@@ -266,6 +266,84 @@ nd_taboo_note_renunciation = {
 	}
 }
 
+# The lowest ceiling an arms-limitation treaty in force sets us, and the
+# partner holding it (spec §7.1). Leaving costs only when this rises or
+# vanishes — our treaty obligations loosened — and not when the partner no
+# longer exists (a lapse nobody chose). The unilateral ceiling never enters:
+# only another treaty can make an exit free, so a country cannot hide behind a
+# ceiling of its own, leave, then lift it. Both parties' ceilings rise when a
+# treaty ends, so both are booked: the regime's end erodes the norm whoever
+# ended it. Scope: country (nd_taboo_country_monthly).
+nd_taboo_refresh_treaty_ceiling = {
+	save_scope_as = nd_tb_self
+	set_variable = { name = nd_tb_new_ceiling value = -1 }
+	every_scope_treaty = {
+		every_scope_article = {
+			limit = {
+				has_type = nuclear_arms_limitation
+				exists = input_quantity
+			}
+			save_scope_as = nd_tb_article
+			scope:nd_tb_self = {
+				if = {
+					limit = {
+						OR = {
+							var:nd_tb_new_ceiling < 0
+							var:nd_tb_new_ceiling > scope:nd_tb_article.input_quantity
+						}
+					}
+					set_variable = { name = nd_tb_new_ceiling value = scope:nd_tb_article.input_quantity }
+					scope:nd_tb_article = {
+						first_country = { save_scope_as = nd_tb_first }
+						second_country = { save_scope_as = nd_tb_second }
+					}
+					if = {
+						limit = {
+							scope:nd_tb_first = { this = scope:nd_tb_self }
+						}
+						set_variable = { name = nd_tb_new_partner value = scope:nd_tb_second }
+					}
+					else = {
+						set_variable = { name = nd_tb_new_partner value = scope:nd_tb_first }
+					}
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_variable = nd_treaty_ceiling
+			OR = {
+				var:nd_tb_new_ceiling < 0
+				var:nd_tb_new_ceiling > var:nd_treaty_ceiling
+			}
+			exists = var:nd_treaty_ceiling_partner
+		}
+		nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_walkout }
+		debug_log = "TE_TABOO: an arms-control treaty was left"
+	}
+	if = {
+		limit = { var:nd_tb_new_ceiling >= 0 }
+		set_variable = { name = nd_treaty_ceiling value = var:nd_tb_new_ceiling }
+		set_variable = { name = nd_treaty_ceiling_partner value = var:nd_tb_new_partner }
+	}
+	else = {
+		if = {
+			limit = { has_variable = nd_treaty_ceiling }
+			remove_variable = nd_treaty_ceiling
+		}
+		if = {
+			limit = { has_variable = nd_treaty_ceiling_partner }
+			remove_variable = nd_treaty_ceiling_partner
+		}
+	}
+	remove_variable = nd_tb_new_ceiling
+	if = {
+		limit = { has_variable = nd_tb_new_partner }
+		remove_variable = nd_tb_new_partner
+	}
+}
+
 # Puts the programme hold on or takes it off. Decides from has_modifier, so
 # call it at most once per effect block: the monthly half calls it last, and
 # each panel action once.
@@ -570,15 +648,17 @@ nd_taboo_country_monthly = {
 				nd_taboo_ai_review_arsenal = yes
 			}
 		}
-		# ---- dismantling, or warheads above the ceiling ----
+		# ---- the ceiling an arms-control treaty sets us, and walk-outs ----
+		nd_taboo_refresh_treaty_ceiling = yes
+		# ---- dismantling, or warheads above the ceiling that binds ----
 		if = {
 			limit = { nd_taboo_is_dismantling = yes }
 			nd_taboo_dismantle_step = yes
 		}
 		else_if = {
 			limit = {
-				has_variable = nd_warhead_ceiling
-				nd_stockpile > var:nd_warhead_ceiling
+				nd_taboo_has_ceiling = yes
+				nd_stockpile > nd_taboo_effective_ceiling_value
 			}
 			nd_taboo_retire_step = yes
 		}

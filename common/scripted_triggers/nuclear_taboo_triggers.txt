@@ -19,14 +19,23 @@ nd_taboo_is_dismantling = {
 	has_variable = nd_dismantle_months_left
 }
 
-# The programme builds nothing while dismantling, or at or above our ceiling
-# (nd_taboo_programme_held carries the programme-pause flag).
+# Our own ceiling or a treaty's binds us.
+nd_taboo_has_ceiling = {
+	OR = {
+		has_variable = nd_warhead_ceiling
+		has_variable = nd_treaty_ceiling
+	}
+}
+
+# The programme builds nothing while dismantling, or at or above the ceiling
+# that binds us — our own or a treaty's (nd_taboo_programme_held carries the
+# programme-pause flag).
 nd_taboo_programme_should_be_held = {
 	OR = {
 		nd_taboo_is_dismantling = yes
 		AND = {
-			has_variable = nd_warhead_ceiling
-			nd_stockpile >= var:nd_warhead_ceiling
+			nd_taboo_has_ceiling = yes
+			nd_stockpile >= nd_taboo_effective_ceiling_value
 		}
 	}
 }

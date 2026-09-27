@@ -134,6 +134,14 @@ nd_taboo_champion_relations = -5
 nd_taboo_quiet_relations = 5
 nd_taboo_modernise_reliability = 10
 nd_taboo_modernise_survivability = 5
+nd_taboo_arms_control_point = 2
+nd_taboo_ledger_walkout = -1
+nd_taboo_arms_quantity_max = 500
+nd_taboo_arms_ai_share = 0.75
+nd_taboo_arms_ai_base = -25
+nd_taboo_arms_ai_burden_weight = 50
+nd_taboo_arms_ai_taboo_weight = 0.5
+nd_taboo_arms_ai_militarist = -50
 
 # ---- READING THE SCORE ---------------------------------------------------------
 
@@ -341,6 +349,16 @@ nd_taboo_renounced_weight_value = {
 	}
 }
 
+# Countries an arms-limitation treaty binds (nd_treaty_ceiling), rank-weighted,
+# each once however many treaties it has.
+nd_taboo_arms_control_weight_value = {
+	value = 0
+	every_country = {
+		limit = { has_variable = nd_treaty_ceiling }
+		add = nd_taboo_rank_weight
+	}
+}
+
 nd_taboo_part_restraint_value = {
 	value = 0
 	add = {
@@ -353,6 +371,10 @@ nd_taboo_part_restraint_value = {
 		value = nd_taboo_renounced_weight_value
 		multiply = nd_taboo_renounced_point
 		max = nd_taboo_renounced_cap
+	}
+	add = {
+		value = nd_taboo_arms_control_weight_value
+		multiply = nd_taboo_arms_control_point
 	}
 	min = 0
 	max = nd_taboo_restraint_cap
@@ -575,16 +597,36 @@ nd_taboo_dismantle_this_month_value = {
 	}
 }
 
-# A tenth of the excess over the ceiling, at least one.
+# The ceiling that binds: the lower of our own (nd_warhead_ceiling) and the
+# lowest a treaty sets us (nd_treaty_ceiling); 0 when neither exists.
+nd_taboo_effective_ceiling_value = {
+	value = 0
+	if = {
+		limit = { has_variable = nd_warhead_ceiling }
+		value = var:nd_warhead_ceiling
+	}
+	if = {
+		limit = {
+			has_variable = nd_treaty_ceiling
+			OR = {
+				NOT = { has_variable = nd_warhead_ceiling }
+				var:nd_treaty_ceiling < var:nd_warhead_ceiling
+			}
+		}
+		value = var:nd_treaty_ceiling
+	}
+}
+
+# A tenth of the excess over the ceiling that binds, at least one.
 nd_taboo_retire_this_month_value = {
 	value = 0
 	if = {
 		limit = {
-			has_variable = nd_warhead_ceiling
-			nd_stockpile > var:nd_warhead_ceiling
+			nd_taboo_has_ceiling = yes
+			nd_stockpile > nd_taboo_effective_ceiling_value
 		}
 		value = nd_stockpile
-		subtract = var:nd_warhead_ceiling
+		subtract = nd_taboo_effective_ceiling_value
 		multiply = nd_taboo_retire_share
 		ceiling = yes
 		min = 1
@@ -735,6 +777,21 @@ nd_taboo_ai_accept_taboo_value = {
 	value = nd_taboo_value
 	subtract = nd_taboo_line_established
 	multiply = nd_taboo_ai_accept_taboo_weight
+	min = 0
+	round = yes
+}
+
+# nuclear_arms_limitation's AI (spec §7.1). Scope: the evaluating country.
+nd_taboo_ai_arms_burden_value = {
+	value = nd_taboo_burden_value
+	multiply = nd_taboo_arms_ai_burden_weight
+	round = yes
+}
+
+nd_taboo_ai_arms_taboo_value = {
+	value = nd_taboo_value
+	subtract = nd_taboo_line_established
+	multiply = nd_taboo_arms_ai_taboo_weight
 	min = 0
 	round = yes
 }

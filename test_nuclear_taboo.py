@@ -754,5 +754,54 @@ class TestBandEvents(unittest.TestCase):
             self.assertIn(key, keys, key)
 
 
+ARMS_ARTICLE = ROOT / "common/treaty_articles/117_nuclear_arms_limitation.txt"
+
+
+class TestArmsControl(unittest.TestCase):
+    def setUp(self):
+        self.taboo = strip_comments(read(TABOO_EFFECTS))
+        self.values = strip_comments(read(TABOO_VALUES))
+
+    def test_article_shape(self):
+        self.assertTrue(ARMS_ARTICLE.read_bytes().startswith(b"\xef\xbb\xbf"))
+        body = block(strip_comments(read(ARMS_ARTICLE)), "nuclear_arms_limitation")
+        self.assertIn("kind = mutual", body)
+        self.assertRegex(body, r"required_inputs = \{\s*quantity\s*\}")
+        self.assertNotIn("country_treaty_leverage_generation_add", body)
+        self.assertIn("quantity_input_value", body)
+
+    def test_only_a_treaty_can_make_an_exit_free(self):
+        body = block(self.taboo, "nd_taboo_refresh_treaty_ceiling")
+        self.assertIn("has_type = nuclear_arms_limitation", body)
+        self.assertIn("scope:nd_tb_article.input_quantity", body)
+        self.assertIn("var:nd_tb_new_ceiling > var:nd_treaty_ceiling", body)
+        self.assertIn("exists = var:nd_treaty_ceiling_partner", body)
+        self.assertIn("POINTS = nd_taboo_ledger_walkout", body)
+        # The unilateral ceiling never shields a walk-out.
+        self.assertNotIn("nd_warhead_ceiling", body)
+
+    def test_the_lowest_ceiling_binds(self):
+        eff = block(self.values, "nd_taboo_effective_ceiling_value")
+        self.assertIn("var:nd_treaty_ceiling < var:nd_warhead_ceiling", eff)
+        held = block(strip_comments(read(TABOO_TRIGGERS)), "nd_taboo_programme_should_be_held")
+        self.assertIn("nd_stockpile >= nd_taboo_effective_ceiling_value", held)
+        self.assertIn("subtract = nd_taboo_effective_ceiling_value", block(self.values, "nd_taboo_retire_this_month_value"))
+        monthly = block(self.taboo, "nd_taboo_country_monthly")
+        self.assertLess(monthly.index("nd_taboo_refresh_treaty_ceiling = yes"), monthly.index("nd_taboo_refresh_held = yes"))
+        self.assertIn("nd_stockpile > nd_taboo_effective_ceiling_value", monthly)
+
+    def test_bound_countries_count_once_in_restraint(self):
+        self.assertIn("has_variable = nd_treaty_ceiling", block(self.values, "nd_taboo_arms_control_weight_value"))
+        self.assertIn("value = nd_taboo_arms_control_weight_value", block(self.values, "nd_taboo_part_restraint_value"))
+
+    def test_article_keys_have_loc(self):
+        keys = loc_keys()
+        for key in ("nuclear_arms_limitation", "nuclear_arms_limitation_desc",
+                    "nuclear_arms_limitation_effects_desc", "nuclear_arms_limitation_article_short_desc",
+                    "nd_taboo_arms_party_tt", "nd_taboo_arms_quantity_tt", "nd_taboo_ai_arms_base",
+                    "nd_taboo_ai_arms_militarist"):
+            self.assertIn(key, keys, key)
+
+
 if __name__ == "__main__":
     unittest.main()
