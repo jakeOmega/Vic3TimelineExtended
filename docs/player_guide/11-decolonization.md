@@ -271,11 +271,3 @@ unaccepted. AI great powers are less willing, and no AI plans full
 decolonization while two of its colonies are well accepted. In events, AI
 empires lean toward negotiation and release, and an AI takes the Imperial
 Federation Act or Civilizing Mission Compact whenever it qualifies.
-
-## Turtle Island and the North American Union <!-- style: allow title-case-heading -->
-
-The base game's The Nations of Turtle Island journal entry no longer appears for
-the North American Union or United Earth, and a union that already holds it
-loses it. This stops the AI switching between Turtle Island and the North
-American Union forever. Formable countries are covered in
-[Diplomacy](08-diplomacy.md).
