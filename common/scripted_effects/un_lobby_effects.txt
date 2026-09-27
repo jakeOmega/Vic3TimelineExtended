@@ -750,3 +750,141 @@ un_lobby_campaign_add_to_member = {
 		change_variable = { name = un_lobby_campaigns_on add = 1 }
 	}
 }
+
+# ============================================================================
+# THE AI'S LOBBYING (spec §5)
+# ============================================================================
+# Script, not the engine's diplomatic AI, starts and ends the AI's campaigns
+# (the two pact actions carry evaluation_chance 0 and will_break always-no), so
+# the AI lobbies exactly by these rules. Its pledge requests go through the
+# engine: the two pledge actions' ai blocks (un_lobbying.txt).
+#
+# Each month, while the resolution votes:
+#   for      its proposer, if AI;
+#   against  on a resolution that accuses its target: the target, its allies
+#            and its power bloc's leader, if AI.
+# Each lobbies only AI members that can still be lobbied, by their TRUE lean
+# (the AI reads the snapshot, not the chamber's band): for, a member between
+# leaning against and undecided (−29 to +9); against, one between undecided
+# and leaning for (−9 to +29). It starts at most one campaign a month, runs at
+# most three, starts only with un_lobby_ai_influence_floor influence to spare,
+# and lets one go each month its influence is below 0.
+
+# Scope: resolution container (= scope:un_resolution), voting
+un_lobby_ai_monthly = {
+	save_temporary_scope_as = un_lai_res
+	var:un_res_proposer ?= {
+		if = {
+			limit = {
+				is_ai = yes
+				un_lobby_campaign_selectable = yes
+			}
+			un_lobby_ai_lobby = { DIR = for LOW = -29 HIGH = 9 }
+		}
+	}
+	if = {
+		limit = {
+			un_resolution_accuses_target = yes
+			exists = var:un_res_target
+		}
+		var:un_res_target = { save_temporary_scope_as = un_lai_target }
+		var:un_res_proposer ?= { save_temporary_scope_as = un_lai_proposer }
+		every_country = {
+			limit = {
+				is_ai = yes
+				un_lobby_campaign_selectable = yes
+				# The proposer lobbies for, never against.
+				NOT = { scope:un_lai_proposer ?= this }
+				OR = {
+					this = scope:un_lai_target
+					has_treaty_alliance_with = { TARGET = scope:un_lai_target }
+					AND = {
+						is_power_bloc_leader = yes
+						is_in_same_power_bloc = scope:un_lai_target
+					}
+				}
+			}
+			un_lobby_ai_lobby = { DIR = against LOW = -9 HIGH = 29 }
+		}
+	}
+}
+
+# One AI lobbyist's month.
+# Parameters: $DIR$ = for | against; $LOW$ / $HIGH$ = the true leans it works on
+# Scope: the AI lobbyist; scope:un_lai_res = the resolution
+un_lobby_ai_lobby = {
+	save_temporary_scope_as = un_lai_lobbyist
+	# Short of influence: let one campaign go.
+	if = {
+		limit = {
+			influence < 0
+			scope:un_lai_res = {
+				has_variable_list = un_res_campaigns
+				any_in_list = {
+					variable = un_res_campaigns
+					has_tag = un_lobby_campaign
+					var:un_lc_lobbyist ?= scope:un_lai_lobbyist
+				}
+			}
+		}
+		scope:un_lai_res = {
+			random_in_list = {
+				variable = un_res_campaigns
+				limit = {
+					has_tag = un_lobby_campaign
+					var:un_lc_lobbyist ?= scope:un_lai_lobbyist
+				}
+				save_scope_as = un_lai_stop
+			}
+			remove_list_variable = { name = un_res_campaigns target = scope:un_lai_stop }
+			scope:un_lai_stop = {
+				var:un_lc_member ?= { save_scope_as = un_lai_stop_member }
+				un_lobby_campaign_remove_pact = yes
+				destroy_container = yes
+			}
+			if = {
+				limit = { exists = scope:un_lai_stop_member }
+				un_lobby_member_recompute = { MEMBER = scope:un_lai_stop_member }
+			}
+		}
+	}
+	# Room for another, and the influence for it: start one on the lobbyable
+	# member nearest the line that it does not already lobby either way.
+	else_if = {
+		limit = {
+			influence >= un_lobby_ai_influence_floor
+			scope:un_lai_res = {
+				NOT = {
+					AND = {
+						has_variable_list = un_res_campaigns
+						any_in_list = {
+							variable = un_res_campaigns
+							count >= 3 # at most three campaigns at once
+							has_tag = un_lobby_campaign
+							var:un_lc_lobbyist ?= scope:un_lai_lobbyist
+						}
+					}
+				}
+			}
+		}
+		ordered_country = {
+			limit = {
+				un_lobby_member_lobbyable = yes
+				NOT = { this = scope:un_lai_lobbyist }
+				un_lobby_true_lean_in = { LOW = $LOW$ HIGH = $HIGH$ }
+				NOT = { has_diplomatic_pact = { who = scope:un_lai_lobbyist type = un_lobby_for_action } }
+				NOT = { has_diplomatic_pact = { who = scope:un_lai_lobbyist type = un_lobby_against_action } }
+			}
+			order_by = un_lobby_ai_target_order
+			max = 1
+			save_scope_as = target_country
+			scope:un_lai_lobbyist = {
+				if = {
+					limit = { can_afford_diplomatic_action = { target = scope:target_country type = un_lobby_$DIR$_action } }
+					create_diplomatic_pact = { country = scope:target_country type = un_lobby_$DIR$_action }
+					un_lobby_campaign_start = { DIR = $DIR$ }
+				}
+			}
+		}
+	}
+}

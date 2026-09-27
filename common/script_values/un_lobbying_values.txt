@@ -78,3 +78,25 @@ un_lean_lobbying = {
 		subtract = var:un_lobby_against_shift
 	}
 }
+
+# ---- The AI's lobbying (spec §5) -----------------------------------------------------
+
+# An AI lobbyist starts a campaign (100 influence) only while its available
+# influence covers it with this much to spare, and lets one go when its
+# influence falls below 0. It runs at most three at once (the literal
+# `count >= 3` in un_lobby_ai_lobby).
+un_lobby_ai_influence_floor = { value = 150 }
+
+# Which lobbyable member the AI works on first: the one nearest the line, whose
+# vote a campaign is likeliest to turn. Scope: the member, with a snapshot for
+# the resolution in session (un_lobby_true_lean_in has checked it).
+un_lobby_ai_target_order = {
+	value = 100
+	if = {
+		limit = { var:un_lean_total >= 0 }
+		subtract = var:un_lean_total
+	}
+	else = {
+		add = var:un_lean_total
+	}
+}

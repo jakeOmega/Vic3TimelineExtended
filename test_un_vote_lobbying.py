@@ -347,5 +347,47 @@ class CampaignTest(unittest.TestCase):
         self.assertIn("un_lobby_member_recompute", end)
 
 
+
+class AiLobbyingTest(unittest.TestCase):
+    """§5: the proposer lobbies for; the target, its allies and bloc leader against."""
+
+    @classmethod
+    def setUpClass(cls):
+        effects = _read(LOBBY_EFFECTS)
+        cls.monthly = _block(effects, "un_lobby_ai_monthly")
+        cls.lobby = _block(effects, "un_lobby_ai_lobby")
+        cls.values = _read(LOBBYING_VALUES)
+
+    def test_it_runs_after_the_campaign_month_and_before_the_leans(self):
+        monthly = _block(_read(VOTE_EFFECTS), "un_resolutions_monthly_update")
+        tick = monthly.index("un_lobby_campaigns_monthly = yes")
+        ai = monthly.index("un_lobby_ai_monthly = yes")
+        leans = monthly.index("un_vote_refresh_leans = yes")
+        self.assertLess(tick, ai)
+        self.assertLess(ai, leans)
+
+    def test_the_sides_and_the_leans_each_side_works_on(self):
+        self.assertRegex(self.monthly, r"var:un_res_proposer[\s\S]*?un_lobby_ai_lobby\s*=\s*\{\s*DIR\s*=\s*for\s+LOW\s*=\s*-29\s+HIGH\s*=\s*9\s*\}")
+        self.assertRegex(self.monthly, r"un_resolution_accuses_target\s*=\s*yes[\s\S]*?un_lobby_ai_lobby\s*=\s*\{\s*DIR\s*=\s*against\s+LOW\s*=\s*-9\s+HIGH\s*=\s*29\s*\}")
+        for side in ("has_treaty_alliance_with = { TARGET = scope:un_lai_target }", "is_power_bloc_leader = yes"):
+            self.assertIn(side, self.monthly)
+
+    def test_only_ai_countries_lobby_and_only_ai_members_are_lobbied(self):
+        self.assertEqual(len(re.findall(r"is_ai\s*=\s*yes", self.monthly)), 2)
+        pick = _sub_block(self.lobby, "ordered_country")
+        self.assertIn("un_lobby_member_lobbyable = yes", _sub_block(pick, "limit"))
+
+    def test_it_starts_one_a_month_within_three_and_with_influence_to_spare(self):
+        self.assertRegex(self.values, re.compile(r"^un_lobby_ai_influence_floor\s*=\s*\{\s*value\s*=\s*150\s*\}", re.M))
+        self.assertIn("influence >= un_lobby_ai_influence_floor", self.lobby)
+        self.assertRegex(self.lobby, r"count\s*>=\s*3\b")
+        pick = _sub_block(self.lobby, "ordered_country")
+        self.assertRegex(pick, r"max\s*=\s*1\b")
+        self.assertLess(pick.index("create_diplomatic_pact"), pick.index("un_lobby_campaign_start"))
+
+    def test_it_lets_a_campaign_go_when_it_runs_short(self):
+        self.assertRegex(self.lobby, r"influence\s*<\s*0[\s\S]*?un_lobby_campaign_remove_pact\s*=\s*yes")
+
+
 if __name__ == "__main__":
     unittest.main()

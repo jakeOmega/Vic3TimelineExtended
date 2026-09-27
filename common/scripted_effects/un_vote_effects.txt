@@ -434,6 +434,8 @@ un_resolutions_monthly_update = {
 			# The campaigns' month: reap, age, and write each member's shift,
 			# before the leans that read it (un_lobby_effects.txt).
 			un_lobby_campaigns_monthly = yes
+			# The AI's lobbying: start or let go of a campaign (un_lobby_effects.txt).
+			un_lobby_ai_monthly = yes
 			un_vote_refresh_leans = yes
 			if = {
 				limit = {
