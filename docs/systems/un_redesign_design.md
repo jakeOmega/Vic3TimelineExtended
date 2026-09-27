@@ -1433,8 +1433,11 @@ script, what the chamber prints) and the recess of §8.3.
    size; one that sat on both options is ported as **half** the difference, because the old
    vote was proportional and a lean decides outright. The full difference would have made
    every great-power permanent member veto every ICC resolution.
-5. **The AI's ballot.** `un_vote.5`, thirty days after a resolution opens, sends every AI
-   member `un_vote.4`, which writes its lean and casts: a veto if it is a permanent member,
+5. **The AI's ballot.** *(Superseded 2026-09-27 by the late ballots:
+   `docs/superpowers/specs/2026-09-27-un-vote-lobbying-design.md`. The AI now votes at month
+   9, 10 or 11, the veto reads the lean without the pledge term, and `un_vote.5` only refreshes
+   leans; see `journal_entry_systems.md`, "UN vote lobbying".)* `un_vote.5`, thirty days after a
+   resolution opens, sent every AI member `un_vote.4`, which writes its lean and casts: a veto if it is a permanent member,
    the topic is binding, it pledged nothing and its lean is at or below −30 (−50 after a veto
    of its own, −10 at Moribund, where a veto costs nothing); otherwise yes when lean + noise
    > 0, the noise being one of −20 / −10 / 0 / +10 / +20. The monthly pulse sends the ballots

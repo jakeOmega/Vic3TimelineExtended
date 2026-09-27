@@ -296,6 +296,20 @@ un_chamber_projection_line = {
 	else = {
 		custom_tooltip_no_bullet = je_un_chamber_projection_fail
 	}
+	# Since the late ballots the AI votes in months 9-11, so for most of the
+	# session the count above holds little more than the proposer and the
+	# human members: say so while AI members have yet to vote.
+	if = {
+		limit = {
+			has_tag = un_res_voting
+			has_variable_list = un_res_delegates
+			any_in_list = {
+				variable = un_res_delegates
+				un_deleg_listed = yes
+			}
+		}
+		custom_tooltip_no_bullet = je_un_chamber_projection_pending
+	}
 }
 
 # Veto exposure and, once a veto has been cast, the vetoing country.
@@ -579,16 +593,17 @@ un_chamber_ballot_lines = {
 	un_chamber_commitment_lines = yes
 }
 
-# Vote commitments secured by the resolution's proposer — SEPARATE from the two
+# Vote pledges, for and against — SEPARATE from the two
 # ballot lists above, and never folded into them: a commitment is a promise, a
 # vote is a ballot, and the chamber has to be able to tell the player apart.
 # Nothing here is counted by un_chamber_tally_line's figures or by
 # un_chamber_projection_line, both of which read un_res_support / un_res_oppose
 # and therefore see votes actually cast and nothing else.
 #
-# The three lists are disjoint by construction (un_lobby_settle_commitment moves
-# a recipient off the pending list as it adds it to a settled one), so the
-# entries below never repeat. Country names print through the same guarded
+# The four lists are disjoint by construction (a member pledges once per
+# resolution, un_pledge_made_by, and un_lobby_settle_commitment moves it off
+# its pending list as it adds it to a settled one), so the entries below never
+# repeat. Country names print through the same guarded
 # accessor the ballot uses, so a recipient annexed since it pledged reads as
 # "a former member".
 #
@@ -604,6 +619,13 @@ un_chamber_commitment_lines = {
 			every_in_list = {
 				variable = un_res_committed_yes
 				custom_tooltip = je_un_chamber_commitment_pending
+			}
+		}
+		if = {
+			limit = { un_lobby_list_has_entries = { LIST = un_res_committed_no } }
+			every_in_list = {
+				variable = un_res_committed_no
+				custom_tooltip = je_un_chamber_commitment_pending_no
 			}
 		}
 		if = {
@@ -1579,13 +1601,16 @@ un_chamber_reasons_block = {
 				has_variable = un_res_why_yes_pledge
 				has_variable = un_res_why_yes_accepted
 				has_variable = un_res_why_yes_interests
+				has_variable = un_res_why_yes_lobbying
 				has_variable = un_res_why_no_grounds
 				has_variable = un_res_why_no_self
+				has_variable = un_res_why_no_pledge
 				has_variable = un_res_why_no_proposer
 				has_variable = un_res_why_no_target
 				has_variable = un_res_why_no_glass
 				has_variable = un_res_why_no_burden
 				has_variable = un_res_why_no_interests
+				has_variable = un_res_why_no_lobbying
 			}
 		}
 		custom_tooltip_no_bullet = je_un_chamber_reasons_intro
@@ -1595,13 +1620,16 @@ un_chamber_reasons_block = {
 		un_chamber_reason_line = { NAME = un_res_why_yes_pledge KEY = je_un_res_why_yes_pledge }
 		un_chamber_reason_line = { NAME = un_res_why_yes_accepted KEY = je_un_res_why_yes_accepted }
 		un_chamber_reason_line = { NAME = un_res_why_yes_interests KEY = je_un_res_why_yes_interests }
+		un_chamber_reason_line = { NAME = un_res_why_yes_lobbying KEY = je_un_res_why_yes_lobbying }
 		un_chamber_reason_line = { NAME = un_res_why_no_grounds KEY = je_un_res_why_no_grounds }
 		un_chamber_reason_line = { NAME = un_res_why_no_self KEY = je_un_res_why_no_self }
+		un_chamber_reason_line = { NAME = un_res_why_no_pledge KEY = je_un_res_why_no_pledge }
 		un_chamber_reason_line = { NAME = un_res_why_no_proposer KEY = je_un_res_why_no_proposer }
 		un_chamber_reason_line = { NAME = un_res_why_no_target KEY = je_un_res_why_no_target }
 		un_chamber_reason_line = { NAME = un_res_why_no_glass KEY = je_un_res_why_no_glass }
 		un_chamber_reason_line = { NAME = un_res_why_no_burden KEY = je_un_res_why_no_burden }
 		un_chamber_reason_line = { NAME = un_res_why_no_interests KEY = je_un_res_why_no_interests }
+		un_chamber_reason_line = { NAME = un_res_why_no_lobbying KEY = je_un_res_why_no_lobbying }
 	}
 	else_if = {
 		limit = { has_tag = un_res_voting }
@@ -2152,5 +2180,188 @@ un_chamber_mission_contributor_at = {
 			save_temporary_scope_as = un_chamber_msn_contrib
 		}
 		custom_tooltip_no_bullet = je_un_chamber_mission_contributor
+	}
+}
+
+# ============================================================================
+# DELEGATIONS (docs/superpowers/specs/2026-09-27-un-vote-lobbying-design.md §6)
+# ============================================================================
+# How the AI members stand on the resolution in session, as bands rather than
+# numbers, each in its own GUI row (un_chamber_deleg_row_sgui, op = the row):
+# the rows un_deleg_reassign_rows wrote (un_dossier_effects.txt). Every line is
+# printed from the RESOLUTION's scope, never inside a country's, so a country
+# named in two places in one row is not gathered under its first appearance
+# (gui_modding_guide.md gotcha #27): the member is stashed in a temporary
+# scope and printed through SCOPE.sCountry.
+#
+# The band is the Assembly's estimate (true lean plus the member's fixed
+# misreading of −10, 0 or +10) unless the viewer runs a campaign on the member,
+# in which case it is the true band.
+
+# Row $N$ of the Delegations section, if it holds a member.
+# Parameters: $N$ = 0-23
+# Scope: country (the viewer)
+un_chamber_deleg_row = {
+	global_var:un_active_resolution ?= {
+		if = {
+			limit = {
+				has_tag = un_res_voting
+				has_variable = un_deleg_row_$N$
+				var:un_deleg_row_$N$ ?= { un_deleg_listed = yes }
+			}
+			var:un_deleg_row_$N$ = { save_temporary_scope_as = un_deleg_m }
+			un_chamber_deleg_member_lines = yes
+		}
+	}
+}
+
+# One member's row: its band, whose reading it is, the campaigns on it and any
+# pledge it has made.
+# Scope: resolution container (in session); scope:un_deleg_m = the member;
+# ROOT = the viewer
+un_chamber_deleg_member_lines = {
+	if = {
+		limit = { ROOT = { un_deleg_viewer_campaigns_on = { MEMBER = scope:un_deleg_m } } }
+		un_chamber_deleg_band = { VAR = un_lean_total }
+		custom_tooltip_no_bullet = je_un_chamber_deleg_reading_true
+	}
+	else = {
+		un_chamber_deleg_band = { VAR = un_lean_shown }
+		custom_tooltip_no_bullet = je_un_chamber_deleg_reading_estimate
+	}
+	if = {
+		limit = { has_variable_list = un_res_campaigns }
+		every_in_list = {
+			variable = un_res_campaigns
+			limit = {
+				has_tag = un_lobby_campaign
+				var:un_lc_member ?= scope:un_deleg_m
+				exists = var:un_lc_lobbyist
+			}
+			var:un_lc_lobbyist = { save_temporary_scope_as = un_deleg_lobbyist }
+			if = {
+				limit = { has_tag = un_lc_for }
+				custom_tooltip_no_bullet = je_un_chamber_deleg_campaign_for
+			}
+			else = {
+				custom_tooltip_no_bullet = je_un_chamber_deleg_campaign_against
+			}
+		}
+	}
+	if = {
+		limit = {
+			scope:un_deleg_m = {
+				has_variable = un_pledge_res
+				var:un_pledge_res ?= global_var:un_active_resolution
+				exists = var:un_pledge_to
+			}
+		}
+		scope:un_deleg_m = {
+			var:un_pledge_to = { save_temporary_scope_as = un_deleg_pledgee }
+		}
+		if = {
+			limit = { un_lobby_in_list = { LIST = un_res_committed_yes COUNTRY = scope:un_deleg_m } }
+			custom_tooltip_no_bullet = je_un_chamber_deleg_pledged_for
+		}
+		else_if = {
+			limit = { un_lobby_in_list = { LIST = un_res_committed_no COUNTRY = scope:un_deleg_m } }
+			custom_tooltip_no_bullet = je_un_chamber_deleg_pledged_against
+		}
+	}
+	else_if = {
+		limit = { un_lobby_in_list = { LIST = un_res_committed_yes COUNTRY = scope:un_deleg_m } }
+		custom_tooltip_no_bullet = je_un_chamber_deleg_pledged_for_proposer
+	}
+}
+
+# The member's name and band, read from its $VAR$ (un_lean_total, the true
+# lean, or un_lean_shown, the estimate).
+# Parameters: $VAR$
+# Scope: resolution container; scope:un_deleg_m = the member
+un_chamber_deleg_band = {
+	if = {
+		limit = { scope:un_deleg_m = { var:$VAR$ >= un_lean_band_firm } }
+		custom_tooltip_no_bullet = je_un_chamber_deleg_band_firm_for
+	}
+	else_if = {
+		limit = { scope:un_deleg_m = { var:$VAR$ >= un_lean_band_lean } }
+		custom_tooltip_no_bullet = je_un_chamber_deleg_band_leaning_for
+	}
+	else_if = {
+		limit = { scope:un_deleg_m = { var:$VAR$ > un_lean_band_lean_against } }
+		custom_tooltip_no_bullet = je_un_chamber_deleg_band_undecided
+	}
+	else_if = {
+		limit = { scope:un_deleg_m = { var:$VAR$ > un_lean_band_firm_against } }
+		custom_tooltip_no_bullet = je_un_chamber_deleg_band_leaning_against
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_deleg_band_firm_against
+	}
+}
+
+# The line over the rows: how many members are firmly decided (and so have no
+# row), how many rows' worth did not fit, and the votes cast so far.
+# Scope: country (the viewer)
+un_chamber_deleg_summary = {
+	if = {
+		limit = {
+			has_global_variable = un_active_resolution
+			global_var:un_active_resolution ?= {
+				has_tag = un_res_voting
+				has_variable = un_res_deleg_firm_for
+			}
+		}
+		global_var:un_active_resolution ?= {
+			custom_tooltip_no_bullet = je_un_chamber_deleg_summary
+			if = {
+				limit = { var:un_res_deleg_more > 0 }
+				custom_tooltip_no_bullet = je_un_chamber_deleg_more
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_variable = un_active_resolution
+			global_var:un_active_resolution ?= { has_tag = un_res_voting }
+		}
+		custom_tooltip_no_bullet = je_un_chamber_deleg_pending
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_deleg_none
+	}
+}
+
+# The summary line's tooltip: the firmly decided members, each naming its
+# side (gotcha #18: no headers over a script-built country list). Each member
+# appears once.
+# Scope: country (the viewer)
+un_chamber_deleg_firm_list = {
+	global_var:un_active_resolution ?= {
+		if = {
+			limit = {
+				has_tag = un_res_voting
+				has_variable_list = un_res_delegates
+			}
+			custom_tooltip_no_bullet = je_un_chamber_deleg_firm_intro
+			every_in_list = {
+				variable = un_res_delegates
+				limit = {
+					un_deleg_listed = yes
+					NOT = { un_deleg_in_rows = yes }
+					var:un_lean_shown >= 0
+				}
+				custom_tooltip = je_un_chamber_deleg_firm_for_entry
+			}
+			every_in_list = {
+				variable = un_res_delegates
+				limit = {
+					un_deleg_listed = yes
+					NOT = { un_deleg_in_rows = yes }
+					var:un_lean_shown < 0
+				}
+				custom_tooltip = je_un_chamber_deleg_firm_against_entry
+			}
+		}
 	}
 }

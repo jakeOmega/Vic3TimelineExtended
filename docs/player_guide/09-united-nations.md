@@ -214,8 +214,12 @@ and lose your standing benefits for five.
 
 The floor takes one resolution at a time, and each is open for a year. The
 proposer's own vote counts in favor. Human members can vote in the chamber at
-once and receive the UN General Assembly Vote event after 30 days. Every AI
-member votes on day 30. After a year, General Assembly Vote Results applies the
+once and receive the UN General Assembly Vote event after 30 days. Its "We will
+decide later." option closes the event without voting, and it comes back in the
+ninth and eleventh months of the session. AI members vote late: each votes in the
+ninth, tenth or eleventh month, drawn at random, by its lean at that time. An AI
+member that still has not voted (one that joined late, for example) votes in the
+last month of the session. After a year, General Assembly Vote Results applies the
 outcome.
 
 Most topics pass when the votes in favor outnumber those against. Charter
@@ -294,14 +298,36 @@ ballot shows every voter's lean and why the members voted as they did.
 | Our ties to the target, on accusing topics | Alliance −60, same bloc −35, rivalry +30, relations up to ±10 |
 | Our own record (glass houses) | −10 with a case of 30, −20 at 50 |
 | The proposer's standing | Exemplary +5, Respected +2, Poor −2, Disgraced −5 |
-| Our pledge to the proposer | +100 |
+| A pledged vote | +100 for, −100 against |
 | The target accepted the verdict | +15 |
 | The cost to us, on aid and peacekeeping requests | −15 per earlier contribution, up to three; more for aid to a great, major or richer country |
 | Our interests on this topic | Laws, technologies and what the convention's terms would do to us |
+| Lobbying campaigns on us (AI members only) | 3 a month per campaign, up to 15; at most 20 each way |
 
 An AI member votes in favor when its lean, plus a random −20 to +20, is above
 0. An AI permanent member vetoes a binding resolution at a lean of −30 or below
-(−50 if it vetoed recently, −10 at Moribund), unless it pledged its vote.
+(−50 if it vetoed recently, −10 at Moribund), leaving any pledge out of the
+count, and never when it pledged to vote for. A pledge against therefore never
+makes a member veto, and never stops one that would have. Lobbying campaigns do
+count, so a campaign can push a permanent member toward a veto or away from one.
+
+### Reading how the members lean
+
+The chamber's Delegations section shows each AI member's lean as a band, not a
+number:
+
+| Band | Lean |
+|---|---|
+| Firmly for | +30 or more |
+| Leaning for | +10 to +29 |
+| Undecided | −9 to +9 |
+| Leaning against | −10 to −29 |
+| Firmly against | −30 or less |
+
+The band is the Assembly's estimate. Each member's reading is off by −10, 0 or
++10, fixed for the whole session, so a member shown as undecided may lean either
+way. While you run a campaign on a member, you see its true band. Votes still
+carry the random −20 to +20, so a close vote can turn on the day it is cast.
 
 ### Complying with a UN resolution
 
@@ -371,13 +397,32 @@ loan](04-banking.md#the-un-emergency-loan).
 
 ### Lobbying for UN votes
 
-While your resolution is open, the diplomatic action Seek a Vote Commitment asks
-another member to promise its vote; if it accepts, you owe it an obligation.
-Only the proposer may ask, once per member, with at most two commitments per
-resolution, and never the target or a member that has voted. Because AI members
-vote on day 30, lobbying them works only in the first month. A kept promise
-gives the member +1 standing and +10 relations with you; a broken one costs it 4
-standing and 20 relations and cancels your obligation.
+Any member can try to move an AI member's vote, for or against the resolution in
+session, in two ways: a campaign, which costs influence and builds up over
+months, or a pledge, which costs an obligation and works at once. Because AI
+members vote only in the ninth to eleventh month, you have most of the session
+to work on them.
+
+A campaign is a diplomatic pact, Lobby For the Resolution or Lobby Against the
+Resolution, started from the diplomacy panel or the chamber's Delegations rows.
+It uses 100 influence while it runs. Each full month it runs moves the member's
+lean 3 points its way, up to 15, so it needs five months to reach its full
+effect. Campaigns on the same side stack to 20, and campaigns on opposite sides
+cancel out. A campaign ends when the member votes or the resolution closes, and
+you can stop it at any time, which frees the influence and loses what it had
+gained. Only AI members can be lobbied, never the resolution's target, and you
+need a vote yourself.
+
+Seek a Vote Commitment: For and Seek a Vote Commitment: Against ask a member to
+pledge its vote. If it accepts, you owe it an obligation and its lean moves 100
+points your way. A member pledges once per resolution, and the first pledge it
+accepts stands. You can ask each member once per resolution and collect two
+pledges per resolution, and you cannot ask the target or a member that has
+voted. From the Delegations rows an AI member answers at once; a human member
+answers a request from the diplomacy panel. A kept pledge gives the member +1
+standing and +10 relations with you; a broken one costs it 4 standing and 20
+relations and cancels your obligation. A permanent member that pledged against
+and then vetoes has kept its word.
 
 ## UN conventions and agencies
 
@@ -530,7 +575,13 @@ The General Assembly chamber is where you vote and propose. Its top panel shows
 your status, the Security Council and the resolution in session (grounds, tally,
 projection, veto exposure, consequences and your own lean), with Vote in Favour,
 Vote Against and, for a permanent member, Veto…, which asks you to confirm.
-Below are collapsible sections: How International Standing Works; Our Exposure;
+Below are collapsible sections: Delegations, with a line counting the firmly
+decided members (hover it for their names) and the votes cast, and a row for up
+to 24 AI members still in play, showing each one's band, the campaigns and
+pledges on it, and Lobby For, Lobby Against, Stop Lobbying, Pledge For and
+Pledge Against buttons (members someone is lobbying come first, then the
+undecided, then those leaning for, then those leaning against); How
+International Standing Works; Our Exposure;
 Missions in the Field, with a row and a Send a Contingent button per mission;
 Our Obligations, with dues and convention terms; Recorded Ballot; Propose a
 Resolution, with a row per topic, its target and why it is blocked, plus the
@@ -545,7 +596,13 @@ great powers outside, and the latest ledger entries, with a history chart below.
 
 AI countries play by the same rules and numbers you do:
 
-- They vote by the lean the chamber shows you, and veto by the same rule.
+- They vote by the same lean and veto rule, in the ninth, tenth or eleventh month
+of the session.
+- A proposer lobbies for its resolution. On a resolution that accuses a country,
+that country, its allies and its bloc leader lobby against it. Each runs up to
+three campaigns at once on AI members close to the line, starts at most one a
+month and only with influence to spare, and asks for pledges now and then,
+humans included. They never run campaigns on human members.
 - They table the seven non-convention topics through the journal entry's buttons
 when their situation calls for it, and reach conventions only through the
 docket, so a qualifying human is offered convention business first.

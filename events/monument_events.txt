@@ -529,7 +529,7 @@ monument_events.8 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "middleeast_engineer_blueprint" }
+	event_image = { texture = "gfx/event_pictures/public_observatory_night.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -589,7 +589,7 @@ monument_events.10 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/augmented_athlete_arena.dds" }
+	event_image = { texture = "gfx/event_pictures/stadium_crowd.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 

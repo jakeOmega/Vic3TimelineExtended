@@ -58,13 +58,14 @@ All are **uncompressed 32-bit RGBA with a full mip chain**, except mobilization 
 
 Each row: current placeholder | three vanilla neighbours ‖ two generated candidates.
 
-- Second pass (current prompts): [`assets/2026-09-26-icon-pipeline-pass2.jpg`](assets/2026-09-26-icon-pipeline-pass2.jpg)
+- Third pass (2026-09-27, current prompts): [`assets/2026-09-27-icon-pipeline-pass3.jpg`](assets/2026-09-27-icon-pipeline-pass3.jpg). Identical to the second pass except the basic-income row: the seeds are fixed, so the same prompt redraws the same picture.
+- Second pass: [`assets/2026-09-26-icon-pipeline-pass2.jpg`](assets/2026-09-26-icon-pipeline-pass2.jpg)
 - First pass (photographic, before the style fix): [`assets/2026-09-26-icon-pipeline-pass1.jpg`](assets/2026-09-26-icon-pipeline-pass1.jpg)
 
 - **Buildings — good on the first try.** A painted diorama prompt, fitted inside the frame lifted from vanilla.
 - **Mobilization options, ideologies — good.** FLUX draws a black silhouette and `gen_pm_icons.apply_metallic_style` embosses it, onto the vanilla disc and ring for ideologies. The same route would give the 15 identical ministry-law icons distinct shapes.
 - **Techs, treaty articles, decrees — good after one revision.** The first pass came out as product photography with garbled text. The prompt has to name the medium: "stylized hand-painted video game icon, painterly digital art with visible brush strokes … blank unmarked surfaces". 100 px categories need "one compact bold object group filling the frame", or the art shrinks to specks. Several subject phrases were rewritten in the same pass, so credit both changes.
-- **Still weak.** The diplomatic-action plinth renders detached from its figure. One transistor seed still shows a "2254" label. Both basic-income candidates hold green notes with a portrait oval, which read as US dollars: "paper banknotes" needs a colour (the sample now asks for cream-and-brown notes; not re-rendered yet). Principles, IG-trait cards and institutions were not tried.
+- **Still weak.** The diplomatic-action plinth renders detached from its figure. One transistor seed still shows a "2254" label. The second pass's basic-income notes were green with a portrait oval and read as US dollars; asking for "plain cream-and-brown paper banknotes" fixed it in the third pass. Principles, IG-trait cards and institutions were not tried.
 
 **Frames are lifted from vanilla, not drawn.** `vanilla_template()` takes the per-pixel median of every same-size icon in the folder. The frame is identical on every icon, so it survives the median while the artwork averages to mud. The medallion ring starts where the colour spread across the folder collapses: decree r≈68 of 79, ideology r≈87 of 110. A fixed fraction sampled the wrong band on ideologies and turned the disc salmon. So the compose step needs the game install, like the raw-vanilla regenerators.
 
@@ -78,7 +79,7 @@ Each row: current placeholder | three vanilla neighbours ‖ two generated candi
    - `CATEGORIES` per category: folder, size, layout, style template, DDS format, output folder.
    - `ICONS`: entity key → subject phrase, plus the accepted seed once reviewed, so reruns are deterministic.
    - About 665 subject phrases (683 with laws), fewer after the building triage. Draft them from each entity's loc name and `_desc` (buildings have no `_desc`; wonders are real landmarks FLUX knows), then review.
-3. **Renderer.** Generalise `generate_event_images.py`'s phases rather than adding a third orchestrator:
+3. **Renderer.** Generalise `generate_event_images.py`'s phases rather than adding a third orchestrator. Its `gen_image.py` can't be used as it stands: it reloads the model per image, uses model offload (out of memory on the 3080) and passes a bare hub id (a 32 GB download). #533's event pictures were made with a one-process batch instead.
    - Embed every prompt in one process and cache the embeddings, since T5 takes ~5 min to load per process.
    - Render in a second process that loads the transformer once. The event pipeline currently reloads the 24 GB model per image and would benefit from the same fix.
    - Skip an output only when it was made from the current prompt. The prototype writes a `.prompt.txt` beside each render and redoes it when the prompt changes; skipping on "file exists" alone would keep the old picture after a prompt edit. The event pipeline has that gap, which is why #502's redraw recipe deletes the old PNG by hand.
@@ -95,10 +96,10 @@ Each row: current placeholder | three vanilla neighbours ‖ two generated candi
 ## Runtime (RTX 3080 10 GB, 39 GB RAM, WSL2)
 
 - **Offload:** `enable_model_cpu_offload` runs out of memory, because the transformer is 24 GB in bf16. `enable_sequential_cpu_offload` works: ~30 s per 1024² image once warm, 2–4 min for the first.
-- **Embedding:** ~5 min per process (T5 reload); peak RSS 6.4 GB.
+- **Embedding:** ~5 min per process (T5 reload) from the first copy; 15 s on 2026-09-27 with the weights in `~/models/FLUX.1-schnell` and still in the page cache from the copy. Peak RSS 6.4 GB.
 - **Full run:** 683 icons × 2 seeds ≈ 11 h GPU, more than a night. Render one seed first (~5.7 h), then second seeds for the rejects only.
 - **NF4:** `bitsandbytes` is installed in `.venv-img` but a 4-bit transformer is **untested**. If it fits in VRAM it would avoid the offload streaming.
-- **Weights:** keep them on ext4. Copying the 32 GB snapshot off `/mnt/c` took 7 min; streaming it from drvfs on every run would pay that each time. Point `FLUX_MODEL_DIR` at the copy.
+- **Weights:** keep them on ext4, outside the session scratchpad, which a reboot clears. The copy now lives at `~/models/FLUX.1-schnell`. Copying the 32 GB snapshot off `/mnt/c` took 7 min; streaming it from drvfs on every run would pay that each time. Point `FLUX_MODEL_DIR` at the copy.
 - **Stale cache path:** the shell sets `HF_HOME=/mnt/e/hf-cache`, which doesn't exist, so any bare `from_pretrained("black-forest-labs/FLUX.1-schnell")` would start a 32 GB download there.
 - **rembg:** `rembg[gpu]` pulls an `onnxruntime-gpu` that wants CUDA 13 libraries and falls back to CPU. Plain `onnxruntime` is enough (~1–2 s per image).
 - **Environment:** the image stack lives in `.venv-img` (gitignored), separate from `.venv`, since `requirements.txt` keeps torch/diffusers commented out.

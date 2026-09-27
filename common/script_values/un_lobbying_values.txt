@@ -1,0 +1,179 @@
+﻿# ============================================================================
+# UN VOTES — LATE BALLOTS, VISIBLE LEANS, LOBBYING
+# ============================================================================
+# docs/superpowers/specs/2026-09-27-un-vote-lobbying-design.md. The writers
+# are in common/scripted_effects/un_dossier_effects.txt (the ballot) and
+# common/scripted_effects/un_lobby_effects.txt (pledges and campaigns).
+# ============================================================================
+
+# ---- The ballot's timing -------------------------------------------------------
+
+# The session's month now, and the month after it. The casting month an AI
+# member draws is 9, 10 or 11 (un_vote_ai_draws); one drawn after the session
+# began is raised to next month at least. Read only inside un_vote.4, where
+# scope:un_resolution is always set (a plain `=` opener, like every math
+# block in un_dossier_values.txt).
+# Scope: any, with scope:un_resolution saved
+un_res_months_now = {
+	value = 0
+	scope:un_resolution = {
+		add = var:un_res_months
+	}
+}
+
+un_res_next_month = {
+	value = un_res_months_now
+	add = 1
+}
+
+# ---- The snapshot's derived readings --------------------------------------------
+# Read by un_lean_snapshot straight after it writes un_lean_total and
+# un_lean_pledge. Scope: the voter, with scope:un_resolution saved.
+
+# The lean as the other members read it: the true lean plus this member's
+# misreading for the resolution (−10, 0 or +10, fixed for the session). A human
+# member draws no misreading, and nobody reads a human's shown lean.
+un_lean_shown_value = {
+	value = var:un_lean_total
+	if = {
+		limit = {
+			has_variable = un_vote_draw_res
+			var:un_vote_draw_res ?= scope:un_resolution
+			has_variable = un_lean_misread
+		}
+		add = var:un_lean_misread
+	}
+}
+
+# The lean the veto is decided on: the lean without the pledge term. A pledge
+# against (−100) never pushes a permanent member into a veto it would not have
+# cast, and a pledge for already rules the veto out (un_vote_ai_should_veto).
+un_lean_veto_basis_value = {
+	value = var:un_lean_total
+	subtract = var:un_lean_pledge
+}
+
+# ---- Campaigns (spec §3) ------------------------------------------------------------
+
+# Each full month a campaign runs moves its member's lean this far its way, up
+# to the cap; campaigns one way on the same member stack to the stack cap, and
+# the two ways net out (un_lobby_campaigns_aggregate).
+un_lobby_campaign_step = { value = 3 }
+un_lobby_campaign_cap = { value = 15 }
+un_lobby_campaign_stack_cap = { value = 20 }
+
+# One campaign's shift after its months. Scope: campaign container
+un_lobby_campaign_shift_value = {
+	value = var:un_lc_months
+	multiply = un_lobby_campaign_step
+	max = un_lobby_campaign_cap
+}
+
+# THE LOBBYING term of the lean: the member's net shift from the campaigns on
+# it, written each month (and when one ends) by un_lobby_effects.txt, for this
+# resolution only.
+# Scope: the voter (= ROOT, un_vote.4), with scope:un_resolution saved
+un_lean_lobbying = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = un_lobby_shift_res
+			var:un_lobby_shift_res ?= scope:un_resolution
+		}
+		add = var:un_lobby_for_shift
+		subtract = var:un_lobby_against_shift
+	}
+}
+
+# ---- The AI's lobbying (spec §5) -----------------------------------------------------
+
+# An AI lobbyist starts a campaign (100 influence) only while its available
+# influence covers it with this much to spare, and lets one go when its
+# influence falls below 0. It runs at most three at once (the literal
+# `count >= 3` in un_lobby_ai_lobby).
+un_lobby_ai_influence_floor = { value = 150 }
+
+# Which lobbyable member the AI works on first: the one nearest the line, whose
+# vote a campaign is likeliest to turn. Scope: the member, with a snapshot for
+# the resolution in session (un_lobby_true_lean_in has checked it).
+un_lobby_ai_target_order = {
+	value = 100
+	if = {
+		limit = { var:un_lean_total >= 0 }
+		subtract = var:un_lean_total
+	}
+	else = {
+		add = var:un_lean_total
+	}
+}
+
+# ---- The chamber's Delegations rows (spec §6) -------------------------------------------
+
+# The bands the chamber shows a lean in (spec §1): firmly for at +30 or more,
+# leaning for from +10, undecided between −9 and +9, leaning against from −10,
+# firmly against at −30 or less.
+un_lean_band_firm = { value = 30 }
+un_lean_band_lean = { value = 10 }
+un_lean_band_lean_against = { value = -10 }
+un_lean_band_firm_against = { value = -30 }
+
+# Where an AI member sits in the rows: members someone is working on (a
+# campaign or a pledge) first, then undecided, then leaning for, then leaning
+# against; within each group the member nearest the line first. A firmly
+# decided member scores under 1000 and gets no row (the summary line counts
+# it). Read off the SHOWN lean, never the true one, so the order gives away
+# nothing the band does not.
+# Scope: the AI member (= ROOT, un_vote.4), after un_lean_snapshot, with
+# scope:un_resolution saved
+un_deleg_key_value = {
+	value = 0
+	if = {
+		limit = { un_deleg_is_worked = yes }
+		add = 4000
+	}
+	else_if = {
+		limit = {
+			var:un_lean_shown > un_lean_band_lean_against
+			var:un_lean_shown < un_lean_band_lean
+		}
+		add = 3000
+	}
+	else_if = {
+		limit = {
+			var:un_lean_shown >= un_lean_band_lean
+			var:un_lean_shown < un_lean_band_firm
+		}
+		add = 2000
+	}
+	else_if = {
+		limit = {
+			var:un_lean_shown <= un_lean_band_lean_against
+			var:un_lean_shown > un_lean_band_firm_against
+		}
+		add = 1000
+	}
+	add = un_deleg_tiebreak
+}
+
+# 0-100: 100 at a shown lean of 0, less the further from the line.
+# Scope: the member
+un_deleg_tiebreak = {
+	value = 100
+	if = {
+		limit = { var:un_lean_shown >= 0 }
+		subtract = var:un_lean_shown
+	}
+	else = {
+		add = var:un_lean_shown
+	}
+	min = 0
+}
+
+# The rows' order_by. Scope: a member on the resolution's un_res_delegates
+un_deleg_order = {
+	value = 0
+	if = {
+		limit = { has_variable = un_deleg_key }
+		add = var:un_deleg_key
+	}
+}

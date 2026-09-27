@@ -990,8 +990,8 @@ IMAGES = {
         "events": ["nuclear_weapon_events.10", "nuclear_taboo.1"],
     },
     "nuclear_diplomacy_talks": {
-        # Prompt revised 2026-09-27: the current .dds shows the EU flag. Redo it as
-        # generate_event_images.py's docstring says (delete the .dds and the PNG).
+        # Redrawn 2026-09-27 from this flag-free prompt; the first version showed
+        # the EU flag.
         "prompt": "Arms control negotiators seated along both sides of a long polished table in a pale panelled conference room, papers and water carafes between them, tall windows and a plain wall behind them.",
         "style": "oil painting, academic art, diplomatic interior",
         "events": [
@@ -1999,8 +1999,8 @@ IMAGES = {
         "events": ["un_events.9"],
     },
     "nuclear_treaty_signing": {
-        # Prompt revised 2026-09-27: the current .dds shows a US flag. Redo it as
-        # generate_event_images.py's docstring says (delete the .dds and the PNG).
+        # Redrawn 2026-09-27 from this flag-free prompt; the first version showed
+        # a US flag.
         "prompt": "Delegates in dark suits signing a treaty at a long table in a wood-panelled hall, pens on paper, photographers with flashbulbs at the edge of the room, a radiation trefoil emblem on the panelled wall behind them.",
         "style": "oil painting, academic art, institutional grandeur",
         "events": ["nuclear_custody.7", "nuclear_custody.11", "un_events.14", "un_events.23"],
@@ -2230,10 +2230,9 @@ IMAGES = {
     },
 
     # =========================================================================
-    # PENDING: EVENTS ADDED SINCE THE APRIL 2026 PASS
-    # Their events show interim art until these are generated (see the
-    # module docstring); phase 3 of generate_event_images.py wires them once
-    # the .dds exists.
+    # SEPTEMBER 2026 PASS: EVENTS ADDED SINCE THE APRIL PASS
+    # Generated and wired 2026-09-27; each picture was chosen from three seeds
+    # and checked for flags, lettering and likenesses.
     # =========================================================================
     "missile_launch_crew": {
         "prompt": "Two officers in uniform seated at steel consoles in a cramped underground missile launch control room, banks of toggle switches, dials and indicator lamps, a heavy blast door behind them, red emergency lighting.",

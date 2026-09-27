@@ -1319,7 +1319,7 @@ nuclear_incident.40 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/nuclear_false_alarm_panic.dds" }
+	event_image = { texture = "gfx/event_pictures/bomber_base_alert.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

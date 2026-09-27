@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import argparse
 import io
+import os
 import shutil
 import subprocess
 import sys
@@ -56,6 +57,26 @@ VERBOSE = True
 
 
 # ── helpers ──────────────────────────────────────────────────────────────
+
+def _on_wsl() -> bool:
+    """True under WSL, where texconv.exe runs through Windows interop."""
+    try:
+        return "microsoft" in Path("/proc/version").read_text().lower()
+    except OSError:
+        return False
+
+
+def _exe_path(p: Path) -> str:
+    """A path texconv.exe can open: under WSL, the Windows form (wslpath -w).
+
+    Interop passes arguments through untranslated, so a Linux path such as
+    /tmp/x/temp_input.png means nothing to the Windows program.
+    """
+    if _on_wsl():
+        return subprocess.run(["wslpath", "-w", str(p)], capture_output=True,
+                              text=True, check=True).stdout.strip()
+    return str(p)
+
 
 def find_texconv() -> Path | None:
     """Return path to texconv.exe if available."""
@@ -101,10 +122,11 @@ def download_texconv() -> Path:
 
 def ensure_texconv() -> Path:
     """Find or download texconv.exe."""
-    path = find_texconv()
-    if path:
-        return path
-    return download_texconv()
+    path = find_texconv() or download_texconv()
+    # A download lands without the execute bit, which WSL interop needs.
+    if os.name != "nt" and not os.access(path, os.X_OK):
+        path.chmod(path.stat().st_mode | 0o111)
+    return path
 
 
 def resize_and_crop(img: "Image.Image") -> "Image.Image":
@@ -168,8 +190,8 @@ def convert_image(
             "-f", fmt,
             "-y",               # overwrite
             "-srgb",            # sRGB color space
-            "-o", str(out_dir),
-            str(tmp_png),
+            "-o", _exe_path(out_dir),
+            _exe_path(tmp_png),
         ]
         if VERBOSE:
             print(f"  Running: {' '.join(cmd)}")
