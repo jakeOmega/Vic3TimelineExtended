@@ -2173,10 +2173,16 @@ society_technology_events_on_action = {
 				trigger_event = { id = society_technology_events.7 }
 			}
 			5 = {
+				# Mirrors the event's own trigger, so a pick never lands on an event
+				# that cannot fire: one-shot (ste_event_8_fired), not while one of its
+				# outcome modifiers runs, and not under Full Equality and Protection
+				# (marriage equality is already law there).
 				trigger = {
 					has_technology_researched = LGBTQ_rights_movement
-					# Not under Full Equality and Protection: the event's own trigger
-					# excludes it (marriage equality is already law there).
+					NOT = { has_variable = ste_event_8_fired }
+					NOT = { has_modifier = ste_marriage_equality }
+					NOT = { has_modifier = ste_marriage_traditional }
+					NOT = { has_modifier = ste_civil_unions }
 					OR = { has_law = law_type:law_basic_protections has_law = law_type:law_comprehensive_rights }
 				}
 				trigger_event = { id = society_technology_events.8 }
