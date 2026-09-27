@@ -34,3 +34,60 @@ te_pm_retooling_waived = {
 		has_game_rule = free_market_construction_no_maintenance
 	}
 }
+
+# A production-method change on this state's railway that is only the
+# Transport principle swap: replacement_if_valid moving a train method into its
+# tier 3 variant (same method, +10 on te_state_railway_train_code), or the
+# method leaving the tier 3 variant because the owner's bloc no longer holds
+# principle_transport_3/4/5. Any other change (a new train method, the
+# passenger group, Centralized Traffic Control) is not covered. Read before
+# te_state_note_railway_train_method updates the record.
+# Residual (accepted by the owner): a railway with no record yet (the weekly
+# retooling sweep records every railway, so only until its first run on a
+# save) that moves from a lower train method straight onto a tier 3 variant is
+# waived once; and a second production-method change on the same railway
+# within the waiver's two days is waived with it.
+# Scope: state
+te_state_railway_tier3_swap = {
+	OR = {
+		AND = {
+			has_variable = te_rail_train_code
+			te_state_railway_train_code_change > 9
+			te_state_railway_train_code_change < 11
+		}
+		AND = {
+			NOT = { has_variable = te_rail_train_code }
+			te_state_railway_train_code > 10
+		}
+		AND = {
+			has_variable = te_rail_train_code
+			var:te_rail_train_code > 10
+			te_state_railway_train_code < 10
+			owner = {
+				NOT = {
+					power_bloc ?= {
+						OR = {
+							has_principle = principle:principle_transport_3
+							has_principle = principle:principle_transport_4
+							has_principle = principle:principle_transport_5
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Retooling is waived for this building (building scope): every building in a
+# game whose free_market_construction_rule setting waives it, or a railway
+# whose state carries the two-day te_rail_retool_waive marker set by
+# te_state_note_railway_train_method for the Transport principle swap.
+te_building_retooling_waived = {
+	OR = {
+		te_pm_retooling_waived = yes
+		AND = {
+			is_building_type = building_railway
+			state = { has_variable = te_rail_retool_waive }
+		}
+	}
+}

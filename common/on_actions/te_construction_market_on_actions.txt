@@ -359,10 +359,18 @@ on_start_expanding_building = {
 # or after this hook fires is unverified, so the building also re-checks a day
 # later (te_construction_market_building_events.3); the weekly sweep
 # (minor_events_timelineextended.100) catches anything else.
+# Railways also get the waiver, in any game, for the automatic Transport
+# principle tier 3 swap only (te_railway_note_train_method records the train
+# method and decides; te_building_retooling_waived reads its marker). It runs
+# first, so the marker is in place before the removal below.
 te_on_production_method_changed_retooling = {
 	effect = {
 		if = {
-			limit = { te_pm_retooling_waived = yes }
+			limit = { is_building_type = building_railway }
+			te_railway_note_train_method = yes
+		}
+		if = {
+			limit = { te_building_retooling_waived = yes }
 			te_remove_waived_pm_retooling = yes
 			trigger_event = {
 				id = te_construction_market_building_events.3
