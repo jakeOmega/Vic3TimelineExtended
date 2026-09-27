@@ -5,12 +5,18 @@ Experiment for extending the event-image pipeline to the mod's icon placeholders
 (techs on `mass_communication.dds`, treaty articles on `offer_embassy.dds`,
 buildings on `skyscraper.dds`, decrees on `decree_road_maintenance.dds`, ...).
 
-Three stages, each resumable:
+Three stages:
 
   embed    Encode every prompt with FLUX's text encoders, save the embeddings,
            free the encoders. Keeps peak RAM at ~one model, not T5 + transformer.
+           Skips a prompt whose saved embedding was made from the same text.
   generate Load the FLUX transformer ONCE and render every sample x seed
            (`generate_event_images.py` reloads the 24 GB model per image).
+           Each render gets a `<name>.prompt.txt` beside it; a render is redone
+           when that text differs from the current prompt, so editing a subject
+           or a style re-renders just what it affects. An embedding made from an
+           older prompt is an error (rerun `embed`). Neither stage loads a model
+           when everything is up to date.
   compose  Fit each raw render into its category's vanilla layout:
              cutout    - background removed (rembg), trimmed, padded, graded
              framed    - full-bleed scene inside the frame lifted from vanilla
@@ -23,7 +29,8 @@ changes, so it survives the median intact while the artwork averages to mud.
 
 Needs the optional image stack (torch, diffusers, rembg + plain onnxruntime;
 rembg[gpu]'s onnxruntime-gpu wants CUDA 13 libs and falls back to CPU anyway).
-Writes PNGs only; no DDS, no reference rewriting.
+Writes PNGs only; no DDS, no reference rewriting. Never downloads weights:
+`FLUX_MODEL_DIR` must name a local snapshot (or the HF cache must hold one).
 
     FLUX_MODEL_DIR=<local FLUX.1-schnell snapshot on ext4> HF_HUB_OFFLINE=1 \
     VIC3_BASE_GAME=<game install> \
@@ -98,7 +105,8 @@ SAMPLES = [
     ("technology", "transistors", "invention_icons/mass_communication.dds",
      "a single large vintage transistor with a black casing and three metal legs"),
     ("technology", "universal_basic_income", "invention_icons/mass_communication.dds",
-     "an open hand holding a neat stack of paper banknotes and a few coins"),
+     # "paper banknotes" alone came back as US dollars; name a colour.
+     "an open hand holding a neat stack of plain cream-and-brown paper banknotes and a few coins"),
     ("technology", "space_elevator", "invention_icons/mass_communication.dds",
      "a miniature model of a space elevator: a slender lattice tether tower with a "
      "climber pod, on a round stone base"),
@@ -138,18 +146,46 @@ def slug(cat: str, key: str, seed: int) -> str:
     return f"{cat}__{key}__s{seed}"
 
 
+def prompt_for(cat: str, subject: str) -> str:
+    return CATEGORIES[cat]["style"].format(subject=subject) + ", no text, no writing, no letters"
+
+
+def load_pipe(**components):
+    """FluxPipeline from local files only.
+
+    A bare hub id with an unset or stale HF_HOME would otherwise start a 32 GB
+    download (see the spec's runtime notes).
+    """
+    import torch
+    from diffusers import FluxPipeline
+    try:
+        return FluxPipeline.from_pretrained(MODEL, local_files_only=True,
+                                            torch_dtype=torch.bfloat16, **components)
+    except OSError as e:
+        raise SystemExit(f"FLUX weights not found locally ({MODEL}). Point FLUX_MODEL_DIR at a "
+                         f"local FLUX.1-schnell snapshot; this script never downloads.\n{e}")
+
+
 # ── stage 1: embed ───────────────────────────────────────────────────────
 
 def stage_embed(out: Path) -> None:
     import torch
-    from diffusers import FluxPipeline
 
-    pipe = FluxPipeline.from_pretrained(MODEL, transformer=None, vae=None, torch_dtype=torch.bfloat16)
-    pipe.enable_model_cpu_offload()
     emb_dir = out / "embeds"
     emb_dir.mkdir(parents=True, exist_ok=True)
+    todo = []
     for cat, key, _placeholder, subject in selected():
-        prompt = CATEGORIES[cat]["style"].format(subject=subject) + ", no text, no writing, no letters"
+        prompt = prompt_for(cat, subject)
+        dest = emb_dir / f"{cat}__{key}.pt"
+        if dest.exists() and torch.load(dest)["prompt"] == prompt:
+            continue
+        todo.append((cat, key, prompt))
+    if not todo:
+        print("embed: every embedding is up to date")
+        return
+    pipe = load_pipe(transformer=None, vae=None)
+    pipe.enable_model_cpu_offload()
+    for cat, key, prompt in todo:
         with torch.no_grad():
             pe, pooled, _ids = pipe.encode_prompt(prompt=prompt, prompt_2=None, max_sequence_length=256)
         torch.save({"prompt_embeds": pe.cpu(), "pooled": pooled.cpu(), "prompt": prompt},
@@ -165,35 +201,48 @@ def stage_generate(out: Path, seeds: int, offload: str) -> None:
     import time
 
     import torch
-    from diffusers import FluxPipeline
+
+    raw = out / "raw"
+    raw.mkdir(parents=True, exist_ok=True)
+    todo = []
+    for cat, key, _placeholder, subject in selected():
+        prompt = prompt_for(cat, subject)
+        emb_path = out / "embeds" / f"{cat}__{key}.pt"
+        if not emb_path.exists():
+            raise SystemExit(f"no embedding for {cat}/{key}: run --stage embed first")
+        emb = torch.load(emb_path)
+        if emb["prompt"] != prompt:
+            raise SystemExit(f"the embedding for {cat}/{key} was made from an older prompt: "
+                             "rerun --stage embed")
+        for seed in range(seeds):
+            dest = raw / f"{slug(cat, key, seed)}.png"
+            note = dest.with_suffix(".prompt.txt")
+            if dest.exists() and note.exists() and note.read_text(encoding="utf-8") == prompt:
+                continue
+            todo.append((emb, seed, dest, note, prompt))
+    if not todo:
+        print("generate: every render is up to date")
+        return
 
     t0 = time.time()
-    pipe = FluxPipeline.from_pretrained(
-        MODEL, text_encoder=None, text_encoder_2=None, tokenizer=None, tokenizer_2=None,
-        torch_dtype=torch.bfloat16)
+    pipe = load_pipe(text_encoder=None, text_encoder_2=None, tokenizer=None, tokenizer_2=None)
     if offload == "sequential":
         pipe.enable_sequential_cpu_offload()
     else:
         pipe.enable_model_cpu_offload()
     print(f"loaded transformer in {time.time() - t0:.0f}s ({offload} offload)")
-    raw = out / "raw"
-    raw.mkdir(parents=True, exist_ok=True)
-    for cat, key, _placeholder, _subject in selected():
-        emb = torch.load(out / "embeds" / f"{cat}__{key}.pt")
-        for seed in range(seeds):
-            dest = raw / f"{slug(cat, key, seed)}.png"
-            if dest.exists():
-                continue
-            t1 = time.time()
-            image = pipe(
-                prompt_embeds=emb["prompt_embeds"].to("cuda"),
-                pooled_prompt_embeds=emb["pooled"].to("cuda"),
-                guidance_scale=0.0, num_inference_steps=4, max_sequence_length=256,
-                width=GEN_SIZE, height=GEN_SIZE,
-                generator=torch.Generator("cpu").manual_seed(1000 + seed),
-            ).images[0]
-            image.save(dest)
-            print(f"  {dest.name}  {time.time() - t1:.0f}s")
+    for emb, seed, dest, note, prompt in todo:
+        t1 = time.time()
+        image = pipe(
+            prompt_embeds=emb["prompt_embeds"].to("cuda"),
+            pooled_prompt_embeds=emb["pooled"].to("cuda"),
+            guidance_scale=0.0, num_inference_steps=4, max_sequence_length=256,
+            width=GEN_SIZE, height=GEN_SIZE,
+            generator=torch.Generator("cpu").manual_seed(1000 + seed),
+        ).images[0]
+        image.save(dest)
+        note.write_text(prompt, encoding="utf-8")
+        print(f"  {dest.name}  {time.time() - t1:.0f}s")
 
 
 # ── stage 3: compose ─────────────────────────────────────────────────────
@@ -212,6 +261,9 @@ def vanilla_template(folder: str, size: int) -> tuple[np.ndarray, np.ndarray]:
             continue
         if im.size == (size, size):
             stack.append(np.asarray(im, dtype=np.float32))
+    if not stack:
+        raise SystemExit(f"no {size}x{size} .dds in {vanilla_icons_dir() / folder}: "
+                         "check VIC3_BASE_GAME")
     a = np.stack(stack)
     return np.median(a, axis=0), a[..., :3].std(axis=0).mean(-1)
 
