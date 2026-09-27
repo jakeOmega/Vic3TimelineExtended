@@ -374,3 +374,41 @@ nd_taboo_burden_hint = {
 		localization_key = nd_taboo_burden_hint_only_dismantling
 	}
 }
+
+# Where the taboo is heading (nd_taboo_gap_value).
+nd_taboo_heading = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { nd_taboo_gap_value > 1 }
+		localization_key = nd_taboo_heading_up
+	}
+	text = {
+		trigger = { nd_taboo_gap_value < -1 }
+		localization_key = nd_taboo_heading_down
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_taboo_heading_steady
+	}
+}
+
+# When a nuclear weapon was last used in anger.
+nd_taboo_last_use = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_global_variable = nd_taboo_last_use_year }
+		localization_key = nd_taboo_last_use_year_known
+	}
+	text = {
+		trigger = { has_global_variable = world_first_nuclear_weapon_used }
+		localization_key = nd_taboo_last_use_before
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_taboo_last_use_never
+	}
+}

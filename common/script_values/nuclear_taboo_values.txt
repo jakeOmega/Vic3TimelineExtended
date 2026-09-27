@@ -441,6 +441,12 @@ nd_disp_tb_ledger = {
 	}
 }
 
+# Target less score: where the taboo is heading.
+nd_taboo_gap_value = {
+	value = nd_disp_taboo_target
+	subtract = nd_taboo_value
+}
+
 # ---- POSSESSION (spec §4.4) — country scope unless noted ----------------------
 # One number drives both costs: the taboo's weight (0 below 40, 1 at 100) times
 # the arsenal's size (0.2 for a token force, 1 from fifty warheads, the count

@@ -620,5 +620,55 @@ class TestAI(unittest.TestCase):
             self.assertIn(key, keys, key)
 
 
+PROGRAM_SGUIS = ROOT / "common/scripted_guis/nuclear_program_sguis.txt"
+PROGRAM_GUI = ROOT / "gui/journal_entry_widgets/nuclear_program_widget.gui"
+
+
+class TestPanel(unittest.TestCase):
+    def setUp(self):
+        self.sguis = strip_comments(read(PROGRAM_SGUIS))
+        self.gui = read(PROGRAM_GUI)
+
+    def test_handlers_are_display_only_and_drawn(self):
+        for name in ("nd_taboo_exists_sgui", "nd_taboo_breakdown_sgui"):
+            body = block(self.sguis, name)
+            self.assertIn("is_valid = { always = no }", body, name)
+            self.assertIn("ai_is_valid = { always = no }", body, name)
+            self.assertIn(name, self.gui, name)
+
+    def test_breakdown_prints_every_part_and_the_target(self):
+        body = block(self.sguis, "nd_taboo_breakdown_sgui")
+        for part in PARTS:
+            self.assertIn(f"custom_tooltip_no_bullet = nd_taboo_bd_{part}", body, part)
+            self.assertIn(f"GetGlobalVariable('nd_tb_{part}')", loc_value(f"nd_taboo_bd_{part}"), part)
+        self.assertIn("custom_tooltip_no_bullet = nd_taboo_bd_target", body)
+
+    def test_chart_records_and_draws_both_series(self):
+        record = block(strip_comments(read(TABOO_EFFECTS)), "nd_taboo_record_history")
+        self.assertIn("te_history_record_sample = { METRIC = nd_taboo VALUE = global_var:nd_taboo }", record)
+        self.assertIn("te_history_record_sample = { METRIC = nd_taboo_tgt VALUE = global_var:nd_taboo_target }", record)
+        self.assertIn("nd_taboo_record_history = yes", block(strip_comments(read(TABOO_EFFECTS)), "nd_taboo_country_monthly"))
+        for metric in ("nd_taboo", "nd_taboo_tgt"):
+            self.assertIn(f"ScriptContainer.HasVariable( 'te_hist_v_{metric}' )", self.gui, metric)
+        section = self.gui[self.gui.index("nd_taboo_hist_open"):]
+        self.assertGreaterEqual(section.count('blockoverride "marker_pips" {}'), 2)
+
+    def test_custom_loc_targets_have_loc(self):
+        keys = loc_keys()
+        custom = strip_comments(read(PROGRAM_CUSTOM_LOC))
+        targets = re.findall(r"localization_key = ((?:nd_taboo|nuclear_program)_\w+)", custom)
+        self.assertTrue(targets)
+        for key in targets:
+            self.assertIn(key, keys, key)
+
+    def test_every_panel_key_has_loc(self):
+        keys = loc_keys()
+        drawn = set(re.findall(r'(?:text|tooltip) = "((?:je_nuclear_program_widget_taboo|nd_taboo)_\w+)"', self.gui))
+        drawn |= set(re.findall(r"Localize\( '((?:je_nuclear_program_widget_taboo|nd_taboo)_\w+)' \)", self.gui))
+        self.assertTrue(drawn)
+        for key in drawn:
+            self.assertIn(key, keys, key)
+
+
 if __name__ == "__main__":
     unittest.main()

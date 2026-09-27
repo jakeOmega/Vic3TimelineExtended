@@ -13,8 +13,9 @@
 ###     for a non-nuclear party to a crisis, and neither has anything to fund.
 ###
 ### widget_je_nuclear_balance     custom_widget_container_4 (last)
-###     Two collapsed sections at the foot of the entry, after posture and
-###     crisis: what our warheads can reach and what our skies can stop, and the
+###     The nuclear taboo (open), then two collapsed sections at the foot of
+###     the entry, after posture and crisis: what our warheads can reach and
+###     what our skies can stop, and the
 ###     global nuclear-powers leaderboard that used to be eleven triggered_desc
 ###     lines on the entry. Drawn for everyone the entry is active for — a
 ###     non-nuclear crisis target has a home defence too.
@@ -305,6 +306,250 @@ flowcontainer = {
 	spacing = 2
 
 	visible = "[JournalEntry.IsActive]"
+
+	### ---- The nuclear taboo (open) ------------------------------------------
+	### The world's score, where it is heading and why, and what it costs us
+	### now (nuclear_taboo_values.txt). Drawn from the first warhead on, for
+	### every country — the entry is active for all of them by then.
+	nuclear_program_section_header = {
+		visible = "[GetScriptedGui('nd_taboo_exists_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		blockoverride "left_text" {
+			text = "je_nuclear_program_widget_taboo_header"
+		}
+		blockoverride "onclick" {
+			onclick = "[GetVariableSystem.Toggle('nd_taboo_panel_closed')]"
+		}
+		# Open by default: Exists means *collapsed* for this section.
+		blockoverride "onclick_showmore" {
+			visible = "[GetVariableSystem.Exists('nd_taboo_panel_closed')]"
+		}
+		blockoverride "onclick_showless" {
+			visible = "[Not(GetVariableSystem.Exists('nd_taboo_panel_closed'))]"
+		}
+	}
+
+	nuclear_program_panel = {
+		visible = "[And( GetScriptedGui('nd_taboo_exists_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Not(GetVariableSystem.Exists('nd_taboo_panel_closed')) )]"
+
+		nuclear_program_row = {
+			blockoverride "row_label" {
+				text = "je_nuclear_program_widget_taboo_score_label"
+			}
+			blockoverride "row_value" {
+				text = "je_nuclear_program_widget_taboo_score_value"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "[Concatenate( Localize( 'je_nuclear_program_widget_taboo_score_tt' ), GetScriptedGui('nd_taboo_breakdown_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+			}
+		}
+
+		nuclear_program_row = {
+			blockoverride "row_label" {
+				text = "je_nuclear_program_widget_taboo_heading_label"
+			}
+			blockoverride "row_value" {
+				text = "je_nuclear_program_widget_taboo_heading_value"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "[Concatenate( Localize( 'je_nuclear_program_widget_taboo_score_tt' ), GetScriptedGui('nd_taboo_breakdown_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+			}
+		}
+
+		nuclear_program_row = {
+			blockoverride "row_label" {
+				text = "je_nuclear_program_widget_taboo_strategic_label"
+			}
+			blockoverride "row_value" {
+				text = "je_nuclear_program_widget_taboo_strategic_value"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "je_nuclear_program_widget_taboo_costs_tt"
+			}
+		}
+
+		nuclear_program_row = {
+			blockoverride "row_label" {
+				text = "je_nuclear_program_widget_taboo_tactical_label"
+			}
+			blockoverride "row_value" {
+				text = "je_nuclear_program_widget_taboo_tactical_value"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "je_nuclear_program_widget_taboo_costs_tt"
+			}
+		}
+
+		nuclear_program_row = {
+			blockoverride "row_label" {
+				text = "je_nuclear_program_widget_taboo_threat_label"
+			}
+			blockoverride "row_value" {
+				text = "je_nuclear_program_widget_taboo_threat_value"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "je_nuclear_program_widget_taboo_costs_tt"
+			}
+		}
+
+		nuclear_program_row = {
+			visible = "[GetScriptedGui('nd_armed_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			blockoverride "row_label" {
+				text = "je_nuclear_program_widget_taboo_burden_label"
+			}
+			blockoverride "row_value" {
+				text = "je_nuclear_program_widget_taboo_burden_value"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "je_nuclear_program_widget_taboo_burden_tt"
+			}
+		}
+
+		nuclear_program_text = {
+			text = "je_nuclear_program_widget_taboo_note"
+			default_format = "#lore"
+		}
+
+		### The taboo's history (closed by default) — the shared chart types
+		### and range variable (te_history_chart.gui), as the UN chart uses.
+		nuclear_program_section_header = {
+			blockoverride "left_text" {
+				text = "je_nuclear_program_widget_taboo_history_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('nd_taboo_hist_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('nd_taboo_hist_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('nd_taboo_hist_open')]"
+			}
+		}
+
+		flowcontainer = {
+			direction = vertical
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 2
+			visible = "[GetVariableSystem.Exists('nd_taboo_hist_open')]"
+
+			flowcontainer = {
+				direction = horizontal
+				ignoreinvisible = yes
+				parentanchor = hcenter
+				spacing = 4
+				margin = { 4 4 }
+
+				te_history_range_button = {
+					blockoverride "range_text" {
+						text = "te_hist_range_1y"
+					}
+					blockoverride "range_enabled" {
+						enabled = "[Not(GetVariableSystem.HasValue( 'te_hist_range', '1' ))]"
+					}
+					blockoverride "range_onclick" {
+						onclick = "[GetVariableSystem.Set( 'te_hist_range', '1' )]"
+					}
+				}
+				te_history_range_button = {
+					blockoverride "range_text" {
+						text = "te_hist_range_5y"
+					}
+					blockoverride "range_enabled" {
+						enabled = "[Not(GetVariableSystem.HasValue( 'te_hist_range', '5' ))]"
+					}
+					blockoverride "range_onclick" {
+						onclick = "[GetVariableSystem.Set( 'te_hist_range', '5' )]"
+					}
+				}
+				te_history_range_button = {
+					blockoverride "range_text" {
+						text = "te_hist_range_20y"
+					}
+					blockoverride "range_enabled" {
+						enabled = "[Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '5' ) )]"
+					}
+					blockoverride "range_onclick" {
+						onclick = "[GetVariableSystem.Set( 'te_hist_range', '20' )]"
+					}
+				}
+			}
+
+			textbox = {
+				visible = "[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('te_hist') ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 480
+				align = hcenter|nobaseline
+				text = "te_hist_since"
+			}
+
+			te_history_chart = {
+				blockoverride "chart_title" {
+					text = "nd_taboo_hist_title"
+				}
+				blockoverride "chart_legend" {
+					text = "nd_taboo_hist_legend"
+				}
+				# The store's marker pips belong to other systems.
+				blockoverride "marker_pips" {}
+				blockoverride "bar_tooltip" {
+					tooltip = "nd_taboo_hist_tt"
+				}
+				blockoverride "bar_body" {
+					te_history_bar_unsigned = {
+						visible = "[ScriptContainer.HasVariable( 'te_hist_v_nd_taboo' )]"
+						blockoverride "values" {
+							min = 0
+							max = 100
+							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_nd_taboo' ) ) )]"
+						}
+						blockoverride "cover_values" {
+							min = 0
+							max = 100
+							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_nd_taboo' ), '(CFixedPoint)4' ) ) )]"
+						}
+						blockoverride "color" {
+							color = { 0.80 0.45 0.25 1.0 }
+						}
+					}
+				}
+			}
+
+			te_history_chart = {
+				blockoverride "chart_title" {
+					text = "nd_taboo_hist_target_title"
+				}
+				blockoverride "chart_legend" {
+					text = "nd_taboo_hist_target_legend"
+				}
+				# The store's marker pips belong to other systems.
+				blockoverride "marker_pips" {}
+				blockoverride "bar_tooltip" {
+					tooltip = "nd_taboo_hist_target_tt"
+				}
+				blockoverride "bar_body" {
+					te_history_bar_unsigned = {
+						visible = "[ScriptContainer.HasVariable( 'te_hist_v_nd_taboo_tgt' )]"
+						blockoverride "values" {
+							min = 0
+							max = 100
+							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_nd_taboo_tgt' ) ) )]"
+						}
+						blockoverride "cover_values" {
+							min = 0
+							max = 100
+							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_nd_taboo_tgt' ), '(CFixedPoint)4' ) ) )]"
+						}
+						blockoverride "color" {
+							color = { 0.55 0.55 0.70 1.0 }
+						}
+					}
+				}
+			}
+		}
+	}
 
 	### ---- What we can deliver, and what we can stop ------------------------
 	### Collapsed by default. The two ratings are the same modifiers the strike

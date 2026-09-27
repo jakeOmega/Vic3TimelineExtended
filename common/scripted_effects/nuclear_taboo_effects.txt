@@ -567,6 +567,7 @@ nd_taboo_country_monthly = {
 		}
 		nd_taboo_refresh_held = yes
 		nd_taboo_refresh_possession = yes
+		nd_taboo_record_history = yes
 	}
 }
 
@@ -598,5 +599,22 @@ nd_taboo_refresh_possession = {
 				remove_modifier = nd_taboo_possession_cost
 			}
 		}
+	}
+}
+
+# Two monthly series for the panel's chart, stored per tracked country for the
+# reason the UN authority and global-warming series are (te_history_chart
+# reads the country's own list; te_history_global_warming_effects.txt). No
+# markers: the store's pips are shared with other systems and would go
+# unexplained. te_history_record_sample gates on te_history_country_is_tracked
+# itself. Scope: country (nd_taboo_country_monthly).
+nd_taboo_record_history = {
+	if = {
+		limit = {
+			has_global_variable = nd_taboo
+			has_global_variable = nd_taboo_target
+		}
+		te_history_record_sample = { METRIC = nd_taboo VALUE = global_var:nd_taboo }
+		te_history_record_sample = { METRIC = nd_taboo_tgt VALUE = global_var:nd_taboo_target }
 	}
 }
