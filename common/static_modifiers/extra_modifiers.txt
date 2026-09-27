@@ -2082,6 +2082,13 @@ mandate_system_modifier = {
 	country_diplomatic_reputation_add = 5
 }
 
+# The Mandate System decision's cost, applied decaying over normal_modifier_time
+# (the shape of peaceful_decolonization_modifier's -200).
+mandate_system_transition_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_authority_add = -100
+}
+
 # Phase modifiers (applied automatically by JE pulse based on stability level).
 # Five tiers, mapped to the status_desc bands:
 #   >=90  Solidified    : strong positive

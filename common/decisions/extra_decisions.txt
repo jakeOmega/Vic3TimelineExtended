@@ -235,8 +235,11 @@ imperial_federation_act_civilizing_mission = {
 # Mandate System Decision — managed-decline option for the broad-franchise empire
 # Converts the colonial JE into informal economic empire (mandate_system_modifier)
 # while allowing the player to keep collecting some of the benefits.
-# Available to liberal-democratic colonial empires that have already taken at
-# least one Round Table Conference.
+# Available to liberal-democratic colonial empires holding the Neocolonialism law.
+# Costs authority: mandate_system_transition_modifier, -100 easing over five
+# years, the decaying shape peaceful_decolonization_modifier gives the Round
+# Table and a unilateral release. (The original one-shot add_authority = -100
+# was dropped in e1fe52ae: add_authority is not a Vic3 effect.)
 # ============================================================================
 mandate_system_decision = {
 	is_shown = {
@@ -259,8 +262,6 @@ mandate_system_decision = {
 		je:je_colonial_empire = {
 			"scripted_bar_progress(colonial_stability_bar)" >= 65
 		}
-		# Round Table Conference taken at least once (timed positive event modifier
-		# is the cleanest signal the button has been used recently)
 		# Hard requirement: neocolonialism law (the mod-added "informal empire"
 		# Colonial Affairs law gated on the decolonization tech)
 		has_law = law_type:law_neocolonialism
@@ -280,6 +281,12 @@ mandate_system_decision = {
 		add_modifier = {
 			name = mandate_system_modifier
 			days = -1
+		}
+		# The cost: selling the transition spends authority, easing over five years
+		add_modifier = {
+			name = mandate_system_transition_modifier
+			days = normal_modifier_time
+			is_decaying = yes
 		}
 		# Push bar up — the world recognizes the negotiated mode
 		add_modifier = {
