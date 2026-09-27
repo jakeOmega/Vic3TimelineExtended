@@ -28,11 +28,10 @@
 #                       rs_mortality, rs_remaining, rs_arrived, rs_died,
 #                       rs_months_running, rs_last_source (a state),
 #                       rs_bonus_scale (destination-bonus multiplier; persists
-#                       while the bonuses can be on)
-#   Authority building  rs_arrived, rs_died (the state's, mirrored: readout
-#                       multipliers; persist, so the multipliers never read
-#                       'none')
-#   source state        rs_recruits (this month, every destination),
+#                       while the bonuses can be on). rs_arrived and rs_died
+#                       also back the Authority's readouts, which read them
+#                       as root.var: (a building has no variables of its own)
+#   source state       rs_recruits (this month, every destination),
 #                       rs_taken_now (this destination's take, for unrest),
 #                       rs_death_carry (transit deaths not yet killed)
 #   country             rs_month_<program> (this month's recruits)
@@ -444,8 +443,8 @@ resettlement_land_pressure = {
 
 # ---- The state pulse: modifier refreshes -------------------------------------
 # State scope, ROOT = the state (resettlement_state_on_action). Every state- or
-# building-scoped add_modifier { multiplier = var:… } is applied here, reading
-# the variables the country pulse stored (see the header).
+# building-scoped add_modifier { multiplier = … } is applied here, reading
+# the state variables the country pulse stored (see the header).
 resettlement_state_monthly = {
 	if = {
 		limit = { has_building = building_resettlement_colony }
@@ -468,27 +467,30 @@ resettlement_state_monthly = {
 	}
 }
 
-# State scope: a destination, from the state pulse. One refresh site for the
-# building's readouts. The building mirrors the state's rs_arrived and rs_died
-# under the same names, so the multiplier is right whether the engine reads
-# it from ROOT (this state) or from the modifier's owner (the building).
+# State scope: a destination, from the state pulse (ROOT = this state). One
+# refresh site for the building's readouts. A building has no variables: a
+# set_variable on one logs "This scope doesn't support variables" and writes
+# nothing, and a var: read in its limit fails, so nothing after it runs. The
+# readouts therefore read the state's own rs_arrived and rs_died through root
+# (docs/guides/scripting_best_practices.md § "Buildings Have No Variables").
+# root.var: in the multiplier is right whether the engine resolves it against
+# ROOT or against the building, and the state's variables are never removed.
 resettlement_refresh_destination_readout = {
-	save_scope_as = rs_readout_state
 	every_scope_building = {
 		limit = { is_building_type = building_resettlement_colony }
-		set_variable = { name = rs_arrived value = scope:rs_readout_state.var:rs_arrived }
-		set_variable = { name = rs_died value = scope:rs_readout_state.var:rs_died }
+		te_debug_rs_readout_probe_building = yes # TEMPORARY PROBE: delete after one launch
 		remove_modifier = resettlement_arrivals
 		remove_modifier = resettlement_transit_deaths
 		if = {
-			limit = { var:rs_arrived > 0 }
-			add_modifier = { name = resettlement_arrivals multiplier = var:rs_arrived }
+			limit = { root.var:rs_arrived > 0 }
+			add_modifier = { name = resettlement_arrivals multiplier = root.var:rs_arrived }
 		}
 		if = {
-			limit = { var:rs_died > 0 }
-			add_modifier = { name = resettlement_transit_deaths multiplier = var:rs_died }
+			limit = { root.var:rs_died > 0 }
+			add_modifier = { name = resettlement_transit_deaths multiplier = root.var:rs_died }
 		}
 	}
+	te_debug_rs_readout_probe_state = yes # TEMPORARY PROBE: delete after one launch
 }
 
 # State scope: a destination, from the state pulse. One refresh site for the
