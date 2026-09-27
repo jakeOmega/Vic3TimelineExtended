@@ -3256,7 +3256,8 @@ un_high_authority_infamy_modifier = {
 	country_infamy_generation_mult = 0.10
 }
 
-# Applied to non-members when UN authority is >= 60
+# Applied to eligible non-members from the Established UN tier
+# (un_tier_at_least_established; it was authority 60 before the tier ladder)
 # Represents diplomatic isolation of countries outside the international order
 un_nonmember_pariah_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
@@ -3265,7 +3266,9 @@ un_nonmember_pariah_modifier = {
 	country_influence_mult = -0.05
 }
 
-# Applied to non-nuclear member powers when authority >= 80 + IAEA exists
+# Applied to non-nuclear members from the Strong UN tier, once the IAEA exists
+# (un_tier_at_least_strong in je_united_nations; it was authority 80 before
+# the tier ladder)
 # Represents NPT enforcement pressure: blocks nuclear program
 un_npt_disarmament_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
@@ -7052,7 +7055,11 @@ banking_crisis_confidence_messaging_modifier = {
 # ============================================================================
 # Applied directly to the hub building by st_res_refresh_hub_flow_effect.
 # These scale the active reserve PM's base 1-unit goods input/output and shut
-# off the inactive side with a fixed -100% multiplier.
+# off the inactive side with a fixed -100% multiplier: the store/withdraw pair
+# re-applied at multiplier = -1 (st_res_rebuild_good_flow_modifiers_effect).
+# The grain and ammunition *_disable_input_flow / *_disable_output_flow
+# modifiers below are left over from an older design and nothing applies them
+# (docs/systems/strategic_reserve_system.md); new goods don't need them.
 #
 # NOTE: These MUST stay `_mult`, not `_add`. The engine only registers
 # goods_input_*_add / goods_output_*_add modifier contributions through PM
@@ -7357,13 +7364,17 @@ sm_te_unused_mandate_reserve = {
 }
 
 # ============================================================================
-# AGRICULTURAL DIFFUSION - applied via agdiff_apply_diffusion_effect to every
-# country except the first researcher of a transformative ag tech. Each carries
-# a fraction (~50%) of the local tech's state_arable_land_mult. The non-decaying
-# duration models "the technique is in the world now; you can adopt it on the
-# cheap even if your scientists never invented it." Diffused modifiers stack
-# additively with the local tech bonus once the country researches itself.
-# Triggered by on_acquired_technology -> agdiff_handle_tech_acquired_effect.
+# AGRICULTURAL DIFFUSION - granted to every recognized country, the first
+# researcher of a transformative ag tech included, by the options of
+# agricultural_diffusion_events.1-5 (.a_first for the first researcher, which
+# also grants agdiff_first_mover_prestige; .a for everyone else, 14 days
+# later). Each carries a fraction (~50%) of the local tech's
+# state_arable_land_mult. The permanent (no days) duration models "the
+# technique is in the world now; you can adopt it on the cheap even if your
+# scientists never invented it." Diffused modifiers stack additively with the
+# local tech bonus once the country researches itself.
+# Triggered by on_acquired_technology -> agdiff_dispatch_if_first ->
+# agdiff_handle_tech_acquired_effect, which fires the events.
 # ============================================================================
 agdiff_nitrogen_fixation = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds

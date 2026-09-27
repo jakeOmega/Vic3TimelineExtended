@@ -1770,7 +1770,7 @@ banking_crash_severity_scale_value = {
 sol_expectations_half_life_years = 10
 
 # Monthly adaptation rate derived from half-life: rate = ln(2) / (H * 12)
-# ln(2) ≈ 0.6931. At default 5y: 0.6931 / 60 ≈ 0.01155/month.
+# ln(2) ≈ 0.6931. At the default 10y: 0.6931 / 120 ≈ 0.00578/month.
 # The country_sol_expectation_adaptation_rate_mult modifier scales this.
 sol_expectations_adaptation_rate_value = {
 	value = 0.6931
