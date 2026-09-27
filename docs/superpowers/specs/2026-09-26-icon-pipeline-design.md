@@ -125,3 +125,25 @@ The owner approved all 170 subjects and asked for era 6 first (37 techs) before 
 - **Treaty articles** (31: 18 on `offer_embassy`, the rest on law or event icons). They use the prototype's 100² `cutout` style unchanged, with `field = icon` in `common/treaty_articles/`. `wire` drops the `# Placeholder Icon` comment on the lines it rewrites.
 - **Diplomatic actions** (7) have a new `plinth` layout. The slab is lifted from vanilla, per the owner's call. `icon_render.plinth_template()` takes the median over the 16 vanilla icons whose green-topped stone slab sits in the common place. On the top face, where every figure stands, each pixel takes the median over only the icons in which it is still green, which recovers the bare marble and its rim. A pixel must be bare in a quarter of the icons, so a figure's own green parts don't count. The figure is cut out, stood on the top face and given a contact shadow. The prompt no longer asks FLUX for a pedestal.
 - **Reuse** (`"use": <path>`): four actions have a better vanilla icon than the one they borrowed. Withdraw Nuclear Umbrella gets `guarantee_independence_obligation` (the crossed-out guarantee), Colonial Culture Change gets `change_culture`, and the two cultural-force actions get the `force_culture` crest. `wire` points them there, with nothing rendered.
+
+## Review lessons (2026-09-27)
+
+About 250 icons were generated in one session: era 6 techs, all treaty articles and all diplomatic actions. The owner reviewed every batch on annotated sheets and changed about one pick in eight.
+
+- **Roughly one subject in five needed a second render, and a few needed three.** The failures repeat, so the rules for writing subjects are in `icon_prompts.py`'s docstring:
+  - real insignia on vehicles;
+  - words that get written out as text;
+  - white surfaces lost to the cutout;
+  - things FLUX won't break or fold;
+  - gallows-like shapes;
+  - double pedestals.
+- **Two candidates were enough when the subject was right.** When the idea is right but both renders are weak, `--seeds 4` adds two more.
+- **The owner's preferences:**
+  - the clearer silhouette at 100 px over the more detailed one;
+  - context that locates the object (a convoy on water, not on land);
+  - complete sets (a full round table of chairs).
+- **Three more tools came out of the session:**
+  - the `"use"` state, for a better vanilla icon;
+  - insertion of a missing icon line, since the covert operations had none;
+  - review sheets at 2× for 100 px categories.
+

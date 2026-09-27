@@ -15,12 +15,28 @@ Each ICONS entry is {"subject": <phrase>, "seed": <state>}:
 or {"use": "gfx/interface/icons/.../x.dds"}: a different existing icon fits
 better than the borrowed one (vanilla's crossed-out guarantee for withdrawing
 one); never rendered, and `wire` points the entity at it.
-A subject describes one physical object, with its material and colour.
-Unnamed colours drift to real-world defaults: "paper banknotes" drew US
-dollars. No screens with text, no currency, flags or faces. Avoid a large
-white surface: renders are on a white background, and the cutout cannot tell
-them apart (a white enamel tray lost its floor, which showed as a dark hole on
-the game's UI).
+A subject describes one physical object, with its material and colour. FLUX
+fills in whatever a subject leaves open, and review kept catching the same
+defaults (September 2026, ~250 icons):
+- Unnamed colours drift to real-world defaults: "paper banknotes" drew US
+  dollars. No screens with text, no currency, flags or faces.
+- Words that imply writing get written: "voting card" drew VOTE, "holy book"
+  HOLY, "payment-plan tag" Payment, a share certificate its title. Name the
+  object, not its purpose ("a small green wooden block").
+- Vehicles and aircraft come with insignia: a red star, a US Army star,
+  roundels, red crosses on a bomber. Choose an unmarked candidate; saying "no
+  markings" does not stop them.
+- Avoid a large white or cream surface: renders are on a white background and
+  the cutout cannot tell them apart (a white tray and a cream certificate lost
+  patches, which showed as dark holes on the game's UI).
+- FLUX will not break, fold or furl on request ("a rifle snapped in two", "a
+  furled umbrella"); change the image (a helmet full of poppies).
+- Anything hung from a crossbeam reads as a gallows (a pole with a hanging
+  bulb, a marionette on its frame).
+- In the plinth layout, "on a stand" or "on a base" adds a second pedestal.
+When both candidates miss, change the subject. When the idea is right and the
+renders are weak, `generate_icons.py --seeds 4` adds two more candidates and
+keeps the first two.
 
 Design, inventory and decisions: docs/superpowers/specs/2026-09-26-icon-pipeline-design.md.
 
@@ -318,8 +334,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "covert_election_interference_action": {"subject": "a black-gloved hand slipping a folded paper ballot into a wooden ballot box", "seed": 0},
         "covert_financial_subversion_action": {"subject": "a black-gloved hand pulling a coin from the bottom of a teetering stack of gold coins", "seed": 1},
         "covert_infrastructure_sabotage_action": {"subject": "a bundle of dynamite sticks with a lit fuse strapped to a small steel bridge", "seed": 1},
-        "covert_comms_disruption_action": {"subject": "an old black telephone with its cord snipped by a pair of red-handled pliers", "seed": 1},
-        "covert_industrial_espionage_action": {"subject": "a black-gloved hand pulling a rolled blue blueprint out of a small brick factory's window", "seed": 1},
+        "covert_comms_disruption_action": {"subject": "an old black telephone with its cord snipped by a pair of red-handled pliers", "seed": None},
+        "covert_industrial_espionage_action": {"subject": "a black-gloved hand pulling a rolled blue blueprint out of a small brick factory's window", "seed": None},
         "covert_military_espionage_action": {"subject": "a small brass spy camera photographing a folded military map with pins in it", "seed": 1},
         "covert_influence_campaign_action": {"subject": "a brass microphone draped with a black domino mask", "seed": 0},
         "covert_ideological_subversion_action": {"subject": "a stone pillar cracked through by a creeping black vine", "seed": 0},
@@ -327,8 +343,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "covert_regime_change_action": {"subject": "a black-gloved hand lifting a small golden crown off a red cushion", "seed": 1},
         "covert_nuclear_sabotage_action": {"subject": "a pair of wire cutters snipping a red wire on a grey nuclear warhead marked with a yellow-and-black radiation trefoil", "seed": 1},
         "covert_space_espionage_action": {"subject": "a grey rocket standing on its launch pad with a small brass spy camera on a tripod aimed at it", "seed": 1},
-        "covert_cultivate_assets_action": {"subject": "two hands in shadow exchanging a sealed brown envelope", "seed": 1},
-        "covert_secure_material_action": {"subject": "a black-gloved hand gripping the handle of a lead-lined steel case marked with a radiation trefoil", "seed": 1},
+        "covert_cultivate_assets_action": {"subject": "two hands in shadow exchanging a sealed brown envelope", "seed": None},
+        "covert_secure_material_action": {"subject": "a black-gloved hand gripping the handle of a lead-lined steel case marked with a radiation trefoil", "seed": None},
         # Other actions that had no icon.
         "decolonize_diplo_action": {"subject": "an open brass birdcage with a small bird flying out of its door", "seed": 1},
         "annex_subject_peaceful": {"subject": "two small stone houses joined under a single shared roof", "seed": 1},

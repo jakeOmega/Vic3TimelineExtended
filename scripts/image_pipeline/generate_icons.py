@@ -6,7 +6,8 @@ Reads the registry (icon_prompts.py) and takes each category through:
 
   render  embed the subjects and render candidates with FLUX: seeds 0..N-1 for
           an unreviewed entry (seed None), only the chosen seed for an accepted
-          one. Cached per prompt, so an edited subject re-renders only itself.
+          one. Cached per prompt, so an edited subject re-renders only itself,
+          and raising --seeds later renders only the new seeds.
   compose fit each render into the category's vanilla layout (icon_render.py).
   sheet   review sheets, 20 entities each: current icon | 3 vanilla neighbours
           || candidates. Pick a seed per entity and record it in ICONS.
