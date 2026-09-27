@@ -4201,6 +4201,46 @@ building_generic_lumber_yard = {
 	}
 }
 
+# --- Generic Dye & Fiber Research Park (Synthetics) ---
+building_generic_dye_fiber_park = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_generic_dye_fiber_park
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			OR = {
+				has_company = company_type:company_basic_synthetics
+			}
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_generic_dye_fiber_park
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_generic_dye_fiber_park
+					}
+				}
+			}
+		}
+	}
+}
+
 #============================================================
 # Phase 7: Remaining Vanilla Flavored Company Buildings
 #============================================================

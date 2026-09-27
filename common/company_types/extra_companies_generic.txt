@@ -704,6 +704,7 @@ company_basic_synthetics = {
 	building_types = {
 		building_synthetics_plant
 		building_synthetics_plant_silk
+		building_generic_dye_fiber_park
 	}
 
 
@@ -725,6 +726,7 @@ company_basic_synthetics = {
 
 	prosperity_modifier = {
 		building_textile_mill_throughput_add = 0.1
+		state_building_generic_dye_fiber_park_max_level_add = 1
 	}
 
 	flavored_company = no

@@ -1025,6 +1025,17 @@ remove_invalid_company_buildings_effect = {
 	}
 	if = {
 		limit = {
+			has_building = building_generic_dye_fiber_park
+			NOT = {
+				owner = {
+					has_company = company_basic_synthetics
+				}
+			}
+		}
+		remove_building = building_generic_dye_fiber_park
+	}
+	if = {
+		limit = {
 			has_building = building_generic_electronics_lab
 			NOT = {
 				owner = {

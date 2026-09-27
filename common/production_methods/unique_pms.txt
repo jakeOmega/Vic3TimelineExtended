@@ -4533,6 +4533,41 @@ pm_generic_lumber_yard = {
 	}
 }
 
+# --- Generic Dye & Fiber Research Park ---
+# Theme: Coal-tar chemistry and cellulose spinning labs serving the synthetic dye and artificial fiber plants.
+pm_generic_dye_fiber_park = {
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_synthetics_plant_throughput_add = 0.05
+			building_synthetics_plant_silk_throughput_add = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_coal_add = 15                            # Price:   30, Total cost:   450.0 (52.94%)
+			goods_input_wood_add = 20                            # Price:   20, Total cost:   400.0 (47.06%)
+			# Output goods
+			goods_output_dye_add = 15                            # Price:   40, Total cost:   600.0 (42.86%)
+			goods_output_silk_add = 20                           # Price:   40, Total cost:   800.0 (57.14%)
+			# Total input cost: 850.0
+			# Total output cost: 1400.0
+			# Profit: 550.0
+			# Profit margin: 64.71%
+			# Zero profit price multiplier: 0.61
+			# Employment: 10000
+			# Wage breakeven: 0.06
+		}
+		level_scaled = {
+			building_employment_engineers_add = 3000
+			building_employment_machinists_add = 3000
+			building_employment_laborers_add = 2000
+			building_employment_clerks_add = 2000
+		}
+	}
+}
+
 #==================================================
 # Phase 7: Remaining Vanilla Flavored Company PMs
 #==================================================

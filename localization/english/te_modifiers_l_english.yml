@@ -709,6 +709,8 @@
  state_building_generic_data_fortress_max_level_add_desc:0 "Increases the maximum number of levels that [GetBuildingType('building_generic_data_fortress').GetName] can expand to in this state"
  state_building_generic_dry_dock_max_level_add:0 "[GetBuildingType('building_generic_dry_dock').GetName] Max Level"
  state_building_generic_dry_dock_max_level_add_desc:0 "Increases the maximum number of levels that [GetBuildingType('building_generic_dry_dock').GetName] can expand to in this state"
+ state_building_generic_dye_fiber_park_max_level_add:0 "[GetBuildingType('building_generic_dye_fiber_park').GetName] Max Level"
+ state_building_generic_dye_fiber_park_max_level_add_desc:0 "Increases the maximum number of levels that [GetBuildingType('building_generic_dye_fiber_park').GetName] can expand to in this state"
  state_building_generic_electronics_lab_max_level_add:0 "[GetBuildingType('building_generic_electronics_lab').GetName] Max Level"
  state_building_generic_electronics_lab_max_level_add_desc:0 "Increases the maximum number of levels that [GetBuildingType('building_generic_electronics_lab').GetName] can expand to in this state"
  state_building_generic_export_warehouse_max_level_add:0 "[GetBuildingType('building_generic_export_warehouse').GetName] Max Level"

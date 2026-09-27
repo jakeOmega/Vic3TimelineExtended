@@ -951,6 +951,11 @@ pmg_generic_lumber_yard = {
 	ai_selection = most_productive
 	production_methods = { pm_generic_lumber_yard }
 }
+pmg_generic_dye_fiber_park = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_generic_dye_fiber_park }
+}
 
 #============================================================
 # Phase 7: Remaining Vanilla Flavored Company PMGs
