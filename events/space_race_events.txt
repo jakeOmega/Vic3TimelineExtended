@@ -46,9 +46,11 @@ space_race_events.1 = {
 		name = space_race_events.1.b
 		ai_chance = { base = 3 }
 		sr_apply_suborbital_reward = yes
-		# Channel momentum into next milestone - innovation boost
+		# Channel momentum into next milestone - innovation boost. Its own
+		# modifier: sr_suborbital is the permanent reward of a country that
+		# was not first, and adding it again here would collide with it.
 		add_modifier = {
-			name = sr_suborbital
+			name = sr_suborbital_momentum
 			days = short_modifier_time
 			is_decaying = yes
 		}
