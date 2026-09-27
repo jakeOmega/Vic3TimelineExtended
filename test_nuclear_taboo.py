@@ -779,13 +779,18 @@ class TestArmsControl(unittest.TestCase):
         self.assertIn("POINTS = nd_taboo_ledger_walkout", body)
         # The unilateral ceiling never shields a walk-out.
         self.assertNotIn("nd_warhead_ceiling", body)
+        # The old ceiling is read (to decide the booking) before it is overwritten.
+        self.assertLess(body.index("POINTS = nd_taboo_ledger_walkout"), body.index("name = nd_treaty_ceiling value"))
 
     def test_the_lowest_ceiling_binds(self):
         eff = block(self.values, "nd_taboo_effective_ceiling_value")
         self.assertIn("var:nd_treaty_ceiling < var:nd_warhead_ceiling", eff)
         held = block(strip_comments(read(TABOO_TRIGGERS)), "nd_taboo_programme_should_be_held")
         self.assertIn("nd_stockpile >= nd_taboo_effective_ceiling_value", held)
-        self.assertIn("subtract = nd_taboo_effective_ceiling_value", block(self.values, "nd_taboo_retire_this_month_value"))
+        self.assertIn("nd_taboo_has_ceiling = yes", held)
+        retire = block(self.values, "nd_taboo_retire_this_month_value")
+        self.assertIn("subtract = nd_taboo_effective_ceiling_value", retire)
+        self.assertIn("nd_taboo_has_ceiling = yes", retire)
         monthly = block(self.taboo, "nd_taboo_country_monthly")
         self.assertLess(monthly.index("nd_taboo_refresh_treaty_ceiling = yes"), monthly.index("nd_taboo_refresh_held = yes"))
         self.assertIn("nd_stockpile > nd_taboo_effective_ceiling_value", monthly)
@@ -794,12 +799,34 @@ class TestArmsControl(unittest.TestCase):
         self.assertIn("has_variable = nd_treaty_ceiling", block(self.values, "nd_taboo_arms_control_weight_value"))
         self.assertIn("value = nd_taboo_arms_control_weight_value", block(self.values, "nd_taboo_part_restraint_value"))
 
+    def test_evaluation_chance_is_root_only_possible_checks_the_partner(self):
+        article = strip_comments(read(ARMS_ARTICLE))
+        self.assertNotIn("other_country", block(article, "evaluation_chance"))
+        self.assertIn("scope:other_country", block(article, "possible"))
+
+    def test_ai_acceptance_weighs_growth_and_parity(self):
+        article = strip_comments(read(ARMS_ARTICLE))
+        accept = block(article, "inherent_accept_score")
+        self.assertIn("nd_taboo_ai_arms_growth_value", accept)
+        self.assertIn("nd_taboo_ai_arms_parity_value", accept)
+        self.assertIn("scope:article.input_quantity", block(self.values, "nd_taboo_ai_arms_growth_value"))
+        self.assertIn("scope:article.input_quantity", block(self.values, "nd_taboo_ai_arms_parity_value"))
+
+    def test_quantity_input_value_reads_the_safe_accessor(self):
+        article = strip_comments(read(ARMS_ARTICLE))
+        self.assertNotIn("var:nuclear_weapon_stockpile", block(article, "quantity_input_value"))
+
+    def test_panel_shows_a_treaty_ceiling(self):
+        custom = strip_comments(read(PROGRAM_CUSTOM_LOC))
+        self.assertIn("localization_key = nd_taboo_arsenal_treaty", block(custom, "nd_taboo_arsenal_status"))
+
     def test_article_keys_have_loc(self):
         keys = loc_keys()
         for key in ("nuclear_arms_limitation", "nuclear_arms_limitation_desc",
                     "nuclear_arms_limitation_effects_desc", "nuclear_arms_limitation_article_short_desc",
                     "nd_taboo_arms_party_tt", "nd_taboo_arms_quantity_tt", "nd_taboo_ai_arms_base",
-                    "nd_taboo_ai_arms_militarist"):
+                    "nd_taboo_ai_arms_militarist", "nd_taboo_arms_other_party_tt", "nd_taboo_ai_arms_growth",
+                    "nd_taboo_ai_arms_parity", "nd_taboo_arsenal_treaty"):
             self.assertIn(key, keys, key)
 
 

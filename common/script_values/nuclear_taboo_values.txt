@@ -13,7 +13,8 @@
 #   base         20          constant
 #   tradition    0 .. +35    years without use (global_var:nd_taboo_quiet_years)
 #   postures     -10 .. +10  the armed countries' doctrines, a rank-weighted average
-#   restraint    0 .. +15    non-use pledges, former nuclear states
+#   restraint    0 .. +15    non-use pledges, arms-control treaties, former
+#                            nuclear states
 #   ledger       -30 .. +10  the decaying record of acts (global_var:nd_taboo_ledger)
 #
 # Drift alone tops out at 55 (base + full tradition); the rest needs
@@ -142,6 +143,8 @@ nd_taboo_arms_ai_base = -25
 nd_taboo_arms_ai_burden_weight = 50
 nd_taboo_arms_ai_taboo_weight = 0.5
 nd_taboo_arms_ai_militarist = -50
+nd_taboo_arms_ai_growth_weight = 0.5	# per warhead of our desired arsenal the ceiling forbids
+nd_taboo_arms_ai_parity_weight = 2	# per warhead we would retire beyond what the other party retires
 
 # ---- READING THE SCORE ---------------------------------------------------------
 
@@ -659,6 +662,14 @@ nd_disp_warhead_ceiling = {
 	}
 }
 
+nd_disp_treaty_ceiling = {
+	value = 0
+	if = {
+		limit = { has_variable = nd_treaty_ceiling }
+		value = var:nd_treaty_ceiling
+	}
+}
+
 nd_disp_dismantle_months_left = {
 	value = 0
 	if = {
@@ -794,6 +805,58 @@ nd_taboo_ai_arms_taboo_value = {
 	multiply = nd_taboo_arms_ai_taboo_weight
 	min = 0
 	round = yes
+}
+
+# The warheads this country would retire under the article's ceiling.
+# Scope: a party; reads scope:article.
+nd_taboo_arms_cut_value = {
+	value = 0
+	if = {
+		limit = {
+			exists = scope:article.input_quantity
+			nd_stockpile > scope:article.input_quantity
+		}
+		value = nd_stockpile
+		subtract = scope:article.input_quantity
+	}
+}
+
+# What the ceiling forbids us to build: our desired arsenal above it. Scope: the evaluating country.
+nd_taboo_ai_arms_growth_value = {
+	value = 0
+	if = {
+		limit = {
+			exists = scope:article.input_quantity
+			nuclear_ai_desired_stockpile > scope:article.input_quantity
+		}
+		value = nuclear_ai_desired_stockpile
+		subtract = scope:article.input_quantity
+		multiply = nd_taboo_arms_ai_growth_weight
+		multiply = -1
+	}
+}
+
+# Parity: the warheads we would retire beyond what the other party retires. Scope: the evaluating country.
+nd_taboo_ai_arms_parity_value = {
+	value = 0
+	if = {
+		limit = {
+			exists = scope:article.input_quantity
+			exists = scope:first_country
+			exists = scope:second_country
+		}
+		value = nd_taboo_arms_cut_value
+		if = {
+			limit = { scope:first_country = { this = root } }
+			subtract = scope:second_country.nd_taboo_arms_cut_value
+		}
+		else = {
+			subtract = scope:first_country.nd_taboo_arms_cut_value
+		}
+		min = 0
+		multiply = nd_taboo_arms_ai_parity_weight
+		multiply = -1
+	}
 }
 
 # ---- BAND EVENTS (spec §6.3) — any scope ------------------------------------------

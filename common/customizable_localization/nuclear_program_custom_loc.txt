@@ -333,6 +333,16 @@ nd_taboo_arsenal_status = {
 		localization_key = nd_taboo_arsenal_dismantling
 	}
 	text = {
+		trigger = {
+			has_variable = nd_treaty_ceiling
+			OR = {
+				NOT = { has_variable = nd_warhead_ceiling }
+				var:nd_treaty_ceiling < var:nd_warhead_ceiling
+			}
+		}
+		localization_key = nd_taboo_arsenal_treaty
+	}
+	text = {
 		trigger = { has_variable = nd_warhead_ceiling }
 		localization_key = nd_taboo_arsenal_ceiling
 	}

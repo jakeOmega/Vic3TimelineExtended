@@ -1678,7 +1678,7 @@
  nuclear_arms_limitation:0 "Nuclear Arms Limitation"
  nuclear_arms_limitation_article_short_desc:0 "Both parties hold their nuclear arsenals to an agreed ceiling"
  nuclear_arms_limitation_desc:0 "A ceiling on nuclear arsenals, the same for both parties, verified and kept."
- nuclear_arms_limitation_effects_desc:0 "• Neither party holds more warheads than the agreed ceiling: those above it are taken apart, a tenth of the excess a month, and neither programme builds past it.\n• Every country such a treaty binds strengthens the nuclear taboo.\n• Leaving it weakens the taboo, unless another treaty already holds the party to the same ceiling or a lower one."
+ nuclear_arms_limitation_effects_desc:0 "• Neither party holds more warheads than the agreed ceiling: those above it are taken apart, a tenth of the excess a month, and neither programme builds past it once the month's review has run.\n• Every country such a treaty binds strengthens the nuclear taboo.\n• Leaving it weakens the taboo, unless another treaty already holds the party to the same ceiling or a lower one."
  nuclear_brinkmanship_modifier:0 "Nuclear Brinkmanship"
  nuclear_brinkmanship_modifier_desc:0 "A nuclear standoff has placed the nation on high alert. Military readiness is at maximum but the civilian population lives in fear."
  nuclear_civilian_applications:0 "Nuclear Civilian Applications"

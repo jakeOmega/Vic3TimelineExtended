@@ -275,72 +275,80 @@ nd_taboo_note_renunciation = {
 # treaty ends, so both are booked: the regime's end erodes the norm whoever
 # ended it. Scope: country (nd_taboo_country_monthly).
 nd_taboo_refresh_treaty_ceiling = {
-	save_scope_as = nd_tb_self
-	set_variable = { name = nd_tb_new_ceiling value = -1 }
-	every_scope_treaty = {
-		every_scope_article = {
-			limit = {
-				has_type = nuclear_arms_limitation
-				exists = input_quantity
+	# Cheap no-op for a country with no treaty ceiling and nothing that could
+	# gain one: no arsenal, no programme, never a party (scripting_best_practices.md
+	# § "Every pulse effect must be a cheap no-op for an unarmed country").
+	if = {
+		limit = {
+			OR = {
+				has_variable = nd_treaty_ceiling
+				nd_is_armed = yes
+				nuclear_program_has_programme = yes
 			}
-			save_scope_as = nd_tb_article
-			scope:nd_tb_self = {
-				if = {
-					limit = {
-						OR = {
-							var:nd_tb_new_ceiling < 0
-							var:nd_tb_new_ceiling > scope:nd_tb_article.input_quantity
-						}
-					}
-					set_variable = { name = nd_tb_new_ceiling value = scope:nd_tb_article.input_quantity }
-					scope:nd_tb_article = {
-						first_country = { save_scope_as = nd_tb_first }
-						second_country = { save_scope_as = nd_tb_second }
-					}
+		}
+		save_scope_as = nd_tb_self
+		set_variable = { name = nd_tb_new_ceiling value = -1 }
+		every_scope_treaty = {
+			every_scope_article = {
+				limit = {
+					has_type = nuclear_arms_limitation
+					exists = input_quantity
+				}
+				save_scope_as = nd_tb_article
+				scope:nd_tb_self = {
 					if = {
 						limit = {
-							scope:nd_tb_first = { this = scope:nd_tb_self }
+							OR = {
+								var:nd_tb_new_ceiling < 0
+								var:nd_tb_new_ceiling > scope:nd_tb_article.input_quantity
+							}
 						}
-						set_variable = { name = nd_tb_new_partner value = scope:nd_tb_second }
-					}
-					else = {
-						set_variable = { name = nd_tb_new_partner value = scope:nd_tb_first }
+						set_variable = { name = nd_tb_new_ceiling value = scope:nd_tb_article.input_quantity }
+						scope:nd_tb_article = {
+							first_country = { save_scope_as = nd_tb_first }
+							second_country = { save_scope_as = nd_tb_second }
+						}
+						if = {
+							limit = {
+								scope:nd_tb_first = { this = scope:nd_tb_self }
+							}
+							scope:nd_tb_second = { save_scope_as = nd_tb_new_partner }
+						}
+						else = {
+							scope:nd_tb_first = { save_scope_as = nd_tb_new_partner }
+						}
 					}
 				}
 			}
 		}
-	}
-	if = {
-		limit = {
-			has_variable = nd_treaty_ceiling
-			OR = {
-				var:nd_tb_new_ceiling < 0
-				var:nd_tb_new_ceiling > var:nd_treaty_ceiling
+		if = {
+			limit = {
+				has_variable = nd_treaty_ceiling
+				OR = {
+					var:nd_tb_new_ceiling < 0
+					var:nd_tb_new_ceiling > var:nd_treaty_ceiling
+				}
+				exists = var:nd_treaty_ceiling_partner
 			}
-			exists = var:nd_treaty_ceiling_partner
-		}
-		nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_walkout }
-		debug_log = "TE_TABOO: an arms-control treaty was left"
-	}
-	if = {
-		limit = { var:nd_tb_new_ceiling >= 0 }
-		set_variable = { name = nd_treaty_ceiling value = var:nd_tb_new_ceiling }
-		set_variable = { name = nd_treaty_ceiling_partner value = var:nd_tb_new_partner }
-	}
-	else = {
-		if = {
-			limit = { has_variable = nd_treaty_ceiling }
-			remove_variable = nd_treaty_ceiling
+			nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_walkout }
+			debug_log = "TE_TABOO: an arms-control treaty was left"
 		}
 		if = {
-			limit = { has_variable = nd_treaty_ceiling_partner }
-			remove_variable = nd_treaty_ceiling_partner
+			limit = { var:nd_tb_new_ceiling >= 0 }
+			set_variable = { name = nd_treaty_ceiling value = var:nd_tb_new_ceiling }
+			set_variable = { name = nd_treaty_ceiling_partner value = scope:nd_tb_new_partner }
 		}
-	}
-	remove_variable = nd_tb_new_ceiling
-	if = {
-		limit = { has_variable = nd_tb_new_partner }
-		remove_variable = nd_tb_new_partner
+		else = {
+			if = {
+				limit = { has_variable = nd_treaty_ceiling }
+				remove_variable = nd_treaty_ceiling
+			}
+			if = {
+				limit = { has_variable = nd_treaty_ceiling_partner }
+				remove_variable = nd_treaty_ceiling_partner
+			}
+		}
+		remove_variable = nd_tb_new_ceiling
 	}
 }
 
