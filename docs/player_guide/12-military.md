@@ -48,7 +48,7 @@ the artillery group to the new Heavy Tanks group, with lower stats than in the
 base game, and aircraft form a group of their own. Each group gains three to
 five units, from Armored Infantry and Propeller Aircraft in era 6 to the Utility
 Fog Phalanx and Orbital Weapons Platforms in era 12, and later units come in
-smaller battalions, down to 100 men for the orbital ones. [Combat unit
+smaller battalions, down to 100 for the orbital ones. [Combat unit
 list](19-appendix-reference-lists.md#combat-unit-list) gives each unit's
 technology, era and battalion size.
 
