@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document is the reference for all custom treaty articles in the Vic3TimelineExtended mod. Each article includes historical motivation, mechanical design, implementation details (required inputs, modifiers, effects, AI weights), and engine constraints. All articles listed below are implemented. When adding new treaty articles, follow the patterns and constraints documented here.
+This document is the reference for all custom treaty articles in the Vic3TimelineExtended mod. Each article includes historical motivation, mechanical design, implementation details (required inputs, modifiers, effects, AI weights), and engine constraints. Articles 1–4, 6 and 8 and the two "additional" articles (Forced Disarmament, Cultural Exchange) are implemented; Articles 5, 7, 9, 11, 12 and 13 are **unbuilt designs**, each marked at its heading, and Article 10 was dropped. When adding new treaty articles, follow the patterns and constraints documented here.
 
 ### Engine Constraints Reference
 
@@ -325,6 +325,8 @@ Should always be fulfilled unless they change to command economy, I think.
 
 ## Article 5: Arms Licensing Agreement
 
+> **Unbuilt design.** No arms-licensing article exists (checked against `common/treaty_articles/` on 2026-09-26). The section below is the proposal as written, kept for reference; nothing in it is in the game.
+
 ### Historical Context
 Lend-Lease programs; Soviet arms exports to client states; French Mirage jet sales; modern US Foreign Military Sales (FMS) program; licensed production of foreign weapons (e.g., Japan producing F-15s under license). One country grants another access to its military technology in exchange for economic benefits to its arms industry.
 
@@ -528,6 +530,8 @@ non_fulfillment = {
 
 ## Article 7: Extradition Treaty / Extraterritoriality
 
+> **Unbuilt design.** Neither an extradition nor an extraterritoriality article exists (checked against `common/treaty_articles/` on 2026-09-26). Both 7A and 7B below are proposals, kept for reference; nothing in them is in the game.
+
 ### Historical Context
 Extraterritoriality in China and Japan (foreign citizens judged by foreign courts); Ottoman Capitulations; modern extradition treaties; diplomatic immunity; Status of Forces Agreements (SOFA). Two distinct but related concepts that could be separate articles:
 
@@ -678,6 +682,8 @@ state_valid_trigger = {
 
 ## Article 9: Climate Accords
 
+> **Unbuilt design.** The mutual Climate Accords article below was never implemented (checked against `common/treaty_articles/` on 2026-09-26). The climate treaty that shipped is a different article, `enforce_emissions_reduction` (`common/treaty_articles/109_enforce_emissions_reduction.txt`): a directed article that holds a market leader to its major mitigation policies (see `docs/systems/mod_systems.md` § Enforce Emissions Reduction Treaty).
+
 > **Design uncertainty:** This article may not be mechanically interesting enough to justify implementation. The existing Global Warming journal entry system already handles climate policy via scripted buttons. A treaty article would need to add something meaningfully different from what the JE provides. Consider whether this should be kept or folded into the JE system.
 
 ### Historical Context
@@ -730,6 +736,8 @@ Removed — too much overlap with the Free Port Concession (Article 2). The Free
 
 ## Article 11: No-Fly Zone / Airspace Control
 
+> **Unbuilt design.** No no-fly-zone article exists (checked against `common/treaty_articles/` on 2026-09-26). The section below is the proposal as written, kept for reference; nothing in it is in the game.
+
 > **Design uncertainty:** This concept may not fit well as a long-term treaty article. No-fly zones are typically short-term military enforcement actions, not standing bilateral agreements. Consider whether this is better modeled as a diplomatic play war goal or a temporary modifier from a peace deal, rather than a treaty article.
 
 ### Historical Context
@@ -765,6 +773,8 @@ Post-Gulf War no-fly zones over Iraq; NATO enforcement over Bosnia and Libya; Co
 ---
 
 ## Article 12: Maritime Exclusion Zone / Territorial Waters
+
+> **Unbuilt design.** No maritime-exclusion article exists (checked against `common/treaty_articles/` on 2026-09-26). The section below is the proposal as written, kept for reference.
 
 > **Design uncertainty:** Maritime exclusion zones are typically either unilateral declarations or part of multilateral international law, not bilateral treaties. This concept may not work well as a two-party agreement. Consider whether it should be reworked as a power bloc principle or a unilateral decision instead.
 
@@ -802,6 +812,8 @@ The `country_treaty_leverage_generation_add = 200` for maritime dominance goes i
 ---
 
 ## Article 13: Space Cooperation Treaty
+
+> **Unbuilt design.** No space-cooperation article exists (checked against `common/treaty_articles/` on 2026-09-26). The section below is the proposal as written, kept for reference. (The UN has a space-cooperation vote topic and event, which is unrelated.)
 
 > **Design uncertainty:** This article may not be mechanically interesting enough to justify its own treaty article. The effects are essentially generic tech spread + prestige modifiers. Consider whether the wonder building integration (space elevator/solar collector bonuses) would be enough to make this feel unique, or if the concept is better handled by the existing `science_aid` article.
 
