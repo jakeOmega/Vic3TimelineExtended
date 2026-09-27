@@ -69,6 +69,10 @@ ship_type_asw_destroyer = {
 		ship_battle_against_ship_type_submarine_hull_damage_mult = 0.5
 		ship_battle_against_ship_type_nuclear_submarine_accuracy_mult = 1.0
 		ship_battle_against_ship_type_nuclear_submarine_hull_damage_mult = 0.5
+		ship_battle_against_ship_type_stealth_attack_submarine_accuracy_mult = 1.0
+		ship_battle_against_ship_type_stealth_attack_submarine_hull_damage_mult = 0.5
+		ship_battle_against_ship_type_autonomous_swarm_submarine_accuracy_mult = 1.0
+		ship_battle_against_ship_type_autonomous_swarm_submarine_hull_damage_mult = 0.5
 	}
 
 	construction_goods = {
@@ -1401,6 +1405,7 @@ ship_type_networked_air_defense_cruiser = {
 			ship_mod_light_cruiser_range_high
 		}
 		ship_mod_slot_utility_1 = {
+			utility_mod_aegis_air_defense
 			utility_mod_fire_control_system
 			utility_mod_range_finder
 			utility_mod_advanced_explosives

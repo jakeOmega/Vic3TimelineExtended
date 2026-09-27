@@ -14,7 +14,13 @@ utility_mod_sonar_suite = {
 	unlocking_technologies = { sonar }
 
 	modifier = {
+		# Every submarine: vanilla's and the mod's three
+		# (ship_battle_against_ship_type_* for mod ships is registered in
+		# common/modifier_type_definitions/mod_entity_modifier_types.txt).
 		ship_battle_against_ship_type_submarine_accuracy_mult = 0.5
+		ship_battle_against_ship_type_nuclear_submarine_accuracy_mult = 0.5
+		ship_battle_against_ship_type_stealth_attack_submarine_accuracy_mult = 0.5
+		ship_battle_against_ship_type_autonomous_swarm_submarine_accuracy_mult = 0.5
 		ship_detection_add = 100
 	}
 
