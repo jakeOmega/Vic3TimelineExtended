@@ -189,9 +189,6 @@ je_nuclear_program = {
 			# block, so this week's progress adds to it.
 			nd_custody_restore_progress = yes
 
-			# Update global nuclear powers leaderboard
-			update_nuclear_powers_ranking = yes
-
 			if = {
 				limit = {
 					modifier:country_nuclear_disarmament_bool = yes

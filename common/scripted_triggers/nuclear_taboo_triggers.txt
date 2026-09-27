@@ -1,0 +1,14 @@
+﻿# ============================================================================
+# THE NUCLEAR TABOO — scripted triggers
+# ============================================================================
+# Design: docs/superpowers/specs/2026-09-26-nuclear-taboo-design.md; values and
+# thresholds in common/script_values/nuclear_taboo_values.txt.
+# ============================================================================
+
+# A former nuclear state: it gave an arsenal up (nd_taboo_note_renunciation set
+# the year) and holds no warheads now. Counted by the restraint part.
+# Scope: country
+nd_taboo_is_former_nuclear_state = {
+	has_variable = nd_renounced
+	nd_is_armed = no
+}

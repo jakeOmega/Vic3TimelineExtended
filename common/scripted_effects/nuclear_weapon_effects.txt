@@ -142,6 +142,10 @@ nuclear_program_weekly_progress = {
 				set_variable = { name = is_world_first_nuclear_power value = yes }
 			}
 			set_global_variable = { name = world_first_nuclear_weapon value = yes }
+			# The nuclear taboo is born with the world's first warhead
+			# (nuclear_taboo_effects.txt); idempotent, so every later
+			# first device passes through harmlessly.
+			nd_taboo_birth = yes
 			trigger_event = { id = nuclear_weapon_events.10 }
 			save_scope_as = first_nuke_country
 			every_country = {

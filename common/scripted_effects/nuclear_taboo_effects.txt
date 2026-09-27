@@ -1,0 +1,180 @@
+﻿# ============================================================================
+# THE NUCLEAR TABOO — effects
+# ============================================================================
+# Design: docs/superpowers/specs/2026-09-26-nuclear-taboo-design.md; the
+# numbers are in common/script_values/nuclear_taboo_values.txt.
+#
+# SINGLE WRITERS. Only the effects in this file write global_var:nd_taboo,
+# nd_taboo_ledger, nd_taboo_quiet_years and the nd_tb_* snapshots
+# (test_nuclear_taboo.py checks). Everything else calls a writer below. Every
+# writer is a no-op before the taboo is born.
+#
+# TWO HALVES. nd_taboo_monthly_update is the world's step, from the global
+# monthly pulse (nuclear_taboo_on_actions.txt): ROOT is none there, so it never
+# applies a modifier. nd_taboo_country_monthly is each country's half, from
+# je_nuclear_program's monthly pulse with ROOT = the country — the possession
+# cost, the exits and the history samples live there.
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# BIRTH
+# ----------------------------------------------------------------------------
+
+# The world's first warhead (nuclear_program_weekly_progress, the branch that
+# sets world_first_nuclear_weapon). Idempotent. Scope: any.
+nd_taboo_birth = {
+	if = {
+		limit = { NOT = { has_global_variable = nd_taboo } }
+		set_global_variable = { name = nd_taboo_quiet_years value = 0 }
+		set_global_variable = { name = nd_taboo_ledger value = 0 }
+		nd_taboo_snapshot = yes
+		set_global_variable = { name = nd_taboo value = nd_taboo_birth_value }
+		set_global_variable = { name = nd_taboo_band value = nd_taboo_band_value }
+		debug_log = "TE_TABOO: born with the world's first warhead"
+	}
+}
+
+# A save in which warheads already exist when the taboo arrives. The tradition
+# clock is the years since the world's first device when no weapon has ever
+# been used, 0 otherwise; the score starts at the target that clock implies,
+# not at 20. Scope: any.
+nd_taboo_seed_existing_world = {
+	if = {
+		limit = {
+			has_global_variable = world_first_nuclear_weapon
+			NOT = { has_global_variable = nd_taboo }
+		}
+		set_global_variable = { name = nd_taboo_quiet_years value = 0 }
+		set_global_variable = { name = nd_taboo_ledger value = 0 }
+		if = {
+			limit = {
+				NOT = { has_global_variable = world_first_nuclear_weapon_used }
+			}
+			random_country = {
+				limit = {
+					has_variable = is_world_first_nuclear_power
+					has_variable = nuclear_program_first_device_year
+				}
+				set_global_variable = {
+					name = nd_taboo_quiet_years
+					value = {
+						value = year
+						subtract = var:nuclear_program_first_device_year
+						min = 0
+					}
+				}
+			}
+		}
+		nd_taboo_snapshot = yes
+		set_global_variable = { name = nd_taboo value = global_var:nd_taboo_target }
+		set_global_variable = { name = nd_taboo_band value = nd_taboo_band_value }
+		debug_log = "TE_TABOO: seeded a world already in the nuclear age"
+	}
+}
+
+# ----------------------------------------------------------------------------
+# THE WORLD'S MONTHLY STEP
+# ----------------------------------------------------------------------------
+
+# Every part, then the target. Scope: any.
+nd_taboo_snapshot = {
+	set_global_variable = { name = nd_tb_base value = nd_taboo_base }
+	set_global_variable = { name = nd_tb_tradition value = nd_taboo_part_tradition_value }
+	set_global_variable = { name = nd_tb_postures value = nd_taboo_part_postures_value }
+	set_global_variable = { name = nd_tb_restraint value = nd_taboo_part_restraint_value }
+	set_global_variable = { name = nd_tb_ledger value = global_var:nd_taboo_ledger }
+	set_global_variable = { name = nd_taboo_target value = nd_taboo_target_sum }
+}
+
+# From nd_taboo_monthly_on_action (global scope). Advances the clock, fades the
+# ledger, snapshots the parts and steps the score toward the target.
+nd_taboo_monthly_update = {
+	# The nuclear powers' leaderboard, once for the world. It ran from every
+	# active country's weekly pulse, which the entry being active for every
+	# country (nuke_triggers.txt) would have made ~200 sweeps a week.
+	update_nuclear_powers_ranking = yes
+	nd_taboo_seed_existing_world = yes
+	if = {
+		limit = { has_global_variable = nd_taboo }
+		change_global_variable = { name = nd_taboo_quiet_years add = nd_taboo_years_per_month }
+		set_global_variable = {
+			name = nd_taboo_ledger
+			value = {
+				value = global_var:nd_taboo_ledger
+				multiply = nd_taboo_ledger_decay
+			}
+		}
+		nd_taboo_snapshot = yes
+		set_global_variable = {
+			name = nd_taboo
+			value = {
+				value = global_var:nd_taboo
+				add = nd_taboo_step_value
+				min = 0
+				max = 100
+			}
+		}
+		debug_log = "TE_TABOO: score [SCOPE.ScriptValue('nd_disp_taboo')|1] target [SCOPE.ScriptValue('nd_disp_taboo_target')|1] base [SCOPE.ScriptValue('nd_disp_tb_base')|1] tradition [SCOPE.ScriptValue('nd_disp_tb_tradition')|1] postures [SCOPE.ScriptValue('nd_disp_tb_postures')|1] restraint [SCOPE.ScriptValue('nd_disp_tb_restraint')|1] ledger [SCOPE.ScriptValue('nd_disp_tb_ledger')|1] quiet years [SCOPE.ScriptValue('nd_disp_taboo_quiet_years')|1]"
+	}
+}
+
+# ----------------------------------------------------------------------------
+# WRITERS — everything outside this file moves the taboo through these
+# ----------------------------------------------------------------------------
+
+# An unweighted ledger entry. POINTS: a number, a script value, var:X or
+# global_var:X, signed. Scope: any.
+nd_taboo_ledger_add = {
+	if = {
+		limit = { has_global_variable = nd_taboo }
+		set_global_variable = { name = nd_tb_stage value = $POINTS$ }
+		nd_taboo_ledger_commit = yes
+	}
+}
+
+# A ledger entry weighted by the acting country's rank (nd_taboo_rank_weight).
+# Scope: the acting country.
+nd_taboo_ledger_add_weighted = {
+	if = {
+		limit = { has_global_variable = nd_taboo }
+		set_global_variable = {
+			name = nd_tb_stage
+			value = {
+				value = nd_taboo_rank_weight
+				multiply = $POINTS$
+			}
+		}
+		nd_taboo_ledger_commit = yes
+	}
+}
+
+# Adds the staged amount to the ledger, held inside -30 .. +10. Only writers
+# in this file call it.
+nd_taboo_ledger_commit = {
+	set_global_variable = {
+		name = nd_taboo_ledger
+		value = {
+			value = global_var:nd_taboo_ledger
+			add = global_var:nd_tb_stage
+			min = nd_taboo_ledger_min
+			max = nd_taboo_ledger_max
+		}
+	}
+	remove_global_variable = nd_tb_stage
+}
+
+# An immediate move of the score, held inside 0 .. 100. Scope: any.
+nd_taboo_shock = {
+	if = {
+		limit = { has_global_variable = nd_taboo }
+		set_global_variable = {
+			name = nd_taboo
+			value = {
+				value = global_var:nd_taboo
+				add = $POINTS$
+				min = 0
+				max = 100
+			}
+		}
+	}
+}
