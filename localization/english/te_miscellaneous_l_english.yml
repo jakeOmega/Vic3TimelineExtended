@@ -2097,6 +2097,7 @@
  gm_national_vanity_desc:0 "We finished monument levels while the country was in default, famine or recession. The resentment fades over about two years."
  gm_national_war_memorial:0 "War Memorials"
  gm_national_war_memorial_desc:0 "From the [concept_grandeur] of our war memorials, counted together."
+ gm_possible_rule_tt:0 "The Grand Monuments game rule is enabled"
  gov_corporate_state_autocracy:0 "Corporate Autocracy"
  gov_corporate_state_democracy:0 "Corporate Democracy"
  gov_corporate_state_single_party_state:0 "Corporate Syndicalism"

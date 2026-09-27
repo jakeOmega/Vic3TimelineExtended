@@ -1,69 +1,36 @@
 ﻿#==================================================
 # Grand Monument dedications
 #==================================================
+# Design: docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md.
+#
 # THE RATCHET -- why every PM below lists itself in unlocking_production_methods.
 #
-# The Clausewitz engine has no "lock this PM once chosen" feature: PM gating is
-# limited to techs / laws / principles / company categories / identities / other PMs,
-# and none of those can differentiate two monuments in two different states. So the
-# lock is built out of unlocking_production_methods, which is an OR over its list:
+# The engine has no "lock this PM once chosen" feature, so the lock is built
+# out of unlocking_production_methods, which is an OR over its list:
 #
 #   pm_monument_undedicated  unlocks on { itself }
 #   every dedication         unlocks on { pm_monument_undedicated, itself }
 #
-# Fresh build  -> Undedicated is active (is_default), so all dedications are available.
-# After a pick -> only the chosen PM's own self-reference is satisfied; Undedicated and
-#                 the seven siblings are all unreachable. The choice is permanent, and
-#                 re-flavouring means demolishing and rebuilding.
+# Fresh build  -> Undedicated is active (is_default), so every dedication is
+#                 available. After a pick -> only the chosen PM's own
+#                 self-reference is satisfied. The choice is permanent;
+#                 Rededicate (§4.3) rebuilds the monument.
 #
-# Every PM carries is_hidden_when_unavailable so the group shows exactly one row at a
-# time rather than a column of greyed-out dead ends.
+# Every PM carries is_hidden_when_unavailable so the group shows one row.
+# Do NOT add replacement_if_valid to any of these -- it would defeat the ratchet.
 #
-# Do NOT add replacement_if_valid to any of these -- it auto-swaps PMs and would
-# defeat the ratchet.
+# STAFF ONLY. A dedication PM carries the caretaker staff and nothing else.
+# Every effect a monument gives -- local and national -- is a modifier that a
+# monthly pulse refreshes along the doubling curve (§2): gm_state_monthly for
+# the state, gm_country_refresh for the nation, both in
+# common/scripted_effects/gm_effects.txt. The registry test fails if a PM here
+# carries country_modifiers, state_modifiers or goods.
 #
-# The dedication is normally set by the ceremony event (monument_events.2) via
-# activate_production_method; the manual building-panel path works too.
-#
-#--------------------------------------------------
-# SCALING -- why national effects are unscaled and local ones are level_scaled.
-#
-# This building is repeatable in EVERY state, so anything country-wide stacks across
-# every monument in the country. A level_scaled country modifier would therefore be
-# unbounded: 20 monuments x 20 levels x -0.01 hits the engine's -100% clamp and the
-# effect becomes free. So:
-#
-#   state_* and building_*_throughput_add  -> level_scaled (genuinely local to the state)
-#   interest_group_* and country_*         -> unscaled     (flat per monument, bounded
-#                                              by how many states you own)
-#
-# EVERY dedication carries a level_scaled, state-local flavour modifier, so growing a
-# monument always means something whichever dedication it has. The unscaled national
-# effects sit on top of that, never instead of it -- otherwise a Grand Shrine or a War
-# Memorial would gain nothing from its second level while a Civic Monument did.
-#
-# Economics, identical across every dedication so the choice is about flavour only:
-#   goods_output_tourism_add = 1   level_scaled  (100/mo per level at base price)
-#   maintenance comes from pmg_maintenance       (50/mo per level)
-#   building_tourism_industry_throughput_add = 0.01 level_scaled, i.e. +1%/level
-#
-# Goods I/O is level_scaled rather than workforce_scaled on purpose: employment here
-# is unscaled (flat, level-independent), so a workforce ratio measured against a
-# constant headcount would behave unlike every other building -- and would collapse to
-# zero output if the unscaled employment block failed to register. level_scaled goods
-# I/O is already proven by pm_maintenance.
+# The dedication is set by the ceremony (monument_events.2) through
+# activate_production_method; a pick made in the building panel is recorded by
+# the first monthly pulse that sees it (gm_state_first_sight).
 
-#--------------------------------------------------
-# TOOLTIP MIRROR -- every number below is also written out in prose, by hand, in the
-# dedication ceremony's option tooltips: the `monument_events.2.*.tt` keys in
-# localization/english/te_events_l_english.yml. Loc has no way to render a PM's effect
-# list (there is no GetProductionMethod('key') global promote), and the dedication is
-# permanent, so the prose is what stops the player choosing blind. There is no generator
-# keeping the two in sync -- change a value here and change the matching .tt string.
-
-# Entry point and fallback: a monument nobody has yet decided the meaning of.
-# Still a tourist draw, just a generic one. Also what a player is left with if
-# they dismiss the dedication ceremony event.
+# Entry point and fallback: a monument whose meaning is not yet settled.
 pm_monument_undedicated = {
 	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 	is_hidden_when_unavailable = yes
@@ -73,19 +40,8 @@ pm_monument_undedicated = {
 		pm_monument_undedicated
 	}
 
-	state_modifiers = {
-		level_scaled = {
-			building_tourism_industry_throughput_add = 0.01
-		}
-	}
-
 	building_modifiers = {
-		level_scaled = {
-			goods_output_tourism_add = 1
-		}
-
-		# Unscaled: a monument needs a caretaker staff, not a workforce that
-		# grows with its height. Flat regardless of level.
+		# A caretaker staff, not a workforce that grows with the monument's height.
 		unscaled = {
 			building_employment_laborers_add = 200
 			building_employment_clerks_add = 50
@@ -93,30 +49,17 @@ pm_monument_undedicated = {
 	}
 }
 
-# Triumphal arch, civic column, a square named after the republic.
-pm_monument_civic = {
+# Regime: to the Crown. Fits while the government is crowned.
+pm_monument_crown = {
 	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 	is_hidden_when_unavailable = yes
 
 	unlocking_production_methods = {
 		pm_monument_undedicated
-		pm_monument_civic
-	}
-
-	state_modifiers = {
-		level_scaled = {
-			state_loyalists_from_political_movements_mult = 0.02
-			building_tourism_industry_throughput_add = 0.01
-		}
+		pm_monument_crown
 	}
 
 	building_modifiers = {
-		level_scaled = {
-			goods_output_tourism_add = 1
-		}
-
-		# Unscaled: a monument needs a caretaker staff, not a workforce that
-		# grows with its height. Flat regardless of level.
 		unscaled = {
 			building_employment_laborers_add = 200
 			building_employment_clerks_add = 50
@@ -124,7 +67,61 @@ pm_monument_civic = {
 	}
 }
 
-# Grand shrine, cathedral, temple complex.
+# Regime: to the republic. Fits while the government is republican.
+pm_monument_republic = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_production_methods = {
+		pm_monument_undedicated
+		pm_monument_republic
+	}
+
+	building_modifiers = {
+		unscaled = {
+			building_employment_laborers_add = 200
+			building_employment_clerks_add = 50
+		}
+	}
+}
+
+# Regime: to the revolution. Fits under a Single-Party State or a Council Republic.
+pm_monument_revolution = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_production_methods = {
+		pm_monument_undedicated
+		pm_monument_revolution
+	}
+
+	building_modifiers = {
+		unscaled = {
+			building_employment_laborers_add = 200
+			building_employment_clerks_add = 50
+		}
+	}
+}
+
+# Ruler: to the leader. Fits while the honoured character still rules.
+pm_monument_leader = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_production_methods = {
+		pm_monument_undedicated
+		pm_monument_leader
+	}
+
+	building_modifiers = {
+		unscaled = {
+			building_employment_laborers_add = 200
+			building_employment_clerks_add = 50
+		}
+	}
+}
+
+# Faith: a grand shrine to the state religion.
 pm_monument_religious = {
 	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 	is_hidden_when_unavailable = yes
@@ -134,28 +131,7 @@ pm_monument_religious = {
 		pm_monument_religious
 	}
 
-	state_modifiers = {
-		level_scaled = {
-			state_conversion_mult = 0.02
-			building_tourism_industry_throughput_add = 0.01
-		}
-	}
-
-	# Unscaled: country-wide, so it must not multiply by level -- see the
-	# SCALING note at the top of this file.
-	country_modifiers = {
-		unscaled = {
-			interest_group_ig_devout_pop_attraction_mult = 0.02
-		}
-	}
-
 	building_modifiers = {
-		level_scaled = {
-			goods_output_tourism_add = 1
-		}
-
-		# Unscaled: a monument needs a caretaker staff, not a workforce that
-		# grows with its height. Flat regardless of level.
 		unscaled = {
 			building_employment_laborers_add = 200
 			building_employment_clerks_add = 50
@@ -163,8 +139,26 @@ pm_monument_religious = {
 	}
 }
 
-# A memorial to the fallen. Grief made bearable is grief that costs less war
-# support -- hence war_support_casualties rather than a flat morale bonus.
+# Timeless: to the nation. The key is the old Civic Monument's, so monuments
+# in older saves keep their dedication (§8).
+pm_monument_civic = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_production_methods = {
+		pm_monument_undedicated
+		pm_monument_civic
+	}
+
+	building_modifiers = {
+		unscaled = {
+			building_employment_laborers_add = 200
+			building_employment_clerks_add = 50
+		}
+	}
+}
+
+# Timeless: a memorial to the fallen.
 pm_monument_war_memorial = {
 	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 	is_hidden_when_unavailable = yes
@@ -174,28 +168,7 @@ pm_monument_war_memorial = {
 		pm_monument_war_memorial
 	}
 
-	state_modifiers = {
-		level_scaled = {
-			state_conscription_rate_add = 0.01
-			building_tourism_industry_throughput_add = 0.01
-		}
-	}
-
-	# Unscaled: country-wide, so it must not multiply by level -- see the
-	# SCALING note at the top of this file.
-	country_modifiers = {
-		unscaled = {
-			country_war_support_casualties_mult = -0.01
-		}
-	}
-
 	building_modifiers = {
-		level_scaled = {
-			goods_output_tourism_add = 1
-		}
-
-		# Unscaled: a monument needs a caretaker staff, not a workforce that
-		# grows with its height. Flat regardless of level.
 		unscaled = {
 			building_employment_laborers_add = 200
 			building_employment_clerks_add = 50
@@ -203,7 +176,7 @@ pm_monument_war_memorial = {
 	}
 }
 
-# Grand opera house, concert hall, national gallery.
+# Timeless: a grand opera house.
 pm_monument_artistic = {
 	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 	is_hidden_when_unavailable = yes
@@ -217,28 +190,7 @@ pm_monument_artistic = {
 		pm_monument_artistic
 	}
 
-	state_modifiers = {
-		level_scaled = {
-			building_art_academy_throughput_add = 0.02
-			building_tourism_industry_throughput_add = 0.01
-		}
-	}
-
-	# Unscaled: country-wide, so it must not multiply by level -- see the
-	# SCALING note at the top of this file.
-	country_modifiers = {
-		unscaled = {
-			interest_group_ig_intelligentsia_pop_attraction_mult = 0.02
-		}
-	}
-
 	building_modifiers = {
-		level_scaled = {
-			goods_output_tourism_add = 1
-		}
-
-		# Unscaled: a monument needs a caretaker staff, not a workforce that
-		# grows with its height. Flat regardless of level.
 		unscaled = {
 			building_employment_laborers_add = 200
 			building_employment_clerks_add = 50
@@ -246,9 +198,7 @@ pm_monument_artistic = {
 	}
 }
 
-# Botanical gardens, arboretum, a great public park.
-# A flat negative add, not a mult: a multiplier on a repeatable building would
-# compound toward 'this state cannot pollute'. This subtracts a finite amount.
+# Timeless: botanical gardens.
 pm_monument_naturalist = {
 	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 	is_hidden_when_unavailable = yes
@@ -262,20 +212,7 @@ pm_monument_naturalist = {
 		pm_monument_naturalist
 	}
 
-	state_modifiers = {
-		level_scaled = {
-			state_pollution_generation_add = -1000 # two parks worth
-			building_tourism_industry_throughput_add = 0.01
-		}
-	}
-
 	building_modifiers = {
-		level_scaled = {
-			goods_output_tourism_add = 1
-		}
-
-		# Unscaled: a monument needs a caretaker staff, not a workforce that
-		# grows with its height. Flat regardless of level.
 		unscaled = {
 			building_employment_laborers_add = 200
 			building_employment_clerks_add = 50
@@ -283,9 +220,7 @@ pm_monument_naturalist = {
 	}
 }
 
-# Observatory, planetarium, great museum of science.
-# Raises the innovation CAP, not raw innovation: raw innovation is cheap for
-# exactly the rich countries that build these, so the cap is what actually binds.
+# Timeless: a grand observatory.
 pm_monument_scientific = {
 	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 	is_hidden_when_unavailable = yes
@@ -299,28 +234,7 @@ pm_monument_scientific = {
 		pm_monument_scientific
 	}
 
-	state_modifiers = {
-		level_scaled = {
-			state_literacy_growth_add = 0.00005
-			building_tourism_industry_throughput_add = 0.01
-		}
-	}
-
-	# Unscaled: country-wide, so it must not multiply by level -- see the
-	# SCALING note at the top of this file.
-	country_modifiers = {
-		unscaled = {
-			country_weekly_innovation_max_add = 2
-		}
-	}
-
 	building_modifiers = {
-		level_scaled = {
-			goods_output_tourism_add = 1
-		}
-
-		# Unscaled: a monument needs a caretaker staff, not a workforce that
-		# grows with its height. Flat regardless of level.
 		unscaled = {
 			building_employment_laborers_add = 200
 			building_employment_clerks_add = 50
@@ -328,7 +242,7 @@ pm_monument_scientific = {
 	}
 }
 
-# Great exhibition hall -- a permanent world's fair.
+# Timeless: a great exhibition hall.
 pm_monument_industrial = {
 	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 	is_hidden_when_unavailable = yes
@@ -342,28 +256,7 @@ pm_monument_industrial = {
 		pm_monument_industrial
 	}
 
-	state_modifiers = {
-		level_scaled = {
-			state_migration_pull_mult = 0.02
-			building_tourism_industry_throughput_add = 0.01
-		}
-	}
-
-	# Unscaled: country-wide, so it must not multiply by level -- see the
-	# SCALING note at the top of this file.
-	country_modifiers = {
-		unscaled = {
-			interest_group_ig_industrialists_pop_attraction_mult = 0.02
-		}
-	}
-
 	building_modifiers = {
-		level_scaled = {
-			goods_output_tourism_add = 1
-		}
-
-		# Unscaled: a monument needs a caretaker staff, not a workforce that
-		# grows with its height. Flat regardless of level.
 		unscaled = {
 			building_employment_laborers_add = 200
 			building_employment_clerks_add = 50
@@ -371,8 +264,7 @@ pm_monument_industrial = {
 	}
 }
 
-# Grand stadium, olympic complex.
-# Bread and circuses: damps the EFFECTS of turmoil rather than turmoil itself.
+# Timeless: a grand stadium.
 pm_monument_athletic = {
 	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 	is_hidden_when_unavailable = yes
@@ -386,20 +278,7 @@ pm_monument_athletic = {
 		pm_monument_athletic
 	}
 
-	state_modifiers = {
-		level_scaled = {
-			state_turmoil_effects_mult = -0.02
-			building_tourism_industry_throughput_add = 0.01
-		}
-	}
-
 	building_modifiers = {
-		level_scaled = {
-			goods_output_tourism_add = 1
-		}
-
-		# Unscaled: a monument needs a caretaker staff, not a workforce that
-		# grows with its height. Flat regardless of level.
 		unscaled = {
 			building_employment_laborers_add = 200
 			building_employment_clerks_add = 50

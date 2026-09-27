@@ -356,5 +356,82 @@ class ModifierTests(unittest.TestCase):
         self.assertIn("concept_grandeur_desc", L)
 
 
+# ---- Task 3: staff-only dedications, the building ------------------------------------
+
+class PMTests(unittest.TestCase):
+    def test_group_lists_every_dedication(self):
+        group = squash(block(read(PMG), "pmg_monument_dedication"))
+        for d in DEDICATIONS:
+            self.assertIn(f"pm_monument_{d.key}", group)
+        self.assertIn("pm_monument_undedicated", group)
+
+    def test_ratchet(self):
+        text = read(PMS)
+        undedicated = squash(block(text, "pm_monument_undedicated"))
+        self.assertIn("is_default = yes", undedicated)
+        self.assertIn("unlocking_production_methods = { pm_monument_undedicated }", undedicated)
+        for d in DEDICATIONS:
+            body = squash(block(text, f"pm_monument_{d.key}"))
+            self.assertIn(f"unlocking_production_methods = {{ pm_monument_undedicated pm_monument_{d.key} }}",
+                          body, d.key)
+            self.assertIn("is_hidden_when_unavailable = yes", body, d.key)
+            self.assertNotIn("replacement_if_valid", body, d.key)
+
+    def test_staff_only(self):
+        text = read(PMS)
+        for name in ["pm_monument_undedicated"] + [f"pm_monument_{d.key}" for d in DEDICATIONS]:
+            body = squash(block(text, name))
+            for forbidden in ("country_modifiers", "state_modifiers", "goods_output", "goods_input",
+                              "level_scaled", "workforce_scaled"):
+                self.assertNotIn(forbidden, body, f"{name}: {forbidden}")
+            self.assertIn("unscaled = { building_employment_laborers_add = 200 "
+                          "building_employment_clerks_add = 50 }", body, name)
+
+    def test_tech_gates(self):
+        text = read(PMS)
+        for d in DEDICATIONS:
+            body = squash(block(text, f"pm_monument_{d.key}"))
+            if d.key in TECH_GATES:
+                self.assertIn(f"unlocking_technologies = {{ {TECH_GATES[d.key]} }}", body, d.key)
+            else:
+                self.assertNotIn("unlocking_technologies", body, d.key)
+
+    def test_pms_localized(self):
+        L = loc()
+        for d in DEDICATIONS:
+            self.assertIn(f"pm_monument_{d.key}", L)
+            self.assertIn(f"pm_monument_{d.key}_desc", L)
+        self.assertEqual(L["pm_monument_civic"], "To the Nation")
+
+
+class BuildingTests(unittest.TestCase):
+    def test_possible_reads_the_rule(self):
+        possible = squash(block(read(BUILDING), "possible"))
+        self.assertIn("text = gm_possible_rule_tt gm_system_enabled = yes", possible)
+        self.assertIn("gm_possible_rule_tt", loc())
+
+    def test_ai_avoids_hard_times_and_war(self):
+        ai = squash(block(read(BUILDING), "ai_value"))
+        self.assertIn("owner = { gm_country_hard_times = yes } } add = -100", ai)
+        self.assertIn("owner = { is_at_war = yes } } add = -100", ai)
+        self.assertIn("owner = { government_legitimacy < 40 } } add = 25", ai)
+
+    def test_hard_times(self):
+        body = squash(block(read(TRIGGERS), "gm_country_hard_times"))
+        self.assertIn("in_default = yes", body)
+        self.assertIn("has_famine = yes", body)
+        self.assertIn("AND = { has_variable = finance_cycle_value banking_cycle_is_recession = yes }", body)
+
+    def test_regime_gates(self):
+        text = read(TRIGGERS)
+        revolutionary = squash(block(text, "gm_government_is_revolutionary"))
+        self.assertIn("law_type:law_single_party_state", revolutionary)
+        self.assertIn("law_type:law_council_republic", revolutionary)
+        leader = squash(block(text, "gm_can_raise_leader_monument"))
+        self.assertIn("law_type:law_autocracy", leader)
+        self.assertIn("law_type:law_single_party_state", leader)
+        self.assertIn("monument_government_is_crowned = no", leader)
+
+
 if __name__ == "__main__":
     unittest.main()

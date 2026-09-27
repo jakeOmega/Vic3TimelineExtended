@@ -48,3 +48,38 @@ monument_government_is_republican = {
 gm_system_enabled = {
 	NOT = { has_game_rule = grand_monuments_disabled }
 }
+
+# ======================================================================
+#  Country gates (spec §1, §5)
+# ======================================================================
+# Country scope. The regime To the Revolution honours.
+gm_government_is_revolutionary = {
+	OR = {
+		has_law_or_variant = law_type:law_single_party_state
+		has_law_or_variant = law_type:law_council_republic
+	}
+}
+
+# Country scope. A personality cult: Autocracy or a Single-Party State under a
+# head of state who is not crowned (a crowned ruler's statue is To the Crown).
+gm_can_raise_leader_monument = {
+	OR = {
+		has_law_or_variant = law_type:law_autocracy
+		has_law_or_variant = law_type:law_single_party_state
+	}
+	monument_government_is_crowned = no
+}
+
+# Country scope. Hard times: finishing a monument level now causes vanity
+# backlash (§5). finance_cycle_value exists only once the banking journal
+# entry has run, so the recession read is guarded.
+gm_country_hard_times = {
+	OR = {
+		in_default = yes
+		has_famine = yes
+		AND = {
+			has_variable = finance_cycle_value
+			banking_cycle_is_recession = yes
+		}
+	}
+}

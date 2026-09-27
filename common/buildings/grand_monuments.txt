@@ -1,15 +1,13 @@
 ﻿#==================================================
 # Grand Monuments
 #==================================================
-# A permanent construction sink. Expensive to build, cheap to run, and infinitely
-# repeatable -- so a country that has finished building everything worthwhile still
-# has somewhere to put its construction sector. Deliberately a poor investment by
-# factory standards; the payoff is a trickle of tourism plus a dedication bonus.
-#
-# Scaling note: tourism is a luxury good whose pop demand is steeply convex in wealth
-# (see popneed_tourism in common/buy_packages/00_buy_packages.txt, ramping 1 -> 622
-# across wealth tiers). A flat per-level tourism output is therefore near-worthless in
-# 1836 and meaningful late-game, with no extra script needed.
+# A monument a regime raises to what it stands for: its crown, republic,
+# revolution, leader, faith or nation. Expensive to build, cheap to run,
+# repeatable (one per state, levels uncapped). Its level is its GRANDEUR; every
+# effect grows with grandeur along the doubling curve, and national effects
+# come from national totals on the Monuments journal entry, never from each
+# building separately.
+# Design: docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md.
 #
 # Group is bg_grand_monuments, NOT bg_monuments -- see common/building_groups/
 # extra_building_groups.txt for why that separation is load-bearing.
@@ -32,15 +30,21 @@ building_grand_monument = {
 
 	required_construction = construction_cost_grand_monument
 
+	# The game rule (spec §7).
+	possible = {
+		custom_tooltip = {
+			text = gm_possible_rule_tt
+			gm_system_enabled = yes
+		}
+	}
+
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 
 	# Evaluated in STATE scope: ROOT is the state, owner reaches the country.
-	# Kept low on purpose -- the AI should only reach for these once it is genuinely
-	# rich and has run out of better places to put construction.
 	ai_value = {
 		value = 0
 
-		# Only interesting to countries with money to burn.
+		# Only interesting to countries with money to spare.
 		if = {
 			limit = {
 				owner = { is_great_or_major_power = yes }
@@ -48,16 +52,32 @@ building_grand_monument = {
 			add = 25
 		}
 
-		# The throughput bonus only pays off where a tourism industry exists to receive it.
+		# The Tourism Industry throughput pays off where one exists.
 		if = {
 			limit = { has_building = building_tourism_industry }
 			add = 50
+		}
+
+		# A regime short of legitimacy is the one that raises monuments (§7).
+		if = {
+			limit = {
+				owner = { government_legitimacy < 40 }
+			}
+			add = 25
 		}
 
 		# Never at the expense of the war effort.
 		if = {
 			limit = {
 				owner = { is_at_war = yes }
+			}
+			add = -100
+		}
+
+		# Never in hard times: a level finished then costs legitimacy (§5).
+		if = {
+			limit = {
+				owner = { gm_country_hard_times = yes }
 			}
 			add = -100
 		}
