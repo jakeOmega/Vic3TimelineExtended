@@ -1522,11 +1522,18 @@ target_construction_per_week = {
 # The per-project cap raise at which target_queue_length projects could spend
 # the pool's gross income: positive exactly when that many projects at base
 # speed couldn't. This is the overflow the modifier compensates for, and its
-# exit test. Gross income and the cost per point don't depend on the modifier,
-# so the modifier can't end its own need by working (net income can: it turns
-# negative as soon as the modifier drains the pool). 0 while nothing is spent
-# privately, which also keeps curr_cost_per_construction_point from dividing
-# by 0 on an empty queue.
+# exit test. Gross income doesn't depend on the modifier, and under Free Market
+# Construction, while the pool's funds don't bind, curr_cost_per_construction_point
+# is the market price: the market sizes the private share to what the pool
+# buys. So the modifier can't end its own need by working (net income can: it
+# turns negative as soon as the modifier drains the pool). The estimate is
+# spending / private_construction_used, though, and the latter includes the
+# modifier's (base + value) x levels cap. Where the pool's funds bind (direct
+# construction with an emptied pool), spending falls below the modelled use,
+# the estimate falls below the price and the overflow reads high (see
+# docs/systems/mod_systems.md § Excess Private Construction). 0 while
+# private_construction_used is 0 or less (an empty queue or no private share),
+# which also keeps curr_cost_per_construction_point from dividing by 0.
 too_much_private_construction_overflow = {
 	value = 0
 	if = {

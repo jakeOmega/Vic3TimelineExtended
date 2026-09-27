@@ -1210,8 +1210,8 @@ war_propaganda_on_action = {
 #   projects at base speed still couldn't spend the pool's gross income. Net
 #   income can't be the stay test: it turns negative as soon as the modifier
 #   drains the pool, so the modifier would remove itself by working. Nor can
-#   the 500-level bar: faster projects shorten the queue while the modifier is
-#   still needed.
+#   the 500-level bar: the engine's own autonomous investment fills the queue,
+#   and faster projects shorten it while the modifier is still needed.
 # - Overinvestment is in force (below).
 # While one holds, the value ramps (at most x1.2 or /1.2 a year,
 # too_much_private_construction_script_value). Otherwise the modifier is
