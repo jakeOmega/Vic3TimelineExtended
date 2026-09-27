@@ -24,6 +24,8 @@ heir_ed_country_allows_ideology_liberal_leader = {
 	has_technology_researched = democracy
 }
 
+# The multi-child NOT below is vanilla's, kept verbatim so it means whatever
+# the source means (scripting_best_practices.md, "Write NOR or NAND").
 heir_ed_country_allows_ideology_radical = {
 	has_technology_researched = egalitarianism
 	# Invalid for pre-ACW USA whilst Jacksonian Democrats are relevant

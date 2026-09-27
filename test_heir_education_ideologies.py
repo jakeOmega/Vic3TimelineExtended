@@ -12,10 +12,12 @@ Two engine-silent ways a roll can go wrong, both found in PR #507:
   copy of that country_trigger. The copy must match its source, which
   apply_ideologies.py regenerates from vanilla.
 
-No game install needed: the mod's definitions come from the generated
-common/ideologies/modified.txt, vanilla's from the committed vanilla_parsed/.
+No game install needed: the mod's definitions come from every
+common/ideologies/*.txt (the generated modified.txt among them), vanilla's
+from the committed vanilla_parsed/.
 """
 
+import glob
 import json
 import os
 import re
@@ -27,8 +29,7 @@ from paradox_file_parser import ParadoxFileParser
 REPO = os.path.dirname(os.path.abspath(__file__))
 EFFECTS = os.path.join(REPO, "common", "scripted_effects", "heir_education_effects.txt")
 TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "heir_education_triggers.txt")
-MOD_IDEOLOGIES = os.path.join(REPO, "common", "ideologies", "modified.txt")
-EXTRA_IDEOLOGIES = os.path.join(REPO, "common", "ideologies", "extra_ideologies.txt")
+MOD_IDEOLOGY_FILES = sorted(glob.glob(os.path.join(REPO, "common", "ideologies", "*.txt")))
 VANILLA_IDEOLOGIES = os.path.join(REPO, "vanilla_parsed", "common", "ideologies.json")
 
 GATE_PREFIX = "heir_ed_country_allows_"
@@ -70,8 +71,12 @@ def _lists(section):
 class HeirIdeologyRollTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.mod = _parse(MOD_IDEOLOGIES)
-        cls.extra = _parse(EXTRA_IDEOLOGIES)
+        # key -> [(file, value)] across every mod ideology file, so a definition
+        # or an INJECT in any of them is seen (a key in two files is listed twice).
+        cls.mod = {}
+        for path in MOD_IDEOLOGY_FILES:
+            for key, value in _parse(path).items():
+                cls.mod.setdefault(key, []).append((os.path.basename(path), value))
         with open(VANILLA_IDEOLOGIES, encoding="utf-8") as fh:
             cls.vanilla = vanilla_parsed.decode(json.load(fh))
         cls.gates = {k: _body(v) for k, v in _parse(TRIGGERS).items()}
@@ -79,17 +84,17 @@ class HeirIdeologyRollTests(unittest.TestCase):
         cls.lists = _lists(cls.section)
 
     def _definition(self, ideology):
-        """The ideology as the game sees it: a mod REPLACE wins; an INJECT only
-        adds law stances (checked below), so vanilla's own fields stand."""
+        """The ideology as the game sees it: a mod REPLACE or plain definition
+        wins; an INJECT (in any mod ideology file) may only add law stances,
+        so vanilla's own fields stand."""
+        for field in ("character_ideology", "country_trigger"):
+            for fname, value in self.mod.get(f"INJECT:{ideology}", []):
+                self.assertNotIn(field, _body(value), f"INJECT:{ideology} in {fname} changes {field}")
         for key in (f"REPLACE:{ideology}", ideology):
-            if key in self.mod:
-                return _body(self.mod[key])
-            if key in self.extra:
-                return _body(self.extra[key])
-        inject = self.mod.get(f"INJECT:{ideology}")
-        if inject is not None:
-            for field in ("character_ideology", "country_trigger"):
-                self.assertNotIn(field, _body(inject), f"INJECT:{ideology} changes {field}")
+            found = self.mod.get(key, [])
+            self.assertLessEqual(len(found), 1, f"{key} is defined in several files")
+            if found:
+                return _body(found[0][1])
         self.assertIn(ideology, self.vanilla, f"{ideology} is defined nowhere")
         return _body(self.vanilla[ideology])
 
