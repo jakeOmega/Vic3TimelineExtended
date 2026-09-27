@@ -1,0 +1,126 @@
+﻿# ============================================================================
+# CLASSICAL HERITAGE — the classical or liturgical languages a country can
+# claim as its own
+# ============================================================================
+# Country scope. One trigger per language that language reform can revive
+# (amendment_langreform_revived_<language>, extra_law_events.25), keyed on a
+# primary culture's language, and for Hebrew, Sanskrit, Pali and Coptic on the
+# state religion. Shared by language reform (which revival it offers) and the
+# Grand Monuments (which heritage skins a monument may take, spec
+# docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md §1.1), so
+# the two cannot drift apart. test_grand_monument_registry.py pins the list and
+# that extra_law_events.25 calls these.
+
+te_heritage_latin = {
+	any_primary_culture = { has_discrimination_trait_group = language_group_romance }
+}
+
+te_heritage_hebrew = {
+	OR = {
+		country_has_state_religion = rel:jewish
+		any_primary_culture = { has_discrimination_trait_group = language_group_semitic }
+	}
+}
+
+te_heritage_sanskrit = {
+	OR = {
+		any_primary_culture = { has_discrimination_trait_group = language_group_indo_aryan }
+		country_has_state_religion = rel:hindu
+	}
+}
+
+te_heritage_geez = {
+	any_primary_culture = {
+		OR = {
+			has_discrimination_trait = language_amharic
+			has_discrimination_trait = language_tigrinya
+		}
+	}
+}
+
+te_heritage_slavonic = {
+	any_primary_culture = { has_discrimination_trait_group = language_group_slavic }
+}
+
+te_heritage_pali = {
+	country_has_state_religion = rel:theravada
+}
+
+te_heritage_avestan = {
+	any_primary_culture = { has_discrimination_trait_group = language_group_iranic }
+}
+
+te_heritage_arabic = {
+	any_primary_culture = { has_discrimination_trait = language_arabic }
+}
+
+te_heritage_chinese = {
+	any_primary_culture = {
+		OR = {
+			has_discrimination_trait_group = language_group_sinitic
+			has_discrimination_trait = language_japanese
+			has_discrimination_trait = language_korean
+		}
+	}
+}
+
+te_heritage_greek = {
+	any_primary_culture = { has_discrimination_trait_group = language_group_hellenic }
+}
+
+te_heritage_irish = {
+	any_primary_culture = { has_discrimination_trait = language_gaelic }
+}
+
+te_heritage_coptic = {
+	country_has_state_religion = rel:oriental_orthodox
+}
+
+te_heritage_nahuatl = {
+	any_primary_culture = { has_discrimination_trait = language_nahuan }
+}
+
+te_heritage_norse = {
+	any_primary_culture = { has_discrimination_trait = language_scandinavian }
+}
+
+te_heritage_gothic = {
+	any_primary_culture = { has_discrimination_trait_group = language_group_germanic }
+}
+
+te_heritage_mayan = {
+	any_primary_culture = { has_discrimination_trait = language_mayan }
+}
+
+te_heritage_prussian = {
+	any_primary_culture = { has_discrimination_trait_group = language_group_baltic }
+}
+
+te_heritage_aramaic = {
+	any_primary_culture = { has_discrimination_trait = language_aramaic }
+}
+
+# Country scope. True if any of the eighteen holds. The generic revival option
+# offers itself only when none does.
+te_heritage_any = {
+	OR = {
+		te_heritage_latin = yes
+		te_heritage_hebrew = yes
+		te_heritage_sanskrit = yes
+		te_heritage_geez = yes
+		te_heritage_slavonic = yes
+		te_heritage_pali = yes
+		te_heritage_avestan = yes
+		te_heritage_arabic = yes
+		te_heritage_chinese = yes
+		te_heritage_greek = yes
+		te_heritage_irish = yes
+		te_heritage_coptic = yes
+		te_heritage_nahuatl = yes
+		te_heritage_norse = yes
+		te_heritage_gothic = yes
+		te_heritage_mayan = yes
+		te_heritage_prussian = yes
+		te_heritage_aramaic = yes
+	}
+}

@@ -525,6 +525,13 @@ def categorize_key(key, technology_keys):
 
     if key in technology_keys:
         return "TECHNOLOGIES"
+    # Grand Monuments (docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md).
+    # Every loc-bearing key the system adds carries the gm_ prefix: modifiers
+    # (some end in _add-like tokens), skin names ("gm_skin_faith_*", which would
+    # otherwise match "religion"-style rules), JE lines and tooltips. Tested
+    # before every substring rule so the whole family stays in one file.
+    if key.startswith("gm_"):
+        return "MISCELLANEOUS"
     if key.startswith("setting_") or key.startswith("rule_"):
         return "GAME_RULES"
     if key.startswith("EFFECTS_ON_ACCEPTANCE_"):

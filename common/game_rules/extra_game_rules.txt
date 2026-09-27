@@ -334,3 +334,20 @@ internal_resettlement_rule = {
 		flag = internal_resettlement_disabled
 	}
 }
+
+# Grand Monuments (docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md
+# §7). Disabled makes the building unbuildable and stops the pulses, the
+# dedication ceremony and the Monuments journal entry. Every check is written
+# NOT = { has_game_rule = grand_monuments_disabled } (gm_system_enabled), so a
+# save started before the rule existed stays enabled.
+grand_monuments_rule = {
+	default = grand_monuments_enabled
+
+	grand_monuments_enabled = {
+		flag = grand_monuments_enabled
+	}
+
+	grand_monuments_disabled = {
+		flag = grand_monuments_disabled
+	}
+}

@@ -40,3 +40,11 @@ monument_government_is_republican = {
 		has_law_or_variant = law_type:law_direct_democracy
 	}
 }
+
+# ======================================================================
+#  The game rule (spec §7)
+# ======================================================================
+# Any scope. The Grand Monument system runs under this rule setting.
+gm_system_enabled = {
+	NOT = { has_game_rule = grand_monuments_disabled }
+}
