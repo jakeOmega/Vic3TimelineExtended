@@ -31,7 +31,7 @@
  setting_cultural_hegemony_disabled:0 "Cultural Hegemony Disabled"
  setting_cultural_hegemony_disabled_desc:0 "The cultural hegemony [concept_journal_entry] is disabled. [concept_cultural_pull] modifiers from technologies and events still apply to tooltips but have no gameplay effect."
  setting_cultural_hegemony_enabled:0 "Cultural Hegemony Enabled"
- setting_cultural_hegemony_enabled_desc:0 "The [concept_cultural_hegemony_system] [concept_journal_entry] is active. Nations compete for global cultural influence through art, [concept_prestige], living standards, and technology. The dominant cultural power attracts migrants and spreads technology."
+ setting_cultural_hegemony_enabled_desc:0 "The [concept_cultural_hegemony_system] [concept_journal_entry] is active. Nations compete for global cultural influence through art, [concept_prestige], living standards, and technology. The dominant cultural power attracts migrants, and events can let countries under its influence gain research speed by opening up to its culture."
  setting_custom_religions_allowed:0 "Custom Religions Allowed"
  setting_custom_religions_allowed_desc:0 "Custom religions are allowed in this game. You will receive a [concept_journal_entry] allowing you to select the ideology and name of your religion."
  setting_custom_religions_not_allowed:0 "Custom Religions Not Allowed"

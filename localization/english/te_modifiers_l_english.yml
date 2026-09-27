@@ -86,7 +86,7 @@
  country_greenhouse_gas_emissions_mult:0 "[concept_greenhouse_gas_emissions]"
  country_greenhouse_gas_emissions_mult_desc:0 "Modifies the rate at which this country contributes to global [concept_greenhouse_gas_emissions]."
  country_ideology_resistance_mult:0 "Ideology Resistance"
- country_ideology_resistance_mult_desc:0 "Resistance to foreign cultural influence from the [concept_cultural_hegemony_system]. Reduces the rise in [concept_sol] expectations and the loss of [concept_legitimacy] from the [concept_foreign_cultural_benchmark]."
+ country_ideology_resistance_mult_desc:0 "Resistance to foreign cultural influence from the [concept_cultural_hegemony_system]. Reduces the loss of [concept_legitimacy] from the [concept_foreign_cultural_benchmark]."
  country_inflation_anchoring_add:0 "Inflation Anchoring"
  country_inflation_anchoring_add_desc:0 "How much standing upward pressure on prices a credible central bank absorbs before it reaches them. It offsets the net pressure from wages and every other standing source, up to this much — and only ever downward to zero, so it never pushes prices down on its own. A bank markets believe can hold its target without holding the economy down to do it."
  country_inflation_pressure_add:0 "Inflationary Pressure"

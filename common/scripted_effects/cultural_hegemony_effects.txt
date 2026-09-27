@@ -132,7 +132,8 @@ ch_refresh_funding_modifiers = {
 	if = {
 		limit = { ch_program_funding_level_value >= 1 }
 		je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding multiplier = ch_program_funding_level_value_for_je } }
-		je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding_cost multiplier = ch_program_funding_cost_mult_for_je } }
+		# One level's cost per level (ch_program_funding_total_cost_mult).
+		je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding_cost multiplier = ch_program_funding_total_cost_mult_for_je } }
 	}
 }
 
