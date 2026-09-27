@@ -225,6 +225,7 @@ Notes:
 | `ig_feminism.py` | Adjusts female leader/commander probability in IG files. **Auto-runs on every server reload.** | `python ig_feminism.py` |
 | `scripts/image_pipeline/event_image_prompts.py` | Maps all mod events to image/video assets. Defines AI image generation prompts. Used by `generate_event_images.py`. | Library (import) |
 | `scripts/image_pipeline/generate_event_images.py` | 3-phase pipeline: generate AI images (FLUX.1-schnell), convert to DDS, create event videos. | `python scripts/image_pipeline/generate_event_images.py --phase generate` |
+| `scripts/image_pipeline/icon_samples.py` | Prototype for FLUX-generated UI icons (techs, treaty articles, buildings, decrees, ideologies, mobilization options). Renders sample icons in each category's vanilla layout, with frames and discs lifted from the per-pixel median of the vanilla folder, and writes a comparison sheet beside vanilla neighbours. PNGs only. Needs the image stack in `.venv-img` and the game install. Design and findings: `docs/superpowers/specs/2026-09-26-icon-pipeline-design.md`. | `FLUX_MODEL_DIR=<snapshot> .venv-img/bin/python scripts/image_pipeline/icon_samples.py --out DIR --offload sequential` |
 
 - **`map_data/state_regions/*.txt` lists province ids both quoted and bare** (`"x29CCD6"` and `x29CCD6`) — both are valid to the engine. Any generator that scans provinces out of a state region block needs a regex that matches both forms; `scripts/generators/gen_region_area.py`'s `HEX_RE` (`\bx([0-9A-Fa-f]{6})\b`, no quote anchor) is the pattern to copy.
 
