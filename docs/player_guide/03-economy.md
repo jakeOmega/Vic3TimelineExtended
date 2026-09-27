@@ -261,7 +261,7 @@ leisure, Convenience, Art and Tourism take about four fifths of what a pop
 spends, and by wealth 100 nearly all of it. Luxuries peak at about half of
 spending around wealth 30 and then fade.
 
-![How a pop's spending divides between needs as its wealth rises, priced at base prices.](images/pop_spending_by_wealth.png)
+![How a pop's spending divides between needs as its wealth rises, at base prices. Left: wealth 5 to 60, where most pops spend most of a campaign. Right: the full range to 200.](images/pop_spending_by_wealth.png)
 
 Tourism as an industry is covered in [State tourism](07-states.md#state-tourism), and the new goods in
 [The extended timeline](02-timeline.md), which also lists the base-game goods
@@ -367,6 +367,12 @@ treasury, and adds demand that raises the price. Releasing sells onto your
 market, adds supply that lowers the price, and pays the treasury; the journal
 entry shows this as Weekly Sales Income.
 
+The budget panel shows the two sides separately. Sales appear under Additional
+Income, as the Strategic Reserve journal entry's income; purchases appear with the
+hub's inputs under Goods for Government Buildings. They are not netted, so a
+reserve that buys small arms while selling grain can show +1,000 a week of income
+and −2,000 a week of expenses at the same time.
+
 ### Reserve policies and presets
 
 Instead of setting a rate by hand, you can give each good a policy that decides
@@ -401,8 +407,7 @@ switch that runs at full flow once the price crosses the threshold.
 A preset keeps its flow and budget in step with your country, recalculating them
 every week from your capacity and GDP, until you change either by hand. The
 preset in force is grayed out, and changing any setting by hand ends it. The
-budget is an estimate and a cap for each week; what goes unspent doesn't carry
-over. A new reserve starts every good on Manual with the Standard settings
+budget is a cap for each week; what goes unspent doesn't carry over. A new reserve starts every good on Manual with the Standard settings
 loaded, so switching a good to a policy works at once. The row's own buttons and
 Reset Reserve Rates switch goods back to Manual. Policies keep running while the
 journal entry is closed.
