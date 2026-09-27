@@ -1203,22 +1203,30 @@ war_propaganda_on_action = {
 #
 # Checked every year, also while the modifier is in force. It is applied or kept
 # while one of these holds:
-# - Entry (no modifier): investors have more than target_queue_length levels
-#   queued and the pool takes in more than it spends.
-# - Stay (modifier in force): the private queue isn't empty and
-#   too_much_private_construction_overflow > 0, i.e. target_queue_length
-#   projects at base speed still couldn't spend the pool's gross income. Net
-#   income can't be the stay test: it turns negative as soon as the modifier
-#   drains the pool, so the modifier would remove itself by working. Nor can
-#   the 500-level bar: the engine's own autonomous investment fills the queue,
-#   and faster projects shorten it while the modifier is still needed.
+# - Entry (no stored value): investors have more than target_queue_length
+#   levels queued and the pool takes in more than it spends.
+# - Stay (var:too_much_private_construction_cached above 0, which is the
+#   modifier's multiplier, so normally the modifier is in force): the private
+#   queue isn't empty and too_much_private_construction_overflow > 0, i.e.
+#   target_queue_length projects at base speed still couldn't spend the pool's
+#   gross income. Net income can't be the stay test: it turns negative as soon
+#   as the modifier drains the pool, so the modifier would remove itself by
+#   working. Nor can the 500-level bar: the engine's own autonomous investment
+#   fills the queue, and faster projects shorten it while the modifier is
+#   still needed.
 # - Overinvestment is in force (below).
 # While one holds, the value ramps (at most x1.2 or /1.2 a year,
 # too_much_private_construction_script_value). Otherwise the modifier is
-# removed and the variable zeroed, including a variable a civil war's winner
-# inherited without the modifier. Outside Overinvestment the stay test fails
-# exactly when the ramp's target reaches 0, so the /1.2 floor can't keep a
-# spent modifier alive. Until 2026-09-26 the gate was skipped once the
+# removed and the variable zeroed. The stay test reads the variable, not the
+# modifier, because a civil war's winner inherits variables but no modifiers
+# (docs/guides/scripting_best_practices.md, "What a Civil War's Winner
+# Inherits"): a winner holding the variable rebuilds the modifier, so it
+# continues the nation. On that first pulse base_construction_per_week
+# subtracts a value the winner's modifiers don't include, so the overflow reads
+# high by that much; the x1.2 ceiling caps the rebuilt value at 1.2x the
+# inherited one, and the next pulse is exact. Outside Overinvestment the stay
+# test fails exactly when the ramp's target reaches 0, so the /1.2 floor can't
+# keep a spent modifier alive. Until 2026-09-26 the gate was skipped once the
 # modifier existed, and it lingered for about a century on that floor.
 #
 # Overinvestment keeps the modifier. It cuts every pop's pool contribution, so
@@ -1247,12 +1255,18 @@ excess_private_construction_on_action = {
 			limit = {
 				OR = {
 					AND = {
-						NOT = { has_modifier = too_much_private_construction }
+						NOT = {
+							AND = {
+								has_variable = too_much_private_construction_cached
+								var:too_much_private_construction_cached > 0
+							}
+						}
 						construction_queue_num_queued_private_levels > target_queue_length
 						investment_pool_net_income > 0
 					}
 					AND = {
-						has_modifier = too_much_private_construction
+						has_variable = too_much_private_construction_cached
+						var:too_much_private_construction_cached > 0
 						construction_queue_num_queued_private_levels > 0
 						too_much_private_construction_overflow > 0
 					}
@@ -1288,6 +1302,7 @@ excess_private_construction_on_action = {
 			if = {
 				limit = {
 					has_variable = too_much_private_construction_cached
+					var:too_much_private_construction_cached > 0
 				}
 				set_variable = {
 					name = too_much_private_construction_cached
