@@ -18,6 +18,8 @@ When you have screenshots ready, paste `[img]<steam-hosted-url>[/img]` at these 
 
 [i]A large content mod for Victoria 3 that pushes the timeline past 1936 into the 20th century, the modern era, and a speculative near-future. Banking cycles, climate change, the space race, the UN, decolonization — playable, opt-in, woven into the existing economy.[/i]
 
+[b]New to the mod?[/b] The [url=https://github.com/jakeOmega/Vic3TimelineExtended/blob/main/docs/player_guide/Vic3TimelineExtended_Player_Guide.pdf]player guide[/url] (PDF) explains every system. You can also [url=https://github.com/jakeOmega/Vic3TimelineExtended/tree/main/docs/player_guide]read it chapter by chapter[/url] on GitHub.
+
 [hr][/hr]
 
 [h1]At a glance[/h1]
@@ -118,6 +120,7 @@ The mod contains AI-generated event images and some AI flavor text. To replace A
 
 [h1]Links and credits[/h1]
 [list]
+[*][url=https://github.com/jakeOmega/Vic3TimelineExtended/blob/main/docs/player_guide/Vic3TimelineExtended_Player_Guide.pdf]Player guide (PDF)[/url]
 [*][url=https://github.com/jakeOmega/Vic3TimelineExtended]Source repository[/url]
 [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3257202613]Free Market Construction[/url] by [b]TOGFan[/b] — basis for the construction-market subsystem; recommended on its own if you want just that mechanic.
 [/list]

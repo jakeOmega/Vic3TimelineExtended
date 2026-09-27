@@ -4,6 +4,8 @@ A large content mod for **Victoria 3** (Paradox Clausewitz engine) that extends 
 
 The repo is both a Paradox-script content mod *and* a Python toolchain that parses the mod (and vanilla) into a queryable HTTP service, regenerates derived files on save, and validates the script against engine constraints. Most of the systems below are layered — they share scripted-effect helpers, on-action wiring, and a common dynamic-modifier pattern documented in `docs/guides/scripting_best_practices.md` and `docs/systems/mod_systems.md`.
 
+> **Playing the mod?** The [player guide](docs/player_guide/Vic3TimelineExtended_Player_Guide.pdf) (PDF) explains every system for players who know Victoria 3 but not this mod. It can also be [read chapter by chapter on GitHub](docs/player_guide/). The rest of this README is about developing the mod.
+
 ## Setting up on a new machine
 
 ```bash
@@ -297,6 +299,8 @@ All under `docs/engine/`:
 - `error_log_digest.md` — game-log digest (gitignored, machine-local).
 - `event_image_inventory.md` — events ↔ image/video map (gitignored, machine-local).
 - `*_report.md` — one per post-load audit (magnitude, modifier visibility, loc coverage, concept references, loc accessors, mod structure, loc render, `any_*` limits, iterator limits, modifier multiplier vars, PM employment, orphaned events, effect/trigger validity, duplicate keys, attitude keys) plus `kill_character_audit.md`. `effect_trigger_valid_keys.txt` is the one exception in this folder: a hand-refreshed bootstrap catalog, not a per-reload dump.
+
+**Player guide:** `player_guide/` holds the player-facing guide: numbered Markdown chapters, the Typst page template, `STYLE.md` (house style) and the built PDF. `scripts/build_player_guide.py` builds the PDF (needs `requirements-docs.txt`); `scripts/analysis/check_player_guide_style.py` lints the chapters. Both run in CI (the build as `--check`, which fails if the PDF is older than its sources).
 
 **Design docs (hand-written):**
 - `systems/mod_systems.md` — every gameplay system's files and mechanics. The single most useful design reference.

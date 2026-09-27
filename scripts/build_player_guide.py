@@ -297,18 +297,25 @@ def build(output: Path, keep_typst: Path | None = None, guide_dir: Path = GUIDE_
     return output
 
 
+def _display(path: Path) -> str:
+    try:
+        return path.relative_to(REPO_ROOT).as_posix()
+    except ValueError:
+        return str(path)
+
+
 def check(pdf: Path, guide_dir: Path = GUIDE_DIR) -> int:
+    """0 when ``pdf`` carries the fingerprint of the current sources, else 1."""
     fingerprint = source_fingerprint(guide_dir)
     if not pdf.exists():
-        print(pdf.relative_to(REPO_ROOT).as_posix() + " is missing; run scripts/build_player_guide.py")
+        print(_display(pdf) + " is missing; run scripts/build_player_guide.py")
         return 1
     if (FINGERPRINT_PREFIX + fingerprint).encode() in pdf.read_bytes():
         print("player guide PDF is up to date with its sources")
         return 0
     print(
-        pdf.relative_to(REPO_ROOT).as_posix()
-        + " was built from different sources than docs/player_guide/ now holds.\n"
-        "Rebuild it:  .venv/bin/python scripts/build_player_guide.py"
+        _display(pdf) + " was built from different sources than " + _display(guide_dir)
+        + " now holds.\nRebuild it:  .venv/bin/python scripts/build_player_guide.py"
     )
     return 1
 

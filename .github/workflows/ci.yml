@@ -190,6 +190,18 @@ jobs:
         if: ${{ !cancelled() }}
         run: python3 scripts/analysis/check_post_load_rosters.py
 
+      # The player guide (docs/player_guide/). The lint keeps the chapters free of
+      # script keys, broken links and machine-sounding prose; --check fails when a
+      # chapter (or the template) changed but the committed PDF wasn't rebuilt.
+      # Neither step needs pandoc or Typst.
+      - name: Player guide — style lint
+        if: ${{ !cancelled() }}
+        run: python3 scripts/analysis/check_player_guide_style.py --strict
+
+      - name: Player guide — PDF matches its sources
+        if: ${{ !cancelled() }}
+        run: python3 scripts/build_player_guide.py --check
+
   dds-dimensions:
     name: DDS texture dimensions
     runs-on: ubuntu-latest
