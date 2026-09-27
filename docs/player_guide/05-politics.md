@@ -123,9 +123,10 @@ policy](04-banking.md).
 | Auxiliary Fleet | Navy Model | Predictive Logistics | A navy that carries the army: ships reach 50% farther from port, naval invasions go better, ships carry 30% more marines and supply ships 30% more supply, supply ships build faster and capital ships slower. Coastal countries only. |
 
 Algorithmic Governance dissolves your parties, replaces Elected Bureaucrats with
-Appointed Bureaucrats and makes you an Algorithmic Directorate. Laws pass 50%
-faster, research runs 10% faster, decrees cost a quarter less and institutions
-change size twice as fast. But radicals and loyalists from changes in living
+Appointed Bureaucrats and makes you an Algorithmic Directorate, or an
+Algorithmic Commons under [Collective Governance](#collective-governance). Laws
+pass 50% faster, research runs 10% faster, decrees cost a quarter less and
+institutions change size twice as fast. But radicals and loyalists from changes in living
 standards double, so a falling standard of living turns on you fast.
 
 ### Law enactment events
@@ -250,8 +251,8 @@ Collective Governance is a governance principle in which nobody holds supreme
 executive power: a body of equals governs, and its chair is first among equals.
 It unlocks with Political Agitation and needs one of these Distribution of Power
 laws: Landed Voting, Wealth Voting, Census Suffrage, Universal Suffrage,
-Single-Party State, Technocracy, Oligarchy, Organic Regulation or Anarchy. Under
-it you have 15% less authority and laws pass 10% more slowly, but broad
+Single-Party State, Technocracy, Oligarchy, Organic Regulation, Anarchy or
+Algorithmic Governance. Under it you have 15% less authority and laws pass 10% more slowly, but broad
 coalitions earn more legitimacy and ideological incoherence costs less. The
 chair's interest group gets no head-of-state legitimacy bonus.
 
@@ -266,6 +267,7 @@ repeal it, and the law's tooltip names it before you enact.
 | Technocracy | Collegial Administration | Institutions change size 50% faster; decrees cost 25% more |
 | Anarchy | Free Federation | Laws pass only with a political movement behind them |
 | Oligarchy or Organic Regulation | Patrician Council | Aristocrats and capitalists gain 15% political strength |
+| Algorithmic Governance | Algorithmic Commons | Wealth brings 25% less political strength; political movements are 10% less active |
 
 Each amendment comes with a government type of the same name, listed in [New
 government types](#new-government-types).
@@ -282,11 +284,12 @@ These follow from the governance laws above.
 | Free Federation | Collective Governance with Anarchy | Representative |
 | Patrician Council | Collective Governance with Oligarchy or Organic Regulation | Syndic |
 | Noble Commonwealth | As Patrician Council, with Traditional Vassalage | Marshal |
+| Algorithmic Commons | Collective Governance with Algorithmic Governance | Steward |
 | Collective Governance | Collective Governance under any other combination, until the laws settle | Speaker |
 | Corporate Democracy | Neocameralism with a voting franchise | Director |
 | Corporate Syndicalism | Neocameralism with Single-Party State | Director |
 | Corporate Autocracy | Neocameralism without a voting franchise | Director |
-| Algorithmic Directorate | Algorithmic Governance | Director |
+| Algorithmic Directorate | Algorithmic Governance, except under Collective Governance or Neocameralism | Director |
 
 ## Ideologies, parties and movements
 
