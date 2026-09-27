@@ -2964,6 +2964,7 @@
  nuclear_standoff_relief_modifier:0 "Nuclear Crisis Averted"
  nuclear_standoff_tension_modifier:0 "Nuclear Standoff"
  nuclear_standoff_terror_modifier:0 "Nuclear Terror"
+ nuclear_tactical_strike_installations_tt:0 "Each naval fortification and military base in the state loses half its levels."
  nuclear_weapon_program_funding:0 "Nuclear Weapons Program Funding"
  nuke_attack_line_hypersonic:0 "\n#variable +50%#! from $hypersonic_weapons$"
  nuke_attack_line_icbms:0 "\n#variable +50%#! from $ICBMs$"
