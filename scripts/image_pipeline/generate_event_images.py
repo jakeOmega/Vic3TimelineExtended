@@ -10,7 +10,9 @@ Each phase skips already-completed work, making the script safe to re-run.
 If it fails partway through, re-run with --phase to resume from that phase.
 
 An image whose .dds already exists is never regenerated (phase 1) or
-reconverted (phase 2); to redo one, delete its .dds first. Phase 3 only wires
+reconverted (phase 2), and phase 1 also skips an image whose PNG is still in
+generated_images/. To redo one, delete both its .dds and its PNG: with only the
+.dds gone, phase 2 converts the old PNG back. Phase 3 only wires
 images whose .dds exists, so a registry entry can name its events before the
 picture is generated (a "pending" image), and those events keep their current
 art until the file lands. Phase 3 also leaves alone events that already show
@@ -33,9 +35,9 @@ generate the pending images in batches; `python event_image_prompts.py
 
 Review every new picture before wiring it: run `--phase generate` and
 `--phase convert`, look at the results (`contact_sheet.py KEY1 KEY2 ...`
-renders a labelled grid), delete and regenerate any bad ones, then run
-`--phase update`. FLUX drifts toward real flags, landmarks and politicians'
-faces even when the prompt names none.
+renders a labelled grid), delete any bad ones (.dds and PNG) and regenerate
+them, then run `--phase update`. FLUX drifts toward real flags, landmarks and
+politicians' faces even when the prompt names none.
 """
 
 from __future__ import annotations
