@@ -422,7 +422,7 @@
  IR_PROXY_CONFLICT_RIVAL_EFFECT_TT:0 "[SCOPE.sCountry('proxy_rival').GetName] gains #bold $proxy_conflict_destabilized_modifier$#! for #v 5 years#!."
  IR_TRADE_EMBARGO_RIVAL_EFFECT_TT:0 "[SCOPE.sCountry('embargo_rival').GetName] gains #bold $trade_embargo_suffered_modifier$#! for #v 5 years#!."
  IS_DECOLONIZATION_ELIGIBLE_STATE_TT:0 "Must be a non-[concept_homeland] territory of at least 100,000 population, outside the capital's region and neighboring regions."
- IS_OVERSEAS_COLONIAL_STATE_TT:0 "Must be a populous non-[concept_homeland] territory outside the capital's region and neighboring regions, with either a low-acceptance indigenous population OR average [concept_sol] below 80% of the metropole's national average (with some non-primary population present)."
+ IS_OVERSEAS_COLONIAL_STATE_TT:0 "Must be a populous non-[concept_homeland] territory outside the capital's region and neighboring regions, with either a low-acceptance indigenous population making up more than a tenth of it OR average [concept_sol] below 80% of the metropole's national average (with some non-primary population present)."
  IS_OVERSEAS_FROM_CAPITAL_TT:0 "Must be outside the capital's region and all neighboring regions."
  IS_OVERSEAS_FROM_OVERLORD_CAPITAL_TT:0 "Must be outside the [concept_overlord]'s capital region and all neighboring regions."
  IS_UNINTEGRATED_CULTURALLY_DISTINCT_STATE_TT:0 "Must be a populous non-[concept_homeland] territory with a significant low-acceptance local population."
