@@ -416,9 +416,14 @@ heir_education_resolve_effect = {
 	# Positive = progressive, Negative = conservative
 	# Thresholds at ±1 (leaning) and ±4 (strong)
 	# Every roll is a character ideology (character_ideology = yes). The lists are
-	# the original design's (13a09b8f) minus Communist and Vanguardist, which
-	# vanilla bars for a monarchy's heir; the rework's Radical takes their 8 as the
-	# extreme progressive outcome, and Moderate takes the "no change" weight.
+	# the original design's (13a09b8f), with Moderate taking its "no change"
+	# weight, plus the rework's Radical (8) in the strong progressive list.
+	# Communist, Vanguardist and Radical each carry vanilla's "Monarchs cannot
+	# be republicans" clause in non_interest_group_leader_trigger, which keeps
+	# the game from generating such an heir. Owner ruling (PR #507): overridden
+	# on purpose, since a monarch who wants to abolish the monarchy is rare but
+	# not incoherent. set_ideology is not expected to check that clause; the
+	# in-game checks watch whether the game later replaces the ideology.
 	# A roll whose ideology has a country_trigger is gated on it
 	# (heir_education_triggers.txt), so it never lands on an ideology the country
 	# cannot have; Moderate, Authoritarian, Theocrat and Jingoist have none, so
@@ -435,6 +440,8 @@ heir_education_resolve_effect = {
 				25 = { trigger = { owner = { heir_ed_country_allows_ideology_liberal_leader = yes } } set_ideology = ideology:ideology_liberal_leader }
 				20 = { trigger = { owner = { heir_ed_country_allows_ideology_social_democrat = yes } } set_ideology = ideology:ideology_social_democrat }
 				10 = { trigger = { owner = { heir_ed_country_allows_ideology_humanitarian = yes } } set_ideology = ideology:ideology_humanitarian }
+				5 = { trigger = { owner = { heir_ed_country_allows_ideology_communist = yes } } set_ideology = ideology:ideology_communist }
+				3 = { trigger = { owner = { heir_ed_country_allows_ideology_vanguardist = yes } } set_ideology = ideology:ideology_vanguardist }
 				8 = { trigger = { owner = { heir_ed_country_allows_ideology_radical = yes } } set_ideology = ideology:ideology_radical }
 				2 = { set_ideology = ideology:ideology_moderate }
 			}

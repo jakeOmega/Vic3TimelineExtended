@@ -100,7 +100,8 @@ class HeirIdeologyRollTests(unittest.TestCase):
 
     def test_every_set_ideology_line_is_a_parsed_roll(self):
         rolls = sum(len(rows) for rows in self.lists)
-        self.assertEqual(rolls, self.section.count("set_ideology"))
+        code = "\n".join(line.split("#")[0] for line in self.section.splitlines())
+        self.assertEqual(rolls, code.count("set_ideology"))
         self.assertEqual(len(self.lists), 5)
 
     def test_every_roll_is_a_character_ideology(self):

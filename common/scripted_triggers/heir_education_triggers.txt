@@ -50,6 +50,14 @@ heir_ed_country_allows_ideology_social_democrat = {
 	has_technology_researched = socialism
 }
 
+heir_ed_country_allows_ideology_communist = {
+	has_technology_researched = socialism
+}
+
+heir_ed_country_allows_ideology_vanguardist = {
+	has_technology_researched = political_agitation
+}
+
 heir_ed_country_allows_ideology_humanitarian = {
 	has_technology_researched = feminism
 }
