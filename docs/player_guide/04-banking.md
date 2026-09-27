@@ -150,10 +150,11 @@ balances.
 A crash can spread to any country that holds the banking journal entry and is
 tied to the crashing one by a shared market, customs union, currency or border,
 economic dependence, or more than 1% of its market's trade, production or
-consumption. The crashing economy must be at least 1% the size of yours, so a
-small country cannot topple a giant. Each exposed country has a 25% base chance
-to be reached, more when the source is much larger than you, when the ties are
-close and when the crash was severe.
+consumption. A country more than 20 times the crashing economy's size is
+immune, and the limit applies at every step of a cascade, so a crisis wave
+rarely climbs from small economies to large ones. Each exposed country has a
+25% base chance to be reached, more when the source is at least your size, when
+the ties are close and when the crash was severe.
 
 A week later, the reached country's own bubble pressure (plus a bump for the
 original crash's severity) decides whether it crashes outright or only suffers a
@@ -219,7 +220,9 @@ Each directed-credit sector builds its buildings 10% faster and pleases some
 interest groups while angering others, and only one can run at a time (two under
 Directed Credit & Development Banks). Asset Relief Program and Bail-in Regime
 exclude each other. A Bank Holiday also shields you from contagion, and ends by
-itself after 90 days.
+itself after 90 days. Freezing everyone's deposits is deeply unpopular: it turns
+5% of middle-strata pops, 3% of upper-strata pops and 2% of lower-strata pops
+radical, about 2.5 to 3% of your population.
 
 ### Command economy and cooperative tools
 

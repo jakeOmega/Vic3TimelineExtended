@@ -47,6 +47,10 @@ but wrecks colonial stability. Affirmative Action raises minimum local
 acceptance by 20, pulls migrants and steadies colonies, but institutions cost
 20% more bureaucracy.
 
+Universal Citizenship needs the Ministry of Refugee Affairs, which in turn rules
+out Closed Borders. Adopting Closed Borders abolishes the ministry at once, and
+Universal Citizenship falls to Assimilatory Citizenship the same day.
+
 State-Led Language Reform starts a chain of choices. On enactment an event asks
 whether to revive a classical language, build a constructed one or simplify the
 existing tongue. Revival offers the classical language that fits your primary
@@ -179,7 +183,7 @@ included, from 5 levels to 9.
 | Ministry of Labor | Public Works Programs (pro-labor) or Marketing Research (pro-capital) | | Both raise the workforce ratio, pro-capital twice as much. Pro-labor weakens the political power of wealth and adds company workforce dividends; pro-capital strengthens it, lowers minimum wages and radicalizes movements slightly |
 | Ministry of the Environment | Pollution Control | | −5% pollution and emissions, larger national parks, slightly lower extraction output |
 | Ministry of Intelligence and Security | Mass Surveillance | | +4 intelligence capacity and one more covert operation slot |
-| Ministry of Refugee Affairs | Civil Rights Movement | No Migration Controls | Faster cultural acceptance, more mass migration |
+| Ministry of Refugee Affairs | Civil Rights Movement | Any migration law except Closed Borders | Faster cultural acceptance, more mass migration |
 | Ministry of Propaganda | Mass Media | Single-Party State, Secret Police or Outlawed Dissent | +100 authority and primary-culture fervor; the law also steadies war support through battles |
 | Ministry of Science | Nuclear Weapons | | +5% research speed, academics' political strength |
 | Ministry of Thought Control | Automated Surveillance | Single-Party State, Secret Police or Outlawed Dissent | Loyalists every month; low electoral confidence hurts less |
