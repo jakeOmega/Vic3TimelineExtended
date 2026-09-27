@@ -24,12 +24,16 @@ decol_is_independent_former_colony = {
 
 # Scope: country (a former overlord). It may be approached for closer ties —
 # the conditions decolonization_events.5 used to check on itself — and no other
-# overture is in flight (decol_ties_overture_cd, set by .60).
+# overture is in flight (decol_ties_overture_cd, set by .60). It holds no
+# colonial subject: a dominion, a customs-union member or any other subject that
+# is not a qualifying colonial one does not stand in the way (owner ruling,
+# 2026-09-26; it was "no subjects at all", which with the entry gate left only
+# empires holding overseas states but no subject of any kind).
 decol_ties_overture_target_ok = {
 	has_journal_entry = je_colonial_empire
 	has_technology_researched = decolonization
 	country_rank >= rank_value:major_power
-	NOT = { any_subject_or_below = { always = yes } }
+	NOT = { any_subject_or_below = { is_qualifying_colonial_subject = yes } }
 	NOT = { has_modifier = post_colonial_partnership_modifier }
 	NOT = { has_variable = decol_ties_overture_cd }
 }
