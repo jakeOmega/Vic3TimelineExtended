@@ -53,6 +53,15 @@ nd_taboo_line_fragile = 30
 nd_taboo_line_established = 50
 nd_taboo_line_strong = 70
 nd_taboo_line_absolute = 90
+nd_taboo_shock_strategic = -15
+nd_taboo_ledger_strategic = -10
+nd_taboo_shock_tactical = -6
+nd_taboo_ledger_tactical = -4
+nd_taboo_retaliation_factor = 0.5
+nd_taboo_clock_keep_first_use = 0.5
+nd_taboo_clock_keep_retaliation = 0.75
+nd_taboo_band_hysteresis = 2
+nd_taboo_event_cooldown_years = 10
 
 # ---- READING THE SCORE ---------------------------------------------------------
 

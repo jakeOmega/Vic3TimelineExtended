@@ -115,5 +115,45 @@ class TestScoreCore(unittest.TestCase):
             self.assertEqual(organize_loc.categorize_key(key, set()), "MISCELLANEOUS", key)
 
 
+sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
+
+
+class TestSimulator(unittest.TestCase):
+    def setUp(self):
+        import nuclear_taboo_sim as sim
+        self.sim = sim
+        self.c = sim.load_constants(TABOO_VALUES)
+
+    def test_constants_come_from_the_script_file(self):
+        for name in ("nd_taboo_base", "nd_taboo_tradition_cap", "nd_taboo_approach_months",
+                     "nd_taboo_ledger_decay", "nd_taboo_shock_strategic", "nd_taboo_ledger_strategic",
+                     "nd_taboo_clock_keep_first_use", "nd_taboo_band_hysteresis"):
+            self.assertIn(name, self.c, name)
+
+    def test_quiet_world_plateaus_at_55(self):
+        series = self.sim.simulate(self.sim.SCENARIOS["quiet"], self.c, years=100)
+        score, target = series[-1]
+        self.assertAlmostEqual(target, 55, delta=0.01)
+        self.assertAlmostEqual(score, 55, delta=0.5)
+
+    def test_one_use_roughly_halves_a_mature_taboo(self):
+        series = self.sim.simulate(self.sim.SCENARIOS["use_year_40"], self.c, years=41)
+        before = series[40 * 12 - 1][1]
+        after = series[40 * 12 + 1][1]
+        self.assertGreater(before - after, 20)
+        self.assertLess(before - after, 35)
+
+    def test_seeded_quiet_world_starts_near_its_target(self):
+        scenario = self.sim.SCENARIOS["seeded_40_years"]
+        score, target = self.sim.simulate(scenario, self.c, years=1)[0]
+        self.assertAlmostEqual(score, target, delta=1.1)
+        self.assertGreater(score, 50)
+
+    def test_band_events_do_not_flap(self):
+        flapping = [50 + (1 if m % 2 else -1) for m in range(240)]
+        events = self.sim.band_events(flapping, self.c, cooldown_months=120)
+        self.assertLessEqual(len(events), 1)
+
+
 if __name__ == "__main__":
     unittest.main()
