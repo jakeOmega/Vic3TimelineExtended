@@ -283,7 +283,7 @@ Vanilla companies should be updated to reference mod-exclusive buildings in thei
 ### building_eic_trading_house
 - **Company:** `company_east_india_company` (GBR, colonial trade)
 - **Theme:** East India Company's trading house — center of colonial commerce
-- **State modifiers:** `state_migration_pull_mult = 0.15`, `state_trade_capacity_add = 5`, `building_port_throughput_add = 0.1`
+- **State modifiers:** `state_migration_pull_mult = 0.15`, `state_trade_capacity_add = 50`, `building_port_throughput_add = 0.1`. The trade capacity was 5 in this spec and 500 after 64bafd59; since Phase 9 every flagship that carries it (EIC, Mitsui, Jardine and the eleven Phase 7 trading houses) has 50, and so does the generator's `trading` template.
 - **Goods I/O:** Input: 10 tea (375), 10 opium (600) → Output: 50 merchant_marine (2500). Profit ~1525
 - **Employment (2000):** 800 clerks, 600 shopkeepers, 400 laborers, 200 officers
 - **Loc:** "East India Company Trading House" / "A grand trading house coordinating the vast commercial empire of the East India Company across the subcontinent and beyond."

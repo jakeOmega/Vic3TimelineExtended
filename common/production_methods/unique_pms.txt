@@ -3343,7 +3343,7 @@ pm_eic_trading_house = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_migration_pull_mult = 0.15
-			state_trade_capacity_add = 500
+			state_trade_capacity_add = 50
 			building_port_throughput_add = 0.1
 		}
 	}
@@ -3696,7 +3696,7 @@ pm_mitsui_trading_house = {
 	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			state_trade_capacity_add = 500
+			state_trade_capacity_add = 50
 			state_migration_pull_mult = 0.1
 			building_trade_center_throughput_add = 0.15
 		}
@@ -4780,7 +4780,7 @@ pm_ap_moller_copenhagen_wharf = {
 	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			state_trade_capacity_add = 500
+			state_trade_capacity_add = 50
 		}
 	}
 	building_modifiers = {
@@ -4920,7 +4920,7 @@ pm_b_grimm_bangkok_warehouse = {
 	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			state_trade_capacity_add = 500
+			state_trade_capacity_add = 50
 		}
 	}
 	building_modifiers = {
@@ -5600,7 +5600,7 @@ pm_sassoon_bombay_docks = {
 	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			state_trade_capacity_add = 500
+			state_trade_capacity_add = 50
 		}
 	}
 	building_modifiers = {
@@ -6623,7 +6623,7 @@ pm_hbc_york_factory = {
 	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			state_trade_capacity_add = 500
+			state_trade_capacity_add = 50
 		}
 	}
 	building_modifiers = {
@@ -7136,7 +7136,7 @@ pm_john_holt_lagos_trading_house = {
 	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			state_trade_capacity_add = 500
+			state_trade_capacity_add = 50
 		}
 	}
 	building_modifiers = {
@@ -8580,7 +8580,7 @@ pm_panama_company_culebra_cut = {
 	texture = "gfx/interface/icons/production_method_icons/cat_train_blue_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			state_trade_capacity_add = 500
+			state_trade_capacity_add = 50
 		}
 	}
 	building_modifiers = {
@@ -8890,7 +8890,7 @@ pm_ralli_odessa_grain_elevator = {
 	texture = "gfx/interface/icons/production_method_icons/cat_wheat_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			state_trade_capacity_add = 500
+			state_trade_capacity_add = 50
 		}
 	}
 	building_modifiers = {
@@ -9097,7 +9097,7 @@ pm_rac_sitka_trading_post = {
 	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			state_trade_capacity_add = 500
+			state_trade_capacity_add = 50
 		}
 	}
 	building_modifiers = {
@@ -9570,7 +9570,7 @@ pm_sudamericana_valparaiso_pier = {
 	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			state_trade_capacity_add = 500
+			state_trade_capacity_add = 50
 		}
 	}
 	building_modifiers = {
@@ -9603,7 +9603,7 @@ pm_suez_company_ismailia_hq = {
 	texture = "gfx/interface/icons/production_method_icons/cat_train_blue_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			state_trade_capacity_add = 500
+			state_trade_capacity_add = 50
 		}
 	}
 	building_modifiers = {
@@ -10110,7 +10110,7 @@ pm_ynchausti_manila_trading_house = {
 	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			state_trade_capacity_add = 500
+			state_trade_capacity_add = 50
 		}
 	}
 	building_modifiers = {
@@ -11017,7 +11017,7 @@ pm_jardine_princeps_house = {
 	state_modifiers = {
 		workforce_scaled = {
 			building_port_throughput_add = 0.10
-			state_trade_capacity_add = 5
+			state_trade_capacity_add = 50
 			state_migration_pull_mult = 0.15
 		}
 	}

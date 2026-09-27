@@ -1215,6 +1215,8 @@ PM modifier blocks have strict scope rules:
 
 **When adding state-level trade bonuses**, use: `state_trade_capacity_add`, `state_trade_quantity_mult`, `state_trade_advantage_mult`, or `building_port_throughput_add`.
 
+**Scale `state_trade_capacity_add` against vanilla's Trade Center: 10 per level, workforce-scaled** (`pm_trade_center`, `11_private_infrastructure.txt`). The type has `decimals = 0`. Thirteen company flagships once carried 500 on a misreading of vanilla (64bafd59); all fourteen flagships that carry the key now have 50.
+
 ## Company Building Requirements
 
 Every company building needs:
