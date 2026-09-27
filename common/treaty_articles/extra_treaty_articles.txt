@@ -2514,8 +2514,9 @@ population_transfer = {
 				}
 			}
 		}
-		# The target cannot demand the transfer of its cultures that already
-		# have high acceptance in the source
+		# At least one community of the target's cultures in the source must be
+		# below acceptance status 4. The effect still moves all of them,
+		# well-accepted ones included, and the tooltip says so.
 		custom_tooltip = {
 			text = POPULATION_TRANSFER_BLOCKED_HIGH_ACCEPTANCE
 			ROOT = {

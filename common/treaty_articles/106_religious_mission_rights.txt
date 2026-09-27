@@ -49,6 +49,9 @@ religious_mission_rights = {
 	possible = {
 		has_diplomatic_relevance = scope:other_country
 		NOT = { is_country_type = decentralized }
+		# ROOT is the source. Under State Atheism it would contravene the
+		# article (see non_fulfillment) from the first monthly check.
+		NOT = { has_law = law_type:law_state_atheism }
 		scope:other_country = {
 			NOT = { is_country_type = decentralized }
 			NOT = { has_law = law_type:law_state_atheism }

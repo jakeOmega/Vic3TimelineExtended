@@ -1353,7 +1353,7 @@ AI weights across events are tuned to favor decolonization:
 
 - **Purpose:** Moves minority pops of the target country's primary culture(s) from the source country to the target country. Models forced population exchanges (e.g., Treaty of Lausanne).
 - **Article type:** Directed, one-time effect on entry into force.
-- **Gating (`possible`, ROOT = the conceding source):** the source hosts pops of a primary culture of the target that is not also primary to the source, at least one of those cultures is below Acceptance Status 4 in some source state, and the demanding target does not have Universal Citizenship (`law_multicultural`).
+- **Gating (`possible`, ROOT = the conceding source):** the source hosts pops of a primary culture of the target that is not also primary to the source, at least one of those cultures is below Acceptance Status 4 in some source state (the effect still moves every pop of those cultures, however well accepted), and the demanding target does not have Universal Citizenship (`law_multicultural`).
 - **Mechanism:**
   1. `on_entry_into_force` saves scopes via `scope:article_options.source_country` / `.target_country` (critical scoping pattern — see `docs/guides/scripting_best_practices.md`).
   2. Calls `population_transfer_effect` scripted effect.

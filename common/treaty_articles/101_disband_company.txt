@@ -70,8 +70,13 @@ disband_company = {
 	on_withdrawal = {}
 	on_break = {}
 
+	# Only the source's own companies (ROOT is the source in valid triggers).
+	# Without this an AI could pick a company the source doesn't own: removal
+	# would silently fail, and Seize would still hand the target a copy.
 	company_valid_trigger = {
-		always = yes
+		scope:input = {
+			owner = root
+		}
 	}
 
 	# This section governs AI behavior regarding the treaty article.
