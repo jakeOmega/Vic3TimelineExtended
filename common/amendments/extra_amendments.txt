@@ -1270,7 +1270,7 @@ amendment_collective_patrician_council = {
 
 # The algorithm answers to no Director: every citizen's feedback weighs the
 # same (the Direct Democracy package's wealth value), and grievances reach it
-# before they harden into movements (-0.1: vanilla's support-regime action;
+# directly, so movements are less active (-0.1: vanilla's support-regime action;
 # internal-security laws are -0.03 to -0.05).
 amendment_collective_algorithmic_commons = {
 	allowed_laws = { law_direct_democracy }

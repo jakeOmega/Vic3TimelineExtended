@@ -280,7 +280,7 @@ output changes mainly because of §1's wider prerequisites (see §8).
 
 - Giving the law to historical collegial governments at game start (Switzerland, the Hanseatic cities, San Marino).
 - New enactment events for the non-voting combinations.
-- Algorithmic Governance as a prerequisite.
+- ~~Algorithmic Governance as a prerequisite.~~ Added 2026-09-27; see the follow-up at the end.
 - A new icon (the current `direct_democracy.dds` stays).
 - A preview tooltip on the Distribution of Power laws saying the amendment will change.
 
