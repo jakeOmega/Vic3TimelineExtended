@@ -113,6 +113,7 @@ The chapters follow the game's own areas rather than the order systems appear.
 | [Quick reference](16-reference.md) | When each system appears, the journal entries at a glance, and a glossary. |
 | [Appendix: social movement details](17-appendix-social-movements.md) | The numbers and event lists behind the social movements chapter. |
 | [Appendix: events](18-appendix-events.md) | The event lists behind the chapters, from resettlement to the space race, with when each event fires and what its options do. |
+| [Appendix: reference lists](19-appendix-reference-lists.md) | The longer lists the chapters summarize: wonders, government types, combat units, ships, ship modifications, mobilization options and military base production methods. |
 
 ## Reporting problems
 
@@ -123,8 +124,7 @@ and attaches a save and the game's `debug.log` and `error.log` (in the `logs`
 folder under `Documents/Paradox Interactive/Victoria 3`). If a mechanic is
 confusing even when it works as intended, that is worth reporting too.
 
-Several systems were reworked recently and have had little play-testing: the
-monetary-policy layer of the banking system, the United Nations, and nuclear
-deterrence and crises. This guide describes what their scripts are written to
+Three systems have had the least play-testing: the monetary-policy layer of the
+banking system, the United Nations, and nuclear deterrence and crises. This guide describes what their scripts are written to
 do. Where the game behaves differently, either the game or the guide is wrong,
 and a report helps fix whichever it is.

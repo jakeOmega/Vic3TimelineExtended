@@ -23,6 +23,7 @@ chapter by chapter:
 16. [Quick reference](16-reference.md)
 17. [Appendix: social movement details](17-appendix-social-movements.md)
 18. [Appendix: events](18-appendix-events.md)
+19. [Appendix: reference lists](19-appendix-reference-lists.md)
 
 ## Editing the guide
 

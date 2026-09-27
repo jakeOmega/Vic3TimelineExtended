@@ -269,27 +269,16 @@ repeal it, and the law's tooltip names it before you enact.
 | Oligarchy or Organic Regulation | Patrician Council | Aristocrats and capitalists gain 15% political strength |
 | Algorithmic Governance | Algorithmic Commons | Wealth brings 25% less political strength; political movements are 10% less active |
 
-Each amendment comes with a government type of the same name, listed in [New
-government types](#new-government-types).
-
 ## New government types
 
-These follow from the governance laws above.
-
-| Government type | When | Ruler title |
-|---|---|---|
-| Direct Democracy | Collective Governance with a voting franchise | Speaker |
-| Collective Leadership | Collective Governance with Single-Party State | Chairman or Chairwoman |
-| Collegial Administration | Collective Governance with Technocracy | Coordinator |
-| Free Federation | Collective Governance with Anarchy | Representative |
-| Patrician Council | Collective Governance with Oligarchy or Organic Regulation | Syndic |
-| Noble Commonwealth | As Patrician Council, with Traditional Vassalage | Marshal |
-| Algorithmic Commons | Collective Governance with Algorithmic Governance | Steward |
-| Collective Governance | Collective Governance under any other combination, until the laws settle | Speaker |
-| Corporate Democracy | Neocameralism with a voting franchise | Director |
-| Corporate Syndicalism | Neocameralism with Single-Party State | Director |
-| Corporate Autocracy | Neocameralism without a voting franchise | Director |
-| Algorithmic Directorate | Algorithmic Governance, except under Collective Governance or Neocameralism | Director |
+These follow from the governance laws above. Each Collective Governance
+amendment brings a government type of the same name, from a Direct Democracy led
+by a Speaker to an Algorithmic Commons led by a Steward. Neocameralism makes you
+a Corporate Democracy, Corporate Syndicalism or Corporate Autocracy, led by a
+Director, and Algorithmic Governance on its own makes you an Algorithmic
+Directorate. [Government type
+list](19-appendix-reference-lists.md#government-type-list) gives every type with
+its conditions and ruler title.
 
 ## Ideologies, parties and movements
 

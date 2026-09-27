@@ -14,9 +14,9 @@ technologies remain, but no program, stockpile, taboo or nuclear events exist.
 ## The Nuclear Weapons journal entry
 
 Everything happens in one journal entry, **Nuclear Weapons**. Before the world's
-first warhead, it is active for any country with a working program and any
-country caught up in a nuclear crisis; a country with the technology but not the
-standing to build sees it inactive, with a status line saying what it lacks.
+first warhead, it is active for any country with a working program; a country
+with the technology but not the standing to build sees it inactive, with a
+status line saying what it lacks.
 Once the first warhead exists, the entry is active for every country except
 decentralized ones, whether or not it has the technology, and its status line
 opens with the nuclear taboo's score and band.
@@ -32,10 +32,8 @@ opens with the nuclear taboo's score and band.
 
 <!-- screenshot: the Nuclear Weapons journal entry for an armed great power, program panel, progress bar and Nuclear Posture panel in view -->
 
-A power that loses its rank stops building but keeps the entry, its posture, its
-upkeep and its accidents. Before the first warhead, disarming closes the entry
-except during a crisis; after it, the entry stays open for every country, armed
-or not.
+An armed power that loses its rank stops building but keeps its warheads, its
+posture, its upkeep and its accidents.
 
 ## Building a nuclear arsenal
 
@@ -587,10 +585,7 @@ is active and shows it. It climbs slowly on its own, falls when the bomb is used
 or brandished, and rises with restraint. The more unthinkable the bomb, the more
 it costs to use it, threaten with it and, above 40, simply to hold it. It also
 shapes how the AI builds, threatens and strikes (see [How the AI plays nuclear
-weapons](#how-the-ai-plays-nuclear-weapons)). In a game that was already past
-its first warhead when the taboo was added, the taboo starts at the target its
-parts give rather than at 20, counting the years since the first device as a
-tradition of non-use if no weapon has been used.
+weapons](#how-the-ai-plays-nuclear-weapons)).
 
 ### The taboo panel and its bands
 

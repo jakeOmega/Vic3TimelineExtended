@@ -44,36 +44,13 @@ large it is, and a formation without a general earns nothing at all.
 Every unit line runs past the base game's last tier, and the new units appear in
 the upgrade options of the older units in their line, so you can upgrade
 battalions in place. The base game's Heavy Tanks (Mobile Armor, era 5) move from
-the artillery group to the new Heavy Tanks group, with lower stats than before,
-and aircraft form a group of their own.
-
-| Group | Unit | Technology | Era | Battalion size |
-|---|---|---|---|---|
-| Infantry | Armored Infantry | Combined Arms | 6 | 1000 |
-| Infantry | Robotic Soldiers | Joint All-Domain Command and Control (JADC2) | 10 | 600 |
-| Infantry | Swarm Bots | Swarm Technology | 11 | 400 |
-| Infantry | Utility Fog Phalanx | Molecular Assemblers | 12 | 250 |
-| Marines | Combined Arms Marines | Combined Arms | 6 | 1000 |
-| Marines | Stealth Marines | Stealth Technology | 8 | 800 |
-| Marines | Networked Marines | JADC2 | 10 | 600 |
-| Marines | Bioenhanced Marines | Bioenhanced Soldiers | 11 | 500 |
-| Artillery | Motorized Artillery | Motorized Artillery | 6 | 1000 |
-| Artillery | Guided Artillery Projectiles | Guided Missiles | 7 | 1000 |
-| Artillery | Networked Guided Artillery Projectiles | Network Centric Warfare | 9 | 800 |
-| Artillery | Orbital Bombardment | Space Militarization | 11 | 100 |
-| Artillery | Orbital Precision Antimatter Strikes | Antimatter Production | 12 | 100 |
-| Cavalry | Modern Scout Tank | Inertial Navigation Systems | 7 | 1000 |
-| Cavalry | Stealth Reconnaissance Drone Carrier | Rapid Deployment Forces | 9 | 1000 |
-| Cavalry | Holographic Ambush Combat Vehicle | Augmented Reality Warfare | 11 | 1000 |
-| Heavy Tanks | Main Battle Tanks | Guided Missiles | 7 | 1000 |
-| Heavy Tanks | Reactive Armor Tank | Advanced Materials Armor | 8 | 1000 |
-| Heavy Tanks | Railgun Tank | Hypersonic Weapons | 10 | 1000 |
-| Heavy Tanks | DEW Tank | Muon-Catalyzed Fusion Reactors | 12 | 1000 |
-| Aircraft | Propeller Aircraft | Bombing Aircraft | 6 | 200 |
-| Aircraft | Jet-Powered Aircraft | Jet Engine Technology | 7 | 200 |
-| Aircraft | Stealth Aircraft | Stealth Technology | 8 | 200 |
-| Aircraft | Orbital Tactical Vehicles | Space Militarization | 11 | 100 |
-| Aircraft | Orbital Weapons Platforms | Orbital Weapon Platforms | 12 | 100 |
+the artillery group to the new Heavy Tanks group, with lower stats than in the
+base game, and aircraft form a group of their own. Each group gains three to
+five units, from Armored Infantry and Propeller Aircraft in era 6 to the Utility
+Fog Phalanx and Orbital Weapons Platforms in era 12, and later units come in
+smaller battalions, down to 100 for the orbital ones. [Combat unit
+list](19-appendix-reference-lists.md#combat-unit-list) gives each unit's
+technology, era and battalion size.
 
 Offense and defense climb steeply with each tier, but read them with the
 battalion size. A battle weighs each battalion by its manpower as well as its
@@ -90,29 +67,11 @@ built under the Peasant Levies law.
 ## Ships and ship modifications
 
 Nineteen ship types extend the navy from era 6, with escorts, submarines,
-carriers, battle-line ships and troop transports in most eras.
-
-| Ship | Class | Role | Technology | Era | Obsolete with |
-|---|---|---|---|---|---|
-| Fleet Carrier | Cruisers | Carrier | Bombing Aircraft | 6 | Nuclear Energy |
-| Amphibious Assault Ship | Cruisers | Transport | Combined Arms | 6 | Precision Guided Munitions |
-| ASW Destroyer | Torpedo Craft | Escort | Sonar | 6 | Network Centric Warfare |
-| Nuclear Submarine | Torpedo Craft | Submarine | Advanced Submarine Technology | 7 | Rapid Deployment Forces |
-| Guided Missile Ship | Torpedo Craft | Escort | Guided Missiles | 7 | Directed Energy Weapons |
-| Nuclear Supercarrier | Cruisers | Carrier | Nuclear Energy | 7 | Hypersonic Weapons |
-| Marine Assault Ship | Cruisers | Transport | Precision Guided Munitions | 8 | Rapid Deployment Forces |
-| Arsenal Ship | Capital Ships | Battle line | Network Centric Warfare | 9 | Hypersonic Weapons |
-| Stealth Battlecruiser | Capital Ships | Battle line | Network Centric Warfare | 9 | Hypersonic Weapons |
-| Networked Air Defense Cruiser | Cruisers | Escort | Network Centric Warfare | 9 | Directed Energy Weapons |
-| Expeditionary Fast Transport | Cruisers | Transport | Network Centric Warfare | 9 | Orbital Weapon Platforms |
-| Stealth Attack Submarine | Torpedo Craft | Submarine | Rapid Deployment Forces | 9 | Directed Energy Weapons |
-| Expeditionary Sea Base | Cruisers | Transport | Rapid Deployment Forces | 9 | Orbital Weapon Platforms |
-| Hypersonic Missile Platform | Capital Ships | Battle line | Hypersonic Weapons | 10 | Antimatter Production |
-| Pulsed Laser Escort | Cruisers | Escort | Directed Energy Weapons | 11 | |
-| Swarm Coordination Vessel | Cruisers | Escort | Swarm Technology | 11 | |
-| Autonomous Swarm Submarine | Torpedo Craft | Submarine | Swarm Technology | 11 | |
-| Antimatter Battleship | Capital Ships | Battle line | Antimatter Production | 12 | |
-| Orbital Support Mothership | Cruisers | Transport | Orbital Weapon Platforms | 12 | |
+carriers, battle-line ships and troop transports in most eras: from the Fleet
+Carrier and ASW Destroyer of era 6 to the Antimatter Battleship and Orbital
+Support Mothership of era 12. [Ship list](19-appendix-reference-lists.md#ship-list)
+gives each ship's class, role and technology, and the technology that makes it
+obsolete.
 
 The Expeditionary Fast Transport is quick and carries little; the Expeditionary
 Sea Base is slow and carries four times as much. The base game's late ships go
@@ -123,18 +82,10 @@ with Nuclear Energy.
 
 In the ship designer, nine of the new ships bring their own armor, guns,
 propulsion and range modifications in three tiers; the others reuse those of a
-related ship. Eight new utility modifications join the base game's.
-
-| Utility modification | Technology | Effect | Mounted on |
-|---|---|---|---|
-| Sonar Suite | Sonar | +50% accuracy against every submarine, +100 detection | ASW Destroyer, the three new submarines |
-| Ballistic Missile Bay | Precision Guided Munitions | +50% blockade strength, +15% hull damage | Guided Missile Ship, Arsenal Ship, Hypersonic Missile Platform, Antimatter Battleship |
-| Underway Replenishment | Containerization | +100 supply capacity, +25% supply efficiency, +30% distance from port | Fleet Carrier, Nuclear Supercarrier, Arsenal Ship, Stealth Battlecruiser |
-| Aegis Air Defense | Network Centric Warfare | +200 screening, +30% accuracy against Guided Missile Ships, +20% against Arsenal Ships | Guided Missile Ship, Networked Air Defense Cruiser |
-| Helicopter Pad | Rapid Deployment Forces | +0.1 marine capacity, +0.2 carrying capacity, +15% naval invasion efficiency | The five transports |
-| DEW Point Defense | Directed Energy Weapons | −25% vulnerability, +200 screening | Nuclear Supercarrier, Arsenal Ship, Stealth Battlecruiser, Hypersonic Missile Platform, Pulsed Laser Escort, Swarm Coordination Vessel, Antimatter Battleship, Orbital Support Mothership |
-| Drone Complement | Swarm Technology | +30% accuracy, +25% screening, +200 detection | Nuclear Supercarrier, Expeditionary Sea Base, Stealth Battlecruiser, Hypersonic Missile Platform, Pulsed Laser Escort, Swarm Coordination Vessel, Antimatter Battleship, Orbital Support Mothership, the two later submarines |
-| Composite Armor Plating | Modern Material Science | +200 armor, −15% hull damage and −20% critical hits taken | Pulsed Laser Escort, Swarm Coordination Vessel, Antimatter Battleship |
+related ship. Eight new utility modifications join the base game's, from the
+Sonar Suite (Sonar) to Composite Armor Plating (Modern Material Science); [Ship
+utility modification list](19-appendix-reference-lists.md#ship-utility-modification-list)
+gives each one's technology and effect and the ships that mount it.
 
 Shipyards gain a Production Focus group that trades civilian hulls for naval
 construction; its strongest setting, Wartime Mobilization, needs the Total War
@@ -149,35 +100,12 @@ Space Transport, and one of First Aid, Field Hospitals and Medevac Helicopters.
 Many options can be chosen only while your market has the goods they consume for
 sale.
 
-| Option | Unlocked by | Effect |
-|---|---|---|
-| Logistical Support, then Extensive, Modern and Advanced Logistical Support | Military Statistics, Central Planning, Reconnaissance Satellites, Rapid Deployment Forces; each needs the one before | −40% attrition risk, then a further −30%, −15% and −10% |
-| Home Communications | Cellular Networks | +25% morale recovery |
-| Robotic Assistance | Network Centric Warfare | +25% morale recovery, −20% morale loss, +5% offense and defense |
-| Coffee, Appliances | The good on your market | +10% morale recovery |
-| Air Transport | Commercial Aviation | +150% movement, +100% mobilization speed |
-| Space Transport | Rapid Deployment Forces | +300% movement and mobilization speed |
-| Entrenchment | Engineering and Logistics principle, tier III+ | +25% defense, half the provinces lost and captured, −50% movement |
-| Space Recon | Reconnaissance Satellites | +100% occupation, more surprise maneuvers |
-| Molecular Scanners | Molecular Assemblers | +100% occupation |
-| Radar Equipment | Radar | +10% defense, +5% offense, −10% morale loss |
-| Night Vision Gear | Infrared Night Vision | +5% offense and defense, −10% morale loss, +10% morale recovery |
-| Missile Defense System | Missile Defense Systems | +20% defense, +5% offense, −10% morale loss |
-| Directed Energy Defenses | Directed Energy Defenses | +20% defense, +5% offense |
-| Cyberwarfare Team | Cyber Warfare | +20% morale damage, −20% morale loss, +5% offense and defense |
-| Electronic Warfare Team | Electronic Warfare | +20% morale damage, +10% offense, +5% defense |
-| Exoskeleton Suits | Advanced Body Armor | +15% offense and defense |
-| Medevac Helicopters | Advanced Military Aircraft | +80% recovery rate |
-| Voluntary Bioenhancement | Regulated Augmentation Market or Unrestricted Augmentation law | +25% offense and defense |
-| Mandatory Bioenhancement | Mandatory Augmentation law | +50% offense and defense |
-| Jungle Combat Training | Military Training principle, tier III+ | +25% offense and defense in forest and hazardous terrain |
-| Mountain Combat Training | Military Training principle, tier III+ | +25% offense and defense in hills, mountains and hazardous terrain |
-| Amphibious Warfare Training | Engineering and Logistics principle, tier III+ | +25% offense and defense in water terrain |
-| Flight Simulators | Military Training principle, tier V | +10% offense and defense for Jet-Powered Aircraft and later |
-
-The principles come from your power bloc ([New principle
-groups](08-diplomacy.md#new-principle-groups)); the augmentation laws are in
-[Rights and society laws](05-politics.md#rights-and-society-laws).
+Beyond transport and medicine, the options run from logistics that cut
+attrition, through morale and combat gear such as Radar Equipment, Night Vision
+Gear and Exoskeleton Suits, to terrain training from your power bloc's
+principles and bioenhancement under the augmentation laws. [Mobilization option
+list](19-appendix-reference-lists.md#mobilization-option-list) gives each
+option's unlock and effect.
 
 Entrenchment, the three terrain trainings, Missile Defense System and
 Exoskeleton Suits add ammunition to a mobilized battalion's upkeep, on top of
@@ -190,22 +118,18 @@ The Military Base is a government building that fortifies a state. It unlocks
 with Trench Works and grows to five levels, one each from Trench Works, Defense
 in Depth, Concrete Fortifications, Guided Missiles and Precision Guided
 Munitions. Each level employs 200 soldiers and 50 officers, buys small arms and
-ammunition, and adds +5 infrastructure. Three production method groups set what
-it does.
+ammunition, and adds +5 infrastructure.
 
-| Group | Production method | Unlocked by | Effect per level |
-|---|---|---|---|
-| Fortification Type | Earthwork Fortifications | Trench Works | +1 fortification level |
-| Fortification Type | Concrete Bunkers | Concrete Fortifications | +2 fortification level, uses steel |
-| Fortification Type | Hardened Positions | Guided Missiles | +3 fortification level, uses steel and explosives |
-| Base Purpose | Garrison Duty | Trench Works | −15% turmoil effects, monthly war support |
-| Base Purpose | Territorial Defense | Trench Works | +1 fortification level, less monthly war support |
-| Base Purpose | Logistics Hub | Trench Works | +10 infrastructure, −3% supply consumption for your whole army |
-| Missile Defense | Missile Defense Battery | Missile Defense Systems | +2% Nuclear Strike Defense Chance in this state |
-| Missile Defense | Directed Energy Point Defense | Directed Energy Defenses | +3% Nuclear Strike Defense Chance in this state |
-
-The figures are for a fully staffed level. The AI values bases far more at war
-or when committed to a diplomatic play.
+Three production method groups set what it does. The Fortification Type and Base
+Purpose methods decide the state's fortification level, 1 to 4 for each level of
+the base. The purpose can instead
+calm turmoil and add war support (Garrison Duty), or add infrastructure and cut
+your whole army's supply use (Logistics Hub). A Missile Defense method, from
+Missile Defense Systems, raises the state's chance of stopping a nuclear strike.
+[Military base production method
+list](19-appendix-reference-lists.md#military-base-production-method-list) gives
+each method's unlock and its effect per fully staffed level. The AI values bases
+far more at war or when committed to a diplomatic play.
 
 <!-- screenshot: a Military Base building panel at level 5 with Hardened Positions, Territorial Defense and Missile Defense Battery selected -->
 
