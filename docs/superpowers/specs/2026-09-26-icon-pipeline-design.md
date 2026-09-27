@@ -30,7 +30,9 @@ Mod-added entities (key not in vanilla) whose icon path resolves only to a vanil
 
 **Shared by design — not placeholders.** Vanilla shares these too: JE icons (generic `event_*.dds`), state traits (`resources_ore.dds`), diplomatic plays (`unification.dds` for every unify/leadership play), ship modifications, company `basic_*` icons, ship types, static modifier icons, PM-group textures, building backgrounds, message textures. Mod `gui/` references to `gfx/interface/icons/` are UI glyphs (warning, checkmark, filter icons), also fine.
 
-None of the files holding a placeholder reference are generator-owned, so rewriting the references is a plain text edit.
+None of the files holding a placeholder reference are generator-owned, so rewriting the references is a plain text edit. One caveat: `common/buildings/company_buildings.txt` (45 building icon references) was bootstrapped by `gen_vanilla_company_buildings.py`. It is hand-editable now, but re-running that generator would put the old icons back.
+
+**Totals.** The table sums to 665 icons, or 683 with the 18 law icons. The building row will shrink once its allowlist entries are triaged. A recount on 2026-09-27 matched apart from content added since (31 treaty articles, 316 buildings).
 
 ## Vanilla icon formats
 
@@ -44,10 +46,11 @@ None of the files holding a placeholder reference are generator-owned, so rewrit
 | `ideology_icons` | 220² | embossed gold symbol on a crimson disc under a gold ring |
 | `mobilization_options` | 208² | embossed rust-orange silhouette |
 | `principles_icons` | 210² | mixed: painted objects, some framed tiles |
-| `institution_icons` / `law_icons` | 256² | tan/bronze sculpted object |
+| `institution_icons` | 256² | tan/bronze sculpted object |
+| `law_icons` | mostly 302² (69 of 132); also 256² and 300² | tan/bronze sculpted object |
 | `ig_trait_icons` | 124×162 | card with a coloured frame |
 
-All are **uncompressed 32-bit RGBA with a full mip chain**, except mobilization options (DXT5). They are not BC7, so `gen_pm_icons.convert_to_dds` (BC7) can't be reused as-is. Also, 100/158/210/220 are not multiples of 4, so BC7 at those sizes would fail CI's `check_dds_dimensions.py`.
+All are **uncompressed 32-bit RGBA with a full mip chain**, except mobilization options (DXT5). They are not BC7, so `gen_pm_icons.convert_to_dds` (BC7) can't be reused as-is. Block compression needs sides that are multiples of 4: 100, 208, 220 and 256 are (vanilla already ships mobilization options as DXT5 at 208²). Decrees (158), principles (210), IG traits (124×162) and laws (302) are not, so BC7 at those sizes would fail CI's `check_dds_dimensions.py`.
 
 ## Prototype findings
 
@@ -61,7 +64,7 @@ Each row: current placeholder | three vanilla neighbours ‖ two generated candi
 - **Buildings — good on the first try.** A painted diorama prompt, fitted inside the frame lifted from vanilla.
 - **Mobilization options, ideologies — good.** FLUX draws a black silhouette and `gen_pm_icons.apply_metallic_style` embosses it, onto the vanilla disc and ring for ideologies. The same route would give the 15 identical ministry-law icons distinct shapes.
 - **Techs, treaty articles, decrees — good after one revision.** The first pass came out as product photography with garbled text. The prompt has to name the medium: "stylized hand-painted video game icon, painterly digital art with visible brush strokes … blank unmarked surfaces". 100 px categories need "one compact bold object group filling the frame", or the art shrinks to specks. Several subject phrases were rewritten in the same pass, so credit both changes.
-- **Still weak.** The diplomatic-action plinth renders detached from its figure. One transistor seed still shows a "2254" label. Principles, IG-trait cards and institutions were not tried.
+- **Still weak.** The diplomatic-action plinth renders detached from its figure. One transistor seed still shows a "2254" label. Both basic-income candidates hold green notes with a portrait oval, which read as US dollars: "paper banknotes" needs a colour (the sample now asks for cream-and-brown notes; not re-rendered yet). Principles, IG-trait cards and institutions were not tried.
 
 **Frames are lifted from vanilla, not drawn.** `vanilla_template()` takes the per-pixel median of every same-size icon in the folder. The frame is identical on every icon, so it survives the median while the artwork averages to mud. The medallion ring starts where the colour spread across the folder collapses: decree r≈68 of 79, ideology r≈87 of 110. A fixed fraction sampled the wrong band on ideologies and turned the disc salmon. So the compose step needs the game install, like the raw-vanilla regenerators.
 
@@ -74,17 +77,17 @@ Each row: current placeholder | three vanilla neighbours ‖ two generated candi
 2. **Prompt registry.** `icon_prompts.py`, next to `event_image_prompts.py`:
    - `CATEGORIES` per category: folder, size, layout, style template, DDS format, output folder.
    - `ICONS`: entity key → subject phrase, plus the accepted seed once reviewed, so reruns are deterministic.
-   - About 520 subject phrases. Draft them from each entity's loc name and `_desc` (buildings have no `_desc`; wonders are real landmarks FLUX knows), then review.
+   - About 665 subject phrases (683 with laws), fewer after the building triage. Draft them from each entity's loc name and `_desc` (buildings have no `_desc`; wonders are real landmarks FLUX knows), then review.
 3. **Renderer.** Generalise `generate_event_images.py`'s phases rather than adding a third orchestrator:
    - Embed every prompt in one process and cache the embeddings, since T5 takes ~5 min to load per process.
    - Render in a second process that loads the transformer once. The event pipeline currently reloads the 24 GB model per image and would benefit from the same fix.
-   - Skip anything whose output already exists.
+   - Skip an output only when it was made from the current prompt. The prototype writes a `.prompt.txt` beside each render and redoes it when the prompt changes; skipping on "file exists" alone would keep the old picture after a prompt edit. The event pipeline has that gap, which is why #502's redraw recipe deletes the old PNG by hand.
 4. **Compose.** The prototype has five layouts: `cutout` (rembg `isnet-general-use`), `framed`, `medallion`, `emboss` and `emboss_medallion`. Still to build: an IG-trait card layout (frame colour per trait), principles, institutions (a monochrome bronze tint over a cutout is the first thing to try), and a plinth for diplomatic actions (likely lifted from vanilla like the frames, rather than prompted).
 5. **DDS writer.** texconv via WSL interop, `-f B8G8R8A8_UNORM -m 0` (uncompressed + mips, matching vanilla).
-   - Budget: a 256² uncompressed icon with mips is ~350 KB, so ~520 icons add roughly 100–180 MB to a 1.8 GB `gfx/`.
-   - BC7 is possible for 256² folders only (~88 KB each), at some quality cost. Owner call.
+   - Budget: a 256² uncompressed icon with mips is ~350 KB. At each folder's vanilla size, the 683 icons add ~212 MB to a 1.8 GB `gfx/`, 105 MB of it buildings.
+   - BC7 works wherever the side is a multiple of 4: everything except decrees, principles, IG traits and laws. That brings the total to ~70 MB (a 256² icon drops to ~88 KB), at some quality cost. Owner call.
 6. **Reference rewrite.** Replace the `icon =` / `texture =` line inside each entity block, handling `INJECT:`/`REPLACE:` blocks. Generalise `generate_event_images.py` phase 3 or `gen_batch_pm_icons.update_pm_files`.
-7. **Review loop.** A contact sheet per batch beside vanilla neighbours (the prototype's `contact_sheet()`). Rejects get a new seed or an edited subject.
+7. **Review loop.** A contact sheet per batch beside vanilla neighbours (the prototype's `contact_sheet()`). Rejects get a new seed or an edited subject. Reject real currency, flags, lettering and recognisable faces: FLUX adds them unasked (`docs/guides/event_creation_guide.md`, from #502's review).
 8. **Docs.** Rows in `docs/auto_generated_files.md` for each new output folder; the script table in `docs/guides/python_tools.md`.
 
 **Priority:** techs, treaty articles, decrees, institutions, principles, ideologies, mobilization options, IG traits, diplomatic actions, then buildings once their allowlist entries are triaged.
@@ -93,7 +96,7 @@ Each row: current placeholder | three vanilla neighbours ‖ two generated candi
 
 - **Offload:** `enable_model_cpu_offload` runs out of memory, because the transformer is 24 GB in bf16. `enable_sequential_cpu_offload` works: ~30 s per 1024² image once warm, 2–4 min for the first.
 - **Embedding:** ~5 min per process (T5 reload); peak RSS 6.4 GB.
-- **Full run:** ~520 icons × 2 seeds ≈ 8–9 h GPU, i.e. an overnight run plus re-rolls.
+- **Full run:** 683 icons × 2 seeds ≈ 11 h GPU, more than a night. Render one seed first (~5.7 h), then second seeds for the rejects only.
 - **NF4:** `bitsandbytes` is installed in `.venv-img` but a 4-bit transformer is **untested**. If it fits in VRAM it would avoid the offload streaming.
 - **Weights:** keep them on ext4. Copying the 32 GB snapshot off `/mnt/c` took 7 min; streaming it from drvfs on every run would pay that each time. Point `FLUX_MODEL_DIR` at the copy.
 - **Stale cache path:** the shell sets `HF_HOME=/mnt/e/hf-cache`, which doesn't exist, so any bare `from_pretrained("black-forest-labs/FLUX.1-schnell")` would start a 32 GB download there.
@@ -102,6 +105,6 @@ Each row: current placeholder | three vanilla neighbours ‖ two generated candi
 
 ## Open questions
 
-- Uncompressed (vanilla parity, ~100–180 MB) or BC7 where the size allows?
+- Uncompressed (vanilla parity, ~212 MB) or BC7 where the size allows (~70 MB)?
 - Diplomatic-action plinth: lifted from vanilla, or dropped?
 - Buildings: which of the 300 borrowings are deliberate (a company building reusing its industry's icon) and should stay allowlisted?
