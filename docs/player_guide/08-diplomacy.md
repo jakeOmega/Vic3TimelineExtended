@@ -16,7 +16,7 @@ a technology gate (listed in the tables), a power bloc principle (see
 actions](#principles-that-unlock-articles-and-actions)), or another system's
 game rule. A directed article binds one side, the conceding country, and gives
 something to the other. An enforceable article can also be demanded as a war
-goal. The draft shows each article's influence cost, which scales with rank.
+goal. The draft shows each article's influence cost.
 
 ### Choosing a company or state for an article
 
@@ -27,9 +27,10 @@ a button with its current choice; click it to pick from a list.
 
 The state or company always belongs to the conceding country. Free Port
 Concession needs a coastal state, and a demilitarized zone can't be the
-capital. A country can concede each of these articles to the same partner only
-once at a time, so a second demilitarized zone against the same country waits
-until the first ends.
+capital. A country can concede each of the four state articles to the same
+partner only once at a time, across all their treaties, so a second
+demilitarized zone against the same country waits until the first ends. The
+company articles can be repeated for different companies.
 
 <!-- screenshot: a treaty draft with Seize Company added, the company picker list open -->
 
@@ -40,17 +41,17 @@ economy.
 
 | Article | Unlocked by | Enforceable | What it does |
 |---|---|---|---|
-| Seize Company | Always available | Yes | The conceding country hands one of its companies to the other, unless the receiver already has it. |
+| Seize Company | Always available | Yes | The conceding country hands one of its companies to the other, unless the receiver already has a company of that type. |
 | Disband Company | Always available | Yes | The conceding country dissolves one of its companies. |
-| Enforce Privatization | Stock Exchange | Yes | The conceding country must privatize its government-owned buildings while the treaty stands. Both sides need particular economic laws, listed in the draft tooltip. |
-| Free Port Concession | International Trade | Yes | The chosen state gets +50% trade capacity, +25% trade advantage and more migration pull, but collects half the tax and assimilates more slowly. Blocked by Isolationism on either side. |
+| Enforce Privatization | Stock Exchange | Yes | The conceding country must privatize its government-owned buildings while the treaty stands. It needs Laissez-Faire or Interventionism on one side and Cooperative Ownership, Agrarianism or Traditionalism on the other; the draft tooltip shows which side needs which. |
+| Free Port Concession | International Trade | Yes | The chosen state drops its tariffs (within a year) and gets +50% trade capacity, +25% trade advantage and more migration pull, but collects half the tax and assimilates more slowly. Blocked by Isolationism on either side. |
 
 The humanitarian and cultural articles move people, faiths and cultures.
 
 | Article | Unlocked by | Enforceable | What it does |
 |---|---|---|---|
 | Minority Protection | International Relations | Yes | Halves assimilation and conversion in the chosen state. The conceder loses legitimacy and pays authority; the other side gains prestige. |
-| Religious Mission Rights | Colonization | Yes | Each year 5% of the chosen state's population converts to the other side's religion. Blocked by State Atheism. |
+| Religious Mission Rights | Colonization | Yes | Each year 5% of the chosen state's pops of other faiths convert to the other side's religion. Blocked if the receiving country has State Atheism. |
 | Cultural Exchange Program | Pan-nationalism | No | Mutual: +1 yearly cultural acceptance, +2% prestige and +1 cultural pull for both, better relations, −1 ideological covert defence. |
 | Population Transfer | Pan-nationalism | Yes | Moves pops of the receiving country's primary cultures out of the conceding country, once. See [population transfers by treaty](#population-transfers-by-treaty). |
 
@@ -61,7 +62,7 @@ armed forces.
 |---|---|---|---|
 | Demilitarized Zone | International Relations | Yes | No conscription, barracks, naval fortifications or military bases in the chosen state; an existing military base is dismantled. |
 | Forced Disarmament | Intergovernmental Organizations | Yes | Military wages −25%, conscription halved, and every arms industry, artillery foundry, munition plant, naval building and military base in the conceding country dismantled. |
-| Intelligence Sharing Pact | Intergovernmental Organizations | No | Mutual, between two major powers or greater that both have the Ministry of Intelligence and Security law: +3 intelligence capacity, a stronger but dearer intelligence ministry, and a [defence shield](#the-intelligence-sharing-pacts-defence-shield). Costs each side 1 infamy. |
+| Intelligence Sharing Pact | Intergovernmental Organizations | No | Mutual, between two major powers or greater that have both established a Ministry of Intelligence and Security: +3 intelligence capacity, a stronger but dearer intelligence ministry, and a [defence shield](#the-intelligence-sharing-pacts-defence-shield). Costs each side 1 infamy. |
 | Joint Military Exercises | Combined Arms | No | Mutual: +25% army experience gain and admiral rank impact, slightly dearer military goods. |
 
 The aid and influence articles are how power blocs extend their reach. All but
@@ -78,7 +79,7 @@ gains leverage over it, and relations improve.
 | Healthcare Aid | A member with a Ministry of Health at level 3+ | −5% mortality and +1 standard of living for a recipient with a weak health system. |
 | Security Aid | A member with a Ministry of Public Safety at level 3+ | −20% turmoil effects and lower liberty desire for a recipient with weak policing. |
 | Development Assistance | A member | +2 standard of living for the lower strata of a recipient whose primary cultures average below 15. |
-| Modernization Aid | A member with more technologies and a Ministry of Science | The recipient gains technology spread; the donor loses weekly innovation. |
+| Modernization Aid | A member with more technologies and a Ministry of Science at level 2+ | The recipient gains technology spread; the donor loses weekly innovation. |
 | Extensive Modernization Aid | A member with a Ministry of Science at level 4+ | Four times Modernization Aid, which it requires. |
 | Reduce Subject Liberty | A subject, to its overlord | Lowers the subject's liberty desire. |
 
@@ -95,56 +96,64 @@ The remaining articles belong to systems with chapters of their own.
 
 Some articles have events that can fire in any year the treaty stands.
 Intelligence Sharing Pact, Minority Protection and Cultural Exchange Program
-each have a good and a bad one, such as a foiled plot or a nationalist backlash. Joint Military Exercises, Education
-Aid, Security Aid, Nuclear Disarmament, Nuclear Program Freeze and Population
-Transfer have one each.
+each have a good and a bad one, such as a foiled plot or a nationalist
+backlash. Joint Military Exercises, Education Aid, Security Aid, Nuclear
+Disarmament and Nuclear Program Freeze have one each, and Population Transfer
+has one that can fire while its disruption lasts.
 
 ### Dynamic treaty names
 
 A treaty containing one of the mod's articles gets a fitting name instead of
 "Treaty of" plus the signing city: a Nationalization Accord for a seized
 company, a Convention on Minority Rights, a Demilitarization Agreement, and so
-on for most of the new articles and for money transfers. The draft's randomize
-button draws from the names that fit.
+on for about half of the new articles and for money transfers. The draft's
+randomize button draws from the names that fit.
 
 ### The Intelligence Sharing Pact's defence shield
 
 Once a year, each partner in an Intelligence Sharing Pact compares its own
 covert defence with its partners'. If a partner's is higher, you gain half the
-gap to your strongest partner as extra economic, military and ideological
-defence. The stronger partner gains nothing from the shield, so the pact lets a
-great power cover a weaker partner against
-[covert operations](10-influence.md). The AI signs readily with a country that
-shares one of its rivals, and never with a rival.
+gap between your combined economic, military and ideological defence and your
+strongest partner's, added to each of the three. The stronger partner gains
+nothing from the shield, so the pact lets a great power cover a weaker partner
+against [covert operations](10-influence.md). The AI signs readily with a
+country that shares one of its rivals, and almost never with a rival.
 
 ### Population transfers by treaty
 
 Population Transfer takes effect once, on ratification. Every pop in the
 conceding country whose culture is primary for the receiving country, and not
 for the conceding one, moves to the receiving country, mostly to its most
-populous states. Both countries then take a decaying five-year disruption to
-bureaucracy, legitimacy and radicalism, scaled by the share of their population
-that moved. The draft blocks it under Multiculturalism, and for cultures already
-highly accepted where they live.
+populous states. Both countries then take a five-year Population Transfer
+Disruption to bureaucracy and legitimacy, with more radicals from conquest. It
+fades over time, and its strength grows with the share of each country's
+population that moved, never falling below a quarter.
+
+The draft blocks the article when the conceding country has Universal
+Citizenship. Its high-acceptance check does not look at the cultures that would
+move: it needs the receiving country to hold a community of one of the
+conceding country's primary cultures with acceptance below 60, and the article
+can't be drafted without one.
 
 ## Diplomatic play escalation
 
 In the base game a play escalates by one point a day. The mod adds extra
 escalation about once a week from the countries in the play, each for its own
 role as initiator, target or committed participant. No country adds more than
-10 a week, and nothing slows a play below the base rate: laws and seats that slow
-plays only cancel extra escalation.
+10 a week, each country's weekly figure is rounded to a whole point, and nothing
+slows a play below the base rate: laws and seats that slow plays only cancel
+extra escalation.
 
 | Source | Effect |
 |---|---|
 | Fourteen technologies of eras 6–12, mostly military, from Bombing Aircraft and Mass Media to Orbital Weapon Platforms | +0.5 to +2 a week each in plays you start; three also add 10% |
-| War Propaganda decree | +0.1 a week in plays you start |
+| War Propaganda decree | +0.1 a week in plays you start, which rounds away on its own |
 | Total War (Rules of War law) | +25% in plays you start and plays against you |
-| War Crimes Forbidden, Humanitarian Regulations, Limited War (Rules of War laws) | −10%, −20%, −30% on both sides |
+| War Crimes Forbidden, Humanitarian Regulations, Limited War (Rules of War laws) | −10%, −20%, −30% in plays you start and plays against you |
 | Vassalization V and Aggressive Coordination V principles | +0.5 and +1 a week in plays you start |
 | Defensive Cooperation V principle | −20% in plays against you |
 | UN membership, a Security Council seat, permanent membership | Small reductions; see [The United Nations](09-united-nations.md) |
-| Rising Global Tensions and Home Front Strain | Faster plays in a world war; see [Military and war](12-military.md) |
+| Rising Global Tensions and Home Front Strain | +1 and +2 a week in plays you start, in the run-up to and during a world war; see [Military and war](12-military.md) |
 
 A country with all of these technologies reaches the cap, so plays it starts
 escalate about two and a half times as fast as in the base game, leaving the
@@ -154,17 +163,18 @@ countries.
 
 ## International relations events
 
-Major and great powers roll monthly for a pool of Cold War events, about one
-chance in ten a month.
+Major and great powers roll monthly for a pool of Cold War events. The more of
+them a country qualifies for, the likelier one fires, up to about one chance in
+ten a month.
 
 | Event | When it can happen | What you decide |
 |---|---|---|
 | Plans on the Table | Radar; a rival that is a major power or greater | Build up against the rival, or shelve the plans. |
-| The Shadow War | Covert Warfare off; Intergovernmental Organizations; a rival with subjects | Fund an insurgency in the rival's sphere, or stay out. |
+| The Shadow War | Covert Warfare off; Intergovernmental Organizations; a rival that is a major power or greater and has subjects | Fund an insurgency in the rival's sphere, or stay out. |
 | International Summit | Intergovernmental Organizations; great power | Host (+10 relations with every other great power), attend (+5) or boycott (−5). |
-| The War of Words | Covert Warfare off; Mass Media; a rival | Open a propaganda offensive against the rival, or not. |
+| The War of Words | Covert Warfare off; Mass Media; a rival that is a major power or greater | Open a propaganda offensive against the rival, or not. |
 | The Iron Purse | Keynesian Economics; a rival that is a major power or greater | Impose an embargo (−30 relations), or keep trading. |
-| An Agent in Place | Covert Warfare off; Cryptography; a rival | Plant an agent in the rival's defence ministry, or not. |
+| An Agent in Place | Covert Warfare off; Cryptography; a rival that is a major power or greater | Plant an agent in the rival's defence ministry, or not. |
 | The Heavens Beckon | Space Race off; Space Exploration; great power | Celebrate a space milestone, or spend on the people. |
 | Nuclear Brinkmanship | You and an opponent in a play both hold nuclear weapons, outside a nuclear crisis | Stand firm, open back channels, or mobilize. |
 
@@ -192,31 +202,32 @@ strategy.
 
 A country is a candidate for you when it shares one of your primary cultures,
 holds no homeland of a culture you lack, owns a homeland state of yours that you
-claim and where your people still live, and borders you or shares a coast with
-you. Neither of you may be a subject of the other's overlord.
+claim and where your people still live, and either borders you or has a coast
+while you have one too. You can't both be subjects of the same overlord.
 
-Your government must also give the cause a voice: Ethnostate, National
-Supremacy, Council Republic or Multiculturalism, a governing interest group
-whose leader's ideology takes up the cause (jingoist, fascist, communist, market
-liberal, humanitarian, pacifist and several more), or the Chinese reunification
-journal entry. The ideology sets whether the AI prefers war or union; it never
-locks either path.
+Your government must also give the cause a voice: Ancestral Citizenship,
+Cultural Citizenship, Universal Citizenship or Council Republic, a governing
+interest group whose leader's ideology takes up the cause (jingoist, fascist,
+communist, market liberal, humanitarian, pacifist and several more), or the base
+game's Warlord Era journal entry. The ideology sets whether the AI prefers war
+or union; it never locks either path.
 
-The Reunify the Nation war goal annexes a candidate outright. It needs sweeping
-claims on the target's homeland states and costs less infamy than a plain
-annexation when those states are your people's homeland. It isn't offered
-against countries with the base game's German, Italian or Chinese unification
-entries.
+The Reunify the Nation war goal annexes a candidate outright. It needs enough
+irredentist pressure, which comes mostly from claims on the target's homeland
+states: several of them, or fewer when your government leans hard toward war or
+union, and more when you share a bloc with the target. Its infamy grows with the
+target's population. It isn't offered against countries with the base game's
+German, Italian or Chinese unification entries.
 
 ### Irredentist events
 
-"The Diaspora Calls" fires on a country with a strong candidate. You can stoke
-the movement (a claim on another homeland state, 1 infamy, −10 relations), fund
+"The Diaspora Calls" fires on a country with a candidate. You can stoke the
+movement (a claim on another homeland state, 1 infamy, −10 relations), fund
 cultural ties (+15 relations and a five-year bond that makes a later union
-likelier), demand a state back, or wait. A demand gives the target a choice: cede
-the state, or refuse and face your diplomatic play to take it. "An Opportunity
-for Union" fires when relations with a candidate are warm and lets you propose a
-union.
+likelier), demand a state back, or wait. A demand gives the target a choice:
+cede the state, or refuse and face your diplomatic play to take it. "An
+Opportunity for Union" fires when relations with a candidate are warm and lets
+you propose a union.
 
 ### A bloc leader's blessing
 
@@ -230,17 +241,18 @@ own.
 
 ### Voluntary union
 
-Voluntary Union is a diplomatic action that merges a smaller same-culture
-country into yours. You need Decolonization, amicable relations and a higher
-rank than the target, which can't be another country's subject. Each side must
-be outside a bloc, lead one, sit in a bloc the other leads or in a Diplomatic
-Framework, or have its leader's blessing. The AI starts from a strong no and
-wants friendly relations, cultural ties or a powerful kinsman's protection before
-it accepts.
+Voluntary Union is a diplomatic action that merges one of your reunification
+candidates into your country. You need Decolonization, amicable relations, no
+truce and a higher rank than the target, which can't be another country's
+subject. Each side must be outside a bloc, lead one, sit in a bloc the other
+leads or in a Diplomatic Framework, or have its leader's blessing. The AI starts
+from a strong no and wants friendly relations, cultural ties or a powerful
+kinsman's protection before it accepts.
 
-Integrate Decentralized Power, also from Decolonization, absorbs a neighbouring
-decentralized nation without consent. Until Globalization it works only on your
-own peoples; after it, on any. The AI absorbs at most one such neighbour a year.
+Integrate Decentralized Power, also from Decolonization, absorbs a decentralized
+nation without consent, if it borders you or you both have a coast. Until
+Globalization it works only on your own peoples; after it, on any. The AI
+absorbs at most one such nation a year.
 
 ## Power bloc principles and identities
 
@@ -263,15 +275,15 @@ its own, and a Diplomatic Framework never blocks a member's voluntary union.
 
 ### New principle groups
 
-Diplomacy and Multilateral Institutions are open only to a Diplomatic Framework,
-and Artistic Expression only to a Cultural Commonwealth. Vassalization, Colonial
-Offices and Sacred Civics are closed to a Diplomatic Framework. Urban Planning
-and Rural Development exclude each other.
+Foreign Service and Multilateral Institutions are open only to a Diplomatic
+Framework, and Artistic Expression only to a Cultural Commonwealth.
+Vassalization, Colonial Offices and Sacred Civics are closed to a Diplomatic
+Framework. Urban Planning and Rural Development exclude each other.
 
 | Group | First tiers need | What it does |
 |---|---|---|
-| Diplomacy | Nothing | Influence, faster relations, cheaper sway. |
-| Multilateral Institutions | Intergovernmental Organizations | Diplomatic reputation and UN alignment; at tier V members can't fight each other. |
+| Foreign Service | Nothing | Influence, faster relations, cheaper sway. |
+| Multilateral Institutions | Intergovernmental Organizations | Diplomatic reputation and UN alignment; at tiers IV and V members can't fight each other. |
 | Global Security | Nuclear Weapons | Less radicalism and turmoil in members, more maneuvers for the leader. |
 | Education | Nothing | Cheaper schools, education access, technology spread. |
 | Healthcare | Pharmaceuticals | Cheaper health ministries, recovery and birth rate. |
@@ -289,10 +301,11 @@ and Rural Development exclude each other.
 ### Principle tiers IV and V
 
 Every base-game group, from Construction to Maritime Supremacy, gains tiers IV
-and V, and the new groups' last tiers work the same way. The bloc leader must
-have researched a mod technology for each. Mass Media opens tier IV of ten
-groups, Combined Arms of the four military ones, Globalization tier V of six.
-The principle's tooltip names its technology.
+and V, and the new groups' last tiers work the same way. Each needs the bloc
+leader to have researched a particular technology, all but one of them from the
+mod's eras. Mass Media opens tier IV of ten groups, Combined Arms of the four
+military ones, Globalization tier V of six. The principle's tooltip names its
+technology.
 
 <!-- screenshot: the power bloc principle picker with a tier V principle and its technology requirement in the tooltip -->
 
@@ -305,26 +318,26 @@ Several principles give your bloc an article, action or decree.
 | Global Security, any tier | Crisis Resolution |
 | Multilateral Institutions I+ | Require UN Membership |
 | Multilateral Institutions III+ | Development Assistance |
-| Diplomacy IV and V | Extend Influence |
+| Foreign Service IV and V | Extend Influence |
 | Education IV and V | Education Aid |
 | Healthcare IV and V | Healthcare Aid |
 | Police Coordination IV and V | Security Aid |
 | Advanced Research IV and V | Modernization Aid; V adds Extensive Modernization Aid |
-| Welfare IV and V | Humanitarian Aid, a pact sending part of your income to another country's poor for influence and relations |
+| Welfare IV and V | Humanitarian Aid, a pact that sends part of your income to another country's poor in return for leverage and better relations |
 | Vassalization IV and V | Peaceful Integration: annex a puppet or colony with under 25 liberty desire, cordial relations and under a tenth of your GDP, without a play |
 | Cultural Unity V | Enforce Cultural Adoption: a subject replaces its primary cultures with yours |
-| Cultural Unity, any tier | Cultural Emigration Initiative and Forced Migration decrees |
+| Cultural Unity, any tier | Cultural Emigration Initiative decree |
 | Freedom of Movement IV and V | Greenest Grass Campaign decree |
 
 ### Other power bloc changes
 
-A bloc leader holding unspent mandates gains cohesion from a Mandate Reserve:
-+3 per unspent mandate, up to +12. New bloc names include the Global Accord for
-a Diplomatic Framework and the Anglosphere for a cultural bloc.
+A bloc holding unspent mandates gains cohesion from a Mandate Reserve, set once
+a year: +3 per unspent mandate, up to +12. New bloc names include the Global
+Accord for a Diplomatic Framework and the Anglosphere for a cultural bloc.
 
 Subjugate, the leader's action that makes a bloc member a protectorate, is open
-to every identity. It needs a Subjugation Strength of at least 1.0: about twenty times
-the target's prestige, ten for a Sovereign Empire, about twelve when your
+to every identity. It needs a Subjugation Strength of at least 1.0: about twenty
+times the target's prestige, ten for a Sovereign Empire, about twelve when your
 identity's bond applies (shared religion, governance principle or culture,
 economic dependence, or five times its army). Its infamy grows with the target's
 population up to 25, halved for a Sovereign Empire.
@@ -346,8 +359,8 @@ your subject, and no rivalry or war with any of them.
 | European Union | 50% | Pan-nationalism |
 | Intermarium | 65% | |
 | North American Union | 65% | |
-| Dar-Al-Islam | 50% | Pan-nationalism; a Sunni, Shia or Ibadi state religion, without Total Separation or State Atheism |
-| United Earth | 75% | Quantum Communications and Space Colonization; you lead a bloc holding every great power but one, which must be aligned with you |
+| Dar-Al-Islam | 50% | Pan-nationalism; a Sunni, Shiite or Ibadi state religion, without Total Separation or State Atheism |
+| United Earth | 75% | Quantum Communications and Space Colonization; you lead a bloc holding every great power but at most one, which must be aligned with you; no rivalry or war with any great power |
 | India | 65% of its core | |
 | Indonesia | 65% of its core | |
 | China | 65% | |
@@ -361,18 +374,20 @@ Indonesia exists, the new one can't be unified.
 Each formable renames itself with its government. The African Union becomes the
 Pan-African Socialist Federation under communism, the African Imperium under
 fascism, the African Empire as a monarchy, and a theocracy or technate
-otherwise. Some names follow the ruler's culture: the Empire of the Great Qing
-in China, the Ottoman or Safavid Caliphate, or Pax Americana for a United Earth
-led from the United States.
+otherwise. Some names follow the ruler's culture or the country that formed
+it: the Empire of the Great Qing for a China with a Manchu monarch, the Ottoman
+or Safavid Caliphate, or Pax Americana for a United Earth formed by the United
+States.
 
 ### India, Indonesia and Operation Polo <!-- style: allow title-case-heading -->
 
 Forming India claims the Pakistani, Bangladeshi, Himalayan and Ceylonese
 periphery; forming Indonesia claims Malaya, northern Borneo and eastern New
 Guinea. A Muslim-ruled state inside India's core isn't swept up in unification.
-If it survives surrounded by India, "An Island of Resistance" lets India annex
-it by police action (20 infamy), pressure it into accession as a major power or
-greater (8 infamy), or leave it be.
+While an independent, Muslim-ruled insignificant power borders India, "An Island
+of Resistance" can fire and lets India annex it by police action (20 infamy),
+pressure it into accession as a major power or greater (8 infamy), or leave it
+be.
 
 <!-- screenshot: the formation panel showing the European Union with its requirements tooltip -->
 
