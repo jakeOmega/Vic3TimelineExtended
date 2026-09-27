@@ -3803,7 +3803,7 @@
  un_conference_opposed_modifier:0 "Wrecked the Founding Conference"
  un_court_compliance_modifier:0 "ICJ Ruling Compliance"
  un_court_contested_modifier:0 "ICJ Jurisdiction Contested"
- un_court_defiance_modifier:0 "ICJ Ruling Defied"
+ un_court_defiance_modifier:0 "International Court Defied"
  un_crisis_abandon_modifier:0 "Freed of the UN"
  un_crisis_rescue_cost:0 "Standing By the UN"
  un_decolonization_champion_modifier:0 "Decolonization Champion"

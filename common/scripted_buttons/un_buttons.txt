@@ -89,8 +89,9 @@ un_found_button = {
 				# then moving toward the equilibrium its members give it
 				# (un_authority_effects.txt). The founder becomes first member, HQ
 				# host, founding member and, as a great power, a permanent member;
-				# a 5-year founding window seats the next great powers to join
-				# (un_found_organisation, un_ladder_effects.txt).
+				# the other permanent seats go by prestige to great-power members
+				# when the one-year signing period closes (un_found_organisation,
+				# un_ladder_effects.txt; un_seat_effects.txt).
 				un_found_organisation = { AUTHORITY = un_founding_authority }
 				# Fire the charter event for all other recognized independent countries
 				un_charter_invitations = yes
