@@ -1371,6 +1371,39 @@ climate_crisis_emergency_modifier = {
 	country_institution_cost_institution_ministry_of_the_environment_mult = -0.50
 }
 
+# Four degrees (event 22). Each option's modifier is made only of harms. The
+# crossing lands three: on the people (mortality +10%, SoL -2), on the harvest
+# (farm output -15%) and on the economy (throughput -5%). Each option spares
+# one and adds its own cost; the other two are carried in full. On top of the
+# global_warming modifier at 4 C (+20% mortality, -4 SoL, -40% farms, -10%
+# throughput). All three are 10 years, decaying.
+
+# 22A: spares the people, costs administration.
+climate_survival_footing_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	building_group_bg_agriculture_throughput_add = -0.15
+	building_throughput_add = -0.05
+	country_bureaucracy_mult = -0.20
+}
+
+# 22B: spares the harvest, costs standing abroad and immigration.
+climate_fortress_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_mortality_mult = 0.10
+	state_standard_of_living_add = -2
+	building_throughput_add = -0.05
+	country_prestige_mult = -0.10
+	state_migration_pull_mult = -0.25
+}
+
+# 22C: spares the economy; its cost is the event's heaviest radicalization.
+climate_carrying_on_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
+	state_mortality_mult = 0.10
+	state_standard_of_living_add = -2
+	building_group_bg_agriculture_throughput_add = -0.15
+}
+
 crop_failure_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	building_group_bg_agriculture_throughput_add = -0.15
@@ -1608,7 +1641,7 @@ climate_accord_rejection_no_gw_modifier = {
 	state_pollution_generation_mult = 0.10
 }
 
-# Rolling back climate protections during cooling (events 17B, 18B, 19B)
+# Rolling back climate protections during cooling (events 17B, 18B, 19B, 23B)
 climate_deregulation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	building_throughput_add = 0.03

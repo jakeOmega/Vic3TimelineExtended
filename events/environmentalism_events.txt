@@ -1502,3 +1502,143 @@ environmentalism_events.21 = {
 		add_radicals = { value = very_small_radicals pop_type = academics }
 	}
 }
+
+# Event 22: Four Degrees (>= 4.0 C). The top of the warming ladder, the
+# apocalyptic tier, and the point the journal entry's progress bar fills. On
+# top of the global_warming modifier (already four times its unit values here)
+# the crossing lands three harms: on the people (mortality, standard of
+# living), on the harvest (farm output) and on the economy (throughput). Every
+# option is a modifier made only of harms. Each spares one of the three and
+# pays for it in its own way; the other two are suffered in full.
+environmentalism_events.22 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/drought_devastation.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = environmentalism_events.22.t
+	desc = environmentalism_events.22.d
+	flavor = environmentalism_events.22.f
+
+	duration = 3
+
+	trigger = {
+		# triggered by global warming on_action at 4.0 C
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = environmentalism_events.22.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { has_law = law_type:law_ministry_of_the_environment }
+				add = 2
+			}
+		}
+		# Spare the people: the state runs cooling, water and food distribution,
+		# paid for in administration. The harvest and the economy suffer.
+		add_modifier = {
+			name = climate_survival_footing_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = medium_radicals }
+		add_radicals = { value = medium_radicals strata = upper }
+	}
+
+	option = {
+		name = environmentalism_events.22.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_law = law_type:law_closed_borders }
+				add = 2
+			}
+		}
+		# Spare the harvest: food is kept at home and the borders closed, paid
+		# for in standing abroad. The people and the economy suffer.
+		add_modifier = {
+			name = climate_fortress_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = large_radicals }
+		add_radicals = { value = small_radicals pop_type = academics }
+	}
+
+	option = {
+		name = environmentalism_events.22.c
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { ig:ig_industrialists ?= { is_in_government = yes } }
+				add = 1
+			}
+		}
+		# Spare the economy: no programme, paid for in public anger. The people
+		# and the harvest suffer.
+		add_modifier = {
+			name = climate_carrying_on_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = very_large_radicals }
+	}
+}
+
+# Event 23: Back Below Four Degrees (< 4.0 C, after event 22). Still above the
+# catastrophic 3.0 C line, so this is a reprieve, not a recovery: same choice
+# shape as event 17. Event 22's modifiers are the damage the crossing did, not
+# measures a government can lift, so neither option touches them; they decay.
+environmentalism_events.23 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/climate_awareness.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = environmentalism_events.23.t
+	desc = environmentalism_events.23.d
+	flavor = environmentalism_events.23.f
+
+	duration = 3
+
+	trigger = {
+		# triggered by global warming on_action when dropping below 4.0 C
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = environmentalism_events.23.a
+		default_option = yes
+		ai_chance = { base = 3 }
+		# Stay vigilant
+		add_loyalists = { value = medium_radicals }
+	}
+
+	option = {
+		name = environmentalism_events.23.b
+		ai_chance = { base = 2 }
+		# Relax the rules and restart industry
+		add_modifier = {
+			name = climate_deregulation_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = small_radicals strata = upper }
+		add_radicals = { value = small_radicals pop_type = academics }
+	}
+}

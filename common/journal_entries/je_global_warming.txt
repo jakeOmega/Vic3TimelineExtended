@@ -11,11 +11,12 @@
 		temperature_anomaly_display >= 0.1
 	}
 
-	# One line. The six-tier ladder that used to be six triggered_desc blocks
+	# One line. The tier ladder that used to be six triggered_desc blocks
 	# here now lives in gw_severity_text
 	# (common/customizable_localization/global_warming_custom_loc.txt), because
 	# the widget's conditions table needs the same tier and two copies of a
-	# threshold table drift. The six sentence keys themselves are unchanged.
+	# threshold table drift. The six original sentence keys are unchanged; a
+	# seventh, apocalyptic (4 C), was added there.
 	status_desc = je_global_warming_status
 
 	# Shown in the journal list and near the foot of the panel, so the current

@@ -482,7 +482,7 @@ Persistent environmental tracker that applies scaled penalties based on global t
 
 ### Key Mechanics
 - **Progress:** `temperature_anomaly_display` against a 4.0°C goal. **Do not "simplify" `goal_add_value = 4 - temperature_anomaly_display` to a flat `4`.** Per vanilla's `journal_entries.md`, `current_value` and `goal_add_value` are evaluated **once, at activation**, and summed to form the goal. Activation happens when `possible` first passes (~0.1°C), so that expression is exactly what pins the goal at 4.0 and freezes it there.
-- **6 temperature tiers:** negligible (<0.1°C), slight (0.1-0.5), moderate (0.5-1.0), significant (1.0-2.0), severe (2.0-3.0), catastrophic (3.0+). Defined **once**, in `gw_severity_text` / `gw_severity_short` (`common/customizable_localization/global_warming_custom_loc.txt`); `status_desc` and the widget both read it.
+- **7 temperature tiers:** negligible (<0.1°C), slight (0.1-0.5), moderate (0.5-1.0), significant (1.0-2.0), severe (2.0-3.0), catastrophic (3.0-4.0), apocalyptic (4.0+). Defined **once**, in `gw_severity_text` / `gw_severity_short` (`common/customizable_localization/global_warming_custom_loc.txt`); `status_desc` and the widget both read it.
 - **Dynamic modifier pattern:** `global_warming` modifier × `temperature_anomaly_display` multiplier, reapplied monthly
 - **Activation:** `is_shown_when_inactive = { has_game_rule = global_warming_enabled }` plus `possible = { temperature_anomaly_display >= 0.1 }`. Both must hold, so the entry renders greyed for every country for the decades before the world warms. There is **no** `should_be_involved` block (an earlier version of this doc claimed one).
 - **Emissions are a property of a market, not a country.** `market_greenhouse_gas_emissions_script_value` sums the whole market's oil and coal consumption, so there is no per-country emissions figure to show. The snapshot lives on the market leader and every member reads it.
@@ -556,7 +556,7 @@ The market sweep is evaluated **once**: the value goes into the variable and the
 **Emissions reduction in force and the active-policy count stay live reads** — they are cheap and must react to a click, which a variable written from a button tail could not do, because `add_modifier` is invisible inside the effect block that applied it.
 
 ### Events
-- `environmentalism_events.txt` — threshold events at 0.5°C, 1.0°C, 2.0°C, 3.0°C, plus cooling/recovery events 17–21
+- `environmentalism_events.txt` — threshold events at 0.5°C, 1.0°C, 2.0°C, 3.0°C (1–4) and 4.0°C (22), plus cooling/recovery events 17–21 and 23 (below 4.0°C)
 - `events/te_debug_gw_events.txt` — console-only test harness, `event te_debug_gw.1` (helpers in `common/scripted_effects/te_debug_gw_effects.txt`)
 
 ### Never Completes
