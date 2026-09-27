@@ -1,6 +1,6 @@
 # Icon pipeline: FLUX-generated UI icons for placeholder entities — design
 
-Status: **prototype** (`scripts/image_pipeline/icon_samples.py`); the production pipeline below is not built yet.
+Status: **production pipeline started with technologies** (`scripts/image_pipeline/generate_icons.py`, registry `icon_prompts.py`, shared code `icon_render.py`, DDS writer `icon_dds.py`). The prototype sample sheet is `icon_samples.py`. Other categories follow the order under Production design.
 
 ## Goal
 
@@ -103,8 +103,17 @@ Each row: current placeholder | three vanilla neighbours ‖ two generated candi
 - **rembg:** `rembg[gpu]` pulls an `onnxruntime-gpu` that wants CUDA 13 libraries and falls back to CPU. Plain `onnxruntime` is enough (~1–2 s per image).
 - **Environment:** the image stack lives in `.venv-img` (gitignored), separate from `.venv`, since `requirements.txt` keeps torch/diffusers commented out.
 
-## Open questions
+## Decisions (owner, 2026-09-27)
 
-- Uncompressed (vanilla parity, ~212 MB) or BC7 where the size allows (~70 MB)?
-- Diplomatic-action plinth: lifted from vanilla, or dropped?
-- Buildings: which of the 300 borrowings are deliberate (a company building reusing its industry's icon) and should stay allowlisted?
+- **DDS format: uncompressed**, vanilla parity (~212 MB for everything). `icon_dds.py` writes it in Python; its header matches vanilla's byte for byte apart from the NVTT tool signature.
+- **Diplomatic-action plinth: lift it from vanilla** like the frames. Drop it if that proves hard.
+- **Buildings: most borrowings are placeholders, but a fair number can share a common icon.** Generate only for the real placeholders, and not all 300 at first. Triage when buildings come up.
+
+## Technology slice (2026-09-27)
+
+The first production category, end to end:
+
+1. `icon_prompts.ICONS["technology"]`: 170 subjects, drafted from each tech's name and description, one physical object each, with material and colour named.
+2. `generate_icons.py --stage render --seeds 2`, then `--stage compose` and `--stage sheet`: review sheets of 20.
+3. Record the chosen seed per tech in the registry (`"keep"` leaves the borrowed vanilla icon in place). 35 techs borrow a vanilla icon other than the newspapers, and some of those may fit.
+4. `--stage write` (DDS to `gfx/interface/icons/invention_icons/<key>.dds`), then `--stage wire` (rewrites the tech's `texture =` line), then an in-game check.
