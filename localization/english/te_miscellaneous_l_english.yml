@@ -1167,7 +1167,7 @@
  banking_cycle_status_bubble_frenzy:"#gold #b Bubble Frenzy#!: exuberance dominates; pricing disconnects from fundamentals.#!\n"
  banking_cycle_status_bubble_frenzy_cmd:0 "#gold #b Critical Strain#!: administrative strain is severe; mass misallocation risks mount.#!\n"
  banking_cycle_status_bubble_frenzy_coop:0 "#gold #b Severe Strain#!: cooperative overcommitment is acute; corrective measures are urgent.#!\n"
- banking_cycle_status_bubble_stable:"#white #b Low [concept_bubble_pressure]#!: pockets of speculation emerge, but risks remain manageable.#!\n"
+ banking_cycle_status_bubble_stable:"#white #b Building [concept_bubble_pressure]#!: pockets of speculation emerge, but risks remain manageable.#!\n"
  banking_cycle_status_bubble_stable_cmd:0 "#white #b Rising Strain#!: minor bottlenecks accumulate; administrative overhead grows.#!\n"
  banking_cycle_status_bubble_stable_coop:0 "#white #b Mild Overextension#!: payout [Concept('concept_obligation', 'obligations')] slightly exceed sustainable levels; manageable for now.#!\n"
  banking_cycle_status_downturn:"#gold #b Downturn#!: tight money and weak demand slow investment.\n\n#!"
