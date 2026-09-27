@@ -56,6 +56,15 @@ def entries(cat: str, only: set[str]) -> dict[str, dict]:
     return {k: e for k, e in ICONS[cat].items() if not only or k in only}
 
 
+def generated(cat: str, only: set[str]) -> dict[str, dict]:
+    """The entries that get a FLUX icon: not "keep", not reusing another icon."""
+    return {k: e for k, e in entries(cat, only).items() if "use" not in e and e["seed"] != KEEP}
+
+
+def accepted(e: dict) -> bool:
+    return "use" not in e and isinstance(e["seed"], int) and not isinstance(e["seed"], bool)
+
+
 # ── reading and rewriting entity files ───────────────────────────────────
 
 _DEF_RE = re.compile(r"^([A-Za-z0-9_\-]+)\s*=\s*\{")
@@ -90,8 +99,9 @@ def rewrite_icon_refs(path: Path, field: str, targets: dict[str, str], dry_run: 
     """Point each key's depth-1 `field = "..."` line in `path` at targets[key].
 
     Returns the keys changed. The rest of the file, its BOM and each line's
-    indentation and trailing comment are kept. Mod-added entities are plain
-    top-level definitions; INJECT:/REPLACE: blocks are not matched.
+    indentation and trailing comment are kept, except a comment calling the
+    old icon a placeholder, which stops being true. Mod-added entities are
+    plain top-level definitions; INJECT:/REPLACE: blocks are not matched.
     """
     raw = path.read_bytes()
     bom = raw.startswith(b"\xef\xbb\xbf")
@@ -107,7 +117,10 @@ def rewrite_icon_refs(path: Path, field: str, targets: dict[str, str], dry_run: 
         elif depth == 1 and key in targets:
             m = field_re.match(line)
             if m and m.group(2) != targets[key] and key not in changed:
-                lines[i] = m.group(1) + targets[key] + m.group(3)
+                rest = m.group(3)
+                if "placeholder" in rest.lower():
+                    rest = '"' + rest[1:].split("#", 1)[0].rstrip()
+                lines[i] = m.group(1) + targets[key] + rest
                 changed.append(key)
         depth += code.count("{") - code.count("}")
     if changed and not dry_run:
@@ -122,12 +135,10 @@ def stage_render(cat: str, only: set[str], work: Path, seeds: int, offload: str)
     from icon_render import embed, render
 
     jobs, prompts = [], {}
-    for key, e in entries(cat, only).items():
-        if e["seed"] == KEEP:
-            continue
+    for key, e in generated(cat, only).items():
         prompt = prompt_for(cat, e["subject"])
         prompts[name(cat, key)] = prompt
-        for seed in ([e["seed"]] if isinstance(e["seed"], int) else range(seeds)):
+        for seed in ([e["seed"]] if accepted(e) else range(seeds)):
             jobs.append((name(cat, key), prompt, seed))
     embed(prompts, work / "embeds")
     render(jobs, work / "embeds", work / "raw", offload)
@@ -148,7 +159,7 @@ def stage_compose(cat: str, only: set[str], work: Path) -> None:
     from icon_render import Composer
 
     composer, n = Composer(), 0
-    for key in entries(cat, only):
+    for key in generated(cat, only):
         for raw in sorted((work / "raw").glob(f"{name(cat, key)}__s*.png")):
             _compose_one(composer, cat, raw, work / "final" / raw.name)
             n += 1
@@ -161,8 +172,8 @@ def stage_sheet(cat: str, only: set[str], work: Path, include_reviewed: bool) ->
     current = current_icons(cat)
     game = vanilla_icons_dir().parents[2]
     rows = []
-    for key, e in entries(cat, only).items():
-        if e["seed"] == KEEP or (e["seed"] is not None and not include_reviewed):
+    for key, e in generated(cat, only).items():
+        if e["seed"] is not None and not include_reviewed:
             continue
         cands = [(f"s{p.stem.rsplit('__s', 1)[1]}", p)
                  for p in sorted((work / "final").glob(f"{name(cat, key)}__s*.png"))]
@@ -186,8 +197,8 @@ def stage_write(cat: str, only: set[str], work: Path) -> None:
         raise SystemExit(f"{out_dir.parent} is not checked out (a sparse worktree?)")
     out_dir.mkdir(exist_ok=True)
     composer, wrote = Composer(), 0
-    for key, e in entries(cat, only).items():
-        if not isinstance(e["seed"], int) or e["seed"] == KEEP:
+    for key, e in generated(cat, only).items():
+        if not accepted(e):
             continue
         dest = MOD_ROOT / icon_path(cat, key)
         if dest.exists():
@@ -203,9 +214,9 @@ def stage_write(cat: str, only: set[str], work: Path) -> None:
 
 def stage_wire(cat: str, only: set[str], dry_run: bool) -> None:
     spec = CATEGORIES[cat]
-    targets = {key: icon_path(cat, key) for key, e in entries(cat, only).items()
-               if isinstance(e["seed"], int) and e["seed"] != KEEP
-               and (MOD_ROOT / icon_path(cat, key)).exists()}
+    targets = {key: icon_path(cat, key) for key, e in generated(cat, only).items()
+               if accepted(e) and (MOD_ROOT / icon_path(cat, key)).exists()}
+    targets.update({key: e["use"] for key, e in entries(cat, only).items() if "use" in e})
     total = 0
     for path in sorted((MOD_ROOT / spec["entity_dir"]).rglob("*.txt")):
         changed = rewrite_icon_refs(path, spec["field"], targets, dry_run)

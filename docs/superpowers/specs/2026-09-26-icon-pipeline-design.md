@@ -117,3 +117,11 @@ The first production category, end to end:
 2. `generate_icons.py --stage render --seeds 2`, then `--stage compose` and `--stage sheet`: review sheets of 20.
 3. Record the chosen seed per tech in the registry (`"keep"` leaves the borrowed vanilla icon in place). 35 techs borrow a vanilla icon other than the newspapers, and some of those may fit.
 4. `--stage write` (DDS to `gfx/interface/icons/invention_icons/<key>.dds`), then `--stage wire` (rewrites the tech's `texture =` line), then an in-game check.
+
+The owner approved all 170 subjects and asked for era 6 first (37 techs) before rendering the rest.
+
+## Diplomatic slice (2026-09-27)
+
+- **Treaty articles** (31: 18 on `offer_embassy`, the rest on law or event icons). They use the prototype's 100² `cutout` style unchanged, with `field = icon` in `common/treaty_articles/`. `wire` drops the `# Placeholder Icon` comment on the lines it rewrites.
+- **Diplomatic actions** (7) have a new `plinth` layout. The slab is lifted from vanilla, per the owner's call. `icon_render.plinth_template()` takes the median over the 16 vanilla icons whose green-topped stone slab sits in the common place. On the top face, where every figure stands, each pixel takes the median over only the icons in which it is still green, which recovers the bare marble and its rim. A pixel must be bare in a quarter of the icons, so a figure's own green parts don't count. The figure is cut out, stood on the top face and given a contact shadow. The prompt no longer asks FLUX for a pedestal.
+- **Reuse** (`"use": <path>`): four actions have a better vanilla icon than the one they borrowed. Withdraw Nuclear Umbrella gets `guarantee_independence_obligation` (the crossed-out guarantee), Colonial Culture Change gets `change_culture`, and the two cultural-force actions get the `force_culture` crest. `wire` points them there, with nothing rendered.

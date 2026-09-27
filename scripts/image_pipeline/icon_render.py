@@ -17,6 +17,7 @@ production pipeline). Nothing here knows about a particular entity list.
                medallion        cutout on a disc, under the ring lifted from vanilla
                emboss           FLUX silhouette -> the PM pipeline's metallic emboss
                emboss_medallion that emboss on the disc and ring
+               plinth           cutout standing on the slab lifted from vanilla
   review_sheet()  Row per entity: [current icon | 3 vanilla neighbours || candidates].
 
 Frames are not hand-drawn: `vanilla_template()` takes the per-pixel median of
@@ -309,6 +310,96 @@ def compose_medallion(raw: Image.Image, spec: dict, tmpl, target, obj: Image.Ima
     return Image.fromarray(np.clip(arr, 0, 255).astype(np.uint8), "RGBA")
 
 
+def plinth_template(folder: str, size: int) -> tuple[np.ndarray, int, int]:
+    """The stone slab vanilla's diplomatic-action figures stand on, lifted by median.
+
+    Most icons in diplomatic_action_icons stand their figure on the same
+    octagonal slab: a green top face over a golden-stone base. Taking the
+    per-pixel median over the icons whose slab sits in the common place keeps
+    the slab and blurs the figures. On the top face, where every figure
+    stands, each pixel instead takes the median over only the icons in which it
+    is still green (no figure covers it there), which recovers the bare marble
+    and its rim. Returns (slab RGBA, top-face first row, top-face centre row).
+    """
+    k = size / 100
+    stack = []
+    for f in sorted((vanilla_icons_dir() / folder).glob("*.dds")):
+        try:
+            im = load_rgba(f)
+        except Exception:
+            continue
+        if im.size != (size, size):
+            continue
+        a = np.asarray(im).astype(int)
+        top, base = a[int(82 * k), int(20 * k)], a[int(92 * k), int(25 * k)]
+        if (top[3] > 200 and top[1] > top[0] + 30 and top[1] > top[2] + 20
+                and base[3] > 200 and base[:3].sum() < 260):
+            stack.append(a.astype(np.float32))
+    if len(stack) < 5:
+        raise SystemExit(f"only {len(stack)} slab icons found in {vanilla_icons_dir() / folder}: "
+                         "check VIC3_BASE_GAME")
+    arr = np.stack(stack)
+    med = np.median(arr, axis=0)
+    # Where a pixel is still green in an icon, no figure covers it there. Its
+    # median over just those icons is the bare slab, texture and rim included.
+    bare = (arr[..., 3] > 200) & (arr[..., 1] > arr[..., 0] + 15) & (arr[..., 1] > arr[..., 2])
+    with np.errstate(all="ignore"):
+        import warnings
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", RuntimeWarning)
+            bare_med = np.nanmedian(np.where(bare[..., None], arr, np.nan), axis=0)
+    # A figure's own green parts (arrows, hills) are green in one or two icons;
+    # the slab is bare in many.
+    bare_med[bare.sum(axis=0) < max(3, len(stack) // 4)] = np.nan
+
+    def green(px):
+        return px[..., 3] > 200 and px[1] > px[0] + 15 and px[1] > px[2]
+
+    # Probe a quarter of the way in, clear of the octagon's cut corners.
+    probe = int(25 * k)
+    rows = [y for y in range(int(55 * k), size) if green(med[y, probe])]
+    if not rows:
+        raise SystemExit("no slab top face found in the median")
+    y0, y1 = rows[0], rows[-1]
+    slab = med.copy()
+    slab[:y0, :, 3] = 0
+    for y in range(y0, y1 + 1):
+        cols = [x for x in range(size) if not np.isnan(bare_med[y, x, 0])]
+        if cols:
+            a, b = min(cols), max(cols)
+            for x in range(a, b + 1):
+                if not np.isnan(bare_med[y, x, 0]):
+                    slab[y, x] = bare_med[y, x]
+                else:  # covered in every icon: borrow the nearest bare neighbour
+                    near = min(cols, key=lambda c: abs(c - x))
+                    slab[y, x] = bare_med[y, near]
+    return slab, y0, (y0 + y1) // 2
+
+
+def compose_plinth(raw: Image.Image, spec: dict, tmpl, target) -> Image.Image:
+    """Cut the figure out and stand it on the slab lifted from vanilla."""
+    slab, y0, face = tmpl
+    size = spec["size"]
+    obj = cut_out(raw)
+    bbox = obj.getchannel("A").point(lambda v: 255 if v > 16 else 0).getbbox()
+    if bbox:
+        obj = obj.crop(bbox)
+    max_w, max_h = size * spec["fill"], face + size * 0.03 - size * 0.04
+    scale = min(max_w / obj.width, max_h / obj.height)
+    obj = resize_premultiplied(obj, (max(1, round(obj.width * scale)), max(1, round(obj.height * scale))))
+    obj = grade(obj, target)
+    icon = Image.fromarray(np.clip(slab, 0, 255).astype(np.uint8), "RGBA")
+    # A soft contact shadow where the figure meets the top face.
+    shadow = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    w = obj.width * 0.75
+    ImageDraw.Draw(shadow).ellipse(
+        (size / 2 - w / 2, face - size * 0.025, size / 2 + w / 2, face + size * 0.035), fill=(0, 0, 0, 110))
+    icon.alpha_composite(shadow.filter(ImageFilter.GaussianBlur(size / 60)))
+    bottom = round(face + size * 0.03)
+    icon.alpha_composite(obj, ((size - obj.width) // 2, bottom - obj.height))
+    return icon
+
+
 class Composer:
     """Compose raw renders per category, caching each category's vanilla template."""
 
@@ -320,7 +411,9 @@ class Composer:
         mode = spec["mode"]
         if mode in ("framed", "medallion", "emboss_medallion") and cat not in self._tmpl:
             self._tmpl[cat] = vanilla_template(spec["folder"], spec["size"])
-        if mode in ("cutout", "medallion") and cat not in self._target:
+        if mode == "plinth" and cat not in self._tmpl:
+            self._tmpl[cat] = plinth_template(spec["folder"], spec["size"])
+        if mode in ("cutout", "medallion", "plinth") and cat not in self._target:
             # A medallion's opaque pixels are mostly its dark disc: grade the
             # object against a folder of bare objects instead.
             self._target[cat] = category_grade_target(spec.get("grade_folder", spec["folder"]))
@@ -331,6 +424,8 @@ class Composer:
             return compose_framed(raw, spec, self._tmpl[cat])
         if mode == "emboss":
             return embossed(raw, spec, spec["size"])
+        if mode == "plinth":
+            return compose_plinth(raw, spec, self._tmpl[cat], self._target[cat])
         if mode == "emboss_medallion":
             return compose_medallion(raw, spec, self._tmpl[cat], None,
                                      obj=embossed(raw, dict(spec, fill=0.95), spec["size"]))

@@ -12,6 +12,9 @@ Each ICONS entry is {"subject": <phrase>, "seed": <state>}:
     seed <int>    this candidate is the icon: its DDS is written and the
                   entity's icon line points at it
     seed "keep"   the borrowed vanilla icon fits; never rendered or rewired
+or {"use": "gfx/interface/icons/.../x.dds"}: a different existing icon fits
+better than the borrowed one (vanilla's crossed-out guarantee for withdrawing
+one); never rendered, and `wire` points the entity at it.
 A subject describes one physical object, with its material and colour.
 Unnamed colours drift to real-world defaults: "paper banknotes" drew US
 dollars. No screens with text, no currency, flags or faces.
@@ -48,12 +51,15 @@ CATEGORIES = {
         style="{subject}, one chunky readable object, " + PAINTED),
     "treaty_article": dict(
         folder="diplomatic_treaties_articles_icons", size=100, mode="cutout", fill=0.98,
+        entity_dir="common/treaty_articles", field="icon",
         style=("{subject}, one compact bold object group filling the frame, simple chunky "
                "silhouette, one strong accent color, " + PAINTED)),
+    # The figure stands on the slab lifted from vanilla (icon_render.plinth_template).
+    # Asking FLUX for the pedestal drew one detached from its figure.
     "diplomatic_action": dict(
-        folder="diplomatic_action_icons", size=100, mode="cutout", fill=0.98,
-        style=("{subject}, a compact miniature statue standing on top of a small square "
-               "green marble pedestal, simple chunky silhouette, " + PAINTED)),
+        folder="diplomatic_action_icons", size=100, mode="plinth", fill=0.8,
+        entity_dir="common/diplomatic_actions", field="texture",
+        style=("{subject}, a compact miniature sculpture, simple chunky silhouette, " + PAINTED)),
     "building": dict(
         folder="building_icons", size=256, mode="framed",
         style=("aerial three-quarter view of {subject}, detailed painted illustration "
@@ -263,6 +269,51 @@ ICONS: dict[str, dict[str, dict]] = {
         "space_colonization": {"subject": "a domed habitat colony on a red rocky planet surface", "seed": None},
         "telepathic_communities": {"subject": "two glowing translucent human heads facing each other, linked by a ribbon of light", "seed": None},
     },
+    "treaty_article": {
+        # Mod-added treaty articles on a borrowed icon (18 on offer_embassy).
+        "nuclear_security_assistance": {"subject": "a nuclear warhead locked inside a steel cage with a big padlock", "seed": None},
+        "nuclear_arms_limitation": {"subject": "a brass balance scale with one short grey missile standing on each pan", "seed": None},
+        "request_influence": {"subject": "a small figure bowing and offering up a silver key with both hands", "seed": None},
+        "crisis_resolution": {"subject": "a cracked stone pillar bound with a bandage and propped up by a wooden brace", "seed": None},
+        "extend_influence": {"subject": "a hand holding a puppeteer's wooden control bar with its strings hanging down", "seed": None},
+        "education_aid": {"subject": "a stack of schoolbooks with a red apple on top", "seed": None},
+        "healthcare_aid": {"subject": "a black leather doctor's bag with a stethoscope draped over it", "seed": None},
+        "security_aid": {"subject": "a steel riot shield and a black police baton crossed together", "seed": None},
+        "development_assistance": {"subject": "a small brick schoolhouse under construction with wooden scaffolding", "seed": None},
+        "science_aid": {"subject": "a brass microscope standing on a wooden crate", "seed": None},
+        "science_aid_2": {"subject": "a brass microscope, a glass flask and a steel gear packed together in an open wooden crate", "seed": None},
+        "suppress_subject_liberty": {"subject": "a chess pawn bound with a heavy iron chain and padlock", "seed": None},
+        "nuclear_disarmament": {"subject": "a nuclear missile warhead cracked open, with a large steel wrench resting across it", "seed": None},
+        "nuclear_program_aid": {"subject": "a lead-lined steel case of glowing green uranium pellets", "seed": None},
+        "intelligence_sharing_pact": {"subject": "a manila dossier folder sealed with red wax, a brass magnifying glass lying on top", "seed": None},
+        "joint_military_exercises": {"subject": "two crossed rifles with two different-coloured steel helmets hung on them", "seed": None},
+        "join_united_nations": {"subject": "a wooden gavel resting on a pale blue sounding block wrapped in an olive branch", "seed": None},
+        "nuclear_program_pause": {"subject": "a nuclear warhead frozen inside a block of blue ice", "seed": None},
+        "disband_company": {"subject": "a plain cream share certificate torn in half, with a red wax seal", "seed": None},
+        "seize_company": {"subject": "a hand grabbing a small brick factory model by its chimney", "seed": None},
+        "minority_protection": {"subject": "a raised steel shield held over a small group of three people", "seed": None},
+        "free_port_concession": {"subject": "an open brass padlock hanging from a ship's anchor", "seed": None},
+        "corporate_concessions": {"subject": "a brown leather briefcase with a gold key resting on top", "seed": None},
+        "enforce_privatization": {"subject": "a small brick factory model with a blank price tag tied to its chimney", "seed": None},
+        "religious_mission_rights": {"subject": "a closed leather-bound holy book with a wooden walking staff leaning on it", "seed": None},
+        "demilitarized_zone": {"subject": "a rifle broken in half lying across a strip of barbed wire", "seed": None},
+        "forced_disarmament": {"subject": "a heap of rifles and steel helmets bound together by a padlocked chain", "seed": None},
+        "cultural_exchange_program": {"subject": "two hands passing a small painted vase between them", "seed": None},
+        "enforce_emissions_reduction": {"subject": "a factory chimney with a big green cork stopper in its top", "seed": None},
+        "nuclear_guarantee": {"subject": "a large steel umbrella whose shaft is a missile", "seed": None},
+        "population_transfer": {"subject": "a heap of worn suitcases and cloth bundles tied with rope", "seed": None},
+    },
+    "diplomatic_action": {
+        # Mod-added diplomatic actions on a borrowed icon. Four have a better
+        # vanilla match than the one they borrowed.
+        "voluntary_union": {"subject": "two bronze hands clasped in a handshake above a small white classical government building", "seed": None},
+        "voluntary_union_decentralized": {"subject": "an open bronze hand offering up a small circle of wooden village huts", "seed": None},
+        "irr_seek_war_blessing": {"subject": "a kneeling bronze figure presenting a sword across both open palms", "seed": None},
+        "nd_withdraw_umbrella_action": {"use": "gfx/interface/icons/diplomatic_action_icons/guarantee_independence_obligation.dds"},  # vanilla's crossed-out guarantee
+        "colonial_culture_change": {"use": "gfx/interface/icons/diplomatic_action_icons/change_culture.dds"},  # culture change; the borrowed crest was religion's
+        "force_cultural_acceptance": {"use": "gfx/interface/icons/diplomatic_action_icons/force_culture.dds"},  # the culture crest; the borrowed one was religion's
+        "force_cultural_adoption": {"use": "gfx/interface/icons/diplomatic_action_icons/force_culture.dds"},  # the culture crest; the borrowed one was religion's
+    },
 }
 
 
@@ -271,10 +322,11 @@ def check(mod_root: str | None = None, on_disk: set[str] | None = None) -> dict:
 
     Errors:
       unknown     a key with no plain top-level definition in its entity_dir
-      bad_entry   an empty subject, or a seed that is not None, an int or "keep"
+      bad_entry   an empty subject, a seed that is not None, an int or "keep",
+                  or a "use" that is not a gfx/ .dds path
       missing_dds an accepted seed whose DDS is not committed (or on disk)
     Information:
-      states      how many entries are unreviewed / accepted / kept
+      states      how many entries are unreviewed / accepted / kept / reused
     `on_disk` defaults to the icon paths git tracks, so it works in a sparse
     worktree.
     """
@@ -296,10 +348,17 @@ def check(mod_root: str | None = None, on_disk: set[str] | None = None) -> dict:
                 if fname.endswith(".txt"):
                     with open(os.path.join(dirpath, fname), encoding="utf-8-sig", errors="replace") as fh:
                         defined |= set(re.findall(r"^([A-Za-z0-9_\-]+)\s*=\s*\{", fh.read(), re.M))
-        states = {"unreviewed": 0, "accepted": 0, "kept": 0}
+        states = {"unreviewed": 0, "accepted": 0, "kept": 0, "reused": 0}
         for key, entry in entries.items():
             if key not in defined:
                 report["unknown"].append((cat, key))
+            if "use" in entry:
+                use = entry["use"]
+                if isinstance(use, str) and use.startswith("gfx/") and use.endswith(".dds"):
+                    states["reused"] += 1
+                else:
+                    report["bad_entry"].append((cat, key))
+                continue
             seed = entry.get("seed")
             if not entry.get("subject") or not (seed is None or seed == KEEP
                                                 or (isinstance(seed, int) and seed >= 0)):

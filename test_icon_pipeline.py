@@ -55,34 +55,53 @@ class RegistryTests(unittest.TestCase):
                 "no_subject": {"subject": "", "seed": None},
                 "bad_seed": {"subject": "a brass gear", "seed": "1"},
                 "nowhere": {"subject": "a brass gear", "seed": None},
+                "reuses": {"use": "gfx/interface/icons/invention_icons/radio.dds"},
+                "bad_use": {"use": "radio.dds"},
             }}
             d = tempfile.mkdtemp()
             tech_dir = Path(d) / "common" / "technology" / "technologies"
             tech_dir.mkdir(parents=True)
             (tech_dir / "t.txt").write_text(
                 "".join(f"{k} = {{\n\tera = era_6\n}}\n"
-                        for k in ("ok", "kept", "accepted", "no_subject", "bad_seed")),
+                        for k in ("ok", "kept", "accepted", "no_subject", "bad_seed", "reuses", "bad_use")),
                 encoding="utf-8-sig")
             r = ip.check(d, on_disk=set())
         finally:
             ip.ICONS = saved
         self.assertEqual(r["unknown"], [("technology", "nowhere")])
-        self.assertEqual(sorted(r["bad_entry"]), [("technology", "bad_seed"), ("technology", "no_subject")])
+        self.assertEqual(sorted(r["bad_entry"]), [("technology", "bad_seed"), ("technology", "bad_use"),
+                                                  ("technology", "no_subject")])
         self.assertEqual(r["missing_dds"], [("technology", "accepted")])
-        self.assertEqual(r["states"]["technology"], {"unreviewed": 2, "accepted": 1, "kept": 1})
+        self.assertEqual(r["states"]["technology"],
+                         {"unreviewed": 2, "accepted": 1, "kept": 1, "reused": 1})
+
+    def test_only_generated_entries_render(self):
+        saved = ip.ICONS
+        try:
+            ip.ICONS = gi.ICONS = {"technology": {
+                "new": {"subject": "a brass gear", "seed": None},
+                "chosen": {"subject": "a brass gear", "seed": 1},
+                "kept": {"subject": "a brass gear", "seed": ip.KEEP},
+                "reuses": {"use": "gfx/interface/icons/invention_icons/radio.dds"},
+            }}
+            self.assertEqual(sorted(gi.generated("technology", set())), ["chosen", "new"])
+            self.assertEqual([k for k, e in ip.ICONS["technology"].items()
+                              if "use" not in e and gi.accepted(e)], ["chosen"])
+        finally:
+            ip.ICONS = gi.ICONS = saved
 
 
 FIXTURE = (
     "# techs\n"
     "alpha = {\n"
     "\tera = era_6\n"
-    '\ttexture = "gfx/interface/icons/invention_icons/mass_communication.dds" # placeholder\n'
+    '\ttexture = "gfx/interface/icons/invention_icons/mass_communication.dds" # kept comment\n'
     "\tmodifier = {\n"
     '\t\ttexture = "not/the/icon.dds"\n'
     "\t}\n"
     "}\n"
     "beta = {\n"
-    '\ttexture = "gfx/interface/icons/invention_icons/mass_communication.dds"\n'
+    '\ttexture = "gfx/interface/icons/invention_icons/mass_communication.dds" # Placeholder Icon\n'
     "}\n"
     "gamma = { # braces in a comment { }\n"
     '\tdesc = "a { brace in a string"\n'
@@ -108,9 +127,14 @@ class RewriteTests(unittest.TestCase):
         # everything else stay as they were.
         expected = (FIXTURE
                     .replace('\ttexture = "gfx/interface/icons/invention_icons/mass_communication.dds"'
-                             ' # placeholder\n', '\ttexture = "gfx/new/alpha.dds" # placeholder\n')
+                             ' # kept comment\n', '\ttexture = "gfx/new/alpha.dds" # kept comment\n')
                     .replace('"gfx/interface/icons/invention_icons/radio.dds"', '"gfx/new/gamma.dds"'))
         self.assertEqual(raw[3:].decode("utf-8"), expected)
+
+    def test_placeholder_comment_is_dropped(self):
+        p = self._file()
+        gi.rewrite_icon_refs(p, "texture", {"beta": "gfx/new/beta.dds"})
+        self.assertIn(b'beta = {\n\ttexture = "gfx/new/beta.dds"\n}', p.read_bytes())
 
     def test_rewrite_is_idempotent(self):
         p = self._file()
