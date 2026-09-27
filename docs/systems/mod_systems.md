@@ -295,7 +295,7 @@ Custom `state_panel_status_item_small` tiles added to `gui/states_panel.gui` for
 - Diplomatic actions: `nuke_diplo_action`, `tactical_nuke_diplo_action`. These stay diplomatic actions; the widget never launches a strike. Both are gated on the deterrence doctrine and non-use pledges as well as the war laws, and their AI decides through `nd_ai_nuclear_use_justified` — see **Nuclear Deterrence and Crisis Diplomacy** below.
 - Treaty articles: `nuclear_disarmament`, `nuclear_program_aid`, `nuclear_program_pause`.
 - **Strike odds are per state** (#493). A strike lands with the striker's `country_nuclear_weapon_attack_success_add` minus the struck state's `state_nuclear_weapon_defense_chance_add` (`nuclear_strike_success_chance`, clamped 5–100 %). Techs, the NPT guarantee and the orbital battlestation grant defence to every state. A military base's **Missile Defense** group (`pmg_military_base_missile_defense`: a battery with `missile_defense_systems`, directed-energy point defence with `directed_energy_defenses`) adds +0.02 / +0.03 per level to its own state only. Missile strike planners (the strike action's AI score, the strategic dispatch, every retaliation) rank states by `nuclear_strike_target_score`, which is value × chance of getting through, so defended states draw fewer strikes. Loose warheads are smuggled rather than launched and use the plain `nuclear_industrial_strike_target_score`.
-- Events: `nuclear_weapon_events.txt` — nuclear strike response events. `events/te_debug_nuclear_events.txt` is a console-only test harness (`event te_debug_nuclear.1` / `.2`).
+- Events: `nuclear_weapon_events.txt` — nuclear strike response events. `events/te_debug_nuclear_events.txt` is a console-only test harness (`event te_debug_nuclear.1` / `.2` / `.3` — the nuclear taboo: set the score, age the clock, step).
 
 **The funding modifier lives on the journal entry, not the country.** The buttons apply `nuclear_weapon_program_funding` in `je:je_nuclear_program` scope with `multiplier = nuclear_weapons_program_current_cost`, so every `has_modifier` / `remove_modifier` for it must use that scope too — in country scope it is a silent no-op. `nuclear_program_refresh_state_effect` is the single site that owns it: it takes the modifier off when `nuclear_weapons_program_funding` reaches 0, deciding from the variable rather than from `has_modifier`, because modifier changes are not visible inside the same effect block and a scripted-effect call is inlined into its caller's.
 
@@ -328,7 +328,11 @@ It scales:
 
 The AI reads it for use, coercion, doctrine, arsenal size and proliferation.
 
-Countries can hold the arsenal to a ceiling or dismantle it (posture ops 60–64), and a renounced country can resume (a decision; re-arming books a breakout). Crossing 30/50/70/90 fires `nuclear_taboo.1`–`.8` to every country, with country-local options. The per-country half (possession, exits, history) runs from the entry's monthly pulse as `nd_taboo_country_monthly`, with ROOT = the country. The nuclear-powers leaderboard now updates once a month from the world's step.
+Countries can hold the arsenal to a ceiling or dismantle it (posture ops 60–64), and a renounced country can resume (a decision; re-arming books a breakout). Crossing 30/50/70/90 fires `nuclear_taboo.1`–`.8` to every country, with country-local options.
+
+Phase 2: the mutual article `nuclear_arms_limitation` (a `quantity` ceiling for both parties; the lowest treaty ceiling, `nd_treaty_ceiling`, joins the unilateral one, and leaving costs a rank-weighted ledger entry only when a country's lowest treaty ceiling rises and its partner still exists), a UN part (the NPT and CPPNM in force × UN authority, up to +12, capped at 15), and the Assembly's verdict on a condemned nuclear use (`un_vote.2`: passed +3 on the ledger and +2 at once; failed or vetoed −3) — only on a condemnation tabled on the nuclear grievance.
+
+The per-country half (possession, exits, history) runs from the entry's monthly pulse as `nd_taboo_country_monthly`, with ROOT = the country. The nuclear-powers leaderboard now updates once a month from the world's step.
 
 ## Nuclear Deterrence and Crisis Diplomacy (part of `je_nuclear_program`)
 

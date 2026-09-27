@@ -1365,7 +1365,7 @@ Traced states: fresh activation (status variable absent → guarded fallback bra
 ### Events
 - `nuclear_weapon_events.10` — fired for creating country
 - `nuclear_weapon_events.9` — fired (14-day delay) to all other countries
-- `te_debug_nuclear.1` / `.2` — console-only test harness (`events/te_debug_nuclear_events.txt`): funding steps, first device, warheads, leaderboard fill/empty; pause and disarmament applied and lifted.
+- `te_debug_nuclear.1` / `.2` / `.3` — console-only test harness (`events/te_debug_nuclear_events.txt`): funding steps, first device, warheads, leaderboard fill/empty; pause and disarmament applied and lifted; `.3` is the nuclear taboo: set the score, age the clock, step.
 
 ### Never Completes
 Persistent journal entry. `immediate` therefore runs again on every re-activation, which is why the stockpile and the first-device flag are created only when absent — progress and funding are still zeroed unconditionally, because the bar's goal is fixed at activation from `current_value + goal_add_value`.
