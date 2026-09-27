@@ -1546,8 +1546,9 @@ too_much_private_construction_overflow = {
 }
 
 # The value the modifier had when it was last removed, 0 if none. The
-# on-action stores it on removal and clears it once the modifier is back, so it
-# only ever raises the ceiling of a re-entry.
+# on-action stores it on removal as a five-year timed variable and clears it
+# once the modifier is back, so it only ever raises the ceiling of a re-entry
+# within five years of a removal.
 too_much_private_construction_resume = {
 	value = 0
 	if = {
@@ -1560,10 +1561,11 @@ too_much_private_construction_resume = {
 
 # The overflow, moving at most x1.2 or /1.2 a year from last year's value; the
 # cap is 9000 (-90% construction efficiency). A new episode starts at the
-# lesser of the overflow and 10, or the value it had when last removed if that
-# is higher (too_much_private_construction_resume), so a short dip in pool
-# income, such as a banking panic or a default, resumes the modifier instead of
-# restarting it at 10. It never overshoots the need either way. The /1.2 floor
+# lesser of the overflow and 10, or the value it had when removed in the last
+# five years if that is higher (too_much_private_construction_resume), so a
+# short dip in pool income, such as a banking panic or a default, resumes the
+# modifier instead of restarting it at 10. It never overshoots the need either
+# way. The /1.2 floor
 # is the ramp down while the modifier stays. The on-action removes the modifier
 # once the overflow is 0 or less, so the floor can't hold it above 0 after its
 # need is gone.

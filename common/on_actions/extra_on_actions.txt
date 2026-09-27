@@ -1229,12 +1229,15 @@ war_propaganda_on_action = {
 # keep a spent modifier alive. Until 2026-09-26 the gate was skipped once the
 # modifier existed, and it lingered for about a century on that floor.
 #
-# On removal the value is kept in var:too_much_private_construction_last, and
-# a re-entry starts at the lesser of it and the overflow instead of at 10 at
-# most (too_much_private_construction_resume). A short dip in pool income can
-# fail the stay test when the need is small (a banking panic cuts capitalist
-# contributions for over a year), and a restart from 10 would take decades to
-# climb back. The stored value is cleared once the modifier is back.
+# On removal the value is kept in var:too_much_private_construction_last for
+# five years, and a re-entry within them starts at the lesser of it and the
+# overflow instead of at 10 at most (too_much_private_construction_resume). A
+# short dip in pool income can fail the stay test when the need is small (a
+# banking panic cuts capitalist contributions for over a year), and a restart
+# from 10 would take decades to climb back. After five years the variable
+# expires and a new episode ramps from 10 as designed, so a re-entry decades
+# later doesn't jump straight to a large penalty. The stored value is also
+# cleared once the modifier is back.
 #
 # Overinvestment keeps the modifier. It cuts every pop's pool contribution, so
 # gross income, and the overflow with it, falls to about 0. Removing the
@@ -1319,6 +1322,7 @@ excess_private_construction_on_action = {
 				set_variable = {
 					name = too_much_private_construction_last
 					value = var:too_much_private_construction_cached
+					years = 5
 				}
 				set_variable = {
 					name = too_much_private_construction_cached
