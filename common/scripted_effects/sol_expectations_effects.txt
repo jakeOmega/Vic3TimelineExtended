@@ -5,7 +5,7 @@
 # Each month, reads the gap (target - average_expected_sol) and nudges
 # the shift to close it. At equilibrium, expected SoL ≈ target.
 #   Example: average_sol=20, target_add=+2 → expected converges to 22
-# Converges with a ~10-year half-life (sol_expectations_half_life_years):
+# Converges with a 10-year half-life (sol_expectations_half_life_years):
 # ~50% adapted in 10 years, ~75% in 20, ~94% in 40.
 #
 # Additional features:
@@ -15,9 +15,11 @@
 # - Per-strata offsets: country_sol_expectations_upper/middle/lower_offset_add
 #   apply direct (non-adaptive) shifts to specific class expectations.
 #   Models class-relative comparison (aristocratic vs egalitarian societies).
+# - Global awareness: (global_average_sol - average_sol) x literacy x 0.2 is
+#   added to every stratum (sol_expectations_global_awareness_value).
 # - The system applies 3 separate strata modifiers (upper, middle, lower),
-#   each with multiplier = clamped shift + class offset. No shared "overall"
-#   modifier; each class's expectation is fully explicit.
+#   each with multiplier = clamped shift + class offset + global awareness.
+#   No shared "overall" modifier; each class's expectation is fully explicit.
 
 sol_expectations_monthly_update = {
 	# Initialize shift variable if it doesn't exist yet (start at 0 = no adjustment)

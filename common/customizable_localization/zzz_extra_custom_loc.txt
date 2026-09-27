@@ -16,6 +16,30 @@
 	}
 }
 
+# The banking entry's description (je_banking_cycle_reason, the engine's
+# implicit <entry>_reason key), in the same three economies as the title above:
+# the cycle reads as a logistics gauge under a command economy, as the balance
+# of payouts and reinvestment under cooperative ownership, and as a liquidity
+# and sentiment gauge everywhere else. The two variants had been unreferenced
+# since be165ed6 removed their triggered_desc lines from status_desc.
+te_banking_cycle_reason = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_law = law_type:law_command_economy }
+		localization_key = je_banking_cycle_reason_command_economy
+	}
+	text = {
+		trigger = { has_law = law_type:law_cooperative_ownership }
+		localization_key = je_banking_cycle_reason_cooperative_ownership
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = je_banking_cycle_reason_market
+	}
+}
+
 te_yearly_temp_change_color = {
 	type = country
 	random_valid = no

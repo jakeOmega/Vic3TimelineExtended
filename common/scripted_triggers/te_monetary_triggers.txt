@@ -424,9 +424,9 @@ te_mon_display_ready = {
 # The bound comes from te_mon_floor_threshold, which reads te_mon_target_min —
 # so the law check that used to sit here is gone, and
 # country_policy_rate_floor_add on law_digital_currency is the single statement
-# of the rule. The threshold carries one point of slack (0.01) because
-# te_policy_rate is a drifting fractional value that need not land exactly on
-# the bound.
+# of the rule. The threshold carries 0.01 of slack (a hundredth of a
+# percentage point, one basis point) because te_policy_rate is a drifting
+# fractional value that need not land exactly on the bound.
 te_mon_policy_rate_at_floor = {
 	has_variable = te_policy_rate
 	var:te_policy_rate <= te_mon_floor_threshold
