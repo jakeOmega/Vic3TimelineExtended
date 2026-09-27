@@ -930,13 +930,14 @@ global_warming_events_on_action = {
 			}
 			random_list = {
 				1800 = { } # ~90% chance of nothing happening this month
-				# Crop failures (severe+ warming, farming country)
+				# Crop failures (severe+ warming, farming country). The farm test
+				# is the event's own (gw_state_has_staple_farm).
 				15 = {
 					trigger = {
 						temperature_anomaly_display >= 2.0
 						any_scope_state = {
 							is_incorporated = yes
-							any_scope_building = { is_building_type = building_wheat_farm }
+							gw_state_has_staple_farm = yes
 						}
 					}
 					trigger_event = { id = environmentalism_events.5 }

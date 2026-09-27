@@ -299,3 +299,26 @@ gw_possible_remove_green_building_codes = {
 		NOT = { has_variable = has_emissions_reduction_treaty }
 	}
 }
+
+# ---------------------------------------------------------------------------
+# Event gates shared by an event and the monthly roll that fires it, so the
+# two cannot drift apart. A roll whose own gate is narrower than the event's
+# silently wastes the event for every country it leaves out.
+# ---------------------------------------------------------------------------
+
+# The Barren Harvest (environmentalism_events.5): a state growing staple food.
+# The five grain farms and livestock ranches; subsistence farms are left out on
+# purpose, or every state would qualify.
+# Scope: state
+gw_state_has_staple_farm = {
+	any_scope_building = {
+		OR = {
+			is_building_type = building_wheat_farm
+			is_building_type = building_rye_farm
+			is_building_type = building_rice_farm
+			is_building_type = building_maize_farm
+			is_building_type = building_millet_farm
+			is_building_type = building_livestock_ranch
+		}
+	}
+}
