@@ -61,6 +61,7 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_oligarchy
 					has_law = law_type:law_organic_regulation
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_algorithmic_governance
 				}
 				has_technology_researched = political_agitation
 			}
@@ -130,6 +131,7 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_oligarchy
 					has_law = law_type:law_organic_regulation
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_algorithmic_governance
 				}
 				has_technology_researched = political_agitation
 			}
@@ -167,6 +169,7 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_oligarchy
 					has_law = law_type:law_organic_regulation
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_algorithmic_governance
 				}
 				has_technology_researched = political_agitation
 			}
@@ -344,6 +347,7 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_oligarchy
 					has_law = law_type:law_organic_regulation
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_algorithmic_governance
 				}
 				has_technology_researched = political_agitation
 			}
@@ -370,6 +374,7 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_oligarchy
 					has_law = law_type:law_organic_regulation
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_algorithmic_governance
 				}
 			}
 		}

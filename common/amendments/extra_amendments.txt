@@ -1267,3 +1267,25 @@ amendment_collective_patrician_council = {
 	}
 	amendment_activism_multiplier = 0
 }
+
+# The algorithm answers to no Director: every citizen's feedback weighs the
+# same (the Direct Democracy package's wealth value), and grievances reach it
+# before they harden into movements (-0.1: vanilla's support-regime action;
+# internal-security laws are -0.03 to -0.05).
+amendment_collective_algorithmic_commons = {
+	allowed_laws = { law_direct_democracy }
+	modifier = {
+		state_political_strength_from_wealth_mult = -0.25
+		political_movement_radicalism_add = -0.1
+	}
+	possible = { collective_governance_is_algorithmic = yes }
+	would_sponsor = { always = no }
+	ai_will_revoke = { always = no }
+	can_repeal = {
+		custom_tooltip = {
+			text = COLLECTIVE_GOVERNANCE_TT_REPEAL
+			NOT = { collective_governance_is_algorithmic = yes }
+		}
+	}
+	amendment_activism_multiplier = 0
+}
