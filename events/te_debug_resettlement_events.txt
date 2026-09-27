@@ -48,7 +48,9 @@ te_debug_resettlement.1 = { # REVIEWED 2026-09-26: console-only test event (`eve
 		}
 	}
 
-	# Run this month's resettlement now (the transfer, readouts, politics).
+	# Run this month's resettlement now (the transfer, politics, log lines).
+	# The readouts and destination bonuses follow on the next monthly state
+	# pulse, which applies every state- and building-scoped modifier.
 	option = {
 		name = te_debug_resettlement.1.b
 		resettlement_country_monthly = yes

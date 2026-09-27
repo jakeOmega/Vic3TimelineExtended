@@ -99,9 +99,22 @@ From the engine docs and vanilla script:
 
 Runs on `on_monthly_pulse_country` (replacing `resettlement_transfer_on_action`), in a new
 `common/scripted_effects/resettlement_effects.txt`. The country pulse resets every state's monthly counters, walks its
-Settlement Authorities one after another, then refreshes every readout and the political layer, all in one execution.
-Several destinations can draw on one source in a month, and a state pulse per destination would leave the source's
-counter at the mercy of pulse order. Every per-state computation still runs in state scope inside `every_scope_state`.
+Settlement Authorities one after another and stores each month's figures as variables (`rs_arrived`, `rs_died`,
+`rs_bonus_scale` on each destination, `rs_recruits` on each source), then refreshes the political layer, all in one
+execution. Several destinations can draw on one source in a month, and a state pulse per destination would leave the
+source's counter at the mercy of pulse order. Every per-state computation still runs in state scope inside
+`every_scope_state`.
+
+**Modifier refresh from the state pulse.** `add_modifier`'s `multiplier` resolves against ROOT, not against the scope the
+effect runs in (`docs/guides/scripting_best_practices.md` § "`add_modifier { multiplier = var:X }` Resolves Against
+ROOT"). In the country pulse ROOT is the country, so a multiplier read there cannot see a state's or building's own
+variable. Every state- or building-scoped `add_modifier { multiplier = var:… }` — the three readouts below and the
+destination bonuses (§3, §5) — is therefore applied from `on_monthly_pulse_state` (`resettlement_state_monthly`, ROOT =
+the state), reading the variables the country pulse stored. The building readouts mirror the state's `rs_arrived` and
+`rs_died` onto the building under the same names, so the multiplier is right whether it reads ROOT or the modifier's
+owner. The state hook runs only for a state with an Authority, an `rs_recruits` readout or leftover `rs_bonus_scale`.
+Country-scope modifiers (the politics layer and the Declaration, §7) stay in the country pulse, where ROOT is the
+country.
 
 **Capacity.** The Programme and Transport PMs grant `state_resettlement_transfer_add`, **half in a `level_scaled` block
 and half in a `workforce_scaled` block** (vanilla uses both in `state_modifiers`). The pulse moves exactly the total, so
@@ -145,7 +158,9 @@ Transportation at 5% needs 2,000 recruits for one step) are killed and counted o
 | `resettlement_recruits` (`state_resettlement_recruits_add`) | each source state | people recruited here last month; its description names the programme's source consequences (§7.1) |
 
 All three types are display-only (registered like today's `state_resettlement_transfer_add`, `ai_value = 0`). Each
-applies only while its count is above zero.
+applies only while its count is above zero. They are refreshed from the state pulse (above); when it runs before the
+country pulse in a month they show the month before, which is what "last month" says. A source's readout and its
+`rs_recruits` are removed after a month with no recruits, so the owner's pulse can stop.
 
 ## 3. Programmes (PM group 1: `pmg_resettlement_programme`)
 
@@ -153,10 +168,11 @@ Each programme sets who is recruited, capacity per level, staff and goods, desti
 Its political reactions are **not** in the PM (§7.2). Additive destination effects sit in the PM's `workforce_scaled` or
 `level_scaled` blocks. Multiplicative destination effects are **not** in the PM, where a level-1 Authority would buy them
 in full and a programme with no one to recruit would keep them: each programme's are the state modifier
-`resettlement_<programme>_destination`, which the monthly pulse removes and re-applies after the walk (one refresh site)
-with `multiplier = rs_bonus_scale` = min(1, the month's arrivals ÷ `resettlement_bonus_full_arrivals`, 2,000). The
-settlement plan's (§5) work the same way. `rs_bonus_scale` persists, since it backs the multiplier; the modifiers and the
-variable are removed at closure and from any state that no longer has the building.
+`resettlement_<programme>_destination`. The country pulse stores `rs_bonus_scale` = min(1, the month's arrivals ÷
+`resettlement_bonus_full_arrivals`, 2,000) after the walk, and the state pulse (§2) removes the modifiers and re-applies
+the active ones with `multiplier = var:rs_bonus_scale` (one refresh site). The settlement plan's (§5) work the same way.
+`rs_bonus_scale` persists, since it backs the multiplier; the modifiers and the variable are removed at closure and, by
+the state pulse, from any state that no longer has the building.
 
 | Programme | Anchors | Unlock / law gates | Recruits | Destination effects | Transit deaths |
 |---|---|---|---|---|---|
@@ -229,7 +245,8 @@ Newfoundland; no European core. 2/km² is close to the US Census's 1890 frontier
 Hokkaido at about 0.8 million, near their populations at the end of their historical settlement booms (1.4 million in
 1890; about 1 million in 1901).
 
-Temporary destination benefits scale with the month's arrivals (full at 2,000 a month, §3) and end at closure or when the
+Temporary destination benefits scale with the month's arrivals (full at 2,000 a month, §3; applied from the state pulse,
+§2, because a multiplier read from the country pulse would resolve against the country) and end at closure or when the
 building is demolished. The frontier gate alone would not bound them in a vast region (Yakutsk, about 2 million km²,
 closes at about 20 million people; Alaska and Akmolinsk are similar), and a level-1 Authority or an idle programme would
 buy them in full; the arrivals scale bounds both. The building's tooltip shows the density and both thresholds.

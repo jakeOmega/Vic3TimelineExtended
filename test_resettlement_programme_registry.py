@@ -182,6 +182,21 @@ def top_level_blocks(text):
         yield m.group(1), text[m.end():i - 1]
 
 
+def effect_closure(text, root):
+    """Names of the top-level effects in text reachable from root by calls."""
+    bodies = dict(top_level_blocks(text))
+    seen, todo = set(), [root]
+    while todo:
+        name = todo.pop()
+        if name in seen or name not in bodies:
+            continue
+        seen.add(name)
+        for callee in re.findall(r"(?<![\w.:$])(\w+)\s*=\s*(?:yes\b|\{)", bodies[name]):
+            if callee in bodies and callee not in seen:
+                todo.append(callee)
+    return seen
+
+
 _LOC = None
 
 
@@ -399,9 +414,15 @@ class DestinationBonusTests(unittest.TestCase):
 
     def test_the_full_bonus_needs_two_thousand_arrivals_a_month(self):
         self.assertRegex(strip_comments(read(VALUES)), r"(?m)^resettlement_bonus_full_arrivals = 2000\s*$")
+        # The country pulse stores the scale after the walk; the state pulse
+        # applies the modifiers from it (test_modifier_refreshes_run_from_the_state_pulse).
+        run = squash(block(read(EFFECTS), "resettlement_run_destination"))
+        scale = ("set_variable = { name = rs_bonus_scale value = { value = var:rs_arrived "
+                 "divide = resettlement_bonus_full_arrivals max = 1 } }")
+        self.assertIn(scale, run)
+        self.assertLess(run.index("resettlement_take_from_source"), run.index(scale))
         body = squash(block(read(EFFECTS), "resettlement_refresh_destination_bonus"))
-        self.assertIn("set_variable = { name = rs_bonus_scale value = { value = var:rs_arrived "
-                      "divide = resettlement_bonus_full_arrivals max = 1 } }", body)
+        self.assertNotIn("name = rs_bonus_scale value", body)
         # One refresh site: remove all eleven, then add the active pair.
         self.assertLess(body.index("resettlement_remove_destination_bonuses = yes"),
                         body.index("limit = { var:rs_bonus_scale > 0 }"))
@@ -409,8 +430,6 @@ class DestinationBonusTests(unittest.TestCase):
         self.assertEqual(programmes, [(str(p.code), p.key) for p in PROGRAMMES])
         plans = re.findall(r"resettlement_add_settlement_bonus = \{ PLAN = (\w+) \}", body)
         self.assertEqual(plans, [k for k, _ in SETTLEMENTS])
-        run = squash(block(read(EFFECTS), "resettlement_run_destination"))
-        self.assertLess(run.index("resettlement_take_from_source"), run.index("resettlement_refresh_destination_bonus = yes"))
 
     def test_both_modifiers_are_added_with_the_persisting_scale(self):
         text = read(EFFECTS)
@@ -432,10 +451,12 @@ class DestinationBonusTests(unittest.TestCase):
         clear = squash(block(text, "resettlement_clear_destination_bonus"))
         self.assertIn("resettlement_remove_destination_bonuses = yes remove_variable = rs_bonus_scale", clear)
         self.assertIn("resettlement_clear_destination_bonus = yes", squash(block(text, "resettlement_close_frontier")))
-        monthly = squash(block(text, "resettlement_country_monthly"))
-        self.assertIn("every_scope_state = { limit = { has_variable = rs_bonus_scale "
-                      "NOT = { has_building = building_resettlement_colony } } "
+        # A demolished Authority: the state pulse clears what it left behind.
+        monthly = squash(block(text, "resettlement_state_monthly"))
+        self.assertIn("else_if = { limit = { has_variable = rs_bonus_scale } "
                       "resettlement_clear_destination_bonus = yes }", monthly)
+        self.assertLess(monthly.index("limit = { has_building = building_resettlement_colony }"),
+                        monthly.index("resettlement_clear_destination_bonus = yes"))
 
     def test_pm_descriptions_say_the_effects_grow_with_arrivals(self):
         L = loc()
@@ -603,8 +624,13 @@ class TransferTests(unittest.TestCase):
                 self.assertIn(key, L)
         effects = read(EFFECTS)
         dest = squash(block(effects, "resettlement_refresh_destination_readout"))
-        self.assertIn("add_modifier = { name = resettlement_arrivals multiplier = var:rs_arrivals }", dest)
-        self.assertIn("add_modifier = { name = resettlement_transit_deaths multiplier = var:rs_deaths }", dest)
+        # The building mirrors the state's variables under the same names, so
+        # the number is right whether the multiplier reads ROOT (the state, in
+        # the state pulse) or the modifier's owner (the building).
+        self.assertIn("set_variable = { name = rs_arrived value = scope:rs_readout_state.var:rs_arrived }", dest)
+        self.assertIn("set_variable = { name = rs_died value = scope:rs_readout_state.var:rs_died }", dest)
+        self.assertIn("add_modifier = { name = resettlement_arrivals multiplier = var:rs_arrived }", dest)
+        self.assertIn("add_modifier = { name = resettlement_transit_deaths multiplier = var:rs_died }", dest)
         src = squash(block(effects, "resettlement_refresh_source_readout"))
         self.assertIn("add_modifier = { name = resettlement_recruits multiplier = var:rs_recruits }", src)
 
@@ -634,6 +660,31 @@ class TransferTests(unittest.TestCase):
         self.assertNotIn("MakeScope", body)
         wrapper = squash(block(read(VALUES), "resettlement_debug_taken_now"))
         self.assertIn("limit = { has_variable = rs_taken_now } value = var:rs_taken_now", wrapper)
+
+    def test_modifier_refreshes_run_from_the_state_pulse(self):
+        # add_modifier's multiplier resolves against ROOT (scripting_best_practices.md
+        # § "Resolves Against ROOT"). In the country pulse ROOT is the country,
+        # so every state- or building-scoped multiplier refresh runs from
+        # on_monthly_pulse_state, where ROOT is the state.
+        on_actions = read(RS_ON_ACTIONS)
+        m = re.search(r"on_monthly_pulse_state\s*=\s*\{\s*on_actions\s*=\s*\{([^}]*)\}", on_actions)
+        self.assertIsNotNone(m)
+        self.assertIn("resettlement_state_on_action", m.group(1))
+        gate = squash(block(on_actions, "resettlement_state_on_action"))
+        for cond in ("has_building = building_resettlement_colony", "has_variable = rs_recruits",
+                     "has_variable = rs_bonus_scale", "resettlement_state_monthly = yes"):
+            self.assertIn(cond, gate)
+        text = read(EFFECTS)
+        refreshes = {"resettlement_refresh_destination_bonus", "resettlement_refresh_destination_readout",
+                     "resettlement_refresh_source_readout"}
+        state = effect_closure(text, "resettlement_state_monthly")
+        self.assertLessEqual(refreshes | {"resettlement_clear_destination_bonus"}, state)
+        country = effect_closure(text, "resettlement_country_monthly")
+        self.assertFalse(refreshes & country, refreshes & country)
+        bodies = dict(top_level_blocks(text))
+        added = {name for effect in country
+                 for name in re.findall(r"add_modifier = \{ name = (\S+) multiplier = var:", squash(bodies[effect]))}
+        self.assertEqual(added, {"resettlement_$PROG$_politics", "resettlement_declaration_violation"})
 
     def test_the_pulse_is_wired(self):
         text = read(RS_ON_ACTIONS)

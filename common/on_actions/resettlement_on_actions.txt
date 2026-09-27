@@ -1,6 +1,10 @@
 ﻿# Internal resettlement: the monthly country pulse (resettlement_effects.txt).
 # Runs only for a country with a Settlement Authority, or with readouts left to
 # clear on states that gave settlers, or political reactions still fading.
+# The state- and building-scoped modifiers are refreshed from the state pulse
+# below (resettlement_state_monthly), not from here: add_modifier's multiplier
+# resolves against ROOT (docs/guides/scripting_best_practices.md § "Resolves
+# Against ROOT"), and ROOT in the country pulse is the country.
 on_monthly_pulse_country = {
 	on_actions = {
 		resettlement_country_on_action
@@ -18,6 +22,30 @@ resettlement_country_on_action = {
 				}
 			}
 			resettlement_country_monthly = yes
+		}
+	}
+}
+
+# State scope (ROOT = the state). Only a state taking part: a Settlement
+# Authority, a source with a readout to refresh or clear, or destination
+# bonuses left by an Authority that has gone.
+on_monthly_pulse_state = {
+	on_actions = {
+		resettlement_state_on_action
+	}
+}
+
+resettlement_state_on_action = {
+	effect = {
+		if = {
+			limit = {
+				OR = {
+					has_building = building_resettlement_colony
+					has_variable = rs_recruits
+					has_variable = rs_bonus_scale
+				}
+			}
+			resettlement_state_monthly = yes
 		}
 	}
 }

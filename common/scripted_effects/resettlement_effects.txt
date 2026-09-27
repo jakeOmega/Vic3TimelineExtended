@@ -3,16 +3,25 @@
 # ============================================================================
 # Design: docs/superpowers/specs/2026-09-26-internal-resettlement-design.md §2.
 #
-# One country pulse does everything, in this order, so several destinations can
-# share a source within a month and every readout has exactly one refresh site:
+# One country pulse computes everything, in this order, so several
+# destinations can share a source within a month:
 #   1. zero every state's monthly recruit counter and the country's
 #      per-program month counters;
 #   2. an AI kept to voluntary programs is switched off coercive ones;
-#   3. each Settlement Authority closes (frontier full) or runs the walk;
-#   4. clear the destination bonuses of a state that lost its Authority, and
-#      refresh the source readouts;
-#   5. the political layer and the Declaration;
-#   6. roll events.
+#   3. each Settlement Authority closes (frontier full) or runs the walk,
+#      storing rs_arrived, rs_died and rs_bonus_scale on the destination and
+#      rs_recruits on each source;
+#   4. the political layer and the Declaration (country modifiers);
+#   5. roll events.
+#
+# The state- and building-scoped modifiers (the readouts and the destination
+# bonuses) are applied from the state pulse, resettlement_state_monthly, each
+# from its one refresh site. add_modifier's multiplier resolves against ROOT
+# (docs/guides/scripting_best_practices.md § "Resolves Against ROOT"): in the
+# country pulse ROOT is the country, so a multiplier read there would never
+# see the state's own variable. The state pulse may run before the country
+# pulse in a month; the readouts then show the month before, which is what
+# their "last month" labels say.
 #
 # Variables
 #   destination state   rs_programme (the code in the registry's PROGRAMMES),
@@ -20,8 +29,9 @@
 #                       rs_months_running, rs_last_source (a state),
 #                       rs_bonus_scale (destination-bonus multiplier; persists
 #                       while the bonuses can be on)
-#   Authority building  rs_arrivals, rs_deaths (readout multipliers; persist,
-#                       so the modifiers' multipliers never read 'none')
+#   Authority building  rs_arrived, rs_died (the state's, mirrored: readout
+#                       multipliers; persist, so the multipliers never read
+#                       'none')
 #   source state        rs_recruits (this month, every destination),
 #                       rs_taken_now (this destination's take, for unrest),
 #                       rs_death_carry (transit deaths not yet killed)
@@ -56,18 +66,6 @@ resettlement_country_monthly = {
 				resettlement_run_destination = yes
 			}
 		}
-	}
-	# A demolished Authority leaves its destination bonuses behind; clear them.
-	every_scope_state = {
-		limit = {
-			has_variable = rs_bonus_scale
-			NOT = { has_building = building_resettlement_colony }
-		}
-		resettlement_clear_destination_bonus = yes
-	}
-	every_scope_state = {
-		limit = { has_variable = rs_recruits }
-		resettlement_refresh_source_readout = yes
 	}
 	resettlement_refresh_politics = yes
 	resettlement_refresh_declaration = yes
@@ -361,8 +359,17 @@ resettlement_run_destination = {
 
 	resettlement_count_programme_month = yes
 	resettlement_land_pressure = yes
-	resettlement_refresh_destination_readout = yes
-	resettlement_refresh_destination_bonus = yes
+	# The destination bonuses' multiplier (§3, §5): this month's arrivals,
+	# full at resettlement_bonus_full_arrivals. The state pulse applies them
+	# (resettlement_refresh_destination_bonus).
+	set_variable = {
+		name = rs_bonus_scale
+		value = {
+			value = var:rs_arrived
+			divide = resettlement_bonus_full_arrivals
+			max = 1
+		}
+	}
 	# .MakeScope and .Var(...).GetValue are rejected/silent inside debug_log
 	# (docs/guides/scripting_best_practices.md § "debug_log Loc-String
 	# Templating Limitations"); read the numbers through script-value
@@ -435,41 +442,64 @@ resettlement_land_pressure = {
 	}
 }
 
-# State scope: a destination. One refresh site for the building's readouts.
+# ---- The state pulse: modifier refreshes -------------------------------------
+# State scope, ROOT = the state (resettlement_state_on_action). Every state- or
+# building-scoped add_modifier { multiplier = var:… } is applied here, reading
+# the variables the country pulse stored (see the header).
+resettlement_state_monthly = {
+	if = {
+		limit = { has_building = building_resettlement_colony }
+		# rs_bonus_scale is set by the destination's first walk, with
+		# rs_arrived and rs_died.
+		if = {
+			limit = { has_variable = rs_bonus_scale }
+			resettlement_refresh_destination_bonus = yes
+			resettlement_refresh_destination_readout = yes
+		}
+	}
+	# An Authority that is gone (demolished) leaves its bonuses behind.
+	else_if = {
+		limit = { has_variable = rs_bonus_scale }
+		resettlement_clear_destination_bonus = yes
+	}
+	if = {
+		limit = { has_variable = rs_recruits }
+		resettlement_refresh_source_readout = yes
+	}
+}
+
+# State scope: a destination, from the state pulse. One refresh site for the
+# building's readouts. The building mirrors the state's rs_arrived and rs_died
+# under the same names, so the multiplier is right whether the engine reads
+# it from ROOT (this state) or from the modifier's owner (the building).
 resettlement_refresh_destination_readout = {
+	save_scope_as = rs_readout_state
 	every_scope_building = {
 		limit = { is_building_type = building_resettlement_colony }
-		set_variable = { name = rs_arrivals value = scope:rs_destination.var:rs_arrived }
-		set_variable = { name = rs_deaths value = scope:rs_destination.var:rs_died }
+		set_variable = { name = rs_arrived value = scope:rs_readout_state.var:rs_arrived }
+		set_variable = { name = rs_died value = scope:rs_readout_state.var:rs_died }
 		remove_modifier = resettlement_arrivals
 		remove_modifier = resettlement_transit_deaths
 		if = {
-			limit = { var:rs_arrivals > 0 }
-			add_modifier = { name = resettlement_arrivals multiplier = var:rs_arrivals }
+			limit = { var:rs_arrived > 0 }
+			add_modifier = { name = resettlement_arrivals multiplier = var:rs_arrived }
 		}
 		if = {
-			limit = { var:rs_deaths > 0 }
-			add_modifier = { name = resettlement_transit_deaths multiplier = var:rs_deaths }
+			limit = { var:rs_died > 0 }
+			add_modifier = { name = resettlement_transit_deaths multiplier = var:rs_died }
 		}
 	}
 }
 
-# State scope: a destination, after the walk. One refresh site for the
+# State scope: a destination, from the state pulse. One refresh site for the
 # destination bonuses (§3, §5): the multiplicative effects of the running
 # program and settlement plan are not in the PMs, so a level-1 Authority or an
-# idle program buys little. They grow with this month's arrivals and are full
+# idle program buys little. They grow with the month's arrivals
+# (var:rs_bonus_scale, set by the country pulse after the walk) and are full
 # at resettlement_bonus_full_arrivals. var:rs_bonus_scale backs the
 # multiplier, so it is never removed while a bonus can be on
 # (resettlement_clear_destination_bonus removes the modifiers first).
 resettlement_refresh_destination_bonus = {
-	set_variable = {
-		name = rs_bonus_scale
-		value = {
-			value = var:rs_arrived
-			divide = resettlement_bonus_full_arrivals
-			max = 1
-		}
-	}
 	resettlement_remove_destination_bonuses = yes
 	if = {
 		limit = { var:rs_bonus_scale > 0 }
@@ -516,16 +546,18 @@ resettlement_remove_destination_bonuses = {
 	remove_modifier = resettlement_planned_towns_destination
 }
 
-# State scope: a state whose Authority closed or was demolished. The modifiers
-# go first, then the variable that backed their multiplier.
+# State scope: a state whose Authority closed (country pulse) or was
+# demolished (state pulse). Only removals, so either pulse may call it. The
+# modifiers go first, then the variable that backed their multiplier.
 resettlement_clear_destination_bonus = {
 	resettlement_remove_destination_bonuses = yes
 	remove_variable = rs_bonus_scale
 }
 
-# State scope: a state that gave settlers this month or last. One refresh
-# site. After a month with none, the readout and its variable go, so the
-# owner's pulse (which runs while any state has rs_recruits) can stop.
+# State scope: a state that gave settlers this month or last, from the state
+# pulse. One refresh site. After a month with none, the readout and its
+# variable go, so the owner's pulse (which runs while any state has
+# rs_recruits) can stop.
 resettlement_refresh_source_readout = {
 	if = {
 		limit = { var:rs_recruits > 0 }
