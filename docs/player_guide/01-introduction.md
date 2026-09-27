@@ -7,7 +7,7 @@ a set of systems that run alongside the base game: a banking cycle with monetary
 policy, a construction market, climate change, decolonization, nuclear weapons,
 a United Nations, a space race, cultural and covert competition between powers,
 and social movements. Most of these systems have their own journal entry, and
-most can be switched off when you set up a game.
+most can be switched off with a game rule.
 
 This guide explains what each system does and how to play it. It assumes you
 know the base game: pops, interest groups, laws, markets, construction and
@@ -54,14 +54,21 @@ the mod.
 ### Game rules
 
 The mod adds fifteen game rules to the game setup screen. Each one turns a
-system on or off, and a few offer a reduced version of the system. Rules are set
-when you start a campaign and can't be changed afterwards.
+system on or off, and a few offer a reduced version of the system. You choose
+them when you start a campaign, and outside Ironman you can change them later.
 
 Turning a system off hides its journal entry and stops its events, but the
 technologies, laws and buildings connected to it stay in the game and keep their
 ordinary effects. With the Banking System off, for example, the financial
 regulation laws still change Urban Center output, investment and innovation;
 only their effects on the banking cycle go.
+
+The mod is balanced with its default systems on, and switching one off removes
+its costs along with its benefits. A choice whose drawback lives in a disabled
+system loses that drawback: a financial regulation law that trades faster growth
+for a more volatile banking cycle is simply better with the Banking System off.
+Expect some laws, technologies and policies to become obvious picks when you
+turn a default system off.
 
 <!-- screenshot: the game setup screen with the mod's game rules listed -->
 
