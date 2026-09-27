@@ -48,30 +48,48 @@ un_may_table_now = {
 }
 
 # The AI's veto rule (un_vote_ai_cast): a permanent member vetoes a binding
-# resolution when its lean is at or below the veto line — lower after a
-# recent veto of its own, higher when a veto costs nothing (Moribund) — and
-# never against a resolution it pledged to carry. Deterministic: the noise
-# moves only the yes/no choice.
+# resolution when its lean without the pledge term is at or below the veto
+# line — lower after a recent veto of its own, higher when a veto costs nothing
+# (Moribund) — and never against a resolution it pledged to carry. The pledge
+# term is left out so that a pledge against (−100) never makes a veto the
+# member would not have cast, and never prevents one it would have (spec §4).
+# Deterministic: the noise moves only the yes/no choice.
 # Scope: the voter (= ROOT, un_vote.4), after un_lean_snapshot
 un_vote_ai_should_veto = {
 	is_un_permanent_member = yes
 	scope:un_resolution ?= { un_resolution_is_binding = yes }
 	NOT = { un_lobby_holds_pending_commitment = yes }
-	has_variable = un_lean_total
+	has_variable = un_lean_veto_basis
 	OR = {
 		AND = {
 			un_tier_is_moribund = yes
-			var:un_lean_total <= un_lean_veto_line_moribund
+			var:un_lean_veto_basis <= un_lean_veto_line_moribund
 		}
 		AND = {
 			NOT = { un_tier_is_moribund = yes }
 			has_modifier = un_veto_isolation_modifier
-			var:un_lean_total <= un_lean_veto_line_recent
+			var:un_lean_veto_basis <= un_lean_veto_line_recent
 		}
 		AND = {
 			NOT = { un_tier_is_moribund = yes }
 			NOT = { has_modifier = un_veto_isolation_modifier }
-			var:un_lean_total <= un_lean_veto_line
+			var:un_lean_veto_basis <= un_lean_veto_line
+		}
+	}
+}
+
+# Whether an AI member casts its ballot now (spec §1): its casting month
+# (un_vote_ai_draws) has come, or the last call has been made (un_vote.6, or
+# the monthly pulse from month 12), which catches a member that joined after
+# its month. Never before month 9 otherwise.
+# Scope: the AI member (= ROOT, un_vote.4), with scope:un_resolution saved
+un_vote_ai_cast_due = {
+	OR = {
+		scope:un_resolution ?= { has_variable = un_res_last_call }
+		AND = {
+			has_variable = un_vote_cast_month
+			var:un_vote_draw_res ?= scope:un_resolution
+			var:un_vote_cast_month <= un_res_months_now
 		}
 	}
 }

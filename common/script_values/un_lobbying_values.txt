@@ -1,0 +1,51 @@
+﻿# ============================================================================
+# UN VOTES — LATE BALLOTS, VISIBLE LEANS, LOBBYING
+# ============================================================================
+# docs/superpowers/specs/2026-09-27-un-vote-lobbying-design.md. The writers
+# are in common/scripted_effects/un_dossier_effects.txt (the ballot) and
+# common/scripted_effects/un_lobby_effects.txt (pledges and campaigns).
+# ============================================================================
+
+# ---- The ballot's timing -------------------------------------------------------
+
+# The session's month now, and the month after it. The casting month an AI
+# member draws is 9, 10 or 11 (un_vote_ai_draws); one drawn after the session
+# began is raised to next month at least.
+# Scope: any, with scope:un_resolution saved
+un_res_months_now = {
+	value = 0
+	scope:un_resolution ?= {
+		add = var:un_res_months
+	}
+}
+
+un_res_next_month = {
+	value = un_res_months_now
+	add = 1
+}
+
+# ---- The snapshot's derived readings --------------------------------------------
+# Read by un_lean_snapshot straight after it writes un_lean_total and
+# un_lean_pledge. Scope: the voter, with scope:un_resolution saved.
+
+# The lean as the other members read it: the true lean plus this member's
+# misreading for the resolution (−10, 0 or +10, fixed for the session). A human
+# member draws no misreading, and nobody reads a human's shown lean.
+un_lean_shown_value = {
+	value = var:un_lean_total
+	if = {
+		limit = {
+			var:un_vote_draw_res ?= scope:un_resolution
+			has_variable = un_lean_misread
+		}
+		add = var:un_lean_misread
+	}
+}
+
+# The lean the veto is decided on: the lean without the pledge term. A pledge
+# against (−100) never pushes a permanent member into a veto it would not have
+# cast, and a pledge for already rules the veto out (un_vote_ai_should_veto).
+un_lean_veto_basis_value = {
+	value = var:un_lean_total
+	subtract = var:un_lean_pledge
+}

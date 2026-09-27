@@ -113,11 +113,15 @@ un_resolution_open = {
 		limit = { has_global_variable = un_vote_reservation }
 		remove_global_variable = un_vote_reservation
 	}
-	# The ballot (redesign phase 3). Human members get un_vote.1 in thirty
-	# days and see their lean in the chamber at once (un_vote.4 writes it).
-	# The AI votes in script, by the same lean: un_vote.5 fires to the
-	# proposer in thirty days and sends every AI member its un_vote.4, with the
-	# monthly pulse as the fallback (un_resolutions_monthly_update).
+	# The ballot (redesign phase 3; late ballots,
+	# docs/superpowers/specs/2026-09-27-un-vote-lobbying-design.md). Human
+	# members get un_vote.1 in thirty days. Every member gets its un_vote.4 at
+	# once, and every month from then on (un_resolutions_monthly_update): a
+	# human member sees its own lean, term by term, and every member sees each
+	# AI member's lean as a band from the first day. The AI votes in script, by
+	# the same lean, at month 9, 10 or 11 (un_vote_ai_draws); the last call
+	# (un_vote.6) five days before the results catches any AI member still
+	# without a vote.
 	every_country = {
 		limit = {
 			je:je_united_nations ?= { has_modifier = un_member_modifier }
@@ -126,8 +130,8 @@ un_resolution_open = {
 		}
 		trigger_event = { id = un_vote.1 days = 30 }
 	}
-	un_vote_refresh_human_leans = yes
-	trigger_event = { id = un_vote.5 days = 30 }
+	un_vote_refresh_leans = yes
+	trigger_event = { id = un_vote.6 days = 360 }
 	trigger_event = { id = un_vote.2 days = 365 }
 }
 
@@ -368,7 +372,8 @@ un_resolution_cooldowns_tick = {
 #      un_vote.2 never fired (the proposer stopped existing or left the UN,
 #      which fails the event's trigger), so it lapses and frees the lock.
 #      Before containers that case locked the General Assembly for good.
-#   2. Free a lock that neither a resolution nor a reservation holds: saves
+#   2. The ballot, while the resolution votes (see the comment in the body).
+#   3. Free a lock that neither a resolution nor a reservation holds: saves
 #      from before containers, or a resolution reference that stopped resolving.
 un_resolutions_monthly_update = {
 	un_resolution_cooldowns_tick = yes
@@ -391,22 +396,44 @@ un_resolutions_monthly_update = {
 			un_resolution_archive = yes
 		}
 	}
-	# The ballot (redesign phase 3). While a resolution is voting: refresh the
-	# human members' lean snapshots, and send the AI its ballots if un_vote.5
-	# has not (its recipient, the proposer, is gone, or the resolution predates
-	# phase 3). Two months in, so the thirty-day event normally goes first.
+	# The ballot (redesign phase 3; late ballots). While a resolution is
+	# voting:
+	#   a. From month 12 the last call is made here too, for a resolution
+	#      opened before un_vote.6 existed or whose un_vote.6 never fired.
+	#   b. Every member gets its un_vote.4: its lean is written, and an AI
+	#      member whose casting month has come casts (un_vote_ai_cast_due).
+	#   c. A human member that chose to decide later is asked again at months 9
+	#      and 11 (un_vote.1 option D). Its trigger turns away one that has
+	#      voted since.
 	global_var:un_active_resolution ?= {
 		if = {
 			limit = { has_tag = un_res_voting }
 			save_scope_as = un_resolution
 			if = {
 				limit = {
-					NOT = { has_variable = un_res_ai_cast }
-					var:un_res_months >= 2
+					var:un_res_months >= 12
+					NOT = { has_variable = un_res_last_call }
 				}
-				un_vote_dispatch_ai_ballots = yes
+				set_variable = un_res_last_call
 			}
-			un_vote_refresh_human_leans = yes
+			un_vote_refresh_leans = yes
+			if = {
+				limit = {
+					has_variable_list = un_res_deferred
+					OR = {
+						var:un_res_months = 9
+						var:un_res_months = 11
+					}
+				}
+				every_in_list = {
+					variable = un_res_deferred
+					limit = {
+						exists = this
+						is_ai = no
+					}
+					trigger_event = { id = un_vote.1 }
+				}
+			}
 		}
 	}
 	if = {

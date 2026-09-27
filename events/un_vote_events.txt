@@ -9,10 +9,14 @@
 # from a proposer event (un_events) or a JE button, and every event here gets
 # it as scope:un_resolution.
 #
-# Phase 1: un_vote.1 fires to every other HUMAN member 30 days later; the AI
-#          votes in script by the itemised lean (un_vote.4, fired by un_vote.5
-#          at 30 days, redesign phase 3). Votes go into the resolution's
-#          un_res_yes / un_res_no lists.
+# Phase 1: un_vote.1 fires to every other HUMAN member 30 days later (and
+#          again at months 9 and 11 to a member that chose to decide later);
+#          the AI votes in script by the itemised lean, late and staggered: the
+#          hidden un_vote.4 reaches every member from the day the resolution
+#          opens and every month after, and an AI member casts in its own at
+#          month 9, 10 or 11, or at the last call (un_vote.6) five days before
+#          the results (docs/superpowers/specs/2026-09-27-un-vote-lobbying-design.md).
+#          Votes go into the resolution's un_res_yes / un_res_no lists.
 # Phase 2: un_vote.2 fires to the proposer 365 days after opening. Its
 #          immediate closes the vote; its option applies the outcome.
 # Phase 3: un_vote.3 notifies every other member, who comply or refuse.
@@ -369,6 +373,47 @@ un_vote.1 = {
 		# weights that used to sit here are the lean's terms now. Only a human
 		# member receives un_vote.1; the base below matters only for an event
 		# an AI received before the update.
+		ai_chance = { base = 0 }
+	}
+
+	# Option D: Decide later (spec §2). Casts nothing: the member goes on the
+	# resolution's un_res_deferred list, and un_resolutions_monthly_update
+	# sends this event again at month 9 and at month 11 — unless the member has
+	# voted by then, which this event's own trigger checks when it fires. The
+	# chamber's vote buttons stay open throughout. The second line says which
+	# reminders are still to come.
+	option = {
+		name = un_vote.1.later
+		trigger = { is_ai = no }
+
+		custom_tooltip = {
+			text = un_vote_decide_later_tt
+			scope:un_resolution ?= {
+				if = {
+					limit = {
+						NOT = {
+							AND = {
+								has_variable_list = un_res_deferred
+								is_target_in_variable_list = { name = un_res_deferred target = ROOT }
+							}
+						}
+					}
+					add_to_variable_list = { name = un_res_deferred target = ROOT }
+				}
+			}
+		}
+		if = {
+			limit = { scope:un_resolution ?= { var:un_res_months < 9 } }
+			custom_tooltip = un_vote_decide_later_both_tt
+		}
+		else_if = {
+			limit = { scope:un_resolution ?= { var:un_res_months < 11 } }
+			custom_tooltip = un_vote_decide_later_eleven_tt
+		}
+		else = {
+			custom_tooltip = un_vote_decide_later_none_tt
+		}
+
 		ai_chance = { base = 0 }
 	}
 }
@@ -1809,16 +1854,23 @@ un_vote.3 = {
 	}
 }
 
-# ---- The ballot in script (redesign phase 3) ----
-# docs/systems/un_redesign_design.md §6.2. The AI no longer answers un_vote.1:
-# it votes here, by the itemised lean (common/script_values/un_dossier_values.txt),
-# so the chamber's explanation of a vote is the rule that decided it.
+# ---- The ballot in script (redesign phase 3; late ballots 2026-09-27) ----
+# docs/systems/un_redesign_design.md §6.2 and
+# docs/superpowers/specs/2026-09-27-un-vote-lobbying-design.md §1. The AI never
+# answers un_vote.1: it votes here, by the itemised lean
+# (common/script_values/un_dossier_values.txt), so the chamber's explanation
+# of a vote is the rule that decided it.
 
-# One member's ballot. Hidden. Fired by un_vote_dispatch_ai_ballots to every AI
-# member (which then casts), and by un_vote_refresh_human_leans to every human
-# member (which only has its lean written, for the chamber). ROOT is the voter,
-# which the relations terms of the lean need.
-# Both senders save scope:un_resolution first. If it did not reach the event,
+# One member's lean, and an AI member's ballot when it is due. Hidden. Sent to
+# every member by un_vote_refresh_leans: the day the resolution opens, every
+# monthly pulse while it votes, and at the last call (un_vote.6). ROOT is the
+# voter, which the relations terms of the lean need.
+#   1. an AI member draws its casting month and misreading, once per
+#      resolution (un_vote_ai_draws);
+#   2. every member has its lean written (un_lean_snapshot);
+#   3. an AI member that may still vote casts, if its month has come or the
+#      last call has been made (un_vote_ai_cast_due).
+# The senders save scope:un_resolution first. If it did not reach the event,
 # the open resolution (global_var:un_active_resolution) stands in, so a lost
 # scope costs the chamber nothing and the AI still votes.
 un_vote.4 = {
@@ -1845,37 +1897,36 @@ un_vote.4 = {
 			var:un_res_proposer ?= { save_scope_as = un_vote_proposer }
 			var:un_res_target ?= { save_scope_as = un_vote_target }
 		}
+		if = {
+			limit = { is_ai = yes }
+			un_vote_ai_draws = yes
+		}
 		un_lean_snapshot = yes
 		if = {
 			limit = {
 				is_ai = yes
 				un_vote_can_cast_ballot = yes
+				un_vote_ai_cast_due = yes
 			}
 			un_vote_ai_cast = yes
 		}
 	}
 }
 
-# Thirty days after a resolution opens: send the AI members their ballots.
-# Hidden; fired to the proposer by un_resolution_open. If the proposer is gone
-# the monthly pulse sends them instead (un_resolutions_monthly_update). The
-# same stand-in as un_vote.4 if scope:un_resolution did not arrive.
-un_vote.5 = {
+# Before the late ballots this sent the AI members their ballots thirty days
+# after a resolution opened. un_resolution_open no longer queues it; an event
+# queued in a save from before the change still arrives, and now only
+# refreshes the leans, so no AI member votes early. Hidden.
+un_vote.5 = { # REVIEWED 2026-09-27: kept only for un_vote.5 events queued in saves from before the late ballots (it now refreshes leans); nothing queues it any more
 	type = country_event
 	hidden = yes
 
 	trigger = {
 		OR = {
-			scope:un_resolution ?= {
-				has_tag = un_res_voting
-				NOT = { has_variable = un_res_ai_cast }
-			}
+			scope:un_resolution ?= { has_tag = un_res_voting }
 			AND = {
 				NOT = { exists = scope:un_resolution }
-				global_var:un_active_resolution ?= {
-					has_tag = un_res_voting
-					NOT = { has_variable = un_res_ai_cast }
-				}
+				global_var:un_active_resolution ?= { has_tag = un_res_voting }
 			}
 		}
 	}
@@ -1885,6 +1936,46 @@ un_vote.5 = {
 			limit = { NOT = { exists = scope:un_resolution } }
 			global_var:un_active_resolution = { save_scope_as = un_resolution }
 		}
-		un_vote_dispatch_ai_ballots = yes
+		un_vote_refresh_leans = yes
+	}
+}
+
+# The last call (spec §1). Five days before the proposer reports back, every AI
+# member still without a vote casts, whatever month it drew: above all a
+# member that joined after its month came. Hidden; queued to the proposer by
+# un_resolution_open beside un_vote.2, so it fires whenever un_vote.2 can. The
+# ballots cannot be cast inside un_vote.2 itself: casting needs ROOT = the
+# voter (the lean's relations terms, un_vote_can_cast_ballot, the pledge
+# triggers), and un_vote.2 runs for the proposer. So this marks the resolution
+# and sends every member its un_vote.4, where each AI member casts for itself.
+# The monthly pulse sets the same mark from month 12 (a resolution opened
+# before the last call existed). The same stand-in as un_vote.4 if
+# scope:un_resolution did not arrive.
+un_vote.6 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		OR = {
+			scope:un_resolution ?= { has_tag = un_res_voting }
+			AND = {
+				NOT = { exists = scope:un_resolution }
+				global_var:un_active_resolution ?= { has_tag = un_res_voting }
+			}
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { NOT = { exists = scope:un_resolution } }
+			global_var:un_active_resolution = { save_scope_as = un_resolution }
+		}
+		scope:un_resolution = {
+			if = {
+				limit = { NOT = { has_variable = un_res_last_call } }
+				set_variable = un_res_last_call
+			}
+		}
+		un_vote_refresh_leans = yes
 	}
 }

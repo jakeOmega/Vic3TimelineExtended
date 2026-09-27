@@ -5153,6 +5153,7 @@
  un_vote.1.a_target:0 "We accept the resolution."
  un_vote.1.b:0 "We vote against."
  un_vote.1.b_target:0 "We refuse the resolution."
+ un_vote.1.later:0 "We will decide later."
  un_vote.1.d:0 "A resolution has been proposed to the General Assembly. All member states are called upon to cast their vote."
  un_vote.1.d_aid_request:0 "[SCOPE.sCountry('un_vote_proposer').GetName] has brought a request for international humanitarian assistance before the General Assembly. The country faces severe hardship and asks the international community for coordinated relief. A vote in favor commits member nations to provide aid and resources."
  un_vote.1.d_climate:0 "The General Assembly has received a proposal for a binding Climate Accord from [SCOPE.sCountry('un_vote_proposer').GetName], requiring member states to commit to specific emissions reduction targets. A vote in favor commits our country to binding limits on industrial [concept_pollution_system]."

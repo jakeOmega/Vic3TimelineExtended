@@ -11,10 +11,15 @@
 #   un_dos_war_logged (country)   un_dossier_monthly_update (a war already
 #                                 recorded, so a long war is recorded once)
 #   un_lean_* (country)           un_lean_snapshot, in un_vote.4 only
+#   un_vote_draw_res, un_vote_cast_month, un_lean_misread (country)
+#                                 un_vote_ai_draws, in un_vote.4: an AI member's
+#                                 casting month and misreading, once per resolution
 #   un_res_why_* (resolution)     the reason tallies, from un_resolution_record_vote
 #                                 and un_resolution_record_veto
 #   un_res_case (resolution)      un_resolution_open: the target's case when tabled
-#   un_res_ai_cast (resolution)   un_vote_dispatch_ai_ballots: the AI has voted
+#   un_res_last_call (resolution) un_vote.6, or the monthly pulse from month 12:
+#                                 every AI member still without a vote casts now
+#   un_res_ai_cast (resolution)   legacy: written before the late ballots; inert
 #   un_recess_months (global)     un_resolution_archive sets it,
 #                                 un_recess_monthly_update counts it down
 #
@@ -155,13 +160,50 @@ un_lean_snapshot = {
 	set_variable = { name = un_lean_burden value = un_lean_burden }
 	set_variable = { name = un_lean_interests value = un_lean_interests }
 	set_variable = { name = un_lean_total value = un_vote_lean }
+	# Derived from the two lines above (un_lobbying_values.txt): the lean the
+	# other members read, misreading included, and the lean the veto is
+	# decided on, without the pledge.
+	set_variable = { name = un_lean_shown value = un_lean_shown_value }
+	set_variable = { name = un_lean_veto_basis value = un_lean_veto_basis_value }
+}
+
+# An AI member's casting month and misreading on scope:un_resolution, drawn
+# once per resolution (docs/superpowers/specs/2026-09-27-un-vote-lobbying-design.md
+# §1). It votes at the monthly pulse of its month, by the lean it has then; the
+# chamber shows the other members its lean plus the misreading, as a band.
+# Drawn at its first un_vote.4 of the session: on the day the resolution opens
+# for a member at that time, later for a member that joins mid-session or a
+# resolution already open when the save was loaded — which then votes no
+# earlier than next month.
+# Scope: the AI member (= ROOT, un_vote.4), with scope:un_resolution saved
+un_vote_ai_draws = {
+	if = {
+		limit = { NOT = { var:un_vote_draw_res ?= scope:un_resolution } }
+		set_variable = { name = un_vote_draw_res value = scope:un_resolution }
+		random_list = {
+			1 = { set_variable = { name = un_vote_cast_month value = 9 } }
+			1 = { set_variable = { name = un_vote_cast_month value = 10 } }
+			1 = { set_variable = { name = un_vote_cast_month value = 11 } }
+		}
+		random_list = {
+			1 = { set_variable = { name = un_lean_misread value = -10 } }
+			1 = { set_variable = { name = un_lean_misread value = 0 } }
+			1 = { set_variable = { name = un_lean_misread value = 10 } }
+		}
+		if = {
+			limit = { var:un_vote_cast_month < un_res_next_month }
+			set_variable = { name = un_vote_cast_month value = un_res_next_month }
+		}
+	}
 }
 
 # The AI's ballot: the lean, plus noise, decides. A permanent member vetoes a
-# binding resolution when its lean (without noise) is at or below the veto
-# line; otherwise it votes yes when lean + noise > 0. The same three effects a
-# human's ballot runs (un_vote_cast_effects.txt) record the vote, so the tally,
-# lobbying settlement and IG reactions are identical.
+# binding resolution when its lean without the pledge term (and without noise)
+# is at or below the veto line (un_vote_ai_should_veto); otherwise it votes yes
+# when lean + noise > 0. The same three effects a human's ballot runs
+# (un_vote_cast_effects.txt) record the vote, so the tally, lobbying
+# settlement and IG reactions are identical. Cast from un_vote.4 at the
+# member's casting month (un_vote_ai_cast_due), never earlier.
 # Scope: the voter (= ROOT), after un_lean_snapshot, with the same saved scopes
 un_vote_ai_cast = {
 	set_variable = { name = un_lean_roll value = var:un_lean_total }
@@ -186,36 +228,16 @@ un_vote_ai_cast = {
 	remove_variable = un_lean_roll
 }
 
-# Send every AI member its ballot (un_vote.4) and mark the resolution so it is
-# sent once. From un_vote.5 thirty days after the resolution opens, with the
-# global monthly pulse as the fallback if un_vote.5 never fires (its recipient,
-# the proposer, is gone).
+# Send every member its un_vote.4: a human member has its lean written for the
+# chamber; an AI member draws its timing, has its lean written, and casts if
+# its month has come (or the last call has been made). From the day the
+# resolution opens, every monthly pulse while it votes, and the last call
+# (un_vote.6). Only while a resolution is voting, so the fan-out is at most
+# a year of monthly events per resolution.
 # Scope: any, with scope:un_resolution saved
-un_vote_dispatch_ai_ballots = {
-	scope:un_resolution = {
-		if = {
-			limit = { NOT = { has_variable = un_res_ai_cast } }
-			set_variable = un_res_ai_cast
-		}
-	}
+un_vote_refresh_leans = {
 	every_country = {
-		limit = {
-			is_ai = yes
-			je:je_united_nations ?= { has_modifier = un_member_modifier }
-		}
-		trigger_event = { id = un_vote.4 }
-	}
-}
-
-# Refresh the human members' lean snapshots, so the chamber shows each human
-# member how the Assembly reads its position on the resolution in session.
-# Scope: any, with scope:un_resolution saved
-un_vote_refresh_human_leans = {
-	every_country = {
-		limit = {
-			is_ai = no
-			je:je_united_nations ?= { has_modifier = un_member_modifier }
-		}
+		limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 		trigger_event = { id = un_vote.4 }
 	}
 }
