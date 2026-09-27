@@ -32,7 +32,7 @@
     date: date,
   )
   set text(font: "Libertinus Serif", size: 10.5pt, lang: "en", region: "gb", hyphenate: true)
-  set par(justify: true, leading: 0.62em, spacing: 0.95em)
+  set par(justify: true, leading: 0.62em, spacing: 1.15em)
   show raw: set text(font: "DejaVu Sans Mono", size: 0.85em)
   show link: set text(fill: accent)
 
@@ -87,33 +87,28 @@
     if parts.len() <= 2 { numbering("1.1", ..parts) }
   })
   show heading: set text(fill: ink)
-  show heading: set block(sticky: true)
+  // Each heading is a sticky block, so it never sits alone at the foot of a page.
   show heading.where(level: 1): it => {
     pagebreak(weak: true)
     v(2.2cm)
-    if it.numbering != none {
-      text(size: 11pt, fill: accent, tracking: 0.12em)[CHAPTER #counter(heading).display("1")]
-      v(0.1em)
-    }
-    text(size: 24pt, weight: "bold")[#it.body]
-    v(0.3em)
-    line(length: 100%, stroke: 0.8pt + accent)
-    v(1.2em)
+    block(sticky: true, below: 1.2em)[
+      #if it.numbering != none {
+        text(size: 11pt, fill: accent, tracking: 0.12em)[CHAPTER #counter(heading).display("1")]
+        v(0.1em)
+      }
+      #text(size: 24pt, weight: "bold")[#it.body]
+      #v(0.3em)
+      #line(length: 100%, stroke: 0.8pt + accent)
+    ]
   }
-  show heading.where(level: 2): it => {
-    v(0.9em)
-    text(size: 14.5pt, weight: "bold")[#it]
-    v(0.25em)
-  }
-  show heading.where(level: 3): it => {
-    v(0.6em)
-    text(size: 12pt, weight: "bold")[#it.body]
-    v(0.15em)
-  }
-  show heading.where(level: 4): it => {
-    v(0.4em)
-    text(size: 10.5pt, weight: "bold", style: "italic")[#it.body]
-  }
+  show heading.where(level: 2): it => block(sticky: true, above: 1.7em, below: 0.8em)[
+    #set text(size: 14.5pt, weight: "bold")
+    #if it.numbering != none [#counter(heading).display(it.numbering)#h(0.5em)]#it.body
+  ]
+  show heading.where(level: 3): it => block(sticky: true, above: 1.4em, below: 0.7em,
+    text(size: 12pt, weight: "bold", it.body))
+  show heading.where(level: 4): it => block(sticky: true, above: 1.1em, below: 0.6em,
+    text(size: 10.5pt, weight: "bold", style: "italic", it.body))
 
   // Tables: Pandoc wraps each one in a figure, which would otherwise refuse to
   // break across pages.
@@ -125,7 +120,9 @@
     fill: (x, y) => if y == 0 { tint },
   )
   show table: set text(size: 9.5pt)
-  show table: set par(justify: false)
+  show table: set par(justify: false, spacing: 0.7em)
+  // Pandoc centres each table; keep the cells themselves left-aligned.
+  show table: set align(left)
   show table.cell.where(y: 0): set text(weight: "bold", fill: ink)
 
   // Screenshots and other images.

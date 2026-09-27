@@ -166,6 +166,94 @@ def combined_markdown(guide_dir: Path = GUIDE_DIR) -> str:
     return "\n\n".join(part.strip("\n") for part in parts) + "\n"
 
 
+_TABLE_SEPARATOR = re.compile(r"^\s*\|?\s*:?-{3,}:?\s*(?:\|\s*:?-{3,}:?\s*)*\|?\s*$")
+_TYPST_TABLE = re.compile(r"(#table\(\s*columns: )(\d+)(,)")
+# A column whose longest cell is at most this many characters is sized to its
+# content; longer ones share the remaining width in proportion to their text.
+NARROW_COLUMN_CHARS = 30
+
+
+def _split_row(line: str) -> list[str]:
+    line = line.strip()
+    if line.startswith("|"):
+        line = line[1:]
+    if line.endswith("|") and not line.endswith("\\|"):
+        line = line[:-1]
+    return [cell.strip() for cell in re.split(r"(?<!\\)\|", line)]
+
+
+def markdown_tables(markdown: str) -> list[list[list[str]]]:
+    """Every pipe table in document order, as rows of cells (header row first)."""
+    lines = markdown.splitlines()
+    tables: list[list[list[str]]] = []
+    in_fence = False
+    i = 0
+    while i < len(lines):
+        line = lines[i]
+        if _FENCE.match(line):
+            in_fence = not in_fence
+        elif (not in_fence and line.lstrip().startswith("|") and i + 1 < len(lines)
+              and _TABLE_SEPARATOR.match(lines[i + 1])):
+            rows = [_split_row(line)]
+            i += 2
+            while i < len(lines) and lines[i].lstrip().startswith("|"):
+                rows.append(_split_row(lines[i]))
+                i += 1
+            tables.append(rows)
+            continue
+        i += 1
+    return tables
+
+
+def column_spec(rows: list[list[str]]) -> str | None:
+    """Typst ``columns:`` value for a table, or None to leave every column auto.
+
+    Typst's auto columns squeeze a long-text column as hard as a short one, so a
+    table of rule names and paragraphs of explanation comes out as four equal
+    slivers. Short columns stay ``auto``; long ones share the rest of the width
+    by their mean text length.
+    """
+    width = len(rows[0])
+    lengths: list[list[int]] = [[] for _ in range(width)]
+    for row in rows:
+        for index, cell in enumerate(row[:width]):
+            lengths[index].append(len(_plain_heading_text(cell)))
+    specs = []
+    for column in lengths:
+        if max(column, default=0) <= NARROW_COLUMN_CHARS:
+            specs.append("auto")
+        else:
+            # Damped, so a column of short phrases isn't starved next to one of
+            # paragraphs: mean length 25 vs 100 gets 1 : 2.8 rather than 1 : 4.
+            mean = sum(column) / len(column)
+            specs.append(str(max(1, round(10 * mean ** 0.75))) + "fr")
+    if all(spec == "auto" for spec in specs):
+        return None
+    return "(" + ", ".join(specs) + ")"
+
+
+def apply_column_widths(typst_body: str, markdown: str) -> str:
+    """Replace pandoc's all-auto ``columns: N`` with widths from :func:`column_spec`."""
+    tables = markdown_tables(markdown)
+    matches = list(_TYPST_TABLE.finditer(typst_body))
+    if len(matches) != len(tables) or any(
+        int(m.group(2)) != len(t[0]) for m, t in zip(matches, tables)
+    ):
+        print(
+            "warning: found " + str(len(tables)) + " Markdown tables but " + str(len(matches))
+            + " Typst tables; leaving column widths to Typst",
+            file=sys.stderr,
+        )
+        return typst_body
+    specs = iter([column_spec(t) for t in tables])
+
+    def repl(match: re.Match) -> str:
+        spec = next(specs)
+        return match.group(0) if spec is None else match.group(1) + spec + match.group(3)
+
+    return _TYPST_TABLE.sub(repl, typst_body)
+
+
 def read_metadata(path: Path = METADATA_PATH) -> dict:
     return json.loads(path.read_text(encoding="utf-8-sig"))
 
@@ -270,7 +358,8 @@ def build(output: Path, keep_typst: Path | None = None, guide_dir: Path = GUIDE_
         )
     fingerprint = source_fingerprint(guide_dir)
     edition = edition_date(guide_dir)
-    body = markdown_to_typst(combined_markdown(guide_dir), find_pandoc())
+    markdown = combined_markdown(guide_dir)
+    body = apply_column_widths(markdown_to_typst(markdown, find_pandoc()), markdown)
     document = typst_document(
         body, metadata=read_metadata(), edition=edition, fingerprint=fingerprint
     )

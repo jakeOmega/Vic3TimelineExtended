@@ -1,7 +1,8 @@
 """Tests for the player guide tooling.
 
 Covers the parts of ``scripts/build_player_guide.py`` that need neither pandoc
-nor Typst (anchors, cross-chapter links, the source fingerprint and ``--check``)
+nor Typst (anchors, cross-chapter links, table column widths, the source
+fingerprint and ``--check``)
 and the rules of ``scripts/analysis/check_player_guide_style.py``.
 """
 
@@ -65,6 +66,35 @@ class CrossLinkTests(unittest.TestCase):
     def test_external_and_local_links_untouched(self):
         text = "[a](https://example.com/x.md#y) [b](#local) [c](images/pic.png)"
         self.assertEqual(guide.rewrite_cross_links(text, {}), text)
+
+
+class TableWidthTests(unittest.TestCase):
+    MARKDOWN = (
+        "# T\n\n| Rule | Default | What it does |\n|---|---|---|\n"
+        "| Banking | On | " + "A long explanation of the rule. " * 4 + "|\n"
+        "| Climate | Off | Short. |\n\n"
+        "```\n| not | a table |\n|---|---|\n```\n\n"
+        "| A | B |\n|---|---|\n| x | y |\n"
+    )
+
+    def test_finds_pipe_tables_outside_code_fences(self):
+        tables = guide.markdown_tables(self.MARKDOWN)
+        self.assertEqual([len(t) for t in tables], [3, 2])
+        self.assertEqual(tables[0][0], ["Rule", "Default", "What it does"])
+
+    def test_long_columns_share_width_and_short_ones_stay_auto(self):
+        wide, narrow = guide.markdown_tables(self.MARKDOWN)
+        spec = guide.column_spec(wide)
+        self.assertRegex(spec, r"^\(auto, auto, \d+fr\)$")
+        self.assertIsNone(guide.column_spec(narrow))
+
+    def test_widths_applied_in_order_and_skipped_on_mismatch(self):
+        body = "#table(\n  columns: 3,\n)\n#table(\n  columns: 2,\n)\n"
+        out = guide.apply_column_widths(body, self.MARKDOWN)
+        self.assertIn("columns: (auto, auto,", out)
+        self.assertIn("columns: 2,", out)
+        self.assertEqual(guide.apply_column_widths("#table(\n  columns: 3,\n)\n", self.MARKDOWN),
+                         "#table(\n  columns: 3,\n)\n")
 
 
 class FingerprintTests(GuideDirTestCase):
