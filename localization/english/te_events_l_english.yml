@@ -4800,6 +4800,7 @@
 # UN_EVENTS
 #
  un_events.1.a:0 "Sign the Charter. We believe in this vision."
+ un_events.1.a_pending_tt:0 "We become a founding member of the United Nations. Our membership takes effect when our United Nations [concept_journal_entry] opens."
  un_events.1.b:0 "We shall observe, but not yet commit."
  un_events.1.c:0 "This undermines our sovereignty."
  un_events.1.d:0 "The United Nations has been founded, and [ROOT.GetCountry.GetName] has been invited to sign its charter as a founding member. Membership promises a seat at the table of global governance, but carries [Concept('concept_obligation', 'obligations')]: international courts, collective security, and the subordination of national interests to the common good."
