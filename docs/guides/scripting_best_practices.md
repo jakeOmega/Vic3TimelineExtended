@@ -1128,6 +1128,10 @@ Symptom: the action works when the player takes it (so `possible` passes and the
 
 Fix pattern: drive the AI path from a pulse on-action (e.g. `on_yearly_pulse_country`) gated `is_ai = yes`, reusing the *same* eligibility triggers as the action's `possible` block, and perform the effect (`annex`, etc.) directly. The player keeps the diplomatic action; the `is_ai` split is forced by the engine limitation, not a design choice. Notify third parties **before** the annex (saved scopes propagate to events fired on observers; the annexed country's name still resolves for the tick) — the engine's `should_notify_third_parties` only fires for the actual player action, not for an on-action `annex`. See `te_ai_decentralized_absorption_effect` + `irredentism.9`.
 
+## Write `NOR` or `NAND`, Never a Multi-Child `NOT`
+
+What `NOT = { A B }` means is unsettled evidence-wise. Vanilla's commented uses read it as NAND, not (A and B): `ideology_radical`'s "Invalid for pre-ACW USA whilst Jacksonian Democrats are relevant" and "Monarchs cannot be republicans" only make sense that way. But `00_devout.txt:684` lists two laws of one group, which reads as NOR and is vacuous as NAND. The engine doc says only "negates content of trigger". Write `NOR = { }` for "none of these" and `NAND = { }` for "not all of these". Both are explicit and mean the same under either reading. PR #507's custom-religion trait gate (`NOT` over five traits, now `NOR`) carries an in-game check that settles it: if the old gate let an IG hold two traits of one level, multi-child `NOT` is NAND.
+
 ## Building Group Trigger Name
 
 - The trigger to check a building's group is `is_building_group = bg_X`, NOT `building_group = bg_X`.
