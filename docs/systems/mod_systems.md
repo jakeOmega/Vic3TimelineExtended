@@ -781,14 +781,15 @@ Per tracked country: 120 containers, each with 3 bookkeeping variables plus one 
 
 ## Colonial Collapse (`colonial_collapse_effect`)
 
-- **Purpose:** After decolonization tech spreads, tiny AI countries (remnants of colonial breakups) are absorbed by culturally similar neighbors or reverted to uncolonized land.
-- **Location:** `common/scripted_effects/colonial_collapse_effects.txt`, triggered by `colonial_collapse_on_action` in `common/on_actions/extra_on_actions.txt` (wired to `on_yearly_pulse_country`).
-- **Criteria for collapse:** Non-player, non-decentralized, not a subject, single-state, pop < 100k, no decolonization tech, not in a diplomatic play.
+- **Purpose:** Once the decolonization era has begun, tiny AI countries (remnants of colonial breakups) are absorbed by culturally similar neighbors or reverted to uncolonized land.
+- **Location:** `common/scripted_effects/colonial_collapse_effects.txt`, triggered by `colonial_collapse_on_action` in `common/on_actions/extra_on_actions.txt` (wired to `on_yearly_pulse_country`). Each country tests itself on its own yearly pulse.
+- **Gates:** the `decolonization_enabled` game rule, and some country in the world has researched `decolonization` (the collapsing country need not have it).
+- **Criteria for collapse:** non-player, alive, not decentralized, not a subject, no civil war at `civil_war_progress >= 0.75`, not in a diplomatic play or a war, and tiny and poor on a sliding scale: population under 100k with average SoL under 6, 200k and 5, 300k and 4, 500k and 3, or 1M and 2. A small, poor colony freed by the Colonial Empire JE can meet this the year after it forms; that is the system's target.
 - **Resolution order:**
-  1. Find culturally similar neighbor → **annex** into that neighbor.
-  2. If no cultural match, find any neighbor → **annex**.
-  3. If no neighbors → **`set_country_type = decentralized`** (revert to uncolonized).
+  1. A neighbour of its most populous state whose owner shares a heritage trait group with it → that owner **annexes** it.
+  2. Otherwise → **`set_country_type = decentralized`** (revert to uncolonized).
 - **Notifications:** Countries in same strategic region AND great powers receive alerts.
+- **History:** until 2026-09 the limit held `any_civil_war = { always = no }` (always false), so the system never ran.
 
 ## Treaty Articles with Entity Selection
 

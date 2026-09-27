@@ -6,12 +6,22 @@
 # Fired from colonial_collapse_on_action (on_yearly_pulse_country) — each
 # country runs the limit block against itself on its own yearly pulse and
 # self-collapses if it matches the tiny-and-poor + neutral-context criteria.
+#
+# Gates: the decolonization game rule, and the decolonization era — some
+# country in the world has researched the decolonization technology (the
+# collapsing country need not have it). The world check is last in the limit,
+# so it only runs for the few countries that pass the cheap filters above it.
+#
+# Until 2026-09 the limit also held `any_civil_war = { always = no }`, meant as
+# "no civil war" (db166830, "colonial collapse checks tightened"). An any_*
+# iterator whose body is `always = no` is false for every country, so the
+# effect never ran; the civil-war test now uses vanilla's idiom (00_autocracy.txt).
 
 colonial_collapse_effect = {
-	# Gate: only run if at least one country in the world has decolonization tech
-	# and this country IS one of those (so only one pulse drives the check)
 	if = {
 		limit = {
+			has_game_rule = decolonization_enabled
+
 			# Must be alive and not player-controlled
 			is_country_alive = yes
 			is_player = no
@@ -22,8 +32,11 @@ colonial_collapse_effect = {
 			# Not a subject (puppet states are managed by overlords)
 			is_subject = no
 
-			any_civil_war = {
-				always = no
+			# No civil war about to break out
+			NOT = {
+				any_civil_war = {
+					civil_war_progress >= 0.75
+				}
 			}
 
 			# Population threshold: very small, poor countries collapse
@@ -56,6 +69,11 @@ colonial_collapse_effect = {
 				is_diplomatic_play_undecided_participant = yes
 			}
 			NOT = { is_at_war = yes }
+
+			# The decolonization era has begun somewhere in the world
+			any_country = {
+				has_technology_researched = decolonization
+			}
 		}
 
 		save_scope_as = collapsing_country
