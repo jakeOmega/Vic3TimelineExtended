@@ -1,8 +1,9 @@
 ﻿# Treaty Article Scripted Effects
 
 # Intelligence Sharing Defense Shield
-# Gives the country with lower covert defense a share of the difference
-# between its base defense and its strongest intel-sharing partner's base defense.
+# Gives the country with lower covert defense half the difference between its
+# base defense and its strongest intel-sharing partner's base defense, spread
+# evenly over the three defense types (a sixth of the gap on each).
 #
 # IMPORTANT: Modifier values are NOT recalculated within a single effect block.
 # remove_modifier / add_modifier changes only take effect after the block completes.
@@ -62,12 +63,15 @@ update_intel_sharing_defense = {
 							remove_variable = _p_shield
 						}
 
-						# boost = (partner_base - own_base) * 0.5, min 0. The floor is
+						# boost = (partner_base - own_base) * 0.5 / 3, min 0: the modifier adds the
+						# boost to each of the three defense types, so dividing by 3 makes the total
+						# gain half the gap (owner decision, PR #505). The floor is
 						# _best_boost's starting 0: a candidate must beat it (strict >)
 						# to count, so a partner weaker than us never lowers the boost.
 						set_variable = { name = _cand value = var:_p_def }
 						change_variable = { name = _cand subtract = var:_own_def }
 						change_variable = { name = _cand multiply = 0.5 }
+						change_variable = { name = _cand divide = 3 }
 
 						if = {
 							limit = { var:_cand > var:_best_boost }
@@ -97,6 +101,7 @@ update_intel_sharing_defense = {
 						set_variable = { name = _cand value = var:_p_def }
 						change_variable = { name = _cand subtract = var:_own_def }
 						change_variable = { name = _cand multiply = 0.5 }
+						change_variable = { name = _cand divide = 3 }
 
 						if = {
 							limit = { var:_cand > var:_best_boost }
