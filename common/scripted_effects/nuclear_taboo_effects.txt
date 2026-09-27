@@ -211,6 +211,22 @@ nd_taboo_note_use = {
 	}
 }
 
+# Console only (te_debug_nuclear.3). Births the taboo if it is not yet, then
+# sets the score and its band. Scope: any.
+nd_taboo_debug_set = {
+	nd_taboo_birth = yes
+	set_global_variable = { name = nd_taboo value = $VALUE$ }
+	set_global_variable = { name = nd_taboo_band value = nd_taboo_band_value }
+}
+
+# Console only: ten more years without use.
+nd_taboo_debug_age_clock = {
+	if = {
+		limit = { has_global_variable = nd_taboo }
+		change_global_variable = { name = nd_taboo_quiet_years add = 10 }
+	}
+}
+
 # ----------------------------------------------------------------------------
 # EXITS (spec §5) — country scope, ROOT = the country
 # ----------------------------------------------------------------------------

@@ -2583,7 +2583,6 @@
  un_withdrawal_penalty_modifier_desc:0 "Having withdrawn from the United Nations, this country faces a temporary reduction in diplomatic reputation and [concept_prestige]."
  united_nations:0 "United Nations"
  use_one_nuke_desc:0 "Use one nuclear weapon from our stockpile."
- nuclear_tactical_strike_installations_tt:0 "Each naval fortification and military base in the state loses half its levels."
  veteran_advisory_modifier:0 "Veteran Advisory Board"
  veteran_advisory_modifier_desc:0 "Experienced veterans advising on military policy have improved our military research capabilities."
  veteran_mental_health_modifier_desc:0 "Dedicated mental health services for veterans have reduced social disruption from returning soldiers."

@@ -2454,6 +2454,8 @@ Per vanilla `journal_entries.md`: a JE auto-activates "when both this and is_sho
 
 **Widening an entry's gate breaks every `has_journal_entry = X` used as "has system X".** When `je_nuclear_program` began to activate for armed and crisis countries as well as for programmes, five such tests (UN non-proliferation, standing sanctions case, vote leans, an event desc, the proliferation spur) started to count a non-nuclear crisis target as a nuclear-threshold state. Name the condition as a scripted trigger (`nuclear_program_has_programme`) and have both the entry and every outside reader ask it; `git grep "has_journal_entry = X"` before changing any `possible`.
 
+**Making an entry active for every country turns its per-country pulse sweeps quadratic.** A pulse effect that iterates every country (`ordered_country`, `every_country`) and runs from each active country's pulse costs n² once n is every country. `update_nuclear_powers_ranking` ran from `je_nuclear_program`'s weekly pulse while ~10 countries held the entry. When the nuclear taboo made the entry every country's (2026-09-26), it moved to the world's monthly step, a global `on_monthly_pulse`. Before widening an entry's `possible`, move every world-level sweep in its pulses to a global pulse, and check that each remaining pulse effect is a cheap no-op for the new members.
+
 ### JE Lifecycle: `invalid` + `on_invalid` Cleanup
 
 A JE with only an `invalid` trigger will disappear when the trigger fires, but **country-scoped state (variables, modifiers applied outside the JE scope) is not cleaned up**. Always pair `invalid` with `on_invalid` when the JE sets country variables or applies country-scoped modifiers that should be removed on invalidation.
