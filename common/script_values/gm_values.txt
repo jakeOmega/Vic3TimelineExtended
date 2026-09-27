@@ -287,3 +287,314 @@ gm_notice_count = {
 		}
 	}
 }
+
+# ---- Journal entry displays (country scope) ------------------------------------
+# Every read guarded: the widget renders from the month the entry activates,
+# possibly before the first refresh has written these (gui gotcha #14).
+gm_display_prestige = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_standing }
+		value = var:gm_s_standing
+		multiply = gm_step_prestige
+	}
+}
+
+gm_display_g_standing = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_standing }
+		value = var:gm_g_standing
+	}
+}
+
+gm_display_n_standing = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_standing }
+		value = var:gm_n_standing
+	}
+}
+
+gm_display_legitimacy = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_regime }
+		value = var:gm_s_regime
+		multiply = gm_step_legitimacy
+	}
+}
+
+gm_display_g_regime = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_regime }
+		value = var:gm_g_regime
+	}
+}
+
+gm_display_n_regime = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_regime }
+		value = var:gm_n_regime
+	}
+}
+
+gm_display_culture = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_culture }
+		value = var:gm_s_culture
+		multiply = gm_step_culture
+	}
+	max = 5
+}
+
+gm_display_n_culture = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_culture }
+		value = var:gm_n_culture
+	}
+}
+
+gm_display_leader = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_leader }
+		value = var:gm_s_leader
+		multiply = gm_step_national_leader
+	}
+}
+
+gm_display_g_leader = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_leader }
+		value = var:gm_g_leader
+	}
+}
+
+gm_display_n_leader = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_leader }
+		value = var:gm_n_leader
+	}
+}
+
+gm_display_religious = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_religious }
+		value = var:gm_s_religious
+		multiply = gm_step_national_religious
+	}
+}
+
+gm_display_g_religious = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_religious }
+		value = var:gm_g_religious
+	}
+}
+
+gm_display_n_religious = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_religious }
+		value = var:gm_n_religious
+	}
+}
+
+gm_display_war_memorial = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_war_memorial }
+		value = var:gm_s_war_memorial
+		multiply = gm_step_national_war_memorial
+	}
+}
+
+gm_display_g_war_memorial = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_war_memorial }
+		value = var:gm_g_war_memorial
+	}
+}
+
+gm_display_n_war_memorial = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_war_memorial }
+		value = var:gm_n_war_memorial
+	}
+}
+
+gm_display_artistic = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_artistic }
+		value = var:gm_s_artistic
+		multiply = gm_step_national_artistic
+	}
+}
+
+gm_display_g_artistic = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_artistic }
+		value = var:gm_g_artistic
+	}
+}
+
+gm_display_n_artistic = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_artistic }
+		value = var:gm_n_artistic
+	}
+}
+
+gm_display_scientific = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_scientific }
+		value = var:gm_s_scientific
+		multiply = gm_step_national_scientific
+	}
+}
+
+gm_display_g_scientific = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_scientific }
+		value = var:gm_g_scientific
+	}
+}
+
+gm_display_n_scientific = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_scientific }
+		value = var:gm_n_scientific
+	}
+}
+
+gm_display_industrial = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_industrial }
+		value = var:gm_s_industrial
+		multiply = gm_step_national_industrial
+	}
+}
+
+gm_display_g_industrial = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_industrial }
+		value = var:gm_g_industrial
+	}
+}
+
+gm_display_n_industrial = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_industrial }
+		value = var:gm_n_industrial
+	}
+}
+
+gm_display_ig_armed_forces = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_ig_armed_forces }
+		value = var:gm_s_ig_armed_forces
+		multiply = gm_step_ig
+	}
+}
+
+gm_display_ig_devout = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_ig_devout }
+		value = var:gm_s_ig_devout
+		multiply = gm_step_ig
+	}
+}
+
+gm_display_ig_industrialists = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_ig_industrialists }
+		value = var:gm_s_ig_industrialists
+		multiply = gm_step_ig
+	}
+}
+
+gm_display_ig_intelligentsia = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_ig_intelligentsia }
+		value = var:gm_s_ig_intelligentsia
+		multiply = gm_step_ig
+	}
+}
+
+gm_display_ig_landowners = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_ig_landowners }
+		value = var:gm_s_ig_landowners
+		multiply = gm_step_ig
+	}
+}
+
+gm_display_ig_petty_bourgeoisie = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_ig_petty_bourgeoisie }
+		value = var:gm_s_ig_petty_bourgeoisie
+		multiply = gm_step_ig
+	}
+}
+
+gm_display_ig_rural_folk = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_ig_rural_folk }
+		value = var:gm_s_ig_rural_folk
+		multiply = gm_step_ig
+	}
+}
+
+gm_display_ig_trade_unions = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_ig_trade_unions }
+		value = var:gm_s_ig_trade_unions
+		multiply = gm_step_ig
+	}
+}
+
+gm_display_teardown = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_teardown }
+		value = var:gm_s_teardown
+		multiply = gm_step_teardown
+	}
+}
+
+gm_display_vanity = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_vanity_ledger }
+		value = var:gm_vanity_ledger
+		multiply = gm_step_vanity
+	}
+}

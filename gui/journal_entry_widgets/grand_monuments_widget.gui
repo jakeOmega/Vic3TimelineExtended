@@ -1,0 +1,293 @@
+﻿### Grand Monuments JE widgets (spec §6)
+###
+### Two widgets, mounted from je_grand_monuments:
+###   widget_je_gm_national   custom_widget_container_1 (above the status desc)
+###     One line per national total in force, with its next step, and the
+###     hard-times warning (§5).
+###   widget_je_gm_monuments  custom_widget_container_2 (below the status desc)
+###     One row per monument, from the country's gm_states list (rebuilt by
+###     every gm_country_refresh). A contested row carries three buttons.
+###
+### EDITING RULES
+### * Numbers come from JournalEntry.GetCountry.MakeScope.ScriptValue (the
+###   guarded gm_display_* values) and State.MakeScope.ScriptValue.
+### * A row's status is gm_status_code (0-4), tested for identity, never a
+###   threshold (gotcha #23).
+### * The row buttons pass the row's state as the saved scope gm_state, one
+###   scripted GUI per action (common/scripted_guis/gm_sguis.txt).
+### * Both roots are gated on [JournalEntry.IsActive] (gotcha #14).
+
+types grand_monuments_widget_types
+{
+	type gm_header = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = fontsize_medium
+		margin_top = 4
+		block "header_text" {}
+	}
+
+	type gm_line = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = fontsize_small
+		block "line_text" {}
+		block "line_extra" {}
+	}
+
+	### One of a contested row's three choices. choice_context points it at its
+	### scripted GUI; the row's state travels as the saved scope gm_state.
+	type gm_choice_button = button {
+		using = default_button_action
+		size = { 150 24 }
+		margin_top = 2
+
+		block "choice_context" {}
+
+		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
+		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
+
+		block "choice_tooltip" {}
+
+		textbox = {
+			parentanchor = center
+			align = center|nobaseline
+			autoresize = yes
+			max_width = 140
+			elide = right
+			using = fontsize_small
+			block "choice_text" {}
+		}
+	}
+
+	type widget_je_gm_row = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		margin = { 20 8 }
+
+		background = {
+			using = entry_bg_fancy_dark
+			alpha = 0.5
+		}
+
+		# ---- Its form and dedication ----
+		textbox = {
+			autoresize = yes
+			multiline = yes
+			minimumsize = { 480 -1 }
+			maximumsize = { 480 -1 }
+			align = left|nobaseline
+			using = fontsize_large
+			text = "gm_row_title"
+		}
+
+		# ---- Where, how grand, its status ----
+		gm_line = {
+			blockoverride "line_text" { text = "gm_row_detail" }
+		}
+
+		# ---- The revived-language inscription (empty when none) ----
+		gm_line = {
+			blockoverride "line_text" { text = "gm_row_inscription" }
+		}
+
+		# ---- Contested: who wants what, and the three choices ----
+		gm_line = {
+			blockoverride "line_text" { text = "gm_row_contest" }
+			blockoverride "line_extra" {
+				visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)4' )]"
+			}
+		}
+
+		flowcontainer = {
+			direction = horizontal
+			spacing = 4
+			margin_left = 12
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)4' )]"
+
+			gm_choice_button = {
+				blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_tear_down_sgui')]" }
+				blockoverride "choice_tooltip" { tooltip = "gm_button_tear_down_tooltip" }
+				blockoverride "choice_text" { text = "gm_button_tear_down" }
+			}
+			gm_choice_button = {
+				blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_rededicate_sgui')]" }
+				blockoverride "choice_tooltip" { tooltip = "gm_button_rededicate_tooltip" }
+				blockoverride "choice_text" { text = "gm_button_rededicate" }
+			}
+			gm_choice_button = {
+				blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_preserve_sgui')]" }
+				blockoverride "choice_tooltip" { tooltip = "gm_button_preserve_tooltip" }
+				blockoverride "choice_text" { text = "gm_button_preserve" }
+			}
+		}
+	}
+}
+
+
+### WIDGETS
+
+### National effects: a line per total in force.
+flowcontainer = {
+	name = "widget_je_gm_national"
+	direction = vertical
+	parentanchor = hcenter
+	spacing = 2
+	visible = "[JournalEntry.IsActive]"
+
+	gm_header = {
+		blockoverride "header_text" { text = "gm_je_header_national" }
+	}
+
+	gm_line = {
+		blockoverride "line_text" { text = "gm_je_line_prestige" }
+		blockoverride "line_extra" {
+			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_prestige'), '(CFixedPoint)0' )]"
+		}
+	}
+	gm_line = {
+		blockoverride "line_text" { text = "gm_je_line_legitimacy" }
+		blockoverride "line_extra" {
+			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_legitimacy'), '(CFixedPoint)0' )]"
+		}
+	}
+	gm_line = {
+		blockoverride "line_text" { text = "gm_je_line_culture" }
+		blockoverride "line_extra" {
+			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_culture'), '(CFixedPoint)0' )]"
+		}
+	}
+	gm_line = {
+		blockoverride "line_text" { text = "gm_je_line_leader" }
+		blockoverride "line_extra" {
+			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_leader'), '(CFixedPoint)0' )]"
+		}
+	}
+	gm_line = {
+		blockoverride "line_text" { text = "gm_je_line_religious" }
+		blockoverride "line_extra" {
+			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_religious'), '(CFixedPoint)0' )]"
+		}
+	}
+	gm_line = {
+		blockoverride "line_text" { text = "gm_je_line_war_memorial" }
+		blockoverride "line_extra" {
+			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_war_memorial'), '(CFixedPoint)0' )]"
+		}
+	}
+	gm_line = {
+		blockoverride "line_text" { text = "gm_je_line_artistic" }
+		blockoverride "line_extra" {
+			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_artistic'), '(CFixedPoint)0' )]"
+		}
+	}
+	gm_line = {
+		blockoverride "line_text" { text = "gm_je_line_scientific" }
+		blockoverride "line_extra" {
+			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_scientific'), '(CFixedPoint)0' )]"
+		}
+	}
+	gm_line = {
+		blockoverride "line_text" { text = "gm_je_line_industrial" }
+		blockoverride "line_extra" {
+			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_industrial'), '(CFixedPoint)0' )]"
+		}
+	}
+	gm_line = {
+		blockoverride "line_text" { text = "gm_je_line_ig_armed_forces" }
+		blockoverride "line_extra" {
+			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_armed_forces'), '(CFixedPoint)0' )]"
+		}
+	}
+	gm_line = {
+		blockoverride "line_text" { text = "gm_je_line_ig_devout" }
+		blockoverride "line_extra" {
+			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_devout'), '(CFixedPoint)0' )]"
+		}
+	}
+	gm_line = {
+		blockoverride "line_text" { text = "gm_je_line_ig_industrialists" }
+		blockoverride "line_extra" {
+			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_industrialists'), '(CFixedPoint)0' )]"
+		}
+	}
+	gm_line = {
+		blockoverride "line_text" { text = "gm_je_line_ig_intelligentsia" }
+		blockoverride "line_extra" {
+			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_intelligentsia'), '(CFixedPoint)0' )]"
+		}
+	}
+	gm_line = {
+		blockoverride "line_text" { text = "gm_je_line_ig_landowners" }
+		blockoverride "line_extra" {
+			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_landowners'), '(CFixedPoint)0' )]"
+		}
+	}
+	gm_line = {
+		blockoverride "line_text" { text = "gm_je_line_ig_petty_bourgeoisie" }
+		blockoverride "line_extra" {
+			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_petty_bourgeoisie'), '(CFixedPoint)0' )]"
+		}
+	}
+	gm_line = {
+		blockoverride "line_text" { text = "gm_je_line_ig_rural_folk" }
+		blockoverride "line_extra" {
+			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_rural_folk'), '(CFixedPoint)0' )]"
+		}
+	}
+	gm_line = {
+		blockoverride "line_text" { text = "gm_je_line_ig_trade_unions" }
+		blockoverride "line_extra" {
+			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_trade_unions'), '(CFixedPoint)0' )]"
+		}
+	}
+	gm_line = {
+		blockoverride "line_text" { text = "gm_je_line_teardown" }
+		blockoverride "line_extra" {
+			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_teardown'), '(CFixedPoint)0' )]"
+		}
+	}
+	gm_line = {
+		blockoverride "line_text" { text = "gm_je_line_vanity" }
+		blockoverride "line_extra" {
+			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_vanity'), '(CFixedPoint)0' )]"
+		}
+	}
+	gm_line = {
+		blockoverride "line_text" { text = "gm_je_hard_times" }
+		blockoverride "line_extra" {
+			visible = "[GetScriptedGui('gm_hard_times_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		}
+	}
+}
+
+### One row per monument.
+flowcontainer = {
+	name = "widget_je_gm_monuments"
+	direction = vertical
+	parentanchor = hcenter
+	spacing = 4
+	visible = "[JournalEntry.IsActive]"
+
+	gm_header = {
+		blockoverride "header_text" { text = "gm_je_header_monuments" }
+	}
+
+	flowcontainer = {
+		direction = vertical
+		parentanchor = hcenter
+		spacing = 4
+		datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('gm_states')]"
+
+		item = {
+			widget_je_gm_row = { datacontext = "[Scope.GetState]" }
+		}
+	}
+}

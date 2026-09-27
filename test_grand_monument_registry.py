@@ -1097,5 +1097,73 @@ class VanityTests(unittest.TestCase):
         self.assertIn("notification_gm_vanity_backlash_notice_desc", L)
 
 
+# ---- Task 9: the journal entry's widgets and buttons ---------------------------------
+
+class WidgetTests(unittest.TestCase):
+    def setUp(self):
+        self.gui = read(WIDGET)
+
+    def test_mounted(self):
+        je = squash(read(JE))
+        for name, container in (("widget_je_gm_national", "custom_widget_container_1"),
+                                ("widget_je_gm_monuments", "custom_widget_container_2")):
+            self.assertIn(f'gui = "gui/journal_entry_widgets/grand_monuments_widget.gui" name = "{name}" '
+                          f'container = "{container}"', je)
+            self.assertIn(f'name = "{name}"', self.gui)
+
+    def test_roots_gated_and_rows_from_the_list(self):
+        g = squash(strip_comments(self.gui))
+        self.assertEqual(g.count('visible = "[JournalEntry.IsActive]"'), 2)
+        self.assertIn('datamodel = "[JournalEntry.GetCountry.MakeScope.GetList(\'gm_states\')]"', g)
+        self.assertIn('widget_je_gm_row = { datacontext = "[Scope.GetState]" }', g)
+
+    def test_national_lines_read_guarded_displays(self):
+        values = read(VALUES)
+        for display in re.findall(r"ScriptValue\('(gm_display_\w+)'\)", self.gui):
+            body = squash(block(values, display))
+            self.assertIsNotNone(block(values, display), display)
+            self.assertIn("if = { limit = { has_variable =", body, display)
+        shown = set(re.findall(r"ScriptValue\('(gm_display_\w+)'\)", self.gui))
+        for key in ["prestige", "legitimacy", "culture", "teardown", "vanity"] + list(NATIONAL):
+            self.assertIn(f"gm_display_{key}", shown)
+        for ig in IGS:
+            self.assertIn(f"gm_display_ig_{ig}", shown)
+
+    def test_buttons(self):
+        g = squash(strip_comments(self.gui))
+        self.assertIn("visible = \"[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)4' )]\"", g)
+        for choice in ("tear_down", "rededicate", "preserve"):
+            self.assertIn(f"datacontext = \"[GetScriptedGui('gm_{choice}_sgui')]\"", g)
+        self.assertIn("AddScope( 'gm_state', State.MakeScope )", g)
+        sguis = read(SGUIS)
+        for choice in ("tear_down", "rededicate", "preserve"):
+            body = squash(block(sguis, f"gm_{choice}_sgui"))
+            self.assertIn("saved_scopes = { gm_state }", body)
+            self.assertIn("exists = scope:gm_state scope:gm_state = { owner = root", body)
+            self.assertIn("gm_state_is_contested = yes", body)
+            self.assertIn(f"scope:gm_state = {{ gm_state_choose_{choice} = yes }}", body)
+            self.assertIn("hidden_effect = { gm_country_refresh = yes }", body)
+            self.assertIn("ai_is_valid = { always = no }", body)
+        self.assertIn("is_shown = { gm_country_hard_times = yes }", squash(block(sguis, "gm_hard_times_sgui")))
+
+    def test_every_gui_loc_key_exists(self):
+        L = loc()
+        for key in set(re.findall(r'(?:text|tooltip) = "([a-z][\w.]*)"', self.gui)):
+            self.assertIn(key, L, key)
+
+
+# ---- The two loc fixes from Task 5's review (controller ruling) ----------------------
+
+class LocFixTests(unittest.TestCase):
+    def test_reason_does_not_imply_faith_lends_legitimacy(self):
+        L = loc()
+        self.assertNotIn("faith still stands", L["je_grand_monuments_reason"])
+
+    def test_status_lines_avoid_the_plural(self):
+        L = loc()
+        self.assertIn("Grand Monuments:", L["je_grand_monuments_status"])
+        self.assertIn("Grand Monuments:", L["je_grand_monuments_status_contested"])
+
+
 if __name__ == "__main__":
     unittest.main()

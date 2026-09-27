@@ -13,6 +13,18 @@ je_grand_monuments = {
 	icon = "gfx/interface/icons/building_icons/building_government_administration.dds"
 	group = je_group_internal_affairs
 
+	widget = {
+		gui = "gui/journal_entry_widgets/grand_monuments_widget.gui"
+		name = "widget_je_gm_national"
+		container = "custom_widget_container_1"
+	}
+
+	widget = {
+		gui = "gui/journal_entry_widgets/grand_monuments_widget.gui"
+		name = "widget_je_gm_monuments"
+		container = "custom_widget_container_2"
+	}
+
 	possible = {
 		gm_system_enabled = yes
 		any_scope_state = { has_building = building_grand_monument }
