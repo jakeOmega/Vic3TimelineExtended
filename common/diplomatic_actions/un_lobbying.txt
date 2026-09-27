@@ -51,6 +51,7 @@
 
 # ---- Pledge FOR ------------------------------------------------------------------
 un_secure_commitment_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/un_secure_commitment_action.dds"
 	groups = {
 		general
 	}

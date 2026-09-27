@@ -91,6 +91,16 @@ class RegistryTests(unittest.TestCase):
             ip.ICONS = gi.ICONS = saved
 
 
+class WriteDecisionTests(unittest.TestCase):
+    def test_changed_pick_is_rewritten_unknown_history_is_trusted(self):
+        want = [1, "prompt b"]
+        self.assertTrue(gi.needs_write(False, None, want))            # no DDS yet
+        self.assertFalse(gi.needs_write(True, None, want))            # no record: trust it
+        self.assertFalse(gi.needs_write(True, [1, "prompt b"], want))  # same pick
+        self.assertTrue(gi.needs_write(True, [0, "prompt b"], want))   # seed changed
+        self.assertTrue(gi.needs_write(True, [1, "prompt a"], want))   # subject changed
+
+
 FIXTURE = (
     "# techs\n"
     "alpha = {\n"

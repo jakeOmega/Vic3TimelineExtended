@@ -12,8 +12,10 @@ Reads the registry (icon_prompts.py) and takes each category through:
   sheet   review sheets, 20 entities each: current icon | 3 vanilla neighbours
           || candidates. Pick a seed per entity and record it in ICONS.
   write   the accepted icons as uncompressed DDS with mips, vanilla's format
-          (icon_dds.py), to gfx/interface/icons/<folder>/<key>.dds. An existing
-          file is left alone; to redo one, delete it.
+          (icon_dds.py), to gfx/interface/icons/<folder>/<key>.dds. A DDS is
+          rewritten when its pick (seed or subject) changed since it was
+          written (recorded in <work>/written.json); otherwise it is left
+          alone, so to force one, delete it.
   wire    point each accepted entity's icon line at its DDS. Only entities whose
           DDS exists are touched, and an entity already pointing there is left
           byte-for-byte alone.
@@ -200,7 +202,20 @@ def stage_sheet(cat: str, only: set[str], work: Path, include_reviewed: bool) ->
                      out / f"{cat}_{i // SHEET_ROWS + 1:02d}.png")
 
 
+def needs_write(exists: bool, recorded: list | None, want: list) -> bool:
+    """Whether `write` should (re)write an icon.
+
+    A missing DDS is written. An existing one is rewritten only when the
+    manifest says it came from another seed or prompt (the pick changed after
+    it was written); with no record (another machine, an older run) it is
+    trusted and left alone.
+    """
+    return not exists or (recorded is not None and recorded != want)
+
+
 def stage_write(cat: str, only: set[str], work: Path) -> None:
+    import json
+
     from icon_dds import write_dds
     from icon_render import Composer, raw_path
 
@@ -208,20 +223,28 @@ def stage_write(cat: str, only: set[str], work: Path) -> None:
     if not out_dir.parent.is_dir():
         raise SystemExit(f"{out_dir.parent} is not checked out (a sparse worktree?)")
     out_dir.mkdir(exist_ok=True)
+    # What each DDS was written from, so a changed pick is rewritten instead of
+    # silently kept. Machine-local, beside the renders it refers to.
+    manifest_path = work / "written.json"
+    manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else {}
     composer, wrote = Composer(), 0
     for key, e in generated(cat, only).items():
         if not accepted(e):
             continue
         dest = MOD_ROOT / icon_path(cat, key)
-        if dest.exists():
+        want = [e["seed"], prompt_for(cat, e["subject"])]
+        if not needs_write(dest.exists(), manifest.get(name(cat, key)), want):
             continue
         raw = raw_path(work / "raw", name(cat, key), e["seed"])
         if not raw.exists():
             print(f"  no render for {cat}/{key} seed {e['seed']}: run --stage render")
             continue
         write_dds(_compose_one(composer, cat, raw, work / "final" / raw.name), dest)
+        manifest[name(cat, key)] = want
         wrote += 1
-    print(f"write: {wrote} new DDS files in {out_dir}")
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    manifest_path.write_text(json.dumps(manifest, indent=1, sort_keys=True))
+    print(f"write: {wrote} DDS files written in {out_dir}")
 
 
 def stage_wire(cat: str, only: set[str], dry_run: bool) -> None:
