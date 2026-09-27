@@ -7,7 +7,9 @@ new eras bring twelve new goods, dozens of new buildings and production methods,
 a flagship building for most companies, 37 wonders, seven megaprojects and a
 repeatable Grand Monument. None of this is behind a game rule: the eras and
 everything they unlock are always in the game, even when you switch off the
-systems that some of their technologies start.
+systems that some of their technologies start. The one exception is the
+International Space Station wonder, which needs a Moon landing from the space
+race.
 
 ## Eras six to twelve
 
@@ -38,7 +40,7 @@ ahead of unresearched technologies in the same tree still applies, and it grows
 with the number of eras between them.
 
 Your innovation has to grow to match. Many of the new technologies raise the
-weekly innovation cap by 25 to 200 each, adding between 250 and 1,000 per era
+weekly innovation cap by 10 to 100 each, adding between 250 and 1,000 per era
 through era 11. Five [wonders](#wonders) raise it further, and new University
 production methods (National Labs, Academic Computing and AI Assisted Research)
 raise the innovation each university produces.
@@ -80,17 +82,19 @@ Awareness.
 
 Era 11 is the near future. Modern Material Science unlocks the Advanced Material
 Fabricator, Abyssal Plain Mining the Deep-Sea Mine, Asteroid Mining the
-Extraplanetary Base, and Fusion Power the Fusion Plant. Genetic Engineering,
-Synthetic Biology and Lab-Grown Food add new synthetic food plants;
-Brain-Computer Interfaces and Human Augmentation bring augmentation laws.
+Extraplanetary Base, and Fusion Power the Fusion Plant. Genetic Engineering
+unlocks the Carbon Conversion Works and Integrated Biorefinery, Lab-Grown Food
+the Cultured Meat Plant and Cultured Produce Facility, and Synthetic Biology
+adds bioengineered production methods such as Designed Crops. Brain-Computer
+Interfaces and Human Augmentation bring augmentation laws.
 
 Era 12 is the far future. Artificial General Intelligence adds AI-managed
-production methods to most industries, and Molecular Assemblers, Programmable
+production methods to many industries, and Molecular Assemblers, Programmable
 Matter and Orbital Manufacturing add a final tier to many more. Space Elevator,
 Space-Based Solar Power, Orbital Weapon Platforms, Antimatter Production, Mind
-Backups and Telepathic Communities each unlock a
+Backups, Molecular Assemblers and Telepathic Communities each unlock a
 [megaproject](#megaprojects). Space Colonization, Biological Immortality and
-Post-Scarcity Economy end the tree.
+Post-Scarcity Economy are among the last technologies in the tree.
 
 Some of the mod's buildings arrive earlier, with base-game technologies: the
 Aerospace Industry with Military Aviation, the Highway with Paved Roads, and the
@@ -104,7 +108,7 @@ Revolution, Gene Splicing and Biotechnology. The first country to research one
 gets an event naming it the pioneer, a permanent bonus to arable land, and a
 decaying +5% prestige and authority bonus that lasts 20 years. Two weeks later
 every other recognized country gets an event and the same arable-land bonus,
-whether or not it has the technology. Each diffusion bonus is about half the
+whether or not it has the technology. Each diffusion bonus is half the
 technology's own arable-land bonus: +15% for Nitrogen Fixation, Modern Chemical
 Processes and Gene Splicing, +25% for Biotechnology and +60% for Green
 Revolution. It stacks with the technology's bonus once you research it.
@@ -122,7 +126,7 @@ view. Each system also needs its game rule, and some have further conditions.
 | Decolonization | 6 | The colonial empire journal entry | [Colonial empires and decolonization](11-decolonization.md) |
 | Nuclear Weapons | 6 | The nuclear programme | [Nuclear weapons](13-nuclear.md) |
 | Rocketry | 6 | The first space race milestone, for great and major powers | [The space race](15-space.md) |
-| Combined Arms | 6 | The World War journal entry | [Military and war](12-military.md) |
+| Combined Arms | 6 | The Gathering Storm, the world war journal entry, for great powers | [Military and war](12-military.md) |
 | Civil Rights Movement | 7 | The civil rights journal entry | [Social movements](06-social-movements.md) |
 | Automated Surveillance or Cybersecurity | 9 | The digital rights journal entry | [Social movements](06-social-movements.md) |
 | Mental Health Awareness | 10 | The mental health journal entry | [Social movements](06-social-movements.md) |
@@ -151,7 +155,7 @@ renames twelve base-game goods to fit a longer timeline.
 | Advanced Materials | Industrial | Advanced Material Fabricator, Nanofabrication Center | Late-game production methods and megaproject construction; base price 4,000, the most expensive good in the game |
 | Construction Services | Industrial | Construction Sector | The construction market ([Economy and construction](03-economy.md)) |
 | Tourism | Luxury | Tourism Industry, National Park, Grand Monument and others | The pops' Tourism need |
-| Tech-Critical Metals | Industrial | Nickel and Cobalt, Lithium, Rare Earth Metals and Platinum Group Metals Mines | Electronics, robotics, modern power plants and other high-tech production methods |
+| Tech-Critical Metals | Industrial | Nickel and Cobalt, Lithium, Rare Earth Metals and Platinum Group Metals Mines; also the Deep-Sea Mine and Extraplanetary Base | Electronics, robotics, modern power plants and other high-tech production methods |
 | Motor Ships | Industrial | Shipyards, from Advanced Submarine Technology | Later production methods for ports, fishing wharves and whaling stations |
 | Magnetic Drive Ships | Industrial | Shipyards, from Modern Material Science | The last tier of the same production methods |
 
@@ -192,9 +196,9 @@ most base-game buildings with production methods for the new eras.
 
 ### New mines and extraction
 
-Fourteen new mines work deposits of specific minerals. Each produces one of the
-renamed resource goods, so they add supply to existing chains rather than
-creating new ones. Resource deposits are covered in
+Fourteen new mines work deposits of specific minerals. Ten of them produce one
+of the renamed resource goods, adding supply to existing chains; the other four
+produce the new Tech-Critical Metals. Resource deposits are covered in
 [Economy and construction](03-economy.md).
 
 | Mine | Produces |
@@ -247,13 +251,11 @@ A flagship building works like this:
 - You can build it only while you have the company, and only while the company's
   prosperity bonus is active, because that bonus supplies its level cap of one.
 - Only the government can build it, at 5,000 construction.
-- Each flagship exists once in the world. A flavored company has only one owner
-  anyway, but a generic company can be founded in many countries, and the first
-  of them to build its flagship blocks the rest.
+- You can have each flagship in only one state.
 - Most are highly profitable at base prices, and each gives its state modifiers
   that fit the company, such as extra Highway levels and migration pull from the
   Volkswagen Autostadt.
-- If you lose the company, the building is demolished at the next monthly check.
+- If you lose the company, the building is demolished.
 
 The mod also adds extension buildings and prosperity bonuses to many base-game
 companies, and fifteen new prestige goods, from Luxury Automobiles to Heavy-Lift
@@ -314,7 +316,7 @@ only that state's owner can build them.
 | Statue of Unity | Gujarat | Advanced Structural Engineering |
 | Golden Bridge | Tonkin | Advanced Structural Engineering |
 
-Each wonder employs about 10,000 workers, and its effects scale with how fully
+Each wonder employs 10,000 workers, and its effects scale with how fully
 it is staffed. The effects are modest and themed: the dams add 10 to 20
 Hydro Plant levels to their state and 25% Hydro Plant throughput, towers and
 trade landmarks raise trade advantage or Urban Center, Trade Center or service
@@ -328,7 +330,7 @@ country to meet their conditions and finish one claims it:
 |---|---|---|---|
 | Peace Palace | Intergovernmental Organizations | Ministry of Foreign Affairs at level 3 | Foreign affairs ministry impact, prestige |
 | Palais des Nations | (no technology) | Major power or better, Ministry of Foreign Affairs at level 5 | Foreign affairs ministry impact, prestige, Government Administration throughput |
-| International Space Station | Satellite Communications | Major power or better, a completed Moon landing | +200 innovation cap, university throughput, education |
+| International Space Station | Satellite Communications | Major power or better, a completed Moon landing ([The space race](15-space.md)) | +200 innovation cap, university throughput, education |
 | LIGO Observatory | Fiber Optics | Great power | +100 innovation cap, university throughput |
 | Large Hadron Collider | World Wide Web | Ministry of Science at level 3 | +200 innovation cap, +50% university throughput |
 | Svalbard Global Seed Vault | Biotechnology | Ministry of the Environment at level 3 | Agriculture throughput, prestige |
@@ -337,7 +339,8 @@ country to meet their conditions and finish one claims it:
 
 The Continental Union Headquarters is the exception to "one in the world": each
 continent can have one, built on the builder's home continent. The United Nations
-Headquarters and the Power Bloc Headquarters are also in this building group; see
+Headquarters and the Power Bloc Headquarters are government buildings, not
+wonders, and don't count as monuments; see
 [The United Nations](09-united-nations.md) and [Diplomacy](08-diplomacy.md).
 
 ## Megaprojects
@@ -377,10 +380,10 @@ specialists per level, and their effects scale with how fully they are staffed.
 | Space Elevator | Space Elevator | 20 | Produces a million Launch Capacity per level and adds space race progress. Can only be built in states near the equator: most of tropical Africa, northern South America and Panama, southern India and Ceylon, Southeast Asia, the Pacific islands and a few others. |
 | Orbital Solar Collector | Space-Based Solar Power | 10 | Each level opens three slots for Solar Power Receivers, ordinary buildings you build in any state; each receiver level produces a million electricity. |
 | Orbital Battlestation | Orbital Weapon Platforms | 5 | Raises unit offense, defence, morale recovery and morale damage by 5% per level and improves defence against nuclear strikes. |
-| Antimatter Containment Facility | Antimatter Production | 10 | Each level opens five slots for Antimatter Engines (Launch Capacity, faster army and fleet movement, space race progress) and Antimatter Warhead Plants (nuclear strike success, army offense). |
+| Antimatter Containment Facility | Antimatter Production | 10 | Each level opens five slots, shared between Antimatter Engines (Launch Capacity, faster army and fleet movement, space race progress) and Antimatter Warhead Plants (nuclear strike success, unit offense). Each level of either uses one slot. |
 | Mind Upload Nexus | Mind Backups | 5 | Produces software, services, tourism and art, and raises research speed by 5% per level. |
 | Nanofabrication Center | Molecular Assemblers | 10 | Produces Advanced Materials and lowers space race risk. |
-| Consciousness Network | Telepathic Communities | 10 | Adds bureaucracy, innovation, infrastructure, tax capacity and education access. Its Network Mode is Open Network (research, innovation, influence, prestige, standard of living) or Social Control Network (authority, government approval, lower turmoil and radicalism). |
+| Consciousness Network | Telepathic Communities | 10 | Adds bureaucracy, innovation, infrastructure, tax capacity and education access. Its Network Mode is Open Network (research, innovation, influence, prestige, standard of living) or Social Control Network (authority, government approval, lower turmoil and radicalism). Social Control Network needs Secret Police, Single-Party State, Autocracy, Mandatory Augmentation or Intrusive Surveillance System, and those laws rule out Open Network. |
 
 Each type of megaproject you complete adds 3 cultural pull
 ([Cultural hegemony and covert warfare](10-influence.md)). The Space Elevator,
@@ -425,7 +428,10 @@ pick a dedication later in its building panel.
 | Great Exhibition Hall | Marketing Research, no Industry Banned law | +2% migration pull | +2% Industrialists attraction |
 | Grand Stadium | Television Broadcasting | 2% lower turmoil effects | |
 
-The civic dedication is worded to suit your government: to the republic, to the
-Crown or to the nation. The AI rates Grand Monuments low: it considers them
-mainly as a great or major power, or in a state with a Tourism Industry, and
-avoids them while at war.
+The technology requirements apply everywhere, but the two law conditions only
+hide the option in the ceremony event; the building panel still offers those
+dedications. The civic dedication is worded to suit your government: to the
+republic, to the Crown or to the nation.
+
+The AI rates Grand Monuments low: it considers them mainly as a great or major
+power, or in a state with a Tourism Industry, and avoids them while at war.
