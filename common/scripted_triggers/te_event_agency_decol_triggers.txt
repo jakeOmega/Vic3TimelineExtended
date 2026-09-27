@@ -12,11 +12,13 @@
 # te_construction_market_on_actions.txt).
 # ============================================================================
 
-# Scope: country (a candidate former colony). Independent, and its former
-# overlord still exists.
+# Scope: country (a candidate former colony). Independent, not decentralized
+# (colonial collapse can leave one so, still carrying former_overlord), and its
+# former overlord still exists.
 decol_is_independent_former_colony = {
 	has_variable = former_overlord
 	is_subject = no
+	NOT = { is_country_type = decentralized }
 	var:former_overlord ?= {
 		is_country_alive = yes
 	}
