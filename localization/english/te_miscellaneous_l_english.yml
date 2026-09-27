@@ -2658,6 +2658,7 @@
  nd_taboo_tt_ceiling_lower:0 "Hold our arsenal to #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_ceiling_lowered_value')|0]#! warheads; those above it are taken apart, a tenth of the excess a month, and each strengthens the nuclear taboo a little"
  nd_taboo_tt_ceiling_raise:0 "Allow up to #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_ceiling_raised_value')|0]#! warheads"
  nd_taboo_tt_champion_relations:0 "The great powers that hold nuclear weapons take it as a lecture: relations #R -5#! with each"
+ nd_taboo_tt_condemn_open:0 "No condemnation has come before the Assembly within the cooldown, or this is a nuclear use, which it can always take up"
  nd_taboo_tt_dismantle_start:0 "Take our #v [GetPlayer.MakeScope.ScriptValue('nd_stockpile')|0]#! warheads apart over #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_dismantle_months_value')|0]#! months. Until the last is gone they stay in storage, the programme builds nothing, and we can halt at a price. When it is done we renounce the bomb: the world's regard grows with the nuclear taboo, and taking it up again would be a breakout"
  nd_taboo_tt_dismantling_owns_it:0 "While we dismantle the arsenal, the dismantling sets its size"
  nd_taboo_tt_halt:0 "Halt the dismantling: what is taken apart stays gone. Our credibility falls by #R 10#!, and the nuclear taboo weakens"

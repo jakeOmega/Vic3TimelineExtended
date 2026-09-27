@@ -963,6 +963,7 @@ class TestArmsControl(unittest.TestCase):
 
 UN_DOCKET = ROOT / "common/scripted_effects/un_docket_effects.txt"
 UN_VOTE_EVENTS = ROOT / "events/un_vote_events.txt"
+UN_EVENTS = ROOT / "events/un_events.txt"
 
 
 class TestUN(unittest.TestCase):
@@ -1015,6 +1016,16 @@ class TestUN(unittest.TestCase):
     def test_every_verdict_block_is_bound_to_the_nuclear_grievance(self):
         option = block(strip_comments(read(UN_VOTE_EVENTS)), "un_vote.2")
         self.assertEqual(option.count("has_tag = un_res_nuclear_grievance"), 3)
+
+    def test_a_nuclear_use_can_be_condemned_through_the_cooldown(self):
+        # Owner call, 2026-09-27: the condemn topic's worldwide cooldown must
+        # not keep a nuclear use from the Assembly's verdict.
+        event = block(strip_comments(read(UN_EVENTS)), "un_events.2")
+        option_a = event[event.index("name = un_events.2.a"):event.index("name = un_events.2.b")]
+        gate = block(block(option_a, "trigger"), "OR")
+        self.assertIn("NOT = { un_resolution_topic_on_cooldown = { TOPIC = condemn } }", gate)
+        self.assertIn("un_docket_cause_is = { CAUSE = 1 }", gate)
+        self.assertIn("nd_taboo_tt_condemn_open", loc_keys())
 
 
 if __name__ == "__main__":

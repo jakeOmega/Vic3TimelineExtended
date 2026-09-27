@@ -417,6 +417,7 @@ One world score, `global_var:nd_taboo` (0-100), for how unthinkable nuclear weap
 - **Retaliation is exempt from the strike AI's taboo factor** (final-review.md M4; spec §8.1 "Retaliation unaffected"): `nuke_diplo_action` and `tactical_nuke_diplo_action` no longer multiply an answering strike's `evaluation_chance` by `nd_taboo_ai_use_factor`.
 - **Champion the norm costs relations with the armed, not the unarmed** (final-review.md M6). Spec §6.3 has it gain relations with other unarmed countries; the code costs −5 with each armed great power, a lecture they don't appreciate. **Seek a protector's guarantee** picks a friendly armed power at random, not the strongest — the spec's "the strongest friendly armed power".
 - **An arms-control ceiling can sit at most a quarter above the larger party's arsenal** (at least 5; `nd_taboo_arms_quantity_cap_value`), not up to a flat 500. A ceiling above every arsenal binds nobody yet would earn both parties full restraint credit (owner call, 2026-09-27). The article's quantity limit reads the other party from `scope:other_country` or `scope:source_country`/`scope:target_country`, whichever the engine binds.
+- **A nuclear use is exempt from the condemn topic's cooldown** (owner call, 2026-09-27). `un_events.2`'s "Table a condemnation" normally waits out the worldwide cooldown that follows any condemnation vote (`un_res_cooldown_months_default`, 60 months). For a nuclear grievance (the accused's `un_dkt_cause` is 1) it does not, so the Assembly's verdict is never skipped for that reason.
 
 #### Known roughnesses
 
@@ -424,7 +425,7 @@ One world score, `global_var:nd_taboo` (0-100), for how unthinkable nuclear weap
 - the civil-defence, renunciation-prestige and norm-champion modifiers are modifiers only, so a revolution's winner loses them (the renunciation itself is rebuilt from `nd_renounced_locked`) — final-review.md M10 flagged the norm-champion case, missing from this line until now;
 - the taboo is global, with no regional or ideological layer;
 - annexing the treaty partner makes leaving free (the "partner no longer exists" exemption covers it) — spec-mandated; the owner accepted it (2026-09-27);
-- the condemn topic's worldwide cooldown (`un_res_cooldown_months_default`, 60 months) means a nuclear use inside it gets no verdict, and an appeal the AI turns into a sanctions vote books none either — spec §7.3 names the condemn topic only; the owner kept it (2026-09-27): a missed verdict moves the taboo a few points at most, against the use's own −15 shock and −10 ledger;
+- an appeal the AI turns into a sanctions vote books no verdict — spec §7.3 names the condemn topic only; the owner kept it (2026-09-27): a missed verdict moves the taboo a few points at most, against the use's own −15 shock and −10 ledger;
 - a retaliation is judged by the Assembly at the same ±3 as a first use (the use note halves retaliation, the verdict does not);
 - holding the programme reuses the pause flag (final-review.md M5): a country held at its ceiling or dismantling cannot be the source of a `nuclear_program_pause` article, cannot receive `nuclear_program_aid`, and ends a running `covert_nuclear_sabotage_action` against it (an AI trimmed to a ceiling reads as a programme that "has really stopped"). All three are decisions, not bugs;
 - old saves don't mark countries disarmed before the taboo existed as renounced (final-review.md M9, parked): a country under a `nuclear_disarmament` article or `te_nuclear_disarmament_ended_program` at seed time gets no `nd_renounced`, so it is absent from the restraint part and books no breakout if it later rebuilds;
@@ -478,6 +479,7 @@ Re-run with python3 scripts/analysis/nuclear_taboo_sim.py after any retune; ever
 30. In a high-taboo world, an AI that was struck retaliates as readily as before.
 31. An AI that cut its arsenal in half through a band event keeps that ceiling through its six-monthly reviews in peacetime.
 32. The arms-control article's ceiling input tops out a quarter above the larger arsenal (at least 5). If it tops out at 5 whatever the arsenals, the engine binds neither pair of party scopes in `quantity_max_value` and the cap reads only one side.
+33. With the condemn topic on cooldown (a condemnation voted within five years), a nuclear strike taken up by the docket still offers the appellant "Table a condemnation", whose requirement reads "…or this is a nuclear use". A war-of-aggression appeal in the same window does not.
 
 ## 1. Intent and owner requirements
 
