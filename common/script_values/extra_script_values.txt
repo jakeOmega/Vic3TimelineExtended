@@ -2044,25 +2044,17 @@ bubble_inertia_multiplier_script_value = {
 }
 
 # Minimum source GDP for contagion to be possible.
-# Returns 1% of the current (target) country's GDP.
+# Returns 5% of the current (target) country's GDP: a country more than 20
+# times the crashing economy's size is immune to its crash.
 # Used in the contagion limit: source.gdp >= this value.
 banking_contagion_min_source_gdp = {
 	value = gdp
-	multiply = 0.01
+	multiply = 0.05
 }
 
-# GDP weight for contagion chance: source GDP / target GDP, clamped [0, 10], * 5
-# NOTE: Cannot be used in random/random_country modifier add = (engine rejects SVs there).
-# Use tiered trigger comparisons in banking_cycle_effects.txt instead.
-banking_contagion_gdp_weight = {
-	value = scope:banking_crash_origin_country.gdp
-	divide = { value = gdp min = 1 }
-	min = 0
-	max = 10
-	multiply = 5
-}
-
-# Tiered GDP thresholds for contagion chance modifiers (used in trigger comparisons)
+# Tiered GDP thresholds for contagion chance modifiers (used in trigger comparisons;
+# a script value cannot be a `random` modifier's `add`, so the GDP weight is tiers,
+# not a ratio)
 banking_contagion_gdp_threshold_2x = { value = gdp multiply = 2 }
 banking_contagion_gdp_threshold_5x = { value = gdp multiply = 5 }
 banking_contagion_gdp_threshold_10x = { value = gdp multiply = 10 }
@@ -2160,11 +2152,23 @@ banking_asset_relief_activation_cost = {
 	round = yes
 }
 
-# Banking-cycle radicals magnitudes — initially mirror vanilla small_radicals/medium_radicals
-# (0.02 / 0.05 in event_values.txt), defined separately so banking-button friction can be tuned
-# independently of global event balance.
+# Banking-cycle radicals magnitudes: the toggle-cost friction shared by most of the tools in
+# banking_policy_effects.txt (market, command and cooperative alike). Defined separately so
+# banking-button friction can be tuned independently of global event balance. Against vanilla's
+# event_values.txt (very_small 0.01, small 0.02, medium 0.05, large 0.1): small matches vanilla
+# small_radicals; medium sits between vanilla small and medium.
 banking_small_radicals_value = 0.02
 banking_medium_radicals_value = 0.03
+
+# Bank Holiday radicals (banking_effect_cb_bank_holiday), one per stratum, middle hardest: a
+# major, unpopular emergency measure that freezes every depositor's money. Its own constants so
+# retuning the toggle costs above cannot move it. The dashboard row's tooltip,
+# banking_bank_holiday_radicals_tt in te_miscellaneous_l_english.yml, quotes all three as
+# literal percentages (5% / 3% / 2%): change them together. (The note lives here because
+# organize_loc.py drops comments from loc files on every reload.)
+banking_bank_holiday_middle_radicals = 0.05
+banking_bank_holiday_upper_radicals = 0.03
+banking_bank_holiday_lower_radicals = 0.02
 
 # Transfer amount for command economy treasury <-> investment pool buttons (0.2% GDP)
 ce_pool_transfer_amount = {
