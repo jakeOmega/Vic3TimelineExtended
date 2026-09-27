@@ -21,7 +21,7 @@ nd_withdraw_umbrella_action = {
 	show_confirmation_box = yes
 	show_in_lens = no
 
-	texture = "gfx/interface/icons/diplomatic_action_icons/guarantee_independence.dds"
+	texture = "gfx/interface/icons/diplomatic_action_icons/nd_withdraw_umbrella_action.dds"
 
 	# Only an overlord that has tested a bomb has an umbrella to withdraw, so
 	# the action is not drawn on every subject from 1836 — unless a withdrawal

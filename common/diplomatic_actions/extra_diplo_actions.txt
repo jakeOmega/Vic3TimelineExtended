@@ -1306,7 +1306,7 @@ voluntary_union_decentralized = {
 	is_hostile = no
 	show_in_lens = no
 
-	texture = "gfx/interface/icons/diplomatic_action_icons/force_become_subject.dds"
+	texture = "gfx/interface/icons/diplomatic_action_icons/voluntary_union_decentralized.dds"
 
 	selectable = {
 		# Same activation floor as voluntary_union / the irredentism system.

@@ -100,29 +100,40 @@ def rewrite_icon_refs(path: Path, field: str, targets: dict[str, str], dry_run: 
 
     Returns the keys changed. The rest of the file, its BOM and each line's
     indentation and trailing comment are kept, except a comment calling the
-    old icon a placeholder, which stops being true. Mod-added entities are
-    plain top-level definitions; INJECT:/REPLACE: blocks are not matched.
+    old icon a placeholder, which stops being true. An entity with no such
+    line (the covert-operation actions had none, so the game showed no icon)
+    gets one as the first line of its block, where vanilla puts it. Mod-added
+    entities are plain top-level definitions; INJECT:/REPLACE: blocks are not
+    matched.
     """
     raw = path.read_bytes()
     bom = raw.startswith(b"\xef\xbb\xbf")
     lines = raw.decode("utf-8-sig").split("\n")
     field_re = re.compile(r'^(\s*' + field + r'\s*=\s*")([^"]*)(".*)$')
     changed: list[str] = []
+    opened: dict[str, int] = {}  # target key -> its opening line, while it has no field line
     key, depth = None, 0
     for i, line in enumerate(lines):
         code = _code(line)
         if depth == 0:
             m = _DEF_RE.match(line)
             key = m.group(1) if m else None
+            if key in targets and code.count("{") > code.count("}"):
+                opened.setdefault(key, i)
         elif depth == 1 and key in targets:
             m = field_re.match(line)
-            if m and m.group(2) != targets[key] and key not in changed:
-                rest = m.group(3)
-                if "placeholder" in rest.lower():
-                    rest = '"' + rest[1:].split("#", 1)[0].rstrip()
-                lines[i] = m.group(1) + targets[key] + rest
-                changed.append(key)
+            if m:
+                opened.pop(key, None)
+                if m.group(2) != targets[key] and key not in changed:
+                    rest = m.group(3)
+                    if "placeholder" in rest.lower():
+                        rest = '"' + rest[1:].split("#", 1)[0].rstrip()
+                    lines[i] = m.group(1) + targets[key] + rest
+                    changed.append(key)
         depth += code.count("{") - code.count("}")
+    for key, i in sorted(opened.items(), key=lambda kv: -kv[1]):
+        lines.insert(i + 1, f'\t{field} = "{targets[key]}"')
+        changed.append(key)
     if changed and not dry_run:
         text = "\n".join(lines).encode("utf-8")
         path.write_bytes((b"\xef\xbb\xbf" if bom else b"") + text)

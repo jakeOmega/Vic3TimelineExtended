@@ -136,6 +136,15 @@ class RewriteTests(unittest.TestCase):
         gi.rewrite_icon_refs(p, "texture", {"beta": "gfx/new/beta.dds"})
         self.assertIn(b'beta = {\n\ttexture = "gfx/new/beta.dds"\n}', p.read_bytes())
 
+    def test_missing_icon_line_is_inserted_first_in_the_block(self):
+        text = ("acted = {\n\tgroups = { general }\n\tpact = {\n\t\ttexture = \"not/this.dds\"\n\t}\n}\n"
+                "other = {\n\tgroups = { general }\n}\n")
+        p = self._file(text)
+        self.assertEqual(gi.rewrite_icon_refs(p, "texture", {"acted": "gfx/a.dds"}), ["acted"])
+        self.assertEqual(p.read_bytes()[3:].decode("utf-8"),
+                         text.replace("acted = {\n", 'acted = {\n\ttexture = "gfx/a.dds"\n'))
+        self.assertEqual(gi.rewrite_icon_refs(p, "texture", {"acted": "gfx/a.dds"}), [])
+
     def test_rewrite_is_idempotent(self):
         p = self._file()
         gi.rewrite_icon_refs(p, "texture", {"beta": "gfx/new/beta.dds"})
