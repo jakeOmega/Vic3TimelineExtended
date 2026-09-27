@@ -58,7 +58,7 @@ The toggleable subset of these (banking cycle, world war, etc.) is gated on per-
 
 ## Game rules (toggleable systems)
 
-Fourteen mod systems can be turned on or off at game setup. Defaults below; full list in `common/game_rules/extra_game_rules.txt`. Disabled systems hide their journal entry, bypass their on-actions, and skip their events — but baseline content (laws, techs, buildings, modifiers) still applies.
+Fifteen mod systems can be turned on or off at game setup. Defaults below; full list in `common/game_rules/extra_game_rules.txt`. Disabled systems hide their journal entry, bypass their on-actions, and skip their events — but baseline content (laws, techs, buildings, modifiers) still applies.
 
 | Rule | Default | What it gates |
 |---|---|---|
@@ -76,10 +76,12 @@ Fourteen mod systems can be turned on or off at game setup. Defaults below; full
 | `custom_religions_allowed_rule` | **disabled** | Custom-religion creator JE and events |
 | `universal_aptitude_traits_rule` | **disabled** | Assigns admin/diplo/military aptitude traits to *all* adult characters, not just rulers and heirs — independent of Heir Education. With both rules off, no character has aptitude traits |
 | `free_market_construction_rule` | enabled | The construction market: construction as a tradeable good bought by the government and investors, construction maintenance on industry and infrastructure, a private share that follows the purchases. *Without Retooling Costs*: the same, but switching a building's production methods no longer multiplies its construction maintenance. *Without Maintenance*: the market with no construction maintenance at all (and so no retooling cost). *Disabled*: base-game construction — the Construction Site becomes the construction sector (built and expanded by the government, points straight from its production method), no construction good or maintenance, and the economic-system law sets the private share; every country gets a small base of construction (+5 a week), and AI countries can't shed their Construction Sites outside default |
+| `internal_resettlement_rule` | enabled | The Settlement Authority and government resettlement programs. *AI voluntary only*: AI countries run only voluntary programs (penal transportation, special settlements and rustication stay open to players). *Disabled*: no Settlement Authority |
 
-Every rule but `banking_system_rule` and `free_market_construction_rule` is a straight on/off
-pair; the first has a third, *simplified* setting, and the second two more market settings,
-*without retooling costs* and *without maintenance* (see the table above).
+Every rule but `banking_system_rule`, `free_market_construction_rule` and
+`internal_resettlement_rule` is a straight on/off pair; the first has a third, *simplified*
+setting, the second two more market settings, *without retooling costs* and *without
+maintenance*, and the third an *AI voluntary only* setting (see the table above).
 
 Loc keys for each rule live in `localization/english/te_game_rules_l_english.yml`. The gating pattern (`is_shown_when_inactive`, on-action `return = yes` guards, etc.) is documented in `docs/systems/mod_systems.md` § Game Rules.
 
