@@ -141,7 +141,7 @@ Tracks a civil rights movement for minority populations. Activates when a countr
 ### Threshold tier events (one-shot via `cr_tier_X_seen` flags)
 - **Tier 25:** existing `.13` (Refugee networks) under severe discriminatory law, else new `.301` (First Mass Rally)
 - **Tier 50:** existing `.15` (Martyrdom) under any discriminatory law, else new `.303` (Trade Union Coalition)
-- **Tier 75:** new `.304` (Federal Commission Recommends Action) when `cr_federal_months > 24`, else existing `.16` (Civil Disobedience Campaign). `.16` needs a discriminatory minority law, so a country with none and 24 months or less of Federal Protection gets no tier-75 event (open owner's call)
+- **Tier 75:** new `.304` (Federal Commission Recommends Action) when `cr_federal_months > 24`, else existing `.16` (Civil Disobedience Campaign) under any discriminatory law, else `.302` (Equal on Paper): the law-neutral fallback for Indifference, or Protection without Multicultural citizenship (enforce the law / leave it to the courts / refuse)
 - **Tier 90:** new `.305` (March on the Capital) — universal cinematic beat
 
 ### Path-dependent resolution
