@@ -257,6 +257,196 @@ def find_progress_bar_keys(project_directory):
     return bar_keys
 
 
+def find_war_goal_keys(project_directory):
+    """Finds the implicit key suite for war goal types.
+
+    The engine names a war goal's text off its type key with no script
+    reference: `war_goal_<type>` (the goal as drafted), `_desc`, `_sway_desc`,
+    `_type_name` and `_type_desc`. Confirmed against vanilla
+    `war_goal_annex_country*`. Without this, te_reunify_country's whole suite
+    ("Reunify the Nation") was filed to te_unused_l_english.yml.
+    """
+    war_goal_keys = set()
+    wg_path = os.path.join(project_directory, "common", "war_goal_types")
+    if not os.path.isdir(wg_path):
+        return war_goal_keys
+    suffixes = ["", "_desc", "_sway_desc", "_type_name", "_type_desc"]
+    for file in os.listdir(wg_path):
+        if file.endswith(".txt"):
+            with open(os.path.join(wg_path, file), "r", encoding="utf-8-sig") as f:
+                matches = re.findall(r"^([\w\.-]+)\s*=\s*{", f.read(), re.MULTILINE)
+                for base_key in matches:
+                    for suffix in suffixes:
+                        war_goal_keys.add(f"war_goal_{base_key}{suffix}")
+    return war_goal_keys
+
+
+# A script token built from literal text and `$PARAM$` placeholders, e.g.
+# `nd_tt_$VAR$_$OP$` or `nd_tt_readiness_target_$R$`.
+_TEMPLATE_TOKEN_RE = re.compile(r"[\w.\-]*(?:\$[A-Z][A-Z0-9_]*\$[\w.\-]*)+")
+_PLACEHOLDER_RE = re.compile(r"\$([A-Z][A-Z0-9_]*)\$")
+# A top-level definition in a scripted effect / trigger file.
+_TOP_LEVEL_DEF_RE = re.compile(r"^([\w.\-]+)\s*=\s*\{", re.MULTILINE)
+# Any block opener; a call of a parameterized effect or trigger is one of these.
+_BLOCK_OPEN_RE = re.compile(r"(?<![\w.\-$:@])([A-Za-z_][\w.\-]*)\s*=\s*\{")
+# A call-site argument, `PARAM = value`, at the top level of the call block.
+_CALL_ARG_RE = re.compile(r"(?<![\w$])([A-Z][A-Z0-9_]*)\s*=\s*([^\s{}\"]+)")
+# Where parameterized effects and triggers are defined, and where they are called.
+_PARAM_DEF_DIRS = (os.path.join("common", "scripted_effects"), os.path.join("common", "scripted_triggers"))
+_SCRIPT_DIRS = ("common", "events")
+# Skip a template whose expansion would exceed this many strings.
+_MAX_TEMPLATE_EXPANSION = 50000
+
+
+def _strip_comments(text):
+    return re.sub(r"#[^\n]*", "", text)
+
+
+def _block_end(text, open_brace):
+    """Index just past the brace that closes the one at `open_brace`."""
+    depth = 0
+    for i in range(open_brace, len(text)):
+        c = text[i]
+        if c == "{":
+            depth += 1
+        elif c == "}":
+            depth -= 1
+            if depth == 0:
+                return i + 1
+    return len(text)
+
+
+def _read_script_texts(project_directory, subdirs):
+    texts = {}
+    for sub in subdirs:
+        for root, _, files in os.walk(os.path.join(project_directory, sub)):
+            for file in files:
+                if not file.endswith(".txt"):
+                    continue
+                path = os.path.join(root, file)
+                try:
+                    with open(path, "r", encoding="utf-8-sig", errors="ignore") as f:
+                        texts[path] = _strip_comments(f.read())
+                except OSError:
+                    continue
+    return texts
+
+
+def find_parameterized_keys(project_directory, all_keys):
+    """Finds loc keys that script reaches only through `$PARAM$` substitution.
+
+    A scripted effect such as `custom_tooltip = { text = nd_tt_$VAR$_$OP$ }`
+    names its loc key only after the caller fills in `VAR = nd_hardening
+    OP = add`; the plain token scan sees `nd_tt_`, `VAR` and `OP`, never
+    `nd_tt_nd_hardening_add`, so such keys were filed as unused.
+
+    Each templated token is expanded with the values that the calls of ITS OWN
+    effect or trigger pass for each parameter. A call that passes a parameter
+    on (`MILESTONE = $MILESTONE$`) contributes whatever its enclosing
+    definition's callers pass. Only expansions that are real loc keys count.
+    """
+    script = _read_script_texts(project_directory, _SCRIPT_DIRS)
+    def_dirs = tuple(os.path.join(project_directory, d) + os.sep for d in _PARAM_DEF_DIRS)
+
+    # Definitions that use placeholders, with their templates and spans.
+    templates_of = {}   # def name -> set of templated tokens
+    spans = []          # (path, start, end, def name) for every definition
+    for path, text in script.items():
+        if not path.startswith(def_dirs):
+            continue
+        for m in _TOP_LEVEL_DEF_RE.finditer(text):
+            name = m.group(1)
+            end = _block_end(text, m.end() - 1)
+            spans.append((path, m.start(), end, name))
+            body = text[m.end():end]
+            if "$" in body:
+                toks = {t for t in _TEMPLATE_TOKEN_RE.findall(body) if _PLACEHOLDER_RE.sub("", t)}
+                templates_of.setdefault(name, set()).update(toks)
+    # Every definition that uses a placeholder, including one that only passes
+    # its parameters on to another call, needs its callers' arguments.
+    param_defs = {name for path, start, end, name in spans if "$" in script[path][start:end]}
+
+    def enclosing_def(path, pos):
+        for p, start, end, name in spans:
+            if p == path and start <= pos < end:
+                return name
+        return None
+
+    # Every call of a parameterized definition: (callee, {PARAM: value}, caller).
+    calls = defaultdict(list)
+    for path, text in script.items():
+        if "=" not in text:
+            continue
+        for m in _BLOCK_OPEN_RE.finditer(text):
+            callee = m.group(1)
+            if callee not in param_defs:
+                continue
+            end = _block_end(text, m.end() - 1)
+            inner = text[m.end():end - 1]
+            # Top-level arguments only: blank out nested blocks.
+            flat, depth = [], 0
+            for c in inner:
+                if c == "{":
+                    depth += 1
+                elif c == "}":
+                    depth -= 1
+                elif depth == 0:
+                    flat.append(c)
+                    continue
+                flat.append(" ")
+            args = dict(_CALL_ARG_RE.findall("".join(flat)))
+            caller = enclosing_def(path, m.start()) if path.startswith(def_dirs) else None
+            calls[callee].append((args, caller))
+
+    memo = {}
+
+    def expand(template, def_name, seen):
+        """Every string `template` can become inside `def_name`."""
+        pieces = _PLACEHOLDER_RE.split(template)
+        # pieces alternate literal, param, literal, param, ..., literal
+        pools = [values_for(def_name, p, seen) for p in pieces[1::2]]
+        if not all(pools):
+            return set()
+        size = 1
+        for pool in pools:
+            size *= len(pool)
+        if size > _MAX_TEMPLATE_EXPANSION:
+            return set()
+        candidates = [pieces[0]]
+        for i, pool in enumerate(pools):
+            literal = pieces[2 * i + 2]
+            candidates = [c + v + literal for c in candidates for v in pool]
+        return set(candidates)
+
+    def values_for(def_name, param, seen=()):
+        """Every value the callers of `def_name` pass for `param`."""
+        key = (def_name, param)
+        if key in memo:
+            return memo[key]
+        if key in seen:
+            return set()
+        out = set()
+        for args, caller in calls.get(def_name, ()):
+            value = args.get(param)
+            if value is None:
+                continue
+            if "$" in value:
+                # Passed on from the caller's own parameters
+                # (`MILESTONE = $MILESTONE$`, `KEY = sr_$MILESTONE$`).
+                if caller:
+                    out |= expand(value, caller, seen + (key,))
+            else:
+                out.add(value)
+        memo[key] = out
+        return out
+
+    found = set()
+    for def_name, templates in templates_of.items():
+        for template in templates:
+            found.update(c for c in expand(template, def_name, ()) if c in all_keys)
+    return found
+
+
 def find_journal_entry_keys(project_directory):
     """Finds implicit keys for journal entries."""
     je_keys = set()
@@ -351,6 +541,14 @@ def categorize_key(key, technology_keys):
         return "LAWS"
     if key.startswith(("institution_", "INSTITUTION_FUNDING_LEVEL_", "NO_INSTITUTION_")):
         return "INSTITUTIONS"
+    # Families whose members would otherwise split across files. The nuclear
+    # deterrence tooltips (`nd_tt_nd_hardening_add` / `_subtract`) must be
+    # tested before the `_add` rule below, or the step-up half lands in
+    # te_modifiers_l_english.yml. A war goal's engine-implicit suite
+    # (find_war_goal_keys) has four-token bases, so its `_desc` halves would
+    # fall to CONCEPTS while the names stay in MISCELLANEOUS.
+    if key.startswith(("nd_tt_", "war_goal_")):
+        return "MISCELLANEOUS"
     if key.endswith(("_add", "_mult", "_add_desc", "_mult_desc")):
         return "MODIFIERS"
     if key.startswith(("goods_", "popneed_")):
@@ -583,9 +781,11 @@ def organize_all(project_directory, dry_run=False):
         find_political_movement_keys,
         find_journal_entry_keys,
         find_progress_bar_keys,
+        find_war_goal_keys,
     ]
     for func in parser_functions:
         used_keys.update(func(project_directory))
+    used_keys.update(find_parameterized_keys(project_directory, all_keys))
 
     technology_keys = find_technology_keys(project_directory)
 
