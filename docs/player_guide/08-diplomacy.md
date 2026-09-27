@@ -79,7 +79,7 @@ gains leverage over it, and relations improve.
 
 | Article | Offered by | What it does |
 |---|---|---|
-| Request Influence | A country outside any bloc, to a bloc leader | The leader gains leverage over you very fast, pulling you toward its bloc. |
+| Request Influence | A country outside any bloc, to a bloc leader | The leader gains leverage over you very fast, so it can soon invite you into its bloc. It is the way for a player to join a bloc: an AI leader accepts readily, but an AI country essentially never agrees to be the one asking. |
 | Extend Influence | Bloc leader | The leader gains leverage over the other country. |
 | Crisis Resolution | Bloc leader with over 100 authority | The recipient gets +40 minimum legitimacy, lower liberty desire and half the radicalism from enacting unpopular laws; the leader pays authority. |
 | Education Aid | A more literate member | +10% education access for a recipient with a weak Ministry of Education or none. |
@@ -331,6 +331,13 @@ a year: +3 per unspent mandate, up to +12. Example new bloc names include the
 Global Accord for a Diplomatic Framework and the Anglosphere for a cultural
 bloc.
 
+Joining a bloc gets easier with technology. In the base game a leader needs a
+Leverage Advantage of 200 over a country to invite it, and the same to accept
+its request to join. The mod lowers that with the bloc leader's technology: to
+100 with Intergovernmental Organizations and to 50 with Globalization. The
+Request Influence article and the mod's monetary articles (see [Monetary treaty
+articles](04-banking.md#monetary-treaty-articles)) build leverage toward it.
+
 With Intergovernmental Organizations, a bloc leader can build one Power Bloc
 Headquarters, a government building with a very high construction cost. What it
 does depends on the bloc's identity: authority and cheaper decrees for a
@@ -370,7 +377,13 @@ subject, and no rivalry or war with any of them.
 | Indonesia | 65% of its core | |
 | China | 65% | |
 
-Once Decolonization is researched, the base game's India and Indonesia
+India, Indonesia and China are nations the base game can already form, but
+there one country forms each by holding enough of its states. From
+Decolonization on, the mod's versions are major formations like the unions:
+major powers with a capital in the region can be candidates and compete
+through leadership and unification plays. They need none of the unions' world
+conditions, so in a world of former colonies these three come together far more
+often. Once Decolonization is researched, the base game's India and Indonesia
 formations leave the list and these replace them. While a base-game India or
 Indonesia exists, the new one can't be unified.
 
