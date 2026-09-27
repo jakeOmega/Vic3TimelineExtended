@@ -373,6 +373,10 @@
 				}
 			}
 			# Tier 75
+			# Known gap, awaiting the owner's call: .16's own trigger needs a
+			# discriminatory minority law, so a country with none and 24 months or
+			# less of Federal Protection gets no tier-75 event (the flag is set
+			# anyway). .304's text presumes the two-year commission.
 			if = {
 				limit = {
 					NOT = { has_variable = cr_tier_75_seen }
@@ -437,7 +441,7 @@
 
 			# --- Slimmed random-events ladder (existing flavor pool) ---
 			random_list = {
-				400 = { } # ~80% nothing
+				400 = { } # ~86% nothing (400 of 463)
 				15 = { trigger_event = { id = movement_events_te.1 } }
 				15 = { trigger_event = { id = movement_events_te.2 } }
 				10 = { trigger_event = { id = movement_events_te.3 } }

@@ -949,7 +949,7 @@
  covert_space_espionage_desc:0 "Our intelligence services are passing us the designs of a foreign space programme: our milestones progress faster and fail less often."
  covert_space_espionage_detected_desc:0 "Counterintelligence has uncovered foreign agents inside our space programme, and plugging the leak consumes administrative focus."
  cr_cooptation_expired:0 "Cooptation Has Run Its Course"
- cr_cooptation_expired_desc:0 "The movement has learned that the appointments were symbolic. Bar bonus from cooptation has expired; remove and re-toggle to refresh."
+ cr_cooptation_expired_desc:0 "The movement has learned that the appointments were symbolic. The bar bonus from cooptation has run out for the rest of this struggle; ending and restarting the program does not restore it."
  cr_cooptation_modifier:0 "Cooptation / Token Reform"
  cr_cooptation_modifier_desc:0 "Token appointments and symbolic statutes take the heat off; ideological coherence suffers."
  cr_federal_protection_modifier_desc:0 "Marshals deploy; civil rights statutes are enforced from the top. [concept_bureaucracy] and authority bear the weight."

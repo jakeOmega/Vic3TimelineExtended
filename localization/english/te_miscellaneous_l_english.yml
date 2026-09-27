@@ -255,7 +255,7 @@
  CR_GRADUALIST_ACCOMMODATION_DESC:0 "Quiet desegregation, blue-ribbon committees, and 'all deliberate speed.' Pushes the bar slowly but cools [concept_turmoil]. The path of least resistance."
  CR_GRASSROOTS_ORGANIZING_DESC:0 "Tolerate (and quietly assist) church, union, and student networks. Builds movement support steadily; raises [Concept('concept_radical', 'radicals')] as suppressed grievances find voice. Can stack with other pro-movement policies."
  CR_REMOVE_COOPTATION_TOKEN_REFORM:0 "End Cooptation"
- CR_REMOVE_COOPTATION_TOKEN_REFORM_DESC:0 "Stop the token-appointment program. Resets the cooptation window."
+ CR_REMOVE_COOPTATION_TOKEN_REFORM_DESC:0 "Stop the token-appointment program. This does not reset the 12-month window: months already spent coopting still count if the program resumes."
  CR_REMOVE_FEDERAL_PROTECTION:0 "Suspend Federal Protection"
  CR_REMOVE_FEDERAL_PROTECTION_DESC:0 "Stand down federal enforcement of civil rights statutes."
  CR_REMOVE_GRADUALIST_ACCOMMODATION:0 "End Gradualist Approach"
