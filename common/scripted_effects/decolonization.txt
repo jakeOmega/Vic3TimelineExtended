@@ -758,9 +758,18 @@ colonial_empire_clear_path_months = {
 # decolonization_events.3 Option C; future Suez-style or Cold-War
 # client-state outcomes can reuse the same shape).
 #
+# Direction: in both vanilla articles the TARGET is the beneficiary and the
+# SOURCE grants. foreign_investment_rights reads "Allows [TARGET] to build in
+# [SOURCE]", can_ratify wants the target's interest in the source's capital
+# region, and maintenance_paid_by = target_country (07_foreign_investment_
+# rights.txt); trade_privilege reads "[TARGET] receives trade privileges from
+# [SOURCE]" (25_trade_privilege.txt). So the ex-colony is the source and the
+# metropole the target. (Until 2026-09 they were the other way round, which
+# gave the ex-colony the rights in the metropole's market.)
+#
 # Parameters:
-#   FIRST  — the metropole (rights holder; source of both articles)
-#   SECOND — the dependent ex-colony (rights granter; target of both articles)
+#   FIRST  — the metropole (rights holder; target of both articles)
+#   SECOND — the dependent ex-colony (rights granter; source of both articles)
 #   YEARS  — binding period in years (e.g. 25)
 impose_neocolonial_investment_trade_treaty = {
 	create_treaty = {
@@ -772,13 +781,13 @@ impose_neocolonial_investment_trade_treaty = {
 		articles_to_create = {
 			{
 				article = foreign_investment_rights
-				source_country = $FIRST$
-				target_country = $SECOND$
+				source_country = $SECOND$
+				target_country = $FIRST$
 			}
 			{
 				article = trade_privilege
-				source_country = $FIRST$
-				target_country = $SECOND$
+				source_country = $SECOND$
+				target_country = $FIRST$
 			}
 		}
 	}
