@@ -4,12 +4,23 @@ Event image generation prompts for Vic3TimelineExtended.
 Each image definition includes:
 - prompt: AI image generation description
 - style: Style modifier for the generator (appended to prompt)
-- events: List of event IDs that use this image
+- events: the event IDs that show this image
+
+The event files are the source of truth, and `events` must agree with them:
+for an image whose .dds exists, every listed event shows exactly that texture
+(test_event_image_registry.py fails otherwise, because phase 3 of
+generate_event_images.py would silently revert the event to the listed image).
+When you re-point an event, move its ID to the new image's list, or drop it
+if the new picture has no entry here. An image with no .dds yet is *pending*:
+its events keep interim art until it is generated, and phase 3 then wires them.
+
+A prompt records what was asked for, not what was drawn. Look at a picture
+before reusing it (`contact_sheet.py NAME ...`).
 
 Usage:
     python event_image_prompts.py              # Print summary stats
     python event_image_prompts.py --json       # Output full JSON
-    python event_image_prompts.py --validate   # Check for unmapped events
+    python event_image_prompts.py --validate   # Registry vs event files; exit 1 on errors
 
 PROMPT WRITING GUIDELINES (FLUX.1-schnell, 4 steps):
 =====================================================
@@ -29,8 +40,14 @@ DO NOT:
   - Mention signs, banners, text, writing, slogans, screens with text, chalkboard
     writing, statistics, charts, projections, or any readable content — FLUX
     generates nonsense text that ruins the image
-  - Request specific national flags — they render as unrecognizable garbled designs.
-    Use "flags" generically or omit them entirely
+  - Mention flags at all, or leave a civic scene unpinned. Generic prompts came
+    back with real ones: "a flag-raising at a newly independent nation's palace"
+    drew India's flag, "a public celebration after a movement's victory" the US
+    Capitol and flag, a press conference Austria's and the EU's. Describe the
+    architecture yourself (columned stone building, no dome) and leave flags out
+  - Show political figures' faces up close. "Two candidates at podiums on a
+    debate stage" drew two likenesses of a real politician. Keep them small,
+    distant, or seen from behind
   - Use abstract/symbolic compositions ("split screen", "portraits facing each
     other", "clock ticking to midnight") — FLUX renders these as surreal collages
   - Describe animals in close-up with humans in protective gear — they merge into
@@ -58,7 +75,7 @@ IMAGES = {
     "underground_augmentation_clinic": {
         "prompt": "An underground surgical clinic with cybernetic implants.",
         "style": "digital painting, atmospheric, cyberpunk mood",
-        "events": ["augmentation_events.2"],
+        "events": ["augmentation_events.2", "extra_law_events.76"],
     },
     "anti_augmentation_protest": {
         "prompt": "Night street protest outside a neon-lit clinic, raised hands and a police line in rain.",
@@ -92,13 +109,17 @@ IMAGES = {
             "banking_cycle_events.9", "banking_cycle_events.14",
             "banking_cycle_events.17", "banking_cycle_events.22",
             "banking_cycle_events.33", "banking_cycle_events.35",
-            "banking_cycle_events.43",
+            "banking_cycle_events.43", "banking_cycle_events.46",
+            "decolonization_events.50",
         ],
     },
     "bank_run_crowd": {
         "prompt": "A panicked crowd at a Victorian bank.",
         "style": "oil painting, chiaroscuro, 19th-century realism",
-        "events": ["banking_cycle_events.4", "banking_cycle_events.31"],
+        "events": [
+            "banking_cycle_events.4", "banking_cycle_events.31",
+            "banking_cycle_events.47", "extra_law_events.38",
+        ],
     },
     "banking_boardroom": {
         "prompt": "A mahogany boardroom with bank executives.",
@@ -107,6 +128,8 @@ IMAGES = {
             "banking_cycle_events.7", "banking_cycle_events.21",
             "banking_cycle_events.23", "banking_cycle_events.26",
             "banking_cycle_events.36", "banking_cycle_events.40",
+            "banking_cycle_events.48", "banking_cycle_events.68", "te_lolr.1",
+            "te_lolr.2", "te_union.1", "un_events.35",
         ],
     },
     "central_bank_policy": {
@@ -114,11 +137,12 @@ IMAGES = {
         "style": "oil painting, academic art, institutional grandeur",
         "events": [
             "banking_cycle_events.8", "banking_cycle_events.10",
-            "banking_cycle_events.12", "banking_cycle_events.15",
-            "banking_cycle_events.16", "banking_cycle_events.19",
-            "banking_cycle_events.25", "banking_cycle_events.30",
-            "banking_cycle_events.34", "banking_cycle_events.39",
-            "banking_cycle_events.45",
+            "banking_cycle_events.15", "banking_cycle_events.16",
+            "banking_cycle_events.19", "banking_cycle_events.25",
+            "banking_cycle_events.30", "banking_cycle_events.34",
+            "banking_cycle_events.39", "banking_cycle_events.45",
+            "banking_cycle_events.58", "banking_cycle_events.69", "te_peg.1",
+            "te_peg.2",
         ],
     },
     "financial_distress_street": {
@@ -221,7 +245,7 @@ IMAGES = {
     "espionage_dead_drop": {
         "prompt": "A clandestine briefcase exchange at a train station.",
         "style": "oil painting, chiaroscuro, noir atmosphere",
-        "events": ["covert_warfare.1", "covert_warfare.2"],
+        "events": ["covert_warfare.1", "covert_warfare.2", "international_relations_events.203"],
     },
 
     # =========================================================================
@@ -240,7 +264,10 @@ IMAGES = {
     "media_broadcast_global": {
         "prompt": "A television broadcasting control room with monitors.",
         "style": "oil painting, impressionist, warm light",
-        "events": ["cultural_hegemony.3", "cultural_hegemony.10"],
+        "events": [
+            "cultural_hegemony.3", "cultural_hegemony.10",
+            "international_relations_events.202",
+        ],
     },
     "cultural_classroom_influence": {
         "prompt": "A classroom studying a foreign nation's culture.",
@@ -289,7 +316,10 @@ IMAGES = {
     "partition_border_drawing": {
         "prompt": "Officials drawing borders on a large map.",
         "style": "oil painting, social realism, warm golden light",
-        "events": ["decolonization_events.4", "decolonization_events.16"],
+        "events": [
+            "decolonization_events.4", "decolonization_events.16",
+            "decolonization_events.63",
+        ],
     },
     "post_colonial_strongman": {
         "prompt": "A military leader addressing a crowd from a balcony.",
@@ -302,6 +332,7 @@ IMAGES = {
         "events": [
             "decolonization_events.8", "decolonization_events.9",
             "decolonization_events.11", "decolonization_events.13",
+            "decolonization_events.300", "decolonization_events.301",
         ],
     },
     "neocolonial_dependency": {
@@ -315,14 +346,14 @@ IMAGES = {
     "cold_war_proxy_competition": {
         "prompt": "Two superpower representatives visiting a new nation.",
         "style": "oil painting, social realism, warm golden light",
-        "events": ["decolonization_events.12"],
+        "events": ["decolonization_events.12", "international_relations_events.101"],
     },
     "post_colonial_tensions": {
         "prompt": "A post-colonial city scene with ethnic tension.",
         "style": "oil painting, social realism, warm golden light",
         "events": [
             "decolonization_events.17", "decolonization_events.20",
-            "decolonization_events.21",
+            "decolonization_events.21", "decolonization_events.203",
         ],
     },
     "failed_state_aftermath": {
@@ -337,37 +368,37 @@ IMAGES = {
     "industrial_smog_victorian": {
         "prompt": "A 19th-century industrial city choked with smog.",
         "style": "oil painting, landscape, dramatic sky",
-        "events": ["environmental_events.1"],
+        "events": [],
     },
     "climate_flooding_city": {
         "prompt": "A coastal city partially submerged in floodwater.",
         "style": "oil painting, landscape, dramatic sky",
-        "events": ["environmental_events.2", "environmentalism_events.15"],
+        "events": ["environmentalism_events.15"],
     },
     "drought_devastation": {
         "prompt": "A cracked, parched landscape under a blazing sun.",
         "style": "oil painting, landscape, dramatic sky",
-        "events": ["environmental_events.3", "environmentalism_events.14"],
+        "events": ["environmentalism_events.5", "environmentalism_events.14"],
     },
     "climate_refugee_exodus": {
         "prompt": "Climate refugees walking along a dusty road.",
         "style": "oil painting, landscape, dramatic sky",
-        "events": ["environmental_events.4", "environmentalism_events.16"],
+        "events": ["environmentalism_events.6", "environmentalism_events.16"],
     },
     "ecological_collapse_panorama": {
         "prompt": "A panoramic view of ecological collapse.",
         "style": "oil painting, landscape, dramatic sky",
-        "events": ["environmental_events.5", "environmentalism_events.19", "environmentalism_events.20"],
+        "events": ["environmentalism_events.19", "environmentalism_events.20"],
     },
     "green_sustainable_city": {
         "prompt": "A sustainable city with vertical gardens and solar panels.",
         "style": "oil painting, impressionist, bright natural light",
-        "events": ["environmental_events.100", "environmentalism_events.21"],
+        "events": ["environmentalism_events.21"],
     },
     "environmental_catastrophe_final": {
         "prompt": "A panorama of environmental ruin and flooded ruins.",
         "style": "oil painting, landscape, dramatic sky",
-        "events": ["environmental_events.200"],
+        "events": [],
     },
 
     # =========================================================================
@@ -391,7 +422,7 @@ IMAGES = {
     "anti_nuclear_energy_march": {
         "prompt": "A massive anti-nuclear protest march.",
         "style": "oil painting, social realism, dramatic light",
-        "events": ["environmentalism_events.5"],
+        "events": [],
     },
     "renewable_energy_installation": {
         "prompt": "Workers installing a solar panel farm.",
@@ -401,7 +432,7 @@ IMAGES = {
     "nature_conservation_effort": {
         "prompt": "Volunteers planting trees in a wilderness.",
         "style": "oil painting, landscape, dramatic sky",
-        "events": ["environmentalism_events.8"],
+        "events": ["environmentalism_events.8", "monument_events.7"],
     },
     "environmental_policy_hearing": {
         "prompt": "A legislative hearing on environmental policy.",
@@ -436,27 +467,39 @@ IMAGES = {
         "prompt": "A grand parliament chamber in heated session.",
         "style": "oil painting, academic art, warm interior light",
         "events": [
-            "extra_law_events.1", "extra_law_events.2", "extra_law_events.3",
-            "extra_law_events.4", "extra_law_events.5", "extra_law_events.9",
-            "extra_law_events.10", "extra_law_events.14", "extra_law_events.15",
-            "extra_law_events.20", "extra_law_events.21", "extra_law_events.25",
-            "extra_law_events.26", "extra_law_events.27", "extra_law_events.28",
-            "extra_law_events.30", "extra_law_events.31", "extra_law_events.32",
-            "extra_law_events.35", "extra_law_events.36",
+            "cultural_hegemony.19", "extra_law_events.1", "extra_law_events.2",
+            "extra_law_events.3", "extra_law_events.4", "extra_law_events.5",
+            "extra_law_events.9", "extra_law_events.10", "extra_law_events.14",
+            "extra_law_events.15", "extra_law_events.20", "extra_law_events.21",
+            "extra_law_events.25", "extra_law_events.26", "extra_law_events.27",
+            "extra_law_events.28", "extra_law_events.30", "extra_law_events.31",
+            "extra_law_events.32", "extra_law_events.35", "extra_law_events.36",
+            "extra_law_events.37", "extra_law_events.39", "extra_law_events.40",
+            "extra_law_events.44", "extra_law_events.45", "extra_law_events.46",
+            "extra_law_events.47", "extra_law_events.48", "extra_law_events.50",
+            "extra_law_events.51", "extra_law_events.53", "extra_law_events.54",
+            "extra_law_events.55", "extra_law_events.57", "extra_law_events.60",
+            "extra_law_events.61", "extra_law_events.62", "extra_law_events.63",
+            "extra_law_events.64", "extra_law_events.68", "extra_law_events.69",
+            "extra_law_events.70", "extra_law_events.71", "extra_law_events.72",
+            "extra_law_events.74", "extra_law_events.75", "extra_law_events.77",
+            "extra_law_events.78", "extra_law_events.79", "extra_law_events.81",
+            "extra_law_events.84", "extra_law_events.86",
         ],
     },
     "surveillance_cameras_cityscape": {
         "prompt": "An urban street corner dominated by a surveillance camera.",
         "style": "oil painting, contemporary realism, desaturated",
         "events": [
-            "extra_law_events.6", "extra_law_events.7",
+            "extra_law_events.6", "extra_law_events.7", "extra_law_events.41",
+            "extra_law_events.42", "extra_law_events.65", "extra_law_events.66",
             "society_technology_events.12",
         ],
     },
     "genetics_laboratory": {
         "prompt": "A state-of-the-art genetics laboratory interior.",
         "style": "oil painting, cool clinical light, scientific",
-        "events": ["extra_law_events.8"],
+        "events": ["extra_law_events.8", "extra_law_events.67"],
     },
     "automation_robots_factory": {
         "prompt": "A factory floor with synchronized robotic arms.",
@@ -466,7 +509,10 @@ IMAGES = {
     "language_reform_classroom": {
         "prompt": "A schoolroom in transition with a teacher and students.",
         "style": "oil painting, academic art, warm interior light",
-        "events": ["extra_law_events.13"],
+        "events": [
+            "decolonization_events.205", "extra_law_events.13", "extra_law_events.49",
+            "extra_law_events.73",
+        ],
     },
     "digital_privacy_screen": {
         "prompt": "A person at a desk surrounded by screens showing encrypted data.",
@@ -482,14 +528,14 @@ IMAGES = {
         "prompt": "Workers striking outside a factory gate.",
         "style": "oil painting, social realism, dramatic light",
         "events": [
-            "extra_law_events.22", "extra_law_events.23",
-            "extra_law_events.29",
+            "extra_law_events.22", "extra_law_events.23", "extra_law_events.29",
+            "extra_law_events.82",
         ],
     },
     "media_press_freedom": {
         "prompt": "A printing press being shut down by authorities.",
         "style": "oil painting, dramatic light, press scene",
-        "events": ["extra_law_events.24"],
+        "events": ["extra_law_events.24", "extra_law_events.56", "extra_law_events.80"],
     },
     "drug_policy_hearing": {
         "prompt": "A public hearing on drug policy with experts and citizens.",
@@ -503,32 +549,32 @@ IMAGES = {
     "feminist_equal_pay_march": {
         "prompt": "A large group of women marching in solidarity.",
         "style": "oil painting, social realism, warm light",
-        "events": ["feminist_events.1", "feminist_events.2"],
+        "events": [],
     },
     "reproductive_rights_debate": {
         "prompt": "A public forum on reproductive rights with testimonies.",
         "style": "oil painting, social realism, warm light",
-        "events": ["feminist_events.3"],
+        "events": [],
     },
     "women_in_military": {
         "prompt": "Women soldiers standing at attention with male colleagues.",
         "style": "oil painting, social realism, warm light",
-        "events": ["feminist_events.4"],
+        "events": [],
     },
     "anti_feminist_backlash": {
         "prompt": "A counter-protest confronting feminist marchers.",
         "style": "oil painting, social realism, warm light",
-        "events": ["feminist_events.5"],
+        "events": [],
     },
     "feminist_struggle_continues": {
         "prompt": "A tired yet determined woman working late at a desk.",
         "style": "oil painting, social realism, warm light",
-        "events": ["feminist_events.100"],
+        "events": [],
     },
     "gender_equality_achieved": {
         "prompt": "A boardroom meeting with equal gender representation.",
         "style": "oil painting, social realism, warm light",
-        "events": ["feminist_events.200"],
+        "events": [],
     },
 
     # =========================================================================
@@ -537,12 +583,7 @@ IMAGES = {
     "military_formation_update": {
         "prompt": "A military command room with officers around a tactical map.",
         "style": "oil painting, dramatic shadows, military interior",
-        "events": [
-            "te_construction_market_pulse_events.1", "te_construction_market_pulse_events.2",
-            "te_construction_market_pulse_events.3", "te_construction_market_recalc_events.1",
-            "te_construction_market_recalc_events.2", "te_construction_market_building_events.1",
-            "te_construction_market_building_events.2", "te_construction_market_building_events.3",
-        ],
+        "events": [],
     },
 
     # =========================================================================
@@ -568,46 +609,49 @@ IMAGES = {
     "arms_race_factories": {
         "prompt": "A massive military-industrial factory producing tanks.",
         "style": "oil painting, dramatic shadows, industrial military",
-        "events": ["international_relations_events.1"],
+        "events": ["international_relations_events.1", "international_relations_events.105"],
     },
     "proxy_war_map": {
         "prompt": "A Cold War situation room with advisors around a map.",
         "style": "oil painting, chiaroscuro, Cold War atmosphere",
-        "events": ["international_relations_events.2"],
+        "events": ["international_relations_events.2", "social_tensions_events.17"],
     },
     "diplomatic_espionage_scandal": {
         "prompt": "Journalists crowding an embassy during a diplomatic scandal.",
         "style": "oil painting, dramatic light, political tension",
-        "events": ["international_relations_events.3", "international_relations_events.103"],
+        "events": [
+            "international_relations_events.6", "international_relations_events.103",
+            "international_relations_events.106",
+        ],
     },
     "nuclear_standoff_tension": {
         "prompt": "A Cold War war room with a glowing strategic map.",
         "style": "oil painting, chiaroscuro, Cold War atmosphere",
-        "events": ["international_relations_events.4"],
+        "events": [
+            "international_relations_events.8", "nuclear_crisis.2", "nuclear_crisis.4",
+            "nuclear_crisis.5", "nuclear_crisis.7", "nuclear_custody.1",
+            "nuclear_incident.11", "nuclear_incident.50",
+        ],
     },
     "detente_summit_meeting": {
         "prompt": "Two rival heads of state shaking hands across a table in a neutral country's elegant conference room. Flags of both nations and the host. Advisors watching cautiously.",
         "style": "oil painting, dramatic light, political tension",
-        "events": ["international_relations_events.5", "international_relations_events.101"],
+        "events": ["international_relations_events.3", "nuclear_crisis.3"],
     },
     "space_rivalry_celebration": {
         "prompt": "A 1960s living room where a family watches a rival nation's rocket launch on a black-and-white television set. The father stands with arms crossed, jaw set. The mother watches with concern. Children sit on the floor, mesmerized. Through the window, a suburban neighborhood at dusk. The sting of being second.",
         "style": "oil painting, social realism, mid-century light",
-        "events": ["international_relations_events.6"],
+        "events": ["international_relations_events.7"],
     },
     "trade_war_sanctions": {
         "prompt": "A port with cargo ships being turned away: customs officials stamp DENIED on shipping manifests, crates sit impounded on the docks. Flag-draped containers from the sanctioned nation stack up. The economic warfare of trade embargoes.",
         "style": "oil painting, contemporary realism, industrial port",
-        "events": [
-            "international_relations_events.7",
-            "international_relations_events.102",
-            "international_relations_events.104",
-        ],
+        "events": [],
     },
     "cyber_warfare_operations": {
         "prompt": "A military cyber operations center: rows of monitors displaying code, network maps, and intrusion alerts. Uniformed personnel in a dark room lit only by screens. Digital warfare being waged in silence.",
         "style": "oil painting, contemporary realism, cool screen light",
-        "events": ["international_relations_events.8"],
+        "events": [],
     },
 
     # =========================================================================
@@ -616,40 +660,37 @@ IMAGES = {
     "pride_march_colorful": {
         "prompt": "A vibrant pride march through city streets.",
         "style": "oil painting, impressionist, vibrant rainbow light",
-        "events": [
-            "lgbtq_events.1",
-            "society_technology_events.7", "society_technology_events.8",
-        ],
+        "events": ["society_technology_events.7", "society_technology_events.8"],
     },
     "lgbtq_religious_backlash": {
         "prompt": "Religious leaders delivering a sermon opposing social change.",
         "style": "oil painting, academic art, dramatic pulpit light",
-        "events": ["lgbtq_events.2"],
+        "events": [],
     },
     "hate_crime_vigil": {
         "prompt": "A candlelight vigil mourning victims of a hate crime.",
         "style": "oil painting, social realism, warm light",
-        "events": ["lgbtq_events.3"],
+        "events": [],
     },
     "lgbtq_military_service": {
         "prompt": "A soldier standing at attention in uniform.",
         "style": "oil painting, social realism, warm light",
-        "events": ["lgbtq_events.4"],
+        "events": [],
     },
     "lgbtq_marriage_debate": {
         "prompt": "A packed legislative chamber during a tense vote.",
         "style": "oil painting, social realism, warm light",
-        "events": ["lgbtq_events.5"],
+        "events": [],
     },
     "lgbtq_persecution_dark": {
         "prompt": "A person hiding behind a locked door, fearful.",
         "style": "oil painting, social realism, warm light",
-        "events": ["lgbtq_events.100"],
+        "events": [],
     },
     "lgbtq_full_equality": {
         "prompt": "A same-sex couple signing a marriage certificate.",
         "style": "oil painting, social realism, warm light",
-        "events": ["lgbtq_events.200"],
+        "events": [],
     },
 
     # =========================================================================
@@ -678,7 +719,7 @@ IMAGES = {
     "institutional_abuse_exposed": {
         "prompt": "A journalist spreading documents exposing institutional abuse.",
         "style": "oil painting, intimate realism, empathetic light",
-        "events": ["mental_health_events.5"],
+        "events": ["decolonization_events.52", "mental_health_events.5"],
     },
     "mental_health_stigma": {
         "prompt": "A person hesitating at the entrance of a mental health clinic.",
@@ -698,18 +739,36 @@ IMAGES = {
         "prompt": "A new government ministry being inaugurated: officials cutting a ribbon at the entrance of a grand but slightly austere building. Civil servants carry stacks of files inside. A new bureaucratic empire being born.",
         "style": "oil painting, academic art, institutional interior",
         "events": [
-            "ministry_law_events.1", "ministry_law_events.2",
-            "ministry_law_events.3", "ministry_law_events.4",
-            "ministry_law_events.5",
+            "cultural_hegemony.17", "ministry_law_events.1", "ministry_law_events.2",
+            "ministry_law_events.3", "ministry_law_events.4", "ministry_law_events.5",
+            "ministry_law_events.20", "ministry_law_events.21",
+            "ministry_law_events.22", "ministry_law_events.23",
+            "ministry_law_events.24", "ministry_law_events.25",
+            "ministry_law_events.26", "ministry_law_events.27",
+            "ministry_law_events.28", "ministry_law_events.29",
+            "ministry_law_events.30", "ministry_law_events.31",
+            "ministry_law_events.32", "ministry_law_events.33",
+            "ministry_law_events.34", "ministry_law_events.35",
+            "ministry_law_events.36", "ministry_law_events.37",
+            "ministry_law_events.38", "ministry_law_events.39",
+            "ministry_law_events.40", "ministry_law_events.41",
+            "ministry_law_events.42", "ministry_law_events.43",
+            "ministry_law_events.44", "ministry_law_events.45",
+            "ministry_law_events.46", "ministry_law_events.47",
+            "ministry_law_events.48", "ministry_law_events.49",
+            "ministry_law_events.50", "ministry_law_events.51",
+            "ministry_law_events.52", "ministry_law_events.53",
+            "ministry_law_events.54", "ministry_law_events.55",
+            "ministry_law_events.56", "ministry_law_events.57",
         ],
     },
     "bureaucratic_turf_war": {
         "prompt": "Two senior government ministers confronting each other across a conference table, their respective staff aligned behind them like opposing armies. Files and memoranda stacked as barricades. Bureaucratic warfare in pinstripes.",
         "style": "oil painting, academic art, institutional interior",
         "events": [
-            "ministry_law_events.6", "ministry_law_events.7",
-            "ministry_law_events.8", "ministry_law_events.9",
-            "ministry_law_events.10",
+            "ministry_law_events.6", "ministry_law_events.7", "ministry_law_events.8",
+            "ministry_law_events.9", "ministry_law_events.10", "ministry_law_events.58",
+            "ministry_law_events.59",
         ],
     },
     "ministry_policy_debate": {
@@ -746,7 +805,7 @@ IMAGES = {
     "world_exhibition_fair": {
         "prompt": "A grand World's Fair exhibition hall: soaring cast-iron and glass architecture, elaborate national pavilions, crowds marveling at technological wonders — steam engines, electrical displays, exotic goods. Victorian spectacle at its most ambitious.",
         "style": "oil painting, academic art, warm golden light",
-        "events": ["minor_events_timelineextended.7"],
+        "events": ["minor_events_timelineextended.7", "monument_events.9"],
     },
     "foreign_investment_opportunity": {
         "prompt": "A foreign investor and a local businessman shaking hands in a colonial-era trading house. Maps, contracts, and commodity samples spread on the desk between them. Ceiling fan turning slowly. The mechanics of international capital.",
@@ -756,11 +815,7 @@ IMAGES = {
     "minor_event_generic": {
         "prompt": "A 19th-century newspaper office: editors reviewing galley proofs, compositors setting type, a boy running in with a telegram. The smell of ink and the urgency of breaking news in the age before radio.",
         "style": "oil painting, academic art, warm golden light",
-        "events": [
-            "minor_events_timelineextended.1",
-            "minor_events_timelineextended.6",
-            "minor_events_timelineextended.100",
-        ],
+        "events": ["minor_events_timelineextended.6"],
     },
 
     # =========================================================================
@@ -770,9 +825,11 @@ IMAGES = {
         "prompt": "A candidate addressing a large crowd from a decorated stage.",
         "style": "oil painting, social realism, dramatic light",
         "events": [
-            "modern_election_events.1", "modern_election_events.2",
-            "modern_election_events.3", "modern_election_events.4",
-            "modern_election_events.5",
+            "modern_election_events.1", "modern_election_events.3",
+            "modern_election_events.4", "modern_election_events.5",
+            "modern_election_events.11", "modern_election_events.12",
+            "modern_election_events.13", "modern_election_events.14",
+            "modern_election_events.15",
         ],
     },
     "social_media_campaign": {
@@ -781,17 +838,13 @@ IMAGES = {
         "events": [
             "modern_election_events.6", "modern_election_events.7",
             "modern_election_events.8", "modern_election_events.9",
-            "modern_election_events.10",
+            "modern_election_events.10", "society_technology_events.32",
         ],
     },
     "election_debate_stage": {
-        "prompt": "Two candidates at podiums on a debate stage.",
+        "prompt": "A television debate stage seen from the back of a darkened studio audience, two small distant figures at wooden podiums under bright stage lights, cameras on tripods in the foreground.",
         "style": "oil painting, social realism, dramatic light",
-        "events": [
-            "modern_election_events.11", "modern_election_events.12",
-            "modern_election_events.13", "modern_election_events.14",
-            "modern_election_events.15",
-        ],
+        "events": ["repeatable_events.10"],
     },
     "voter_registration_queue": {
         "prompt": "Citizens queuing outside a polling station.",
@@ -815,6 +868,7 @@ IMAGES = {
         "events": [
             "modern_election_events.23", "modern_election_events.24",
             "modern_election_events.25", "modern_election_events.26",
+            "nuclear_incident.60", "nuclear_loose.7",
         ],
     },
     "grassroots_canvassing": {
@@ -825,15 +879,6 @@ IMAGES = {
             "modern_election_events.29",
         ],
     },
-    "election_crisis_contested": {
-        "prompt": "Crowd pressing against barricades outside a government counting hall at night.",
-        "style": "oil painting, social realism, dramatic light",
-        "events": [
-            "modern_election_events.30", "modern_election_events.31",
-            "modern_election_events.32", "modern_election_events.33",
-            "modern_election_events.34", "modern_election_events.35",
-        ],
-    },
 
     # =========================================================================
     # MOVEMENT EVENTS
@@ -842,8 +887,9 @@ IMAGES = {
         "prompt": "A massive peaceful civil rights march.",
         "style": "oil painting, social realism, dramatic light",
         "events": [
-            "movement_events_te.1", "movement_events_te.2",
-            "movement_events_te.3", "movement_events_te.4",
+            "movement_events_te.1", "movement_events_te.2", "movement_events_te.301",
+            "movement_events_te.303", "movement_events_te.304",
+            "movement_events_te.305",
         ],
     },
     "economic_boycott_action": {
@@ -858,7 +904,7 @@ IMAGES = {
         "prompt": "Men burning draft cards in a public square.",
         "style": "oil painting, social realism, dramatic light",
         "events": [
-            "movement_events_te.9", "movement_events_te.10",
+            "decolonization_events.54", "movement_events_te.9", "movement_events_te.10",
             "movement_events_te.11", "movement_events_te.12",
         ],
     },
@@ -875,12 +921,16 @@ IMAGES = {
     "movement_triumph_celebration": {
         "prompt": "A massive public celebration after a movement's victory.",
         "style": "oil painting, social realism, dramatic light",
-        "events": ["movement_events_te.100"],
+        "events": ["movement_events_te.222", "movement_events_te.223"],
     },
     "movement_crushed_aftermath": {
         "prompt": "Empty rain-soaked streets after a suppressed movement.",
         "style": "oil painting, social realism, dramatic light",
-        "events": ["movement_events_te.200"],
+        "events": [
+            "movement_events_te.100", "movement_events_te.230",
+            "movement_events_te.231", "movement_events_te.232",
+            "movement_events_te.240",
+        ],
     },
 
     # =========================================================================
@@ -889,12 +939,15 @@ IMAGES = {
     "nuclear_city_destruction": {
         "prompt": "A mushroom cloud rising over a city skyline.",
         "style": "oil painting, dramatic light, apocalyptic tone",
-        "events": ["nuclear_weapon_events.1"],
+        "events": ["nuclear_loose.2", "nuclear_weapon_events.1"],
     },
     "tactical_nuclear_strike": {
         "prompt": "A tactical nuclear blast on a battlefield.",
         "style": "oil painting, dramatic light, apocalyptic tone",
-        "events": ["nuclear_weapon_events.2", "nuclear_weapon_events.18"],
+        "events": [
+            "nuclear_crisis.20", "nuclear_crisis.24", "nuclear_weapon_events.2",
+            "nuclear_weapon_events.18",
+        ],
     },
     "nuclear_fallout_contamination": {
         "prompt": "An abandoned contaminated exclusion zone with inspectors in hazmat suits.",
@@ -912,33 +965,38 @@ IMAGES = {
     "nuclear_test_mushroom": {
         "prompt": "A nuclear test mushroom cloud over a desert.",
         "style": "oil painting, dramatic light, apocalyptic tone",
-        "events": ["nuclear_weapon_events.5"],
+        "events": ["nuclear_weapon_events.5", "nuclear_weapon_events.9"],
     },
     "nuclear_proliferation_threat": {
         "prompt": "Analysts reviewing satellite photos of suspected nuclear sites.",
         "style": "oil painting, dramatic light, apocalyptic tone",
         "events": [
+            "international_relations_events.104", "nuclear_custody.3",
+            "nuclear_custody.10", "nuclear_incident.5", "nuclear_loose.4",
             "nuclear_weapon_events.6", "nuclear_weapon_events.7",
-            "nuclear_weapon_events.16",
+            "nuclear_weapon_events.16", "nuclear_weapon_events.23",
         ],
     },
     "nuclear_false_alarm_panic": {
         "prompt": "A missile warning center in crisis with red alert lights.",
         "style": "oil painting, dramatic light, apocalyptic tone",
         "events": [
-            "nuclear_weapon_events.8", "nuclear_weapon_events.17",
-            "nuclear_weapon_events.20",
+            "nuclear_incident.1", "nuclear_incident.2", "nuclear_weapon_events.8",
+            "nuclear_weapon_events.17", "nuclear_weapon_events.20",
         ],
     },
     "anti_nuclear_movement": {
         "prompt": "A massive anti-nuclear demonstration in a city park.",
         "style": "oil painting, social realism, dramatic light",
-        "events": ["nuclear_weapon_events.9", "nuclear_weapon_events.10"],
+        "events": ["nuclear_weapon_events.10"],
     },
     "nuclear_diplomacy_talks": {
         "prompt": "Arms control negotiators at a treaty table.",
         "style": "oil painting, academic art, diplomatic interior",
         "events": [
+            "nuclear_crisis.6", "nuclear_crisis.21", "nuclear_crisis.23",
+            "nuclear_custody.4", "nuclear_custody.6", "nuclear_custody.8",
+            "nuclear_custody.12", "nuclear_incident.12", "nuclear_loose.8",
             "nuclear_weapon_events.11", "nuclear_weapon_events.12",
             "nuclear_weapon_events.19", "nuclear_weapon_events.21",
         ],
@@ -946,12 +1004,12 @@ IMAGES = {
     "nuclear_defense_shield": {
         "prompt": "A missile defense installation with radar dishes and interceptor rockets.",
         "style": "oil painting, dramatic light, apocalyptic tone",
-        "events": ["nuclear_weapon_events.13"],
+        "events": ["nuclear_incident.40", "nuclear_weapon_events.13"],
     },
     "nuclear_power_debate": {
         "prompt": "A tense public hearing on nuclear power.",
         "style": "oil painting, academic art, institutional interior",
-        "events": ["nuclear_weapon_events.22"],
+        "events": ["nuclear_incident.3", "nuclear_weapon_events.22"],
     },
 
     # =========================================================================
@@ -1014,7 +1072,7 @@ IMAGES = {
     "religious_political_power": {
         "prompt": "Religious leaders meeting politicians in a government office.",
         "style": "oil painting, academic art, warm interior light",
-        "events": ["religious_revival_events.7"],
+        "events": ["extra_law_events.43", "extra_law_events.52", "religious_revival_events.7"],
     },
 
     # =========================================================================
@@ -1023,7 +1081,7 @@ IMAGES = {
     "supply_chain_disruption": {
         "prompt": "A chaotic port with backed-up container ships and empty warehouses.",
         "style": "oil painting, contemporary realism, industrial crisis",
-        "events": ["repeatable_events.10"],
+        "events": [],
     },
     "automation_displacement": {
         "prompt": "A factory floor where robots replace human workers.",
@@ -1068,7 +1126,7 @@ IMAGES = {
     "international_development_project": {
         "prompt": "Engineers from multiple countries collaborating on infrastructure.",
         "style": "oil painting, social realism, warm light",
-        "events": ["repeatable_events.100"],
+        "events": ["decolonization_events.202", "repeatable_events.100"],
     },
 
     # =========================================================================
@@ -1077,27 +1135,27 @@ IMAGES = {
     "religious_scandal_media": {
         "prompt": "A religious scandal breaking across newspapers and screens.",
         "style": "oil painting, academic art, warm interior light",
-        "events": ["secular_events.1"],
+        "events": [],
     },
     "social_moral_panic": {
         "prompt": "A heated community meeting over perceived moral decline.",
         "style": "oil painting, social realism, warm interior light",
-        "events": ["secular_events.2", "secular_events.100"],
+        "events": [],
     },
     "new_age_spirituality_center": {
         "prompt": "A new age center with crystals and meditation cushions.",
         "style": "oil painting, impressionist, warm diffuse light",
-        "events": ["secular_events.3"],
+        "events": [],
     },
     "church_state_separation": {
         "prompt": "A courtroom ruling removing religious symbols from a government building.",
         "style": "oil painting, academic art, institutional gravitas",
-        "events": ["secular_events.4", "secular_events.200"],
+        "events": [],
     },
     "interfaith_dialogue_table": {
         "prompt": "Religious leaders from different faiths meeting around a table.",
         "style": "oil painting, academic art, warm interior light",
-        "events": ["secular_events.5"],
+        "events": [],
     },
 
     # =========================================================================
@@ -1115,8 +1173,8 @@ IMAGES = {
         "prompt": "Lobbyists and legislators exchanging briefcases in a legislative corridor.",
         "style": "oil painting, chiaroscuro, institutional power",
         "events": [
-            "social_tensions_events.3", "social_tensions_events.9",
-            "social_tensions_events.10",
+            "extra_law_events.58", "social_tensions_events.3",
+            "social_tensions_events.9", "social_tensions_events.10",
         ],
     },
     "monopoly_corporate_tower": {
@@ -1196,12 +1254,12 @@ IMAGES = {
     "election_interference_cyber": {
         "prompt": "Hackers in a dark room targeting election systems.",
         "style": "oil painting, contemporary realism, dark screen light",
-        "events": ["society_technology_events.14"],
+        "events": ["modern_election_events.30", "society_technology_events.14"],
     },
     "student_protest_campus": {
         "prompt": "A university campus protest: students occupying a building, banners hanging from windows, teach-ins on the lawn. Faculty divided — some joining, some condemning. The perennial engine of youthful idealism challenging institutional complacency.",
         "style": "oil painting, social realism, campus daylight",
-        "events": ["society_technology_events.15"],
+        "events": ["decolonization_events.53", "society_technology_events.15"],
     },
     "neural_interface_consumer": {
         "prompt": "A patient receiving a small neural implant in a clinical chair.",
@@ -1221,7 +1279,10 @@ IMAGES = {
     "telepathic_diplomacy_link": {
         "prompt": "Two diplomats connected by neural interfaces in a negotiation.",
         "style": "digital painting, ethereal light, speculative future",
-        "events": ["society_technology_events.21"],
+        "events": [
+            "society_technology_events.21", "society_technology_events.34",
+            "society_technology_events.35",
+        ],
     },
     "nuclear_reactor_leak": {
         "prompt": "A nuclear plant incident with warning lights and workers responding.",
@@ -1236,7 +1297,7 @@ IMAGES = {
     "deepfake_crisis_screen": {
         "prompt": "Officials in a crisis room examining a viral deepfake video.",
         "style": "oil painting, contemporary realism, cool screen light",
-        "events": ["society_technology_events.25"],
+        "events": ["modern_election_events.2", "society_technology_events.25"],
     },
     "ai_alignment_failure": {
         "prompt": "Engineers scrambling in a server room during an AI failure.",
@@ -1246,7 +1307,7 @@ IMAGES = {
     "algorithmic_governance_office": {
         "prompt": "A government office where algorithms render routine decisions.",
         "style": "oil painting, contemporary realism, sterile light",
-        "events": ["society_technology_events.27"],
+        "events": ["extra_law_events.59", "extra_law_events.83", "society_technology_events.27"],
     },
     "genetic_designer_baby_clinic": {
         "prompt": "Prospective parents reviewing an embryo's genetic profile in clinic.",
@@ -1455,7 +1516,7 @@ IMAGES = {
     "orbital_earth_view": {
         "prompt": "An astronaut looking out a spacecraft window at Earth below — the thin blue atmosphere line, swirling white clouds, the curvature of the planet. The profound loneliness and beauty of orbit. Earth as a fragile island in blackness.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["space_race_events.2"],
+        "events": ["modern_election_events.32", "space_race_events.2", "te_map_modes.1"],
     },
     "moon_landing_footprint": {
         "prompt": "An astronaut's boot pressing into lunar regolith for the first time. The bootprint is sharp and clear in the grey dust. The lunar module sits nearby, Earth hangs in the black sky.",
@@ -1787,7 +1848,7 @@ IMAGES = {
     "engineering_breakthrough_lab": {
         "prompt": "Engineers celebrating a breakthrough in a lab: a new engine design, a lighter material, a more efficient solar cell. Whiteboards covered in equations, prototypes on benches, the eureka moment that suddenly makes the impossible possible.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["space_race_events.74"],
+        "events": ["agricultural_diffusion_events.1", "space_race_events.74"],
     },
     "program_cancelled_empty": {
         "prompt": "An empty space program facility: lights off, equipment covered in dust sheets, a partially built rocket standing alone in a cavernous assembly hall. The dream abandoned, the budget redirected, the engineers scattered.",
@@ -1840,7 +1901,10 @@ IMAGES = {
     "intelligence_dead_drop": {
         "prompt": "A clandestine intelligence exchange: a briefcase left under a park bench at night, a shadowy figure retrieving it while another walks away. Streetlights create pools of light and shadow. The human side of espionage.",
         "style": "oil painting, chiaroscuro, noir atmosphere",
-        "events": ["treaty_article_events.2"],
+        "events": [
+            "international_relations_events.107", "social_tensions_events.18",
+            "treaty_article_events.2",
+        ],
     },
     "cultural_renaissance_shared": {
         "prompt": "A cultural exchange program in full bloom: an art exhibition featuring works from two allied nations side by side. Visitors from both countries mingling, musicians performing fusion compositions. Culture as the bridge between peoples.",
@@ -1850,7 +1914,10 @@ IMAGES = {
     "nationalist_backlash_flags": {
         "prompt": "A nationalist protest against foreign cultural influence: demonstrators waving national flags and burning foreign goods. Traditional symbols held up against foreign products. The backlash against cultural integration and perceived loss of identity.",
         "style": "oil painting, social realism, dramatic firelight",
-        "events": ["treaty_article_events.4", "treaty_article_events.12"],
+        "events": [
+            "cultural_hegemony.20", "treaty_article_events.4",
+            "treaty_article_events.12", "un_events.34",
+        ],
     },
     "military_disarmament_ceremony": {
         "prompt": "A formal military disarmament ceremony: soldiers from a defeated or treaty-bound nation turning in weapons under the supervision of international observers. Weapons stacked in piles. The bitter ritual of enforced peace.",
@@ -1860,7 +1927,7 @@ IMAGES = {
     "joint_military_exercises": {
         "prompt": "Joint military exercises between allied nations: troops from different countries training together, their different uniforms and equipment mixing. Camaraderie and professionalism across language barriers. Interoperability as alliance cement.",
         "style": "oil painting, dramatic light, military field",
-        "events": ["treaty_article_events.6"],
+        "events": ["nuclear_incident.10", "treaty_article_events.6"],
     },
     "education_initiative_school": {
         "prompt": "A school built through international cooperation: children studying from textbooks provided by a foreign ally, a building dedicated with both nations' flags. Education as the long-term investment in peace between peoples.",
@@ -1884,21 +1951,21 @@ IMAGES = {
     "un_charter_signing": {
         "prompt": "The founding moment of the United Nations: delegates from many nations signing a charter document at a grand ceremony. Flashbulbs pop, flags of the world line the hall.",
         "style": "oil painting, academic art, institutional grandeur",
-        "events": ["un_events.1"],
+        "events": ["un_events.1", "un_events.31", "un_events.36"],
     },
     "un_assembly_hall_vote": {
         "prompt": "The UN General Assembly in session: a vast hemispherical hall filled with delegates, voting boards lit up, the Secretary-General at the podium. The theater of international diplomacy where every nation has one voice.",
         "style": "oil painting, academic art, institutional grandeur",
         "events": [
-            "un_events.2", "un_events.6", "un_events.11",
-            "un_events.12", "un_events.13", "un_events.20",
-            "un_vote.1", "un_vote.2", "un_vote.3",
+            "un_events.2", "un_events.6", "un_events.11", "un_events.12",
+            "un_events.20", "un_mandate.1", "un_mandate.2", "un_vote.1", "un_vote.2",
+            "un_vote.3",
         ],
     },
     "human_rights_declaration": {
         "prompt": "The proclamation of universal human rights: a dignified official reading from a historic document at a podium, delegates from every continent listening. The aspiration that all humans are born free and equal, codified in international law.",
         "style": "oil painting, academic art, institutional grandeur",
-        "events": ["un_events.3", "un_events.22"],
+        "events": ["movement_events_te.4", "movement_events_te.17", "un_events.3", "un_events.22"],
     },
     "peacekeeping_deployment": {
         "prompt": "UN peacekeepers in distinctive blue helmets and berets deploying in a conflict zone: armored vehicles painted white, soldiers establishing checkpoints, civilians cautiously emerging. Peace kept at gunpoint by neutral third parties.",
@@ -1908,7 +1975,10 @@ IMAGES = {
     "sanctions_cargo_inspection": {
         "prompt": "International sanctions enforcement: inspectors boarding a cargo ship at port, customs officers examining manifests against a sanctions list. Containers impounded, shipments blocked. Economic warfare conducted through bureaucracy.",
         "style": "oil painting, contemporary realism, industrial port",
-        "events": ["un_events.5", "un_events.15"],
+        "events": [
+            "international_relations_events.102", "nuclear_loose.3", "nuclear_loose.9",
+            "un_events.5", "un_events.15",
+        ],
     },
     "humanitarian_camp_tents": {
         "prompt": "A large humanitarian refugee camp: rows of white UNHCR tents stretching to the horizon, aid workers distributing food and medicine, children playing amid the displacement. The massive infrastructure of emergency human compassion.",
@@ -1918,22 +1988,17 @@ IMAGES = {
     "international_court_chamber": {
         "prompt": "The International Court of Justice in session: judges in robes at a raised bench, lawyers presenting arguments with maps and documents. The flags of disputing nations on either side. International law rendered in solemn judicial proceedings.",
         "style": "oil painting, academic art, institutional grandeur",
-        "events": ["un_events.8"],
+        "events": ["decolonization_events.61", "resettlement.20", "un_events.8", "un_events.33"],
     },
     "heritage_site_monument": {
         "prompt": "A UNESCO World Heritage Site being preserved: restoration workers carefully cleaning ancient stonework, archaeologists documenting with modern equipment. The intersection of ancient human achievement and modern conservation science.",
         "style": "oil painting, academic art, institutional grandeur",
         "events": ["un_events.9"],
     },
-    "un_crisis_empty_seats": {
-        "prompt": "Grand international chamber with many empty desks while a few delegates argue across the floor.",
-        "style": "oil painting, academic art, institutional grandeur",
-        "events": ["un_events.10"],
-    },
     "nuclear_treaty_signing": {
         "prompt": "World leaders signing a nuclear non-proliferation treaty: pens on paper, cameras flashing, the relief of containing the worst weapons ever devised through the fragile mechanism of international agreement.",
         "style": "oil painting, academic art, institutional grandeur",
-        "events": ["un_events.14"],
+        "events": ["nuclear_custody.7", "nuclear_custody.11", "un_events.14", "un_events.23"],
     },
     "pandemic_hospital_ward": {
         "prompt": "A global pandemic response: an overwhelmed hospital ward with patients in rows, medical staff in full protective equipment, supply crates from international aid stacked in corridors. The world fighting a common invisible enemy.",
@@ -2088,17 +2153,17 @@ IMAGES = {
     "ideological_confrontation_speech": {
         "prompt": "A powerful leader delivering a fiery ideological speech to a massive rally. Searchlights cross the sky, banners and flags fill the stadium. The crowd roars. The rhetoric that turns disagreement into existential conflict.",
         "style": "oil painting, dramatic shadows, military painting",
-        "events": ["world_war_events.1"],
+        "events": ["cultural_hegemony.18", "world_war_events.1", "world_war_events.4"],
     },
     "border_skirmish_troops": {
         "prompt": "Infantry trading fire across trenches and barbed wire in cold dawn haze.",
         "style": "oil painting, dramatic shadows, military painting",
-        "events": ["world_war_events.2"],
+        "events": ["world_war_events.2", "world_war_events.31"],
     },
     "diplomatic_crisis_ultimatum": {
         "prompt": "A diplomatic crisis: an ambassador delivering an ultimatum document to a foreign minister. Both men's hands tremble. Behind them, military aides flip through contingency plans. The last moment before the point of no return.",
         "style": "oil painting, dramatic shadows, military painting",
-        "events": ["world_war_events.3"],
+        "events": ["irredentism.2", "nuclear_crisis.1", "nuclear_loose.6", "world_war_events.3"],
     },
     "world_war_declaration": {
         "prompt": "Leader delivering a wartime broadcast in a formal office while civilians listen on radios.",
@@ -2128,12 +2193,12 @@ IMAGES = {
     "war_weariness_homefront": {
         "prompt": "Long ration lines and grieving families in a worn city square during a prolonged war.",
         "style": "oil painting, dramatic shadows, military painting",
-        "events": ["world_war_events.30"],
+        "events": ["decolonization_events.51", "world_war_events.30"],
     },
     "peace_conference_grand": {
         "prompt": "A grand peace conference ending a world war: delegations from exhausted nations gathered in an ornate palace. Maps of redrawn borders, terms of surrender, the exhausted relief of peace mixed with the anxiety of what comes next.",
         "style": "oil painting, academic art, grand diplomatic interior",
-        "events": ["world_war_events.100"],
+        "events": ["decolonization_events.62", "world_war_events.100"],
     },
     "regime_change_occupation": {
         "prompt": "Occupation forces overseeing regime change in a defeated nation: new flags being raised, old symbols pulled down, former officials arrested. Citizens watch — some liberated, some defeated. The bitter transformation of a conquered country.",
@@ -2154,6 +2219,61 @@ IMAGES = {
         "prompt": "Diplomats redrawing the map of the world after a great war: new borders, new alliances, new spheres of influence sketched on a giant map. Some nations enlarged, others divided, some erased entirely. The tectonic restructuring of geopolitics.",
         "style": "oil painting, academic art, warm strategic light",
         "events": ["world_war_events.104", "world_war_events.105"],
+    },
+
+    # =========================================================================
+    # PENDING: EVENTS ADDED SINCE THE APRIL 2026 PASS
+    # Their events show interim art until these are generated (see the
+    # module docstring); phase 3 of generate_event_images.py wires them once
+    # the .dds exists.
+    # =========================================================================
+    "missile_launch_crew": {
+        "prompt": "Two officers in uniform seated at steel consoles in a cramped underground missile launch control room, banks of toggle switches, dials and indicator lamps, a heavy blast door behind them, red emergency lighting.",
+        "style": "oil painting, cold war realism, harsh red light",
+        "events": ["nuclear_crisis.100", "nuclear_weapon_events.24"],
+    },
+    "nuclear_warhead_depot": {
+        "prompt": "Soldiers and technicians in white coats standing beside a missile warhead resting on a wheeled steel cradle inside a concrete storage bunker, rows of sealed crates, fluorescent ceiling lights, a heavy vault door.",
+        "style": "oil painting, cold war realism, cold fluorescent light",
+        "events": ["nuclear_custody.5"],
+    },
+    "public_observatory_night": {
+        "prompt": "Townspeople in coats gathered inside a domed observatory at night, a large brass telescope aimed through the open slit of the dome at a starry sky, an astronomer adjusting the eyepiece.",
+        "style": "oil painting, academic art, warm lamplight against deep blue night",
+        "events": ["monument_events.8"],
+    },
+    "stadium_crowd": {
+        "prompt": "A packed open-air stadium seen from high in the stands during a football match, tiers of cheering spectators, a green pitch far below, floodlight towers.",
+        "style": "oil painting, impressionist, golden late afternoon light",
+        "events": ["monument_events.10"],
+    },
+    "fertilizer_works": {
+        "prompt": "An early twentieth-century chemical works, tall riveted steel reaction towers and pipework beside brick sheds and round storage tanks, workers in flat caps and overalls in the foreground.",
+        "style": "oil painting, industrial realism, soft grey morning light",
+        "events": ["agricultural_diffusion_events.2"],
+    },
+    "wheat_field_trials": {
+        "prompt": "Two agronomists in shirtsleeves kneeling among neat test plots of short-stalked golden wheat heavy with grain, wooden stakes marking the plots, a research station barn in the distance.",
+        "style": "oil painting, social realism, warm golden light",
+        "events": ["agricultural_diffusion_events.3", "agricultural_diffusion_events.5"],
+    },
+    "dust_storm_homestead": {
+        "prompt": "A towering black dust storm rolling across flat grassland toward a lone wooden farmhouse and windmill, fence posts half-buried in drifted soil, an abandoned plough in the foreground.",
+        "style": "oil painting, dramatic realism, ochre and charcoal tones",
+        "events": ["resettlement.4"],
+    },
+    "civil_rights_victory": {
+        "prompt": "A jubilant crowd filling the wide stone steps of a columned civic building, people embracing, hats and scarves thrown in the air.",
+        "style": "oil painting, social realism, warm afternoon light",
+        "events": ["movement_events_te.200", "movement_events_te.220", "movement_events_te.221"],
+    },
+    "colonial_flag_lowering": {
+        "prompt": "Dusk at a whitewashed colonial governor's residence with a deep veranda, an honour guard standing at attention beside a bare flagpole, a quiet crowd watching from the lawn under palm trees.",
+        "style": "oil painting, social realism, fading dusk light",
+        "events": [
+            "decolonization_events.204", "decolonization_events.206",
+            "decolonization_events.400", "decolonization_events.401",
+        ],
     },
 }
 
@@ -2178,35 +2298,90 @@ def get_all_mapped_events() -> set:
     return mapped
 
 
-def validate(all_event_ids=None):
-    """Check for duplicate event assignments and unmapped events."""
-    seen = {}
-    duplicates = []
+def check(arts=None, on_disk=None) -> dict:
+    """Compare the registry with what the event files actually show.
+
+    ``arts`` is ``event_image_inventory.load(mod_root)`` and ``on_disk`` the set
+    of ``gfx/event_pictures/*.dds`` stems; both default to this checkout's
+    (git's list of pictures when ``gfx/`` is not checked out).
+
+    Errors (the registry is wrong; ``generate_event_images.py --phase update``
+    would act on them):
+      duplicates  an event listed under two images
+      dead        a listed event that is gone, hidden, or a console-only test event
+      drift       a listed event whose image exists but which shows something else;
+                  phase 3 would silently revert the event to the listed image
+    Information:
+      pending       images with no .dds yet, and the events waiting for them
+      unregistered  visible events the registry does not list, by what they show
+    """
+    import os
+    import event_image_inventory as inv
+
+    mod_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    if arts is None:
+        arts = inv.load(mod_root)
+    if on_disk is None:
+        on_disk = inv.known_pictures(mod_root)
+
+    seen: dict[str, str] = {}
+    report: dict = {"duplicates": [], "dead": [], "drift": [], "pending": {},
+                    "unregistered": {"registered_picture": [], "unregistered_picture": [],
+                                     "video": [], "conditional": []}}
     for key, img in IMAGES.items():
+        if key not in on_disk and img["events"]:
+            report["pending"][key] = list(img["events"])
         for eid in img["events"]:
             if eid in seen:
-                duplicates.append((eid, seen[eid], key))
+                report["duplicates"].append((eid, seen[eid], key))
             seen[eid] = key
+            art = arts.get(eid)
+            if art is None or art.hidden or art.debug:
+                reason = "missing" if art is None else "hidden" if art.hidden else "debug"
+                report["dead"].append((eid, key, reason))
+            elif key in on_disk and art.picture != key:
+                shows = art.picture or art.kind
+                report["drift"].append((eid, key, shows))
 
-    if duplicates:
-        print("DUPLICATE EVENT ASSIGNMENTS:")
-        for eid, k1, k2 in duplicates:
-            print(f"  {eid} -> {k1} AND {k2}")
+    for eid, art in sorted(arts.items()):
+        if eid in seen or art.hidden or art.debug or art.kind == "none":
+            continue
+        if art.kind in ("video", "conditional"):
+            report["unregistered"][art.kind].append(eid)
+        elif art.picture in IMAGES:
+            report["unregistered"]["registered_picture"].append((eid, art.picture))
+        else:
+            report["unregistered"]["unregistered_picture"].append((eid, art.picture))
+    return report
 
-    if all_event_ids:
-        unmapped = set(all_event_ids) - set(seen.keys())
-        if unmapped:
-            print(f"\nUNMAPPED EVENTS ({len(unmapped)}):")
-            for eid in sorted(unmapped):
-                print(f"  {eid}")
 
-    print(f"\nTotal images: {len(IMAGES)}")
-    print(f"Total mapped events: {len(seen)}")
-    if all_event_ids:
-        print(f"Total known events: {len(all_event_ids)}")
-        print(f"Coverage: {len(seen)}/{len(all_event_ids)} ({100*len(seen)//len(all_event_ids)}%)")
-
-    return len(duplicates) == 0
+def validate() -> bool:
+    """Print ``check()``'s report; True when the registry has no errors."""
+    r = check()
+    for title, rows in (("DUPLICATE EVENT ASSIGNMENTS", r["duplicates"]),
+                        ("LISTED EVENTS THAT ARE GONE, HIDDEN OR DEBUG-ONLY", r["dead"]),
+                        ("DRIFT: LISTED UNDER AN IMAGE BUT SHOWING ANOTHER", r["drift"])):
+        if rows:
+            print(f"{title} ({len(rows)}):")
+            for row in rows:
+                print("  " + " | ".join(str(x) for x in row))
+            print()
+    if r["pending"]:
+        print(f"PENDING IMAGES, no .dds yet ({len(r['pending'])}):")
+        for key, events in sorted(r["pending"].items()):
+            print(f"  {key}: {', '.join(events)}")
+        print()
+    un = r["unregistered"]
+    print("VISIBLE EVENTS NOT IN THE REGISTRY:")
+    print(f"  showing a registered image (add them to its list): {len(un['registered_picture'])}")
+    for eid, pic in un["registered_picture"]:
+        print(f"    {eid} -> {pic}")
+    print(f"  showing a picture with no prompt entry: {len(un['unregistered_picture'])}")
+    print(f"  showing a vanilla video: {len(un['video'])}")
+    print(f"  with conditional art (phase 3 never touches these): {len(un['conditional'])}")
+    errors = len(r["duplicates"]) + len(r["dead"]) + len(r["drift"])
+    print(f"\nImages: {len(IMAGES)}  Listed events: {len(get_all_mapped_events())}  Errors: {errors}")
+    return errors == 0
 
 
 if __name__ == "__main__":
@@ -2216,15 +2391,8 @@ if __name__ == "__main__":
     if "--json" in sys.argv:
         print(json.dumps(IMAGES, indent=2))
     elif "--validate" in sys.argv:
-        try:
-            import requests
-            r = requests.get("http://localhost:8950/events", timeout=5)
-            all_ids = [e["id"] for e in r.json().get("events", [])]
-        except Exception:
-            all_ids = None
-            print("(Could not reach mod state server for full event list)")
-        validate(all_ids)
+        sys.exit(0 if validate() else 1)
     else:
         print(f"Images defined: {len(IMAGES)}")
         print(f"Events mapped: {len(get_all_mapped_events())}")
-        print("\nUse --json for full output, --validate for coverage check")
+        print("\nUse --json for full output, --validate for the registry-vs-files check")
