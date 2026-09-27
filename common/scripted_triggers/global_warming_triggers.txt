@@ -67,6 +67,17 @@ gw_is_market_leader = {
 	market_capital.owner = THIS
 }
 
+# Bound by an Enforce Emissions Reduction treaty article
+# (109_enforce_emissions_reduction.txt sets the variable on its source). Such a
+# country keeps every market-wide policy it holds: its own repeal is barred
+# (gw_cond_not_treaty_bound), its market leader's repeal skips it
+# (gw_effect_remove_*), and so do the join sync and the monthly reconciliation
+# (gw_sync_market_policy_modifiers). A removal would freeze the treaty. The one
+# definition for those three sites.
+gw_bound_by_emissions_treaty = {
+	has_variable = has_emissions_reduction_treaty
+}
+
 # Have the yearly emissions figures been taken yet? False on a brand-new game
 # before the first yearly state pulse and on a save upgraded mid-year, which is
 # when the widget shows "figures update each January" instead of a row of

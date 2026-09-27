@@ -724,8 +724,11 @@ gw_market_join_on_action = {
 				exists = owner
 				exists = scope:market.owner
 			}
+			scope:market.owner = { save_scope_as = gw_policy_leader }
 			owner = {
 				# The joiner's market-wide policies become the absorbing leader's.
+				# Its market's other members follow at the monthly reconciliation
+				# (gw_reconcile_market_policies_effect).
 				if = {
 					limit = { has_journal_entry = je_global_warming }
 					gw_sync_market_policy_modifiers = yes
@@ -892,6 +895,8 @@ global_warming_events_on_action = {
 		if = {
 			limit = { has_game_rule = global_warming_enabled }
 			gw_rebase_annual_emissions_effect = yes
+			# Before the counters, so they count the reconciled policies.
+			gw_reconcile_market_policies_effect = yes
 			gw_refresh_global_counts_effect = yes
 
 			# Fire warming-threshold environmentalism events exactly once globally when
