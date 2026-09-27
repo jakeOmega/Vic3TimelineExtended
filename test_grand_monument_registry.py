@@ -1071,5 +1071,31 @@ class SkinTests(unittest.TestCase):
         self.assertIn("has_amendment = amendment_type:amendment_langreform_revived_$LANG$", revived)
 
 
+# ---- Task 8: vanity backlash ---------------------------------------------------------
+
+class VanityTests(unittest.TestCase):
+    def test_level_finished_hook(self):
+        ev = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.1\s*=\s*\{")))
+        self.assertIn("type = building_event hidden = yes", ev)
+        self.assertIn("owner = { gm_country_hard_times = yes } } gm_state_vanity_backlash = yes", ev)
+        self.assertIn("gm_state_is_dedicated = no } gm_state_start_ceremony = yes", ev)
+        self.assertIn("owner = { trigger_event = { id = monument_events.20 } }", ev)
+        self.assertNotIn("add_modifier", ev, "ROOT is the building here: no multiplier modifiers")
+
+    def test_backlash(self):
+        body = squash(block(read(EFFECTS), "gm_state_vanity_backlash"))
+        self.assertIn("add_radicals_in_state = { value = 0.05 }", body)
+        self.assertIn("change_variable = { name = gm_vanity_ledger add = 1 }", body)
+        self.assertIn("post_notification = gm_vanity_backlash_notice", body)
+
+    def test_notice(self):
+        msg = squash(block(read(MESSAGES), "gm_vanity_backlash_notice"))
+        self.assertIn("type = country", msg)
+        self.assertIn("notification_type = toast", msg)
+        L = loc()
+        self.assertIn("notification_gm_vanity_backlash_notice_name", L)
+        self.assertIn("notification_gm_vanity_backlash_notice_desc", L)
+
+
 if __name__ == "__main__":
     unittest.main()

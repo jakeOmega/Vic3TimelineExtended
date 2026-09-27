@@ -10,8 +10,10 @@
 # Events 3+ - recurring flavour, dispatched from monument_events_on_actions.txt.
 # ============================================================================
 
-# Event 1: construction finished (hidden plumbing).
-# ROOT is the newly-built BUILDING. Hop to its state and let the ceremony fire there.
+# Event 1: a level finished (hidden plumbing). ROOT is the BUILDING, so
+# nothing here adds a multiplier modifier: it hops to the state for vanity
+# backlash (§5) and the ceremony, then refreshes the nation through the hidden
+# country event.
 monument_events.1 = {
 	type = building_event
 	hidden = yes
@@ -22,7 +24,22 @@ monument_events.1 = {
 				is_building_group = bg_grand_monuments
 				exists = owner
 			}
-			state = { trigger_event = { id = monument_events.2 } }
+			state = {
+				if = {
+					limit = { gm_system_enabled = yes }
+					if = {
+						limit = {
+							owner = { gm_country_hard_times = yes }
+						}
+						gm_state_vanity_backlash = yes
+					}
+					if = {
+						limit = { gm_state_is_dedicated = no }
+						gm_state_start_ceremony = yes
+					}
+					owner = { trigger_event = { id = monument_events.20 } }
+				}
+			}
 		}
 	}
 }

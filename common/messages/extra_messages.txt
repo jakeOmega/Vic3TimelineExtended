@@ -2124,3 +2124,11 @@ un_representation_restored_notice = {
 	notification_type = feed
 	color = good
 }
+
+# Grand Monuments: vanity backlash (docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md §5)
+gm_vanity_backlash_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = toast
+	color = bad
+}

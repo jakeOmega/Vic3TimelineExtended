@@ -1110,3 +1110,17 @@ gm_state_choose_skin = {
 		gm_remove_state_var = { VAR = gm_skin_axis }
 	}
 }
+
+# ---- Vanity backlash (§5) --------------------------------------------------------
+# State scope. A level finished while the country is in default, famine or
+# recession: radicals in the state, and one more unit on the vanity ledger,
+# which takes legitimacy linearly (gm_national_vanity) and fades over about
+# two years. The journal entry warns beforehand (gm_hard_times_sgui, Task 9).
+gm_state_vanity_backlash = {
+	add_radicals_in_state = { value = 0.05 }
+	owner = {
+		gm_init_ledgers = yes
+		change_variable = { name = gm_vanity_ledger add = 1 }
+		post_notification = gm_vanity_backlash_notice
+	}
+}
