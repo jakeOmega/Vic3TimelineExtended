@@ -7,7 +7,9 @@
 # Conditions rows (gui/journal_entry_widgets/banking_dashboard_widget.gui).
 # The band edges reuse thresholds the script already acts on (momentum +-3 is
 # banking_cycle_bubble_risk_rising / banking_cycle_risk_falling; bubble 15 / 30
-# / 50 are crash-roll steps in banking_cycle_effects.txt).
+# / 50 are crash-roll steps in banking_cycle_effects.txt). je_banking_cycle's
+# status_desc bands momentum and bubble pressure at the same edges; keep the
+# two in step.
 # ============================================================================
 
 banking_dash_momentum_band = {
@@ -126,12 +128,14 @@ te_mon_stance_band_name = {
 # (te_monetary_update_stance): band 1 at or below -2, band 2 above that to
 # -0.75, band 3 inside +/-0.75, band 4 up to 2, band 5 at or above 2. The push
 # is te_mon_stance_momentum_add (-0.125 per pp) and te_mon_stance_bubble_add
-# (-0.75 per pp), both on the gap CLAMPED to +/-4
-# (te_mon_stance_gap_clamped). So each band's range is its threshold pair times
-# those two rates, and band 1 / band 5 run out at the clamp:
+# (-0.75 per pp), both on the gap CLAMPED to -2 .. +4
+# (te_mon_stance_gap_clamped; the loose bound was halved from -4 in #371). So
+# each band's range is its threshold pair times those two rates, band 5 runs
+# out at the tight clamp, and band 1 sits at the loose clamp, which is also
+# band 2's far edge:
 #
 #   band   gap            momentum/month      bubble/month
-#   1      <= -2 (to -4)  +0.25 .. +0.5       +1.5 .. +3
+#   1      <= -2 (at -2)  +0.25 (the most)    +1.5 (the most)
 #   2      -2 .. -0.75    +0.1  .. +0.25      +0.5 .. +1.5
 #   3      +/-0.75        under 0.1 either way   under 0.5 either way
 #   4      0.75 .. 2      -0.1  .. -0.25      -0.5 .. -1.5
