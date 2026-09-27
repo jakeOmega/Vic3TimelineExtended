@@ -342,12 +342,17 @@ un_lean_standing = {
 	}
 }
 
-# A PLEDGE: a vote committed through lobbying is a promise, not a lean.
+# A PLEDGE: a vote committed through lobbying is a promise, not a lean — for
+# (+100) or against (−100). The veto leaves it out (un_lean_veto_basis_value).
 un_lean_pledge = {
 	value = 0
 	if = {
 		limit = { un_lobby_holds_pending_commitment = yes }
 		add = 100
+	}
+	else_if = {
+		limit = { un_lobby_holds_pending_against = yes }
+		add = -100
 	}
 }
 
@@ -697,7 +702,7 @@ un_lean_regime = {
 	}
 }
 
-# The whole lean: the sum of every term above.
+# The whole lean: the sum of every term above, and the lobbying campaigns'.
 un_vote_lean = {
 	value = un_lean_consensus
 	add = un_lean_grounds
@@ -710,6 +715,8 @@ un_vote_lean = {
 	add = un_lean_accepted
 	add = un_lean_burden
 	add = un_lean_interests
+	# Influence campaigns on this member (un_lobbying_values.txt).
+	add = un_lean_lobbying
 }
 
 # ---- The lean: display reads (O(1), from the snapshot un_vote.4 wrote) ------------

@@ -32,12 +32,20 @@
 #                             (v1: always the proposer)
 #   lists   un_res_yes, un_res_no  voters (the proposer is in un_res_yes)
 #
-# Resolution lobbying adds four more lists (un_res_lobbied,
-# un_res_committed_yes, un_res_commit_kept, un_res_commit_broken) and two more
-# variables (un_res_commit_count, un_res_commit_pending) to the same container.
-# They are documented where they are written, at the top of
-# common/scripted_effects/un_lobby_effects.txt, and need nothing from the
-# lifecycle here: they are archived with the resolution and destroyed with it.
+# Resolution lobbying adds more lists (un_res_lobbied, un_res_committed_yes,
+# un_res_committed_no, un_res_commit_kept, un_res_commit_broken, and
+# un_res_campaigns, the influence campaigns) and variables (un_res_commit_count,
+# un_res_commit_pending) to the same container. They are documented where they
+# are written, at the top of common/scripted_effects/un_lobby_effects.txt. The
+# pledge lists are archived with the resolution and destroyed with it; the
+# campaigns end when it closes (un_lobby_campaigns_close, in
+# un_resolution_archive).
+#
+# The late ballots (docs/superpowers/specs/2026-09-27-un-vote-lobbying-design.md)
+# add un_res_last_call (every AI member still without a vote casts now; see
+# un_vote.6), un_res_deferred (human members that chose to decide later) and
+# the chamber's Delegations rows (un_res_delegates, un_deleg_row_0..23 and
+# their counts; un_chamber_display_effects.txt).
 #
 # Globals:
 #   un_vote_active         the vote lock: one resolution (or reservation) at a time
@@ -61,8 +69,9 @@
 
 # Open a General Assembly vote on $TOPIC$. Stores scope:un_vote_target as the
 # resolution's target when it is saved, takes the vote lock, fires un_vote.1
-# to every other member in 30 days and schedules un_vote.2 for the proposer
-# in 365 days. Leaves scope:un_resolution pointing at the new container.
+# to every other human member in 30 days, sends every member its lean at once,
+# and schedules the last call (un_vote.6, 360 days) and un_vote.2 (365 days)
+# for the proposer. Leaves scope:un_resolution pointing at the new container.
 # Parameters: $TOPIC$ = topic key (condemn, human_rights, sanctions, ...)
 # Scope: proposing country
 un_resolution_open = {
@@ -113,11 +122,15 @@ un_resolution_open = {
 		limit = { has_global_variable = un_vote_reservation }
 		remove_global_variable = un_vote_reservation
 	}
-	# The ballot (redesign phase 3). Human members get un_vote.1 in thirty
-	# days and see their lean in the chamber at once (un_vote.4 writes it).
-	# The AI votes in script, by the same lean: un_vote.5 fires to the
-	# proposer in thirty days and sends every AI member its un_vote.4, with the
-	# monthly pulse as the fallback (un_resolutions_monthly_update).
+	# The ballot (redesign phase 3; late ballots,
+	# docs/superpowers/specs/2026-09-27-un-vote-lobbying-design.md). Human
+	# members get un_vote.1 in thirty days. Every member gets its un_vote.4 at
+	# once, and every month from then on (un_resolutions_monthly_update): a
+	# human member sees its own lean, term by term, and every member sees each
+	# AI member's lean as a band from the first day. The AI votes in script, by
+	# the same lean, at month 9, 10 or 11 (un_vote_ai_draws); the last call
+	# (un_vote.6) five days before the results catches any AI member still
+	# without a vote.
 	every_country = {
 		limit = {
 			je:je_united_nations ?= { has_modifier = un_member_modifier }
@@ -126,8 +139,8 @@ un_resolution_open = {
 		}
 		trigger_event = { id = un_vote.1 days = 30 }
 	}
-	un_vote_refresh_human_leans = yes
-	trigger_event = { id = un_vote.5 days = 30 }
+	un_vote_refresh_leans = yes
+	trigger_event = { id = un_vote.6 days = 360 }
 	trigger_event = { id = un_vote.2 days = 365 }
 }
 
@@ -180,6 +193,8 @@ un_resolution_record_vote = {
 			add_to_variable_list = { name = $LIST$ target = scope:un_res_voter }
 			change_variable = { name = $COUNT$ add = 1 }
 			un_lobby_settle_commitment = yes
+			# Its vote is cast: every campaign on it ends today (un_lobby_effects.txt).
+			un_lobby_campaigns_end_on = { MEMBER = scope:un_res_voter }
 		}
 	}
 }
@@ -190,10 +205,11 @@ un_resolution_record_vote = {
 # resolution costs the Assembly far more than a fading one does. At Moribund
 # (redesign phase 2) a veto costs nothing, so no entry is booked.
 #
-# A veto books a NO vote, so it settles a lobbying commitment exactly as an
-# ordinary no vote does — as broken. The veto RIGHT is never bound by a pledge
-# (the option's own trigger is untouched); exercising it against a resolution
-# you promised to carry is simply the most emphatic way of breaking the promise.
+# A veto books a NO vote, so it settles a pledge exactly as an ordinary no
+# vote does: a pledge to vote for is broken, a pledge to vote against is kept.
+# The veto RIGHT is never bound by a pledge (the option's own trigger is
+# untouched); exercising it against a resolution you promised to carry is
+# simply the most emphatic way of breaking the promise.
 # Scope: vetoing country
 un_resolution_record_veto = {
 	save_scope_as = un_res_voter
@@ -221,6 +237,7 @@ un_resolution_record_veto = {
 			add_to_variable_list = { name = un_res_no target = scope:un_res_voter }
 			change_variable = { name = un_res_oppose add = 1 }
 			un_lobby_settle_commitment = yes
+			un_lobby_campaigns_end_on = { MEMBER = scope:un_res_voter }
 		}
 	}
 }
@@ -280,6 +297,8 @@ un_resolution_veto_restraint = {
 # Scope: resolution container (already tagged passed, failed or lapsed)
 un_resolution_archive = {
 	save_scope_as = un_res_archived
+	# Every lobbying campaign on it ends, pact and all (un_lobby_effects.txt).
+	un_lobby_campaigns_close = yes
 	if = {
 		limit = { has_tag = un_topic_expulsion }
 		set_variable = { name = un_res_cooldown_months value = un_res_cooldown_months_expulsion }
@@ -368,7 +387,8 @@ un_resolution_cooldowns_tick = {
 #      un_vote.2 never fired (the proposer stopped existing or left the UN,
 #      which fails the event's trigger), so it lapses and frees the lock.
 #      Before containers that case locked the General Assembly for good.
-#   2. Free a lock that neither a resolution nor a reservation holds: saves
+#   2. The ballot, while the resolution votes (see the comment in the body).
+#   3. Free a lock that neither a resolution nor a reservation holds: saves
 #      from before containers, or a resolution reference that stopped resolving.
 un_resolutions_monthly_update = {
 	un_resolution_cooldowns_tick = yes
@@ -391,22 +411,51 @@ un_resolutions_monthly_update = {
 			un_resolution_archive = yes
 		}
 	}
-	# The ballot (redesign phase 3). While a resolution is voting: refresh the
-	# human members' lean snapshots, and send the AI its ballots if un_vote.5
-	# has not (its recipient, the proposer, is gone, or the resolution predates
-	# phase 3). Two months in, so the thirty-day event normally goes first.
+	# The ballot (redesign phase 3; late ballots). While a resolution is
+	# voting:
+	#   a. From month 12 the last call is made here too, for a resolution
+	#      opened before un_vote.6 existed or whose un_vote.6 never fired.
+	#   b. The lobbying campaigns age and each member's shift is rewritten
+	#      (un_lobby_campaigns_monthly); then every member gets its un_vote.4:
+	#      its lean is written, and an AI member whose casting month has come
+	#      casts (un_vote_ai_cast_due).
+	#   c. A human member that chose to decide later is asked again at months 9
+	#      and 11 (un_vote.1 option D). Its trigger turns away one that has
+	#      voted since.
 	global_var:un_active_resolution ?= {
 		if = {
 			limit = { has_tag = un_res_voting }
 			save_scope_as = un_resolution
 			if = {
 				limit = {
-					NOT = { has_variable = un_res_ai_cast }
-					var:un_res_months >= 2
+					var:un_res_months >= 12
+					NOT = { has_variable = un_res_last_call }
 				}
-				un_vote_dispatch_ai_ballots = yes
+				set_variable = un_res_last_call
 			}
-			un_vote_refresh_human_leans = yes
+			# The campaigns' month: reap, age, and write each member's shift,
+			# before the leans that read it (un_lobby_effects.txt).
+			un_lobby_campaigns_monthly = yes
+			# The AI's lobbying: start or let go of a campaign (un_lobby_effects.txt).
+			un_lobby_ai_monthly = yes
+			un_vote_refresh_leans = yes
+			if = {
+				limit = {
+					has_variable_list = un_res_deferred
+					OR = {
+						var:un_res_months = 9
+						var:un_res_months = 11
+					}
+				}
+				every_in_list = {
+					variable = un_res_deferred
+					limit = {
+						exists = this
+						is_ai = no
+					}
+					trigger_event = { id = un_vote.1 }
+				}
+			}
 		}
 	}
 	if = {

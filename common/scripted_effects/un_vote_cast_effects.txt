@@ -1,15 +1,17 @@
 ﻿# ============================================================================
 # UN GENERAL ASSEMBLY — CASTING A BALLOT
 # ============================================================================
-# THE single implementation of what casting a vote does. Two callers:
+# THE single implementation of what casting a vote does. Three callers:
 #
 #   1. events/un_vote_events.txt, un_vote.1 options A / B / C — the popup that
-#      reaches every member 30 days after a resolution opens, and the only path
-#      the AI ever uses.
+#      reaches every human member 30 days after a resolution opens (and again
+#      at months 9 and 11 to one that chose to decide later).
 #   2. common/scripted_guis/un_chamber_sguis.txt, un_chamber_vote_sgui — the
 #      Vote in Favour / Vote Against / Veto controls on the chamber widget's
 #      active-resolution card, available to a human member from the day the
 #      resolution opens.
+#   3. un_vote_ai_cast (un_dossier_effects.txt), the AI's ballot, from its own
+#      hidden un_vote.4 at its casting month.
 #
 # Each body below was lifted VERBATIM out of its un_vote.1 option (the only
 # deliberate change is the `un_vote_can_cast_ballot` wrapper described next),
@@ -125,6 +127,10 @@ un_vote_cast_yes = {
 		if = {
 			limit = { un_lobby_holds_pending_commitment = yes }
 			custom_tooltip = UN_VOTE_COMMITMENT_KEEP_TT
+		}
+		else_if = {
+			limit = { un_lobby_holds_pending_against = yes }
+			custom_tooltip = UN_VOTE_COMMITMENT_BREAK_TT
 		}
 
 		custom_tooltip = {
@@ -266,6 +272,10 @@ un_vote_cast_no = {
 			limit = { un_lobby_holds_pending_commitment = yes }
 			custom_tooltip = UN_VOTE_COMMITMENT_BREAK_TT
 		}
+		else_if = {
+			limit = { un_lobby_holds_pending_against = yes }
+			custom_tooltip = UN_VOTE_COMMITMENT_KEEP_TT
+		}
 
 		custom_tooltip = {
 			text = UN_VOTE_AGAINST_TT
@@ -332,14 +342,18 @@ un_vote_cast_no = {
 }
 
 # Veto. Extracted from un_vote.1 option C. A veto books a NO vote as well as
-# tagging the resolution, so it settles a lobbying commitment as broken — see
-# un_resolution_record_veto.
+# tagging the resolution, so it breaks a pledge to vote for and keeps a pledge
+# to vote against — see un_resolution_record_veto.
 un_vote_cast_veto = {
 	if = {
 		limit = { un_vote_can_cast_ballot = yes }
 		if = {
 			limit = { un_lobby_holds_pending_commitment = yes }
 			custom_tooltip = UN_VOTE_COMMITMENT_BREAK_TT
+		}
+		else_if = {
+			limit = { un_lobby_holds_pending_against = yes }
+			custom_tooltip = UN_VOTE_COMMITMENT_KEEP_TT
 		}
 
 		# At Moribund (redesign phase 2) a veto costs nothing: the Assembly's

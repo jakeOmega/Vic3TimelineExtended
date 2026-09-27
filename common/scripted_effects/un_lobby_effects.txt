@@ -1,117 +1,130 @@
 ﻿# ============================================================================
-# RESOLUTION LOBBYING — "secure a commitment" (proof of concept)
+# RESOLUTION LOBBYING — pledges and campaigns
 # ============================================================================
-# ONE lobbying action, and nothing else. While a resolution is open, its
-# PROPOSER may ask one other member to commit to voting with it. If that member
-# accepts, it is committed, and the proposer immediately takes on a vanilla
-# diplomatic obligation toward it — the engine's own "I owe you a favour",
-# redeemable through vanilla's redeem_obligation action and already understood
-# by the AI and by the diplomacy UI.
+# docs/superpowers/specs/2026-09-27-un-vote-lobbying-design.md. Any member may
+# try to move another member's vote on the resolution in session, in either
+# direction, two ways:
 #
-#   the deal      a pledged YES vote  <->  an obligation owed to the pledger
-#   the vehicle   common/diplomatic_actions/un_lobbying.txt, a pactless
-#                 requires_approval = yes action, so a HUMAN recipient gets the
-#                 native accept/decline request and the native itemised
-#                 acceptance tooltip
-#   the settlement  un_lobby_settle_commitment below, called the moment the
-#                 recipient's vote is booked, exactly once per commitment
+#   a PLEDGE      "Seek a Vote Commitment" (for or against), a
+#                 requires_approval diplomatic action: the member may refuse;
+#                 if it accepts, its lean moves ±100 and the asker owes it a
+#                 vanilla diplomatic obligation, paid up front. Settled when the
+#                 member's vote is booked (un_lobby_settle_commitment).
+#   a CAMPAIGN    "Lobby For / Against the Resolution", a one-sided pact with
+#                 influence upkeep, on an AI member only: +3 lean a month its
+#                 way, up to 15; campaigns one way stack to 20 (§ CAMPAIGNS
+#                 below).
 #
 # ---------------------------------------------------------------------------
-# STATE — ALL OF IT ON THE RESOLUTION CONTAINER
+# PLEDGE STATE
 # ---------------------------------------------------------------------------
-# Nothing is copied onto a country. The resolution already outlives an annexed
-# proposer, is already archived by un_resolution_archive and already destroyed
-# by its eviction step, so the lobbying record is archived, shown in history
-# and pruned WITH the resolution for free.
-#
+# On the resolution container:
 #   lists   un_res_lobbied         every member approached on this resolution,
-#                                  accepted or declined. The "one attempt per
-#                                  (resolution, recipient)" rule.
-#           un_res_committed_yes   PENDING commitments. A recipient is taken
-#                                  off this list the instant its vote is
-#                                  booked, so membership means "still owes a
-#                                  vote", never "once promised one".
+#                                  by anyone, accepted or declined (a record)
+#           un_res_committed_yes   PENDING pledges to vote for. A member is
+#                                  taken off the instant its vote is booked, so
+#                                  membership means "still owes a vote"
+#           un_res_committed_no    PENDING pledges to vote against, the same way
 #           un_res_commit_kept     settled: voted the way it pledged
 #           un_res_commit_broken   settled: did not
-#   vars    un_res_commit_count    commitments ACCEPTED, ever. Only ever goes
-#                                  up; it is what un_lobby_under_cap reads, so
-#                                  a slot cannot be recycled by lobbying
-#                                  somebody who then votes early.
-#           un_res_commit_pending  unsettled commitments, for the chamber's
-#                                  tally line. A variable rather than a list
-#                                  size because loc can print a variable
-#                                  ([THIS.Var('x').GetValue]) and cannot print
-#                                  a list size.
+#   vars    un_res_commit_count    pledges ACCEPTED on the resolution, ever
+#                                  (the chamber's Commitments block shows
+#                                  itself on it)
+#           un_res_commit_pending  unsettled pledges, for the chamber's tally
+#                                  line. A variable rather than a list size
+#                                  because loc can print a variable and cannot
+#                                  print a list size.
+# On the member that pledged (country variables, so a civil war's winner
+# inherits them and continues the nation's promise):
+#           un_pledge_to           the country it pledged to
+#           un_pledge_dir          1 for, -1 against
+#           un_pledge_res          the resolution
+#           un_pledge_askers       list: who has asked it on un_pledge_askers_res
+#           un_pledge_askers_res   the resolution those asks were about
+# On the asker:
+#           un_pledge_count        pledges it has collected on un_pledge_count_res
+#           un_pledge_count_res    (un_lobby_commitment_cap = 2 per resolution)
 #
-# WHY LISTS AND NOT ONE CONTAINER PER COMMITMENT. A commitment container would
-# have to be destroyed when its resolution is evicted from un_resolution_history
-# (un_vote_effects.txt: `scope:un_res_evicted = { destroy_container = yes }`),
-# which destroys the resolution and nothing else — so every commitment would
-# leak unless each one were created with `parent = <the resolution>` and that
-# cascade verified in game, which cannot be verified here. Four lists and two
-# counters on the resolution itself cannot leak by construction, need no
-# lifecycle of their own, and carry everything this POC records. If lobbying
-# ever grows a per-commitment payload (a sum of money, a dated pledge, an
-# opponent's counter-offer), a parented container is the right next step.
+# A member pledges once per resolution (the first accepted wins,
+# un_pledge_made_by); an asker asks a member once per resolution
+# (un_pledge_asked_by). A pledge made before this rework was always to the
+# proposer and always for; it carries no un_pledge_to, and settles against the
+# proposer as it always did.
 #
-# WHY THE PROPOSER ONLY. v1 lets exactly one country lobby — the resolution's
-# proposer — for exactly one side, YES. Opposition lobbying is not symmetric in
-# the way it looks: there is no single "opponent" to hold the obligation, no
-# obvious cap holder, and no proposer-shaped seat in the chamber display for a
-# second lobbyist. There is therefore no un_res_committed_no list; if opponent
-# lobbying is ever added, it gets its own mirrored set of lists and its own cap.
-#
-# OLD SAVES. Nothing here assumes any of the lists or counters exist. A
-# resolution already in session when the mod updated simply has no lobbying
-# state: every read is guarded (common/scripted_triggers/un_lobby_triggers.txt),
-# the chamber's Commitments block stays hidden, and the vote hook's trigger is
-# false for everyone.
+# OLD SAVES. Nothing here assumes any of the lists or counters exist: every
+# read is guarded (common/scripted_triggers/un_lobby_triggers.txt).
 # ============================================================================
 
-# Book the approach itself, whatever the answer was. Called from BOTH the
-# accept and the decline branch of the diplomatic action, which is what makes
-# "one attempt per (resolution, recipient)" true for a refusal as well as for a
-# deal — you get one ask, and a no is an answer.
+# Book the ask itself, whatever the answer was. Called from BOTH the accept
+# and the decline branch of the pledge actions, and from the chamber's Seek
+# Pledge buttons, which is what makes "one ask per asker per member per
+# resolution" true for a refusal as well as for a deal — a no is an answer.
 #
 # A request the recipient never answers at all (it expires unanswered) records
-# nothing and may be made again. That is the engine's behaviour, not a choice
-# made here: no effect of ours runs on an expiry.
-# Expects: ROOT = the lobbyist, scope:target_country = the recipient.
+# nothing and may be made again. That is the engine's behaviour: no effect of
+# ours runs on an expiry.
+# Expects: ROOT = the asker, scope:target_country = the recipient.
 un_lobby_record_attempt = {
+	save_scope_as = un_lobby_asker
 	scope:target_country = { save_scope_as = un_lobby_recipient }
 	global_var:un_active_resolution ?= {
 		if = {
-			limit = {
-				has_tag = un_res_voting
-				NOT = { un_lobby_in_list = { LIST = un_res_lobbied COUNTRY = scope:un_lobby_recipient } }
+			limit = { has_tag = un_res_voting }
+			save_scope_as = un_lobby_ask_res
+			if = {
+				limit = { NOT = { un_lobby_in_list = { LIST = un_res_lobbied COUNTRY = scope:un_lobby_recipient } } }
+				add_to_variable_list = { name = un_res_lobbied target = scope:un_lobby_recipient }
 			}
-			add_to_variable_list = { name = un_res_lobbied target = scope:un_lobby_recipient }
+			scope:un_lobby_recipient = {
+				if = {
+					limit = {
+						OR = {
+							NOT = { has_variable = un_pledge_askers_res }
+							NOT = { var:un_pledge_askers_res ?= scope:un_lobby_ask_res }
+						}
+					}
+					if = {
+						limit = { has_variable_list = un_pledge_askers }
+						clear_variable_list = un_pledge_askers
+					}
+					set_variable = { name = un_pledge_askers_res value = scope:un_lobby_ask_res }
+				}
+				if = {
+					limit = {
+						NOT = {
+							AND = {
+								has_variable_list = un_pledge_askers
+								is_target_in_variable_list = { name = un_pledge_askers target = scope:un_lobby_asker }
+							}
+						}
+					}
+					add_to_variable_list = { name = un_pledge_askers target = scope:un_lobby_asker }
+				}
+			}
 		}
 	}
 }
 
-# The recipient said yes: record the commitment and hand over the obligation.
+# The recipient said yes: record the pledge and hand over the obligation.
 #
 # Every precondition is re-checked here against the LIVE resolution rather than
 # trusted from the action's `possible`. A human recipient can hold the request
 # open for as long as the engine lets it stand, and in that time it may have
-# voted, the resolution may have closed or lapsed, the cap may have filled from
-# another accepted request, or the proposer may have been annexed. The engine
-# does not re-run `possible` when the answer finally arrives, so this is the
-# check that counts.
+# voted, pledged to someone else, the resolution may have closed or lapsed,
+# the asker's cap may have filled, or the asker may have been annexed. The
+# engine does not re-run `possible` when the answer finally arrives, so this is
+# the check that counts.
 #
-# The commitment and the obligation are created in the SAME `if`, so the
-# recipient can never end up committed without the lobbyist paying, or the
-# lobbyist paying for a commitment that was not recorded.
+# The pledge and the obligation are created in the SAME `if`, so the recipient
+# can never end up pledged without the asker paying, or the asker paying for a
+# pledge that was not recorded.
 #
-# Residual edge, documented rather than fixed: if the same proposer opens a
-# SECOND resolution while an unanswered request from the first is still
-# outstanding, a late acceptance binds the recipient to the new resolution —
-# global_var:un_active_resolution is read at answer time. It needs a request to
-# survive a full 12-month vote plus the gap to the next proposal, and the deal
-# struck is still a real one (open resolution, honest lists, obligation paid),
-# just not the one the recipient was asked about.
-# Expects: ROOT = the lobbyist, scope:target_country = the recipient.
+# Residual edge, documented rather than fixed: if a SECOND resolution opens
+# while an unanswered request from the first is still outstanding, a late
+# acceptance binds the recipient on the new resolution —
+# global_var:un_active_resolution is read at answer time.
+# Parameters: $LIST$ = yes | no (un_res_committed_$LIST$), $DIR$ = 1 | -1
+# Expects: ROOT = the asker, scope:target_country = the recipient.
 un_lobby_accept_commitment = {
 	save_scope_as = un_lobby_lobbyist
 	scope:target_country = { save_scope_as = un_lobby_recipient }
@@ -119,12 +132,13 @@ un_lobby_accept_commitment = {
 	global_var:un_active_resolution ?= {
 		if = {
 			limit = {
-				un_lobby_deal_available = {
-					LOBBYIST = scope:un_lobby_lobbyist
+				un_pledge_deal_available = {
+					ASKER = scope:un_lobby_lobbyist
 					COUNTRY = scope:un_lobby_recipient
 				}
 			}
-			add_to_variable_list = { name = un_res_committed_yes target = scope:un_lobby_recipient }
+			save_scope_as = un_lobby_pledge_res
+			add_to_variable_list = { name = un_res_committed_$LIST$ target = scope:un_lobby_recipient }
 			if = {
 				limit = { NOT = { has_variable = un_res_commit_count } }
 				set_variable = { name = un_res_commit_count value = 0 }
@@ -135,10 +149,26 @@ un_lobby_accept_commitment = {
 				set_variable = { name = un_res_commit_pending value = 0 }
 			}
 			change_variable = { name = un_res_commit_pending add = 1 }
-			# The price, paid up front and in full. set_owes_obligation_to is
-			# scoped to the country that OWES (vanilla: common/decisions/
-			# france_savoy.txt:97, common/history/diplomacy/00_favors.txt:3).
+			scope:un_lobby_recipient = {
+				set_variable = { name = un_pledge_to value = scope:un_lobby_lobbyist }
+				set_variable = { name = un_pledge_dir value = $DIR$ }
+				set_variable = { name = un_pledge_res value = scope:un_lobby_pledge_res }
+			}
 			scope:un_lobby_lobbyist = {
+				if = {
+					limit = {
+						OR = {
+							NOT = { has_variable = un_pledge_count_res }
+							NOT = { var:un_pledge_count_res ?= scope:un_lobby_pledge_res }
+						}
+					}
+					set_variable = { name = un_pledge_count value = 0 }
+					set_variable = { name = un_pledge_count_res value = scope:un_lobby_pledge_res }
+				}
+				change_variable = { name = un_pledge_count add = 1 }
+				# The price, paid up front and in full. set_owes_obligation_to is
+				# scoped to the country that OWES (vanilla: common/decisions/
+				# france_savoy.txt:97, common/history/diplomacy/00_favors.txt:3).
 				set_owes_obligation_to = {
 					country = scope:un_lobby_recipient
 					setting = yes
@@ -157,87 +187,834 @@ un_lobby_accept_commitment = {
 # the vote goes onto its list and inside the same `has_tag = un_res_voting`
 # guard, so a ballot cast after the vote closed settles nothing.
 #
-# IT CANNOT SETTLE THE SAME COMMITMENT TWICE. Everything below is inside one
-# `if` whose condition is "the voter is on the PENDING list", and the first
-# statement inside it removes the voter from that list. Re-entry on any path —
-# a second call from the same option, a queued un_vote.1 answered twice, a veto
-# followed by a vote — finds the condition false and does nothing. It cannot
-# settle a commitment that was never made either: a voter who is not on the
-# pending list falls straight through.
+# IT CANNOT SETTLE THE SAME PLEDGE TWICE. Each branch is gated on "the voter is
+# on a PENDING list", and the first statement inside it removes the voter from
+# that list. Re-entry on any path finds both conditions false and does
+# nothing.
 #
-# A commitment left pending when the resolution is decided, lapses, or loses
-# its recipient is simply never settled: no site fires, nothing is paid either
-# way, and the chamber shows it as unsettled. That is the "void, no penalty"
-# case, and it costs no extra code because there is no extra site.
+# A pledge left pending when the resolution is decided, lapses, or loses its
+# recipient is simply never settled: nothing is paid either way, and the
+# chamber shows it as unsettled. That is the "void, no penalty" case.
 #
-# A VETO BY A COMMITTED PERMANENT MEMBER IS A BROKEN COMMITMENT. The veto right
-# itself is never bound — the option is offered to every permanent member on
-# every binding topic regardless of what it has pledged — but a veto is recorded
-# as a NO vote (un_resolution_record_veto), and a member that pledged its YES
-# and then killed the resolution outright has defeated the whole purpose of the
-# pledge. It settles as broken, at the same site, for the same cost.
+# A pledge FOR is kept by a yes. A veto by a member pledged for is a no vote,
+# so it breaks the pledge; the veto right itself is never bound. A pledge
+# AGAINST is kept by a no, and a veto is a no, so a pledged-against permanent
+# member that vetoes keeps its word.
 #
-# WHICH WAY THEY VOTED is read back off un_res_yes, which the caller wrote one
-# line earlier. Reading a variable back inside the same effect block is the
-# established shape in this system — un_standing_clamp (un_standing_effects.txt)
-# reads var:un_standing immediately after un_standing_gain's change_variable —
-# and it is only add_modifier / remove_modifier whose results are deferred
-# (docs/guides/scripting_best_practices.md).
+# WHICH WAY THEY VOTED is read back off the ballot list the caller wrote one
+# line earlier (reading a variable back inside the same effect block is fine;
+# only add_modifier / remove_modifier results are deferred).
 # Expects: scope:un_res_voter = the country whose vote has just been booked.
 # Scope: resolution container (still tagged un_res_voting)
 un_lobby_settle_commitment = {
 	if = {
 		limit = { un_lobby_in_list = { LIST = un_res_committed_yes COUNTRY = scope:un_res_voter } }
 		remove_list_variable = { name = un_res_committed_yes target = scope:un_res_voter }
+		un_lobby_settle_pledge = { KEPT_LIST = un_res_yes }
+	}
+	else_if = {
+		limit = { un_lobby_in_list = { LIST = un_res_committed_no COUNTRY = scope:un_res_voter } }
+		remove_list_variable = { name = un_res_committed_no target = scope:un_res_voter }
+		un_lobby_settle_pledge = { KEPT_LIST = un_res_no }
+	}
+}
+
+# Settle one pledge the voter has just been taken off the pending list for:
+# kept if its vote is on $KEPT_LIST$, broken otherwise.
+#
+# The other party is the country the member pledged to (un_pledge_to), or,
+# for a pledge made before this rework (which carries none), the proposer.
+# An asker annexed since leaves a variable that no longer resolves: the
+# member's own record still settles, and the bilateral half is skipped.
+# Parameters: $KEPT_LIST$ = un_res_yes | un_res_no
+# Expects: scope:un_res_voter
+# Scope: resolution container
+un_lobby_settle_pledge = {
+	save_temporary_scope_as = un_lobby_settle_res
+	if = {
+		limit = { has_variable = un_res_commit_pending }
+		change_variable = { name = un_res_commit_pending add = -1 }
+	}
+	# A pledge made on this resolution settles against the country it was made
+	# to — and against nobody, if that country is gone. Only a pledge from
+	# before the rework (no un_pledge_res for this resolution) settles against
+	# the proposer, the only country that could ask for one then.
+	scope:un_res_voter = {
 		if = {
-			limit = { has_variable = un_res_commit_pending }
-			change_variable = { name = un_res_commit_pending add = -1 }
+			limit = {
+				has_variable = un_pledge_res
+				var:un_pledge_res ?= scope:un_lobby_settle_res
+			}
+			var:un_pledge_to ?= { save_temporary_scope_as = un_lobby_settle_lobbyist }
 		}
-		# The other party. Guarded because a proposer annexed mid-vote leaves a
-		# variable that no longer resolves — the recipient's own record still
-		# settles, only the bilateral half is skipped.
+	}
+	if = {
+		limit = {
+			scope:un_res_voter = {
+				OR = {
+					NOT = { has_variable = un_pledge_res }
+					NOT = { var:un_pledge_res ?= scope:un_lobby_settle_res }
+				}
+			}
+		}
 		var:un_res_proposer ?= { save_temporary_scope_as = un_lobby_settle_lobbyist }
-		if = {
-			limit = { un_lobby_in_list = { LIST = un_res_yes COUNTRY = scope:un_res_voter } }
-			add_to_variable_list = { name = un_res_commit_kept target = scope:un_res_voter }
-			scope:un_res_voter = {
-				un_standing_gain = { AMOUNT = un_standing_commitment_kept_gain REASON = 30 }
-				if = {
-					limit = { exists = scope:un_lobby_settle_lobbyist }
-					change_relations = {
-						country = scope:un_lobby_settle_lobbyist
-						value = un_standing_commitment_kept_relations
-					}
-				}
-			}
-			# The obligation stands. It was the price of the pledge, the pledge
-			# was delivered, and the recipient redeems it whenever it likes
-			# through vanilla's own redeem_obligation action.
-		}
-		else = {
-			add_to_variable_list = { name = un_res_commit_broken target = scope:un_res_voter }
-			scope:un_res_voter = {
-				un_standing_loss = { AMOUNT = un_standing_commitment_broken_loss REASON = 31 }
-				if = {
-					limit = { exists = scope:un_lobby_settle_lobbyist }
-					change_relations = {
-						country = scope:un_lobby_settle_lobbyist
-						value = un_standing_commitment_broken_relations
-					}
-				}
-			}
-			# The lobbyist bought nothing, so it stops paying: the obligation it
-			# took on is struck off. `setting = no` is a no-op if the recipient
-			# has already redeemed it, which is the behaviour we want — a favour
-			# already called in cannot be un-called.
+	}
+	if = {
+		limit = { un_lobby_in_list = { LIST = $KEPT_LIST$ COUNTRY = scope:un_res_voter } }
+		add_to_variable_list = { name = un_res_commit_kept target = scope:un_res_voter }
+		scope:un_res_voter = {
+			un_standing_gain = { AMOUNT = un_standing_commitment_kept_gain REASON = 30 }
 			if = {
 				limit = { exists = scope:un_lobby_settle_lobbyist }
-				scope:un_lobby_settle_lobbyist = {
-					set_owes_obligation_to = {
-						country = scope:un_res_voter
-						setting = no
+				change_relations = {
+					country = scope:un_lobby_settle_lobbyist
+					value = un_standing_commitment_kept_relations
+				}
+			}
+		}
+		# The obligation stands. It was the price of the pledge, the pledge
+		# was delivered, and the member redeems it whenever it likes through
+		# vanilla's own redeem_obligation action.
+	}
+	else = {
+		add_to_variable_list = { name = un_res_commit_broken target = scope:un_res_voter }
+		scope:un_res_voter = {
+			un_standing_loss = { AMOUNT = un_standing_commitment_broken_loss REASON = 31 }
+			if = {
+				limit = { exists = scope:un_lobby_settle_lobbyist }
+				change_relations = {
+					country = scope:un_lobby_settle_lobbyist
+					value = un_standing_commitment_broken_relations
+				}
+			}
+		}
+		# The asker bought nothing, so it stops paying: the obligation it took
+		# on is struck off. `setting = no` is a no-op if the member has already
+		# redeemed it — a favour already called in cannot be un-called.
+		if = {
+			limit = { exists = scope:un_lobby_settle_lobbyist }
+			scope:un_lobby_settle_lobbyist = {
+				set_owes_obligation_to = {
+					country = scope:un_res_voter
+					setting = no
+				}
+			}
+		}
+	}
+}
+
+# ============================================================================
+# CAMPAIGNS (spec §3)
+# ============================================================================
+# A campaign is a one-sided pact, un_lobby_for_action or
+# un_lobby_against_action (common/diplomatic_actions/un_lobbying.txt), from any
+# member with a vote to an AI member that has not voted, with influence upkeep.
+# The pact is the source of truth for whether a campaign runs; a script
+# container mirrors each one to count its months:
+#
+#   tags    un_lobby_campaign, un_lc_for | un_lc_against
+#   parent  the lobbyist — the engine culls the container if it stops existing
+#   vars    un_lc_lobbyist   the lobbying country
+#           un_lc_member     the member lobbied
+#           un_lc_months     full months run (the first pulse only arms it:
+#                            un_lc_armed)
+#           un_lc_shift      its lean shift: 3 a month, up to 15
+#                            (un_lobby_campaign_shift_value)
+#   listed  on the resolution's un_res_campaigns
+#
+# Each month (un_lobby_campaigns_monthly, from the global UN pulse, before the
+# leans are read): containers whose pact is gone are reaped, pacts without a
+# container are adopted, the live ones age, and each member's net shift is
+# written as country variables the lean reads (un_lean_lobbying):
+#   un_lobby_for_shift, un_lobby_against_shift   each capped at 20
+#   un_lobby_campaigns_on                        campaigns on it (the chamber
+#                                                orders worked members first)
+#   un_lobby_shift_res                           the resolution they belong to
+#
+# A campaign starts from the pact's accept_effect (the diplomacy panel), from
+# the chamber's Lobby buttons and from the AI (un_lobby_ai_monthly), which
+# create the pact and then call un_lobby_campaign_start themselves; the start
+# is idempotent, so a path that runs both is harmless. It ends when the pact
+# breaks (the break hooks call un_lobby_campaign_end, which drops the
+# campaign's shift at once), when its member votes (un_lobby_campaigns_end_on,
+# from un_resolution_record_vote / _veto) and when the resolution closes
+# (un_lobby_campaigns_close, from un_resolution_archive).
+#
+# Every removal is a `while` over "one matching container left", taking it off
+# the list before destroying it, so no list is changed while it is iterated
+# and the list never holds a dead reference of our making.
+# ============================================================================
+
+# Start a $DIR$ campaign by the scoped lobbyist on scope:target_country, on the
+# resolution in session, replacing a container already there for the same
+# lobbyist, member and direction. Leaves scope:un_lc_new at the container.
+# Callers guard any use of scope:un_lc_new with `exists`: when an action's
+# tooltip renders its accept_effect the container is not created.
+# Parameters: $DIR$ = for | against
+# Scope: the lobbyist; scope:target_country = the member
+un_lobby_campaign_start = {
+	save_scope_as = un_lc_lobbyist_new
+	scope:target_country = { save_scope_as = un_lc_member_new }
+	global_var:un_active_resolution ?= {
+		if = {
+			limit = { has_tag = un_res_voting }
+			save_scope_as = un_lc_start_res
+			un_lobby_campaign_drop = {
+				DIR = $DIR$
+				LOBBYIST = scope:un_lc_lobbyist_new
+				MEMBER = scope:un_lc_member_new
+			}
+		}
+	}
+	if = {
+		limit = { scope:un_lc_start_res ?= { has_tag = un_res_voting } }
+		create_container = {
+			tags = { un_lobby_campaign un_lc_$DIR$ }
+			parent = scope:un_lc_lobbyist_new
+			save_scope_as = un_lc_new
+		}
+		if = {
+			limit = { exists = scope:un_lc_new }
+			scope:un_lc_new = {
+				set_variable = { name = un_lc_lobbyist value = scope:un_lc_lobbyist_new }
+				set_variable = { name = un_lc_member value = scope:un_lc_member_new }
+				set_variable = { name = un_lc_months value = 0 }
+				set_variable = { name = un_lc_shift value = 0 }
+			}
+			scope:un_lc_start_res = {
+				add_to_variable_list = { name = un_res_campaigns target = scope:un_lc_new }
+			}
+		}
+	}
+}
+
+# Take every $DIR$ campaign by $LOBBYIST$ on $MEMBER$ off the resolution and
+# destroy it. Does not touch the pact.
+# Parameters: $DIR$, $LOBBYIST$, $MEMBER$ (scopes)
+# Scope: resolution container
+un_lobby_campaign_drop = {
+	while = {
+		limit = {
+			has_variable_list = un_res_campaigns
+			any_in_list = {
+				variable = un_res_campaigns
+				has_tag = un_lc_$DIR$
+				var:un_lc_lobbyist ?= $LOBBYIST$
+				var:un_lc_member ?= $MEMBER$
+			}
+		}
+		random_in_list = {
+			variable = un_res_campaigns
+			limit = {
+				has_tag = un_lc_$DIR$
+				var:un_lc_lobbyist ?= $LOBBYIST$
+				var:un_lc_member ?= $MEMBER$
+			}
+			save_scope_as = un_lc_drop
+		}
+		remove_list_variable = { name = un_res_campaigns target = scope:un_lc_drop }
+		scope:un_lc_drop = { destroy_container = yes }
+	}
+}
+
+# The pact broke: manually (cancelled from the diplomacy panel or the chamber,
+# or removed by script) or automatically (its requirement failed). Drop the
+# campaign and rewrite its member's shift at once, so a cancelled campaign's
+# gain is gone even if the member votes before the next monthly pulse (the
+# last call can land mid-month). If scope:target_country no longer resolves,
+# the monthly reap collects the container instead.
+# Parameters: $DIR$ = for | against
+# Scope: the lobbyist (the pact's ROOT); scope:target_country = the member
+un_lobby_campaign_end = {
+	hidden_effect = {
+		save_scope_as = un_lc_end_lobbyist
+		if = {
+			limit = { exists = scope:target_country }
+			scope:target_country = { save_scope_as = un_lc_end_member }
+			global_var:un_active_resolution ?= {
+				un_lobby_campaign_drop = {
+					DIR = $DIR$
+					LOBBYIST = scope:un_lc_end_lobbyist
+					MEMBER = scope:un_lc_end_member
+				}
+				un_lobby_member_recompute = { MEMBER = scope:un_lc_end_member }
+			}
+		}
+	}
+}
+
+# Remove the pact behind the scoped campaign (the container is left to the
+# caller). Guarded: a lobbyist or member that stopped existing has no pact.
+# Scope: campaign container
+un_lobby_campaign_remove_pact = {
+	if = {
+		limit = {
+			exists = var:un_lc_lobbyist
+			exists = var:un_lc_member
+		}
+		var:un_lc_member = { save_temporary_scope_as = un_lc_rm_member }
+		if = {
+			limit = { has_tag = un_lc_for }
+			var:un_lc_lobbyist = {
+				remove_diplomatic_pact = { country = scope:un_lc_rm_member type = un_lobby_for_action }
+			}
+		}
+		else = {
+			var:un_lc_lobbyist = {
+				remove_diplomatic_pact = { country = scope:un_lc_rm_member type = un_lobby_against_action }
+			}
+		}
+	}
+}
+
+# $MEMBER$ has voted: every campaign on it ends, pact and all, the same day
+# (the pact's own requirement would break it a tick later; this stops the
+# influence the day the ballot is cast). Its shift no longer matters.
+# Parameters: $MEMBER$ = the member (a scope)
+# Scope: resolution container
+un_lobby_campaigns_end_on = {
+	while = {
+		limit = {
+			has_variable_list = un_res_campaigns
+			any_in_list = {
+				variable = un_res_campaigns
+				has_tag = un_lobby_campaign
+				var:un_lc_member ?= $MEMBER$
+			}
+		}
+		random_in_list = {
+			variable = un_res_campaigns
+			limit = {
+				has_tag = un_lobby_campaign
+				var:un_lc_member ?= $MEMBER$
+			}
+			save_scope_as = un_lc_stop
+		}
+		remove_list_variable = { name = un_res_campaigns target = scope:un_lc_stop }
+		scope:un_lc_stop = {
+			un_lobby_campaign_remove_pact = yes
+			destroy_container = yes
+		}
+	}
+}
+
+# The resolution closes (decided, lapsed, vetoed): every campaign on it ends.
+# Then the list is emptied of anything left (a container the engine culled with
+# its lobbyist).
+# Scope: resolution container
+un_lobby_campaigns_close = {
+	while = {
+		limit = {
+			has_variable_list = un_res_campaigns
+			any_in_list = {
+				variable = un_res_campaigns
+				has_tag = un_lobby_campaign
+			}
+		}
+		random_in_list = {
+			variable = un_res_campaigns
+			limit = { has_tag = un_lobby_campaign }
+			save_scope_as = un_lc_stop
+		}
+		remove_list_variable = { name = un_res_campaigns target = scope:un_lc_stop }
+		scope:un_lc_stop = {
+			un_lobby_campaign_remove_pact = yes
+			destroy_container = yes
+		}
+	}
+	if = {
+		limit = { has_variable_list = un_res_campaigns }
+		clear_variable_list = un_res_campaigns
+	}
+}
+
+# Monthly campaign upkeep, while the resolution votes. From
+# un_resolutions_monthly_update, before the leans are read. NOT IDEMPOTENT
+# WITHIN A MONTH: campaigns age on every call.
+# Scope: resolution container (= scope:un_resolution)
+un_lobby_campaigns_monthly = {
+	save_temporary_scope_as = un_lc_res_t
+	un_lobby_campaigns_reap = yes
+	un_lobby_campaigns_adopt = yes
+	if = {
+		limit = { has_variable_list = un_res_campaigns }
+		every_in_list = {
+			variable = un_res_campaigns
+			limit = { has_tag = un_lobby_campaign }
+			if = {
+				limit = { has_variable = un_lc_armed }
+				change_variable = { name = un_lc_months add = 1 }
+			}
+			else = {
+				set_variable = un_lc_armed
+			}
+			set_variable = { name = un_lc_shift value = un_lobby_campaign_shift_value }
+		}
+	}
+	un_lobby_campaigns_aggregate = yes
+}
+
+# Destroy the campaigns whose pact is gone: broken by a path whose hook did not
+# reach the container (its member annexed, the pact removed by the engine), or
+# a lobbyist or member that stopped existing. A live pact is found by its
+# direction — first_country is the lobbyist, second_country the member — so a
+# pact of the same type the other way round never keeps a dead campaign alive.
+# Scope: resolution container
+un_lobby_campaigns_reap = {
+	if = {
+		limit = { has_variable_list = un_res_campaigns }
+		every_in_list = {
+			variable = un_res_campaigns
+			limit = { has_tag = un_lobby_campaign }
+			if = {
+				limit = {
+					OR = {
+						NOT = { exists = var:un_lc_lobbyist }
+						NOT = { exists = var:un_lc_member }
 					}
 				}
+				set_variable = un_lc_dead
+			}
+			else = {
+				var:un_lc_member = { save_temporary_scope_as = un_lc_m }
+				if = {
+					limit = {
+						has_tag = un_lc_for
+						var:un_lc_lobbyist = {
+							NOT = {
+								any_scope_diplomatic_pact = {
+									is_diplomatic_action_type = un_lobby_for_action
+									first_country = prev # REVIEWED 2026-09-27: prev is var:un_lc_lobbyist on purpose — the pact must run from the lobbyist to the member
+									second_country = scope:un_lc_m
+								}
+							}
+						}
+					}
+					set_variable = un_lc_dead
+				}
+				else_if = {
+					limit = {
+						has_tag = un_lc_against
+						var:un_lc_lobbyist = {
+							NOT = {
+								any_scope_diplomatic_pact = {
+									is_diplomatic_action_type = un_lobby_against_action
+									first_country = prev # REVIEWED 2026-09-27: prev is var:un_lc_lobbyist on purpose — the pact must run from the lobbyist to the member
+									second_country = scope:un_lc_m
+								}
+							}
+						}
+					}
+					set_variable = un_lc_dead
+				}
+			}
+		}
+	}
+	while = {
+		limit = {
+			has_variable_list = un_res_campaigns
+			any_in_list = {
+				variable = un_res_campaigns
+				has_tag = un_lobby_campaign
+				has_variable = un_lc_dead
+			}
+		}
+		random_in_list = {
+			variable = un_res_campaigns
+			limit = {
+				has_tag = un_lobby_campaign
+				has_variable = un_lc_dead
+			}
+			save_scope_as = un_lc_reaped
+		}
+		remove_list_variable = { name = un_res_campaigns target = scope:un_lc_reaped }
+		scope:un_lc_reaped = { destroy_container = yes }
+	}
+}
+
+# Give a container to every campaign pact that has none: a pact whose start
+# never ran (a path we do not know of). It starts at month 0.
+# Scope: resolution container; scope:un_lc_res_t = it
+un_lobby_campaigns_adopt = {
+	every_country = {
+		limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+		save_temporary_scope_as = un_lca_lobbyist
+		every_scope_diplomatic_pact = {
+			limit = {
+				is_diplomatic_action_type = un_lobby_for_action
+				first_country = prev
+			}
+			second_country = { save_temporary_scope_as = un_lca_member }
+			un_lobby_campaign_adopt_one = { DIR = for }
+		}
+		every_scope_diplomatic_pact = {
+			limit = {
+				is_diplomatic_action_type = un_lobby_against_action
+				first_country = prev
+			}
+			second_country = { save_temporary_scope_as = un_lca_member }
+			un_lobby_campaign_adopt_one = { DIR = against }
+		}
+	}
+}
+
+# Parameters: $DIR$ = for | against
+# Scope: any; scope:un_lca_lobbyist, scope:un_lca_member, scope:un_lc_res_t
+un_lobby_campaign_adopt_one = {
+	if = {
+		limit = {
+			scope:un_lc_res_t = {
+				NOT = {
+					AND = {
+						has_variable_list = un_res_campaigns
+						any_in_list = {
+							variable = un_res_campaigns
+							has_tag = un_lc_$DIR$
+							var:un_lc_lobbyist ?= scope:un_lca_lobbyist
+							var:un_lc_member ?= scope:un_lca_member
+						}
+					}
+				}
+			}
+		}
+		scope:un_lca_member = { save_scope_as = target_country }
+		scope:un_lca_lobbyist = { un_lobby_campaign_start = { DIR = $DIR$ } }
+	}
+}
+
+# Rewrite every member's shift from the live campaigns: clear last month's,
+# add each campaign's shift to its member, cap each direction at the stack cap.
+# Scope: resolution container; scope:un_lc_res_t = it
+un_lobby_campaigns_aggregate = {
+	every_country = {
+		limit = { has_variable = un_lobby_shift_res }
+		un_lobby_member_shift_clear = yes
+	}
+	if = {
+		limit = { has_variable_list = un_res_campaigns }
+		every_in_list = {
+			variable = un_res_campaigns
+			limit = {
+				has_tag = un_lobby_campaign
+				exists = var:un_lc_member
+			}
+			un_lobby_campaign_add_to_member = yes
+		}
+	}
+	every_country = {
+		limit = {
+			has_variable = un_lobby_shift_res
+			var:un_lobby_shift_res ?= scope:un_lc_res_t
+		}
+		clamp_variable = { name = un_lobby_for_shift min = 0 max = un_lobby_campaign_stack_cap }
+		clamp_variable = { name = un_lobby_against_shift min = 0 max = un_lobby_campaign_stack_cap }
+	}
+}
+
+# Rewrite one member's shift (a campaign on it has just ended).
+# Parameters: $MEMBER$ = the member (a scope)
+# Scope: resolution container
+un_lobby_member_recompute = {
+	save_temporary_scope_as = un_lc_res_t
+	$MEMBER$ = { un_lobby_member_shift_clear = yes }
+	if = {
+		limit = { has_variable_list = un_res_campaigns }
+		every_in_list = {
+			variable = un_res_campaigns
+			limit = {
+				has_tag = un_lobby_campaign
+				var:un_lc_member ?= $MEMBER$
+			}
+			un_lobby_campaign_add_to_member = yes
+		}
+	}
+	$MEMBER$ = {
+		if = {
+			limit = {
+				has_variable = un_lobby_shift_res
+				var:un_lobby_shift_res ?= scope:un_lc_res_t
+			}
+			clamp_variable = { name = un_lobby_for_shift min = 0 max = un_lobby_campaign_stack_cap }
+			clamp_variable = { name = un_lobby_against_shift min = 0 max = un_lobby_campaign_stack_cap }
+		}
+	}
+}
+
+# Scope: a member country
+un_lobby_member_shift_clear = {
+	if = {
+		limit = { has_variable = un_lobby_shift_res }
+		remove_variable = un_lobby_shift_res
+		remove_variable = un_lobby_for_shift
+		remove_variable = un_lobby_against_shift
+		remove_variable = un_lobby_campaigns_on
+	}
+}
+
+# Add the scoped campaign's shift to its member, writing the member's shift
+# variables first if this is the first campaign counted on it. Accumulates
+# with set_variable's inline value block: change_variable does not reliably
+# resolve a script-value operand.
+# Scope: campaign container; scope:un_lc_res_t = its resolution
+un_lobby_campaign_add_to_member = {
+	save_temporary_scope_as = un_lc_add
+	var:un_lc_member ?= {
+		if = {
+			limit = {
+				OR = {
+					NOT = { has_variable = un_lobby_shift_res }
+					NOT = { var:un_lobby_shift_res ?= scope:un_lc_res_t }
+				}
+			}
+			set_variable = { name = un_lobby_shift_res value = scope:un_lc_res_t }
+			set_variable = { name = un_lobby_for_shift value = 0 }
+			set_variable = { name = un_lobby_against_shift value = 0 }
+			set_variable = { name = un_lobby_campaigns_on value = 0 }
+		}
+		if = {
+			limit = { scope:un_lc_add = { has_tag = un_lc_for } }
+			set_variable = { name = un_lobby_for_shift value = { value = var:un_lobby_for_shift add = scope:un_lc_add.var:un_lc_shift } }
+		}
+		else = {
+			set_variable = { name = un_lobby_against_shift value = { value = var:un_lobby_against_shift add = scope:un_lc_add.var:un_lc_shift } }
+		}
+		change_variable = { name = un_lobby_campaigns_on add = 1 }
+	}
+}
+
+# ============================================================================
+# THE AI'S LOBBYING (spec §5)
+# ============================================================================
+# Script, not the engine's diplomatic AI, starts and ends the AI's campaigns
+# (the two pact actions carry evaluation_chance 0 and will_break always-no), so
+# the AI lobbies exactly by these rules. Its pledge requests go through the
+# engine: the two pledge actions' ai blocks (un_lobbying.txt).
+#
+# Each month, while the resolution votes:
+#   for      its proposer, if AI;
+#   against  on a resolution that accuses its target: the target, its allies
+#            and its power bloc's leader, if AI.
+# Each lobbies only AI members that can still be lobbied, by their TRUE lean
+# (the AI reads the snapshot, not the chamber's band): for, a member between
+# leaning against and undecided (−29 to +9); against, one between undecided
+# and leaning for (−9 to +29). It starts at most one campaign a month, runs at
+# most three, starts only with un_lobby_ai_influence_floor influence to spare,
+# and lets one go each month its influence is below 0.
+
+# Scope: resolution container (= scope:un_resolution), voting
+un_lobby_ai_monthly = {
+	save_temporary_scope_as = un_lai_res
+	var:un_res_proposer ?= {
+		if = {
+			limit = {
+				is_ai = yes
+				un_lobby_campaign_selectable = yes
+			}
+			un_lobby_ai_lobby = { DIR = for LOW = -29 HIGH = 9 }
+		}
+	}
+	if = {
+		limit = {
+			un_resolution_accuses_target = yes
+			exists = var:un_res_target
+		}
+		var:un_res_target = { save_temporary_scope_as = un_lai_target }
+		var:un_res_proposer ?= { save_temporary_scope_as = un_lai_proposer }
+		every_country = {
+			limit = {
+				is_ai = yes
+				un_lobby_campaign_selectable = yes
+				# The proposer lobbies for, never against.
+				NOT = { scope:un_lai_proposer ?= this }
+				OR = {
+					this = scope:un_lai_target
+					has_treaty_alliance_with = { TARGET = scope:un_lai_target }
+					AND = {
+						is_power_bloc_leader = yes
+						is_in_same_power_bloc = scope:un_lai_target
+					}
+				}
+			}
+			un_lobby_ai_lobby = { DIR = against LOW = -9 HIGH = 29 }
+		}
+	}
+}
+
+# One AI lobbyist's month.
+# Parameters: $DIR$ = for | against; $LOW$ / $HIGH$ = the true leans it works on
+# Scope: the AI lobbyist; scope:un_lai_res = the resolution
+un_lobby_ai_lobby = {
+	save_temporary_scope_as = un_lai_lobbyist
+	# Short of influence: let one campaign go.
+	if = {
+		limit = {
+			influence < 0
+			scope:un_lai_res = {
+				has_variable_list = un_res_campaigns
+				any_in_list = {
+					variable = un_res_campaigns
+					has_tag = un_lobby_campaign
+					var:un_lc_lobbyist ?= scope:un_lai_lobbyist
+				}
+			}
+		}
+		scope:un_lai_res = {
+			random_in_list = {
+				variable = un_res_campaigns
+				limit = {
+					has_tag = un_lobby_campaign
+					var:un_lc_lobbyist ?= scope:un_lai_lobbyist
+				}
+				save_scope_as = un_lai_stop
+			}
+			remove_list_variable = { name = un_res_campaigns target = scope:un_lai_stop }
+			scope:un_lai_stop = {
+				var:un_lc_member ?= { save_scope_as = un_lai_stop_member }
+				un_lobby_campaign_remove_pact = yes
+				destroy_container = yes
+			}
+			if = {
+				limit = { exists = scope:un_lai_stop_member }
+				un_lobby_member_recompute = { MEMBER = scope:un_lai_stop_member }
+			}
+		}
+	}
+	# Room for another, and the influence for it: start one on the lobbyable
+	# member nearest the line that it does not already lobby either way.
+	else_if = {
+		limit = {
+			influence >= un_lobby_ai_influence_floor
+			scope:un_lai_res = {
+				NOT = {
+					AND = {
+						has_variable_list = un_res_campaigns
+						any_in_list = {
+							variable = un_res_campaigns
+							count >= 3 # at most three campaigns at once
+							has_tag = un_lobby_campaign
+							var:un_lc_lobbyist ?= scope:un_lai_lobbyist
+						}
+					}
+				}
+			}
+		}
+		ordered_country = {
+			limit = {
+				un_lobby_member_lobbyable = yes
+				NOT = { this = scope:un_lai_lobbyist }
+				un_lobby_true_lean_in = { LOW = $LOW$ HIGH = $HIGH$ }
+				NOT = { has_diplomatic_pact = { who = scope:un_lai_lobbyist type = un_lobby_for_action } }
+				NOT = { has_diplomatic_pact = { who = scope:un_lai_lobbyist type = un_lobby_against_action } }
+			}
+			order_by = un_lobby_ai_target_order
+			max = 1
+			save_scope_as = target_country
+			scope:un_lai_lobbyist = {
+				if = {
+					limit = { can_afford_diplomatic_action = { target = scope:target_country type = un_lobby_$DIR$_action } }
+					create_diplomatic_pact = { country = scope:target_country type = un_lobby_$DIR$_action }
+					un_lobby_campaign_start = { DIR = $DIR$ }
+				}
+			}
+		}
+	}
+}
+
+# ============================================================================
+# THE CHAMBER'S BUTTONS (spec §6)
+# ============================================================================
+# The Delegations rows' Lobby For / Lobby Against / Stop Lobbying / Seek Pledge
+# buttons (un_chamber_sguis.txt), each acting on the member in row $N$
+# (un_deleg_row_$N$ on the resolution in session). They run the same effects
+# the diplomatic actions run, so a campaign or a pledge made here is the same
+# as one made from the diplomacy panel. Their `is_valid` triggers are in
+# un_lobby_triggers.txt. ExecuteTooltip renders these without running them.
+
+# Start a $DIR$ campaign on the member in row $N$: create the pact, then the
+# campaign (the pact's accept_effect does not run for a pact made by script).
+# Parameters: $N$ = 0-23, $DIR$ = for | against
+# Scope: the viewer (ROOT)
+un_deleg_row_lobby = {
+	global_var:un_active_resolution ?= {
+		if = {
+			limit = { has_variable = un_deleg_row_$N$ }
+			var:un_deleg_row_$N$ ?= { save_scope_as = target_country }
+		}
+	}
+	if = {
+		limit = { exists = scope:target_country }
+		custom_tooltip = un_lobby_campaign_$DIR$_effect_tt
+		custom_tooltip = un_deleg_campaign_cost_tt
+		hidden_effect = {
+			create_diplomatic_pact = { country = scope:target_country type = un_lobby_$DIR$_action }
+			un_lobby_campaign_start = { DIR = $DIR$ }
+		}
+	}
+}
+
+# Stop our campaign on the member in row $N$, whichever way it runs. Removing
+# the pact runs its break hook; the campaign's end is called here as well, and
+# is harmless twice.
+# Parameters: $N$ = 0-23
+# Scope: the viewer (ROOT)
+un_deleg_row_stop = {
+	global_var:un_active_resolution ?= {
+		if = {
+			limit = { has_variable = un_deleg_row_$N$ }
+			var:un_deleg_row_$N$ ?= { save_scope_as = target_country }
+		}
+	}
+	if = {
+		limit = { exists = scope:target_country }
+		custom_tooltip = un_deleg_stop_tt
+		hidden_effect = {
+			if = {
+				limit = { has_diplomatic_pact = { who = scope:target_country type = un_lobby_for_action } }
+				remove_diplomatic_pact = { country = scope:target_country type = un_lobby_for_action }
+				un_lobby_campaign_end = { DIR = for }
+			}
+			if = {
+				limit = { has_diplomatic_pact = { who = scope:target_country type = un_lobby_against_action } }
+				remove_diplomatic_pact = { country = scope:target_country type = un_lobby_against_action }
+				un_lobby_campaign_end = { DIR = against }
+			}
+		}
+	}
+}
+
+# Ask the (AI) member in row $N$ for a pledge. An AI member answers at once,
+# by the pledge action's own accept_score (would_accept_diplomatic_action), so
+# the answer is the one the diplomacy panel would get; the tooltip says which
+# it will be. Either way the ask is booked.
+# Parameters: $N$ = 0-23, $ACTION$ = the pledge action,
+#             $LIST$ / $DIR$ = yes / 1 or no / -1 (un_lobby_accept_commitment),
+#             $STRUCK$ = the action's accept tooltip
+# Scope: the viewer (ROOT)
+un_deleg_row_pledge = {
+	global_var:un_active_resolution ?= {
+		if = {
+			limit = { has_variable = un_deleg_row_$N$ }
+			var:un_deleg_row_$N$ ?= { save_scope_as = target_country }
+		}
+	}
+	if = {
+		limit = { exists = scope:target_country }
+		if = {
+			limit = {
+				scope:target_country = {
+					would_accept_diplomatic_action = { actor = ROOT type = $ACTION$ } # REVIEWED 2026-09-27: `actor` is the trigger's documented key (engine triggers.log: would_accept_diplomatic_action = { actor = <country scope> type = <action type key> })
+				}
+			}
+			custom_tooltip = un_deleg_pledge_accepts_tt
+			custom_tooltip = {
+				text = $STRUCK$
+				un_lobby_accept_commitment = { LIST = $LIST$ DIR = $DIR$ }
+			}
+		}
+		else = {
+			custom_tooltip = {
+				text = un_deleg_pledge_refuses_tt
+				un_lobby_record_attempt = yes
 			}
 		}
 	}

@@ -11,10 +11,15 @@
 #   un_dos_war_logged (country)   un_dossier_monthly_update (a war already
 #                                 recorded, so a long war is recorded once)
 #   un_lean_* (country)           un_lean_snapshot, in un_vote.4 only
+#   un_vote_draw_res, un_vote_cast_month, un_lean_misread (country)
+#                                 un_vote_ai_draws, in un_vote.4: an AI member's
+#                                 casting month and misreading, once per resolution
 #   un_res_why_* (resolution)     the reason tallies, from un_resolution_record_vote
 #                                 and un_resolution_record_veto
 #   un_res_case (resolution)      un_resolution_open: the target's case when tabled
-#   un_res_ai_cast (resolution)   un_vote_dispatch_ai_ballots: the AI has voted
+#   un_res_last_call (resolution) un_vote.6, or the monthly pulse from month 12:
+#                                 every AI member still without a vote casts now
+#   un_res_ai_cast (resolution)   legacy: written before the late ballots; inert
 #   un_recess_months (global)     un_resolution_archive sets it,
 #                                 un_recess_monthly_update counts it down
 #
@@ -154,14 +159,57 @@ un_lean_snapshot = {
 	set_variable = { name = un_lean_accepted value = un_lean_accepted }
 	set_variable = { name = un_lean_burden value = un_lean_burden }
 	set_variable = { name = un_lean_interests value = un_lean_interests }
+	set_variable = { name = un_lean_lobbying value = un_lean_lobbying }
 	set_variable = { name = un_lean_total value = un_vote_lean }
+	# Derived from the two lines above (un_lobbying_values.txt): the lean the
+	# other members read, misreading included, and the lean the veto is
+	# decided on, without the pledge.
+	set_variable = { name = un_lean_shown value = un_lean_shown_value }
+	set_variable = { name = un_lean_veto_basis value = un_lean_veto_basis_value }
+}
+
+# An AI member's casting month and misreading on scope:un_resolution, drawn
+# once per resolution (docs/superpowers/specs/2026-09-27-un-vote-lobbying-design.md
+# §1). It votes at the monthly pulse of its month, by the lean it has then; the
+# chamber shows the other members its lean plus the misreading, as a band.
+# Drawn at its first un_vote.4 of the session: on the day the resolution opens
+# for a member at that time, later for a member that joins mid-session or a
+# resolution already open when the save was loaded — which then votes no
+# earlier than next month.
+# Scope: the AI member (= ROOT, un_vote.4), with scope:un_resolution saved
+un_vote_ai_draws = {
+	if = {
+		limit = {
+			OR = {
+				NOT = { has_variable = un_vote_draw_res }
+				NOT = { var:un_vote_draw_res ?= scope:un_resolution }
+			}
+		}
+		set_variable = { name = un_vote_draw_res value = scope:un_resolution }
+		random_list = {
+			1 = { set_variable = { name = un_vote_cast_month value = 9 } }
+			1 = { set_variable = { name = un_vote_cast_month value = 10 } }
+			1 = { set_variable = { name = un_vote_cast_month value = 11 } }
+		}
+		random_list = {
+			1 = { set_variable = { name = un_lean_misread value = -10 } }
+			1 = { set_variable = { name = un_lean_misread value = 0 } }
+			1 = { set_variable = { name = un_lean_misread value = 10 } }
+		}
+		if = {
+			limit = { var:un_vote_cast_month < un_res_next_month }
+			set_variable = { name = un_vote_cast_month value = un_res_next_month }
+		}
+	}
 }
 
 # The AI's ballot: the lean, plus noise, decides. A permanent member vetoes a
-# binding resolution when its lean (without noise) is at or below the veto
-# line; otherwise it votes yes when lean + noise > 0. The same three effects a
-# human's ballot runs (un_vote_cast_effects.txt) record the vote, so the tally,
-# lobbying settlement and IG reactions are identical.
+# binding resolution when its lean without the pledge term (and without noise)
+# is at or below the veto line (un_vote_ai_should_veto); otherwise it votes yes
+# when lean + noise > 0. The same three effects a human's ballot runs
+# (un_vote_cast_effects.txt) record the vote, so the tally, lobbying
+# settlement and IG reactions are identical. Cast from un_vote.4 at the
+# member's casting month (un_vote_ai_cast_due), never earlier.
 # Scope: the voter (= ROOT), after un_lean_snapshot, with the same saved scopes
 un_vote_ai_cast = {
 	set_variable = { name = un_lean_roll value = var:un_lean_total }
@@ -186,37 +234,173 @@ un_vote_ai_cast = {
 	remove_variable = un_lean_roll
 }
 
-# Send every AI member its ballot (un_vote.4) and mark the resolution so it is
-# sent once. From un_vote.5 thirty days after the resolution opens, with the
-# global monthly pulse as the fallback if un_vote.5 never fires (its recipient,
-# the proposer, is gone).
+# Send every member its un_vote.4: a human member has its lean written for the
+# chamber; an AI member draws its timing, has its lean written, and casts if
+# its month has come (or the last call has been made). From the day the
+# resolution opens, every monthly pulse while it votes, and the last call
+# (un_vote.6). Only while a resolution is voting, so the fan-out is at most
+# a year of monthly events per resolution.
 # Scope: any, with scope:un_resolution saved
-un_vote_dispatch_ai_ballots = {
-	scope:un_resolution = {
-		if = {
-			limit = { NOT = { has_variable = un_res_ai_cast } }
-			set_variable = un_res_ai_cast
-		}
-	}
+un_vote_refresh_leans = {
 	every_country = {
-		limit = {
-			is_ai = yes
-			je:je_united_nations ?= { has_modifier = un_member_modifier }
-		}
+		limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 		trigger_event = { id = un_vote.4 }
+	}
+	# The next day, with every snapshot and cast in, the chamber's Delegations
+	# rows are sorted once (un_vote.7). Only a human country ever looks at
+	# them, so it goes to each human country.
+	every_country = {
+		limit = { is_ai = no }
+		trigger_event = { id = un_vote.7 days = 1 }
 	}
 }
 
-# Refresh the human members' lean snapshots, so the chamber shows each human
-# member how the Assembly reads its position on the resolution in session.
-# Scope: any, with scope:un_resolution saved
-un_vote_refresh_human_leans = {
-	every_country = {
-		limit = {
-			is_ai = no
-			je:je_united_nations ?= { has_modifier = un_member_modifier }
+# ---- The chamber's Delegations rows (spec §6) -------------------------------------------
+# Every AI member with a vote that has not voted is on the resolution's
+# un_res_delegates, with a sort key (un_deleg_key, un_lobbying_values.txt)
+# from its latest snapshot. The day after each fan-out (un_vote.7, sent by
+# un_vote_refresh_leans to each human country, the only ones that look), the
+# resolution re-assigns its 24 rows, un_deleg_row_0..23, one ordered_in_list
+# position each, so the rows and their buttons read the same member; the
+# summary line's counts are written at the same time. Between sorts the order
+# stands: a campaign started mid-month moves its member up at the next pulse,
+# and a member that votes drops out of its row at once (un_deleg_listed).
+
+# Scope: the AI member (= ROOT, un_vote.4), after the snapshot and any cast,
+# with scope:un_resolution saved
+un_deleg_refresh_self = {
+	if = {
+		limit = { un_vote_can_cast_ballot = yes }
+		set_variable = { name = un_deleg_key value = un_deleg_key_value }
+		scope:un_resolution = {
+			if = {
+				limit = { NOT = { un_lobby_in_list = { LIST = un_res_delegates COUNTRY = ROOT } } }
+				add_to_variable_list = { name = un_res_delegates target = ROOT }
+			}
 		}
-		trigger_event = { id = un_vote.4 }
+	}
+	else = {
+		scope:un_resolution = {
+			if = {
+				limit = { un_lobby_in_list = { LIST = un_res_delegates COUNTRY = ROOT } }
+				remove_list_variable = { name = un_res_delegates target = ROOT }
+			}
+		}
+	}
+}
+
+# Re-sort the rows: un_vote.7, the day after each fan-out of un_vote.4, once
+# the month's snapshots and casts are all in. Sorting after every AI member's
+# own event would have run 24 sorts of the whole list per member per month.
+# Scope: resolution container
+un_deleg_reassign_rows = {
+	save_temporary_scope_as = un_deleg_res
+	un_deleg_clear_row = { N = 0 }
+	un_deleg_clear_row = { N = 1 }
+	un_deleg_clear_row = { N = 2 }
+	un_deleg_clear_row = { N = 3 }
+	un_deleg_clear_row = { N = 4 }
+	un_deleg_clear_row = { N = 5 }
+	un_deleg_clear_row = { N = 6 }
+	un_deleg_clear_row = { N = 7 }
+	un_deleg_clear_row = { N = 8 }
+	un_deleg_clear_row = { N = 9 }
+	un_deleg_clear_row = { N = 10 }
+	un_deleg_clear_row = { N = 11 }
+	un_deleg_clear_row = { N = 12 }
+	un_deleg_clear_row = { N = 13 }
+	un_deleg_clear_row = { N = 14 }
+	un_deleg_clear_row = { N = 15 }
+	un_deleg_clear_row = { N = 16 }
+	un_deleg_clear_row = { N = 17 }
+	un_deleg_clear_row = { N = 18 }
+	un_deleg_clear_row = { N = 19 }
+	un_deleg_clear_row = { N = 20 }
+	un_deleg_clear_row = { N = 21 }
+	un_deleg_clear_row = { N = 22 }
+	un_deleg_clear_row = { N = 23 }
+	un_deleg_assign_row = { N = 0 COUNT = 1 }
+	un_deleg_assign_row = { N = 1 COUNT = 2 }
+	un_deleg_assign_row = { N = 2 COUNT = 3 }
+	un_deleg_assign_row = { N = 3 COUNT = 4 }
+	un_deleg_assign_row = { N = 4 COUNT = 5 }
+	un_deleg_assign_row = { N = 5 COUNT = 6 }
+	un_deleg_assign_row = { N = 6 COUNT = 7 }
+	un_deleg_assign_row = { N = 7 COUNT = 8 }
+	un_deleg_assign_row = { N = 8 COUNT = 9 }
+	un_deleg_assign_row = { N = 9 COUNT = 10 }
+	un_deleg_assign_row = { N = 10 COUNT = 11 }
+	un_deleg_assign_row = { N = 11 COUNT = 12 }
+	un_deleg_assign_row = { N = 12 COUNT = 13 }
+	un_deleg_assign_row = { N = 13 COUNT = 14 }
+	un_deleg_assign_row = { N = 14 COUNT = 15 }
+	un_deleg_assign_row = { N = 15 COUNT = 16 }
+	un_deleg_assign_row = { N = 16 COUNT = 17 }
+	un_deleg_assign_row = { N = 17 COUNT = 18 }
+	un_deleg_assign_row = { N = 18 COUNT = 19 }
+	un_deleg_assign_row = { N = 19 COUNT = 20 }
+	un_deleg_assign_row = { N = 20 COUNT = 21 }
+	un_deleg_assign_row = { N = 21 COUNT = 22 }
+	un_deleg_assign_row = { N = 22 COUNT = 23 }
+	un_deleg_assign_row = { N = 23 COUNT = 24 }
+	set_variable = { name = un_res_deleg_firm_for value = 0 }
+	set_variable = { name = un_res_deleg_firm_against value = 0 }
+	set_variable = { name = un_res_deleg_rowable value = 0 }
+	if = {
+		limit = { has_variable_list = un_res_delegates }
+		every_in_list = {
+			variable = un_res_delegates
+			limit = { un_deleg_listed = yes }
+			if = {
+				limit = { un_deleg_in_rows = yes }
+				scope:un_deleg_res = { change_variable = { name = un_res_deleg_rowable add = 1 } }
+			}
+			else_if = {
+				limit = { var:un_lean_shown >= 0 }
+				scope:un_deleg_res = { change_variable = { name = un_res_deleg_firm_for add = 1 } }
+			}
+			else = {
+				scope:un_deleg_res = { change_variable = { name = un_res_deleg_firm_against add = 1 } }
+			}
+		}
+	}
+	# Members with a row to be shown beyond the 24 rows: the chamber says how many.
+	set_variable = { name = un_res_deleg_more value = { value = var:un_res_deleg_rowable subtract = 24 min = 0 } }
+}
+
+# Parameters: $N$ = 0-23
+# Scope: resolution container
+un_deleg_clear_row = {
+	if = {
+		limit = { has_variable = un_deleg_row_$N$ }
+		remove_variable = un_deleg_row_$N$
+	}
+}
+
+# Row $N$ (0-based) gets the member at position $N$ of the rows' order, if
+# there are $COUNT$ ($N$ + 1) to show. The guard keeps a position past the end
+# from leaving the previous row's pick in the temporary scope.
+# Parameters: $N$, $COUNT$
+# Scope: resolution container
+un_deleg_assign_row = {
+	if = {
+		limit = {
+			has_variable_list = un_res_delegates
+			any_in_list = {
+				variable = un_res_delegates
+				count >= $COUNT$
+				un_deleg_in_rows = yes
+			}
+		}
+		ordered_in_list = {
+			variable = un_res_delegates
+			limit = { un_deleg_in_rows = yes }
+			order_by = un_deleg_order
+			position = $N$
+			check_range_bounds = no
+			save_temporary_scope_as = un_deleg_pick
+		}
+		set_variable = { name = un_deleg_row_$N$ value = scope:un_deleg_pick }
 	}
 }
 
@@ -260,6 +444,13 @@ un_lean_tally_un_res_yes = {
 			limit = { var:un_lean_interests >= un_lean_reason_size }
 			un_lean_count_reason = { NAME = un_res_why_yes_interests }
 		}
+		if = {
+			limit = {
+				has_variable = un_lean_lobbying
+				var:un_lean_lobbying >= un_lean_reason_size
+			}
+			un_lean_count_reason = { NAME = un_res_why_yes_lobbying }
+		}
 	}
 }
 
@@ -276,6 +467,10 @@ un_lean_tally_un_res_no = {
 		if = {
 			limit = { var:un_lean_self <= un_lean_reason_size_negative }
 			un_lean_count_reason = { NAME = un_res_why_no_self }
+		}
+		if = {
+			limit = { var:un_lean_pledge <= un_lean_reason_size_negative }
+			un_lean_count_reason = { NAME = un_res_why_no_pledge }
 		}
 		if = {
 			limit = { var:un_lean_proposer <= un_lean_reason_size_negative }
@@ -296,6 +491,13 @@ un_lean_tally_un_res_no = {
 		if = {
 			limit = { var:un_lean_interests <= un_lean_reason_size_negative }
 			un_lean_count_reason = { NAME = un_res_why_no_interests }
+		}
+		if = {
+			limit = {
+				has_variable = un_lean_lobbying
+				var:un_lean_lobbying <= un_lean_reason_size_negative
+			}
+			un_lean_count_reason = { NAME = un_res_why_no_lobbying }
 		}
 	}
 }

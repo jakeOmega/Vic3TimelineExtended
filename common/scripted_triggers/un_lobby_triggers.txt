@@ -1,10 +1,11 @@
 ﻿# ============================================================================
 # RESOLUTION LOBBYING — TRIGGERS
 # ============================================================================
-# The gates behind the "Seek a Vote Commitment" diplomatic action
-# (common/diplomatic_actions/un_lobbying.txt) and behind the vote-time
-# settlement in common/scripted_effects/un_lobby_effects.txt. The state model
-# is documented at the top of that file.
+# The gates behind the two "Seek a Vote Commitment" diplomatic actions and the
+# two lobbying campaigns (common/diplomatic_actions/un_lobbying.txt), the
+# vote-time settlement, the chamber's Delegations rows and the AI's lobbying
+# (common/scripted_effects/un_lobby_effects.txt). The state model is
+# documented at the top of that file.
 #
 # SAVE COMPATIBILITY IS THE RULE HERE, exactly as it is for standing. A
 # resolution opened before this feature carries none of the lobbying lists or
@@ -15,7 +16,7 @@
 # Whether $COUNTRY$ is on the resolution's $LIST$. The has_variable_list guard
 # is what makes this safe to ask of a resolution that has never been lobbied —
 # and of a pre-feature save, where none of the lists exist at all.
-# Parameters: $LIST$  = un_res_lobbied | un_res_committed_yes |
+# Parameters: $LIST$  = un_res_lobbied | un_res_committed_yes | un_res_committed_no |
 #                       un_res_commit_kept | un_res_commit_broken |
 #                       un_res_yes | un_res_no
 #             $COUNTRY$ = the country asked about (a scope)
@@ -36,17 +37,6 @@ un_lobby_list_has_entries = {
 	any_in_list = { variable = $LIST$ exists = this }
 }
 
-# Whether this resolution's proposer may still secure another commitment.
-# un_res_commit_count only ever goes up, so a settled commitment still occupies
-# its slot.
-# Scope: resolution container
-un_lobby_under_cap = {
-	OR = {
-		NOT = { has_variable = un_res_commit_count }
-		var:un_res_commit_count < un_lobby_commitment_cap
-	}
-}
-
 # Whether $COUNTRY$ has already cast a vote on this resolution, either way.
 # A veto goes into un_res_no like any other no vote, so this covers it.
 # Parameters: $COUNTRY$ = the country asked about (a scope)
@@ -58,34 +48,9 @@ un_lobby_has_voted = {
 	}
 }
 
-# The whole "this deal can still be struck" test, from the resolution's side.
-# Asked twice: once by the diplomatic action's `possible` (so the player is
-# told why the button is greyed out, one custom_tooltip per clause) and once
-# inside un_lobby_accept_commitment, because a HUMAN recipient can sit on the
-# request for months and the engine does not re-run `possible` when they
-# finally answer.
-# Parameters: $LOBBYIST$ = the proposing country (a scope)
-#             $COUNTRY$  = the prospective recipient (a scope)
-# Scope: resolution container
-un_lobby_deal_available = {
-	has_tag = un_res_voting
-	var:un_res_proposer ?= $LOBBYIST$
-	# Written out rather than as a bare `NOT = { var:un_res_target ?= ... }` so
-	# it is unambiguous on the majority of topics, which set no target at all.
-	NOT = {
-		AND = {
-			has_variable = un_res_target
-			var:un_res_target ?= $COUNTRY$
-		}
-	}
-	NOT = { un_lobby_has_voted = { COUNTRY = $COUNTRY$ } }
-	NOT = { un_lobby_in_list = { LIST = un_res_committed_yes COUNTRY = $COUNTRY$ } }
-	un_lobby_under_cap = yes
-}
-
-# Whether ROOT holds an unsettled commitment on scope:un_resolution. THE trigger
-# the vote hook keys on: it is read by un_vote.1's option tooltips and by the
-# literal `add`s in its ai_chance blocks, where ROOT is the voting country.
+# Whether ROOT holds an unsettled pledge to vote FOR scope:un_resolution. Read
+# by the lean (un_lean_pledge), the veto rule (a member pledged for never
+# vetoes) and the ballot's keep/break lines, where ROOT is the voting country.
 #
 # `un_res_committed_yes` is the PENDING list — un_lobby_settle_commitment takes
 # the recipient off it the instant the vote is booked — so this answers "still
@@ -104,4 +69,371 @@ un_lobby_holds_pending_commitment = {
 un_lobby_resolution_has_commitments = {
 	has_variable = un_res_commit_count
 	var:un_res_commit_count >= 1
+}
+
+# Whether ROOT holds an unsettled pledge to vote AGAINST scope:un_resolution:
+# the mirror of un_lobby_holds_pending_commitment, on un_res_committed_no.
+# Scope: the voting country (expects scope:un_resolution)
+un_lobby_holds_pending_against = {
+	scope:un_resolution ?= {
+		un_lobby_in_list = { LIST = un_res_committed_no COUNTRY = ROOT }
+	}
+}
+
+# ---- Pledges (spec §4) ------------------------------------------------------------
+
+# Whether $COUNTRY$ has pledged its vote on this resolution, either way,
+# pending or settled. One pledge per member per resolution: the first
+# accepted wins (spec §4).
+# Parameters: $COUNTRY$ = the member asked about (a scope)
+# Scope: resolution container
+un_pledge_made_by = {
+	OR = {
+		un_lobby_in_list = { LIST = un_res_committed_yes COUNTRY = $COUNTRY$ }
+		un_lobby_in_list = { LIST = un_res_committed_no COUNTRY = $COUNTRY$ }
+		un_lobby_in_list = { LIST = un_res_commit_kept COUNTRY = $COUNTRY$ }
+		un_lobby_in_list = { LIST = un_res_commit_broken COUNTRY = $COUNTRY$ }
+	}
+}
+
+# Whether $ASKER$ has already asked the scoped member for a pledge on the
+# resolution in session, whatever the answer: one ask per asker per member per
+# resolution, and a refusal is an answer. The askers are kept on the member
+# (un_lobby_record_attempt), keyed to the resolution by un_pledge_askers_res.
+# Parameters: $ASKER$ = the asking country (a scope)
+# Scope: the prospective recipient
+un_pledge_asked_by = {
+	has_global_variable = un_active_resolution
+	has_variable = un_pledge_askers_res
+	var:un_pledge_askers_res ?= global_var:un_active_resolution
+	has_variable_list = un_pledge_askers
+	is_target_in_variable_list = { name = un_pledge_askers target = $ASKER$ }
+}
+
+# Whether the scoped country may still collect a pledge on the resolution in
+# session: fewer than un_lobby_commitment_cap accepted so far. The count only
+# ever rises, so a settled pledge still occupies its slot.
+# Scope: the asker
+un_pledge_under_cap = {
+	OR = {
+		NOT = { has_variable = un_pledge_count_res }
+		NOT = { var:un_pledge_count_res ?= global_var:un_active_resolution }
+		var:un_pledge_count < un_lobby_commitment_cap
+	}
+}
+
+# The whole "this pledge can still be struck" test, from the resolution's
+# side. Asked by un_lobby_accept_commitment against the LIVE resolution,
+# because a HUMAN recipient can sit on the request for months and the engine
+# does not re-run `possible` when it finally answers.
+# Parameters: $ASKER$ = the asking country, $COUNTRY$ = the recipient (scopes)
+# Scope: resolution container
+un_pledge_deal_available = {
+	has_tag = un_res_voting
+	# Written out rather than as a bare `NOT = { var:un_res_target ?= ... }` so
+	# it is unambiguous on the majority of topics, which set no target at all.
+	NOT = {
+		AND = {
+			has_variable = un_res_target
+			var:un_res_target ?= $COUNTRY$
+		}
+	}
+	NOT = { un_lobby_has_voted = { COUNTRY = $COUNTRY$ } }
+	NOT = { un_pledge_made_by = { COUNTRY = $COUNTRY$ } }
+	$ASKER$ = { un_pledge_under_cap = yes }
+}
+
+# ---- The AI's sides (spec §5) ---------------------------------------------------------
+
+# Whether the scoped member's TRUE lean on the resolution in session is between
+# $LOW$ and $HIGH$ (its last snapshot, un_vote.4). The AI knows the true lean;
+# only the chamber's display is a reading.
+# Parameters: $LOW$, $HIGH$ = numbers
+# Scope: a member
+un_lobby_true_lean_in = {
+	has_global_variable = un_active_resolution
+	has_variable = un_lean_res
+	var:un_lean_res ?= global_var:un_active_resolution
+	has_variable = un_lean_total
+	var:un_lean_total >= $LOW$
+	var:un_lean_total <= $HIGH$
+}
+
+# Whether ROOT lobbies FOR the resolution in session: its proposer.
+# Scope: any; ROOT = the country asked about
+un_lobby_ai_side_for = {
+	has_global_variable = un_active_resolution
+	global_var:un_active_resolution ?= {
+		has_tag = un_res_voting
+		var:un_res_proposer ?= ROOT
+	}
+}
+
+# Whether ROOT lobbies AGAINST the resolution in session: the resolution
+# accuses its target, and ROOT is the target, an ally of it or the leader of
+# its power bloc.
+# Scope: any; ROOT = the country asked about
+un_lobby_ai_side_against = {
+	has_global_variable = un_active_resolution
+	global_var:un_active_resolution ?= {
+		has_tag = un_res_voting
+		un_resolution_accuses_target = yes
+		has_variable = un_res_target
+		NOT = { var:un_res_proposer ?= ROOT }
+		var:un_res_target ?= {
+			OR = {
+				this = ROOT
+				has_treaty_alliance_with = { TARGET = ROOT }
+				power_bloc ?= {
+					power_bloc_leader ?= { this = ROOT }
+				}
+			}
+		}
+	}
+}
+
+# ---- Campaigns (spec §3) --------------------------------------------------------------
+
+# The lobbyist's side of both campaign pacts: a member with a vote, while a
+# resolution is voting.
+# Scope: the lobbyist
+un_lobby_campaign_selectable = {
+	has_game_rule = united_nations_enabled
+	has_global_variable = un_active_resolution
+	global_var:un_active_resolution ?= { has_tag = un_res_voting }
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_dues_vote_suspended = yes }
+	NOT = { un_representation_suspended = yes }
+}
+
+# Whether the scoped member can be the object of a campaign on the resolution
+# in session: an AI member with a vote that has not voted and is not the
+# resolution's target. Humans decide for themselves.
+# Scope: the member
+un_lobby_member_lobbyable = {
+	is_ai = yes
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_dues_vote_suspended = yes }
+	NOT = { un_representation_suspended = yes }
+	has_global_variable = un_active_resolution
+	global_var:un_active_resolution ?= {
+		has_tag = un_res_voting
+		NOT = { un_lobby_has_voted = { COUNTRY = PREV } } # REVIEWED 2026-09-27: PREV is the member this trigger is asked of (the scope before global_var:un_active_resolution)
+		NOT = {
+			AND = {
+				has_variable = un_res_target
+				var:un_res_target ?= PREV # REVIEWED 2026-09-27: PREV is the member this trigger is asked of
+			}
+		}
+	}
+}
+
+# A campaign pact stands while the resolution votes, its member can still be
+# lobbied and the lobbyist keeps its vote (the pacts' requirement_to_maintain,
+# so the engine breaks a pact the tick after its member votes or the resolution
+# closes; script also ends it at those two sites, un_lobby_campaigns_end_on /
+# un_lobby_campaigns_close).
+# Scope: the lobbyist (ROOT), with scope:target_country the member
+un_lobby_campaign_live_ok = {
+	un_lobby_campaign_selectable = yes
+	scope:target_country = { un_lobby_member_lobbyable = yes }
+}
+
+# ---- The chamber's Delegations rows (spec §6) ------------------------------------------
+# The rows are written by un_deleg_reassign_rows (un_dossier_effects.txt) into
+# un_deleg_row_0..23 on the resolution; the chamber's buttons act on the member
+# in their row (un_chamber_sguis.txt, un_lobby_effects.txt § THE CHAMBER'S
+# BUTTONS).
+
+# Whether someone is working on the scoped member: a campaign on it this month,
+# or a pledge it has made on the resolution.
+# Scope: the AI member (= ROOT, un_vote.4), with scope:un_resolution saved
+un_deleg_is_worked = {
+	OR = {
+		AND = {
+			has_variable = un_lobby_shift_res
+			var:un_lobby_shift_res ?= scope:un_resolution
+			var:un_lobby_campaigns_on > 0
+		}
+		scope:un_resolution ?= { un_pledge_made_by = { COUNTRY = ROOT } }
+	}
+}
+
+# Whether the scoped member belongs in the Delegations section at all: an AI
+# member with a vote, that has not voted, and that its snapshot has placed
+# (un_deleg_refresh_self adds it to un_res_delegates). Re-checked at display,
+# so a member that voted, left or lost its vote since the rows were last
+# sorted (un_vote.7, the day after each fan-out) is not shown.
+# Scope: a member
+un_deleg_listed = {
+	exists = this
+	is_ai = yes
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_dues_vote_suspended = yes }
+	NOT = { un_representation_suspended = yes }
+	has_variable = un_deleg_key
+	has_variable = un_lean_shown
+	has_variable = un_lean_total
+	has_global_variable = un_active_resolution
+	global_var:un_active_resolution ?= {
+		NOT = { un_lobby_has_voted = { COUNTRY = PREV } } # REVIEWED 2026-09-27: PREV is the member this trigger is asked of
+	}
+}
+
+# Whether the scoped member gets a row rather than a place in the summary.
+# Scope: a member
+un_deleg_in_rows = {
+	un_deleg_listed = yes
+	var:un_deleg_key >= 1000
+}
+
+# Row $N$ holds a member to show.
+# Parameters: $N$ = 0-23
+# Scope: the viewer
+un_deleg_row_filled = {
+	has_global_variable = un_active_resolution
+	global_var:un_active_resolution ?= {
+		has_tag = un_res_voting
+		has_variable = un_deleg_row_$N$
+		var:un_deleg_row_$N$ ?= { un_deleg_listed = yes }
+	}
+}
+
+# Whether the scoped viewer runs a campaign on $MEMBER$, either way: it then
+# reads the member's true band.
+# Parameters: $MEMBER$ = the member (a scope)
+# Scope: the viewer
+un_deleg_viewer_campaigns_on = {
+	OR = {
+		has_diplomatic_pact = { who = $MEMBER$ type = un_lobby_for_action }
+		has_diplomatic_pact = { who = $MEMBER$ type = un_lobby_against_action }
+	}
+}
+
+# The chamber's Lobby For / Lobby Against button on row $N$: the member can be
+# lobbied, we can lobby, we are not lobbying it already, and the engine would
+# let us send the pact (can_send_diplomatic_action reads the action's own
+# potential and possible) and we can afford it.
+# `prev` below is deliberate: inside ROOT = { } it is the row's member, the
+# scope var:un_deleg_row_$N$ entered — triggers cannot save a scope.
+# Parameters: $N$ = 0-23, $DIR$ = for | against
+# Scope: the viewer (ROOT)
+un_deleg_row_can_lobby = {
+	custom_tooltip = {
+		text = un_deleg_member_open_tt
+		global_var:un_active_resolution ?= {
+			has_variable = un_deleg_row_$N$
+			var:un_deleg_row_$N$ ?= { un_lobby_member_lobbyable = yes }
+		}
+	}
+	custom_tooltip = {
+		text = un_deleg_we_vote_tt
+		un_lobby_campaign_selectable = yes
+	}
+	custom_tooltip = {
+		text = un_deleg_not_lobbying_tt
+		global_var:un_active_resolution ?= {
+			has_variable = un_deleg_row_$N$
+			var:un_deleg_row_$N$ ?= {
+				NOT = { has_diplomatic_pact = { who = ROOT type = un_lobby_for_action } }
+				NOT = { has_diplomatic_pact = { who = ROOT type = un_lobby_against_action } }
+			}
+		}
+	}
+	custom_tooltip = {
+		text = un_deleg_can_afford_tt
+		global_var:un_active_resolution ?= {
+			has_variable = un_deleg_row_$N$
+			var:un_deleg_row_$N$ ?= {
+				ROOT = {
+					can_afford_diplomatic_action = { target = prev type = un_lobby_$DIR$_action } # REVIEWED 2026-09-27: prev is the row's member (var:un_deleg_row_$N$), deliberately
+				}
+			}
+		}
+	}
+	custom_tooltip = {
+		text = un_deleg_can_send_tt
+		global_var:un_active_resolution ?= {
+			has_variable = un_deleg_row_$N$
+			var:un_deleg_row_$N$ ?= {
+				ROOT = {
+					can_send_diplomatic_action = { target = prev type = un_lobby_$DIR$_action } # REVIEWED 2026-09-27: prev is the row's member (var:un_deleg_row_$N$), deliberately
+				}
+			}
+		}
+	}
+}
+
+# Whether we run a campaign on the member in row $N$ (the Stop Lobbying button
+# shows, and Lobby For / Against hide).
+# Parameters: $N$ = 0-23
+# Scope: the viewer (ROOT)
+un_deleg_row_lobbying = {
+	has_global_variable = un_active_resolution
+	global_var:un_active_resolution ?= {
+		has_variable = un_deleg_row_$N$
+		var:un_deleg_row_$N$ ?= {
+			OR = {
+				has_diplomatic_pact = { who = ROOT type = un_lobby_for_action }
+				has_diplomatic_pact = { who = ROOT type = un_lobby_against_action }
+			}
+		}
+	}
+}
+
+# The chamber's Seek Pledge For / Against button on row $N$: the pledge
+# action's own reasons, and then the engine's can_send_diplomatic_action for
+# the rest of its gates.
+# Parameters: $N$ = 0-23, $ACTION$ = un_secure_commitment_action |
+#             un_secure_commitment_against_action
+# Scope: the viewer (ROOT)
+un_deleg_row_can_pledge = {
+	custom_tooltip = {
+		text = un_lobby_has_not_voted_tt
+		global_var:un_active_resolution ?= {
+			has_variable = un_deleg_row_$N$
+			var:un_deleg_row_$N$ ?= { un_deleg_listed = yes }
+		}
+	}
+	custom_tooltip = {
+		text = un_lobby_not_pledged_tt
+		global_var:un_active_resolution ?= {
+			has_variable = un_deleg_row_$N$
+			var:un_deleg_row_$N$ ?= {
+				NOT = { un_lobby_holds_pledge_on_active = yes }
+			}
+		}
+	}
+	custom_tooltip = {
+		text = un_lobby_not_yet_approached_tt
+		global_var:un_active_resolution ?= {
+			has_variable = un_deleg_row_$N$
+			var:un_deleg_row_$N$ ?= {
+				NOT = { un_pledge_asked_by = { ASKER = ROOT } }
+			}
+		}
+	}
+	custom_tooltip = {
+		text = un_lobby_under_cap_tt
+		un_pledge_under_cap = yes
+	}
+	custom_tooltip = {
+		text = un_deleg_can_send_tt
+		global_var:un_active_resolution ?= {
+			has_variable = un_deleg_row_$N$
+			var:un_deleg_row_$N$ ?= {
+				ROOT = {
+					can_send_diplomatic_action = { target = prev type = $ACTION$ } # REVIEWED 2026-09-27: prev is the row's member (var:un_deleg_row_$N$), deliberately
+				}
+			}
+		}
+	}
+}
+
+# Whether the scoped member has pledged its vote on the resolution in session,
+# either way, pending or settled (un_pledge_made_by, asked of the member).
+# Scope: a member
+un_lobby_holds_pledge_on_active = {
+	has_variable = un_pledge_res
+	var:un_pledge_res ?= global_var:un_active_resolution
 }
