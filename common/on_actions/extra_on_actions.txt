@@ -1237,32 +1237,149 @@ war_propaganda_on_action = {
 	}
 }
 
+# Excess Private Construction (docs/systems/mod_systems.md § Excess Private
+# Construction). too_much_private_construction raises every project's weekly
+# construction cap so an investment pool the private queue can't spend gets
+# spent, and charges a construction-efficiency penalty that scales with it.
+#
+# Checked every year, also while the modifier is in force. It is applied or kept
+# while one of these holds:
+# - Entry (no stored value): investors have more than target_queue_length
+#   levels queued and the pool takes in more than it spends.
+# - Stay (var:too_much_private_construction_cached above 0, which is the
+#   modifier's multiplier, so normally the modifier is in force): the private
+#   queue isn't empty and too_much_private_construction_overflow > 0, i.e.
+#   target_queue_length projects at base speed still couldn't spend the pool's
+#   gross income. Net income can't be the stay test: it turns negative as soon
+#   as the modifier drains the pool, so the modifier would remove itself by
+#   working. Nor can the 500-level bar: the engine's own autonomous investment
+#   fills the queue, and faster projects shorten it while the modifier is
+#   still needed.
+# - Overinvestment is in force (below).
+# While one holds, the value ramps (at most x1.2 or /1.2 a year,
+# too_much_private_construction_script_value). Otherwise the modifier is
+# removed and the variable zeroed. The stay test reads the variable, not the
+# modifier, because a civil war's winner inherits variables but no modifiers
+# (docs/guides/scripting_best_practices.md, "What a Civil War's Winner
+# Inherits"): a winner holding the variable rebuilds the modifier, so it
+# continues the nation. On that first pulse base_construction_per_week
+# subtracts a value the winner's modifiers don't include, so the overflow reads
+# high by that much; the x1.2 ceiling caps the rebuilt value at 1.2x the
+# inherited one, and the next pulse is exact. Outside Overinvestment the stay
+# test fails exactly when the ramp's target reaches 0, so the /1.2 floor can't
+# keep a spent modifier alive. Until 2026-09-26 the gate was skipped once the
+# modifier existed, and it lingered for about a century on that floor.
+#
+# On removal the value is kept in var:too_much_private_construction_last for
+# five years, and a re-entry within them starts at the lesser of it and the
+# overflow instead of at 10 at most (too_much_private_construction_resume). A
+# short dip in pool income can fail the stay test when the need is small (a
+# banking panic cuts capitalist contributions for over a year), and a restart
+# from 10 would take decades to climb back. After five years the variable
+# expires and a new episode ramps from 10 as designed, so a re-entry decades
+# later doesn't jump straight to a large penalty. The stored value is also
+# cleared once the modifier is back.
+#
+# Overinvestment keeps the modifier. It cuts every pop's pool contribution, so
+# gross income, and the overflow with it, falls to about 0. Removing the
+# modifier then would zero the variable and end Overinvestment after one year,
+# since it needs the variable above 1000. Kept, the value is held at last
+# year's while the private queue has levels (too_much_private_construction_script_value,
+# owner's ruling), so Overinvestment is re-added until its own exit holds: the
+# pool at or under GDP. The year after it lifts, the stay test and the normal
+# ramp take over. Limits of the hold:
+# - It freezes growth as well as decay: with gross income cut the overflow
+#   reads -base, so the need can't raise the value during Overinvestment.
+#   When the queue cap limits the drain, the frozen value is the limit (the
+#   PR #514 toy model's 2M/week country runs 13 straight years at 1145).
+# - Episodes can be long, even indefinite, when inflows that aren't pop
+#   contributions outpace a capped drain: the cooperative boom and frenzy
+#   phases (country_weekly_investment_pool_mult in
+#   financial_cycle_phase_boom_coop and _frenzy_coop), government-dividend
+#   reinvestment, or a pool left far above GDP by a GDP collapse.
+# - One queued private level is enough to keep it.
+# (Before 2026-09-27 the value fell /1.2 in each Overinvestment
+# year, so while the pool stayed above GDP it hovered around 1000, with
+# Overinvestment every other year.) Meanwhile the private queue keeps spending
+# the pool: under direct construction through the law's allocation, under Free
+# Market Construction through te_construction_market_private_spending_target,
+# a 24th of the pool a week whatever the sign of gross income (until
+# 2026-09-26 it was 0 or less once gross income was, so the market bought
+# nothing during Overinvestment).
+#
+# The variable is written first and the modifier reads it flat, so the
+# modifier always equals var:too_much_private_construction_cached, which
+# base_construction_per_week subtracts. It is set to 0, never removed.
 excess_private_construction_on_action = {
 	effect = {
 		if = {
 			limit = {
 				OR = {
 					AND = {
+						NOT = {
+							AND = {
+								has_variable = too_much_private_construction_cached
+								var:too_much_private_construction_cached > 0
+							}
+						}
 						construction_queue_num_queued_private_levels > target_queue_length
 						investment_pool_net_income > 0
 					}
-					has_modifier = too_much_private_construction
+					AND = {
+						has_variable = too_much_private_construction_cached
+						var:too_much_private_construction_cached > 0
+						construction_queue_num_queued_private_levels > 0
+						too_much_private_construction_overflow > 0
+					}
+					has_modifier = overinvestment_modifier
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_variable = too_much_private_construction_cached }
+				}
+				set_variable = {
+					name = too_much_private_construction_cached
+					value = 0
 				}
 			}
 			remove_modifier = too_much_private_construction
-			if = {
-				limit = {
-					too_much_private_construction_script_value > 0
-				}
-				add_modifier = {
-					name = too_much_private_construction
-					multiplier = too_much_private_construction_script_value
-
-				}
-			}
 			set_variable = {
 				name = too_much_private_construction_cached
 				value = too_much_private_construction_script_value
+			}
+			if = {
+				limit = {
+					var:too_much_private_construction_cached > 0
+				}
+				add_modifier = {
+					name = too_much_private_construction
+					multiplier = var:too_much_private_construction_cached
+				}
+				if = {
+					limit = {
+						has_variable = too_much_private_construction_last
+					}
+					remove_variable = too_much_private_construction_last
+				}
+			}
+		}
+		else = {
+			remove_modifier = too_much_private_construction
+			if = {
+				limit = {
+					has_variable = too_much_private_construction_cached
+					var:too_much_private_construction_cached > 0
+				}
+				set_variable = {
+					name = too_much_private_construction_last
+					value = var:too_much_private_construction_cached
+					years = 5
+				}
+				set_variable = {
+					name = too_much_private_construction_cached
+					value = 0
+				}
 			}
 		}
 		remove_modifier = overinvestment_modifier

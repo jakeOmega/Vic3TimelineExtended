@@ -1491,8 +1491,14 @@ curr_year = {
 	value = year
 }
 
+# Excess Private Construction, read by excess_private_construction_on_action
+# (extra_on_actions.txt), which evaluates too_much_private_construction_script_value
+# only in years the modifier's conditions hold and removes the modifier the year
+# they fail. var:too_much_private_construction_cached is last year's value, which
+# is also the modifier's multiplier (0 when the modifier is absent).
 target_queue_length = 500
 
+# The per-project weekly construction cap without this modifier.
 base_construction_per_week = {
 	value = modifier:country_max_weekly_construction_progress_add
 	subtract = var:too_much_private_construction_cached
@@ -1520,19 +1526,90 @@ target_construction_per_week = {
 	divide = target_queue_length
 }
 
-too_much_private_construction_script_value = {
-	value = target_construction_per_week
-	subtract = base_construction_per_week
-	min = {
-		value = var:too_much_private_construction_cached
-		divide = 1.2
-		min = 0
+# The per-project cap raise at which target_queue_length projects could spend
+# the pool's gross income: positive exactly when that many projects at base
+# speed couldn't. This is the overflow the modifier compensates for, and its
+# exit test. Gross income doesn't depend on the modifier, and under Free Market
+# Construction, while the pool's funds don't bind, curr_cost_per_construction_point
+# is the market price: the market sizes the private share to what the pool
+# buys. So the modifier can't end its own need by working (net income can: it
+# turns negative as soon as the modifier drains the pool). The estimate is
+# spending / private_construction_used, though, and the latter includes the
+# modifier's (base + value) x levels cap. Where the pool's funds bind (direct
+# construction with an emptied pool), spending falls below the modelled use,
+# the estimate falls below the price and the overflow reads high (see
+# docs/systems/mod_systems.md § Excess Private Construction). 0 while
+# private_construction_used is 0 or less (an empty queue or no private share),
+# which also keeps curr_cost_per_construction_point from dividing by 0.
+too_much_private_construction_overflow = {
+	value = 0
+	if = {
+		limit = {
+			private_construction_used > 0
+		}
+		value = target_construction_per_week
+		subtract = base_construction_per_week
 	}
-	max = {
+}
+
+# The value the modifier had when it was last removed, 0 if none. The
+# on-action stores it on removal as a five-year timed variable and clears it
+# once the modifier is back, so it only ever raises the ceiling of a re-entry
+# within five years of a removal.
+too_much_private_construction_resume = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = too_much_private_construction_last
+		}
+		value = var:too_much_private_construction_last
+	}
+}
+
+# The overflow, moving at most x1.2 or /1.2 a year from last year's value; the
+# cap is 9000 (-90% construction efficiency). A new episode starts at the
+# lesser of the overflow and 10, or the value it had when removed in the last
+# five years if that is higher (too_much_private_construction_resume), so a
+# short dip in pool income, such as a banking panic or a default, resumes the
+# modifier instead of restarting it at 10. It never overshoots the need either
+# way. The /1.2 floor
+# is the ramp down while the modifier stays. The on-action removes the modifier
+# once the overflow is 0 or less, so the floor can't hold it above 0 after its
+# need is gone.
+#
+# While Overinvestment is in force the value is held at last year's instead
+# (owner's ruling, PR #514). Overinvestment cuts every pop's contribution, so
+# gross income and the overflow read about 0, and the ramp would cut the value
+# /1.2 a year for a need that is still there. That ended Overinvestment (it
+# needs the value above 1000) every other year while the pool stayed above
+# GDP. Held, Overinvestment lasts until its own exit, the pool at or under GDP,
+# and the normal ramp resumes the next year. The hold needs a non-empty
+# private queue: with nothing queued nothing drains the pool, so the value
+# falls /1.2 as before and Overinvestment still ends within 13 years.
+too_much_private_construction_script_value = {
+	if = {
+		limit = {
+			has_modifier = overinvestment_modifier
+			construction_queue_num_queued_private_levels > 0
+		}
 		value = var:too_much_private_construction_cached
-		multiply = 1.2
-		min = 10
-		max = 9000
+	}
+	else = {
+		value = too_much_private_construction_overflow
+		min = {
+			value = var:too_much_private_construction_cached
+			divide = 1.2
+			min = 0
+		}
+		max = {
+			value = var:too_much_private_construction_cached
+			multiply = 1.2
+			min = {
+				value = too_much_private_construction_resume
+				min = 10
+			}
+			max = 9000
+		}
 	}
 }
 
