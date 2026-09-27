@@ -36,17 +36,31 @@ te_pm_retooling_waived = {
 }
 
 # A production-method change on this state's railway that is only the
-# Transport principle swap: replacement_if_valid moving a train method into its
-# tier 3 variant (same method, +10 on te_state_railway_train_code), or the
-# method leaving the tier 3 variant because the owner's bloc no longer holds
-# principle_transport_3/4/5. Any other change (a new train method, the
-# passenger group, Centralized Traffic Control) is not covered. Read before
-# te_state_note_railway_train_method updates the record.
-# Residual (accepted by the owner): a railway with no record yet (the weekly
-# retooling sweep records every railway, so only until its first run on a
-# save) that moves from a lower train method straight onto a tier 3 variant is
-# waived once; and a second production-method change on the same railway
-# within the waiver's two days is waived with it.
+# Transport principle swap. Read before te_state_note_railway_train_method
+# updates the record (codes: te_state_railway_train_code). Three cases:
+# 1. swap-in: a recorded railway's code moved exactly +10 (steam, electric or
+#    diesel into its own tier 3 variant; replacement_if_valid);
+# 2. no record yet and the railway is on a tier 3 variant;
+# 3. swap-out: the recorded code was a variant (> 10), the owner's bloc no
+#    longer holds principle_transport_3/4/5, and the railway either moved
+#    exactly -10 (back to the same method's base) or sits on pm_early_trains
+#    (the group's fallback, code 0). A move to another train method or to
+#    Centralized Traffic Control and later (codes 4-7) is the player's choice
+#    and pays.
+# Residuals, accepted under the owner's ruling (a small exploit rather than an
+# unfair penalty):
+# - the waiver strips the whole pm_retooling, including time left from an
+#   earlier player switch: a bloc leader can clear its members' railway
+#   retooling by dropping the transport principle to tier 2 and re-adopting
+#   tier 3 (swap-out and swap-in both waived);
+# - the first weekly sweep on an old save, or on a new state object, waives
+#   every railway already on a variant (case 2), whatever its retooling came
+#   from; and a railway not yet recorded that jumps from a lower method
+#   straight onto a variant is waived once;
+# - a second production-method change within the marker's two days rides
+#   along; if the hook missed the swap, until the next sweep instead;
+# - if losing the tier drops a railway to pm_early_trains, the player's switch
+#   back pays full retooling (no waiver built; the in-game check decides).
 # Scope: state
 te_state_railway_tier3_swap = {
 	OR = {
@@ -62,7 +76,16 @@ te_state_railway_tier3_swap = {
 		AND = {
 			has_variable = te_rail_train_code
 			var:te_rail_train_code > 10
-			te_state_railway_train_code < 10
+			OR = {
+				AND = {
+					te_state_railway_train_code_change > -11
+					te_state_railway_train_code_change < -9
+				}
+				any_scope_building = {
+					is_building_type = building_railway
+					has_active_production_method = pm_early_trains
+				}
+			}
 			owner = {
 				NOT = {
 					power_bloc ?= {

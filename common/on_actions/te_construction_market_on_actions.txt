@@ -358,7 +358,11 @@ on_start_expanding_building = {
 # again (root = the building). Whether the engine applies the modifier before
 # or after this hook fires is unverified, so the building also re-checks a day
 # later (te_construction_market_building_events.3); the weekly sweep
-# (minor_events_timelineextended.100) catches anything else.
+# (minor_events_timelineextended.100) catches anything else under the rule.
+# For the railway waiver the sweep is a fallback only when this hook missed the
+# swap (the record is then stale and the sweep sees it). If the hook fired and
+# the engine applied pm_retooling more than a day later, the record is already
+# current and only the day-later re-check, inside the two-day marker, helps.
 # Railways also get the waiver, in any game, for the automatic Transport
 # principle tier 3 swap only (te_railway_note_train_method records the train
 # method and decides; te_building_retooling_waived reads its marker). It runs
