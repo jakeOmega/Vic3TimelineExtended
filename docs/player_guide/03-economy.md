@@ -312,14 +312,15 @@ you build a Strategic Reserve Hub. No game rule controls it.
 
 Two buildings make up the reserve, both unlocked by Logistics.
 
-| Building | Where | Construction cost | Each level adds | Staff per level |
+| Building | Where | Construction cost | Adds | Staff |
 |---|---|---|---|---|
-| Strategic Reserve Hub | Capital only, one per country | Low | 5,000 storage for each good; each good may move 1,000 units a week | 5,000 |
-| Strategic Reserve Silo | Any state | High | 1,000 storage for each good; +100 to each good's weekly limit | 500 |
+| Strategic Reserve Hub | Capital only; one per country, at one level | Low | 5,000 storage for each good; each good may move 1,000 units a week | 5,000 |
+| Strategic Reserve Silo | Any state, any number of levels | High | Per level: 1,000 storage for each good; +100 to each good's weekly limit | 500 per level |
 
 The hub is the reserve: it holds the controls and does the buying and selling.
-It can't be downsized or demolished. Silos only add room and flow, and do
-nothing without a hub. The hub trades only when it is fully staffed. Below full
+It can't be expanded past its single level, downsized or demolished. Silos are
+how a reserve grows: they only add room and flow, and do nothing without a
+hub. The hub trades only when it is fully staffed. Below full
 occupancy the journal entry shows the hub as deactivated, and it neither trades
 nor replaces what decays.
 
@@ -415,11 +416,12 @@ journal entry is closed.
 ### Moving or losing the reserve hub
 
 The hub always follows your capital. If your capital moves, the next weekly
-update builds a level-1 hub in the new capital for free and removes the old one.
-Your stock moves with it, but the new hub has only one level of capacity plus
-your silos, and stock above that capacity is lost. The new hub also hires its
-5,000 workers from scratch and trades nothing until it is fully staffed. Expand
-it again before you need it.
+update builds a new hub in the new capital for free and removes the old one.
+Your stock and your capacity carry over unchanged, since the hub has only one
+level and your silos stay where they are. The cost is time: the new hub hires
+its 5,000 workers from scratch and trades nothing until it is fully staffed, so
+the reserve neither buys, releases nor replaces decay in the meantime. Avoid
+moving your capital while you are counting on the reserve.
 
 If a foreign power takes the hub's state, the hub is destroyed, the journal
 entry ends and the whole stockpile is lost. You can build a new hub in your
