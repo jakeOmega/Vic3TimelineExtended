@@ -50,7 +50,7 @@ Systems using this pattern:
 - **Modifier:** `construction_cost_scaling` in `common/static_modifiers/extra_modifiers.txt` — `goods_input_construction_mult = 1`.
 - **Script values:** `common/script_values/extra_script_values.txt` — search for `CONSTRUCTION COST SCALING`.
 - **On action:** `construction_cost_scaling_on_action` in `common/on_actions/extra_on_actions.txt`, wired to `on_yearly_pulse_country`.
-- **Tuning:** `construction_cost_gdppc_reference`, `construction_cost_floor_ratio` (1x), `construction_cost_ceiling_ratio` (14x), `construction_cost_max_mult` (10 = +1000%).
+- **Tuning:** `construction_cost_gdppc_reference`, `construction_cost_floor_ratio` (1x), `construction_cost_ceiling_ratio` (100x), `construction_cost_max_mult` (10 = +1000%).
 - **Curve:** Linear interpolation from 0 at floor to `max_mult` at ceiling.
 - `goods_input_construction_mult` affects both construction project costs AND ongoing building maintenance.
 - With `free_market_construction_rule` disabled there is no construction good to scale, so the on_action applies `construction_cost_scaling_direct` (`country_construction_goods_cost_mult = 1`, adjusted by `construction_cost_scaling_direct_adjusted_mult`) instead. See § Free Market Construction off.
@@ -204,9 +204,9 @@ The same effect keeps its older job in every setting: removing the modifier from
 
 | Producer category | PMs (representative) | Building family |
 |---|---|---|
-| **Railway** | `pm_early_trains`, `pm_steam_trains`, `pm_diesel_trains`, `pm_electric_trains`, `pm_autonomous_trains`, `pm_centralized_traffic_control`, `pm_automated_loading_and_unloading` | Railway (REPLACE'd) |
+| **Railway** | `pm_early_trains`, `pm_steam_trains`, `pm_diesel_trains`, `pm_electric_trains`, `pm_autonomous_trains`, `pm_centralized_traffic_control`, `pm_containerized_cargo`, `pm_automated_loading_and_unloading` | Railway (REPLACE'd) |
 | **Motorways / highways** | `pm_civil_highway`, `pm_industrial_highway`, `pm_electric_civil_highway`, `pm_electric_industrial_highway`, `pm_autonomous_highway` | Motorways |
-| **Ports** | `pm_container_ports`, `pm_containerized_cargo`, `pm_global_ports` | Port (vanilla preserved + mod tiers) |
+| **Ports** | `pm_container_ports`, `pm_global_ports` | Port (vanilla preserved + mod tiers) |
 | **Airports & spaceports** | `pm_airport`, `pm_spaceport` | Airport / Spaceport (mod additions) |
 | **Trading houses & flagged company HQs** | `pm_eic_trading_house`, `pm_hbc_york_factory`, `pm_rac_sitka_trading_post`, `pm_mitsui_trading_house`, `pm_sassoon_bombay_docks`, `pm_ralli_odessa_grain_elevator`, `pm_sudamericana_valparaiso_pier`, `pm_b_grimm_bangkok_warehouse`, `pm_john_holt_lagos_trading_house`, `pm_ynchausti_manila_trading_house`, `pm_volkswagen_autostadt`, `pm_suez_company_ismailia_hq`, `pm_panama_company_culebra_cut` | Vanilla / mod company buildings |
 | **Logistics & shipyards (modern)** | `pm_amazon_fulfillment_center`, `pm_alibaba_cainiao_park`, `pm_shopify_fulfillment_hub`, `pm_ap_moller_copenhagen_wharf`, `pm_mitsubishi_nagasaki_shipyard`, `pm_generic_dry_dock`, `pm_generic_logistics_hub`, `pm_generic_rail_nexus`, `pm_generic_shipping_terminal` | Vanilla / mod company buildings |
@@ -238,10 +238,10 @@ The same effect keeps its older job in every setting: removing the modifier from
 - **Modifier:** `migration_crowding` — `state_migration_pull_mult = -0.1` (base, scaled by multiplier).
 - **Script values:** `common/script_values/extra_script_values.txt` — search for `MIGRATION CROWDING`.
 - **On action:** `migration_crowding_on_action`, wired to `on_yearly_pulse_state`.
-- **Density-based:** Uses `state_population / arable_land` as a proxy.
-- **Density modifier:** `state_migration_crowding_density_mult` — custom modifier that divides effective density. Applied by `institution_ministry_of_urban_planning` (+10% per level).
+- **Density-based:** Uses `state_population / arable_land_base` as a proxy.
+- **Density modifier:** `state_migration_crowding_density_mult` — custom modifier that divides effective density (density / (1 + mult)). Applied by `institution_ministry_of_urban_planning` (+10% per level) and five technologies: `modern_skyscrapers` (+15%), `modern_urban_planning` (+20%), `advanced_structural_engineering` (+20%), `autonomous_vehicles` (+15%), `post-scarcity_economy` (+15%).
 - **Scaling:** Quadratic up to the 10x density knee, then linear beyond it. `migration_crowding_ratio` is 0 at the floor, 1.0 at the 10x knee, and can exceed 1.0 in the linear tail. `migration_crowding_mult` uses `4.5 * r^2` below the knee and `9 * r - 4.5` above it, giving a 45% pull penalty at 10x density and 145% at 20x density.
-- **Tuning:** `migration_crowding_density_reference` (100000), `migration_crowding_floor_ratio` (1x), `migration_crowding_ceiling_ratio` (10x knee).
+- **Tuning:** `migration_crowding_density_reference` (10000), `migration_crowding_floor_ratio` (1x), `migration_crowding_ceiling_ratio` (10x knee).
 - **Split states:** Arable-land-derived threshold and tooltip breakdown values subtract the same-owner regional `arable_land_added` cache, so fully owned split states do not undercount geographic base land.
 
 ## Dynamic Homeland Progress
@@ -939,12 +939,21 @@ Suborbital Flight (rocketry tech)
 
 > **Full design document:** `docs/vanilla/wonder_buildings_reference.md`
 
-Two-phase construction pattern: buildable construction site → completed building via scripted effect.
+The seven **megaprojects** use a two-phase construction pattern: a buildable construction site becomes the completed building through a scripted effect. (The ordinary wonders in `common/buildings/wonders.txt` are built through the normal construction queue and are not covered here.) All seven are era-12 technologies; their sites and buildings live in `common/buildings/extra_buildings.txt`.
 
-- **Space Elevator:** `building_space_elevator_construction_site` → `building_space_elevator`. Scripted effect: `space_elevator_construction` in `extra_effects.txt`. On-action: `space_elevator_on_action` (monthly state pulse). Max 20 levels.
-- **Solar Collector:** Three-building system (construction site → orbital hub → ground receivers). Hub enables receiver slots via `country_solar_receiver_max_level_add`. Max 10 levels.
-- **Construction progress:** Monthly based on `(occupancy / 12) * speed_multiplier`. Speed PMs: paused=0, slow=0.25, medium=0.5, fast=1.0.
-- **Custom modifier types:** `building_weekly_*_progress` and `building_total_*_progress` (percent, script_only) in `megastructure_progress_modifier_types.txt`.
+| Megaproject | Tech | Max level | Completed building does |
+|---|---|---|---|
+| Space Elevator | `space_elevator` | 20 | 1M `launch_capacity` per level, `country_space_race_progress_add` |
+| Orbital Solar Collector | `space_based_solar_power` | 10 | an orbital hub: each level opens 3 `building_solar_receiver` slots (`country_solar_receiver_max_level_add`); the ground receivers produce the electricity |
+| Orbital Battlestation | `orbital_weapon_platforms` | 5 | country-wide unit offense/defense/morale and nuclear-defence chance; no goods output |
+| Antimatter Containment Facility | `antimatter_production` | 10 | each level opens 5 slots (`country_antimatter_facility_max_level_add`) for `building_antimatter_engine` and `building_antimatter_warhead_plant` |
+| Mind Upload Nexus | `mind_backups` | 5 | digital assets, services, tourism and fine art output, research speed |
+| Nanofabrication Center | `molecular_assemblers` | 10 | `advanced_materials` output, lower space race risk |
+| Consciousness Network | `telepathic_communities` | 10 | state infrastructure, tax capacity and institution impact, bureaucracy; a mode group picks Open (SoL, innovation, influence) or Social Control (authority, less turmoil; unlocked by the laws that disallow Open) |
+
+- **Construction effect:** `generic_wonder_construction_base = { WONDER = <name> MAX_LEVEL = <n> }` in `common/scripted_effects/extra_effects.txt`, called through one named wrapper per megaproject (`space_elevator_construction`, …). Each megaproject's `<name>_on_action` runs it from `on_monthly_pulse_state` (`common/on_actions/extra_on_actions.txt`). On completion it removes the site and creates the building at level 1, or raises it one level up to the cap; a site can't be placed once the building is at its cap.
+- **Construction progress:** each month, `occupancy / 12 × building_annual_<name>_progress`, and nothing while the site has a goods shortage. Speed PMs set the annual progress: paused 0, slow 0.25, medium 0.5, fast 1.0 (about 4 / 2 / 1 years at full occupancy).
+- **Custom modifier types:** `building_annual_*_progress` and `building_total_*_progress` (script_only) in `megastructure_progress_modifier_types.txt`.
 
 ## Grand Monuments (Repeatable Construction Sink)
 
@@ -1180,7 +1189,7 @@ Building, institution and law scopes **do not support variables or modifiers**. 
 
 ### Overview
 
-The decolonization system models the decline of colonial empires through a journal entry with a stability progress bar, scripted buttons for colonial policies, and a series of events. The system is designed so that **most colonial powers except the top 2-3 GPs will lose most of their colonies** after the `decolonization` tech is researched (era 7).
+The decolonization system models the decline of colonial empires through a journal entry with a stability progress bar, scripted buttons for colonial policies, and a series of events. The system is designed so that **most colonial powers except the top 2-3 GPs will lose most of their colonies** after the `decolonization` tech is researched (era 6).
 
 ### Architecture
 
@@ -1307,7 +1316,7 @@ AI weights across events are tuned to favor decolonization:
 ## Dynamic Treaty Names
 
 - **Purpose:** Gives thematic names to treaties containing mod-specific treaty articles (instead of generic "Treaty of [City]").
-- **How it works:** Each entry in `common/dynamic_treaty_names/` has a `trigger` (checked against the treaty's articles via `any_scope_article_option = { has_type = X }`) and a `weight` (higher = more likely). The engine picks the highest-weighted matching name.
+- **How it works:** Each entry in `common/dynamic_treaty_names/` has a `trigger` (checked against the treaty's articles via `any_scope_article_option = { has_type = X }`) and a `weight` (higher = more likely). The engine picks one of the matching names at random, weighted by `weight` (vanilla `common/dynamic_treaty_names/readme.md`), so a heavy name is only the likeliest, not guaranteed; the treaty draft's randomize button (`TreatyDraft.RandomizeName`) re-rolls it.
 - **Coverage by article type:**
   - Corporate: `seize_company`, `disband_company`, `enforce_privatization`, `corporate_concessions`, `free_port_concession`, `money_transfer`
   - Humanitarian: `minority_protection`, `cultural_exchange`, `religious_mission_rights`
@@ -1356,12 +1365,13 @@ AI weights across events are tuned to favor decolonization:
 - **Mechanism:**
   1. `on_entry_into_force` saves scopes via `scope:article_options.source_country` / `.target_country` (critical scoping pattern — see `docs/guides/scripting_best_practices.md`).
   2. Calls `population_transfer_effect` scripted effect.
-  3. The effect iterates target country's primary cultures, for each culture finds source-country states with matching pops via population-weighted random selection (tiered modifiers since `state_population` is a trigger, not a value).
-  4. Uses `move_pop` to transfer pops, increments a counter variable.
-  5. Applies `population_transfer_disruption` timed modifier to affected states, scaled by transfer count.
+  3. The effect iterates the target country's primary cultures and moves **every** matching pop in every source-country state (pops whose culture is also primary in the source stay). Each pop goes to a random target-country state, weighted by population (tiered `weight` modifiers, since `state_population` is a trigger, not a value).
+  4. Uses `move_pop` to transfer pops, adding each pop's size to `var:pop_transfer_count` on both countries.
+  5. Applies `population_transfer_disruption` to **both countries** as a 5-year decaying country modifier. Its multiplier is the share of that country's population moved (`te_pop_transfer_disruption_strength` = `pop_transfer_count / total_population`, clamped to 0.25–2, so even a small transfer costs at least a quarter of the full effect), precomputed into `var:pop_transfer_disruption_strength` because an inline multiplier would be re-evaluated on every decay tick.
 - **Key scripted effect:** `population_transfer_effect` in `common/scripted_effects/extra_effects.txt`.
-- **Key modifier:** `population_transfer_disruption` — reduces state throughput and increases mortality, applied per-state.
-- **Files:** `common/treaty_articles/extra_treaty_articles.txt`, `common/scripted_effects/extra_effects.txt`, `common/static_modifiers/extra_modifiers.txt`, localization.
+- **Key modifier:** `population_transfer_disruption` (country scope) — at multiplier 1: `country_bureaucracy_mult` −50%, `country_legitimacy_base_add` −10, `country_radicals_from_conquest_mult` +50%. There is no per-state throughput or mortality effect.
+- **Follow-up event:** while the disruption lasts, `treaty_article_events.10` (weight 10 in `treaty_article_events_on_actions.txt`) offers resettlement support (`population_transfer_aftermath_modifier`) or neglect (`population_transfer_neglect_modifier`).
+- **Files:** `common/treaty_articles/extra_treaty_articles.txt`, `common/scripted_effects/extra_effects.txt`, `common/script_values/extra_script_values.txt` (`te_pop_transfer_disruption_strength`), `common/static_modifiers/extra_modifiers.txt`, `events/treaty_article_events.txt`, localization.
 
 ## Intelligence Sharing Defense Shield
 
@@ -1525,7 +1535,7 @@ Each surviving JE has monthly pulse events plus a fail-state event (except Post-
 **Purpose:** Counterbalance the natural decline of the Devout IG caused by urbanization, literacy, and modernization techs. Inspired by 20th/21st century religious-political movements.
 
 **Mechanism:** 7 events fire from the `society_technology_events_on_action` random list, each tied to a different social tech (eras 7–9). Each offers three options:
-- **Strong option:** Adds a permanent modifier with large `interest_group_ig_devout_pop_attraction_mult` (0.25–0.50) and `interest_group_ig_devout_pol_str_mult` (0.20–0.50). Some include costs (authority, research speed, prestige). These stack — a player who embraces multiple religious movements will see a very strong Devout IG.
+- **Strong option:** Adds a 20-year modifier (`very_long_modifier_time`) with large `interest_group_ig_devout_pop_attraction_mult` (0.25–0.50) and `interest_group_ig_devout_pol_str_mult` (0.20–0.50). Four hold at full strength for the 20 years (events 1, 2, 3, 5); three decay over them (events 4, 6, 7). Some include costs (authority, research speed, prestige). These stack — a player who embraces multiple religious movements will see a very strong Devout IG.
 - **Moderate option:** Adds a decaying modifier lasting 20 years with moderate attraction/pol_str bonuses.
 - **Secular option:** No devout boost or negative (radicals), with alternative benefits.
 
@@ -1542,11 +1552,11 @@ Each surviving JE has monthly pulse events plus a fail-state event (except Post-
 - **Default:** Covers Christian and other religions with generic or broadly Western religious language.
 - Some events also have variant titles (e.g., "The Satellite Minbar" for Islamic event 2, "One Ummah, One Law" for Islamic event 4).
 
-**Removal:** The "Secularization Campaign" decision (requires `decline_of_organized_religion` tech) removes all permanent religious revival modifiers at once, with a radicals cost.
+**Removal:** The "Secularization Campaign" decision (requires `decline_of_organized_religion` tech) removes all seven strong-option modifiers at once, with a radicals cost, instead of waiting out their 20 years.
 
 **Events:**
 1. **The Moral Majority** (`television_broadcasting`, era 7) — Religious political organizing via broadcast media
-2. **The Electronic Pulpit** (`pop_culture`, era 8) — Televangelism and megachurches
+2. **The Electronic Pulpit** (`pop_culture`, era 7) — Televangelism and megachurches
 3. **The Preferential Option** (`civil_rights_movement`, era 7) — Liberation theology (fires under state atheism)
 4. **One Nation Under God** (`globalization`, era 9) — Religious nationalism
 5. **The Digital Pulpit** (`social_media`, era 9) — Online faith communities
@@ -1794,12 +1804,12 @@ article, power-bloc principle, GUI.
 
 **Purpose:** Adds an espionage/covert operations layer to the Cold War+ era. Countries can run covert operations against rivals (election interference, sabotage, espionage, etc.) using pact-based diplomatic actions. Operations consume operation slots, cost GDP-scaled expenses, and carry detection risk.
 
-**Gate:** `has_game_rule = covert_warfare_enabled` + `has_technology_researched = television`.
+**Gate:** `has_game_rule = covert_warfare_enabled` (shows the entry). It activates once `covert_operation_max_slots` is one above the rank baseline: 4 for a great power, 3 for a major power, 2 for anyone else (`je_covert_warfare.txt` `possible`). Slots (`country_covert_operation_slot_add`) come from the base 1 every country has (`base_values`), the rank bonus (great power +2, major power +1, `extra_country_ranks.txt`), four technologies (`mainframe_computers`, `computer_networks`, `cyber_warfare`, `quantum_computing`, +1 each) and the Ministry of Intelligence and Security institution (`law_ministry_of_intelligence_and_security`, +1 per level). No technology gates the entry directly; the first extra slot usually comes from `mainframe_computers` or the ministry.
 
 ### Key Files
 | File | Purpose |
 |---|---|
-| `common/diplomatic_actions/covert_operations.txt` | 13 diplomatic actions (11 peacetime, 2 wartime) |
+| `common/diplomatic_actions/covert_operations.txt` | 14 diplomatic actions (12 peacetime, 2 wartime: infrastructure sabotage and communications disruption) |
 | `common/journal_entries/je_covert_warfare.txt` | Command center JE: IC display, slots, funding, detection; wires the operations widget |
 | `gui/journal_entry_widgets/covert_operations_widget.gui` | Three JE widgets: `widget_je_covert_command_centre` (capacity, slots, funding ladder + stepper, detection factors, defence, last exposure), `widget_je_covert_operations` (one row per running operation) and `widget_je_covert_networks` (one row per per-target network, 2026-09 covert slice 4, with what a strong network reports on its target, slice 7) |
 | `common/scripted_guis/covert_warfare_sguis.txt` | Widget handlers: the funding stepper, the ladder tooltip builder, four `is_shown`-only questions, fourteen per-type stand-down handlers, the per-row priority stepper (`covert_priority_up_sgui` / `_down_sgui`, 2026-09 covert slice 3) |
@@ -1836,7 +1846,7 @@ article, power-bloc principle, GUI.
   AI rule: `covert_ai_manage_priorities`, run for every `is_player = no` country before `covert_ops_sync_all` in the monthly pulse, sets a per-operation wanted level — 1 in default or bankruptcy, 3 for a great power at war with the target, 2 against a rival, else 1 — and steps `iw_priority` toward it at most twice per direction per month through the same `covert_possible_priority_up`/`_down` gates the stepper uses.
 - **JE display:** `status_desc` is down to the five-tier intelligence-standing verdict plus the empty-state pointer. Everything else is in `widget_je_covert_command_centre` (`custom_widget_container_1`); per-operation rows are `widget_je_covert_operations` (`custom_widget_container_2`), whose datamodel is `JournalEntry.GetCountry.MakeScope.GetList('iw_ops')`; per-target network rows are `widget_je_covert_networks` (`custom_widget_container_3`, below the buttons, over `GetList('iw_nets')`). Full breakdown, op table and editing rules: `journal_entry_systems.md` § Covert Warfare → Command Centre.
 - **Intelligence Capacity (IC):** Base 5 (from `INJECT:base_values`) + rank bonus (GP +10, Major +5 from `INJECT:country_ranks`) + literacy component (`literacy_rate × intelligence_capacity_literacy_max`, i.e. × 50) + GDP component (`gdp / global_gdp × 100`, capped at `intelligence_capacity_gdp_max` = 25) + modifiers (`country_intelligence_capacity_add`), the whole sum then scaled by `1 + country_intelligence_capacity_mult`.
-- **Operation Slots:** Single modifier-driven value: `modifier:country_covert_operation_slot_add`. Base 1 (`INJECT:base_values`) + rank bonus (GP +2, Major +1) + tech modifiers (`mainframe_computers`, `computer_networks`, `cyber_warfare`, `quantum_computing`, +1 each). Capped at 10.
+- **Operation Slots:** Single modifier-driven value: `modifier:country_covert_operation_slot_add`. Base 1 (`INJECT:base_values`) + rank bonus (GP +2, Major +1) + tech modifiers (`mainframe_computers`, `computer_networks`, `cyber_warfare`, `quantum_computing`, +1 each) + the Ministry of Intelligence and Security institution (+1 per level). Capped at 10.
 - **Funding:** **6 levels**, 0 – `iw_funding_level_max` (= 5): 0 Dormant, 1 Operational, 2 Professional (named Tradecraft before slice 5), 3 Covert Network, 4 Black Budget, 5 Deep State. **Level 0 does not idle operations, it ends them** — every covert action's `requirement_to_maintain` demands `iw_funding_level >= 1`, so dropping to 0 lapses every running pact (which is why the AI's own funding branch floors at 1 while it has operations, and why the widget's decrease control warns before the step). Cumulative detection reduction and counterintelligence IC by level: L2 −3 % / +5, L3 −8 % / +10, L4 −13 % / +15, L5 −19 % / +20, applied through the `iw_funding_defense` static modifier scaled by `covert_ops_funding_ci_mult` (= level − 1). The widget reads these from `covert_funding_detect_reduction_at_N` / `covert_funding_ci_ic_at_N`, which are sums of the Section 1 constants rather than a second copy of the numbers.
 - **Cost:** `country_expenses_add` with GDP-scaled multiplier: `(Σ priority weights + 1) × funding_level × covert_operations_cost_scale` (`gdp × 0.00005`). The sum is `iw_priority_cost_sum`, refreshed by `covert_refresh_priority_cost` from `covert_op_create`, `covert_op_destroy`, the tail of `covert_ops_sync_all`, every priority step (`covert_apply_priority_change`), and the end of `covert_ops_apply_all_phase_effects`; it falls back to the pact count (`covert_operations_active`, the pre-slice-3 formula) for a save loaded before the first refresh. Each operation contributes 1 / 1.6 / 2.4 depending on its own priority — or rather the higher of its current priority and the one its running effects were applied at (`iw_priority_applied`), so raising charges more on the click while lowering charges less only from the next pulse, when the effects follow (the pulse re-refreshes the sum after applying; see **Priority** above) — example: three operations at priority 1 cost 4 units; raising one to priority 3 costs 5.4 units, +35 % total upkeep for +60 % on that one operation's effect, the diminishing return that keeps "everything at 3" from being the answer. The `+1` ensures a base maintenance cost even with 0 active operations (you pay for defensive IC benefits like counterintelligence). Cost modifier applies whenever `iw_funding_level >= 1`, regardless of active op count.
 - **Detection:** each running operation carries its own monthly chance, `iw_detect` = `(base 10 − funding stealth − network cover + target counterintelligence penalty + (priority − 1) × covert_op_priority_detect_add) × (1 − covert efficiency, floored at 0.2) × covert_ops_detection_multi_op_scale` (scale default 1) — the priority term (2026-09, covert slice 3) adds raw points before efficiency, so a busier operation is more exposed but better tradecraft still hides most of it: at base 10 % with no efficiency, priority 1/2/3 reads 10/12/14 %, and at the late-game efficiency floor (0.2) the +4 raw points becomes +0.8. The priority is staged per operation onto the operator as `iw_priority_staging` by `covert_op_refresh_detection` (from `PREV.var:iw_priority` on the container — reading `scope:iw_op.var:iw_priority` directly isn't valid) before `covert_operation_detection_chance` is computed, then removed, clamped to a max of 50 % and a floor of `covert_ops_detection_floor` = 0.1 % (2026-09, covert slice 2) — reachable at high funding against a target with no counterintelligence, an "almost with impunity" but never "safe" floor; the operation row shows the chance to one decimal (`|1`, not `|0`) so that 0.1 % doesn't render as "0%" and read as safe — refreshed by `covert_ops_sync_all` at the top of the pulse. `covert_ops_roll_detection_all` (last in the pulse) rolls every operation against `covert_op_roll_chance` (= `iw_detect` directly — the multi-op scale is already folded in above, so the widget row and the roll agree by construction), collects the successes in a temporary list and burns **at most one** per month, chosen at random among them, by firing `covert_warfare.1` with the container in `scope:iw_burned_op`. With N equal operations at c each, P(any burn) = 1 − (1 − c)^N: 10 % → 19 % at two, 27 % at three. The event reads the container only in `immediate` (target → `scope:detected_by_country`, `iw_type_code` → ROOT `iw_burned_type_code`, `iw_phase` → ROOT `iw_burned_phase`, plus a derived `iw_burned_at_war` from a `has_war_with` check — see **Graduated exposure blowback** below) and branches on the type code in `after`; the options' blowback values read all three copied variables. `covert_burned_type_name` names the operation and `covert_burned_tier_name` names its tier in the text. The target penalty is `((target IC + target type defense) / attacker IC − 1) × 15`, capped at +20. Funding stealth is the cumulative reduction listed above.
@@ -1931,7 +1941,7 @@ Vanilla 1.14 computes each country's weekly war support change in `common/script
 | United Nations | `un_condemned_modifier` on root (`else_if` `un_non_binding_rebuke_modifier`, −0.25) | −0.5 |
 | United Nations | an enemy in `scope:war` carries `un_condemned_modifier` ("the world is with us") | +0.25 |
 | Covert Warfare | root is `second_country` of a `covert_comms_disruption_action` pact whose attacker fights in `scope:war` (flat — operation phase lives on the attacker's containers) | −0.25 |
-| Nuclear | root lacks `nuclear_power` and an enemy in `scope:war` has it (strikes themselves already drain through devastation and the one-off in `nuclear_industrial_strike`) | −0.25 |
+| Nuclear | root lacks `nuclear_power`, an enemy in `scope:war` has it, and root has no armed guarantor (`nd_has_armed_guarantor_against`: an in-force `nuclear_guarantee` from a country believed armed, or an overlord's nuclear umbrella, removes the "Enemy nuclear arsenal" line — that is what extended deterrence is for). Strikes themselves already drain through devastation and the one-off in `nuclear_industrial_strike` | −0.25 |
 
 Scale: vanilla's per-beat factors run from −5 (fully occupied) to about +2; the rival boost / taking loans are ±0.25. War support is 0–100, drifts toward 50, red band ≤ 25.
 

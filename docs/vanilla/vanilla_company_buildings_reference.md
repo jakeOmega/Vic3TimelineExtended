@@ -11,15 +11,17 @@ The mod's **company building system** gives flavored companies a unique building
 
 Each company building follows this pattern:
 - **Building group:** `bg_company_buildings`
-- **Potential:** Gated by `has_company = company_X` (only buildable when company is active)
+- **Potential:** Gated by `has_company = company_type:company_X` (only buildable when company is active)
 - **Ownership:** `ownership_type = self`
 - **Cost:** `construction_cost_mega_high`
 - **Production methods:** Single PMG with 1-2 PMs
 - **Company integration:** Company's `prosperity_modifier` includes `state_building_X_max_level_add = 1`
 
-The mod already has:
-- **53 flavored company buildings** (modern era: tech, defense, energy, etc.)
-- **20 generic company buildings** (for mod-created generic company types)
+`common/buildings/company_buildings.txt` holds **299** company buildings (counted 2026-09-26):
+- **289 active**, each gated on one or more companies (`has_company`). Between them they cover 290 companies, since a few buildings are shared: **206 of vanilla's 221 companies** have a flagship (a flavored building, or a generic one for the `company_basic_*` types), and the other 84 companies are the mod's own.
+- **10 retired `building_generic_*`** buildings (mega factory, exhibition centre, shipping terminal, corporate university, industrial city, pipeline terminus, rail nexus, financial center, monument to industry, spaceport), kept with `potential = { always = no }` so nothing can build them.
+
+The 15 vanilla companies without a flagship: `company_a_markwald_and_company`, `company_broken_hill_proprietary_company`, `company_ferranti_ltd`, `company_guthrie`, `company_maschinenfabrik_oerlikon`, `company_nhm`, `company_noda_shoyu`, `company_oriental_consolidated_mining`, `company_ramirez`, `company_siam_electrical_company_limited`, `company_societe_francaise_charbonnages_du_tonkin`, `company_tokyo_electric_light_company`, `company_van_vlissingen_en_dudok_van_heel`, `company_white_star_line`, `company_yasuda`.
 
 **Flavored company buildings** have ~2000 employment, significant goods I/O, and strong state modifiers.
 **Generic company buildings** have ~10000 employment, weaker modifiers, and simpler goods setups.

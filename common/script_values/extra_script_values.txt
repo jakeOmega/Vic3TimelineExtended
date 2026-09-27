@@ -2139,7 +2139,7 @@ ce_treasury_pool_balance_multiplier = {
 #    should have GDP/c roughly equal to this value.
 # 2. floor_ratio and ceiling_ratio are multiples of the reference:
 #    - floor_ratio = 1 means no penalty at the reference level (a rich 1836 nation).
-#    - ceiling_ratio = 14 means max penalty at 14x the reference (late-game AI economy).
+#    - ceiling_ratio = 100 means max penalty at 100x the reference (very rich late-game economy).
 # 3. max_mult is the maximum construction cost multiplier (10 = +1000% cost at ceiling).
 #
 # GDP is in yearly terms. GDP/c = gdp / total_population (country scope).
