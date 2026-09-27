@@ -870,6 +870,13 @@ gw_emission_multiplier_script_value = {
 			add = modifier:country_greenhouse_gas_emissions_mult
 		}
 	}
+	# Floor at 0: the cuts stack additively (the three market-wide policies,
+	# the environment ministry per investment level, the sustainability
+	# principle, conventions, summits) and can pass -100%, which would make
+	# burning coal and oil remove carbon. Capture is modelled separately
+	# (market_carbon_capture_script_value), and a market goes net negative only
+	# through it. Must stay after the add above.
+	min = 0
 }
 
 # The eight `gw_countries_with_*_script_value` definitions used to live here.
@@ -1770,7 +1777,7 @@ banking_crash_severity_scale_value = {
 sol_expectations_half_life_years = 10
 
 # Monthly adaptation rate derived from half-life: rate = ln(2) / (H * 12)
-# ln(2) ≈ 0.6931. At default 5y: 0.6931 / 60 ≈ 0.01155/month.
+# ln(2) ≈ 0.6931. At the default 10y: 0.6931 / 120 ≈ 0.00578/month.
 # The country_sol_expectation_adaptation_rate_mult modifier scales this.
 sol_expectations_adaptation_rate_value = {
 	value = 0.6931

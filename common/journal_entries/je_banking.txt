@@ -228,16 +228,19 @@
 			triggered_desc = { desc = banking_cycle_status_frenzy          trigger = { var:finance_cycle_value >= 88 } }
 		}
 
+		# Same edges as the dashboard's Momentum row (banking_dash_momentum_band):
+		# Collapsing at -3 or below, Falling above -3 to -1, Steady strictly
+		# inside +-1, Rising from 1, Surging from 3.
 		first_valid = {
-			triggered_desc = { desc = banking_cycle_status_fast_downturn_cmd  trigger = { var:finance_cycle_momentum < -3  has_law = law_type:law_command_economy } }
-			triggered_desc = { desc = banking_cycle_status_fast_downturn_coop trigger = { var:finance_cycle_momentum < -3  has_law = law_type:law_cooperative_ownership } }
-			triggered_desc = { desc = banking_cycle_status_fast_downturn      trigger = { var:finance_cycle_momentum < -3 } }
-			triggered_desc = { desc = banking_cycle_status_slow_downturn_cmd  trigger = { var:finance_cycle_momentum >= -3  var:finance_cycle_momentum < -1  has_law = law_type:law_command_economy } }
-			triggered_desc = { desc = banking_cycle_status_slow_downturn_coop trigger = { var:finance_cycle_momentum >= -3  var:finance_cycle_momentum < -1  has_law = law_type:law_cooperative_ownership } }
-			triggered_desc = { desc = banking_cycle_status_slow_downturn      trigger = { var:finance_cycle_momentum >= -3  var:finance_cycle_momentum < -1 } }
-			triggered_desc = { desc = banking_cycle_status_neutral_cmd        trigger = { var:finance_cycle_momentum >= -1  var:finance_cycle_momentum < 1  has_law = law_type:law_command_economy } }
-			triggered_desc = { desc = banking_cycle_status_neutral_coop       trigger = { var:finance_cycle_momentum >= -1  var:finance_cycle_momentum < 1  has_law = law_type:law_cooperative_ownership } }
-			triggered_desc = { desc = banking_cycle_status_neutral            trigger = { var:finance_cycle_momentum >= -1  var:finance_cycle_momentum < 1 } }
+			triggered_desc = { desc = banking_cycle_status_fast_downturn_cmd  trigger = { var:finance_cycle_momentum <= -3  has_law = law_type:law_command_economy } }
+			triggered_desc = { desc = banking_cycle_status_fast_downturn_coop trigger = { var:finance_cycle_momentum <= -3  has_law = law_type:law_cooperative_ownership } }
+			triggered_desc = { desc = banking_cycle_status_fast_downturn      trigger = { var:finance_cycle_momentum <= -3 } }
+			triggered_desc = { desc = banking_cycle_status_slow_downturn_cmd  trigger = { var:finance_cycle_momentum > -3  var:finance_cycle_momentum <= -1  has_law = law_type:law_command_economy } }
+			triggered_desc = { desc = banking_cycle_status_slow_downturn_coop trigger = { var:finance_cycle_momentum > -3  var:finance_cycle_momentum <= -1  has_law = law_type:law_cooperative_ownership } }
+			triggered_desc = { desc = banking_cycle_status_slow_downturn      trigger = { var:finance_cycle_momentum > -3  var:finance_cycle_momentum <= -1 } }
+			triggered_desc = { desc = banking_cycle_status_neutral_cmd        trigger = { var:finance_cycle_momentum > -1  var:finance_cycle_momentum < 1  has_law = law_type:law_command_economy } }
+			triggered_desc = { desc = banking_cycle_status_neutral_coop       trigger = { var:finance_cycle_momentum > -1  var:finance_cycle_momentum < 1  has_law = law_type:law_cooperative_ownership } }
+			triggered_desc = { desc = banking_cycle_status_neutral            trigger = { var:finance_cycle_momentum > -1  var:finance_cycle_momentum < 1 } }
 			triggered_desc = { desc = banking_cycle_status_slow_expansion_cmd  trigger = { var:finance_cycle_momentum >= 1  var:finance_cycle_momentum < 3  has_law = law_type:law_command_economy } }
 			triggered_desc = { desc = banking_cycle_status_slow_expansion_coop trigger = { var:finance_cycle_momentum >= 1  var:finance_cycle_momentum < 3  has_law = law_type:law_cooperative_ownership } }
 			triggered_desc = { desc = banking_cycle_status_slow_expansion      trigger = { var:finance_cycle_momentum >= 1  var:finance_cycle_momentum < 3 } }
@@ -246,22 +249,25 @@
 			triggered_desc = { desc = banking_cycle_status_fast_expansion      trigger = { var:finance_cycle_momentum >= 3 } }
 		}
 
+		# Same band edges as the dashboard's Bubble Pressure row
+		# (banking_dash_bubble_band, 15 / 30 / 50 / 75), so the two never name
+		# different bands. The loc names the band, never the number.
 		first_valid = {
 			triggered_desc = { desc = banking_cycle_status_no_bubble_cmd          trigger = { var:bubble_pressure < 15  has_law = law_type:law_command_economy } }
 			triggered_desc = { desc = banking_cycle_status_no_bubble_coop         trigger = { var:bubble_pressure < 15  has_law = law_type:law_cooperative_ownership } }
 			triggered_desc = { desc = banking_cycle_status_no_bubble              trigger = { var:bubble_pressure < 15 } }
-			triggered_desc = { desc = banking_cycle_status_bubble_stable_cmd      trigger = { var:bubble_pressure >= 15  var:bubble_pressure < 35  has_law = law_type:law_command_economy } }
-			triggered_desc = { desc = banking_cycle_status_bubble_stable_coop     trigger = { var:bubble_pressure >= 15  var:bubble_pressure < 35  has_law = law_type:law_cooperative_ownership } }
-			triggered_desc = { desc = banking_cycle_status_bubble_stable          trigger = { var:bubble_pressure >= 15  var:bubble_pressure < 35 } }
-			triggered_desc = { desc = banking_cycle_status_bubble_expansion_cmd   trigger = { var:bubble_pressure >= 35  var:bubble_pressure < 65  has_law = law_type:law_command_economy } }
-			triggered_desc = { desc = banking_cycle_status_bubble_expansion_coop  trigger = { var:bubble_pressure >= 35  var:bubble_pressure < 65  has_law = law_type:law_cooperative_ownership } }
-			triggered_desc = { desc = banking_cycle_status_bubble_expansion       trigger = { var:bubble_pressure >= 35  var:bubble_pressure < 65 } }
-			triggered_desc = { desc = banking_cycle_status_bubble_frenzy_cmd      trigger = { var:bubble_pressure >= 65  var:bubble_pressure < 85  has_law = law_type:law_command_economy } }
-			triggered_desc = { desc = banking_cycle_status_bubble_frenzy_coop     trigger = { var:bubble_pressure >= 65  var:bubble_pressure < 85  has_law = law_type:law_cooperative_ownership } }
-			triggered_desc = { desc = banking_cycle_status_bubble_frenzy          trigger = { var:bubble_pressure >= 65  var:bubble_pressure < 85 } }
-			triggered_desc = { desc = banking_cycle_status_bubble_extreme_cmd     trigger = { var:bubble_pressure >= 85  has_law = law_type:law_command_economy } }
-			triggered_desc = { desc = banking_cycle_status_bubble_extreme_coop    trigger = { var:bubble_pressure >= 85  has_law = law_type:law_cooperative_ownership } }
-			triggered_desc = { desc = banking_cycle_status_bubble_extreme         trigger = { var:bubble_pressure >= 85 } }
+			triggered_desc = { desc = banking_cycle_status_bubble_stable_cmd      trigger = { var:bubble_pressure >= 15  var:bubble_pressure < 30  has_law = law_type:law_command_economy } }
+			triggered_desc = { desc = banking_cycle_status_bubble_stable_coop     trigger = { var:bubble_pressure >= 15  var:bubble_pressure < 30  has_law = law_type:law_cooperative_ownership } }
+			triggered_desc = { desc = banking_cycle_status_bubble_stable          trigger = { var:bubble_pressure >= 15  var:bubble_pressure < 30 } }
+			triggered_desc = { desc = banking_cycle_status_bubble_expansion_cmd   trigger = { var:bubble_pressure >= 30  var:bubble_pressure < 50  has_law = law_type:law_command_economy } }
+			triggered_desc = { desc = banking_cycle_status_bubble_expansion_coop  trigger = { var:bubble_pressure >= 30  var:bubble_pressure < 50  has_law = law_type:law_cooperative_ownership } }
+			triggered_desc = { desc = banking_cycle_status_bubble_expansion       trigger = { var:bubble_pressure >= 30  var:bubble_pressure < 50 } }
+			triggered_desc = { desc = banking_cycle_status_bubble_frenzy_cmd      trigger = { var:bubble_pressure >= 50  var:bubble_pressure < 75  has_law = law_type:law_command_economy } }
+			triggered_desc = { desc = banking_cycle_status_bubble_frenzy_coop     trigger = { var:bubble_pressure >= 50  var:bubble_pressure < 75  has_law = law_type:law_cooperative_ownership } }
+			triggered_desc = { desc = banking_cycle_status_bubble_frenzy          trigger = { var:bubble_pressure >= 50  var:bubble_pressure < 75 } }
+			triggered_desc = { desc = banking_cycle_status_bubble_extreme_cmd     trigger = { var:bubble_pressure >= 75  has_law = law_type:law_command_economy } }
+			triggered_desc = { desc = banking_cycle_status_bubble_extreme_coop    trigger = { var:bubble_pressure >= 75  has_law = law_type:law_cooperative_ownership } }
+			triggered_desc = { desc = banking_cycle_status_bubble_extreme         trigger = { var:bubble_pressure >= 75 } }
 		}
 
 		first_valid = {

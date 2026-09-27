@@ -339,7 +339,7 @@
  building_michelin_clermont_ferrand_desc:0 "Michelin's Clermont-Ferrand tyre works, putting the automobile age on pneumatic rubber."
  building_microsoft_redmond_campus:0 "Microsoft Redmond Campus"
  building_military_base:0 "Military Base"
- building_military_base_desc:0 "A permanent military installation providing state-level [concept_infrastructure], [concept_blockade] resistance, and [concept_fortification_system] defensive bonuses. Expanding the base and upgrading its [Concept('concept_production_method', 'production methods')] increases [concept_fortification_level], unlocking progressively stronger [Concept('concept_battle_condition', 'battle conditions')] for defenders."
+ building_military_base_desc:0 "A permanent military installation providing state-level [concept_infrastructure] and [concept_fortification_system] defensive bonuses. Expanding the base and upgrading its [Concept('concept_production_method', 'production methods')] increases [concept_fortification_level], unlocking progressively stronger [Concept('concept_battle_condition', 'battle conditions')] for defenders."
  building_mind_upload_nexus:0 "Mind Upload Nexus"
  building_mind_upload_nexus_construction_site:0 "Mind Upload Nexus Construction Site"
  building_misr_mahalla_textile_complex:0 "Misr Mahalla Textile Complex"

@@ -2,10 +2,12 @@
 # Vic3TimelineExtended — modern ship modifications
 # =============================================================================
 # Replaces the vanilla parent-ship slot mods (e.g. ship_mod_super_dreadnought_*)
-# that the modern ships were using. Each modern ship now has its own
-# thematically-modern slot mods. Modifier values match the vanilla parent's
-# (preserves balance); construction goods are modernized; names + flavor are
-# updated to fit the era.
+# that the modern ships were using. Nine modern ships have their own
+# thematically-modern slot sets, one section each below; the other ten reuse
+# one of these sets or a vanilla parent's (the list is in the header of
+# common/ship_types/extra_ship_types.txt). Modifier values match the vanilla
+# parent's (preserves balance); construction goods are modernized; names +
+# flavor are updated to fit the era.
 #
 # Tier scaling matches vanilla pattern: light/medium/high are scalar steps on
 # the same modifier axes. Some tiers add a small extra effect where the theme
@@ -99,7 +101,10 @@ ship_mod_asw_destroyer_guns_high = {
 		ship_crew_damage_add = 50
 		ship_critical_hit_chance_add = 0.2
 		ship_vulnerability_add = 25
+		ship_battle_against_ship_type_submarine_accuracy_mult = 0.15
 		ship_battle_against_ship_type_nuclear_submarine_accuracy_mult = 0.15
+		ship_battle_against_ship_type_stealth_attack_submarine_accuracy_mult = 0.15
+		ship_battle_against_ship_type_autonomous_swarm_submarine_accuracy_mult = 0.15
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 30
@@ -673,7 +678,7 @@ ship_mod_nuclear_supercarrier_range_high = {
 
 
 # =============================================================================
-# ARSENAL SHIP (era 8, precision_guided_munitions) — super_dreadnought slots
+# ARSENAL SHIP (era 9, network_centric_warfare) — super_dreadnought slots
 # =============================================================================
 
 ship_mod_arsenal_ship_armor_light = {

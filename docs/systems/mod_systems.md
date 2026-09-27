@@ -142,6 +142,15 @@ Everything else in both new settings is the enabled setting's: the Construction 
 
 The same effect keeps its older job in every setting: removing the modifier from level-0 buildings (also from `on_start_expanding_building`).
 
+**Railways: the Transport principle swap is free in every setting** (owner ruling, #511). A railway's steam, electric or diesel method switches itself into its `pm_*_trains_principle_transport_3` variant through `replacement_if_valid` when the bloc reaches tier 3, and back when the bloc loses tiers 3–5. The player chose neither switch. On each railway PM change the hook runs `te_railway_note_train_method` (`extra_effects.txt`) first, and so does the weekly sweep for every state with a railway (`te_state_note_railway_train_method`), which catches a swap the hook missed and keeps every railway recorded. It compares the state's `te_state_railway_train_code` (steam 1, electric 2, diesel 3, +10 for the tier-3 variant; Centralized Traffic Control through Autonomous Trains 4–7; `pm_early_trains` 0) against the last recorded `var:te_rail_train_code` (a state variable, since buildings don't hold variables reliably; one railway per state). Only the swap itself (`te_state_railway_tier3_swap`) sets a two-day `te_rail_retool_waive` marker on the state, which `te_building_retooling_waived` reads. It covers three cases: the same method moving +10; no record yet with the railway on a variant; or, after the bloc lost the principle, a recorded variant moving exactly −10 or landing on `pm_early_trains`, the group's fallback. A new train method, the passenger group or Centralized Traffic Control and later still pay. Residuals, accepted under the owner's ruling:
+
+- **The waiver strips the whole `pm_retooling`,** including time left from an earlier player switch. A bloc leader can clear its members' railway retooling by dropping the transport principle to tier 2 and re-adopting tier 3.
+- **The first weekly sweep on an old save, or on a new state object,** waives every railway already on a variant, whatever its retooling came from. A railway not yet recorded that jumps from a lower method straight onto a variant is waived once.
+- **Another PM change within the two days rides along.** If the hook missed the swap, it rides along until the next sweep.
+- **If losing the tier drops a railway to `pm_early_trains`,** the player's switch back pays full retooling. No waiver is built for that yet.
+
+The sweep is a fallback only for a swap the hook missed. If the hook fired and the engine applied `pm_retooling` more than a day later, only the day-later re-check helps.
+
 **Play-test list.**
 1. *No retooling, switch a PM* on a factory with maintenance: the Retooling modifier does not appear on the building (or is gone the next day), and its construction input stays at 0.1 per level (times cost scaling). An AI country's buildings show no Retooling modifier after a few weeks.
 2. *No maintenance, day 1*: `pmg_maintenance` shows No Maintenance only; the construction market read-out's demand is the government and private purchases plus the company buildings. Construction Sites, sectors and the panel work as in the default game.
@@ -1149,7 +1158,7 @@ These fire instantly when the engine event occurs, providing same-tick responsiv
 - `te_amendment_timeout_on_action` — routes to the sunset-clause expiry events (`amendment_on_actions.txt`; see § Temporary Amendments)
 
 **`on_merge_markets`** (Root = dissolving market, scope:market = absorbing market):
-- `gw_market_join_on_action` — copies market leader's GW policy modifiers to new member
+- `gw_market_join_on_action` — `gw_sync_market_policy_modifiers`: the joining market's owner takes the absorbing leader's three market-wide GW policies and drops any the leader lacks, unless bound by an emissions reduction treaty (`gw_bound_by_emissions_treaty`). The dissolving market's other members, leadership changes and old saves are caught within a month by `gw_reconcile_market_policies_effect` in `global_warming_events_on_action`, which runs the same sync for every member of every market. The leader's repeal (`gw_effect_remove_*`) skips treaty-bound members too.
 
 
 ### Construction-Market Immediate Triggers (`te_construction_market_on_actions.txt`)
@@ -1570,7 +1579,7 @@ Each surviving JE has monthly pulse events plus a fail-state event (except Post-
 **Mechanic:**
 - Country variable `var:sol_expectations_shift` tracks the adaptive shift applied via a static modifier
 - Monthly: `gap = (average_sol + target_add) - average_expected_sol`, then `shift += gap * rate + monthly_bias`
-- Rate derived from half-life: `rate = ln(2) / (half_life_years × 12)` (default 5y → ~0.01155/month)
+- Rate derived from half-life: `rate = ln(2) / (half_life_years × 12)` (default 10y → ~0.00578/month)
 - At equilibrium: `average_expected_sol ≈ average_sol + target_add` (shift stabilizes at whatever bridges the gap)
 - Applied via `sol_expectations_adaptive_shift` static modifier with `multiplier = shift`
 - Shift threshold: only applied when |shift| > 0.05 (avoids modifier clutter in steady state)
@@ -1585,10 +1594,10 @@ Each surviving JE has monthly pulse events plus a fail-state event (except Post-
 **NOT converted** (intentionally): Engine-hardcoded code static modifiers (base_values, tax_modifier_*, unincorporated_state) and temporary DLC/event modifiers (expecting_riches_forever, etc.) — these are either unchangeable or correctly handled by the adaptive lag.
 
 **Tuning:**
-- `sol_expectations_half_life_years = 5` — script value controlling convergence speed. Change this single value to tune. 5y = ~50% adapted after 5y, ~75% after 10y, ~94% after 20y.
+- `sol_expectations_half_life_years = 10` — script value controlling convergence speed. Change this single value to tune. 10y = ~50% adapted after 10y, ~75% after 20y, ~94% after 40y.
 
 **Modifiers:**
-- `country_sol_expectation_adaptation_rate_mult` (percent, script_only) — scales the adaptation rate. +50% = faster convergence (~3.3y half-life).
+- `country_sol_expectation_adaptation_rate_mult` (percent, script_only) — scales the adaptation rate. +50% = faster convergence (~6.7y half-life at the default 10y).
 - `country_sol_expectations_shift_add` (decimals=2, script_only) — persistent monthly bias added to shift. Positive = expectations rise faster.
 - `country_sol_expectations_target_add` (decimals=1, script_only) — permanent offset to the convergence target. Positive = people expect more than actual SoL.
 
@@ -1601,7 +1610,7 @@ Each surviving JE has monthly pulse events plus a fail-state event (except Post-
 **Static modifier:** `sol_expectations_adaptive_shift` — applied at country level with `multiplier = shift_value`. Base modifier provides +1 to all three strata expected_sol_add, so multiplier directly controls the SoL shift.
 
 **Script values** (in `extra_script_values.txt`):
-- `sol_expectations_half_life_years` — half-life parameter in years (default 5)
+- `sol_expectations_half_life_years` — half-life parameter in years (default 10)
 - `sol_expectations_adaptation_rate_value` — derived monthly rate, scaled by modifier, clamped [0.001, 0.1]
 - `sol_expectations_gap_value` — (average_sol + target_add) - average_expected_sol
 - `sol_expectations_shift_value` — current shift variable, used as modifier multiplier
