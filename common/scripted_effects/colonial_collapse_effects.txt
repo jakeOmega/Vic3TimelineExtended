@@ -8,17 +8,30 @@
 # self-collapses if it matches the tiny-and-poor + neutral-context criteria.
 #
 # Gates: the decolonization game rule, and the decolonization era — some
-# country in the world has researched the decolonization technology (the
-# collapsing country need not have it). The world check is last in the limit,
-# so it only runs for the few countries that pass the cheap filters above it.
+# country in the world has researched the decolonization technology
+# (decol_era_begun; the collapsing country need not have it). The world check
+# is last in the limit, so it only runs for the few countries that pass the
+# cheap filters above it.
 #
 # Until 2026-09 the limit also held `any_civil_war = { always = no }`, added in
-# db166830 (a 53-file omnibus whose message says "colonial collapse checks
-# tightened"), two days after the effect first ran, ungated, from 1836. An
-# any_* iterator whose body is `always = no` is false for every country, so the
-# effect never ran again. The likely reading is a "no civil war" test written
-# wrongly, but a deliberate switch-off is possible; the owner has not confirmed
-# either. The civil-war test now uses vanilla's idiom (00_autocracy.txt).
+# db166830 ("colonial collapse checks tightened"), two days after the effect
+# first ran, ungated, from 1836. An any_* iterator whose body is `always = no`
+# is false for every country, so the effect never ran again. The owner
+# confirmed on 2026-09-26 that collapse should be live, the decentralize branch
+# included; the civil-war test now uses vanilla's idiom (00_autocracy.txt).
+#
+# Safety, since vanilla itself never sets a country decentralized:
+# - a country freed in the last 20 years (recently_decolonized, set by every
+#   release path) is exempt, so a colony the Colonial Empire entry just freed
+#   cannot collapse the next year;
+# - a country with subjects never collapses;
+# - the absorber is at peace and not a subject;
+# - the decentralize branch runs only for a country with nothing that ties it
+#   to other countries or that a decentralized country cannot hold: no power
+#   bloc, no treaty in force, no company, no warheads. Otherwise it waits and is
+#   tested again next year;
+# - the notice is posted before the annexation, while the collapsing country
+#   still exists for its name.
 
 colonial_collapse_effect = {
 	if = {
@@ -32,8 +45,13 @@ colonial_collapse_effect = {
 			# Not already decentralized
 			NOT = { is_country_type = decentralized }
 
-			# Not a subject (puppet states are managed by overlords)
+			# Not a subject (puppet states are managed by overlords), and holding
+			# no subjects of its own
 			is_subject = no
+			NOT = { any_subject_or_below = { always = yes } }
+
+			# Freed in the last 20 years: exempt (owner ruling, 2026-09-26)
+			NOT = { has_variable = recently_decolonized }
 
 			# No civil war about to break out
 			NOT = {
@@ -74,9 +92,7 @@ colonial_collapse_effect = {
 			NOT = { is_at_war = yes }
 
 			# The decolonization era has begun somewhere in the world
-			any_country = {
-				has_technology_researched = decolonization
-			}
+			decol_era_begun = yes
 		}
 
 		save_scope_as = collapsing_country
@@ -97,6 +113,9 @@ colonial_collapse_effect = {
 						is_country_alive = yes
 						NOT = { is_country_type = decentralized }
 						NOT = { this = scope:collapsing_country }
+						# At peace, and free to annex (a subject's gains are its overlord's business)
+						is_at_war = no
+						is_subject = no
 						any_primary_culture = {
 							shares_heritage_trait_group_with_any_primary_culture = scope:collapsing_country
 						}
@@ -112,14 +131,8 @@ colonial_collapse_effect = {
 			limit = {
 				exists = scope:absorbing_country
 			}
-			# Culturally similar neighbor absorbs this country
-			scope:absorbing_country = {
-				annex = scope:collapsing_country
-				# An armed country annexed: its arsenal settles to us (nuclear_custody_effects.txt).
-				nd_custody_reconcile_soon = yes
-			}
-
-			# Notify countries with strategic interest
+			# Notify countries with strategic interest, first: the notice names
+			# the collapsing country, which the annexation below removes.
 			every_country = {
 				limit = {
 					is_country_alive = yes
@@ -136,9 +149,25 @@ colonial_collapse_effect = {
 				}
 				post_notification = colonial_territory_absorbed_notice
 			}
+
+			# Culturally similar neighbor absorbs this country
+			scope:absorbing_country = {
+				annex = scope:collapsing_country
+				# An armed country annexed: its arsenal settles to us (nuclear_custody_effects.txt).
+				nd_custody_reconcile_soon = yes
+			}
 		}
-		else = {
-			# No culturally similar neighbor: revert to decentralized (uncolonized)
+		else_if = {
+			# No culturally similar neighbor: revert to decentralized (uncolonized),
+			# but only a country nothing ties to the rest of the world. Vanilla never
+			# sets a country decentralized, so each of these is a case the engine may
+			# not unwind cleanly; such a country waits and is tested next year.
+			limit = {
+				is_in_power_bloc = no
+				NOT = { any_scope_treaty = { always = yes } }
+				NOT = { any_company = { always = yes } }
+				nd_is_armed = no
+			}
 			set_country_type = decentralized
 
 			# Notify countries with strategic interest
