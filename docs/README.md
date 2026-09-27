@@ -9,6 +9,7 @@ Files marked `[auto-gen]` are regenerated automatically and should not be hand-e
 ```
 docs/
 ├── README.md                 (this file)
+├── player_guide/             (the player-facing guide: Markdown chapters → PDF)
 ├── auto_generated_files.md   (generator → output ownership map)
 ├── guides/                   (curated authoring guides — read first)
 ├── systems/                  (mod-system writeups)
@@ -19,6 +20,18 @@ docs/
 ├── archive/                  (deferred / completed / orphaned reference)
 └── superpowers/plans/        (multi-step implementation plans from /writing-plans)
 ```
+
+## Player Guide — `player_guide/`
+
+The one part of `docs/` written for players rather than modders or agents: a guide to every mod system, in numbered Markdown chapters that build into [`player_guide/Vic3TimelineExtended_Player_Guide.pdf`](player_guide/Vic3TimelineExtended_Player_Guide.pdf).
+
+| File | Contents | Read When... |
+|------|----------|--------------|
+| [`player_guide/README.md`](player_guide/README.md) | Chapter list, build and edit instructions | Finding or editing a chapter |
+| [`player_guide/STYLE.md`](player_guide/STYLE.md) | House style: audience, accuracy rules, the AI-writing tells to avoid, the Markdown subset | Before writing or editing a chapter |
+| `player_guide/NN-*.md` | The chapters, in reading order | Changing what the guide says; after changing a system players see |
+
+Build with `scripts/build_player_guide.py` (pandoc + Typst from `requirements-docs.txt`); lint with `scripts/analysis/check_player_guide_style.py`. CI runs the lint with `--strict` and fails when the committed PDF was built from older sources.
 
 ## Mod Authoring Guides — `guides/`
 

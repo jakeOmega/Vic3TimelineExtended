@@ -4,6 +4,8 @@ A large content mod for **Victoria 3** (Paradox Clausewitz engine) that extends 
 
 The repo is both a Paradox-script content mod *and* a Python toolchain that parses the mod (and vanilla) into a queryable HTTP service, regenerates derived files on save, and validates the script against engine constraints. Most of the systems below are layered — they share scripted-effect helpers, on-action wiring, and a common dynamic-modifier pattern documented in `docs/guides/scripting_best_practices.md` and `docs/systems/mod_systems.md`.
 
+> **Playing the mod?** The [player guide](docs/player_guide/Vic3TimelineExtended_Player_Guide.pdf) (PDF) explains every system for players who know Victoria 3 but not this mod. It can also be [read chapter by chapter on GitHub](docs/player_guide/). The rest of this README is about developing the mod.
+
 ## Setting up on a new machine
 
 ```bash
@@ -56,7 +58,7 @@ The toggleable subset of these (banking cycle, world war, etc.) is gated on per-
 
 ## Game rules (toggleable systems)
 
-Fourteen mod systems can be turned on or off at game setup. Defaults below; full list in `common/game_rules/extra_game_rules.txt`. Disabled systems hide their journal entry, bypass their on-actions, and skip their events — but baseline content (laws, techs, buildings, modifiers) still applies.
+Fifteen mod systems can be turned on or off at game setup. Defaults below; full list in `common/game_rules/extra_game_rules.txt`. Disabled systems hide their journal entry, bypass their on-actions, and skip their events — but baseline content (laws, techs, buildings, modifiers) still applies.
 
 | Rule | Default | What it gates |
 |---|---|---|
@@ -74,10 +76,12 @@ Fourteen mod systems can be turned on or off at game setup. Defaults below; full
 | `custom_religions_allowed_rule` | **disabled** | Custom-religion creator JE and events |
 | `universal_aptitude_traits_rule` | **disabled** | Assigns admin/diplo/military aptitude traits to *all* adult characters, not just rulers and heirs — independent of Heir Education. With both rules off, no character has aptitude traits |
 | `free_market_construction_rule` | enabled | The construction market: construction as a tradeable good bought by the government and investors, construction maintenance on industry and infrastructure, a private share that follows the purchases. *Without Retooling Costs*: the same, but switching a building's production methods no longer multiplies its construction maintenance. *Without Maintenance*: the market with no construction maintenance at all (and so no retooling cost). *Disabled*: base-game construction — the Construction Site becomes the construction sector (built and expanded by the government, points straight from its production method), no construction good or maintenance, and the economic-system law sets the private share; every country gets a small base of construction (+5 a week), and AI countries can't shed their Construction Sites outside default |
+| `internal_resettlement_rule` | enabled | The Settlement Authority and government resettlement programs. *AI voluntary only*: AI countries run only voluntary programs (penal transportation, special settlements and rustication stay open to players). *Disabled*: no Settlement Authority |
 
-Every rule but `banking_system_rule` and `free_market_construction_rule` is a straight on/off
-pair; the first has a third, *simplified* setting, and the second two more market settings,
-*without retooling costs* and *without maintenance* (see the table above).
+Every rule but `banking_system_rule`, `free_market_construction_rule` and
+`internal_resettlement_rule` is a straight on/off pair; the first has a third, *simplified*
+setting, the second two more market settings, *without retooling costs* and *without
+maintenance*, and the third an *AI voluntary only* setting (see the table above).
 
 Loc keys for each rule live in `localization/english/te_game_rules_l_english.yml`. The gating pattern (`is_shown_when_inactive`, on-action `return = yes` guards, etc.) is documented in `docs/systems/mod_systems.md` § Game Rules.
 
@@ -297,6 +301,8 @@ All under `docs/engine/`:
 - `error_log_digest.md` — game-log digest (gitignored, machine-local).
 - `event_image_inventory.md` — events ↔ image/video map (gitignored, machine-local).
 - `*_report.md` — one per post-load audit (magnitude, modifier visibility, loc coverage, concept references, loc accessors, mod structure, loc render, `any_*` limits, iterator limits, modifier multiplier vars, PM employment, orphaned events, effect/trigger validity, duplicate keys, attitude keys) plus `kill_character_audit.md`. `effect_trigger_valid_keys.txt` is the one exception in this folder: a hand-refreshed bootstrap catalog, not a per-reload dump.
+
+**Player guide:** `player_guide/` holds the player-facing guide: numbered Markdown chapters, the Typst page template, `STYLE.md` (house style) and the built PDF. `scripts/build_player_guide.py` builds the PDF (needs `requirements-docs.txt`); `scripts/analysis/check_player_guide_style.py` lints the chapters. Both run in CI (the build as `--check`, which fails if the PDF is older than its sources).
 
 **Design docs (hand-written):**
 - `systems/mod_systems.md` — every gameplay system's files and mechanics. The single most useful design reference.
