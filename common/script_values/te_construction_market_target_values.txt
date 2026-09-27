@@ -1,13 +1,22 @@
 ﻿# Construction-market subsystem.
 # Based on the third-party "Free Market Construction" mod. See README.md.
 
+# The private sector's weekly construction spending: a 24th of the investment
+# pool, so the pool settles at 24 weeks of gross income. Read from the pool
+# alone so it holds whatever the sign of gross income. The earlier form,
+# gross x pool / (24 x gross), is the same while gross income is positive, but
+# fell back to a fixed 2.4M divisor at 0 or below, which made the target 0 or
+# negative. Overinvestment (extra_on_actions.txt) cuts every pop's contribution,
+# which pushes gross income there, so it switched off the private spending it
+# exists to force.
 te_construction_market_private_spending_target = {
-	value = investment_pool_gross_income
-	multiply = {
+	value = 0
+	if = {
+		limit = {
+			investment_pool > 0
+		}
 		value = investment_pool
-		subtract = te_construction_market_investment_pool_size_target
-		divide = te_construction_market_investment_pool_size_target
-		add = 1
+		divide = 24
 	}
 }
 
@@ -42,19 +51,6 @@ te_construction_market_public_use_target = {
 	else = {
 		value = 1
 	}
-}
-
-te_construction_market_investment_pool_size_target = {
-	if = {
-		limit = {
-			investment_pool_gross_income > 0
-		}
-		value = investment_pool_gross_income
-	}
-	else = {
-		value = 100000
-	}
-	multiply = 24
 }
 
 te_construction_market_investment_pool_x_1000 = {
