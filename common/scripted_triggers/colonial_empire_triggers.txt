@@ -319,10 +319,12 @@ is_overseas_colonial_state = {
 		state_population >= 100000
 		OR = {
 			# Indigenous-population signal: non-primary culture with low acceptance.
+			# Acceptance runs 0-100; acceptance_status_4 is vanilla's 60 (the old
+			# `value < 0.6` read it as 0-1 and so matched almost no one).
 			any_scope_culture = {
 				NOT = { is_primary_culture_of = owner }
 				prev = {
-					state_average_culture_pop_acceptance = { culture = prev value < 0.6 }
+					state_average_culture_pop_acceptance = { culture = prev value < acceptance_status_4 }
 				}
 			}
 			# Economic-disparity signal: state SoL falls below 0.8 x metropole
@@ -517,10 +519,11 @@ is_unintegrated_culturally_distinct_state = {
 		text = IS_UNINTEGRATED_CULTURALLY_DISTINCT_STATE_TT
 		NOT = { is_homeland_of_country_cultures = owner }
 		state_population >= 100000
+		# Acceptance runs 0-100 (acceptance_status_4 = 60), as in is_overseas_colonial_state.
 		any_scope_culture = {
 			NOT = { is_primary_culture_of = owner }
 			prev = {
-				state_average_culture_pop_acceptance = { culture = prev value < 0.6 }
+				state_average_culture_pop_acceptance = { culture = prev value < acceptance_status_4 }
 			}
 		}
 	}
