@@ -13278,7 +13278,7 @@ pm_centralized_traffic_control = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_infrastructure_add = 40
+			state_infrastructure_add = 55
 			state_pollution_generation_add = 15
 		}
 	}
@@ -13318,7 +13318,7 @@ pm_containerized_cargo = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_infrastructure_add = 40
+			state_infrastructure_add = 55
 			state_pollution_generation_add = 15
 		}
 	}
@@ -13359,7 +13359,7 @@ pm_automated_loading_and_unloading = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_infrastructure_add = 40
+			state_infrastructure_add = 55
 			state_pollution_generation_add = 15
 		}
 	}
@@ -13397,7 +13397,7 @@ pm_autonomous_trains = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_infrastructure_add = 40
+			state_infrastructure_add = 55
 		}
 	}
 }
