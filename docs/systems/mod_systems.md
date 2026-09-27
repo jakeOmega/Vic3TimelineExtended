@@ -1353,14 +1353,15 @@ AI weights across events are tuned to favor decolonization:
 
 - **Purpose:** Moves minority pops of the target country's primary culture(s) from the source country to the target country. Models forced population exchanges (e.g., Treaty of Lausanne).
 - **Article type:** Directed, one-time effect on entry into force.
+- **Gating (`possible`, ROOT = the conceding source):** the source hosts pops of a primary culture of the target that is not also primary to the source, at least one of those cultures is below Acceptance Status 4 in some source state, and the demanding target does not have Universal Citizenship (`law_multicultural`).
 - **Mechanism:**
   1. `on_entry_into_force` saves scopes via `scope:article_options.source_country` / `.target_country` (critical scoping pattern — see `docs/guides/scripting_best_practices.md`).
   2. Calls `population_transfer_effect` scripted effect.
   3. The effect iterates target country's primary cultures, for each culture finds source-country states with matching pops via population-weighted random selection (tiered modifiers since `state_population` is a trigger, not a value).
   4. Uses `move_pop` to transfer pops, increments a counter variable.
-  5. Applies `population_transfer_disruption` timed modifier to affected states, scaled by transfer count.
+  5. Applies the decaying `population_transfer_disruption` country modifier for 5 years to both countries, scaled by the share of each country's population that moved (`te_pop_transfer_disruption_strength`, clamped 0.25–2).
 - **Key scripted effect:** `population_transfer_effect` in `common/scripted_effects/extra_effects.txt`.
-- **Key modifier:** `population_transfer_disruption` — reduces state throughput and increases mortality, applied per-state.
+- **Key modifier:** `population_transfer_disruption` — a country modifier (−50% bureaucracy, −10 legitimacy, +50% radicals from conquest, before the multiplier) on both parties.
 - **Files:** `common/treaty_articles/extra_treaty_articles.txt`, `common/scripted_effects/extra_effects.txt`, `common/static_modifiers/extra_modifiers.txt`, localization.
 
 ## Intelligence Sharing Defense Shield
