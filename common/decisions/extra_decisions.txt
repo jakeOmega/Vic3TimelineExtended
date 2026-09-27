@@ -242,6 +242,10 @@ mandate_system_decision = {
 	is_shown = {
 		has_journal_entry = je_colonial_empire
 		has_technology_researched = decolonization
+		# One-shot (docs/archive/decolonization_review.md § 6): the conversion
+		# is permanent (mandate_system_modifier, days = -1), and without this a
+		# retake refreshed the 12-month stability boost at will.
+		NOT = { has_modifier = mandate_system_modifier }
 	}
 
 	possible = {
