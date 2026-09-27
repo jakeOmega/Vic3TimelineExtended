@@ -1374,14 +1374,29 @@ covert_op_election_confidence_effect = {
 				}
 				if = {
 					limit = { covert_op_is_fully_operational = yes }
-					ROOT = { change_variable = { name = iw_election_worst_phase max = 3 } }
+					ROOT = {
+						if = {
+							limit = { var:iw_election_worst_phase < 3 }
+							set_variable = { name = iw_election_worst_phase value = 3 }
+						}
+					}
 				}
 				else_if = {
 					limit = { covert_op_is_established = yes }
-					ROOT = { change_variable = { name = iw_election_worst_phase max = 2 } }
+					ROOT = {
+						if = {
+							limit = { var:iw_election_worst_phase < 2 }
+							set_variable = { name = iw_election_worst_phase value = 2 }
+						}
+					}
 				}
 				else = {
-					ROOT = { change_variable = { name = iw_election_worst_phase max = 1 } }
+					ROOT = {
+						if = {
+							limit = { var:iw_election_worst_phase < 1 }
+							set_variable = { name = iw_election_worst_phase value = 1 }
+						}
+					}
 				}
 			}
 		}
