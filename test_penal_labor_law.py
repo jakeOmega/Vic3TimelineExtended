@@ -168,6 +168,7 @@ class LawDefinitionTests(unittest.TestCase):
                 "building_group_bg_mining_throughput_add",
                 "building_group_bg_logging_throughput_add",
                 "building_group_bg_plantations_throughput_add",
+                "building_group_bg_rubber_throughput_add",
             },
         )
         for key, value in throughput.items():

@@ -1093,8 +1093,12 @@ law_open_government = {
 # The extractive throughput is flat by design (owner call): it does not scale
 # with radicals, turmoil or prisoners, so the law never pays more for more
 # repression and never becomes the economic pick. Half of vanilla's
-# whole-economy +10% (law_traditionalism, law_extraction_economy), on three
-# groups only. Its strongest point is bg_mining, which holds the gold mines.
+# whole-economy +10% (law_traditionalism, law_extraction_economy), on four
+# groups only: mines, logging camps, plantations and rubber plantations
+# (bg_rubber sits under bg_extraction, not bg_plantations, so it needs its own
+# key; bg_extraction itself would also take fishing, whaling, oil and the gold
+# fields). Its strongest point is bg_mining, which holds the gold mines and the
+# mod's discoverable mines.
 #
 # Suppression attraction -0.10 is Shinsengumi's value. Vanilla multiplies a
 # suppressed movement's attraction by (-0.5 + this factor), and every
@@ -1136,6 +1140,7 @@ law_penal_labor_camps = {
 		building_group_bg_mining_throughput_add = 0.05
 		building_group_bg_logging_throughput_add = 0.05
 		building_group_bg_plantations_throughput_add = 0.05
+		building_group_bg_rubber_throughput_add = 0.05
 	}
 }
 
