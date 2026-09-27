@@ -1,12 +1,12 @@
 # Introduction
 
 Vic3TimelineExtended carries Victoria 3 past its 1936 end date, through the
-twentieth century and into a speculative future. It adds seven eras of
-technology, new goods and buildings, over a hundred laws, and a set of systems
-that run alongside the base game: a banking cycle with monetary policy, a
-construction market, climate change, decolonization, nuclear weapons, a United
-Nations, a space race, cultural and covert competition between powers, and
-social movements. Most of these systems have their own journal entry, and most
+twentieth century and into a speculative future; a campaign now runs to 2136. It
+adds seven eras of technology, new goods and buildings, over a hundred laws, and
+a set of systems that run alongside the base game: a banking cycle with monetary
+policy, a construction market, climate change, decolonization, nuclear weapons,
+a United Nations, a space race, cultural and covert competition between powers,
+and social movements. Most of these systems have their own journal entry, and most
 can be switched off when you set up a game.
 
 This guide explains what each system does and how to play it. It assumes you
@@ -113,3 +113,9 @@ The most useful report says what you did, what you expected and what happened,
 and attaches a save and the game's `debug.log` and `error.log` (in the `logs`
 folder under `Documents/Paradox Interactive/Victoria 3`). If a mechanic is
 confusing even when it works as intended, that is worth reporting too.
+
+Several systems were reworked recently and have had little play-testing: the
+monetary-policy layer of the banking system, the United Nations, and nuclear
+deterrence and crises. This guide describes what their scripts are written to
+do. Where the game behaves differently, either the game or the guide is wrong,
+and a report helps fix whichever it is.

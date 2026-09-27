@@ -3,8 +3,8 @@
 The mod adds 133 laws, most of them in 34 new law groups, with the institutions,
 amendments, government types, ideologies, parties and movements that go with
 them. The new law groups exist from 1836: every country starts with a law in
-each and unlocks the others with technology. The chapter also covers three
-systems for rulers and states: Heir Education and aptitude traits (the Heir
+each, and most of the others unlock with technology. The chapter also covers
+three systems for rulers and states: Heir Education and aptitude traits (the Heir
 Education and Universal Aptitude Traits rules, both disabled by default), the
 custom religion creator (the Custom Religion Allowed rule, not allowed by
 default) and State Collapse, which has no rule.
@@ -22,28 +22,33 @@ are grouped here by theme, and ten further laws join base-game law groups.
 | Minority Rights | Violent Hostility, Ghettoization, Discrimination, Cultural Assimilation, Indifference, Protection, Affirmative Action | How the state treats cultural and religious minorities. |
 | LGBTQ+ Rights | Active Persecution, Legal Limbo, Basic Protections, Anti-Discrimination Laws, Full Equality and Protection | Legal status of LGBTQ+ people. |
 | Criminal Justice | Punishment-Focused Criminal Justice, Restorative Justice, Rehabilitation-Focused Criminal Justice | Prisons, policing and reintegration. |
-| Family & Reproductive Policy | Traditional Family Structure, Pro-Natalist Subsidies, State-Sponsored Family Planning, Population Control Measures, Communal Child-Rearing | Birth rates, dependants and the working-age share. |
+| Family & Reproductive Policy | Traditional Family Structure, Pro-Natalist Subsidies, State-Sponsored Family Planning, Population Control Measures, Communal Child-Rearing | Birth rates, dependents and the working-age share. |
 | Language Policy | Local Vernacular, Civic Monolingualism, Multilingual Federalism, Linguistic Purity, State-Led Language Reform, Ubiquitous Translation | Assimilation, separatism and acceptance by language. |
 | Human Augmentation | No Augmentation, Human Purity, Medical Augmentation Only, Unrestricted Augmentation, Regulated Augmentation Market, Mandatory Augmentation | Cybernetic and genetic implants, from Brain-Computer Interfaces on. |
 
 Minority Rights pairs with Citizenship: most rungs need a compatible
-Citizenship law. Violent Hostility needs Ancestral, Cultural or Racialized Citizenship, and
-Affirmative Action needs Assimilatory or Universal Citizenship and the Civil
-Rights Movement technology. The harsh end turns on violence against minorities
-and lets primary-culture homelands form more easily, but wrecks colonial
-stability. Affirmative Action raises minimum local acceptance by 20, pulls
-migrants and steadies colonies, at a higher bureaucracy cost.
+Citizenship law. Violent Hostility needs Ancestral, Cultural or Racialized
+Citizenship, and Affirmative Action needs Assimilatory or Universal Citizenship
+and the Civil Rights Movement technology. Violent Hostility turns on violence
+against minorities, and the harsh end lets primary-culture homelands form more
+easily but wrecks colonial stability. Affirmative Action raises minimum local
+acceptance by 20, pulls migrants and steadies colonies, but institutions cost
+20% more bureaucracy.
 
 State-Led Language Reform starts a chain of choices. On enactment an event asks
 whether to revive a classical language, build a constructed one or simplify the
 existing tongue. Revival offers the classical language that fits your primary
-culture (Latin for Romance speakers, Sanskrit for Indo-Aryan ones and so on, 18
-in all), each with a small bonus of its own. Later events ask whether an academy
-or an advisory panel governs the standard, and whether minority languages are
-protected. Each answer becomes an amendment on the law; repeal one and its
-event can fire again.
+culture or state religion (Latin for Romance speakers, Sanskrit for Indo-Aryan
+ones and so on, 18 in all), each with a small bonus of its own. Later events
+ask whether an academy or an advisory panel governs the standard, and whether
+minority languages are protected. Each answer becomes an amendment on the law;
+repeal one and its event can fire again.
 
-Human Augmentation laws also drive a movement journal entry, described in
+Three Human Augmentation laws need another law as well: Medical Augmentation
+Only needs Charity Hospitals, Private Health Insurance or Public Health
+Insurance; Regulated Augmentation Market needs a Ministry of Consumer
+Protection; Mandatory Augmentation needs a Ministry of War. The group's laws
+also drive a movement journal entry, described in
 [Social movements](06-social-movements.md).
 
 ### Laws on state power and information
@@ -52,25 +57,25 @@ Human Augmentation laws also drive a movement journal entry, described in
 |---|---|---|
 | State Power | Traditional Vassalage, Unitary State, Federal System, Devolved Administration | Centralization: authority, incorporation, decree costs, separatism. |
 | Inheritance Laws | Primogeniture, Partible Inheritance, Equal Inheritance, Non-Inheritable Usage Rights | Birth rate, landowner power, tax capacity. |
-| Electoral Finance | No Campaign Finance Laws, Unregulated Donations, Donation Limits, Publicly Funded Elections | Money in elections; everything past the first needs a voting franchise. |
+| Electoral Finance | No Campaign Finance Laws, Unregulated Donations, Donation Limits, Publicly Funded Elections | Money in elections. The first is only for countries without a voting franchise; the other three need one. |
 | Right to Information | State Secrets, Informal Government Secrecy, Freedom of Information, Open Government | Authority against legitimacy and cultural pull. |
 | Rules of War | Total War, Traditional Rules of War, War Crimes Forbidden, Humanitarian Regulations, Limited War | Devastation, casualties, war support and diplomatic standing. |
-| Privacy Rights | Intrusive Surveillance System, Minimal Privacy Protection, Moderate Data Privacy, Strong Privacy Rights | Surveillance against technology spread and tourism. |
+| Privacy Rights | Intrusive Surveillance System, Minimal Privacy Protection, Moderate Data Privacy, Strong Privacy Rights | Surveillance against technology spread and tourism. Intrusive Surveillance System needs Social Media or Automated Surveillance. |
 | Internet Governance | No Internet Policy, Unregulated Internet, State-Controlled Internet, Net Neutrality | From the World Wide Web on: technology spread, radicalism, covert defense. |
 
 In State Power, Unitary State gives 200 authority and faster incorporation.
 Federal System makes decrees 25% cheaper and calms movements but lowers tax
-capacity by 10%. Devolved Administration cuts bureaucracy costs by 20%, slows
-assimilation and resists separatism and coups. Traditional Vassalage
-strengthens the aristocrats and costs authority.
+capacity by 10%. Devolved Administration cuts the bureaucracy cost of
+institutions by 20%, slows assimilation and resists separatism and coups.
+Traditional Vassalage strengthens the aristocrats and costs authority.
 
-Total War (from Bombing Aircraft) doubles devastation and all but removes the
-war-support loss from casualties, at a cost of 20 diplomatic reputation and a
-stronger anti-war movement. The humane end, up to Limited War (from
+Total War (from Bombing Aircraft) doubles devastation and cuts the war-support
+loss from casualties by three quarters, at a cost of 20 diplomatic reputation
+and a stronger anti-war movement. The humane end, up to Limited War (from
 Intercontinental Ballistic Missiles), cuts devastation by up to 75%, slows
 diplomatic-play escalation, adds reputation and lowers your Ministry of War's
-cap. Rules of War also limits your nuclear posture; see
-[Nuclear weapons](13-nuclear.md).
+cap. Humanitarian Regulations and Limited War also restrict nuclear strikes;
+see [Nuclear weapons](13-nuclear.md).
 
 ### Economic law groups
 
@@ -115,13 +120,16 @@ staff. Several offer an amendment as the price of passage (see
 
 ### Forceful Legislation
 
-When you start enacting any law, the **Forceful Legislation** event may offer
-to bypass the legislature, if your authority income covers the cost. What it allows depends on your **Legislative Override
-Capacity**, summed from your laws and institutions. Autocracy and Single-Party
-State give 3, Algorithmic Governance 2, Unitary State 1; Universal Suffrage,
-Anarchy and Traditional Vassalage take away 3, Guaranteed Liberties and
-Devolved Administration 2. The ministries of Thought Control, Propaganda and
-Intelligence and Security add to it. Below 0, the event never appears.
+When you start enacting any law, the **Forceful Legislation** event offers to
+bypass the legislature, if your authority income covers the cheapest option.
+What it allows depends on your **Legislative Override Capacity**, summed from
+your laws, your institutions and a few technologies and power bloc
+principles. Among the laws, Autocracy and Single-Party State give 3,
+Algorithmic Governance 2 and Unitary State 1; Universal Suffrage, Anarchy and
+Traditional Vassalage take away 3, and Guaranteed Liberties and Devolved
+Administration 2. The ministries of Thought Control, Propaganda and
+Intelligence and Security add to it. Below 0, the event never appears, and each
+stronger option also needs authority income above its own cost.
 
 <!-- screenshot: the Forceful Legislation event with all three bypass options available -->
 
@@ -140,8 +148,8 @@ then must wait.
 
 Sixteen law groups each decide whether a ministry exists. A ministry is an
 institution you invest in like schools or police. Its law sets a starting cap of
-one to three levels, and later-era technologies raise the cap one level at a
-time. The mod raises the ceiling on every institution, the base game's
+one to three levels, and later-era technologies raise the cap, most of them by
+one level. The mod raises the ceiling on every institution, the base game's
 included, from 5 levels to 9.
 
 | Ministry | Technology | Also needs | Each level of investment |
@@ -179,7 +187,7 @@ laws, and several law events attach them.
 | Amendment | Attaches to | Effect |
 |---|---|---|
 | Minority Script Preservation | Civic Monolingualism, State-Led Language Reform | Slower assimilation, less separatism |
-| Language Requirement for Naturalization | Cultural, Assimilatory or Universal Citizenship | Faster assimilation, tighter migration |
+| Language Requirement for Naturalization | Cultural, Assimilatory or Universal Citizenship, alongside Civic Monolingualism, State-Led Language Reform or Linguistic Purity | Faster assimilation, tighter migration |
 | Official Bilingualism | Multilingual Federalism, State-Led Language Reform | Weaker separatism, higher bureaucracy cost |
 | National Champion Exemption | Antitrust Enforcement, Regulated Utilities | Company output up, general output slightly down |
 | Worker Cooperative Preference | Antitrust Enforcement, Regulated Utilities | Trade Unions gain political strength, Industrialists lose it |
@@ -205,7 +213,8 @@ runs out, the amendment lapses and a follow-up event asks what to do next.
 | Environmental Grandfather Clause | Ministry of the Environment Established ("The Grandfather Clause") | 10 years | The Phase-In Ends |
 
 At the end of the term you make the clause permanent, costing legitimacy for a
-few years and radicalizing some shopkeepers, or let it lapse, angering the
+few years and radicalizing some shopkeepers (for the National Champion
+Exemption) or academics (for the other two), or let it lapse, angering the
 Industrialists. While the Environmental Grandfather Clause applies, its extra
 pollution and emissions cancel one level of the new ministry's reductions.
 
@@ -256,7 +265,7 @@ These follow from the governance laws above.
 ## Ideologies, parties and movements
 
 The mod adds ideologies, three parties and four political movements, and gives
-every base-game ideology a stance on each new law group.
+many base-game ideologies stances on some of the new law groups.
 
 ### New ideologies
 
@@ -268,7 +277,7 @@ every base-game ideology a stance on each new law group.
 | Anti-Colonialist | Leaders; also added to the Trade Unions and Intelligentsia | With the Decolonization technology; opposes colonial laws |
 | Optimist Transhumanist | Leaders | From Brain-Computer Interfaces; favors augmentation, open genetics and Algorithmic Governance |
 | Corpocrat | Leaders | From Mutual Funds, mostly Industrialists; favors Neocameralism |
-| Islamic Inheritance | The Devout in Sunni and Shia countries | From the start; favors Partible and Equal Inheritance |
+| Islamic Inheritance | The Devout in Sunni and Shiite countries | From the start; favors Partible and Equal Inheritance |
 
 Interest-group leaders, commanders and politicians are more often women under
 Protected Class, the higher LGBTQ+ Rights laws and related technologies.
@@ -290,7 +299,7 @@ such as Die Grünen or Movimento 5 Stelle.
 |---|---|---|---|
 | Environmental Movement | Pollution Control researched and no Ministry of the Environment | A fully funded Ministry of the Environment | Grows with pollution, global warming and literacy; climate policies you adopt calm it, ones you ignore radicalize it |
 | Civil Rights Movement | Civil Rights Movement technology, or Cultural Unity at tier 3 or higher in your power bloc | Universal Citizenship and Affirmative Action | Strongest among discriminated pops |
-| Anti-War Movement | Anti-War Movement technology | Pacifist policy; its leaders may be Anti-Colonialist | Grows with casualties and while at war; never starts a revolution or secession |
+| Anti-War Movement | Anti-War Movement technology | Pacifist policy; its leaders may be Anti-Colonialist | Grows with casualties and while at war; never starts a revolution or secession, and never disbands |
 | Transhumanist Movement | Brain-Computer Interfaces researched, without Unrestricted Augmentation | Unrestricted Augmentation | Radicalized by Human Purity and bans on genetic modification; never disbands |
 
 The social-movement journal entries (civil rights, digital rights and others)
@@ -300,11 +309,12 @@ are separate systems, described in [Social movements](06-social-movements.md).
 
 During an election campaign, countries with elections draw from 35 extra
 events, from radio broadcasts and war heroes through televised debates to
-deepfakes, microtargeting and space-colony voters. Each needs its technology:
-Mass Propaganda for the earliest, Social Media for most, Generative AI and
-later ones for the last. Single-party states never get them. They share the base
-game's pacing (one election event every three months at most), and each fires
-at most once every 20 years. Most options shift momentum between the governing
+deepfakes, microtargeting and space-colony voters. Each needs its own
+technology, from Mass Propaganda for the earliest through Television
+Broadcasting and Social Media to Generative AI and Space Colonization for the
+last. Single-party states never get them. They share the base game's pacing
+(one election event every three months at most), and each fires at most once
+every 20 years. Most options shift momentum between the governing
 and opposition parties or trade loyalists, radicals or a temporary modifier.
 Your laws, such as an unregulated internet or strong privacy rights, decide
 which option the AI favors.
@@ -327,7 +337,7 @@ You can run one focus from each track at once, and each running focus costs
 |---|---|---|
 | Skills | Administrative Focus, Diplomatic Focus, Military Focus | Industrialists, Intelligentsia or Armed Forces approve their own focus; another group objects |
 | Ideology | Progressive Tutors, Conservative Tutors | Intelligentsia and Trade Unions against Devout and Landowners |
-| Faction | Radical Mentors, Moderate Mentors, Regressive Mentors | The groups each mentor points toward approve; their rivals object |
+| Faction | Radical Mentors, Moderate Mentors, Regressive Mentors | Radical: Intelligentsia, Rural Folk and Trade Unions against Landowners and Devout; Regressive: the reverse, without the Rural Folk; Moderate: Industrialists, Petty Bourgeoisie and Armed Forces, and nobody objects |
 
 Each successful skill lesson also lowers innovation by 10% for 30 days. Every
 heir has a hidden intelligence from 1 to 5: a bright heir sometimes gains two
@@ -340,7 +350,7 @@ Pupil, A Difficult Student and Foreign Correspondence, which needs an ally.
 
 The education ends when the heir is an adult and at least a year has passed
 since the journal entry began, or after 18 years. If the heir dies or changes,
-the tracks reset for the new heir.
+the tracks reset and the focuses switch off; set them again for the new heir.
 
 | Points in a skill | Terrible | Poor | Average | Skilled | Exceptional |
 |---|---|---|---|---|---|
@@ -351,9 +361,12 @@ the tracks reset for the new heir.
 | 8 or more | 0% | 2% | 10% | 38% | 50% |
 
 Ideology follows the tutors' net lean, but 8% of heirs rebel and take the
-opposite one. Progressive tutoring yields a Reformer, a Moderate or, with a
-strong lean, a Radical; conservative tutoring a Traditionalist or Moderate; no
-lean, most often a Moderate. The strongest mentor faction picks the interest group:
+opposite one. A light progressive lean yields a Reformer or a Moderate, a
+strong one (4 points or more) a Reformer or a Radical. A conservative lean
+yields a Traditionalist, or a Moderate if the lean is light. With no lean the
+heir is most often a Moderate. Some rolls change nothing and the heir keeps the
+ideology they already had: about one in four with a lean, one in two with a
+strong conservative lean. The strongest mentor faction picks the interest group:
 Radical mentors lead to the Trade Unions, Intelligentsia or Rural Folk,
 Moderate to the Industrialists, Petty Bourgeoisie or Armed Forces, Regressive to
 the Landowners, Devout or Rural Folk. Without mentoring it is random.
@@ -364,7 +377,8 @@ Aptitude traits rate a character's administration, diplomacy and command on
 five tiers each. A good administrator as ruler raises bureaucracy, tax capacity
 and legitimacy, a good diplomat prestige, influence and reputation, a good
 commander army morale, experience and Armed Forces support; a poor one does the
-reverse, and every tier changes the character's popularity.
+reverse. Every tier except the middle one also changes the character's
+popularity. The middle tier has no effect.
 
 | Tier | Administration | Diplomacy | Command |
 |---|---|---|---|
@@ -376,10 +390,10 @@ reverse, and every tier changes the character's popularity.
 
 With Heir Education on, rulers and heirs have aptitude traits. Heirs in
 education earn theirs; any other ruler or heir without them is rolled once a
-year, mostly into the lower tiers, with generals and admirals rolled higher for
-command. A ruler who leaves power loses the traits and gets the same ones back
-on returning. The Universal Aptitude Traits rule gives them to every adult
-character instead, with or without Heir Education.
+year, usually at the middle tier or below, with generals and admirals rolled
+higher for command. A ruler who leaves power loses the traits and gets the same
+ones back on returning. The Universal Aptitude Traits rule gives them to every
+adult character instead, with or without Heir Education.
 
 ## Custom religion creator
 
@@ -390,7 +404,7 @@ Back buttons.
 | Screen | You choose |
 |---|---|
 | 1 | Three doctrines, at most one per category (economy, society, governance, outlook), such as Divine Wealth, Imperial Cult or Pacifism. |
-| 2 | Three traits for the religion's interest group, marked loyal, happy or unhappy for the approval they need. Only traits matching one of your doctrines can be picked. |
+| 2 | Three traits for the religion's interest group, one each for the loyal, happy and unhappy approval levels (the group holds one trait per level). Only traits matching one of your doctrines can be picked. |
 | 3 | A name, from 20 such as Neohellenism or Church of the Sacred Machine. |
 | 4 | The religion's heritage: Christian, Muslim, Judaism, Eastern, Animist, Buddhist or Custom. |
 
@@ -428,7 +442,7 @@ noted, scaled by your rank.
 | War Propaganda | War Propaganda | +5 war support a month, faster escalation as aggressor |
 | Political Patronage | Mass Media | Pops' political strength doubled |
 | Bureaucratic Reform | Intergovernmental Organizations | Government administrations +25% throughput |
-| Greenest Grass Campaign | Freedom of Movement power bloc principle | Large migration pull |
+| Greenest Grass Campaign | Freedom of Movement power bloc principle, tier 4 or higher | Large migration pull |
 | Cultural Emigration Initiative | Cultural Unity power bloc principle | Violence against minorities |
 | Pollution Control | Pollution Control | −50% pollution |
 | Cultural Integration | | +5 cultural acceptance a year |
@@ -447,7 +461,8 @@ When a revolution wins, the winner carries on as the same nation and keeps what
 the old government built. UN membership, seat and programs, the central bank's
 gold and monetary settings, the banking cycle's position, nuclear arsenals,
 space-race rewards and milestone progress, and the arable-land bonuses from
-farming breakthroughs all carry over. A movement journal entry you already
-finished, such as Civil Rights, does not start over. Some things are still
-lost: policies switched on from journal-entry buttons, such as banking tools and
-climate policies, have to be switched on again, and history charts start empty.
+farming breakthroughs all carry over. A Civil Rights Movement, Human
+Augmentation Debate or Mental Health Crisis journal entry you already finished
+does not start over. Some things are still lost: policies switched on from
+journal-entry buttons, such as banking tools and climate policies, have to be
+switched on again, and history charts start empty.
