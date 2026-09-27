@@ -55,11 +55,12 @@ un_regime_npt_guaranteed = {
 # ---- Human rights (UNHRC) -----------------------------------------------------------
 
 # A member whose laws the declaration condemns: an ethnostate, outlawed
-# dissent, or slavery in any form.
+# dissent, penal labor camps, or slavery in any form.
 un_regime_human_rights_violator = {
 	OR = {
 		has_law = law_type:law_ethnostate
 		has_law = law_type:law_outlawed_dissent
+		has_law = law_type:law_penal_labor_camps
 		has_law = law_type:law_slave_trade
 		has_law = law_type:law_legacy_slavery
 		has_law = law_type:law_debt_slavery
