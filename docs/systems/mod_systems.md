@@ -9,12 +9,13 @@ Several mod systems use a common pattern for continuously-scaling modifiers:
 2. Define a **script value** in `common/script_values/extra_script_values.txt` that computes a multiplier (0 to N).
 3. In an **on_action** (`on_yearly_pulse_country` or `on_yearly_pulse_state`), remove the old modifier and re-apply with `add_modifier = { name = X multiplier = <script_value> }`.
 4. The engine multiplies every field in the static modifier by the multiplier value.
+5. If the modifier applies only under some conditions, re-check them on every refresh and remove it on the refresh they fail. A gate of the form `OR = { <conditions>  has_modifier = X }` never looks at the conditions again once X exists, and with a decay floor such as "last value ÷ 1.2" the value never reaches 0. Excess Private Construction shipped that way and lingered for about a century (fixed 2026-09-26).
 
 Systems using this pattern:
 - **Global Warming** — `global_warming` modifier × `temperature_anomaly_display` (applied from JE `on_monthly_pulse`)
 - **Construction Cost Scaling** — `construction_cost_scaling` modifier × `construction_cost_scaling_mult` (applied yearly, country scope)
 - **Migration Crowding** — `migration_crowding` modifier × `migration_crowding_mult` (applied yearly, state scope)
-- **Excess Private Construction** — `too_much_private_construction` modifier × `too_much_private_construction_script_value`
+- **Excess Private Construction** — `too_much_private_construction` modifier × `var:too_much_private_construction_cached`, set yearly from `too_much_private_construction_script_value` (country scope; § Excess Private Construction)
 - **Tourism** — `tourism_output` × `total_tourism_output_bonus_percent` and `tourism_throughput` × `total_tourism_throughput_bonus_percent` (state scope), re-applied by `te_update_tourism_modifier` from `tourism_on_action` on `on_monthly_pulse_state`, because its inputs (`city_size_rank`, building levels) move monthly. Uses ~2700 lines of state_region appeal values in `common/script_values/tourism.txt`. It must run from a state pulse: law, treaty and building hooks have unreliable scope chains for state-targeted script values.
 
 ## Production Methods (PMs)
@@ -54,6 +55,16 @@ Systems using this pattern:
 - **Curve:** Linear interpolation from 0 at floor to `max_mult` at ceiling.
 - `goods_input_construction_mult` affects both construction project costs AND ongoing building maintenance.
 - With `free_market_construction_rule` disabled there is no construction good to scale, so the on_action applies `construction_cost_scaling_direct` (`country_construction_goods_cost_mult = 1`, adjusted by `construction_cost_scaling_direct_adjusted_mult`) instead. See § Free Market Construction off.
+
+## Excess Private Construction
+
+- **Purpose:** Gives an investment pool that the private queue can't spend a way to spend. The engine caps the private queue at 1,000 buildings and each project's weekly progress at `country_max_weekly_construction_progress_add`, so a rich pool can outgrow what investors can build and keep depositing forever. The modifier raises the per-project cap and charges a construction-efficiency penalty for it, which is the sink. Overinvestment is the second stage.
+- **Modifiers** (`common/static_modifiers/extra_modifiers.txt`): `too_much_private_construction`, per unit `country_max_weekly_construction_progress_add = 1` and `state_construction_mult = -0.0001` (−90% at the 9,000 cap). `overinvestment_modifier` sets every pop type's `state_*_investment_pool_contribution_add = -1`.
+- **Script values** (`common/script_values/extra_script_values.txt`, `target_queue_length` through `too_much_private_construction_script_value`): the cap raise at which 500 projects could spend the pool's gross income, moving at most ×1.2 or ÷1.2 a year from last year's value (`var:too_much_private_construction_cached`). A new episode starts at 10 at most; the cap is 9,000.
+- **On action:** `excess_private_construction_on_action`, on `on_yearly_pulse_country`. Its conditions are checked every year, also while the modifier is in force: more than 500 private levels queued and `investment_pool_net_income > 0`, or Overinvestment in force. While they hold, the modifier is re-applied at the script value. The year they fail, it is removed and the variable set to 0. When they hold again, it starts over at 10 at most, so even at the fastest ramp it takes 27 years to pass 1,000 and 39 to reach the cap.
+- **Overinvestment** is added the same pulse the variable is above 1,000 and `investment_pool > gdp`. It counts as the conditions holding because it cuts pool income, which turns net income negative while the pool still holds more than a year's GDP. Removing the construction modifier then would end Overinvestment after one year, since Overinvestment needs the variable above 1,000, and leave that pool with no sink. While Overinvestment cuts contributions, gross income is near 0, so the value falls ÷1.2 a year. Overinvestment therefore ends once the pool is at or under GDP, or at most 12 years after a peak at the cap.
+- **Invariant:** the modifier's multiplier is `var:too_much_private_construction_cached`, written first, so `base_construction_per_week` (the per-project cap without this modifier) can subtract it. Set the variable to 0; never `remove_variable` it.
+- **History:** until 2026-09-26 the gate was `OR = { <conditions>  has_modifier = too_much_private_construction }` and the value could only fall ÷1.2 a year. Once the modifier existed, the conditions were never checked again, and it stayed above 0 for 76–114 years.
 
 ## Construction as a Market Good (FMC architecture)
 
@@ -1095,7 +1106,7 @@ All pulse-based on_actions are routed through `extra_on_actions.txt`:
 
 **`on_yearly_pulse_country`** (Root = Country):
 - `tech_spread_on_action` — technology diffusion
-- `excess_private_construction_on_action` — construction cost penalty
+- `excess_private_construction_on_action` — Excess Private Construction (per-project construction cap raise with an efficiency penalty, removed the year its conditions fail) and Overinvestment
 - `fix_incompatible_laws` — auto-fix illegal law combos
 - `construction_cost_scaling_on_action` — GDP-based construction costs
 - `colonial_collapse_on_action` — tiny AI country absorption

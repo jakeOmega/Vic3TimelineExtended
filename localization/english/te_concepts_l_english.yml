@@ -2407,7 +2407,7 @@
  terror_resilience_modifier_desc:0 "The nation has rallied together in defiance after a terrorist attack, strengthening social [concept_power_bloc_cohesion]."
  terror_surveillance_modifier:0 "Expanded Surveillance"
  terror_surveillance_modifier_desc:0 "A comprehensive surveillance program has been enacted to prevent future attacks, at the cost of civil liberties."
- too_much_private_construction_desc:0 "Represents strain caused by excessive private-sector construction activity."
+ too_much_private_construction_desc:0 "Investors have more than 500 levels of [concept_private_construction] queued while the [concept_investment_pool] keeps growing. Each project may absorb more construction a week so the pool can be spent, at the cost of construction efficiency. Checked every year: it ends once the queue is down to 500 levels or the pool stops growing, unless Overinvestment is in force."
  tourism:0 "Tourism"
  tourism_output:0 "Tourism Output"
  tourism_output_desc:0 "$concept_tourism_output_desc$"
