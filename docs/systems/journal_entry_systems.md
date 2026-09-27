@@ -70,7 +70,7 @@ Areas:
 
 **Bars at the top (monetary phase 3).** The conditions widget now opens with the entry's own scripted progress bars — cycle value, momentum, **policy stance** (new: `banking_policy_stance_bar`, tight left / loose right, from the displayed band) and bubble pressure — drawn from `JournalEntry.GetScriptedProgressBars` with vanilla's markup. Vanilla's copy at the bottom of the panel is hidden for this entry only: `je_banking.txt` puts the zero-sized `te_je_bars_on_top_marker.gui` in `custom_widget_container_7`, and `gui/journal_entry.gui` (a one-line override of the vanilla panel) hides its bar block for any entry that does. Any other journal entry can opt in the same way, provided its widget draws the bar variants it uses. The system's managed modifiers also moved onto this entry — see `mod_systems.md` § Monetary Policy (phase 3).
 
-**Monetary Policy block (phase 3).** Four more rows. **World Rate** sits directly under *World Reference Rate*: the real, GDP-weighted rate of the great powers that set their own (`te_mon_world_rate_now`, the per-pulse copy of `global_var:te_world_rate`), behind its own readiness handler `banking_mon_world_rate_ready` because a phase-2 save has no such variable until its first pulse. Then, after the rate-target stepper and only for a gold-standard country with a dial (`banking_mon_shows_gold` — suspended or not): **Gap to World Rate**, **Gold Flow** (the monthly `add_treasury`, which the budget ledger never shows; its tooltip carries the hot-money balance) and **Peg Confidence**, a 0–100 figure with a word from the `te_mon_peg_state` customizable localization. A **Bank's Gold Reserve** row heads the gold sub-section (the central bank's own vault, `te_bank_gold`, in pounds and as a share of its limit — the hybrid model: flows move this, never the treasury) and a **Recapitalise the Bank** button (op 13, treasury → vault, one way) closes it. **Borrowed Gold** and **Interest on It** sit between the flow and the confidence row (rows of their own since the first playtest; they share the Gold Flow tooltip). None of these is hidden state, so all are printed exactly. The block is now split by five `banking_dash_mon_subheader` sub-headings — *The Rate*, *Gold and the Peg* (gold countries only), *What Borrowing Costs*, *Prices*, *The Central Bank* — the label column is 200 wide rather than 160, and **Delegate / Take Control moved out of the Delegation row into a centred row of their own beneath it**, which is what made room. The rate-target −/+ buttons use `click_modifiers`: click a point, ctrl-click a tenth, shift-click to the regime's limit (ops 9–12 of `banking_mon_control_sgui`); the target therefore prints to one decimal. The Peg Defence mandate button now keys on `te_mon_is_on_gold` rather than the law, so it disappears while convertibility is suspended. See `mod_systems.md` § Monetary Policy (phase 3).
+**Monetary Policy block (phase 3).** Four more rows. **World Rate** sits directly under *World Reference Rate*: the real, GDP-weighted rate of the great powers that set their own (`te_mon_world_rate_now`, the per-pulse copy of `global_var:te_world_rate`), behind its own readiness handler `banking_mon_world_rate_ready` because a phase-2 save has no such variable until its first pulse. Then, after the rate-target stepper and only for a gold-standard country with a dial (`banking_mon_shows_gold` — suspended or not): **Gap to World Rate**, **Gold Flow** (the month's movement of gold into or out of the central bank's own vault, `te_bank_gold` — never the treasury, and not an `add_treasury`; its tooltip carries the hot-money balance) and **Peg Confidence**, a 0–100 figure with a word from the `te_mon_peg_state` customizable localization. A **Bank's Gold Reserve** row heads the gold sub-section (the central bank's own vault, `te_bank_gold`, in pounds and as a share of its limit — the hybrid model: flows move this, never the treasury) and a **Recapitalise the Bank** button (op 13, treasury → vault, one way) closes it. **Borrowed Gold** and **Interest on It** sit between the flow and the confidence row (rows of their own since the first playtest; they share the Gold Flow tooltip). None of these is hidden state, so all are printed exactly. The block is now split by five `banking_dash_mon_subheader` sub-headings — *The Rate*, *Gold and the Peg* (gold countries only), *What Borrowing Costs*, *Prices*, *The Central Bank* — the label column is 200 wide rather than 160, and **Delegate / Take Control moved out of the Delegation row into a centred row of their own beneath it**, which is what made room. The rate-target −/+ buttons use `click_modifiers`: click a point, ctrl-click a tenth, shift-click to the regime's limit (ops 9–12 of `banking_mon_control_sgui`); the target therefore prints to one decimal. The Peg Defence mandate button now keys on `te_mon_is_on_gold` rather than the law, so it disappears while convertibility is suspended. See `mod_systems.md` § Monetary Policy (phase 3).
 
 **Monetary Policy block (phase 4).** An **EXCHANGE RATE** sub-header and two rows, above *Borrowing*, for every country. **Exchange Rate Index** prints `te_fx_index` exactly (one decimal) through the customizable loc `te_mon_fx_state` — *Par (convertible)* under metal, the figure plus *(devalued)* while a §12.3 devaluation walks back to par, *Par (inconvertible)* under a command economy — and its tooltip lists `fx_target`'s four terms from the `te_mon_fx_term_*` script values, the target, and a `te_mon_fx_controls_note` line on what capital controls do to the rate term. **Trade and Prices** (`te_mon_fx_effect`) shows the trade edge and imported inflation for a floater, and *overvalued by N* under a fixed parity. Nothing here is hidden state: every input is already exact on the dashboard. The two FX tool rows (`cb_fx_devaluation`, `cb_fx_support`) are gone from both the active list and the External category; the capital-controls row stays and its tooltip now carries the peacetime-months counter. Full system: `docs/systems/mod_systems.md` § Banking Cycle → **Monetary Policy (phase 4)**.
 
@@ -109,10 +109,11 @@ A third custom widget in `custom_widget_container_3`, collapsed by default.
 ### Events
 - `minor_events_timelineextended.6` — crash announcement (origin country)
 - `minor_events_timelineextended.7` — contagion to connected countries
-- `banking_cycle_events.txt` — 45 events (1–45) covering financial scenarios
+- `banking_cycle_events.txt` — 83 event blocks (counted 2026-09-26): `.1`–`.69` (no `.12` or `.49`) plus the sixteen `_command` / `_coop` variants `.101`–`.120` and `.151`–`.170`
   - Events 1, 4, 6, 10, 15, 16, 17, 20 have dedicated `_command` / `_coop` variants
   - Events 2, 5, 7–9, 11, 18, 21–26, 28, 30–33, 35–37, 40–44 are **market-economy gated** (`trigger = { banking_is_market_economy = yes }` in dispatch block in `banking_cycle_effects.txt`)
   - Events 3, 13–14, 19, 27, 29, 34, 38, 39, 45 fire for all economy types (event 12, *Gold Standard Pressure*, was removed in monetary phase 3 — absorbed by `te_peg.1`)
+  - Events 46–69 came later and are not sorted into the two lists above; each one's draw conditions are in `banking_cycle_random_event_effect` (`banking_cycle_effects.txt`). `.68` / `.69` are the bailout appeal and its answer, fired from `.45`, not drawn
   - Event 58, *The Gold Window Closes* (downturn/panic, `modern_financial_instruments`), needs a convertible gold standard (`te_mon_is_on_gold`) **and** the simplified setting of `banking_system_rule`: under the full monetary system `te_peg.1` is the gold crisis, and a random draw beside it would repeat event 12's problem. Before this gate it reached fiat, digital and crypto countries
   - Events 10, 16, 31, 34, 39 and 55 ask the dashboard and the monetary layer before they fire; 31 enacts the dashboard tool it offers, and 39 does under the full monetary system (#428) — see **Banking Cycle** in `mod_systems.md`
 - `te_inflation_events.txt` — `te_inflation.1` "Not Worth the Paper", the §9.2 hyperinflation crisis (phase 2). Fired from the monthly update's band-swap step, not from this journal entry, so it reaches a country with no banking JE at all; three options (currency reform / dollarise / ride it out) and a 24-month anti-nag cooldown.
@@ -136,7 +137,7 @@ Tracks a civil rights movement for minority populations. Activates when a countr
 - **5 phase modifiers** keyed to bar tiers: `civil_rights_phase_marginal/growing/active/pressuring/imminent_modifier`. Imminent (90+) adds `country_law_enactment_success_add = 0.10` so the legal finish line gets a push from the very pressure the bar represents.
 - **6 button toggle pairs** (12 buttons total) representing player stance. Pro buttons (`grassroots`, `federal_protection`, `gradualist`) and anti buttons (`suppression`, `segregationist`) are mutually exclusive. Cooptation is cross-compatible with anti buttons (the historical "coopt moderates, jail radicals" stance). Each button increments a months-tracker variable consumed by path-dependent resolution.
 - **Cooptation expiry:** after 12 months, `cr_cooptation_expired` marker is added by the JE on_monthly_pulse and the bar bonus stops; remove + re-toggle to reset.
-- **No timeout** — bar carries the urgency. Drifts to 0 → `on_fail`; reaches 100 → `on_complete`.
+- **No timeout** — bar carries the urgency. Reaching 0 → `on_fail` (so does the civil-rights movement disappearing); reaching 100 → `on_complete`. Below 5 the bar gets +0.4 floor relief (`cr_floor_relief_tt`), which cancels the −0.4 base decay, so a passive government's bar settles just under 5 instead of draining to 0. Only something that pushes it down harder reaches 0: the Suppression (−0.6) or Segregationist (−0.9) stance, or a Violent Hostility or Ghettoization minority law (−0.5, `has_severe_discriminatory_minority_law`).
 
 ### Threshold tier events (one-shot via `cr_tier_X_seen` flags)
 - **Tier 25:** existing `.13` (Refugee networks) under severe discriminatory law, else new `.301` (First Mass Rally)
@@ -305,7 +306,13 @@ Fresh activation (`immediate` populates the display state on frame one) · inact
 No markers: their tooltip branches live in the shared `te_history_scripted_gui.txt`. `te_hist_range` is a single global GUI variable shared with the banking charts.
 
 ### Outcomes
-- **Complete:** 60 sustained months at bar 100, or the Imperial Federation Act capstone. Permanent `colonial_empire_solidified_modifier`, grants homeland to primary cultures in colonial states with 4+ acceptance, sets `colonial_empire_completed` (permanent re-entry block).
+- **Complete:** 60 sustained months at bar 100, or the Imperial Federation Act capstone. `on_complete` dispatches on the path (`je_colonial_empire.txt`) and always sets `colonial_empire_completed` (permanent re-entry block). The homeland grant goes to the country's primary cultures in overseas states of 100k+ where every pop is at acceptance 4 or better, except where noted:
+  - **The Imperial Federation Act** (`.300`, the Iron Fist decision): the decision already granted `imperial_federation_modifier` (Imperial Federation); the event adds `iron_fist_path_modifier` (The Iron Fist) and the homeland grant. No `colonial_empire_solidified_modifier`.
+  - **The Civilizing Mission Compact** (`.301`, the Civilizing Mission decision): `imperial_federation_modifier` from the decision, then `commonwealth_path_modifier` (The Commonwealth Path) and the homeland grant. No `colonial_empire_solidified_modifier`.
+  - **The Iron Fist Holds** (`.203`, garrison months led, > 24): `colonial_empire_solidified_modifier` + `iron_fist_path_modifier`, +25 infamy, **no homelands**.
+  - **Commonwealth Path** (`.202`, investment months led, > 24): `colonial_empire_solidified_modifier` + `commonwealth_path_modifier` and the homeland grant.
+  - **Quiet Assimilation** (`.205`, assimilation months > 24): `colonial_empire_solidified_modifier` + `quiet_assimilation_path_modifier`, and the widest homeland grant: every overseas state of 75k+, with no acceptance test.
+  - **The Empire Endures** (`.200`, no path led): `colonial_empire_solidified_modifier` and the homeland grant.
 - **Fail (bar 0):** path-dependent resolution event, strong liberty-desire spike and relations hit on every qualifying colonial subject, `colonial_empire_collapsed_recently` 10-year cooldown.
 - **Voluntary end (bar > 0, no colonies left):** resolution event, no cooldown.
 
@@ -562,14 +569,14 @@ Persistent journal entry. `can_deactivate = no`, so once the world has warmed th
 **Group:** `je_group_internal_affairs`
 
 ### Purpose
-Allows monarchies to shape their heir's education through active focus choices. The heir gains attribute traits (admin/diplo/military), ideological leanings, and IG affiliation based on selected focuses over ~15 years.
+Allows monarchies to shape their heir's education through active focus choices. The heir gains attribute traits (admin/diplo/military), ideological leanings, and IG affiliation based on selected focuses until the heir comes of age (an 18-year safety timeout).
 
 ### Key Mechanics
 - **Progress bar:** `heir_education_progress_bar` (goal = 20 total points)
-- **Monthly pulse:** Each active focus has 5% chance to advance its attribute, increment `heir_ed_total`, apply 30-day cost modifier, and trigger IG reaction
+- **Monthly pulse:** Each active focus has a 3% chance to advance its attribute, increment `heir_ed_total`, apply 30-day cost modifier, and trigger IG reaction
 - **Random education events** (2% each, 365-day cooldown): `heir_education_events.1`, `.2`, `.3`
 - **Completion:** Heir reaches adulthood + 365-day grace period
-- **Safety timeout:** 5475 days (15 years)
+- **Safety timeout:** 6570 days (18 years)
 - **Invalid:** Not a monarchy
 
 ### Variables
@@ -729,8 +736,8 @@ The UN must be actively founded by a Great Power with Intergovernmental Organiza
 - **Policy (members):** `un_lift_sanctions_button`, `un_peacekeeping_button`, `un_end_peacekeeping_button`, `un_fund_development_button`, `un_defund_development_button`, `un_human_rights_button`, `un_arms_control_button`
 - **GP influence:** `un_champion_order_button`, `un_stop_championing_button`, `un_undermine_order_button`, `un_stop_undermining_button`
 
-### Vote Topics (17, of which 6 are *binding* / vetoable)
-The 6 binding topics — sanctions, peacekeeping_request, icc, condemn, reform, military_mandate — can be vetoed by [concept_un_permanent_member]s via the third option in `un_vote.1`. Vetoed binding resolutions that still have GA simple-majority pass in graduated/weak form, except the two that have **no** graduated form and are flat-blocked: reform (charter changes really do need P5 unanimity) and military_mandate (there is no weaker version of a licence to use force). All other 10 topics are recommendatory (non-vetoable). `expulsion` is recommendatory but uses a 2/3 supermajority threshold instead of simple majority; since phase 2 **charter reform** does too (`un_resolution_needs_supermajority`).
+### Vote Topics (18, of which 6 are *binding* / vetoable)
+The 6 binding topics — sanctions, peacekeeping_request, icc, condemn, reform, military_mandate — can be vetoed by [concept_un_permanent_member]s via the third option in `un_vote.1`. Vetoed binding resolutions that still have GA simple-majority pass in graduated/weak form, except the two that have **no** graduated form and are flat-blocked: reform (charter changes really do need P5 unanimity) and military_mandate (there is no weaker version of a licence to use force). All other 12 topics are recommendatory (non-vetoable). `expulsion` is recommendatory but uses a 2/3 supermajority threshold instead of simple majority; since phase 2 **charter reform** does too (`un_resolution_needs_supermajority`).
 
 
 | Resolution Tag | Triggered By | Description |
@@ -1271,7 +1278,7 @@ Nothing assumes any lobbying list or counter exists. Every read is guarded by `h
 - Drift components (per-country): `un_authority_drift_base`, `un_authority_drift_democracy`, `un_authority_drift_champion`, `un_authority_drift_undermine`, `un_authority_drift_wars`, `un_authority_drift_total`
 
 ### Treaty Articles
-- `join_united_nations`: Directed treaty article (`cost = 200`). Source must be UN member; target must not be. Target receives `un_membership_obligation` modifier, auto-enrolled by JE monthly pulse.
+- `join_united_nations` (in-game name **Require UN Membership**): Directed treaty article (`cost = 200`). Only a UN-member power bloc leader whose bloc holds a Multilateral Institutions principle (`principle_multilateral_institutions_1`–`_5`, which grant `power_bloc_can_use_join_united_nations_bool`) sees it; the other country must not be a member and must have `intergovernmental_organizations`. The target gets `country_un_membership_obligation_bool` (a modifier-type flag in `target_modifier`, not a static modifier) and is auto-enrolled by the JE monthly pulse.
 
 ### Events
 - **un_events.1-22:** Main UN events (formation charter, the appeal, conventions, crises). Since phase 4 none is rolled at random: see the header of `events/un_events.txt` for which the docket raises and which fire where the thing happens. `un_events.13` was deleted.
@@ -1304,7 +1311,7 @@ Two gates. The **entry** is active for anyone it applies to (`possible = nuclear
 - **Nuke creation:** When progress ≥ goal, increments stockpile, decrements progress, checks for world-first achievement
 - **World first detection:** Sets `is_world_first_nuclear_power` + global `world_first_nuclear_weapon`
 - **Subsequent nukes:** Cost reduced by `nuclear_weapon_program_additional_nuke_multiplier`
-- **Disarmament:** `nuclear_disarmament` modifier blocks progress, resets stockpile
+- **Disarmament:** the `country_nuclear_disarmament_bool` flag (the `nuclear_disarmament` treaty article's `source_modifier`, and `un_npt_disarmament_modifier`) zeroes stockpile and progress each week, removes `nuclear_power` and blocks progress. There is no static modifier called `nuclear_disarmament`.
 
 ### Variables
 | Variable | Description |
@@ -1357,7 +1364,7 @@ Traced states: fresh activation (status variable absent → guarded fallback bra
 
 ### Modifiers
 - `nuclear_power` — applied when stockpile > 0
-- `nuclear_disarmament` — blocks program growth
+- `country_nuclear_disarmament_bool` — not a static modifier: the flag the `nuclear_disarmament` **treaty article** puts on its source (and `un_npt_disarmament_modifier` carries); blocks program growth
 - `nuclear_weapon_program_funding` — the weekly innovation cost, applied **in `je:je_nuclear_program` scope** with `multiplier = nuclear_weapons_program_current_cost`. Owned by `nuclear_program_refresh_state_effect`, which takes it off when funding reaches 0. A `remove_modifier` for it in country scope is a silent no-op.
 - `nuclear_program_debug_pause` — console-only, carries `country_nuclear_program_pause_bool` for the test harness. Nothing in the mod applies it.
 - War support (1.14): an enemy with `nuclear_power` costs a non-nuclear country −0.25 per beat — `common/script_values/zz_te_war_support_injections.txt` (see `mod_systems.md` § War Support Feeds)
@@ -1549,23 +1556,23 @@ Completes when `ww_fully_resolved` is set (36 months post-war). Fails if dropped
 Multi-stage competitive space race system across nine journal entries — seven milestones with a bar, the repeatable Solar System Colonization entry, and a passive entry that waits out the interstellar probe's transit. Great/Major Powers with rocketry tech compete to achieve milestones first. Semi-parallel progression allows pursuing multiple objectives once prerequisites are met.
 
 ### Key Mechanics
-- **9 Entries:** Suborbital Flight → Orbital Flight → Moon Landing / Deep-Space Probe (parallel) → Moon Base / Mars Landing (parallel) → Interstellar Probe (→ Awaiting Data, passive) / Solar System Colonization (repeatable)
+- **9 Entries:** Suborbital Flight → Orbital Flight → Moon Landing → Deep-Space Probe / Moon Base / Mars Landing (parallel; all three need the Moon Landing) → Interstellar Probe (→ Awaiting Data, passive) / Solar System Colonization (repeatable)
 - **"The First" Bonus:** Global flags track first achiever per milestone. First nation gets ~2× permanent rewards.
 - **Approach Choice:** Safe vs Ambitious, per entry. Base setback risk is 5–10% a month depending on the milestone (`sr_base_risk_<m>`); Safe halves it and Ambitious leaves it alone, through `country_space_race_risk_mult`. The roll and the panel's "Setback risk" figure read the same `sr_risk_pct_<m>`.
 - **Funding Levels:** 0 to `sr_max_funding_level` (base 3) affecting progress speed and innovation drain.
 - **Failure:** Multiplies progress down (×0.75 ambitious, ×0.85 safe) and starts a cooldown. The cooldown suppresses only the **roll** — progress keeps accruing at full rate while it runs. Does NOT permanently block.
 - **Moon Landing Site:** Shackleton Crater (high risk, science) vs Equatorial Plain (low risk, modest).
-- **Progress Sources:** Base rate + Aerospace Industry levels + Space Elevator + Space Mine + UN partnership + SpaceX company + funding + tech bonuses.
-- **Cross-System:** UN space partnership, SpaceX company, space elevator, space mine, and tourism all provide progress bonuses and/or reduce failure risk.
+- **Progress Sources:** `country_space_race_progress_add` × (1 + `country_space_race_progress_mult`), at least 0.5 a month once an approach is chosen. The adds come from the Space Programme production method, funding, the Space Elevator, the SpaceX / Lockheed Martin / Roscosmos companies, UN space partnership, two techs and choice-event rewards; the multipliers from the Ambitious approach, the UN outer-space regime, covert space espionage, antimatter engines and a power bloc principle. Full list: `mod_systems.md` § Space Race.
+- **Cross-System:** UN space partnership, the space companies and the space elevator add progress; the Nanofabrication Center lowers setback risk; the space mine and tourism only gate events (`.53`, `.51`).
 - **Colony Modifiers (JE-Scoped):** All 68 colony modifiers and `sr_solar_system_trade` are applied to `je:je_space_race_solar_colonization` (not country scope). The colonization JE stays alive indefinitely in passive mode once all 34 colonies are claimed, keeping colony modifiers active. Buttons are hidden when colonization is complete.
 
 ### Milestones & Prerequisites
 | Milestone | Tech Required | Other Prerequisites |
 |-----------|--------------|-------------------|
 | Suborbital Flight | rocketry | GP/MP rank |
-| Orbital Flight | — | Suborbital complete |
+| Orbital Flight | guided_missiles | Suborbital complete |
 | Moon Landing | space_exploration | Orbital complete |
-| Outer Solar System Probe | space_exploration | Orbital complete |
+| Outer Solar System Probe | space_exploration | Orbital + Moon Landing complete (shown once Orbital is done) |
 | Moon Base | reusable_rocketry | Moon Landing complete |
 | Mars Landing | knowledge_economy | Orbital + Moon Landing complete |
 | Interstellar Probe | compact_fusion_reactors | Deep-Space Probe + Mars Landing complete |
@@ -1618,7 +1625,7 @@ Traced scenarios: fresh activation (no approach → drift rate, no risk); inacti
 ### Debug harness
 `event te_debug_space_race.1` (`events/te_debug_space_race_events.txt`, helpers in `common/scripted_effects/te_debug_space_race_effects.txt`) reaches every panel state: 90% / 100% progress, a forced setback with its cooldown, clearing the cooldown, seeding rival programmes, and claiming or releasing "the first". The rival flags are not backed by a journal entry, so the monthly cleanup wipes them — pause first.
 
-### Events (34 total)
+### Events (61 in `space_race_events.txt`, plus 30 probe results and 34 colony events)
 - `.1`-`.9` — Milestone completion events (1 per milestone + notification)
 - `.5` — Moon landing site choice (Shackleton vs Equatorial)
 - `.10` — Ambitious approach failure (3 options: investigate/switch to safe/double down)
@@ -1627,6 +1634,11 @@ Traced scenarios: fresh activation (no approach → drift rate, no risk); inacti
 - `.30`-`.37` — In-progress flavor events (test flights, debris, astronauts, water on Mars, ethical debates, Helium-3, outer planet images, colony ships)
 - `.40`-`.49`, `.54` — Hard sci-fi events (radiation shielding, gravity well economics, communication delay, life support, solar flare, gravitational slingshot, ISRU, micrometeorite, crew psychology, orbital fuel depot, heat shield re-entry)
 - `.50`-`.53`, `.55` — Cross-system events (SpaceX private company, space tourism, ISS/UN cooperation, extraplanetary base integration, space elevator synergy)
+- `.12`-`.19`, `.21`-`.25`, `.70`-`.73`, `.75` — Themed setbacks and incidents (pad fires, lost probes, scandals, supply failures, …); `.74` — An Unexpected Breakthrough; `.26` — When Politics Reaches Orbit
+- `.60` — Interstellar probe data received; its results are `.601`-`.630` in `events/probe_result_events.txt`
+- `.76` — Programme discontinued (a lost or lowered launch complex)
+- `.80`-`.83` — Choice events asked once per milestone (who flies first, probe target, the Moon base's purpose, the Mars strategy)
+- `events/space_race_colony_events.txt` — 34 colony establishment events
 
 ### Related Files
 - Effects: `common/scripted_effects/space_race_effects.txt`

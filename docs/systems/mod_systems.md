@@ -832,11 +832,11 @@ Key gotchas:
 
 ## Space Race (`je_space_race_*`)
 
-Multi-stage competition system simulating a space race between Great Powers. 9 milestones (including a passive waiting JE) with semi-parallel progression, "The First" bonuses, Safe/Ambitious approach choices, and failure mechanics. Solar System Colonization is repeatable with 34 globally-claimed colonies across 5 stages. Extensive cross-system connections to UN, private companies, buildings, and tourism.
+Multi-stage competition system simulating a space race between great and major powers. Nine journal entries: seven milestones with a progress bar, the repeatable Solar System Colonization entry (34 globally-claimed colonies across 5 stages), and a passive entry that waits out the interstellar probe's transit. Semi-parallel progression, "The First" bonuses, Safe/Ambitious approach choices, and failure mechanics. Cross-system connections to the UN, private companies, buildings, and tourism. The per-entry table of techs and prerequisites is in `docs/systems/journal_entry_systems.md` → Space Race.
 
 ### Files
 - **Journal Entries:** `common/journal_entries/je_space_race.txt` — 9 JEs (suborbital → interstellar probe, plus interstellar results passive JE, plus repeatable solar colonization with 5 stages)
-- **Events:** `events/space_race_events.txt` — ~35 events (completion, failure, notification, site choice, in-progress, hard-sci-fi, cross-system); `events/space_race_colony_events.txt` — 34 colony establishment events (5 stages)
+- **Events:** `events/space_race_events.txt` — 61 events (counted 2026-09-26: completion, failure/setback, notification, site and other choice events, in-progress, hard-sci-fi, cross-system, programme loss, interstellar data); `events/probe_result_events.txt` — the 30 interstellar probe results (`space_race_events.601`–`.630`); `events/space_race_colony_events.txt` — 34 colony establishment events (5 stages)
 - **Modifiers:** `common/static_modifiers/space_race_modifiers.txt` — approach, milestone (first/subsequent), failure, economic, plus cross-system (tourism, ISS, extraplanetary integration). Colony modifiers (68) and `sr_solar_system_trade` are applied to **JE scope** (`je:je_space_race_solar_colonization`), not country scope.
 - **Legacy Cleanup:** `common/scripted_effects/legacy_modifier_cleanup.txt` — removes country-scoped colony modifiers from old saves and re-applies them to JE scope (guarded by `has_journal_entry`).
 - **Script Values:** `common/script_values/space_race_values.txt` — progress goals (stage-dependent for colonization), progress rates (with building/company/UN bonuses), failure weights
@@ -850,17 +850,19 @@ Multi-stage competition system simulating a space race between Great Powers. 9 m
 
 ### Milestone Progression (Semi-Parallel)
 ```
-Suborbital Flight (rocketry tech)
-    └→ Orbital Flight
-        ├→ Moon Landing (space_exploration tech)
-        │      └→ Moon Base (reusable_rocketry tech)
-        ├→ Outer Solar System Probe (space_exploration tech) [parallel with Moon]
-        └→ Mars Landing (reusable_rocketry tech) [parallel with Moon Base]
-               ├→ Interstellar Probe (requires Probe + Mars Landing + space_colonization)
-               │      └→ Interstellar Results (passive 132-month wait, fires after probe launch)
-               └→ Solar System Colonization (requires Moon Base + Mars Landing + space_colonization)
-                      [Repeatable: 5 stages × variable colonies = 34 total colonies]
+Suborbital Flight (rocketry; great or major power)
+    └→ Orbital Flight (guided_missiles)
+        └→ Moon Landing (space_exploration)
+               ├→ Outer Solar System Probe (space_exploration) [shown once Orbital is done, but `possible` also needs the Moon Landing]
+               ├→ Moon Base (reusable_rocketry)
+               └→ Mars Landing (knowledge_economy) [parallel with Moon Base]
+                      ├→ Interstellar Probe (compact_fusion_reactors; also needs the Probe)
+                      │      └→ Interstellar Results (passive 132-month wait, fires after probe launch)
+                      └→ Solar System Colonization (directed_energy_weapons; also needs the Moon Base)
+                             [Repeatable: 5 stages, 34 colonies in all]
 ```
+
+Every entry also needs the matching programme bool from the Space Programme building's production method (`building_space_program`, itself unlocked by `guided_missiles`): `pm_earth_orbit` for Suborbital and Orbital, `pm_moon_mission` (space_exploration) for the Moon Landing and the Probe, `pm_mars_mission` (knowledge_economy) for the Moon Base and Mars, `pm_solar_colonization` (directed_energy_weapons) for colonization, plus `pm_deep_space_exploration` (space_colonization) from colonization stage 3, and `pm_interstellar_mission` (compact_fusion_reactors) for the Interstellar Probe. Each PM also carries all the lower tiers' bools. Losing the bool fails the entry (see *Programme loss* below).
 
 ### Key Mechanics
 - **"The First" Bonus:** Global variables (`sr_global_first_*`) track first achiever. First nation gets ~2× rewards (prestige, innovation max, tech speed) permanently. Subsequent nations get smaller permanent modifiers.
@@ -885,14 +887,18 @@ Suborbital Flight (rocketry tech)
   - **Category III: Biological Discovery** (20%, 9 results) — Atmospheric biosignatures, alien vegetation, exotic biochemistry. Grants `sr_probe_biological_data` (major prestige/research/innovation/cultural pull).
   - **Category IV: Intelligence & Tech-signatures** (10%, 6 results) — Orbital debris, technogenic gases, artificial light. Grants `sr_probe_intelligence_data` (exceptional prestige/research/innovation/cultural pull).
   - Discovery selection uses two-stage `random_list`: first picks category by weight, then picks specific result uniformly within category. Each result event (601–630) records itself globally on first discovery (`sr_record_probe_result`: `sr_probe_found_<id>` = the discoverer). A later nation drawing the same result gets opening/closing lines that confirm the first finder's discovery, named, instead of "unprecedented data"; the rewards are the same (none is a first-discovery reward). Result events use triggered_desc blocks for the confirmation variant and the result-specific description.
-- **Solar System Colonization (Repeatable):** Each completion establishes one colony at a random unclaimed location in the current stage. Colonies are tracked via global variables (`sr_colony_*`), making them first-come-first-served across all nations. Stage advances when all locations in a stage are claimed. Goals increase per stage (100/120/140/160/200). JE only sets `sr_completed_solar_colonization` after all 34 colonies across 5 stages are claimed.
+- **Solar System Colonization (Repeatable):** Each completion establishes one colony at a random unclaimed location in the current stage. Colonies are tracked via global variables (`sr_colony_*`), making them first-come-first-served across all nations. Stage advances when all locations in a stage are claimed. The goal per colony rises with the stage (`sr_solar_colonization_goal`: 400 / 450 / 500 / 550 / 650). JE only sets `sr_completed_solar_colonization` after all 34 colonies across 5 stages are claimed.
   - **Stage 1:** Mars (5) + Asteroids (5) = 10 colonies
   - **Stage 2:** Jupiter system (6) + Venus clouds (1) = 7 colonies
   - **Stage 3:** Mercury (1) + Saturn moons (5) = 6 colonies
   - **Stage 4:** Uranus moons (4) + Neptune moons (2) = 6 colonies
   - **Stage 5:** Kuiper Belt/Oort Cloud (5) = 5 colonies
 - **Late-Game Economic Rewards:** Interstellar Probe grants one of 4 category-specific modifiers (see Interstellar Probe above), all colonies complete grants `sr_solar_system_trade`.
-- **Progress Sources:** Base rate + Aerospace Industry levels + Space Elevator + Extraplanetary Base + UN Space Partnership + SpaceX company + funding + tech bonuses.
+- **Milestone goals** (`space_race_values.txt`): Suborbital 50, Orbital 100, Moon Landing 200, Probe 150, Moon Base 300, Mars Landing 450, Interstellar Probe 600; colonization 400–650 per colony (above).
+- **Progress Sources:** each month an entry with an approach selected adds `sr_progress` = `modifier:country_space_race_progress_add` × (1 + `modifier:country_space_race_progress_mult`), at least 0.5; with no approach it adds the flat `sr_progress_drift` (0.5). Everything reaches it through those two modifiers, so the tooltip breakdown lists every source:
+  - `country_space_race_progress_add`: the Space Programme PM (Earth Orbit +0.5, every later tier +1, workforce-scaled), funding (`sr_funding_progress` on each running entry, +0.5 per funding level, stacking across entries, plus +25% space-programme throughput per level), the Space Elevator (+1 per level), the SpaceX, Lockheed Martin and Roscosmos company prosperity modifiers (+0.3 each), UN space partnership (`un_space_partnership_modifier`, +0.1), the `reusable_rocketry` and `space_colonization` techs (+0.2 each), and several choice-event and reward modifiers (probe target +0.3 to +0.5, `sr_mars_resource_extraction` +0.5, …).
+  - `country_space_race_progress_mult`: the Ambitious approach (+50% per entry), the temporary safety review (−10%), the UN outer-space regime (leader −5%, laggard +10%), covert space espionage (+10%), antimatter engines (+5% each, workforce-scaled) and `principle_advanced_research_5` (+10%).
+  - There is no Aerospace Industry or Space Mine term: the space mine only gates event `.53`, and `building_space_program` is a single-level monument.
 - **A revolution's winner continues the programme** (`docs/audits/civil_war_inheritance_audit.md` F5, #464). The winner inherits the loser's variables but none of its modifiers, and every entry it inherits active runs `immediate` again. So:
   - **`immediate` only creates what is missing.** Progress and funding are guarded with `has_variable`, so a milestone at 90 % stays at 90 %. That is safe for the native progress bar because an inherited record keeps the loser's bar: start date, baseline and goal are copied, not evaluated again (the German-revolution saves' `je_global_warming`: baseline 0.1 and goal 4.0 on the winner with the anomaly at 1.18). For a same-record re-activation inside a month (before the monthly cleanup clears the progress), `goal_add_value` subtracts the progress so the goal stays at `sr_<m>_goal`. Solar colonization's bar restarts at every colony, so it keeps progress only while it holds a colony (it cannot deactivate then); a colony-less programme still restarts, and a finished one is not re-opened. `je_space_race_interstellar_results` keeps its transit months the same way.
   - **Choice events are asked once per milestone** (`sr_<m>_choice_made`, checked in `immediate` and in the event's `trigger`). Before, a re-activation or an inherited entry asked again and could leave two answers and two modifiers.
@@ -902,9 +908,9 @@ Suborbital Flight (rocketry tech)
 ### Cross-System Connections
 | System | Connection |
 |--------|-----------|
-| **UN** | `un_space_partnership_modifier` boosts progress (+0.3/+0.4 safe/ambitious) and reduces failure risk (-2). ISS cooperation event (52) fires for UN members. UN resolution topic `un_topic_space` (event un_events.19). |
-| **Private Companies** | `company_spacex` boosts progress (+0.3/+0.4) and reduces failure risk (-2). Event 50 (private sector breakthrough) fires when SpaceX exists. |
-| **Buildings** | `building_aerospace_industry` levels 3/5 scale progress. `building_space_elevator` provides major bonus (+0.4/+0.6) and reduces failure (-2). `building_space_mine` (extraplanetary base) boosts colonization progress (+0.2/+0.3). Events 41, 53, 55 create direct building interactions. |
+| **UN** | `un_space_partnership_modifier` adds +0.1 progress (and prestige, science-ministry impact). The outer-space regime shares progress: `un_regime_space_leader_modifier` −5%, `un_regime_space_laggard_modifier` +10%. ISS cooperation event (52) fires for UN members with a station partner. UN resolution topic `un_topic_space` (event un_events.19). |
+| **Private Companies** | `company_spacex`, `company_lockheed_martin` and `company_roscosmos` each add +0.3 progress through their prosperity modifier. Event 50 (private sector breakthrough) fires when SpaceX exists. |
+| **Buildings** | `building_space_program` carries the programme tier (progress and the programme bools). `building_space_elevator` adds +1 progress per level. `building_space_mine` (extraplanetary base) adds no progress; it gates event 53. Antimatter engines add +5% progress each; the Nanofabrication Center lowers setback risk (−1% per level). Events 41, 53, 55 create direct building interactions. |
 | **Tourism** | Event 51 fires after orbital achievement if tourism industry exists. Grants `sr_space_tourism_boost` (tourism output +5%). Space tourism PM (`pm_space_tourism`) already exists in tourism industry building. |
 | **Society Tech Events** | `society_technology_events.18` (space colonization) and `.19` (colonial governance) fire based on aerospace industry levels and space elevator. These are separate from but thematically connected to space race milestones. |
 
@@ -1411,7 +1417,7 @@ Allows monarchies to shape their heir's education through focus selection and ra
 ### Architecture
 - **Journal Entry:** `je_heir_education` — main controller with monthly pulse, scripted buttons, progress bar
 - **Scripted Effects:** `heir_education_effects.txt` — gain effects (intelligence-modified), resolve effect (5-tier), adult initialization, cleanup, IG reactions, non-heir trait assignment
-- **Scripted Buttons:** `heir_education_buttons.txt` — 14 toggle buttons (enable/disable pairs for 8 focuses)
+- **Scripted Buttons:** `heir_education_buttons.txt` — 16 toggle buttons (enable/disable pairs for 8 focuses)
 - **Progress Bar:** `heir_education_progress_bars.txt` — 0-20 range
 - **Static Modifiers:** `heir_education_modifiers.txt` — innovation cost, grace period, event cooldown
 - **Events:** `heir_education_events.txt` — 3 events (Promising Pupil, Difficult Student, Foreign Correspondence)
