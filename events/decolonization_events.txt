@@ -563,14 +563,19 @@ decolonization_events.4 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		# The system's rule, not je_colonial_empire: the recipient, a country with
-		# no homeland of its own cultures, is a former colony and holds no entry.
+		# The system's rule, not je_colonial_empire: the recipient is a former
+		# colony and holds no entry.
 		has_game_rule = decolonization_enabled
 		NOT = { has_modifier = cultural_reclamation_modifier }
 		# The world's decolonization era, not our own research: a former colony
 		# rarely has the technology itself (owner ruling, 2026-09-26).
 		decol_era_begun = yes
 		is_subject = no
+		# Freed in the last 20 years (decol_mark_former_colony and the vanilla
+		# release hook set it), as the header says: "no homeland of its own
+		# cultures" alone also reached long-established countries (owner ruling,
+		# 2026-09-26).
+		has_variable = recently_decolonized
 		NOT = {
 			any_scope_state = {
 				is_homeland_of_country_cultures = ROOT
