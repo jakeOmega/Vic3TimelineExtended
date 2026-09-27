@@ -16,7 +16,6 @@
 #let guide(
   title: "",
   subtitle: "",
-  version: "",
   game-version: "",
   edition: "",
   date: none,
@@ -46,8 +45,7 @@
     #align(center, text(size: 26pt, style: "italic", fill: gold)[#subtitle])
     #v(0.8em)
     #align(center, text(size: 11pt)[
-      Mod version #version #h(0.5em) · #h(0.5em) Written for Victoria 3 #game-version \
-      Guide edition #edition
+      Written for Victoria 3 #game-version #h(0.5em) · #h(0.5em) Guide edition #edition
     ])
     #v(1fr)
     #align(center, text(size: 9pt, fill: rgb("#a39d90"))[

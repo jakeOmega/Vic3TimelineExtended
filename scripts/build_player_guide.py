@@ -333,7 +333,6 @@ def typst_document(body: str, *, metadata: dict, edition: dt.date, fingerprint: 
     args = {
         "title": _typst_string(TITLE),
         "subtitle": _typst_string(SUBTITLE),
-        "version": _typst_string(str(metadata.get("version", ""))),
         "game-version": _typst_string(str(metadata.get("supported_game_version", ""))),
         "edition": _typst_string(str(edition.day) + edition.strftime(" %B %Y")),
         "date": "datetime(year: %d, month: %d, day: %d)" % (edition.year, edition.month, edition.day),
