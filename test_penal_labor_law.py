@@ -65,6 +65,13 @@ def _read(path):
         return fh.read()
 
 
+def _slice(path, start_marker, end_marker):
+    """The text of `path` from `start_marker` to the next `end_marker`."""
+    text = _read(path)
+    start = text.index(start_marker)
+    return text[start : text.index(end_marker, start + len(start_marker))]
+
+
 def _script_ideology_stances():
     """{(file, ideology key): {law: stance}} for every Criminal Justice block in
     the mod's ideology files, REPLACE:/INJECT: prefixes kept in the key."""
@@ -198,22 +205,34 @@ class HumanRightsTests(unittest.TestCase):
         self.assertIn("has_law = law_type:law_outlawed_dissent", block)
         self.assertIn(f"has_law = law_type:{LAW}", block)
 
-    def test_every_outlawed_dissent_weight_in_un_code_has_a_camps_twin(self):
+    def test_every_outlawed_dissent_weight_in_un_human_rights_code_has_a_camps_twin(self):
         # The human-rights vote lean, refusal and withdrawal weights read
         # Outlawed Dissent; the camps must weigh the same wherever it does.
-        files = [
-            os.path.join(REPO, "common", "script_values", "un_dossier_values.txt"),
-            os.path.join(REPO, "common", "scripted_buttons", "un_buttons.txt"),
-            os.path.join(REPO, "events", "un_events.txt"),
-        ]
-        for path in files:
-            text = _read(path)
-            dissent = len(re.findall(r"has_law = law_type:law_outlawed_dissent\b", text))
-            camps = len(re.findall(rf"has_law = law_type:{LAW}\b", text))
-            with self.subTest(file=os.path.basename(path)):
-                self.assertGreater(dissent, 0)
+        # Each file is cut to its human-rights block, so an Outlawed Dissent
+        # check added elsewhere in these files for another reason doesn't count.
+        blocks = {
+            "un_dossier_values.txt (human-rights lean)": _slice(
+                os.path.join(REPO, "common", "script_values", "un_dossier_values.txt"),
+                "has_tag = un_topic_human_rights } }",
+                "\telse_if = {",
+            ),
+            "un_events.txt (un_events.3 option c)": _slice(
+                os.path.join(REPO, "events", "un_events.txt"),
+                "name = un_events.3.c",
+                "custom_tooltip",
+            ),
+            "un_buttons.txt (withdraw from human rights)": _slice(
+                os.path.join(REPO, "common", "scripted_buttons", "un_buttons.txt"),
+                "un_withdraw_human_rights_button = {",
+                "\n}\n",
+            ),
+        }
+        for where, block in blocks.items():
+            dissent = re.findall(r"has_law = law_type:law_outlawed_dissent \}\s*add = (-?\d+)", block)
+            camps = re.findall(rf"has_law = law_type:{LAW} \}}\s*add = (-?\d+)", block)
+            with self.subTest(block=where):
+                self.assertTrue(dissent, "no Outlawed Dissent weight found")
                 self.assertEqual(camps, dissent)
-
 
 if __name__ == "__main__":
     unittest.main()
