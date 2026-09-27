@@ -69,11 +69,13 @@ gw_is_market_leader = {
 
 # Bound by an Enforce Emissions Reduction treaty article
 # (109_enforce_emissions_reduction.txt sets the variable on its source). Such a
-# country keeps every market-wide policy it holds: its own repeal is barred
-# (gw_cond_not_treaty_bound), its market leader's repeal skips it
+# country keeps every policy it holds: its own repeal is barred (the seven
+# gw_possible_remove_* below, gw_cond_not_treaty_bound, and the matching
+# journal-entry buttons' `visible`), its market leader's repeal skips it
 # (gw_effect_remove_*), and so do the join sync and the monthly reconciliation
-# (gw_sync_market_policy_modifiers). A removal would freeze the treaty. The one
-# definition for those three sites.
+# (gw_sync_market_policy_modifiers). A removal would freeze the treaty. Every
+# one of those sites reads this trigger. (The debug repeal-all in
+# te_debug_gw_effects.txt deliberately does not.)
 gw_bound_by_emissions_treaty = {
 	has_variable = has_emissions_reduction_treaty
 }
@@ -135,7 +137,7 @@ gw_possible_remove_carbon_tax = {
 	}
 	custom_tooltip = {
 		text = gw_cond_not_treaty_bound
-		NOT = { has_variable = has_emissions_reduction_treaty }
+		NOT = { gw_bound_by_emissions_treaty = yes }
 	}
 }
 
@@ -165,7 +167,7 @@ gw_possible_remove_renewable_investment = {
 	}
 	custom_tooltip = {
 		text = gw_cond_not_treaty_bound
-		NOT = { has_variable = has_emissions_reduction_treaty }
+		NOT = { gw_bound_by_emissions_treaty = yes }
 	}
 }
 
@@ -215,7 +217,7 @@ gw_possible_remove_emission_standards = {
 	}
 	custom_tooltip = {
 		text = gw_cond_not_treaty_bound
-		NOT = { has_variable = has_emissions_reduction_treaty }
+		NOT = { gw_bound_by_emissions_treaty = yes }
 	}
 }
 
@@ -238,7 +240,7 @@ gw_possible_remove_reforestation = {
 	}
 	custom_tooltip = {
 		text = gw_cond_not_treaty_bound
-		NOT = { has_variable = has_emissions_reduction_treaty }
+		NOT = { gw_bound_by_emissions_treaty = yes }
 	}
 }
 
@@ -261,7 +263,7 @@ gw_possible_remove_public_transit = {
 	}
 	custom_tooltip = {
 		text = gw_cond_not_treaty_bound
-		NOT = { has_variable = has_emissions_reduction_treaty }
+		NOT = { gw_bound_by_emissions_treaty = yes }
 	}
 }
 
@@ -284,7 +286,7 @@ gw_possible_remove_fossil_fuel_divestment = {
 	}
 	custom_tooltip = {
 		text = gw_cond_not_treaty_bound
-		NOT = { has_variable = has_emissions_reduction_treaty }
+		NOT = { gw_bound_by_emissions_treaty = yes }
 	}
 }
 
@@ -307,7 +309,7 @@ gw_possible_remove_green_building_codes = {
 	}
 	custom_tooltip = {
 		text = gw_cond_not_treaty_bound
-		NOT = { has_variable = has_emissions_reduction_treaty }
+		NOT = { gw_bound_by_emissions_treaty = yes }
 	}
 }
 
