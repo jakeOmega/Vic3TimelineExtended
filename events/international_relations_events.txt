@@ -1129,7 +1129,7 @@ international_relations_events.106 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/misinformation_spreading.dds" }
+	event_image = { texture = "gfx/event_pictures/diplomatic_espionage_scandal.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

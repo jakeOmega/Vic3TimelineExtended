@@ -19,7 +19,7 @@ agricultural_diffusion_events.1 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/green_industry_factory.dds" }
+	event_image = { texture = "gfx/event_pictures/engineering_breakthrough_lab.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -114,7 +114,7 @@ agricultural_diffusion_events.3 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/synthetic_crops.dds" }
+	event_image = { texture = "gfx/event_pictures/genetics_laboratory.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -208,7 +208,7 @@ agricultural_diffusion_events.5 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/synthetic_food_laboratory.dds" }
+	event_image = { texture = "gfx/event_pictures/genetics_laboratory.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 

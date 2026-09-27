@@ -2077,7 +2077,7 @@ nuclear_weapon_events.24 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/nuclear_bunker_life.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_standoff_tension.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

@@ -1376,7 +1376,7 @@ un_events.10 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/program_cancelled_empty.dds" }
+	event_image = { texture = "gfx/event_pictures/un_assembly.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -3135,7 +3135,7 @@ un_events.30 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/program_cancelled_empty.dds" }
+	event_image = { texture = "gfx/event_pictures/un_assembly.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -3295,7 +3295,7 @@ un_events.32 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/program_cancelled_empty.dds" }
+	event_image = { texture = "gfx/event_pictures/un_assembly.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

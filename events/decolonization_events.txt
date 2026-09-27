@@ -3011,7 +3011,7 @@ decolonization_events.202 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+	event_image = { texture = "gfx/event_pictures/international_development_project.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
@@ -3068,7 +3068,7 @@ decolonization_events.203 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+	event_image = { texture = "gfx/event_pictures/post_colonial_tensions.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
@@ -3102,7 +3102,7 @@ decolonization_events.204 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+	event_image = { texture = "gfx/event_pictures/colonial_departure.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
@@ -3164,7 +3164,7 @@ decolonization_events.205 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+	event_image = { texture = "gfx/event_pictures/language_reform_classroom.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
@@ -3224,7 +3224,7 @@ decolonization_events.206 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+	event_image = { texture = "gfx/event_pictures/colonial_departure.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
@@ -3395,7 +3395,7 @@ decolonization_events.51 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+	event_image = { texture = "gfx/event_pictures/war_weariness_homefront.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
@@ -3442,7 +3442,7 @@ decolonization_events.52 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+	event_image = { texture = "gfx/event_pictures/institutional_abuse_exposed.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
@@ -3503,7 +3503,7 @@ decolonization_events.53 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+	event_image = { texture = "gfx/event_pictures/student_protest_campus.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
@@ -3566,7 +3566,7 @@ decolonization_events.54 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/military_parade.dds" }
+	event_image = { texture = "gfx/event_pictures/draft_resistance_protest.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
@@ -3962,7 +3962,7 @@ decolonization_events.300 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/military_parade.dds" }
+	event_image = { texture = "gfx/event_pictures/post_colonial_nation_building.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
@@ -4016,7 +4016,7 @@ decolonization_events.301 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+	event_image = { texture = "gfx/event_pictures/post_colonial_nation_building.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
@@ -4079,7 +4079,7 @@ decolonization_events.400 = {
 	type = country_event
 	placement = scope:decolonization_target_state_1
 
-	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+	event_image = { texture = "gfx/event_pictures/colonial_departure.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -4290,7 +4290,7 @@ decolonization_events.401 = {
 	type = country_event
 	placement = scope:decolonization_target_state
 
-	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+	event_image = { texture = "gfx/event_pictures/colonial_departure.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
