@@ -103,7 +103,7 @@ green_revolution = {
 civil_rights_movement = {
 	# Unlocks Affirmative Action, Ministry of Refugee Affairs laws
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/civil_rights_movement.dds"
 	category = society
 
 	unlocking_technologies = {
@@ -152,7 +152,7 @@ laser_technology = {
 space_exploration = {
 	# Launch Facility and Space Program buildings
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/space_exploration.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -174,7 +174,7 @@ space_exploration = {
 pollution_control = {
 	# Ministry of the Environment law, Pollution Controll decree
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/pollution_control.dds"
 	category = society
 
 	modifier = {
@@ -291,7 +291,7 @@ integrated_circuits = {
 prefabricated_construction = {
 	# Unlocks Advanced Construction PM for Construction Sectors
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/prefabricated_construction.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -418,7 +418,7 @@ recon_satellites = {
 inertial_navigation_systems = {
 	# Modern Scout Tank unit
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/inertial_navigation_systems.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -515,7 +515,7 @@ contraceptive_pill = {
 second_wave_feminism = {
 	# State-Sponsored Family Planning law
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/second_wave_feminism.dds"
 	category = society
 
 	modifier = {
