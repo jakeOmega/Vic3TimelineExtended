@@ -137,7 +137,7 @@ nuclear_taboo.2 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/nuclear_diplomacy_talks.dds" }
+	event_image = { texture = "gfx/event_pictures/un_assembly_hall_vote.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -259,7 +259,7 @@ nuclear_taboo.3 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/nuclear_treaty_signing.dds" }
+	event_image = { texture = "gfx/event_pictures/anti_nuclear_energy_march.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -381,7 +381,7 @@ nuclear_taboo.4 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/nuclear_defense_shield.dds" }
+	event_image = { texture = "gfx/event_pictures/human_rights_declaration.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -775,7 +775,7 @@ nuclear_taboo.8 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/nuclear_bunker_life.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_proliferation_threat.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -867,7 +867,7 @@ nuclear_taboo.20 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/nuclear_treaty_signing.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_proliferation_threat.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

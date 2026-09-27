@@ -9,6 +9,16 @@ Phase 3 (update):   Update event files with new texture references
 Each phase skips already-completed work, making the script safe to re-run.
 If it fails partway through, re-run with --phase to resume from that phase.
 
+An image whose .dds already exists is never regenerated (phase 1) or
+reconverted (phase 2), and phase 1 also skips an image whose PNG is still in
+generated_images/. To redo one, delete both its .dds and its PNG: with only the
+.dds gone, phase 2 converts the old PNG back. Phase 3 only wires
+images whose .dds exists, so a registry entry can name its events before the
+picture is generated (a "pending" image), and those events keep their current
+art until the file lands. Phase 3 also leaves alone events that already show
+the right texture and events with conditional art (several event_image blocks,
+or one with a trigger), which a single texture line would flatten.
+
 Usage:
     python generate_event_images.py                    # All three phases
     python generate_event_images.py --phase generate   # Phase 1 only
@@ -19,8 +29,15 @@ Usage:
     python generate_event_images.py --list              # List all image keys
 
 Note: Phase 1 calls gen_image.py as a subprocess for each image. The FLUX model
-(~34GB) is loaded each time, so generating all ~317 images will take many hours.
-Consider using --only to generate in batches, or running overnight.
+(~34GB) is loaded each time, so each image takes minutes. Use --only to
+generate the pending images in batches; `python event_image_prompts.py
+--validate` lists them.
+
+Review every new picture before wiring it: run `--phase generate` and
+`--phase convert`, look at the results (`contact_sheet.py KEY1 KEY2 ...`
+renders a labelled grid), delete any bad ones (.dds and PNG) and regenerate
+them, then run `--phase update`. FLUX drifts toward real flags, landmarks and
+politicians' faces even when the prompt names none.
 """
 
 from __future__ import annotations
@@ -30,6 +47,8 @@ import re
 import subprocess
 import sys
 from pathlib import Path
+
+from event_image_inventory import pictures_on_disk
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 MOD_ROOT = Path(__file__).resolve().parents[2]
@@ -72,6 +91,10 @@ def phase_generate(images: dict, dry_run: bool = False) -> None:
 
         if out.exists():
             print(f"  [{i}/{total}] SKIP (exists): {name}.png")
+            skipped += 1
+            continue
+        if (GFX_DIR / f"{name}.dds").exists():
+            print(f"  [{i}/{total}] SKIP (dds exists): {name}.dds")
             skipped += 1
             continue
 
@@ -172,68 +195,108 @@ def phase_convert(images: dict, dry_run: bool = False) -> None:
 # Phase 3: Update event files
 # =========================================================================
 
-def _build_event_to_texture(images: dict) -> dict[str, str]:
-    """Build mapping: event_id -> texture path string."""
-    mapping = {}
+_EVENT_DEF_RE = re.compile(r'^(\w+\.\d+)\s*=\s*\{')
+_IMAGE_OPEN_RE = re.compile(r'event_image\s*=\s*\{')
+_TEXTURE_RE = re.compile(r'\btexture\s*=\s*"([^"]+)"')
+_TRIGGER_RE = re.compile(r'\btrigger\s*=')
+
+
+def _build_event_to_texture(images: dict,
+                            on_disk: set[str]) -> tuple[dict[str, str], list[str]]:
+    """Map event_id -> texture path for the images whose .dds exists.
+
+    Returns (mapping, pending): pending names the images that list events but
+    have no .dds yet. Their events are left alone rather than pointed at a
+    missing file, which the engine would render as a magenta blob, silently.
+    """
+    mapping: dict[str, str] = {}
+    pending: list[str] = []
     for name, img in images.items():
+        if name not in on_disk:
+            if img["events"]:
+                pending.append(name)
+            continue
         texture = f"gfx/event_pictures/{name}.dds"
         for event_id in img["events"]:
             mapping[event_id] = texture
-    return mapping
+    return mapping, pending
+
+
+def _event_image_counts(lines: list[str]) -> dict[str, int]:
+    """Count the event_image blocks inside each top-level event."""
+    counts: dict[str, int] = {}
+    current = None
+    for line in lines:
+        stripped = line.strip()
+        m = _EVENT_DEF_RE.match(stripped)
+        if m and current is None:
+            current = m.group(1)
+        if current and _IMAGE_OPEN_RE.match(stripped):
+            counts[current] = counts.get(current, 0) + 1
+        if current and stripped == '}' and not line[0:1].isspace():
+            current = None
+    return counts
 
 
 def _update_event_file(filepath: Path, event_to_texture: dict,
-                       dry_run: bool = False) -> int:
-    """Update event_image references in a single event file.
+                       dry_run: bool = False) -> tuple[int, list[str]]:
+    """Point the mapped events in one file at their textures.
 
-    Returns the number of events updated.
+    Returns (events changed, events skipped because their art is conditional).
+    An event that already shows its texture is left byte-for-byte as it is.
     """
     raw = filepath.read_bytes()
     has_bom = raw[:3] == b'\xef\xbb\xbf'
     content = raw.decode("utf-8-sig")
     lines = content.split('\n')
+    counts = _event_image_counts(lines)
 
-    result = []
+    result: list[str] = []
     current_event = None
-    skip_until_balanced = False
-    image_brace_surplus = 0
+    block: list[str] | None = None  # lines of the event_image block being read
+    surplus = 0
     changes = 0
+    skipped: list[str] = []
+
+    def flush() -> int:
+        text = '\n'.join(block)
+        target = event_to_texture[current_event]
+        if counts.get(current_event, 0) > 1 or _TRIGGER_RE.search(text):
+            if current_event not in skipped:
+                skipped.append(current_event)
+            result.extend(block)
+            return 0
+        found = _TEXTURE_RE.search(text)
+        if found and found.group(1) == target:
+            result.extend(block)
+            return 0
+        indent = block[0][:len(block[0]) - len(block[0].lstrip())]
+        result.append(f'{indent}event_image = {{ texture = "{target}" }}')
+        return 1
 
     for line in lines:
         stripped = line.strip()
 
-        # Track event definition start (top-level: "namespace.id = {")
-        m = re.match(r'^(\w+\.\d+)\s*=\s*\{', stripped)
+        if block is not None:
+            block.append(line)
+            surplus += stripped.count('{') - stripped.count('}')
+            if surplus <= 0:
+                changes += flush()
+                block = None
+            continue
+
+        m = _EVENT_DEF_RE.match(stripped)
         if m and current_event is None:
             current_event = m.group(1)
 
-        # If we're skipping lines from a multi-line event_image block
-        if skip_until_balanced:
-            image_brace_surplus += stripped.count('{') - stripped.count('}')
-            if image_brace_surplus <= 0:
-                skip_until_balanced = False
-            # Don't append this line (it's part of the old event_image block)
+        if current_event in event_to_texture and _IMAGE_OPEN_RE.match(stripped):
+            block = [line]
+            surplus = stripped.count('{') - stripped.count('}')
+            if surplus <= 0:
+                changes += flush()
+                block = None
             continue
 
-        # Check for event_image line inside a mapped event
-        if (current_event
-                and current_event in event_to_texture
-                and re.match(r'\s*event_image\s*=\s*\{', stripped)):
-            indent = line[:len(line) - len(line.lstrip())]
-            new_texture = event_to_texture[current_event]
-            replacement = f'{indent}event_image = {{ texture = "{new_texture}" }}'
-            result.append(replacement)
-            changes += 1
-
-            # Check if this is a multi-line block (more { than })
-            opens = stripped.count('{')
-            closes = stripped.count('}')
-            if opens > closes:
-                skip_until_balanced = True
-                image_brace_surplus = opens - closes
-            continue
-
-        # Track when we leave an event definition
         # Simple heuristic: a line starting with "}" at column 0 ends the event
         if current_event and stripped == '}' and not line[0:1].isspace():
             current_event = None
@@ -241,13 +304,12 @@ def _update_event_file(filepath: Path, event_to_texture: dict,
         result.append(line)
 
     if changes > 0 and not dry_run:
-        new_content = '\n'.join(result)
-        encoded = new_content.encode('utf-8')
+        encoded = '\n'.join(result).encode('utf-8')
         if has_bom:
             encoded = b'\xef\xbb\xbf' + encoded
         filepath.write_bytes(encoded)
 
-    return changes
+    return changes, skipped
 
 
 def phase_update(images: dict, dry_run: bool = False) -> None:
@@ -256,11 +318,17 @@ def phase_update(images: dict, dry_run: bool = False) -> None:
     print("PHASE 3: Update event files")
     print(f"{'=' * 60}")
 
-    event_to_texture = _build_event_to_texture(images)
+    event_to_texture, pending = _build_event_to_texture(
+        images, pictures_on_disk(str(GFX_DIR)))
+    if pending:
+        print(f"  PENDING (no .dds yet, events left as they are): "
+              f"{', '.join(sorted(pending))}")
     total_changes = 0
 
-    for txt in sorted(EVENTS_DIR.glob("*.txt")):
-        changes = _update_event_file(txt, event_to_texture, dry_run=dry_run)
+    for txt in sorted(EVENTS_DIR.rglob("*.txt")):
+        changes, skipped = _update_event_file(txt, event_to_texture, dry_run=dry_run)
+        for eid in skipped:
+            print(f"  SKIP (conditional art): {eid} in {txt.name}")
         if changes > 0:
             verb = "WOULD UPDATE" if dry_run else "UPDATED"
             print(f"  {verb}: {txt.name} ({changes} events)")
@@ -315,6 +383,14 @@ def main() -> None:
             print(f"  {name}  ({n_events} events)")
         print(f"\n  Total: {len(all_images)} images")
         return
+
+    # A sparse worktree leaves gfx/ unchecked-out: every .dds would look
+    # missing, so phase 1 would regenerate every picture and phase 3 would
+    # report all of them pending.
+    if not GFX_DIR.is_dir():
+        print(f"Error: {GFX_DIR} is not checked out (a sparse worktree?). "
+              "Run the pipeline from a full checkout.")
+        sys.exit(1)
 
     # Filter to --only keys if specified
     if args.only:

@@ -249,7 +249,7 @@ nuclear_incident.3 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/budget_hearing_congress.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_power_debate.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1319,7 +1319,7 @@ nuclear_incident.40 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/nuclear_bunker_life.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_false_alarm_panic.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

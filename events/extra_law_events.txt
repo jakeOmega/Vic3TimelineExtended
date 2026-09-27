@@ -4128,7 +4128,7 @@ extra_law_events.38 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+	event_image = { texture = "gfx/event_pictures/bank_run_crowd.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -4624,7 +4624,7 @@ extra_law_events.43 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/genetics_laboratory.dds" }
+	event_image = { texture = "gfx/event_pictures/religious_political_power.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -5411,7 +5411,7 @@ extra_law_events.52 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/automation_robots_factory.dds" }
+	event_image = { texture = "gfx/event_pictures/religious_political_power.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -5936,7 +5936,7 @@ extra_law_events.58 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/labor_strike_picket.dds" }
+	event_image = { texture = "gfx/event_pictures/corporate_lobbying_legislature.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -6022,7 +6022,7 @@ extra_law_events.59 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/labor_strike_picket.dds" }
+	event_image = { texture = "gfx/event_pictures/algorithmic_governance_office.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -7065,7 +7065,7 @@ extra_law_events.76 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/automation_robots_factory.dds" }
+	event_image = { texture = "gfx/event_pictures/underground_augmentation_clinic.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -7460,7 +7460,7 @@ extra_law_events.83 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/labor_strike_picket.dds" }
+	event_image = { texture = "gfx/event_pictures/algorithmic_governance_office.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -7573,7 +7573,7 @@ extra_law_events.85 = {
 	desc = extra_law_events.85.d
 	flavor = extra_law_events.85.f
 
-	event_image = { texture = "gfx/event_pictures/labor_strike_picket.dds" }
+	event_image = { texture = "gfx/event_pictures/industrial_monopoly.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
