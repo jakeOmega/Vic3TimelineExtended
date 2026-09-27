@@ -205,6 +205,29 @@ class FindParameterizedKeysTests(unittest.TestCase):
         self.assertNotIn("my_tt_alpha_commented", found)
         self.assertNotIn("unrelated", found)
 
+    def test_parameter_cycle_terminates(self):
+        # cyc_a passes $X$ to cyc_b and cyc_b passes it straight back. The
+        # `seen` guard in values_for is all that stops this recursing forever,
+        # which on the server would hang every POST /reload.
+        with tempfile.TemporaryDirectory() as td:
+            _write(td, "common/scripted_effects/c.txt", (
+                "cyc_a = {\n"
+                "\tcustom_tooltip = { text = cyc_tt_$X$ }\n"
+                "\tcyc_b = { X = $X$ }\n"
+                "}\n"
+                "cyc_b = {\n"
+                "\tcustom_tooltip = { text = cyc_b_tt_$X$ }\n"
+                "\tcyc_a = { X = $X$ }\n"
+                "}\n"
+            ))
+            _write(td, "events/e.txt", "e.1 = { immediate = { cyc_a = { X = one } } }\n")
+            found = find_parameterized_keys(
+                td, {"cyc_tt_one", "cyc_tt_two", "cyc_b_tt_one", "cyc_b_tt_two"}
+            )
+        # cyc_b only hears `one` through cyc_a, across the cut cycle: a result
+        # computed with the cycle cut short must not be remembered as final.
+        self.assertEqual(found, {"cyc_tt_one", "cyc_b_tt_one"})
+
     def test_organize_all_keeps_parameterized_keys_out_of_unused(self):
         loc = (
             "l_english:\n"

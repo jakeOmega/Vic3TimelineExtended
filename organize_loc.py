@@ -418,13 +418,19 @@ def find_parameterized_keys(project_directory, all_keys):
             candidates = [c + v + literal for c in candidates for v in pool]
         return set(candidates)
 
+    cut_log = []  # keys whose recursion a cycle cut short, in order
+
     def values_for(def_name, param, seen=()):
         """Every value the callers of `def_name` pass for `param`."""
         key = (def_name, param)
         if key in memo:
             return memo[key]
         if key in seen:
+            # A cycle (A passes $X$ to B, B passes it back): stop here. The
+            # loop can only feed back values the outer call already collects.
+            cut_log.append(key)
             return set()
+        cuts_before = len(cut_log)
         out = set()
         for args, caller in calls.get(def_name, ()):
             value = args.get(param)
@@ -437,7 +443,11 @@ def find_parameterized_keys(project_directory, all_keys):
                     out |= expand(value, caller, seen + (key,))
             else:
                 out.add(value)
-        memo[key] = out
+        # A result is complete unless a cycle was cut at some OTHER key below
+        # this one: then an inner definition is missing values that only its
+        # outer caller supplies, so it is not remembered.
+        if all(k == key for k in cut_log[cuts_before:]):
+            memo[key] = out
         return out
 
     found = set()

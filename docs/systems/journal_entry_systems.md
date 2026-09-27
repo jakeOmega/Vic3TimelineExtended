@@ -1574,7 +1574,7 @@ Multi-stage competitive space race system across nine journal entries — seven 
 | Moon Landing | space_exploration | Orbital complete |
 | Outer Solar System Probe | space_exploration | Orbital + Moon Landing complete (shown once Orbital is done) |
 | Moon Base | reusable_rocketry | Moon Landing complete |
-| Mars Landing | knowledge_economy | Orbital + Moon Landing complete |
+| Mars Landing | knowledge_economy | Orbital + Moon Landing complete (shown once Orbital is done) |
 | Interstellar Probe | compact_fusion_reactors | Deep-Space Probe + Mars Landing complete |
 | Interstellar Probe: Awaiting Data | — | Interstellar Probe launched (passive, 132 months) |
 | Solar System Colonization | directed_energy_weapons | Moon Base + Mars Landing complete |
