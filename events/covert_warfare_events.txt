@@ -343,9 +343,10 @@ covert_warfare.2 = {
 	}
 
 	immediate = {
-		# Cooldown decays via the JE monthly pulse: iw_defender_event_cooldown_age
-		# is incremented each month, and both variables are cleared after 24 months.
-		# Without this, the event can only fire once per defender per game.
+		# The cooldown decays in every country's monthly pulse
+		# (covert_warfare_monthly_country, covert_warfare_on_actions.txt):
+		# iw_defender_event_cooldown_age counts the months, and both variables
+		# are cleared after 24. The defender need not hold je_covert_warfare.
 		set_variable = { name = iw_defender_event_cooldown value = yes }
 		set_variable = { name = iw_defender_event_cooldown_age value = 0 }
 		# Who ran it, for option b and its text. The record holds the country
@@ -359,9 +360,13 @@ covert_warfare.2 = {
 		name = covert_warfare.2.a
 		default_option = yes
 
-		# Harden defenses: temporary IC boost
+		# Harden defenses: a decaying boost to separatism and coup resistance,
+		# three times the unit the command centre scales with intelligence
+		# capacity. It does not raise intelligence capacity itself. Its own
+		# modifier: intelligence_capacity_defense at country scope is stripped
+		# every month by legacy_je_modifier_cleanup_effect.
 		add_modifier = {
-			name = intelligence_capacity_defense
+			name = covert_counterintelligence_alert
 			days = normal_modifier_time
 			is_decaying = yes
 			multiplier = 3
