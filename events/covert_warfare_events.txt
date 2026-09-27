@@ -362,7 +362,7 @@ covert_warfare.2 = {
 
 		# Harden defenses: a decaying boost to separatism and coup resistance,
 		# three times the unit the command centre scales with intelligence
-		# capacity. It does not raise intelligence capacity itself. Its own
+		# capacity, and +6 intelligence capacity (2 per unit). Its own
 		# modifier: intelligence_capacity_defense at country scope is stripped
 		# every month by legacy_je_modifier_cleanup_effect.
 		add_modifier = {
