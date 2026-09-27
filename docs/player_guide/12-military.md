@@ -118,22 +118,18 @@ The Military Base is a government building that fortifies a state. It unlocks
 with Trench Works and grows to five levels, one each from Trench Works, Defense
 in Depth, Concrete Fortifications, Guided Missiles and Precision Guided
 Munitions. Each level employs 200 soldiers and 50 officers, buys small arms and
-ammunition, and adds +5 infrastructure. Three production method groups set what
-it does.
+ammunition, and adds +5 infrastructure.
 
-| Group | Production method | Unlocked by | Effect per level |
-|---|---|---|---|
-| Fortification Type | Earthwork Fortifications | Trench Works | +1 fortification level |
-| Fortification Type | Concrete Bunkers | Concrete Fortifications | +2 fortification level, uses steel |
-| Fortification Type | Hardened Positions | Guided Missiles | +3 fortification level, uses steel and explosives |
-| Base Purpose | Garrison Duty | Trench Works | −15% turmoil effects, monthly war support |
-| Base Purpose | Territorial Defense | Trench Works | +1 fortification level, less monthly war support |
-| Base Purpose | Logistics Hub | Trench Works | +10 infrastructure, −3% supply consumption for your whole army |
-| Missile Defense | Missile Defense Battery | Missile Defense Systems | +2% Nuclear Strike Defense Chance in this state |
-| Missile Defense | Directed Energy Point Defense | Directed Energy Defenses | +3% Nuclear Strike Defense Chance in this state |
-
-The figures are for a fully staffed level. The AI values bases far more at war
-or when committed to a diplomatic play.
+Three production method groups set what it does. The Fortification Type and Base
+Purpose methods decide the state's fortification level, 1 to 4 for each level of
+the base. The purpose can instead
+calm turmoil and add war support (Garrison Duty), or add infrastructure and cut
+your whole army's supply use (Logistics Hub). A Missile Defense method, from
+Missile Defense Systems, raises the state's chance of stopping a nuclear strike.
+[Military base production method
+list](19-appendix-reference-lists.md#military-base-production-method-list) gives
+each method's unlock and its effect per fully staffed level. The AI values bases
+far more at war or when committed to a diplomatic play.
 
 <!-- screenshot: a Military Base building panel at level 5 with Hardened Positions, Territorial Defense and Missile Defense Battery selected -->
 

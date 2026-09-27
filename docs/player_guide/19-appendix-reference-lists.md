@@ -176,3 +176,20 @@ laws](05-politics.md#rights-and-society-laws).
 | Mountain Combat Training | Military Training principle, tier III+ | +25% offense and defense in hills, mountains and hazardous terrain |
 | Amphibious Warfare Training | Engineering and Logistics principle, tier III+ | +25% offense and defense in water terrain |
 | Flight Simulators | Military Training principle, tier V | +10% offense and defense for Jet-Powered Aircraft and later |
+
+## Military base production method list
+
+The Military Base's production methods, with the technology that unlocks each
+and its effect for a fully staffed level. See [Military
+bases](12-military.md#military-bases).
+
+| Group | Production method | Unlocked by | Effect per level |
+|---|---|---|---|
+| Fortification Type | Earthwork Fortifications | Trench Works | +1 fortification level |
+| Fortification Type | Concrete Bunkers | Concrete Fortifications | +2 fortification level, uses steel |
+| Fortification Type | Hardened Positions | Guided Missiles | +3 fortification level, uses steel and explosives |
+| Base Purpose | Garrison Duty | Trench Works | −15% turmoil effects, monthly war support |
+| Base Purpose | Territorial Defense | Trench Works | +1 fortification level, less monthly war support |
+| Base Purpose | Logistics Hub | Trench Works | +10 infrastructure, −3% supply consumption for your whole army |
+| Missile Defense | Missile Defense Battery | Missile Defense Systems | +2% Nuclear Strike Defense Chance in this state |
+| Missile Defense | Directed Energy Point Defense | Directed Energy Defenses | +3% Nuclear Strike Defense Chance in this state |
