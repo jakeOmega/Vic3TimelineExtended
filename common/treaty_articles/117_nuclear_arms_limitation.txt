@@ -28,8 +28,9 @@ nuclear_arms_limitation = {
 	quantity_min_value = {
 		value = 1
 	}
+	# At most a quarter above the larger party's arsenal (nuclear_taboo_values.txt).
 	quantity_max_value = {
-		value = nd_taboo_arms_quantity_max
+		value = nd_taboo_arms_quantity_cap_value
 	}
 
 	visible = {
@@ -92,18 +93,11 @@ nuclear_arms_limitation = {
 		# Three quarters of the larger arsenal: it binds the larger party
 		# first, and leaves parity within reach.
 		quantity_input_value = {
-			value = nd_stockpile
-			if = {
-				limit = {
-					exists = scope:other_country
-					scope:other_country.nd_stockpile > nd_stockpile
-				}
-				value = scope:other_country.nd_stockpile
-			}
+			value = nd_taboo_arms_larger_arsenal_value
 			multiply = nd_taboo_arms_ai_share
 			ceiling = yes
 			min = 1
-			max = nd_taboo_arms_quantity_max
+			max = nd_taboo_arms_quantity_cap_value
 		}
 
 		inherent_accept_score = {

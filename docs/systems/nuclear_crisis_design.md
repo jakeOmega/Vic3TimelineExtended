@@ -416,15 +416,15 @@ One world score, `global_var:nd_taboo` (0-100), for how unthinkable nuclear weap
 - **Resume the Nuclear Programme stays open to a renouncer without the standing to run one, with a warning** (final-review.md I2). `possible` is still just the game rule; `when_taken` now warns when `nd_taboo_has_programme_standing = no` that Resume only ends the renunciation. The AI's `nd_taboo_ai_would_resume` requires the standing.
 - **Retaliation is exempt from the strike AI's taboo factor** (final-review.md M4; spec §8.1 "Retaliation unaffected"): `nuke_diplo_action` and `tactical_nuke_diplo_action` no longer multiply an answering strike's `evaluation_chance` by `nd_taboo_ai_use_factor`.
 - **Champion the norm costs relations with the armed, not the unarmed** (final-review.md M6). Spec §6.3 has it gain relations with other unarmed countries; the code costs −5 with each armed great power, a lecture they don't appreciate. **Seek a protector's guarantee** picks a friendly armed power at random, not the strongest — the spec's "the strongest friendly armed power".
+- **An arms-control ceiling can sit at most a quarter above the larger party's arsenal** (at least 5; `nd_taboo_arms_quantity_cap_value`), not up to a flat 500. A ceiling above every arsenal binds nobody yet would earn both parties full restraint credit (owner call, 2026-09-27). The article's quantity limit reads the other party from `scope:other_country` or `scope:source_country`/`scope:target_country`, whichever the engine binds.
 
 #### Known roughnesses
 
 - `nuclear_power`'s leverage *resistance* is not offset, only its generation (a burden on influence, not on standing firm);
 - the civil-defence, renunciation-prestige and norm-champion modifiers are modifiers only, so a revolution's winner loses them (the renunciation itself is rebuilt from `nd_renounced_locked`) — final-review.md M10 flagged the norm-champion case, missing from this line until now;
 - the taboo is global, with no regional or ideological layer;
-- a treaty ceiling far above any arsenal (the quantity runs to `nd_taboo_arms_quantity_max`) still earns its parties full restraint credit — spec §7.1 counts every bound country; owner call pending;
-- annexing the treaty partner makes leaving free (the "partner no longer exists" exemption covers it) — spec-mandated; owner call pending;
-- the condemn topic's worldwide cooldown (`un_res_cooldown_months_default`, 60 months) means a nuclear use inside it gets no verdict, and an appeal the AI turns into a sanctions vote books none either — spec §7.3 names the condemn topic only; owner call pending;
+- annexing the treaty partner makes leaving free (the "partner no longer exists" exemption covers it) — spec-mandated; the owner accepted it (2026-09-27);
+- the condemn topic's worldwide cooldown (`un_res_cooldown_months_default`, 60 months) means a nuclear use inside it gets no verdict, and an appeal the AI turns into a sanctions vote books none either — spec §7.3 names the condemn topic only; the owner kept it (2026-09-27): a missed verdict moves the taboo a few points at most, against the use's own −15 shock and −10 ledger;
 - a retaliation is judged by the Assembly at the same ±3 as a first use (the use note halves retaliation, the verdict does not);
 - holding the programme reuses the pause flag (final-review.md M5): a country held at its ceiling or dismantling cannot be the source of a `nuclear_program_pause` article, cannot receive `nuclear_program_aid`, and ends a running `covert_nuclear_sabotage_action` against it (an AI trimmed to a ceiling reads as a programme that "has really stopped"). All three are decisions, not bugs;
 - old saves don't mark countries disarmed before the taboo existed as renounced (final-review.md M9, parked): a country under a `nuclear_disarmament` article or `te_nuclear_disarmament_ended_program` at seed time gets no `nd_renounced`, so it is absent from the restraint part and books no breakout if it later rebuilds;
@@ -477,6 +477,7 @@ Re-run with python3 scripts/analysis/nuclear_taboo_sim.py after any retune; ever
 29. An armed country that lets a `.5` band event time out gets a valid armed option.
 30. In a high-taboo world, an AI that was struck retaliates as readily as before.
 31. An AI that cut its arsenal in half through a band event keeps that ceiling through its six-monthly reviews in peacetime.
+32. The arms-control article's ceiling input tops out a quarter above the larger arsenal (at least 5). If it tops out at 5 whatever the arsenals, the engine binds neither pair of party scopes in `quantity_max_value` and the cap reads only one side.
 
 ## 1. Intent and owner requirements
 

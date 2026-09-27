@@ -138,7 +138,8 @@ nd_taboo_modernise_reliability = 10
 nd_taboo_modernise_survivability = 5
 nd_taboo_arms_control_point = 2
 nd_taboo_ledger_walkout = -1
-nd_taboo_arms_quantity_max = 500
+nd_taboo_arms_quantity_headroom = 1.25	# a ceiling may sit at most this far above the larger arsenal
+nd_taboo_arms_quantity_floor = 5	# ... and may always reach this, for two small or budding arsenals
 nd_taboo_arms_ai_share = 0.75
 nd_taboo_arms_ai_base = -25
 nd_taboo_arms_ai_burden_weight = 50
@@ -837,6 +838,45 @@ nd_taboo_ai_accept_taboo_value = {
 	multiply = nd_taboo_ai_accept_taboo_weight
 	min = 0
 	round = yes
+}
+
+# The larger of the two parties' arsenals, for nuclear_arms_limitation's
+# quantity limit and the AI's pick. Scope: a party. The other party comes from
+# scope:other_country where the engine binds it (the AI's quantity pick), or
+# from scope:source_country / scope:target_country (vanilla
+# 13_goods_transfer's quantity_max_value reads those); with neither, our own.
+nd_taboo_arms_larger_arsenal_value = {
+	value = nd_stockpile
+	if = {
+		limit = { exists = scope:other_country }
+		add = {
+			value = scope:other_country.nd_stockpile
+			subtract = nd_stockpile
+			min = 0
+		}
+	}
+	else_if = {
+		limit = {
+			exists = scope:source_country
+			exists = scope:target_country
+		}
+		value = scope:source_country.nd_stockpile
+		add = {
+			value = scope:target_country.nd_stockpile
+			subtract = scope:source_country.nd_stockpile
+			min = 0
+		}
+	}
+}
+
+# The highest ceiling the article can set: a quarter above the larger arsenal,
+# and at least the floor. A ceiling far above every arsenal would bind nobody
+# yet earn its parties full restraint credit (owner call, 2026-09-27).
+nd_taboo_arms_quantity_cap_value = {
+	value = nd_taboo_arms_larger_arsenal_value
+	multiply = nd_taboo_arms_quantity_headroom
+	ceiling = yes
+	min = nd_taboo_arms_quantity_floor
 }
 
 # nuclear_arms_limitation's AI (spec §7.1). Scope: the evaluating country.

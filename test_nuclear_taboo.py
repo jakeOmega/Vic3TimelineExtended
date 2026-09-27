@@ -885,6 +885,22 @@ class TestArmsControl(unittest.TestCase):
         self.assertNotIn("country_treaty_leverage_generation_add", body)
         self.assertIn("quantity_input_value", body)
 
+    def test_the_ceiling_cannot_float_above_the_arsenals(self):
+        # Owner call, 2026-09-27: a ceiling far above any arsenal binds nobody
+        # yet would earn full restraint credit, so the input tops out a quarter
+        # above the larger party's arsenal (at least the floor).
+        body = block(strip_comments(read(ARMS_ARTICLE)), "nuclear_arms_limitation")
+        self.assertIn("value = nd_taboo_arms_quantity_cap_value", block(body, "quantity_max_value"))
+        self.assertIn("max = nd_taboo_arms_quantity_cap_value", block(body, "quantity_input_value"))
+        cap = block(self.values, "nd_taboo_arms_quantity_cap_value")
+        self.assertIn("value = nd_taboo_arms_larger_arsenal_value", cap)
+        self.assertIn("multiply = nd_taboo_arms_quantity_headroom", cap)
+        self.assertIn("min = nd_taboo_arms_quantity_floor", cap)
+        larger = block(self.values, "nd_taboo_arms_larger_arsenal_value")
+        self.assertIn("scope:other_country.nd_stockpile", larger)
+        self.assertIn("scope:target_country.nd_stockpile", larger)
+        self.assertNotIn("nd_taboo_arms_quantity_max", self.values + strip_comments(read(ARMS_ARTICLE)))
+
     def test_only_a_treaty_can_make_an_exit_free(self):
         body = block(self.taboo, "nd_taboo_refresh_treaty_ceiling")
         self.assertIn("has_type = nuclear_arms_limitation", body)

@@ -330,7 +330,7 @@ The AI reads it for use, coercion, doctrine, arsenal size and proliferation.
 
 Countries can hold the arsenal to a ceiling or dismantle it (posture ops 60–64), and a renounced country can resume (a decision; re-arming books a breakout). Crossing 30/50/70/90 fires `nuclear_taboo.1`–`.8` to every country, with country-local options.
 
-Phase 2: the mutual article `nuclear_arms_limitation` (a `quantity` ceiling for both parties; the lowest treaty ceiling, `nd_treaty_ceiling`, joins the unilateral one, and leaving costs a rank-weighted ledger entry only when a country's lowest treaty ceiling rises and its partner still exists), a UN part (the NPT and CPPNM in force × UN authority, up to +12, capped at 15), and the Assembly's verdict on a condemned nuclear use (`un_vote.2`: passed +3 on the ledger and +2 at once; failed or vetoed −3) — only on a condemnation tabled on the nuclear grievance.
+Phase 2: the mutual article `nuclear_arms_limitation` (a `quantity` ceiling for both parties, at most a quarter above the larger arsenal; the lowest treaty ceiling, `nd_treaty_ceiling`, joins the unilateral one, and leaving costs a rank-weighted ledger entry only when a country's lowest treaty ceiling rises and its partner still exists), a UN part (the NPT and CPPNM in force × UN authority, up to +12, capped at 15), and the Assembly's verdict on a condemned nuclear use (`un_vote.2`: passed +3 on the ledger and +2 at once; failed or vetoed −3) — only on a condemnation tabled on the nuclear grievance.
 
 The per-country half (possession, exits, history) runs from the entry's monthly pulse as `nd_taboo_country_monthly`, with ROOT = the country. The nuclear-powers leaderboard now updates once a month from the world's step.
 
