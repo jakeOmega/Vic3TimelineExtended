@@ -574,6 +574,12 @@ decolonization_events.4 = {
 				is_homeland_of_country_cultures = ROOT
 			}
 		}
+		# Option A drops every primary culture and adopts the cultures present
+		# in the capital that have it as a homeland; with none, it would leave
+		# the country with no primary culture at all.
+		capital = {
+			any_scope_culture = { has_homeland = prev }
+		}
 	}
 
 	immediate = {

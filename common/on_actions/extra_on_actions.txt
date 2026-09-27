@@ -1719,6 +1719,11 @@ decolonization_events_on_action = {
 					trigger = {
 						is_subject = no
 						NOT = { any_scope_state = { is_homeland_of_country_cultures = ROOT } }
+						# The event's own guard: its option A needs a homeland
+						# culture in the capital to adopt.
+						capital = {
+							any_scope_culture = { has_homeland = prev }
+						}
 					}
 					trigger_event = { id = decolonization_events.4 }
 				}
