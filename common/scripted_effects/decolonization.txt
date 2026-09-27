@@ -16,6 +16,7 @@
 # At the end, also applies a 12-month "liberation contagion" -1.0/mo bar
 # drain to every other country running the colonial-empire JE. Produces
 # the historical wave pattern: India 1947 → Burma, Ceylon, Indonesia.
+# Last, it sends the new country the Nationalization Question (.15).
 apply_decolonization_path = {
 	# The parent is our former overlord, as for a country released by the
 	# vanilla release actions; without this the former-colony events never
@@ -142,6 +143,15 @@ apply_decolonization_path = {
 			months = 12
 		}
 	}
+
+	# The Nationalization Question (decolonization_events.15), for every
+	# country formed here (owner ruling, 2026-09-26). Its usual sender,
+	# on_become_independent, is for a subject made independent, which a country
+	# created by create_dynamic_country never was. A week's delay lets the new
+	# country's GDP and foreign-ownership figures, which .15's trigger reads,
+	# settle first. If the engine also sends on_become_independent, the
+	# nationalization_cooldown_var .15 sets in immediate stops a second firing.
+	trigger_event = { id = decolonization_events.15 days = 7 }
 }
 
 # Mark the scoped country as a former colony of $OVERLORD$, with the two
@@ -153,13 +163,16 @@ apply_decolonization_path = {
 #                         (also by .7 and .19)
 #   recently_decolonized  ~20 years; read by the post-independence events (.7,
 #                         .16, .17, .18, .21) and their pool entries
-# Only .60 / .61 (and so .5 / .6) are reachable through these variables alone.
-# .7, .15, .16, .17, .18 and .21 also require je_colonial_empire on the former
-# colony itself, which a freed colony almost never holds (its possible needs an
-# overseas colonial state or a colonial subject), and .19 needs .15's
-# nationalization modifier. That gate predates this helper and blocks
-# vanilla-released countries too; recently_decolonized is still set so the two
-# release paths match.
+# The post-independence events (.4, .7, .15, .16, .17, .18, .21) gate on the
+# decolonization game rule, not on je_colonial_empire: a freed colony never
+# holds that entry (its possible needs an overseas colonial state or a colonial
+# subject). #44 gated every event in the file on the entry, which kept these
+# unreachable until 2026-09. They need only the world's decolonization era
+# (decol_era_begun), not the former colony's own research (owner ruling,
+# 2026-09-26). .15 fires from on_become_independent and from
+# apply_decolonization_path, and reads neither variable; .19, on the former
+# overlord, needs .15's nationalization modifier on a country whose
+# former_overlord is that overlord.
 # A country the mod frees itself never passes through those release actions
 # (create_dynamic_country makes a new country; make_independent frees an
 # existing subject), so every decolonization path that frees a colony calls this:
@@ -670,12 +683,12 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 # colonial_collapse_subject_unrest_modifier (applied separately, intentionally
 # permanent) -- this helper does not touch that modifier.
 #
+# The three programme-month counters are NOT cleared here: see
+# colonial_empire_clear_path_months below.
+#
 # Scope: country (the metropole).
 colonial_empire_je_cleanup_effect = {
-	# Path-tracking and total-duration variables
-	remove_variable = colonial_invest_months
-	remove_variable = colonial_garrison_months
-	remove_variable = colonial_assimilate_months
+	# Sustained-time and total-duration counters
 	remove_variable = colonial_solidified_months
 	remove_variable = colonial_je_total_months
 	remove_variable = colonial_at_100_months
@@ -712,6 +725,11 @@ colonial_empire_je_cleanup_effect = {
 	remove_modifier = colonial_development_investment_expense_modifier
 	remove_modifier = colonial_military_garrison_modifier
 	remove_modifier = colonial_cultural_assimilation_modifier
+	# And their records (decol_sync_programmes), or a revolution's winner, or a
+	# later run of the entry, would be handed the programmes back.
+	remove_variable = colonial_development_investment_modifier_held
+	remove_variable = colonial_military_garrison_modifier_held
+	remove_variable = colonial_cultural_assimilation_modifier_held
 
 	# Civil-rights movement radicalism modifiers reapplied each pulse while
 	# the JE was active. Remove from any civil-rights movement.
@@ -733,6 +751,157 @@ colonial_empire_je_cleanup_effect = {
 	}
 }
 
+# Clear the three programme-month counters the monthly pulse keeps, which pick
+# the resolution event and, through apply_decolonization_path, the legacy of
+# every country form_decolonized_country creates. The collapse events .201 and
+# .204 form up to three countries in their option, which runs after on_fail
+# (and colonial_empire_je_cleanup_effect) has finished, so those two clear the
+# counters themselves, after forming. on_complete and on_fail's .206 branch,
+# which form no country, call this directly. (Same arrangement as
+# decol_chosen_releases, which .206 clears.)
+# Scope: country (the metropole).
+colonial_empire_clear_path_months = {
+	remove_variable = colonial_invest_months
+	remove_variable = colonial_garrison_months
+	remove_variable = colonial_assimilate_months
+}
+
+# ============================================================================
+# COLONIAL EMPIRE — WHAT A REVOLUTION'S WINNER KEEPS
+#
+# A civil war's winner inherits the loser's variables but none of its
+# modifiers (docs/guides/scripting_best_practices.md, "What a Civil War's
+# Winner Inherits"), and the mod's rule is that the winner continues the
+# nation (#460-#465; owner ruling for this system, PR #508). So every country
+# modifier this system gives without a duration has a variable record, and
+# decol_repair_after_civil_war puts back each modifier whose record the winner
+# holds and whose modifier it lacks. It never removes anything, so it is a
+# no-op for a loyalist winner, which keeps its own modifiers.
+#
+# Which modifiers: every add_modifier on the country with no duration or
+# days = -1 in this system.
+# - The ending rewards, permanent: colonial_empire_solidified_modifier (.200,
+#   .202, .203, .205) and the three path modifiers (.202, .203, .205, and the
+#   Imperial Federation capstones .300 / .301). Recorded as <modifier>_held by
+#   decol_grant_permanent_modifier, which grants them.
+# - The Imperial Federation Act's imperial_federation_modifier and the Mandate
+#   System's mandate_system_modifier, recorded by the decisions' own
+#   imperial_federation_taken / mandate_system_taken.
+# - The three running programmes, which stand until their remove button or the
+#   entry's end: recorded as <modifier>_held by the programme effects, cleared
+#   by the remove effects and colonial_empire_je_cleanup_effect, and restored
+#   only while the entry runs. The Invest programme's expense modifier is not
+#   recorded: the entry's monthly pulse re-adds it whenever the programme is on.
+# Not rebuilt: timed modifiers (the remaining time is recorded nowhere) and the
+# entry's own band modifiers, which its monthly pulse re-applies.
+# ============================================================================
+
+# Grant a permanent ending reward with its record. Country scope.
+decol_grant_permanent_modifier = {
+	add_modifier = {
+		name = $MODIFIER$
+		days = -1
+	}
+	set_variable = { name = $MODIFIER$_held value = yes }
+}
+
+# One permanent modifier, both ways: a modifier with no record was granted
+# before the record existed (record it: the backfill, which only older saves
+# need, since every grant now sets its record); a record with no modifier is a
+# revolution's winner (put it back). Country scope.
+decol_backfill_permanent_record = {
+	if = {
+		limit = {
+			has_modifier = $MODIFIER$
+			NOT = { has_variable = $RECORD$ }
+		}
+		set_variable = { name = $RECORD$ value = yes }
+	}
+}
+
+decol_restore_permanent_modifier = {
+	if = {
+		limit = {
+			has_variable = $RECORD$
+			NOT = { has_modifier = $MODIFIER$ }
+		}
+		add_modifier = {
+			name = $MODIFIER$
+			days = -1
+		}
+	}
+}
+
+decol_sync_permanent_modifier = {
+	decol_backfill_permanent_record = { MODIFIER = $MODIFIER$ RECORD = $RECORD$ }
+	decol_restore_permanent_modifier = { MODIFIER = $MODIFIER$ RECORD = $RECORD$ }
+}
+
+decol_sync_permanent_modifiers = {
+	# colonial_empire_solidified_modifier is also the entry's top band modifier,
+	# applied to je:je_colonial_empire each month at bar >= 90. A country-scope
+	# has_modifier should not see an entry's modifier, but that is unobserved;
+	# if it did, the backfill would record a reward the empire never earned, and
+	# a later sync would grant it. So its record is backfilled only while no
+	# entry runs: the reward comes only at completion, after which
+	# colonial_empire_completed keeps the entry shut for good.
+	if = {
+		limit = { NOT = { has_journal_entry = je_colonial_empire } }
+		decol_backfill_permanent_record = { MODIFIER = colonial_empire_solidified_modifier RECORD = colonial_empire_solidified_modifier_held }
+	}
+	decol_restore_permanent_modifier = { MODIFIER = colonial_empire_solidified_modifier RECORD = colonial_empire_solidified_modifier_held }
+	decol_sync_permanent_modifier = { MODIFIER = commonwealth_path_modifier RECORD = commonwealth_path_modifier_held }
+	decol_sync_permanent_modifier = { MODIFIER = iron_fist_path_modifier RECORD = iron_fist_path_modifier_held }
+	decol_sync_permanent_modifier = { MODIFIER = quiet_assimilation_path_modifier RECORD = quiet_assimilation_path_modifier_held }
+	decol_sync_permanent_modifier = { MODIFIER = imperial_federation_modifier RECORD = imperial_federation_taken }
+	decol_sync_permanent_modifier = { MODIFIER = mandate_system_modifier RECORD = mandate_system_taken }
+}
+
+# One running programme, both ways, as decol_sync_permanent_modifier but with no
+# duration (a programme stands until removed). Only while the entry runs: the
+# programme effects and the entry's end keep the record in step with the
+# modifier. Country scope.
+decol_sync_programme = {
+	if = {
+		limit = {
+			has_modifier = $MODIFIER$
+			NOT = { has_variable = $MODIFIER$_held }
+		}
+		set_variable = { name = $MODIFIER$_held value = yes }
+	}
+	else_if = {
+		limit = {
+			has_variable = $MODIFIER$_held
+			NOT = { has_modifier = $MODIFIER$ }
+		}
+		add_modifier = { name = $MODIFIER$ }
+	}
+}
+
+decol_sync_programmes = {
+	if = {
+		limit = { has_journal_entry = je_colonial_empire }
+		decol_sync_programme = { MODIFIER = colonial_development_investment_modifier }
+		decol_sync_programme = { MODIFIER = colonial_military_garrison_modifier }
+		decol_sync_programme = { MODIFIER = colonial_cultural_assimilation_modifier }
+	}
+}
+
+# The colonial empire's part of the civil-war repair. ROOT = THIS = the winner,
+# called from te_civil_war_on_won (te_civil_war_on_actions.txt) after the
+# loser's variables have merged in. Stateless, like sr_repair_after_civil_war:
+# it reads no side information and only adds what a record says is missing.
+# Whether on_civil_war_won runs before or after the inherited entry exists is
+# unknown, and the programmes need the entry, so the entry's monthly pulse
+# syncs them too. The permanent modifiers' records are country variables,
+# merged before on_civil_war_won, so the repair restores them at once; the
+# yearly country pulse (decol_permanent_modifier_sync_on_action) is there to
+# backfill the records on saves from before they existed.
+decol_repair_after_civil_war = {
+	decol_sync_permanent_modifiers = yes
+	decol_sync_programmes = yes
+}
+
 # Forge an immediately-binding "neocolonial arrangement" treaty between a
 # former metropole and a newly-independent ex-colony. The metropole gets
 # foreign investment rights and a trade privilege in the ex-colony's
@@ -741,9 +910,18 @@ colonial_empire_je_cleanup_effect = {
 # decolonization_events.3 Option C; future Suez-style or Cold-War
 # client-state outcomes can reuse the same shape).
 #
+# Direction: in both vanilla articles the TARGET is the beneficiary and the
+# SOURCE grants. foreign_investment_rights reads "Allows [TARGET] to build in
+# [SOURCE]", can_ratify wants the target's interest in the source's capital
+# region, and maintenance_paid_by = target_country (07_foreign_investment_
+# rights.txt); trade_privilege reads "[TARGET] receives trade privileges from
+# [SOURCE]" (25_trade_privilege.txt). So the ex-colony is the source and the
+# metropole the target. (Until 2026-09 they were the other way round, which
+# gave the ex-colony the rights in the metropole's market.)
+#
 # Parameters:
-#   FIRST  — the metropole (rights holder; source of both articles)
-#   SECOND — the dependent ex-colony (rights granter; target of both articles)
+#   FIRST  — the metropole (rights holder; target of both articles)
+#   SECOND — the dependent ex-colony (rights granter; source of both articles)
 #   YEARS  — binding period in years (e.g. 25)
 impose_neocolonial_investment_trade_treaty = {
 	create_treaty = {
@@ -755,13 +933,13 @@ impose_neocolonial_investment_trade_treaty = {
 		articles_to_create = {
 			{
 				article = foreign_investment_rights
-				source_country = $FIRST$
-				target_country = $SECOND$
+				source_country = $SECOND$
+				target_country = $FIRST$
 			}
 			{
 				article = trade_privilege
-				source_country = $FIRST$
-				target_country = $SECOND$
+				source_country = $SECOND$
+				target_country = $FIRST$
 			}
 		}
 	}
@@ -791,6 +969,8 @@ colonial_empire_effect_invest = {
 		text = "CE_INVEST_IN_DEVELOPMENT_DESC"
 		add_modifier = { name = colonial_development_investment_modifier }
 	}
+	# The record a revolution's winner inherits (decol_sync_programmes)
+	set_variable = { name = colonial_development_investment_modifier_held value = yes }
 	# Seed the GDP-scaled expense modifier so the budget line shows up
 	# immediately on activation; the JE monthly pulse refreshes it from
 	# here on, keeping the multiplier in sync with current GDP.
@@ -816,6 +996,7 @@ colonial_empire_effect_remove_invest = {
 		text = "CE_REMOVE_INVEST_IN_DEVELOPMENT_DESC"
 		remove_modifier = colonial_development_investment_modifier
 	}
+	remove_variable = colonial_development_investment_modifier_held
 	# Drop the budget-line expense too; the JE pulse stops refreshing
 	# it once the policy modifier is gone, but the active copy needs
 	# explicit cleanup or it would linger out a full duration.
@@ -830,6 +1011,8 @@ colonial_empire_effect_garrison = {
 		text = "CE_MILITARY_GARRISON_DESC"
 		add_modifier = { name = colonial_military_garrison_modifier }
 	}
+	# The record a revolution's winner inherits (decol_sync_programmes)
+	set_variable = { name = colonial_military_garrison_modifier_held value = yes }
 	# Infamy compounds with repeated cycles — a sustained Iron-Fist run
 	# accumulates infamy that itself draws GP condemners (existing -0.6/mo
 	# bar drain per condemner, escalating at tier 4 and 6).
@@ -844,6 +1027,7 @@ colonial_empire_effect_remove_garrison = {
 		text = "CE_REMOVE_MILITARY_GARRISON_DESC"
 		remove_modifier = colonial_military_garrison_modifier
 	}
+	remove_variable = colonial_military_garrison_modifier_held
 
 	# Refresh the widget's snapshot variables now rather than next month.
 	colonial_empire_refresh_display = yes
@@ -854,6 +1038,8 @@ colonial_empire_effect_assimilation = {
 		text = "CE_CULTURAL_ASSIMILATION_DESC"
 		add_modifier = { name = colonial_cultural_assimilation_modifier }
 	}
+	# The record a revolution's winner inherits (decol_sync_programmes)
+	set_variable = { name = colonial_cultural_assimilation_modifier_held value = yes }
 	# Program startup cost — parallel to Development Investment, so the
 	# two activation costs read as the same flavor of "fund the program."
 	add_treasury = colonial_assimilate_startup_cost
@@ -867,6 +1053,7 @@ colonial_empire_effect_remove_assimilation = {
 		text = "CE_REMOVE_CULTURAL_ASSIMILATION_DESC"
 		remove_modifier = colonial_cultural_assimilation_modifier
 	}
+	remove_variable = colonial_cultural_assimilation_modifier_held
 
 	# Refresh the widget's snapshot variables now rather than next month.
 	colonial_empire_refresh_display = yes

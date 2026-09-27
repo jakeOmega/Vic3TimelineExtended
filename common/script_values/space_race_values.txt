@@ -236,6 +236,11 @@ sr_funding_solar_colonization_level = {
 
 # Per-JE cost values for JE-scoped funding modifiers
 # Uses owner = { } wrapper for universal scope compatibility (country scope = no-op, JE scope = owner country)
+# The approach terms (safe 1, ambitious 2) count only for a country that
+# passes sr_ai_should_participate: an AI outside the top three makes no
+# progress (sr_monthly_progress_update_effect), so it pays nothing for the
+# approach it chose (owner ruling, PR #507). space_race_on_action recalculates
+# when that changes; players always pass.
 # Per-JE innovation cost multipliers (scaling with tech era)
 # Suborbital=1x, Orbital=1.5x, Moon=2x, Probe=2x, Moon Base=5x, Mars=6x, Solar=8x, Interstellar=12x
 
@@ -243,8 +248,8 @@ sr_suborbital_cost = {
 	value = 0
 	owner = {
 		if = { limit = { has_variable = sr_funding_suborbital } add = var:sr_funding_suborbital }
-		if = { limit = { has_variable = sr_safe_suborbital } add = 1 }
-		if = { limit = { has_variable = sr_ambitious_suborbital } add = 2 }
+		if = { limit = { has_variable = sr_safe_suborbital sr_ai_should_participate = yes } add = 1 }
+		if = { limit = { has_variable = sr_ambitious_suborbital sr_ai_should_participate = yes } add = 2 }
 	}
 	# Era 6 baseline - no multiplier
 }
@@ -252,8 +257,8 @@ sr_orbital_cost = {
 	value = 0
 	owner = {
 		if = { limit = { has_variable = sr_funding_orbital } add = var:sr_funding_orbital }
-		if = { limit = { has_variable = sr_safe_orbital } add = 1 }
-		if = { limit = { has_variable = sr_ambitious_orbital } add = 2 }
+		if = { limit = { has_variable = sr_safe_orbital sr_ai_should_participate = yes } add = 1 }
+		if = { limit = { has_variable = sr_ambitious_orbital sr_ai_should_participate = yes } add = 2 }
 	}
 	multiply = 1.5  # Era 7
 }
@@ -261,8 +266,8 @@ sr_moon_landing_cost = {
 	value = 0
 	owner = {
 		if = { limit = { has_variable = sr_funding_moon_landing } add = var:sr_funding_moon_landing }
-		if = { limit = { has_variable = sr_safe_moon_landing } add = 1 }
-		if = { limit = { has_variable = sr_ambitious_moon_landing } add = 2 }
+		if = { limit = { has_variable = sr_safe_moon_landing sr_ai_should_participate = yes } add = 1 }
+		if = { limit = { has_variable = sr_ambitious_moon_landing sr_ai_should_participate = yes } add = 2 }
 	}
 	multiply = 2  # Era 7
 }
@@ -270,8 +275,8 @@ sr_probe_cost = {
 	value = 0
 	owner = {
 		if = { limit = { has_variable = sr_funding_probe } add = var:sr_funding_probe }
-		if = { limit = { has_variable = sr_safe_probe } add = 1 }
-		if = { limit = { has_variable = sr_ambitious_probe } add = 2 }
+		if = { limit = { has_variable = sr_safe_probe sr_ai_should_participate = yes } add = 1 }
+		if = { limit = { has_variable = sr_ambitious_probe sr_ai_should_participate = yes } add = 2 }
 	}
 	multiply = 2  # Era 7
 }
@@ -279,8 +284,8 @@ sr_moon_base_cost = {
 	value = 0
 	owner = {
 		if = { limit = { has_variable = sr_funding_moon_base } add = var:sr_funding_moon_base }
-		if = { limit = { has_variable = sr_safe_moon_base } add = 1 }
-		if = { limit = { has_variable = sr_ambitious_moon_base } add = 2 }
+		if = { limit = { has_variable = sr_safe_moon_base sr_ai_should_participate = yes } add = 1 }
+		if = { limit = { has_variable = sr_ambitious_moon_base sr_ai_should_participate = yes } add = 2 }
 	}
 	multiply = 5  # Era 10
 }
@@ -288,8 +293,8 @@ sr_mars_landing_cost = {
 	value = 0
 	owner = {
 		if = { limit = { has_variable = sr_funding_mars_landing } add = var:sr_funding_mars_landing }
-		if = { limit = { has_variable = sr_safe_mars_landing } add = 1 }
-		if = { limit = { has_variable = sr_ambitious_mars_landing } add = 2 }
+		if = { limit = { has_variable = sr_safe_mars_landing sr_ai_should_participate = yes } add = 1 }
+		if = { limit = { has_variable = sr_ambitious_mars_landing sr_ai_should_participate = yes } add = 2 }
 	}
 	multiply = 6  # Era 10
 }
@@ -297,8 +302,8 @@ sr_interstellar_probe_cost = {
 	value = 0
 	owner = {
 		if = { limit = { has_variable = sr_funding_interstellar_probe } add = var:sr_funding_interstellar_probe }
-		if = { limit = { has_variable = sr_safe_interstellar_probe } add = 1 }
-		if = { limit = { has_variable = sr_ambitious_interstellar_probe } add = 2 }
+		if = { limit = { has_variable = sr_safe_interstellar_probe sr_ai_should_participate = yes } add = 1 }
+		if = { limit = { has_variable = sr_ambitious_interstellar_probe sr_ai_should_participate = yes } add = 2 }
 	}
 	multiply = 12  # Era 12
 }
@@ -306,8 +311,8 @@ sr_solar_colonization_cost = {
 	value = 0
 	owner = {
 		if = { limit = { has_variable = sr_funding_solar_colonization } add = var:sr_funding_solar_colonization }
-		if = { limit = { has_variable = sr_safe_solar_colonization } add = 1 }
-		if = { limit = { has_variable = sr_ambitious_solar_colonization } add = 2 }
+		if = { limit = { has_variable = sr_safe_solar_colonization sr_ai_should_participate = yes } add = 1 }
+		if = { limit = { has_variable = sr_ambitious_solar_colonization sr_ai_should_participate = yes } add = 2 }
 	}
 	multiply = 8  # Era 11
 }
@@ -556,62 +561,111 @@ sr_pace_rate_solar_colonization = {
 }
 
 # The setback risk the panel shows. Identical to sr_risk_pct_<m> — the value the
-# roll actually uses — except that it reads zero while the post-setback cooldown
-# is running, because during the cooldown the pulse skips the roll entirely.
+# roll actually uses — except that it reads zero whenever the monthly pulse
+# skips the roll: while no approach is chosen (the milestone only drifts, see
+# sr_monthly_progress_update_effect) and while the post-setback cooldown runs.
 # Never used for a roll; sr_risk_pct_<m> is.
 sr_risk_shown_suborbital = {
 	value = 0
 	if = {
-		limit = { NOT = { sr_has_failure_cooldown = yes } }
+		limit = {
+			OR = {
+				has_variable = sr_safe_suborbital
+				has_variable = sr_ambitious_suborbital
+			}
+			NOT = { sr_has_failure_cooldown = yes }
+		}
 		add = sr_risk_pct_suborbital
 	}
 }
 sr_risk_shown_orbital = {
 	value = 0
 	if = {
-		limit = { NOT = { sr_has_failure_cooldown = yes } }
+		limit = {
+			OR = {
+				has_variable = sr_safe_orbital
+				has_variable = sr_ambitious_orbital
+			}
+			NOT = { sr_has_failure_cooldown = yes }
+		}
 		add = sr_risk_pct_orbital
 	}
 }
 sr_risk_shown_moon_landing = {
 	value = 0
 	if = {
-		limit = { NOT = { sr_has_failure_cooldown = yes } }
+		limit = {
+			OR = {
+				has_variable = sr_safe_moon_landing
+				has_variable = sr_ambitious_moon_landing
+			}
+			NOT = { sr_has_failure_cooldown = yes }
+		}
 		add = sr_risk_pct_moon_landing
 	}
 }
 sr_risk_shown_probe = {
 	value = 0
 	if = {
-		limit = { NOT = { sr_has_failure_cooldown = yes } }
+		limit = {
+			OR = {
+				has_variable = sr_safe_probe
+				has_variable = sr_ambitious_probe
+			}
+			NOT = { sr_has_failure_cooldown = yes }
+		}
 		add = sr_risk_pct_probe
 	}
 }
 sr_risk_shown_moon_base = {
 	value = 0
 	if = {
-		limit = { NOT = { sr_has_failure_cooldown = yes } }
+		limit = {
+			OR = {
+				has_variable = sr_safe_moon_base
+				has_variable = sr_ambitious_moon_base
+			}
+			NOT = { sr_has_failure_cooldown = yes }
+		}
 		add = sr_risk_pct_moon_base
 	}
 }
 sr_risk_shown_mars_landing = {
 	value = 0
 	if = {
-		limit = { NOT = { sr_has_failure_cooldown = yes } }
+		limit = {
+			OR = {
+				has_variable = sr_safe_mars_landing
+				has_variable = sr_ambitious_mars_landing
+			}
+			NOT = { sr_has_failure_cooldown = yes }
+		}
 		add = sr_risk_pct_mars_landing
 	}
 }
 sr_risk_shown_interstellar_probe = {
 	value = 0
 	if = {
-		limit = { NOT = { sr_has_failure_cooldown = yes } }
+		limit = {
+			OR = {
+				has_variable = sr_safe_interstellar_probe
+				has_variable = sr_ambitious_interstellar_probe
+			}
+			NOT = { sr_has_failure_cooldown = yes }
+		}
 		add = sr_risk_pct_interstellar_probe
 	}
 }
 sr_risk_shown_solar_colonization = {
 	value = 0
 	if = {
-		limit = { NOT = { sr_has_failure_cooldown = yes } }
+		limit = {
+			OR = {
+				has_variable = sr_safe_solar_colonization
+				has_variable = sr_ambitious_solar_colonization
+			}
+			NOT = { sr_has_failure_cooldown = yes }
+		}
 		add = sr_risk_pct_solar_colonization
 	}
 }

@@ -1,3 +1,6 @@
 # The committed vanilla parse (vanilla_parsed.py build): collapse it in PR
 # diffs, and keep LF everywhere so a rebuild on any machine is byte-identical.
 vanilla_parsed/** linguist-generated=true eol=lf
+
+# The player guide is a generated binary artifact, committed with its chapters.
+docs/player_guide/*.pdf binary linguist-generated=true

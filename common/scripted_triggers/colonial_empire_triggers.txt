@@ -302,6 +302,29 @@ is_overseas_from_capital = {
 	}
 }
 
+# The decolonization era has begun: some country in the world has researched
+# the decolonization technology. The era gate for colonial collapse, for .15
+# (independence nationalization) and for the events sent to former colonies,
+# which need not have the technology themselves (owner ruling, 2026-09-26).
+# Stateless on purpose; before the era it scans every country, so callers put
+# it after their cheap tests.
+# Scope: any
+decol_era_begun = {
+	any_country = {
+		has_technology_researched = decolonization
+	}
+}
+
+# Colonial collapse may take this country, by either branch: it is in no power
+# bloc and bound by no treaty in force (an alliance, a guarantee, an
+# arrangement with a player). Annexation and decentralization alike would have
+# to unwind those (owner ruling, 2026-09-26). colonial_collapse_effects.txt.
+# Scope: country
+colonial_collapse_unattached = {
+	is_in_power_bloc = no
+	NOT = { any_scope_treaty = { always = yes } }
+}
+
 # A state that structurally qualifies as an overseas colony.
 # Does NOT include acceptance/integration checks - those are context-dependent.
 # Two qualifying signals (either suffices, given non-primary population
@@ -318,11 +341,17 @@ is_overseas_colonial_state = {
 		# Meaningful population - filters tiny outposts (Falklands, Wallis & Futuna, etc.)
 		state_population >= 100000
 		OR = {
-			# Indigenous-population signal: non-primary culture with low acceptance.
+			# Indigenous-population signal: a non-primary culture that is more than
+			# a tenth of the state and has low acceptance. Acceptance runs 0-100;
+			# acceptance_status_4 is vanilla's 60 (the old `value < 0.6` read it as
+			# 0-1 and so matched almost no one). The share is a 0-1 fraction
+			# (culture_percent_state, as in vanilla 06_language_policy.txt); 4f222c8b
+			# had it, and 9b61d999 dropped it.
 			any_scope_culture = {
 				NOT = { is_primary_culture_of = owner }
 				prev = {
-					state_average_culture_pop_acceptance = { culture = prev value < 0.6 }
+					state_average_culture_pop_acceptance = { culture = prev value < acceptance_status_4 }
+					culture_percent_state = { target = prev value > 0.1 }
 				}
 			}
 			# Economic-disparity signal: state SoL falls below 0.8 x metropole
@@ -517,10 +546,13 @@ is_unintegrated_culturally_distinct_state = {
 		text = IS_UNINTEGRATED_CULTURALLY_DISTINCT_STATE_TT
 		NOT = { is_homeland_of_country_cultures = owner }
 		state_population >= 100000
+		# A low-acceptance culture above a tenth of the state, as in
+		# is_overseas_colonial_state (acceptance 0-100, share 0-1).
 		any_scope_culture = {
 			NOT = { is_primary_culture_of = owner }
 			prev = {
-				state_average_culture_pop_acceptance = { culture = prev value < 0.6 }
+				state_average_culture_pop_acceptance = { culture = prev value < acceptance_status_4 }
+				culture_percent_state = { target = prev value > 0.1 }
 			}
 		}
 	}

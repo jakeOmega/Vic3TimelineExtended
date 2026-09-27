@@ -5,7 +5,10 @@
 # to the same alert, so the total is clamped at zero, and a programme whose
 # progress variable is gone (dismantled, disarmed) is left alone rather than
 # re-created negative.
-# Scope: the proliferating country.
+# Also the development setbacks in nuclear_weapon_events.19 (lab accident)
+# and .20 (civilian applications), which take progress off the developing
+# country's own programme.
+# Scope: the country whose programme loses progress.
 # $AMOUNT$ — progress points to remove (a positive number).
 nw_prolif_progress_setback = {
 	if = {

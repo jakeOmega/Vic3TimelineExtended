@@ -35,7 +35,7 @@ irredentism.1 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "europenorthamerica_native_american" }
+	event_image = { video = "unspecific_politicians_arguing" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -258,7 +258,7 @@ irredentism.2 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "europenorthamerica_rich_and_poor" }
+	event_image = { texture = "gfx/event_pictures/diplomatic_crisis_ultimatum.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

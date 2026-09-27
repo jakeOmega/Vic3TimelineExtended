@@ -127,6 +127,26 @@ gov_direct_democracy = {
 	}
 }
 
+gov_collective_algorithmic_commons = {
+	transfer_of_power = parliamentary_elective
+	new_leader_on_reform_government = yes
+
+	male_ruler = "RULER_TITLE_STEWARD"
+	female_ruler = "RULER_TITLE_STEWARD"
+
+	possible = {
+		has_law = law_type:law_direct_democracy
+		collective_governance_is_algorithmic = yes
+	}
+
+	on_government_type_change = {
+		change_to_parliamentary_elective = yes
+	}
+	on_post_government_type_change = {
+		post_change_to_parliamentary_elective = yes
+	}
+}
+
 gov_collective_governance = {
 	transfer_of_power = parliamentary_elective
 	new_leader_on_reform_government = yes
@@ -207,6 +227,8 @@ gov_corporate_state_autocracy = {
 	}
 }
 
+# With Collective Governance, gov_collective_algorithmic_commons (earlier in
+# this file) matches first.
 gov_algorithmic_directorate = {
 	transfer_of_power = parliamentary_elective
 	new_leader_on_reform_government = yes

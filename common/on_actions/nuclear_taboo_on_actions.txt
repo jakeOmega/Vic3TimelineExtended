@@ -1,0 +1,26 @@
+﻿# ============================================================================
+# THE NUCLEAR TABOO — the world's monthly step
+# ============================================================================
+# Global scope (no ROOT): the step runs once for the world, never once per
+# country, and never from the UN's pulse (un_global_authority_on_action runs
+# only once the UN is founded; the nuclear system must work with the UN
+# disabled). Nothing here applies a modifier with `multiplier = root.var:…`;
+# the per-country half runs from je_nuclear_program's monthly pulse
+# (nd_taboo_country_monthly, nuclear_taboo_effects.txt).
+# The engine unions same-name on_action declarations across files.
+# ============================================================================
+
+on_monthly_pulse = {
+	on_actions = {
+		nd_taboo_monthly_on_action
+	}
+}
+
+nd_taboo_monthly_on_action = {
+	effect = {
+		if = {
+			limit = { has_game_rule = nuclear_weapons_enabled }
+			nd_taboo_monthly_update = yes
+		}
+	}
+}

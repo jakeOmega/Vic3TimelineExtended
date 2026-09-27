@@ -34,9 +34,11 @@ te_construction_market_building_events.2 = {
 }
 
 # Fires a day after on_production_method_changed in games whose
-# free_market_construction_rule setting waives retooling
-# (te_on_production_method_changed_retooling): removes pm_retooling in case
-# the engine applied it after the hook ran.
+# free_market_construction_rule setting waives retooling, or for a railway
+# whose train method just made the Transport principle swap (the two-day
+# te_rail_retool_waive marker; te_on_production_method_changed_retooling):
+# removes pm_retooling in case the engine applied it after the hook ran. For
+# the railway waiver this is the only fallback after a hook that fired.
 te_construction_market_building_events.3 = {
 	type = building_event
 	hidden = yes

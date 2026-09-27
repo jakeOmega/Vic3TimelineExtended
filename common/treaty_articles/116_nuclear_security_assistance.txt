@@ -90,6 +90,11 @@ nuclear_security_assistance = {
 		}
 	}
 
+	# These ongoing benefits are implemented by the nuclear system, not modifiers.
+	on_entry_into_force = {
+		custom_tooltip_no_bullet = nuclear_security_assistance_effects_desc
+	}
+
 	ai = {
 		treaty_categories = { other }
 		article_ai_usage = { offer request }

@@ -907,7 +907,16 @@ nuclear_crisis.20 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/nuclear_treaty_signing.dds" }
+	# The same test as the struck desc below: a mushroom cloud only once a
+	# weapon has been used, the war room while it is still a threat.
+	event_image = {
+		trigger = {
+			has_variable = nd_guarantee_context
+			var:nd_guarantee_context = 2
+		}
+		texture = "gfx/event_pictures/tactical_nuclear_strike.dds"
+	}
+	event_image = { texture = "gfx/event_pictures/nuclear_standoff_tension.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1021,7 +1030,7 @@ nuclear_crisis.21 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/nuclear_treaty_signing.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_standoff_tension.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1134,7 +1143,7 @@ nuclear_crisis.23 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/nuclear_treaty_signing.dds" }
+	event_image = { texture = "gfx/event_pictures/diplomatic_crisis_ultimatum.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1171,7 +1180,7 @@ nuclear_crisis.24 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/nuclear_treaty_signing.dds" }
+	event_image = { texture = "gfx/event_pictures/tactical_nuclear_strike.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1287,7 +1296,7 @@ nuclear_crisis.100 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/nuclear_bunker_life.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_defense_shield.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

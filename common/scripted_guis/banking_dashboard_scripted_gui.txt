@@ -169,6 +169,11 @@ banking_dash_any_policy_active = {
 			banking_tool_deposit_active = yes
 			banking_tool_directed_active = yes
 			banking_tool_export_credit_active = yes
+			banking_tool_restrict_inflows_active = yes
+			banking_tool_sterilize_inflows_active = yes
+			banking_tool_foreign_borrowing_limits_active = yes
+			banking_tool_fx_surrender_active = yes
+			banking_tool_emergency_import_financing_active = yes
 			banking_tool_capital_controls_active = yes
 			banking_tool_eliq_active = yes
 			banking_tool_asset_relief_active = yes
@@ -752,4 +757,79 @@ banking_dash_disable_cw_worker_buyout = {
 	ai_is_valid = { always = no }
 	is_valid = { banking_tool_cw_buyout_active = yes }
 	effect = { banking_effect_cw_disable_worker_buyout = yes }
+}
+
+banking_dash_enable_cb_restrict_inflows = {
+	scope = country
+	is_shown = { banking_external_available = yes banking_tool_restrict_inflows_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cb_restrict_inflows = yes }
+	effect = { banking_effect_cb_restrict_inflows = yes }
+}
+banking_dash_disable_cb_restrict_inflows = {
+	scope = country
+	is_shown = { banking_tool_restrict_inflows_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_restrict_inflows_active = yes }
+	effect = { banking_effect_cb_disable_restrict_inflows = yes }
+}
+
+banking_dash_enable_cb_sterilize_inflows = {
+	scope = country
+	is_shown = { banking_external_available = yes banking_tool_sterilize_inflows_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cb_sterilize_inflows = yes }
+	effect = { banking_effect_cb_sterilize_inflows = yes }
+}
+banking_dash_disable_cb_sterilize_inflows = {
+	scope = country
+	is_shown = { banking_tool_sterilize_inflows_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_sterilize_inflows_active = yes }
+	effect = { banking_effect_cb_disable_sterilize_inflows = yes }
+}
+
+banking_dash_enable_cb_foreign_borrowing_limits = {
+	scope = country
+	is_shown = { banking_external_available = yes banking_tool_foreign_borrowing_limits_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cb_foreign_borrowing_limits = yes }
+	effect = { banking_effect_cb_foreign_borrowing_limits = yes }
+}
+banking_dash_disable_cb_foreign_borrowing_limits = {
+	scope = country
+	is_shown = { banking_tool_foreign_borrowing_limits_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_foreign_borrowing_limits_active = yes }
+	effect = { banking_effect_cb_disable_foreign_borrowing_limits = yes }
+}
+
+banking_dash_enable_cb_fx_surrender = {
+	scope = country
+	is_shown = { banking_external_available = yes banking_tool_fx_surrender_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cb_fx_surrender = yes }
+	effect = { banking_effect_cb_fx_surrender = yes }
+}
+banking_dash_disable_cb_fx_surrender = {
+	scope = country
+	is_shown = { banking_tool_fx_surrender_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_fx_surrender_active = yes }
+	effect = { banking_effect_cb_disable_fx_surrender = yes }
+}
+
+banking_dash_enable_cb_emergency_import_financing = {
+	scope = country
+	is_shown = { banking_external_available = yes banking_tool_emergency_import_financing_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cb_emergency_import_financing = yes }
+	effect = { banking_effect_cb_emergency_import_financing = yes }
+}
+banking_dash_disable_cb_emergency_import_financing = {
+	scope = country
+	is_shown = { banking_tool_emergency_import_financing_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_emergency_import_financing_active = yes }
+	effect = { banking_effect_cb_disable_emergency_import_financing = yes }
 }

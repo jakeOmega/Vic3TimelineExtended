@@ -9,10 +9,11 @@
 # THE SEVERITY LADDER IS DEFINED EXACTLY ONCE, HERE. It used to be six
 # `triggered_desc` blocks inside the journal entry's `status_desc`; the widget
 # needs the same tier, and duplicating a threshold table is how the two drift.
-# The six sentence keys are the originals, unchanged -- only the branching moved.
-# Thresholds match the journal entry's own scale and the four warming-threshold
-# events in global_warming_events_on_action; change them in all three places or
-# in none.
+# The six original sentence keys are unchanged -- only the branching moved; the
+# seventh tier, apocalyptic (4.0 C, where the progress bar fills), came later.
+# Thresholds match the journal entry's own scale and the five warming-threshold
+# events in global_warming_events_on_action (0.5, 1, 2, 3, 4 C); change them in
+# all three places or in none.
 #
 # `temperature_anomaly_display` is read as a bare script value on the left of a
 # comparison, which is the documented form for using a script value as a trigger.
@@ -25,6 +26,10 @@ gw_severity_text = {
 	type = country
 	random_valid = no
 
+	text = {
+		trigger = { temperature_anomaly_display >= 4.0 }
+		localization_key = je_global_warming_status_apocalyptic
+	}
 	text = {
 		trigger = { temperature_anomaly_display >= 3.0 }
 		localization_key = je_global_warming_status_catastrophic
@@ -57,6 +62,10 @@ gw_severity_short = {
 	type = country
 	random_valid = no
 
+	text = {
+		trigger = { temperature_anomaly_display >= 4.0 }
+		localization_key = gw_tier_short_apocalyptic
+	}
 	text = {
 		trigger = { temperature_anomaly_display >= 3.0 }
 		localization_key = gw_tier_short_catastrophic

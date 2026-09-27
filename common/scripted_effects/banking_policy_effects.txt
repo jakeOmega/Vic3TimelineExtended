@@ -232,8 +232,16 @@ banking_effect_cb_bank_holiday = {
 			change_variable = { name = finance_cycle_momentum multiply = 0.5 }
 		}
 	}
-	# Depositors who cannot reach their money.
-	add_radicals = { value = banking_small_radicals_value strata = middle }
+	# Depositors who cannot reach their money for up to ninety days, hit in
+	# proportion to what they keep in the banks: the middle strata's savings
+	# and shop takings hardest; the upper strata's firms cannot meet a payroll
+	# (their wealth is mostly outside the banks); the lower strata have little
+	# on deposit but go unpaid while commerce runs on cash. `strata` takes one
+	# value per call, hence three calls (vanilla's tenpo_events do the same).
+	# banking_bank_holiday_radicals_tt quotes the three values literally.
+	add_radicals = { value = banking_bank_holiday_middle_radicals strata = middle }
+	add_radicals = { value = banking_bank_holiday_upper_radicals strata = upper }
+	add_radicals = { value = banking_bank_holiday_lower_radicals strata = lower }
 }
 
 banking_effect_cb_disable_bank_holiday = {
@@ -433,4 +441,53 @@ banking_effect_cw_worker_buyout = {
 banking_effect_cw_disable_worker_buyout = {
 	te_history_record_banking_marker = { MARK = off_cw_worker_buyout }
 	je:je_banking_cycle = { remove_modifier = cooperative_worker_buyout }
+}
+
+banking_effect_cb_restrict_inflows = {
+	te_history_record_banking_marker = { MARK = on_cb_restrict_inflows }
+	je:je_banking_cycle = { add_modifier = { name = banking_restrict_inflows } }
+}
+banking_effect_cb_disable_restrict_inflows = {
+	te_history_record_banking_marker = { MARK = off_cb_restrict_inflows }
+	je:je_banking_cycle = { remove_modifier = banking_restrict_inflows }
+}
+
+banking_effect_cb_sterilize_inflows = {
+	te_history_record_banking_marker = { MARK = on_cb_sterilize_inflows }
+	je:je_banking_cycle = { add_modifier = { name = banking_sterilize_inflows } }
+	add_treasury = banking_external_sterilization_payment
+	set_variable = { name = banking_external_sterilization_funded value = 1 }
+}
+banking_effect_cb_disable_sterilize_inflows = {
+	te_history_record_banking_marker = { MARK = off_cb_sterilize_inflows }
+	je:je_banking_cycle = { remove_modifier = banking_sterilize_inflows }
+	set_variable = { name = banking_external_sterilization_funded value = 0 }
+}
+
+banking_effect_cb_foreign_borrowing_limits = {
+	te_history_record_banking_marker = { MARK = on_cb_foreign_borrowing_limits }
+	je:je_banking_cycle = { add_modifier = { name = banking_foreign_borrowing_limits } }
+}
+banking_effect_cb_disable_foreign_borrowing_limits = {
+	te_history_record_banking_marker = { MARK = off_cb_foreign_borrowing_limits }
+	je:je_banking_cycle = { remove_modifier = banking_foreign_borrowing_limits }
+}
+
+banking_effect_cb_fx_surrender = {
+	te_history_record_banking_marker = { MARK = on_cb_fx_surrender }
+	je:je_banking_cycle = { add_modifier = { name = banking_fx_surrender } }
+}
+banking_effect_cb_disable_fx_surrender = {
+	te_history_record_banking_marker = { MARK = off_cb_fx_surrender }
+	je:je_banking_cycle = { remove_modifier = banking_fx_surrender }
+}
+
+banking_effect_cb_emergency_import_financing = {
+	te_history_record_banking_marker = { MARK = on_cb_emergency_import_financing }
+	je:je_banking_cycle = { add_modifier = { name = banking_emergency_import_financing } }
+	add_treasury = banking_external_import_payment
+}
+banking_effect_cb_disable_emergency_import_financing = {
+	te_history_record_banking_marker = { MARK = off_cb_emergency_import_financing }
+	je:je_banking_cycle = { remove_modifier = banking_emergency_import_financing }
 }

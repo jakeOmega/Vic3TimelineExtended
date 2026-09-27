@@ -140,6 +140,13 @@ nuclear_program_weekly_progress = {
 			if = {
 				limit = { NOT = { has_global_variable = world_first_nuclear_weapon } }
 				set_variable = { name = is_world_first_nuclear_power value = yes }
+				# The nuclear taboo is born with the world's first warhead, here
+				# and only here (M1, final-review.md): every later first device
+				# (a second, third, … power's) must pass through harmlessly and
+				# leave the birth to the monthly seed (nd_taboo_seed_existing_world)
+				# for a save that predates the taboo — the seed reads
+				# world_first_nuclear_weapon, which this branch is the one to set.
+				nd_taboo_birth = yes
 			}
 			set_global_variable = { name = world_first_nuclear_weapon value = yes }
 			trigger_event = { id = nuclear_weapon_events.10 }
@@ -290,7 +297,16 @@ nuclear_program_refresh_state_effect = {
 	# The status code the panel and the status line read. Order matters: a pause
 	# treaty forces funding to 0, so without testing the pause first a frozen
 	# programme would report itself as merely unfunded.
+	# 5 and 4 before 3: the taboo's hold carries the same pause flag.
 	if = {
+		limit = { nd_taboo_is_dismantling = yes }
+		set_variable = { name = nuclear_program_last_status value = 5 }
+	}
+	else_if = {
+		limit = { has_modifier = nd_taboo_programme_held }
+		set_variable = { name = nuclear_program_last_status value = 4 }
+	}
+	else_if = {
 		limit = { modifier:country_nuclear_program_pause_bool = yes }
 		set_variable = { name = nuclear_program_last_status value = 3 }
 	}

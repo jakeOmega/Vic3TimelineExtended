@@ -76,10 +76,27 @@ ch_program_funding_level_value = {
 	min = 0
 }
 
+# The cost of one funding level: GDP x 0.00005, the multiplier on a
+# country_expenses_add = 1 modifier, so that much a week. The World
+# Exposition (ch_effect_world_exposition) costs one level's worth: x1, not
+# x level, re-evaluated like every multiplier.
 ch_program_funding_cost_mult = {
 	value = 0
 	add = gdp
 	multiply = 0.00005
+	min = 0
+}
+
+# The funding programme's weekly cost at its current level: one
+# ch_program_funding_cost_mult per level (owner decision, PR #510; it was flat
+# across levels from 8d81d261). The cost modifier's multiplier
+# (ch_refresh_funding_modifiers, through the _for_je wrapper below) and the
+# funding tooltip (ch_policy_funding_step_tt, through the displays below) read
+# this one value, so what is shown is what is paid. The AI's funding buttons
+# weigh cultural pull only; no affordability check reads a cost.
+ch_program_funding_total_cost_mult = {
+	value = ch_program_funding_cost_mult
+	multiply = ch_program_funding_level_value
 	min = 0
 }
 
@@ -99,6 +116,23 @@ ch_program_funding_level_value_for_je = {
 ch_program_funding_cost_mult_for_je = {
 	value = 0
 	owner = { add = ch_program_funding_cost_mult }
+}
+
+ch_program_funding_total_cost_mult_for_je = {
+	value = 0
+	owner = { add = ch_program_funding_total_cost_mult }
+}
+
+# The funding tooltip's two figures, in money a week: one level's cost and the
+# programme's cost at its current level.
+ch_program_funding_step_cost_display = {
+	value = ch_program_funding_cost_mult
+	round = yes
+}
+
+ch_program_funding_total_cost_display = {
+	value = ch_program_funding_total_cost_mult
+	round = yes
 }
 
 ch_program_funding_level_display = {
@@ -484,14 +518,15 @@ cultural_hegemony_modifier_mult = {
 	max = 100
 }
 
-# Foreign benchmark multiplier: how much this country's SoL expectations
-# are raised by the world's cultural hegemon
+# Foreign benchmark multiplier: how much legitimacy this country loses to the
+# world's cultural hegemon (cultural_hegemony_foreign_benchmark is legitimacy
+# only; it never touched SoL expectations)
 # Uses global_var:ch_top_cultural_pull set by yearly pulse
 cultural_hegemony_benchmark_mult = {
 	value = 0
 	if = {
 		limit = { has_global_variable = ch_top_cultural_pull }
-		# The higher the hegemon's share vs yours, the more expectations rise
+		# The higher the hegemon's share vs yours, the larger the legitimacy loss
 		add = global_var:ch_top_cultural_pull
 		subtract = cultural_pull_total
 		divide = {

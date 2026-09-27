@@ -1694,6 +1694,10 @@ cultural_hegemony.16 = {
 						is_same_law_group_as = law_type:law_local_vernacular
 					}
 				}
+				# Never press a country into Penal Labor Camps: activate_law skips the
+				# law's gate, and the consistency sweep would bounce an ungated target
+				# to Punishment-Focused.
+				NOT = { law_type = law_type:law_penal_labor_camps }
 				ROOT = {
 					NOT = { has_law = PREV.law_type }
 				}
@@ -1769,6 +1773,10 @@ cultural_hegemony.16 = {
 									is_same_law_group_as = law_type:law_guild_system
 								}
 							}
+							# Never press a country into Penal Labor Camps: activate_law skips the
+							# law's gate, and the consistency sweep would bounce an ungated target
+							# to Punishment-Focused.
+							NOT = { law_type = law_type:law_penal_labor_camps }
 							scope:ch_target = {
 								NOT = { has_law = PREV.law_type }
 							}
@@ -1789,6 +1797,10 @@ cultural_hegemony.16 = {
 									is_same_law_group_as = law_type:law_guild_system
 								}
 							}
+							# Never press a country into Penal Labor Camps: activate_law skips the
+							# law's gate, and the consistency sweep would bounce an ungated target
+							# to Punishment-Focused.
+							NOT = { law_type = law_type:law_penal_labor_camps }
 							scope:ch_target = {
 								NOT = { has_law = PREV.law_type }
 							}
@@ -1998,7 +2010,7 @@ cultural_hegemony.17 = {
 	desc = cultural_hegemony.17.d
 	flavor = cultural_hegemony.17.f
 
-	event_image = { texture = "gfx/event_pictures/propaganda_broadcast.dds" }
+	event_image = { texture = "gfx/event_pictures/ministry_establishment.dds" }
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
 	duration = 3

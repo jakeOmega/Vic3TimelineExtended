@@ -723,3 +723,98 @@ banking_crisis_wave_reached = {
 		has_variable = banking_crisis_wave_crashed
 	}
 }
+
+# External tools require the full monetary layer; no inert simplified-mode toggles.
+banking_external_available = {
+	te_mon_full_system = yes
+	banking_is_market_economy = yes
+	has_journal_entry = je_banking_cycle
+}
+banking_cycle_is_expansion_or_boom = {
+	has_variable = finance_cycle_value
+	var:finance_cycle_value >= 60
+}
+
+banking_external_eligible_restrict_inflows = {
+	banking_external_available = yes
+	te_mon_has_dial = yes
+	custom_tooltip = {
+		text = banking_button_locked_capital_controls_tt
+		OR = { modifier:country_banking_lock_capital_controls_bool = no is_at_war = yes }
+	}
+}
+banking_possible_cb_restrict_inflows = {
+	banking_external_eligible_restrict_inflows = yes
+	banking_tool_restrict_inflows_active = no
+	custom_tooltip = { text = BANKING_POINTS_2 modifier:country_banking_intervention_max_add >= 2 }
+}
+banking_ai_core_cb_restrict_inflows = {
+	te_mon_fx_term_rate > 0
+	banking_cycle_is_expansion_or_boom = yes
+}
+
+banking_external_eligible_sterilize_inflows = {
+	banking_external_available = yes
+	te_mon_has_gold_flows = yes
+}
+banking_possible_cb_sterilize_inflows = {
+	banking_external_eligible_sterilize_inflows = yes
+	banking_tool_sterilize_inflows_active = no
+	custom_tooltip = { text = BANKING_POINTS_2 modifier:country_banking_intervention_max_add >= 2 }
+	gold_reserves >= banking_external_sterilization_cost
+}
+banking_ai_core_cb_sterilize_inflows = {
+	te_mon_gold_flow_signed > 0
+	banking_cycle_is_expansion_or_boom = yes
+}
+
+banking_external_eligible_foreign_borrowing_limits = {
+	banking_external_available = yes
+	has_law_or_variant = law_type:law_national_bank
+}
+banking_possible_cb_foreign_borrowing_limits = {
+	banking_external_eligible_foreign_borrowing_limits = yes
+	banking_tool_foreign_borrowing_limits_active = no
+	custom_tooltip = { text = BANKING_POINTS_2 modifier:country_banking_intervention_max_add >= 2 }
+}
+banking_ai_core_cb_foreign_borrowing_limits = {
+	te_mon_fx_index_display < 95
+}
+
+banking_external_eligible_fx_surrender = {
+	banking_external_available = yes
+	te_mon_has_gold_flows = yes
+	custom_tooltip = {
+		text = banking_button_locked_capital_controls_tt
+		OR = { modifier:country_banking_lock_capital_controls_bool = no is_at_war = yes }
+	}
+}
+banking_possible_cb_fx_surrender = {
+	banking_external_eligible_fx_surrender = yes
+	banking_tool_fx_surrender_active = no
+	custom_tooltip = { text = BANKING_POINTS_2 modifier:country_banking_intervention_max_add >= 2 }
+	banking_external_export_share > 0
+	gold_reserves > 0
+	te_mon_gold_inflow_room > 0
+}
+banking_ai_core_cb_fx_surrender = {
+	te_mon_bank_gold_scaled < 0.5
+	gold_reserves > 0
+}
+
+banking_external_eligible_emergency_import_financing = {
+	banking_external_available = yes
+	has_law_or_variant = law_type:law_national_bank
+}
+banking_possible_cb_emergency_import_financing = {
+	banking_external_eligible_emergency_import_financing = yes
+	banking_tool_emergency_import_financing_active = no
+	custom_tooltip = { text = BANKING_POINTS_3 modifier:country_banking_intervention_max_add >= 3 }
+	te_mon_in_financial_crisis = yes
+	gold_reserves >= banking_external_import_cost
+}
+banking_ai_core_cb_emergency_import_financing = {
+	te_mon_in_financial_crisis = yes
+}
+
+te_mon_external_positive_carry = { banking_external_real_gap > 0 }

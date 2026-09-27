@@ -92,7 +92,11 @@ continent_has_no_building_of_type = {
 
 # State scope: standard "unique per owner" potential guard.
 # True if this state already has the building OR the owner doesn't have one anywhere.
-# Used by generic wonders that allow one per country.
+# Two kinds of caller: the UN and power-bloc HQs (unique = no), where this
+# guard is what limits the owner to one; and the build-anywhere wonders (LHC,
+# ISS, ITER, Svalbard, LIGO, Peace Palace, Palais des Nations), which also set
+# unique = yes, so the engine already allows only one in the WORLD and this
+# guard adds nothing beyond it.
 building_unique_per_owner_potential = {
 	OR = {
 		any_scope_building = {

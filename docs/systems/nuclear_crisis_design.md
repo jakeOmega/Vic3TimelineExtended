@@ -8,6 +8,7 @@
 > **2026-09-25 (later):** owner items 4 and 7 — subjects under an armed overlord's **nuclear umbrella** (§0.5), a **Recessed** readiness and an **Automatic Retaliation** launch authority (§0.2) — per `docs/superpowers/specs/2026-09-25-nuclear-umbrella-recessed-dead-hand-design.md`.
 > **2026-09-26:** §0.10 step 2 (custody transfer) and step 3's outbreak event are built, per `docs/superpowers/specs/2026-09-26-nuclear-custody-design.md`: an arsenal ledger that outlives its owner, one settlement for every way an owner can end, "Who Holds the Button?", a winning revolution's new regime, the price of striking one's own civil war, and the first loose-warhead counts.
 > **2026-09-26 (later):** the rest of §0.10 is built, per `docs/superpowers/specs/2026-09-26-nuclear-loose-warheads-design.md`: "Deny Them the Bomb" and the world's reaction to an armed civil war (step 3), the Budapest path (step 4), and loose warheads — plots from the terror pool, attribution, the reckoning, and recovery by inspection, a covert operation, a treaty article and a UN convention (step 5; buying warheads, its phase 2, is not built). Calls made without the owner are listed at the end of that spec.
+> **2026-09-26 (taboo):** a world **nuclear taboo** (§0.11), per `docs/superpowers/specs/2026-09-26-nuclear-taboo-design.md`: one score that scales every nuclear cost, makes possession a burden, feeds the AI, and adds unilateral dismantling and reduction. Phase 2 (arms control, the UN's terms, the Assembly's verdict) is built; phase 3 (a Prohibition convention) follows.
 > **2026-09-25:** posture and crises no longer have their own journal entry. `je_nuclear_deterrence` was merged into `je_nuclear_program`, shown as "Nuclear Weapons", to spend one journal slot instead of two; §0.1 and §0.7 say how the separation §2 and §10 asked for is kept.
 
 ## 0. Implementation as shipped
@@ -172,7 +173,7 @@ A public bluff that ends in a climb-down or lapses costs the issuer 5 credibilit
 
 ### 0.4 Incidents (phase 3)
 
-Each armed country gets one roll per month, in `nd_monthly_update`, never one per crisis. The chance is `nd_incident_permille`: 0.5 ‰ at Recessed, 1 ‰ at routine, 4 ‰ at heightened and 10 ‰ at high alert, × (1 + strain/100) × (0.5 + (100 − reliability)/100) × (1 + 0.5 × own crisis danger band), capped at 30 ‰. The roll has two stages (10 % × permille %) so that the inner `chance` never needs a fraction. The family is then drawn by weight from those the country qualifies for:
+Each armed country gets one roll per month, in `nd_monthly_update`, never one per crisis. The chance is `nd_incident_permille`: 0.5 ‰ at Recessed, 1 ‰ at routine, 4 ‰ at heightened and 10 ‰ at high alert, × (1 + strain/100) × (0.5 + (100 − reliability)/100) × (1 + 0.5 × own crisis danger band), capped at 30 ‰. The roll has two stages so that the inner `chance` is a rounded whole number: 1 % × the chance in tenths of a per mille up to 10 ‰, 10 % × whole per mille above (`nd_incident_tenth_permille`, `nd_incident_permille_whole`). The per-mille value itself is fractional at low readiness, and a `random` that truncated fractions would have stopped those incidents. The family is then drawn by weight from those the country qualifies for:
 
 | Family | Weight | Eligible when | Inspiration |
 |---|---|---|---|
@@ -252,7 +253,7 @@ The beneficiary hears the answer through `.21`. Programme freezes and disarmamen
 - The Unconfirmed Warning is always a false alarm; the genuine-warning variant is not built. Nothing in its text says "false alarm" before the inquiry.
 - Exercises exist as an incident (`.10`) and as a crisis act, not as a standing action.
 - Posture and crises share the programme's journal entry (§2 and §10 kept them apart). The separations those sections care about are kept without a second entry: arsenal ownership is still separate from programme eligibility — the entry's `possible` admits anyone armed, while the programme half of its weekly pulse runs only under `nuclear_program_has_programme`, so a demoted power keeps its posture, upkeep and accidents and stops building — and production still does not share a bar with the crisis: the native bar is warhead progress, and the crisis has its own panel.
-- A strike through a crisis option (`.4.g`, `.7.a`, `.20.b`) now needs the Rules of War gate as well (`nd_war_law_permits_strategic_strike`). It used to check doctrine and pledges only, so a country under Limited War could strike through a crisis.
+- A strike through a crisis option (`.4.g`, `.7.a`, `.20.b`) now needs the Rules of War gate as well (`nd_war_law_permits_strategic_strike`). It used to check doctrine and pledges only, so a country under Limited War could strike through a crisis. The Monopoly Window's first use (`nuclear_incident.50.c`) had the same hole until 2026-09-26 and has the same gate; its ultimatum (`.50.b`) stays open under the law, as a crisis threat does. The government's order on an unconfirmed warning (`nuclear_incident.1.c`, "Give the launch order") passes the same gates as every deliberate launch since 2026-09-26 (owner ruling): doctrine, non-use pledge, Rules of War and assembled forces, shown greyed with the failing line when forbidden. The doctrine needs a war with the suspect, so outside a war that order can no longer be given; only launches nobody in government ordered (launch on warning, delegation, the cut-off commander) still skip the gates, as §8.1 and §8.3 intend.
 - The AI's first use in `nuke.txt` used to test `scope:country` (the actor) and so probably never passed. It now tests `scope:target_country` and goes through `nd_ai_nuclear_use_justified`, so an AI warfighting monopolist **can** use weapons in an ordinary war, as §9 requires. Expect more AI nuclear use than before.
 - Civil war, secession and annexation were not handled explicitly until 2026-09-26; §0.10 says what is built. What the engine did on its own, read from saves of a revolution the rebels won (2026-09-25): the winner received the loser's arsenal and posture through the variable merge, but not `nuclear_power` or the entry (`scripting_best_practices.md` § "What a Civil War's Winner Inherits"). An arsenal annexed any other way vanished with its owner.
 
@@ -346,6 +347,139 @@ The order agreed with the owner for closing the §11 gap ("handle annexation, ci
    - **Attribution (owner ruling) — built** (`.4`, a month later): confirmed with 10 + 30/15 for one/two candidate lines + 15 `nuclear_weapons` + 10 armed + 15 an origin with `nuclear_power` + 15/25 a covert network there (its stored intelligence tier) + 20 a seized device, max 90; of the rest, 60 − expertise − network (10–90) % stays unknown and the others get a shortlist of the true origin and up to two decoys, in random order. The truth stays in the per-origin counts. **Blame means negligence** (`.6`): a confirmed origin pays compensation (the reparations formula), opens its custody to inspection (secured for twenty years, −5 legitimacy decaying over ten, a 50 % first search) or denies it (−40 relations, +5 infamy); a shortlisted suspect is only asked to cooperate; a suspect named in public is told (`.7`); the victim hears the answer (`.8`).
    - **Recovery — built:** inspection's search; the covert operation "Secure Loose Material" (mild; 3 % a month established, 6 % fully operational, more at higher priority); the `nuclear_security_assistance` article (6 % a month, and secured custody); the UN Convention on the Physical Protection of Nuclear Material (3 % a month for a party, and secured custody; on the docket only once warheads have gone loose). A recovered warhead is destroyed. The posture panel shows an "Unaccounted for" row.
    - **Phase 2 (owner ruling) — not built:** states buy loose warheads through a covert operation. The buyer is armed but undeclared (`nd_is_armed` without `nd_believed_armed`), so it must test or declare before it can threaten or strike. Without the `nuclear_weapons` tech its reliability target drops and a warhead can decay each year.
+
+### 0.11 The nuclear taboo
+
+One world score, `global_var:nd_taboo` (0-100), for how unthinkable nuclear weapons are: born at 20 with the first warhead, moved each month toward a target of named parts, knocked down by use and worn by threats, and scaling every nuclear cost up to making possession itself a burden. The design, with every owner ruling, is `docs/superpowers/specs/2026-09-26-nuclear-taboo-design.md`; `mod_systems.md` § Nuclear Weapons has the summary. Built 2026-09-26; nothing here has run in a game yet.
+
+#### Where it lives
+
+| File | Responsibility |
+|---|---|
+| `common/script_values/nuclear_taboo_values.txt` | every constant (the simulator parses them), the parts, the target and step, costs, possession, AI factors, display values |
+| `common/scripted_effects/nuclear_taboo_effects.txt` | birth, seed, world step, snapshot, the writers, use/renunciation notes, the country half, exits, AI arsenal review, band events, option bodies, history, debug setter |
+| `common/scripted_triggers/nuclear_taboo_triggers.txt` | dismantling/held/former-state tests, gates, AI judgements, band due/cooldown |
+| `common/on_actions/nuclear_taboo_on_actions.txt` | the global monthly pulse |
+| `common/static_modifiers/nuclear_taboo_modifiers.txt` | the six taboo modifiers |
+| `events/nuclear_taboo_events.txt` | `nuclear_taboo.1`–`.8` (band crossings), `.20` (the last warhead) |
+| `common/treaty_articles/117_nuclear_arms_limitation.txt` | the arms-control article: a mutual `quantity` ceiling |
+| `test_nuclear_taboo.py` | static consistency checks + simulator tests |
+| `scripts/analysis/nuclear_taboo_sim.py` | the monthly model, scenarios, band events |
+| `organize_loc.py` | file `nd_taboo_*` whole |
+| `common/scripted_effects/nuclear_weapon_effects.txt` | birth at the first warhead; status codes 4/5 |
+| `common/journal_entries/je_nuclear_program.txt` | leaderboard off the weekly pulse; the country monthly call; comments |
+| `common/scripted_effects/extra_effects.txt` | strike detonation sites: use notes, scaled infamy, world reaction |
+| `common/scripted_effects/nuclear_deterrence_effects.txt` | tactical resolve, doctrine wrappers, pledges, law binding, readiness hold, AI review hook |
+| `common/scripted_effects/nuclear_crisis_effects.txt` | crisis open/go-public ledger, preview infamy, stand-down, the pressure part |
+| `common/script_values/nuclear_deterrence_values.txt` | `nd_yp_taboo_value`, `nd_ig_term_possession_value` |
+| `common/scripted_triggers/nuclear_deterrence_triggers.txt` | readiness gate, AI use and ultimatum gates |
+| `common/scripted_triggers/nuke_triggers.txt` | the entry applies to everyone once the taboo exists |
+| `common/scripted_effects/nuclear_custody_effects.txt` | renunciation at `nd_cw_dismantle_as`, `nd_bp_accept` |
+| `common/scripted_effects/nuclear_loose_effects.txt` | terror detonation ledger |
+| `common/treaty_articles/extra_treaty_articles.txt` | disarmament article: renunciation, AI acceptance |
+| `common/diplomatic_actions/nuke.txt` | strike confirmation lines; AI evaluation factor |
+| `common/script_values/extra_script_values.txt` | desired stockpile × taboo |
+| `common/scripted_buttons/nuclear_program_buttons.txt` | proliferation restraint |
+| `common/decisions/extra_decisions.txt` | Resume the Nuclear Programme |
+| `common/script_values/zz_te_war_support_injections.txt` | civil defence halves the nuclear shadow |
+| `common/scripted_guis/nuclear_deterrence_sguis.txt`, `gui/journal_entry_widgets/nuclear_deterrence_widget.gui` | ops 60–64 and the Arsenal rows |
+| `common/scripted_guis/nuclear_program_sguis.txt`, `gui/journal_entry_widgets/nuclear_program_widget.gui` | the taboo panel, breakdown (base/tradition/postures/restraint/UN/ledger/target), chart |
+| `common/customizable_localization/nuclear_program_custom_loc.txt` | status line, band name, heading, burden hint, rate note, the Arsenal row's treaty branch (`nd_taboo_arsenal_treaty`) |
+| `events/te_debug_nuclear_events.txt` | `te_debug_nuclear.3` |
+| `events/un_vote_events.txt`, `common/scripted_effects/un_docket_effects.txt`, `events/un_events.txt` | the Assembly's verdict: `un_vote.2` books it (`nd_taboo_verdict`); `un_docket_effects.txt` sets `nd_taboo_verdict_pending` (730 days) when the docket takes up a nuclear grievance; `un_events.2` option A tags the resolution `un_res_nuclear_grievance` |
+| `localization/english/te_miscellaneous_l_english.yml`, `te_events_l_english.yml`, `te_journal_entries_l_english.yml`, `te_concepts_l_english.yml` | loc |
+| `test_nuclear_deterrence.py` | pressure parts, IG vars, go-public pin |
+| `docs/systems/nuclear_crisis_design.md`, `docs/systems/mod_systems.md`, `docs/systems/journal_entry_systems.md`, `docs/README.md` | what shipped |
+
+#### Deviations from the spec
+
+- **Static-modifier names** carry the `nd_taboo_` loc prefix: `nd_taboo_renounced` (spec: `nd_renounced_modifier`), `nd_taboo_programme_held` (`nd_programme_held_modifier`), `nd_taboo_renunciation_prestige` (`nd_renunciation_prestige`), `nd_taboo_civil_defence` (`nd_civil_defence_modifier`). This lets `organize_loc.py` file each name with its `_desc`.
+- **The possession cost is added once and its multiplier re-read live.** The engine re-evaluates `multiplier = root.var:X` on later ticks, which is exactly how `nd_upkeep_cost` works, so the monthly refresh only updates `nd_taboo_burden_cached` and adds or removes the modifier at the 0 boundary. The spec said "removed and re-added each month". It also uses `has_modifier` rather than a tracker variable, because it has one caller per month and self-heals after a revolution.
+- **No chart markers.** The history store's pips are shared by every system on the month's container. The UN and global-warming charts hide them (`blockoverride "marker_pips" {}`) for this reason. The panel shows the year of the last use instead.
+- **Tactical first use** costs world-reaction relations at 0.4× the strategic figure (−0.16 × taboo), the infamy ratio. The spec gave the strategic figure only.
+- **Retaliation through the strike actions** now costs no infamy (it cost 25 through `nuclear_first_strike` before). The spec's table: "Retaliation's infamy: none — it is licensed."
+- **The strike confirmation** gains a line naming the infamy, because `nuclear_first_strike` hides its `change_infamy` inside a custom tooltip. It sits in the actions' `accept_effect`, where `scope:target_country` exists in the preview.
+- **The leaderboard** (`update_nuclear_powers_ranking`, an `ordered_country` sweep) moves from every active country's weekly pulse to the world's monthly step. Otherwise making the entry active for everyone would run it about 200 times a week.
+- **The world-reaction relations are applied at the detonation sites** (`nuclear_first_strike`'s success branch, `nd_tactical_strike_resolve`'s), not in `nd_record_nuclear_use` as the spec's §4.1 put it. So they follow a successful detonation only, beside the infamy they accompany. `nd_record_nuclear_use` runs before the dice and cannot tell strategic from tactical.
+- **The entry-close fallbacks are kept, not re-keyed.** Spec §6.1 said every `NOT = { has_journal_entry = je_nuclear_program }` branch in `nd_country_monthly_cleanup` is re-keyed on `nd_is_armed` or removed. The plan keeps both: the domestic-stance clean-up and the custody-record refresh for a country without the entry. They remain right for a world where the entry never activated (the rule off, before the first warhead). The unarmed case they used to cover is handled by the entry's own pulses, which Task 5's tests pin, and the test whitelists exactly those two branches. The weekly disarmament block, which the rule missed because it isn't keyed on `has_journal_entry`, is fixed in Task 5.
+- **Phase 2 walk-outs are booked for every party whose lowest treaty ceiling rose.** The monthly check cannot tell who withdrew, and the end of an arms-control regime erodes the norm whoever ended it. It is not booked when the partner no longer exists.
+- **Walk-outs are booked for both parties when one side leaves.** The spec doesn't say who withdrew; the lowest-treaty-ceiling rule reads each party alone.
+- **The AI's `evaluation_chance` reads only its own country** (vanilla `treaty_articles.md`: "Only has root scope"); `possible` checks that the other party is armed or runs a programme.
+- **The AI's acceptance weighs the ceiling itself:** a growth term (0.5 per warhead of its desired arsenal the ceiling forbids) and a parity term (2 per warhead it would retire beyond what the other party retires). Spec §7.1's "parity" clause, made concrete; weights are a first estimate.
+- **The treaty ceiling is read on the monthly country pulse**, so a new treaty holds the programme from its next monthly review, and a lapsed one releases it the same way.
+- **The panel's Arsenal row shows the treaty ceiling** when a treaty binds tighter than (or instead of) the unilateral one; the held status and its description name both sources.
+- **The Assembly's verdict is bound to the nuclear grievance:** the resolution carries `un_res_nuclear_grievance` and the culprit `nd_taboo_verdict_pending` (730 days); both are needed.
+- **The UN part peaks at +12** (NPT 8 + CPPNM 4 at authority 100), under a cap of 15 left as headroom; spec §7.2 says "0 … +15".
+- **Dismantling runs its full length.** The plan rounded each month's retirements up and completed when the stock reached zero, which finished small arsenals early (6 warheads in month 6 of 12). The code retires the remainder divided by the months left, rounded down, and completes only when the months run out (spec §5.2). A dismantling overtaken by another disarmament path (a treaty, a civil-war dismantle) stops without its voluntary rewards.
+- **The pressure part keeps the `nd_yp_` prefix** (`nd_yp_taboo`, `nd_yp_taboo_line`): it is the twelfth member of the existing crisis-pressure family, whose tests and store effect address the parts by that prefix.
+- **Dismantling pauses through a civil war, and credits only the warheads actually retired** (final-review.md I1). Spec §5.2 forbids dismantling through a civil war, but the monthly step only checked it at the start; custody's split can move warheads to rebels without setting `nd_renounced`, so the renunciation note used to book the start-of-dismantling stock even when the government no longer held it all. A new `nd_dismantle_retired` variable tracks the true count; the schedule resumes where it left off once every civil war of ours is over.
+- **Resume the Nuclear Programme stays open to a renouncer without the standing to run one, with a warning** (final-review.md I2). `possible` is still just the game rule; `when_taken` now warns when `nd_taboo_has_programme_standing = no` that Resume only ends the renunciation. The AI's `nd_taboo_ai_would_resume` requires the standing.
+- **Retaliation is exempt from the strike AI's taboo factor** (final-review.md M4; spec §8.1 "Retaliation unaffected"): `nuke_diplo_action` and `tactical_nuke_diplo_action` no longer multiply an answering strike's `evaluation_chance` by `nd_taboo_ai_use_factor`.
+- **Champion the norm costs relations with the armed, not the unarmed** (final-review.md M6). Spec §6.3 has it gain relations with other unarmed countries; the code costs −5 with each armed great power, a lecture they don't appreciate. **Seek a protector's guarantee** picks a friendly armed power at random, not the strongest — the spec's "the strongest friendly armed power".
+- **An arms-control ceiling can sit at most a quarter above the larger party's arsenal** (at least 5; `nd_taboo_arms_quantity_cap_value`), not up to a flat 500. A ceiling above every arsenal binds nobody yet would earn both parties full restraint credit (owner call, 2026-09-27). The article's quantity limit reads the other party from `scope:other_country` or `scope:source_country`/`scope:target_country`, whichever the engine binds.
+- **A nuclear use is exempt from the condemn topic's cooldown** (owner call, 2026-09-27). `un_events.2`'s "Table a condemnation" normally waits out the worldwide cooldown that follows any condemnation vote (`un_res_cooldown_months_default`, 60 months). For a nuclear grievance (the accused's `un_dkt_cause` is 1) it does not, so the Assembly's verdict is never skipped for that reason.
+
+#### Known roughnesses
+
+- `nuclear_power`'s leverage *resistance* is not offset, only its generation (a burden on influence, not on standing firm);
+- the civil-defence, renunciation-prestige and norm-champion modifiers are modifiers only, so a revolution's winner loses them (the renunciation itself is rebuilt from `nd_renounced_locked`) — final-review.md M10 flagged the norm-champion case, missing from this line until now;
+- the taboo is global, with no regional or ideological layer;
+- annexing the treaty partner makes leaving free (the "partner no longer exists" exemption covers it) — spec-mandated; the owner accepted it (2026-09-27);
+- an appeal the AI turns into a sanctions vote books no verdict — spec §7.3 names the condemn topic only; the owner kept it (2026-09-27): a missed verdict moves the taboo a few points at most, against the use's own −15 shock and −10 ledger;
+- a retaliation is judged by the Assembly at the same ±3 as a first use (the use note halves retaliation, the verdict does not);
+- holding the programme reuses the pause flag (final-review.md M5): a country held at its ceiling or dismantling cannot be the source of a `nuclear_program_pause` article, cannot receive `nuclear_program_aid`, and ends a running `covert_nuclear_sabotage_action` against it (an AI trimmed to a ceiling reads as a programme that "has really stopped"). All three are decisions, not bugs;
+- old saves don't mark countries disarmed before the taboo existed as renounced (final-review.md M9, parked): a country under a `nuclear_disarmament` article or `te_nuclear_disarmament_ended_program` at seed time gets no `nd_renounced`, so it is absent from the restraint part and books no breakout if it later rebuilds;
+- the arms-control article's card doesn't show its ceiling, and it uses a placeholder icon (final-review.md M10).
+
+#### Expected curves
+
+| Scenario | year 1 | year 10 | year 20 | year 35 | year 50 | year 75 | year 100 | band events |
+|---|---|---|---|---|---|---|---|---|
+| No use, no threats, no treaties | 20 (21) | 27 (30) | 37 (40) | 52 (55) | 55 (55) | 55 (55) | 55 (55) | 2 |
+| A strategic first use in year 10 | 20 (21) | 27 (30) | 29 (33) | 47 (50) | 55 (55) | 55 (55) | 55 (55) | 2 |
+| A strategic first use in year 40 | 20 (21) | 27 (30) | 37 (40) | 52 (55) | 44 (48) | 55 (55) | 55 (55) | 4 |
+| Armed powers under No First Use, pledges, a renunciation in year 20 | 25 (39) | 45 (48) | 55 (58) | 71 (73) | 73 (73) | 73 (73) | 73 (73) | 3 |
+| Warfighting doctrines and a strategic first use every 8 years | 17 (11) | 4 (9) | 8 (14) | 6 (13) | 5 (10) | 7 (13) | 9 (15) | 0 |
+| A save seeded 40 years after the first device, no use | 55 (55) | 55 (55) | 55 (55) | 55 (55) | 55 (55) | 55 (55) | 55 (55) | 0 |
+| No First Use, pledges, arms control, and the NPT and CPPNM at UN authority 80 | 29 (51) | 56 (60) | 67 (70) | 82 (85) | 85 (85) | 85 (85) | 85 (85) | 3 |
+
+Re-run with python3 scripts/analysis/nuclear_taboo_sim.py after any retune; every constant is read from nuclear_taboo_values.txt.
+
+#### In-game checklist
+
+1. A new game reaching its first warhead logs `TE_TABOO: born`, and the panel shows 20, Normalised.
+2. An existing save already in the nuclear age wakes at its target, not 20: `TE_TABOO: seeded`.
+3. Every country's journal shows Nuclear Weapons after the first warhead, and the monthly pulse does not visibly slow the game (compare month-ticks before and after the first warhead).
+4. The status line opens with the taboo sentence, and its number matches the panel.
+5. The breakdown tooltip's lines add up to the target line.
+6. A strategic first strike's confirmation names the infamy and relations; the strike charges exactly them. A licensed retaliation says no infamy and charges none.
+7. `TE_TABOO:` after a strike shows the shock, and the target falls by the ledger and the halved tradition.
+8. The prestige tooltip lists The Burden of the Bomb at the burden the panel shows; restraint groups' At Home terms show "the arsenal itself".
+9. The ceiling stepper lowers the ceiling, warheads retire monthly, the programme reads "held", and lifting the ceiling releases it the same click.
+10. Dismantling a small arsenal completes, fires "The Last Warhead", applies the prestige and relations, and the entry stays active with the Resume decision shown.
+11. `event te_debug_nuclear.3` option b (85) then d (step) fires the Strong band event to every country, once; running d again does not fire it again.
+12. An AI great power in a high-taboo world with no rival trims its arsenal to a ceiling within a year.
+13. Civil defence halves the "Enemy nuclear arsenal" war-support line.
+14. An eroding band event offers an unarmed country with an amicable armed neighbour "Seek the shelter of a friendly nuclear power" (the option's `relations:root >= relations_threshold:amicable` has vanilla precedent — `common/objective_subgoals/00_subgoals_tutorial.txt:1201` uses the mirror form, `relations:root < relations_threshold:amicable` — so if the option never appears, suspect the friendly-power search before the syntax).
+15. A treaty-disarmed or renounced country's weekly pulse logs no `remove_modifier` error for `nuclear_power`.
+16. A band event reaching an armed country that lets it time out picks a valid armed option (the default_option in every band event is an unarmed-only option; the engine should fall back to the first valid one).
+17. The arms-control article asks for a ceiling. In force, warheads above it retire and the programme reads "held". Leaving it with no other treaty logs `TE_TABOO: an arms-control treaty was left` for both parties; leaving it while a stricter one stands logs nothing.
+18. A nuclear strike taken up by the docket and condemned moves the taboo up (the vote's result tooltip says so); a vetoed or failed condemnation moves it down.
+19. The breakdown's UN line reads +0 until the UN exists with a convention (the NPT or CPPNM) in force, then rises with UN authority — the line itself (`nd_taboo_bd_un`) renders every time the breakdown does, whatever its value.
+20. The Arsenal row reads "Held to N warheads by an arms-control treaty" when only a treaty (or a tighter treaty) binds; the held status says "at our arsenal ceiling".
+21. An AI in a high-taboo or burdened world proposes the arms-control article to an armed partner (the evaluation now reads its own country only). Two equal arsenals proposed an equal ceiling show no "We would give up more warheads than they would" line in the AI's acceptance tooltip (it would mean `scope:article` was lost reading the other party).
+22. Renegotiating a treaty's ceiling upward (30 → 50) logs `TE_TABOO: an arms-control treaty was left`; if it does not, the engine keeps the old article reachable and upward renegotiation goes unbooked.
+23. A revolution's winner in a country bound by an arms-control treaty: does the treaty pass to the winner? If not, the winner is booked a walk-out it didn't choose (it inherits `nd_treaty_ceiling`) — note which.
+24. The monthly `TE_TABOO: score …` line in debug.log prints numbers, not raw `[SCOPE.ScriptValue(...)]` text (it runs from the ROOT-less global pulse).
+25. A condemnation of the culprit for an unrelated grievance (e.g. a later war) books no nuclear verdict.
+26. A civil war breaks out mid-dismantle, the government holds: the dismantling pauses, then resumes after the war. "The Last Warhead" counts only the warheads actually taken apart.
+27. A minor-power renouncer sees the no-standing warning on Resume. An AI minor renouncer does not take it.
+28. A country that dismantled its arsenal reads "We gave up the bomb of our own accord".
+29. An armed country that lets a `.5` band event time out gets a valid armed option.
+30. In a high-taboo world, an AI that was struck retaliates as readily as before.
+31. An AI that cut its arsenal in half through a band event keeps that ceiling through its six-monthly reviews in peacetime.
+32. The arms-control article's ceiling input tops out a quarter above the larger arsenal (at least 5). If it tops out at 5 whatever the arsenals, the engine binds neither pair of party scopes in `quantity_max_value` and the cap reads only one side.
+33. With the condemn topic on cooldown (a condemnation voted within five years), a nuclear strike taken up by the docket still offers the appellant "Table a condemnation", whose requirement reads "…or this is a nuclear use". A war-of-aggression appeal in the same window does not.
 
 ## 1. Intent and owner requirements
 

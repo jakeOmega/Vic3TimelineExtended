@@ -120,7 +120,9 @@ The 1933 holiday and the nineteenth century's suspensions of payment: shut the b
   cooldown**.
 - While it runs: crash chance −90 % (`country_banking_crash_chance_mult`, which both the origin and the
   contagion checks multiply by — so it shields against imported crashes too), services output −20 %,
-  tax collection −5 %. Small middle-strata radicals: depositors cannot reach their money.
+  tax collection −5 %. Small middle-strata radicals: depositors cannot reach their money. *(Amended
+  2026-09-27 at the owner's request: 0.05 of the middle strata, 0.03 of the upper and 0.02 of the
+  lower — see `mod_systems.md` § "Policy tools added 2026-09-23".)*
 - AI: ELIQ's core (panic; downturn at momentum ≤ −4), +20 while ELIQ is still locked; lifted early only
   once the cycle is back at stable.
 

@@ -999,7 +999,7 @@ modern_election_events.11 = {
 	desc = modern_election_events.11.d
 	flavor = modern_election_events.11.f
 
-	event_image = { texture = "gfx/event_pictures/election_debate_stage.dds" }
+	event_image = { texture = "gfx/event_pictures/election_campaign_rally.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 
@@ -1090,7 +1090,7 @@ modern_election_events.12 = {
 	desc = modern_election_events.12.d
 	flavor = modern_election_events.12.f
 
-	event_image = { texture = "gfx/event_pictures/election_debate_stage.dds" }
+	event_image = { texture = "gfx/event_pictures/election_campaign_rally.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 
@@ -1181,7 +1181,7 @@ modern_election_events.13 = {
 	desc = modern_election_events.13.d
 	flavor = modern_election_events.13.f
 
-	event_image = { texture = "gfx/event_pictures/election_debate_stage.dds" }
+	event_image = { texture = "gfx/event_pictures/election_campaign_rally.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 
@@ -1275,7 +1275,7 @@ modern_election_events.14 = {
 	desc = modern_election_events.14.d
 	flavor = modern_election_events.14.f
 
-	event_image = { texture = "gfx/event_pictures/election_debate_stage.dds" }
+	event_image = { texture = "gfx/event_pictures/election_campaign_rally.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 
@@ -1372,7 +1372,7 @@ modern_election_events.15 = {
 	desc = modern_election_events.15.d
 	flavor = modern_election_events.15.f
 
-	event_image = { texture = "gfx/event_pictures/election_debate_stage.dds" }
+	event_image = { texture = "gfx/event_pictures/election_campaign_rally.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 

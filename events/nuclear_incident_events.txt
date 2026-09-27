@@ -128,11 +128,40 @@ nuclear_incident.1 = {
 	}
 
 	# Execute the warning-response orders. The only way a warning under central
-	# authority ends in a launch: somebody has to give the order.
+	# authority ends in a launch: somebody has to give the order. It is the
+	# government's own order, so it passes the gates every deliberate launch
+	# passes (owner ruling 2026-09-26, PR #510): the doctrine, any non-use
+	# pledge, the Rules of War and assembled forces, with the shared triggers
+	# and failure lines nuke_diplo_action uses. Forbidden, it shows greyed with
+	# the reason. The doctrine needs a war with the suspect, so outside a war
+	# the order cannot be given: the bare has_war_with comes first, so a
+	# peacetime warning's greyed option names the missing war rather than
+	# blaming the doctrine (whose tooltip line hides its own war check). The
+	# unauthorised paths (launch on warning, delegation, the cut-off commander)
+	# still skip these gates. Not highlighted: it is often greyed now.
 	option = {
 		name = nuclear_incident.1.c
-		trigger = { nd_is_armed = yes }
-		highlighted_option = yes
+		trigger = {
+			nd_is_armed = yes
+			has_war_with = scope:nd_warning_suspect
+			custom_tooltip = {
+				text = nd_tt_doctrine_permits_strike
+				nd_doctrine_permits_strike = { ENEMY = scope:nd_warning_suspect }
+			}
+			custom_tooltip = {
+				text = nd_tt_pledge_permits_strike
+				nd_pledge_permits_strike = { ENEMY = scope:nd_warning_suspect }
+			}
+			custom_tooltip = {
+				text = nd_tt_war_law_permits_strike
+				nd_war_law_permits_strategic_strike = yes
+			}
+			custom_tooltip = {
+				text = nd_tt_forces_assembled
+				nd_forces_assembled = yes
+			}
+		}
+		show_as_unavailable = { nd_is_armed = yes }
 		set_variable = { name = nd_warning_launched value = 1 }
 		nd_launch_or_intercept = { VICTIM = scope:nd_warning_suspect NARRATE = yes KIND = warning }
 		trigger_event = { id = nuclear_incident.3 days = 10 }
@@ -220,7 +249,7 @@ nuclear_incident.3 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/budget_hearing_congress.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_power_debate.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1290,7 +1319,7 @@ nuclear_incident.40 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/nuclear_bunker_life.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_false_alarm_panic.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1476,12 +1505,15 @@ nuclear_incident.50 = {
 		}
 	}
 
-	# Authorise first use.
+	# Authorise first use. The Rules of War gate as well as the pledges, as on
+	# every crisis option that ends in a strike (nuclear_crisis_design.md §0.7):
+	# under Limited War or Humanitarian Regulations only the ultimatum is open.
 	option = {
 		name = nuclear_incident.50.c
 		trigger = {
 			exists = scope:nd_mw_enemy
 			nd_pledge_permits_strike = { ENEMY = scope:nd_mw_enemy }
+			nd_war_law_permits_strategic_strike = yes
 		}
 		highlighted_option = yes
 		custom_tooltip = nd_tt_monopoly_first_use

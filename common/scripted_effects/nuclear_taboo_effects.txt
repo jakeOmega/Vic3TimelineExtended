@@ -1,0 +1,1017 @@
+﻿# ============================================================================
+# THE NUCLEAR TABOO — effects
+# ============================================================================
+# Design: docs/superpowers/specs/2026-09-26-nuclear-taboo-design.md; the
+# numbers are in common/script_values/nuclear_taboo_values.txt.
+#
+# SINGLE WRITERS. Only the effects in this file write global_var:nd_taboo,
+# nd_taboo_ledger, nd_taboo_quiet_years and the nd_tb_* snapshots
+# (test_nuclear_taboo.py checks). Everything else calls a writer below. Every
+# writer is a no-op before the taboo is born.
+#
+# TWO HALVES. nd_taboo_monthly_update is the world's step, from the global
+# monthly pulse (nuclear_taboo_on_actions.txt): ROOT is none there, so it never
+# applies a modifier. nd_taboo_country_monthly is each country's half, from
+# je_nuclear_program's monthly pulse with ROOT = the country — the possession
+# cost, the exits and the history samples live there.
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# BIRTH
+# ----------------------------------------------------------------------------
+
+# The world's first warhead (nuclear_program_weekly_progress, the branch that
+# sets world_first_nuclear_weapon). Idempotent. Scope: any.
+nd_taboo_birth = {
+	if = {
+		limit = { NOT = { has_global_variable = nd_taboo } }
+		set_global_variable = { name = nd_taboo_quiet_years value = 0 }
+		set_global_variable = { name = nd_taboo_ledger value = 0 }
+		nd_taboo_snapshot = yes
+		set_global_variable = { name = nd_taboo value = nd_taboo_birth_value }
+		set_global_variable = { name = nd_taboo_band value = nd_taboo_band_value }
+		debug_log = "TE_TABOO: born with the world's first warhead"
+	}
+}
+
+# A save in which warheads already exist when the taboo arrives. The tradition
+# clock is the years since the world's first device when no weapon has ever
+# been used, 0 otherwise; the score starts at the target that clock implies,
+# not at 20. Scope: any.
+nd_taboo_seed_existing_world = {
+	if = {
+		limit = {
+			has_global_variable = world_first_nuclear_weapon
+			NOT = { has_global_variable = nd_taboo }
+		}
+		set_global_variable = { name = nd_taboo_quiet_years value = 0 }
+		set_global_variable = { name = nd_taboo_ledger value = 0 }
+		if = {
+			limit = {
+				NOT = { has_global_variable = world_first_nuclear_weapon_used }
+			}
+			random_country = {
+				limit = {
+					has_variable = is_world_first_nuclear_power
+					has_variable = nuclear_program_first_device_year
+				}
+				set_global_variable = {
+					name = nd_taboo_quiet_years
+					value = {
+						value = year
+						subtract = var:nuclear_program_first_device_year
+						min = 0
+					}
+				}
+			}
+		}
+		nd_taboo_snapshot = yes
+		set_global_variable = { name = nd_taboo value = global_var:nd_taboo_target }
+		set_global_variable = { name = nd_taboo_band value = nd_taboo_band_value }
+		debug_log = "TE_TABOO: seeded a world already in the nuclear age"
+	}
+}
+
+# ----------------------------------------------------------------------------
+# THE WORLD'S MONTHLY STEP
+# ----------------------------------------------------------------------------
+
+# Every part, then the target. Scope: any.
+nd_taboo_snapshot = {
+	set_global_variable = { name = nd_tb_base value = nd_taboo_base }
+	set_global_variable = { name = nd_tb_tradition value = nd_taboo_part_tradition_value }
+	set_global_variable = { name = nd_tb_postures value = nd_taboo_part_postures_value }
+	set_global_variable = { name = nd_tb_restraint value = nd_taboo_part_restraint_value }
+	set_global_variable = { name = nd_tb_un value = nd_taboo_part_un_value }
+	set_global_variable = { name = nd_tb_ledger value = global_var:nd_taboo_ledger }
+	set_global_variable = { name = nd_taboo_target value = nd_taboo_target_sum }
+}
+
+# From nd_taboo_monthly_on_action (global scope). Advances the clock, fades the
+# ledger, snapshots the parts and steps the score toward the target.
+nd_taboo_monthly_update = {
+	# The nuclear powers' leaderboard, once for the world. It ran from every
+	# active country's weekly pulse, which the entry being active for every
+	# country (nuke_triggers.txt) would have made ~200 sweeps a week.
+	update_nuclear_powers_ranking = yes
+	nd_taboo_seed_existing_world = yes
+	if = {
+		limit = { has_global_variable = nd_taboo }
+		change_global_variable = { name = nd_taboo_quiet_years add = nd_taboo_years_per_month }
+		set_global_variable = {
+			name = nd_taboo_ledger
+			value = {
+				value = global_var:nd_taboo_ledger
+				multiply = nd_taboo_ledger_decay
+			}
+		}
+		nd_taboo_snapshot = yes
+		set_global_variable = {
+			name = nd_taboo
+			value = {
+				value = global_var:nd_taboo
+				add = nd_taboo_step_value
+				min = 0
+				max = 100
+			}
+		}
+		nd_taboo_band_check = yes
+		debug_log = "TE_TABOO: score [SCOPE.ScriptValue('nd_disp_taboo')|1] target [SCOPE.ScriptValue('nd_disp_taboo_target')|1] base [SCOPE.ScriptValue('nd_disp_tb_base')|1] tradition [SCOPE.ScriptValue('nd_disp_tb_tradition')|1] postures [SCOPE.ScriptValue('nd_disp_tb_postures')|1] restraint [SCOPE.ScriptValue('nd_disp_tb_restraint')|1] un [SCOPE.ScriptValue('nd_disp_tb_un')|1] ledger [SCOPE.ScriptValue('nd_disp_tb_ledger')|1] quiet years [SCOPE.ScriptValue('nd_disp_taboo_quiet_years')|1]"
+	}
+}
+
+# ----------------------------------------------------------------------------
+# WRITERS — everything outside this file moves the taboo through these
+# ----------------------------------------------------------------------------
+
+# An unweighted ledger entry. POINTS: a number, a script value, var:X or
+# global_var:X, signed. Scope: any.
+nd_taboo_ledger_add = {
+	if = {
+		limit = { has_global_variable = nd_taboo }
+		set_global_variable = { name = nd_tb_stage value = $POINTS$ }
+		nd_taboo_ledger_commit = yes
+	}
+}
+
+# A ledger entry weighted by the acting country's rank (nd_taboo_rank_weight).
+# Scope: the acting country.
+nd_taboo_ledger_add_weighted = {
+	if = {
+		limit = { has_global_variable = nd_taboo }
+		set_global_variable = {
+			name = nd_tb_stage
+			value = {
+				value = nd_taboo_rank_weight
+				multiply = $POINTS$
+			}
+		}
+		nd_taboo_ledger_commit = yes
+	}
+}
+
+# Adds the staged amount to the ledger, held inside -30 .. +10. Only writers
+# in this file call it.
+nd_taboo_ledger_commit = {
+	set_global_variable = {
+		name = nd_taboo_ledger
+		value = {
+			value = global_var:nd_taboo_ledger
+			add = global_var:nd_tb_stage
+			min = nd_taboo_ledger_min
+			max = nd_taboo_ledger_max
+		}
+	}
+	remove_global_variable = nd_tb_stage
+}
+
+# An immediate move of the score, held inside 0 .. 100. Scope: any.
+nd_taboo_shock = {
+	if = {
+		limit = { has_global_variable = nd_taboo }
+		set_global_variable = {
+			name = nd_taboo
+			value = {
+				value = global_var:nd_taboo
+				add = $POINTS$
+				min = 0
+				max = 100
+			}
+		}
+	}
+}
+
+# A detonation by a state (a loose warhead's is not one: the terror plot books
+# nd_taboo_ledger_terror instead). KIND = strategic | tactical. RETALIATION =
+# yes | no, a literal from the caller: the response strikes pass yes by
+# construction, the first-strike effects ask nd_was_struck_by — never a role
+# read from a scope the strike effects swap (scripting_best_practices.md § A
+# Shared Script Value Must Not Read a Scope Named for a Role Its Callers
+# Swap). A first use halves the tradition of non-use; an answer counts half
+# and cuts it by a quarter. Scope: any.
+nd_taboo_note_use = {
+	if = {
+		limit = { has_global_variable = nd_taboo }
+		set_global_variable = { name = nd_tb_use_shock value = nd_taboo_shock_$KIND$ }
+		set_global_variable = { name = nd_tb_use_ledger value = nd_taboo_ledger_$KIND$ }
+		if = {
+			limit = { always = $RETALIATION$ }
+			change_global_variable = { name = nd_tb_use_shock multiply = nd_taboo_retaliation_factor }
+			change_global_variable = { name = nd_tb_use_ledger multiply = nd_taboo_retaliation_factor }
+			change_global_variable = { name = nd_taboo_quiet_years multiply = nd_taboo_clock_keep_retaliation }
+		}
+		else = {
+			change_global_variable = { name = nd_taboo_quiet_years multiply = nd_taboo_clock_keep_first_use }
+		}
+		nd_taboo_shock = { POINTS = global_var:nd_tb_use_shock }
+		nd_taboo_ledger_add = { POINTS = global_var:nd_tb_use_ledger }
+		set_global_variable = { name = nd_taboo_last_use_year value = year }
+		remove_global_variable = nd_tb_use_shock
+		remove_global_variable = nd_tb_use_ledger
+		debug_log = "TE_TABOO: a nuclear weapon was used; score now [SCOPE.ScriptValue('nd_disp_taboo')|1]"
+	}
+}
+
+# Console only (te_debug_nuclear.3). Births the taboo if it is not yet, then
+# sets the score and its band. Scope: any.
+nd_taboo_debug_set = {
+	nd_taboo_birth = yes
+	set_global_variable = { name = nd_taboo value = $VALUE$ }
+	set_global_variable = { name = nd_taboo_band value = nd_taboo_band_value }
+}
+
+# Console only: ten more years without use.
+nd_taboo_debug_age_clock = {
+	if = {
+		limit = { has_global_variable = nd_taboo }
+		change_global_variable = { name = nd_taboo_quiet_years add = 10 }
+	}
+}
+
+# The Assembly's verdict on a nuclear use (spec §7.3), from un_vote.2's option
+# on a condemnation of a country the docket took up for a nuclear strike
+# (nd_taboo_verdict_pending). PASSED = yes: the world said no. PASSED = no —
+# failed, or vetoed down to a rebuke: impunity. Scope: any.
+nd_taboo_verdict = {
+	if = {
+		limit = { has_global_variable = nd_taboo }
+		if = {
+			limit = { always = $PASSED$ }
+			custom_tooltip = {
+				text = nd_taboo_tt_verdict_passed
+				nd_taboo_ledger_add = { POINTS = nd_taboo_ledger_verdict_passed }
+				nd_taboo_shock = { POINTS = nd_taboo_shock_verdict_passed }
+			}
+		}
+		else = {
+			custom_tooltip = {
+				text = nd_taboo_tt_verdict_failed
+				nd_taboo_ledger_add = { POINTS = nd_taboo_ledger_verdict_failed }
+			}
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# EXITS (spec §5) — country scope, ROOT = the country
+# ----------------------------------------------------------------------------
+
+# An arsenal given up, by any path: Dismantle the Arsenal on completion, the
+# nuclear_disarmament article, the Budapest path (nd_bp_accept), the civil-war
+# dismantles (nd_cw_dismantle_as). Call it BEFORE the stockpile is zeroed, with
+# WARHEADS = the count given up. Idempotent: a country already renounced and
+# unarmed is not counted again — the Budapest path can put a disarmament
+# article in force (whose on_entry_into_force calls this) and then zero the
+# stockpile itself. Marks a former nuclear state (nd_renounced = the year) for
+# the restraint part; a breakout clears it (nd_taboo_country_monthly).
+nd_taboo_note_renunciation = {
+	if = {
+		limit = {
+			has_global_variable = nd_taboo
+			$WARHEADS$ > 0
+			NOT = {
+				AND = {
+					has_variable = nd_renounced
+					nd_is_armed = no
+				}
+			}
+		}
+		set_global_variable = {
+			name = nd_tb_stage
+			value = {
+				value = $WARHEADS$
+				multiply = nd_taboo_ledger_renounce_per_warhead
+				add = nd_taboo_ledger_renounce_base
+				max = nd_taboo_ledger_renounce_cap
+			}
+		}
+		nd_taboo_ledger_commit = yes
+		set_variable = { name = nd_renounced value = year }
+		debug_log = "TE_TABOO: an arsenal was given up"
+	}
+}
+
+# The lowest ceiling an arms-limitation treaty in force sets us, and the
+# partner holding it (spec §7.1). Leaving costs only when this rises or
+# vanishes — our treaty obligations loosened — and not when the partner no
+# longer exists (a lapse nobody chose). The unilateral ceiling never enters:
+# only another treaty can make an exit free, so a country cannot hide behind a
+# ceiling of its own, leave, then lift it. Both parties' ceilings rise when a
+# treaty ends, so both are booked: the regime's end erodes the norm whoever
+# ended it. Scope: country (nd_taboo_country_monthly).
+nd_taboo_refresh_treaty_ceiling = {
+	# Cheap no-op for a country with no treaty ceiling and nothing that could
+	# gain one: no arsenal, no programme, never a party (scripting_best_practices.md
+	# § "Every pulse effect must be a cheap no-op for an unarmed country").
+	if = {
+		limit = {
+			OR = {
+				has_variable = nd_treaty_ceiling
+				nd_is_armed = yes
+				nuclear_program_has_programme = yes
+			}
+		}
+		save_scope_as = nd_tb_self
+		set_variable = { name = nd_tb_new_ceiling value = -1 }
+		every_scope_treaty = {
+			every_scope_article = {
+				limit = {
+					has_type = nuclear_arms_limitation
+					exists = input_quantity
+				}
+				save_scope_as = nd_tb_article
+				scope:nd_tb_self = {
+					if = {
+						limit = {
+							OR = {
+								var:nd_tb_new_ceiling < 0
+								var:nd_tb_new_ceiling > scope:nd_tb_article.input_quantity
+							}
+						}
+						set_variable = { name = nd_tb_new_ceiling value = scope:nd_tb_article.input_quantity }
+						scope:nd_tb_article = {
+							first_country = { save_scope_as = nd_tb_first }
+							second_country = { save_scope_as = nd_tb_second }
+						}
+						if = {
+							limit = {
+								scope:nd_tb_first = { this = scope:nd_tb_self }
+							}
+							scope:nd_tb_second = { save_scope_as = nd_tb_new_partner }
+						}
+						else = {
+							scope:nd_tb_first = { save_scope_as = nd_tb_new_partner }
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_variable = nd_treaty_ceiling
+				OR = {
+					var:nd_tb_new_ceiling < 0
+					var:nd_tb_new_ceiling > var:nd_treaty_ceiling
+				}
+				exists = var:nd_treaty_ceiling_partner
+			}
+			nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_walkout }
+			debug_log = "TE_TABOO: an arms-control treaty was left"
+		}
+		if = {
+			limit = { var:nd_tb_new_ceiling >= 0 }
+			set_variable = { name = nd_treaty_ceiling value = var:nd_tb_new_ceiling }
+			set_variable = { name = nd_treaty_ceiling_partner value = scope:nd_tb_new_partner }
+		}
+		else = {
+			if = {
+				limit = { has_variable = nd_treaty_ceiling }
+				remove_variable = nd_treaty_ceiling
+			}
+			if = {
+				limit = { has_variable = nd_treaty_ceiling_partner }
+				remove_variable = nd_treaty_ceiling_partner
+			}
+		}
+		remove_variable = nd_tb_new_ceiling
+	}
+}
+
+# Puts the programme hold on or takes it off. Decides from has_modifier, so
+# call it at most once per effect block: the monthly half calls it last, and
+# each panel action once.
+nd_taboo_refresh_held = {
+	if = {
+		limit = { nd_taboo_programme_should_be_held = yes }
+		if = {
+			limit = { NOT = { has_modifier = nd_taboo_programme_held } }
+			add_modifier = { name = nd_taboo_programme_held }
+		}
+	}
+	else_if = {
+		limit = { has_modifier = nd_taboo_programme_held }
+		remove_modifier = nd_taboo_programme_held
+	}
+}
+
+# ---- Reduce the Arsenal: the posture panel's ops 60 / 61 / 62 ----
+
+nd_taboo_ceiling_lower = {
+	custom_tooltip = {
+		text = nd_taboo_tt_ceiling_lower
+		set_variable = { name = nd_warhead_ceiling value = nd_taboo_ceiling_lowered_value }
+	}
+	hidden_effect = {
+		# A player-set ceiling is not the AI review's own (M2, final-review.md).
+		if = {
+			limit = { has_variable = nd_ai_ceiling_from_review }
+			remove_variable = nd_ai_ceiling_from_review
+		}
+		nd_taboo_refresh_held = yes
+	}
+}
+
+nd_taboo_ceiling_raise = {
+	custom_tooltip = {
+		text = nd_taboo_tt_ceiling_raise
+		set_variable = { name = nd_warhead_ceiling value = nd_taboo_ceiling_raised_value }
+	}
+	hidden_effect = {
+		if = {
+			limit = { has_variable = nd_ai_ceiling_from_review }
+			remove_variable = nd_ai_ceiling_from_review
+		}
+		nd_taboo_refresh_held = yes
+	}
+}
+
+nd_taboo_ceiling_lift = {
+	custom_tooltip = {
+		text = nd_taboo_tt_ceiling_lift
+		remove_variable = nd_warhead_ceiling
+	}
+	hidden_effect = {
+		if = {
+			limit = { has_variable = nd_ai_ceiling_from_review }
+			remove_variable = nd_ai_ceiling_from_review
+		}
+		nd_taboo_refresh_held = yes
+	}
+}
+
+# Warheads above the ceiling, a tenth of the excess a month, through the
+# custody ledger; each strengthens the taboo a little.
+nd_taboo_retire_step = {
+	set_variable = { name = nd_tb_retire value = nd_taboo_retire_this_month_value }
+	change_variable = { name = nuclear_weapon_stockpile subtract = var:nd_tb_retire }
+	set_variable = {
+		name = nd_tb_retire_points
+		value = {
+			value = var:nd_tb_retire
+			multiply = nd_taboo_ledger_retire_per_warhead
+		}
+	}
+	nd_taboo_ledger_add = { POINTS = var:nd_tb_retire_points }
+	nd_ledger_refresh = yes
+	remove_variable = nd_tb_retire
+	remove_variable = nd_tb_retire_points
+}
+
+# ---- Dismantle the Arsenal: op 63, band-event options, and the AI ----
+# 12 months + 1 per 10 warheads above 20 (at most 36), evenly; readiness goes
+# to Recessed and is held there (nd_weekly_update, nd_can_set_readiness); the
+# programme is held. Each action is a core and a wrapper: the panel and the
+# event options call the wrapper, which refreshes the hold at once; the AI's
+# arsenal review calls the core, because it runs inside the monthly half,
+# which refreshes the hold once after it (a second refresh in one block would
+# misread the modifier).
+nd_taboo_dismantle_begin = {
+	custom_tooltip = {
+		text = nd_taboo_tt_dismantle_start
+		set_variable = { name = nd_dismantle_start_stock value = nd_stockpile }
+		set_variable = { name = nd_dismantle_months_left value = nd_taboo_dismantle_months_value }
+		set_variable = { name = nd_dismantle_retired value = 0 }
+	}
+	if = {
+		limit = {
+			has_variable = nd_readiness_target
+			var:nd_readiness_target > 0
+		}
+		nd_set_readiness_target_0 = yes
+	}
+	hidden_effect = {
+		debug_log = "TE_TABOO: dismantling begun"
+	}
+}
+
+nd_taboo_dismantle_start = {
+	nd_taboo_dismantle_begin = yes
+	hidden_effect = {
+		nd_taboo_refresh_held = yes
+	}
+}
+
+# Op 64: what is retired stays gone; a public reversal.
+nd_taboo_dismantle_stop = {
+	custom_tooltip = {
+		text = nd_taboo_tt_halt
+		remove_variable = nd_dismantle_months_left
+		if = {
+			limit = { has_variable = nd_dismantle_retired }
+			remove_variable = nd_dismantle_retired
+		}
+		change_variable = { name = nd_credibility subtract = nd_taboo_halt_credibility }
+		clamp_variable = { name = nd_credibility min = 0 max = 100 }
+	}
+	hidden_effect = {
+		nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_halt }
+		debug_log = "TE_TABOO: dismantling halted"
+	}
+}
+
+nd_taboo_dismantle_halt = {
+	nd_taboo_dismantle_stop = yes
+	hidden_effect = {
+		nd_taboo_refresh_held = yes
+	}
+}
+
+# One month of dismantling (nd_taboo_country_monthly). Completes when the
+# months run out, not when the stock happens to hit zero early.
+nd_taboo_dismantle_step = {
+	# Given up another way meanwhile (a disarmament article, a civil war
+	# dismantle): this dismantling is over, and the renunciation was not ours,
+	# so it stops without completing (no voluntary rewards, no lock).
+	if = {
+		limit = {
+			nd_stockpile <= 0
+			has_variable = nd_renounced
+		}
+		remove_variable = nd_dismantle_months_left
+		if = {
+			limit = { has_variable = nd_dismantle_retired }
+			remove_variable = nd_dismantle_retired
+		}
+	}
+	# A civil war of ours is still being fought (spec §5.2 forbids dismantling
+	# through one): nothing moves this month — no retirement, no countdown, no
+	# completion — so the schedule resumes where it left off once every civil
+	# war of ours is over (nuclear_custody_triggers.txt, nd_in_civil_war).
+	else_if = {
+		limit = { nd_in_civil_war = yes }
+		# Deliberately empty: the pause itself. Load-bearing (it claims this
+		# case ahead of the `else` below), so empty_effect_audit does not flag it.
+	}
+	else = {
+		if = {
+			limit = { NOT = { has_variable = nd_dismantle_retired } }
+			set_variable = { name = nd_dismantle_retired value = 0 }
+		}
+		set_variable = { name = nd_tb_retire value = nd_taboo_dismantle_this_month_value }
+		change_variable = { name = nuclear_weapon_stockpile subtract = var:nd_tb_retire }
+		change_variable = { name = nd_dismantle_retired add = var:nd_tb_retire }
+		change_variable = { name = nd_dismantle_months_left subtract = 1 }
+		nd_ledger_refresh = yes
+		remove_variable = nd_tb_retire
+		if = {
+			limit = { var:nd_dismantle_months_left <= 0 }
+			nd_taboo_dismantle_complete = yes
+		}
+	}
+}
+
+# The last warhead gone. Only nd_taboo_dismantle_step calls it, from the
+# monthly half, which refreshes the hold and the possession cost once after it
+# — so this must not.
+nd_taboo_dismantle_complete = {
+	# The warheads actually taken apart, not the count at the start (I1,
+	# final-review.md): a civil war mid-dismantle can move stock out from under
+	# us without our choosing to give it up. Kept afterward, unlike the other
+	# nd_dismantle_* variables, so nuclear_taboo.20 can still read it — trigger_event
+	# renders after this whole block finishes, so removing it here would blank
+	# the event's read (the way nd_dismantle_start_stock is kept). Falls back
+	# to the start stock, and backfills the variable from it, for a dismantling
+	# begun before nd_dismantle_retired existed.
+	if = {
+		limit = { has_variable = nd_dismantle_retired }
+		nd_taboo_note_renunciation = { WARHEADS = var:nd_dismantle_retired }
+	}
+	else = {
+		nd_taboo_note_renunciation = { WARHEADS = var:nd_dismantle_start_stock }
+		set_variable = { name = nd_dismantle_retired value = var:nd_dismantle_start_stock }
+	}
+	set_variable = { name = nuclear_weapon_stockpile value = 0 }
+	set_variable = nd_renounced_locked
+	add_modifier = { name = nd_taboo_renounced }
+	if = {
+		limit = { has_modifier = nuclear_power }
+		remove_modifier = nuclear_power
+	}
+	remove_variable = nd_dismantle_months_left
+	if = {
+		limit = { has_variable = nd_warhead_ceiling }
+		remove_variable = nd_warhead_ceiling
+	}
+	if = {
+		limit = { has_variable = nd_ai_ceiling_from_review }
+		remove_variable = nd_ai_ceiling_from_review
+	}
+	nd_snap_public_estimate = yes
+	nd_apply_posture_modifiers = yes
+	nd_ledger_refresh = yes
+	trigger_event = { id = nuclear_taboo.20 }
+	debug_log = "TE_TABOO: an arsenal was dismantled"
+}
+
+# nuclear_taboo.20's option: what the world gives a country that gave the bomb
+# up of its own accord — more the more it has come to fear the weapon.
+# nd_taboo_renounce_mult is set by the event's immediate, so the option's
+# preview shows the right prestige.
+nd_taboo_renunciation_rewards = {
+	add_modifier = {
+		name = nd_taboo_renunciation_prestige
+		years = 20
+		is_decaying = yes
+		multiplier = root.var:nd_taboo_renounce_mult
+	}
+	custom_tooltip = {
+		text = nd_taboo_tt_renounce_relations
+		every_country = {
+			limit = { NOT = { this = ROOT } }
+			change_relations = { country = ROOT value = nd_taboo_renounce_relations_value }
+		}
+	}
+	every_interest_group = {
+		limit = { nd_ig_is_restraint = yes }
+		add_modifier = {
+			name = ig_approval_positive_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+	every_interest_group = {
+		limit = { nd_ig_is_hawk = yes }
+		add_modifier = {
+			name = ig_approval_negative_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# Resume the Nuclear Programme (the decision). The breakout itself is booked
+# when the country is armed again (nd_taboo_country_monthly).
+nd_taboo_resume = {
+	remove_modifier = nd_taboo_renounced
+	if = {
+		limit = { has_variable = nd_renounced_locked }
+		remove_variable = nd_renounced_locked
+	}
+	if = {
+		limit = { has_modifier = nd_taboo_renunciation_prestige }
+		remove_modifier = nd_taboo_renunciation_prestige
+	}
+	change_infamy = nd_taboo_infamy_threat
+	custom_tooltip = {
+		text = nd_taboo_tt_resume_relations
+		every_country = {
+			limit = { NOT = { this = ROOT } }
+			change_relations = { country = ROOT value = nd_taboo_resume_relations_value }
+		}
+	}
+}
+
+# The AI's arsenal (spec §5.4), flagged every sixth month by
+# nd_ai_review_posture and run from nd_taboo_country_monthly before its one
+# refresh of the hold, so it calls the cores and never refreshes itself.
+nd_taboo_ai_review_arsenal = {
+	if = {
+		limit = { nd_taboo_is_dismantling = yes }
+		if = {
+			limit = { nd_taboo_ai_would_halt = yes }
+			nd_taboo_dismantle_stop = yes
+		}
+	}
+	else_if = {
+		limit = { nd_taboo_ai_would_dismantle = yes }
+		random = {
+			chance = 20
+			nd_taboo_dismantle_begin = yes
+		}
+	}
+	else_if = {
+		limit = {
+			nd_taboo_burden_value > 0
+			nd_stockpile > nd_taboo_ai_reduce_line_value
+		}
+		set_variable = { name = nd_warhead_ceiling value = nuclear_ai_desired_stockpile }
+		# Marks this ceiling as the review's own (M2, final-review.md), so the
+		# Lift branch below undoes only what the review itself set, not a
+		# player's own cut through a band event.
+		set_variable = nd_ai_ceiling_from_review
+	}
+	else_if = {
+		limit = {
+			has_variable = nd_warhead_ceiling
+			var:nd_warhead_ceiling < nuclear_ai_desired_stockpile
+			OR = {
+				has_variable = nd_ai_ceiling_from_review
+				is_at_war = yes
+			}
+		}
+		remove_variable = nd_warhead_ceiling
+		if = {
+			limit = { has_variable = nd_ai_ceiling_from_review }
+			remove_variable = nd_ai_ceiling_from_review
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# THE COUNTRY HALF — je_nuclear_program's monthly pulse, ROOT = this country
+# ----------------------------------------------------------------------------
+# Every per-country piece of the taboo that applies a modifier or must run
+# with ROOT = the country. Each refresh below is called exactly once here: a
+# second call in the same block would read a modifier the first had just
+# added or removed as still absent or present.
+nd_taboo_country_monthly = {
+	if = {
+		limit = { has_global_variable = nd_taboo }
+		# ---- a former nuclear state armed again, by any route: a breakout ----
+		if = {
+			limit = {
+				has_variable = nd_renounced
+				nd_is_armed = yes
+			}
+			nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_breakout }
+			remove_variable = nd_renounced
+			debug_log = "TE_TABOO: a former nuclear state is armed again"
+		}
+		# ---- the renunciation outlives a revolution: the winner keeps our
+		# variables but none of our modifiers (scripting_best_practices.md §
+		# What a Civil War's Winner Inherits) ----
+		if = {
+			limit = {
+				has_variable = nd_renounced_locked
+				NOT = { has_modifier = nd_taboo_renounced }
+			}
+			add_modifier = { name = nd_taboo_renounced }
+		}
+		# ---- the AI's arsenal review, flagged by its six-monthly posture
+		# review (nd_ai_review_posture) and run here, before the one refresh
+		# of the hold below ----
+		if = {
+			limit = { has_variable = nd_taboo_ai_arsenal_due }
+			remove_variable = nd_taboo_ai_arsenal_due
+			if = {
+				limit = { is_ai = yes }
+				nd_taboo_ai_review_arsenal = yes
+			}
+		}
+		# ---- the ceiling an arms-control treaty sets us, and walk-outs ----
+		nd_taboo_refresh_treaty_ceiling = yes
+		# ---- dismantling, or warheads above the ceiling that binds ----
+		if = {
+			limit = { nd_taboo_is_dismantling = yes }
+			nd_taboo_dismantle_step = yes
+		}
+		else_if = {
+			limit = {
+				nd_taboo_has_ceiling = yes
+				nd_stockpile > nd_taboo_effective_ceiling_value
+			}
+			nd_taboo_retire_step = yes
+		}
+		nd_taboo_refresh_held = yes
+		nd_taboo_refresh_possession = yes
+		nd_taboo_record_history = yes
+	}
+}
+
+# The possession cost on the entry (je_nuclear_program, the upkeep's scope).
+# The engine re-reads a modifier's multiplier on later ticks, so the modifier
+# is put on once and the cache updated each month — nd_apply_posture_modifiers'
+# upkeep pattern. The cache is never removed (modifier_multiplier_var_audit);
+# ROOT must be this country, which is why this runs only from the entry's
+# pulse. It comes off when the burden is 0 — below a taboo of 40, or unarmed:
+# the entry no longer closes on disarmament.
+nd_taboo_refresh_possession = {
+	set_variable = { name = nd_taboo_burden_cached value = nd_taboo_burden_value }
+	if = {
+		limit = { var:nd_taboo_burden_cached > 0 }
+		je:je_nuclear_program ?= {
+			if = {
+				limit = { NOT = { has_modifier = nd_taboo_possession_cost } }
+				add_modifier = {
+					name = nd_taboo_possession_cost
+					multiplier = root.var:nd_taboo_burden_cached
+				}
+			}
+		}
+	}
+	else = {
+		je:je_nuclear_program ?= {
+			if = {
+				limit = { has_modifier = nd_taboo_possession_cost }
+				remove_modifier = nd_taboo_possession_cost
+			}
+		}
+	}
+}
+
+# Two monthly series for the panel's chart, stored per tracked country for the
+# reason the UN authority and global-warming series are (te_history_chart
+# reads the country's own list; te_history_global_warming_effects.txt). No
+# markers: the store's pips are shared with other systems and would go
+# unexplained. te_history_record_sample gates on te_history_country_is_tracked
+# itself. Scope: country (nd_taboo_country_monthly).
+nd_taboo_record_history = {
+	if = {
+		limit = {
+			has_global_variable = nd_taboo
+			has_global_variable = nd_taboo_target
+		}
+		te_history_record_sample = { METRIC = nd_taboo VALUE = global_var:nd_taboo }
+		te_history_record_sample = { METRIC = nd_taboo_tgt VALUE = global_var:nd_taboo_target }
+	}
+}
+
+# ----------------------------------------------------------------------------
+# BAND EVENTS (spec §6.3) — the world's step calls the check; global scope
+# ----------------------------------------------------------------------------
+
+# One band a month, up or down; the band moves even when the event is on
+# cooldown.
+nd_taboo_band_check = {
+	if = {
+		limit = { nd_taboo_band_up_due = yes }
+		change_global_variable = { name = nd_taboo_band add = 1 }
+		nd_taboo_fire_band_up = yes
+	}
+	else_if = {
+		limit = { nd_taboo_band_down_due = yes }
+		change_global_variable = { name = nd_taboo_band subtract = 1 }
+		nd_taboo_fire_band_down = yes
+	}
+}
+
+# The band has just risen to 2..5: through 30 / 50 / 70 / 90.
+nd_taboo_fire_band_up = {
+	if = {
+		limit = { global_var:nd_taboo_band = 2 }
+		nd_taboo_fire_band_event = { N = 1 EVENT = nuclear_taboo.1 }
+	}
+	else_if = {
+		limit = { global_var:nd_taboo_band = 3 }
+		nd_taboo_fire_band_event = { N = 2 EVENT = nuclear_taboo.2 }
+	}
+	else_if = {
+		limit = { global_var:nd_taboo_band = 4 }
+		nd_taboo_fire_band_event = { N = 3 EVENT = nuclear_taboo.3 }
+	}
+	else_if = {
+		limit = { global_var:nd_taboo_band = 5 }
+		nd_taboo_fire_band_event = { N = 4 EVENT = nuclear_taboo.4 }
+	}
+}
+
+# The band has just fallen to 4..1: through 90 / 70 / 50 / 30.
+nd_taboo_fire_band_down = {
+	if = {
+		limit = { global_var:nd_taboo_band = 4 }
+		nd_taboo_fire_band_event = { N = 5 EVENT = nuclear_taboo.5 }
+	}
+	else_if = {
+		limit = { global_var:nd_taboo_band = 3 }
+		nd_taboo_fire_band_event = { N = 6 EVENT = nuclear_taboo.6 }
+	}
+	else_if = {
+		limit = { global_var:nd_taboo_band = 2 }
+		nd_taboo_fire_band_event = { N = 7 EVENT = nuclear_taboo.7 }
+	}
+	else_if = {
+		limit = { global_var:nd_taboo_band = 1 }
+		nd_taboo_fire_band_event = { N = 8 EVENT = nuclear_taboo.8 }
+	}
+}
+
+# To every country, as global warming's thresholds are (gw_fire_warming_threshold_event).
+nd_taboo_fire_band_event = {
+	if = {
+		limit = { nd_taboo_event_ready = { N = $N$ } }
+		set_global_variable = { name = nd_taboo_ev_$N$_year value = year }
+		every_country = {
+			limit = { NOT = { is_country_type = decentralized } }
+			trigger_event = { id = $EVENT$ }
+		}
+		debug_log = "TE_TABOO: a band event fired"
+	}
+}
+
+# ---- The band events' option bodies — country scope, ROOT = the recipient.
+# Country-local: none writes the world's score. Two enact a real system action
+# (nd_set_doctrine_1, nd_taboo_dismantle_start), which carries its own effect.
+
+nd_taboo_opt_cut_arsenal = {
+	custom_tooltip = {
+		text = nd_taboo_tt_opt_cut
+		set_variable = { name = nd_warhead_ceiling value = nd_taboo_half_arsenal_value }
+	}
+	hidden_effect = {
+		if = {
+			limit = { has_variable = nd_ai_ceiling_from_review }
+			remove_variable = nd_ai_ceiling_from_review
+		}
+		nd_taboo_refresh_held = yes
+	}
+}
+
+nd_taboo_opt_stand_firm = {
+	every_interest_group = {
+		limit = { nd_ig_is_hawk = yes }
+		add_modifier = {
+			name = ig_approval_positive_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+	every_interest_group = {
+		limit = { nd_ig_is_restraint = yes }
+		add_modifier = {
+			name = ig_approval_negative_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+nd_taboo_opt_hold_line = {
+	every_interest_group = {
+		limit = { nd_ig_is_restraint = yes }
+		add_modifier = {
+			name = ig_approval_positive_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+	every_interest_group = {
+		limit = { nd_ig_is_hawk = yes }
+		add_modifier = {
+			name = ig_approval_negative_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+nd_taboo_opt_champion = {
+	add_modifier = {
+		name = nd_taboo_norm_champion
+		years = 10
+		is_decaying = yes
+	}
+	custom_tooltip = {
+		text = nd_taboo_tt_champion_relations
+		every_country = {
+			limit = {
+				NOT = { this = ROOT }
+				nd_is_armed = yes
+				country_rank >= rank_value:great_power
+			}
+			change_relations = { country = ROOT value = nd_taboo_champion_relations }
+		}
+	}
+}
+
+nd_taboo_opt_keep_quiet = {
+	custom_tooltip = {
+		text = nd_taboo_tt_quiet_relations
+		every_country = {
+			limit = {
+				NOT = { this = ROOT }
+				nd_is_armed = yes
+				country_rank >= rank_value:great_power
+			}
+			change_relations = { country = ROOT value = nd_taboo_quiet_relations }
+		}
+	}
+}
+
+nd_taboo_opt_seek_protector = {
+	custom_tooltip = {
+		text = nd_taboo_tt_protector
+		random_country = {
+			limit = { nd_taboo_friendly_armed_power = yes }
+			change_relations = { country = ROOT value = nd_taboo_protector_relations }
+		}
+	}
+}
+
+nd_taboo_opt_modernise = {
+	custom_tooltip = {
+		text = nd_taboo_tt_modernise
+		change_variable = { name = nd_reliability add = nd_taboo_modernise_reliability }
+		clamp_variable = { name = nd_reliability min = 0 max = 100 }
+		change_variable = { name = nd_survivability add = nd_taboo_modernise_survivability }
+		clamp_variable = { name = nd_survivability min = 0 max = 100 }
+	}
+	every_interest_group = {
+		limit = { nd_ig_is_restraint = yes }
+		add_modifier = {
+			name = ig_approval_negative_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# The eroding events' immediate caches the weekly cost first, so the option's
+# preview shows it; the cache is never removed (modifier_multiplier_var_audit).
+nd_taboo_opt_shelters = {
+	add_modifier = {
+		name = nd_taboo_civil_defence
+		years = 10
+		multiplier = root.var:nd_taboo_civil_defence_cost_cached
+	}
+	custom_tooltip = nd_taboo_tt_shelters_war_support
+}

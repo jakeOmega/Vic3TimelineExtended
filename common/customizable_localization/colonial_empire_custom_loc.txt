@@ -18,8 +18,11 @@
 #   3 strained    (bar 40-65)  -> colonial_empire_strained_modifier
 #   4 stable      (bar 65-90)  -> colonial_empire_stable_modifier
 #   5 solidified  (bar 90+)    -> colonial_empire_solidified_modifier
-# (The band names and the modifier names are offset by one for historical
-# reasons; the mapping above is the authority.)
+# (The band names and the modifier KEYS are offset by one for historical
+# reasons, and renaming a key would break saves; the mapping above is the
+# authority. The modifiers' displayed names follow the bands: the
+# _crumbling_modifier reads "Colonial Empire Collapsing" and the
+# _under_pressure_modifier "Colonial Empire Crumbling".)
 #
 # Read from loc as [JournalEntry.GetCountry.GetCustom('<key>')], or
 # [ROOT.GetCountry.GetCustom('<key>')] inside a journal-entry desc.
