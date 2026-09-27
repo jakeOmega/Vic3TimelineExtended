@@ -19,6 +19,7 @@ Simulates a realistic financial cycle with boom/bust mechanics, including specul
 - **Crash detection:** Asymmetric — higher probability in frenzy/boom when bubble pressure is high
 - **Contagion:** Crash spreads via trade agreements, customs unions, adjacency, economic dependence, market share. Event `minor_events_timelineextended.7` fires to connected countries.
 - **Fiscal policy:** `financial_cycle_government_fiscal_policy_effect` recalculated monthly based on budget
+- **Text by economy:** the title and the description follow the economic system law (command economy, cooperative ownership, anything else). Both are customizable localization in `common/customizable_localization/zzz_extra_custom_loc.txt`: `te_banking_cycle_title` behind `je_banking_cycle`, and `te_banking_cycle_reason` behind the engine's implicit `je_banking_cycle_reason`, which picks `je_banking_cycle_reason_command_economy` / `_cooperative_ownership` / `_market`. The two variants had been unreferenced since `be165ed6` and were wired back on 2026-09-26. `status_desc` and `progress_desc` branch on the same two laws with `triggered_desc`.
 
 ### Variables
 | Variable | Range | Description |

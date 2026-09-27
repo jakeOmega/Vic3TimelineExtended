@@ -324,8 +324,6 @@
  iw_launch_infrastructure_sabotage_button:0 "Launch Infrastructure Sabotage"
  iw_launch_infrastructure_sabotage_button_desc:0 "Deploy cyber weapons to disrupt enemy [concept_infrastructure] during wartime, reducing production and transport capacity.\n\n#bold Requires:#! Available operation slot, active war.\n#bold Effect:#! Reduces enemy infrastructure and [concept_throughput].\n#bold Risk:#! Monthly detection chance; if detected, generates [concept_infamy]."
  iw_not_at_war_tt:0 "Must be at peace (peacetime operation)"
- je_banking_cycle_reason_command_economy:0 "In a Command Economy the cycle should be read as a logistics coordination gauge: momentum and [concept_bubble_pressure] track supply-chain synchronization and administrative strain rather than investor confidence. Use directed credit, plan revisions, and allocation orders to resolve bottlenecks."
- je_banking_cycle_reason_cooperative_ownership:0 "Under Cooperative Ownership the cycle tracks the balance between worker consumption and capital availability. High [concept_bubble_pressure] reflects excessive payouts and low reinvestment; interventions include mutual aid funds and council moral suasion to prioritize long-term viability."
  je_civil_rights_status_discriminatory:0 "Our current laws perpetuate #N [concept_discrimination]#! against minority communities. The movement demands systemic reform."
  je_civil_rights_status_hostile:0 "Our laws enforce #R active hostility#! toward minority communities. The movement faces a long and difficult struggle."
  je_civil_rights_status_indifferent:0 "Our government takes no position on minority rights. The movement pushes for #G active protection#!."
