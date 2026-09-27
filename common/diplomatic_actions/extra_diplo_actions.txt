@@ -243,6 +243,7 @@ colonial_culture_change = {
 }
 
 diplomatic_alignment = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/diplomatic_alignment.dds"
 	groups= {
 		general
 	}

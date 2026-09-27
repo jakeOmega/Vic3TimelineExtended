@@ -337,6 +337,7 @@ un_secure_commitment_action = {
 # vetoed anyway, and a pledge against never prevents a veto (the veto is
 # decided on the lean without the pledge, un_vote_ai_should_veto).
 un_secure_commitment_against_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/un_secure_commitment_against_action.dds"
 	groups = {
 		general
 	}

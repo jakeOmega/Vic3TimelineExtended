@@ -1642,6 +1642,7 @@ covert_regime_change_action = {
 # failed centrifuges, missing scientists. Severe tier. Needs a Seasoned agency
 # to launch; lapses when the target's programme stops.
 covert_nuclear_sabotage_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/covert_nuclear_sabotage_action.dds"
 	groups = {
 		general
 	}
@@ -1818,6 +1819,7 @@ covert_nuclear_sabotage_action = {
 # target to have completed a milestone we have not.
 # Effect phases through preparatory → establishing → fully operational.
 covert_space_espionage_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/covert_space_espionage_action.dds"
 	groups = {
 		general
 	}
