@@ -297,8 +297,21 @@ te_on_company_disbanded = {
 # Root = newly independent country
 # ============================================================================
 on_become_independent = {
+	on_actions = {
+		decol_collapse_grace_on_action
+	}
 	events = {
 		decolonization_events.15
+	}
+}
+
+# Twenty years' grace from colonial collapse for a country that has just become
+# independent (owner ruling, 2026-09-26). Collapse only: the post-independence
+# events key on recently_decolonized, which only the mod's own releases and
+# vanilla's release as independent set. colonial_collapse_effects.txt.
+decol_collapse_grace_on_action = {
+	effect = {
+		set_variable = { name = decol_collapse_grace days = 7300 }
 	}
 }
 

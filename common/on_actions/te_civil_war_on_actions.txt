@@ -71,6 +71,9 @@ te_civil_war_on_secession_end = {
 		scope:target ?= {
 			if = {
 				limit = { is_country_alive = yes }
+				# Twenty years' grace from colonial collapse, as for any country
+				# that has just become independent (decol_collapse_grace_on_action).
+				set_variable = { name = decol_collapse_grace days = 7300 }
 				if = {
 					limit = { has_variable = te_cw_origin }
 					remove_variable = te_cw_origin

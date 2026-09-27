@@ -781,13 +781,16 @@ Per tracked country: 120 containers, each with 3 bookkeeping variables plus one 
 
 ## Colonial Collapse (`colonial_collapse_effect`)
 
-- **Purpose:** Once the decolonization era has begun, tiny AI countries (remnants of colonial breakups) are absorbed by culturally similar neighbors or reverted to uncolonized land.
+- **Purpose:** Once the decolonization era has begun, any tiny, poor AI country (not only a former colony: owner ruling 2026-09-26) is absorbed by an AI neighbour sharing its heritage or, with none, reverted to uncolonized land.
 - **Location:** `common/scripted_effects/colonial_collapse_effects.txt`, triggered by `colonial_collapse_on_action` in `common/on_actions/extra_on_actions.txt` (wired to `on_yearly_pulse_country`). Each country tests itself on its own yearly pulse.
 - **Gates:** the `decolonization_enabled` game rule, and some country in the world has researched `decolonization` (`decol_era_begun`; the collapsing country need not have it).
-- **Criteria for collapse:** non-player, alive, not decentralized, not a subject, holding no subjects, not freed in the last 20 years (`recently_decolonized`, which every release path sets), no civil war at `civil_war_progress >= 0.75`, not in a diplomatic play or a war, and tiny and poor on a sliding scale: population under 100k with average SoL under 6, 200k and 5, 300k and 4, 500k and 3, or 1M and 2.
+- **Criteria for collapse:** non-player, alive, not decentralized, not a subject, holding no subjects, in no power bloc and bound by no treaty in force (`colonial_collapse_unattached`, both branches: owner ruling 2026-09-26), no civil war at `civil_war_progress >= 0.75`, not in a diplomatic play or a war, and tiny and poor on a sliding scale: population under 100k with average SoL under 6, 200k and 5, 300k and 4, 500k and 3, or 1M and 2.
+- **Twenty years' grace after independence**, from either of two 20-year variables:
+  - `recently_decolonized`, set by `decol_mark_former_colony` (every country the mod's releases form, and the `make_independent` options of `.1` / `.3`) and by `te_construction_market_on_released_independent` (vanilla's release as independent). The post-independence events key on it.
+  - `decol_collapse_grace`, set by `on_become_independent` (a subject made independent: an independence war won, an overlord's release) and by a won secession (`te_civil_war_on_secession_end`). It exempts from collapse only and opens no event (owner ruling 2026-09-26).
 - **Resolution order:**
   1. A neighbour of its most populous state whose owner shares a heritage trait group with it and is an AI country at peace and not a subject → that owner **annexes** it (never a player: owner ruling 2026-09-26) (the notice is posted first, while the collapsing country still exists).
-  2. Otherwise, if nothing ties it to the rest of the world (no power bloc, no treaty in force, no company, no warheads) → **`set_country_type = decentralized`** (revert to uncolonized). Vanilla never does this, so the branch is limited to the plain case.
+  2. Otherwise, if it holds no company and no warheads → **`set_country_type = decentralized`** (revert to uncolonized). Vanilla never does this, so the branch is limited to the plain case.
   3. Otherwise nothing happens; it is tested again next year.
 - **Notifications:** Countries in same strategic region AND great powers receive alerts.
 - **History:** from db166830 (2026-03-23) until 2026-09 the limit held `any_civil_war = { always = no }`, which is always false, so the system never ran. The owner confirmed on 2026-09-26 that collapse should be live, the decentralize branch included.
@@ -1100,7 +1103,7 @@ All pulse-based on_actions are routed through `extra_on_actions.txt`:
 - `excess_private_construction_on_action` — construction cost penalty
 - `fix_incompatible_laws` — auto-fix illegal law combos
 - `construction_cost_scaling_on_action` — GDP-based construction costs
-- `colonial_collapse_on_action` — tiny AI country absorption
+- `colonial_collapse_on_action` — tiny, poor AI countries absorbed or decentralized
 - `assign_aptitude_traits_on_action` — character trait assignment
 
 ### Immediate Triggers (`extra_on_actions.txt`)
@@ -1205,7 +1208,7 @@ Three layers:
 | `common/scripted_guis/colonial_empire_sguis.txt` | 5 handlers backing the widget (2 guards, 1 text renderer, 2 op-coded actions) |
 | `common/customizable_localization/colonial_empire_custom_loc.txt` | Band names, status line and phase-modifier line, keyed on `var:colonial_empire_tier` |
 | `common/scripted_effects/te_history_colonial_effects.txt` | `te_history_record_colonial_samples` — the two chart series |
-| `common/scripted_effects/colonial_collapse_effects.txt` | AI country absorption for tiny post-colonial remnants |
+| `common/scripted_effects/colonial_collapse_effects.txt` | Colonial collapse: tiny, poor AI countries absorbed or decentralized in the decolonization era |
 | `common/laws/colonial_empire_law_injections.txt` | Per-law colonial-stability and programme-effectiveness contributions |
 | `common/modifier_type_definitions/colonial_empire_modifier_types.txt` | The four `country_colonial_*` aggregate modifier types |
 | `common/on_actions/extra_on_actions.txt` | `decolonization_events_on_action` wiring |

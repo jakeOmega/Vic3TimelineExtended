@@ -315,6 +315,16 @@ decol_era_begun = {
 	}
 }
 
+# Colonial collapse may take this country, by either branch: it is in no power
+# bloc and bound by no treaty in force (an alliance, a guarantee, an
+# arrangement with a player). Annexation and decentralization alike would have
+# to unwind those (owner ruling, 2026-09-26). colonial_collapse_effects.txt.
+# Scope: country
+colonial_collapse_unattached = {
+	is_in_power_bloc = no
+	NOT = { any_scope_treaty = { always = yes } }
+}
+
 # A state that structurally qualifies as an overseas colony.
 # Does NOT include acceptance/integration checks - those are context-dependent.
 # Two qualifying signals (either suffices, given non-primary population
