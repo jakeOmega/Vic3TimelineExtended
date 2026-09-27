@@ -3010,6 +3010,9 @@ decolonization_events.201 = {
 				remove_variable = decolonization_marker
 			}
 		}
+		# The successors above read our programme-month counters for their
+		# legacy (apply_decolonization_path); on_fail left them for this.
+		colonial_empire_clear_path_months = yes
 		add_modifier = {
 			name = colonial_empire_collapsed_modifier
 			days = long_modifier_time
@@ -3169,6 +3172,9 @@ decolonization_events.204 = {
 				remove_variable = decolonization_marker
 			}
 		}
+		# The successors above read our programme-month counters for their
+		# legacy (apply_decolonization_path); on_fail left them for this.
+		colonial_empire_clear_path_months = yes
 		add_modifier = {
 			name = negotiated_withdrawal_modifier
 			days = long_modifier_time

@@ -167,6 +167,9 @@
 		# attached to entities that survive the JE's end and would otherwise
 		# stick around indefinitely.
 		colonial_empire_je_cleanup_effect = yes
+		# No success event forms a country, so the programme-month counters
+		# can go now (on_fail keeps them for .201 / .204).
+		colonial_empire_clear_path_months = yes
 
 		# Permanent re-entry block. Any successful completion (bar 100 hold or
 		# IF Act capstone) commits the player out of further je_colonial_empire
@@ -209,6 +212,10 @@
 			}
 			# .206 reads and then clears var:decol_chosen_releases itself.
 			trigger_event = { id = decolonization_events.206 }   # Voluntary Decolonization
+			# .206 forms no country. .204 and .201 below do, in their option,
+			# where apply_decolonization_path reads these counters for each
+			# successor's legacy; they clear them after forming.
+			colonial_empire_clear_path_months = yes
 		}
 		else_if = {
 			limit = {
@@ -254,7 +261,8 @@
 		# Clean up persistent JE state. The collapse_subject_unrest_modifier
 		# applied just above is intentionally preserved (failure consequence)
 		# -- the cleanup helper removes the bar-band LD modifiers but not the
-		# failure aftershock.
+		# failure aftershock. It leaves the programme-month counters, which
+		# .201 / .204 still need (colonial_empire_clear_path_months).
 		colonial_empire_je_cleanup_effect = yes
 	}
 
