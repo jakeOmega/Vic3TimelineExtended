@@ -62,6 +62,10 @@ bubble pressure; the high phases raise output and build it.
 | Boom | 75–87 | Services +35%, manufacturing +10%, capitalists' contribution +10%, bubble +4 a month |
 | Frenzy | 88 and up | Services +50%, manufacturing +15%, capitalists' contribution +15%, bubble +8 a month |
 
+The capitalists' contribution figures are percentage points, not percentages.
+Capitalists put a share of their income into the investment pool, and a Panic
+takes 25 points off that share rather than a quarter of it.
+
 A command economy's phases change construction costs and bureaucracy instead of
 services and investment; a cooperative economy's grow or shrink the investment
 pool. Both are far less exposed to crashes.
