@@ -10,11 +10,13 @@
 
 # The session's month now, and the month after it. The casting month an AI
 # member draws is 9, 10 or 11 (un_vote_ai_draws); one drawn after the session
-# began is raised to next month at least.
+# began is raised to next month at least. Read only inside un_vote.4, where
+# scope:un_resolution is always set (a plain `=` opener, like every math
+# block in un_dossier_values.txt).
 # Scope: any, with scope:un_resolution saved
 un_res_months_now = {
 	value = 0
-	scope:un_resolution ?= {
+	scope:un_resolution = {
 		add = var:un_res_months
 	}
 }
@@ -35,6 +37,7 @@ un_lean_shown_value = {
 	value = var:un_lean_total
 	if = {
 		limit = {
+			has_variable = un_vote_draw_res
 			var:un_vote_draw_res ?= scope:un_resolution
 			has_variable = un_lean_misread
 		}
@@ -73,7 +76,10 @@ un_lobby_campaign_shift_value = {
 un_lean_lobbying = {
 	value = 0
 	if = {
-		limit = { var:un_lobby_shift_res ?= scope:un_resolution }
+		limit = {
+			has_variable = un_lobby_shift_res
+			var:un_lobby_shift_res ?= scope:un_resolution
+		}
 		add = var:un_lobby_for_shift
 		subtract = var:un_lobby_against_shift
 	}

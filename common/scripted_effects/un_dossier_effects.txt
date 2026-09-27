@@ -179,7 +179,12 @@ un_lean_snapshot = {
 # Scope: the AI member (= ROOT, un_vote.4), with scope:un_resolution saved
 un_vote_ai_draws = {
 	if = {
-		limit = { NOT = { var:un_vote_draw_res ?= scope:un_resolution } }
+		limit = {
+			OR = {
+				NOT = { has_variable = un_vote_draw_res }
+				NOT = { var:un_vote_draw_res ?= scope:un_resolution }
+			}
+		}
 		set_variable = { name = un_vote_draw_res value = scope:un_resolution }
 		random_list = {
 			1 = { set_variable = { name = un_vote_cast_month value = 9 } }

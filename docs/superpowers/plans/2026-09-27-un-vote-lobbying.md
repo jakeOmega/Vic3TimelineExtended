@@ -28,7 +28,7 @@
 1. **Pact `cost` as a script value:** not verifiable offline, and vanilla has no precedent. Use the flat 100.
 2. **Create/end pacts from script:** `create_diplomatic_pact` (country scope, initiator) and `remove_diplomatic_pact` are documented and used by vanilla (`31_power_bloc_force_become_subject.txt`, `01_expel_diplomats.txt`). Script never trusts a hook alone: every create is followed by our own container start (idempotent), and the monthly tick reaps containers whose pact is gone and adopts pacts that have no container (covert-warfare's proven reconcile shape).
 3. **Monthly per-AI event:** `un_vote.4` fans out only while a resolution is voting (≤ 12 months at a time); the old code already fired it to every AI member once.
-4. **Ordered rows without sorting primitives:** `ordered_in_list` with a literal `position` is a sorting primitive (the mission contributor rows use it). Each AI member's snapshot writes a sort key; after every AI snapshot the resolution re-assigns `un_deleg_row_0..23` with 24 unrolled `ordered_in_list = { position = N }` calls, so display and buttons read the same slot.
+4. **Ordered rows without sorting primitives:** `ordered_in_list` with a literal `position` is a sorting primitive (the mission contributor rows use it). Each AI member's snapshot writes a sort key; the resolution re-assigns `un_deleg_row_0..23` with 24 unrolled `ordered_in_list = { position = N }` calls, so display and buttons read the same slot. *(As built after review: the re-assignment runs once per fan-out, in a hidden `un_vote.7` sent to each human country the next day, not after every AI snapshot; a member that votes drops out of its row at once.)*
 
 ## Other decisions the spec leaves to the plan
 

@@ -2206,6 +2206,7 @@ un_chamber_deleg_row = {
 		if = {
 			limit = {
 				has_tag = un_res_voting
+				has_variable = un_deleg_row_$N$
 				var:un_deleg_row_$N$ ?= { un_deleg_listed = yes }
 			}
 			var:un_deleg_row_$N$ = { save_temporary_scope_as = un_deleg_m }
@@ -2250,6 +2251,7 @@ un_chamber_deleg_member_lines = {
 	if = {
 		limit = {
 			scope:un_deleg_m = {
+				has_variable = un_pledge_res
 				var:un_pledge_res ?= global_var:un_active_resolution
 				exists = var:un_pledge_to
 			}

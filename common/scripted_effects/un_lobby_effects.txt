@@ -77,7 +77,12 @@ un_lobby_record_attempt = {
 			}
 			scope:un_lobby_recipient = {
 				if = {
-					limit = { NOT = { var:un_pledge_askers_res ?= scope:un_lobby_ask_res } }
+					limit = {
+						OR = {
+							NOT = { has_variable = un_pledge_askers_res }
+							NOT = { var:un_pledge_askers_res ?= scope:un_lobby_ask_res }
+						}
+					}
 					if = {
 						limit = { has_variable_list = un_pledge_askers }
 						clear_variable_list = un_pledge_askers
@@ -151,7 +156,12 @@ un_lobby_accept_commitment = {
 			}
 			scope:un_lobby_lobbyist = {
 				if = {
-					limit = { NOT = { var:un_pledge_count_res ?= scope:un_lobby_pledge_res } }
+					limit = {
+						OR = {
+							NOT = { has_variable = un_pledge_count_res }
+							NOT = { var:un_pledge_count_res ?= scope:un_lobby_pledge_res }
+						}
+					}
 					set_variable = { name = un_pledge_count value = 0 }
 					set_variable = { name = un_pledge_count_res value = scope:un_lobby_pledge_res }
 				}
@@ -231,14 +241,20 @@ un_lobby_settle_pledge = {
 	# the proposer, the only country that could ask for one then.
 	scope:un_res_voter = {
 		if = {
-			limit = { var:un_pledge_res ?= scope:un_lobby_settle_res }
+			limit = {
+				has_variable = un_pledge_res
+				var:un_pledge_res ?= scope:un_lobby_settle_res
+			}
 			var:un_pledge_to ?= { save_temporary_scope_as = un_lobby_settle_lobbyist }
 		}
 	}
 	if = {
 		limit = {
 			scope:un_res_voter = {
-				NOT = { var:un_pledge_res ?= scope:un_lobby_settle_res }
+				OR = {
+					NOT = { has_variable = un_pledge_res }
+					NOT = { var:un_pledge_res ?= scope:un_lobby_settle_res }
+				}
 			}
 		}
 		var:un_res_proposer ?= { save_temporary_scope_as = un_lobby_settle_lobbyist }
@@ -686,7 +702,10 @@ un_lobby_campaigns_aggregate = {
 		}
 	}
 	every_country = {
-		limit = { var:un_lobby_shift_res ?= scope:un_lc_res_t }
+		limit = {
+			has_variable = un_lobby_shift_res
+			var:un_lobby_shift_res ?= scope:un_lc_res_t
+		}
 		clamp_variable = { name = un_lobby_for_shift min = 0 max = un_lobby_campaign_stack_cap }
 		clamp_variable = { name = un_lobby_against_shift min = 0 max = un_lobby_campaign_stack_cap }
 	}
@@ -711,7 +730,10 @@ un_lobby_member_recompute = {
 	}
 	$MEMBER$ = {
 		if = {
-			limit = { var:un_lobby_shift_res ?= scope:un_lc_res_t }
+			limit = {
+				has_variable = un_lobby_shift_res
+				var:un_lobby_shift_res ?= scope:un_lc_res_t
+			}
 			clamp_variable = { name = un_lobby_for_shift min = 0 max = un_lobby_campaign_stack_cap }
 			clamp_variable = { name = un_lobby_against_shift min = 0 max = un_lobby_campaign_stack_cap }
 		}
@@ -738,7 +760,12 @@ un_lobby_campaign_add_to_member = {
 	save_temporary_scope_as = un_lc_add
 	var:un_lc_member ?= {
 		if = {
-			limit = { NOT = { var:un_lobby_shift_res ?= scope:un_lc_res_t } }
+			limit = {
+				OR = {
+					NOT = { has_variable = un_lobby_shift_res }
+					NOT = { var:un_lobby_shift_res ?= scope:un_lc_res_t }
+				}
+			}
 			set_variable = { name = un_lobby_shift_res value = scope:un_lc_res_t }
 			set_variable = { name = un_lobby_for_shift value = 0 }
 			set_variable = { name = un_lobby_against_shift value = 0 }
@@ -909,7 +936,10 @@ un_lobby_ai_lobby = {
 # Scope: the viewer (ROOT)
 un_deleg_row_lobby = {
 	global_var:un_active_resolution ?= {
-		var:un_deleg_row_$N$ ?= { save_scope_as = target_country }
+		if = {
+			limit = { has_variable = un_deleg_row_$N$ }
+			var:un_deleg_row_$N$ ?= { save_scope_as = target_country }
+		}
 	}
 	if = {
 		limit = { exists = scope:target_country }
@@ -929,7 +959,10 @@ un_deleg_row_lobby = {
 # Scope: the viewer (ROOT)
 un_deleg_row_stop = {
 	global_var:un_active_resolution ?= {
-		var:un_deleg_row_$N$ ?= { save_scope_as = target_country }
+		if = {
+			limit = { has_variable = un_deleg_row_$N$ }
+			var:un_deleg_row_$N$ ?= { save_scope_as = target_country }
+		}
 	}
 	if = {
 		limit = { exists = scope:target_country }
@@ -959,7 +992,10 @@ un_deleg_row_stop = {
 # Scope: the viewer (ROOT)
 un_deleg_row_pledge = {
 	global_var:un_active_resolution ?= {
-		var:un_deleg_row_$N$ ?= { save_scope_as = target_country }
+		if = {
+			limit = { has_variable = un_deleg_row_$N$ }
+			var:un_deleg_row_$N$ ?= { save_scope_as = target_country }
+		}
 	}
 	if = {
 		limit = { exists = scope:target_country }

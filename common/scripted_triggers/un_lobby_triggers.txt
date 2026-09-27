@@ -104,6 +104,7 @@ un_pledge_made_by = {
 # Scope: the prospective recipient
 un_pledge_asked_by = {
 	has_global_variable = un_active_resolution
+	has_variable = un_pledge_askers_res
 	var:un_pledge_askers_res ?= global_var:un_active_resolution
 	has_variable_list = un_pledge_askers
 	is_target_in_variable_list = { name = un_pledge_askers target = $ASKER$ }
@@ -115,6 +116,7 @@ un_pledge_asked_by = {
 # Scope: the asker
 un_pledge_under_cap = {
 	OR = {
+		NOT = { has_variable = un_pledge_count_res }
 		NOT = { var:un_pledge_count_res ?= global_var:un_active_resolution }
 		var:un_pledge_count < un_lobby_commitment_cap
 	}
@@ -150,6 +152,7 @@ un_pledge_deal_available = {
 # Scope: a member
 un_lobby_true_lean_in = {
 	has_global_variable = un_active_resolution
+	has_variable = un_lean_res
 	var:un_lean_res ?= global_var:un_active_resolution
 	has_variable = un_lean_total
 	var:un_lean_total >= $LOW$
@@ -248,6 +251,7 @@ un_lobby_campaign_live_ok = {
 un_deleg_is_worked = {
 	OR = {
 		AND = {
+			has_variable = un_lobby_shift_res
 			var:un_lobby_shift_res ?= scope:un_resolution
 			var:un_lobby_campaigns_on > 0
 		}
@@ -290,6 +294,7 @@ un_deleg_row_filled = {
 	has_global_variable = un_active_resolution
 	global_var:un_active_resolution ?= {
 		has_tag = un_res_voting
+		has_variable = un_deleg_row_$N$
 		var:un_deleg_row_$N$ ?= { un_deleg_listed = yes }
 	}
 }
@@ -317,6 +322,7 @@ un_deleg_row_can_lobby = {
 	custom_tooltip = {
 		text = un_deleg_member_open_tt
 		global_var:un_active_resolution ?= {
+			has_variable = un_deleg_row_$N$
 			var:un_deleg_row_$N$ ?= { un_lobby_member_lobbyable = yes }
 		}
 	}
@@ -327,6 +333,7 @@ un_deleg_row_can_lobby = {
 	custom_tooltip = {
 		text = un_deleg_not_lobbying_tt
 		global_var:un_active_resolution ?= {
+			has_variable = un_deleg_row_$N$
 			var:un_deleg_row_$N$ ?= {
 				NOT = { has_diplomatic_pact = { who = ROOT type = un_lobby_for_action } }
 				NOT = { has_diplomatic_pact = { who = ROOT type = un_lobby_against_action } }
@@ -336,6 +343,7 @@ un_deleg_row_can_lobby = {
 	custom_tooltip = {
 		text = un_deleg_can_afford_tt
 		global_var:un_active_resolution ?= {
+			has_variable = un_deleg_row_$N$
 			var:un_deleg_row_$N$ ?= {
 				ROOT = {
 					can_afford_diplomatic_action = { target = prev type = un_lobby_$DIR$_action } # REVIEWED 2026-09-27: prev is the row's member (var:un_deleg_row_$N$), deliberately
@@ -346,6 +354,7 @@ un_deleg_row_can_lobby = {
 	custom_tooltip = {
 		text = un_deleg_can_send_tt
 		global_var:un_active_resolution ?= {
+			has_variable = un_deleg_row_$N$
 			var:un_deleg_row_$N$ ?= {
 				ROOT = {
 					can_send_diplomatic_action = { target = prev type = un_lobby_$DIR$_action } # REVIEWED 2026-09-27: prev is the row's member (var:un_deleg_row_$N$), deliberately
@@ -362,6 +371,7 @@ un_deleg_row_can_lobby = {
 un_deleg_row_lobbying = {
 	has_global_variable = un_active_resolution
 	global_var:un_active_resolution ?= {
+		has_variable = un_deleg_row_$N$
 		var:un_deleg_row_$N$ ?= {
 			OR = {
 				has_diplomatic_pact = { who = ROOT type = un_lobby_for_action }
@@ -381,12 +391,14 @@ un_deleg_row_can_pledge = {
 	custom_tooltip = {
 		text = un_lobby_has_not_voted_tt
 		global_var:un_active_resolution ?= {
+			has_variable = un_deleg_row_$N$
 			var:un_deleg_row_$N$ ?= { un_deleg_listed = yes }
 		}
 	}
 	custom_tooltip = {
 		text = un_lobby_not_pledged_tt
 		global_var:un_active_resolution ?= {
+			has_variable = un_deleg_row_$N$
 			var:un_deleg_row_$N$ ?= {
 				NOT = { un_lobby_holds_pledge_on_active = yes }
 			}
@@ -395,6 +407,7 @@ un_deleg_row_can_pledge = {
 	custom_tooltip = {
 		text = un_lobby_not_yet_approached_tt
 		global_var:un_active_resolution ?= {
+			has_variable = un_deleg_row_$N$
 			var:un_deleg_row_$N$ ?= {
 				NOT = { un_pledge_asked_by = { ASKER = ROOT } }
 			}
@@ -407,6 +420,7 @@ un_deleg_row_can_pledge = {
 	custom_tooltip = {
 		text = un_deleg_can_send_tt
 		global_var:un_active_resolution ?= {
+			has_variable = un_deleg_row_$N$
 			var:un_deleg_row_$N$ ?= {
 				ROOT = {
 					can_send_diplomatic_action = { target = prev type = $ACTION$ } # REVIEWED 2026-09-27: prev is the row's member (var:un_deleg_row_$N$), deliberately
@@ -420,5 +434,6 @@ un_deleg_row_can_pledge = {
 # either way, pending or settled (un_pledge_made_by, asked of the member).
 # Scope: a member
 un_lobby_holds_pledge_on_active = {
+	has_variable = un_pledge_res
 	var:un_pledge_res ?= global_var:un_active_resolution
 }

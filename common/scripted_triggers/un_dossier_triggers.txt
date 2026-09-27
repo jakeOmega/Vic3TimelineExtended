@@ -88,6 +88,7 @@ un_vote_ai_cast_due = {
 		scope:un_resolution ?= { has_variable = un_res_last_call }
 		AND = {
 			has_variable = un_vote_cast_month
+			has_variable = un_vote_draw_res
 			var:un_vote_draw_res ?= scope:un_resolution
 			var:un_vote_cast_month <= un_res_months_now
 		}
