@@ -124,11 +124,12 @@ only protect yourself: the leader decides your market's emissions.
 
 ## How the AI adopts climate policy
 
-Each AI country weighs each policy separately, from its own conditions, and
-keeps the ones those conditions support. Every policy's will starts from a
-shared core: 20 points per degree of warming (at most 100), 15 more with the
-Ministry of the Environment established, and 8 more if an environmentalist
-leads an interest group in government. Five signals then push it up or down,
+Each AI country weighs each policy separately, from its own conditions. For
+every policy it keeps a score, its will, and compares it with that policy's
+threshold in the table below. Every policy's will starts from a shared core: 20
+points per degree of warming (at most 100), 15 more with the Ministry of the
+Environment established, and 8 more if an environmentalist leads an interest
+group in government. Five signals then push it up or down,
 weighted by who each policy costs or helps:
 
 - laissez-faire economics, against every policy;
@@ -139,8 +140,8 @@ weighted by who each policy costs or helps:
 - how far the market is a net exporter of coal and oil, strongly against the
   Carbon Tax and Fossil-Fuel Divestment.
 
-The AI adopts a policy once its will reaches the policy's threshold and it has
-the authority, and repeals only once the will falls 15 points below the
+The AI adopts a policy once the will reaches the threshold, if it has the
+authority, and repeals it only once the will falls 15 points below the
 threshold, or while its authority is negative. Between the two it leaves the
 policy alone, so an election doesn't flip policies back and forth.
 
@@ -214,7 +215,7 @@ The Fever's March has one for the Ministry of Consumer Protection at level 3.
 
 The Tide Comes In can leave you with Coastal Flooding or Coastal Population
 Relocation; while either lasts, a Settlement Authority on Managed Retreat can
-move people off your coasts ([States and population](07-states.md)).
+move people off your coasts ([Resettlement programs](07-states.md#resettlement-programs)).
 
 ## State pollution
 

@@ -104,10 +104,11 @@ The approach decides how fast a milestone moves and how often it goes wrong.
 | Safe | −50% setback risk. | One extra funding level's worth. |
 | Ambitious | +50% progress. | Two extra funding levels' worth. |
 
-Approach, funding and mission-choice modifiers sit on each milestone's journal
-entry, but the game adds them up for your country as a whole. Every running
-milestone with an approach moves at the same pace, and every milestone's base
-risk is scaled by the same total. A Safe approach on one milestone cuts the risk
+Approach, funding and mission choices apply to your whole program, not to the
+milestone they sit on. Their modifiers appear on each milestone's journal entry,
+but the game adds them up for your country as a whole: every running milestone
+with an approach moves at the same pace, and every milestone's base risk is
+scaled by the same total. A Safe approach on one milestone cuts the risk
 on all of them, including those on Ambitious, and an Ambitious one speeds up all
 of them, including those on Safe. They stack: two Ambitious milestones add
 +100% progress, and two Safe ones bring every milestone down to the 1% floor.
@@ -137,8 +138,8 @@ is finished it also decides a reward that fades over ten years.
 
 Each milestone has its own funding level, from 0 up to your cap. The cap starts
 at 3 and rises with technology: eleven space-related technologies from era 7 to
-era 11 raise it by 1 each, and four in era 12 raise it by 2 each. The fifth and
-highest tier of the Advanced Research power bloc principle adds another level.
+era 11 raise it by 1 each, and four in era 12 raise it by 2 each. Tier V of the
+Advanced Research power bloc principle, its highest, adds another level.
 
 Every funding level, on any milestone, adds 0.5 to your monthly pace, and so to
 every milestone with an approach. It also raises the Space Program's throughput
@@ -168,7 +169,7 @@ bonuses, and never less than 0.5 once you have chosen an approach.
 | Ambitious approach | +50% |
 | Stolen Rocket Plans, while your Space Programme Espionage operation runs | +10%, and −10% setback risk |
 | Outer Space Treaty terms of International Space Cooperation | +10% for lagging powers, −5% for the leader |
-| Advanced Research principle, fifth tier | +10% |
+| Advanced Research principle, tier V | +10% |
 | Antimatter Engine, each fully staffed level | +5% |
 | Nanofabrication Center, each fully staffed level | −1% setback risk |
 | Temporary Safety Review, from some failure options | −10%, and −25% setback risk |
@@ -226,11 +227,11 @@ who finishes it later gets the smaller one.
 
 The first figure is the first-to-finish reward, the second the later one.
 Cultural pull feeds the cultural hegemony competition described in
-[Cultural hegemony and covert warfare](10-influence.md).
+[Where cultural pull comes from](10-influence.md#where-cultural-pull-comes-from).
 
 ## Interstellar probe results
 
-Finishing the Interstellar Probe launches it towards Alpha Centauri and opens
+Finishing the Interstellar Probe launches it toward Alpha Centauri and opens
 Interstellar Probe: Awaiting Data, which counts down 132 months (eleven years).
 Nothing you do shortens the wait. When it ends, the probe reports one of 30
 possible discoveries in four categories, and you keep that category's reward
@@ -312,9 +313,10 @@ AI great and major powers use the same entries, approaches and funding. Only an
 AI in the top three of the global ranking makes progress; a weaker one can open
 an entry but its bar doesn't move, and the Who else is racing list leaves it
 out. AI great powers prefer the Ambitious approach, more so when another country
-is running the same milestone; AI major powers lean towards Safe. The AI raises
+is running the same milestone; AI major powers lean toward Safe. The AI raises
 funding while it has innovation to spare and cuts it when innovation runs short.
 
 A revolution's winner continues the old country's program, with its progress
-(except progress towards a first colony) and its rewards, and rebels can't start a program of their own during a civil
-war; see [Government, laws and characters](05-politics.md).
+(except progress toward a first colony) and its rewards, and rebels can't start
+a program of their own during a civil war; see
+[After a revolution](05-politics.md#after-a-revolution).

@@ -12,8 +12,8 @@ journal entries; the event chains run either way.
 ## Movement journal entries at a glance
 
 All five sit in the journal's Domestic Affairs group, except the Post-Scarcity
-Transition (Development). Decentralized countries never get them. The laws are described in
-[Government, laws and characters](05-politics.md).
+Transition (Development). Decentralized countries never get them. The laws are
+described in [The mod's new laws](05-politics.md#the-mods-new-laws).
 
 | Journal entry | Appears with | Succeeds when | Fails when | Time limit |
 |---|---|---|---|---|
@@ -40,7 +40,7 @@ movement, which the technology brings, has formed. If every such pop rises to Pr
 closes with no outcome and can return with the grievance. Once it succeeds or
 fails, it is over for the campaign. A revolution's winner carries the struggle
 on, keeping the bar, the policies and any reward (see
-[Government, laws and characters](05-politics.md)).
+[After a revolution](05-politics.md#after-a-revolution)).
 
 ### The Movement Support bar
 
@@ -193,7 +193,7 @@ The events bring a whistleblower, a data breach, hackers, predictive policing
 and foreign cyber-espionage; with
 Covert Warfare on, the last follows only when your counterintelligence catches a
 foreign espionage operation (see
-[Cultural hegemony and covert warfare](10-influence.md)).
+[What the target learns](10-influence.md#what-the-target-learns)).
 
 ### The mental health debate
 
@@ -217,9 +217,17 @@ neo-Luddite terrorism and an art renaissance.
 Second-wave feminism, LGBTQ+ rights, secularization and environmentalism have no
 journal entry, though the Social Movements rule's description still lists all
 four as journal entries. They come as random events once you have the
-technology, and the rule doesn't stop them. The Anti-War and Transhumanist
-political movements also bring events of their own; see
-[Government, laws and characters](05-politics.md).
+technology, and the rule doesn't stop them.
+
+The Anti-War and Transhumanist political movements
+([New political movements](05-politics.md#new-political-movements)) bring four
+events each while they exist. Three of the Anti-War Movement's (Draft
+Resistance, Veterans Speak Against the War and Peace Rally Fills the Capital)
+fire only in wartime; War Profiteering Exposed needs a military-industry
+building of level 3 or more instead. The Transhumanist Movement's (Neural
+Implant Human Trials, The Augmentation Divide, The Biohacker Underground and The
+Digital Consciousness Debate) each need one of Brain-Computer Interfaces, Human
+Augmentation and Mind Backups.
 
 ### Second-wave feminism events
 

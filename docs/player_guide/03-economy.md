@@ -164,13 +164,13 @@ building and each level of upkeep, while a poor country builds cheaply.
 
 Once a year, the game also checks whether investors have more than 500 levels
 waiting in the private queue while the investment pool is still growing. If so,
-you get the Excess Private Construction modifier. It raises Max Weekly
-Construction Progress, so each project can absorb more construction a week and
-the pool can spend its money, and it lowers State Construction Efficiency by a
-small amount that grows with the modifier. The modifier changes
-gradually, by at most about a fifth a year. If it grows very large while the
-investment pool holds more than your yearly GDP, Overinvestment is added for a
-year: pops stop paying into the investment pool.
+you get Excess Private Construction. Each project can then absorb more
+construction a week, so the pool can spend its money, at a small cost in
+construction efficiency that grows with the modifier; the tooltip lists the two
+effects as Max Weekly Construction Progress and State Construction Efficiency.
+The modifier moves by at most about a fifth a year. If it grows very large while
+the investment pool holds more than your yearly GDP, Overinvestment follows for
+a year and pops stop paying into the pool.
 
 ## Adaptive standard-of-living expectations
 
@@ -222,7 +222,7 @@ Three new needs appear as pops grow rich:
 
 These needs, and Services, grow steeply with wealth: at wealth 60, Services and
 Convenience make up more than half of what a pop buys. Tourism as an industry is
-covered in [States and population](07-states.md), and the new goods in
+covered in [State tourism](07-states.md#state-tourism), and the new goods in
 [The extended timeline](02-timeline.md), which also lists the base-game goods
 the mod renames. In the table above, Personal Transportation is the base game's
 Transportation and Art and Entertainment its Fine Art. Chemicals, in the
@@ -379,8 +379,9 @@ If a foreign power takes the hub's state, the hub is destroyed, the journal
 entry ends and the whole stockpile is lost. You can build a new hub in your
 capital, and it starts empty. Since the hub always stands in your capital,
 protecting the reserve means keeping your capital state. A revolution or
-secession that takes the hub's state also costs you the whole stockpile. The
-building is meant to pass to the rebels, who move it to their own capital.
+secession that takes the hub's state also costs you the whole stockpile: your
+journal entry ends and its stock is lost, while the rebels keep the building and
+move it to their own capital.
 
 ### How the AI uses the reserve
 
@@ -396,12 +397,13 @@ into the spike.
 
 Peacetime armies train with half the base game's ammunition. When an army
 mobilizes, Basic Supplies, which no army can switch off, raises its ammunition
-use by +300%. A mobilized battalion therefore burns four times its peacetime
-ammunition, twice the base game's peacetime figure. The mod removes the extra
-ammunition that Extra Supplies and Luxurious Supplies add in the base game, so
-the supplies you choose no longer change how much ammunition an army uses. The
-Basic Supplies tooltip shows the ammunition figure. A few of the mod's own
-mobilization options add more on top; see [Military and war](12-military.md).
+use by +300% (+50% in the base game). A mobilized battalion therefore burns four
+times its peacetime ammunition, twice the base game's peacetime figure. The mod
+removes the extra ammunition that Extra Supplies and Luxurious Supplies add in
+the base game, so the supplies you choose no longer change how much ammunition
+an army uses. The Basic Supplies tooltip shows the ammunition figure. A few of
+the mod's own mobilization options add more on top; see
+[Mobilization options](12-military.md#mobilization-options).
 
 The demand follows mobilization rather than war: an army mobilized for a
 diplomatic play spikes it even if no war follows, and the demand falls away as

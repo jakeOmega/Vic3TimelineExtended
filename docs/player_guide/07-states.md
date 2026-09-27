@@ -62,7 +62,7 @@ starts. The tile's tooltip lists every source, under Urban Capacity.
 | Urban Planning power bloc principle | +25% at tiers I to III, +50% at IV, +100% at V, plus +5% per Ministry of Urban Planning level (+10% at IV, +20% at V) |
 | National Park building on National Park, National Forest or National Wildlife Refuge | −5%, −7.5% or −10% per level, scaled by staffing |
 
-Ministries are explained in [Government, laws and characters](05-politics.md).
+Ministries are explained in [Ministries](05-politics.md#ministries).
 The same tolerance also raises the densities that open and close a
 resettlement frontier.
 
@@ -155,7 +155,7 @@ acceptance below 60 risks an outbreak, more likely the lower its acceptance. A
 severe outbreak kills 10% of that culture in the state, radicalizes the
 survivors, devastates the region and sets off a mass migration; a lesser one
 kills 2% and does the same on a smaller scale. Minority laws are in
-[Government, laws and characters](05-politics.md).
+[Rights and society laws](05-politics.md#rights-and-society-laws).
 
 ## State tourism
 
@@ -268,8 +268,8 @@ Retreat also use services; Military Colonies and the coercive programs (Penal
 Transportation, Special Settlements and Rustication) hire soldiers and use small
 arms instead. Slaves are never recruited. If a law change retires the running
 program, the Authority falls back to Land Grants. Managed Retreat's damage comes
-from [Climate and pollution](14-climate.md) and
-[Nuclear weapons](13-nuclear.md).
+from [Climate events](14-climate.md#climate-events) and
+[What a nuclear strike does](13-nuclear.md#what-a-nuclear-strike-does).
 
 Each program also speeds up the destination's incorporation and its growth as a
 colony, by 10% to 25%. Military Colonies also reduce the effect of turmoil there
@@ -303,10 +303,10 @@ Transport adds capacity and costs transportation goods:
 ### How settlers are recruited
 
 Each month an Authority works down your other states, most eligible people
-first, until its capacity is met; it skips other Authorities' states. Each state
+first, until its capacity is met; it skips other Authorities' states. A state
 gives at most 2% of its eligible people a month across all your Authorities, and
-takes under 100 people are skipped, so a pop smaller than 5,000 is never
-recruited. The Authority shows "Settlers arrived last month" and "Died in
+any draw of fewer than 100 people from a pop is skipped, so a pop smaller than
+5,000 is never recruited. The Authority shows "Settlers arrived last month" and "Died in
 transit last month", and each source state shows how many it gave.
 
 The Resettlement Recruitment Drive decree steers recruitment. Every Authority
@@ -335,11 +335,11 @@ left after one year).
 | Penal Transportation | Intelligentsia −3 |
 | Organized Colonization | Rural Folk +3 |
 | Special Settlements | Rural Folk −10, Intelligentsia −5 |
-| Rustication | Intelligentsia −10, Petty Bourgeoisie −5 |
+| Rustication | Intelligentsia −10, Petite Bourgeoisie −5 |
 | Development Program, Managed Retreat | none |
 
 If you are a party to the Universal Declaration of Human Rights, a UN convention
-([The United Nations](09-united-nations.md)), running Penal Transportation,
+([UN conventions and agencies](09-united-nations.md#un-conventions-and-agencies)), running Penal Transportation,
 Special Settlements or Rustication gives you Violating the Declaration: up to
 −10% prestige as the programs grow, halved if you ratified with reservations.
 It fades over several years after they stop. The first month you run a coercive

@@ -72,8 +72,8 @@ term with its current value.
 Colonial Exploitation and Colonial Resettlement raise the bar; No Colonial
 Affairs and Neocolonialism lower it. The harshest minority-rights laws drain it heavily, even
 though they make a garrison far stronger. Being a nuclear power helps a little;
-the UN's Decolonization Resolution ([The United Nations](09-united-nations.md))
-and foreign destabilization ([Cultural hegemony and covert warfare](10-influence.md))
+the UN's Decolonization Resolution ([UN conventions and agencies](09-united-nations.md#un-conventions-and-agencies))
+and foreign destabilization ([The covert operations](10-influence.md#the-covert-operations))
 hurt.
 
 ### Great power stances on colonialism
@@ -90,9 +90,9 @@ how powers without colonies usually end up condemning yours.
 
 Each condemning great power costs you about 0.6 a month and each supporter adds
 about 0.3, scaled by its prestige against yours: from a quarter as much, for a
-power with a quarter of your prestige, up to double. Two further penalties apply
-when the condemners together hold a third (−1 a month) and then two-thirds
-(another −2) of the prestige of all great powers plus you. A dominant empire is
+power with a quarter of your prestige, up to double. If the condemners together
+hold a third of the prestige of all great powers plus you, you lose a further 1
+a month; if they hold two thirds, another 2. A dominant empire is
 hard to isolate; a small one reaches both thresholds as soon as a few large
 powers turn on it. The widget's International Pressure section lists who
 condemns and who supports you.
@@ -212,7 +212,7 @@ gives you investment rights and a trade privilege in the new country.
 | Event | When it can fire |
 |---|---|
 | Winds of Change | A colonial subject reaches 50 liberty desire. |
-| The World is Watching | An anti-colonial great power presses you over a colonial subject (needs Intergovernmental Organizations). |
+| The World is Watching (not the cultural hegemony milestone of the same name) | An anti-colonial great power presses you over a colonial subject (needs Intergovernmental Organizations). |
 | The Price of Empire | A colonial subject at 75 liberty desire rises in armed revolt (needs Civil Rights Movement). |
 | Trouble in (the colony's name) | A colony has a severely unaccepted population. |
 | Blood in the Colonies | Armed resistance in a colony, once two or more colonies are badly unaccepted. |
@@ -240,11 +240,11 @@ bureaucracy) for 40 better relations, or refuses and loses 20.
 ## How the AI runs its colonies
 
 The AI plays by the same rules and uses the same programs and decisions. An
-AI that isn't a great power leans strongly towards Planned Full Decolonization,
+AI that isn't a great power leans strongly toward Planned Full Decolonization,
 more so when three great powers condemn it or three of its colonies are badly
 unaccepted. AI great powers are less willing, and no AI plans full
 decolonization while two of its colonies are well accepted. In events, AI
-empires lean towards negotiation and release, and an AI takes the Imperial
+empires lean toward negotiation and release, and an AI takes the Imperial
 Federation Act or Civilizing Mission Compact whenever it qualifies.
 
 ## Turtle Island and the North American Union <!-- style: allow title-case-heading -->

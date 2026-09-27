@@ -160,7 +160,7 @@ renames twelve base-game goods to fit a longer timeline.
 | Magnetic Drive Ships | Industrial | Shipyards, from Modern Material Science | The last tier of the same production methods |
 
 The Convenience and Tourism needs, which wealthier pops fill with these goods,
-are covered in [Economy and construction](03-economy.md).
+are covered in [Pop consumption at high wealth](03-economy.md#pop-consumption-at-high-wealth).
 
 ### Renamed base-game goods
 
@@ -184,7 +184,7 @@ same goods underneath, so base-game buildings still make and use them.
 
 Chemicals is the base game's fertilizer. Farms and plantations still take it,
 and dozens of modern industrial production methods now take it too. Bulk
-Transportation is explained in [Economy and construction](03-economy.md). Four
+Transportation is explained in [Bulk Transportation and freight](03-economy.md#bulk-transportation-and-freight). Four
 buildings are renamed to match: Fertilizer Plants are Chemical Plants, Electrics
 Industries are Wired Telecommunications Industries, Synthetics Plants are
 Synthetic Dyes Industries, and the Arts Academy is Creative Industries.
@@ -199,7 +199,7 @@ most base-game buildings with production methods for the new eras.
 Fourteen new mines work deposits of specific minerals. Ten of them produce one
 of the renamed resource goods, adding supply to existing chains; the other four
 produce the new Tech-Critical Metals. Resource deposits are covered in
-[Economy and construction](03-economy.md).
+[New mineral deposits](03-economy.md#new-mineral-deposits).
 
 | Mine | Produces |
 |---|---|
@@ -225,7 +225,7 @@ Resort Colony production method, which produces art and tourism instead.
 | Power | Hydro Plant, Nuclear Plant, Renewable Energy Plant and Fusion Plant, alongside the base game's Power Plants. |
 | Transport | Airport and Highway, both producing Personal and Bulk Transportation. |
 | Leisure | Tourism Industry and National Park ([States and population](07-states.md)). |
-| Government | Space Program ([The space race](15-space.md)), State Youth Centers, which need a family-policy law ([Government, laws and characters](05-politics.md)), and Military Base ([Military and war](12-military.md)). |
+| Government | Space Program ([The space race](15-space.md)), which counts as a monument like the wonders below; State Youth Centers, which need Pro-Natalist Subsidies, State-Sponsored Family Planning, Communal Child-Rearing, State Eugenics Program or Mandatory Augmentation; and Military Base ([Military and war](12-military.md)). |
 
 ### Later production methods for existing buildings
 
@@ -235,15 +235,16 @@ Smart Miners and Laser Excavation Technology; grain farms to Modern Farming,
 Automated Harvesters and Planters and Designed Crops; plantations to Mechanized
 Farm and GMO Plantation; and automation groups end in AI-managed methods such as
 AI Managed Fab. A few polluting buildings get pollution-control groups
-([Climate and pollution](14-climate.md)), and many get a hidden maintenance group
-used by the construction market ([Economy and construction](03-economy.md)).
+([State pollution](14-climate.md#state-pollution)), and many get a hidden maintenance group
+used by the construction market ([Construction maintenance and retooling](03-economy.md#construction-maintenance-and-retooling)).
 
 ## Company flagship buildings
 
 The mod gives companies a unique flagship building: the Krupp Essen Works, the
 Standard Oil Refinery, the Ford Rouge Plant, and so on. 206 of the base game's 221
 companies have one; the fifteen without one all come from a single expansion's
-company list. All but one of the mod's own companies have one too, for 289
+company list. All but one of the mod's own companies have one too. Two
+flagships serve a pair of companies each and one company has two, for 289
 flagship buildings in all.
 
 A flagship building works like this:
@@ -277,9 +278,9 @@ building of their industry.
 
 The mod adds 37 wonders: landmarks of the twentieth and twenty-first centuries.
 Each costs 5,000 construction, has one level, and exists once in the world.
-Wonders count as monuments: each one
-raises Tourism Industry throughput in its state by 25% and adds 3 cultural pull
-([Cultural hegemony and covert warfare](10-influence.md)).
+Wonders, like the base game's monuments and the Space Program, count as
+monuments: each one raises Tourism Industry throughput in its state by 25% and
+adds 3 cultural pull ([Where cultural pull comes from](10-influence.md#where-cultural-pull-comes-from)).
 
 Most wonders can only be built in one state, the landmark's real location, so
 only that state's owner can build them.
@@ -341,7 +342,8 @@ The Continental Union Headquarters is the exception to "one in the world": each
 continent can have one, built on the builder's home continent. The United Nations
 Headquarters and the Power Bloc Headquarters are government buildings, not
 wonders, and don't count as monuments; see
-[The United Nations](09-united-nations.md) and [Diplomacy](08-diplomacy.md).
+[Founding the United Nations](09-united-nations.md#founding-the-united-nations) and
+[Other power bloc changes](08-diplomacy.md#other-power-bloc-changes).
 
 ## Megaprojects
 
@@ -386,7 +388,7 @@ specialists per level, and their effects scale with how fully they are staffed.
 | Consciousness Network | Telepathic Communities | 10 | Adds bureaucracy, innovation, infrastructure, tax capacity and education access. Its Network Mode is Open Network (research, innovation, influence, prestige, standard of living) or Social Control Network (authority, government approval, lower turmoil and radicalism). Social Control Network needs Secret Police, Single-Party State, Autocracy, Mandatory Augmentation or Intrusive Surveillance System, and those laws rule out Open Network. |
 
 Each type of megaproject you complete adds 3 cultural pull
-([Cultural hegemony and covert warfare](10-influence.md)). The Space Elevator,
+([Where cultural pull comes from](10-influence.md#where-cultural-pull-comes-from)). The Space Elevator,
 Orbital Solar Collector, Orbital Battlestation and Antimatter Containment
 Facility have their own events during construction and after completion. The
 military and nuclear effects are covered in [Military and war](12-military.md)
