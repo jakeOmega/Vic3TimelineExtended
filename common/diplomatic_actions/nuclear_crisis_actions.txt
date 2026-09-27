@@ -20,6 +20,7 @@
 # Names a red line without staking the government's public standing on it:
 # less domestic reward, easier to walk back (§5.2).
 nd_nuclear_warning_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/nd_nuclear_warning_action.dds"
 	groups = {
 		general
 	}
@@ -85,6 +86,7 @@ nd_nuclear_warning_action = {
 # achieving the objective (§5.2): +5 infamy on issue, credibility −15 on a
 # climb-down, and a defied ultimatum licenses compellence.
 nd_nuclear_ultimatum_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/nd_nuclear_ultimatum_action.dds"
 	groups = {
 		general
 	}
@@ -148,6 +150,7 @@ nd_nuclear_ultimatum_action = {
 # The only way past a pledge short of being struck first (§6): it costs what a
 # broken promise costs, and the partner hears about it.
 nd_repudiate_pledge_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/nd_repudiate_pledge_action.dds"
 	groups = {
 		general
 	}

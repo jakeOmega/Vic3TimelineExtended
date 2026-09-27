@@ -51,6 +51,7 @@
 
 # ---- Pledge FOR ------------------------------------------------------------------
 un_secure_commitment_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/un_secure_commitment_action.dds"
 	groups = {
 		general
 	}
@@ -337,6 +338,7 @@ un_secure_commitment_action = {
 # vetoed anyway, and a pledge against never prevents a veto (the veto is
 # decided on the lean without the pledge, un_vote_ai_should_veto).
 un_secure_commitment_against_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/un_secure_commitment_against_action.dds"
 	groups = {
 		general
 	}
@@ -590,6 +592,7 @@ un_secure_commitment_against_action = {
 # the pact directly. evaluation_chance 0 keeps the engine from proposing it,
 # and will_break always-no keeps the engine from breaking one script started.
 un_lobby_for_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/un_lobby_for_action.dds"
 	groups = {
 		general
 	}
@@ -705,6 +708,7 @@ un_lobby_for_action = {
 # the pact directly. evaluation_chance 0 keeps the engine from proposing it,
 # and will_break always-no keeps the engine from breaking one script started.
 un_lobby_against_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/un_lobby_against_action.dds"
 	groups = {
 		general
 	}

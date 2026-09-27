@@ -3,7 +3,7 @@
 	# Electronic Brokarage PM for Financial Districts/Companies, Offshore Rigs PM for Oil Rigs,
 	# Textile Finishing Machinery PM for Textile Mills
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/transistors.dds"
 	category = production
 
 	modifier = {
@@ -23,7 +23,7 @@
 nuclear_energy = {
 	# Unlocks nuclear power plants, Nuclear Supercarrier unit
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/nuclear_energy.dds"
 	category = military
 
 	modifier = {
@@ -43,7 +43,7 @@ nuclear_energy = {
 advanced_military_aircraft = {
 	# Advanced Aeroplane Production PM for Aeroplane Industries, Medevac Helicopters mobilization option
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/military_aviation.dds"
+	texture = "gfx/interface/icons/invention_icons/advanced_military_aircraft.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -63,7 +63,7 @@ advanced_military_aircraft = {
 jet_engine_technology = {
 	# Unlocks Jet-Powered Aircraft unit
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/jet_engine_technology.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -83,7 +83,7 @@ green_revolution = {
 	# Unlocks Modern Farming and Hydraulic Equipment PMs in farms, Mechanized Farm for plantations,
 	# Ziegler-Natta Catalyzation SBR PM for Synthetic Rubber
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/green_revolution.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -103,7 +103,7 @@ green_revolution = {
 civil_rights_movement = {
 	# Unlocks Affirmative Action, Ministry of Refugee Affairs laws
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/civil_rights_movement.dds"
 	category = society
 
 	unlocking_technologies = {
@@ -132,7 +132,7 @@ civil_rights_movement = {
 laser_technology = {
 	# Geophysical Survey Techniques PM for mines, Electrochemical Machining PM for Tooling Workshops
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/laser_technology.dds"
 	category = production
 
 	modifier = {
@@ -152,7 +152,7 @@ laser_technology = {
 space_exploration = {
 	# Launch Facility and Space Program buildings
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/space_exploration.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -174,7 +174,7 @@ space_exploration = {
 pollution_control = {
 	# Ministry of the Environment law, Pollution Controll decree
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/pollution_control.dds"
 	category = society
 
 	modifier = {
@@ -194,7 +194,7 @@ pollution_control = {
 advanced_submarine_technology = {
 	# Nuclear Submarine unit
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/advanced_submarine_technology.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -210,7 +210,7 @@ advanced_submarine_technology = {
 guided_missiles = {
 	# Guided Artillery, Main Battle Tanks, Guided Missile Ships units
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/guided_missiles.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -232,7 +232,7 @@ guided_missiles = {
 plastic_mass_production = {
 	# Mass-Produced Plastics PM for Glassworks, Polymerization Processes for Chemical Plants
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/plastic_mass_production.dds"
 	category = production
 
 	modifier = {
@@ -251,7 +251,7 @@ plastic_mass_production = {
 
 mainframe_computers = {
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/mainframe_computers.dds"
 	category = production
 
 	modifier = {
@@ -276,7 +276,7 @@ integrated_circuits = {
 	# Unlocks Integrated Circuits PM in electronics factories, Directional Drilling PM in oil rigs,
 	# Debarkers and Chippers + Skidders and Forwarders PMs in logging camps
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/integrated_circuits.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -291,7 +291,7 @@ integrated_circuits = {
 prefabricated_construction = {
 	# Unlocks Advanced Construction PM for Construction Sectors
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/prefabricated_construction.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -305,7 +305,7 @@ prefabricated_construction = {
 
 photocopiers = {
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/photocopiers.dds"
 	category = production
 
 	modifier = {
@@ -327,7 +327,7 @@ photocopiers = {
 
 anti_sub_warfare = {
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/anti_sub_warfare.dds"
 	category = military
 
 	modifier = {
@@ -352,7 +352,7 @@ anti_sub_warfare = {
 ICBMs = {
 	# Limited War law
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/ICBMs.dds"
 	category = military
 
 	modifier = {
@@ -375,7 +375,7 @@ ICBMs = {
 tactical_nuclear_weapons = {
 	# Tactical Nuke "diplo action" for nuclear powers
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/tactical_nuclear_weapons.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -399,7 +399,7 @@ tactical_nuclear_weapons = {
 recon_satellites = {
 	# Modern Logisitcal Support and Space Recon mobilization options
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/recon_satellites.dds"
 	category = military
 
 	modifier = {
@@ -418,7 +418,7 @@ recon_satellites = {
 inertial_navigation_systems = {
 	# Modern Scout Tank unit
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/inertial_navigation_systems.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -440,7 +440,7 @@ inertial_navigation_systems = {
 television_broadcasting = {
 	# High Pressure Sodium Streetlights PM for Urban Centers, Broadcast Television PM for Arts Academy
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/television_broadcasting.dds"
 	category = society
 
 	modifier = {
@@ -470,7 +470,7 @@ television_broadcasting = {
 
 antibiotic_mass_production = {
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/antibiotic_mass_production.dds"
 	category = society
 
 	unlocking_technologies = {
@@ -490,7 +490,7 @@ antibiotic_mass_production = {
 
 contraceptive_pill = {
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/contraceptive_pill.dds"
 	category = society
 
 	modifier = {
@@ -515,7 +515,7 @@ contraceptive_pill = {
 second_wave_feminism = {
 	# State-Sponsored Family Planning law
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/second_wave_feminism.dds"
 	category = society
 
 	modifier = {
@@ -538,7 +538,7 @@ second_wave_feminism = {
 
 anti_war_movement = {
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/anti_war_movement.dds"
 	category = society
 
 	modifier = {
@@ -564,7 +564,7 @@ modern_urban_planning = {
 	# Multimodal Transit and Department Stores PMs for Urban Centers, Bullet Trains PM for Railways,
 	# Reinforced Concrete Buildings PM for Construction Sectors, Modern plants PMs for Power Plants
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/modern_urban_planning.dds"
 	category = society
 
 	unlocking_technologies = {
@@ -589,7 +589,7 @@ satellite_communications = {
 	# Satellite Communications PM for Wireless Telecommunication Industries, Moon Mission PM for Space Program
 	# Moved from era_8 to era_7 (2026-05): Telstar 1962 and INTELSAT 1965 are the canonical first-light anchors; era_8 was the commercial-maturity decade but era_7 fits the invention period better.
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/satellite_communications.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -615,7 +615,7 @@ satellite_communications = {
 pop_culture = {
 	# Moved from era_8 to era_7 (2026-05): mass-pop-culture concept is anchored in 1960s music/television/film boom; era_7 fits the era better than era_8.
 	era = era_7
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/pop_culture.dds"
 	category = society
 
 	unlocking_technologies = {

@@ -26,7 +26,7 @@
 # "somebody armed stands behind us".
 # ============================================================================
 nuclear_guarantee = {
-	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/guarantee_independence_treaties.dds"
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/nuclear_guarantee.dds"
 	kind = directed
 	maintenance_paid_by = source_country
 	cost = 100

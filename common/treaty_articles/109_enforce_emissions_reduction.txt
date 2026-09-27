@@ -10,7 +10,7 @@
 # in trade deals and international lending.
 # =================================================================
 enforce_emissions_reduction = {
-	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/enforce_emissions_reduction.dds"
 	kind = directed
 	cost = 200
 
