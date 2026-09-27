@@ -756,10 +756,12 @@ gm_state_changed_hands = {
 		}
 		else = {
 			gm_remove_state_var = { VAR = gm_heritage }
-			if = {
-				limit = { gm_state_is_contested = no }
-				gm_state_contest = yes
-			}
+			# Unconditional: a monument already contested under the old owner
+			# still needs its contest re-recorded for the new one (fresh
+			# gm_contested count, fresh IGs, a new gm_new_contest so the
+			# conqueror gets the notice) -- gm_state_contest itself resets
+			# gm_contested to 0.
+			gm_state_contest = yes
 		}
 	}
 	owner = { trigger_event = { id = monument_events.20 } }
@@ -845,6 +847,11 @@ gm_state_record_teardown = {
 				add = prev.var:gm_grandeur
 			}
 		}
+		# Keep the pulse running so what was just recorded gets decayed, even
+		# when this is the last monument and the panel demolished it (a state
+		# pulse's else branch, up to a month before the country pulse's
+		# gm_ledgers_idle check would otherwise zero it straight back out).
+		set_variable = gm_active
 	}
 	gm_state_ledger_ig = { WHO = gm_base_ig FACTOR = 1 }
 	gm_state_ledger_ig = { WHO = gm_supporter_ig FACTOR = -1 }

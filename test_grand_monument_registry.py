@@ -696,6 +696,7 @@ class NationalTests(unittest.TestCase):
         invalid = squash(block(je, "invalid"))
         self.assertIn("gm_system_enabled = no", invalid)
         self.assertIn("gm_ledgers_idle = yes", invalid)
+        self.assertIn("NOT = { any_scope_state = { has_variable = gm_seen } }", invalid)
         self.assertIsNone(block(je, "immediate"), "nothing a revolution's winner would lose")
         for key in ("je_grand_monuments", "je_grand_monuments_reason", "je_grand_monuments_status",
                     "je_grand_monuments_status_contested"):
@@ -756,7 +757,11 @@ class ContestTests(unittest.TestCase):
         self.assertIn("owner = { NOT = { has_variable = te_cw_role } is_revolutionary = no }", body)
         self.assertIn("gm_state_raised_by_owner = no", body)
         self.assertIn("limit = { gm_state_kind_faith = yes } gm_state_lift_contest = yes set_variable = gm_heritage", body)
-        self.assertIn("gm_state_contest = yes", body)
+        # Unconditional: a monument already contested under the old owner is
+        # re-recorded for the new one too, not left with the old owner's IGs
+        # and no fresh gm_new_contest (plan-mandated fix).
+        self.assertIn("gm_remove_state_var = { VAR = gm_heritage } gm_state_contest = yes", body)
+        self.assertNotIn("limit = { gm_state_is_contested = no } gm_state_contest = yes", body)
         self.assertTrue(body.endswith("owner = { trigger_event = { id = monument_events.20 } }"))
         oa = read(ON_ACTIONS)
         self.assertIn("gm_state_owner_change_on_action", squash(block(oa, "on_state_owner_change")))
@@ -784,6 +789,11 @@ class ContestTests(unittest.TestCase):
     def test_the_three_choices(self):
         record = squash(block(self.e, "gm_state_record_teardown"))
         self.assertIn("add = prev.var:gm_grandeur", record)
+        # Keeps the pulse running so a teardown recorded from the last
+        # monument (panel demolition) still gets decayed (plan-mandated fix).
+        self.assertIn("owner = { gm_init_ledgers = yes set_variable = { name = gm_teardown_ledger "
+                      "value = { value = var:gm_teardown_ledger add = prev.var:gm_grandeur } } "
+                      "set_variable = gm_active }", record)
         self.assertIn("gm_state_ledger_ig = { WHO = gm_base_ig FACTOR = 1 }", record)
         self.assertIn("gm_state_ledger_ig = { WHO = gm_supporter_ig FACTOR = -1 }", record)
         tear = squash(block(self.e, "gm_state_tear_down"))
@@ -877,7 +887,12 @@ class ContestTests(unittest.TestCase):
         for var in ["gm_teardown_ledger", "gm_vanity_ledger"] + [f"gm_ig_ledger_{ig}" for ig in IGS]:
             self.assertIn(f"set_variable = {{ name = {var} value = 0 }}", zero)
         monthly = squash(block(self.e, "gm_country_monthly"))
-        self.assertIn("gm_zero_ledgers = yes", monthly)
+        # Pin placement, not just order: the call must sit inside the outer
+        # if's own body (gm_ledgers_idle branch), not merely somewhere before
+        # remove_variable = gm_active -- a call hoisted above the outer if
+        # would zero every country's ledgers monthly and still pass a
+        # find()-based order check.
+        self.assertIn("gm_ledgers_idle = yes } gm_zero_ledgers = yes", monthly)
         self.assertLess(monthly.find("gm_zero_ledgers = yes"), monthly.find("remove_variable = gm_active"))
 
     def test_gm_active_set_on_refresh_when_monument_seen(self):
