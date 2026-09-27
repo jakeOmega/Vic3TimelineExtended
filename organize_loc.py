@@ -656,6 +656,12 @@ def categorize_key(key, technology_keys):
     # the other government-type and amendment loc.
     if key.startswith(("gov_collective_", "gov_direct_democracy", "amendment_collective_")):
         return "CONCEPTS"
+    # Climate event modifiers (`climate_crisis_emergency_modifier`,
+    # `climate_survival_footing_modifier`, ...): four-token names would land in
+    # MISCELLANEOUS and their `_desc` halves in CONCEPTS, while the three-token
+    # ones already sit in CONCEPTS. Keep the whole family there.
+    if key.startswith("climate_"):
+        return "CONCEPTS"
     if "_desc" in key or (re.match(r"^[a-zA-Z_]+$", key) and len(key.split("_")) < 4):
         return "CONCEPTS"
     return "MISCELLANEOUS"

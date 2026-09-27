@@ -7,9 +7,13 @@
 # climate dashboard's interesting states can be reached in minutes.
 #
 # What each option is for:
-#   a-e  drive the temperature through every severity tier, including back down
-#        below the activation threshold, so the ladder, the tier word, the
-#        progress bar and the charts can all be checked
+#   a-e  drive the temperature through every severity tier up to catastrophic,
+#        including back down below the activation threshold, so the ladder, the
+#        tier word, the progress bar and the charts can all be checked
+#   m    the top tier, apocalyptic (4.2 C), and its threshold event
+#        (environmentalism_events.22). Threshold events fire on the monthly
+#        pulse, so let a month pass; e then fires .23 and the rest of the
+#        cooling ladder together on the next one
 #   f/g  set or clear the emissions-reduction treaty lock, which must grey the
 #        Repeal controls of the emissions policies while leaving Climate
 #        Adaptation's Repeal enabled
@@ -56,6 +60,11 @@ te_debug_gw.1 = { # REVIEWED 2026-09-18: console-only test event (`event te_debu
 	option = {
 		name = te_debug_gw.1.d
 		te_debug_gw_set_anomaly = { HUNDREDTHS = 32000 }
+	}
+
+	option = {
+		name = te_debug_gw.1.m
+		te_debug_gw_set_anomaly = { HUNDREDTHS = 42000 }
 	}
 
 	# Back below the 0.1 C activation threshold. can_deactivate = no, so the

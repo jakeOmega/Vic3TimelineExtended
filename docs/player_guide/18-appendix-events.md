@@ -238,7 +238,8 @@ passed:
 | The Sweltering Season | 1.0 °C |
 | When the Levees Break | 2.0 °C |
 | The Reckoning | 3.0 °C |
-| Off the Brink, The Heat Recedes, A Cooler Decade, Below the Line | Warming falls back below 3.0, 2.0, 1.0 and 0.5 °C |
+| Four Degrees | 4.0 °C |
+| Out of the Furnace, Off the Brink, The Heat Recedes, A Cooler Decade, Below the Line | Warming falls back below 4.0, 3.0, 2.0, 1.0 and 0.5 °C |
 | Near Baseline | Warming falls back below 0.1 °C, after having reached 0.5 °C |
 
 ### Recurring climate event list
