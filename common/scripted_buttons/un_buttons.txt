@@ -531,28 +531,63 @@ un_lift_sanctions_button = {
 		custom_tooltip = {
 			text = "UN_LIFT_SANCTIONS_DESC"
 			remove_modifier = un_sanctions_enforcer_modifier
+			# Only the regime we enforce: two can run at once, under different
+			# enforcers, and each sanctioned country names its enforcer
+			# (un_sanctions_enforced_by, set by un_vote.2). An enforcer holds
+			# at most one regime (un_propose_sanctions_available). A regime
+			# from a save made before the target recorded its enforcer names
+			# nobody; any enforcer's lift ends those, as every lift used to.
 			# The UN's record below names the sanctioned country when there is
-			# one. The button lifts every regime in force, so with several it
-			# books the entry with no subject, and the log prints the plain
-			# line. One booking either way: gen_un_button_descs.py prints a
-			# line for every booking it finds.
+			# one; with several legacy regimes it books the entry with no
+			# subject, and the log prints the plain line. One booking either
+			# way: gen_un_button_descs.py prints a line for every booking it
+			# finds.
 			if = {
+				limit = {
+					any_country = {
+						has_modifier = un_sanctions_target_modifier
+						var:un_sanctions_enforced_by ?= ROOT
+					}
+				}
+				random_country = {
+					limit = {
+						has_modifier = un_sanctions_target_modifier
+						var:un_sanctions_enforced_by ?= ROOT
+					}
+					save_scope_as = un_sanctions_lifted_target
+				}
+			}
+			else_if = {
 				limit = {
 					NOT = {
 						any_country = {
 							count >= 2
 							has_modifier = un_sanctions_target_modifier
+							NOT = { has_variable = un_sanctions_enforced_by }
 						}
 					}
 				}
 				random_country = {
-					limit = { has_modifier = un_sanctions_target_modifier }
+					limit = {
+						has_modifier = un_sanctions_target_modifier
+						NOT = { has_variable = un_sanctions_enforced_by }
+					}
 					save_scope_as = un_sanctions_lifted_target
 				}
 			}
 			every_country = {
-				limit = { has_modifier = un_sanctions_target_modifier }
+				limit = {
+					has_modifier = un_sanctions_target_modifier
+					OR = {
+						var:un_sanctions_enforced_by ?= ROOT
+						NOT = { has_variable = un_sanctions_enforced_by }
+					}
+				}
 				remove_modifier = un_sanctions_target_modifier
+				if = {
+					limit = { has_variable = un_sanctions_enforced_by }
+					remove_variable = un_sanctions_enforced_by
+				}
 				# The embargoes the Assembly imposed go with the regime
 				# (redesign phase 5, un_teeth_effects.txt).
 				un_teeth_lift_embargoes = yes

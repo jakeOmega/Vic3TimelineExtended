@@ -480,6 +480,10 @@ un_dissolve_strip_country = {
 	un_state_off = { MODIFIER = un_headquarters_modifier }
 	un_standing_clear_tier_modifiers = yes
 	remove_modifier = un_sanctions_target_modifier
+	if = {
+		limit = { has_variable = un_sanctions_enforced_by }
+		remove_variable = un_sanctions_enforced_by
+	}
 	remove_modifier = un_sanctions_voluntary_target_modifier
 	remove_modifier = un_sanctions_enforcement_modifier
 	remove_modifier = un_sanctions_partial_modifier
