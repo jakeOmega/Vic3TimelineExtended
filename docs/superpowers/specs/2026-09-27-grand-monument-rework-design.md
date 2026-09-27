@@ -114,15 +114,15 @@ Every dedication has a **kind**, which decides what can make it fall:
 - **timeless** — always fits; never contested.
 
 "Fits" is read **live** every month from the owner's current laws, religion and ruler. Only two dedications store a
-record on the state: To the Leader (`mon_honoree`, the character) and the Grand Shrine (`mon_faith`, the religion).
+record on the state: To the Leader (`gm_honoree`, the character) and the Grand Shrine (`gm_faith`, the religion).
 
 | Dedication (PM) | Kind | Fits while | Commission gate | IGs approve / oppose | Local effect (state) | National specific effect |
 |---|---|---|---|---|---|---|
 | To the Crown (`pm_monument_crown`) | regime | `monument_government_is_crowned` | same | Landowners / Intelligentsia | loyalists from movements | legitimacy |
 | To the Republic (`pm_monument_republic`) | regime | `monument_government_is_republican` | same | Intelligentsia / Landowners | loyalists from movements | legitimacy |
 | To the Revolution (`pm_monument_revolution`) | regime | Single-Party State or Council Republic | same | Trade Unions / Industrialists | loyalists from movements | legitimacy |
-| To the Leader (`pm_monument_leader`) | ruler | `ruler = var:mon_honoree` | Autocracy or Single-Party State, and not crowned | ruler's own IG / strongest IG outside government | loyalists from movements | legitimacy, authority |
-| Grand Shrine (`pm_monument_religious`) | faith | `religion = var:mon_faith` and no State Atheism | no State Atheism | Devout / — | **conversion** (see below) | Devout attraction |
+| To the Leader (`pm_monument_leader`) | ruler | `ruler = var:gm_honoree` | Autocracy or Single-Party State, and not crowned | ruler's own IG / strongest IG outside government | loyalists from movements | legitimacy, authority |
+| Grand Shrine (`pm_monument_religious`) | faith | `religion = var:gm_faith` and no State Atheism | no State Atheism | Devout / — | **conversion** (see below) | Devout attraction |
 | To the Nation (`pm_monument_civic`) | timeless | always | — | Petty Bourgeoisie / — | loyalists from movements | — |
 | War Memorial (`pm_monument_war_memorial`) | timeless | always | — | Armed Forces / — | conscription rate | less war support lost to casualties |
 | Grand Opera House (`pm_monument_artistic`) | timeless | always | `romanticism` | Intelligentsia / — | Creative Industries throughput | Intelligentsia attraction |
@@ -153,7 +153,7 @@ contested rule handles it; nothing is special-cased.
 
 A **skin** is the form a dedication takes for the country that raises it: a Catholic basilica or a Shinto grand shrine,
 a Roman triumphal column or a Hall of Dynasties. It changes **name, wording and art, never effects**. It is recorded on
-the state at dedication (`mon_skin`, a flag) and shown wherever the monument is named: the JE row ("The Hall of
+the state at dedication (`gm_skin`, a flag) and shown wherever the monument is named: the JE row ("The Hall of
 Dynasties — To the Crown"), the ceremony, the flavour events (§6.1) and the contested notifications. The building
 panel keeps the dedication's generic PM name (PM names are static loc). Skins follow only the **builder's own**
 identity: its state religion and its primary cultures.
@@ -227,10 +227,10 @@ With a first step of *f* grandeur, step *n* completes at *f*·(2ⁿ − 1), and 
 By the end each level buys 1/128 of what the first five did, so the flat end is out of reach in practice. Larger *f*
 (national totals summed across monuments) move the end proportionally.
 
-**Implementation.** One script value per first-step size (`mon_curve_steps_f5`, `mon_curve_steps_f10`) reads the
-grandeur from a variable the caller sets on the scope (`var:mon_curve_in`) and returns the fractional step count: a sum
+**Implementation.** One script value per first-step size (`gm_curve_steps_f5`, `gm_curve_steps_f10`) reads the
+grandeur from a variable the caller sets on the scope (`var:gm_curve_in`) and returns the fractional step count: a sum
 of eight terms, each `(G − start_k) / size_k` clamped to [0, 1]. **Per-step values live in script values**
-(`mon_step_prestige`, `mon_step_legitimacy`, …); the static modifiers carry unit values, and the multiplier variable
+(`gm_step_prestige`, `gm_step_legitimacy`, …); the static modifiers carry unit values, and the multiplier variable
 is steps × per-step value. The JE and the ceremony tooltips read the same script values, so "next full step at 35
 grandeur (you have 28)" and every number in a tooltip are computed, not written.
 
@@ -252,10 +252,10 @@ total with `multiplier = var:…` from the curve:
 
 | Total | Counts | Modifier (unit values; the multiplier carries step count × per-step value) |
 |---|---|---|
-| Standing | every Fits, Undedicated or Heritage monument | `mon_national_prestige` (`country_prestige_add`) |
-| Regime | Fits monuments of kind regime or ruler | `mon_national_legitimacy` (`country_legitimacy_base_add`) |
-| Per dedication | that dedication's Fits monuments | `mon_national_<dedication>` for the five with a specific effect, plus Leader's authority |
-| Per IG | signed: + each Fits dedication the IG approves, − each it opposes, plus the §4 ledgers | `mon_ig_approval_<ig>` (`interest_group_ig_<ig>_approval_add`), one per vanilla IG, on the absolute value with the sign applied |
+| Standing | every Fits, Undedicated or Heritage monument | `gm_national_prestige` (`country_prestige_add`) |
+| Regime | Fits monuments of kind regime or ruler | `gm_national_legitimacy` (`country_legitimacy_base_add`) |
+| Per dedication | that dedication's Fits monuments | `gm_national_<dedication>` for the five with a specific effect, plus Leader's authority |
+| Per IG | signed: + each Fits dedication the IG approves, − each it opposes, plus the §4 ledgers | `gm_ig_approval_<ig>` (`interest_group_ig_<ig>_approval_add`), one per vanilla IG, on the absolute value with the sign applied |
 
 Cultural pull stays a script value (`cultural_pull_from_grand_monuments`), now read from standing grandeur through the
 curve instead of `levels / 20`. Its 5-step chain keeps the existing +5 ceiling.
@@ -266,10 +266,10 @@ goes through one curve. Monuments can never buy an interest group outright.
 ### 2.5 Local effects: modifiers on the state
 
 The state pulse (`on_monthly_pulse_state`) runs the curve over the monument's own level and sets two variables on the
-state, `var:mon_local_tourism_mult` and `var:mon_local_effect_mult` (steps × each per-step value), then refreshes two
-state modifiers from them: `mon_local_tourism` (`building_tourism_industry_throughput_add`) and
-`mon_local_<dedication>` (the dedication's local effect). There is one named modifier per dedication even where the
-effect is shared (the five loyalist dedications each have their own `mon_local_crown`, `mon_local_republic`, …), so
+state, `var:gm_local_tourism_mult` and `var:gm_local_effect_mult` (steps × each per-step value), then refreshes two
+state modifiers from them: `gm_local_tourism` (`building_tourism_industry_throughput_add`) and
+`gm_local_<dedication>` (the dedication's local effect). There is one named modifier per dedication even where the
+effect is shared (the five loyalist dedications each have their own `gm_local_crown`, `gm_local_republic`, …), so
 the state's list names the monument's message; a state holds exactly one of them, since it holds one monument. Each is
 named after the monument ("Grand Monument: To the Crown") in the state's modifier list. A building readout of grandeur
 and next step, on the Settlement Authority's pattern, is added **only if** #500's check shows building readouts render
@@ -296,12 +296,12 @@ ceremony tooltips and the JE carry the effects.
   commission gate the owner meets, each option's tooltip rendering the per-step values from the script values (the
   TOOLTIP MIRROR header and its hand-kept numbers go). **Undedicated** stays an option; the ceremony asks again at the
   next level.
-- **Records:** choosing To the Leader sets `mon_honoree` = the ruler on the state; choosing the Shrine sets
-  `mon_faith` = the owner's religion. The skin follow-up (§1.1) sets `mon_skin`.
+- **Records:** choosing To the Leader sets `gm_honoree` = the ruler on the state; choosing the Shrine sets
+  `gm_faith` = the owner's religion. The skin follow-up (§1.1) sets `gm_skin`.
 - **The lock** stays the self-reference ratchet, so the panel shows one row.
 - **Records on first sight.** A dedicated Leader or Shrine monument the pulse finds without its record, and without
-  the state flag `mon_seen`, gets its record from the current ruler or faith and the flag; any dedicated monument
-  without `mon_skin` gets the most specific fitting skin, without asking. This covers panel picks and pre-rework
+  the state flag `gm_seen`, gets its record from the current ruler or faith and the flag; any dedicated monument
+  without `gm_skin` gets the most specific fitting skin, without asking. This covers panel picks and pre-rework
   saves. After that, **a missing record reads as "does not fit"**, never as "fits".
 - **Rededication rebuilds** (§4.3): `remove_building`, then the level ladder at the new level, then the ceremony fired
   directly, since a script-created building may not fire `on_building_built`. The shared ladder
@@ -315,9 +315,9 @@ ceremony tooltips and the JE carry the effects.
 
 Each month the country pulse re-reads "fits" for every regime, ruler and faith monument; `on_law_activated`,
 `on_new_ruler` and `on_state_owner_change` re-read at once. A monument that stops fitting, and is neither contested nor
-heritage, becomes **contested**: the state gets `mon_contested`, plus two IG records taken at that moment,
-`mon_base_ig` (the new order's base: the IG that **opposed** the old message; for a Leader monument, the strongest IG
-outside government at the time) and `mon_supporter_ig` (the IG that **approved** it; for a Leader monument, the old
+heritage, becomes **contested**: the state gets `gm_contested`, plus two IG records taken at that moment,
+`gm_base_ig` (the new order's base: the IG that **opposed** the old message; for a Leader monument, the strongest IG
+outside government at the time) and `gm_supporter_ig` (the IG that **approved** it; for a Leader monument, the old
 ruler's IG). While a Leader monument fits, both its IGs are re-read every month; the month it is contested, that
 reading is frozen into the two records and no longer follows the government.
 
@@ -331,7 +331,7 @@ laws. How reliably this separates the cases is an in-game check.
 ### 4.2 While contested
 
 - It counts only toward local effects and tourism (§2.3). Its prestige, legitimacy, specific effect and IG approval stop.
-- **Standing penalty:** its grandeur counts **negative toward `mon_base_ig`** in the per-IG total, every month it
+- **Standing penalty:** its grandeur counts **negative toward `gm_base_ig`** in the per-IG total, every month it
   stands undecided. Ignoring the question is never free, but there is no deadline. The per-IG curve bounds it.
 
 ### 4.3 The three choices
@@ -340,23 +340,23 @@ Buttons on the monument's JE row, each with a tooltip spelling out what it does:
 
 | Choice | What happens | Gains | Costs |
 |---|---|---|---|
-| **Tear Down** | `remove_building`; clears the state's records | its grandeur added to the **teardown ledger** (legitimacy for the new order) and positive to `mon_base_ig`'s ledger | all its grandeur; its grandeur negative to `mon_supporter_ig`'s ledger |
-| **Rededicate** | rebuilt at half its level (rounded up), then the ceremony under current laws | half its grandeur, the new message counting in full | treasury, scaled by its level; half its grandeur negative to `mon_supporter_ig`'s ledger |
-| **Preserve as Heritage** | stays as it is; `mon_contested` → `mon_heritage` | prestige back, local effects and tourism kept | its grandeur negative to `mon_base_ig`'s ledger |
+| **Tear Down** | `remove_building`; clears the state's records | its grandeur added to the **teardown ledger** (legitimacy for the new order) and positive to `gm_base_ig`'s ledger | all its grandeur; its grandeur negative to `gm_supporter_ig`'s ledger |
+| **Rededicate** | rebuilt at half its level (rounded up), then the ceremony under current laws | half its grandeur, the new message counting in full | treasury, scaled by its level; half its grandeur negative to `gm_supporter_ig`'s ledger |
+| **Preserve as Heritage** | stays as it is; `gm_contested` → `gm_heritage` | prestige back, local effects and tourism kept | its grandeur negative to `gm_base_ig`'s ledger |
 
 **No stacking, anywhere.** Every reward and cost of these choices goes into a **ledger**, a country variable that
 decays each month, and the ledger feeds its effect through the same curve:
 
-- `mon_teardown_ledger` → `mon_national_teardown` (legitimacy, "The Old Order Torn Down") on the JE; decays ×0.96 a
+- `gm_teardown_ledger` → `gm_national_teardown` (legitimacy, "The Old Order Torn Down") on the JE; decays ×0.96 a
   month (half in about 17 months, under 10% after five years).
-- `mon_ig_ledger_<ig>`, one per vanilla IG, added into that IG's per-IG total (§2.4); decays ×0.97 a month (half in
+- `gm_ig_ledger_<ig>`, one per vanilla IG, added into that IG's per-IG total (§2.4); decays ×0.97 a month (half in
   about two years, under 10% after six).
 
 So forty level-1 statues torn down in one day give exactly what one level-40 statue gives: the same curve value, once.
 
 ### 4.4 Restoration
 
-If a contested or heritage monument's message fits again (the monarchy returns), `mon_contested`/`mon_heritage` lift
+If a contested or heritage monument's message fits again (the monarchy returns), `gm_contested`/`gm_heritage` lift
 and it counts in full. Tear Down is the only permanent choice.
 
 ### 4.5 Many at once
@@ -368,7 +368,7 @@ Conquest and the fall of a Leader each give one event per country per month, lis
 ### 4.6 The AI
 
 Within a few months of a contest, weighted:
-- **Tear Down** up under a revolutionary or newly radical government, or when `mon_supporter_ig` is weak or in
+- **Tear Down** up under a revolutionary or newly radical government, or when `gm_supporter_ig` is weak or in
   opposition.
 - **Preserve** up when the monument is tall (its tourism and prestige are worth keeping).
 - **Rededicate** up when the treasury can pay without going negative.
@@ -380,7 +380,7 @@ Within a few months of a contest, weighted:
 
 When a monument level finishes (`on_building_built`) in hard times:
 - **In that state:** `add_radicals_in_state` on a share of its pops.
-- **Nationally:** +1 to `mon_vanity_ledger`, which decays ×0.92 a month; the JE modifier `mon_national_vanity` takes
+- **Nationally:** +1 to `gm_vanity_ledger`, which decays ×0.92 a month; the JE modifier `gm_national_vanity` takes
   legitimacy **linearly** from it. A cost is not put on the curve, since a curved cost would make building more in hard
   times cheaper per level.
 
@@ -391,7 +391,7 @@ toast, not an event.
 ## 6. The Monuments journal entry
 
 `je_grand_monuments` (`je_group_internal_affairs`), on the Strategic Reserve's lifecycle: `possible` = owns a Grand
-Monument, `invalid` = owns none, `on_invalid` removes every `mon_national_*` and `mon_ig_approval_*` modifier. It comes
+Monument, `invalid` = owns none, `on_invalid` removes every `gm_national_*` and `gm_ig_approval_*` modifier. It comes
 back when a new monument is built. Its `immediate` writes nothing a revolution's winner would lose
 (`je_immediate_reset_audit`).
 
@@ -452,16 +452,16 @@ and `empty_effect` audits check the sizes; no option is effect-free.
 - **PMs:** strip every effect block except employment (§2.7). Add `pm_monument_crown`, `pm_monument_republic`,
   `pm_monument_revolution` and `pm_monument_leader` to the ratchet. `pm_monument_civic` keeps its key and becomes **To
   the Nation**, so old civic monuments stay valid with no migration.
-- **Old saves:** old Shrines get `mon_faith` on first sight (§3). The unscaled national effects vanish with the PM
+- **Old saves:** old Shrines get `gm_faith` on first sight (§3). The unscaled national effects vanish with the PM
   blocks, which removes the exploit from existing saves too.
 - **Ceremony:** the three civic skins become To the Crown / To the Republic / To the Nation options; To the Revolution
   and To the Leader are new options; the skin choice is the new follow-up `monument_events.11` (§1.1). Old
-  monuments get `mon_skin` on first sight (§3), set to the most specific fitting skin without asking.
+  monuments get `gm_skin` on first sight (§3), set to the most specific fitting skin without asking.
 - **Flavour events:** `.3`–`.10` gain their options (§6.1); `.12`–`.15` are new; the on-action's gates add "fits".
 - **Language reform:** `extra_law_events.25`'s inline partition is replaced by calls to the shared
   `te_heritage_<language>` triggers, with no change to which revival it offers (a test pins the eighteen).
 - **Loc:** PM names and descriptions, ceremony options and tooltips, JE, buttons, events, modifiers and the concept
-  `concept_grandeur`; run `organize_loc.py` (new `mon_` prefix needs a `startswith` rule if any key family has four
+  `concept_grandeur`; run `organize_loc.py` (new `gm_` prefix, chosen because `mon_` and `te_mon_` belong to the monetary system; it needs a `startswith` rule if any key family has four
   tokens).
 - **Remove** the TOOLTIP MIRROR header and the hand-kept numbers in `monument_events.2.*.tt`.
 
@@ -483,7 +483,7 @@ and `empty_effect` audits check the sizes; no option is effect-free.
 | IG ledgers | — | added to the per-IG total | decay ×0.97/month |
 | Rededication cost | — | treasury, level × 5,000 | calibrate against a level's construction good at market price |
 | Vanity: radicals in the state | — | 5% of its pops per level | — |
-| Vanity: legitimacy | — | −3 per unit of `mon_vanity_ledger` | decays ×0.92/month |
+| Vanity: legitimacy | — | −3 per unit of `gm_vanity_ledger` | decays ×0.92/month |
 | Construction per level | unchanged | 10,000 | — |
 | Flavour events (§6.1) | — | IG approval +2 (+3 for the "more" option in `.4`), 3–5 years; prestige, legitimacy and authority about a tenth of the curve's first step; money `sv_treasury_event_small` | the `event_magnitude` audit |
 
