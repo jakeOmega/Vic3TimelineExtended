@@ -3,11 +3,17 @@
 # ============================================================================
 # GRAND MONUMENTS
 # ============================================================================
-# Event 1  - hidden building_event, fires from on_building_built. Hands off to the
-#            monument's own STATE, because that is where the ceremony belongs and
-#            because building scope supports neither variables nor modifiers.
-# Event 2  - the dedication ceremony (state event), then Event 11 - the skin (§1.1).
-# Events 3+ - recurring flavour, dispatched from monument_events_on_actions.txt.
+# Event 1       - a level finished (hidden building_event, fires from
+#                 on_building_built): vanity backlash in hard times, the
+#                 ceremony for a monument not yet dedicated, then Event 20.
+# Event 2       - the dedication ceremony (state event); Event 11 - the skin,
+#                 players only (§1.1).
+# Events 3-10,
+# 12-15         - recurring anniversary flavour, dispatched from
+#                 monument_events_on_actions.txt.
+# Events 16-17  - a fallen order's monuments: the contested notice, then one
+#                 event per monument (§4.5).
+# Event 20      - refresh (hidden plumbing).
 # ============================================================================
 
 # Event 1: a level finished (hidden plumbing). ROOT is the BUILDING, so
@@ -324,8 +330,9 @@ monument_events.2 = {
 
 # ============================================================================
 # RECURRING FLAVOUR (dispatched from monument_events_on_actions.txt)
-# Each is gated on owning a monument of that dedication at level 3 or more, so
-# they only start appearing once a monument is a real landmark.
+# Each gates on a fitting monument of this dedication at level 3 or more (a
+# contested or heritage one holds no anniversaries), and offers a choice
+# between two benefits.
 # ============================================================================
 
 monument_events.3 = {
@@ -344,17 +351,38 @@ monument_events.3 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		any_scope_building = {
-			is_building_type = building_grand_monument
-			has_active_production_method = pm_monument_civic
-			level >= 3
+		any_scope_state = {
+			gm_state_holds_anniversary = { PM = pm_monument_civic }
+		}
+	}
+
+	# The country's tallest monument of this dedication that holds anniversaries.
+	immediate = {
+		ordered_scope_state = {
+			limit = {
+				gm_state_holds_anniversary = { PM = pm_monument_civic }
+			}
+			order_by = gm_state_grandeur
+			position = 0
+			check_range_bounds = no
+			save_scope_as = monument_state
 		}
 	}
 
 	option = {
 		name = monument_events.3.a
-		default_option = yes
+		add_treasury = gm_event_cost
+		add_modifier = { name = gm_evt_state_occasion days = normal_modifier_time }
 		ai_chance = { base = 1 }
+	}
+
+	option = {
+		name = monument_events.3.b
+		default_option = yes
+		scope:monument_state = {
+			add_loyalists_in_state = { value = 0.05 }
+		}
+		ai_chance = { base = 2 }
 	}
 }
 
@@ -429,17 +457,39 @@ monument_events.4 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		any_scope_building = {
-			is_building_type = building_grand_monument
-			has_active_production_method = pm_monument_religious
-			level >= 3
+		any_scope_state = {
+			gm_state_holds_anniversary = { PM = pm_monument_religious }
+		}
+	}
+
+	# The country's tallest monument of this dedication that holds anniversaries.
+	immediate = {
+		ordered_scope_state = {
+			limit = {
+				gm_state_holds_anniversary = { PM = pm_monument_religious }
+			}
+			order_by = gm_state_grandeur
+			position = 0
+			check_range_bounds = no
+			save_scope_as = monument_state
 		}
 	}
 
 	option = {
 		name = monument_events.4.a
-		default_option = yes
+		add_treasury = gm_event_cost
+		scope:monument_state = {
+			add_modifier = { name = gm_evt_pilgrim_hostels days = normal_modifier_time }
+		}
+		add_modifier = { name = gm_evt_devout_pleased days = normal_modifier_time }
 		ai_chance = { base = 1 }
+	}
+
+	option = {
+		name = monument_events.4.b
+		default_option = yes
+		add_modifier = { name = gm_evt_clergy_trusted days = normal_modifier_time }
+		ai_chance = { base = 2 }
 	}
 }
 
@@ -459,17 +509,37 @@ monument_events.5 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		any_scope_building = {
-			is_building_type = building_grand_monument
-			has_active_production_method = pm_monument_war_memorial
-			level >= 3
+		any_scope_state = {
+			gm_state_holds_anniversary = { PM = pm_monument_war_memorial }
+		}
+	}
+
+	# The country's tallest monument of this dedication that holds anniversaries.
+	immediate = {
+		ordered_scope_state = {
+			limit = {
+				gm_state_holds_anniversary = { PM = pm_monument_war_memorial }
+			}
+			order_by = gm_state_grandeur
+			position = 0
+			check_range_bounds = no
+			save_scope_as = monument_state
 		}
 	}
 
 	option = {
 		name = monument_events.5.a
-		default_option = yes
+		add_modifier = { name = gm_evt_remembrance_day days = normal_modifier_time }
 		ai_chance = { base = 1 }
+	}
+
+	option = {
+		name = monument_events.5.b
+		default_option = yes
+		scope:monument_state = {
+			add_modifier = { name = gm_evt_quiet_remembrance days = normal_modifier_time }
+		}
+		ai_chance = { base = 2 }
 	}
 }
 
@@ -489,17 +559,35 @@ monument_events.6 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		any_scope_building = {
-			is_building_type = building_grand_monument
-			has_active_production_method = pm_monument_artistic
-			level >= 3
+		any_scope_state = {
+			gm_state_holds_anniversary = { PM = pm_monument_artistic }
+		}
+	}
+
+	# The country's tallest monument of this dedication that holds anniversaries.
+	immediate = {
+		ordered_scope_state = {
+			limit = {
+				gm_state_holds_anniversary = { PM = pm_monument_artistic }
+			}
+			order_by = gm_state_grandeur
+			position = 0
+			check_range_bounds = no
+			save_scope_as = monument_state
 		}
 	}
 
 	option = {
 		name = monument_events.6.a
-		default_option = yes
+		add_modifier = { name = gm_evt_artists_defended days = normal_modifier_time }
 		ai_chance = { base = 1 }
+	}
+
+	option = {
+		name = monument_events.6.b
+		default_option = yes
+		add_modifier = { name = gm_evt_works_closed days = normal_modifier_time }
+		ai_chance = { base = 2 }
 	}
 }
 
@@ -519,17 +607,38 @@ monument_events.7 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		any_scope_building = {
-			is_building_type = building_grand_monument
-			has_active_production_method = pm_monument_naturalist
-			level >= 3
+		any_scope_state = {
+			gm_state_holds_anniversary = { PM = pm_monument_naturalist }
+		}
+	}
+
+	# The country's tallest monument of this dedication that holds anniversaries.
+	immediate = {
+		ordered_scope_state = {
+			limit = {
+				gm_state_holds_anniversary = { PM = pm_monument_naturalist }
+			}
+			order_by = gm_state_grandeur
+			position = 0
+			check_range_bounds = no
+			save_scope_as = monument_state
 		}
 	}
 
 	option = {
 		name = monument_events.7.a
-		default_option = yes
+		add_treasury = gm_event_cost
+		scope:monument_state = {
+			add_modifier = { name = gm_evt_gardens_open days = normal_modifier_time }
+		}
 		ai_chance = { base = 1 }
+	}
+
+	option = {
+		name = monument_events.7.b
+		default_option = yes
+		add_treasury = gm_event_income
+		ai_chance = { base = 2 }
 	}
 }
 
@@ -549,17 +658,37 @@ monument_events.8 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		any_scope_building = {
-			is_building_type = building_grand_monument
-			has_active_production_method = pm_monument_scientific
-			level >= 3
+		any_scope_state = {
+			gm_state_holds_anniversary = { PM = pm_monument_scientific }
+		}
+	}
+
+	# The country's tallest monument of this dedication that holds anniversaries.
+	immediate = {
+		ordered_scope_state = {
+			limit = {
+				gm_state_holds_anniversary = { PM = pm_monument_scientific }
+			}
+			order_by = gm_state_grandeur
+			position = 0
+			check_range_bounds = no
+			save_scope_as = monument_state
 		}
 	}
 
 	option = {
 		name = monument_events.8.a
-		default_option = yes
+		scope:monument_state = {
+			add_modifier = { name = gm_evt_public_lectures days = normal_modifier_time }
+		}
 		ai_chance = { base = 1 }
+	}
+
+	option = {
+		name = monument_events.8.b
+		default_option = yes
+		add_modifier = { name = gm_evt_research_nights days = normal_modifier_time }
+		ai_chance = { base = 2 }
 	}
 }
 
@@ -579,17 +708,35 @@ monument_events.9 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		any_scope_building = {
-			is_building_type = building_grand_monument
-			has_active_production_method = pm_monument_industrial
-			level >= 3
+		any_scope_state = {
+			gm_state_holds_anniversary = { PM = pm_monument_industrial }
+		}
+	}
+
+	# The country's tallest monument of this dedication that holds anniversaries.
+	immediate = {
+		ordered_scope_state = {
+			limit = {
+				gm_state_holds_anniversary = { PM = pm_monument_industrial }
+			}
+			order_by = gm_state_grandeur
+			position = 0
+			check_range_bounds = no
+			save_scope_as = monument_state
 		}
 	}
 
 	option = {
 		name = monument_events.9.a
-		default_option = yes
+		add_modifier = { name = gm_evt_domestic_exhibition days = normal_modifier_time }
 		ai_chance = { base = 1 }
+	}
+
+	option = {
+		name = monument_events.9.b
+		default_option = yes
+		add_modifier = { name = gm_evt_foreign_exhibitors days = normal_modifier_time }
+		ai_chance = { base = 2 }
 	}
 }
 
@@ -609,17 +756,39 @@ monument_events.10 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		any_scope_building = {
-			is_building_type = building_grand_monument
-			has_active_production_method = pm_monument_athletic
-			level >= 3
+		any_scope_state = {
+			gm_state_holds_anniversary = { PM = pm_monument_athletic }
+		}
+	}
+
+	# The country's tallest monument of this dedication that holds anniversaries.
+	immediate = {
+		ordered_scope_state = {
+			limit = {
+				gm_state_holds_anniversary = { PM = pm_monument_athletic }
+			}
+			order_by = gm_state_grandeur
+			position = 0
+			check_range_bounds = no
+			save_scope_as = monument_state
 		}
 	}
 
 	option = {
 		name = monument_events.10.a
-		default_option = yes
+		add_treasury = gm_event_cost
+		scope:monument_state = {
+			add_modifier = { name = gm_evt_subsidised_tickets days = normal_modifier_time }
+		}
+		add_modifier = { name = gm_evt_unions_pleased days = normal_modifier_time }
 		ai_chance = { base = 1 }
+	}
+
+	option = {
+		name = monument_events.10.b
+		default_option = yes
+		add_treasury = gm_event_income
+		ai_chance = { base = 2 }
 	}
 }
 
@@ -1209,5 +1378,213 @@ monument_events.11 = {
 	option = {
 		name = monument_events.11.generic
 		gm_state_choose_skin = { SKIN = generic }
+	}
+}
+
+# ============================================================================
+# Events 12-15: anniversaries of the regime and ruler dedications (§6.1)
+# ============================================================================
+# As 3-10: dispatched from monument_events_on_action, gated on a fitting
+# monument of level 3 or more, a choice between two benefits.
+
+monument_events.12 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "unspecific_ruler_speaking_to_people" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	title = monument_events.12.t
+	desc = monument_events.12.d
+	flavor = monument_events.12.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		any_scope_state = {
+			gm_state_holds_anniversary = { PM = pm_monument_crown }
+		}
+	}
+
+	# The country's tallest monument of this dedication that holds anniversaries.
+	immediate = {
+		ordered_scope_state = {
+			limit = {
+				gm_state_holds_anniversary = { PM = pm_monument_crown }
+			}
+			order_by = gm_state_grandeur
+			position = 0
+			check_range_bounds = no
+			save_scope_as = monument_state
+		}
+	}
+
+	option = {
+		name = monument_events.12.a
+		add_treasury = gm_event_cost
+		add_modifier = { name = gm_evt_jubilee days = normal_modifier_time }
+		ai_chance = { base = 1 }
+	}
+
+	option = {
+		name = monument_events.12.b
+		default_option = yes
+		ruler = {
+			add_modifier = { name = gm_evt_ruler_popular days = normal_modifier_time }
+		}
+		ai_chance = { base = 2 }
+	}
+}
+
+monument_events.13 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "unspecific_politicians_arguing" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	title = monument_events.13.t
+	desc = monument_events.13.d
+	flavor = monument_events.13.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		any_scope_state = {
+			gm_state_holds_anniversary = { PM = pm_monument_republic }
+		}
+	}
+
+	# The country's tallest monument of this dedication that holds anniversaries.
+	immediate = {
+		ordered_scope_state = {
+			limit = {
+				gm_state_holds_anniversary = { PM = pm_monument_republic }
+			}
+			order_by = gm_state_grandeur
+			position = 0
+			check_range_bounds = no
+			save_scope_as = monument_state
+		}
+	}
+
+	option = {
+		name = monument_events.13.a
+		add_modifier = { name = gm_evt_citizens_assembly days = normal_modifier_time }
+		ai_chance = { base = 1 }
+	}
+
+	option = {
+		name = monument_events.13.b
+		default_option = yes
+		add_modifier = { name = gm_evt_military_parade days = normal_modifier_time }
+		ai_chance = { base = 2 }
+	}
+}
+
+monument_events.14 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "unspecific_military_parade" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	title = monument_events.14.t
+	desc = monument_events.14.d
+	flavor = monument_events.14.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		any_scope_state = {
+			gm_state_holds_anniversary = { PM = pm_monument_revolution }
+		}
+	}
+
+	# The country's tallest monument of this dedication that holds anniversaries.
+	immediate = {
+		ordered_scope_state = {
+			limit = {
+				gm_state_holds_anniversary = { PM = pm_monument_revolution }
+			}
+			order_by = gm_state_grandeur
+			position = 0
+			check_range_bounds = no
+			save_scope_as = monument_state
+		}
+	}
+
+	option = {
+		name = monument_events.14.a
+		add_treasury = gm_event_cost
+		add_modifier = { name = gm_evt_mass_rally days = normal_modifier_time }
+		scope:monument_state = {
+			add_loyalists_in_state = { value = 0.05 }
+		}
+		ai_chance = { base = 1 }
+	}
+
+	option = {
+		name = monument_events.14.b
+		default_option = yes
+		add_modifier = { name = gm_evt_quiet_commemoration days = normal_modifier_time }
+		ai_chance = { base = 2 }
+	}
+}
+
+monument_events.15 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "unspecific_ruler_speaking_to_people" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	title = monument_events.15.t
+	desc = monument_events.15.d
+	flavor = monument_events.15.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		any_scope_state = {
+			gm_state_holds_anniversary = { PM = pm_monument_leader }
+		}
+	}
+
+	# The country's tallest monument of this dedication that holds anniversaries.
+	immediate = {
+		ordered_scope_state = {
+			limit = {
+				gm_state_holds_anniversary = { PM = pm_monument_leader }
+			}
+			order_by = gm_state_grandeur
+			position = 0
+			check_range_bounds = no
+			save_scope_as = monument_state
+		}
+	}
+
+	option = {
+		name = monument_events.15.a
+		add_treasury = gm_event_cost
+		add_modifier = { name = gm_evt_leader_celebrated days = normal_modifier_time }
+		ai_chance = { base = 1 }
+	}
+
+	option = {
+		name = monument_events.15.b
+		default_option = yes
+		ruler = {
+			add_modifier = { name = gm_evt_ruler_popular days = normal_modifier_time }
+		}
+		ai_chance = { base = 2 }
 	}
 }

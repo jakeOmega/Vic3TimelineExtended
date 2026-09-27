@@ -166,3 +166,120 @@ gm_local_athletic = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
 	state_turmoil_effects_mult = -0.10
 }
+
+# ---- Flavour event rewards (§6.1): timed, normal_modifier_time (5 years) -----
+# Every one is a benefit: the events choose between two benefits, and the
+# only cost an option may carry is money.
+gm_evt_state_occasion = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_prestige_mult = 0.02
+	interest_group_ig_petty_bourgeoisie_approval_add = 2
+}
+
+gm_evt_pilgrim_hostels = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	building_tourism_industry_throughput_add = 0.1
+}
+
+gm_evt_devout_pleased = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	interest_group_ig_devout_approval_add = 2
+}
+
+gm_evt_clergy_trusted = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	interest_group_ig_devout_approval_add = 3
+}
+
+gm_evt_remembrance_day = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	interest_group_ig_armed_forces_approval_add = 2
+	country_war_support_casualties_mult = -0.1
+}
+
+gm_evt_quiet_remembrance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_turmoil_effects_mult = -0.1
+}
+
+gm_evt_artists_defended = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	interest_group_ig_intelligentsia_approval_add = 2
+}
+
+gm_evt_works_closed = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	interest_group_ig_devout_approval_add = 2
+}
+
+gm_evt_gardens_open = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_standard_of_living_add = 1
+}
+
+gm_evt_public_lectures = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_literacy_growth_add = 0.0005
+}
+
+gm_evt_research_nights = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_weekly_innovation_add = 5
+}
+
+gm_evt_domestic_exhibition = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	interest_group_ig_industrialists_approval_add = 2
+}
+
+gm_evt_foreign_exhibitors = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_influence_add = 10
+	country_prestige_mult = 0.01
+}
+
+gm_evt_subsidised_tickets = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_turmoil_effects_mult = -0.1
+}
+
+gm_evt_unions_pleased = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	interest_group_ig_trade_unions_approval_add = 2
+}
+
+gm_evt_jubilee = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_legitimacy_base_add = 3
+	interest_group_ig_landowners_approval_add = 2
+}
+
+gm_evt_ruler_popular = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	character_popularity_add = 10
+}
+
+gm_evt_citizens_assembly = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	interest_group_ig_intelligentsia_approval_add = 2
+}
+
+gm_evt_military_parade = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	interest_group_ig_armed_forces_approval_add = 2
+}
+
+gm_evt_mass_rally = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_authority_add = 25
+}
+
+gm_evt_quiet_commemoration = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	interest_group_ig_trade_unions_approval_add = 2
+}
+
+gm_evt_leader_celebrated = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_legitimacy_base_add = 3
+}

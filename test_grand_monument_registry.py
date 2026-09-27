@@ -1165,5 +1165,55 @@ class LocFixTests(unittest.TestCase):
         self.assertIn("Grand Monuments:", L["je_grand_monuments_status_contested"])
 
 
+# ---- Task 10: flavour events ---------------------------------------------------------
+
+class FlavourTests(unittest.TestCase):
+    def test_dispatch(self):
+        body = squash(block(read(ON_ACTIONS), "monument_events_on_action"))
+        self.assertIn("trigger = { gm_system_enabled = yes }", body)
+        for d in DEDICATIONS:
+            self.assertIn(f"gm_state_holds_anniversary = {{ PM = pm_monument_{d.key} }} }} }} "
+                          f"trigger_event = {{ id = monument_events.{d.event} }}", body)
+
+    def test_only_a_fitting_landmark_holds_anniversaries(self):
+        self.assertEqual(squash(block(read(TRIGGERS), "gm_state_holds_anniversary")),
+                         "gm_state_status_fits = yes gm_state_has_pm = { PM = $PM$ } "
+                         "b:building_grand_monument ?= { level >= 3 }")
+
+    def test_events(self):
+        text, L = read(EVENTS), loc()
+        for d in DEDICATIONS:
+            ev = raw_block_at(text, rf"(?m)^monument_events\.{d.event}\s*=\s*\{{")
+            self.assertIsNotNone(ev, d.event)
+            se = strip_comments(ev)
+            s = squash(se)
+            self.assertIn(f"gm_state_holds_anniversary = {{ PM = pm_monument_{d.key} }}", s)
+            self.assertIn("order_by = gm_state_grandeur position = 0", s)
+            self.assertIn("save_scope_as = monument_state", s)
+            self.assertEqual(s.count("default_option = yes"), 1, d.event)
+            options = [squash(_match_brace(se, m.end())) for m in re.finditer(r"option\s*=\s*\{", se)]
+            self.assertEqual(len(options), 2, d.event)
+            for o in options:
+                effects = re.sub(r"name = \S+|default_option = yes|ai_chance = \{ base = \d+ \}", "", o).strip()
+                self.assertTrue(effects, f"{d.event}: an option with no effect")
+                self.assertNotRegex(o, r"add_treasury = (?!gm_event_(cost|income)\b)",
+                                    "money moves only through gm_event_cost / gm_event_income")
+            for k in ("t", "d", "f", "a", "b"):
+                self.assertIn(f"monument_events.{d.event}.{k}", L)
+            self.assertNotEqual(L[f"monument_events.{d.event}.a"], "A fine thing to have built")
+
+    def test_event_modifiers_are_all_positive(self):
+        good_when_negative = {"state_turmoil_effects_mult", "country_war_support_casualties_mult"}
+        seen = 0
+        for name, body in top_level_blocks(read(MODIFIERS)):
+            if not name.startswith("gm_evt_"):
+                continue
+            seen += 1
+            for field, value in re.findall(r"(?m)^\s*(\w+)\s*=\s*(-?[\d.]+)\s*$", body):
+                v = float(value)
+                self.assertTrue(v < 0 if field in good_when_negative else v > 0, f"{name}.{field}")
+        self.assertEqual(seen, 22)
+
+
 if __name__ == "__main__":
     unittest.main()
