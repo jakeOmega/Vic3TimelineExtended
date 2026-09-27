@@ -624,13 +624,18 @@ class TransferTests(unittest.TestCase):
                 self.assertIn(key, L)
         effects = read(EFFECTS)
         dest = squash(block(effects, "resettlement_refresh_destination_readout"))
-        # The building mirrors the state's variables under the same names, so
-        # the number is right whether the multiplier reads ROOT (the state, in
-        # the state pulse) or the modifier's owner (the building).
-        self.assertIn("set_variable = { name = rs_arrived value = scope:rs_readout_state.var:rs_arrived }", dest)
-        self.assertIn("set_variable = { name = rs_died value = scope:rs_readout_state.var:rs_died }", dest)
-        self.assertIn("add_modifier = { name = resettlement_arrivals multiplier = var:rs_arrived }", dest)
-        self.assertIn("add_modifier = { name = resettlement_transit_deaths multiplier = var:rs_died }", dest)
+        # A building has no variables: set_variable on one logs "This scope
+        # doesn't support variables" and writes nothing, and a var: read in its
+        # limit fails, so the readouts were never added (PR #500's mirror). The
+        # guard and the multiplier read the state's own variables through root
+        # (ROOT is the state in the state pulse), which is right whether the
+        # multiplier resolves against ROOT or against the building.
+        self.assertNotIn("set_variable", dest)
+        self.assertNotRegex(dest, r"(?<![.\w])var:")
+        self.assertIn("if = { limit = { root.var:rs_arrived > 0 } "
+                      "add_modifier = { name = resettlement_arrivals multiplier = root.var:rs_arrived } }", dest)
+        self.assertIn("if = { limit = { root.var:rs_died > 0 } "
+                      "add_modifier = { name = resettlement_transit_deaths multiplier = root.var:rs_died } }", dest)
         src = squash(block(effects, "resettlement_refresh_source_readout"))
         self.assertIn("add_modifier = { name = resettlement_recruits multiplier = var:rs_recruits }", src)
 
