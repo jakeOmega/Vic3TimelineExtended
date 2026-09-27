@@ -70,6 +70,14 @@ nd_taboo_ledger_repudiation = -1.5
 nd_taboo_ledger_nfu = 0.5
 nd_taboo_ledger_standdown = 0.5
 nd_taboo_ledger_terror = 2
+nd_taboo_infamy_strategic_per_point = 1
+nd_taboo_infamy_tactical_per_point = 0.4
+nd_taboo_infamy_threat_per_point = 0.1
+nd_taboo_world_relations_per_point = -0.4
+nd_taboo_world_relations_tactical_share = 0.4
+nd_taboo_yp_midpoint = 50
+nd_taboo_yp_per_point = 0.16
+nd_taboo_yp_public_discount = 0.5
 
 # ---- READING THE SCORE ---------------------------------------------------------
 
@@ -178,6 +186,39 @@ nd_taboo_pledge_count_value = {
 			add = 1
 		}
 	}
+}
+
+# ---- WHAT IT COSTS (spec §4) ---------------------------------------------------
+# The fixed numbers these replace (25, 10 and 5 infamy) are their value at a
+# taboo of 25 (50 for a threat); at 0 a nuclear act costs no infamy at all.
+
+nd_taboo_infamy_strategic = {
+	value = nd_taboo_value
+	multiply = nd_taboo_infamy_strategic_per_point
+}
+
+nd_taboo_infamy_tactical = {
+	value = nd_taboo_value
+	multiply = nd_taboo_infamy_tactical_per_point
+}
+
+# A public ultimatum, going public, an offensive doctrine.
+nd_taboo_infamy_threat = {
+	value = nd_taboo_value
+	multiply = nd_taboo_infamy_threat_per_point
+}
+
+# Every country but the victim, after a first use. Negative.
+nd_taboo_world_relations_strategic = {
+	value = nd_taboo_value
+	multiply = nd_taboo_world_relations_per_point
+	round = yes
+}
+
+nd_taboo_world_relations_tactical = {
+	value = nd_taboo_world_relations_strategic
+	multiply = nd_taboo_world_relations_tactical_share
+	round = yes
 }
 
 # ---- THE PARTS (the monthly update snapshots them) ----------------------------

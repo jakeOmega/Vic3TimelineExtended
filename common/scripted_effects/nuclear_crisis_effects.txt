@@ -81,7 +81,7 @@ nd_crisis_preview = {
 		limit = { nd_crisis_parties_free = { TARGET = $TARGET$ } }
 		if = {
 			limit = { always = $PUBLIC$ }
-			change_infamy = 5
+			change_infamy = nd_taboo_infamy_threat
 			change_relations = { country = $TARGET$ value = -20 }
 		}
 		else = {
@@ -494,6 +494,7 @@ nd_crisis_refresh_figures = {
 		nd_crisis_store_yp = { C = nd_yp_temperament V = nd_yp_temperament_value }
 		nd_crisis_store_yp = { C = nd_yp_war V = nd_yp_war_value }
 		nd_crisis_store_yp = { C = nd_yp_follow_through V = nd_yp_follow_through_value }
+		nd_crisis_store_yp = { C = nd_yp_taboo V = nd_yp_taboo_value }
 		set_variable = { name = nd_yield_pressure value = nd_yield_pressure_value }
 	}
 }
@@ -607,6 +608,10 @@ nd_crisis_clear_figures = {
 	if = {
 		limit = { has_variable = nd_yp_follow_through }
 		remove_variable = nd_yp_follow_through
+	}
+	if = {
+		limit = { has_variable = nd_yp_taboo }
+		remove_variable = nd_yp_taboo
 	}
 }
 
@@ -1502,7 +1507,7 @@ nd_crisis_act_back_down = {
 # Issuer scope: turn a private warning into a public ultimatum.
 nd_crisis_act_go_public = {
 	custom_tooltip = nd_tt_act_go_public
-	change_infamy = 5
+	change_infamy = nd_taboo_infamy_threat
 	if = {
 		limit = { exists = var:nd_crisis_opponent }
 		change_relations = { country = var:nd_crisis_opponent value = -15 }

@@ -455,7 +455,6 @@ nuclear_first_strike = { # Scope is target state
 				custom_tooltip = {
 					text = industrial_nuke_succeeds_desc
 
-					change_infamy = 25
 					# UN: a nuclear first strike is a world moment and a lasting
 					# blow to the order pillar, whoever strikes (un_authority_effects.txt).
 					un_authority_actor_shock_on = { AMOUNT = -3 REASON = 8 SUBJECT = scope:target_state }
@@ -478,6 +477,17 @@ nuclear_first_strike = { # Scope is target state
 						nd_taboo_note_use = { KIND = strategic RETALIATION = yes }
 					}
 					else = {
+						# First use pays in infamy and the world's goodwill in
+						# proportion to the taboo, before the taboo falls
+						# (nuclear_taboo_values.txt). An answer pays neither.
+						change_infamy = nd_taboo_infamy_strategic
+						every_country = {
+							limit = {
+								NOT = { THIS = scope:attacking_country }
+								NOT = { THIS = scope:target_country }
+							}
+							change_relations = { country = scope:attacking_country value = nd_taboo_world_relations_strategic }
+						}
 						nd_taboo_note_use = { KIND = strategic RETALIATION = no }
 					}
 					scope:target_state = {

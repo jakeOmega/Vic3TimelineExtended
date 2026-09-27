@@ -427,6 +427,7 @@ nd_crisis_pressure_breakdown_sgui = {
 		nd_crisis_breakdown_line = { C = nd_yp_temperament KEY = nd_yp_temperament_line }
 		nd_crisis_breakdown_line = { C = nd_yp_war KEY = nd_yp_war_line }
 		nd_crisis_breakdown_line = { C = nd_yp_follow_through KEY = nd_yp_follow_through_line }
+		nd_crisis_breakdown_line = { C = nd_yp_taboo KEY = nd_yp_taboo_line }
 		custom_tooltip_no_bullet = nd_yp_total_line
 	}
 }

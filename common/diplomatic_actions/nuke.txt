@@ -49,6 +49,17 @@
 
 	accept_effect = {
 		save_scope_as = attacking_country
+		# What success will cost, before the dice (the nuclear taboo,
+		# nuclear_taboo_values.txt). Here, not in nuclear_first_strike, whose
+		# success branch is one custom text and whose saved scopes do not exist
+		# in this preview.
+		if = {
+			limit = { nd_was_struck_by = { ENEMY = scope:target_country } }
+			custom_tooltip = nd_taboo_tt_strike_answer
+		}
+		else = {
+			custom_tooltip = nd_taboo_tt_strike_first_use
+		}
 		if = {
 			limit = { exists = scope:second_state }
 			scope:second_state = {
@@ -205,6 +216,14 @@ tactical_nuke_diplo_action = {
 
 	accept_effect = {
 		save_scope_as = attacking_country
+		# What success will cost (the nuclear taboo, nuclear_taboo_values.txt).
+		if = {
+			limit = { nd_was_struck_by = { ENEMY = scope:target_country } }
+			custom_tooltip = nd_taboo_tt_strike_answer
+		}
+		else = {
+			custom_tooltip = nd_taboo_tt_tactical_first_use
+		}
 		if = {
 			limit = { exists = scope:second_state }
 			scope:second_state = {

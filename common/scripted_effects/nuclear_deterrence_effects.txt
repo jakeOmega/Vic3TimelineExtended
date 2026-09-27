@@ -704,7 +704,7 @@ nd_set_doctrine = {
 	# tooltip preview.
 	if = {
 		limit = { always = $OFFENSIVE$ }
-		change_infamy = 5
+		change_infamy = nd_taboo_infamy_threat
 		custom_tooltip = nd_tt_doctrine_alarms_rivals
 		hidden_effect = {
 			# ...and wears the nuclear taboo down, by our rank.
@@ -1678,7 +1678,6 @@ nd_tactical_strike_resolve = {
 	random_list = {
 		0 = {
 			modifier = nuclear_strike_success_chance
-			change_infamy = 10
 			# The nuclear taboo (nuclear_taboo_effects.txt); this country is
 			# the attacker and at war with the target.
 			if = {
@@ -1686,6 +1685,19 @@ nd_tactical_strike_resolve = {
 				nd_taboo_note_use = { KIND = tactical RETALIATION = yes }
 			}
 			else = {
+				change_infamy = nd_taboo_infamy_tactical
+				# Hidden: an every_* renders every member in the action's
+				# preview, whose own line (nd_taboo_tt_tactical_first_use)
+				# already names the figure.
+				hidden_effect = {
+					every_country = {
+						limit = {
+							NOT = { THIS = scope:attacking_country }
+							NOT = { THIS = scope:target_country }
+						}
+						change_relations = { country = scope:attacking_country value = nd_taboo_world_relations_tactical }
+					}
+				}
 				nd_taboo_note_use = { KIND = tactical RETALIATION = no }
 			}
 			scope:target_state = {

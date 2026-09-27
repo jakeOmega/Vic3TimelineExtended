@@ -15,7 +15,7 @@ import sys
 import unittest
 from pathlib import Path
 
-from test_nuclear_deterrence import block, read, strip_comments
+from test_nuclear_deterrence import block, loc_keys, read, strip_comments
 
 ROOT = Path(__file__).resolve().parent
 TABOO_VALUES = ROOT / "common/script_values/nuclear_taboo_values.txt"
@@ -236,6 +236,68 @@ class TestActs(unittest.TestCase):
         self.assertTrue(used)
         for name in used:
             self.assertRegex(values, rf"(?m)^{name} = ", name)
+
+
+NUKE_ACTIONS = ROOT / "common/diplomatic_actions/nuke.txt"
+DETERRENCE_VALUES = ROOT / "common/script_values/nuclear_deterrence_values.txt"
+
+
+def constant(text, name):
+    return float(re.search(rf"(?m)^{name} = (-?[\d.]+)", text).group(1))
+
+
+class TestCosts(unittest.TestCase):
+    def setUp(self):
+        self.values = strip_comments(read(TABOO_VALUES))
+        self.extra = strip_comments(read(EXTRA_EFFECTS))
+        self.det = strip_comments(read(DETERRENCE_EFFECTS))
+        self.crisis = strip_comments(read(CRISIS_EFFECTS))
+
+    def test_old_costs_are_the_value_at_taboo_25(self):
+        self.assertEqual(25 * constant(self.values, "nd_taboo_infamy_strategic_per_point"), 25)
+        self.assertEqual(25 * constant(self.values, "nd_taboo_infamy_tactical_per_point"), 10)
+        self.assertAlmostEqual(50 * constant(self.values, "nd_taboo_infamy_threat_per_point"), 5)
+
+    def test_first_use_pays_before_the_taboo_falls(self):
+        for text, name, kind in ((self.extra, "nuclear_first_strike", "strategic"),
+                                 (self.det, "nd_tactical_strike_resolve", "tactical")):
+            body = block(text, name)
+            self.assertNotRegex(body, r"change_infamy = (25|10)\b", name)
+            pay = body.index(f"change_infamy = nd_taboo_infamy_{kind}")
+            relations = body.index(f"value = nd_taboo_world_relations_{kind}")
+            shock = body.index(f"nd_taboo_note_use = {{ KIND = {kind} RETALIATION = no }}")
+            self.assertLess(pay, shock, name)
+            self.assertLess(relations, shock, name)
+            answer = body.index(f"nd_taboo_note_use = {{ KIND = {kind} RETALIATION = yes }}")
+            self.assertNotIn("change_infamy", body[answer - 200:answer], name)
+
+    def test_threats_and_doctrines_pay_by_the_taboo(self):
+        for text, name in ((self.crisis, "nd_crisis_preview"), (self.crisis, "nd_crisis_act_go_public"),
+                           (self.det, "nd_set_doctrine")):
+            body = block(text, name)
+            self.assertIn("change_infamy = nd_taboo_infamy_threat", body, name)
+            self.assertNotIn("change_infamy = 5", body, name)
+
+    def test_strike_confirmations_name_the_cost(self):
+        text = strip_comments(read(NUKE_ACTIONS))
+        effects = re.findall(r"accept_effect = \{", text)
+        self.assertEqual(len(effects), 2)
+        self.assertIn("custom_tooltip = nd_taboo_tt_strike_first_use", text)
+        self.assertIn("custom_tooltip = nd_taboo_tt_tactical_first_use", text)
+        self.assertEqual(text.count("custom_tooltip = nd_taboo_tt_strike_answer"), 2)
+
+    def test_pressure_part_reads_the_taboo(self):
+        body = block(strip_comments(read(DETERRENCE_VALUES)), "nd_yp_taboo_value")
+        for needle in ("value = nd_taboo_yp_midpoint", "subtract = nd_taboo_value",
+                       "multiply = nd_taboo_yp_per_point", "var:nd_crisis_public = 1",
+                       "multiply = nd_taboo_yp_public_discount"):
+            self.assertIn(needle, body)
+
+    def test_cost_keys_have_loc(self):
+        keys = loc_keys()
+        for key in ("nd_taboo_tt_strike_first_use", "nd_taboo_tt_tactical_first_use",
+                    "nd_taboo_tt_strike_answer", "nd_yp_taboo_line"):
+            self.assertIn(key, keys, key)
 
 
 if __name__ == "__main__":

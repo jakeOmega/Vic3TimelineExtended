@@ -787,6 +787,28 @@ nd_yp_follow_through_value = {
 	}
 }
 
+# The nuclear taboo (nuclear_taboo_values.txt): +8 at taboo 0, where threats
+# are believed, down to -8 at 100, where nobody believes a government would do
+# it. The doubt is halved for a public ultimatum: issuing one spends reputation
+# (the taboo-scaled infamy), and that price is itself the signal. Target scope,
+# scope:nd_issuer saved.
+nd_yp_taboo_value = {
+	value = nd_taboo_yp_midpoint
+	subtract = nd_taboo_value
+	multiply = nd_taboo_yp_per_point
+	if = {
+		limit = {
+			nd_taboo_value > nd_taboo_yp_midpoint
+			scope:nd_issuer ?= {
+				has_variable = nd_crisis_public
+				var:nd_crisis_public = 1
+			}
+		}
+		multiply = nd_taboo_yp_public_discount
+	}
+	round = yes
+}
+
 nd_yield_pressure_value = {
 	value = nd_yp_base_value
 	add = nd_yp_answer_value
@@ -799,6 +821,7 @@ nd_yield_pressure_value = {
 	add = nd_yp_temperament_value
 	add = nd_yp_war_value
 	add = nd_yp_follow_through_value
+	add = nd_yp_taboo_value
 	min = 0
 	max = 100
 	round = yes
