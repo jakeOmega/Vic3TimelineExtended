@@ -951,6 +951,11 @@ pmg_generic_lumber_yard = {
 	ai_selection = most_productive
 	production_methods = { pm_generic_lumber_yard }
 }
+pmg_generic_dye_fiber_park = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_generic_dye_fiber_park }
+}
 
 #============================================================
 # Phase 7: Remaining Vanilla Flavored Company PMGs
@@ -1916,4 +1921,95 @@ pmg_sumitomo_besshi_mine = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	ai_selection = most_productive
 	production_methods = { pm_sumitomo_besshi_mine }
+}
+
+# Phase 9: The Great Wave (DLC 018) Company PMGs
+pmg_yasuda_atosanupuri_mine = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_yasuda_atosanupuri_mine }
+}
+
+pmg_tokyo_electric_asakusa_station = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_tokyo_electric_asakusa_station }
+}
+
+pmg_guthrie_singapore_agency = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_guthrie_singapore_agency }
+}
+
+pmg_sfct_hon_gai_collieries = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_sfct_hon_gai_collieries }
+}
+
+pmg_bhp_broken_hill_mine = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_bhp_broken_hill_mine }
+}
+
+pmg_ramirez_vila_real_cannery = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_ramirez_vila_real_cannery }
+}
+
+pmg_ocmc_unsan_gold_mines = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_ocmc_unsan_gold_mines }
+}
+
+pmg_siam_electric_wat_liab_station = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_siam_electric_wat_liab_station }
+}
+
+pmg_ferranti_hollinwood_works = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_ferranti_hollinwood_works }
+}
+
+pmg_van_vlissingen_oostenburg_works = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_van_vlissingen_oostenburg_works }
+}
+
+pmg_mfo_oerlikon_works = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_mfo_oerlikon_works }
+}
+
+pmg_markwald_bangkok_rice_mill = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_markwald_bangkok_rice_mill }
+}
+
+pmg_nhm_factorij_batavia = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_nhm_factorij_batavia }
+}
+
+pmg_white_star_albion_house = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_white_star_albion_house }
+}
+
+pmg_noda_shoyu_goyogura = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_noda_shoyu_goyogura }
 }

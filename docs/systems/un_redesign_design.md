@@ -1053,9 +1053,9 @@ charter reforms' own teeth), §5.3 (convention regimes, the ICC indictment), §7
       security guarantee, `state_nuclear_weapon_defense_chance_add` +0.05 × E.
     - **Law of the sea (deviation):** the mod does not use vanilla piracy, so the pirates' side
       is not built. Great powers' naval prestige projection is curbed (−10% × E).
-    - **Human rights:** a member with an ethnostate, outlawed dissent or any slavery law loses
-      5 × E legitimacy and 5% × E prestige. The authoritarian interest groups' dislike is §7.1's
-      job.
+    - **Human rights:** a member with an ethnostate, outlawed dissent, penal labor camps or any
+      slavery law loses 5 × E legitimacy and 5% × E prestige. The authoritarian interest groups'
+      dislike is §7.1's job.
     - **Decolonisation:** now a standing regime (`un_regime_decolonization`, set when the
       declaration carries; the topic is closed while it stands). Colonial powers (running
       `je_colonial_empire`) get colonial stability drift −0.3 × E; qualifying colonial subjects

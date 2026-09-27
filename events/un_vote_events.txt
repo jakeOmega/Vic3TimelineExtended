@@ -375,7 +375,6 @@ un_vote.1 = {
 
 # ---- Phase 2: Vote results - fires for the proposer 365 days after opening ----
 un_vote.2 = {
-	# REVIEWED 2026-09-25 (system_ungated): the generic result event; the non-proliferation text shows only for that resolution
 	type = country_event
 	placement = ROOT
 
@@ -827,6 +826,15 @@ un_vote.2 = {
 				}
 				custom_tooltip = un_vote_condemn_passed_tt
 				un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
+				# The nuclear taboo: condemning a nuclear use reaffirms it.
+				if = {
+					limit = {
+						scope:un_resolution ?= { has_tag = un_res_nuclear_grievance }
+						scope:un_vote_target ?= { has_variable = nd_taboo_verdict_pending }
+					}
+					nd_taboo_verdict = { PASSED = yes }
+					scope:un_vote_target = { remove_variable = nd_taboo_verdict_pending }
+				}
 				if = {
 					limit = { exists = scope:un_vote_target }
 					change_relations = { country = scope:un_vote_target value = -30 }
@@ -871,6 +879,15 @@ un_vote.2 = {
 				# Graduated condemn: SC veto downgrades to non-binding rebuke
 				custom_tooltip = un_vote_condemn_passed_vetoed_tt
 				un_ledger_entry = { PILLAR = credibility POINTS = 0.5 REASON = 2 }
+				# The nuclear taboo: a veto shielding a nuclear use is impunity.
+				if = {
+					limit = {
+						scope:un_resolution ?= { has_tag = un_res_nuclear_grievance }
+						scope:un_vote_target ?= { has_variable = nd_taboo_verdict_pending }
+					}
+					nd_taboo_verdict = { PASSED = no }
+					scope:un_vote_target = { remove_variable = nd_taboo_verdict_pending }
+				}
 				if = {
 					limit = { exists = scope:un_vote_target }
 					change_relations = { country = scope:un_vote_target value = -10 }
@@ -1259,6 +1276,10 @@ un_vote.2 = {
 								name = un_sanctions_target_modifier
 								multiplier = un_enforcement
 							}
+							# The regime names its enforcer: two regimes can
+							# run at once, and un_lift_sanctions_button lifts
+							# only the one its presser enforces.
+							set_variable = { name = un_sanctions_enforced_by value = ROOT }
 							# Teeth by tier (redesign phase 5, §5.2): from Strong
 							# the members who voted for it embargo the target; at
 							# Supranational every major-power member does.
@@ -1448,6 +1469,16 @@ un_vote.2 = {
 			}
 			custom_tooltip = un_vote_failed_tt
 			un_ledger_entry = { PILLAR = credibility POINTS = -1 REASON = 3 }
+			# The nuclear taboo: failing to condemn a nuclear use is impunity.
+			if = {
+				limit = {
+					scope:un_resolution ?= { has_tag = un_topic_condemn }
+					scope:un_resolution ?= { has_tag = un_res_nuclear_grievance }
+					scope:un_vote_target ?= { has_variable = nd_taboo_verdict_pending }
+				}
+				nd_taboo_verdict = { PASSED = no }
+				scope:un_vote_target = { remove_variable = nd_taboo_verdict_pending }
+			}
 			add_modifier = {
 				name = un_vote_failure_penalty
 				days = normal_modifier_time

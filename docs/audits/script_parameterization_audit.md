@@ -44,9 +44,9 @@ The repo already uses parameterized helpers in several systems:
 
 ### Current shape
 
-1. Country scope computes shared locals for grain, ammunition, and oil.
+1. Country scope computes shared locals for each reserve good.
 2. The effect performs a single `random_scope_building` hop into `building_strategic_reserve_hub`.
-3. Inside building scope, the orchestrator now calls three explicit wrappers:
+3. Inside building scope, the orchestrator calls one explicit wrapper per good (eight since the reserve grew past the original three: grain, ammunition, oil, small arms, artillery, aeroplanes, tanks, fertilizer), e.g.:
    - `st_res_rebuild_grain_flow_modifiers_effect`
    - `st_res_rebuild_ammunition_flow_modifiers_effect`
    - `st_res_rebuild_oil_flow_modifiers_effect`
@@ -61,7 +61,7 @@ The repo already uses parameterized helpers in several systems:
 
 ### Behavior that must stay locked
 
-- Exact modifier names: `sr_<good>_store_flow`, `sr_<good>_withdraw_flow`, `sr_<good>_disable_input_flow`, `sr_<good>_disable_output_flow`
+- Exact modifier names: `st_res_<good>_store_flow`, `st_res_<good>_withdraw_flow` (the helper shuts a side off by re-applying its modifier at `multiplier = -1`; the grain/ammunition `st_res_<good>_disable_input_flow` / `_disable_output_flow` modifiers in `extra_modifiers.txt` are unused leftovers)
 - Exact `if / else_if / else` ordering
 - Exact thresholds and guards
 - Exact single-hop country-scope to building-scope structure

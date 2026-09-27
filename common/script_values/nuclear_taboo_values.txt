@@ -1,0 +1,1016 @@
+﻿# ============================================================================
+# THE NUCLEAR TABOO — script values
+# ============================================================================
+# Design: docs/superpowers/specs/2026-09-26-nuclear-taboo-design.md; what
+# shipped: docs/systems/nuclear_crisis_design.md §0.11.
+#
+# One world score, global_var:nd_taboo (0-100): how unthinkable nuclear weapons
+# are. It is born at 20 with the world's first warhead (nd_taboo_birth) and
+# moves every month toward a TARGET, the sum of named parts that
+# nd_taboo_monthly_update snapshots into globals (the UN authority model,
+# un_authority_values.txt):
+#
+#   base         20          constant
+#   tradition    0 .. +35    years without use (global_var:nd_taboo_quiet_years)
+#   postures     -10 .. +10  the armed countries' doctrines, a rank-weighted average
+#   restraint    0 .. +15    non-use pledges, arms-control treaties, former
+#                            nuclear states
+#   un           0 .. +12    the NPT (8) and CPPNM (4) in force, x UN authority / 100 (cap 15, headroom for later conventions)
+#   ledger       -30 .. +10  the decaying record of acts (global_var:nd_taboo_ledger)
+#
+# Drift alone tops out at 55 (base + full tradition); the rest needs
+# cooperation. A use also knocks the score down at once (nd_taboo_note_use).
+#
+# THE TUNING BLOCK is parsed by scripts/analysis/nuclear_taboo_sim.py: keep
+# every constant on one line as `name = number`.
+#
+# Scope: the parts and the reading values evaluate in any scope (they sweep
+# every_country and read globals). nd_taboo_rank_weight, nd_taboo_stance_value
+# and everything under POSSESSION are country-scoped.
+# ============================================================================
+
+# ---- TUNING ------------------------------------------------------------------
+nd_taboo_birth_value = 20
+nd_taboo_base = 20
+nd_taboo_tradition_per_year = 1
+nd_taboo_tradition_cap = 35
+nd_taboo_approach_months = 36
+nd_taboo_max_step = 1
+nd_taboo_max_step_down = -1
+nd_taboo_ledger_decay = 0.9857
+nd_taboo_ledger_min = -30
+nd_taboo_ledger_max = 10
+nd_taboo_postures_span = 10
+nd_taboo_postures_floor = -10
+nd_taboo_restraint_cap = 15
+nd_taboo_pledge_point = 1
+nd_taboo_pledge_cap = 5
+nd_taboo_renounced_point = 3
+nd_taboo_renounced_cap = 10
+nd_taboo_weight_great = 1
+nd_taboo_weight_major = 0.5
+nd_taboo_weight_minor = 0.25
+nd_taboo_weight_other = 0.1
+nd_taboo_line_fragile = 30
+nd_taboo_line_established = 50
+nd_taboo_line_strong = 70
+nd_taboo_line_absolute = 90
+nd_taboo_shock_strategic = -15
+nd_taboo_ledger_strategic = -10
+nd_taboo_shock_tactical = -6
+nd_taboo_ledger_tactical = -4
+nd_taboo_retaliation_factor = 0.5
+nd_taboo_clock_keep_first_use = 0.5
+nd_taboo_clock_keep_retaliation = 0.75
+nd_taboo_band_hysteresis = 2
+nd_taboo_event_cooldown_years = 10
+nd_taboo_ledger_ultimatum = -1
+nd_taboo_ledger_warning = -0.3
+nd_taboo_ledger_go_public = -0.7
+nd_taboo_ledger_offensive_doctrine = -1
+nd_taboo_ledger_repudiation = -1.5
+nd_taboo_ledger_nfu = 0.5
+nd_taboo_ledger_standdown = 0.5
+nd_taboo_ledger_terror = 2
+nd_taboo_infamy_strategic_per_point = 1
+nd_taboo_infamy_tactical_per_point = 0.4
+nd_taboo_infamy_threat_per_point = 0.1
+nd_taboo_world_relations_per_point = -0.4
+nd_taboo_world_relations_tactical_share = 0.4
+nd_taboo_yp_midpoint = 50
+nd_taboo_yp_per_point = 0.16
+nd_taboo_yp_public_discount = 0.5
+nd_taboo_burden_floor = 40
+nd_taboo_burden_span = 60
+nd_taboo_arsenal_saturation = 50
+nd_taboo_arsenal_floor_factor = 0.2
+nd_taboo_arsenal_span_factor = 0.8
+nd_taboo_burden_step_mild = 0.333
+nd_taboo_burden_step_full = 0.667
+nd_taboo_possession_prestige_pct = -45
+nd_taboo_possession_leverage_pct = -25
+nd_taboo_ledger_renounce_base = 1
+nd_taboo_ledger_renounce_per_warhead = 0.1
+nd_taboo_ledger_renounce_cap = 6
+nd_taboo_ledger_retire_per_warhead = 0.05
+nd_taboo_ledger_breakout = -2
+nd_taboo_ledger_halt = -1
+nd_taboo_dismantle_base_months = 12
+nd_taboo_dismantle_free_warheads = 20
+nd_taboo_dismantle_warheads_per_month = 10
+nd_taboo_dismantle_max_months = 36
+nd_taboo_retire_share = 0.1
+nd_taboo_ceiling_step_small = 1
+nd_taboo_ceiling_step_medium = 5
+nd_taboo_ceiling_step_large = 25
+nd_taboo_ceiling_medium_from = 10
+nd_taboo_ceiling_large_from = 50
+nd_taboo_halt_credibility = 10
+nd_taboo_renounce_relations_per_point = 0.2
+nd_taboo_resume_relations_per_point = -0.2
+nd_taboo_ai_survival_only_line = 70
+nd_taboo_ai_loosen_line = 30
+nd_taboo_ai_use_pivot = 35
+nd_taboo_ai_use_boost = 1
+nd_taboo_ai_use_span_high = 65
+nd_taboo_ai_use_cut = 0.7
+nd_taboo_ai_coercion_line = 70
+nd_taboo_ai_nfu_weight_per_point = 0.3
+nd_taboo_ai_flexible_penalty = -5
+nd_taboo_ai_offensive_bonus = 10
+nd_taboo_ai_offensive_damping = 0.25
+nd_taboo_ai_arsenal_pivot = 40
+nd_taboo_ai_arsenal_boost = 0.3
+nd_taboo_ai_arsenal_span_high = 60
+nd_taboo_ai_arsenal_cut = 0.5
+nd_taboo_ai_programme_restraint_line = 70
+nd_taboo_ai_programme_restraint_factor = 0.25
+nd_taboo_ai_reduce_margin = 1.5
+nd_taboo_ai_dismantle_burden = 0.3
+nd_taboo_ai_dismantle_line = 70
+nd_taboo_ai_accept_burden_weight = 60
+nd_taboo_ai_accept_taboo_weight = 0.6
+nd_taboo_civil_defence_units = 5
+nd_taboo_protector_relations = 15
+nd_taboo_champion_relations = -5
+nd_taboo_quiet_relations = 5
+nd_taboo_modernise_reliability = 10
+nd_taboo_modernise_survivability = 5
+nd_taboo_arms_control_point = 2
+nd_taboo_ledger_walkout = -1
+nd_taboo_arms_quantity_headroom = 1.25	# a ceiling may sit at most this far above the larger arsenal
+nd_taboo_arms_quantity_floor = 5	# ... and may always reach this, for two small or budding arsenals
+nd_taboo_arms_ai_share = 0.75
+nd_taboo_arms_ai_base = -25
+nd_taboo_arms_ai_burden_weight = 50
+nd_taboo_arms_ai_taboo_weight = 0.5
+nd_taboo_arms_ai_militarist = -50
+nd_taboo_arms_ai_growth_weight = 0.5	# per warhead of our desired arsenal the ceiling forbids
+nd_taboo_arms_ai_parity_weight = 2	# per warhead we would retire beyond what the other party retires
+nd_taboo_un_npt_weight = 8
+nd_taboo_un_cppnm_weight = 4
+nd_taboo_un_cap = 15	# never binds today: NPT (8) + CPPNM (4) peaks at 12; headroom for later conventions
+nd_taboo_ledger_verdict_passed = 3
+nd_taboo_shock_verdict_passed = 2
+nd_taboo_ledger_verdict_failed = -3
+
+# ---- READING THE SCORE ---------------------------------------------------------
+
+# The score; the birth value before the first warhead, so no reader ever reads
+# a missing global.
+nd_taboo_value = {
+	value = nd_taboo_birth_value
+	if = {
+		limit = { has_global_variable = nd_taboo }
+		value = global_var:nd_taboo
+	}
+}
+
+# The band the score falls in: 1 Normalised, 2 Fragile, 3 Established,
+# 4 Strong, 5 Absolute.
+nd_taboo_band_value = {
+	value = 1
+	if = {
+		limit = { nd_taboo_value >= nd_taboo_line_fragile }
+		value = 2
+	}
+	if = {
+		limit = { nd_taboo_value >= nd_taboo_line_established }
+		value = 3
+	}
+	if = {
+		limit = { nd_taboo_value >= nd_taboo_line_strong }
+		value = 4
+	}
+	if = {
+		limit = { nd_taboo_value >= nd_taboo_line_absolute }
+		value = 5
+	}
+}
+
+# ---- WEIGHTS -------------------------------------------------------------------
+
+# How much this country's threats, doctrines and pledges count, from its rank.
+# Read when the act happens, so it needs no UN (un_actor_weight reads a share
+# only the UN's monthly update caches, and is 0 in a world without one).
+# Scope: country
+nd_taboo_rank_weight = {
+	value = nd_taboo_weight_other
+	if = {
+		limit = { country_rank >= rank_value:great_power }
+		value = nd_taboo_weight_great
+	}
+	else_if = {
+		limit = { country_rank >= rank_value:major_power }
+		value = nd_taboo_weight_major
+	}
+	else_if = {
+		limit = { country_rank >= rank_value:minor_power }
+		value = nd_taboo_weight_minor
+	}
+}
+
+# An armed country's stance, -1 .. +1: its doctrine (No First Use +1,
+# Existential 0, Flexible -1/3, Compellence -2/3, Warfighting -1), +1/4 while
+# Recessed, -1/4 at High Alert.
+# Scope: country
+nd_taboo_stance_value = {
+	value = 0
+	if = {
+		limit = { has_variable = nd_doctrine }
+		if = {
+			limit = { var:nd_doctrine = 1 }
+			value = 1
+		}
+		else_if = {
+			limit = { var:nd_doctrine = 3 }
+			value = -0.33
+		}
+		else_if = {
+			limit = { var:nd_doctrine = 4 }
+			value = -0.67
+		}
+		else_if = {
+			limit = { var:nd_doctrine = 5 }
+			value = -1
+		}
+	}
+	if = {
+		limit = { has_variable = nd_readiness }
+		if = {
+			limit = { var:nd_readiness = 0 }
+			add = 0.25
+		}
+		else_if = {
+			limit = { var:nd_readiness = 3 }
+			add = -0.25
+		}
+	}
+	min = -1
+	max = 1
+}
+
+# How many non-use pledges this country holds (one list entry per partner).
+# Scope: country
+nd_taboo_pledge_count_value = {
+	value = 0
+	if = {
+		limit = { has_variable_list = nd_nonuse_pledges }
+		every_in_list = {
+			variable = nd_nonuse_pledges
+			add = 1
+		}
+	}
+}
+
+# ---- WHAT IT COSTS (spec §4) ---------------------------------------------------
+# The fixed numbers these replace (25, 10 and 5 infamy) are their value at a
+# taboo of 25 (50 for a threat); at 0 a nuclear act costs no infamy at all.
+
+nd_taboo_infamy_strategic = {
+	value = nd_taboo_value
+	multiply = nd_taboo_infamy_strategic_per_point
+}
+
+nd_taboo_infamy_tactical = {
+	value = nd_taboo_value
+	multiply = nd_taboo_infamy_tactical_per_point
+}
+
+# A public ultimatum, going public, an offensive doctrine.
+nd_taboo_infamy_threat = {
+	value = nd_taboo_value
+	multiply = nd_taboo_infamy_threat_per_point
+}
+
+# Every country but the victim, after a first use. Negative.
+nd_taboo_world_relations_strategic = {
+	value = nd_taboo_value
+	multiply = nd_taboo_world_relations_per_point
+	round = yes
+}
+
+nd_taboo_world_relations_tactical = {
+	value = nd_taboo_world_relations_strategic
+	multiply = nd_taboo_world_relations_tactical_share
+	round = yes
+}
+
+# ---- THE PARTS (the monthly update snapshots them) ----------------------------
+
+nd_taboo_part_tradition_value = {
+	value = 0
+	if = {
+		limit = { has_global_variable = nd_taboo_quiet_years }
+		add = global_var:nd_taboo_quiet_years
+		multiply = nd_taboo_tradition_per_year
+	}
+	min = 0
+	max = nd_taboo_tradition_cap
+}
+
+nd_taboo_armed_weight_sum = {
+	value = 0
+	every_country = {
+		limit = { nd_is_armed = yes }
+		add = nd_taboo_rank_weight
+	}
+}
+
+nd_taboo_armed_stance_sum = {
+	value = 0
+	every_country = {
+		limit = { nd_is_armed = yes }
+		add = {
+			value = nd_taboo_rank_weight
+			multiply = nd_taboo_stance_value
+		}
+	}
+}
+
+# An average, so one micro-state's No First Use cannot swamp the world.
+nd_taboo_part_postures_value = {
+	value = 0
+	if = {
+		limit = {
+			any_country = { nd_is_armed = yes }
+		}
+		value = nd_taboo_armed_stance_sum
+		divide = nd_taboo_armed_weight_sum
+		multiply = nd_taboo_postures_span
+	}
+	min = nd_taboo_postures_floor
+	max = nd_taboo_postures_span
+}
+
+# Each pledge is held by both partners, so the pairs are half the entries.
+nd_taboo_pledge_entries_value = {
+	value = 0
+	every_country = {
+		limit = { has_variable_list = nd_nonuse_pledges }
+		add = nd_taboo_pledge_count_value
+	}
+}
+
+nd_taboo_renounced_weight_value = {
+	value = 0
+	every_country = {
+		limit = { nd_taboo_is_former_nuclear_state = yes }
+		add = nd_taboo_rank_weight
+	}
+}
+
+# Countries an arms-limitation treaty binds (nd_treaty_ceiling), rank-weighted,
+# each once however many treaties it has.
+nd_taboo_arms_control_weight_value = {
+	value = 0
+	every_country = {
+		limit = { has_variable = nd_treaty_ceiling }
+		add = nd_taboo_rank_weight
+	}
+}
+
+nd_taboo_part_restraint_value = {
+	value = 0
+	add = {
+		value = nd_taboo_pledge_entries_value
+		divide = 2
+		multiply = nd_taboo_pledge_point
+		max = nd_taboo_pledge_cap
+	}
+	add = {
+		value = nd_taboo_renounced_weight_value
+		multiply = nd_taboo_renounced_point
+		max = nd_taboo_renounced_cap
+	}
+	add = {
+		value = nd_taboo_arms_control_weight_value
+		multiply = nd_taboo_arms_control_point
+	}
+	min = 0
+	max = nd_taboo_restraint_cap
+}
+
+# The UN's conventions (spec §7.2): the NPT (the IAEA) and the Physical
+# Protection convention (CPPNM), each in proportion to UN authority. 0 with no
+# UN: the taboo never needs one.
+nd_taboo_part_un_value = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = un_founded
+			has_global_variable = un_authority
+		}
+		if = {
+			limit = { has_global_variable = un_agency_iaea }
+			add = {
+				value = global_var:un_authority
+				divide = 100
+				multiply = nd_taboo_un_npt_weight
+			}
+		}
+		if = {
+			limit = { has_global_variable = un_agency_cppnm }
+			add = {
+				value = global_var:un_authority
+				divide = 100
+				multiply = nd_taboo_un_cppnm_weight
+			}
+		}
+	}
+	min = 0
+	max = nd_taboo_un_cap
+}
+
+# ---- THE TARGET AND THE STEP ---------------------------------------------------
+
+# The equilibrium, from the snapshots the monthly update has just written.
+nd_taboo_target_sum = {
+	value = global_var:nd_tb_base
+	add = global_var:nd_tb_tradition
+	add = global_var:nd_tb_postures
+	add = global_var:nd_tb_restraint
+	add = global_var:nd_tb_un
+	add = global_var:nd_tb_ledger
+	min = 0
+	max = 100
+}
+
+# This month's move toward the target: a 36th of the gap, at most one point.
+nd_taboo_step_value = {
+	value = global_var:nd_taboo_target
+	subtract = global_var:nd_taboo
+	divide = nd_taboo_approach_months
+	min = nd_taboo_max_step_down
+	max = nd_taboo_max_step
+}
+
+nd_taboo_years_per_month = {
+	value = 1
+	divide = 12
+}
+
+# ---- DISPLAY (reads of the snapshots; the panel re-renders every frame) --------
+
+nd_disp_taboo = {
+	value = nd_taboo_value
+}
+
+nd_disp_taboo_target = {
+	value = nd_taboo_birth_value
+	if = {
+		limit = { has_global_variable = nd_taboo_target }
+		value = global_var:nd_taboo_target
+	}
+}
+
+nd_disp_taboo_quiet_years = {
+	value = 0
+	if = {
+		limit = { has_global_variable = nd_taboo_quiet_years }
+		value = global_var:nd_taboo_quiet_years
+	}
+}
+
+nd_disp_tb_base = {
+	value = 0
+	if = {
+		limit = { has_global_variable = nd_tb_base }
+		value = global_var:nd_tb_base
+	}
+}
+
+nd_disp_tb_tradition = {
+	value = 0
+	if = {
+		limit = { has_global_variable = nd_tb_tradition }
+		value = global_var:nd_tb_tradition
+	}
+}
+
+nd_disp_tb_postures = {
+	value = 0
+	if = {
+		limit = { has_global_variable = nd_tb_postures }
+		value = global_var:nd_tb_postures
+	}
+}
+
+nd_disp_tb_restraint = {
+	value = 0
+	if = {
+		limit = { has_global_variable = nd_tb_restraint }
+		value = global_var:nd_tb_restraint
+	}
+}
+
+nd_disp_tb_un = {
+	value = 0
+	if = {
+		limit = { has_global_variable = nd_tb_un }
+		value = global_var:nd_tb_un
+	}
+}
+
+nd_disp_tb_ledger = {
+	value = 0
+	if = {
+		limit = { has_global_variable = nd_tb_ledger }
+		value = global_var:nd_tb_ledger
+	}
+}
+
+# Target less score: where the taboo is heading.
+nd_taboo_gap_value = {
+	value = nd_disp_taboo_target
+	subtract = nd_taboo_value
+}
+
+# ---- POSSESSION (spec §4.4) — country scope unless noted ----------------------
+# One number drives both costs: the taboo's weight (0 below 40, 1 at 100) times
+# the arsenal's size (0.2 for a token force, 1 from fifty warheads, the count
+# the upkeep's custody term stops at). A minimal deterrent in a world that
+# holds the bomb in horror still costs a quarter of a big arsenal.
+
+# Scope: any
+nd_taboo_factor_value = {
+	value = nd_taboo_value
+	subtract = nd_taboo_burden_floor
+	divide = nd_taboo_burden_span
+	min = 0
+	max = 1
+}
+
+nd_taboo_arsenal_factor_value = {
+	value = nd_stockpile
+	max = nd_taboo_arsenal_saturation
+	divide = nd_taboo_arsenal_saturation
+	multiply = nd_taboo_arsenal_span_factor
+	add = nd_taboo_arsenal_floor_factor
+}
+
+nd_taboo_burden_value = {
+	value = 0
+	if = {
+		limit = { nd_is_armed = yes }
+		value = nd_taboo_factor_value
+		multiply = nd_taboo_arsenal_factor_value
+	}
+}
+
+nd_disp_taboo_burden_pct = {
+	value = nd_taboo_burden_value
+	multiply = 100
+	round = yes
+}
+
+# What the burden costs now, in the percentages nd_taboo_possession_cost shows
+# (its fields are these constants / 100; test_nuclear_taboo.py pins them).
+nd_disp_taboo_prestige_cost_pct = {
+	value = nd_taboo_burden_value
+	multiply = nd_taboo_possession_prestige_pct
+	round = yes
+}
+
+nd_disp_taboo_leverage_cost_pct = {
+	value = nd_taboo_burden_value
+	multiply = nd_taboo_possession_leverage_pct
+	round = yes
+}
+
+# ---- EXITS (spec §5) — country scope --------------------------------------------
+
+# The ceiling in force, or the stock when there is none (the stepper steps
+# from here).
+nd_taboo_ceiling_now_value = {
+	value = nd_stockpile
+	if = {
+		limit = { has_variable = nd_warhead_ceiling }
+		value = var:nd_warhead_ceiling
+	}
+}
+
+# 1 warhead at a time up to 10, 5 up to 50, then 25.
+nd_taboo_ceiling_step_value = {
+	value = nd_taboo_ceiling_step_small
+	if = {
+		limit = { nd_taboo_ceiling_now_value > nd_taboo_ceiling_medium_from }
+		value = nd_taboo_ceiling_step_medium
+	}
+	if = {
+		limit = { nd_taboo_ceiling_now_value > nd_taboo_ceiling_large_from }
+		value = nd_taboo_ceiling_step_large
+	}
+}
+
+nd_taboo_ceiling_lowered_value = {
+	value = nd_taboo_ceiling_now_value
+	subtract = nd_taboo_ceiling_step_value
+	min = 1
+}
+
+nd_taboo_ceiling_raised_value = {
+	value = nd_taboo_ceiling_now_value
+	add = nd_taboo_ceiling_step_value
+}
+
+nd_taboo_half_arsenal_value = {
+	value = nd_stockpile
+	divide = 2
+	floor = yes
+	min = 1
+}
+
+# 12 months, +1 per 10 warheads above 20, at most 36.
+nd_taboo_dismantle_months_value = {
+	value = nd_stockpile
+	subtract = nd_taboo_dismantle_free_warheads
+	min = 0
+	divide = nd_taboo_dismantle_warheads_per_month
+	floor = yes
+	add = nd_taboo_dismantle_base_months
+	max = nd_taboo_dismantle_max_months
+}
+
+# This month's retirements while dismantling: what is left divided by the
+# months left, rounded down, so the warheads go evenly across the whole
+# period and the last month takes the rest (spec §5.2).
+nd_taboo_dismantle_this_month_value = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = nd_dismantle_months_left
+			var:nd_dismantle_months_left > 0
+		}
+		value = nd_stockpile
+		divide = var:nd_dismantle_months_left
+		floor = yes
+	}
+}
+
+# The ceiling that binds: the lower of our own (nd_warhead_ceiling) and the
+# lowest a treaty sets us (nd_treaty_ceiling); 0 when neither exists.
+nd_taboo_effective_ceiling_value = {
+	value = 0
+	if = {
+		limit = { has_variable = nd_warhead_ceiling }
+		value = var:nd_warhead_ceiling
+	}
+	if = {
+		limit = {
+			has_variable = nd_treaty_ceiling
+			OR = {
+				NOT = { has_variable = nd_warhead_ceiling }
+				var:nd_treaty_ceiling < var:nd_warhead_ceiling
+			}
+		}
+		value = var:nd_treaty_ceiling
+	}
+}
+
+# A tenth of the excess over the ceiling that binds, at least one.
+nd_taboo_retire_this_month_value = {
+	value = 0
+	if = {
+		limit = {
+			nd_taboo_has_ceiling = yes
+			nd_stockpile > nd_taboo_effective_ceiling_value
+		}
+		value = nd_stockpile
+		subtract = nd_taboo_effective_ceiling_value
+		multiply = nd_taboo_retire_share
+		ceiling = yes
+		min = 1
+	}
+}
+
+# Scope: any
+nd_taboo_renounce_mult_value = {
+	value = nd_taboo_value
+	divide = 100
+}
+
+nd_taboo_renounce_relations_value = {
+	value = nd_taboo_value
+	multiply = nd_taboo_renounce_relations_per_point
+	round = yes
+}
+
+nd_taboo_resume_relations_value = {
+	value = nd_taboo_value
+	multiply = nd_taboo_resume_relations_per_point
+	round = yes
+}
+
+nd_disp_warhead_ceiling = {
+	value = 0
+	if = {
+		limit = { has_variable = nd_warhead_ceiling }
+		value = var:nd_warhead_ceiling
+	}
+}
+
+nd_disp_treaty_ceiling = {
+	value = 0
+	if = {
+		limit = { has_variable = nd_treaty_ceiling }
+		value = var:nd_treaty_ceiling
+	}
+}
+
+nd_disp_dismantle_months_left = {
+	value = 0
+	if = {
+		limit = { has_variable = nd_dismantle_months_left }
+		value = var:nd_dismantle_months_left
+	}
+}
+
+nd_disp_dismantle_per_month = {
+	value = nd_taboo_dismantle_this_month_value
+}
+
+# The largest arsenal at which the burden would fall below the domestic step
+# it is on now (for the ceiling's hint): solves factor x (0.2 + 0.8 w / 50) <
+# step for w. 0 when there is no step to lose; below 1 when only dismantling
+# gets there.
+nd_disp_taboo_step_down_warheads = {
+	value = 0
+	if = {
+		limit = {
+			nd_taboo_factor_value > 0
+			nd_taboo_burden_value >= nd_taboo_burden_step_full
+		}
+		value = nd_taboo_burden_step_full
+	}
+	else_if = {
+		limit = {
+			nd_taboo_factor_value > 0
+			nd_taboo_burden_value >= nd_taboo_burden_step_mild
+		}
+		value = nd_taboo_burden_step_mild
+	}
+	if = {
+		limit = { nd_taboo_burden_value >= nd_taboo_burden_step_mild }
+		divide = nd_taboo_factor_value
+		subtract = nd_taboo_arsenal_floor_factor
+		divide = nd_taboo_arsenal_span_factor
+		multiply = nd_taboo_arsenal_saturation
+		ceiling = yes
+		subtract = 1
+		min = -1
+	}
+}
+
+# ---- THE AI (spec §8) ------------------------------------------------------------
+# "If you've created a world in which using nukes is normal, you should not be
+# surprised when the AI uses them against you."
+
+# How readily the AI considers a strike (the actions' evaluation_chance): x2 at
+# taboo 0, x1 at 35, x0.3 at 100, linear between.
+nd_taboo_ai_use_factor = {
+	value = 1
+	if = {
+		limit = { nd_taboo_value < nd_taboo_ai_use_pivot }
+		value = nd_taboo_ai_use_pivot
+		subtract = nd_taboo_value
+		divide = nd_taboo_ai_use_pivot
+		multiply = nd_taboo_ai_use_boost
+		add = 1
+	}
+	else = {
+		value = nd_taboo_value
+		subtract = nd_taboo_ai_use_pivot
+		divide = nd_taboo_ai_use_span_high
+		multiply = nd_taboo_ai_use_cut
+		multiply = -1
+		add = 1
+	}
+}
+
+# The AI's wanted arsenal (nuclear_ai_desired_stockpile) x1.3 at taboo 0, x1 at
+# 40, x0.5 at 100.
+nd_taboo_ai_arsenal_factor = {
+	value = 1
+	if = {
+		limit = { nd_taboo_value < nd_taboo_ai_arsenal_pivot }
+		value = nd_taboo_ai_arsenal_pivot
+		subtract = nd_taboo_value
+		divide = nd_taboo_ai_arsenal_pivot
+		multiply = nd_taboo_ai_arsenal_boost
+		add = 1
+	}
+	else = {
+		value = nd_taboo_value
+		subtract = nd_taboo_ai_arsenal_pivot
+		divide = nd_taboo_ai_arsenal_span_high
+		multiply = nd_taboo_ai_arsenal_cut
+		multiply = -1
+		add = 1
+	}
+}
+
+# No First Use's extra weight in the AI's doctrine review: up to +15 above 50.
+nd_taboo_ai_nfu_weight = {
+	value = nd_taboo_value
+	subtract = nd_taboo_line_established
+	multiply = nd_taboo_ai_nfu_weight_per_point
+	min = 0
+}
+
+# Above this the AI trims its arsenal back to what it wants. Scope: country
+nd_taboo_ai_reduce_line_value = {
+	value = nuclear_ai_desired_stockpile
+	multiply = nd_taboo_ai_reduce_margin
+}
+
+# The disarmament article's acceptance terms for the country asked to give
+# its arsenal up. Scope: country
+nd_taboo_ai_accept_burden_value = {
+	value = nd_taboo_burden_value
+	multiply = nd_taboo_ai_accept_burden_weight
+	round = yes
+}
+
+nd_taboo_ai_accept_taboo_value = {
+	value = nd_taboo_value
+	subtract = nd_taboo_line_established
+	multiply = nd_taboo_ai_accept_taboo_weight
+	min = 0
+	round = yes
+}
+
+# The larger of the two parties' arsenals, for nuclear_arms_limitation's
+# quantity limit and the AI's pick. Scope: a party. The other party comes from
+# scope:other_country where the engine binds it (the AI's quantity pick), or
+# from scope:source_country / scope:target_country (vanilla
+# 13_goods_transfer's quantity_max_value reads those); with neither, our own.
+nd_taboo_arms_larger_arsenal_value = {
+	value = nd_stockpile
+	if = {
+		limit = { exists = scope:other_country }
+		add = {
+			value = scope:other_country.nd_stockpile
+			subtract = nd_stockpile
+			min = 0
+		}
+	}
+	else_if = {
+		limit = {
+			exists = scope:source_country
+			exists = scope:target_country
+		}
+		value = scope:source_country.nd_stockpile
+		add = {
+			value = scope:target_country.nd_stockpile
+			subtract = scope:source_country.nd_stockpile
+			min = 0
+		}
+	}
+}
+
+# The highest ceiling the article can set: a quarter above the larger arsenal,
+# and at least the floor. A ceiling far above every arsenal would bind nobody
+# yet earn its parties full restraint credit (owner call, 2026-09-27).
+nd_taboo_arms_quantity_cap_value = {
+	value = nd_taboo_arms_larger_arsenal_value
+	multiply = nd_taboo_arms_quantity_headroom
+	ceiling = yes
+	min = nd_taboo_arms_quantity_floor
+}
+
+# nuclear_arms_limitation's AI (spec §7.1). Scope: the evaluating country.
+nd_taboo_ai_arms_burden_value = {
+	value = nd_taboo_burden_value
+	multiply = nd_taboo_arms_ai_burden_weight
+	round = yes
+}
+
+nd_taboo_ai_arms_taboo_value = {
+	value = nd_taboo_value
+	subtract = nd_taboo_line_established
+	multiply = nd_taboo_arms_ai_taboo_weight
+	min = 0
+	round = yes
+}
+
+# The warheads this country would retire under the article's ceiling.
+# Scope: a party; reads scope:article.
+nd_taboo_arms_cut_value = {
+	value = 0
+	if = {
+		limit = {
+			exists = scope:article.input_quantity
+			nd_stockpile > scope:article.input_quantity
+		}
+		value = nd_stockpile
+		subtract = scope:article.input_quantity
+	}
+}
+
+# What the ceiling forbids us to build: our desired arsenal above it. Scope: the evaluating country.
+nd_taboo_ai_arms_growth_value = {
+	value = 0
+	if = {
+		limit = {
+			exists = scope:article.input_quantity
+			nuclear_ai_desired_stockpile > scope:article.input_quantity
+		}
+		value = nuclear_ai_desired_stockpile
+		subtract = scope:article.input_quantity
+		multiply = nd_taboo_arms_ai_growth_weight
+		multiply = -1
+	}
+}
+
+# Parity: the warheads we would retire beyond what the other party retires. Scope: the evaluating country.
+nd_taboo_ai_arms_parity_value = {
+	value = 0
+	if = {
+		limit = {
+			exists = scope:article.input_quantity
+			exists = scope:first_country
+			exists = scope:second_country
+		}
+		value = nd_taboo_arms_cut_value
+		if = {
+			limit = { scope:first_country = { this = root } }
+			subtract = scope:second_country.nd_taboo_arms_cut_value
+		}
+		else = {
+			subtract = scope:first_country.nd_taboo_arms_cut_value
+		}
+		min = 0
+		multiply = nd_taboo_arms_ai_parity_weight
+		multiply = -1
+	}
+}
+
+# ---- BAND EVENTS (spec §6.3) — any scope ------------------------------------------
+# global_var:nd_taboo_band is the band last announced (1..5). The next band up
+# is announced at 2 above its line, the next down at 2 below the current
+# band's line.
+
+nd_taboo_upper_line_value = {
+	value = 1000
+	if = {
+		limit = { global_var:nd_taboo_band = 1 }
+		value = nd_taboo_line_fragile
+	}
+	else_if = {
+		limit = { global_var:nd_taboo_band = 2 }
+		value = nd_taboo_line_established
+	}
+	else_if = {
+		limit = { global_var:nd_taboo_band = 3 }
+		value = nd_taboo_line_strong
+	}
+	else_if = {
+		limit = { global_var:nd_taboo_band = 4 }
+		value = nd_taboo_line_absolute
+	}
+}
+
+nd_taboo_lower_line_value = {
+	value = -1000
+	if = {
+		limit = { global_var:nd_taboo_band = 2 }
+		value = nd_taboo_line_fragile
+	}
+	else_if = {
+		limit = { global_var:nd_taboo_band = 3 }
+		value = nd_taboo_line_established
+	}
+	else_if = {
+		limit = { global_var:nd_taboo_band = 4 }
+		value = nd_taboo_line_strong
+	}
+	else_if = {
+		limit = { global_var:nd_taboo_band = 5 }
+		value = nd_taboo_line_absolute
+	}
+}
+
+nd_taboo_up_threshold_value = {
+	value = nd_taboo_upper_line_value
+	add = nd_taboo_band_hysteresis
+}
+
+nd_taboo_down_threshold_value = {
+	value = nd_taboo_lower_line_value
+	subtract = nd_taboo_band_hysteresis
+}
+
+# An event last fired in this year or earlier may fire again.
+nd_taboo_cooldown_cutoff_year = {
+	value = year
+	subtract = nd_taboo_event_cooldown_years
+}
+
+# Shelters and civil defence: 5 of the posture upkeep's units (1/100,000 of
+# GDP a week). Scope: country
+nd_taboo_civil_defence_weekly_value = {
+	value = gdp
+	divide = 100000
+	multiply = nd_taboo_civil_defence_units
+}

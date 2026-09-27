@@ -634,6 +634,10 @@ nd_cw_dismantle = {
 # the tooltip that says how (a literal key, so organize_loc sees it used;
 # #451). The outbreak's Dismantle, and both of "Deny Them the Bomb"'s.
 nd_cw_dismantle_as = {
+	# The nuclear taboo: an arsenal given up (read before it is zeroed).
+	hidden_effect = {
+		nd_taboo_note_renunciation = { WARHEADS = nd_stockpile }
+	}
 	custom_tooltip = {
 		text = $TT$
 		set_variable = { name = nuclear_weapon_stockpile value = 0 }
@@ -1172,6 +1176,10 @@ nd_bp_accept = {
 			}
 			nd_bp_treaty_guarantee = { GUARANTOR = scope:nd_bp_lead STATE = ROOT }
 		}
+		# The nuclear taboo: an arsenal given up. Idempotent, so the lead's
+		# disarmament article, if it went into force above, has already
+		# counted it.
+		nd_taboo_note_renunciation = { WARHEADS = nd_stockpile }
 		if = {
 			limit = { nd_stockpile > 0 }
 			set_variable = { name = nuclear_weapon_stockpile value = 0 }

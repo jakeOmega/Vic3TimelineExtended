@@ -5,6 +5,10 @@
 # common/scripted_buttons/global_warming_buttons.txt. The journal-entry button
 # and the widget's scripted GUI both call these.
 #
+# A market-wide repeal skips members bound by an emissions reduction treaty
+# (gw_bound_by_emissions_treaty): the treaty locks their policies in, and a
+# removal would freeze it.
+#
 # The `custom_tooltip` wrapper around each market-wide policy is LOAD-BEARING:
 # without it the `every_country` iteration enumerates every market member in the
 # button/control tooltip (see docs/guides/scripting_best_practices.md,
@@ -30,6 +34,7 @@ gw_effect_remove_carbon_tax = {
 			limit = {
 				market_capital = ROOT.market_capital
 				je:je_global_warming = { has_modifier = carbon_tax_modifier }
+				NOT = { gw_bound_by_emissions_treaty = yes }
 			}
 			je:je_global_warming = { remove_modifier = carbon_tax_modifier }
 		}
@@ -56,6 +61,7 @@ gw_effect_remove_renewable_investment = {
 			limit = {
 				market_capital = ROOT.market_capital
 				je:je_global_warming = { has_modifier = renewable_investment_modifier }
+				NOT = { gw_bound_by_emissions_treaty = yes }
 			}
 			je:je_global_warming = { remove_modifier = renewable_investment_modifier }
 		}
@@ -96,6 +102,7 @@ gw_effect_remove_emission_standards = {
 			limit = {
 				market_capital = ROOT.market_capital
 				je:je_global_warming = { has_modifier = emission_standards_modifier }
+				NOT = { gw_bound_by_emissions_treaty = yes }
 			}
 			je:je_global_warming = { remove_modifier = emission_standards_modifier }
 		}

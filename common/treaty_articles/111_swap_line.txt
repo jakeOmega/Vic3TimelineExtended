@@ -184,9 +184,14 @@ swap_line = {
 	}
 
 	on_entry_into_force = {
-		scope:article_options = {
-			source_country = { trigger_event = { id = te_monetary_internal.2 days = 1 } }
-			target_country = { trigger_event = { id = te_monetary_internal.2 days = 1 } }
+		# The offer/designer preview reads this hook, not the _effects_desc key.
+		# Keep the explanation outside article_options: it can be unset in previews.
+		custom_tooltip_no_bullet = swap_line_effects_desc
+		hidden_effect = {
+			scope:article_options = {
+				source_country = { trigger_event = { id = te_monetary_internal.2 days = 1 } }
+				target_country = { trigger_event = { id = te_monetary_internal.2 days = 1 } }
+			}
 		}
 	}
 

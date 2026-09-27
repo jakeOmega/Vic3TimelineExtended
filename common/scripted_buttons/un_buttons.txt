@@ -89,8 +89,9 @@ un_found_button = {
 				# then moving toward the equilibrium its members give it
 				# (un_authority_effects.txt). The founder becomes first member, HQ
 				# host, founding member and, as a great power, a permanent member;
-				# a 5-year founding window seats the next great powers to join
-				# (un_found_organisation, un_ladder_effects.txt).
+				# the other permanent seats go by prestige to great-power members
+				# when the one-year signing period closes (un_found_organisation,
+				# un_ladder_effects.txt; un_seat_effects.txt).
 				un_found_organisation = { AUTHORITY = un_founding_authority }
 				# Fire the charter event for all other recognized independent countries
 				un_charter_invitations = yes
@@ -531,28 +532,68 @@ un_lift_sanctions_button = {
 		custom_tooltip = {
 			text = "UN_LIFT_SANCTIONS_DESC"
 			remove_modifier = un_sanctions_enforcer_modifier
-			# The UN's record below names the sanctioned country when there is
-			# one. The button lifts every regime in force, so with several it
-			# books the entry with no subject, and the log prints the plain
-			# line. One booking either way: gen_un_button_descs.py prints a
-			# line for every booking it finds.
+			# Only the regime we enforce: two can run at once, under different
+			# enforcers, and each sanctioned country names its enforcer
+			# (un_sanctions_enforced_by, set by un_vote.2). An enforcer holds
+			# at most one regime (un_propose_sanctions_available). A regime
+			# nobody enforces any more is orphaned, and any enforcer's lift
+			# ends it too, as every lift used to: its enforcer left the UN
+			# (un_membership_end_effect drops the enforcer modifier), died, or
+			# won or lost a revolution (the winner inherits no modifiers), or
+			# the regime is from a save made before the target recorded its
+			# enforcer, so it names nobody. Another live enforcer's regime is
+			# spared. The UN's record below names the country whose sanctions
+			# we lift: ours, else the orphan when there is only one; with
+			# several orphans and none of ours it books the entry with no
+			# subject, and the log prints the plain line. One booking either
+			# way: gen_un_button_descs.py prints a line for every booking it
+			# finds.
 			if = {
+				limit = {
+					any_country = {
+						has_modifier = un_sanctions_target_modifier
+						var:un_sanctions_enforced_by ?= ROOT
+					}
+				}
+				random_country = {
+					limit = {
+						has_modifier = un_sanctions_target_modifier
+						var:un_sanctions_enforced_by ?= ROOT
+					}
+					save_scope_as = un_sanctions_lifted_target
+				}
+			}
+			else_if = {
 				limit = {
 					NOT = {
 						any_country = {
 							count >= 2
 							has_modifier = un_sanctions_target_modifier
+							NOT = { var:un_sanctions_enforced_by ?= { has_modifier = un_sanctions_enforcer_modifier } }
 						}
 					}
 				}
 				random_country = {
-					limit = { has_modifier = un_sanctions_target_modifier }
+					limit = {
+						has_modifier = un_sanctions_target_modifier
+						NOT = { var:un_sanctions_enforced_by ?= { has_modifier = un_sanctions_enforcer_modifier } }
+					}
 					save_scope_as = un_sanctions_lifted_target
 				}
 			}
 			every_country = {
-				limit = { has_modifier = un_sanctions_target_modifier }
+				limit = {
+					has_modifier = un_sanctions_target_modifier
+					OR = {
+						var:un_sanctions_enforced_by ?= ROOT
+						NOT = { var:un_sanctions_enforced_by ?= { has_modifier = un_sanctions_enforcer_modifier } }
+					}
+				}
 				remove_modifier = un_sanctions_target_modifier
+				if = {
+					limit = { has_variable = un_sanctions_enforced_by }
+					remove_variable = un_sanctions_enforced_by
+				}
 				# The embargoes the Assembly imposed go with the regime
 				# (redesign phase 5, un_teeth_effects.txt).
 				un_teeth_lift_embargoes = yes
@@ -795,6 +836,7 @@ un_withdraw_human_rights_button = {
 		value = 0
 		if = { limit = { has_law = law_type:law_ethnostate } add = 30 }
 		if = { limit = { has_law = law_type:law_outlawed_dissent } add = 20 }
+		if = { limit = { has_law = law_type:law_penal_labor_camps } add = 20 }
 	}
 
 	effect = {

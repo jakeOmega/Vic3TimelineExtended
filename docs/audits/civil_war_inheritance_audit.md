@@ -255,6 +255,7 @@ E6. **References to the dead loser persist two weeks after the win** (`h3_raw.py
   change.
 
 ### F8. Button-toggled policies whose only state is a JE modifier are switched off (E1). MEDIUM
+- **Colonial empire FIXED (PR #508)**, a case this report missed: its three programmes and its permanent rewards are *country* modifiers. Every country modifier the system gives without a duration now has a variable record (`<modifier>_held`; the Imperial Federation Act's and Mandate System's own `imperial_federation_taken` / `mandate_system_taken`), and `decol_repair_after_civil_war`, called from `te_civil_war_on_won`, adds back each modifier whose record the winner holds and whose modifier it lacks. The programmes are restored only while the entry runs, and also by its monthly pulse (the order of `on_civil_war_won` and the inherited entry is unknown). A yearly pulse backfills the permanent modifiers' records on older saves. Stateless and add-only, like the space race's repair. `decolonization.txt` § "What a revolution's winner keeps".
 - Banking tools: `banking_policy_effects.txt:12-140`; the `banking_tool_*_active` checks are
   `has_modifier` on the JE (`market_triggers.txt:60-95`). The same applies to:
   - Command-economy and cooperative tools.

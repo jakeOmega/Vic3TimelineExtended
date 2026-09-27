@@ -1,0 +1,146 @@
+﻿# ============================================================================
+# TREATY ARTICLE: nuclear_arms_limitation (the nuclear taboo, phase 2)
+# ============================================================================
+# Design: docs/superpowers/specs/2026-09-26-nuclear-taboo-design.md §7.1.
+# Mutual: while it is in force each party holds at most `quantity` warheads.
+# The ceiling is read monthly by nd_taboo_refresh_treaty_ceiling
+# (nuclear_taboo_effects.txt): warheads above it retire, a tenth of the excess
+# a month, and the programme is held at it from its next monthly review, so
+# the stock cannot stay above it. Leaving it books a walk-out against the
+# taboo unless another treaty holds the same or a lower ceiling. No leverage
+# either way: it binds both alike.
+# ============================================================================
+nuclear_arms_limitation = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
+	kind = mutual
+	cost = 50
+
+	flags = {
+		can_be_renegotiated
+	}
+
+	usage_limit = once_per_treaty
+
+	required_inputs = {
+		quantity
+	}
+
+	quantity_min_value = {
+		value = 1
+	}
+	# At most a quarter above the larger party's arsenal (nuclear_taboo_values.txt).
+	quantity_max_value = {
+		value = nd_taboo_arms_quantity_cap_value
+	}
+
+	visible = {
+		has_game_rule = nuclear_weapons_enabled
+		has_technology_researched = nuclear_weapons
+	}
+
+	possible = {
+		has_game_rule = nuclear_weapons_enabled
+		custom_tooltip = {
+			text = nd_taboo_arms_party_tt
+			OR = {
+				nd_is_armed = yes
+				nuclear_program_has_programme = yes
+			}
+		}
+		custom_tooltip = {
+			text = nd_taboo_arms_other_party_tt
+			scope:other_country ?= {
+				OR = {
+					nd_is_armed = yes
+					nuclear_program_has_programme = yes
+				}
+			}
+		}
+	}
+
+	requirement_to_maintain = {
+		trigger = {
+			custom_tooltip = {
+				text = nd_taboo_arms_quantity_tt
+				scope:article ?= {
+					exists = input_quantity
+					input_quantity > 0
+				}
+			}
+		}
+	}
+
+	ai = {
+		treaty_categories = { military }
+		article_ai_usage = { offer request }
+
+		# Armed, in a world that fears the bomb or where our arsenal weighs on
+		# us; `possible` checks the partner.
+		evaluation_chance = {
+			value = 0
+			if = {
+				limit = {
+					nd_is_armed = yes
+					OR = {
+						nd_taboo_value >= nd_taboo_line_established
+						nd_taboo_burden_value > 0
+					}
+				}
+				add = 0.1
+			}
+		}
+
+		# Three quarters of the larger arsenal: it binds the larger party
+		# first, and leaves parity within reach.
+		quantity_input_value = {
+			value = nd_taboo_arms_larger_arsenal_value
+			multiply = nd_taboo_arms_ai_share
+			ceiling = yes
+			min = 1
+			max = nd_taboo_arms_quantity_cap_value
+		}
+
+		inherent_accept_score = {
+			value = 0
+			add = {
+				desc = "nd_taboo_ai_arms_base"
+				value = nd_taboo_arms_ai_base
+			}
+			if = {
+				limit = { nd_taboo_burden_value > 0 }
+				add = {
+					desc = "nd_taboo_ai_accept_burden"
+					value = nd_taboo_ai_arms_burden_value
+				}
+			}
+			if = {
+				limit = { nd_taboo_value > nd_taboo_line_established }
+				add = {
+					desc = "nd_taboo_ai_accept_taboo"
+					value = nd_taboo_ai_arms_taboo_value
+				}
+			}
+			if = {
+				limit = { nd_regime_is_militarist = yes }
+				add = {
+					desc = "nd_taboo_ai_arms_militarist"
+					value = nd_taboo_arms_ai_militarist
+				}
+			}
+			if = {
+				limit = { nd_taboo_ai_arms_growth_value < 0 }
+				add = {
+					desc = "nd_taboo_ai_arms_growth"
+					value = nd_taboo_ai_arms_growth_value
+				}
+			}
+			if = {
+				limit = { nd_taboo_ai_arms_parity_value < 0 }
+				add = {
+					desc = "nd_taboo_ai_arms_parity"
+					value = nd_taboo_ai_arms_parity_value
+				}
+			}
+		}
+	}
+}

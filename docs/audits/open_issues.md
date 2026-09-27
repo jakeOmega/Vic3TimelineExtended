@@ -16,6 +16,67 @@ _(no open HIGH items — H1–H3 from the 2026-09-10 review were fixed 2026-09-1
 
 ## MEDIUM
 
+### Findings from writing the player guide (2026-09-26, branch `docs/player-guide`) — RESOLVED 2026-09-27
+**Status:** every item below was addressed by the fix PRs that followed, each independently reviewed and merged; none was play-tested, so each PR carries in-game checks. By PR: #505 item 1 (with `change_variable_clamp_audit`); #506 items 6–8, 21, and the Enforce Cultural Acceptance and War Propaganda items of 22; #507 items 12 and 18, and the Mars reward, space race and custom-religion `NOR` items of 22; #508 items 2–5 and the Mandate System item of 22; #510 items 13–15 and 17; #511 items 9–11, 16, 19 and 20; #512 the `te_unused` detection item of 22. Some fixes needed owner decisions and differ from the "Fix" suggested here; the PR descriptions record what shipped. Kept below as the record of what was found.
+
+Two agents read each system's script end to end while writing and fact-checking `docs/player_guide/`, and turned up the items below. The guide describes what the script does, so it doesn't promise the broken behaviour. The same PR's description also lists the localization strings that promise effects the script doesn't deliver, and the design docs that have drifted from the script.
+
+Ordered by player impact. "Confirmed" means a reviewer traced it through the script. Nothing was play-tested.
+
+1. **`change_variable { max = N }` used as a floor (10 sites).** In the engine's value operations `max` caps and `min` floors (vanilla script values clamp with `min = 0 max = 1`). So:
+   - `events/nuclear_weapon_events.txt:1630,1653,1690,1762,1815`: the progress-costing options of "Critical Incident" and "Unexpected Dividends" set first-device progress to 0 (or leave it negative). The tooltips promise −5 to −25.
+   - `common/scripted_effects/covert_warfare_effects.txt:1377,1381,1384`: `iw_election_worst_phase` stays 0, so Election Interference's penalty never applies.
+   - `common/scripted_effects/treaty_article_effects.txt:69,99`: the Intelligence Sharing defence-shield boost is never positive. The comment even says "min 0".
+
+   Fix: `min =`. Worth a debug probe first, and probably an audit for the pattern.
+2. **Colonial collapse never runs.** `common/scripted_effects/colonial_collapse_effects.txt:25-27` has `any_civil_war = { always = no }` inside the implicit-AND limit. It runs yearly for every country and does nothing. The comment at :11-12 also claims a Decolonization-tech gate that isn't there.
+3. **Post-independence decolonization events can't fire.** In `events/decolonization_events.txt`:
+   - .7 (:806), .15 (:1772), .16, .17, .18 and .21 require `has_journal_entry = je_colonial_empire` on the freed colony itself.
+   - So independence nationalization (.15, from `on_become_independent`) never happens.
+   - .19 and .20, and .62 and .63, sit downstream of these and can't fire either.
+   - Already noted in `common/scripted_effects/decolonization.txt:156-162`.
+4. **Colonies freed in a colonial collapse get no legacy.** `je_colonial_empire.txt:258` runs `colonial_empire_je_cleanup_effect`, which removes `colonial_*_months`. That happens before the .201 and .204 options call `form_decolonized_country`, which reads them (`decolonization.txt:35-81`).
+5. **Acceptance compared on the wrong scale.** `colonial_empire_triggers.txt:325` and `:523` test `state_average_culture_pop_acceptance … value < 0.6` on a 0–100 scale. The low-acceptance branch almost never fires, and `is_unintegrated_culturally_distinct_state` is effectively always false.
+6. **Enforce Privatization is inverted.** `common/treaty_articles/105_enforce_privatization.txt:42-51` (`possible`) and `:59-74` (`can_ratify`) require the country forced to privatize to be the market economy. The receiver must be the state-led one.
+7. **Religious Mission Rights non-fulfilment is inverted.** `106_religious_mission_rights.txt:77-88` counts the article as broken when the conceding country does *not* have State Atheism, so it stays frozen.
+8. **Population Transfer checks** (`extra_treaty_articles.txt:2499-2525`):
+   - The high-acceptance block looks for the conceding country's cultures in the receiver's states, so it blocks whenever the receiver hosts none.
+   - The Universal Citizenship check sits on the conceding side, though the comment says the proposer.
+9. **Strategic Reserve silo.** `common/production_methods/strategic_reserve_pms.txt:79` puts `building_employment_bureaucrats_add = 1000` in `country_modifiers`, so every silo level may add bureaucrat jobs to every building in the country.
+10. **Railways stop producing Bulk Transportation under Transport principle tier 3.** The base game's `pm_steam/electric/diesel_trains_principle_transport_3` aren't overridden, so they still output Personal Transportation.
+11. **Global warming:**
+    - `common/script_values/extra_script_values.txt:863` (`gw_emission_multiplier_script_value`) has no floor. Policies, a level-9 ministry and principle tier 5 together pass −100%, so burning fossil fuels would remove carbon.
+    - `common/on_actions/extra_on_actions.txt:719`: a country joining a market keeps its own market-wide policies and can't repeal them, because repeal needs market leadership.
+12. **Heir Education:**
+    - `heir_education_effects.txt:423,434,443,444,454,465` call `set_ideology` to `ideology_liberal`, `ideology_patriarchal` and `ideology_pious`, which lack `character_ideology = yes`. Those rolls are no-ops.
+    - `je_heir_education.txt:142-150`: on an heir change, the focus variables are cleared but the `heir_ed_*_focus_active` modifiers stay. They keep charging 100 authority each, and the Stop buttons are hidden.
+13. **World War:**
+    - "Enter the War" (`world_war_buttons.txt:499-505`) is visible only to countries that can't use it. Late entry happens only through The Hour of Decision.
+    - Lend-Lease's "world war under way" branch (`:198/207`) checks the country's own belligerent flag.
+14. **UN:**
+    - `un_buttons.txt:513`: lifting sanctions removes every sanctions regime, not just the enforcer's.
+    - `un_state_effects.txt` (`un_state_on`): a country that signs the Charter before its journal entry is active stays outside. AI signers answer at once.
+15. **Covert Warfare.** The defender event's cooldown decays only in `je_covert_warfare.txt:283-294`, so a country without that entry sees `covert_warfare.2` once per game. `iw_last_exposed_age` has the same problem.
+16. **Tourism.** `common/script_values/tourism.txt:2850-2864`: the park bonus multiplies by (1 + appeal/200), but appeal is already on a 0–1 scale, so the scaling is at most +0.5%. Probably meant `divide = 2`.
+17. **Nuclear:**
+    - The Monopoly Window strike (`nuclear_incident_events.txt:1481`) skips the Rules of War gate.
+    - "Give the launch order" (`:133`) skips every gate. The intent is unclear.
+    - The monthly incident roll passes fractional per-mille chances (`nuclear_deterrence_effects.txt:1397`). If the engine truncates them, Routine incidents never fire.
+18. **Civil rights.** The 75 milestone fires `movement_events_te.16` (`je_civil_rights.txt:387`), whose trigger (`movement_events_te.txt:900`) needs a discriminatory law. Other countries silently get no milestone.
+19. **Navy:**
+    - Sonar Suite, the ASW Destroyer bonuses and the era-7 sub-accuracy grant (`extra_utility_modifications.txt:17`, `extra_ship_types.txt:68-69`, `era_7.txt:336`) apply only to the base game's Submarine, not the mod's three new submarines.
+    - Aegis Air Defense, Composite Armor Plating, Helicopter Pad and Underway Replenishment (`extra_utility_modifications.txt:106/131/156/181`) are in no ship's slot list.
+20. **Banking status labels are swapped.** "Bubble Frenzy" fires at 65–85 but says "(85+)", and "Bubble Extreme" the reverse (`je_banking.txt:261,264`; `te_miscellaneous_l_english.yml:1164,1167`).
+21. **Broken localization line.** `te_miscellaneous_l_english.yml:474` has `POWER_BLOC_COHESION_LEADER_INFAMY` glued onto the end of the `POPULATION_TRANSFER_BLOCKED_HIGH_ACCEPTANCE` line.
+22. **Smaller items:**
+    - The Mandate System decision has no retake guard (`extra_decisions.txt:241-284`).
+    - Enforce Cultural Acceptance can't be used, because its unlock boolean is never granted.
+    - `sr_mars_resource_extraction` is never granted.
+    - `space_race_events.1` option b adds a timed `sr_suborbital` over a permanent one.
+    - Custom-religion trait exclusivity uses multi-child `NOT = { … }` (`timeline_extended_scripted_buttons.txt:2534` and 17 siblings); `NOR` would be unambiguous.
+    - The War Propaganda decree's +0.1 escalation rounds to 0 on its own.
+    - Several live keys sit in `te_unused_l_english.yml`, pointing at `organize_loc` detection gaps: the `nd_tt_*` keys reached through `$VAR$` substitution, the "Reunify the Nation" war goal name, and the banking reason keys for other economic systems.
+
 ### Ticketed 2026-09-12 — items M6–M14 / L18–L22 from the 2026-09-10 review moved to GitHub issues
 Detail lives on the issues; this tracker only keeps the pointer so the review header stays meaningful.
 

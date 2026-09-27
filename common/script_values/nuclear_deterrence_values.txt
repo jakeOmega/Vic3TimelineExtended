@@ -392,6 +392,21 @@ nd_incident_permille = {
 	}
 }
 
+# nd_incident_permille as whole numbers for nd_roll_incident's inner roll,
+# which must not rely on `random` reading a fraction: in tenths of a per mille
+# (for the 1 % branch, up to 10 per mille) and in whole per mille (the 10 %
+# branch, above 10).
+nd_incident_tenth_permille = {
+	value = nd_incident_permille
+	multiply = 10
+	round = yes
+}
+
+nd_incident_permille_whole = {
+	value = nd_incident_permille
+	round = yes
+}
+
 # Chance (percent) that a launch sequence started under delegated authority or
 # launch on warning is halted by someone in the chain — the Petrov or
 # Arkhipov who refuses. There is no player veto on these branches (§8.1); this
@@ -787,6 +802,28 @@ nd_yp_follow_through_value = {
 	}
 }
 
+# The nuclear taboo (nuclear_taboo_values.txt): +8 at taboo 0, where threats
+# are believed, down to -8 at 100, where nobody believes a government would do
+# it. The doubt is halved for a public ultimatum: issuing one spends reputation
+# (the taboo-scaled infamy), and that price is itself the signal. Target scope,
+# scope:nd_issuer saved.
+nd_yp_taboo_value = {
+	value = nd_taboo_yp_midpoint
+	subtract = nd_taboo_value
+	multiply = nd_taboo_yp_per_point
+	if = {
+		limit = {
+			nd_taboo_value > nd_taboo_yp_midpoint
+			scope:nd_issuer ?= {
+				has_variable = nd_crisis_public
+				var:nd_crisis_public = 1
+			}
+		}
+		multiply = nd_taboo_yp_public_discount
+	}
+	round = yes
+}
+
 nd_yield_pressure_value = {
 	value = nd_yp_base_value
 	add = nd_yp_answer_value
@@ -799,6 +836,7 @@ nd_yield_pressure_value = {
 	add = nd_yp_temperament_value
 	add = nd_yp_war_value
 	add = nd_yp_follow_through_value
+	add = nd_yp_taboo_value
 	min = 0
 	max = 100
 	round = yes
@@ -1239,6 +1277,26 @@ nd_ig_term_business_value = {
 	}
 }
 
+# The nuclear taboo (nuclear_taboo_values.txt §4.4): restraint groups object to
+# the arsenal itself once the world holds the bomb in horror, and more to a big
+# one. Not tenure-gated — holding warheads is not a posture choice.
+nd_ig_term_possession_value = {
+	value = 0
+	if = {
+		limit = { nd_ig_class_restraint = yes }
+		owner = {
+			if = {
+				limit = { nd_taboo_burden_value >= nd_taboo_burden_step_full }
+				add = -2
+			}
+			else_if = {
+				limit = { nd_taboo_burden_value >= nd_taboo_burden_step_mild }
+				add = -1
+			}
+		}
+	}
+}
+
 # The capped total the approval band is read from: ±1 for a mild militarist
 # or restraint group, ±2 otherwise.
 nd_ig_stance_value = {
@@ -1247,6 +1305,7 @@ nd_ig_stance_value = {
 	add = nd_ig_term_authority_value
 	add = nd_ig_term_strain_value
 	add = nd_ig_term_business_value
+	add = nd_ig_term_possession_value
 	if = {
 		limit = {
 			nd_ig_is_fixed_class = no

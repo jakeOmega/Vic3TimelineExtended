@@ -1,6 +1,6 @@
 ﻿# Collective Governance (law_direct_democracy, displayed as "Collective
 # Governance"): keeps on the governance law exactly the one amendment the
-# country's Distribution of Power calls for, and none of the other four.
+# country's Distribution of Power calls for, and none of the other five.
 #
 # Derived from current laws on every call, so nothing is stored, and a
 # revolution's winner gets the amendment its own laws call for. A law's
@@ -34,6 +34,7 @@ te_refresh_collective_governance_amendment = {
 			te_cg_sync_amendment = { AMENDMENT = amendment_collective_administration TRIGGER = collective_governance_is_technocratic }
 			te_cg_sync_amendment = { AMENDMENT = amendment_collective_free_federation TRIGGER = collective_governance_is_anarchic }
 			te_cg_sync_amendment = { AMENDMENT = amendment_collective_patrician_council TRIGGER = collective_governance_is_patrician }
+			te_cg_sync_amendment = { AMENDMENT = amendment_collective_algorithmic_commons TRIGGER = collective_governance_is_algorithmic }
 		}
 	}
 }

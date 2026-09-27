@@ -12,8 +12,15 @@ with no engine diagnostic.
 Fix: move the `limit` conditions up as direct conditions of the
 `any_*` block (they are ANDed there), or restructure the logic.
 
+Also flagged: `always = no` (or `always = false`) as an immediate
+child of an `any_*` trigger. No element matches it, so the trigger is
+false for every scope and the block holding it can never pass. For
+"there is no X" write `NOT = { any_X = { } }`. A bare `always = no`
+outside an `any_*` (a retired `potential`) is not flagged.
+
 Suppress a rare legitimate case with a trailing comment on the
 `any_*` opener line: `any_scope_state = { # REVIEWED YYYY-MM-DD: why`
+(for `always = no`, the comment may also sit on that line).
 
 ## Unreviewed Flags
 
@@ -26,6 +33,7 @@ _None._
 ## Coverage
 
 - total flags: 0
+- `always = no` flags: 0
 - unreviewed: 0
 - exempted: 0
 

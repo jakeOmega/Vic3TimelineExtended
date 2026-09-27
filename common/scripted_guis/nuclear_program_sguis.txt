@@ -1,11 +1,13 @@
 ﻿# ============================================================================
 # NUCLEAR PROGRAMME — scripted GUIs for gui/journal_entry_widgets/nuclear_program_widget.gui
 # ============================================================================
-# Three handlers, and that is deliberately all: the programme panel's rows are
+# Five handlers, and that is deliberately all: the programme panel's rows are
 # ordinary localization reading display-only script values and
 # common/customizable_localization/nuclear_program_custom_loc.txt, which is
 # cheaper per frame than ExecuteTooltip and needs no handler at all. A scripted
-# GUI is used only where nothing else can do the job.
+# GUI is used only where nothing else can do the job:
+#   nuclear_program_has_programme_sgui, nuclear_program_funding_sgui,
+#   nuclear_program_powers_sgui, nd_taboo_exists_sgui, nd_taboo_breakdown_sgui.
 #
 # ---- nuclear_program_has_programme_sgui — display only ---------------------
 # Scope-free yes/no: does this country have a programme? The programme panel's
@@ -33,6 +35,18 @@
 # scope changes (gui_modding_guide.md gotcha #18) — separate rows make that
 # impossible. No flag icon in the row text: the engine already prefixes a
 # country-scope tooltip line with that country's flag (gotcha #19).
+#
+# ---- nd_taboo_exists_sgui — display only -----------------------------------
+# Scope-free yes/no: has the taboo been born yet? Gates the taboo section's
+# `visible` (nuclear_taboo_values.txt) — a plain `has_global_variable` check
+# cannot drive a .gui `visible` string on its own, so it is wrapped here as an
+# IsShown a widget root can read.
+#
+# ---- nd_taboo_breakdown_sgui — display only ---------------------------------
+# Script-built text, printed with ExecuteTooltip: the target's six named parts
+# (nd_tb_base/tradition/postures/restraint/un/ledger) and the target itself,
+# each its own custom_tooltip_no_bullet line — the same shape as
+# nd_crisis_pressure_breakdown_sgui in nuclear_deterrence_sguis.txt.
 #
 # ---- WHY NEITHER `is_shown` DEPENDS ON `scope:op` --------------------------
 # Whether a saved scope passed as `IsShown( … AddScope('op', …) … )` actually
@@ -260,6 +274,43 @@ nuclear_program_powers_sgui = {
 		else_if = {
 			limit = { exists = scope:op  scope:op = 10  has_global_variable = nuke_rank_10 }
 			global_var:nuke_rank_10 ?= { custom_tooltip_no_bullet = nuclear_program_power_row_10 }
+		}
+	}
+}
+
+# ---- The nuclear taboo (nuclear_taboo_values.txt) — display only -----------------
+
+# Whether the taboo exists yet: the panel section is drawn from the first
+# warhead on.
+nd_taboo_exists_sgui = {
+	scope = country
+	is_shown = {
+		has_global_variable = nd_taboo
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = { }
+}
+
+# The target, part by part, from the snapshots the world's monthly step wrote.
+# The lines add up to the target line.
+nd_taboo_breakdown_sgui = {
+	scope = country
+	is_shown = {
+		has_global_variable = nd_taboo_target
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = {
+		if = {
+			limit = { has_global_variable = nd_taboo_target }
+			custom_tooltip_no_bullet = nd_taboo_bd_base
+			custom_tooltip_no_bullet = nd_taboo_bd_tradition
+			custom_tooltip_no_bullet = nd_taboo_bd_postures
+			custom_tooltip_no_bullet = nd_taboo_bd_restraint
+			custom_tooltip_no_bullet = nd_taboo_bd_un
+			custom_tooltip_no_bullet = nd_taboo_bd_ledger
+			custom_tooltip_no_bullet = nd_taboo_bd_target
 		}
 	}
 }

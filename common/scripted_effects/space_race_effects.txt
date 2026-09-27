@@ -73,6 +73,16 @@ sr_recalculate_cost = {
 	sr_apply_milestone_cost_modifiers_base = { MILESTONE = mars_landing       }
 	sr_apply_milestone_cost_modifiers_base = { MILESTONE = interstellar_probe }
 	sr_apply_milestone_cost_modifiers_base = { MILESTONE = solar_colonization }
+	# The participation the approach costs above were computed with (sr_<m>_cost
+	# gates them on sr_ai_should_participate). space_race_on_action compares it
+	# with the live value each month and recalculates when it is stale.
+	if = {
+		limit = { sr_ai_should_participate = yes }
+		set_variable = { name = sr_cost_participation value = 1 } # REVIEWED 2026-09-26: a cache of live state (global ranking), re-derived on every call; nothing a revolution's winner could lose
+	}
+	else = {
+		set_variable = { name = sr_cost_participation value = 0 } # REVIEWED 2026-09-26: a cache of live state (global ranking), re-derived on every call; nothing a revolution's winner could lose
+	}
 	# Refresh the widget's display state. This effect is the shared tail of every
 	# approach / funding button, every journal entry's `immediate`, milestone
 	# completion and the monthly cleanup, so the panel's status label reacts to a

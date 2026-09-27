@@ -197,8 +197,11 @@ nd_readiness_locked = {
 # ENEMY = the country to be struck. Read by nuke_diplo_action and
 # tactical_nuke_diplo_action (`possible` and AI `will_propose`), by the
 # Monopoly Window and by every incident branch that can end in a deliberate
-# launch. Unauthorised and mistaken launches deliberately do NOT consult it:
-# that they can breach a doctrine is the point of §8.
+# launch, the government's order on an unconfirmed warning
+# (nuclear_incident.1 option c, owner ruling 2026-09-26) included. Launches
+# nobody in government ordered (launch on warning, delegated authority, the
+# cut-off commander) deliberately do NOT consult it: that they can breach a
+# doctrine is the point of §8.
 
 # Did $ENEMY$ — or anyone on its side of a war with us — strike us, or a
 # country we cover? Retaliation is permitted under every doctrine, including
@@ -375,8 +378,9 @@ nd_doctrine_permits_strike = {
 }
 
 # The Rules of War gate on a nuclear strike, shared by the strike actions
-# (nuke.txt) and every crisis option that can end in a strike (.4.g, .7.a,
-# .20.b), which used to skip it. Country scope. Humanitarian Regulations and
+# (nuke.txt), every crisis option that can end in a strike (.4.g, .7.a,
+# .20.b) and the Monopoly Window's first use (nuclear_incident.50.c), which
+# used to skip it. Country scope. Humanitarian Regulations and
 # Limited War forbid a strategic strike and Limited War a tactical one, unless
 # nd_war_law_exception holds. A threat the law forbids carrying out is a bluff
 # (nd_threat_law_permits).
@@ -1461,6 +1465,12 @@ nd_ai_nuclear_use_justified = {
 				nd_enemy_threatens_existence = { ENEMY = $ENEMY$ }
 			}
 			NOT = { has_variable = nd_first_use_cooldown }
+			# The nuclear taboo (nuclear_taboo_values.txt): at 70 or more,
+			# first use only for national survival, whatever the doctrine.
+			OR = {
+				nd_taboo_value < nd_taboo_ai_survival_only_line
+				nd_enemy_threatens_existence = { ENEMY = $ENEMY$ }
+			}
 			OR = {
 				# National survival.
 				nd_enemy_threatens_existence = { ENEMY = $ENEMY$ }
@@ -1490,10 +1500,12 @@ nd_ai_nuclear_use_justified = {
 					NOT = { nd_faces_retaliation_from = { ENEMY = $ENEMY$ } }
 				}
 			}
-			# A cautious ruler only for survival.
+			# A cautious ruler only for survival — unless the world treats
+			# the bomb as an ordinary weapon (the nuclear taboo below 30).
 			OR = {
 				ruler_is_cautious = no
 				nd_enemy_threatens_existence = { ENEMY = $ENEMY$ }
+				nd_taboo_value < nd_taboo_ai_loosen_line
 			}
 		}
 	}
@@ -1567,6 +1579,14 @@ nd_ai_would_issue_ultimatum = {
 	}
 	has_variable = nd_credibility
 	var:nd_credibility >= 40
+	# The nuclear taboo: at 70 or more, no coercive ultimatum; one in defence
+	# of a guaranteed country, our survival or our core still goes out.
+	OR = {
+		nd_taboo_value < nd_taboo_ai_coercion_line
+		nd_dispute_guarantee_against = { TARGET = $TARGET$ }
+		nd_enemy_threatens_existence = { ENEMY = $TARGET$ }
+		nd_core_threatened_by = { ENEMY = $TARGET$ }
+	}
 }
 
 # Event scope (either party). The crisis popup still belongs to this pair's
@@ -1658,6 +1678,15 @@ nd_can_set_readiness = {
 		text = nd_tt_readiness_withdrawn
 		OR = {
 			nd_readiness_withdrawn = no
+			var:nd_readiness_target > $R$
+		}
+	}
+	# Being dismantled (nuclear_taboo_effects.txt): in storage until the last
+	# warhead is gone. Lowering is never blocked.
+	custom_tooltip = {
+		text = nd_taboo_tt_readiness_dismantling
+		OR = {
+			nd_taboo_is_dismantling = no
 			var:nd_readiness_target > $R$
 		}
 	}

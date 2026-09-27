@@ -412,6 +412,7 @@ REPLACE:ideology_liberal = {
 		law_punishment_focused_criminal_justice = disapprove
 		law_rehabilitation_focused_criminal_justice = strongly_approve
 		law_restorative_justice = neutral
+		law_penal_labor_camps = strongly_disapprove
 	}
 	lawgroup_rules_of_war = {
 		law_traditional_rules_of_war = disapprove
@@ -595,6 +596,7 @@ REPLACE:ideology_liberal_modern = {
 		law_punishment_focused_criminal_justice = disapprove
 		law_rehabilitation_focused_criminal_justice = strongly_approve
 		law_restorative_justice = neutral
+		law_penal_labor_camps = strongly_disapprove
 	}
 	lawgroup_rules_of_war = {
 		law_traditional_rules_of_war = disapprove
@@ -744,6 +746,7 @@ REPLACE:ideology_market_liberal = {
 		law_punishment_focused_criminal_justice = disapprove
 		law_rehabilitation_focused_criminal_justice = neutral
 		law_restorative_justice = approve
+		law_penal_labor_camps = strongly_disapprove
 	}
 	lawgroup_rules_of_war = {
 		law_traditional_rules_of_war = disapprove
@@ -1273,6 +1276,7 @@ REPLACE:ideology_traditionalist = {
 		law_punishment_focused_criminal_justice = strongly_approve
 		law_rehabilitation_focused_criminal_justice = disapprove
 		law_restorative_justice = neutral
+		law_penal_labor_camps = approve
 	}
 	lawgroup_rules_of_war = {
 		law_traditional_rules_of_war = approve
@@ -1545,6 +1549,7 @@ REPLACE:ideology_reformer = {
 		law_punishment_focused_criminal_justice = disapprove
 		law_rehabilitation_focused_criminal_justice = neutral
 		law_restorative_justice = approve
+		law_penal_labor_camps = strongly_disapprove
 	}
 	lawgroup_rules_of_war = {
 		law_traditional_rules_of_war = neutral
@@ -1943,6 +1948,7 @@ REPLACE:ideology_radical = {
 		law_punishment_focused_criminal_justice = disapprove
 		law_rehabilitation_focused_criminal_justice = strongly_approve
 		law_restorative_justice = neutral
+		law_penal_labor_camps = strongly_disapprove
 	}
 	lawgroup_LGBTQ_rights = {
 		law_active_persecution = strongly_disapprove
@@ -2531,6 +2537,7 @@ REPLACE:ideology_social_democrat = {
 		law_punishment_focused_criminal_justice = disapprove
 		law_rehabilitation_focused_criminal_justice = strongly_approve
 		law_restorative_justice = neutral
+		law_penal_labor_camps = strongly_disapprove
 	}
 	lawgroup_LGBTQ_rights = {
 		law_active_persecution = disapprove
@@ -2927,6 +2934,7 @@ REPLACE:ideology_vanguardist = {
 		law_punishment_focused_criminal_justice = strongly_approve
 		law_rehabilitation_focused_criminal_justice = disapprove
 		law_restorative_justice = neutral
+		law_penal_labor_camps = approve
 	}
 	lawgroup_rules_of_war = {
 		law_traditional_rules_of_war = approve
@@ -3493,6 +3501,9 @@ REPLACE:ideology_vanguardist = {
 REPLACE:ideology_fascist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_fascist.dds"
 	character_ideology = yes
+	lawgroup_criminal_justice = {
+		law_penal_labor_camps = strongly_approve
+	}
 	lawgroup_antitrust = {
 		law_guilds_chartered_monopolies = neutral
 		law_freedom_of_contract = disapprove
@@ -4228,6 +4239,7 @@ REPLACE:ideology_anarchist = {
 		law_punishment_focused_criminal_justice = disapprove
 		law_rehabilitation_focused_criminal_justice = strongly_approve
 		law_restorative_justice = neutral
+		law_penal_labor_camps = strongly_disapprove
 	}
 	lawgroup_rules_of_war = {
 		law_traditional_rules_of_war = disapprove
@@ -4871,6 +4883,7 @@ INJECT:ideology_egalitarian = {
 		law_punishment_focused_criminal_justice = disapprove
 		law_rehabilitation_focused_criminal_justice = neutral
 		law_restorative_justice = approve
+		law_penal_labor_camps = strongly_disapprove
 	}
 	lawgroup_ministry_of_consumer_protection = {
 		law_no_ministry_of_consumer_protection = disapprove
@@ -4926,6 +4939,7 @@ REPLACE:ideology_egalitarian_modern = {
 		law_punishment_focused_criminal_justice = disapprove
 		law_rehabilitation_focused_criminal_justice = strongly_approve
 		law_restorative_justice = neutral
+		law_penal_labor_camps = strongly_disapprove
 	}
 	lawgroup_LGBTQ_rights = {
 		law_active_persecution = strongly_disapprove
@@ -6780,6 +6794,7 @@ REPLACE:ideology_humanitarian = {
 		law_punishment_focused_criminal_justice = disapprove
 		law_rehabilitation_focused_criminal_justice = strongly_approve
 		law_restorative_justice = neutral
+		law_penal_labor_camps = strongly_disapprove
 	}
 	lawgroup_LGBTQ_rights = {
 		law_active_persecution = strongly_disapprove
@@ -7085,6 +7100,7 @@ REPLACE:ideology_humanitarian_royalist = {
 		law_punishment_focused_criminal_justice = disapprove
 		law_rehabilitation_focused_criminal_justice = strongly_approve
 		law_restorative_justice = neutral
+		law_penal_labor_camps = strongly_disapprove
 	}
 	lawgroup_LGBTQ_rights = {
 		law_active_persecution = strongly_disapprove
@@ -7459,6 +7475,7 @@ REPLACE:ideology_reactionary = {
 		law_punishment_focused_criminal_justice = strongly_approve
 		law_rehabilitation_focused_criminal_justice = disapprove
 		law_restorative_justice = neutral
+		law_penal_labor_camps = approve
 	}
 	lawgroup_right_to_information = {
 		law_informal_government_secrecy = neutral
@@ -10384,6 +10401,9 @@ REPLACE:ideology_oriental_orthodox_patriarch = {
 REPLACE:ideology_authoritarian = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/authoritarian.dds"
 	character_ideology = yes
+	lawgroup_criminal_justice = {
+		law_penal_labor_camps = approve
+	}
 	lawgroup_ministry_of_propaganda = {
 		law_no_ministry_of_propaganda = disapprove
 		law_ministry_of_propaganda = strongly_approve
@@ -11744,6 +11764,9 @@ REPLACE:ideology_integralist = {
 REPLACE:ideology_liberal_leader = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_liberal.dds"
 	character_ideology = yes
+	lawgroup_criminal_justice = {
+		law_penal_labor_camps = strongly_disapprove
+	}
 	lawgroup_minority_rights = {
 		law_minority_rights_violent_hostility = strongly_disapprove
 		law_minority_rights_ghettoization = disapprove
@@ -12606,6 +12629,9 @@ REPLACE:ideology_communist_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power
 REPLACE:ideology_anarchist_movement = {
 	icon = "gfx/interface/icons/ideology_icons/anarchist.dds"
+	lawgroup_criminal_justice = {
+		law_penal_labor_camps = strongly_disapprove
+	}
 	lawgroup_antitrust = {
 		law_guilds_chartered_monopolies = disapprove
 		law_freedom_of_contract = strongly_disapprove
@@ -12794,6 +12820,9 @@ REPLACE:ideology_vanguardist_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_distribution_of_power, lawgroup_governance_principles
 REPLACE:ideology_fascist_movement = {
 	icon = "gfx/interface/icons/ideology_icons/fascist.dds"
+	lawgroup_criminal_justice = {
+		law_penal_labor_camps = strongly_approve
+	}
 	lawgroup_antitrust = {
 		law_guilds_chartered_monopolies = neutral
 		law_freedom_of_contract = disapprove
@@ -12961,6 +12990,9 @@ REPLACE:ideology_corporatist_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_distribution_of_power
 REPLACE:ideology_liberal_movement = {
 	icon = "gfx/interface/icons/ideology_icons/liberal.dds"
+	lawgroup_criminal_justice = {
+		law_penal_labor_camps = strongly_disapprove
+	}
 	lawgroup_antitrust = {
 		law_guilds_chartered_monopolies = disapprove
 		law_freedom_of_contract = neutral
@@ -13035,6 +13067,9 @@ REPLACE:ideology_liberal_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_distribution_of_power, lawgroup_governance_principles
 REPLACE:ideology_radical_movement = {
 	icon = "gfx/interface/icons/ideology_icons/radical.dds"
+	lawgroup_criminal_justice = {
+		law_penal_labor_camps = strongly_disapprove
+	}
 	lawgroup_antitrust = {
 		law_guilds_chartered_monopolies = disapprove
 		law_freedom_of_contract = neutral
@@ -13128,6 +13163,18 @@ REPLACE:ideology_radical_movement = {
 		law_corporatized_unions = disapprove
 		law_right_to_associate = neutral
 		law_factory_councils = strongly_disapprove
+	}
+}
+
+INJECT:ideology_liberal_republican_movement = {
+	lawgroup_criminal_justice = {
+		law_penal_labor_camps = strongly_disapprove
+	}
+}
+
+INJECT:ideology_national_liberal_movement = {
+	lawgroup_criminal_justice = {
+		law_penal_labor_camps = strongly_disapprove
 	}
 }
 
@@ -13280,6 +13327,7 @@ REPLACE:ideology_reactionary_movement = {
 		law_punishment_focused_criminal_justice = strongly_approve
 		law_rehabilitation_focused_criminal_justice = disapprove
 		law_restorative_justice = neutral
+		law_penal_labor_camps = approve
 	}
 	lawgroup_right_to_information = {
 		law_informal_government_secrecy = neutral

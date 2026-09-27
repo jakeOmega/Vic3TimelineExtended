@@ -563,14 +563,29 @@ decolonization_events.4 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_journal_entry = je_colonial_empire
+		# The system's rule, not je_colonial_empire: the recipient is a former
+		# colony and holds no entry.
+		has_game_rule = decolonization_enabled
 		NOT = { has_modifier = cultural_reclamation_modifier }
-		has_technology_researched = decolonization
+		# The world's decolonization era, not our own research: a former colony
+		# rarely has the technology itself (owner ruling, 2026-09-26).
+		decol_era_begun = yes
 		is_subject = no
+		# Freed in the last 20 years (decol_mark_former_colony and the vanilla
+		# release hook set it), as the header says: "no homeland of its own
+		# cultures" alone also reached long-established countries (owner ruling,
+		# 2026-09-26).
+		has_variable = recently_decolonized
 		NOT = {
 			any_scope_state = {
 				is_homeland_of_country_cultures = ROOT
 			}
+		}
+		# Option A drops every primary culture and adopts the cultures present
+		# in the capital that have it as a homeland; with none, it would leave
+		# the country with no primary culture at all.
+		capital = {
+			any_scope_culture = { has_homeland = prev }
 		}
 	}
 
@@ -803,13 +818,17 @@ decolonization_events.7 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_journal_entry = je_colonial_empire
+		# The system's rule, not je_colonial_empire: the recipient is a former
+		# colony, which never holds that entry (see decol_mark_former_colony).
+		has_game_rule = decolonization_enabled
 		NOR = {
 			has_modifier = nation_building_investment_modifier
 			has_modifier = foreign_investment_dependency_modifier
 			has_modifier = post_colonial_self_reliance_modifier
 		}
-		has_technology_researched = decolonization
+		# The world's decolonization era, not our own research: a former colony
+		# rarely has the technology itself (owner ruling, 2026-09-26).
+		decol_era_begun = yes
 		country_rank <= rank_value:minor_power
 		has_variable = recently_decolonized
 	}
@@ -1570,7 +1589,13 @@ decolonization_events.14 = {
 	duration = 3
 
 	trigger = {
-		has_journal_entry = je_colonial_empire
+		# The system's rule, not je_colonial_empire: every great power takes a
+		# stance, a power without colonies most of all (option A's AI weights).
+		# That includes a great power whose own entry has completed or failed,
+		# on purpose: it stands for the powers that disapprove of other empires
+		# and press them (owner ruling, 2026-09-26). It is not an event about
+		# its own former colonies, which #44 meant to stop.
+		has_game_rule = decolonization_enabled
 		has_technology_researched = decolonization
 		country_rank >= rank_value:great_power
 		NOR = {
@@ -1769,7 +1794,13 @@ decolonization_events.15 = {
 	duration = 3
 
 	trigger = {
-		has_journal_entry = je_colonial_empire
+		# The system's rule, not je_colonial_empire: the recipient has just
+		# become independent and holds no colonial entry of its own.
+		has_game_rule = decolonization_enabled
+		# The world's decolonization era: some country has researched the
+		# technology (owner ruling, 2026-09-26). Before it, independence does
+		# not raise the question.
+		decol_era_begun = yes
 		# Only fire on true independence — not on overlord-to-overlord transfer
 		# or other transitions where on_become_independent may still pulse.
 		is_subject = no
@@ -1994,8 +2025,12 @@ decolonization_events.16 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_journal_entry = je_colonial_empire
-		has_technology_researched = decolonization
+		# The system's rule, not je_colonial_empire: the recipient is a former
+		# colony, which never holds that entry (see decol_mark_former_colony).
+		has_game_rule = decolonization_enabled
+		# The world's decolonization era, not our own research: a former colony
+		# rarely has the technology itself (owner ruling, 2026-09-26).
+		decol_era_begun = yes
 		has_variable = recently_decolonized
 		is_subject = no
 		NOT = { has_modifier = partition_territorial_claims_modifier }
@@ -2182,8 +2217,12 @@ decolonization_events.17 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_journal_entry = je_colonial_empire
-		has_technology_researched = decolonization
+		# The system's rule, not je_colonial_empire: the recipient is a former
+		# colony, which never holds that entry (see decol_mark_former_colony).
+		has_game_rule = decolonization_enabled
+		# The world's decolonization era, not our own research: a former colony
+		# rarely has the technology itself (owner ruling, 2026-09-26).
+		decol_era_begun = yes
 		has_variable = recently_decolonized
 		is_subject = no
 		NOT = { has_modifier = border_dispute_active_modifier }
@@ -2336,8 +2375,12 @@ decolonization_events.18 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_journal_entry = je_colonial_empire
-		has_technology_researched = decolonization
+		# The system's rule, not je_colonial_empire: the recipient is a former
+		# colony, which never holds that entry (see decol_mark_former_colony).
+		has_game_rule = decolonization_enabled
+		# The world's decolonization era, not our own research: a former colony
+		# rarely has the technology itself (owner ruling, 2026-09-26).
+		decol_era_begun = yes
 		has_variable = recently_decolonized
 		is_subject = no
 		NOR = {
@@ -2467,7 +2510,9 @@ decolonization_events.19 = {
 
 	trigger = {
 		has_journal_entry = je_colonial_empire
-		has_technology_researched = decolonization
+		# The world's decolonization era (owner ruling, 2026-09-26), as for the
+		# former-colony events that lead here.
+		decol_era_begun = yes
 		country_rank >= rank_value:great_power
 		NOR = {
 			has_modifier = gp_military_intervention_modifier
@@ -2551,7 +2596,8 @@ decolonization_events.19 = {
 				limit = {
 					NOT = { this = root }
 					country_rank >= rank_value:great_power
-					has_technology_researched = decolonization
+					# Every other great power, whatever its own research: .19 already
+					# needs the world's decolonization era (decol_era_begun).
 				}
 				trigger_event = { id = decolonization_events.20 }
 			}
@@ -2641,7 +2687,11 @@ decolonization_events.20 = {
 	# re-picked here with random_country, which named whichever power had
 	# intervened anywhere, not necessarily this one.
 	trigger = {
-		has_journal_entry = je_colonial_empire
+		# The system's rule, not je_colonial_empire: any great power may answer
+		# the intervention, with or without colonies of its own, and one whose
+		# own entry has ended included; it stands for the powers that disapprove
+		# of colonial empires and press them (owner ruling, 2026-09-26).
+		has_game_rule = decolonization_enabled
 		exists = scope:intervening_power
 		exists = scope:intervention_victim
 	}
@@ -2771,8 +2821,12 @@ decolonization_events.21 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_journal_entry = je_colonial_empire
-		has_technology_researched = decolonization
+		# The system's rule, not je_colonial_empire: the recipient is a former
+		# colony, which never holds that entry (see decol_mark_former_colony).
+		has_game_rule = decolonization_enabled
+		# The world's decolonization era, not our own research: a former colony
+		# rarely has the technology itself (owner ruling, 2026-09-26).
+		decol_era_begun = yes
 		has_variable = recently_decolonized
 		is_subject = no
 		NOR = {
@@ -2910,10 +2964,7 @@ decolonization_events.200 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Permanent solidified modifier
-		add_modifier = {
-			name = colonial_empire_solidified_modifier
-			days = -1
-		}
+		decol_grant_permanent_modifier = { MODIFIER = colonial_empire_solidified_modifier }
 		# Grant homeland to colonial states with high acceptance
 		every_scope_state = {
 			limit = {
@@ -2992,6 +3043,9 @@ decolonization_events.201 = {
 				remove_variable = decolonization_marker
 			}
 		}
+		# The successors above read our programme-month counters for their
+		# legacy (apply_decolonization_path); on_fail left them for this.
+		colonial_empire_clear_path_months = yes
 		add_modifier = {
 			name = colonial_empire_collapsed_modifier
 			days = long_modifier_time
@@ -3028,14 +3082,8 @@ decolonization_events.202 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Permanent solidified modifier with a Commonwealth-style cultural pull bonus
-		add_modifier = {
-			name = colonial_empire_solidified_modifier
-			days = -1
-		}
-		add_modifier = {
-			name = commonwealth_path_modifier
-			days = -1
-		}
+		decol_grant_permanent_modifier = { MODIFIER = colonial_empire_solidified_modifier }
+		decol_grant_permanent_modifier = { MODIFIER = commonwealth_path_modifier }
 		# Grant homeland to colonial states with high acceptance
 		every_scope_state = {
 			limit = {
@@ -3085,14 +3133,8 @@ decolonization_events.203 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Solidified, but with infamy and ongoing radicalism — empire by force
-		add_modifier = {
-			name = colonial_empire_solidified_modifier
-			days = -1
-		}
-		add_modifier = {
-			name = iron_fist_path_modifier
-			days = -1
-		}
+		decol_grant_permanent_modifier = { MODIFIER = colonial_empire_solidified_modifier }
+		decol_grant_permanent_modifier = { MODIFIER = iron_fist_path_modifier }
 		change_infamy = 25
 	}
 }
@@ -3151,6 +3193,9 @@ decolonization_events.204 = {
 				remove_variable = decolonization_marker
 			}
 		}
+		# The successors above read our programme-month counters for their
+		# legacy (apply_decolonization_path); on_fail left them for this.
+		colonial_empire_clear_path_months = yes
 		add_modifier = {
 			name = negotiated_withdrawal_modifier
 			days = long_modifier_time
@@ -3181,14 +3226,8 @@ decolonization_events.205 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Strongest acceptance / homeland integration outcome
-		add_modifier = {
-			name = colonial_empire_solidified_modifier
-			days = -1
-		}
-		add_modifier = {
-			name = quiet_assimilation_path_modifier
-			days = -1
-		}
+		decol_grant_permanent_modifier = { MODIFIER = colonial_empire_solidified_modifier }
+		decol_grant_permanent_modifier = { MODIFIER = quiet_assimilation_path_modifier }
 		# Grant homeland aggressively — colonial states with population >= 75k
 		# (lower than event 200's 100k) get integrated. The path was about
 		# making them part of the metropole.
@@ -3980,10 +4019,7 @@ decolonization_events.300 = {
 		ai_chance = { base = 5 }
 		# Capstone modifier already applied by the decision; reinforce with
 		# the iron-fist flavor modifier as a permanent badge.
-		add_modifier = {
-			name = iron_fist_path_modifier
-			days = -1
-		}
+		decol_grant_permanent_modifier = { MODIFIER = iron_fist_path_modifier }
 		# Grant homeland to colonial states with high acceptance — the
 		# Federation absorbs them into the metropole's cultural fabric.
 		every_scope_state = {
@@ -4034,10 +4070,7 @@ decolonization_events.301 = {
 		ai_chance = { base = 5 }
 		# Civilizing Mission flavor — the Commonwealth path modifier
 		# expresses ongoing cultural soft-power retention.
-		add_modifier = {
-			name = commonwealth_path_modifier
-			days = -1
-		}
+		decol_grant_permanent_modifier = { MODIFIER = commonwealth_path_modifier }
 		every_scope_state = {
 			limit = {
 				NOT = { is_homeland_of_country_cultures = ROOT }

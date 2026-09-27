@@ -81,7 +81,7 @@ nd_crisis_preview = {
 		limit = { nd_crisis_parties_free = { TARGET = $TARGET$ } }
 		if = {
 			limit = { always = $PUBLIC$ }
-			change_infamy = 5
+			change_infamy = nd_taboo_infamy_threat
 			change_relations = { country = $TARGET$ value = -20 }
 		}
 		else = {
@@ -265,6 +265,14 @@ nd_crisis_open = {
 				set_variable = { name = nd_crisis_id value = scope:nd_issuer.var:nd_crisis_id }
 				set_variable = { name = nd_crisis_opponent value = scope:nd_issuer }
 				set_variable = { name = nd_crisis_role value = 2 }
+			}
+			# ---- a threat wears the nuclear taboo down, by our rank ---------
+			if = {
+				limit = { always = $PUBLIC$ }
+				nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_ultimatum }
+			}
+			else = {
+				nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_warning }
 			}
 			# ---- the crisis's figures, before anyone weighs them ------------
 			nd_crisis_refresh_figures = yes
@@ -486,6 +494,7 @@ nd_crisis_refresh_figures = {
 		nd_crisis_store_yp = { C = nd_yp_temperament V = nd_yp_temperament_value }
 		nd_crisis_store_yp = { C = nd_yp_war V = nd_yp_war_value }
 		nd_crisis_store_yp = { C = nd_yp_follow_through V = nd_yp_follow_through_value }
+		nd_crisis_store_yp = { C = nd_yp_taboo V = nd_yp_taboo_value }
 		set_variable = { name = nd_yield_pressure value = nd_yield_pressure_value }
 	}
 }
@@ -599,6 +608,10 @@ nd_crisis_clear_figures = {
 	if = {
 		limit = { has_variable = nd_yp_follow_through }
 		remove_variable = nd_yp_follow_through
+	}
+	if = {
+		limit = { has_variable = nd_yp_taboo }
+		remove_variable = nd_yp_taboo
 	}
 }
 
@@ -898,6 +911,11 @@ nd_crisis_close = {
 		scope:nd_target = { nd_crisis_flush_pending = yes }
 		scope:nd_issuer = {
 			set_variable = { name = nd_crisis_outcome_now value = $OUTCOME$ }
+		}
+		# Both sides stepping back strengthens the nuclear taboo.
+		if = {
+			limit = { scope:nd_issuer = { var:nd_crisis_outcome_now = 3 } }
+			nd_taboo_ledger_add = { POINTS = nd_taboo_ledger_standdown }
 		}
 		# Each side's consequences wait on its outcome notice's option
 		# (nd_crisis_apply_outcome_side), so the option's tooltip shows them.
@@ -1489,7 +1507,7 @@ nd_crisis_act_back_down = {
 # Issuer scope: turn a private warning into a public ultimatum.
 nd_crisis_act_go_public = {
 	custom_tooltip = nd_tt_act_go_public
-	change_infamy = 5
+	change_infamy = nd_taboo_infamy_threat
 	if = {
 		limit = { exists = var:nd_crisis_opponent }
 		change_relations = { country = var:nd_crisis_opponent value = -15 }
@@ -1497,6 +1515,9 @@ nd_crisis_act_go_public = {
 	custom_tooltip = nd_tt_go_public_terms
 	hidden_effect = {
 		nd_crisis_save_parties = yes
+		# A private warning made public: the rest of an ultimatum's toll on
+		# the nuclear taboo.
+		nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_go_public }
 		if = {
 			limit = { exists = scope:nd_target }
 			set_variable = { name = nd_crisis_public value = 1 }

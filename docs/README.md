@@ -9,6 +9,7 @@ Files marked `[auto-gen]` are regenerated automatically and should not be hand-e
 ```
 docs/
 ├── README.md                 (this file)
+├── player_guide/             (the player-facing guide: Markdown chapters → PDF)
 ├── auto_generated_files.md   (generator → output ownership map)
 ├── guides/                   (curated authoring guides — read first)
 ├── systems/                  (mod-system writeups)
@@ -19,6 +20,18 @@ docs/
 ├── archive/                  (deferred / completed / orphaned reference)
 └── superpowers/plans/        (multi-step implementation plans from /writing-plans)
 ```
+
+## Player Guide — `player_guide/`
+
+The one part of `docs/` written for players rather than modders or agents: a guide to every mod system, in numbered Markdown chapters that build into [`player_guide/Vic3TimelineExtended_Player_Guide.pdf`](player_guide/Vic3TimelineExtended_Player_Guide.pdf).
+
+| File | Contents | Read When... |
+|------|----------|--------------|
+| [`player_guide/README.md`](player_guide/README.md) | Chapter list, build and edit instructions | Finding or editing a chapter |
+| [`player_guide/STYLE.md`](player_guide/STYLE.md) | House style: audience, accuracy rules, the AI-writing tells to avoid, the Markdown subset | Before writing or editing a chapter |
+| `player_guide/NN-*.md` | The chapters, in reading order | Changing what the guide says; after changing a system players see |
+
+Build with `scripts/build_player_guide.py` (pandoc + Typst from `requirements-docs.txt`); lint with `scripts/analysis/check_player_guide_style.py`. CI runs the lint with `--strict` and fails when the committed PDF was built from older sources.
 
 ## Mod Authoring Guides — `guides/`
 
@@ -40,7 +53,7 @@ docs/
 | [`systems/modifier_scope_reference.md`](systems/modifier_scope_reference.md) | The mod's own modifier types by scope: already state-level (and which of those actually vary per state), country-level ones that could move to states with the cost of each move, and ones that must stay national with the reason | Designing a mechanic that should differ between a country's states; moving a modifier from country to state level |
 | [`systems/strategic_reserve_system.md`](systems/strategic_reserve_system.md) | Architecture and file layout of the Strategic Reserve journal-entry system | Adding goods to the SR; touching the SR JE / Hub building |
 | [`systems/monetary_policy_design.md`](systems/monetary_policy_design.md) | **Phases 1–5 implemented, pending in-game verification.** Policy-rate dial, risk premium, inflation, currency-regime ladder, gold flows, the exchange-rate index and international monetary arrangements (treaty pegs, swap lines, a lender of last resort, a power-bloc common currency, subject currency boards) for the banking JE; §0 holds what each phase shipped (§0.8 for phase 5), the deviations and the in-game checklists | Implementing or reviewing any phase of the monetary-policy rework; touching interest-rate modifiers |
-| [`systems/nuclear_crisis_design.md`](systems/nuclear_crisis_design.md) | **Phases 1–3 implemented, 4–5 in part; pending in-game verification.** Nuclear doctrine, readiness, launch authority, crisis bargaining, guarantees, domestic incentives, accident chains, and alternate-history AI; §0 holds what shipped (posture and crises live in `je_nuclear_program`, "Nuclear Weapons"), the deviations and the in-game checklist | Before touching `je_nuclear_program`'s posture or crisis halves, the nuclear strike actions' gates, or any `nd_*` script |
+| [`systems/nuclear_crisis_design.md`](systems/nuclear_crisis_design.md) | **Phases 1–3 implemented, 4–5 in part; pending in-game verification.** Nuclear doctrine, readiness, launch authority, crisis bargaining, guarantees, domestic incentives, accident chains, and alternate-history AI; the nuclear taboo (§0.11); §0 holds what shipped (posture and crises live in `je_nuclear_program`, "Nuclear Weapons"), the deviations and the in-game checklist | Before touching `je_nuclear_program`'s posture or crisis halves, the nuclear strike actions' gates, or any `nd_*` script |
 | [`systems/un_redesign_design.md`](systems/un_redesign_design.md) | **Phase 1 (authority model) implemented and play-tested; phases 2 (tiers, charter reforms, crisis, dissolution, refounding), 3 (dossier and grounds, itemised vote lean, AI voting in script, recess) and 4 (the docket replacing the random event roll, the event rewrite) implemented, pending in-game verification; phases 5–6 designed.** United Nations redesign: UN authority as an equilibrium computed from power-weighted pillars, tiers with charter caps, dissolution and refounding, resolutions whose teeth scale with authority, grounds and itemised vote leans, a situation-driven docket, and missions in states. §1 surveys the UN as it stood | Before changing anything in the UN system |
 
 ## Vanilla & Patch References — `vanilla/`
@@ -113,7 +126,7 @@ All files in this directory are `[auto-gen]` (see `auto_generated_files.md`). Mo
 | [`engine/event_magnitude_report.md`](engine/event_magnitude_report.md) | Hardcoded fast-scaling event effects flagged by the magnitude audit |
 | [`engine/event_image_inventory.md`](engine/event_image_inventory.md) | Every mod event with title, description, flavor, and current image path (gitignored; rewritten on every reload) |
 | [`engine/loc_render_report.md`](engine/loc_render_report.md) | Bracket-style formatting tags (`[b]`, `[/i]`, …) in loc values — render-breaking, cause log-spam lag |
-| [`engine/any_limit_report.md`](engine/any_limit_report.md) | `limit = { }` placed as an immediate child of an `any_*` trigger (silently ignored → meaning flip) |
+| [`engine/any_limit_report.md`](engine/any_limit_report.md) | `limit = { }` placed as an immediate child of an `any_*` trigger (silently ignored → meaning flip), and `always = no` in the same place (always false → the enclosing block never passes) |
 | [`engine/iterator_limit_report.md`](engine/iterator_limit_report.md) | An iterator's `limit = { }` written after an effect sibling — the limit gates that effect too |
 | [`engine/modifier_multiplier_var_report.md`](engine/modifier_multiplier_var_report.md) | Permanent `add_modifier { multiplier = var:X }` whose backing variable is removed later in the same block |
 | [`engine/loc_coverage_report.md`](engine/loc_coverage_report.md) | Mod-introduced entities with no `*_l_english.yml` key — the engine shows the raw key with no warning |

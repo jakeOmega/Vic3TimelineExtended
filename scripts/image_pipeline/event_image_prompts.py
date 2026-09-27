@@ -378,7 +378,7 @@ IMAGES = {
     "drought_devastation": {
         "prompt": "A cracked, parched landscape under a blazing sun.",
         "style": "oil painting, landscape, dramatic sky",
-        "events": ["environmentalism_events.5", "environmentalism_events.14"],
+        "events": ["environmentalism_events.5", "environmentalism_events.14", "environmentalism_events.22"],
     },
     "climate_refugee_exodus": {
         "prompt": "Climate refugees walking along a dusty road.",
