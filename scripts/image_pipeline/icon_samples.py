@@ -112,7 +112,7 @@ SAMPLES = [
      "a spaceport with a rocket standing on its launch pad, gantry tower, hangars and a control tower"),
     ("building", "building_wonder_petronas_towers", "building_icons/skyscraper.dds",
      "the Petronas Twin Towers skyscrapers of Kuala Lumpur joined by their skybridge"),
-    ("ideology", "ideology_environmentalists", "ideology_icons/rural_folk.dds",
+    ("ideology", "ideology_environmentalists", "ig_icons/rural_folk.dds",
      "a leafy oak tree with spreading branches"),
     ("mobilization_option", "mobilization_option_robotic_assistance", "mobilization_options/luxurious_supplies.dds",
      "an industrial robotic arm with a gripper claw"),
