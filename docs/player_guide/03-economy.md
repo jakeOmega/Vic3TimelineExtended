@@ -17,8 +17,9 @@ a national pool. Under Free Market Construction, the default setting of the game
 rule of the same name, construction is a tradeable good instead. Construction
 Sectors sell it on the market like any factory, your government and your
 investors buy it every week, and what they buy becomes the points your two
-construction queues spend. The system is based on TOGFan's Free Market
-Construction mod.
+construction queues spend. The system is based on TOGFan's
+[Free Market Construction](https://steamcommunity.com/sharedfiles/filedetails/?id=3257202613)
+mod, which is worth a look on its own if you want only this mechanic.
 
 ### From Construction Sector to construction queue
 
@@ -44,10 +45,12 @@ private projects is recalculated every week from the two purchases, and your
 economic-system law no longer sets it.
 
 When all buyers together want more construction than is on sale, the price
-rises: construction costs the treasury more, and investors' money buys fewer
-points. Construction then slows, however much money the treasury or the
-investment pool holds. Every country in your market buys from the same supply,
-and construction is imported and exported like other goods.
+rises, as it does for any good in Victoria 3. You still get all the construction
+you buy, for as long as the shortage lasts; each point just costs more, so the
+treasury pays more for its weekly purchase and investors' money buys fewer
+points. Think of the higher price as supply stretching in the short run. Every
+country in your market buys from the same supply, and construction is imported
+and exported like other goods.
 
 Each level of a Construction Sector produces more with better production
 methods:
@@ -123,8 +126,8 @@ or the government queue builds nothing.
 - A high purchase setting is harmless, because only what the queue can use is
 bought. To stop government construction while private building carries on, set
 it to 0; the sector keeps selling to investors.
-- Watch the market line. A standing shortage means you need more Construction
-Sector levels or a better production method. Cheap wood, iron and steel make
+- Watch the market line. A standing shortage keeps the price high, which means
+you need more Construction Sector levels or a better production method. Cheap wood, iron and steel make
 construction cheaper, because the sector buys them.
 - A high price makes Construction Sectors profitable, and investors then build
 them on their own.

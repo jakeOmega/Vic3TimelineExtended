@@ -325,7 +325,7 @@ only that state's owner can build them.
 | Petronas Towers | Malaya | Cellular Networks |
 | Three Gorges Dam | Western Hubei | Clean Energy Technologies |
 | Gardens by the Bay | Malaya | Clean Energy Technologies |
-| Channel Tunnel | Home Counties | Globalization |
+| Channel Tunnel | Home Counties (sorry, France) | Globalization |
 | Abraj Al-Bait Clock Tower | Hedjaz | Globalization |
 | Taipei 101 | Formosa | Digital Telecommunications |
 | Lotte World Tower | Gyeonggi | World Wide Web |
@@ -430,8 +430,9 @@ Monument you own add one point of cultural pull, up to +5.
 When a level of an undedicated Grand Monument finishes, a dedication ceremony
 event asks what it honors, and its tooltips list each dedication's effects. The
 choice is permanent: to change it, demolish the monument and build again. One
-option leaves the monument Undedicated, a plain tourist draw, and you can still
-pick a dedication later in its building panel.
+option leaves the monument Undedicated, a plain tourist draw. An undedicated
+monument can still be dedicated later from its building panel, and the ceremony
+asks again when its next level finishes.
 
 <!-- screenshot: the Grand Monument dedication ceremony event with its options -->
 
