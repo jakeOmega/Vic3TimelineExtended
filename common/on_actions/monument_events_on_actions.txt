@@ -118,3 +118,37 @@ monument_events_on_action = {
 		}
 	}
 }
+
+# ============================================================================
+# The local pulse (spec §2.5)
+# ============================================================================
+# State scope (ROOT = the state). A state modifier's multiplier resolves
+# against ROOT, so each monument's local modifiers are refreshed here and never
+# from the country pulse. Runs for a state with a monument, or one whose
+# monument has just gone (records or a multiplier left to clear).
+on_monthly_pulse_state = {
+	on_actions = {
+		gm_state_on_action
+	}
+}
+
+gm_state_on_action = {
+	trigger = {
+		gm_system_enabled = yes
+	}
+	effect = {
+		if = {
+			limit = {
+				OR = {
+					has_building = building_grand_monument
+					has_variable = gm_seen
+					AND = {
+						has_variable = gm_local_steps
+						var:gm_local_steps > 0
+					}
+				}
+			}
+			gm_state_monthly = yes
+		}
+	}
+}

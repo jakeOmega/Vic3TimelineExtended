@@ -1,20 +1,15 @@
 ﻿# ======================================================================
 #  Grand Monument Scripted Triggers
 #  Country scope. Used by the dedication ceremony (monument_events.2) to
-#  pick which wording the civic dedication is offered under.
+#  gate which dedications a country may raise.
 # ======================================================================
-# The civic dedication (pm_monument_civic) is available to every government --
-# a triumphal arch means something under any flag. What changes is who the arch
-# is raised TO, so the one PM is offered under three mutually exclusive option
-# skins and these two triggers carve lawgroup_governance_principles in three:
-#
-#   monument_government_is_crowned      -> "Dedicate it to the Crown"
-#   monument_government_is_republican   -> "Dedicate it to the republic"
-#   neither                             -> "Dedicate it to the nation"
-#
-# The third skin is written as NOT of both, so a governance principle added
-# later (by this mod or by vanilla) still gets a civic dedication it can use
-# rather than silently losing the option.
+# These two triggers carve lawgroup_governance_principles for the dedication
+# ceremony: monument_government_is_crowned gates To the Crown (pm_monument_crown)
+# and excludes To the Leader (a crowned ruler's statue is To the Crown, not To
+# the Leader); monument_government_is_republican gates To the Republic
+# (pm_monument_republic). The neutral wording is its own dedication, To the
+# Nation (pm_monument_civic), which every government -- crowned, republican or
+# neither -- may raise regardless of these two triggers.
 #
 # has_law_or_variant throughout: variant laws (parent = law_X) are tag- and
 # condition-restricted skins of their parent and must count as the parent here.
@@ -81,5 +76,148 @@ gm_country_hard_times = {
 			has_variable = finance_cycle_value
 			banking_cycle_is_recession = yes
 		}
+	}
+}
+
+# ======================================================================
+#  A monument's kind, fit and status (spec §1, §2.3, §3)
+# ======================================================================
+# State scope. Everything a monument must remember lives on its STATE
+# (buildings hold no variables; one Grand Monument per state):
+#   gm_raised_by      the country that dedicated it (regime, ruler, faith)
+#   gm_honoree        To the Leader: the ruler it honours
+#   gm_honoree_ig     To the Leader: that ruler's IG, as a flag
+#   gm_faith          Grand Shrine: the religion it honours
+#   gm_skin           flag: the form it takes (§1.1)
+#   gm_seen           its records have been written
+#   gm_contested      months it has stood contested (§4)
+#   gm_heritage       preserved as heritage (§4.3)
+#   gm_base_ig / gm_supporter_ig   IG flags recorded at contest (§4.1)
+# A missing record reads as "does not fit", never as "fits".
+
+gm_state_has_pm = {
+	b:building_grand_monument ?= { has_active_production_method = $PM$ }
+}
+
+gm_state_is_dedicated = {
+	has_building = building_grand_monument
+	NOT = { gm_state_has_pm = { PM = pm_monument_undedicated } }
+}
+
+gm_state_kind_regime = {
+	OR = {
+		gm_state_has_pm = { PM = pm_monument_crown }
+		gm_state_has_pm = { PM = pm_monument_republic }
+		gm_state_has_pm = { PM = pm_monument_revolution }
+	}
+}
+
+gm_state_kind_ruler = {
+	gm_state_has_pm = { PM = pm_monument_leader }
+}
+
+gm_state_kind_faith = {
+	gm_state_has_pm = { PM = pm_monument_religious }
+}
+
+# Regime, ruler or faith: a message that can fall. Everything else is timeless.
+gm_state_is_bound = {
+	OR = {
+		gm_state_kind_regime = yes
+		gm_state_kind_ruler = yes
+		gm_state_kind_faith = yes
+	}
+}
+
+# The country that raised it still owns it. Not true of a conquered monument,
+# whatever the conqueror's laws (plan decision 2).
+gm_state_raised_by_owner = {
+	has_variable = gm_raised_by
+	var:gm_raised_by ?= { save_temporary_scope_as = gm_tmp_raiser }
+	owner = scope:gm_tmp_raiser
+}
+
+# The honoured character still rules. A dead honoree fails the `?=`.
+gm_state_leader_fits = {
+	has_variable = gm_honoree
+	var:gm_honoree ?= { save_temporary_scope_as = gm_tmp_honoree }
+	owner = {
+		ruler ?= { this = scope:gm_tmp_honoree }
+	}
+}
+
+# The state religion is still the one it honours, and not under State Atheism.
+gm_state_shrine_fits = {
+	has_variable = gm_faith
+	owner = {
+		NOT = { has_law_or_variant = law_type:law_state_atheism }
+	}
+	var:gm_faith ?= { save_temporary_scope_as = gm_tmp_faith }
+	owner = { religion = scope:gm_tmp_faith }
+}
+
+# Its message still stands. Read live every month from the owner's laws,
+# religion and ruler; never cached.
+gm_state_message_fits = {
+	OR = {
+		gm_state_is_bound = no
+		AND = {
+			gm_state_raised_by_owner = yes
+			OR = {
+				AND = {
+					gm_state_has_pm = { PM = pm_monument_crown }
+					owner = { monument_government_is_crowned = yes }
+				}
+				AND = {
+					gm_state_has_pm = { PM = pm_monument_republic }
+					owner = { monument_government_is_republican = yes }
+				}
+				AND = {
+					gm_state_has_pm = { PM = pm_monument_revolution }
+					owner = { gm_government_is_revolutionary = yes }
+				}
+				AND = {
+					gm_state_kind_ruler = yes
+					gm_state_leader_fits = yes
+				}
+				AND = {
+					gm_state_kind_faith = yes
+					gm_state_shrine_fits = yes
+				}
+			}
+		}
+	}
+}
+
+gm_state_is_contested = {
+	has_variable = gm_contested
+}
+
+gm_state_is_heritage = {
+	has_variable = gm_heritage
+}
+
+# §2.3 "Fits": the monuments whose politics count.
+gm_state_status_fits = {
+	gm_state_is_dedicated = yes
+	gm_state_is_contested = no
+	gm_state_is_heritage = no
+	gm_state_message_fits = yes
+}
+
+# §2.3 standing grandeur (prestige, cultural pull): every monument not contested.
+gm_state_counts_standing = {
+	has_building = building_grand_monument
+	gm_state_is_contested = no
+}
+
+# §1.1: the dedications that take heritage skins. The Grand Shrine takes faith
+# skins; the War Memorial takes heritage skins only (plan decision 4).
+gm_state_takes_heritage_skin = {
+	OR = {
+		gm_state_kind_regime = yes
+		gm_state_kind_ruler = yes
+		gm_state_has_pm = { PM = pm_monument_civic }
+		gm_state_has_pm = { PM = pm_monument_war_memorial }
 	}
 }

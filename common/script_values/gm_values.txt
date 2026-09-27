@@ -106,3 +106,39 @@ gm_event_income = {
 	value = yearly_gross_income
 	multiply = 0.01
 }
+
+# ---- A monument's own numbers (state scope) --------------------------------
+# Its level, or 0.
+gm_state_grandeur = {
+	value = 0
+	if = {
+		limit = { has_building = building_grand_monument }
+		value = b:building_grand_monument.level
+	}
+}
+
+# The journal entry row's status: 0 none, 1 undedicated, 2 fits (or not yet
+# judged), 3 heritage, 4 contested. A code, so the .gui tests identity rather
+# than a threshold (gui gotcha #23). Later ifs override earlier ones.
+gm_status_code = {
+	value = 0
+	if = {
+		limit = { has_building = building_grand_monument }
+		value = 2
+	}
+	if = {
+		limit = {
+			has_building = building_grand_monument
+			gm_state_is_dedicated = no
+		}
+		value = 1
+	}
+	if = {
+		limit = { gm_state_is_heritage = yes }
+		value = 3
+	}
+	if = {
+		limit = { gm_state_is_contested = yes }
+		value = 4
+	}
+}

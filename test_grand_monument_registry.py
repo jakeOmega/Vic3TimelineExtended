@@ -433,5 +433,161 @@ class BuildingTests(unittest.TestCase):
         self.assertIn("monument_government_is_crowned = no", leader)
 
 
+# ---- Task 4: kinds, fit, status, records, the local pulse ----------------------------
+
+REGIME_GATE = {"crown": "monument_government_is_crowned", "republic": "monument_government_is_republican",
+               "revolution": "gm_government_is_revolutionary"}
+
+
+class FitTests(unittest.TestCase):
+    def setUp(self):
+        self.t = read(TRIGGERS)
+
+    def test_has_pm_reads_the_building(self):
+        self.assertEqual(squash(block(self.t, "gm_state_has_pm")),
+                         "b:building_grand_monument ?= { has_active_production_method = $PM$ }")
+
+    def test_kinds_match_the_table(self):
+        kind_trigger = {"regime": "gm_state_kind_regime", "ruler": "gm_state_kind_ruler",
+                        "faith": "gm_state_kind_faith"}
+        for d in DEDICATIONS:
+            for kind, trig in kind_trigger.items():
+                present = f"PM = pm_monument_{d.key} }}" in squash(block(self.t, trig))
+                self.assertEqual(present, d.kind == kind, f"{d.key} in {trig}")
+        bound = squash(block(self.t, "gm_state_is_bound"))
+        for trig in kind_trigger.values():
+            self.assertIn(f"{trig} = yes", bound)
+
+    def test_bound_messages_fit_only_for_the_raiser(self):
+        body = squash(block(self.t, "gm_state_message_fits"))
+        self.assertTrue(body.startswith("OR = { gm_state_is_bound = no AND = { gm_state_raised_by_owner = yes OR = {"))
+        for key, gate in REGIME_GATE.items():
+            self.assertIn(f"AND = {{ gm_state_has_pm = {{ PM = pm_monument_{key} }} owner = {{ {gate} = yes }} }}", body)
+        self.assertIn("AND = { gm_state_kind_ruler = yes gm_state_leader_fits = yes }", body)
+        self.assertIn("AND = { gm_state_kind_faith = yes gm_state_shrine_fits = yes }", body)
+
+    def test_raiser_honoree_faith_are_guarded(self):
+        raiser = squash(block(self.t, "gm_state_raised_by_owner"))
+        self.assertIn("has_variable = gm_raised_by var:gm_raised_by ?=", raiser)
+        leader = squash(block(self.t, "gm_state_leader_fits"))
+        self.assertIn("has_variable = gm_honoree var:gm_honoree ?=", leader)
+        self.assertIn("ruler ?= { this = scope:gm_tmp_honoree }", leader)
+        shrine = squash(block(self.t, "gm_state_shrine_fits"))
+        self.assertIn("has_variable = gm_faith", shrine)
+        self.assertIn("NOT = { has_law_or_variant = law_type:law_state_atheism }", shrine)
+        self.assertIn("religion = scope:gm_tmp_faith", shrine)
+
+    def test_statuses(self):
+        fits = squash(block(self.t, "gm_state_status_fits"))
+        self.assertEqual(fits, "gm_state_is_dedicated = yes gm_state_is_contested = no "
+                               "gm_state_is_heritage = no gm_state_message_fits = yes")
+        standing = squash(block(self.t, "gm_state_counts_standing"))
+        self.assertEqual(standing, "has_building = building_grand_monument gm_state_is_contested = no")
+
+    def test_heritage_skinned(self):
+        body = squash(block(self.t, "gm_state_takes_heritage_skin"))
+        for key in HERITAGE_SKINNED:
+            d = BY_KEY[key]
+            if d.kind == "regime":
+                self.assertIn("gm_state_kind_regime = yes", body)
+            elif d.kind == "ruler":
+                self.assertIn("gm_state_kind_ruler = yes", body)
+            else:
+                self.assertIn(f"PM = pm_monument_{key} }}", body)
+        self.assertNotIn("gm_state_kind_faith", body)
+
+
+class RecordTests(unittest.TestCase):
+    def setUp(self):
+        self.e = read(EFFECTS)
+
+    def test_first_sight(self):
+        body = squash(block(self.e, "gm_state_first_sight"))
+        self.assertIn("gm_state_is_dedicated = yes NOT = { has_variable = gm_seen }", body)
+        self.assertIn("set_variable = gm_seen", body)
+        self.assertIn("limit = { gm_state_is_bound = yes } set_variable = { name = gm_raised_by value = owner }", body)
+        self.assertIn("limit = { gm_state_kind_ruler = yes } gm_state_record_honoree = yes", body)
+        self.assertIn("limit = { gm_state_kind_faith = yes } gm_state_record_faith = yes", body)
+        self.assertIn("gm_state_set_default_skin = yes", body)
+        honoree = squash(block(self.e, "gm_state_record_honoree"))
+        self.assertIn("ruler = { save_scope_as = gm_tmp_ruler }", honoree)
+        self.assertIn("set_variable = { name = gm_honoree value = scope:gm_tmp_ruler }", honoree)
+        self.assertIn("gm_ig_to_flag_on_owner = { VAR = gm_tmp_ig_flag }", honoree)
+        self.assertIn("set_variable = { name = gm_honoree_ig value = owner.var:gm_tmp_ig_flag }", honoree)
+        faith = squash(block(self.e, "gm_state_record_faith"))
+        self.assertIn("religion = { save_scope_as = gm_tmp_faith_scope }", faith)
+        self.assertIn("set_variable = { name = gm_faith value = scope:gm_tmp_faith_scope }", faith)
+
+    def test_ig_flags_cover_every_ig(self):
+        body = squash(block(self.e, "gm_ig_to_flag_on_owner"))
+        for ig in IGS:
+            self.assertIn(f"is_interest_group_type = ig_{ig} }} owner = {{ set_variable = "
+                          f"{{ name = $VAR$ value = flag:{ig} }} }}", body)
+
+    def test_default_skin_covers_every_faith_and_heritage(self):
+        body = squash(block(self.e, "gm_state_set_default_skin"))
+        self.assertTrue(body.startswith("set_variable = { name = gm_skin value = flag:generic }"))
+        self.assertIn("gm_state_kind_faith = yes } gm_state_default_faith_skin = yes", body)
+        self.assertIn("gm_state_takes_heritage_skin = yes } gm_state_default_heritage_skin = yes", body)
+        faith = squash(block(self.e, "gm_state_default_faith_skin"))
+        for f in FAITHS:
+            self.assertIn(f"gm_state_try_faith_skin = {{ R = {f} }}", faith)
+        heritage = squash(block(self.e, "gm_state_default_heritage_skin"))
+        order = []
+        for m in re.finditer(r"gm_state_try_heritage(?:_as_faith)?_skin = \{ H = (\w+)(?: R = (\w+))? \}", heritage):
+            order.append(m.group(1))
+            if m.group(1) in HERITAGE_AS_FAITH:
+                self.assertEqual(m.group(2), HERITAGE_AS_FAITH[m.group(1)])
+        self.assertEqual(order, list(reversed(HERITAGES)), "reverse order: the partition's first wins")
+
+    def test_skin_helpers(self):
+        self.assertIn("owner = { religion = rel:$R$ } } set_variable = { name = gm_skin value = flag:faith_$R$ }",
+                      squash(block(self.e, "gm_state_try_faith_skin")))
+        self.assertIn("owner = { te_heritage_$H$ = yes } } set_variable = { name = gm_skin value = flag:heritage_$H$ }",
+                      squash(block(self.e, "gm_state_try_heritage_skin")))
+        self.assertIn("owner = { te_heritage_$H$ = yes } } set_variable = { name = gm_skin value = flag:faith_$R$ }",
+                      squash(block(self.e, "gm_state_try_heritage_as_faith_skin")))
+
+
+class LocalPulseTests(unittest.TestCase):
+    def setUp(self):
+        self.e = read(EFFECTS)
+
+    def test_removes_every_local_modifier(self):
+        body = squash(block(self.e, "gm_remove_local_modifiers"))
+        self.assertIn("remove_modifier = gm_local_tourism", body)
+        for d in DEDICATIONS:
+            self.assertIn(f"remove_modifier = gm_local_{d.key}", body)
+
+    def test_pulse_applies_the_curve(self):
+        body = squash(block(self.e, "gm_state_monthly"))
+        self.assertTrue(body.startswith("gm_remove_local_modifiers = yes"))
+        self.assertIn("set_variable = { name = gm_curve_in value = gm_state_grandeur }", body)
+        self.assertIn("set_variable = { name = gm_local_steps value = gm_curve_steps_f5 }", body)
+        self.assertIn("add_modifier = { name = gm_local_tourism multiplier = var:gm_local_steps }", body)
+        for d in DEDICATIONS:
+            self.assertIn(f"gm_add_local = {{ KEY = {d.key} }}", body)
+        self.assertIn("add_modifier = { name = gm_local_$KEY$ multiplier = var:gm_local_steps }",
+                      squash(block(self.e, "gm_add_local")))
+
+    def test_backing_variable_is_never_removed(self):
+        self.assertNotRegex(strip_comments(self.e), r"remove_variable = gm_local_steps")
+        self.assertIn("set_variable = { name = gm_local_steps value = 0 }", squash(block(self.e, "gm_clear_state")))
+
+    def test_wired_to_the_state_pulse(self):
+        oa = read(ON_ACTIONS)
+        self.assertIn("gm_state_on_action", squash(block(oa, "on_monthly_pulse_state")))
+        body = squash(block(oa, "gm_state_on_action"))
+        self.assertIn("trigger = { gm_system_enabled = yes }", body)
+        self.assertIn("gm_state_monthly = yes", body)
+
+    def test_state_values(self):
+        v = read(VALUES)
+        self.assertIn("value = b:building_grand_monument.level", squash(block(v, "gm_state_grandeur")))
+        code = squash(block(v, "gm_status_code"))
+        for n in (1, 2, 3, 4):
+            self.assertIn(f"value = {n} }}", code)
+
+
 if __name__ == "__main__":
     unittest.main()

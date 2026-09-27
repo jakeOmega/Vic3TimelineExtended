@@ -1,0 +1,314 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — scripted effects
+# ============================================================================
+# Design: docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md.
+# The state-held records are listed in monument_triggers.txt § "kind, fit and
+# status".
+#
+# Where modifiers are applied: state modifiers only from gm_state_monthly
+# (on_monthly_pulse_state, ROOT = the state); national ones only from
+# gm_country_refresh with ROOT = the country. A variable backing a multiplier
+# is zeroed, never removed.
+
+# ---- Records (§3) ------------------------------------------------------------
+# State scope. A dedicated monument the pulse finds without records (a pick
+# made in the building panel, or a monument from a save older than this
+# system) gets them from its current owner, once. The ceremony writes them
+# itself, so this does nothing for a monument it dedicated.
+gm_state_first_sight = {
+	if = {
+		limit = {
+			gm_state_is_dedicated = yes
+			NOT = { has_variable = gm_seen }
+		}
+		set_variable = gm_seen
+		if = {
+			limit = { gm_state_is_bound = yes }
+			set_variable = { name = gm_raised_by value = owner }
+		}
+		if = {
+			limit = { gm_state_kind_ruler = yes }
+			gm_state_record_honoree = yes
+		}
+		if = {
+			limit = { gm_state_kind_faith = yes }
+			gm_state_record_faith = yes
+		}
+		if = {
+			limit = {
+				NOT = { has_variable = gm_skin }
+			}
+			gm_state_set_default_skin = yes
+		}
+	}
+}
+
+# State scope. The ruler a Leader monument honours, and that ruler's IG as a
+# flag (gm_honoree_ig): its supporters, whom a later Tear Down angers (§4.3).
+# Recorded now because by the time the monument is contested the ruler has
+# changed.
+gm_state_record_honoree = {
+	if = {
+		limit = {
+			owner = { exists = ruler }
+		}
+		# Saved scope, then the variable: vanilla stores a ruler this way
+		# (`ruler = { save_scope_as = … }`); cleared first so a stale save
+		# from an earlier call cannot be read.
+		clear_saved_scope = gm_tmp_ruler
+		owner = {
+			ruler = { save_scope_as = gm_tmp_ruler }
+		}
+		set_variable = { name = gm_honoree value = scope:gm_tmp_ruler }
+		owner = {
+			set_variable = { name = gm_tmp_ig_flag value = flag:none }
+			ruler = {
+				interest_group ?= {
+					gm_ig_to_flag_on_owner = { VAR = gm_tmp_ig_flag }
+				}
+			}
+		}
+		set_variable = { name = gm_honoree_ig value = owner.var:gm_tmp_ig_flag }
+	}
+}
+
+# Interest-group scope. Writes this IG's type as a flag to variable $VAR$ on
+# its owner. A flag, not the IG scope: it names the same group in any country.
+gm_ig_to_flag_on_owner = {
+	if = {
+		limit = { is_interest_group_type = ig_armed_forces }
+		owner = { set_variable = { name = $VAR$ value = flag:armed_forces } }
+	}
+	if = {
+		limit = { is_interest_group_type = ig_devout }
+		owner = { set_variable = { name = $VAR$ value = flag:devout } }
+	}
+	if = {
+		limit = { is_interest_group_type = ig_industrialists }
+		owner = { set_variable = { name = $VAR$ value = flag:industrialists } }
+	}
+	if = {
+		limit = { is_interest_group_type = ig_intelligentsia }
+		owner = { set_variable = { name = $VAR$ value = flag:intelligentsia } }
+	}
+	if = {
+		limit = { is_interest_group_type = ig_landowners }
+		owner = { set_variable = { name = $VAR$ value = flag:landowners } }
+	}
+	if = {
+		limit = { is_interest_group_type = ig_petty_bourgeoisie }
+		owner = { set_variable = { name = $VAR$ value = flag:petty_bourgeoisie } }
+	}
+	if = {
+		limit = { is_interest_group_type = ig_rural_folk }
+		owner = { set_variable = { name = $VAR$ value = flag:rural_folk } }
+	}
+	if = {
+		limit = { is_interest_group_type = ig_trade_unions }
+		owner = { set_variable = { name = $VAR$ value = flag:trade_unions } }
+	}
+}
+
+# State scope. The faith a Grand Shrine honours.
+gm_state_record_faith = {
+	clear_saved_scope = gm_tmp_faith_scope
+	owner = {
+		religion = { save_scope_as = gm_tmp_faith_scope }
+	}
+	set_variable = { name = gm_faith value = scope:gm_tmp_faith_scope }
+}
+
+# ---- Skins (§1.1) ------------------------------------------------------------
+# State scope, with the dedication already active. The most specific skin that
+# fits, without asking: the state religion's for a Shrine, the first heritage in
+# the revival partition's order for a heritage-skinned dedication, else
+# generic. Used for old saves, panel picks and as the ceremony follow-up's
+# default (monument_events.11). Skins read only the owner's own religion and
+# primary cultures.
+gm_state_set_default_skin = {
+	set_variable = { name = gm_skin value = flag:generic }
+	if = {
+		limit = { gm_state_kind_faith = yes }
+		gm_state_default_faith_skin = yes
+		# The mod's own religions have no faith skin: a heritage skin instead.
+		if = {
+			limit = { var:gm_skin = flag:generic }
+			gm_state_default_heritage_skin = yes
+		}
+	}
+	else_if = {
+		limit = { gm_state_takes_heritage_skin = yes }
+		gm_state_default_heritage_skin = yes
+	}
+}
+
+# State scope. The state religion's faith skin, if it has one; else no change.
+# Called directly by the ceremony (Task 7), which knows the dedication before
+# the newly activated production method can be read back.
+gm_state_default_faith_skin = {
+	gm_state_try_faith_skin = { R = catholic }
+	gm_state_try_faith_skin = { R = protestant }
+	gm_state_try_faith_skin = { R = orthodox }
+	gm_state_try_faith_skin = { R = oriental_orthodox }
+	gm_state_try_faith_skin = { R = sunni }
+	gm_state_try_faith_skin = { R = shiite }
+	gm_state_try_faith_skin = { R = ibadi }
+	gm_state_try_faith_skin = { R = jewish }
+	gm_state_try_faith_skin = { R = mahayana }
+	gm_state_try_faith_skin = { R = gelugpa }
+	gm_state_try_faith_skin = { R = theravada }
+	gm_state_try_faith_skin = { R = confucian }
+	gm_state_try_faith_skin = { R = hindu }
+	gm_state_try_faith_skin = { R = shinto }
+	gm_state_try_faith_skin = { R = sikh }
+	gm_state_try_faith_skin = { R = animist }
+}
+
+# State scope. The first heritage skin in the revival partition's order that
+# the owner can claim; else no change. Reverse order: a later match overrides,
+# so the partition's first wins.
+gm_state_default_heritage_skin = {
+	gm_state_try_heritage_skin = { H = aramaic }
+	gm_state_try_heritage_skin = { H = prussian }
+	gm_state_try_heritage_skin = { H = mayan }
+	gm_state_try_heritage_skin = { H = gothic }
+	gm_state_try_heritage_skin = { H = norse }
+	gm_state_try_heritage_skin = { H = nahuatl }
+	gm_state_try_heritage_as_faith_skin = { H = coptic R = oriental_orthodox }
+	gm_state_try_heritage_skin = { H = irish }
+	gm_state_try_heritage_skin = { H = greek }
+	gm_state_try_heritage_skin = { H = chinese }
+	gm_state_try_heritage_skin = { H = arabic }
+	gm_state_try_heritage_skin = { H = avestan }
+	gm_state_try_heritage_as_faith_skin = { H = pali R = theravada }
+	gm_state_try_heritage_skin = { H = slavonic }
+	gm_state_try_heritage_skin = { H = geez }
+	gm_state_try_heritage_skin = { H = sanskrit }
+	gm_state_try_heritage_skin = { H = hebrew }
+	gm_state_try_heritage_skin = { H = latin }
+}
+
+gm_state_try_faith_skin = {
+	if = {
+		limit = {
+			owner = { religion = rel:$R$ }
+		}
+		set_variable = { name = gm_skin value = flag:faith_$R$ }
+	}
+}
+
+gm_state_try_heritage_skin = {
+	if = {
+		limit = {
+			owner = { te_heritage_$H$ = yes }
+		}
+		set_variable = { name = gm_skin value = flag:heritage_$H$ }
+	}
+}
+
+# Pali and Coptic are keyed on the state religion; their skin is that faith's.
+gm_state_try_heritage_as_faith_skin = {
+	if = {
+		limit = {
+			owner = { te_heritage_$H$ = yes }
+		}
+		set_variable = { name = gm_skin value = flag:faith_$R$ }
+	}
+}
+
+# ---- Forgetting a monument ---------------------------------------------------
+# State scope. Every local modifier, whichever dedication added it.
+gm_remove_local_modifiers = {
+	remove_modifier = gm_local_tourism
+	remove_modifier = gm_local_crown
+	remove_modifier = gm_local_republic
+	remove_modifier = gm_local_revolution
+	remove_modifier = gm_local_leader
+	remove_modifier = gm_local_religious
+	remove_modifier = gm_local_civic
+	remove_modifier = gm_local_war_memorial
+	remove_modifier = gm_local_artistic
+	remove_modifier = gm_local_naturalist
+	remove_modifier = gm_local_scientific
+	remove_modifier = gm_local_industrial
+	remove_modifier = gm_local_athletic
+}
+
+gm_remove_state_var = {
+	if = {
+		limit = { has_variable = $VAR$ }
+		remove_variable = $VAR$
+	}
+}
+
+# State scope. Forget a monument that is gone (demolished, torn down, or about
+# to be rebuilt). gm_local_steps backs the local modifiers' multiplier: zeroed,
+# never removed.
+gm_clear_state = {
+	gm_remove_local_modifiers = yes
+	gm_remove_state_var = { VAR = gm_seen }
+	gm_remove_state_var = { VAR = gm_raised_by }
+	gm_remove_state_var = { VAR = gm_honoree }
+	gm_remove_state_var = { VAR = gm_honoree_ig }
+	gm_remove_state_var = { VAR = gm_faith }
+	gm_remove_state_var = { VAR = gm_skin }
+	gm_remove_state_var = { VAR = gm_skin_axis }
+	gm_remove_state_var = { VAR = gm_contested }
+	gm_remove_state_var = { VAR = gm_heritage }
+	gm_remove_state_var = { VAR = gm_base_ig }
+	gm_remove_state_var = { VAR = gm_supporter_ig }
+	gm_remove_state_var = { VAR = gm_new_contest }
+	gm_remove_state_var = { VAR = gm_grandeur }
+	gm_remove_state_var = { VAR = gm_ceremony_pending }
+	set_variable = { name = gm_local_steps value = 0 }
+}
+
+# ---- The local pulse (§2.5): on_monthly_pulse_state, ROOT = the state --------
+# Tourism Industry throughput for every monument; the dedication's own local
+# effect for every dedicated one (fits, heritage or contested, §2.3). Both on
+# the curve over this monument's own level.
+gm_state_monthly = {
+	gm_remove_local_modifiers = yes
+	if = {
+		limit = { has_building = building_grand_monument }
+		# Last known level, read if the building disappears before the next pulse.
+		set_variable = { name = gm_grandeur value = gm_state_grandeur }
+		set_variable = { name = gm_curve_in value = gm_state_grandeur }
+		set_variable = { name = gm_local_steps value = gm_curve_steps_f5 }
+		add_modifier = { name = gm_local_tourism multiplier = var:gm_local_steps }
+		if = {
+			limit = { gm_state_is_dedicated = yes }
+			gm_add_local = { KEY = crown }
+			gm_add_local = { KEY = republic }
+			gm_add_local = { KEY = revolution }
+			gm_add_local = { KEY = leader }
+			gm_add_local = { KEY = religious }
+			gm_add_local = { KEY = civic }
+			gm_add_local = { KEY = war_memorial }
+			gm_add_local = { KEY = artistic }
+			gm_add_local = { KEY = naturalist }
+			gm_add_local = { KEY = scientific }
+			gm_add_local = { KEY = industrial }
+			gm_add_local = { KEY = athletic }
+		}
+	}
+	else = {
+		if = {
+			limit = { has_variable = gm_seen }
+			gm_clear_state = yes
+		}
+		if = {
+			limit = { has_variable = gm_local_steps }
+			set_variable = { name = gm_local_steps value = 0 }
+		}
+	}
+}
+
+gm_add_local = {
+	if = {
+		limit = {
+			gm_state_has_pm = { PM = pm_monument_$KEY$ }
+		}
+		add_modifier = { name = gm_local_$KEY$ multiplier = var:gm_local_steps }
+	}
+}
