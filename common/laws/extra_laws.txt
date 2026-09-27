@@ -1096,6 +1096,12 @@ law_open_government = {
 # whole-economy +10% (law_traditionalism, law_extraction_economy), on three
 # groups only. Its strongest point is bg_mining, which holds the gold mines.
 #
+# Suppression attraction -0.10 is Shinsengumi's value. Vanilla multiplies a
+# suppressed movement's attraction by (-0.5 + this factor), and every
+# free-speech law carries one (Right of Assembly -0.3, Censorship -0.4,
+# Outlawed Dissent -0.5), so -0.10 adds half a free-speech step: Outlawed
+# Dissent's -1.0 x base becomes -1.1 x base.
+#
 # Repression feeds the opposition, as a cost: there is no activism cut
 # (political_movement_radicalism_add), which would be a second suppression gain
 # and would halve the stance feed below. The civil-rights movement support
@@ -1125,7 +1131,7 @@ law_penal_labor_camps = {
 	modifier = {
 		country_authority_add = 100
 		country_legitimacy_base_add = -10
-		country_suppression_attraction_factor = -0.25
+		country_suppression_attraction_factor = -0.1
 		state_pop_support_movement_civil_rights_mult = 0.1
 		building_group_bg_mining_throughput_add = 0.05
 		building_group_bg_logging_throughput_add = 0.05
