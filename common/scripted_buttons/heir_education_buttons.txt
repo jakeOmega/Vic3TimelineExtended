@@ -1,8 +1,8 @@
 ﻿### Heir Education - Toggle Buttons
-### 7 focus categories with enable/disable toggle pairs
+### 8 focuses on three tracks, each with an enable/disable toggle pair
 ### Trait Focus (admin/diplo/military) - mutually exclusive
 ### Ideology Focus (progressive/conservative) - mutually exclusive
-### IG Focus (establishment/reformist) - mutually exclusive
+### IG Focus (radical/moderate/regressive) - mutually exclusive
 
 # ─────────── ADMINISTRATIVE FOCUS ───────────
 

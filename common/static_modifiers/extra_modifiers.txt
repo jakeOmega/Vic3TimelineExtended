@@ -2518,8 +2518,8 @@ cr_cooptation_modifier = {
 	country_legitimacy_ideological_incoherence_mult = 0.05
 }
 
-# Marker added by the JE on_monthly_pulse once cr_cooptation_months > 12 — the
-# civil_rights_support_bar checks for its presence to expire the +0.6 push.
+# Marker added by the JE on_monthly_pulse once cr_cooptation_months >= 12 — the
+# civil_rights_support_bar checks for its presence to expire the +0.15 push.
 cr_cooptation_expired = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 }

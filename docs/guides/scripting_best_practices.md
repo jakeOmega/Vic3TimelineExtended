@@ -1128,6 +1128,10 @@ Symptom: the action works when the player takes it (so `possible` passes and the
 
 Fix pattern: drive the AI path from a pulse on-action (e.g. `on_yearly_pulse_country`) gated `is_ai = yes`, reusing the *same* eligibility triggers as the action's `possible` block, and perform the effect (`annex`, etc.) directly. The player keeps the diplomatic action; the `is_ai` split is forced by the engine limitation, not a design choice. Notify third parties **before** the annex (saved scopes propagate to events fired on observers; the annexed country's name still resolves for the tick) — the engine's `should_notify_third_parties` only fires for the actual player action, not for an on-action `annex`. See `te_ai_decentralized_absorption_effect` + `irredentism.9`.
 
+## Write `NOR` or `NAND`, Never a Multi-Child `NOT`
+
+What `NOT = { A B }` means is untested. The evidence leans to NAND, "not (A and B)": the engine doc says only "negates content of trigger", and seven of vanilla's eight "# Monarchs cannot be republicans" clauses in `01_character_ideologies.txt` write `NAND`, while Radical's writes a multi-child `NOT` under the same comment, so vanilla's authors use the two interchangeably (Radical's pre-ACW "Invalid for pre-ACW USA whilst Jacksonian Democrats are relevant" block reads the same way). Against it, `00_devout.txt` lists the two `lawgroup_church_and_state` laws `law_total_separation` and `law_state_atheism` in one `NOT`, which is vacuous as NAND. So write `NOR = { }` for "none of these" and `NAND = { }` for "not all of these"; both mean the same under either reading. The exception is a verbatim, test-pinned copy of a vanilla trigger, such as the Radical copy in `heir_education_triggers.txt`: it must say what its source says. To settle the question, fire a debug event whose trigger or `if` limit is `NOT = { always = yes always = no }`: it passes if `NOT` is NAND and fails if it is NOR.
+
 ## Building Group Trigger Name
 
 - The trigger to check a building's group is `is_building_group = bg_X`, NOT `building_group = bg_X`.
