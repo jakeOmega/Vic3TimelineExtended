@@ -2175,7 +2175,9 @@ society_technology_events_on_action = {
 			5 = {
 				trigger = {
 					has_technology_researched = LGBTQ_rights_movement
-					OR = { has_law = law_type:law_basic_protections has_law = law_type:law_comprehensive_rights has_law = law_type:law_full_equality_and_protection }
+					# Not under Full Equality and Protection: the event's own trigger
+					# excludes it (marriage equality is already law there).
+					OR = { has_law = law_type:law_basic_protections has_law = law_type:law_comprehensive_rights }
 				}
 				trigger_event = { id = society_technology_events.8 }
 			}

@@ -42,7 +42,10 @@
 
 # ============================================================================
 # Secularization Campaign
-# Removes all permanent religious revival modifiers.
+# Removes the seven modifiers granted by embracing a religious revival (the
+# first option of each religious_revival_events event; each lasts 20 years).
+# The other options' modifiers and social_tensions_events.13's
+# revival_embraced_modifier are left alone.
 # Available after researching decline_of_organized_religion.
 # ============================================================================
 secularization_campaign = {
