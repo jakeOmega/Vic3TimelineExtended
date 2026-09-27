@@ -12981,6 +12981,7 @@ REPLACE:pm_early_trains = {
 
 REPLACE:pm_steam_trains = {
 	texture = "gfx/interface/icons/production_method_icons/trains_steam.dds"
+	replacement_if_valid = pm_steam_trains_principle_transport_3
 
 	unlocking_technologies = {
 		steel_railway_cars
@@ -13018,6 +13019,7 @@ REPLACE:pm_steam_trains = {
 
 REPLACE:pm_electric_trains = {
 	texture = "gfx/interface/icons/production_method_icons/trains_electric.dds"
+	replacement_if_valid = pm_electric_trains_principle_transport_3
 
 	unlocking_technologies = {
 		electric_railway
@@ -13057,6 +13059,7 @@ REPLACE:pm_electric_trains = {
 
 REPLACE:pm_diesel_trains = {
 	texture = "gfx/interface/icons/production_method_icons/trains_diesel.dds"
+	replacement_if_valid = pm_diesel_trains_principle_transport_3
 
 	unlocking_technologies = {
 		compression_ignition
@@ -13089,6 +13092,145 @@ REPLACE:pm_diesel_trains = {
 		workforce_scaled = {
 			state_infrastructure_add = 40
 			state_pollution_generation_add = 15
+		}
+	}
+}
+
+# Transport principle tier 3 variants. Vanilla's copies still output
+# `transportation`; these carry the mod's `merchant_marine` output like the
+# three base methods above, which switch to them through
+# `replacement_if_valid`. Each input, the output, infrastructure and pollution
+# move by vanilla's own principle-over-base ratio for that method, rounded
+# (steam x1.2; electric: engines x1.2, electricity x1.25, output x1.29,
+# infrastructure +10; diesel: engines x1.2, oil x1.33, output x1.25,
+# infrastructure +15, pollution +5); employment is the base method's.
+# Tier 3 only: principle_transport_4/5 give railways
+# building_railway_throughput_add instead.
+REPLACE:pm_steam_trains_principle_transport_3 = {
+	texture = "gfx/interface/icons/production_method_icons/trains_steam.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_principles = {
+		principle_transport_3
+	}
+
+	unlocking_technologies = {
+		steel_railway_cars
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 6                          # Price:   60, Total cost:   360.0 (66.67%)
+			goods_input_coal_add = 6                             # Price:   30, Total cost:   180.0 (33.33%)
+			# Output goods
+			goods_output_merchant_marine_add = 18                # Price:   50, Total cost:   900.0 (100.00%)
+			# Total input cost: 540.0
+			# Total output cost: 900.0
+			# Profit: 360.0
+			# Profit margin: 66.67%
+			# Zero profit price multiplier: 0.60
+			# Employment: 1000
+			# Wage breakeven: 0.36
+		}
+		level_scaled = {
+			building_employment_laborers_add = 500
+			building_employment_machinists_add = 300
+			building_employment_clerks_add = 200
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_infrastructure_add = 30
+			state_pollution_generation_add = 25
+		}
+	}
+}
+
+REPLACE:pm_electric_trains_principle_transport_3 = {
+	texture = "gfx/interface/icons/production_method_icons/trains_electric.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_principles = {
+		principle_transport_3
+	}
+
+	unlocking_technologies = {
+		electric_railway
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 6                          # Price:   60, Total cost:   360.0 (48.00%)
+			goods_input_electricity_add = 13                     # Price:   30, Total cost:   390.0 (52.00%)
+			# Output goods
+			goods_output_merchant_marine_add = 32                # Price:   50, Total cost:  1600.0 (100.00%)
+			# Total input cost: 750.0
+			# Total output cost: 1600.0
+			# Profit: 850.0
+			# Profit margin: 113.33%
+			# Zero profit price multiplier: 0.47
+			# Employment: 1000
+			# Wage breakeven: 0.85
+		}
+		level_scaled = {
+			building_employment_laborers_add = 400
+			building_employment_machinists_add = 350
+			building_employment_engineers_add = 50
+			building_employment_clerks_add = 200
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_infrastructure_add = 40
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+REPLACE:pm_diesel_trains_principle_transport_3 = {
+	texture = "gfx/interface/icons/production_method_icons/trains_diesel.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_principles = {
+		principle_transport_3
+	}
+
+	unlocking_technologies = {
+		compression_ignition
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 6                          # Price:   60, Total cost:   360.0 (45.00%)
+			goods_input_oil_add = 11                             # Price:   40, Total cost:   440.0 (55.00%)
+			# Output goods
+			goods_output_merchant_marine_add = 38                # Price:   50, Total cost:  1900.0 (100.00%)
+			# Total input cost: 800.0
+			# Total output cost: 1900.0
+			# Profit: 1100.0
+			# Profit margin: 137.50%
+			# Zero profit price multiplier: 0.42
+			# Employment: 1000
+			# Wage breakeven: 1.10
+		}
+		level_scaled = {
+			building_employment_laborers_add = 400
+			building_employment_machinists_add = 350
+			building_employment_engineers_add = 50
+			building_employment_clerks_add = 200
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_infrastructure_add = 55
+			state_pollution_generation_add = 20
 		}
 	}
 }
