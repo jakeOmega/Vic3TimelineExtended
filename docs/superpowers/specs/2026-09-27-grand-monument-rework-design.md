@@ -54,6 +54,10 @@ Baseline: `main` at `0de90891` (#504 merged).
 | Where modifiers live | **National effects on the JE; local effects on the state** (the engine gives no other home for a state-level key, see Engine facts) |
 | Game rule | `grand_monuments_rule`: **Enabled / Disabled.** Disabled makes the building unbuildable and stops everything else |
 | JE activation | **Only while the country owns a Grand Monument** |
+| Shrine's local effect | **Conversion kept** (flagged at review) |
+| Identity skins | **Faith skins** (per state religion) and **heritage skins** (the language-reform revival partition); the player **chooses** when several fit; a revived language is **inscribed** on the monument; **named landmarks** (§1.1) |
+| Flavour events | **Every dedication gets one** (the eight reworked, four new). **All options positive**; the only cost an option may carry is money |
+| Phasing | **Phase 1:** everything in this spec except named landmarks and new art. **Phase 2:** named landmarks and new art per skin and landmark |
 
 ## Engine facts this rests on
 
@@ -134,15 +138,9 @@ opponents on purpose: they are the safe choice, the regime ones are divisive, an
 legitimacy.
 
 **The Shrine's local effect is conversion** (today's `state_conversion_mult`), which acts on the state's religious
-minorities. It is kept visible here for review; a swap (e.g. to loyalists or to Devout-only effects) is a one-line
-change in the registry.
+minorities. Flagged at review; the owner kept it.
 
-**Identity skins.** The builder's own faith and heritage change wording and art, never effects:
-- option wording partitioned by trigger, as the civic dedication's three skins already are
-  (`monument_triggers.txt`), e.g. the Shrine as a cathedral, mosque, temple or the Temple for Judaism, and To the Crown
-  as a Hall of Dynasties for a Chinese monarchy;
-- art by religion, as `monument_events.4` already does. Every reused picture is viewed first (contact sheet), per the
-  event-art rule.
+**Identity skins** (the builder's own faith and heritage, in name, wording and art) are §1.1.
 
 **Conquest.** A regime or ruler monument in a conquered state honours a foreign order: it becomes contested for the new
 owner (§4). **A conquered shrine is never contested**: it becomes heritage at once, with no Tear Down or Rededicate
@@ -150,6 +148,56 @@ offered, because pulling down a conquered people's place of worship is the targe
 
 **A building-panel pick that fails its gate** (a republic choosing To the Crown) is a monument that does not fit. The
 contested rule handles it; nothing is special-cased.
+
+### 1.1 Identity skins
+
+A **skin** is the form a dedication takes for the country that raises it: a Catholic basilica or a Shinto grand shrine,
+a Roman triumphal column or a Hall of Dynasties. It changes **name, wording and art, never effects**. It is recorded on
+the state at dedication (`mon_skin`, a flag) and shown wherever the monument is named: the JE row ("The Hall of
+Dynasties — To the Crown"), the ceremony, the flavour events (§6.1) and the contested notifications. The building
+panel keeps the dedication's generic PM name (PM names are static loc). Skins follow only the **builder's own**
+identity: its state religion and its primary cultures.
+
+**Faith skins** (Grand Shrine; War Memorial where the faith has its own form of memorial) are keyed to the **specific
+state religion**, one each for the sixteen vanilla faiths: Catholic basilica, Protestant cathedral, Orthodox cathedral,
+Oriental Orthodox church, Sunni great mosque, Shia shrine, Ibadi mosque, the Great Temple (Judaism), Mahayana pagoda,
+Gelugpa monastery, Theravada stupa, Confucian temple, Hindu temple complex, Shinto grand shrine, Sikh gurdwara, sacred
+grove (animist). The mod's own religions fall back to a heritage skin, then to the generic one.
+
+**Heritage skins** (To the Crown, the Republic, the Revolution, the Leader, the Nation; the War Memorial) are keyed to a
+**primary culture's classical heritage**, with **the same language partition language reform uses for revival**
+(`extra_law_events.25`, eighteen groups): Romance (Latin) → a Roman forum and triumphal column; Hellenic → a pantheon;
+Semitic or a Jewish state (Hebrew) → a temple court; Indo-Aryan or a Hindu state (Sanskrit) → a Sanskrit-inscribed
+pillar in the Ashokan manner; Amharic/Tigrinya (Ge'ez) → an Aksumite stele; Slavic → a memorial church; Iranic → a
+Persepolis gate; Arabic → a caliphal hall; Sinitic/Japanese/Korean → a Hall of Dynasties; Gaelic → a round tower and
+high cross; Nahuan and Mayan → a stepped pyramid; Scandinavian → a rune-stone hall; Germanic (Gothic) → a
+Walhalla-style hall of fame; Baltic → a hill-fort shrine; Aramaic → a rock-cut monument. The partition keys Pali on a
+Theravada state and Coptic on an Oriental Orthodox one; those two reuse the matching faith skin. Plus a generic
+neoclassical skin. The partition moves out of `extra_law_events.25`'s inline `triggered_desc` blocks into eighteen
+shared scripted triggers (`te_heritage_<language>`, country scope, the same culture-or-religion tests), which the
+language reform event and the monuments both call, so the two cannot drift apart.
+
+**Language revival.** When the country holds the revival amendment matching a heritage skin
+(`amendment_langreform_revived_<language>`), that monument is **inscribed in the revived language**: one extra line in
+the ceremony, the follow-up event and the JE row's tooltip ("its dedication carved in revived Hebrew"). No effect.
+
+**Choosing the skin.** The ceremony picks the dedication only, so its option list stays the size it is. When more than
+one skin fits the chosen dedication (each primary culture's heritage skin, the faith skin where relevant, any
+qualifying named landmark, and the generic skin always), a follow-up state event (`monument_events.11`) offers them;
+with one fitting skin it is set without asking. A dual monarchy with two heritages genuinely chooses. Rededication
+(§4.3) runs the ceremony and so the choice again; a heritage or contested monument keeps its skin, so a conquered
+Walhalla stays a Walhalla.
+
+**Named landmarks (phase 2).** Hand-written special cases, each a dedication + a skin + a state (sometimes "the
+capital"), with its own name and art, offered as a skin in the follow-up event. First candidates: a Hall of Dynasties
+in a Chinese monarchy's capital; an Altar of the Fatherland in Rome; a Walhalla in Bavaria; a Shahyad gate in Tehran; a
+new Stele of Aksum in Tigray; a Monument to the Revolution in Mexico City. **A landmark never sits on, or names, a site
+another faith holds**: the Great Temple is a Jewish state's faith skin anywhere, and no Third Temple on the Temple Mount
+is written. Phase 1 builds the mechanism and an empty `LANDMARKS` table in the registry, so each landmark is data.
+
+**Art.** Phase 1 reuses existing pictures and videos per skin, each viewed on a contact sheet first
+(`contact_sheet.py`, the event-art rule); new art per skin and per landmark is phase 2, through the FLUX pipeline
+(#504).
 
 ## 2. Grandeur and the national totals
 
@@ -249,11 +297,12 @@ ceremony tooltips and the JE carry the effects.
   TOOLTIP MIRROR header and its hand-kept numbers go). **Undedicated** stays an option; the ceremony asks again at the
   next level.
 - **Records:** choosing To the Leader sets `mon_honoree` = the ruler on the state; choosing the Shrine sets
-  `mon_faith` = the owner's religion.
+  `mon_faith` = the owner's religion. The skin follow-up (§1.1) sets `mon_skin`.
 - **The lock** stays the self-reference ratchet, so the panel shows one row.
 - **Records on first sight.** A dedicated Leader or Shrine monument the pulse finds without its record, and without
-  the state flag `mon_seen`, gets its record from the current ruler or faith and the flag. This covers panel picks
-  and pre-rework saves. After that, **a missing record reads as "does not fit"**, never as "fits".
+  the state flag `mon_seen`, gets its record from the current ruler or faith and the flag; any dedicated monument
+  without `mon_skin` gets the most specific fitting skin, without asking. This covers panel picks and pre-rework
+  saves. After that, **a missing record reads as "does not fit"**, never as "fits".
 - **Rededication rebuilds** (§4.3): `remove_building`, then the level ladder at the new level, then the ceremony fired
   directly, since a script-created building may not fire `on_building_built`. The shared ladder
   (`te_construction_market_build_specified_level`, also called by the construction market and tactical-strike
@@ -356,8 +405,35 @@ Layout, top to bottom:
    Contested). A contested row carries the three buttons, which pass the state through a scripted-GUI datacontext on the
    row (the covert-operations rows' pattern, `gui_modding_guide.md`).
 
-The eight flavour events (`.3`–`.10`) keep firing as now, keyed to dedications and `level >= 3`, and are unchanged
-apart from the renamed civic event.
+### 6.1 Flavour events
+
+Every dedication gets one recurring event: the eight existing ones (`.3`–`.10`) keep their text and gain options, and
+four new ones cover Crown, Republic, Revolution and Leader (`.12`–`.15`). Each is a **choice between two benefits**,
+usually for two constituencies. **Every option is positive; the only cost an option may carry is money**
+(`sv_treasury_event_*`). Effects are small and timed (2–5 years; IG approval about +2). Each event saves the state of the
+country's tallest monument of that dedication as `scope:monument_state`, so the text names it (in its skin, §1.1) and
+local effects land there.
+
+| Event | Option A | Option B |
+|---|---|---|
+| .3 A Wreath at the Column (Nation) | a state occasion: money for prestige, Petty Bourgeoisie approve | let the day keep itself: loyalists in the state |
+| .4 Pilgrims at the Shrine | build pilgrim hostels: money for Tourism Industry throughput in the state, Devout approve | let the clergy manage it: Devout approve more |
+| .5 The Names Are Read (Memorial) | a national day of remembrance: Armed Forces approve, war support | keep it quiet: fewer radicals in the state |
+| .6 A Season of Some Note (Opera) | defend the artists: Intelligentsia approve | close the scandalous works: Devout approve |
+| .7 The Gardens in Flower | open them free: money for standard of living in the state | charge admission: money in |
+| .8 A Night at the Glass (Observatory) | public lectures: literacy in the state | keep the telescopes for research: innovation |
+| .9 The Halls Are Full (Exhibition) | domestic manufacturers only: Industrialists approve | invite foreign exhibitors: influence and prestige |
+| .10 The Crowd Roars (Stadium) | subsidise tickets: money for lower turmoil in the state, Trade Unions approve | let the clubs profit: money in |
+| .12 Jubilee at the Monument (Crown) | a lavish jubilee: money for legitimacy, Landowners approve | a simple service: the ruler's popularity |
+| .13 Constitution Day (Republic) | a citizens' assembly: Intelligentsia approve | a military parade: Armed Forces approve |
+| .14 Anniversary of the Revolution | a mass rally: money for authority, fewer radicals | a quiet commemoration: Trade Unions approve |
+| .15 The Leader's Birthday | a grand celebration: money for legitimacy | the Leader declines the honour: the ruler's popularity |
+
+The ruler's popularity goes on the ruler (`scope:ruler` / `ruler = { add_modifier }`), since a country-wide
+`character_popularity_add` works relatively and cancels out. Firing stays as today: `monument_events_on_action` on the
+monthly country pulse, weight 3 per dedication against 800 for nothing, gated on a monument of that dedication with
+`level >= 3` that fits (a contested monument holds no anniversaries), and a long cooldown each. The `event_magnitude`
+and `empty_effect` audits check the sizes; no option is effect-free.
 
 ## 7. Game rule and AI
 
@@ -378,8 +454,12 @@ apart from the renamed civic event.
   the Nation**, so old civic monuments stay valid with no migration.
 - **Old saves:** old Shrines get `mon_faith` on first sight (§3). The unscaled national effects vanish with the PM
   blocks, which removes the exploit from existing saves too.
-- **Ceremony:** the three civic skins become To the Crown / To the Republic / To the Nation options; To the Revolution,
-  To the Leader and the identity skins are new options.
+- **Ceremony:** the three civic skins become To the Crown / To the Republic / To the Nation options; To the Revolution
+  and To the Leader are new options; the skin choice is the new follow-up `monument_events.11` (§1.1). Old
+  monuments get `mon_skin` on first sight (§3), set to the most specific fitting skin without asking.
+- **Flavour events:** `.3`–`.10` gain their options (§6.1); `.12`–`.15` are new; the on-action's gates add "fits".
+- **Language reform:** `extra_law_events.25`'s inline partition is replaced by calls to the shared
+  `te_heritage_<language>` triggers, with no change to which revival it offers (a test pins the eighteen).
 - **Loc:** PM names and descriptions, ceremony options and tooltips, JE, buttons, events, modifiers and the concept
   `concept_grandeur`; run `organize_loc.py` (new `mon_` prefix needs a `startswith` rule if any key family has four
   tokens).
@@ -405,6 +485,7 @@ apart from the renamed civic event.
 | Vanity: radicals in the state | — | 5% of its pops per level | — |
 | Vanity: legitimacy | — | −3 per unit of `mon_vanity_ledger` | decays ×0.92/month |
 | Construction per level | unchanged | 10,000 | — |
+| Flavour events (§6.1) | — | IG approval +2 (+3 for the "more" option in `.4`), 3–5 years; prestige, legitimacy and authority about a tenth of the curve's first step; money `sv_treasury_event_small` | the `event_magnitude` audit |
 
 The first-step sizes and per-step values are first estimates, checked in play with the debug event.
 
@@ -414,8 +495,12 @@ The first-step sizes and per-step values are first estimates, checked in play wi
   ratchet), kind, fit and commission triggers, IG alignment, local and national modifiers (registered types where
   needed), ceremony option and skins, JE text, AI weight and loc. Plus: no dedication PM carries `country_modifiers`,
   `state_modifiers` or a goods output; the §2.3 table, as the status conditions in each total's script value; the
-curve's eight terms. It is the add-a-dedication checklist,
-  like `test_resettlement_programme_registry.py`.
+  curve's eight terms. A `SKINS` table pins each skin's axis, trigger, dedications, loc and art (and that faith and
+  heritage triggers read only the owner's own religion and primary cultures); an empty `LANDMARKS` table is the phase-2
+  hook; an `EVENTS` table pins each dedication's flavour event, its two options and that none is effect-free or
+  carries a cost other than money. It is the add-a-dedication checklist, like `test_resettlement_programme_registry.py`.
+- **`te_heritage_<language>` triggers:** a test pins the eighteen and that `extra_law_events.25` calls them, so language
+  reform and the monuments share one partition.
 - **Debug:** `te_debug_monuments` in `events/te_debug_*` (set a monument's level, force a contest, force hard times,
   print totals) and `TE_MONUMENTS:` lines in `debug.log` for each month's totals and ledgers.
 - **CI:** the `--strict` audits (`event_image`, `silent_variable`, `event_context`, `modifier_multiplier_var`,
@@ -439,13 +524,22 @@ curve's eight terms. It is the add-a-dedication checklist,
   10. A Leader monument contests on the ruler's death; the strongest-opposition IG reads correctly.
   11. Vanity backlash lands only in hard times, with the warning line shown beforehand.
   12. The rule's Disabled setting: no building, no JE.
+  13. The skin follow-up appears only when two or more skins fit, and the chosen skin names the monument in the JE row,
+      the flavour events and the contested notification.
+  14. With a revival amendment, the inscription line shows; language reform still offers the same revivals.
+  15. Each flavour event's two options do what their tooltips say; the ruler's popularity lands on the ruler.
+
+## Phase 2
+
+- **Named landmarks** (§1.1): the first six, each a row in `LANDMARKS` with its loc and art.
+- **New art** per skin and per landmark, through the FLUX pipeline (#504), replacing phase 1's reused pictures.
 
 ## Out of scope (possible extensions)
 
 - A monument as a target for rivals: a covert defacement operation, prestige lost when its state is occupied.
 - Superlinear upkeep for colossal monuments.
 - A state-panel tile for the monument.
-- Recurring decision events tied to a monument (anniversaries that ask something), beyond the eight flavour events.
 - A dedication for a war won (a triumphal arch keyed to a recent victory).
-- Flavour events for the four new regime and ruler dedications (the existing eight stay).
+- Skins with effects of their own (skins stay name, wording and art).
+- Skins for the civic-progress dedications (an observatory in the Jantar Mantar manner).
 - Wonders (`bg_monuments`) and megaprojects joining the legacy mechanic.
