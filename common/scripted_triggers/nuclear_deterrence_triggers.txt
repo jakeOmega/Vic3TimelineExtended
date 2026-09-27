@@ -1661,6 +1661,15 @@ nd_can_set_readiness = {
 			var:nd_readiness_target > $R$
 		}
 	}
+	# Being dismantled (nuclear_taboo_effects.txt): in storage until the last
+	# warhead is gone. Lowering is never blocked.
+	custom_tooltip = {
+		text = nd_taboo_tt_readiness_dismantling
+		OR = {
+			nd_taboo_is_dismantling = no
+			var:nd_readiness_target > $R$
+		}
+	}
 }
 
 nd_can_set_authority = {

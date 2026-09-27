@@ -12,3 +12,96 @@ nd_taboo_is_former_nuclear_state = {
 	has_variable = nd_renounced
 	nd_is_armed = no
 }
+
+# ---- EXITS (spec §5) — country scope --------------------------------------------
+
+nd_taboo_is_dismantling = {
+	has_variable = nd_dismantle_months_left
+}
+
+# The programme builds nothing while dismantling, or at or above our ceiling
+# (nd_taboo_programme_held carries the programme-pause flag).
+nd_taboo_programme_should_be_held = {
+	OR = {
+		nd_taboo_is_dismantling = yes
+		AND = {
+			has_variable = nd_warhead_ceiling
+			nd_stockpile >= var:nd_warhead_ceiling
+		}
+	}
+}
+
+nd_taboo_can_dismantle = {
+	custom_tooltip = {
+		text = nd_tt_need_arsenal
+		nd_is_armed = yes
+	}
+	custom_tooltip = {
+		text = nd_taboo_tt_already_dismantling
+		nd_taboo_is_dismantling = no
+	}
+	custom_tooltip = {
+		text = nd_taboo_tt_need_peace
+		is_at_war = no
+	}
+	custom_tooltip = {
+		text = nd_taboo_tt_need_no_crisis
+		nd_in_crisis = no
+	}
+	custom_tooltip = {
+		text = nd_taboo_tt_need_no_civil_war
+		nd_in_civil_war = no
+	}
+}
+
+nd_taboo_can_lower_ceiling = {
+	custom_tooltip = {
+		text = nd_tt_need_arsenal
+		nd_is_armed = yes
+	}
+	custom_tooltip = {
+		text = nd_taboo_tt_dismantling_owns_it
+		nd_taboo_is_dismantling = no
+	}
+	custom_tooltip = {
+		text = nd_taboo_tt_ceiling_at_floor
+		nd_taboo_ceiling_now_value > 1
+	}
+}
+
+# Raising and lifting: there must be a ceiling to move.
+nd_taboo_can_raise_ceiling = {
+	custom_tooltip = {
+		text = nd_taboo_tt_no_ceiling
+		has_variable = nd_warhead_ceiling
+	}
+	custom_tooltip = {
+		text = nd_taboo_tt_dismantling_owns_it
+		nd_taboo_is_dismantling = no
+	}
+}
+
+nd_taboo_can_halt = {
+	custom_tooltip = {
+		text = nd_taboo_tt_not_dismantling
+		nd_taboo_is_dismantling = yes
+	}
+}
+
+# The AI takes the bomb up again when an armed country threatens it — at war
+# with it, or an antagonistic armed rival — in a world that no longer holds the
+# bomb in much horror (below 50).
+nd_taboo_ai_would_resume = {
+	nd_taboo_value < nd_taboo_line_established
+	save_temporary_scope_as = nd_tb_self
+	any_country = {
+		nd_believed_armed = yes
+		OR = {
+			has_war_with = scope:nd_tb_self
+			AND = {
+				has_diplomatic_pact = { who = scope:nd_tb_self type = rivalry }
+				has_attitude = { who = scope:nd_tb_self attitude = antagonistic }
+			}
+		}
+	}
+}

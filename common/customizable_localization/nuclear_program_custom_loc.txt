@@ -36,6 +36,7 @@
 # nuclear_program_refresh_state_effect. Nothing here re-derives it.
 #   0 authorised but unfunded   1 first device under development
 #   2 in series production      3 frozen by a pause treaty
+#   4 held at our arsenal ceiling 5 being dismantled
 # ============================================================================
 
 # The journal entry's whole status line. Called from
@@ -63,6 +64,20 @@ nuclear_program_status_line = {
 	text = {
 		trigger = { nuclear_program_can_run_programme = no }
 		localization_key = nuclear_program_status_ineligible
+	}
+	text = {
+		trigger = {
+			has_variable = nuclear_program_last_status
+			var:nuclear_program_last_status = 5
+		}
+		localization_key = nuclear_program_status_dismantling
+	}
+	text = {
+		trigger = {
+			has_variable = nuclear_program_last_status
+			var:nuclear_program_last_status = 4
+		}
+		localization_key = nuclear_program_status_held
 	}
 	text = {
 		trigger = {
@@ -173,6 +188,10 @@ nuclear_program_rate_note = {
 	type = country
 	random_valid = no
 
+	text = {
+		trigger = { has_modifier = nd_taboo_programme_held }
+		localization_key = nuclear_program_rate_note_held
+	}
 	text = {
 		# Live modifier, not status code 3, for the same reason the status line
 		# reads its blockers live: between a pause article entering force and the
@@ -300,5 +319,58 @@ nuclear_program_first_device = {
 	text = {
 		trigger = { always = yes }
 		localization_key = nuclear_program_first_device_none
+	}
+}
+
+# ---- The arsenal: a ceiling, or dismantling it (the nuclear taboo) -----------
+
+nd_taboo_arsenal_status = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { nd_taboo_is_dismantling = yes }
+		localization_key = nd_taboo_arsenal_dismantling
+	}
+	text = {
+		trigger = { has_variable = nd_warhead_ceiling }
+		localization_key = nd_taboo_arsenal_ceiling
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_taboo_arsenal_free
+	}
+}
+
+nd_taboo_ceiling_value = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = nd_warhead_ceiling }
+		localization_key = nd_taboo_ceiling_set
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_taboo_ceiling_none
+	}
+}
+
+# Where the burden would ease a domestic step (nd_disp_taboo_step_down_warheads).
+nd_taboo_burden_hint = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { nd_taboo_burden_value < nd_taboo_burden_step_mild }
+		localization_key = nuke_line_empty
+	}
+	text = {
+		trigger = { nd_disp_taboo_step_down_warheads >= 1 }
+		localization_key = nd_taboo_burden_hint_cut
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_taboo_burden_hint_only_dismantling
 	}
 }

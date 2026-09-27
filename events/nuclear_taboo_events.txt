@@ -1,0 +1,43 @@
+﻿# ============================================================================
+# THE NUCLEAR TABOO — events
+# ============================================================================
+# Design: docs/superpowers/specs/2026-09-26-nuclear-taboo-design.md.
+#   .1-.4   the taboo hardens through 30 / 50 / 70 / 90 (nd_taboo_band_check)
+#   .5-.8   it erodes through 90 / 70 / 50 / 30
+#   .20     the last warhead taken apart (nd_taboo_dismantle_complete)
+# The band events' options are country-local: none moves the world's score.
+# ============================================================================
+namespace = nuclear_taboo
+
+# The last warhead taken apart. Its option pays the renunciation's rewards, so
+# the tooltip shows them; the prestige multiplier is set here first.
+nuclear_taboo.20 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_treaty_signing.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = nuclear_taboo.20.t
+	desc = nuclear_taboo.20.d
+	flavor = nuclear_taboo.20.f
+
+	duration = 3
+
+	trigger = {
+		has_variable = nd_renounced_locked
+	}
+
+	immediate = {
+		set_variable = { name = nd_taboo_renounce_mult value = nd_taboo_renounce_mult_value }
+	}
+
+	option = {
+		name = nuclear_taboo.20.a
+		default_option = yes
+		nd_taboo_renunciation_rewards = yes
+	}
+}

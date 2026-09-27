@@ -301,3 +301,31 @@ te_open_map_mode_survey = {
 		value = 0
 	}
 }
+
+# ============================================================================
+# Resume the Nuclear Programme (the nuclear taboo, nuclear_taboo_effects.txt)
+# A country that dismantled its arsenal (nd_taboo_renounced) may take the bomb
+# up again. The breakout — a ledger entry against the taboo — is booked when
+# it is armed again, whatever the route (nd_taboo_country_monthly).
+# ============================================================================
+nd_taboo_resume_programme = {
+	is_shown = {
+		has_modifier = nd_taboo_renounced
+	}
+
+	possible = {
+		has_game_rule = nuclear_weapons_enabled
+	}
+
+	when_taken = {
+		nd_taboo_resume = yes
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { nd_taboo_ai_would_resume = yes }
+			add = 100
+		}
+	}
+}

@@ -5512,3 +5512,7 @@
  heir_education_event_cooldown_desc:0 "The [concept_heir]'s education continues without interruption for the time being."
  nuclear_event_prestige:0 "Nuclear Achievement"
  nuclear_event_prestige_desc:0 "This country's nuclear capabilities have affected its standing in the eyes of the world."
+ nuclear_taboo.20.t:0 "The Last Warhead"
+ nuclear_taboo.20.d:0 "The last of our warheads has been taken apart, under the eyes of foreign inspectors and our own cameras. #v [ROOT.GetCountry.MakeScope.Var('nd_dismantle_start_stock').GetValue|0]#! weapons — years of work and a fortune — are gone by our own decision. Few states have ever given up the bomb of their own accord, and the world's regard for it will follow how much the world has come to fear the weapon: the nuclear taboo stands at #v [GetGlobalVariable('nd_taboo').GetValue|0]#!."
+ nuclear_taboo.20.f:0 "\"We built it because we feared our neighbours. We have taken it apart because we came to fear it more.\""
+ nuclear_taboo.20.a:0 "A burden we are glad to set down"

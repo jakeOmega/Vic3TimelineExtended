@@ -15,7 +15,7 @@ import sys
 import unittest
 from pathlib import Path
 
-from test_nuclear_deterrence import block, loc_keys, loc_value, read, strip_comments
+from test_nuclear_deterrence import block, loc_keys, loc_value, read, sgui_ops, strip_comments
 
 ROOT = Path(__file__).resolve().parent
 TABOO_VALUES = ROOT / "common/script_values/nuclear_taboo_values.txt"
@@ -414,6 +414,117 @@ class TestPossession(unittest.TestCase):
         keys = loc_keys()
         self.assertIn("nd_taboo_possession_cost", keys)
         self.assertIn("nd_taboo_possession_cost_desc", keys)
+
+
+TABOO_EVENTS = ROOT / "events/nuclear_taboo_events.txt"
+NEW_FILES.append(TABOO_EVENTS)
+DETERRENCE_TRIGGERS = ROOT / "common/scripted_triggers/nuclear_deterrence_triggers.txt"
+DETERRENCE_SGUIS = ROOT / "common/scripted_guis/nuclear_deterrence_sguis.txt"
+CUSTODY_EFFECTS = ROOT / "common/scripted_effects/nuclear_custody_effects.txt"
+TREATY_ARTICLES = ROOT / "common/treaty_articles/extra_treaty_articles.txt"
+DECISIONS = ROOT / "common/decisions/extra_decisions.txt"
+
+ZEROING = "name = nuclear_weapon_stockpile value = 0"
+
+
+class TestExits(unittest.TestCase):
+    def setUp(self):
+        self.taboo = strip_comments(read(TABOO_EFFECTS))
+        self.triggers = strip_comments(read(TABOO_TRIGGERS))
+        self.custody = strip_comments(read(CUSTODY_EFFECTS))
+        self.det = strip_comments(read(DETERRENCE_EFFECTS))
+
+    def test_renunciation_is_idempotent_and_read_before_zeroing(self):
+        body = block(self.taboo, "nd_taboo_note_renunciation")
+        self.assertRegex(body, r"NOT = \{\s*AND = \{\s*has_variable = nd_renounced\s*nd_is_armed = no\s*\}\s*\}")
+        self.assertIn("$WARHEADS$ > 0", body)
+        self.assertIn("name = nd_renounced value = year", body)
+        call = "nd_taboo_note_renunciation = { WARHEADS = nd_stockpile }"
+        for name in ("nd_bp_accept", "nd_cw_dismantle_as"):
+            b = block(self.custody, name)
+            self.assertLess(b.index(call), b.index(ZEROING), name)
+        on_entry = block(block(strip_comments(read(TREATY_ARTICLES)), "nuclear_disarmament"), "on_entry_into_force")
+        self.assertLess(on_entry.index(call), on_entry.index(ZEROING))
+        complete = block(self.taboo, "nd_taboo_dismantle_complete")
+        self.assertLess(complete.index("nd_taboo_note_renunciation = { WARHEADS = var:nd_dismantle_start_stock }"),
+                        complete.index(ZEROING))
+
+    def test_every_ceiling_change_refreshes_the_hold(self):
+        for name in ("nd_taboo_ceiling_lower", "nd_taboo_ceiling_raise", "nd_taboo_ceiling_lift",
+                     "nd_taboo_dismantle_start", "nd_taboo_dismantle_halt"):
+            self.assertIn("nd_taboo_refresh_held = yes", block(self.taboo, name), name)
+        refresh = block(self.taboo, "nd_taboo_refresh_held")
+        self.assertIn("nd_taboo_programme_should_be_held = yes", refresh)
+        self.assertIn("remove_modifier = nd_taboo_programme_held", refresh)
+        monthly = block(self.taboo, "nd_taboo_country_monthly")
+        self.assertEqual(monthly.count("nd_taboo_refresh_held = yes"), 1)
+        self.assertNotIn("nd_taboo_refresh_held", block(self.taboo, "nd_taboo_dismantle_complete"))
+        self.assertNotIn("nd_taboo_refresh_possession", block(self.taboo, "nd_taboo_dismantle_complete"))
+
+    def test_exits_go_through_the_custody_ledger(self):
+        for name in ("nd_taboo_dismantle_step", "nd_taboo_retire_step", "nd_taboo_dismantle_complete"):
+            body = block(self.taboo, name)
+            self.assertIn("nd_ledger_refresh = yes", body, name)
+            self.assertNotIn("loose", body, name)
+
+    def test_panel_ops(self):
+        sguis = strip_comments(read(DETERRENCE_SGUIS))
+        for part in ("is_valid", "effect"):
+            ops = sgui_ops(sguis, "nd_posture_sgui", part)
+            for op in range(60, 65):
+                self.assertIn(op, ops, f"{part} lacks op {op}")
+
+    def test_readiness_stays_in_storage_while_dismantling(self):
+        gate = block(strip_comments(read(DETERRENCE_TRIGGERS)), "nd_can_set_readiness")
+        self.assertRegex(gate, r"OR = \{\s*nd_taboo_is_dismantling = no\s*var:nd_readiness_target > \$R\$\s*\}")
+        self.assertIn("nd_taboo_is_dismantling = yes", block(self.det, "nd_weekly_update"))
+
+    def test_renounced_state_is_rebuilt_from_its_variable(self):
+        monthly = block(self.taboo, "nd_taboo_country_monthly")
+        self.assertIn("has_variable = nd_renounced_locked", monthly)
+        self.assertIn("add_modifier = { name = nd_taboo_renounced }", monthly)
+        mods = strip_comments(read(TABOO_MODIFIERS))
+        self.assertIn("country_nuclear_disarmament_bool = yes", block(mods, "nd_taboo_renounced"))
+        self.assertIn("country_nuclear_program_pause_bool = yes", block(mods, "nd_taboo_programme_held"))
+
+    def test_breakout_is_booked_once(self):
+        monthly = block(self.taboo, "nd_taboo_country_monthly")
+        self.assertIn("POINTS = nd_taboo_ledger_breakout", monthly)
+        self.assertIn("remove_variable = nd_renounced", monthly)
+
+    def test_resume_decision(self):
+        body = block(strip_comments(read(DECISIONS)), "nd_taboo_resume_programme")
+        self.assertIn("has_modifier = nd_taboo_renounced", body)
+        self.assertIn("nd_taboo_resume = yes", body)
+        self.assertIn("nd_taboo_ai_would_resume = yes", body)
+
+    def test_programme_status_reports_the_hold(self):
+        body = block(strip_comments(read(WEAPON_EFFECTS)), "nuclear_program_refresh_state_effect")
+        five = body.index("name = nuclear_program_last_status value = 5")
+        four = body.index("name = nuclear_program_last_status value = 4")
+        three = body.index("name = nuclear_program_last_status value = 3")
+        self.assertLess(five, four)
+        self.assertLess(four, three)
+
+    def test_last_warhead_event(self):
+        events = strip_comments(read(TABOO_EVENTS))
+        body = block(events, "nuclear_taboo.20")
+        self.assertIn("nd_taboo_renunciation_rewards = yes", body)
+        self.assertIn("name = nd_taboo_renounce_mult value = nd_taboo_renounce_mult_value", block(body, "immediate"))
+        self.assertIn("trigger_event = { id = nuclear_taboo.20 }", block(self.taboo, "nd_taboo_dismantle_complete"))
+
+    def test_exit_keys_have_loc(self):
+        keys = loc_keys()
+        for key in ("nd_taboo_renounced", "nd_taboo_renounced_desc", "nd_taboo_programme_held",
+                    "nd_taboo_programme_held_desc", "nd_taboo_renunciation_prestige",
+                    "nd_taboo_renunciation_prestige_desc", "nd_taboo_resume_programme",
+                    "nd_taboo_resume_programme_desc", "nuclear_taboo.20.t", "nuclear_taboo.20.d",
+                    "nuclear_taboo.20.f", "nuclear_taboo.20.a", "nuclear_program_status_held",
+                    "nuclear_program_status_dismantling", "nuclear_program_rate_note_held"):
+            self.assertIn(key, keys, key)
+        for text in (read(TABOO_EFFECTS), read(TABOO_TRIGGERS)):
+            for key in re.findall(r"text = (nd_taboo_tt_\w+)", text):
+                self.assertIn(key, keys, key)
 
 
 if __name__ == "__main__":

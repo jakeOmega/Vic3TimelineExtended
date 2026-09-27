@@ -1392,6 +1392,10 @@ Op table (repeated in the sgui header and the `.gui` header — keep all three i
 | | 31–34 | adopt launch authority 1–4 (4 = Automatic Retaliation) |
 | | 40 / 41 | safeguards down / up |
 | | 50 / 51 | hardening down / up |
+| | 60 / 61 | arsenal ceiling down / up (the nuclear taboo) |
+| | 62 | lift the arsenal ceiling |
+| | 63 | dismantle the arsenal |
+| | 64 | halt the dismantling |
 | `nd_crisis_action_sgui` | 1 | go public (issuer) |
 | | 2 | propose a mutual stand-down |
 | | 3 | a demonstration exercise (armed) |

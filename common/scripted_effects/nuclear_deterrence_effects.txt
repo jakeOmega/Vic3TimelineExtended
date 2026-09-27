@@ -441,6 +441,16 @@ nd_weekly_update = {
 		}
 		set_variable = { name = nd_readiness_target value = 0 }
 	}
+	# ---- being dismantled (nuclear_taboo_effects.txt): in storage until the
+	# last warhead is gone; any other path that raised the target is put back.
+	if = {
+		limit = {
+			nd_taboo_is_dismantling = yes
+			has_variable = nd_readiness_target
+			var:nd_readiness_target > 0
+		}
+		set_variable = { name = nd_readiness_target value = 0 }
+	}
 	# ---- readiness transition: one step every nd_readiness_step_weeks ------
 	if = {
 		limit = {

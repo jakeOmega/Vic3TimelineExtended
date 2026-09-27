@@ -22,6 +22,10 @@
 #   31..34  adopt launch authority 1..4   -> nd_set_authority
 #   40 / 41 safeguards down / up          -> nd_step_investment
 #   50 / 51 hardening down / up           -> nd_step_investment
+#   60 / 61 arsenal ceiling down / up     -> nd_taboo_ceiling_lower / _raise
+#   62      lift the ceiling              -> nd_taboo_ceiling_lift
+#   63      dismantle the arsenal         -> nd_taboo_dismantle_start
+#   64      halt the dismantling          -> nd_taboo_dismantle_halt
 #
 # ---- nd_crisis_action_sgui — op table ---------------------------------------
 #   1  go public (issuer)                 -> nd_crisis_act_go_public
@@ -130,6 +134,26 @@ nd_posture_sgui = {
 			limit = { exists = scope:op  scope:op = 51 }
 			nd_can_step_investment_up = { VAR = nd_hardening }
 		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 60 }
+			nd_taboo_can_lower_ceiling = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 61 }
+			nd_taboo_can_raise_ceiling = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 62 }
+			nd_taboo_can_raise_ceiling = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 63 }
+			nd_taboo_can_dismantle = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 64 }
+			nd_taboo_can_halt = yes
+		}
 		trigger_else = {
 			always = no
 		}
@@ -207,6 +231,26 @@ nd_posture_sgui = {
 		else_if = {
 			limit = { exists = scope:op  scope:op = 51 }
 			nd_step_investment = { VAR = nd_hardening OP = add }
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 60 }
+			nd_taboo_ceiling_lower = yes
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 61 }
+			nd_taboo_ceiling_raise = yes
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 62 }
+			nd_taboo_ceiling_lift = yes
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 63 }
+			nd_taboo_dismantle_start = yes
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 64 }
+			nd_taboo_dismantle_halt = yes
 		}
 	}
 }

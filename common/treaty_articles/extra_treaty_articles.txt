@@ -1442,6 +1442,8 @@ nuclear_disarmament = {
 				limit = { has_variable = te_nuclear_disarmament_ended_program }
 				remove_variable = te_nuclear_disarmament_ended_program
 			}
+			# The nuclear taboo: an arsenal given up (read before it is zeroed).
+			nd_taboo_note_renunciation = { WARHEADS = nd_stockpile }
 			set_variable = { name = nuclear_weapon_stockpile value = 0 }
 			set_variable = { name = nuclear_weapon_program_progress value = 0 }
 			set_variable = { name = nuclear_weapons_program_funding value = 0 }
