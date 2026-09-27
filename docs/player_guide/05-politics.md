@@ -262,7 +262,7 @@ repeal it, and the law's tooltip names it before you enact.
 
 | Distribution of Power | Amendment | Effect |
 |---|---|---|
-| Any voting franchise | Direct Democracy | Laws pass only with a political movement behind them; movements draw more support and radicalize faster, but enacted laws radicalize their opponents less; votes add legitimacy; +25% enactment success, one more agitator slot |
+| Any voting franchise | Direct Democracy | Laws pass only with a political movement behind them; movements draw more support and are 50% more active, but enacting a law stirs its opponents and calms its supporters 75% less; wealth brings 25% less political strength; votes add legitimacy; +25% enactment success, one more agitator slot |
 | Single-Party State | Collective Leadership | +25% coup resistance, which its modifier list doesn't show |
 | Technocracy | Collegial Administration | Institutions change size 50% faster; decrees cost 25% more |
 | Anarchy | Free Federation | Laws pass only with a political movement behind them |
