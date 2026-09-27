@@ -196,9 +196,9 @@ activation and each month; their tooltips show the current monthly cost.
 ### Market economy banking tools
 
 A market economy has twenty-two tools under the full Banking System, seventeen
-under Simplified. The leaning tools (Moral Suasion, reserve requirements, the counter-cyclical buffer, margin requirements) drain bubble
-pressure and cool a boom; the credit tools feed growth; the crisis tools shorten
-a slump.
+under Simplified. The leaning tools drain bubble pressure and cool a boom, the
+credit tools feed growth, and the crisis tools shorten a slump. The sections
+after the table say what each group buys and when it is worth its points.
 
 | Category | Tool | Points | Needs |
 |---|---|---|---|
@@ -225,13 +225,107 @@ a slump.
 | Crisis Response | Asset Relief Program | 5 | Keynesian Economics |
 | Crisis Response | Bail-in Regime | 3 | Globalization |
 
-Each directed-credit sector builds its buildings 10% faster and pleases some
-interest groups while angering others, and only one can run at a time (two under
-Directed Credit & Development Banks). Asset Relief Program and Bail-in Regime
-exclude each other. A Bank Holiday also shields you from contagion, and ends by
-itself after 90 days. Freezing everyone's deposits is deeply unpopular: it turns
-5% of middle-strata pops, 3% of upper-strata pops and 2% of lower-strata pops
-radical, about 2.5 to 3% of your population.
+Because momentum loses a tenth of itself each month, a steady push settles at
+about ten times its monthly figure. A tool worth −0.05 momentum a month ends up
+taking about half a point a month off the cycle value.
+
+### Leaning against a boom
+
+The four leaning tools in Prudential Regulation drain bubble pressure and slow
+momentum every month they run. Switch them on once the cycle reaches Expansion
+and bubble pressure starts to build. Lift them when it falls back to Stable: in
+a slump they slow the recovery you want.
+
+| Tool | What you gain each month | What you pay or give up |
+|---|---|---|
+| Moral Suasion | −0.15 bubble pressure, −0.02 momentum | 1 point and nothing else. |
+| Raise Reserve Requirements | −0.9 bubble pressure, −0.04 momentum; under the full Banking System, half a point less inflation pressure | 2 points and 5% lower investment efficiency for capitalists. 2% of pops radicalize when you raise them, and again when you lift them. |
+| Enable Counter-cyclical Buffer | −1.5 bubble pressure, −0.05 momentum | 2 points. Capitalists pay 1 point and shopkeepers 5 points less of their income into the investment pool. Radicals when you enable it and when you lift it, as above. |
+| Raise Margin Requirements | −1.2 bubble pressure, −0.05 momentum | 2 points and −0.5 standard of living for the middle strata. Radicals when you raise them and when you lift them. |
+
+Measure them against the phases: Expansion adds 3 bubble pressure a month, Boom
+4 and Frenzy 8. All four together drain about 3.75 and take 7 points, enough to
+hold an Expansion's bubble steady but not a Boom's. Under the full Banking
+System a Tight or Very Tight policy stance drains up to 3 more (see [Monetary
+policy stance](#monetary-policy-stance)), so the rate and the tools together can
+hold a Boom. In a Frenzy the bubble outgrows everything you can drain, so lean
+early.
+
+The AI uses Moral Suasion in an Expansion, reserve requirements and the buffer
+from Expansion upward, and margin requirements in a Boom or Frenzy. It uses any
+of them while momentum reads Surging, and lifts them once the cycle turns down.
+
+### Directing credit into growth
+
+Directed credit steers cheap loans to one sector. Each sector builds its
+buildings 10% faster, pleases some interest groups and angers others, and adds
+momentum and bubble pressure, so it belongs in a cycle at or below Stable, not in
+a boom. Each costs 3 points and a one-off 0.8% of GDP from the treasury, the
+state's share of the loans, and lifting it radicalizes 2% of pops. Only one
+sector runs at a time, two under Directed Credit & Development Banks, and
+Prudential / Narrow Banking forbids them all.
+
+| Sector | Builds 10% faster | Approve | Disapprove | Each month |
+|---|---|---|---|---|
+| Directed Credit to Infrastructure | Infrastructure | Armed Forces +1, Trade Unions +1 | Industrialists −5 | +0.05 momentum, +0.3 bubble pressure; decrees also cost 10% less |
+| Directed Credit to Heavy Industry | Heavy industry | Industrialists +3 | Landowners −3 | +0.05 momentum, +0.3 bubble pressure |
+| Directed Credit to Agriculture | Farms, plantations and ranches | Landowners +3, Rural Folk +2 | Industrialists −3 | +0.04 momentum, +0.4 bubble pressure |
+| Directed Credit to Armaments | Military industry and shipyards | Armed Forces +3 | Intelligentsia −2 | +0.05 momentum, +0.2 bubble pressure |
+| Directed Credit to Electrification & High Tech | Power plants and high-tech industry | Intelligentsia +2, Trade Unions +1 | Industrialists −3 | +0.05 momentum, +0.3 bubble pressure |
+
+Pick the sector you are building in and whose interest groups you can afford to
+annoy. Infrastructure is the one that costs you the Industrialists' favor.
+
+Export Credit Facility, listed under External & Currency, is the credit tool for
+exporters. It gives +25% export advantage, +0.05 momentum and +0.15 bubble
+pressure a month, for 2 points, 0.2% of GDP at the start and 2% less tax
+collection while it runs. It needs Corporate Governance, and Prudential / Narrow
+Banking forbids it.
+
+AI countries direct credit in a Downturn, in Stagnation, or while a Stable cycle
+has momentum Collapsing. They choose the sector by who governs: heavy industry
+for Industrialists, agriculture for Landowners or Rural Folk, armaments for the
+Armed Forces or in war, electrification for the Intelligentsia, infrastructure
+otherwise. They lift it in a Panic or once the cycle climbs past Stable, and run
+Export Credit Facility from Stagnation down.
+
+### Pulling out of a slump
+
+Six tools help in a Downturn or Panic: the four in Crisis Response, Expand
+Deposit Guarantee from Prudential Regulation, and Open-Market Operations from
+Monetary Policy. They run alongside the crash event's responses (see
+[Responding to a banking crash](#responding-to-a-banking-crash)), which hold
+points of their own for a year.
+
+| Tool | What you gain | What you pay or give up |
+|---|---|---|
+| Declare a Bank Holiday | Falling momentum halves at once. For 90 days, crash likelihood −90%, which also keeps contagion out. | 2 points; −20% services output and −5% tax collection while it lasts. Radicals: 5% of middle-strata pops, 3% of upper and 2% of lower, about 2.5 to 3% of your population. Only in a Downturn or Panic, and once in five years. |
+| Emergency Liquidity Program | +12 cycle value at once, then −0.8 points of risk premium and +0.08 momentum a month. | 4 points; 1.2% of GDP when you open it, 1% refunded when you close it. +10 bubble pressure at once and +0.8 a month. |
+| Asset Relief Program | +0.3 cycle value a month. | 5 points; 2.5% of GDP at once; −5% tax collection and −5% bureaucracy; 3% of pops radicalize. |
+| Bail-in Regime | +0.15 cycle value and −0.3 bubble pressure a month. | 3 points and nothing from the treasury: the banks' creditors take the losses. +0.1 point of risk premium, and 3% of upper-strata pops radicalize. |
+| Expand Deposit Guarantee | −0.2 points of risk premium, +0.03 momentum and −0.2 bubble pressure a month. | 4 points. 2% of pops turn loyalist when you expand it; 3% radicalize when you withdraw it. |
+| Open-Market Operations | +0.1 momentum a month and +5% services output. | 4 points and 0.5% of GDP at the start; +1.5 bubble pressure a month and, under the full Banking System, about a point of inflation pressure. |
+
+A Bank Holiday is the first answer to a Panic: it halves the fall at once and
+keeps a trading partner's crash out while you recover, but you get one every
+five years. It ends by itself after 90 days, and you can end it sooner. Emergency
+Liquidity lifts the cycle most at once, and closing it hands most of its cost
+back, so close it once you are out of the slump, before its bubble pressure
+feeds the next boom. A deposit guarantee is cheap to open and costly to
+withdraw, so keep it for a lasting slump.
+
+Asset Relief Program and Bail-in Regime exclude each other. Asset Relief lifts
+the cycle twice as fast, at 2.5% of GDP and a standing cost in tax and
+bureaucracy; a bail-in costs the treasury nothing and angers the upper strata
+instead. Open-Market Operations is what is left when you can't cut any further:
+under the full Banking System it needs Fiat Money or Digital Currency with your
+policy rate at its floor.
+
+The AI declares a Bank Holiday and opens Emergency Liquidity in a Panic, or in a
+Downturn that is still falling fast. It expands the deposit guarantee in a
+Downturn or Panic, uses Asset Relief or a bail-in from Stagnation down, and
+uses Open-Market Operations at the rate floor in a slump or deflation. It lifts
+them as the cycle climbs back to Stable and beyond.
 
 ### Managing foreign capital and import credit
 
@@ -294,15 +388,6 @@ the old system's tools off.
 | Cooperative Ownership | Investment & Credit | Collective Capital Investment Plan (4), Cooperative Credit Union Expansion (3) |
 | Cooperative Ownership | Council Direction | Federation Council Advisory Directive (1), Consumption Ceiling Resolution (2) |
 | Cooperative Ownership | Membership Mobilisation | Worker Solidarity Campaign (1), Worker Buyout Facilitation (3) |
-
-### How AI countries use banking tools
-
-AI countries use the same tools when the cycle calls for them: leaning tools as
-a boom builds a bubble, crisis tools in a Downturn or Panic, Open-Market
-Operations at the rate floor in a slump or deflation. They choose a
-directed-credit sector by who governs: heavy industry for Industrialists,
-agriculture for Landowners or Rural Folk, armaments for the Armed Forces or in
-war, electrification for the Intelligentsia, infrastructure otherwise.
 
 ### Banking history charts
 
@@ -577,8 +662,10 @@ shows as overvaluation, which drains Peg Confidence.
 | Debt Receivership | International Exchange Standards | The debtor pays the creditor 0.1% of GDP a month, with −10 legitimacy, until its debt stays low for 12 months |
 
 The last two are hostile: a larger power can demand them only of a country in
-default. Each article earns the stronger party leverage over the weaker, from
-150 to 500, but only while it leads a power bloc. A country may receive only one
+default. If the stronger party leads a power bloc, each article also gives it
+leverage generation over the weaker, from 150 to 500 by article, which builds the Leverage
+Advantage it needs to invite that country into its bloc (see [Other power bloc
+changes](08-diplomacy.md#other-power-bloc-changes)). A country may receive only one
 swap line at a time. A treaty pegger at Peg Confidence 20 gets The Peg Under
 Siege: impose capital controls for a year (+40 confidence), break the peg by
 leaving the treaty, or re-peg lower. AI countries look for a swap line when
@@ -589,11 +676,11 @@ Each side signs for its own reasons:
 
 | Article | Why the weaker side takes it | Why the stronger side agrees |
 |---|---|---|
-| Currency Peg | A small economy that trades mostly inside a bigger country's market, or a fiat currency whose bank commands little trust (a rate set by hand, State-Owned Banking, inflation running high). It borrows more cheaply and takes on the anchor's credibility, but gives up its dial and money printing, and suffers when its inflation outruns the anchor's. | A great or major power, or a market leader, drawing trading partners into its monetary orbit at no risk to itself: +2% prestige, better relations, and cheaper borrowing as more of the world's GDP pegs to it. It pays the article's upkeep. |
-| Swap Line | A country with high borrowing costs, a shaky gold peg or a habit of financial crises: −1 point of risk premium at once, +2 Peg Confidence a month, and credit of up to 2% of its GDP in a crisis, repaid afterwards. | A larger economy backing a partner cheaply: +1% prestige and better relations, for extra risk premium in proportion to the partner's size (a sliver when a great power backs a minor) and loans in a crisis. It pays the upkeep. |
-| Lender of Last Resort | A heavily indebted country: its debt-load premium halves, imported panics start shallower, and a default brings a payout unless the guarantor refuses. Each payout makes the guarantee worth less. | A rich power sure of its ward: +2% prestige and better relations, for extra risk premium in proportion to the ward's size. On a default it pays 5% to 15% of the ward's GDP, or refuses at a cost in infamy, prestige, relations and its own borrowing costs. |
-| Imposed Currency Peg | Nothing it would choose: it is forced on a country in default. | A major power or better that wants a defaulted country's money tied to its own for good. |
-| Debt Receivership | A defaulted country that needs cheaper credit more than it needs legitimacy, though it is usually forced. | A larger financial power facing a defaulted country: it collects 0.1% of the debtor's GDP a month until the debtor recovers, and takes on a little of its risk. |
+| Currency Peg | A small economy that trades mostly inside a bigger country's market, or a fiat currency whose bank commands little trust (a rate set by hand, State-Owned Banking, inflation running high). It borrows more cheaply and takes on the anchor's credibility, but gives up its dial and money printing, and suffers when its inflation outruns the anchor's. | A great or major power, or a market leader, drawing trading partners into its monetary orbit at no risk to itself: +2% prestige, better relations, and cheaper borrowing as more of the world's GDP pegs to it. A bloc leader also gains 200 leverage generation over the pegger. It pays the article's upkeep. |
+| Swap Line | A country with high borrowing costs, a shaky gold peg or a habit of financial crises: −1 point of risk premium at once, +2 Peg Confidence a month, and credit of up to 2% of its GDP in a crisis, repaid afterwards. | A larger economy backing a partner cheaply: +1% prestige and better relations, and as a bloc leader 150 leverage generation over the partner, for extra risk premium in proportion to the partner's size (a sliver when a great power backs a minor) and loans in a crisis. It pays the upkeep. |
+| Lender of Last Resort | A heavily indebted country: its debt-load premium halves, imported panics start shallower, and a default brings a payout unless the guarantor refuses. Each payout makes the guarantee worth less. | A rich power sure of its ward: +2% prestige and better relations, and as a bloc leader 300 leverage generation over the ward, for extra risk premium in proportion to the ward's size. On a default it pays 5% to 15% of the ward's GDP, or refuses at a cost in infamy, prestige, relations and its own borrowing costs. |
+| Imposed Currency Peg | Nothing it would choose: it is forced on a country in default. | A major power or better that wants a defaulted country's money tied to its own for good; a bloc leader also gains 400 leverage generation over it. |
+| Debt Receivership | A defaulted country that needs cheaper credit more than it needs legitimacy, though it is usually forced. | A larger financial power facing a defaulted country: it collects 0.1% of the debtor's GDP a month until the debtor recovers, and takes on a little of its risk. A bloc leader also gains 500 leverage generation over the debtor. |
 
 ### The Monetary Union principle group
 
