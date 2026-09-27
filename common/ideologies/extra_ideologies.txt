@@ -1292,6 +1292,7 @@ ideology_custom_religion_traditionalist_society = {
 		law_punishment_focused_criminal_justice = strongly_approve
 		law_rehabilitation_focused_criminal_justice = disapprove
 		law_restorative_justice = neutral
+		law_penal_labor_camps = approve
 	}
 
 	lawgroup_human_augmentation = {
@@ -1387,6 +1388,7 @@ ideology_custom_religion_inclusive_society = {
 		law_punishment_focused_criminal_justice = disapprove
 		law_rehabilitation_focused_criminal_justice = approve
 		law_restorative_justice = neutral
+		law_penal_labor_camps = strongly_disapprove
 	}
 
 	lawgroup_human_augmentation = {
@@ -1482,6 +1484,7 @@ ideology_custom_religion_totalitarian_society = {
 		law_punishment_focused_criminal_justice = strongly_approve
 		law_rehabilitation_focused_criminal_justice = disapprove
 		law_restorative_justice = disapprove
+		law_penal_labor_camps = strongly_approve
 	}
 
 	lawgroup_human_augmentation = {
@@ -1577,6 +1580,7 @@ ideology_custom_religion_meritocratic_society = {
 		law_punishment_focused_criminal_justice = disapprove
 		law_rehabilitation_focused_criminal_justice = neutral
 		law_restorative_justice = approve
+		law_penal_labor_camps = strongly_disapprove
 	}
 
 	lawgroup_human_augmentation = {
@@ -1672,6 +1676,7 @@ ideology_custom_religion_imperial_cult_society = {
 		law_punishment_focused_criminal_justice = approve
 		law_rehabilitation_focused_criminal_justice = neutral
 		law_restorative_justice = disapprove
+		law_penal_labor_camps = approve
 	}
 
 	lawgroup_human_augmentation = {
@@ -1767,6 +1772,7 @@ ideology_custom_religion_theocratic_society = {
 		law_punishment_focused_criminal_justice = approve
 		law_rehabilitation_focused_criminal_justice = disapprove
 		law_restorative_justice = disapprove
+		law_penal_labor_camps = approve
 	}
 
 	lawgroup_human_augmentation = {

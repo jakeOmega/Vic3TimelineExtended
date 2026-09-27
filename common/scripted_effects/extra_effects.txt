@@ -7,8 +7,9 @@ remove_modifier_if_exists_effect = {
 	}
 }
 
-# Country-scope wonder construction tick. Called from each wonder's monthly
-# pulse (the wonder's named wrapper). Tracks progress against the construction
+# State-scope wonder construction tick (ROOT is the state holding the
+# construction site). Called from each wonder's on_monthly_pulse_state
+# on-action through the wonder's named wrapper. Tracks progress against the construction
 # site's annual-progress modifier; on completion, removes the site, posts the
 # wonder-complete notification, and either bumps the wonder one level (capped
 # at $MAX_LEVEL$) or creates the level-1 wonder if none exists yet.
@@ -1147,29 +1148,86 @@ reset_all_institutions_and_ministries = {
 	activate_law = law_type:law_no_ministry_of_war
 }
 
-# Copy active global warming policy modifiers from the absorbing market's leader
-# to a new market member (country scope, expects scope:market.owner).
-gw_copy_market_policy_modifiers = {
+# Bring a market member's three market-wide global warming policies into line
+# with its market leader (country scope, expects scope:gw_policy_leader = the
+# leader; the caller checks this country has je_global_warming). Called when a
+# market merges into another (gw_market_join_on_action, for the joining
+# market's owner) and monthly for every member of every market
+# (gw_reconcile_market_policies_effect), which also covers the joining market's
+# other members and repairs old saves.
+# A member's market-wide policies are the leader's: the leader adopts and
+# repeals them for the whole market (global_warming_effects.txt), only the
+# leader's own modifier sets the market's emissions
+# (gw_emission_multiplier_script_value), and a member cannot repeal one
+# (gw_possible_remove_* require market leadership). So the member picks up each
+# one the leader has and drops each one the leader lacks. A joiner used to keep
+# its own, paying their costs with no way out while the dashboard read "set by
+# market leader".
+#
+# A member bound by an emissions reduction treaty keeps its own
+# (gw_bound_by_emissions_treaty).
+gw_sync_market_policy_modifiers = {
 	if = {
 		limit = {
 			NOT = { je:je_global_warming = { has_modifier = carbon_tax_modifier } }
-			scope:market.owner = { je:je_global_warming = { has_modifier = carbon_tax_modifier } }
+			scope:gw_policy_leader = { je:je_global_warming ?= { has_modifier = carbon_tax_modifier } }
 		}
 		je:je_global_warming = { add_modifier = { name = carbon_tax_modifier } }
+	}
+	else_if = {
+		limit = {
+			NOT = { gw_bound_by_emissions_treaty = yes }
+			je:je_global_warming = { has_modifier = carbon_tax_modifier }
+			scope:gw_policy_leader = { NOT = { je:je_global_warming ?= { has_modifier = carbon_tax_modifier } } }
+		}
+		je:je_global_warming = { remove_modifier = carbon_tax_modifier }
 	}
 	if = {
 		limit = {
 			NOT = { je:je_global_warming = { has_modifier = renewable_investment_modifier } }
-			scope:market.owner = { je:je_global_warming = { has_modifier = renewable_investment_modifier } }
+			scope:gw_policy_leader = { je:je_global_warming ?= { has_modifier = renewable_investment_modifier } }
 		}
 		je:je_global_warming = { add_modifier = { name = renewable_investment_modifier } }
+	}
+	else_if = {
+		limit = {
+			NOT = { gw_bound_by_emissions_treaty = yes }
+			je:je_global_warming = { has_modifier = renewable_investment_modifier }
+			scope:gw_policy_leader = { NOT = { je:je_global_warming ?= { has_modifier = renewable_investment_modifier } } }
+		}
+		je:je_global_warming = { remove_modifier = renewable_investment_modifier }
 	}
 	if = {
 		limit = {
 			NOT = { je:je_global_warming = { has_modifier = emission_standards_modifier } }
-			scope:market.owner = { je:je_global_warming = { has_modifier = emission_standards_modifier } }
+			scope:gw_policy_leader = { je:je_global_warming ?= { has_modifier = emission_standards_modifier } }
 		}
 		je:je_global_warming = { add_modifier = { name = emission_standards_modifier } }
+	}
+	else_if = {
+		limit = {
+			NOT = { gw_bound_by_emissions_treaty = yes }
+			je:je_global_warming = { has_modifier = emission_standards_modifier }
+			scope:gw_policy_leader = { NOT = { je:je_global_warming ?= { has_modifier = emission_standards_modifier } } }
+		}
+		je:je_global_warming = { remove_modifier = emission_standards_modifier }
+	}
+}
+
+# Monthly reconciliation (any scope; from global_warming_events_on_action):
+# every member of every market takes each market-wide policy its leader has and
+# drops each one its leader lacks (gw_sync_market_policy_modifiers). Catches
+# what the merge hook misses - the joining market's other members, a
+# leadership change, old saves - within a month.
+gw_reconcile_market_policies_effect = {
+	every_country = {
+		limit = {
+			has_journal_entry = je_global_warming
+			exists = market_capital.owner
+			NOT = { gw_is_market_leader = yes }
+		}
+		market_capital.owner = { save_scope_as = gw_policy_leader }
+		gw_sync_market_policy_modifiers = yes
 	}
 }
 
@@ -1245,58 +1303,6 @@ remove_all_langreform_modifiers = {
 	remove_modifier = langreform_advisory_panel
 	remove_modifier = langreform_minority_protection
 	remove_modifier = langreform_national_focus
-}
-
-# =================================================================
-# Resettlement Population Transfer
-# =================================================================
-# State scope (SOURCE state with a resettlement camp).
-# Finds the camp, identifies a destination state with a colony,
-# then moves pops employed at the camp to the destination.
-#
-# Uses ordered_scope_pop with order_by = total_size to prefer
-# moving large pops over tiny minorities.
-#
-# Transfer volumes per camp level per month:
-#   Homesteading:            ~100  (voluntary settler recruitment)
-#   Organized Colonization:  ~250  (government-organized program)
-#   Forced Resettlement:     ~400  (state-directed mass transfer)
-#   Penal Transportation:    ~150  (convict/undesirable deportation)
-# =================================================================
-resettlement_transfer_effect = {
-	# Find a destination state (another state owned by the same country
-	# that has a resettlement colony)
-	owner = {
-		random_scope_state = {
-			limit = {
-				NOT = { this = ROOT }
-				any_scope_building = {
-					is_building_type = building_resettlement_colony
-					level > 0
-				}
-			}
-			save_scope_as = resettlement_destination
-		}
-	}
-
-	# Only proceed if we have a valid destination and a nonzero transfer modifier
-	if = {
-		limit = {
-			exists = scope:resettlement_destination
-			modifier:state_resettlement_transfer_add > 0
-		}
-
-		every_scope_pop = {
-			limit = {
-				pop_employment_building = building_resettlement_camp
-				OR = {
-					is_pop_type = laborers
-					is_pop_type = slaves
-				}
-			}
-			move_pop = scope:resettlement_destination
-		}
-	}
 }
 
 #==================================================
@@ -1432,7 +1438,9 @@ population_transfer_effect = {
 #   intended to matter once a real level exists, but the engine can leave it on
 #   fresh construction sites;
 # - every building in games whose free_market_construction_rule setting waives
-#   retooling (te_pm_retooling_waived).
+#   retooling (te_pm_retooling_waived), and a railway whose train method only
+#   swapped into or out of its Transport principle tier 3 variant
+#   (te_building_retooling_waived, te_railway_note_train_method).
 # Called from on_production_method_changed and on_start_expanding_building
 # (te_construction_market_on_actions.txt), a day after a production-method
 # change (te_construction_market_building_events.3), and by the weekly sweep
@@ -1443,14 +1451,42 @@ te_remove_waived_pm_retooling = {
 			has_modifier = pm_retooling
 			OR = {
 				level = 0
-				te_pm_retooling_waived = yes
+				te_building_retooling_waived = yes
 			}
 		}
 		remove_modifier = pm_retooling
 	}
 }
 
+# Railway train-method record (state scope): if the railway's last change is
+# only the Transport principle swap (te_state_railway_tier3_swap), mark the
+# state for two days so te_remove_waived_pm_retooling strips the retooling
+# penalty now and at the day-later re-check; then record the current train
+# method. Owner ruling 2026-09-26: an automatic switch the player did not
+# choose should not cost five years of retooling. Called from
+# on_production_method_changed through te_railway_note_train_method, and by
+# the weekly sweep below, which records every railway (so few stay unrecorded)
+# and catches a swap the hook missed.
+te_state_note_railway_train_method = {
+	if = {
+		limit = { te_state_railway_tier3_swap = yes }
+		set_variable = { name = te_rail_retool_waive days = 2 }
+	}
+	set_variable = { name = te_rail_train_code value = te_state_railway_train_code }
+}
+
+# Building scope (the railway), from on_production_method_changed.
+te_railway_note_train_method = {
+	state = {
+		te_state_note_railway_train_method = yes
+	}
+}
+
 te_remove_waived_pm_retooling_from_state_buildings = {
+	if = {
+		limit = { has_building = building_railway }
+		te_state_note_railway_train_method = yes
+	}
 	every_scope_building = {
 		te_remove_waived_pm_retooling = yes
 	}

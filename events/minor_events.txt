@@ -792,7 +792,8 @@ minor_events_timelineextended.7 = {
 }
 
 # Great Depression event: fired for all countries when a cascading crash
-# wave hits 10+ countries covering 20%+ of world GDP.
+# wave hits 10+ countries covering 50%+ of world GDP — at most once per game
+# (great_depression_occurred, set in banking_crisis_wave_check_great_depression).
 # Mostly notificational with long-lasting momentum penalty.
 # Isolated countries can avoid the worst effects.
 # banking_crisis_wave_crashed marks a country whose banks crashed in the wave,

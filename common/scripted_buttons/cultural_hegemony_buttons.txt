@@ -31,15 +31,26 @@ ch_increase_program_funding_button = {
 		has_journal_entry = je_cultural_hegemony
 	}
 
+	# Only while the budget can carry another step: out of default, and a
+	# weekly surplus (net_fixed_income, the affordability check vanilla's and
+	# the mod's AI blocks use) at least one level's cost, since each level adds
+	# ch_program_funding_cost_mult to the weekly bill (PR #510). There is no
+	# automatic step-down.
 	ai_chance = {
 		value = 0
 		if = {
-			limit = { has_variable = ch_total var:ch_total >= 10 }
-			add = 20
-		}
-		if = {
-			limit = { has_variable = ch_total var:ch_total < 5 }
-			add = 10
+			limit = {
+				in_default = no
+				net_fixed_income > ch_program_funding_cost_mult
+			}
+			if = {
+				limit = { has_variable = ch_total var:ch_total >= 10 }
+				add = 20
+			}
+			if = {
+				limit = { has_variable = ch_total var:ch_total < 5 }
+				add = 10
+			}
 		}
 	}
 

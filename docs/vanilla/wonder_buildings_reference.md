@@ -333,9 +333,26 @@ At 5 levels: +25% tech speed, +50% innovation, -10% mortality, +2500 character h
 
 **Design revision:** Focus on massive services and software output representing the digital labor of uploaded minds. Drop mortality reduction (would stack below 0% with existing techs), innovation (cheap by endgame), and character health (already covered by `mind_backups` tech). Keep the tech research speed buff as the sole country modifier; the main value of this wonder is the enormous goods output.
 
+## Wonder 5: Nanofabrication Center
+
+*Added after this document's four designs; described here as built (`common/buildings/extra_buildings.txt`, `pm_nanofabrication_center` in `common/production_methods/extra_pms.txt`).*
+
+- **Unlocked by:** `molecular_assemblers` (era 12, prereq: `advanced_nanofabrication`).
+- **Construction site:** `building_nanofabrication_center_construction_site`, four speed PMs (paused / slow / medium / fast) like the others. Max level 10.
+- **Completed: `building_nanofabrication_center`** (`bg_private_infrastructure`, `ownership_type = self`). Per level at full employment: consumes electricity, launch capacity, digital assets, electronic components and steel, and produces 2,500 `advanced_materials`; country modifier `country_space_race_risk_mult` −1%. Employs 3,000 engineers and 3,000 academics per level.
+
+## Wonder 6: Consciousness Network
+
+*Added after this document's four designs; described here as built (`common/buildings/extra_buildings.txt`, `pm_consciousness_network*` in `common/production_methods/extra_pms.txt`).*
+
+- **Unlocked by:** `telepathic_communities` (era 12, prereqs: `neural_lace` + `mental_health_awareness`).
+- **Construction site:** `building_consciousness_network_construction_site`, four speed PMs. Max level 10.
+- **Completed: `building_consciousness_network`** (`bg_government`, `ownership_type = no_ownership`). It produces no goods. The base PM consumes digital access, digital assets, electronic components, electricity and advanced materials, and grants state infrastructure, tax capacity, institution impact and education access, plus country bureaucracy, economy-of-scale cap and innovation cap.
+- **Mode group (`pmg_consciousness_network_mode`):** *Open* (SoL, loyalists from movements, research speed, innovation, prestige, influence) is disallowed under secret police, a single-party state, autocracy, mandatory augmentation or intrusive surveillance; *Social Control* (authority, government IG approval and attraction, less turmoil and fewer radicals, monthly loyalists) is unlocked by those same laws.
+
 ## FAQ
 
-1. **Should wonders be limited to one per country?** No. The cost is the limiting factor, not a hard cap. Only the Ark should be unique (one per world, first to complete wins).
+1. **Should wonders be limited to one per country?** No. The cost is the limiting factor, not a hard cap. Only the Ark should be unique (one per world, first to complete wins). (No Ark was built. The seven megaprojects have no per-country cap: the site's level check is per state.)
 
 2. **Should wonders have maintenance concepts?** No. Goods consumption in the operational PM IS the maintenance.
 

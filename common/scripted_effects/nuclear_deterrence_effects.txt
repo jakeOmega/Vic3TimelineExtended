@@ -1445,18 +1445,36 @@ nd_ai_review_posture = {
 # ----------------------------------------------------------------------------
 # INCIDENTS (§8)
 # ----------------------------------------------------------------------------
-# One roll a month. Two-stage (10 % × permille %) so that the inner chance is
-# never a fraction; nd_debug_incident_odds skips straight to the draw.
+# One roll a month, in two stages so that the inner chance is a whole number:
+# nd_incident_permille itself is fractional at most settings (0.5 to 0.9 at
+# Routine or Recessed with good reliability), and no vanilla precedent proves
+# that `random` rolls a fraction rather than truncating it, which would stop
+# those incidents altogether. Up to 10 per mille: 1 % × the chance in tenths of
+# a per mille (nd_incident_tenth_permille, 2 to 100). Above: 10 % × the chance
+# in whole per mille (nd_incident_permille_whole, 10 to 30). Both are rounded,
+# so the odds are the per-mille value to within 0.05 and 0.5 per mille. The
+# same whichever way the engine reads a fraction. nd_debug_incident_odds
+# skips straight to the draw.
 nd_roll_incident = {
 	if = {
 		limit = { has_variable = nd_debug_incident_odds }
 		nd_fire_incident = yes
 	}
+	else_if = {
+		limit = { nd_incident_permille <= 10 }
+		random = {
+			chance = 1
+			random = {
+				chance = nd_incident_tenth_permille
+				nd_fire_incident = yes
+			}
+		}
+	}
 	else = {
 		random = {
 			chance = 10
 			random = {
-				chance = nd_incident_permille
+				chance = nd_incident_permille_whole
 				nd_fire_incident = yes
 			}
 		}

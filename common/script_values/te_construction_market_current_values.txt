@@ -66,3 +66,75 @@ te_construction_market_points_left_queue_private = {
 		value = 0
 	}
 }
+
+# ----------------------------------------------------------------------------
+# Railway train method, for the Transport-principle retooling waiver
+# (te_railway_note_train_method, common/scripted_effects/extra_effects.txt).
+# ----------------------------------------------------------------------------
+# The state's railway train method as a code: steam 1, electric 2, diesel 3,
+# plus 10 for the Transport principle tier 3 variant of the same method
+# (pm_*_trains_principle_transport_3); Centralized Traffic Control 4,
+# Containerized Cargo 5, Automated Loading and Unloading 6, Autonomous Trains
+# 7; pm_early_trains (the group's fallback) 0, as is a state with no railway.
+# Only 1-3 <-> 11-13 differ by exactly 10. A state holds at most
+# one railway, which is why this can be read, and recorded, at state scope:
+# buildings do not reliably hold variables (scripting_best_practices.md).
+# Scope: state
+te_state_railway_train_code = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_railway }
+		if = {
+			limit = { has_active_production_method = pm_steam_trains }
+			add = 1
+		}
+		else_if = {
+			limit = { has_active_production_method = pm_electric_trains }
+			add = 2
+		}
+		else_if = {
+			limit = { has_active_production_method = pm_diesel_trains }
+			add = 3
+		}
+		else_if = {
+			limit = { has_active_production_method = pm_steam_trains_principle_transport_3 }
+			add = 11
+		}
+		else_if = {
+			limit = { has_active_production_method = pm_electric_trains_principle_transport_3 }
+			add = 12
+		}
+		else_if = {
+			limit = { has_active_production_method = pm_diesel_trains_principle_transport_3 }
+			add = 13
+		}
+		else_if = {
+			limit = { has_active_production_method = pm_centralized_traffic_control }
+			add = 4
+		}
+		else_if = {
+			limit = { has_active_production_method = pm_containerized_cargo }
+			add = 5
+		}
+		else_if = {
+			limit = { has_active_production_method = pm_automated_loading_and_unloading }
+			add = 6
+		}
+		else_if = {
+			limit = { has_active_production_method = pm_autonomous_trains }
+			add = 7
+		}
+	}
+}
+
+# Current code minus the recorded one (the code itself when nothing is
+# recorded yet). +10 / -10 means the same train method moved into / out of its
+# tier 3 variant.
+# Scope: state
+te_state_railway_train_code_change = {
+	value = te_state_railway_train_code
+	if = {
+		limit = { has_variable = te_rail_train_code }
+		subtract = var:te_rail_train_code
+	}
+}

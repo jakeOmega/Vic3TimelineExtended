@@ -1,7 +1,7 @@
 ﻿# =================================================================
 # TREATY ARTICLE: demilitarized_zone
 # Forbids military buildings in a specific state, preventing
-# barracks, naval bases and military bases from being constructed or
+# barracks, naval fortifications and military bases from being constructed or
 # maintained.
 # Historical: Rhineland DMZ, Korean DMZ, Sinai after Camp David,
 # Åland Islands, Black Sea limitations (Treaty of Paris 1856).

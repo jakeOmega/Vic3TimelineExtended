@@ -731,6 +731,12 @@ building_synthetics_plant_oil_throughput_add = {
 	decimals = 0
 }
 
+building_synthetics_plant_silk_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
 building_network_infrastructure_throughput_add = {
 	color = good
 	percent = yes
@@ -1375,6 +1381,8 @@ state_building_generic_resource_depository_max_level_add = {
 	percent = no
 }
 
+# building_generic_hq_skyscraper is retired (potential = { always = no }); no
+# company grants this any more. Kept with its loc so nothing that named it breaks.
 state_building_generic_hq_skyscraper_max_level_add = {
 	color = good
 	percent = no
@@ -1416,11 +1424,6 @@ state_building_generic_logistics_hub_max_level_add = {
 }
 
 state_building_strategic_reserve_hub_max_level_add = {
-	color = good
-	percent = no
-}
-
-state_building_resettlement_camp_max_level_add = {
 	color = good
 	percent = no
 }
@@ -1659,6 +1662,12 @@ state_building_generic_furniture_showroom_max_level_add = {
 }
 
 state_building_generic_lumber_yard_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_generic_dye_fiber_park_max_level_add = {
 	color = good
 	percent = no
 	decimals = 0
@@ -2697,6 +2706,97 @@ state_building_rekal_hq_max_level_add = {
 	decimals = 0
 }
 
+# Phase 9: The Great Wave (DLC 018) Company Buildings
+state_building_yasuda_atosanupuri_mine_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_tokyo_electric_asakusa_station_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_guthrie_singapore_agency_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_sfct_hon_gai_collieries_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_bhp_broken_hill_mine_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_ramirez_vila_real_cannery_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_ocmc_unsan_gold_mines_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_siam_electric_wat_liab_station_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_ferranti_hollinwood_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_van_vlissingen_oostenburg_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_mfo_oerlikon_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_markwald_bangkok_rice_mill_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_nhm_factorij_batavia_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_white_star_albion_house_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_noda_shoyu_goyogura_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
 # Military Base
 state_building_military_base_max_level_add = {
 	color = good
@@ -3573,6 +3673,36 @@ state_migration_crowding_density_mult = {
 state_resettlement_transfer_add = {
 	color = neutral
 	percent = no
+	decimals = 0
+	game_data = {
+		ai_value = 0
+	}
+}
+
+# Internal resettlement readouts: display-only, re-applied monthly by
+# resettlement_effects.txt with the month's count as multiplier.
+building_resettlement_arrivals_add = {
+	color = neutral
+	percent = no
+	decimals = 0
+	game_data = {
+		ai_value = 0
+	}
+}
+
+building_resettlement_transit_deaths_add = {
+	color = bad
+	percent = no
+	decimals = 0
+	game_data = {
+		ai_value = 0
+	}
+}
+
+state_resettlement_recruits_add = {
+	color = neutral
+	percent = no
+	decimals = 0
 	game_data = {
 		ai_value = 0
 	}

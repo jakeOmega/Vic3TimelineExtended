@@ -1639,6 +1639,9 @@ principle_cultural_unity_2 = {
 
 	power_bloc_modifier = {
 		power_bloc_can_enact_decree_cultural_emigration_initiative_bool = yes
+		# New at tier II (Enforce Cultural Acceptance). Tiers don't stack, so
+		# every higher tier restates it.
+		power_bloc_leader_can_force_cultural_acceptance_bool = yes
 	}
 
 	ai_weight = {
@@ -1670,6 +1673,7 @@ principle_cultural_unity_3 = {
 
 	power_bloc_modifier = {
 		power_bloc_can_enact_decree_cultural_emigration_initiative_bool = yes
+		power_bloc_leader_can_force_cultural_acceptance_bool = yes
 	}
 
 	ai_weight = {
@@ -1707,6 +1711,7 @@ principle_cultural_unity_4 = {
 
 	power_bloc_modifier = {
 		power_bloc_can_enact_decree_cultural_emigration_initiative_bool = yes
+		power_bloc_leader_can_force_cultural_acceptance_bool = yes
 	}
 
 	institution = institution_ministry_of_culture
@@ -1751,6 +1756,7 @@ principle_cultural_unity_5 = {
 
 	power_bloc_modifier = {
 		power_bloc_can_enact_decree_cultural_emigration_initiative_bool = yes
+		power_bloc_leader_can_force_cultural_acceptance_bool = yes
 		power_bloc_leader_can_force_cultural_adoption_bool = yes
 	}
 

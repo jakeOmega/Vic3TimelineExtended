@@ -3033,16 +3033,20 @@ banking_cycle_events.31 = {
 		# the holiday may have been declared from the dashboard, or the points
 		# spent, in the meantime. Asked FIRST: the +5 below can lift a late
 		# downturn into stagnation, and the tool is for a downturn or panic.
+		# The tool carries its own radicals (every stratum, middle hardest), so
+		# the event's upper-strata charge applies only when it could not fire.
 		if = {
 			limit = { banking_can_enact_cb_bank_holiday = yes }
 			banking_effect_cb_bank_holiday = yes
 		}
+		else = {
+			add_radicals = {
+				value = small_radicals
+				strata = upper
+			}
+		}
 		banking_change_cycle_value = { ADD = 5 TEXT = CYCLE_VALUE_5_DESC }
 		banking_change_bubble_pressure = { ADD = -10 TEXT = BUBBLE_PRESSURE_MINUS_10_DESC }
-		add_radicals = {
-			value = small_radicals
-			strata = upper
-		}
 		ai_chance = {
 			base = 50
 		}

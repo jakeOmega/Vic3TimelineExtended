@@ -462,6 +462,7 @@ un_lean_interests = {
 		if = { limit = { has_law = law_type:law_guaranteed_liberties } add = 15 }
 		if = { limit = { has_law = law_type:law_ethnostate } add = -35 }
 		if = { limit = { has_law = law_type:law_outlawed_dissent } add = -30 }
+		if = { limit = { has_law = law_type:law_penal_labor_camps } add = -30 }
 	}
 	else_if = {
 		limit = { scope:un_resolution ?= { has_tag = un_topic_npt } }

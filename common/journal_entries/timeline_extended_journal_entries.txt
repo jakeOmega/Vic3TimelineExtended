@@ -19,6 +19,13 @@
 		}
 	}
 
+	# Never true, by design since the entry was written (a87e88ab): the weekly
+	# pulse below resets the counter in the same effect that raises it to 52,
+	# so the entry never completes. It is a cycle: each year that average SoL
+	# stays below 4 ends in a collapse, and can_deactivate = yes returns the
+	# entry to inactive once SoL recovers. Kept rather than deleted: no vanilla
+	# entry has a native progressbar without a complete trigger, so dropping
+	# it would be untested.
 	complete = {
 		ROOT.var:state_collapse_progress >= 52
 	}

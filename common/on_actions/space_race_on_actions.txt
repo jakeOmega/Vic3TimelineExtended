@@ -20,6 +20,30 @@ space_race_on_action = {
 			limit = { sr_space_race_participant = yes }
 			sr_sync_space_race_entries = yes
 			sr_sync_probe_data = yes
+			# An AI's approach costs stop outside the top three and resume when it
+			# climbs back (sr_<m>_cost reads sr_ai_should_participate). Ranking
+			# moves without any button press, so recalculate when the
+			# participation the costs were last computed with is stale, or was
+			# never recorded (saves from before PR #507).
+			if = {
+				limit = { NOT = { has_variable = sr_cost_participation } }
+				sr_recalculate_cost = yes
+			}
+			else_if = {
+				limit = {
+					OR = {
+						AND = {
+							sr_ai_should_participate = yes
+							var:sr_cost_participation = 0
+						}
+						AND = {
+							NOT = { sr_ai_should_participate = yes }
+							var:sr_cost_participation = 1
+						}
+					}
+				}
+				sr_recalculate_cost = yes
+			}
 		}
 		if = {
 			limit = { NOT = { has_variable = sr_failure_cooldown } }

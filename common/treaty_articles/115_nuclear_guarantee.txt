@@ -112,6 +112,11 @@ nuclear_guarantee = {
 		}
 	}
 
+	# These ongoing benefits are implemented by the nuclear system, not modifiers.
+	on_entry_into_force = {
+		custom_tooltip_no_bullet = nuclear_guarantee_effects_desc
+	}
+
 	ai = {
 		treaty_categories = { military_defense }
 		article_ai_usage = { offer request }

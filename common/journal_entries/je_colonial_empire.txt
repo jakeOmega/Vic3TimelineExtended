@@ -167,6 +167,9 @@
 		# attached to entities that survive the JE's end and would otherwise
 		# stick around indefinitely.
 		colonial_empire_je_cleanup_effect = yes
+		# No success event forms a country, so the programme-month counters
+		# can go now (on_fail keeps them for .201 / .204).
+		colonial_empire_clear_path_months = yes
 
 		# Permanent re-entry block. Any successful completion (bar 100 hold or
 		# IF Act capstone) commits the player out of further je_colonial_empire
@@ -209,6 +212,10 @@
 			}
 			# .206 reads and then clears var:decol_chosen_releases itself.
 			trigger_event = { id = decolonization_events.206 }   # Voluntary Decolonization
+			# .206 forms no country. .204 and .201 below do, in their option,
+			# where apply_decolonization_path reads these counters for each
+			# successor's legacy; they clear them after forming.
+			colonial_empire_clear_path_months = yes
 		}
 		else_if = {
 			limit = {
@@ -254,12 +261,25 @@
 		# Clean up persistent JE state. The collapse_subject_unrest_modifier
 		# applied just above is intentionally preserved (failure consequence)
 		# -- the cleanup helper removes the bar-band LD modifiers but not the
-		# failure aftershock.
+		# failure aftershock. It leaves the programme-month counters, which
+		# .201 / .204 still need (colonial_empire_clear_path_months).
 		colonial_empire_je_cleanup_effect = yes
 	}
 
 	on_monthly_pulse = {
 		effect = {
+			# --- Programmes a revolution's winner lost ---
+			# A civil war's winner inherits the programme records but not the
+			# modifiers; put back any programme whose record we hold, and record
+			# any programme enabled before the records existed (decolonization.txt,
+			# decol_sync_programmes). A modifier added here is not visible to
+			# has_modifier later in this block, but a variable set here is, so
+			# every programme test below reads the record
+			# (<modifier>_held), which the programme effects keep in step with
+			# the modifier: a programme restored this month is counted, and
+			# Invest pays its expense, this month.
+			decol_sync_programmes = yes
+
 			# --- Path-dependence tracking ---
 			# Count months each policy is active. Read at on_complete / on_fail
 			# to choose the appropriate resolution event.
@@ -287,15 +307,15 @@
 			}
 			change_variable = { name = colonial_je_total_months add = 1 }
 			if = {
-				limit = { has_modifier = colonial_development_investment_modifier }
+				limit = { has_variable = colonial_development_investment_modifier_held }
 				change_variable = { name = colonial_invest_months add = 1 }
 			}
 			if = {
-				limit = { has_modifier = colonial_military_garrison_modifier }
+				limit = { has_variable = colonial_military_garrison_modifier_held }
 				change_variable = { name = colonial_garrison_months add = 1 }
 			}
 			if = {
-				limit = { has_modifier = colonial_cultural_assimilation_modifier }
+				limit = { has_variable = colonial_cultural_assimilation_modifier_held }
 				change_variable = { name = colonial_assimilate_months add = 1 }
 			}
 
@@ -340,7 +360,7 @@
 			# button (ce_remove_invest_in_development); the per-pulse
 			# re-application keeps the multiplier in sync with current GDP.
 			if = {
-				limit = { has_modifier = colonial_development_investment_modifier }
+				limit = { has_variable = colonial_development_investment_modifier_held }
 				remove_modifier = colonial_development_investment_expense_modifier
 				add_modifier = {
 					name = colonial_development_investment_expense_modifier
@@ -364,7 +384,7 @@
 			# economy. 2-month duration; reapplied each pulse so it sticks
 			# while the policy is on, decays naturally when it ends.
 			if = {
-				limit = { has_modifier = colonial_cultural_assimilation_modifier }
+				limit = { has_variable = colonial_cultural_assimilation_modifier_held }
 				every_scope_state = {
 					limit = { is_overseas_colonial_state = yes }
 					add_modifier = {

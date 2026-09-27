@@ -1276,6 +1276,10 @@ un_vote.2 = {
 								name = un_sanctions_target_modifier
 								multiplier = un_enforcement
 							}
+							# The regime names its enforcer: two regimes can
+							# run at once, and un_lift_sanctions_button lifts
+							# only the one its presser enforces.
+							set_variable = { name = un_sanctions_enforced_by value = ROOT }
 							# Teeth by tier (redesign phase 5, §5.2): from Strong
 							# the members who voted for it embargo the target; at
 							# Supranational every major-power member does.

@@ -3,6 +3,44 @@
 # We use on_actions = { } to add a named sub-action (safe, additive).
 # Adding effect = { } would overwrite vanilla's BRZ election variable and coup modifier removal.
 
+# ---- Monthly, every country: the defender's side of an exposure ----
+# The target of an operation need not run a covert service of its own, so
+# what an exposure leaves on it is aged here, not by je_covert_warfare's pulse
+# (the single site for both; the entry used to age them, so a country without
+# it saw covert_warfare.2 once per game and kept a two-year-old exposure
+# "recent" for ever).
+#   iw_last_exposed_age         months since covert_op_burn caught an
+#                               operation against us. Only ever counts up; the
+#                               command centre stops showing it past ten years
+#                               (covert_last_exposed_known_sgui), and
+#                               surveillance_events.5 reads it as "within two
+#                               years".
+#   iw_defender_event_cooldown  set with its _age by covert_warfare.2; both go
+#                               after 24 months, so the event can come again.
+on_monthly_pulse_country = {
+	on_actions = {
+		covert_warfare_monthly_country
+	}
+}
+
+covert_warfare_monthly_country = {
+	effect = {
+		if = {
+			limit = { has_variable = iw_last_exposed_age }
+			change_variable = { name = iw_last_exposed_age add = 1 }
+		}
+		if = {
+			limit = { has_variable = iw_defender_event_cooldown_age }
+			change_variable = { name = iw_defender_event_cooldown_age add = 1 }
+			if = {
+				limit = { var:iw_defender_event_cooldown_age >= 24 }
+				remove_variable = iw_defender_event_cooldown
+				remove_variable = iw_defender_event_cooldown_age
+			}
+		}
+	}
+}
+
 on_election_campaign_end = {
 	on_actions = {
 		covert_warfare_election_end

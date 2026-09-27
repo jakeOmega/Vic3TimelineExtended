@@ -100,6 +100,30 @@ je_world_war = {
 				trigger = { always = yes }
 			}
 		}
+		# Our ideological camp (the country_is_* buckets in
+		# world_war_triggers.txt), which decides whom we count as our opposite.
+		first_valid = {
+			triggered_desc = {
+				desc = je_world_war_ideology_fascist
+				trigger = { country_is_fascist = yes }
+			}
+			triggered_desc = {
+				desc = je_world_war_ideology_communist
+				trigger = { country_is_communist = yes }
+			}
+			triggered_desc = {
+				desc = je_world_war_ideology_democratic
+				trigger = { country_is_democratic = yes }
+			}
+			triggered_desc = {
+				desc = je_world_war_ideology_authoritarian
+				trigger = { country_is_authoritarian = yes }
+			}
+			triggered_desc = {
+				desc = je_world_war_ideology_nonaligned
+				trigger = { always = yes }
+			}
+		}
 	}
 
 	progressbar = no

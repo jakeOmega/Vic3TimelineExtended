@@ -7,7 +7,8 @@ import tempfile
 import unittest
 
 from organize_loc import (
-    categorize_key, find_diplo_action_keys, find_quoted_loc_args, organize_all,
+    categorize_key, find_diplo_action_keys, find_parameterized_keys,
+    find_quoted_loc_args, find_war_goal_keys, organize_all,
 )
 
 
@@ -41,6 +42,13 @@ class CategorizeKeyTests(unittest.TestCase):
     def test_homeland_panel_family_stays_together(self):
         for key in ("TE_HOMELAND_CREATION", "TE_HOMELAND_REMOVAL",
                     "TE_HOMELAND_PAUSED_LOCKED", "TE_HOMELAND_CREATION_THRESHOLD"):
+            with self.subTest(key=key):
+                self.assertEqual(categorize_key(key, set()), "MISCELLANEOUS")
+
+    def test_resettlement_families_stay_together(self):
+        for key in ("resettlement_arrivals", "resettlement_arrivals_desc",
+                    "resettlement_special_settlements_politics", "resettlement_special_settlements_politics_desc",
+                    "resettlement_declaration_pm_line", "resettlement_possible_open_frontier_tt"):
             with self.subTest(key=key):
                 self.assertEqual(categorize_key(key, set()), "MISCELLANEOUS")
 
@@ -148,6 +156,110 @@ class FindDiploActionKeysTests(unittest.TestCase):
             "_effect_desc_first", "_effect_desc_third", "_effect_desc_global",
         ):
             self.assertIn(f"my_action{suffix}", keys)
+
+
+def _write(root, rel, text):
+    path = os.path.join(root, rel)
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8-sig") as fh:
+        fh.write(text)
+
+
+class FindParameterizedKeysTests(unittest.TestCase):
+    def _project(self, td):
+        _write(td, "common/scripted_effects/e.txt", (
+            "my_step = {\n"
+            "\tcustom_tooltip = {\n"
+            "\t\ttext = my_tt_$VAR$_$OP$\n"
+            "\t\tchange_variable = { name = $VAR$ $OP$ = 1 }\n"
+            "\t}\n"
+            "\t# text = my_tt_$VAR$_commented\n"
+            "}\n"
+            "# Passes its own parameter on to my_step.\n"
+            "my_wrapper = { my_step = { VAR = $V$ OP = add } }\n"
+            "other = { add_modifier = { name = other_$VAR$ } }\n"
+        ))
+        # The call sites live in a file with no `$` of its own.
+        _write(td, "common/scripted_guis/g.txt", (
+            "g = {\n"
+            "\teffect = { my_step = { VAR = alpha OP = subtract } }\n"
+            "\teffect = { my_wrapper = { V = beta } }\n"
+            "\teffect = { other = { VAR = gamma } }\n"
+            "}\n"
+        ))
+
+    def test_expands_templates_with_their_callers_values(self):
+        keys = {
+            "my_tt_alpha_subtract", "my_tt_beta_add", "other_gamma",
+            # alpha is only ever passed to my_step, never to other.
+            "other_alpha",
+            "my_tt_alpha_commented", "unrelated",
+        }
+        with tempfile.TemporaryDirectory() as td:
+            self._project(td)
+            found = find_parameterized_keys(td, keys)
+        self.assertIn("my_tt_alpha_subtract", found)
+        self.assertIn("my_tt_beta_add", found)  # through the wrapper's $V$
+        self.assertIn("other_gamma", found)
+        self.assertNotIn("other_alpha", found)
+        self.assertNotIn("my_tt_alpha_commented", found)
+        self.assertNotIn("unrelated", found)
+
+    def test_parameter_cycle_terminates(self):
+        # cyc_a passes $X$ to cyc_b and cyc_b passes it straight back. The
+        # `seen` guard in values_for is all that stops this recursing forever,
+        # which on the server would hang every POST /reload.
+        with tempfile.TemporaryDirectory() as td:
+            _write(td, "common/scripted_effects/c.txt", (
+                "cyc_a = {\n"
+                "\tcustom_tooltip = { text = cyc_tt_$X$ }\n"
+                "\tcyc_b = { X = $X$ }\n"
+                "}\n"
+                "cyc_b = {\n"
+                "\tcustom_tooltip = { text = cyc_b_tt_$X$ }\n"
+                "\tcyc_a = { X = $X$ }\n"
+                "}\n"
+            ))
+            _write(td, "events/e.txt", "e.1 = { immediate = { cyc_a = { X = one } } }\n")
+            found = find_parameterized_keys(
+                td, {"cyc_tt_one", "cyc_tt_two", "cyc_b_tt_one", "cyc_b_tt_two"}
+            )
+        # cyc_b only hears `one` through cyc_a, across the cut cycle: a result
+        # computed with the cycle cut short must not be remembered as final.
+        self.assertEqual(found, {"cyc_tt_one", "cyc_b_tt_one"})
+
+    def test_organize_all_keeps_parameterized_keys_out_of_unused(self):
+        loc = (
+            "l_english:\n"
+            " my_tt_alpha_subtract:0 \"down\"\n"
+            " other_alpha:0 \"never reached\"\n"
+        )
+        with tempfile.TemporaryDirectory() as td:
+            self._project(td)
+            _write(td, "localization/english/x_l_english.yml", loc)
+            with contextlib.redirect_stdout(io.StringIO()):
+                organize_all(td)
+            with open(os.path.join(td, "localization", "english", "te_unused_l_english.yml"),
+                      encoding="utf-8-sig") as fh:
+                unused = fh.read()
+        self.assertNotIn(" my_tt_alpha_subtract:", unused)
+        self.assertIn(" other_alpha:", unused)
+
+
+class FindWarGoalKeysTests(unittest.TestCase):
+    def test_engine_implicit_suite(self):
+        with tempfile.TemporaryDirectory() as td:
+            _write(td, "common/war_goal_types/w.txt", "te_my_goal = {\n\tkind = annex_country\n}\n")
+            keys = find_war_goal_keys(td)
+        for suffix in ("", "_desc", "_sway_desc", "_type_name", "_type_desc"):
+            self.assertIn(f"war_goal_te_my_goal{suffix}", keys)
+
+    def test_families_file_together(self):
+        for key in ("war_goal_te_reunify_country", "war_goal_te_reunify_country_desc",
+                    "war_goal_te_reunify_country_type_name",
+                    "nd_tt_nd_hardening_add", "nd_tt_nd_hardening_subtract"):
+            with self.subTest(key=key):
+                self.assertEqual(categorize_key(key, set()), "MISCELLANEOUS")
 
 
 if __name__ == "__main__":

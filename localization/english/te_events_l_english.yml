@@ -2578,6 +2578,12 @@
  movement_events_te.301.d:0 "What started as a community meeting filled a city block. Sympathetic newspapers run the photograph above the fold. The movement has, suddenly, faces and names."
  movement_events_te.301.f:0 "\"We had permits for a few hundred. By noon there were thousands, and we had no idea what to do with them — except keep them in the square, and keep them singing, and hope the police kept their distance long enough for the photographers to set up.\"\n\n\"I had never been to a rally before. My wife asked me not to go. I went anyway, and stood at the back, and listened. By the end I was crying in front of people I had never met, and not one of them looked at me as if I should be ashamed.\"\n\n\"My editor wanted six column inches. I gave him twenty-four. He ran it on the front page above the fold. He told me, much later, that he had been waiting for years for something that deserved that much space.\""
  movement_events_te.301.t:0 "First Mass Rally Draws Notice"
+ movement_events_te.302.a:0 "Give the law teeth: send in inspectors and prosecutors."
+ movement_events_te.302.b:0 "The courts are open. Let them bring their cases."
+ movement_events_te.302.c:0 "The law is equal. The rest is for society to settle."
+ movement_events_te.302.d:0 "No statute singles the minority out any longer, yet the movement's organizers have filled the capital's hearing rooms with evidence that landlords, employers, and local police still do. Their demand has changed: not new rights, but a state that enforces the ones already written."
+ movement_events_te.302.f:0 "\"The law says I can rent the flat. The landlord says it has just been let. It is let again every time I come back.\"\n\n\"We have six hundred affidavits like hers. Each of those refusals is lawful on its face, taken one at a time, and the ministry only ever takes them one at a time.\"\n\n\"The ministry's position is that discrimination is illegal. Ours is that nobody at the ministry has ever gone out to check whether that sentence is true.\""
+ movement_events_te.302.t:0 "Equal on Paper"
  movement_events_te.303.a:0 "A coalition that frightens the right people."
  movement_events_te.303.d:0 "Local branches of organized labor open their halls to civil rights organizers. Joint statements appear; shop floors are now movement spaces."
  movement_events_te.303.f:0 "\"For thirty years I told my men the civil rights question was a distraction from the wages question. This morning, the discriminated boys on the line and the rest of the boys on the line were drinking the same coffee in the same hall, and I am not going to be the one to tell them they are in two different fights.\"\n\n\"We brought the leafletters in through the side door. By the afternoon they were leafletting from the front, and the shop foreman was watching, and the shop foreman said nothing. That was the moment I knew we had won this hall.\"\n\n\"The owners will retaliate. They will try to split us apart. They will fail, this time, because we have already had the conversation they were counting on us not to have.\""
@@ -3324,6 +3330,59 @@
  repeatable_events.90.d_quantum:0 "Labs and fabs are all asking for the same rare substrates, and the supply chain cannot stretch that far without snapping. Production planners want subsidies; researchers want openness; everyone else wants first claim."
  repeatable_events.90.f:0 "The procurement officer spread his hands. 'There are three suppliers on the planet. One is in a country that hates us, one is six months behind on deliveries, and one just doubled their price.'\n\n'Can we substitute?'\n\n'If you'd like your quantum processors to work slightly less well than an abacus, certainly.'\n\nThe minister pinched the bridge of his nose. 'How did we build an entire industry on a mineral we can't reliably obtain?'\n\n'The same way we always do, sir. Optimistically.'"
  repeatable_events.90.t:0 "Quantum Materials Bottleneck"
+
+#
+# RESETTLEMENT
+#
+ resettlement.1.a:0 "Open the land at once."
+ resettlement.1.b:0 "Survey it first."
+ resettlement.1.d:0 "Word that the government is giving land away in [SCOPE.sState('rs_event_state').GetName] has spread faster than our surveyors can work. Crowds of would-be settlers are camped at the boundary markers, waiting for the signal to stake their claims."
+ resettlement.1.f:0 "In 1889 fifty thousand people raced into the Unassigned Lands of Oklahoma at the sound of a gun. Some had slipped across the line the night before."
+ resettlement.1.t:0 "Land Rush in [SCOPE.sState('rs_event_state').GetName]"
+ resettlement.2.a:0 "Send in the inspectors."
+ resettlement.2.b:0 "The market will sort it out."
+ resettlement.2.d:0 "Agents of land companies are filing claims in [SCOPE.sState('rs_event_state').GetName] in the names of settlers who do not exist, and reselling the best plots at a profit. Genuine settlers arrive to find the land already taken."
+ resettlement.2.f:0 "Much of the land given away under the Homestead Act ended up with speculators, cattle companies and railroads rather than the families it was meant for."
+ resettlement.2.t:0 "The Speculators"
+ resettlement.20.a:0 "We accept the cost."
+ resettlement.20.b:0 "End the coercive programs."
+ resettlement.20.d:0 "We are a party to the Universal Declaration of Human Rights, and we have begun a coercive resettlement program. Our treaty partners will hold it against us: we suffer #N Violating the Declaration#!, which grows with the number of people the program moves and fades over the following years once it stops."
+ resettlement.20.f:0 "The Declaration of 1948 promised everyone the right to freedom of movement and residence within the borders of their own state."
+ resettlement.20.t:0 "The Declaration and Our Settlements"
+ resettlement.3.a:0 "Send relief."
+ resettlement.3.b:0 "They will have to endure."
+ resettlement.3.d:0 "The first winter has caught the settlers of [SCOPE.sState('rs_event_state').GetName] in sod houses and dugouts. Fuel is short, the roads are closed and the new arrivals are falling sick."
+ resettlement.3.f:0 "Settlers on the northern plains measured their first years by the winters they survived."
+ resettlement.3.t:0 "A Hard Winter on the Frontier"
+ resettlement.4.a:0 "Fund a conservation program."
+ resettlement.4.b:0 "Keep plowing."
+ resettlement.4.d:0 "Years of plowing have stripped the grass that held the soil of [SCOPE.sState('rs_event_state').GetName]. Now the wind is taking the topsoil with it, in black clouds that bury fences and machinery."
+ resettlement.4.f:0 "The Dust Bowl of the 1930s drove hundreds of thousands off the Great Plains, and erosion ruined millions of hectares of the Virgin Lands in the early 1960s."
+ resettlement.4.t:0 "Dust Storms over [SCOPE.sState('rs_event_state').GetName]"
+ resettlement.5.a:0 "End the coercive programs."
+ resettlement.5.b:0 "These accounts are exaggerated."
+ resettlement.5.d:0 "A campaign against our coercive resettlement has caught the public's attention. Writers and reformers have published accounts of conditions in the settlements of [SCOPE.sState('rs_event_state').GetName], and they are demanding that the program end."
+ resettlement.5.f:0 "Chekhov's account of the penal colony on Sakhalin, Albert Londres's reports from French Guiana and Australia's Anti-Transportation League all turned public opinion against penal colonies."
+ resettlement.5.t:0 "The Reform Campaign"
+ resettlement.6.a:0 "Send grain and tools."
+ resettlement.6.b:0 "Let the settlements fend for themselves."
+ resettlement.6.d:0 "The deportees sent to [SCOPE.sState('rs_event_state').GetName] were set down without tools or seed. Now the settlements are starving."
+ resettlement.6.f:0 "In 1933 several thousand deportees were left on the island of Nazino in the Ob River without food or shelter. Within weeks most of them were dead."
+ resettlement.6.t:0 "Famine in the Settlements"
+ resettlement.7.a:0 "Let them go home, and end the program here."
+ resettlement.7.b:0 "The program continues."
+ resettlement.7.d:0 "Thousands of the people we resettled in [SCOPE.sState('rs_event_state').GetName] have signed a petition asking to go home to [SCOPE.sState('rs_return_state').GetName]. Some are refusing to work, and some have already left without permission."
+ resettlement.7.f:0 "The Soviet special settlers were released from 1954 onward. In 1978 and 1979 strikes by sent-down youth in Yunnan led China to end the Down to the Countryside movement."
+ resettlement.7.t:0 "A Petition to Return"
+ resettlement.8.a:0 "Negotiate reserves for them."
+ resettlement.8.b:0 "Back the settlers' claims."
+ resettlement.8.d:0 "The settlers arriving in [SCOPE.sState('rs_event_state').GetName] are fencing land that others have farmed, hunted and grazed for generations. The people who were here first are appealing to the government."
+ resettlement.8.f:0 "Treaties, reserves and broken promises followed the settlement of almost every frontier."
+ resettlement.8.t:0 "Land Disputes in [SCOPE.sState('rs_event_state').GetName]"
+ resettlement.9.a:0 "A new chapter."
+ resettlement.9.d:0 "[SCOPE.sState('rs_closed_state').GetName] is a frontier no longer. Its farms and towns are as settled as the rest of the country, and the Settlement Authority there has been wound up. If we want more settlers, we will have to find another frontier."
+ resettlement.9.f:0 "In 1890 the Superintendent of the Census reported that the United States no longer had a frontier line. Three years later Frederick Jackson Turner argued that its closing ended the first period of American history."
+ resettlement.9.t:0 "The Frontier Is Closed"
 
 #
 # SOCIAL_TENSIONS_EVENTS
@@ -4589,6 +4648,17 @@
  te_debug_nuclear.3.tt_step:0 "The world's monthly taboo step runs now"
 
 #
+# TE_DEBUG_RESETTLEMENT
+#
+ te_debug_resettlement.1.a:0 "Found a Settlement Authority in our emptiest frontier"
+ te_debug_resettlement.1.b:0 "Run this month's resettlement now"
+ te_debug_resettlement.1.c:0 "Close one of our Settlement Authorities"
+ te_debug_resettlement.1.d:0 "Log the frontier numbers"
+ te_debug_resettlement.1.desc:0 "Test the Settlement Authority. Every option writes TE_RESETTLEMENT: lines to debug.log."
+ te_debug_resettlement.1.flavor:0 "Console only."
+ te_debug_resettlement.1.t:0 "Debug: Internal Resettlement"
+
+#
 # TE_DEBUG_SPACE_RACE
 #
  te_debug_space_race.1.a:0 "Push every running milestone to 90% of its goal"
@@ -4781,6 +4851,7 @@
 # UN_EVENTS
 #
  un_events.1.a:0 "Sign the Charter. We believe in this vision."
+ un_events.1.a_pending_tt:0 "We become a founding member of the United Nations. Our membership takes effect when our United Nations [concept_journal_entry] opens."
  un_events.1.b:0 "We shall observe, but not yet commit."
  un_events.1.c:0 "This undermines our sovereignty."
  un_events.1.d:0 "The United Nations has been founded, and [ROOT.GetCountry.GetName] has been invited to sign its charter as a founding member. Membership promises a seat at the table of global governance, but carries [Concept('concept_obligation', 'obligations')]: international courts, collective security, and the subordination of national interests to the common good."
@@ -4945,7 +5016,7 @@
  un_events.23.t:0 "Physical Protection of Nuclear Material"
  un_events.3.a:0 "Propose the declaration to the General Assembly."
  un_events.3.c:0 "We will not be bound by this."
- un_events.3.d:0 "Delegations at the United Nations are pressing for a Universal Declaration of Human Rights, setting fundamental freedoms as the common standard for all peoples and nations. Nothing is before the General Assembly yet: we could table the declaration ourselves. Championing it would signal our commitment to the international order, though some of its provisions may conflict with domestic policy."
+ un_events.3.d:0 "Delegations at the United Nations are pressing for a Universal Declaration of Human Rights, setting fundamental freedoms as the common standard for all peoples and nations. Nothing is before the General Assembly yet: we could table the declaration ourselves. Championing it would signal our commitment to the international order, though some of its provisions may conflict with domestic policy. Parties that run coercive resettlement programs at home would be penalized for it."
  un_events.3.d_authoritarian:0 "A committee of idealists has drafted a Universal Declaration of Human Rights, and delegations are pressing for someone to table it before the General Assembly. For [ROOT.GetCountry.GetName], where the state ensures order, many of these so-called rights are tools of subversion dressed as [Concept('concept_power_bloc_principle', 'principles')]. Yet opposing it outright would make us a pariah."
  un_events.3.d_cause_war:0 "The war between the great powers has only just ended, and the chamber is full of delegates who mean never to see another.\n\n"
  un_events.3.d_council:0 "Delegations are pressing for a Universal Declaration of Human Rights to be tabled before the General Assembly. For [ROOT.GetCountry.GetName], it affirms rights our revolution was fought to secure - work, education, social security. But it also enshrines bourgeois civil liberties historically used to protect the exploiting class."
@@ -5079,7 +5150,7 @@
  un_vote.1.d_expulsion:0 "[SCOPE.sCountry('un_vote_proposer').GetName] has put a motion before the General Assembly calling for the expulsion of [SCOPE.sCountry('un_vote_target').GetName] from the [concept_un_security_council]. The motion cites recent abuses of the [concept_un_veto] and demands that [SCOPE.sCountry('un_vote_target').GetName] forfeit its [concept_un_permanent_member] seat. As a non-vetoable [concept_un_resolution_recommendatory], the motion requires a #G 2/3 supermajority#! to pass."
  un_vote.1.d_expulsion_target:0 "An ill-conceived motion has been put before the General Assembly: [SCOPE.sCountry('un_vote_proposer').GetName] is calling for our expulsion from the [concept_un_security_council], citing our principled exercise of the [concept_un_veto]. The motion requires a #G 2/3 supermajority#! to pass — sufficient delegations remain in our orbit to defeat it."
  un_vote.1.d_heritage:0 "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed the establishment of an international cultural heritage program to protect and preserve sites of outstanding universal value. A vote in favor commits our country to participate in the conservation effort."
- un_vote.1.d_human_rights:0 "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed a Universal Declaration of Human Rights to the General Assembly, establishing fundamental freedoms as the common standard for all peoples and nations. A vote in favor means our country ratifies the declaration and commits to upholding its [Concept('concept_power_bloc_principle', 'principles')]."
+ un_vote.1.d_human_rights:0 "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed a Universal Declaration of Human Rights to the General Assembly, establishing fundamental freedoms as the common standard for all peoples and nations. A vote in favor means our country ratifies the declaration and commits to upholding its [Concept('concept_power_bloc_principle', 'principles')]. Parties that run coercive resettlement programs at home will be penalized for it."
  un_vote.1.d_icc:0 "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed the Rome Statute establishing a permanent International Criminal Court with jurisdiction over genocide, war crimes, and crimes against humanity. A vote in favor submits our military and political leadership to international criminal jurisdiction."
  un_vote.1.d_law_of_sea:0 "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed a Convention on the Law of the Sea, establishing territorial waters, exclusive economic zones, and international maritime law. A vote in favor commits our country to international arbitration of maritime disputes and shared stewardship of the oceans."
  un_vote.1.d_military_mandate:0 "[SCOPE.sCountry('un_vote_proposer').GetName] has asked the General Assembly to authorize it, by name, to take back territory held by [SCOPE.sCountry('un_vote_target').GetName] — a state this chamber has already had occasion to censure. The resolution is narrow: one [concept_state_region], one claimant, one war, and nothing else. It is also the gravest thing this body can do. Carried, it lends the organisation's name to a war someone else will fight; refused, the claim stays a grievance and the Assembly keeps its hands clean. How shall [ROOT.GetCountry.GetName] vote?"

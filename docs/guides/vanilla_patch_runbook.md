@@ -136,6 +136,7 @@ python3 ig_feminism.py                               # common/interest_groups/00
 python3 pop_needs_curves.py                          # common/buy_packages/00_buy_packages.txt
 python3 resources.py                                 # map_data/state_regions/*.txt
 python3 scripts/generators/gen_formable_regions.py   # common/geographic_regions/te_formable_regions_generated.txt
+python3 scripts/generators/gen_region_area.py         # common/scripted_effects/te_region_area_generated.txt (bump VERSION if the map changed)
 python3 effect_trigger_validity_audit.py bootstrap   # docs/engine/effect_trigger_valid_keys.txt (frozen valid effect/trigger catalog)
 python3 scripts/generators/fold_vanilla_loc_accessors.py  # localization_accessor_vanilla_extras.py (1.14 added 117 accessors; 1.14.3 a further 5 — point releases count)
 ```
@@ -176,6 +177,8 @@ For each at-risk file, run a 3-way merge with vanilla's pre- and post-patch vers
 **Prove each merge preserved the mod's delta.** Strip BOM/CR from all three inputs, merge, then compare the set of non-blank changed lines of `diff(OLD, mod)` against `diff(NEW, merged)` — they must be identical (0 lost, 0 extra). This catches both a mod edit the merge dropped and a stale pre-patch vanilla line the merge kept. In 1.14 all 11 merges passed; the only 2 conflicts were mod-side trailing whitespace. Restore each file's BOM when copying back.
 
 **Sweep every `REPLACE:`/`INJECT:` target, not just the ones in changed files.** Locate each target key in the full `OLD_REF` and `NEW_REF` trees of its `common/` subfolder (rename-proof) and diff the block. A changed `REPLACE:` target needs vanilla's delta ported; a changed `INJECT:` target is usually fine (the mod appends sibling `modifier` blocks and vanilla's additions stack with them), but read the diff. 1.14: 898 targets, 0 removed, 6 changed — `ideology_pacifist` (generator-owned) plus war-support lines added inside 5 injected laws/techs.
+
+**A `REPLACE:` must carry its target's links, and its siblings may need one too.** Check the block's link fields against vanilla (`replacement_if_valid`, unlocks) and look for *sibling variants* in the same group (a PMG's principle or law variants) that should be overridden the same way. The mod's `REPLACE:pm_{steam,electric,diesel}_trains` lacked `replacement_if_valid`, and vanilla's `pm_*_trains_principle_transport_3` variants were never overridden. So the variants stayed selectable in `pmg_base_building_railway` with vanilla's Personal Transportation output until 2026-09-26. Principle checks are exact-tier, so a tier-3 method the mod keeps must also list the mod's tiers 4/5 in its `unlocking_principles`, inside the `REPLACE:` (an `INJECT:` on a REPLACEd entity is dropped).
 
 **A conflict-free merge is not a clean merge.** `git merge-file` happily produces a 0-conflict result when vanilla's edits don't textually overlap the mod's edits — but vanilla may have renamed a function the mod's untouched code-path still calls. After every merge, grep the merged file for any identifier vanilla deleted/renamed during this patch (use the engine-surface delta from step 3). The engine doesn't log GUI script errors, so a broken onclick handler manifests as a silently unresponsive button, not a `debug.log` entry — there's no runtime safety net.
 
