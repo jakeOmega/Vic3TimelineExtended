@@ -98,7 +98,7 @@ rocketry = {
 bombing_aircraft = {
 	# Propeller Aircraft, Fleet Carrier units, Total War law
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/military_aviation.dds"
+	texture = "gfx/interface/icons/invention_icons/bombing_aircraft.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -273,7 +273,7 @@ modern_skyscrapers = {
 
 advanced_agricultural_statistics = {
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/intensive_agriculture.dds"
+	texture = "gfx/interface/icons/invention_icons/advanced_agricultural_statistics.dds"
 	category = society
 
 	modifier = {
@@ -417,7 +417,7 @@ semiautomatic_rifle = {
 
 modern_vaccines = {
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/pharmaceuticals.dds"
+	texture = "gfx/interface/icons/invention_icons/modern_vaccines.dds"
 	category = society
 
 	unlocking_technologies = {
@@ -465,7 +465,7 @@ mass_media = {
 
 animation = {
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/film.dds"
+	texture = "gfx/interface/icons/invention_icons/animation.dds"
 	category = society
 
 	modifier = {
@@ -484,7 +484,7 @@ animation = {
 
 rural_electrification = {
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/electrical_generation.dds"
+	texture = "gfx/interface/icons/invention_icons/rural_electrification.dds"
 	category = society
 
 	modifier = {
@@ -626,7 +626,7 @@ naval_convoy_defense = {
 sonar = {
 	# ASW capability — boosts destroyer construction (the primary ASW platform) + admiral effects
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/radio.dds"
+	texture = "gfx/interface/icons/invention_icons/sonar.dds"
 	category = military
 
 	modifier = {
