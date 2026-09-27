@@ -567,7 +567,9 @@ decolonization_events.4 = {
 		# no homeland of its own cultures, is a former colony and holds no entry.
 		has_game_rule = decolonization_enabled
 		NOT = { has_modifier = cultural_reclamation_modifier }
-		has_technology_researched = decolonization
+		# The world's decolonization era, not our own research: a former colony
+		# rarely has the technology itself (owner ruling, 2026-09-26).
+		decol_era_begun = yes
 		is_subject = no
 		NOT = {
 			any_scope_state = {
@@ -819,7 +821,9 @@ decolonization_events.7 = {
 			has_modifier = foreign_investment_dependency_modifier
 			has_modifier = post_colonial_self_reliance_modifier
 		}
-		has_technology_researched = decolonization
+		# The world's decolonization era, not our own research: a former colony
+		# rarely has the technology itself (owner ruling, 2026-09-26).
+		decol_era_begun = yes
 		country_rank <= rank_value:minor_power
 		has_variable = recently_decolonized
 	}
@@ -1582,6 +1586,10 @@ decolonization_events.14 = {
 	trigger = {
 		# The system's rule, not je_colonial_empire: every great power takes a
 		# stance, a power without colonies most of all (option A's AI weights).
+		# That includes a great power whose own entry has completed or failed,
+		# on purpose: it stands for the powers that disapprove of other empires
+		# and press them (owner ruling, 2026-09-26). It is not an event about
+		# its own former colonies, which #44 meant to stop.
 		has_game_rule = decolonization_enabled
 		has_technology_researched = decolonization
 		country_rank >= rank_value:great_power
@@ -1784,6 +1792,10 @@ decolonization_events.15 = {
 		# The system's rule, not je_colonial_empire: the recipient has just
 		# become independent and holds no colonial entry of its own.
 		has_game_rule = decolonization_enabled
+		# The world's decolonization era: some country has researched the
+		# technology (owner ruling, 2026-09-26). Before it, independence does
+		# not raise the question.
+		decol_era_begun = yes
 		# Only fire on true independence — not on overlord-to-overlord transfer
 		# or other transitions where on_become_independent may still pulse.
 		is_subject = no
@@ -2011,7 +2023,9 @@ decolonization_events.16 = {
 		# The system's rule, not je_colonial_empire: the recipient is a former
 		# colony, which never holds that entry (see decol_mark_former_colony).
 		has_game_rule = decolonization_enabled
-		has_technology_researched = decolonization
+		# The world's decolonization era, not our own research: a former colony
+		# rarely has the technology itself (owner ruling, 2026-09-26).
+		decol_era_begun = yes
 		has_variable = recently_decolonized
 		is_subject = no
 		NOT = { has_modifier = partition_territorial_claims_modifier }
@@ -2201,7 +2215,9 @@ decolonization_events.17 = {
 		# The system's rule, not je_colonial_empire: the recipient is a former
 		# colony, which never holds that entry (see decol_mark_former_colony).
 		has_game_rule = decolonization_enabled
-		has_technology_researched = decolonization
+		# The world's decolonization era, not our own research: a former colony
+		# rarely has the technology itself (owner ruling, 2026-09-26).
+		decol_era_begun = yes
 		has_variable = recently_decolonized
 		is_subject = no
 		NOT = { has_modifier = border_dispute_active_modifier }
@@ -2357,7 +2373,9 @@ decolonization_events.18 = {
 		# The system's rule, not je_colonial_empire: the recipient is a former
 		# colony, which never holds that entry (see decol_mark_former_colony).
 		has_game_rule = decolonization_enabled
-		has_technology_researched = decolonization
+		# The world's decolonization era, not our own research: a former colony
+		# rarely has the technology itself (owner ruling, 2026-09-26).
+		decol_era_begun = yes
 		has_variable = recently_decolonized
 		is_subject = no
 		NOR = {
@@ -2487,7 +2505,9 @@ decolonization_events.19 = {
 
 	trigger = {
 		has_journal_entry = je_colonial_empire
-		has_technology_researched = decolonization
+		# The world's decolonization era (owner ruling, 2026-09-26), as for the
+		# former-colony events that lead here.
+		decol_era_begun = yes
 		country_rank >= rank_value:great_power
 		NOR = {
 			has_modifier = gp_military_intervention_modifier
@@ -2571,7 +2591,8 @@ decolonization_events.19 = {
 				limit = {
 					NOT = { this = root }
 					country_rank >= rank_value:great_power
-					has_technology_researched = decolonization
+					# Every other great power, whatever its own research: .19 already
+					# needs the world's decolonization era (decol_era_begun).
 				}
 				trigger_event = { id = decolonization_events.20 }
 			}
@@ -2662,7 +2683,9 @@ decolonization_events.20 = {
 	# intervened anywhere, not necessarily this one.
 	trigger = {
 		# The system's rule, not je_colonial_empire: any great power may answer
-		# the intervention, with or without colonies of its own.
+		# the intervention, with or without colonies of its own, and one whose
+		# own entry has ended included; it stands for the powers that disapprove
+		# of colonial empires and press them (owner ruling, 2026-09-26).
 		has_game_rule = decolonization_enabled
 		exists = scope:intervening_power
 		exists = scope:intervention_victim
@@ -2796,7 +2819,9 @@ decolonization_events.21 = {
 		# The system's rule, not je_colonial_empire: the recipient is a former
 		# colony, which never holds that entry (see decol_mark_former_colony).
 		has_game_rule = decolonization_enabled
-		has_technology_researched = decolonization
+		# The world's decolonization era, not our own research: a former colony
+		# rarely has the technology itself (owner ruling, 2026-09-26).
+		decol_era_begun = yes
 		has_variable = recently_decolonized
 		is_subject = no
 		NOR = {

@@ -16,6 +16,7 @@
 # At the end, also applies a 12-month "liberation contagion" -1.0/mo bar
 # drain to every other country running the colonial-empire JE. Produces
 # the historical wave pattern: India 1947 → Burma, Ceylon, Indonesia.
+# Last, it sends the new country the Nationalization Question (.15).
 apply_decolonization_path = {
 	# The parent is our former overlord, as for a country released by the
 	# vanilla release actions; without this the former-colony events never
@@ -142,6 +143,15 @@ apply_decolonization_path = {
 			months = 12
 		}
 	}
+
+	# The Nationalization Question (decolonization_events.15), for every
+	# country formed here (owner ruling, 2026-09-26). Its usual sender,
+	# on_become_independent, is for a subject made independent, which a country
+	# created by create_dynamic_country never was. A week's delay lets the new
+	# country's GDP and foreign-ownership figures, which .15's trigger reads,
+	# settle first. If the engine also sends on_become_independent, the
+	# nationalization_cooldown_var .15 sets in immediate stops a second firing.
+	trigger_event = { id = decolonization_events.15 days = 7 }
 }
 
 # Mark the scoped country as a former colony of $OVERLORD$, with the two
@@ -157,10 +167,11 @@ apply_decolonization_path = {
 # decolonization game rule, not on je_colonial_empire: a freed colony never
 # holds that entry (its possible needs an overseas colonial state or a colonial
 # subject). #44 gated every event in the file on the entry, which kept these
-# unreachable until 2026-09. They still need the former colony itself to have
-# researched decolonization (their triggers and the on_action's outer gate).
-# .15 fires from on_become_independent and reads neither variable; .19, on the
-# former overlord, needs .15's nationalization modifier on a country whose
+# unreachable until 2026-09. They need only the world's decolonization era
+# (decol_era_begun), not the former colony's own research (owner ruling,
+# 2026-09-26). .15 fires from on_become_independent and from
+# apply_decolonization_path, and reads neither variable; .19, on the former
+# overlord, needs .15's nationalization modifier on a country whose
 # former_overlord is that overlord.
 # A country the mod frees itself never passes through those release actions
 # (create_dynamic_country makes a new country; make_independent frees an

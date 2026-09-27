@@ -1664,7 +1664,12 @@ decolonization_events_on_action = {
 		if = {
 			limit = {
 				NOT = { is_country_type = decentralized }
-				has_technology_researched = decolonization
+				# The world's decolonization era, not our own research, so a former
+				# colony without the technology still gets its post-independence
+				# events (owner ruling, 2026-09-26). Every metropole-side event
+				# still needs our own technology through its own trigger (the
+				# entry, .14, the .60 / .61 targets).
+				decol_era_begun = yes
 			}
 			# Event firing weights audited (proposal #10):
 			# Total event weight ~265 vs 900 nothing = ~23% chance per month of
