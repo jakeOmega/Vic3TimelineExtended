@@ -311,8 +311,9 @@ Each month an Authority works down your other states, most eligible people
 first, until its capacity is met; it skips other Authorities' states. A state
 gives at most 2% of its eligible people a month across all your Authorities, and
 any draw of fewer than 100 people from a pop is skipped, so a pop smaller than
-5,000 is never recruited. The Authority shows "Settlers arrived last month" and
-"Died in transit last month", and each source state shows how many it gave.
+5,000 is never recruited. The Authority's Modifiers tab shows "Settlers arrived
+last month" and "Died in transit last month", and each source state's modifiers
+show how many it gave.
 
 The Resettlement Recruitment Drive decree steers recruitment. Every Authority
 recruits from a drive state before any other, and may take 4% of its eligible
