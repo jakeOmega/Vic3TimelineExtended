@@ -786,7 +786,7 @@ Per tracked country: 120 containers, each with 3 bookkeeping variables plus one 
 - **Gates:** the `decolonization_enabled` game rule, and some country in the world has researched `decolonization` (`decol_era_begun`; the collapsing country need not have it).
 - **Criteria for collapse:** non-player, alive, not decentralized, not a subject, holding no subjects, not freed in the last 20 years (`recently_decolonized`, which every release path sets), no civil war at `civil_war_progress >= 0.75`, not in a diplomatic play or a war, and tiny and poor on a sliding scale: population under 100k with average SoL under 6, 200k and 5, 300k and 4, 500k and 3, or 1M and 2.
 - **Resolution order:**
-  1. A neighbour of its most populous state whose owner shares a heritage trait group with it, is at peace and is not a subject → that owner **annexes** it (the notice is posted first, while the collapsing country still exists).
+  1. A neighbour of its most populous state whose owner shares a heritage trait group with it and is an AI country at peace and not a subject → that owner **annexes** it (never a player: owner ruling 2026-09-26) (the notice is posted first, while the collapsing country still exists).
   2. Otherwise, if nothing ties it to the rest of the world (no power bloc, no treaty in force, no company, no warheads) → **`set_country_type = decentralized`** (revert to uncolonized). Vanilla never does this, so the branch is limited to the plain case.
   3. Otherwise nothing happens; it is tested again next year.
 - **Notifications:** Countries in same strategic region AND great powers receive alerts.

@@ -25,7 +25,7 @@
 #   release path) is exempt, so a colony the Colonial Empire entry just freed
 #   cannot collapse the next year;
 # - a country with subjects never collapses;
-# - the absorber is at peace and not a subject;
+# - the absorber is an AI country, at peace and not a subject;
 # - the decentralize branch runs only for a country with nothing that ties it
 #   to other countries or that a decentralized country cannot hold: no power
 #   bloc, no treaty in force, no company, no warheads. Otherwise it waits and is
@@ -116,6 +116,11 @@ colonial_collapse_effect = {
 						# At peace, and free to annex (a subject's gains are its overlord's business)
 						is_at_war = no
 						is_subject = no
+						# AI only: a collapse never annexes a country into a player's
+						# (owner ruling, 2026-09-26). With no AI absorber the country
+						# may be decentralized instead, and a player can absorb that
+						# by the voluntary-union action.
+						is_player = no
 						any_primary_culture = {
 							shares_heritage_trait_group_with_any_primary_culture = scope:collapsing_country
 						}
