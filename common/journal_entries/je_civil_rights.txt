@@ -327,14 +327,14 @@
 
 			# --- Cooptation expiry: after 12 months the bar push goes to 0 ---
 			# Re-applies cleanly each tick once expired so the marker survives
-			# the periodic phase-modifier swaps below. The mirror counts, as for
-			# the counters: the self-heal above may have just re-added the policy.
+			# the periodic phase-modifier swaps below. The marker lasts the rest of
+			# the run once cooptation has had 12 months, running or not, so the
+			# counter alone decides (it only grows while cooptation runs). That also
+			# restores it, before a restart can collect the push, in a save where
+			# End Cooptation used to remove it and after a civil war whose rebuild
+			# left it to this pulse.
 			if = {
 				limit = {
-					OR = {
-						has_modifier = cr_cooptation_modifier
-						has_variable = cr_policy_cooptation
-					}
 					var:cr_cooptation_months >= 12
 					NOT = { has_modifier = cr_cooptation_expired }
 				}
