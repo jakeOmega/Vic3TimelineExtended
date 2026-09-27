@@ -440,6 +440,10 @@ gm_country_monthly = {
 	else = {
 		set_variable = gm_active
 	}
+	if = {
+		limit = { is_ai = no }
+		gm_debug_log = yes
+	}
 }
 
 # Country scope. The strongest IG outside the government, as a flag: the
@@ -1123,4 +1127,15 @@ gm_state_vanity_backlash = {
 		change_variable = { name = gm_vanity_ledger add = 1 }
 		post_notification = gm_vanity_backlash_notice
 	}
+}
+
+# ---- Debug (spec §10) ------------------------------------------------------------
+# Country scope. TE_MONUMENTS: lines in debug.log. Only the documented working
+# debug_log form ([SCOPE.ScriptValue('...')|N], no .MakeScope, no names:
+# scripting_best_practices.md § "debug_log Loc-String Templating Limitations").
+gm_debug_log = {
+	debug_log = "TE_MONUMENTS: [SCOPE.ScriptValue('gm_display_count')|0] monuments, [SCOPE.ScriptValue('gm_display_contested')|0] contested"
+	debug_log = "TE_MONUMENTS: standing grandeur [SCOPE.ScriptValue('gm_display_g_standing')|0], prestige +[SCOPE.ScriptValue('gm_display_prestige')|1]; regime grandeur [SCOPE.ScriptValue('gm_display_g_regime')|0], legitimacy +[SCOPE.ScriptValue('gm_display_legitimacy')|1]; cultural pull +[SCOPE.ScriptValue('gm_display_culture')|1]"
+	debug_log = "TE_MONUMENTS: teardown legitimacy +[SCOPE.ScriptValue('gm_display_teardown')|1], vanity legitimacy [SCOPE.ScriptValue('gm_display_vanity')|1]"
+	debug_log = "TE_MONUMENTS: IG approval AF [SCOPE.ScriptValue('gm_display_ig_armed_forces')|1] DV [SCOPE.ScriptValue('gm_display_ig_devout')|1] IN [SCOPE.ScriptValue('gm_display_ig_industrialists')|1] IT [SCOPE.ScriptValue('gm_display_ig_intelligentsia')|1] LO [SCOPE.ScriptValue('gm_display_ig_landowners')|1] PB [SCOPE.ScriptValue('gm_display_ig_petty_bourgeoisie')|1] RF [SCOPE.ScriptValue('gm_display_ig_rural_folk')|1] TU [SCOPE.ScriptValue('gm_display_ig_trade_unions')|1]"
 }

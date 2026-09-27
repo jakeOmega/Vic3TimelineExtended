@@ -1215,5 +1215,28 @@ class FlavourTests(unittest.TestCase):
         self.assertEqual(seen, 22)
 
 
+# ---- Task 11: the debug event ---------------------------------------------------------
+
+class DebugTests(unittest.TestCase):
+    def test_debug_event(self):
+        text = read(DEBUG_EVENTS)
+        self.assertIn("namespace = te_debug_monuments", text)
+        self.assertRegex(text, r"(?m)^te_debug_monuments\.1 = \{ # REVIEWED \d{4}-\d{2}-\d{2}: console-only")
+        body = squash(strip_comments(raw_block_at(text, r"(?m)^te_debug_monuments\.1\s*=\s*\{")))
+        for s in ("gm_state_start_ceremony = yes", "gm_country_monthly = yes", "gm_state_contest = yes",
+                  "gm_state_vanity_backlash = yes", "gm_debug_log = yes"):
+            self.assertIn(s, body)
+        L = loc()
+        for k in ("t", "desc", "flavor", "a", "b", "c", "d", "e"):
+            self.assertIn(f"te_debug_monuments.1.{k}", L)
+
+    def test_monthly_log_for_players(self):
+        monthly = squash(block(read(EFFECTS), "gm_country_monthly"))
+        self.assertIn("limit = { is_ai = no } gm_debug_log = yes", monthly)
+        log = block(read(EFFECTS), "gm_debug_log")
+        self.assertIn('debug_log = "TE_MONUMENTS:', log)
+        self.assertNotIn(".MakeScope", log, "debug_log's working form is [SCOPE.ScriptValue('x')|N]")
+
+
 if __name__ == "__main__":
     unittest.main()

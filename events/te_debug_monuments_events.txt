@@ -1,0 +1,77 @@
+﻿namespace = te_debug_monuments
+
+# ============================================================================
+# GRAND MONUMENTS — console test event: `event te_debug_monuments.1`
+# ============================================================================
+# Each option writes TE_MONUMENTS: lines to debug.log (gm_debug_log). The
+# options together answer the in-game checklist: a ceremony, a monthly pass,
+# a forced contest, vanity backlash, and a print of every total.
+
+te_debug_monuments.1 = { # REVIEWED 2026-09-27: console-only test event (`event te_debug_monuments.1`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { video = "unspecific_world_fair" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = te_debug_monuments.1.t
+	desc = te_debug_monuments.1.desc
+	flavor = te_debug_monuments.1.flavor
+
+	# Raise a level-20 monument in the capital and hold the ceremony.
+	option = {
+		name = te_debug_monuments.1.a
+		default_option = yes
+		capital = {
+			if = {
+				limit = {
+					NOT = { has_building = building_grand_monument }
+				}
+				create_building = { building = building_grand_monument level = 20 }
+			}
+			gm_state_start_ceremony = yes
+		}
+	}
+
+	# Run this month's pass now (contests, ledgers, totals, the log).
+	option = {
+		name = te_debug_monuments.1.b
+		gm_country_monthly = yes
+	}
+
+	# Contest our tallest regime, ruler or faith monument now, as if it had fallen.
+	option = {
+		name = te_debug_monuments.1.c
+		ordered_scope_state = {
+			limit = {
+				gm_state_is_dedicated = yes
+				gm_state_is_bound = yes
+				gm_state_is_contested = no
+			}
+			order_by = gm_state_grandeur
+			position = 0
+			check_range_bounds = no
+			gm_state_contest = yes
+		}
+		gm_country_refresh = yes
+	}
+
+	# Vanity backlash in the capital's monument, as if a level had finished in hard times.
+	option = {
+		name = te_debug_monuments.1.d
+		capital = {
+			if = {
+				limit = { has_building = building_grand_monument }
+				gm_state_vanity_backlash = yes
+			}
+		}
+		gm_country_refresh = yes
+	}
+
+	# Print every total.
+	option = {
+		name = te_debug_monuments.1.e
+		gm_debug_log = yes
+	}
+}
