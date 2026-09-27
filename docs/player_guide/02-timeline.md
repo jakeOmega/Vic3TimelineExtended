@@ -304,39 +304,10 @@ adds 3 cultural pull ([Where cultural pull comes
 from](10-influence.md#where-cultural-pull-comes-from)).
 
 Most wonders can only be built in one state, the landmark's real location, so
-only that state's owner can build them.
-
-| Wonder | State | Unlocked by |
-|---|---|---|
-| Golden Gate Bridge | California | Marketing Research |
-| Empire State Building | New York | Modern Skyscrapers |
-| CN Tower | Ontario | Modern Skyscrapers |
-| Sydney Opera House | New South Wales | Art Deco Architecture |
-| Hoover Dam | Nevada | Public Works Programs |
-| The Pentagon | Virginia | Combined Arms |
-| Azadi Tower | Mazandaran | Decolonization |
-| Kenyatta International Convention Centre | Kenya | Decolonization |
-| Kennedy Space Center | Florida | Space Exploration |
-| Aswan High Dam | Upper Egypt | Nuclear Energy |
-| Tokyo Tower | Kanto | Television Broadcasting |
-| Moscow State University | Moscow | Mainframe Computers |
-| Berlin TV Tower | Brandenburg | Transistor Technology |
-| Lotus Temple | Delhi | Pop Culture |
-| Basilica of Our Lady of Peace | Ivory Coast | Pop Culture |
-| Burj Khalifa | Trucial Coast | Computer-Aided Design |
-| World Trade Center | New York | Containerization |
-| Itaipu Dam | Paraná | Industrial Robotics |
-| Petronas Towers | Malaya | Cellular Networks |
-| Three Gorges Dam | Western Hubei | Clean Energy Technologies |
-| Gardens by the Bay | Malaya | Clean Energy Technologies |
-| Channel Tunnel | Home Counties (sorry, France) | Globalization |
-| Abraj Al-Bait Clock Tower | Hedjaz | Globalization |
-| Taipei 101 | Formosa | Digital Telecommunications |
-| Lotte World Tower | Gyeonggi | World Wide Web |
-| FAST Telescope | Guizhou | Machine Learning |
-| Shanghai Tower | Jiangsu | Advanced Structural Engineering |
-| Statue of Unity | Gujarat | Advanced Structural Engineering |
-| Golden Bridge | Tonkin | Advanced Structural Engineering |
+only that state's owner can build them: the Golden Gate Bridge in California,
+the Burj Khalifa on the Trucial Coast, the Three Gorges Dam in Western Hubei and
+26 more. [Wonder list](19-appendix-reference-lists.md#wonder-list) gives each
+one's state and the technology that unlocks it.
 
 Each wonder employs 10,000 workers, and its effects scale with how fully it is
 staffed. The effects are modest and themed: the dams add 10 to 20 Hydro Plant

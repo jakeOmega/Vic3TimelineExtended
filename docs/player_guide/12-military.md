@@ -44,36 +44,13 @@ large it is, and a formation without a general earns nothing at all.
 Every unit line runs past the base game's last tier, and the new units appear in
 the upgrade options of the older units in their line, so you can upgrade
 battalions in place. The base game's Heavy Tanks (Mobile Armor, era 5) move from
-the artillery group to the new Heavy Tanks group, with lower stats than before,
-and aircraft form a group of their own.
-
-| Group | Unit | Technology | Era | Battalion size |
-|---|---|---|---|---|
-| Infantry | Armored Infantry | Combined Arms | 6 | 1000 |
-| Infantry | Robotic Soldiers | Joint All-Domain Command and Control (JADC2) | 10 | 600 |
-| Infantry | Swarm Bots | Swarm Technology | 11 | 400 |
-| Infantry | Utility Fog Phalanx | Molecular Assemblers | 12 | 250 |
-| Marines | Combined Arms Marines | Combined Arms | 6 | 1000 |
-| Marines | Stealth Marines | Stealth Technology | 8 | 800 |
-| Marines | Networked Marines | JADC2 | 10 | 600 |
-| Marines | Bioenhanced Marines | Bioenhanced Soldiers | 11 | 500 |
-| Artillery | Motorized Artillery | Motorized Artillery | 6 | 1000 |
-| Artillery | Guided Artillery Projectiles | Guided Missiles | 7 | 1000 |
-| Artillery | Networked Guided Artillery Projectiles | Network Centric Warfare | 9 | 800 |
-| Artillery | Orbital Bombardment | Space Militarization | 11 | 100 |
-| Artillery | Orbital Precision Antimatter Strikes | Antimatter Production | 12 | 100 |
-| Cavalry | Modern Scout Tank | Inertial Navigation Systems | 7 | 1000 |
-| Cavalry | Stealth Reconnaissance Drone Carrier | Rapid Deployment Forces | 9 | 1000 |
-| Cavalry | Holographic Ambush Combat Vehicle | Augmented Reality Warfare | 11 | 1000 |
-| Heavy Tanks | Main Battle Tanks | Guided Missiles | 7 | 1000 |
-| Heavy Tanks | Reactive Armor Tank | Advanced Materials Armor | 8 | 1000 |
-| Heavy Tanks | Railgun Tank | Hypersonic Weapons | 10 | 1000 |
-| Heavy Tanks | DEW Tank | Muon-Catalyzed Fusion Reactors | 12 | 1000 |
-| Aircraft | Propeller Aircraft | Bombing Aircraft | 6 | 200 |
-| Aircraft | Jet-Powered Aircraft | Jet Engine Technology | 7 | 200 |
-| Aircraft | Stealth Aircraft | Stealth Technology | 8 | 200 |
-| Aircraft | Orbital Tactical Vehicles | Space Militarization | 11 | 100 |
-| Aircraft | Orbital Weapons Platforms | Orbital Weapon Platforms | 12 | 100 |
+the artillery group to the new Heavy Tanks group, with lower stats than in the
+base game, and aircraft form a group of their own. Each group gains three to
+five units, from Armored Infantry and Propeller Aircraft in era 6 to the Utility
+Fog Phalanx and Orbital Weapons Platforms in era 12, and later units come in
+smaller battalions, down to 100 men for the orbital ones. [Combat unit
+list](19-appendix-reference-lists.md#combat-unit-list) gives each unit's
+technology, era and battalion size.
 
 Offense and defense climb steeply with each tier, but read them with the
 battalion size. A battle weighs each battalion by its manpower as well as its
@@ -90,29 +67,11 @@ built under the Peasant Levies law.
 ## Ships and ship modifications
 
 Nineteen ship types extend the navy from era 6, with escorts, submarines,
-carriers, battle-line ships and troop transports in most eras.
-
-| Ship | Class | Role | Technology | Era | Obsolete with |
-|---|---|---|---|---|---|
-| Fleet Carrier | Cruisers | Carrier | Bombing Aircraft | 6 | Nuclear Energy |
-| Amphibious Assault Ship | Cruisers | Transport | Combined Arms | 6 | Precision Guided Munitions |
-| ASW Destroyer | Torpedo Craft | Escort | Sonar | 6 | Network Centric Warfare |
-| Nuclear Submarine | Torpedo Craft | Submarine | Advanced Submarine Technology | 7 | Rapid Deployment Forces |
-| Guided Missile Ship | Torpedo Craft | Escort | Guided Missiles | 7 | Directed Energy Weapons |
-| Nuclear Supercarrier | Cruisers | Carrier | Nuclear Energy | 7 | Hypersonic Weapons |
-| Marine Assault Ship | Cruisers | Transport | Precision Guided Munitions | 8 | Rapid Deployment Forces |
-| Arsenal Ship | Capital Ships | Battle line | Network Centric Warfare | 9 | Hypersonic Weapons |
-| Stealth Battlecruiser | Capital Ships | Battle line | Network Centric Warfare | 9 | Hypersonic Weapons |
-| Networked Air Defense Cruiser | Cruisers | Escort | Network Centric Warfare | 9 | Directed Energy Weapons |
-| Expeditionary Fast Transport | Cruisers | Transport | Network Centric Warfare | 9 | Orbital Weapon Platforms |
-| Stealth Attack Submarine | Torpedo Craft | Submarine | Rapid Deployment Forces | 9 | Directed Energy Weapons |
-| Expeditionary Sea Base | Cruisers | Transport | Rapid Deployment Forces | 9 | Orbital Weapon Platforms |
-| Hypersonic Missile Platform | Capital Ships | Battle line | Hypersonic Weapons | 10 | Antimatter Production |
-| Pulsed Laser Escort | Cruisers | Escort | Directed Energy Weapons | 11 | |
-| Swarm Coordination Vessel | Cruisers | Escort | Swarm Technology | 11 | |
-| Autonomous Swarm Submarine | Torpedo Craft | Submarine | Swarm Technology | 11 | |
-| Antimatter Battleship | Capital Ships | Battle line | Antimatter Production | 12 | |
-| Orbital Support Mothership | Cruisers | Transport | Orbital Weapon Platforms | 12 | |
+carriers, battle-line ships and troop transports in most eras: from the Fleet
+Carrier and ASW Destroyer of era 6 to the Antimatter Battleship and Orbital
+Support Mothership of era 12. [Ship list](19-appendix-reference-lists.md#ship-list)
+gives each ship's class, role and technology, and the technology that makes it
+obsolete.
 
 The Expeditionary Fast Transport is quick and carries little; the Expeditionary
 Sea Base is slow and carries four times as much. The base game's late ships go
@@ -123,18 +82,10 @@ with Nuclear Energy.
 
 In the ship designer, nine of the new ships bring their own armor, guns,
 propulsion and range modifications in three tiers; the others reuse those of a
-related ship. Eight new utility modifications join the base game's.
-
-| Utility modification | Technology | Effect | Mounted on |
-|---|---|---|---|
-| Sonar Suite | Sonar | +50% accuracy against every submarine, +100 detection | ASW Destroyer, the three new submarines |
-| Ballistic Missile Bay | Precision Guided Munitions | +50% blockade strength, +15% hull damage | Guided Missile Ship, Arsenal Ship, Hypersonic Missile Platform, Antimatter Battleship |
-| Underway Replenishment | Containerization | +100 supply capacity, +25% supply efficiency, +30% distance from port | Fleet Carrier, Nuclear Supercarrier, Arsenal Ship, Stealth Battlecruiser |
-| Aegis Air Defense | Network Centric Warfare | +200 screening, +30% accuracy against Guided Missile Ships, +20% against Arsenal Ships | Guided Missile Ship, Networked Air Defense Cruiser |
-| Helicopter Pad | Rapid Deployment Forces | +0.1 marine capacity, +0.2 carrying capacity, +15% naval invasion efficiency | The five transports |
-| DEW Point Defense | Directed Energy Weapons | −25% vulnerability, +200 screening | Nuclear Supercarrier, Arsenal Ship, Stealth Battlecruiser, Hypersonic Missile Platform, Pulsed Laser Escort, Swarm Coordination Vessel, Antimatter Battleship, Orbital Support Mothership |
-| Drone Complement | Swarm Technology | +30% accuracy, +25% screening, +200 detection | Nuclear Supercarrier, Expeditionary Sea Base, Stealth Battlecruiser, Hypersonic Missile Platform, Pulsed Laser Escort, Swarm Coordination Vessel, Antimatter Battleship, Orbital Support Mothership, the two later submarines |
-| Composite Armor Plating | Modern Material Science | +200 armor, −15% hull damage and −20% critical hits taken | Pulsed Laser Escort, Swarm Coordination Vessel, Antimatter Battleship |
+related ship. Eight new utility modifications join the base game's, from the
+Sonar Suite (Sonar) to Composite Armor Plating (Modern Material Science); [Ship
+utility modification list](19-appendix-reference-lists.md#ship-utility-modification-list)
+gives each one's technology and effect and the ships that mount it.
 
 Shipyards gain a Production Focus group that trades civilian hulls for naval
 construction; its strongest setting, Wartime Mobilization, needs the Total War

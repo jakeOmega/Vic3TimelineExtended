@@ -113,6 +113,7 @@ The chapters follow the game's own areas rather than the order systems appear.
 | [Quick reference](16-reference.md) | When each system appears, the journal entries at a glance, and a glossary. |
 | [Appendix: social movement details](17-appendix-social-movements.md) | The numbers and event lists behind the social movements chapter. |
 | [Appendix: events](18-appendix-events.md) | The event lists behind the chapters, from resettlement to the space race, with when each event fires and what its options do. |
+| [Appendix: reference lists](19-appendix-reference-lists.md) | The longer lists the chapters summarize: wonders, government types, combat units, ships and ship modifications. |
 
 ## Reporting problems
 
