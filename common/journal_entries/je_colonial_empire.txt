@@ -271,9 +271,13 @@
 			# --- Programmes a revolution's winner lost ---
 			# A civil war's winner inherits the programme records but not the
 			# modifiers; put back any programme whose record we hold, and record
-			# any programme enabled before the records existed. First, so the
-			# month counters below see it (decolonization.txt,
-			# decol_sync_programmes).
+			# any programme enabled before the records existed (decolonization.txt,
+			# decol_sync_programmes). A modifier added here is not visible to
+			# has_modifier later in this block, but a variable set here is, so
+			# every programme test below reads the record
+			# (<modifier>_held), which the programme effects keep in step with
+			# the modifier: a programme restored this month is counted, and
+			# Invest pays its expense, this month.
 			decol_sync_programmes = yes
 
 			# --- Path-dependence tracking ---
@@ -303,15 +307,15 @@
 			}
 			change_variable = { name = colonial_je_total_months add = 1 }
 			if = {
-				limit = { has_modifier = colonial_development_investment_modifier }
+				limit = { has_variable = colonial_development_investment_modifier_held }
 				change_variable = { name = colonial_invest_months add = 1 }
 			}
 			if = {
-				limit = { has_modifier = colonial_military_garrison_modifier }
+				limit = { has_variable = colonial_military_garrison_modifier_held }
 				change_variable = { name = colonial_garrison_months add = 1 }
 			}
 			if = {
-				limit = { has_modifier = colonial_cultural_assimilation_modifier }
+				limit = { has_variable = colonial_cultural_assimilation_modifier_held }
 				change_variable = { name = colonial_assimilate_months add = 1 }
 			}
 
@@ -356,7 +360,7 @@
 			# button (ce_remove_invest_in_development); the per-pulse
 			# re-application keeps the multiplier in sync with current GDP.
 			if = {
-				limit = { has_modifier = colonial_development_investment_modifier }
+				limit = { has_variable = colonial_development_investment_modifier_held }
 				remove_modifier = colonial_development_investment_expense_modifier
 				add_modifier = {
 					name = colonial_development_investment_expense_modifier
@@ -380,7 +384,7 @@
 			# economy. 2-month duration; reapplied each pulse so it sticks
 			# while the policy is on, decays naturally when it ends.
 			if = {
-				limit = { has_modifier = colonial_cultural_assimilation_modifier }
+				limit = { has_variable = colonial_cultural_assimilation_modifier_held }
 				every_scope_state = {
 					limit = { is_overseas_colonial_state = yes }
 					add_modifier = {

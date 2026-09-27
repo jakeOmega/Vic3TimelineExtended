@@ -120,10 +120,32 @@ class CoverageTests(unittest.TestCase):
 
     def test_sync_lists_every_permanent_modifier(self):
         sync = _block(EFFECTS, "decol_sync_permanent_modifiers")
-        pairs = dict(re.findall(
-            r"decol_sync_permanent_modifier\s*=\s*\{\s*MODIFIER\s*=\s*(\w+)\s+RECORD\s*=\s*(\w+)\s*\}",
-            sync))
-        self.assertEqual(pairs, PERMANENT)
+        call = r"\s*=\s*\{\s*MODIFIER\s*=\s*(\w+)\s+RECORD\s*=\s*(\w+)\s*\}"
+        pairs = dict(re.findall(r"decol_sync_permanent_modifier" + call, sync))
+        # Solidified is synced in halves (test_solidified_backfill_waits_for_no_entry).
+        backfilled = dict(re.findall(r"decol_backfill_permanent_record" + call, sync))
+        restored = dict(re.findall(r"decol_restore_permanent_modifier" + call, sync))
+        self.assertEqual(backfilled, restored)
+        self.assertFalse(set(pairs) & set(restored))
+        self.assertEqual({**pairs, **restored}, PERMANENT)
+
+    def test_solidified_backfill_waits_for_no_entry(self):
+        # colonial_empire_solidified_modifier is also the entry's top band
+        # modifier (on je:je_colonial_empire). Its record may be backfilled only
+        # while no entry runs, so a country-scope has_modifier that saw the band
+        # modifier could never mint the permanent reward.
+        sync = _block(EFFECTS, "decol_sync_permanent_modifiers")
+        pos = sync.index("decol_backfill_permanent_record = { MODIFIER = colonial_empire_solidified_modifier")
+        guards = []
+        for m in re.finditer(r"\bif\s*=\s*\{", sync):
+            end = _close(sync, m.end() - 1)
+            if m.start() < pos < end:
+                guards.append(_block(sync[m.start():end + 1], "limit"))
+        self.assertTrue(any(re.search(r"NOT\s*=\s*\{\s*has_journal_entry\s*=\s*je_colonial_empire\s*\}", g)
+                            for g in guards),
+                        "the Solidified backfill is not gated on the entry being inactive")
+        self.assertNotRegex(sync, r"decol_sync_permanent_modifier\s*=\s*\{\s*MODIFIER\s*=\s*"
+                                  r"colonial_empire_solidified_modifier\b")
 
     def test_programme_sync_lists_every_programme(self):
         sync = _block(EFFECTS, "decol_sync_programmes")
@@ -156,6 +178,19 @@ class RecordTests(unittest.TestCase):
                 self.assertRegex(_block(_block(DECISIONS, decision), "when_taken"),
                                  r"set_variable\s*=\s*" + record + r"\b")
 
+    def test_the_pulse_reads_programme_records(self):
+        # A modifier the pulse's own sync restores is invisible to has_modifier
+        # later in the same block; the record it reads instead is not. So the
+        # month counters, the Invest expense and the assimilation disruption
+        # read <modifier>_held.
+        pulse = _block(_block(JE, "on_monthly_pulse"), "effect")
+        for modifier, _on, _off in PROGRAMMES:
+            with self.subTest(programme=modifier):
+                self.assertNotRegex(pulse, r"has_modifier\s*=\s*" + modifier + r"\b")
+                self.assertRegex(pulse, r"has_variable\s*=\s*" + modifier + r"_held\b")
+        self.assertLess(pulse.index("decol_sync_programmes = yes"),
+                        pulse.index("change_variable = { name = colonial_invest_months"))
+
     def test_programme_records_follow_the_toggles_and_the_entry(self):
         cleanup = _block(EFFECTS, "colonial_empire_je_cleanup_effect")
         for modifier, on, off in PROGRAMMES:
@@ -176,8 +211,9 @@ class RepairTests(unittest.TestCase):
 
     def test_the_repair_only_adds(self):
         # Stateless and add-only, so a loyalist winner sees no change.
-        for effect in ("decol_sync_permanent_modifier", "decol_sync_programme",
-                       "decol_repair_after_civil_war"):
+        for effect in ("decol_backfill_permanent_record", "decol_restore_permanent_modifier",
+                       "decol_sync_permanent_modifier", "decol_sync_permanent_modifiers",
+                       "decol_sync_programme", "decol_repair_after_civil_war"):
             with self.subTest(effect=effect):
                 body = _block(EFFECTS, effect)
                 self.assertNotIn("remove_modifier", body)

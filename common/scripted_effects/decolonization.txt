@@ -806,9 +806,10 @@ decol_grant_permanent_modifier = {
 }
 
 # One permanent modifier, both ways: a modifier with no record was granted
-# before the record existed (record it); a record with no modifier is a
+# before the record existed (record it: the backfill, which only older saves
+# need, since every grant now sets its record); a record with no modifier is a
 # revolution's winner (put it back). Country scope.
-decol_sync_permanent_modifier = {
+decol_backfill_permanent_record = {
 	if = {
 		limit = {
 			has_modifier = $MODIFIER$
@@ -816,7 +817,10 @@ decol_sync_permanent_modifier = {
 		}
 		set_variable = { name = $RECORD$ value = yes }
 	}
-	else_if = {
+}
+
+decol_restore_permanent_modifier = {
+	if = {
 		limit = {
 			has_variable = $RECORD$
 			NOT = { has_modifier = $MODIFIER$ }
@@ -828,8 +832,24 @@ decol_sync_permanent_modifier = {
 	}
 }
 
+decol_sync_permanent_modifier = {
+	decol_backfill_permanent_record = { MODIFIER = $MODIFIER$ RECORD = $RECORD$ }
+	decol_restore_permanent_modifier = { MODIFIER = $MODIFIER$ RECORD = $RECORD$ }
+}
+
 decol_sync_permanent_modifiers = {
-	decol_sync_permanent_modifier = { MODIFIER = colonial_empire_solidified_modifier RECORD = colonial_empire_solidified_modifier_held }
+	# colonial_empire_solidified_modifier is also the entry's top band modifier,
+	# applied to je:je_colonial_empire each month at bar >= 90. A country-scope
+	# has_modifier should not see an entry's modifier, but that is unobserved;
+	# if it did, the backfill would record a reward the empire never earned, and
+	# a later sync would grant it. So its record is backfilled only while no
+	# entry runs: the reward comes only at completion, after which
+	# colonial_empire_completed keeps the entry shut for good.
+	if = {
+		limit = { NOT = { has_journal_entry = je_colonial_empire } }
+		decol_backfill_permanent_record = { MODIFIER = colonial_empire_solidified_modifier RECORD = colonial_empire_solidified_modifier_held }
+	}
+	decol_restore_permanent_modifier = { MODIFIER = colonial_empire_solidified_modifier RECORD = colonial_empire_solidified_modifier_held }
 	decol_sync_permanent_modifier = { MODIFIER = commonwealth_path_modifier RECORD = commonwealth_path_modifier_held }
 	decol_sync_permanent_modifier = { MODIFIER = iron_fist_path_modifier RECORD = iron_fist_path_modifier_held }
 	decol_sync_permanent_modifier = { MODIFIER = quiet_assimilation_path_modifier RECORD = quiet_assimilation_path_modifier_held }
@@ -872,9 +892,11 @@ decol_sync_programmes = {
 # loser's variables have merged in. Stateless, like sr_repair_after_civil_war:
 # it reads no side information and only adds what a record says is missing.
 # Whether on_civil_war_won runs before or after the inherited entry exists is
-# unknown, so the programmes are also synced by the entry's monthly pulse, and
-# the permanent modifiers by a yearly country pulse
-# (decol_permanent_modifier_sync_on_action).
+# unknown, and the programmes need the entry, so the entry's monthly pulse
+# syncs them too. The permanent modifiers' records are country variables,
+# merged before on_civil_war_won, so the repair restores them at once; the
+# yearly country pulse (decol_permanent_modifier_sync_on_action) is there to
+# backfill the records on saves from before they existed.
 decol_repair_after_civil_war = {
 	decol_sync_permanent_modifiers = yes
 	decol_sync_programmes = yes
