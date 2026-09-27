@@ -1,0 +1,5 @@
+# Optional extras for building the player guide PDF
+# (scripts/build_player_guide.py). The mod-state server, the tests and CI's
+# checks don't need these. Pinned so every machine lays out the PDF the same way.
+typst==0.15.0
+pypandoc_binary==1.17
