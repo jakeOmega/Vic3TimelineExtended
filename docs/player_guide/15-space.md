@@ -2,8 +2,8 @@
 
 The space race is a sequence of journal entries in which great and major powers
 compete to reach space milestones, from a first suborbital flight to colonies in
-the Kuiper Belt. The first country to finish each milestone keeps a larger
-permanent reward than anyone who follows. The entries start to appear once you
+the Kuiper Belt. The first country to finish each of the seven single-goal
+milestones keeps a larger permanent reward than anyone who follows. The entries start to appear once you
 research Rocketry in era 6, but you need a Space Program building, unlocked by
 Guided Missiles in era 7, before any of them can make progress. The Space Race
 game rule controls the system; with it off, the journal entries and their
@@ -12,10 +12,12 @@ events never appear.
 ## Joining the space race
 
 Only great powers and major powers can run a space programme. If you drop below
-major power, your running milestones stop and their progress is lost. A player
-country of either rank always makes progress. An AI country makes progress only
-while it is in the top three of the global country ranking, so in practice you
-race against the three strongest AI powers.
+major power, your running milestones stop and their progress is lost. The one
+exception is Solar System Colonization once you hold a colony: it keeps running
+whatever your rank. A player country of either rank always makes progress. An
+AI country makes progress only while it is in the top three of the global
+country ranking, so in practice you race against the AI powers that hold those
+places.
 
 ### The Space Program building
 
@@ -37,7 +39,7 @@ innovation, innovation cap and prestige.
 | Moon Mission | Space Exploration | adds Moon Landing and Deep-Space Probe | 1,500 |
 | Mars Mission | Knowledge Economy | adds Mars Landing and Moon Base | 5,000 |
 | Solar Colonization | Directed Energy Weapons | adds Solar System Colonization, stages 1 and 2 | 25,000 |
-| Deep Space Exploration | Space Colonization | adds colonization stages 3 to 5 | 50,000 |
+| Deep Space Exploration | Space Colonization | lets a country with no colony start colonizing at stages 3 to 5 | 50,000 |
 | Interstellar Mission | Muon-Catalyzed Fusion Reactors | adds the Interstellar Probe | 100,000 |
 
 > Lowering the production method, or losing the building, fails every running
@@ -83,13 +85,15 @@ Each running milestone has a panel in its journal entry. It shows progress
 against the goal, the pace per month, the current setback risk, the setbacks so
 far and a rough estimate of the months left. Hover the progress line to see the
 reward for finishing first and for finishing later. The controls are an approach
-selector (Safe or Ambitious) and a funding stepper. Two collapsed sections list
-which other powers are running the same milestone and whether its "first" is
-still unclaimed (they don't show rivals' progress), and how far your own
-programme has come across all nine entries.
+selector (Safe or Ambitious) and a funding stepper. Two collapsed sections
+follow. Who else is racing lists the other powers running the same milestone
+and whether its "first" is still unclaimed, but not how far along they are. The
+programme so far shows how far your own programme has come across all nine
+entries.
 
 A new milestone starts with no approach and funding level 1. Until you pick an
-approach it creeps forward at 0.5 a month and never suffers a setback.
+approach it creeps forward at 0.5 a month and never suffers a setback, but its
+funding level is already billed.
 
 ### Safe and Ambitious approaches
 
@@ -97,22 +101,29 @@ The approach decides how fast a milestone moves and how often it goes wrong.
 
 | Approach | Effect | Innovation cost |
 |---|---|---|
-| Safe | Halves the setback risk. | One extra funding level's worth. |
+| Safe | −50% setback risk. | One extra funding level's worth. |
 | Ambitious | +50% progress. | Two extra funding levels' worth. |
 
-Approach and funding modifiers sit on each milestone's journal entry, but the
-game adds them up for your country as a whole, and every running milestone with
-an approach moves at the same pace. So a Safe approach on one milestone lowers
-the risk on all of them, and an Ambitious one speeds them all up. Setback risk never drops below 1%
+Approach, funding and mission-choice modifiers sit on each milestone's journal
+entry, but the game adds them up for your country as a whole. Every running
+milestone with an approach moves at the same pace, and every milestone's base
+risk is scaled by the same total. A Safe approach on one milestone cuts the risk
+on all of them, including those on Ambitious, and an Ambitious one speeds up all
+of them, including those on Safe. They stack: two Ambitious milestones add
++100% progress, and two Safe ones bring every milestone down to the 1% floor.
+What stays with each milestone is its innovation cost and the kind of setback
+it suffers, which follows its own approach (see
+[Space race setbacks](#space-race-setbacks)). Setback risk never drops below 1%
 a month or rises above 50%. The panel's pace and risk figures are the ones the
 game uses, so check them after every change.
 
 ### Mission profile choices
 
 Thirty days after Orbital Flight, the Moon Landing, the Deep-Space Probe, the Moon
-Base or the Mars Landing starts, an event asks you to choose how to fly it. Your
-choice changes that programme's risk, and sometimes its pace, while it runs. When
-the milestone is finished it also decides a ten-year reward.
+Base or the Mars Landing starts, an event asks you to choose how to fly it. While
+that milestone runs, your choice changes the setback risk, and sometimes the
+pace, of your whole programme, in the same way as an approach. When the milestone
+is finished it also decides a reward that fades over ten years.
 
 | Event | Milestone | Options |
 |---|---|---|
@@ -129,11 +140,12 @@ at 3 and rises with technology: eleven space-related technologies from era 7 to
 era 11 raise it by 1 each, and four in era 12 raise it by 2 each. The fifth and
 highest tier of the Advanced Research power bloc principle adds another level.
 
-Every funding level adds 0.5 to your monthly pace. It also raises the Space
-Program's throughput by 25%, which makes the building consume more Launch
-Capacity. Funding and approach cost weekly innovation: 15 for each funding level,
-plus 15 for a Safe approach or 30 for an Ambitious one, multiplied by the
-milestone's cost factor from the table above. A Suborbital Flight at funding 1
+Every funding level, on any milestone, adds 0.5 to your monthly pace, and so to
+every milestone with an approach. It also raises the Space Program's throughput
+by 25%, which makes the building consume more Launch Capacity. Funding and
+approach cost weekly innovation: 15 for each funding level, plus 15 for a Safe
+approach or 30 for an Ambitious one, multiplied by the milestone's cost factor
+from the table above. A Suborbital Flight at funding 1
 on Safe costs 30 innovation a week; an Interstellar Probe at funding 3 on
 Ambitious costs 900. The Space Program Cost modifier on each journal entry shows
 the current drain.
@@ -145,9 +157,9 @@ bonuses, and never less than 0.5 once you have chosen an approach.
 |---|---|
 | Space Program: Earth Orbit, or any higher method, fully staffed | +0.5, or +1 |
 | Each funding level on each running milestone | +0.5 |
-| Space Elevator megaproject, fully staffed | +1 |
+| Space Elevator megaproject, each fully staffed level | +1 |
 | SpaceX, Lockheed Martin or Roscosmos company, when prosperous | +0.3 each |
-| International Space Partnership, for parties to the UN's International Space Cooperation | +0.1 |
+| International Space Partnership, for members that ratify the UN's International Space Cooperation | +0.1 |
 | Reusable Rocketry and Space Colonization technologies | +0.2 each |
 | Mission choices, probe targets and colony specializations | +0.1 to +0.6 each |
 
@@ -157,8 +169,13 @@ bonuses, and never less than 0.5 once you have chosen an approach.
 | Stolen Rocket Plans, while your Space Programme Espionage operation runs | +10%, and −10% setback risk |
 | Outer Space Treaty terms of International Space Cooperation | +10% for lagging powers, −5% for the leader |
 | Advanced Research principle, fifth tier | +10% |
-| Antimatter Engine production method | +5% |
+| Antimatter Engine, each fully staffed level | +5% |
+| Nanofabrication Center, each fully staffed level | −1% setback risk |
 | Temporary Safety Review, from some failure options | −10%, and −25% setback risk |
+
+The International Space Partnership and Outer Space Treaty figures are those at
+Established enforcement (×1); they scale with the UN's enforcement, as its other
+convention effects do.
 
 ## Space race setbacks
 
@@ -172,16 +189,18 @@ cost 25% of that milestone's progress, give Space Mission Failure (−2% prestig
 and −25 innovation cap, fading over five years) and radicalize some academics.
 They also start a six-month safety period during which none of your milestones
 can suffer another setback, although they keep moving at full pace; the panel
-calls this "shielded". One option usually adds a Temporary Safety Review, which
-fades over ten years, and in some events also switches the milestone to Safe.
-Another usually presses on with a further flat loss of progress and more
-radicals, and no safety period. Now and then the roll brings An Unexpected
-Breakthrough instead, which speeds up the Space Program for a year or two.
+says the programme is inside its post-setback review and shows the risk as 0%.
+One option usually adds a Temporary Safety Review, which fades over ten years,
+and in some events also switches the milestone to Safe. Another usually presses
+on with a further flat loss of progress and more radicals, and no safety period.
+Now and then the roll brings An Unexpected Breakthrough instead: no progress is
+lost, and the Space Program's throughput rises by 15% for 18 or 24 months.
 
 On a Safe approach you get a minor setback: missing parts, bad weather, a
 scandal, a quarrel with a foreign supplier. It costs 15% of the milestone's
 progress plus a few points, with no lasting modifier and no safety period. A few
-setbacks also damage the Space Program's throughput for some months.
+setbacks, on either approach, also cut the Space Program's throughput for some
+months.
 
 A setback never ends a milestone; it only costs time. Two things do: dropping
 below major power, or losing the production method or building the milestone
@@ -246,13 +265,15 @@ it has been claimed, and each stage needs more progress per colony.
 | 5 | The Kuiper Belt and beyond (Pluto-Charon, Eris, Makemake, Haumea, Sedna) | 5 | 650 |
 
 From stage 3, a country that doesn't yet hold a colony needs the Deep Space
-Exploration or Interstellar Mission method to start the programme. Each colony's
-event offers two specializations, and the one you choose becomes a small
-permanent modifier on the journal entry. The options differ by
-world: research speed, space race progress, Extraplanetary Base or fusion plant
+Exploration or Interstellar Mission method to start the programme; a country
+that already holds one carries on through all five stages with Solar
+Colonization. Each colony's event offers two specializations, and the one you
+choose becomes a small permanent modifier on the journal entry. The options
+differ by world: research speed, military research speed, innovation cap, space
+race progress, Extraplanetary Base, Fusion Plant or Orbital Solar Collector
 throughput, Advanced Materials or Launch Capacity output, cultural pull,
-influence or cheaper military goods. Your first colony also brings the event
-Beyond the Blue.
+influence, diplomatic reputation or cheaper military goods. Your first colony
+also brings the event Beyond the Blue.
 
 The entry stays open for as long as you hold a colony, even if you switch off
 the Solar Colonization method, so your colony modifiers are never lost; the
@@ -268,15 +289,16 @@ Besides the choice, setback and completion events above, the space race has
 yearly events for programmes under way. Some are hard science problems, such as
 radiation, the rocket equation, communication delay, closed-loop life support,
 solar storms and orbital debris; others are discoveries, such as water on Mars or
-lunar helium-3. They add or remove a few points of progress, or apply short
-modifiers. A handful connect the space race to other systems.
+lunar helium-3. Their options add progress to the milestones they concern,
+usually a few points and never more than 30, and some also bring loyalists,
+radicals or better relations. A handful connect the space race to other systems.
 
 | Event | When it can fire | What it offers |
 |---|---|---|
-| The Private Sector Steps Up | You have the SpaceX company and a milestone under way | 3 to 15 points of progress, more the more you hand to the company |
-| Tickets to the Stars | You have reached orbit and own a Tourism Industry | Space Tourism Revenue (+5% tourism output) for ten years, or a research bonus instead |
-| A Station for All Nations | You are a UN member between Orbital Flight and the Moon Landing, and another member has reached orbit | 5 points of progress, and for ten years either a joint station (research, prestige, influence, better relations with spacefaring members) or a national one (research, prestige) |
-| Off-World Industry Meets the Space Program | You are colonizing and own an Extraplanetary Base | 5 or 15 points of colonization progress; full integration adds ten years of research and prestige |
+| The Private Sector Steps Up | You have the SpaceX company and a milestone under way | 3 to 15 points of progress on every milestone under way, more the more you hand to the company |
+| Tickets to the Stars | You have reached orbit and own a Tourism Industry | Space Tourism Revenue (+5% tourism output, fading over ten years), a research bonus instead, or both for two and a half years |
+| A Station for All Nations | You are a UN member between Orbital Flight and the Moon Landing, and another member has reached orbit | 5 points of progress, and a ten-year, fading bonus from either a joint station (research, prestige, influence, better relations with spacefaring members) or a national one (research, prestige) |
+| Off-World Industry Meets the Space Program | You are colonizing and own an Extraplanetary Base | 5 or 15 points of colonization progress; full integration adds research and prestige, fading over ten years |
 | The Elevator Advantage | You own a Space Elevator and are building the Moon Base, landing on Mars or colonizing | 8 or 12 points of progress on those missions |
 
 The Space Elevator and the Extraplanetary Base are covered in
@@ -290,9 +312,9 @@ AI great and major powers use the same entries, approaches and funding. Only an
 AI in the top three of the global ranking makes progress; a weaker one can open
 an entry but its bar doesn't move, and the Who else is racing list leaves it
 out. AI great powers prefer the Ambitious approach, more so when another country
-is running the same milestone; smaller AI powers lean towards Safe. The AI raises funding while it has innovation to spare and cuts it
-when innovation runs short.
+is running the same milestone; AI major powers lean towards Safe. The AI raises
+funding while it has innovation to spare and cuts it when innovation runs short.
 
 A revolution's winner continues the old country's programme, with its progress
-and its rewards, and rebels can't start a programme of their own during a civil
+(except progress towards a first colony) and its rewards, and rebels can't start a programme of their own during a civil
 war; see [Government, laws and characters](05-politics.md).
