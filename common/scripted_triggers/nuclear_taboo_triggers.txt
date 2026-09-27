@@ -97,10 +97,28 @@ nd_taboo_can_halt = {
 	}
 }
 
+# The rank half of nuclear_program_can_run_programme (nuke_triggers.txt):
+# does this country have the standing to sustain a nuclear weapons programme
+# on its own — great-power rank, or a major power with ICBMs? The aid
+# alternative is not here: it is a patron's choice, not this country's
+# standing (I2, final-review.md).
+nd_taboo_has_programme_standing = {
+	OR = {
+		country_rank >= rank_value:great_power
+		AND = {
+			country_rank = rank_value:major_power
+			has_technology_researched = ICBMs
+		}
+	}
+}
+
 # The AI takes the bomb up again when an armed country threatens it — at war
 # with it, or an antagonistic armed rival — in a world that no longer holds the
-# bomb in much horror (below 50).
+# bomb in much horror (below 50), and only when it could actually run a
+# programme (I2, final-review.md): otherwise Resume would only end its
+# renunciation and pay the price for nothing.
 nd_taboo_ai_would_resume = {
+	nd_taboo_has_programme_standing = yes
 	nd_taboo_value < nd_taboo_line_established
 	save_temporary_scope_as = nd_tb_self
 	any_country = {

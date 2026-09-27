@@ -14,14 +14,12 @@
 
 # Country scope: does this country have the standing to sustain a nuclear
 # weapons programme? Rank, or a patron's aid, and no disarmament. Read through
-# nuclear_program_has_programme, which adds the science and the game rule.
+# nuclear_program_has_programme, which adds the science and the game rule. The
+# rank half is nd_taboo_has_programme_standing (nuclear_taboo_triggers.txt),
+# shared with Resume the Nuclear Programme's standing check (I2, final-review.md).
 nuclear_program_can_run_programme = {
 	OR = {
-		country_rank >= rank_value:great_power
-		AND = {
-			country_rank = rank_value:major_power
-			has_technology_researched = ICBMs
-		}
+		nd_taboo_has_programme_standing = yes
 		modifier:country_receiving_nuclear_program_aid_bool = yes
 	}
 	NOT = {

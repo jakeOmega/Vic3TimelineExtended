@@ -318,6 +318,15 @@ nd_taboo_resume_programme = {
 	}
 
 	when_taken = {
+		# A renouncer without the standing to run a programme (I2, final-review.md):
+		# Resume still ends the renunciation and pays its price, but gains no
+		# programme. Trigger-gated custom_tooltip, the form nuclear_crisis_effects.txt
+		# uses for a conditional explanatory line (e.g. nd_crisis_open's
+		# dispute-kind branches).
+		if = {
+			limit = { nd_taboo_has_programme_standing = no }
+			custom_tooltip = { text = nd_taboo_tt_resume_no_standing }
+		}
 		nd_taboo_resume = yes
 	}
 

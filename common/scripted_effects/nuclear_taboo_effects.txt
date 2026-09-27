@@ -402,6 +402,11 @@ nd_taboo_ceiling_lower = {
 		set_variable = { name = nd_warhead_ceiling value = nd_taboo_ceiling_lowered_value }
 	}
 	hidden_effect = {
+		# A player-set ceiling is not the AI review's own (M2, final-review.md).
+		if = {
+			limit = { has_variable = nd_ai_ceiling_from_review }
+			remove_variable = nd_ai_ceiling_from_review
+		}
 		nd_taboo_refresh_held = yes
 	}
 }
@@ -412,6 +417,10 @@ nd_taboo_ceiling_raise = {
 		set_variable = { name = nd_warhead_ceiling value = nd_taboo_ceiling_raised_value }
 	}
 	hidden_effect = {
+		if = {
+			limit = { has_variable = nd_ai_ceiling_from_review }
+			remove_variable = nd_ai_ceiling_from_review
+		}
 		nd_taboo_refresh_held = yes
 	}
 }
@@ -422,6 +431,10 @@ nd_taboo_ceiling_lift = {
 		remove_variable = nd_warhead_ceiling
 	}
 	hidden_effect = {
+		if = {
+			limit = { has_variable = nd_ai_ceiling_from_review }
+			remove_variable = nd_ai_ceiling_from_review
+		}
 		nd_taboo_refresh_held = yes
 	}
 }
@@ -457,6 +470,7 @@ nd_taboo_dismantle_begin = {
 		text = nd_taboo_tt_dismantle_start
 		set_variable = { name = nd_dismantle_start_stock value = nd_stockpile }
 		set_variable = { name = nd_dismantle_months_left value = nd_taboo_dismantle_months_value }
+		set_variable = { name = nd_dismantle_retired value = 0 }
 	}
 	if = {
 		limit = {
@@ -482,6 +496,10 @@ nd_taboo_dismantle_stop = {
 	custom_tooltip = {
 		text = nd_taboo_tt_halt
 		remove_variable = nd_dismantle_months_left
+		if = {
+			limit = { has_variable = nd_dismantle_retired }
+			remove_variable = nd_dismantle_retired
+		}
 		change_variable = { name = nd_credibility subtract = nd_taboo_halt_credibility }
 		clamp_variable = { name = nd_credibility min = 0 max = 100 }
 	}
@@ -510,10 +528,28 @@ nd_taboo_dismantle_step = {
 			has_variable = nd_renounced
 		}
 		remove_variable = nd_dismantle_months_left
+		if = {
+			limit = { has_variable = nd_dismantle_retired }
+			remove_variable = nd_dismantle_retired
+		}
+	}
+	# A civil war of ours is still being fought (spec §5.2 forbids dismantling
+	# through one): nothing moves this month — no retirement, no countdown, no
+	# completion — so the schedule resumes where it left off once every civil
+	# war of ours is over (nuclear_custody_triggers.txt, nd_in_civil_war).
+	else_if = {
+		limit = { nd_in_civil_war = yes }
+		# Deliberately empty: the pause itself. Load-bearing (it claims this
+		# case ahead of the `else` below), so empty_effect_audit does not flag it.
 	}
 	else = {
+		if = {
+			limit = { NOT = { has_variable = nd_dismantle_retired } }
+			set_variable = { name = nd_dismantle_retired value = 0 }
+		}
 		set_variable = { name = nd_tb_retire value = nd_taboo_dismantle_this_month_value }
 		change_variable = { name = nuclear_weapon_stockpile subtract = var:nd_tb_retire }
+		change_variable = { name = nd_dismantle_retired add = var:nd_tb_retire }
 		change_variable = { name = nd_dismantle_months_left subtract = 1 }
 		nd_ledger_refresh = yes
 		remove_variable = nd_tb_retire
@@ -528,7 +564,22 @@ nd_taboo_dismantle_step = {
 # monthly half, which refreshes the hold and the possession cost once after it
 # — so this must not.
 nd_taboo_dismantle_complete = {
-	nd_taboo_note_renunciation = { WARHEADS = var:nd_dismantle_start_stock }
+	# The warheads actually taken apart, not the count at the start (I1,
+	# final-review.md): a civil war mid-dismantle can move stock out from under
+	# us without our choosing to give it up. Kept afterward, unlike the other
+	# nd_dismantle_* variables, so nuclear_taboo.20 can still read it — trigger_event
+	# renders after this whole block finishes, so removing it here would blank
+	# the event's read (the way nd_dismantle_start_stock is kept). Falls back
+	# to the start stock, and backfills the variable from it, for a dismantling
+	# begun before nd_dismantle_retired existed.
+	if = {
+		limit = { has_variable = nd_dismantle_retired }
+		nd_taboo_note_renunciation = { WARHEADS = var:nd_dismantle_retired }
+	}
+	else = {
+		nd_taboo_note_renunciation = { WARHEADS = var:nd_dismantle_start_stock }
+		set_variable = { name = nd_dismantle_retired value = var:nd_dismantle_start_stock }
+	}
 	set_variable = { name = nuclear_weapon_stockpile value = 0 }
 	set_variable = nd_renounced_locked
 	add_modifier = { name = nd_taboo_renounced }
@@ -540,6 +591,10 @@ nd_taboo_dismantle_complete = {
 	if = {
 		limit = { has_variable = nd_warhead_ceiling }
 		remove_variable = nd_warhead_ceiling
+	}
+	if = {
+		limit = { has_variable = nd_ai_ceiling_from_review }
+		remove_variable = nd_ai_ceiling_from_review
 	}
 	nd_snap_public_estimate = yes
 	nd_apply_posture_modifiers = yes
@@ -630,13 +685,25 @@ nd_taboo_ai_review_arsenal = {
 			nd_stockpile > nd_taboo_ai_reduce_line_value
 		}
 		set_variable = { name = nd_warhead_ceiling value = nuclear_ai_desired_stockpile }
+		# Marks this ceiling as the review's own (M2, final-review.md), so the
+		# Lift branch below undoes only what the review itself set, not a
+		# player's own cut through a band event.
+		set_variable = nd_ai_ceiling_from_review
 	}
 	else_if = {
 		limit = {
 			has_variable = nd_warhead_ceiling
 			var:nd_warhead_ceiling < nuclear_ai_desired_stockpile
+			OR = {
+				has_variable = nd_ai_ceiling_from_review
+				is_at_war = yes
+			}
 		}
 		remove_variable = nd_warhead_ceiling
+		if = {
+			limit = { has_variable = nd_ai_ceiling_from_review }
+			remove_variable = nd_ai_ceiling_from_review
+		}
 	}
 }
 
@@ -831,6 +898,10 @@ nd_taboo_opt_cut_arsenal = {
 		set_variable = { name = nd_warhead_ceiling value = nd_taboo_half_arsenal_value }
 	}
 	hidden_effect = {
+		if = {
+			limit = { has_variable = nd_ai_ceiling_from_review }
+			remove_variable = nd_ai_ceiling_from_review
+		}
 		nd_taboo_refresh_held = yes
 	}
 }

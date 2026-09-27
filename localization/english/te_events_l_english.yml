@@ -2958,7 +2958,7 @@
  nuclear_taboo.2.f:0 "\"We keep it so that no one will ever use it. Including us.\""
  nuclear_taboo.2.t:0 "A Line the World Will Not Cross"
  nuclear_taboo.20.a:0 "A burden we are glad to set down"
- nuclear_taboo.20.d:0 "The last of our warheads has been taken apart, under the eyes of foreign inspectors and our own cameras. #v [ROOT.GetCountry.MakeScope.Var('nd_dismantle_start_stock').GetValue|0]#! weapons — years of work and a fortune — are gone by our own decision. Few states have ever given up the bomb of their own accord, and the world's regard for it will follow how much the world has come to fear the weapon: the nuclear taboo stands at #v [GetGlobalVariable('nd_taboo').GetValue|0]#!."
+ nuclear_taboo.20.d:0 "The last of our warheads has been taken apart, under the eyes of foreign inspectors and our own cameras. #v [ROOT.GetCountry.MakeScope.Var('nd_dismantle_retired').GetValue|0]#! weapons — years of work and a fortune — are gone by our own decision. Few states have ever given up the bomb of their own accord, and the world's regard for it will follow how much the world has come to fear the weapon: the nuclear taboo stands at #v [GetGlobalVariable('nd_taboo').GetValue|0]#!."
  nuclear_taboo.20.f:0 "\"We built it because we feared our neighbours. We have taken it apart because we came to fear it more.\""
  nuclear_taboo.20.t:0 "The Last Warhead"
  nuclear_taboo.3.d:0 "In the world's eyes the bomb has become a weapon that cannot be used. Holding one now draws questions at home and censure abroad, and the larger the arsenal, the sharper both become. The nuclear taboo stands at #v [GetGlobalVariable('nd_taboo').GetValue|0]#!."
@@ -4585,7 +4585,7 @@
  te_debug_nuclear.3.tt_20:0 "The nuclear taboo is set to 20"
  te_debug_nuclear.3.tt_85:0 "The nuclear taboo is set to 85"
  te_debug_nuclear.3.tt_age:0 "Ten years are added to the tradition of non-use"
- te_debug_nuclear.3.tt_renounce:0 "We are noted as having given up ten warheads"
+ te_debug_nuclear.3.tt_renounce:0 "We are noted as having given up ten warheads. If we are still armed, the next monthly step books us a breakout"
  te_debug_nuclear.3.tt_step:0 "The world's monthly taboo step runs now"
 
 #

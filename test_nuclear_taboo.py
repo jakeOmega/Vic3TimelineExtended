@@ -89,10 +89,15 @@ class TestScoreCore(unittest.TestCase):
         self.assertNotIn("add_modifier", body)
         self.assertNotIn("root.var", body)
 
-    def test_birth_is_called_at_the_first_warhead(self):
+    def test_birth_is_called_only_in_the_world_first_branch(self):
+        # M1, final-review.md: every later first device (a second, third, …
+        # power's) must pass through harmlessly, leaving the birth to the
+        # monthly seed for a save that predates the taboo.
         text = strip_comments(read(WEAPON_EFFECTS))
-        i = text.index("set_global_variable = { name = world_first_nuclear_weapon value = yes }")
-        self.assertIn("nd_taboo_birth = yes", text[i:i + 200])
+        branch_start = text.index("limit = { NOT = { has_global_variable = world_first_nuclear_weapon } }")
+        branch_end = text.index("set_global_variable = { name = world_first_nuclear_weapon value = yes }")
+        self.assertLess(branch_start, branch_end)
+        self.assertIn("nd_taboo_birth = yes", text[branch_start:branch_end])
 
     def test_existing_world_is_seeded_from_the_first_device(self):
         body = block(self.effects, "nd_taboo_seed_existing_world")
@@ -457,6 +462,34 @@ class TestExits(unittest.TestCase):
         self.assertLess(complete.index("nd_taboo_note_renunciation = { WARHEADS = var:nd_dismantle_start_stock }"),
                         complete.index(ZEROING))
 
+    def test_dismantling_pauses_through_a_civil_war(self):
+        # I1, final-review.md: spec §5.2 forbids dismantling through a civil
+        # war, so the monthly step must ask nd_in_civil_war, not just at the
+        # start.
+        step = block(self.taboo, "nd_taboo_dismantle_step")
+        self.assertIn("nd_in_civil_war = yes", step)
+
+    def test_completion_credits_only_what_it_retired(self):
+        complete = block(self.taboo, "nd_taboo_dismantle_complete")
+        retired_call = "nd_taboo_note_renunciation = { WARHEADS = var:nd_dismantle_retired }"
+        fallback_call = "nd_taboo_note_renunciation = { WARHEADS = var:nd_dismantle_start_stock }"
+        self.assertIn(retired_call, complete)
+        self.assertIn(fallback_call, complete)
+        self.assertLess(complete.index(retired_call), complete.index(ZEROING))
+        self.assertLess(complete.index(fallback_call), complete.index(ZEROING))
+        # The retired count is set to 0 at the start and accumulated each
+        # month, so it is never absent for a dismantling begun after this fix.
+        self.assertIn("name = nd_dismantle_retired value = 0", block(self.taboo, "nd_taboo_dismantle_begin"))
+        step = block(self.taboo, "nd_taboo_dismantle_step")
+        self.assertIn("name = nd_dismantle_retired add = var:nd_tb_retire", step)
+
+    def test_last_warhead_loc_reads_what_was_retired(self):
+        # nuclear_taboo.20.d must not read nd_dismantle_start_stock any more
+        # (I1): a civil war mid-dismantle can leave the two counts different.
+        text = loc_value("nuclear_taboo.20.d")
+        self.assertIn("Var('nd_dismantle_retired')", text)
+        self.assertNotIn("nd_dismantle_start_stock", text)
+
     def test_every_ceiling_change_refreshes_the_hold(self):
         for name in ("nd_taboo_ceiling_lower", "nd_taboo_ceiling_raise", "nd_taboo_ceiling_lift",
                      "nd_taboo_dismantle_start", "nd_taboo_dismantle_halt"):
@@ -505,6 +538,25 @@ class TestExits(unittest.TestCase):
         self.assertIn("has_modifier = nd_taboo_renounced", body)
         self.assertIn("nd_taboo_resume = yes", body)
         self.assertIn("nd_taboo_ai_would_resume = yes", body)
+        # I2, final-review.md: a renouncer without the standing to run a
+        # programme is warned that Resume only ends the renunciation.
+        self.assertIn("nd_taboo_has_programme_standing = no", body)
+        self.assertIn("nd_taboo_tt_resume_no_standing", body)
+
+    def test_resume_needs_standing(self):
+        nuke_triggers = strip_comments(read(NUKE_TRIGGERS))
+        run = block(nuke_triggers, "nuclear_program_can_run_programme")
+        self.assertIn("nd_taboo_has_programme_standing = yes", run)
+        self.assertIn("modifier:country_receiving_nuclear_program_aid_bool = yes", run)
+        standing = block(self.triggers, "nd_taboo_has_programme_standing")
+        self.assertIn("country_rank >= rank_value:great_power", standing)
+        self.assertIn("country_rank = rank_value:major_power", standing)
+        self.assertIn("has_technology_researched = ICBMs", standing)
+        would_resume = block(self.triggers, "nd_taboo_ai_would_resume")
+        self.assertIn("nd_taboo_has_programme_standing = yes", would_resume)
+
+    def test_resume_no_standing_key_has_loc(self):
+        self.assertIn("nd_taboo_tt_resume_no_standing", loc_keys())
 
     def test_programme_status_reports_the_hold(self):
         body = block(strip_comments(read(WEAPON_EFFECTS)), "nuclear_program_refresh_state_effect")
@@ -533,6 +585,19 @@ class TestExits(unittest.TestCase):
         for text in (read(TABOO_EFFECTS), read(TABOO_TRIGGERS)):
             for key in re.findall(r"text = (nd_taboo_tt_\w+)", text):
                 self.assertIn(key, keys, key)
+
+    def test_renounced_status_precedes_disarmed(self):
+        # I3, final-review.md: a country that gave the bomb up of its own
+        # accord must not be told, permanently and in red, that a settlement
+        # or the NPT disarmed it.
+        custom = strip_comments(read(PROGRAM_CUSTOM_LOC))
+        body = block(custom, "nuclear_program_status_line")
+        renounced_at = body.index("localization_key = nuclear_program_status_renounced")
+        disarmed_at = body.index("localization_key = nuclear_program_status_disarmed")
+        self.assertLess(renounced_at, disarmed_at)
+        trigger = body[body.rfind("trigger", 0, renounced_at):renounced_at]
+        self.assertIn("has_modifier = nd_taboo_renounced", trigger)
+        self.assertIn("nuclear_program_status_renounced", loc_keys())
 
     def test_dismantling_runs_its_full_length(self):
         values = strip_comments(read(TABOO_VALUES))
@@ -621,6 +686,33 @@ class TestAI(unittest.TestCase):
         self.assertIn("var:nd_warhead_ceiling < nuclear_ai_desired_stockpile", lift_guard)
         self.assertIn("multiply = nd_taboo_ai_reduce_margin",
                       block(strip_comments(read(TABOO_VALUES)), "nd_taboo_ai_reduce_line_value"))
+
+    def test_ai_ceiling_marker_gates_the_lift(self):
+        # M2, final-review.md: the Lift branch must undo only a ceiling the
+        # review itself set (or any ceiling at war), not a player's own cut
+        # through a band event.
+        review = block(self.taboo, "nd_taboo_ai_review_arsenal")
+        self.assertIn("set_variable = nd_ai_ceiling_from_review", review)
+        lift_at = review.index("remove_variable = nd_warhead_ceiling")
+        lift_guard = review[review.rfind("limit", 0, lift_at):lift_at]
+        self.assertRegex(lift_guard, r"OR = \{\s*has_variable = nd_ai_ceiling_from_review\s*is_at_war = yes\s*\}")
+
+    def test_ceiling_marker_cleared_by_every_other_writer(self):
+        for name in ("nd_taboo_ceiling_lower", "nd_taboo_ceiling_raise", "nd_taboo_ceiling_lift",
+                     "nd_taboo_dismantle_complete", "nd_taboo_opt_cut_arsenal"):
+            self.assertIn("nd_ai_ceiling_from_review", block(self.taboo, name), name)
+
+    def test_retaliation_is_exempt_from_the_taboo_factor(self):
+        # M4, final-review.md; spec §8.1 "Retaliation unaffected": the taboo
+        # governs restraint, not whether a second strike answers a first.
+        text = strip_comments(read(NUKE_ACTIONS))
+        for name in ("nuke_diplo_action", "tactical_nuke_diplo_action"):
+            ai = block(block(text, name), "ai")
+            chance = block(ai, "evaluation_chance")
+            i = chance.index("multiply = nd_taboo_ai_use_factor")
+            guard = chance[chance.rfind("limit", 0, i):i]
+            self.assertIn("nd_was_struck_by = { ENEMY = scope:target_country }", guard, name)
+            self.assertRegex(guard, r"NOT = \{\s*AND = \{", name)
 
     def test_ai_keys_have_loc(self):
         keys = loc_keys()
@@ -723,6 +815,29 @@ class TestBandEvents(unittest.TestCase):
 
     def test_cut_refreshes_the_hold(self):
         self.assertIn("nd_taboo_refresh_held = yes", block(self.taboo, "nd_taboo_opt_cut_arsenal"))
+
+    def test_cut_option_does_not_raise_a_lower_ceiling(self):
+        # M3, final-review.md: every copy of "Cut our arsenal in half" must
+        # carry the ceiling guard.
+        marks = [m.start() for m in re.finditer(r"name = nd_taboo_opt_cut\b", self.events)]
+        self.assertEqual(len(marks), 4)
+        for i in marks:
+            window = self.events[i:i + 400]
+            self.assertRegex(window, r"NOT = \{\s*AND = \{\s*has_variable = nd_warhead_ceiling\s*"
+                                      r"var:nd_warhead_ceiling <= nd_taboo_half_arsenal_value\s*\}\s*\}")
+
+    def test_firm_and_modernise_exclude_a_dismantling_country(self):
+        # M3, final-review.md: "Our deterrent is not negotiable" and
+        # "Modernise the arsenal" read oddly for a country taking its
+        # arsenal apart.
+        firm_marks = [m.start() for m in re.finditer(r"name = nd_taboo_opt_firm\b", self.events)]
+        self.assertEqual(len(firm_marks), 4)
+        for i in firm_marks:
+            self.assertIn("nd_taboo_is_dismantling = no", self.events[i:i + 200])
+        modernise_marks = [m.start() for m in re.finditer(r"name = nd_taboo_opt_modernise\b", self.events)]
+        self.assertEqual(len(modernise_marks), 4)
+        for i in modernise_marks:
+            self.assertIn("nd_taboo_is_dismantling = no", self.events[i:i + 200])
 
     def test_civil_defence(self):
         ws = strip_comments(read(WAR_SUPPORT))

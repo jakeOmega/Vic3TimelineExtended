@@ -140,12 +140,15 @@ nuclear_program_weekly_progress = {
 			if = {
 				limit = { NOT = { has_global_variable = world_first_nuclear_weapon } }
 				set_variable = { name = is_world_first_nuclear_power value = yes }
+				# The nuclear taboo is born with the world's first warhead, here
+				# and only here (M1, final-review.md): every later first device
+				# (a second, third, … power's) must pass through harmlessly and
+				# leave the birth to the monthly seed (nd_taboo_seed_existing_world)
+				# for a save that predates the taboo — the seed reads
+				# world_first_nuclear_weapon, which this branch is the one to set.
+				nd_taboo_birth = yes
 			}
 			set_global_variable = { name = world_first_nuclear_weapon value = yes }
-			# The nuclear taboo is born with the world's first warhead
-			# (nuclear_taboo_effects.txt); idempotent, so every later
-			# first device passes through harmlessly.
-			nd_taboo_birth = yes
 			trigger_event = { id = nuclear_weapon_events.10 }
 			save_scope_as = first_nuke_country
 			every_country = {

@@ -45,9 +45,18 @@ nuclear_program_status_line = {
 	type = country
 	random_valid = no
 
+	# Renounced the bomb of its own accord (Dismantle the Arsenal, the nuclear
+	# taboo): comes first, ahead of the disarmed branch below (I3, final-review.md)
+	# — without it, a country that chose to give up its arsenal would be told,
+	# permanently and in red, that a settlement or the NPT did it for them.
+	text = {
+		trigger = { has_modifier = nd_taboo_renounced }
+		localization_key = nuclear_program_status_renounced
+	}
 	# A disarmament settlement (or the UN's NPT modifier) makes the entry's
 	# `possible` fail, so the entry deactivates and the pulse stops: read the
-	# modifier, not the status code.
+	# modifier, not the status code. A country that renounced of its own accord
+	# (nd_taboo_renounced, above) never falls through to this branch.
 	text = {
 		trigger = { modifier:country_nuclear_disarmament_bool = yes }
 		localization_key = nuclear_program_status_disarmed

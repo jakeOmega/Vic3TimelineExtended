@@ -37,6 +37,14 @@ nuclear_taboo.1 = {
 			nd_is_armed = yes
 			nd_taboo_is_dismantling = no
 			nd_stockpile > 1
+			# Not when a ceiling already at or below half our arsenal would
+			# only be raised (M3, final-review.md).
+			NOT = {
+				AND = {
+					has_variable = nd_warhead_ceiling
+					var:nd_warhead_ceiling <= nd_taboo_half_arsenal_value
+				}
+			}
 		}
 		nd_taboo_opt_cut_arsenal = yes
 		ai_chance = {
@@ -84,7 +92,11 @@ nuclear_taboo.1 = {
 	}
 	option = {
 		name = nd_taboo_opt_firm
-		trigger = { nd_is_armed = yes }
+		trigger = {
+			nd_is_armed = yes
+			# Reads oddly for a country taking its arsenal apart (M3, final-review.md).
+			nd_taboo_is_dismantling = no
+		}
 		nd_taboo_opt_stand_firm = yes
 		ai_chance = {
 			base = 1
@@ -147,6 +159,14 @@ nuclear_taboo.2 = {
 			nd_is_armed = yes
 			nd_taboo_is_dismantling = no
 			nd_stockpile > 1
+			# Not when a ceiling already at or below half our arsenal would
+			# only be raised (M3, final-review.md).
+			NOT = {
+				AND = {
+					has_variable = nd_warhead_ceiling
+					var:nd_warhead_ceiling <= nd_taboo_half_arsenal_value
+				}
+			}
 		}
 		nd_taboo_opt_cut_arsenal = yes
 		ai_chance = {
@@ -194,7 +214,11 @@ nuclear_taboo.2 = {
 	}
 	option = {
 		name = nd_taboo_opt_firm
-		trigger = { nd_is_armed = yes }
+		trigger = {
+			nd_is_armed = yes
+			# Reads oddly for a country taking its arsenal apart (M3, final-review.md).
+			nd_taboo_is_dismantling = no
+		}
 		nd_taboo_opt_stand_firm = yes
 		ai_chance = {
 			base = 1
@@ -257,6 +281,14 @@ nuclear_taboo.3 = {
 			nd_is_armed = yes
 			nd_taboo_is_dismantling = no
 			nd_stockpile > 1
+			# Not when a ceiling already at or below half our arsenal would
+			# only be raised (M3, final-review.md).
+			NOT = {
+				AND = {
+					has_variable = nd_warhead_ceiling
+					var:nd_warhead_ceiling <= nd_taboo_half_arsenal_value
+				}
+			}
 		}
 		nd_taboo_opt_cut_arsenal = yes
 		ai_chance = {
@@ -304,7 +336,11 @@ nuclear_taboo.3 = {
 	}
 	option = {
 		name = nd_taboo_opt_firm
-		trigger = { nd_is_armed = yes }
+		trigger = {
+			nd_is_armed = yes
+			# Reads oddly for a country taking its arsenal apart (M3, final-review.md).
+			nd_taboo_is_dismantling = no
+		}
 		nd_taboo_opt_stand_firm = yes
 		ai_chance = {
 			base = 1
@@ -367,6 +403,14 @@ nuclear_taboo.4 = {
 			nd_is_armed = yes
 			nd_taboo_is_dismantling = no
 			nd_stockpile > 1
+			# Not when a ceiling already at or below half our arsenal would
+			# only be raised (M3, final-review.md).
+			NOT = {
+				AND = {
+					has_variable = nd_warhead_ceiling
+					var:nd_warhead_ceiling <= nd_taboo_half_arsenal_value
+				}
+			}
 		}
 		nd_taboo_opt_cut_arsenal = yes
 		ai_chance = {
@@ -414,7 +458,11 @@ nuclear_taboo.4 = {
 	}
 	option = {
 		name = nd_taboo_opt_firm
-		trigger = { nd_is_armed = yes }
+		trigger = {
+			nd_is_armed = yes
+			# Reads oddly for a country taking its arsenal apart (M3, final-review.md).
+			nd_taboo_is_dismantling = no
+		}
 		nd_taboo_opt_stand_firm = yes
 		ai_chance = {
 			base = 1
@@ -517,6 +565,8 @@ nuclear_taboo.5 = {
 		trigger = {
 			nd_is_armed = yes
 			nd_is_initialized = yes
+			# Reads oddly for a country taking its arsenal apart (M3, final-review.md).
+			nd_taboo_is_dismantling = no
 		}
 		nd_taboo_opt_modernise = yes
 		ai_chance = {
@@ -605,6 +655,8 @@ nuclear_taboo.6 = {
 		trigger = {
 			nd_is_armed = yes
 			nd_is_initialized = yes
+			# Reads oddly for a country taking its arsenal apart (M3, final-review.md).
+			nd_taboo_is_dismantling = no
 		}
 		nd_taboo_opt_modernise = yes
 		ai_chance = {
@@ -693,6 +745,8 @@ nuclear_taboo.7 = {
 		trigger = {
 			nd_is_armed = yes
 			nd_is_initialized = yes
+			# Reads oddly for a country taking its arsenal apart (M3, final-review.md).
+			nd_taboo_is_dismantling = no
 		}
 		nd_taboo_opt_modernise = yes
 		ai_chance = {
@@ -781,6 +835,8 @@ nuclear_taboo.8 = {
 		trigger = {
 			nd_is_armed = yes
 			nd_is_initialized = yes
+			# Reads oddly for a country taking its arsenal apart (M3, final-review.md).
+			nd_taboo_is_dismantling = no
 		}
 		nd_taboo_opt_modernise = yes
 		ai_chance = {

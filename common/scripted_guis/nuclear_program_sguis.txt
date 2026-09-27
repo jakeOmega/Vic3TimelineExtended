@@ -43,8 +43,8 @@
 # IsShown a widget root can read.
 #
 # ---- nd_taboo_breakdown_sgui — display only ---------------------------------
-# Script-built text, printed with ExecuteTooltip: the target's five named
-# parts (nd_tb_base/tradition/postures/restraint/ledger) and the target itself,
+# Script-built text, printed with ExecuteTooltip: the target's six named parts
+# (nd_tb_base/tradition/postures/restraint/un/ledger) and the target itself,
 # each its own custom_tooltip_no_bullet line — the same shape as
 # nd_crisis_pressure_breakdown_sgui in nuclear_deterrence_sguis.txt.
 #

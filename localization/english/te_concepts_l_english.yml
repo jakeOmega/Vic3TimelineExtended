@@ -828,7 +828,7 @@
  country_combined_arms_bonus_enabled_bool_desc:0 "Generals commanding formations with a diverse mix of unit groups gain [concept_combined_arms] commander traits. Each group that makes up at least 5% of the formation grants a unique trait when at least two groups are present."
  country_homelands_can_change_bool_desc:0 "Allows [concept_homeland] assignments to shift over time based on which cultures predominantly inhabit a state."
  country_nuclear_disarmament_bool_desc:0 "This country has agreed to give up its nuclear weapons."
- country_nuclear_program_pause_bool_desc:0 "This country has agreed to freeze its nuclear weapons program. No new investment is permitted, but existing weapons and progress are preserved."
+ country_nuclear_program_pause_bool_desc:0 "Nuclear weapons development is halted, by a freeze agreed in a treaty or at an arsenal ceiling: the programme builds nothing and cannot be funded."
  country_receiving_nuclear_program_aid_bool_desc:0 "This country is receiving aid to develop its [concept_nuclear_program]."
  country_sr_deep_space_exploration_program_bool_desc:0 "Unlocks advanced Solar System Colonization stages (stages 3-5: Mercury & Saturn, Uranus & Neptune, Kuiper Belt)."
  country_sr_earth_orbit_program_bool_desc:0 "Unlocks Earth orbit [concept_space_race] milestones (Suborbital Flight, Orbital Flight)."
