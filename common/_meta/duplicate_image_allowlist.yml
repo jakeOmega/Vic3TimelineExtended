@@ -136,6 +136,7 @@ buildings:
   - building_generic_corporate_university
   - building_generic_data_fortress
   - building_generic_dry_dock
+  - building_generic_dye_fiber_park
   - building_generic_electronics_lab
   - building_generic_exhibition_centre
   - building_generic_export_warehouse

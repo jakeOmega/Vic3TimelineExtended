@@ -60,7 +60,7 @@
  intelligence_sharing_pact:0 "Intelligence Sharing Pact"
  intelligence_sharing_pact_article_short_desc:0 "Both countries will share intelligence"
  intelligence_sharing_pact_desc:0 "An agreement between two countries to share intelligence information."
- intelligence_sharing_pact_effects_desc:0 "• +5% intelligence [concept_institution] effectiveness for both countries.\n• +3 [concept_intelligence_capacity] for both.\n• +1 Economic, Military, and Ideological covert defense for both.\n• +10% intelligence institution costs for both.\n• +300 [concept_treaty] leverage generation for both.\n• Both countries gain 1 [concept_infamy] upon signing.\n• Improves relations over time (max +60)."
+ intelligence_sharing_pact_effects_desc:0 "• +5% intelligence [concept_institution] effectiveness for both countries.\n• +3 [concept_intelligence_capacity] for both.\n• Once a year, the partner with the weaker covert defense is shielded by the stronger partner's intelligence, raising its Economic, Military and Ideological covert defense according to the gap between them.\n• +10% intelligence institution costs for both.\n• +300 [concept_treaty] leverage generation for both.\n• Both countries gain 1 [concept_infamy] upon signing.\n• Improves relations over time (max +60)."
  iw_target_not_our_subject_tt:0 "Cannot target our own subjects"
  ministry_fa_diplomacy_advance:0 "Foreign Affairs Ministry: Diplomacy Advance"
  ministry_fa_diplomacy_advance_desc:0 "A strong positive boost to ministry law enactment progress from a recent event."

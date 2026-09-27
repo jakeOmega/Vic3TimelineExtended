@@ -580,7 +580,7 @@ SECTOR_TEMPLATES = {
         'employment': [('machinists', 800), ('laborers', 600), ('engineers', 400), ('clerks', 200)],
     },
     'trading': {
-        'state_mods': [('state_trade_capacity_add', 5)],
+        'state_mods': [('state_trade_capacity_add', 50)],
         'country_mods': [],
         'inputs': [('fabric', 10), ('paper', 10)],
         'outputs': [('merchant_marine', 30)],

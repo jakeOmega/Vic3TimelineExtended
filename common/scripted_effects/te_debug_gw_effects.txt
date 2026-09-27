@@ -118,12 +118,19 @@ te_debug_gw_adopt_all = {
 	te_debug_gw_refresh_display = yes
 }
 
-# Repeal all eight, ignoring the treaty lock.
+# Repeal all eight, ignoring the treaty lock. The market-wide repeals skip
+# treaty-bound members (gw_bound_by_emissions_treaty), so the debugging
+# country's own three are also removed directly, in case option f bound it.
 # Scope: country
 te_debug_gw_repeal_all = {
 	gw_effect_remove_carbon_tax = yes
 	gw_effect_remove_renewable_investment = yes
 	gw_effect_remove_emission_standards = yes
+	je:je_global_warming ?= {
+		remove_modifier = carbon_tax_modifier
+		remove_modifier = renewable_investment_modifier
+		remove_modifier = emission_standards_modifier
+	}
 	gw_effect_remove_climate_adaptation = yes
 	gw_effect_remove_reforestation = yes
 	gw_effect_remove_public_transit = yes

@@ -9,12 +9,13 @@ Several mod systems use a common pattern for continuously-scaling modifiers:
 2. Define a **script value** in `common/script_values/extra_script_values.txt` that computes a multiplier (0 to N).
 3. In an **on_action** (`on_yearly_pulse_country` or `on_yearly_pulse_state`), remove the old modifier and re-apply with `add_modifier = { name = X multiplier = <script_value> }`.
 4. The engine multiplies every field in the static modifier by the multiplier value.
+5. If the modifier applies only under some conditions, re-check them on every refresh and remove it on the refresh they fail. A gate of the form `OR = { <conditions>  has_modifier = X }` never looks at the conditions again once X exists, and with a decay floor such as "last value ÷ 1.2" the value never reaches 0. Excess Private Construction shipped that way and lingered for about a century (fixed 2026-09-26). And don't gate a sink on a quantity the sink itself drives, such as the sign of net income: the modifier then removes itself as soon as it works. Keep it on a need it can't change (§ Excess Private Construction).
 
 Systems using this pattern:
 - **Global Warming** — `global_warming` modifier × `temperature_anomaly_display` (applied from JE `on_monthly_pulse`)
 - **Construction Cost Scaling** — `construction_cost_scaling` modifier × `construction_cost_scaling_mult` (applied yearly, country scope)
 - **Migration Crowding** — `migration_crowding` modifier × `migration_crowding_mult` (applied yearly, state scope)
-- **Excess Private Construction** — `too_much_private_construction` modifier × `too_much_private_construction_script_value`
+- **Excess Private Construction** — `too_much_private_construction` modifier × `var:too_much_private_construction_cached`, set yearly from `too_much_private_construction_script_value` (country scope; § Excess Private Construction)
 - **Tourism** — `tourism_output` × `total_tourism_output_bonus_percent` and `tourism_throughput` × `total_tourism_throughput_bonus_percent` (state scope), re-applied by `te_update_tourism_modifier` from `tourism_on_action` on `on_monthly_pulse_state`, because its inputs (`city_size_rank`, building levels) move monthly. Uses ~2700 lines of state_region appeal values in `common/script_values/tourism.txt`. It must run from a state pulse: law, treaty and building hooks have unreliable scope chains for state-targeted script values.
 
 ## Production Methods (PMs)
@@ -50,10 +51,26 @@ Systems using this pattern:
 - **Modifier:** `construction_cost_scaling` in `common/static_modifiers/extra_modifiers.txt` — `goods_input_construction_mult = 1`.
 - **Script values:** `common/script_values/extra_script_values.txt` — search for `CONSTRUCTION COST SCALING`.
 - **On action:** `construction_cost_scaling_on_action` in `common/on_actions/extra_on_actions.txt`, wired to `on_yearly_pulse_country`.
-- **Tuning:** `construction_cost_gdppc_reference`, `construction_cost_floor_ratio` (1x), `construction_cost_ceiling_ratio` (14x), `construction_cost_max_mult` (10 = +1000%).
+- **Tuning:** `construction_cost_gdppc_reference`, `construction_cost_floor_ratio` (1x), `construction_cost_ceiling_ratio` (100x), `construction_cost_max_mult` (10 = +1000%).
 - **Curve:** Linear interpolation from 0 at floor to `max_mult` at ceiling.
 - `goods_input_construction_mult` affects both construction project costs AND ongoing building maintenance.
 - With `free_market_construction_rule` disabled there is no construction good to scale, so the on_action applies `construction_cost_scaling_direct` (`country_construction_goods_cost_mult = 1`, adjusted by `construction_cost_scaling_direct_adjusted_mult`) instead. See § Free Market Construction off.
+
+## Excess Private Construction
+
+- **Purpose:** Gives an investment pool that the private queue can't spend a way to spend. The engine caps the private queue at 1,000 buildings and each project's weekly progress at `country_max_weekly_construction_progress_add`, so a rich pool can outgrow what investors can build and keep depositing forever. The modifier raises the per-project cap and charges a construction-efficiency penalty for it, which is the sink. Overinvestment is the second stage.
+- **Modifiers** (`common/static_modifiers/extra_modifiers.txt`): `too_much_private_construction`, per unit `country_max_weekly_construction_progress_add = 1` and `state_construction_mult = -0.0001` (−90% at the 9,000 cap). `overinvestment_modifier` sets every pop type's `state_*_investment_pool_contribution_add = -1`.
+- **Script values** (`common/script_values/extra_script_values.txt`, `target_queue_length` through `too_much_private_construction_script_value`). `too_much_private_construction_overflow` is target − base: the per-project cap raise at which 500 projects could spend the pool's gross income. It is positive exactly when 500 projects at base speed couldn't, and 0 while `private_construction_used` is 0 or less, i.e. an empty queue or no private share (which also keeps `curr_cost_per_construction_point` from dividing by 0). `too_much_private_construction_script_value` is the overflow, moving at most ×1.2 or ÷1.2 a year from last year's value (`var:too_much_private_construction_cached`); the cap is 9,000. While Overinvestment is in force and the private queue has levels, it returns last year's value instead. A new episode starts at the lesser of the overflow and 10, or, if higher, the value the modifier had when it was removed in the last five years (`too_much_private_construction_resume`, reading `var:too_much_private_construction_last`).
+- **On action:** `excess_private_construction_on_action`, on `on_yearly_pulse_country`, checked every year, also while the modifier is in force. The modifier is applied or kept while one of these holds:
+  - **Entry** (no stored value above 0): more than 500 private levels queued and `investment_pool_net_income > 0`.
+  - **Stay** (`var:too_much_private_construction_cached` above 0; it is the modifier's multiplier, so normally the modifier is in force): a non-empty private queue and `too_much_private_construction_overflow > 0`.
+  - Overinvestment is in force.
+
+  While one holds, the modifier is re-applied at the script value. Otherwise it is removed, its value kept for five years in `var:too_much_private_construction_last` (a timed country variable), and the variable set to 0. A re-entry within those five years resumes at the lesser of the kept value and the overflow, so a short dip in pool income (a banking panic cuts capitalist contributions for 14–18 months; a default or bankruptcy) doesn't restart it at 10 and let the pool build up for decades. After five years the kept value expires and a new episode ramps from 10 as designed, so a re-entry decades later doesn't jump straight to a large penalty. The kept value is also removed once the modifier is back. The tests read the variable rather than the modifier because a civil war's winner inherits variables but no modifiers (`docs/guides/scripting_best_practices.md` § What a Civil War's Winner Inherits). A winner holding the variable rebuilds the modifier and continues the nation. On that first pulse `base_construction_per_week` subtracts a value the winner's modifiers don't include, so the overflow reads high by that much; the ×1.2 ceiling caps the rebuilt value at 1.2× the inherited one. The stay test can't be the entry test. Net income turns negative the moment the modifier starts draining the pool, so the modifier would remove itself by working and the pool would refill until it came back. The queue can also fall to 500 or below while the modifier is still needed: the engine's own autonomous investment fills it, and faster projects shorten it. Gross income doesn't depend on the modifier, and under Free Market Construction, while the pool's funds don't bind, the cost per point (`curr_cost_per_construction_point`, spending ÷ `private_construction_used`) is the market price, because the market sizes the private share to what the pool buys. So the modifier can't end its own need by working. The estimate does include the modifier's (base + value) × levels cap through `private_construction_used`; where the pool's funds bind it reads low and the overflow high (the direct-construction exception below). Outside Overinvestment it fails exactly when the ramp target reaches 0, so the ÷1.2 floor can't keep a spent modifier alive.
+- **Overinvestment** is added the same pulse the variable is above 1,000 and `investment_pool > gdp`. It keeps the construction modifier because it cuts every pop's pool contribution, so gross income, and the overflow with it, falls to about 0; removing the modifier then would end Overinvestment after one year, since it needs the variable above 1,000. Kept, the value is **held at last year's** while Overinvestment is in force and the private queue has levels (owner's ruling, PR #514), so Overinvestment is re-added until its own exit holds, the pool at or under GDP, even with the value above 1,000. The year after it lifts, the stay test and the normal ramp take over. With an empty private queue nothing drains the pool, so there the value falls ÷1.2 as before and Overinvestment ends within 13 years. Meanwhile the private queue keeps spending the pool, under direct construction through the law's allocation and under Free Market Construction through the private purchase, a 24th of the pool a week up to what the private queue can absorb (§ Construction as a Market Good). **Limits of the hold.** It freezes growth as well as decay: with gross income cut the overflow reads −base, so the need can't raise the value during Overinvestment, and when the queue cap limits the drain the frozen value is the limit (PR #514's toy model has a 2M/week country run 13 straight years at 1,145). Episodes can be long, even indefinite, when inflows that aren't pop contributions outpace a capped drain: the cooperative boom and frenzy phases (`country_weekly_investment_pool_mult` in `financial_cycle_phase_boom_coop` / `_frenzy_coop`), government-dividend reinvestment, or a pool left far above GDP by a GDP collapse. One queued private level is enough to keep the hold. If play shows long episodes, the candidate follow-ups are capping the hold's consecutive years, or holding only while the per-project cap binds (`private_construction_used` at or above queued levels × `country_max_weekly_construction_progress_add`). Two earlier behaviours made Overinvestment fail to drain the pool. Until 2026-09-26 the market formula was gross × pool ÷ (24 × gross) with a fixed 2.4M divisor at gross ≤ 0, so it went to 0 or below exactly when Overinvestment cut gross income, and the market bought nothing for the private queue. Until 2026-09-27 the value fell ÷1.2 in each Overinvestment year, which lifted Overinvestment every other year and kept the value, and so per-project capacity, near 1,000 while the pool stayed above GDP. What still limits a very rich pool is the owner's 9,000 cap.
+- **Direct construction with an emptied pool (known exception, accepted for now).** Under direct construction nothing throttles the private queue to pool ÷ 24. It draws its allocation, `min(construction × private share, (base + value) × levels)`, and stalls at what the pool can fund. If that allocation costs more than the pool's income, the modifier drains the pool to 0. From then on spending equals gross income, but `private_construction_used` doesn't see the stall, so the cost estimate falls below the price and the overflow reads about private allocation ÷ 500 − base instead of the real need. The modifier climbs to that and stays while the allocation exceeds 500 × base, even after the real need is gone (a toy model in PR #514's review put it at twice the real need, and kept it after the need turned negative). This is off the default rule (Free Market Construction), and the gate before 2026-09-26 kept the modifier regardless. Follow-up: give the stay test a cost per point that doesn't depend on spending: `te_construction_market_price` under Free Market Construction, a goods cost per point under direct construction. The same fix covers the estimate's `min = 1` floor, which makes the overflow read huge for one pulse after a week of almost no spending (for example after `te_mon_currency_reform_pool_wipe` or `te_mon_union_exit_pool_hit`).
+- **Invariant:** the modifier's multiplier is `var:too_much_private_construction_cached`, written first, so `base_construction_per_week` (the per-project cap without this modifier) can subtract it. Set the variable to 0; never `remove_variable` it. `var:too_much_private_construction_last` exists only while the modifier is absent, for up to five years after a removal.
+- **History:** until 2026-09-26 the gate was `OR = { <conditions>  has_modifier = too_much_private_construction }` and the value could only fall ÷1.2 a year. Once the modifier existed, the conditions were never checked again, and it stayed above 0 for 76–114 years. The first draft of the fix (PR #514) re-checked the entry test every year and removed the modifier when it failed. Review found that this removes it the pulse after it starts draining the pool, so the stay test is separate.
 
 ## Construction as a Market Good (FMC architecture)
 
@@ -83,7 +100,7 @@ Vanilla two-FCFS queues (government from treasury / private from IP) spend it
 New buildings get built / expanded
 ```
 
-**Purchases and the queue split.** The government purchase is the country variable `te_construction_market_public_target` (set by the player in the construction panel, by `te_construction_market_ai_update_buy` for the AI), capped each week at what the government queue can absorb (`te_construction_market_public_use_target`: queued government levels × `country_max_weekly_construction_progress_add`). The private purchase (`te_construction_market_private_use_target`) is roughly the investment pool's gross weekly income, scaled by how full the pool is against 24 weeks of income, divided by the smoothed price (`te_construction_market_price_stabilizer`) and capped by the private queue. The private share of construction (`te_construction_market_private_share_modifier`, `country_private_construction_allocation_mult = 0.01` × the private share in percent) is set weekly from those two purchases; `common/laws/construction_system_law_injections.txt` cancels the economic-system laws' vanilla allocations so nothing else moves it.
+**Purchases and the queue split.** The government purchase is the country variable `te_construction_market_public_target` (set by the player in the construction panel, by `te_construction_market_ai_update_buy` for the AI), capped each week at what the government queue can absorb (`te_construction_market_public_use_target`: queued government levels × `country_max_weekly_construction_progress_add`). The private purchase (`te_construction_market_private_use_target`) is a 24th of the investment pool a week (`te_construction_market_private_spending_target`), so the pool settles at 24 weeks of gross income, divided by the smoothed price (`te_construction_market_price_stabilizer`) and capped by the private queue. It reads the pool alone, so it keeps spending when gross income is 0 or less, as under Overinvestment (§ Excess Private Construction); an earlier gross × pool ÷ (24 × gross) form went to 0 or below there. The private share of construction (`te_construction_market_private_share_modifier`, `country_private_construction_allocation_mult = 0.01` × the private share in percent) is set weekly from those two purchases; `common/laws/construction_system_law_injections.txt` cancels the economic-system laws' vanilla allocations so nothing else moves it.
 
 **Construction-cost-scaling layer.** The `construction_cost_scaling` static modifier (above) applies `goods_input_construction_mult = 1` (multiplied by a per-country GDPpc-driven multiplier). This scales how much *construction good* every consumer burns — each construction site per point delivered, and every building's maintenance PM. So a richer country burns more construction good per same building → competes more for the same supply → stockouts and higher prices → fewer net `country_construction_add` produced → vanilla queues stall on availability rather than treasury.
 
@@ -141,6 +158,15 @@ Everything else in both new settings is the enabled setting's: the Construction 
 - from the weekly sweep `minor_events_timelineextended.100` (every building of every state), which catches any PM change the hook misses, such as one the engine makes itself.
 
 The same effect keeps its older job in every setting: removing the modifier from level-0 buildings (also from `on_start_expanding_building`).
+
+**Railways: the Transport principle swap is free in every setting** (owner ruling, #511). A railway's steam, electric or diesel method switches itself into its `pm_*_trains_principle_transport_3` variant through `replacement_if_valid` when the bloc reaches tier 3, and back when the bloc loses tiers 3–5. The player chose neither switch. On each railway PM change the hook runs `te_railway_note_train_method` (`extra_effects.txt`) first, and so does the weekly sweep for every state with a railway (`te_state_note_railway_train_method`), which catches a swap the hook missed and keeps every railway recorded. It compares the state's `te_state_railway_train_code` (steam 1, electric 2, diesel 3, +10 for the tier-3 variant; Centralized Traffic Control through Autonomous Trains 4–7; `pm_early_trains` 0) against the last recorded `var:te_rail_train_code` (a state variable, since buildings don't hold variables reliably; one railway per state). Only the swap itself (`te_state_railway_tier3_swap`) sets a two-day `te_rail_retool_waive` marker on the state, which `te_building_retooling_waived` reads. It covers three cases: the same method moving +10; no record yet with the railway on a variant; or, after the bloc lost the principle, a recorded variant moving exactly −10 or landing on `pm_early_trains`, the group's fallback. A new train method, the passenger group or Centralized Traffic Control and later still pay. Residuals, accepted under the owner's ruling:
+
+- **The waiver strips the whole `pm_retooling`,** including time left from an earlier player switch. A bloc leader can clear its members' railway retooling by dropping the transport principle to tier 2 and re-adopting tier 3.
+- **The first weekly sweep on an old save, or on a new state object,** waives every railway already on a variant, whatever its retooling came from. A railway not yet recorded that jumps from a lower method straight onto a variant is waived once.
+- **Another PM change within the two days rides along.** If the hook missed the swap, it rides along until the next sweep.
+- **If losing the tier drops a railway to `pm_early_trains`,** the player's switch back pays full retooling. No waiver is built for that yet.
+
+The sweep is a fallback only for a swap the hook missed. If the hook fired and the engine applied `pm_retooling` more than a day later, only the day-later re-check helps.
 
 **Play-test list.**
 1. *No retooling, switch a PM* on a factory with maintenance: the Retooling modifier does not appear on the building (or is gone the next day), and its construction input stays at 0.1 per level (times cost scaling). An AI country's buildings show no Retooling modifier after a few weeks.
@@ -200,16 +226,16 @@ The same effect keeps its older job in every setting: removing the modifier from
 
 **Localization override:** `localization/english/replace/timeline_extended_override_l_english.yml:23` — `merchant_marine:0 "Bulk Transportation"`. (And matching description / icon overrides if present.) The engine sees `merchant_marine`; the player sees "Bulk Transportation".
 
-**Producers (43 PMs total: 21 in `extra_pms.txt`, 22 in `unique_pms.txt`).** The mod's design rule is: *transport infrastructure produces, everything else consumes*. Concretely:
+**Producers (44 PMs total: 18 in `extra_pms.txt`, 26 in `unique_pms.txt`).** The mod's design rule is: *transport infrastructure produces, everything else consumes*. Concretely:
 
 | Producer category | PMs (representative) | Building family |
 |---|---|---|
-| **Railway** | `pm_early_trains`, `pm_steam_trains`, `pm_diesel_trains`, `pm_electric_trains`, `pm_autonomous_trains`, `pm_centralized_traffic_control`, `pm_automated_loading_and_unloading` | Railway (REPLACE'd) |
+| **Railway** | `pm_early_trains`, `pm_steam_trains`, `pm_diesel_trains`, `pm_electric_trains`, `pm_autonomous_trains`, `pm_centralized_traffic_control`, `pm_containerized_cargo`, `pm_automated_loading_and_unloading` | Railway (REPLACE'd) |
 | **Motorways / highways** | `pm_civil_highway`, `pm_industrial_highway`, `pm_electric_civil_highway`, `pm_electric_industrial_highway`, `pm_autonomous_highway` | Motorways |
-| **Ports** | `pm_container_ports`, `pm_containerized_cargo`, `pm_global_ports` | Port (vanilla preserved + mod tiers) |
+| **Ports** | `pm_container_ports`, `pm_global_ports` | Port (vanilla preserved + mod tiers) |
 | **Airports & spaceports** | `pm_airport`, `pm_spaceport` | Airport / Spaceport (mod additions) |
-| **Trading houses & flagged company HQs** | `pm_eic_trading_house`, `pm_hbc_york_factory`, `pm_rac_sitka_trading_post`, `pm_mitsui_trading_house`, `pm_sassoon_bombay_docks`, `pm_ralli_odessa_grain_elevator`, `pm_sudamericana_valparaiso_pier`, `pm_b_grimm_bangkok_warehouse`, `pm_john_holt_lagos_trading_house`, `pm_ynchausti_manila_trading_house`, `pm_volkswagen_autostadt`, `pm_suez_company_ismailia_hq`, `pm_panama_company_culebra_cut` | Vanilla / mod company buildings |
-| **Logistics & shipyards (modern)** | `pm_amazon_fulfillment_center`, `pm_alibaba_cainiao_park`, `pm_shopify_fulfillment_hub`, `pm_ap_moller_copenhagen_wharf`, `pm_mitsubishi_nagasaki_shipyard`, `pm_generic_dry_dock`, `pm_generic_logistics_hub`, `pm_generic_rail_nexus`, `pm_generic_shipping_terminal` | Vanilla / mod company buildings |
+| **Trading houses & flagged company HQs** | `pm_eic_trading_house`, `pm_hbc_york_factory`, `pm_rac_sitka_trading_post`, `pm_mitsui_trading_house`, `pm_sassoon_bombay_docks`, `pm_ralli_odessa_grain_elevator`, `pm_sudamericana_valparaiso_pier`, `pm_b_grimm_bangkok_warehouse`, `pm_john_holt_lagos_trading_house`, `pm_ynchausti_manila_trading_house`, `pm_volkswagen_autostadt`, `pm_suez_company_ismailia_hq`, `pm_panama_company_culebra_cut`, `pm_markwald_bangkok_rice_mill`, `pm_nhm_factorij_batavia` | Vanilla / mod company buildings |
+| **Logistics & shipyards (modern)** | `pm_amazon_fulfillment_center`, `pm_alibaba_cainiao_park`, `pm_shopify_fulfillment_hub`, `pm_ap_moller_copenhagen_wharf`, `pm_mitsubishi_nagasaki_shipyard`, `pm_generic_dry_dock`, `pm_generic_logistics_hub`, `pm_generic_rail_nexus`, `pm_generic_shipping_terminal`, `pm_white_star_albion_house` | Vanilla / mod company buildings |
 
 **Consumers (91 PMs in `extra_pms.txt`).** Demand spans most of the catalog — anywhere goods need to move between buildings or out of the country. By family:
 
@@ -238,10 +264,10 @@ The same effect keeps its older job in every setting: removing the modifier from
 - **Modifier:** `migration_crowding` — `state_migration_pull_mult = -0.1` (base, scaled by multiplier).
 - **Script values:** `common/script_values/extra_script_values.txt` — search for `MIGRATION CROWDING`.
 - **On action:** `migration_crowding_on_action`, wired to `on_yearly_pulse_state`.
-- **Density-based:** Uses `state_population / arable_land` as a proxy.
-- **Density modifier:** `state_migration_crowding_density_mult` — custom modifier that divides effective density. Applied by `institution_ministry_of_urban_planning` (+10% per level).
+- **Density-based:** Uses `state_population / arable_land_base` as a proxy.
+- **Density modifier:** `state_migration_crowding_density_mult` — custom modifier that divides effective density (density / (1 + mult)). Applied by `institution_ministry_of_urban_planning` (+10% per level) and five technologies: `modern_skyscrapers` (+15%), `modern_urban_planning` (+20%), `advanced_structural_engineering` (+20%), `autonomous_vehicles` (+15%), `post-scarcity_economy` (+15%).
 - **Scaling:** Quadratic up to the 10x density knee, then linear beyond it. `migration_crowding_ratio` is 0 at the floor, 1.0 at the 10x knee, and can exceed 1.0 in the linear tail. `migration_crowding_mult` uses `4.5 * r^2` below the knee and `9 * r - 4.5` above it, giving a 45% pull penalty at 10x density and 145% at 20x density.
-- **Tuning:** `migration_crowding_density_reference` (100000), `migration_crowding_floor_ratio` (1x), `migration_crowding_ceiling_ratio` (10x knee).
+- **Tuning:** `migration_crowding_density_reference` (10000), `migration_crowding_floor_ratio` (1x), `migration_crowding_ceiling_ratio` (10x knee).
 - **Split states:** Arable-land-derived threshold and tooltip breakdown values subtract the same-owner regional `arable_land_added` cache, so fully owned split states do not undercount geographic base land.
 
 ## Dynamic Homeland Progress
@@ -327,7 +353,7 @@ Posture and crises share the **Nuclear Weapons** entry with the programme (above
 
 **Domestic stance.** `nd_refresh_domestic_stance` is the single site of `nd_posture_approval_*` on interest groups. Classes are by interest-group type (Armed Forces, Industrialists) and Rules of War stance (`nd_ig_class_*`, `nd_stance_*`), with the two fixed classes leaning by their leader's stance (`nd_ig_lean_*`); each group's terms and capped total are stored on the group (`nd_ig_*`, scored by `nd_ig_term_*_value`) and the band is set from that total. Every term but the Industrialists' business concerns is zero until a doctrine has been held six months. The At Home list prints the stored numbers (`nd_home_list_sgui`). Crisis outcomes pay hawks/doves one-off IG modifiers and adjust native lobby appeasement (`nd_lobby_react`); an IG in an anti-opponent lobby is paid through the lobby only.
 
-**Incidents.** One roll per armed country per month (`nd_roll_incident`, two-stage so the inner chance is never fractional), family drawn in `nd_fire_incident`. The fallback family (`nuclear_incident.40`) is always eligible, so the draw is never empty.
+**Incidents.** One roll per armed country per month (`nd_roll_incident`, two-stage so the inner chance is a rounded whole number), family drawn in `nd_fire_incident`. The fallback family (`nuclear_incident.40`) is always eligible, so the draw is never empty.
 
 **The No-First-Strike Pledge amendment is the law's copy of doctrine 1** (#430). `amendment_no_first_strike` (a rules-of-war amendment, offered by `extra_law_events.32` option a or sponsored in an enactment negotiation) used to be a second, unenforced pledge beside the doctrine. Now: while it is in force (`nd_nfu_amendment_in_force`: on an active law), `nd_weekly_update` holds an armed country's doctrine at 1 through `nd_set_doctrine_1` — whatever brought the amendment in, the law outranking tenure — and `nd_init_posture` seeds 1 for an arsenal built under it. The law made that move, not the government, so the binding puts `nd_doctrine_months` back as it was (tenure-satisfied if it was missing): the two-year lock and the six months before the interest groups judge a doctrine run on from the government's own last change, and a country that repeals the amendment is not then held at No First Use for two years. A human is told through the feed message `nd_doctrine_bound_by_law`. Leaving No First Use while it is in force or attached to the law being enacted (`nd_nfu_amendment_on_file`) is the usual repudiation plus `nd_strike_nfu_amendment`, which removes it from both laws (`every_scope_amendment` + `remove_amendment`, the vanilla shape; vanilla never removes one from a law still being enacted, so a repudiation made then also leaves `nd_nfu_amendment_repudiated`, and if the law passes with the amendment after all, the weekly update strikes it from the passed law instead of binding — the marker is cleared once the amendment is off file) — so the panel and the AI review need no new gate, and the binding never pulls a country back to a doctrine it has repudiated. The AI review leaves doctrine alone while the amendment is on file (the AI never repeals it). Repealing it through the law panel ends the codification without a repudiation; the doctrine stays where it is. The amendment has no `on_activate` / `on_deactivate`: its scope there is unverified, and a removal hook would loop.
 
@@ -346,7 +372,7 @@ Posture and crises share the **Nuclear Weapons** entry with the programme (above
 - Uses 4 `scripted_progress_bar` instances and 68 scripted buttons (34 `cb_*` — 17 market tools, each an enable/disable pair — 18 `ce_*`, 16 `cw_*`). `test_banking_tool_roster.py` checks every `cb_*` tool is registered everywhere it has to be (see **Policy tools added 2026-09-23** below).
 - Requires `stock_exchange` tech.
 - All banking buttons already have detailed AI weights. Each enable button's `ai_chance` is *core* terms (the cycle state the tool answers) plus *flavour* / *resource* terms (law, an independent bank, free points), and the latter only count while the matching `banking_ai_core_cb_*` trigger (`banking_policy_triggers.txt`) is true — as unconditional adds they scored a tool 5–25 in a stable phase and the AI parked prudential tools for 40% of the century. Keep a core term and its gate trigger in step.
-- Events: `banking_cycle_events.txt` — 77 events covering crises from railway bubbles to derivatives, with command-economy and cooperative-ownership variants.
+- Events: `banking_cycle_events.txt` — 83 event blocks (counted 2026-09-26) covering crises from railway bubbles to derivatives, with command-economy and cooperative-ownership variants (`.1xx` / `.15x`–`.17x`).
 - **Events that duplicate a dashboard tool, or narrate monetary state, defer to it (#428).** Their draws in `banking_cycle_random_event_effect` ask triggers at the foot of `banking_policy_triggers.txt`, following events 15 and 58 (PR #416). `.31` *Bank Holiday* is drawn only while the dashboard's Bank Holiday could be pressed (`banking_can_enact_cb_bank_holiday` — the button's `possible` whole, points included, because the tool's own modifier holds them), and its option A enacts that tool. `.39` *Quantitative Easing* never fires beside running open-market operations; under the full system it needs OMO's whole gate (a dial at the rate's floor) and option A enacts OMO — a standing policy, with its activation cost, bubble push and inflation pressure, that runs until it is switched off — and under the simplified rule it keeps its bespoke, decaying stimulus. `.34` *Deposit Insurance* is not drawn while a guarantee is in force (`banking_deposit_guarantee_in_force`), and says "after recent banking failures" only after a crash in the last five years (`banking_recent_crash`, a timed variable set where each crash is decided). `.16` *Central Bank Independence* (market branch only) needs a delegated or independent dial under the full system, a national bank under the simplified rule; its option B moves the bank to the Growth mandate through `te_mon_effect_set_mandate`. `.10` / `.110` / `.160` need `scaled_debt > 0.25` and no default, and `.10`'s option C is a *threatened* default — no effect enters the engine's default state. `.55` names a real planned-economy ally (`banking_is_fraternal_aid_donor`). **Wave marks:** `banking_crisis_wave_hit` is every country a contagion wave reached, from the moment it is reached (the cascade dedupe, and the UN docket's loan test through `banking_crisis_wave_reached`); `banking_crisis_wave_crashed` and `banking_crisis_wave_scared` record how its contagion roll came out, seven days later. The Great Depression event reads those two, so a country reached but not yet decided gets the general text and the bystander option. It fires at most once per game: `banking_crisis_wave_check_great_depression` sets the global `great_depression_occurred` when it queues the event. Before that flag, the only guard was that no country still carried a Great Depression modifier, so another crash in the three days before the event fired queued a second one, and a new one could start once the modifiers ran out.
 - **Tuned by simulation.** `scripts/analysis/banking_cycle_sim.py` is a Monte-Carlo port of the monthly loop (reads every number from these files at import); `docs/audits/banking_cycle_simulation.md` is the study behind the 2026-09-22 retune — phase bubble adds ~×3, downturn/stagnation recovery ×3 plus a +0.5 climb, crash severity seeded from `banking_crash_severity_scale_value` (0.55) × bubble, a crash branch below cycle 40, the tools' standing momentum ×0.3 and negative bubble ×0.2 (then, the same day, §10's boom-rescue package: the three leaning tools — buffer, margin, moral suasion — back to ×0.6, frenzy's bubble add 20 → 8, the bubble-inertia curve flattened above 50 to reach +0.45 rather than +1.25 at bubble 100, and +0.2 bubble a month on fiat / digital; a maxed player now pulls back about a quarter to a third of booms and a few percent of frenzies — `--rescue`, `--rescue-entry 88`), the fiscal channel annualised and clamped, the stance clamp's loose side −4 → −2, the growth bias −1.0 → −0.25, players delegated by default, and the AI gates above. Re-run it before retuning any of those; the targets it was tuned to are in the study's §2.
 - **The delegated bank (2026-09-25, study §12).** Three changes answer the delegated bank's overshoot: `te_mon_cycle_lean` reads the phase of `te_mon_cycle_outlook` (value + 4.69 × momentum) rather than today's phase; a mandate-run bank cuts 3× as fast while the cycle is below 40 (`te_mon_drift_step_down`, `te_mon_emergency_cuts`; hikes and the manual dial are unchanged); and the growth mandate reacts to inflation above 4% at 1.0, not 0.5. The simulator never saw the overshoot because it had no standing inflation pressure: sweep `--wage-pressure` (labour laws grant +0.2 to +1.4pp) whenever you tune a mandate. Standing pressure still costs price stability a high rate and a near-stagnant cycle (§12 F15); that is a balance question, not a bank-logic one. For independent banks, §13 answers it: `law_central_bank_independence`'s per-National-Bank-level bonus is `country_inflation_anchoring_add` (+0.1pp a level), which `te_mon_pressure_anchoring` subtracts from the net positive wage + price pressure, never past zero (a flat negative pressure made the bank run loose and doubled crashes). It replaced −5% crash chance and −2% random momentum a level. The simulator's `--bank-level N` ports the institution; `--tune pre_anchoring` restores the old bonus.
@@ -663,13 +689,20 @@ Two `script_only` modifier types allow laws (and potentially techs, PMs, etc.) t
 | Unregulated Banking | +50% | +25% | — |
 | Free & Mutual Banking | — | -10% | — |
 | Universal Light Prudence | +10% | — | — |
-| Prudential Narrow Banking | -60% | -50% | -10% |
-| Directed Credit Dev Banks | -25% | -20% | — |
-| Central Bank Independence | -10% | -30% | — |
+| Prudential Narrow Banking | -60% | -50% | -10% efficiency |
+| Directed Credit Dev Banks | -20% | -20% | — |
+| State-Owned Banking | -35% | -35% | -10% contribution |
+| Central Bank Independence | -10% | — | — |
 
 Directed Credit & Development Banks also grants `country_directed_credit_sectors_add = 1` — a second directed-credit sector at once (see **Policy tools added 2026-09-23**).
 
-(`state_capitalists_investment_pool_efficiency_mult` is a vanilla per-pop modifier; Prudential is the only banking law that uses it. CBI gets the opposite signal at scale through `institution_national_bank` (+5%/level for capitalists in National Bank states).)
+State-Owned Banking (unlocked by `law_command_economy`) also carries `country_government_dividends_efficiency_add` +10%, `country_weekly_innovation_mult` −5% and `country_credit_standing_add` +0.5pp (the least credible arrangement for a lender).
+
+Central Bank Independence has had no crash-likelihood line since 2026-09-25: its per-level `institution_modifier` (on the National Bank) is now **Inflation Anchoring**, `country_inflation_anchoring_add` +0.1pp a level, which replaced −5% crash chance and −2% random momentum a level (the simulator found that pair almost worthless; `docs/audits/banking_cycle_simulation.md` §13). The law's flat −10% volatility stays.
+
+Other laws also carry these two modifiers: the monetary laws (`law_gold_standard` −10% volatility, `law_digital_currency` +50%, `law_decentralized_cryptocurrency` +75% volatility and −15% crash), the economic-system injections in `construction_system_law_injections.txt` (`law_cooperative_ownership` −25%, `law_command_economy` −50% volatility), `law_command_cooperative_economy` (−25% / −25%) and `law_algorithmic_governance` (−25% volatility).
+
+(`state_capitalists_investment_pool_efficiency_mult` is a vanilla per-pop modifier; Prudential is the only banking law that uses it. State-Owned Banking cuts capitalists' investment pool *contribution* instead. CBI gets the opposite signal at scale through `institution_national_bank` (+5%/level for capitalists in National Bank states).)
 
 **Script values** (in `extra_script_values.txt`):
 - `banking_random_nudge_down_value` — base -1, scaled by `(1 + country_banking_random_momentum_mult)`. Used in the random nudge step.
@@ -688,10 +721,10 @@ Contagion spread depends on relative GDP sizes (script values in `extra_script_v
 - **`banking_contagion_gdp_weight`** — source GDP / target GDP × 5 (capped at 50). Large economies crushing small ones: +25–50 bonus. Small→large: near-zero bonus.
 
 ### Event After Blocks
-All banking events (77 in `banking_cycle_events.txt`, plus `.6`/`.7` in `minor_events.txt` and `society_technology_events.30`) have `after = { banking_cycle_post_event_refresh = yes }` blocks that re-apply phase modifiers and update progress bars immediately after the player's choice.
+Banking events (81 of the 83 blocks in `banking_cycle_events.txt` — all but the bailout-appeal pair `.68`/`.69` — plus `.6`/`.7` in `minor_events.txt` and `society_technology_events.30`) have `after = { banking_cycle_post_event_refresh = yes }` blocks that re-apply phase modifiers and update progress bars immediately after the player's choice.
 
 ### Other Scripted Effects
-- **`banking_cycle_random_event_effect`** — cooldown-gated random event dispatcher (12-month cooldown).
+- **`banking_cycle_random_event_effect`** — cooldown-gated random event dispatcher. A draw sets `banking_event_cooldown` to 18 months (20, 24 or 30 on five of the draws); nothing is drawn in a crash month.
 - **`remove_all_banking_phase_modifiers`** — removes all 21 phase modifiers (6 market + 6 cmd + 6 coop + 3 bubble inertia).
 - **`apply_banking_crash_origin_effects`** — sets cycle vars based on crash severity (called from event .6 options).
 - **`apply_banking_contagion_effects`** — subtracts from cycle vars based on origin severity (called from event .7 options).
@@ -781,14 +814,19 @@ Per tracked country: 120 containers, each with 3 bookkeeping variables plus one 
 
 ## Colonial Collapse (`colonial_collapse_effect`)
 
-- **Purpose:** After decolonization tech spreads, tiny AI countries (remnants of colonial breakups) are absorbed by culturally similar neighbors or reverted to uncolonized land.
-- **Location:** `common/scripted_effects/colonial_collapse_effects.txt`, triggered by `colonial_collapse_on_action` in `common/on_actions/extra_on_actions.txt` (wired to `on_yearly_pulse_country`).
-- **Criteria for collapse:** Non-player, non-decentralized, not a subject, single-state, pop < 100k, no decolonization tech, not in a diplomatic play.
+- **Purpose:** Once the decolonization era has begun, any tiny, poor AI country (not only a former colony: owner ruling 2026-09-26) is absorbed by an AI neighbour sharing its heritage or, with none, reverted to uncolonized land.
+- **Location:** `common/scripted_effects/colonial_collapse_effects.txt`, triggered by `colonial_collapse_on_action` in `common/on_actions/extra_on_actions.txt` (wired to `on_yearly_pulse_country`). Each country tests itself on its own yearly pulse.
+- **Gates:** the `decolonization_enabled` game rule, and some country in the world has researched `decolonization` (`decol_era_begun`; the collapsing country need not have it).
+- **Criteria for collapse:** non-player, alive, not decentralized, not a subject, holding no subjects, in no power bloc and bound by no treaty in force (`colonial_collapse_unattached`, both branches: owner ruling 2026-09-26), no civil war at `civil_war_progress >= 0.75`, not in a diplomatic play or a war, and tiny and poor on a sliding scale: population under 100k with average SoL under 6, 200k and 5, 300k and 4, 500k and 3, or 1M and 2.
+- **Twenty years' grace after independence**, from either of two 20-year variables:
+  - `recently_decolonized`, set by `decol_mark_former_colony` (every country the mod's releases form, and the `make_independent` options of `.1` / `.3`) and by `te_construction_market_on_released_independent` (vanilla's release as independent). The post-independence events key on it.
+  - `decol_collapse_grace`, set by `on_become_independent` (a subject made independent: an independence war won, an overlord's release) and by a won secession (`te_civil_war_on_secession_end`). It exempts from collapse only and opens no event (owner ruling 2026-09-26).
 - **Resolution order:**
-  1. Find culturally similar neighbor → **annex** into that neighbor.
-  2. If no cultural match, find any neighbor → **annex**.
-  3. If no neighbors → **`set_country_type = decentralized`** (revert to uncolonized).
+  1. A neighbour of its most populous state whose owner shares a heritage trait group with it and is an AI country at peace and not a subject → that owner **annexes** it (never a player: owner ruling 2026-09-26) (the notice is posted first, while the collapsing country still exists).
+  2. Otherwise, if it holds no company and no warheads → **`set_country_type = decentralized`** (revert to uncolonized). Vanilla never does this, so the branch is limited to the plain case.
+  3. Otherwise nothing happens; it is tested again next year.
 - **Notifications:** Countries in same strategic region AND great powers receive alerts.
+- **History:** from db166830 (2026-03-23) until 2026-09 the limit held `any_civil_war = { always = no }`, which is always false, so the system never ran. The owner confirmed on 2026-09-26 that collapse should be live, the decentralize branch included.
 
 ## Treaty Articles with Entity Selection
 
@@ -816,11 +854,11 @@ Key gotchas:
 
 ## Space Race (`je_space_race_*`)
 
-Multi-stage competition system simulating a space race between Great Powers. 9 milestones (including a passive waiting JE) with semi-parallel progression, "The First" bonuses, Safe/Ambitious approach choices, and failure mechanics. Solar System Colonization is repeatable with 34 globally-claimed colonies across 5 stages. Extensive cross-system connections to UN, private companies, buildings, and tourism.
+Multi-stage competition system simulating a space race between great and major powers. Nine journal entries: seven milestones with a progress bar, the repeatable Solar System Colonization entry (34 globally-claimed colonies across 5 stages), and a passive entry that waits out the interstellar probe's transit. Semi-parallel progression, "The First" bonuses, Safe/Ambitious approach choices, and failure mechanics. Cross-system connections to the UN, private companies, buildings, and tourism. The per-entry table of techs and prerequisites is in `docs/systems/journal_entry_systems.md` → Space Race.
 
 ### Files
 - **Journal Entries:** `common/journal_entries/je_space_race.txt` — 9 JEs (suborbital → interstellar probe, plus interstellar results passive JE, plus repeatable solar colonization with 5 stages)
-- **Events:** `events/space_race_events.txt` — ~35 events (completion, failure, notification, site choice, in-progress, hard-sci-fi, cross-system); `events/space_race_colony_events.txt` — 34 colony establishment events (5 stages)
+- **Events:** `events/space_race_events.txt` — 61 events (counted 2026-09-26: completion, failure/setback, notification, site and other choice events, in-progress, hard-sci-fi, cross-system, programme loss, interstellar data); `events/probe_result_events.txt` — the 30 interstellar probe results (`space_race_events.601`–`.630`); `events/space_race_colony_events.txt` — 34 colony establishment events (5 stages)
 - **Modifiers:** `common/static_modifiers/space_race_modifiers.txt` — approach, milestone (first/subsequent), failure, economic, plus cross-system (tourism, ISS, extraplanetary integration). Colony modifiers (68) and `sr_solar_system_trade` are applied to **JE scope** (`je:je_space_race_solar_colonization`), not country scope.
 - **Legacy Cleanup:** `common/scripted_effects/legacy_modifier_cleanup.txt` — removes country-scoped colony modifiers from old saves and re-applies them to JE scope (guarded by `has_journal_entry`).
 - **Script Values:** `common/script_values/space_race_values.txt` — progress goals (stage-dependent for colonization), progress rates (with building/company/UN bonuses), failure weights
@@ -834,17 +872,19 @@ Multi-stage competition system simulating a space race between Great Powers. 9 m
 
 ### Milestone Progression (Semi-Parallel)
 ```
-Suborbital Flight (rocketry tech)
-    └→ Orbital Flight
-        ├→ Moon Landing (space_exploration tech)
-        │      └→ Moon Base (reusable_rocketry tech)
-        ├→ Outer Solar System Probe (space_exploration tech) [parallel with Moon]
-        └→ Mars Landing (reusable_rocketry tech) [parallel with Moon Base]
-               ├→ Interstellar Probe (requires Probe + Mars Landing + space_colonization)
-               │      └→ Interstellar Results (passive 132-month wait, fires after probe launch)
-               └→ Solar System Colonization (requires Moon Base + Mars Landing + space_colonization)
-                      [Repeatable: 5 stages × variable colonies = 34 total colonies]
+Suborbital Flight (rocketry; great or major power)
+    └→ Orbital Flight (guided_missiles)
+        └→ Moon Landing (space_exploration)
+               ├→ Outer Solar System Probe (space_exploration) [shown once Orbital is done, but `possible` also needs the Moon Landing]
+               ├→ Moon Base (reusable_rocketry)
+               └→ Mars Landing (knowledge_economy) [parallel with Moon Base; shown once Orbital is done, but `possible` also needs the Moon Landing]
+                      ├→ Interstellar Probe (compact_fusion_reactors; also needs the Probe)
+                      │      └→ Interstellar Results (passive 132-month wait, fires after probe launch)
+                      └→ Solar System Colonization (directed_energy_weapons; also needs the Moon Base)
+                             [Repeatable: 5 stages, 34 colonies in all]
 ```
+
+Every entry also needs the matching programme bool from the Space Programme building's production method (`building_space_program`, itself unlocked by `guided_missiles`): `pm_earth_orbit` for Suborbital and Orbital, `pm_moon_mission` (space_exploration) for the Moon Landing and the Probe, `pm_mars_mission` (knowledge_economy) for the Moon Base and Mars, `pm_solar_colonization` (directed_energy_weapons) for colonization, plus `pm_deep_space_exploration` (space_colonization) from colonization stage 3, and `pm_interstellar_mission` (compact_fusion_reactors) for the Interstellar Probe. Each PM also carries all the lower tiers' bools. Losing the bool fails the entry (see *Programme loss* below).
 
 ### Key Mechanics
 - **"The First" Bonus:** Global variables (`sr_global_first_*`) track first achiever. First nation gets ~2× rewards (prestige, innovation max, tech speed) permanently. Subsequent nations get smaller permanent modifiers.
@@ -869,14 +909,18 @@ Suborbital Flight (rocketry tech)
   - **Category III: Biological Discovery** (20%, 9 results) — Atmospheric biosignatures, alien vegetation, exotic biochemistry. Grants `sr_probe_biological_data` (major prestige/research/innovation/cultural pull).
   - **Category IV: Intelligence & Tech-signatures** (10%, 6 results) — Orbital debris, technogenic gases, artificial light. Grants `sr_probe_intelligence_data` (exceptional prestige/research/innovation/cultural pull).
   - Discovery selection uses two-stage `random_list`: first picks category by weight, then picks specific result uniformly within category. Each result event (601–630) records itself globally on first discovery (`sr_record_probe_result`: `sr_probe_found_<id>` = the discoverer). A later nation drawing the same result gets opening/closing lines that confirm the first finder's discovery, named, instead of "unprecedented data"; the rewards are the same (none is a first-discovery reward). Result events use triggered_desc blocks for the confirmation variant and the result-specific description.
-- **Solar System Colonization (Repeatable):** Each completion establishes one colony at a random unclaimed location in the current stage. Colonies are tracked via global variables (`sr_colony_*`), making them first-come-first-served across all nations. Stage advances when all locations in a stage are claimed. Goals increase per stage (100/120/140/160/200). JE only sets `sr_completed_solar_colonization` after all 34 colonies across 5 stages are claimed.
+- **Solar System Colonization (Repeatable):** Each completion establishes one colony at a random unclaimed location in the current stage. Colonies are tracked via global variables (`sr_colony_*`), making them first-come-first-served across all nations. Stage advances when all locations in a stage are claimed. The goal per colony rises with the stage (`sr_solar_colonization_goal`: 400 / 450 / 500 / 550 / 650). JE only sets `sr_completed_solar_colonization` after all 34 colonies across 5 stages are claimed.
   - **Stage 1:** Mars (5) + Asteroids (5) = 10 colonies
   - **Stage 2:** Jupiter system (6) + Venus clouds (1) = 7 colonies
   - **Stage 3:** Mercury (1) + Saturn moons (5) = 6 colonies
   - **Stage 4:** Uranus moons (4) + Neptune moons (2) = 6 colonies
   - **Stage 5:** Kuiper Belt/Oort Cloud (5) = 5 colonies
 - **Late-Game Economic Rewards:** Interstellar Probe grants one of 4 category-specific modifiers (see Interstellar Probe above), all colonies complete grants `sr_solar_system_trade`.
-- **Progress Sources:** Base rate + Aerospace Industry levels + Space Elevator + Extraplanetary Base + UN Space Partnership + SpaceX company + funding + tech bonuses.
+- **Milestone goals** (`space_race_values.txt`): Suborbital 50, Orbital 100, Moon Landing 200, Probe 150, Moon Base 300, Mars Landing 450, Interstellar Probe 600; colonization 400–650 per colony (above).
+- **Progress Sources:** each month an entry with an approach selected adds `sr_progress` = `modifier:country_space_race_progress_add` × (1 + `modifier:country_space_race_progress_mult`), at least 0.5; with no approach it adds the flat `sr_progress_drift` (0.5). Everything reaches it through those two modifiers, so the tooltip breakdown lists every source:
+  - `country_space_race_progress_add`: the Space Programme PM (Earth Orbit +0.5, every later tier +1, workforce-scaled), funding (`sr_funding_progress` on each running entry, +0.5 per funding level, stacking across entries, plus +25% space-programme throughput per level), the Space Elevator (+1 per level), the SpaceX, Lockheed Martin and Roscosmos company prosperity modifiers (+0.3 each), UN space partnership (`un_space_partnership_modifier`, +0.1), the `reusable_rocketry` and `space_colonization` techs (+0.2 each), and several choice-event and reward modifiers (probe target +0.3 to +0.5, `sr_mars_resource_extraction` +0.5, …).
+  - `country_space_race_progress_mult`: the Ambitious approach (+50% per entry), the temporary safety review (−10%), the UN outer-space regime (leader −5%, laggard +10%), covert space espionage (+10%), antimatter engines (+5% each, workforce-scaled) and `principle_advanced_research_5` (+10%).
+  - There is no Aerospace Industry or Space Mine term: the space mine only gates event `.53`, and `building_space_program` is a single-level monument.
 - **A revolution's winner continues the programme** (`docs/audits/civil_war_inheritance_audit.md` F5, #464). The winner inherits the loser's variables but none of its modifiers, and every entry it inherits active runs `immediate` again. So:
   - **`immediate` only creates what is missing.** Progress and funding are guarded with `has_variable`, so a milestone at 90 % stays at 90 %. That is safe for the native progress bar because an inherited record keeps the loser's bar: start date, baseline and goal are copied, not evaluated again (the German-revolution saves' `je_global_warming`: baseline 0.1 and goal 4.0 on the winner with the anomaly at 1.18). For a same-record re-activation inside a month (before the monthly cleanup clears the progress), `goal_add_value` subtracts the progress so the goal stays at `sr_<m>_goal`. Solar colonization's bar restarts at every colony, so it keeps progress only while it holds a colony (it cannot deactivate then); a colony-less programme still restarts, and a finished one is not re-opened. `je_space_race_interstellar_results` keeps its transit months the same way.
   - **Choice events are asked once per milestone** (`sr_<m>_choice_made`, checked in `immediate` and in the event's `trigger`). Before, a re-activation or an inherited entry asked again and could leave two answers and two modifiers.
@@ -886,9 +930,9 @@ Suborbital Flight (rocketry tech)
 ### Cross-System Connections
 | System | Connection |
 |--------|-----------|
-| **UN** | `un_space_partnership_modifier` boosts progress (+0.3/+0.4 safe/ambitious) and reduces failure risk (-2). ISS cooperation event (52) fires for UN members. UN resolution topic `un_topic_space` (event un_events.19). |
-| **Private Companies** | `company_spacex` boosts progress (+0.3/+0.4) and reduces failure risk (-2). Event 50 (private sector breakthrough) fires when SpaceX exists. |
-| **Buildings** | `building_aerospace_industry` levels 3/5 scale progress. `building_space_elevator` provides major bonus (+0.4/+0.6) and reduces failure (-2). `building_space_mine` (extraplanetary base) boosts colonization progress (+0.2/+0.3). Events 41, 53, 55 create direct building interactions. |
+| **UN** | `un_space_partnership_modifier` adds +0.1 progress (and prestige, science-ministry impact). The outer-space regime shares progress: `un_regime_space_leader_modifier` −5%, `un_regime_space_laggard_modifier` +10%. ISS cooperation event (52) fires for UN members with a station partner. UN resolution topic `un_topic_space` (event un_events.19). |
+| **Private Companies** | `company_spacex`, `company_lockheed_martin` and `company_roscosmos` each add +0.3 progress through their prosperity modifier. Event 50 (private sector breakthrough) fires when SpaceX exists. |
+| **Buildings** | `building_space_program` carries the programme tier (progress and the programme bools). `building_space_elevator` adds +1 progress per level. `building_space_mine` (extraplanetary base) adds no progress; it gates event 53. Antimatter engines add +5% progress each; the Nanofabrication Center lowers setback risk (−1% per level). Events 41, 53, 55 create direct building interactions. |
 | **Tourism** | Event 51 fires after orbital achievement if tourism industry exists. Grants `sr_space_tourism_boost` (tourism output +5%). Space tourism PM (`pm_space_tourism`) already exists in tourism industry building. |
 | **Society Tech Events** | `society_technology_events.18` (space colonization) and `.19` (colonial governance) fire based on aerospace industry levels and space elevator. These are separate from but thematically connected to space race milestones. |
 
@@ -939,12 +983,21 @@ Suborbital Flight (rocketry tech)
 
 > **Full design document:** `docs/vanilla/wonder_buildings_reference.md`
 
-Two-phase construction pattern: buildable construction site → completed building via scripted effect.
+The seven **megaprojects** use a two-phase construction pattern: a buildable construction site becomes the completed building through a scripted effect. (The ordinary wonders in `common/buildings/wonders.txt` are built through the normal construction queue and are not covered here.) All seven are era-12 technologies; their sites and buildings live in `common/buildings/extra_buildings.txt`.
 
-- **Space Elevator:** `building_space_elevator_construction_site` → `building_space_elevator`. Scripted effect: `space_elevator_construction` in `extra_effects.txt`. On-action: `space_elevator_on_action` (monthly state pulse). Max 20 levels.
-- **Solar Collector:** Three-building system (construction site → orbital hub → ground receivers). Hub enables receiver slots via `country_solar_receiver_max_level_add`. Max 10 levels.
-- **Construction progress:** Monthly based on `(occupancy / 12) * speed_multiplier`. Speed PMs: paused=0, slow=0.25, medium=0.5, fast=1.0.
-- **Custom modifier types:** `building_weekly_*_progress` and `building_total_*_progress` (percent, script_only) in `megastructure_progress_modifier_types.txt`.
+| Megaproject | Tech | Max level | Completed building does |
+|---|---|---|---|
+| Space Elevator | `space_elevator` | 20 | 1M `launch_capacity` per level, `country_space_race_progress_add` |
+| Orbital Solar Collector | `space_based_solar_power` | 10 | an orbital hub: each level opens 3 `building_solar_receiver` slots (`country_solar_receiver_max_level_add`); the ground receivers produce the electricity |
+| Orbital Battlestation | `orbital_weapon_platforms` | 5 | country-wide unit offense/defense/morale and nuclear-defence chance; no goods output |
+| Antimatter Containment Facility | `antimatter_production` | 10 | each level opens 5 slots (`country_antimatter_facility_max_level_add`) for `building_antimatter_engine` and `building_antimatter_warhead_plant` |
+| Mind Upload Nexus | `mind_backups` | 5 | digital assets, services, tourism and fine art output, research speed |
+| Nanofabrication Center | `molecular_assemblers` | 10 | `advanced_materials` output, lower space race risk |
+| Consciousness Network | `telepathic_communities` | 10 | state infrastructure, tax capacity and institution impact, bureaucracy; a mode group picks Open (SoL, innovation, influence) or Social Control (authority, less turmoil; unlocked by the laws that disallow Open) |
+
+- **Construction effect:** `generic_wonder_construction_base = { WONDER = <name> MAX_LEVEL = <n> }` in `common/scripted_effects/extra_effects.txt`, called through one named wrapper per megaproject (`space_elevator_construction`, …). Each megaproject's `<name>_on_action` runs it from `on_monthly_pulse_state` (`common/on_actions/extra_on_actions.txt`). On completion it removes the site and creates the building at level 1, or raises it one level up to the cap; a site can't be placed once the building is at its cap.
+- **Construction progress:** each month, `occupancy / 12 × building_annual_<name>_progress`, and nothing while the site has a goods shortage. Speed PMs set the annual progress: paused 0, slow 0.25, medium 0.5, fast 1.0 (about 4 / 2 / 1 years at full occupancy).
+- **Custom modifier types:** `building_annual_*_progress` and `building_total_*_progress` (script_only) in `megastructure_progress_modifier_types.txt`.
 
 ## Grand Monuments (Repeatable Construction Sink)
 
@@ -1095,10 +1148,10 @@ All pulse-based on_actions are routed through `extra_on_actions.txt`:
 
 **`on_yearly_pulse_country`** (Root = Country):
 - `tech_spread_on_action` — technology diffusion
-- `excess_private_construction_on_action` — construction cost penalty
+- `excess_private_construction_on_action` — Excess Private Construction (per-project construction cap raise with an efficiency penalty, removed the year it is no longer needed) and Overinvestment
 - `fix_incompatible_laws` — auto-fix illegal law combos
 - `construction_cost_scaling_on_action` — GDP-based construction costs
-- `colonial_collapse_on_action` — tiny AI country absorption
+- `colonial_collapse_on_action` — tiny, poor AI countries absorbed or decentralized
 - `assign_aptitude_traits_on_action` — character trait assignment
 
 ### Immediate Triggers (`extra_on_actions.txt`)
@@ -1149,7 +1202,7 @@ These fire instantly when the engine event occurs, providing same-tick responsiv
 - `te_amendment_timeout_on_action` — routes to the sunset-clause expiry events (`amendment_on_actions.txt`; see § Temporary Amendments)
 
 **`on_merge_markets`** (Root = dissolving market, scope:market = absorbing market):
-- `gw_market_join_on_action` — copies market leader's GW policy modifiers to new member
+- `gw_market_join_on_action` — `gw_sync_market_policy_modifiers`: the joining market's owner takes the absorbing leader's three market-wide GW policies and drops any the leader lacks, unless bound by an emissions reduction treaty (`gw_bound_by_emissions_treaty`). The dissolving market's other members, leadership changes and old saves are caught within a month by `gw_reconcile_market_policies_effect` in `global_warming_events_on_action`, which runs the same sync for every member of every market. The leader's repeal (`gw_effect_remove_*`) skips treaty-bound members too.
 
 
 ### Construction-Market Immediate Triggers (`te_construction_market_on_actions.txt`)
@@ -1180,7 +1233,7 @@ Building, institution and law scopes **do not support variables or modifiers**. 
 
 ### Overview
 
-The decolonization system models the decline of colonial empires through a journal entry with a stability progress bar, scripted buttons for colonial policies, and a series of events. The system is designed so that **most colonial powers except the top 2-3 GPs will lose most of their colonies** after the `decolonization` tech is researched (era 7).
+The decolonization system models the decline of colonial empires through a journal entry with a stability progress bar, scripted buttons for colonial policies, and a series of events. The system is designed so that **most colonial powers except the top 2-3 GPs will lose most of their colonies** after the `decolonization` tech is researched (era 6).
 
 ### Architecture
 
@@ -1203,7 +1256,7 @@ Three layers:
 | `common/scripted_guis/colonial_empire_sguis.txt` | 5 handlers backing the widget (2 guards, 1 text renderer, 2 op-coded actions) |
 | `common/customizable_localization/colonial_empire_custom_loc.txt` | Band names, status line and phase-modifier line, keyed on `var:colonial_empire_tier` |
 | `common/scripted_effects/te_history_colonial_effects.txt` | `te_history_record_colonial_samples` — the two chart series |
-| `common/scripted_effects/colonial_collapse_effects.txt` | AI country absorption for tiny post-colonial remnants |
+| `common/scripted_effects/colonial_collapse_effects.txt` | Colonial collapse: tiny, poor AI countries absorbed or decentralized in the decolonization era |
 | `common/laws/colonial_empire_law_injections.txt` | Per-law colonial-stability and programme-effectiveness contributions |
 | `common/modifier_type_definitions/colonial_empire_modifier_types.txt` | The four `country_colonial_*` aggregate modifier types |
 | `common/on_actions/extra_on_actions.txt` | `decolonization_events_on_action` wiring |
@@ -1276,8 +1329,12 @@ Events 1-15 handle the core colonial cycle: negotiations, crackdowns, releases, 
 - **Only colonial subjects count.** `.1`/`.2`/`.3`/`.8`/`.11` iterate `is_qualifying_colonial_subject` only.
 - **`.206`'s "by decision" epilogue** needs a chosen release. `decol_record_chosen_release` counts them (`decol_chosen_releases`); otherwise a neutral variant shows.
 
+**What a revolution's winner keeps (PR #508):** the three running programmes, the permanent ending rewards (`colonial_empire_solidified_modifier` and the three path modifiers), `imperial_federation_modifier` and `mandate_system_modifier` are country modifiers, which a civil war's winner does not inherit. Each has a variable record, and `decol_repair_after_civil_war` (from `te_civil_war_on_won`) puts back each modifier whose record the winner holds and whose modifier it lacks. The records are `<modifier>_held`, written by `decol_grant_permanent_modifier` and the programme effects, plus the decisions' own `imperial_federation_taken` / `mandate_system_taken`. The programmes need the entry, and whether `on_civil_war_won` runs before or after the winner inherits it is unknown, so the entry's monthly pulse syncs them too; its programme tests read the records, so a programme it restores counts that month. The permanent modifiers' records are country variables, merged before `on_civil_war_won`, so the repair restores them at once. A yearly country pulse (`decol_permanent_modifier_sync_on_action`) backfills the records on saves from before they existed. It backfills the Solidified record only while no entry runs, because that key is also the entry's top band modifier. Timed modifiers and the entry's band modifiers are not rebuilt.
+
 **Former colonies, colonial wars and notices (2026-09, #430):**
-- **Every freed colony is a former colony.** `decol_mark_former_colony` (`decolonization.txt`) sets `var:former_overlord` (untimed) and `recently_decolonized` (7300 days), the shapes the vanilla release actions set in `te_construction_market_on_released_*`. `apply_decolonization_path` calls it for every country `form_decolonized_country` creates, and so do the `make_independent` options `.1.c`, `.1.d_neo`, `.3.a` and `.3.c`. What this makes reachable is the precursors `.60` / `.61` and, through them, `.5` / `.6`. The post-independence events (`.7`, `.15`, `.16`, `.17`, `.18`, `.21`) also require `je_colonial_empire` on the former colony itself, which a freed colony almost never holds, and `.19` needs `.15`'s nationalization modifier. So those stay out of reach for any freed colony, including one released by the vanilla actions. That gate predates the helper; whether it should read the decolonization rule instead is an open question.
+- **Every freed colony is a former colony.** `decol_mark_former_colony` (`decolonization.txt`) sets `var:former_overlord` (untimed) and `recently_decolonized` (7300 days), the shapes the vanilla release actions set in `te_construction_market_on_released_*`. `apply_decolonization_path` calls it for every country `form_decolonized_country` creates, and so do the `make_independent` options `.1.c`, `.1.d_neo`, `.3.a` and `.3.c`. That opens the precursors `.60` / `.61` (and, through them, `.5` / `.6`) and the post-independence events `.7`, `.16`, `.17`, `.18` and `.21`, which read `recently_decolonized`.
+- **Events for countries that never hold the entry gate on the rule.** `.4`, `.7`, `.15`, `.16`, `.17`, `.18`, `.21` (a former colony) and `.14`, `.20` (any great power) test `has_game_rule = decolonization_enabled` instead of `has_journal_entry = je_colonial_empire`. #44 had gated every event in the file on the entry, so until 2026-09 these could not fire: a freed colony never holds the entry, and `.14`'s AI weights and `.20`'s audience are aimed at great powers without colonies. `.14` / `.20` also reach a great power whose own entry has ended, on purpose: they stand for the powers that disapprove of colonial empires and press them (owner ruling, 2026-09-26). `.19` (the former overlord) keeps the entry gate, as do the metropole-side events.
+- **The former-colony events need only the world's decolonization era.** `.4`, `.7`, `.15`, `.16`–`.19`, `.21` and the outer gate of `decolonization_events_on_action` test `decol_era_begun` (some country has researched `decolonization`, `colonial_empire_triggers.txt`) instead of the recipient's own research (owner ruling, 2026-09-26). The metropole-side events still need the recipient's own technology through their own triggers (the entry's `is_shown_when_inactive`, `.14`, the `.60` / `.61` target checks).
 - **`.51` (Conscription Crisis) fires only in a colonial war.** The trigger is `decol_fighting_colonial_war` (`colonial_empire_triggers.txt`), used by both the event and its pool entry. It is true when the country is at war and one of these holds: the colonial crackdown is running, an enemy is its own qualifying colonial subject, or an enemy is a secessionist people sharing no heritage with it. Other wars still drain the bar through `colonial_stability_term_war`.
 - **`.50`'s City-and-sterling text is Britain's** (`c:GBR ?= this`). Every other empire gets a generic treasury text, since the mod models no per-country currency.
 - **Notices name the colonial power.** `.1`, `.2`, `.3` and `.11` save it as `scope:decol_colonial_power` for their `notification_*` loc. A message reads only `notification_<msg>_name/_desc/_tooltip`, never a bare key. `.2.c` frees no one, so it posts its own `colonial_neocolonial_reforms_notice`; `colonial_neocolonial_terms_notice` is for the options that grant independence (`.1.d_neo`, `.3.c`).
@@ -1293,8 +1350,8 @@ AI weights across events are tuned to favor decolonization:
 ## Independence Nationalization Event (`decolonization_events.15`)
 
 - **Purpose:** When a country gains independence, presents a choice about foreign-owned assets.
-- **Trigger:** `on_become_independent` on_action → fires event with 1-tick delay.
-- **Condition:** At least one foreign country owns >5% of the new country's GDP.
+- **Trigger:** `on_become_independent` on_action (any subject that becomes independent), and `apply_decolonization_path` a week after it forms a country (release decisions and collapses; the new country was never a subject, so `on_become_independent` may not reach it).
+- **Condition:** the decolonization game rule, the world's decolonization era (`decol_era_begun`), not a subject, no nationalization in the last 20 years (`nationalization_cooldown_var`, which also stops a double firing), and at least one foreign minor power or above owns >5% of the new country's GDP.
 - **Branching description:** Uses `first_valid` + `triggered_desc` — violent version if `is_at_war = yes`, peaceful version otherwise.
 - **Options:**
   - **(A) Full nationalization:** Seize all foreign assets. +10 infamy, -60 relations with all foreign owners, prestige boost, throughput penalty. Loyalists among lower strata, trade unions approve, industrialists oppose.
@@ -1307,7 +1364,7 @@ AI weights across events are tuned to favor decolonization:
 ## Dynamic Treaty Names
 
 - **Purpose:** Gives thematic names to treaties containing mod-specific treaty articles (instead of generic "Treaty of [City]").
-- **How it works:** Each entry in `common/dynamic_treaty_names/` has a `trigger` (checked against the treaty's articles via `any_scope_article_option = { has_type = X }`) and a `weight` (higher = more likely). The engine picks the highest-weighted matching name.
+- **How it works:** Each entry in `common/dynamic_treaty_names/` has a `trigger` (checked against the treaty's articles via `any_scope_article_option = { has_type = X }`) and a `weight` (higher = more likely). The engine picks one of the matching names at random, weighted by `weight` (vanilla `common/dynamic_treaty_names/readme.md`), so a heavy name is only the likeliest, not guaranteed; the treaty draft's randomize button (`TreatyDraft.RandomizeName`) re-rolls it.
 - **Coverage by article type:**
   - Corporate: `seize_company`, `disband_company`, `enforce_privatization`, `corporate_concessions`, `free_port_concession`, `money_transfer`
   - Humanitarian: `minority_protection`, `cultural_exchange`, `religious_mission_rights`
@@ -1353,19 +1410,21 @@ AI weights across events are tuned to favor decolonization:
 
 - **Purpose:** Moves minority pops of the target country's primary culture(s) from the source country to the target country. Models forced population exchanges (e.g., Treaty of Lausanne).
 - **Article type:** Directed, one-time effect on entry into force.
+- **Gating (`possible`, ROOT = the conceding source):** the source hosts pops of a primary culture of the target that is not also primary to the source, at least one of those cultures is below Acceptance Status 4 in some source state (the effect still moves every pop of those cultures, however well accepted), and the demanding target does not have Universal Citizenship (`law_multicultural`).
 - **Mechanism:**
   1. `on_entry_into_force` saves scopes via `scope:article_options.source_country` / `.target_country` (critical scoping pattern — see `docs/guides/scripting_best_practices.md`).
   2. Calls `population_transfer_effect` scripted effect.
-  3. The effect iterates target country's primary cultures, for each culture finds source-country states with matching pops via population-weighted random selection (tiered modifiers since `state_population` is a trigger, not a value).
-  4. Uses `move_pop` to transfer pops, increments a counter variable.
-  5. Applies `population_transfer_disruption` timed modifier to affected states, scaled by transfer count.
+  3. The effect iterates the target country's primary cultures and moves **every** matching pop in every source-country state (pops whose culture is also primary in the source stay). Each pop goes to a random target-country state, weighted by population (tiered `weight` modifiers, since `state_population` is a trigger, not a value).
+  4. Uses `move_pop` to transfer pops, adding each pop's size to `var:pop_transfer_count` on both countries.
+  5. Applies `population_transfer_disruption` to **both countries** as a 5-year decaying country modifier. Its multiplier is the share of that country's population moved (`te_pop_transfer_disruption_strength` = `pop_transfer_count / total_population`, clamped to 0.25–2, so even a small transfer costs at least a quarter of the full effect), precomputed into `var:pop_transfer_disruption_strength` because an inline multiplier would be re-evaluated on every decay tick.
 - **Key scripted effect:** `population_transfer_effect` in `common/scripted_effects/extra_effects.txt`.
-- **Key modifier:** `population_transfer_disruption` — reduces state throughput and increases mortality, applied per-state.
-- **Files:** `common/treaty_articles/extra_treaty_articles.txt`, `common/scripted_effects/extra_effects.txt`, `common/static_modifiers/extra_modifiers.txt`, localization.
+- **Key modifier:** `population_transfer_disruption` (country scope) — at multiplier 1: `country_bureaucracy_mult` −50%, `country_legitimacy_base_add` −10, `country_radicals_from_conquest_mult` +50%. There is no per-state throughput or mortality effect.
+- **Follow-up event:** while the disruption lasts, `treaty_article_events.10` (weight 10 in `treaty_article_events_on_actions.txt`) offers resettlement support (`population_transfer_aftermath_modifier`) or neglect (`population_transfer_neglect_modifier`).
+- **Files:** `common/treaty_articles/extra_treaty_articles.txt`, `common/scripted_effects/extra_effects.txt`, `common/script_values/extra_script_values.txt` (`te_pop_transfer_disruption_strength`), `common/static_modifiers/extra_modifiers.txt`, `events/treaty_article_events.txt`, localization.
 
 ## Intelligence Sharing Defense Shield
 
-- **Purpose:** Countries with an intelligence sharing pact benefit from their partner's covert defense strength. The weaker partner receives a shield equal to 50% of the difference between their base defense and their strongest partner's base defense.
+- **Purpose:** Countries with an intelligence sharing pact benefit from their partner's covert defense strength. The weaker partner receives a shield equal to 50% of the difference between their combined base defense and their strongest partner's, spread evenly over the three defense types (a sixth of the gap on each; the boost is multiplied by 0.5 and divided by 3).
 - **Mechanism:** Uses the "prior variable subtraction" pattern for modifier recalculation. Each country stores `intel_shield_mult` (the multiplier currently applied to their shield modifier). When recalculating:
   1. Reads own total defense from `modifier:country_covert_defense_*_add` (3 types summed).
   2. Subtracts `3 * intel_shield_mult` to get base defense (since the shield adds multiplier to each of 3 types).
@@ -1385,7 +1444,7 @@ Allows monarchies to shape their heir's education through focus selection and ra
 ### Architecture
 - **Journal Entry:** `je_heir_education` — main controller with monthly pulse, scripted buttons, progress bar
 - **Scripted Effects:** `heir_education_effects.txt` — gain effects (intelligence-modified), resolve effect (5-tier), adult initialization, cleanup, IG reactions, non-heir trait assignment
-- **Scripted Buttons:** `heir_education_buttons.txt` — 14 toggle buttons (enable/disable pairs for 8 focuses)
+- **Scripted Buttons:** `heir_education_buttons.txt` — 16 toggle buttons (enable/disable pairs for 8 focuses)
 - **Progress Bar:** `heir_education_progress_bars.txt` — 0-20 range
 - **Static Modifiers:** `heir_education_modifiers.txt` — innovation cost, grace period, event cooldown
 - **Events:** `heir_education_events.txt` — 3 events (Promising Pupil, Difficult Student, Foreign Correspondence)
@@ -1525,7 +1584,7 @@ Each surviving JE has monthly pulse events plus a fail-state event (except Post-
 **Purpose:** Counterbalance the natural decline of the Devout IG caused by urbanization, literacy, and modernization techs. Inspired by 20th/21st century religious-political movements.
 
 **Mechanism:** 7 events fire from the `society_technology_events_on_action` random list, each tied to a different social tech (eras 7–9). Each offers three options:
-- **Strong option:** Adds a permanent modifier with large `interest_group_ig_devout_pop_attraction_mult` (0.25–0.50) and `interest_group_ig_devout_pol_str_mult` (0.20–0.50). Some include costs (authority, research speed, prestige). These stack — a player who embraces multiple religious movements will see a very strong Devout IG.
+- **Strong option:** Adds a 20-year modifier (`very_long_modifier_time`) with large `interest_group_ig_devout_pop_attraction_mult` (0.25–0.50) and `interest_group_ig_devout_pol_str_mult` (0.20–0.50). Four hold at full strength for the 20 years (events 1, 2, 3, 5); three decay over them (events 4, 6, 7). Some include costs (authority, research speed, prestige). These stack — a player who embraces multiple religious movements will see a very strong Devout IG.
 - **Moderate option:** Adds a decaying modifier lasting 20 years with moderate attraction/pol_str bonuses.
 - **Secular option:** No devout boost or negative (radicals), with alternative benefits.
 
@@ -1542,11 +1601,11 @@ Each surviving JE has monthly pulse events plus a fail-state event (except Post-
 - **Default:** Covers Christian and other religions with generic or broadly Western religious language.
 - Some events also have variant titles (e.g., "The Satellite Minbar" for Islamic event 2, "One Ummah, One Law" for Islamic event 4).
 
-**Removal:** The "Secularization Campaign" decision (requires `decline_of_organized_religion` tech) removes all permanent religious revival modifiers at once, with a radicals cost.
+**Removal:** The "Secularization Campaign" decision (requires `decline_of_organized_religion` tech) removes all seven strong-option modifiers at once, with a radicals cost, instead of waiting out their 20 years.
 
 **Events:**
 1. **The Moral Majority** (`television_broadcasting`, era 7) — Religious political organizing via broadcast media
-2. **The Electronic Pulpit** (`pop_culture`, era 8) — Televangelism and megachurches
+2. **The Electronic Pulpit** (`pop_culture`, era 7) — Televangelism and megachurches
 3. **The Preferential Option** (`civil_rights_movement`, era 7) — Liberation theology (fires under state atheism)
 4. **One Nation Under God** (`globalization`, era 9) — Religious nationalism
 5. **The Digital Pulpit** (`social_media`, era 9) — Online faith communities
@@ -1564,53 +1623,59 @@ Each surviving JE has monthly pulse events plus a fail-state event (except Post-
 
 ## SoL Expectations System
 
-**Purpose:** Adds adaptive standard of living expectations that create inertia around SoL changes. When SoL rises suddenly, people's expectations lag behind (contentment bonus). When SoL drops, expectations remain high (dissatisfaction penalty). Expectations converge toward a target (actual SoL + permanent offsets) with a configurable half-life.
+**Purpose:** Adds adaptive standard of living expectations that create inertia around SoL changes. When SoL rises suddenly, people's expectations lag behind (contentment bonus). When SoL drops, expectations stay high for a while (dissatisfaction penalty). Expectations converge toward a target (actual SoL + permanent offsets) with a 10-year half-life.
 
 **Mechanic:**
-- Country variable `var:sol_expectations_shift` tracks the adaptive shift applied via a static modifier
-- Monthly: `gap = (average_sol + target_add) - average_expected_sol`, then `shift += gap * rate + monthly_bias`
-- Rate derived from half-life: `rate = ln(2) / (half_life_years × 12)` (default 5y → ~0.01155/month)
-- At equilibrium: `average_expected_sol ≈ average_sol + target_add` (shift stabilizes at whatever bridges the gap)
-- Applied via `sol_expectations_adaptive_shift` static modifier with `multiplier = shift`
-- Shift threshold: only applied when |shift| > 0.05 (avoids modifier clutter in steady state)
+- Country variable `var:sol_expectations_shift` tracks the adaptive shift; `sol_expectations_monthly_update` runs from `on_monthly_pulse_country`.
+- Monthly: `gap = (average_sol + target_add) - average_expected_sol` (cached in `var:sol_expectations_gap_cached` before anything is removed), then `shift += gap × rate + country_sol_expectations_shift_add`.
+- Rate derived from half-life: `rate = ln(2) / (half_life_years × 12)`, scaled by `1 + country_sol_expectation_adaptation_rate_mult` and clamped to [0.001, 0.1] (default 10y → ~0.00578/month).
+- **Clamp:** the shift is then clamped to [floor, ceiling]. The floor is 0 plus `country_sol_expectations_shift_min_add`, so by default the shift never goes negative: the adaptive shift can only raise expectations above vanilla's, and falling SoL lets it decay back toward 0, not below. Welfare laws raise the floor (`law_poor_laws` +1, `law_wage_subsidies` +2, `law_old_age_pension` +3, `law_universal_basic_income` +10, `law_post-scarcity` +15), so expectations can't adapt all the way down to hardship. The ceiling is 50 plus `country_sol_expectations_shift_max_add` (negative values, mostly from events, lower it).
+- **Per-strata application:** three static modifiers, `sol_expectations_upper_strata_shift`, `sol_expectations_middle_strata_shift` and `sol_expectations_lower_strata_shift` (each +1 `state_<strata>_strata_expected_sol_add`), are re-applied every month. Each one's multiplier is `sol_expectations_<strata>_shift_value`: `(clamped shift × (1 + country_sol_expectations_offset_mult) + country_sol_expectations_<strata>_offset_add) × (1 + country_sol_expectations_<strata>_offset_mult) + global awareness`. A modifier is only applied when its multiplier is outside ±0.1 (avoids modifier clutter in steady state).
+- **Global awareness:** `sol_expectations_global_awareness_value = (global_average_sol − average_sol) × literacy_rate × 0.2`, added to all three strata. Literate populations expect more when the world is richer than they are and less when it is poorer. `global_average_sol` is the population-weighted world mean from `cultural_hegemony_script_values.txt`.
+- At equilibrium, while the shift is inside [floor, ceiling]: `average_expected_sol ≈ average_sol + target_add`. Because the gap reads `average_expected_sol` with the strata offsets and the awareness term already applied, the adaptive shift works back against their effect on the national average over time; what persists is the difference between classes. When the floor binds, expected SoL sits above the target.
 
-**Target offset:** `country_sol_expectations_target_add` (script_only) — offsets the convergence target above/below actual SoL. Techs, laws, IG traits, and power bloc principles use this to represent permanent changes in societal expectations. Example: egalitarianism tech adds `country_sol_expectations_target_add = 1`, meaning a society with that tech permanently expects 1 point above their actual average SoL.
+**Target offset:** `country_sol_expectations_target_add` (script_only) — offsets the convergence target above/below actual SoL. Techs, laws, IG traits, and power bloc principles use this to represent permanent changes in societal expectations. Example: the egalitarianism tech adds `country_sol_expectations_target_add = 0.5`, meaning a society with that tech expects half a point above its actual average SoL.
+
+**Per-strata offsets:** `country_sol_expectations_upper/middle/lower_offset_add` model class-relative comparison (aristocratic vs egalitarian societies): restrictive franchises (autocracy, landed, wealth and census voting) raise the upper-strata offset, universal suffrage and labour-rights laws the lower one; corporate and investment-banking techs raise the upper one, and egalitarianism lowers the middle one. Many event modifiers carry small offsets or ceiling cuts too (`event_modifiers.txt`).
 
 **Vanilla modifier conversion:** All vanilla `state_expected_sol_from_literacy`, `state_expected_sol_mult`, and per-strata `state_*_strata_expected_sol_add` modifiers from techs, laws, and IG traits have been replaced with `country_sol_expectations_target_add` using `INJECT:` directives that cancel the original values with inverse modifiers and add the new target offset. Injection files:
-- `common/technology/technologies/sol_expectations_vanilla_injections.txt` — egalitarianism, labor_movement, socialism, political_agitation, mass_propaganda
-- `common/laws/sol_expectations_vanilla_injections.txt` — law_industry_banned, law_women_in_the_fields
+- `common/technology/technologies/sol_expectations_vanilla_injections.txt` — egalitarianism, labor_movement, socialism, political_agitation, mass_propaganda (plus per-strata offsets on investment_banks, corporate_management and others)
+- `common/laws/sol_expectations_vanilla_injections.txt` — law_industry_banned, law_women_in_the_fields, the voting and labour-rights offsets, and the welfare floors above
 - `common/interest_group_traits/sol_expectations_vanilla_injections.txt` — ig_trait_biedermanner
 
 **NOT converted** (intentionally): Engine-hardcoded code static modifiers (base_values, tax_modifier_*, unincorporated_state) and temporary DLC/event modifiers (expecting_riches_forever, etc.) — these are either unchangeable or correctly handled by the adaptive lag.
 
 **Tuning:**
-- `sol_expectations_half_life_years = 5` — script value controlling convergence speed. Change this single value to tune. 5y = ~50% adapted after 5y, ~75% after 10y, ~94% after 20y.
+- `sol_expectations_half_life_years = 10` — script value controlling convergence speed. Change this single value to tune. 10y = ~50% adapted after 10y, ~75% after 20y, ~94% after 40y.
 
-**Modifiers:**
-- `country_sol_expectation_adaptation_rate_mult` (percent, script_only) — scales the adaptation rate. +50% = faster convergence (~3.3y half-life).
-- `country_sol_expectations_shift_add` (decimals=2, script_only) — persistent monthly bias added to shift. Positive = expectations rise faster.
-- `country_sol_expectations_target_add` (decimals=1, script_only) — permanent offset to the convergence target. Positive = people expect more than actual SoL.
+**Modifiers** (`sol_expectations_modifier_types.txt`, all script_only):
+- `country_sol_expectation_adaptation_rate_mult` (percent) — scales the adaptation rate. +100% = twice as fast (5-year half-life).
+- `country_sol_expectations_shift_add` (decimals=2) — persistent monthly bias added to shift. Positive = expectations rise faster.
+- `country_sol_expectations_target_add` (decimals=1) — permanent offset to the convergence target. Positive = people expect more than actual SoL.
+- `country_sol_expectations_shift_min_add` / `_shift_max_add` (decimals=1) — raise the floor (default 0) / lower the ceiling (default 50) of the shift.
+- `country_sol_expectations_upper/middle/lower_offset_add` (decimals=1) — direct per-strata offsets, not adaptive.
+- `country_sol_expectations_offset_mult` (percent) — scales the clamped shift for all three strata before the offsets; `country_sol_expectations_upper/middle/lower_offset_mult` (percent) — scales one stratum's total.
 
 **Utility scripted effects** (in `sol_expectations_effects.txt`):
 - `sol_expectations_instant_adjust = { AMOUNT = X }` — instantly add X to the shift
 - `sol_expectations_close_gap = { FRACTION = X }` — close X fraction of the remaining gap (0.5 = half, 1.0 = full)
 - `sol_expectations_reset = yes` — fully reset expectations to match current target
-- `sol_expectations_reapply_modifier = yes` — internal: remove and re-apply the static modifier
+- `sol_expectations_reapply_modifier = yes` — internal: clamp the shift and re-apply the three strata modifiers (`sol_expectations_apply_strata_shifts`)
 
-**Static modifier:** `sol_expectations_adaptive_shift` — applied at country level with `multiplier = shift_value`. Base modifier provides +1 to all three strata expected_sol_add, so multiplier directly controls the SoL shift.
+All four clamp the shift before re-applying, so an adjustment can't push it past the floor or ceiling.
 
 **Script values** (in `extra_script_values.txt`):
-- `sol_expectations_half_life_years` — half-life parameter in years (default 5)
+- `sol_expectations_half_life_years` — half-life parameter in years (default 10)
 - `sol_expectations_adaptation_rate_value` — derived monthly rate, scaled by modifier, clamped [0.001, 0.1]
 - `sol_expectations_gap_value` — (average_sol + target_add) - average_expected_sol
-- `sol_expectations_shift_value` — current shift variable, used as modifier multiplier
-- `sol_expectations_shift_display` — rounded shift for UI display
-- `sol_expectations_gap_display` — rounded cached gap for UI display
+- `sol_expectations_shift_clamped_value` — the shift variable clamped to [floor, ceiling]
+- `sol_expectations_global_awareness_value` — the literacy-scaled world comparison
+- `sol_expectations_upper_shift_value` / `_middle_shift_value` / `_lower_shift_value` — each stratum's modifier multiplier
 
 **Files:**
 - Scripted Effect: `common/scripted_effects/sol_expectations_effects.txt` (`sol_expectations_monthly_update` + utilities)
 - On_action: `common/on_actions/sol_expectations_on_actions.txt`
-- Static Modifier: `common/static_modifiers/sol_expectations_modifiers.txt`
+- Static Modifiers: `common/static_modifiers/sol_expectations_modifiers.txt` (the three strata modifiers)
 - Modifier Types: `common/modifier_type_definitions/sol_expectations_modifier_types.txt`
 - Script Values: `common/script_values/extra_script_values.txt` (search `sol_expectations`)
 - Vanilla Injections: `sol_expectations_vanilla_injections.txt` in `technologies/`, `laws/`, `interest_group_traits/`
@@ -1718,10 +1783,10 @@ The risk to be aware of: if a mod system *also* adds loyalists/radicals tied to 
 | `events/te_debug_ch_events.txt` | Console test harness (`event te_debug_ch.1`) for the widget's awkward states |
 
 ### Player Controls
-- **Increase/Decrease Cultural Program Funding:** Adjusts a `ch_program_funding_level` variable that re-applies JE-scoped flat `country_cultural_pull_add` and a separate GDP-scaled expense modifier. The maximum level comes from `country_cultural_program_max_funding_add`.
+- **Increase/Decrease Cultural Program Funding:** Adjusts a `ch_program_funding_level` variable that re-applies JE-scoped flat `country_cultural_pull_add` (with +5 % `country_cultural_pull_mult`) per level, and a separate expense modifier that costs GDP × 0.00005 a week **per level** (`ch_program_funding_total_cost_mult`; flat across levels until PR #510). The maximum level comes from `country_cultural_program_max_funding_add`. The AI steps funding up only while it is out of default and its weekly surplus covers another step.
 - **Funding cap sources:** `institution_ministry_of_culture` grants funding tiers through ministry investment, while `mass_media` and `television` each raise the cap further.
 - **Begin International Cultural Outreach** (internally `ch_world_exposition`): a **persistent toggle**, not a one-shot and not timed — the JE-scoped modifier has no duration and runs, with its GDP-scaled cost, until the player ends it or the Ministry goes away. (An earlier version of this section described it as a one-shot decaying action; it never was one.)
-- **Fund Cultural Institutes:** JE-scoped policy that trades bureaucracy for higher `country_cultural_pull_mult` and society tech progress.
+- **Fund Cultural Institutes:** JE-scoped policy that trades authority (`country_authority_cost_add = 100`) for +10 % `country_cultural_pull_mult`. It gives no society research.
 - **Launch Global Media Campaign:** JE-scoped policy that requires `mass_media` and converts authority into prestige plus stronger cultural projection.
 - **Enact Cultural Protectionism:** JE-scoped defensive policy that boosts pull and authority while reducing migration attraction and society tech openness.
 - **Mutual exclusivity:** Global Media Campaign and Cultural Protectionism cannot be active at the same time.
@@ -1794,12 +1859,12 @@ article, power-bloc principle, GUI.
 
 **Purpose:** Adds an espionage/covert operations layer to the Cold War+ era. Countries can run covert operations against rivals (election interference, sabotage, espionage, etc.) using pact-based diplomatic actions. Operations consume operation slots, cost GDP-scaled expenses, and carry detection risk.
 
-**Gate:** `has_game_rule = covert_warfare_enabled` + `has_technology_researched = television`.
+**Gate:** `has_game_rule = covert_warfare_enabled` (shows the entry). It activates once `covert_operation_max_slots` is one above the rank baseline: 4 for a great power, 3 for a major power, 2 for anyone else (`je_covert_warfare.txt` `possible`). Slots (`country_covert_operation_slot_add`) come from the base 1 every country has (`base_values`), the rank bonus (great power +2, major power +1, `extra_country_ranks.txt`), four technologies (`mainframe_computers`, `computer_networks`, `cyber_warfare`, `quantum_computing`, +1 each) and the Ministry of Intelligence and Security institution (`law_ministry_of_intelligence_and_security`, +1 per level). No technology gates the entry directly; the first extra slot usually comes from `mainframe_computers` or the ministry.
 
 ### Key Files
 | File | Purpose |
 |---|---|
-| `common/diplomatic_actions/covert_operations.txt` | 13 diplomatic actions (11 peacetime, 2 wartime) |
+| `common/diplomatic_actions/covert_operations.txt` | 14 diplomatic actions (12 peacetime, 2 wartime: infrastructure sabotage and communications disruption) |
 | `common/journal_entries/je_covert_warfare.txt` | Command center JE: IC display, slots, funding, detection; wires the operations widget |
 | `gui/journal_entry_widgets/covert_operations_widget.gui` | Three JE widgets: `widget_je_covert_command_centre` (capacity, slots, funding ladder + stepper, detection factors, defence, last exposure), `widget_je_covert_operations` (one row per running operation) and `widget_je_covert_networks` (one row per per-target network, 2026-09 covert slice 4, with what a strong network reports on its target, slice 7) |
 | `common/scripted_guis/covert_warfare_sguis.txt` | Widget handlers: the funding stepper, the ladder tooltip builder, four `is_shown`-only questions, fourteen per-type stand-down handlers, the per-row priority stepper (`covert_priority_up_sgui` / `_down_sgui`, 2026-09 covert slice 3) |
@@ -1836,7 +1901,7 @@ article, power-bloc principle, GUI.
   AI rule: `covert_ai_manage_priorities`, run for every `is_player = no` country before `covert_ops_sync_all` in the monthly pulse, sets a per-operation wanted level — 1 in default or bankruptcy, 3 for a great power at war with the target, 2 against a rival, else 1 — and steps `iw_priority` toward it at most twice per direction per month through the same `covert_possible_priority_up`/`_down` gates the stepper uses.
 - **JE display:** `status_desc` is down to the five-tier intelligence-standing verdict plus the empty-state pointer. Everything else is in `widget_je_covert_command_centre` (`custom_widget_container_1`); per-operation rows are `widget_je_covert_operations` (`custom_widget_container_2`), whose datamodel is `JournalEntry.GetCountry.MakeScope.GetList('iw_ops')`; per-target network rows are `widget_je_covert_networks` (`custom_widget_container_3`, below the buttons, over `GetList('iw_nets')`). Full breakdown, op table and editing rules: `journal_entry_systems.md` § Covert Warfare → Command Centre.
 - **Intelligence Capacity (IC):** Base 5 (from `INJECT:base_values`) + rank bonus (GP +10, Major +5 from `INJECT:country_ranks`) + literacy component (`literacy_rate × intelligence_capacity_literacy_max`, i.e. × 50) + GDP component (`gdp / global_gdp × 100`, capped at `intelligence_capacity_gdp_max` = 25) + modifiers (`country_intelligence_capacity_add`), the whole sum then scaled by `1 + country_intelligence_capacity_mult`.
-- **Operation Slots:** Single modifier-driven value: `modifier:country_covert_operation_slot_add`. Base 1 (`INJECT:base_values`) + rank bonus (GP +2, Major +1) + tech modifiers (`mainframe_computers`, `computer_networks`, `cyber_warfare`, `quantum_computing`, +1 each). Capped at 10.
+- **Operation Slots:** Single modifier-driven value: `modifier:country_covert_operation_slot_add`. Base 1 (`INJECT:base_values`) + rank bonus (GP +2, Major +1) + tech modifiers (`mainframe_computers`, `computer_networks`, `cyber_warfare`, `quantum_computing`, +1 each) + the Ministry of Intelligence and Security institution (+1 per level). Capped at 10.
 - **Funding:** **6 levels**, 0 – `iw_funding_level_max` (= 5): 0 Dormant, 1 Operational, 2 Professional (named Tradecraft before slice 5), 3 Covert Network, 4 Black Budget, 5 Deep State. **Level 0 does not idle operations, it ends them** — every covert action's `requirement_to_maintain` demands `iw_funding_level >= 1`, so dropping to 0 lapses every running pact (which is why the AI's own funding branch floors at 1 while it has operations, and why the widget's decrease control warns before the step). Cumulative detection reduction and counterintelligence IC by level: L2 −3 % / +5, L3 −8 % / +10, L4 −13 % / +15, L5 −19 % / +20, applied through the `iw_funding_defense` static modifier scaled by `covert_ops_funding_ci_mult` (= level − 1). The widget reads these from `covert_funding_detect_reduction_at_N` / `covert_funding_ci_ic_at_N`, which are sums of the Section 1 constants rather than a second copy of the numbers.
 - **Cost:** `country_expenses_add` with GDP-scaled multiplier: `(Σ priority weights + 1) × funding_level × covert_operations_cost_scale` (`gdp × 0.00005`). The sum is `iw_priority_cost_sum`, refreshed by `covert_refresh_priority_cost` from `covert_op_create`, `covert_op_destroy`, the tail of `covert_ops_sync_all`, every priority step (`covert_apply_priority_change`), and the end of `covert_ops_apply_all_phase_effects`; it falls back to the pact count (`covert_operations_active`, the pre-slice-3 formula) for a save loaded before the first refresh. Each operation contributes 1 / 1.6 / 2.4 depending on its own priority — or rather the higher of its current priority and the one its running effects were applied at (`iw_priority_applied`), so raising charges more on the click while lowering charges less only from the next pulse, when the effects follow (the pulse re-refreshes the sum after applying; see **Priority** above) — example: three operations at priority 1 cost 4 units; raising one to priority 3 costs 5.4 units, +35 % total upkeep for +60 % on that one operation's effect, the diminishing return that keeps "everything at 3" from being the answer. The `+1` ensures a base maintenance cost even with 0 active operations (you pay for defensive IC benefits like counterintelligence). Cost modifier applies whenever `iw_funding_level >= 1`, regardless of active op count.
 - **Detection:** each running operation carries its own monthly chance, `iw_detect` = `(base 10 − funding stealth − network cover + target counterintelligence penalty + (priority − 1) × covert_op_priority_detect_add) × (1 − covert efficiency, floored at 0.2) × covert_ops_detection_multi_op_scale` (scale default 1) — the priority term (2026-09, covert slice 3) adds raw points before efficiency, so a busier operation is more exposed but better tradecraft still hides most of it: at base 10 % with no efficiency, priority 1/2/3 reads 10/12/14 %, and at the late-game efficiency floor (0.2) the +4 raw points becomes +0.8. The priority is staged per operation onto the operator as `iw_priority_staging` by `covert_op_refresh_detection` (from `PREV.var:iw_priority` on the container — reading `scope:iw_op.var:iw_priority` directly isn't valid) before `covert_operation_detection_chance` is computed, then removed, clamped to a max of 50 % and a floor of `covert_ops_detection_floor` = 0.1 % (2026-09, covert slice 2) — reachable at high funding against a target with no counterintelligence, an "almost with impunity" but never "safe" floor; the operation row shows the chance to one decimal (`|1`, not `|0`) so that 0.1 % doesn't render as "0%" and read as safe — refreshed by `covert_ops_sync_all` at the top of the pulse. `covert_ops_roll_detection_all` (last in the pulse) rolls every operation against `covert_op_roll_chance` (= `iw_detect` directly — the multi-op scale is already folded in above, so the widget row and the roll agree by construction), collects the successes in a temporary list and burns **at most one** per month, chosen at random among them, by firing `covert_warfare.1` with the container in `scope:iw_burned_op`. With N equal operations at c each, P(any burn) = 1 − (1 − c)^N: 10 % → 19 % at two, 27 % at three. The event reads the container only in `immediate` (target → `scope:detected_by_country`, `iw_type_code` → ROOT `iw_burned_type_code`, `iw_phase` → ROOT `iw_burned_phase`, plus a derived `iw_burned_at_war` from a `has_war_with` check — see **Graduated exposure blowback** below) and branches on the type code in `after`; the options' blowback values read all three copied variables. `covert_burned_type_name` names the operation and `covert_burned_tier_name` names its tier in the text. The target penalty is `((target IC + target type defense) / attacker IC − 1) × 15`, capped at +20. Funding stealth is the cumulative reduction listed above.
@@ -1919,6 +1984,7 @@ article, power-bloc principle, GUI.
 - **`covert_warfare.2` keyed infrastructure sabotage on its state modifier until 2026-09 (covert slice 6)**, so a burned sabotage operation never reached the defender; slice 6 keyed it on the country-scope `covert_infra_sabotage_morale`.
 - **`covert_warfare.2` never reached the defender of an operation burned during preparation until #430 (2026-09-25).** Its trigger listed the modifier each type leaves on its target, and those are applied only from the establishing phase. It now keys on the exposure record `covert_op_burn` writes for every burn (`iw_last_exposed_type`, with `iw_last_exposed_phase` for the text), and it names a burn stopped in preparation as one that never took effect. Its option b, **Retaliate in kind**, used to take 3 infamy off the defender and retaliate against nobody: it now seeds the defender's own network inside the perpetrator (`covert_retaliation_seed_network`, `covert_net_retaliation_seed` = 25, the size of the burn's own network loss), open to a country whose covert journal entry is active. The infamy relief is option c, **Make the evidence public**.
 - **`covert_warfare.2` names the perpetrator and the operation (2026-09-26).** Until then its text said only "agents of a foreign power", although option b already named the country. The `_named` descs (`covert_warfare.2.d_named`, `.d_preparatory_named`) print `#b [SCOPE.sCountry('iw_exposed_by').GetName]#!` — vanilla's own country link, flag and hover tooltip included — and are chosen only while `scope:iw_exposed_by` exists; the plain `.d` / `.d_preparatory` are the fallback for a record whose country is gone. All four name the operation through `$covert_exposed_op_link$`: bold, hoverable, with `covert_exposed_op_tt` as its tooltip — the operation's name over `covert_last_exposed_type_desc`, what that type does to its target. The journal entry's last-exposed line (`je_iw_last_exposed_named` / `_unknown`) uses the same link and bolds the country, so the snippet reads the defender through `GetPlayer`, not `ROOT`: that line is built by `ExecuteTooltip`, where the existing text reached the defender only through `GetPlayer`. The event's flavor is chosen the same way: `covert_warfare.2.f_election` (the ballot-box vignette) only for code 0, the general `.f` for every other type, `.f_preparatory` for a burn in preparation. `test_covert_op_registry.py` pins the block's codes, the texts' shape and the flavor choice.
+- **The defender's side of an exposure aged only in `je_covert_warfare`'s pulse until 2026-09-26.** `iw_last_exposed_age` and `covert_warfare.2`'s cooldown (`iw_defender_event_cooldown` / `_age`) sit on the target of an operation, which need not run a service of its own, so such a country saw `covert_warfare.2` once per game and kept an exposure "recent" for ever (`surveillance_events.5` worked around it with a once-only flag, now removed). Both age in every country's monthly pulse now (`covert_warfare_monthly_country`, `common/on_actions/covert_warfare_on_actions.txt`), the single site. The same event's option a, **Shore up our counterintelligence**, added `intelligence_capacity_defense` at country scope, where `legacy_je_modifier_cleanup_effect` strips it within a month; it adds `covert_counterintelligence_alert` instead: the same separatism and coup resistance, plus 2 intelligence capacity (owner decision, PR #510), all ×3 and decaying.
 
 ## War Support Feeds (1.14 hook)
 
@@ -1931,7 +1997,7 @@ Vanilla 1.14 computes each country's weekly war support change in `common/script
 | United Nations | `un_condemned_modifier` on root (`else_if` `un_non_binding_rebuke_modifier`, −0.25) | −0.5 |
 | United Nations | an enemy in `scope:war` carries `un_condemned_modifier` ("the world is with us") | +0.25 |
 | Covert Warfare | root is `second_country` of a `covert_comms_disruption_action` pact whose attacker fights in `scope:war` (flat — operation phase lives on the attacker's containers) | −0.25 |
-| Nuclear | root lacks `nuclear_power` and an enemy in `scope:war` has it (strikes themselves already drain through devastation and the one-off in `nuclear_industrial_strike`) | −0.25 |
+| Nuclear | root lacks `nuclear_power`, an enemy in `scope:war` has it, and root has no armed guarantor (`nd_has_armed_guarantor_against`: an in-force `nuclear_guarantee` from a country believed armed, or an overlord's nuclear umbrella, removes the "Enemy nuclear arsenal" line — that is what extended deterrence is for). Strikes themselves already drain through devastation and the one-off in `nuclear_industrial_strike` | −0.25 |
 
 Scale: vanilla's per-beat factors run from −5 (fully occupied) to about +2; the rival boost / taking loans are ±0.25. War support is 0–100, drifts toward 50, red band ≤ 25.
 

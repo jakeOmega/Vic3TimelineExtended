@@ -2326,6 +2326,7 @@ movement_events_te.232 = {
 # Civil Rights — threshold tier events (301-305). One-shot per JE lifetime,
 # fired by je_civil_rights.on_monthly_pulse when the bar first crosses each
 # tier. cr_tier_X_seen flag prevents repeat fires; reset in immediate {}.
+# .302 is tier 75's fallback when neither .304 nor .16 applies.
 # ============================================================================
 
 # Tier 25 alt: First Mass Rally Draws Notice (when no severe discrim law)
@@ -2358,6 +2359,71 @@ movement_events_te.301 = {
 				is_decaying = yes
 			}
 		}
+	}
+}
+
+# Tier 75 fallback: Equal on Paper. For a country with no discriminatory
+# minority law (so .16 cannot fire) and 24 months or less of Federal
+# Protection (so .304's two-year commission never sat): Indifference, or
+# Protection without Multicultural citizenship. Affirmative Action, or
+# Protection with Multicultural, completes the entry before tier 75 matters.
+movement_events_te.302 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/civil_rights_peaceful_march.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = movement_events_te.302.t
+	desc = movement_events_te.302.d
+	flavor = movement_events_te.302.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	# Enforce the law: the largest acceptance gain, the sharpest backlash
+	option = {
+		name = movement_events_te.302.a
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_technology_researched = social_justice_movements }
+				add = 2
+			}
+		}
+		add_modifier = {
+			name = minority_rights_reform_push_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		social_progressive_reform_major_reaction_effect = { DAYS = normal_modifier_time }
+		discriminated_pops_loyalty_effect = { VALUE = medium_radicals }
+	}
+
+	# Leave it to the courts: a little goodwill, a little grumbling
+	option = {
+		name = movement_events_te.302.b
+		default_option = yes
+		ai_chance = { base = 3 }
+		social_progressive_reaction_effect = { DAYS = short_modifier_time }
+		discriminated_pops_loyalty_effect = { VALUE = small_radicals }
+	}
+
+	# The law is already equal: the conservatives' answer
+	option = {
+		name = movement_events_te.302.c
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { ig:ig_devout ?= { is_in_government = yes } }
+				add = 2
+			}
+		}
+		social_regressive_reaction_effect = { DAYS = normal_modifier_time }
+		discriminated_pops_radicalism_effect = { VALUE = medium_radicals }
 	}
 }
 

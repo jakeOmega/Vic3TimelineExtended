@@ -16,6 +16,14 @@
 # common/scripted_effects/space_race_effects.txt), so the AI's grid and the
 # player's panel cannot disagree. Change an approach or funding rule in the
 # helper; the `ai_chance` weights below are the only per-button content left.
+#
+# NON-PARTICIPANTS. An AI outside the top three by global ranking
+# (sr_ai_should_participate fails) makes no progress at all in the monthly
+# pulse, yet sr_recalculate_cost still charges it for funding and approach.
+# So for such a country the approach and increase-funding buttons weigh 0 and
+# decrease-funding gets +100, and it winds its funding down to 0. An approach
+# already chosen costs nothing while it stays outside (sr_<m>_cost gates the
+# approach terms; space_race_on_action recalculates when its rank crosses 3).
 # ----------------------------------------------------------------------------
 
 
@@ -35,6 +43,11 @@ sr_btn_safe_suborbital = {
 		if = {
 			limit = { country_rank >= rank_value:great_power }
 			add = -20
+		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			multiply = 0
 		}
 	}
 
@@ -67,6 +80,11 @@ sr_btn_ambitious_suborbital = {
 			}
 			add = 20
 		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			multiply = 0
+		}
 	}
 
 	possible = { sr_possible_ambitious = { MILESTONE = suborbital } }
@@ -93,6 +111,11 @@ sr_btn_fund_up_suborbital = {
 			limit = { var:sr_funding_suborbital < 2 }
 			add = 20
 		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			multiply = 0
+		}
 	}
 
 	possible = { sr_possible_fund_up = { MILESTONE = suborbital } }
@@ -114,6 +137,11 @@ sr_btn_fund_down_suborbital = {
 		if = {
 			limit = { country_innovation < 25 }
 			add = 30
+		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			add = 100
 		}
 	}
 
@@ -139,6 +167,11 @@ sr_btn_safe_orbital = {
 		if = {
 			limit = { country_rank >= rank_value:great_power }
 			add = -20
+		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			multiply = 0
 		}
 	}
 
@@ -171,6 +204,11 @@ sr_btn_ambitious_orbital = {
 			}
 			add = 20
 		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			multiply = 0
+		}
 	}
 
 	possible = { sr_possible_ambitious = { MILESTONE = orbital } }
@@ -197,6 +235,11 @@ sr_btn_fund_up_orbital = {
 			limit = { var:sr_funding_orbital < 2 }
 			add = 20
 		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			multiply = 0
+		}
 	}
 
 	possible = { sr_possible_fund_up = { MILESTONE = orbital } }
@@ -218,6 +261,11 @@ sr_btn_fund_down_orbital = {
 		if = {
 			limit = { country_innovation < 25 }
 			add = 30
+		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			add = 100
 		}
 	}
 
@@ -243,6 +291,11 @@ sr_btn_safe_moon_landing = {
 		if = {
 			limit = { country_rank >= rank_value:great_power }
 			add = -20
+		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			multiply = 0
 		}
 	}
 
@@ -275,6 +328,11 @@ sr_btn_ambitious_moon_landing = {
 			}
 			add = 20
 		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			multiply = 0
+		}
 	}
 
 	possible = { sr_possible_ambitious = { MILESTONE = moon_landing } }
@@ -301,6 +359,11 @@ sr_btn_fund_up_moon_landing = {
 			limit = { var:sr_funding_moon_landing < 2 }
 			add = 20
 		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			multiply = 0
+		}
 	}
 
 	possible = { sr_possible_fund_up = { MILESTONE = moon_landing } }
@@ -322,6 +385,11 @@ sr_btn_fund_down_moon_landing = {
 		if = {
 			limit = { country_innovation < 25 }
 			add = 30
+		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			add = 100
 		}
 	}
 
@@ -347,6 +415,11 @@ sr_btn_safe_probe = {
 		if = {
 			limit = { country_rank >= rank_value:great_power }
 			add = -20
+		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			multiply = 0
 		}
 	}
 
@@ -379,6 +452,11 @@ sr_btn_ambitious_probe = {
 			}
 			add = 20
 		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			multiply = 0
+		}
 	}
 
 	possible = { sr_possible_ambitious = { MILESTONE = probe } }
@@ -405,6 +483,11 @@ sr_btn_fund_up_probe = {
 			limit = { var:sr_funding_probe < 2 }
 			add = 20
 		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			multiply = 0
+		}
 	}
 
 	possible = { sr_possible_fund_up = { MILESTONE = probe } }
@@ -426,6 +509,11 @@ sr_btn_fund_down_probe = {
 		if = {
 			limit = { country_innovation < 25 }
 			add = 30
+		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			add = 100
 		}
 	}
 
@@ -451,6 +539,11 @@ sr_btn_safe_moon_base = {
 		if = {
 			limit = { country_rank >= rank_value:great_power }
 			add = -20
+		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			multiply = 0
 		}
 	}
 
@@ -483,6 +576,11 @@ sr_btn_ambitious_moon_base = {
 			}
 			add = 20
 		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			multiply = 0
+		}
 	}
 
 	possible = { sr_possible_ambitious = { MILESTONE = moon_base } }
@@ -509,6 +607,11 @@ sr_btn_fund_up_moon_base = {
 			limit = { var:sr_funding_moon_base < 2 }
 			add = 20
 		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			multiply = 0
+		}
 	}
 
 	possible = { sr_possible_fund_up = { MILESTONE = moon_base } }
@@ -530,6 +633,11 @@ sr_btn_fund_down_moon_base = {
 		if = {
 			limit = { country_innovation < 25 }
 			add = 30
+		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			add = 100
 		}
 	}
 
@@ -555,6 +663,11 @@ sr_btn_safe_mars_landing = {
 		if = {
 			limit = { country_rank >= rank_value:great_power }
 			add = -20
+		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			multiply = 0
 		}
 	}
 
@@ -587,6 +700,11 @@ sr_btn_ambitious_mars_landing = {
 			}
 			add = 20
 		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			multiply = 0
+		}
 	}
 
 	possible = { sr_possible_ambitious = { MILESTONE = mars_landing } }
@@ -613,6 +731,11 @@ sr_btn_fund_up_mars_landing = {
 			limit = { var:sr_funding_mars_landing < 2 }
 			add = 20
 		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			multiply = 0
+		}
 	}
 
 	possible = { sr_possible_fund_up = { MILESTONE = mars_landing } }
@@ -634,6 +757,11 @@ sr_btn_fund_down_mars_landing = {
 		if = {
 			limit = { country_innovation < 25 }
 			add = 30
+		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			add = 100
 		}
 	}
 
@@ -659,6 +787,11 @@ sr_btn_safe_interstellar_probe = {
 		if = {
 			limit = { country_rank >= rank_value:great_power }
 			add = -20
+		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			multiply = 0
 		}
 	}
 
@@ -691,6 +824,11 @@ sr_btn_ambitious_interstellar_probe = {
 			}
 			add = 20
 		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			multiply = 0
+		}
 	}
 
 	possible = { sr_possible_ambitious = { MILESTONE = interstellar_probe } }
@@ -717,6 +855,11 @@ sr_btn_fund_up_interstellar_probe = {
 			limit = { var:sr_funding_interstellar_probe < 2 }
 			add = 20
 		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			multiply = 0
+		}
 	}
 
 	possible = { sr_possible_fund_up = { MILESTONE = interstellar_probe } }
@@ -738,6 +881,11 @@ sr_btn_fund_down_interstellar_probe = {
 		if = {
 			limit = { country_innovation < 25 }
 			add = 30
+		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			add = 100
 		}
 	}
 
@@ -763,6 +911,11 @@ sr_btn_safe_solar_colonization = {
 		if = {
 			limit = { country_rank >= rank_value:great_power }
 			add = -20
+		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			multiply = 0
 		}
 	}
 
@@ -795,6 +948,11 @@ sr_btn_ambitious_solar_colonization = {
 			}
 			add = 20
 		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			multiply = 0
+		}
 	}
 
 	possible = { sr_possible_ambitious = { MILESTONE = solar_colonization } }
@@ -821,6 +979,11 @@ sr_btn_fund_up_solar_colonization = {
 			limit = { var:sr_funding_solar_colonization < 2 }
 			add = 20
 		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			multiply = 0
+		}
 	}
 
 	possible = { sr_possible_fund_up = { MILESTONE = solar_colonization } }
@@ -842,6 +1005,11 @@ sr_btn_fund_down_solar_colonization = {
 		if = {
 			limit = { country_innovation < 25 }
 			add = 30
+		}
+		# Non-participant: see NON-PARTICIPANTS in the header.
+		if = {
+			limit = { NOT = { sr_ai_should_participate = yes } }
+			add = 100
 		}
 	}
 

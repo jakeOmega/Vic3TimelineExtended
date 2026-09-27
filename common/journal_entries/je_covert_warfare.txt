@@ -269,30 +269,10 @@ je_covert_warfare = {
 				je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
 			}
 
-			# ---- Age the "last exposed a foreign operation" record ----
-			# covert_op_burn sets iw_last_exposed_age to 0 on the target whose
-			# counterintelligence caught an operation. It only ever counts up;
-			# the command centre stops showing the line once it passes ten years
-			# (covert_last_exposed_known_sgui).
-			if = {
-				limit = { has_variable = iw_last_exposed_age }
-				change_variable = { name = iw_last_exposed_age add = 1 }
-			}
-
-			# ---- Decay defender-event cooldown (24-month window) ----
-			# covert_warfare.2 sets iw_defender_event_cooldown when it fires;
-			# without decay, the defender can only ever see the detection event
-			# once per game. iw_defender_event_cooldown_age tracks elapsed
-			# months and clears both vars after 24 months.
-			if = {
-				limit = { has_variable = iw_defender_event_cooldown_age }
-				change_variable = { name = iw_defender_event_cooldown_age add = 1 }
-				if = {
-					limit = { var:iw_defender_event_cooldown_age >= 24 }
-					remove_variable = iw_defender_event_cooldown
-					remove_variable = iw_defender_event_cooldown_age
-				}
-			}
+			# The exposure record's age (iw_last_exposed_age) and the defender
+			# event's cooldown are aged by covert_warfare_monthly_country
+			# (covert_warfare_on_actions.txt): the countries operations are run
+			# against need not hold this entry.
 
 			# ---- AI priorities ----
 			# Before the sync, so the sync's detection refresh and the upkeep

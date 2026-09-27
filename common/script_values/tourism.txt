@@ -2846,7 +2846,9 @@ tourism_throughput_from_art = {
 	}
 }
 
-# Bonus from National Parks, scaled by the state's intrinsic appeal
+# Bonus from National Parks, scaled by the state's intrinsic appeal: +25% at
+# appeal 0 up to +37.5% at appeal 1. base_tourism_appeal_value is already
+# 0-1 (it ends with divide = 100), so the factor is 1 + appeal / 2.
 tourism_throughput_from_parks = {
 	value = 0
 	if = {
@@ -2857,7 +2859,7 @@ tourism_throughput_from_parks = {
 				value = 1
 				add = {
 					value = base_tourism_appeal_value
-					divide = 200
+					divide = 2
 				}
 			}
 		}
@@ -2949,11 +2951,11 @@ tourism_fill_art_pct = {
 	max = 100
 }
 
-# A national park is all or nothing.
+# Cap +37.5%: a national park in a state of appeal 1 (tourism_throughput_from_parks).
 tourism_fill_parks_pct = {
-	value = 0
-	if = {
-		limit = { has_building = building_national_park }
-		value = 100
-	}
+	value = tourism_throughput_from_parks
+	divide = 0.375
+	multiply = 100
+	min = 0
+	max = 100
 }

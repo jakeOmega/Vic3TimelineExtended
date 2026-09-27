@@ -392,6 +392,21 @@ nd_incident_permille = {
 	}
 }
 
+# nd_incident_permille as whole numbers for nd_roll_incident's inner roll,
+# which must not rely on `random` reading a fraction: in tenths of a per mille
+# (for the 1 % branch, up to 10 per mille) and in whole per mille (the 10 %
+# branch, above 10).
+nd_incident_tenth_permille = {
+	value = nd_incident_permille
+	multiply = 10
+	round = yes
+}
+
+nd_incident_permille_whole = {
+	value = nd_incident_permille
+	round = yes
+}
+
 # Chance (percent) that a launch sequence started under delegated authority or
 # launch on warning is halted by someone in the chain — the Petrov or
 # Arkhipov who refuses. There is no player veto on these branches (§8.1); this

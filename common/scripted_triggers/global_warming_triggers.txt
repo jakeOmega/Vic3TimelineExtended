@@ -67,6 +67,19 @@ gw_is_market_leader = {
 	market_capital.owner = THIS
 }
 
+# Bound by an Enforce Emissions Reduction treaty article
+# (109_enforce_emissions_reduction.txt sets the variable on its source). Such a
+# country keeps every policy it holds: its own repeal is barred (the seven
+# gw_possible_remove_* below, gw_cond_not_treaty_bound, and the matching
+# journal-entry buttons' `visible`), its market leader's repeal skips it
+# (gw_effect_remove_*), and so do the join sync and the monthly reconciliation
+# (gw_sync_market_policy_modifiers). A removal would freeze the treaty. Every
+# one of those sites reads this trigger. (The debug repeal-all in
+# te_debug_gw_effects.txt deliberately does not.)
+gw_bound_by_emissions_treaty = {
+	has_variable = has_emissions_reduction_treaty
+}
+
 # Have the yearly emissions figures been taken yet? False on a brand-new game
 # before the first yearly state pulse and on a save upgraded mid-year, which is
 # when the widget shows "figures update each January" instead of a row of
@@ -124,7 +137,7 @@ gw_possible_remove_carbon_tax = {
 	}
 	custom_tooltip = {
 		text = gw_cond_not_treaty_bound
-		NOT = { has_variable = has_emissions_reduction_treaty }
+		NOT = { gw_bound_by_emissions_treaty = yes }
 	}
 }
 
@@ -154,7 +167,7 @@ gw_possible_remove_renewable_investment = {
 	}
 	custom_tooltip = {
 		text = gw_cond_not_treaty_bound
-		NOT = { has_variable = has_emissions_reduction_treaty }
+		NOT = { gw_bound_by_emissions_treaty = yes }
 	}
 }
 
@@ -204,7 +217,7 @@ gw_possible_remove_emission_standards = {
 	}
 	custom_tooltip = {
 		text = gw_cond_not_treaty_bound
-		NOT = { has_variable = has_emissions_reduction_treaty }
+		NOT = { gw_bound_by_emissions_treaty = yes }
 	}
 }
 
@@ -227,7 +240,7 @@ gw_possible_remove_reforestation = {
 	}
 	custom_tooltip = {
 		text = gw_cond_not_treaty_bound
-		NOT = { has_variable = has_emissions_reduction_treaty }
+		NOT = { gw_bound_by_emissions_treaty = yes }
 	}
 }
 
@@ -250,7 +263,7 @@ gw_possible_remove_public_transit = {
 	}
 	custom_tooltip = {
 		text = gw_cond_not_treaty_bound
-		NOT = { has_variable = has_emissions_reduction_treaty }
+		NOT = { gw_bound_by_emissions_treaty = yes }
 	}
 }
 
@@ -273,7 +286,7 @@ gw_possible_remove_fossil_fuel_divestment = {
 	}
 	custom_tooltip = {
 		text = gw_cond_not_treaty_bound
-		NOT = { has_variable = has_emissions_reduction_treaty }
+		NOT = { gw_bound_by_emissions_treaty = yes }
 	}
 }
 
@@ -296,6 +309,29 @@ gw_possible_remove_green_building_codes = {
 	}
 	custom_tooltip = {
 		text = gw_cond_not_treaty_bound
-		NOT = { has_variable = has_emissions_reduction_treaty }
+		NOT = { gw_bound_by_emissions_treaty = yes }
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Event gates shared by an event and the monthly roll that fires it, so the
+# two cannot drift apart. A roll whose own gate is narrower than the event's
+# silently wastes the event for every country it leaves out.
+# ---------------------------------------------------------------------------
+
+# The Barren Harvest (environmentalism_events.5): a state growing staple food.
+# The five grain farms and livestock ranches; subsistence farms are left out on
+# purpose, or every state would qualify.
+# Scope: state
+gw_state_has_staple_farm = {
+	any_scope_building = {
+		OR = {
+			is_building_type = building_wheat_farm
+			is_building_type = building_rye_farm
+			is_building_type = building_rice_farm
+			is_building_type = building_maize_farm
+			is_building_type = building_millet_farm
+			is_building_type = building_livestock_ranch
+		}
 	}
 }
