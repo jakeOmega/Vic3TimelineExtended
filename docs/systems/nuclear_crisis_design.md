@@ -412,16 +412,23 @@ One world score, `global_var:nd_taboo` (0-100), for how unthinkable nuclear weap
 - **The UN part peaks at +12** (NPT 8 + CPPNM 4 at authority 100), under a cap of 15 left as headroom; spec §7.2 says "0 … +15".
 - **Dismantling runs its full length.** The plan rounded each month's retirements up and completed when the stock reached zero, which finished small arsenals early (6 warheads in month 6 of 12). The code retires the remainder divided by the months left, rounded down, and completes only when the months run out (spec §5.2). A dismantling overtaken by another disarmament path (a treaty, a civil-war dismantle) stops without its voluntary rewards.
 - **The pressure part keeps the `nd_yp_` prefix** (`nd_yp_taboo`, `nd_yp_taboo_line`): it is the twelfth member of the existing crisis-pressure family, whose tests and store effect address the parts by that prefix.
+- **Dismantling pauses through a civil war, and credits only the warheads actually retired** (final-review.md I1). Spec §5.2 forbids dismantling through a civil war, but the monthly step only checked it at the start; custody's split can move warheads to rebels without setting `nd_renounced`, so the renunciation note used to book the start-of-dismantling stock even when the government no longer held it all. A new `nd_dismantle_retired` variable tracks the true count; the schedule resumes where it left off once every civil war of ours is over.
+- **Resume the Nuclear Programme stays open to a renouncer without the standing to run one, with a warning** (final-review.md I2). `possible` is still just the game rule; `when_taken` now warns when `nd_taboo_has_programme_standing = no` that Resume only ends the renunciation. The AI's `nd_taboo_ai_would_resume` requires the standing.
+- **Retaliation is exempt from the strike AI's taboo factor** (final-review.md M4; spec §8.1 "Retaliation unaffected"): `nuke_diplo_action` and `tactical_nuke_diplo_action` no longer multiply an answering strike's `evaluation_chance` by `nd_taboo_ai_use_factor`.
+- **Champion the norm costs relations with the armed, not the unarmed** (final-review.md M6). Spec §6.3 has it gain relations with other unarmed countries; the code costs −5 with each armed great power, a lecture they don't appreciate. **Seek a protector's guarantee** picks a friendly armed power at random, not the strongest — the spec's "the strongest friendly armed power".
 
 #### Known roughnesses
 
 - `nuclear_power`'s leverage *resistance* is not offset, only its generation (a burden on influence, not on standing firm);
-- the civil-defence and renunciation-prestige modifiers are modifiers only, so a revolution's winner loses them (the renunciation itself is rebuilt from `nd_renounced_locked`);
+- the civil-defence, renunciation-prestige and norm-champion modifiers are modifiers only, so a revolution's winner loses them (the renunciation itself is rebuilt from `nd_renounced_locked`) — final-review.md M10 flagged the norm-champion case, missing from this line until now;
 - the taboo is global, with no regional or ideological layer;
 - a treaty ceiling far above any arsenal (the quantity runs to `nd_taboo_arms_quantity_max`) still earns its parties full restraint credit — spec §7.1 counts every bound country; owner call pending;
 - annexing the treaty partner makes leaving free (the "partner no longer exists" exemption covers it) — spec-mandated; owner call pending;
 - the condemn topic's worldwide cooldown (`un_res_cooldown_months_default`, 60 months) means a nuclear use inside it gets no verdict, and an appeal the AI turns into a sanctions vote books none either — spec §7.3 names the condemn topic only; owner call pending;
-- a retaliation is judged by the Assembly at the same ±3 as a first use (the use note halves retaliation, the verdict does not).
+- a retaliation is judged by the Assembly at the same ±3 as a first use (the use note halves retaliation, the verdict does not);
+- holding the programme reuses the pause flag (final-review.md M5): a country held at its ceiling or dismantling cannot be the source of a `nuclear_program_pause` article, cannot receive `nuclear_program_aid`, and ends a running `covert_nuclear_sabotage_action` against it (an AI trimmed to a ceiling reads as a programme that "has really stopped"). All three are decisions, not bugs;
+- old saves don't mark countries disarmed before the taboo existed as renounced (final-review.md M9, parked): a country under a `nuclear_disarmament` article or `te_nuclear_disarmament_ended_program` at seed time gets no `nd_renounced`, so it is absent from the restraint part and books no breakout if it later rebuilds;
+- the arms-control article's card doesn't show its ceiling, and it uses a placeholder icon (final-review.md M10).
 
 #### Expected curves
 
@@ -452,7 +459,7 @@ Re-run with python3 scripts/analysis/nuclear_taboo_sim.py after any retune; ever
 11. `event te_debug_nuclear.3` option b (85) then d (step) fires the Strong band event to every country, once; running d again does not fire it again.
 12. An AI great power in a high-taboo world with no rival trims its arsenal to a ceiling within a year.
 13. Civil defence halves the "Enemy nuclear arsenal" war-support line.
-14. An eroding band event offers an unarmed country with an amicable armed neighbour "Seek the shelter of a friendly nuclear power" (the option's `relations:root >= relations_threshold:amicable` is a form the mod had not used in a trigger before; if the option never appears, suspect the syntax before concluding no friendly power exists).
+14. An eroding band event offers an unarmed country with an amicable armed neighbour "Seek the shelter of a friendly nuclear power" (the option's `relations:root >= relations_threshold:amicable` has vanilla precedent — `common/objective_subgoals/00_subgoals_tutorial.txt:1201` uses the mirror form, `relations:root < relations_threshold:amicable` — so if the option never appears, suspect the friendly-power search before the syntax).
 15. A treaty-disarmed or renounced country's weekly pulse logs no `remove_modifier` error for `nuclear_power`.
 16. A band event reaching an armed country that lets it time out picks a valid armed option (the default_option in every band event is an unarmed-only option; the engine should fall back to the first valid one).
 17. The arms-control article asks for a ceiling. In force, warheads above it retire and the programme reads "held". Leaving it with no other treaty logs `TE_TABOO: an arms-control treaty was left` for both parties; leaving it while a stricter one stands logs nothing.
@@ -464,6 +471,12 @@ Re-run with python3 scripts/analysis/nuclear_taboo_sim.py after any retune; ever
 23. A revolution's winner in a country bound by an arms-control treaty: does the treaty pass to the winner? If not, the winner is booked a walk-out it didn't choose (it inherits `nd_treaty_ceiling`) — note which.
 24. The monthly `TE_TABOO: score …` line in debug.log prints numbers, not raw `[SCOPE.ScriptValue(...)]` text (it runs from the ROOT-less global pulse).
 25. A condemnation of the culprit for an unrelated grievance (e.g. a later war) books no nuclear verdict.
+26. A civil war breaks out mid-dismantle, the government holds: the dismantling pauses, then resumes after the war. "The Last Warhead" counts only the warheads actually taken apart.
+27. A minor-power renouncer sees the no-standing warning on Resume. An AI minor renouncer does not take it.
+28. A country that dismantled its arsenal reads "We gave up the bomb of our own accord".
+29. An armed country that lets a `.5` band event time out gets a valid armed option.
+30. In a high-taboo world, an AI that was struck retaliates as readily as before.
+31. An AI that cut its arsenal in half through a band event keeps that ceiling through its six-monthly reviews in peacetime.
 
 ## 1. Intent and owner requirements
 
