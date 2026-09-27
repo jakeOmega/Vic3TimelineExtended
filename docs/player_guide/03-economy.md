@@ -135,9 +135,13 @@ Economy.
 
 - Your government purchase starts at 0 in a new game. Set it in your first week,
 or the government queue builds nothing.
-- A high purchase setting is harmless, because only what the queue can use is
-bought. To stop government construction while private building carries on, set
-it to 0; the sector keeps selling to investors.
+- Only what the queue can use is bought, so a purchase set above your queue
+wastes nothing. With a long queue, though, a high setting buys all of it: that
+is expensive for your budget, and a government buying heavily pushes up the
+price for every buyer in your market, investors included. Set the purchase to
+what you can afford rather than to the maximum. To stop government construction
+while private building carries on, set it to 0; the sector keeps selling to
+investors.
 - Watch the market line. A standing shortage keeps the price high, which means
 you need more Construction Sector levels or a better production method. Cheap wood, iron and steel make
 construction cheaper, because the sector buys them.
@@ -146,8 +150,11 @@ them on their own.
 - Spread production-method switches out. Every switch adds five years of
 retooling upkeep, heaviest in the first months, and switching a whole industry
 at once can take the construction your queues were counting on.
-- Don't downsize the last Construction Site. A new one appears in your capital
-the next week, but construction stops for about two weeks.
+- Don't downsize Construction Sites at all. They can be downsized only because
+the Disabled setting uses them as an ordinary government building. Under the
+market settings the game places and removes them as needed, and if you downsize
+the last one, construction stops for about two weeks until a new one appears in
+your capital.
 
 AI countries choose their own purchase each week. They spend roughly their net
 income, more when their gold reserves are full and less when they carry debt.
