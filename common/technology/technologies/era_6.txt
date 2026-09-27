@@ -2,7 +2,7 @@
 	# Unlocks Synthetic Oil Plants building
 	# Unlocks Catalytic Cracking for Chemical Plants
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/aniline.dds"
+	texture = "gfx/interface/icons/invention_icons/bergius_process.dds"
 	category = production
 
 	modifier = {
@@ -22,7 +22,7 @@
 isoprene = {
 	# Unlocks Synthetic Rubber Plants building
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/rubber.dds"
+	texture = "gfx/interface/icons/invention_icons/isoprene.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -36,7 +36,7 @@ isoprene = {
 
 computing_machines = {
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/computing_machines.dds"
 	category = society
 
 	modifier = {
@@ -58,7 +58,7 @@ computing_machines = {
 personal_appliances = {
 	# Unlocks Consumer Appliance Industries building
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/electrical_generation.dds"
+	texture = "gfx/interface/icons/invention_icons/personal_appliances.dds"
 	category = production
 
 	modifier = {
@@ -78,7 +78,7 @@ personal_appliances = {
 rocketry = {
 	# Rocket Artillery PM for Artillery Foundary
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/artillery.dds"
+	texture = "gfx/interface/icons/invention_icons/rocketry.dds"
 	category = military
 
 	modifier = {
@@ -117,7 +117,7 @@ bombing_aircraft = {
 nuclear_weapons = {
 	# Nuclear program journal entry, military research PM for University, Humanitarian Regulations and Ministry of Science laws
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/multilateral_alliances.dds"
+	texture = "gfx/interface/icons/invention_icons/nuclear_weapons.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -142,7 +142,7 @@ nuclear_weapons = {
 commercial_aviation = {
 	# Unlocks Airport building, Air Transport mobilization option
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/military_aviation.dds"
+	texture = "gfx/interface/icons/invention_icons/commercial_aviation.dds"
 	category = society
 
 	unlocking_technologies = {
@@ -163,7 +163,7 @@ commercial_aviation = {
 keynesian_economics = {
 	# Fiat Money, Publically Funded Election, and Banking Separation laws, Tax Breaks decree
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/macroeconomics.dds"
+	texture = "gfx/interface/icons/invention_icons/keynesian_economics.dds"
 	category = society
 
 	modifier = {
@@ -190,7 +190,7 @@ keynesian_economics = {
 combined_arms = {
 	# Armored Infrantry unit
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/military_drill.dds"
+	texture = "gfx/interface/icons/invention_icons/combined_arms.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -214,7 +214,7 @@ modern_materials = {
 	# Polyester and Nylon PM for synthetic clothes, Flexible Packaging for Food Industries,
 	# Advanced Dyes for Synthetic Dyes Industries
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/plastics.dds"
+	texture = "gfx/interface/icons/invention_icons/modern_materials.dds"
 	category = production
 
 	modifier = {
@@ -233,7 +233,7 @@ modern_tools = {
 	# Large Scale Earth Movers for Mines, Electrified Rotary Drilling Rigs for Oil Rigs,
 	# Ultradeep Wells for Oil Rigs, Material Handling Equipment for Tooling Workshops
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/mechanical_tools.dds"
+	texture = "gfx/interface/icons/invention_icons/modern_tools.dds"
 	category = production
 
 	modifier = {
@@ -252,7 +252,7 @@ modern_tools = {
 modern_skyscrapers = {
 	# Twisted Pair Copper Cables for Wired Telecommunications Industries
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/steel_frame_buildings.dds"
+	texture = "gfx/interface/icons/invention_icons/modern_skyscrapers.dds"
 	category = production
 
 	modifier = {
@@ -295,7 +295,7 @@ advanced_agricultural_statistics = {
 modern_automotive_technology = {
 	# Gas Turbine Engines for Motor Industries, Modern Automobiles for Automotive Industries
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/combustion_engine.dds"
+	texture = "gfx/interface/icons/invention_icons/modern_automotive_technology.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -314,7 +314,7 @@ modern_automotive_technology = {
 radar = {
 	# Radar Equipment mobilization option
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/radio.dds"
+	texture = "gfx/interface/icons/invention_icons/radar.dds"
 	category = military
 
 	modifier = {
@@ -333,7 +333,7 @@ radar = {
 television = {
 	# VHF and UHF Transmission for Wireless Telecommunications Industries, Television PM for Consumer Appliance Industries
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/television.dds"
 	category = production
 
 	modifier = {
@@ -356,7 +356,7 @@ television = {
 marketing_research = {
 	# Mass Marketing PM for Textile and Furniture buildings, Media Corporations PM for Art Academy, Pro-Capital Ministry of Labor and Corporatocracy laws
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/mass_propaganda.dds"
+	texture = "gfx/interface/icons/invention_icons/marketing_research.dds"
 	category = society
 
 	modifier = {
@@ -379,7 +379,7 @@ marketing_research = {
 motorized_artillery = {
 	# Motorized Arillery unit
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/artillery.dds"
+	texture = "gfx/interface/icons/invention_icons/motorized_artillery.dds"
 	category = military
 
 	modifier = {
@@ -399,7 +399,7 @@ motorized_artillery = {
 semiautomatic_rifle = {
 	# Modern Cartridges for Munition Plants, Semi-Automatic Rifle PM for Arms Industries
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/bolt_action_rifles.dds"
+	texture = "gfx/interface/icons/invention_icons/semiautomatic_rifle.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -439,7 +439,7 @@ mass_media = {
 	# Sound Film PM for Art Academy, Donation Limits, Ministry of Propaganda, Ministry of Religion, Direct Democracy laws
 	# Political Patronage, Natalism Initiative decrees
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/mass_media.dds"
 	category = society
 
 	unlocking_technologies = {
@@ -506,7 +506,7 @@ rural_electrification = {
 
 fluorescent_lamps = {
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/electrical_capacitors.dds"
+	texture = "gfx/interface/icons/invention_icons/fluorescent_lamps.dds"
 	category = production
 
 	modifier = {
@@ -528,7 +528,7 @@ modern_chemical_processes = {
 	# Food Additives PM for Food Industries, Ammonium Nitrate Explosives PM for Explosives Factory
 	# Advanced Process Control automation PM for all chemical/synthetic-type industries
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/chemical_bleaching.dds"
+	texture = "gfx/interface/icons/invention_icons/modern_chemical_processes.dds"
 	category = production
 
 	modifier = {
@@ -552,7 +552,7 @@ modern_chemical_processes = {
 aluminum_mass_production = {
 	# Aluminum Substitution PM for Steel Mills
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/steelworking.dds"
+	texture = "gfx/interface/icons/invention_icons/aluminum_mass_production.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -567,7 +567,7 @@ aluminum_mass_production = {
 stainless_steel_mass_production = {
 	# Chromium Substitution PM for Steel Mills
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/steelworking.dds"
+	texture = "gfx/interface/icons/invention_icons/stainless_steel_mass_production.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -588,7 +588,7 @@ modern_management_techniques = {
 	# Centralized Traffic Control PM for Railways, Module Shipbuilding PM for civilian and military shipyards
 	# Prefabricated Building Components PM for Construction Sectors
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/central_planning.dds"
+	texture = "gfx/interface/icons/invention_icons/modern_management_techniques.dds"
 	category = society
 
 	modifier = {
@@ -606,7 +606,7 @@ modern_management_techniques = {
 
 naval_convoy_defense = {
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/sea_lane_strategies.dds"
+	texture = "gfx/interface/icons/invention_icons/naval_convoy_defense.dds"
 	category = military
 
 	modifier = {
@@ -647,7 +647,7 @@ sonar = {
 
 naval_fire_control_systems = {
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/battleship_tech.dds"
+	texture = "gfx/interface/icons/invention_icons/naval_fire_control_systems.dds"
 	category = military
 
 	modifier = {
@@ -670,7 +670,7 @@ naval_fire_control_systems = {
 cryptography = {
 	# State Secrets law
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/mass_surveillance.dds"
+	texture = "gfx/interface/icons/invention_icons/cryptography.dds"
 	category = military
 
 	modifier = {
@@ -695,7 +695,7 @@ public_works_programs = {
 	# Hydro Plant building, Double-Decker Passenger Carriages PM for Railways,
 	# Pro-Labor Ministry of Labor law
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/urban_planning.dds"
+	texture = "gfx/interface/icons/invention_icons/public_works_programs.dds"
 	category = society
 
 	modifier = {
@@ -719,7 +719,7 @@ public_works_programs = {
 art_deco_architecture = {
 	# Modern Design Porcelain PM for Glassworks
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/urban_planning.dds"
+	texture = "gfx/interface/icons/invention_icons/art_deco_architecture.dds"
 	category = society
 
 	modifier = {
@@ -761,7 +761,7 @@ consumer_credit = {
 intergovernmental_organizations = {
 	# Managed Global Trade PM for Trade Center, Ministry of International Aid law, Bureaucratic Reform decree
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/multilateral_alliances.dds"
+	texture = "gfx/interface/icons/invention_icons/intergovernmental_organizations.dds"
 	category = society
 
 	modifier = {
