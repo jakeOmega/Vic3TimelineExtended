@@ -582,9 +582,10 @@ te_mon_target_min = {
 }
 
 # The rate at or below which the policy rate counts as "at the floor" — the gate
-# on open market operations (te_mon_policy_rate_at_floor). One point of slack,
-# because te_policy_rate drifts fractionally and need not land exactly on the
-# bound.
+# on open market operations (te_mon_policy_rate_at_floor). The rate is in
+# percentage points, so the 0.01 added here is a hundredth of a point (one basis
+# point) of slack, because te_policy_rate drifts fractionally and need not land
+# exactly on the bound.
 #
 # ONLY FIAT AND DIGITAL EVER READ THIS. Open-market operations are fiat/digital
 # only (§0.1 ruling of 2026-09-20: creating unbacked money to buy bonds is what

@@ -46,6 +46,9 @@
 #   un_dkt_cause (country, timed)      on the accused: 1 nuclear, 2 war, 3 covert
 #   un_dkt_*_raised (country)          collapse / famine / nuke / colonial / embargo
 #   un_dkt_offered (country, 60 days)  offered the item in hand
+#   nd_taboo_verdict_pending (country, 730 days)  the nuclear take-up marks
+#                                      the culprit; un_vote.2 consumes it
+#                                      through nd_taboo_verdict
 #   un_docket_months_left (global)     the cadence
 #   un_dkt_agenda_months_left (global) the Assembly-business cadence
 #   un_dkt_offers (global)             offers made for the item in hand
@@ -392,6 +395,12 @@ un_docket_scan = {
 	if = {
 		limit = { global_var:un_dkt_best_type = 1 }
 		un_docket_take_up_grievance = { KIND = nuclear CAUSE = 1 FOUND = scope:un_dkt_found_nuclear }
+		# The nuclear taboo awaits the Assembly's verdict on this use
+		# (un_vote.2 books it, nd_taboo_verdict). Two years: an appeal waits
+		# for a free floor, and the vote itself takes one.
+		scope:un_dkt_found_nuclear ?= {
+			set_variable = { name = nd_taboo_verdict_pending value = 1 days = 730 }
+		}
 	}
 	else_if = {
 		limit = { global_var:un_dkt_best_type = 2 }

@@ -2060,7 +2060,8 @@ banking_cycle_check_and_execute_crash = {
 
 # 3b. Spread financial contagion to eligible countries.
 #     Probability depends on trade linkage, severity, AND relative GDP.
-#     Countries where the source is less than ~1% of target GDP are immune.
+#     Countries where the source is less than 5% of target GDP (a target more
+#     than 20 times its size) are immune.
 banking_cycle_spread_contagion = {
 	custom_tooltip = {
 		text = BANKING_CONTAGION_SPREAD_TT
@@ -2105,7 +2106,7 @@ banking_cycle_spread_contagion = {
 						}
 					}
 				}
-				# GDP filter: source must have at least 1% of target's GDP
+				# GDP filter: source must have at least 5% of target's GDP
 				# Tiny economies cannot destabilise giants
 				scope:banking_crash_origin_country.gdp >= banking_contagion_min_source_gdp
 			}

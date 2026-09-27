@@ -11,6 +11,7 @@
 #                        and the leaderboard
 #   te_debug_nuclear.2   the things that block it: a pause treaty and a
 #                        disarmament settlement, each applied and lifted
+#   te_debug_nuclear.3   the nuclear taboo: set it, age it, step it, renounce
 #
 # Run these as a great power that has researched nuclear_weapons, or the entry
 # will not be active and the panels will correctly draw nothing.
@@ -167,6 +168,68 @@ te_debug_nuclear.2 = { # REVIEWED 2026-09-18: console-only test event (`event te
 		if = {
 			limit = { has_modifier = un_npt_disarmament_modifier }
 			remove_modifier = un_npt_disarmament_modifier
+		}
+	}
+}
+
+te_debug_nuclear.3 = { # REVIEWED 2026-09-26: console-only test event (`event te_debug_nuclear.3`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/mushroom_cloud.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/mushroom_cloud.dds"
+
+	title = te_debug_nuclear.3.t
+	desc = te_debug_nuclear.3.desc
+	flavor = te_debug_nuclear.3.f
+
+	# The taboo at its birth value (born now if it was not).
+	option = {
+		name = te_debug_nuclear.3.a
+		default_option = yes
+		custom_tooltip = {
+			text = te_debug_nuclear.3.tt_20
+			nd_taboo_debug_set = { VALUE = 20 }
+		}
+	}
+	# High enough for the possession burden, the AI's survival-only gate and a
+	# Strong band event.
+	option = {
+		name = te_debug_nuclear.3.b
+		custom_tooltip = {
+			text = te_debug_nuclear.3.tt_85
+			nd_taboo_debug_set = { VALUE = 85 }
+		}
+	}
+	option = {
+		name = te_debug_nuclear.3.c
+		custom_tooltip = {
+			text = te_debug_nuclear.3.tt_age
+			nd_taboo_debug_age_clock = yes
+		}
+	}
+	# The world's monthly step now (the one console exception to its
+	# call-site contract); read the TE_TABOO: line in debug.log.
+	option = {
+		name = te_debug_nuclear.3.d
+		custom_tooltip = {
+			text = te_debug_nuclear.3.tt_step
+			nd_taboo_monthly_update = yes
+		}
+	}
+	# WARHEADS must be a value a trigger can compare (the effect's limit is
+	# `$WARHEADS$ > 0`), so the count goes through a variable, not a literal.
+	option = {
+		name = te_debug_nuclear.3.e
+		hidden_effect = {
+			set_variable = { name = nd_taboo_debug_warheads value = 10 }
+		}
+		custom_tooltip = {
+			text = te_debug_nuclear.3.tt_renounce
+			nd_taboo_note_renunciation = { WARHEADS = var:nd_taboo_debug_warheads }
 		}
 	}
 }

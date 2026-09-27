@@ -30,7 +30,7 @@ Baseline: `main` at `6ca193db` (#478 merged).
 | Enactment preview | **A `custom_tooltip` in the law's `on_enact`**, as `law_state_led_language_reform` does, naming the amendment the current Distribution of Power will give |
 | Name | **Collective Governance** |
 | Tech gate | **`mass_media` (era 6) → `political_agitation` (era 4).** `democracy` (era 1) was proposed and rejected as too early. `political_agitation` is the mass-politics tech: it already unlocks Single-Party State, and it suits the movement-driven Direct Democracy and Free Federation amendments. Anarchy (era 3) waits one era, Technocracy (era 2) two; Direct Democracy arrives two eras earlier than today. The gate stays in `unlocking_technologies`, because `gen_law_consistency` reads that field and not `can_enact` |
-| Algorithmic Governance | **Not a prerequisite** (unchanged from today); follow-up if wanted |
+| Algorithmic Governance | **Not a prerequisite** (unchanged from today); follow-up if wanted. **Added 2026-09-27** as a sixth expression, *Algorithmic Commons* (see the note at the end) |
 | Ideology stances | **The §6 table** (10 changes) |
 | Government and ruler names | **The §4 table** |
 | Base effects | **The §1 starting values**; the plan checks defines before fixing them |
@@ -280,6 +280,28 @@ output changes mainly because of §1's wider prerequisites (see §8).
 
 - Giving the law to historical collegial governments at game start (Switzerland, the Hanseatic cities, San Marino).
 - New enactment events for the non-voting combinations.
-- Algorithmic Governance as a prerequisite.
+- ~~Algorithmic Governance as a prerequisite.~~ Added 2026-09-27; see the follow-up at the end.
 - A new icon (the current `direct_democracy.dds` stays).
 - A preview tooltip on the Distribution of Power laws saying the amendment will change.
+
+## Follow-up (2026-09-27): Algorithmic Governance
+
+Algorithmic Governance is now a prerequisite. Every other governance principle already paired with it, Monarchy
+included, so blocking only the law that says no person stands above the government was inconsistent.
+`modern_election_events.33.a` ("neural direct democracy") and `ch_set_political_model`, which counts it as
+Technocratic, already treat it as a shared-decision regime.
+
+It is a sixth row, not part of `collective_governance_is_technocratic`, because Collegial Administration's name, text
+and tooltip are about bureaus.
+
+| Piece | Value |
+|---|---|
+| Trigger | `collective_governance_is_algorithmic` (`law_algorithmic_governance`) |
+| Amendment | `amendment_collective_algorithmic_commons` "Algorithmic Commons": `state_political_strength_from_wealth_mult = -0.25` (the Direct Democracy value: every citizen's feedback weighs the same), `political_movement_radicalism_add = -0.1` (grievances reach the algorithm before they harden; vanilla's support-regime action is −0.1, the internal-security laws −0.03 to −0.05) |
+| Government type | `gov_collective_algorithmic_commons` "Algorithmic Commons", ruler `RULER_TITLE_STEWARD` "Steward", parliamentary_elective, before the catch-all |
+| Preview | `COLLECTIVE_GOVERNANCE_TT_ALGORITHMIC` |
+
+Cascade (`extra_law_consistency_generated.txt`): the only change that can fire is that a Collective Governance country
+moving to Algorithmic Governance keeps the law. The new candidate lines in the Monarchy and Colonial Administration
+cascades (which fire only under Anarchy) and the Parliamentary Republic cascade (only under Autocracy) cannot hold
+while Algorithmic Governance does. In the Neocameralism cascade, Monarchy comes first and fails only under Anarchy.

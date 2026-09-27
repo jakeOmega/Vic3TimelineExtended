@@ -91,6 +91,12 @@ increase_funding_nuclear_program = {
 			limit = { var:nuclear_weapon_stockpile >= nuclear_ai_desired_stockpile }
 			add = -45
 		}
+		# The nuclear taboo: a norm-bound world does not start or grow a
+		# programme lightly (nuclear_taboo_triggers.txt).
+		if = {
+			limit = { nd_taboo_ai_restrains_programme = yes }
+			multiply = nd_taboo_ai_programme_restraint_factor
+		}
 	}
 
 	possible = {

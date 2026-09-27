@@ -162,6 +162,9 @@ nd_loose_surface = {
 			scope:nd_loose_state = {
 				nuclear_industrial_strike = yes
 			}
+			# The nuclear taboo: no government chose this, so it is not a use;
+			# the world tightens up after a horror no one can answer.
+			nd_taboo_ledger_add = { POINTS = nd_taboo_ledger_terror }
 			debug_log = "TE_CUSTODY: a loose warhead from [SCOPE.sCountry('nd_loose_origin').GetNameNoFormatting] detonated in [THIS.GetCountry.GetNameNoFormatting]"
 			trigger_event = { id = nuclear_loose.2 popup = yes }
 			every_country = {

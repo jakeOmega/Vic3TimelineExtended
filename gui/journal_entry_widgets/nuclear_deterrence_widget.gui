@@ -36,6 +36,8 @@
 ###   nd_posture_sgui         11..15 doctrine 1..5   20..23 readiness 0..3
 ###                           31..34 authority 1..4  40/41 safeguards -/+
 ###                           50/51 hardening -/+
+###                           60/61 arsenal ceiling -/+  62 lift it
+###                           63 dismantle the arsenal  64 halt it
 ###   nd_crisis_action_sgui   1 go public  2 propose stand-down  3 exercise
 ###                           4 concede    5 let it go
 ### The AI does not use these (ai_is_valid = no): it sets its posture in
@@ -740,6 +742,118 @@ flowcontainer = {
 				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)51' ) ).End )]"
 				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)51' ) ).End )]"
 				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)51' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)51' ) ).End ) ) )]"
+			}
+		}
+
+		### ---- The arsenal: a ceiling, or dismantling it (the nuclear taboo,
+		### nuclear_taboo_effects.txt) ----------------------------------------
+		nd_row = {
+			blockoverride "row_label" {
+				text = "nd_taboo_w_status_label"
+			}
+			blockoverride "row_value" {
+				text = "nd_taboo_w_status_value"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "nd_taboo_w_status_tt"
+			}
+		}
+		nd_stepper_row = {
+			datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+			textbox = {
+				text = "nd_taboo_w_ceiling_label"
+				size = { 200 24 }
+				align = left|nobaseline
+				using = fontsize_medium
+				parentanchor = vcenter
+				elide = right
+				alwaystransparent = yes
+			}
+			button_icon_minus_action = {
+				size = { 24 24 }
+				parentanchor = vcenter
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)60' ) ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)60' ) ).End )]"
+				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)60' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)60' ) ).End ) ) )]"
+			}
+			textbox = {
+				text = "nd_taboo_w_ceiling_value"
+				tooltip = "nd_taboo_w_ceiling_tt"
+				size = { 216 24 }
+				align = center|nobaseline
+				using = fontsize_medium
+				parentanchor = vcenter
+				elide = right
+			}
+			button_icon_plus_action = {
+				size = { 24 24 }
+				parentanchor = vcenter
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)61' ) ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)61' ) ).End )]"
+				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)61' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)61' ) ).End ) ) )]"
+			}
+		}
+		nd_choice_row = {
+			datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+			textbox = {
+				size = { 360 30 }
+				align = left|nobaseline
+				using = fontsize_medium
+				parentanchor = vcenter
+				elide = right
+				text = "nd_taboo_w_lift_label"
+				tooltip = "nd_taboo_w_lift_tt"
+			}
+			button = {
+				using = default_button_action
+				size = { 110 30 }
+				parentanchor = vcenter
+				text = "nd_taboo_w_btn_lift"
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)62' ) ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)62' ) ).End )]"
+				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)62' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)62' ) ).End ) ) )]"
+			}
+		}
+		nd_choice_row = {
+			datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+			textbox = {
+				size = { 360 30 }
+				align = left|nobaseline
+				using = fontsize_medium
+				parentanchor = vcenter
+				elide = right
+				text = "nd_taboo_w_dismantle_label"
+				tooltip = "nd_taboo_w_dismantle_tt"
+			}
+			button = {
+				using = default_button_action
+				size = { 110 30 }
+				parentanchor = vcenter
+				text = "nd_taboo_w_btn_dismantle"
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)63' ) ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)63' ) ).End )]"
+				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)63' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)63' ) ).End ) ) )]"
+			}
+		}
+		nd_choice_row = {
+			datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+			textbox = {
+				size = { 360 30 }
+				align = left|nobaseline
+				using = fontsize_medium
+				parentanchor = vcenter
+				elide = right
+				text = "nd_taboo_w_halt_label"
+				tooltip = "nd_taboo_w_halt_tt"
+			}
+			button = {
+				using = default_button_action
+				size = { 110 30 }
+				parentanchor = vcenter
+				text = "nd_taboo_w_btn_halt"
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)64' ) ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)64' ) ).End )]"
+				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)64' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)64' ) ).End ) ) )]"
 			}
 		}
 	}

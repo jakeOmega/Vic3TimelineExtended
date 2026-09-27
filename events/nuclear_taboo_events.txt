@@ -1,0 +1,895 @@
+﻿# ============================================================================
+# THE NUCLEAR TABOO — events
+# ============================================================================
+# Design: docs/superpowers/specs/2026-09-26-nuclear-taboo-design.md.
+#   .1-.4   the taboo hardens through 30 / 50 / 70 / 90 (nd_taboo_band_check)
+#   .5-.8   it erodes through 90 / 70 / 50 / 30
+#   .20     the last warhead taken apart (nd_taboo_dismantle_complete)
+# The band events' options are country-local: none moves the world's score.
+# ============================================================================
+namespace = nuclear_taboo
+
+# ---- The taboo hardens (nd_taboo_fire_band_up) ------------------------------
+
+nuclear_taboo.1 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/anti_nuclear_movement.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = nuclear_taboo.1.t
+	desc = nuclear_taboo.1.d
+	flavor = nuclear_taboo.1.f
+
+	duration = 3
+
+	trigger = {
+		has_game_rule = nuclear_weapons_enabled
+	}
+
+	option = {
+		name = nd_taboo_opt_cut
+		trigger = {
+			nd_is_armed = yes
+			nd_taboo_is_dismantling = no
+			nd_stockpile > 1
+			# Not when a ceiling already at or below half our arsenal would
+			# only be raised (M3, final-review.md).
+			NOT = {
+				AND = {
+					has_variable = nd_warhead_ceiling
+					var:nd_warhead_ceiling <= nd_taboo_half_arsenal_value
+				}
+			}
+		}
+		nd_taboo_opt_cut_arsenal = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { nd_taboo_burden_value >= nd_taboo_burden_step_mild }
+				add = 3
+			}
+		}
+	}
+	option = {
+		name = nd_taboo_opt_dismantle
+		trigger = {
+			nd_is_armed = yes
+			nd_taboo_can_dismantle = yes
+		}
+		nd_taboo_dismantle_start = yes
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = { nd_taboo_ai_would_dismantle = yes }
+				add = 2
+			}
+		}
+	}
+	option = {
+		name = nd_taboo_opt_nfu
+		trigger = {
+			nd_is_armed = yes
+			nd_doctrine_nfu = no
+			nd_can_set_doctrine = { D = 1 }
+		}
+		nd_set_doctrine_1 = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = 2
+			}
+			modifier = {
+				trigger = { nd_regime_is_militarist = yes }
+				factor = 0
+			}
+		}
+	}
+	option = {
+		name = nd_taboo_opt_firm
+		trigger = {
+			nd_is_armed = yes
+			# Reads oddly for a country taking its arsenal apart (M3, final-review.md).
+			nd_taboo_is_dismantling = no
+		}
+		nd_taboo_opt_stand_firm = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { nd_regime_is_militarist = yes }
+				add = 3
+			}
+		}
+	}
+	option = {
+		name = nd_taboo_opt_champion
+		trigger = { nd_is_armed = no }
+		nd_taboo_opt_champion = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { nd_is_guaranteed = yes }
+				add = -1
+			}
+		}
+	}
+	option = {
+		name = nd_taboo_opt_quiet
+		default_option = yes
+		trigger = { nd_is_armed = no }
+		nd_taboo_opt_keep_quiet = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { nd_is_guaranteed = yes }
+				add = 2
+			}
+		}
+	}
+}
+
+nuclear_taboo.2 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_diplomacy_talks.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = nuclear_taboo.2.t
+	desc = nuclear_taboo.2.d
+	flavor = nuclear_taboo.2.f
+
+	duration = 3
+
+	trigger = {
+		has_game_rule = nuclear_weapons_enabled
+	}
+
+	option = {
+		name = nd_taboo_opt_cut
+		trigger = {
+			nd_is_armed = yes
+			nd_taboo_is_dismantling = no
+			nd_stockpile > 1
+			# Not when a ceiling already at or below half our arsenal would
+			# only be raised (M3, final-review.md).
+			NOT = {
+				AND = {
+					has_variable = nd_warhead_ceiling
+					var:nd_warhead_ceiling <= nd_taboo_half_arsenal_value
+				}
+			}
+		}
+		nd_taboo_opt_cut_arsenal = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { nd_taboo_burden_value >= nd_taboo_burden_step_mild }
+				add = 3
+			}
+		}
+	}
+	option = {
+		name = nd_taboo_opt_dismantle
+		trigger = {
+			nd_is_armed = yes
+			nd_taboo_can_dismantle = yes
+		}
+		nd_taboo_dismantle_start = yes
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = { nd_taboo_ai_would_dismantle = yes }
+				add = 2
+			}
+		}
+	}
+	option = {
+		name = nd_taboo_opt_nfu
+		trigger = {
+			nd_is_armed = yes
+			nd_doctrine_nfu = no
+			nd_can_set_doctrine = { D = 1 }
+		}
+		nd_set_doctrine_1 = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = 2
+			}
+			modifier = {
+				trigger = { nd_regime_is_militarist = yes }
+				factor = 0
+			}
+		}
+	}
+	option = {
+		name = nd_taboo_opt_firm
+		trigger = {
+			nd_is_armed = yes
+			# Reads oddly for a country taking its arsenal apart (M3, final-review.md).
+			nd_taboo_is_dismantling = no
+		}
+		nd_taboo_opt_stand_firm = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { nd_regime_is_militarist = yes }
+				add = 3
+			}
+		}
+	}
+	option = {
+		name = nd_taboo_opt_champion
+		trigger = { nd_is_armed = no }
+		nd_taboo_opt_champion = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { nd_is_guaranteed = yes }
+				add = -1
+			}
+		}
+	}
+	option = {
+		name = nd_taboo_opt_quiet
+		default_option = yes
+		trigger = { nd_is_armed = no }
+		nd_taboo_opt_keep_quiet = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { nd_is_guaranteed = yes }
+				add = 2
+			}
+		}
+	}
+}
+
+nuclear_taboo.3 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_treaty_signing.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = nuclear_taboo.3.t
+	desc = nuclear_taboo.3.d
+	flavor = nuclear_taboo.3.f
+
+	duration = 3
+
+	trigger = {
+		has_game_rule = nuclear_weapons_enabled
+	}
+
+	option = {
+		name = nd_taboo_opt_cut
+		trigger = {
+			nd_is_armed = yes
+			nd_taboo_is_dismantling = no
+			nd_stockpile > 1
+			# Not when a ceiling already at or below half our arsenal would
+			# only be raised (M3, final-review.md).
+			NOT = {
+				AND = {
+					has_variable = nd_warhead_ceiling
+					var:nd_warhead_ceiling <= nd_taboo_half_arsenal_value
+				}
+			}
+		}
+		nd_taboo_opt_cut_arsenal = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { nd_taboo_burden_value >= nd_taboo_burden_step_mild }
+				add = 3
+			}
+		}
+	}
+	option = {
+		name = nd_taboo_opt_dismantle
+		trigger = {
+			nd_is_armed = yes
+			nd_taboo_can_dismantle = yes
+		}
+		nd_taboo_dismantle_start = yes
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = { nd_taboo_ai_would_dismantle = yes }
+				add = 2
+			}
+		}
+	}
+	option = {
+		name = nd_taboo_opt_nfu
+		trigger = {
+			nd_is_armed = yes
+			nd_doctrine_nfu = no
+			nd_can_set_doctrine = { D = 1 }
+		}
+		nd_set_doctrine_1 = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = 2
+			}
+			modifier = {
+				trigger = { nd_regime_is_militarist = yes }
+				factor = 0
+			}
+		}
+	}
+	option = {
+		name = nd_taboo_opt_firm
+		trigger = {
+			nd_is_armed = yes
+			# Reads oddly for a country taking its arsenal apart (M3, final-review.md).
+			nd_taboo_is_dismantling = no
+		}
+		nd_taboo_opt_stand_firm = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { nd_regime_is_militarist = yes }
+				add = 3
+			}
+		}
+	}
+	option = {
+		name = nd_taboo_opt_champion
+		trigger = { nd_is_armed = no }
+		nd_taboo_opt_champion = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { nd_is_guaranteed = yes }
+				add = -1
+			}
+		}
+	}
+	option = {
+		name = nd_taboo_opt_quiet
+		default_option = yes
+		trigger = { nd_is_armed = no }
+		nd_taboo_opt_keep_quiet = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { nd_is_guaranteed = yes }
+				add = 2
+			}
+		}
+	}
+}
+
+nuclear_taboo.4 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_defense_shield.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = nuclear_taboo.4.t
+	desc = nuclear_taboo.4.d
+	flavor = nuclear_taboo.4.f
+
+	duration = 3
+
+	trigger = {
+		has_game_rule = nuclear_weapons_enabled
+	}
+
+	option = {
+		name = nd_taboo_opt_cut
+		trigger = {
+			nd_is_armed = yes
+			nd_taboo_is_dismantling = no
+			nd_stockpile > 1
+			# Not when a ceiling already at or below half our arsenal would
+			# only be raised (M3, final-review.md).
+			NOT = {
+				AND = {
+					has_variable = nd_warhead_ceiling
+					var:nd_warhead_ceiling <= nd_taboo_half_arsenal_value
+				}
+			}
+		}
+		nd_taboo_opt_cut_arsenal = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { nd_taboo_burden_value >= nd_taboo_burden_step_mild }
+				add = 3
+			}
+		}
+	}
+	option = {
+		name = nd_taboo_opt_dismantle
+		trigger = {
+			nd_is_armed = yes
+			nd_taboo_can_dismantle = yes
+		}
+		nd_taboo_dismantle_start = yes
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = { nd_taboo_ai_would_dismantle = yes }
+				add = 2
+			}
+		}
+	}
+	option = {
+		name = nd_taboo_opt_nfu
+		trigger = {
+			nd_is_armed = yes
+			nd_doctrine_nfu = no
+			nd_can_set_doctrine = { D = 1 }
+		}
+		nd_set_doctrine_1 = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = 2
+			}
+			modifier = {
+				trigger = { nd_regime_is_militarist = yes }
+				factor = 0
+			}
+		}
+	}
+	option = {
+		name = nd_taboo_opt_firm
+		trigger = {
+			nd_is_armed = yes
+			# Reads oddly for a country taking its arsenal apart (M3, final-review.md).
+			nd_taboo_is_dismantling = no
+		}
+		nd_taboo_opt_stand_firm = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { nd_regime_is_militarist = yes }
+				add = 3
+			}
+		}
+	}
+	option = {
+		name = nd_taboo_opt_champion
+		trigger = { nd_is_armed = no }
+		nd_taboo_opt_champion = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { nd_is_guaranteed = yes }
+				add = -1
+			}
+		}
+	}
+	option = {
+		name = nd_taboo_opt_quiet
+		default_option = yes
+		trigger = { nd_is_armed = no }
+		nd_taboo_opt_keep_quiet = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { nd_is_guaranteed = yes }
+				add = 2
+			}
+		}
+	}
+}
+
+# ---- The taboo erodes (nd_taboo_fire_band_down) ------------------------------
+
+nuclear_taboo.5 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_standoff_tension.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = nuclear_taboo.5.t
+	desc = nuclear_taboo.5.d
+	flavor = nuclear_taboo.5.f
+
+	duration = 3
+
+	trigger = {
+		has_game_rule = nuclear_weapons_enabled
+	}
+
+	immediate = {
+		set_variable = { name = nd_taboo_civil_defence_cost_cached value = nd_taboo_civil_defence_weekly_value }
+	}
+
+	option = {
+		name = nd_taboo_opt_protector
+		trigger = {
+			nd_is_armed = no
+			any_country = { nd_taboo_friendly_armed_power = yes }
+		}
+		nd_taboo_opt_seek_protector = yes
+		ai_chance = {
+			base = 2
+		}
+	}
+	option = {
+		name = nd_taboo_opt_programme
+		trigger = {
+			nd_is_armed = no
+			nuclear_program_possible_increase_funding = yes
+		}
+		nuclear_program_effect_increase_funding = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { nd_has_plausible_attacker = yes }
+				add = 2
+			}
+		}
+	}
+	option = {
+		name = nd_taboo_opt_shelters
+		default_option = yes
+		trigger = { nd_is_armed = no }
+		nd_taboo_opt_shelters = yes
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = nd_taboo_opt_modernise
+		trigger = {
+			nd_is_armed = yes
+			nd_is_initialized = yes
+			# Reads oddly for a country taking its arsenal apart (M3, final-review.md).
+			nd_taboo_is_dismantling = no
+		}
+		nd_taboo_opt_modernise = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { nd_regime_is_militarist = yes }
+				add = 2
+			}
+		}
+	}
+	option = {
+		name = nd_taboo_opt_hold
+		trigger = { nd_is_armed = yes }
+		nd_taboo_opt_hold_line = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = 2
+			}
+		}
+	}
+}
+
+nuclear_taboo.6 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_test_mushroom.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = nuclear_taboo.6.t
+	desc = nuclear_taboo.6.d
+	flavor = nuclear_taboo.6.f
+
+	duration = 3
+
+	trigger = {
+		has_game_rule = nuclear_weapons_enabled
+	}
+
+	immediate = {
+		set_variable = { name = nd_taboo_civil_defence_cost_cached value = nd_taboo_civil_defence_weekly_value }
+	}
+
+	option = {
+		name = nd_taboo_opt_protector
+		trigger = {
+			nd_is_armed = no
+			any_country = { nd_taboo_friendly_armed_power = yes }
+		}
+		nd_taboo_opt_seek_protector = yes
+		ai_chance = {
+			base = 2
+		}
+	}
+	option = {
+		name = nd_taboo_opt_programme
+		trigger = {
+			nd_is_armed = no
+			nuclear_program_possible_increase_funding = yes
+		}
+		nuclear_program_effect_increase_funding = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { nd_has_plausible_attacker = yes }
+				add = 2
+			}
+		}
+	}
+	option = {
+		name = nd_taboo_opt_shelters
+		default_option = yes
+		trigger = { nd_is_armed = no }
+		nd_taboo_opt_shelters = yes
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = nd_taboo_opt_modernise
+		trigger = {
+			nd_is_armed = yes
+			nd_is_initialized = yes
+			# Reads oddly for a country taking its arsenal apart (M3, final-review.md).
+			nd_taboo_is_dismantling = no
+		}
+		nd_taboo_opt_modernise = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { nd_regime_is_militarist = yes }
+				add = 2
+			}
+		}
+	}
+	option = {
+		name = nd_taboo_opt_hold
+		trigger = { nd_is_armed = yes }
+		nd_taboo_opt_hold_line = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = 2
+			}
+		}
+	}
+}
+
+nuclear_taboo.7 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/mushroom_cloud_distant.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = nuclear_taboo.7.t
+	desc = nuclear_taboo.7.d
+	flavor = nuclear_taboo.7.f
+
+	duration = 3
+
+	trigger = {
+		has_game_rule = nuclear_weapons_enabled
+	}
+
+	immediate = {
+		set_variable = { name = nd_taboo_civil_defence_cost_cached value = nd_taboo_civil_defence_weekly_value }
+	}
+
+	option = {
+		name = nd_taboo_opt_protector
+		trigger = {
+			nd_is_armed = no
+			any_country = { nd_taboo_friendly_armed_power = yes }
+		}
+		nd_taboo_opt_seek_protector = yes
+		ai_chance = {
+			base = 2
+		}
+	}
+	option = {
+		name = nd_taboo_opt_programme
+		trigger = {
+			nd_is_armed = no
+			nuclear_program_possible_increase_funding = yes
+		}
+		nuclear_program_effect_increase_funding = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { nd_has_plausible_attacker = yes }
+				add = 2
+			}
+		}
+	}
+	option = {
+		name = nd_taboo_opt_shelters
+		default_option = yes
+		trigger = { nd_is_armed = no }
+		nd_taboo_opt_shelters = yes
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = nd_taboo_opt_modernise
+		trigger = {
+			nd_is_armed = yes
+			nd_is_initialized = yes
+			# Reads oddly for a country taking its arsenal apart (M3, final-review.md).
+			nd_taboo_is_dismantling = no
+		}
+		nd_taboo_opt_modernise = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { nd_regime_is_militarist = yes }
+				add = 2
+			}
+		}
+	}
+	option = {
+		name = nd_taboo_opt_hold
+		trigger = { nd_is_armed = yes }
+		nd_taboo_opt_hold_line = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = 2
+			}
+		}
+	}
+}
+
+nuclear_taboo.8 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_bunker_life.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = nuclear_taboo.8.t
+	desc = nuclear_taboo.8.d
+	flavor = nuclear_taboo.8.f
+
+	duration = 3
+
+	trigger = {
+		has_game_rule = nuclear_weapons_enabled
+	}
+
+	immediate = {
+		set_variable = { name = nd_taboo_civil_defence_cost_cached value = nd_taboo_civil_defence_weekly_value }
+	}
+
+	option = {
+		name = nd_taboo_opt_protector
+		trigger = {
+			nd_is_armed = no
+			any_country = { nd_taboo_friendly_armed_power = yes }
+		}
+		nd_taboo_opt_seek_protector = yes
+		ai_chance = {
+			base = 2
+		}
+	}
+	option = {
+		name = nd_taboo_opt_programme
+		trigger = {
+			nd_is_armed = no
+			nuclear_program_possible_increase_funding = yes
+		}
+		nuclear_program_effect_increase_funding = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { nd_has_plausible_attacker = yes }
+				add = 2
+			}
+		}
+	}
+	option = {
+		name = nd_taboo_opt_shelters
+		default_option = yes
+		trigger = { nd_is_armed = no }
+		nd_taboo_opt_shelters = yes
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = nd_taboo_opt_modernise
+		trigger = {
+			nd_is_armed = yes
+			nd_is_initialized = yes
+			# Reads oddly for a country taking its arsenal apart (M3, final-review.md).
+			nd_taboo_is_dismantling = no
+		}
+		nd_taboo_opt_modernise = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { nd_regime_is_militarist = yes }
+				add = 2
+			}
+		}
+	}
+	option = {
+		name = nd_taboo_opt_hold
+		trigger = { nd_is_armed = yes }
+		nd_taboo_opt_hold_line = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = 2
+			}
+		}
+	}
+}
+
+# The last warhead taken apart. Its option pays the renunciation's rewards, so
+# the tooltip shows them; the prestige multiplier is set here first.
+nuclear_taboo.20 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_treaty_signing.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = nuclear_taboo.20.t
+	desc = nuclear_taboo.20.d
+	flavor = nuclear_taboo.20.f
+
+	duration = 3
+
+	trigger = {
+		has_variable = nd_renounced_locked
+	}
+
+	immediate = {
+		set_variable = { name = nd_taboo_renounce_mult value = nd_taboo_renounce_mult_value }
+	}
+
+	option = {
+		name = nuclear_taboo.20.a
+		default_option = yes
+		nd_taboo_renunciation_rewards = yes
+	}
+}

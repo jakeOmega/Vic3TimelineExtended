@@ -232,8 +232,16 @@ banking_effect_cb_bank_holiday = {
 			change_variable = { name = finance_cycle_momentum multiply = 0.5 }
 		}
 	}
-	# Depositors who cannot reach their money.
-	add_radicals = { value = banking_small_radicals_value strata = middle }
+	# Depositors who cannot reach their money for up to ninety days, hit in
+	# proportion to what they keep in the banks: the middle strata's savings
+	# and shop takings hardest; the upper strata's firms cannot meet a payroll
+	# (their wealth is mostly outside the banks); the lower strata have little
+	# on deposit but go unpaid while commerce runs on cash. `strata` takes one
+	# value per call, hence three calls (vanilla's tenpo_events do the same).
+	# banking_bank_holiday_radicals_tt quotes the three values literally.
+	add_radicals = { value = banking_bank_holiday_middle_radicals strata = middle }
+	add_radicals = { value = banking_bank_holiday_upper_radicals strata = upper }
+	add_radicals = { value = banking_bank_holiday_lower_radicals strata = lower }
 }
 
 banking_effect_cb_disable_bank_holiday = {
