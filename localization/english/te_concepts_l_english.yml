@@ -2546,7 +2546,7 @@
  un_regime_npt_inspection_modifier_desc:0 "This country is running a nuclear programme without the bomb. The Non-Proliferation Treaty's inspectors slow it. Scaled by UN enforcement."
  un_regime_refugee_host_modifier_desc:0 "As one of the richest countries, this country is where refugees under the UN convention come, and it bears the strain. Scaled by UN enforcement."
  un_regime_refugee_source_modifier_desc:0 "As one of the poorer countries, this country is relieved by the UN refugee convention. Scaled by UN enforcement."
- un_regime_rights_violator_modifier_desc:0 "This country's laws — an ethnostate, outlawed dissent or slavery — are in breach of the Universal Declaration of Human Rights, and the government answers for it at home and abroad. Scaled by UN enforcement."
+ un_regime_rights_violator_modifier_desc:0 "This country's laws — an ethnostate, outlawed dissent, penal labor camps or slavery — are in breach of the Universal Declaration of Human Rights, and the government answers for it at home and abroad. Scaled by UN enforcement."
  un_regime_shared_intelligence_modifier_desc:0 "A strong United Nations shares intelligence among its members, making every kind of covert operation against them harder."
  un_regime_space_laggard_modifier_desc:0 "This country is far behind in the space race, and the Outer Space Treaty shares the leaders' progress with it. Scaled by UN enforcement."
  un_regime_space_leader_modifier_desc:0 "This country leads the space race, and the Outer Space Treaty obliges it to share what it learns. Scaled by UN enforcement."

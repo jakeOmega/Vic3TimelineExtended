@@ -467,6 +467,7 @@ social_tensions_events.5 = {
 			base = 3
 			modifier = { trigger = { has_law = law_type:law_militarized_police } add = 5 }
 			modifier = { trigger = { has_law = law_type:law_punishment_focused_criminal_justice } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_penal_labor_camps } add = 5 }
 		}
 	}
 
