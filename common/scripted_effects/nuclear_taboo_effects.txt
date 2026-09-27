@@ -114,6 +114,7 @@ nd_taboo_monthly_update = {
 				max = 100
 			}
 		}
+		nd_taboo_band_check = yes
 		debug_log = "TE_TABOO: score [SCOPE.ScriptValue('nd_disp_taboo')|1] target [SCOPE.ScriptValue('nd_disp_taboo_target')|1] base [SCOPE.ScriptValue('nd_disp_tb_base')|1] tradition [SCOPE.ScriptValue('nd_disp_tb_tradition')|1] postures [SCOPE.ScriptValue('nd_disp_tb_postures')|1] restraint [SCOPE.ScriptValue('nd_disp_tb_restraint')|1] ledger [SCOPE.ScriptValue('nd_disp_tb_ledger')|1] quiet years [SCOPE.ScriptValue('nd_disp_taboo_quiet_years')|1]"
 	}
 }
@@ -617,4 +618,200 @@ nd_taboo_record_history = {
 		te_history_record_sample = { METRIC = nd_taboo VALUE = global_var:nd_taboo }
 		te_history_record_sample = { METRIC = nd_taboo_tgt VALUE = global_var:nd_taboo_target }
 	}
+}
+
+# ----------------------------------------------------------------------------
+# BAND EVENTS (spec §6.3) — the world's step calls the check; global scope
+# ----------------------------------------------------------------------------
+
+# One band a month, up or down; the band moves even when the event is on
+# cooldown.
+nd_taboo_band_check = {
+	if = {
+		limit = { nd_taboo_band_up_due = yes }
+		change_global_variable = { name = nd_taboo_band add = 1 }
+		nd_taboo_fire_band_up = yes
+	}
+	else_if = {
+		limit = { nd_taboo_band_down_due = yes }
+		change_global_variable = { name = nd_taboo_band subtract = 1 }
+		nd_taboo_fire_band_down = yes
+	}
+}
+
+# The band has just risen to 2..5: through 30 / 50 / 70 / 90.
+nd_taboo_fire_band_up = {
+	if = {
+		limit = { global_var:nd_taboo_band = 2 }
+		nd_taboo_fire_band_event = { N = 1 EVENT = nuclear_taboo.1 }
+	}
+	else_if = {
+		limit = { global_var:nd_taboo_band = 3 }
+		nd_taboo_fire_band_event = { N = 2 EVENT = nuclear_taboo.2 }
+	}
+	else_if = {
+		limit = { global_var:nd_taboo_band = 4 }
+		nd_taboo_fire_band_event = { N = 3 EVENT = nuclear_taboo.3 }
+	}
+	else_if = {
+		limit = { global_var:nd_taboo_band = 5 }
+		nd_taboo_fire_band_event = { N = 4 EVENT = nuclear_taboo.4 }
+	}
+}
+
+# The band has just fallen to 4..1: through 90 / 70 / 50 / 30.
+nd_taboo_fire_band_down = {
+	if = {
+		limit = { global_var:nd_taboo_band = 4 }
+		nd_taboo_fire_band_event = { N = 5 EVENT = nuclear_taboo.5 }
+	}
+	else_if = {
+		limit = { global_var:nd_taboo_band = 3 }
+		nd_taboo_fire_band_event = { N = 6 EVENT = nuclear_taboo.6 }
+	}
+	else_if = {
+		limit = { global_var:nd_taboo_band = 2 }
+		nd_taboo_fire_band_event = { N = 7 EVENT = nuclear_taboo.7 }
+	}
+	else_if = {
+		limit = { global_var:nd_taboo_band = 1 }
+		nd_taboo_fire_band_event = { N = 8 EVENT = nuclear_taboo.8 }
+	}
+}
+
+# To every country, as global warming's thresholds are (gw_fire_warming_threshold_event).
+nd_taboo_fire_band_event = {
+	if = {
+		limit = { nd_taboo_event_ready = { N = $N$ } }
+		set_global_variable = { name = nd_taboo_ev_$N$_year value = year }
+		every_country = {
+			limit = { NOT = { is_country_type = decentralized } }
+			trigger_event = { id = $EVENT$ }
+		}
+		debug_log = "TE_TABOO: a band event fired"
+	}
+}
+
+# ---- The band events' option bodies — country scope, ROOT = the recipient.
+# Country-local: none writes the world's score. Two enact a real system action
+# (nd_set_doctrine_1, nd_taboo_dismantle_start), which carries its own effect.
+
+nd_taboo_opt_cut_arsenal = {
+	custom_tooltip = {
+		text = nd_taboo_tt_opt_cut
+		set_variable = { name = nd_warhead_ceiling value = nd_taboo_half_arsenal_value }
+	}
+	hidden_effect = {
+		nd_taboo_refresh_held = yes
+	}
+}
+
+nd_taboo_opt_stand_firm = {
+	every_interest_group = {
+		limit = { nd_ig_is_hawk = yes }
+		add_modifier = {
+			name = ig_approval_positive_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+	every_interest_group = {
+		limit = { nd_ig_is_restraint = yes }
+		add_modifier = {
+			name = ig_approval_negative_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+nd_taboo_opt_hold_line = {
+	every_interest_group = {
+		limit = { nd_ig_is_restraint = yes }
+		add_modifier = {
+			name = ig_approval_positive_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+	every_interest_group = {
+		limit = { nd_ig_is_hawk = yes }
+		add_modifier = {
+			name = ig_approval_negative_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+nd_taboo_opt_champion = {
+	add_modifier = {
+		name = nd_taboo_norm_champion
+		years = 10
+		is_decaying = yes
+	}
+	custom_tooltip = {
+		text = nd_taboo_tt_champion_relations
+		every_country = {
+			limit = {
+				NOT = { this = ROOT }
+				nd_is_armed = yes
+				country_rank >= rank_value:great_power
+			}
+			change_relations = { country = ROOT value = nd_taboo_champion_relations }
+		}
+	}
+}
+
+nd_taboo_opt_keep_quiet = {
+	custom_tooltip = {
+		text = nd_taboo_tt_quiet_relations
+		every_country = {
+			limit = {
+				NOT = { this = ROOT }
+				nd_is_armed = yes
+				country_rank >= rank_value:great_power
+			}
+			change_relations = { country = ROOT value = nd_taboo_quiet_relations }
+		}
+	}
+}
+
+nd_taboo_opt_seek_protector = {
+	custom_tooltip = {
+		text = nd_taboo_tt_protector
+		random_country = {
+			limit = { nd_taboo_friendly_armed_power = yes }
+			change_relations = { country = ROOT value = nd_taboo_protector_relations }
+		}
+	}
+}
+
+nd_taboo_opt_modernise = {
+	custom_tooltip = {
+		text = nd_taboo_tt_modernise
+		change_variable = { name = nd_reliability add = nd_taboo_modernise_reliability }
+		clamp_variable = { name = nd_reliability min = 0 max = 100 }
+		change_variable = { name = nd_survivability add = nd_taboo_modernise_survivability }
+		clamp_variable = { name = nd_survivability min = 0 max = 100 }
+	}
+	every_interest_group = {
+		limit = { nd_ig_is_restraint = yes }
+		add_modifier = {
+			name = ig_approval_negative_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# The eroding events' immediate caches the weekly cost first, so the option's
+# preview shows it; the cache is never removed (modifier_multiplier_var_audit).
+nd_taboo_opt_shelters = {
+	add_modifier = {
+		name = nd_taboo_civil_defence
+		years = 10
+		multiplier = root.var:nd_taboo_civil_defence_cost_cached
+	}
+	custom_tooltip = nd_taboo_tt_shelters_war_support
 }

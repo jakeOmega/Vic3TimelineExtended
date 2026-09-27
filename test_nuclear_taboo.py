@@ -154,6 +154,14 @@ class TestSimulator(unittest.TestCase):
         events = self.sim.band_events(flapping, self.c, cooldown_months=120)
         self.assertLessEqual(len(events), 1)
 
+    def test_band_events_respect_the_cooldown(self):
+        swinging = [53 if m % 2 else 47 for m in range(240)]
+        events = self.sim.band_events(swinging, self.c, cooldown_months=120)
+        self.assertEqual(sorted(k for _, k in events), ["down 2", "down 2", "up 2", "up 2"])
+        for key in ("up 2", "down 2"):
+            months = [m for m, k in events if k == key]
+            self.assertGreaterEqual(months[1] - months[0], 120)
+
 
 EXTRA_EFFECTS = ROOT / "common/scripted_effects/extra_effects.txt"
 DETERRENCE_EFFECTS = ROOT / "common/scripted_effects/nuclear_deterrence_effects.txt"
@@ -667,6 +675,82 @@ class TestPanel(unittest.TestCase):
         drawn |= set(re.findall(r"Localize\( '((?:je_nuclear_program_widget_taboo|nd_taboo)_\w+)' \)", self.gui))
         self.assertTrue(drawn)
         for key in drawn:
+            self.assertIn(key, keys, key)
+
+
+WAR_SUPPORT = ROOT / "common/script_values/zz_te_war_support_injections.txt"
+HARDENING = [1, 2, 3, 4]
+ERODING = [5, 6, 7, 8]
+
+
+class TestBandEvents(unittest.TestCase):
+    def setUp(self):
+        self.taboo = strip_comments(read(TABOO_EFFECTS))
+        self.values = strip_comments(read(TABOO_VALUES))
+        self.events = strip_comments(read(TABOO_EVENTS))
+
+    def test_band_check_uses_hysteresis_and_cooldown(self):
+        self.assertIn("add = nd_taboo_band_hysteresis", block(self.values, "nd_taboo_up_threshold_value"))
+        self.assertIn("subtract = nd_taboo_band_hysteresis", block(self.values, "nd_taboo_down_threshold_value"))
+        self.assertIn("subtract = nd_taboo_event_cooldown_years", block(self.values, "nd_taboo_cooldown_cutoff_year"))
+        trig = strip_comments(read(TABOO_TRIGGERS))
+        self.assertIn("nd_taboo_value >= nd_taboo_up_threshold_value", block(trig, "nd_taboo_band_up_due"))
+        self.assertIn("nd_taboo_value <= nd_taboo_down_threshold_value", block(trig, "nd_taboo_band_down_due"))
+        self.assertIn("nd_taboo_cooldown_cutoff_year", block(trig, "nd_taboo_event_ready"))
+        update = block(self.taboo, "nd_taboo_monthly_update")
+        self.assertLess(update.index("add = nd_taboo_step_value"), update.index("nd_taboo_band_check = yes"))
+
+    def test_every_band_event_is_fired_once_per_crossing(self):
+        fired = re.findall(r"nd_taboo_fire_band_event = \{ N = (\d) EVENT = nuclear_taboo\.(\d) \}", self.taboo)
+        self.assertEqual(sorted((int(n), int(e)) for n, e in fired), [(n, n) for n in range(1, 9)])
+
+    def test_every_event_serves_armed_and_unarmed(self):
+        for n in HARDENING + ERODING:
+            body = block(self.events, f"nuclear_taboo.{n}")
+            self.assertIn("nd_is_armed = yes", body, n)
+            self.assertIn("nd_is_armed = no", body, n)
+            self.assertIn("event_image", body, n)
+
+    def test_options_never_write_the_score(self):
+        for needle in ("nd_taboo_ledger_add", "nd_taboo_shock", "nd_taboo_note_use", "name = nd_taboo "):
+            self.assertNotIn(needle, self.events, needle)
+        for name in ("nd_taboo_opt_cut_arsenal", "nd_taboo_opt_stand_firm", "nd_taboo_opt_hold_line",
+                     "nd_taboo_opt_champion", "nd_taboo_opt_keep_quiet", "nd_taboo_opt_seek_protector",
+                     "nd_taboo_opt_modernise", "nd_taboo_opt_shelters"):
+            body = block(self.taboo, name)
+            for needle in ("nd_taboo_ledger_add", "nd_taboo_shock"):
+                self.assertNotIn(needle, body, name)
+
+    def test_cut_refreshes_the_hold(self):
+        self.assertIn("nd_taboo_refresh_held = yes", block(self.taboo, "nd_taboo_opt_cut_arsenal"))
+
+    def test_civil_defence(self):
+        ws = strip_comments(read(WAR_SUPPORT))
+        self.assertIn("has_modifier = nd_taboo_civil_defence", ws)
+        self.assertIn('desc = "WAR_SUPPORT_TE_CIVIL_DEFENCE"', ws)
+        self.assertIn("multiplier = root.var:nd_taboo_civil_defence_cost_cached", block(self.taboo, "nd_taboo_opt_shelters"))
+        self.assertNotIn("remove_variable = nd_taboo_civil_defence_cost_cached", self.taboo + self.events)
+        for n in ERODING:
+            immediate = block(block(self.events, f"nuclear_taboo.{n}"), "immediate")
+            self.assertIn("name = nd_taboo_civil_defence_cost_cached", immediate, n)
+
+    def test_option_numbers_match_their_constants(self):
+        for key, name in (("nd_taboo_tt_protector", "nd_taboo_protector_relations"),
+                          ("nd_taboo_tt_quiet_relations", "nd_taboo_quiet_relations"),
+                          ("nd_taboo_tt_modernise", "nd_taboo_modernise_reliability"),
+                          ("nd_taboo_tt_modernise", "nd_taboo_modernise_survivability")):
+            n = abs(int(constant(self.values, name)))
+            self.assertIn(str(n), loc_value(key), key)
+
+    def test_event_keys_have_loc(self):
+        keys = loc_keys()
+        for n in HARDENING + ERODING:
+            for suffix in ("t", "d", "f"):
+                self.assertIn(f"nuclear_taboo.{n}.{suffix}", keys)
+        for key in set(re.findall(r"name = (nd_taboo_opt_\w+)", self.events)):
+            self.assertIn(key, keys, key)
+        for key in ("nd_taboo_norm_champion", "nd_taboo_norm_champion_desc", "nd_taboo_civil_defence",
+                    "nd_taboo_civil_defence_desc", "WAR_SUPPORT_TE_CIVIL_DEFENCE"):
             self.assertIn(key, keys, key)
 
 

@@ -128,6 +128,12 @@ nd_taboo_ai_dismantle_burden = 0.3
 nd_taboo_ai_dismantle_line = 70
 nd_taboo_ai_accept_burden_weight = 60
 nd_taboo_ai_accept_taboo_weight = 0.6
+nd_taboo_civil_defence_units = 5
+nd_taboo_protector_relations = 15
+nd_taboo_champion_relations = -5
+nd_taboo_quiet_relations = 5
+nd_taboo_modernise_reliability = 10
+nd_taboo_modernise_survivability = 5
 
 # ---- READING THE SCORE ---------------------------------------------------------
 
@@ -731,4 +737,73 @@ nd_taboo_ai_accept_taboo_value = {
 	multiply = nd_taboo_ai_accept_taboo_weight
 	min = 0
 	round = yes
+}
+
+# ---- BAND EVENTS (spec §6.3) — any scope ------------------------------------------
+# global_var:nd_taboo_band is the band last announced (1..5). The next band up
+# is announced at 2 above its line, the next down at 2 below the current
+# band's line.
+
+nd_taboo_upper_line_value = {
+	value = 1000
+	if = {
+		limit = { global_var:nd_taboo_band = 1 }
+		value = nd_taboo_line_fragile
+	}
+	else_if = {
+		limit = { global_var:nd_taboo_band = 2 }
+		value = nd_taboo_line_established
+	}
+	else_if = {
+		limit = { global_var:nd_taboo_band = 3 }
+		value = nd_taboo_line_strong
+	}
+	else_if = {
+		limit = { global_var:nd_taboo_band = 4 }
+		value = nd_taboo_line_absolute
+	}
+}
+
+nd_taboo_lower_line_value = {
+	value = -1000
+	if = {
+		limit = { global_var:nd_taboo_band = 2 }
+		value = nd_taboo_line_fragile
+	}
+	else_if = {
+		limit = { global_var:nd_taboo_band = 3 }
+		value = nd_taboo_line_established
+	}
+	else_if = {
+		limit = { global_var:nd_taboo_band = 4 }
+		value = nd_taboo_line_strong
+	}
+	else_if = {
+		limit = { global_var:nd_taboo_band = 5 }
+		value = nd_taboo_line_absolute
+	}
+}
+
+nd_taboo_up_threshold_value = {
+	value = nd_taboo_upper_line_value
+	add = nd_taboo_band_hysteresis
+}
+
+nd_taboo_down_threshold_value = {
+	value = nd_taboo_lower_line_value
+	subtract = nd_taboo_band_hysteresis
+}
+
+# An event last fired in this year or earlier may fire again.
+nd_taboo_cooldown_cutoff_year = {
+	value = year
+	subtract = nd_taboo_event_cooldown_years
+}
+
+# Shelters and civil defence: 5 of the posture upkeep's units (1/100,000 of
+# GDP a week). Scope: country
+nd_taboo_civil_defence_weekly_value = {
+	value = gdp
+	divide = 100000
+	multiply = nd_taboo_civil_defence_units
 }

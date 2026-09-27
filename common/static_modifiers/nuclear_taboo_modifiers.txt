@@ -8,6 +8,9 @@
 #                                    nd_taboo_country_monthly; off: nd_taboo_resume
 #   nd_taboo_programme_held          nd_taboo_refresh_held (country scope)
 #   nd_taboo_renunciation_prestige   nd_taboo_renunciation_rewards (nuclear_taboo.20)
+#   nd_taboo_norm_champion           nd_taboo_opt_champion (nuclear_taboo.1-.4)
+#   nd_taboo_civil_defence           nd_taboo_opt_shelters (nuclear_taboo.5-.8),
+#                                    multiplier = root.var:nd_taboo_civil_defence_cost_cached
 # ============================================================================
 
 # The bomb's standing, turned against its holder as the world comes to hold it
@@ -42,4 +45,19 @@ nd_taboo_programme_held = {
 nd_taboo_renunciation_prestige = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
 	country_prestige_mult = 0.2
+}
+
+# A band event's "Champion the norm abroad": 10 years, decaying.
+nd_taboo_norm_champion = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_prestige_mult = 0.05
+}
+
+# A band event's "Build shelters and civil defence": 10 years, costing 5 of
+# the posture upkeep's units a week (multiplier = root.var:
+# nd_taboo_civil_defence_cost_cached); while it holds, an enemy's arsenal
+# drains our war support half as fast (zz_te_war_support_injections.txt).
+nd_taboo_civil_defence = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
 }

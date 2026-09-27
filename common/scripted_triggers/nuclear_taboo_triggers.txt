@@ -144,3 +144,31 @@ nd_taboo_ai_would_halt = {
 		}
 	}
 }
+
+# ---- BAND EVENTS (spec §6.3) -----------------------------------------------------
+
+nd_taboo_band_up_due = {
+	has_global_variable = nd_taboo_band
+	nd_taboo_value >= nd_taboo_up_threshold_value
+}
+
+nd_taboo_band_down_due = {
+	has_global_variable = nd_taboo_band
+	nd_taboo_value <= nd_taboo_down_threshold_value
+}
+
+# N = 1..8: this boundary-and-direction has not fired in ten years.
+nd_taboo_event_ready = {
+	OR = {
+		NOT = { has_global_variable = nd_taboo_ev_$N$_year }
+		global_var:nd_taboo_ev_$N$_year <= nd_taboo_cooldown_cutoff_year
+	}
+}
+
+# A candidate protector for a band event's unarmed recipient (ROOT): armed,
+# and on good terms with us.
+nd_taboo_friendly_armed_power = {
+	NOT = { this = root }
+	nd_is_armed = yes
+	relations:root >= relations_threshold:amicable
+}
