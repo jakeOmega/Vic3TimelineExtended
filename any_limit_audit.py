@@ -27,6 +27,19 @@ valid; only `limit` is the bug.
 
 Suppress a rare legitimate case with a trailing comment on the `any_*` opener
 line: `any_scope_state = { # REVIEWED YYYY-MM-DD: rationale`.
+
+Second check, `always_false`: `always = no` (or `always = false`) as an
+immediate child of an `any_*` block. The iterator is true only when some
+element matches its body, and `always = no` matches nothing, so the trigger is
+false for every scope, and the `limit` or `trigger` holding it can never pass
+(under a `NOT` it is always true instead). It is not "there is no X": write
+`NOT = { any_X = { } }` for that. `colonial_collapse_effect` carried
+`any_civil_war = { always = no }` for six months and never ran. A bare
+`always = no` (a `potential` or `possible` retired on purpose) is not an
+`any_*` body and is never flagged. This check reads tokens, not lines, so a
+one-line `any_X = { always = no }` is caught too. Suppress with the same
+trailing `# REVIEWED` comment, on the `any_*` opener line or on the
+`always = no` line.
 """
 import os
 import re
@@ -36,10 +49,15 @@ from dataclasses import dataclass, field
 @dataclass
 class Flag:
     file: str
-    line: int  # line of the offending `limit = {`
+    line: int  # line of the offending `limit = {` / `always = no`
     any_name: str  # the enclosing any_* trigger
     any_line: int  # line of the any_* opener
     exemption: dict | None = None
+    kind: str = "limit"  # "limit" or "always_false"
+
+
+# What each flag kind is called in the report.
+_KIND_LABEL = {"limit": "`limit`", "always_false": "`always = no`"}
 
 
 @dataclass
@@ -70,9 +88,56 @@ def _parse_reviewed(comment: str | None) -> dict | None:
     return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
 
 
+_TOKEN_RE = re.compile(r"[{}]|\?=|[<>!=]=?|[^\s{}<>!=?]+")
+_FALSE_VALUES = {"no", "false"}
+
+
+def _scan_always_false(lines: list[str], rel_path: str) -> list[Flag]:
+    """Token scan: flag `always = no|false` whose immediate enclosing block
+    is an `any_*` trigger. Tokens rather than lines, so a one-line
+    `any_X = { always = no }` is seen too."""
+    toks: list[tuple[str, int, str | None]] = []  # (token, line, line comment)
+    for line_num, raw in enumerate(lines, 1):
+        content, comment = _split_comment(raw.rstrip("\n"))
+        for tok in _TOKEN_RE.findall(content):
+            toks.append((tok, line_num, comment))
+
+    flags: list[Flag] = []
+    stack: list[dict] = []
+    for i, (tok, line_num, comment) in enumerate(toks):
+        if tok == "{":
+            name = None
+            opener_line, opener_comment = line_num, comment
+            if i >= 2 and toks[i - 1][0] in ("=", "?="):
+                name, opener_line, opener_comment = toks[i - 2]
+            stack.append({"name": name, "line": opener_line, "comment": opener_comment})
+        elif tok == "}":
+            if stack:
+                stack.pop()
+        elif (
+            tok == "always"
+            and i + 2 < len(toks)
+            and toks[i + 1][0] == "="
+            and toks[i + 2][0].lower() in _FALSE_VALUES
+        ):
+            parent = stack[-1] if stack else None
+            if parent and parent["name"] and parent["name"].startswith("any_"):
+                exemption = _parse_reviewed(parent["comment"]) or _parse_reviewed(comment)
+                flags.append(Flag(
+                    file=rel_path,
+                    line=line_num,
+                    any_name=parent["name"],
+                    any_line=parent["line"],
+                    exemption=exemption,
+                    kind="always_false",
+                ))
+    return flags
+
+
 def scan_file(filepath: str, rel_path: str) -> list[Flag]:
     """Brace-aware scan of one file; return flags for any `limit = {` whose
-    immediate enclosing block is an `any_*` trigger."""
+    immediate enclosing block is an `any_*` trigger, and for any
+    `always = no` in the same position (`_scan_always_false`)."""
     flags: list[Flag] = []
     # Stack of opener frames: {"name": str|None, "line": int, "comment": str|None}.
     # None name == an anonymous nesting level (extra `{` on a line we couldn't
@@ -121,6 +186,8 @@ def scan_file(filepath: str, rel_path: str) -> list[Flag]:
                 if stack:
                     stack.pop()
 
+    flags.extend(_scan_always_false(lines, rel_path))
+    flags.sort(key=lambda f: f.line)
     return flags
 
 
@@ -168,8 +235,15 @@ def render_report(result: AuditResult) -> str:
         "Fix: move the `limit` conditions up as direct conditions of the",
         "`any_*` block (they are ANDed there), or restructure the logic.",
         "",
+        "Also flagged: `always = no` (or `always = false`) as an immediate",
+        "child of an `any_*` trigger. No element matches it, so the trigger is",
+        "false for every scope and the block holding it can never pass. For",
+        "\"there is no X\" write `NOT = { any_X = { } }`. A bare `always = no`",
+        "outside an `any_*` (a retired `potential`) is not flagged.",
+        "",
         "Suppress a rare legitimate case with a trailing comment on the",
         "`any_*` opener line: `any_scope_state = { # REVIEWED YYYY-MM-DD: why`",
+        "(for `always = no`, the comment may also sit on that line).",
         "",
         "## Unreviewed Flags",
         "",
@@ -186,7 +260,7 @@ def render_report(result: AuditResult) -> str:
             out.append("")
             for f in by_file[fname]:
                 out.append(
-                    f"- line {f.line}: `limit` inside `{f.any_name}` "
+                    f"- line {f.line}: {_KIND_LABEL[f.kind]} inside `{f.any_name}` "
                     f"(opened at line {f.any_line})"
                 )
             out.append("")
@@ -201,7 +275,7 @@ def render_report(result: AuditResult) -> str:
         # otherwise churn the report.
         for f in exemp:
             out.append(
-                f"- `{f.file}` — `limit` inside `{f.any_name}` — "
+                f"- `{f.file}` — {_KIND_LABEL[f.kind]} inside `{f.any_name}` — "
                 f"**{f.exemption['date']}**: {f.exemption['rationale']}"
             )
         out.append("")
@@ -211,6 +285,7 @@ def render_report(result: AuditResult) -> str:
     out.append("## Coverage")
     out.append("")
     out.append(f"- total flags: {len(result.flags)}")
+    out.append(f"- `always = no` flags: {sum(1 for f in result.flags if f.kind == 'always_false')}")
     out.append(f"- unreviewed: {len(unrev)}")
     out.append(f"- exempted: {len(exemp)}")
     out.append("")
@@ -232,6 +307,7 @@ def regenerate(mod_state=None) -> dict:
     return {
         "files_audited": result.files_audited,
         "total_flags": len(result.flags),
+        "always_false_flags": sum(1 for f in result.flags if f.kind == "always_false"),
         "unreviewed": unrev,
         "exempted": exemp,
     }

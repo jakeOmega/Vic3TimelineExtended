@@ -156,6 +156,98 @@ class ReportTests(unittest.TestCase):
         self.assertNotIn("418", report)
 
 
+class AlwaysFalseTests(unittest.TestCase):
+    """`always = no` as an any_* body: always false, silently kills its limit."""
+
+    def test_flags_multiline_body(self):
+        # The colonial_collapse_effect shape that kept the effect off.
+        flags = _scan(
+            "colonial_collapse_effect = {\n"
+            "\tif = {\n"
+            "\t\tlimit = {\n"
+            "\t\t\tis_subject = no\n"
+            "\t\t\tany_civil_war = {\n"
+            "\t\t\t\talways = no\n"
+            "\t\t\t}\n"
+            "\t\t}\n"
+            "\t}\n"
+            "}\n"
+        )
+        self.assertEqual(len(flags), 1)
+        self.assertEqual(flags[0].kind, "always_false")
+        self.assertEqual(flags[0].any_name, "any_civil_war")
+        self.assertEqual(flags[0].line, 6)
+        self.assertEqual(flags[0].any_line, 5)
+
+    def test_flags_one_line_body(self):
+        flags = _scan("t = {\n\tany_scope_state = { always = no }\n}\n")
+        self.assertEqual([(f.kind, f.line, f.any_line) for f in flags],
+                         [("always_false", 2, 2)])
+
+    def test_flags_always_false_spelling_and_other_conditions(self):
+        flags = _scan(
+            "any_country = {\n\tis_at_war = yes\n\talways = false\n}\n"
+        )
+        self.assertEqual(len(flags), 1)
+        self.assertEqual(flags[0].line, 3)
+
+    def test_flags_under_not(self):
+        # Under NOT it is always true instead: just as dead.
+        flags = _scan("limit = {\n\tNOT = { any_civil_war = { always = no } }\n}\n")
+        self.assertEqual(len(flags), 1)
+        self.assertEqual(flags[0].any_name, "any_civil_war")
+
+    def test_no_flag_for_bare_always_no(self):
+        # A retired potential / possible / limit is deliberate.
+        flags = _scan(
+            "my_decision = {\n"
+            "\tpotential = {\n\t\talways = no\n\t}\n"
+            "\tpossible = { always = no }\n"
+            "\teffect = { if = { limit = { always = no } } }\n"
+            "}\n"
+        )
+        self.assertEqual(flags, [])
+
+    def test_no_flag_when_not_the_immediate_parent(self):
+        flags = _scan(
+            "any_scope_state = {\n"
+            "\ttrigger_if = {\n\t\tlimit = { is_coastal = yes }\n\t\talways = no\n\t}\n"
+            "\tevery_scope_pop = { limit = { always = no } }\n"
+            "}\n"
+        )
+        self.assertEqual(flags, [])
+
+    def test_no_flag_for_always_yes_or_empty_body(self):
+        flags = _scan(
+            "t = {\n\tany_civil_war = { always = yes }\n\tany_civil_war = { }\n}\n"
+        )
+        self.assertEqual(flags, [])
+
+    def test_reviewed_on_opener_or_always_line_suppresses(self):
+        flags = _scan(
+            "any_country = { # REVIEWED 2026-09-26: switched off on purpose\n"
+            "\talways = no\n"
+            "}\n"
+            "any_scope_state = {\n"
+            "\talways = no # REVIEWED 2026-09-26: placeholder, see #999\n"
+            "}\n"
+        )
+        self.assertEqual(len(flags), 2)
+        self.assertTrue(all(f.exemption for f in flags))
+        self.assertEqual(flags[1].exemption["rationale"], "placeholder, see #999")
+
+    def test_report_names_the_kind(self):
+        with tempfile.TemporaryDirectory() as td:
+            cdir = os.path.join(td, "common", "scripted_effects")
+            os.makedirs(cdir)
+            with open(os.path.join(cdir, "x.txt"), "w", encoding="utf-8") as fh:
+                fh.write("se = {\n\tif = { limit = { any_civil_war = { always = no } } }\n}\n")
+            report = render_report(audit(mod_path=td))
+            self.assertIn("- line 2: `always = no` inside `any_civil_war` (opened at line 2)",
+                          report)
+            self.assertIn("- `always = no` flags: 1", report)
+
+
 @unittest.skipUnless(os.path.isdir(VANILLA_GAME), "vanilla install not found")
 class VanillaCleanTests(unittest.TestCase):
     def test_vanilla_has_no_flags(self):

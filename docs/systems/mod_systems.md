@@ -790,14 +790,19 @@ Per tracked country: 120 containers, each with 3 bookkeeping variables plus one 
 
 ## Colonial Collapse (`colonial_collapse_effect`)
 
-- **Purpose:** After decolonization tech spreads, tiny AI countries (remnants of colonial breakups) are absorbed by culturally similar neighbors or reverted to uncolonized land.
-- **Location:** `common/scripted_effects/colonial_collapse_effects.txt`, triggered by `colonial_collapse_on_action` in `common/on_actions/extra_on_actions.txt` (wired to `on_yearly_pulse_country`).
-- **Criteria for collapse:** Non-player, non-decentralized, not a subject, single-state, pop < 100k, no decolonization tech, not in a diplomatic play.
+- **Purpose:** Once the decolonization era has begun, any tiny, poor AI country (not only a former colony: owner ruling 2026-09-26) is absorbed by an AI neighbour sharing its heritage or, with none, reverted to uncolonized land.
+- **Location:** `common/scripted_effects/colonial_collapse_effects.txt`, triggered by `colonial_collapse_on_action` in `common/on_actions/extra_on_actions.txt` (wired to `on_yearly_pulse_country`). Each country tests itself on its own yearly pulse.
+- **Gates:** the `decolonization_enabled` game rule, and some country in the world has researched `decolonization` (`decol_era_begun`; the collapsing country need not have it).
+- **Criteria for collapse:** non-player, alive, not decentralized, not a subject, holding no subjects, in no power bloc and bound by no treaty in force (`colonial_collapse_unattached`, both branches: owner ruling 2026-09-26), no civil war at `civil_war_progress >= 0.75`, not in a diplomatic play or a war, and tiny and poor on a sliding scale: population under 100k with average SoL under 6, 200k and 5, 300k and 4, 500k and 3, or 1M and 2.
+- **Twenty years' grace after independence**, from either of two 20-year variables:
+  - `recently_decolonized`, set by `decol_mark_former_colony` (every country the mod's releases form, and the `make_independent` options of `.1` / `.3`) and by `te_construction_market_on_released_independent` (vanilla's release as independent). The post-independence events key on it.
+  - `decol_collapse_grace`, set by `on_become_independent` (a subject made independent: an independence war won, an overlord's release) and by a won secession (`te_civil_war_on_secession_end`). It exempts from collapse only and opens no event (owner ruling 2026-09-26).
 - **Resolution order:**
-  1. Find culturally similar neighbor → **annex** into that neighbor.
-  2. If no cultural match, find any neighbor → **annex**.
-  3. If no neighbors → **`set_country_type = decentralized`** (revert to uncolonized).
+  1. A neighbour of its most populous state whose owner shares a heritage trait group with it and is an AI country at peace and not a subject → that owner **annexes** it (never a player: owner ruling 2026-09-26) (the notice is posted first, while the collapsing country still exists).
+  2. Otherwise, if it holds no company and no warheads → **`set_country_type = decentralized`** (revert to uncolonized). Vanilla never does this, so the branch is limited to the plain case.
+  3. Otherwise nothing happens; it is tested again next year.
 - **Notifications:** Countries in same strategic region AND great powers receive alerts.
+- **History:** from db166830 (2026-03-23) until 2026-09 the limit held `any_civil_war = { always = no }`, which is always false, so the system never ran. The owner confirmed on 2026-09-26 that collapse should be live, the decentralize branch included.
 
 ## Treaty Articles with Entity Selection
 
@@ -1107,7 +1112,7 @@ All pulse-based on_actions are routed through `extra_on_actions.txt`:
 - `excess_private_construction_on_action` — construction cost penalty
 - `fix_incompatible_laws` — auto-fix illegal law combos
 - `construction_cost_scaling_on_action` — GDP-based construction costs
-- `colonial_collapse_on_action` — tiny AI country absorption
+- `colonial_collapse_on_action` — tiny, poor AI countries absorbed or decentralized
 - `assign_aptitude_traits_on_action` — character trait assignment
 
 ### Immediate Triggers (`extra_on_actions.txt`)
@@ -1212,7 +1217,7 @@ Three layers:
 | `common/scripted_guis/colonial_empire_sguis.txt` | 5 handlers backing the widget (2 guards, 1 text renderer, 2 op-coded actions) |
 | `common/customizable_localization/colonial_empire_custom_loc.txt` | Band names, status line and phase-modifier line, keyed on `var:colonial_empire_tier` |
 | `common/scripted_effects/te_history_colonial_effects.txt` | `te_history_record_colonial_samples` — the two chart series |
-| `common/scripted_effects/colonial_collapse_effects.txt` | AI country absorption for tiny post-colonial remnants |
+| `common/scripted_effects/colonial_collapse_effects.txt` | Colonial collapse: tiny, poor AI countries absorbed or decentralized in the decolonization era |
 | `common/laws/colonial_empire_law_injections.txt` | Per-law colonial-stability and programme-effectiveness contributions |
 | `common/modifier_type_definitions/colonial_empire_modifier_types.txt` | The four `country_colonial_*` aggregate modifier types |
 | `common/on_actions/extra_on_actions.txt` | `decolonization_events_on_action` wiring |
@@ -1285,8 +1290,12 @@ Events 1-15 handle the core colonial cycle: negotiations, crackdowns, releases, 
 - **Only colonial subjects count.** `.1`/`.2`/`.3`/`.8`/`.11` iterate `is_qualifying_colonial_subject` only.
 - **`.206`'s "by decision" epilogue** needs a chosen release. `decol_record_chosen_release` counts them (`decol_chosen_releases`); otherwise a neutral variant shows.
 
+**What a revolution's winner keeps (PR #508):** the three running programmes, the permanent ending rewards (`colonial_empire_solidified_modifier` and the three path modifiers), `imperial_federation_modifier` and `mandate_system_modifier` are country modifiers, which a civil war's winner does not inherit. Each has a variable record, and `decol_repair_after_civil_war` (from `te_civil_war_on_won`) puts back each modifier whose record the winner holds and whose modifier it lacks. The records are `<modifier>_held`, written by `decol_grant_permanent_modifier` and the programme effects, plus the decisions' own `imperial_federation_taken` / `mandate_system_taken`. The programmes need the entry, and whether `on_civil_war_won` runs before or after the winner inherits it is unknown, so the entry's monthly pulse syncs them too; its programme tests read the records, so a programme it restores counts that month. The permanent modifiers' records are country variables, merged before `on_civil_war_won`, so the repair restores them at once. A yearly country pulse (`decol_permanent_modifier_sync_on_action`) backfills the records on saves from before they existed. It backfills the Solidified record only while no entry runs, because that key is also the entry's top band modifier. Timed modifiers and the entry's band modifiers are not rebuilt.
+
 **Former colonies, colonial wars and notices (2026-09, #430):**
-- **Every freed colony is a former colony.** `decol_mark_former_colony` (`decolonization.txt`) sets `var:former_overlord` (untimed) and `recently_decolonized` (7300 days), the shapes the vanilla release actions set in `te_construction_market_on_released_*`. `apply_decolonization_path` calls it for every country `form_decolonized_country` creates, and so do the `make_independent` options `.1.c`, `.1.d_neo`, `.3.a` and `.3.c`. What this makes reachable is the precursors `.60` / `.61` and, through them, `.5` / `.6`. The post-independence events (`.7`, `.15`, `.16`, `.17`, `.18`, `.21`) also require `je_colonial_empire` on the former colony itself, which a freed colony almost never holds, and `.19` needs `.15`'s nationalization modifier. So those stay out of reach for any freed colony, including one released by the vanilla actions. That gate predates the helper; whether it should read the decolonization rule instead is an open question.
+- **Every freed colony is a former colony.** `decol_mark_former_colony` (`decolonization.txt`) sets `var:former_overlord` (untimed) and `recently_decolonized` (7300 days), the shapes the vanilla release actions set in `te_construction_market_on_released_*`. `apply_decolonization_path` calls it for every country `form_decolonized_country` creates, and so do the `make_independent` options `.1.c`, `.1.d_neo`, `.3.a` and `.3.c`. That opens the precursors `.60` / `.61` (and, through them, `.5` / `.6`) and the post-independence events `.7`, `.16`, `.17`, `.18` and `.21`, which read `recently_decolonized`.
+- **Events for countries that never hold the entry gate on the rule.** `.4`, `.7`, `.15`, `.16`, `.17`, `.18`, `.21` (a former colony) and `.14`, `.20` (any great power) test `has_game_rule = decolonization_enabled` instead of `has_journal_entry = je_colonial_empire`. #44 had gated every event in the file on the entry, so until 2026-09 these could not fire: a freed colony never holds the entry, and `.14`'s AI weights and `.20`'s audience are aimed at great powers without colonies. `.14` / `.20` also reach a great power whose own entry has ended, on purpose: they stand for the powers that disapprove of colonial empires and press them (owner ruling, 2026-09-26). `.19` (the former overlord) keeps the entry gate, as do the metropole-side events.
+- **The former-colony events need only the world's decolonization era.** `.4`, `.7`, `.15`, `.16`–`.19`, `.21` and the outer gate of `decolonization_events_on_action` test `decol_era_begun` (some country has researched `decolonization`, `colonial_empire_triggers.txt`) instead of the recipient's own research (owner ruling, 2026-09-26). The metropole-side events still need the recipient's own technology through their own triggers (the entry's `is_shown_when_inactive`, `.14`, the `.60` / `.61` target checks).
 - **`.51` (Conscription Crisis) fires only in a colonial war.** The trigger is `decol_fighting_colonial_war` (`colonial_empire_triggers.txt`), used by both the event and its pool entry. It is true when the country is at war and one of these holds: the colonial crackdown is running, an enemy is its own qualifying colonial subject, or an enemy is a secessionist people sharing no heritage with it. Other wars still drain the bar through `colonial_stability_term_war`.
 - **`.50`'s City-and-sterling text is Britain's** (`c:GBR ?= this`). Every other empire gets a generic treasury text, since the mod models no per-country currency.
 - **Notices name the colonial power.** `.1`, `.2`, `.3` and `.11` save it as `scope:decol_colonial_power` for their `notification_*` loc. A message reads only `notification_<msg>_name/_desc/_tooltip`, never a bare key. `.2.c` frees no one, so it posts its own `colonial_neocolonial_reforms_notice`; `colonial_neocolonial_terms_notice` is for the options that grant independence (`.1.d_neo`, `.3.c`).
@@ -1302,8 +1311,8 @@ AI weights across events are tuned to favor decolonization:
 ## Independence Nationalization Event (`decolonization_events.15`)
 
 - **Purpose:** When a country gains independence, presents a choice about foreign-owned assets.
-- **Trigger:** `on_become_independent` on_action → fires event with 1-tick delay.
-- **Condition:** At least one foreign country owns >5% of the new country's GDP.
+- **Trigger:** `on_become_independent` on_action (any subject that becomes independent), and `apply_decolonization_path` a week after it forms a country (release decisions and collapses; the new country was never a subject, so `on_become_independent` may not reach it).
+- **Condition:** the decolonization game rule, the world's decolonization era (`decol_era_begun`), not a subject, no nationalization in the last 20 years (`nationalization_cooldown_var`, which also stops a double firing), and at least one foreign minor power or above owns >5% of the new country's GDP.
 - **Branching description:** Uses `first_valid` + `triggered_desc` — violent version if `is_at_war = yes`, peaceful version otherwise.
 - **Options:**
   - **(A) Full nationalization:** Seize all foreign assets. +10 infamy, -60 relations with all foreign owners, prestige boost, throughput penalty. Loyalists among lower strata, trade unions approve, industrialists oppose.
