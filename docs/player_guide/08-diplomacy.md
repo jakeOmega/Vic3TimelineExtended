@@ -1,6 +1,6 @@
 # Diplomacy
 
-The mod adds 34 treaty articles, extra escalation in diplomatic plays, events
+The mod adds 36 treaty articles, extra escalation in diplomatic plays, events
 between rival powers, a reunification system for divided nations, two more tiers
 of power bloc principles, and ten late-game formable countries. None of this has
 a game rule or journal entry of its own: it works through the base game's treaty
@@ -66,6 +66,12 @@ armed forces.
 | Intelligence Sharing Pact | Intergovernmental Organizations | No | Mutual, between two major powers or greater that have both established a Ministry of Intelligence and Security: +3 intelligence capacity, a stronger but dearer intelligence ministry, and a [defense shield](#the-intelligence-sharing-pacts-defense-shield). Costs each side 1 infamy. |
 | Joint Military Exercises | Combined Arms | No | Mutual: +25% army experience gain and admiral rank impact, slightly dearer military goods. |
 
+Arms control between nuclear powers belongs to the nuclear system: Nuclear Arms
+Limitation holds two countries to the same ceiling on warheads, and leaving it
+weakens the nuclear taboo unless another such treaty still binds you as tightly
+(see [The Nuclear Arms Limitation
+treaty](13-nuclear.md#the-nuclear-arms-limitation-treaty)).
+
 The aid and influence articles are how power blocs extend their reach. All but
 Request Influence and Reduce Subject Liberty need a principle in your bloc. In
 the aid articles the donor must outrank the recipient, pays a running cost and
@@ -89,7 +95,7 @@ The remaining articles belong to systems with chapters of their own.
 | Article | Game rule | Chapter |
 |---|---|---|
 | Currency Peg, Imposed Currency Peg, Swap Line, Lender of Last Resort, Debt Receivership | Banking System set to Enabled | [Banking and monetary policy](04-banking.md) |
-| Nuclear Disarmament, Nuclear Program Freeze, Nuclear Program Aid, Nuclear Guarantee, Nuclear Security Assistance | Nuclear Weapons | [Nuclear weapons](13-nuclear.md) |
+| Nuclear Disarmament, Nuclear Program Freeze, Nuclear Program Aid, Nuclear Guarantee, Nuclear Security Assistance, Nuclear Arms Limitation | Nuclear Weapons | [Nuclear weapons](13-nuclear.md) |
 | Require UN Membership | United Nations | [The United Nations](09-united-nations.md) |
 | Enforce Emissions Reduction | Global Warming | [Climate and pollution](14-climate.md) |
 

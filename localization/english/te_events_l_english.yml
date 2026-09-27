@@ -2966,6 +2966,38 @@
  nuclear_loose.9.t:0 "Loose Material Secured"
 
 #
+# NUCLEAR_TABOO
+#
+ nuclear_taboo.1.d:0 "For years the bomb was argued over like any other weapon: its yield, its range, its price. That is changing. The photographs of what it does have gone around the world, scientists sign open letters, and in parliaments the word \"unthinkable\" is heard as often as \"decisive\". The nuclear taboo has risen to #v [GetGlobalVariable('nd_taboo').GetValue|0]#!: not yet a rule, but no longer nothing."
+ nuclear_taboo.1.f:0 "\"It is not a weapon. It is the end of weapons.\""
+ nuclear_taboo.1.t:0 "Something Different About This Weapon"
+ nuclear_taboo.2.d:0 "A consensus has settled over the world's chancelleries: using the bomb would be a crime, not a choice. Governments that hold it now take care to say they never would. The nuclear taboo stands at #v [GetGlobalVariable('nd_taboo').GetValue|0]#!, and a government that crossed the line would pay for it in every capital."
+ nuclear_taboo.2.f:0 "\"We keep it so that no one will ever use it. Including us.\""
+ nuclear_taboo.2.t:0 "A Line the World Will Not Cross"
+ nuclear_taboo.20.a:0 "A burden we are glad to set down"
+ nuclear_taboo.20.d:0 "The last of our warheads has been taken apart, under the eyes of foreign inspectors and our own cameras. #v [ROOT.GetCountry.MakeScope.Var('nd_dismantle_retired').GetValue|0]#! weapons — years of work and a fortune — are gone by our own decision. Few states have ever given up the bomb of their own accord, and the world's regard for it will follow how much the world has come to fear the weapon: the nuclear taboo stands at #v [GetGlobalVariable('nd_taboo').GetValue|0]#!."
+ nuclear_taboo.20.f:0 "\"We built it because we feared our neighbours. We have taken it apart because we came to fear it more.\""
+ nuclear_taboo.20.t:0 "The Last Warhead"
+ nuclear_taboo.3.d:0 "In the world's eyes the bomb has become a weapon that cannot be used. Holding one now draws questions at home and censure abroad, and the larger the arsenal, the sharper both become. The nuclear taboo stands at #v [GetGlobalVariable('nd_taboo').GetValue|0]#!."
+ nuclear_taboo.3.f:0 "\"There is no cause on earth for which I would do this. I say that to our enemies and to our own generals.\""
+ nuclear_taboo.3.t:0 "The Unusable Weapon"
+ nuclear_taboo.4.d:0 "Using the bomb is now spoken of the way the world speaks of slavery or genocide: as something civilised states do not do. To hold one at all sets a state apart. The nuclear taboo stands at #v [GetGlobalVariable('nd_taboo').GetValue|0]#!, higher than it has ever been."
+ nuclear_taboo.4.f:0 "\"The question is no longer when these weapons might be used, but why anyone still keeps them.\""
+ nuclear_taboo.4.t:0 "Beyond the Pale"
+ nuclear_taboo.5.d:0 "The consensus that the bomb could never be used has cracked. Voices once kept to the fringes argue that deterrence means nothing if no one believes it, and some governments have begun to listen. The nuclear taboo has fallen to #v [GetGlobalVariable('nd_taboo').GetValue|0]#!."
+ nuclear_taboo.5.f:0 "\"A weapon no one would ever use is not a deterrent. It is a museum piece.\""
+ nuclear_taboo.5.t:0 "The First Crack"
+ nuclear_taboo.6.d:0 "Generals write openly about limited nuclear war, and politicians no longer apologise for their threats. The weapon everyone agreed could not be used is being discussed as though it could. The nuclear taboo has fallen to #v [GetGlobalVariable('nd_taboo').GetValue|0]#!."
+ nuclear_taboo.6.f:0 "\"We have to think about the unthinkable, because our enemies are thinking about it.\""
+ nuclear_taboo.6.t:0 "Talk of the Unthinkable"
+ nuclear_taboo.7.d:0 "The line against the bomb is fraying. Threats are traded openly, arsenals are praised rather than excused, and a use that once seemed impossible now seems merely terrible. The nuclear taboo has fallen to #v [GetGlobalVariable('nd_taboo').GetValue|0]#!."
+ nuclear_taboo.7.f:0 "\"It is a bigger bomb. That is all it has ever been.\""
+ nuclear_taboo.7.t:0 "The Taboo Frays"
+ nuclear_taboo.8.d:0 "In the world's eyes the bomb has become one more weapon: fearsome, expensive and usable. Those who hold it are envied rather than censured, and those who do not are left to wonder how long they can afford not to. The nuclear taboo has fallen to #v [GetGlobalVariable('nd_taboo').GetValue|0]#!."
+ nuclear_taboo.8.f:0 "\"The only nations that fear the bomb are the ones without it.\""
+ nuclear_taboo.8.t:0 "Just Another Weapon"
+
+#
 # NUCLEAR_WEAPON_EVENTS
 #
  nuclear_weapon_events.1.a:0 "This is nothing less than a monstrous crime against humanity!"
@@ -4613,6 +4645,19 @@
  te_debug_nuclear.2.desc:0 "The two states that stop a programme, each applied and lifted.\n\nA freeze should grey out both funding controls with the pause named as the failing condition, and within one week the funding modifier should be gone from the journal entry itself — check the entry's modifier list, not only the panel.\n\nDisarmament makes the entry's requirements fail, so the entry deactivates: the panels vanish and only the status line speaks. Lifting it reactivates the entry and re-runs its activation effect, which is where the stockpile has to survive. It should survive however long disarmament stood — the pulse branch that empties a stockpile cannot run once the entry is inactive, and only the disarmament treaty article itself empties one. A stockpile of 0 on the way back is a finding, not expected behaviour."
  te_debug_nuclear.2.f:0 "'The treaty does not say we must forget how.'"
  te_debug_nuclear.2.t:0 "Nuclear Programme Blockers"
+ te_debug_nuclear.3.a:0 "Taboo to 20"
+ te_debug_nuclear.3.b:0 "Taboo to 85"
+ te_debug_nuclear.3.c:0 "Ten more years without use"
+ te_debug_nuclear.3.d:0 "Run the world's monthly step"
+ te_debug_nuclear.3.desc:0 "Console harness for the nuclear taboo. Set the score, age the tradition of non-use, run the monthly step, or note a renunciation of ten warheads by us. The step logs a TE_TABOO: line."
+ te_debug_nuclear.3.e:0 "Note a renunciation of 10 warheads"
+ te_debug_nuclear.3.f:0 "Debug"
+ te_debug_nuclear.3.t:0 "Debug: the Nuclear Taboo"
+ te_debug_nuclear.3.tt_20:0 "The nuclear taboo is set to 20"
+ te_debug_nuclear.3.tt_85:0 "The nuclear taboo is set to 85"
+ te_debug_nuclear.3.tt_age:0 "Ten years are added to the tradition of non-use"
+ te_debug_nuclear.3.tt_renounce:0 "We are noted as having given up ten warheads. If we are still armed, the next monthly step books us a breakout"
+ te_debug_nuclear.3.tt_step:0 "The world's monthly taboo step runs now"
 
 #
 # TE_DEBUG_RESETTLEMENT

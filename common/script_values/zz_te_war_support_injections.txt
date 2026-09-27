@@ -120,5 +120,14 @@ INJECT:war_support_from_journal_entries = {
 			value = -0.25
 			desc = "WAR_SUPPORT_TE_NUCLEAR_SHADOW"
 		}
+		# Shelters and civil defence (the nuclear taboo's band events,
+		# nd_taboo_civil_defence) halve it.
+		if = {
+			limit = { has_modifier = nd_taboo_civil_defence }
+			add = {
+				value = 0.125
+				desc = "WAR_SUPPORT_TE_CIVIL_DEFENCE"
+			}
+		}
 	}
 }

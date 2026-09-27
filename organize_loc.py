@@ -636,6 +636,13 @@ def categorize_key(key, technology_keys):
     # longer siblings stay in MISCELLANEOUS.
     if key.startswith("TE_HOMELAND_"):
         return "MISCELLANEOUS"
+    # The nuclear taboo (docs/superpowers/specs/2026-09-26-nuclear-taboo-design.md).
+    # Every loc-bearing key it adds — static modifiers, the decision, event
+    # options, tooltips, the panel's breakdown lines — carries the nd_taboo_
+    # prefix. Four-token bases (`nd_taboo_possession_cost`) would otherwise land
+    # in MISCELLANEOUS while their `_desc` fell to CONCEPTS.
+    if key.startswith("nd_taboo_"):
+        return "MISCELLANEOUS"
     # Internal resettlement (the Settlement Authority): static modifiers,
     # tooltips and the Declaration splice line. Four-token names would land in
     # MISCELLANEOUS and their `_desc` halves in CONCEPTS; two- and three-token

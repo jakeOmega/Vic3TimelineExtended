@@ -1367,6 +1367,22 @@ nuclear_disarmament = {
 						value = 25
 					}
 				}
+				# The nuclear taboo: a world that holds the bomb in horror makes
+				# giving it up easier, the more so the more it costs us to keep.
+				if = {
+					limit = { nd_taboo_burden_value > 0 }
+					add = {
+						desc = "nd_taboo_ai_accept_burden"
+						value = nd_taboo_ai_accept_burden_value
+					}
+				}
+				if = {
+					limit = { nd_taboo_value > nd_taboo_line_established }
+					add = {
+						desc = "nd_taboo_ai_accept_taboo"
+						value = nd_taboo_ai_accept_taboo_value
+					}
+				}
 			}
 		}
 	}
@@ -1442,6 +1458,8 @@ nuclear_disarmament = {
 				limit = { has_variable = te_nuclear_disarmament_ended_program }
 				remove_variable = te_nuclear_disarmament_ended_program
 			}
+			# The nuclear taboo: an arsenal given up (read before it is zeroed).
+			nd_taboo_note_renunciation = { WARHEADS = nd_stockpile }
 			set_variable = { name = nuclear_weapon_stockpile value = 0 }
 			set_variable = { name = nuclear_weapon_program_progress value = 0 }
 			set_variable = { name = nuclear_weapons_program_funding value = 0 }

@@ -202,6 +202,25 @@ didn't lose champion self-determination (Liberation Hero) or turn to recovery.
 The New Rivalry comes when a great power you fought beside now holds an opposed
 ideology; either answer closes the entry at once.
 
+## Nuclear taboo event list
+
+These are the events behind [Nuclear taboo
+events](13-nuclear.md#nuclear-taboo-events) in Nuclear weapons. The band events
+reach every country as the nuclear taboo crosses a band line, once the score is
+2 points past it, and each fires at most once in ten years:
+
+| Event | When |
+|---|---|
+| Something Different About This Weapon | The taboo rises through 30 |
+| A Line the World Will Not Cross | It rises through 50 |
+| The Unusable Weapon | It rises through 70 |
+| Beyond the Pale | It rises through 90 |
+| The First Crack | It falls back through 90 |
+| Talk of the Unthinkable | It falls back through 70 |
+| The Taboo Frays | It falls back through 50 |
+| Just Another Weapon | It falls back through 30 |
+| The Last Warhead | You finish dismantling your arsenal |
+
 ## Climate event list
 
 These are the events behind [Climate events](14-climate.md#climate-events) in

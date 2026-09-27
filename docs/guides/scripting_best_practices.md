@@ -1720,6 +1720,11 @@ on_entry_into_force = {
 - `can_ratify` (and `requirement_to_maintain`): a directed article gets `scope:source_country` and `scope:target_country`, a mutual one `scope:first_country` and `scope:second_country`. **ROOT is the article, not a country**, so name the party explicitly.
 - The input valid triggers (`state_valid_trigger`, `company_valid_trigger`, …): `root` is the source, `scope:input` the candidate, `scope:other_country` the target. Filter on ownership there: Seize / Disband Company shipped `company_valid_trigger = { always = yes }`, which let an AI pick a company the source didn't own, so `remove_company` did nothing and Seize still gave the target a copy (fixed 2026-09-26).
 - `on_entry_into_force` / `on_break` / `on_withdrawal`: use `scope:article_options.source_country` / `.target_country` per the snippet above.
+- `ai` block: each field has its own scopes (vanilla `common/treaty_articles/treaty_articles.md` § AI block).
+  - **`evaluation_chance` has root only.** The doc says "Only has root scope for the country we're looking at", and no vanilla article reads `scope:other_country` there. Check the partner in `possible`, which binds `scope:other_country`.
+  - A partner check inside `evaluation_chance` fails silently. If `scope:other_country` is unset there, the chance stays 0 and the AI never proposes the article. On 2026-09-27 about 18 mod articles did this (owner call pending). `nuclear_arms_limitation` was fixed before it shipped.
+  - `quantity_input_value` and the input filters get `root`, `scope:other_country` and `scope:article`.
+  - `inherent_accept_score` gets `root` and `scope:article`, plus `scope:first_country` and `scope:second_country` on a mutual article.
 
 ### `state_population` / `total_population` Are Triggers, Not Script Values
 
@@ -2471,6 +2476,8 @@ Per vanilla `journal_entries.md`: a JE auto-activates "when both this and is_sho
 **A new auto-activating JE does not appear in a save started before it existed.** In play-testing on 2026-09-25, `je_nuclear_deterrence` never activated in an older save across several in-game years, although its `possible` was true the whole time: the same trigger showed the country the new diplomatic actions. Test a new auto-activating JE on a new game. If existing saves must get it, add it explicitly with `add_journal_entry`. Folding the new content into an entry that is already active in those saves also reaches them — posture and crises reach old saves through `je_nuclear_program` since `je_nuclear_deterrence` was merged into it — but then that entry's `immediate` never runs for them either, so initialise the new state lazily from a pulse (`nd_weekly_update`'s first-armed branch, `nd_rebuild_posture_modifiers`).
 
 **Widening an entry's gate breaks every `has_journal_entry = X` used as "has system X".** When `je_nuclear_program` began to activate for armed and crisis countries as well as for programmes, five such tests (UN non-proliferation, standing sanctions case, vote leans, an event desc, the proliferation spur) started to count a non-nuclear crisis target as a nuclear-threshold state. Name the condition as a scripted trigger (`nuclear_program_has_programme`) and have both the entry and every outside reader ask it; `git grep "has_journal_entry = X"` before changing any `possible`.
+
+**Making an entry active for every country turns its per-country pulse sweeps quadratic.** A pulse effect that iterates every country (`ordered_country`, `every_country`) and runs from each active country's pulse costs n² once n is every country. `update_nuclear_powers_ranking` ran from `je_nuclear_program`'s weekly pulse while ~10 countries held the entry. When the nuclear taboo made the entry every country's (2026-09-26), it moved to the world's monthly step, a global `on_monthly_pulse`. Before widening an entry's `possible`, move every world-level sweep in its pulses to a global pulse, and check that each remaining pulse effect is a cheap no-op for the new members.
 
 ### JE Lifecycle: `invalid` + `on_invalid` Cleanup
 

@@ -417,7 +417,7 @@ DANGER_PARTS = ["nd_cd_stage", "nd_cd_issuer_readiness", "nd_cd_target_readiness
                 "nd_cd_exercise"]
 PRESSURE_PARTS = ["nd_yp_base", "nd_yp_answer", "nd_yp_protector", "nd_yp_credibility", "nd_yp_alert",
                   "nd_yp_recessed", "nd_yp_danger", "nd_yp_exercise", "nd_yp_temperament", "nd_yp_war",
-                  "nd_yp_follow_through"]
+                  "nd_yp_follow_through", "nd_yp_taboo"]
 
 
 class TestCrisisFigures(unittest.TestCase):
@@ -578,7 +578,7 @@ ACT_LINES = {
     "nd_crisis_act_extend": ["text = nd_tt_credibility_down_3"],
     "nd_crisis_act_back_down": ["nd_tt_then_back_down_public", "nd_tt_then_back_down_private",
                                 "nd_tt_then_bluff_called"],
-    "nd_crisis_act_go_public": ["change_infamy = 5", "change_relations", "nd_tt_go_public_terms"],
+    "nd_crisis_act_go_public": ["change_infamy = nd_taboo_infamy_threat", "change_relations", "nd_tt_go_public_terms"],
     "nd_crisis_act_exercise": ["text = nd_tt_strain_up_5", "text = nd_tt_credibility_up_3",
                                "nd_tt_exercise_effect"],
 }
@@ -716,7 +716,8 @@ class TestInterestGroupClasses(unittest.TestCase):
 
 
 IG_VARS = ["nd_ig_class", "nd_ig_lean", "nd_ig_strength", "nd_ig_term_doctrine", "nd_ig_term_readiness",
-           "nd_ig_term_authority", "nd_ig_term_strain", "nd_ig_term_business", "nd_ig_stance"]
+           "nd_ig_term_authority", "nd_ig_term_strain", "nd_ig_term_business", "nd_ig_term_possession",
+           "nd_ig_stance"]
 
 
 class TestInterestGroupOpinion(unittest.TestCase):

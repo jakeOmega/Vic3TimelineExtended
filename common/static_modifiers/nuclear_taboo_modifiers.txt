@@ -1,0 +1,63 @@
+﻿# ============================================================================
+# THE NUCLEAR TABOO — static modifiers
+# ============================================================================
+# Design: docs/superpowers/specs/2026-09-26-nuclear-taboo-design.md. Writers:
+#   nd_taboo_possession_cost   nd_taboo_refresh_possession (je_nuclear_program
+#                              scope, multiplier = root.var:nd_taboo_burden_cached)
+#   nd_taboo_renounced               nd_taboo_dismantle_complete, rebuilt by
+#                                    nd_taboo_country_monthly; off: nd_taboo_resume
+#   nd_taboo_programme_held          nd_taboo_refresh_held (country scope)
+#   nd_taboo_renunciation_prestige   nd_taboo_renunciation_rewards (nuclear_taboo.20)
+#   nd_taboo_norm_champion           nd_taboo_opt_champion (nuclear_taboo.1-.4)
+#   nd_taboo_civil_defence           nd_taboo_opt_shelters (nuclear_taboo.5-.8),
+#                                    multiplier = root.var:nd_taboo_civil_defence_cost_cached
+# ============================================================================
+
+# The bomb's standing, turned against its holder as the world comes to hold it
+# in horror: per unit of burden (0-1). nuclear_power's +30 % prestige and +25 %
+# leverage generation are left as they are; at a full burden this takes a
+# fifty-warhead arsenal to -15 % prestige and no leverage bonus. Its fields are
+# nd_taboo_possession_prestige_pct and _leverage_pct / 100.
+nd_taboo_possession_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	country_prestige_mult = -0.45
+	country_leverage_generation_mult = -0.25
+}
+
+# We renounced the bomb (Dismantle the Arsenal). The disarmament flag makes
+# every gate built for a treaty-disarmed country apply: no programme, not
+# armed, the NPT's enforcement treats us as non-nuclear. Mirrored by the flag
+# variable nd_renounced_locked and rebuilt from it (nd_taboo_country_monthly).
+nd_taboo_renounced = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_nuclear_disarmament_bool = yes
+}
+
+# The programme held: at or above our arsenal ceiling, or while dismantling.
+# The programme-pause article's flag: funding zeroed, no increase allowed.
+nd_taboo_programme_held = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_nuclear_program_pause_bool = yes
+}
+
+# A renunciation the world honours: 20 years, decaying, multiplier = the taboo
+# / 100 when the last warhead went (root.var:nd_taboo_renounce_mult).
+nd_taboo_renunciation_prestige = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_prestige_mult = 0.2
+}
+
+# A band event's "Champion the norm abroad": 10 years, decaying.
+nd_taboo_norm_champion = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_prestige_mult = 0.05
+}
+
+# A band event's "Build shelters and civil defence": 10 years, costing 5 of
+# the posture upkeep's units a week (multiplier = root.var:
+# nd_taboo_civil_defence_cost_cached); while it holds, an enemy's arsenal
+# drains our war support half as fast (zz_te_war_support_injections.txt).
+nd_taboo_civil_defence = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+}
