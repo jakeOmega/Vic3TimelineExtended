@@ -1734,17 +1734,26 @@ banking_crisis_wave_increment = {
 
 # Check if the crisis wave has reached Great Depression thresholds.
 # Requirements:
+#   - No Great Depression yet this game (great_depression_occurred)
 #   - 10+ countries crashed in the wave
-#   - Wave GDP >= 20% of global GDP
-#   - No country currently has a Great Depression modifier (acts as cooldown)
+#   - Wave GDP >= 50% of global GDP (great_depression_gdp_threshold)
 # If triggered, fires the Great Depression event for all countries with banking systems.
+#
+# ONCE PER GAME. The flag is set when the event is queued, not when it fires:
+# the event waits three days, and every further crash in the wave runs this
+# check again, so without it a crash landing in those three days queued a
+# second Great Depression. The only guard before was the modifier check below,
+# which let a new one start once the last country's modifier ran out (ten
+# years, long_modifier_time).
 banking_crisis_wave_check_great_depression = {
 	if = {
 		limit = {
+			NOT = { has_global_variable = great_depression_occurred }
 			has_global_variable = great_depression_wave_count
 			global_var:great_depression_wave_count >= 10
 			global_var:great_depression_wave_gdp >= great_depression_gdp_threshold
-			# Cooldown: no new Great Depression while any country still has the modifier
+			# A save from before great_depression_occurred existed: no new
+			# Great Depression while one it already had is still running.
 			NOT = {
 				any_country = {
 					OR = {
@@ -1755,6 +1764,7 @@ banking_crisis_wave_check_great_depression = {
 				}
 			}
 		}
+		set_global_variable = { name = great_depression_occurred value = yes }
 		# Fire Great Depression event for all countries with banking journals
 		every_country = {
 			limit = {
