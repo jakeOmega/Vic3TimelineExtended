@@ -1096,10 +1096,13 @@ law_open_government = {
 # whole-economy +10% (law_traditionalism, law_extraction_economy), on three
 # groups only. Its strongest point is bg_mining, which holds the gold mines.
 #
-# The civil-rights movement support mirrors the mod's discriminatory
-# citizenship laws (law_cultural_exclusion +10%, law_national_supremacy +15%).
-# The liberal, radical and anarchist movements are fed through their ideology
-# stances instead (ideology_modifications.py).
+# Repression feeds the opposition, as a cost: there is no activism cut
+# (political_movement_radicalism_add), which would be a second suppression gain
+# and would halve the stance feed below. The civil-rights movement support
+# mirrors the mod's discriminatory citizenship laws (law_cultural_exclusion
+# +10%, law_national_supremacy +15%). The liberal, radical and anarchist
+# movements are fed through their ideology stances instead
+# (ideology_modifications.py).
 law_penal_labor_camps = {
 	group = lawgroup_criminal_justice
 
@@ -1123,7 +1126,6 @@ law_penal_labor_camps = {
 		country_authority_add = 100
 		country_legitimacy_base_add = -10
 		country_suppression_attraction_factor = -0.25
-		political_movement_radicalism_add = -0.05
 		state_pop_support_movement_civil_rights_mult = 0.1
 		building_group_bg_mining_throughput_add = 0.05
 		building_group_bg_logging_throughput_add = 0.05
