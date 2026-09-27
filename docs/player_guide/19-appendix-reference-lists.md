@@ -43,6 +43,38 @@ country can race to build, are in [Wonders](02-timeline.md#wonders).
 | Statue of Unity | Gujarat | Advanced Structural Engineering |
 | Golden Bridge | Tonkin | Advanced Structural Engineering |
 
+## Banking tool list
+
+Every market economy banking tool, with its dashboard category, the intervention
+points it holds and what it needs. What each does and when to use it is in
+[Market economy banking tools](04-banking.md#market-economy-banking-tools) and
+the sections after it.
+
+| Category | Tool | Points | Needs |
+|---|---|---|---|
+| Monetary Policy | Open-Market Operations | 4 | Keynesian Economics; under the full Banking System, Fiat Money or Digital Currency with the rate at its floor |
+| Prudential Regulation | Moral Suasion | 1 | – |
+| Prudential Regulation | Raise Reserve Requirements | 2 | – |
+| Prudential Regulation | Enable Counter-cyclical Buffer | 2 | International Exchange Standards |
+| Prudential Regulation | Raise Margin Requirements | 2 | – |
+| Prudential Regulation | Expand Deposit Guarantee | 4 | Consumer Credit |
+| Directed Credit | Directed Credit to Infrastructure | 3 | – |
+| Directed Credit | Directed Credit to Heavy Industry | 3 | – |
+| Directed Credit | Directed Credit to Agriculture | 3 | – |
+| Directed Credit | Directed Credit to Armaments | 3 | – |
+| Directed Credit | Directed Credit to Electrification & High Tech | 3 | Rural Electrification |
+| External & Currency | Export Credit Facility | 2 | Corporate Governance |
+| External & Currency | Capital Controls (Outflows) | 2 | a law that allows it, or war |
+| External & Currency | Restrict Speculative Inflows | 2 | full Banking System; your own policy rate; a law that allows capital controls, or war |
+| External & Currency | Sterilize Capital Inflows | 2 | full Banking System; convertible Gold Standard with your own policy rate; treasury cash |
+| External & Currency | Limit Foreign-Currency Borrowing | 2 | full Banking System; National Bank Established |
+| External & Currency | Foreign Exchange Surrender Requirement | 2 | full Banking System; convertible Gold Standard with your own policy rate; exports, cash and room in the vault; a law that allows capital controls, or war |
+| External & Currency | Emergency Import Financing | 3 | full Banking System; National Bank Established; a financial crisis and treasury cash |
+| Crisis Response | Declare a Bank Holiday | 2 | Downturn or Panic; none in the last five years |
+| Crisis Response | Emergency Liquidity Program | 4 | Investment Banks |
+| Crisis Response | Asset Relief Program | 5 | Keynesian Economics |
+| Crisis Response | Bail-in Regime | 3 | Globalization |
+
 ## Government type list
 
 These government types follow from the governance laws in [Collective

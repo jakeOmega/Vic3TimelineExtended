@@ -197,33 +197,11 @@ activation and each month; their tooltips show the current monthly cost.
 
 A market economy has twenty-two tools under the full Banking System, seventeen
 under Simplified. The leaning tools drain bubble pressure and cool a boom, the
-credit tools feed growth, and the crisis tools shorten a slump. The sections
-after the table say what each group buys and when it is worth its points.
-
-| Category | Tool | Points | Needs |
-|---|---|---|---|
-| Monetary Policy | Open-Market Operations | 4 | Keynesian Economics; under the full Banking System, Fiat Money or Digital Currency with the rate at its floor |
-| Prudential Regulation | Moral Suasion | 1 | – |
-| Prudential Regulation | Raise Reserve Requirements | 2 | – |
-| Prudential Regulation | Enable Counter-cyclical Buffer | 2 | International Exchange Standards |
-| Prudential Regulation | Raise Margin Requirements | 2 | – |
-| Prudential Regulation | Expand Deposit Guarantee | 4 | Consumer Credit |
-| Directed Credit | Directed Credit to Infrastructure | 3 | – |
-| Directed Credit | Directed Credit to Heavy Industry | 3 | – |
-| Directed Credit | Directed Credit to Agriculture | 3 | – |
-| Directed Credit | Directed Credit to Armaments | 3 | – |
-| Directed Credit | Directed Credit to Electrification & High Tech | 3 | Rural Electrification |
-| External & Currency | Export Credit Facility | 2 | Corporate Governance |
-| External & Currency | Capital Controls (Outflows) | 2 | a law that allows it, or war |
-| External & Currency | Restrict Speculative Inflows | 2 | full Banking System; your own policy rate; a law that allows capital controls, or war |
-| External & Currency | Sterilize Capital Inflows | 2 | full Banking System; convertible Gold Standard with your own policy rate; treasury cash |
-| External & Currency | Limit Foreign-Currency Borrowing | 2 | full Banking System; National Bank Established |
-| External & Currency | Foreign Exchange Surrender Requirement | 2 | full Banking System; convertible Gold Standard with your own policy rate; exports, cash and room in the vault; a law that allows capital controls, or war |
-| External & Currency | Emergency Import Financing | 3 | full Banking System; National Bank Established; a financial crisis and treasury cash |
-| Crisis Response | Declare a Bank Holiday | 2 | Downturn or Panic; none in the last five years |
-| Crisis Response | Emergency Liquidity Program | 4 | Investment Banks |
-| Crisis Response | Asset Relief Program | 5 | Keynesian Economics |
-| Crisis Response | Bail-in Regime | 3 | Globalization |
+credit tools feed growth, the crisis tools shorten a slump, and the foreign
+capital tools manage gold and the exchange rate. The sections below say what
+each group buys, what it needs and when it is worth its points. [Banking tool
+list](19-appendix-reference-lists.md#banking-tool-list) gives every tool with its
+dashboard category, points and requirements in one table.
 
 Because momentum loses a tenth of itself each month, a steady push settles at
 about ten times its monthly figure. A tool worth −0.05 momentum a month ends up
@@ -234,7 +212,8 @@ taking about half a point a month off the cycle value.
 The four leaning tools in Prudential Regulation drain bubble pressure and slow
 momentum every month they run. Switch them on once the cycle reaches Expansion
 and bubble pressure starts to build. Lift them when it falls back to Stable: in
-a slump they slow the recovery you want.
+a slump they slow the recovery you want. The counter-cyclical buffer needs
+International Exchange Standards; the other three are available from the start.
 
 | Tool | What you gain each month | What you pay or give up |
 |---|---|---|
@@ -263,7 +242,8 @@ momentum and bubble pressure, so it belongs in a cycle at or below Stable, not i
 a boom. Each costs 3 points and a one-off 0.8% of GDP from the treasury, the
 state's share of the loans, and lifting it radicalizes 2% of pops. Only one
 sector runs at a time, two under Directed Credit & Development Banks, and
-Prudential / Narrow Banking forbids them all.
+Prudential / Narrow Banking forbids them all. Electrification & High Tech needs
+Rural Electrification; the other four are available from the start.
 
 | Sector | Builds 10% faster | Approve | Disapprove | Each month |
 |---|---|---|---|---|
@@ -295,7 +275,9 @@ Six tools help in a Downturn or Panic: the four in Crisis Response, Expand
 Deposit Guarantee from Prudential Regulation, and Open-Market Operations from
 Monetary Policy. They run alongside the crash event's responses (see
 [Responding to a banking crash](#responding-to-a-banking-crash)), which hold
-points of their own for a year.
+points of their own for a year. Emergency Liquidity needs Investment Banks,
+Asset Relief and Open-Market Operations Keynesian Economics, the bail-in
+Globalization and the deposit guarantee Consumer Credit.
 
 | Tool | What you gain | What you pay or give up |
 |---|---|---|
@@ -331,9 +313,12 @@ them as the cycle climbs back to Stable and beyond.
 
 External & Currency groups export lending and outflow controls with five
 monetary interventions. These five appear only under the full Banking System.
-Their points stay committed while the tools run, leaving fewer for deposit
-guarantees, domestic credit or crisis relief. The tooltips show their current
-costs and restrictions.
+Each holds 2 points while it runs (Emergency Import Financing 3), leaving fewer
+for deposit guarantees, domestic credit or crisis relief. Restrict Speculative
+Inflows needs your own policy rate; Sterilize Capital Inflows and the surrender
+requirement need a convertible Gold Standard with your own policy rate; Limit
+Foreign-Currency Borrowing and Emergency Import Financing need National Bank
+Established. The tooltips show their current costs and restrictions.
 
 | Intervention | What you gain | What you pay or give up |
 |---|---|---|
@@ -637,8 +622,9 @@ gives +1.25% export advantage and −1.25% import advantage, and above par the
 reverse. A weak currency adds risk premium, and a fall below its three-year
 average raises prices for a while.
 
-Capital Controls (Outflows) cut the effect of the gap between your rate and the
-world's on your exchange rate, gold and peg to a quarter. Each peacetime year
+Capital Controls (Outflows), an External & Currency tool for 2 points, cut the
+effect of the gap between your rate and the world's on your exchange rate, gold
+and peg to a quarter. Each peacetime year
 they stay on adds a step of Trapped Capital, up to five, costing Industrialist
 and Petite Bourgeoisie approval and investment efficiency. The count freezes in
 a war or crisis and fades after the controls come off.
