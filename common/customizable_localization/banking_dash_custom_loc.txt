@@ -519,6 +519,8 @@ te_mon_monetise_condition = {
 # band standing in for a hidden number. Thresholds: the crisis fires at
 # te_mon_peg_crisis_threshold (20), and a resumed or devalued peg restarts at
 # te_mon_peg_devalue_confidence (50), which is why 50 is still only "Watched".
+# The Doubted / Watched bands are te_mon_peg_doubted_below and
+# te_mon_peg_watched_below, which the monthly recovery is keyed on too.
 #
 # Suspension is tested first: confidence is frozen while convertibility is
 # suspended, so its figure says nothing and the word says why. Defending comes
@@ -544,11 +546,11 @@ te_mon_peg_state = {
 		localization_key = banking_dash_mon_peg_state_breaking
 	}
 	text = {
-		trigger = { var:te_peg_confidence < 40 }
+		trigger = { var:te_peg_confidence < te_mon_peg_doubted_below }
 		localization_key = banking_dash_mon_peg_state_doubted
 	}
 	text = {
-		trigger = { var:te_peg_confidence < 70 }
+		trigger = { var:te_peg_confidence < te_mon_peg_watched_below }
 		localization_key = banking_dash_mon_peg_state_watched
 	}
 	text = {
