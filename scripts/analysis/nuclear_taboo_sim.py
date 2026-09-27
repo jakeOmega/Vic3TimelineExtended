@@ -40,7 +40,9 @@ class Scenario:
     description: str
     postures: float = 0.0
     restraint: float = 0.0
-    un: float = 0.0
+    un_authority: float = 0.0  # 0 = no UN
+    npt: bool = False
+    cppnm: bool = False
     # month -> ("strategic" | "tactical", retaliation?)
     uses: dict = field(default_factory=dict)
     # month -> ledger points (renunciations, threats, ...)
@@ -53,9 +55,20 @@ def _step(c, score, target):
     return max(c["nd_taboo_max_step_down"], min(c["nd_taboo_max_step"], step))
 
 
+def _un_part(c, s):
+    """nd_taboo_part_un_value, mirrored: the NPT and CPPNM, each in proportion
+    to UN authority, held to the cap."""
+    part = 0.0
+    if s.npt:
+        part += s.un_authority / 100 * c["nd_taboo_un_npt_weight"]
+    if s.cppnm:
+        part += s.un_authority / 100 * c["nd_taboo_un_cppnm_weight"]
+    return min(c["nd_taboo_un_cap"], part)
+
+
 def _target(c, quiet_years, ledger, s):
     tradition = min(c["nd_taboo_tradition_cap"], max(0.0, quiet_years * c["nd_taboo_tradition_per_year"]))
-    return max(0.0, min(100.0, c["nd_taboo_base"] + tradition + s.postures + s.restraint + s.un + ledger))
+    return max(0.0, min(100.0, c["nd_taboo_base"] + tradition + s.postures + s.restraint + _un_part(c, s) + ledger))
 
 
 def simulate(scenario, constants, years=100):
@@ -126,7 +139,7 @@ SCENARIOS = {
                            postures=-10, uses={m: ("strategic", False) for m in range(96, 1200, 96)}),
     "seeded_40_years": Scenario("A save seeded 40 years after the first device, no use", seed_quiet_years=40),
     "cooperative": Scenario("No First Use, pledges, arms control, and the NPT and CPPNM at UN authority 80",
-                            postures=8, restraint=12, un=9.6),
+                            postures=8, restraint=12, un_authority=80, npt=True, cppnm=True),
 }
 
 

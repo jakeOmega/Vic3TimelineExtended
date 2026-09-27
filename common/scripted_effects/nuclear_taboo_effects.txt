@@ -234,17 +234,20 @@ nd_taboo_debug_age_clock = {
 # failed, or vetoed down to a rebuke: impunity. Scope: any.
 nd_taboo_verdict = {
 	if = {
-		limit = { always = $PASSED$ }
-		custom_tooltip = {
-			text = nd_taboo_tt_verdict_passed
-			nd_taboo_ledger_add = { POINTS = nd_taboo_ledger_verdict_passed }
-			nd_taboo_shock = { POINTS = nd_taboo_shock_verdict_passed }
+		limit = { has_global_variable = nd_taboo }
+		if = {
+			limit = { always = $PASSED$ }
+			custom_tooltip = {
+				text = nd_taboo_tt_verdict_passed
+				nd_taboo_ledger_add = { POINTS = nd_taboo_ledger_verdict_passed }
+				nd_taboo_shock = { POINTS = nd_taboo_shock_verdict_passed }
+			}
 		}
-	}
-	else = {
-		custom_tooltip = {
-			text = nd_taboo_tt_verdict_failed
-			nd_taboo_ledger_add = { POINTS = nd_taboo_ledger_verdict_failed }
+		else = {
+			custom_tooltip = {
+				text = nd_taboo_tt_verdict_failed
+				nd_taboo_ledger_add = { POINTS = nd_taboo_ledger_verdict_failed }
+			}
 		}
 	}
 }

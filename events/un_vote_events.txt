@@ -828,7 +828,10 @@ un_vote.2 = {
 				un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
 				# The nuclear taboo: condemning a nuclear use reaffirms it.
 				if = {
-					limit = { scope:un_vote_target ?= { has_variable = nd_taboo_verdict_pending } }
+					limit = {
+						scope:un_resolution ?= { has_tag = un_res_nuclear_grievance }
+						scope:un_vote_target ?= { has_variable = nd_taboo_verdict_pending }
+					}
 					nd_taboo_verdict = { PASSED = yes }
 					scope:un_vote_target = { remove_variable = nd_taboo_verdict_pending }
 				}
@@ -878,7 +881,10 @@ un_vote.2 = {
 				un_ledger_entry = { PILLAR = credibility POINTS = 0.5 REASON = 2 }
 				# The nuclear taboo: a veto shielding a nuclear use is impunity.
 				if = {
-					limit = { scope:un_vote_target ?= { has_variable = nd_taboo_verdict_pending } }
+					limit = {
+						scope:un_resolution ?= { has_tag = un_res_nuclear_grievance }
+						scope:un_vote_target ?= { has_variable = nd_taboo_verdict_pending }
+					}
 					nd_taboo_verdict = { PASSED = no }
 					scope:un_vote_target = { remove_variable = nd_taboo_verdict_pending }
 				}
@@ -1463,6 +1469,7 @@ un_vote.2 = {
 			if = {
 				limit = {
 					scope:un_resolution ?= { has_tag = un_topic_condemn }
+					scope:un_resolution ?= { has_tag = un_res_nuclear_grievance }
 					scope:un_vote_target ?= { has_variable = nd_taboo_verdict_pending }
 				}
 				nd_taboo_verdict = { PASSED = no }

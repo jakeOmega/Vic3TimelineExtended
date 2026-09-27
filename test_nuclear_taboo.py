@@ -874,6 +874,17 @@ class TestUN(unittest.TestCase):
         for key in ("nd_taboo_bd_un", "nd_taboo_tt_verdict_passed", "nd_taboo_tt_verdict_failed"):
             self.assertIn(key, keys, key)
 
+    def test_failed_branch_keeps_its_topic_guard(self):
+        option = block(strip_comments(read(UN_VOTE_EVENTS)), "un_vote.2")
+        i = option.index("custom_tooltip = un_vote_failed_tt")
+        j = option.index("nd_taboo_verdict", i)
+        failed_block = option[i:j]
+        self.assertIn("has_tag = un_topic_condemn", failed_block)
+
+    def test_every_verdict_block_is_bound_to_the_nuclear_grievance(self):
+        option = block(strip_comments(read(UN_VOTE_EVENTS)), "un_vote.2")
+        self.assertEqual(option.count("has_tag = un_res_nuclear_grievance"), 3)
+
 
 if __name__ == "__main__":
     unittest.main()

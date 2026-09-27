@@ -15,7 +15,7 @@
 #   postures     -10 .. +10  the armed countries' doctrines, a rank-weighted average
 #   restraint    0 .. +15    non-use pledges, arms-control treaties, former
 #                            nuclear states
-#   un           0 .. +15    the NPT and CPPNM in force, x UN authority (phase 2)
+#   un           0 .. +12    the NPT (8) and CPPNM (4) in force, x UN authority / 100 (cap 15, headroom for later conventions)
 #   ledger       -30 .. +10  the decaying record of acts (global_var:nd_taboo_ledger)
 #
 # Drift alone tops out at 55 (base + full tradition); the rest needs
@@ -148,7 +148,7 @@ nd_taboo_arms_ai_growth_weight = 0.5	# per warhead of our desired arsenal the ce
 nd_taboo_arms_ai_parity_weight = 2	# per warhead we would retire beyond what the other party retires
 nd_taboo_un_npt_weight = 8
 nd_taboo_un_cppnm_weight = 4
-nd_taboo_un_cap = 15
+nd_taboo_un_cap = 15	# never binds today: NPT (8) + CPPNM (4) peaks at 12; headroom for later conventions
 nd_taboo_ledger_verdict_passed = 3
 nd_taboo_shock_verdict_passed = 2
 nd_taboo_ledger_verdict_failed = -3

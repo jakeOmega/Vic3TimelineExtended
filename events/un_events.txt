@@ -265,6 +265,12 @@ un_events.2 = {
 		hidden_effect = {
 			scope:condemned_country = { save_scope_as = un_vote_target }
 			un_resolution_open = { TOPIC = condemn }
+			# The nuclear taboo: a condemnation tabled on a nuclear grievance
+			# is the Assembly's verdict on that use (un_vote.2, nd_taboo_verdict).
+			if = {
+				limit = { scope:condemned_country = { un_docket_cause_is = { CAUSE = 1 } } }
+				scope:un_resolution ?= { add_tag = un_res_nuclear_grievance }
+			}
 		}
 	}
 
