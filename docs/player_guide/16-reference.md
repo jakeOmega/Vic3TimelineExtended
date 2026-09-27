@@ -17,7 +17,7 @@ a dash means none can.
 | Adaptive standard-of-living expectations, Construction Cost Scaling, Bulk Transportation | Always on. | none | [Economy and construction](03-economy.md) |
 | Migration crowding, Homeland Dynamics, tourism, world city rankings | Always on, shown in the state panel. Homeland changes also need an enabling law, principle or the Mass Media technology. | none | [States and population](07-states.md) |
 | Grand Monument | From the start, in any state. | none | [The extended timeline](02-timeline.md) |
-| Settlement Authority | From the start, in a thinly populated frontier state region. Programmes unlock with technologies and laws. | Internal Resettlement | [States and population](07-states.md) |
+| Settlement Authority | From the start, in a thinly populated frontier state region. Programs unlock with technologies and laws. | Internal Resettlement | [States and population](07-states.md) |
 | Global Warming journal entry | Listed from the start; becomes active for every country once warming reaches 0.1 °C. | Global Warming | [Climate and pollution](14-climate.md) |
 | Strategic Reserve journal entry | Shown once you research Logistics; active once you build a Strategic Reserve Hub. | none | [Economy and construction](03-economy.md) |
 | Banking Cycle journal entry | Stock Exchange and an Urban Center of level 5 or more. | Banking System | [Banking and monetary policy](04-banking.md) |
@@ -28,7 +28,7 @@ a dash means none can.
 | Cultural Hegemony journal entry | Any country has researched Mass Media, and you have Romanticism. | Cultural Hegemony | [Cultural hegemony and covert warfare](10-influence.md) |
 | Colonial Empire journal entry | The Decolonization technology (era 6) and at least one overseas colony or colonial subject. | Decolonization | [Colonial empires and decolonization](11-decolonization.md) |
 | United Nations journal entry | Shown at Intergovernmental Organizations (era 6); active for everyone once a great power founds the UN. | United Nations | [The United Nations](09-united-nations.md) |
-| Nuclear Weapons journal entry | The Nuclear Weapons technology and Great Power rank (or Major Power with Intercontinental Ballistic Missiles, or programme aid by treaty). Anyone holding a warhead or caught in a nuclear crisis also gets it. | Nuclear Weapons | [Nuclear weapons](13-nuclear.md) |
+| Nuclear Weapons journal entry | The Nuclear Weapons technology and Great Power rank (or Major Power with Intercontinental Ballistic Missiles, or program aid by treaty). Anyone holding a warhead or caught in a nuclear crisis also gets it. | Nuclear Weapons | [Nuclear weapons](13-nuclear.md) |
 | The Gathering Storm (World War journal entry) | Great Power rank and Combined Arms, while a great power of an opposed ideological camp exists. | World War (off by default) | [Military and war](12-military.md) |
 | Space race journal entries | Shown at Rocketry for great and major powers; the first milestone needs a Space Program building (Guided Missiles, era 7). | Space Race | [The space race](15-space.md) |
 | Covert Warfare journal entry | One covert operation slot more than your rank gives, from the Ministry of Intelligence and Security or the Mainframe Computers technology. | Covert Warfare | [Cultural hegemony and covert warfare](10-influence.md) |
@@ -48,7 +48,7 @@ Terms the mod introduces, or uses in its own sense.
 | Bubble pressure | Speculation that builds up during a boom. It sets how likely a banking crash is and how hard it hits. | [Banking and monetary policy](04-banking.md) |
 | Bulk Transportation | The base game's Merchant Marine good, renamed: freight, produced by transport infrastructure and used by industry. | [Economy and construction](03-economy.md) |
 | Case strength | A 0–100 score built from a country's record that decides which punitive UN resolutions can be tabled against it. | [The United Nations](09-united-nations.md) |
-| Colonial stability | The 0–100 bar of the Colonial Empire journal entry. Its level and the programmes you run decide how the empire ends. | [Colonial empires and decolonization](11-decolonization.md) |
+| Colonial stability | The 0–100 bar of the Colonial Empire journal entry. Its level and the programs you run decide how the empire ends. | [Colonial empires and decolonization](11-decolonization.md) |
 | Construction maintenance | The construction good that industry and infrastructure consume each week under the construction market. | [Economy and construction](03-economy.md) |
 | Construction Services | The good that Construction Sectors sell and Construction Sites turn into construction points. | [Economy and construction](03-economy.md) |
 | Covert operation slot | Room for one running covert operation. Rank, the Ministry of Intelligence and Security and technologies add slots. | [Cultural hegemony and covert warfare](10-influence.md) |

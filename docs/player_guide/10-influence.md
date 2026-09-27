@@ -16,7 +16,7 @@ until some country in the world has researched Mass Media (an era 6 society
 technology) and you have Romanticism. Until then the scores run in the
 background and have no effect. The entry never completes.
 
-Its panels show your tier, share and world rank, the cultural programmes, and
+Its panels show your tier, share and world rank, the cultural programs, and
 collapsible sections for your pull breakdown, the top ten cultural powers, the
 world's political models and a history chart of your share.
 
@@ -54,14 +54,14 @@ multiplier. The breakdown section lists each one for your country.
 | Tech Leadership | +2 each time you research a technology no other country has yet, up to 30, fading by a tenth at each recount. |
 | Monuments | +3 per wonder (power bloc statues don't count), plus up to +5 from grand monuments (+1 per 20 levels). |
 | Megaprojects | +3 for each of the seven megaproject types you have completed. |
-| Other Modifiers | Flat pull from programme funding, events, tiers IV and V of the Education power bloc principle and the Cultural Exchange Program treaty article. |
+| Other Modifiers | Flat pull from program funding, events, tiers IV and V of the Education power bloc principle and the Cultural Exchange Program treaty article. |
 | Infamy | −0.1 per point of infamy. |
 | Instability | Up to −10 at full turmoil, and −20 during a civil war. |
 
 The multiplier comes from your rank (great power +25%, major power +10%), laws
 (free trade, open borders and inclusive citizenship raise it; isolationist,
 exclusionary and repressive laws lower it), technologies such as Romanticism,
-Realism, Film and Television, the Ministry of Culture institution, programmes
+Realism, Film and Television, the Ministry of Culture institution, programs
 and events. Wonders, megaprojects and grand monuments are described in
 [The extended timeline](02-timeline.md).
 
@@ -106,17 +106,17 @@ liberal hegemon, for example, or a related one if it is absent) grows more activ
 and attracts more pops. The push is zero while the model holds less than 15% of
 world culture and grows with its share after that; the tooltip on the exported
 model shows its strength. A hegemon with feminist, civil-rights, environmental,
-abolitionist, labour or land-reform laws also feeds those movements abroad, and
+abolitionist, labor or land-reform laws also feeds those movements abroad, and
 one at peace without Mass Conscription feeds anti-war movements. Movements are
 covered in [Government, laws and characters](05-politics.md).
 
-### Cultural programmes
+### Cultural programs
 
-Every programme needs the Ministry of Culture Established law (unlocked by Mass
-Propaganda). If you repeal it, funding drops to zero and all four programmes
+Every program needs the Ministry of Culture Established law (unlocked by Mass
+Propaganda). If you repeal it, funding drops to zero and all four programs
 stop at the next monthly update.
 
-| Programme | Controls | Effect | Cost |
+| Program | Controls | Effect | Cost |
 |---|---|---|---|
 | Cultural Program Funding | − and + | Each step adds +1 cultural pull and +5% pull. | A weekly expense that grows with your GDP. |
 | International Cultural Outreach | Begin / End | +10% pull, +5% prestige, +10% mass migration attraction. Needs Mass Media. | A weekly expense that grows with your GDP. |
@@ -126,8 +126,8 @@ stop at the next monthly update.
 
 The funding cap is one step per level of the Ministry of Culture institution,
 plus one each from Mass Media and Television; the panel shows it. The four
-programmes run until you end them. Global Media Campaign and Cultural
-Protectionism exclude each other: while one runs, the other's button is greyed
+programs run until you end them. Global Media Campaign and Cultural
+Protectionism exclude each other: while one runs, the other's button is grayed
 out.
 
 ### Cultural hegemony events
@@ -156,18 +156,18 @@ Four events follow the political models:
 | Our Model Abroad | The hegemon, when its model holds 40% of world culture across three or more countries | Champion it (prestige and a stronger push abroad, paid in influence and relations) or lead by example (legitimacy). |
 | Between Two Suns | A trailing country when the top two cultural powers run different models | Lean to either power (relations, research, a push toward its model) or stand apart (legitimacy). |
 | The Standard Falls | Countries still running a model the leading power has abandoned | Hold course (legitimacy falls, governing interest groups approve) or adapt (relations with the new leader, a push toward its model). |
-| Across the Border | Neighbours of a country that has just adopted the hegemon's model | Close the border to its ideas (costs authority and relations) or let them travel (relations, a push toward the model). |
+| Across the Border | Neighbors of a country that has just adopted the hegemon's model | Close the border to its ideas (costs authority and relations) or let them travel (relations, a push toward the model). |
 
 ### How the AI competes for culture
 
-AI countries use the same programmes. Those with a share of 10% or more raise
+AI countries use the same programs. Those with a share of 10% or more raise
 funding, begin outreach and launch media campaigns. Small countries under the
 benchmark enact Cultural Protectionism and end media campaigns, and drop
 protectionism once their share passes 10%.
 
 ## The Covert Warfare journal entry
 
-The Covert Warfare journal entry is your agency's command centre. It becomes
+The Covert Warfare journal entry is your agency's command center. It becomes
 active when you hold one more covert operation slot than your rank grants for
 free (every country gets one, major powers two, great powers three). The first
 extra slots come from the Ministry of Intelligence and Security Established law
@@ -177,11 +177,11 @@ even if you later lose that extra slot. It never completes.
 
 You launch operations from another country's diplomatic actions, listed as
 "Covert: ..." with the operation's name. Everything else is in the journal
-entry: the command centre (capacity, slots, the funding stepper, detection
-factors, Tradecraft, covert defence and the last foreign operation you exposed),
+entry: the command center (capacity, slots, the funding stepper, detection
+factors, Tradecraft, covert defense and the last foreign operation you exposed),
 one row per running operation, and one row per agent network.
 
-<!-- screenshot: the Covert Warfare command centre with two operation rows and a network row visible -->
+<!-- screenshot: the Covert Warfare command center with two operation rows and a network row visible -->
 
 ### Intelligence capacity and operation slots
 
@@ -206,7 +206,7 @@ agency.
 
 ### Covert funding levels
 
-The command centre's funding stepper sets what the agency spends. Every
+The command center's funding stepper sets what the agency spends. Every
 operation needs funding of at least 1, so stepping down to 0 ends them all; the
 button warns you first. The weekly cost grows with your GDP, the funding level
 and the number of operations (weighted by priority, plus a base share paid even
@@ -246,7 +246,7 @@ one at cordial or better. The others have no relations limit.
 | Ideological Subversion | Target −10% separatism resistance; movements there matching your political model grow more active and attract more pops | Target has a political movement |
 | Destabilization | Target −15% separatism resistance, worse colonial stability; every movement there grows more active and attracts more pops | Target has a political movement |
 | Regime Change | Target −5 legitimacy, −1 coup resistance, more radical movements; once fully operational, a coup under way there gains 5 progress a month | A rivalry; target not your subject; Seasoned Tradecraft |
-| Nuclear Programme Sabotage | Target's nuclear programme 25% slower | Target runs a funded programme; Seasoned Tradecraft |
+| Nuclear Programme Sabotage | Target's nuclear program 25% slower | Target runs a funded program; Seasoned Tradecraft |
 | Space Programme Espionage | You: space race milestones 10% faster and 10% less risky. Target: −3 authority | Target has completed a milestone you have not |
 | Cultivate Assets | Nothing to either country; your network there grows half again as fast | Target not your subject |
 | Secure Loose Material | Once established, a 3% monthly chance (6% fully operational) of finding and destroying one of the target's missing warheads | Target has warheads unaccounted for; Nuclear Weapons rule on |
@@ -254,7 +254,7 @@ one at cordial or better. The others have no relations limit.
 If you run several espionage operations of one type, your gains come from the
 strongest and don't add up. Election Interference cuts electoral confidence by 5%
 once establishing and 10% once fully operational. Bubble pressure is explained in
-[Banking and monetary policy](04-banking.md), nuclear programmes and loose
+[Banking and monetary policy](04-banking.md), nuclear programs and loose
 warheads in [Nuclear weapons](13-nuclear.md), and milestones in
 [The space race](15-space.md).
 
@@ -327,7 +327,7 @@ networks grow 15% faster. Falling below a tier never ends a running operation.
 Each operation has its own monthly detection risk, shown on its row. It starts
 at 10%, falls with your funding level and your network in the target, and rises
 with priority and with the target's counterintelligence (its capacity plus its
-defence against that kind of operation, compared to yours; up to +20 points).
+defense against that kind of operation, compared to yours; up to +20 points).
 Your covert efficiency, from technologies, laws and the Ministry of Intelligence
 and Security, then cuts it by up to four fifths, within a range of 0.1% to 50%.
 Each operation rolls separately, so three at 10% give about a 27% monthly chance
@@ -337,7 +337,7 @@ A caught operation ends in the Operation Compromised event, which also costs its
 network 25 and costs you Tradecraft. Recalling your operatives and apologizing
 takes the full infamy and half the relations damage. Denying everything takes
 half the infamy and the full relations damage, and the target gains Heightened
-Vigilance (+5 to all three of its covert defences, decaying over five years). At
+Vigilance (+5 to all three of its covert defenses, decaying over five years). At
 the establishing phase the costs are:
 
 | Exposure tier | Operations | Recall and apologize | Deny everything |
@@ -362,24 +362,24 @@ event, which names you and the operation. It can shore up its counterintelligenc
 network of up to 25 inside your country, if it has a Covert Warfare journal
 entry of its own), or make the evidence public (−3 infamy for itself). The event
 fires at most once every two years per country, and only once per game for a
-country without a Covert Warfare journal entry of its own. The command centre
+country without a Covert Warfare journal entry of its own. The command center
 shows the latest catch for ten years. Nothing else names the country behind an
 operation. A target can see the effects among its own modifiers, gets an
 unsigned Election Interference Detected notification with each confidence hit,
 and can count the operations against it through a strong network of its own.
 
-### Covert defence
+### Covert defense
 
 Each unused slot becomes Domestic Intelligence Focus: +2 intelligence capacity,
 more separatism and coup resistance, calmer movements and better colonial
 garrisons. You also
-have three covert defences, economic, military and ideological, each added to
+have three covert defenses, economic, military and ideological, each added to
 your capacity against operations of its kind. Strict IP Protection and Central
-Bank Independence raise economic defence and Publicly Funded Elections
-ideological defence; No IP Protection, Unregulated Banking and No Campaign
+Bank Independence raise economic defense and Publicly Funded Elections
+ideological defense; No IP Protection, Unregulated Banking and No Campaign
 Finance Laws lower them. The Intelligence Sharing Pact treaty article adds
 intelligence capacity and lends the weaker partner part of the stronger one's
-covert defences.
+covert defenses.
 
 ### When operations end
 
@@ -390,7 +390,7 @@ An operation runs until one of these happens:
 - Your funding drops to 0, which ends every operation.
 - A truce with the target begins.
 - A wartime operation's war ends, or its diplomatic play ends without one.
-- Something it needs goes: the target's elections, its political movements, its lead in space, its missing warheads or its nuclear programme (paused by treaty or given up), your rivalry, or your power bloc lead over a target outside the bloc. Destabilization also ends if relations reach cordial. Technology and Tradecraft conditions only gate the launch.
+- Something it needs goes: the target's elections, its political movements, its lead in space, its missing warheads or its nuclear program (paused by treaty or given up), your rivalry, or your power bloc lead over a target outside the bloc. Destabilization also ends if relations reach cordial. Technology and Tradecraft conditions only gate the launch.
 
 A war with the target does not end a peacetime operation.
 

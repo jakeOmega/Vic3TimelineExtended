@@ -7,7 +7,7 @@ of the cycle sits a monetary layer: a central-bank policy rate, inflation, an
 exchange rate, gold reserves, and treaties that tie one currency to another. The
 Banking System game rule controls both. *Enabled* gives you everything in this
 chapter, *Simplified* keeps the cycle and drops the monetary layer, and
-*Disabled* removes the journal entry (see the game rules table in the
+*Disabled* removes the journal entry (see the
 [Introduction](01-introduction.md)).
 
 Under every setting the mod replaces the base game's flat interest rate on
@@ -17,17 +17,16 @@ loans dearer and a sound currency makes them cheaper.
 
 ## The Banking Cycle journal entry
 
-The cycle lives in a journal entry in the internal affairs group. Its title
+The cycle lives in a journal entry in the Domestic Affairs group. Its title
 follows your economic system: Boom & Bust Cycle in a market economy, Logistics &
 Allocation Gauge under Command Economy, and Cooperative Finance Dashboard under
 Cooperative Ownership. The model is the same in all three; the phase effects and
 the tools differ.
 
 The entry appears once you have researched Stock Exchange and own an Urban Center
-of level 5 or higher. It starts in the Stable phase with no momentum and no
-bubble, and it never completes: once it appears it stays for the rest of the
-game. If a revolution succeeds, the new government carries on the cycle and the
-central bank where the old one left them (see
+of level 5 or higher. It starts at Stable with no momentum or bubble, and stays
+for the rest of the game. If a revolution succeeds, the new government carries
+on the cycle and the central bank where the old one left them (see
 [Government, laws and characters](05-politics.md)), but policies you had
 switched on are lost and must be enabled again.
 
@@ -37,13 +36,14 @@ Three readings drive the cycle, each drawn as a bar at the top of the entry. The
 cycle value runs from 0 to 100 and decides the phase. Momentum is added to the
 cycle value every month, so it sets how fast conditions change; it loses a tenth
 of itself each month. Bubble pressure, also 0 to 100, is accumulated speculation.
-It does not move the cycle, but it decides how likely a crash is and how hard it
-hits. Under the full Banking System a fourth bar, Policy Stance, shows whether
-your interest rate is loose or tight.
+It decides how likely a crash is and how hard it hits. A fourth bar, Policy
+Stance, shows whether your interest rate is loose or tight; it moves only under
+the full Banking System.
 
 The dashboard reports momentum and bubble pressure as bands, not figures.
 Momentum reads Collapsing, Falling, Steady, Rising or Surging. Bubble pressure
-reads Low (under 15), Building, Elevated (30 to 49), High (50 to 74) or Severe (75 and up). <!-- style: allow ai-vocab -->
+reads Low (under 15), Building, Elevated (30 to 49), High (50 to 74) or Severe <!-- style: allow ai-vocab -->
+(75 and up).
 
 <!-- screenshot: the Boom & Bust Cycle journal entry during a Boom, with the four bars and the Current Conditions readout in view -->
 
@@ -88,21 +88,18 @@ arrives from a trading partner's crash.
 
 Every month the game rolls for a crash. The higher the phase, the lower the
 bubble at which risk begins and the faster it grows. Base monthly chances in a
-market economy, before your laws' Banking Crash Likelihood:
+market economy, before the Banking Crash Likelihood your laws and policies add:
 
 | Phase | Risk begins above bubble | At bubble 50 | At bubble 75 |
 |---|---|---|---|
 | Frenzy | 15 | about 11% | about 17% |
 | Boom | 25 | about 4% | about 7% |
 | Expansion | 50 | none | about 1% |
-| Stable or lower | 75 or more | none | none |
+| Stable | 75 | none | none |
+| Stagnation or lower | 90 | none | none |
 
 A command economy rolls at about a third of these chances, a cooperative economy
-at about two thirds. The mod is tuned so that a country on metallic money sees
-roughly eight to sixteen crashes a century, and a well-run fiat economy a few
-fewer. An untended boom almost always ends in a crash; switching on the leaning
-tools early pulls back about a quarter to a third of booms on metallic money,
-more with a free policy rate, but only a few percent of frenzies.
+at about two thirds.
 
 ### Banking crash severity
 
@@ -118,19 +115,18 @@ how far the cycle falls, and every crash wipes bubble pressure to 0.
 | 20–39 | Market Downturn | 30 | −2 |
 | under 20 | Market Correction | 40 | −1 |
 
-About a quarter of crashes end in Panic. A Panic-level crash usually climbs back
-to Stable in about a year and a half. Command economies suffer 40% less severity
-and cooperative economies 20% less.
+Climbing back from a Panic-level crash to Stable takes more than a year without
+a crash response. Command economies suffer 40% less severity and cooperative
+economies 20% less, and less still when the crash is imported.
 
 ### Responding to a banking crash
 
 The crash event always offers Weather the storm, which is free but angers the
 upper and middle strata. Beside it you get one response set by your financial
-regulation law (see [Financial regulation laws](#financial-regulation-laws)) and
-up to four more, depending on your laws, from Central Banking (an emergency
-discount window), Investment Banks (international swap lines), Keynesian
-Economics (a fiscal stimulus) and Corporate Governance (emergency capital
-controls).
+regulation law and up to four more, depending on your technology and laws: an
+emergency discount window (Central Banking), coordinated swap lines (Investment
+Banks; not the treaty article), a fiscal stimulus (Keynesian Economics) and
+emergency capital controls (Corporate Governance).
 
 Each response adds back 3 to 12 cycle value and up to 3 momentum. It costs a
 GDP-scaled treasury expense that fades over six months, holds 1 to 4
@@ -155,8 +151,9 @@ safe. One that does crash passes contagion on, so one crash can become a wave.
 
 Command and cooperative economies are harder to infect. A Bank Holiday or a
 banking union lowers the chance of catching a crash, and a Lender of Last Resort
-guarantee makes an imported one start less deep. The contagion event lets you shut your markets to protect domestic banks or keep
-them open at the cost of more radicals.
+guarantee makes an imported one start less deep. The contagion event lets you
+shut your markets to protect domestic banks or keep them open at the cost of
+more radicals.
 
 ## The banking policy dashboard
 
@@ -169,16 +166,15 @@ Current Conditions shows the phase, the momentum and bubble bands and your
 Intervention Budget, and every tooltip lists what is pushing that reading this
 month. Under the full Banking System the Monetary Policy block follows.
 
-The intervention budget is the pool of points your policies draw on. Each active
-policy holds its cost while it stays on. Your financial regulation law gives 1 to
-7 points, National Bank Established 1 more, and a power bloc's banking union 1
-more. Command economies call it the Free Planning Budget and cooperatives the
-Free Council Mandate Points.
+The intervention budget is the pool of points your active policies hold. Your
+financial regulation law gives 1 to 7 points, National Bank Established 1 more,
+and a power bloc's banking union 1 more. Command economies call it the Free
+Planning Budget and cooperatives the Free Council Mandate Points.
 
 Active Policies lists what is in force, each with a Disable button; Available
-Interventions lists your economic system's tools, greyed out with the reason when
+Interventions lists your economic system's tools, grayed out with the reason when
 you cannot use them. Switching a tool on has its own price: the lending tools
-charge the treasury 0.2% to 2.5% of GDP, the regulatory tools create radicals,
+charge the treasury 0.2% to 2.5% of GDP, most regulatory tools create radicals,
 and capital controls cost infamy and great-power relations.
 
 ### Market economy banking tools
@@ -188,38 +184,39 @@ reserve requirements, the counter-cyclical buffer, margin requirements) drain
 bubble pressure and cool a boom; the credit tools feed growth; the crisis tools
 shorten a slump.
 
-| Category | Tool | Points | Needs | Effect |
-|---|---|---|---|---|
-| Monetary Policy | Open-Market Operations | 4 | Keynesian Economics; under the full Banking System, Fiat Money or Digital Currency with the rate at its floor | Momentum, bubble pressure, +5% services, +1 point of inflationary pressure |
-| Prudential Regulation | Moral Suasion | 1 | – | Small drain on bubble and momentum |
-| Prudential Regulation | Raise Reserve Requirements | 2 | – | Drains bubble; capitalists invest less efficiently; lowers inflation |
-| Prudential Regulation | Enable Counter-cyclical Buffer | 2 | International Exchange Standards | Strongest bubble drain; smaller investment-pool contributions |
-| Prudential Regulation | Raise Margin Requirements | 2 | – | Drains bubble; middle-strata standard of living −0.5 |
-| Prudential Regulation | Expand Deposit Guarantee | 4 | Consumer Credit | Lowers risk premium; loyalists on, radicals off |
-| Directed Credit | Directed Credit to Infrastructure | 3 | – | +10% infrastructure construction efficiency, cheaper decrees; Industrialists disapprove |
-| Directed Credit | Directed Credit to Heavy Industry | 3 | – | +10% for heavy industry and high-tech buildings; Industrialists approve, Landowners disapprove |
-| Directed Credit | Directed Credit to Agriculture | 3 | – | +10% for farms, plantations and ranches; Landowners and Rural Folk approve |
-| Directed Credit | Directed Credit to Armaments | 3 | – | +10% for military industry and shipyards; Armed Forces approve, Intelligentsia disapprove |
-| Directed Credit | Directed Credit to Electrification & High Tech | 3 | Rural Electrification | +10% for power and high-tech buildings; Intelligentsia approve, Industrialists disapprove |
-| Directed Credit | Export Credit Facility | 2 | Corporate Governance | +25% export advantage, −2% tax collection |
-| External & Currency | Capital Controls (Outflows) | 2 | a law that allows it, or war | Shields exchange rate, gold and peg from the interest gap |
-| Crisis Response | Declare a Bank Holiday | 2 | Downturn or Panic; none in the last five years | 90 days of −90% crash chance, −20% services; halves falling momentum once |
-| Crisis Response | Emergency Liquidity Program | 4 | Investment Banks | Lowers risk premium, adds momentum and some bubble |
-| Crisis Response | Asset Relief Program | 5 | Keynesian Economics | Lifts the cycle value monthly; −5% tax collection |
-| Crisis Response | Bail-in Regime | 3 | Globalization | Half Asset Relief's lift at no treasury cost; upper strata furious |
+| Category | Tool | Points | Needs |
+|---|---|---|---|
+| Monetary Policy | Open-Market Operations | 4 | Keynesian Economics; under the full Banking System, Fiat Money or Digital Currency with the rate at its floor |
+| Prudential Regulation | Moral Suasion | 1 | – |
+| Prudential Regulation | Raise Reserve Requirements | 2 | – |
+| Prudential Regulation | Enable Counter-cyclical Buffer | 2 | International Exchange Standards |
+| Prudential Regulation | Raise Margin Requirements | 2 | – |
+| Prudential Regulation | Expand Deposit Guarantee | 4 | Consumer Credit |
+| Directed Credit | Directed Credit to Infrastructure | 3 | – |
+| Directed Credit | Directed Credit to Heavy Industry | 3 | – |
+| Directed Credit | Directed Credit to Agriculture | 3 | – |
+| Directed Credit | Directed Credit to Armaments | 3 | – |
+| Directed Credit | Directed Credit to Electrification & High Tech | 3 | Rural Electrification |
+| Directed Credit | Export Credit Facility | 2 | Corporate Governance |
+| External & Currency | Capital Controls (Outflows) | 2 | a law that allows it, or war |
+| Crisis Response | Declare a Bank Holiday | 2 | Downturn or Panic; none in the last five years |
+| Crisis Response | Emergency Liquidity Program | 4 | Investment Banks |
+| Crisis Response | Asset Relief Program | 5 | Keynesian Economics |
+| Crisis Response | Bail-in Regime | 3 | Globalization |
 
-The directed-credit sectors speed construction of their buildings, and only one
-can run at a time (two under Directed Credit & Development Banks). Asset Relief
-Program and Bail-in Regime exclude each other. A Bank Holiday also shields you
-from contagion, and ends by itself after 90 days.
+Each directed-credit sector builds its buildings 10% faster and pleases some
+interest groups while angering others, and only one can run at a time (two under
+Directed Credit & Development Banks). Asset Relief Program and Bail-in Regime
+exclude each other. A Bank Holiday also shields you from contagion, and ends by
+itself after 90 days.
 
 ### Command economy and cooperative tools
 
 Under Command Economy the cycle measures planning strain, and the dashboard
 offers eight planning tools plus two transfers. Under Cooperative Ownership it
 measures the balance between what worker-owners pay themselves and what they
-reinvest, and there are eight council tools. Each tooltip says when a tool is
-best used. Changing economic system switches the old system's tools off.
+reinvest, and there are eight council tools. Changing economic system switches
+the old system's tools off.
 
 | Economy | Category | Tools (points) |
 |---|---|---|
@@ -243,12 +240,11 @@ Intelligentsia, infrastructure otherwise.
 
 ### Banking history charts
 
-The History section draws one bar per month over the last 1, 5 or 20 years:
-cycle value (coloured by phase), momentum, bubble pressure, policy rate and rate
-paid on debt, plus inflation and the exchange-rate index under the full Banking
-System. Markers show the months a policy was adopted or withdrawn and months with
-a crash, your own or one that reached you. History is kept for the player and for
-major powers and above.
+The History section charts the last 1, 5 or 20 years month by month: the
+cycle's three readings, the policy rate and the rate paid on debt, plus
+inflation and the exchange-rate index under the full Banking System. Markers
+flag policy changes and crashes, including imported ones. History is kept for
+the player and for major powers and above.
 
 ## Financial regulation laws
 
@@ -256,19 +252,19 @@ The Financial Regulation law group sets how volatile your banking system is, how
 likely it is to crash, how large your intervention budget is, which tools you may
 use and which response the crash event offers.
 
-| Law | Unlocked by | Points | Volatility | Crash likelihood | Locks | Crash response |
-|---|---|---|---|---|---|---|
-| Unregulated Banking | default | 1 | +50% | +25% | Capital Controls (Outflows), Asset Relief Program | Suspend convertibility and declare a bank holiday |
-| Free & Mutual Banking | Postal Savings | 3 | – | −10% | Capital Controls (Outflows), Asset Relief Program | Convene a mutual clearing-house bailout |
-| Universal Banking (Light Prudence) | Central Banking | 4 | +10% | – | Capital Controls (Outflows), Asset Relief Program | Inject liquidity through correspondent banks |
-| Prudential / Narrow Banking | Modern Financial Instruments | 7 | −60% | −50% | Open-Market Operations, all directed credit, Export Credit Facility | Activate the deposit guarantee scheme |
-| Directed Credit & Development Banks | Central Planning | 5 | −20% | −20% | none (two credit sectors) | Direct development banks to crisis lending |
-| State-Owned Banking | needs Command Economy | 7 | −35% | −35% | Capital Controls (Outflows), Asset Relief Program (moot under Command Economy) | Nationalise failing institutions |
-| Central Bank Independence | Keynesian Economics, with National Bank Established | 7 | −10% | – | Capital Controls (Outflows) | Open-market operations and discount window |
+| Law | Unlocked by | Points | Volatility | Crash likelihood | Locks |
+|---|---|---|---|---|---|
+| Unregulated Banking | default | 1 | +50% | +25% | Capital Controls (Outflows), Asset Relief Program |
+| Free & Mutual Banking | Postal Savings | 3 | – | −10% | Capital Controls (Outflows), Asset Relief Program |
+| Universal Banking (Light Prudence) | Central Banking | 4 | +10% | – | Capital Controls (Outflows), Asset Relief Program |
+| Prudential / Narrow Banking | Modern Financial Instruments | 7 | −60% | −50% | Open-Market Operations, all directed credit, Export Credit Facility |
+| Directed Credit & Development Banks | Central Planning | 5 | −20% | −20% | none (two credit sectors) |
+| State-Owned Banking | needs Command Economy | 7 | −35% | −35% | Capital Controls (Outflows), Asset Relief Program |
+| Central Bank Independence | Keynesian Economics, with National Bank Established | 7 | −10% | – | Capital Controls (Outflows) |
 
 Capital controls are allowed in any war and lifted when it ends if your law
 forbids them. The laws also have effects outside the cycle, listed in their
-tooltips; Central Bank Independence, for one, strengthens your economic defence
+tooltips; Central Bank Independence, for one, strengthens your economic defense
 against covert operations (see
 [Cultural hegemony and covert warfare](10-influence.md)).
 
@@ -292,7 +288,7 @@ country runs the monetary model whether or not it holds the journal entry.
 
 You have a dial, a policy rate of your own, with National Bank Established and a
 currency law of Commodity Money, Gold Standard, Fiat Money or Digital Currency,
-unless you run a Command Economy, have dollarised, or tie your currency to
+unless you run a Command Economy, have dollarized, or tie your currency to
 another country's. Everyone else still has a rate, and the dashboard says why it
 is out of your hands: without a national bank or under Decentralized
 Cryptocurrency it is the world rate plus expected inflation plus a point, a
@@ -311,13 +307,12 @@ of charge.
 
 | Mandate | What the bank does |
 |---|---|
-| Price Stability | Raises the rate more than a point for each point of inflation above target, and leans fully against the cycle: tighter into a boom, cutting hard in a Panic, reading where the cycle is heading |
-| Growth | About a point looser, half as responsive to the cycle, ignores inflation below about 4%; more momentum, faster bubbles, more crashes |
+| Price Stability | Raises the rate more than a point for each point of inflation above target, and leans fully against where the cycle is heading |
+| Growth | A quarter point looser at target, half as responsive to the cycle, and blind to inflation below 4% |
 | Peg Defence | Holds the world rate, up to a point above while gold is short, and ignores the domestic cycle; convertible gold standard only |
 
 A mandate-run bank cuts three times as fast once the cycle falls into Stagnation
-or worse. In the simulations Growth brings one and a half to two and a half times
-the crashes of Price Stability, for about a point more manufacturing throughput.
+or worse.
 
 Central Bank Independence makes delegation permanent: you choose the mandate but
 no longer set the rate or print money. Lenders reward it with half a point off
@@ -328,11 +323,10 @@ which soaks up a tenth of a point of standing wage and price pressure.
 ### Monetary policy stance
 
 Policy Stance reports your rate as Very Loose, Loose, Neutral, Tight or Very
-Tight against what your economy can bear. Loose adds roughly 0.1 to 0.25
-momentum and 0.5 to 1.5 bubble pressure a month, Very Loose about twice that, and
-the tight bands drain the same. What the economy can bear is hidden even from
-your bank, and the band is the bank's estimate, so stepping the dial will not
-find the exact turning point.
+Tight against what your economy can bear. The loose bands add momentum and
+bubble pressure every month, and the tight bands drain them. What the economy
+can bear is hidden even from your bank, and the band is the bank's estimate, so
+stepping the dial will not find the exact turning point.
 
 Six months on the tight side bring Dear Money Politics (Landowners and Petite
 Bourgeoisie approve; Industrialists, Rural Folk and Trade Unions disapprove), and
@@ -347,11 +341,11 @@ inflation), your credit standing and your risk premium, less the inflation that
 actually happened, and never falls below 0.5%.
 
 Credit standing is what your country is: rank, finance technologies and a stock
-exchange, institutions and currency credibility. It cannot go below 0.5 points
-(0.25 under Central Bank Independence). Risk premium is what is happening: the
-cycle phase, crisis tools, banking events, bankruptcy, a debt load past a quarter
-of your credit limit (up to +4 points at the limit), expectations that have
-strayed from target, money printing and a weak currency.
+exchange, institutions and currency credibility. It cannot go below 0.5 points.
+Risk premium is what is happening: the cycle phase, crisis tools, banking
+events, bankruptcy, a debt load past a quarter of your credit limit (up to +4
+points at the limit), expectations that have strayed from target, money printing
+and a weak currency.
 
 The World Reference Rate is 3% for every country, 2.5% once any great power has
 Macroeconomics and 2% once one has Globalization. The World Rate is the real
@@ -363,30 +357,33 @@ rates are measured against it.
 Inflation shows what prices did over the last year, and Expected Inflation what
 lenders and workers assume they will do. A loose stance, a boom, deficits, money
 printing, dearer goods and imports, and inflowing gold push it up, as do the Wage
-Pressure of your labour and welfare laws and any other standing Inflationary
-Pressure, such as a devaluation. Above 8% inflation feeds itself, because labour
-laws count twice.
+Pressure of your labor and welfare laws and any other standing Inflationary
+Pressure, such as a devaluation. Above 8% inflation, the wage pressure of your
+labor and welfare laws counts twice.
 
-Expected inflation creeps toward the bank's target of 2% (0% on metallic money),
-twice as fast under an independent bank as a delegated one. It sets the floor
-under your borrowing, so only inflation lenders did not foresee erodes your debt.
+Expected inflation follows actual inflation, pulled toward the bank's target of
+2% (0% on metallic money) the more lenders trust the bank, and adjusts twice as
+fast under an independent bank. It sets the floor under your borrowing, so only
+inflation lenders did not foresee erodes your debt.
 
 Inflation puts you in one of six price bands, each a modifier on your country.
-You leave a band only once inflation is a quarter point past its edge.
+You leave a band only once inflation is a quarter point past its edge. Above
+Stable prices, each band is worse than the one below on every count; the
+modifier's tooltip gives the figures.
 
-| Band | Inflation | Effects |
+| Band | Inflation | Main effects |
 |---|---|---|
-| Deflation | below −1% | −0.2 momentum a month; Rural Folk and Trade Unions disapprove |
-| Stable prices | −1% to 3% | None; labour laws pay the Real-Wage Dividend |
+| Deflation | below −1% | Momentum drains; Rural Folk and Trade Unions disapprove |
+| Stable prices | −1% to 3% | None; labor laws pay the Real-Wage Dividend |
 | Elevated | 3% to 8% | Lower strata expect more; Petite Bourgeoisie disapprove | <!-- style: allow ai-vocab -->
-| High | 8% to 20% | +5% tax waste, capitalists and shopkeepers invest 15% less efficiently, higher expectations, three interest groups disapprove |
-| Very high | 20% to 50% | +12% tax waste, −30% investment efficiency, −30% minting, +1 bubble a month |
-| Hyperinflation | 50% and up | +25% tax waste, −50% investment efficiency, −80% minting, +2 bubble a month; the hyperinflation crisis fires |
+| High | 8% to 20% | Tax waste, weaker investment, more interest groups disapprove |
+| Very high | 20% to 50% | Less minting, and bubble pressure builds |
+| Hyperinflation | 50% and up | The hyperinflation crisis fires |
 
-The Real-Wage Dividend turns your labour laws' wage pressure into a lower
+The Real-Wage Dividend turns your labor laws' wage pressure into a lower
 standard-of-living expectation for the lower strata (see
 [Economy and construction](03-economy.md)) and a little momentum, while prices
-are stable. Command and dollarised economies never get it.
+are stable. Command and dollarized economies never get it.
 
 ### Monetising the deficit
 
@@ -394,7 +391,7 @@ Monetise Deficit, from 0 to 3, has your national bank print money for the
 treasury. Each level mints about 1% of a year's GDP, adds about 2.5 points of
 inflation pressure and half a point of risk premium. It needs Fiat Money or
 Digital Currency and a bank that takes instructions, so Central Bank
-Independence, Command Economy, dollarisation and an anchored currency rule it
+Independence, Command Economy, dollarization and an anchored currency rule it
 out.
 
 ### Currency regimes and the policy rate
@@ -403,8 +400,8 @@ Your Monetary Policy law sets the dial's range.
 
 | Currency law | Unlocked by | Rate range | Notes |
 |---|---|---|---|
-| Commodity Money | default | World rate −1 to +3, with a national bank | Coin flows out when your prices outrun the world's; exchange rate fixed at par |
-| Gold Standard | Central Banking | 0% to 15% | −1 point of credit standing; gold reserve; Peg Defence; fixed at par |
+| Commodity Money | default | World rate −1 to +3, with a national bank | Prices that outrun the world's are pulled back down; fixed at par |
+| Gold Standard | Central Banking | 0% to 15% | A point off credit standing; gold reserve; Peg Defence; fixed at par |
 | Fiat Money | Keynesian Economics, with National Bank Established | 0% to 25% | Open-Market Operations and money printing; floats |
 | Digital Currency | Universal Digital Identity, with National Bank Established | −3% to 25% | As Fiat, and the rate moves twice as fast; floats |
 | Decentralized Cryptocurrency | Cybersecurity | no dial | Borrows at the world rate plus a spread; floats |
@@ -427,9 +424,9 @@ currency drains it at any time. At 20 comes The Run on the Vault:
 
 | Option | Effect |
 |---|---|
-| Raise the rate until the gold comes back | For a year the target cannot go below the World Rate +4; Peg Confidence +40 |
-| Suspend payment in gold | Five years as a paper currency with a free dial; +2 points of risk premium for five years, the gold credit-standing bonus lost for ten |
-| The peg holds. The price of gold does not. | Devalue: the vault gains 15% of its limit, Peg Confidence resets to 50, the exchange-rate index falls to 88 and recovers over five years; prices rise and the great powers resent it |
+| Raise the rate until the gold comes back. | For a year the rate target stays at least 4 points above the World Rate; Peg Confidence +40 |
+| Suspend payment in gold. For the duration. | Five years as a paper currency with a free rate; +2 points of risk premium for five years; gold's credit-standing bonus lost for ten |
+| The peg holds. The price of gold does not. | Devalue: the vault gains 15% of its limit, Peg Confidence resets to 50, the exchange-rate index drops to 88 and recovers over five years; prices rise; the great powers resent it |
 
 ### The exchange-rate index and capital controls
 
@@ -447,18 +444,18 @@ Confidence on gold and pulls prices down on commodity money.
 
 Capital Controls (Outflows) cut the effect of the gap between your rate and the
 world's on your exchange rate, gold and peg to a quarter. Each peacetime year
-they stay on adds a step of Capital Controls Fatigue, up to five, costing
-Industrialist and Petite Bourgeoisie approval and investment efficiency. The
-count freezes in a war or crisis and fades after the controls come off.
+they stay on adds a step of Trapped Capital, up to five, costing Industrialist
+and Petite Bourgeoisie approval and investment efficiency. The count freezes in
+a war or crisis and fades after the controls come off.
 
-### Hyperinflation and dollarisation
+### Hyperinflation and dollarization
 
 When inflation reaches 50%, Not Worth the Paper offers three answers:
 
 | Option | Effect |
 |---|---|
-| Call in every note. We begin again. | Inflation and expectations reset to 5%; printing stops; part of the investment pool is lost; middle and upper strata radicalise; Currency Reform adds 5 points of risk premium for ten years |
-| Let them keep the foreign money. They already have. | A Dollarised Economy: inflation ends, but the dial and money printing are gone and minting falls 75%. Enacting any monetary law brings back your own currency, with inflation at 5% and ten years of the Currency Reform premium; Command Economy ends it free |
+| Call in every note. We begin again. | Inflation and expectations reset to 5%; printing stops; the investment pool is wiped out; middle and upper strata radicalise; Currency Reform adds 5 points of risk premium for ten years |
+| Let them keep the foreign money. They already have. | A Dollarised Economy: inflation drops to the bank's target, but the dial and money printing are gone and minting falls 75%. Enacting any monetary law brings back your own currency, with inflation at 5% and ten years of Currency Reform; Command Economy ends it free |
 | It will pass. Everything passes. | Nothing; the question returns in two years |
 
 ### Monetary treaty articles
@@ -467,24 +464,25 @@ Five treaty articles tie money or debts across borders; all need the full
 Banking System (treaties in general: [Diplomacy](08-diplomacy.md)). A pegged
 country is anchored: no dial, the anchor's rate plus a spread, the anchor's
 exchange rate, no money printing, and up to 80% of the anchor's credibility. It
-keeps its own inflation and cycle, so its currency grows overvalued when the two
-economies drift apart.
+keeps its own inflation and cycle, and when its inflation outruns the anchor's
+the gap shows as overvaluation, which drains Peg Confidence.
 
-| Article | Unlocked by | Weaker party | Stronger party |
-|---|---|---|---|
-| Currency Peg | International Exchange Standards | Anchor's rate +0.5; credit standing 0.5 points better; Peg Confidence | Better credit standing as more of the world pegs to it; +2% prestige; +200 leverage |
-| Swap Line | Macroeconomics | −1 risk premium, +2 Peg Confidence a month; in a financial crisis borrows 0.1% of GDP a month (to 2%), repaid interest-free | Premium scaled by the recipient's GDP against its own; +150 leverage |
-| Lender of Last Resort | Intergovernmental Organizations | Debt-load premium halved (less after each default); imported panics a fifth less deep | Premium scaled the same way; on the ward's default, honour (5% of its GDP or more) or renege (+5 infamy, −10% prestige, other guarantees void for five years); +300 leverage |
-| Imposed Currency Peg | International Exchange Standards | Anchor's rate +1; no credit-standing benefit; −10 legitimacy; cannot break the peg | +400 leverage |
-| Debt Receivership | International Exchange Standards | Guarantee-like relief; pays 0.1% of GDP a month; −10 legitimacy; ends after 12 months of low debt | Takes the payment; +500 leverage |
+| Article | Unlocked by | What it does |
+|---|---|---|
+| Currency Peg | International Exchange Standards | The weaker party pegs to the stronger at the anchor's rate plus half a point, and its credit standing improves |
+| Swap Line | Macroeconomics | Lowers the recipient's risk premium and steadies its peg; in a financial crisis it borrows from the provider, repaid interest-free |
+| Lender of Last Resort | Intergovernmental Organizations | Halves the ward's debt-load premium; if the ward defaults, the guarantor pays out or reneges at a cost in infamy and prestige |
+| Imposed Currency Peg | International Exchange Standards | A peg at the anchor's rate plus a point, with no credit benefit and −10 legitimacy, that the pegger cannot break |
+| Debt Receivership | International Exchange Standards | The debtor pays the creditor 0.1% of GDP a month, with −10 legitimacy, until its debt stays low for 12 months |
 
-The last two are hostile and can only be demanded of a country in default. Leverage
-is generated only while the stronger party leads a power bloc. A country may
-receive only one swap line at a time. A treaty pegger at Peg Confidence 20 gets The Peg Under
+The last two are hostile: a larger power can demand them only of a country in
+default. Each article earns the stronger party leverage over the weaker, from
+150 to 500, but only while it leads a power bloc. A country may receive only one
+swap line at a time. A treaty pegger at Peg Confidence 20 gets The Peg Under
 Siege: impose capital controls for a year (+40 confidence), break the peg by
-leaving the treaty, or re-peg lower. An imposed peg cannot be broken. AI
-countries seek swap lines in a financial crisis and guarantees when heavily in
-debt, and are slow to give up their own currency.
+leaving the treaty, or re-peg lower. AI countries look for a swap line when
+their peg wobbles and a guarantee when heavily in debt, and are reluctant to peg
+their own currency.
 
 ### The Monetary Union principle group
 
@@ -493,19 +491,19 @@ principles. Each tier includes the ones before, and all need Central Banking.
 
 | Tier | Principle | Effect |
 |---|---|---|
-| 1 | Monetary Cooperation | Half a swap line for every member from the leader |
-| 2 | Common Currency | Members may adopt the leader's money: its rate with no spread, its exchange rate, +5% export and import advantage; overvaluation raises the adopter's premium instead of breaking a peg |
+| 1 | Monetary Cooperation | Every member gets half a swap line from the leader |
+| 2 | Common Currency | Members may adopt the leader's money: its rate with no spread, its exchange rate and +5% export and import advantage |
 | 3 | Fiscal Backstop | The leader is lender of last resort to every adopter |
 | 4 | Banking Union | Adopters get −25% crash likelihood and volatility and an intervention point; needs Keynesian Economics |
 | 5 | Reserve Currency | The leader borrows more cheaply and earns on the world's balances; adopters gain more trade advantage; needs Globalization |
 
 Adopting needs Fiat Money or Digital Currency with a national bank, inflation
 within 3 points of the leader's and debt under half your credit limit. Leaving
-drops your currency, worsens your credit standing for ten years, costs
-investment pool, relations and bloc cohesion, and bars you for ten years. A
-leader can Press for Convergence at 50 influence per holdout, which puts The
-Question of the Common Currency to each holdout; one that refuses costs the bloc
-cohesion and gains Monetary Independence. Power blocs in general are covered in
+worsens your credit standing for ten years, costs investment pool, relations and
+bloc cohesion, and bars you for ten years. A leader can Press for Convergence at
+50 influence per holdout, which waives the debt condition and puts The Question
+of the Common Currency to each holdout; one that refuses costs the bloc cohesion
+and gains Monetary Independence. Power blocs in general are covered in
 [Diplomacy](08-diplomacy.md).
 
 ### Currency boards for subjects
@@ -526,14 +524,14 @@ quarter full and the treasury is flush.
 
 ## The Simplified banking setting
 
-*Simplified* keeps the whole cycle: phases, crashes, contagion, rescue appeals,
-the Great Depression, every tool, the financial regulation laws, and the charts
-for the cycle, the policy rate and the rate paid. It drops the monetary layer: no
-rate target or mandates, inflation, exchange rate, gold reserve, monetary treaty
-articles, Monetary Union principles or currency boards.
+*Simplified* keeps the cycle and everything tied to it: crashes, contagion,
+rescue appeals, the Great Depression, every tool and the financial regulation
+laws. It drops the monetary layer: no rate target or mandates, inflation,
+exchange rate, gold reserve, monetary treaty articles, Monetary Union principles
+or currency boards.
 
-You still borrow at a rate of your own: the World Reference Rate (3%, falling to
-2% over the eras), a point more without a national bank, plus credit standing and
+You still borrow at a rate of your own: the World Reference Rate, a point more
+without a national bank, plus credit standing and
 risk premium, so a Panic still raises your interest. Open-Market Operations needs
 only Keynesian Economics, four points and a law that allows it, and The Gold
 Window Closes, a gold-standard crisis event, appears only under this setting.
@@ -557,20 +555,20 @@ Bailout Request:
 
 | Answer | Effect |
 |---|---|
-| Extend a generous rescue package | Pays the recipient a sum scaled to the rescuer's GDP, capped at a fifth of the recipient's GDP; +30 relations; five years of Restored Banking Confidence for the recipient |
-| Offer a smaller emergency grant | Capped at an eighth of that; +10 relations; two and a half years of Restored Banking Confidence |
-| They must solve their own problems | −20 relations; the largest hit to the rescuer's own cycle, since every answer shakes its markets a little |
+| Extend a generous rescue package | A sum scaled to the rescuer's GDP, capped at a fifth of the recipient's; +30 relations; five years of Restored Banking Confidence for the recipient |
+| Offer a smaller emergency grant | An eighth of the package; +10 relations; two and a half years of Restored Banking Confidence |
+| They must solve their own problems | −20 relations, and the largest of the three hits to the rescuer's own cycle |
 
 Restored Banking Confidence lowers crash likelihood by 10% and blocks another
-appeal while it lasts. For standing support, use the Swap Line and Lender of Last
-Resort articles.
+appeal while it lasts.
 
 ### The Great Depression
 
-Every crash starts a crisis wave, and each contagion crash adds to it. If ten or
-more countries crash in one wave and together hold half of world GDP, every
-country with the banking journal entry gets The Great Depression three days later.
-It happens at most once per game.
+Every crash that starts at home begins a new crisis wave, replacing any wave
+still running, and each contagion crash adds to it. If ten or more countries
+crash in one wave and together hold half of world GDP, every country with the
+banking journal entry gets The Great Depression three days later. It happens at
+most once per game.
 
 | Your situation | Modifier |
 |---|---|
@@ -578,8 +576,8 @@ It happens at most once per game.
 | Not crashed, under Isolationism or Command Economy | Global Depression (Sheltered) for five years: −0.1 momentum a month |
 | Not crashed, any other country | Global Depression for ten years: −0.2 momentum a month, +1 point of risk premium |
 
-A United Nations member in a Panic or default after a crisis wave can be offered
-an emergency loan (see [The United Nations](09-united-nations.md)).
+A United Nations member in a Panic or default that a crisis wave has reached can
+be offered an emergency loan (see [The United Nations](09-united-nations.md)).
 
 ## Banking events
 

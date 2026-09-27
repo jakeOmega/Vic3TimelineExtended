@@ -1,9 +1,9 @@
 # The United Nations
 
-The United Nations is an organisation that one great power founds and the rest
+The United Nations is an organization that one great power founds and the rest
 of the world then joins, ignores or works against. Its
 journal entry shows UN Authority (how seriously the world takes the
-organisation), the Security Council of five permanent members with a veto, the
+organization), the Security Council of five permanent members with a veto, the
 conventions in force, missions in individual states and the dues every member
 pays, and holds a chamber where you vote and table resolutions. The journal
 entry appears once you research Intergovernmental Organizations, an era 6
@@ -50,7 +50,7 @@ speed, +1% research speed, +3% prestige). Joining binds you, without a choice,
 to every convention already in force, and makes you pay [UN
 dues](#un-dues-and-article-19).
 
-Leave the United Nations ends your membership, seat, programmes and conventions.
+Leave the United Nations ends your membership, seat, programs and conventions.
 It costs 5 standing and gives UN Withdrawal Consequences for five years (−25%
 relations improvement speed, −5% prestige), during which you cannot rejoin.
 Sanctions against you stay in force, and so do unpaid dues. A permanent member
@@ -64,7 +64,7 @@ and conventions over to the winner and rebuilds them in the following months
 A member that stops conducting its own foreign policy, for example by being made
 a puppet, keeps its membership but has its **representation suspended**. It
 casts no vote, tables nothing, holds no permanent seat, cannot host the
-headquarters and runs no UN programmes. It pays no dues itself: if its direct
+headquarters and runs no UN programs. It pays no dues itself: if its direct
 overlord is a represented member, the overlord is assessed on the subject's GDP
 too, and while the overlord pays, the subject keeps its membership benefits.
 Representation returns as soon as the country conducts its own foreign policy
@@ -91,9 +91,9 @@ world shows over years. The target is the sum of seven pillars:
 |---|---|---|
 | Base | 15 | Constant. |
 | Participation | 0 to +25 | The share of world prestige held by members. |
-| Great-power commitment | −25 to +25 | Members championing (+1) or undermining (−1) the order, weighted by their share of world power. Members of a bloc with Multilateral Institutions count a little in favour. |
+| Great-power commitment | −25 to +25 | Members championing (+1) or undermining (−1) the order, weighted by their share of world power. Members of a bloc with Multilateral Institutions count a little in favor. |
 | Credibility | −15 to +15 | Resolutions carried or failing, vetoes, members backing or defying the UN in events, lifted sanctions, abused mandates, failed missions. |
-| Funding | −10 to +10 | The power-weighted share of major and great power members running UN programmes, minus up to 15 for dues withheld. |
+| Funding | −10 to +10 | The power-weighted share of major and great power members running UN programs, minus up to 15 for dues withheld. |
 | Peace and order | −20 to 0 | Members at war with fellow members, and nuclear use. |
 | Delivery | 0 to +10 | Aid and peacekeepers delivered, emergency loans, mandates discharged, missions accomplished. |
 
@@ -102,9 +102,9 @@ entries halve every four years. Every act enters them multiplied by the actor's
 **weight in world affairs**: its share of world prestige against a typical great
 power's 10% (×1), up to ×5. A permanent member walking out and a nuclear first
 strike also knock authority down directly. A new UN starts at 50, but with empty
-ledgers, no champions and no programmes its target sits well below that, so
+ledgers, no champions and no programs its target sits well below that, so
 expect authority to fall in its first years unless great powers champion it and
-run programmes.
+run programs.
 
 <!-- screenshot: the Why UN Authority Is Moving widget, with the pillar table, the tier and charter lines and the recent ledger entries -->
 
@@ -120,7 +120,7 @@ effects. A tier is entered at its floor and left 4 points below it.
 | Contested | 20–45 | ×0.5 | 0.1% | Membership benefits are paid. |
 | Established | 45–70 | ×1 | 0.2% | Countries that could join but stay out become International Pariahs. Each war goal a play's initiator adds without a mandate costs 2 extra infamy. Peacekeeping requests send full deployments. |
 | Strong (needs Charter Reform I) | 70–85 | ×1.5 | 0.4% | Outsiders also lose trade advantage and leverage. Sanctions become embargoes, condemned countries are Shunned, the surcharge rises to 4, members share intelligence, and nationalist interest groups resent the UN. With the IAEA, members without the bomb are held to disarmament. |
-| Supranational (needs Charter Reform II) | 85+ | ×2.5 | 1% | The surcharge rises to 10, condemned countries are also Restrained, and outsiders of major rank or with a nuclear programme carry a standing case of 50. |
+| Supranational (needs Charter Reform II) | 85+ | ×2.5 | 1% | The surcharge rises to 10, condemned countries are also Restrained, and outsiders of major rank or with a nuclear program carry a standing case of 50. |
 
 From Strong, the surcharge doubles against a country hosting UN peacekeepers,
 your patriotic, jingoist, isolationist and sovereignist interest groups lose
@@ -149,14 +149,14 @@ five years.
 
 Below authority 10 the UN is in crisis until authority climbs above 20. Every
 great power then receives The United Nations in Crisis: members can stand by the
-organisation (−10% influence for five years, credibility +2 × weight), outsiders
+organization (−10% influence for five years, credibility +2 × weight), outsiders
 can join to save it, and anyone can wait and see or let it go (+5% influence for
 five years, credibility −2 × weight). The authority widget lists every great
 power that could lift the target, and by how much. If the target falls below 5
 during the crisis, authority falls at least a quarter point a month, and at 0
 the UN dissolves.
 
-Dissolution ends every membership, seat, programme, convention, agency,
+Dissolution ends every membership, seat, program, convention, agency,
 sanctions regime, mandate and mission, demolishes the headquarters and writes
 off unpaid dues. Every power bloc gains The UN Has Fallen (+20 cohesion, +20%
 leverage generation, fading over ten years). Twenty years later any great power
@@ -207,16 +207,16 @@ and lose your standing benefits for five.
 ## Resolutions in the General Assembly
 
 The floor takes one resolution at a time, and each is open for a year. The
-proposer's own vote counts in favour. Human members can vote in the chamber at
+proposer's own vote counts in favor. Human members can vote in the chamber at
 once and receive the UN General Assembly Vote event after 30 days. Every AI
 member votes on day 30. After a year, General Assembly Vote Results applies the
 outcome.
 
-Most topics pass when the votes in favour outnumber those against. Charter
+Most topics pass when the votes in favor outnumber those against. Charter
 reforms and motions to expel need two thirds of all members with a vote, so
-abstaining counts against them. A vote in favour gives +15 relations with the
+abstaining counts against them. A vote in favor gives +15 relations with the
 proposer, a vote against −15. On a resolution that accuses a country (a
-condemnation, sanctions, a mandate or a motion to expel), voting in favour also
+condemnation, sanctions, a mandate or a motion to expel), voting in favor also
 costs 15 relations with the target and voting against gains 15. When a power
 bloc leader's resolution carries, its bloc gains 3 leverage in each of its other
 members that sits in the Assembly; when it falls, the bloc loses 3.
@@ -283,7 +283,7 @@ ballot shows every voter's lean and why the members voted as they did.
 | The cost to us, on aid and peacekeeping requests | −15 per earlier contribution, up to three; more for aid to a great, major or richer country |
 | Our interests on this topic | Laws, technologies and what the convention's terms would do to us |
 
-An AI member votes in favour when its lean, plus a random −20 to +20, is above
+An AI member votes in favor when its lean, plus a random −20 to +20, is above
 0. An AI permanent member vetoes a binding resolution at a lean of −30 or below
 (−50 if it vetoed recently, −10 at Moribund), unless it pledged its vote.
 
@@ -296,7 +296,7 @@ request (Refuse to take part) means you contribute nothing. Refusing anything
 else (Denounce the decision) is a statement on the record that changes nothing.
 Refusing costs 20 relations with the proposer and 3 infamy, and for a binding
 resolution also 5 standing and 10 case strength. Accepting a binding resolution
-you opposed earns 2 standing. A member that voted in favour, or did not vote,
+you opposed earns 2 standing. A member that voted in favor, or did not vote,
 ratifies a carried convention without being asked.
 
 ### Tabling UN business
@@ -370,7 +370,7 @@ and once a year.
 |---|---|---|---|
 | Universal Declaration of Human Rights (UNHRC) | Authority 40; a proposer with Human Rights | Acceptance of other cultures, prestige | Countries with Ancestral Citizenship, Outlawed Dissent or slavery lose legitimacy and prestige. |
 | International Criminal Court (ICC), binding | Authority 40; the Declaration in force (a great-power war's end can raise it sooner); a major-power proposer with Human Rights | Less infamy generation, faster relations | The court indicts rulers. |
-| Nuclear Non-Proliferation Treaty (IAEA) | Authority 40; a proposer with Nuclear Weapons | Faster infamy decay, prestige | Programmes without a bomb run 25% slower; countries with neither a bomb nor a programme defend better against strikes. |
+| Nuclear Non-Proliferation Treaty (IAEA) | Authority 40; a proposer with Nuclear Weapons | Faster infamy decay, prestige | Programs without a bomb run 25% slower; countries with neither a bomb nor a program defend better against strikes. |
 | Climate Accord (UNEP) | Authority 30; Environmental Movement; the Global Warming rule | Environment ministry impact, prestige | Market leaders with 10%+ of world emissions cut emissions and heavy industry; low emitters get adaptation aid. |
 | Global Pandemic Response (WHO) | Authority 20; a major-power proposer with Antibiotics | Cheaper health system, prestige | None. |
 | International Refugee Resolution (UNHCR) | Authority 20; a country at war or with a state below 6 standard of living | Refugee ministry impact, prestige, migration pull | The 20 richest countries per head take in migrants and turmoil; the poorest gain standard of living. |
@@ -393,7 +393,7 @@ Supranational) for a nuclear first or tactical strike or an exposed
 regime-change operation, at most once a decade. Handing the ruler over exiles
 the ruler, and your heir, if you have one, takes the throne first; defying the
 court costs 5 standing, 10 case strength and credibility. A party to the
-Declaration that runs a coercive resettlement programme is penalised (see
+Declaration that runs a coercive resettlement program is penalised (see
 [States and population](07-states.md)).
 
 ## UN military mandates
@@ -440,16 +440,16 @@ Any major-power member not under sanctions can press Send a Contingent on a
 mission's row in the chamber, if it is not the host, not at war with it and has
 not left that mission before. Each mission joined this way costs a quarter of a
 percent of GDP a year, free for peacekeeping and stabilisation if you run the
-peacekeeping programme. Bring Our Contingent Home costs 2 standing and 10
+peacekeeping program. Bring Our Contingent Home costs 2 standing and 10
 relations with the host, and a peacekeeping or stabilisation mission left empty
 fails.
 
 <!-- screenshot: a state panel showing the UN Mission tile for a peacekeeping mission, with its strength and progress -->
 
-## UN programmes and great-power stances
+## UN programs and great-power stances
 
-A major power's programmes count toward the funding pillar while they run (two
-count in full), and every programme earns standing after 24 months.
+A major power's programs count toward the funding pillar while they run (two
+count in full), and every program earns standing after 24 months.
 
 | Button | Requires | Cost | Gives |
 |---|---|---|---|
@@ -476,7 +476,7 @@ a dissolution writes them off.
 
 ## International standing
 
-Standing is your own record in the organisation, separate from UN Authority. It
+Standing is your own record in the organization, separate from UN Authority. It
 starts at 50 when you join.
 
 | Tier | Standing | Effect |
@@ -488,7 +488,7 @@ starts at 50 when you join.
 | Disgraced | below 20 | −4 diplomatic reputation, slower infamy decay; no mandates |
 
 Standing also sways votes on your resolutions. You earn it by delivering:
-programmes kept for two years, aid and peacekeepers sent, missions accomplished,
+programs kept for two years, aid and peacekeepers sent, missions accomplished,
 mandates discharged, and binding resolutions accepted at a cost. Gains shrink as
 standing rises, and voting earns none apart from a kept vote pledge. Censure,
 sanctions, defiance, abused mandates, leaving and withheld dues cost it.

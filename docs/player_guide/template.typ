@@ -31,7 +31,7 @@
     keywords: ("source-sha256:" + fingerprint,),
     date: date,
   )
-  set text(font: "Libertinus Serif", size: 10.5pt, lang: "en", region: "gb", hyphenate: true)
+  set text(font: "Libertinus Serif", size: 10.5pt, lang: "en", region: "us", hyphenate: true)
   set par(justify: true, leading: 0.62em, spacing: 1.15em)
   show raw: set text(font: "DejaVu Sans Mono", size: 0.85em)
   show link: set text(fill: accent)

@@ -359,7 +359,7 @@ switch that runs at full flow once the price crosses the threshold.
 
 A preset keeps its flow and budget in step with your country, recalculating them
 every week from your capacity and GDP, until you change either by hand. The
-preset in force is greyed out, and changing any setting by hand ends it. The
+preset in force is grayed out, and changing any setting by hand ends it. The
 budget is an estimate and a cap for each week; what goes unspent doesn't carry
 over. A new reserve starts every good on Manual with the Standard settings
 loaded, so switching a good to a policy works at once. The row's own buttons and

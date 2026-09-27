@@ -49,7 +49,7 @@ So:
 
 ## Voice
 
-Plain, direct, second person, present tense. "You", not "the player". "The
+Plain, direct, second person, present tense, American spelling (as the base game uses; keep in-game names exactly as spelled, e.g. "Nuclear Programme Sabotage"). "You", not "the player". "The
 reserve drains", not "the reserve will drain". Write the way a good strategy-game
 manual reads: short declarative sentences, concrete nouns, the verb *is* when
 something is something.

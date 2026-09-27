@@ -52,7 +52,7 @@ The humanitarian and cultural articles move people, faiths and cultures.
 |---|---|---|---|
 | Minority Protection | International Relations | Yes | Halves assimilation and conversion in the chosen state. The conceder loses legitimacy and pays authority; the other side gains prestige. |
 | Religious Mission Rights | Colonization | Yes | Each year 5% of the chosen state's pops of other faiths convert to the other side's religion. Blocked if the receiving country has State Atheism. |
-| Cultural Exchange Program | Pan-nationalism | No | Mutual: +1 yearly cultural acceptance, +2% prestige and +1 cultural pull for both, better relations, −1 ideological covert defence. |
+| Cultural Exchange Program | Pan-nationalism | No | Mutual: +1 yearly cultural acceptance, +2% prestige and +1 cultural pull for both, better relations, −1 ideological covert defense. |
 | Population Transfer | Pan-nationalism | Yes | Moves pops of the receiving country's primary cultures out of the conceding country, once. See [population transfers by treaty](#population-transfers-by-treaty). |
 
 The military and security articles cover disarmament and cooperation between
@@ -62,7 +62,7 @@ armed forces.
 |---|---|---|---|
 | Demilitarized Zone | International Relations | Yes | No conscription, barracks, naval fortifications or military bases in the chosen state; an existing military base is dismantled. |
 | Forced Disarmament | Intergovernmental Organizations | Yes | Military wages −25%, conscription halved, and every arms industry, artillery foundry, munition plant, naval building and military base in the conceding country dismantled. |
-| Intelligence Sharing Pact | Intergovernmental Organizations | No | Mutual, between two major powers or greater that have both established a Ministry of Intelligence and Security: +3 intelligence capacity, a stronger but dearer intelligence ministry, and a [defence shield](#the-intelligence-sharing-pacts-defence-shield). Costs each side 1 infamy. |
+| Intelligence Sharing Pact | Intergovernmental Organizations | No | Mutual, between two major powers or greater that have both established a Ministry of Intelligence and Security: +3 intelligence capacity, a stronger but dearer intelligence ministry, and a [defense shield](#the-intelligence-sharing-pacts-defense-shield). Costs each side 1 infamy. |
 | Joint Military Exercises | Combined Arms | No | Mutual: +25% army experience gain and admiral rank impact, slightly dearer military goods. |
 
 The aid and influence articles are how power blocs extend their reach. All but
@@ -109,11 +109,11 @@ company, a Convention on Minority Rights, a Demilitarization Agreement, and so
 on for about half of the new articles and for money transfers. The draft's
 randomize button draws from the names that fit.
 
-### The Intelligence Sharing Pact's defence shield
+### The Intelligence Sharing Pact's defense shield
 
 Once a year, each partner in an Intelligence Sharing Pact compares its own
-covert defence with its partners'. If a partner's is higher, you gain half the
-gap between your combined economic, military and ideological defence and your
+covert defense with its partners'. If a partner's is higher, you gain half the
+gap between your combined economic, military and ideological defense and your
 strongest partner's, added to each of the three. The stronger partner gains
 nothing from the shield, so the pact lets a great power cover a weaker partner
 against [covert operations](10-influence.md). The AI signs readily with a
@@ -174,7 +174,7 @@ ten a month.
 | International Summit | Intergovernmental Organizations; great power | Host (+10 relations with every other great power), attend (+5) or boycott (−5). |
 | The War of Words | Covert Warfare off; Mass Media; a rival that is a major power or greater | Open a propaganda offensive against the rival, or not. |
 | The Iron Purse | Keynesian Economics; a rival that is a major power or greater | Impose an embargo (−30 relations), or keep trading. |
-| An Agent in Place | Covert Warfare off; Cryptography; a rival that is a major power or greater | Plant an agent in the rival's defence ministry, or not. |
+| An Agent in Place | Covert Warfare off; Cryptography; a rival that is a major power or greater | Plant an agent in the rival's defense ministry, or not. |
 | The Heavens Beckon | Space Race off; Space Exploration; great power | Celebrate a space milestone, or spend on the people. |
 | Nuclear Brinkmanship | You and an opponent in a play both hold nuclear weapons, outside a nuclear crisis | Stand firm, open back channels, or mobilize. |
 

@@ -11,7 +11,7 @@ events never appear.
 
 ## Joining the space race
 
-Only great powers and major powers can run a space programme. If you drop below
+Only great powers and major powers can run a space program. If you drop below
 major power, your running milestones stop and their progress is lost. The one
 exception is Solar System Colonization once you hold a colony: it keeps running
 whatever your rank. A player country of either rank always makes progress. An
@@ -30,7 +30,7 @@ Industry makes.
 
 Its production method decides which milestones you can run. Each method includes
 everything the ones before it allow, so you only ever need the highest one your
-programme calls for. Each step up uses far more Launch Capacity and gives more
+program calls for. Each step up uses far more Launch Capacity and gives more
 innovation, innovation cap and prestige.
 
 | Production method | Technology | Milestones it allows | Launch Capacity used |
@@ -88,7 +88,7 @@ reward for finishing first and for finishing later. The controls are an approach
 selector (Safe or Ambitious) and a funding stepper. Two collapsed sections
 follow. Who else is racing lists the other powers running the same milestone
 and whether its "first" is still unclaimed, but not how far along they are. The
-programme so far shows how far your own programme has come across all nine
+program so far shows how far your own program has come across all nine
 entries.
 
 A new milestone starts with no approach and funding level 1. Until you pick an
@@ -122,7 +122,7 @@ game uses, so check them after every change.
 Thirty days after Orbital Flight, the Moon Landing, the Deep-Space Probe, the Moon
 Base or the Mars Landing starts, an event asks you to choose how to fly it. While
 that milestone runs, your choice changes the setback risk, and sometimes the
-pace, of your whole programme, in the same way as an approach. When the milestone
+pace, of your whole program, in the same way as an approach. When the milestone
 is finished it also decides a reward that fades over ten years.
 
 | Event | Milestone | Options |
@@ -189,7 +189,7 @@ cost 25% of that milestone's progress, give Space Mission Failure (−2% prestig
 and −25 innovation cap, fading over five years) and radicalize some academics.
 They also start a six-month safety period during which none of your milestones
 can suffer another setback, although they keep moving at full pace; the panel
-says the programme is inside its post-setback review and shows the risk as 0%.
+says the program is inside its post-setback review and shows the risk as 0%.
 One option usually adds a Temporary Safety Review, which fades over ten years,
 and in some events also switches the milestone to Safe. Another usually presses
 on with a further flat loss of progress and more radicals, and no safety period.
@@ -209,7 +209,7 @@ needs.
 ## First-to-finish rewards
 
 When a milestone completes, its event plays and every other recognized country
-gets a notice two weeks later, from which it can push its own programme by 3
+gets a notice two weeks later, from which it can push its own program by 3
 points or congratulate you for better relations. The finisher keeps a permanent
 reward. The first country to finish a milestone gets the larger version; anyone
 who finishes it later gets the smaller one.
@@ -265,7 +265,7 @@ it has been claimed, and each stage needs more progress per colony.
 | 5 | The Kuiper Belt and beyond (Pluto-Charon, Eris, Makemake, Haumea, Sedna) | 5 | 650 |
 
 From stage 3, a country that doesn't yet hold a colony needs the Deep Space
-Exploration or Interstellar Mission method to start the programme; a country
+Exploration or Interstellar Mission method to start the program; a country
 that already holds one carries on through all five stages with Solar
 Colonization. Each colony's event offers two specializations, and the one you
 choose becomes a small permanent modifier on the journal entry. The options
@@ -277,16 +277,16 @@ also brings the event Beyond the Blue.
 
 The entry stays open for as long as you hold a colony, even if you switch off
 the Solar Colonization method, so your colony modifiers are never lost; the
-programme simply stops until the method returns. Once all 34 worlds are
+program simply stops until the method returns. Once all 34 worlds are
 claimed, Solar System Colonization finishes for the country that took the last
-one, and for any other colony holder whose programme is still running when its
+one, and for any other colony holder whose program is still running when its
 bar next fills. Finishing grants Interplanetary Trade Networks: +10% prestige,
 +5% research speed, +10% influence and +15% cultural pull.
 
 ## Space race events
 
 Besides the choice, setback and completion events above, the space race has
-yearly events for programmes under way. Some are hard science problems, such as
+yearly events for programs under way. Some are hard science problems, such as
 radiation, the rocket equation, communication delay, closed-loop life support,
 solar storms and orbital debris; others are discoveries, such as water on Mars or
 lunar helium-3. Their options add progress to the milestones they concern,
@@ -315,6 +315,6 @@ out. AI great powers prefer the Ambitious approach, more so when another country
 is running the same milestone; AI major powers lean towards Safe. The AI raises
 funding while it has innovation to spare and cuts it when innovation runs short.
 
-A revolution's winner continues the old country's programme, with its progress
-(except progress towards a first colony) and its rewards, and rebels can't start a programme of their own during a civil
+A revolution's winner continues the old country's program, with its progress
+(except progress towards a first colony) and its rewards, and rebels can't start a program of their own during a civil
 war; see [Government, laws and characters](05-politics.md).

@@ -1,41 +1,41 @@
 # Nuclear weapons
 
 Once you research the Nuclear Weapons technology, a great power can fund a
-weapons programme that turns research into warheads. Holding warheads brings a
+weapons program that turns research into warheads. Holding warheads brings a
 posture to choose (when you would use them, how ready they stand and who may
 launch), a standing bill, the risk of accidents, and crises in which you threaten
 others or are threatened. Strikes, civil wars that split an arsenal, and warheads
 that go missing follow from the same system. The Nuclear Weapons game rule
 controls it and is on by default; with it off the technologies remain, but no
-programme, stockpile or nuclear events exist.
+program, stockpile or nuclear events exist.
 
 ## The Nuclear Weapons journal entry
 
 Everything happens in one journal entry, **Nuclear Weapons**. It is active for
-any country with a working programme, any country holding a warhead (whatever its
+any country with a working program, any country holding a warhead (whatever its
 rank), and any country caught up in a nuclear crisis. A country with the
 technology but not the standing to build sees it inactive, with a status line
 saying what it lacks.
 
 | Panel | Shown when | What it holds |
 |---|---|---|
-| The Programme | You have a programme | Funding, production rate, time to the next warhead, warheads held |
+| The Programme | You have a program | Funding, production rate, time to the next warhead, warheads held |
 | Progress bar | Always | Progress toward the next warhead |
 | Nuclear Posture | You hold warheads | Doctrine, readiness, launch authority, forces, upkeep, incident exposure, interest-group opinions |
 | Nuclear Crisis and Reputation | In a crisis, or once you have a record | The crisis and your moves in it; credibility and pledges |
 | Delivery and Defence, Nuclear Powers | Always | Strike and interception ratings; the ten largest arsenals as the world estimates them |
 
-<!-- screenshot: the Nuclear Weapons journal entry for an armed great power, programme panel, progress bar and Nuclear Posture panel in view -->
+<!-- screenshot: the Nuclear Weapons journal entry for an armed great power, program panel, progress bar and Nuclear Posture panel in view -->
 
 A power that loses its rank stops building but keeps the entry, its posture, its
 upkeep and its accidents. Disarming closes the entry, except during a crisis.
 
 ## Building a nuclear arsenal
 
-The programme spends weekly innovation on warheads. It is slow to reach the
+The program spends weekly innovation on warheads. It is slow to reach the
 first device and much faster afterwards.
 
-### Who can run a weapons programme
+### Who can run a weapons program
 
 You need the Nuclear Weapons technology and one of these:
 
@@ -44,12 +44,12 @@ You need the Nuclear Weapons technology and one of these:
 - A Nuclear Program Aid treaty article in which a nuclear power helps you, at any rank.
 
 A Nuclear Disarmament article, or the United Nations' non-proliferation regime,
-ends the programme; a Nuclear Program Freeze holds funding at zero. Losing the
+ends the program; a Nuclear Program Freeze holds funding at zero. Losing the
 rank that qualified you zeroes funding the same week.
 
-### Programme funding and warhead production
+### Program funding and warhead production
 
-Funding is a stepper in the programme panel. Each step costs 100 weekly
+Funding is a stepper in the program panel. Each step costs 100 weekly
 innovation, taken out of your research, and you can add a step only while your
 innovation is above 100. A warhead needs 100 progress.
 
@@ -60,7 +60,7 @@ innovation is above 100. A warhead needs 100 progress.
 
 A Nuclear Program Aid article doubles the rate, covert sabotage slows it, United
 Nations inspections slow it (by a quarter at the UN's middle tier of enforcement,
-more at the higher tiers), and after any nuclear use every funded programme gets
+more at the higher tiers), and after any nuclear use every funded program gets
 +25%, fading over five years (The Bomb Has Been Used). Events can bring a
 laboratory accident, a discovery with civilian uses, or anti-nuclear protests.
 Most of the accident's and the discovery's choices cost progress toward the
@@ -73,10 +73,10 @@ Power modifier and a burst of loyalists. Later powers get "Our Nuclear Arsenal i
 Complete" and the same modifier, which raises prestige, diplomatic play
 maneuvers, and leverage generation and resistance.
 
-A later programme is noticed at 75 progress on its first device: the great
-powers, its rivals and its neighbours get "Nuclear Proliferation Alert". A nuclear
+A later program is noticed at 75 progress on its first device: the great
+powers, its rivals and its neighbors get "Nuclear Proliferation Alert". A nuclear
 power can answer with a public ultimatum, or with a public denunciation where no
-crisis can be opened. A country with a programme of its own can crash it or stay
+crisis can be opened. A country with a program of its own can crash it or stay
 the course. Anyone can push for a non-proliferation treaty, accept the new
 reality, or, with the Covert Warfare rule off, sponsor sabotage. Several answers
 shave progress off the proliferator.
@@ -119,19 +119,19 @@ Safeguards also make an unapproved launch likelier to be halted and cut the
 warheads lost when your arsenal changes hands. Survivability decides how hard you
 are to coerce: at 50 or more, threats against you carry much less weight.
 
-### Delivery capability and home defence
+### Delivery capability and home defense
 
 A strike lands with the attacker's delivery capability minus the target state's
-defence, never below 5% and never above 100%.
+defense, never below 5% and never above 100%.
 
-| Delivery | Bonus | Defence | Bonus |
+| Delivery | Bonus | Defense | Bonus |
 |---|---|---|---|
 | Nuclear Weapons | +100% | Military Aviation | +25% |
 | Intercontinental Ballistic Missiles | +50% | Radar | +25% |
 | Hypersonic Weapons | +50% | Missile Defense Systems | +50% |
 | Orbital Weapon Platforms | +50% | Directed Energy Defenses | +50% |
 | Heightened readiness | +5% | Orbital Weapon Platforms | +50% |
-| High Alert | +10% | Non-Proliferation Treaty guarantee (members with no bomb and no programme) | +5% at the UN's middle tier of enforcement, scaled by the tier |
+| High Alert | +10% | Non-Proliferation Treaty guarantee (members with no bomb and no program) | +5% at the UN's middle tier of enforcement, scaled by the tier |
 
 Technology defends every state. A Military Base defends its own state only, by
 +2% per level with a Missile Defense Battery or +3% with Directed Energy Point
@@ -207,8 +207,8 @@ doctrine has stood for six months.
 |---|---|---|
 | Armed Forces (officers) | Flexible First Use at Heightened readiness | No First Use, Warfighting, Recessed, Routine when an armed enemy is plausible, High Alert with strain of 50 or more |
 | Industrialists (business) | No doctrine preference | High Alert held three months or more; any crisis at Confrontation or beyond |
-| Groups favouring Total War over Limited War | Compellence or Warfighting, High Alert | No First Use, Existential Deterrence, Routine or Recessed |
-| Groups favouring Limited War over Total War | No First Use (Existential Deterrence less so), Recessed | Flexible First Use, Compellence, Warfighting, High Alert, Launch on Warning, Automatic Retaliation |
+| Groups favoring Total War over Limited War | Compellence or Warfighting, High Alert | No First Use, Existential Deterrence, Routine or Recessed |
+| Groups favoring Limited War over Total War | No First Use (Existential Deterrence less so), Recessed | Flexible First Use, Compellence, Warfighting, High Alert, Launch on Warning, Automatic Retaliation |
 
 A group that only approves of its preferred Rules of War law, rather than
 strongly, holds a mild view (±1). The Armed Forces and the Industrialists also
@@ -258,9 +258,9 @@ a war.
 | Dispute | What the target gives up if it concedes |
 |---|---|
 | A war between you | −35 war support in that war |
-| A diplomatic play between you | It backs down, and the play should end in your favour |
+| A diplomatic play between you | It backs down, and the play should end in your favor |
 | A play or war between the target and a country you cover, when you are not a party to it | The same, on your protégé's behalf |
-| A weapons programme run by your rival, or by a country you are antagonistic, belligerent or domineering toward | Its programme is frozen for 10 years |
+| A weapons program run by your rival, or by a country you are antagonistic, belligerent or domineering toward | Its program is frozen for 10 years |
 | An armed rival at Heightened readiness or higher | It stands down to Routine for 24 months |
 
 ### Crisis stages, danger and pressure
@@ -332,7 +332,7 @@ Called In":
 
 | Choice | Effect |
 |---|---|
-| Honour | +5 credibility. Under threat, you back the target. After a strike, you join its war, or open a public crisis against the attacker if there is no war to join |
+| Honor | +5 credibility. Under threat, you back the target. After a strike, you join its war, or open a public crisis against the attacker if there is no war to join |
 | Retaliate (after a strike) | +10 credibility; you join the war and, if you are at war with the attacker a day later, strike back then, as retaliation, under any doctrine |
 | Abandon | −15 credibility, Abandoned a Nuclear Guarantee for five years, −30 relations with the protégé and −10 with everyone else you protect; a subject gains 10 liberty desire |
 
@@ -372,10 +372,10 @@ A tactical strike that lands kills half the soldiers and officers in the state
 and a few civilians, stops unit training there for a while, and costs 10 infamy.
 It halves every Naval Fortification and Military Base in the state, an odd level
 lost on a coin flip, so a level-1 site is destroyed half the time. Barracks,
-conscription centres and the other naval buildings survive.
+conscription centers and the other naval buildings survive.
 
 Both sides get a notification of the result. Every use speeds up the world's
-funded programmes and ends any crisis between the two countries. The United
+funded programs and ends any crisis between the two countries. The United
 Nations records it against you, and its court may indict your ruler (see
 [The United Nations](09-united-nations.md)).
 
@@ -421,7 +421,7 @@ A Compellence or Warfighting power at war with an enemy that has no arsenal, no
 armed protector and no armed ally in that war, and whose doctrine allows a strike
 on it, has an 8% chance a month, at most once a year, of "The Monopoly Window":
 its general staff proposes using the bomb while nobody can answer. You can win
-conventionally, issue a public ultimatum, or authorise the strike.
+conventionally, issue a public ultimatum, or authorize the strike.
 
 ## Arsenals in civil wars and annexations
 
@@ -470,7 +470,7 @@ government's arsenal.
 ### Foreign powers and a divided arsenal
 
 A week after an armed country's civil war breaks out, every armed major power and
-armed neighbour gets "A Nuclear Power Divided". It can back either side (+20
+armed neighbor gets "A Nuclear Power Divided". It can back either side (+20
 relations with it, −20 with the other, +5 war support for that side), offer to
 secure the arsenal, or stay out. An accepted offer makes the helper the
 government's custodian for the war.
@@ -536,9 +536,9 @@ upkeep while the treaty is in force.
 
 | Article | Parties | Effect |
 |---|---|---|
-| Nuclear Disarmament | The disarmed country concedes; the demander pays 200 | Stockpile and progress go to zero, Nuclear Power is lost, and no programme runs while it lasts |
+| Nuclear Disarmament | The disarmed country concedes; the demander pays 200 | Stockpile and progress go to zero, Nuclear Power is lost, and no program runs while it lasts |
 | Nuclear Program Freeze | The frozen country concedes; the demander pays 100 | Funding held at zero; warheads and progress kept |
-| Nuclear Program Aid | A nuclear power helps a non-nuclear country and pays 500 | The recipient can run a programme at any rank, at double the rate. Refused once the IAEA exists and United Nations authority is 60 or more |
+| Nuclear Program Aid | A nuclear power helps a non-nuclear country and pays 500 | The recipient can run a program at any rank, at double the rate. Refused once the IAEA exists and United Nations authority is 60 or more |
 | Nuclear Guarantee | An armed guarantor pays 100 | Extended deterrence, as for the umbrella; not for your own subjects |
 | Nuclear Security Assistance | An armed country pays 100 to help one holding or missing warheads | Secured custody and a monthly chance to recover missing warheads |
 
@@ -548,7 +548,7 @@ United Nations' non-proliferation treaty and IAEA are in
 
 ## How the AI plays nuclear weapons
 
-- It funds its programme toward a target stockpile that grows with rank, innovation, war and a rival that seems to hold more.
+- It funds its program toward a target stockpile that grows with rank, innovation, war and a rival that seems to hold more.
 - It reviews its posture every six months and when a crisis opens. Most AIs keep Existential Deterrence; cautious rulers and democracies lean to No First Use, and militarist regimes (fascist, or with a jingoist ruler or a powerful Armed Forces in government) to Compellence or Warfighting.
 - It goes to High Alert in an Acute crisis or a war with an armed enemy, to Heightened in any war or Confrontation, and to Recessed only at peace with nothing to deter and nobody to protect, and then only under a cautious ruler, No First Use or a default.
 - It strikes first only when its doctrine allows and its survival is at stake, or when it is losing (Flexible), was defied (Compellence) or is at war (Warfighting) against an enemy with no arsenal and no armed protector. An aggressive ruler losing under Flexible First Use strikes whether or not the enemy can answer; a cautious one strikes first only for survival. It keeps a warhead in reserve unless its survival is at stake, waits six months between first uses, and strikes its own rebels only with 40% of its land occupied under Outlawed Dissent or a Secret Police.

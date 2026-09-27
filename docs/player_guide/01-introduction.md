@@ -71,19 +71,19 @@ only their effects on the banking cycle go.
 | Free Market Construction | Enabled | *Enabled*: construction is a good bought on the market, and buildings use some as maintenance. *Without Retooling Costs*: as Enabled, but switching production methods doesn't raise that maintenance. *Without Maintenance*: construction is still a market good, but buildings don't consume it. *Disabled*: base-game construction sectors. | [Economy and construction](03-economy.md) |
 | Global Warming | Enabled | Greenhouse emissions, rising temperatures, climate events and climate policies. | [Climate and pollution](14-climate.md) |
 | United Nations | Enabled | Founding and joining the UN, its votes, resolutions and agencies. | [The United Nations](09-united-nations.md) |
-| Nuclear Weapons | Enabled | Nuclear programmes, arsenals, doctrine, crises and strikes. | [Nuclear weapons](13-nuclear.md) |
+| Nuclear Weapons | Enabled | Nuclear programs, arsenals, doctrine, crises and strikes. | [Nuclear weapons](13-nuclear.md) |
 | Space Race | Enabled | The space race milestones and their events. | [The space race](15-space.md) |
 | Decolonization | Enabled | Colonial stability, the decolonization journal entry and its events. | [Colonial empires and decolonization](11-decolonization.md) |
 | Cultural Hegemony | Enabled | The competition for global cultural influence. | [Cultural hegemony and covert warfare](10-influence.md) |
 | Covert Warfare | Enabled | Intelligence agencies and covert operations against other countries. | [Cultural hegemony and covert warfare](10-influence.md) |
 | Social Movements | Enabled | The social-movement journal entries and their event chains. | [Social movements](06-social-movements.md) |
-| Internal Resettlement | Enabled | *Enabled*: the Settlement Authority and government resettlement programmes. *AI Voluntary Only*: AI countries run only voluntary programmes. *Disabled*: no resettlement. | [States and population](07-states.md) |
+| Internal Resettlement | Enabled | *Enabled*: the Settlement Authority and government resettlement programs. *AI Voluntary Only*: AI countries run only voluntary programs. *Disabled*: no resettlement. | [States and population](07-states.md) |
 | World War | Disabled | A journal entry for great powers that tracks ideological tension into a world war and its aftermath. | [Military and war](12-military.md) |
 | Heir Education | Disabled | Educating your heir, and administrative, diplomatic and military aptitude traits for rulers and heirs. | [Government, laws and characters](05-politics.md) |
 | Universal Aptitude Traits | Disabled | Gives aptitude traits to every adult character, with or without Heir Education. | [Government, laws and characters](05-politics.md) |
 | Custom Religion Allowed | Not allowed | A journal entry that lets you design a religion of your own. | [Government, laws and characters](05-politics.md) |
 
-## How the guide is organised
+## How the guide is organized
 
 The chapters follow the game's own areas rather than the order systems appear.
 

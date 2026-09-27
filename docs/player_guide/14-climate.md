@@ -13,8 +13,10 @@ event work under either setting.
 Emissions belong to a market, not a country. Each year a market emits in
 proportion to the coal and oil consumed anywhere in it, cut by the emission
 reductions of its market leader and reduced by the carbon captured by Synthetic
-Fuel Works and Carbon Conversion Works in the market. The year's emissions of
-every market are added to the world's cumulative total, and the temperature
+Fuel Works and Carbon Conversion Works in the market. (The mod renames the base
+game's coal good Energy and Carbon Minerals; this chapter calls it coal for
+short.) The year's emissions of every market are added to the world's
+cumulative total, and the temperature
 anomaly is that total divided by 10,000: a market that emits 1,000 a year warms
 the world by 0.1 °C a year.
 
@@ -30,7 +32,7 @@ A member's own ministry does nothing for the market's emissions.
 
 ## The Global Warming journal entry
 
-The entry is listed, greyed out, for every country from the start of the game.
+The entry is listed, grayed out, for every country from the start of the game.
 It activates for everyone once the anomaly reaches 0.1 °C and then stays
 active: it never completes and never goes away, even if the world cools again.
 Its progress bar fills at 4 °C, but the penalties keep growing past that.
@@ -79,7 +81,7 @@ adopt or repeal.
 Mitigation Policies lists all eight policies for every country. Each row shows
 Active or Inactive and one control: Adopt while the policy is not in force,
 Repeal while it is. A market-wide policy that your market leader put in force
-is also marked "set by market leader". A greyed control's tooltip lists the
+is also marked "set by market leader". A grayed control's tooltip lists the
 conditions and which of them you meet. Adoption Around the World, a collapsible
 section, counts the nations running each policy.
 
@@ -106,7 +108,7 @@ Standards charges its cost to every country in the market, members included.
 | Emission Standards | Market | 200 | Emissions −10%; generated pollution −25%; −5% throughput for every building. |
 | Climate Adaptation | National | 250 | Mortality −2.5% and standard of living +0.5 in every state. |
 | Reforestation Subsidies | National | 100 | Farm throughput +5%; droughts and floods 25% weaker and shorter. |
-| Public Transit | National | 150 | Transportation output +10%; oil input −5%; infrastructure built 10% faster; pops' automobiles add less infrastructure. |
+| Public Transit | National | 150 | Personal Transportation output +10%; oil input −5%; infrastructure built 10% faster; pops' automobiles add less infrastructure. |
 | Fossil-Fuel Divestment | National | 200 | Taxes on coal mining and oil extraction +25%; coal and oil input −5%. |
 | Green Building Codes | National | 100 | Construction goods input +5%; electricity input −2.5%. |
 

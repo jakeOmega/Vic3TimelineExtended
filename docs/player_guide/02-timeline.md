@@ -25,7 +25,7 @@ technologies were chosen to fit, so treat them as a rough guide.
 | 6 | 1919–1945 | 20,000 | 38 | Synthetics, appliances, aviation, radar, rockets and the atomic bomb |
 | 7 | 1946–1967 | 65,000 | 29 | Transistors, nuclear power, jets, the Green Revolution, missiles and satellites |
 | 8 | 1968–1987 | 115,000 | 21 | Computer networks, robotics, containerization, pharmaceuticals, stealth |
-| 9 | 1988–2012 | 210,000 | 28 | The internet, renewable energy, biotechnology, globalization, drones and cyber defence |
+| 9 | 1988–2012 | 210,000 | 28 | The internet, renewable energy, biotechnology, globalization, drones and cyber defense |
 | 10 | the present to about 2030 | 450,000 | 17 | Machine learning, electric vehicles, reusable rockets, hypersonic and cyber weapons |
 | 11 | about 2030–2060 | 800,000 | 20 | Advanced materials, fusion power, deep-sea and asteroid mining, genetic engineering, augmentation |
 | 12 | after 2060 | 2,000,000 | 18 | General AI, nanofabrication, megaprojects in orbit, antimatter, mind uploading, post-scarcity |
@@ -124,7 +124,7 @@ view. Each system also needs its game rule, and some have further conditions.
 |---|---|---|---|
 | Intergovernmental Organizations | 6 | The United Nations journal entry; the Power Bloc Headquarters and the Peace Palace | [The United Nations](09-united-nations.md) |
 | Decolonization | 6 | The colonial empire journal entry | [Colonial empires and decolonization](11-decolonization.md) |
-| Nuclear Weapons | 6 | The nuclear programme | [Nuclear weapons](13-nuclear.md) |
+| Nuclear Weapons | 6 | The nuclear program | [Nuclear weapons](13-nuclear.md) |
 | Rocketry | 6 | The first space race milestone, for great and major powers | [The space race](15-space.md) |
 | Combined Arms | 6 | The Gathering Storm, the world war journal entry, for great powers | [Military and war](12-military.md) |
 | Civil Rights Movement | 7 | The civil rights journal entry | [Social movements](06-social-movements.md) |
@@ -151,7 +151,7 @@ renames twelve base-game goods to fit a longer timeline.
 | Industrial Robotics | Industrial | Robotics Industry | Automation production methods in factories and mines |
 | Software | Luxury | Software Industry | The Convenience need; digital and automation production methods |
 | Digital Access | Luxury, local | Network Infrastructure | The Convenience need and many modern production methods; like Personal Transportation it is only available in the state that produces it |
-| Launch Capacity | Industrial | Aerospace Industry (with rocket production methods), Space Elevator, Antimatter Engine | Space programmes, satellites, orbital production methods and megaprojects |
+| Launch Capacity | Industrial | Aerospace Industry (with rocket production methods), Space Elevator, Antimatter Engine | Space programs, satellites, orbital production methods and megaprojects |
 | Advanced Materials | Industrial | Advanced Material Fabricator, Nanofabrication Center | Late-game production methods and megaproject construction; base price 4,000, the most expensive good in the game |
 | Construction Services | Industrial | Construction Sector | The construction market ([Economy and construction](03-economy.md)) |
 | Tourism | Luxury | Tourism Industry, National Park, Grand Monument and others | The pops' Tourism need |
@@ -379,7 +379,7 @@ specialists per level, and their effects scale with how fully they are staffed.
 |---|---|---|---|
 | Space Elevator | Space Elevator | 20 | Produces a million Launch Capacity per level and adds space race progress. Can only be built in states near the equator: most of tropical Africa, northern South America and Panama, southern India and Ceylon, Southeast Asia, the Pacific islands and a few others. |
 | Orbital Solar Collector | Space-Based Solar Power | 10 | Each level opens three slots for Solar Power Receivers, ordinary buildings you build in any state; each receiver level produces a million electricity. |
-| Orbital Battlestation | Orbital Weapon Platforms | 5 | Raises unit offense, defence, morale recovery and morale damage by 5% per level and improves defence against nuclear strikes. |
+| Orbital Battlestation | Orbital Weapon Platforms | 5 | Raises unit offense, defense, morale recovery and morale damage by 5% per level and improves defense against nuclear strikes. |
 | Antimatter Containment Facility | Antimatter Production | 10 | Each level opens five slots, shared between Antimatter Engines (Launch Capacity, faster army and fleet movement, space race progress) and Antimatter Warhead Plants (nuclear strike success, unit offense). Each level of either uses one slot. |
 | Mind Upload Nexus | Mind Backups | 5 | Produces software, services, tourism and art, and raises research speed by 5% per level. |
 | Nanofabrication Center | Molecular Assemblers | 10 | Produces Advanced Materials and lowers space race risk. |
@@ -410,7 +410,7 @@ Monument you own add one point of cultural pull, up to +5.
 ### Monument dedications
 
 When a level of an undedicated Grand Monument finishes, a dedication ceremony
-event asks what it honours, and its tooltips list each dedication's effects. The
+event asks what it honors, and its tooltips list each dedication's effects. The
 choice is permanent: to change it, demolish the monument and build again. One
 option leaves the monument Undedicated, a plain tourist draw, and you can still
 pick a dedication later in its building panel.
