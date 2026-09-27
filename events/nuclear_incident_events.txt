@@ -1476,12 +1476,15 @@ nuclear_incident.50 = {
 		}
 	}
 
-	# Authorise first use.
+	# Authorise first use. The Rules of War gate as well as the pledges, as on
+	# every crisis option that ends in a strike (nuclear_crisis_design.md §0.7):
+	# under Limited War or Humanitarian Regulations only the ultimatum is open.
 	option = {
 		name = nuclear_incident.50.c
 		trigger = {
 			exists = scope:nd_mw_enemy
 			nd_pledge_permits_strike = { ENEMY = scope:nd_mw_enemy }
+			nd_war_law_permits_strategic_strike = yes
 		}
 		highlighted_option = yes
 		custom_tooltip = nd_tt_monopoly_first_use

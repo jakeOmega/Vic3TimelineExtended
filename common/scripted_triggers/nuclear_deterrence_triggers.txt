@@ -375,8 +375,9 @@ nd_doctrine_permits_strike = {
 }
 
 # The Rules of War gate on a nuclear strike, shared by the strike actions
-# (nuke.txt) and every crisis option that can end in a strike (.4.g, .7.a,
-# .20.b), which used to skip it. Country scope. Humanitarian Regulations and
+# (nuke.txt), every crisis option that can end in a strike (.4.g, .7.a,
+# .20.b) and the Monopoly Window's first use (nuclear_incident.50.c), which
+# used to skip it. Country scope. Humanitarian Regulations and
 # Limited War forbid a strategic strike and Limited War a tactical one, unless
 # nd_war_law_exception holds. A threat the law forbids carrying out is a bluff
 # (nd_threat_law_permits).

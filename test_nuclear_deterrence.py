@@ -278,6 +278,11 @@ class TestWarLawGate(unittest.TestCase):
         for opt in ("nuclear_crisis.4.g", "nuclear_crisis.7.a", "nuclear_crisis.20.b", "nuclear_crisis.24.b"):
             self.assertIn("nd_war_law_permits_strategic_strike = yes", option_body(text, opt), opt)
 
+    def test_monopoly_window_first_use_checks_the_law(self):
+        text = strip_comments(read(INCIDENT_EVENTS))
+        self.assertIn("nd_war_law_permits_strategic_strike = yes",
+                      option_body(text, "nuclear_incident.50.c"))
+
 
 class TestTacticalTargets(unittest.TestCase):
     """nd_state_has_military_target is the tactical strike's one target list:
