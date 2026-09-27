@@ -110,11 +110,11 @@ effect runs in (`docs/guides/scripting_best_practices.md` § "`add_modifier { mu
 ROOT"). In the country pulse ROOT is the country, so a multiplier read there cannot see a state's or building's own
 variable. Every state- or building-scoped `add_modifier { multiplier = var:… }` — the three readouts below and the
 destination bonuses (§3, §5) — is therefore applied from `on_monthly_pulse_state` (`resettlement_state_monthly`, ROOT =
-the state), reading the variables the country pulse stored. The building readouts mirror the state's `rs_arrived` and
-`rs_died` onto the building under the same names, so the multiplier is right whether it reads ROOT or the modifier's
-owner. The state hook runs only for a state with an Authority, an `rs_recruits` readout or leftover `rs_bonus_scale`.
-Country-scope modifiers (the politics layer and the Declaration, §7) stay in the country pulse, where ROOT is the
-country.
+the state), reading the variables the country pulse stored. A building has no variables, so the building readouts read
+the state's `rs_arrived` and `rs_died` as `root.var:`, which is right whether the multiplier resolves against ROOT or
+against the building. The state hook runs only for a state with an Authority, an `rs_recruits` readout or leftover
+`rs_bonus_scale`. Country-scope modifiers (the politics layer and the Declaration, §7) stay in the country pulse, where
+ROOT is the country.
 
 **Capacity.** The Programme and Transport PMs grant `state_resettlement_transfer_add`, **half in a `level_scaled` block
 and half in a `workforce_scaled` block** (vanilla uses both in `state_modifiers`). The pulse moves exactly the total, so

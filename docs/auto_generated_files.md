@@ -47,6 +47,7 @@ All generator-produced docs files live under `docs/engine/`. Manually-curated au
 
 | File | Owner | Trigger |
 |---|---|---|
+| `docs/player_guide/Vic3TimelineExtended_Player_Guide.pdf` | `scripts/build_player_guide.py` | manual run after editing a chapter or `template.typ` (needs `requirements-docs.txt`). Not a post-load generator. CI's `build_player_guide.py --check` fails when the committed PDF's embedded source fingerprint doesn't match the chapters. |
 | `docs/engine/laws.txt`, `docs/engine/technologies.txt`, `docs/engine/buildings.txt`, `docs/engine/goods.txt`, `docs/engine/combat_units.txt` | `mod_state_script.py` | server start + `POST /reload` (skipped when no vanilla game files are on disk — its tech-unlock lines scan them) |
 | `docs/engine/vic3_triggers_effects_reference.md`, `docs/engine/vic3_modifier_type_definitions_reference.md` | `engine_docs_render.py` | manual run / server start |
 | `docs/engine/triggers_summary.txt`, `docs/engine/effects_summary.txt`, `docs/engine/modifiers_summary.txt`, `docs/engine/event_targets_summary.txt`, `docs/engine/on_actions_summary.txt`, `docs/engine/custom_localization_summary.txt`, `docs/engine/triggers_parsed.txt`, `docs/engine/country_triggers.txt`, `docs/engine/modifier_patterns.md` | `engine_docs_render.py` | manual run / server start |

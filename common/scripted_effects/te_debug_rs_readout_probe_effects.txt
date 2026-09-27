@@ -1,0 +1,91 @@
+﻿# ============================================================================
+# TEMPORARY PROBE: do the Settlement Authority's readouts reach the building?
+# ============================================================================
+# Delete this file, and the two "TEMPORARY PROBE" call lines in
+# resettlement_refresh_destination_readout (resettlement_effects.txt), once a
+# launch has logged the TE_RS_READOUT lines (search debug.log for
+# TE_RS_READOUT).
+#
+# Why. Until this fix the readouts were never added: a building has no
+# variables, so the old mirror's set_variable wrote nothing and the var: read
+# in its limit failed. They now read the state's rs_arrived and rs_died through
+# root. What static reading cannot settle is whether add_modifier's multiplier
+# resolves on a building target. Each take is at least resettlement_min_take
+# (100) and moves round((1 - mortality) x take) people, so arrivals are 0 (no
+# readout) or at least 85 (at least 100 under a program with no transit
+# deaths). Deaths are killed in steps of 100. A readout that reads exactly 1
+# means the multiplier fell back to 1.0.
+#
+# Only for a human player's Authorities, once a month each, from the state
+# pulse (ROOT = the destination state).
+# ============================================================================
+
+# Building scope: an Authority, before its readouts are removed and re-added.
+# Reports what last month's refresh left on the building. The first month
+# after loading a save from before the fix reports "none", as it should.
+# modifier: reads are taken here, a month after the add, because an
+# add_modifier is not visible to reads in the same effect.
+te_debug_rs_readout_probe_building = {
+	if = {
+		limit = { owner = { is_ai = no } }
+		if = {
+			limit = { NOT = { has_modifier = resettlement_arrivals } }
+			debug_log = "TE_RS_READOUT 1 arrivals: no readout on the Authority from last month"
+		}
+		else_if = {
+			limit = { modifier:building_resettlement_arrivals_add = 1 }
+			debug_log = "TE_RS_READOUT 1 arrivals: readout present but reads exactly 1 (the multiplier fell back to 1.0)"
+		}
+		else_if = {
+			limit = { modifier:building_resettlement_arrivals_add > 1 }
+			debug_log = "TE_RS_READOUT 1 arrivals: readout present and reads more than 1 (the multiplier resolved)"
+		}
+		else = {
+			debug_log = "TE_RS_READOUT 1 arrivals: readout present but reads less than 1 (the multiplier resolved to something wrong)"
+		}
+		if = {
+			limit = { NOT = { has_modifier = resettlement_transit_deaths } }
+			debug_log = "TE_RS_READOUT 2 deaths: no readout on the Authority from last month (expected unless the program kills people in transit)"
+		}
+		else_if = {
+			limit = { modifier:building_resettlement_transit_deaths_add = 1 }
+			debug_log = "TE_RS_READOUT 2 deaths: readout present but reads exactly 1 (the multiplier fell back to 1.0)"
+		}
+		else_if = {
+			limit = { modifier:building_resettlement_transit_deaths_add >= 100 }
+			debug_log = "TE_RS_READOUT 2 deaths: readout present and reads 100 or more (the multiplier resolved)"
+		}
+		else = {
+			debug_log = "TE_RS_READOUT 2 deaths: readout present but reads 0 or between 1 and 100 (the multiplier resolved to something wrong)"
+		}
+	}
+}
+
+# State scope: a destination, after the refresh. Reports the counts the
+# readouts were just added from, and which of the two were added. Here ROOT is
+# this state, so the ScriptValue wrappers should read it whichever of ROOT or
+# SCOPE debug_log evaluates them against. A -1 would mean the wrapper did not
+# evaluate against this state (the country-pulse TE_RESETTLEMENT: lines print
+# -1 where the variable exists), not that the state lacks the variable. Lines 4
+# and 5 branch in script and are the authoritative read.
+te_debug_rs_readout_probe_state = {
+	if = {
+		limit = { owner = { is_ai = no } }
+		debug_log = "TE_RS_READOUT 3 state counts: rs_arrived [SCOPE.ScriptValue('resettlement_debug_arrived')|0], rs_died [SCOPE.ScriptValue('resettlement_debug_died')|0]"
+		if = {
+			limit = { var:rs_arrived > 0 }
+			debug_log = "TE_RS_READOUT 4 arrivals readout added this month"
+		}
+		else = {
+			debug_log = "TE_RS_READOUT 4 no arrivals this month, so no arrivals readout"
+		}
+		if = {
+			limit = { var:rs_died > 0 }
+			debug_log = "TE_RS_READOUT 5 deaths readout added this month"
+		}
+		else = {
+			debug_log = "TE_RS_READOUT 5 no deaths this month, so no deaths readout"
+		}
+		debug_log_scopes = yes
+	}
+}

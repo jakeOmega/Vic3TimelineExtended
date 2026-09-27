@@ -7,8 +7,9 @@ remove_modifier_if_exists_effect = {
 	}
 }
 
-# Country-scope wonder construction tick. Called from each wonder's monthly
-# pulse (the wonder's named wrapper). Tracks progress against the construction
+# State-scope wonder construction tick (ROOT is the state holding the
+# construction site). Called from each wonder's on_monthly_pulse_state
+# on-action through the wonder's named wrapper. Tracks progress against the construction
 # site's annual-progress modifier; on completion, removes the site, posts the
 # wonder-complete notification, and either bumps the wonder one level (capped
 # at $MAX_LEVEL$) or creates the level-1 wonder if none exists yet.

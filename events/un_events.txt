@@ -527,6 +527,10 @@ un_events.3 = {
 				trigger = { has_law = law_type:law_outlawed_dissent }
 				add = 3
 			}
+			modifier = {
+				trigger = { has_law = law_type:law_penal_labor_camps }
+				add = 3
+			}
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_1_5
 		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1.5 REASON = 1031 }
