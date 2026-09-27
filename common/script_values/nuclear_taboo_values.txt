@@ -15,6 +15,7 @@
 #   postures     -10 .. +10  the armed countries' doctrines, a rank-weighted average
 #   restraint    0 .. +15    non-use pledges, arms-control treaties, former
 #                            nuclear states
+#   un           0 .. +15    the NPT and CPPNM in force, x UN authority (phase 2)
 #   ledger       -30 .. +10  the decaying record of acts (global_var:nd_taboo_ledger)
 #
 # Drift alone tops out at 55 (base + full tradition); the rest needs
@@ -145,6 +146,12 @@ nd_taboo_arms_ai_taboo_weight = 0.5
 nd_taboo_arms_ai_militarist = -50
 nd_taboo_arms_ai_growth_weight = 0.5	# per warhead of our desired arsenal the ceiling forbids
 nd_taboo_arms_ai_parity_weight = 2	# per warhead we would retire beyond what the other party retires
+nd_taboo_un_npt_weight = 8
+nd_taboo_un_cppnm_weight = 4
+nd_taboo_un_cap = 15
+nd_taboo_ledger_verdict_passed = 3
+nd_taboo_shock_verdict_passed = 2
+nd_taboo_ledger_verdict_failed = -3
 
 # ---- READING THE SCORE ---------------------------------------------------------
 
@@ -383,6 +390,37 @@ nd_taboo_part_restraint_value = {
 	max = nd_taboo_restraint_cap
 }
 
+# The UN's conventions (spec §7.2): the NPT (the IAEA) and the Physical
+# Protection convention (CPPNM), each in proportion to UN authority. 0 with no
+# UN: the taboo never needs one.
+nd_taboo_part_un_value = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = un_founded
+			has_global_variable = un_authority
+		}
+		if = {
+			limit = { has_global_variable = un_agency_iaea }
+			add = {
+				value = global_var:un_authority
+				divide = 100
+				multiply = nd_taboo_un_npt_weight
+			}
+		}
+		if = {
+			limit = { has_global_variable = un_agency_cppnm }
+			add = {
+				value = global_var:un_authority
+				divide = 100
+				multiply = nd_taboo_un_cppnm_weight
+			}
+		}
+	}
+	min = 0
+	max = nd_taboo_un_cap
+}
+
 # ---- THE TARGET AND THE STEP ---------------------------------------------------
 
 # The equilibrium, from the snapshots the monthly update has just written.
@@ -391,6 +429,7 @@ nd_taboo_target_sum = {
 	add = global_var:nd_tb_tradition
 	add = global_var:nd_tb_postures
 	add = global_var:nd_tb_restraint
+	add = global_var:nd_tb_un
 	add = global_var:nd_tb_ledger
 	min = 0
 	max = 100
@@ -461,6 +500,14 @@ nd_disp_tb_restraint = {
 	if = {
 		limit = { has_global_variable = nd_tb_restraint }
 		value = global_var:nd_tb_restraint
+	}
+}
+
+nd_disp_tb_un = {
+	value = 0
+	if = {
+		limit = { has_global_variable = nd_tb_un }
+		value = global_var:nd_tb_un
 	}
 }
 

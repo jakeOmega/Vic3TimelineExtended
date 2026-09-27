@@ -82,6 +82,7 @@ nd_taboo_snapshot = {
 	set_global_variable = { name = nd_tb_tradition value = nd_taboo_part_tradition_value }
 	set_global_variable = { name = nd_tb_postures value = nd_taboo_part_postures_value }
 	set_global_variable = { name = nd_tb_restraint value = nd_taboo_part_restraint_value }
+	set_global_variable = { name = nd_tb_un value = nd_taboo_part_un_value }
 	set_global_variable = { name = nd_tb_ledger value = global_var:nd_taboo_ledger }
 	set_global_variable = { name = nd_taboo_target value = nd_taboo_target_sum }
 }
@@ -115,7 +116,7 @@ nd_taboo_monthly_update = {
 			}
 		}
 		nd_taboo_band_check = yes
-		debug_log = "TE_TABOO: score [SCOPE.ScriptValue('nd_disp_taboo')|1] target [SCOPE.ScriptValue('nd_disp_taboo_target')|1] base [SCOPE.ScriptValue('nd_disp_tb_base')|1] tradition [SCOPE.ScriptValue('nd_disp_tb_tradition')|1] postures [SCOPE.ScriptValue('nd_disp_tb_postures')|1] restraint [SCOPE.ScriptValue('nd_disp_tb_restraint')|1] ledger [SCOPE.ScriptValue('nd_disp_tb_ledger')|1] quiet years [SCOPE.ScriptValue('nd_disp_taboo_quiet_years')|1]"
+		debug_log = "TE_TABOO: score [SCOPE.ScriptValue('nd_disp_taboo')|1] target [SCOPE.ScriptValue('nd_disp_taboo_target')|1] base [SCOPE.ScriptValue('nd_disp_tb_base')|1] tradition [SCOPE.ScriptValue('nd_disp_tb_tradition')|1] postures [SCOPE.ScriptValue('nd_disp_tb_postures')|1] restraint [SCOPE.ScriptValue('nd_disp_tb_restraint')|1] un [SCOPE.ScriptValue('nd_disp_tb_un')|1] ledger [SCOPE.ScriptValue('nd_disp_tb_ledger')|1] quiet years [SCOPE.ScriptValue('nd_disp_taboo_quiet_years')|1]"
 	}
 }
 
@@ -224,6 +225,27 @@ nd_taboo_debug_age_clock = {
 	if = {
 		limit = { has_global_variable = nd_taboo }
 		change_global_variable = { name = nd_taboo_quiet_years add = 10 }
+	}
+}
+
+# The Assembly's verdict on a nuclear use (spec §7.3), from un_vote.2's option
+# on a condemnation of a country the docket took up for a nuclear strike
+# (nd_taboo_verdict_pending). PASSED = yes: the world said no. PASSED = no —
+# failed, or vetoed down to a rebuke: impunity. Scope: any.
+nd_taboo_verdict = {
+	if = {
+		limit = { always = $PASSED$ }
+		custom_tooltip = {
+			text = nd_taboo_tt_verdict_passed
+			nd_taboo_ledger_add = { POINTS = nd_taboo_ledger_verdict_passed }
+			nd_taboo_shock = { POINTS = nd_taboo_shock_verdict_passed }
+		}
+	}
+	else = {
+		custom_tooltip = {
+			text = nd_taboo_tt_verdict_failed
+			nd_taboo_ledger_add = { POINTS = nd_taboo_ledger_verdict_failed }
+		}
 	}
 }
 

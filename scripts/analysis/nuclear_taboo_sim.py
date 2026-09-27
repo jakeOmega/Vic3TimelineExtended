@@ -125,6 +125,8 @@ SCENARIOS = {
     "normalised": Scenario("Warfighting doctrines and a strategic first use every 8 years",
                            postures=-10, uses={m: ("strategic", False) for m in range(96, 1200, 96)}),
     "seeded_40_years": Scenario("A save seeded 40 years after the first device, no use", seed_quiet_years=40),
+    "cooperative": Scenario("No First Use, pledges, arms control, and the NPT and CPPNM at UN authority 80",
+                            postures=8, restraint=12, un=9.6),
 }
 
 

@@ -26,7 +26,7 @@ WEAPON_EFFECTS = ROOT / "common/scripted_effects/nuclear_weapon_effects.txt"
 JE = ROOT / "common/journal_entries/je_nuclear_program.txt"
 
 # The target's parts, in the order nd_taboo_target_sum adds them.
-PARTS = ["base", "tradition", "postures", "restraint", "ledger"]
+PARTS = ["base", "tradition", "postures", "restraint", "un", "ledger"]
 NEW_FILES = [TABOO_VALUES, TABOO_EFFECTS, TABOO_TRIGGERS, TABOO_ON_ACTIONS]
 
 
@@ -827,6 +827,51 @@ class TestArmsControl(unittest.TestCase):
                     "nd_taboo_arms_party_tt", "nd_taboo_arms_quantity_tt", "nd_taboo_ai_arms_base",
                     "nd_taboo_ai_arms_militarist", "nd_taboo_arms_other_party_tt", "nd_taboo_ai_arms_growth",
                     "nd_taboo_ai_arms_parity", "nd_taboo_arsenal_treaty"):
+            self.assertIn(key, keys, key)
+
+
+UN_DOCKET = ROOT / "common/scripted_effects/un_docket_effects.txt"
+UN_VOTE_EVENTS = ROOT / "events/un_vote_events.txt"
+
+
+class TestUN(unittest.TestCase):
+    def setUp(self):
+        self.values = strip_comments(read(TABOO_VALUES))
+        self.taboo = strip_comments(read(TABOO_EFFECTS))
+
+    def test_un_part_needs_a_un_and_reads_the_two_conventions(self):
+        body = block(self.values, "nd_taboo_part_un_value")
+        for needle in ("has_global_variable = un_founded", "has_global_variable = un_agency_iaea",
+                       "has_global_variable = un_agency_cppnm", "global_var:un_authority",
+                       "max = nd_taboo_un_cap"):
+            self.assertIn(needle, body)
+
+    def test_verdict_waits_on_a_nuclear_grievance(self):
+        docket = strip_comments(read(UN_DOCKET))
+        i = docket.index("un_docket_take_up_grievance = { KIND = nuclear CAUSE = 1 FOUND = scope:un_dkt_found_nuclear }")
+        self.assertIn("name = nd_taboo_verdict_pending value = 1 days = 730", docket[i:i + 400])
+
+    def test_every_condemnation_outcome_books_the_verdict(self):
+        option = block(strip_comments(read(UN_VOTE_EVENTS)), "un_vote.2")
+        self.assertEqual(option.count("nd_taboo_verdict = { PASSED = yes }"), 1)
+        self.assertEqual(option.count("nd_taboo_verdict = { PASSED = no }"), 2)
+        self.assertEqual(option.count("remove_variable = nd_taboo_verdict_pending"), 3)
+
+    def test_verdict_prints_what_it_does(self):
+        body = block(self.taboo, "nd_taboo_verdict")
+        self.assertEqual(body.count("custom_tooltip = {"), 2)
+        self.assertIn("text = nd_taboo_tt_verdict_passed", body)
+        self.assertIn("text = nd_taboo_tt_verdict_failed", body)
+
+    def test_cooperation_reaches_past_drift(self):
+        import nuclear_taboo_sim as sim
+        c = sim.load_constants(TABOO_VALUES)
+        score, target = sim.simulate(sim.SCENARIOS["cooperative"], c, years=100)[-1]
+        self.assertGreater(target, 80)
+
+    def test_un_keys_have_loc(self):
+        keys = loc_keys()
+        for key in ("nd_taboo_bd_un", "nd_taboo_tt_verdict_passed", "nd_taboo_tt_verdict_failed"):
             self.assertIn(key, keys, key)
 
 

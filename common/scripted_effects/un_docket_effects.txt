@@ -392,6 +392,12 @@ un_docket_scan = {
 	if = {
 		limit = { global_var:un_dkt_best_type = 1 }
 		un_docket_take_up_grievance = { KIND = nuclear CAUSE = 1 FOUND = scope:un_dkt_found_nuclear }
+		# The nuclear taboo awaits the Assembly's verdict on this use
+		# (un_vote.2 books it, nd_taboo_verdict). Two years: an appeal waits
+		# for a free floor, and the vote itself takes one.
+		scope:un_dkt_found_nuclear ?= {
+			set_variable = { name = nd_taboo_verdict_pending value = 1 days = 730 }
+		}
 	}
 	else_if = {
 		limit = { global_var:un_dkt_best_type = 2 }

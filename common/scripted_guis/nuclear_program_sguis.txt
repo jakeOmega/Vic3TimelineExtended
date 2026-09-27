@@ -308,6 +308,7 @@ nd_taboo_breakdown_sgui = {
 			custom_tooltip_no_bullet = nd_taboo_bd_tradition
 			custom_tooltip_no_bullet = nd_taboo_bd_postures
 			custom_tooltip_no_bullet = nd_taboo_bd_restraint
+			custom_tooltip_no_bullet = nd_taboo_bd_un
 			custom_tooltip_no_bullet = nd_taboo_bd_ledger
 			custom_tooltip_no_bullet = nd_taboo_bd_target
 		}
