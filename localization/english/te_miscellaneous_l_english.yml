@@ -2598,7 +2598,7 @@
  nd_taboo_band_4:0 "Strong"
  nd_taboo_band_5:0 "Absolute"
  nd_taboo_bd_base:0 "#v [GetGlobalVariable('nd_tb_base').GetValue|+0]#!  Where every nuclear age begins"
- nd_taboo_bd_ledger:0 "#v [GetGlobalVariable('nd_tb_ledger').GetValue|+1]#!  What the world has done lately — uses, threats, renunciations — fading over four years"
+ nd_taboo_bd_ledger:0 "#v [GetGlobalVariable('nd_tb_ledger').GetValue|+1]#!  What the world has done lately — uses, threats, renunciations — halving every four years"
  nd_taboo_bd_postures:0 "#v [GetGlobalVariable('nd_tb_postures').GetValue|+1]#!  The nuclear powers' doctrines: No First Use and warheads in storage raise it, compellence and warfighting lower it"
  nd_taboo_bd_restraint:0 "#v [GetGlobalVariable('nd_tb_restraint').GetValue|+1]#!  Restraint: non-use pledges, arms-control treaties, and states that gave the bomb up"
  nd_taboo_bd_target:0 "#v = [GetGlobalVariable('nd_taboo_target').GetValue|1]#!  Drift alone reaches 55 at most; beyond that takes cooperation"
