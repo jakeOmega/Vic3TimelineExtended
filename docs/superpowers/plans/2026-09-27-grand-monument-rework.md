@@ -1917,10 +1917,13 @@ class RecordTests(unittest.TestCase):
         self.assertIn("limit = { gm_state_kind_faith = yes } gm_state_record_faith = yes", body)
         self.assertIn("gm_state_set_default_skin = yes", body)
         honoree = squash(block(self.e, "gm_state_record_honoree"))
-        self.assertIn("set_variable = { name = gm_honoree value = owner.ruler }", honoree)
+        self.assertIn("ruler = { save_scope_as = gm_tmp_ruler }", honoree)
+        self.assertIn("set_variable = { name = gm_honoree value = scope:gm_tmp_ruler }", honoree)
         self.assertIn("gm_ig_to_flag_on_owner = { VAR = gm_tmp_ig_flag }", honoree)
         self.assertIn("set_variable = { name = gm_honoree_ig value = owner.var:gm_tmp_ig_flag }", honoree)
-        self.assertIn("value = owner.religion", squash(block(self.e, "gm_state_record_faith")))
+        faith = squash(block(self.e, "gm_state_record_faith"))
+        self.assertIn("religion = { save_scope_as = gm_tmp_faith_scope }", faith)
+        self.assertIn("set_variable = { name = gm_faith value = scope:gm_tmp_faith_scope }", faith)
 
     def test_ig_flags_cover_every_ig(self):
         body = squash(block(self.e, "gm_ig_to_flag_on_owner"))
@@ -2250,7 +2253,14 @@ gm_state_record_honoree = {
 		limit = {
 			owner = { exists = ruler }
 		}
-		set_variable = { name = gm_honoree value = owner.ruler }
+		# Saved scope, then the variable: vanilla stores a ruler this way
+		# (`ruler = { save_scope_as = … }`); cleared first so a stale save
+		# from an earlier call cannot be read.
+		clear_saved_scope = gm_tmp_ruler
+		owner = {
+			ruler = { save_scope_as = gm_tmp_ruler }
+		}
+		set_variable = { name = gm_honoree value = scope:gm_tmp_ruler }
 		owner = {
 			set_variable = { name = gm_tmp_ig_flag value = flag:none }
 			ruler = {
@@ -2302,7 +2312,11 @@ gm_ig_to_flag_on_owner = {
 
 # State scope. The faith a Grand Shrine honours.
 gm_state_record_faith = {
-	set_variable = { name = gm_faith value = owner.religion }
+	clear_saved_scope = gm_tmp_faith_scope
+	owner = {
+		religion = { save_scope_as = gm_tmp_faith_scope }
+	}
+	set_variable = { name = gm_faith value = scope:gm_tmp_faith_scope }
 }
 
 # ---- Skins (§1.1) ------------------------------------------------------------
@@ -7570,7 +7584,7 @@ gm_evt_leader_celebrated = {
 
 View the art each event already shows before keeping it: `python3 scripts/image_pipeline/contact_sheet.py --event monument_events.3 monument_events.4 monument_events.5 monument_events.6 monument_events.7 monument_events.8 monument_events.9 monument_events.10`.
 
-In each event below, replace its `trigger = { … }` block and its single `option = { … }` with the code given; keep everything else (image, icon, title, desc, flavor, duration, cooldown). Update the section comment above `.3` to say each event gates on a fitting monument of level 3 or more and offers a choice between two benefits.
+In each event below, replace the event's own top-level `trigger = { … }` block (not the `trigger` blocks inside `.4`'s `event_image` entries) and its single `option = { … }` with the code given; keep everything else (image, icon, title, desc, flavor, duration, cooldown). Update the section comment above `.3` to say each event gates on a fitting monument of level 3 or more and offers a choice between two benefits.
 
 **`monument_events.3`** (civic):
 
@@ -8690,6 +8704,7 @@ Setup: build an integration from this branch in the **full** main checkout (CLAU
 5. The ceremony tooltips show real numbers (from `gm_step_*`), not blanks.
 6. JE-scoped approval: the IG panel's approval breakdown shows *Grand Monuments* for the approving and objecting groups.
 7. A contest by law: change a crowned government to a republic (console law change). The Crown monument becomes contested, the notice (`.16`) fires, and each of Pull Down / Keep as Heritage / Decide each in turn does what its tooltip says; restoring the monarchy lifts a heritage monument back to full.
+8a. The choice tooltips (Pull Down, Rededicate, Keep as Heritage, in `.17` and on the row buttons) name the interest groups and the rededication cost. They read the state as `THIS.GetState…` inside a `custom_tooltip`, a form with no vanilla precedent; if the names or the cost render blank, drop those clauses from `gm_tear_down_tt`, `gm_rededicate_tt`, `gm_preserve_tt` and `gm_leave_contested_tt` (the row's contest line already names the groups through `State.GetCustom`, which is proven).
 8. The row buttons: on a contested row, Pull Down, Rededicate and Keep as Heritage are enabled and act on that row's state (the saved `gm_state` scope; if they stay greyed, the scope is not arriving: report it, `.17` is the fallback).
 9. Rededicate: the monument comes back at half its level (rounded up), rehired, with the ceremony; the treasury pays 5,000 a level.
 10. A Leader monument: under Autocracy with an uncrowned head of state, raise one; when the ruler changes, it becomes contested; the objecting group read is the strongest one outside the government.
