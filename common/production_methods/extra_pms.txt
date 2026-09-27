@@ -13104,14 +13104,20 @@ REPLACE:pm_diesel_trains = {
 # (steam x1.2; electric: engines x1.2, electricity x1.25, output x1.29,
 # infrastructure +10; diesel: engines x1.2, oil x1.33, output x1.25,
 # infrastructure +15, pollution +5); employment is the base method's.
-# Tier 3 only: principle_transport_4/5 give railways
-# building_railway_throughput_add instead.
+# Unlocked from tier 3 up: principle checks are exact-tier, so tiers 4/5 are
+# listed too (as vanilla and the mod's other tier-3 carry-forwards do), or a
+# railway would switch back when its bloc upgrades. At tiers 4/5 the method
+# stacks with those tiers' building_railway_throughput_add. Tiers 4/5 must be
+# listed here, inside the REPLACE: a separate INJECT on a REPLACEd entity is
+# dropped.
 REPLACE:pm_steam_trains_principle_transport_3 = {
 	texture = "gfx/interface/icons/production_method_icons/trains_steam.dds"
 	is_hidden_when_unavailable = yes
 
 	unlocking_principles = {
 		principle_transport_3
+		principle_transport_4
+		principle_transport_5
 	}
 
 	unlocking_technologies = {
@@ -13154,6 +13160,8 @@ REPLACE:pm_electric_trains_principle_transport_3 = {
 
 	unlocking_principles = {
 		principle_transport_3
+		principle_transport_4
+		principle_transport_5
 	}
 
 	unlocking_technologies = {
@@ -13198,6 +13206,8 @@ REPLACE:pm_diesel_trains_principle_transport_3 = {
 
 	unlocking_principles = {
 		principle_transport_3
+		principle_transport_4
+		principle_transport_5
 	}
 
 	unlocking_technologies = {
