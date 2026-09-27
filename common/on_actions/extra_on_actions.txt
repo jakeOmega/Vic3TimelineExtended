@@ -1239,19 +1239,18 @@ war_propaganda_on_action = {
 # Overinvestment keeps the modifier. It cuts every pop's pool contribution, so
 # gross income, and the overflow with it, falls to about 0. Removing the
 # modifier then would zero the variable and end Overinvestment after one year,
-# since it needs the variable above 1000. Kept, the value falls /1.2 in each
-# Overinvestment year, as before 2026-09-26, and Overinvestment is re-added
-# while the value is above 1000 and the pool above GDP (at most 13 years in a
-# row from the cap). If the overflow is still large when it lifts, the value
-# climbs back past 1000 and Overinvestment returns, so while the pool stays
-# above GDP the value hovers around 1000. Meanwhile the private queue keeps
-# spending the pool: under direct construction through the law's allocation,
-# under Free Market Construction through
-# te_construction_market_private_spending_target, a 24th of the pool a week
-# whatever the sign of gross income (until 2026-09-26 it was 0 or less once
-# gross income was, so the market bought nothing during Overinvestment). The
-# value hovering around 1000 still limits how fast that is: a pool whose income
-# needs far more stays above GDP (open owner's call, PR #514).
+# since it needs the variable above 1000. Kept, the value is held at last
+# year's while the private queue has levels (too_much_private_construction_script_value,
+# owner's ruling), so Overinvestment is re-added until its own exit holds: the
+# pool at or under GDP. The year after it lifts, the stay test and the normal
+# ramp take over. (Before 2026-09-27 the value fell /1.2 in each Overinvestment
+# year, so while the pool stayed above GDP it hovered around 1000, with
+# Overinvestment every other year.) Meanwhile the private queue keeps spending
+# the pool: under direct construction through the law's allocation, under Free
+# Market Construction through te_construction_market_private_spending_target,
+# a 24th of the pool a week whatever the sign of gross income (until
+# 2026-09-26 it was 0 or less once gross income was, so the market bought
+# nothing during Overinvestment).
 #
 # The variable is written first and the modifier reads it flat, so the
 # modifier always equals var:too_much_private_construction_cached, which

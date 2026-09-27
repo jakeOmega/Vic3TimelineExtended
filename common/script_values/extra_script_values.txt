@@ -1566,22 +1566,41 @@ too_much_private_construction_resume = {
 # restarting it at 10. It never overshoots the need either way. The /1.2 floor
 # is the ramp down while the modifier stays. The on-action removes the modifier
 # once the overflow is 0 or less, so the floor can't hold it above 0 after its
-# need is gone (Overinvestment aside, see the on-action).
+# need is gone.
+#
+# While Overinvestment is in force the value is held at last year's instead
+# (owner's ruling, PR #514). Overinvestment cuts every pop's contribution, so
+# gross income and the overflow read about 0, and the ramp would cut the value
+# /1.2 a year for a need that is still there. That ended Overinvestment (it
+# needs the value above 1000) every other year while the pool stayed above
+# GDP. Held, Overinvestment lasts until its own exit, the pool at or under GDP,
+# and the normal ramp resumes the next year. The hold needs a non-empty
+# private queue: with nothing queued nothing drains the pool, so the value
+# falls /1.2 as before and Overinvestment still ends within 13 years.
 too_much_private_construction_script_value = {
-	value = too_much_private_construction_overflow
-	min = {
-		value = var:too_much_private_construction_cached
-		divide = 1.2
-		min = 0
-	}
-	max = {
-		value = var:too_much_private_construction_cached
-		multiply = 1.2
-		min = {
-			value = too_much_private_construction_resume
-			min = 10
+	if = {
+		limit = {
+			has_modifier = overinvestment_modifier
+			construction_queue_num_queued_private_levels > 0
 		}
-		max = 9000
+		value = var:too_much_private_construction_cached
+	}
+	else = {
+		value = too_much_private_construction_overflow
+		min = {
+			value = var:too_much_private_construction_cached
+			divide = 1.2
+			min = 0
+		}
+		max = {
+			value = var:too_much_private_construction_cached
+			multiply = 1.2
+			min = {
+				value = too_much_private_construction_resume
+				min = 10
+			}
+			max = 9000
+		}
 	}
 }
 
