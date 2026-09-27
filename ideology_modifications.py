@@ -211,21 +211,43 @@ anti_secrecy = [
     ("law_freedom_of_information", "approve"),
     ("law_open_government", "strongly_approve"),
 ]
+# --- lawgroup_criminal_justice ---
+# law_penal_labor_camps is the group's authoritarian end. Each list stances it
+# one step harsher than its Punishment-Focused stance, and any list that
+# disapproves Punishment-Focused strongly disapproves the camps. The regressive
+# list approves the camps but strongly approves Punishment-Focused, so a
+# regressive group prefers the ordinary prison and does not push for camps on
+# its own; only the strongly_approve holders below do. test_penal_labor_law.py
+# pins that every ideology with a stance on a Criminal Justice law has one on
+# the camps.
 regressive_criminal_justice = [
     ("law_punishment_focused_criminal_justice", "strongly_approve"),
     ("law_rehabilitation_focused_criminal_justice", "disapprove"),
     ("law_restorative_justice", "neutral"),
+    ("law_penal_labor_camps", "approve"),
 ]
 progressive_criminal_justice = [
     ("law_punishment_focused_criminal_justice", "disapprove"),
     ("law_rehabilitation_focused_criminal_justice", "strongly_approve"),
     ("law_restorative_justice", "neutral"),
+    ("law_penal_labor_camps", "strongly_disapprove"),
 ]
 moderate_criminal_justice = [
     ("law_punishment_focused_criminal_justice", "disapprove"),
     ("law_rehabilitation_focused_criminal_justice", "neutral"),
     ("law_restorative_justice", "approve"),
+    ("law_penal_labor_camps", "strongly_disapprove"),
 ]
+# Camps-only stances for ideologies with no stance on the other Criminal Justice
+# laws but a strong one on vanilla's repressive laws (Secret Police, Outlawed
+# Dissent), which they mirror: the fascist and authoritarian leaders and the
+# fascist movement for them, the liberal, radical and anarchist movements and
+# the liberal leader against. The movement stances are how the camps feed those
+# movements: enacting a law a movement's ideology disapproves raises its
+# activism, and the movement campaigns for repeal.
+penal_labor_camps_strongly_approve = [("law_penal_labor_camps", "strongly_approve")]
+penal_labor_camps_approve = [("law_penal_labor_camps", "approve")]
+penal_labor_camps_strongly_disapprove = [("law_penal_labor_camps", "strongly_disapprove")]
 anti_augmentation = [
     ("law_no_augmentation", "neutral"),
     ("law_unrestricted_augmentation", "strongly_disapprove"),
@@ -1173,6 +1195,7 @@ modifications = {
         ],
         "lawgroup_language_policy": language_ethno_nationalist,
         "lawgroup_antitrust": antitrust_corporatist_nat,
+        "lawgroup_criminal_justice": penal_labor_camps_strongly_approve,
     },
     "ideology_anarchist": {
         "lawgroup_army_model": pmc_strongly_disapprove,
@@ -2104,6 +2127,7 @@ modifications = {
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "neutral"),
         ],
+        "lawgroup_criminal_justice": penal_labor_camps_approve,
     },
     "ideology_austrian_hegemony": {
         "lawgroup_ministry_of_propaganda": ministry_constructor(
@@ -2236,6 +2260,7 @@ modifications = {
             ("law_algorithmic_governance", "neutral"),
         ],
         "lawgroup_minority_rights": minority_like,
+        "lawgroup_criminal_justice": penal_labor_camps_strongly_disapprove,
     },
     "ideology_despotic_utopian": {
         "lawgroup_distribution_of_power": [
@@ -2362,6 +2387,7 @@ modifications = {
         ],
         "lawgroup_language_policy": language_technologist,
         "lawgroup_antitrust": antitrust_command_coop,
+        "lawgroup_criminal_justice": penal_labor_camps_strongly_disapprove,
     },
     "ideology_vanguardist_movement": {
         "lawgroup_governance_principles": [
@@ -2434,6 +2460,7 @@ modifications = {
         ],
         "lawgroup_language_policy": language_ethno_nationalist,
         "lawgroup_antitrust": antitrust_corporatist_nat,
+        "lawgroup_criminal_justice": penal_labor_camps_strongly_approve,
     },
     "ideology_corporatist_movement": {
         "lawgroup_governance_principles": [
@@ -2456,6 +2483,7 @@ modifications = {
         "lawgroup_financial_regulation": finreg_liberal,
         "lawgroup_language_policy": language_pluralist,
         "lawgroup_antitrust": antitrust_ordoliberal,
+        "lawgroup_criminal_justice": penal_labor_camps_strongly_disapprove,
     },
     "ideology_radical_movement": {
         "lawgroup_distribution_of_power": [
@@ -2483,6 +2511,13 @@ modifications = {
         ),
         "lawgroup_language_policy": language_pluralist,
         "lawgroup_antitrust": antitrust_ordoliberal,
+        "lawgroup_criminal_justice": penal_labor_camps_strongly_disapprove,
+    },
+    "ideology_liberal_republican_movement": {
+        "lawgroup_criminal_justice": penal_labor_camps_strongly_disapprove,
+    },
+    "ideology_national_liberal_movement": {
+        "lawgroup_criminal_justice": penal_labor_camps_strongly_disapprove,
     },
     "ideology_nihilist_movement": {
         "lawgroup_governance_principles": [
