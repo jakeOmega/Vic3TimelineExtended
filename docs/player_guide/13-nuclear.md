@@ -5,30 +5,37 @@ weapons program that turns research into warheads. Holding warheads brings a
 posture to choose (when you would use them, how ready they stand and who may
 launch), a standing bill, the risk of accidents, and crises in which you
 threaten others or are threatened. Strikes, civil wars that split an arsenal,
-and warheads that go missing follow from the same system. The Nuclear Weapons
-game rule controls it and is on by default; with it off the technologies remain,
-but no program, stockpile or nuclear events exist.
+and warheads that go missing follow from the same system. From the world's first
+warhead, the [nuclear taboo](#the-nuclear-taboo), a single score for the whole
+world, sets what each nuclear act costs and can make holding the bomb a burden.
+The Nuclear Weapons game rule controls it and is on by default; with it off the
+technologies remain, but no program, stockpile, taboo or nuclear events exist.
 
 ## The Nuclear Weapons journal entry
 
-Everything happens in one journal entry, **Nuclear Weapons**. It is active for
-any country with a working program, any country holding a warhead (whatever its
-rank), and any country caught up in a nuclear crisis. A country with the
-technology but not the standing to build sees it inactive, with a status line
-saying what it lacks.
+Everything happens in one journal entry, **Nuclear Weapons**. Before the world's
+first warhead, it is active for any country with a working program and any
+country caught up in a nuclear crisis; a country with the technology but not the
+standing to build sees it inactive, with a status line saying what it lacks.
+Once the first warhead exists, the entry is active for every country except
+decentralized ones, whether or not it has the technology, and its status line
+opens with the nuclear taboo's score and band.
 
 | Panel | Shown when | What it holds |
 |---|---|---|
 | The Programme | You have a program | Funding, production rate, time to the next warhead, warheads held |
 | Progress bar | Always | Progress toward the next warhead |
-| Nuclear Posture | You hold warheads | Doctrine, readiness, launch authority, forces, upkeep, incident exposure, interest-group opinions |
+| Nuclear Posture | You hold warheads | Doctrine, readiness, launch authority, forces, upkeep, incident exposure, interest-group opinions; in the Forces section, your arsenal ceiling and dismantling |
 | Nuclear Crisis and Reputation | In a crisis, or once you have a record | The crisis and your moves in it; credibility and pledges |
+| The Nuclear Taboo | From the world's first warhead | The taboo's score and band, where it is heading and why, what nuclear acts cost now, your arsenal's burden, and its history |
 | Delivery and Defence, Nuclear Powers | Always | Strike and interception ratings; the ten largest arsenals as the world estimates them |
 
 <!-- screenshot: the Nuclear Weapons journal entry for an armed great power, program panel, progress bar and Nuclear Posture panel in view -->
 
 A power that loses its rank stops building but keeps the entry, its posture, its
-upkeep and its accidents. Disarming closes the entry, except during a crisis.
+upkeep and its accidents. Before the first warhead, disarming closes the entry
+except during a crisis; after it, the entry stays open for every country, armed
+or not.
 
 ## Building a nuclear arsenal
 
@@ -43,11 +50,14 @@ You need the Nuclear Weapons technology and one of these:
 - Major Power rank and the Intercontinental Ballistic Missiles technology.
 - A Nuclear Program Aid treaty article in which a nuclear power helps you, at any rank.
 
-A Nuclear Disarmament article ends the program. A United Nations member without
+A Nuclear Disarmament article ends the program, and so does renouncing the bomb
+by dismantling your arsenal (see [Reducing or giving up an
+arsenal](#reducing-or-giving-up-an-arsenal)). A United Nations member without
 a bomb can't run one while the UN is at its Strong tier or higher and the IAEA
 exists (see [UN authority tiers](09-united-nations.md#un-authority-tiers)). A
-Nuclear Program Freeze holds funding at zero. Losing the rank that qualified you
-zeroes funding the same week.
+Nuclear Program Freeze holds funding at zero, and so does an arsenal ceiling,
+your own or a Nuclear Arms Limitation treaty's, while you hold at least that
+many warheads. Losing the rank that qualified you zeroes funding the same week.
 
 ### Program funding and warhead production
 
@@ -71,9 +81,12 @@ of progress toward the first device, never taking it below zero.
 ### The first device and the world's reaction
 
 The first country to finish a device gets "Dawn of the Atomic Age", the Nuclear
-Power modifier and a burst of loyalists. Later powers get "Our Nuclear Arsenal
-is Complete" and the same modifier, which raises prestige, diplomatic play
-maneuvers, and leverage generation and resistance.
+Power modifier and a burst of loyalists, and its warhead brings the nuclear taboo
+into being at 20. Later powers get "Our Nuclear Arsenal is Complete" and the
+same modifier, which raises prestige (+30%), diplomatic play maneuvers, and
+leverage generation (+25%) and resistance. Once the taboo rises above 40, The
+Burden of the Bomb eats into that prestige and leverage generation (see [What
+the nuclear taboo costs](#what-the-nuclear-taboo-costs)).
 
 A later program is noticed at 75 progress on its first device: the great powers,
 its rivals and its neighbors get "Nuclear Proliferation Alert". A nuclear power
@@ -160,8 +173,9 @@ once every two years, and the first choice is free.
 | Nuclear Warfighting | In any war | +20% maneuvers, +10% leverage generation, +20% infamy generation, −10% infamy decay, −20% relations improvement |
 
 Losing means a quarter of your land occupied, or under 35% of battles won after
-five significant battles. Adopting Compellence or Warfighting costs 5 infamy and
-10 relations with every rival. Leaving No First Use is a **repudiation**: −20
+five significant battles. Adopting Compellence or Warfighting costs infamy equal
+to a tenth of the [nuclear taboo](#what-the-nuclear-taboo-costs) (5 at a taboo of
+50) and 10 relations with every rival. Leaving No First Use is a **repudiation**: −20
 credibility, +10 infamy, a ten-year Broken Nuclear Pledge modifier, and your
 restraint-minded interest groups disapprove. While the No-First-Strike Pledge
 amendment is on your laws (see [Amendments to the mod's
@@ -181,7 +195,9 @@ Readiness moves one step every two weeks toward the level you order.
 
 Struck while Recessed, you can order the warheads mated; "Our Forces Are Ready"
 offers the answer when they reach Routine, if the war goes on. A stand-down
-agreed or conceded in a crisis holds you at Routine or below for two years.
+agreed or conceded in a crisis holds you at Routine or below for two years, and
+dismantling your arsenal takes you down to Recessed and holds you there until
+it ends or you halt it.
 
 ### Launch authority
 
@@ -211,11 +227,14 @@ a doctrine has stood for six months.
 | Armed Forces (officers) | Flexible First Use at Heightened readiness | No First Use, Warfighting, Recessed, Routine when an armed enemy is plausible, High Alert with strain of 50 or more |
 | Industrialists (business) | No doctrine preference | High Alert held three months or more; any crisis at Confrontation or beyond |
 | Groups favoring Total War over Limited War | Compellence or Warfighting, High Alert | No First Use, Existential Deterrence, Routine or Recessed |
-| Groups favoring Limited War over Total War | No First Use (Existential Deterrence less so), Recessed | Flexible First Use, Compellence, Warfighting, High Alert, Launch on Warning, Automatic Retaliation |
+| Groups favoring Limited War over Total War | No First Use (Existential Deterrence less so), Recessed | Flexible First Use, Compellence, Warfighting, High Alert, Launch on Warning, Automatic Retaliation; the arsenal itself, once its burden reaches 33% (−1) or 67% (−2) |
 
 A group that only approves of its preferred Rules of War law, rather than
 strongly, holds a mild view (±1). The Armed Forces and the Industrialists also
-lean with their leader: a jingoist-led army wants compellence.
+lean with their leader: a jingoist-led army wants compellence. The objection to
+the arsenal itself, listed as "the arsenal itself" among the group's terms,
+comes from [the nuclear taboo's burden](#what-the-nuclear-taboo-costs) and
+counts at once, whatever your doctrine's tenure.
 
 ### The nuclear umbrella and nuclear guarantees
 
@@ -251,7 +270,7 @@ Two diplomatic actions open one:
 | Action | Cost | Deadline |
 |---|---|---|
 | Private Nuclear Warning | −5 relations | 10 weeks |
-| Public Nuclear Ultimatum | +5 infamy, −20 relations, higher reputation stakes | 8 weeks |
+| Public Nuclear Ultimatum | Infamy equal to a tenth of the nuclear taboo, −20 relations, higher reputation stakes | 8 weeks |
 
 Either action needs an arsenal of your own, both sides free of other crises, no
 non-use pledge between you, and one of the disputes below, taken in this order.
@@ -279,7 +298,7 @@ moment. A crisis can be settled at any stage, and it lapses after a year.
 The crisis panel shows two figures, each broken down in its tooltip.
 
 - Danger (0–100) rises with the stage, time, publicity, readiness, poor command reliability, counter-threats and exercises, and falls with open talks. It is lower when the target has no arsenal and no armed protector. High danger makes incidents likelier.
-- Pressure on the target (0–100) is what makes an AI target concede. The issuer's credibility, the danger, a threat that can be carried out, and the issuer's exercises and alerts raise it. The target's ability to answer in kind and an armed protector behind it lower it. The course of the war and the target ruler's temperament shift it either way. When first threatened, an AI target concedes only rarely below 40. Pressed again later, it never concedes below 50, does so about half the time from 70, and two times in three from 85.
+- Pressure on the target (0–100) is what makes an AI target concede. The issuer's credibility, the danger, a threat that can be carried out, and the issuer's exercises and alerts raise it. The target's ability to answer in kind and an armed protector behind it lower it. The course of the war, the target ruler's temperament and the nuclear taboo shift it either way: up to +8 where the taboo is near 0 and threats are believed, down to −8 near 100 where nobody believes them, with the doubt halved for a public ultimatum. When first threatened, an AI target concedes only rarely below 40. Pressed again later, it never concedes below 50, does so about half the time from 70, and two times in three from 85.
 
 From Confrontation on, the target is pressed every six weeks unless talks are
 open.
@@ -296,7 +315,7 @@ Each side acts through events and the crisis panel's buttons.
 | Refuse | Target | Confrontation. A refused public ultimatum counts as defiance, which lets a Compellence issuer strike you in a war |
 | Counter-threat | Armed target | Confrontation, danger +10, readiness to Heightened |
 | Propose a mutual stand-down | Either | Pressure pauses and danger falls 15 while the other side decides. If accepted, both stand down to Routine for 24 months and pledge non-use; the war or play goes on |
-| Go public | Issuer | +5 infamy, −15 relations, a new 8-week deadline |
+| Go public | Issuer | Infamy equal to a tenth of the nuclear taboo, −15 relations, a new 8-week deadline |
 | Exercise | Either armed side | Money and 5 strain (and +3 credibility for the issuer); for six weeks danger +10, and pressure +10 if the issuer holds it. It can be mistaken for an attack |
 | Back down | Issuer | The crisis ends in a climb-down |
 
@@ -371,18 +390,25 @@ and accidents](#nuclear-incidents-and-accidents)).
 A strategic strike that lands devastates the state, kills a tenth of its people
 and leaves Nuclear Strike Aftermath for two and a half years (decaying): −50%
 infrastructure, −3 standard of living, +25% mortality and −50% throughput. The
-victim loses 12.5 war support and 50 relations with you, and you gain 25 infamy.
-A strike that fails costs 5 infamy.
+victim loses 12.5 war support and 50 relations with you. A first use also costs
+you infamy equal to the [nuclear taboo](#what-the-nuclear-taboo-costs) and
+relations with every other country; an answer to a strike on you or on a country
+you cover costs neither. The action's confirmation names the figures. A strike
+that fails costs 5 infamy.
 
 A tactical strike that lands kills half the soldiers and officers in the state
-and a few civilians, stops unit training there for a while, and costs 10 infamy.
+and a few civilians, and stops unit training there for a while. As a first use
+it costs infamy equal to four tenths of the taboo, and relations with every other
+country; as an answer it costs neither. A tactical strike that fails costs no
+infamy.
 It halves every Naval Fortification and Military Base in the state, an odd level
 lost on a coin flip, so a level-1 site is destroyed half the time; what survives
 keeps its production methods. Barracks, conscription centers and the other naval
 buildings survive.
 
 Both sides get a notification of the result. Every use speeds up the world's
-funded programs and ends any crisis between the two countries. The United
+funded programs and ends any crisis between the two countries, and one that
+lands knocks the nuclear taboo down. The United
 Nations records it against you, and its court may indict your ruler (see
 [Grounds for UN censure](09-united-nations.md#grounds-for-un-censure)).
 
@@ -390,8 +416,11 @@ Nations records it against you, and its court may indict your ruler (see
 
 The victim of a strategic strike gets "A City Erased" with its answer: condemn
 the attack, retaliate with one warhead, or launch a full retaliation of three if
-it holds more than two. Retaliation costs no infamy and counts for less with the
-United Nations than a first strike, and the attacker may answer it in turn.
+it holds more than two. Retaliation costs no infamy, counts for less with the
+United Nations than a first strike, knocks the nuclear taboo down half as far,
+and the attacker may answer it in turn. A strike you order through the strike
+actions in answer to one on you or on a country you cover also costs no infamy
+and counts as an answer for the taboo.
 Under Automatic Retaliation the answer is made for you; while Recessed you can
 only mate the warheads and answer when they are ready.
 
@@ -549,9 +578,240 @@ find them:
 - A Nuclear Security Assistance article: 6% a month for the country helped.
 - The Convention on the Physical Protection of Nuclear Material: 3% a month for each party. It reaches the United Nations Assembly only once warheads have gone missing somewhere.
 
+## The nuclear taboo
+
+The nuclear taboo is one score for the whole world, from 0 to 100, for how
+unthinkable nuclear weapons have become. It is born at 20 the week the world's
+first warhead is built, and from then on every country's Nuclear Weapons entry
+is active and shows it. It climbs slowly on its own, falls when the bomb is used
+or brandished, and rises with restraint. The more unthinkable the bomb, the more
+it costs to use it, threaten with it and, above 40, simply to hold it. It also
+shapes how the AI builds, threatens and strikes (see [How the AI plays nuclear
+weapons](#how-the-ai-plays-nuclear-weapons)). In a game that was already past
+its first warhead when the taboo was added, the taboo starts at the target its
+parts give rather than at 20, counting the years since the first device as a
+tradition of non-use if no weapon has been used.
+
+### The taboo panel and its bands
+
+The Nuclear Taboo section of the entry is open by default.
+
+| Row | What it shows |
+|---|---|
+| Nuclear taboo | The score and its band |
+| Heading toward | The target the score is moving to, and whether it is rising, falling or steady. Hover this row or the one above for the target's breakdown, part by part |
+| First use on a city, First use on a battlefield | The infamy and the relations with every other country that a strategic or tactical first use would cost now |
+| A public ultimatum | The infamy a public ultimatum would cost now |
+| Burden of our arsenal | Only while you hold warheads: your burden, and the prestige and leverage it costs |
+
+Below the rows, a line says whether a nuclear weapon has been used in war and,
+if so, when the last one fell; The Taboo Over Time holds two charts, the score
+and its target, month by month.
+
+<!-- screenshot: the Nuclear Taboo panel with the Heading toward breakdown tooltip open -->
+
+The band sets the words of the status line and marks where the taboo's effects
+start.
+
+| Band | Score | The status line says | What starts here |
+|---|---|---|---|
+| Normalised | 0–29 | The bomb is treated as one weapon among others | Below 30, AI rulers drop some of their restraint |
+| Fragile | 30–49 | The bomb is feared, but its use is still argued for | Above 40, holding warheads is a burden |
+| Established | 50–69 | Using the bomb is widely held to be wrong | Above 50, AI countries lean to No First Use and accept arms control and disarmament more readily |
+| Strong | 70–89 | The bomb is seen as unusable, and even holding one draws censure | From 70, the AI strikes first only for survival and may dismantle its arsenal |
+| Absolute | 90–100 | The bomb is beyond the pale, and holding one marks a state apart | Every cost keeps rising with the score |
+
+### What moves the nuclear taboo
+
+Each month the taboo moves toward its target by a small part of the gap, never
+more than one point, so it closes about half of a gap in two years. The
+target is the sum of six parts, which the breakdown lists:
+
+| Part | Range | What sets it |
+|---|---|---|
+| Base | 20 | Constant |
+| Tradition of non-use | 0 to +35 | One point a year, full after 35 years. A first use halves the years counted; an answer to a strike cuts them by a quarter |
+| Doctrines | −10 to +10 | The doctrines of the countries that hold warheads, averaged with great powers counting most. No First Use and warheads in storage (Recessed) raise it; Flexible First Use, Compellence, Warfighting and High Alert lower it |
+| Restraint | 0 to +15 | Non-use pledges in force (up to +5); countries that gave up an arsenal and have not armed again (up to +10) and countries bound by a Nuclear Arms Limitation treaty, both weighted by rank |
+| United Nations | 0 to +12 | The Non-Proliferation Treaty (up to 8) and the Physical Protection convention (up to 4), in proportion to UN authority |
+| Ledger | −30 to +10 | The record of what the world has done lately, which halves every four years |
+
+Base and a full tradition make 55. With no use and nothing else moving it, the
+target climbs a point a year from 20 to 55 over 35 years, and the score follows
+a couple of years behind. Anything above 55 has to come from doctrines,
+restraint, the United Nations and the ledger.
+
+A use that lands hits the score at once as well as the ledger. A first use
+halves the tradition and takes 15 points off the score and 10 off the ledger for
+a strategic strike, 6 and 4 for a tactical one. An answer to a strike counts half
+as much and cuts the tradition by a quarter. Other acts move the ledger only.
+These lower it:
+
+- Threats: a public ultimatum, and less so a private warning or taking one public.
+- Adopting Compellence or Warfighting.
+- Repudiating No First Use or breaking a non-use pledge.
+- A breakout: a country that gave up an arsenal holding a warhead again.
+- Leaving an arms-control treaty (see [The Nuclear Arms Limitation treaty](#the-nuclear-arms-limitation-treaty)).
+- Halting a dismantling.
+- A condemnation of a nuclear use that fails, or that a veto cuts to a rebuke.
+
+These raise it:
+
+- Adopting No First Use yourself (not when the No-First-Strike Pledge amendment holds you to it).
+- A nuclear crisis that ends in a mutual stand-down.
+- Giving up an arsenal, by any path, and more for a bigger one: Dismantle the Arsenal, a Nuclear Disarmament article, the Budapest path, or taking the warheads apart in a civil war.
+- Each warhead taken apart under a ceiling, yours or a treaty's.
+- A condemnation of a nuclear use that carries.
+- A loose warhead's terror detonation: no government chose it, and the world closes ranks after it.
+
+Uses count the same whoever makes them. Threats, doctrines, broken pledges,
+breakouts, walk-outs and halts count by the country's rank: a great power's
+four times a minor power's.
+
+### What the nuclear taboo costs
+
+Every scaled cost is nothing at a taboo of 0 and grows in step with it.
+
+| Act | Cost | At a taboo of 50 |
+|---|---|---|
+| Strategic first use | Infamy equal to the taboo, and relations with every country but the victim lowered by four tenths of it | 50 infamy, −20 relations |
+| Tactical first use | Four tenths of the strategic figures | 20 infamy, −8 relations |
+| A public ultimatum, taking a warning public, adopting Compellence or Warfighting | Infamy of a tenth of the taboo | 5 infamy |
+
+A strike that answers one on you or on a country you cover costs no infamy and
+no relations at any taboo. At 100 a single first strike on a city costs 100
+infamy, enough on its own to reach the Pariah threshold. The panel's cost rows
+show today's figures, and a strike's confirmation repeats them before you
+launch. The taboo also moves the pressure a threat puts on its target (see
+[Crisis stages, danger and pressure](#crisis-stages-danger-and-pressure)).
+
+Above a taboo of 40, holding warheads is a burden in itself. Your burden, shown
+as a percentage in the panel, grows with the taboo, from nothing at 40 to full
+at 100, and with your arsenal, from about a fifth of full for a single warhead
+to all of it at fifty warheads or more. It does two things:
+
+- The Burden of the Bomb lowers prestige by up to 45% and leverage generation by up to 25%. At a taboo of 100, a fifty-warhead arsenal turns Nuclear Power's +30% prestige into −15% and cancels its leverage bonus; five warheads in the same world keep about +17% prestige.
+- Interest groups favoring Limited War over Total War object to the arsenal itself: −1 to their view of your posture from a burden of 33%, −2 from 67% (see [How interest groups judge your posture](#how-interest-groups-judge-your-posture)). The ceiling's tooltip says how many warheads would ease them a step.
+
+### Reducing or giving up an arsenal
+
+The exits sit in the Forces section of the posture panel, which is collapsed by
+default: an Arsenal row saying whether a ceiling holds you or you are
+dismantling, the Arsenal ceiling stepper with a Lift button, and Dismantle the
+arsenal with Begin and Halt buttons.
+
+The **arsenal ceiling** is the most warheads you will hold. The minus button
+sets one below your stock, or lowers the one you have, by 1 warhead up to 10, by
+5 up to 50 and by 25 above that, and the plus button raises it by the same
+steps. It goes no lower than 1; below that you dismantle. Warheads above the
+ceiling are taken apart, a tenth of the excess a month and at least one, and
+each strengthens the taboo a little. While you hold at least as many warheads as
+the ceiling, Programme Held stops your program: funding goes to zero and can't
+be raised, and the program's status reads "Development is held at our arsenal
+ceiling." Raising the ceiling above your stock, or lifting it, costs nothing and
+releases the program at once, unless a treaty's ceiling still holds you.
+
+Dismantle the Arsenal needs warheads, peace, no nuclear crisis and no civil
+war. It takes 12 months, one more for every 10 warheads above 20, and at most
+36. The warheads go over that time, the last month taking whatever is left.
+Until it ends, your readiness is ordered down to Recessed and can't be raised,
+and the program is held. Recessed forces can't launch, so once there you can't
+answer a strike. A war doesn't stop the dismantling; a civil war of your own
+pauses it, and it resumes where it left off once every such war is over. Halt
+the dismantling at any time: what is taken apart stays gone, your credibility
+falls by 10 and the taboo weakens. If the arsenal goes another way meanwhile (a
+disarmament treaty, or taking the warheads apart in a civil war), the
+dismantling ends without its rewards.
+
+When the last warhead goes, "The Last Warhead" fires. Its option gives The Bomb
+Renounced, a prestige bonus of up to +20% in proportion to the taboo (+10% at
+50) that fades over 20 years, and raises relations with every country by a
+fifth of the taboo (+10 at 50). Restraint-minded interest groups approve and
+hawks disapprove. You lose Nuclear Power and take Renounced the Bomb: you count
+as a disarmed country, so no program can run, and the status line reads "We
+gave up the bomb of our own accord." Only Dismantle the Arsenal brings these
+rewards and Renounced the Bomb; every path counts toward the taboo.
+
+Resume the Nuclear Programme is a decision you can take while you hold
+Renounced the Bomb. It ends the renunciation and The Bomb Renounced, and costs
+infamy of a tenth of the taboo and relations with every country of a fifth of
+it. It gives back no warheads. A great power, a major power with Intercontinental
+Ballistic Missiles or a country receiving Nuclear Program Aid can then run a
+program again; a country without the rank for one is warned that resuming only
+ends its renunciation. Once any country that gave up an arsenal, by whatever
+path, holds a warhead again, the taboo books a breakout against it.
+
+### The Nuclear Arms Limitation treaty
+
+Nuclear Arms Limitation is a mutual treaty article, available with the Nuclear
+Weapons technology, between two countries that each hold warheads or run a
+program. You set the ceiling in the draft, from 1 up to a quarter above the
+larger of the two arsenals (at least 5). While the treaty is in force:
+
+- Neither party holds more warheads than the ceiling. Those above it are taken apart, a tenth of the excess a month, and each party's program is held at the ceiling from its next monthly review.
+- The Arsenal row reads "Held to N warheads by an arms-control treaty" when the treaty binds you tighter than your own ceiling, or you have none.
+- Each country it binds adds to the taboo's Restraint part, once however many such treaties it has, weighted by rank.
+
+Leaving costs nothing directly, but it weakens the taboo. When a treaty ends,
+whoever ends it, or is renegotiated to a higher ceiling, each party whose lowest
+treaty ceiling rises or disappears is booked a walk-out. No walk-out is booked
+while another such treaty holds the party to the same ceiling or a lower one,
+or when the partner no longer exists. Your own arsenal ceiling never covers a
+walk-out. An AI party accepts more readily as the taboo rises above 50 and as
+its arsenal burdens it, is very reluctant under a militarist government, and
+resists a ceiling that stops it building the arsenal it wants or cuts it deeper
+than the other party.
+
+### The United Nations and the taboo
+
+The United Nations can move the taboo, but the taboo works without it. While the
+Non-Proliferation Treaty is in force it adds up to 8 to the target, and the
+Convention on the Physical Protection of Nuclear Material up to 4, both in
+proportion to UN authority (4 and 2 at authority 50).
+
+When the docket takes up a nuclear strike, its appeal can table a condemnation
+even while the condemnation topic is on its five-year cooldown, provided the
+striker's case gives grounds. That vote is the Assembly's verdict on the use. A
+condemnation that carries raises the score 2 points at once and the ledger 3; one
+that fails, or that a veto cuts to a rebuke, takes 3 off the ledger. Sanctions or
+a court case over the same strike deliver no verdict. See [The UN
+docket](09-united-nations.md#the-un-docket) and [UN conventions and
+agencies](09-united-nations.md#un-conventions-and-agencies).
+
+### Nuclear taboo events
+
+When the score crosses a band line, every country gets an event: four as it
+rises through 30, 50, 70 and 90, and four as it falls back through them. The
+score has to pass 2 points beyond the line, the band moves at most one step a
+month, and each of the eight events fires at most once in ten years. The options
+act on your own country; those that start a real action (a ceiling, dismantling
+or No First Use) then move the taboo the usual way. Whether you hold warheads
+decides which options you see.
+
+| Option | Events | Offered when | What it does |
+|---|---|---|---|
+| Cut our arsenal in half | Rising | You hold more than one warhead, aren't dismantling, and have no ceiling already at half your stock or lower | Sets your arsenal ceiling at half your stock |
+| Take our arsenal apart | Rising | You could begin Dismantle the Arsenal | Begins it |
+| Pledge never to use it first | Rising | You hold warheads and could adopt No First Use now | Adopts it |
+| Our deterrent is not negotiable | Rising | You hold warheads and aren't dismantling | Hawks approve, restraint-minded groups disapprove |
+| Champion the norm abroad | Rising | You hold none | Champion of the Taboo (+5% prestige, fading over ten years); −5 relations with each great power that holds warheads |
+| Keep out of the powers' quarrel | Rising | You hold none | +5 relations with each great power that holds warheads |
+| Modernise the arsenal | Falling | You hold warheads and aren't dismantling | +10 command reliability, +5 survivability; restraint-minded groups disapprove |
+| Say publicly that nothing has changed | Falling | You hold warheads | Restraint-minded groups approve, hawks disapprove |
+| Seek the shelter of a friendly nuclear power | Falling | You hold none, and an armed country is on amicable terms with you | +15 relations with one such country |
+| Put more into our own programme | Falling | You hold none and could add a funding step | One more funding step |
+| Build shelters and civil defence | Falling | You hold none | Civil Defence, below |
+
+Build shelters and civil defence gives Civil Defence for ten years. It costs a
+weekly sum set when you choose it, about 0.26% of your GDP a year, and halves the
+war-support drain of facing a nuclear-armed enemy without the bomb (see [War
+support from mod systems](12-military.md#war-support-from-mod-systems)). These
+events and The Last Warhead are listed in [Nuclear taboo event
+list](18-appendix-events.md#nuclear-taboo-event-list).
+
 ## Nuclear treaty articles
 
-Five treaty articles deal with nuclear weapons. Each costs its payer influence
+Six treaty articles deal with nuclear weapons. Each costs its payer influence
 upkeep while the treaty is in force.
 
 | Article | Parties | Effect |
@@ -561,16 +821,25 @@ upkeep while the treaty is in force.
 | Nuclear Program Aid | A nuclear power helps a non-nuclear country and pays 500 | The recipient can run a program at any rank, at double the rate. Refused once the IAEA exists and United Nations authority is 60 or more |
 | Nuclear Guarantee | An armed guarantor pays 100 | Extended deterrence, as for the umbrella; not for your own subjects |
 | Nuclear Security Assistance | An armed country pays 100 to help one holding or missing warheads | Secured custody and a monthly chance to recover missing warheads |
+| Nuclear Arms Limitation | Mutual, between two countries that each hold warheads or run a program; both pay 50 | Neither holds more warheads than the agreed ceiling; see [The Nuclear Arms Limitation treaty](#the-nuclear-arms-limitation-treaty) |
 
-Aid can't be combined with a disarmament or freeze of the same country. The
-United Nations' non-proliferation treaty and IAEA are in [The United
-Nations](09-united-nations.md).
+Aid can't be combined with a disarmament or freeze of the same country, and a
+country whose program is held (at an arsenal ceiling, or while it dismantles)
+can't agree to a freeze. The United Nations' non-proliferation treaty and IAEA
+are in [The United Nations](09-united-nations.md).
 
 ## How the AI plays nuclear weapons
 
-- It funds its program toward a target stockpile that grows with rank, innovation, war and a rival that seems to hold more.
-- It reviews its posture every six months and when a crisis opens. Most AIs keep Existential Deterrence; cautious rulers and democracies lean to No First Use, and militarist regimes (fascist, or with a jingoist ruler or a powerful Armed Forces in government) to Compellence or Warfighting.
+The nuclear taboo feeds every one of these decisions: in a world that treats the
+bomb as ordinary the AI builds more, threatens more and strikes first more
+readily, and in one that holds it in horror it trims and gives up its arsenal.
+It retaliates at any taboo.
+
+- It funds its program toward a target stockpile that grows with rank, innovation, war and a rival that seems to hold more, and shrinks as the taboo rises: about a third larger at 0 than at 40, and half the size at 100. From a taboo of 70, an AI at peace that faces no plausible attacker is far slower to fund a program.
+- It reviews its posture every six months and when a crisis opens. Most AIs keep Existential Deterrence; cautious rulers and democracies lean to No First Use, and militarist regimes (fascist, or with a jingoist ruler or a powerful Armed Forces in government) to Compellence or Warfighting. Above a taboo of 50, No First Use gains favor; below 30, Compellence and Warfighting tempt any ruler who is not cautious; from 70 they, and Flexible First Use, lose favor.
 - It goes to High Alert in an Acute crisis or a war with an armed enemy, to Heightened in any war or Confrontation, and to Recessed only at peace with nothing to deter and nobody to protect, and then only under a cautious ruler, No First Use or a default.
-- It strikes first only when its doctrine allows and its survival is at stake, or when it is losing (Flexible), was defied (Compellence) or is at war (Warfighting) against an enemy with no arsenal and no armed protector. An aggressive ruler losing under Flexible First Use strikes whether or not the enemy can answer; a cautious one strikes first only for survival. It keeps a warhead in reserve unless its survival is at stake, waits six months between first uses, and strikes its own rebels only with 40% of its land occupied under Outlawed Dissent or a Secret Police.
-- It warns countries that threaten a protégé or its survival, and a great power warns a rival that is building a bomb. Coercive warnings need a hawkish doctrine or regime and a target that can't answer. It never makes a public bluff.
-- It usually declines to answer for a protégé that struck first, never withdraws a nuclear umbrella, and demands disarmament from rivals and hostile countries.
+- It strikes first only when its doctrine allows and its survival is at stake, or when it is losing (Flexible), was defied (Compellence) or is at war (Warfighting) against an enemy with no arsenal and no armed protector. An aggressive ruler losing under Flexible First Use strikes whether or not the enemy can answer; a cautious one strikes first only for survival, unless the taboo is below 30. From a taboo of 70, any AI strikes first only when its enemy means to annex or subjugate it, whatever its doctrine. The lower the taboo, the more readily it takes a strike it is allowed. It keeps a warhead in reserve unless its survival is at stake, waits six months between first uses, and strikes its own rebels only with 40% of its land occupied under Outlawed Dissent or a Secret Police. None of this holds back retaliation.
+- It warns countries that threaten a protégé or its survival, and a great power warns a rival that is building a bomb. Coercive warnings need a hawkish doctrine or regime and a target that can't answer. It never makes a public bluff. From a taboo of 70 it issues a public ultimatum only in defense of a country it covers, its survival or its core territory, and otherwise warns privately.
+- At each posture review it also weighs its arsenal. While its arsenal burdens it and it holds more than half again the stockpile it wants, it sets a ceiling at what it wants; it lifts that ceiling once it wants more, and in a war lifts any ceiling below what it wants. When the burden reaches 30% or the taboo 70, it may begin dismantling, a one-in-five chance each review, provided it is at peace, outside any nuclear crisis or civil war, faces no plausible attacker, has neither a militarist government nor an aggressive ruler, and is covered by a guarantee or umbrella or is not a great power. It halts a dismantling only when an armed enemy at war with it means to annex or subjugate it. A renouncer takes Resume the Nuclear Programme only with the standing to run a program, below a taboo of 50, and when an armed country is at war with it or is a rival antagonistic toward it.
+- An armed AI proposes Nuclear Arms Limitation when the taboo is 50 or more or its arsenal burdens it, at a ceiling of three quarters of the larger arsenal.
+- It usually declines to answer for a protégé that struck first, never withdraws a nuclear umbrella, and demands disarmament from rivals and hostile countries. It accepts a Nuclear Disarmament demand more readily when the taboo is above 50 or its own arsenal burdens it.
