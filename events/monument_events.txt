@@ -777,6 +777,7 @@ monument_events.17 = {
 # and the plain style. Faith first, then heritage in the partition's order,
 # generic last, and no default_option: an expired event takes the first valid
 # option, which is the most specific skin, the one already set.
+# Offered to players only; the AI keeps the most specific skin unasked.
 monument_events.11 = {
 	type = state_event
 	placement = ROOT

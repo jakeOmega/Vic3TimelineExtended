@@ -1060,9 +1060,10 @@ gm_state_dedicate_faith = {
 }
 
 # ---- Skins (§1.1) ----------------------------------------------------------------
-# State scope. The most specific skin for the axis, set at once; then, if it is
-# not the generic one, the choice (monument_events.11), whose first valid
-# option is that same skin. Then a national refresh.
+# State scope. The most specific skin for the axis, set at once; then, for a
+# player, the choice (monument_events.11), whose first valid option is that
+# same skin -- the AI keeps the most specific skin without being asked. Then a
+# national refresh.
 gm_state_offer_skins = {
 	set_variable = { name = gm_skin value = flag:generic }
 	gm_state_offer_skins_$AXIS$ = yes
@@ -1081,8 +1082,11 @@ gm_state_offer_skins_faith = {
 		gm_state_offer_skins_heritage = yes
 	}
 	else = {
-		set_variable = { name = gm_skin_axis value = flag:faith }
-		trigger_event = { id = monument_events.11 }
+		if = {
+			limit = { owner = { is_ai = no } }
+			set_variable = { name = gm_skin_axis value = flag:faith }
+			trigger_event = { id = monument_events.11 }
+		}
 	}
 }
 
@@ -1091,6 +1095,7 @@ gm_state_offer_skins_heritage = {
 	if = {
 		limit = {
 			NOT = { var:gm_skin = flag:generic }
+			owner = { is_ai = no }
 		}
 		set_variable = { name = gm_skin_axis value = flag:heritage }
 		trigger_event = { id = monument_events.11 }

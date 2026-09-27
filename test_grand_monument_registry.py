@@ -990,6 +990,14 @@ class CeremonyTests(unittest.TestCase):
         self.assertIn("trigger_event = { id = monument_events.20 }", offer)
         faith_offer = squash(block(e, "gm_state_offer_skins_faith"))
         self.assertIn("gm_state_offer_skins_heritage = yes", faith_offer, "mod religions fall back to heritage")
+        # The skin choice is for players only; the AI keeps the most specific
+        # skin gm_state_default_faith_skin / gm_state_default_heritage_skin
+        # already set, unasked (plan-mandated fix, Task 7 fix round 1).
+        self.assertIn("limit = { owner = { is_ai = no } } set_variable = { name = gm_skin_axis value = flag:faith } "
+                      "trigger_event = { id = monument_events.11 }", faith_offer)
+        heritage_offer = squash(block(e, "gm_state_offer_skins_heritage"))
+        self.assertIn("owner = { is_ai = no } } set_variable = { name = gm_skin_axis value = flag:heritage } "
+                      "trigger_event = { id = monument_events.11 }", heritage_offer)
 
 
 class SkinTests(unittest.TestCase):
