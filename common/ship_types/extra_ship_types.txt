@@ -310,6 +310,7 @@ ship_type_guided_missile_ship = {
 			utility_mod_fire_control_system
 			utility_mod_range_finder
 			utility_mod_advanced_explosives
+			utility_mod_aegis_air_defense
 		}
 	}
 }
@@ -404,6 +405,7 @@ ship_type_nuclear_supercarrier = {
 			utility_mod_dew_point_defense
 			utility_mod_fire_suppression
 			utility_mod_extended_sick_bay
+			utility_mod_underway_replenishment
 		}
 		ship_mod_slot_utility_2 = {
 			utility_mod_drone_complement
@@ -503,6 +505,7 @@ ship_type_arsenal_ship = {
 			utility_mod_fire_control_system
 			utility_mod_range_finder
 			utility_mod_advanced_explosives
+			utility_mod_underway_replenishment
 		}
 		ship_mod_slot_utility_2 = {
 			utility_mod_dew_point_defense
@@ -598,6 +601,7 @@ ship_type_expeditionary_sea_base = {
 			utility_mod_drone_complement
 			utility_mod_extended_sick_bay
 			utility_mod_camouflage
+			utility_mod_helicopter_pad
 		}
 	}
 }
@@ -685,6 +689,7 @@ ship_type_expeditionary_fast_transport = {
 			utility_mod_landing_skiffs
 			utility_mod_camouflage
 			utility_mod_searchlights
+			utility_mod_helicopter_pad
 		}
 	}
 }
@@ -863,6 +868,7 @@ ship_type_pulsed_laser_escort = {
 			utility_mod_fire_control_system
 			utility_mod_searchlights
 			utility_mod_advanced_explosives
+			utility_mod_composite_armor_plating
 		}
 	}
 }
@@ -946,6 +952,7 @@ ship_type_swarm_coordination_vessel = {
 			utility_mod_fire_control_system
 			utility_mod_range_finder
 			utility_mod_searchlights
+			utility_mod_composite_armor_plating
 		}
 		ship_mod_slot_utility_2 = {
 			utility_mod_dew_point_defense
@@ -1045,6 +1052,7 @@ ship_type_fleet_carrier = {
 			utility_mod_torpedo_nets
 			utility_mod_camouflage
 			utility_mod_searchlights
+			utility_mod_underway_replenishment
 		}
 	}
 }
@@ -1136,6 +1144,7 @@ ship_type_amphibious_assault_ship = {
 			utility_mod_extended_sick_bay
 			utility_mod_fire_suppression
 			utility_mod_camouflage
+			utility_mod_helicopter_pad
 		}
 	}
 }
@@ -1227,6 +1236,7 @@ ship_type_marine_assault_ship = {
 			utility_mod_extended_sick_bay
 			utility_mod_camouflage
 			utility_mod_fire_suppression
+			utility_mod_helicopter_pad
 		}
 	}
 }
@@ -1319,6 +1329,7 @@ ship_type_stealth_battlecruiser = {
 			utility_mod_range_finder
 			utility_mod_advanced_explosives
 			utility_mod_camouflage
+			utility_mod_underway_replenishment
 		}
 		ship_mod_slot_utility_2 = {
 			utility_mod_dew_point_defense
@@ -1674,6 +1685,7 @@ ship_type_antimatter_battleship = {
 			utility_mod_fire_control_system
 			utility_mod_range_finder
 			utility_mod_advanced_explosives
+			utility_mod_composite_armor_plating
 		}
 		ship_mod_slot_utility_2 = {
 			utility_mod_dew_point_defense
@@ -1765,6 +1777,7 @@ ship_type_orbital_support_amphibious_mothership = {
 			utility_mod_drone_complement
 			utility_mod_extended_sick_bay
 			utility_mod_camouflage
+			utility_mod_helicopter_pad
 		}
 		ship_mod_slot_utility_2 = {
 			utility_mod_dew_point_defense
