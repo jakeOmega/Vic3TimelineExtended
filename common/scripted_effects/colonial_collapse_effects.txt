@@ -12,10 +12,13 @@
 # collapsing country need not have it). The world check is last in the limit,
 # so it only runs for the few countries that pass the cheap filters above it.
 #
-# Until 2026-09 the limit also held `any_civil_war = { always = no }`, meant as
-# "no civil war" (db166830, "colonial collapse checks tightened"). An any_*
-# iterator whose body is `always = no` is false for every country, so the
-# effect never ran; the civil-war test now uses vanilla's idiom (00_autocracy.txt).
+# Until 2026-09 the limit also held `any_civil_war = { always = no }`, added in
+# db166830 (a 53-file omnibus whose message says "colonial collapse checks
+# tightened"), two days after the effect first ran, ungated, from 1836. An
+# any_* iterator whose body is `always = no` is false for every country, so the
+# effect never ran again. The likely reading is a "no civil war" test written
+# wrongly, but a deliberate switch-off is possible; the owner has not confirmed
+# either. The civil-war test now uses vanilla's idiom (00_autocracy.txt).
 
 colonial_collapse_effect = {
 	if = {

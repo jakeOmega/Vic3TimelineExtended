@@ -789,7 +789,7 @@ Per tracked country: 120 containers, each with 3 bookkeeping variables plus one 
   1. A neighbour of its most populous state whose owner shares a heritage trait group with it → that owner **annexes** it.
   2. Otherwise → **`set_country_type = decentralized`** (revert to uncolonized).
 - **Notifications:** Countries in same strategic region AND great powers receive alerts.
-- **History:** until 2026-09 the limit held `any_civil_war = { always = no }` (always false), so the system never ran.
+- **History:** from db166830 (2026-03-23) until 2026-09 the limit held `any_civil_war = { always = no }`, which is always false, so the system never ran. That was most likely a "no civil war" test written wrongly, but a deliberate switch-off is not ruled out (the effect had run ungated from 1836 for the two days before).
 
 ## Treaty Articles with Entity Selection
 
