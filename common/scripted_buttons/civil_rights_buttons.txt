@@ -253,10 +253,12 @@ cr_remove_cooptation_token_reform = {
 		custom_tooltip = {
 			text = "CR_REMOVE_COOPTATION_TOKEN_REFORM_DESC"
 			remove_modifier = cr_cooptation_modifier
-			# Also drop the expired-marker if present so re-toggling resets the
-			# 12-month bar bonus window cleanly. Guarded: removing a modifier the
-			# country does not hold logs "not found" to error.log.
-			remove_modifier_if_exists_effect = { MODIFIER = cr_cooptation_expired }
+			# cr_cooptation_expired stays: the 12-month window does not reset
+			# (cr_cooptation_months keeps counting across restarts and also picks
+			# the Coopted Reform ending). Removing the marker here let a restart
+			# past 12 months take the +0.15 push again until the next monthly
+			# pulse re-added it. cr_je_cleanup_effect clears it when the run ends,
+			# so the next run starts without it.
 		}
 		if = { limit = { has_variable = cr_policy_cooptation } remove_variable = cr_policy_cooptation }
 	}

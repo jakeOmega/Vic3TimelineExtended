@@ -5,7 +5,8 @@
 # It shows cultural pull breakdown, global leaderboard, and tier status.
 # All computation runs in on_actions (cultural_hegemony_on_actions.txt) via
 # scripted effects (cultural_hegemony_effects.txt) from game start.
-# The JE only activates after 1845 so scores are stable when first shown.
+# The JE activates once any country has researched Mass Media and this
+# country has Romanticism (`possible`), so scores are stable when first shown.
 # ============================================================================
 
 je_cultural_hegemony = {
@@ -128,7 +129,7 @@ je_cultural_hegemony = {
 				je:je_cultural_hegemony ?= { add_modifier = { name = cultural_hegemony_effect multiplier = cultural_hegemony_modifier_mult } }
 			}
 
-			# Apply/remove foreign benchmark (SoL expectations from hegemon)
+			# Apply/remove foreign benchmark (the legitimacy loss from trailing the hegemon)
 			# Only applies to countries with this JE active
 			if = {
 				limit = { cultural_hegemony_benchmark_mult >= 0.1 }

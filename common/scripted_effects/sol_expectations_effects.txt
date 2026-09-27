@@ -5,8 +5,8 @@
 # Each month, reads the gap (target - average_expected_sol) and nudges
 # the shift to close it. At equilibrium, expected SoL ≈ target.
 #   Example: average_sol=20, target_add=+2 → expected converges to 22
-# Converges with a 10-year half-life (sol_expectations_half_life_years),
-# ~75% adapted in 20 years.
+# Converges with a 10-year half-life (sol_expectations_half_life_years):
+# ~50% adapted in 10 years, ~75% in 20, ~94% in 40.
 #
 # Additional features:
 # - Min/max clamp: shift is bounded by configurable floor/ceiling.

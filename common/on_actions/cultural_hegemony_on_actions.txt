@@ -25,7 +25,8 @@ ch_war_end_recalc_on_action = {
 
 # ---- Monthly pulse: update per-country CH values and modifiers ----
 # Runs from game start for all qualifying countries (even before JE activates).
-# This ensures scores are stable by the time the JE appears in 1845.
+# This ensures scores are stable by the time the JE appears (once any country
+# has Mass Media; je_cultural_hegemony `possible`).
 on_monthly_pulse_country = {
 	on_actions = {
 		ch_monthly_pulse_on_action

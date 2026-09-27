@@ -438,7 +438,9 @@ social_tensions_events.5 = {
 			any_scope_pop = {
 				is_pop_type = laborers
 				pop_acceptance < acceptance_status_4
-				pop_acceptance < 0.5
+				# Below half acceptance: 94c2aba1's `pop_acceptance < 0.5`, written as if
+				# acceptance were 0-1. It runs 0-100, so that matched only pops at the floor.
+				pop_acceptance < 50
 			}
 		}
 		has_technology_researched = civil_rights_movement
@@ -936,7 +938,9 @@ social_tensions_events.11 = {
 			is_incorporated = yes
 			any_scope_pop = {
 				pop_acceptance < acceptance_status_4
-				pop_acceptance < 0.5
+				# Below half acceptance: 94c2aba1's `pop_acceptance < 0.5`, written as if
+				# acceptance were 0-1. It runs 0-100, so that matched only pops at the floor.
+				pop_acceptance < 50
 			}
 		}
 	}
@@ -1030,7 +1034,9 @@ social_tensions_events.12 = {
 			is_incorporated = yes
 			any_scope_pop = {
 				pop_acceptance < acceptance_status_4
-				pop_acceptance < 0.5
+				# Below half acceptance: 94c2aba1's `pop_acceptance < 0.5`, written as if
+				# acceptance were 0-1. It runs 0-100, so that matched only pops at the floor.
+				pop_acceptance < 50
 			}
 		}
 		OR = {

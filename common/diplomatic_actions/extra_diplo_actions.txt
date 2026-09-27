@@ -673,6 +673,8 @@ force_cultural_acceptance = {
 
 	texture = "gfx/interface/icons/diplomatic_action_icons/force_state_religion.dds"
 
+	# The bool comes from Cultural Unity tier II and up
+	# (extra_power_bloc_principles.txt).
 	selectable = {
 		is_power_bloc_leader = yes
 		power_bloc ?= {

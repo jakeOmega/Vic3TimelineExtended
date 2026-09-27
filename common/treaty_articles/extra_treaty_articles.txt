@@ -1722,29 +1722,6 @@ intelligence_sharing_pact = {
 	# Only visible and possible between significant powers who have something to share.
 	visible = {
 		has_law = law_type:law_ministry_of_intelligence_and_security
-
-		# Don't already have same article in existing treaty
-		trigger_if = {
-			limit = { exists = scope:source_country }
-			NOT = {
-				scope:source_country = {
-					any_scope_treaty = {
-						hidden_trigger = {
-							OR = {
-								scope:treaty = {
-									is_renegotiation = no
-								}
-								scope:treaty.amended_treaty != this
-							}
-						}
-						any_scope_article = {
-							has_type = intelligence_sharing_pact
-							source_country = scope:source_country
-						}
-					}
-				}
-			}
-		}
 	}
 
 	possible = {
@@ -1887,12 +1864,6 @@ joint_military_exercises = {
 	visible = {
 		NOT = { is_country_type = decentralized }
 		has_technology_researched = combined_arms
-
-		# Don't already have same article in existing treaty
-		trigger_if = {
-			limit = { exists = scope:source_country }
-			no_duplicate_treaty_article = { ARTICLE_TYPE = joint_military_exercises }
-		}
 	}
 
 	possible = {
@@ -2488,6 +2459,9 @@ population_transfer = {
 		always = yes
 	}
 
+	# ROOT here is the source, the conceding country whose minority pops are
+	# moved out, and scope:other_country is the demanding target that takes
+	# its people back (vanilla 14_treaty_port, 18_acquire_monopoly_for_company).
 	possible = {
 		has_diplomatic_relevance = scope:other_country
 		NOT = { is_country_type = decentralized }
@@ -2497,10 +2471,12 @@ population_transfer = {
 		# Inclusive democracies would not demand forced population transfers
 		custom_tooltip = {
 			text = POPULATION_TRANSFER_BLOCKED_BY_MULTICULTURAL
-			NOT = { has_law = law_type:law_multicultural }
+			scope:other_country = {
+				NOT = { has_law = law_type:law_multicultural }
+			}
 		}
-		# The proposer must have primary culture pops of the other country
-		# that are NOT also a primary culture of the proposer
+		# The source must have pops of a primary culture of the target that
+		# is NOT also a primary culture of the source
 		ROOT = {
 			any_scope_state = {
 				any_scope_pop = {
@@ -2509,14 +2485,16 @@ population_transfer = {
 				}
 			}
 		}
-		# Cannot demand transfer of cultures that already have high acceptance in the other country
+		# At least one community of the target's cultures in the source must be
+		# below acceptance status 4. The effect still moves all of them,
+		# well-accepted ones included, and the tooltip says so.
 		custom_tooltip = {
 			text = POPULATION_TRANSFER_BLOCKED_HIGH_ACCEPTANCE
-			scope:other_country = {
+			ROOT = {
 				any_scope_state = {
 					any_scope_culture = {
-						is_primary_culture_of = ROOT
-						NOT = { is_primary_culture_of = scope:other_country }
+						is_primary_culture_of = scope:other_country
+						NOT = { is_primary_culture_of = ROOT }
 						PREV = {
 							state_average_culture_pop_acceptance = {
 								culture = prev

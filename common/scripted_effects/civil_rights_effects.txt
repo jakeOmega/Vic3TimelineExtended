@@ -436,9 +436,12 @@ cr_rebuild_after_civil_war = {
 	# and its counters survive (immediate sees cr_run_in_progress). Restore the
 	# policies the counters assume, and cooptation's expiry marker with them; the
 	# pulse would add the marker only a month later, after the bar had had a
-	# month of the cooptation push it no longer earns. Only with the entry
-	# active: if the inherited record is not in place yet when this hook runs,
-	# the entry's pulse restores the policies a month later instead.
+	# month of the cooptation push it no longer earns. The marker comes back
+	# whether or not cooptation is running now: it stays for the rest of the run
+	# once cooptation has had its 12 months (End Cooptation no longer removes
+	# it). Only with the entry active: if the inherited record is not in place
+	# yet when this hook runs, the entry's pulse restores the policies a month
+	# later instead.
 	if = {
 		limit = {
 			has_variable = cr_run_in_progress
@@ -447,7 +450,6 @@ cr_rebuild_after_civil_war = {
 		cr_sync_policy_mirrors = yes
 		if = {
 			limit = {
-				has_variable = cr_policy_cooptation
 				has_variable = cr_cooptation_months
 				var:cr_cooptation_months >= 12
 				NOT = { has_modifier = cr_cooptation_expired }

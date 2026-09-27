@@ -181,7 +181,7 @@ combat_unit_type_swarm_bots = {
 		unit_provinces_lost_mult = -0.25
 	}
 
-	unlocking_technologies = { swarm_technology } # era 10
+	unlocking_technologies = { swarm_technology } # era 11
 
 	combat_unit_image = {
 		# fallback
@@ -215,7 +215,7 @@ combat_unit_type_grey_goo = {
 		unit_provinces_lost_mult = -0.25
 	}
 
-	unlocking_technologies = { molecular_assemblers }  # era 11
+	unlocking_technologies = { molecular_assemblers }  # era 12
 
 	combat_unit_image = {
 		# fallback
@@ -437,7 +437,7 @@ combat_unit_type_orbital_bombardment = {
 		unit_devastation_mult = 3
 	}
 
-	unlocking_technologies = { space_militarization }  # era 10
+	unlocking_technologies = { space_militarization }  # era 11
 
 	combat_unit_image = {
 		texture = "gfx/unit_illustrations/orbital1.dds"
@@ -479,7 +479,7 @@ combat_unit_type_orbital_precision_antimatter_strikes = {
 		unit_devastation_mult = 6
 	}
 
-	unlocking_technologies = { antimatter_production }  # era 11
+	unlocking_technologies = { antimatter_production }  # era 12
 
 	combat_unit_image = {
 		texture = "gfx/unit_illustrations/orbital2.dds"
@@ -618,7 +618,7 @@ combat_unit_type_holographic_ambush_combat_vehicle = {
 		unit_occupation_mult = 2
 	}
 
-	unlocking_technologies = { augmented_reality_warfare }  # era 10
+	unlocking_technologies = { augmented_reality_warfare }  # era 11
 
 	combat_unit_image = {
 		texture = "gfx/unit_illustrations/hologram_tank.dds"
@@ -839,7 +839,7 @@ combat_unit_type_DEW_tank = { #directed energy weapon tank
 		unit_devastation_mult = 4
 	}
 
-	unlocking_technologies = { compact_fusion_reactors }  # era 11
+	unlocking_technologies = { compact_fusion_reactors }  # era 12
 
 	combat_unit_image = {
 		texture = "gfx/unit_illustrations/DEW_tank.dds"
@@ -1006,7 +1006,7 @@ combat_unit_type_orbital_tactical_vehicles = {
 		unit_devastation_mult = 4
 	}
 
-	unlocking_technologies = { space_militarization }  # era 10
+	unlocking_technologies = { space_militarization }  # era 11
 
 	combat_unit_image = {
 		texture = "gfx/unit_illustrations/OTC.dds"
@@ -1049,7 +1049,7 @@ combat_unit_type_orbital_weapons_platforms = {
 		unit_devastation_mult = 8
 	}
 
-	unlocking_technologies = { orbital_weapon_platforms }  # era 11
+	unlocking_technologies = { orbital_weapon_platforms }  # era 12
 
 	combat_unit_image = {
 		texture = "gfx/unit_illustrations/OTC2.dds"
@@ -1219,9 +1219,10 @@ combat_unit_type_networked_marines = {
 	}
 
 	# Combined-arms-in-miniature: 60% robotic_soldiers + 10% each of orbital_bombardment
-	# (era 10), railgun_tank (era 10), stealth_reconnaissance_drone_carrier (era 9, last
-	# available light tank), and orbital_tactical_vehicles (era 10). Goods +25% elite
-	# premium; offense/defense +10% combat bonus. Marines acquire orbital-insertion
+	# (era 11), railgun_tank (era 10), stealth_reconnaissance_drone_carrier (era 9, last
+	# light tank before era 11), and orbital_tactical_vehicles (era 11). Goods +25% elite
+	# premium; offense/defense +10% combat bonus. The two orbital arms unlock an era
+	# after these marines, so this mix borrows goods from units not yet available. Marines acquire orbital-insertion
 	# launch_capacity from the orbital arty/aircraft mix, modeling drone-marine
 	# fireteams that drop from orbit with their own organic fire support.
 	upkeep_modifier = {
@@ -1273,11 +1274,12 @@ combat_unit_type_bioenhanced_marines = {
 		}
 	}
 
-	# Combined-arms-in-miniature: 60% grey_goo (era 11 nanobot infantry) + 10% each
-	# of orbital_precision_antimatter_strikes (era 11), DEW_tank (era 11),
-	# holographic_ambush_combat_vehicle (era 10, last available light tank), and
-	# orbital_weapons_platforms (era 11). Goods +25% elite premium; offense/defense
-	# +10% combat bonus. Bioenhanced marine fireteams operate alongside their own
+	# Combined-arms-in-miniature: 60% grey_goo (era 12 nanobot infantry) + 10% each
+	# of orbital_precision_antimatter_strikes (era 12), DEW_tank (era 12),
+	# holographic_ambush_combat_vehicle (era 11, last available light tank), and
+	# orbital_weapons_platforms (era 12). Goods +25% elite premium; offense/defense
+	# +10% combat bonus. Four of the five unlock an era after these marines, so this
+	# mix borrows goods from units not yet available. Bioenhanced marine fireteams operate alongside their own
 	# nanoswarm support, energy-weapon armor, and orbital strike platforms.
 	upkeep_modifier = {
 		goods_input_small_arms_add = 22                       # Price:   60, Total cost:  1320.0 (2.41%)

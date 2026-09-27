@@ -80,9 +80,10 @@ un_state_forget = {
 # modifier, so do not add and then remove the same modifier in one effect
 # block through this helper: the add is invisible to it there.
 # The mirror is recorded only where the modifier was actually added, i.e.
-# where the entry exists: a country that signs the charter before its entry
-# is active stays outside, as it always has (it joins later, and not as a
-# founding member). The mirror then never claims more than the entry held.
+# where the entry exists, so it never claims more than the entry held. The
+# one caller that runs before a country's entry can be active, the charter
+# signing (un_events.1 option A), records the membership mirrors itself when
+# the entry is missing, and the entry restores them on activation.
 # Parameters: $MODIFIER$
 # Scope: country
 un_state_on = {

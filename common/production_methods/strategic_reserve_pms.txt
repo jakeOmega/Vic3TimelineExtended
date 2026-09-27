@@ -76,7 +76,6 @@ pm_st_res_silo_capacity = {
 			country_st_res_aeroplanes_capacity_add = 1000
 			country_st_res_tanks_capacity_add = 1000
 			country_st_res_fertilizer_capacity_add = 1000
-			building_employment_bureaucrats_add = 1000
 			country_st_res_weekly_rate_cap_add = 100
 		}
 	}

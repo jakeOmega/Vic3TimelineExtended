@@ -106,6 +106,21 @@ un_events.1 = {
 		un_state_on = { MODIFIER = un_member_modifier }
 		je:je_united_nations ?= { add_modifier = { name = un_member_privileges_modifier } }
 		un_state_on = { MODIFIER = un_founding_member_modifier }
+		# A signer whose journal entry is not active yet (it lacks
+		# Intergovernmental Organizations; the entry activates once the UN
+		# exists) cannot take the modifiers above. The AI answers the moment
+		# the charter arrives, so such signers used to stay outside. Record the
+		# mirrors instead: the entry's `immediate` restores them on activation
+		# (un_state_restore_all), privileges included, and its first monthly
+		# pulse heals whatever that missed (un_state_effects.txt).
+		if = {
+			limit = { NOT = { exists = je:je_united_nations } }
+			custom_tooltip = {
+				text = un_events.1.a_pending_tt
+				un_state_record = { MODIFIER = un_member_modifier }
+				un_state_record = { MODIFIER = un_founding_member_modifier }
+			}
+		}
 		# No conventions are ratified at UN founding, so this is a no-op today;
 		# kept for symmetry with the other join paths in case the founding event
 		# is ever fired after conventions exist (alternate timeline starts, etc.).
