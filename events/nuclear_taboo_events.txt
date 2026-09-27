@@ -867,7 +867,7 @@ nuclear_taboo.20 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/nuclear_proliferation_threat.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_warhead_depot.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
