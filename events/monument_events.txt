@@ -634,3 +634,145 @@ monument_events.20 = {
 		gm_country_refresh = yes
 	}
 }
+
+# ============================================================================
+# Event 16: monuments to a fallen order (§4.5)
+# ============================================================================
+# Players only (gm_notify_new_contests); the AI decides monthly. One notice per
+# fall, naming how many monuments it contested. The immediate moves the flags
+# into gm_notice_states, so a second refresh this month cannot fire it again.
+monument_events.16 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "unspecific_vandalized_storefront" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = monument_events.16.t
+	desc = monument_events.16.d
+	flavor = monument_events.16.f
+
+	duration = 3
+
+	trigger = {
+		any_scope_state = { has_variable = gm_new_contest }
+	}
+
+	immediate = {
+		clear_variable_list = gm_notice_states
+		every_scope_state = {
+			limit = { has_variable = gm_new_contest }
+			remove_variable = gm_new_contest
+			owner = {
+				add_to_variable_list = { name = gm_notice_states target = prev }
+			}
+		}
+	}
+
+	# Tear them all down.
+	option = {
+		name = monument_events.16.a
+		custom_tooltip = {
+			text = monument_events.16.a.tt
+			every_in_list = {
+				variable = gm_notice_states
+				limit = { gm_state_is_contested = yes }
+				gm_state_tear_down = yes
+			}
+		}
+		hidden_effect = { gm_country_refresh = yes }
+		ai_chance = { base = 0 }
+	}
+
+	# Keep them all as heritage.
+	option = {
+		name = monument_events.16.b
+		custom_tooltip = {
+			text = monument_events.16.b.tt
+			every_in_list = {
+				variable = gm_notice_states
+				limit = { gm_state_is_contested = yes }
+				gm_state_preserve = yes
+			}
+		}
+		hidden_effect = { gm_country_refresh = yes }
+		ai_chance = { base = 0 }
+	}
+
+	# Decide on each in turn: one decision per monument.
+	option = {
+		name = monument_events.16.c
+		default_option = yes
+		custom_tooltip = {
+			text = monument_events.16.c.tt
+			every_in_list = {
+				variable = gm_notice_states
+				limit = { gm_state_is_contested = yes }
+				trigger_event = { id = monument_events.17 }
+			}
+		}
+		ai_chance = { base = 1 }
+	}
+}
+
+# ============================================================================
+# Event 17: one contested monument (§4.3)
+# ============================================================================
+# A state event on the monument's state, from the notice's "Decide on each in
+# turn". The same three choices as the journal entry row's buttons (plan
+# decision 5), through the same wrappers.
+monument_events.17 = {
+	type = state_event
+	placement = ROOT
+
+	event_image = { video = "unspecific_vandalized_storefront" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = monument_events.17.t
+	# .desc, not .d: .d is the fourth option's name.
+	desc = monument_events.17.desc
+	flavor = monument_events.17.f
+
+	duration = 3
+
+	trigger = {
+		gm_state_is_contested = yes
+	}
+
+	immediate = {
+		save_scope_as = monument_state
+	}
+
+	option = {
+		name = monument_events.17.a
+		gm_state_choose_tear_down = yes
+		hidden_effect = {
+			owner = { trigger_event = { id = monument_events.20 } }
+		}
+	}
+
+	option = {
+		name = monument_events.17.b
+		gm_state_choose_rededicate = yes
+		hidden_effect = {
+			owner = { trigger_event = { id = monument_events.20 } }
+		}
+	}
+
+	option = {
+		name = monument_events.17.c
+		gm_state_choose_preserve = yes
+		hidden_effect = {
+			owner = { trigger_event = { id = monument_events.20 } }
+		}
+	}
+
+	option = {
+		name = monument_events.17.d
+		# REVIEWED 2026-09-27 (no_effect_option): the decision waits on the monument's journal entry row; the tooltip says the standing penalty continues
+		default_option = yes
+		custom_tooltip = gm_leave_contested_tt
+	}
+}

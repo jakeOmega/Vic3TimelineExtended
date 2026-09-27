@@ -1,0 +1,168 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — customizable localization (spec §1.1, §4, §6)
+# ============================================================================
+# State scope: the Grand Monument in that state. First valid entry wins.
+
+gm_dedication_name = {
+	type = state
+	random_valid = no
+
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_crown } }
+		localization_key = pm_monument_crown
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_republic } }
+		localization_key = pm_monument_republic
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_revolution } }
+		localization_key = pm_monument_revolution
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_leader } }
+		localization_key = pm_monument_leader
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_religious } }
+		localization_key = pm_monument_religious
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_civic } }
+		localization_key = pm_monument_civic
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_war_memorial } }
+		localization_key = pm_monument_war_memorial
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_artistic } }
+		localization_key = pm_monument_artistic
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_naturalist } }
+		localization_key = pm_monument_naturalist
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_scientific } }
+		localization_key = pm_monument_scientific
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_industrial } }
+		localization_key = pm_monument_industrial
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_athletic } }
+		localization_key = pm_monument_athletic
+	}
+	text = {
+		localization_key = pm_monument_undedicated
+	}
+}
+
+gm_status_name = {
+	type = state
+	random_valid = no
+
+	text = {
+		trigger = { gm_state_is_contested = yes }
+		localization_key = gm_status_contested
+	}
+	text = {
+		trigger = { gm_state_is_heritage = yes }
+		localization_key = gm_status_heritage
+	}
+	text = {
+		trigger = { gm_state_is_dedicated = no }
+		localization_key = gm_status_undedicated
+	}
+	text = {
+		trigger = { gm_state_message_fits = no }
+		localization_key = gm_status_unsettled
+	}
+	text = {
+		localization_key = gm_status_fits
+	}
+}
+
+gm_base_ig_name = {
+	type = state
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_base_ig var:gm_base_ig = flag:armed_forces }
+		localization_key = ig_armed_forces
+	}
+	text = {
+		trigger = { has_variable = gm_base_ig var:gm_base_ig = flag:devout }
+		localization_key = ig_devout
+	}
+	text = {
+		trigger = { has_variable = gm_base_ig var:gm_base_ig = flag:industrialists }
+		localization_key = ig_industrialists
+	}
+	text = {
+		trigger = { has_variable = gm_base_ig var:gm_base_ig = flag:intelligentsia }
+		localization_key = ig_intelligentsia
+	}
+	text = {
+		trigger = { has_variable = gm_base_ig var:gm_base_ig = flag:landowners }
+		localization_key = ig_landowners
+	}
+	text = {
+		trigger = { has_variable = gm_base_ig var:gm_base_ig = flag:petty_bourgeoisie }
+		localization_key = ig_petty_bourgeoisie
+	}
+	text = {
+		trigger = { has_variable = gm_base_ig var:gm_base_ig = flag:rural_folk }
+		localization_key = ig_rural_folk
+	}
+	text = {
+		trigger = { has_variable = gm_base_ig var:gm_base_ig = flag:trade_unions }
+		localization_key = ig_trade_unions
+	}
+	text = {
+		localization_key = gm_ig_nobody
+	}
+}
+
+gm_supporter_ig_name = {
+	type = state
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_supporter_ig var:gm_supporter_ig = flag:armed_forces }
+		localization_key = ig_armed_forces
+	}
+	text = {
+		trigger = { has_variable = gm_supporter_ig var:gm_supporter_ig = flag:devout }
+		localization_key = ig_devout
+	}
+	text = {
+		trigger = { has_variable = gm_supporter_ig var:gm_supporter_ig = flag:industrialists }
+		localization_key = ig_industrialists
+	}
+	text = {
+		trigger = { has_variable = gm_supporter_ig var:gm_supporter_ig = flag:intelligentsia }
+		localization_key = ig_intelligentsia
+	}
+	text = {
+		trigger = { has_variable = gm_supporter_ig var:gm_supporter_ig = flag:landowners }
+		localization_key = ig_landowners
+	}
+	text = {
+		trigger = { has_variable = gm_supporter_ig var:gm_supporter_ig = flag:petty_bourgeoisie }
+		localization_key = ig_petty_bourgeoisie
+	}
+	text = {
+		trigger = { has_variable = gm_supporter_ig var:gm_supporter_ig = flag:rural_folk }
+		localization_key = ig_rural_folk
+	}
+	text = {
+		trigger = { has_variable = gm_supporter_ig var:gm_supporter_ig = flag:trade_unions }
+		localization_key = ig_trade_unions
+	}
+	text = {
+		localization_key = gm_ig_nobody
+	}
+}

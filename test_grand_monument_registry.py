@@ -667,7 +667,8 @@ class NationalTests(unittest.TestCase):
         order = ["gm_init_ledgers = yes", "clear_variable_list = gm_states",
                  "set_variable = { name = gm_grandeur value = gm_state_grandeur }",
                  "gm_state_first_sight = yes", "add_to_variable_list = { name = gm_states target = prev }",
-                 "gm_set_opposition_ig = yes", "gm_compute_totals = yes", "gm_apply_national_modifiers = yes"]
+                 "gm_set_opposition_ig = yes", "gm_check_contests = yes", "gm_compute_totals = yes",
+                 "gm_apply_national_modifiers = yes", "gm_notify_new_contests = yes"]
         positions = [body.find(s) for s in order]
         self.assertNotIn(-1, positions, dict(zip(order, positions)))
         self.assertEqual(positions, sorted(positions))
@@ -718,6 +719,172 @@ class NationalTests(unittest.TestCase):
         self.assertIn("value = var:gm_s_culture", body)
         self.assertIn("max = 5", body)
         self.assertIsNone(block(text, "grand_monument_levels_in_state"))
+
+
+# ---- Task 6: contested monuments -----------------------------------------------------
+
+class ContestTests(unittest.TestCase):
+    def setUp(self):
+        self.e = read(EFFECTS)
+
+    def test_contest_records_the_table_igs(self):
+        body = squash(block(self.e, "gm_state_record_contest_igs"))
+        for d in DEDICATIONS:
+            if d.kind == "regime":
+                self.assertIn(f"gm_state_has_pm = {{ PM = pm_monument_{d.key} }} }} "
+                              f"set_variable = {{ name = gm_base_ig value = flag:{d.oppose} }} "
+                              f"set_variable = {{ name = gm_supporter_ig value = flag:{d.approve} }}", body)
+        self.assertIn("gm_state_kind_faith = yes } set_variable = { name = gm_supporter_ig value = flag:devout }", body)
+        self.assertIn("set_variable = { name = gm_base_ig value = owner.var:gm_opposition_ig }", body)
+        self.assertIn("set_variable = { name = gm_supporter_ig value = var:gm_honoree_ig }", body)
+
+    def test_monthly_check(self):
+        body = squash(block(self.e, "gm_check_contests"))
+        self.assertTrue(body.startswith("if = { limit = { NOT = { has_variable = te_cw_role } }"))
+        self.assertIn("limit = { gm_state_is_dedicated = yes gm_state_is_bound = yes }", body)
+        self.assertIn("owner = { has_variable = gm_cw_adopting } } gm_state_adopt_for_winner = yes", body)
+        self.assertIn("gm_state_is_heritage = yes } gm_state_message_fits = yes } gm_state_lift_contest = yes", body)
+        self.assertIn("gm_state_is_heritage = no gm_state_message_fits = no } gm_state_contest = yes", body)
+
+    def test_months_count_once_a_month(self):
+        self.assertNotIn("add = 1", squash(block(self.e, "gm_check_contests")))
+        self.assertIn("limit = { gm_state_is_contested = yes } change_variable = { name = gm_contested add = 1 }",
+                      squash(block(self.e, "gm_country_monthly")))
+
+    def test_changed_hands(self):
+        body = squash(block(self.e, "gm_state_changed_hands"))
+        self.assertIn("owner = { NOT = { has_variable = te_cw_role } is_revolutionary = no }", body)
+        self.assertIn("gm_state_raised_by_owner = no", body)
+        self.assertIn("limit = { gm_state_kind_faith = yes } gm_state_lift_contest = yes set_variable = gm_heritage", body)
+        self.assertIn("gm_state_contest = yes", body)
+        self.assertTrue(body.endswith("owner = { trigger_event = { id = monument_events.20 } }"))
+        oa = read(ON_ACTIONS)
+        self.assertIn("gm_state_owner_change_on_action", squash(block(oa, "on_state_owner_change")))
+        self.assertIn("gm_state_changed_hands = yes", squash(block(oa, "gm_state_owner_change_on_action")))
+
+    def test_civil_war_winner_adopts(self):
+        won = squash(block(read(CIVIL_WAR_ON_ACTIONS), "te_civil_war_on_won"))
+        self.assertLess(won.find("te_civil_war_resolve_sides = yes"), won.find("gm_repair_after_civil_war = yes"))
+        self.assertLess(won.find("gm_repair_after_civil_war = yes"), won.find("te_civil_war_clear = yes"))
+        repair = squash(block(self.e, "gm_repair_after_civil_war"))
+        self.assertIn("set_variable = { name = gm_cw_loser value = scope:te_cw_loser days = 30 }", repair)
+        self.assertIn("set_variable = { name = gm_cw_adopting value = yes days = 30 }", repair)
+        adopt = squash(block(self.e, "gm_state_adopt_for_winner"))
+        self.assertIn("var:gm_raised_by = scope:gm_tmp_loser", adopt)
+        self.assertIn("set_variable = { name = gm_raised_by value = owner }", adopt)
+
+    def test_ledger_helper_covers_every_ig(self):
+        body = squash(block(self.e, "gm_state_ledger_ig"))
+        for ig in IGS:
+            self.assertIn(f"gm_state_ledger_ig_one = {{ WHO = $WHO$ FACTOR = $FACTOR$ IG = {ig} }}", body)
+        one = squash(block(self.e, "gm_state_ledger_ig_one"))
+        self.assertIn("var:$WHO$ = flag:$IG$", one)
+        self.assertIn("value = { value = prev.var:gm_grandeur multiply = $FACTOR$ add = var:gm_ig_ledger_$IG$ }", one)
+
+    def test_the_three_choices(self):
+        record = squash(block(self.e, "gm_state_record_teardown"))
+        self.assertIn("add = prev.var:gm_grandeur", record)
+        self.assertIn("gm_state_ledger_ig = { WHO = gm_base_ig FACTOR = 1 }", record)
+        self.assertIn("gm_state_ledger_ig = { WHO = gm_supporter_ig FACTOR = -1 }", record)
+        tear = squash(block(self.e, "gm_state_tear_down"))
+        for s in ("gm_state_record_teardown = yes", "remove_list_variable = { name = gm_states target = prev }",
+                  "remove_building = building_grand_monument", "gm_clear_state = yes"):
+            self.assertIn(s, tear)
+        rededicate = squash(block(self.e, "gm_state_rededicate"))
+        for s in ("set_variable = { name = gm_rebuild_cost value = gm_state_rededicate_cost }",
+                  "add_treasury = { value = prev.var:gm_rebuild_cost multiply = -1 }",
+                  "gm_state_ledger_ig = { WHO = gm_supporter_ig FACTOR = -0.5 }",
+                  "divide = 2 ceiling = yes max = 200",
+                  "SPEC_TYPE = building_grand_monument SPEC_LEVEL = var:gm_rebuild_level",
+                  "gm_state_start_ceremony = yes"):
+            self.assertIn(s, rededicate)
+        self.assertLess(rededicate.find("gm_clear_state = yes"),
+                        rededicate.find("te_construction_market_build_specified_level"))
+        self.assertIn("multiply = 5000", squash(block(read(VALUES), "gm_state_rededicate_cost")))
+        preserve = squash(block(self.e, "gm_state_preserve"))
+        self.assertIn("gm_state_ledger_ig = { WHO = gm_base_ig FACTOR = -1 }", preserve)
+        self.assertIn("set_variable = gm_heritage", preserve)
+        for choice in ("tear_down", "rededicate", "preserve"):
+            self.assertEqual(squash(block(self.e, f"gm_state_choose_{choice}")),
+                             f"custom_tooltip = {{ text = gm_{choice}_tt gm_state_{choice} = yes }}")
+            self.assertIn(f"gm_{choice}_tt", loc())
+
+    def test_ladder_reaches_200(self):
+        body = squash(block(read(LADDER), "te_construction_market_build_specified_level"))
+        for n in range(1, 201):
+            self.assertIn(f"{n} = {{ create_building = {{ building = $SPEC_TYPE$ level = {n} }} }}", body)
+
+    def test_one_ceremony_at_a_time(self):
+        body = squash(block(self.e, "gm_state_start_ceremony"))
+        self.assertIn("NOT = { has_variable = gm_ceremony_pending }", body)
+        self.assertIn("set_variable = { name = gm_ceremony_pending days = 30 }", body)
+        self.assertIn("trigger_event = { id = monument_events.2 }", body)
+
+    def test_demolished_contested_counts_as_torn_down(self):
+        body = squash(block(self.e, "gm_state_monthly"))
+        self.assertIn("limit = { gm_state_is_contested = yes } gm_state_record_teardown = yes", body)
+
+    def test_ai_and_notice(self):
+        monthly = squash(block(self.e, "gm_country_monthly"))
+        self.assertIn("gm_ai_decide_contests = yes", monthly)
+        ai = squash(block(self.e, "gm_ai_decide_contests"))
+        self.assertTrue(ai.startswith("if = { limit = { is_ai = yes }"))
+        for s in ("gm_state_tear_down = yes", "gm_state_preserve = yes", "gm_state_rededicate = yes",
+                  "var:gm_contested >= 2"):
+            self.assertIn(s, ai)
+        notify = squash(block(self.e, "gm_notify_new_contests"))
+        self.assertIn("limit = { is_ai = no } trigger_event = { id = monument_events.16 }", notify)
+
+    def test_events(self):
+        text = read(EVENTS)
+        notice = squash(raw_block_at(text, r"(?m)^monument_events\.16\s*=\s*\{"))
+        self.assertIn("type = country_event", notice)
+        self.assertIn("remove_variable = gm_new_contest", notice)
+        self.assertIn("gm_state_tear_down = yes", notice)
+        self.assertIn("gm_state_preserve = yes", notice)
+        self.assertIn("trigger_event = { id = monument_events.17 }", notice)
+        self.assertIn("hidden_effect = { gm_country_refresh = yes }", notice)
+        one = squash(raw_block_at(text, r"(?m)^monument_events\.17\s*=\s*\{"))
+        self.assertIn("type = state_event", one)
+        for choice in ("tear_down", "rededicate", "preserve"):
+            self.assertIn(f"gm_state_choose_{choice} = yes", one)
+        L = loc()
+        for key in ("t", "d", "f", "a", "b", "c", "a.tt", "b.tt", "c.tt"):
+            self.assertIn(f"monument_events.16.{key}", L)
+        for key in ("t", "desc", "f", "a", "b", "c", "d"):
+            self.assertIn(f"monument_events.17.{key}", L)
+        self.assertIn("desc = monument_events.17.desc", one)
+
+    def test_custom_loc(self):
+        text = read(CUSTOM_LOC)
+        ded = squash(block(text, "gm_dedication_name"))
+        for d in DEDICATIONS:
+            self.assertIn(f"localization_key = pm_monument_{d.key}", ded)
+        for name, var in (("gm_base_ig_name", "gm_base_ig"), ("gm_supporter_ig_name", "gm_supporter_ig")):
+            body = squash(block(text, name))
+            for ig in IGS:
+                self.assertIn(f"var:{var} = flag:{ig} }} localization_key = ig_{ig}", body)
+            self.assertIn("localization_key = gm_ig_nobody", body)
+        status = squash(block(text, "gm_status_name"))
+        for s in ("contested", "heritage", "undedicated", "unsettled", "fits"):
+            self.assertIn(f"localization_key = gm_status_{s}", status)
+            self.assertIn(f"gm_status_{s}", loc())
+
+    # ---- Controller rulings: ledgers zeroed when the pulse stops; gm_active set on sight ----
+
+    def test_ledgers_zeroed_when_pulse_stops(self):
+        zero = squash(block(self.e, "gm_zero_ledgers"))
+        for var in ["gm_teardown_ledger", "gm_vanity_ledger"] + [f"gm_ig_ledger_{ig}" for ig in IGS]:
+            self.assertIn(f"set_variable = {{ name = {var} value = 0 }}", zero)
+        monthly = squash(block(self.e, "gm_country_monthly"))
+        self.assertLess(monthly.find("gm_zero_ledgers = yes"), monthly.find("remove_variable = gm_active"))
+
+    def test_gm_active_set_on_refresh_when_monument_seen(self):
+        body = squash(block(self.e, "gm_country_refresh"))
+        self.assertTrue(body.startswith("gm_init_ledgers = yes if = { limit = { any_scope_state = "
+                                        "{ has_building = building_grand_monument } } set_variable = gm_active }"))
+        self.assertIn("any_scope_state = { has_building = building_grand_monument } } set_variable = gm_active",
+                      body)
 
 
 if __name__ == "__main__":

@@ -75,6 +75,8 @@ te_construction_market_add_specified_level = {
 
 }
 
+# Cases run to 200 (the Grand Monument's Rededicate rebuilds at half a
+# monument's level, up to 200; gm_state_rededicate in gm_effects.txt).
 te_construction_market_build_specified_level = {
 
 	switch = {
@@ -677,6 +679,606 @@ te_construction_market_build_specified_level = {
 			create_building = {
 				building = $SPEC_TYPE$
 				level = 100
+			}
+		}
+		101 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 101
+			}
+		}
+		102 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 102
+			}
+		}
+		103 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 103
+			}
+		}
+		104 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 104
+			}
+		}
+		105 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 105
+			}
+		}
+		106 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 106
+			}
+		}
+		107 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 107
+			}
+		}
+		108 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 108
+			}
+		}
+		109 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 109
+			}
+		}
+		110 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 110
+			}
+		}
+		111 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 111
+			}
+		}
+		112 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 112
+			}
+		}
+		113 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 113
+			}
+		}
+		114 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 114
+			}
+		}
+		115 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 115
+			}
+		}
+		116 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 116
+			}
+		}
+		117 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 117
+			}
+		}
+		118 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 118
+			}
+		}
+		119 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 119
+			}
+		}
+		120 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 120
+			}
+		}
+		121 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 121
+			}
+		}
+		122 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 122
+			}
+		}
+		123 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 123
+			}
+		}
+		124 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 124
+			}
+		}
+		125 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 125
+			}
+		}
+		126 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 126
+			}
+		}
+		127 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 127
+			}
+		}
+		128 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 128
+			}
+		}
+		129 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 129
+			}
+		}
+		130 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 130
+			}
+		}
+		131 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 131
+			}
+		}
+		132 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 132
+			}
+		}
+		133 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 133
+			}
+		}
+		134 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 134
+			}
+		}
+		135 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 135
+			}
+		}
+		136 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 136
+			}
+		}
+		137 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 137
+			}
+		}
+		138 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 138
+			}
+		}
+		139 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 139
+			}
+		}
+		140 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 140
+			}
+		}
+		141 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 141
+			}
+		}
+		142 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 142
+			}
+		}
+		143 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 143
+			}
+		}
+		144 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 144
+			}
+		}
+		145 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 145
+			}
+		}
+		146 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 146
+			}
+		}
+		147 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 147
+			}
+		}
+		148 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 148
+			}
+		}
+		149 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 149
+			}
+		}
+		150 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 150
+			}
+		}
+		151 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 151
+			}
+		}
+		152 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 152
+			}
+		}
+		153 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 153
+			}
+		}
+		154 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 154
+			}
+		}
+		155 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 155
+			}
+		}
+		156 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 156
+			}
+		}
+		157 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 157
+			}
+		}
+		158 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 158
+			}
+		}
+		159 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 159
+			}
+		}
+		160 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 160
+			}
+		}
+		161 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 161
+			}
+		}
+		162 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 162
+			}
+		}
+		163 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 163
+			}
+		}
+		164 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 164
+			}
+		}
+		165 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 165
+			}
+		}
+		166 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 166
+			}
+		}
+		167 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 167
+			}
+		}
+		168 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 168
+			}
+		}
+		169 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 169
+			}
+		}
+		170 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 170
+			}
+		}
+		171 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 171
+			}
+		}
+		172 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 172
+			}
+		}
+		173 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 173
+			}
+		}
+		174 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 174
+			}
+		}
+		175 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 175
+			}
+		}
+		176 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 176
+			}
+		}
+		177 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 177
+			}
+		}
+		178 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 178
+			}
+		}
+		179 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 179
+			}
+		}
+		180 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 180
+			}
+		}
+		181 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 181
+			}
+		}
+		182 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 182
+			}
+		}
+		183 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 183
+			}
+		}
+		184 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 184
+			}
+		}
+		185 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 185
+			}
+		}
+		186 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 186
+			}
+		}
+		187 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 187
+			}
+		}
+		188 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 188
+			}
+		}
+		189 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 189
+			}
+		}
+		190 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 190
+			}
+		}
+		191 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 191
+			}
+		}
+		192 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 192
+			}
+		}
+		193 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 193
+			}
+		}
+		194 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 194
+			}
+		}
+		195 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 195
+			}
+		}
+		196 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 196
+			}
+		}
+		197 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 197
+			}
+		}
+		198 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 198
+			}
+		}
+		199 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 199
+			}
+		}
+		200 = {
+			create_building = {
+				building = $SPEC_TYPE$
+				level = 200
 			}
 		}
 	}

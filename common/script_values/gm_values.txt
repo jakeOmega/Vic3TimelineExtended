@@ -268,3 +268,22 @@ gm_display_contested = {
 		value = var:gm_count_contested
 	}
 }
+
+# ---- Contests (§4.3, §4.5) ----------------------------------------------------
+# State scope. What Rededicate costs: 5,000 a level.
+gm_state_rededicate_cost = {
+	value = gm_state_grandeur
+	multiply = 5000
+}
+
+# Country scope. How many monuments the open notice (monument_events.16) names.
+gm_notice_count = {
+	value = 0
+	if = {
+		limit = { has_variable_list = gm_notice_states }
+		every_in_list = {
+			variable = gm_notice_states
+			add = 1
+		}
+	}
+}

@@ -295,6 +295,12 @@ gm_state_monthly = {
 	else = {
 		if = {
 			limit = { has_variable = gm_seen }
+			# Gone without the Tear Down button (demolished from the building
+			# panel): a contested monument counts as torn down (plan decision 6).
+			if = {
+				limit = { gm_state_is_contested = yes }
+				gm_state_record_teardown = yes
+			}
 			gm_clear_state = yes
 		}
 		if = {
@@ -370,6 +376,12 @@ gm_decay_ledgers = {
 # a state, building, law or character: the multipliers resolve against ROOT.
 gm_country_refresh = {
 	gm_init_ledgers = yes
+	if = {
+		limit = {
+			any_scope_state = { has_building = building_grand_monument }
+		}
+		set_variable = gm_active
+	}
 	clear_variable_list = gm_states
 	every_scope_state = {
 		limit = { has_building = building_grand_monument }
@@ -380,8 +392,10 @@ gm_country_refresh = {
 		}
 	}
 	gm_set_opposition_ig = yes
+	gm_check_contests = yes
 	gm_compute_totals = yes
 	gm_apply_national_modifiers = yes
+	gm_notify_new_contests = yes
 }
 
 # Country scope. The monthly pulse: decay, then refresh; gm_active keeps the
@@ -390,11 +404,18 @@ gm_country_monthly = {
 	gm_init_ledgers = yes
 	gm_decay_ledgers = yes
 	gm_country_refresh = yes
+	every_scope_state = {
+		limit = { gm_state_is_contested = yes }
+		change_variable = { name = gm_contested add = 1 }
+	}
+	gm_ai_decide_contests = yes
 	if = {
 		limit = {
 			NOT = { any_scope_state = { has_building = building_grand_monument } }
 			gm_ledgers_idle = yes
 		}
+		# Ledgers must not freeze un-snapped once the pulse stops running.
+		gm_zero_ledgers = yes
 		if = {
 			limit = { has_variable = gm_active }
 			remove_variable = gm_active
@@ -583,5 +604,411 @@ gm_add_national_signed = {
 			}
 		}
 		add_modifier = { name = $NAME$ multiplier = root.var:$VAR$ }
+	}
+}
+
+# Country scope. Zero every ledger (never remove: they back multipliers).
+# Called when the pulse is about to stop (gm_country_monthly), so a ledger
+# does not freeze un-snapped once the country stops being refreshed.
+gm_zero_ledgers = {
+	set_variable = { name = gm_teardown_ledger value = 0 }
+	set_variable = { name = gm_vanity_ledger value = 0 }
+	set_variable = { name = gm_ig_ledger_armed_forces value = 0 }
+	set_variable = { name = gm_ig_ledger_devout value = 0 }
+	set_variable = { name = gm_ig_ledger_industrialists value = 0 }
+	set_variable = { name = gm_ig_ledger_intelligentsia value = 0 }
+	set_variable = { name = gm_ig_ledger_landowners value = 0 }
+	set_variable = { name = gm_ig_ledger_petty_bourgeoisie value = 0 }
+	set_variable = { name = gm_ig_ledger_rural_folk value = 0 }
+	set_variable = { name = gm_ig_ledger_trade_unions value = 0 }
+}
+
+# ---- Contests (§4) -------------------------------------------------------------
+# Country scope. From gm_country_refresh: a bound monument whose message no
+# longer fits becomes contested; a contested or heritage one whose message
+# fits again is restored (a Bourbon restoration gets its statues back). Not
+# while this country is a side in a civil war: the winner is judged after it
+# (plan decision 2). A civil war's winner first adopts the loser's monuments.
+gm_check_contests = {
+	if = {
+		limit = {
+			NOT = { has_variable = te_cw_role }
+		}
+		every_scope_state = {
+			limit = {
+				gm_state_is_dedicated = yes
+				gm_state_is_bound = yes
+			}
+			if = {
+				limit = {
+					owner = { has_variable = gm_cw_adopting }
+				}
+				gm_state_adopt_for_winner = yes
+			}
+			if = {
+				limit = {
+					OR = {
+						gm_state_is_contested = yes
+						gm_state_is_heritage = yes
+					}
+					gm_state_message_fits = yes
+				}
+				gm_state_lift_contest = yes
+			}
+			else_if = {
+				limit = {
+					gm_state_is_contested = no
+					gm_state_is_heritage = no
+					gm_state_message_fits = no
+				}
+				gm_state_contest = yes
+			}
+		}
+	}
+}
+
+# State scope. Contest this monument (§4.1).
+gm_state_contest = {
+	set_variable = { name = gm_contested value = 0 }
+	set_variable = gm_new_contest
+	gm_state_record_contest_igs = yes
+}
+
+# State scope. The IG that opposed its message (the new order's base) and the
+# IG that approved it (its supporters), as flags, recorded now: the Leader's
+# pair is dynamic and would otherwise follow the new government.
+gm_state_record_contest_igs = {
+	set_variable = { name = gm_base_ig value = flag:none }
+	set_variable = { name = gm_supporter_ig value = flag:none }
+	if = {
+		limit = { gm_state_has_pm = { PM = pm_monument_crown } }
+		set_variable = { name = gm_base_ig value = flag:intelligentsia }
+		set_variable = { name = gm_supporter_ig value = flag:landowners }
+	}
+	else_if = {
+		limit = { gm_state_has_pm = { PM = pm_monument_republic } }
+		set_variable = { name = gm_base_ig value = flag:landowners }
+		set_variable = { name = gm_supporter_ig value = flag:intelligentsia }
+	}
+	else_if = {
+		limit = { gm_state_has_pm = { PM = pm_monument_revolution } }
+		set_variable = { name = gm_base_ig value = flag:industrialists }
+		set_variable = { name = gm_supporter_ig value = flag:trade_unions }
+	}
+	else_if = {
+		limit = { gm_state_kind_faith = yes }
+		set_variable = { name = gm_supporter_ig value = flag:devout }
+	}
+	else_if = {
+		limit = { gm_state_kind_ruler = yes }
+		if = {
+			limit = {
+				owner = { has_variable = gm_opposition_ig }
+			}
+			set_variable = { name = gm_base_ig value = owner.var:gm_opposition_ig }
+		}
+		if = {
+			limit = { has_variable = gm_honoree_ig }
+			set_variable = { name = gm_supporter_ig value = var:gm_honoree_ig }
+		}
+	}
+}
+
+# State scope. Lift a contest, or restore a heritage monument to full effect.
+gm_state_lift_contest = {
+	gm_remove_state_var = { VAR = gm_contested }
+	gm_remove_state_var = { VAR = gm_heritage }
+	gm_remove_state_var = { VAR = gm_new_contest }
+	gm_remove_state_var = { VAR = gm_base_ig }
+	gm_remove_state_var = { VAR = gm_supporter_ig }
+}
+
+# ---- A change of owner (§1, §4.1) ----------------------------------------------
+# State scope, ROOT = the state (on_state_owner_change). A regime or ruler
+# monument now owned by a country that did not raise it honours a foreign
+# order: contested for the new owner. A shrine becomes heritage, never
+# contested (§1). This does not rely on the records surviving the transfer.
+# Skipped for a civil war's transfers (the new owner is a side: te_cw_role, or
+# a revolutionary country); the nation that raised it taking it back fails
+# `gm_state_raised_by_owner = no`, and the monthly check restores it.
+gm_state_changed_hands = {
+	if = {
+		limit = {
+			owner = { has_variable = gm_cw_adopting }
+		}
+		gm_state_adopt_for_winner = yes
+	}
+	if = {
+		limit = {
+			gm_state_is_dedicated = yes
+			gm_state_is_bound = yes
+			owner = {
+				NOT = { has_variable = te_cw_role }
+				is_revolutionary = no
+			}
+			gm_state_raised_by_owner = no
+		}
+		set_variable = gm_seen
+		if = {
+			limit = { gm_state_kind_faith = yes }
+			gm_state_lift_contest = yes
+			set_variable = gm_heritage
+		}
+		else = {
+			gm_remove_state_var = { VAR = gm_heritage }
+			if = {
+				limit = { gm_state_is_contested = no }
+				gm_state_contest = yes
+			}
+		}
+	}
+	owner = { trigger_event = { id = monument_events.20 } }
+}
+
+# ---- Civil wars: the winner continues the nation (#460-#465) -------------------
+# Country scope, ROOT = the winner (te_civil_war_on_won, between
+# te_civil_war_resolve_sides and te_civil_war_clear). The monuments the loser
+# raised become the winner's, now and, for 30 days, in states still changing
+# hands (gm_state_changed_hands and gm_check_contests call
+# gm_state_adopt_for_winner). The fit test then contests them only if the
+# winner's laws differ.
+gm_repair_after_civil_war = {
+	if = {
+		limit = { exists = scope:te_cw_loser }
+		set_variable = { name = gm_cw_loser value = scope:te_cw_loser days = 30 }
+		set_variable = { name = gm_cw_adopting value = yes days = 30 }
+		every_scope_state = {
+			limit = { has_building = building_grand_monument }
+			gm_state_adopt_for_winner = yes
+		}
+	}
+}
+
+# State scope, owner = a civil war's winner.
+gm_state_adopt_for_winner = {
+	if = {
+		limit = {
+			has_variable = gm_raised_by
+			owner = { has_variable = gm_cw_loser }
+			owner.var:gm_cw_loser ?= { save_temporary_scope_as = gm_tmp_loser }
+			var:gm_raised_by = scope:gm_tmp_loser
+		}
+		set_variable = { name = gm_raised_by value = owner }
+	}
+}
+
+# ---- The three choices (§4.3) --------------------------------------------------
+# State scope. Adds FACTOR x this monument's grandeur to the owner's ledger of
+# the IG whose flag the state's variable $WHO$ holds (gm_base_ig or
+# gm_supporter_ig). The owner's ledgers must exist (gm_init_ledgers).
+gm_state_ledger_ig = {
+	gm_state_ledger_ig_one = { WHO = $WHO$ FACTOR = $FACTOR$ IG = armed_forces }
+	gm_state_ledger_ig_one = { WHO = $WHO$ FACTOR = $FACTOR$ IG = devout }
+	gm_state_ledger_ig_one = { WHO = $WHO$ FACTOR = $FACTOR$ IG = industrialists }
+	gm_state_ledger_ig_one = { WHO = $WHO$ FACTOR = $FACTOR$ IG = intelligentsia }
+	gm_state_ledger_ig_one = { WHO = $WHO$ FACTOR = $FACTOR$ IG = landowners }
+	gm_state_ledger_ig_one = { WHO = $WHO$ FACTOR = $FACTOR$ IG = petty_bourgeoisie }
+	gm_state_ledger_ig_one = { WHO = $WHO$ FACTOR = $FACTOR$ IG = rural_folk }
+	gm_state_ledger_ig_one = { WHO = $WHO$ FACTOR = $FACTOR$ IG = trade_unions }
+}
+
+gm_state_ledger_ig_one = {
+	if = {
+		limit = {
+			has_variable = $WHO$
+			var:$WHO$ = flag:$IG$
+		}
+		owner = {
+			set_variable = {
+				name = gm_ig_ledger_$IG$
+				value = {
+					value = prev.var:gm_grandeur
+					multiply = $FACTOR$
+					add = var:gm_ig_ledger_$IG$
+				}
+			}
+		}
+	}
+}
+
+# State scope. What pulling this monument down does (§4.3): its grandeur to
+# the teardown ledger (legitimacy for the new order, fading), positive to the
+# new order's base, negative to its old supporters. Reads gm_grandeur, the
+# level last recorded (current when called from gm_state_tear_down).
+gm_state_record_teardown = {
+	owner = {
+		gm_init_ledgers = yes
+		set_variable = {
+			name = gm_teardown_ledger
+			value = {
+				value = var:gm_teardown_ledger
+				add = prev.var:gm_grandeur
+			}
+		}
+	}
+	gm_state_ledger_ig = { WHO = gm_base_ig FACTOR = 1 }
+	gm_state_ledger_ig = { WHO = gm_supporter_ig FACTOR = -1 }
+}
+
+gm_state_tear_down = {
+	set_variable = { name = gm_grandeur value = gm_state_grandeur }
+	gm_state_record_teardown = yes
+	owner = {
+		remove_list_variable = { name = gm_states target = prev }
+	}
+	remove_building = building_grand_monument
+	gm_clear_state = yes
+}
+
+# Rebuilt at half its level (rounded up, at most 200: the ladder's reach) and
+# dedicated again under current laws. No effect removes levels, so the old
+# building goes and a new one is built (nuclear_strike_halve_building's path).
+gm_state_rededicate = {
+	set_variable = { name = gm_grandeur value = gm_state_grandeur }
+	set_variable = { name = gm_rebuild_cost value = gm_state_rededicate_cost }
+	owner = {
+		add_treasury = {
+			value = prev.var:gm_rebuild_cost
+			multiply = -1
+		}
+		gm_init_ledgers = yes
+	}
+	gm_state_ledger_ig = { WHO = gm_supporter_ig FACTOR = -0.5 }
+	set_variable = {
+		name = gm_rebuild_level
+		value = {
+			value = var:gm_grandeur
+			divide = 2
+			ceiling = yes
+			max = 200
+		}
+	}
+	remove_building = building_grand_monument
+	gm_clear_state = yes
+	te_construction_market_build_specified_level = {
+		SPEC_TYPE = building_grand_monument
+		SPEC_LEVEL = var:gm_rebuild_level
+	}
+	remove_variable = gm_rebuild_level
+	remove_variable = gm_rebuild_cost
+	gm_state_start_ceremony = yes
+}
+
+gm_state_preserve = {
+	set_variable = { name = gm_grandeur value = gm_state_grandeur }
+	owner = { gm_init_ledgers = yes }
+	gm_state_ledger_ig = { WHO = gm_base_ig FACTOR = -1 }
+	gm_state_lift_contest = yes
+	set_variable = gm_heritage
+}
+
+# State scope. Each choice with the tooltip that says what it does. One
+# wrapper per choice, so the notice, the per-monument event and the journal
+# entry's buttons show the same words. The loc reads the state as THIS.
+gm_state_choose_tear_down = {
+	custom_tooltip = {
+		text = gm_tear_down_tt
+		gm_state_tear_down = yes
+	}
+}
+
+gm_state_choose_rededicate = {
+	custom_tooltip = {
+		text = gm_rededicate_tt
+		gm_state_rededicate = yes
+	}
+}
+
+gm_state_choose_preserve = {
+	custom_tooltip = {
+		text = gm_preserve_tt
+		gm_state_preserve = yes
+	}
+}
+
+# State scope. The dedication ceremony, once: a rebuilt monument may also fire
+# on_building_built, and two ceremonies queued together would both show.
+gm_state_start_ceremony = {
+	if = {
+		limit = {
+			NOT = { has_variable = gm_ceremony_pending }
+		}
+		set_variable = { name = gm_ceremony_pending days = 30 }
+		trigger_event = { id = monument_events.2 }
+	}
+}
+
+# ---- The AI and the notice (§4.5, §4.6) ----------------------------------------
+# Country scope, AI only: a monument contested two months or more is decided,
+# by weight. Tear Down is likelier for a small monument or under a
+# revolutionary government, Preserve for a tall one, Rededicate only with
+# money in the treasury.
+gm_ai_decide_contests = {
+	if = {
+		limit = { is_ai = yes }
+		every_scope_state = {
+			limit = {
+				gm_state_is_contested = yes
+				var:gm_contested >= 2
+			}
+			random_list = {
+				10 = {
+					modifier = {
+						if = {
+							limit = { var:gm_grandeur < 5 }
+							add = 10
+						}
+						if = {
+							limit = {
+								owner = { gm_government_is_revolutionary = yes }
+							}
+							add = 10
+						}
+					}
+					gm_state_tear_down = yes
+				}
+				10 = {
+					modifier = {
+						if = {
+							limit = { var:gm_grandeur >= 10 }
+							add = 10
+						}
+					}
+					gm_state_preserve = yes
+				}
+				5 = {
+					modifier = {
+						if = {
+							limit = {
+								owner = { scaled_gold_reserves < 0.5 }
+							}
+							multiply = 0
+						}
+					}
+					gm_state_rededicate = yes
+				}
+			}
+		}
+	}
+}
+
+# Country scope. New contests since the last notice: a player gets one notice
+# (monument_events.16, which clears the flags as it opens); the AI's flags are
+# cleared (it decides monthly, above).
+gm_notify_new_contests = {
+	if = {
+		limit = {
+			any_scope_state = { has_variable = gm_new_contest }
+		}
+		if = {
+			limit = { is_ai = no }
+			trigger_event = { id = monument_events.16 }
+		}
+		else = {
+			every_scope_state = {
+				limit = { has_variable = gm_new_contest }
+				remove_variable = gm_new_contest
+			}
+		}
 	}
 }

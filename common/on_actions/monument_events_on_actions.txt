@@ -220,3 +220,20 @@ gm_new_ruler_on_action = {
 		}
 	}
 }
+
+# ROOT = the state that changed hands (conquest, cession, release, annexation).
+on_state_owner_change = {
+	on_actions = {
+		gm_state_owner_change_on_action
+	}
+}
+
+gm_state_owner_change_on_action = {
+	trigger = {
+		gm_system_enabled = yes
+		has_building = building_grand_monument
+	}
+	effect = {
+		gm_state_changed_hands = yes
+	}
+}
