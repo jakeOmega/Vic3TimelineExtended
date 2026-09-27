@@ -249,7 +249,8 @@ The mod gives companies a unique flagship building: the Krupp Essen Works, the
 Standard Oil Refinery, the Ford Rouge Plant, and so on. 206 of the base game's
 221 companies have one. The fifteen without one all come from The Great Wave
 expansion, whose only company with a flagship is Sumitomo (the Besshi Mine).
-All of the mod's own companies have one except the generic Synthetics company.
+All of the mod's own companies have one except the Synthetics company for
+synthetic dyes and silk.
 Two flagships are shared by a pair of basic companies (the Granary Complex by the
 two agriculture companies, the Textile Depot by Fabrics and Textiles), and the
 basic Telecommunications company has two, for 289 flagship buildings in all.
@@ -279,7 +280,8 @@ the twentieth and twenty-first centuries (Volkswagen, Intel, SpaceX, Pfizer,
 Saudi Aramco and many more) plus a few fictional far-future ones such as
 Tessier-Ashpool S.A. The other eleven are generic companies for the new sectors:
 Entertainment, Power, Electronics, Aerospace, Software, Advanced Materials,
-Biotechnology, Infrastructure, Megastructure and two Synthetics companies.
+Biotechnology, Infrastructure, Megastructure, and two companies both named
+Synthetics (one for synthetic dyes and silk, one for synthetic oil and rubber).
 
 The mod's flavored companies are not tied to a country. The base game's usually
 require you to hold the company's home state, but the mod's need only a
