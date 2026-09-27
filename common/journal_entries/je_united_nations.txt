@@ -294,7 +294,7 @@
 			}
 		}
 
-		# 6a-6g. Individual agency status (only shown when established)
+		# 6a-6k. Individual agency status (only shown when established)
 		triggered_desc = {
 			desc = je_un_agency_who_active
 			trigger = { has_global_variable = un_agency_who }
@@ -326,6 +326,18 @@
 		triggered_desc = {
 			desc = je_un_agency_unoosa_active
 			trigger = { has_global_variable = un_agency_unoosa }
+		}
+		triggered_desc = {
+			desc = je_un_agency_itlos_active
+			trigger = { has_global_variable = un_agency_itlos }
+		}
+		triggered_desc = {
+			desc = je_un_agency_icc_active
+			trigger = { has_global_variable = un_agency_icc }
+		}
+		triggered_desc = {
+			desc = je_un_agency_cppnm_active
+			trigger = { has_global_variable = un_agency_cppnm }
 		}
 
 		# 7. Active resolutions & program participation (members) / join prompt (non-members)

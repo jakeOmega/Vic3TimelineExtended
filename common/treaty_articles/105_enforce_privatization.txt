@@ -36,18 +36,21 @@ enforce_privatization = {
 		always = yes
 	}
 
+	# ROOT here is the source, the country forced to privatize, and
+	# scope:other_country is the demanding target (vanilla 14_treaty_port,
+	# 18_acquire_monopoly_for_company).
 	possible = {
 		has_diplomatic_relevance = scope:other_country
 		NOT = { is_country_type = decentralized }
+		# The source must have a state-heavy economy worth privatizing.
+		# Interventionism is mostly-private already, so excluded.
+		OR = {
+			has_law = law_type:law_cooperative_ownership
+			has_law = law_type:law_agrarianism
+			has_law = law_type:law_traditionalism
+		}
 		scope:other_country = {
 			NOT = { is_country_type = decentralized }
-			# Target must have a state-heavy economy worth privatizing.
-			# Interventionism is mostly-private already, so excluded.
-			OR = {
-				has_law = law_type:law_cooperative_ownership
-				has_law = law_type:law_agrarianism
-				has_law = law_type:law_traditionalism
-			}
 		}
 	}
 
@@ -56,20 +59,20 @@ enforce_privatization = {
 			text = DUPLICATE_ARTICLE_SAME_INPUTS
 			no_duplicate_treaty_article = { ARTICLE_TYPE = enforce_privatization }
 		}
+		# The source must still have a state-heavy economy at ratification time.
 		scope:source_country = {
+			OR = {
+				has_law = law_type:law_cooperative_ownership
+				has_law = law_type:law_agrarianism
+				has_law = law_type:law_traditionalism
+			}
+		}
+		scope:target_country = {
 			# The demanding side must itself be capitalist (privatization is an
 			# ideological export, not a power play of state-led economies).
 			OR = {
 				has_law = law_type:law_laissez_faire
 				has_law = law_type:law_interventionism
-			}
-		}
-		# Target must still have state-heavy economy at ratification time.
-		scope:target_country = {
-			OR = {
-				has_law = law_type:law_cooperative_ownership
-				has_law = law_type:law_agrarianism
-				has_law = law_type:law_traditionalism
 			}
 		}
 	}

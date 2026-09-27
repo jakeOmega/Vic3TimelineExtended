@@ -405,24 +405,16 @@ surveillance_events.5 = {
 			# an espionage-tier operation (covert_op_burn's exposure record), within
 			# the last two years. Gating on a live covert pact instead would tell us
 			# about an operation we never detected, which the covert system withholds
-			# by design (see covert_op_burn's header). The age only ticks while
-			# je_covert_warfare runs, so a country without that JE active sees this
-			# at most once (te_ea_b_surv5_answered) instead of on every cooldown.
+			# by design (see covert_op_burn's header). The age ticks in every
+			# country's monthly pulse (covert_warfare_monthly_country), whether or
+			# not it runs a covert service of its own.
 			AND = {
 				has_game_rule = covert_warfare_enabled
 				covert_code_tier_mild = { VAR = iw_last_exposed_type }
 				has_variable = iw_last_exposed_age
 				var:iw_last_exposed_age < 24
-				OR = {
-					has_journal_entry = je_covert_warfare
-					NOT = { has_variable = te_ea_b_surv5_answered }
-				}
 			}
 		}
-	}
-
-	immediate = {
-		set_variable = te_ea_b_surv5_answered
 	}
 
 	# Strengthen cybersecurity defenses

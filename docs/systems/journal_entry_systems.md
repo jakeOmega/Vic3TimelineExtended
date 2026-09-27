@@ -135,13 +135,13 @@ Tracks a civil rights movement for minority populations. Activates when a countr
 - **Progress bar:** `civil_rights_support_bar` (0-100), starts at 30. Drift sources include base decay, tech tier (`social_justice_movements`), current minority law, low-acceptance state count (via `cr_low_acceptance_count` SV), radical fraction tier, and active button modifiers.
 - **5 phase modifiers** keyed to bar tiers: `civil_rights_phase_marginal/growing/active/pressuring/imminent_modifier`. Imminent (90+) adds `country_law_enactment_success_add = 0.10` so the legal finish line gets a push from the very pressure the bar represents.
 - **6 button toggle pairs** (12 buttons total) representing player stance. Pro buttons (`grassroots`, `federal_protection`, `gradualist`) and anti buttons (`suppression`, `segregationist`) are mutually exclusive. Cooptation is cross-compatible with anti buttons (the historical "coopt moderates, jail radicals" stance). Each button increments a months-tracker variable consumed by path-dependent resolution.
-- **Cooptation expiry:** after 12 months, `cr_cooptation_expired` marker is added by the JE on_monthly_pulse and the bar bonus stops; remove + re-toggle to reset.
+- **Cooptation expiry:** after 12 months, `cr_cooptation_expired` marker is added by the JE on_monthly_pulse and the bar bonus stops for the rest of the run. Ending and restarting the program does not reset it: `cr_cooptation_months` keeps counting (it also picks the Coopted Reform ending), and End Cooptation leaves the marker in place. `cr_je_cleanup_effect` removes it when the run ends.
 - **No timeout** — bar carries the urgency. Drifts to 0 → `on_fail`; reaches 100 → `on_complete`.
 
 ### Threshold tier events (one-shot via `cr_tier_X_seen` flags)
 - **Tier 25:** existing `.13` (Refugee networks) under severe discriminatory law, else new `.301` (First Mass Rally)
 - **Tier 50:** existing `.15` (Martyrdom) under any discriminatory law, else new `.303` (Trade Union Coalition)
-- **Tier 75:** new `.304` (Federal Commission Recommends Action) when `cr_federal_months > 24`, else existing `.16` (Civil Disobedience Campaign)
+- **Tier 75:** new `.304` (Federal Commission Recommends Action) when `cr_federal_months > 24`, else existing `.16` (Civil Disobedience Campaign) under any discriminatory law, else `.302` (Equal on Paper): the law-neutral fallback for Indifference, or Protection without Multicultural citizenship (enforce the law / leave it to the courts / refuse)
 - **Tier 90:** new `.305` (March on the Capital) — universal cinematic beat
 
 ### Path-dependent resolution
@@ -166,7 +166,7 @@ Design and variables: `common/scripted_effects/civil_rights_effects.txt` § REVO
 - **Not rebuilt:** the IG approval modifiers from `.100`'s `social_*_reaction_effect`, and `.240` A's modifier on the political movement.
 
 ### Random pool (slimmed)
-- `movement_events_te.1, .2, .3, .4, .14` — kept in JE on_monthly_pulse `random_list` at lower weights (~20% chance per month). Threshold events carry the narrative arc; this pool provides ambient flavor. `.4` (a great power condemns us) goes through `te_ea_cr_invite_condemnation`: a great power with a progressive minority law is asked first (`.17`), and `.4` follows only if it condemns.
+- `movement_events_te.1, .2, .3, .4, .14` — kept in JE on_monthly_pulse `random_list` at lower weights (~14% chance per month: 63 of 463). Threshold events carry the narrative arc; this pool provides ambient flavor. `.4` (a great power condemns us) goes through `te_ea_cr_invite_condemnation`: a great power with a progressive minority law is asked first (`.17`), and `.4` follows only if it condemns.
 
 ### Supporting files
 - `common/scripted_progress_bars/extra_progress_bars.txt` — `civil_rights_support_bar`
@@ -1417,6 +1417,7 @@ Models failed state mechanics. When a country's average standard of living drops
 - **Progress:** `state_collapse_progress` / 52 (one year of weekly increments)
 - **Weekly pulse:** +1 progress per week
 - **Collapse at 52:** Resets progress, applies `failed_state_modifier` (decaying, long duration), calls `state_collapse_remove_infrastructure` on all states and `reset_all_institutions_and_ministries`
+- **Never completes:** the reset happens in the same effect that reaches 52, so `complete` (>= 52) is never true. The entry cycles yearly while SoL stays below 4 and goes inactive (`can_deactivate = yes`) when SoL recovers
 
 ### Variables
 | Variable | Description |
@@ -1514,7 +1515,8 @@ Models a World War lifecycle from rising tensions through active total war to po
 ### Buttons (12+)
 - **Leadup phase:** rearm, appease, lend-lease (toggle pairs)
 - **War phase:** total war economy, war propaganda, wartime rationing (toggle pairs)
-- **Late entry:** `ww_join_war_button`
+- **Late entry:** `ww_join_war_button`, shown to a human great power outside a world war that is being fought (`ww_world_war_is_being_fought`, which ignores a belligerent past its peace); it enters on the defenders' side through `ww_enter_war_on_defender_side`, the effect `.20` option a runs too, against the pair `ww_save_entry_sides` picks (an aggressor great power and a defender great power at war with it). The AI enters only through `.20`: the button carries `is_ai = no`, because its `ai_chance` was never tuned for outsiders. Until 2026-09-26 it was visible only with `ww_active_phase`, which only belligerents hold, and fired `.20`, which turns belligerents away. Lend-lease's "during a world war" branch reads the same trigger (it read our own `ww_active_phase`).
+- **Status:** below the phase line, our ideological camp (`je_world_war_ideology_*`, from the `country_is_*` buckets).
 
 ### Modifiers
 - **Leadup:** `ww_rising_tensions_modifier` (≥30 tension, non-belligerent), `ww_rearmament_modifier`, `ww_appeasement_modifier`, `ww_lend_lease_modifier`
@@ -1531,7 +1533,7 @@ Models a World War lifecycle from rising tensions through active total war to po
 - **Post-war:** `.100` (peace conference: victor options for `ww_won_world_war`, whose harsh/just peace sends `.101`/`.102` only to belligerents of the other side with `ww_lost_world_war`, once each; loser and no-victor variants otherwise), `.103` (war crimes), `.104` (new order: not for powers that lost outright, only when someone won; neutral text for non-victors), `.105` (new rivalry with a great power that fought on our side)
 
 ### Related Triggers/Values
-- `country_is_ww_belligerent`, `country_has_opposed_ideology`
+- `country_is_ww_belligerent`, `country_has_opposed_ideology`, `ww_world_war_is_being_fought`, `ww_entry_aggressor_candidate`, `ww_world_war_open_to_entrants`
 - `country_is_democratic`, `country_is_communist`, `country_is_fascist`, `country_is_authoritarian`
 - `ww_ideological_tension`
 

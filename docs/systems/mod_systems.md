@@ -159,6 +159,15 @@ Everything else in both new settings is the enabled setting's: the Construction 
 
 The same effect keeps its older job in every setting: removing the modifier from level-0 buildings (also from `on_start_expanding_building`).
 
+**Railways: the Transport principle swap is free in every setting** (owner ruling, #511). A railway's steam, electric or diesel method switches itself into its `pm_*_trains_principle_transport_3` variant through `replacement_if_valid` when the bloc reaches tier 3, and back when the bloc loses tiers 3–5. The player chose neither switch. On each railway PM change the hook runs `te_railway_note_train_method` (`extra_effects.txt`) first, and so does the weekly sweep for every state with a railway (`te_state_note_railway_train_method`), which catches a swap the hook missed and keeps every railway recorded. It compares the state's `te_state_railway_train_code` (steam 1, electric 2, diesel 3, +10 for the tier-3 variant; Centralized Traffic Control through Autonomous Trains 4–7; `pm_early_trains` 0) against the last recorded `var:te_rail_train_code` (a state variable, since buildings don't hold variables reliably; one railway per state). Only the swap itself (`te_state_railway_tier3_swap`) sets a two-day `te_rail_retool_waive` marker on the state, which `te_building_retooling_waived` reads. It covers three cases: the same method moving +10; no record yet with the railway on a variant; or, after the bloc lost the principle, a recorded variant moving exactly −10 or landing on `pm_early_trains`, the group's fallback. A new train method, the passenger group or Centralized Traffic Control and later still pay. Residuals, accepted under the owner's ruling:
+
+- **The waiver strips the whole `pm_retooling`,** including time left from an earlier player switch. A bloc leader can clear its members' railway retooling by dropping the transport principle to tier 2 and re-adopting tier 3.
+- **The first weekly sweep on an old save, or on a new state object,** waives every railway already on a variant, whatever its retooling came from. A railway not yet recorded that jumps from a lower method straight onto a variant is waived once.
+- **Another PM change within the two days rides along.** If the hook missed the swap, it rides along until the next sweep.
+- **If losing the tier drops a railway to `pm_early_trains`,** the player's switch back pays full retooling. No waiver is built for that yet.
+
+The sweep is a fallback only for a swap the hook missed. If the hook fired and the engine applied `pm_retooling` more than a day later, only the day-later re-check helps.
+
 **Play-test list.**
 1. *No retooling, switch a PM* on a factory with maintenance: the Retooling modifier does not appear on the building (or is gone the next day), and its construction input stays at 0.1 per level (times cost scaling). An AI country's buildings show no Retooling modifier after a few weeks.
 2. *No maintenance, day 1*: `pmg_maintenance` shows No Maintenance only; the construction market read-out's demand is the government and private purchases plus the company buildings. Construction Sites, sectors and the panel work as in the default game.
@@ -217,7 +226,7 @@ The same effect keeps its older job in every setting: removing the modifier from
 
 **Localization override:** `localization/english/replace/timeline_extended_override_l_english.yml:23` — `merchant_marine:0 "Bulk Transportation"`. (And matching description / icon overrides if present.) The engine sees `merchant_marine`; the player sees "Bulk Transportation".
 
-**Producers (43 PMs total: 21 in `extra_pms.txt`, 22 in `unique_pms.txt`).** The mod's design rule is: *transport infrastructure produces, everything else consumes*. Concretely:
+**Producers (44 PMs total: 18 in `extra_pms.txt`, 26 in `unique_pms.txt`).** The mod's design rule is: *transport infrastructure produces, everything else consumes*. Concretely:
 
 | Producer category | PMs (representative) | Building family |
 |---|---|---|
@@ -225,8 +234,8 @@ The same effect keeps its older job in every setting: removing the modifier from
 | **Motorways / highways** | `pm_civil_highway`, `pm_industrial_highway`, `pm_electric_civil_highway`, `pm_electric_industrial_highway`, `pm_autonomous_highway` | Motorways |
 | **Ports** | `pm_container_ports`, `pm_containerized_cargo`, `pm_global_ports` | Port (vanilla preserved + mod tiers) |
 | **Airports & spaceports** | `pm_airport`, `pm_spaceport` | Airport / Spaceport (mod additions) |
-| **Trading houses & flagged company HQs** | `pm_eic_trading_house`, `pm_hbc_york_factory`, `pm_rac_sitka_trading_post`, `pm_mitsui_trading_house`, `pm_sassoon_bombay_docks`, `pm_ralli_odessa_grain_elevator`, `pm_sudamericana_valparaiso_pier`, `pm_b_grimm_bangkok_warehouse`, `pm_john_holt_lagos_trading_house`, `pm_ynchausti_manila_trading_house`, `pm_volkswagen_autostadt`, `pm_suez_company_ismailia_hq`, `pm_panama_company_culebra_cut` | Vanilla / mod company buildings |
-| **Logistics & shipyards (modern)** | `pm_amazon_fulfillment_center`, `pm_alibaba_cainiao_park`, `pm_shopify_fulfillment_hub`, `pm_ap_moller_copenhagen_wharf`, `pm_mitsubishi_nagasaki_shipyard`, `pm_generic_dry_dock`, `pm_generic_logistics_hub`, `pm_generic_rail_nexus`, `pm_generic_shipping_terminal` | Vanilla / mod company buildings |
+| **Trading houses & flagged company HQs** | `pm_eic_trading_house`, `pm_hbc_york_factory`, `pm_rac_sitka_trading_post`, `pm_mitsui_trading_house`, `pm_sassoon_bombay_docks`, `pm_ralli_odessa_grain_elevator`, `pm_sudamericana_valparaiso_pier`, `pm_b_grimm_bangkok_warehouse`, `pm_john_holt_lagos_trading_house`, `pm_ynchausti_manila_trading_house`, `pm_volkswagen_autostadt`, `pm_suez_company_ismailia_hq`, `pm_panama_company_culebra_cut`, `pm_markwald_bangkok_rice_mill`, `pm_nhm_factorij_batavia` | Vanilla / mod company buildings |
+| **Logistics & shipyards (modern)** | `pm_amazon_fulfillment_center`, `pm_alibaba_cainiao_park`, `pm_shopify_fulfillment_hub`, `pm_ap_moller_copenhagen_wharf`, `pm_mitsubishi_nagasaki_shipyard`, `pm_generic_dry_dock`, `pm_generic_logistics_hub`, `pm_generic_rail_nexus`, `pm_generic_shipping_terminal`, `pm_white_star_albion_house` | Vanilla / mod company buildings |
 
 **Consumers (91 PMs in `extra_pms.txt`).** Demand spans most of the catalog — anywhere goods need to move between buildings or out of the country. By family:
 
@@ -344,7 +353,7 @@ Posture and crises share the **Nuclear Weapons** entry with the programme (above
 
 **Domestic stance.** `nd_refresh_domestic_stance` is the single site of `nd_posture_approval_*` on interest groups. Classes are by interest-group type (Armed Forces, Industrialists) and Rules of War stance (`nd_ig_class_*`, `nd_stance_*`), with the two fixed classes leaning by their leader's stance (`nd_ig_lean_*`); each group's terms and capped total are stored on the group (`nd_ig_*`, scored by `nd_ig_term_*_value`) and the band is set from that total. Every term but the Industrialists' business concerns is zero until a doctrine has been held six months. The At Home list prints the stored numbers (`nd_home_list_sgui`). Crisis outcomes pay hawks/doves one-off IG modifiers and adjust native lobby appeasement (`nd_lobby_react`); an IG in an anti-opponent lobby is paid through the lobby only.
 
-**Incidents.** One roll per armed country per month (`nd_roll_incident`, two-stage so the inner chance is never fractional), family drawn in `nd_fire_incident`. The fallback family (`nuclear_incident.40`) is always eligible, so the draw is never empty.
+**Incidents.** One roll per armed country per month (`nd_roll_incident`, two-stage so the inner chance is a rounded whole number), family drawn in `nd_fire_incident`. The fallback family (`nuclear_incident.40`) is always eligible, so the draw is never empty.
 
 **The No-First-Strike Pledge amendment is the law's copy of doctrine 1** (#430). `amendment_no_first_strike` (a rules-of-war amendment, offered by `extra_law_events.32` option a or sponsored in an enactment negotiation) used to be a second, unenforced pledge beside the doctrine. Now: while it is in force (`nd_nfu_amendment_in_force`: on an active law), `nd_weekly_update` holds an armed country's doctrine at 1 through `nd_set_doctrine_1` — whatever brought the amendment in, the law outranking tenure — and `nd_init_posture` seeds 1 for an arsenal built under it. The law made that move, not the government, so the binding puts `nd_doctrine_months` back as it was (tenure-satisfied if it was missing): the two-year lock and the six months before the interest groups judge a doctrine run on from the government's own last change, and a country that repeals the amendment is not then held at No First Use for two years. A human is told through the feed message `nd_doctrine_bound_by_law`. Leaving No First Use while it is in force or attached to the law being enacted (`nd_nfu_amendment_on_file`) is the usual repudiation plus `nd_strike_nfu_amendment`, which removes it from both laws (`every_scope_amendment` + `remove_amendment`, the vanilla shape; vanilla never removes one from a law still being enacted, so a repudiation made then also leaves `nd_nfu_amendment_repudiated`, and if the law passes with the amendment after all, the weekly update strikes it from the passed law instead of binding — the marker is cleared once the amendment is off file) — so the panel and the AI review need no new gate, and the binding never pulls a country back to a doctrine it has repudiated. The AI review leaves doctrine alone while the amendment is on file (the AI never repeals it). Repealing it through the law panel ends the codification without a repudiation; the doctrine stays where it is. The amendment has no `on_activate` / `on_deactivate`: its scope there is unverified, and a removal hook would loop.
 
@@ -798,14 +807,19 @@ Per tracked country: 120 containers, each with 3 bookkeeping variables plus one 
 
 ## Colonial Collapse (`colonial_collapse_effect`)
 
-- **Purpose:** After decolonization tech spreads, tiny AI countries (remnants of colonial breakups) are absorbed by culturally similar neighbors or reverted to uncolonized land.
-- **Location:** `common/scripted_effects/colonial_collapse_effects.txt`, triggered by `colonial_collapse_on_action` in `common/on_actions/extra_on_actions.txt` (wired to `on_yearly_pulse_country`).
-- **Criteria for collapse:** Non-player, non-decentralized, not a subject, single-state, pop < 100k, no decolonization tech, not in a diplomatic play.
+- **Purpose:** Once the decolonization era has begun, any tiny, poor AI country (not only a former colony: owner ruling 2026-09-26) is absorbed by an AI neighbour sharing its heritage or, with none, reverted to uncolonized land.
+- **Location:** `common/scripted_effects/colonial_collapse_effects.txt`, triggered by `colonial_collapse_on_action` in `common/on_actions/extra_on_actions.txt` (wired to `on_yearly_pulse_country`). Each country tests itself on its own yearly pulse.
+- **Gates:** the `decolonization_enabled` game rule, and some country in the world has researched `decolonization` (`decol_era_begun`; the collapsing country need not have it).
+- **Criteria for collapse:** non-player, alive, not decentralized, not a subject, holding no subjects, in no power bloc and bound by no treaty in force (`colonial_collapse_unattached`, both branches: owner ruling 2026-09-26), no civil war at `civil_war_progress >= 0.75`, not in a diplomatic play or a war, and tiny and poor on a sliding scale: population under 100k with average SoL under 6, 200k and 5, 300k and 4, 500k and 3, or 1M and 2.
+- **Twenty years' grace after independence**, from either of two 20-year variables:
+  - `recently_decolonized`, set by `decol_mark_former_colony` (every country the mod's releases form, and the `make_independent` options of `.1` / `.3`) and by `te_construction_market_on_released_independent` (vanilla's release as independent). The post-independence events key on it.
+  - `decol_collapse_grace`, set by `on_become_independent` (a subject made independent: an independence war won, an overlord's release) and by a won secession (`te_civil_war_on_secession_end`). It exempts from collapse only and opens no event (owner ruling 2026-09-26).
 - **Resolution order:**
-  1. Find culturally similar neighbor → **annex** into that neighbor.
-  2. If no cultural match, find any neighbor → **annex**.
-  3. If no neighbors → **`set_country_type = decentralized`** (revert to uncolonized).
+  1. A neighbour of its most populous state whose owner shares a heritage trait group with it and is an AI country at peace and not a subject → that owner **annexes** it (never a player: owner ruling 2026-09-26) (the notice is posted first, while the collapsing country still exists).
+  2. Otherwise, if it holds no company and no warheads → **`set_country_type = decentralized`** (revert to uncolonized). Vanilla never does this, so the branch is limited to the plain case.
+  3. Otherwise nothing happens; it is tested again next year.
 - **Notifications:** Countries in same strategic region AND great powers receive alerts.
+- **History:** from db166830 (2026-03-23) until 2026-09 the limit held `any_civil_war = { always = no }`, which is always false, so the system never ran. The owner confirmed on 2026-09-26 that collapse should be live, the decentralize branch included.
 
 ## Treaty Articles with Entity Selection
 
@@ -1115,7 +1129,7 @@ All pulse-based on_actions are routed through `extra_on_actions.txt`:
 - `excess_private_construction_on_action` — Excess Private Construction (per-project construction cap raise with an efficiency penalty, removed the year it is no longer needed) and Overinvestment
 - `fix_incompatible_laws` — auto-fix illegal law combos
 - `construction_cost_scaling_on_action` — GDP-based construction costs
-- `colonial_collapse_on_action` — tiny AI country absorption
+- `colonial_collapse_on_action` — tiny, poor AI countries absorbed or decentralized
 - `assign_aptitude_traits_on_action` — character trait assignment
 
 ### Immediate Triggers (`extra_on_actions.txt`)
@@ -1166,7 +1180,7 @@ These fire instantly when the engine event occurs, providing same-tick responsiv
 - `te_amendment_timeout_on_action` — routes to the sunset-clause expiry events (`amendment_on_actions.txt`; see § Temporary Amendments)
 
 **`on_merge_markets`** (Root = dissolving market, scope:market = absorbing market):
-- `gw_market_join_on_action` — copies market leader's GW policy modifiers to new member
+- `gw_market_join_on_action` — `gw_sync_market_policy_modifiers`: the joining market's owner takes the absorbing leader's three market-wide GW policies and drops any the leader lacks, unless bound by an emissions reduction treaty (`gw_bound_by_emissions_treaty`). The dissolving market's other members, leadership changes and old saves are caught within a month by `gw_reconcile_market_policies_effect` in `global_warming_events_on_action`, which runs the same sync for every member of every market. The leader's repeal (`gw_effect_remove_*`) skips treaty-bound members too.
 
 
 ### Construction-Market Immediate Triggers (`te_construction_market_on_actions.txt`)
@@ -1220,7 +1234,7 @@ Three layers:
 | `common/scripted_guis/colonial_empire_sguis.txt` | 5 handlers backing the widget (2 guards, 1 text renderer, 2 op-coded actions) |
 | `common/customizable_localization/colonial_empire_custom_loc.txt` | Band names, status line and phase-modifier line, keyed on `var:colonial_empire_tier` |
 | `common/scripted_effects/te_history_colonial_effects.txt` | `te_history_record_colonial_samples` — the two chart series |
-| `common/scripted_effects/colonial_collapse_effects.txt` | AI country absorption for tiny post-colonial remnants |
+| `common/scripted_effects/colonial_collapse_effects.txt` | Colonial collapse: tiny, poor AI countries absorbed or decentralized in the decolonization era |
 | `common/laws/colonial_empire_law_injections.txt` | Per-law colonial-stability and programme-effectiveness contributions |
 | `common/modifier_type_definitions/colonial_empire_modifier_types.txt` | The four `country_colonial_*` aggregate modifier types |
 | `common/on_actions/extra_on_actions.txt` | `decolonization_events_on_action` wiring |
@@ -1293,8 +1307,12 @@ Events 1-15 handle the core colonial cycle: negotiations, crackdowns, releases, 
 - **Only colonial subjects count.** `.1`/`.2`/`.3`/`.8`/`.11` iterate `is_qualifying_colonial_subject` only.
 - **`.206`'s "by decision" epilogue** needs a chosen release. `decol_record_chosen_release` counts them (`decol_chosen_releases`); otherwise a neutral variant shows.
 
+**What a revolution's winner keeps (PR #508):** the three running programmes, the permanent ending rewards (`colonial_empire_solidified_modifier` and the three path modifiers), `imperial_federation_modifier` and `mandate_system_modifier` are country modifiers, which a civil war's winner does not inherit. Each has a variable record, and `decol_repair_after_civil_war` (from `te_civil_war_on_won`) puts back each modifier whose record the winner holds and whose modifier it lacks. The records are `<modifier>_held`, written by `decol_grant_permanent_modifier` and the programme effects, plus the decisions' own `imperial_federation_taken` / `mandate_system_taken`. The programmes need the entry, and whether `on_civil_war_won` runs before or after the winner inherits it is unknown, so the entry's monthly pulse syncs them too; its programme tests read the records, so a programme it restores counts that month. The permanent modifiers' records are country variables, merged before `on_civil_war_won`, so the repair restores them at once. A yearly country pulse (`decol_permanent_modifier_sync_on_action`) backfills the records on saves from before they existed. It backfills the Solidified record only while no entry runs, because that key is also the entry's top band modifier. Timed modifiers and the entry's band modifiers are not rebuilt.
+
 **Former colonies, colonial wars and notices (2026-09, #430):**
-- **Every freed colony is a former colony.** `decol_mark_former_colony` (`decolonization.txt`) sets `var:former_overlord` (untimed) and `recently_decolonized` (7300 days), the shapes the vanilla release actions set in `te_construction_market_on_released_*`. `apply_decolonization_path` calls it for every country `form_decolonized_country` creates, and so do the `make_independent` options `.1.c`, `.1.d_neo`, `.3.a` and `.3.c`. What this makes reachable is the precursors `.60` / `.61` and, through them, `.5` / `.6`. The post-independence events (`.7`, `.15`, `.16`, `.17`, `.18`, `.21`) also require `je_colonial_empire` on the former colony itself, which a freed colony almost never holds, and `.19` needs `.15`'s nationalization modifier. So those stay out of reach for any freed colony, including one released by the vanilla actions. That gate predates the helper; whether it should read the decolonization rule instead is an open question.
+- **Every freed colony is a former colony.** `decol_mark_former_colony` (`decolonization.txt`) sets `var:former_overlord` (untimed) and `recently_decolonized` (7300 days), the shapes the vanilla release actions set in `te_construction_market_on_released_*`. `apply_decolonization_path` calls it for every country `form_decolonized_country` creates, and so do the `make_independent` options `.1.c`, `.1.d_neo`, `.3.a` and `.3.c`. That opens the precursors `.60` / `.61` (and, through them, `.5` / `.6`) and the post-independence events `.7`, `.16`, `.17`, `.18` and `.21`, which read `recently_decolonized`.
+- **Events for countries that never hold the entry gate on the rule.** `.4`, `.7`, `.15`, `.16`, `.17`, `.18`, `.21` (a former colony) and `.14`, `.20` (any great power) test `has_game_rule = decolonization_enabled` instead of `has_journal_entry = je_colonial_empire`. #44 had gated every event in the file on the entry, so until 2026-09 these could not fire: a freed colony never holds the entry, and `.14`'s AI weights and `.20`'s audience are aimed at great powers without colonies. `.14` / `.20` also reach a great power whose own entry has ended, on purpose: they stand for the powers that disapprove of colonial empires and press them (owner ruling, 2026-09-26). `.19` (the former overlord) keeps the entry gate, as do the metropole-side events.
+- **The former-colony events need only the world's decolonization era.** `.4`, `.7`, `.15`, `.16`–`.19`, `.21` and the outer gate of `decolonization_events_on_action` test `decol_era_begun` (some country has researched `decolonization`, `colonial_empire_triggers.txt`) instead of the recipient's own research (owner ruling, 2026-09-26). The metropole-side events still need the recipient's own technology through their own triggers (the entry's `is_shown_when_inactive`, `.14`, the `.60` / `.61` target checks).
 - **`.51` (Conscription Crisis) fires only in a colonial war.** The trigger is `decol_fighting_colonial_war` (`colonial_empire_triggers.txt`), used by both the event and its pool entry. It is true when the country is at war and one of these holds: the colonial crackdown is running, an enemy is its own qualifying colonial subject, or an enemy is a secessionist people sharing no heritage with it. Other wars still drain the bar through `colonial_stability_term_war`.
 - **`.50`'s City-and-sterling text is Britain's** (`c:GBR ?= this`). Every other empire gets a generic treasury text, since the mod models no per-country currency.
 - **Notices name the colonial power.** `.1`, `.2`, `.3` and `.11` save it as `scope:decol_colonial_power` for their `notification_*` loc. A message reads only `notification_<msg>_name/_desc/_tooltip`, never a bare key. `.2.c` frees no one, so it posts its own `colonial_neocolonial_reforms_notice`; `colonial_neocolonial_terms_notice` is for the options that grant independence (`.1.d_neo`, `.3.c`).
@@ -1310,8 +1328,8 @@ AI weights across events are tuned to favor decolonization:
 ## Independence Nationalization Event (`decolonization_events.15`)
 
 - **Purpose:** When a country gains independence, presents a choice about foreign-owned assets.
-- **Trigger:** `on_become_independent` on_action → fires event with 1-tick delay.
-- **Condition:** At least one foreign country owns >5% of the new country's GDP.
+- **Trigger:** `on_become_independent` on_action (any subject that becomes independent), and `apply_decolonization_path` a week after it forms a country (release decisions and collapses; the new country was never a subject, so `on_become_independent` may not reach it).
+- **Condition:** the decolonization game rule, the world's decolonization era (`decol_era_begun`), not a subject, no nationalization in the last 20 years (`nationalization_cooldown_var`, which also stops a double firing), and at least one foreign minor power or above owns >5% of the new country's GDP.
 - **Branching description:** Uses `first_valid` + `triggered_desc` — violent version if `is_at_war = yes`, peaceful version otherwise.
 - **Options:**
   - **(A) Full nationalization:** Seize all foreign assets. +10 infamy, -60 relations with all foreign owners, prestige boost, throughput penalty. Loyalists among lower strata, trade unions approve, industrialists oppose.
@@ -1370,19 +1388,20 @@ AI weights across events are tuned to favor decolonization:
 
 - **Purpose:** Moves minority pops of the target country's primary culture(s) from the source country to the target country. Models forced population exchanges (e.g., Treaty of Lausanne).
 - **Article type:** Directed, one-time effect on entry into force.
+- **Gating (`possible`, ROOT = the conceding source):** the source hosts pops of a primary culture of the target that is not also primary to the source, at least one of those cultures is below Acceptance Status 4 in some source state (the effect still moves every pop of those cultures, however well accepted), and the demanding target does not have Universal Citizenship (`law_multicultural`).
 - **Mechanism:**
   1. `on_entry_into_force` saves scopes via `scope:article_options.source_country` / `.target_country` (critical scoping pattern — see `docs/guides/scripting_best_practices.md`).
   2. Calls `population_transfer_effect` scripted effect.
   3. The effect iterates target country's primary cultures, for each culture finds source-country states with matching pops via population-weighted random selection (tiered modifiers since `state_population` is a trigger, not a value).
   4. Uses `move_pop` to transfer pops, increments a counter variable.
-  5. Applies `population_transfer_disruption` timed modifier to affected states, scaled by transfer count.
+  5. Applies the decaying `population_transfer_disruption` country modifier for 5 years to both countries, scaled by the share of each country's population that moved (`te_pop_transfer_disruption_strength`, clamped 0.25–2).
 - **Key scripted effect:** `population_transfer_effect` in `common/scripted_effects/extra_effects.txt`.
-- **Key modifier:** `population_transfer_disruption` — reduces state throughput and increases mortality, applied per-state.
+- **Key modifier:** `population_transfer_disruption` — a country modifier (−50% bureaucracy, −10 legitimacy, +50% radicals from conquest, before the multiplier) on both parties.
 - **Files:** `common/treaty_articles/extra_treaty_articles.txt`, `common/scripted_effects/extra_effects.txt`, `common/static_modifiers/extra_modifiers.txt`, localization.
 
 ## Intelligence Sharing Defense Shield
 
-- **Purpose:** Countries with an intelligence sharing pact benefit from their partner's covert defense strength. The weaker partner receives a shield equal to 50% of the difference between their base defense and their strongest partner's base defense.
+- **Purpose:** Countries with an intelligence sharing pact benefit from their partner's covert defense strength. The weaker partner receives a shield equal to 50% of the difference between their combined base defense and their strongest partner's, spread evenly over the three defense types (a sixth of the gap on each; the boost is multiplied by 0.5 and divided by 3).
 - **Mechanism:** Uses the "prior variable subtraction" pattern for modifier recalculation. Each country stores `intel_shield_mult` (the multiplier currently applied to their shield modifier). When recalculating:
   1. Reads own total defense from `modifier:country_covert_defense_*_add` (3 types summed).
   2. Subtracts `3 * intel_shield_mult` to get base defense (since the shield adds multiplier to each of 3 types).
@@ -1586,7 +1605,7 @@ Each surviving JE has monthly pulse events plus a fail-state event (except Post-
 **Mechanic:**
 - Country variable `var:sol_expectations_shift` tracks the adaptive shift applied via a static modifier
 - Monthly: `gap = (average_sol + target_add) - average_expected_sol`, then `shift += gap * rate + monthly_bias`
-- Rate derived from half-life: `rate = ln(2) / (half_life_years × 12)` (default 5y → ~0.01155/month)
+- Rate derived from half-life: `rate = ln(2) / (half_life_years × 12)` (default 10y → ~0.00578/month)
 - At equilibrium: `average_expected_sol ≈ average_sol + target_add` (shift stabilizes at whatever bridges the gap)
 - Applied via `sol_expectations_adaptive_shift` static modifier with `multiplier = shift`
 - Shift threshold: only applied when |shift| > 0.05 (avoids modifier clutter in steady state)
@@ -1601,10 +1620,10 @@ Each surviving JE has monthly pulse events plus a fail-state event (except Post-
 **NOT converted** (intentionally): Engine-hardcoded code static modifiers (base_values, tax_modifier_*, unincorporated_state) and temporary DLC/event modifiers (expecting_riches_forever, etc.) — these are either unchangeable or correctly handled by the adaptive lag.
 
 **Tuning:**
-- `sol_expectations_half_life_years = 5` — script value controlling convergence speed. Change this single value to tune. 5y = ~50% adapted after 5y, ~75% after 10y, ~94% after 20y.
+- `sol_expectations_half_life_years = 10` — script value controlling convergence speed. Change this single value to tune. 10y = ~50% adapted after 10y, ~75% after 20y, ~94% after 40y.
 
 **Modifiers:**
-- `country_sol_expectation_adaptation_rate_mult` (percent, script_only) — scales the adaptation rate. +50% = faster convergence (~3.3y half-life).
+- `country_sol_expectation_adaptation_rate_mult` (percent, script_only) — scales the adaptation rate. +50% = faster convergence (~6.7y half-life at the default 10y).
 - `country_sol_expectations_shift_add` (decimals=2, script_only) — persistent monthly bias added to shift. Positive = expectations rise faster.
 - `country_sol_expectations_target_add` (decimals=1, script_only) — permanent offset to the convergence target. Positive = people expect more than actual SoL.
 
@@ -1617,7 +1636,7 @@ Each surviving JE has monthly pulse events plus a fail-state event (except Post-
 **Static modifier:** `sol_expectations_adaptive_shift` — applied at country level with `multiplier = shift_value`. Base modifier provides +1 to all three strata expected_sol_add, so multiplier directly controls the SoL shift.
 
 **Script values** (in `extra_script_values.txt`):
-- `sol_expectations_half_life_years` — half-life parameter in years (default 5)
+- `sol_expectations_half_life_years` — half-life parameter in years (default 10)
 - `sol_expectations_adaptation_rate_value` — derived monthly rate, scaled by modifier, clamped [0.001, 0.1]
 - `sol_expectations_gap_value` — (average_sol + target_add) - average_expected_sol
 - `sol_expectations_shift_value` — current shift variable, used as modifier multiplier
@@ -1735,10 +1754,10 @@ The risk to be aware of: if a mod system *also* adds loyalists/radicals tied to 
 | `events/te_debug_ch_events.txt` | Console test harness (`event te_debug_ch.1`) for the widget's awkward states |
 
 ### Player Controls
-- **Increase/Decrease Cultural Program Funding:** Adjusts a `ch_program_funding_level` variable that re-applies JE-scoped flat `country_cultural_pull_add` and a separate GDP-scaled expense modifier. The maximum level comes from `country_cultural_program_max_funding_add`.
+- **Increase/Decrease Cultural Program Funding:** Adjusts a `ch_program_funding_level` variable that re-applies JE-scoped flat `country_cultural_pull_add` (with +5 % `country_cultural_pull_mult`) per level, and a separate expense modifier that costs GDP × 0.00005 a week **per level** (`ch_program_funding_total_cost_mult`; flat across levels until PR #510). The maximum level comes from `country_cultural_program_max_funding_add`. The AI steps funding up only while it is out of default and its weekly surplus covers another step.
 - **Funding cap sources:** `institution_ministry_of_culture` grants funding tiers through ministry investment, while `mass_media` and `television` each raise the cap further.
 - **Begin International Cultural Outreach** (internally `ch_world_exposition`): a **persistent toggle**, not a one-shot and not timed — the JE-scoped modifier has no duration and runs, with its GDP-scaled cost, until the player ends it or the Ministry goes away. (An earlier version of this section described it as a one-shot decaying action; it never was one.)
-- **Fund Cultural Institutes:** JE-scoped policy that trades bureaucracy for higher `country_cultural_pull_mult` and society tech progress.
+- **Fund Cultural Institutes:** JE-scoped policy that trades authority (`country_authority_cost_add = 100`) for +10 % `country_cultural_pull_mult`. It gives no society research.
 - **Launch Global Media Campaign:** JE-scoped policy that requires `mass_media` and converts authority into prestige plus stronger cultural projection.
 - **Enact Cultural Protectionism:** JE-scoped defensive policy that boosts pull and authority while reducing migration attraction and society tech openness.
 - **Mutual exclusivity:** Global Media Campaign and Cultural Protectionism cannot be active at the same time.
@@ -1936,6 +1955,7 @@ article, power-bloc principle, GUI.
 - **`covert_warfare.2` keyed infrastructure sabotage on its state modifier until 2026-09 (covert slice 6)**, so a burned sabotage operation never reached the defender; slice 6 keyed it on the country-scope `covert_infra_sabotage_morale`.
 - **`covert_warfare.2` never reached the defender of an operation burned during preparation until #430 (2026-09-25).** Its trigger listed the modifier each type leaves on its target, and those are applied only from the establishing phase. It now keys on the exposure record `covert_op_burn` writes for every burn (`iw_last_exposed_type`, with `iw_last_exposed_phase` for the text), and it names a burn stopped in preparation as one that never took effect. Its option b, **Retaliate in kind**, used to take 3 infamy off the defender and retaliate against nobody: it now seeds the defender's own network inside the perpetrator (`covert_retaliation_seed_network`, `covert_net_retaliation_seed` = 25, the size of the burn's own network loss), open to a country whose covert journal entry is active. The infamy relief is option c, **Make the evidence public**.
 - **`covert_warfare.2` names the perpetrator and the operation (2026-09-26).** Until then its text said only "agents of a foreign power", although option b already named the country. The `_named` descs (`covert_warfare.2.d_named`, `.d_preparatory_named`) print `#b [SCOPE.sCountry('iw_exposed_by').GetName]#!` — vanilla's own country link, flag and hover tooltip included — and are chosen only while `scope:iw_exposed_by` exists; the plain `.d` / `.d_preparatory` are the fallback for a record whose country is gone. All four name the operation through `$covert_exposed_op_link$`: bold, hoverable, with `covert_exposed_op_tt` as its tooltip — the operation's name over `covert_last_exposed_type_desc`, what that type does to its target. The journal entry's last-exposed line (`je_iw_last_exposed_named` / `_unknown`) uses the same link and bolds the country, so the snippet reads the defender through `GetPlayer`, not `ROOT`: that line is built by `ExecuteTooltip`, where the existing text reached the defender only through `GetPlayer`. The event's flavor is chosen the same way: `covert_warfare.2.f_election` (the ballot-box vignette) only for code 0, the general `.f` for every other type, `.f_preparatory` for a burn in preparation. `test_covert_op_registry.py` pins the block's codes, the texts' shape and the flavor choice.
+- **The defender's side of an exposure aged only in `je_covert_warfare`'s pulse until 2026-09-26.** `iw_last_exposed_age` and `covert_warfare.2`'s cooldown (`iw_defender_event_cooldown` / `_age`) sit on the target of an operation, which need not run a service of its own, so such a country saw `covert_warfare.2` once per game and kept an exposure "recent" for ever (`surveillance_events.5` worked around it with a once-only flag, now removed). Both age in every country's monthly pulse now (`covert_warfare_monthly_country`, `common/on_actions/covert_warfare_on_actions.txt`), the single site. The same event's option a, **Shore up our counterintelligence**, added `intelligence_capacity_defense` at country scope, where `legacy_je_modifier_cleanup_effect` strips it within a month; it adds `covert_counterintelligence_alert` instead: the same separatism and coup resistance, plus 2 intelligence capacity (owner decision, PR #510), all ×3 and decaying.
 
 ## War Support Feeds (1.14 hook)
 

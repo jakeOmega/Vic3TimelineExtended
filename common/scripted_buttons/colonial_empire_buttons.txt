@@ -274,13 +274,17 @@ ce_planned_decolonization = {
 }
 
 # ------ Round Table Conference ------
-# A negotiated transition for ONE colony at a time. Costs authority + prestige
-# up front, but produces a high-acceptance independent country with the
-# Commonwealth Legacy modifier — friendly diplomatic relations, technological
-# cooperation, and no infamy hit. Distinct from "Release Colonial Territory"
-# (which is a unilateral grant) and "Planned Full Decolonization" (which
-# liquidates the entire empire). The Round Table is for the colony you want
-# to leave on good terms while keeping the rest.
+# A negotiated transition for ONE colony at a time, offered only for colonies
+# with no severely unaccepted pops. Gated on more than 200 authority; the cost
+# is the Peaceful Decolonization modifier (a decaying -200 authority), which a
+# unilateral release also takes. What it buys over "Release Colonial Territory"
+# (decolonization_events.400): +25 starting relations with the new country
+# instead of -10 (apply_decolonization_path), 12 months of +1/month stability
+# instead of 8, and intelligentsia approval at the landowners' expense. The
+# successor's legacy modifier follows the empire's longest-running programme,
+# as for any release. "Planned Full Decolonization" liquidates the entire
+# empire. The Round Table is for the colony you want to leave on good terms
+# while keeping the rest.
 ce_round_table_conference = {
 	name = "CE_ROUND_TABLE_CONFERENCE"
 	desc = "CE_ROUND_TABLE_CONFERENCE_DESC"

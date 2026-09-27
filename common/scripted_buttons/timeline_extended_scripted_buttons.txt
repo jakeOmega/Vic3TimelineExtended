@@ -2531,7 +2531,7 @@ select_trait_traditionalist_loyal = {
 			has_variable = custom_religion_ideology_aristocratic_governance_selected
 			has_variable = custom_religion_ideology_isolationist_outlook_selected
 		}
-		NOT = {
+		NOR = {
 			has_variable = custom_religion_trait_market_liberal_loyal_selected
 			has_variable = custom_religion_trait_social_democrat_loyal_selected
 			has_variable = custom_religion_trait_totalitarian_loyal_selected
@@ -2605,7 +2605,7 @@ select_trait_traditionalist_happy = {
 			has_variable = custom_religion_ideology_aristocratic_governance_selected
 			has_variable = custom_religion_ideology_isolationist_outlook_selected
 		}
-		NOT = {
+		NOR = {
 			has_variable = custom_religion_trait_market_liberal_happy_selected
 			has_variable = custom_religion_trait_social_democrat_happy_selected
 			has_variable = custom_religion_trait_totalitarian_happy_selected
@@ -2679,7 +2679,7 @@ select_trait_traditionalist_unhappy = {
 			has_variable = custom_religion_ideology_aristocratic_governance_selected
 			has_variable = custom_religion_ideology_isolationist_outlook_selected
 		}
-		NOT = {
+		NOR = {
 			has_variable = custom_religion_trait_market_liberal_unhappy_selected
 			has_variable = custom_religion_trait_social_democrat_unhappy_selected
 			has_variable = custom_religion_trait_totalitarian_unhappy_selected
@@ -2753,7 +2753,7 @@ select_trait_market_liberal_loyal = {
 			has_variable = custom_religion_ideology_corporate_governance_selected
 			has_variable = custom_religion_ideology_exploitative_outlook_selected
 		}
-		NOT = {
+		NOR = {
 			has_variable = custom_religion_trait_social_democrat_loyal_selected
 			has_variable = custom_religion_trait_totalitarian_loyal_selected
 			has_variable = custom_religion_trait_traditionalist_loyal_selected
@@ -2827,7 +2827,7 @@ select_trait_market_liberal_happy = {
 			has_variable = custom_religion_ideology_corporate_governance_selected
 			has_variable = custom_religion_ideology_exploitative_outlook_selected
 		}
-		NOT = {
+		NOR = {
 			has_variable = custom_religion_trait_social_democrat_happy_selected
 			has_variable = custom_religion_trait_totalitarian_happy_selected
 			has_variable = custom_religion_trait_traditionalist_happy_selected
@@ -2901,7 +2901,7 @@ select_trait_market_liberal_unhappy = {
 			has_variable = custom_religion_ideology_corporate_governance_selected
 			has_variable = custom_religion_ideology_exploitative_outlook_selected
 		}
-		NOT = {
+		NOR = {
 			has_variable = custom_religion_trait_social_democrat_unhappy_selected
 			has_variable = custom_religion_trait_totalitarian_unhappy_selected
 			has_variable = custom_religion_trait_traditionalist_unhappy_selected
@@ -2975,7 +2975,7 @@ select_trait_social_democrat_loyal = {
 			has_variable = custom_religion_ideology_republican_governance_selected
 			has_variable = custom_religion_ideology_pacifist_outlook_selected
 		}
-		NOT = {
+		NOR = {
 			has_variable = custom_religion_trait_market_liberal_loyal_selected
 			has_variable = custom_religion_trait_totalitarian_loyal_selected
 			has_variable = custom_religion_trait_traditionalist_loyal_selected
@@ -3049,7 +3049,7 @@ select_trait_social_democrat_happy = {
 			has_variable = custom_religion_ideology_republican_governance_selected
 			has_variable = custom_religion_ideology_pacifist_outlook_selected
 		}
-		NOT = {
+		NOR = {
 			has_variable = custom_religion_trait_market_liberal_happy_selected
 			has_variable = custom_religion_trait_totalitarian_happy_selected
 			has_variable = custom_religion_trait_traditionalist_happy_selected
@@ -3123,7 +3123,7 @@ select_trait_social_democrat_unhappy = {
 			has_variable = custom_religion_ideology_republican_governance_selected
 			has_variable = custom_religion_ideology_pacifist_outlook_selected
 		}
-		NOT = {
+		NOR = {
 			has_variable = custom_religion_trait_market_liberal_unhappy_selected
 			has_variable = custom_religion_trait_totalitarian_unhappy_selected
 			has_variable = custom_religion_trait_traditionalist_unhappy_selected
@@ -3197,7 +3197,7 @@ select_trait_totalitarian_loyal = {
 			has_variable = custom_religion_ideology_technocratic_governance_selected
 			has_variable = custom_religion_ideology_militarist_outlook_selected
 		}
-		NOT = {
+		NOR = {
 			has_variable = custom_religion_trait_market_liberal_loyal_selected
 			has_variable = custom_religion_trait_social_democrat_loyal_selected
 			has_variable = custom_religion_trait_traditionalist_loyal_selected
@@ -3271,7 +3271,7 @@ select_trait_totalitarian_happy = {
 			has_variable = custom_religion_ideology_technocratic_governance_selected
 			has_variable = custom_religion_ideology_militarist_outlook_selected
 		}
-		NOT = {
+		NOR = {
 			has_variable = custom_religion_trait_market_liberal_happy_selected
 			has_variable = custom_religion_trait_social_democrat_happy_selected
 			has_variable = custom_religion_trait_traditionalist_happy_selected
@@ -3346,7 +3346,7 @@ select_trait_totalitarian_unhappy = {
 			has_variable = custom_religion_ideology_technocratic_governance_selected
 			has_variable = custom_religion_ideology_militarist_outlook_selected
 		}
-		NOT = {
+		NOR = {
 			has_variable = custom_religion_trait_market_liberal_unhappy_selected
 			has_variable = custom_religion_trait_social_democrat_unhappy_selected
 			has_variable = custom_religion_trait_traditionalist_unhappy_selected
@@ -3420,7 +3420,7 @@ select_trait_imperial_cult_loyal = {
 			has_variable = custom_religion_ideology_imperial_cult_governance_selected
 			has_variable = custom_religion_ideology_imperialist_outlook_selected
 		}
-		NOT = {
+		NOR = {
 			has_variable = custom_religion_trait_market_liberal_loyal_selected
 			has_variable = custom_religion_trait_social_democrat_loyal_selected
 			has_variable = custom_religion_trait_totalitarian_loyal_selected
@@ -3494,7 +3494,7 @@ select_trait_imperial_cult_happy = {
 			has_variable = custom_religion_ideology_imperial_cult_governance_selected
 			has_variable = custom_religion_ideology_imperialist_outlook_selected
 		}
-		NOT = {
+		NOR = {
 			has_variable = custom_religion_trait_market_liberal_happy_selected
 			has_variable = custom_religion_trait_social_democrat_happy_selected
 			has_variable = custom_religion_trait_totalitarian_happy_selected
@@ -3568,7 +3568,7 @@ select_trait_imperial_cult_unhappy = {
 			has_variable = custom_religion_ideology_imperial_cult_governance_selected
 			has_variable = custom_religion_ideology_imperialist_outlook_selected
 		}
-		NOT = {
+		NOR = {
 			has_variable = custom_religion_trait_market_liberal_unhappy_selected
 			has_variable = custom_religion_trait_social_democrat_unhappy_selected
 			has_variable = custom_religion_trait_totalitarian_unhappy_selected
@@ -3642,7 +3642,7 @@ select_trait_theocratic_loyal = {
 			has_variable = custom_religion_ideology_theocratic_governance_selected
 			has_variable = custom_religion_ideology_theocratic_outlook_selected
 		}
-		NOT = {
+		NOR = {
 			has_variable = custom_religion_trait_market_liberal_loyal_selected
 			has_variable = custom_religion_trait_social_democrat_loyal_selected
 			has_variable = custom_religion_trait_totalitarian_loyal_selected
@@ -3716,7 +3716,7 @@ select_trait_theocratic_happy = {
 			has_variable = custom_religion_ideology_theocratic_governance_selected
 			has_variable = custom_religion_ideology_theocratic_outlook_selected
 		}
-		NOT = {
+		NOR = {
 			has_variable = custom_religion_trait_market_liberal_happy_selected
 			has_variable = custom_religion_trait_social_democrat_happy_selected
 			has_variable = custom_religion_trait_totalitarian_happy_selected
@@ -3790,7 +3790,7 @@ select_trait_theocratic_unhappy = {
 			has_variable = custom_religion_ideology_theocratic_governance_selected
 			has_variable = custom_religion_ideology_theocratic_outlook_selected
 		}
-		NOT = {
+		NOR = {
 			has_variable = custom_religion_trait_market_liberal_unhappy_selected
 			has_variable = custom_religion_trait_social_democrat_unhappy_selected
 			has_variable = custom_religion_trait_totalitarian_unhappy_selected
