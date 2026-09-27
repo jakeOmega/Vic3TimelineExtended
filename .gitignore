@@ -35,6 +35,7 @@ generated_images/
 scripts/image_pipeline/preview_law_icons/
 scripts/image_pipeline/company_logos_generated/
 .venv/
+.venv-img/
 /tests/
 rules_found.txt
 generate_images.log
