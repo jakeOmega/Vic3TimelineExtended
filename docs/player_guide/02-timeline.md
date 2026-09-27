@@ -264,6 +264,9 @@ prosperity bonus is active, because that bonus supplies its level cap of one.
 that fit the company, such as extra Highway levels and migration pull from the
 Volkswagen Autostadt.
 - If you lose the company, the building is demolished.
+- Once it stands, you can privatize it to its own company. A building the
+company owns gets the company's throughput bonus, which is often worth having
+on a flagship.
 
 The mod also adds extension buildings and prosperity bonuses to many base-game
 companies, and fifteen new prestige goods, from Luxury Automobiles to Heavy-Lift
@@ -276,10 +279,14 @@ the twentieth and twenty-first centuries (Volkswagen, Intel, SpaceX, Pfizer,
 Saudi Aramco and many more) plus a few fictional far-future ones such as
 Tessier-Ashpool S.A. The other eleven are generic companies for the new sectors:
 Entertainment, Power, Electronics, Aerospace, Software, Advanced Materials,
-Biotechnology, Infrastructure, Megastructure and two Synthetics companies. As in
-the base game, flavored companies become available with a technology and ask for
-conditions such as a high production rank; generic ones need a large enough
-building of their industry.
+Biotechnology, Infrastructure, Megastructure and two Synthetics companies.
+
+The mod's flavored companies are not tied to a country. The base game's usually
+require you to hold the company's home state, but the mod's need only a
+technology and industrial conditions, such as a high production rank or being
+the leading producer of their good. Japan can found Saudi Aramco and the United
+States can found Volkswagen if they meet those conditions. Generic companies
+need a large enough building of their industry.
 
 ## Wonders
 
