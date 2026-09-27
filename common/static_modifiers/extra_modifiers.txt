@@ -2089,8 +2089,10 @@ mandate_system_modifier = {
 #   40-64 Strained      : mild negative (note name kept for compatibility)
 #   20-39 Crumbling     : strong negative — uses _under_pressure_modifier
 #   <20   Collapsing    : worst negative — uses _crumbling_modifier
-# (The legacy modifier names _under_pressure / _crumbling don't match the
-# status labels exactly; renaming would break existing saves, so they stay.)
+# (The legacy modifier keys _under_pressure / _crumbling don't match the
+# status labels; renaming would break existing saves, so they stay. Their
+# displayed names follow the bands: "Colonial Empire Crumbling" and
+# "Colonial Empire Collapsing".)
 
 colonial_empire_stable_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
