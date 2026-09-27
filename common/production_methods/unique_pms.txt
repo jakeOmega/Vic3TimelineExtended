@@ -11356,7 +11356,7 @@ pm_ferranti_hollinwood_works = {
 	texture = "gfx/interface/icons/production_method_icons/cat_antenna_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			building_electrics_industry_throughput_add = 0.15
+			building_electrics_industry_radio_throughput_add = 0.15
 			building_power_plant_throughput_add = 0.05
 		}
 	}

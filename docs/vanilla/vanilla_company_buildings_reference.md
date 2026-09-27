@@ -109,7 +109,7 @@ The base game's second expansion adds sixteen flavored companies in `00_companie
 | `company_ramirez` | `building_ramirez_vila_real_cannery` | Vila Real de Santo António cannery | food industry +15%, fishing wharf +5% |
 | `company_oriental_consolidated_mining` | `building_ocmc_unsan_gold_mines` | Unsan gold concession, Korea | gold mine +15%, logging camp +5% |
 | `company_siam_electrical_company_limited` | `building_siam_electric_wat_liab_station` | Wat Liab power station, Bangkok | power plant +15%, railway +5% |
-| `company_ferranti_ltd` | `building_ferranti_hollinwood_works` | Hollinwood works, Oldham | electrics industry +15%, power plant +5% |
+| `company_ferranti_ltd` | `building_ferranti_hollinwood_works` | Hollinwood works, Oldham | radio industry (`building_electrics_industry_radio`) +15%, power plant +5% |
 | `company_van_vlissingen_en_dudok_van_heel` | `building_van_vlissingen_oostenburg_works` | Oostenburg works, Amsterdam | motor industry +15%, shipyard +5% |
 | `company_maschinenfabrik_oerlikon` | `building_mfo_oerlikon_works` | MFO works, Oerlikon | motor industry +10%, tooling workshop +10% |
 | `company_a_markwald_and_company` | `building_markwald_bangkok_rice_mill` | Markwald rice mill, Bangkok | rice farm +15%, port +5% |
