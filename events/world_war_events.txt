@@ -902,34 +902,17 @@ world_war_events.20 = {
 		# Not already committed to a side
 		NOT = { has_variable = ww_aggressor_side }
 		NOT = { has_variable = ww_defender_side }
-		# A world war must be happening
-		any_country = {
-			has_variable = ww_aggressor_side
-			is_at_war = yes
-		}
+		# A world war must be happening, not merely a former belligerent at war
+		# after its peace
+		ww_world_war_is_being_fought = yes
 	}
 
 	cooldown = { days = normal_modifier_time }
 
 	immediate = {
-		# Find the main aggressor still at war
-		random_country = {
-			limit = {
-				has_variable = ww_aggressor_side
-				is_at_war = yes
-				country_rank >= rank_value:great_power
-			}
-			save_scope_as = ww_main_aggressor
-		}
-		# Find a defender we could ally with
-		random_country = {
-			limit = {
-				has_variable = ww_defender_side
-				is_at_war = yes
-				country_rank >= rank_value:great_power
-			}
-			save_scope_as = ww_main_defender
-		}
+		# An aggressor-side great power still at war, and a defender-side great
+		# power at war with it (option a joins the defender's wars against it)
+		ww_save_entry_sides = yes
 	}
 
 	# Option A: Join the war against the aggressors - full commitment

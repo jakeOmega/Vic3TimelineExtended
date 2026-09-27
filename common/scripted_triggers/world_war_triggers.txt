@@ -138,29 +138,42 @@ world_war_conditions_met = {
 }
 
 # --- True while a world war is being fought: an aggressor-side belligerent is
-# at war. Any scope; read from belligerents and outsiders alike. The side
-# variables sit only on belligerents, so a country's own ww_active_phase says
-# nothing about whether a war is on for anyone else.
+# at war and has not yet made its peace. Any scope; read from belligerents and
+# outsiders alike. The side variables sit only on belligerents, so a country's
+# own ww_active_phase says nothing about whether a war is on for anyone else.
+# A belligerent keeps its side variable for up to 36 months after its peace
+# (world_war_je.txt), so without the ww_peace_concluded check a former
+# aggressor in some unrelated war would read as a world war still on.
 ww_world_war_is_being_fought = {
 	any_country = {
 		has_variable = ww_aggressor_side
+		NOT = { has_variable = ww_peace_concluded }
 		is_at_war = yes
 	}
 }
 
-# --- True if a late entrant has a side to join: a great power of each side is
-# at war (world_war_events.20 option a and ww_join_war_button pick one of each
-# as scope:ww_main_aggressor / scope:ww_main_defender). Any scope.
-ww_world_war_open_to_entrants = {
-	any_country = {
-		has_variable = ww_aggressor_side
-		is_at_war = yes
-		country_rank >= rank_value:great_power
-	}
+# --- Country scope: an aggressor-side great power a late entrant can fight,
+# because a defender-side great power is at war with it, and neither has made
+# its peace. ww_save_entry_sides picks one as scope:ww_main_aggressor.
+ww_entry_aggressor_candidate = {
+	has_variable = ww_aggressor_side
+	NOT = { has_variable = ww_peace_concluded }
+	country_rank >= rank_value:great_power
+	save_temporary_scope_as = ww_entry_aggressor
 	any_country = {
 		has_variable = ww_defender_side
-		is_at_war = yes
+		NOT = { has_variable = ww_peace_concluded }
 		country_rank >= rank_value:great_power
+		has_war_with = scope:ww_entry_aggressor
+	}
+}
+
+# --- True if a late entrant has a side to join: a great power of each side,
+# at war with each other (ww_save_entry_sides saves the pair for
+# world_war_events.20 option a and ww_join_war_button). Any scope.
+ww_world_war_open_to_entrants = {
+	any_country = {
+		ww_entry_aggressor_candidate = yes
 	}
 }
 

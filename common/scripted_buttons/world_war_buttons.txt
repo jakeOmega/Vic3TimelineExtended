@@ -507,12 +507,22 @@ ww_stop_wartime_rationing_button = {
 # ever saw it, and a belligerent's click did nothing but start the cooldown.
 # It joins directly rather than through .20, whose five-year event cooldown
 # outlasts the one-year ww_late_entry_cooldown and could swallow the click.
+#
+# Humans only (is_ai = no): the AI enters through world_war_events.20 alone,
+# exactly as before the button was made visible to outsiders. The ai_chance
+# below was written for a button no outsider could see, and would send nearly
+# every outsider great power into the war within a year: the great-power term
+# is unconditional, no term looks at ideology or alliances, and the war-length
+# term reads our own ww_years_elapsed, which only belligerents carry. It is
+# inert while the button is hidden from the AI; reworking it is the owner's
+# call (PR #510).
 
 ww_join_war_button = {
 	name = "WW_JOIN_WAR_BUTTON"
 	desc = "WW_JOIN_WAR_BUTTON_DESC"
 
 	visible = {
+		is_ai = no
 		NOT = { country_is_ww_belligerent = yes }
 		NOT = { has_variable = ww_peace_concluded }
 		is_at_war = no
@@ -585,22 +595,7 @@ ww_join_war_button = {
 
 	effect = {
 		hidden_effect = {
-			random_country = {
-				limit = {
-					has_variable = ww_aggressor_side
-					is_at_war = yes
-					country_rank >= rank_value:great_power
-				}
-				save_scope_as = ww_main_aggressor
-			}
-			random_country = {
-				limit = {
-					has_variable = ww_defender_side
-					is_at_war = yes
-					country_rank >= rank_value:great_power
-				}
-				save_scope_as = ww_main_defender
-			}
+			ww_save_entry_sides = yes
 		}
 		ww_enter_war_on_defender_side = yes
 	}

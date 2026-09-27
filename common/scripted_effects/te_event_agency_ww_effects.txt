@@ -61,9 +61,33 @@ ww_clear_unfought_belligerent = {
 	remove_variable = ww_months_counter
 }
 
+# Any scope. Saves the sides a late entrant joins: scope:ww_main_aggressor, an
+# aggressor-side great power (ww_entry_aggressor_candidate), and
+# scope:ww_main_defender, a defender-side great power at war with it, neither
+# past its peace. Both are missing when ww_world_war_open_to_entrants is false.
+# world_war_events.20's immediate and ww_join_war_button.
+ww_save_entry_sides = {
+	random_country = {
+		limit = { ww_entry_aggressor_candidate = yes }
+		save_scope_as = ww_main_aggressor
+	}
+	if = {
+		limit = { exists = scope:ww_main_aggressor }
+		random_country = {
+			limit = {
+				has_variable = ww_defender_side
+				NOT = { has_variable = ww_peace_concluded }
+				country_rank >= rank_value:great_power
+				has_war_with = scope:ww_main_aggressor
+			}
+			save_scope_as = ww_main_defender
+		}
+	}
+}
+
 # Country scope: the late entrant, which must also be ROOT (join_war's target).
 # Expects scope:ww_main_aggressor and scope:ww_main_defender, great-power
-# belligerents of each side at war (ww_world_war_open_to_entrants). Enters
+# belligerents of each side at war with each other (ww_save_entry_sides). Enters
 # every war the defender fights against the aggressor, on the defender's side,
 # marks us a defender-side belligerent, and starts the late-entry cooldown.
 # Shared by world_war_events.20 option a and ww_join_war_button, so the two
