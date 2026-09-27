@@ -1088,7 +1088,9 @@ law_open_government = {
 # Neo-Absolutism, which unlocking_laws does not match through the parent),
 # Single-Party State, or Outlawed Dissent. A country that loses every gate is
 # moved to Punishment-Focused Criminal Justice, the closest progressiveness,
-# by the generated law-consistency sweep (gen_law_consistency.py).
+# by the generated law-consistency sweep (gen_law_consistency.py), which runs
+# from on_law_activated (so when the replacing Distribution of Power or Free
+# Speech law activates) and on the monthly country pulse.
 #
 # The extractive throughput is flat by design (owner call): it does not scale
 # with radicals, turmoil or prisoners, so the law never pays more for more

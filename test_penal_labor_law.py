@@ -131,6 +131,22 @@ class IdeologyStanceTests(unittest.TestCase):
                 with self.subTest(where=where):
                     self.assertEqual(camps, "strongly_disapprove")
 
+    def test_only_fascist_and_authoritarian_ideologies_rank_camps_above_the_prison(self):
+        # These are the ideologies that push a government from the default
+        # Punishment-Focused into the camps. An ideology with no stance on a
+        # law is neutral on it.
+        order = ["strongly_disapprove", "disapprove", "neutral", "approve", "strongly_approve"]
+        pushers = set()
+        for (_fname, key), block in _script_ideology_stances().items():
+            punishment = block.get("law_punishment_focused_criminal_justice", "neutral")
+            camps = block.get(LAW, "neutral")
+            if order.index(camps) > order.index(punishment):
+                pushers.add(key.split(":", 1)[-1])
+        self.assertEqual(
+            pushers,
+            {"ideology_fascist", "ideology_fascist_movement", "ideology_authoritarian"},
+        )
+
 
 class LawDefinitionTests(unittest.TestCase):
     @classmethod

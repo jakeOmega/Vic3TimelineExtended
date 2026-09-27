@@ -217,9 +217,11 @@ anti_secrecy = [
 # disapproves Punishment-Focused strongly disapproves the camps. The regressive
 # list approves the camps but strongly approves Punishment-Focused, so a
 # regressive group prefers the ordinary prison and does not push for camps on
-# its own; only the strongly_approve holders below do. test_penal_labor_law.py
-# pins that every ideology with a stance on a Criminal Justice law has one on
-# the camps.
+# its own. The ideologies that rank the camps above Punishment-Focused are the
+# camps-only ones below with no Punishment-Focused stance: the fascist leader
+# and movement (strongly approve) and the authoritarian leader (approve).
+# test_penal_labor_law.py pins that set, and that every ideology with a stance
+# on a Criminal Justice law has one on the camps.
 regressive_criminal_justice = [
     ("law_punishment_focused_criminal_justice", "strongly_approve"),
     ("law_rehabilitation_focused_criminal_justice", "disapprove"),
