@@ -456,7 +456,6 @@ nuclear_first_strike = { # Scope is target state
 				custom_tooltip = {
 					text = industrial_nuke_succeeds_desc
 
-					change_infamy = 25
 					# UN: a nuclear first strike is a world moment and a lasting
 					# blow to the order pillar, whoever strikes (un_authority_effects.txt).
 					un_authority_actor_shock_on = { AMOUNT = -3 REASON = 8 SUBJECT = scope:target_state }
@@ -470,6 +469,28 @@ nuclear_first_strike = { # Scope is target state
 					# ...and a crime the International Criminal Court may
 					# indict the striker's ruler for (redesign phase 5).
 					un_regime_icc_note_crime = { CRIME = 1 }
+					# ...and a blow to the nuclear taboo (nuclear_taboo_effects.txt).
+					# An answer to a strike on us or on a country we cover counts
+					# half; every caller is at war with the target, which
+					# nd_was_struck_by needs.
+					if = {
+						limit = { nd_was_struck_by = { ENEMY = scope:target_country } }
+						nd_taboo_note_use = { KIND = strategic RETALIATION = yes }
+					}
+					else = {
+						# First use pays in infamy and the world's goodwill in
+						# proportion to the taboo, before the taboo falls
+						# (nuclear_taboo_values.txt). An answer pays neither.
+						change_infamy = nd_taboo_infamy_strategic
+						every_country = {
+							limit = {
+								NOT = { THIS = scope:attacking_country }
+								NOT = { THIS = scope:target_country }
+							}
+							change_relations = { country = scope:attacking_country value = nd_taboo_world_relations_strategic }
+						}
+						nd_taboo_note_use = { KIND = strategic RETALIATION = no }
+					}
 					scope:target_state = {
 						nuclear_industrial_strike = yes
 						trigger_event = { id = nuclear_weapon_events.1 popup = yes }
@@ -538,6 +559,9 @@ nuclear_response_strike = {  # Scope is target state, target/attacking_country r
 					# first strike (un_authority_effects.txt).
 					un_ledger_actor_entry_unweighted_on = { PILLAR = order POINTS = -2 REASON = 10 SUBJECT = scope:target_state }
 					un_dossier_record = { RECORD = nuclear POINTS = un_dos_points_retaliation }
+					# Retaliation by construction: half a first use's blow to the
+					# nuclear taboo (nuclear_taboo_effects.txt).
+					nd_taboo_note_use = { KIND = strategic RETALIATION = yes }
 					scope:target_state = {
 						nuclear_industrial_strike = yes
 						trigger_event = { id = nuclear_weapon_events.11 popup = yes }
@@ -585,6 +609,9 @@ nuclear_response_response_strike = {  # Scope is target state
 					# UN: retaliation erodes the order pillar (un_authority_effects.txt).
 					un_ledger_actor_entry_unweighted_on = { PILLAR = order POINTS = -2 REASON = 10 SUBJECT = scope:target_state }
 					un_dossier_record = { RECORD = nuclear POINTS = un_dos_points_retaliation }
+					# An answer to an answer: still retaliation for the nuclear
+					# taboo (nuclear_taboo_effects.txt).
+					nd_taboo_note_use = { KIND = strategic RETALIATION = yes }
 					scope:target_state = {
 						nuclear_industrial_strike = yes
 						trigger_event = { id = nuclear_weapon_events.1 popup = yes }

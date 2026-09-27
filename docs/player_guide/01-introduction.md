@@ -78,7 +78,7 @@ turn a default system off.
 | Free Market Construction | Enabled | *Enabled*: construction is a good bought on the market, and buildings use some as maintenance. *Without Retooling Costs*: as Enabled, but switching production methods doesn't raise that maintenance. *Without Maintenance*: construction is still a market good, but buildings don't consume it. *Disabled*: base-game construction sectors. | [Economy and construction](03-economy.md) |
 | Global Warming | Enabled | Greenhouse emissions, rising temperatures, climate events and climate policies. | [Climate and pollution](14-climate.md) |
 | United Nations | Enabled | Founding and joining the UN, its votes, resolutions and agencies. | [The United Nations](09-united-nations.md) |
-| Nuclear Weapons | Enabled | Nuclear programs, arsenals, doctrine, crises and strikes. | [Nuclear weapons](13-nuclear.md) |
+| Nuclear Weapons | Enabled | Nuclear programs, arsenals, doctrine, crises, strikes and the nuclear taboo. | [Nuclear weapons](13-nuclear.md) |
 | Space Race | Enabled | The space race milestones and their events. | [The space race](15-space.md) |
 | Decolonization | Enabled | Colonial stability, the decolonization journal entry and its events. | [Colonial empires and decolonization](11-decolonization.md) |
 | Cultural Hegemony | Enabled | The competition for global cultural influence. | [Cultural hegemony and covert warfare](10-influence.md) |
@@ -107,7 +107,7 @@ The chapters follow the game's own areas rather than the order systems appear.
 | [Cultural hegemony and covert warfare](10-influence.md) | Soft power and intelligence operations. |
 | [Colonial empires and decolonization](11-decolonization.md) | Colonial stability, independence and what follows it. |
 | [Military and war](12-military.md) | Combined arms, new units and ships, military bases and the World War journal entry. |
-| [Nuclear weapons](13-nuclear.md) | Building a bomb, doctrine and posture, crises, strikes and disarmament. |
+| [Nuclear weapons](13-nuclear.md) | Building a bomb, doctrine and posture, crises, strikes, the nuclear taboo and disarmament. |
 | [Climate and pollution](14-climate.md) | Emissions, warming, climate policy and state pollution. |
 | [The space race](15-space.md) | The milestones from suborbital flight to colonizing the solar system. |
 | [Quick reference](16-reference.md) | When each system appears, the journal entries at a glance, and a glossary. |

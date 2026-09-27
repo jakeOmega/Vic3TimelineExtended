@@ -383,7 +383,7 @@ An operation runs until one of these happens:
 - Your funding drops to 0, which ends every operation.
 - A truce with the target begins.
 - A wartime operation's war ends, or its diplomatic play ends without one.
-- Something it needs goes: the target's elections, its political movements, its lead in space, its missing warheads or its nuclear program (frozen by treaty or given up), your rivalry, or your power bloc lead over a target outside the bloc. Destabilization also ends if relations reach cordial. Technology and Tradecraft conditions only gate the launch.
+- Something it needs goes: the target's elections, its political movements, its lead in space, its missing warheads or its nuclear program (frozen by treaty, held at an arsenal ceiling or while it dismantles, or given up), your rivalry, or your power bloc lead over a target outside the bloc. Destabilization also ends if relations reach cordial. Technology and Tradecraft conditions only gate the launch.
 
 A war with the target does not end a peacetime operation.
 

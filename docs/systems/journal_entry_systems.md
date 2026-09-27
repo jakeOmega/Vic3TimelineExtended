@@ -667,6 +667,7 @@ The UN must be actively founded by a Great Power with Intergovernmental Organiza
   - **No more random roll.** `un_events_on_action` no longer rolls UN events for each member every month. Once a month `un_docket_monthly_update` scores every live situation and takes up the gravest, at most one item every three months, and sends it to the countries it concerns.
   - **The items:** a nuclear strike, a war of aggression on a member (6+ months, a state devastated past 30), an exposed covert operation (each an appeal, `un_events.2`, to the wronged party first and then one member with a stake); a state collapse (`un_events.4` to three peacekeeping powers); a famine (`un_events.7` to three donors); a new nuclear power (the NPT, `un_events.14`); a warming threshold (the climate accord, `un_events.17`); a colonial collapse (`un_events.12`); the first Moon landing or colony (`un_events.19`); the end of a great-power war (`un_events.3`, else `un_events.22`); the charter outgrown (`un_events.6`); an embargo between members (`un_events.15`, to the weaker party); and, at most once in 24 months when nothing graver is pending, Assembly business (a convention no situation raises).
   - **Who is asked.** A topic with no wronged party goes to a human delegation first when one qualifies, then to the strongest qualifying member; an item is offered to at most two members. "Leave it to another delegation" (every proposer event) passes it on and earns nothing.
+  - **A nuclear appeal can always table a condemnation.** `un_events.2`'s "Table a condemnation" normally waits out the condemn topic's worldwide cooldown; for a nuclear strike (the accused's `un_dkt_cause` is 1) it does not, so the nuclear taboo's Assembly verdict (`nd_taboo_verdict`, `nuclear_crisis_design.md` §0.11) is never skipped.
   - **Fired where they happen, not by the docket:** `un_events.5` (sanctions adopted), `un_events.8` (a World Court case brought in `un_events.2`), `un_events.11` (a veto, to the proposer), `un_events.20` (a great power leaving, to the other great powers). `un_events.13` was deleted.
   - **The chamber** shows the docket's last item and when the next can be taken up, and says what raises each topic of Assembly business and whether it is in force.
 - **Dues, teeth and regimes (redesign phase 5):** rulings and the in-game checklist are in `un_redesign_design.md` §0.5.
@@ -1373,11 +1374,13 @@ Traced states: fresh activation (status variable absent → guarded fallback bra
 ### Events
 - `nuclear_weapon_events.10` — fired for creating country
 - `nuclear_weapon_events.9` — fired (14-day delay) to all other countries
-- `te_debug_nuclear.1` / `.2` — console-only test harness (`events/te_debug_nuclear_events.txt`): funding steps, first device, warheads, leaderboard fill/empty; pause and disarmament applied and lifted.
+- `te_debug_nuclear.1` / `.2` / `.3` — console-only test harness (`events/te_debug_nuclear_events.txt`): funding steps, first device, warheads, leaderboard fill/empty; pause and disarmament applied and lifted; `.3` is the nuclear taboo: set the score, age the clock, step.
 
 ### Never Completes
 Persistent journal entry. `immediate` therefore runs again on every re-activation, which is why the stockpile and the first-device flag are created only when absent — progress and funding are still zeroed unconditionally, because the bar's goal is fixed at activation from `current_value + goal_add_value`.
 
+
+**The nuclear taboo panel** (since 2026-09-26) opens `widget_je_nuclear_balance`, open by default and drawn from the first warhead on: the score and band, where it is heading, a breakdown of the target (`nd_taboo_breakdown_sgui`, from the monthly snapshots), what a first use, a battlefield use and a public ultimatum cost now, the possession burden while armed, when a weapon was last used, and a collapsed history chart of score and target (`te_hist_v_nd_taboo`, `te_hist_v_nd_taboo_tgt`). Display handlers `nd_taboo_exists_sgui` and `nd_taboo_breakdown_sgui` in `nuclear_program_sguis.txt`.
 
 ### Nuclear Deterrence Widget (journal-entry widget)
 Two more panels on `je_nuclear_program` — posture and crises, which had their own entry, `je_nuclear_deterrence`, until 2026-09-25 (`mod_systems.md` § Nuclear Deterrence and Crisis Diplomacy; design and what shipped in `nuclear_crisis_design.md` §0).
@@ -1391,6 +1394,8 @@ Areas (posture): **Nuclear Posture** (open) — doctrine, readiness (with the st
 
 Areas (crisis): **Nuclear Crisis** (open, only while in one) — the opponent (printed in script), our side, the dispute and whether it is public, stage (its tooltip says what would move this crisis on), weeks to the deadline, danger and the pressure on the target (on us, for a target) — each with a tooltip breaking it into its stored parts — then what conceding costs, whether the threat can be carried out (backed, uncertain or a bluff, from `nd_ft_reason`), when the target is pressed next, and our credibility stakes. Then the moves: Go public (issuer, while private), Propose, Exercise (while armed), Concede (target), Back down (issuer); the rows a side cannot use are hidden. Between crises, the last opponent and how it ended. **Reputation** — credibility and pledges, once there is a record (`nd_has_reputation_sgui`: credibility exists once the posture is initialised or a crisis has touched us).
 
+**Arsenal rows** (the nuclear taboo, since 2026-09-26), at the foot of Capabilities: the arsenal's state (a ceiling, being dismantled, or free), the ceiling stepper (ops 60/61) with a hint of the size at which restraint groups would ease, Lift the ceiling (62), Dismantle the arsenal (63) and Halt the dismantling (64).
+
 Op table (repeated in the sgui header and the `.gui` header — keep all three in step):
 
 | sgui | op | meaning |
@@ -1400,6 +1405,10 @@ Op table (repeated in the sgui header and the `.gui` header — keep all three i
 | | 31–34 | adopt launch authority 1–4 (4 = Automatic Retaliation) |
 | | 40 / 41 | safeguards down / up |
 | | 50 / 51 | hardening down / up |
+| | 60 / 61 | arsenal ceiling down / up (the nuclear taboo) |
+| | 62 | lift the arsenal ceiling |
+| | 63 | dismantle the arsenal |
+| | 64 | halt the dismantling |
 | `nd_crisis_action_sgui` | 1 | go public (issuer) |
 | | 2 | propose a mutual stand-down |
 | | 3 | a demonstration exercise (armed) |

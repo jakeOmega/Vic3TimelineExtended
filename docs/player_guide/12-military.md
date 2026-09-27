@@ -257,6 +257,7 @@ The mod adds weekly lines to the war support breakdown.
 | Fighting a UN-condemned enemy | An enemy in this war is condemned | +0.25 |
 | Enemy communications disruption | An enemy in this war runs a communications-disruption operation against you | −0.25 |
 | Enemy nuclear arsenal | An enemy has nuclear weapons, you don't, and neither a nuclear-armed guarantor nor your overlord's nuclear umbrella covers you | −0.25 |
+| Shelters and civil defence | The line above applies and you have Civil Defence, from a [nuclear taboo event](13-nuclear.md#nuclear-taboo-events) | +0.125 |
 
 The United Nations, covert operation and nuclear lines come from systems with
 their own game rules, and appear only when those systems are on.

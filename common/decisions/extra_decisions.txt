@@ -320,3 +320,40 @@ te_open_map_mode_survey = {
 		value = 0
 	}
 }
+
+# ============================================================================
+# Resume the Nuclear Programme (the nuclear taboo, nuclear_taboo_effects.txt)
+# A country that dismantled its arsenal (nd_taboo_renounced) may take the bomb
+# up again. The breakout — a ledger entry against the taboo — is booked when
+# it is armed again, whatever the route (nd_taboo_country_monthly).
+# ============================================================================
+nd_taboo_resume_programme = {
+	is_shown = {
+		has_modifier = nd_taboo_renounced
+	}
+
+	possible = {
+		has_game_rule = nuclear_weapons_enabled
+	}
+
+	when_taken = {
+		# A renouncer without the standing to run a programme (I2, final-review.md):
+		# Resume still ends the renunciation and pays its price, but gains no
+		# programme. Trigger-gated custom_tooltip, the form nuclear_crisis_effects.txt
+		# uses for a conditional explanatory line (e.g. nd_crisis_open's
+		# dispute-kind branches).
+		if = {
+			limit = { nd_taboo_has_programme_standing = no }
+			custom_tooltip = { text = nd_taboo_tt_resume_no_standing }
+		}
+		nd_taboo_resume = yes
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { nd_taboo_ai_would_resume = yes }
+			add = 100
+		}
+	}
+}

@@ -323,8 +323,10 @@ your own motion puts UN Request Cooldown on you for ten years, during which you
 can table nothing else yourself. A convention or charter reform the docket
 offers you is free, so the docket's offer is the cheap way to bring one to the
 floor. A topic cannot return to the floor for five years after a resolution on
-it closes (ten for a motion to expel), and mandates have a five-year cooldown
-per proposer. After every vote the floor is in recess for three months, when
+it closes (ten for a motion to expel), except that an appeal over a nuclear
+strike can table a condemnation despite that cooldown (see [The UN
+docket](#the-un-docket)),
+and mandates have a five-year cooldown per proposer. After every vote the floor is in recess for three months, when
 only human members may table, and you are told when it reopens.
 
 ### The UN docket
@@ -352,7 +354,13 @@ situation and offers it to the countries it concerns. Roughly from gravest down:
 
 An appeal lets the wronged party table a condemnation or sanctions, ask for
 peacekeepers, take the accused to the World Court, or pass the matter to a
-member with a stake, never one on the accused's side. Business with no wronged
+member with a stake, never one on the accused's side. An appeal over a nuclear
+strike can table a condemnation even while that topic is on its five-year
+cooldown, as long as the striker's case gives grounds. That vote is the
+Assembly's verdict on the use: a condemnation that carries strengthens the
+nuclear taboo, and one that fails, or that a veto cuts to a rebuke, weakens it.
+Sanctions or a World Court case over the same strike give no verdict (see [The
+United Nations and the taboo](13-nuclear.md#the-united-nations-and-the-taboo)). Business with no wronged
 party goes first to a human member that qualifies. Every proposer event has
 "Leave it to another delegation", which passes the item on and earns nothing;
 refusing a convention outright costs credibility and bars you from tabling it
@@ -397,7 +405,10 @@ and once a year.
 
 Three member modifiers also carry a cost: the NPT raises infamy generation and
 lowers your units' kill rate, the Climate Accord lowers bureaucracy, and the ICC
-makes casualties cost more war support.
+makes casualties cost more war support. While in force, the NPT and the CPPNM
+also raise the target of the [nuclear
+taboo](13-nuclear.md#what-moves-the-nuclear-taboo), by up to 8 and 4 points, in
+proportion to UN authority.
 
 The journal entry counts eleven specialized agencies. Ten come from the
 conventions in the table: WHO, UNESCO, UNHRC, IAEA, UNEP, UNHCR, UNOOSA, ITLOS,
@@ -547,8 +558,10 @@ a mandate is steered toward the target and the authorized goal.
 ## How the UN connects to other systems
 
 Nuclear strikes lower peace and order and add to the striker's case, the NPT
-reaches threshold states, and at authority 60 with the IAEA in place the Nuclear
-Program Aid treaty article is forbidden ([Nuclear weapons](13-nuclear.md)). The
+reaches threshold states, at authority 60 with the IAEA in place the Nuclear
+Program Aid treaty article is forbidden, and the NPT, the CPPNM and the
+Assembly's verdict on a nuclear use move the nuclear taboo ([Nuclear
+weapons](13-nuclear.md)). The
 Climate Accord exists only under the Global Warming rule ([Climate and
 pollution](14-climate.md)). The decolonization declaration presses colonial
 powers ([Colonial empires and decolonization](11-decolonization.md)), and the

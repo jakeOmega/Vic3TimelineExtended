@@ -421,7 +421,7 @@ nd_weekly_update = {
 		else = {
 			set_variable = { name = nd_doctrine_months_before_law value = nd_doctrine_tenure_months }
 		}
-		nd_set_doctrine_1 = yes
+		nd_bind_doctrine_1 = yes
 		set_variable = { name = nd_doctrine_months value = var:nd_doctrine_months_before_law }
 		remove_variable = nd_doctrine_months_before_law
 		if = {
@@ -436,6 +436,16 @@ nd_weekly_update = {
 	if = {
 		limit = {
 			nd_readiness_withdrawn = yes
+			has_variable = nd_readiness_target
+			var:nd_readiness_target > 0
+		}
+		set_variable = { name = nd_readiness_target value = 0 }
+	}
+	# ---- being dismantled (nuclear_taboo_effects.txt): in storage until the
+	# last warhead is gone; any other path that raised the target is put back.
+	if = {
+		limit = {
+			nd_taboo_is_dismantling = yes
 			has_variable = nd_readiness_target
 			var:nd_readiness_target > 0
 		}
@@ -659,11 +669,23 @@ nd_snap_public_estimate = {
 # without running the effects above it: a `var:` just "set" would still read
 # the old value, and the authority tooltip would hide the one warning it
 # exists to show. `always = yes/no` reads the same in the preview and the run.
-nd_set_doctrine_1 = { nd_set_doctrine = { D = 1 OFFENSIVE = no LEAVES_NFU = no } }
+# The government's own pledge strengthens the nuclear taboo (weighted by our
+# rank); the law holding us to it does not — nd_bind_doctrine_1 below.
+nd_set_doctrine_1 = {
+	nd_set_doctrine = { D = 1 OFFENSIVE = no LEAVES_NFU = no }
+	hidden_effect = {
+		nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_nfu }
+	}
+}
 nd_set_doctrine_2 = { nd_set_doctrine = { D = 2 OFFENSIVE = no LEAVES_NFU = yes } }
 nd_set_doctrine_3 = { nd_set_doctrine = { D = 3 OFFENSIVE = no LEAVES_NFU = yes } }
 nd_set_doctrine_4 = { nd_set_doctrine = { D = 4 OFFENSIVE = yes LEAVES_NFU = yes } }
 nd_set_doctrine_5 = { nd_set_doctrine = { D = 5 OFFENSIVE = yes LEAVES_NFU = yes } }
+
+# The No-First-Strike amendment holding an armed country at doctrine 1
+# (nd_weekly_update): the law's act, not the government's, so the nuclear
+# taboo is not credited.
+nd_bind_doctrine_1 = { nd_set_doctrine = { D = 1 OFFENSIVE = no LEAVES_NFU = no } }
 
 # D = 1..5; OFFENSIVE / LEAVES_NFU = yes | no. Call through the wrappers.
 nd_set_doctrine = {
@@ -692,9 +714,11 @@ nd_set_doctrine = {
 	# tooltip preview.
 	if = {
 		limit = { always = $OFFENSIVE$ }
-		change_infamy = 5
+		change_infamy = nd_taboo_infamy_threat
 		custom_tooltip = nd_tt_doctrine_alarms_rivals
 		hidden_effect = {
+			# ...and wears the nuclear taboo down, by our rank.
+			nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_offensive_doctrine }
 			every_country = {
 				limit = {
 					NOT = { this = scope:nd_sd_self }
@@ -796,6 +820,10 @@ nd_break_pledge_effects = {
 		set_variable = { name = nd_pledge_broken_months value = nd_pledge_broken_months_value }
 	}
 	change_infamy = $INFAMY$
+	# A broken promise wears the nuclear taboo down, by the breaker's rank.
+	hidden_effect = {
+		nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_repudiation }
+	}
 	add_modifier = {
 		name = nd_pledge_broken_mod
 		years = 10
@@ -951,6 +979,7 @@ nd_ig_store_opinion = {
 	set_variable = { name = nd_ig_term_authority value = nd_ig_term_authority_value }
 	set_variable = { name = nd_ig_term_strain value = nd_ig_term_strain_value }
 	set_variable = { name = nd_ig_term_business value = nd_ig_term_business_value }
+	set_variable = { name = nd_ig_term_possession value = nd_ig_term_possession_value }
 	set_variable = { name = nd_ig_stance value = nd_ig_stance_value }
 }
 
@@ -986,6 +1015,10 @@ nd_ig_clear_opinion = {
 	if = {
 		limit = { has_variable = nd_ig_term_business }
 		remove_variable = nd_ig_term_business
+	}
+	if = {
+		limit = { has_variable = nd_ig_term_possession }
+		remove_variable = nd_ig_term_possession
 	}
 	if = {
 		limit = { has_variable = nd_ig_stance }
@@ -1130,6 +1163,8 @@ nd_ai_review_posture = {
 						limit = { country_is_democratic = yes }
 						add = 10
 					}
+					# The nuclear taboo: up to +15 above 50.
+					add = nd_taboo_ai_nfu_weight
 					if = {
 						limit = { nd_regime_is_militarist = yes }
 						multiply = 0
@@ -1168,6 +1203,10 @@ nd_ai_review_posture = {
 						limit = { ruler_is_cautious = yes }
 						add = -10
 					}
+					if = {
+						limit = { nd_taboo_value >= nd_taboo_ai_survival_only_line }
+						add = nd_taboo_ai_flexible_penalty
+					}
 				}
 				if = {
 					limit = { NOT = { var:nd_doctrine = 3 } }
@@ -1184,6 +1223,16 @@ nd_ai_review_posture = {
 					if = {
 						limit = { ruler_is_aggressive = yes }
 						add = 10
+					}
+					# The nuclear taboo: tempting where the bomb is ordinary,
+					# damped where it is unthinkable.
+					if = {
+						limit = { nd_taboo_value < nd_taboo_ai_loosen_line }
+						add = nd_taboo_ai_offensive_bonus
+					}
+					if = {
+						limit = { nd_taboo_value >= nd_taboo_ai_survival_only_line }
+						multiply = nd_taboo_ai_offensive_damping
 					}
 					if = {
 						limit = { ruler_is_cautious = yes }
@@ -1210,6 +1259,14 @@ nd_ai_review_posture = {
 							limit = { country_is_fascist = yes }
 							add = 10
 						}
+					}
+					if = {
+						limit = { nd_taboo_value < nd_taboo_ai_loosen_line }
+						add = nd_taboo_ai_offensive_bonus
+					}
+					if = {
+						limit = { nd_taboo_value >= nd_taboo_ai_survival_only_line }
+						multiply = nd_taboo_ai_offensive_damping
 					}
 					if = {
 						limit = { ruler_is_cautious = yes }
@@ -1378,6 +1435,11 @@ nd_ai_review_posture = {
 	set_variable = { name = nd_safeguards value = var:nd_ai_want_safeguards }
 	set_variable = { name = nd_hardening value = var:nd_ai_want_hardening }
 	nd_apply_posture_modifiers = yes
+	# ---- arsenal size and disarmament (the nuclear taboo) -------------------
+	# Decided by nd_taboo_ai_review_arsenal from the entry's monthly taboo
+	# half, later in this same pulse, which refreshes the programme hold once
+	# after it.
+	set_variable = nd_taboo_ai_arsenal_due
 }
 
 # ----------------------------------------------------------------------------
@@ -1678,7 +1740,28 @@ nd_tactical_strike_resolve = {
 	random_list = {
 		0 = {
 			modifier = nuclear_strike_success_chance
-			change_infamy = 10
+			# The nuclear taboo (nuclear_taboo_effects.txt); this country is
+			# the attacker and at war with the target.
+			if = {
+				limit = { nd_was_struck_by = { ENEMY = scope:target_country } }
+				nd_taboo_note_use = { KIND = tactical RETALIATION = yes }
+			}
+			else = {
+				change_infamy = nd_taboo_infamy_tactical
+				# Hidden: an every_* renders every member in the action's
+				# preview, whose own line (nd_taboo_tt_tactical_first_use)
+				# already names the figure.
+				hidden_effect = {
+					every_country = {
+						limit = {
+							NOT = { THIS = scope:attacking_country }
+							NOT = { THIS = scope:target_country }
+						}
+						change_relations = { country = scope:attacking_country value = nd_taboo_world_relations_tactical }
+					}
+				}
+				nd_taboo_note_use = { KIND = tactical RETALIATION = no }
+			}
 			scope:target_state = {
 				nuclear_tactical_strike = yes
 			}
