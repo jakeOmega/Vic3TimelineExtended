@@ -1246,7 +1246,18 @@ war_propaganda_on_action = {
 # year's while the private queue has levels (too_much_private_construction_script_value,
 # owner's ruling), so Overinvestment is re-added until its own exit holds: the
 # pool at or under GDP. The year after it lifts, the stay test and the normal
-# ramp take over. (Before 2026-09-27 the value fell /1.2 in each Overinvestment
+# ramp take over. Limits of the hold:
+# - It freezes growth as well as decay: with gross income cut the overflow
+#   reads -base, so the need can't raise the value during Overinvestment.
+#   When the queue cap limits the drain, the frozen value is the limit (the
+#   PR #514 toy model's 2M/week country runs 13 straight years at 1145).
+# - Episodes can be long, even indefinite, when inflows that aren't pop
+#   contributions outpace a capped drain: the cooperative boom and frenzy
+#   phases (country_weekly_investment_pool_mult in
+#   financial_cycle_phase_boom_coop and _frenzy_coop), government-dividend
+#   reinvestment, or a pool left far above GDP by a GDP collapse.
+# - One queued private level is enough to keep it.
+# (Before 2026-09-27 the value fell /1.2 in each Overinvestment
 # year, so while the pool stayed above GDP it hovered around 1000, with
 # Overinvestment every other year.) Meanwhile the private queue keeps spending
 # the pool: under direct construction through the law's allocation, under Free
