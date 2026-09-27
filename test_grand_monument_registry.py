@@ -877,6 +877,7 @@ class ContestTests(unittest.TestCase):
         for var in ["gm_teardown_ledger", "gm_vanity_ledger"] + [f"gm_ig_ledger_{ig}" for ig in IGS]:
             self.assertIn(f"set_variable = {{ name = {var} value = 0 }}", zero)
         monthly = squash(block(self.e, "gm_country_monthly"))
+        self.assertIn("gm_zero_ledgers = yes", monthly)
         self.assertLess(monthly.find("gm_zero_ledgers = yes"), monthly.find("remove_variable = gm_active"))
 
     def test_gm_active_set_on_refresh_when_monument_seen(self):

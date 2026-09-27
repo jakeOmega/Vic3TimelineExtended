@@ -345,6 +345,22 @@ gm_init_ledgers = {
 	gm_init_ledger = { VAR = gm_ig_ledger_trade_unions }
 }
 
+# Country scope. Zero every ledger (never remove: they back multipliers).
+# Called when the pulse is about to stop (gm_country_monthly), so a ledger
+# does not freeze un-snapped once the country stops being refreshed.
+gm_zero_ledgers = {
+	set_variable = { name = gm_teardown_ledger value = 0 }
+	set_variable = { name = gm_vanity_ledger value = 0 }
+	set_variable = { name = gm_ig_ledger_armed_forces value = 0 }
+	set_variable = { name = gm_ig_ledger_devout value = 0 }
+	set_variable = { name = gm_ig_ledger_industrialists value = 0 }
+	set_variable = { name = gm_ig_ledger_intelligentsia value = 0 }
+	set_variable = { name = gm_ig_ledger_landowners value = 0 }
+	set_variable = { name = gm_ig_ledger_petty_bourgeoisie value = 0 }
+	set_variable = { name = gm_ig_ledger_rural_folk value = 0 }
+	set_variable = { name = gm_ig_ledger_trade_unions value = 0 }
+}
+
 gm_decay = {
 	change_variable = { name = $VAR$ multiply = $RATE$ }
 	if = {
@@ -605,22 +621,6 @@ gm_add_national_signed = {
 		}
 		add_modifier = { name = $NAME$ multiplier = root.var:$VAR$ }
 	}
-}
-
-# Country scope. Zero every ledger (never remove: they back multipliers).
-# Called when the pulse is about to stop (gm_country_monthly), so a ledger
-# does not freeze un-snapped once the country stops being refreshed.
-gm_zero_ledgers = {
-	set_variable = { name = gm_teardown_ledger value = 0 }
-	set_variable = { name = gm_vanity_ledger value = 0 }
-	set_variable = { name = gm_ig_ledger_armed_forces value = 0 }
-	set_variable = { name = gm_ig_ledger_devout value = 0 }
-	set_variable = { name = gm_ig_ledger_industrialists value = 0 }
-	set_variable = { name = gm_ig_ledger_intelligentsia value = 0 }
-	set_variable = { name = gm_ig_ledger_landowners value = 0 }
-	set_variable = { name = gm_ig_ledger_petty_bourgeoisie value = 0 }
-	set_variable = { name = gm_ig_ledger_rural_folk value = 0 }
-	set_variable = { name = gm_ig_ledger_trade_unions value = 0 }
 }
 
 # ---- Contests (§4) -------------------------------------------------------------
