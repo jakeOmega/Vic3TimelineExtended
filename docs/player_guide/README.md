@@ -22,7 +22,7 @@ chapter by chapter:
 15. [The space race](15-space.md)
 16. [Quick reference](16-reference.md)
 17. [Appendix: social movement details](17-appendix-social-movements.md)
-18. [Appendix: resettlement events](18-appendix-resettlement-events.md)
+18. [Appendix: events](18-appendix-events.md)
 
 ## Editing the guide
 

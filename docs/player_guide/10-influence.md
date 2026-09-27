@@ -133,31 +133,16 @@ out.
 
 ### Cultural hegemony events
 
-Rising powers get opportunities as their share climbs, from Soft Power Dividend
-at 8% to Media Dominance and Lingua Franca at 20%, mostly trading authority or
-prestige for pull, research or migration. Two milestones fire once: The World is
-Watching when you first pass 10%, and The Cultural Hegemon when you first pass
-25% while ranked first.
-
-Trailing countries under the benchmark get events such as Foreign Cultural
-Infiltration, Brain Drain and Foreign Ideological Influence. Most let you
-embrace the foreign influence (research, relations, often a push toward the
-hegemon's model) or resist it (authority and interest group approval, often at a
-cost in relations, legitimacy or pull). The harshest is Hegemonic Convergence:
-when the hegemon holds at least 25% and your share is at most a tenth of its
-share, you may be pressed to adopt one of its laws. Yielding enacts the law at
-once, with radicals, a decaying −10 legitimacy and +10 relations with the
-hegemon. Refusing costs 5 infamy, −10 relations and a decaying modifier with −5
-legitimacy and worse turmoil effects.
-
-Four events follow the political models:
-
-| Event | Who gets it | Choices |
-|---|---|---|
-| Our Model Abroad | The hegemon, when its model holds 40% of world culture across three or more countries | Champion it (prestige and a stronger push abroad, paid in influence and relations) or lead by example (legitimacy). |
-| Between Two Suns | A trailing country when the top two cultural powers run different models | Lean to either power (relations, research, a push toward its model) or stand apart (legitimacy). |
-| The Standard Falls | Countries still running a model the leading power has abandoned | Hold course (legitimacy falls, governing interest groups approve) or adapt (relations with the new leader, a push toward its model). |
-| Across the Border | Neighbors of a country that has just adopted the hegemon's model | Close the border to its ideas (costs authority and relations) or let them travel (relations, a push toward the model). |
+Rising powers get opportunities as their share climbs past 8%, mostly trading
+authority or prestige for pull, research or migration, and two milestones fire
+once, at 10% and at 25% while ranked first. Trailing countries under the
+benchmark get events of their own. Most let you embrace the foreign influence
+(research, relations, often a push toward the hegemon's model) or resist it
+(authority and interest group approval, often at a cost in relations,
+legitimacy or pull). The harshest, Hegemonic Convergence, can press you to adopt
+one of the hegemon's laws once it holds 25% and your share is a tenth of its
+share or less. Four more events follow the political models. All of them are in
+[Cultural hegemony event list](18-appendix-events.md#cultural-hegemony-event-list).
 
 ### How the AI competes for culture
 
@@ -404,7 +389,7 @@ A war with the target does not end a peacetime operation.
 
 With the Covert Warfare rule off, a few international-relations events such as
 The Shadow War and The Spy Who Was Caught stand in for the operations; see
-[Diplomacy](08-diplomacy.md).
+[International relations events](08-diplomacy.md#international-relations-events).
 
 ### How the AI runs covert operations
 

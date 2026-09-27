@@ -210,66 +210,29 @@ finished empire, and the Imperial Federation and Mandate System modifiers (see
 ## Decolonization events
 
 Most decolonization events fire for the colonial power while the journal entry
-runs. Repressive options usually add Colonial Crackdown, which strengthens your
-garrison but costs prestige and bureaucracy and gives the Intelligentsia more
-clout; a war fought while it lasts can bring on the Conscription Crisis.
-Conciliatory options add Decolonization Negotiations or free the colony. With
-the Neocolonialism law, four events offer independence on your terms and give
-you Neocolonial Economic Concessions. A colonial subject freed this way leaves
-with Neocolonial Dependency, and in The Price of Empire a 25-year treaty also
-gives you investment rights and a trade privilege in the new country, whose
-upkeep you pay.
-
-| Event | When it can fire |
-|---|---|
-| Winds of Change | A colonial subject reaches 50 liberty desire. |
-| The World is Watching (not the cultural hegemony milestone of the same name) | An anti-colonial great power presses you over a colonial subject (needs Intergovernmental Organizations). |
-| The Price of Empire | A colonial subject at 75 liberty desire rises in armed revolt (needs Civil Rights Movement). |
-| Trouble in (the colony's name) | A colony has a severely unaccepted population. |
-| Blood in the Colonies | Armed resistance in a colony, once two or more colonies are badly unaccepted. |
-| Judged by New Standards | An anti-colonial great power condemns you in international forums. |
-| Powerful Friends | A pro-colonial great power offers its backing. |
-| These Dark Satanic Mills of Empire, The Intelligentsia Petition | An Anti-Colonialist leads the Intelligentsia. |
-| The Treasury Says No | Your debt is high while you hold colonies. |
-| Conscription Crisis | You are at war against a rebelling colonial subject or culturally distinct secessionists, or at war while Colonial Crackdown runs. |
-| The Universities Speak | The entry has run for ten years and a powerful Intelligentsia is out of government. |
-| The Veterans' Protest | Your garrison has run for more than three years. |
+runs: as a subject's liberty desire climbs, when great powers condemn or back
+you, when colonies resist, and as the cost of empire tells at home. Repressive
+options usually add Colonial Crackdown, which strengthens your garrison but
+costs prestige and bureaucracy and gives the Intelligentsia more clout; a war
+fought while it lasts can bring on the Conscription Crisis. Conciliatory options
+add Decolonization Negotiations or free the colony. With the Neocolonialism law,
+four events offer independence on your terms and give you Neocolonial Economic
+Concessions. Each event and what triggers it is in [Colonial power event
+list](18-appendix-events.md#colonial-power-event-list).
 
 ### Former colonies
 
 Every colony freed through this system, through an event, or through the base
 game's release actions is marked as a former colony of its old ruler. While that
 ruler still runs the Colonial Empire entry and is at least a major power, the
-former colony may take the initiative. It can propose closer ties (only to an
-old ruler with no colonial subjects; a dominion or other subject doesn't stand
-in the way); if the old ruler accepts in Old Ties, New Terms, relations improve
-by 30 and the old ruler gains Post-Colonial Partnership. It can also demand
-reparations of a tenth of the old ruler's yearly revenue, capped at a tenth of
-its own GDP. In Debts of Empire the old ruler either pays, taking Colonial
-Reparations Paid (a ten-year loss of prestige, influence and bureaucracy) for 40
-better relations, or refuses and loses 20.
-
-For its first 20 years a former colony also faces the questions of a young
-state. These events need only that some country in the world has researched
-Decolonization; the former colony doesn't need the technology itself.
-
-| Event | Who gets it | Choices |
-|---|---|---|
-| Year One | A former colony of minor rank or below | Schools and roads, foreign capital (better relations with the old ruler) or self-reliance (worse relations) |
-| The Partition Question | A former colony bordering a newly freed country of shared heritage, or a colonial power that rules people of its heritage | Press territorial claims, propose a fraternal federation (the neighbor may accept a five-year truce in A Fraternal Proposal), or accept the borders |
-| Whose Country Is This? | A former colony bordering another newly freed country | Demand new borders, ask for mediation, or build within them (the neighbor may accept a five-year truce in The Line on the Map) |
-| The Strongman's Promise | A former colony with a revolutionary movement, primary cultures below half its population, or radical soldiers | Military rule, democracy or a one-party state |
-| The Non-Aligned Path | A former colony while one great power condemns colonialism and another backs it | Non-alignment, or side with either power |
-| Whose Language Do We Dream In? | A former colony with no homeland of its own cultures, whose capital is the homeland of a culture living there | Make the capital's native cultures your primary cultures, or keep the colonial-era identity |
-
-The Nationalization Question reaches every country formed by a release or a
-collapse, a week after it forms, and any subject that becomes independent once
-the era has begun, whenever a foreign country of minor rank or above owns more
-than 5% of its GDP. It can seize everything, nationalize strategic sectors or
-protect foreign property. If it seizes everything, a great-power old ruler still
-running the Colonial Empire entry may face The Crisis: send the fleet, impose
-sanctions or accept. Sending the fleet brings Gunboats in the Harbor to every
-other great power, which can condemn the intervention, back it or stay out.
+former colony may propose closer ties or demand reparations of a tenth of the
+old ruler's yearly revenue, capped at a tenth of its own GDP. For its first 20
+years it also faces the questions of a young state: development, borders,
+government, alignment and identity. A newly independent country in which one
+foreign country owns more than 5% of its GDP faces the Nationalization
+Question, and seizing everything can bring a great-power old ruler's fleet. The
+events are in [Former colony event
+list](18-appendix-events.md#former-colony-event-list).
 
 ## Colonial collapse of tiny countries
 

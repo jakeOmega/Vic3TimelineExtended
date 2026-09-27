@@ -288,24 +288,13 @@ research speed, +10% influence and +15% cultural pull.
 
 Besides the choice, setback and completion events above, the space race has
 yearly events for programs under way. Some are hard science problems, such as
-radiation, the rocket equation, communication delay, closed-loop life support,
-solar storms and orbital debris; others are discoveries, such as water on Mars
-or lunar helium-3. Their options add progress to the milestones they concern,
-usually a few points and never more than 30, and some also bring loyalists,
-radicals or better relations. A handful connect the space race to other systems.
-
-| Event | When it can fire | What it offers |
-|---|---|---|
-| The Private Sector Steps Up | You have the SpaceX company and a milestone under way | 3 to 15 points of progress on every milestone under way, more the more you hand to the company |
-| Tickets to the Stars | You have reached orbit and own a Tourism Industry | Space Tourism Revenue (+5% tourism output, fading over ten years), a research bonus instead, or both for two and a half years |
-| A Station for All Nations | You are a UN member between Orbital Flight and the Moon Landing, and another member has reached orbit | 5 points of progress, and a ten-year, fading bonus from either a joint station (research, prestige, influence, better relations with spacefaring members) or a national one (research, prestige) |
-| Off-World Industry Meets the Space Program | You are colonizing and own an Extraplanetary Base | 5 or 15 points of colonization progress; full integration adds research and prestige, fading over ten years |
-| The Elevator Advantage | You own a Space Elevator and are building the Moon Base, landing on Mars or colonizing | 8 or 12 points of progress on those missions |
-
-The Space Elevator and the Extraplanetary Base are covered in [The extended
-timeline](02-timeline.md), tourism in [States and population](07-states.md), and
-International Space Cooperation and its agency in [The United
-Nations](09-united-nations.md).
+radiation or orbital debris; others are discoveries, such as water on Mars.
+Their options add progress to the milestones they concern, usually a few points
+and never more than 30, and some also bring loyalists, radicals or better
+relations. A handful tie the race to other systems: the SpaceX company, a
+Tourism Industry, the United Nations, the Extraplanetary Base and the Space
+Elevator. They are listed in [Space race event
+list](18-appendix-events.md#space-race-event-list).
 
 ## How the AI races
 

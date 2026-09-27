@@ -189,44 +189,19 @@ climate accords ([The United Nations](09-united-nations.md)).
 
 ## Climate events
 
-Two kinds of event come with warming. The threshold events fire once for every
-country as the world crosses each mark, and the recovery events fire once if it
-falls back below a mark it had passed:
-
-| Event | When |
-|---|---|
-| The Mercury Rises | Warming reaches 0.5 °C |
-| The Sweltering Season | 1.0 °C |
-| When the Levees Break | 2.0 °C |
-| The Reckoning | 3.0 °C |
-| Off the Brink, The Heat Recedes, A Cooler Decade, Below the Line | Warming falls back below 3.0, 2.0, 1.0 and 0.5 °C |
-| Near Baseline | Warming falls back below 0.1 °C, after having reached 0.5 °C |
-
-Each month every country also has a small chance of one recurring event whose
-conditions it meets. Their choices trade money, authority and interest group
-approval against radicals, mortality and throughput. Three have an extra option
-for a country that funds its Ministry of the Environment to level 3, and The
-Fever's March has one for the Ministry of Consumer Protection at level 3.
-
-| Event | Conditions |
-|---|---|
-| These Dark Satanic Chimneys (a pollution scandal) | Coal Mines or Oil Rigs of level 3 or more; fires even with the rule off |
-| A Greener Shade of Politics | 0.5 °C and Pollution Control |
-| The Uprooted (climate refugees) | 1.0 °C |
-| The Tide Comes In (coastal flooding) | 1.0 °C and a coastal state with a Port |
-| The Congress of Smoke (a climate summit) | 1.0 °C, a major or great power with Pollution Control, and no United Nations |
-| The Barren Harvest | 2.0 °C, any grain farm or livestock ranch, and a Ministry of the Environment below level 5 |
-| The Wells Run Dry | 2.0 °C |
-| The Fever's March | 2.0 °C and a Ministry of Consumer Protection below level 5 |
-| The Great Thaw | 2.5 °C and a coast |
-| Green and Gold | 3.0 °C, Clean Energy Technologies and industrialists in government |
-| Quiet Power | The Environmental Movement technology and a Renewable Energy Plant |
-| Friends in High Places | A Carbon Tax, Emission Standards or Fossil-Fuel Divestment, and Coal Mines or Oil Rigs of level 5 or more |
-
-The Tide Comes In can leave you with Coastal Flooding or Coastal Population
-Relocation; while either lasts, a Settlement Authority on Managed Retreat can
-move people off your coasts ([Resettlement
-programs](07-states.md#resettlement-programs)).
+Two kinds of event come with warming. Threshold events fire once for every
+country as the world crosses 0.5, 1, 2 and 3 °C, and recovery events once if it
+falls back below a mark it had passed. Each month every country also has a
+small chance of one recurring event whose conditions it meets. Most need a level
+of warming, and one, a pollution scandal at large coal mines or oil rigs, fires
+even with the Global Warming rule off. Their choices trade money, authority and
+interest group approval against radicals, mortality and throughput, and four
+have an extra option for a Ministry of the Environment or of Consumer
+Protection funded to level 3. The Tide Comes In can leave you with Coastal
+Flooding or Coastal Population Relocation; while either lasts, a Settlement
+Authority on Managed Retreat can move people off your coasts ([Resettlement
+programs](07-states.md#resettlement-programs)). Both lists are in [Climate
+event list](18-appendix-events.md#climate-event-list).
 
 ## State pollution
 

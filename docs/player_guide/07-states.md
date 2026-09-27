@@ -367,8 +367,8 @@ coercive programs draw the harshest ones: reform campaigns, famine in Special
 Settlements, and after five years a petition from the settlers to go home. Most
 events offer a choice between paying (money, authority or fewer settlers) and
 letting the settlers or their neighbors bear it (deaths, radicals, lost
-throughput or prestige). Every event and option is listed in [Appendix:
-resettlement events](18-appendix-resettlement-events.md).
+throughput or prestige). Every event and option is listed in [Resettlement
+event list](18-appendix-events.md#resettlement-event-list).
 
 ### Resettlement and the AI
 

@@ -166,34 +166,22 @@ countries.
 
 Major and great powers roll monthly for a pool of Cold War events. The more of
 them a country qualifies for, the likelier one fires, up to about one chance in
-ten a month.
-
-| Event | When it can happen | What you decide |
-|---|---|---|
-| Plans on the Table | Radar; a rival that is a major power or greater | Build up against the rival, or shelve the plans. |
-| The Shadow War | Covert Warfare off; Intergovernmental Organizations; a rival that is a major power or greater and has subjects | Fund an insurgency in the rival's sphere, or stay out. |
-| International Summit | Intergovernmental Organizations; great power | Host (+10 relations with every other great power), attend (+5) or boycott (−5). |
-| The War of Words | Covert Warfare off; Mass Media; a rival that is a major power or greater | Open a propaganda offensive against the rival, or not. |
-| The Iron Purse | Keynesian Economics; a rival that is a major power or greater | Impose an embargo (−30 relations), or keep trading. |
-| An Agent in Place | Covert Warfare off; Cryptography; a rival that is a major power or greater | Plant an agent in the rival's defense ministry, or not. |
-| The Heavens Beckon | Space Race off; Space Exploration; great power | Celebrate a space milestone, or spend on the people. |
-| Nuclear Brinkmanship | You and an opponent in a play both hold nuclear weapons, outside a nuclear crisis | Stand firm, open back channels, or mobilize. |
-
-With Covert Warfare on, its operations replace the proxy war, propaganda and
+ten a month. Most offer a move against a rival of major power rank or greater (a
+buildup, a proxy insurgency, propaganda, an embargo or a planted agent) or
+restraint. The others are a great-power summit, a space milestone to celebrate,
+and Nuclear Brinkmanship when both sides of a play hold nuclear weapons. With
+Covert Warfare on, its operations replace the proxy war, propaganda and
 espionage events (see [The covert
-operations](10-influence.md#the-covert-operations)).
+operations](10-influence.md#the-covert-operations)). Each event, what it needs
+and its choices are in [International relations event
+list](18-appendix-events.md#international-relations-event-list).
 
 ### Rival-choice event chains
 
 When an event says a rival has acted against you, the rival chose to. Plans on
 the Table, The War of Words and An Agent in Place go to the rival first, and you
-hear only if it acts: "The Gathering Storm" (an event, not the World War journal
-entry) if it arms, "Hearts and Minds" if it broadcasts, and "The Spy Who Was
-Caught" about half the time it plants an agent. Your answer goes back to it:
-matching a buildup or a campaign sends it a follow-up, and a caught spy can be
-tried, traded quietly or answered by expelling its diplomats. Your own choices
-in The Shadow War, The Iron Purse and Nuclear Brinkmanship reach the other
-country the same way.
+hear only if it acts; your answer goes back to it. The chains are in
+[Rival-choice chain list](18-appendix-events.md#rival-choice-chain-list).
 
 ## Irredentism and reunification
 
@@ -224,13 +212,11 @@ German, Italian or Chinese unification entries.
 
 ### Irredentist events
 
-"The Diaspora Calls" fires on a country with a candidate. You can stoke the
-movement (a claim on another homeland state, 1 infamy, −10 relations), fund
-cultural ties (+15 relations and a five-year bond that makes a later union
-likelier), demand a state back, or wait. A demand gives the target a choice:
-cede the state, or refuse and face your diplomatic play to take it. "An
-Opportunity for Union" fires when relations with a candidate are warm and lets
-you propose a union.
+Two events come with a reunification candidate. "The Diaspora Calls" offers a
+claim, cultural ties that make a later union likelier, or a demand that the
+target cede a state or face your diplomatic play. "An Opportunity for Union"
+comes when relations are warm. Their options and costs are in [Irredentist event
+list](18-appendix-events.md#irredentist-event-list).
 
 ### A bloc leader's blessing
 
@@ -335,8 +321,9 @@ Several principles give your bloc an article, action or decree.
 ### Other power bloc changes
 
 A bloc holding unspent mandates gains cohesion from a Mandate Reserve, set once
-a year: +3 per unspent mandate, up to +12. New bloc names include the Global
-Accord for a Diplomatic Framework and the Anglosphere for a cultural bloc.
+a year: +3 per unspent mandate, up to +12. Example new bloc names include the
+Global Accord for a Diplomatic Framework and the Anglosphere for a cultural
+bloc.
 
 With Intergovernmental Organizations, a bloc leader can build one Power Bloc
 Headquarters, a government building with a very high construction cost. What it
@@ -350,8 +337,9 @@ to every identity. It needs a Subjugation Strength of at least 1.0, which means
 roughly that your prestige is twenty times the target's: ten times if your bloc
 is a Sovereign Empire, and about twelve times when your identity's bond applies
 (shared religion, governance principle or culture, economic dependence, or an
-army five times the target's). Its infamy grows with the target's population up
-to 25, halved for a Sovereign Empire.
+army five times the target's). Its infamy grows with the target's population, up
+to 25; a Sovereign Empire pays half as much, so it reaches that cap only against
+far more populous targets.
 
 ## Formable countries
 

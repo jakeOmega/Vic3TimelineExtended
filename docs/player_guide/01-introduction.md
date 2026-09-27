@@ -112,7 +112,7 @@ The chapters follow the game's own areas rather than the order systems appear.
 | [The space race](15-space.md) | The milestones from suborbital flight to colonizing the solar system. |
 | [Quick reference](16-reference.md) | When each system appears, the journal entries at a glance, and a glossary. |
 | [Appendix: social movement details](17-appendix-social-movements.md) | The numbers and event lists behind the social movements chapter. |
-| [Appendix: resettlement events](18-appendix-resettlement-events.md) | Every Settlement Authority event, with both choices and their effects. |
+| [Appendix: events](18-appendix-events.md) | The event lists behind the chapters, from resettlement to the space race, with when each event fires and what its options do. |
 
 ## Reporting problems
 

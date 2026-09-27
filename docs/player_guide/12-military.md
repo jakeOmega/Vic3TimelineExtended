@@ -343,13 +343,11 @@ The AI rearms when it is fascist or authoritarian and tension is high; AI
 democracies appease between 30 and 70. An AI great power that stays out of a
 world war leans strongly toward providing Lend-Lease.
 
-Leadup events come at random. In Ideological Demands you decide whether to press
-an opposed great-power rival to renounce its system; if you do, it answers in
-Ideological Confrontation. Border Incident, with an opposed rival on your
-border, lets you demand an apology, downplay it, or mobilize (Rearmament for
-five years). Diplomatic Crisis fires when an opposed rival opens a play against
-a smaller country in your power bloc or under your protection: guarantee its
-independence for five years, abandon it, or mobilize in its defense.
+Leadup events come at random, each over an opposed great-power rival: demands
+that it renounce its system, a border incident, or a diplomatic crisis when it
+opens a play against a smaller country in your power bloc or under your
+protection. Their options are in [World War event
+list](18-appendix-events.md#world-war-event-list).
 
 ### The brink of war
 
@@ -383,12 +381,10 @@ casualties and a further −0.5 war support a week. The war support breakdown
 shows the two weekly losses as Home front strain (World War) and Prolonged World
 War.
 
-Wartime events include Home Front Rally, Strategic Bombing (once an enemy has
-Bombing Aircraft; air defense costs a spell of Home Front Strain) and Resistance
-Movement (after a year of war, when the enemy holds 5% of your land). From two
-years, War Weariness asks whether to push on or seek terms, and Stalemate on the
-Front, when your war goal has stalled after 24 months and ten large battles,
-offers +5 war support to hold the line or −10 to open armistice talks.
+Wartime events test the home front, from rallies and strategic bombing to
+resistance in occupied land, and from two years on they ask whether to push on
+or seek terms. They are listed in [World War event
+list](18-appendix-events.md#world-war-event-list).
 
 Great powers that stayed out receive The Hour of Decision. Entering joins the
 defender's side with Fresh Forces for five years (+20% army offense, +10%
@@ -431,10 +427,8 @@ home and keeping the army ready.
 ### The post-war years
 
 The entry stays open for 36 months after peace, and three events can reach great
-powers. War Crimes Tribunal lets you prosecute (Liberation Hero), move on, or
-bury the evidence, which brings War Crimes Exposed (−30% prestige for ten
-years). The Post-War Order lets a victor take a further spell of Victor's Peace,
-and any power that didn't lose champion self-determination (Liberation Hero) or
-turn to recovery. The New Rivalry comes when a great power you fought beside now
-holds an opposed ideology; either answer closes the entry at once. Otherwise it
-completes after the 36 months.
+powers: a war crimes tribunal, a choice about the post-war order, and The New
+Rivalry, when a great power you fought beside now holds an opposed ideology.
+Either answer to The New Rivalry closes the entry at once. Otherwise it
+completes after the 36 months. The events are in [World War event
+list](18-appendix-events.md#world-war-event-list).
