@@ -336,7 +336,7 @@ civil_rights_support_bar = {
 		}
 
 		# Cooptation: short bump (handled by adding cr_cooptation_expired modifier
-		# from the JE on_monthly_pulse once cr_cooptation_months > 12)
+		# from the JE on_monthly_pulse once cr_cooptation_months >= 12)
 		if = {
 			limit = {
 				owner = {

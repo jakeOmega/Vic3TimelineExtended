@@ -43,3 +43,6 @@ generate_images.log
 .claude/*
 !.claude/skills/
 scratch
+
+# Player guide build intermediate (scripts/build_player_guide.py)
+docs/player_guide/.player_guide.typ

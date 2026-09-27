@@ -1,17 +1,52 @@
 ﻿# Colonial Collapse Effects
-# When the decolonization era arrives, tiny non-player countries
-# that lack population collapse: either reverting to decentralized
-# (uncolonized) land or being absorbed by a culturally similar neighbor.
+# When the decolonization era arrives, any tiny, poor AI country (not only a
+# former colony; owner ruling, 2026-09-26) collapses: it is absorbed by an AI
+# neighbour sharing its heritage or, with none, reverts to decentralized
+# (uncolonized) land.
 #
 # Fired from colonial_collapse_on_action (on_yearly_pulse_country) — each
 # country runs the limit block against itself on its own yearly pulse and
 # self-collapses if it matches the tiny-and-poor + neutral-context criteria.
+#
+# Gates: the decolonization game rule, and the decolonization era — some
+# country in the world has researched the decolonization technology
+# (decol_era_begun; the collapsing country need not have it). The world check
+# is last in the limit, so it only runs for the few countries that pass the
+# cheap filters above it.
+#
+# Until 2026-09 the limit also held `any_civil_war = { always = no }`, added in
+# db166830 ("colonial collapse checks tightened"), two days after the effect
+# first ran, ungated, from 1836. An any_* iterator whose body is `always = no`
+# is false for every country, so the effect never ran again. The owner
+# confirmed on 2026-09-26 that collapse should be live, the decentralize branch
+# included; the civil-war test now uses vanilla's idiom (00_autocracy.txt).
+#
+# Safety, since vanilla itself never sets a country decentralized:
+# - a country freed in the last 20 years is exempt, so a colony just freed
+#   cannot collapse the next year. Two 20-year variables say so:
+#   recently_decolonized, set by decol_mark_former_colony (every country the
+#   mod's releases form, and the make_independent options of .1 and .3) and by
+#   te_construction_market_on_released_independent (vanilla's release as
+#   independent); and decol_collapse_grace, set by on_become_independent (a
+#   subject made independent: an independence war won, an overlord's release)
+#   and by a secession won (te_civil_war_on_secession_end). The second exempts
+#   from collapse only: the post-independence events key on
+#   recently_decolonized alone (owner ruling, 2026-09-26);
+# - a country with subjects never collapses;
+# - a country in a power bloc or bound by a treaty never collapses, by either
+#   branch (colonial_collapse_unattached; owner ruling, 2026-09-26);
+# - the absorber is an AI country, at peace and not a subject;
+# - the decentralize branch also needs no company and no warheads, which a
+#   decentralized country cannot hold. Otherwise it waits and is tested again
+#   next year;
+# - the notice is posted before the annexation, while the collapsing country
+#   still exists for its name.
 
 colonial_collapse_effect = {
-	# Gate: only run if at least one country in the world has decolonization tech
-	# and this country IS one of those (so only one pulse drives the check)
 	if = {
 		limit = {
+			has_game_rule = decolonization_enabled
+
 			# Must be alive and not player-controlled
 			is_country_alive = yes
 			is_player = no
@@ -19,11 +54,23 @@ colonial_collapse_effect = {
 			# Not already decentralized
 			NOT = { is_country_type = decentralized }
 
-			# Not a subject (puppet states are managed by overlords)
+			# Not a subject (puppet states are managed by overlords), and holding
+			# no subjects of its own
 			is_subject = no
+			NOT = { any_subject_or_below = { always = yes } }
 
-			any_civil_war = {
-				always = no
+			# Freed in the last 20 years: exempt (owner rulings, 2026-09-26)
+			NOT = { has_variable = recently_decolonized }
+			NOT = { has_variable = decol_collapse_grace }
+
+			# No power bloc and no treaty in force: neither branch unwinds those
+			colonial_collapse_unattached = yes
+
+			# No civil war about to break out
+			NOT = {
+				any_civil_war = {
+					civil_war_progress >= 0.75
+				}
 			}
 
 			# Population threshold: very small, poor countries collapse
@@ -56,6 +103,9 @@ colonial_collapse_effect = {
 				is_diplomatic_play_undecided_participant = yes
 			}
 			NOT = { is_at_war = yes }
+
+			# The decolonization era has begun somewhere in the world
+			decol_era_begun = yes
 		}
 
 		save_scope_as = collapsing_country
@@ -76,6 +126,14 @@ colonial_collapse_effect = {
 						is_country_alive = yes
 						NOT = { is_country_type = decentralized }
 						NOT = { this = scope:collapsing_country }
+						# At peace, and free to annex (a subject's gains are its overlord's business)
+						is_at_war = no
+						is_subject = no
+						# AI only: a collapse never annexes a country into a player's
+						# (owner ruling, 2026-09-26). With no AI absorber the country
+						# may be decentralized instead, and a player can absorb that
+						# by the voluntary-union action.
+						is_player = no
 						any_primary_culture = {
 							shares_heritage_trait_group_with_any_primary_culture = scope:collapsing_country
 						}
@@ -91,14 +149,8 @@ colonial_collapse_effect = {
 			limit = {
 				exists = scope:absorbing_country
 			}
-			# Culturally similar neighbor absorbs this country
-			scope:absorbing_country = {
-				annex = scope:collapsing_country
-				# An armed country annexed: its arsenal settles to us (nuclear_custody_effects.txt).
-				nd_custody_reconcile_soon = yes
-			}
-
-			# Notify countries with strategic interest
+			# Notify countries with strategic interest, first: the notice names
+			# the collapsing country, which the annexation below removes.
 			every_country = {
 				limit = {
 					is_country_alive = yes
@@ -115,9 +167,26 @@ colonial_collapse_effect = {
 				}
 				post_notification = colonial_territory_absorbed_notice
 			}
+
+			# Culturally similar neighbor absorbs this country
+			scope:absorbing_country = {
+				annex = scope:collapsing_country
+				# An armed country annexed: its arsenal settles to us (nuclear_custody_effects.txt).
+				nd_custody_reconcile_soon = yes
+			}
 		}
-		else = {
-			# No culturally similar neighbor: revert to decentralized (uncolonized)
+		else_if = {
+			# No culturally similar neighbor: revert to decentralized (uncolonized),
+			# but only a country holding nothing a decentralized country cannot.
+			# Vanilla never sets a country decentralized, so each of these is a case
+			# the engine may not unwind cleanly; such a country waits and is tested
+			# next year.
+			# (The power bloc and treaty guard is in the limit above, for both
+			# branches: colonial_collapse_unattached.)
+			limit = {
+				NOT = { any_company = { always = yes } }
+				nd_is_armed = no
+			}
 			set_country_type = decentralized
 
 			# Notify countries with strategic interest

@@ -2,9 +2,18 @@
 # Vic3TimelineExtended — modern (post-vanilla) ship types
 # =============================================================================
 # These ships extend vanilla 1.13's ship roster into the mod's late-era timeline.
-# Each ship is loosely modeled on a vanilla parent type and reuses that parent's
-# modification slots (ship_mod_<parent>_*) so we don't duplicate every armor /
-# guns / propulsion / range tier.
+# Each ship is loosely modeled on a vanilla parent type. Nine carry their own
+# armor / guns / propulsion / range sets (ship_mod_<ship>_* in
+# common/ship_modifications/extra_ship_modifications.txt): asw_destroyer,
+# nuclear_submarine, guided_missile_ship, nuclear_supercarrier, arsenal_ship,
+# expeditionary_sea_base, hypersonic_missile_platform, pulsed_laser_escort and
+# swarm_coordination_vessel. The other ten reuse one of those sets or a vanilla
+# parent's (ship_mod_<parent>_*): stealth_attack_submarine and
+# autonomous_swarm_submarine use nuclear_submarine's, stealth_battlecruiser
+# arsenal_ship's, antimatter_battleship hypersonic_missile_platform's,
+# orbital_support_amphibious_mothership expeditionary_sea_base's;
+# fleet_carrier uses vanilla aircraft_carrier's, networked_air_defense_cruiser
+# light_cruiser's, and the three troop ships troop_ship's.
 #
 # Era / tech mapping (covers all 4 roles every era 6-12 with 2-3 era overlap):
 #   era 6  bombing_aircraft             → fleet_carrier                     (capital)
@@ -69,6 +78,10 @@ ship_type_asw_destroyer = {
 		ship_battle_against_ship_type_submarine_hull_damage_mult = 0.5
 		ship_battle_against_ship_type_nuclear_submarine_accuracy_mult = 1.0
 		ship_battle_against_ship_type_nuclear_submarine_hull_damage_mult = 0.5
+		ship_battle_against_ship_type_stealth_attack_submarine_accuracy_mult = 1.0
+		ship_battle_against_ship_type_stealth_attack_submarine_hull_damage_mult = 0.5
+		ship_battle_against_ship_type_autonomous_swarm_submarine_accuracy_mult = 1.0
+		ship_battle_against_ship_type_autonomous_swarm_submarine_hull_damage_mult = 0.5
 	}
 
 	construction_goods = {
@@ -297,6 +310,7 @@ ship_type_guided_missile_ship = {
 			utility_mod_fire_control_system
 			utility_mod_range_finder
 			utility_mod_advanced_explosives
+			utility_mod_aegis_air_defense
 		}
 	}
 }
@@ -391,6 +405,7 @@ ship_type_nuclear_supercarrier = {
 			utility_mod_dew_point_defense
 			utility_mod_fire_suppression
 			utility_mod_extended_sick_bay
+			utility_mod_underway_replenishment
 		}
 		ship_mod_slot_utility_2 = {
 			utility_mod_drone_complement
@@ -490,6 +505,7 @@ ship_type_arsenal_ship = {
 			utility_mod_fire_control_system
 			utility_mod_range_finder
 			utility_mod_advanced_explosives
+			utility_mod_underway_replenishment
 		}
 		ship_mod_slot_utility_2 = {
 			utility_mod_dew_point_defense
@@ -585,6 +601,7 @@ ship_type_expeditionary_sea_base = {
 			utility_mod_drone_complement
 			utility_mod_extended_sick_bay
 			utility_mod_camouflage
+			utility_mod_helicopter_pad
 		}
 	}
 }
@@ -672,6 +689,7 @@ ship_type_expeditionary_fast_transport = {
 			utility_mod_landing_skiffs
 			utility_mod_camouflage
 			utility_mod_searchlights
+			utility_mod_helicopter_pad
 		}
 	}
 }
@@ -850,6 +868,7 @@ ship_type_pulsed_laser_escort = {
 			utility_mod_fire_control_system
 			utility_mod_searchlights
 			utility_mod_advanced_explosives
+			utility_mod_composite_armor_plating
 		}
 	}
 }
@@ -933,6 +952,7 @@ ship_type_swarm_coordination_vessel = {
 			utility_mod_fire_control_system
 			utility_mod_range_finder
 			utility_mod_searchlights
+			utility_mod_composite_armor_plating
 		}
 		ship_mod_slot_utility_2 = {
 			utility_mod_dew_point_defense
@@ -1032,6 +1052,7 @@ ship_type_fleet_carrier = {
 			utility_mod_torpedo_nets
 			utility_mod_camouflage
 			utility_mod_searchlights
+			utility_mod_underway_replenishment
 		}
 	}
 }
@@ -1123,6 +1144,7 @@ ship_type_amphibious_assault_ship = {
 			utility_mod_extended_sick_bay
 			utility_mod_fire_suppression
 			utility_mod_camouflage
+			utility_mod_helicopter_pad
 		}
 	}
 }
@@ -1214,6 +1236,7 @@ ship_type_marine_assault_ship = {
 			utility_mod_extended_sick_bay
 			utility_mod_camouflage
 			utility_mod_fire_suppression
+			utility_mod_helicopter_pad
 		}
 	}
 }
@@ -1306,6 +1329,7 @@ ship_type_stealth_battlecruiser = {
 			utility_mod_range_finder
 			utility_mod_advanced_explosives
 			utility_mod_camouflage
+			utility_mod_underway_replenishment
 		}
 		ship_mod_slot_utility_2 = {
 			utility_mod_dew_point_defense
@@ -1401,6 +1425,7 @@ ship_type_networked_air_defense_cruiser = {
 			ship_mod_light_cruiser_range_high
 		}
 		ship_mod_slot_utility_1 = {
+			utility_mod_aegis_air_defense
 			utility_mod_fire_control_system
 			utility_mod_range_finder
 			utility_mod_advanced_explosives
@@ -1660,6 +1685,7 @@ ship_type_antimatter_battleship = {
 			utility_mod_fire_control_system
 			utility_mod_range_finder
 			utility_mod_advanced_explosives
+			utility_mod_composite_armor_plating
 		}
 		ship_mod_slot_utility_2 = {
 			utility_mod_dew_point_defense
@@ -1751,6 +1777,7 @@ ship_type_orbital_support_amphibious_mothership = {
 			utility_mod_drone_complement
 			utility_mod_extended_sick_bay
 			utility_mod_camouflage
+			utility_mod_helicopter_pad
 		}
 		ship_mod_slot_utility_2 = {
 			utility_mod_dew_point_defense

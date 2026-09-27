@@ -29,8 +29,8 @@
 ###                        actually applies (sr_progress once an approach is
 ###                        chosen, sr_progress_drift before that)
 ###   setback risk      -> ScriptValue('sr_risk_shown_<m>'), the value the roll
-###                        uses, forced to zero while the post-setback cooldown
-###                        suppresses the roll
+###                        uses, forced to zero while no approach is chosen or
+###                        the post-setback cooldown runs (no roll either way)
 ###   setbacks, colonies-> ScriptValue('sr_setbacks_<m>_value'), guarded reads
 ###   the sentence below -> GetCustom('sr_<m>_pace'), branching on
 ###                        sr_<m>_last_status, whose single derivation site is

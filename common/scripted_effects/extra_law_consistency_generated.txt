@@ -61,6 +61,7 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_oligarchy
 					has_law = law_type:law_organic_regulation
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_algorithmic_governance
 				}
 				has_technology_researched = political_agitation
 			}
@@ -130,6 +131,7 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_oligarchy
 					has_law = law_type:law_organic_regulation
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_algorithmic_governance
 				}
 				has_technology_researched = political_agitation
 			}
@@ -167,6 +169,7 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_oligarchy
 					has_law = law_type:law_organic_regulation
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_algorithmic_governance
 				}
 				has_technology_researched = political_agitation
 			}
@@ -344,6 +347,7 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_oligarchy
 					has_law = law_type:law_organic_regulation
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_algorithmic_governance
 				}
 				has_technology_researched = political_agitation
 			}
@@ -370,6 +374,7 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_oligarchy
 					has_law = law_type:law_organic_regulation
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_algorithmic_governance
 				}
 			}
 		}
@@ -3410,6 +3415,29 @@ te_fix_inconsistent_lawgroup_minority_rights = {
 
 }
 
+te_fix_inconsistent_lawgroup_criminal_justice = {
+	# Active: law_penal_labor_camps  ->  detect violation, cascade replacements
+	if = {
+		limit = {
+			has_law = law_type:law_penal_labor_camps
+			OR = {
+				NOR = {
+					has_law = law_type:law_autocracy
+					has_law = law_type:law_bakufu
+					has_law = law_type:law_neo_absolutism
+					has_law = law_type:law_single_party_state
+					has_law = law_type:law_outlawed_dissent
+				}
+			}
+		}
+		if = {
+			limit = { always = yes }
+			activate_law = law_type:law_punishment_focused_criminal_justice
+		}
+	}
+
+}
+
 te_fix_inconsistent_lawgroup_intellectual_property = {
 	# Active: law_state_intellectual_property  ->  detect violation, cascade replacements
 	if = {
@@ -4762,9 +4790,7 @@ te_fix_inconsistent_lawgroup_ministry_of_refugee_affairs = {
 		limit = {
 			has_law = law_type:law_ministry_of_refugee_affairs
 			OR = {
-				NOR = {
-					has_law = law_type:law_no_migration_controls
-				}
+				has_law = law_type:law_closed_borders
 			}
 		}
 		if = {
@@ -4878,6 +4904,7 @@ te_fix_inconsistent_laws = {
 	te_fix_inconsistent_lawgroup_slavery = yes
 	te_fix_inconsistent_lawgroup_caste_hegemony = yes
 	te_fix_inconsistent_lawgroup_minority_rights = yes
+	te_fix_inconsistent_lawgroup_criminal_justice = yes
 	te_fix_inconsistent_lawgroup_intellectual_property = yes
 	te_fix_inconsistent_lawgroup_monetary_policy = yes
 	te_fix_inconsistent_lawgroup_inheritance = yes

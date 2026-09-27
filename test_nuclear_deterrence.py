@@ -278,6 +278,38 @@ class TestWarLawGate(unittest.TestCase):
         for opt in ("nuclear_crisis.4.g", "nuclear_crisis.7.a", "nuclear_crisis.20.b", "nuclear_crisis.24.b"):
             self.assertIn("nd_war_law_permits_strategic_strike = yes", option_body(text, opt), opt)
 
+    def test_monopoly_window_first_use_checks_the_law(self):
+        text = strip_comments(read(INCIDENT_EVENTS))
+        self.assertIn("nd_war_law_permits_strategic_strike = yes",
+                      option_body(text, "nuclear_incident.50.c"))
+
+    def test_the_government_launch_order_passes_every_deliberate_gate(self):
+        """nuclear_incident.1.c is the government's own order (owner ruling
+        2026-09-26): the same gates as nuke_diplo_action, shown greyed."""
+        body = option_body(strip_comments(read(INCIDENT_EVENTS)), "nuclear_incident.1.c")
+        for gate in ("has_war_with = scope:nd_warning_suspect",
+                     "nd_doctrine_permits_strike = { ENEMY = scope:nd_warning_suspect }",
+                     "nd_pledge_permits_strike = { ENEMY = scope:nd_warning_suspect }",
+                     "nd_war_law_permits_strategic_strike = yes",
+                     "nd_forces_assembled = yes",
+                     "show_as_unavailable"):
+            self.assertIn(gate, body, gate)
+
+
+class TestIncidentRoll(unittest.TestCase):
+    """nd_incident_permille is fractional at low readiness (0.5-0.9 once its
+    multipliers apply), and nothing proves `random` rolls a fraction instead
+    of truncating it, so the roll's inner chance is always a rounded whole
+    number (nd_roll_incident's header)."""
+
+    def test_the_inner_chances_are_rounded(self):
+        roll = block(strip_comments(read(EFFECTS)), "nd_roll_incident")
+        self.assertEqual(re.findall(r"chance\s*=\s*(\w+)", roll),
+                         ["1", "nd_incident_tenth_permille", "10", "nd_incident_permille_whole"])
+        values = strip_comments(read(VALUES))
+        for name in ("nd_incident_tenth_permille", "nd_incident_permille_whole"):
+            self.assertIn("round = yes", block(values, name), name)
+
 
 class TestTacticalTargets(unittest.TestCase):
     """nd_state_has_military_target is the tactical strike's one target list:
@@ -385,7 +417,7 @@ DANGER_PARTS = ["nd_cd_stage", "nd_cd_issuer_readiness", "nd_cd_target_readiness
                 "nd_cd_exercise"]
 PRESSURE_PARTS = ["nd_yp_base", "nd_yp_answer", "nd_yp_protector", "nd_yp_credibility", "nd_yp_alert",
                   "nd_yp_recessed", "nd_yp_danger", "nd_yp_exercise", "nd_yp_temperament", "nd_yp_war",
-                  "nd_yp_follow_through"]
+                  "nd_yp_follow_through", "nd_yp_taboo"]
 
 
 class TestCrisisFigures(unittest.TestCase):
@@ -546,7 +578,7 @@ ACT_LINES = {
     "nd_crisis_act_extend": ["text = nd_tt_credibility_down_3"],
     "nd_crisis_act_back_down": ["nd_tt_then_back_down_public", "nd_tt_then_back_down_private",
                                 "nd_tt_then_bluff_called"],
-    "nd_crisis_act_go_public": ["change_infamy = 5", "change_relations", "nd_tt_go_public_terms"],
+    "nd_crisis_act_go_public": ["change_infamy = nd_taboo_infamy_threat", "change_relations", "nd_tt_go_public_terms"],
     "nd_crisis_act_exercise": ["text = nd_tt_strain_up_5", "text = nd_tt_credibility_up_3",
                                "nd_tt_exercise_effect"],
 }
@@ -684,7 +716,8 @@ class TestInterestGroupClasses(unittest.TestCase):
 
 
 IG_VARS = ["nd_ig_class", "nd_ig_lean", "nd_ig_strength", "nd_ig_term_doctrine", "nd_ig_term_readiness",
-           "nd_ig_term_authority", "nd_ig_term_strain", "nd_ig_term_business", "nd_ig_stance"]
+           "nd_ig_term_authority", "nd_ig_term_strain", "nd_ig_term_business", "nd_ig_term_possession",
+           "nd_ig_stance"]
 
 
 class TestInterestGroupOpinion(unittest.TestCase):

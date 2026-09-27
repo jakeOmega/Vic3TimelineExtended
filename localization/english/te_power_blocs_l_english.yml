@@ -4,8 +4,8 @@
 # POWER_BLOCS
 #
  power_bloc_banking_union_bool:0 "One supervisor and one deposit guarantee across the union: adopters get #G −25%#! banking crash chance, #G −25%#! random momentum and #G +1#! banking intervention in reserve, and a crash elsewhere in the currency spreads far less readily"
- power_bloc_can_enact_decree_cultural_emigration_initiative_bool:0 "Can Enact Cultural Emigration Initiative and Forced Migration [Concept('concept_decree', 'Decrees')]"
- power_bloc_can_enact_decree_cultural_emigration_initiative_bool_desc:0 "Can enact the Cultural Emigration Initiative [concept_decree], which encourages emigration of non-[concept_primary_cultures] to other countries, and the Forced Migration decree, which forces non-primary cultures to emigrate to another state or to other countries."
+ power_bloc_can_enact_decree_cultural_emigration_initiative_bool:0 "Can Enact Cultural Emigration Initiative [Concept('concept_decree', 'Decree')]"
+ power_bloc_can_enact_decree_cultural_emigration_initiative_bool_desc:0 "Can enact the Cultural Emigration Initiative [concept_decree], which encourages emigration of non-[concept_primary_cultures] to other countries."
  power_bloc_can_enact_greenest_grass_campaign_bool:0 "Can Enact Greenest Grass Campaign"
  power_bloc_can_enact_greenest_grass_campaign_bool_desc:0 "Can enact the Greenest Grass Campaign [concept_decree], an upgraded version of the Greener Grass Campaign decree."
  power_bloc_can_give_development_aid_bool:0 "Members Can Give Development Assistance"

@@ -293,6 +293,17 @@ remove_invalid_company_buildings_effect = {
 	}
 	if = {
 		limit = {
+			has_building = building_bhp_broken_hill_mine
+			NOT = {
+				owner = {
+					has_company = company_broken_hill_proprietary_company
+				}
+			}
+		}
+		remove_building = building_bhp_broken_hill_mine
+	}
+	if = {
+		limit = {
 			has_building = building_bhp_mount_whaleback_mine
 			NOT = {
 				owner = {
@@ -821,6 +832,17 @@ remove_invalid_company_buildings_effect = {
 	}
 	if = {
 		limit = {
+			has_building = building_ferranti_hollinwood_works
+			NOT = {
+				owner = {
+					has_company = company_ferranti_ltd
+				}
+			}
+		}
+		remove_building = building_ferranti_hollinwood_works
+	}
+	if = {
+		limit = {
 			has_building = building_ferrari_maranello_factory
 			NOT = {
 				owner = {
@@ -1025,6 +1047,17 @@ remove_invalid_company_buildings_effect = {
 	}
 	if = {
 		limit = {
+			has_building = building_generic_dye_fiber_park
+			NOT = {
+				owner = {
+					has_company = company_basic_synthetics
+				}
+			}
+		}
+		remove_building = building_generic_dye_fiber_park
+	}
+	if = {
+		limit = {
 			has_building = building_generic_electronics_lab
 			NOT = {
 				owner = {
@@ -1107,11 +1140,6 @@ remove_invalid_company_buildings_effect = {
 	if = {
 		limit = {
 			has_building = building_generic_hq_skyscraper
-			NOT = {
-				owner = {
-					has_company = company_basic_electrics
-				}
-			}
 		}
 		remove_building = building_generic_hq_skyscraper
 	}
@@ -1445,6 +1473,17 @@ remove_invalid_company_buildings_effect = {
 			}
 		}
 		remove_building = building_guinness_st_james_gate_brewery
+	}
+	if = {
+		limit = {
+			has_building = building_guthrie_singapore_agency
+			NOT = {
+				owner = {
+					has_company = company_guthrie
+				}
+			}
+		}
+		remove_building = building_guthrie_singapore_agency
 	}
 	if = {
 		limit = {
@@ -1954,6 +1993,17 @@ remove_invalid_company_buildings_effect = {
 	}
 	if = {
 		limit = {
+			has_building = building_markwald_bangkok_rice_mill
+			NOT = {
+				owner = {
+					has_company = company_a_markwald_and_company
+				}
+			}
+		}
+		remove_building = building_markwald_bangkok_rice_mill
+	}
+	if = {
+		limit = {
 			has_building = building_massey_harris_toronto_implement_works
 			NOT = {
 				owner = {
@@ -1995,6 +2045,17 @@ remove_invalid_company_buildings_effect = {
 			}
 		}
 		remove_building = building_meissen_porcelain_manufactory
+	}
+	if = {
+		limit = {
+			has_building = building_mfo_oerlikon_works
+			NOT = {
+				owner = {
+					has_company = company_maschinenfabrik_oerlikon
+				}
+			}
+		}
+		remove_building = building_mfo_oerlikon_works
 	}
 	if = {
 		limit = {
@@ -2152,6 +2213,17 @@ remove_invalid_company_buildings_effect = {
 	}
 	if = {
 		limit = {
+			has_building = building_nhm_factorij_batavia
+			NOT = {
+				owner = {
+					has_company = company_nhm
+				}
+			}
+		}
+		remove_building = building_nhm_factorij_batavia
+	}
+	if = {
+		limit = {
 			has_building = building_nintendo_development_center
 			NOT = {
 				owner = {
@@ -2185,6 +2257,17 @@ remove_invalid_company_buildings_effect = {
 	}
 	if = {
 		limit = {
+			has_building = building_noda_shoyu_goyogura
+			NOT = {
+				owner = {
+					has_company = company_noda_shoyu
+				}
+			}
+		}
+		remove_building = building_noda_shoyu_goyogura
+	}
+	if = {
+		limit = {
 			has_building = building_nokia_cable_works
 			NOT = {
 				owner = {
@@ -2215,6 +2298,17 @@ remove_invalid_company_buildings_effect = {
 			}
 		}
 		remove_building = building_nvidia_endeavor_campus
+	}
+	if = {
+		limit = {
+			has_building = building_ocmc_unsan_gold_mines
+			NOT = {
+				owner = {
+					has_company = company_oriental_consolidated_mining
+				}
+			}
+		}
+		remove_building = building_ocmc_unsan_gold_mines
 	}
 	if = {
 		limit = {
@@ -2482,6 +2576,17 @@ remove_invalid_company_buildings_effect = {
 	}
 	if = {
 		limit = {
+			has_building = building_ramirez_vila_real_cannery
+			NOT = {
+				owner = {
+					has_company = company_ramirez
+				}
+			}
+		}
+		remove_building = building_ramirez_vila_real_cannery
+	}
+	if = {
+		limit = {
 			has_building = building_rekal_hq
 			NOT = {
 				owner = {
@@ -2746,6 +2851,17 @@ remove_invalid_company_buildings_effect = {
 	}
 	if = {
 		limit = {
+			has_building = building_sfct_hon_gai_collieries
+			NOT = {
+				owner = {
+					has_company = company_societe_francaise_charbonnages_du_tonkin
+				}
+			}
+		}
+		remove_building = building_sfct_hon_gai_collieries
+	}
+	if = {
+		limit = {
 			has_building = building_shell_pernis_refinery
 			NOT = {
 				owner = {
@@ -2787,6 +2903,17 @@ remove_invalid_company_buildings_effect = {
 			}
 		}
 		remove_building = building_shopify_fulfillment_hub
+	}
+	if = {
+		limit = {
+			has_building = building_siam_electric_wat_liab_station
+			NOT = {
+				owner = {
+					has_company = company_siam_electrical_company_limited
+				}
+			}
+		}
+		remove_building = building_siam_electric_wat_liab_station
 	}
 	if = {
 		limit = {
@@ -3021,6 +3148,17 @@ remove_invalid_company_buildings_effect = {
 	}
 	if = {
 		limit = {
+			has_building = building_tokyo_electric_asakusa_station
+			NOT = {
+				owner = {
+					has_company = company_tokyo_electric_light_company
+				}
+			}
+		}
+		remove_building = building_tokyo_electric_asakusa_station
+	}
+	if = {
+		limit = {
 			has_building = building_toyota_kaikan_plant
 			NOT = {
 				owner = {
@@ -3142,6 +3280,17 @@ remove_invalid_company_buildings_effect = {
 	}
 	if = {
 		limit = {
+			has_building = building_van_vlissingen_oostenburg_works
+			NOT = {
+				owner = {
+					has_company = company_van_vlissingen_en_dudok_van_heel
+				}
+			}
+		}
+		remove_building = building_van_vlissingen_oostenburg_works
+	}
+	if = {
+		limit = {
 			has_building = building_verizon_building
 			NOT = {
 				owner = {
@@ -3197,6 +3346,17 @@ remove_invalid_company_buildings_effect = {
 	}
 	if = {
 		limit = {
+			has_building = building_white_star_albion_house
+			NOT = {
+				owner = {
+					has_company = company_white_star_line
+				}
+			}
+		}
+		remove_building = building_white_star_albion_house
+	}
+	if = {
+		limit = {
 			has_building = building_witkowitzer_ostrava_ironworks
 			NOT = {
 				owner = {
@@ -3216,6 +3376,17 @@ remove_invalid_company_buildings_effect = {
 			}
 		}
 		remove_building = building_worth_rue_de_la_paix_atelier
+	}
+	if = {
+		limit = {
+			has_building = building_yasuda_atosanupuri_mine
+			NOT = {
+				owner = {
+					has_company = company_yasuda
+				}
+			}
+		}
+		remove_building = building_yasuda_atosanupuri_mine
 	}
 	if = {
 		limit = {

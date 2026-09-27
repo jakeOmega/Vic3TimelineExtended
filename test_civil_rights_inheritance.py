@@ -283,9 +283,10 @@ class PolicyMirrorTests(unittest.TestCase):
                 self.assertIsNotNone(m)
                 self.assertLess(heal, m.start())
         # Round 2 (review M3): the expiry marker, like the counters, must not wait
-        # a month for a policy the self-heal has just re-added.
-        m = re.search(r"OR\s*=\s*\{\s*has_modifier\s*=\s*cr_cooptation_modifier\s+has_variable\s*=\s*"
-                      r"cr_policy_cooptation\s*\}\s*var:cr_cooptation_months\s*>=\s*12\s+"
+        # a month for a policy the self-heal has just re-added. Since PR #507 the
+        # marker lasts the rest of the run (End Cooptation keeps it), so it hangs
+        # on the counter alone, whether or not cooptation is running now.
+        m = re.search(r"limit\s*=\s*\{\s*var:cr_cooptation_months\s*>=\s*12\s+"
                       r"NOT\s*=\s*\{\s*has_modifier\s*=\s*cr_cooptation_expired\s*\}\s*\}\s*"
                       r"add_modifier\s*=\s*\{\s*name\s*=\s*cr_cooptation_expired\s*\}", pulse)
         self.assertIsNotNone(m)

@@ -45,23 +45,24 @@ enforce_emissions_reduction = {
 		country_prestige_mult = 0.02
 	}
 
+	# ROOT in visible and possible is the source, the market leader being
+	# forced to reduce emissions; scope:other_country is the demanding target
+	# (vanilla 14_treaty_port, 29_recognize_independence).
 	visible = {
 		# Only visible once global warming is active
 		temperature_anomaly_display > 0.1
-		# Only target market leaders
-		scope:other_country = {
-			market_capital.owner = scope:other_country
-		}
+		# Only market leaders can be forced
+		market_capital.owner = root
 	}
 
 	possible = {
 		has_diplomatic_relevance = scope:other_country
 		NOT = { is_country_type = decentralized }
 		temperature_anomaly_display >= 0.5
+		# Must be a market leader
+		market_capital.owner = root
 		scope:other_country = {
 			NOT = { is_country_type = decentralized }
-			# Must be a market leader
-			market_capital.owner = scope:other_country
 		}
 	}
 
@@ -83,35 +84,32 @@ enforce_emissions_reduction = {
 				# ROOT.market_capital. on_entry_into_force runs in treaty_article scope,
 				# so ROOT is the article (no .market_capital) — unlike the GW scripted
 				# buttons this idiom was lifted from, where ROOT is the acting country.
-				if = {
-					limit = { NOT = { je:je_global_warming = { has_modifier = carbon_tax_modifier } } }
-					every_country = {
-						limit = {
-							market_capital = prev.market_capital
-							NOT = { je:je_global_warming = { has_modifier = carbon_tax_modifier } }
-						}
-						je:je_global_warming = { add_modifier = { name = carbon_tax_modifier } }
+				# No outer "does the source already have it" test: the sweep's own
+				# limit skips whoever has the policy, and an outer test used to skip
+				# topping up members that lacked a policy the source already had.
+				every_country = {
+					limit = {
+						market_capital = prev.market_capital
+						has_journal_entry = je_global_warming
+						NOT = { je:je_global_warming ?= { has_modifier = carbon_tax_modifier } }
 					}
+					je:je_global_warming = { add_modifier = { name = carbon_tax_modifier } }
 				}
-				if = {
-					limit = { NOT = { je:je_global_warming = { has_modifier = renewable_investment_modifier } } }
-					every_country = {
-						limit = {
-							market_capital = prev.market_capital
-							NOT = { je:je_global_warming = { has_modifier = renewable_investment_modifier } }
-						}
-						je:je_global_warming = { add_modifier = { name = renewable_investment_modifier } }
+				every_country = {
+					limit = {
+						market_capital = prev.market_capital
+						has_journal_entry = je_global_warming
+						NOT = { je:je_global_warming ?= { has_modifier = renewable_investment_modifier } }
 					}
+					je:je_global_warming = { add_modifier = { name = renewable_investment_modifier } }
 				}
-				if = {
-					limit = { NOT = { je:je_global_warming = { has_modifier = emission_standards_modifier } } }
-					every_country = {
-						limit = {
-							market_capital = prev.market_capital
-							NOT = { je:je_global_warming = { has_modifier = emission_standards_modifier } }
-						}
-						je:je_global_warming = { add_modifier = { name = emission_standards_modifier } }
+				every_country = {
+					limit = {
+						market_capital = prev.market_capital
+						has_journal_entry = je_global_warming
+						NOT = { je:je_global_warming ?= { has_modifier = emission_standards_modifier } }
 					}
+					je:je_global_warming = { add_modifier = { name = emission_standards_modifier } }
 				}
 
 				# Apply country-only modifiers

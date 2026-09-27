@@ -1371,6 +1371,39 @@ climate_crisis_emergency_modifier = {
 	country_institution_cost_institution_ministry_of_the_environment_mult = -0.50
 }
 
+# Four degrees (event 22). Each option's modifier is made only of harms. The
+# crossing lands three: on the people (mortality +10%, SoL -2), on the harvest
+# (farm output -15%) and on the economy (throughput -5%). Each option spares
+# one and adds its own cost; the other two are carried in full. On top of the
+# global_warming modifier at 4 C (+20% mortality, -4 SoL, -40% farms, -10%
+# throughput). All three are 10 years, decaying.
+
+# 22A: spares the people, costs administration.
+climate_survival_footing_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	building_group_bg_agriculture_throughput_add = -0.15
+	building_throughput_add = -0.05
+	country_bureaucracy_mult = -0.20
+}
+
+# 22B: spares the harvest, costs standing abroad and immigration.
+climate_fortress_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_mortality_mult = 0.10
+	state_standard_of_living_add = -2
+	building_throughput_add = -0.05
+	country_prestige_mult = -0.10
+	state_migration_pull_mult = -0.25
+}
+
+# 22C: spares the economy; its cost is the event's heaviest radicalization.
+climate_carrying_on_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
+	state_mortality_mult = 0.10
+	state_standard_of_living_add = -2
+	building_group_bg_agriculture_throughput_add = -0.15
+}
+
 crop_failure_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	building_group_bg_agriculture_throughput_add = -0.15
@@ -1608,7 +1641,7 @@ climate_accord_rejection_no_gw_modifier = {
 	state_pollution_generation_mult = 0.10
 }
 
-# Rolling back climate protections during cooling (events 17B, 18B, 19B)
+# Rolling back climate protections during cooling (events 17B, 18B, 19B, 23B)
 climate_deregulation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	building_throughput_add = 0.03
@@ -2082,6 +2115,13 @@ mandate_system_modifier = {
 	country_diplomatic_reputation_add = 5
 }
 
+# The Mandate System decision's cost, applied decaying over normal_modifier_time
+# (the shape of peaceful_decolonization_modifier's -200).
+mandate_system_transition_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_authority_add = -100
+}
+
 # Phase modifiers (applied automatically by JE pulse based on stability level).
 # Five tiers, mapped to the status_desc bands:
 #   >=90  Solidified    : strong positive
@@ -2089,8 +2129,10 @@ mandate_system_modifier = {
 #   40-64 Strained      : mild negative (note name kept for compatibility)
 #   20-39 Crumbling     : strong negative — uses _under_pressure_modifier
 #   <20   Collapsing    : worst negative — uses _crumbling_modifier
-# (The legacy modifier names _under_pressure / _crumbling don't match the
-# status labels exactly; renaming would break existing saves, so they stay.)
+# (The legacy modifier keys _under_pressure / _crumbling don't match the
+# status labels; renaming would break existing saves, so they stay. Their
+# displayed names follow the bands: "Colonial Empire Crumbling" and
+# "Colonial Empire Collapsing".)
 
 colonial_empire_stable_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
@@ -2518,8 +2560,8 @@ cr_cooptation_modifier = {
 	country_legitimacy_ideological_incoherence_mult = 0.05
 }
 
-# Marker added by the JE on_monthly_pulse once cr_cooptation_months > 12 — the
-# civil_rights_support_bar checks for its presence to expire the +0.6 push.
+# Marker added by the JE on_monthly_pulse once cr_cooptation_months >= 12 — the
+# civil_rights_support_bar checks for its presence to expire the +0.15 push.
 cr_cooptation_expired = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 }
@@ -2945,6 +2987,11 @@ riot_curfew_modifier = {
 	country_authority_add = 50
 	state_standard_of_living_add = -0.5
 	country_sol_expectations_shift_max_add = -1
+	# Moved from riot_property_damage_modifier, which the same option adds to
+	# a state, where a country_* key reaches nothing. Halved from -0.02 because
+	# this modifier decays over 5 years instead of 2.5, so the total shift the
+	# option was written with stays the same.
+	country_sol_expectations_shift_add = -0.01
 }
 
 riot_concessions_modifier = {
@@ -2966,7 +3013,6 @@ riot_property_damage_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
 	building_throughput_add = -0.1
 	state_infrastructure_mult = -0.05
-	country_sol_expectations_shift_add = -0.02
 }
 
 # --- War Crimes ---
@@ -3256,7 +3302,8 @@ un_high_authority_infamy_modifier = {
 	country_infamy_generation_mult = 0.10
 }
 
-# Applied to non-members when UN authority is >= 60
+# Applied to eligible non-members from the Established UN tier
+# (un_tier_at_least_established; it was authority 60 before the tier ladder)
 # Represents diplomatic isolation of countries outside the international order
 un_nonmember_pariah_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
@@ -3265,7 +3312,9 @@ un_nonmember_pariah_modifier = {
 	country_influence_mult = -0.05
 }
 
-# Applied to non-nuclear member powers when authority >= 80 + IAEA exists
+# Applied to non-nuclear members from the Strong UN tier, once the IAEA exists
+# (un_tier_at_least_strong in je_united_nations; it was authority 80 before
+# the tier ladder)
 # Represents NPT enforcement pressure: blocks nuclear program
 un_npt_disarmament_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
@@ -6379,6 +6428,19 @@ intelligence_capacity_defense = {
 	country_coup_resistance_add = 0.1
 }
 
+# covert_warfare.2 option a, on the country (×3, decaying): the same two
+# resistances as intelligence_capacity_defense, which lives on
+# je_covert_warfare, plus a small intelligence capacity boost (owner decision,
+# PR #510: 2 per unit, so +6 when granted, decaying). That option used to add
+# intelligence_capacity_defense itself, at country scope, where
+# legacy_je_modifier_cleanup_effect strips it every month.
+covert_counterintelligence_alert = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_support_separatism_resistance_mult = 0.05
+	country_coup_resistance_add = 0.1
+	country_intelligence_capacity_add = 2
+}
+
 # Counterintelligence bonus from covert funding level (applied with multiplier = funding_level - 1)
 # Level 2: +5 IC, Level 3: +10 IC
 iw_funding_defense = {
@@ -7052,7 +7114,11 @@ banking_crisis_confidence_messaging_modifier = {
 # ============================================================================
 # Applied directly to the hub building by st_res_refresh_hub_flow_effect.
 # These scale the active reserve PM's base 1-unit goods input/output and shut
-# off the inactive side with a fixed -100% multiplier.
+# off the inactive side with a fixed -100% multiplier: the store/withdraw pair
+# re-applied at multiplier = -1 (st_res_rebuild_good_flow_modifiers_effect).
+# The grain and ammunition *_disable_input_flow / *_disable_output_flow
+# modifiers below are left over from an older design and nothing applies them
+# (docs/systems/strategic_reserve_system.md); new goods don't need them.
 #
 # NOTE: These MUST stay `_mult`, not `_add`. The engine only registers
 # goods_input_*_add / goods_output_*_add modifier contributions through PM
@@ -7357,13 +7423,17 @@ sm_te_unused_mandate_reserve = {
 }
 
 # ============================================================================
-# AGRICULTURAL DIFFUSION - applied via agdiff_apply_diffusion_effect to every
-# country except the first researcher of a transformative ag tech. Each carries
-# a fraction (~50%) of the local tech's state_arable_land_mult. The non-decaying
-# duration models "the technique is in the world now; you can adopt it on the
-# cheap even if your scientists never invented it." Diffused modifiers stack
-# additively with the local tech bonus once the country researches itself.
-# Triggered by on_acquired_technology -> agdiff_handle_tech_acquired_effect.
+# AGRICULTURAL DIFFUSION - granted to every recognized country, the first
+# researcher of a transformative ag tech included, by the options of
+# agricultural_diffusion_events.1-5 (.a_first for the first researcher, which
+# also grants agdiff_first_mover_prestige; .a for everyone else, 14 days
+# later). Each carries a fraction (~50%) of the local tech's
+# state_arable_land_mult. The permanent (no days) duration models "the
+# technique is in the world now; you can adopt it on the cheap even if your
+# scientists never invented it." Diffused modifiers stack additively with the
+# local tech bonus once the country researches itself.
+# Triggered by on_acquired_technology -> agdiff_dispatch_if_first ->
+# agdiff_handle_tech_acquired_effect, which fires the events.
 # ============================================================================
 agdiff_nitrogen_fixation = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds

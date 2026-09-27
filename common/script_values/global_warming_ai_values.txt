@@ -97,7 +97,7 @@ gw_ai_will_shared = {
 # industrialists in government never taxes carbon (43). Only a ministry, green
 # government, movement or wealth carries those over, so the world's last
 # holdouts are the ones with several reasons to hold out. A cap
-# at 3.5 C froze the will halfway through the catastrophic tier (3 C and up).
+# at 3.5 C froze the will halfway through the catastrophic tier (3 to 4 C).
 gw_ai_will_urgency = {
 	value = temperature_anomaly_display
 	multiply = 20

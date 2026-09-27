@@ -451,6 +451,9 @@ un_agency_count = {
 	if = { limit = { has_global_variable = un_agency_unep } add = 1 }
 	if = { limit = { has_global_variable = un_agency_unhcr } add = 1 }
 	if = { limit = { has_global_variable = un_agency_unoosa } add = 1 }
+	if = { limit = { has_global_variable = un_agency_itlos } add = 1 }
+	if = { limit = { has_global_variable = un_agency_icc } add = 1 }
+	if = { limit = { has_global_variable = un_agency_cppnm } add = 1 }
 }
 
 # ---- Authorized Military Mandates ----

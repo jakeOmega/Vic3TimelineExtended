@@ -78,6 +78,16 @@ sr_suborbital = {
 	country_weekly_innovation_max_add = 10
 	country_cultural_pull_mult = 0.03
 }
+# space_race_events.1 option b's 2.5-year decaying bonus (short_modifier_time),
+# on top of the milestone reward.
+# Same values as sr_suborbital, under its own name: re-adding sr_suborbital
+# itself collided with the permanent reward a country that was not first holds.
+sr_suborbital_momentum = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_prestige_mult = 0.01
+	country_weekly_innovation_max_add = 10
+	country_cultural_pull_mult = 0.03
+}
 sr_orbital = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_mult = 0.015
@@ -113,6 +123,8 @@ sr_mars_landing = {
 	country_tech_research_speed_mult = 0.02
 	country_cultural_pull_mult = 0.12
 }
+# Not a milestone reward: the Mars robotic-precursor path grants it beside
+# sr_mars_robotic_precursor (space_race_events.7 option c, ten years, decaying).
 sr_mars_resource_extraction = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_tech_research_speed_mult = 0.03

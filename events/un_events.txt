@@ -106,6 +106,21 @@ un_events.1 = {
 		un_state_on = { MODIFIER = un_member_modifier }
 		je:je_united_nations ?= { add_modifier = { name = un_member_privileges_modifier } }
 		un_state_on = { MODIFIER = un_founding_member_modifier }
+		# A signer whose journal entry is not active yet (it lacks
+		# Intergovernmental Organizations; the entry activates once the UN
+		# exists) cannot take the modifiers above. The AI answers the moment
+		# the charter arrives, so such signers used to stay outside. Record the
+		# mirrors instead: the entry's `immediate` restores them on activation
+		# (un_state_restore_all), privileges included, and its first monthly
+		# pulse heals whatever that missed (un_state_effects.txt).
+		if = {
+			limit = { NOT = { exists = je:je_united_nations } }
+			custom_tooltip = {
+				text = un_events.1.a_pending_tt
+				un_state_record = { MODIFIER = un_member_modifier }
+				un_state_record = { MODIFIER = un_founding_member_modifier }
+			}
+		}
 		# No conventions are ratified at UN founding, so this is a no-op today;
 		# kept for symmetry with the other join paths in case the founding event
 		# is ever fired after conventions exist (alternate timeline starts, etc.).
@@ -159,7 +174,9 @@ un_events.1 = {
 # costs something: tabling a censure costs relations and the tabling marker, a
 # court case costs relations, letting it rest costs prestige or credibility.
 un_events.2 = {
-	# REVIEWED 2026-09-25 (system_ungated): fired by the nuclear strike itself (extra_effects.txt); the UN condemnation of a real use
+	# Its nuclear text follows a real use: a nuclear appeal is taken up only
+	# after a strike (extra_effects.txt), and option A reads the accused's
+	# un_dkt_cause. (event_context_audit now reads the event as gated.)
 	type = country_event
 	placement = root
 
@@ -242,7 +259,17 @@ un_events.2 = {
 		name = un_events.2.a
 		trigger = {
 			scope:condemned_country = { un_case_supports = { TOPIC = condemn } }
-			NOT = { un_resolution_topic_on_cooldown = { TOPIC = condemn } }
+			# The nuclear taboo: a nuclear use can always be brought to a vote,
+			# cooldown or not, so the Assembly's verdict on it is never skipped
+			# (un_vote.2, nd_taboo_verdict). un_dkt_cause was set on the accused
+			# by the take-up that sent this event.
+			custom_tooltip = {
+				text = nd_taboo_tt_condemn_open
+				OR = {
+					NOT = { un_resolution_topic_on_cooldown = { TOPIC = condemn } }
+					scope:condemned_country = { un_docket_cause_is = { CAUSE = 1 } }
+				}
+			}
 		}
 		ai_chance = {
 			base = 10
@@ -265,6 +292,12 @@ un_events.2 = {
 		hidden_effect = {
 			scope:condemned_country = { save_scope_as = un_vote_target }
 			un_resolution_open = { TOPIC = condemn }
+			# The nuclear taboo: a condemnation tabled on a nuclear grievance
+			# is the Assembly's verdict on that use (un_vote.2, nd_taboo_verdict).
+			if = {
+				limit = { scope:condemned_country = { un_docket_cause_is = { CAUSE = 1 } } }
+				scope:un_resolution ?= { add_tag = un_res_nuclear_grievance }
+			}
 		}
 	}
 
@@ -510,6 +543,10 @@ un_events.3 = {
 			}
 			modifier = {
 				trigger = { has_law = law_type:law_outlawed_dissent }
+				add = 3
+			}
+			modifier = {
+				trigger = { has_law = law_type:law_penal_labor_camps }
 				add = 3
 			}
 		}
