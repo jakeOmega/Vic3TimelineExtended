@@ -1,0 +1,136 @@
+﻿# External banking tools. Country scope. Money is pounds; GDP is annual.
+# Trade volumes are engine comparison triggers, so export reliance is banded.
+# These are policy abstractions, not a second foreign-exchange balance sheet.
+banking_external_inflow_factor = { value = 0.5 }
+banking_external_sterilized_factor = { value = 0.25 }
+banking_external_fx_protection_step = { value = 0.020833 }
+banking_external_fx_protection_cap = { value = 0.5 }
+banking_external_sterilization_share = { value = 0.0001 }
+banking_external_surrender_share = { value = 0.0005 }
+banking_external_import_share = { value = 0.0005 }
+banking_external_import_fatigue_cap = { value = 12 }
+
+# No current policy = no new flow restraint; positive side only. Eligibility
+# matters immediately after a law change, before monthly cleanup removes a tool.
+banking_external_inflow_damp = {
+	value = 1
+	if = {
+		limit = { banking_external_eligible_restrict_inflows = yes banking_tool_restrict_inflows_active = yes }
+		value = banking_external_inflow_factor
+	}
+}
+banking_external_gold_pressure_factor = {
+	value = 1
+	if = {
+		limit = { banking_external_eligible_sterilize_inflows = yes banking_tool_sterilize_inflows_active = yes has_variable = banking_external_sterilization_funded var:banking_external_sterilization_funded = 1 }
+		value = banking_external_sterilized_factor
+	}
+}
+# The stock of safer debt survives a repeal, revolution or temporary law change;
+# it unwinds at the same speed as it accumulated. Ineligible regimes get no benefit.
+banking_external_fx_exposure = {
+	value = 1
+	if = {
+		limit = { banking_external_available = yes has_variable = banking_external_fx_protection }
+		subtract = var:banking_external_fx_protection
+	}
+	min = 0.5
+	max = 1
+}
+banking_external_fx_protection_pct = {
+	value = 1
+	subtract = banking_external_fx_exposure
+	multiply = 100
+}
+banking_external_export_share = {
+	value = 0
+	if = {
+		limit = { exists = market market = { market_exports_reliance = { value > 0.3 } } }
+		value = 1
+	}
+	else_if = {
+		limit = { exists = market market = { market_exports_reliance = { value > 0.1 } } }
+		value = 0.5
+	}
+	else_if = {
+		limit = { exists = market market = { market_exports_reliance = { value > 0 } } }
+		value = 0.25
+	}
+}
+banking_external_sterilization_cost = {
+	value = gdp
+	multiply = banking_external_sterilization_share
+	min = 0
+}
+banking_external_sterilization_payment = {
+	value = banking_external_sterilization_cost
+	multiply = -1
+}
+banking_external_surrender_purchase = {
+	value = gdp
+	multiply = banking_external_surrender_share
+	multiply = banking_external_export_share
+	max = te_mon_gold_inflow_room
+	max = banking_external_purchase_cash
+	min = 0
+}
+# Debit the snapshot, not a recomputed amount after the vault has changed.
+banking_external_surrender_payment = {
+	value = 0
+	if = {
+		limit = { has_variable = banking_external_purchase }
+		subtract = var:banking_external_purchase
+	}
+}
+banking_external_import_fatigue = {
+	value = 0
+	if = {
+		limit = { has_variable = banking_external_import_months }
+		add = var:banking_external_import_months
+	}
+	min = 0
+	max = banking_external_import_fatigue_cap
+}
+banking_external_import_cost = {
+	value = banking_external_import_fatigue
+	divide = banking_external_import_fatigue_cap
+	add = 1
+	multiply = banking_external_import_share
+	multiply = gdp
+	min = 0
+}
+banking_external_import_payment = {
+	value = banking_external_import_cost
+	multiply = -1
+}
+
+banking_external_real_gap = {
+	value = 0
+	if = {
+		limit = { has_variable = te_policy_rate has_variable = te_mon_world_rate_now }
+		add = var:te_policy_rate
+		subtract = te_mon_fx_inflation_read
+		subtract = var:te_mon_world_rate_now
+	}
+}
+
+banking_external_combined_import_cost = {
+	value = banking_external_import_cost
+	if = {
+		limit = { banking_tool_sterilize_inflows_active = yes banking_external_eligible_sterilize_inflows = yes }
+		add = banking_external_sterilization_cost
+	}
+}
+
+banking_external_purchase_cash = {
+	value = gold_reserves
+	if = {
+		limit = { banking_tool_sterilize_inflows_active = yes }
+		subtract = banking_external_sterilization_cost
+	}
+	if = {
+		limit = { banking_tool_emergency_import_financing_active = yes }
+		subtract = banking_external_import_cost
+	}
+	min = 0
+}

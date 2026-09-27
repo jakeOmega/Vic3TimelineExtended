@@ -79,6 +79,9 @@ DELIBERATELY OUT OF SCOPE (pass 1)
     `--event-channel` adds a crude aggregate stand-in for a sensitivity read.
   * contagion, crisis waves and the Great Depression chain: single-country sim.
   * the FX index, monetisation, and phase-5 arrangements: held at par / zero.
+    Foreign-borrowing limits, FX surrender and import financing therefore have
+    no AI selection here; actual-script scenarios test their accounting. The
+    two flow tools assume funding, since liquid treasury is not modeled.
   * `ce_*` / `cw_*` tools: command economy and cooperative ownership are a
     different economic law, and the question posed was about currency laws.
 
@@ -111,6 +114,7 @@ SCRIPT_VALUE_FILES = [
     REPO / "common/script_values/te_monetary_script_values.txt",
     REPO / "common/script_values/extra_script_values.txt",
     REPO / "common/script_values/te_monetary_fx_script_values.txt",
+    REPO / "common/script_values/banking_external_values.txt",
 ]
 STATIC_MODIFIER_FILE = REPO / "common/static_modifiers/extra_modifiers.txt"
 LAW_FILE = REPO / "common/laws/extra_laws.txt"
@@ -331,7 +335,7 @@ INFLATION_BAND_MODIFIERS = {
     7: K.modifier("te_mon_dollarised_modifier"),
 }
 
-# ── the seventeen market-economy dashboard tools ──────────────────────────────
+# ── the market-economy dashboard tools ──────────────────────────────
 TOOL_MODIFIER_NAMES = {
     "omo": "banking_open_market_ops",
     "moral_suasion": "banking_moral_suasion",
@@ -351,6 +355,11 @@ TOOL_MODIFIER_NAMES = {
     "reserve_requirements": "banking_reserve_requirements",
     "bank_holiday": "banking_bank_holiday",
     "bail_in": "banking_bail_in_regime",
+    "restrict_inflows": "banking_restrict_inflows",
+    "sterilize_inflows": "banking_sterilize_inflows",
+    "foreign_borrowing_limits": "banking_foreign_borrowing_limits",
+    "fx_surrender": "banking_fx_surrender",
+    "emergency_import_financing": "banking_emergency_import_financing",
 }
 TOOL_MODIFIERS = {k: K.modifier(v) for k, v in TOOL_MODIFIER_NAMES.items()}
 # The tools that lean against a boom rather than soften a crash (§10).
@@ -858,6 +867,10 @@ def target_bounds(cfg: Config, state: State, world_rate: float) -> tuple[float, 
 def monetary_update(cfg: Config, state: State, rng: random.Random, year_index: int) -> None:
     world_rate = era_base(year_index)
     state.world_rate = world_rate
+    if not has_dial(cfg, state):
+        state.tools.discard("restrict_inflows")
+    if not has_gold_flows(cfg, state):
+        state.tools.discard("sterilize_inflows")
 
     # step 0 — the commodity band's whole-point centre, re-rounded when stale
     if abs(state.commodity_centre - world_rate) >= 0.75:
@@ -1171,7 +1184,10 @@ def pressure_total(cfg: Config, state: State, world_rate: float) -> float:
             total -= pull * max(0.0, state.inflation_core - anchor)
 
     # gold flow
-    total += max(-6.0, min(6.0, state.gold_flow_pct * K.sv("te_mon_gold_flow_pressure_per_pct")))
+    gold_pressure = state.gold_flow_pct * K.sv("te_mon_gold_flow_pressure_per_pct")
+    if gold_pressure > 0 and has_gold_flows(cfg, state) and "sterilize_inflows" in state.tools:
+        gold_pressure *= K.sv("banking_external_sterilized_factor")
+    total += max(-6.0, min(6.0, gold_pressure))
 
     # commodity money's specie discipline (§0.6 R7)
     if cfg.currency == "commodity":
@@ -1263,7 +1279,8 @@ def monetary_update_gold(cfg: Config, state: State, world_rate: float) -> None:
 
     flow = 0.0
     if gap > 0:
-        flow = min(flow_unit * gap, max(0.0, limit - state.bank_gold))
+        inflow_damp = K.sv("banking_external_inflow_factor") if "restrict_inflows" in state.tools else 1.0
+        flow = min(flow_unit * gap * inflow_damp, max(0.0, limit - state.bank_gold))
         state.gold_hot_money += flow
     elif gap <= 0 and not under_pressure:
         work = -gap
@@ -1740,6 +1757,13 @@ def tool_scores(cfg: Config, state: State) -> dict[str, float]:
     v -= 50 if p == FRENZY else 0
     s["bail_in"] = v
 
+    # External tools: FX stays at par and treasury is not simulated here.
+    # Only the gold/carry tools have modeled reasons to run. Funding is assumed;
+    # treasury exhaustion, FX protection and reserve purchases have script tests.
+    s["restrict_inflows"] = 30 if state.policy_rate > state.world_rate + state.inflation_expected and state.finance_cycle_value >= 60 else 0
+    if has_gold_flows(cfg, state):
+        s["restrict_inflows"] = 30 if state.policy_rate > state.world_rate and state.finance_cycle_value >= 60 else 0
+    s["sterilize_inflows"] = 30 if state.gold_flow > 0 and state.finance_cycle_value >= 60 else 0
     return s
 
 
@@ -1761,6 +1785,15 @@ def tool_possible(cfg: Config, state: State, tool: str) -> bool:
     if tool in state.tools:
         return False
     if intervention_points(cfg, state) < TOOL_COST[tool]:
+        return False
+    if cfg.simplified and tool in {"restrict_inflows", "sterilize_inflows"}:
+        return False
+    if tool in {"foreign_borrowing_limits", "fx_surrender", "emergency_import_financing"}:
+        # The FX index, export reliance and spendable treasury are outside this model.
+        return False
+    if tool == "restrict_inflows" and not has_dial(cfg, state):
+        return False
+    if tool == "sterilize_inflows" and not has_gold_flows(cfg, state):
         return False
     if tool == "omo":
         # needs unbacked money (fiat / digital) AND the rate at its floor
@@ -1926,6 +1959,9 @@ def disable_scores(cfg: Config, state: State) -> dict[str, float]:
     v += 60 if p == FRENZY else 0
     s["bail_in"] = v
 
+    external_scores = tool_scores(cfg, state)
+    for tool in ("restrict_inflows", "sterilize_inflows"):
+        s[tool] = 60 if external_scores[tool] == 0 else 0
     return s
 
 
@@ -1967,6 +2003,8 @@ def consider_tools(cfg: Config, state: State, rng: random.Random) -> None:
 def prune_overdrawn_tools(cfg: Config, state: State) -> None:
     """banking_crash_check_overdrawn_interventions, for the dashboard tools."""
     order = [
+        "emergency_import_financing", "sterilize_inflows", "fx_surrender",
+        "restrict_inflows", "foreign_borrowing_limits",
         "capital_controls",
         "eliq",
         "bank_holiday",

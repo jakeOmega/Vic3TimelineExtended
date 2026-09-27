@@ -1,0 +1,80 @@
+﻿# Monthly country-scope settlement, after anchor discovery and before premium/FX.
+# Bank purchases run after gold's initialization/flows, so its seed cannot
+# overwrite a treasury-funded deposit. Modifiers update after this effect block;
+# eligibility is checked directly wherever their mechanical benefits are read.
+banking_external_monthly_update = {
+	set_variable = { name = banking_external_sterilization_funded value = 0 }
+	if = {
+		limit = { NOT = { has_variable = banking_external_fx_protection } }
+		set_variable = { name = banking_external_fx_protection value = 0 }
+	}
+	if = {
+		limit = { banking_external_eligible_foreign_borrowing_limits = yes banking_tool_foreign_borrowing_limits_active = yes }
+		change_variable = { name = banking_external_fx_protection add = banking_external_fx_protection_step }
+	}
+	else = {
+		change_variable = { name = banking_external_fx_protection subtract = banking_external_fx_protection_step }
+	}
+	clamp_variable = { name = banking_external_fx_protection min = 0 max = banking_external_fx_protection_cap }
+	if = {
+		limit = { NOT = { has_variable = banking_external_import_months } }
+		set_variable = { name = banking_external_import_months value = 0 }
+	}
+	if = {
+		limit = { banking_tool_sterilize_inflows_active = yes }
+		if = {
+			limit = { banking_external_eligible_sterilize_inflows = yes gold_reserves >= banking_external_sterilization_cost }
+			add_treasury = banking_external_sterilization_payment
+			set_variable = { name = banking_external_sterilization_funded value = 1 }
+		}
+		else = { banking_effect_cb_disable_sterilize_inflows = yes }
+	}
+	if = {
+		limit = { banking_tool_emergency_import_financing_active = yes }
+		if = {
+			limit = {
+				banking_external_eligible_emergency_import_financing = yes
+				te_mon_in_financial_crisis = yes
+				gold_reserves >= banking_external_combined_import_cost
+			}
+			add_treasury = banking_external_import_payment
+			change_variable = { name = banking_external_import_months add = 1 }
+		}
+		else = { banking_effect_cb_disable_emergency_import_financing = yes }
+	}
+	else = { change_variable = { name = banking_external_import_months subtract = 1 } }
+	clamp_variable = { name = banking_external_import_months min = 0 max = banking_external_import_fatigue_cap }
+	banking_external_cleanup = yes
+}
+
+banking_external_purchase_reserves = {
+	if = {
+		limit = {
+			banking_external_eligible_fx_surrender = yes
+			banking_tool_fx_surrender_active = yes
+			has_variable = te_bank_gold
+			banking_external_surrender_purchase > 0
+		}
+		set_variable = { name = banking_external_purchase value = banking_external_surrender_purchase }
+		add_treasury = banking_external_surrender_payment
+		change_variable = { name = te_bank_gold add = var:banking_external_purchase }
+		remove_variable = banking_external_purchase
+	}
+}
+
+# Unavailable tools never occupy intervention points indefinitely. Disable
+# helpers also record the policy change in history; state stocks persist.
+banking_external_cleanup = {
+	if = {
+		limit = { banking_tool_restrict_inflows_active = yes banking_external_eligible_restrict_inflows = no }
+		banking_effect_cb_disable_restrict_inflows = yes
+	}
+	if = {
+		limit = { banking_tool_foreign_borrowing_limits_active = yes banking_external_eligible_foreign_borrowing_limits = no }
+		banking_effect_cb_disable_foreign_borrowing_limits = yes
+	}
+	if = {
+		limit = { banking_tool_fx_surrender_active = yes banking_external_eligible_fx_surrender = no }
+		banking_effect_cb_disable_fx_surrender = yes
+	}
+}

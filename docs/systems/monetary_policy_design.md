@@ -1,5 +1,7 @@
 # Monetary Policy — Design
 
+> **External policy expansion (2026-09-27):** Five banking interventions now influence positive capital flows, sterilization, FX debt exposure, paid reserve accumulation, and emergency import credit. See `mod_systems.md` → External & Currency tools for costs, gates, monthly ordering and modeling limits. Exchange rates remain endogenous and treaty arrangements retain their existing role; the retired direct FX buttons are not restored.
+
 > **STATUS: PHASES 1–6 IMPLEMENTED, PENDING IN-GAME VERIFICATION.** Phase 6 (§19 rows 6a / 6b /
 > 6c — the swap line as a repayable capped single-provider loan, the guarantee's call counter,
 > `non_fulfillment` on the friendly three, treaty leverage, and the two hostile articles

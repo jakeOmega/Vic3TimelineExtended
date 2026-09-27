@@ -160,6 +160,11 @@ te_mon_fx_term_rate = {
 		}
 		max = te_mon_fx_rate_gap_clamp
 		multiply = te_mon_controls_damp
+		# Restrain only positive carry, never capital flight.
+		if = {
+			limit = { te_mon_external_positive_carry = yes }
+			multiply = banking_external_inflow_damp
+		}
 		multiply = te_mon_fx_rate_weight
 	}
 }
@@ -297,6 +302,7 @@ te_mon_premium_fx = {
 		subtract = var:te_fx_index
 		min = 0
 		multiply = te_mon_fx_premium_per_point
+		multiply = banking_external_fx_exposure
 	}
 }
 
