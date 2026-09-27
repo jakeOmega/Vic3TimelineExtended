@@ -78,7 +78,8 @@ ch_program_funding_level_value = {
 
 # The cost of one funding level: GDP x 0.00005, the multiplier on a
 # country_expenses_add = 1 modifier, so that much a week. The World
-# Exposition's cost reads it once (ch_effect_world_exposition).
+# Exposition (ch_effect_world_exposition) costs one level's worth: x1, not
+# x level, re-evaluated like every multiplier.
 ch_program_funding_cost_mult = {
 	value = 0
 	add = gdp

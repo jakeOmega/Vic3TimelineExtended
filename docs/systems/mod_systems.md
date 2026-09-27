@@ -1718,10 +1718,10 @@ The risk to be aware of: if a mod system *also* adds loyalists/radicals tied to 
 | `events/te_debug_ch_events.txt` | Console test harness (`event te_debug_ch.1`) for the widget's awkward states |
 
 ### Player Controls
-- **Increase/Decrease Cultural Program Funding:** Adjusts a `ch_program_funding_level` variable that re-applies JE-scoped flat `country_cultural_pull_add` and a separate GDP-scaled expense modifier. The maximum level comes from `country_cultural_program_max_funding_add`.
+- **Increase/Decrease Cultural Program Funding:** Adjusts a `ch_program_funding_level` variable that re-applies JE-scoped flat `country_cultural_pull_add` (with +5 % `country_cultural_pull_mult`) per level, and a separate expense modifier that costs GDP × 0.00005 a week **per level** (`ch_program_funding_total_cost_mult`; flat across levels until PR #510). The maximum level comes from `country_cultural_program_max_funding_add`. The AI steps funding up only while it is out of default and its weekly surplus covers another step.
 - **Funding cap sources:** `institution_ministry_of_culture` grants funding tiers through ministry investment, while `mass_media` and `television` each raise the cap further.
 - **Begin International Cultural Outreach** (internally `ch_world_exposition`): a **persistent toggle**, not a one-shot and not timed — the JE-scoped modifier has no duration and runs, with its GDP-scaled cost, until the player ends it or the Ministry goes away. (An earlier version of this section described it as a one-shot decaying action; it never was one.)
-- **Fund Cultural Institutes:** JE-scoped policy that trades bureaucracy for higher `country_cultural_pull_mult` and society tech progress.
+- **Fund Cultural Institutes:** JE-scoped policy that trades authority (`country_authority_cost_add = 100`) for +10 % `country_cultural_pull_mult`. It gives no society research.
 - **Launch Global Media Campaign:** JE-scoped policy that requires `mass_media` and converts authority into prestige plus stronger cultural projection.
 - **Enact Cultural Protectionism:** JE-scoped defensive policy that boosts pull and authority while reducing migration attraction and society tech openness.
 - **Mutual exclusivity:** Global Media Campaign and Cultural Protectionism cannot be active at the same time.
