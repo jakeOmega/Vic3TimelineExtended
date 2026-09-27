@@ -3353,8 +3353,12 @@ law_ministry_of_refugee_affairs = {
 		civil_rights_movement
 	}
 
-	unlocking_laws = {
-		law_no_migration_controls
+	# A country that has shut its borders has no refugees to receive; any other
+	# migration law can run the ministry. Adopting Closed Borders while it is
+	# established abolishes it through te_fix_inconsistent_laws
+	# (gen_law_consistency.py), like every law whose requirements lapse.
+	disallowing_laws = {
+		law_closed_borders
 	}
 
 	institution = institution_ministry_of_refugee_affairs
