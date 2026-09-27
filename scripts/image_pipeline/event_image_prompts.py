@@ -2310,7 +2310,9 @@ def check(arts=None, on_disk=None) -> dict:
       duplicates  an event listed under two images
       dead        a listed event that is gone, hidden, or a console-only test event
       drift       a listed event whose image exists but which shows something else;
-                  phase 3 would silently revert the event to the listed image
+                  phase 3 would silently change the event to the listed image. Fix
+                  by moving the ID if the event was re-pointed by hand, or by
+                  running phase 3 if the image was just generated
     Information:
       pending       images with no .dds yet, and the events waiting for them
       unregistered  visible events the registry does not list, by what they show
@@ -2360,7 +2362,8 @@ def validate() -> bool:
     r = check()
     for title, rows in (("DUPLICATE EVENT ASSIGNMENTS", r["duplicates"]),
                         ("LISTED EVENTS THAT ARE GONE, HIDDEN OR DEBUG-ONLY", r["dead"]),
-                        ("DRIFT: LISTED UNDER AN IMAGE BUT SHOWING ANOTHER", r["drift"])):
+                        ("DRIFT: LISTED UNDER AN IMAGE BUT SHOWING ANOTHER (re-pointed by hand: "
+                         "move the ID; image just generated: run --phase update)", r["drift"])):
         if rows:
             print(f"{title} ({len(rows)}):")
             for row in rows:

@@ -46,10 +46,13 @@ class RegistryMatchesEventFilesTests(unittest.TestCase):
         self.assertEqual(
             self.report["drift"], [],
             "These events show a different picture from the one they are listed "
-            "under, so `generate_event_images.py --phase update` would revert them. "
-            "Move each ID to the list of the picture it now shows (or drop it if "
-            "that picture has no entry). `python3 scripts/image_pipeline/"
-            "event_image_prompts.py --validate` prints the full report.")
+            "under, so `generate_event_images.py --phase update` would change them. "
+            "If you re-pointed an event by hand, move its ID to the list of the "
+            "picture it now shows (or drop it if that picture has no entry). If the "
+            "listed picture was just generated, wire it instead: "
+            "`generate_event_images.py --only <key> --phase update`. "
+            "`python3 scripts/image_pipeline/event_image_prompts.py --validate` "
+            "prints the full report.")
 
 
 class PhaseUpdateTests(unittest.TestCase):
