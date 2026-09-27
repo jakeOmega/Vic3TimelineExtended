@@ -62,6 +62,14 @@ nd_taboo_clock_keep_first_use = 0.5
 nd_taboo_clock_keep_retaliation = 0.75
 nd_taboo_band_hysteresis = 2
 nd_taboo_event_cooldown_years = 10
+nd_taboo_ledger_ultimatum = -1
+nd_taboo_ledger_warning = -0.3
+nd_taboo_ledger_go_public = -0.7
+nd_taboo_ledger_offensive_doctrine = -1
+nd_taboo_ledger_repudiation = -1.5
+nd_taboo_ledger_nfu = 0.5
+nd_taboo_ledger_standdown = 0.5
+nd_taboo_ledger_terror = 2
 
 # ---- READING THE SCORE ---------------------------------------------------------
 

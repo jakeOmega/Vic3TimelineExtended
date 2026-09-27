@@ -155,5 +155,88 @@ class TestSimulator(unittest.TestCase):
         self.assertLessEqual(len(events), 1)
 
 
+EXTRA_EFFECTS = ROOT / "common/scripted_effects/extra_effects.txt"
+DETERRENCE_EFFECTS = ROOT / "common/scripted_effects/nuclear_deterrence_effects.txt"
+CRISIS_EFFECTS = ROOT / "common/scripted_effects/nuclear_crisis_effects.txt"
+LOOSE_EFFECTS = ROOT / "common/scripted_effects/nuclear_loose_effects.txt"
+
+
+class TestActs(unittest.TestCase):
+    def setUp(self):
+        self.taboo = strip_comments(read(TABOO_EFFECTS))
+        self.extra = strip_comments(read(EXTRA_EFFECTS))
+        self.det = strip_comments(read(DETERRENCE_EFFECTS))
+        self.crisis = strip_comments(read(CRISIS_EFFECTS))
+        self.loose = strip_comments(read(LOOSE_EFFECTS))
+
+    def test_note_use_scales_and_cuts_the_clock(self):
+        body = block(self.taboo, "nd_taboo_note_use")
+        for needle in ("value = nd_taboo_shock_$KIND$", "value = nd_taboo_ledger_$KIND$",
+                       "always = $RETALIATION$", "multiply = nd_taboo_clock_keep_retaliation",
+                       "multiply = nd_taboo_clock_keep_first_use",
+                       "nd_taboo_shock = { POINTS = global_var:nd_tb_use_shock }",
+                       "nd_taboo_ledger_add = { POINTS = global_var:nd_tb_use_ledger }",
+                       "name = nd_taboo_last_use_year value = year"):
+            self.assertIn(needle, body)
+
+    def test_response_strikes_are_retaliation_by_construction(self):
+        for name in ("nuclear_response_strike", "nuclear_response_response_strike"):
+            body = block(self.extra, name)
+            self.assertIn("nd_taboo_note_use = { KIND = strategic RETALIATION = yes }", body, name)
+            self.assertNotIn("RETALIATION = no", body, name)
+            self.assertNotIn("nd_was_struck_by", body, name)
+
+    def test_first_strikes_ask_whether_they_answer_a_strike(self):
+        for text, name, kind in ((self.extra, "nuclear_first_strike", "strategic"),
+                                 (self.det, "nd_tactical_strike_resolve", "tactical")):
+            body = block(text, name)
+            self.assertIn("nd_was_struck_by = { ENEMY = scope:target_country }", body, name)
+            self.assertIn(f"nd_taboo_note_use = {{ KIND = {kind} RETALIATION = yes }}", body, name)
+            self.assertIn(f"nd_taboo_note_use = {{ KIND = {kind} RETALIATION = no }}", body, name)
+
+    def test_dispatch_is_always_at_war(self):
+        # nd_was_struck_by opens with has_war_with; every detonation site is
+        # reached inside a war, or the retaliation branch could never be taken.
+        for name in ("nd_dispatch_strategic_strike", "nd_dispatch_tactical_strike"):
+            self.assertIn("has_war_with = scope:nd_strike_victim", block(self.det, name), name)
+
+    def test_terror_is_not_a_use(self):
+        self.assertIn("nd_taboo_ledger_add = { POINTS = nd_taboo_ledger_terror }", self.loose)
+        self.assertNotIn("nd_taboo_note_use", self.loose)
+
+    def test_threats_wear_it_down(self):
+        body = block(self.crisis, "nd_crisis_open")
+        self.assertIn("nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_ultimatum }", body)
+        self.assertIn("nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_warning }", body)
+        self.assertIn("nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_go_public }",
+                      block(self.crisis, "nd_crisis_act_go_public"))
+
+    def test_doctrine_credit_is_the_governments_not_the_laws(self):
+        weekly = block(self.det, "nd_weekly_update")
+        self.assertIn("nd_bind_doctrine_1 = yes", weekly)
+        self.assertNotIn("nd_set_doctrine_1 = yes", weekly)
+        shared = "nd_set_doctrine = { D = 1 OFFENSIVE = no LEAVES_NFU = no }"
+        self.assertIn(shared, block(self.det, "nd_set_doctrine_1"))
+        self.assertIn(shared, block(self.det, "nd_bind_doctrine_1"))
+        self.assertIn("POINTS = nd_taboo_ledger_nfu", block(self.det, "nd_set_doctrine_1"))
+        self.assertNotIn("nd_taboo_ledger", block(self.det, "nd_bind_doctrine_1"))
+        self.assertIn("POINTS = nd_taboo_ledger_offensive_doctrine", block(self.det, "nd_set_doctrine"))
+        self.assertIn("POINTS = nd_taboo_ledger_repudiation", block(self.det, "nd_break_pledge_effects"))
+
+    def test_reciprocal_standdown_strengthens_it(self):
+        body = block(self.crisis, "nd_crisis_close")
+        self.assertIn("var:nd_crisis_outcome_now = 3", body)
+        self.assertIn("nd_taboo_ledger_add = { POINTS = nd_taboo_ledger_standdown }", body)
+
+    def test_every_ledger_constant_is_defined(self):
+        values = strip_comments(read(TABOO_VALUES))
+        used = set()
+        for path in script_files():
+            used |= set(re.findall(r"POINTS = (nd_taboo_\w+)", strip_comments(read(path))))
+        self.assertTrue(used)
+        for name in used:
+            self.assertRegex(values, rf"(?m)^{name} = ", name)
+
+
 if __name__ == "__main__":
     unittest.main()

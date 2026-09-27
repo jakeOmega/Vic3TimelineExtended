@@ -421,7 +421,7 @@ nd_weekly_update = {
 		else = {
 			set_variable = { name = nd_doctrine_months_before_law value = nd_doctrine_tenure_months }
 		}
-		nd_set_doctrine_1 = yes
+		nd_bind_doctrine_1 = yes
 		set_variable = { name = nd_doctrine_months value = var:nd_doctrine_months_before_law }
 		remove_variable = nd_doctrine_months_before_law
 		if = {
@@ -659,11 +659,23 @@ nd_snap_public_estimate = {
 # without running the effects above it: a `var:` just "set" would still read
 # the old value, and the authority tooltip would hide the one warning it
 # exists to show. `always = yes/no` reads the same in the preview and the run.
-nd_set_doctrine_1 = { nd_set_doctrine = { D = 1 OFFENSIVE = no LEAVES_NFU = no } }
+# The government's own pledge strengthens the nuclear taboo (weighted by our
+# rank); the law holding us to it does not — nd_bind_doctrine_1 below.
+nd_set_doctrine_1 = {
+	nd_set_doctrine = { D = 1 OFFENSIVE = no LEAVES_NFU = no }
+	hidden_effect = {
+		nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_nfu }
+	}
+}
 nd_set_doctrine_2 = { nd_set_doctrine = { D = 2 OFFENSIVE = no LEAVES_NFU = yes } }
 nd_set_doctrine_3 = { nd_set_doctrine = { D = 3 OFFENSIVE = no LEAVES_NFU = yes } }
 nd_set_doctrine_4 = { nd_set_doctrine = { D = 4 OFFENSIVE = yes LEAVES_NFU = yes } }
 nd_set_doctrine_5 = { nd_set_doctrine = { D = 5 OFFENSIVE = yes LEAVES_NFU = yes } }
+
+# The No-First-Strike amendment holding an armed country at doctrine 1
+# (nd_weekly_update): the law's act, not the government's, so the nuclear
+# taboo is not credited.
+nd_bind_doctrine_1 = { nd_set_doctrine = { D = 1 OFFENSIVE = no LEAVES_NFU = no } }
 
 # D = 1..5; OFFENSIVE / LEAVES_NFU = yes | no. Call through the wrappers.
 nd_set_doctrine = {
@@ -695,6 +707,8 @@ nd_set_doctrine = {
 		change_infamy = 5
 		custom_tooltip = nd_tt_doctrine_alarms_rivals
 		hidden_effect = {
+			# ...and wears the nuclear taboo down, by our rank.
+			nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_offensive_doctrine }
 			every_country = {
 				limit = {
 					NOT = { this = scope:nd_sd_self }
@@ -796,6 +810,10 @@ nd_break_pledge_effects = {
 		set_variable = { name = nd_pledge_broken_months value = nd_pledge_broken_months_value }
 	}
 	change_infamy = $INFAMY$
+	# A broken promise wears the nuclear taboo down, by the breaker's rank.
+	hidden_effect = {
+		nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_repudiation }
+	}
 	add_modifier = {
 		name = nd_pledge_broken_mod
 		years = 10
@@ -1661,6 +1679,15 @@ nd_tactical_strike_resolve = {
 		0 = {
 			modifier = nuclear_strike_success_chance
 			change_infamy = 10
+			# The nuclear taboo (nuclear_taboo_effects.txt); this country is
+			# the attacker and at war with the target.
+			if = {
+				limit = { nd_was_struck_by = { ENEMY = scope:target_country } }
+				nd_taboo_note_use = { KIND = tactical RETALIATION = yes }
+			}
+			else = {
+				nd_taboo_note_use = { KIND = tactical RETALIATION = no }
+			}
 			scope:target_state = {
 				nuclear_tactical_strike = yes
 			}

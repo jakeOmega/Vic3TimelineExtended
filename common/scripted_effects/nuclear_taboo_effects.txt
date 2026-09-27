@@ -178,3 +178,34 @@ nd_taboo_shock = {
 		}
 	}
 }
+
+# A detonation by a state (a loose warhead's is not one: the terror plot books
+# nd_taboo_ledger_terror instead). KIND = strategic | tactical. RETALIATION =
+# yes | no, a literal from the caller: the response strikes pass yes by
+# construction, the first-strike effects ask nd_was_struck_by — never a role
+# read from a scope the strike effects swap (scripting_best_practices.md § A
+# Shared Script Value Must Not Read a Scope Named for a Role Its Callers
+# Swap). A first use halves the tradition of non-use; an answer counts half
+# and cuts it by a quarter. Scope: any.
+nd_taboo_note_use = {
+	if = {
+		limit = { has_global_variable = nd_taboo }
+		set_global_variable = { name = nd_tb_use_shock value = nd_taboo_shock_$KIND$ }
+		set_global_variable = { name = nd_tb_use_ledger value = nd_taboo_ledger_$KIND$ }
+		if = {
+			limit = { always = $RETALIATION$ }
+			change_global_variable = { name = nd_tb_use_shock multiply = nd_taboo_retaliation_factor }
+			change_global_variable = { name = nd_tb_use_ledger multiply = nd_taboo_retaliation_factor }
+			change_global_variable = { name = nd_taboo_quiet_years multiply = nd_taboo_clock_keep_retaliation }
+		}
+		else = {
+			change_global_variable = { name = nd_taboo_quiet_years multiply = nd_taboo_clock_keep_first_use }
+		}
+		nd_taboo_shock = { POINTS = global_var:nd_tb_use_shock }
+		nd_taboo_ledger_add = { POINTS = global_var:nd_tb_use_ledger }
+		set_global_variable = { name = nd_taboo_last_use_year value = year }
+		remove_global_variable = nd_tb_use_shock
+		remove_global_variable = nd_tb_use_ledger
+		debug_log = "TE_TABOO: a nuclear weapon was used; score now [SCOPE.ScriptValue('nd_disp_taboo')|1]"
+	}
+}

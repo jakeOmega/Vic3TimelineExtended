@@ -266,6 +266,14 @@ nd_crisis_open = {
 				set_variable = { name = nd_crisis_opponent value = scope:nd_issuer }
 				set_variable = { name = nd_crisis_role value = 2 }
 			}
+			# ---- a threat wears the nuclear taboo down, by our rank ---------
+			if = {
+				limit = { always = $PUBLIC$ }
+				nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_ultimatum }
+			}
+			else = {
+				nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_warning }
+			}
 			# ---- the crisis's figures, before anyone weighs them ------------
 			nd_crisis_refresh_figures = yes
 			# ---- both AIs reconsider their posture now ------------------------
@@ -899,6 +907,11 @@ nd_crisis_close = {
 		scope:nd_issuer = {
 			set_variable = { name = nd_crisis_outcome_now value = $OUTCOME$ }
 		}
+		# Both sides stepping back strengthens the nuclear taboo.
+		if = {
+			limit = { scope:nd_issuer = { var:nd_crisis_outcome_now = 3 } }
+			nd_taboo_ledger_add = { POINTS = nd_taboo_ledger_standdown }
+		}
 		# Each side's consequences wait on its outcome notice's option
 		# (nd_crisis_apply_outcome_side), so the option's tooltip shows them.
 		if = {
@@ -1497,6 +1510,9 @@ nd_crisis_act_go_public = {
 	custom_tooltip = nd_tt_go_public_terms
 	hidden_effect = {
 		nd_crisis_save_parties = yes
+		# A private warning made public: the rest of an ultimatum's toll on
+		# the nuclear taboo.
+		nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_go_public }
 		if = {
 			limit = { exists = scope:nd_target }
 			set_variable = { name = nd_crisis_public value = 1 }
