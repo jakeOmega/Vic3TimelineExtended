@@ -263,5 +263,89 @@ class PledgeTest(unittest.TestCase):
                 self.assertRegex(body, r"un_lobby_holds_pending_against\s*=\s*yes\s*\}\s*custom_tooltip\s*=\s*UN_VOTE_COMMITMENT_KEEP_TT")
 
 
+
+class CampaignTest(unittest.TestCase):
+    """§3: an influence campaign on an AI member, a one-sided pact."""
+
+    @classmethod
+    def setUpClass(cls):
+        actions = _read(LOBBYING_ACTIONS)
+        cls.pacts = {d: _block(actions, f"un_lobby_{d}_action") for d in ("for", "against")}
+        cls.effects = _read(LOBBY_EFFECTS)
+        cls.values = _read(LOBBYING_VALUES)
+        cls.vote_effects = _read(VOTE_EFFECTS)
+
+    def test_both_pacts_cost_a_hundred_and_are_one_sided(self):
+        for d, body in self.pacts.items():
+            pact = _sub_block(body, "pact")
+            with self.subTest(direction=d):
+                self.assertRegex(pact, r"\bcost\s*=\s*100\b")
+                self.assertRegex(pact, r"is_two_sided_pact\s*=\s*no")
+                self.assertIn("un_lobby_campaign_live_ok = yes", _sub_block(pact, "requirement_to_maintain"))
+
+    def test_each_pact_ends_its_own_campaign(self):
+        for d, body in self.pacts.items():
+            pact = _sub_block(body, "pact")
+            for hook in ("manual_break_effect", "auto_break_effect"):
+                with self.subTest(direction=d, hook=hook):
+                    self.assertRegex(_sub_block(pact, hook), r"un_lobby_campaign_end\s*=\s*\{\s*DIR\s*=\s*" + d + r"\s*\}")
+            self.assertRegex(_sub_block(body, "accept_effect"), r"un_lobby_campaign_start\s*=\s*\{\s*DIR\s*=\s*" + d + r"\s*\}")
+
+    def test_script_alone_starts_and_stops_the_ai_s_campaigns(self):
+        for d, body in self.pacts.items():
+            ai = _sub_block(body, "ai")
+            with self.subTest(direction=d):
+                self.assertRegex(_sub_block(ai, "evaluation_chance"), r"value\s*=\s*0\s*$")
+                self.assertRegex(ai, r"will_break\s*=\s*\{\s*always\s*=\s*no\s*\}")
+
+    def test_only_ai_members_can_be_lobbied(self):
+        for d, body in self.pacts.items():
+            with self.subTest(direction=d):
+                self.assertRegex(_sub_block(body, "potential"), r"is_ai\s*=\s*yes")
+        triggers = _read(LOBBY_TRIGGERS)
+        self.assertIn("un_lobby_member_lobbyable = yes", _block(triggers, "un_lobby_campaign_live_ok"))
+        self.assertRegex(_block(triggers, "un_lobby_member_lobbyable"), r"is_ai\s*=\s*yes")
+
+    def test_the_steps_and_caps(self):
+        for name, value in (("un_lobby_campaign_step", "3"), ("un_lobby_campaign_cap", "15"), ("un_lobby_campaign_stack_cap", "20")):
+            with self.subTest(value=name):
+                self.assertRegex(self.values, re.compile(r"^" + name + r"\s*=\s*\{\s*value\s*=\s*" + value + r"\s*\}", re.M))
+        shift = _block(self.values, "un_lobby_campaign_shift_value")
+        self.assertIn("multiply = un_lobby_campaign_step", shift)
+        self.assertIn("max = un_lobby_campaign_cap", shift)
+        aggregate = _block(self.effects, "un_lobby_campaigns_aggregate")
+        self.assertIn("max = un_lobby_campaign_stack_cap", aggregate)
+
+    def test_the_lean_reads_the_net_shift(self):
+        self.assertIn("add = un_lean_lobbying", _block(_read(DOSSIER_VALUES), "un_vote_lean"))
+        term = _block(self.values, "un_lean_lobbying")
+        self.assertIn("add = var:un_lobby_for_shift", term)
+        self.assertIn("subtract = var:un_lobby_against_shift", term)
+        self.assertIn("var:un_lobby_shift_res ?= scope:un_resolution", term)
+        self.assertRegex(_block(_read(DOSSIER_EFFECTS), "un_lean_snapshot"), r"name\s*=\s*un_lean_lobbying\s+value\s*=\s*un_lean_lobbying")
+
+    def test_voting_and_closing_end_the_campaigns(self):
+        for name in ("un_resolution_record_vote", "un_resolution_record_veto"):
+            with self.subTest(site=name):
+                self.assertRegex(_block(self.vote_effects, name), r"un_lobby_campaigns_end_on\s*=\s*\{\s*MEMBER\s*=\s*scope:un_res_voter\s*\}")
+        self.assertIn("un_lobby_campaigns_close = yes", _block(self.vote_effects, "un_resolution_archive"))
+        for name in ("un_lobby_campaigns_end_on", "un_lobby_campaigns_close"):
+            self.assertIn("un_lobby_campaign_remove_pact = yes", _block(self.effects, name))
+
+    def test_the_month_ticks_before_the_leans_are_read(self):
+        monthly = _block(self.vote_effects, "un_resolutions_monthly_update")
+        self.assertLess(monthly.index("un_lobby_campaigns_monthly = yes"), monthly.index("un_vote_refresh_leans = yes"))
+
+    def test_a_live_pact_is_found_by_its_direction(self):
+        reap = _block(self.effects, "un_lobby_campaigns_reap")
+        self.assertRegex(reap, r"first_country\s*=\s*prev\s+second_country\s*=\s*scope:un_lc_m\b")
+        self.assertNotIn("has_diplomatic_pact", reap)
+
+    def test_a_cancelled_campaign_drops_its_shift_at_once(self):
+        end = _block(self.effects, "un_lobby_campaign_end")
+        self.assertIn("un_lobby_campaign_drop", end)
+        self.assertIn("un_lobby_member_recompute", end)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -702,7 +702,7 @@ un_lean_regime = {
 	}
 }
 
-# The whole lean: the sum of every term above.
+# The whole lean: the sum of every term above, and the lobbying campaigns'.
 un_vote_lean = {
 	value = un_lean_consensus
 	add = un_lean_grounds
@@ -715,6 +715,8 @@ un_vote_lean = {
 	add = un_lean_accepted
 	add = un_lean_burden
 	add = un_lean_interests
+	# Influence campaigns on this member (un_lobbying_values.txt).
+	add = un_lean_lobbying
 }
 
 # ---- The lean: display reads (O(1), from the snapshot un_vote.4 wrote) ------------

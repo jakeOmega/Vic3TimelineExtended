@@ -49,3 +49,32 @@ un_lean_veto_basis_value = {
 	value = var:un_lean_total
 	subtract = var:un_lean_pledge
 }
+
+# ---- Campaigns (spec §3) ------------------------------------------------------------
+
+# Each full month a campaign runs moves its member's lean this far its way, up
+# to the cap; campaigns one way on the same member stack to the stack cap, and
+# the two ways net out (un_lobby_campaigns_aggregate).
+un_lobby_campaign_step = { value = 3 }
+un_lobby_campaign_cap = { value = 15 }
+un_lobby_campaign_stack_cap = { value = 20 }
+
+# One campaign's shift after its months. Scope: campaign container
+un_lobby_campaign_shift_value = {
+	value = var:un_lc_months
+	multiply = un_lobby_campaign_step
+	max = un_lobby_campaign_cap
+}
+
+# THE LOBBYING term of the lean: the member's net shift from the campaigns on
+# it, written each month (and when one ends) by un_lobby_effects.txt, for this
+# resolution only.
+# Scope: the voter (= ROOT, un_vote.4), with scope:un_resolution saved
+un_lean_lobbying = {
+	value = 0
+	if = {
+		limit = { var:un_lobby_shift_res ?= scope:un_resolution }
+		add = var:un_lobby_for_shift
+		subtract = var:un_lobby_against_shift
+	}
+}

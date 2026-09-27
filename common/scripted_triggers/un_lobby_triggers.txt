@@ -212,3 +212,50 @@ un_lobby_ai_side_against = {
 		}
 	}
 }
+
+# ---- Campaigns (spec §3) --------------------------------------------------------------
+
+# The lobbyist's side of both campaign pacts: a member with a vote, while a
+# resolution is voting.
+# Scope: the lobbyist
+un_lobby_campaign_selectable = {
+	has_game_rule = united_nations_enabled
+	has_global_variable = un_active_resolution
+	global_var:un_active_resolution ?= { has_tag = un_res_voting }
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_dues_vote_suspended = yes }
+	NOT = { un_representation_suspended = yes }
+}
+
+# Whether the scoped member can be the object of a campaign on the resolution
+# in session: an AI member with a vote that has not voted and is not the
+# resolution's target. Humans decide for themselves.
+# Scope: the member
+un_lobby_member_lobbyable = {
+	is_ai = yes
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_dues_vote_suspended = yes }
+	NOT = { un_representation_suspended = yes }
+	has_global_variable = un_active_resolution
+	global_var:un_active_resolution ?= {
+		has_tag = un_res_voting
+		NOT = { un_lobby_has_voted = { COUNTRY = PREV } } # REVIEWED 2026-09-27: PREV is the member this trigger is asked of (the scope before global_var:un_active_resolution)
+		NOT = {
+			AND = {
+				has_variable = un_res_target
+				var:un_res_target ?= PREV # REVIEWED 2026-09-27: PREV is the member this trigger is asked of
+			}
+		}
+	}
+}
+
+# A campaign pact stands while the resolution votes, its member can still be
+# lobbied and the lobbyist keeps its vote (the pacts' requirement_to_maintain,
+# so the engine breaks a pact the tick after its member votes or the resolution
+# closes; script also ends it at those two sites, un_lobby_campaigns_end_on /
+# un_lobby_campaigns_close).
+# Scope: the lobbyist (ROOT), with scope:target_country the member
+un_lobby_campaign_live_ok = {
+	un_lobby_campaign_selectable = yes
+	scope:target_country = { un_lobby_member_lobbyable = yes }
+}

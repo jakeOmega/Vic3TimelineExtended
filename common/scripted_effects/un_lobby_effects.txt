@@ -282,3 +282,471 @@ un_lobby_settle_pledge = {
 		}
 	}
 }
+
+# ============================================================================
+# CAMPAIGNS (spec §3)
+# ============================================================================
+# A campaign is a one-sided pact, un_lobby_for_action or
+# un_lobby_against_action (common/diplomatic_actions/un_lobbying.txt), from any
+# member with a vote to an AI member that has not voted, with influence upkeep.
+# The pact is the source of truth for whether a campaign runs; a script
+# container mirrors each one to count its months:
+#
+#   tags    un_lobby_campaign, un_lc_for | un_lc_against
+#   parent  the lobbyist — the engine culls the container if it stops existing
+#   vars    un_lc_lobbyist   the lobbying country
+#           un_lc_member     the member lobbied
+#           un_lc_months     full months run (the first pulse only arms it:
+#                            un_lc_armed)
+#           un_lc_shift      its lean shift: 3 a month, up to 15
+#                            (un_lobby_campaign_shift_value)
+#   listed  on the resolution's un_res_campaigns
+#
+# Each month (un_lobby_campaigns_monthly, from the global UN pulse, before the
+# leans are read): containers whose pact is gone are reaped, pacts without a
+# container are adopted, the live ones age, and each member's net shift is
+# written as country variables the lean reads (un_lean_lobbying):
+#   un_lobby_for_shift, un_lobby_against_shift   each capped at 20
+#   un_lobby_campaigns_on                        campaigns on it (the chamber
+#                                                orders worked members first)
+#   un_lobby_shift_res                           the resolution they belong to
+#
+# A campaign starts from the pact's accept_effect (the diplomacy panel), from
+# the chamber's Lobby buttons and from the AI (un_lobby_ai_monthly), which
+# create the pact and then call un_lobby_campaign_start themselves; the start
+# is idempotent, so a path that runs both is harmless. It ends when the pact
+# breaks (the break hooks call un_lobby_campaign_end, which drops the
+# campaign's shift at once), when its member votes (un_lobby_campaigns_end_on,
+# from un_resolution_record_vote / _veto) and when the resolution closes
+# (un_lobby_campaigns_close, from un_resolution_archive).
+#
+# Every removal is a `while` over "one matching container left", taking it off
+# the list before destroying it, so no list is changed while it is iterated
+# and the list never holds a dead reference of our making.
+# ============================================================================
+
+# Start a $DIR$ campaign by the scoped lobbyist on scope:target_country, on the
+# resolution in session, replacing a container already there for the same
+# lobbyist, member and direction. Leaves scope:un_lc_new at the container.
+# Callers guard any use of scope:un_lc_new with `exists`: when an action's
+# tooltip renders its accept_effect the container is not created.
+# Parameters: $DIR$ = for | against
+# Scope: the lobbyist; scope:target_country = the member
+un_lobby_campaign_start = {
+	save_scope_as = un_lc_lobbyist_new
+	scope:target_country = { save_scope_as = un_lc_member_new }
+	global_var:un_active_resolution ?= {
+		if = {
+			limit = { has_tag = un_res_voting }
+			save_scope_as = un_lc_start_res
+			un_lobby_campaign_drop = {
+				DIR = $DIR$
+				LOBBYIST = scope:un_lc_lobbyist_new
+				MEMBER = scope:un_lc_member_new
+			}
+		}
+	}
+	if = {
+		limit = { scope:un_lc_start_res ?= { has_tag = un_res_voting } }
+		create_container = {
+			tags = { un_lobby_campaign un_lc_$DIR$ }
+			parent = scope:un_lc_lobbyist_new
+			save_scope_as = un_lc_new
+		}
+		if = {
+			limit = { exists = scope:un_lc_new }
+			scope:un_lc_new = {
+				set_variable = { name = un_lc_lobbyist value = scope:un_lc_lobbyist_new }
+				set_variable = { name = un_lc_member value = scope:un_lc_member_new }
+				set_variable = { name = un_lc_months value = 0 }
+				set_variable = { name = un_lc_shift value = 0 }
+			}
+			scope:un_lc_start_res = {
+				add_to_variable_list = { name = un_res_campaigns target = scope:un_lc_new }
+			}
+		}
+	}
+}
+
+# Take every $DIR$ campaign by $LOBBYIST$ on $MEMBER$ off the resolution and
+# destroy it. Does not touch the pact.
+# Parameters: $DIR$, $LOBBYIST$, $MEMBER$ (scopes)
+# Scope: resolution container
+un_lobby_campaign_drop = {
+	while = {
+		limit = {
+			has_variable_list = un_res_campaigns
+			any_in_list = {
+				variable = un_res_campaigns
+				has_tag = un_lc_$DIR$
+				var:un_lc_lobbyist ?= $LOBBYIST$
+				var:un_lc_member ?= $MEMBER$
+			}
+		}
+		random_in_list = {
+			variable = un_res_campaigns
+			limit = {
+				has_tag = un_lc_$DIR$
+				var:un_lc_lobbyist ?= $LOBBYIST$
+				var:un_lc_member ?= $MEMBER$
+			}
+			save_scope_as = un_lc_drop
+		}
+		remove_list_variable = { name = un_res_campaigns target = scope:un_lc_drop }
+		scope:un_lc_drop = { destroy_container = yes }
+	}
+}
+
+# The pact broke: manually (cancelled from the diplomacy panel or the chamber,
+# or removed by script) or automatically (its requirement failed). Drop the
+# campaign and rewrite its member's shift at once, so a cancelled campaign's
+# gain is gone even if the member votes before the next monthly pulse (the
+# last call can land mid-month). If scope:target_country no longer resolves,
+# the monthly reap collects the container instead.
+# Parameters: $DIR$ = for | against
+# Scope: the lobbyist (the pact's ROOT); scope:target_country = the member
+un_lobby_campaign_end = {
+	hidden_effect = {
+		save_scope_as = un_lc_end_lobbyist
+		if = {
+			limit = { exists = scope:target_country }
+			scope:target_country = { save_scope_as = un_lc_end_member }
+			global_var:un_active_resolution ?= {
+				un_lobby_campaign_drop = {
+					DIR = $DIR$
+					LOBBYIST = scope:un_lc_end_lobbyist
+					MEMBER = scope:un_lc_end_member
+				}
+				un_lobby_member_recompute = { MEMBER = scope:un_lc_end_member }
+			}
+		}
+	}
+}
+
+# Remove the pact behind the scoped campaign (the container is left to the
+# caller). Guarded: a lobbyist or member that stopped existing has no pact.
+# Scope: campaign container
+un_lobby_campaign_remove_pact = {
+	if = {
+		limit = {
+			exists = var:un_lc_lobbyist
+			exists = var:un_lc_member
+		}
+		var:un_lc_member = { save_temporary_scope_as = un_lc_rm_member }
+		if = {
+			limit = { has_tag = un_lc_for }
+			var:un_lc_lobbyist = {
+				remove_diplomatic_pact = { country = scope:un_lc_rm_member type = un_lobby_for_action }
+			}
+		}
+		else = {
+			var:un_lc_lobbyist = {
+				remove_diplomatic_pact = { country = scope:un_lc_rm_member type = un_lobby_against_action }
+			}
+		}
+	}
+}
+
+# $MEMBER$ has voted: every campaign on it ends, pact and all, the same day
+# (the pact's own requirement would break it a tick later; this stops the
+# influence the day the ballot is cast). Its shift no longer matters.
+# Parameters: $MEMBER$ = the member (a scope)
+# Scope: resolution container
+un_lobby_campaigns_end_on = {
+	while = {
+		limit = {
+			has_variable_list = un_res_campaigns
+			any_in_list = {
+				variable = un_res_campaigns
+				has_tag = un_lobby_campaign
+				var:un_lc_member ?= $MEMBER$
+			}
+		}
+		random_in_list = {
+			variable = un_res_campaigns
+			limit = {
+				has_tag = un_lobby_campaign
+				var:un_lc_member ?= $MEMBER$
+			}
+			save_scope_as = un_lc_stop
+		}
+		remove_list_variable = { name = un_res_campaigns target = scope:un_lc_stop }
+		scope:un_lc_stop = {
+			un_lobby_campaign_remove_pact = yes
+			destroy_container = yes
+		}
+	}
+}
+
+# The resolution closes (decided, lapsed, vetoed): every campaign on it ends.
+# Then the list is emptied of anything left (a container the engine culled with
+# its lobbyist).
+# Scope: resolution container
+un_lobby_campaigns_close = {
+	while = {
+		limit = {
+			has_variable_list = un_res_campaigns
+			any_in_list = {
+				variable = un_res_campaigns
+				has_tag = un_lobby_campaign
+			}
+		}
+		random_in_list = {
+			variable = un_res_campaigns
+			limit = { has_tag = un_lobby_campaign }
+			save_scope_as = un_lc_stop
+		}
+		remove_list_variable = { name = un_res_campaigns target = scope:un_lc_stop }
+		scope:un_lc_stop = {
+			un_lobby_campaign_remove_pact = yes
+			destroy_container = yes
+		}
+	}
+	if = {
+		limit = { has_variable_list = un_res_campaigns }
+		clear_variable_list = un_res_campaigns
+	}
+}
+
+# Monthly campaign upkeep, while the resolution votes. From
+# un_resolutions_monthly_update, before the leans are read. NOT IDEMPOTENT
+# WITHIN A MONTH: campaigns age on every call.
+# Scope: resolution container (= scope:un_resolution)
+un_lobby_campaigns_monthly = {
+	save_temporary_scope_as = un_lc_res_t
+	un_lobby_campaigns_reap = yes
+	un_lobby_campaigns_adopt = yes
+	if = {
+		limit = { has_variable_list = un_res_campaigns }
+		every_in_list = {
+			variable = un_res_campaigns
+			limit = { has_tag = un_lobby_campaign }
+			if = {
+				limit = { has_variable = un_lc_armed }
+				change_variable = { name = un_lc_months add = 1 }
+			}
+			else = {
+				set_variable = un_lc_armed
+			}
+			set_variable = { name = un_lc_shift value = un_lobby_campaign_shift_value }
+		}
+	}
+	un_lobby_campaigns_aggregate = yes
+}
+
+# Destroy the campaigns whose pact is gone: broken by a path whose hook did not
+# reach the container (its member annexed, the pact removed by the engine), or
+# a lobbyist or member that stopped existing. A live pact is found by its
+# direction — first_country is the lobbyist, second_country the member — so a
+# pact of the same type the other way round never keeps a dead campaign alive.
+# Scope: resolution container
+un_lobby_campaigns_reap = {
+	if = {
+		limit = { has_variable_list = un_res_campaigns }
+		every_in_list = {
+			variable = un_res_campaigns
+			limit = { has_tag = un_lobby_campaign }
+			if = {
+				limit = {
+					OR = {
+						NOT = { exists = var:un_lc_lobbyist }
+						NOT = { exists = var:un_lc_member }
+					}
+				}
+				set_variable = un_lc_dead
+			}
+			else = {
+				var:un_lc_member = { save_temporary_scope_as = un_lc_m }
+				if = {
+					limit = {
+						has_tag = un_lc_for
+						var:un_lc_lobbyist = {
+							NOT = {
+								any_scope_diplomatic_pact = {
+									is_diplomatic_action_type = un_lobby_for_action
+									first_country = prev # REVIEWED 2026-09-27: prev is var:un_lc_lobbyist on purpose — the pact must run from the lobbyist to the member
+									second_country = scope:un_lc_m
+								}
+							}
+						}
+					}
+					set_variable = un_lc_dead
+				}
+				else_if = {
+					limit = {
+						has_tag = un_lc_against
+						var:un_lc_lobbyist = {
+							NOT = {
+								any_scope_diplomatic_pact = {
+									is_diplomatic_action_type = un_lobby_against_action
+									first_country = prev # REVIEWED 2026-09-27: prev is var:un_lc_lobbyist on purpose — the pact must run from the lobbyist to the member
+									second_country = scope:un_lc_m
+								}
+							}
+						}
+					}
+					set_variable = un_lc_dead
+				}
+			}
+		}
+	}
+	while = {
+		limit = {
+			has_variable_list = un_res_campaigns
+			any_in_list = {
+				variable = un_res_campaigns
+				has_tag = un_lobby_campaign
+				has_variable = un_lc_dead
+			}
+		}
+		random_in_list = {
+			variable = un_res_campaigns
+			limit = {
+				has_tag = un_lobby_campaign
+				has_variable = un_lc_dead
+			}
+			save_scope_as = un_lc_reaped
+		}
+		remove_list_variable = { name = un_res_campaigns target = scope:un_lc_reaped }
+		scope:un_lc_reaped = { destroy_container = yes }
+	}
+}
+
+# Give a container to every campaign pact that has none: a pact whose start
+# never ran (a path we do not know of). It starts at month 0.
+# Scope: resolution container; scope:un_lc_res_t = it
+un_lobby_campaigns_adopt = {
+	every_country = {
+		limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+		save_temporary_scope_as = un_lca_lobbyist
+		every_scope_diplomatic_pact = {
+			limit = {
+				is_diplomatic_action_type = un_lobby_for_action
+				first_country = prev
+			}
+			second_country = { save_temporary_scope_as = un_lca_member }
+			un_lobby_campaign_adopt_one = { DIR = for }
+		}
+		every_scope_diplomatic_pact = {
+			limit = {
+				is_diplomatic_action_type = un_lobby_against_action
+				first_country = prev
+			}
+			second_country = { save_temporary_scope_as = un_lca_member }
+			un_lobby_campaign_adopt_one = { DIR = against }
+		}
+	}
+}
+
+# Parameters: $DIR$ = for | against
+# Scope: any; scope:un_lca_lobbyist, scope:un_lca_member, scope:un_lc_res_t
+un_lobby_campaign_adopt_one = {
+	if = {
+		limit = {
+			scope:un_lc_res_t = {
+				NOT = {
+					AND = {
+						has_variable_list = un_res_campaigns
+						any_in_list = {
+							variable = un_res_campaigns
+							has_tag = un_lc_$DIR$
+							var:un_lc_lobbyist ?= scope:un_lca_lobbyist
+							var:un_lc_member ?= scope:un_lca_member
+						}
+					}
+				}
+			}
+		}
+		scope:un_lca_member = { save_scope_as = target_country }
+		scope:un_lca_lobbyist = { un_lobby_campaign_start = { DIR = $DIR$ } }
+	}
+}
+
+# Rewrite every member's shift from the live campaigns: clear last month's,
+# add each campaign's shift to its member, cap each direction at the stack cap.
+# Scope: resolution container; scope:un_lc_res_t = it
+un_lobby_campaigns_aggregate = {
+	every_country = {
+		limit = { has_variable = un_lobby_shift_res }
+		un_lobby_member_shift_clear = yes
+	}
+	if = {
+		limit = { has_variable_list = un_res_campaigns }
+		every_in_list = {
+			variable = un_res_campaigns
+			limit = {
+				has_tag = un_lobby_campaign
+				exists = var:un_lc_member
+			}
+			un_lobby_campaign_add_to_member = yes
+		}
+	}
+	every_country = {
+		limit = { var:un_lobby_shift_res ?= scope:un_lc_res_t }
+		clamp_variable = { name = un_lobby_for_shift min = 0 max = un_lobby_campaign_stack_cap }
+		clamp_variable = { name = un_lobby_against_shift min = 0 max = un_lobby_campaign_stack_cap }
+	}
+}
+
+# Rewrite one member's shift (a campaign on it has just ended).
+# Parameters: $MEMBER$ = the member (a scope)
+# Scope: resolution container
+un_lobby_member_recompute = {
+	save_temporary_scope_as = un_lc_res_t
+	$MEMBER$ = { un_lobby_member_shift_clear = yes }
+	if = {
+		limit = { has_variable_list = un_res_campaigns }
+		every_in_list = {
+			variable = un_res_campaigns
+			limit = {
+				has_tag = un_lobby_campaign
+				var:un_lc_member ?= $MEMBER$
+			}
+			un_lobby_campaign_add_to_member = yes
+		}
+	}
+	$MEMBER$ = {
+		if = {
+			limit = { var:un_lobby_shift_res ?= scope:un_lc_res_t }
+			clamp_variable = { name = un_lobby_for_shift min = 0 max = un_lobby_campaign_stack_cap }
+			clamp_variable = { name = un_lobby_against_shift min = 0 max = un_lobby_campaign_stack_cap }
+		}
+	}
+}
+
+# Scope: a member country
+un_lobby_member_shift_clear = {
+	if = {
+		limit = { has_variable = un_lobby_shift_res }
+		remove_variable = un_lobby_shift_res
+		remove_variable = un_lobby_for_shift
+		remove_variable = un_lobby_against_shift
+		remove_variable = un_lobby_campaigns_on
+	}
+}
+
+# Add the scoped campaign's shift to its member, writing the member's shift
+# variables first if this is the first campaign counted on it. Accumulates
+# with set_variable's inline value block: change_variable does not reliably
+# resolve a script-value operand.
+# Scope: campaign container; scope:un_lc_res_t = its resolution
+un_lobby_campaign_add_to_member = {
+	save_temporary_scope_as = un_lc_add
+	var:un_lc_member ?= {
+		if = {
+			limit = { NOT = { var:un_lobby_shift_res ?= scope:un_lc_res_t } }
+			set_variable = { name = un_lobby_shift_res value = scope:un_lc_res_t }
+			set_variable = { name = un_lobby_for_shift value = 0 }
+			set_variable = { name = un_lobby_against_shift value = 0 }
+			set_variable = { name = un_lobby_campaigns_on value = 0 }
+		}
+		if = {
+			limit = { scope:un_lc_add = { has_tag = un_lc_for } }
+			set_variable = { name = un_lobby_for_shift value = { value = var:un_lobby_for_shift add = scope:un_lc_add.var:un_lc_shift } }
+		}
+		else = {
+			set_variable = { name = un_lobby_against_shift value = { value = var:un_lobby_against_shift add = scope:un_lc_add.var:un_lc_shift } }
+		}
+		change_variable = { name = un_lobby_campaigns_on add = 1 }
+	}
+}

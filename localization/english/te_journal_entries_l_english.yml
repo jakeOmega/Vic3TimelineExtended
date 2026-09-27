@@ -1260,3 +1260,5 @@
  je_world_war_status_war_declared:0 "#bold WAR HAS BEEN DECLARED.#! The ideological blocs have taken up arms. The world holds its breath."
  je_un_chamber_commitment_pending_no:0 "#v Pledged against#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')] undertook to vote against. No vote of theirs is on the record."
  je_un_res_why_no_pledge:0 "  #R Against#! — a vote pledged against it: #v [THIS.Var('un_res_why_no_pledge').GetValue|0]#!"
+ je_un_res_why_yes_lobbying:0 "  #G In favour#! — lobbied for it: #v [THIS.Var('un_res_why_yes_lobbying').GetValue|0]#!"
+ je_un_res_why_no_lobbying:0 "  #R Against#! — lobbied against it: #v [THIS.Var('un_res_why_no_lobbying').GetValue|0]#!"

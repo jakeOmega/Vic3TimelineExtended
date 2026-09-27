@@ -546,3 +546,233 @@ un_secure_commitment_against_action = {
 		}
 	}
 }
+
+# ---- Campaign: lobby for (spec §3) -------------------------------------------
+# A one-sided pact, like vanilla's Improve Relations: our delegation works on
+# an AI member for as long as we keep it running. Each full month moves the
+# member's lean 3 points in favour, up to 15; campaigns one way on the same
+# member stack to 20, and opposing ones net out (un_lobby_effects.txt,
+# § CAMPAIGNS). While it runs we read the member's true position in the
+# chamber. It ends when the member votes, when the resolution closes, or when
+# we cancel it — and a cancelled campaign's gain goes with it.
+#
+# Cost: a flat 100 influence. The spec asked for 75 / 100 / 150 by the
+# member's rank if a pact's cost could be a script value; every vanilla pact
+# cost is a literal and the engine's reading of anything else cannot be
+# checked outside the game, so the fallback it named is used.
+#
+# The AI never takes this action through the engine: its campaigns are chosen,
+# started and ended in script each month (un_lobby_ai_monthly), which creates
+# the pact directly. evaluation_chance 0 keeps the engine from proposing it,
+# and will_break always-no keeps the engine from breaking one script started.
+un_lobby_for_action = {
+	groups = {
+		general
+	}
+
+	requires_approval = no
+	show_confirmation_box = yes
+	show_effect_in_tooltip = yes
+	is_hostile = no
+	should_notify_third_parties = no
+
+	selectable = {
+		un_lobby_campaign_selectable = yes
+	}
+
+	# Only AI members: a human member decides for itself.
+	potential = {
+		NOT = { is_country_type = decentralized }
+		scope:target_country = {
+			is_ai = yes
+			NOT = { is_country_type = decentralized }
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = un_lobby_campaign_member_votes_tt
+			scope:target_country = {
+				NOT = { un_dues_vote_suspended = yes }
+				NOT = { un_representation_suspended = yes }
+			}
+		}
+		custom_tooltip = {
+			text = un_lobby_not_the_target_tt
+			global_var:un_active_resolution ?= {
+				NOT = {
+					AND = {
+						has_variable = un_res_target
+						var:un_res_target ?= scope:target_country
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			text = un_lobby_has_not_voted_tt
+			global_var:un_active_resolution ?= {
+				NOT = { un_lobby_has_voted = { COUNTRY = scope:target_country } }
+			}
+		}
+		custom_tooltip = {
+			text = un_lobby_campaign_not_both_ways_tt
+			NOT = { has_diplomatic_pact = { who = scope:target_country type = un_lobby_against_action } }
+		}
+	}
+
+	accept_effect = {
+		custom_tooltip = un_lobby_campaign_for_effect_tt
+		hidden_effect = {
+			un_lobby_campaign_start = { DIR = for }
+		}
+	}
+
+	pact = {
+		cost = 100
+		is_two_sided_pact = no
+		show_in_outliner = yes
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = un_lobby_campaign_maintain_tt
+					un_lobby_campaign_live_ok = yes
+				}
+			}
+		}
+
+		manual_break_effect = {
+			un_lobby_campaign_end = { DIR = for }
+		}
+		auto_break_effect = {
+			un_lobby_campaign_end = { DIR = for }
+		}
+	}
+
+	ai = {
+		evaluation_chance = {
+			value = 0
+		}
+		will_propose = { always = no }
+		will_break = { always = no }
+		propose_score = {
+			value = 0
+		}
+	}
+}
+
+# ---- Campaign: lobby against (spec §3) -------------------------------------------
+# A one-sided pact, like vanilla's Improve Relations: our delegation works on
+# an AI member for as long as we keep it running. Each full month moves the
+# member's lean 3 points against, up to 15; campaigns one way on the same
+# member stack to 20, and opposing ones net out (un_lobby_effects.txt,
+# § CAMPAIGNS). While it runs we read the member's true position in the
+# chamber. It ends when the member votes, when the resolution closes, or when
+# we cancel it — and a cancelled campaign's gain goes with it.
+#
+# Cost: a flat 100 influence. The spec asked for 75 / 100 / 150 by the
+# member's rank if a pact's cost could be a script value; every vanilla pact
+# cost is a literal and the engine's reading of anything else cannot be
+# checked outside the game, so the fallback it named is used.
+#
+# The AI never takes this action through the engine: its campaigns are chosen,
+# started and ended in script each month (un_lobby_ai_monthly), which creates
+# the pact directly. evaluation_chance 0 keeps the engine from proposing it,
+# and will_break always-no keeps the engine from breaking one script started.
+un_lobby_against_action = {
+	groups = {
+		general
+	}
+
+	requires_approval = no
+	show_confirmation_box = yes
+	show_effect_in_tooltip = yes
+	is_hostile = no
+	should_notify_third_parties = no
+
+	selectable = {
+		un_lobby_campaign_selectable = yes
+	}
+
+	# Only AI members: a human member decides for itself.
+	potential = {
+		NOT = { is_country_type = decentralized }
+		scope:target_country = {
+			is_ai = yes
+			NOT = { is_country_type = decentralized }
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = un_lobby_campaign_member_votes_tt
+			scope:target_country = {
+				NOT = { un_dues_vote_suspended = yes }
+				NOT = { un_representation_suspended = yes }
+			}
+		}
+		custom_tooltip = {
+			text = un_lobby_not_the_target_tt
+			global_var:un_active_resolution ?= {
+				NOT = {
+					AND = {
+						has_variable = un_res_target
+						var:un_res_target ?= scope:target_country
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			text = un_lobby_has_not_voted_tt
+			global_var:un_active_resolution ?= {
+				NOT = { un_lobby_has_voted = { COUNTRY = scope:target_country } }
+			}
+		}
+		custom_tooltip = {
+			text = un_lobby_campaign_not_both_ways_tt
+			NOT = { has_diplomatic_pact = { who = scope:target_country type = un_lobby_for_action } }
+		}
+	}
+
+	accept_effect = {
+		custom_tooltip = un_lobby_campaign_against_effect_tt
+		hidden_effect = {
+			un_lobby_campaign_start = { DIR = against }
+		}
+	}
+
+	pact = {
+		cost = 100
+		is_two_sided_pact = no
+		show_in_outliner = yes
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = un_lobby_campaign_maintain_tt
+					un_lobby_campaign_live_ok = yes
+				}
+			}
+		}
+
+		manual_break_effect = {
+			un_lobby_campaign_end = { DIR = against }
+		}
+		auto_break_effect = {
+			un_lobby_campaign_end = { DIR = against }
+		}
+	}
+
+	ai = {
+		evaluation_chance = {
+			value = 0
+		}
+		will_propose = { always = no }
+		will_break = { always = no }
+		propose_score = {
+			value = 0
+		}
+	}
+}

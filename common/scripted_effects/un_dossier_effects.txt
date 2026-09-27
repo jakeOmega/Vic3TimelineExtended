@@ -159,6 +159,7 @@ un_lean_snapshot = {
 	set_variable = { name = un_lean_accepted value = un_lean_accepted }
 	set_variable = { name = un_lean_burden value = un_lean_burden }
 	set_variable = { name = un_lean_interests value = un_lean_interests }
+	set_variable = { name = un_lean_lobbying value = un_lean_lobbying }
 	set_variable = { name = un_lean_total value = un_vote_lean }
 	# Derived from the two lines above (un_lobbying_values.txt): the lean the
 	# other members read, misreading included, and the lean the veto is
@@ -282,6 +283,13 @@ un_lean_tally_un_res_yes = {
 			limit = { var:un_lean_interests >= un_lean_reason_size }
 			un_lean_count_reason = { NAME = un_res_why_yes_interests }
 		}
+		if = {
+			limit = {
+				has_variable = un_lean_lobbying
+				var:un_lean_lobbying >= un_lean_reason_size
+			}
+			un_lean_count_reason = { NAME = un_res_why_yes_lobbying }
+		}
 	}
 }
 
@@ -322,6 +330,13 @@ un_lean_tally_un_res_no = {
 		if = {
 			limit = { var:un_lean_interests <= un_lean_reason_size_negative }
 			un_lean_count_reason = { NAME = un_res_why_no_interests }
+		}
+		if = {
+			limit = {
+				has_variable = un_lean_lobbying
+				var:un_lean_lobbying <= un_lean_reason_size_negative
+			}
+			un_lean_count_reason = { NAME = un_res_why_no_lobbying }
 		}
 	}
 }

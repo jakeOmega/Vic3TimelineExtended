@@ -1587,6 +1587,7 @@ un_chamber_reasons_block = {
 				has_variable = un_res_why_yes_pledge
 				has_variable = un_res_why_yes_accepted
 				has_variable = un_res_why_yes_interests
+				has_variable = un_res_why_yes_lobbying
 				has_variable = un_res_why_no_grounds
 				has_variable = un_res_why_no_self
 				has_variable = un_res_why_no_pledge
@@ -1595,6 +1596,7 @@ un_chamber_reasons_block = {
 				has_variable = un_res_why_no_glass
 				has_variable = un_res_why_no_burden
 				has_variable = un_res_why_no_interests
+				has_variable = un_res_why_no_lobbying
 			}
 		}
 		custom_tooltip_no_bullet = je_un_chamber_reasons_intro
@@ -1604,6 +1606,7 @@ un_chamber_reasons_block = {
 		un_chamber_reason_line = { NAME = un_res_why_yes_pledge KEY = je_un_res_why_yes_pledge }
 		un_chamber_reason_line = { NAME = un_res_why_yes_accepted KEY = je_un_res_why_yes_accepted }
 		un_chamber_reason_line = { NAME = un_res_why_yes_interests KEY = je_un_res_why_yes_interests }
+		un_chamber_reason_line = { NAME = un_res_why_yes_lobbying KEY = je_un_res_why_yes_lobbying }
 		un_chamber_reason_line = { NAME = un_res_why_no_grounds KEY = je_un_res_why_no_grounds }
 		un_chamber_reason_line = { NAME = un_res_why_no_self KEY = je_un_res_why_no_self }
 		un_chamber_reason_line = { NAME = un_res_why_no_pledge KEY = je_un_res_why_no_pledge }
@@ -1612,6 +1615,7 @@ un_chamber_reasons_block = {
 		un_chamber_reason_line = { NAME = un_res_why_no_glass KEY = je_un_res_why_no_glass }
 		un_chamber_reason_line = { NAME = un_res_why_no_burden KEY = je_un_res_why_no_burden }
 		un_chamber_reason_line = { NAME = un_res_why_no_interests KEY = je_un_res_why_no_interests }
+		un_chamber_reason_line = { NAME = un_res_why_no_lobbying KEY = je_un_res_why_no_lobbying }
 	}
 	else_if = {
 		limit = { has_tag = un_res_voting }
