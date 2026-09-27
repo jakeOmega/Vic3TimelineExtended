@@ -382,6 +382,14 @@ def main() -> None:
         print(f"\n  Total: {len(all_images)} images")
         return
 
+    # A sparse worktree leaves gfx/ unchecked-out: every .dds would look
+    # missing, so phase 1 would regenerate every picture and phase 3 would
+    # report all of them pending.
+    if not GFX_DIR.is_dir():
+        print(f"Error: {GFX_DIR} is not checked out (a sparse worktree?). "
+              "Run the pipeline from a full checkout.")
+        sys.exit(1)
+
     # Filter to --only keys if specified
     if args.only:
         unknown = [k for k in args.only if k not in all_images]
