@@ -16,8 +16,10 @@ _(no open HIGH items — H1–H3 from the 2026-09-10 review were fixed 2026-09-1
 
 ## MEDIUM
 
-### Findings from writing the player guide (2026-09-26, branch `docs/player-guide`)
-Two agents read each system's script end to end while writing and fact-checking `docs/player_guide/`, and turned up the items below. None is fixed yet, and none was play-tested. The guide describes what the script does, so it doesn't promise the broken behaviour. The same PR's description also lists the localization strings that promise effects the script doesn't deliver, and the design docs that have drifted from the script.
+### Findings from writing the player guide (2026-09-26, branch `docs/player-guide`) — RESOLVED 2026-09-27
+**Status:** every item below was addressed by the fix PRs that followed, each independently reviewed and merged; none was play-tested, so each PR carries in-game checks. By PR: #505 item 1 (with `change_variable_clamp_audit`); #506 items 6–8, 21, and the Enforce Cultural Acceptance and War Propaganda items of 22; #507 items 12 and 18, and the Mars reward, space race and custom-religion `NOR` items of 22; #508 items 2–5 and the Mandate System item of 22; #510 items 13–15 and 17; #511 items 9–11, 16, 19 and 20; #512 the `te_unused` detection item of 22. Some fixes needed owner decisions and differ from the "Fix" suggested here; the PR descriptions record what shipped. Kept below as the record of what was found.
+
+Two agents read each system's script end to end while writing and fact-checking `docs/player_guide/`, and turned up the items below. The guide describes what the script does, so it doesn't promise the broken behaviour. The same PR's description also lists the localization strings that promise effects the script doesn't deliver, and the design docs that have drifted from the script.
 
 Ordered by player impact. "Confirmed" means a reviewer traced it through the script. Nothing was play-tested.
 
