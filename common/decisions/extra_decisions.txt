@@ -243,8 +243,12 @@ mandate_system_decision = {
 		has_journal_entry = je_colonial_empire
 		has_technology_researched = decolonization
 		# One-shot (docs/archive/decolonization_review.md § 6): the conversion
-		# is permanent (mandate_system_modifier, days = -1), and without this a
-		# retake refreshed the 12-month stability boost at will.
+		# is permanent, and without this a retake refreshed the 12-month
+		# stability boost at will. Kept in a variable, as the Imperial Federation
+		# Acts keep imperial_federation_taken, because a revolution's winner
+		# inherits variables but no modifiers; the modifier check covers saves
+		# from before the variable.
+		NOT = { has_variable = mandate_system_taken }
 		NOT = { has_modifier = mandate_system_modifier }
 	}
 
@@ -272,6 +276,7 @@ mandate_system_decision = {
 	}
 
 	when_taken = {
+		set_variable = mandate_system_taken
 		add_modifier = {
 			name = mandate_system_modifier
 			days = -1
