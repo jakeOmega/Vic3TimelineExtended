@@ -2010,7 +2010,7 @@ cultural_hegemony.17 = {
 	desc = cultural_hegemony.17.d
 	flavor = cultural_hegemony.17.f
 
-	event_image = { texture = "gfx/event_pictures/propaganda_broadcast.dds" }
+	event_image = { texture = "gfx/event_pictures/ministry_establishment.dds" }
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
 	duration = 3

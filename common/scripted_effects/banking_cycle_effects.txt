@@ -1493,6 +1493,26 @@ banking_crash_check_overdrawn_interventions = {
 			limit = { has_modifier = banking_crash_intervention_nationalize }
 			remove_modifier = banking_crash_intervention_nationalize
 		}
+		else_if = {
+			limit = { banking_tool_emergency_import_financing_active = yes }
+			banking_effect_cb_disable_emergency_import_financing = yes
+		}
+		else_if = {
+			limit = { banking_tool_sterilize_inflows_active = yes }
+			banking_effect_cb_disable_sterilize_inflows = yes
+		}
+		else_if = {
+			limit = { banking_tool_fx_surrender_active = yes }
+			banking_effect_cb_disable_fx_surrender = yes
+		}
+		else_if = {
+			limit = { banking_tool_restrict_inflows_active = yes }
+			banking_effect_cb_disable_restrict_inflows = yes
+		}
+		else_if = {
+			limit = { banking_tool_foreign_borrowing_limits_active = yes }
+			banking_effect_cb_disable_foreign_borrowing_limits = yes
+		}
 	}
 }
 

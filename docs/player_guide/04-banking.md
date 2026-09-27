@@ -142,8 +142,10 @@ GDP-scaled treasury expense that fades over six months, holds 1 to 4
 intervention points for a year (see [the intervention
 budget](#current-conditions-and-the-intervention-budget)), and radicalizes some
 of the upper strata. If your intervention budget goes negative, for example
-after a law downgrade, the game switches off one crash response a month until it
-balances.
+after a law downgrade, the game switches off one crash response a month. Once
+those are gone, it lifts one of the five monetary interventions in External &
+Currency each month
+until the budget balances or none of those interventions remains.
 
 ### Banking contagion
 
@@ -187,12 +189,14 @@ Active Policies lists what is in force, each with a Disable button; Available
 Interventions lists your economic system's tools, grayed out with the reason
 when you cannot use them. Switching a tool on has its own price: the lending
 tools charge the treasury 0.2% to 2.5% of GDP, most regulatory tools create
-radicals, and capital controls cost infamy and great-power relations.
+radicals, and Capital Controls (Outflows) costs infamy and great-power relations.
+Sterilize Capital Inflows and Emergency Import Financing charge cash on
+activation and each month; their tooltips show the current monthly cost.
 
 ### Market economy banking tools
 
-A market economy has seventeen tools. The leaning tools (Moral Suasion, reserve
-requirements, the counter-cyclical buffer, margin requirements) drain bubble
+A market economy has twenty-two tools under the full Banking System, seventeen
+under Simplified. The leaning tools (Moral Suasion, reserve requirements, the counter-cyclical buffer, margin requirements) drain bubble
 pressure and cool a boom; the credit tools feed growth; the crisis tools shorten
 a slump.
 
@@ -209,8 +213,13 @@ a slump.
 | Directed Credit | Directed Credit to Agriculture | 3 | – |
 | Directed Credit | Directed Credit to Armaments | 3 | – |
 | Directed Credit | Directed Credit to Electrification & High Tech | 3 | Rural Electrification |
-| Directed Credit | Export Credit Facility | 2 | Corporate Governance |
+| External & Currency | Export Credit Facility | 2 | Corporate Governance |
 | External & Currency | Capital Controls (Outflows) | 2 | a law that allows it, or war |
+| External & Currency | Restrict Speculative Inflows | 2 | full Banking System; your own policy rate; a law that allows capital controls, or war |
+| External & Currency | Sterilize Capital Inflows | 2 | full Banking System; convertible Gold Standard with your own policy rate; treasury cash |
+| External & Currency | Limit Foreign-Currency Borrowing | 2 | full Banking System; National Bank Established |
+| External & Currency | Foreign Exchange Surrender Requirement | 2 | full Banking System; convertible Gold Standard with your own policy rate; exports, cash and room in the vault; a law that allows capital controls, or war |
+| External & Currency | Emergency Import Financing | 3 | full Banking System; National Bank Established; a financial crisis and treasury cash |
 | Crisis Response | Declare a Bank Holiday | 2 | Downturn or Panic; none in the last five years |
 | Crisis Response | Emergency Liquidity Program | 4 | Investment Banks |
 | Crisis Response | Asset Relief Program | 5 | Keynesian Economics |
@@ -223,6 +232,49 @@ exclude each other. A Bank Holiday also shields you from contagion, and ends by
 itself after 90 days. Freezing everyone's deposits is deeply unpopular: it turns
 5% of middle-strata pops, 3% of upper-strata pops and 2% of lower-strata pops
 radical, about 2.5 to 3% of your population.
+
+### Managing foreign capital and import credit
+
+External & Currency groups export lending and outflow controls with five
+monetary interventions. These five appear only under the full Banking System.
+Their points stay committed while the tools run, leaving fewer for deposit
+guarantees, domestic credit or crisis relief. The tooltips show their current
+costs and restrictions.
+
+| Intervention | What you gain | What you pay or give up |
+|---|---|---|
+| Restrict Speculative Inflows | Halves incoming speculative gold and the upward exchange-rate pressure from a positive real-rate gap. Gold can still leave at its usual speed. | Slower reserve accumulation, −3% bureaucracy and slightly slower credit growth. Bubble pressure also falls. |
+| Sterilize Capital Inflows | Removes 75% of the inflation pressure from incoming gold. | 0.01% of annual GDP in cash on activation and each month, with slightly slower credit growth and less bubble pressure. Foreign lenders retain their claims on the vault, and outgoing gold still causes deflation. |
+| Limit Foreign-Currency Borrowing | Gradually reduces the risk premium caused by a weak currency, reaching half that component after about 24 months. | Adds 0.25 percentage points of risk premium while active and slows credit growth. Protection takes time to build; it also takes about 24 months to disappear after you lift the limits. |
+| Foreign Exchange Surrender Requirement | Buys gold for the central bank with treasury cash, without adding Borrowed Gold that foreign lenders can withdraw. | −10% export advantage and −3% bureaucracy, plus the cash spent on reserves. Purchases stop at the vault's capacity and cannot exceed available cash. |
+| Emergency Import Financing | +15% import advantage while a financial crisis lasts. | Cash on activation and each month: initially 0.05% of annual GDP, rising to 0.10% after 12 funded months. Holds 3 intervention points. |
+
+Surrender purchases depend on your market's exports. The monthly cap is 0.05%
+of annual GDP when export reliance is above 30%, half that amount above 10%,
+and a quarter with any smaller positive share. A market with no exports buys
+nothing. Cash needed for the other funded interventions reduces what you can
+spend on these purchases.
+
+Emergency Import Financing is available during a Downturn or Panic, a gold
+crisis with Peg Confidence at 40 or below, or hyperinflation. War alone does not
+qualify. It supports imports generally; it does not guarantee supplies or get
+ships through a blockade. The tool ends when the crisis passes or you cannot
+fund it. Each inactive month removes one month of its accumulated surcharge;
+switching it off and back on does not reset the cost.
+
+Sterilize Capital Inflows ends if you cannot fund it. Both it and Foreign
+Exchange Surrender Requirement end when you lose the conditions for convertible
+gold flows, including a suspension of convertibility. Other tools are lifted
+when their law or monetary requirements no longer hold. Restrict Speculative
+Inflows and the surrender requirement share the outflow control's wartime
+exception to restrictive financial regulation laws.
+
+The AI restricts inflows when positive rate pressure accompanies an Expansion
+or hotter cycle, and sterilizes when gold is arriving during those phases. It
+uses borrowing limits when the Exchange Rate Index is below 95, surrender
+requirements when its vault is less than half full and it has cash, and import
+financing during a financial crisis. It favors lifting each tool when those
+reasons end.
 
 ### Command economy and cooperative tools
 
@@ -276,9 +328,10 @@ may use and which response the crash event offers.
 | State-Owned Banking | needs Command Economy | 7 | −35% | −35% | Capital Controls (Outflows), Asset Relief Program |
 | Central Bank Independence | Keynesian Economics, with National Bank Established | 7 | −10% | – | Capital Controls (Outflows) |
 
-Capital controls are allowed in any war and lifted when it ends if your law
-forbids them. The laws also have effects outside the cycle, listed in their
-tooltips, and these apply under every setting of the Banking System rule,
+The capital-controls locks in the table also apply to Restrict Speculative
+Inflows and Foreign Exchange Surrender Requirement. All three are allowed in
+any war and lifted when it ends if your law forbids them. The laws also have
+effects outside the cycle, listed in their tooltips, and these apply under every setting of the Banking System rule,
 Disabled included: Urban Center throughput, the investment pool, innovation and
 government dividends. Central Bank Independence, for one, strengthens your
 economic defense against covert operations (see [Covert
@@ -584,8 +637,11 @@ a quarter full and the treasury is flush.
 ## The Simplified banking setting
 
 *Simplified* keeps the cycle and everything tied to it: crashes, contagion,
-rescue appeals, the Great Depression, every tool and the financial regulation
-laws. It drops the monetary layer: no rate target or mandates, inflation,
+rescue appeals, the Great Depression, the seventeen cycle tools and the
+financial regulation laws. The five additional monetary interventions in
+External & Currency are unavailable; Export Credit Facility and Capital
+Controls (Outflows) remain. It drops the monetary layer: no rate target or
+mandates, inflation,
 exchange rate, gold reserve, monetary treaty articles, Monetary Union principles
 or currency boards.
 

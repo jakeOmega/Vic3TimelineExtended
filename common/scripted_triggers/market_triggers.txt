@@ -90,3 +90,9 @@ banking_tool_directed_credit_electrification_active  = { je:je_banking_cycle ?= 
 banking_tool_reserve_requirements_active             = { je:je_banking_cycle ?= { has_modifier = banking_reserve_requirements } }
 banking_tool_bank_holiday_active                     = { je:je_banking_cycle ?= { has_modifier = banking_bank_holiday } }
 banking_tool_bail_in_regime_active                   = { je:je_banking_cycle ?= { has_modifier = banking_bail_in_regime } }
+
+banking_tool_restrict_inflows_active = { je:je_banking_cycle ?= { has_modifier = banking_restrict_inflows } }
+banking_tool_sterilize_inflows_active = { je:je_banking_cycle ?= { has_modifier = banking_sterilize_inflows } }
+banking_tool_foreign_borrowing_limits_active = { je:je_banking_cycle ?= { has_modifier = banking_foreign_borrowing_limits } }
+banking_tool_fx_surrender_active = { je:je_banking_cycle ?= { has_modifier = banking_fx_surrender } }
+banking_tool_emergency_import_financing_active = { je:je_banking_cycle ?= { has_modifier = banking_emergency_import_financing } }

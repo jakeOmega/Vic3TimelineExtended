@@ -651,6 +651,101 @@ flowcontainer = {
 	}
 
 	banking_dash_policy_row = {
+		visible = "[GetScriptedGui('banking_dash_disable_cb_restrict_inflows').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		tooltip = "banking_dash_tt_cb_restrict_inflows"
+		blockoverride "row_label" {
+			text = "CB_RESTRICT_INFLOWS"
+		}
+		blockoverride "row_cost" {
+			text = "banking_dash_cost_cb_restrict_inflows"
+		}
+		blockoverride "enable_action" {
+			datacontext = "[GetScriptedGui('banking_dash_enable_cb_restrict_inflows')]"
+			text = "banking_dash_btn_enable"
+		}
+		blockoverride "disable_action" {
+			datacontext = "[GetScriptedGui('banking_dash_disable_cb_restrict_inflows')]"
+			text = "banking_dash_btn_disable"
+		}
+	}
+
+	banking_dash_policy_row = {
+		visible = "[GetScriptedGui('banking_dash_disable_cb_sterilize_inflows').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		tooltip = "banking_dash_tt_cb_sterilize_inflows"
+		blockoverride "row_label" {
+			text = "CB_STERILIZE_INFLOWS"
+		}
+		blockoverride "row_cost" {
+			text = "banking_dash_cost_cb_sterilize_inflows"
+		}
+		blockoverride "enable_action" {
+			datacontext = "[GetScriptedGui('banking_dash_enable_cb_sterilize_inflows')]"
+			text = "banking_dash_btn_enable"
+		}
+		blockoverride "disable_action" {
+			datacontext = "[GetScriptedGui('banking_dash_disable_cb_sterilize_inflows')]"
+			text = "banking_dash_btn_disable"
+		}
+	}
+
+	banking_dash_policy_row = {
+		visible = "[GetScriptedGui('banking_dash_disable_cb_foreign_borrowing_limits').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		tooltip = "banking_dash_tt_cb_foreign_borrowing_limits"
+		blockoverride "row_label" {
+			text = "CB_FOREIGN_BORROWING_LIMITS"
+		}
+		blockoverride "row_cost" {
+			text = "banking_dash_cost_cb_foreign_borrowing_limits"
+		}
+		blockoverride "enable_action" {
+			datacontext = "[GetScriptedGui('banking_dash_enable_cb_foreign_borrowing_limits')]"
+			text = "banking_dash_btn_enable"
+		}
+		blockoverride "disable_action" {
+			datacontext = "[GetScriptedGui('banking_dash_disable_cb_foreign_borrowing_limits')]"
+			text = "banking_dash_btn_disable"
+		}
+	}
+
+	banking_dash_policy_row = {
+		visible = "[GetScriptedGui('banking_dash_disable_cb_fx_surrender').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		tooltip = "banking_dash_tt_cb_fx_surrender"
+		blockoverride "row_label" {
+			text = "CB_FX_SURRENDER"
+		}
+		blockoverride "row_cost" {
+			text = "banking_dash_cost_cb_fx_surrender"
+		}
+		blockoverride "enable_action" {
+			datacontext = "[GetScriptedGui('banking_dash_enable_cb_fx_surrender')]"
+			text = "banking_dash_btn_enable"
+		}
+		blockoverride "disable_action" {
+			datacontext = "[GetScriptedGui('banking_dash_disable_cb_fx_surrender')]"
+			text = "banking_dash_btn_disable"
+		}
+	}
+
+	banking_dash_policy_row = {
+		visible = "[GetScriptedGui('banking_dash_disable_cb_emergency_import_financing').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		tooltip = "banking_dash_tt_cb_emergency_import_financing"
+		blockoverride "row_label" {
+			text = "CB_EMERGENCY_IMPORT_FINANCING"
+		}
+		blockoverride "row_cost" {
+			text = "banking_dash_cost_cb_emergency_import_financing"
+		}
+		blockoverride "enable_action" {
+			datacontext = "[GetScriptedGui('banking_dash_enable_cb_emergency_import_financing')]"
+			text = "banking_dash_btn_enable"
+		}
+		blockoverride "disable_action" {
+			datacontext = "[GetScriptedGui('banking_dash_disable_cb_emergency_import_financing')]"
+			text = "banking_dash_btn_disable"
+		}
+	}
+
+	banking_dash_policy_row = {
 		visible = "[GetScriptedGui('banking_dash_disable_cb_capital_controls_outflow').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 		tooltip = "banking_dash_tt_cb_capital_controls_outflow"
 		blockoverride "row_label" {
@@ -2368,24 +2463,7 @@ flowcontainer = {
 				}
 			}
 
-			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_enable_cb_export_credit_facility').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				tooltip = "banking_dash_tt_cb_export_credit_facility"
-				blockoverride "row_label" {
-					text = "CB_EXPORT_CREDIT"
-				}
-				blockoverride "row_cost" {
-					text = "banking_dash_cost_cb_export_credit_facility"
-				}
-				blockoverride "enable_action" {
-					datacontext = "[GetScriptedGui('banking_dash_enable_cb_export_credit_facility')]"
-					text = "banking_dash_btn_enable"
-				}
-				blockoverride "disable_action" {
-					datacontext = "[GetScriptedGui('banking_dash_disable_cb_export_credit_facility')]"
-					text = "banking_dash_btn_disable"
-				}
-			}
+
 
 		}
 	}
@@ -2420,6 +2498,120 @@ flowcontainer = {
 			parentanchor = hcenter
 			spacing = 2
 			visible = "[Not(GetVariableSystem.Exists('banking_dash_collapsed_external'))]"
+
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_cb_export_credit_facility').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_cb_export_credit_facility"
+				blockoverride "row_label" {
+					text = "CB_EXPORT_CREDIT"
+				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_cb_export_credit_facility"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_cb_export_credit_facility')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_cb_export_credit_facility')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
+
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_cb_restrict_inflows').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_cb_restrict_inflows"
+				blockoverride "row_label" {
+					text = "CB_RESTRICT_INFLOWS"
+				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_cb_restrict_inflows"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_cb_restrict_inflows')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_cb_restrict_inflows')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
+
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_cb_sterilize_inflows').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_cb_sterilize_inflows"
+				blockoverride "row_label" {
+					text = "CB_STERILIZE_INFLOWS"
+				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_cb_sterilize_inflows"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_cb_sterilize_inflows')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_cb_sterilize_inflows')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
+
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_cb_foreign_borrowing_limits').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_cb_foreign_borrowing_limits"
+				blockoverride "row_label" {
+					text = "CB_FOREIGN_BORROWING_LIMITS"
+				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_cb_foreign_borrowing_limits"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_cb_foreign_borrowing_limits')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_cb_foreign_borrowing_limits')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
+
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_cb_fx_surrender').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_cb_fx_surrender"
+				blockoverride "row_label" {
+					text = "CB_FX_SURRENDER"
+				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_cb_fx_surrender"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_cb_fx_surrender')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_cb_fx_surrender')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
+
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_cb_emergency_import_financing').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_cb_emergency_import_financing"
+				blockoverride "row_label" {
+					text = "CB_EMERGENCY_IMPORT_FINANCING"
+				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_cb_emergency_import_financing"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_cb_emergency_import_financing')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_cb_emergency_import_financing')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
 			banking_dash_policy_row = {
 				visible = "[GetScriptedGui('banking_dash_enable_cb_capital_controls_outflow').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
