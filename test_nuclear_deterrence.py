@@ -287,7 +287,8 @@ class TestWarLawGate(unittest.TestCase):
         """nuclear_incident.1.c is the government's own order (owner ruling
         2026-09-26): the same gates as nuke_diplo_action, shown greyed."""
         body = option_body(strip_comments(read(INCIDENT_EVENTS)), "nuclear_incident.1.c")
-        for gate in ("nd_doctrine_permits_strike = { ENEMY = scope:nd_warning_suspect }",
+        for gate in ("has_war_with = scope:nd_warning_suspect",
+                     "nd_doctrine_permits_strike = { ENEMY = scope:nd_warning_suspect }",
                      "nd_pledge_permits_strike = { ENEMY = scope:nd_warning_suspect }",
                      "nd_war_law_permits_strategic_strike = yes",
                      "nd_forces_assembled = yes",

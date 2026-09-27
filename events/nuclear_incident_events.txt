@@ -134,12 +134,16 @@ nuclear_incident.1 = {
 	# pledge, the Rules of War and assembled forces, with the shared triggers
 	# and failure lines nuke_diplo_action uses. Forbidden, it shows greyed with
 	# the reason. The doctrine needs a war with the suspect, so outside a war
-	# the order cannot be given; the unauthorised paths (launch on warning,
-	# delegation, the cut-off commander) still skip these gates.
+	# the order cannot be given: the bare has_war_with comes first, so a
+	# peacetime warning's greyed option names the missing war rather than
+	# blaming the doctrine (whose tooltip line hides its own war check). The
+	# unauthorised paths (launch on warning, delegation, the cut-off commander)
+	# still skip these gates. Not highlighted: it is often greyed now.
 	option = {
 		name = nuclear_incident.1.c
 		trigger = {
 			nd_is_armed = yes
+			has_war_with = scope:nd_warning_suspect
 			custom_tooltip = {
 				text = nd_tt_doctrine_permits_strike
 				nd_doctrine_permits_strike = { ENEMY = scope:nd_warning_suspect }
@@ -158,7 +162,6 @@ nuclear_incident.1 = {
 			}
 		}
 		show_as_unavailable = { nd_is_armed = yes }
-		highlighted_option = yes
 		set_variable = { name = nd_warning_launched value = 1 }
 		nd_launch_or_intercept = { VICTIM = scope:nd_warning_suspect NARRATE = yes KIND = warning }
 		trigger_event = { id = nuclear_incident.3 days = 10 }
