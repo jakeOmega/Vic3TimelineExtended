@@ -740,7 +740,7 @@ art_deco_architecture = {
 consumer_credit = {
 	# Ministry of Consumer Protection law
 	era = era_6
-	texture = "gfx/interface/icons/invention_icons/modern_financial_instruments.dds"
+	texture = "gfx/interface/icons/invention_icons/consumer_credit.dds"
 	category = society
 
 	modifier = {
