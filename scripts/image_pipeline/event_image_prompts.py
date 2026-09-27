@@ -422,7 +422,7 @@ IMAGES = {
     "anti_nuclear_energy_march": {
         "prompt": "A massive anti-nuclear protest march.",
         "style": "oil painting, social realism, dramatic light",
-        "events": [],
+        "events": ["nuclear_taboo.3"],
     },
     "renewable_energy_installation": {
         "prompt": "Workers installing a solar panel farm.",
@@ -630,7 +630,8 @@ IMAGES = {
         "events": [
             "international_relations_events.8", "nuclear_crisis.2", "nuclear_crisis.4",
             "nuclear_crisis.5", "nuclear_crisis.7", "nuclear_custody.1",
-            "nuclear_incident.11", "nuclear_incident.50",
+            "nuclear_incident.11", "nuclear_incident.50", "nuclear_crisis.21",
+            "nuclear_taboo.5",
         ],
     },
     "detente_summit_meeting": {
@@ -869,6 +870,7 @@ IMAGES = {
             "modern_election_events.23", "modern_election_events.24",
             "modern_election_events.25", "modern_election_events.26",
             "nuclear_incident.60", "nuclear_loose.7",
+            "international_relations_events.4",
         ],
     },
     "grassroots_canvassing": {
@@ -889,7 +891,7 @@ IMAGES = {
         "events": [
             "movement_events_te.1", "movement_events_te.2", "movement_events_te.301",
             "movement_events_te.303", "movement_events_te.304",
-            "movement_events_te.305",
+            "movement_events_te.305", "movement_events_te.302",
         ],
     },
     "economic_boycott_action": {
@@ -944,10 +946,7 @@ IMAGES = {
     "tactical_nuclear_strike": {
         "prompt": "A tactical nuclear blast on a battlefield.",
         "style": "oil painting, dramatic light, apocalyptic tone",
-        "events": [
-            "nuclear_crisis.20", "nuclear_crisis.24", "nuclear_weapon_events.2",
-            "nuclear_weapon_events.18",
-        ],
+        "events": ["nuclear_crisis.24", "nuclear_weapon_events.2", "nuclear_weapon_events.18"],
     },
     "nuclear_fallout_contamination": {
         "prompt": "An abandoned contaminated exclusion zone with inspectors in hazmat suits.",
@@ -965,7 +964,7 @@ IMAGES = {
     "nuclear_test_mushroom": {
         "prompt": "A nuclear test mushroom cloud over a desert.",
         "style": "oil painting, dramatic light, apocalyptic tone",
-        "events": ["nuclear_weapon_events.5", "nuclear_weapon_events.9"],
+        "events": ["nuclear_weapon_events.5", "nuclear_weapon_events.9", "nuclear_taboo.6"],
     },
     "nuclear_proliferation_threat": {
         "prompt": "Analysts reviewing satellite photos of suspected nuclear sites.",
@@ -974,7 +973,7 @@ IMAGES = {
             "international_relations_events.104", "nuclear_custody.3",
             "nuclear_custody.10", "nuclear_incident.5", "nuclear_loose.4",
             "nuclear_weapon_events.6", "nuclear_weapon_events.7",
-            "nuclear_weapon_events.16", "nuclear_weapon_events.23",
+            "nuclear_weapon_events.16", "nuclear_weapon_events.23", "nuclear_taboo.8",
         ],
     },
     "nuclear_false_alarm_panic": {
@@ -988,23 +987,22 @@ IMAGES = {
     "anti_nuclear_movement": {
         "prompt": "A massive anti-nuclear demonstration in a city park.",
         "style": "oil painting, social realism, dramatic light",
-        "events": ["nuclear_weapon_events.10"],
+        "events": ["nuclear_weapon_events.10", "nuclear_taboo.1"],
     },
     "nuclear_diplomacy_talks": {
-        "prompt": "Arms control negotiators at a treaty table.",
+        "prompt": "Arms control negotiators seated along both sides of a long polished table in a pale panelled conference room, papers and water carafes between them, tall windows and a plain wall behind them.",
         "style": "oil painting, academic art, diplomatic interior",
         "events": [
-            "nuclear_crisis.6", "nuclear_crisis.21", "nuclear_crisis.23",
-            "nuclear_custody.4", "nuclear_custody.6", "nuclear_custody.8",
-            "nuclear_custody.12", "nuclear_incident.12", "nuclear_loose.8",
-            "nuclear_weapon_events.11", "nuclear_weapon_events.12",
+            "nuclear_crisis.6", "nuclear_custody.4", "nuclear_custody.6",
+            "nuclear_custody.8", "nuclear_custody.12", "nuclear_incident.12",
+            "nuclear_loose.8", "nuclear_weapon_events.11", "nuclear_weapon_events.12",
             "nuclear_weapon_events.19", "nuclear_weapon_events.21",
         ],
     },
     "nuclear_defense_shield": {
         "prompt": "A missile defense installation with radar dishes and interceptor rockets.",
         "style": "oil painting, dramatic light, apocalyptic tone",
-        "events": ["nuclear_incident.40", "nuclear_weapon_events.13"],
+        "events": ["nuclear_weapon_events.13"],
     },
     "nuclear_power_debate": {
         "prompt": "A tense public hearing on nuclear power.",
@@ -1959,13 +1957,16 @@ IMAGES = {
         "events": [
             "un_events.2", "un_events.6", "un_events.11", "un_events.12",
             "un_events.20", "un_mandate.1", "un_mandate.2", "un_vote.1", "un_vote.2",
-            "un_vote.3",
+            "un_vote.3", "nuclear_taboo.2",
         ],
     },
     "human_rights_declaration": {
         "prompt": "The proclamation of universal human rights: a dignified official reading from a historic document at a podium, delegates from every continent listening. The aspiration that all humans are born free and equal, codified in international law.",
         "style": "oil painting, academic art, institutional grandeur",
-        "events": ["movement_events_te.4", "movement_events_te.17", "un_events.3", "un_events.22"],
+        "events": [
+            "movement_events_te.4", "movement_events_te.17", "un_events.3",
+            "un_events.22", "nuclear_taboo.4",
+        ],
     },
     "peacekeeping_deployment": {
         "prompt": "UN peacekeepers in distinctive blue helmets and berets deploying in a conflict zone: armored vehicles painted white, soldiers establishing checkpoints, civilians cautiously emerging. Peace kept at gunpoint by neutral third parties.",
@@ -1996,7 +1997,7 @@ IMAGES = {
         "events": ["un_events.9"],
     },
     "nuclear_treaty_signing": {
-        "prompt": "World leaders signing a nuclear non-proliferation treaty: pens on paper, cameras flashing, the relief of containing the worst weapons ever devised through the fragile mechanism of international agreement.",
+        "prompt": "Delegates in dark suits signing a treaty at a long table in a wood-panelled hall, pens on paper, photographers with flashbulbs at the edge of the room, a plain panelled wall behind them.",
         "style": "oil painting, academic art, institutional grandeur",
         "events": ["nuclear_custody.7", "nuclear_custody.11", "un_events.14", "un_events.23"],
     },
@@ -2163,7 +2164,10 @@ IMAGES = {
     "diplomatic_crisis_ultimatum": {
         "prompt": "A diplomatic crisis: an ambassador delivering an ultimatum document to a foreign minister. Both men's hands tremble. Behind them, military aides flip through contingency plans. The last moment before the point of no return.",
         "style": "oil painting, dramatic shadows, military painting",
-        "events": ["irredentism.2", "nuclear_crisis.1", "nuclear_loose.6", "world_war_events.3"],
+        "events": [
+            "irredentism.2", "nuclear_crisis.1", "nuclear_loose.6",
+            "world_war_events.3", "nuclear_crisis.23",
+        ],
     },
     "world_war_declaration": {
         "prompt": "Leader delivering a wartime broadcast in a formal office while civilians listen on radios.",
@@ -2235,7 +2239,7 @@ IMAGES = {
     "nuclear_warhead_depot": {
         "prompt": "Soldiers and technicians in white coats standing beside a missile warhead resting on a wheeled steel cradle inside a concrete storage bunker, rows of sealed crates, fluorescent ceiling lights, a heavy vault door.",
         "style": "oil painting, cold war realism, cold fluorescent light",
-        "events": ["nuclear_custody.5"],
+        "events": ["nuclear_custody.5", "nuclear_taboo.20"],
     },
     "public_observatory_night": {
         "prompt": "Townspeople in coats gathered inside a domed observatory at night, a large brass telescope aimed through the open slit of the dome at a starry sky, an astronomer adjusting the eyepiece.",
@@ -2263,9 +2267,14 @@ IMAGES = {
         "events": ["resettlement.4"],
     },
     "civil_rights_victory": {
-        "prompt": "A jubilant crowd filling the wide stone steps of a columned civic building, people embracing, hats and scarves thrown in the air.",
+        "prompt": "A jubilant crowd filling the wide stone steps of a low, flat-roofed civic building with a row of square columns, people embracing, hats and scarves thrown in the air.",
         "style": "oil painting, social realism, warm afternoon light",
         "events": ["movement_events_te.200", "movement_events_te.220", "movement_events_te.221"],
+    },
+    "bomber_base_alert": {
+        "prompt": "Ground crews running across a floodlit airfield at night toward a line of parked jet bombers, a siren on a pole and a fuel truck in the foreground, an officer waving them on.",
+        "style": "oil painting, cold war realism, harsh floodlight",
+        "events": ["nuclear_incident.40"],
     },
     "colonial_flag_lowering": {
         "prompt": "Dusk at a whitewashed colonial governor's residence with a deep veranda, an honour guard standing at attention beside a bare flagpole, a quiet crowd watching from the lawn under palm trees.",
