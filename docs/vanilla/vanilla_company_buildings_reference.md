@@ -148,7 +148,7 @@ Vanilla generic companies (from `99_basic_companies.txt`) should receive **weake
 
 All other vanilla generic companies now have at least one unique mod building — Phase 6 added the colonial / mining / silk / wine / paper buildings; Phase 8 added home_goods and forestry.
 
-**Mod generic companies** (`extra_companies_generic.txt`) list their flagship in their own `building_types` and grant its level in their own `prosperity_modifier`, with no INJECT. The last one without a flagship, `company_basic_synthetics` (synthetic dyes and artificial fibers), got `building_generic_dye_fiber_park` in Phase 9: +5% throughput to `building_synthetics_plant` and `building_synthetics_plant_silk`, coal and wood into dye and silk. Its name marks it as the dyes-and-fibers company; `company_basic_autarky`, whose flagship is the National Resource Depository, also displays as "Synthetics".
+**Mod generic companies** (`extra_companies_generic.txt`) list their flagship in their own `building_types` and grant its level in their own `prosperity_modifier`, with no INJECT. The last one without a flagship, `company_basic_synthetics` ("Synthetic Dyes & Fibers"), got `building_generic_dye_fiber_park` in Phase 9: +5% throughput to `building_synthetics_plant` and `building_synthetics_plant_silk`, coal and wood into dye and silk. It is not `company_basic_autarky` ("Synthetic Fuels & Rubber": `building_synthetics_plant_oil` and `_rubber`, flagship the National Resource Depository). Both displayed as "Synthetics" until Phase 9 renamed them; each has its own company name and plural/singular dynamic-name tags in `te_companies_l_english.yml`.
 
 ### Generic Building Design Principles
 - **~10000 employment** (level_scaled), split across laborers/machinists/clerks
@@ -239,7 +239,8 @@ Vanilla companies should be updated to reference mod-exclusive buildings in thei
 
 ### Phase 9: The Great Wave + last gaps ← DONE
 - Fifteen Great Wave (DLC 018) companies: one flagship each (table in Part A). Hand-written in Sumitomo's shape; `gen_vanilla_company_buildings.py` re-appends all 164 Phase 7 companies on every run and has no per-company mode.
-- `company_basic_synthetics`: `building_generic_dye_fiber_park` (Part B). Registers `building_synthetics_plant_silk_throughput_add`.
+- `company_basic_synthetics` (Synthetic Dyes & Fibers): `building_generic_dye_fiber_park` (Part B). Registers `building_synthetics_plant_silk_throughput_add`.
+- The two generic companies that both displayed as "Synthetics" are renamed: `company_basic_autarky` to "Synthetic Fuels & Rubber", `company_basic_synthetics` to "Synthetic Dyes & Fibers".
 - `building_generic_hq_skyscraper` retired, leaving Telecommunications with the Electronics Laboratory alone.
 
 ---
