@@ -200,7 +200,7 @@ The same effect keeps its older job in every setting: removing the modifier from
 
 **Localization override:** `localization/english/replace/timeline_extended_override_l_english.yml:23` — `merchant_marine:0 "Bulk Transportation"`. (And matching description / icon overrides if present.) The engine sees `merchant_marine`; the player sees "Bulk Transportation".
 
-**Producers (43 PMs total: 21 in `extra_pms.txt`, 22 in `unique_pms.txt`).** The mod's design rule is: *transport infrastructure produces, everything else consumes*. Concretely:
+**Producers (48 PMs total: 22 in `extra_pms.txt`, 26 in `unique_pms.txt`).** The mod's design rule is: *transport infrastructure produces, everything else consumes*. Concretely:
 
 | Producer category | PMs (representative) | Building family |
 |---|---|---|
@@ -208,8 +208,8 @@ The same effect keeps its older job in every setting: removing the modifier from
 | **Motorways / highways** | `pm_civil_highway`, `pm_industrial_highway`, `pm_electric_civil_highway`, `pm_electric_industrial_highway`, `pm_autonomous_highway` | Motorways |
 | **Ports** | `pm_container_ports`, `pm_containerized_cargo`, `pm_global_ports` | Port (vanilla preserved + mod tiers) |
 | **Airports & spaceports** | `pm_airport`, `pm_spaceport` | Airport / Spaceport (mod additions) |
-| **Trading houses & flagged company HQs** | `pm_eic_trading_house`, `pm_hbc_york_factory`, `pm_rac_sitka_trading_post`, `pm_mitsui_trading_house`, `pm_sassoon_bombay_docks`, `pm_ralli_odessa_grain_elevator`, `pm_sudamericana_valparaiso_pier`, `pm_b_grimm_bangkok_warehouse`, `pm_john_holt_lagos_trading_house`, `pm_ynchausti_manila_trading_house`, `pm_volkswagen_autostadt`, `pm_suez_company_ismailia_hq`, `pm_panama_company_culebra_cut` | Vanilla / mod company buildings |
-| **Logistics & shipyards (modern)** | `pm_amazon_fulfillment_center`, `pm_alibaba_cainiao_park`, `pm_shopify_fulfillment_hub`, `pm_ap_moller_copenhagen_wharf`, `pm_mitsubishi_nagasaki_shipyard`, `pm_generic_dry_dock`, `pm_generic_logistics_hub`, `pm_generic_rail_nexus`, `pm_generic_shipping_terminal` | Vanilla / mod company buildings |
+| **Trading houses & flagged company HQs** | `pm_eic_trading_house`, `pm_hbc_york_factory`, `pm_rac_sitka_trading_post`, `pm_mitsui_trading_house`, `pm_sassoon_bombay_docks`, `pm_ralli_odessa_grain_elevator`, `pm_sudamericana_valparaiso_pier`, `pm_b_grimm_bangkok_warehouse`, `pm_john_holt_lagos_trading_house`, `pm_ynchausti_manila_trading_house`, `pm_volkswagen_autostadt`, `pm_suez_company_ismailia_hq`, `pm_panama_company_culebra_cut`, `pm_markwald_bangkok_rice_mill`, `pm_nhm_factorij_batavia` | Vanilla / mod company buildings |
+| **Logistics & shipyards (modern)** | `pm_amazon_fulfillment_center`, `pm_alibaba_cainiao_park`, `pm_shopify_fulfillment_hub`, `pm_ap_moller_copenhagen_wharf`, `pm_mitsubishi_nagasaki_shipyard`, `pm_generic_dry_dock`, `pm_generic_logistics_hub`, `pm_generic_rail_nexus`, `pm_generic_shipping_terminal`, `pm_white_star_albion_house` | Vanilla / mod company buildings |
 
 **Consumers (91 PMs in `extra_pms.txt`).** Demand spans most of the catalog — anywhere goods need to move between buildings or out of the country. By family:
 

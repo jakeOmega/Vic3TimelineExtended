@@ -1221,13 +1221,15 @@ Every company building needs:
 1. **Building definition** in `common/buildings/company_buildings.txt` (with `potential` gating on `has_company`)
 2. **PM + PMG** in `common/production_methods/unique_pms.txt` and `unique_pm_groups.txt`
 3. **Modifier type definition** for `state_building_<name>_max_level_add` in `common/modifier_type_definitions/mod_entity_modifier_types.txt`
-4. **INJECT** on the parent company (in `extra_companies_vanilla_updates.txt`) — adds `building_types`, `extension_building_types`, `prosperity_modifier`
+4. **INJECT** on the parent company (in `extra_companies_vanilla_updates.txt`) — adds `building_types`, `extension_building_types`, `prosperity_modifier`. A company the mod defines itself (`extra_companies_generic.txt`, `extra_companies_flavored.txt`) takes the same fields in its own definition instead.
 5. **Localization** — five keys per building, all required:
    - `building_<name>` (building name) and `building_<name>_desc` in `te_buildings_l_english.yml`
    - `pm_<name>` and `pmg_<name>` in `te_production_methods_l_english.yml`
    - **`state_building_<name>_max_level_add` AND `state_building_<name>_max_level_add_desc`** in `te_modifiers_l_english.yml` — pattern: `"[GetBuildingType('building_<name>').GetName] Max Level"` for the name, `"Increases the maximum number of levels that [GetBuildingType('building_<name>').GetName] can expand to in this state"` for the desc. Without both, the prosperity tooltip shows the raw modifier key.
 
 Use `INJECT:company_name` (not `REPLACE:`) to add fields to vanilla companies without overwriting their entire definition.
+
+To retire a company building, set its `potential = { always = no }` and drop it from the company's `building_types` and `prosperity_modifier`, but keep the building, its PM/PMG and its loc: saves that contain it still load, and the regenerated `remove_invalid_company_buildings_effect` (monthly country pulse) removes it. `gen_company_building_cleanup.py` accepts an unreferenced company building only when `always = no` sits at the top level of `potential`.
 
 If an `INJECT` block adds `prosperity_modifier = { state_building_<name>_max_level_add = 1 }`, that exact modifier key must also exist in `common/modifier_type_definitions/mod_entity_modifier_types.txt` with `color = good`, `percent = no`, and `decimals = 0`. Defining the prosperity modifier in the company file alone is not enough.
 
