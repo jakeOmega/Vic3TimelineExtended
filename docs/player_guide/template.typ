@@ -130,10 +130,25 @@
   show table: set align(left)
   show table.cell.where(y: 0): set text(weight: "bold", fill: ink)
 
-  // Screenshots and other images.
+  // Screenshots and other images. Each is scaled to the text width, except that
+  // a tall one (most UI panels are) is capped in height so it fits on a page
+  // with its caption. Setting a height alone keeps the aspect ratio; setting
+  // both would crop. The height check also stops the rule recursing. Figures
+  // float to the top or bottom of a page, so one too tall for the space left
+  // moves on without leaving the rest of the page blank.
+  show figure.where(kind: image): set figure(placement: auto)
   show figure.where(kind: image): set figure.caption(position: bottom)
   show figure.caption: set text(size: 9pt, style: "italic")
   set image(width: 100%)
+  let max-image-height = 17cm
+  show image: it => {
+    if it.height != auto { return it }
+    layout(size => {
+      if measure(it, width: size.width).height <= max-image-height { it } else {
+        image(it.source, width: auto, height: max-image-height)
+      }
+    })
+  }
 
   // A Markdown block quote is a side note or tip.
   show quote.where(block: true): it => block(

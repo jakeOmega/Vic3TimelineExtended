@@ -47,7 +47,7 @@ reads Low (under 15), Building (15 to 29), Elevated (30 to 49), High (50 to 74) 
 (75 and up). The entry's status text describes the phase, momentum and bubble
 pressure over the same bands, in its own words, and shows no figures either.
 
-<!-- screenshot: the Boom & Bust Cycle journal entry during a Boom, with the four bars and the Current Conditions readout in view -->
+![The Boom & Bust Cycle journal entry in Stagnation with momentum rising: the Current Conditions readout, the status text and, below them, the History charts.](images/banking_stagnation.png)
 
 ### The seven banking cycle phases
 
@@ -298,7 +298,7 @@ and the United States with Free & Mutual Banking.
 With the rule on Enabled, the dashboard gains a Monetary Policy block, and every
 country runs the monetary model whether or not it holds the journal entry.
 
-<!-- screenshot: the Monetary Policy block of the banking dashboard, showing Rate Target with its stepper, Delegation, Mandate, Rate You Pay and Price Band -->
+![The Monetary Policy block of the banking dashboard: the rates and the Rate Target stepper, the exchange rate, what borrowing costs, prices, and the central bank's stance, delegation and mandate.](images/banking_rate.png)
 
 ### Who sets the policy rate
 

@@ -20,6 +20,8 @@ that would benefit from one with a comment on its own line:
 2. Replace the placeholder with an image and a caption:
    `![The Banking Cycle dashboard during a Boom.](images/banking_dashboard_boom.png)`
    The caption becomes the figure caption in the PDF. Images are scaled to the
-   text width.
+   text width, but none is drawn taller than 17 cm, so a tall panel comes out
+   narrower. Figures float to the top or bottom of a page, so one may land a
+   paragraph or two after its place in the text.
 3. Rebuild the PDF (`.venv/bin/python scripts/build_player_guide.py`) and commit
    the image, the chapter and the PDF together.

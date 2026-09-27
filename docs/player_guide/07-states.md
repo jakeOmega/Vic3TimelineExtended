@@ -14,7 +14,7 @@ The mod adds tiles to the status grid of the state panel and a tourism card
 above the grid. Each tile is titled with a game concept you can hover for an
 explanation, and its tooltip breaks the numbers down.
 
-<!-- screenshot: a state panel showing the Homeland Dynamics, Arable Land and Migration Crowding tiles and the tourism card -->
+![A state panel with the tourism card above the status grid and the Homeland Dynamics, Arable Land and Migration Crowding tiles at the bottom.](images/state_panel.png)
 
 | Tile | Shown | What it tells you |
 |---|---|---|
@@ -223,7 +223,7 @@ Special Settlements and Rustication. Disabled removes the system. Moving people
 between countries by treaty is a different mechanic, the Population Transfer
 article in [Diplomacy](08-diplomacy.md).
 
-<!-- screenshot: a Settlement Authority's building panel with its program, settlement plan and transport methods, and the Settlers arrived last month readout -->
+![A Settlement Authority's building panel. Its three production method groups sit at the bottom left, and the tooltip shows the settlers who arrived last month.](images/settlement_authority.png)
 
 ### The Settlement Authority
 
