@@ -526,6 +526,21 @@ class TestExits(unittest.TestCase):
             for key in re.findall(r"text = (nd_taboo_tt_\w+)", text):
                 self.assertIn(key, keys, key)
 
+    def test_dismantling_runs_its_full_length(self):
+        values = strip_comments(read(TABOO_VALUES))
+        this_month = block(values, "nd_taboo_dismantle_this_month_value")
+        self.assertIn("divide = var:nd_dismantle_months_left", this_month)
+        self.assertIn("floor = yes", this_month)
+        self.assertNotRegex(values, r"(?m)^nd_taboo_dismantle_per_month_value = ")
+        step = block(self.taboo, "nd_taboo_dismantle_step")
+        complete_at = step.index("nd_taboo_dismantle_complete = yes")
+        guard = step[step.rfind("limit", 0, complete_at):complete_at]
+        self.assertIn("var:nd_dismantle_months_left <= 0", guard)
+        self.assertNotIn("nd_stockpile", guard)
+        leftover = re.compile(r"(?<![\w])nd_dismantle_per_month\b")
+        for path in script_files():
+            self.assertNotRegex(strip_comments(read(path)), leftover, path.name)
+
 
 if __name__ == "__main__":
     unittest.main()

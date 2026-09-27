@@ -329,7 +329,6 @@ nd_taboo_dismantle_begin = {
 		text = nd_taboo_tt_dismantle_start
 		set_variable = { name = nd_dismantle_start_stock value = nd_stockpile }
 		set_variable = { name = nd_dismantle_months_left value = nd_taboo_dismantle_months_value }
-		set_variable = { name = nd_dismantle_per_month value = nd_taboo_dismantle_per_month_value }
 	}
 	if = {
 		limit = {
@@ -355,7 +354,6 @@ nd_taboo_dismantle_stop = {
 	custom_tooltip = {
 		text = nd_taboo_tt_halt
 		remove_variable = nd_dismantle_months_left
-		remove_variable = nd_dismantle_per_month
 		change_variable = { name = nd_credibility subtract = nd_taboo_halt_credibility }
 		clamp_variable = { name = nd_credibility min = 0 max = 100 }
 	}
@@ -372,25 +370,29 @@ nd_taboo_dismantle_halt = {
 	}
 }
 
-# One month of dismantling (nd_taboo_country_monthly).
+# One month of dismantling (nd_taboo_country_monthly). Completes when the
+# months run out, not when the stock happens to hit zero early.
 nd_taboo_dismantle_step = {
-	set_variable = { name = nd_tb_retire value = var:nd_dismantle_per_month }
-	if = {
-		limit = { var:nd_tb_retire > nd_stockpile }
-		set_variable = { name = nd_tb_retire value = nd_stockpile }
-	}
-	change_variable = { name = nuclear_weapon_stockpile subtract = var:nd_tb_retire }
-	change_variable = { name = nd_dismantle_months_left subtract = 1 }
-	nd_ledger_refresh = yes
-	remove_variable = nd_tb_retire
+	# Given up another way meanwhile (a disarmament article, a civil war
+	# dismantle): this dismantling is over, and the renunciation was not ours,
+	# so it stops without completing (no voluntary rewards, no lock).
 	if = {
 		limit = {
-			OR = {
-				var:nd_dismantle_months_left <= 0
-				nd_stockpile <= 0
-			}
+			nd_stockpile <= 0
+			has_variable = nd_renounced
 		}
-		nd_taboo_dismantle_complete = yes
+		remove_variable = nd_dismantle_months_left
+	}
+	else = {
+		set_variable = { name = nd_tb_retire value = nd_taboo_dismantle_this_month_value }
+		change_variable = { name = nuclear_weapon_stockpile subtract = var:nd_tb_retire }
+		change_variable = { name = nd_dismantle_months_left subtract = 1 }
+		nd_ledger_refresh = yes
+		remove_variable = nd_tb_retire
+		if = {
+			limit = { var:nd_dismantle_months_left <= 0 }
+			nd_taboo_dismantle_complete = yes
+		}
 	}
 }
 
@@ -407,7 +409,6 @@ nd_taboo_dismantle_complete = {
 		remove_modifier = nuclear_power
 	}
 	remove_variable = nd_dismantle_months_left
-	remove_variable = nd_dismantle_per_month
 	if = {
 		limit = { has_variable = nd_warhead_ceiling }
 		remove_variable = nd_warhead_ceiling
