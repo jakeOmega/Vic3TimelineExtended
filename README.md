@@ -69,7 +69,7 @@ Fourteen mod systems can be turned on or off at game setup. Defaults below; full
 | `nuclear_weapons_rule` | enabled | Nuclear program JE, strike events, nuclear-disarmament treaty article |
 | `decolonization_rule` | enabled | Decolonization events, colonial-collapse absorption |
 | `space_race_rule` | enabled | Space race JEs and events |
-| `social_movements_rule` | enabled | 8 social-movement JEs and event chains |
+| `social_movements_rule` | enabled | 5 social-movement JEs (civil rights, human augmentation, digital rights, post-scarcity, mental health) and the events they fire |
 | `world_war_rule` | **disabled** | World War JE leadup → active → post-war lifecycle |
 | `custom_religions_allowed_rule` | **disabled** | Custom-religion creator JE and events |
 | `universal_aptitude_traits_rule` | **disabled** | Assigns admin/diplo/military aptitude traits to *all* adult characters, not just rulers and heirs — independent of Heir Education. With both rules off, no character has aptitude traits |
