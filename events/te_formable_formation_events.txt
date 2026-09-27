@@ -111,7 +111,7 @@ formation_te.2 = {
 # bordered by Indian territory — the Hyderabad/Nizam holdout the formation
 # religion guard (can_be_unification_target) deliberately leaves behind. India
 # may annex it by force ("police action", high infamy), pressure it into
-# accession (great-power-only, lower infamy), or leave it be.
+# accession (major power or higher only, lower infamy), or leave it be.
 #
 # scope:polo_target_country = the holdout (saved by the on_action).
 # ----------------------------------------------------------------------------
@@ -148,7 +148,7 @@ formation_te.10 = {
 		ai_chance = { factor = 2 }
 	}
 
-	# Pressure into accession — only credible for a great power. Lower outcry.
+	# Pressure into accession — only credible for a major power or higher. Lower outcry.
 	option = {
 		name = formation_te.10.b
 		trigger = {

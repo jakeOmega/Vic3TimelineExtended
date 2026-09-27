@@ -8,7 +8,8 @@
 # which gates the rebalanced force_become_subject diplomatic action.
 #
 # identity_diplomatic (mod-defined) is intentionally not wired in — it's
-# strong via alignment, infamy reduction, and pact leverage already.
+# strong via alignment and pact leverage already, and its leader pays
+# +25% infamy generation for it.
 #
 # Vanilla still leaves power_bloc_leader_can_make_subjects_bool = yes set
 # on identity_sovereign_empire's power_bloc_modifier. The mod's

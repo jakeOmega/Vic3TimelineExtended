@@ -27,11 +27,12 @@ disband_company = {
 		always = yes
 	}
 
+	# ROOT here is the source, whose company is disbanded. (Vanilla
+	# 18_acquire_monopoly_for_company checks scope:other_country instead
+	# because there the company belongs to the target.)
 	possible = {
-		scope:other_country = {
-			any_company = {
-				owner = prev
-			}
+		any_company = {
+			owner = root
 		}
 	}
 
@@ -69,8 +70,13 @@ disband_company = {
 	on_withdrawal = {}
 	on_break = {}
 
+	# Only the source's own companies (ROOT is the source in valid triggers).
+	# Without this an AI could pick a company the source doesn't own: removal
+	# would silently fail, and Seize would still hand the target a copy.
 	company_valid_trigger = {
-		always = yes
+		scope:input = {
+			owner = root
+		}
 	}
 
 	# This section governs AI behavior regarding the treaty article.

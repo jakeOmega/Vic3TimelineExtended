@@ -2945,6 +2945,11 @@ riot_curfew_modifier = {
 	country_authority_add = 50
 	state_standard_of_living_add = -0.5
 	country_sol_expectations_shift_max_add = -1
+	# Moved from riot_property_damage_modifier, which the same option adds to
+	# a state, where a country_* key reaches nothing. Halved from -0.02 because
+	# this modifier decays over 5 years instead of 2.5, so the total shift the
+	# option was written with stays the same.
+	country_sol_expectations_shift_add = -0.01
 }
 
 riot_concessions_modifier = {
@@ -2966,7 +2971,6 @@ riot_property_damage_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
 	building_throughput_add = -0.1
 	state_infrastructure_mult = -0.05
-	country_sol_expectations_shift_add = -0.02
 }
 
 # --- War Crimes ---
