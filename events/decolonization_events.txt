@@ -2964,10 +2964,7 @@ decolonization_events.200 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Permanent solidified modifier
-		add_modifier = {
-			name = colonial_empire_solidified_modifier
-			days = -1
-		}
+		decol_grant_permanent_modifier = { MODIFIER = colonial_empire_solidified_modifier }
 		# Grant homeland to colonial states with high acceptance
 		every_scope_state = {
 			limit = {
@@ -3085,14 +3082,8 @@ decolonization_events.202 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Permanent solidified modifier with a Commonwealth-style cultural pull bonus
-		add_modifier = {
-			name = colonial_empire_solidified_modifier
-			days = -1
-		}
-		add_modifier = {
-			name = commonwealth_path_modifier
-			days = -1
-		}
+		decol_grant_permanent_modifier = { MODIFIER = colonial_empire_solidified_modifier }
+		decol_grant_permanent_modifier = { MODIFIER = commonwealth_path_modifier }
 		# Grant homeland to colonial states with high acceptance
 		every_scope_state = {
 			limit = {
@@ -3142,14 +3133,8 @@ decolonization_events.203 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Solidified, but with infamy and ongoing radicalism — empire by force
-		add_modifier = {
-			name = colonial_empire_solidified_modifier
-			days = -1
-		}
-		add_modifier = {
-			name = iron_fist_path_modifier
-			days = -1
-		}
+		decol_grant_permanent_modifier = { MODIFIER = colonial_empire_solidified_modifier }
+		decol_grant_permanent_modifier = { MODIFIER = iron_fist_path_modifier }
 		change_infamy = 25
 	}
 }
@@ -3241,14 +3226,8 @@ decolonization_events.205 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Strongest acceptance / homeland integration outcome
-		add_modifier = {
-			name = colonial_empire_solidified_modifier
-			days = -1
-		}
-		add_modifier = {
-			name = quiet_assimilation_path_modifier
-			days = -1
-		}
+		decol_grant_permanent_modifier = { MODIFIER = colonial_empire_solidified_modifier }
+		decol_grant_permanent_modifier = { MODIFIER = quiet_assimilation_path_modifier }
 		# Grant homeland aggressively — colonial states with population >= 75k
 		# (lower than event 200's 100k) get integrated. The path was about
 		# making them part of the metropole.
@@ -4040,10 +4019,7 @@ decolonization_events.300 = {
 		ai_chance = { base = 5 }
 		# Capstone modifier already applied by the decision; reinforce with
 		# the iron-fist flavor modifier as a permanent badge.
-		add_modifier = {
-			name = iron_fist_path_modifier
-			days = -1
-		}
+		decol_grant_permanent_modifier = { MODIFIER = iron_fist_path_modifier }
 		# Grant homeland to colonial states with high acceptance — the
 		# Federation absorbs them into the metropole's cultural fabric.
 		every_scope_state = {
@@ -4094,10 +4070,7 @@ decolonization_events.301 = {
 		ai_chance = { base = 5 }
 		# Civilizing Mission flavor — the Commonwealth path modifier
 		# expresses ongoing cultural soft-power retention.
-		add_modifier = {
-			name = commonwealth_path_modifier
-			days = -1
-		}
+		decol_grant_permanent_modifier = { MODIFIER = commonwealth_path_modifier }
 		every_scope_state = {
 			limit = {
 				NOT = { is_homeland_of_country_cultures = ROOT }

@@ -110,6 +110,7 @@ te_civil_war_on_won = {
 		te_monetary_repair_after_civil_war = yes	# #462
 		cr_repair_after_civil_war = yes			# #463
 		sr_repair_after_civil_war = yes			# #464
+		decol_repair_after_civil_war = yes		# PR #508
 		te_civil_war_clear = yes
 	}
 }
