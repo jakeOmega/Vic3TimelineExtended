@@ -591,6 +591,13 @@ space_race_events.7 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
+		# The precursors' surveys: the robotic path's second reward, on the same
+		# ten-year decaying clock as every mission-choice reward.
+		add_modifier = {
+			name = sr_mars_resource_extraction
+			days = long_modifier_time
+			is_decaying = yes
+		}
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals }
 	}

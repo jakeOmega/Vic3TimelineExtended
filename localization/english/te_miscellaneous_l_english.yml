@@ -504,7 +504,7 @@
  SR_MANUAL_OVERRIDE_SUCCESS_TT:0 "The pilot seized manual control and brought the lander down safely: a remarkable feat of skill under pressure."
  SR_MARS_DIRECT_CHOSEN_TT:0 "We will attempt a direct landing on Mars: bold, fast, and high-risk. The dramatic moment will yield [concept_prestige] and cultural influence for ten years, fading over that time."
  SR_MARS_ORBITAL_CHOSEN_TT:0 "We will establish orbital [concept_infrastructure] around Mars before attempting a surface landing. The reusable orbital infrastructure will accelerate our research and space-program output for ten years, fading over that time."
- SR_MARS_ROBOTIC_CHOSEN_TT:0 "Robotic precursors will prepare a landing site and cache supplies before human arrival. The robotic mining and survey systems will boost our space-mine output and innovation capacity for ten years, fading over that time."
+ SR_MARS_ROBOTIC_CHOSEN_TT:0 "Robotic precursors will prepare a landing site and cache supplies before human arrival. The robotic mining and survey systems will boost our space-mine output and innovation capacity, and their resource surveys will speed our research, the space-race program and our cultural pull, all for ten years, fading over that time."
  SR_MAX_FUNDING_NOT_REACHED:0 "Funding is not yet at maximum."
  SR_MIN_FUNDING_NOT_REACHED:0 "Funding is not yet at minimum."
  SR_MOON_BASE_INDUSTRIAL_CHOSEN_TT:0 "The lunar base will be an industrial facility for mining and materials processing. Lunar mining will boost our space-mine [concept_throughput] and launch-capacity output for ten years, fading over that time."

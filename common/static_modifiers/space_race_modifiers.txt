@@ -123,6 +123,8 @@ sr_mars_landing = {
 	country_tech_research_speed_mult = 0.02
 	country_cultural_pull_mult = 0.12
 }
+# Not a milestone reward: the Mars robotic-precursor path grants it beside
+# sr_mars_robotic_precursor (space_race_events.7 option c, ten years, decaying).
 sr_mars_resource_extraction = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_tech_research_speed_mult = 0.03
