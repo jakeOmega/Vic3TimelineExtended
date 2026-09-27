@@ -241,18 +241,25 @@ un_vote_refresh_leans = {
 		limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 		trigger_event = { id = un_vote.4 }
 	}
+	# The next day, with every snapshot and cast in, the chamber's Delegations
+	# rows are sorted once (un_vote.7). Only a human country ever looks at
+	# them, so it goes to each human country.
+	every_country = {
+		limit = { is_ai = no }
+		trigger_event = { id = un_vote.7 days = 1 }
+	}
 }
 
 # ---- The chamber's Delegations rows (spec §6) -------------------------------------------
 # Every AI member with a vote that has not voted is on the resolution's
 # un_res_delegates, with a sort key (un_deleg_key, un_lobbying_values.txt)
-# from its latest snapshot. After each AI member's un_vote.4 the resolution
-# re-assigns its 24 rows, un_deleg_row_0..23, one ordered_in_list position
-# each, so the rows and their buttons read the same member. Every snapshot of
-# the month re-sorts, so after the last one the rows hold the month's order;
-# between pulses the order stands (a campaign started mid-month moves its
-# member up at the next pulse). The summary line's counts are written at the
-# same time.
+# from its latest snapshot. The day after each fan-out (un_vote.7, sent by
+# un_vote_refresh_leans to each human country, the only ones that look), the
+# resolution re-assigns its 24 rows, un_deleg_row_0..23, one ordered_in_list
+# position each, so the rows and their buttons read the same member; the
+# summary line's counts are written at the same time. Between sorts the order
+# stands: a campaign started mid-month moves its member up at the next pulse,
+# and a member that votes drops out of its row at once (un_deleg_listed).
 
 # Scope: the AI member (= ROOT, un_vote.4), after the snapshot and any cast,
 # with scope:un_resolution saved
@@ -275,11 +282,11 @@ un_deleg_refresh_self = {
 			}
 		}
 	}
-	scope:un_resolution = {
-		un_deleg_reassign_rows = yes
-	}
 }
 
+# Re-sort the rows: un_vote.7, the day after each fan-out of un_vote.4, once
+# the month's snapshots and casts are all in. Sorting after every AI member's
+# own event would have run 24 sorts of the whole list per member per month.
 # Scope: resolution container
 un_deleg_reassign_rows = {
 	save_temporary_scope_as = un_deleg_res

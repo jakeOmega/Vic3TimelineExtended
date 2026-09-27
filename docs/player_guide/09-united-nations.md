@@ -218,8 +218,8 @@ once and receive the UN General Assembly Vote event after 30 days. Its "We will
 decide later." option closes the event without voting, and it comes back in the
 ninth and eleventh months of the session. AI members vote late: each votes in the
 ninth, tenth or eleventh month, drawn at random, by its lean at that time. An AI
-member that still has not voted (one that joined late, for example) votes five
-days before the results. After a year, General Assembly Vote Results applies the
+member that still has not voted (one that joined late, for example) votes in the
+last month of the session. After a year, General Assembly Vote Results applies the
 outcome.
 
 Most topics pass when the votes in favor outnumber those against. Charter
@@ -308,7 +308,8 @@ An AI member votes in favor when its lean, plus a random −20 to +20, is above
 0. An AI permanent member vetoes a binding resolution at a lean of −30 or below
 (−50 if it vetoed recently, −10 at Moribund), leaving any pledge out of the
 count, and never when it pledged to vote for. A pledge against therefore never
-makes a member veto, and never stops one that would have.
+makes a member veto, and never stops one that would have. Lobbying campaigns do
+count, so a campaign can push a permanent member toward a veto or away from one.
 
 ### Reading how the members lean
 

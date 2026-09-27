@@ -1870,8 +1870,9 @@ un_vote.3 = {
 #   2. every member has its lean written (un_lean_snapshot);
 #   3. an AI member that may still vote casts, if its month has come or the
 #      last call has been made (un_vote_ai_cast_due);
-#   4. an AI member takes its place in the chamber's Delegations rows, or
-#      leaves them once it has voted (un_deleg_refresh_self).
+#   4. an AI member takes its place in the chamber's Delegations list, or
+#      leaves it once it has voted (un_deleg_refresh_self); the rows are
+#      sorted the next day (un_vote.7).
 # The senders save scope:un_resolution first. If it did not reach the event,
 # the open resolution (global_var:un_active_resolution) stands in, so a lost
 # scope costs the chamber nothing and the AI still votes.
@@ -1985,5 +1986,35 @@ un_vote.6 = {
 			}
 		}
 		un_vote_refresh_leans = yes
+	}
+}
+
+# The chamber's Delegations rows, sorted once (spec §6): sent by
+# un_vote_refresh_leans to each human country the day after it fans un_vote.4
+# out, so every snapshot and cast of the month is in. Hidden. Several human
+# countries each sort; the sort is the same every time. The same stand-in as
+# un_vote.4 if scope:un_resolution did not arrive.
+un_vote.7 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		OR = {
+			scope:un_resolution ?= { has_tag = un_res_voting }
+			AND = {
+				NOT = { exists = scope:un_resolution }
+				global_var:un_active_resolution ?= { has_tag = un_res_voting }
+			}
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { NOT = { exists = scope:un_resolution } }
+			global_var:un_active_resolution = { save_scope_as = un_resolution }
+		}
+		scope:un_resolution = {
+			un_deleg_reassign_rows = yes
+		}
 	}
 }

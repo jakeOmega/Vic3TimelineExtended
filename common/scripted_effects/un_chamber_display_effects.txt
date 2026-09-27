@@ -296,6 +296,20 @@ un_chamber_projection_line = {
 	else = {
 		custom_tooltip_no_bullet = je_un_chamber_projection_fail
 	}
+	# Since the late ballots the AI votes in months 9-11, so for most of the
+	# session the count above holds little more than the proposer and the
+	# human members: say so while AI members have yet to vote.
+	if = {
+		limit = {
+			has_tag = un_res_voting
+			has_variable_list = un_res_delegates
+			any_in_list = {
+				variable = un_res_delegates
+				un_deleg_listed = yes
+			}
+		}
+		custom_tooltip_no_bullet = je_un_chamber_projection_pending
+	}
 }
 
 # Veto exposure and, once a veto has been cast, the vetoing country.

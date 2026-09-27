@@ -256,9 +256,10 @@ un_deleg_is_worked = {
 }
 
 # Whether the scoped member belongs in the Delegations section at all: an AI
-# member with a vote that its snapshot has placed (un_deleg_refresh_self adds
-# it to un_res_delegates while it has not voted). Re-checked at display, so a
-# member that left or lost its vote since is not shown.
+# member with a vote, that has not voted, and that its snapshot has placed
+# (un_deleg_refresh_self adds it to un_res_delegates). Re-checked at display,
+# so a member that voted, left or lost its vote since the rows were last
+# sorted (un_vote.7, the day after each fan-out) is not shown.
 # Scope: a member
 un_deleg_listed = {
 	exists = this
@@ -269,6 +270,10 @@ un_deleg_listed = {
 	has_variable = un_deleg_key
 	has_variable = un_lean_shown
 	has_variable = un_lean_total
+	has_global_variable = un_active_resolution
+	global_var:un_active_resolution ?= {
+		NOT = { un_lobby_has_voted = { COUNTRY = PREV } } # REVIEWED 2026-09-27: PREV is the member this trigger is asked of
+	}
 }
 
 # Whether the scoped member gets a row rather than a place in the summary.

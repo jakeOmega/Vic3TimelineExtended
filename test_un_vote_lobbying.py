@@ -137,8 +137,12 @@ class CastingTimingTest(unittest.TestCase):
 
     def test_the_refresh_reaches_every_member(self):
         refresh = _block(self.effects, "un_vote_refresh_leans")
-        self.assertNotIn("is_ai", refresh)
-        self.assertIn("trigger_event = { id = un_vote.4 }", refresh)
+        fan_out = [
+            b for b in (_braced(refresh, m.end() - 1) for m in re.finditer(r"every_country\s*=\s*\{", refresh))
+            if "id = un_vote.4" in b
+        ]
+        self.assertEqual(len(fan_out), 1)
+        self.assertNotIn("is_ai", fan_out[0])
 
 
 class VetoBasisTest(unittest.TestCase):
@@ -478,6 +482,71 @@ class DelegationRowTest(unittest.TestCase):
     def test_a_campaigner_reads_the_true_band_and_everyone_else_the_estimate(self):
         lines = _block(_read(DISPLAY), "un_chamber_deleg_member_lines")
         self.assertRegex(lines, r"un_deleg_viewer_campaigns_on[\s\S]*?un_chamber_deleg_band\s*=\s*\{\s*VAR\s*=\s*un_lean_total\s*\}[\s\S]*?else[\s\S]*?un_chamber_deleg_band\s*=\s*\{\s*VAR\s*=\s*un_lean_shown\s*\}")
+
+
+
+def _loc_values():
+    """{key: value} over every English localization file."""
+    out = {}
+    root = _path("localization", "english")
+    for dirpath, _dirs, files in os.walk(root):
+        for f in files:
+            if f.endswith(".yml"):
+                with open(os.path.join(dirpath, f), encoding="utf-8-sig") as fh:
+                    for line in fh:
+                        m = re.match(r'^ ([^:#\s]+):\d* "(.*)"\s*$', line)
+                        if m:
+                            out[m.group(1)] = m.group(2)
+    return out
+
+
+class ReviewFixesTest(unittest.TestCase):
+    """What the whole-branch review found: text the late ballots made wrong,
+    the projection early in a session, the rows' sort cost, and a pledge
+    settled against the wrong country."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.loc = _loc_values()
+
+    def test_no_text_still_says_the_members_vote_within_a_month(self):
+        stale = re.compile(r"over the next (30|90) days|ballots thirty days|vote about thirty days", re.I)
+        found = sorted(k for k, v in self.loc.items() if stale.search(v))
+        self.assertEqual(found, [])
+
+    def test_the_pledge_count_names_no_side(self):
+        self.assertNotIn("in favour", self.loc["je_un_chamber_tally_committed"])
+
+    def test_standing_help_no_longer_ties_pledges_to_the_sponsor(self):
+        for key in ("je_un_standing_help_limits", "je_un_standing_help_losses", "je_un_standing_help_sources"):
+            with self.subTest(key=key):
+                self.assertNotIn("sponsor", self.loc[key])
+
+    def test_the_projection_says_when_ai_members_have_yet_to_vote(self):
+        projection = _block(_read(DISPLAY), "un_chamber_projection_line")
+        self.assertRegex(projection, r"un_res_delegates[\s\S]*?custom_tooltip_no_bullet\s*=\s*je_un_chamber_projection_pending")
+        self.assertIn("je_un_chamber_projection_pending", self.loc)
+
+    def test_the_rows_are_sorted_once_per_fan_out_not_per_member(self):
+        effects = _read(DOSSIER_EFFECTS)
+        self.assertNotIn("un_deleg_reassign_rows", _block(effects, "un_deleg_refresh_self"))
+        refresh = _block(effects, "un_vote_refresh_leans")
+        self.assertRegex(refresh, r"trigger_event\s*=\s*\{\s*id\s*=\s*un_vote\.7\s+days\s*=\s*1\s*\}")
+        self.assertIn("un_deleg_reassign_rows = yes", _sub_block(_event("un_vote.7"), "immediate"))
+
+    def test_a_member_that_has_voted_leaves_its_row_at_once(self):
+        listed = _block(_read(LOBBY_TRIGGERS), "un_deleg_listed")
+        self.assertIn("un_lobby_has_voted", listed)
+
+    def test_an_annexed_asker_is_never_replaced_by_the_proposer(self):
+        settle = _block(_read(LOBBY_EFFECTS), "un_lobby_settle_pledge")
+        # The proposer stands in only for a pledge made before the rework,
+        # i.e. one whose un_pledge_res is not this resolution.
+        self.assertRegex(
+            settle,
+            r"NOT\s*=\s*\{\s*var:un_pledge_res\s*\?=\s*scope:un_lobby_settle_res\s*\}[\s\S]*?"
+            r"var:un_res_proposer\s*\?=\s*\{\s*save_temporary_scope_as\s*=\s*un_lobby_settle_lobbyist",
+        )
 
 
 if __name__ == "__main__":

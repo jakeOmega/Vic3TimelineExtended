@@ -214,8 +214,8 @@ un_lobby_settle_commitment = {
 #
 # The other party is the country the member pledged to (un_pledge_to), or,
 # for a pledge made before this rework (which carries none), the proposer.
-# Guarded because an annexed asker leaves a variable that no longer resolves —
-# the member's own record still settles, only the bilateral half is skipped.
+# An asker annexed since leaves a variable that no longer resolves: the
+# member's own record still settles, and the bilateral half is skipped.
 # Parameters: $KEPT_LIST$ = un_res_yes | un_res_no
 # Expects: scope:un_res_voter
 # Scope: resolution container
@@ -225,18 +225,22 @@ un_lobby_settle_pledge = {
 		limit = { has_variable = un_res_commit_pending }
 		change_variable = { name = un_res_commit_pending add = -1 }
 	}
+	# A pledge made on this resolution settles against the country it was made
+	# to — and against nobody, if that country is gone. Only a pledge from
+	# before the rework (no un_pledge_res for this resolution) settles against
+	# the proposer, the only country that could ask for one then.
+	scope:un_res_voter = {
+		if = {
+			limit = { var:un_pledge_res ?= scope:un_lobby_settle_res }
+			var:un_pledge_to ?= { save_temporary_scope_as = un_lobby_settle_lobbyist }
+		}
+	}
 	if = {
 		limit = {
 			scope:un_res_voter = {
-				var:un_pledge_res ?= scope:un_lobby_settle_res
-				exists = var:un_pledge_to
+				NOT = { var:un_pledge_res ?= scope:un_lobby_settle_res }
 			}
 		}
-		scope:un_res_voter = {
-			var:un_pledge_to = { save_temporary_scope_as = un_lobby_settle_lobbyist }
-		}
-	}
-	else = {
 		var:un_res_proposer ?= { save_temporary_scope_as = un_lobby_settle_lobbyist }
 	}
 	if = {
