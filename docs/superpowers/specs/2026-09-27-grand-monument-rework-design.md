@@ -220,7 +220,9 @@ goes through one curve. Monuments can never buy an interest group outright.
 The state pulse (`on_monthly_pulse_state`) runs the curve over the monument's own level and sets two variables on the
 state, `var:mon_local_tourism_mult` and `var:mon_local_effect_mult` (steps × each per-step value), then refreshes two
 state modifiers from them: `mon_local_tourism` (`building_tourism_industry_throughput_add`) and
-`mon_local_<dedication>` (the dedication's local effect). Each is
+`mon_local_<dedication>` (the dedication's local effect). There is one named modifier per dedication even where the
+effect is shared (the five loyalist dedications each have their own `mon_local_crown`, `mon_local_republic`, …), so
+the state's list names the monument's message; a state holds exactly one of them, since it holds one monument. Each is
 named after the monument ("Grand Monument: To the Crown") in the state's modifier list. A building readout of grandeur
 and next step, on the Settlement Authority's pattern, is added **only if** #500's check shows building readouts render
 a multiplied value.
@@ -253,8 +255,10 @@ ceremony tooltips and the JE carry the effects.
   the state flag `mon_seen`, gets its record from the current ruler or faith and the flag. This covers panel picks
   and pre-rework saves. After that, **a missing record reads as "does not fit"**, never as "fits".
 - **Rededication rebuilds** (§4.3): `remove_building`, then the level ladder at the new level, then the ceremony fired
-  directly, since a script-created building may not fire `on_building_built`. The ladder is extended to 200, so
-  rededication halves any monument up to level 400 exactly; above that it rebuilds at 200 and the tooltip says so.
+  directly, since a script-created building may not fire `on_building_built`. The shared ladder
+  (`te_construction_market_build_specified_level`, also called by the construction market and tactical-strike
+  damage) is **extended** from 100 to 200 cases in place, not copied, so rededication halves any monument up to
+  level 400 exactly; above that it rebuilds at 200 and the tooltip says so.
 
 ## 4. Contested monuments
 
@@ -265,7 +269,8 @@ Each month the country pulse re-reads "fits" for every regime, ruler and faith m
 heritage, becomes **contested**: the state gets `mon_contested`, plus two IG records taken at that moment,
 `mon_base_ig` (the new order's base: the IG that **opposed** the old message; for a Leader monument, the strongest IG
 outside government at the time) and `mon_supporter_ig` (the IG that **approved** it; for a Leader monument, the old
-ruler's IG).
+ruler's IG). While a Leader monument fits, both its IGs are re-read every month; the month it is contested, that
+reading is frozen into the two records and no longer follows the government.
 
 **Conquest:** `on_state_owner_change` marks the state's regime and ruler monument contested and turns a shrine into
 heritage at once. It does not rely on records surviving the transfer.
