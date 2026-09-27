@@ -283,6 +283,17 @@ class TestWarLawGate(unittest.TestCase):
         self.assertIn("nd_war_law_permits_strategic_strike = yes",
                       option_body(text, "nuclear_incident.50.c"))
 
+    def test_the_government_launch_order_passes_every_deliberate_gate(self):
+        """nuclear_incident.1.c is the government's own order (owner ruling
+        2026-09-26): the same gates as nuke_diplo_action, shown greyed."""
+        body = option_body(strip_comments(read(INCIDENT_EVENTS)), "nuclear_incident.1.c")
+        for gate in ("nd_doctrine_permits_strike = { ENEMY = scope:nd_warning_suspect }",
+                     "nd_pledge_permits_strike = { ENEMY = scope:nd_warning_suspect }",
+                     "nd_war_law_permits_strategic_strike = yes",
+                     "nd_forces_assembled = yes",
+                     "show_as_unavailable"):
+            self.assertIn(gate, body, gate)
+
 
 class TestIncidentRoll(unittest.TestCase):
     """nd_incident_permille is fractional at low readiness (0.5-0.9 once its
