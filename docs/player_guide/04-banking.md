@@ -27,7 +27,7 @@ The entry appears once you have researched Stock Exchange and own an Urban Cente
 of level 5 or higher. It starts at Stable with no momentum or bubble, and stays
 for the rest of the game. If a revolution succeeds, the new government carries
 on the cycle and the central bank where the old one left them (see
-[Government, laws and characters](05-politics.md)), but policies you had
+[After a revolution](05-politics.md#after-a-revolution)), but policies you had
 switched on are lost and must be enabled again.
 
 ### Cycle value, momentum and bubble pressure
@@ -68,14 +68,17 @@ pool. Both are far less exposed to crashes.
 
 ### What moves the banking cycle
 
-The phases and a random monthly nudge both pull the cycle back toward the middle;
-your laws scale the nudge as Banking Cycle Volatility. Pushing the other way,
-bubble pressure in a market economy feeds momentum (the Speculative Inertia,
-Feedback and Euphoria modifiers), which keeps a boom climbing once a bubble
-forms. A budget deficit lifts the cycle through the Government Fiscal Policy
-Effect, a tenth of a point a month per 1% of GDP up to one point, and a surplus
-lowers it. Policies, laws, events and, under the full Banking System, your policy
-stance push the readings directly. Fiat Money and Digital Currency add 0.2 bubble
+Two forces pull the cycle back toward the middle: the phases, and a random
+monthly nudge that your laws scale (Banking Cycle Volatility).
+
+Two others can push against that pull. In a market economy, bubble pressure
+feeds momentum, so a boom keeps climbing once a bubble forms; the tooltip shows
+this as the Speculative Inertia, Feedback and Euphoria modifiers. A budget
+deficit lifts the cycle by a tenth of a point a month per 1% of GDP, up to one
+point, and a surplus lowers it (the Government Fiscal Policy Effect).
+
+Policies, laws, events and, under the full Banking System, your policy stance
+push the readings directly. Fiat Money and Digital Currency add 0.2 bubble
 pressure a month, and Digital Currency and Decentralized Cryptocurrency make the
 cycle more volatile.
 
@@ -130,9 +133,11 @@ emergency capital controls (Corporate Governance).
 
 Each response adds back 3 to 12 cycle value and up to 3 momentum. It costs a
 GDP-scaled treasury expense that fades over six months, holds 1 to 4
-intervention points for a year, and radicalises some of the upper strata. If
-your intervention budget goes negative, for example after a law downgrade, the
-game switches off one crash response a month until it balances.
+intervention points for a year (see
+[the intervention budget](#current-conditions-and-the-intervention-budget)), and
+radicalizes some of the upper strata. If your intervention budget goes negative,
+for example after a law downgrade, the game switches off one crash response a
+month until it balances.
 
 ### Banking contagion
 
@@ -265,8 +270,7 @@ use and which response the crash event offers.
 Capital controls are allowed in any war and lifted when it ends if your law
 forbids them. The laws also have effects outside the cycle, listed in their
 tooltips; Central Bank Independence, for one, strengthens your economic defense
-against covert operations (see
-[Cultural hegemony and covert warfare](10-influence.md)).
+against covert operations (see [Covert defense](10-influence.md#covert-defense)).
 
 The National Bank law group decides whether you have a central bank. National
 Bank Established (Central Banking) adds an intervention point and the National
@@ -314,11 +318,13 @@ of charge.
 A mandate-run bank cuts three times as fast once the cycle falls into Stagnation
 or worse.
 
-Central Bank Independence makes delegation permanent: you choose the mandate but
-no longer set the rate or print money. Lenders reward it with half a point off
-your credit standing, a lower standing floor, a bank that misjudges your economy
-less, and Inflation Anchoring from each level of the National Bank institution,
-which soaks up a tenth of a point of standing wage and price pressure.
+Central Bank Independence makes delegation permanent: you choose the mandate,
+but you no longer set the rate or print money. Lenders reward it. Your credit
+standing improves by half a point and its floor drops from 0.5 to 0.25 points,
+and the bank's estimate of what your economy can bear (see
+[Monetary policy stance](#monetary-policy-stance)) errs by less. Each level of the
+National Bank institution adds a tenth of a point of Inflation Anchoring, which
+absorbs that much standing wage and price pressure.
 
 ### Monetary policy stance
 
@@ -341,7 +347,8 @@ inflation), your credit standing and your risk premium, less the inflation that
 actually happened, and never falls below 0.5%.
 
 Credit standing is what your country is: rank, finance technologies and a stock
-exchange, institutions and currency credibility. It cannot go below 0.5 points.
+exchange, institutions and currency credibility. It cannot go below 0.5 points
+(0.25 under Central Bank Independence).
 Risk premium is what is happening: the cycle phase, crisis tools, banking
 events, bankruptcy, a debt load past a quarter of your credit limit (up to +4
 points at the limit), expectations that have strayed from target, money printing
@@ -385,7 +392,7 @@ standard-of-living expectation for the lower strata (see
 [Economy and construction](03-economy.md)) and a little momentum, while prices
 are stable. Command and dollarized economies never get it.
 
-### Monetising the deficit
+### Monetizing the deficit
 
 Monetise Deficit, from 0 to 3, has your national bank print money for the
 treasury. Each level mints about 1% of a year's GDP, adds about 2.5 points of
@@ -416,11 +423,19 @@ policy rate on it (Interest on Borrowed Gold), and it leaves first, at double
 speed, once your rate is no longer above the world's. Recapitalise the Bank moves
 a tenth of the reserve's limit from treasury to vault, in cash, for good.
 
-Peg Confidence (0 to 100) reacts to your rate only once the vault is under a
-tenth of its limit: then it loses 3 a month for every point your rate is under
-the World Rate, 2 in a Downturn or Panic and 2 with debt at half your credit
-limit, and gains 2 with your rate at or above the world's. An overvalued
-currency drains it at any time. At 20 comes The Run on the Vault:
+Peg Confidence (0 to 100) reacts to your rate only while the vault is under a
+tenth of its limit:
+
+| While the vault is low | Peg Confidence a month |
+|---|---|
+| Each point your rate is below the World Rate | −3 |
+| Downturn or Panic | −2 |
+| Debt at half your credit limit or more | −2 |
+| Rate at or above the World Rate | +2 |
+
+With more gold in the vault, it recovers a point a month while your rate is at
+or above the world's and the vault holds no Borrowed Gold. An overvalued currency
+drains it at any time. At 20, The Run on the Vault fires:
 
 | Option | Effect |
 |---|---|
@@ -454,18 +469,20 @@ When inflation reaches 50%, Not Worth the Paper offers three answers:
 
 | Option | Effect |
 |---|---|
-| Call in every note. We begin again. | Inflation and expectations reset to 5%; printing stops; the investment pool is wiped out; middle and upper strata radicalise; Currency Reform adds 5 points of risk premium for ten years |
+| Call in every note. We begin again. | Inflation and expectations reset to 5%; printing stops; the investment pool is wiped out; middle and upper strata radicalize; Currency Reform adds 5 points of risk premium for ten years |
 | Let them keep the foreign money. They already have. | A Dollarised Economy: inflation drops to the bank's target, but the dial and money printing are gone and minting falls 75%. Enacting any monetary law brings back your own currency, with inflation at 5% and ten years of Currency Reform; Command Economy ends it free |
 | It will pass. Everything passes. | Nothing; the question returns in two years |
 
 ### Monetary treaty articles
 
 Five treaty articles tie money or debts across borders; all need the full
-Banking System (treaties in general: [Diplomacy](08-diplomacy.md)). A pegged
-country is anchored: no dial, the anchor's rate plus a spread, the anchor's
-exchange rate, no money printing, and up to 80% of the anchor's credibility. It
-keeps its own inflation and cycle, and when its inflation outruns the anchor's
-the gap shows as overvaluation, which drains Peg Confidence.
+Banking System (treaties in general: [Diplomacy](08-diplomacy.md)).
+
+A pegged country is anchored. It has no dial and prints no money: its policy
+rate is the anchor's plus a spread, its exchange rate is the anchor's, and it
+gets up to 80% of the anchor's credibility. It keeps its own inflation and
+banking cycle; when its inflation runs ahead of the anchor's, the difference
+shows as overvaluation, which drains Peg Confidence.
 
 | Article | Unlocked by | What it does |
 |---|---|---|
@@ -491,11 +508,11 @@ principles. Each tier includes the ones before, and all need Central Banking.
 
 | Tier | Principle | Effect |
 |---|---|---|
-| 1 | Monetary Cooperation | Every member gets half a swap line from the leader |
-| 2 | Common Currency | Members may adopt the leader's money: its rate with no spread, its exchange rate and +5% export and import advantage |
-| 3 | Fiscal Backstop | The leader is lender of last resort to every adopter |
-| 4 | Banking Union | Adopters get −25% crash likelihood and volatility and an intervention point; needs Keynesian Economics |
-| 5 | Reserve Currency | The leader borrows more cheaply and earns on the world's balances; adopters gain more trade advantage; needs Globalization |
+| I | Monetary Cooperation | Every member gets half a swap line from the leader |
+| II | Common Currency | Members may adopt the leader's money: its rate with no spread, its exchange rate and +5% export and import advantage |
+| III | Fiscal Backstop | The leader is lender of last resort to every adopter |
+| IV | Banking Union | Adopters get −25% crash likelihood and volatility and an intervention point; needs Keynesian Economics |
+| V | Reserve Currency | The leader borrows more cheaply and earns on the world's balances; adopters gain more trade advantage; needs Globalization |
 
 Adopting needs Fiat Money or Digital Currency with a national bank, inflation
 within 3 points of the leader's and debt under half your credit limit. Leaving
@@ -504,7 +521,7 @@ bloc cohesion, and bars you for ten years. A leader can Press for Convergence at
 50 influence per holdout, which waives the debt condition and puts The Question
 of the Common Currency to each holdout; one that refuses costs the bloc cohesion
 and gains Monetary Independence. Power blocs in general are covered in
-[Diplomacy](08-diplomacy.md).
+[Power bloc principles and identities](08-diplomacy.md#power-bloc-principles-and-identities).
 
 ### Currency boards for subjects
 
@@ -540,8 +557,9 @@ premium.
 
 ## Bailouts and the Great Depression
 
-One country can ask another to rescue its banks, and a wave of crashes can become
-a worldwide depression.
+One country can ask another to rescue its banks, a wave of crashes can become
+a worldwide depression, and the United Nations can lend to a member caught in
+one.
 
 ### Appeals for a banking rescue
 
@@ -559,8 +577,8 @@ Bailout Request:
 | Offer a smaller emergency grant | An eighth of the package; +10 relations; two and a half years of Restored Banking Confidence |
 | They must solve their own problems | −20 relations, and the largest of the three hits to the rescuer's own cycle |
 
-Restored Banking Confidence lowers crash likelihood by 10% and blocks another
-appeal while it lasts.
+Restored Banking Confidence lowers crash likelihood by 10%, raises company
+throughput by 5% and blocks another appeal while it lasts.
 
 ### The Great Depression
 
@@ -576,8 +594,22 @@ most once per game.
 | Not crashed, under Isolationism or Command Economy | Global Depression (Sheltered) for five years: −0.1 momentum a month |
 | Not crashed, any other country | Global Depression for ten years: −0.2 momentum a month, +1 point of risk premium |
 
-A United Nations member in a Panic or default that a crisis wave has reached can
-be offered an emergency loan (see [The United Nations](09-united-nations.md)).
+### The UN emergency loan
+
+A United Nations member with the banking journal entry that is in a Panic or in
+default can be offered An Emergency Lending Facility through the UN's docket
+(see [The UN docket](09-united-nations.md#the-un-docket)), once a crisis wave has
+reached it or while any country suffers the Great Depression. The offer comes at
+most once in ten years, and never while you are still repaying a UN loan or your
+representation is suspended.
+
+| Option | Effect |
+|---|---|
+| Accept the facility and its conditions | 2% of your GDP at once, repaid as 110% over five years through the weekly UN Emergency Loan Repayments expense. For the same five years you carry UN Emergency Loan Conditions (−5 legitimacy, −50 Authority, the government resource rather than UN Authority) and Restored Banking Confidence. Cycle value +10. Trade Unions and Rural Folk disapprove, Industrialists approve. The loan adds to UN Authority's delivery pillar |
+| We will weather this alone | Nothing |
+
+The loan is capped at half a year of the dues members pay together, so a
+Moribund UN, which collects no dues, has nothing to lend.
 
 ## Banking events
 

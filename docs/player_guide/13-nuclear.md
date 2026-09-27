@@ -43,9 +43,11 @@ You need the Nuclear Weapons technology and one of these:
 - Major Power rank and the Intercontinental Ballistic Missiles technology.
 - A Nuclear Program Aid treaty article in which a nuclear power helps you, at any rank.
 
-A Nuclear Disarmament article, or the United Nations' non-proliferation regime,
-ends the program; a Nuclear Program Freeze holds funding at zero. Losing the
-rank that qualified you zeroes funding the same week.
+A Nuclear Disarmament article ends the program. A United Nations member without
+a bomb can't run one while the UN is at its Strong tier or higher and the IAEA
+exists (see [UN authority tiers](09-united-nations.md#un-authority-tiers)). A
+Nuclear Program Freeze holds funding at zero. Losing the rank that qualified you
+zeroes funding the same week.
 
 ### Program funding and warhead production
 
@@ -154,7 +156,7 @@ once every two years, and the first choice is free.
 | No First Use | Never | +10% infamy decay and relations improvement, −10% play maneuvers |
 | Existential Deterrence (default) | The enemy's side means to annex or subjugate you, or holds goals on your incorporated states while you are losing | +5% leverage resistance |
 | Flexible First Use | Also when you are losing to them, or they hold goals on any incorporated state | +10% leverage resistance, +5% maneuvers, −5% infamy decay |
-| Nuclear Compellence | Also when they defied your public ultimatum, or your threat against them has reached Confrontation | +15% maneuvers, +10% leverage generation, +10% infamy generation, −10% relations improvement |
+| Nuclear Compellence | Also when they defied your public ultimatum, or your threat against them has reached [Confrontation](#crisis-stages-danger-and-pressure) | +15% maneuvers, +10% leverage generation, +10% infamy generation, −10% relations improvement |
 | Nuclear Warfighting | In any war | +20% maneuvers, +10% leverage generation, +20% infamy generation, −10% infamy decay, −20% relations improvement |
 
 Losing means a quarter of your land occupied, or under 35% of battles won after
@@ -162,7 +164,8 @@ five significant battles. Adopting Compellence or Warfighting costs 5 infamy and
 10 relations with every rival. Leaving No First Use is a **repudiation**: −20
 credibility, +10 infamy, a ten-year Broken Nuclear Pledge modifier, and your
 restraint-minded interest groups disapprove. While the No-First-Strike Pledge
-amendment is on your laws (see [Government, laws and characters](05-politics.md)),
+amendment is on your laws (see
+[Amendments to the mod's laws](05-politics.md#amendments-to-the-mods-laws)),
 your doctrine is held at No First Use, and leaving it strikes the amendment.
 
 ### Nuclear readiness levels
@@ -276,7 +279,7 @@ crisis can be settled at any stage, and it lapses after a year.
 The crisis panel shows two figures, each broken down in its tooltip.
 
 - Danger (0–100) rises with the stage, time, publicity, readiness, poor command reliability, counter-threats and exercises, and falls with open talks. It is lower when the target has no arsenal and no armed protector. High danger makes incidents likelier.
-- Pressure on the target (0–100) comes from the issuer's credibility, whether the threat can be carried out, the danger, the war, whether the target can answer in kind, an armed protector behind it, exercises and alerts, and the target ruler's temperament. An AI target's willingness to concede rises with it. When first threatened it concedes only rarely below 40 pressure; when pressed later it never concedes below 50, about half the time from 70 and two times in three from 85.
+- Pressure on the target (0–100) is what makes an AI target concede. The issuer's credibility, the danger, a threat that can be carried out, and the issuer's exercises and alerts raise it. The target's ability to answer in kind and an armed protector behind it lower it. The course of the war and the target ruler's temperament shift it either way. When first threatened, an AI target concedes only rarely below 40. Pressed again later, it never concedes below 50, does so about half the time from 70, and two times in three from 85.
 
 From Confrontation on, the target is pressed every six weeks unless talks are
 open.
@@ -371,13 +374,14 @@ A strike that fails costs 5 infamy.
 A tactical strike that lands kills half the soldiers and officers in the state
 and a few civilians, stops unit training there for a while, and costs 10 infamy.
 It halves every Naval Fortification and Military Base in the state, an odd level
-lost on a coin flip, so a level-1 site is destroyed half the time. Barracks,
-conscription centers and the other naval buildings survive.
+lost on a coin flip, so a level-1 site is destroyed half the time; what survives
+keeps its production methods. Barracks, conscription centers and the other naval
+buildings survive.
 
 Both sides get a notification of the result. Every use speeds up the world's
 funded programs and ends any crisis between the two countries. The United
 Nations records it against you, and its court may indict your ruler (see
-[The United Nations](09-united-nations.md)).
+[Grounds for UN censure](09-united-nations.md#grounds-for-un-censure)).
 
 ### Retaliation and Automatic Retaliation
 
@@ -428,14 +432,15 @@ conventionally, issue a public ultimatum, or authorize the strike.
 Warheads outlive the government that built them. When an armed country is
 annexed by war, diplomacy or a formable nation, its arsenal passes to whoever
 holds the most populous state in its old capital's region, and a human recipient
-gets "The Arsenal Changes Hands". Every such transfer loses a share of the
-warheads on the way: 7% with no safeguards, 2% less per level (1% at level 3),
-3% more under delegation or Launch on Warning, doubled if the holder was at war.
-**Secured custody** halves the loss. You have it while a foreign custodian helps
-you in a civil war, for twenty years after opening your depots to inspectors over
-a stolen warhead, while a Nuclear Security Assistance article is in force, or as a
-party to the United Nations' Convention on the Physical Protection of Nuclear
-Material. Missing warheads become [loose warheads](#loose-warheads).
+gets "The Arsenal Changes Hands". Every such transfer loses some warheads on the
+way: 7% with no safeguards, 2 points less per safeguards level (1% at level 3).
+Conditional Delegation or Launch on Warning adds 3 points, and the loss doubles
+if the holder was at war. **Secured custody** halves the loss. You have it while
+a foreign custodian helps you in a civil war, for twenty years after opening
+your depots to inspectors over a stolen warhead, while a Nuclear Security
+Assistance article is in force, or as a party to the United Nations' Convention
+on the Physical Protection of Nuclear Material. Missing warheads become [loose
+warheads](#loose-warheads).
 
 ### Who Holds the Button?
 

@@ -1,14 +1,13 @@
 # The United Nations
 
-The United Nations is an organization that one great power founds and the rest
-of the world then joins, ignores or works against. Its
-journal entry shows UN Authority (how seriously the world takes the
-organization), the Security Council of five permanent members with a veto, the
-conventions in force, missions in individual states and the dues every member
-pays, and holds a chamber where you vote and table resolutions. The journal
-entry appears once you research Intergovernmental Organizations, an era 6
-society technology, and for every country once a UN exists. The United Nations
-game rule turns the system off.
+One great power founds the United Nations; the rest of the world joins, ignores
+or works against it. The journal entry appears once you research
+Intergovernmental Organizations, an era 6 society technology, and for every
+country once a UN exists. It shows UN Authority (how seriously the world takes
+the organization), the Security Council of five permanent members with a veto,
+the conventions in force, missions in individual states and the dues members
+pay. It also holds the General Assembly chamber, where you vote and table
+resolutions. The United Nations game rule turns the system off.
 
 ## Founding the United Nations
 
@@ -51,13 +50,15 @@ to every convention already in force, and makes you pay [UN
 dues](#un-dues-and-article-19).
 
 Leave the United Nations ends your membership, seat, programs and conventions.
-It costs 5 standing and gives UN Withdrawal Consequences for five years (−25%
-relations improvement speed, −5% prestige), during which you cannot rejoin.
-Sanctions against you stay in force, and so do unpaid dues. A permanent member
-walking out knocks authority down at once (4 points for a typical great power,
-up to 8). When a revolution wins, the mod carries the nation's membership, seat
-and conventions over to the winner and rebuilds them in the following months
-(see [Government, laws and characters](05-politics.md)).
+It costs 5 [standing](#international-standing) and gives UN Withdrawal
+Consequences for five years (−25% relations improvement speed, −5% prestige),
+during which you cannot rejoin. Sanctions against you stay in force, and so do
+unpaid dues. A permanent member walking out knocks authority down at once (4
+points for a typical great power, up to 8).
+
+When a revolution wins, the mod carries the nation's membership, seat and
+conventions over to the winner and rebuilds them in the following months (see
+[After a revolution](05-politics.md#after-a-revolution)).
 
 ### Subjects and suspended representation
 
@@ -97,14 +98,15 @@ world shows over years. The target is the sum of seven pillars:
 | Peace and order | −20 to 0 | Members at war with fellow members, and nuclear use. |
 | Delivery | 0 to +10 | Aid and peacekeepers delivered, emergency loans, mandates discharged, missions accomplished. |
 
-Credibility, delivery and the nuclear half of peace and order are ledgers whose
-entries halve every four years. Every act enters them multiplied by the actor's
-**weight in world affairs**: its share of world prestige against a typical great
-power's 10% (×1), up to ×5. A permanent member walking out and a nuclear first
-strike also knock authority down directly. A new UN starts at 50, but with empty
-ledgers, no champions and no programs its target sits well below that, so
-expect authority to fall in its first years unless great powers champion it and
-run programs.
+Credibility, delivery and the nuclear half of peace and order are kept as
+ledgers: each act adds or subtracts points, and old entries halve every four
+years. Acts by powerful countries count for more. Each entry is multiplied by
+the actor's **weight in world affairs**, its share of world prestige against a
+typical great power's 10% (×1), up to ×5. A permanent member walking out and a
+nuclear first strike also knock authority down directly. A new UN starts at 50,
+but with empty ledgers, no champions and no programs its target sits well below
+that, so expect authority to fall in its first years unless great powers
+champion it and run programs.
 
 <!-- screenshot: the Why UN Authority Is Moving widget, with the pillar table, the tier and charter lines and the recent ledger entries -->
 
@@ -234,7 +236,7 @@ the other seven are:
 
 | Topic | Who may table it | If it carries |
 |---|---|---|
-| Condemnation of Aggression | A member with a rival that started a war it is still fighting and has a case of 30+ | Condemned for ten years: prestige, relations improvement speed and infamy decay, × enforcement. |
+| Condemnation of Aggression | A member with a rival that started a war it is still fighting and has a [case](#grounds-for-un-censure) of 30+ | Condemned for ten years: prestige, relations improvement speed and infamy decay, × enforcement. |
 | International Sanctions | A major power, against a rival with a case of 50+ | Sanctioned until the proposer lifts them: trade advantage, influence and prestige, × enforcement. |
 | Authorized Military Mandate | See [UN military mandates](#un-military-mandates) | A mandate for the proposer. |
 | Request a Peacekeeping Deployment | A member at war or with a devastated state, for its own territory | A peacekeeping mission; major-power members that voted join and pay for it. |
@@ -254,14 +256,24 @@ Nations (fewer play maneuvers, more infamy) at Supranational.
 ### Grounds for UN censure
 
 Punitive topics need grounds. Every country has a **case strength** from 0 to
-100 built from its record: a war begun without a mandate (10 to 30, more against
-a greater power), a binding resolution refused (10), sanctions busted (8), a
-court ruling defied (6), a mandate abused (20), a severe covert operation
-exposed (15), a nuclear first strike (40), tactical strike (20) or retaliation
-(10), and 0.8 per point of infamy, up to 50. Each record halves every five
-years. A condemnation needs 30, sanctions 50 and a military mandate 60, so a
-clean record cannot be censured. The chamber's Our Exposure section shows your
-own case.
+100 built from its record:
+
+| Record | Case |
+|---|---|
+| War begun without a mandate | 10 to 30 (more against a greater power) |
+| Binding resolution refused | 10 |
+| Sanctions busted | 8 |
+| Court ruling defied | 6 |
+| Mandate abused | 20 |
+| Severe covert operation exposed | 15 |
+| Nuclear first strike | 40 |
+| Tactical nuclear strike | 20 |
+| Nuclear retaliation | 10 |
+| Infamy | 0.8 per point, up to 50 |
+
+Each entry halves every five years. A condemnation needs 30, sanctions 50 and a
+military mandate 60, so a clean record cannot be censured. The chamber's Our
+Exposure section shows your own case.
 
 ### How members decide their UN votes
 
@@ -344,7 +356,7 @@ refusing a convention outright costs credibility and bars you from tabling it
 for five years. A major power that refuses a famine appeal while UN authority is
 40 or more loses prestige and relations improvement speed for five years. The
 lending facility's loan and conditions are covered in
-[Banking and monetary policy](04-banking.md).
+[The UN emergency loan](04-banking.md#the-un-emergency-loan).
 
 ### Lobbying for UN votes
 
@@ -387,14 +399,14 @@ makes casualties cost more war support.
 The journal entry lists eight specialized agencies: WHO, UNESCO, the
 International Court of Justice, UNHRC, IAEA, UNEP, UNHCR and UNOOSA. The Court
 of Justice is founded the first time a country accepts a World Court ruling
-against it. Once the Rome Statute is in force, the criminal court indicts the
-ruler of a country that ratified it (from Established) or of any country (at
-Supranational) for a nuclear first or tactical strike or an exposed
-regime-change operation, at most once a decade. Handing the ruler over exiles
-the ruler, and your heir, if you have one, takes the throne first; defying the
-court costs 5 standing, 10 case strength and credibility. A party to the
-Declaration that runs a coercive resettlement program is penalised (see
-[States and population](07-states.md)).
+against it. Once the International Criminal Court convention is in force, the
+court indicts the ruler of a country that ratified it (from Established) or of
+any country (at Supranational) for a nuclear first or tactical strike or an
+exposed regime-change operation, at most once a decade. Handing the ruler over
+sends them into exile, and your heir, if you have one, succeeds them; defying
+the court costs 5 standing, 10 case strength and credibility. A party to the
+Declaration that runs a coercive resettlement program is penalized (see
+[Costs and consequences of resettlement](07-states.md#costs-and-consequences-of-resettlement)).
 
 ## UN military mandates
 
@@ -429,9 +441,9 @@ Missions put the UN's work in one state:
 Effects scale with the UN's enforcement, fall by up to half when members
 withhold dues, and rise with each contributor up to three. A mission fails if
 its host is attacked after it arrived, if every contributor leaves a
-peacekeeping or stabilisation mission, or if the host expels a stabilisation
+peacekeeping or Stabilisation mission, or if the host expels a Stabilisation
 mission. It lapses after five years, or after six months if nobody has joined a
-peacekeeping or stabilisation mission. Success adds delivery and gives each
+peacekeeping or Stabilisation mission. Success adds delivery and gives each
 contributor 3 standing and 15 relations with the host; failure costs
 credibility. The state panel shows a UN Mission tile, and contributors build
 covert networks in the host faster.
@@ -439,9 +451,9 @@ covert networks in the host faster.
 Any major-power member not under sanctions can press Send a Contingent on a
 mission's row in the chamber, if it is not the host, not at war with it and has
 not left that mission before. Each mission joined this way costs a quarter of a
-percent of GDP a year, free for peacekeeping and stabilisation if you run the
+percent of GDP a year, free for peacekeeping and Stabilisation if you run the
 peacekeeping program. Bring Our Contingent Home costs 2 standing and 10
-relations with the host, and a peacekeeping or stabilisation mission left empty
+relations with the host, and a peacekeeping or Stabilisation mission left empty
 fails.
 
 <!-- screenshot: a state panel showing the UN Mission tile for a peacekeeping mission, with its strength and progress -->
@@ -476,8 +488,8 @@ a dissolution writes them off.
 
 ## International standing
 
-Standing is your own record in the organization, separate from UN Authority. It
-starts at 50 when you join.
+Standing is your own record in the organization, from 0 to 100, separate from
+UN Authority. It starts at 50 when you join.
 
 | Tier | Standing | Effect |
 |---|---|---|
