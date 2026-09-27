@@ -56,6 +56,8 @@ These are the five inputs most likely to bite a player that no happy-path test e
 - **Retaliation through the strike actions** now costs no infamy (it cost 25 through `nuclear_first_strike` before). The spec's table: "Retaliation's infamy: none — it is licensed."
 - **The strike confirmation** gains a line naming the infamy, because `nuclear_first_strike` hides its `change_infamy` inside a custom tooltip. It sits in the actions' `accept_effect`, where `scope:target_country` exists in the preview.
 - **The leaderboard** (`update_nuclear_powers_ranking`, an `ordered_country` sweep) moves from every active country's weekly pulse to the world's monthly step. Otherwise making the entry active for everyone would run it about 200 times a week.
+- **The world-reaction relations are applied at the detonation sites** (`nuclear_first_strike`'s success branch, `nd_tactical_strike_resolve`'s), not in `nd_record_nuclear_use` as the spec's §4.1 put it. So they follow a successful detonation only, beside the infamy they accompany. `nd_record_nuclear_use` runs before the dice and cannot tell strategic from tactical.
+- **The entry-close fallbacks are kept, not re-keyed.** Spec §6.1 said every `NOT = { has_journal_entry = je_nuclear_program }` branch in `nd_country_monthly_cleanup` is re-keyed on `nd_is_armed` or removed. The plan keeps both: the domestic-stance clean-up and the custody-record refresh for a country without the entry. They remain right for a world where the entry never activated (the rule off, before the first warhead). The unarmed case they used to cover is handled by the entry's own pulses, which Task 5's tests pin, and the test whitelists exactly those two branches. The weekly disarmament block, which the rule missed because it isn't keyed on `has_journal_entry`, is fixed in Task 5.
 - **Phase 2 walk-outs are booked for every party whose lowest treaty ceiling rose.** The monthly check cannot tell who withdrew, and the end of an arms-control regime erodes the norm whoever ended it. It is not booked when the partner no longer exists.
 
 ## File map
@@ -2010,7 +2012,7 @@ git commit -m "Nuclear taboo: use, threat and doctrine costs scale with it; a tw
 
 **Files:**
 - Modify: `common/scripted_triggers/nuke_triggers.txt` (`nuclear_program_entry_applies`)
-- Modify: `common/journal_entries/je_nuclear_program.txt` (comments only)
+- Modify: `common/journal_entries/je_nuclear_program.txt` (the weekly disarmament clean-up's guard; comments)
 - Modify: `common/customizable_localization/nuclear_program_custom_loc.txt` (`nd_taboo_status_line`, `nd_taboo_band_name`)
 - Modify: `localization/english/te_journal_entries_l_english.yml` (`je_nuclear_program_status_line`)
 - Modify: `localization/english/te_miscellaneous_l_english.yml`
@@ -2052,6 +2054,10 @@ class TestEveryoneActive(unittest.TestCase):
         self.assertIn("remove_modifier = nd_upkeep_cost", block(self.det, "nd_apply_posture_modifiers"))
         weekly = block(strip_comments(read(JE)), "on_weekly_pulse")
         self.assertIn("has_variable = nd_arsenal_record", weekly)
+        # A disarmed country now keeps the entry, so its weekly clean-up runs
+        # every week: taking off a modifier it no longer has would log each time.
+        self.assertRegex(weekly, r"limit = \{ has_modifier = nuclear_power \}\s*remove_modifier = nuclear_power")
+        self.assertNotRegex(weekly, r"value = 0\s*\}\s*remove_modifier = nuclear_power")
 
     def test_nothing_else_waits_for_the_entry_to_close(self):
         # With the entry active for every country, a branch that acts only
@@ -2090,7 +2096,7 @@ class TestEveryoneActive(unittest.TestCase):
 - [ ] **Step 2: Run to verify failure**
 
 Run: `python3 -m unittest test_nuclear_taboo.TestEveryoneActive -v`
-Expected: failures in the entry, status-line and band-name tests. The clean-up and the "nothing else waits" tests already pass; they pin existing behaviour.
+Expected: failures in the entry, status-line and band-name tests, and in the clean-up test's new `has_modifier = nuclear_power` guard assertion. The "nothing else waits" test already passes; it pins existing behaviour.
 
 - [ ] **Step 3: The entry applies to everyone** (`nuke_triggers.txt`)
 
@@ -2118,7 +2124,36 @@ nuclear_program_entry_applies = {
 
 Also update its comment header's first sentence to: `# Country scope: the body of je_nuclear_program's \`possible\` — everyone the entry applies to: a country with a programme, one that holds warheads, one party to a nuclear crisis, and — once the nuclear taboo exists — every country.`
 
-- [ ] **Step 4: The entry's comments** (`je_nuclear_program.txt`)
+- [ ] **Step 4: The entry's weekly disarmament clean-up, and its comments** (`je_nuclear_program.txt`)
+
+The weekly pulse's disarmament block ran at most once while disarmament closed the entry. Now a treaty-disarmed, NPT-bound or renounced country keeps the entry and runs it every week, and an unguarded `remove_modifier` on a modifier it no longer has logs each time. Replace
+
+```
+				set_variable = {
+					name = nuclear_weapon_program_progress
+					value = 0
+				}
+				remove_modifier = nuclear_power
+			}
+```
+
+with
+
+```
+				set_variable = {
+					name = nuclear_weapon_program_progress
+					value = 0
+				}
+				# Guarded: the entry no longer closes on disarmament, so this
+				# runs every week for a disarmed country.
+				if = {
+					limit = { has_modifier = nuclear_power }
+					remove_modifier = nuclear_power
+				}
+			}
+```
+
+Then update the comments:
 
 Replace the comment above `possible`:
 
@@ -6133,11 +6168,16 @@ te_debug_nuclear.3 = { # REVIEWED 2026-09-26: console-only test event (`event te
 			nd_taboo_monthly_update = yes
 		}
 	}
+	# WARHEADS must be a value a trigger can compare (the effect's limit is
+	# `$WARHEADS$ > 0`), so the count goes through a variable, not a literal.
 	option = {
 		name = te_debug_nuclear.3.e
+		hidden_effect = {
+			set_variable = { name = nd_taboo_debug_warheads value = 10 }
+		}
 		custom_tooltip = {
 			text = te_debug_nuclear.3.tt_renounce
-			nd_taboo_note_renunciation = { WARHEADS = 10 }
+			nd_taboo_note_renunciation = { WARHEADS = var:nd_taboo_debug_warheads }
 		}
 	}
 }
@@ -6204,6 +6244,8 @@ One world score, `global_var:nd_taboo` (0-100), for how unthinkable nuclear weap
    11. `event te_debug_nuclear.3` option b (85) then d (step) fires the Strong band event to every country, once; running d again does not fire it again.
    12. An AI great power in a high-taboo world with no rival trims its arsenal to a ceiling within a year.
    13. Civil defence halves the "Enemy nuclear arsenal" war-support line.
+   14. An eroding band event offers an unarmed country with an amicable armed neighbour "Seek the shelter of a friendly nuclear power" (the option's `relations:root >= relations_threshold:amicable` is a form the mod had not used in a trigger before; if the option never appears, suspect the syntax before concluding no friendly power exists).
+   15. A treaty-disarmed or renounced country's weekly pulse logs no `remove_modifier` error for `nuclear_power`.
 
 - [ ] **Step 4: `docs/systems/mod_systems.md`**
 
