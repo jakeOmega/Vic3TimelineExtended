@@ -31,7 +31,7 @@
 #                       while the bonuses can be on). rs_arrived and rs_died
 #                       also back the Authority's readouts, which read them
 #                       as root.var: (a building has no variables of its own)
-#   source state       rs_recruits (this month, every destination),
+#   source state        rs_recruits (this month, every destination),
 #                       rs_taken_now (this destination's take, for unrest),
 #                       rs_death_carry (transit deaths not yet killed)
 #   country             rs_month_<program> (this month's recruits)
