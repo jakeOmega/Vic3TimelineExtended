@@ -1706,6 +1706,11 @@ on_entry_into_force = {
 - `visible`: `scope:source_country` is sometimes set, sometimes not (depends on call site) — wrap reads in `trigger_if = { limit = { exists = scope:source_country } ... }`.
 - `can_ratify`: both `scope:source_country` and `scope:target_country` ARE bound (vanilla pattern).
 - `on_entry_into_force` / `on_break` / `on_withdrawal`: use `scope:article_options.source_country` / `.target_country` per the snippet above.
+- `ai` block: each field has its own scopes (vanilla `common/treaty_articles/treaty_articles.md` § AI block).
+  - **`evaluation_chance` has root only.** The doc says "Only has root scope for the country we're looking at", and no vanilla article reads `scope:other_country` there. Check the partner in `possible`, which binds `scope:other_country`.
+  - A partner check inside `evaluation_chance` fails silently. If `scope:other_country` is unset there, the chance stays 0 and the AI never proposes the article. On 2026-09-27 about 18 mod articles did this (owner call pending). `nuclear_arms_limitation` was fixed before it shipped.
+  - `quantity_input_value` and the input filters get `root`, `scope:other_country` and `scope:article`.
+  - `inherent_accept_score` gets `root` and `scope:article`, plus `scope:first_country` and `scope:second_country` on a mutual article.
 
 ### `state_population` / `total_population` Are Triggers, Not Script Values
 
