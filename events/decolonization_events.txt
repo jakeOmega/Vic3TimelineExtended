@@ -563,7 +563,9 @@ decolonization_events.4 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_journal_entry = je_colonial_empire
+		# The system's rule, not je_colonial_empire: the recipient, a country with
+		# no homeland of its own cultures, is a former colony and holds no entry.
+		has_game_rule = decolonization_enabled
 		NOT = { has_modifier = cultural_reclamation_modifier }
 		has_technology_researched = decolonization
 		is_subject = no
@@ -803,7 +805,9 @@ decolonization_events.7 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_journal_entry = je_colonial_empire
+		# The system's rule, not je_colonial_empire: the recipient is a former
+		# colony, which never holds that entry (see decol_mark_former_colony).
+		has_game_rule = decolonization_enabled
 		NOR = {
 			has_modifier = nation_building_investment_modifier
 			has_modifier = foreign_investment_dependency_modifier
@@ -1570,7 +1574,9 @@ decolonization_events.14 = {
 	duration = 3
 
 	trigger = {
-		has_journal_entry = je_colonial_empire
+		# The system's rule, not je_colonial_empire: every great power takes a
+		# stance, a power without colonies most of all (option A's AI weights).
+		has_game_rule = decolonization_enabled
 		has_technology_researched = decolonization
 		country_rank >= rank_value:great_power
 		NOR = {
@@ -1769,7 +1775,9 @@ decolonization_events.15 = {
 	duration = 3
 
 	trigger = {
-		has_journal_entry = je_colonial_empire
+		# The system's rule, not je_colonial_empire: the recipient has just
+		# become independent and holds no colonial entry of its own.
+		has_game_rule = decolonization_enabled
 		# Only fire on true independence — not on overlord-to-overlord transfer
 		# or other transitions where on_become_independent may still pulse.
 		is_subject = no
@@ -1994,7 +2002,9 @@ decolonization_events.16 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_journal_entry = je_colonial_empire
+		# The system's rule, not je_colonial_empire: the recipient is a former
+		# colony, which never holds that entry (see decol_mark_former_colony).
+		has_game_rule = decolonization_enabled
 		has_technology_researched = decolonization
 		has_variable = recently_decolonized
 		is_subject = no
@@ -2182,7 +2192,9 @@ decolonization_events.17 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_journal_entry = je_colonial_empire
+		# The system's rule, not je_colonial_empire: the recipient is a former
+		# colony, which never holds that entry (see decol_mark_former_colony).
+		has_game_rule = decolonization_enabled
 		has_technology_researched = decolonization
 		has_variable = recently_decolonized
 		is_subject = no
@@ -2336,7 +2348,9 @@ decolonization_events.18 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_journal_entry = je_colonial_empire
+		# The system's rule, not je_colonial_empire: the recipient is a former
+		# colony, which never holds that entry (see decol_mark_former_colony).
+		has_game_rule = decolonization_enabled
 		has_technology_researched = decolonization
 		has_variable = recently_decolonized
 		is_subject = no
@@ -2641,7 +2655,9 @@ decolonization_events.20 = {
 	# re-picked here with random_country, which named whichever power had
 	# intervened anywhere, not necessarily this one.
 	trigger = {
-		has_journal_entry = je_colonial_empire
+		# The system's rule, not je_colonial_empire: any great power may answer
+		# the intervention, with or without colonies of its own.
+		has_game_rule = decolonization_enabled
 		exists = scope:intervening_power
 		exists = scope:intervention_victim
 	}
@@ -2771,7 +2787,9 @@ decolonization_events.21 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_journal_entry = je_colonial_empire
+		# The system's rule, not je_colonial_empire: the recipient is a former
+		# colony, which never holds that entry (see decol_mark_former_colony).
+		has_game_rule = decolonization_enabled
 		has_technology_researched = decolonization
 		has_variable = recently_decolonized
 		is_subject = no

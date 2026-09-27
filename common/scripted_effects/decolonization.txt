@@ -153,13 +153,15 @@ apply_decolonization_path = {
 #                         (also by .7 and .19)
 #   recently_decolonized  ~20 years; read by the post-independence events (.7,
 #                         .16, .17, .18, .21) and their pool entries
-# Only .60 / .61 (and so .5 / .6) are reachable through these variables alone.
-# .7, .15, .16, .17, .18 and .21 also require je_colonial_empire on the former
-# colony itself, which a freed colony almost never holds (its possible needs an
-# overseas colonial state or a colonial subject), and .19 needs .15's
-# nationalization modifier. That gate predates this helper and blocks
-# vanilla-released countries too; recently_decolonized is still set so the two
-# release paths match.
+# The post-independence events (.4, .7, .15, .16, .17, .18, .21) gate on the
+# decolonization game rule, not on je_colonial_empire: a freed colony never
+# holds that entry (its possible needs an overseas colonial state or a colonial
+# subject). #44 gated every event in the file on the entry, which kept these
+# unreachable until 2026-09. They still need the former colony itself to have
+# researched decolonization (their triggers and the on_action's outer gate).
+# .15 fires from on_become_independent and reads neither variable; .19, on the
+# former overlord, needs .15's nationalization modifier on a country whose
+# former_overlord is that overlord.
 # A country the mod frees itself never passes through those release actions
 # (create_dynamic_country makes a new country; make_independent frees an
 # existing subject), so every decolonization path that frees a colony calls this:
