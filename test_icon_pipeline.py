@@ -101,6 +101,36 @@ class WriteDecisionTests(unittest.TestCase):
         self.assertTrue(gi.needs_write(True, [1, "prompt a"], want))   # subject changed
 
 
+class LensCopyTests(unittest.TestCase):
+    def test_shown_actions_get_a_byte_copy_hidden_ones_do_not(self):
+        root = Path(tempfile.mkdtemp())
+        d = root / "common" / "diplomatic_actions"
+        d.mkdir(parents=True)
+        (d / "a.txt").write_bytes(b"\xef\xbb\xbf" + (
+            "shown = {\n\tgroups = { general }\n}\n"
+            "hidden = {\n\tshow_in_lens = no # comment\n\tpact = { show_in_lens = no }\n}\n"
+            "nested_only = {\n\tpact = {\n\t\tshow_in_lens = no\n\t}\n}\n").encode("utf-8"))
+        icons = root / "gfx" / "interface" / "icons" / "diplomatic_action_icons"
+        icons.mkdir(parents=True)
+        for k in ("shown", "hidden", "nested_only"):
+            (icons / f"{k}.dds").write_bytes(f"DDS {k}".encode())
+        lens = root / "gfx" / "interface" / "icons" / "lens_toolbar_icons"
+        lens.mkdir(parents=True)
+        (lens / "shown.dds").write_bytes(b"placeholder")
+        saved = ip.ICONS
+        try:
+            ip.ICONS = gi.ICONS = {"diplomatic_action": {
+                k: {"subject": "x", "seed": 0} for k in ("shown", "hidden", "nested_only")}}
+            self.assertEqual(gi.hidden_from_lens("diplomatic_action", root), {"hidden"})
+            self.assertEqual(sorted(gi.sync_lens_copies("diplomatic_action", set(), root)),
+                             ["nested_only", "shown"])
+            self.assertEqual((lens / "shown.dds").read_bytes(), b"DDS shown")
+            self.assertFalse((lens / "hidden.dds").exists())
+            self.assertEqual(gi.sync_lens_copies("diplomatic_action", set(), root), [])
+        finally:
+            ip.ICONS = gi.ICONS = saved
+
+
 FIXTURE = (
     "# techs\n"
     "alpha = {\n"
