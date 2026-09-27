@@ -192,7 +192,6 @@ REPLACE:company_basic_electrics = {
 		building_electrics_industry
 		building_electrics_industry_radio
 		building_electrics_industry_appliances
-		building_generic_hq_skyscraper
 		building_generic_electronics_lab
 	}
 
@@ -226,7 +225,6 @@ REPLACE:company_basic_electrics = {
 
 	prosperity_modifier = {
 		state_education_access_add = 0.05
-		state_building_generic_hq_skyscraper_max_level_add = 1
 		state_building_generic_electronics_lab_max_level_add = 1
 	}
 

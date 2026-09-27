@@ -1833,9 +1833,9 @@ INJECT:company_basic_colonial_plantations_2 = {
 	}
 }
 
-# (Generic Electrics unique buildings — building_generic_hq_skyscraper and
-# building_generic_electronics_lab — are wired in the REPLACE: block in
-# extra_companies_generic.txt.)
+# (The Generic Electrics unique building, building_generic_electronics_lab, is
+# wired in the REPLACE: block in extra_companies_generic.txt. Its second one,
+# building_generic_hq_skyscraper, is retired.)
 
 # Generic Gold Mining - Unique: Assay Office
 INJECT:company_basic_gold_mining = {

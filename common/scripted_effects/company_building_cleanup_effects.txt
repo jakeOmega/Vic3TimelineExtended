@@ -1107,11 +1107,6 @@ remove_invalid_company_buildings_effect = {
 	if = {
 		limit = {
 			has_building = building_generic_hq_skyscraper
-			NOT = {
-				owner = {
-					has_company = company_basic_electrics
-				}
-			}
 		}
 		remove_building = building_generic_hq_skyscraper
 	}
