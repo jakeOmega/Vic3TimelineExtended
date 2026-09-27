@@ -60,8 +60,8 @@ armed forces.
 
 | Article | Unlocked by | Enforceable | What it does |
 |---|---|---|---|
-| Demilitarized Zone | International Relations | Yes | No conscription, barracks, naval fortifications or military bases in the chosen state; an existing military base is dismantled. |
-| Forced Disarmament | Intergovernmental Organizations | Yes | Military wages −25%, conscription halved, and every arms industry, artillery foundry, munition plant, naval building and military base in the conceding country dismantled. |
+| Demilitarized Zone | International Relations | Yes | No conscription, Barracks, Naval Fortifications or Military Bases in the chosen state; an existing Military Base is dismantled. While it stands the conceding country uses 25 authority and loses 5 prestige. |
+| Forced Disarmament | Intergovernmental Organizations | Yes | Military wages −25%, conscription halved, military industry throughput −25% and −10 prestige. Every Arms Industry, Artillery Foundry, Munition Plant, Naval Administration, Naval Fortification, Naval Logistics Center and Military Base in the conceding country is dismantled; Shipyards and Military Shipyards are spared. |
 | Intelligence Sharing Pact | Intergovernmental Organizations | No | Mutual, between two major powers or greater that have both established a Ministry of Intelligence and Security: +3 intelligence capacity, a stronger but dearer intelligence ministry, and a [defense shield](#the-intelligence-sharing-pacts-defense-shield). Costs each side 1 infamy. |
 | Joint Military Exercises | Combined Arms | No | Mutual: +25% army experience gain and admiral rank impact, slightly dearer military goods. |
 
@@ -116,8 +116,9 @@ covert defense with its partners'. If a partner's is higher, you gain half the
 gap between your combined economic, military and ideological defense and your
 strongest partner's, added to each of the three. The stronger partner gains
 nothing from the shield, so the pact lets a great power cover a weaker partner
-against [covert operations](10-influence.md). The AI signs readily with a
-country that shares one of its rivals, and almost never with a rival.
+against [covert operations](10-influence.md#covert-defense). The AI signs
+readily with a country that shares one of its rivals, and almost never with a
+rival.
 
 ### Population transfers by treaty
 
@@ -130,10 +131,10 @@ fades over time, and its strength grows with the share of each country's
 population that moved, never falling below a quarter.
 
 The draft blocks the article when the conceding country has Universal
-Citizenship. Its high-acceptance check does not look at the cultures that would
-move: it needs the receiving country to hold a community of one of the
-conceding country's primary cultures with acceptance below 60, and the article
-can't be drafted without one.
+Citizenship. It also needs the receiving country to hold a community of one of
+the conceding country's primary cultures with acceptance below 60. That check
+looks at a community in the receiving country, not at the people who would
+move.
 
 ## Diplomatic play escalation
 
@@ -153,7 +154,7 @@ extra escalation.
 | Vassalization V and Aggressive Coordination V principles | +0.5 and +1 a week in plays you start |
 | Defensive Cooperation V principle | −20% in plays against you |
 | UN membership, a Security Council seat, permanent membership | Small reductions; see [The United Nations](09-united-nations.md) |
-| Rising Global Tensions and Home Front Strain | +1 and +2 a week in plays you start, in the run-up to and during a world war; see [Military and war](12-military.md) |
+| Rising Global Tensions and Home Front Strain | +1 and +2 a week in plays you start, in the run-up to and during a world war; see [Ideological tension](12-military.md#ideological-tension) |
 
 A country with all of these technologies reaches the cap, so plays it starts
 escalate about two and a half times as fast as in the base game, leaving the
@@ -179,18 +180,19 @@ ten a month.
 | Nuclear Brinkmanship | You and an opponent in a play both hold nuclear weapons, outside a nuclear crisis | Stand firm, open back channels, or mobilize. |
 
 With Covert Warfare on, its operations replace the proxy war, propaganda and
-espionage events (see [Cultural hegemony and covert warfare](10-influence.md)).
+espionage events (see [The covert operations](10-influence.md#the-covert-operations)).
 
 ### Rival-choice event chains
 
 When an event says a rival has acted against you, the rival chose to. Plans on
 the Table, The War of Words and An Agent in Place go to the rival first, and you
-hear only if it acts: "The Gathering Storm" if it arms, "Hearts and Minds" if it
-broadcasts, and "The Spy Who Was Caught" about half the time it plants an
-agent. Your answer goes back to it: matching a buildup or a campaign sends it a
-follow-up, and a caught spy can be tried, traded quietly or answered by
-expelling its diplomats. Your own choices in The Shadow War, The Iron Purse and
-Nuclear Brinkmanship reach the other country the same way.
+hear only if it acts: "The Gathering Storm" (an event, not the World War
+journal entry) if it arms, "Hearts and Minds" if it broadcasts, and "The Spy
+Who Was Caught" about half the time it plants an agent. Your answer goes back
+to it: matching a buildup or a campaign sends it a follow-up, and a caught spy
+can be tried, traded quietly or answered by expelling its diplomats. Your own
+choices in The Shadow War, The Iron Purse and Nuclear Brinkmanship reach the
+other country the same way.
 
 ## Irredentism and reunification
 
@@ -335,12 +337,20 @@ A bloc holding unspent mandates gains cohesion from a Mandate Reserve, set once
 a year: +3 per unspent mandate, up to +12. New bloc names include the Global
 Accord for a Diplomatic Framework and the Anglosphere for a cultural bloc.
 
+With Intergovernmental Organizations, a bloc leader can build one Power Bloc
+Headquarters, a government building with a very high construction cost. What it
+does depends on the bloc's identity: authority and cheaper decrees for a
+Sovereign Empire, military industry throughput and faster training for a
+Military Treaty bloc, trade advantage and capacity for a Trade League, and so
+on. Its production method lists the effects.
+
 Subjugate, the leader's action that makes a bloc member a protectorate, is open
-to every identity. It needs a Subjugation Strength of at least 1.0: about twenty
-times the target's prestige, ten for a Sovereign Empire, about twelve when your
-identity's bond applies (shared religion, governance principle or culture,
-economic dependence, or five times its army). Its infamy grows with the target's
-population up to 25, halved for a Sovereign Empire.
+to every identity. It needs a Subjugation Strength of at least 1.0, which means
+roughly that your prestige is twenty times the target's: ten times if your bloc
+is a Sovereign Empire, and about twelve times when your identity's bond applies
+(shared religion, governance principle or culture, economic dependence, or an
+army five times the target's). Its infamy grows with the target's population up
+to 25, halved for a Sovereign Empire.
 
 ## Formable countries
 
@@ -369,7 +379,7 @@ Once Decolonization is researched, the base game's India and Indonesia
 formations leave the list and these replace them. While a base-game India or
 Indonesia exists, the new one can't be unified.
 
-### Government-flavoured country names
+### Government-flavored country names
 
 Each formable renames itself with its government. The African Union becomes the
 Pan-African Socialist Federation under communism, the African Imperium under
@@ -395,8 +405,9 @@ be.
 
 The mod doesn't change rank thresholds. Great powers gain +25% cultural pull,
 two covert operation slots and +10 intelligence capacity; major powers +10%, one
-slot and +5. With the Banking System enabled, each rank also sets a risk premium
-on your borrowing (see [Banking and monetary policy](04-banking.md)).
+slot and +5. Each rank also sets part of your credit standing, and so what you
+pay to borrow (see
+[What your government pays to borrow](04-banking.md#what-your-government-pays-to-borrow)).
 
 Colonial Culture Change lets an overlord with three times a colonial subject's
 prestige replace the subject's primary cultures and religion with its own, at +20

@@ -49,7 +49,7 @@ Only needs Charity Hospitals, Private Health Insurance or Public Health
 Insurance; Regulated Augmentation Market needs a Ministry of Consumer
 Protection; Mandatory Augmentation needs a Ministry of War. The group's laws
 also drive a movement journal entry, described in
-[Social movements](06-social-movements.md).
+[The augmentation debate](06-social-movements.md#the-augmentation-debate).
 
 ### Laws on state power and information
 
@@ -75,7 +75,7 @@ and a stronger anti-war movement. The humane end, up to Limited War (from
 Intercontinental Ballistic Missiles), cuts devastation by up to 75%, slows
 diplomatic-play escalation, adds reputation and lowers your Ministry of War's
 cap. Humanitarian Regulations and Limited War also restrict nuclear strikes;
-see [Nuclear weapons](13-nuclear.md).
+see [Strategic and tactical strike actions](13-nuclear.md#strategic-and-tactical-strike-actions).
 
 ### Economic law groups
 
@@ -101,9 +101,9 @@ Monetary Policy and Financial Regulation are explained in
 | Collective Governance | Governance Principles | Political Agitation | No single head of state; see [Collective Governance](#collective-governance). |
 | Algorithmic Governance | Distribution of Power | Machine Learning | Government by algorithm. |
 | Neocolonialism | Colonization | Decolonization | See [Colonial empires and decolonization](11-decolonization.md). |
-| Private Military Contractors | Army Model | Guided Missiles | See [Military and war](12-military.md). |
-| Littoral Defense | Navy Model | Naval Convoy Defense | See [Military and war](12-military.md). |
-| Auxiliary Fleet | Navy Model | Predictive Logistics | See [Military and war](12-military.md). |
+| Private Military Contractors | Army Model | Guided Missiles | Deniable force: 20% less infamy, faster infamy decay, fewer radicals from conquest and +0.25 war support a month, but casualties cost 30% more war support; −10% authority, 30% less conscription, 20% dearer military goods and −10% unit offense and defense. |
+| Littoral Defense | Navy Model | Naval Convoy Defense | A coastal navy: ships operate only half as far from port, torpedo craft build faster and capital ships slower, navy goods cost 20% less, and Naval Fortifications get two more levels and resist invasion better. Coastal countries only. |
+| Auxiliary Fleet | Navy Model | Predictive Logistics | A navy that carries the army: ships reach 50% farther from port, naval invasions go better, ships carry 30% more marines and supply ships 30% more supply, supply ships build faster and capital ships slower. Coastal countries only. |
 
 Algorithmic Governance dissolves your parties, replaces Elected Bureaucrats
 with Appointed Bureaucrats and makes you an Algorithmic Directorate. Laws pass
@@ -139,10 +139,10 @@ stronger option also needs authority income above its own cost.
 | Push the law forward decisively | 2 | 500 | +25 amenability, +15% success, half the stalls, one more setback allowed, 20% faster | Opposition −3 approval, −5 legitimacy, movements radicalize more, capacity −2 |
 | Force the law through, consequences be damned | 4 | 750 | +50 amenability, +25% success, three quarters fewer stalls, two more setbacks, 35% faster, jumps one enactment phase | Opposition −5 approval, −10 legitimacy, more radicals, some upper-strata radicals at once, capacity −3 |
 
-The authority cost also fades out over five years. Capacity discounts it:
-slightly up to 4 (about 9% at 4), steeply beyond (20% at 5, half at 8). Each use
-drains capacity, so a country exactly on a threshold can use that tier once and
-then must wait.
+The authority cost fades out over five years too. More capacity makes it
+cheaper: a few percent off from 2 (about 9% at 4), then 20% at 5 and half at 8.
+Each use lowers your capacity for a while, so a country exactly on a tier's
+threshold can use that tier once and must then wait.
 
 ## Ministries
 
@@ -157,8 +157,8 @@ included, from 5 levels to 9.
 | Ministry of Foreign Affairs | International Relations | | +100 influence and +10% influence, faster relations changes, more leverage |
 | Ministry of War | Wargaming | | More army experience and military research, +2% offense and defense, dearer military wages and goods |
 | Ministry of Commerce | International Exchange Standards | | +5% trade advantage and trade capacity |
-| National Bank | Central Banking | not Traditionalism | Lower borrowing premium, larger gold reserves, better investment efficiency; see [Banking and monetary policy](04-banking.md) |
-| Ministry of Culture | Mass Propaganda | | +10% assimilation and conversion, cultural pull, cultural program funding; see [Cultural hegemony and covert warfare](10-influence.md) |
+| National Bank | Central Banking | not Traditionalism | Lower borrowing premium, larger gold reserves, better investment efficiency; see [Financial regulation laws](04-banking.md#financial-regulation-laws) |
+| Ministry of Culture | Mass Propaganda | | +10% assimilation and conversion, cultural pull, cultural program funding; see [Cultural programs](10-influence.md#cultural-programs) |
 | Ministry of Labor | Public Works Programs (pro-labor) or Marketing Research (pro-capital) | | Pro-labor weakens the political power of wealth; pro-capital strengthens it and lowers minimum wages |
 | Ministry of the Environment | Pollution Control | | −5% pollution and emissions, a larger national park, slightly lower extraction output |
 | Ministry of Intelligence and Security | Mass Surveillance | | +4 intelligence capacity and one more covert operation slot |
@@ -176,8 +176,13 @@ is missing or funded below its cap, and the Anti-War Movement does the same over
 the foreign affairs, international aid and refugee ministries (see
 [New political movements](#new-political-movements)).
 
-The mod's Migration Controls institution is covered in
-[States and population](07-states.md).
+The mod also adds one institution that isn't a ministry: the base game's
+Migration Controls law now sets up a Migration Controls institution in place of
+its flat restriction. Each level raises migration restrictiveness, the
+acceptance a pop needs to move to your country, by 10, so six levels match the
+base law. Each level also cuts mass migration attraction by 10% and adds 5%
+resistance to foreign leverage. The institution costs a tenth of the usual
+bureaucracy, and countries that start with the law begin at level 6.
 
 ## Amendments to the mod's laws
 
@@ -191,7 +196,7 @@ laws, and several law events attach them.
 | Official Bilingualism | Multilingual Federalism, State-Led Language Reform | Weaker separatism, higher bureaucracy cost |
 | National Champion Exemption | Antitrust Enforcement, Regulated Utilities | Company output up, general output slightly down |
 | Worker Cooperative Preference | Antitrust Enforcement, Regulated Utilities | Trade Unions gain political strength, Industrialists lose it |
-| Mandatory Minimum Sentences | Restorative or Rehabilitation-Focused Criminal Justice | Petty Bourgeoisie and Devout approval, fewer workers |
+| Mandatory Minimum Sentences | Restorative or Rehabilitation-Focused Criminal Justice | Petite Bourgeoisie and Devout approval, fewer workers |
 | Community Service Alternative | Punishment-Focused Criminal Justice | Intelligentsia approval, more workers |
 | Corporate Data Access Exemption | Moderate Data Privacy, Strong Privacy Rights | Industrialists gain strength, technology spreads faster |
 | Whistleblower Protection Act | Moderate Data Privacy, Strong Privacy Rights | +5 legitimacy, less authority |
@@ -287,7 +292,7 @@ Protected Class, the higher LGBTQ+ Rights laws and related technologies.
 | Party | Technology | Draws |
 |---|---|---|
 | Green Party | Environmental Movement | Intelligentsia and Rural Folk, environmentalist, pacifist and reformist leaders; not the Industrialists or the far right |
-| Populist Party | Social Media | Rural Folk, Petty Bourgeoisie and Devout, nationalist and reactionary leaders; not the left |
+| Populist Party | Social Media | Rural Folk, Petite Bourgeoisie and Devout, nationalist and reactionary leaders; not the left |
 | Technocratic Party | Machine Learning | Industrialists and Intelligentsia, Corpocrat, transhumanist and market-liberal leaders |
 
 All three need a voting franchise and take national names in some countries,
@@ -297,13 +302,22 @@ such as Die Grünen or Movimento 5 Stelle.
 
 | Movement | Forms when | Wants | Notes |
 |---|---|---|---|
-| Environmental Movement | Pollution Control researched and no Ministry of the Environment | A fully funded Ministry of the Environment | Grows with pollution, global warming and literacy; climate policies you adopt calm it, ones you ignore radicalize it |
-| Civil Rights Movement | Civil Rights Movement technology, or Cultural Unity at tier 3 or higher in your power bloc | Universal Citizenship and Affirmative Action | Strongest among discriminated pops |
+| Environmental Movement | Pollution Control researched and no Ministry of the Environment | A fully funded Ministry of the Environment | See [The Environmental Movement](14-climate.md#the-environmental-movement) |
+| Civil Rights Movement | Civil Rights Movement technology, or Cultural Unity at tier III or higher in your power bloc | Universal Citizenship and Affirmative Action | Strongest among discriminated pops |
 | Anti-War Movement | Anti-War Movement technology | Pacifist policy; its leaders may be Anti-Colonialist | Grows with casualties and while at war; never starts a revolution or secession, and never disbands |
 | Transhumanist Movement | Brain-Computer Interfaces researched, without Unrestricted Augmentation | Unrestricted Augmentation | Radicalized by Human Purity and bans on genetic modification; never disbands |
 
+The Anti-War and Transhumanist Movements bring events of their own. The
+Anti-War Movement's come mostly in wartime: Draft Resistance, Veterans Speak
+Against the War, Peace Rally Fills the Capital, and War Profiteering Exposed,
+which needs a military industry building of level 3 or more. The Transhumanist
+Movement's arrive with augmentation technology: Neural Implant Human Trials, The
+Augmentation Divide, The Biohacker Underground and The Digital Consciousness
+Debate.
+
 The social-movement journal entries (civil rights, digital rights and others)
-are separate systems, described in [Social movements](06-social-movements.md).
+are separate systems, described in
+[Movement journal entries at a glance](06-social-movements.md#movement-journal-entries-at-a-glance).
 
 ## Modern election events
 
@@ -337,7 +351,7 @@ You can run one focus from each track at once, and each running focus costs
 |---|---|---|
 | Skills | Administrative Focus, Diplomatic Focus, Military Focus | Industrialists, Intelligentsia or Armed Forces approve their own focus; another group objects |
 | Ideology | Progressive Tutors, Conservative Tutors | Intelligentsia and Trade Unions against Devout and Landowners |
-| Faction | Radical Mentors, Moderate Mentors, Regressive Mentors | Radical: Intelligentsia, Rural Folk and Trade Unions against Landowners and Devout; Regressive: the reverse, without the Rural Folk; Moderate: Industrialists, Petty Bourgeoisie and Armed Forces, and nobody objects |
+| Faction | Radical Mentors, Moderate Mentors, Regressive Mentors | Radical: Intelligentsia, Rural Folk and Trade Unions against Landowners and Devout; Regressive: the reverse, without the Rural Folk; Moderate: Industrialists, Petite Bourgeoisie and Armed Forces, and nobody objects |
 
 Each successful skill lesson also lowers innovation by 10% for 30 days. Every
 heir has a hidden intelligence from 1 to 5: a bright heir sometimes gains two
@@ -360,16 +374,28 @@ the tracks reset and the focuses switch off; set them again for the new heir.
 | 5–7 | 2% | 5% | 18% | 45% | 30% |
 | 8 or more | 0% | 2% | 10% | 38% | 50% |
 
-Ideology follows the tutors' net lean, but 8% of heirs rebel and take the
-opposite one. A light progressive lean yields a Reformer or a Moderate, a
-strong one (4 points or more) a Reformer or a Radical. A conservative lean
-yields a Traditionalist, or a Moderate if the lean is light. With no lean the
-heir is most often a Moderate. Some rolls change nothing and the heir keeps the
-ideology they already had: about one in four with a lean, one in two with a
-strong conservative lean. The strongest mentor faction picks the interest group:
-Radical mentors lead to the Trade Unions, Intelligentsia or Rural Folk,
-Moderate to the Industrialists, Petty Bourgeoisie or Armed Forces, Regressive to
-the Landowners, Devout or Rural Folk. Without mentoring it is random.
+The tutors' net lean sets the heir's ideology.
+
+| Tutors' net lean | Likely ideology |
+|---|---|
+| Strong progressive (4 points or more) | Reformer or Radical |
+| Light progressive | Reformer or Moderate |
+| None | Usually Moderate, sometimes Reformer or Traditionalist |
+| Light conservative | Traditionalist or Moderate |
+| Strong conservative (4 points or more) | Traditionalist |
+
+Each heir has an 8% chance to rebel and take the opposite lean. Some rolls
+change nothing and the heir keeps the ideology they already had: about one in
+four with a lean, one in two with a strong conservative one.
+
+The strongest mentor faction picks the heir's interest group.
+
+| Strongest mentors | Interest group |
+|---|---|
+| Radical | Trade Unions, Intelligentsia or Rural Folk |
+| Moderate | Industrialists, Petite Bourgeoisie or Armed Forces |
+| Regressive | Landowners, Devout or Rural Folk |
+| None | Random |
 
 ### Aptitude traits
 
@@ -442,7 +468,7 @@ noted, scaled by your rank.
 | War Propaganda | War Propaganda | +5 war support a month, faster escalation as aggressor |
 | Political Patronage | Mass Media | Pops' political strength doubled |
 | Bureaucratic Reform | Intergovernmental Organizations | Government administrations +25% throughput |
-| Greenest Grass Campaign | Freedom of Movement power bloc principle, tier 4 or higher | Large migration pull |
+| Greenest Grass Campaign | Freedom of Movement power bloc principle, tier IV or higher | Large migration pull |
 | Cultural Emigration Initiative | Cultural Unity power bloc principle | Violence against minorities |
 | Pollution Control | Pollution Control | −50% pollution |
 | Cultural Integration | | +5 cultural acceptance a year |

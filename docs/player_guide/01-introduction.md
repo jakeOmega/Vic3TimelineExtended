@@ -94,8 +94,8 @@ The chapters follow the game's own areas rather than the order systems appear.
 | [Banking and monetary policy](04-banking.md) | The banking cycle, crashes and contagion, the policy rate, inflation, exchange rates and international monetary arrangements. |
 | [Government, laws and characters](05-politics.md) | New laws and law groups, ministries, political movements and parties, elections, heir education, custom religions and state collapse. |
 | [Social movements](06-social-movements.md) | The movement journal entries, from civil rights to post-scarcity, and the movements carried by events. |
-| [States and population](07-states.md) | Migration crowding, dynamic homelands, cultural acceptance, tourism, city tiers and internal resettlement. |
-| [Diplomacy](08-diplomacy.md) | New treaty articles, diplomatic play escalation, power blocs and formable countries. |
+| [States and population](07-states.md) | Migration crowding, dynamic homelands, cultural acceptance, tourism, world city rankings and internal resettlement. |
+| [Diplomacy](08-diplomacy.md) | New treaty articles, diplomatic play escalation, irredentism and reunification, power blocs and formable countries. |
 | [The United Nations](09-united-nations.md) | Founding the UN, its authority, the Security Council, votes, resolutions, conventions and missions. |
 | [Cultural hegemony and covert warfare](10-influence.md) | Soft power and intelligence operations. |
 | [Colonial empires and decolonization](11-decolonization.md) | Colonial stability, independence and what follows it. |

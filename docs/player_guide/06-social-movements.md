@@ -219,15 +219,9 @@ journal entry, though the Social Movements rule's description still lists all
 four as journal entries. They come as random events once you have the
 technology, and the rule doesn't stop them.
 
-The Anti-War and Transhumanist political movements
-([New political movements](05-politics.md#new-political-movements)) bring four
-events each while they exist. Three of the Anti-War Movement's (Draft
-Resistance, Veterans Speak Against the War and Peace Rally Fills the Capital)
-fire only in wartime; War Profiteering Exposed needs a military-industry
-building of level 3 or more instead. The Transhumanist Movement's (Neural
-Implant Human Trials, The Augmentation Divide, The Biohacker Underground and The
-Digital Consciousness Debate) each need one of Brain-Computer Interfaces, Human
-Augmentation and Mind Backups.
+The Anti-War and Transhumanist political movements also bring events of their
+own, described with the movements in
+[New political movements](05-politics.md#new-political-movements).
 
 ### Second-wave feminism events
 

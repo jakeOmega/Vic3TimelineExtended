@@ -1,6 +1,6 @@
 # Military and war
 
-The mod carries the army and navy through to Era 12. It adds 25 battalion
+The mod carries the army and navy through to era 12. It adds 25 battalion
 types, two new unit groups (Heavy Tanks and Aircraft) and 19 ship types, and it
 rewards armies that mix their arms. Military Bases fortify states against
 invasion and missiles, several of the mod's systems feed war support, and
@@ -12,7 +12,7 @@ global war and then settle the peace.
 ## Combined arms bonuses
 
 Combined arms rewards army formations that field several kinds of battalion. It
-starts when you research the Combined Arms technology (Era 6, after Mobile
+starts when you research the Combined Arms technology (era 6, after Mobile
 Armor), which also unlocks Armored Infantry and Combined Arms Marines.
 
 Each month, and whenever you create a formation, recruit a general or finish
@@ -43,7 +43,7 @@ large it is, and a formation without a general earns nothing at all.
 
 Every unit line runs past the base game's last tier, and the new units appear in
 the upgrade options of the older units in their line, so you can upgrade
-battalions in place. The base game's Heavy Tanks (Mobile Armor, Era 5) move from
+battalions in place. The base game's Heavy Tanks (Mobile Armor, era 5) move from
 the artillery group to the new Heavy Tanks group, with lower stats than before,
 and aircraft form a group of their own.
 
@@ -89,7 +89,7 @@ built under the Peasant Levies law.
 
 ## Ships and ship modifications
 
-Nineteen ship types extend the navy from Era 6, with escorts, submarines,
+Nineteen ship types extend the navy from era 6, with escorts, submarines,
 carriers, battle-line ships and troop transports in most eras.
 
 | Ship | Class | Role | Technology | Era | Obsolete with |
@@ -171,11 +171,15 @@ for sale.
 | Amphibious Warfare Training | Engineering and Logistics principle, tier III+ | +25% offense and defense in water terrain |
 | Flight Simulators | Military Training principle, tier V | +10% offense and defense for Jet-Powered Aircraft and later |
 
-The principles come from your power bloc ([Diplomacy](08-diplomacy.md)); the
-augmentation laws are in [Government, laws and characters](05-politics.md).
+The principles come from your power bloc
+([New principle groups](08-diplomacy.md#new-principle-groups)); the
+augmentation laws are in
+[Rights and society laws](05-politics.md#rights-and-society-laws).
+
 Entrenchment, the three terrain trainings, Missile Defense System and
 Exoskeleton Suits add ammunition to a mobilized battalion's upkeep, on top of
-the wartime rise in [Ammunition and mobilization](#ammunition-and-mobilization).
+the fourfold rise that mobilization already brings
+([Wartime demand for munitions](03-economy.md#wartime-demand-for-munitions)).
 
 ## Military bases
 
@@ -227,23 +231,15 @@ A base's missile defense covers its own state, on top of the defense your
 technologies give every state. AI strike planners weigh target states by the
 chance a warhead gets through, so defended states draw fewer strikes.
 
-A tactical nuclear strike can target only a state with a military installation:
-Barracks, a Conscription Center, Naval Administration, a Naval Fortification, a
-Naval Logistics Center or a Military Base. Each Naval Fortification and Military
-Base it hits loses half its levels, an odd level going on a coin flip, so a
-level-1 site is destroyed half the time; what survives keeps its production
-methods. The other installations are left standing. Strikes themselves are in
-[Nuclear weapons](13-nuclear.md).
+A tactical nuclear strike halves every Naval Fortification and Military Base in
+the state, and what survives keeps its production methods; see
+[What a nuclear strike does](13-nuclear.md#what-a-nuclear-strike-does).
 
 ### Demilitarized zones and forced disarmament
 
-Two hostile treaty articles take military buildings away, and both can be war
-goals ([Diplomacy](08-diplomacy.md) covers treaties).
-
-| Article | Unlocked by | Effect on the country that accepts it |
-|---|---|---|
-| Demilitarized Zone | International Relations | One named state other than the capital can't build barracks, naval fortifications or military bases, loses conscription, and has any military base dismantled. Uses 25 authority and costs 5 prestige while in force. |
-| Forced Disarmament | Intergovernmental Organizations | Military wages −25%, conscription halved, military industry throughput −25%, −10 prestige. All Arms Industries, Artillery Foundries, Munition Plants, Naval Administrations, Naval Fortifications, Naval Logistics Centers and Military Bases are dismantled; Military Shipyards are not. |
+Two treaty articles, Demilitarized Zone and Forced Disarmament, dismantle
+military buildings, Military Bases included, and both can be war goals; see
+[Treaty articles by purpose](08-diplomacy.md#treaty-articles-by-purpose).
 
 ## War support from mod systems
 
@@ -287,14 +283,9 @@ Total War and Limited War belong to the Rules of War law group; see
 
 ## Ammunition and mobilization
 
-Peacetime armies buy half the base game's ammunition. Mobilization raises it
-steeply: Basic Supplies, which every mobilized formation uses, adds +300%
-ammunition instead of the base game's +50%, and Extra and Luxurious Supplies no
-longer add any. A mobilized battalion buys around four times its peacetime
-amount, so ammunition prices climb as soon as you mobilize, even for a
-diplomatic play that never becomes a war.
-[Economy and construction](03-economy.md) explains the market effect and how the
-Strategic Reserve covers the spike.
+Mobilization quadruples a battalion's ammunition use, even for a diplomatic
+play that never becomes a war; see
+[Wartime demand for munitions](03-economy.md#wartime-demand-for-munitions).
 
 ## The World War journal entry
 
@@ -328,7 +319,7 @@ weapons. The entry doesn't show the number; its status text names the band.
 | Tension | Status text | What opens |
 |---|---|---|
 | 20 | The great powers watch each other warily | Pursue Appeasement |
-| 30 | Tensions are rising | Begin Rearmament, the Ideological Demands event, and Rising Global Tensions (+25 maneuvers in your plays, faster escalation as aggressor) |
+| 30 | Tensions are rising | Begin Rearmament, the Ideological Demands event, and Rising Global Tensions (+25 maneuvers in your plays, faster escalation as aggressor, +5% military goods cost, +10% prestige from army power projection) |
 | 40 | Tensions are rising | Provide Lend-Lease, the Border Incident event |
 | 50 | High tension | The Diplomatic Crisis event |
 | 70 | Crisis: war is imminent | The Brink of War event |
@@ -380,10 +371,12 @@ All three lift when the war ends.
 | Impose Rationing | Nothing extra | −3 standard of living, +10% agriculture throughput, −10% bureaucracy |
 
 A long war wears the home front down. After two years Home Front Strain gives
-−10% bureaucracy and −0.5 war support a week. After four, Prolonged War
-Weariness adds −4 standard of living, +3% mortality, +100% radicals from
-political movements, +25% war support lost to casualties and a further −0.5 war
-support a week.
+−10% bureaucracy and −0.5 war support a week, and plays you start escalate 2 a
+week faster. After four, Prolonged War Weariness adds −4 standard of living, +3%
+mortality, +100% radicals from political movements, +25% war support lost to
+casualties and a further −0.5 war support a week. The war support breakdown
+shows the two weekly losses as Home front strain (World War) and Prolonged World
+War.
 
 Wartime events include Home Front Rally, Strategic Bombing (once an enemy has
 Bombing Aircraft; air defense costs a spell of Home Front Strain) and Resistance
