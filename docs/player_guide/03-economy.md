@@ -95,9 +95,9 @@ building that is only adding levels already has finished ones, so it pays.
 ### Reading the construction panel
 
 The Construction Market section sits at the top of the construction panel's
-domestic tab.
+National Queue tab.
 
-<!-- screenshot: the Construction Market section of the construction panel, with the purchase control and the four read-out lines -->
+![The Construction Market section, with the government buying 1,000 construction a week while private investors take 91% of it and the market is short.](images/construction_market.png)
 
 | Line | What it shows |
 |---|---|
@@ -373,7 +373,7 @@ Withdrawing, Idle or Blocked) and decrease, stop and increase buttons. Click the
 good's name to expand the row: stock against capacity, your rate setting, what
 actually moved last week, decay, and the good's policy.
 
-<!-- screenshot: the Strategic Reserve journal entry with one good's row expanded and its policy settings open -->
+![The Strategic Reserve journal entry with the Ammunition row expanded and its settings open. The good runs Stabilize Prices with the Aggressive preset.](images/strategic_reserve.png)
 
 A positive rate buys that many units a week from the market into the reserve; a
 negative rate releases that many onto the market. Every button press moves the

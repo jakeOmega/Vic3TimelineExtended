@@ -33,7 +33,7 @@ articles to the same partner only once at a time, across all their treaties, so
 a second demilitarized zone against the same country waits until the first
 ends. The company articles can be repeated for different companies.
 
-<!-- screenshot: a treaty draft with Seize Company added, the company picker list open -->
+![Choosing the company for a Disband Company article. The list holds the conceding country's companies.](images/disband_company.png)
 
 ### Treaty articles by purpose
 
