@@ -104,6 +104,9 @@ Before redesigning, rebalancing, or extending an existing gameplay system, read 
 ### Triage workflow for log issues
 **Look at `debug.log` first, not `error.log`** — Vic3's `error.log` only contains a small subset of engine diagnostics. Use the `log-triage` skill (`.claude/skills/log-triage/SKILL.md`) — it covers the canonical curl, mod-vs-vanilla decision, third-party-mod filtering (`include_external`), and bulk-fixable noise. Vanilla-file errors (e.g. `headlines_on_actions.txt`) belong in `docs/vanilla/vanilla_known_bugs.md`, not in fixes here.
 
+### Keep the player guide current (check before every PR)
+`docs/player_guide/` is what players read to learn the mod, so it must match the script. **Before opening any PR, ask whether it changes anything a player sees or decides**: a law, building, modifier value, button, event option, threshold, AI behaviour a player plans around, or an in-game name. If it does, update the chapter that covers it (and `16-reference.md` or an appendix if they list it) in the same PR, rebuild the PDF (`.venv/bin/python scripts/build_player_guide.py`) and commit chapter and PDF together; CI's `build_player_guide.py --check` fails on a stale PDF. Every PR body says which it is: a "Player guide" line naming the chapters updated, or "no player-facing change". Style and the lint: `docs/player_guide/STYLE.md`, `scripts/analysis/check_player_guide_style.py --strict`.
+
 ### Recording lessons learned
 When you discover something generally applicable — engine quirk, refactor pattern, tool behavior, validation rule that bites — write it into the appropriate doc in the same session. Don't let it die in conversation history. Natural homes:
 - Engine syntax, scope rules, modifier validation, scripting gotchas → `docs/guides/scripting_best_practices.md`
