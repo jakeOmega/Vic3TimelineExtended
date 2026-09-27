@@ -2161,11 +2161,14 @@ banking_asset_relief_activation_cost = {
 	round = yes
 }
 
-# Banking-cycle radicals magnitudes — initially mirror vanilla small_radicals/medium_radicals
-# (0.02 / 0.05 in event_values.txt), defined separately so banking-button friction can be tuned
-# independently of global event balance.
+# Banking-cycle radicals magnitudes, defined separately so banking-button friction can be tuned
+# independently of global event balance. Against vanilla's event_values.txt (very_small 0.01,
+# small 0.02, medium 0.05, large 0.1): small matches vanilla small_radicals; medium sits between
+# vanilla small and medium; large matches vanilla medium_radicals and is for a major, unpopular
+# emergency measure (the Bank Holiday, which freezes every depositor's money).
 banking_small_radicals_value = 0.02
 banking_medium_radicals_value = 0.03
+banking_large_radicals_value = 0.05
 
 # Transfer amount for command economy treasury <-> investment pool buttons (0.2% GDP)
 ce_pool_transfer_amount = {
