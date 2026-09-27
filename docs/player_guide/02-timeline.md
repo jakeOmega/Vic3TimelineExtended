@@ -247,10 +247,12 @@ retooling](03-economy.md#construction-maintenance-and-retooling)).
 
 The mod gives companies a unique flagship building: the Krupp Essen Works, the
 Standard Oil Refinery, the Ford Rouge Plant, and so on. 206 of the base game's
-221 companies have one; the fifteen without one all come from a single
-expansion's company list. All but one of the mod's own companies have one too.
-Two flagships serve a pair of companies each and one company has two, for 289
-flagship buildings in all.
+221 companies have one. The fifteen without one all come from The Great Wave
+expansion, whose only company with a flagship is Sumitomo (the Besshi Mine).
+All of the mod's own companies have one except the generic Synthetics company.
+Two flagships are shared by a pair of basic companies (the Granary Complex by the
+two agriculture companies, the Textile Depot by Fabrics and Textiles), and the
+basic Telecommunications company has two, for 289 flagship buildings in all.
 
 A flagship building works like this:
 
