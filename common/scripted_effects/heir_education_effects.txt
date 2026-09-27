@@ -415,12 +415,19 @@ heir_education_resolve_effect = {
 	# ─── Resolve Ideology ───
 	# Positive = progressive, Negative = conservative
 	# Thresholds at ±1 (leaning) and ±4 (strong)
+	# Every roll must be a character ideology (character_ideology = yes). These
+	# lists once named the interest-group ideologies ideology_liberal,
+	# ideology_patriarchal and ideology_pious, which a character cannot hold;
+	# their character counterparts are ideology_liberal_leader ("Liberal"),
+	# ideology_royalist and ideology_theocrat. The focus buttons' text
+	# (HE_ENABLE_PROGRESSIVE_DESC, HE_ENABLE_CONSERVATIVE_DESC) names these
+	# outcomes; keep the two in step.
 	if = {
 		limit = { var:heir_ed_ideology >= 4 }
 		heir ?= {
 			random_list = {
 				50 = { set_ideology = ideology:ideology_reformer }
-				30 = { set_ideology = ideology:ideology_liberal }
+				30 = { set_ideology = ideology:ideology_liberal_leader }
 				20 = { set_ideology = ideology:ideology_radical }
 			}
 		}
@@ -431,7 +438,7 @@ heir_education_resolve_effect = {
 			random_list = {
 				40 = { set_ideology = ideology:ideology_reformer }
 				35 = { set_ideology = ideology:ideology_moderate }
-				25 = { set_ideology = ideology:ideology_liberal }
+				25 = { set_ideology = ideology:ideology_liberal_leader }
 			}
 		}
 	}
@@ -440,8 +447,8 @@ heir_education_resolve_effect = {
 		heir ?= {
 			random_list = {
 				50 = { set_ideology = ideology:ideology_traditionalist }
-				30 = { set_ideology = ideology:ideology_patriarchal }
-				20 = { set_ideology = ideology:ideology_pious }
+				30 = { set_ideology = ideology:ideology_royalist }
+				20 = { set_ideology = ideology:ideology_theocrat }
 			}
 		}
 	}
@@ -451,7 +458,7 @@ heir_education_resolve_effect = {
 			random_list = {
 				40 = { set_ideology = ideology:ideology_traditionalist }
 				35 = { set_ideology = ideology:ideology_moderate }
-				25 = { set_ideology = ideology:ideology_patriarchal }
+				25 = { set_ideology = ideology:ideology_royalist }
 			}
 		}
 	}
@@ -462,7 +469,7 @@ heir_education_resolve_effect = {
 				50 = { set_ideology = ideology:ideology_moderate }
 				20 = { set_ideology = ideology:ideology_reformer }
 				20 = { set_ideology = ideology:ideology_traditionalist }
-				10 = { set_ideology = ideology:ideology_liberal }
+				10 = { set_ideology = ideology:ideology_liberal_leader }
 			}
 		}
 	}
@@ -647,6 +654,7 @@ heir_education_moderate_ig_reaction = {
 heir_education_regressive_ig_reaction = {
 	ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	ig_approval_effect = { IG = ig_rural_folk MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 }

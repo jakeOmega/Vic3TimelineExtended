@@ -148,6 +148,12 @@ je_heir_education = {
 				if = { limit = { has_variable = heir_ed_focus_radical } remove_variable = heir_ed_focus_radical }
 				if = { limit = { has_variable = heir_ed_focus_moderate } remove_variable = heir_ed_focus_moderate }
 				if = { limit = { has_variable = heir_ed_focus_regressive } remove_variable = heir_ed_focus_regressive }
+				# ...and the tutors' authority cost with them: the Stop buttons need
+				# the focus variables, so a modifier left behind here could never be
+				# removed and would keep charging 100 Authority per track.
+				if = { limit = { has_modifier = heir_ed_trait_focus_active } remove_modifier = heir_ed_trait_focus_active }
+				if = { limit = { has_modifier = heir_ed_ideology_focus_active } remove_modifier = heir_ed_ideology_focus_active }
+				if = { limit = { has_modifier = heir_ed_ig_focus_active } remove_modifier = heir_ed_ig_focus_active }
 				scope:journal_entry = {
 					set_bar_progress = { name = heir_education_progress_bar value = 0 }
 				}
