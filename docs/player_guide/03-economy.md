@@ -79,6 +79,18 @@ switch, falling steadily to nothing over five years (260 weeks); the building
 shows when the modifier expires. Just after switching methods, a 20-level
 factory goes from 2 construction a week to 22, before cost scaling.
 
+That adds up. Over the five years the 20-level factory buys 10 extra
+construction a week on average, about £10,000 a week at base prices, so the
+switch costs around £2.6 million: 2,600 construction, or about what it takes to
+build all 20 levels of the cheapest kind of building (100 construction a level)
+from scratch. You pay it, or the building's owners do. Switch production methods
+when the new one earns that back, not on a whim.
+
+A building that has no finished level yet can switch for free: the mod removes
+the retooling modifier from it, once a week and whenever it changes method. Set
+a new building's production methods while it is still under construction. A
+building that is only adding levels already has finished ones, so it pays.
+
 ### Reading the construction panel
 
 The Construction Market section sits at the top of the construction panel's
