@@ -602,6 +602,18 @@ class TestAI(unittest.TestCase):
         self.assertIn("nd_taboo_dismantle_stop = yes", review)
         self.assertIn("chance = 20", review)
 
+    def test_arsenal_review_reduces_and_lifts(self):
+        review = block(self.taboo, "nd_taboo_ai_review_arsenal")
+        reduce_at = review.index("set_variable = { name = nd_warhead_ceiling value = nuclear_ai_desired_stockpile }")
+        reduce_guard = review[review.rfind("limit", 0, reduce_at):reduce_at]
+        self.assertIn("nd_taboo_burden_value > 0", reduce_guard)
+        self.assertIn("nd_stockpile > nd_taboo_ai_reduce_line_value", reduce_guard)
+        lift_at = review.index("remove_variable = nd_warhead_ceiling")
+        lift_guard = review[review.rfind("limit", 0, lift_at):lift_at]
+        self.assertIn("var:nd_warhead_ceiling < nuclear_ai_desired_stockpile", lift_guard)
+        self.assertIn("multiply = nd_taboo_ai_reduce_margin",
+                      block(strip_comments(read(TABOO_VALUES)), "nd_taboo_ai_reduce_line_value"))
+
     def test_ai_keys_have_loc(self):
         keys = loc_keys()
         for key in ("nd_taboo_ai_accept_burden", "nd_taboo_ai_accept_taboo"):
