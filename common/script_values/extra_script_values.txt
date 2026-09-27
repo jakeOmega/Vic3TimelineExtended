@@ -499,6 +499,10 @@ nuclear_ai_desired_stockpile = {
 		add = 2
 	}
 
+	# The nuclear taboo: bigger arsenals where the bomb is ordinary, smaller
+	# where it is unthinkable (nuclear_taboo_values.txt).
+	multiply = nd_taboo_ai_arsenal_factor
+
 	min = 1
 	max = 25
 	round = yes

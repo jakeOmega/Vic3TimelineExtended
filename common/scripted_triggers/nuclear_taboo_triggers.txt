@@ -105,3 +105,42 @@ nd_taboo_ai_would_resume = {
 		}
 	}
 }
+
+# ---- THE AI (spec §8) — country scope ------------------------------------------
+
+# A norm-bound world does not start or grow a programme lightly: at 70 or
+# more, for a country nobody threatens and not at war.
+nd_taboo_ai_restrains_programme = {
+	nd_taboo_value >= nd_taboo_ai_programme_restraint_line
+	is_at_war = no
+	nd_has_plausible_attacker = no
+}
+
+# When the AI gives the bomb up (then 20 % a review, nd_taboo_ai_review_arsenal).
+nd_taboo_ai_would_dismantle = {
+	OR = {
+		nd_taboo_burden_value >= nd_taboo_ai_dismantle_burden
+		nd_taboo_value >= nd_taboo_ai_dismantle_line
+	}
+	nd_taboo_can_dismantle = yes
+	nd_has_plausible_attacker = no
+	OR = {
+		nd_is_guaranteed = yes
+		country_rank < rank_value:great_power
+	}
+	nd_regime_is_militarist = no
+	ruler_is_aggressive = no
+}
+
+# Only an armed enemy that threatens our existence stops a dismantling.
+nd_taboo_ai_would_halt = {
+	save_temporary_scope_as = nd_tb_self
+	any_country = {
+		has_war_with = scope:nd_tb_self
+		nd_believed_armed = yes
+		save_temporary_scope_as = nd_tb_enemy
+		scope:nd_tb_self = {
+			nd_enemy_threatens_existence = { ENEMY = scope:nd_tb_enemy }
+		}
+	}
+}

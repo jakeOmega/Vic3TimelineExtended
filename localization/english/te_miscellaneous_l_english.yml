@@ -4097,6 +4097,8 @@
  nd_taboo_possession_cost:0 "The Burden of the Bomb"
  nd_taboo_possession_cost_desc:0 "The world holds nuclear weapons in horror, and it holds that horror against those who keep them. The weight grows with the nuclear taboo above 40 and with our arsenal up to fifty warheads: a small deterrent is tolerated far more than a large one."
  nd_taboo_arsenal_ceiling:0 "Held to #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_warhead_ceiling')|0]#! warheads"
+ nd_taboo_ai_accept_burden:0 "The burden of our arsenal"
+ nd_taboo_ai_accept_taboo:0 "The world's horror of the bomb"
  nd_taboo_arsenal_dismantling:0 "#R Being dismantled#!: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_dismantle_months_left')|0]#! months left, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_dismantle_per_month')|0]#! warheads this month"
  nd_taboo_arsenal_free:0 "No ceiling"
  nd_taboo_burden_hint_cut:0 "\n\nOur restraint groups would ease at #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_step_down_warheads')|0]#! warheads or fewer."

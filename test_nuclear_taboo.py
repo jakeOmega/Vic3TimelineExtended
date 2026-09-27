@@ -542,5 +542,71 @@ class TestExits(unittest.TestCase):
             self.assertNotRegex(strip_comments(read(path)), leftover, path.name)
 
 
+EXTRA_VALUES = ROOT / "common/script_values/extra_script_values.txt"
+PROGRAM_BUTTONS = ROOT / "common/scripted_buttons/nuclear_program_buttons.txt"
+
+
+class TestAI(unittest.TestCase):
+    def setUp(self):
+        self.values = strip_comments(read(TABOO_VALUES))
+        self.taboo = strip_comments(read(TABOO_EFFECTS))
+        self.dtrig = strip_comments(read(DETERRENCE_TRIGGERS))
+        self.det = strip_comments(read(DETERRENCE_EFFECTS))
+
+    def test_factor_endpoints_match_the_spec(self):
+        c = lambda n: constant(self.values, n)  # noqa: E731
+        self.assertEqual(1 + c("nd_taboo_ai_use_boost"), 2)
+        self.assertAlmostEqual(1 - c("nd_taboo_ai_use_cut"), 0.3)
+        self.assertEqual(c("nd_taboo_ai_use_pivot") + c("nd_taboo_ai_use_span_high"), 100)
+        self.assertAlmostEqual(1 + c("nd_taboo_ai_arsenal_boost"), 1.3)
+        self.assertAlmostEqual(1 - c("nd_taboo_ai_arsenal_cut"), 0.5)
+        self.assertEqual(c("nd_taboo_ai_arsenal_pivot") + c("nd_taboo_ai_arsenal_span_high"), 100)
+
+    def test_use_is_gated_by_the_taboo(self):
+        body = block(self.dtrig, "nd_ai_nuclear_use_justified")
+        self.assertRegex(body, r"OR = \{\s*nd_taboo_value < nd_taboo_ai_survival_only_line\s*"
+                               r"nd_enemy_threatens_existence = \{ ENEMY = \$ENEMY\$ \}\s*\}")
+        self.assertRegex(body, r"ruler_is_cautious = no\s*nd_enemy_threatens_existence = \{ ENEMY = \$ENEMY\$ \}"
+                               r"\s*nd_taboo_value < nd_taboo_ai_loosen_line")
+        text = strip_comments(read(NUKE_ACTIONS))
+        self.assertEqual(text.count("multiply = nd_taboo_ai_use_factor"), 2)
+
+    def test_coercion_is_gated_by_the_taboo(self):
+        body = block(self.dtrig, "nd_ai_would_issue_ultimatum")
+        self.assertIn("nd_taboo_value < nd_taboo_ai_coercion_line", body)
+        self.assertIn("nd_dispute_guarantee_against = { TARGET = $TARGET$ }", body)
+
+    def test_doctrine_weights_read_the_taboo(self):
+        body = block(self.det, "nd_ai_review_posture")
+        self.assertIn("add = nd_taboo_ai_nfu_weight", body)
+        self.assertIn("add = nd_taboo_ai_flexible_penalty", body)
+        self.assertEqual(body.count("add = nd_taboo_ai_offensive_bonus"), 2)
+        self.assertEqual(body.count("multiply = nd_taboo_ai_offensive_damping"), 2)
+
+    def test_arsenal_and_programme_read_the_taboo(self):
+        self.assertIn("multiply = nd_taboo_ai_arsenal_factor",
+                      block(strip_comments(read(EXTRA_VALUES)), "nuclear_ai_desired_stockpile"))
+        self.assertIn("nd_taboo_ai_restrains_programme = yes",
+                      block(strip_comments(read(PROGRAM_BUTTONS)), "increase_funding_nuclear_program"))
+        accept = block(block(strip_comments(read(TREATY_ARTICLES)), "nuclear_disarmament"), "inherent_accept_score")
+        self.assertIn("value = nd_taboo_ai_accept_burden_value", accept)
+        self.assertIn("value = nd_taboo_ai_accept_taboo_value", accept)
+
+    def test_arsenal_review_runs_before_the_one_refresh(self):
+        self.assertIn("set_variable = nd_taboo_ai_arsenal_due", block(self.det, "nd_ai_review_posture"))
+        monthly = block(self.taboo, "nd_taboo_country_monthly")
+        self.assertLess(monthly.index("nd_taboo_ai_review_arsenal = yes"), monthly.index("nd_taboo_refresh_held = yes"))
+        review = block(self.taboo, "nd_taboo_ai_review_arsenal")
+        self.assertNotIn("nd_taboo_refresh_held", review)
+        self.assertIn("nd_taboo_dismantle_begin = yes", review)
+        self.assertIn("nd_taboo_dismantle_stop = yes", review)
+        self.assertIn("chance = 20", review)
+
+    def test_ai_keys_have_loc(self):
+        keys = loc_keys()
+        for key in ("nd_taboo_ai_accept_burden", "nd_taboo_ai_accept_taboo"):
+            self.assertIn(key, keys, key)
+
+
 if __name__ == "__main__":
     unittest.main()

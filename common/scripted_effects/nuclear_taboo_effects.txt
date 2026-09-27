@@ -478,6 +478,40 @@ nd_taboo_resume = {
 	}
 }
 
+# The AI's arsenal (spec §5.4), flagged every sixth month by
+# nd_ai_review_posture and run from nd_taboo_country_monthly before its one
+# refresh of the hold, so it calls the cores and never refreshes itself.
+nd_taboo_ai_review_arsenal = {
+	if = {
+		limit = { nd_taboo_is_dismantling = yes }
+		if = {
+			limit = { nd_taboo_ai_would_halt = yes }
+			nd_taboo_dismantle_stop = yes
+		}
+	}
+	else_if = {
+		limit = { nd_taboo_ai_would_dismantle = yes }
+		random = {
+			chance = 20
+			nd_taboo_dismantle_begin = yes
+		}
+	}
+	else_if = {
+		limit = {
+			nd_taboo_burden_value > 0
+			nd_stockpile > nd_taboo_ai_reduce_line_value
+		}
+		set_variable = { name = nd_warhead_ceiling value = nuclear_ai_desired_stockpile }
+	}
+	else_if = {
+		limit = {
+			has_variable = nd_warhead_ceiling
+			var:nd_warhead_ceiling < nuclear_ai_desired_stockpile
+		}
+		remove_variable = nd_warhead_ceiling
+	}
+}
+
 # ----------------------------------------------------------------------------
 # THE COUNTRY HALF — je_nuclear_program's monthly pulse, ROOT = this country
 # ----------------------------------------------------------------------------
@@ -507,6 +541,17 @@ nd_taboo_country_monthly = {
 				NOT = { has_modifier = nd_taboo_renounced }
 			}
 			add_modifier = { name = nd_taboo_renounced }
+		}
+		# ---- the AI's arsenal review, flagged by its six-monthly posture
+		# review (nd_ai_review_posture) and run here, before the one refresh
+		# of the hold below ----
+		if = {
+			limit = { has_variable = nd_taboo_ai_arsenal_due }
+			remove_variable = nd_taboo_ai_arsenal_due
+			if = {
+				limit = { is_ai = yes }
+				nd_taboo_ai_review_arsenal = yes
+			}
 		}
 		# ---- dismantling, or warheads above the ceiling ----
 		if = {

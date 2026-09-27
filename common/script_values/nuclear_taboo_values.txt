@@ -106,6 +106,28 @@ nd_taboo_ceiling_large_from = 50
 nd_taboo_halt_credibility = 10
 nd_taboo_renounce_relations_per_point = 0.2
 nd_taboo_resume_relations_per_point = -0.2
+nd_taboo_ai_survival_only_line = 70
+nd_taboo_ai_loosen_line = 30
+nd_taboo_ai_use_pivot = 35
+nd_taboo_ai_use_boost = 1
+nd_taboo_ai_use_span_high = 65
+nd_taboo_ai_use_cut = 0.7
+nd_taboo_ai_coercion_line = 70
+nd_taboo_ai_nfu_weight_per_point = 0.3
+nd_taboo_ai_flexible_penalty = -5
+nd_taboo_ai_offensive_bonus = 10
+nd_taboo_ai_offensive_damping = 0.25
+nd_taboo_ai_arsenal_pivot = 40
+nd_taboo_ai_arsenal_boost = 0.3
+nd_taboo_ai_arsenal_span_high = 60
+nd_taboo_ai_arsenal_cut = 0.5
+nd_taboo_ai_programme_restraint_line = 70
+nd_taboo_ai_programme_restraint_factor = 0.25
+nd_taboo_ai_reduce_margin = 1.5
+nd_taboo_ai_dismantle_burden = 0.3
+nd_taboo_ai_dismantle_line = 70
+nd_taboo_ai_accept_burden_weight = 60
+nd_taboo_ai_accept_taboo_weight = 0.6
 
 # ---- READING THE SCORE ---------------------------------------------------------
 
@@ -625,4 +647,82 @@ nd_disp_taboo_step_down_warheads = {
 		subtract = 1
 		min = -1
 	}
+}
+
+# ---- THE AI (spec §8) ------------------------------------------------------------
+# "If you've created a world in which using nukes is normal, you should not be
+# surprised when the AI uses them against you."
+
+# How readily the AI considers a strike (the actions' evaluation_chance): x2 at
+# taboo 0, x1 at 35, x0.3 at 100, linear between.
+nd_taboo_ai_use_factor = {
+	value = 1
+	if = {
+		limit = { nd_taboo_value < nd_taboo_ai_use_pivot }
+		value = nd_taboo_ai_use_pivot
+		subtract = nd_taboo_value
+		divide = nd_taboo_ai_use_pivot
+		multiply = nd_taboo_ai_use_boost
+		add = 1
+	}
+	else = {
+		value = nd_taboo_value
+		subtract = nd_taboo_ai_use_pivot
+		divide = nd_taboo_ai_use_span_high
+		multiply = nd_taboo_ai_use_cut
+		multiply = -1
+		add = 1
+	}
+}
+
+# The AI's wanted arsenal (nuclear_ai_desired_stockpile) x1.3 at taboo 0, x1 at
+# 40, x0.5 at 100.
+nd_taboo_ai_arsenal_factor = {
+	value = 1
+	if = {
+		limit = { nd_taboo_value < nd_taboo_ai_arsenal_pivot }
+		value = nd_taboo_ai_arsenal_pivot
+		subtract = nd_taboo_value
+		divide = nd_taboo_ai_arsenal_pivot
+		multiply = nd_taboo_ai_arsenal_boost
+		add = 1
+	}
+	else = {
+		value = nd_taboo_value
+		subtract = nd_taboo_ai_arsenal_pivot
+		divide = nd_taboo_ai_arsenal_span_high
+		multiply = nd_taboo_ai_arsenal_cut
+		multiply = -1
+		add = 1
+	}
+}
+
+# No First Use's extra weight in the AI's doctrine review: up to +15 above 50.
+nd_taboo_ai_nfu_weight = {
+	value = nd_taboo_value
+	subtract = nd_taboo_line_established
+	multiply = nd_taboo_ai_nfu_weight_per_point
+	min = 0
+}
+
+# Above this the AI trims its arsenal back to what it wants. Scope: country
+nd_taboo_ai_reduce_line_value = {
+	value = nuclear_ai_desired_stockpile
+	multiply = nd_taboo_ai_reduce_margin
+}
+
+# The disarmament article's acceptance terms for the country asked to give
+# its arsenal up. Scope: country
+nd_taboo_ai_accept_burden_value = {
+	value = nd_taboo_burden_value
+	multiply = nd_taboo_ai_accept_burden_weight
+	round = yes
+}
+
+nd_taboo_ai_accept_taboo_value = {
+	value = nd_taboo_value
+	subtract = nd_taboo_line_established
+	multiply = nd_taboo_ai_accept_taboo_weight
+	min = 0
+	round = yes
 }

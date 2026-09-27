@@ -1163,6 +1163,8 @@ nd_ai_review_posture = {
 						limit = { country_is_democratic = yes }
 						add = 10
 					}
+					# The nuclear taboo: up to +15 above 50.
+					add = nd_taboo_ai_nfu_weight
 					if = {
 						limit = { nd_regime_is_militarist = yes }
 						multiply = 0
@@ -1201,6 +1203,10 @@ nd_ai_review_posture = {
 						limit = { ruler_is_cautious = yes }
 						add = -10
 					}
+					if = {
+						limit = { nd_taboo_value >= nd_taboo_ai_survival_only_line }
+						add = nd_taboo_ai_flexible_penalty
+					}
 				}
 				if = {
 					limit = { NOT = { var:nd_doctrine = 3 } }
@@ -1217,6 +1223,16 @@ nd_ai_review_posture = {
 					if = {
 						limit = { ruler_is_aggressive = yes }
 						add = 10
+					}
+					# The nuclear taboo: tempting where the bomb is ordinary,
+					# damped where it is unthinkable.
+					if = {
+						limit = { nd_taboo_value < nd_taboo_ai_loosen_line }
+						add = nd_taboo_ai_offensive_bonus
+					}
+					if = {
+						limit = { nd_taboo_value >= nd_taboo_ai_survival_only_line }
+						multiply = nd_taboo_ai_offensive_damping
 					}
 					if = {
 						limit = { ruler_is_cautious = yes }
@@ -1243,6 +1259,14 @@ nd_ai_review_posture = {
 							limit = { country_is_fascist = yes }
 							add = 10
 						}
+					}
+					if = {
+						limit = { nd_taboo_value < nd_taboo_ai_loosen_line }
+						add = nd_taboo_ai_offensive_bonus
+					}
+					if = {
+						limit = { nd_taboo_value >= nd_taboo_ai_survival_only_line }
+						multiply = nd_taboo_ai_offensive_damping
 					}
 					if = {
 						limit = { ruler_is_cautious = yes }
@@ -1411,6 +1435,11 @@ nd_ai_review_posture = {
 	set_variable = { name = nd_safeguards value = var:nd_ai_want_safeguards }
 	set_variable = { name = nd_hardening value = var:nd_ai_want_hardening }
 	nd_apply_posture_modifiers = yes
+	# ---- arsenal size and disarmament (the nuclear taboo) -------------------
+	# Decided by nd_taboo_ai_review_arsenal from the entry's monthly taboo
+	# half, later in this same pulse, which refreshes the programme hold once
+	# after it.
+	set_variable = nd_taboo_ai_arsenal_due
 }
 
 # ----------------------------------------------------------------------------

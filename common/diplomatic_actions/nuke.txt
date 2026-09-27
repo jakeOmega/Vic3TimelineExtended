@@ -122,6 +122,9 @@
 				}
 				multiply = 0.25 # very reluctant but not impossible in existential situations
 			}
+			# The nuclear taboo: x2 in a world that treats the bomb as ordinary,
+			# x0.3 where it is unthinkable (nuclear_taboo_values.txt).
+			multiply = nd_taboo_ai_use_factor
 			max = 1
 		}
 
@@ -275,6 +278,8 @@ tactical_nuke_diplo_action = {
 				}
 				multiply = 0.25 # reluctant but not impossible
 			}
+			# The nuclear taboo (nuclear_taboo_values.txt).
+			multiply = nd_taboo_ai_use_factor
 			max = 1
 		}
 
