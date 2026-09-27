@@ -238,9 +238,10 @@ banking_effect_cb_bank_holiday = {
 	# (their wealth is mostly outside the banks); the lower strata have little
 	# on deposit but go unpaid while commerce runs on cash. `strata` takes one
 	# value per call, hence three calls (vanilla's tenpo_events do the same).
-	add_radicals = { value = banking_large_radicals_value strata = middle }
-	add_radicals = { value = banking_medium_radicals_value strata = upper }
-	add_radicals = { value = banking_small_radicals_value strata = lower }
+	# banking_bank_holiday_radicals_tt quotes the three values literally.
+	add_radicals = { value = banking_bank_holiday_middle_radicals strata = middle }
+	add_radicals = { value = banking_bank_holiday_upper_radicals strata = upper }
+	add_radicals = { value = banking_bank_holiday_lower_radicals strata = lower }
 }
 
 banking_effect_cb_disable_bank_holiday = {
