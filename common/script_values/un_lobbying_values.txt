@@ -100,3 +100,74 @@ un_lobby_ai_target_order = {
 		add = var:un_lean_total
 	}
 }
+
+# ---- The chamber's Delegations rows (spec §6) -------------------------------------------
+
+# The bands the chamber shows a lean in (spec §1): firmly for at +30 or more,
+# leaning for from +10, undecided between −9 and +9, leaning against from −10,
+# firmly against at −30 or less.
+un_lean_band_firm = { value = 30 }
+un_lean_band_lean = { value = 10 }
+un_lean_band_lean_against = { value = -10 }
+un_lean_band_firm_against = { value = -30 }
+
+# Where an AI member sits in the rows: members someone is working on (a
+# campaign or a pledge) first, then undecided, then leaning for, then leaning
+# against; within each group the member nearest the line first. A firmly
+# decided member scores under 1000 and gets no row (the summary line counts
+# it). Read off the SHOWN lean, never the true one, so the order gives away
+# nothing the band does not.
+# Scope: the AI member (= ROOT, un_vote.4), after un_lean_snapshot, with
+# scope:un_resolution saved
+un_deleg_key_value = {
+	value = 0
+	if = {
+		limit = { un_deleg_is_worked = yes }
+		add = 4000
+	}
+	else_if = {
+		limit = {
+			var:un_lean_shown > un_lean_band_lean_against
+			var:un_lean_shown < un_lean_band_lean
+		}
+		add = 3000
+	}
+	else_if = {
+		limit = {
+			var:un_lean_shown >= un_lean_band_lean
+			var:un_lean_shown < un_lean_band_firm
+		}
+		add = 2000
+	}
+	else_if = {
+		limit = {
+			var:un_lean_shown <= un_lean_band_lean_against
+			var:un_lean_shown > un_lean_band_firm_against
+		}
+		add = 1000
+	}
+	add = un_deleg_tiebreak
+}
+
+# 0-100: 100 at a shown lean of 0, less the further from the line.
+# Scope: the member
+un_deleg_tiebreak = {
+	value = 100
+	if = {
+		limit = { var:un_lean_shown >= 0 }
+		subtract = var:un_lean_shown
+	}
+	else = {
+		add = var:un_lean_shown
+	}
+	min = 0
+}
+
+# The rows' order_by. Scope: a member on the resolution's un_res_delegates
+un_deleg_order = {
+	value = 0
+	if = {
+		limit = { has_variable = un_deleg_key }
+		add = var:un_deleg_key
+	}
+}

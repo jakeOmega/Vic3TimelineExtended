@@ -70,11 +70,23 @@ un_secure_commitment_action = {
 	# Asker-side only: evaluated once for us, not per target, so it is the
 	# right place for the structural gates. Any member may ask (spec §4).
 	selectable = {
-		un_pledge_asker_selectable = yes
+		has_game_rule = united_nations_enabled
+		has_global_variable = un_active_resolution
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { un_representation_suspended = yes }
+		global_var:un_active_resolution ?= { has_tag = un_res_voting }
 	}
 
 	potential = {
-		un_pledge_recipient_potential = yes
+		NOT = { is_country_type = decentralized }
+		scope:target_country = {
+			NOT = { is_country_type = decentralized }
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			# A member without a vote has none to promise: Article 19, or
+			# suspended representation (§0.8).
+			NOT = { un_dues_vote_suspended = yes }
+			NOT = { un_representation_suspended = yes }
+		}
 	}
 
 	# Every clause carries its own custom_tooltip so a greyed-out action says
@@ -338,11 +350,23 @@ un_secure_commitment_against_action = {
 	can_use_obligations = no # REVIEWED 2026-09-27: diplomatic-action field, not an effect/trigger — vanilla violate_sovereignty uses it (game/common/diplomatic_actions/03_violate_sovereignty.txt:8). effect_trigger_validity_audit has no schema for this entity type.
 
 	selectable = {
-		un_pledge_asker_selectable = yes
+		has_game_rule = united_nations_enabled
+		has_global_variable = un_active_resolution
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { un_representation_suspended = yes }
+		global_var:un_active_resolution ?= { has_tag = un_res_voting }
 	}
 
 	potential = {
-		un_pledge_recipient_potential = yes
+		NOT = { is_country_type = decentralized }
+		scope:target_country = {
+			NOT = { is_country_type = decentralized }
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			# A member without a vote has none to promise: Article 19, or
+			# suspended representation (§0.8).
+			NOT = { un_dues_vote_suspended = yes }
+			NOT = { un_representation_suspended = yes }
+		}
 	}
 
 	possible = {

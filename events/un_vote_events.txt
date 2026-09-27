@@ -1869,7 +1869,9 @@ un_vote.3 = {
 #      resolution (un_vote_ai_draws);
 #   2. every member has its lean written (un_lean_snapshot);
 #   3. an AI member that may still vote casts, if its month has come or the
-#      last call has been made (un_vote_ai_cast_due).
+#      last call has been made (un_vote_ai_cast_due);
+#   4. an AI member takes its place in the chamber's Delegations rows, or
+#      leaves them once it has voted (un_deleg_refresh_self).
 # The senders save scope:un_resolution first. If it did not reach the event,
 # the open resolution (global_var:un_active_resolution) stands in, so a lost
 # scope costs the chamber nothing and the AI still votes.
@@ -1909,6 +1911,12 @@ un_vote.4 = {
 				un_vote_ai_cast_due = yes
 			}
 			un_vote_ai_cast = yes
+		}
+		# The chamber's Delegations rows: this member's place, and the rows
+		# re-sorted (un_dossier_effects.txt).
+		if = {
+			limit = { is_ai = yes }
+			un_deleg_refresh_self = yes
 		}
 	}
 }

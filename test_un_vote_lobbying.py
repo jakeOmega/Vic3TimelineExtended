@@ -12,7 +12,7 @@ import os
 import re
 import unittest
 
-from test_un_chamber_mission_slots import _block, _braced, _read, _sub_block
+from test_un_chamber_mission_slots import _block, _braced, _branches, _read, _sub_block, _widget_rows
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 
@@ -31,6 +31,11 @@ LOBBYING_ACTIONS = _path("common", "diplomatic_actions", "un_lobbying.txt")
 LOBBY_EFFECTS = _path("common", "scripted_effects", "un_lobby_effects.txt")
 LOBBY_TRIGGERS = _path("common", "scripted_triggers", "un_lobby_triggers.txt")
 CAST_EFFECTS = _path("common", "scripted_effects", "un_vote_cast_effects.txt")
+WIDGET = _path("gui", "journal_entry_widgets", "un_chamber_widget.gui")
+SGUIS = _path("common", "scripted_guis", "un_chamber_sguis.txt")
+DISPLAY = _path("common", "scripted_effects", "un_chamber_display_effects.txt")
+
+DELEGATION_ROWS = 24
 
 _TOP_LEVEL = re.compile(r"^([A-Za-z_][A-Za-z0-9_.]*)\s*=\s*\{", re.M)
 
@@ -387,6 +392,92 @@ class AiLobbyingTest(unittest.TestCase):
 
     def test_it_lets_a_campaign_go_when_it_runs_short(self):
         self.assertRegex(self.lobby, r"influence\s*<\s*0[\s\S]*?un_lobby_campaign_remove_pact\s*=\s*yes")
+
+
+
+class DelegationRowTest(unittest.TestCase):
+    """§6: up to 24 member rows, one scripted-GUI row per member (the #453 pattern).
+
+    Nothing in the engine checks that op 7 means row 7 in every switch, or that
+    a row passes one op to all its bindings; a row whose button acted on
+    another member would load cleanly.
+    """
+
+    SGUIS = {
+        # sgui: (is_valid helper, effect helper)
+        "un_chamber_deleg_row_sgui": ("un_deleg_row_filled", "un_chamber_deleg_row"),
+        "un_chamber_deleg_for_sgui": ("un_deleg_row_can_lobby", "un_deleg_row_lobby"),
+        "un_chamber_deleg_against_sgui": ("un_deleg_row_can_lobby", "un_deleg_row_lobby"),
+        "un_chamber_deleg_stop_sgui": ("un_deleg_row_lobbying", "un_deleg_row_stop"),
+        "un_chamber_deleg_pledge_for_sgui": ("un_deleg_row_can_pledge", "un_deleg_row_pledge"),
+        "un_chamber_deleg_pledge_against_sgui": ("un_deleg_row_can_pledge", "un_deleg_row_pledge"),
+    }
+
+    @classmethod
+    def setUpClass(cls):
+        sguis = _read(SGUIS)
+        cls.switches = {}
+        for sgui in cls.SGUIS:
+            body = _block(sguis, sgui)
+            cls.switches[(sgui, "is_valid")] = _branches(_sub_block(body, "is_valid"))
+            cls.switches[(sgui, "effect")] = _branches(_sub_block(body, "effect"))
+        cls.rows = _widget_rows(_read(WIDGET), "un_chamber_deleg_row")
+        cls.reassign = _block(_read(DOSSIER_EFFECTS), "un_deleg_reassign_rows")
+
+    def test_the_widget_has_one_row_per_slot(self):
+        self.assertEqual(sorted(ops[0] for ops in self.rows), list(range(DELEGATION_ROWS)))
+
+    def test_each_row_passes_one_slot_to_every_binding(self):
+        for ops in self.rows:
+            # the row's visible and text; Lobby For and Lobby Against: visible
+            # (Stop's IsValid), enabled, onclick, tooltip x2; Stop: visible,
+            # onclick, tooltip; each Pledge: enabled, onclick, tooltip x2
+            self.assertEqual(len(ops), 23, ops)
+            self.assertEqual(len(set(ops)), 1, f"a delegation row mixes slots {ops}")
+
+    def test_every_switch_maps_op_to_the_same_slot(self):
+        for (sgui, part), branches in self.switches.items():
+            helper = self.SGUIS[sgui][0 if part == "is_valid" else 1]
+            with self.subTest(sgui=sgui, part=part):
+                self.assertEqual(sorted(branches), list(range(DELEGATION_ROWS)))
+                for op, branch in branches.items():
+                    calls = re.findall(r"\b(\w+)\s*=\s*\{\s*N\s*=\s*(\d+)\b", branch)
+                    self.assertEqual(calls, [(helper, str(op))], f"op {op}")
+
+    def test_the_direction_each_button_passes(self):
+        expect = {
+            "un_chamber_deleg_for_sgui": r"DIR\s*=\s*for\b",
+            "un_chamber_deleg_against_sgui": r"DIR\s*=\s*against\b",
+            "un_chamber_deleg_pledge_for_sgui": r"ACTION\s*=\s*un_secure_commitment_action\b",
+            "un_chamber_deleg_pledge_against_sgui": r"ACTION\s*=\s*un_secure_commitment_against_action\b",
+        }
+        for sgui, pattern in expect.items():
+            for part in ("is_valid", "effect"):
+                for op, branch in self.switches[(sgui, part)].items():
+                    with self.subTest(sgui=sgui, part=part, op=op):
+                        self.assertRegex(branch, pattern)
+
+    def test_rows_are_filled_in_order_and_all_of_them(self):
+        calls = re.findall(r"un_deleg_assign_row\s*=\s*\{\s*N\s*=\s*(\d+)\s+COUNT\s*=\s*(\d+)\s*\}", self.reassign)
+        self.assertEqual(calls, [(str(k), str(k + 1)) for k in range(DELEGATION_ROWS)])
+        cleared = re.findall(r"un_deleg_clear_row\s*=\s*\{\s*N\s*=\s*(\d+)\s*\}", self.reassign)
+        self.assertEqual(cleared, [str(k) for k in range(DELEGATION_ROWS)])
+        assign = _block(_read(DOSSIER_EFFECTS), "un_deleg_assign_row")
+        self.assertRegex(assign, r"position\s*=\s*\$N\$")
+        self.assertRegex(assign, r"name\s*=\s*un_deleg_row_\$N\$")
+
+    def test_every_ai_member_refreshes_its_row_after_it_may_have_voted(self):
+        body = _sub_block(_event("un_vote.4"), "immediate")
+        self.assertLess(body.index("un_vote_ai_cast = yes"), body.index("un_deleg_refresh_self = yes"))
+
+    def test_the_order_reads_the_shown_lean_never_the_true_one(self):
+        key = _block(_read(LOBBYING_VALUES), "un_deleg_key_value")
+        self.assertIn("var:un_lean_shown", key)
+        self.assertNotIn("un_lean_total", key)
+
+    def test_a_campaigner_reads_the_true_band_and_everyone_else_the_estimate(self):
+        lines = _block(_read(DISPLAY), "un_chamber_deleg_member_lines")
+        self.assertRegex(lines, r"un_deleg_viewer_campaigns_on[\s\S]*?un_chamber_deleg_band\s*=\s*\{\s*VAR\s*=\s*un_lean_total\s*\}[\s\S]*?else[\s\S]*?un_chamber_deleg_band\s*=\s*\{\s*VAR\s*=\s*un_lean_shown\s*\}")
 
 
 if __name__ == "__main__":

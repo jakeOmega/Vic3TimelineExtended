@@ -243,6 +243,155 @@ un_vote_refresh_leans = {
 	}
 }
 
+# ---- The chamber's Delegations rows (spec §6) -------------------------------------------
+# Every AI member with a vote that has not voted is on the resolution's
+# un_res_delegates, with a sort key (un_deleg_key, un_lobbying_values.txt)
+# from its latest snapshot. After each AI member's un_vote.4 the resolution
+# re-assigns its 24 rows, un_deleg_row_0..23, one ordered_in_list position
+# each, so the rows and their buttons read the same member. Every snapshot of
+# the month re-sorts, so after the last one the rows hold the month's order;
+# between pulses the order stands (a campaign started mid-month moves its
+# member up at the next pulse). The summary line's counts are written at the
+# same time.
+
+# Scope: the AI member (= ROOT, un_vote.4), after the snapshot and any cast,
+# with scope:un_resolution saved
+un_deleg_refresh_self = {
+	if = {
+		limit = { un_vote_can_cast_ballot = yes }
+		set_variable = { name = un_deleg_key value = un_deleg_key_value }
+		scope:un_resolution = {
+			if = {
+				limit = { NOT = { un_lobby_in_list = { LIST = un_res_delegates COUNTRY = ROOT } } }
+				add_to_variable_list = { name = un_res_delegates target = ROOT }
+			}
+		}
+	}
+	else = {
+		scope:un_resolution = {
+			if = {
+				limit = { un_lobby_in_list = { LIST = un_res_delegates COUNTRY = ROOT } }
+				remove_list_variable = { name = un_res_delegates target = ROOT }
+			}
+		}
+	}
+	scope:un_resolution = {
+		un_deleg_reassign_rows = yes
+	}
+}
+
+# Scope: resolution container
+un_deleg_reassign_rows = {
+	save_temporary_scope_as = un_deleg_res
+	un_deleg_clear_row = { N = 0 }
+	un_deleg_clear_row = { N = 1 }
+	un_deleg_clear_row = { N = 2 }
+	un_deleg_clear_row = { N = 3 }
+	un_deleg_clear_row = { N = 4 }
+	un_deleg_clear_row = { N = 5 }
+	un_deleg_clear_row = { N = 6 }
+	un_deleg_clear_row = { N = 7 }
+	un_deleg_clear_row = { N = 8 }
+	un_deleg_clear_row = { N = 9 }
+	un_deleg_clear_row = { N = 10 }
+	un_deleg_clear_row = { N = 11 }
+	un_deleg_clear_row = { N = 12 }
+	un_deleg_clear_row = { N = 13 }
+	un_deleg_clear_row = { N = 14 }
+	un_deleg_clear_row = { N = 15 }
+	un_deleg_clear_row = { N = 16 }
+	un_deleg_clear_row = { N = 17 }
+	un_deleg_clear_row = { N = 18 }
+	un_deleg_clear_row = { N = 19 }
+	un_deleg_clear_row = { N = 20 }
+	un_deleg_clear_row = { N = 21 }
+	un_deleg_clear_row = { N = 22 }
+	un_deleg_clear_row = { N = 23 }
+	un_deleg_assign_row = { N = 0 COUNT = 1 }
+	un_deleg_assign_row = { N = 1 COUNT = 2 }
+	un_deleg_assign_row = { N = 2 COUNT = 3 }
+	un_deleg_assign_row = { N = 3 COUNT = 4 }
+	un_deleg_assign_row = { N = 4 COUNT = 5 }
+	un_deleg_assign_row = { N = 5 COUNT = 6 }
+	un_deleg_assign_row = { N = 6 COUNT = 7 }
+	un_deleg_assign_row = { N = 7 COUNT = 8 }
+	un_deleg_assign_row = { N = 8 COUNT = 9 }
+	un_deleg_assign_row = { N = 9 COUNT = 10 }
+	un_deleg_assign_row = { N = 10 COUNT = 11 }
+	un_deleg_assign_row = { N = 11 COUNT = 12 }
+	un_deleg_assign_row = { N = 12 COUNT = 13 }
+	un_deleg_assign_row = { N = 13 COUNT = 14 }
+	un_deleg_assign_row = { N = 14 COUNT = 15 }
+	un_deleg_assign_row = { N = 15 COUNT = 16 }
+	un_deleg_assign_row = { N = 16 COUNT = 17 }
+	un_deleg_assign_row = { N = 17 COUNT = 18 }
+	un_deleg_assign_row = { N = 18 COUNT = 19 }
+	un_deleg_assign_row = { N = 19 COUNT = 20 }
+	un_deleg_assign_row = { N = 20 COUNT = 21 }
+	un_deleg_assign_row = { N = 21 COUNT = 22 }
+	un_deleg_assign_row = { N = 22 COUNT = 23 }
+	un_deleg_assign_row = { N = 23 COUNT = 24 }
+	set_variable = { name = un_res_deleg_firm_for value = 0 }
+	set_variable = { name = un_res_deleg_firm_against value = 0 }
+	set_variable = { name = un_res_deleg_rowable value = 0 }
+	if = {
+		limit = { has_variable_list = un_res_delegates }
+		every_in_list = {
+			variable = un_res_delegates
+			limit = { un_deleg_listed = yes }
+			if = {
+				limit = { un_deleg_in_rows = yes }
+				scope:un_deleg_res = { change_variable = { name = un_res_deleg_rowable add = 1 } }
+			}
+			else_if = {
+				limit = { var:un_lean_shown >= 0 }
+				scope:un_deleg_res = { change_variable = { name = un_res_deleg_firm_for add = 1 } }
+			}
+			else = {
+				scope:un_deleg_res = { change_variable = { name = un_res_deleg_firm_against add = 1 } }
+			}
+		}
+	}
+	# Members with a row to be shown beyond the 24 rows: the chamber says how many.
+	set_variable = { name = un_res_deleg_more value = { value = var:un_res_deleg_rowable subtract = 24 min = 0 } }
+}
+
+# Parameters: $N$ = 0-23
+# Scope: resolution container
+un_deleg_clear_row = {
+	if = {
+		limit = { has_variable = un_deleg_row_$N$ }
+		remove_variable = un_deleg_row_$N$
+	}
+}
+
+# Row $N$ (0-based) gets the member at position $N$ of the rows' order, if
+# there are $COUNT$ ($N$ + 1) to show. The guard keeps a position past the end
+# from leaving the previous row's pick in the temporary scope.
+# Parameters: $N$, $COUNT$
+# Scope: resolution container
+un_deleg_assign_row = {
+	if = {
+		limit = {
+			has_variable_list = un_res_delegates
+			any_in_list = {
+				variable = un_res_delegates
+				count >= $COUNT$
+				un_deleg_in_rows = yes
+			}
+		}
+		ordered_in_list = {
+			variable = un_res_delegates
+			limit = { un_deleg_in_rows = yes }
+			order_by = un_deleg_order
+			position = $N$
+			check_range_bounds = no
+			save_temporary_scope_as = un_deleg_pick
+		}
+		set_variable = { name = un_deleg_row_$N$ value = scope:un_deleg_pick }
+	}
+}
+
 # ---- Why they voted: the reason tallies -------------------------------------------------
 # When a ballot is recorded, each term of the voter's lean that pushed it the way
 # it voted, by at least un_lean_reason_size, is counted on the resolution, so

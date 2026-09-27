@@ -888,3 +888,94 @@ un_lobby_ai_lobby = {
 		}
 	}
 }
+
+# ============================================================================
+# THE CHAMBER'S BUTTONS (spec §6)
+# ============================================================================
+# The Delegations rows' Lobby For / Lobby Against / Stop Lobbying / Seek Pledge
+# buttons (un_chamber_sguis.txt), each acting on the member in row $N$
+# (un_deleg_row_$N$ on the resolution in session). They run the same effects
+# the diplomatic actions run, so a campaign or a pledge made here is the same
+# as one made from the diplomacy panel. Their `is_valid` triggers are in
+# un_lobby_triggers.txt. ExecuteTooltip renders these without running them.
+
+# Start a $DIR$ campaign on the member in row $N$: create the pact, then the
+# campaign (the pact's accept_effect does not run for a pact made by script).
+# Parameters: $N$ = 0-23, $DIR$ = for | against
+# Scope: the viewer (ROOT)
+un_deleg_row_lobby = {
+	global_var:un_active_resolution ?= {
+		var:un_deleg_row_$N$ ?= { save_scope_as = target_country }
+	}
+	if = {
+		limit = { exists = scope:target_country }
+		custom_tooltip = un_lobby_campaign_$DIR$_effect_tt
+		custom_tooltip = un_deleg_campaign_cost_tt
+		hidden_effect = {
+			create_diplomatic_pact = { country = scope:target_country type = un_lobby_$DIR$_action }
+			un_lobby_campaign_start = { DIR = $DIR$ }
+		}
+	}
+}
+
+# Stop our campaign on the member in row $N$, whichever way it runs. Removing
+# the pact runs its break hook; the campaign's end is called here as well, and
+# is harmless twice.
+# Parameters: $N$ = 0-23
+# Scope: the viewer (ROOT)
+un_deleg_row_stop = {
+	global_var:un_active_resolution ?= {
+		var:un_deleg_row_$N$ ?= { save_scope_as = target_country }
+	}
+	if = {
+		limit = { exists = scope:target_country }
+		custom_tooltip = un_deleg_stop_tt
+		hidden_effect = {
+			if = {
+				limit = { has_diplomatic_pact = { who = scope:target_country type = un_lobby_for_action } }
+				remove_diplomatic_pact = { country = scope:target_country type = un_lobby_for_action }
+				un_lobby_campaign_end = { DIR = for }
+			}
+			if = {
+				limit = { has_diplomatic_pact = { who = scope:target_country type = un_lobby_against_action } }
+				remove_diplomatic_pact = { country = scope:target_country type = un_lobby_against_action }
+				un_lobby_campaign_end = { DIR = against }
+			}
+		}
+	}
+}
+
+# Ask the (AI) member in row $N$ for a pledge. An AI member answers at once,
+# by the pledge action's own accept_score (would_accept_diplomatic_action), so
+# the answer is the one the diplomacy panel would get; the tooltip says which
+# it will be. Either way the ask is booked.
+# Parameters: $N$ = 0-23, $ACTION$ = the pledge action,
+#             $LIST$ / $DIR$ = yes / 1 or no / -1 (un_lobby_accept_commitment),
+#             $STRUCK$ = the action's accept tooltip
+# Scope: the viewer (ROOT)
+un_deleg_row_pledge = {
+	global_var:un_active_resolution ?= {
+		var:un_deleg_row_$N$ ?= { save_scope_as = target_country }
+	}
+	if = {
+		limit = { exists = scope:target_country }
+		if = {
+			limit = {
+				scope:target_country = {
+					would_accept_diplomatic_action = { actor = ROOT type = $ACTION$ } # REVIEWED 2026-09-27: `actor` is the trigger's documented key (engine triggers.log: would_accept_diplomatic_action = { actor = <country scope> type = <action type key> })
+				}
+			}
+			custom_tooltip = un_deleg_pledge_accepts_tt
+			custom_tooltip = {
+				text = $STRUCK$
+				un_lobby_accept_commitment = { LIST = $LIST$ DIR = $DIR$ }
+			}
+		}
+		else = {
+			custom_tooltip = {
+				text = un_deleg_pledge_refuses_tt
+				un_lobby_record_attempt = yes
+			}
+		}
+	}
+}

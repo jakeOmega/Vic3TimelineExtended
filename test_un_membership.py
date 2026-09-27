@@ -123,6 +123,7 @@ class RepresentationGateTests(unittest.TestCase):
     def test_gates_without_article_19(self):
         cases = [
             (("common", "diplomatic_actions", "un_lobbying.txt"), "un_secure_commitment_action"),
+            (("common", "diplomatic_actions", "un_lobbying.txt"), "un_secure_commitment_against_action"),
             (("common", "scripted_triggers", "un_docket_triggers.txt"), "un_docket_loan_candidate"),
             (("common", "scripted_triggers", "un_docket_triggers.txt"), "un_docket_peacekeeping_power"),
             (("common", "scripted_triggers", "un_docket_triggers.txt"), "un_docket_aid_power"),
@@ -136,13 +137,15 @@ class RepresentationGateTests(unittest.TestCase):
                 self.assertIn("un_representation_suspended", _block(_read(_path(*parts)), name))
 
     def test_lobbying_target_needs_a_vote(self):
-        body = _block(_read(_path("common", "diplomatic_actions", "un_lobbying.txt")),
-                      "un_secure_commitment_action")
-        start = re.search(r"^\tpotential\s*=\s*\{", body, re.M).end()
-        end = re.search(r"^\tpossible\s*=\s*\{", body, re.M).start()
-        potential = body[start:end]
-        self.assertIn("un_representation_suspended", potential)
-        self.assertIn("un_dues_vote_suspended", potential)
+        text = _read(_path("common", "diplomatic_actions", "un_lobbying.txt"))
+        for action in ("un_secure_commitment_action", "un_secure_commitment_against_action"):
+            body = _block(text, action)
+            start = re.search(r"^\tpotential\s*=\s*\{", body, re.M).end()
+            end = re.search(r"^\tpossible\s*=\s*\{", body, re.M).start()
+            potential = body[start:end]
+            with self.subTest(action=action):
+                self.assertIn("un_representation_suspended", potential)
+                self.assertIn("un_dues_vote_suspended", potential)
 
     def test_headquarters_goes_only_to_represented_members(self):
         text = _read(_path("common", "scripted_effects", "un_hq_effects.txt"))
