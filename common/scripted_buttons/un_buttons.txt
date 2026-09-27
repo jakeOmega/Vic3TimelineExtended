@@ -536,10 +536,15 @@ un_lift_sanctions_button = {
 			# enforcers, and each sanctioned country names its enforcer
 			# (un_sanctions_enforced_by, set by un_vote.2). An enforcer holds
 			# at most one regime (un_propose_sanctions_available). A regime
-			# from a save made before the target recorded its enforcer names
-			# nobody; any enforcer's lift ends those, as every lift used to.
-			# The UN's record below names the sanctioned country when there is
-			# one; with several legacy regimes it books the entry with no
+			# nobody enforces any more is orphaned, and any enforcer's lift
+			# ends it too, as every lift used to: its enforcer left the UN
+			# (un_membership_end_effect drops the enforcer modifier), died, or
+			# won or lost a revolution (the winner inherits no modifiers), or
+			# the regime is from a save made before the target recorded its
+			# enforcer, so it names nobody. Another live enforcer's regime is
+			# spared. The UN's record below names the country whose sanctions
+			# we lift: ours, else the orphan when there is only one; with
+			# several orphans and none of ours it books the entry with no
 			# subject, and the log prints the plain line. One booking either
 			# way: gen_un_button_descs.py prints a line for every booking it
 			# finds.
@@ -564,14 +569,14 @@ un_lift_sanctions_button = {
 						any_country = {
 							count >= 2
 							has_modifier = un_sanctions_target_modifier
-							NOT = { has_variable = un_sanctions_enforced_by }
+							NOT = { var:un_sanctions_enforced_by ?= { has_modifier = un_sanctions_enforcer_modifier } }
 						}
 					}
 				}
 				random_country = {
 					limit = {
 						has_modifier = un_sanctions_target_modifier
-						NOT = { has_variable = un_sanctions_enforced_by }
+						NOT = { var:un_sanctions_enforced_by ?= { has_modifier = un_sanctions_enforcer_modifier } }
 					}
 					save_scope_as = un_sanctions_lifted_target
 				}
@@ -581,7 +586,7 @@ un_lift_sanctions_button = {
 					has_modifier = un_sanctions_target_modifier
 					OR = {
 						var:un_sanctions_enforced_by ?= ROOT
-						NOT = { has_variable = un_sanctions_enforced_by }
+						NOT = { var:un_sanctions_enforced_by ?= { has_modifier = un_sanctions_enforcer_modifier } }
 					}
 				}
 				remove_modifier = un_sanctions_target_modifier
