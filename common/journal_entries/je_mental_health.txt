@@ -82,8 +82,12 @@
 	}
 
 	fail = {
-		# Fail if they still have punitive justice and have moved past the era
-		has_law = law_type:law_punishment_focused_criminal_justice
+		# Fail if they still have punitive justice and have moved past the era.
+		# Penal Labor Camps is the harsher punitive law, so it fails too.
+		OR = {
+			has_law = law_type:law_punishment_focused_criminal_justice
+			has_law = law_type:law_penal_labor_camps
+		}
 		has_technology_researched = decline_of_organized_religion
 	}
 

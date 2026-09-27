@@ -216,6 +216,12 @@ mental_health_events.3 = {
 				}
 				add = 2
 			}
+			modifier = {
+				trigger = {
+					has_law = law_type:law_penal_labor_camps
+				}
+				add = 3
+			}
 		}
 		add_modifier = {
 			name = war_on_drugs_modifier

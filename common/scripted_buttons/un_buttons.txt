@@ -836,6 +836,7 @@ un_withdraw_human_rights_button = {
 		value = 0
 		if = { limit = { has_law = law_type:law_ethnostate } add = 30 }
 		if = { limit = { has_law = law_type:law_outlawed_dissent } add = 20 }
+		if = { limit = { has_law = law_type:law_penal_labor_camps } add = 20 }
 	}
 
 	effect = {
