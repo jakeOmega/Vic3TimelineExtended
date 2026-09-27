@@ -870,6 +870,13 @@ gw_emission_multiplier_script_value = {
 			add = modifier:country_greenhouse_gas_emissions_mult
 		}
 	}
+	# Floor at 0: the cuts stack additively (the three market-wide policies,
+	# the environment ministry per investment level, the sustainability
+	# principle, conventions, summits) and can pass -100%, which would make
+	# burning coal and oil remove carbon. Capture is modelled separately
+	# (market_carbon_capture_script_value), and a market goes net negative only
+	# through it. Must stay after the add above.
+	min = 0
 }
 
 # The eight `gw_countries_with_*_script_value` definitions used to live here.
