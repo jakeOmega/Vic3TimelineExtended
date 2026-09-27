@@ -1,15 +1,17 @@
 ﻿# ============================================================================
 # UN GENERAL ASSEMBLY — CASTING A BALLOT
 # ============================================================================
-# THE single implementation of what casting a vote does. Two callers:
+# THE single implementation of what casting a vote does. Three callers:
 #
 #   1. events/un_vote_events.txt, un_vote.1 options A / B / C — the popup that
-#      reaches every member 30 days after a resolution opens, and the only path
-#      the AI ever uses.
+#      reaches every human member 30 days after a resolution opens (and again
+#      at months 9 and 11 to one that chose to decide later).
 #   2. common/scripted_guis/un_chamber_sguis.txt, un_chamber_vote_sgui — the
 #      Vote in Favour / Vote Against / Veto controls on the chamber widget's
 #      active-resolution card, available to a human member from the day the
 #      resolution opens.
+#   3. un_vote_ai_cast (un_dossier_effects.txt), the AI's ballot, from its own
+#      hidden un_vote.4 at its casting month.
 #
 # Each body below was lifted VERBATIM out of its un_vote.1 option (the only
 # deliberate change is the `un_vote_can_cast_ballot` wrapper described next),

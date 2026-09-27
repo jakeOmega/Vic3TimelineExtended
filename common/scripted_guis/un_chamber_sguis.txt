@@ -927,9 +927,9 @@ un_chamber_mandate_case_sgui = {
 # saved scope carrying a number. That is the shape the strategic reserve's
 # policy panel already uses in this mod.
 #
-# `ai_is_valid = { always = no }` on both: the AI votes through un_vote.1 and
-# proposes through the journal entry's scripted buttons, and neither of those
-# paths is touched by this file.
+# `ai_is_valid = { always = no }` on both: the AI votes in script (un_vote.4,
+# un_vote_ai_cast) and proposes through the journal entry's scripted buttons,
+# and neither of those paths is touched by this file.
 # ============================================================================
 
 # Cast our ballot on the resolution in session, from the chamber card, without

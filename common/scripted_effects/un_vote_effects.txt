@@ -69,8 +69,9 @@
 
 # Open a General Assembly vote on $TOPIC$. Stores scope:un_vote_target as the
 # resolution's target when it is saved, takes the vote lock, fires un_vote.1
-# to every other member in 30 days and schedules un_vote.2 for the proposer
-# in 365 days. Leaves scope:un_resolution pointing at the new container.
+# to every other human member in 30 days, sends every member its lean at once,
+# and schedules the last call (un_vote.6, 360 days) and un_vote.2 (365 days)
+# for the proposer. Leaves scope:un_resolution pointing at the new container.
 # Parameters: $TOPIC$ = topic key (condemn, human_rights, sanctions, ...)
 # Scope: proposing country
 un_resolution_open = {
