@@ -587,10 +587,7 @@ is active and shows it. It climbs slowly on its own, falls when the bomb is used
 or brandished, and rises with restraint. The more unthinkable the bomb, the more
 it costs to use it, threaten with it and, above 40, simply to hold it. It also
 shapes how the AI builds, threatens and strikes (see [How the AI plays nuclear
-weapons](#how-the-ai-plays-nuclear-weapons)). In a game that was already past
-its first warhead when the taboo was added, the taboo starts at the target its
-parts give rather than at 20, counting the years since the first device as a
-tradition of non-use if no weapon has been used.
+weapons](#how-the-ai-plays-nuclear-weapons)).
 
 ### The taboo panel and its bands
 

@@ -246,18 +246,7 @@ retooling](03-economy.md#construction-maintenance-and-retooling)).
 ## Company flagship buildings
 
 The mod gives every company a unique flagship building: the Krupp Essen Works,
-the Standard Oil Refinery, the Ford Rouge Plant, and so on. Each of the base
-game's 221 companies and each of the mod's has exactly one. The companies of The
-Great Wave expansion have theirs too, such as the Yasuda Atosanupuri Sulfur
-Mine, the White Star Albion House and the Noda Shoyu Goyōgura. Two flagships are
-shared by a pair of basic companies (the Granary Complex by the two agriculture
-companies, the Textile Depot by Fabrics and Textiles), for 304 flagship
-buildings in all.
-
-The basic Telecommunications company's flagship is the Electronics Laboratory.
-Its old second flagship, the Corporate Headquarters Skyscraper, is retired, and
-one already standing in a saved game is removed; the base game's Skyscraper is
-unaffected.
+the Standard Oil Refinery, the Ford Rouge Plant, and so on.
 
 A flagship building works like this:
 
