@@ -235,5 +235,21 @@ class HumanRightsTests(unittest.TestCase):
                 self.assertTrue(dissent, "no Outlawed Dissent weight found")
                 self.assertEqual(camps, dissent)
 
+
+class CulturalHegemonyTests(unittest.TestCase):
+    def test_hegemonic_pressure_never_picks_the_camps(self):
+        # cultural_hegemony.16.a adopts the hegemon's law with activate_law,
+        # which skips the camps' gate. Each place the event scans the Criminal
+        # Justice group must exclude the camps: the outer trigger (or the event
+        # fires with no valid pick), tier 2's trigger and its random pick.
+        text = _slice(
+            os.path.join(REPO, "events", "cultural_hegemony_events.txt"),
+            "cultural_hegemony.16 = {",
+            "\n}\n",
+        )
+        scans = text.count("is_same_law_group_as = law_type:law_punishment_focused_criminal_justice")
+        self.assertEqual(scans, 3)
+        self.assertEqual(text.count(f"NOT = {{ law_type = law_type:{LAW} }}"), scans)
+
 if __name__ == "__main__":
     unittest.main()
