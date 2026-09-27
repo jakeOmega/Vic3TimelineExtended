@@ -2044,11 +2044,12 @@ bubble_inertia_multiplier_script_value = {
 }
 
 # Minimum source GDP for contagion to be possible.
-# Returns 1% of the current (target) country's GDP.
+# Returns 5% of the current (target) country's GDP: a country more than 20
+# times the crashing economy's size is immune to its crash.
 # Used in the contagion limit: source.gdp >= this value.
 banking_contagion_min_source_gdp = {
 	value = gdp
-	multiply = 0.01
+	multiply = 0.05
 }
 
 # GDP weight for contagion chance: source GDP / target GDP, clamped [0, 10], * 5

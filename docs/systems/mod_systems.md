@@ -717,8 +717,8 @@ Other laws also carry these two modifiers: the monetary laws (`law_gold_standard
 
 ### Contagion GDP Scaling
 Contagion spread depends on relative GDP sizes (script values in `extra_script_values.txt`):
-- **`banking_contagion_min_source_gdp`** — 1% of target country's GDP; source must meet this threshold for contagion to be possible.
-- **`banking_contagion_gdp_weight`** — source GDP / target GDP × 5 (capped at 50). Large economies crushing small ones: +25–50 bonus. Small→large: near-zero bonus.
+- **`banking_contagion_min_source_gdp`** — 5% of target country's GDP; source must meet this threshold for contagion to be possible, so a country more than 20 times the crashing economy's size is immune (1% until 2026-09-27, i.e. 100 times). The gate runs at every hop of a cascade (`minor_events_timelineextended.7`'s `after` re-enters `banking_cycle_spread_contagion`), so small-to-large hops drop out of a crisis wave too.
+- **GDP chance tiers** — `banking_cycle_spread_contagion`'s roll (base 25) adds +5 when the source is at least the target's size, and a further +10 / +15 / +20 at 2× / 5× / 10× (`banking_contagion_gdp_threshold_2x` / `_5x` / `_10x`): +50 in all for a source ten times the target. An eligible source smaller than the target gets no GDP bonus, only the channel and severity adds. `banking_contagion_gdp_weight` (the ratio × 5, capped at 50) is not used: a script value cannot be a `random` modifier's `add`.
 
 ### Event After Blocks
 Banking events (81 of the 83 blocks in `banking_cycle_events.txt` — all but the bailout-appeal pair `.68`/`.69` — plus `.6`/`.7` in `minor_events.txt` and `society_technology_events.30`) have `after = { banking_cycle_post_event_refresh = yes }` blocks that re-apply phase modifiers and update progress bars immediately after the player's choice.
