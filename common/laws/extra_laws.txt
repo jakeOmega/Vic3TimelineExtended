@@ -3867,6 +3867,7 @@ law_direct_democracy = {
 		law_oligarchy
 		law_organic_regulation
 		law_anarchy
+		law_algorithmic_governance
 	}
 
 	unlocking_technologies = {
@@ -3912,6 +3913,10 @@ law_direct_democracy = {
 		else_if = {
 			limit = { collective_governance_is_patrician = yes }
 			custom_tooltip = COLLECTIVE_GOVERNANCE_TT_PATRICIAN
+		}
+		else_if = {
+			limit = { collective_governance_is_algorithmic = yes }
+			custom_tooltip = COLLECTIVE_GOVERNANCE_TT_ALGORITHMIC
 		}
 		custom_tooltip = COLLECTIVE_GOVERNANCE_TT_FOLLOWS_DOP
 	}

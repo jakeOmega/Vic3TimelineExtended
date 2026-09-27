@@ -130,6 +130,12 @@ EXPRESSIONS = [
         "amendment_collective_patrician_council",
         "COLLECTIVE_GOVERNANCE_TT_PATRICIAN",
     ),
+    Expression(
+        "collective_governance_is_algorithmic",
+        {"law_algorithmic_governance"},
+        "amendment_collective_algorithmic_commons",
+        "COLLECTIVE_GOVERNANCE_TT_ALGORITHMIC",
+    ),
 ]
 
 TRIGGERS = _path("common", "scripted_triggers", "collective_governance_triggers.txt")
@@ -184,6 +190,10 @@ EXPRESSION_MODIFIERS = {
     "amendment_collective_patrician_council": {
         "country_aristocrats_pol_str_mult": "0.15",
         "country_capitalists_pol_str_mult": "0.15",
+    },
+    "amendment_collective_algorithmic_commons": {
+        "state_political_strength_from_wealth_mult": "-0.25",
+        "political_movement_radicalism_add": "-0.1",
     },
 }
 
@@ -302,8 +312,7 @@ class LawTests(unittest.TestCase):
     def test_prerequisites_are_exactly_the_expressions(self):
         laws = set(_inner(self.body, "unlocking_laws").split())
         self.assertEqual(laws, set().union(*(e.dop_laws for e in EXPRESSIONS)))
-        for excluded in ("law_autocracy", "law_bakufu", "law_neo_absolutism",
-                         "law_algorithmic_governance", "law_elder_council"):
+        for excluded in ("law_autocracy", "law_bakufu", "law_neo_absolutism", "law_elder_council"):
             self.assertNotIn(excluded, laws)
 
     def test_tech_gate(self):
@@ -361,6 +370,8 @@ GOV_TYPES = [
         "Free Federation", "RULER_REPRESENTATIVE", "RULER_REPRESENTATIVE", "parliamentary_elective"),
     Gov("gov_direct_democracy", "collective_governance_is_popular", None,
         "Direct Democracy", "RULER_TITLE_SPEAKER", "RULER_TITLE_SPEAKER", "parliamentary_elective"),
+    Gov("gov_collective_algorithmic_commons", "collective_governance_is_algorithmic", None,
+        "Algorithmic Commons", "RULER_TITLE_STEWARD", "RULER_TITLE_STEWARD", "parliamentary_elective"),
     Gov("gov_collective_governance", None, None,
         "Collective Governance", "RULER_TITLE_SPEAKER", "RULER_TITLE_SPEAKER", "parliamentary_elective"),
 ]
@@ -411,7 +422,7 @@ class GovernmentTypeTests(unittest.TestCase):
             with self.subTest(gov=g.key):
                 self.assertEqual(loc.get(g.key), g.name)
                 self.assertTrue(g.key + "_desc" in loc, f"no loc for {g.key}_desc")
-        for title in ("RULER_TITLE_MARSHAL", "RULER_TITLE_SYNDIC", "RULER_TITLE_COORDINATOR"):
+        for title in ("RULER_TITLE_MARSHAL", "RULER_TITLE_SYNDIC", "RULER_TITLE_COORDINATOR", "RULER_TITLE_STEWARD"):
             self.assertTrue(title in loc, f"no loc for {title}")
 
 

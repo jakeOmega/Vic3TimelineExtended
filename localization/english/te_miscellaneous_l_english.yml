@@ -206,6 +206,7 @@
  CH_REQUIRES_MASS_MEDIA_TT:0 "Requires [GetTechnology('mass_media').GetName]."
  CH_REQUIRES_MINISTRY_TT:0 "Requires [GetLawType('law_ministry_of_culture').GetName]."
  CH_WORLD_EXPOSITION_DESC:0 "Dedicate state resources to sustained cultural projection abroad — touring shows, foreign cultural centers, sponsored translations. Costs scale with GDP while the program runs."
+ COLLECTIVE_GOVERNANCE_TT_ALGORITHMIC:0 "Under Algorithmic Governance, gains the #b Algorithmic Commons#! amendment: every citizen's feedback weighs the same in the algorithm, so wealth brings less [concept_political_strength], and grievances reach it before they harden, so [Concept('concept_political_movement','political movements')] are less active."
  COLLECTIVE_GOVERNANCE_TT_ANARCHIC:0 "Under Anarchy, gains the #b Free Federation#! amendment: delegates act only on mandates from below, so a law can only be enacted with a political movement behind it."
  COLLECTIVE_GOVERNANCE_TT_FOLLOWS_DOP:0 "The amendment changes whenever the Distribution of Power does."
  COLLECTIVE_GOVERNANCE_TT_PARTY:0 "Under Single-Party State, gains the #b Collective Leadership#! amendment: the party's presidium governs together, and with no single leader for a coup to remove, the country gains +25% [concept_coup_resistance]."
