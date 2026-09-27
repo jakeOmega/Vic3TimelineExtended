@@ -1,10 +1,10 @@
 # States and population
 
 The mod changes how people spread across your country and how its states
-develop. Crowded states stop drawing migrants, homelands follow the cultures
+develop. Crowded states draw fewer migrants, homelands follow the cultures
 that actually live in a region, a state's tourism depends on what it offers
 visitors, and a government can move settlers onto an empty frontier. The state
-panel gains tiles that show each of these. Everything in this chapter is always
+panel gains tiles that show most of these. Everything in this chapter is always
 on except internal resettlement, which the Internal Resettlement game rule
 controls (see the [Introduction](01-introduction.md)).
 
@@ -20,19 +20,19 @@ explanation, and its tooltip breaks the numbers down.
 |---|---|---|
 | Homeland Dynamics | Always | Which cultures are gaining or losing homeland status here, with a progress bar for each, or why nothing can change. |
 | Arable Land | Always | Total arable land, how much technologies and other regional effects add to the geographic base, and the arable-land multiplier. |
-| Migration Crowding | Always | Population, crowding threshold, crowding ratio with a bar, and the migration pull penalty. |
-| Solar Collector | Once your country has one | Receiver slots available and generated (10 per level). A megaproject; see [The extended timeline](02-timeline.md). |
-| Antimatter Facility | Once your country has one | Engine and warhead-plant slots available and generated (5 per level). |
+| Migration Crowding | While the state is over its crowding threshold | Population, crowding threshold, crowding ratio with a bar, and the migration pull penalty. |
+| Solar Collector | Once your country has one | Receiver slots available and generated (3 per staffed level). A megaproject; see [The extended timeline](02-timeline.md). |
+| Antimatter Facility | Once your country has one | Engine and warhead-plant slots available and generated (5 per staffed level). |
 | UN Mission | While a UN mission works in the state | The mission's type, months, strength and progress; see [The United Nations](09-united-nations.md). |
 | Tourism card | Always | Tourism output and throughput from each source, with a bar toward each source's cap. |
 
 ## Migration crowding
 
 Every state has a crowding threshold of 10,000 people for each unit of its
-geographic arable land, the land the state region starts with before
-technologies add to it. Once the population passes the threshold, the state
-carries a Population Pressure modifier that cuts its migration pull. The
-modifier is recalculated once a year.
+geographic arable land, the land the state starts with before technologies add
+to it. Once the population passes the threshold, the state carries a Population
+Pressure modifier that cuts its migration pull. The modifier is recalculated
+once a year.
 
 The penalty starts gently and then climbs fast. Up to ten times the threshold it
 grows with the square of the excess; beyond that it adds 10 percentage points
@@ -51,16 +51,16 @@ for each further multiple.
 
 The Migration Crowding Tolerance modifier multiplies the threshold: +50%
 tolerance lets a state hold half as many people again before the penalty
-starts. The tile's tooltip lists every source.
+starts. The tile's tooltip lists every source, under Urban Capacity.
 
 | Source | Tolerance |
 |---|---|
 | Ministry of Urban Planning (institution) | +10% per level |
 | Highway on the Civil Highway, Electric Civil Highway or Autonomous Highway method | +10% per level, scaled by staffing |
-| Modern Skyscrapers, Wireless Internet (Wi-Fi), Autonomous Vehicles | +15% each |
+| Modern Skyscrapers, Wireless Internet (Wi-Fi), Autonomous Vehicles, Post-Scarcity Economy | +15% each |
 | Modern Urban Planning, Advanced Structural Engineering | +20% each |
-| Urban Planning power bloc principle | +25% at tiers I to III, +50% at IV, +100% at V |
-| National Park building on National Park, National Forest or National Wildlife Refuge | −5%, −7.5% or −10% per level |
+| Urban Planning power bloc principle | +25% at tiers I to III, +50% at IV, +100% at V, plus +5% per Ministry of Urban Planning level (+10% at IV, +20% at V) |
+| National Park building on National Park, National Forest or National Wildlife Refuge | −5%, −7.5% or −10% per level, scaled by staffing |
 
 Ministries are explained in [Government, laws and characters](05-politics.md).
 The same tolerance also raises the densities that open and close a
@@ -106,17 +106,18 @@ stops qualifying; the tile marks such a project before it is cleared.
 
 A project gains 10 percentage points a year by default, so a homeland forms or
 disappears in ten years. The Homeland Change Speed modifier scales that rate.
-Turmoil of 25% multiplies it by 1.25, and turmoil of 50% by 1.5. Legitimacy
+Turmoil of 25% or more multiplies it by 1.25, and 50% or more by 1.5. Legitimacy
 below 25 halves it, and legitimacy of 75 or more multiplies it by 1.25. The rate
 stays between 1 and 95 points a year. The Promote National Values decree adds
 +300% speed in its state, which on its own brings a change down to 30 months.
 
-The laws and principles that move the three numbers most:
+Laws and principles that move the three numbers:
 
 | Law or source | Creation threshold | Removal threshold | Change speed |
 |---|---|---|---|
 | Ancestral Citizenship | −20% | +10% | +50% |
 | Violent Hostility | −20% | +10% | +25% |
+| Ghettoization | −15% | none | none |
 | Linguistic Purity | −10% | +10% | +50% |
 | Cultural Assimilation | −10% | +5% | +25% |
 | Racialized Citizenship | −10% | +5% | +25% |
@@ -125,10 +126,11 @@ The laws and principles that move the three numbers most:
 | Universal Citizenship | +20% | −5% | −25% |
 | Cultural Unity principle, tier II / III / IV / V | −5 / −15 / −25 / −35% | +5 / +10 / +20 / +40% | +5 / +10 / +20 / +30% |
 
-Other Citizenship, Minority Rights and Language Policy laws, and a few
-technologies, move them by less. Under Ancestral Citizenship alone, a primary
-culture needs 40% of a state to start a homeland, a minority's homeland goes
-once it falls below 10%, and each change takes under seven years.
+Other Citizenship, Minority Rights and Language Policy laws, a few technologies
+and the language-reform amendments move them too; the tile's tooltip lists every
+source. Under Ancestral Citizenship alone, a primary culture needs 40% of a state
+to start a homeland, a minority's homeland goes once it falls below 10%, and
+each change takes under seven years.
 
 ## Cultural acceptance and minorities
 
@@ -138,12 +140,12 @@ state modifiers that act on that penalty:
 
 - Annual Cultural Acceptance closes the penalty faster, adding its value in
   acceptance over a year to every culture that still carries one. The Cultural
-  Integration decree gives +5, and tiers III to V of the Cultural Plurality
-  principle +0.25 to +0.5.
-- Minimum Local Acceptance limits how deep the penalty can go. The floor is
-  −40, and each point of the modifier raises it: Indifference gives +5,
-  Protection +10 and Affirmative Action +20 (all Minority Rights laws), and
-  Cultural Plurality tiers III to V give +5 to +10.
+  Integration decree gives +5, the Ministry of Refugee Affairs +0.2 per level,
+  and tiers III to V of the Cultural Plurality principle +0.25 to +0.5.
+- Minimum Local Acceptance limits how deep the penalty can go: no deeper than
+  −40 plus the modifier's value. Indifference gives +5, Protection +10 and
+  Affirmative Action +20 (all Minority Rights laws), and Cultural Plurality
+  tiers III to V give +5 to +10. Without either modifier there is no floor.
 
 These matter most where migration keeps bringing new communities into a state.
 
@@ -152,7 +154,8 @@ state Violence Against Minorities. Each year, every culture there with
 acceptance below 60 risks an outbreak, more likely the lower its acceptance. A
 severe outbreak kills 10% of that culture in the state, radicalizes the
 survivors, devastates the region and sets off a mass migration; a lesser one
-kills 2%. Minority laws are in [Government, laws and characters](05-politics.md).
+kills 2% and does the same on a smaller scale. Minority laws are in
+[Government, laws and characters](05-politics.md).
 
 ## State tourism
 
@@ -175,8 +178,8 @@ The card's "All modifiers" line adds everything else that changes output. An
 Airport or Spaceport adds +15% per level, scaled by staffing. Laws add between
 −30% (Secret Police, Outlawed Dissent) and +15% (Universal Citizenship).
 Pollution, turmoil and obstinance cut output in proportion to how bad they are,
-at their worst by 200%, 100% and 50%, so a badly polluted or turbulent state
-produces no tourism at all.
+at their worst by 200%, 100% and 50%, so heavy pollution can shut a state's
+tourism off entirely.
 
 ### Tourism throughput
 
@@ -231,8 +234,8 @@ frontier, measured over the whole state region whoever owns each part:
 
 Both densities scale with Migration Crowding Tolerance, and the building's
 requirements show the region's current density against them. In an 1836 start
-the open frontiers include the American West, Siberia, the steppe, Hokkaido,
-Manchuria and the Argentine pampas.
+the open frontiers include the American West, Siberia, the Kazakh steppe,
+Hokkaido and the Argentine pampas.
 
 An Authority can have up to 5 levels. Nationalism, Civilizing Mission, Mass
 Propaganda, Keynesian Economics and Civil Rights Movement each add 5, to a
@@ -246,8 +249,8 @@ frontier.
 
 The Resettlement Program method decides who is recruited and how many move each
 month. Half the capacity comes with each level and half depends on staffing, so
-a new Authority moves settlers from the first month and speeds up as arrivals
-take its jobs. The state's modifiers show the total as Settlers Moved per Month.
+a new Authority moves settlers from the first month and speeds up as it fills
+its jobs. The state's modifiers show the total as Settlers Moved per Month.
 
 | Program | Needs | Recruits | Moved per month per staffed level | Die in transit |
 |---|---|---|---|---|
@@ -260,11 +263,12 @@ take its jobs. The state's modifiers show the total as Settlers Moved per Month.
 | Rustication | Mass Media and Single-Party State | Laborers and clerks who do not work in farming, plantations, ranching or subsistence | 800 | 1% |
 | Managed Retreat | Environmental Movement | Everyone except slaves, from coastal states while you suffer Coastal Flooding or Coastal Population Relocation, and from states hit by a nuclear strike or a weapons accident | 600 | none |
 
-Programs cost bureaucracy, paper and staff; Military Colonies and the coercive
-programs (Penal Transportation, Special Settlements and Rustication) hire
-soldiers and use small arms. Slaves are never recruited. If a law change retires
-the running program, the Authority falls back to Land Grants. Managed Retreat's
-damage comes from [Climate and pollution](14-climate.md) and
+Programs cost bureaucracy, paper and staff. The voluntary programs and Managed
+Retreat also use services; Military Colonies and the coercive programs (Penal
+Transportation, Special Settlements and Rustication) hire soldiers and use small
+arms instead. Slaves are never recruited. If a law change retires the running
+program, the Authority falls back to Land Grants. Managed Retreat's damage comes
+from [Climate and pollution](14-climate.md) and
 [Nuclear weapons](13-nuclear.md).
 
 Each program also speeds up the destination's incorporation and its growth as a
@@ -301,14 +305,15 @@ Transport adds capacity and costs transportation goods:
 Each month an Authority works down your other states, most eligible people
 first, until its capacity is met; it skips other Authorities' states. Each state
 gives at most 2% of its eligible people a month across all your Authorities, and
-takes under 100 people are skipped. The Authority shows "Settlers arrived last
-month" and "Died in transit last month", and each source state shows how many
-it gave.
+takes under 100 people are skipped, so a pop smaller than 5,000 is never
+recruited. The Authority shows "Settlers arrived last month" and "Died in
+transit last month", and each source state shows how many it gave.
 
 The Resettlement Recruitment Drive decree steers recruitment. Every Authority
 recruits from a drive state before any other, and may take 4% of its eligible
-people a month instead of 2%. The decree lowers the state's migration pull by
-10% and needs at least one Authority.
+people a month instead of 2%, which reaches pops of 2,500 or more. The decree
+lowers the state's migration pull by 10% and needs at least one Authority
+elsewhere.
 
 ### Costs and consequences of resettlement
 
@@ -337,9 +342,9 @@ If you are a party to the Universal Declaration of Human Rights, a UN convention
 ([The United Nations](09-united-nations.md)), running Penal Transportation,
 Special Settlements or Rustication gives you Violating the Declaration: up to
 −10% prestige as the programs grow, halved if you ratified with reservations.
-It fades over several years after they stop. The first time it applies, an event
-explains it and offers to switch every coercive program to your best voluntary
-one.
+It fades over several years after they stop. The first month you run a coercive
+program as a party, an event explains the penalty and offers to switch every
+coercive program to your best voluntary one.
 
 Settlers change the culture shares at the destination. Over time that can create
 or remove a homeland there, under the rules in
@@ -347,13 +352,13 @@ or remove a homeland there, under the rules in
 
 ### Resettlement events
 
-A running program draws at most one event every eighteen months, from an
-Authority that received settlers that month.
+You draw at most one resettlement event every eighteen months, however many
+Authorities you run, set in an Authority that received settlers that month.
 
 | Event | Fires for | Choices |
 |---|---|---|
 | Land Rush | Voluntary programs | +2,000 settlers a month for a year and more land pressure, or +10% construction there for two years. |
-| The Speculators | Voluntary programs | Authority for two years (Rural Folk approve), or 500 fewer settlers a month for two years (Landowners and Industrialists approve). |
+| The Speculators | Voluntary programs | −50 authority for two years (Rural Folk approve), or 500 fewer settlers a month for two years (Landowners and Industrialists approve). |
 | A Hard Winter on the Frontier | Any program | Money, or deaths, radicals and lower migration pull there for a year. |
 | Dust Storms | Homesteads after ten years | Money and a small farm penalty for ten years, or a decaying −20% farm and ranch penalty. |
 | The Reform Campaign | Coercive programs | End them for prestige, or defy the critics for a prestige penalty. |
@@ -363,8 +368,9 @@ Authority that received settlers that month.
 
 ### Resettlement and the AI
 
-The AI builds a Settlement Authority when it has an open frontier and a state at
-home with unemployment above 5% or migration crowding, prefers the emptiest
-frontiers, and stops founding new ones at three. It favors voluntary programs,
-and it issues the Recruitment Drive in states with high unemployment or heavy
-crowding.
+The AI values a Settlement Authority on an open frontier when one of its states
+has unemployment above 5% or migration crowding, and on any frontier emptier
+than 0.5 people per km². It stops founding new ones once it has three. It issues
+the Recruitment Drive in states with unemployment above 10% or a crowding
+penalty above 10%. The mod gives the coercive programs a low AI weight, but only
+the AI Voluntary Only rule guarantees that AI countries stay off them.

@@ -2,11 +2,11 @@
 
 Two systems let countries compete for influence without going to war. Cultural
 Hegemony measures how much of the world's cultural influence each country holds
-and turns a large share into migrants, legitimacy pressure on rivals and pressure
-on foreign political movements. Covert Warfare gives you an intelligence agency
-that runs espionage, subversion and sabotage against other countries, at the
-risk of being caught. Each has its own game rule, Cultural Hegemony and Covert
-Warfare, and both are on by default.
+and turns a large share into migrants, legitimacy pressure on trailing countries
+and pressure on foreign political movements. Covert Warfare gives you an
+intelligence agency that runs espionage, subversion and sabotage against other
+countries, at the risk of being caught. Each has its own game rule, Cultural
+Hegemony and Covert Warfare, and both are on by default.
 
 ## The Cultural Hegemony journal entry
 
@@ -48,20 +48,22 @@ multiplier. The breakdown section lists each one for your country.
 
 | Component | How it counts |
 |---|---|
-| Art Production | Your fine art output, capped at your percentage share of world production, with diminishing returns above a third of world output. Free-speech laws, Romanticism, Realism and Film change your art multiplier. |
+| Art Production | Your fine art output, capped at your percentage share of world production, with diminishing returns above a third of world output. Free Speech, Church and State and LGBTQ+ Rights laws, Romanticism, Realism and Film change your art multiplier. |
 | Prestige | Your prestige divided by 5, capped at your percentage share of world prestige. Recognized countries only. |
 | Standard of Living | Your average standard of living minus the world average (−5 to +20): in full for great powers, half for major powers, a quarter for minor powers, nothing below. |
 | Tech Leadership | +2 each time you research a technology no other country has yet, up to 30, fading by a tenth at each recount. |
 | Monuments | +3 per wonder (power bloc statues don't count), plus up to +5 from grand monuments (+1 per 20 levels). |
 | Megaprojects | +3 for each of the seven megaproject types you have completed. |
-| Other Modifiers | Flat pull from laws, technologies, programme funding and the Cultural Exchange Program treaty article. |
+| Other Modifiers | Flat pull from programme funding, events, tiers IV and V of the Education power bloc principle and the Cultural Exchange Program treaty article. |
 | Infamy | −0.1 per point of infamy. |
 | Instability | Up to −10 at full turmoil, and −20 during a civil war. |
 
-The multiplier comes from your rank (great power +25%, major power +10%),
-technologies such as Romanticism, Realism, Film and Television, the Ministry of
-Culture institution, programmes and events. Wonders, megaprojects and grand
-monuments are described in [The extended timeline](02-timeline.md).
+The multiplier comes from your rank (great power +25%, major power +10%), laws
+(free trade, open borders and inclusive citizenship raise it; isolationist,
+exclusionary and repressive laws lower it), technologies such as Romanticism,
+Realism, Film and Television, the Ministry of Culture institution, programmes
+and events. Wonders, megaprojects and grand monuments are described in
+[The extended timeline](02-timeline.md).
 
 ### What cultural dominance gives
 
@@ -104,17 +106,19 @@ liberal hegemon, for example, or a related one if it is absent) grows more activ
 and attracts more pops. The push is zero while the model holds less than 15% of
 world culture and grows with its share after that; the tooltip on the exported
 model shows its strength. A hegemon with feminist, civil-rights, environmental,
-anti-war, abolitionist, labour or land-reform laws also feeds those movements
-abroad. Movements are covered in [Government, laws and characters](05-politics.md).
+abolitionist, labour or land-reform laws also feeds those movements abroad, and
+one at peace without Mass Conscription feeds anti-war movements. Movements are
+covered in [Government, laws and characters](05-politics.md).
 
 ### Cultural programmes
 
-Every programme needs the Ministry of Culture Established law (unlocked by Mass Propaganda). If you repeal it, funding
-drops to zero and all four programmes stop at the next monthly update.
+Every programme needs the Ministry of Culture Established law (unlocked by Mass
+Propaganda). If you repeal it, funding drops to zero and all four programmes
+stop at the next monthly update.
 
 | Programme | Controls | Effect | Cost |
 |---|---|---|---|
-| Cultural Program Funding | − and + | Each step adds +1 cultural pull and +5% pull. | A weekly expense per step that grows with your GDP. |
+| Cultural Program Funding | − and + | Each step adds +1 cultural pull and +5% pull. | A weekly expense that grows with your GDP. |
 | International Cultural Outreach | Begin / End | +10% pull, +5% prestige, +10% mass migration attraction. Needs Mass Media. | A weekly expense that grows with your GDP. |
 | Cultural Institutes | Fund / Defund | +10% pull. | +100 authority cost. |
 | Global Media Campaign | Launch / End | +15% pull, +5% prestige. Needs Mass Media. | +100 authority cost. |
@@ -138,12 +142,12 @@ Trailing countries under the benchmark get events such as Foreign Cultural
 Infiltration, Brain Drain and Foreign Ideological Influence. Most let you
 embrace the foreign influence (research, relations, often a push toward the
 hegemon's model) or resist it (authority and interest group approval, often at a
-cost in relations, legitimacy or pull). The harshest is Hegemonic Convergence: when the hegemon
-holds at least 25% and your share is at most a tenth of its share, you may be
-pressed to adopt one of its laws. Yielding enacts the law at once, with
-radicals, a decaying −10 legitimacy and +10 relations with the hegemon. Refusing
-costs 5 infamy, −10 relations and a decaying modifier with −5 legitimacy and
-worse turmoil effects.
+cost in relations, legitimacy or pull). The harshest is Hegemonic Convergence:
+when the hegemon holds at least 25% and your share is at most a tenth of its
+share, you may be pressed to adopt one of its laws. Yielding enacts the law at
+once, with radicals, a decaying −10 legitimacy and +10 relations with the
+hegemon. Refusing costs 5 infamy, −10 relations and a decaying modifier with −5
+legitimacy and worse turmoil effects.
 
 Four events follow the political models:
 
@@ -163,13 +167,13 @@ protectionism once their share passes 10%.
 
 ## The Covert Warfare journal entry
 
-The Covert Warfare journal entry is your agency's command centre. It appears
-when you hold one more covert operation slot than your rank grants for free
-(every country gets one, major powers two, great powers three). The first extra
-slots come from the Ministry of Intelligence and Security Established law
+The Covert Warfare journal entry is your agency's command centre. It becomes
+active when you hold one more covert operation slot than your rank grants for
+free (every country gets one, major powers two, great powers three). The first
+extra slots come from the Ministry of Intelligence and Security Established law
 (unlocked by Mass Surveillance), whose institution adds a slot per level, and
-from the era 7 technology Mainframe Computers. If you lose that extra slot, the
-entry closes. It never completes.
+from the era 7 technology Mainframe Computers. Once active, the entry stays open
+even if you later lose that extra slot. It never completes.
 
 You launch operations from another country's diplomatic actions, listed as
 "Covert: ..." with the operation's name. Everything else is in the journal
@@ -222,8 +226,9 @@ From level 3, idle networks also decay half as fast.
 ### The covert operations
 
 There are fourteen operations. Every one needs a free slot, room under the
-per-type limit, funding of at least 1, a target that is not decentralized, no
-truce with it, and no Intelligence Sharing Pact binding it (see
+per-type limit, no operation of the same type already running against that
+target, funding of at least 1, a target that is not decentralized, no truce with
+it, and no Intelligence Sharing Pact binding it (see
 [Diplomacy](08-diplomacy.md)). Election Interference, Financial Subversion,
 Ideological Subversion and the two wartime operations can't target a country
 with amicable relations or better toward you, and Destabilization can't target
@@ -262,7 +267,8 @@ and the description says how the world will read it if it is exposed.
 An operation does nothing for its first six months (Preparatory). From month 6 it
 is Establishing and has its base effect; from month 12 it is Fully Operational
 and its effects double. Each row shows the phase and the months to the next
-one.
+one. Ideological Subversion's push on movements is the exception: it doesn't
+double, and stays at its establishing strength.
 
 Each row also has a priority stepper from 1 to 3. Priority multiplies what the
 operation does, but costs and exposure rise faster:
@@ -276,7 +282,9 @@ operation does, but costs and exposure rise faster:
 Priority 3 needs an Established agency; a fully operational operation at
 priority 3 works at 3.2 times base strength. Detection and upkeep change when you
 click, the effects at the start of the next month, and lowering priority cuts
-upkeep only once they have. Cultivate Assets stays at priority 1.
+upkeep only once they have. Cultivate Assets stays at priority 1. Election
+Interference's cut to electoral confidence and Regime Change's push on a coup
+are fixed and don't scale with priority.
 
 ### Agent networks
 
@@ -296,11 +304,12 @@ it never says which.
 ### Tradecraft
 
 Tradecraft is your agency's experience, from 0 to 100. Each month every
-operation past its preparatory phase adds 1 (a preparatory one half that),
-counting at most four operations, and gains slow above 50. An exposed operation
-costs 3 (routine espionage or wartime sabotage), 6 (interference) or 9 (an
-attempt on a government). With nothing running, Tradecraft drifts down by a
-quarter point a month. Standing an operation down costs nothing.
+operation past its preparatory phase adds 1 (a preparatory one half that, and
+Cultivate Assets always half), counting at most four operations, and gains slow
+above 50. An exposed operation costs 3 (routine espionage or wartime sabotage),
+6 (interference) or 9 (an attempt on a government). With nothing running,
+Tradecraft drifts down by a quarter point a month. Standing an operation down
+costs nothing.
 
 | Tier | Tradecraft | Unlocks |
 |---|---|---|
@@ -352,16 +361,18 @@ event, which names you and the operation. It can shore up its counterintelligenc
 (a decaying boost to separatism and coup resistance), retaliate in kind (a
 network of up to 25 inside your country, if it has a Covert Warfare journal
 entry of its own), or make the evidence public (−3 infamy for itself). The event
-fires at most once every two years per country, but the command centre shows the
-latest catch for ten years. Nothing else names the country behind an operation.
-A target can see the effects among its own modifiers, gets an unsigned Election
-Interference Detected notification with each confidence hit, and can count the
-operations against it through a strong network of its own.
+fires at most once every two years per country, and only once per game for a
+country without a Covert Warfare journal entry of its own. The command centre
+shows the latest catch for ten years. Nothing else names the country behind an
+operation. A target can see the effects among its own modifiers, gets an
+unsigned Election Interference Detected notification with each confidence hit,
+and can count the operations against it through a strong network of its own.
 
 ### Covert defence
 
-Each unused slot becomes Domestic Intelligence Focus: +2 intelligence capacity, more separatism
-and coup resistance, calmer movements and better colonial garrisons. You also
+Each unused slot becomes Domestic Intelligence Focus: +2 intelligence capacity,
+more separatism and coup resistance, calmer movements and better colonial
+garrisons. You also
 have three covert defences, economic, military and ideological, each added to
 your capacity against operations of its kind. Strict IP Protection and Central
 Bank Independence raise economic defence and Publicly Funded Elections
@@ -390,11 +401,12 @@ The Shadow War and The Spy Who Was Caught stand in for the operations; see
 ### How the AI runs covert operations
 
 AI countries set their funding each month: none while idle, level 1 to keep
-operations alive when bankrupt or without rivals, level 3 for a great power with
-a rival, and level 5 for a great power at war. They launch rarely. Peacetime
-operations come mostly from major and great powers, aimed at rivals or countries
-they feel antagonistic or domineering towards; espionage goes to countries ahead
-in technology or in space, and a funded AI at war or in a play uses the wartime
+operations alive when bankrupt or without rivals (and for a major power with a
+rival), level 3 for a great power with a rival or a major power at war, and
+level 5 for a great power at war. They launch rarely. Peacetime operations come
+mostly from major and great powers, aimed at rivals or countries they feel
+antagonistic or domineering towards; espionage goes to countries ahead in
+technology or in space, and a funded AI at war or in a play uses the wartime
 operations. The AI raises priority to 2 against rivals and to 3 when a great
 power is at war with the target. It needs Seasoned Tradecraft for the two most
 severe operations, as you do, so it rarely launches them.

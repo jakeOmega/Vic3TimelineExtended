@@ -55,8 +55,9 @@ every value multiplied by the current anomaly. At 1 °C it is:
 - +1% migration quota, as climate refugees move;
 - 25% worse floods, droughts, extreme winds and torrential rains, and 50% worse
   heatwaves and wildfires, in both impact and duration;
-- 15% milder frost and hailstorms, and weaker pollinator surges and moderate
-  rainfall.
+- 15% milder frost and hailstorms;
+- 25% weaker pollinator surges and 10% weaker moderate rainfall, the two
+  harvest conditions that help.
 
 At 2 °C every line doubles, and at 3 °C it triples. The dashboard's Warming
 Penalty Scale shows the current multiplier.
@@ -72,17 +73,19 @@ Year, Our Market's Emissions (with the amount captured), our Share of World
 Emissions, the Emissions Cut In Force (the percentage and how many of the eight
 policies are active), Our Role in the market, and the Warming Penalty Scale.
 Each row's tooltip explains the reading. The emissions and yearly figures are
-recalculated each January; the cut and the policy count change the moment you
+recalculated once a year; the cut and the policy count change the moment you
 adopt or repeal.
 
-Mitigation Policies lists all eight policies for every country, each with an
-Adopt or Repeal control and a status: Active, Inactive, or set by market leader.
-A greyed control's tooltip lists the conditions and which of them you meet.
-Adoption Around the World, a collapsible section, counts the nations running
-each policy.
+Mitigation Policies lists all eight policies for every country. Each row shows
+Active or Inactive and one control: Adopt while the policy is not in force,
+Repeal while it is. A market-wide policy that your market leader put in force
+is also marked "set by market leader". A greyed control's tooltip lists the
+conditions and which of them you meet. Adoption Around the World, a collapsible
+section, counts the nations running each policy.
 
 History, collapsed by default, charts global temperature and your market's
-share of world emissions, one point a year.
+share of world emissions. Both lines step once a year, when the emissions
+figures update.
 
 ## Climate policies
 
@@ -93,7 +96,8 @@ country. Every policy needs the anomaly to have reached 0.5 °C, except
 Fossil-Fuel Divestment, which needs 1.0 °C.
 
 Most policies carry an Authority Cost for as long as they are in force, and you
-can only adopt one while you produce more authority than that cost.
+can only adopt one while you produce more authority than that cost. Emission
+Standards charges its cost to every country in the market, members included.
 
 | Policy | Scope | Authority | Effects |
 |---|---|---|---|
@@ -102,7 +106,7 @@ can only adopt one while you produce more authority than that cost.
 | Emission Standards | Market | 200 | Emissions −10%; generated pollution −25%; −5% throughput for every building. |
 | Climate Adaptation | National | 250 | Mortality −2.5% and standard of living +0.5 in every state. |
 | Reforestation Subsidies | National | 100 | Farm throughput +5%; droughts and floods 25% weaker and shorter. |
-| Public Transit | National | 150 | Transportation output +10%; oil input −5%; infrastructure built 10% faster; pops' automobiles give 0.25 less infrastructure per unit. |
+| Public Transit | National | 150 | Transportation output +10%; oil input −5%; infrastructure built 10% faster; pops' automobiles add less infrastructure. |
 | Fossil-Fuel Divestment | National | 200 | Taxes on coal mining and oil extraction +25%; coal and oil input −5%. |
 | Green Building Codes | National | 100 | Construction goods input +5%; electricity input −2.5%. |
 
@@ -110,8 +114,7 @@ Only the three market-wide policies cut the emissions figure directly. The
 national ones trim oil, coal and electricity use at the margin, protect your
 people from the damage, and calm the Environmental Movement
 ([The Environmental Movement](#the-environmental-movement)). Climate Adaptation
-is the one that pays off even if nobody else acts, and it is worth most to poor
-countries.
+is the one that pays off even if nobody else acts.
 
 If you lead a market that burns a large share of the world's coal and oil, the
 market-wide policies are where your choice matters. If you are a member, you can
@@ -163,10 +166,10 @@ Organizations technology, against a country that leads its own market. It can
 be a war goal, and it can be requested or offered in a treaty.
 
 On entry into force, the bound country adopts the three market-wide policies
-for its whole market and the four national emissions policies for itself. While
+for its whole market and the other four national policies for itself. While
 the treaty holds, it can't repeal them, and it also suffers −20% power plant
 throughput, −10% coal mining and oil extraction throughput and +300 Authority
-Cost. The demanding side gains +2% prestige and pays the article's upkeep. If
+Cost on top of the policies' own costs. The demanding side gains +2% prestige and pays the article's upkeep. If
 the bound country loses one of the policies anyway, the treaty freezes. Treaty
 mechanics are in [Diplomacy](08-diplomacy.md); while a United Nations exists, it
 also negotiates climate accords ([The United Nations](09-united-nations.md)).
@@ -184,12 +187,13 @@ falls back below a mark it had passed:
 | When the Levees Break | 2.0 °C |
 | The Reckoning | 3.0 °C |
 | Off the Brink, The Heat Recedes, A Cooler Decade, Below the Line | Warming falls back below 3.0, 2.0, 1.0 and 0.5 °C |
-| Near Baseline | Warming falls back below 0.1 °C |
+| Near Baseline | Warming falls back below 0.1 °C, after having reached 0.5 °C |
 
 Each month every country also has a small chance of one recurring event whose
 conditions it meets. Their choices trade money, authority and interest group
-approval against radicals, mortality and throughput, and three have an extra
-option for a country that funds its Ministry of the Environment to level 3.
+approval against radicals, mortality and throughput. Three have an extra
+option for a country that funds its Ministry of the Environment to level 3, and
+The Fever's March has one for the Ministry of Consumer Protection at level 3.
 
 | Event | Conditions |
 |---|---|
@@ -197,12 +201,13 @@ option for a country that funds its Ministry of the Environment to level 3.
 | A Greener Shade of Politics | 0.5 °C and Pollution Control |
 | The Uprooted (climate refugees) | 1.0 °C |
 | The Tide Comes In (coastal flooding) | 1.0 °C and a coastal state with a Port |
-| The Congress of Smoke (a climate summit) | 1.0 °C, a major power with Pollution Control, and no United Nations |
-| The Barren Harvest | 2.0 °C and Wheat Farms |
-| The Wells Run Dry, The Fever's March | 2.0 °C |
+| The Congress of Smoke (a climate summit) | 1.0 °C, a major or great power with Pollution Control, and no United Nations |
+| The Barren Harvest | 2.0 °C, Wheat Farms, and a Ministry of the Environment below level 5 |
+| The Wells Run Dry | 2.0 °C |
+| The Fever's March | 2.0 °C and a Ministry of Consumer Protection below level 5 |
 | The Great Thaw | 2.5 °C and a coast |
 | Green and Gold | 3.0 °C, Clean Energy Technologies and industrialists in government |
-| Quiet Power | Environmental Movement and a Renewable Energy Plant |
+| Quiet Power | The Environmental Movement technology and a Renewable Energy Plant |
 | Friends in High Places | A Carbon Tax, Emission Standards or Fossil-Fuel Divestment, and Coal Mines or Oil Rigs of level 5 or more |
 
 The Tide Comes In can leave you with Coastal Flooding or Coastal Population
@@ -219,11 +224,12 @@ state's buildings produce, recalculated monthly. It is lowered by:
 | Pollution Control decree (needs Pollution Control) | −50% |
 | Emission Standards policy | −25% |
 | Ministry of the Environment | −5% per level |
-| Electric Vehicles | −5% |
+| Biotechnology company, while prosperous | −20% |
+| Electric Vehicles technology | −5% |
 
 Each level of the Ministry of the Environment also cuts emissions by 5% and
-raises the National Park level cap by one, at a small cost to mining, logging
-and oil extraction throughput and to construction goods.
+raises the National Park level cap by one. Each level costs 1% mining and
+logging throughput, 2% oil extraction throughput and 5% more construction goods.
 
 Heavy pollution hurts more than in the base game. As a state region's pollution
 rises toward its maximum, it adds up to +5% mortality, −3 standard of living and

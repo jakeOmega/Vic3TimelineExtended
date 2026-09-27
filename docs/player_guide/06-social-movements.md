@@ -116,8 +116,8 @@ mark:
 | 75 | Mass Disobedience, only under a discriminatory minority law (otherwise no event) | Federal Commission Recommends Action, if Federal Protection has run over 24 months |
 | 90 | The March on the Capital | Always this one |
 
-In about one month in seven, a random event may also come: Civil Rights March,
-Segregation Incident (under a discriminatory minority law), Cultural
+Each month also has about a one-in-seven chance of a random event: Civil Rights
+March, Segregation Incident (under a discriminatory minority law), Cultural
 Renaissance (at 40% literacy), The Boycott, or the international condemnation
 described below. Sympathetic options please the Intelligentsia, anger the
 Devout, Rural Folk and Armed Forces, and make discriminated pops loyal;
@@ -126,11 +126,10 @@ repressive options do the reverse.
 While you lack Protection, Affirmative Action and Universal Citizenship (or keep
 Active Persecution or Legal Guardianship), a great power that has one of those
 three and has researched Civil Rights Movement may be asked whether to condemn
-you. If it does, you get International
-Pressure on Human Rights: reject it (−30 relations with the critic), promise
-reform (+20 relations, a small acceptance bonus) or counter-accuse (−50
-relations and a diplomatic incident). As such a great power, you get the same
-question about others.
+you. If it does, you get International Pressure on Human Rights: reject it
+(−30 relations with the critic), promise reform (+20 relations, a small
+acceptance bonus) or counter-accuse (−50 relations and a diplomatic incident).
+As such a great power, you get the same question about others.
 
 ### How the civil rights struggle ends
 
@@ -189,8 +188,9 @@ workplace discrimination, augmented crime and religious condemnation.
 ### The digital rights debate
 
 The entry opens in era 9, but Strong Privacy Rights needs Universal Digital
-Identity from era 11 and the Guaranteed Liberties law, and you have 15 years. The events bring a whistleblower, a
-data breach, hackers, predictive policing and foreign cyber-espionage; with
+Identity from era 11 and the Guaranteed Liberties law, and you have 15 years.
+The events bring a whistleblower, a data breach, hackers, predictive policing
+and foreign cyber-espionage; with
 Covert Warfare on, the last follows only when your counterintelligence catches a
 foreign espionage operation (see
 [Cultural hegemony and covert warfare](10-influence.md)).
@@ -200,13 +200,14 @@ foreign espionage operation (see
 Rehabilitation-Focused Criminal Justice unlocks with the technology that opens
 the crisis, so raising Social Security to level 4 is usually the slow half.
 Researching Decline of Organized Religion while Punishment-Focused Criminal
-Justice is in force fails the crisis on the spot. The events deal with burnout,
-youth mental health, addiction, veterans' PTSD and a care-home scandal.
+Justice, the law every country starts with, is in force fails the crisis on the
+spot. The events deal with burnout, youth mental health, addiction, veterans'
+PTSD and a care-home scandal.
 
 ### The post-scarcity debate
 
-This entry can't fail: it succeeds or times out. It opens in era 10, while the Post-Scarcity
-Economy law needs the era 12 technology of that name, so the 30 years are a race
+This entry can't fail: it succeeds or times out. It opens in era 10, while the
+Post-Scarcity Economy law needs the era 12 technology of that name, so the 30 years are a race
 through two eras (see [The extended timeline](02-timeline.md)). The events bring
 unemployment protests, a crisis of meaning, AI replacing bureaucrats,
 neo-Luddite terrorism and an art renaissance.
@@ -232,8 +233,8 @@ the Devout, Rural Folk and Armed Forces, and shelving it does the reverse.
 ### LGBTQ+ rights events
 
 These need LGBTQ+ Rights Movement (era 9). Pride and Protest can recur, at most
-once in ten years, until you enact Full Equality and Protection; its options, from protecting
-the march to breaking it up, depend on your LGBTQ+ Rights law. The Marriage
+once in ten years, until you enact Full Equality and Protection; its options,
+from protecting the march to breaking it up, depend on your LGBTQ+ Rights law. The Marriage
 Equality Question fires once, under Basic Protections or Anti-Discrimination
 Laws, offering civil partnerships, marriage equality, a traditional definition
 or waiting for the courts.
@@ -243,13 +244,14 @@ or waiting for the courts.
 Two events carry the conflict between faith and modern life. Both are in the
 yearly draw of social-tension events, which has a 65% chance each year of
 picking one event from a large pool. Neither fires under State Atheism, and
-each comes at most once in ten years. Religious Revival Sweeps the Nation needs a marginalized
-Devout group and Decline of Organized Religion (era 10), Sexual Revolution or
-Social Media: you
+each comes at most once in ten years.
+
+Religious Revival Sweeps the Nation needs a marginalized Devout group and
+Decline of Organized Religion (era 10), Sexual Revolution or Social Media: you
 embrace it (Devout political strength up, Authority down), stay secular (a small
 research bonus) or channel it into charity (a little standard of living). Faith
-Against Modernity needs Devout clout of at least 5% and a progressive law or
-technology:
+Against Modernity needs Devout clout of at least 5% and either Total Separation
+or one of Second Wave Feminism, Sexual Revolution and LGBTQ+ Rights Movement:
 you side with tradition, modernize, or seek a theological compromise.
 
 ### Environmentalism belongs to climate
@@ -289,8 +291,8 @@ Ministry of Religion.
 
 Islamic and Dharmic countries get their own text for all seven events, and some
 titles change: The Electronic Pulpit becomes The Satellite Minbar for Islamic
-countries, and One Nation Under God becomes One Ummah, One Law; One
-Civilization, One Dharma; or, for Jewish countries, The Promised Land.
+countries, and One Nation Under God becomes One Ummah, One Law (Islamic), One
+Civilization, One Dharma (Dharmic) or The Promised Land (Jewish).
 
 Once you have Decline of Organized Religion and any embrace modifier, the
 Secularization Campaign decision appears. It removes all seven embrace

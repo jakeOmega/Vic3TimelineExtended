@@ -127,10 +127,10 @@ related ship. Four new utility modifications join the base game's.
 
 | Utility modification | Technology | Effect | Mounted on |
 |---|---|---|---|
-| Sonar Suite | Sonar | +50% accuracy against submarines, +100 detection | ASW Destroyer, the three new submarines |
+| Sonar Suite | Sonar | +50% accuracy against the base game's Submarine (not the mod's new submarines), +100 detection | ASW Destroyer, the three new submarines |
 | Ballistic Missile Bay | Precision Guided Munitions | +50% blockade strength, +15% hull damage | Guided Missile Ship, Arsenal Ship, Hypersonic Missile Platform, Antimatter Battleship |
-| DEW Point Defense | Directed Energy Weapons | −25% vulnerability, +200 screening | Nuclear Supercarrier, Pulsed Laser Escort |
-| Drone Complement | Swarm Technology | +30% accuracy, +25% screening, +200 detection | Nuclear Supercarrier, Expeditionary Sea Base, Orbital Support Mothership, Pulsed Laser Escort, Swarm Coordination Vessel, the two later submarines |
+| DEW Point Defense | Directed Energy Weapons | −25% vulnerability, +200 screening | Nuclear Supercarrier, Arsenal Ship, Stealth Battlecruiser, Hypersonic Missile Platform, Pulsed Laser Escort, Swarm Coordination Vessel, Antimatter Battleship, Orbital Support Mothership |
+| Drone Complement | Swarm Technology | +30% accuracy, +25% screening, +200 detection | Nuclear Supercarrier, Expeditionary Sea Base, Stealth Battlecruiser, Hypersonic Missile Platform, Pulsed Laser Escort, Swarm Coordination Vessel, Antimatter Battleship, Orbital Support Mothership, the two later submarines |
 
 Shipyards gain a Production Focus group that trades civilian hulls for naval
 construction; its strongest setting, Wartime Mobilization, needs the Total War
@@ -138,11 +138,12 @@ law.
 
 ## Mobilization options
 
-The mod adds 27 mobilization options, some in a new Training group. It also makes
-the transport and medical options exclusive: a formation picks one of Forced
-March, Truck Transport, Rail Transport, Air Transport and Space Transport, and
-one of First Aid, Field Hospitals and Medevac Helicopters. An option that
-consumes a good can be chosen only while your market has that good for sale.
+The mod adds 27 mobilization options, some in a new Training group. The new
+transport and medical options join the base game's exclusive sets: a formation
+picks one of Forced March, Truck Transport, Rail Transport, Air Transport and
+Space Transport, and one of First Aid, Field Hospitals and Medevac Helicopters.
+Many options can be chosen only while your market has the goods they consume
+for sale.
 
 | Option | Unlocked by | Effect |
 |---|---|---|
@@ -167,14 +168,14 @@ consumes a good can be chosen only while your market has that good for sale.
 | Mandatory Bioenhancement | Mandatory Augmentation law | +50% offense and defense |
 | Jungle Combat Training | Military Training principle, tier III+ | +25% offense and defense in forest and hazardous terrain |
 | Mountain Combat Training | Military Training principle, tier III+ | +25% offense and defense in hills, mountains and hazardous terrain |
-| Amphibious Warfare Training | Engineering and Logistics principle, tier III+ | +25% offense and defense across water |
+| Amphibious Warfare Training | Engineering and Logistics principle, tier III+ | +25% offense and defense in water terrain |
 | Flight Simulators | Military Training principle, tier V | +10% offense and defense for Jet-Powered Aircraft and later |
 
 The principles come from your power bloc ([Diplomacy](08-diplomacy.md)); the
-augmentation laws are in [Government, laws and characters](05-politics.md). Entrenchment, the three terrain
-trainings, Missile Defense System and Exoskeleton Suits add ammunition to a
-mobilized battalion's upkeep, on top of the wartime rise in
-[Ammunition and mobilization](#ammunition-and-mobilization).
+augmentation laws are in [Government, laws and characters](05-politics.md).
+Entrenchment, the three terrain trainings, Missile Defense System and
+Exoskeleton Suits add ammunition to a mobilized battalion's upkeep, on top of
+the wartime rise in [Ammunition and mobilization](#ammunition-and-mobilization).
 
 ## Military bases
 
@@ -223,7 +224,7 @@ and blockade.
 ### Bases under nuclear attack
 
 A base's missile defense covers its own state, on top of the defense your
-technologies give every state. AI strike planners rank target states by the
+technologies give every state. AI strike planners weigh target states by the
 chance a warhead gets through, so defended states draw fewer strikes.
 
 A tactical nuclear strike can target only a state with a military installation:
@@ -241,8 +242,8 @@ goals ([Diplomacy](08-diplomacy.md) covers treaties).
 
 | Article | Unlocked by | Effect on the country that accepts it |
 |---|---|---|
-| Demilitarized Zone | International Relations | One named state other than the capital can't build barracks, naval fortifications or military bases, loses conscription, and has any military base dismantled. Costs authority and prestige. |
-| Forced Disarmament | Intergovernmental Organizations | Military wages −25%, conscription halved, military industry throughput −25%, −10 prestige. Every arms industry, artillery foundry, munition plant, naval building and military base is dismantled. |
+| Demilitarized Zone | International Relations | One named state other than the capital can't build barracks, naval fortifications or military bases, loses conscription, and has any military base dismantled. Uses 25 authority and costs 5 prestige while in force. |
+| Forced Disarmament | Intergovernmental Organizations | Military wages −25%, conscription halved, military industry throughput −25%, −10 prestige. All Arms Industries, Artillery Foundries, Munition Plants, Naval Administrations, Naval Fortifications, Naval Logistics Centers and Military Bases are dismantled; Military Shipyards are not. |
 
 ## War support from mod systems
 
@@ -258,12 +259,16 @@ The mod adds weekly lines to the war support breakdown.
 | Enemy communications disruption | An enemy in this war runs a communications-disruption operation against you | −0.25 |
 | Enemy nuclear arsenal | An enemy has nuclear weapons, you don't, and no nuclear-armed guarantor covers you | −0.25 |
 
+The United Nations, covert operation and nuclear lines come from systems with
+their own game rules, and appear only when those systems are on.
+
 At war, states also add war support each month, scaled by their share of your
 population. The War Propaganda decree is worth 5 a month in its state, and a
 Military Base 0.25 per level on Garrison Duty (half that on Territorial
 Defense), each times that state's share. The Private Military Contractors law
 adds 0.25 across the country. **Fervor** is the religious kind, from the Sacred
-Civics power bloc principle: 5 a month times the Devout interest group's clout.
+Civics power bloc principle at tier II and up: 5 a month times the Devout
+interest group's clout.
 
 Laws and technologies also change how far battles move war support.
 
@@ -282,9 +287,12 @@ Total War and Limited War belong to the Rules of War law group; see
 
 ## Ammunition and mobilization
 
-Peacetime armies buy half the base game's ammunition, and a mobilized battalion
-buys four times its peacetime amount, so ammunition prices climb as soon as you
-mobilize, even for a diplomatic play that never becomes a war.
+Peacetime armies buy half the base game's ammunition. Mobilization raises it
+steeply: Basic Supplies, which every mobilized formation uses, adds +300%
+ammunition instead of the base game's +50%, and Extra and Luxurious Supplies no
+longer add any. A mobilized battalion buys around four times its peacetime
+amount, so ammunition prices climb as soon as you mobilize, even for a
+diplomatic play that never becomes a war.
 [Economy and construction](03-economy.md) explains the market effect and how the
 Strategic Reserve covers the spike.
 
@@ -334,7 +342,7 @@ to end it.
 |---|---|---|
 | Begin Rearmament | Tension 30, not appeasing | +10% army offense and defense, +20% prestige from army power projection, +15% military goods cost. Armed Forces approve. |
 | Pursue Appeasement | Democracy, tension 20, not rearming | +50 influence, +10% relations improvement speed, −5% military goods cost. Intelligentsia approve, Armed Forces disapprove. |
-| Provide Lend-Lease | Major power, tension 40 or a world war under way, not at war | +50 influence, +15% prestige, +15% military goods cost. Industrialists approve. |
+| Provide Lend-Lease | Major power, tension 40, not at war | +50 influence, +15% prestige, +15% military goods cost. Industrialists approve. |
 
 The AI rearms when it is fascist or authoritarian and tension is high; AI
 democracies appease between 30 and 70.
@@ -379,16 +387,17 @@ support a week.
 
 Wartime events include Home Front Rally, Strategic Bombing (once an enemy has
 Bombing Aircraft; air defense costs a spell of Home Front Strain) and Resistance
-Movement (when the enemy holds 5% of your land). From two years, War Weariness
-asks whether to push on or seek terms, and Stalemate on the Front, when your war
-goal has stalled after 24 months and ten large battles, offers +5 war support to
-hold the line or −10 to open armistice talks.
+Movement (after a year of war, when the enemy holds 5% of your land). From two
+years, War Weariness asks whether to push on or seek terms, and Stalemate on the
+Front, when your war goal has stalled after 24 months and ten large battles,
+offers +5 war support to hold the line or −10 to open armistice talks.
 
 Great powers that stayed out receive The Hour of Decision. Entering joins the
 defender's side with Fresh Forces for five years (+20% army offense, +10%
 defense, +20% morale recovery), plus Arsenal of Democracy for a democracy. You
-can instead send material support (Lend-Lease for ten years) or stay neutral.
-AI democracies and communists join readily against a fascist aggressor.
+can instead send material support (Lend-Lease Program for ten years) or stay
+neutral. AI democracies and communists join readily against a fascist
+aggressor.
 
 ### Winning and losing the world war
 

@@ -35,19 +35,19 @@ Each week, construction moves through four steps.
    pool. They spend roughly the pool's weekly income, more when the pool has
    built up and less when it runs low.
 4. Construction Sites turn the purchased good into construction points. They
-   appear on their own in every state where construction is under way, and
-   always in your capital. Nobody builds them.
+   appear on their own in every state where construction is under way, and in
+   your capital when nothing is under way anywhere else. Nobody builds them.
 
 Each purchase is capped at what its queue can use that week: at most one week's
 maximum progress for each level in the queue. The share of points that goes to
 private projects is recalculated every week from the two purchases, and your
 economic-system law no longer sets it.
 
-When all buyers together want more construction than is on sale, the price rises
-and every buyer receives less than it asked for. Both queues then slow down,
-however much money the treasury or the investment pool holds. Every country in
-your market buys from the same supply, and construction is imported and exported
-like other goods.
+When all buyers together want more construction than is on sale, the price
+rises: construction costs the treasury more, and investors' money buys fewer
+points. Construction then slows, however much money the treasury or the
+investment pool holds. Every country in your market buys from the same supply,
+and construction is imported and exported like other goods.
 
 Each level of a Construction Sector produces more with better production
 methods:
@@ -66,15 +66,16 @@ methods:
 
 Most factories, power plants, railways, ports, airports, highways, trade centers
 and skyscrapers use 0.1 construction per level each week as maintenance. Farms,
-mines, plantations and urban centers don't. A few company buildings also use
-construction in their production. This upkeep competes with your queues for the
-same supply, so a growing economy needs a growing construction sector.
+ordinary mines, plantations and urban centers don't. A few company buildings
+also use construction in their production. This upkeep competes with your
+queues for the same supply, so a growing economy needs a growing construction
+sector.
 
 When a building switches production method it gets the Production Method
-Retooling modifier, which raises its construction use by +1,000% for five years
-(260 weeks); the building shows when the modifier expires. A 20-level factory
-that switches methods goes from 2 construction a week to 22, before cost
-scaling.
+Retooling modifier, which raises its construction use by +1,000% right after the
+switch, falling steadily to nothing over five years (260 weeks); the building
+shows when the modifier expires. Just after switching methods, a 20-level
+factory goes from 2 construction a week to 22, before cost scaling.
 
 ### Reading the construction panel
 
@@ -97,7 +98,7 @@ The game rule has four settings, fixed when you start the campaign.
 
 | Setting | Construction good | Maintenance | Retooling | Private share of construction |
 |---|---|---|---|---|
-| Enabled (default) | Traded on the market | 0.1 per level | +1,000% for five years | Follows the two purchases |
+| Enabled (default) | Traded on the market | 0.1 per level | +1,000%, fading over five years | Follows the two purchases |
 | Without Retooling Costs | Traded on the market | 0.1 per level | None | Follows the two purchases |
 | Without Maintenance | Traded on the market; a few company buildings still use it in production | None | None | Follows the two purchases |
 | Disabled | None | None | None | Set by your economic-system law |
@@ -129,15 +130,15 @@ Economy.
 - A high price makes Construction Sectors profitable, and investors then build
   them on their own.
 - Spread production-method switches out. Every switch adds five years of
-  retooling upkeep, and switching a whole industry at once can take the
-  construction your queues were counting on.
+  retooling upkeep, heaviest in the first months, and switching a whole
+  industry at once can take the construction your queues were counting on.
 - Don't downsize the last Construction Site. A new one appears in your capital
   the next week, but construction stops for about two weeks.
 
 AI countries choose their own purchase each week. They spend roughly their net
 income, more when their gold reserves are full and less when they carry debt.
 They cut back when a war or banking stress meets thin reserves, and buy at least
-10 points a week while anything is queued.
+10 points a week while their government queue has anything in it.
 
 ## Construction costs in rich countries
 
@@ -165,8 +166,8 @@ Once a year, the game also checks whether investors have more than 500 levels
 waiting in the private queue while the investment pool is still growing. If so,
 you get the Excess Private Construction modifier. It raises Max Weekly
 Construction Progress, so each project can absorb more construction a week and
-the pool can spend its money, and it lowers State Construction
-Efficiency by a small amount that grows with the modifier. The modifier changes
+the pool can spend its money, and it lowers State Construction Efficiency by a
+small amount that grows with the modifier. The modifier changes
 gradually, by at most about a fifth a year. If it grows very large while the
 investment pool holds more than your yearly GDP, Overinvestment is added for a
 year: pops stop paying into the investment pool.
@@ -175,9 +176,13 @@ year: pops stop paying into the investment pool.
 
 In the base game, pops expect a standard of living set by their stratum,
 literacy and laws, and pops below that expectation turn radical over time. The
-mod's Adaptive SoL Expectations make your country's average expectation follow
-its actual average SoL instead, with a delay. Each month expectations close part
-of the gap: about half of it in ten years and three-quarters in twenty.
+mod drops the literacy part and adds Adaptive SoL Expectations: an extra
+expectation that follows your country's actual average SoL, with a delay. It
+aims at a level 10 SoL below your average SoL, moved up or down by some
+technologies and laws, and each month it closes part of the gap:
+about half of it in ten years and three-quarters in twenty. It only ever adds
+to the base-game expectation. While your SoL is too low for that level to reach
+the base-game expectation, expectations stay at the base-game level.
 
 So the direction of your economy matters as much as its level. After a sudden
 rise in SoL, expectations lag behind for years, pops live better than they
@@ -186,7 +191,7 @@ years and pops sit below them, which feeds radicals long after the shock itself.
 Slow, steady growth is the calmest path. You see the adjustment as three country
 modifiers: Lower, Middle and Upper Class Expectations Shift.
 
-Some things move expectations permanently, on top of the adaptation:
+Technologies, laws and literacy move expectations further:
 
 - The society technologies Egalitarianism, Labor Movement, Socialism, Political
   Agitation and Mass Propaganda each raise the level expectations settle at by
@@ -197,9 +202,9 @@ Some things move expectations permanently, on top of the adaptation:
   Autocracy, Landed Voting and Wealth Voting raise the upper class, Universal
   Suffrage the lower class. Regulatory Bodies and Workers' Protections raise the
   lower class.
-- Poor Laws, Wage Subsidies and Old Age Pension set a floor that expectations
-  can't fall below, however long hard times last. Universal Basic Income and the
-  Post-Scarcity Economy raise that floor much higher.
+- Poor Laws, Wage Subsidies and Old Age Pension keep expectations at least 1, 2
+  or 3 SoL above the base-game level, however long hard times last. Universal
+  Basic Income raises that floor to 10 SoL and the Post-Scarcity Economy to 15.
 - Literate populations compare themselves with the world. When the world's
   average SoL is above yours, their expectations rise; when it is below, they
   fall.
@@ -212,14 +217,16 @@ Three new needs appear as pops grow rich:
 | Need | Starts at wealth | Goods that meet it |
 |---|---|---|
 | Convenience | 20 | Services, Consumer Appliances, Digital Access, Software |
-| Art | 25 | Fine Art, some Services |
+| Art | 25 | Art and Entertainment, some Services |
 | Tourism | 25 | Tourism, some Personal Transportation |
 
 These needs, and Services, grow steeply with wealth: at wealth 60, Services and
 Convenience make up more than half of what a pop buys. Tourism as an industry is
 covered in [States and population](07-states.md), and the new goods in
-[The extended timeline](02-timeline.md). Two base-game goods are renamed:
-Transportation is Personal Transportation, and Fertilizer is Chemicals.
+[The extended timeline](02-timeline.md), which also lists the base-game goods
+the mod renames. In the table above, Personal Transportation is the base game's
+Transportation and Art and Entertainment its Fine Art. Chemicals, in the
+Strategic Reserve below, is its Fertilizer.
 
 ## Bulk Transportation and freight
 
@@ -230,19 +237,20 @@ It is produced by transport infrastructure:
 
 - Ports, as in the base game, and their later methods: Container Ports, Global
   Ports and Magnetic Drive Ports.
-- Railways, on every train method and on their Centralized Traffic Control,
+- Railways, on their train methods and on their Centralized Traffic Control,
   Containerized Cargo and automated loading methods.
 - Highways, on every method.
 - Airports, including their Spaceport method.
-- Trading-house, logistics, dry-dock and shipping-terminal company buildings.
+- Company buildings such as trading houses, logistics hubs, docks, shipyards
+  and canal companies.
 
 It is consumed across the industrial economy:
 
 - Trade Centers, as in the base game.
 - Construction Sectors from Iron-Frame Buildings onward.
-- The rail-transport and tanker-car methods of logging camps, mines and oil
-  rigs, and the refrigerated rail car and flash-freezing methods of fishing
-  wharves, whaling stations and ranches.
+- The rail-transport and tanker-car methods of logging camps, mines,
+  plantations and oil rigs, and the refrigerated rail car and flash-freezing
+  methods of fishing wharves, whaling stations and ranches.
 - Later mining methods, such as dragline excavators and geophysical surveys, and
   the deeper oil-well methods.
 - Many late-game factory and retail methods, from advanced assembly lines and
@@ -281,9 +289,9 @@ technology lowers.
 
 | Good | Available from | Decay per year at first | After all technologies |
 |---|---|---|---|
-| Grain | Start | 25% | 0% |
-| Small Arms | Start | 1.5% | 0.7% |
-| Artillery | Start | 1% | 0.4% |
+| Grain | Always | 25% | 0% |
+| Small Arms | Always | 1.5% | 0.7% |
+| Artillery | Always | 1% | 0.4% |
 | Ammunition | Percussion Cap | 2% | 0.5% |
 | Oil | Fractional Distillation | 0.5% | 0.05% |
 | Chemicals | Intensive Agriculture | 4% | 0.1% |
@@ -370,9 +378,9 @@ it again before you need it.
 If a foreign power takes the hub's state, the hub is destroyed, the journal
 entry ends and the whole stockpile is lost. You can build a new hub in your
 capital, and it starts empty. Since the hub always stands in your capital,
-protecting the reserve means holding your capital. A revolution or secession
-that takes the hub's state keeps the building for that side, which moves it to
-its own capital, and you lose your stock as if the hub had been captured.
+protecting the reserve means keeping your capital state. A revolution or
+secession that takes the hub's state also costs you the whole stockpile. The
+building is meant to pass to the rebels, who move it to their own capital.
 
 ### How the AI uses the reserve
 
@@ -381,8 +389,8 @@ silos once any good passes 75% of capacity. An AI reserve runs every good on
 Stabilize Prices with the Conservative preset: it buys below −20% and releases
 above +30%, and while prices stay low it fills an empty reserve in about a year.
 It follows the same rules, limits and costs as yours. It doesn't change policy
-for a war, but a war pushes ammunition past +30%, so AI reserves release into
-the spike.
+for a war, but a war that pushes ammunition past +30% makes AI reserves release
+into the spike.
 
 ## Wartime demand for munitions
 
@@ -391,15 +399,16 @@ mobilizes, Basic Supplies, which no army can switch off, raises its ammunition
 use by +300%. A mobilized battalion therefore burns four times its peacetime
 ammunition, twice the base game's peacetime figure. The mod removes the extra
 ammunition that Extra Supplies and Luxurious Supplies add in the base game, so
-Basic Supplies is the only wartime lever. A few of the mod's own mobilization
-options add more on top; see [Military and war](12-military.md).
+the supplies you choose no longer change how much ammunition an army uses. The
+Basic Supplies tooltip shows the ammunition figure. A few of the mod's own
+mobilization options add more on top; see [Military and war](12-military.md).
 
 The demand follows mobilization rather than war: an army mobilized for a
 diplomatic play spikes it even if no war follows, and the demand falls away as
 the army demobilizes. Where armies buy most of the ammunition, four times the
-demand pushes its price to the maximum. That is the case for building munitions
-capacity, stocking ammunition in the Strategic Reserve while it is cheap, or
-both, before you go to war.
+demand can push its price to the maximum. Build munitions capacity, stock
+ammunition in the Strategic Reserve while it is cheap, or both, before you go to
+war.
 
 ## New mineral deposits
 
