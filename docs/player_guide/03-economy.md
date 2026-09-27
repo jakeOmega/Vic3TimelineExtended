@@ -25,18 +25,18 @@ Construction mod.
 Each week, construction moves through four steps.
 
 1. Construction Sectors produce the good, which your market lists as
-   Construction Services (base price £1,000). In a market game the sector is
-   ordinary heavy industry: investors build it when it pays, and your government
-   can build it too. Barracks under the Engineering and Logistics power bloc
-   principle add a little.
+Construction Services (base price £1,000). In a market game the sector is
+ordinary heavy industry: investors build it when it pays, and your government
+can build it too. Barracks under the Engineering and Logistics power bloc
+principle add a little.
 2. The government buys the number of points you set in the construction panel,
-   paid from the treasury.
+paid from the treasury.
 3. Investors buy for private projects on their own, paid from the investment
-   pool. They spend roughly the pool's weekly income, more when the pool has
-   built up and less when it runs low.
+pool. They spend roughly the pool's weekly income, more when the pool has built
+up and less when it runs low.
 4. Construction Sites turn the purchased good into construction points. They
-   appear on their own in every state where construction is under way, and in
-   your capital when nothing is under way anywhere else. Nobody builds them.
+appear on their own in every state where construction is under way, and in your
+capital when nothing is under way anywhere else. Nobody builds them.
 
 Each purchase is capped at what its queue can use that week: at most one week's
 maximum progress for each level in the queue. The share of points that goes to
@@ -67,9 +67,8 @@ methods:
 Most factories, power plants, railways, ports, airports, highways, trade centers
 and skyscrapers use 0.1 construction per level each week as maintenance. Farms,
 ordinary mines, plantations and urban centers don't. A few company buildings
-also use construction in their production. This upkeep competes with your
-queues for the same supply, so a growing economy needs a growing construction
-sector.
+also use construction in their production. This upkeep competes with your queues
+for the same supply, so a growing economy needs a growing construction sector.
 
 When a building switches production method it gets the Production Method
 Retooling modifier, which raises its construction use by +1,000% right after the
@@ -120,20 +119,20 @@ Economy.
 ### Running the construction market
 
 - Your government purchase starts at 0 in a new game. Set it in your first week,
-  or the government queue builds nothing.
+or the government queue builds nothing.
 - A high purchase setting is harmless, because only what the queue can use is
-  bought. To stop government construction while private building carries on, set
-  it to 0; the sector keeps selling to investors.
+bought. To stop government construction while private building carries on, set
+it to 0; the sector keeps selling to investors.
 - Watch the market line. A standing shortage means you need more Construction
-  Sector levels or a better production method. Cheap wood, iron and steel make
-  construction cheaper, because the sector buys them.
+Sector levels or a better production method. Cheap wood, iron and steel make
+construction cheaper, because the sector buys them.
 - A high price makes Construction Sectors profitable, and investors then build
-  them on their own.
+them on their own.
 - Spread production-method switches out. Every switch adds five years of
-  retooling upkeep, heaviest in the first months, and switching a whole
-  industry at once can take the construction your queues were counting on.
+retooling upkeep, heaviest in the first months, and switching a whole industry
+at once can take the construction your queues were counting on.
 - Don't downsize the last Construction Site. A new one appears in your capital
-  the next week, but construction stops for about two weeks.
+the next week, but construction stops for about two weeks.
 
 AI countries choose their own purchase each week. They spend roughly their net
 income, more when their gold reserves are full and less when they carry debt.
@@ -155,7 +154,8 @@ applies to every use of construction: the points your queues spend and the
 maintenance your buildings pay. It combines by multiplication with other
 construction-cost modifiers, so another modifier that cuts construction costs by
 20% still cuts 20% in a rich country. With Free Market Construction disabled,
-the same scaling raises the cost of the materials your construction uses instead.
+the same scaling raises the cost of the materials your construction uses
+instead.
 
 This is a catch-up mechanic: a rich country needs more construction for each
 building and each level of upkeep, while a poor country builds cheaply.
@@ -179,10 +179,10 @@ literacy and laws, and pops below that expectation turn radical over time. The
 mod drops the literacy part and adds Adaptive SoL Expectations: an extra
 expectation that follows your country's actual average SoL, with a delay. It
 aims at a level 10 SoL below your average SoL, moved up or down by some
-technologies and laws, and each month it closes part of the gap:
-about half of it in ten years and three-quarters in twenty. It only ever adds
-to the base-game expectation. While your SoL is too low for that level to reach
-the base-game expectation, expectations stay at the base-game level.
+technologies and laws, and each month it closes part of the gap: about half of
+it in ten years and three-quarters in twenty. It only ever adds to the base-game
+expectation. While your SoL is too low for that level to reach the base-game
+expectation, expectations stay at the base-game level.
 
 So the direction of your economy matters as much as its level. After a sudden
 rise in SoL, expectations lag behind for years, pops live better than they
@@ -194,20 +194,20 @@ modifiers: Lower, Middle and Upper Class Expectations Shift.
 Technologies, laws and literacy move expectations further:
 
 - The society technologies Egalitarianism, Labor Movement, Socialism, Political
-  Agitation and Mass Propaganda each raise the level expectations settle at by
-  0.5 SoL. They replace the literacy-based increase those technologies give in
-  the base game. Several of the mod's later technologies and laws raise or lower
-  it too, and Industry Banned lowers it by 1.
+Agitation and Mass Propaganda each raise the level expectations settle at by 0.5
+SoL. They replace the literacy-based increase those technologies give in the
+base game. Several of the mod's later technologies and laws raise or lower it
+too, and Industry Banned lowers it by 1.
 - Voting laws raise the expectations of the classes that hold power under them:
-  Autocracy, Landed Voting and Wealth Voting raise the upper class, Universal
-  Suffrage the lower class. Regulatory Bodies and Workers' Protections raise the
-  lower class.
+Autocracy, Landed Voting and Wealth Voting raise the upper class, Universal
+Suffrage the lower class. Regulatory Bodies and Workers' Protections raise the
+lower class.
 - Poor Laws, Wage Subsidies and Old Age Pension keep expectations at least 1, 2
-  or 3 SoL above the base-game level, however long hard times last. Universal
-  Basic Income raises that floor to 10 SoL and the Post-Scarcity Economy to 15.
+or 3 SoL above the base-game level, however long hard times last. Universal
+Basic Income raises that floor to 10 SoL and the Post-Scarcity Economy to 15.
 - Literate populations compare themselves with the world. When the world's
-  average SoL is above yours, their expectations rise; when it is below, they
-  fall.
+average SoL is above yours, their expectations rise; when it is below, they
+fall.
 
 ## Pop consumption at high wealth
 
@@ -236,25 +236,25 @@ stands for freight of every kind, by rail, road, sea and air.
 It is produced by transport infrastructure:
 
 - Ports, as in the base game, and their later methods: Container Ports, Global
-  Ports and Magnetic Drive Ports.
+Ports and Magnetic Drive Ports.
 - Railways, on their train methods and on their Centralized Traffic Control,
-  Containerized Cargo and automated loading methods.
+Containerized Cargo and automated loading methods.
 - Highways, on every method.
 - Airports, including their Spaceport method.
 - Company buildings such as trading houses, logistics hubs, docks, shipyards
-  and canal companies.
+and canal companies.
 
 It is consumed across the industrial economy:
 
 - Trade Centers, as in the base game.
 - Construction Sectors from Iron-Frame Buildings onward.
 - The rail-transport and tanker-car methods of logging camps, mines,
-  plantations and oil rigs, and the refrigerated rail car and flash-freezing
-  methods of fishing wharves, whaling stations and ranches.
+plantations and oil rigs, and the refrigerated rail car and flash-freezing
+methods of fishing wharves, whaling stations and ranches.
 - Later mining methods, such as dragline excavators and geophysical surveys, and
-  the deeper oil-well methods.
+the deeper oil-well methods.
 - Many late-game factory and retail methods, from advanced assembly lines and
-  AI-managed production to e-commerce, department stores and shopping malls.
+AI-managed production to e-commerce, department stores and shopping malls.
 
 An agrarian economy barely touches it. An industrial one needs railways, ports
 and highways to keep up, and a Bulk Transportation shortage raises costs across
@@ -402,8 +402,8 @@ times its peacetime ammunition, twice the base game's peacetime figure. The mod
 removes the extra ammunition that Extra Supplies and Luxurious Supplies add in
 the base game, so the supplies you choose no longer change how much ammunition
 an army uses. The Basic Supplies tooltip shows the ammunition figure. A few of
-the mod's own mobilization options add more on top; see
-[Mobilization options](12-military.md#mobilization-options).
+the mod's own mobilization options add more on top; see [Mobilization
+options](12-military.md#mobilization-options).
 
 The demand follows mobilization rather than war: an army mobilized for a
 diplomatic play spikes it even if no war follows, and the demand falls away as

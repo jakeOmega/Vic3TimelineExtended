@@ -4,16 +4,16 @@ The mod adds 133 laws, most of them in 34 new law groups, with the institutions,
 amendments, government types, ideologies, parties and movements that go with
 them. The new law groups exist from 1836: every country starts with a law in
 each, and most of the others unlock with technology. The chapter also covers
-three systems for rulers and states: Heir Education and aptitude traits (the Heir
-Education and Universal Aptitude Traits rules, both disabled by default), the
-custom religion creator (the Custom Religion Allowed rule, not allowed by
+three systems for rulers and states: Heir Education and aptitude traits (the
+Heir Education and Universal Aptitude Traits rules, both disabled by default),
+the custom religion creator (the Custom Religion Allowed rule, not allowed by
 default) and State Collapse, which has no rule.
 
 ## The mod's new laws
 
-The new law groups sit beside the base game's in the laws panel. Sixteen of
-them are ministries, covered in [Ministries](#ministries). The other eighteen
-are grouped here by theme, and ten further laws join base-game law groups.
+The new law groups sit beside the base game's in the laws panel. Sixteen of them
+are ministries, covered in [Ministries](#ministries). The other eighteen are
+grouped here by theme, and ten further laws join base-game law groups.
 
 ### Rights and society laws
 
@@ -26,12 +26,12 @@ are grouped here by theme, and ten further laws join base-game law groups.
 | Language Policy | Local Vernacular, Civic Monolingualism, Multilingual Federalism, Linguistic Purity, State-Led Language Reform, Ubiquitous Translation | Assimilation, separatism and acceptance by language. |
 | Human Augmentation | No Augmentation, Human Purity, Medical Augmentation Only, Unrestricted Augmentation, Regulated Augmentation Market, Mandatory Augmentation | Cybernetic and genetic implants, from Brain-Computer Interfaces on. |
 
-Minority Rights pairs with Citizenship: most rungs need a compatible
-Citizenship law. Violent Hostility needs Ancestral, Cultural or Racialized
-Citizenship, and Affirmative Action needs Assimilatory or Universal Citizenship
-and the Civil Rights Movement technology. Violent Hostility turns on violence
-against minorities, and the harsh end lets primary-culture homelands form more
-easily but wrecks colonial stability. Affirmative Action raises minimum local
+Minority Rights pairs with Citizenship: most rungs need a compatible Citizenship
+law. Violent Hostility needs Ancestral, Cultural or Racialized Citizenship, and
+Affirmative Action needs Assimilatory or Universal Citizenship and the Civil
+Rights Movement technology. Violent Hostility turns on violence against
+minorities, and the harsh end lets primary-culture homelands form more easily
+but wrecks colonial stability. Affirmative Action raises minimum local
 acceptance by 20, pulls migrants and steadies colonies, but institutions cost
 20% more bureaucracy.
 
@@ -39,8 +39,8 @@ State-Led Language Reform starts a chain of choices. On enactment an event asks
 whether to revive a classical language, build a constructed one or simplify the
 existing tongue. Revival offers the classical language that fits your primary
 culture or state religion (Latin for Romance speakers, Sanskrit for Indo-Aryan
-ones and so on, 18 in all), each with a small bonus of its own. Later events
-ask whether an academy or an advisory panel governs the standard, and whether
+ones and so on, 18 in all), each with a small bonus of its own. Later events ask
+whether an academy or an advisory panel governs the standard, and whether
 minority languages are protected. Each answer becomes an amendment on the law;
 repeal one and its event can fire again.
 
@@ -48,8 +48,8 @@ Three Human Augmentation laws need another law as well: Medical Augmentation
 Only needs Charity Hospitals, Private Health Insurance or Public Health
 Insurance; Regulated Augmentation Market needs a Ministry of Consumer
 Protection; Mandatory Augmentation needs a Ministry of War. The group's laws
-also drive a movement journal entry, described in
-[The augmentation debate](06-social-movements.md#the-augmentation-debate).
+also drive a movement journal entry, described in [The augmentation
+debate](06-social-movements.md#the-augmentation-debate).
 
 ### Laws on state power and information
 
@@ -74,8 +74,9 @@ loss from casualties by three quarters, at a cost of 20 diplomatic reputation
 and a stronger anti-war movement. The humane end, up to Limited War (from
 Intercontinental Ballistic Missiles), cuts devastation by up to 75%, slows
 diplomatic-play escalation, adds reputation and lowers your Ministry of War's
-cap. Humanitarian Regulations and Limited War also restrict nuclear strikes;
-see [Strategic and tactical strike actions](13-nuclear.md#strategic-and-tactical-strike-actions).
+cap. Humanitarian Regulations and Limited War also restrict nuclear strikes; see
+[Strategic and tactical strike
+actions](13-nuclear.md#strategic-and-tactical-strike-actions).
 
 ### Economic law groups
 
@@ -87,8 +88,8 @@ see [Strategic and tactical strike actions](13-nuclear.md#strategic-and-tactical
 | Monetary Policy | Commodity Money, Gold Standard, Fiat Money, Digital Currency, Decentralized Cryptocurrency | Currency regime. |
 | Financial Regulation | Unregulated Banking, Free & Mutual Banking, Universal Banking (Light Prudence), Prudential / Narrow Banking, Directed Credit & Development Banks, State-Owned Banking, Central Bank Independence | How banks are supervised. |
 
-Monetary Policy and Financial Regulation are explained in
-[Banking and monetary policy](04-banking.md).
+Monetary Policy and Financial Regulation are explained in [Banking and monetary
+policy](04-banking.md).
 
 ### New laws in base-game law groups
 
@@ -105,31 +106,31 @@ Monetary Policy and Financial Regulation are explained in
 | Littoral Defense | Navy Model | Naval Convoy Defense | A coastal navy: ships operate only half as far from port, torpedo craft build faster and capital ships slower, navy goods cost 20% less, and Naval Fortifications get two more levels and resist invasion better. Coastal countries only. |
 | Auxiliary Fleet | Navy Model | Predictive Logistics | A navy that carries the army: ships reach 50% farther from port, naval invasions go better, ships carry 30% more marines and supply ships 30% more supply, supply ships build faster and capital ships slower. Coastal countries only. |
 
-Algorithmic Governance dissolves your parties, replaces Elected Bureaucrats
-with Appointed Bureaucrats and makes you an Algorithmic Directorate. Laws pass
-50% faster, research runs 10% faster, decrees cost a quarter less and
-institutions change size twice as fast. But radicals and loyalists from changes
-in living standards double, so a falling standard of living turns on you fast.
+Algorithmic Governance dissolves your parties, replaces Elected Bureaucrats with
+Appointed Bureaucrats and makes you an Algorithmic Directorate. Laws pass 50%
+faster, research runs 10% faster, decrees cost a quarter less and institutions
+change size twice as fast. But radicals and loyalists from changes in living
+standards double, so a falling standard of living turns on you fast.
 
 ### Law enactment events
 
 The mod's laws have their own events at the enactment checkpoints, such as a
 banking scare that helps financial reform or a new ministry struggling to find
-staff. Several offer an amendment as the price of passage (see
-[Amendments to the mod's laws](#amendments-to-the-mods-laws)).
+staff. Several offer an amendment as the price of passage (see [Amendments to
+the mod's laws](#amendments-to-the-mods-laws)).
 
 ### Forceful Legislation
 
 When you start enacting any law, the **Forceful Legislation** event offers to
 bypass the legislature, if your authority income covers the cheapest option.
 What it allows depends on your **Legislative Override Capacity**, summed from
-your laws, your institutions and a few technologies and power bloc
-principles. Among the laws, Autocracy and Single-Party State give 3,
-Algorithmic Governance 2 and Unitary State 1; Universal Suffrage, Anarchy and
-Traditional Vassalage take away 3, and Guaranteed Liberties and Devolved
-Administration 2. The ministries of Thought Control, Propaganda and
-Intelligence and Security add to it. Below 0, the event never appears, and each
-stronger option also needs authority income above its own cost.
+your laws, your institutions and a few technologies and power bloc principles.
+Among the laws, Autocracy and Single-Party State give 3, Algorithmic Governance
+2 and Unitary State 1; Universal Suffrage, Anarchy and Traditional Vassalage
+take away 3, and Guaranteed Liberties and Devolved Administration 2. The
+ministries of Thought Control, Propaganda and Intelligence and Security add to
+it. Below 0, the event never appears, and each stronger option also needs
+authority income above its own cost.
 
 <!-- screenshot: the Forceful Legislation event with all three bypass options available -->
 
@@ -171,10 +172,10 @@ included, from 5 levels to 9.
 | Ministry of Religion | Mass Media | State Religion or Freedom of Conscience | +20% conversion, clergy political strength, acceptance of the state religion |
 | Ministry of International Aid | Intergovernmental Organizations | | Strengthens the Ministry of Foreign Affairs, which also costs more |
 
-The Environmental Movement radicalizes while your Ministry of the Environment
-is missing or funded below its cap, and the Anti-War Movement does the same over
-the foreign affairs, international aid and refugee ministries (see
-[New political movements](#new-political-movements)).
+The Environmental Movement radicalizes while your Ministry of the Environment is
+missing or funded below its cap, and the Anti-War Movement does the same over
+the foreign affairs, international aid and refugee ministries (see [New
+political movements](#new-political-movements)).
 
 The mod also adds one institution that isn't a ministry: the base game's
 Migration Controls law now sets up a Migration Controls institution in place of
@@ -227,10 +228,10 @@ pollution and emissions cancel one level of the new ministry's reductions.
 
 Collective Governance is a governance principle in which nobody holds supreme
 executive power: a body of equals governs, and its chair is first among equals.
-It unlocks with Political Agitation and needs one of these Distribution of
-Power laws: Landed Voting, Wealth Voting, Census Suffrage, Universal Suffrage,
-Single-Party State, Technocracy, Oligarchy, Organic Regulation or Anarchy.
-Under it you have 15% less authority and laws pass 10% more slowly, but broad
+It unlocks with Political Agitation and needs one of these Distribution of Power
+laws: Landed Voting, Wealth Voting, Census Suffrage, Universal Suffrage,
+Single-Party State, Technocracy, Oligarchy, Organic Regulation or Anarchy. Under
+it you have 15% less authority and laws pass 10% more slowly, but broad
 coalitions earn more legitimacy and ideological incoherence costs less. The
 chair's interest group gets no head-of-state legitimacy bonus.
 
@@ -246,8 +247,8 @@ repeal it, and the law's tooltip names it before you enact.
 | Anarchy | Free Federation | Laws pass only with a political movement behind them |
 | Oligarchy or Organic Regulation | Patrician Council | Aristocrats and capitalists gain 15% political strength |
 
-Each amendment comes with a government type of the same name, listed in
-[New government types](#new-government-types).
+Each amendment comes with a government type of the same name, listed in [New
+government types](#new-government-types).
 
 ## New government types
 
@@ -307,45 +308,44 @@ such as Die Grünen or Movimento 5 Stelle.
 | Anti-War Movement | Anti-War Movement technology | Pacifist policy; its leaders may be Anti-Colonialist | Grows with casualties and while at war; never starts a revolution or secession, and never disbands |
 | Transhumanist Movement | Brain-Computer Interfaces researched, without Unrestricted Augmentation | Unrestricted Augmentation | Radicalized by Human Purity and bans on genetic modification; never disbands |
 
-The Anti-War and Transhumanist Movements bring events of their own. The
-Anti-War Movement's come mostly in wartime: Draft Resistance, Veterans Speak
-Against the War, Peace Rally Fills the Capital, and War Profiteering Exposed,
-which needs a military industry building of level 3 or more. The Transhumanist
-Movement's arrive with augmentation technology: Neural Implant Human Trials, The
+The Anti-War and Transhumanist Movements bring events of their own. The Anti-War
+Movement's come mostly in wartime: Draft Resistance, Veterans Speak Against the
+War, Peace Rally Fills the Capital, and War Profiteering Exposed, which needs a
+military industry building of level 3 or more. The Transhumanist Movement's
+arrive with augmentation technology: Neural Implant Human Trials, The
 Augmentation Divide, The Biohacker Underground and The Digital Consciousness
 Debate.
 
 The social-movement journal entries (civil rights, digital rights and others)
-are separate systems, described in
-[Movement journal entries at a glance](06-social-movements.md#movement-journal-entries-at-a-glance).
+are separate systems, described in [Movement journal entries at a
+glance](06-social-movements.md#movement-journal-entries-at-a-glance).
 
 ## Modern election events
 
-During an election campaign, countries with elections draw from 35 extra
-events, from radio broadcasts and war heroes through televised debates to
-deepfakes, microtargeting and space-colony voters. Each needs its own
-technology, from Mass Propaganda for the earliest through Television
-Broadcasting and Social Media to Generative AI and Space Colonization for the
-last. Single-party states never get them. They share the base game's pacing
-(one election event every three months at most), and each fires at most once
-every 20 years. Most options shift momentum between the governing
-and opposition parties or trade loyalists, radicals or a temporary modifier.
-Your laws, such as an unregulated internet or strong privacy rights, decide
-which option the AI favors.
+During an election campaign, countries with elections draw from 35 extra events,
+from radio broadcasts and war heroes through televised debates to deepfakes,
+microtargeting and space-colony voters. Each needs its own technology, from Mass
+Propaganda for the earliest through Television Broadcasting and Social Media to
+Generative AI and Space Colonization for the last. Single-party states never get
+them. They share the base game's pacing (one election event every three months
+at most), and each fires at most once every 20 years. Most options shift
+momentum between the governing and opposition parties or trade loyalists,
+radicals or a temporary modifier. Your laws, such as an unregulated internet or
+strong privacy rights, decide which option the AI favors.
 
 ## Heir Education
 
-With the Heir Education rule on, a monarchy with an heir gets the Heir
-Education journal entry. Each month every focus you set has a 3% chance of
-advancing its track, and when the heir comes of age the tracks become traits,
-an ideology and an interest group.
+With the Heir Education rule on, a monarchy with an heir gets the Heir Education
+journal entry. Each month every focus you set has a 3% chance of advancing its
+track, and when the heir comes of age the tracks become traits, an ideology and
+an interest group.
 
 <!-- screenshot: the Heir Education journal entry with one trait focus, one ideology focus and one mentor focus active -->
 
 ### Heir Education focuses
 
-You can run one focus from each track at once, and each running focus costs
-100 authority.
+You can run one focus from each track at once, and each running focus costs 100
+authority.
 
 | Track | Choices | Who approves and who objects |
 |---|---|---|
@@ -399,12 +399,12 @@ The strongest mentor faction picks the heir's interest group.
 
 ### Aptitude traits
 
-Aptitude traits rate a character's administration, diplomacy and command on
-five tiers each. A good administrator as ruler raises bureaucracy, tax capacity
-and legitimacy, a good diplomat prestige, influence and reputation, a good
-commander army morale, experience and Armed Forces support; a poor one does the
-reverse. Every tier except the middle one also changes the character's
-popularity. The middle tier has no effect.
+Aptitude traits rate a character's administration, diplomacy and command on five
+tiers each. A good administrator as ruler raises bureaucracy, tax capacity and
+legitimacy, a good diplomat prestige, influence and reputation, a good commander
+army morale, experience and Armed Forces support; a poor one does the reverse.
+Every tier except the middle one also changes the character's popularity. The
+middle tier has no effect.
 
 | Tier | Administration | Diplomacy | Command |
 |---|---|---|---|
@@ -434,11 +434,11 @@ Back buttons.
 | 3 | A name, from 20 such as Neohellenism or Church of the Sacred Machine. |
 | 4 | The religion's heritage: Christian, Muslim, Judaism, Eastern, Animist, Buddhist or Custom. |
 
-Create New Religion founds it at once. It becomes your state religion,
-your ruler and heir convert, and a fifth of your capital's population and a
-tenth of every other incorporated state convert with them. The Devout take the
-religion's name, your doctrines as their ideologies and your chosen traits, and
-every current Devout character is exiled.
+Create New Religion founds it at once. It becomes your state religion, your
+ruler and heir convert, and a fifth of your capital's population and a tenth of
+every other incorporated state convert with them. The Devout take the religion's
+name, your doctrines as their ideologies and your chosen traits, and every
+current Devout character is exiled.
 
 ## State Collapse
 
@@ -447,15 +447,15 @@ falls below 5 and starts counting 52 weeks below 4. If the count runs out, the
 state fails:
 
 - Every state loses its barracks, naval administrations, naval fortifications,
-  naval logistics centers, military bases, ports, railways, universities and
-  government administrations.
+naval logistics centers, military bases, ports, railways, universities and
+government administrations.
 - Every institution and ministry is abolished.
 - You get Failed State for ten years, fading as it goes: no resistance to
-  foreign leverage, the governing interest groups lose half their attraction,
-  and subsistence farms produce twice as much.
+foreign leverage, the governing interest groups lose half their attraction, and
+subsistence farms produce twice as much.
 
-The count then starts again. Raising the average standard of living to 4 or
-more stops it, and it restarts from zero if living standards fall again.
+The count then starts again. Raising the average standard of living to 4 or more
+stops it, and it restarts from zero if living standards fall again.
 Decentralized countries are exempt.
 
 ## New decrees

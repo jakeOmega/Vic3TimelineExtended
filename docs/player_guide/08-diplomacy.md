@@ -1,12 +1,12 @@
 # Diplomacy
 
 The mod adds 34 treaty articles, extra escalation in diplomatic plays, events
-between rival powers, a reunification system for divided nations, two more
-tiers of power bloc principles, and ten late-game formable countries. None of
-this has a game rule or journal entry of its own: it works through the base
-game's treaty screen, diplomatic plays, power bloc panel and formation panel,
-though some pieces depend on other systems' rules. Much of it opens up in era
-6, with Decolonization and Intergovernmental Organizations.
+between rival powers, a reunification system for divided nations, two more tiers
+of power bloc principles, and ten late-game formable countries. None of this has
+a game rule or journal entry of its own: it works through the base game's treaty
+screen, diplomatic plays, power bloc panel and formation panel, though some
+pieces depend on other systems' rules. Much of it opens up in era 6, with
+Decolonization and Intergovernmental Organizations.
 
 ## Treaty articles
 
@@ -26,11 +26,11 @@ Demilitarized Zone take a state. When you add one to a draft, the article shows
 a button with its current choice; click it to pick from a list.
 
 The state or company always belongs to the conceding country. Free Port
-Concession needs a coastal state, and a demilitarized zone can't be the
-capital. A country can concede each of the four state articles to the same
-partner only once at a time, across all their treaties, so a second
-demilitarized zone against the same country waits until the first ends. The
-company articles can be repeated for different companies.
+Concession needs a coastal state, and a demilitarized zone can't be the capital.
+A country can concede each of the four state articles to the same partner only
+once at a time, across all their treaties, so a second demilitarized zone
+against the same country waits until the first ends. The company articles can be
+repeated for different companies.
 
 <!-- screenshot: a treaty draft with Seize Company added, the company picker list open -->
 
@@ -96,10 +96,10 @@ The remaining articles belong to systems with chapters of their own.
 
 Some articles have events that can fire in any year the treaty stands.
 Intelligence Sharing Pact, Minority Protection and Cultural Exchange Program
-each have a good and a bad one, such as a foiled plot or a nationalist
-backlash. Joint Military Exercises, Education Aid, Security Aid, Nuclear
-Disarmament and Nuclear Program Freeze have one each, and Population Transfer
-has one that can fire while its disruption lasts.
+each have a good and a bad one, such as a foiled plot or a nationalist backlash.
+Joint Military Exercises, Education Aid, Security Aid, Nuclear Disarmament and
+Nuclear Program Freeze have one each, and Population Transfer has one that can
+fire while its disruption lasts.
 
 ### Dynamic treaty names
 
@@ -133,15 +133,14 @@ population that moved, never falling below a quarter.
 The draft blocks the article when the conceding country has Universal
 Citizenship. It also needs the receiving country to hold a community of one of
 the conceding country's primary cultures with acceptance below 60. That check
-looks at a community in the receiving country, not at the people who would
-move.
+looks at a community in the receiving country, not at the people who would move.
 
 ## Diplomatic play escalation
 
 In the base game a play escalates by one point a day. The mod adds extra
 escalation about once a week from the countries in the play, each for its own
-role as initiator, target or committed participant. No country adds more than
-10 a week, each country's weekly figure is rounded to a whole point, and nothing
+role as initiator, target or committed participant. No country adds more than 10
+a week, each country's weekly figure is rounded to a whole point, and nothing
 slows a play below the base rate: laws and seats that slow plays only cancel
 extra escalation.
 
@@ -180,19 +179,20 @@ ten a month.
 | Nuclear Brinkmanship | You and an opponent in a play both hold nuclear weapons, outside a nuclear crisis | Stand firm, open back channels, or mobilize. |
 
 With Covert Warfare on, its operations replace the proxy war, propaganda and
-espionage events (see [The covert operations](10-influence.md#the-covert-operations)).
+espionage events (see [The covert
+operations](10-influence.md#the-covert-operations)).
 
 ### Rival-choice event chains
 
 When an event says a rival has acted against you, the rival chose to. Plans on
 the Table, The War of Words and An Agent in Place go to the rival first, and you
-hear only if it acts: "The Gathering Storm" (an event, not the World War
-journal entry) if it arms, "Hearts and Minds" if it broadcasts, and "The Spy
-Who Was Caught" about half the time it plants an agent. Your answer goes back
-to it: matching a buildup or a campaign sends it a follow-up, and a caught spy
-can be tried, traded quietly or answered by expelling its diplomats. Your own
-choices in The Shadow War, The Iron Purse and Nuclear Brinkmanship reach the
-other country the same way.
+hear only if it acts: "The Gathering Storm" (an event, not the World War journal
+entry) if it arms, "Hearts and Minds" if it broadcasts, and "The Spy Who Was
+Caught" about half the time it plants an agent. Your answer goes back to it:
+matching a buildup or a campaign sends it a follow-up, and a caught spy can be
+tried, traded quietly or answered by expelling its diplomats. Your own choices
+in The Shadow War, The Iron Purse and Nuclear Brinkmanship reach the other
+country the same way.
 
 ## Irredentism and reunification
 
@@ -261,9 +261,8 @@ absorbs at most one such nation a year.
 The mod adds one identity, fifteen principle groups, and tiers IV and V to every
 base-game group. A bloc can hold five mandates instead of three.
 
-Each tier's effects are the complete list for that tier: tier V replaces tier
-IV rather than adding to it. Compare tiers by their tooltips, not by summing
-them.
+Each tier's effects are the complete list for that tier: tier V replaces tier IV
+rather than adding to it. Compare tiers by their tooltips, not by summing them.
 
 ### The Diplomatic Framework identity
 
@@ -355,12 +354,12 @@ to 25, halved for a Sovereign Empire.
 ## Formable countries
 
 The mod adds ten formable countries. All need Decolonization and form through
-the base game's leadership and unification plays, with up to three candidates.
-A candidate needs major power rank and, except for United Earth, a capital in
-the region. The regional unions also need a world that pushes them together: a
-top-three great power outside the region, every major power of the region
-allied to you, in a defensive pact or customs union with you, in your bloc, or
-your subject, and no rivalry or war with any of them.
+the base game's leadership and unification plays, with up to three candidates. A
+candidate needs major power rank and, except for United Earth, a capital in the
+region. The regional unions also need a world that pushes them together: a
+top-three great power outside the region, every major power of the region allied
+to you, in a defensive pact or customs union with you, in your bloc, or your
+subject, and no rivalry or war with any of them.
 
 | Country | States needed | Also needs |
 |---|---|---|
@@ -384,9 +383,9 @@ Indonesia exists, the new one can't be unified.
 Each formable renames itself with its government. The African Union becomes the
 Pan-African Socialist Federation under communism, the African Imperium under
 fascism, the African Empire as a monarchy, and a theocracy or technate
-otherwise. Some names follow the ruler's culture or the country that formed
-it: the Empire of the Great Qing for a China with a Manchu monarch, the Ottoman
-or Safavid Caliphate, or Pax Americana for a United Earth formed by the United
+otherwise. Some names follow the ruler's culture or the country that formed it:
+the Empire of the Great Qing for a China with a Manchu monarch, the Ottoman or
+Safavid Caliphate, or Pax Americana for a United Earth formed by the United
 States.
 
 ### India, Indonesia and Operation Polo <!-- style: allow title-case-heading -->
@@ -406,12 +405,12 @@ be.
 The mod doesn't change rank thresholds. Great powers gain +25% cultural pull,
 two covert operation slots and +10 intelligence capacity; major powers +10%, one
 slot and +5. Each rank also sets part of your credit standing, and so what you
-pay to borrow (see
-[What your government pays to borrow](04-banking.md#what-your-government-pays-to-borrow)).
+pay to borrow (see [What your government pays to
+borrow](04-banking.md#what-your-government-pays-to-borrow)).
 
 Colonial Culture Change lets an overlord with three times a colonial subject's
-prestige replace the subject's primary cultures and religion with its own, at +20
-liberty desire. Covert operations are in [Cultural hegemony and covert
+prestige replace the subject's primary cultures and religion with its own, at
++20 liberty desire. Covert operations are in [Cultural hegemony and covert
 warfare](10-influence.md), nuclear warnings and strikes in [Nuclear
 weapons](13-nuclear.md), and UN lobbying in [The United
 Nations](09-united-nations.md).

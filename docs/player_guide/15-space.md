@@ -3,21 +3,20 @@
 The space race is a sequence of journal entries in which great and major powers
 compete to reach space milestones, from a first suborbital flight to colonies in
 the Kuiper Belt. The first country to finish each of the seven single-goal
-milestones keeps a larger permanent reward than anyone who follows. The entries start to appear once you
-research Rocketry in era 6, but you need a Space Program building, unlocked by
-Guided Missiles in era 7, before any of them can make progress. The Space Race
-game rule controls the system; with it off, the journal entries and their
-events never appear.
+milestones keeps a larger permanent reward than anyone who follows. The entries
+start to appear once you research Rocketry in era 6, but you need a Space
+Program building, unlocked by Guided Missiles in era 7, before any of them can
+make progress. The Space Race game rule controls the system; with it off, the
+journal entries and their events never appear.
 
 ## Joining the space race
 
 Only great powers and major powers can run a space program. If you drop below
 major power, your running milestones stop and their progress is lost. The one
 exception is Solar System Colonization once you hold a colony: it keeps running
-whatever your rank. A player country of either rank always makes progress. An
-AI country makes progress only while it is in the top three of the global
-country ranking, so in practice you race against the AI powers that hold those
-places.
+whatever your rank. A player country of either rank always makes progress. An AI
+country makes progress only while it is in the top three of the global country
+ranking, so in practice you race against the AI powers that hold those places.
 
 ### The Space Program building
 
@@ -68,14 +67,14 @@ Program runs a method that supports it.
 | Solar System Colonization | Moon Base and Mars Landing | Directed Energy Weapons (era 11) | 400 to 650 per colony | 10% | ×8 |
 
 The setback risk is the base chance each month; the cost factor scales the
-milestone's innovation cost (see [Space race funding and cost](#space-race-funding-and-cost)).
-The order is mostly a chain, but it branches after the Moon Landing: the
-Deep-Space Probe, Mars Landing and Moon Base can then run at the same time, as
-long as you have their technologies and the Mars Mission method. The Interstellar
-Probe and Solar System Colonization each need two of those three finished. The
-Deep-Space Probe and Mars Landing show up in the journal as soon as you reach
-orbit and have their technologies, but neither can start before the Moon
-Landing.
+milestone's innovation cost (see [Space race funding and
+cost](#space-race-funding-and-cost)). The order is mostly a chain, but it
+branches after the Moon Landing: the Deep-Space Probe, Mars Landing and Moon
+Base can then run at the same time, as long as you have their technologies and
+the Mars Mission method. The Interstellar Probe and Solar System Colonization
+each need two of those three finished. The Deep-Space Probe and Mars Landing
+show up in the journal as soon as you reach orbit and have their technologies,
+but neither can start before the Moon Landing.
 
 <!-- screenshot: the Moon Landing journal entry with its milestone panel open, showing progress, pace, setback risk, the Safe and Ambitious selector and the funding stepper -->
 
@@ -86,10 +85,9 @@ against the goal, the pace per month, the current setback risk, the setbacks so
 far and a rough estimate of the months left. Hover the progress line to see the
 reward for finishing first and for finishing later. The controls are an approach
 selector (Safe or Ambitious) and a funding stepper. Two collapsed sections
-follow. Who else is racing lists the other powers running the same milestone
-and whether its "first" is still unclaimed, but not how far along they are. The
-program so far shows how far your own program has come across all nine
-entries.
+follow. Who else is racing lists the other powers running the same milestone and
+whether its "first" is still unclaimed, but not how far along they are. The
+program so far shows how far your own program has come across all nine entries.
 
 A new milestone starts with no approach and funding level 1. Until you pick an
 approach it creeps forward at 0.5 a month and never suffers a setback, but its
@@ -108,23 +106,23 @@ Approach, funding and mission choices apply to your whole program, not to the
 milestone they sit on. Their modifiers appear on each milestone's journal entry,
 but the game adds them up for your country as a whole: every running milestone
 with an approach moves at the same pace, and every milestone's base risk is
-scaled by the same total. A Safe approach on one milestone cuts the risk
-on all of them, including those on Ambitious, and an Ambitious one speeds up all
-of them, including those on Safe. They stack: two Ambitious milestones add
-+100% progress, and two Safe ones bring every milestone down to the 1% floor.
-What stays with each milestone is its innovation cost and the kind of setback
-it suffers, which follows its own approach (see
-[Space race setbacks](#space-race-setbacks)). Setback risk never drops below 1%
-a month or rises above 50%. The panel's pace and risk figures are the ones the
-game uses, so check them after every change.
+scaled by the same total. A Safe approach on one milestone cuts the risk on all
+of them, including those on Ambitious, and an Ambitious one speeds up all of
+them, including those on Safe. They stack: two Ambitious milestones add +100%
+progress, and two Safe ones bring every milestone down to the 1% floor. What
+stays with each milestone is its innovation cost and the kind of setback it
+suffers, which follows its own approach (see [Space race
+setbacks](#space-race-setbacks)). Setback risk never drops below 1% a month or
+rises above 50%. The panel's pace and risk figures are the ones the game uses,
+so check them after every change.
 
 ### Mission profile choices
 
-Thirty days after Orbital Flight, the Moon Landing, the Deep-Space Probe, the Moon
-Base or the Mars Landing starts, an event asks you to choose how to fly it. While
-that milestone runs, your choice changes the setback risk, and sometimes the
-pace, of your whole program, in the same way as an approach. When the milestone
-is finished it also decides a reward that fades over ten years.
+Thirty days after Orbital Flight, the Moon Landing, the Deep-Space Probe, the
+Moon Base or the Mars Landing starts, an event asks you to choose how to fly it.
+While that milestone runs, your choice changes the setback risk, and sometimes
+the pace, of your whole program, in the same way as an approach. When the
+milestone is finished it also decides a reward that fades over ten years.
 
 | Event | Milestone | Options |
 |---|---|---|
@@ -146,10 +144,9 @@ every milestone with an approach. It also raises the Space Program's throughput
 by 25%, which makes the building consume more Launch Capacity. Funding and
 approach cost weekly innovation: 15 for each funding level, plus 15 for a Safe
 approach or 30 for an Ambitious one, multiplied by the milestone's cost factor
-from the table above. A Suborbital Flight at funding 1
-on Safe costs 30 innovation a week; an Interstellar Probe at funding 3 on
-Ambitious costs 900. The Space Program Cost modifier on each journal entry shows
-the current drain.
+from the table above. A Suborbital Flight at funding 1 on Safe costs 30
+innovation a week; an Interstellar Probe at funding 3 on Ambitious costs 900.
+The Space Program Cost modifier on each journal entry shows the current drain.
 
 Your monthly pace is the sum of your progress sources, raised by your progress
 bonuses, and never less than 0.5 once you have chosen an approach.
@@ -190,10 +187,10 @@ cost 25% of that milestone's progress, give Space Mission Failure (−2% prestig
 and −25 innovation cap, fading over five years) and radicalize some academics.
 They also start a six-month safety period during which none of your milestones
 can suffer another setback, although they keep moving at full pace; the panel
-says the program is inside its post-setback review and shows the risk as 0%.
-One option usually adds a Temporary Safety Review, which fades over ten years,
-and in some events also switches the milestone to Safe. Another usually presses
-on with a further flat loss of progress and more radicals, and no safety period.
+says the program is inside its post-setback review and shows the risk as 0%. One
+option usually adds a Temporary Safety Review, which fades over ten years, and
+in some events also switches the milestone to Safe. Another usually presses on
+with a further flat loss of progress and more radicals, and no safety period.
 Now and then the roll brings An Unexpected Breakthrough instead: no progress is
 lost, and the Space Program's throughput rises by 15% for 18 or 24 months.
 
@@ -226,8 +223,8 @@ who finishes it later gets the smaller one.
 | Interstellar Probe | +10% / +5% | +100 / +50 | +10% / +5% | +10% / +5% | +25% / +10% |
 
 The first figure is the first-to-finish reward, the second the later one.
-Cultural pull feeds the cultural hegemony competition described in
-[Where cultural pull comes from](10-influence.md#where-cultural-pull-comes-from).
+Cultural pull feeds the cultural hegemony competition described in [Where
+cultural pull comes from](10-influence.md#where-cultural-pull-comes-from).
 
 ## Interstellar probe results
 
@@ -245,9 +242,9 @@ permanently.
 | Intelligence detected | 10% | 6 | +12% prestige, +15% research speed, +200 innovation cap, +30% cultural pull |
 
 Each discovery has its own event, from barren worlds and asteroid maps through
-ocean worlds and alien vegetation to the ruins of a dead civilization. If another
-country's probe found the same thing first, the event names it and confirms its
-discovery; the reward is the same.
+ocean worlds and alien vegetation to the ruins of a dead civilization. If
+another country's probe found the same thing first, the event names it and
+confirms its discovery; the reward is the same.
 
 ## Colonizing the solar system
 
@@ -266,31 +263,31 @@ it has been claimed, and each stage needs more progress per colony.
 | 5 | The Kuiper Belt and beyond (Pluto-Charon, Eris, Makemake, Haumea, Sedna) | 5 | 650 |
 
 From stage 3, a country that doesn't yet hold a colony needs the Deep Space
-Exploration or Interstellar Mission method to start the program; a country
-that already holds one carries on through all five stages with Solar
-Colonization. Each colony's event offers two specializations, and the one you
-choose becomes a small permanent modifier on the journal entry. The options
-differ by world: research speed, military research speed, innovation cap, space
-race progress, Extraplanetary Base, Fusion Plant or Orbital Solar Collector
-throughput, Advanced Materials or Launch Capacity output, cultural pull,
-influence, diplomatic reputation or cheaper military goods. Your first colony
-also brings the event Beyond the Blue.
+Exploration or Interstellar Mission method to start the program; a country that
+already holds one carries on through all five stages with Solar Colonization.
+Each colony's event offers two specializations, and the one you choose becomes a
+small permanent modifier on the journal entry. The options differ by world:
+research speed, military research speed, innovation cap, space race progress,
+Extraplanetary Base, Fusion Plant or Orbital Solar Collector throughput,
+Advanced Materials or Launch Capacity output, cultural pull, influence,
+diplomatic reputation or cheaper military goods. Your first colony also brings
+the event Beyond the Blue.
 
 The entry stays open for as long as you hold a colony, even if you switch off
 the Solar Colonization method, so your colony modifiers are never lost; the
-program simply stops until the method returns. Once all 34 worlds are
-claimed, Solar System Colonization finishes for the country that took the last
-one, and for any other colony holder whose program is still running when its
-bar next fills. Finishing grants Interplanetary Trade Networks: +10% prestige,
-+5% research speed, +10% influence and +15% cultural pull.
+program simply stops until the method returns. Once all 34 worlds are claimed,
+Solar System Colonization finishes for the country that took the last one, and
+for any other colony holder whose program is still running when its bar next
+fills. Finishing grants Interplanetary Trade Networks: +10% prestige, +5%
+research speed, +10% influence and +15% cultural pull.
 
 ## Space race events
 
 Besides the choice, setback and completion events above, the space race has
 yearly events for programs under way. Some are hard science problems, such as
 radiation, the rocket equation, communication delay, closed-loop life support,
-solar storms and orbital debris; others are discoveries, such as water on Mars or
-lunar helium-3. Their options add progress to the milestones they concern,
+solar storms and orbital debris; others are discoveries, such as water on Mars
+or lunar helium-3. Their options add progress to the milestones they concern,
 usually a few points and never more than 30, and some also bring loyalists,
 radicals or better relations. A handful connect the space race to other systems.
 
@@ -302,10 +299,10 @@ radicals or better relations. A handful connect the space race to other systems.
 | Off-World Industry Meets the Space Program | You are colonizing and own an Extraplanetary Base | 5 or 15 points of colonization progress; full integration adds research and prestige, fading over ten years |
 | The Elevator Advantage | You own a Space Elevator and are building the Moon Base, landing on Mars or colonizing | 8 or 12 points of progress on those missions |
 
-The Space Elevator and the Extraplanetary Base are covered in
-[The extended timeline](02-timeline.md), tourism in
-[States and population](07-states.md), and International Space Cooperation and
-its agency in [The United Nations](09-united-nations.md).
+The Space Elevator and the Extraplanetary Base are covered in [The extended
+timeline](02-timeline.md), tourism in [States and population](07-states.md), and
+International Space Cooperation and its agency in [The United
+Nations](09-united-nations.md).
 
 ## How the AI races
 
@@ -318,5 +315,5 @@ funding while it has innovation to spare and cuts it when innovation runs short.
 
 A revolution's winner continues the old country's program, with its progress
 (except progress toward a first colony) and its rewards, and rebels can't start
-a program of their own during a civil war; see
-[After a revolution](05-politics.md#after-a-revolution).
+a program of their own during a civil war; see [After a
+revolution](05-politics.md#after-a-revolution).

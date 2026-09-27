@@ -158,13 +158,13 @@ power that could lift the target, and by how much. If the target falls below 5
 during the crisis, authority falls at least a quarter point a month, and at 0
 the UN dissolves.
 
-Dissolution ends every membership, seat, program, convention, agency,
-sanctions regime, mandate and mission, demolishes the headquarters and writes
-off unpaid dues. Every power bloc gains The UN Has Fallen (+20 cohesion, +20%
-leverage generation, fading over ten years). Twenty years later any great power
-with Intergovernmental Organizations can convene a founding conference with
-Found the United Nations. The great power with the most prestige, if it is not
-the convener, receives A Founding Conference and may join, stay out or oppose;
+Dissolution ends every membership, seat, program, convention, agency, sanctions
+regime, mandate and mission, demolishes the headquarters and writes off unpaid
+dues. Every power bloc gains The UN Has Fallen (+20 cohesion, +20% leverage
+generation, fading over ten years). Twenty years later any great power with
+Intergovernmental Organizations can convene a founding conference with Found the
+United Nations. The great power with the most prestige, if it is not the
+convener, receives A Founding Conference and may join, stay out or oppose;
 opposing wrecks it and blocks another for ten years. Otherwise the UN is
 refounded after twelve months at authority 25, under the founding charter and
 with no agencies.
@@ -248,10 +248,10 @@ From Strong, sanctions also become embargoes: each major-power member with
 diplomatic relevance to the target that voted for them (at Supranational, every
 such member) loses 30 relations with it and, if relations are then Poor or worse
 and the pact can be made, embargoes it at its own influence cost. Dropping such
-an embargo by choice once its first year is out counts as busting the
-sanctions. A condemnation adds Shunned by the United Nations (−6
-diplomatic reputation × enforcement) from Strong, and Restrained by the United
-Nations (fewer play maneuvers, more infamy) at Supranational.
+an embargo by choice once its first year is out counts as busting the sanctions.
+A condemnation adds Shunned by the United Nations (−6 diplomatic reputation ×
+enforcement) from Strong, and Restrained by the United Nations (fewer play
+maneuvers, more infamy) at Supranational.
 
 ### Grounds for UN censure
 
@@ -320,9 +320,8 @@ can table nothing else yourself. A convention or charter reform the docket
 offers you is free, so the docket's offer is the cheap way to bring one to the
 floor. A topic cannot return to the floor for five years after a resolution on
 it closes (ten for a motion to expel), and mandates have a five-year cooldown
-per proposer.
-After every vote the floor is in recess for three months, when only human
-members may table, and you are told when it reopens.
+per proposer. After every vote the floor is in recess for three months, when
+only human members may table, and you are told when it reopens.
 
 ### The UN docket
 
@@ -355,8 +354,8 @@ party goes first to a human member that qualifies. Every proposer event has
 refusing a convention outright costs credibility and bars you from tabling it
 for five years. A major power that refuses a famine appeal while UN authority is
 40 or more loses prestige and relations improvement speed for five years. The
-lending facility's loan and conditions are covered in
-[The UN emergency loan](04-banking.md#the-un-emergency-loan).
+lending facility's loan and conditions are covered in [The UN emergency
+loan](04-banking.md#the-un-emergency-loan).
 
 ### Lobbying for UN votes
 
@@ -405,8 +404,9 @@ any country (at Supranational) for a nuclear first or tactical strike or an
 exposed regime-change operation, at most once a decade. Handing the ruler over
 sends them into exile, and your heir, if you have one, succeeds them; defying
 the court costs 5 standing, 10 case strength and credibility. A party to the
-Declaration that runs a coercive resettlement program is penalized (see
-[Costs and consequences of resettlement](07-states.md#costs-and-consequences-of-resettlement)).
+Declaration that runs a coercive resettlement program is penalized (see [Costs
+and consequences of
+resettlement](07-states.md#costs-and-consequences-of-resettlement)).
 
 ## UN military mandates
 
@@ -488,8 +488,8 @@ a dissolution writes them off.
 
 ## International standing
 
-Standing is your own record in the organization, from 0 to 100, separate from
-UN Authority. It starts at 50 when you join.
+Standing is your own record in the organization, from 0 to 100, separate from UN
+Authority. It starts at 50 when you join.
 
 | Tier | Standing | Effect |
 |---|---|---|
@@ -528,13 +528,13 @@ AI countries play by the same rules and numbers you do:
 
 - They vote by the lean the chamber shows you, and veto by the same rule.
 - They table the seven non-convention topics through the journal entry's buttons
-  when their situation calls for it, and reach conventions only through the
-  docket, so a qualifying human is offered convention business first.
+when their situation calls for it, and reach conventions only through the
+docket, so a qualifying human is offered convention business first.
 - They join readily unless isolationist, and withhold dues when isolationist,
-  undermining the order, in default or facing a high levy.
+undermining the order, in default or facing a high levy.
 - They send contingents to missions hosted by allies, bloc partners and
-  subjects, and bring them home when attacked or short of money. A country
-  holding a mandate is steered toward the target and the authorized goal.
+subjects, and bring them home when attacked or short of money. A country holding
+a mandate is steered toward the target and the authorized goal.
 
 ## How the UN connects to other systems
 

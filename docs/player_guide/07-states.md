@@ -1,12 +1,12 @@
 # States and population
 
 The mod changes how people spread across your country and how its states
-develop. Crowded states draw fewer migrants, homelands follow the cultures
-that actually live in a region, a state's tourism depends on what it offers
-visitors, and a government can move settlers onto an empty frontier. The state
-panel gains tiles that show most of these. Everything in this chapter is always
-on except internal resettlement, which the Internal Resettlement game rule
-controls (see the [Introduction](01-introduction.md)).
+develop. Crowded states draw fewer migrants, homelands follow the cultures that
+actually live in a region, a state's tourism depends on what it offers visitors,
+and a government can move settlers onto an empty frontier. The state panel gains
+tiles that show most of these. Everything in this chapter is always on except
+internal resettlement, which the Internal Resettlement game rule controls (see
+the [Introduction](01-introduction.md)).
 
 ## State panel additions
 
@@ -50,8 +50,8 @@ for each further multiple.
 ### Raising crowding tolerance
 
 The Migration Crowding Tolerance modifier multiplies the threshold: +50%
-tolerance lets a state hold half as many people again before the penalty
-starts. The tile's tooltip lists every source, under Urban Capacity.
+tolerance lets a state hold half as many people again before the penalty starts.
+The tile's tooltip lists every source, under Urban Capacity.
 
 | Source | Tolerance |
 |---|---|
@@ -62,9 +62,8 @@ starts. The tile's tooltip lists every source, under Urban Capacity.
 | Urban Planning power bloc principle | +25% at tiers I to III, +50% at IV, +100% at V, plus +5% per Ministry of Urban Planning level (+10% at IV, +20% at V) |
 | National Park building on National Park, National Forest or National Wildlife Refuge | −5%, −7.5% or −10% per level, scaled by staffing |
 
-Ministries are explained in [Ministries](05-politics.md#ministries).
-The same tolerance also raises the densities that open and close a
-resettlement frontier.
+Ministries are explained in [Ministries](05-politics.md#ministries). The same
+tolerance also raises the densities that open and close a resettlement frontier.
 
 ## Dynamic homelands
 
@@ -79,7 +78,7 @@ state region, and you get a notification.
 Nothing changes until your country enables homeland changes with one of these:
 
 - the Ancestral Citizenship law (Citizenship), Violent Hostility (Minority
-  Rights) or Linguistic Purity (Language Policy);
+Rights) or Linguistic Purity (Language Policy);
 - tier II or higher of the Cultural Unity principle in your power bloc;
 - the Mass Media technology.
 
@@ -128,9 +127,9 @@ Laws and principles that move the three numbers:
 
 Other Citizenship, Minority Rights and Language Policy laws, a few technologies
 and the language-reform amendments move them too; the tile's tooltip lists every
-source. Under Ancestral Citizenship alone, a primary culture needs 40% of a state
-to start a homeland, a minority's homeland goes once it falls below 10%, and
-each change takes under seven years.
+source. Under Ancestral Citizenship alone, a primary culture needs 40% of a
+state to start a homeland, a minority's homeland goes once it falls below 10%,
+and each change takes under seven years.
 
 ## Cultural acceptance and minorities
 
@@ -139,13 +138,13 @@ temporary local acceptance penalty that wears off over time. The mod adds two
 state modifiers that act on that penalty:
 
 - Annual Cultural Acceptance closes the penalty faster, adding its value in
-  acceptance over a year to every culture that still carries one. The Cultural
-  Integration decree gives +5, the Ministry of Refugee Affairs +0.2 per level,
-  and tiers III to V of the Cultural Plurality principle +0.25 to +0.5.
+acceptance over a year to every culture that still carries one. The Cultural
+Integration decree gives +5, the Ministry of Refugee Affairs +0.2 per level, and
+tiers III to V of the Cultural Plurality principle +0.25 to +0.5.
 - Minimum Local Acceptance limits how deep the penalty can go: no deeper than
-  −40 plus the modifier's value. Indifference gives +5, Protection +10 and
-  Affirmative Action +20 (all Minority Rights laws), and Cultural Plurality
-  tiers III to V give +5 to +10. Without either modifier there is no floor.
+−40 plus the modifier's value. Indifference gives +5, Protection +10 and
+Affirmative Action +20 (all Minority Rights laws), and Cultural Plurality tiers
+III to V give +5 to +10. Without either modifier there is no floor.
 
 These matter most where migration keeps bringing new communities into a state.
 
@@ -154,8 +153,8 @@ state Violence Against Minorities. Each year, every culture there with
 acceptance below 60 risks an outbreak, more likely the lower its acceptance. A
 severe outbreak kills 10% of that culture in the state, radicalizes the
 survivors, devastates the region and sets off a mass migration; a lesser one
-kills 2% and does the same on a smaller scale. Minority laws are in
-[Rights and society laws](05-politics.md#rights-and-society-laws).
+kills 2% and does the same on a smaller scale. Minority laws are in [Rights and
+society laws](05-politics.md#rights-and-society-laws).
 
 ## State tourism
 
@@ -198,8 +197,8 @@ The "All modifiers" line for throughput also carries the Promote Tourism decree
 
 ## World city rankings
 
-Each month the game ranks every state in the world by city size: the services
-it produces (only with an Urban Center), weighted up by its average standard of
+Each month the game ranks every state in the world by city size: the services it
+produces (only with an Urban Center), weighted up by its average standard of
 living, ×1.5 for a capital and ×1.5 for a great power's states, halved for an
 unrecognized country. The tourism card shows the rank. The top 20 get the Cities
 bonus to tourism output, from +100% for first to +5% for twentieth; nothing else
@@ -214,8 +213,8 @@ choose a culture or religion to move: programs select by occupation, strata,
 acceptance and radicalism.
 
 The Internal Resettlement game rule has three settings. Enabled (the default)
-gives everyone every program their laws allow. AI Voluntary Only is the same
-for players, but each month it switches AI countries off Penal Transportation,
+gives everyone every program their laws allow. AI Voluntary Only is the same for
+players, but each month it switches AI countries off Penal Transportation,
 Special Settlements and Rustication. Disabled removes the system. Moving people
 between countries by treaty is a different mechanic, the Population Transfer
 article in [Diplomacy](08-diplomacy.md).
@@ -230,7 +229,7 @@ frontier, measured over the whole state region whoever owns each part:
 
 - a new Authority needs fewer than 2 people per km²;
 - an existing one keeps running, and can add levels, until the region reaches
-  10 people per km².
+10 people per km².
 
 Both densities scale with Migration Crowding Tolerance, and the building's
 requirements show the region's current density against them. In an 1836 start
@@ -268,8 +267,8 @@ Retreat also use services; Military Colonies and the coercive programs (Penal
 Transportation, Special Settlements and Rustication) hire soldiers and use small
 arms instead. Slaves are never recruited. If a law change retires the running
 program, the Authority falls back to Land Grants. Managed Retreat's damage comes
-from [Climate events](14-climate.md#climate-events) and
-[What a nuclear strike does](13-nuclear.md#what-a-nuclear-strike-does).
+from [Climate events](14-climate.md#climate-events) and [What a nuclear strike
+does](13-nuclear.md#what-a-nuclear-strike-does).
 
 Each program also speeds up the destination's incorporation and its growth as a
 colony, by 10% to 25%. Military Colonies also reduce the effect of turmoil there
@@ -306,8 +305,8 @@ Each month an Authority works down your other states, most eligible people
 first, until its capacity is met; it skips other Authorities' states. A state
 gives at most 2% of its eligible people a month across all your Authorities, and
 any draw of fewer than 100 people from a pop is skipped, so a pop smaller than
-5,000 is never recruited. The Authority shows "Settlers arrived last month" and "Died in
-transit last month", and each source state shows how many it gave.
+5,000 is never recruited. The Authority shows "Settlers arrived last month" and
+"Died in transit last month", and each source state shows how many it gave.
 
 The Resettlement Recruitment Drive decree steers recruitment. Every Authority
 recruits from a drive state before any other, and may take 4% of its eligible
@@ -339,16 +338,17 @@ left after one year).
 | Development Program, Managed Retreat | none |
 
 If you are a party to the Universal Declaration of Human Rights, a UN convention
-([UN conventions and agencies](09-united-nations.md#un-conventions-and-agencies)), running Penal Transportation,
-Special Settlements or Rustication gives you Violating the Declaration: up to
-−10% prestige as the programs grow, halved if you ratified with reservations.
-It fades over several years after they stop. The first month you run a coercive
-program as a party, an event explains the penalty and offers to switch every
-coercive program to your best voluntary one.
+([UN conventions and
+agencies](09-united-nations.md#un-conventions-and-agencies)), running Penal
+Transportation, Special Settlements or Rustication gives you Violating the
+Declaration: up to −10% prestige as the programs grow, halved if you ratified
+with reservations. It fades over several years after they stop. The first month
+you run a coercive program as a party, an event explains the penalty and offers
+to switch every coercive program to your best voluntary one.
 
 Settlers change the culture shares at the destination. Over time that can create
-or remove a homeland there, under the rules in
-[Dynamic homelands](#dynamic-homelands).
+or remove a homeland there, under the rules in [Dynamic
+homelands](#dynamic-homelands).
 
 ### Resettlement events
 

@@ -6,8 +6,8 @@ adds seven eras of technology, new goods and buildings, over a hundred laws, and
 a set of systems that run alongside the base game: a banking cycle with monetary
 policy, a construction market, climate change, decolonization, nuclear weapons,
 a United Nations, a space race, cultural and covert competition between powers,
-and social movements. Most of these systems have their own journal entry, and most
-can be switched off when you set up a game.
+and social movements. Most of these systems have their own journal entry, and
+most can be switched off when you set up a game.
 
 This guide explains what each system does and how to play it. It assumes you
 know the base game: pops, interest groups, laws, markets, construction and
@@ -17,17 +17,17 @@ diplomatic plays are not explained here except where the mod changes them.
 
 Each chapter covers one area of the game and can be read on its own. Start with
 the chapters for the systems you meet first. In an 1836 start the construction
-market changes how building works from the first day
-([Economy and construction](03-economy.md)), and the banking cycle begins once
-you have researched Stock Exchange and have an Urban Center of level 5 or more
-([Banking and monetary policy](04-banking.md)). Most later systems unlock with
-technology, so you can read about them as they approach.
+market changes how building works from the first day ([Economy and
+construction](03-economy.md)), and the banking cycle begins once you have
+researched Stock Exchange and have an Urban Center of level 5 or more ([Banking
+and monetary policy](04-banking.md)). Most later systems unlock with technology,
+so you can read about them as they approach.
 
 Numbers in this guide are there to help you plan: thresholds, tiers, durations
-and caps. They are rounded, and they can change between versions of the mod.
-The game's tooltips show the exact values for your country, and many of the
-mod's journal entries and panels break their numbers down line by line when you
-hover over them.
+and caps. They are rounded, and they can change between versions of the mod. The
+game's tooltips show the exact values for your country, and many of the mod's
+journal entries and panels break their numbers down line by line when you hover
+over them.
 
 The Markdown source of this guide is kept in the mod's repository, and the
 [chapters](https://github.com/jakeOmega/Vic3TimelineExtended/tree/main/docs/player_guide)
@@ -44,8 +44,8 @@ Subscribe to the mod on the Steam Workshop, or copy it into your Victoria 3
 `mod` folder, then enable it in a playset in the launcher. The mod overrides the
 base game's ideologies, a number of its production methods, the state-region map
 files and several interface panels, so other mods that change those will
-conflict with it. Put Vic3TimelineExtended last in the load order so its versions
-win. Mods that only add content usually work alongside it.
+conflict with it. Put Vic3TimelineExtended last in the load order so its
+versions win. Mods that only add content usually work alongside it.
 
 Start a new campaign with the mod enabled. Don't add it to, or remove it from, a
 game already in progress. In multiplayer, every player needs the same version of
@@ -53,9 +53,9 @@ the mod.
 
 ### Game rules
 
-The mod adds fifteen game rules to the game setup screen. Each one turns a system
-on or off, and a few offer a reduced version of the system. Rules are set when
-you start a campaign and can't be changed afterwards.
+The mod adds fifteen game rules to the game setup screen. Each one turns a
+system on or off, and a few offer a reduced version of the system. Rules are set
+when you start a campaign and can't be changed afterwards.
 
 Turning a system off hides its journal entry and stops its events, but the
 technologies, laws and buildings connected to it stay in the game and keep their

@@ -5,8 +5,8 @@ free. A country with overseas colonies or colonial subjects gets the Colonial
 Empire journal entry, whose Colonial Stability bar drifts downward unless your
 rank, laws and programs hold it up. You can spend money, authority and
 bureaucracy to slow the drift, integrate colonies into the nation, or let them
-go on your own terms before they break away. The Decolonization game rule controls the system; with it off, the
-journal entry and its events never appear.
+go on your own terms before they break away. The Decolonization game rule
+controls the system; with it off, the journal entry and its events never appear.
 
 ## The Colonial Empire journal entry
 
@@ -15,13 +15,12 @@ After you research it, the Colonial Empire entry activates as soon as you hold
 either of these:
 
 - An overseas colony: a state that is not a homeland of your cultures, has at
-  least 100,000 people, lies outside your capital's region and the regions next
-  to it, and has people of a culture that isn't one of your primary cultures.
-  On top of that, its average standard of living must be below 80% of your
-  national average, or one of those cultures must have almost no acceptance
-  there.
+least 100,000 people, lies outside your capital's region and the regions next to
+it, and has people of a culture that isn't one of your primary cultures. On top
+of that, its average standard of living must be below 80% of your national
+average, or one of those cultures must have almost no acceptance there.
 - A colonial subject: a Colony or Chartered Company subject, or a Protectorate
-  that holds overseas land and whose cultures share no heritage with yours.
+that holds overseas land and whose cultures share no heritage with yours.
 
 The regions in that test are large ones: Western Europe, North Africa, India,
 Southeast Asia and so on. Neighboring regions don't count as overseas, so for a
@@ -39,8 +38,8 @@ and −1.5 a month to the drift, so holding on gets harder as the game goes on.
 The Colonial Stability bar runs from 0 to 100 and starts at 50. Once a month it
 moves by the sum of everything acting on it, but never by more than 1.67 up or
 down, so crossing the whole bar takes at least five years. Where the bar sits
-puts you in one of five bands. Each band applies a modifier to the journal entry,
-and the lower three also raise your colonial subjects' liberty desire.
+puts you in one of five bands. Each band applies a modifier to the journal
+entry, and the lower three also raise your colonial subjects' liberty desire.
 
 | Band | Bar | While in this band |
 |---|---|---|
@@ -70,10 +69,11 @@ term with its current value.
 | Monthly limit | What the ±1.67 cap removed, if anything. |
 
 Colonial Exploitation and Colonial Resettlement raise the bar; No Colonial
-Affairs and Neocolonialism lower it. The harshest minority-rights laws drain it heavily, even
-though they make a garrison far stronger. Being a nuclear power helps a little;
-the UN's Decolonization Resolution ([UN conventions and agencies](09-united-nations.md#un-conventions-and-agencies))
-and foreign destabilization ([The covert operations](10-influence.md#the-covert-operations))
+Affairs and Neocolonialism lower it. The harshest minority-rights laws drain it
+heavily, even though they make a garrison far stronger. Being a nuclear power
+helps a little; the UN's Decolonization Resolution ([UN conventions and
+agencies](09-united-nations.md#un-conventions-and-agencies)) and foreign
+destabilization ([The covert operations](10-influence.md#the-covert-operations))
 hurt.
 
 ### Great power stances on colonialism
@@ -83,19 +83,19 @@ none. A great power that runs the Colonial Empire entry itself is asked to
 declare in the event The Colonial Question, at most once every three years: it
 can condemn colonialism, stay neutral, or back the colonial powers. Condemning
 brings influence and prestige but, for a power that holds colonies, also drains
-its own bar and weakens its programs. When a Decolonization Resolution passes
-at the United Nations, every great power that voted for it, or voted against
-it and then accepted it, takes the anti-colonial stance automatically. That is
-how powers without colonies usually end up condemning yours.
+its own bar and weakens its programs. When a Decolonization Resolution passes at
+the United Nations, every great power that voted for it, or voted against it and
+then accepted it, takes the anti-colonial stance automatically. That is how
+powers without colonies usually end up condemning yours.
 
 Each condemning great power costs you about 0.6 a month and each supporter adds
 about 0.3, scaled by its prestige against yours: from a quarter as much, for a
 power with a quarter of your prestige, up to double. If the condemners together
 hold a third of the prestige of all great powers plus you, you lose a further 1
-a month; if they hold two thirds, another 2. A dominant empire is
-hard to isolate; a small one reaches both thresholds as soon as a few large
-powers turn on it. The widget's International Pressure section lists who
-condemns and who supports you.
+a month; if they hold two thirds, another 2. A dominant empire is hard to
+isolate; a small one reaches both thresholds as soon as a few large powers turn
+on it. The widget's International Pressure section lists who condemns and who
+supports you.
 
 ## Colonial programs and decolonization decisions
 
@@ -120,16 +120,16 @@ laws strengthen the garrison, while Protected Speech and the Protection and
 Affirmative Action minority-rights laws weaken it. Voting franchises strengthen
 investment. Assimilatory, Ancestral and Cultural Citizenship and the Cultural
 Assimilation minority-rights law strengthen assimilation, and Universal
-Citizenship weakens it. The program you run longest also decides how the
-empire ends (see [How a colonial empire ends](#how-a-colonial-empire-ends)).
+Citizenship weakens it. The program you run longest also decides how the empire
+ends (see [How a colonial empire ends](#how-a-colonial-empire-ends)).
 
 ### Releasing colonies
 
 The widget's Decolonization section offers three decisions. Each one opens an
 event that lists the candidates before anything happens, and each event has a
-Reconsider option that releases nothing. A territory is a candidate if it isn't a
-homeland of your cultures, has at least 100,000 people and lies overseas by the
-same region test; it doesn't have to be poorly accepted.
+Reconsider option that releases nothing. A territory is a candidate if it isn't
+a homeland of your cultures, has at least 100,000 people and lies overseas by
+the same region test; it doesn't have to be poorly accepted.
 
 | Decision | What it releases | What you get |
 |---|---|---|
@@ -150,17 +150,15 @@ Colonial Empire entry take a year of Colonial Crisis, −1 stability a month.
 
 Common Bonds and two decisions keep colonies for good. The event Common Bonds
 fires when an overseas state's whole population is well accepted, and lets you
-make it a homeland of your primary cultures; it then stops counting as a
-colony.
+make it a homeland of your primary cultures; it then stops counting as a colony.
 
-The Imperial Federation Act and the Civilizing Mission Compact are decisions that
-complete the journal entry at once. Both need a great power that owns at least
-four overseas colonies itself (colonial subjects don't count), Colonial
+The Imperial Federation Act and the Civilizing Mission Compact are decisions
+that complete the journal entry at once. Both need a great power that owns at
+least four overseas colonies itself (colonial subjects don't count), Colonial
 Exploitation or Colonial Resettlement, 36 consecutive months in the Solidified
-band, more than 300 authority and 100 prestige. The Act also
-wants repressive minority-rights, citizenship, speech and power laws; the
-Compact wants liberal ones and a voting franchise. The decision tooltip lists
-the accepted laws.
+band, more than 300 authority and 100 prestige. The Act also wants repressive
+minority-rights, citizenship, speech and power laws; the Compact wants liberal
+ones and a voting franchise. The decision tooltip lists the accepted laws.
 
 The Mandate System Decision suits a liberal empire in managed decline. It needs
 the bar at 65 or more, the Neocolonialism law, a voting franchise, no Outlawed
@@ -188,14 +186,13 @@ that ran for more than 24 months.
 | Cultural Assimilation Programme | Quiet Assimilation | Negotiated Withdrawal | Cultural Assimilation Legacy; they start with Assimilatory Citizenship, and relations rise by 15 |
 | none | The Empire Endures | The Empire Crumbles | no legacy |
 
-The legacy applies to the countries you free through the three decisions, and
-to those an event frees as a new country. Countries that break away in a
-collapse get none of it. On top of the legacy, a Round Table adds 25 to
-relations, a single release subtracts 10 and Planned Full Decolonization
-subtracts 25. The Empire Crumbles also leaves you with Colonial Empire
-Collapsed, a decaying loss of prestige and standard of living; Negotiated
-Withdrawal instead gives the same decaying diplomatic-reputation boost as a
-voluntary end.
+The legacy applies to the countries you free through the three decisions, and to
+those an event frees as a new country. Countries that break away in a collapse
+get none of it. On top of the legacy, a Round Table adds 25 to relations, a
+single release subtracts 10 and Planned Full Decolonization subtracts 25. The
+Empire Crumbles also leaves you with Colonial Empire Collapsed, a decaying loss
+of prestige and standard of living; Negotiated Withdrawal instead gives the same
+decaying diplomatic-reputation boost as a voluntary end.
 
 ## Decolonization events
 
@@ -239,9 +236,9 @@ bureaucracy) for 40 better relations, or refuses and loses 20.
 
 ## How the AI runs its colonies
 
-The AI plays by the same rules and uses the same programs and decisions. An
-AI that isn't a great power leans strongly toward Planned Full Decolonization,
-more so when three great powers condemn it or three of its colonies are badly
+The AI plays by the same rules and uses the same programs and decisions. An AI
+that isn't a great power leans strongly toward Planned Full Decolonization, more
+so when three great powers condemn it or three of its colonies are badly
 unaccepted. AI great powers are less willing, and no AI plans full
 decolonization while two of its colonies are well accepted. In events, AI
 empires lean toward negotiation and release, and an AI takes the Imperial

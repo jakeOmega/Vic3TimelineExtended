@@ -15,10 +15,9 @@ proportion to the coal and oil consumed anywhere in it, cut by the emission
 reductions of its market leader and reduced by the carbon captured by Synthetic
 Fuel Works and Carbon Conversion Works in the market. (The mod renames the base
 game's coal good Energy and Carbon Minerals; this chapter calls it coal for
-short.) The year's emissions of every market are added to the world's
-cumulative total, and the temperature
-anomaly is that total divided by 10,000: a market that emits 1,000 a year warms
-the world by 0.1 °C a year.
+short.) The year's emissions of every market are added to the world's cumulative
+total, and the temperature anomaly is that total divided by 10,000: a market
+that emits 1,000 a year warms the world by 0.1 °C a year.
 
 Warming does not wear off. The anomaly falls only in a year when the world as a
 whole captures more carbon than it emits. Cutting your emissions slows the rise;
@@ -33,9 +32,9 @@ A member's own ministry does nothing for the market's emissions.
 ## The Global Warming journal entry
 
 The entry is listed, grayed out, for every country from the start of the game.
-It activates for everyone once the anomaly reaches 0.1 °C and then stays
-active: it never completes and never goes away, even if the world cools again.
-Its progress bar fills at 4 °C, but the penalties keep growing past that.
+It activates for everyone once the anomaly reaches 0.1 °C and then stays active:
+it never completes and never goes away, even if the world cools again. Its
+progress bar fills at 4 °C, but the penalties keep growing past that.
 
 | Anomaly | Status |
 |---|---|
@@ -56,10 +55,10 @@ every value multiplied by the current anomaly. At 1 °C it is:
 - +5% construction goods used by buildings;
 - +1% migration quota, as climate refugees move;
 - 25% worse floods, droughts, extreme winds and torrential rains, and 50% worse
-  heatwaves and wildfires, in both impact and duration;
+heatwaves and wildfires, in both impact and duration;
 - 15% milder frost and hailstorms;
 - 25% weaker pollinator surges and 10% weaker moderate rainfall, the two
-  harvest conditions that help.
+harvest conditions that help.
 
 At 2 °C every line doubles, and at 3 °C it triples. The dashboard's Warming
 Penalty Scale shows the current multiplier.
@@ -80,14 +79,14 @@ adopt or repeal.
 
 Mitigation Policies lists all eight policies for every country. Each row shows
 Active or Inactive and one control: Adopt while the policy is not in force,
-Repeal while it is. A market-wide policy that your market leader put in force
-is also marked "set by market leader". A grayed control's tooltip lists the
+Repeal while it is. A market-wide policy that your market leader put in force is
+also marked "set by market leader". A grayed control's tooltip lists the
 conditions and which of them you meet. Adoption Around the World, a collapsible
 section, counts the nations running each policy.
 
-History, collapsed by default, charts global temperature and your market's
-share of world emissions. Both lines step once a year, when the emissions
-figures update.
+History, collapsed by default, charts global temperature and your market's share
+of world emissions. Both lines step once a year, when the emissions figures
+update.
 
 ## Climate policies
 
@@ -114,9 +113,9 @@ Standards charges its cost to every country in the market, members included.
 
 Only the three market-wide policies cut the emissions figure directly. The
 national ones trim oil, coal and electricity use at the margin, protect your
-people from the damage, and calm the Environmental Movement
-([The Environmental Movement](#the-environmental-movement)). Climate Adaptation
-is the one that pays off even if nobody else acts.
+people from the damage, and calm the Environmental Movement ([The Environmental
+Movement](#the-environmental-movement)). Climate Adaptation is the one that pays
+off even if nobody else acts.
 
 If you lead a market that burns a large share of the world's coal and oil, the
 market-wide policies are where your choice matters. If you are a member, you can
@@ -129,16 +128,16 @@ every policy it keeps a score, its will, and compares it with that policy's
 threshold in the table below. Every policy's will starts from a shared core: 20
 points per degree of warming (at most 100), 15 more with the Ministry of the
 Environment established, and 8 more if an environmentalist leads an interest
-group in government. Five signals then push it up or down,
-weighted by who each policy costs or helps:
+group in government. Five signals then push it up or down, weighted by who each
+policy costs or helps:
 
 - laissez-faire economics, against every policy;
 - industrialists in government, against the policies that burden industry;
 - the Environmental Movement's support, for every policy;
 - standard of living against the world average: wealth favors most policies
-  but counts against Climate Adaptation and Reforestation Subsidies;
+but counts against Climate Adaptation and Reforestation Subsidies;
 - how far the market is a net exporter of coal and oil, strongly against the
-  Carbon Tax and Fossil-Fuel Divestment.
+Carbon Tax and Fossil-Fuel Divestment.
 
 The AI adopts a policy once the will reaches the threshold, if it has the
 authority, and repeals it only once the will falls 15 points below the
@@ -165,17 +164,18 @@ never divest.
 Enforce Emissions Reduction is a treaty article that forces a market leader to
 run every climate policy except Climate Adaptation. It appears once the world
 has warmed past 0.1 °C and can be signed from 0.5 °C, with the Intergovernmental
-Organizations technology, against a country that leads its own market. It can
-be a war goal, and it can be requested or offered in a treaty.
+Organizations technology, against a country that leads its own market. It can be
+a war goal, and it can be requested or offered in a treaty.
 
-On entry into force, the bound country adopts the three market-wide policies
-for its whole market and the other four national policies for itself. While
-the treaty holds, it can't repeal them, and it also suffers −20% power plant
+On entry into force, the bound country adopts the three market-wide policies for
+its whole market and the other four national policies for itself. While the
+treaty holds, it can't repeal them, and it also suffers −20% power plant
 throughput, −10% coal mining and oil extraction throughput and +300 Authority
-Cost on top of the policies' own costs. The demanding side gains +2% prestige and pays the article's upkeep. If
-the bound country loses one of the policies anyway, the treaty freezes. Treaty
-mechanics are in [Diplomacy](08-diplomacy.md); while a United Nations exists, it
-also negotiates climate accords ([The United Nations](09-united-nations.md)).
+Cost on top of the policies' own costs. The demanding side gains +2% prestige
+and pays the article's upkeep. If the bound country loses one of the policies
+anyway, the treaty freezes. Treaty mechanics are in
+[Diplomacy](08-diplomacy.md); while a United Nations exists, it also negotiates
+climate accords ([The United Nations](09-united-nations.md)).
 
 ## Climate events
 
@@ -194,9 +194,9 @@ falls back below a mark it had passed:
 
 Each month every country also has a small chance of one recurring event whose
 conditions it meets. Their choices trade money, authority and interest group
-approval against radicals, mortality and throughput. Three have an extra
-option for a country that funds its Ministry of the Environment to level 3, and
-The Fever's March has one for the Ministry of Consumer Protection at level 3.
+approval against radicals, mortality and throughput. Three have an extra option
+for a country that funds its Ministry of the Environment to level 3, and The
+Fever's March has one for the Ministry of Consumer Protection at level 3.
 
 | Event | Conditions |
 |---|---|
@@ -215,7 +215,8 @@ The Fever's March has one for the Ministry of Consumer Protection at level 3.
 
 The Tide Comes In can leave you with Coastal Flooding or Coastal Population
 Relocation; while either lasts, a Settlement Authority on Managed Retreat can
-move people off your coasts ([Resettlement programs](07-states.md#resettlement-programs)).
+move people off your coasts ([Resettlement
+programs](07-states.md#resettlement-programs)).
 
 ## State pollution
 

@@ -51,23 +51,25 @@ Era 6 opens synthetic industry and the consumer economy. Bergius Process and
 Isoprene unlock Synthetic Fuel Works and Synthetic Rubber Works, Personal
 Appliances unlocks Consumer Appliance Industries, Commercial Aviation the
 Airport, and Public Works Programs the Hydro Plant. Nine of the era's
-technologies each open a new kind of mine, such as Modern Tools (Manganese Mine).
-Radar, Rocketry, Nuclear Weapons, Combined Arms, Keynesian Economics (the Fiat
-Money law), Intergovernmental Organizations and Decolonization are here too.
+technologies each open a new kind of mine, such as Modern Tools (Manganese
+Mine). Radar, Rocketry, Nuclear Weapons, Combined Arms, Keynesian Economics (the
+Fiat Money law), Intergovernmental Organizations and Decolonization are here
+too.
 
 Era 7 is the postwar boom. Transistor Technology unlocks the Electronic
 Components and Semiconductor Industry, Nuclear Energy the Nuclear Plant, and
 Green Revolution modernizes farms and plantations (Modern Farming, Mechanized
-Farm) and unlocks the Artificial Sweeteners Plant. Guided Missiles unlocks
-the Space Program building, and Space Exploration, Satellite Communications and
-Intercontinental Ballistic Missiles follow. Plastic Mass Production, Modern Urban
-Planning, Pollution Control and the Civil Rights Movement round out the era.
+Farm) and unlocks the Artificial Sweeteners Plant. Guided Missiles unlocks the
+Space Program building, and Space Exploration, Satellite Communications and
+Intercontinental Ballistic Missiles follow. Plastic Mass Production, Modern
+Urban Planning, Pollution Control and the Civil Rights Movement round out the
+era.
 
 Era 8 brings computers and automation. Computer Networks unlocks the Software
 Industry and Network Infrastructure, Industrial Robotics the Robotics Industry,
-and Modern Pharmaceuticals the Pharmaceutical Industries. Containerization, Fiber
-Optics, Cellular Networks, Microprocessor, Gene Splicing, Stealth Technology and
-Video Games are also here.
+and Modern Pharmaceuticals the Pharmaceutical Industries. Containerization,
+Fiber Optics, Cellular Networks, Microprocessor, Gene Splicing, Stealth
+Technology and Video Games are also here.
 
 Era 9 is the internet age. World Wide Web opens the internet laws, Clean Energy
 Technologies unlocks the Renewable Energy Plant, Hydraulic Fracturing adds
@@ -134,8 +136,8 @@ view. Each system also needs its game rule, and some have further conditions.
 | Brain-Computer Interfaces or Human Augmentation | 11 | The human augmentation journal entry | [Social movements](06-social-movements.md) |
 
 Some society technologies also start occasional narrative events (Second Wave
-Feminism, Contraceptive Pill, Social Media and others), covered in
-[Social movements](06-social-movements.md).
+Feminism, Contraceptive Pill, Social Media and others), covered in [Social
+movements](06-social-movements.md).
 
 ## New goods
 
@@ -160,12 +162,13 @@ renames twelve base-game goods to fit a longer timeline.
 | Magnetic Drive Ships | Industrial | Shipyards, from Modern Material Science | The last tier of the same production methods |
 
 The Convenience and Tourism needs, which wealthier pops fill with these goods,
-are covered in [Pop consumption at high wealth](03-economy.md#pop-consumption-at-high-wealth).
+are covered in [Pop consumption at high
+wealth](03-economy.md#pop-consumption-at-high-wealth).
 
 ### Renamed base-game goods
 
-Several base-game goods now stand for a broader family of materials. They are the
-same goods underneath, so base-game buildings still make and use them.
+Several base-game goods now stand for a broader family of materials. They are
+the same goods underneath, so base-game buildings still make and use them.
 
 | Base-game name | Name in this mod |
 |---|---|
@@ -184,10 +187,11 @@ same goods underneath, so base-game buildings still make and use them.
 
 Chemicals is the base game's fertilizer. Farms and plantations still take it,
 and dozens of modern industrial production methods now take it too. Bulk
-Transportation is explained in [Bulk Transportation and freight](03-economy.md#bulk-transportation-and-freight). Four
-buildings are renamed to match: Fertilizer Plants are Chemical Plants, Electrics
-Industries are Wired Telecommunications Industries, Synthetics Plants are
-Synthetic Dyes Industries, and the Arts Academy is Creative Industries.
+Transportation is explained in [Bulk Transportation and
+freight](03-economy.md#bulk-transportation-and-freight). Four buildings are
+renamed to match: Fertilizer Plants are Chemical Plants, Electrics Industries
+are Wired Telecommunications Industries, Synthetics Plants are Synthetic Dyes
+Industries, and the Arts Academy is Creative Industries.
 
 ## New buildings and production methods
 
@@ -198,8 +202,8 @@ most base-game buildings with production methods for the new eras.
 
 Fourteen new mines work deposits of specific minerals. Ten of them produce one
 of the renamed resource goods, adding supply to existing chains; the other four
-produce the new Tech-Critical Metals. Resource deposits are covered in
-[New mineral deposits](03-economy.md#new-mineral-deposits).
+produce the new Tech-Critical Metals. Resource deposits are covered in [New
+mineral deposits](03-economy.md#new-mineral-deposits).
 
 | Mine | Produces |
 |---|---|
@@ -234,28 +238,29 @@ building you built in 1850 keeps upgrading. Mines move on to Continuous Miners,
 Smart Miners and Laser Excavation Technology; grain farms to Modern Farming,
 Automated Harvesters and Planters and Designed Crops; plantations to Mechanized
 Farm and GMO Plantation; and automation groups end in AI-managed methods such as
-AI Managed Fab. A few polluting buildings get pollution-control groups
-([State pollution](14-climate.md#state-pollution)), and many get a hidden maintenance group
-used by the construction market ([Construction maintenance and retooling](03-economy.md#construction-maintenance-and-retooling)).
+AI Managed Fab. A few polluting buildings get pollution-control groups ([State
+pollution](14-climate.md#state-pollution)), and many get a hidden maintenance
+group used by the construction market ([Construction maintenance and
+retooling](03-economy.md#construction-maintenance-and-retooling)).
 
 ## Company flagship buildings
 
 The mod gives companies a unique flagship building: the Krupp Essen Works, the
-Standard Oil Refinery, the Ford Rouge Plant, and so on. 206 of the base game's 221
-companies have one; the fifteen without one all come from a single expansion's
-company list. All but one of the mod's own companies have one too. Two
-flagships serve a pair of companies each and one company has two, for 289
+Standard Oil Refinery, the Ford Rouge Plant, and so on. 206 of the base game's
+221 companies have one; the fifteen without one all come from a single
+expansion's company list. All but one of the mod's own companies have one too.
+Two flagships serve a pair of companies each and one company has two, for 289
 flagship buildings in all.
 
 A flagship building works like this:
 
 - You can build it only while you have the company, and only while the company's
-  prosperity bonus is active, because that bonus supplies its level cap of one.
+prosperity bonus is active, because that bonus supplies its level cap of one.
 - Only the government can build it, at 5,000 construction.
 - You can have each flagship in only one state.
 - Most are highly profitable at base prices, and each gives its state modifiers
-  that fit the company, such as extra Highway levels and migration pull from the
-  Volkswagen Autostadt.
+that fit the company, such as extra Highway levels and migration pull from the
+Volkswagen Autostadt.
 - If you lose the company, the building is demolished.
 
 The mod also adds extension buildings and prosperity bonuses to many base-game
@@ -280,7 +285,8 @@ The mod adds 37 wonders: landmarks of the twentieth and twenty-first centuries.
 Each costs 5,000 construction, has one level, and exists once in the world.
 Wonders, like the base game's monuments and the Space Program, count as
 monuments: each one raises Tourism Industry throughput in its state by 25% and
-adds 3 cultural pull ([Where cultural pull comes from](10-influence.md#where-cultural-pull-comes-from)).
+adds 3 cultural pull ([Where cultural pull comes
+from](10-influence.md#where-cultural-pull-comes-from)).
 
 Most wonders can only be built in one state, the landmark's real location, so
 only that state's owner can build them.
@@ -317,12 +323,11 @@ only that state's owner can build them.
 | Statue of Unity | Gujarat | Advanced Structural Engineering |
 | Golden Bridge | Tonkin | Advanced Structural Engineering |
 
-Each wonder employs 10,000 workers, and its effects scale with how fully
-it is staffed. The effects are modest and themed: the dams add 10 to 20
-Hydro Plant levels to their state and 25% Hydro Plant throughput, towers and
-trade landmarks raise trade advantage or Urban Center, Trade Center or service
-throughput, religious landmarks please the Devout, and several give flat
-prestige.
+Each wonder employs 10,000 workers, and its effects scale with how fully it is
+staffed. The effects are modest and themed: the dams add 10 to 20 Hydro Plant
+levels to their state and 25% Hydro Plant throughput, towers and trade landmarks
+raise trade advantage or Urban Center, Trade Center or service throughput,
+religious landmarks please the Devout, and several give flat prestige.
 
 Eight science and diplomacy wonders can be built in any state, so the first
 country to meet their conditions and finish one claims it:
@@ -339,11 +344,11 @@ country to meet their conditions and finish one claims it:
 | ITER Fusion Reactor | Fusion Power | Major power or better, Ministry of Science at level 3 | +150 innovation cap, Nuclear Plant throughput |
 
 The Continental Union Headquarters is the exception to "one in the world": each
-continent can have one, built on the builder's home continent. The United Nations
-Headquarters and the Power Bloc Headquarters are government buildings, not
-wonders, and don't count as monuments; see
-[Founding the United Nations](09-united-nations.md#founding-the-united-nations) and
-[Other power bloc changes](08-diplomacy.md#other-power-bloc-changes).
+continent can have one, built on the builder's home continent. The United
+Nations Headquarters and the Power Bloc Headquarters are government buildings,
+not wonders, and don't count as monuments; see [Founding the United
+Nations](09-united-nations.md#founding-the-united-nations) and [Other power bloc
+changes](08-diplomacy.md#other-power-bloc-changes).
 
 ## Megaprojects
 
@@ -356,19 +361,19 @@ of goods and specialists for one to four years.
 Every megaproject follows the same two-phase pattern.
 
 1. Build the construction site. It costs only 400 construction and the government
-   builds it.
+builds it.
 2. Choose its pace with its production method: Paused, 4 years, 2 years or 1 year.
-   Faster paces consume more goods per week. The site employs 50,000 to 100,000
-   engineers and academics (the Orbital Battlestation's also takes officers), and
-   it uses Advanced Materials, Electronic Components and other high-tech goods,
-   plus Launch Capacity for the Space Elevator, Orbital Solar Collector and
-   Orbital Battlestation.
+Faster paces consume more goods per week. The site employs 50,000 to 100,000
+engineers and academics (the Orbital Battlestation's also takes officers), and
+it uses Advanced Materials, Electronic Components and other high-tech goods,
+plus Launch Capacity for the Space Elevator, Orbital Solar Collector and Orbital
+Battlestation.
 3. Progress builds monthly in proportion to how fully the site is staffed. It
-   stops completely in any month the site is short of an input good, so a
-   supply gap stalls the whole project. Hover over the site to see its progress.
+stops completely in any month the site is short of an input good, so a supply
+gap stalls the whole project. Hover over the site to see its progress.
 4. When progress reaches 100%, the site disappears and the megaproject gains a
-   level (or appears at level 1). To add another level, build a new site in the
-   same state.
+level (or appears at level 1). To add another level, build a new site in the
+same state.
 
 <!-- screenshot: a Space Elevator Construction Site's building panel with the pace production methods and the progress modifier visible -->
 
@@ -387,12 +392,12 @@ specialists per level, and their effects scale with how fully they are staffed.
 | Nanofabrication Center | Molecular Assemblers | 10 | Produces Advanced Materials and lowers space race risk. |
 | Consciousness Network | Telepathic Communities | 10 | Adds bureaucracy, innovation, infrastructure, tax capacity and education access. Its Network Mode is Open Network (research, innovation, influence, prestige, standard of living) or Social Control Network (authority, government approval, lower turmoil and radicalism). Social Control Network needs Secret Police, Single-Party State, Autocracy, Mandatory Augmentation or Intrusive Surveillance System, and those laws rule out Open Network. |
 
-Each type of megaproject you complete adds 3 cultural pull
-([Where cultural pull comes from](10-influence.md#where-cultural-pull-comes-from)). The Space Elevator,
-Orbital Solar Collector, Orbital Battlestation and Antimatter Containment
-Facility have their own events during construction and after completion. The
-military and nuclear effects are covered in [Military and war](12-military.md)
-and [Nuclear weapons](13-nuclear.md).
+Each type of megaproject you complete adds 3 cultural pull ([Where cultural pull
+comes from](10-influence.md#where-cultural-pull-comes-from)). The Space
+Elevator, Orbital Solar Collector, Orbital Battlestation and Antimatter
+Containment Facility have their own events during construction and after
+completion. The military and nuclear effects are covered in [Military and
+war](12-military.md) and [Nuclear weapons](13-nuclear.md).
 
 ## Grand monuments
 

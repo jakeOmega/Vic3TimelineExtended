@@ -3,11 +3,11 @@
 Once you research the Nuclear Weapons technology, a great power can fund a
 weapons program that turns research into warheads. Holding warheads brings a
 posture to choose (when you would use them, how ready they stand and who may
-launch), a standing bill, the risk of accidents, and crises in which you threaten
-others or are threatened. Strikes, civil wars that split an arsenal, and warheads
-that go missing follow from the same system. The Nuclear Weapons game rule
-controls it and is on by default; with it off the technologies remain, but no
-program, stockpile or nuclear events exist.
+launch), a standing bill, the risk of accidents, and crises in which you
+threaten others or are threatened. Strikes, civil wars that split an arsenal,
+and warheads that go missing follow from the same system. The Nuclear Weapons
+game rule controls it and is on by default; with it off the technologies remain,
+but no program, stockpile or nuclear events exist.
 
 ## The Nuclear Weapons journal entry
 
@@ -32,8 +32,8 @@ upkeep and its accidents. Disarming closes the entry, except during a crisis.
 
 ## Building a nuclear arsenal
 
-The program spends weekly innovation on warheads. It is slow to reach the
-first device and much faster afterwards.
+The program spends weekly innovation on warheads. It is slow to reach the first
+device and much faster afterwards.
 
 ### Who can run a weapons program
 
@@ -61,23 +61,23 @@ innovation is above 100. A warhead needs 100 progress.
 | Series production | 10 a month | 5 steps then build a warhead every 2 months |
 
 A Nuclear Program Aid article doubles the rate, covert sabotage slows it, United
-Nations inspections slow it (by a quarter at the UN's middle tier of enforcement,
-more at the higher tiers), and after any nuclear use every funded program gets
-+25%, fading over five years (The Bomb Has Been Used). Events can bring a
-laboratory accident, a discovery with civilian uses, or anti-nuclear protests.
-Most of the accident's and the discovery's choices cost progress toward the
-first device.
+Nations inspections slow it (by a quarter at the UN's middle tier of
+enforcement, more at the higher tiers), and after any nuclear use every funded
+program gets +25%, fading over five years (The Bomb Has Been Used). Events can
+bring a laboratory accident, a discovery with civilian uses, or anti-nuclear
+protests. Most of the accident's and the discovery's choices cost progress
+toward the first device.
 
 ### The first device and the world's reaction
 
 The first country to finish a device gets "Dawn of the Atomic Age", the Nuclear
-Power modifier and a burst of loyalists. Later powers get "Our Nuclear Arsenal is
-Complete" and the same modifier, which raises prestige, diplomatic play
+Power modifier and a burst of loyalists. Later powers get "Our Nuclear Arsenal
+is Complete" and the same modifier, which raises prestige, diplomatic play
 maneuvers, and leverage generation and resistance.
 
-A later program is noticed at 75 progress on its first device: the great
-powers, its rivals and its neighbors get "Nuclear Proliferation Alert". A nuclear
-power can answer with a public ultimatum, or with a public denunciation where no
+A later program is noticed at 75 progress on its first device: the great powers,
+its rivals and its neighbors get "Nuclear Proliferation Alert". A nuclear power
+can answer with a public ultimatum, or with a public denunciation where no
 crisis can be opened. A country with a program of its own can crash it or stay
 the course. Anyone can push for a non-proliferation treaty, accept the new
 reality, or, with the Covert Warfare rule off, sponsor sabotage. Several answers
@@ -118,8 +118,8 @@ updated monthly, and two investment steppers from 0 to 3.
 - Crew strain rises 5 a month at High Alert, settles around 40 at Heightened, and falls 6 a month at Routine or Recessed.
 
 Safeguards also make an unapproved launch likelier to be halted and cut the
-warheads lost when your arsenal changes hands. Survivability decides how hard you
-are to coerce: at 50 or more, threats against you carry much less weight.
+warheads lost when your arsenal changes hands. Survivability decides how hard
+you are to coerce: at 50 or more, threats against you carry much less weight.
 
 ### Delivery capability and home defense
 
@@ -137,8 +137,8 @@ defense, never below 5% and never above 100%.
 
 Technology defends every state. A Military Base defends its own state only, by
 +2% per level with a Missile Defense Battery or +3% with Directed Energy Point
-Defense, and AI planners aim fewer strikes at defended states. Military bases in general
-are in [Military and war](12-military.md).
+Defense, and AI planners aim fewer strikes at defended states. Military bases in
+general are in [Military and war](12-military.md).
 
 ## Nuclear posture
 
@@ -147,8 +147,8 @@ use says why.
 
 ### Nuclear doctrine
 
-Doctrine says when your government may strike first against a country you are
-at war with. Retaliation is allowed under every doctrine. You can change doctrine
+Doctrine says when your government may strike first against a country you are at
+war with. Retaliation is allowed under every doctrine. You can change doctrine
 once every two years, and the first choice is free.
 
 | Doctrine | First use allowed when | Standing effect |
@@ -164,9 +164,9 @@ five significant battles. Adopting Compellence or Warfighting costs 5 infamy and
 10 relations with every rival. Leaving No First Use is a **repudiation**: −20
 credibility, +10 infamy, a ten-year Broken Nuclear Pledge modifier, and your
 restraint-minded interest groups disapprove. While the No-First-Strike Pledge
-amendment is on your laws (see
-[Amendments to the mod's laws](05-politics.md#amendments-to-the-mods-laws)),
-your doctrine is held at No First Use, and leaving it strikes the amendment.
+amendment is on your laws (see [Amendments to the mod's
+laws](05-politics.md#amendments-to-the-mods-laws)), your doctrine is held at No
+First Use, and leaving it strikes the amendment.
 
 ### Nuclear readiness levels
 
@@ -180,8 +180,8 @@ Readiness moves one step every two weeks toward the level you order.
 | High Alert | +10% strike success and +5 play maneuvers; strain builds every month, and with it accidents and false warnings |
 
 Struck while Recessed, you can order the warheads mated; "Our Forces Are Ready"
-offers the answer when they reach Routine, if the war goes on. A stand-down agreed
-or conceded in a crisis holds you at Routine or below for two years.
+offers the answer when they reach Routine, if the war goes on. A stand-down
+agreed or conceded in a crisis holds you at Routine or below for two years.
 
 ### Launch authority
 
@@ -196,15 +196,15 @@ once a year.
 | Automatic Retaliation | Radar, Intercontinental Ballistic Missiles, Mainframe Computers | A strategic first strike on you is answered in full, up to three warheads, with no choice left to you. Threats against you count as if your forces were survivable. Extra upkeep; restraint-minded groups dislike it; an accident at home during a war or an acute crisis can set it off |
 
 The Forces section shows the chance that someone in the chain halts a launch
-begun under delegation or launch on warning. Automatic Retaliation never answers a
-retaliation, and answers a given attacker at most once in six months.
+begun under delegation or launch on warning. Automatic Retaliation never answers
+a retaliation, and answers a given attacker at most once in six months.
 
 ### How interest groups judge your posture
 
 The At Home section lists each interest group with a view and the approval it
 adds: Nuclear Posture: Enthusiastic (+2), Approving (+1), Uneasy (−1) or Opposed
-(−2). Opinions are reviewed monthly, and doctrine and readiness count only once a
-doctrine has stood for six months.
+(−2). Opinions are reviewed monthly, and doctrine and readiness count only once
+a doctrine has stood for six months.
 
 | Group | Wants | Dislikes |
 |---|---|---|
@@ -228,15 +228,15 @@ in a war or play with it, and lets you retaliate for a strike on it under any
 doctrine. You are asked to answer when it is threatened or struck (see
 [Guarantors called in](#guarantors-called-in)).
 
-Withdraw Nuclear Umbrella is a diplomatic action on a direct subject: +10 liberty
-desire and −20 relations at once, then +0.1 liberty desire a week until you
-restore it. Subjects of your subjects are covered by their own overlord only, and
-power bloc members need a treaty.
+Withdraw Nuclear Umbrella is a diplomatic action on a direct subject: +10
+liberty desire and −20 relations at once, then +0.1 liberty desire a week until
+you restore it. Subjects of your subjects are covered by their own overlord
+only, and power bloc members need a treaty.
 
 Going Recessed while you protect anyone brings "Our Allies Are Alarmed" every
-time: −5 credibility, −10 relations with each country you protect, and +5 liberty
-desire in each covered subject. A protector in storage counts for half in a
-crisis.
+time: −5 credibility, −10 relations with each country you protect, and +5
+liberty desire in each covered subject. A protector in storage counts for half
+in a crisis.
 
 ## Nuclear crises
 
@@ -255,8 +255,8 @@ Two diplomatic actions open one:
 
 Either action needs an arsenal of your own, both sides free of other crises, no
 non-use pledge between you, and one of the disputes below, taken in this order.
-After a crisis you can't threaten the same country again for 24 months, except in
-a war.
+After a crisis you can't threaten the same country again for 24 months, except
+in a war.
 
 | Dispute | What the target gives up if it concedes |
 |---|---|
@@ -269,12 +269,12 @@ a war.
 ### Crisis stages, danger and pressure
 
 A private warning starts at Warning; a public ultimatum starts at Confrontation.
-A warning becomes a Confrontation when it goes public, is refused or answered with
-a counter-threat, or when either side holds an exercise. A Confrontation turns
-Acute when danger reaches 70 or the issuer is at High Alert while the target is at
-Heightened or higher. Any crisis turns Acute when the issuer holds firm, a play
-becomes a war, or a launch between the two is recalled at the last moment. A
-crisis can be settled at any stage, and it lapses after a year.
+A warning becomes a Confrontation when it goes public, is refused or answered
+with a counter-threat, or when either side holds an exercise. A Confrontation
+turns Acute when danger reaches 70 or the issuer is at High Alert while the
+target is at Heightened or higher. Any crisis turns Acute when the issuer holds
+firm, a play becomes a war, or a launch between the two is recalled at the last
+moment. A crisis can be settled at any stage, and it lapses after a year.
 
 The crisis panel shows two figures, each broken down in its tooltip.
 
@@ -302,18 +302,19 @@ Each side acts through events and the crisis panel's buttons.
 
 At the deadline the issuer chooses: six more weeks (−3 credibility), hold firm
 (the crisis turns Acute, forces go to High Alert, six more weeks), offer a
-stand-down, let the deadline lapse (which counts as backing down), or, at war with
-the target and with every strike gate open, carry out the threat. A play under a
-public ultimatum that turns into a war brings "They Chose War": strike, fight
-conventionally (−10 credibility, militarists disapprove) or offer a stand-down.
+stand-down, let the deadline lapse (which counts as backing down), or, at war
+with the target and with every strike gate open, carry out the threat. A play
+under a public ultimatum that turns into a war brings "They Chose War": strike,
+fight conventionally (−10 credibility, militarists disapprove) or offer a
+stand-down.
 
 ### Credibility, bluffs and crisis outcomes
 
 Doctrine is public, so the panel rates every threat: Backed (+10 pressure; your
-doctrine permits a strike now, or you hold Compellence or Warfighting), Uncertain
-(Flexible First Use, or Existential Deterrence with something at stake), or A
-bluff (−25, or −35 under No First Use; your doctrine or Rules of War law forbids
-a strike).
+doctrine permits a strike now, or you hold Compellence or Warfighting),
+Uncertain (Flexible First Use, or Existential Deterrence with something at
+stake), or A bluff (−25, or −35 under No First Use; your doctrine or Rules of
+War law forbids a strike).
 
 | Outcome | Issuer | Target |
 |---|---|---|
@@ -324,9 +325,10 @@ a strike).
 
 A public bluff that ends in a climb-down or runs out its year costs 5 more
 credibility. The modifiers last five years. A crisis also ends when its war or
-play ends, or when nuclear weapons are used between the two. A non-use pledge from a stand-down
-blocks strikes on that partner until one side uses Repudiate Non-Use Pledge (−15
-credibility, +5 infamy, −30 relations and a Broken Nuclear Pledge).
+play ends, or when nuclear weapons are used between the two. A non-use pledge
+from a stand-down blocks strikes on that partner until one side uses Repudiate
+Non-Use Pledge (−15 credibility, +5 infamy, −30 relations and a Broken Nuclear
+Pledge).
 
 ### Guarantors called in
 
@@ -339,9 +341,9 @@ Called In":
 | Retaliate (after a strike) | +10 credibility; you join the war and, if you are at war with the attacker a day later, strike back then, as retaliation, under any doctrine |
 | Abandon | −15 credibility, Abandoned a Nuclear Guarantee for five years, −30 relations with the protégé and −10 with everyone else you protect; a subject gains 10 liberty desire |
 
-If your protégé used the bomb first and its victim answered, you get "Our Protégé
-Struck First" instead. Standing by it or answering in kind costs 5 infamy;
-declining costs no credibility, only 10 relations with the protégé.
+If your protégé used the bomb first and its victim answered, you get "Our
+Protégé Struck First" instead. Standing by it or answering in kind costs 5
+infamy; declining costs no credibility, only 10 relations with the protégé.
 
 ## Nuclear strikes
 
@@ -356,12 +358,12 @@ state you pick.
 | Target | Any enemy state | A state with a Barracks, Naval Administration, Naval Fortification, Naval Logistics Center, Conscription Center or Military Base |
 | Rules of War that forbid it | Humanitarian Regulations, Limited War | Limited War |
 
-A strike ordered through these actions or a crisis event also needs your doctrine
-to allow it, no non-use pledge with the target, and forces that are not Recessed.
-The Rules of War block lifts once you or a country you cover has been struck, or
-when an enemy's war goal would annex or subjugate you. A launch ordered on an
-unconfirmed early warning skips the doctrine and Rules of War tests (see
-[Nuclear incidents and accidents](#nuclear-incidents-and-accidents)).
+A strike ordered through these actions or a crisis event also needs your
+doctrine to allow it, no non-use pledge with the target, and forces that are not
+Recessed. The Rules of War block lifts once you or a country you cover has been
+struck, or when an enemy's war goal would annex or subjugate you. A launch
+ordered on an unconfirmed early warning skips the doctrine and Rules of War
+tests (see [Nuclear incidents and accidents](#nuclear-incidents-and-accidents)).
 
 ### What a nuclear strike does
 
@@ -388,18 +390,18 @@ Nations records it against you, and its court may indict your ruler (see
 The victim of a strategic strike gets "A City Erased" with its answer: condemn
 the attack, retaliate with one warhead, or launch a full retaliation of three if
 it holds more than two. Retaliation costs no infamy and counts for less with the
-United Nations than a first strike, and the attacker may answer it in turn. Under
-Automatic Retaliation the answer is made for you; while Recessed you can only
-mate the warheads and answer when they are ready.
+United Nations than a first strike, and the attacker may answer it in turn.
+Under Automatic Retaliation the answer is made for you; while Recessed you can
+only mate the warheads and answer when they are ready.
 
 ## Nuclear incidents and accidents
 
-Every armed country rolls once a month for something going wrong. The base chance
-is 0.05% a month at Recessed, 0.1% at Routine, 0.4% at Heightened and 1% at High
-Alert. Strain and a dangerous crisis raise it, command reliability moves it up or
-down, and it never passes 3%. Over ten years without a crisis that is roughly a
-5–10% chance of any incident at Routine, 35–50% at Heightened and 90% at High
-Alert.
+Every armed country rolls once a month for something going wrong. The base
+chance is 0.05% a month at Recessed, 0.1% at Routine, 0.4% at Heightened and 1%
+at High Alert. Strain and a dangerous crisis raise it, command reliability moves
+it up or down, and it never passes 3%. Over ten years without a crisis that is
+roughly a 5–10% chance of any incident at Routine, 35–50% at Heightened and 90%
+at High Alert.
 
 | Incident | Can happen when | What it is |
 |---|---|---|
@@ -410,22 +412,22 @@ Alert.
 | A Routine Mishap | Always | False alarms, dropped training weapons, storms |
 
 Most incidents cost money, readiness, reliability or reputation. A buried
-incident has a 3% chance each month of coming out (Nuclear
-Cover-Up Exposed: −10 legitimacy, −10% authority, −5% prestige).
+incident has a 3% chance each month of coming out (Nuclear Cover-Up Exposed: −10
+legitimacy, −10% authority, −5% prestige).
 
-A launch needs a war with the country in question. Outside a war, a launch nobody
-halted is recalled at the last moment: +10 infamy, −50 relations with the target,
-more strain and less reliability, and an armed target may answer by opening a
-crisis. Under No First Use, even an unapproved launch in a war breaks your
-pledge.
+A launch needs a war with the country in question. Outside a war, a launch
+nobody halted is recalled at the last moment: +10 infamy, −50 relations with the
+target, more strain and less reliability, and an armed target may answer by
+opening a crisis. Under No First Use, even an unapproved launch in a war breaks
+your pledge.
 
 ### The Monopoly Window
 
 A Compellence or Warfighting power at war with an enemy that has no arsenal, no
-armed protector and no armed ally in that war, and whose doctrine allows a strike
-on it, has an 8% chance a month, at most once a year, of "The Monopoly Window":
-its general staff proposes using the bomb while nobody can answer. You can win
-conventionally, issue a public ultimatum, or authorize the strike.
+armed protector and no armed ally in that war, and whose doctrine allows a
+strike on it, has an 8% chance a month, at most once a year, of "The Monopoly
+Window": its general staff proposes using the bomb while nobody can answer. You
+can win conventionally, issue a public ultimatum, or authorize the strike.
 
 ## Arsenals in civil wars and annexations
 
@@ -474,8 +476,8 @@ government's arsenal.
 
 ### Foreign powers and a divided arsenal
 
-A week after an armed country's civil war breaks out, every armed major power and
-armed neighbor gets "A Nuclear Power Divided". It can back either side (+20
+A week after an armed country's civil war breaks out, every armed major power
+and armed neighbor gets "A Nuclear Power Divided". It can back either side (+20
 relations with it, −20 with the other, +5 war support for that side), offer to
 secure the arsenal, or stay out. An accepted offer makes the helper the
 government's custodian for the war.
@@ -483,13 +485,13 @@ government's custodian for the war.
 ### The Budapest path
 
 A week after a secession wins while holding warheads, every armed great power
-gets "A New Nuclear State" and may press it. A month after the first does, the new
-state gets "The Budapest Offer". Trading the warheads away dismantles them, and
-the pressers sign treaties with you wherever one can be made: the one with the
-largest economy a Nuclear Disarmament and a Nuclear Guarantee, every other a
+gets "A New Nuclear State" and may press it. A month after the first does, the
+new state gets "The Budapest Offer". Trading the warheads away dismantles them,
+and the pressers sign treaties with you wherever one can be made: the one with
+the largest economy a Nuclear Disarmament and a Nuclear Guarantee, every other a
 guarantee, all binding for ten years. Relations with each rise by 20. Keeping
-them costs 20 relations with each presser, and for ten years the AI is readier to
-demand your disarmament.
+them costs 20 relations with each presser, and for ten years the AI is readier
+to demand your disarmament.
 
 ## Loose warheads
 
@@ -519,10 +521,10 @@ possible sources make certainty likelier.
 | A shortlist of two or three, which may include innocent countries | Name them all in public (−25 relations with each), or ask each privately to open its depots |
 | Unknown | Say nothing, or blame a rival anyway |
 
-Blame means negligence, not attack. The origin gets "The Warhead Was Ours" and can
-pay compensation (up to a tenth of your GDP), let your inspectors in (twenty years
-of secured custody, Custody Inspections at −5 legitimacy, and a 50% chance of
-finding one of its missing warheads at once), or deny it (−40 relations, +5
+Blame means negligence, not attack. The origin gets "The Warhead Was Ours" and
+can pay compensation (up to a tenth of your GDP), let your inspectors in (twenty
+years of secured custody, Custody Inspections at −5 legitimacy, and a 50% chance
+of finding one of its missing warheads at once), or deny it (−40 relations, +5
 infamy).
 
 ### Recovering loose warheads
@@ -548,8 +550,8 @@ upkeep while the treaty is in force.
 | Nuclear Security Assistance | An armed country pays 100 to help one holding or missing warheads | Secured custody and a monthly chance to recover missing warheads |
 
 Aid can't be combined with a disarmament or freeze of the same country. The
-United Nations' non-proliferation treaty and IAEA are in
-[The United Nations](09-united-nations.md).
+United Nations' non-proliferation treaty and IAEA are in [The United
+Nations](09-united-nations.md).
 
 ## How the AI plays nuclear weapons
 

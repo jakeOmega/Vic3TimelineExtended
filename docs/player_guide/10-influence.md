@@ -61,9 +61,9 @@ multiplier. The breakdown section lists each one for your country.
 The multiplier comes from your rank (great power +25%, major power +10%), laws
 (free trade, open borders and inclusive citizenship raise it; isolationist,
 exclusionary and repressive laws lower it), technologies such as Romanticism,
-Realism, Film and Television, the Ministry of Culture institution, programs
-and events. Wonders, megaprojects and grand monuments are described in
-[The extended timeline](02-timeline.md).
+Realism, Film and Television, the Ministry of Culture institution, programs and
+events. Wonders, megaprojects and grand monuments are described in [The extended
+timeline](02-timeline.md).
 
 ### What cultural dominance gives
 
@@ -102,19 +102,20 @@ by the cultural pull of the countries running it rather than by their number.
 
 The hegemon's model pushes on every country that carries the Foreign Cultural
 Benchmark: the matching political movement there (a liberal movement under a
-liberal hegemon, for example, or a related one if it is absent) grows more active
-and attracts more pops. The push is zero while the model holds less than 15% of
-world culture and grows with its share after that; the tooltip on the exported
-model shows its strength. A hegemon with feminist, civil-rights, environmental,
-abolitionist, labor or land-reform laws also feeds those movements abroad, and
-one at peace without Mass Conscription feeds anti-war movements. Movements are
-covered in [Government, laws and characters](05-politics.md).
+liberal hegemon, for example, or a related one if it is absent) grows more
+active and attracts more pops. The push is zero while the model holds less than
+15% of world culture and grows with its share after that; the tooltip on the
+exported model shows its strength. A hegemon with feminist, civil-rights,
+environmental, abolitionist, labor or land-reform laws also feeds those
+movements abroad, and one at peace without Mass Conscription feeds anti-war
+movements. Movements are covered in [Government, laws and
+characters](05-politics.md).
 
 ### Cultural programs
 
 Every program needs the Ministry of Culture Established law (unlocked by Mass
-Propaganda). If you repeal it, funding drops to zero and all four programs
-stop at the next monthly update.
+Propaganda). If you repeal it, funding drops to zero and all four programs stop
+at the next monthly update.
 
 | Program | Controls | Effect | Cost |
 |---|---|---|---|
@@ -186,18 +187,18 @@ one row per running operation, and one row per agent network.
 ### Intelligence capacity and operation slots
 
 Intelligence capacity is your agency's size: a base of 5, plus your rank (great
-power +10, major power +5), your literacy (up to 50 at full literacy), your share
-of world GDP (a point per percent, up to 25), and modifiers from technologies,
-laws such as Secret Police and Censorship, and the Ministry of Intelligence and
-Security (+4 per level). Tradecraft then multiplies the total. The journal entry
-rates you against the world's best, from Intelligence Fortress (80% of the best
-or more) through Hardened, Defended and Exposed to Vulnerable (below 20%).
+power +10, major power +5), your literacy (up to 50 at full literacy), your
+share of world GDP (a point per percent, up to 25), and modifiers from
+technologies, laws such as Secret Police and Censorship, and the Ministry of
+Intelligence and Security (+4 per level). Tradecraft then multiplies the total.
+The journal entry rates you against the world's best, from Intelligence Fortress
+(80% of the best or more) through Hardened, Defended and Exposed to Vulnerable
+(below 20%).
 
 Capacity cuts both ways. The stronger a target's capacity is against yours, the
 likelier your operations there are caught; the stronger yours, the likelier you
-catch operations against you. Capacity also gives separatism and coup
-resistance (the Intelligence Capacity modifier), growing up to a capacity of
-125.
+catch operations against you. Capacity also gives separatism and coup resistance
+(the Intelligence Capacity modifier), growing up to a capacity of 125.
 
 Each operation occupies one slot. Beyond the rank and ministry slots, Mainframe
 Computers, Computer Networks, Cyber Warfare and Quantum Computing each add one,
@@ -229,11 +230,13 @@ From level 3, idle networks also decay half as fast.
 There are fourteen operations. Every one needs a free slot, room under the
 per-type limit, no operation of the same type already running against that
 target, funding of at least 1, a target that is not decentralized, no truce with
-it, and no Intelligence Sharing Pact binding it (see
-[The Intelligence Sharing Pact's defense shield](08-diplomacy.md#the-intelligence-sharing-pacts-defense-shield)). Election Interference, Financial Subversion,
-Ideological Subversion and the two wartime operations can't target a country
-with amicable relations or better toward you, and Destabilization can't target
-one at cordial or better. The others have no relations limit.
+it, and no Intelligence Sharing Pact binding it (see [The Intelligence Sharing
+Pact's defense
+shield](08-diplomacy.md#the-intelligence-sharing-pacts-defense-shield)).
+Election Interference, Financial Subversion, Ideological Subversion and the two
+wartime operations can't target a country with amicable relations or better
+toward you, and Destabilization can't target one at cordial or better. The
+others have no relations limit.
 
 | Operation | What it does at base strength | Also needs |
 |---|---|---|
@@ -253,11 +256,11 @@ one at cordial or better. The others have no relations limit.
 | Secure Loose Material | Once established, a 3% monthly chance (6% fully operational) of finding and destroying one of the target's missing warheads | Target has warheads unaccounted for; Nuclear Weapons rule on |
 
 If you run several espionage operations of one type, your gains come from the
-strongest and don't add up. Election Interference cuts electoral confidence by 5%
-once establishing and 10% once fully operational. Bubble pressure is explained in
-[Banking and monetary policy](04-banking.md), nuclear programs and loose
-warheads in [Nuclear weapons](13-nuclear.md), and milestones in
-[The space race](15-space.md).
+strongest and don't add up. Election Interference cuts electoral confidence by
+5% once establishing and 10% once fully operational. Bubble pressure is
+explained in [Banking and monetary policy](04-banking.md), nuclear programs and
+loose warheads in [Nuclear weapons](13-nuclear.md), and milestones in [The space
+race](15-space.md).
 
 Hover over an operation before launching it: the tooltip previews its effects at
 base strength (established, priority 1) and how phase and priority scale them,
@@ -265,11 +268,11 @@ and the description says how the world will read it if it is exposed.
 
 ### Operation phases and priority
 
-An operation does nothing for its first six months (Preparatory). From month 6 it
-is Establishing and has its base effect; from month 12 it is Fully Operational
-and its effects double. Each row shows the phase and the months to the next
-one. Ideological Subversion's push on movements is the exception: it doesn't
-double, and stays at its establishing strength.
+An operation does nothing for its first six months (Preparatory). From month 6
+it is Establishing and has its base effect; from month 12 it is Fully
+Operational and its effects double. Each row shows the phase and the months to
+the next one. Ideological Subversion's push on movements is the exception: it
+doesn't double, and stays at its establishing strength.
 
 Each row also has a priority stepper from 1 to 3. Priority multiplies what the
 operation does, but costs and exposure rise faster:
@@ -284,17 +287,18 @@ Priority 3 needs an Established agency; a fully operational operation at
 priority 3 works at 3.2 times base strength. A click changes detection risk at
 once, in either direction, but the effects only at the start of the next month.
 Raising priority raises upkeep at once; lowering it cuts upkeep only when the
-effects fall. Cultivate Assets stays at priority 1. Election
-Interference's cut to electoral confidence and Regime Change's push on a coup
-are fixed and don't scale with priority.
+effects fall. Cultivate Assets stays at priority 1. Election Interference's cut
+to electoral confidence and Regime Change's push on a coup are fixed and don't
+scale with priority.
 
 ### Agent networks
 
 Every country you run operations against keeps a network of yours, rated 0 to
-100, that outlives the operations. It grows by about 2 a month with one operation
-there, faster with two or three and more slowly above 50, so one operation takes
-it to 50 in about two years (Cultivate Assets, in about 17 months). With nothing
-running it decays by 1.5 a month. An exposed operation costs its network 25.
+100, that outlives the operations. It grows by about 2 a month with one
+operation there, faster with two or three and more slowly above 50, so one
+operation takes it to 50 in about two years (Cultivate Assets, in about 17
+months). With nothing running it decays by 1.5 a month. An exposed operation
+costs its network 25.
 
 A strong network gives new operations there a head start of up to five months
 (strength ÷ 20) and takes up to 5 points off their detection risk. From strength
@@ -353,35 +357,35 @@ the establishing phase the costs are:
 An operation caught while preparatory costs half as much, and one caught fully
 operational half as much again. Exposing an attempt on a government also costs
 10 relations with every country in the target's power bloc and every treaty ally
-of the target, and the United Nations records it (see
-[The United Nations](09-united-nations.md)).
+of the target, and the United Nations records it (see [The United
+Nations](09-united-nations.md)).
 
 ### What the target learns
 
 A country that catches your operation gets the Foreign Interference Detected
-event, which names you and the operation. It can shore up its counterintelligence
-(a decaying boost to separatism and coup resistance), retaliate in kind (a
-network of up to 25 inside your country, if it has a Covert Warfare journal
-entry of its own), or make the evidence public (−3 infamy for itself). The event
-fires at most once every two years per country, and only once per game for a
-country without a Covert Warfare journal entry of its own. The command center
-shows the latest catch for ten years. Nothing else names the country behind an
-operation. A target can see the effects among its own modifiers, gets an
-unsigned Election Interference Detected notification with each confidence hit,
-and can count the operations against it through a strong network of its own.
+event, which names you and the operation. It can shore up its
+counterintelligence (a decaying boost to separatism and coup resistance),
+retaliate in kind (a network of up to 25 inside your country, if it has a Covert
+Warfare journal entry of its own), or make the evidence public (−3 infamy for
+itself). The event fires at most once every two years per country, and only once
+per game for a country without a Covert Warfare journal entry of its own. The
+command center shows the latest catch for ten years. Nothing else names the
+country behind an operation. A target can see the effects among its own
+modifiers, gets an unsigned Election Interference Detected notification with
+each confidence hit, and can count the operations against it through a strong
+network of its own.
 
 ### Covert defense
 
 Each unused slot becomes Domestic Intelligence Focus: +2 intelligence capacity,
 more separatism and coup resistance, calmer movements and better colonial
-garrisons. You also
-have three covert defenses, economic, military and ideological, each added to
-your capacity against operations of its kind. Strict IP Protection and Central
-Bank Independence raise economic defense and Publicly Funded Elections
-ideological defense; No IP Protection, Unregulated Banking and No Campaign
-Finance Laws lower them. The Intelligence Sharing Pact treaty article adds
-intelligence capacity and lends the weaker partner part of the stronger one's
-covert defenses.
+garrisons. You also have three covert defenses, economic, military and
+ideological, each added to your capacity against operations of its kind. Strict
+IP Protection and Central Bank Independence raise economic defense and Publicly
+Funded Elections ideological defense; No IP Protection, Unregulated Banking and
+No Campaign Finance Laws lower them. The Intelligence Sharing Pact treaty
+article adds intelligence capacity and lends the weaker partner part of the
+stronger one's covert defenses.
 
 ### When operations end
 

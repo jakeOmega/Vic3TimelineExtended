@@ -1,13 +1,13 @@
 # Military and war
 
-The mod carries the army and navy through to era 12. It adds 25 battalion
-types, two new unit groups (Heavy Tanks and Aircraft) and 19 ship types, and it
-rewards armies that mix their arms. Military Bases fortify states against
-invasion and missiles, several of the mod's systems feed war support, and
-mobilization drives a sharp rise in ammunition demand. All of this is always on.
-The optional part is the World War journal entry, which needs the World War game
-rule (disabled by default): great powers of opposed ideologies drift into a
-global war and then settle the peace.
+The mod carries the army and navy through to era 12. It adds 25 battalion types,
+two new unit groups (Heavy Tanks and Aircraft) and 19 ship types, and it rewards
+armies that mix their arms. Military Bases fortify states against invasion and
+missiles, several of the mod's systems feed war support, and mobilization drives
+a sharp rise in ammunition demand. All of this is always on. The optional part
+is the World War journal entry, which needs the World War game rule (disabled by
+default): great powers of opposed ideologies drift into a global war and then
+settle the peace.
 
 ## Combined arms bonuses
 
@@ -116,10 +116,10 @@ carriers, battle-line ships and troop transports in most eras.
 
 The Expeditionary Fast Transport is quick and carries little; the Expeditionary
 Sea Base is slow and carries four times as much. The base game's late ships go
-obsolete as their successors arrive: the Super Dreadnought with Bombing Aircraft,
-the Troopship with Combined Arms, the Destroyer and Light Cruiser with Sonar, the
-Submarine with Advanced Submarine Technology and the Aircraft Carrier with
-Nuclear Energy.
+obsolete as their successors arrive: the Super Dreadnought with Bombing
+Aircraft, the Troopship with Combined Arms, the Destroyer and Light Cruiser with
+Sonar, the Submarine with Advanced Submarine Technology and the Aircraft Carrier
+with Nuclear Energy.
 
 In the ship designer, nine of the new ships bring their own armor, guns,
 propulsion and range modifications in three tiers; the others reuse those of a
@@ -142,8 +142,8 @@ The mod adds 27 mobilization options, some in a new Training group. The new
 transport and medical options join the base game's exclusive sets: a formation
 picks one of Forced March, Truck Transport, Rail Transport, Air Transport and
 Space Transport, and one of First Aid, Field Hospitals and Medevac Helicopters.
-Many options can be chosen only while your market has the goods they consume
-for sale.
+Many options can be chosen only while your market has the goods they consume for
+sale.
 
 | Option | Unlocked by | Effect |
 |---|---|---|
@@ -171,15 +171,14 @@ for sale.
 | Amphibious Warfare Training | Engineering and Logistics principle, tier III+ | +25% offense and defense in water terrain |
 | Flight Simulators | Military Training principle, tier V | +10% offense and defense for Jet-Powered Aircraft and later |
 
-The principles come from your power bloc
-([New principle groups](08-diplomacy.md#new-principle-groups)); the
-augmentation laws are in
+The principles come from your power bloc ([New principle
+groups](08-diplomacy.md#new-principle-groups)); the augmentation laws are in
 [Rights and society laws](05-politics.md#rights-and-society-laws).
 
 Entrenchment, the three terrain trainings, Missile Defense System and
 Exoskeleton Suits add ammunition to a mobilized battalion's upkeep, on top of
-the fourfold rise that mobilization already brings
-([Wartime demand for munitions](03-economy.md#wartime-demand-for-munitions)).
+the fourfold rise that mobilization already brings ([Wartime demand for
+munitions](03-economy.md#wartime-demand-for-munitions)).
 
 ## Military bases
 
@@ -232,8 +231,8 @@ technologies give every state. AI strike planners weigh target states by the
 chance a warhead gets through, so defended states draw fewer strikes.
 
 A tactical nuclear strike halves every Naval Fortification and Military Base in
-the state, and what survives keeps its production methods; see
-[What a nuclear strike does](13-nuclear.md#what-a-nuclear-strike-does).
+the state, and what survives keeps its production methods; see [What a nuclear
+strike does](13-nuclear.md#what-a-nuclear-strike-does).
 
 ### Demilitarized zones and forced disarmament
 
@@ -278,14 +277,14 @@ Laws and technologies also change how far battles move war support.
 | State Secrets / Freedom of Information / Open Government laws | −5% / +5% / +10% | the same |
 | Television Broadcasting / Satellite Communications / Social Media technologies | +10% / +5% / +15% | +15% / +10% / +20% |
 
-Total War and Limited War belong to the Rules of War law group; see
-[Government, laws and characters](05-politics.md).
+Total War and Limited War belong to the Rules of War law group; see [Government,
+laws and characters](05-politics.md).
 
 ## Ammunition and mobilization
 
-Mobilization quadruples a battalion's ammunition use, even for a diplomatic
-play that never becomes a war; see
-[Wartime demand for munitions](03-economy.md#wartime-demand-for-munitions).
+Mobilization quadruples a battalion's ammunition use, even for a diplomatic play
+that never becomes a war; see [Wartime demand for
+munitions](03-economy.md#wartime-demand-for-munitions).
 
 ## The World War journal entry
 
@@ -342,8 +341,8 @@ Leadup events come at random. In Ideological Demands you decide whether to press
 an opposed great-power rival to renounce its system; if you do, it answers in
 Ideological Confrontation. Border Incident, with an opposed rival on your
 border, lets you demand an apology, downplay it, or mobilize (Rearmament for
-five years). Diplomatic Crisis fires when an opposed rival opens a play against a
-smaller country in your power bloc or under your protection: guarantee its
+five years). Diplomatic Crisis fires when an opposed rival opens a play against
+a smaller country in your power bloc or under your protection: guarantee its
 independence for five years, abandon it, or mobilize in its defense.
 
 ### The brink of war
@@ -355,9 +354,9 @@ opens a Cut Down to Size diplomatic play against it at escalation 90. Standing
 down angers the Armed Forces and keeps the event away for ten years. The AI
 usually launches.
 
-At launch only those two powers are belligerents; allies who join the play
-fight beside them but take no side in the entry. If the play ends without a war,
-the crisis is defused and a later one can start another.
+At launch only those two powers are belligerents; allies who join the play fight
+beside them but take no side in the entry. If the play ends without a war, the
+crisis is defused and a later one can start another.
 
 ### Fighting the world war
 
@@ -389,8 +388,7 @@ Great powers that stayed out receive The Hour of Decision. Entering joins the
 defender's side with Fresh Forces for five years (+20% army offense, +10%
 defense, +20% morale recovery), plus Arsenal of Democracy for a democracy. You
 can instead send material support (Lend-Lease Program for ten years) or stay
-neutral. AI democracies and communists join readily against a fascist
-aggressor.
+neutral. AI democracies and communists join readily against a fascist aggressor.
 
 ### Winning and losing the world war
 

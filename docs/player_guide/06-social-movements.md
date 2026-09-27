@@ -1,13 +1,13 @@
 # Social movements
 
-The later eras bring social questions your government must answer: equal
-rights for discriminated minorities, human augmentation, digital privacy, mental
-health and life after work. Each has a journal entry that opens with a
-technology and ends when you settle the question, mostly by passing a law, or
-when time runs out. Other movements arrive as
-events without a journal entry, and religious revival events push back against
-secularization. The Social Movements game rule (on by default) controls the five
-journal entries; the event chains run either way.
+The later eras bring social questions your government must answer: equal rights
+for discriminated minorities, human augmentation, digital privacy, mental health
+and life after work. Each has a journal entry that opens with a technology and
+ends when you settle the question, mostly by passing a law, or when time runs
+out. Other movements arrive as events without a journal entry, and religious
+revival events push back against secularization. The Social Movements game rule
+(on by default) controls the five journal entries; the event chains run either
+way.
 
 ## Movement journal entries at a glance
 
@@ -34,13 +34,13 @@ of ten endings you get.
 ### When the civil rights struggle begins
 
 The entry appears once you have researched Civil Rights Movement and an
-incorporated state holds pops with acceptance below Provisional Acceptance (under
-60: Open Prejudice or worse). It becomes active when the Civil Rights political
-movement, which the technology brings, has formed. If every such pop rises to Provisional Acceptance, the entry
-closes with no outcome and can return with the grievance. Once it succeeds or
-fails, it is over for the campaign. A revolution's winner carries the struggle
-on, keeping the bar, the policies and any reward (see
-[After a revolution](05-politics.md#after-a-revolution)).
+incorporated state holds pops with acceptance below Provisional Acceptance
+(under 60: Open Prejudice or worse). It becomes active when the Civil Rights
+political movement, which the technology brings, has formed. If every such pop
+rises to Provisional Acceptance, the entry closes with no outcome and can return
+with the grievance. Once it succeeds or fails, it is over for the campaign. A
+revolution's winner carries the struggle on, keeping the bar, the policies and
+any reward (see [After a revolution](05-politics.md#after-a-revolution)).
 
 ### The Movement Support bar
 
@@ -64,12 +64,12 @@ month it moves by the sum of these lines, which the bar's tooltip lists:
 | Support below 5 | +0.4 |
 
 The last line cancels the decay near the bottom, so an ignored movement hovers
-around 5; only a crackdown or a Violent Hostility or Ghettoization law can drive it
-to 0. With Social Justice Movements, Protection and all three pro-movement
+around 5; only a crackdown or a Violent Hostility or Ghettoization law can drive
+it to 0. With Social Justice Movements, Protection and all three pro-movement
 policies, support gains about a point a month, so the struggle takes some six
-years; without the technology, a decade or more. Enacting Affirmative Action,
-or Universal Citizenship with Protection, skips the bar and completes the entry
-at once.
+years; without the technology, a decade or more. Enacting Affirmative Action, or
+Universal Citizenship with Protection, skips the bar and completes the entry at
+once.
 
 ### Civil rights phases
 
@@ -126,15 +126,15 @@ repressive options do the reverse.
 While you lack Protection, Affirmative Action and Universal Citizenship (or keep
 Active Persecution or Legal Guardianship), a great power that has one of those
 three and has researched Civil Rights Movement may be asked whether to condemn
-you. If it does, you get International Pressure on Human Rights: reject it
-(−30 relations with the critic), promise reform (+20 relations, a small
-acceptance bonus) or counter-accuse (−50 relations and a diplomatic incident).
-As such a great power, you get the same question about others.
+you. If it does, you get International Pressure on Human Rights: reject it (−30
+relations with the critic), promise reform (+20 relations, a small acceptance
+bonus) or counter-accuse (−50 relations and a diplomatic incident). As such a
+great power, you get the same question about others.
 
 ### How the civil rights struggle ends
 
-The ending depends on how the struggle finished and which policy ran longest;
-a policy must run more than 18 months to count. Results decay over ten years.
+The ending depends on how the struggle finished and which policy ran longest; a
+policy must run more than 18 months to count. Results decay over ten years.
 
 | Ending | When | Result |
 |---|---|---|
@@ -154,11 +154,11 @@ Ties between pro-movement policies go to Federal Protection, then Grassroots.
 ### How the AI handles civil rights
 
 AI countries pick policies mostly by their minority law: Grassroots Organizing
-under Indifference or better, Federal Protection under Protection or
-Affirmative Action, Cooptation under Discrimination, the crackdowns under
-Violent Hostility or Ghettoization, and Gradualist Accommodation anywhere. The
-Intelligentsia in government also draw them to Grassroots Organizing, and the
-Landowners to Suppression / Crackdown. They never switch a policy off.
+under Indifference or better, Federal Protection under Protection or Affirmative
+Action, Cooptation under Discrimination, the crackdowns under Violent Hostility
+or Ghettoization, and Gradualist Accommodation anywhere. The Intelligentsia in
+government also draw them to Grassroots Organizing, and the Landowners to
+Suppression / Crackdown. They never switch a policy off.
 
 ## Debates settled by law
 
@@ -190,10 +190,9 @@ workplace discrimination, augmented crime and religious condemnation.
 The entry opens in era 9, but Strong Privacy Rights needs Universal Digital
 Identity from era 11 and the Guaranteed Liberties law, and you have 15 years.
 The events bring a whistleblower, a data breach, hackers, predictive policing
-and foreign cyber-espionage; with
-Covert Warfare on, the last follows only when your counterintelligence catches a
-foreign espionage operation (see
-[What the target learns](10-influence.md#what-the-target-learns)).
+and foreign cyber-espionage; with Covert Warfare on, the last follows only when
+your counterintelligence catches a foreign espionage operation (see [What the
+target learns](10-influence.md#what-the-target-learns)).
 
 ### The mental health debate
 
@@ -207,10 +206,10 @@ PTSD and a care-home scandal.
 ### The post-scarcity debate
 
 This entry can't fail: it succeeds or times out. It opens in era 10, while the
-Post-Scarcity Economy law needs the era 12 technology of that name, so the 30 years are a race
-through two eras (see [The extended timeline](02-timeline.md)). The events bring
-unemployment protests, a crisis of meaning, AI replacing bureaucrats,
-neo-Luddite terrorism and an art renaissance.
+Post-Scarcity Economy law needs the era 12 technology of that name, so the 30
+years are a race through two eras (see [The extended timeline](02-timeline.md)).
+The events bring unemployment protests, a crisis of meaning, AI replacing
+bureaucrats, neo-Luddite terrorism and an art renaissance.
 
 ## Movements carried by events
 
@@ -220,8 +219,8 @@ four as journal entries. They come as random events once you have the
 technology, and the rule doesn't stop them.
 
 The Anti-War and Transhumanist political movements also bring events of their
-own, described with the movements in
-[New political movements](05-politics.md#new-political-movements).
+own, described with the movements in [New political
+movements](05-politics.md#new-political-movements).
 
 ### Second-wave feminism events
 
@@ -236,17 +235,17 @@ the Devout, Rural Folk and Armed Forces, and shelving it does the reverse.
 
 These need LGBTQ+ Rights Movement (era 9). Pride and Protest can recur, at most
 once in ten years, until you enact Full Equality and Protection; its options,
-from protecting the march to breaking it up, depend on your LGBTQ+ Rights law. The Marriage
-Equality Question fires once, under Basic Protections or Anti-Discrimination
-Laws, offering civil partnerships, marriage equality, a traditional definition
-or waiting for the courts.
+from protecting the march to breaking it up, depend on your LGBTQ+ Rights law.
+The Marriage Equality Question fires once, under Basic Protections or
+Anti-Discrimination Laws, offering civil partnerships, marriage equality, a
+traditional definition or waiting for the courts.
 
 ### Secularization and faith events
 
 Two events carry the conflict between faith and modern life. Both are in the
 yearly draw of social-tension events, which has a 65% chance each year of
-picking one event from a large pool. Neither fires under State Atheism, and
-each comes at most once in ten years.
+picking one event from a large pool. Neither fires under State Atheism, and each
+comes at most once in ten years.
 
 Religious Revival Sweeps the Nation needs a marginalized Devout group and
 Decline of Organized Religion (era 10), Sexual Revolution or Social Media: you
@@ -259,8 +258,8 @@ you side with tradition, modernize, or seek a theological compromise.
 ### Environmentalism belongs to climate
 
 Environmental events belong to the Global Warming journal entry and its game
-rule, and fire as world temperature crosses thresholds. See
-[Climate and pollution](14-climate.md).
+rule, and fire as world temperature crosses thresholds. See [Climate and
+pollution](14-climate.md).
 
 ## Religious revival events
 
@@ -269,9 +268,8 @@ decline. Each is tied to a technology and fires at most once per campaign, at
 least five years apart. They need Devout clout above 2% and below 10% (15% for
 One Nation Under God, The Culture War and The Faithful Hand), a church law other
 than State Religion or its Millet System and People of the Book variants, and
-neither Autocracy nor Oligarchy. State Atheism blocks
-all but The Preferential Option and The Faithful Hand, which then
-tell of underground faith.
+neither Autocracy nor Oligarchy. State Atheism blocks all but The Preferential
+Option and The Faithful Hand, which then tell of underground faith.
 
 | Event | Technology (era) | Embracing it grants, for 20 years |
 |---|---|---|
@@ -297,9 +295,8 @@ countries, and One Nation Under God becomes One Ummah, One Law (Islamic), One
 Civilization, One Dharma (Dharmic) or The Promised Land (Jewish).
 
 Once you have Decline of Organized Religion and any embrace modifier, the
-Secularization Campaign decision appears. It removes all seven embrace
-modifiers at once, radicalizes Devout pops, and leaves the moderate modifiers
-in place.
+Secularization Campaign decision appears. It removes all seven embrace modifiers
+at once, radicalizes Devout pops, and leaves the moderate modifiers in place.
 
 ## What the Social Movements rule turns off
 
