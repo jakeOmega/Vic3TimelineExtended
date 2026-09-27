@@ -284,6 +284,21 @@ class TestWarLawGate(unittest.TestCase):
                       option_body(text, "nuclear_incident.50.c"))
 
 
+class TestIncidentRoll(unittest.TestCase):
+    """nd_incident_permille is fractional at low readiness (0.5-0.9 once its
+    multipliers apply), and nothing proves `random` rolls a fraction instead
+    of truncating it, so the roll's inner chance is always a rounded whole
+    number (nd_roll_incident's header)."""
+
+    def test_the_inner_chances_are_rounded(self):
+        roll = block(strip_comments(read(EFFECTS)), "nd_roll_incident")
+        self.assertEqual(re.findall(r"chance\s*=\s*(\w+)", roll),
+                         ["1", "nd_incident_tenth_permille", "10", "nd_incident_permille_whole"])
+        values = strip_comments(read(VALUES))
+        for name in ("nd_incident_tenth_permille", "nd_incident_permille_whole"):
+            self.assertIn("round = yes", block(values, name), name)
+
+
 class TestTacticalTargets(unittest.TestCase):
     """nd_state_has_military_target is the tactical strike's one target list:
     the action's state pickers read it, and its AI score covers every

@@ -172,7 +172,7 @@ A public bluff that ends in a climb-down or lapses costs the issuer 5 credibilit
 
 ### 0.4 Incidents (phase 3)
 
-Each armed country gets one roll per month, in `nd_monthly_update`, never one per crisis. The chance is `nd_incident_permille`: 0.5 ‰ at Recessed, 1 ‰ at routine, 4 ‰ at heightened and 10 ‰ at high alert, × (1 + strain/100) × (0.5 + (100 − reliability)/100) × (1 + 0.5 × own crisis danger band), capped at 30 ‰. The roll has two stages (10 % × permille %) so that the inner `chance` never needs a fraction. The family is then drawn by weight from those the country qualifies for:
+Each armed country gets one roll per month, in `nd_monthly_update`, never one per crisis. The chance is `nd_incident_permille`: 0.5 ‰ at Recessed, 1 ‰ at routine, 4 ‰ at heightened and 10 ‰ at high alert, × (1 + strain/100) × (0.5 + (100 − reliability)/100) × (1 + 0.5 × own crisis danger band), capped at 30 ‰. The roll has two stages so that the inner `chance` is a rounded whole number: 1 % × the chance in tenths of a per mille up to 10 ‰, 10 % × whole per mille above (`nd_incident_tenth_permille`, `nd_incident_permille_whole`). The per-mille value itself is fractional at low readiness, and a `random` that truncated fractions would have stopped those incidents. The family is then drawn by weight from those the country qualifies for:
 
 | Family | Weight | Eligible when | Inspiration |
 |---|---|---|---|
