@@ -1210,8 +1210,8 @@ war_propaganda_on_action = {
 #   projects at base speed still couldn't spend the pool's gross income. Net
 #   income can't be the stay test: it turns negative as soon as the modifier
 #   drains the pool, so the modifier would remove itself by working. Nor can
-#   the 500-level bar: faster projects shorten the queue, and
-#   queue_more_private_investment refills it only while construction is wasted.
+#   the 500-level bar: faster projects shorten the queue while the modifier is
+#   still needed.
 # - Overinvestment is in force (below).
 # While one holds, the value ramps (at most x1.2 or /1.2 a year,
 # too_much_private_construction_script_value). Otherwise the modifier is
@@ -1229,13 +1229,14 @@ war_propaganda_on_action = {
 # while the value is above 1000 and the pool above GDP (at most 13 years in a
 # row from the cap). If the overflow is still large when it lifts, the value
 # climbs back past 1000 and Overinvestment returns, so while the pool stays
-# above GDP the value hovers around 1000. Whether the pool drains meanwhile
-# depends on the construction rule. Under direct construction the private
-# queue keeps spending it. Under Free Market Construction
-# te_construction_market_private_spending_target is 0 or less while gross
-# income is, so the market buys nothing for the private queue, and the pool
-# falls only if the engine lets negative contributions withdraw from it
-# (unverified).
+# above GDP the value hovers around 1000. Meanwhile the private queue keeps
+# spending the pool: under direct construction through the law's allocation,
+# under Free Market Construction through
+# te_construction_market_private_spending_target, a 24th of the pool a week
+# whatever the sign of gross income (until 2026-09-26 it was 0 or less once
+# gross income was, so the market bought nothing during Overinvestment). The
+# value hovering around 1000 still limits how fast that is: a pool whose income
+# needs far more stays above GDP (open owner's call, PR #514).
 #
 # The variable is written first and the modifier reads it flat, so the
 # modifier always equals var:too_much_private_construction_cached, which
