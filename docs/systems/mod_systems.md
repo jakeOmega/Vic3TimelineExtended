@@ -200,7 +200,7 @@ The same effect keeps its older job in every setting: removing the modifier from
 
 **Localization override:** `localization/english/replace/timeline_extended_override_l_english.yml:23` — `merchant_marine:0 "Bulk Transportation"`. (And matching description / icon overrides if present.) The engine sees `merchant_marine`; the player sees "Bulk Transportation".
 
-**Producers (48 PMs total: 22 in `extra_pms.txt`, 26 in `unique_pms.txt`).** The mod's design rule is: *transport infrastructure produces, everything else consumes*. Concretely:
+**Producers (44 PMs total: 18 in `extra_pms.txt`, 26 in `unique_pms.txt`).** The mod's design rule is: *transport infrastructure produces, everything else consumes*. Concretely:
 
 | Producer category | PMs (representative) | Building family |
 |---|---|---|
