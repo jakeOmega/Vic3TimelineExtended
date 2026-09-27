@@ -4326,7 +4326,7 @@ A numeric parameter substituted into a condition gives `2 = 1`, which has no lef
 
 ## A Per-Mille Chance: Roll Twice Rather Than Pass a Fraction to `random`
 
-`random = { chance = X }` takes a percentage, and nothing in vanilla passes it a fraction below one, so a 0.1 %/month incident rate has no proven single-roll form. Nest two rolls instead: `random = { chance = 10  random = { chance = <per-mille script value> … } }` is exactly `permille / 1000`, and the inner value stays a whole number ≥ 1 at every setting (`nd_roll_incident`). A debug override that must fire every time should skip the outer roll rather than raise the inner value past 100.
+`random = { chance = X }` takes a percentage. Vanilla does pass it computed fractions (`05_montenegro_je.txt`'s raiding roll gives 0.3 and 0.45), so the engine very likely rolls them, but nothing proves it does not truncate: a truncating engine would silently turn every chance below 1 into never. Where a chance can fall below one, keep the inner value a **rounded whole number** by nesting rolls: `random = { chance = 1  random = { chance = <tenths of a per mille, round = yes> … } }` is `permille / 1000` to within 0.05 per mille. A computed per-mille value is not whole by itself — `nd_incident_permille` is 0.5–0.9 at low readiness once its multipliers apply — which is why `nd_roll_incident` rounds (`nd_incident_tenth_permille`, and `nd_incident_permille_whole` behind a 10 % roll above 10 per mille, where tenths would pass 100). A debug override that must fire every time should skip the outer roll rather than raise the inner value past 100.
 
 ## In a Diplomatic Action's AI Blocks the Target Is `scope:target_country`
 

@@ -6383,6 +6383,19 @@ intelligence_capacity_defense = {
 	country_coup_resistance_add = 0.1
 }
 
+# covert_warfare.2 option a, on the country (×3, decaying): the same two
+# resistances as intelligence_capacity_defense, which lives on
+# je_covert_warfare, plus a small intelligence capacity boost (owner decision,
+# PR #510: 2 per unit, so +6 when granted, decaying). That option used to add
+# intelligence_capacity_defense itself, at country scope, where
+# legacy_je_modifier_cleanup_effect strips it every month.
+covert_counterintelligence_alert = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_support_separatism_resistance_mult = 0.05
+	country_coup_resistance_add = 0.1
+	country_intelligence_capacity_add = 2
+}
+
 # Counterintelligence bonus from covert funding level (applied with multiplier = funding_level - 1)
 # Level 2: +5 IC, Level 3: +10 IC
 iw_funding_defense = {

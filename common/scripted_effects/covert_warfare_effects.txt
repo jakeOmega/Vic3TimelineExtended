@@ -247,7 +247,8 @@ covert_op_end = {
 # widget renders the name by navigating into the country in script
 # (covert_last_exposed_sgui), so an annexed attacker falls back to an anonymous
 # line instead of a months-old capital naming whoever conquered it.
-# iw_last_exposed_age is aged by the journal entry's monthly pulse.
+# iw_last_exposed_age is aged by every country's monthly pulse
+# (covert_warfare_monthly_country, covert_warfare_on_actions.txt).
 # iw_last_exposed_phase is the phase the operation was caught in. The record is
 # also the whole trigger of the defender's event, covert_warfare.2, which fires
 # only from covert_warfare.1's `after`, straight after this effect — so every

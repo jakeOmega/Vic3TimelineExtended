@@ -278,6 +278,38 @@ class TestWarLawGate(unittest.TestCase):
         for opt in ("nuclear_crisis.4.g", "nuclear_crisis.7.a", "nuclear_crisis.20.b", "nuclear_crisis.24.b"):
             self.assertIn("nd_war_law_permits_strategic_strike = yes", option_body(text, opt), opt)
 
+    def test_monopoly_window_first_use_checks_the_law(self):
+        text = strip_comments(read(INCIDENT_EVENTS))
+        self.assertIn("nd_war_law_permits_strategic_strike = yes",
+                      option_body(text, "nuclear_incident.50.c"))
+
+    def test_the_government_launch_order_passes_every_deliberate_gate(self):
+        """nuclear_incident.1.c is the government's own order (owner ruling
+        2026-09-26): the same gates as nuke_diplo_action, shown greyed."""
+        body = option_body(strip_comments(read(INCIDENT_EVENTS)), "nuclear_incident.1.c")
+        for gate in ("has_war_with = scope:nd_warning_suspect",
+                     "nd_doctrine_permits_strike = { ENEMY = scope:nd_warning_suspect }",
+                     "nd_pledge_permits_strike = { ENEMY = scope:nd_warning_suspect }",
+                     "nd_war_law_permits_strategic_strike = yes",
+                     "nd_forces_assembled = yes",
+                     "show_as_unavailable"):
+            self.assertIn(gate, body, gate)
+
+
+class TestIncidentRoll(unittest.TestCase):
+    """nd_incident_permille is fractional at low readiness (0.5-0.9 once its
+    multipliers apply), and nothing proves `random` rolls a fraction instead
+    of truncating it, so the roll's inner chance is always a rounded whole
+    number (nd_roll_incident's header)."""
+
+    def test_the_inner_chances_are_rounded(self):
+        roll = block(strip_comments(read(EFFECTS)), "nd_roll_incident")
+        self.assertEqual(re.findall(r"chance\s*=\s*(\w+)", roll),
+                         ["1", "nd_incident_tenth_permille", "10", "nd_incident_permille_whole"])
+        values = strip_comments(read(VALUES))
+        for name in ("nd_incident_tenth_permille", "nd_incident_permille_whole"):
+            self.assertIn("round = yes", block(values, name), name)
+
 
 class TestTacticalTargets(unittest.TestCase):
     """nd_state_has_military_target is the tactical strike's one target list:
