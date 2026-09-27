@@ -16,17 +16,18 @@ diplomatic plays are not explained here except where the mod changes them.
 ## How to use this guide
 
 Each chapter covers one area of the game and can be read on its own. Start with
-the chapters for the systems you meet first. In an 1836 start that is the
-banking cycle ([Banking and monetary policy](04-banking.md)) and the
-construction market ([Economy and construction](03-economy.md)), because both
-change how your economy behaves from the first month. The later systems unlock
-with technology, so you can read about them as they approach.
+the chapters for the systems you meet first. In an 1836 start the construction
+market changes how building works from the first day
+([Economy and construction](03-economy.md)), and the banking cycle begins once
+you have researched Stock Exchange and have an Urban Center of level 5 or more
+([Banking and monetary policy](04-banking.md)). Most later systems unlock with
+technology, so you can read about them as they approach.
 
 Numbers in this guide are there to help you plan: thresholds, tiers, durations
 and caps. They are rounded, and they can change between versions of the mod.
-The game's tooltips always show the exact values for your country, and most of
-the mod's journal entries and panels break their numbers down line by line when
-you hover over them.
+The game's tooltips show the exact values for your country, and many of the
+mod's journal entries and panels break their numbers down line by line when you
+hover over them.
 
 The Markdown source of this guide is kept in the mod's repository, and the
 [chapters](https://github.com/jakeOmega/Vic3TimelineExtended/tree/main/docs/player_guide)
@@ -58,9 +59,9 @@ you start a campaign and can't be changed afterwards.
 
 Turning a system off hides its journal entry and stops its events, but the
 technologies, laws and buildings connected to it stay in the game and keep their
-ordinary effects. With the Banking System off, for example, financial regulation
-laws still lower construction costs and improve infrastructure; they just no
-longer interact with a banking cycle.
+ordinary effects. With the Banking System off, for example, the financial
+regulation laws still change Urban Center output, investment and innovation;
+only their effects on the banking cycle go.
 
 <!-- screenshot: the game setup screen with the mod's game rules listed -->
 
