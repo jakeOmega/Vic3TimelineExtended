@@ -25,12 +25,13 @@ company. Minority Protection, Free Port Concession, Religious Mission Rights and
 Demilitarized Zone take a state. When you add one to a draft, the article shows
 a button with its current choice; click it to pick from a list.
 
-The state or company always belongs to the conceding country. Free Port
-Concession needs a coastal state, and a demilitarized zone can't be the capital.
-A country can concede each of the four state articles to the same partner only
-once at a time, across all their treaties, so a second demilitarized zone
-against the same country waits until the first ends. The company articles can be
-repeated for different companies.
+The state or company always belongs to the conceding country, so only a
+country that owns at least one company can be asked for Seize Company or
+Disband Company. Free Port Concession needs a coastal state, and a demilitarized
+zone can't be the capital. A country can concede each of the four state
+articles to the same partner only once at a time, across all their treaties, so
+a second demilitarized zone against the same country waits until the first
+ends. The company articles can be repeated for different companies.
 
 <!-- screenshot: a treaty draft with Seize Company added, the company picker list open -->
 
@@ -43,7 +44,7 @@ economy.
 |---|---|---|---|
 | Seize Company | Always available | Yes | The conceding country hands one of its companies to the other, unless the receiver already has a company of that type. |
 | Disband Company | Always available | Yes | The conceding country dissolves one of its companies. |
-| Enforce Privatization | Stock Exchange | Yes | The conceding country must privatize its government-owned buildings while the treaty stands. It needs Laissez-Faire or Interventionism on one side and Cooperative Ownership, Agrarianism or Traditionalism on the other; the draft tooltip shows which side needs which. |
+| Enforce Privatization | Stock Exchange | Yes | The conceding country must privatize its government-owned buildings while the treaty stands. The demanding country needs Laissez-Faire or Interventionism, and the conceding country Cooperative Ownership, Agrarianism or Traditionalism. |
 | Free Port Concession | International Trade | Yes | The chosen state drops its tariffs (within a year) and gets +50% trade capacity, +25% trade advantage and more migration pull, but collects half the tax and assimilates more slowly. Blocked by Isolationism on either side. |
 
 The humanitarian and cultural articles move people, faiths and cultures.
@@ -51,7 +52,7 @@ The humanitarian and cultural articles move people, faiths and cultures.
 | Article | Unlocked by | Enforceable | What it does |
 |---|---|---|---|
 | Minority Protection | International Relations | Yes | Halves assimilation and conversion in the chosen state. The conceder loses legitimacy and pays authority; the other side gains prestige. |
-| Religious Mission Rights | Colonization | Yes | Each year 5% of the chosen state's pops of other faiths convert to the other side's religion. Blocked if the receiving country has State Atheism. |
+| Religious Mission Rights | Colonization | Yes | Each year 5% of the chosen state's pops of other faiths convert to the other side's religion. Neither country can have State Atheism, and the treaty freezes if the conceding country adopts it later. |
 | Cultural Exchange Program | Pan-nationalism | No | Mutual: +1 yearly cultural acceptance, +2% prestige and +1 cultural pull for both, better relations, −1 ideological covert defense. |
 | Population Transfer | Pan-nationalism | Yes | Moves pops of the receiving country's primary cultures out of the conceding country, once. See [population transfers by treaty](#population-transfers-by-treaty). |
 
@@ -114,11 +115,12 @@ randomize button draws from the names that fit.
 Once a year, each partner in an Intelligence Sharing Pact compares its own
 covert defense with its partners'. If a partner's is higher, you gain half the
 gap between your combined economic, military and ideological defense and your
-strongest partner's, added to each of the three. The stronger partner gains
-nothing from the shield, so the pact lets a great power cover a weaker partner
-against [covert operations](10-influence.md#covert-defense). The AI signs
-readily with a country that shares one of its rivals, and almost never with a
-rival.
+strongest partner's, spread evenly over the three: a sixth of the gap on each.
+The stronger partner gains nothing from the shield, so the pact lets a great
+power cover a weaker partner against [covert
+operations](10-influence.md#covert-defense), and partners can't run covert
+operations against each other. The AI signs readily with a country that shares
+one of its rivals, and almost never with a rival.
 
 ### Population transfers by treaty
 
@@ -130,10 +132,10 @@ Disruption to bureaucracy and legitimacy, with more radicals from conquest. It
 fades over time, and its strength grows with the share of each country's
 population that moved, never falling below a quarter.
 
-The draft blocks the article when the conceding country has Universal
-Citizenship. It also needs the receiving country to hold a community of one of
-the conceding country's primary cultures with acceptance below 60. That check
-looks at a community in the receiving country, not at the people who would move.
+The draft blocks the article when the receiving (demanding) country has
+Universal Citizenship. It also needs at least one community of the receiving
+country's primary cultures inside the conceding country with acceptance below
+60. The transfer then moves every such pop, well-accepted communities included.
 
 ## Diplomatic play escalation
 
@@ -147,7 +149,6 @@ extra escalation.
 | Source | Effect |
 |---|---|
 | Fourteen technologies of eras 6–12, mostly military, from Bombing Aircraft and Mass Media to Orbital Weapon Platforms | +0.5 to +2 a week each in plays you start; three also add 10% |
-| War Propaganda decree | +0.1 a week in plays you start, which rounds away on its own |
 | Total War (Rules of War law) | +25% in plays you start and plays against you |
 | War Crimes Forbidden, Humanitarian Regulations, Limited War (Rules of War laws) | −10%, −20%, −30% in plays you start and plays against you |
 | Vassalization V and Aggressive Coordination V principles | +0.5 and +1 a week in plays you start |
@@ -326,6 +327,7 @@ Several principles give your bloc an article, action or decree.
 | Advanced Research IV and V | Modernization Aid; V adds Extensive Modernization Aid |
 | Welfare IV and V | Humanitarian Aid, a pact that sends part of your income to another country's poor in return for leverage and better relations |
 | Vassalization IV and V | Peaceful Integration: annex a puppet or colony with under 25 liberty desire, cordial relations and under a tenth of your GDP, without a play |
+| Cultural Unity II+ | Enforce Cultural Acceptance: a member of five years or more adds your primary cultures to its own, if the bloc has 50% cohesion and you have three times its prestige |
 | Cultural Unity V | Enforce Cultural Adoption: a subject replaces its primary cultures with yours |
 | Cultural Unity, any tier | Cultural Emigration Initiative decree |
 | Freedom of Movement IV and V | Greenest Grass Campaign decree |

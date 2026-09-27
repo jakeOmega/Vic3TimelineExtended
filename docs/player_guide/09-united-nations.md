@@ -22,7 +22,7 @@ United Nations Charter:
 
 | Option | Result |
 |---|---|
-| Sign the Charter | You join as a founding member (UN Founding Member: prestige and leverage generation). |
+| Sign the Charter | You join as a founding member (UN Founding Member: prestige and leverage generation). A signer without Intergovernmental Organizations is a founding member too, from the moment its UN journal entry opens. |
 | We shall observe, but not yet commit | UN Observer Status for ten years (+5% relations improvement speed). You can join later. |
 | This undermines our sovereignty | UN Rejectionist for five years (−10% relations improvement speed, +50 Authority, the government resource rather than UN Authority). |
 
@@ -136,9 +136,9 @@ leave, buy their patience with concessions, or stay and anger them.
 The charter caps the target at 70, so the founding charter allows no more than
 Established. Charter Reform I, Standing Mandate Force and Compulsory
 Jurisdiction, raises the ceiling to 85. Charter Reform II, Veto Restraint and
-the UN Levy, raises it to 100 and restrains the veto: a simple-majority
-resolution carried by two thirds of the members with a vote is no longer stopped
-by a veto.
+the UN Levy, raises it to 100 and restrains the veto: a binding resolution other
+than a charter reform that two thirds of the members with a vote carry is no
+longer stopped by a veto.
 
 A reform is ripe once authority has held within 5 points of the ceiling for 24
 months running; the authority widget counts the months. A member of major-power
@@ -197,6 +197,10 @@ the resolution, a weaker form applies:
 | Charter Reform | Blocked outright. |
 | Authorized Military Mandate | Blocked outright. |
 
+After Charter Reform II, a resolution that two thirds of the members with a vote
+carry overrides the veto and takes its full form. This covers every binding
+topic, military mandates included, except Charter Reform itself.
+
 A veto costs credibility (1.5 × your weight), Diplomatic Isolation After Veto
 for five years, −5% influence for ten, 25 relations with the proposer, and 3
 infamy when it blocks a condemnation, the ICC or a peacekeeping request. At
@@ -237,10 +241,10 @@ the other seven are:
 | Topic | Who may table it | If it carries |
 |---|---|---|
 | Condemnation of Aggression | A member with a rival that started a war it is still fighting and has a [case](#grounds-for-un-censure) of 30+ | Condemned for ten years: prestige, relations improvement speed and infamy decay, × enforcement. |
-| International Sanctions | A major power, against a rival with a case of 50+ | Sanctioned until the proposer lifts them: trade advantage, influence and prestige, × enforcement. |
+| International Sanctions | A major power, against a rival with a case of 50+ | Sanctioned: trade advantage, influence and prestige, × enforcement. The proposer enforces them until it presses Lift Sanctions. That ends its own regime and any whose enforcer has left the UN or is gone; a regime another member still enforces continues. |
 | Authorized Military Mandate | See [UN military mandates](#un-military-mandates) | A mandate for the proposer. |
-| Request a Peacekeeping Deployment | A member at war or with a devastated state, for its own territory | A peacekeeping mission; major-power members that voted join and pay for it. |
-| Request Humanitarian Aid | A member with a state below 8 standard of living or devastated | An aid mission; major-power members that voted pay for ten years. |
+| Request a Peacekeeping Deployment | A member at war or with a devastated state, for its own territory | A peacekeeping mission. Major-power members that voted and take part (a yes vote, or a no vote they then accept) contribute and pay for it; nobody else is asked. |
+| Request Humanitarian Aid | A member with a state below 8 standard of living or devastated | An aid mission; major-power members that voted and take part pay for ten years. |
 | Charter Reform | A major power, once the charter is ripe | The next reform. |
 | Motion to Expel a Permanent Member | Any member, against a permanent member that vetoed within five years | The seat is stripped. |
 
@@ -389,21 +393,25 @@ and once a year.
 | Decolonization Resolution | Authority 30; Decolonization; a country holding a subject | Binds every member | Colonial powers lose colonial stability; members' colonies gain liberty desire. |
 | International Space Cooperation (UNOOSA) | Authority 40; a major-power proposer with Space Exploration | Science ministry impact, space race progress | The space race leader slows and laggards speed up; orbital battlestation holders lose prestige. |
 | Convention on the Law of the Sea (ITLOS) | Authority 30; International Trade | Cheaper port connections, prestige | Great powers gain less prestige from their navies. |
-| Convention on the Physical Protection of Nuclear Material | Authority 30; warheads missing; a proposer with Nuclear Weapons; the Nuclear Weapons rule | Prestige | Half as many of the parties' warheads go missing, and they may recover lost ones. |
+| Convention on the Physical Protection of Nuclear Material (CPPNM) | Authority 30; warheads missing; a proposer with Nuclear Weapons; the Nuclear Weapons rule | Prestige | Half as many of the parties' warheads go missing, and they may recover lost ones. |
 
 Three member modifiers also carry a cost: the NPT raises infamy generation and
 lowers your units' kill rate, the Climate Accord lowers bureaucracy, and the ICC
 makes casualties cost more war support.
 
-The journal entry lists eight specialized agencies: WHO, UNESCO, the
-International Court of Justice, UNHRC, IAEA, UNEP, UNHCR and UNOOSA. The Court
-of Justice is founded the first time a country accepts a World Court ruling
-against it. Once the International Criminal Court convention is in force, the
-court indicts the ruler of a country that ratified it (from Established) or of
-any country (at Supranational) for a nuclear first or tactical strike or an
-exposed regime-change operation, at most once a decade. Handing the ruler over
-sends them into exile, and your heir, if you have one, succeeds them; defying
-the court costs 5 standing, 10 case strength and credibility. A party to the
+The journal entry counts eleven specialized agencies. Ten come from the
+conventions in the table: WHO, UNESCO, UNHRC, IAEA, UNEP, UNHCR, UNOOSA, ITLOS,
+the ICC and the CPPNM. The eleventh, the International Court of Justice, is
+founded the first time a country accepts a World Court ruling against it. Once
+the International Criminal Court convention is in force, the court indicts the
+ruler of a country that ratified it (from Established) or of any country (at
+Supranational) for a nuclear first or tactical strike or an exposed
+regime-change operation, at most once a decade. Handing the ruler over sends
+them into exile, and your heir, if you have one, succeeds them. Defying the
+court costs 5 standing, 10 case strength and credibility, and brings
+International Court Defied (−25% infamy decay, −5% prestige, fading over five
+years, × enforcement); defying a World Court ruling brings the same modifier at
+full strength. A party to the
 Declaration that runs a coercive resettlement program is penalized (see [Costs
 and consequences of
 resettlement](07-states.md#costs-and-consequences-of-resettlement)).

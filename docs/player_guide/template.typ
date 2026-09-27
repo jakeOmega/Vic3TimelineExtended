@@ -86,12 +86,19 @@
   })
   show heading: set text(fill: ink)
   // Each heading is a sticky block, so it never sits alone at the foot of a page.
+  // A chapter titled "Appendix: ..." is labelled APPENDIX instead of CHAPTER n.
+  // Pandoc hands the title over as a sequence of text and spaces, so flatten it.
+  let plain(c) = if type(c) == str { c } else if c.has("text") { c.text } else if c.has("children") {
+    c.children.map(plain).sum(default: "")
+  } else if c.has("body") { plain(c.body) } else { " " }
   show heading.where(level: 1): it => {
+    let appendix = plain(it.body).starts-with("Appendix")
     pagebreak(weak: true)
     v(2.2cm)
     block(sticky: true, below: 1.2em)[
       #if it.numbering != none {
-        text(size: 11pt, fill: accent, tracking: 0.12em)[CHAPTER #counter(heading).display("1")]
+        let label = if appendix [APPENDIX] else [CHAPTER #counter(heading).display("1")]
+        text(size: 11pt, fill: accent, tracking: 0.12em, label)
         v(0.1em)
       }
       #text(size: 24pt, weight: "bold")[#it.body]

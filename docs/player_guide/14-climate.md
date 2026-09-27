@@ -27,7 +27,9 @@ Only the market leader's reductions count, and they apply to the whole market.
 The leader's Greenhouse Gas Emissions modifier comes mainly from the three
 market-wide climate policies, the Ministry of the Environment (−5% per level)
 and the Environmental Sustainability power bloc principle (−5% to −25% by tier).
-A member's own ministry does nothing for the market's emissions.
+A member's own ministry does nothing for the market's emissions. The cuts add
+together, but however far they go they only bring a market's emissions down to
+zero; only carbon capture takes a market below it.
 
 ## The Global Warming journal entry
 
@@ -95,6 +97,13 @@ or repeal them, and they then apply to every country in its market, which sees
 them as "set by market leader". The other five are national, open to every
 country. Every policy needs the anomaly to have reached 0.5 °C, except
 Fossil-Fuel Divestment, which needs 1.0 °C.
+
+Members always follow their leader's market-wide policies. A country that joins
+another market takes the ones its new leader has and drops the ones the leader
+lacks, and each month every member is brought into line with its leader the
+same way. A country bound by an [Enforce Emissions
+Reduction](#enforce-emissions-reduction) treaty is the exception: it keeps its
+policies when it joins a market and when its leader repeals them.
 
 Most policies carry an Authority Cost for as long as they are in force, and you
 can only adopt one while you produce more authority than that cost. Emission
@@ -164,8 +173,9 @@ never divest.
 Enforce Emissions Reduction is a treaty article that forces a market leader to
 run every climate policy except Climate Adaptation. It appears once the world
 has warmed past 0.1 °C and can be signed from 0.5 °C, with the Intergovernmental
-Organizations technology, against a country that leads its own market. It can be
-a war goal, and it can be requested or offered in a treaty.
+Organizations technology, against a country that leads its own market. Any
+country can demand it. It can be a war goal, and it can be requested or offered
+in a treaty.
 
 On entry into force, the bound country adopts the three market-wide policies for
 its whole market and the other four national policies for itself. While the
@@ -205,7 +215,7 @@ Fever's March has one for the Ministry of Consumer Protection at level 3.
 | The Uprooted (climate refugees) | 1.0 °C |
 | The Tide Comes In (coastal flooding) | 1.0 °C and a coastal state with a Port |
 | The Congress of Smoke (a climate summit) | 1.0 °C, a major or great power with Pollution Control, and no United Nations |
-| The Barren Harvest | 2.0 °C, Wheat Farms, and a Ministry of the Environment below level 5 |
+| The Barren Harvest | 2.0 °C, any grain farm or livestock ranch, and a Ministry of the Environment below level 5 |
 | The Wells Run Dry | 2.0 °C |
 | The Fever's March | 2.0 °C and a Ministry of Consumer Protection below level 5 |
 | The Great Thaw | 2.5 °C and a coast |

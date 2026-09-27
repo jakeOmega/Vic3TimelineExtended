@@ -6,8 +6,8 @@ and life after work. Each has a journal entry that opens with a technology and
 ends when you settle the question, mostly by passing a law, or when time runs
 out. Other movements arrive as events without a journal entry, and religious
 revival events push back against secularization. The Social Movements game rule
-(on by default) controls the five journal entries; the event chains run either
-way.
+(on by default) controls the five journal entries and their events; the
+movements carried by events run either way.
 
 ## Movement journal entries at a glance
 
@@ -44,44 +44,23 @@ any reward (see [After a revolution](05-politics.md#after-a-revolution)).
 
 ### The Movement Support bar
 
-Movement Support starts at 30. At 100 the movement wins; at 0 it collapses. Each
-month it moves by the sum of these lines, which the bar's tooltip lists:
-
-| Source | Change per month |
-|---|---|
-| Movement decay (always) | −0.4 |
-| Social Justice Movements researched (era 9) | +0.4 |
-| Protection or Affirmative Action in force | +0.3 |
-| Violent Hostility or Ghettoization in force | −0.5 |
-| Incorporated states with pops below Provisional Acceptance | Up to +0.5 (at 40 states) |
-| Radicals at 10% of your population, and again at 20% | +0.15 each |
-| Encourage Grassroots Organizing | +0.2 |
-| Federal Civil Rights Protection | +0.3 |
-| Gradualist Accommodation | +0.1 |
-| Cooptation / Token Reform (first 12 months) | +0.15 |
-| Suppression / Crackdown | −0.6 |
-| Segregationist Consolidation | −0.9 |
-| Support below 5 | +0.4 |
-
-The last line cancels the decay near the bottom, so an ignored movement hovers
-around 5; only a crackdown or a Violent Hostility or Ghettoization law can drive
-it to 0. With Social Justice Movements, Protection and all three pro-movement
-policies, support gains about a point a month, so the struggle takes some six
-years; without the technology, a decade or more. Enacting Affirmative Action, or
+Movement Support starts at 30. At 100 the movement wins; at 0 it collapses. The
+bar drifts down on its own, but an ignored movement hovers around 5: only a
+crackdown or a Violent Hostility or Ghettoization law can drive it to 0. It
+rises with Social Justice Movements (era 9), with Protection or Affirmative
+Action in force, with the number of incorporated states holding poorly accepted
+pops, with widespread radicals and with the pro-movement policies below. With
+Social Justice Movements, Protection and all three pro-movement policies,
+support gains about a point a month, so the struggle takes some six years;
+without the technology, a decade or more. Enacting Affirmative Action, or
 Universal Citizenship with Protection, skips the bar and completes the entry at
 once.
 
-### Civil rights phases
-
-The bar's level sets a phase, applied as a modifier on the journal entry:
-
-| Phase | Support | Effects |
-|---|---|---|
-| Marginal | Below 20 | −10% radicals from political movements |
-| Growing | 20–40 | +5% turmoil penalties |
-| Active | 40–65 | +5% turmoil penalties, +10% radicals from political movements |
-| Pressuring | 65–90 | +10% turmoil penalties, +20% radicals from political movements |
-| Imminent Reform | 90 and above | +15% turmoil penalties, +20% radicals from political movements, +10% enactment success chance |
+As support climbs, the bar's phase adds turmoil penalties and radicals from
+political movements, and from 90 it also raises your chance of enacting laws.
+The bar's tooltip lists every line. The full list of what moves the bar, with
+the phase effects, is in [Appendix: social movement
+details](17-appendix-social-movements.md#what-moves-movement-support).
 
 ### Civil rights policy buttons
 
@@ -89,39 +68,30 @@ The entry has six policies, each switched on and off with a pair of buttons. The
 three pro-movement policies stack, and so do the two crackdowns, but the two
 groups exclude each other. Cooptation is limited only by its law requirement.
 
-| Policy | Requires | Support per month | While active |
-|---|---|---|---|
-| Encourage Grassroots Organizing | No crackdown | +0.2 | +5% enactment success chance, +10% radicals from political movements |
-| Federal Civil Rights Protection | Indifference, Protection or Affirmative Action; Minor Power rank or above; no crackdown | +0.3 | +5 acceptance, −5% Bureaucracy, −5% Authority |
-| Gradualist Accommodation | No crackdown | +0.1 | −5% turmoil penalties, +2 acceptance |
-| Cooptation / Token Reform | Discrimination, Indifference or Cultural Assimilation | +0.15 for 12 months | −10% turmoil penalties, +3 acceptance, +5% legitimacy penalty from ideological incoherence |
-| Suppression / Crackdown | No pro-movement policy | −0.6 | +5% Authority, +10% turmoil penalties |
-| Segregationist Consolidation | A discriminatory minority law; no pro-movement policy | −0.9 | +10% Authority, +30% radicals from political movements, −10 acceptance |
+| Policy | Requires | What it does |
+|---|---|---|
+| Encourage Grassroots Organizing | No crackdown | Raises support; helps enact laws but brings more radicals |
+| Federal Civil Rights Protection | Indifference, Protection or Affirmative Action; Minor Power rank or above; no crackdown | Raises support the most of the three; raises acceptance, costs bureaucracy and authority |
+| Gradualist Accommodation | No crackdown | Raises support a little; eases turmoil, raises acceptance slightly |
+| Cooptation / Token Reform | Discrimination, Indifference or Cultural Assimilation | Raises support for 12 months only; eases turmoil, costs legitimacy through ideological incoherence |
+| Suppression / Crackdown | No pro-movement policy | Lowers support; adds authority and turmoil |
+| Segregationist Consolidation | A discriminatory minority law; no pro-movement policy | Lowers support fast; adds authority, but lowers acceptance and brings more radicals |
 
-Acceptance figures apply to pops outside their homeland. The discriminatory
-minority laws are Violent Hostility, Ghettoization, Cultural Assimilation and
-Discrimination. Cooptation stops pushing the bar after 12 months in total;
-switching it off and on doesn't restart the count, whatever the button's
-description says, and its other effects stay.
+The discriminatory minority laws are Violent Hostility, Ghettoization, Cultural
+Assimilation and Discrimination. Cooptation stops pushing the bar after 12
+months in total for the whole struggle; switching it off and on doesn't restart
+the count, and its other effects stay. The exact figures are in [Civil rights
+policy effects](17-appendix-social-movements.md#civil-rights-policy-effects).
 
 ### Civil rights events
 
-Four milestones each bring one event, once, when the bar first crosses their
-mark:
-
-| Support reaches | Event | Instead, when |
-|---|---|---|
-| 25 | First Mass Rally Draws Notice | The Underground Railroad, under Violent Hostility or Ghettoization |
-| 50 | Coalition Forms with Trade Unions | Blood of a Martyr, under a discriminatory minority law |
-| 75 | Mass Disobedience, only under a discriminatory minority law (otherwise no event) | Federal Commission Recommends Action, if Federal Protection has run over 24 months |
-| 90 | The March on the Capital | Always this one |
-
-Each month also has about a one-in-seven chance of a random event: Civil Rights
-March, Segregation Incident (under a discriminatory minority law), Cultural
-Renaissance (at 40% literacy), The Boycott, or the international condemnation
-described below. Sympathetic options please the Intelligentsia, anger the
-Devout, Rural Folk and Armed Forces, and make discriminated pops loyal;
-repressive options do the reverse.
+Four milestone events fire once each, as support first reaches 25, 50, 75 and
+90; your minority law and your policies decide which version you get. A random
+event also comes about one month in seven. Sympathetic options please the
+Intelligentsia, anger the Devout, Rural Folk and Armed Forces, and make
+discriminated pops loyal; repressive options do the reverse. The events are
+listed in [Civil rights event
+list](17-appendix-social-movements.md#civil-rights-event-list).
 
 While you lack Protection, Affirmative Action and Universal Citizenship (or keep
 Active Persecution or Legal Guardianship), a great power that has one of those
@@ -214,85 +184,43 @@ bureaucrats, neo-Luddite terrorism and an art renaissance.
 ## Movements carried by events
 
 Second-wave feminism, LGBTQ+ rights, secularization and environmentalism have no
-journal entry, though the Social Movements rule's description still lists all
-four as journal entries. They come as random events once you have the
-technology, and the rule doesn't stop them.
+journal entry. They come as random events once you have the technology, and the
+Social Movements rule doesn't stop them.
+
+| Movement | Needs | Events |
+|---|---|---|
+| Second-wave feminism | Second Wave Feminism (era 7) | The Second Shift and Half the Salary, once each, over women's work and equal pay |
+| LGBTQ+ rights | LGBTQ+ Rights Movement (era 9) | Pride and Protest, at most once in ten years until you enact Full Equality and Protection; The Marriage Equality Question, once, under Basic Protections or Anti-Discrimination Laws |
+| Secularization | One of several technologies, such as Sexual Revolution or Social Media, or the Total Separation law | Religious Revival Sweeps the Nation and Faith Against Modernity, each at most once in ten years and never under State Atheism |
+| Environmentalism | The Global Warming journal entry | Climate events as world temperature crosses thresholds, under the Global Warming rule; see [Climate and pollution](14-climate.md) |
+
+Their options are in [Details of the movements carried by
+events](17-appendix-social-movements.md#details-of-the-movements-carried-by-events).
 
 The Anti-War and Transhumanist political movements also bring events of their
 own, described with the movements in [New political
 movements](05-politics.md#new-political-movements).
 
-### Second-wave feminism events
-
-Two events need Second Wave Feminism (era 7), and each fires once. The Second
-Shift, under Propertied Women or Women in the Workplace, trades research speed
-against legitimacy: welcoming women into the workforce angers aristocrats,
-keeping traditional roles slows research. Half the Salary, under Women in the
-Workplace, asks for equal pay: passing it pleases the Intelligentsia and angers
-the Devout, Rural Folk and Armed Forces, and shelving it does the reverse.
-
-### LGBTQ+ rights events
-
-These need LGBTQ+ Rights Movement (era 9). Pride and Protest can recur, at most
-once in ten years, until you enact Full Equality and Protection; its options,
-from protecting the march to breaking it up, depend on your LGBTQ+ Rights law.
-The Marriage Equality Question fires once, under Basic Protections or
-Anti-Discrimination Laws, offering civil partnerships, marriage equality, a
-traditional definition or waiting for the courts.
-
-### Secularization and faith events
-
-Two events carry the conflict between faith and modern life. Both are in the
-yearly draw of social-tension events, which has a 65% chance each year of
-picking one event from a large pool. Neither fires under State Atheism, and each
-comes at most once in ten years.
-
-Religious Revival Sweeps the Nation needs a marginalized Devout group and
-Decline of Organized Religion (era 10), Sexual Revolution or Social Media: you
-embrace it (Devout political strength up, Authority down), stay secular (a small
-research bonus) or channel it into charity (a little standard of living). Faith
-Against Modernity needs Devout clout of at least 5% and either Total Separation
-or one of Second Wave Feminism, Sexual Revolution and LGBTQ+ Rights Movement:
-you side with tradition, modernize, or seek a theological compromise.
-
-### Environmentalism belongs to climate
-
-Environmental events belong to the Global Warming journal entry and its game
-rule, and fire as world temperature crosses thresholds. See [Climate and
-pollution](14-climate.md).
-
 ## Religious revival events
 
 Seven religious revival events push back against the Devout interest group's
-decline. Each is tied to a technology and fires at most once per campaign, at
-least five years apart. They need Devout clout above 2% and below 10% (15% for
-One Nation Under God, The Culture War and The Faithful Hand), a church law other
-than State Religion or its Millet System and People of the Book variants, and
-neither Autocracy nor Oligarchy. State Atheism blocks all but The Preferential
-Option and The Faithful Hand, which then tell of underground faith.
+decline. Each is tied to a technology of eras 7 to 9 and fires at most once per
+campaign, at least five years apart. They need a Devout group that is weak but
+present (clout above 2% and below 10%, or 15% for three of them), a church law
+other than State Religion or its Millet System and People of the Book variants,
+and neither Autocracy nor Oligarchy. State Atheism blocks all but two of them.
 
-| Event | Technology (era) | Embracing it grants, for 20 years |
-|---|---|---|
-| The Moral Majority | Television Broadcasting (7) | The Religious Right: +35% Devout political strength, +30% Devout attraction, −50 Authority |
-| The Electronic Pulpit | Pop Culture (7) | Televangelism Movement: +20% strength, +50% attraction |
-| The Preferential Option | Civil Rights Movement (7) | Liberation Theology: +30% strength, +25% attraction, +0.5 standard of living |
-| One Nation Under God | Globalization (9) | Religious Nationalism: +50% strength, +40% attraction, +10% assimilation, −5% prestige (fading) |
-| The Digital Pulpit | Social Media (9) | Digital Faith Movement: +25% strength, +45% attraction |
-| The Culture War | Sexual Revolution (8) | Culture War: +40% strength, +35% attraction, slower research (fading) |
-| The Faithful Hand | Social Justice Movements (9) | Faith-Based Social Services: +25% strength, +30% attraction, +0.5 standard of living (fading) |
-
-Each event also offers a moderate choice with a weaker modifier that fades over
-20 years, and a secular choice that radicalizes Devout pops. The embrace
-modifiers stack, so taking several can make the Devout a leading interest group
-again. AI countries embrace more readily with a powerful Devout group or a
-Ministry of Religion.
+Each event offers three choices. Embracing the revival grants a modifier for 20
+years that raises Devout political strength and attraction, some with a side
+effect such as lost Authority or a little standard of living. A moderate choice
+gives a weaker modifier that fades over 20 years, and a secular choice
+radicalizes Devout pops. The embrace modifiers stack, so taking several can make
+the Devout a leading interest group again. AI countries embrace more readily
+with a powerful Devout group or a Ministry of Religion. The seven events and
+their modifiers are in [Religious revival event
+list](17-appendix-social-movements.md#religious-revival-event-list).
 
 <!-- screenshot: a religious revival event, such as The Moral Majority, with its three options -->
-
-Islamic and Dharmic countries get their own text for all seven events, and some
-titles change: The Electronic Pulpit becomes The Satellite Minbar for Islamic
-countries, and One Nation Under God becomes One Ummah, One Law (Islamic), One
-Civilization, One Dharma (Dharmic) or The Promised Land (Jewish).
 
 Once you have Decline of Organized Religion and any embrace modifier, the
 Secularization Campaign decision appears. It removes all seven embrace modifiers

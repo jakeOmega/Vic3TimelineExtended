@@ -38,7 +38,7 @@ The penalty starts gently and then climbs fast. Up to ten times the threshold it
 grows with the square of the excess; beyond that it adds 10 percentage points
 for each further multiple.
 
-| Population against the threshold | Migration pull penalty |
+| Population (× threshold) | Migration pull penalty |
 |---|---|
 | 1× or less | none |
 | 4× | 5% |
@@ -134,8 +134,11 @@ and each change takes under seven years.
 ## Cultural acceptance and minorities
 
 When a new cultural community appears in a state, the base game gives it a
-temporary local acceptance penalty that wears off over time. The mod adds two
-state modifiers that act on that penalty:
+temporary local acceptance penalty that wears off over time. The mod makes the
+penalty harsher and much slower to fade: a new community starts 40 points of
+acceptance down instead of 30 and recovers 1 point a year instead of 3, so the
+penalty lasts about 40 years rather than 10. The mod also adds two state
+modifiers that act on the penalty:
 
 - Annual Cultural Acceptance closes the penalty faster, adding its value in
 acceptance over a year to every culture that still carries one. The Cultural
@@ -182,14 +185,15 @@ tourism off entirely.
 
 ### Tourism throughput
 
-Five sources set a state's throughput bonus, each with a bar toward its cap:
+Five sources set a state's throughput bonus, and each capped one shows a bar
+toward its cap:
 
 | Source | Bonus | Cap |
 |---|---|---|
 | Ports | +0.2% per Port level up to 100, then +0.04% per level up to 500 | +36% |
 | Transit | +0.1% per Railway level and per Highway level up to 100, then +0.02% per level up to 500 | +18% from each |
 | Art | +1% per Creative Industries level up to 20, +0.25% up to 100, +0.05% up to 500, +0.01% up to 1,500 | +70% |
-| Parks | +25% with a National Park | +25% |
+| Parks | +25% with a National Park, rising with Base Appeal to +37.5% | +37.5% |
 | Monuments | +10% for a Skyscraper, +25% for each monument | none |
 
 The "All modifiers" line for throughput also carries the Promote Tourism decree
@@ -249,9 +253,10 @@ frontier.
 The Resettlement Program method decides who is recruited and how many move each
 month. Half the capacity comes with each level and half depends on staffing, so
 a new Authority moves settlers from the first month and speeds up as it fills
-its jobs. The state's modifiers show the total as Settlers Moved per Month.
+its jobs. The state's modifiers show the total as Settlers Moved per Month. The
+table gives each program's settlers a month for every fully staffed level.
 
-| Program | Needs | Recruits | Moved per month per staffed level | Die in transit |
+| Program | Needs | Recruits | Settlers a month per level | Die in transit |
 |---|---|---|---|---|
 | Land Grants | nothing | Unemployed and peasants of the lower strata who are at least second-class citizens; no peasants under Serfdom | 300 | none |
 | Military Colonies | Standing Army | As Land Grants, but fully accepted only | 250 | none |
@@ -290,9 +295,10 @@ hold its settlers.
 
 The settlement bonuses scale with arrivals in the same way as the program's.
 
-Transport adds capacity and costs transportation goods:
+Transport adds capacity for every fully staffed level and costs transportation
+goods:
 
-| Transport | Needs | Extra settlers per month per level |
+| Transport | Needs | Extra settlers a month |
 |---|---|---|
 | Overland | nothing | none |
 | Rail and Steamship | Railways | +200 |
@@ -352,19 +358,17 @@ homelands](#dynamic-homelands).
 
 ### Resettlement events
 
-You draw at most one resettlement event every eighteen months, however many
-Authorities you run, set in an Authority that received settlers that month.
-
-| Event | Fires for | Choices |
-|---|---|---|
-| Land Rush | Voluntary programs | +2,000 settlers a month for a year and more land pressure, or +10% construction there for two years. |
-| The Speculators | Voluntary programs | −50 authority for two years (Rural Folk approve), or 500 fewer settlers a month for two years (Landowners and Industrialists approve). |
-| A Hard Winter on the Frontier | Any program | Money, or deaths, radicals and lower migration pull there for a year. |
-| Dust Storms | Homesteads after ten years | Money and a small farm penalty for ten years, or a decaying −20% farm and ranch penalty. |
-| The Reform Campaign | Coercive programs | End them for prestige, or defy the critics for a prestige penalty. |
-| Famine in the Settlements | Special Settlements | Money, or deaths and radical farmers. |
-| A Petition to Return | Coercive programs after five years | Switch that Authority to a voluntary program and let one in twenty of its lower-strata citizens go home, or face radicals. |
-| Land Disputes | Destinations with inhabitants below second-class citizens | Money, authority and 300 fewer settlers a month for ten years to calm them, or back the settlers and radicalize them. |
+While an Authority is receiving settlers, you have a 10% chance each month of a
+resettlement event, and at most one every eighteen months however many
+Authorities you run. The events follow the program. Voluntary programs bring
+land rushes and speculators, Homesteads bring dust storms after ten years, and
+settling among people below second-class citizens brings land disputes. The
+coercive programs draw the harshest ones: reform campaigns, famine in Special
+Settlements, and after five years a petition from the settlers to go home. Most
+events offer a choice between paying (money, authority or fewer settlers) and
+letting the settlers or their neighbors bear it (deaths, radicals, lost
+throughput or prestige). Every event and option is listed in [Appendix:
+resettlement events](18-appendix-resettlement-events.md).
 
 ### Resettlement and the AI
 

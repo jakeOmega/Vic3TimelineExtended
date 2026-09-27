@@ -20,8 +20,9 @@ loans dearer and a sound currency makes them cheaper.
 The cycle lives in a journal entry in the Domestic Affairs group. Its title
 follows your economic system: Boom & Bust Cycle in a market economy, Logistics &
 Allocation Gauge under Command Economy, and Cooperative Finance Dashboard under
-Cooperative Ownership. The model is the same in all three; the phase effects and
-the tools differ.
+Cooperative Ownership. Its description changes with the title and explains what
+the readings mean in that economy. The model is the same in all three; the phase
+effects and the tools differ.
 
 The entry appears once you have researched Stock Exchange and own an Urban
 Center of level 5 or higher. It starts at Stable with no momentum or bubble, and
@@ -43,7 +44,8 @@ only under the full Banking System.
 The dashboard reports momentum and bubble pressure as bands, not figures.
 Momentum reads Collapsing, Falling, Steady, Rising or Surging. Bubble pressure
 reads Low (under 15), Building (15 to 29), Elevated (30 to 49), High (50 to 74) or Severe <!-- style: allow ai-vocab -->
-(75 and up).
+(75 and up). The entry's status text describes the phase, momentum and bubble
+pressure over the same bands, in its own words, and shows no figures either.
 
 <!-- screenshot: the Boom & Bust Cycle journal entry during a Boom, with the four bars and the Current Conditions readout in view -->
 
@@ -232,7 +234,7 @@ the old system's tools off.
 | Command Economy | Plan Management | Emergency Plan Revision (3), Production Target Reduction (2), Plant Consolidation Order (2) |
 | Command Economy | Allocation & Supply | Emergency Resource Allocation (3), Strategic Material Stockpile (2), Central Distribution Upgrade (4) |
 | Command Economy | Administration | Administrative Performance Campaign (3), Inter-Sectoral Coordination Protocol (1) |
-| Command Economy | Investment Pool Transfers | Capital Injection and Capital Withdrawal: move 0.2% of GDP between treasury and investment pool |
+| Command Economy | Investment Pool Transfers | Capital Injection moves 0.2% of GDP from the treasury into the investment pool. While private projects are queued, the pool then spends about a 24th of itself a week, and the treasury keeps topping it up as State Investment Funding. Capital Withdrawal moves 0.2% of GDP back, or the whole pool if it holds less |
 | Cooperative Ownership | Surplus & Reserves | Dividend Restraint Resolution (2), Mutual Aid Fund Deployment (4) |
 | Cooperative Ownership | Investment & Credit | Collective Capital Investment Plan (4), Cooperative Credit Union Expansion (3) |
 | Cooperative Ownership | Council Direction | Federation Council Advisory Directive (1), Consumption Ceiling Resolution (2) |
@@ -273,8 +275,10 @@ may use and which response the crash event offers.
 
 Capital controls are allowed in any war and lifted when it ends if your law
 forbids them. The laws also have effects outside the cycle, listed in their
-tooltips; Central Bank Independence, for one, strengthens your economic defense
-against covert operations (see [Covert
+tooltips, and these apply under every setting of the Banking System rule,
+Disabled included: Urban Center throughput, the investment pool, innovation and
+government dividends. Central Bank Independence, for one, strengthens your
+economic defense against covert operations (see [Covert
 defense](10-influence.md#covert-defense)).
 
 The National Bank law group decides whether you have a central bank. National
@@ -339,6 +343,11 @@ bubble pressure every month, and the tight bands drain them. What the economy
 can bear is hidden even from your bank, and the band is the bank's estimate, so
 stepping the dial will not find the exact turning point.
 
+The push is capped unevenly. On the loose side it tops out at about +0.25
+momentum and +1.5 bubble pressure a month, so loosening much further adds
+nothing to the cycle. On the tight side it goes to about −0.5 momentum and −3
+bubble pressure a month.
+
 Six months on the tight side bring Dear Money Politics (Landowners and Petite
 Bourgeoisie approve; Industrialists, Rural Folk and Trade Unions disapprove),
 and six months on the loose side bring Cheap Money Politics, the reverse. Both
@@ -372,10 +381,21 @@ Wage Pressure of your labor and welfare laws and any other standing Inflationary
 Pressure, such as a devaluation. Above 8% inflation, the wage pressure of your
 labor and welfare laws counts twice.
 
-Expected inflation follows actual inflation, pulled toward the bank's target of
-2% (0% on metallic money) the more lenders trust the bank, and adjusts twice as
-fast under an independent bank. It sets the floor under your borrowing, so only
-inflation lenders did not foresee erodes your debt.
+Every country starts on metallic money, Commodity Money or the Gold Standard,
+and there expected inflation is fixed at 0%: money redeemable in metal promises
+stable prices, lenders take the promise at face value, and the money itself
+pulls inflation back toward zero. Expected inflation sets the floor under your
+borrowing, so on metal any inflation erodes your debt and any deflation adds to
+it.
+
+Fiat Money and Digital Currency replace that promise with the bank's inflation
+target of 2%. Expected inflation then follows actual inflation, pulled toward
+the target the more lenders trust the bank: most under Central Bank
+Independence, less when you delegate the dial, less again when you set it
+yourself, and least under State-Owned Banking. That trust wears away as
+inflation strays from the target and is gone 10 points from it. Expectations
+adjust twice as fast under an independent bank, and only inflation that lenders
+did not foresee erodes your debt.
 
 Inflation puts you in one of six price bands, each a modifier on your country.
 You leave a band only once inflation is a quarter point past its edge. Above
@@ -444,23 +464,26 @@ currency drains it at any time. At 20, The Run on the Vault fires:
 
 | Option | Effect |
 |---|---|
-| Raise the rate until the gold comes back. | For a year the rate target stays at least 4 points above the World Rate; Peg Confidence +40 |
-| Suspend payment in gold. For the duration. | Five years as a paper currency with a free rate; +2 points of risk premium for five years; gold's credit-standing bonus lost for ten |
-| The peg holds. The price of gold does not. | Devalue: the vault gains 15% of its limit, Peg Confidence resets to 50, the exchange-rate index drops to 88 and recovers over five years; prices rise; the great powers resent it |
+| Defend the peg: "Raise the rate until the gold comes back." | For a year the rate target stays at least 4 points above the World Rate; Peg Confidence +40 |
+| Suspend convertibility: "Suspend payment in gold. For the duration." | Five years as a paper currency with a free rate; +2 points of risk premium for five years; gold's credit-standing bonus lost for ten |
+| Devalue: "The peg holds. The price of gold does not." | The vault gains 15% of its limit, Peg Confidence resets to 50, the exchange-rate index drops to 88 and recovers over five years; prices rise; the great powers resent it |
 
 ### The exchange-rate index and capital controls
 
-The Exchange Rate Index is your currency's real value to foreigners: 100 is par,
-the range 50 to 150, and nobody sets it. A floating currency drifts toward a
-target that rises when your real interest rate beats the World Rate and falls
-when your inflation runs above the world's, when lenders charge you a risk
-premium, or when events knock it; the tooltip lists each term.
+The Exchange Rate Index is your currency's real value to foreigners, where 100
+is par. On Commodity Money and the Gold Standard your currency is fixed at par
+and the index moves only after a devaluation. The pressure that would move it
+shows up as overvaluation instead, which pulls prices down on commodity money
+and drains Peg Confidence on gold.
 
-Every point below par gives +1.25% export advantage and −1.25% import advantage,
-and above par the reverse. A weak currency adds risk premium, and a fall below
-its three-year average raises prices for a while. Under a fixed parity the index
-cannot move and the pressure shows up as overvaluation, which drains Peg
-Confidence on gold and pulls prices down on commodity money.
+Fiat Money, Digital Currency and Decentralized Cryptocurrency float, and nobody
+sets the index: it moves between 50 and 150, drifting toward a target that
+rises when your real interest rate beats the World Rate and falls when your
+inflation runs above the world's, when lenders charge you a risk premium, or
+when events knock it; the tooltip lists each term. Every point below par
+gives +1.25% export advantage and −1.25% import advantage, and above par the
+reverse. A weak currency adds risk premium, and a fall below its three-year
+average raises prices for a while.
 
 Capital Controls (Outflows) cut the effect of the gap between your rate and the
 world's on your exchange rate, gold and peg to a quarter. Each peacetime year
@@ -474,9 +497,9 @@ When inflation reaches 50%, Not Worth the Paper offers three answers:
 
 | Option | Effect |
 |---|---|
-| Call in every note. We begin again. | Inflation and expectations reset to 5%; printing stops; the investment pool is wiped out; middle and upper strata radicalize; Currency Reform adds 5 points of risk premium for ten years |
-| Let them keep the foreign money. They already have. | A Dollarised Economy: inflation drops to the bank's target, but the dial and money printing are gone and minting falls 75%. Enacting any monetary law brings back your own currency, with inflation at 5% and ten years of Currency Reform; Command Economy ends it free |
-| It will pass. Everything passes. | Nothing; the question returns in two years |
+| Currency reform: "Call in every note. We begin again." | Inflation and expectations reset to 5%; printing stops; the investment pool is wiped out; middle and upper strata radicalize; Currency Reform adds 5 points of risk premium for ten years |
+| Dollarize: "Let them keep the foreign money. They already have." | A Dollarised Economy: inflation drops to the bank's target, but the dial and money printing are gone and minting falls 75%. Enacting any monetary law brings back your own currency, with inflation at 5% and ten years of Currency Reform; Command Economy ends it free |
+| Wait: "It will pass. Everything passes." | Nothing; the question returns in two years |
 
 ### Monetary treaty articles
 
@@ -505,6 +528,16 @@ Siege: impose capital controls for a year (+40 confidence), break the peg by
 leaving the treaty, or re-peg lower. AI countries look for a swap line when
 their peg wobbles and a guarantee when heavily in debt, and are reluctant to peg
 their own currency.
+
+Each side signs for its own reasons:
+
+| Article | Why the weaker side takes it | Why the stronger side agrees |
+|---|---|---|
+| Currency Peg | A small economy that trades mostly inside a bigger country's market, or a fiat currency whose bank commands little trust (a rate set by hand, State-Owned Banking, inflation running high). It borrows more cheaply and takes on the anchor's credibility, but gives up its dial and money printing, and suffers when its inflation outruns the anchor's. | A great or major power, or a market leader, drawing trading partners into its monetary orbit at no risk to itself: +2% prestige, better relations, and cheaper borrowing as more of the world's GDP pegs to it. It pays the article's upkeep. |
+| Swap Line | A country with high borrowing costs, a shaky gold peg or a habit of financial crises: −1 point of risk premium at once, +2 Peg Confidence a month, and credit of up to 2% of its GDP in a crisis, repaid afterwards. | A larger economy backing a partner cheaply: +1% prestige and better relations, for extra risk premium in proportion to the partner's size (a sliver when a great power backs a minor) and loans in a crisis. It pays the upkeep. |
+| Lender of Last Resort | A heavily indebted country: its debt-load premium halves, imported panics start shallower, and a default brings a payout unless the guarantor refuses. Each payout makes the guarantee worth less. | A rich power sure of its ward: +2% prestige and better relations, for extra risk premium in proportion to the ward's size. On a default it pays 5% to 15% of the ward's GDP, or refuses at a cost in infamy, prestige, relations and its own borrowing costs. |
+| Imposed Currency Peg | Nothing it would choose: it is forced on a country in default. | A major power or better that wants a defaulted country's money tied to its own for good. |
+| Debt Receivership | A defaulted country that needs cheaper credit more than it needs legitimacy, though it is usually forced. | A larger financial power facing a defaulted country: it collects 0.1% of the debtor's GDP a month until the debtor recovers, and takes on a little of its risk. |
 
 ### The Monetary Union principle group
 

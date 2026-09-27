@@ -6,7 +6,8 @@ Empire journal entry, whose Colonial Stability bar drifts downward unless your
 rank, laws and programs hold it up. You can spend money, authority and
 bureaucracy to slow the drift, integrate colonies into the nation, or let them
 go on your own terms before they break away. The Decolonization game rule
-controls the system; with it off, the journal entry and its events never appear.
+controls the system; with it off, the journal entry and its events never appear,
+and tiny countries never [collapse](#colonial-collapse-of-tiny-countries).
 
 ## The Colonial Empire journal entry
 
@@ -18,7 +19,8 @@ either of these:
 least 100,000 people, lies outside your capital's region and the regions next to
 it, and has people of a culture that isn't one of your primary cultures. On top
 of that, its average standard of living must be below 80% of your national
-average, or one of those cultures must have almost no acceptance there.
+average, or one of those cultures must make up more than a tenth of the state
+with an average acceptance below 60 there.
 - A colonial subject: a Colony or Chartered Company subject, or a Protectorate
 that holds overseas land and whose cultures share no heritage with yours.
 
@@ -79,23 +81,28 @@ hurt.
 ### Great power stances on colonialism
 
 Each great power can hold an anti-colonial stance, a pro-colonial stance, or
-none. A great power that runs the Colonial Empire entry itself is asked to
-declare in the event The Colonial Question, at most once every three years: it
-can condemn colonialism, stay neutral, or back the colonial powers. Condemning
+none. Every great power that has researched Decolonization is asked to declare
+in the event The Colonial Question, at most once every three years, while any
+other country holds an overseas colony. That includes powers with no colonies
+of their own and powers whose own Colonial Empire entry has ended. It can
+condemn colonialism, stay neutral, or back the colonial powers. Condemning
 brings influence and prestige but, for a power that holds colonies, also drains
-its own bar and weakens its programs. When a Decolonization Resolution passes at
-the United Nations, every great power that voted for it, or voted against it and
-then accepted it, takes the anti-colonial stance automatically. That is how
-powers without colonies usually end up condemning yours.
+its own bar and weakens its programs. An AI power without colonies nearly always
+condemns; one with colonies leans toward backing them. When a Decolonization
+Resolution passes at the United Nations, every great power that voted for it, or
+voted against it and then accepted it, takes the anti-colonial stance
+automatically.
 
 Each condemning great power costs you about 0.6 a month and each supporter adds
 about 0.3, scaled by its prestige against yours: from a quarter as much, for a
 power with a quarter of your prestige, up to double. If the condemners together
 hold a third of the prestige of all great powers plus you, you lose a further 1
-a month; if they hold two thirds, another 2. A dominant empire is hard to
-isolate; a small one reaches both thresholds as soon as a few large powers turn
-on it. The widget's International Pressure section lists who condemns and who
-supports you.
+a month; if they hold two thirds, another 2. Two condemning peers that together
+hold a third already cost about 2.2 a month; with the base decline, the rest of
+your terms must add more than +1 just to keep the bar off its fastest monthly
+fall. A dominant empire is hard to isolate; a small one reaches both thresholds
+as soon as a few large powers turn on it. The widget's International Pressure
+section lists who condemns and who supports you.
 
 ## Colonial programs and decolonization decisions
 
@@ -162,9 +169,10 @@ ones and a voting franchise. The decision tooltip lists the accepted laws.
 
 The Mandate System Decision suits a liberal empire in managed decline. It needs
 the bar at 65 or more, the Neocolonialism law, a voting franchise, no Outlawed
-Dissent and more than 100 authority. It gives a permanent diplomatic-reputation
-bonus at a small cost in acceptance, and a year of Positive Colonial
-Development.
+Dissent and more than 100 authority. It costs 100 authority, easing over five
+years (Mandate System Transition), and can be taken only once. It gives a
+permanent diplomatic-reputation bonus at a small cost in acceptance, and a year
+of Positive Colonial Development.
 
 ## How a colonial empire ends
 
@@ -176,7 +184,7 @@ that ran for more than 24 months.
 |---|---|---|
 | The empire holds | The bar stays at 100 for 60 consecutive months | Permanent Colonial Empire Solidified, plus a permanent modifier for your path if one program dominated. Overseas states where everyone is well accepted become homelands. After Quiet Assimilation every overseas state of 75,000 people or more does, whatever its acceptance; after The Iron Fist Holds none do, and you gain 25 infamy. You can never get the entry again. |
 | Federation | You take the Imperial Federation Act or the Civilizing Mission Compact | Imperial Federation from the decision, plus a permanent The Iron Fist (Act) or The Commonwealth Path (Compact). Well-accepted overseas states become homelands. You can never get the entry again. |
-| Collapse | The bar reaches 0 | Up to three of your overseas territories, picked at random, become independent with their homeland regions. Every colonial subject gains Imperial Collapse Aftershock, a large liberty-desire increase for 20 years, and its relations with you drop by 50. The entry can't return for ten years. |
+| Collapse | The bar reaches 0 | Up to three of your overseas territories, picked at random, become independent with their homeland regions, and they inherit the legacy of your longest program (below). Every colonial subject gains Imperial Collapse Aftershock, a large liberty-desire increase for 20 years, and its relations with you drop by 50. The entry can't return for ten years. |
 | Voluntary end | You no longer hold any colony or colonial subject while the bar is above 0 | A decaying boost to diplomatic reputation; the event's wording depends on whether you freed colonies by choice. No lockout: new colonies bring the entry back. |
 
 | Longest program | If the empire holds | If it collapses | The countries you free |
@@ -186,13 +194,18 @@ that ran for more than 24 months.
 | Cultural Assimilation Programme | Quiet Assimilation | Negotiated Withdrawal | Cultural Assimilation Legacy; they start with Assimilatory Citizenship, and relations rise by 15 |
 | none | The Empire Endures | The Empire Crumbles | no legacy |
 
-The legacy applies to the countries you free through the three decisions, and to
-those an event frees as a new country. Countries that break away in a collapse
-get none of it. On top of the legacy, a Round Table adds 25 to relations, a
+The legacy applies to every country the system creates: those you free through
+the three decisions, those an event frees as a new country, and those that break
+away in a collapse. On top of the legacy, a Round Table adds 25 to relations, a
 single release subtracts 10 and Planned Full Decolonization subtracts 25. The
 Empire Crumbles also leaves you with Colonial Empire Collapsed, a decaying loss
 of prestige and standard of living; Negotiated Withdrawal instead gives the same
 decaying diplomatic-reputation boost as a voluntary end.
+
+When a revolution wins, the new government carries the empire on. It keeps the
+programs you were running, Colonial Empire Solidified and the path rewards of a
+finished empire, and the Imperial Federation and Mandate System modifiers (see
+[After a revolution](05-politics.md#after-a-revolution)).
 
 ## Decolonization events
 
@@ -204,7 +217,8 @@ Conciliatory options add Decolonization Negotiations or free the colony. With
 the Neocolonialism law, four events offer independence on your terms and give
 you Neocolonial Economic Concessions. A colonial subject freed this way leaves
 with Neocolonial Dependency, and in The Price of Empire a 25-year treaty also
-gives you investment rights and a trade privilege in the new country.
+gives you investment rights and a trade privilege in the new country, whose
+upkeep you pay.
 
 | Event | When it can fire |
 |---|---|
@@ -227,12 +241,63 @@ Every colony freed through this system, through an event, or through the base
 game's release actions is marked as a former colony of its old ruler. While that
 ruler still runs the Colonial Empire entry and is at least a major power, the
 former colony may take the initiative. It can propose closer ties (only to an
-old ruler with no subjects); if the old ruler accepts in Old Ties, New Terms,
-relations improve by 30 and the old ruler gains Post-Colonial Partnership. It
-can also demand reparations of a tenth of the old ruler's yearly revenue, capped
-at a tenth of its own GDP. In Debts of Empire the old ruler either pays, taking
-Colonial Reparations Paid (a ten-year loss of prestige, influence and
-bureaucracy) for 40 better relations, or refuses and loses 20.
+old ruler with no colonial subjects; a dominion or other subject doesn't stand
+in the way); if the old ruler accepts in Old Ties, New Terms, relations improve
+by 30 and the old ruler gains Post-Colonial Partnership. It can also demand
+reparations of a tenth of the old ruler's yearly revenue, capped at a tenth of
+its own GDP. In Debts of Empire the old ruler either pays, taking Colonial
+Reparations Paid (a ten-year loss of prestige, influence and bureaucracy) for 40
+better relations, or refuses and loses 20.
+
+For its first 20 years a former colony also faces the questions of a young
+state. These events need only that some country in the world has researched
+Decolonization; the former colony doesn't need the technology itself.
+
+| Event | Who gets it | Choices |
+|---|---|---|
+| Year One | A former colony of minor rank or below | Schools and roads, foreign capital (better relations with the old ruler) or self-reliance (worse relations) |
+| The Partition Question | A former colony bordering a newly freed country of shared heritage, or a colonial power that rules people of its heritage | Press territorial claims, propose a fraternal federation (the neighbor may accept a five-year truce in A Fraternal Proposal), or accept the borders |
+| Whose Country Is This? | A former colony bordering another newly freed country | Demand new borders, ask for mediation, or build within them (the neighbor may accept a five-year truce in The Line on the Map) |
+| The Strongman's Promise | A former colony with a revolutionary movement, primary cultures below half its population, or radical soldiers | Military rule, democracy or a one-party state |
+| The Non-Aligned Path | A former colony while one great power condemns colonialism and another backs it | Non-alignment, or side with either power |
+| Whose Language Do We Dream In? | A former colony with no homeland of its own cultures, whose capital is the homeland of a culture living there | Make the capital's native cultures your primary cultures, or keep the colonial-era identity |
+
+The Nationalization Question reaches every country formed by a release or a
+collapse, a week after it forms, and any subject that becomes independent once
+the era has begun, whenever a foreign country of minor rank or above owns more
+than 5% of its GDP. It can seize everything, nationalize strategic sectors or
+protect foreign property. If it seizes everything, a great-power old ruler still
+running the Colonial Empire entry may face The Crisis: send the fleet, impose
+sanctions or accept. Sending the fleet brings Gunboats in the Harbor to every
+other great power, which can condemn the intervention, back it or stay out.
+
+## Colonial collapse of tiny countries
+
+Once any country has researched Decolonization, a tiny, poor AI country can
+collapse. The check runs once a year, and a country qualifies when its
+population and its average standard of living are both below one of these
+pairs:
+
+| Population under | Standard of living under |
+|---|---|
+| 100,000 | 6 |
+| 200,000 | 5 |
+| 300,000 | 4 |
+| 500,000 | 3 |
+| 1,000,000 | 2 |
+
+It must also be independent, at peace, outside any diplomatic play and not on
+the verge of a civil war, and it must hold no subjects, belong to no power bloc
+and be bound by no treaty. A country that became independent in the last 20
+years, by a release, an independence war or a secession, is exempt, and so is
+every player's country.
+
+A collapsing country is annexed by an AI neighbor of its most populous state
+whose primary cultures share its heritage, provided that neighbor is at peace
+and not a subject. A player's country never absorbs one. With no such neighbor,
+the country reverts to decentralized land, unless it owns a company or holds
+nuclear warheads, in which case nothing happens that year. Players with a state
+in the same strategic region, and player great powers, get a notification.
 
 ## How the AI runs its colonies
 

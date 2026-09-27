@@ -119,8 +119,8 @@ at the next monthly update.
 
 | Program | Controls | Effect | Cost |
 |---|---|---|---|
-| Cultural Program Funding | − and + | Each step adds +1 cultural pull and +5% pull. | A weekly expense that grows with your GDP. |
-| International Cultural Outreach | Begin / End | +10% pull, +5% prestige, +10% mass migration attraction. Needs Mass Media. | A weekly expense that grows with your GDP. |
+| Cultural Program Funding | − and + | Each step adds +1 cultural pull and +5% pull. | A weekly expense per step that grows with your GDP, so the bill rises with every step. The tooltip shows the cost of one step and of your current level. |
+| International Cultural Outreach | Begin / End | +10% pull, +5% prestige, +10% mass migration attraction. Needs Mass Media. | The weekly cost of one funding step. |
 | Cultural Institutes | Fund / Defund | +10% pull. | +100 authority cost. |
 | Global Media Campaign | Launch / End | +15% pull, +5% prestige. Needs Mass Media. | +100 authority cost. |
 | Cultural Protectionism | Enact / End | +10% pull, +100 authority. | −5% society research speed, −10% mass migration attraction. |
@@ -161,10 +161,12 @@ Four events follow the political models:
 
 ### How the AI competes for culture
 
-AI countries use the same programs. Those with a share of 10% or more raise
-funding, begin outreach and launch media campaigns. Small countries under the
-benchmark enact Cultural Protectionism and end media campaigns, and drop
-protectionism once their share passes 10%.
+AI countries use the same programs. Those with a share of 10% or more begin
+outreach and launch media campaigns. An AI raises funding at a share of 10% or
+more, or below 5%, but only while it is out of default and its weekly surplus
+covers one more step; below 2% it is more likely to cut funding. Small
+countries under the benchmark enact Cultural Protectionism and end media
+campaigns, and drop protectionism once their share passes 10%.
 
 ## The Covert Warfare journal entry
 
@@ -364,16 +366,16 @@ Nations](09-united-nations.md)).
 
 A country that catches your operation gets the Foreign Interference Detected
 event, which names you and the operation. It can shore up its
-counterintelligence (a decaying boost to separatism and coup resistance),
-retaliate in kind (a network of up to 25 inside your country, if it has a Covert
-Warfare journal entry of its own), or make the evidence public (−3 infamy for
-itself). The event fires at most once every two years per country, and only once
-per game for a country without a Covert Warfare journal entry of its own. The
-command center shows the latest catch for ten years. Nothing else names the
-country behind an operation. A target can see the effects among its own
-modifiers, gets an unsigned Election Interference Detected notification with
-each confidence hit, and can count the operations against it through a strong
-network of its own.
+counterintelligence (Counterintelligence Alert: +6 intelligence capacity and
+more separatism and coup resistance, fading over five years), retaliate in kind
+(a network of up to 25 inside your country, if it has a Covert Warfare journal
+entry of its own), or make the evidence public (−3 infamy for itself). The event
+fires at most once every two years per country, whether or not that country has
+a Covert Warfare journal entry. The command center shows the latest catch for
+ten years. Nothing else names the country behind an operation. A target can see
+the effects among its own modifiers, gets an unsigned Election Interference
+Detected notification with each confidence hit, and can count the operations
+against it through a strong network of its own.
 
 ### Covert defense
 

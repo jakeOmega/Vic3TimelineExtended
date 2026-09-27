@@ -4,7 +4,7 @@ The base game ends in 1936 after five eras of technology. This mod moves the end
 date to 2136 and adds seven more eras, numbered 6 to 12, with 171 new
 technologies. The base game has 179, so the technology tree roughly doubles. The
 new eras bring twelve new goods, dozens of new buildings and production methods,
-a flagship building for most companies, 37 wonders, seven megaprojects and a
+a flagship building for every company, 37 wonders, seven megaprojects and a
 repeatable Grand Monument. None of this is behind a game rule: the eras and
 everything they unlock are always in the game, even when you switch off the
 systems that some of their technologies start. The one exception is the
@@ -245,15 +245,19 @@ retooling](03-economy.md#construction-maintenance-and-retooling)).
 
 ## Company flagship buildings
 
-The mod gives companies a unique flagship building: the Krupp Essen Works, the
-Standard Oil Refinery, the Ford Rouge Plant, and so on. 206 of the base game's
-221 companies have one. The fifteen without one all come from The Great Wave
-expansion, whose only company with a flagship is Sumitomo (the Besshi Mine).
-All of the mod's own companies have one except the Synthetics company for
-synthetic dyes and silk.
-Two flagships are shared by a pair of basic companies (the Granary Complex by the
-two agriculture companies, the Textile Depot by Fabrics and Textiles), and the
-basic Telecommunications company has two, for 289 flagship buildings in all.
+The mod gives every company a unique flagship building: the Krupp Essen Works,
+the Standard Oil Refinery, the Ford Rouge Plant, and so on. Each of the base
+game's 221 companies and each of the mod's has exactly one. The companies of The
+Great Wave expansion have theirs too, such as the Yasuda Atosanupuri Sulfur
+Mine, the White Star Albion House and the Noda Shoyu Goyōgura. Two flagships are
+shared by a pair of basic companies (the Granary Complex by the two agriculture
+companies, the Textile Depot by Fabrics and Textiles), for 304 flagship
+buildings in all.
+
+The basic Telecommunications company's flagship is the Electronics Laboratory.
+Its old second flagship, the Corporate Headquarters Skyscraper, is retired, and
+one already standing in a saved game is removed; the base game's Skyscraper is
+unaffected.
 
 A flagship building works like this:
 
@@ -280,8 +284,8 @@ the twentieth and twenty-first centuries (Volkswagen, Intel, SpaceX, Pfizer,
 Saudi Aramco and many more) plus a few fictional far-future ones such as
 Tessier-Ashpool S.A. The other eleven are generic companies for the new sectors:
 Entertainment, Power, Electronics, Aerospace, Software, Advanced Materials,
-Biotechnology, Infrastructure, Megastructure, and two companies both named
-Synthetics (one for synthetic dyes and silk, one for synthetic oil and rubber).
+Biotechnology, Infrastructure, Megastructure, Synthetic Fuels & Rubber and
+Synthetic Dyes & Fibers.
 
 The mod's flavored companies are not tied to a country. The base game's usually
 require you to hold the company's home state, but the mod's need only a

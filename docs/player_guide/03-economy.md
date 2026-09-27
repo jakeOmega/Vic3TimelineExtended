@@ -33,8 +33,9 @@ principle add a little.
 2. The government buys the number of points you set in the construction panel,
 paid from the treasury.
 3. Investors buy for private projects on their own, paid from the investment
-pool. They spend roughly the pool's weekly income, more when the pool has built
-up and less when it runs low.
+pool. Each week they spend a 24th of the pool. That settles at about the pool's
+weekly income, more when the pool has built up and less when it runs low, and
+they keep spending when the income stops.
 4. Construction Sites turn the purchased good into construction points. They
 appear on their own in every state where construction is under way, and in your
 capital when nothing is under way anywhere else. Nobody builds them.
@@ -55,7 +56,7 @@ and exported like other goods.
 Each level of a Construction Sector produces more with better production
 methods:
 
-| Production method | Construction per level each week |
+| Production method | Weekly construction per level |
 |---|---|
 | Wooden Buildings | 1 |
 | Iron-Frame Buildings | 2 |
@@ -191,14 +192,29 @@ modifier lets each project absorb more construction instead. You generally won't
 see it until your weekly investment pool income is in the billions.
 
 Once a year, the game checks whether investors have more than 500 levels
-waiting in the private queue while the investment pool is still growing. If so,
-you get Excess Private Construction. Each project can then absorb more
-construction a week, so the pool can spend its money, at a small cost in
-construction efficiency that grows with the modifier; the tooltip lists the two
-effects as Max Weekly Construction Progress and State Construction Efficiency.
-The modifier moves by at most about a fifth a year. If it grows very large while
-the investment pool holds more than your yearly GDP, Overinvestment follows for
-a year and pops stop paying into the pool.
+waiting in the private queue while the investment pool takes in more than it
+spends. If so, you get Excess Private Construction. Each project can then absorb
+more construction a week, so the pool can spend its money, at a cost in
+construction efficiency that grows with the modifier, up to −90% at its cap; the
+tooltip lists the two effects as Max Weekly Construction Progress and State
+Construction Efficiency. It starts small, at no more than +10 Max Weekly
+Construction Progress, and each year moves by at most about a fifth toward what
+the pool needs.
+
+The modifier stays as long as it is needed: while 500 projects at normal speed
+still couldn't spend the pool's income and the private queue isn't empty. A pool
+that shrinks because the modifier is working doesn't end it. Once the need is
+gone, the modifier is removed outright, and the efficiency penalty goes with it.
+If it is needed again within five years, it comes back at its old strength or at
+what the pool now needs, whichever is less, so a short banking panic doesn't
+reset it. After longer it starts small again.
+
+If the modifier passes +1,000 while the investment pool holds more than your
+yearly GDP, Overinvestment follows and most pops stop paying into the pool. It
+lasts until the pool is back down to a year's GDP, and meanwhile Excess Private
+Construction holds its strength, neither growing nor shrinking. Investors keep
+spending the pool on the private queue throughout, a 24th of it a week or as
+much as the queue can absorb, whichever is less.
 
 ## Adaptive standard-of-living expectations
 
@@ -279,7 +295,11 @@ It is produced by transport infrastructure:
 - Ports, as in the base game, and their later methods: Container Ports, Global
 Ports and Magnetic Drive Ports.
 - Railways, on their train methods and on their Centralized Traffic Control,
-Containerized Cargo and automated loading methods.
+Containerized Cargo, Automated Loading and Unloading and Autonomous Trains
+methods. In a power bloc with tier III or higher of the Transportation
+Infrastructure principle, each railway switches its steam, electric or diesel
+trains to a stronger version on its own, which carries 20–28% more freight and
+adds more infrastructure. That switch costs no retooling.
 - Highways, on every method.
 - Airports, including their Spaceport method.
 - Company buildings such as trading houses, logistics hubs, docks, shipyards

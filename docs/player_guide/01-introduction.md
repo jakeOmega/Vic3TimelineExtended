@@ -60,8 +60,8 @@ them when you start a campaign, and outside Ironman you can change them later.
 Turning a system off hides its journal entry and stops its events, but the
 technologies, laws and buildings connected to it stay in the game and keep their
 ordinary effects. With the Banking System off, for example, the financial
-regulation laws still change Urban Center output, investment and innovation;
-only their effects on the banking cycle go.
+regulation laws still change Urban Center output, investment, innovation and
+government dividends; only their effects on the banking cycle go.
 
 The mod is balanced with its default systems on, and switching one off removes
 its costs along with its benefits. A choice whose drawback lives in a disabled
@@ -83,7 +83,7 @@ turn a default system off.
 | Decolonization | Enabled | Colonial stability, the decolonization journal entry and its events. | [Colonial empires and decolonization](11-decolonization.md) |
 | Cultural Hegemony | Enabled | The competition for global cultural influence. | [Cultural hegemony and covert warfare](10-influence.md) |
 | Covert Warfare | Enabled | Intelligence agencies and covert operations against other countries. | [Cultural hegemony and covert warfare](10-influence.md) |
-| Social Movements | Enabled | The social-movement journal entries and their event chains. | [Social movements](06-social-movements.md) |
+| Social Movements | Enabled | The five social-movement journal entries (civil rights, human augmentation, digital rights, mental health and post-scarcity) and their events. Feminism, LGBTQ+, religious, anti-war, transhumanist and environmental events fire either way. | [Social movements](06-social-movements.md) |
 | Internal Resettlement | Enabled | *Enabled*: the Settlement Authority and government resettlement programs. *AI Voluntary Only*: AI countries run only voluntary programs. *Disabled*: no resettlement. | [States and population](07-states.md) |
 | World War | Disabled | A journal entry for great powers that tracks ideological tension into a world war and its aftermath. | [Military and war](12-military.md) |
 | Heir Education | Disabled | Educating your heir, and administrative, diplomatic and military aptitude traits for rulers and heirs. | [Government, laws and characters](05-politics.md) |
@@ -111,6 +111,8 @@ The chapters follow the game's own areas rather than the order systems appear.
 | [Climate and pollution](14-climate.md) | Emissions, warming, climate policy and state pollution. |
 | [The space race](15-space.md) | The milestones from suborbital flight to colonizing the solar system. |
 | [Quick reference](16-reference.md) | When each system appears, the journal entries at a glance, and a glossary. |
+| [Appendix: social movement details](17-appendix-social-movements.md) | The numbers and event lists behind the social movements chapter. |
+| [Appendix: resettlement events](18-appendix-resettlement-events.md) | Every Settlement Authority event, with both choices and their effects. |
 
 ## Reporting problems
 

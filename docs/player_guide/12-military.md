@@ -123,14 +123,18 @@ with Nuclear Energy.
 
 In the ship designer, nine of the new ships bring their own armor, guns,
 propulsion and range modifications in three tiers; the others reuse those of a
-related ship. Four new utility modifications join the base game's.
+related ship. Eight new utility modifications join the base game's.
 
 | Utility modification | Technology | Effect | Mounted on |
 |---|---|---|---|
-| Sonar Suite | Sonar | +50% accuracy against the base game's Submarine (not the mod's new submarines), +100 detection | ASW Destroyer, the three new submarines |
+| Sonar Suite | Sonar | +50% accuracy against every submarine, +100 detection | ASW Destroyer, the three new submarines |
 | Ballistic Missile Bay | Precision Guided Munitions | +50% blockade strength, +15% hull damage | Guided Missile Ship, Arsenal Ship, Hypersonic Missile Platform, Antimatter Battleship |
+| Underway Replenishment | Containerization | +100 supply capacity, +25% supply efficiency, +30% distance from port | Fleet Carrier, Nuclear Supercarrier, Arsenal Ship, Stealth Battlecruiser |
+| Aegis Air Defense | Network Centric Warfare | +200 screening, +30% accuracy against Guided Missile Ships, +20% against Arsenal Ships | Guided Missile Ship, Networked Air Defense Cruiser |
+| Helicopter Pad | Rapid Deployment Forces | +0.1 marine capacity, +0.2 carrying capacity, +15% naval invasion efficiency | The five transports |
 | DEW Point Defense | Directed Energy Weapons | −25% vulnerability, +200 screening | Nuclear Supercarrier, Arsenal Ship, Stealth Battlecruiser, Hypersonic Missile Platform, Pulsed Laser Escort, Swarm Coordination Vessel, Antimatter Battleship, Orbital Support Mothership |
 | Drone Complement | Swarm Technology | +30% accuracy, +25% screening, +200 detection | Nuclear Supercarrier, Expeditionary Sea Base, Stealth Battlecruiser, Hypersonic Missile Platform, Pulsed Laser Escort, Swarm Coordination Vessel, Antimatter Battleship, Orbital Support Mothership, the two later submarines |
+| Composite Armor Plating | Modern Material Science | +200 armor, −15% hull damage and −20% critical hits taken | Pulsed Laser Escort, Swarm Coordination Vessel, Antimatter Battleship |
 
 Shipyards gain a Production Focus group that trades civilian hulls for naval
 construction; its strongest setting, Wartime Mobilization, needs the Total War
@@ -252,7 +256,7 @@ The mod adds weekly lines to the war support breakdown.
 | Rebuked by the United Nations | The UN rebuked you and did not condemn you | −0.25 |
 | Fighting a UN-condemned enemy | An enemy in this war is condemned | +0.25 |
 | Enemy communications disruption | An enemy in this war runs a communications-disruption operation against you | −0.25 |
-| Enemy nuclear arsenal | An enemy has nuclear weapons, you don't, and no nuclear-armed guarantor covers you | −0.25 |
+| Enemy nuclear arsenal | An enemy has nuclear weapons, you don't, and neither a nuclear-armed guarantor nor your overlord's nuclear umbrella covers you | −0.25 |
 
 The United Nations, covert operation and nuclear lines come from systems with
 their own game rules, and appear only when those systems are on.
@@ -297,9 +301,10 @@ world war and three post-war years, and it fails if you drop below great power.
 
 ### Ideological camps
 
-The entry sorts countries into camps by their laws. Democratic opposes communist
-and fascist, and communist opposes fascist. Authoritarian countries, and those
-in no camp, oppose nobody, so their entry stays inactive.
+The entry sorts countries into camps by their laws, and its status shows your
+own camp on a second line (Non-Aligned when you are in none). Democratic opposes
+communist and fascist, and communist opposes fascist. Authoritarian countries,
+and those in no camp, oppose nobody, so their entry stays inactive.
 
 | Camp | Laws |
 |---|---|
@@ -332,10 +337,11 @@ to end it.
 |---|---|---|
 | Begin Rearmament | Tension 30, not appeasing | +10% army offense and defense, +20% prestige from army power projection, +15% military goods cost. Armed Forces approve. |
 | Pursue Appeasement | Democracy, tension 20, not rearming | +50 influence, +10% relations improvement speed, −5% military goods cost. Intelligentsia approve, Armed Forces disapprove. |
-| Provide Lend-Lease | Major power, tension 40, not at war | +50 influence, +15% prestige, +15% military goods cost. Industrialists approve. |
+| Provide Lend-Lease | Major power, tension 40 or a world war under way, not at war | +50 influence, +15% prestige, +15% military goods cost. Industrialists approve. |
 
 The AI rearms when it is fascist or authoritarian and tension is high; AI
-democracies appease between 30 and 70.
+democracies appease between 30 and 70. An AI great power that stays out of a
+world war leans strongly toward providing Lend-Lease.
 
 Leadup events come at random. In Ideological Demands you decide whether to press
 an opposed great-power rival to renounce its system; if you do, it answers in
@@ -389,6 +395,14 @@ defender's side with Fresh Forces for five years (+20% army offense, +10%
 defense, +20% morale recovery), plus Arsenal of Democracy for a democracy. You
 can instead send material support (Lend-Lease Program for ten years) or stay
 neutral. AI democracies and communists join readily against a fascist aggressor.
+
+A player great power outside the war need not wait for the event. While a great
+power still fights on each side, the entry's Enter the War button joins the
+defender's wars against the aggressor at once, with the same Fresh Forces and
+Arsenal of Democracy. Entering by either route, and every answer to The Hour of
+Decision, brings Recent Intervention Decision, which keeps the button
+unavailable for a year. A power that has already made its peace in the war
+can't enter again, and AI powers enter only through The Hour of Decision.
 
 ### Winning and losing the world war
 

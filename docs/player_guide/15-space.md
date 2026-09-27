@@ -90,8 +90,8 @@ whether its "first" is still unclaimed, but not how far along they are. The
 program so far shows how far your own program has come across all nine entries.
 
 A new milestone starts with no approach and funding level 1. Until you pick an
-approach it creeps forward at 0.5 a month and never suffers a setback, but its
-funding level is already billed.
+approach it creeps forward at 0.5 a month and never suffers a setback (the
+panel shows its risk as 0%), but its funding level is already billed.
 
 ### Safe and Ambitious approaches
 
@@ -130,7 +130,7 @@ milestone is finished it also decides a reward that fades over ten years.
 | Where the Eagle Shall Land | Moon Landing | Shackleton Crater (much riskier, faster; research, innovation cap); Equatorial Plain (lower risk; prestige, research); Sea of Tranquility (a little riskier; prestige, cultural pull); far side of the Moon (riskier, faster; research, innovation cap) |
 | Where Shall We Send the Probe? | Deep-Space Probe | Venus (riskier; research, space race progress); Mars (lower risk, faster; the most space race progress, prestige); the asteroid belt (much riskier; space race progress, innovation cap) |
 | The Purpose of the Base | Moon Base | Scientific outpost (lower risk, faster; research, innovation cap); industrial facility (riskier; Extraplanetary Base throughput, Launch Capacity output); military installation (much riskier; military research, influence, cheaper military goods) |
-| The Mars Strategy | Mars Landing | Direct landing (much riskier, much faster; prestige, cultural pull); orbital-first (slightly lower risk, faster; research, Space Program throughput); robotic precursors (lower risk; Extraplanetary Base throughput, innovation cap) |
+| The Mars Strategy | Mars Landing | Direct landing (much riskier, much faster; prestige, cultural pull); orbital-first (slightly lower risk, faster; research, Space Program throughput); robotic precursors (lower risk; Extraplanetary Base throughput, innovation cap, and Mars Resource Extraction: research speed, space race progress and cultural pull) |
 
 ## Space race funding and cost
 
@@ -223,7 +223,10 @@ who finishes it later gets the smaller one.
 | Interstellar Probe | +10% / +5% | +100 / +50 | +10% / +5% | +10% / +5% | +25% / +10% |
 
 The first figure is the first-to-finish reward, the second the later one.
-Cultural pull feeds the cultural hegemony competition described in [Where
+Suborbital Flight's completion event also offers a choice: loyalists, or
+Suborbital Momentum, an extra copy of the later finisher's reward (+1%
+prestige, +10 innovation cap, +3% cultural pull) that fades over two and a half
+years. Cultural pull feeds the cultural hegemony competition described in [Where
 cultural pull comes from](10-influence.md#where-cultural-pull-comes-from).
 
 ## Interstellar probe results
@@ -309,9 +312,11 @@ Nations](09-united-nations.md).
 AI great and major powers use the same entries, approaches and funding. Only an
 AI in the top three of the global ranking makes progress; a weaker one can open
 an entry but its bar doesn't move, and the Who else is racing list leaves it
-out. AI great powers prefer the Ambitious approach, more so when another country
-is running the same milestone; AI major powers lean toward Safe. The AI raises
-funding while it has innovation to spare and cuts it when innovation runs short.
+out. Such an AI winds its funding down to 0 and pays nothing for the approach
+it has chosen until it climbs back into the top three. AI great powers prefer
+the Ambitious approach, more so when another country is running the same
+milestone; AI major powers lean toward Safe. The AI raises funding while it has
+innovation to spare and cuts it when innovation runs short.
 
 A revolution's winner continues the old country's program, with its progress
 (except progress toward a first colony) and its rewards, and rebels can't start

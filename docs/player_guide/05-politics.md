@@ -26,6 +26,18 @@ grouped here by theme, and ten further laws join base-game law groups.
 | Language Policy | Local Vernacular, Civic Monolingualism, Multilingual Federalism, Linguistic Purity, State-Led Language Reform, Ubiquitous Translation | Assimilation, separatism and acceptance by language. |
 | Human Augmentation | No Augmentation, Human Purity, Medical Augmentation Only, Unrestricted Augmentation, Regulated Augmentation Market, Mandatory Augmentation | Cybernetic and genetic implants, from Brain-Computer Interfaces on. |
 
+The mod renames the base game's six Citizenship laws and changes their effects.
+This guide, like the game, uses the new names:
+
+| Base-game name | Name in the mod |
+|---|---|
+| Subjecthood | Sovereign Subjecthood |
+| Ethnostate | Ancestral Citizenship |
+| National Supremacy | Cultural Citizenship |
+| Racial Segregation | Racialized Citizenship |
+| Cultural Exclusion | Assimilatory Citizenship |
+| Multiculturalism | Universal Citizenship |
+
 Minority Rights pairs with Citizenship: most rungs need a compatible Citizenship
 law. Violent Hostility needs Ancestral, Cultural or Racialized Citizenship, and
 Affirmative Action needs Assimilatory or Universal Citizenship and the Civil
@@ -127,10 +139,14 @@ What it allows depends on your **Legislative Override Capacity**, summed from
 your laws, your institutions and a few technologies and power bloc principles.
 Among the laws, Autocracy and Single-Party State give 3, Algorithmic Governance
 2 and Unitary State 1; Universal Suffrage, Anarchy and Traditional Vassalage
-take away 3, and Guaranteed Liberties and Devolved Administration 2. The
-ministries of Thought Control, Propaganda and Intelligence and Security add to
-it. Below 0, the event never appears, and each stronger option also needs
-authority income above its own cost.
+take away 3, and Guaranteed Liberties and Devolved Administration 2.
+Establishing the Ministry of Thought Control adds 2, and the ministries of
+Propaganda and of Intelligence and Security 1 each. The Policing laws count
+too, from −0.5 for No Police to +1 for a Militarized Police Force. Each level of
+investment adds a fraction more: 0.4 in Thought Control, 0.2 in Propaganda and
+0.1 in the Ministry of Public Safety, the base game's Law Enforcement
+institution under its new name. Below 0, the event never appears, and each
+stronger option also needs authority income above its own cost.
 
 <!-- screenshot: the Forceful Legislation event with all three bypass options available -->
 
@@ -160,15 +176,15 @@ included, from 5 levels to 9.
 | Ministry of Commerce | International Exchange Standards | | +5% trade advantage and trade capacity |
 | National Bank | Central Banking | not Traditionalism | Lower borrowing premium, larger gold reserves, better investment efficiency; see [Financial regulation laws](04-banking.md#financial-regulation-laws) |
 | Ministry of Culture | Mass Propaganda | | +10% assimilation and conversion, cultural pull, cultural program funding; see [Cultural programs](10-influence.md#cultural-programs) |
-| Ministry of Labor | Public Works Programs (pro-labor) or Marketing Research (pro-capital) | | Pro-labor weakens the political power of wealth; pro-capital strengthens it and lowers minimum wages |
-| Ministry of the Environment | Pollution Control | | −5% pollution and emissions, a larger national park, slightly lower extraction output |
+| Ministry of Labor | Public Works Programs (pro-labor) or Marketing Research (pro-capital) | | Both raise the workforce ratio, pro-capital twice as much. Pro-labor weakens the political power of wealth and adds company workforce dividends; pro-capital strengthens it, lowers minimum wages and radicalizes movements slightly |
+| Ministry of the Environment | Pollution Control | | −5% pollution and emissions, larger national parks, slightly lower extraction output |
 | Ministry of Intelligence and Security | Mass Surveillance | | +4 intelligence capacity and one more covert operation slot |
 | Ministry of Refugee Affairs | Civil Rights Movement | No Migration Controls | Faster cultural acceptance, more mass migration |
 | Ministry of Propaganda | Mass Media | Single-Party State, Secret Police or Outlawed Dissent | +100 authority and primary-culture fervor; the law also steadies war support through battles |
 | Ministry of Science | Nuclear Weapons | | +5% research speed, academics' political strength |
 | Ministry of Thought Control | Automated Surveillance | Single-Party State, Secret Police or Outlawed Dissent | Loyalists every month; low electoral confidence hurts less |
 | Ministry of Consumer Protection | Consumer Credit | Regulatory Bodies or Workers' Protections | +0.5 standard of living, lower mortality, production research |
-| Ministry of Urban Planning | Urbanization | | Urban centers produce more and need less urbanization per level |
+| Ministry of Urban Planning | Urbanization | | Urban centers produce more and need less urbanization per level; +10% [migration crowding tolerance](07-states.md#raising-crowding-tolerance); faster recovery from devastation |
 | Ministry of Religion | Mass Media | State Religion or Freedom of Conscience | +20% conversion, clergy political strength, acceptance of the state religion |
 | Ministry of International Aid | Intergovernmental Organizations | | Strengthens the Ministry of Foreign Affairs, which also costs more |
 
@@ -242,7 +258,7 @@ repeal it, and the law's tooltip names it before you enact.
 | Distribution of Power | Amendment | Effect |
 |---|---|---|
 | Any voting franchise | Direct Democracy | Laws pass only with a political movement behind them; movements draw more support and radicalize faster, but enacted laws radicalize their opponents less; votes add legitimacy; +25% enactment success, one more agitator slot |
-| Single-Party State | Collective Leadership | +25% coup resistance |
+| Single-Party State | Collective Leadership | +25% coup resistance, which its modifier list doesn't show |
 | Technocracy | Collegial Administration | Institutions change size 50% faster; decrees cost 25% more |
 | Anarchy | Free Federation | Laws pass only with a political movement behind them |
 | Oligarchy or Organic Regulation | Patrician Council | Aristocrats and capitalists gain 15% political strength |
@@ -351,7 +367,7 @@ authority.
 |---|---|---|
 | Skills | Administrative Focus, Diplomatic Focus, Military Focus | Industrialists, Intelligentsia or Armed Forces approve their own focus; another group objects |
 | Ideology | Progressive Tutors, Conservative Tutors | Intelligentsia and Trade Unions against Devout and Landowners |
-| Faction | Radical Mentors, Moderate Mentors, Regressive Mentors | Radical: Intelligentsia, Rural Folk and Trade Unions against Landowners and Devout; Regressive: the reverse, without the Rural Folk; Moderate: Industrialists, Petite Bourgeoisie and Armed Forces, and nobody objects |
+| Faction | Radical Mentors, Moderate Mentors, Regressive Mentors | Radical: Intelligentsia, Rural Folk and Trade Unions against Landowners and Devout; Regressive: Landowners, Devout and Rural Folk against Intelligentsia and Trade Unions; Moderate: Industrialists, Petite Bourgeoisie and Armed Forces, and nobody objects |
 
 Each successful skill lesson also lowers innovation by 10% for 30 days. Every
 heir has a hidden intelligence from 1 to 5: a bright heir sometimes gains two
@@ -364,7 +380,8 @@ Pupil, A Difficult Student and Foreign Correspondence, which needs an ally.
 
 The education ends when the heir is an adult and at least a year has passed
 since the journal entry began, or after 18 years. If the heir dies or changes,
-the tracks reset and the focuses switch off; set them again for the new heir.
+the tracks reset at the next monthly check, and the focuses switch off along
+with their Authority cost; set them again for the new heir.
 
 | Points in a skill | Terrible | Poor | Average | Skilled | Exceptional |
 |---|---|---|---|---|---|
@@ -376,17 +393,28 @@ the tracks reset and the focuses switch off; set them again for the new heir.
 
 The tutors' net lean sets the heir's ideology.
 
-| Tutors' net lean | Likely ideology |
+| Tutors' net lean | Possible ideologies, likeliest first |
 |---|---|
-| Strong progressive (4 points or more) | Reformer or Radical |
-| Light progressive | Reformer or Moderate |
-| None | Usually Moderate, sometimes Reformer or Traditionalist |
-| Light conservative | Traditionalist or Moderate |
-| Strong conservative (4 points or more) | Traditionalist |
+| Strong progressive (4 points or more) | Reformer, Liberal, Social Democrat, Humanitarian, Radical, Communist or Vanguardist; rarely Moderate |
+| Light progressive | Reformer, Liberal, Humanitarian or Social Democrat; often Moderate |
+| None | Usually Moderate, sometimes Reformer, Traditionalist or Liberal |
+| Light conservative | Royalist, Traditionalist, Authoritarian or Theocrat; often Moderate |
+| Strong conservative (4 points or more) | Royalist, Traditionalist, Authoritarian, Theocrat, Ethno-Nationalist or Jingoist; rarely Moderate |
 
-Each heir has an 8% chance to rebel and take the opposite lean. Some rolls
-change nothing and the heir keeps the ideology they already had: about one in
-four with a lean, one in two with a strong conservative one.
+Strong progressive tutoring can raise a Radical, Communist or Vanguardist, an
+heir who may want to abolish the monarchy they inherit. Each heir has an 8%
+chance to rebel and take the opposite lean.
+
+Only ideologies your country can have are rolled. Reformer needs Egalitarianism
+and is no longer possible once you have Feminism; Radical also needs
+Egalitarianism, Liberal needs Democracy, Social Democrat and Communist need
+Socialism, Vanguardist needs Political Agitation, Humanitarian needs Feminism
+and Ethno-Nationalist needs Pan-nationalism. France never gets a Royalist or
+Traditionalist heir, and countries with a strong republican tradition never get
+a Royalist. Until you have Democracy or one of those other technologies,
+progressive tutoring can only produce a Moderate, at the full Authority cost.
+Conservative tutoring always has outcomes, since Authoritarian, Theocrat and
+Jingoist need nothing.
 
 The strongest mentor faction picks the heir's interest group.
 
@@ -396,6 +424,9 @@ The strongest mentor faction picks the heir's interest group.
 | Moderate | Industrialists, Petite Bourgeoisie or Armed Forces |
 | Regressive | Landowners, Devout or Rural Folk |
 | None | Random |
+
+The first group listed is the likeliest, at 35–40%; the other two are about
+30% each.
 
 ### Aptitude traits
 
@@ -430,7 +461,7 @@ Back buttons.
 | Screen | You choose |
 |---|---|
 | 1 | Three doctrines, at most one per category (economy, society, governance, outlook), such as Divine Wealth, Imperial Cult or Pacifism. |
-| 2 | Three traits for the religion's interest group, one each for the loyal, happy and unhappy approval levels (the group holds one trait per level). Only traits matching one of your doctrines can be picked. |
+| 2 | Three traits for the religion's interest group, one each for the loyal, happy and unhappy approval levels (the group holds one trait per level, so picking one rules out the rest of that level). Only traits matching one of your doctrines can be picked. |
 | 3 | A name, from 20 such as Neohellenism or Church of the Sacred Machine. |
 | 4 | The religion's heritage: Christian, Muslim, Judaism, Eastern, Animist, Buddhist or Custom. |
 
@@ -465,7 +496,7 @@ noted, scaled by your rank.
 
 | Decree | Unlocked by | Effect in the state |
 |---|---|---|
-| War Propaganda | War Propaganda | +5 war support a month, faster escalation as aggressor |
+| War Propaganda | War Propaganda | +5 war support a month |
 | Political Patronage | Mass Media | Pops' political strength doubled |
 | Bureaucratic Reform | Intergovernmental Organizations | Government administrations +25% throughput |
 | Greenest Grass Campaign | Freedom of Movement power bloc principle, tier IV or higher | Large migration pull |
@@ -481,6 +512,10 @@ noted, scaled by your rank.
 | Subsidize Immigration | Public Works Programs | +50% migration pull, welfare payments |
 | Resettlement Recruitment Drive | A Settlement Authority | Resettlement draws settlers here first; see [States and population](07-states.md) |
 
+War Propaganda works only while you are at war, and its +5 is multiplied by the
+state's share of your population: in a state holding a fifth of your people it
+adds 1 war support a month. Issue it in your most populous state.
+
 ## After a revolution
 
 When a revolution wins, the winner carries on as the same nation and keeps what
@@ -491,4 +526,8 @@ farming breakthroughs all carry over. A Civil Rights Movement, Human
 Augmentation Debate or Mental Health Crisis journal entry you already finished
 does not start over. Some things are still lost: policies switched on from
 journal-entry buttons, such as banking tools and climate policies, have to be
-switched on again, and history charts start empty.
+switched on again, and history charts start empty. The colonial empire is the
+exception: the winner keeps the colonial programs you were running while the
+Colonial Empire entry is open, Colonial Empire Solidified and the path rewards
+of a finished empire, and the Imperial Federation and Mandate System modifiers
+(see [Colonial empires and decolonization](11-decolonization.md)).

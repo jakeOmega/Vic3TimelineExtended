@@ -65,8 +65,8 @@ Nations inspections slow it (by a quarter at the UN's middle tier of
 enforcement, more at the higher tiers), and after any nuclear use every funded
 program gets +25%, fading over five years (The Bomb Has Been Used). Events can
 bring a laboratory accident, a discovery with civilian uses, or anti-nuclear
-protests. Most of the accident's and the discovery's choices cost progress
-toward the first device.
+protests. Most of the accident's and the discovery's choices cost 5 to 25 points
+of progress toward the first device, never taking it below zero.
 
 ### The first device and the world's reaction
 
@@ -361,9 +361,10 @@ state you pick.
 A strike ordered through these actions or a crisis event also needs your
 doctrine to allow it, no non-use pledge with the target, and forces that are not
 Recessed. The Rules of War block lifts once you or a country you cover has been
-struck, or when an enemy's war goal would annex or subjugate you. A launch
-ordered on an unconfirmed early warning skips the doctrine and Rules of War
-tests (see [Nuclear incidents and accidents](#nuclear-incidents-and-accidents)).
+struck, or when an enemy's war goal would annex or subjugate you. Give the
+launch order, the government's answer to an unconfirmed early warning, passes
+the same tests; only launches nobody ordered skip them (see [Nuclear incidents
+and accidents](#nuclear-incidents-and-accidents)).
 
 ### What a nuclear strike does
 
@@ -415,7 +416,16 @@ Most incidents cost money, readiness, reliability or reputation. A buried
 incident has a 3% chance each month of coming out (Nuclear Cover-Up Exposed: −10
 legitimacy, −10% authority, −5% prestige).
 
-A launch needs a war with the country in question. Outside a war, a launch
+When the government decides on a false warning, Give the launch order is a
+deliberate strike and is greyed out unless every test for one passes: a war
+with the suspected attacker, a doctrine that permits the strike, no non-use
+pledge with it, Rules of War that allow it and forces at Routine or higher. A
+warning alone never counts as being struck, so under No First Use the order is
+open only against a country that has already struck you. Launch on warning,
+delegated commanders and a commander cut off from the capital fire without any
+of these tests.
+
+Any launch needs a war with the country in question. Outside a war, a launch
 nobody halted is recalled at the last moment: +10 infamy, −50 relations with the
 target, more strain and less reliability, and an armed target may answer by
 opening a crisis. Under No First Use, even an unapproved launch in a war breaks
@@ -427,7 +437,10 @@ A Compellence or Warfighting power at war with an enemy that has no arsenal, no
 armed protector and no armed ally in that war, and whose doctrine allows a
 strike on it, has an 8% chance a month, at most once a year, of "The Monopoly
 Window": its general staff proposes using the bomb while nobody can answer. You
-can win conventionally, issue a public ultimatum, or authorize the strike.
+can win conventionally, issue a public ultimatum, or authorize the strike. The
+strike obeys the Rules of War like any other: under Limited War or Humanitarian
+Regulations it is offered only once their block has lifted (see [Strategic and
+tactical strike actions](#strategic-and-tactical-strike-actions)).
 
 ## Arsenals in civil wars and annexations
 
