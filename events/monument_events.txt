@@ -6,9 +6,7 @@
 # Event 1  - hidden building_event, fires from on_building_built. Hands off to the
 #            monument's own STATE, because that is where the ceremony belongs and
 #            because building scope supports neither variables nor modifiers.
-# Event 2  - the dedication ceremony, a state_event placed on the monument's state.
-#            ROOT is that state, so activate_production_method targets it directly
-#            and every country-level gate goes through `owner`.
+# Event 2  - the dedication ceremony (state event), then Event 11 - the skin (§1.1).
 # Events 3+ - recurring flavour, dispatched from monument_events_on_actions.txt.
 # ============================================================================
 
@@ -29,29 +27,19 @@ monument_events.1 = {
 	}
 }
 
-# Event 2: The Dedication. A STATE event -- the ceremony happens where the monument
-# stands, not in the capital, and the event window is placed on that state.
+# Event 2: The Dedication (§3). A STATE event placed on the monument's state;
+# ROOT is that state, and every country-level gate goes through `owner`. Each
+# option dedicates through a gm_state_dedicate_* wrapper (gm_effects.txt),
+# which writes the records, offers the skins that fit (Event 11) and refreshes
+# the nation (Event 20).
 #
-# Every option locks its choice in permanently via the unlocking_production_methods
-# ratchet (see common/production_methods/grand_monument_pms.txt).
+# OPTION GATING: a `trigger` hides a dedication the country cannot raise (a
+# crown it does not wear, a faith under State Atheism, an untaught technology);
+# ai_chance tilts the rest.
 #
-# OPTION GATING. Two kinds, and they are not interchangeable:
-#   * `trigger` on an option HIDES it. Reserved for dedications the country has no
-#     business offering at all -- a state-atheist republic consecrating a shrine, an
-#     industry-banned agrarian state glorifying the factory, or a technology it has
-#     not researched.
-#   * `ai_chance` TILTS it. Everything a country could plausibly want stays visible
-#     and is steered by weight instead, so the player always sees the full menu of
-#     what is actually possible.
-# The civic dedication is never hidden: it is offered under one of three wordings
-# depending on who the monument would be raised to. See
-# common/scripted_triggers/monument_triggers.txt.
-#
-# TOOLTIPS. Each option wraps its activate_production_method in a custom_tooltip so
-# the player reads what the dedication actually does before committing to it, rather
-# than relying on whatever the engine emits for that effect. The .tt strings live in
-# localization/english/te_events_l_english.yml and are hand-kept in sync with
-# grand_monument_pms.txt; change a value there, change it here.
+# TOOLTIPS: every number is read from the gm_step_* script values
+# (gm_values.txt), which the registry test pins to the static modifiers. The
+# loc holds no hand-kept numbers.
 monument_events.2 = {
 	type = state_event
 	placement = ROOT
@@ -66,9 +54,10 @@ monument_events.2 = {
 
 	duration = 3
 
-	# Only for a monument that has not been dedicated yet. `has_building` alone would
-	# re-open the question every time an existing monument gains a level.
+	# Only for a monument not yet dedicated. `has_building` alone would re-open
+	# the question every time an existing monument gains a level.
 	trigger = {
+		gm_system_enabled = yes
 		any_scope_building = {
 			is_building_type = building_grand_monument
 			has_active_production_method = pm_monument_undedicated
@@ -80,78 +69,102 @@ monument_events.2 = {
 		save_scope_as = monument_state
 	}
 
-	# Leave it undedicated -- the monument keeps pm_monument_undedicated and the
-	# player can still dedicate it by hand in the building panel later.
+	# Leave it undedicated; the ceremony asks again at the next level.
 	option = {
 		name = monument_events.2.a
-		# REVIEWED 2026-09-26 (no_effect_option): keeps the default production method, whose output the tooltip describes
 		default_option = yes
 		ai_chance = { base = 1 }
-
 		custom_tooltip = monument_events.2.a.tt
-	}
-
-	# Civic, republican wording.
-	option = {
-		name = monument_events.2.b
-		trigger = {
-			owner = { monument_government_is_republican = yes }
-		}
-
-		ai_chance = { base = 3 }
-
-		custom_tooltip = {
-			text = monument_events.2.b.tt
-			activate_production_method = {
-				building_type = building_grand_monument
-				production_method = pm_monument_civic
-			}
+		hidden_effect = {
+			gm_remove_state_var = { VAR = gm_ceremony_pending }
 		}
 	}
 
-	# Civic, dynastic wording. Same production method as the republican option.
+	# To the Crown.
 	option = {
 		name = monument_events.2.l
 		trigger = {
 			owner = { monument_government_is_crowned = yes }
 		}
-
-		ai_chance = { base = 3 }
-
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = {
+					owner = { government_legitimacy < 40 }
+				}
+				add = 5
+			}
+		}
 		custom_tooltip = {
 			text = monument_events.2.l.tt
-			activate_production_method = {
-				building_type = building_grand_monument
-				production_method = pm_monument_civic
-			}
+			gm_state_dedicate_regime = { KEY = crown }
 		}
 	}
 
-	# Civic, neutral wording -- theocracies, corporate states, colonial
-	# administrations, neocameralist states, and any governance principle added later.
+	# To the Republic.
 	option = {
-		name = monument_events.2.m
+		name = monument_events.2.b
 		trigger = {
-			owner = {
-				monument_government_is_republican = no
-				monument_government_is_crowned = no
+			owner = { monument_government_is_republican = yes }
+		}
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = {
+					owner = { government_legitimacy < 40 }
+				}
+				add = 5
 			}
 		}
-
-		ai_chance = { base = 3 }
-
 		custom_tooltip = {
-			text = monument_events.2.m.tt
-			activate_production_method = {
-				building_type = building_grand_monument
-				production_method = pm_monument_civic
-			}
+			text = monument_events.2.b.tt
+			gm_state_dedicate_regime = { KEY = republic }
 		}
 	}
 
-	# Religious. Hidden only under state atheism, where there is no faith to
-	# consecrate it to; a secular state may still build a cathedral, it is just
-	# an unlikely use of the money.
+	# To the Revolution.
+	option = {
+		name = monument_events.2.n
+		trigger = {
+			owner = { gm_government_is_revolutionary = yes }
+		}
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = {
+					owner = { government_legitimacy < 40 }
+				}
+				add = 5
+			}
+		}
+		custom_tooltip = {
+			text = monument_events.2.n.tt
+			gm_state_dedicate_regime = { KEY = revolution }
+		}
+	}
+
+	# To the Leader: a personality cult.
+	option = {
+		name = monument_events.2.o
+		trigger = {
+			owner = { gm_can_raise_leader_monument = yes }
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = {
+					owner = { government_legitimacy < 40 }
+				}
+				add = 5
+			}
+		}
+		custom_tooltip = {
+			text = monument_events.2.o.tt
+			gm_state_dedicate_leader = yes
+		}
+	}
+
+	# A grand shrine. Hidden only under State Atheism.
 	option = {
 		name = monument_events.2.c
 		trigger = {
@@ -159,7 +172,6 @@ monument_events.2 = {
 				NOT = { has_law_or_variant = law_type:law_state_atheism }
 			}
 		}
-
 		ai_chance = {
 			base = 3
 			modifier = {
@@ -174,22 +186,32 @@ monument_events.2 = {
 				}
 				add = 2
 			}
+			modifier = {
+				trigger = {
+					owner = { ig:ig_devout = { is_in_government = yes } }
+				}
+				add = 3
+			}
 		}
-
 		custom_tooltip = {
 			text = monument_events.2.c.tt
-			activate_production_method = {
-				building_type = building_grand_monument
-				production_method = pm_monument_religious
-			}
+			gm_state_dedicate_faith = yes
 		}
 	}
 
-	# War memorial. Every country has fallen soldiers to name, so this is never
-	# hidden -- but a country that has just been through a war reaches for it.
+	# To the Nation: never hidden, never falls.
+	option = {
+		name = monument_events.2.m
+		ai_chance = { base = 3 }
+		custom_tooltip = {
+			text = monument_events.2.m.tt
+			gm_state_dedicate_timeless = { KEY = civic AXIS = heritage }
+		}
+	}
+
+	# War memorial. A country just through a war reaches for it.
 	option = {
 		name = monument_events.2.e
-
 		ai_chance = {
 			base = 3
 			modifier = {
@@ -199,41 +221,31 @@ monument_events.2 = {
 				add = 3
 			}
 		}
-
 		custom_tooltip = {
 			text = monument_events.2.e.tt
-			activate_production_method = {
-				building_type = building_grand_monument
-				production_method = pm_monument_war_memorial
-			}
+			gm_state_dedicate_timeless = { KEY = war_memorial AXIS = heritage }
 		}
 	}
 
-	# Artistic.
+	# Opera house.
 	option = {
 		name = monument_events.2.g
 		trigger = {
 			owner = { has_technology_researched = romanticism }
 		}
-
 		ai_chance = { base = 3 }
-
 		custom_tooltip = {
 			text = monument_events.2.g.tt
-			activate_production_method = {
-				building_type = building_grand_monument
-				production_method = pm_monument_artistic
-			}
+			gm_state_dedicate_timeless = { KEY = artistic AXIS = none }
 		}
 	}
 
-	# Naturalist.
+	# Botanical gardens.
 	option = {
 		name = monument_events.2.h
 		trigger = {
 			owner = { has_technology_researched = romanticism }
 		}
-
 		ai_chance = {
 			base = 3
 			# The state itself has industry worth planting over.
@@ -244,36 +256,26 @@ monument_events.2 = {
 				add = 3
 			}
 		}
-
 		custom_tooltip = {
 			text = monument_events.2.h.tt
-			activate_production_method = {
-				building_type = building_grand_monument
-				production_method = pm_monument_naturalist
-			}
+			gm_state_dedicate_timeless = { KEY = naturalist AXIS = none }
 		}
 	}
 
-	# Scientific.
+	# Observatory.
 	option = {
 		name = monument_events.2.i
 		trigger = {
 			owner = { has_technology_researched = empiricism }
 		}
-
 		ai_chance = { base = 3 }
-
 		custom_tooltip = {
 			text = monument_events.2.i.tt
-			activate_production_method = {
-				building_type = building_grand_monument
-				production_method = pm_monument_scientific
-			}
+			gm_state_dedicate_timeless = { KEY = scientific AXIS = none }
 		}
 	}
 
-	# Industrial. Hidden where industry itself is outlawed -- a great exhibition
-	# hall is not something an industry-banned state puts up.
+	# Exhibition hall. Hidden where industry itself is outlawed.
 	option = {
 		name = monument_events.2.j
 		trigger = {
@@ -282,36 +284,25 @@ monument_events.2 = {
 				NOT = { has_law_or_variant = law_type:law_industry_banned }
 			}
 		}
-
 		ai_chance = { base = 3 }
-
 		custom_tooltip = {
 			text = monument_events.2.j.tt
-			activate_production_method = {
-				building_type = building_grand_monument
-				production_method = pm_monument_industrial
-			}
+			gm_state_dedicate_timeless = { KEY = industrial AXIS = none }
 		}
 	}
 
-	# Athletic.
+	# Stadium.
 	option = {
 		name = monument_events.2.k
 		trigger = {
 			owner = { has_technology_researched = television_broadcasting }
 		}
-
 		ai_chance = { base = 3 }
-
 		custom_tooltip = {
 			text = monument_events.2.k.tt
-			activate_production_method = {
-				building_type = building_grand_monument
-				production_method = pm_monument_athletic
-			}
+			gm_state_dedicate_timeless = { KEY = athletic AXIS = none }
 		}
 	}
-
 }
 
 # ============================================================================
@@ -774,5 +765,431 @@ monument_events.17 = {
 		# REVIEWED 2026-09-27 (no_effect_option): the decision waits on the monument's journal entry row; the tooltip says the standing penalty continues
 		default_option = yes
 		custom_tooltip = gm_leave_contested_tt
+	}
+}
+
+# ============================================================================
+# Event 11: the form the monument takes (§1.1)
+# ============================================================================
+# A state event, from gm_state_offer_skins when a specific skin fits. Offers
+# the skins of the builder's own faith (a Shrine) or of each primary culture's
+# classical heritage (the language-reform revival partition, te_heritage_*),
+# and the plain style. Faith first, then heritage in the partition's order,
+# generic last, and no default_option: an expired event takes the first valid
+# option, which is the most specific skin, the one already set.
+monument_events.11 = {
+	type = state_event
+	placement = ROOT
+
+	event_image = {
+		trigger = {
+			var:gm_skin_axis = flag:faith
+			owner = { religion = rel:jewish }
+		}
+		video = "europenorthamerica_judaism"
+	}
+	event_image = {
+		trigger = {
+			var:gm_skin_axis = flag:faith
+			owner = {
+				OR = {
+					religion = rel:protestant
+					religion = rel:catholic
+					religion = rel:orthodox
+					religion = rel:oriental_orthodox
+				}
+			}
+		}
+		video = "southamerica_christianity"
+	}
+	event_image = {
+		trigger = {
+			var:gm_skin_axis = flag:faith
+			owner = {
+				OR = {
+					religion = rel:hindu
+					religion = rel:sikh
+				}
+			}
+		}
+		video = "asia_hinduism_sikhism"
+	}
+	event_image = {
+		trigger = {
+			var:gm_skin_axis = flag:faith
+			owner = {
+				OR = {
+					religion = rel:shinto
+					religion = rel:confucian
+				}
+			}
+		}
+		video = "asia_confucianism_shinto"
+	}
+	event_image = {
+		trigger = {
+			var:gm_skin_axis = flag:faith
+			owner = {
+				OR = {
+					religion = rel:mahayana
+					religion = rel:gelugpa
+					religion = rel:theravada
+				}
+			}
+		}
+		video = "asia_buddhism"
+	}
+	event_image = {
+		trigger = {
+			var:gm_skin_axis = flag:faith
+			owner = {
+				OR = {
+					religion = rel:sunni
+					religion = rel:shiite
+					religion = rel:ibadi
+				}
+			}
+		}
+		video = "middleeast_islam"
+	}
+	event_image = {
+		trigger = {
+			var:gm_skin_axis = flag:faith
+			owner = { religion = rel:animist }
+		}
+		video = "africa_animism"
+	}
+	event_image = {
+		video = "unspecific_world_fair"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = monument_events.11.t
+	desc = monument_events.11.d
+	flavor = monument_events.11.f
+
+	duration = 3
+
+	trigger = {
+		has_variable = gm_skin_axis
+	}
+
+	immediate = {
+		save_scope_as = monument_state
+	}
+
+	option = {
+		name = monument_events.11.faith_catholic
+		trigger = {
+			var:gm_skin_axis = flag:faith
+			owner = { religion = rel:catholic }
+		}
+		gm_state_choose_skin = { SKIN = faith_catholic }
+	}
+
+	option = {
+		name = monument_events.11.faith_protestant
+		trigger = {
+			var:gm_skin_axis = flag:faith
+			owner = { religion = rel:protestant }
+		}
+		gm_state_choose_skin = { SKIN = faith_protestant }
+	}
+
+	option = {
+		name = monument_events.11.faith_orthodox
+		trigger = {
+			var:gm_skin_axis = flag:faith
+			owner = { religion = rel:orthodox }
+		}
+		gm_state_choose_skin = { SKIN = faith_orthodox }
+	}
+
+	option = {
+		name = monument_events.11.faith_oriental_orthodox
+		trigger = {
+			var:gm_skin_axis = flag:faith
+			owner = { religion = rel:oriental_orthodox }
+		}
+		gm_state_choose_skin = { SKIN = faith_oriental_orthodox }
+	}
+
+	option = {
+		name = monument_events.11.faith_sunni
+		trigger = {
+			var:gm_skin_axis = flag:faith
+			owner = { religion = rel:sunni }
+		}
+		gm_state_choose_skin = { SKIN = faith_sunni }
+	}
+
+	option = {
+		name = monument_events.11.faith_shiite
+		trigger = {
+			var:gm_skin_axis = flag:faith
+			owner = { religion = rel:shiite }
+		}
+		gm_state_choose_skin = { SKIN = faith_shiite }
+	}
+
+	option = {
+		name = monument_events.11.faith_ibadi
+		trigger = {
+			var:gm_skin_axis = flag:faith
+			owner = { religion = rel:ibadi }
+		}
+		gm_state_choose_skin = { SKIN = faith_ibadi }
+	}
+
+	option = {
+		name = monument_events.11.faith_jewish
+		trigger = {
+			var:gm_skin_axis = flag:faith
+			owner = { religion = rel:jewish }
+		}
+		gm_state_choose_skin = { SKIN = faith_jewish }
+	}
+
+	option = {
+		name = monument_events.11.faith_mahayana
+		trigger = {
+			var:gm_skin_axis = flag:faith
+			owner = { religion = rel:mahayana }
+		}
+		gm_state_choose_skin = { SKIN = faith_mahayana }
+	}
+
+	option = {
+		name = monument_events.11.faith_gelugpa
+		trigger = {
+			var:gm_skin_axis = flag:faith
+			owner = { religion = rel:gelugpa }
+		}
+		gm_state_choose_skin = { SKIN = faith_gelugpa }
+	}
+
+	option = {
+		name = monument_events.11.faith_theravada
+		trigger = {
+			var:gm_skin_axis = flag:faith
+			owner = { religion = rel:theravada }
+		}
+		gm_state_choose_skin = { SKIN = faith_theravada }
+	}
+
+	option = {
+		name = monument_events.11.faith_confucian
+		trigger = {
+			var:gm_skin_axis = flag:faith
+			owner = { religion = rel:confucian }
+		}
+		gm_state_choose_skin = { SKIN = faith_confucian }
+	}
+
+	option = {
+		name = monument_events.11.faith_hindu
+		trigger = {
+			var:gm_skin_axis = flag:faith
+			owner = { religion = rel:hindu }
+		}
+		gm_state_choose_skin = { SKIN = faith_hindu }
+	}
+
+	option = {
+		name = monument_events.11.faith_shinto
+		trigger = {
+			var:gm_skin_axis = flag:faith
+			owner = { religion = rel:shinto }
+		}
+		gm_state_choose_skin = { SKIN = faith_shinto }
+	}
+
+	option = {
+		name = monument_events.11.faith_sikh
+		trigger = {
+			var:gm_skin_axis = flag:faith
+			owner = { religion = rel:sikh }
+		}
+		gm_state_choose_skin = { SKIN = faith_sikh }
+	}
+
+	option = {
+		name = monument_events.11.faith_animist
+		trigger = {
+			var:gm_skin_axis = flag:faith
+			owner = { religion = rel:animist }
+		}
+		gm_state_choose_skin = { SKIN = faith_animist }
+	}
+
+	option = {
+		name = monument_events.11.heritage_latin
+		trigger = {
+			var:gm_skin_axis = flag:heritage
+			owner = { te_heritage_latin = yes }
+		}
+		gm_state_choose_skin = { SKIN = heritage_latin }
+	}
+
+	option = {
+		name = monument_events.11.heritage_hebrew
+		trigger = {
+			var:gm_skin_axis = flag:heritage
+			owner = { te_heritage_hebrew = yes }
+		}
+		gm_state_choose_skin = { SKIN = heritage_hebrew }
+	}
+
+	option = {
+		name = monument_events.11.heritage_sanskrit
+		trigger = {
+			var:gm_skin_axis = flag:heritage
+			owner = { te_heritage_sanskrit = yes }
+		}
+		gm_state_choose_skin = { SKIN = heritage_sanskrit }
+	}
+
+	option = {
+		name = monument_events.11.heritage_geez
+		trigger = {
+			var:gm_skin_axis = flag:heritage
+			owner = { te_heritage_geez = yes }
+		}
+		gm_state_choose_skin = { SKIN = heritage_geez }
+	}
+
+	option = {
+		name = monument_events.11.heritage_slavonic
+		trigger = {
+			var:gm_skin_axis = flag:heritage
+			owner = { te_heritage_slavonic = yes }
+		}
+		gm_state_choose_skin = { SKIN = heritage_slavonic }
+	}
+
+	option = {
+		name = monument_events.11.heritage_pali
+		trigger = {
+			var:gm_skin_axis = flag:heritage
+			owner = { te_heritage_pali = yes }
+		}
+		gm_state_choose_skin = { SKIN = faith_theravada }
+	}
+
+	option = {
+		name = monument_events.11.heritage_avestan
+		trigger = {
+			var:gm_skin_axis = flag:heritage
+			owner = { te_heritage_avestan = yes }
+		}
+		gm_state_choose_skin = { SKIN = heritage_avestan }
+	}
+
+	option = {
+		name = monument_events.11.heritage_arabic
+		trigger = {
+			var:gm_skin_axis = flag:heritage
+			owner = { te_heritage_arabic = yes }
+		}
+		gm_state_choose_skin = { SKIN = heritage_arabic }
+	}
+
+	option = {
+		name = monument_events.11.heritage_chinese
+		trigger = {
+			var:gm_skin_axis = flag:heritage
+			owner = { te_heritage_chinese = yes }
+		}
+		gm_state_choose_skin = { SKIN = heritage_chinese }
+	}
+
+	option = {
+		name = monument_events.11.heritage_greek
+		trigger = {
+			var:gm_skin_axis = flag:heritage
+			owner = { te_heritage_greek = yes }
+		}
+		gm_state_choose_skin = { SKIN = heritage_greek }
+	}
+
+	option = {
+		name = monument_events.11.heritage_irish
+		trigger = {
+			var:gm_skin_axis = flag:heritage
+			owner = { te_heritage_irish = yes }
+		}
+		gm_state_choose_skin = { SKIN = heritage_irish }
+	}
+
+	option = {
+		name = monument_events.11.heritage_coptic
+		trigger = {
+			var:gm_skin_axis = flag:heritage
+			owner = { te_heritage_coptic = yes }
+		}
+		gm_state_choose_skin = { SKIN = faith_oriental_orthodox }
+	}
+
+	option = {
+		name = monument_events.11.heritage_nahuatl
+		trigger = {
+			var:gm_skin_axis = flag:heritage
+			owner = { te_heritage_nahuatl = yes }
+		}
+		gm_state_choose_skin = { SKIN = heritage_nahuatl }
+	}
+
+	option = {
+		name = monument_events.11.heritage_norse
+		trigger = {
+			var:gm_skin_axis = flag:heritage
+			owner = { te_heritage_norse = yes }
+		}
+		gm_state_choose_skin = { SKIN = heritage_norse }
+	}
+
+	option = {
+		name = monument_events.11.heritage_gothic
+		trigger = {
+			var:gm_skin_axis = flag:heritage
+			owner = { te_heritage_gothic = yes }
+		}
+		gm_state_choose_skin = { SKIN = heritage_gothic }
+	}
+
+	option = {
+		name = monument_events.11.heritage_mayan
+		trigger = {
+			var:gm_skin_axis = flag:heritage
+			owner = { te_heritage_mayan = yes }
+		}
+		gm_state_choose_skin = { SKIN = heritage_mayan }
+	}
+
+	option = {
+		name = monument_events.11.heritage_prussian
+		trigger = {
+			var:gm_skin_axis = flag:heritage
+			owner = { te_heritage_prussian = yes }
+		}
+		gm_state_choose_skin = { SKIN = heritage_prussian }
+	}
+
+	option = {
+		name = monument_events.11.heritage_aramaic
+		trigger = {
+			var:gm_skin_axis = flag:heritage
+			owner = { te_heritage_aramaic = yes }
+		}
+		gm_state_choose_skin = { SKIN = heritage_aramaic }
+	}
+
+	# Always offered, last: with no default_option, an expired event takes the
+	# first valid option, which is the most specific skin.
+	option = {
+		name = monument_events.11.generic
+		gm_state_choose_skin = { SKIN = generic }
 	}
 }

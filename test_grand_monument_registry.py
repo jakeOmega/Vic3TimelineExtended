@@ -903,5 +903,165 @@ class ContestTests(unittest.TestCase):
                       body)
 
 
+# ---- Task 7: the ceremony, skins, the inscription ------------------------------------
+
+CEREMONY_OPTION = {"crown": "l", "republic": "b", "revolution": "n", "leader": "o", "religious": "c",
+                   "civic": "m", "war_memorial": "e", "artistic": "g", "naturalist": "h", "scientific": "i",
+                   "industrial": "j", "athletic": "k"}
+CEREMONY_GATE = {"crown": "monument_government_is_crowned = yes",
+                 "republic": "monument_government_is_republican = yes",
+                 "revolution": "gm_government_is_revolutionary = yes",
+                 "leader": "gm_can_raise_leader_monument = yes",
+                 "religious": "NOT = { has_law_or_variant = law_type:law_state_atheism }",
+                 "industrial": "NOT = { has_law_or_variant = law_type:law_industry_banned }"}
+INSCRIPTION_FAITHS = {"catholic": "latin", "jewish": "hebrew", "hindu": "sanskrit", "theravada": "pali",
+                      "oriental_orthodox": "coptic", "sunni": "arabic", "shiite": "arabic", "ibadi": "arabic",
+                      "orthodox": "slavonic"}
+# Named landmarks (spec §1.1, phase 2): (key, the dedications it can take). Each
+# is a skin flag `landmark_<key>`, an option `monument_events.11.landmark_<key>`
+# placed before the faith options (a landmark is the most specific form), whose
+# trigger names its state, and the loc `gm_skin_landmark_<key>`. Empty in phase 1.
+LANDMARKS = ()
+
+
+def ceremony_options():
+    event = raw_block_at(read(EVENTS), r"(?m)^monument_events\.2\s*=\s*\{")
+    out = {}
+    for m in re.finditer(r"option\s*=\s*\{", event):
+        body = _match_brace(event, m.end())
+        name = re.search(r"name = monument_events\.2\.(\w+)", body)
+        out[name.group(1)] = body
+    return out
+
+
+def wrapper_call(d):
+    if d.kind == "regime":
+        return f"gm_state_dedicate_regime = {{ KEY = {d.key} }}"
+    if d.kind == "ruler":
+        return "gm_state_dedicate_leader = yes"
+    if d.kind == "faith":
+        return "gm_state_dedicate_faith = yes"
+    axis = "heritage" if d.key in HERITAGE_SKINNED else "none"
+    return f"gm_state_dedicate_timeless = {{ KEY = {d.key} AXIS = {axis} }}"
+
+
+class CeremonyTests(unittest.TestCase):
+    def test_every_dedication_has_its_option(self):
+        options = ceremony_options()
+        self.assertEqual(set(options), set(CEREMONY_OPTION.values()) | {"a"})
+        for d in DEDICATIONS:
+            body = squash(strip_comments(options[CEREMONY_OPTION[d.key]]))
+            self.assertIn(f"text = monument_events.2.{CEREMONY_OPTION[d.key]}.tt {wrapper_call(d)}", body, d.key)
+            if d.key in CEREMONY_GATE:
+                self.assertIn(CEREMONY_GATE[d.key], body, d.key)
+            if d.key in TECH_GATES:
+                self.assertIn(f"has_technology_researched = {TECH_GATES[d.key]}", body, d.key)
+
+    def test_leave_undedicated_clears_the_pending_flag(self):
+        body = ceremony_options()["a"]
+        self.assertNotIn("REVIEWED", body)
+        self.assertIn("gm_remove_state_var = { VAR = gm_ceremony_pending }", squash(body))
+
+    def test_tooltips_hold_no_hand_kept_numbers(self):
+        L = loc()
+        keys = [f"monument_events.2.{o}.tt" for o in list(CEREMONY_OPTION.values()) + ["a"]]
+        keys.append("monument_events.2.common_tt")
+        for key in keys:
+            self.assertIn(key, L)
+            self.assertNotRegex(L[key], r"#G [+-]?\d", f"{key}: numbers come from gm_step_* script values")
+        for o in CEREMONY_OPTION.values():
+            self.assertIn("$monument_events.2.common_tt$", L[f"monument_events.2.{o}.tt"])
+
+    def test_wrappers(self):
+        e = read(EFFECTS)
+        base = squash(block(e, "gm_state_dedicate"))
+        self.assertIn("production_method = pm_monument_$KEY$", base)
+        self.assertIn("set_variable = gm_seen", base)
+        self.assertIn("set_variable = { name = gm_raised_by value = owner }", squash(block(e, "gm_state_dedicate_regime")))
+        leader = squash(block(e, "gm_state_dedicate_leader"))
+        self.assertIn("gm_state_record_honoree = yes", leader)
+        self.assertIn("gm_state_offer_skins = { AXIS = heritage }", leader)
+        faith = squash(block(e, "gm_state_dedicate_faith"))
+        self.assertIn("gm_state_record_faith = yes", faith)
+        self.assertIn("gm_state_offer_skins = { AXIS = faith }", faith)
+        self.assertNotIn("gm_raised_by", squash(block(e, "gm_state_dedicate_timeless")))
+        offer = squash(block(e, "gm_state_offer_skins"))
+        self.assertIn("gm_state_offer_skins_$AXIS$ = yes", offer)
+        self.assertIn("trigger_event = { id = monument_events.20 }", offer)
+        faith_offer = squash(block(e, "gm_state_offer_skins_faith"))
+        self.assertIn("gm_state_offer_skins_heritage = yes", faith_offer, "mod religions fall back to heritage")
+
+
+class SkinTests(unittest.TestCase):
+    def setUp(self):
+        self.event = raw_block_at(read(EVENTS), r"(?m)^monument_events\.11\s*=\s*\{")
+        self.assertIsNotNone(self.event)
+
+    def _options(self):
+        out = []
+        for m in re.finditer(r"option\s*=\s*\{", self.event):
+            body = squash(strip_comments(_match_brace(self.event, m.end())))
+            name = re.search(r"name = monument_events\.11\.(\w+)", body).group(1)
+            out.append((name, body))
+        return out
+
+    def test_an_option_per_skin_generic_last(self):
+        options = self._options()
+        names = [n for n, _ in options]
+        expected = ([f"landmark_{k}" for k, _ in LANDMARKS] + [f"faith_{f}" for f in FAITHS]
+                    + [f"heritage_{h}" for h in HERITAGES] + ["generic"])
+        self.assertEqual(names, expected)
+        bodies = dict(options)
+        for f in FAITHS:
+            self.assertIn(f"var:gm_skin_axis = flag:faith owner = {{ religion = rel:{f} }}", bodies[f"faith_{f}"])
+            self.assertIn(f"gm_state_choose_skin = {{ SKIN = faith_{f} }}", bodies[f"faith_{f}"])
+        for h in HERITAGES:
+            skin = f"faith_{HERITAGE_AS_FAITH[h]}" if h in HERITAGE_AS_FAITH else f"heritage_{h}"
+            self.assertIn(f"var:gm_skin_axis = flag:heritage owner = {{ te_heritage_{h} = yes }}",
+                          bodies[f"heritage_{h}"])
+            self.assertIn(f"gm_state_choose_skin = {{ SKIN = {skin} }}", bodies[f"heritage_{h}"])
+        self.assertNotIn("default_option", squash(strip_comments(self.event)))
+
+    def test_skins_read_only_own_identity(self):
+        body = strip_comments(self.event)
+        self.assertNotRegex(body, r"\bculture\s*=|\bhas_discrimination_trait|any_scope_pop")
+
+    def test_skin_loc_and_names(self):
+        L = loc()
+        for name, _ in self._options():
+            self.assertIn(f"monument_events.11.{name}", L)
+        for key in ("t", "d", "f"):
+            self.assertIn(f"monument_events.11.{key}", L)
+        names = squash(block(read(CUSTOM_LOC), "gm_skin_name"))
+        for skin in SKINS:
+            self.assertIn(f"gm_skin_{skin}", L, skin)
+            if skin != "generic":
+                self.assertIn(f"var:gm_skin = flag:{skin} }} localization_key = gm_skin_{skin}", names)
+        self.assertTrue(names.endswith("text = { localization_key = gm_skin_generic }"))
+
+    def test_landmarks_phase_2_hook(self):
+        L = loc()
+        names = [n for n, _ in self._options()]
+        names_block = squash(block(read(CUSTOM_LOC), "gm_skin_name"))
+        for key, _dedications in LANDMARKS:
+            self.assertIn(f"landmark_{key}", names)
+            self.assertLess(names.index(f"landmark_{key}"), names.index(f"faith_{FAITHS[0]}"))
+            self.assertIn(f"gm_skin_landmark_{key}", L)
+            self.assertIn(f"flag:landmark_{key} }} localization_key = gm_skin_landmark_{key}", names_block)
+
+    def test_inscription(self):
+        body = squash(block(read(CUSTOM_LOC), "gm_inscription"))
+        L = loc()
+        for h in HERITAGE_SKINS:
+            self.assertIn(f"var:gm_skin = flag:heritage_{h} owner = {{ gm_country_has_revived = {{ LANG = {h} }} }}", body)
+        for f, lang in INSCRIPTION_FAITHS.items():
+            self.assertIn(f"var:gm_skin = flag:faith_{f} owner = {{ gm_country_has_revived = {{ LANG = {lang} }} }}", body)
+        for h in HERITAGES:
+            self.assertIn(f"gm_inscription_{h}", L)
+        self.assertIn("gm_inscription_none", L)
+        revived = squash(block(read(TRIGGERS), "gm_country_has_revived"))
+        self.assertIn("has_amendment = amendment_type:amendment_langreform_revived_$LANG$", revived)
+
+
 if __name__ == "__main__":
     unittest.main()

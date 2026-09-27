@@ -1019,3 +1019,89 @@ gm_notify_new_contests = {
 		}
 	}
 }
+
+# ---- The dedication (§3): from the ceremony, monument_events.2 (ROOT = state) ----
+# The ceremony's option knows the dedication, so these wrappers never read the
+# production method back: whether activate_production_method is visible within
+# the same effect is not established.
+gm_state_dedicate = {
+	activate_production_method = {
+		building_type = building_grand_monument
+		production_method = pm_monument_$KEY$
+	}
+	gm_remove_state_var = { VAR = gm_ceremony_pending }
+	set_variable = gm_seen
+}
+
+# AXIS: heritage (To the Nation, War Memorial) or none (the civic-progress five).
+gm_state_dedicate_timeless = {
+	gm_state_dedicate = { KEY = $KEY$ }
+	gm_state_offer_skins = { AXIS = $AXIS$ }
+}
+
+gm_state_dedicate_regime = {
+	gm_state_dedicate = { KEY = $KEY$ }
+	set_variable = { name = gm_raised_by value = owner }
+	gm_state_offer_skins = { AXIS = heritage }
+}
+
+gm_state_dedicate_leader = {
+	gm_state_dedicate = { KEY = leader }
+	set_variable = { name = gm_raised_by value = owner }
+	gm_state_record_honoree = yes
+	gm_state_offer_skins = { AXIS = heritage }
+}
+
+gm_state_dedicate_faith = {
+	gm_state_dedicate = { KEY = religious }
+	set_variable = { name = gm_raised_by value = owner }
+	gm_state_record_faith = yes
+	gm_state_offer_skins = { AXIS = faith }
+}
+
+# ---- Skins (§1.1) ----------------------------------------------------------------
+# State scope. The most specific skin for the axis, set at once; then, if it is
+# not the generic one, the choice (monument_events.11), whose first valid
+# option is that same skin. Then a national refresh.
+gm_state_offer_skins = {
+	set_variable = { name = gm_skin value = flag:generic }
+	gm_state_offer_skins_$AXIS$ = yes
+	owner = { trigger_event = { id = monument_events.20 } }
+}
+
+gm_state_offer_skins_none = {
+	gm_remove_state_var = { VAR = gm_skin_axis }
+}
+
+gm_state_offer_skins_faith = {
+	gm_state_default_faith_skin = yes
+	if = {
+		limit = { var:gm_skin = flag:generic }
+		# The mod's own religions have no faith skin: a heritage skin instead.
+		gm_state_offer_skins_heritage = yes
+	}
+	else = {
+		set_variable = { name = gm_skin_axis value = flag:faith }
+		trigger_event = { id = monument_events.11 }
+	}
+}
+
+gm_state_offer_skins_heritage = {
+	gm_state_default_heritage_skin = yes
+	if = {
+		limit = {
+			NOT = { var:gm_skin = flag:generic }
+		}
+		set_variable = { name = gm_skin_axis value = flag:heritage }
+		trigger_event = { id = monument_events.11 }
+	}
+}
+
+# State scope, an option of monument_events.11.
+gm_state_choose_skin = {
+	custom_tooltip = {
+		text = gm_skin_choice_tt
+		set_variable = { name = gm_skin value = flag:$SKIN$ }
+		gm_remove_state_var = { VAR = gm_skin_axis }
+	}
+}

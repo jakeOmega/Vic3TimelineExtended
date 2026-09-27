@@ -25,8 +25,9 @@ monument_government_is_crowned = {
 
 # True if the head of state is chosen rather than born to it.
 # Deliberately excludes law_corporate_state, law_theocracy, law_neocameralism and
-# law_colonial_administration -- all of them are "the republic" only by courtesy,
-# and they fall through to the neutral "to the nation" skin.
+# law_colonial_administration -- all of them are "the republic" only by courtesy.
+# Those governments cannot raise To the Republic; every government -- these
+# included -- can raise To the Nation instead.
 monument_government_is_republican = {
 	OR = {
 		has_law_or_variant = law_type:law_presidential_republic
@@ -374,4 +375,17 @@ gm_ledgers_idle = {
 	gm_ledger_idle = { VAR = gm_ig_ledger_petty_bourgeoisie }
 	gm_ledger_idle = { VAR = gm_ig_ledger_rural_folk }
 	gm_ledger_idle = { VAR = gm_ig_ledger_trade_unions }
+}
+
+# ======================================================================
+#  The revived-language inscription (spec §1.1)
+# ======================================================================
+# Country scope. The country has revived $LANG$ under language reform
+# (amendment_langreform_revived_<language>; common/scripted_triggers/
+# misc_triggers.txt reads the same amendments).
+gm_country_has_revived = {
+	has_law = law_type:law_state_led_language_reform
+	active_law:lawgroup_language_policy = {
+		has_amendment = amendment_type:amendment_langreform_revived_$LANG$
+	}
 }
