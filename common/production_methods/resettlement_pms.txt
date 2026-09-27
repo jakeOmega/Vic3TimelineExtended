@@ -1,33 +1,43 @@
 ﻿# =================================================================
-# Resettlement Production Methods
+# Settlement Authority production methods
 # =================================================================
-# Two-building system:
-#   SOURCE (Resettlement Camp) - employs administrative staff (bureaucrats,
-#     soldiers, officers) who are NOT moved, plus settlers (laborers, farmers,
-#     peasants) who ARE moved. The on-action uses state_resettlement_transfer_add
-#     to determine monthly transfer volume and filters to movable pop types.
-#   DESTINATION (Resettlement Colony) - administrators and infrastructure
-#     that receive incoming settlers and provide migration pull.
+# Design: docs/superpowers/specs/2026-09-26-internal-resettlement-design.md.
+# Every PM sits on the DESTINATION building, so its state_modifiers land on
+# the destination state. What happens at the source is script-applied by the
+# pulse (resettlement_effects.txt).
 #
-# Transfer volume is shown via the state_resettlement_transfer_add modifier
-# so the player can see exactly how many people move per month.
+# Capacity (state_resettlement_transfer_add) is half level_scaled, half
+# workforce_scaled: the building hires from a sparse frontier, so a purely
+# workforce-scaled capacity could stall at zero before the first settlers
+# arrive. The pulse moves exactly the total.
+#
+# No PM carries a multiplicative or unscaled destination effect: those are
+# the state modifiers resettlement_<pm>_destination (resettlement_modifiers.txt),
+# which the pulse applies scaled by the month's arrivals, so a level-1
+# Authority or an idle program buys little. The PMs keep the additive,
+# level- or workforce-scaled effects (capacity, infrastructure, pull, staff,
+# goods). No PM carries IG approval: political reactions are one country
+# modifier per programme, scaled by volume (resettlement_*_politics).
+# test_resettlement_programme_registry.py pins all of this.
 # =================================================================
 
 # =====================================================================
-# SOURCE BUILDING PMs: Resettlement Camp (pmg_resettlement_method)
-# =====================================================================
-# Tradeoff summary:
-#   Homesteading:        Cheap, slow (50/lvl), no negatives. Early game.
-#   Organized Colonization: Moderate cost, moderate speed (100/lvl). Era 3.
-#   Forced Resettlement: Expensive (arms), fast (200/lvl), radicals + mortality. Era 5.
-#   Penal Transportation: Cheap, moderate (75/lvl), high mortality. Requires auth laws.
-#   Incentivized Relocation: Expensive (services), fast (150/lvl), no negatives. Era 6.
+# PROGRAM (pmg_resettlement_programme): who is recruited, and how
 # =====================================================================
 
-# Voluntary: government offers free land and subsidies to recruit settlers
-# Cheap and conflict-free, but slow throughput
-pm_homesteading_program = {
+# Land grants to volunteers: the unemployed and peasants (never under
+# Serfdom), Second-class or better. Homestead Act 1862, Dominion Lands Act 1872.
+pm_resettlement_land_grants = {
 	texture = "gfx/interface/icons/production_method_icons/homesteading.dds"
+
+	state_modifiers = {
+		level_scaled = {
+			state_resettlement_transfer_add = 150
+		}
+		workforce_scaled = {
+			state_resettlement_transfer_add = 150
+		}
+	}
 
 	country_modifiers = {
 		workforce_scaled = {
@@ -35,10 +45,122 @@ pm_homesteading_program = {
 		}
 	}
 
-	state_modifiers = {
+	building_modifiers = {
 		workforce_scaled = {
-			# 50 people moved per building level per month (~600/year)
+			goods_input_paper_add = 5
+			goods_input_services_add = 5
+		}
+		level_scaled = {
+			building_employment_bureaucrats_add = 100
+			building_employment_clerks_add = 100
+		}
+	}
+
+	ai_value = 200
+}
+
+# Soldier-settlers holding a strategic frontier: Russian military settlements,
+# Cossack hosts, tondenhei, the Xinjiang bingtuan. Fully accepted volunteers.
+pm_resettlement_military_colonies = {
+	texture = "gfx/interface/icons/production_method_icons/ownership_bureacrats.dds"
+
+	unlocking_technologies = {
+		standing_army
+	}
+
+	state_modifiers = {
+		level_scaled = {
+			state_resettlement_transfer_add = 125
+		}
+		workforce_scaled = {
+			state_resettlement_transfer_add = 125
+		}
+	}
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_bureaucracy_cost_add = 5
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_paper_add = 5
+			goods_input_small_arms_add = 5
+		}
+		level_scaled = {
+			building_employment_bureaucrats_add = 50
+			building_employment_soldiers_add = 100
+			building_employment_officers_add = 25
+		}
+	}
+
+	ai_value = 150
+}
+
+# Convicts and the politically unreliable, sent to a remote frontier:
+# Australia to 1868, French Guiana, New Caledonia, Sakhalin, the Andamans.
+pm_resettlement_penal_transportation = {
+	texture = "gfx/interface/icons/production_method_icons/rail_transport.dds"
+
+	unlocking_technologies = {
+		law_enforcement
+	}
+
+	disallowing_laws = {
+		law_guaranteed_liberties
+	}
+
+	state_modifiers = {
+		level_scaled = {
 			state_resettlement_transfer_add = 50
+		}
+		workforce_scaled = {
+			state_resettlement_transfer_add = 50
+		}
+	}
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_bureaucracy_cost_add = 5
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_paper_add = 3
+			goods_input_small_arms_add = 3
+		}
+		level_scaled = {
+			building_employment_bureaucrats_add = 50
+			building_employment_soldiers_add = 100
+		}
+	}
+
+	ai_value = 25
+}
+
+# Subsidized passage and land along the railway: Stolypin's resettlement to
+# Siberia, 1906–1914. The unemployed, peasants and laborers, Second-class or better.
+pm_resettlement_organized_colonization = {
+	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
+
+	unlocking_technologies = {
+		railways
+	}
+
+	state_modifiers = {
+		level_scaled = {
+			state_resettlement_transfer_add = 250
+		}
+		workforce_scaled = {
+			state_resettlement_transfer_add = 250
+		}
+	}
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_bureaucracy_cost_add = 10
 		}
 	}
 
@@ -48,83 +170,45 @@ pm_homesteading_program = {
 			goods_input_services_add = 5
 		}
 		level_scaled = {
-			# Administrative staff (not moved)
 			building_employment_bureaucrats_add = 100
-			# Settlers being processed (moved to destination)
-			building_employment_laborers_add = 50
-		}
-	}
-
-	ai_value = 100
-}
-
-# Semi-voluntary: organized government programs with logistics and financial assistance
-# More expensive than homesteading but twice the throughput
-pm_organized_colonization = {
-	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
-
-	unlocking_technologies = {
-		civilizing_mission
-	}
-
-	country_modifiers = {
-		workforce_scaled = {
-			country_bureaucracy_cost_add = 10
-		}
-	}
-
-	state_modifiers = {
-		workforce_scaled = {
-			# 100 people moved per building level per month (~1200/year)
-			state_resettlement_transfer_add = 100
-		}
-	}
-
-	building_modifiers = {
-		workforce_scaled = {
-			goods_input_paper_add = 15
-			goods_input_services_add = 10
-			goods_input_transportation_add = 10
-		}
-		level_scaled = {
-			# Administrative staff (not moved)
-			building_employment_bureaucrats_add = 150
 			building_employment_clerks_add = 100
-			# Settlers being processed (moved to destination)
-			building_employment_laborers_add = 100
 		}
 	}
 
-	ai_value = 200
+	ai_value = 300
 }
 
-# Coercive: state-directed population transfers enforced by military/police
-# The fastest method but generates radicals and increases mortality
-pm_forced_resettlement = {
+# Deportation of landholding farmers under collectivization: the Soviet
+# special settlements, 1930–1933.
+pm_resettlement_special_settlements = {
 	texture = "gfx/interface/icons/production_method_icons/ownership_bureacrats.dds"
 
 	unlocking_technologies = {
 		mass_propaganda
 	}
 
-	# Cannot use forced methods under liberal security laws
+	unlocking_laws = {
+		law_collectivized_agriculture
+	}
+
 	disallowing_laws = {
 		law_guaranteed_liberties
+		law_protected_speech
+		law_right_of_assembly
+	}
+
+	state_modifiers = {
+		level_scaled = {
+			state_resettlement_transfer_add = 500
+		}
+		workforce_scaled = {
+			state_resettlement_transfer_add = 500
+		}
 	}
 
 	country_modifiers = {
 		workforce_scaled = {
 			country_bureaucracy_cost_add = 10
-		}
-	}
-
-	state_modifiers = {
-		workforce_scaled = {
-			# 200 people moved per building level per month (~2400/year)
-			state_resettlement_transfer_add = 200
-			# Forced roundups cause social disruption in the source state
-			state_radicals_from_political_movements_mult = 0.25
-			state_mortality_mult = 0.02
 		}
 	}
 
@@ -135,71 +219,32 @@ pm_forced_resettlement = {
 			goods_input_ammunition_add = 5
 		}
 		level_scaled = {
-			# Military staff running the operation (not moved)
 			building_employment_bureaucrats_add = 100
-			building_employment_soldiers_add = 200
-			building_employment_officers_add = 50
-			# People being forcibly relocated (moved to destination)
-			building_employment_laborers_add = 200
-		}
-	}
-
-	# ai_value blocks don't support script values in PMs - use flat number
-	# AI should rarely pick forced resettlement over peaceful alternatives
-	ai_value = 50
-}
-
-# Punitive: transportation of convicts and undesirables to remote territories
-# Cheap to run but causes significant mortality and poor conditions
-pm_penal_transportation = {
-	texture = "gfx/interface/icons/production_method_icons/rail_transport.dds"
-
-	# Requires restrictive criminal justice or authoritarian laws
-	disallowing_laws = {
-		law_guaranteed_liberties
-		law_protected_speech
-	}
-
-	country_modifiers = {
-		workforce_scaled = {
-			country_bureaucracy_cost_add = 5
-		}
-	}
-
-	state_modifiers = {
-		workforce_scaled = {
-			# 75 people moved per building level per month (~900/year)
-			state_resettlement_transfer_add = 75
-			# Penal processing is harsh
-			state_mortality_mult = 0.04
-			state_standard_of_living_add = -1
-		}
-	}
-
-	building_modifiers = {
-		workforce_scaled = {
-			goods_input_paper_add = 5
-			goods_input_small_arms_add = 5
-		}
-		level_scaled = {
-			# Guards and administrators (not moved)
-			building_employment_soldiers_add = 200
-			building_employment_bureaucrats_add = 50
-			# Convicts being transported (moved to destination)
-			building_employment_laborers_add = 75
+			building_employment_soldiers_add = 150
+			building_employment_officers_add = 25
 		}
 	}
 
 	ai_value = 25
 }
 
-# Modern: government-funded relocation with financial incentives and job placement
-# Fast throughput through generous subsidies, but very expensive to operate
-pm_incentivized_relocation = {
+# State-funded settlement with jobs and housing waiting: Virgin Lands 1954,
+# FELDA 1956, Transmigrasi, Brasília. Adds skilled workers to the voluntary pool.
+pm_resettlement_development_program = {
 	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
 
 	unlocking_technologies = {
 		keynesian_economics
+	}
+
+	state_modifiers = {
+		level_scaled = {
+			state_resettlement_transfer_add = 400
+		}
+		workforce_scaled = {
+			state_resettlement_transfer_add = 400
+			state_infrastructure_add = 2
+		}
 	}
 
 	country_modifiers = {
@@ -208,87 +253,40 @@ pm_incentivized_relocation = {
 		}
 	}
 
-	state_modifiers = {
-		workforce_scaled = {
-			# 150 people moved per building level per month (~1800/year)
-			state_resettlement_transfer_add = 150
-		}
-	}
-
-	building_modifiers = {
-		workforce_scaled = {
-			goods_input_paper_add = 15
-			goods_input_services_add = 20
-			goods_input_transportation_add = 15
-		}
-		level_scaled = {
-			# Administrative and social services staff (not moved)
-			building_employment_bureaucrats_add = 200
-			building_employment_clerks_add = 100
-			# Volunteers being relocated (moved to destination)
-			building_employment_laborers_add = 150
-		}
-	}
-
-	ai_value = 150
-}
-
-
-# =====================================================================
-# DESTINATION BUILDING PMs: Resettlement Colony
-# =====================================================================
-#
-# STACKING NOTE: pm_planned_settlement and pm_administered_territory below
-# both apply state_migration_pull_mult inside state_modifiers.workforce_scaled.
-# This is per-building-level × workforce-fraction; multiple Resettlement
-# Colony levels in the same state SUM their _mult contributions. Currently
-# safe because INJECT:base_values caps state_building_resettlement_colony_max_level_add
-# at 1, so each state has at most one level. If any law/tech/decree/etc.
-# raises that cap above 1, this _mult becomes pathological (a state with
-# 5 levels at full workforce running pm_administered_territory would have
-# state_migration_pull_mult = -1.25, killing all migration pull). The
-# country_bureaucracy_add penalties in country_modifiers are _add and
-# therefore safe under any cap. Per CLAUDE.md § "Modifier stacking is
-# additive across all sources".
-#
-# ----- PM Group: Settlement Type (pmg_resettlement_settlement) -----
-
-# Basic homesteading settlement with land grants and minimal infrastructure
-pm_settler_homesteads = {
-	texture = "gfx/interface/icons/production_method_icons/homesteading.dds"
-
-	country_modifiers = {
-		workforce_scaled = {
-			country_bureaucracy_cost_add = 5
-		}
-	}
-
-	state_modifiers = {
-		workforce_scaled = {
-			state_migration_pull_add = 5
-		}
-	}
-
 	building_modifiers = {
 		workforce_scaled = {
 			goods_input_paper_add = 10
-			goods_input_services_add = 10
+			goods_input_services_add = 15
 		}
 		level_scaled = {
-			building_employment_bureaucrats_add = 200
-			building_employment_clerks_add = 300
+			building_employment_bureaucrats_add = 100
+			building_employment_clerks_add = 100
 		}
 	}
 
-	ai_value = 100
+	ai_value = 350
 }
 
-# Government-organized settlement with planned infrastructure and logistics
-pm_planned_settlement = {
-	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
+# Urban workers sent down to the countryside: China's Down to the Countryside
+# movement, 1968–1980.
+pm_resettlement_rustication = {
+	texture = "gfx/interface/icons/production_method_icons/harvesting_tools.dds"
 
 	unlocking_technologies = {
-		civilizing_mission
+		mass_media
+	}
+
+	unlocking_laws = {
+		law_single_party_state
+	}
+
+	state_modifiers = {
+		level_scaled = {
+			state_resettlement_transfer_add = 400
+		}
+		workforce_scaled = {
+			state_resettlement_transfer_add = 400
+		}
 	}
 
 	country_modifiers = {
@@ -297,133 +295,148 @@ pm_planned_settlement = {
 		}
 	}
 
-	state_modifiers = {
-		workforce_scaled = {
-			state_migration_pull_add = 10
-			state_migration_pull_mult = -0.10
-			state_colony_growth_speed_mult = 0.50
-		}
-	}
-
 	building_modifiers = {
 		workforce_scaled = {
-			goods_input_paper_add = 15
-			goods_input_services_add = 15
-			goods_input_transportation_add = 10
-		}
-		level_scaled = {
-			building_employment_bureaucrats_add = 300
-			building_employment_clerks_add = 300
-			building_employment_laborers_add = 200
-		}
-	}
-
-	ai_value = 200
-}
-
-# Full government administration of incoming settlement with military oversight
-pm_administered_territory = {
-	texture = "gfx/interface/icons/production_method_icons/ownership_bureacrats.dds"
-
-	unlocking_technologies = {
-		mass_propaganda
-	}
-
-	country_modifiers = {
-		workforce_scaled = {
-			country_bureaucracy_cost_add = 15
-		}
-	}
-
-	state_modifiers = {
-		workforce_scaled = {
-			state_migration_pull_add = 15
-			state_migration_pull_mult = -0.25
-			state_colony_growth_speed_mult = 0.75
-			# Harsh conditions in administered settlements
-			state_mortality_mult = 0.02
-		}
-	}
-
-	building_modifiers = {
-		workforce_scaled = {
-			goods_input_paper_add = 15
-			goods_input_services_add = 10
+			goods_input_paper_add = 10
 			goods_input_small_arms_add = 5
 		}
 		level_scaled = {
-			building_employment_bureaucrats_add = 300
-			building_employment_clerks_add = 200
-			building_employment_soldiers_add = 300
+			building_employment_bureaucrats_add = 100
+			building_employment_soldiers_add = 100
 		}
 	}
 
-	ai_value = 50
+	ai_value = 25
 }
 
-# Modern development zone with economic incentives and infrastructure investment
-pm_development_zone = {
+# Moving people out of harm's way, with compensation: the Chernobyl zone,
+# Jakarta to Nusantara, Newtok.
+pm_resettlement_managed_retreat = {
 	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
 
 	unlocking_technologies = {
-		keynesian_economics
+		environmental_movement
+	}
+
+	state_modifiers = {
+		level_scaled = {
+			state_resettlement_transfer_add = 300
+		}
+		workforce_scaled = {
+			state_resettlement_transfer_add = 300
+		}
 	}
 
 	country_modifiers = {
 		workforce_scaled = {
-			country_bureaucracy_cost_add = 15
-		}
-	}
-
-	state_modifiers = {
-		workforce_scaled = {
-			state_migration_pull_add = 10
-			state_migration_pull_mult = 0.15
-			state_colony_growth_speed_mult = 0.50
-			# Development zones boost local infrastructure
-			state_infrastructure_mult = 0.05
-			# Tax incentives to attract investment reduce state revenue
-			state_tax_collection_mult = -0.15
+			country_bureaucracy_cost_add = 10
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
-			goods_input_paper_add = 15
-			goods_input_services_add = 20
-			goods_input_transportation_add = 15
+			goods_input_paper_add = 10
+			goods_input_services_add = 15
 		}
 		level_scaled = {
-			building_employment_bureaucrats_add = 300
-			building_employment_clerks_add = 300
-			building_employment_engineers_add = 100
+			building_employment_bureaucrats_add = 100
+			building_employment_clerks_add = 100
+		}
+	}
+
+	ai_value = 100
+}
+
+# =====================================================================
+# SETTLEMENT (pmg_resettlement_settlement): what the settlers build
+# =====================================================================
+# Every settlement adds level-scaled migration pull, so the frontier is less
+# likely to become an emigration source while the program runs (§5).
+
+# Virgin soil: newly broken land yields well while settlers arrive
+# (resettlement_homesteads_destination). No arable land is added; the bonus
+# ends with the building.
+pm_resettlement_homesteads = {
+	texture = "gfx/interface/icons/production_method_icons/homesteading.dds"
+
+	state_modifiers = {
+		level_scaled = {
+			state_migration_pull_add = 1
 		}
 	}
 
 	ai_value = 200
 }
 
-# ----- PM Group: Transportation Method (pmg_resettlement_transportation) -----
+# The settlers work where they land: mines, timber, the railway.
+pm_resettlement_work_settlements = {
+	texture = "gfx/interface/icons/production_method_icons/crude_tools.dds"
 
-# Basic overland transport: wagons, walking columns
-pm_resettlement_overland = {
-	texture = "gfx/interface/icons/production_method_icons/no_rail_transport.dds"
-
-
-	building_modifiers = {
-		workforce_scaled = {
-			goods_input_transportation_add = 5
-		}
+	state_modifiers = {
 		level_scaled = {
-			building_employment_laborers_add = 200
+			state_migration_pull_add = 1
+		}
+		workforce_scaled = {
+			state_infrastructure_add = 1
 		}
 	}
 
-	ai_value = -100
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_tools_add = 5
+		}
+		level_scaled = {
+			building_employment_laborers_add = 100
+		}
+	}
+
+	ai_value = 150
 }
 
-# Railways: mass transport of settlers by rail
-pm_resettlement_railway = {
+# A town planned before the first settler arrives: Brasília, the British New
+# Towns, Akademgorodok.
+pm_resettlement_planned_towns = {
+	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
+
+	unlocking_technologies = {
+		modern_urban_planning
+	}
+
+	state_modifiers = {
+		level_scaled = {
+			state_migration_pull_add = 1
+		}
+		workforce_scaled = {
+			state_infrastructure_add = 3
+			state_migration_pull_add = 2
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_services_add = 10
+		}
+		level_scaled = {
+			building_employment_engineers_add = 50
+		}
+	}
+
+	ai_value = 250
+}
+
+# =====================================================================
+# TRANSPORT (pmg_resettlement_transportation): how many can be carried
+# =====================================================================
+# Each adds capacity per level (additive, so safe as levels stack) and costs
+# transportation. Steamships fold into rail: a PM cannot test for a coast.
+
+pm_resettlement_overland = {
+	texture = "gfx/interface/icons/production_method_icons/no_rail_transport.dds"
+
+	ai_value = 0
+}
+
+pm_resettlement_rail_steamship = {
 	texture = "gfx/interface/icons/production_method_icons/rail_transport.dds"
 
 	unlocking_technologies = {
@@ -431,8 +444,36 @@ pm_resettlement_railway = {
 	}
 
 	state_modifiers = {
+		level_scaled = {
+			state_resettlement_transfer_add = 100
+		}
 		workforce_scaled = {
-			state_migration_pull_add = 3
+			state_resettlement_transfer_add = 100
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_transportation_add = 10
+		}
+	}
+
+	ai_value = 100
+}
+
+pm_resettlement_motor_transport = {
+	texture = "gfx/interface/icons/production_method_icons/motorised_logistics.dds"
+
+	unlocking_technologies = {
+		combustion_engine
+	}
+
+	state_modifiers = {
+		level_scaled = {
+			state_resettlement_transfer_add = 200
+		}
+		workforce_scaled = {
+			state_resettlement_transfer_add = 200
 		}
 	}
 
@@ -440,27 +481,24 @@ pm_resettlement_railway = {
 		workforce_scaled = {
 			goods_input_transportation_add = 15
 		}
-		level_scaled = {
-			building_employment_clerks_add = 200
-		}
 	}
 
-	ai_value = 100
+	ai_value = 200
 }
 
-# Steamship passage: transoceanic settler transport
-pm_resettlement_steamship = {
-	texture = "gfx/interface/icons/production_method_icons/reinforced_steam_ships.dds"
+pm_resettlement_airlift = {
+	texture = "gfx/interface/icons/production_method_icons/aeroplanes.dds"
 
 	unlocking_technologies = {
-		paddle_steamer
+		commercial_aviation
 	}
 
 	state_modifiers = {
+		level_scaled = {
+			state_resettlement_transfer_add = 300
+		}
 		workforce_scaled = {
-			state_migration_pull_add = 5
-			# Steamships are particularly effective for colonial growth
-			state_colony_growth_speed_mult = 0.25
+			state_resettlement_transfer_add = 300
 		}
 	}
 
@@ -468,37 +506,6 @@ pm_resettlement_steamship = {
 		workforce_scaled = {
 			goods_input_transportation_add = 20
 			goods_input_services_add = 5
-		}
-		level_scaled = {
-			building_employment_clerks_add = 200
-			building_employment_laborers_add = 100
-		}
-	}
-
-	ai_value = 200
-}
-
-# Air transport: fast modern airlift capacity
-pm_resettlement_airlift = {
-	texture = "gfx/interface/icons/production_method_icons/cat_plane_gold_p0.dds"
-
-	unlocking_technologies = {
-		commercial_aviation
-	}
-
-	state_modifiers = {
-		workforce_scaled = {
-			state_migration_pull_add = 8
-		}
-	}
-
-	building_modifiers = {
-		workforce_scaled = {
-			goods_input_transportation_add = 25
-			goods_input_services_add = 10
-		}
-		level_scaled = {
-			building_employment_clerks_add = 300
 		}
 	}
 

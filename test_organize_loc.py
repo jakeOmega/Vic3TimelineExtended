@@ -44,6 +44,13 @@ class CategorizeKeyTests(unittest.TestCase):
             with self.subTest(key=key):
                 self.assertEqual(categorize_key(key, set()), "MISCELLANEOUS")
 
+    def test_resettlement_families_stay_together(self):
+        for key in ("resettlement_arrivals", "resettlement_arrivals_desc",
+                    "resettlement_special_settlements_politics", "resettlement_special_settlements_politics_desc",
+                    "resettlement_declaration_pm_line", "resettlement_possible_open_frontier_tt"):
+            with self.subTest(key=key):
+                self.assertEqual(categorize_key(key, set()), "MISCELLANEOUS")
+
     def test_collective_governance_families_stay_together(self):
         # A government type or amendment name and its _desc must land in the
         # same file. Four-token bases would otherwise split: the name to

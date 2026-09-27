@@ -1,0 +1,199 @@
+﻿# ============================================================================
+# INTERNAL RESETTLEMENT — scripted triggers
+# ============================================================================
+# Design: docs/superpowers/specs/2026-09-26-internal-resettlement-design.md.
+# Culture and religion are never tested to choose who moves (Decisions table).
+
+# ---- The frontier (§6) -----------------------------------------------------
+# State scope. A new Settlement Authority may be built here.
+resettlement_state_is_open_frontier = {
+	resettlement_frontier_open_margin > 0
+}
+
+# State scope. An existing Settlement Authority keeps running here.
+resettlement_state_frontier_still_open = {
+	resettlement_frontier_close_margin > 0
+}
+
+# ---- The game rule (§10) ---------------------------------------------------
+# Any scope. The system runs under this rule setting.
+resettlement_system_enabled = {
+	NOT = { has_game_rule = internal_resettlement_disabled }
+}
+
+# Country scope. An AI country kept to voluntary programmes.
+resettlement_ai_voluntary_only = {
+	is_ai = yes
+	has_game_rule = internal_resettlement_ai_voluntary
+}
+
+# ---- Which program a destination runs (§3) ----------------------------------
+# State scope. This state's Settlement Authority has $PM$ active (any group).
+resettlement_runs_pm = {
+	any_scope_building = {
+		is_building_type = building_resettlement_colony
+		has_active_production_method = $PM$
+	}
+}
+
+# State scope. Penal Transportation, Special Settlements or Rustication.
+resettlement_state_runs_coercive = {
+	OR = {
+		resettlement_runs_pm = { PM = pm_resettlement_penal_transportation }
+		resettlement_runs_pm = { PM = pm_resettlement_special_settlements }
+		resettlement_runs_pm = { PM = pm_resettlement_rustication }
+	}
+}
+
+# State scope. Land Grants, Military Colonies, Organized Colonization or the
+# Development Program. (Managed Retreat is neither: nobody chooses the flood.)
+resettlement_state_runs_voluntary = {
+	OR = {
+		resettlement_runs_pm = { PM = pm_resettlement_land_grants }
+		resettlement_runs_pm = { PM = pm_resettlement_military_colonies }
+		resettlement_runs_pm = { PM = pm_resettlement_organized_colonization }
+		resettlement_runs_pm = { PM = pm_resettlement_development_program }
+	}
+}
+
+# ---- Who may be recruited (§3) ----------------------------------------------
+# Pop scope, with scope:rs_country (the owner) and scope:rs_destination (the
+# state whose var:rs_programme holds the program's code) saved. Culture and
+# religion are never tested. Slaves never: move_partial_pop would free them.
+resettlement_pop_eligible = {
+	NOT = { is_pop_type = slaves }
+	OR = {
+		AND = {
+			scope:rs_destination.var:rs_programme = 0
+			resettlement_pop_volunteer = yes
+			pop_acceptance >= acceptance_status_4
+		}
+		AND = {
+			scope:rs_destination.var:rs_programme = 1
+			resettlement_pop_volunteer = yes
+			pop_acceptance >= acceptance_status_5
+		}
+		AND = {
+			scope:rs_destination.var:rs_programme = 2
+			strata = lower
+			pop_radical_fraction >= 0.2
+		}
+		AND = {
+			scope:rs_destination.var:rs_programme = 3
+			resettlement_pop_colonist = yes
+			pop_acceptance >= acceptance_status_4
+		}
+		AND = {
+			scope:rs_destination.var:rs_programme = 4
+			is_pop_type = farmers
+		}
+		AND = {
+			scope:rs_destination.var:rs_programme = 5
+			pop_acceptance >= acceptance_status_4
+			OR = {
+				resettlement_pop_colonist = yes
+				is_pop_type = machinists
+				is_pop_type = engineers
+				is_pop_type = clerks
+			}
+		}
+		AND = {
+			scope:rs_destination.var:rs_programme = 6
+			resettlement_pop_urban_worker = yes
+		}
+		AND = {
+			scope:rs_destination.var:rs_programme = 7
+			state = { resettlement_state_is_damaged = yes }
+		}
+	}
+}
+
+# Pop scope, scope:rs_country saved. The unemployed and peasants of the lower
+# strata. Serfs cannot leave the land (vanilla forbids peasant migration under
+# Serfdom).
+resettlement_pop_volunteer = {
+	strata = lower
+	OR = {
+		is_employed = no
+		AND = {
+			is_pop_type = peasants
+			scope:rs_country = { NOT = { has_law = law_type:law_serfdom } }
+		}
+	}
+}
+
+# Pop scope, scope:rs_country saved. Volunteers plus laborers.
+resettlement_pop_colonist = {
+	strata = lower
+	OR = {
+		is_employed = no
+		is_pop_type = laborers
+		AND = {
+			is_pop_type = peasants
+			scope:rs_country = { NOT = { has_law = law_type:law_serfdom } }
+		}
+	}
+}
+
+# Pop scope. Laborers and clerks who do not work the land.
+resettlement_pop_urban_worker = {
+	OR = {
+		is_pop_type = laborers
+		is_pop_type = clerks
+	}
+	NOR = {
+		pop_employment_building_group = bg_agriculture
+		pop_employment_building_group = bg_plantations
+		pop_employment_building_group = bg_ranching
+		pop_employment_building_group = bg_subsistence_agriculture
+		pop_employment_building_group = bg_subsistence_ranching
+	}
+}
+
+# State scope. Damage Managed Retreat moves people away from. Global-warming
+# flooding is a country modifier, so it is read through the owner and the
+# coast; the nuclear markers sit on the state.
+resettlement_state_is_damaged = {
+	OR = {
+		has_modifier = nuclear_strike_aftermath
+		has_modifier = nd_weapons_accident_contamination
+		AND = {
+			is_coastal = yes
+			owner = {
+				OR = {
+					has_modifier = coastal_flooding_modifier
+					has_modifier = coastal_relocation_modifier
+				}
+			}
+		}
+	}
+}
+
+# State scope, scope:rs_destination saved. A state the walk may take from.
+resettlement_valid_source = {
+	NOT = { this = scope:rs_destination }
+	NOT = { has_building = building_resettlement_colony }
+	resettlement_state_eligible_pop >= resettlement_min_take
+}
+
+# ---- The political layer and the Declaration (§7.2, §7.4) -------------------
+# Country scope. Party to the Universal Declaration of Human Rights, in full or
+# with reservations (read as un_human_rights_signatories does).
+resettlement_is_declaration_party = {
+	OR = {
+		je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier }
+		has_modifier = un_human_rights_reservations_modifier
+	}
+}
+
+# Country scope. A program's political reaction has not yet faded.
+resettlement_country_still_fading = {
+	OR = {
+		AND = { has_variable = rs_volume_land_grants var:rs_volume_land_grants > 1 }
+		AND = { has_variable = rs_volume_military_colonies var:rs_volume_military_colonies > 1 }
+		AND = { has_variable = rs_volume_penal_transportation var:rs_volume_penal_transportation > 1 }
+		AND = { has_variable = rs_volume_organized_colonization var:rs_volume_organized_colonization > 1 }
+		AND = { has_variable = rs_volume_special_settlements var:rs_volume_special_settlements > 1 }
+		AND = { has_variable = rs_volume_rustication var:rs_volume_rustication > 1 }
+	}
+}

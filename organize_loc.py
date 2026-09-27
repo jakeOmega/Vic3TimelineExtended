@@ -428,6 +428,12 @@ def categorize_key(key, technology_keys):
     # longer siblings stay in MISCELLANEOUS.
     if key.startswith("TE_HOMELAND_"):
         return "MISCELLANEOUS"
+    # Internal resettlement (the Settlement Authority): static modifiers,
+    # tooltips and the Declaration splice line. Four-token names would land in
+    # MISCELLANEOUS and their `_desc` halves in CONCEPTS; two- and three-token
+    # ones would all fall to CONCEPTS, away from the rest of the family.
+    if key.startswith("resettlement_"):
+        return "MISCELLANEOUS"
     # Collective Governance government types and amendments (law_direct_democracy):
     # four-token bases (`gov_collective_noble_commonwealth`,
     # `amendment_collective_direct_democracy`) would otherwise split, the name

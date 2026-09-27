@@ -1420,11 +1420,6 @@ state_building_strategic_reserve_hub_max_level_add = {
 	percent = no
 }
 
-state_building_resettlement_camp_max_level_add = {
-	color = good
-	percent = no
-}
-
 state_building_resettlement_colony_max_level_add = {
 	color = good
 	percent = no
@@ -3573,6 +3568,36 @@ state_migration_crowding_density_mult = {
 state_resettlement_transfer_add = {
 	color = neutral
 	percent = no
+	decimals = 0
+	game_data = {
+		ai_value = 0
+	}
+}
+
+# Internal resettlement readouts: display-only, re-applied monthly by
+# resettlement_effects.txt with the month's count as multiplier.
+building_resettlement_arrivals_add = {
+	color = neutral
+	percent = no
+	decimals = 0
+	game_data = {
+		ai_value = 0
+	}
+}
+
+building_resettlement_transit_deaths_add = {
+	color = bad
+	percent = no
+	decimals = 0
+	game_data = {
+		ai_value = 0
+	}
+}
+
+state_resettlement_recruits_add = {
+	color = neutral
+	percent = no
+	decimals = 0
 	game_data = {
 		ai_value = 0
 	}

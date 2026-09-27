@@ -316,7 +316,6 @@ on_monthly_pulse_state = {
 		war_propaganda_on_action
 		state_yearly_cultural_acceptance_add_on_action
 		tourism_on_action
-		resettlement_transfer_on_action
 		ministry_of_thought_control_on_action
 	}
 }
@@ -2676,23 +2675,6 @@ world_war_events_on_action = {
 	effect = { }
 }
 
-# ---- Resettlement Population Transfer (state scope, monthly) ----
-# SOURCE state with a resettlement camp. Moves pops employed at the camp
-# to a destination state with a resettlement colony using move_partial_pop.
-# The active PM on the camp determines transfer volume per level.
-resettlement_transfer_on_action = {
-	effect = {
-		if = {
-			limit = {
-				any_scope_building = {
-					is_building_type = building_resettlement_camp
-					level > 0
-				}
-			}
-			resettlement_transfer_effect = yes
-		}
-	}
-}
 orbital_battlestation_on_action = {
 	effect = {
 		if = {

@@ -44,7 +44,6 @@ buildings:
   entities:
   - building_government_administration
   - building_power_bloc_hq
-  - building_resettlement_camp
   - building_resettlement_colony
   - building_strategic_reserve_hub
   - building_strategic_reserve_silo
