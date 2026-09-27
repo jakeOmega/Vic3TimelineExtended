@@ -43,7 +43,7 @@
 4. **The War Memorial takes heritage skins only**, not faith skins.
 5. **"Decide each in turn"** in the contested notice fires one state event per monument (`monument_events.17`: Tear Down / Rededicate / Preserve / Leave it for now), a proven UI path beside the JE row buttons, whose saved state scope (`AddScope('gm_state', State.MakeScope)`) has no vanilla precedent (gui gotcha #22). The notice itself (`.16`) goes to players only; the AI decides per monument, monthly (§4.6).
 6. **Demolishing a contested monument from the building panel counts as tearing it down** (its grandeur goes to the same ledgers), so the panel is not a free way out of the standing penalty.
-7. **Flavour event magnitudes** (spec §9 said "about a tenth of the first step"): IG approval +2 (+3 for Pilgrims' clergy option), prestige +10, legitimacy +3, authority +25, standard of living +1, literacy growth +0.0005, innovation +5/week, influence +10, turmoil effects −10%, Tourism Industry throughput +10%, ruler popularity +10, all for `normal_modifier_time` (5 years); costs 2% of yearly gross income, income 1%.
+7. **Flavour event magnitudes** (spec §9 said "about a tenth of the first step"): IG approval +2 (+3 for Pilgrims' clergy option), prestige +2% (`country_prestige_mult`; +1% beside the foreign exhibitors' influence; owner, 2026-09-27: a percentage, not a flat add), legitimacy +3, authority +25, standard of living +1, literacy growth +0.0005, innovation +5/week, influence +10, turmoil effects −10%, Tourism Industry throughput +10%, ruler popularity +10, all for `normal_modifier_time` (5 years); costs 2% of yearly gross income, income 1%.
 
 ## Review Focus
 
@@ -7467,7 +7467,7 @@ Append to `common/static_modifiers/gm_modifiers.txt`:
 # only cost an option may carry is money.
 gm_evt_state_occasion = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-	country_prestige_add = 10
+	country_prestige_mult = 0.02
 	interest_group_ig_petty_bourgeoisie_approval_add = 2
 }
 
@@ -7530,7 +7530,7 @@ gm_evt_domestic_exhibition = {
 gm_evt_foreign_exhibitors = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
 	country_influence_add = 10
-	country_prestige_add = 5
+	country_prestige_mult = 0.01
 }
 
 gm_evt_subsidised_tickets = {
