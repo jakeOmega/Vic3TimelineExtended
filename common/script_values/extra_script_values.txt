@@ -1545,11 +1545,28 @@ too_much_private_construction_overflow = {
 	}
 }
 
-# The overflow, moving at most x1.2 or /1.2 a year from last year's value. A new
-# episode starts at 10 at most; the cap is 9000 (-90% construction efficiency).
-# The /1.2 floor is the ramp down while the modifier stays. The on-action
-# removes the modifier once the overflow is 0 or less, so the floor can't hold
-# it above 0 after its need is gone (Overinvestment aside, see the on-action).
+# The value the modifier had when it was last removed, 0 if none. The
+# on-action stores it on removal and clears it once the modifier is back, so it
+# only ever raises the ceiling of a re-entry.
+too_much_private_construction_resume = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = too_much_private_construction_last
+		}
+		value = var:too_much_private_construction_last
+	}
+}
+
+# The overflow, moving at most x1.2 or /1.2 a year from last year's value; the
+# cap is 9000 (-90% construction efficiency). A new episode starts at the
+# lesser of the overflow and 10, or the value it had when last removed if that
+# is higher (too_much_private_construction_resume), so a short dip in pool
+# income, such as a banking panic or a default, resumes the modifier instead of
+# restarting it at 10. It never overshoots the need either way. The /1.2 floor
+# is the ramp down while the modifier stays. The on-action removes the modifier
+# once the overflow is 0 or less, so the floor can't hold it above 0 after its
+# need is gone (Overinvestment aside, see the on-action).
 too_much_private_construction_script_value = {
 	value = too_much_private_construction_overflow
 	min = {
@@ -1560,7 +1577,10 @@ too_much_private_construction_script_value = {
 	max = {
 		value = var:too_much_private_construction_cached
 		multiply = 1.2
-		min = 10
+		min = {
+			value = too_much_private_construction_resume
+			min = 10
+		}
 		max = 9000
 	}
 }
