@@ -184,7 +184,13 @@ building and each level of upkeep, while a poor country builds cheaply.
 
 ### Excess private construction
 
-Once a year, the game also checks whether investors have more than 500 levels
+This only matters for extremely rich countries, and you will rarely meet it
+before the late game. The private construction queue holds at most 1,000
+buildings, so a huge investment pool can run out of projects to spend on; this
+modifier lets each project absorb more construction instead. You generally won't
+see it until your weekly investment pool income is in the billions.
+
+Once a year, the game checks whether investors have more than 500 levels
 waiting in the private queue while the investment pool is still growing. If so,
 you get Excess Private Construction. Each project can then absorb more
 construction a week, so the pool can spend its money, at a small cost in
@@ -227,9 +233,17 @@ lower class.
 - Poor Laws, Wage Subsidies and Old Age Pension keep expectations at least 1, 2
 or 3 SoL above the base-game level, however long hard times last. Universal
 Basic Income raises that floor to 10 SoL and the Post-Scarcity Economy to 15.
-- Literate populations compare themselves with the world. When the world's
-average SoL is above yours, their expectations rise; when it is below, they
-fall.
+- Literate populations compare themselves with the rest of the world. Each
+month the gap between the world's average standard of living (weighted by
+population) and your country's average moves every stratum's expectations: for
+each point your average trails the world's, a fully literate population expects
+about 0.2 SoL more, and for each point it leads, 0.2 less. Literacy scales the
+effect, so an illiterate population doesn't compare at all. A country 10 points
+below the world average with 80% literacy expects 1.6 SoL more than it
+otherwise would, because its people know others live better; one 10 points
+above it expects 1.6 less, which makes a rich, educated country easier to keep
+content. This comparison is added after the floors above, so it can take
+expectations below the base-game level.
 
 ## Pop consumption at high wealth
 
@@ -242,9 +256,14 @@ Three new needs appear as pops grow rich:
 | Art | 25 | Art and Entertainment, some Services |
 | Tourism | 25 | Tourism, some Personal Transportation |
 
-These needs, and Services, grow steeply with wealth: at wealth 60, Services and
-Convenience make up more than half of what a pop buys. Tourism as an industry is
-covered in [State tourism](07-states.md#state-tourism), and the new goods in
+These needs, and Services, grow steeply with wealth. By wealth 60, services and
+leisure, Convenience, Art and Tourism take about four fifths of what a pop
+spends, and by wealth 100 nearly all of it. Luxuries peak at about half of
+spending around wealth 30 and then fade.
+
+![How a pop's spending divides between needs as its wealth rises, priced at base prices.](images/pop_spending_by_wealth.png)
+
+Tourism as an industry is covered in [State tourism](07-states.md#state-tourism), and the new goods in
 [The extended timeline](02-timeline.md), which also lists the base-game goods
 the mod renames. In the table above, Personal Transportation is the base game's
 Transportation and Art and Entertainment its Fine Art. Chemicals, in the

@@ -3,3 +3,4 @@
 # checks don't need these. Pinned so every machine lays out the PDF the same way.
 typst==0.15.0
 pypandoc_binary==1.17
+matplotlib==3.11.2   # scripts/player_guide_figures.py

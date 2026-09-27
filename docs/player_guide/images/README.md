@@ -1,5 +1,9 @@
 # Player guide images
 
+Some images here are generated: `pop_spending_by_wealth.png` comes from
+`scripts/player_guide_figures.py` (rerun it after changing the pop needs curves,
+then rebuild the PDF). Screenshots are added by hand, as below.
+
 Screenshots for the player guide go in this folder. The chapters mark the spots
 that would benefit from one with a comment on its own line:
 

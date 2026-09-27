@@ -172,8 +172,12 @@ class StyleRuleTests(GuideDirTestCase):
         self.assertIn("thematic-break", self.rules("Intro.\n\n---\n\nMore.\n"))
         self.assertIn("chapter-heading", self.rules("Intro.\n\n# Second chapter\n\nText.\n"))
         self.assertIn("leading-comment", self.rules("<!-- note -->Text that vanishes.\n"))
+        self.assertIn("inline-image", self.rules("Text.\n\n![Caption.](images/x.png) More text.\n"))
+        self.assertIn("inline-image", self.rules("Text.\n![Caption.](images/x.png)\n\nMore.\n"))
         # A comment alone on its line, as screenshot placeholders are, is fine.
         self.assertEqual(self.rules("Text.\n\n<!-- screenshot: the panel -->\n\nMore text.\n"), set())
+        # An image alone in its paragraph is a figure (the missing file is a broken link, not this rule).
+        self.assertNotIn("inline-image", self.rules("Text.\n\n![Caption.](images/x.png)\n\nMore.\n"))
 
     def test_suppression_comment_at_end_of_line(self):
         self.assertEqual(self.rules("Press the key in the corner. <!-- style: allow ai-vocab -->\n"), set())

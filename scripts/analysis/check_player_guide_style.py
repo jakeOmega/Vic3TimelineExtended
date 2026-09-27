@@ -9,7 +9,8 @@ modders. This check keeps it that way, and keeps it readable:
   the guide (the PDF is one document, so a repeated anchor breaks its links), and
   every in-guide link pointing at a heading that exists.
 * **Internals** — no script keys (``snake_case`` identifiers), mod file paths,
-  or raw HTML (pandoc drops HTML when it builds the PDF, silently).
+  or raw HTML (pandoc drops HTML when it builds the PDF, silently). An image
+  must stand alone in its paragraph, or pandoc renders it inline with no caption.
 * **Prose** — the language tells listed in Wikipedia's "Signs of AI writing":
   inflated vocabulary (*pivotal*, *showcase*, *seamless*), copula avoidance
   (*serves as*), negative parallelisms (*not just X but Y*), stock openers
@@ -121,12 +122,13 @@ _LINK_TARGET = re.compile(r"\]\(([^)\s]+)\)")
 _URL = re.compile(r"https?://\S+")
 _TABLE_ROW = re.compile(r"^\s*\|")
 _LIST_ITEM = re.compile(r"^\s*(?:[-*+]|\d+[.)])\s+")
+_IMAGE = re.compile(r"!\[[^\]]*\]\([^)]*\)")
 
 ALL_RULES = [
     "ai-vocab", "ai-phrase", "stock-opener", "negative-parallel", "inline-header-list",
     "em-dash", "bold-density", "emoji", "curly-quote", "title-case-heading", "heading-skip",
     "empty-heading", "chapter-heading", "thematic-break", "duplicate-anchor", "broken-link",
-    "script-key", "mod-path", "raw-html", "leading-comment",
+    "script-key", "mod-path", "raw-html", "leading-comment", "inline-image",
 ]
 
 
@@ -274,6 +276,15 @@ def lint_text(path: Path, text: str) -> list[Finding]:
             add(number, "mod-path", "mod file path '" + match.group(0) + "'")
         if _MERGE_DIRECTIVE.search(code_free):
             add(number, "mod-path", "script merge directive in player text")
+        image = _IMAGE.search(line)
+        if image:
+            alone = line.strip() == image.group(0)
+            before = number < 2 or not lines[number - 2].strip()
+            after = number >= len(lines) or not lines[number].strip()
+            if not (alone and before and after):
+                add(number, "inline-image",
+                    "an image must be alone in its paragraph (blank lines around it) to become "
+                    "a captioned figure in the PDF")
         for match in _RAW_HTML.finditer(_INLINE_CODE.sub("", line)):
             add(number, "raw-html", "raw HTML '" + match.group(0) + "' is dropped from the PDF")
 
