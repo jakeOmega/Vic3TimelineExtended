@@ -266,5 +266,95 @@ class RuleTests(unittest.TestCase):
             self.assertIn(f"setting_{setting}_desc", L)
 
 
+# ---- Task 2: the curve, the step values, the modifiers -------------------------------
+
+NATIONAL = ("leader", "religious", "war_memorial", "artistic", "scientific", "industrial")
+
+
+def curve_terms(f):
+    """(start, size) of the eight steps of a curve with first step f."""
+    return [(f * (2 ** k - 1), f * 2 ** k) for k in range(8)]
+
+
+class CurveTests(unittest.TestCase):
+    def _terms(self, name):
+        body = squash(block(read(VALUES), name))
+        self.assertIsNotNone(body, name)
+        return re.findall(r"add = \{ value = var:gm_curve_in (?:subtract = (\d+) )?divide = (\d+) "
+                          r"min = 0 max = 1 \}", body)
+
+    def test_steps_double(self):
+        for f in (5, 10):
+            terms = [(int(s or 0), int(d)) for s, d in self._terms(f"gm_curve_steps_f{f}")]
+            self.assertEqual(terms, curve_terms(f), f)
+
+    def test_next_thresholds(self):
+        for f in (5, 10):
+            body = squash(block(read(VALUES), f"gm_curve_next_f{f}"))
+            ends = [f * (2 ** n - 1) for n in range(1, 9)]
+            self.assertTrue(body.startswith(f"value = {ends[-1]} "), f)
+            for end in ends[:-1]:
+                self.assertIn(f"if = {{ limit = {{ var:gm_curve_in < {end} }} value = {end} }}", body)
+
+
+class ModifierTests(unittest.TestCase):
+    def _mod(self, name):
+        body = block(read(MODIFIERS), name)
+        self.assertIsNotNone(body, name)
+        return body
+
+    def assert_pair(self, modifier, field, step_name, expected):
+        self.assertAlmostEqual(number(self._mod(modifier), field), expected, msg=modifier)
+        mirror = re.search(r"(?m)^" + step_name + r"\s*=\s*(-?\d+(?:\.\d+)?)\s*$",
+                           strip_comments(read(VALUES)))
+        self.assertIsNotNone(mirror, step_name)
+        self.assertAlmostEqual(float(mirror.group(1)), expected, msg=step_name)
+
+    def test_national_pairs(self):
+        self.assert_pair("gm_national_prestige", "country_prestige_add", "gm_step_prestige", 25)
+        self.assert_pair("gm_national_legitimacy", "country_legitimacy_base_add", "gm_step_legitimacy", 2)
+        self.assert_pair("gm_national_teardown", "country_legitimacy_base_add", "gm_step_teardown", 3)
+        self.assert_pair("gm_national_vanity", "country_legitimacy_base_add", "gm_step_vanity", -3)
+        for key in NATIONAL:
+            d = BY_KEY[key]
+            self.assert_pair(f"gm_national_{key}", d.national_field, f"gm_step_national_{key}",
+                             d.national_step)
+        self.assertEqual({d.key for d in DEDICATIONS if d.national_field}, set(NATIONAL))
+
+    def test_ig_pairs(self):
+        for ig in IGS:
+            self.assert_pair(f"gm_ig_approval_{ig}", f"interest_group_ig_{ig}_approval_add",
+                             "gm_step_ig", 1)
+
+    def test_local_pairs(self):
+        self.assert_pair("gm_local_tourism", "building_tourism_industry_throughput_add",
+                         "gm_step_tourism", 0.25)
+        for d in DEDICATIONS:
+            self.assert_pair(f"gm_local_{d.key}", d.local_field, f"gm_step_local_{d.key}", d.local_step)
+
+    def test_culture_step(self):
+        self.assertRegex(strip_comments(read(VALUES)), r"(?m)^gm_step_culture = 1\s*$")
+
+    def test_each_modifier_has_one_field_and_an_icon(self):
+        for name, body in top_level_blocks(read(MODIFIERS)):
+            if not name.startswith(("gm_national_", "gm_ig_approval_", "gm_local_")):
+                continue
+            fields = [k for k in re.findall(r"(?m)^\s*(\w+)\s*=", body) if k != "icon"]
+            self.assertEqual(len(fields), 1, name)
+            self.assertIn("modifier_statue_", body, name)
+
+    def test_modifiers_are_localized(self):
+        L = loc()
+        for name, _ in top_level_blocks(read(MODIFIERS)):
+            self.assertIn(name, L, name)
+            self.assertIn(f"{name}_desc", L, name)
+
+    def test_concept(self):
+        self.assertIsNotNone(block(read(CONCEPTS), "concept_grandeur"))
+        L = loc()
+        self.assertIn("concept_grandeur", L)
+        self.assertIn("concept_grandeur_desc", L)
+
+
 if __name__ == "__main__":
     unittest.main()

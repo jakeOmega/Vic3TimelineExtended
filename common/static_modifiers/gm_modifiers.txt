@@ -1,0 +1,168 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — static modifiers
+# ============================================================================
+# Design: docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md.
+# Each carries ONE STEP of the doubling curve (§2.2); the multiplier is the
+# step count. gm_values.txt mirrors every value as gm_step_*; change both.
+
+# ---- National totals (§2.4): on je:je_grand_monuments ------------------------
+# Refreshed by gm_apply_national_modifiers (gm_effects.txt), ROOT = country.
+gm_national_prestige = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_prestige_add = 25
+}
+
+gm_national_legitimacy = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_legitimacy_base_add = 2
+}
+
+gm_national_leader = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_authority_add = 25
+}
+
+gm_national_religious = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	interest_group_ig_devout_pop_attraction_mult = 0.05
+}
+
+gm_national_war_memorial = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_war_support_casualties_mult = -0.03
+}
+
+gm_national_artistic = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	interest_group_ig_intelligentsia_pop_attraction_mult = 0.05
+}
+
+gm_national_scientific = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_weekly_innovation_max_add = 3
+}
+
+gm_national_industrial = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	interest_group_ig_industrialists_pop_attraction_mult = 0.05
+}
+
+# Tear Down's reward (§4.3), from the decaying teardown ledger through the curve.
+gm_national_teardown = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	country_legitimacy_base_add = 3
+}
+
+# Vanity backlash (§5): the multiplier is the vanity ledger itself, LINEAR.
+gm_national_vanity = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	country_legitimacy_base_add = -3
+}
+
+# ---- IG approval (§2.4): one per IG, signed multiplier -----------------------
+gm_ig_approval_armed_forces = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	interest_group_ig_armed_forces_approval_add = 1
+}
+
+gm_ig_approval_devout = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	interest_group_ig_devout_approval_add = 1
+}
+
+gm_ig_approval_industrialists = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	interest_group_ig_industrialists_approval_add = 1
+}
+
+gm_ig_approval_intelligentsia = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	interest_group_ig_intelligentsia_approval_add = 1
+}
+
+gm_ig_approval_landowners = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	interest_group_ig_landowners_approval_add = 1
+}
+
+gm_ig_approval_petty_bourgeoisie = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	interest_group_ig_petty_bourgeoisie_approval_add = 1
+}
+
+gm_ig_approval_rural_folk = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	interest_group_ig_rural_folk_approval_add = 1
+}
+
+gm_ig_approval_trade_unions = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	interest_group_ig_trade_unions_approval_add = 1
+}
+
+# ---- Local (§2.5): on the monument's state, multiplier = its own steps -------
+# Refreshed by gm_state_monthly (gm_effects.txt) from on_monthly_pulse_state.
+gm_local_tourism = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	building_tourism_industry_throughput_add = 0.25
+}
+
+gm_local_crown = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_loyalists_from_political_movements_mult = 0.10
+}
+
+gm_local_republic = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_loyalists_from_political_movements_mult = 0.10
+}
+
+gm_local_revolution = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_loyalists_from_political_movements_mult = 0.10
+}
+
+gm_local_leader = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_loyalists_from_political_movements_mult = 0.10
+}
+
+gm_local_religious = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_conversion_mult = 0.10
+}
+
+gm_local_civic = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_loyalists_from_political_movements_mult = 0.10
+}
+
+gm_local_war_memorial = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_conscription_rate_add = 0.05
+}
+
+gm_local_artistic = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	building_art_academy_throughput_add = 0.10
+}
+
+gm_local_naturalist = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_pollution_generation_add = -5000
+}
+
+gm_local_scientific = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_literacy_growth_add = 0.00025
+}
+
+gm_local_industrial = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_migration_pull_mult = 0.10
+}
+
+gm_local_athletic = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_turmoil_effects_mult = -0.10
+}

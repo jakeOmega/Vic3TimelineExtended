@@ -1,0 +1,108 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — script values
+# ============================================================================
+# Design: docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md.
+
+# ---- The doubling curve (§2.2) ---------------------------------------------
+# Every effect a monument gives grows in steps of equal size, and each step
+# costs twice the grandeur of the one before. With a first step of f, step n
+# completes at f * (2^n - 1): for f = 5, at 5, 15, 35, 75, 155, 315, 635 and
+# 1275. Inside a step the value grows linearly, so no level is wasted.
+#
+# Input: var:gm_curve_in on the current scope, which the caller sets first.
+# Output: the fractional number of steps, 0-8. Each term is one step's share,
+# clamped to 0-1 (min, then max: sequential clamps).
+gm_curve_steps_f5 = {
+	value = 0
+	add = { value = var:gm_curve_in divide = 5 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 5 divide = 10 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 15 divide = 20 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 35 divide = 40 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 75 divide = 80 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 155 divide = 160 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 315 divide = 320 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 635 divide = 640 min = 0 max = 1 }
+}
+
+gm_curve_steps_f10 = {
+	value = 0
+	add = { value = var:gm_curve_in divide = 10 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 10 divide = 20 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 30 divide = 40 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 70 divide = 80 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 150 divide = 160 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 310 divide = 320 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 630 divide = 640 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 1270 divide = 1280 min = 0 max = 1 }
+}
+
+# The grandeur at which the step now being filled completes ("next step at"
+# in the journal entry). Each later `if` overrides the earlier, so the result
+# is the smallest step end above the input; the last end once the curve is
+# complete.
+gm_curve_next_f5 = {
+	value = 1275
+	if = { limit = { var:gm_curve_in < 635 } value = 635 }
+	if = { limit = { var:gm_curve_in < 315 } value = 315 }
+	if = { limit = { var:gm_curve_in < 155 } value = 155 }
+	if = { limit = { var:gm_curve_in < 75 } value = 75 }
+	if = { limit = { var:gm_curve_in < 35 } value = 35 }
+	if = { limit = { var:gm_curve_in < 15 } value = 15 }
+	if = { limit = { var:gm_curve_in < 5 } value = 5 }
+}
+
+gm_curve_next_f10 = {
+	value = 2550
+	if = { limit = { var:gm_curve_in < 1270 } value = 1270 }
+	if = { limit = { var:gm_curve_in < 630 } value = 630 }
+	if = { limit = { var:gm_curve_in < 310 } value = 310 }
+	if = { limit = { var:gm_curve_in < 150 } value = 150 }
+	if = { limit = { var:gm_curve_in < 70 } value = 70 }
+	if = { limit = { var:gm_curve_in < 30 } value = 30 }
+	if = { limit = { var:gm_curve_in < 10 } value = 10 }
+}
+
+# ---- Per-step values (§9) ------------------------------------------------------
+# Mirrors of the static modifiers in gm_modifiers.txt, each of which carries
+# exactly one step (the multiplier is the step count). Loc reads these; the
+# registry test pins every pair equal.
+gm_step_prestige = 25
+gm_step_legitimacy = 2
+gm_step_ig = 1
+gm_step_teardown = 3
+gm_step_vanity = -3
+gm_step_tourism = 0.25
+gm_step_culture = 1
+
+gm_step_local_crown = 0.10
+gm_step_local_republic = 0.10
+gm_step_local_revolution = 0.10
+gm_step_local_leader = 0.10
+gm_step_local_religious = 0.10
+gm_step_local_civic = 0.10
+gm_step_local_war_memorial = 0.05
+gm_step_local_artistic = 0.10
+gm_step_local_naturalist = -5000
+gm_step_local_scientific = 0.00025
+gm_step_local_industrial = 0.10
+gm_step_local_athletic = -0.10
+
+gm_step_national_leader = 25
+gm_step_national_religious = 0.05
+gm_step_national_war_memorial = -0.03
+gm_step_national_artistic = 0.05
+gm_step_national_scientific = 3
+gm_step_national_industrial = 0.05
+
+# ---- Money (§6.1, plan decision 7) -------------------------------------------
+# Country scope. What a flavour event's paid option costs, and what a
+# money-in option brings.
+gm_event_cost = {
+	value = yearly_gross_income
+	multiply = -0.02
+}
+
+gm_event_income = {
+	value = yearly_gross_income
+	multiply = 0.01
+}
