@@ -597,11 +597,22 @@ tenth of its limit:
 | Each point your rate is below the World Rate | −3 |
 | Downturn or Panic | −2 |
 | Debt at half your credit limit or more | −2 |
-| Rate at or above the World Rate | +2 |
+| Rate at or above the World Rate | +2 (+1 at 70 or more) |
 
-With more gold in the vault, it recovers a point a month while your rate is at
-or above the world's and the vault holds no Borrowed Gold. An overvalued
-currency drains it at any time. At 20, The Run on the Vault fires:
+With more gold in the vault, it recovers while your rate is at or above the
+world's and no Borrowed Gold is leaving. Borrowed Gold leaves only once your
+rate is no longer above the world's, so a bank holding its rate above the World
+Rate keeps recovering while it draws gold in. The lower confidence is, the
+faster it comes back:
+
+| Peg Confidence | Recovery a month |
+|---|---|
+| Under 40 (Doubted) | +3 |
+| 40 to 69 (Watched) | +2 |
+| 70 or more (Trusted) | +1 |
+
+An overvalued currency drains it at any time and stops the recovery. At 20, The
+Run on the Vault fires:
 
 | Option | Effect |
 |---|---|
@@ -651,7 +662,9 @@ A pegged country is anchored. It has no dial and prints no money: its policy
 rate is the anchor's plus a spread, its exchange rate is the anchor's, and it
 gets up to 80% of the anchor's credibility. It keeps its own inflation and
 banking cycle; when its inflation runs ahead of the anchor's, the difference
-shows as overvaluation, which drains Peg Confidence.
+shows as overvaluation, which drains Peg Confidence. While overvaluation stays at
+5 points or less, confidence recovers on the same schedule as a gold peg's: +3,
++2 or +1 a month by band.
 
 | Article | Unlocked by | What it does |
 |---|---|---|

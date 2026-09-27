@@ -155,9 +155,7 @@ resettlement.4 = {
 	type = country_event
 	placement = scope:rs_event_state
 
-	event_image = {
-		texture = "gfx/event_pictures/drought_devastation.dds"
-	}
+	event_image = { texture = "gfx/event_pictures/dust_storm_homestead.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
