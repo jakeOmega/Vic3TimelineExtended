@@ -22,8 +22,8 @@
 # pulse, yet sr_recalculate_cost still charges it for funding and approach.
 # So for such a country the approach and increase-funding buttons weigh 0 and
 # decrease-funding gets +100, and it winds its funding down to 0. An approach
-# already chosen keeps its cost (1 safe, 2 ambitious, times the milestone's
-# era multiplier): there is no button to clear one.
+# already chosen costs nothing while it stays outside (sr_<m>_cost gates the
+# approach terms; space_race_on_action recalculates when its rank crosses 3).
 # ----------------------------------------------------------------------------
 
 
