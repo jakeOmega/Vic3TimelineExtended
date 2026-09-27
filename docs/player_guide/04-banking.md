@@ -42,7 +42,7 @@ only under the full Banking System.
 
 The dashboard reports momentum and bubble pressure as bands, not figures.
 Momentum reads Collapsing, Falling, Steady, Rising or Surging. Bubble pressure
-reads Low (under 15), Building, Elevated (30 to 49), High (50 to 74) or Severe <!-- style: allow ai-vocab -->
+reads Low (under 15), Building (15 to 29), Elevated (30 to 49), High (50 to 74) or Severe <!-- style: allow ai-vocab -->
 (75 and up).
 
 <!-- screenshot: the Boom & Bust Cycle journal entry during a Boom, with the four bars and the Current Conditions readout in view -->
