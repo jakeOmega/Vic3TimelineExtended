@@ -275,6 +275,10 @@ je_nuclear_program = {
 		effect = {
 			nd_monthly_update = yes
 			nd_crisis_target_watchdog = yes
+			# The nuclear taboo's country half: the possession cost, the exits
+			# and the history samples (nuclear_taboo_effects.txt). ROOT = this
+			# country, which the possession cost's multiplier needs.
+			nd_taboo_country_monthly = yes
 		}
 	}
 

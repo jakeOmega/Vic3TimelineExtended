@@ -78,6 +78,15 @@ nd_taboo_world_relations_tactical_share = 0.4
 nd_taboo_yp_midpoint = 50
 nd_taboo_yp_per_point = 0.16
 nd_taboo_yp_public_discount = 0.5
+nd_taboo_burden_floor = 40
+nd_taboo_burden_span = 60
+nd_taboo_arsenal_saturation = 50
+nd_taboo_arsenal_floor_factor = 0.2
+nd_taboo_arsenal_span_factor = 0.8
+nd_taboo_burden_step_mild = 0.333
+nd_taboo_burden_step_full = 0.667
+nd_taboo_possession_prestige_pct = -45
+nd_taboo_possession_leverage_pct = -25
 
 # ---- READING THE SCORE ---------------------------------------------------------
 
@@ -389,4 +398,56 @@ nd_disp_tb_ledger = {
 		limit = { has_global_variable = nd_tb_ledger }
 		value = global_var:nd_tb_ledger
 	}
+}
+
+# ---- POSSESSION (spec §4.4) — country scope unless noted ----------------------
+# One number drives both costs: the taboo's weight (0 below 40, 1 at 100) times
+# the arsenal's size (0.2 for a token force, 1 from fifty warheads, the count
+# the upkeep's custody term stops at). A minimal deterrent in a world that
+# holds the bomb in horror still costs a quarter of a big arsenal.
+
+# Scope: any
+nd_taboo_factor_value = {
+	value = nd_taboo_value
+	subtract = nd_taboo_burden_floor
+	divide = nd_taboo_burden_span
+	min = 0
+	max = 1
+}
+
+nd_taboo_arsenal_factor_value = {
+	value = nd_stockpile
+	max = nd_taboo_arsenal_saturation
+	divide = nd_taboo_arsenal_saturation
+	multiply = nd_taboo_arsenal_span_factor
+	add = nd_taboo_arsenal_floor_factor
+}
+
+nd_taboo_burden_value = {
+	value = 0
+	if = {
+		limit = { nd_is_armed = yes }
+		value = nd_taboo_factor_value
+		multiply = nd_taboo_arsenal_factor_value
+	}
+}
+
+nd_disp_taboo_burden_pct = {
+	value = nd_taboo_burden_value
+	multiply = 100
+	round = yes
+}
+
+# What the burden costs now, in the percentages nd_taboo_possession_cost shows
+# (its fields are these constants / 100; test_nuclear_taboo.py pins them).
+nd_disp_taboo_prestige_cost_pct = {
+	value = nd_taboo_burden_value
+	multiply = nd_taboo_possession_prestige_pct
+	round = yes
+}
+
+nd_disp_taboo_leverage_cost_pct = {
+	value = nd_taboo_burden_value
+	multiply = nd_taboo_possession_leverage_pct
+	round = yes
 }

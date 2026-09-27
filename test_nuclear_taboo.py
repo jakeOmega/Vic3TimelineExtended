@@ -366,5 +366,55 @@ class TestEveryoneActive(unittest.TestCase):
             self.assertIn(f"nd_taboo_band_{n}", keys)
 
 
+TABOO_MODIFIERS = ROOT / "common/static_modifiers/nuclear_taboo_modifiers.txt"
+NEW_FILES.append(TABOO_MODIFIERS)
+
+
+class TestPossession(unittest.TestCase):
+    def setUp(self):
+        self.values = strip_comments(read(TABOO_VALUES))
+        self.effects = strip_comments(read(TABOO_EFFECTS))
+
+    def test_modifier_matches_its_display_constants(self):
+        body = block(strip_comments(read(TABOO_MODIFIERS)), "nd_taboo_possession_cost")
+        prestige = constant(self.values, "nd_taboo_possession_prestige_pct") / 100
+        leverage = constant(self.values, "nd_taboo_possession_leverage_pct") / 100
+        self.assertIn(f"country_prestige_mult = {prestige:g}", body)
+        self.assertIn(f"country_leverage_generation_mult = {leverage:g}", body)
+
+    def test_burden_is_a_product_zero_below_the_floor(self):
+        burden = block(self.values, "nd_taboo_burden_value")
+        self.assertIn("value = nd_taboo_factor_value", burden)
+        self.assertIn("multiply = nd_taboo_arsenal_factor_value", burden)
+        self.assertIn("nd_is_armed = yes", burden)
+        factor = block(self.values, "nd_taboo_factor_value")
+        self.assertIn("subtract = nd_taboo_burden_floor", factor)
+        self.assertIn("min = 0", factor)
+
+    def test_refresh_runs_with_the_country_as_root(self):
+        body = block(self.effects, "nd_taboo_refresh_possession")
+        self.assertIn("multiplier = root.var:nd_taboo_burden_cached", body)
+        self.assertIn("je:je_nuclear_program ?=", body)
+        self.assertNotIn("remove_variable = nd_taboo_burden_cached", self.effects)
+        self.assertEqual(block(self.effects, "nd_taboo_country_monthly").count("nd_taboo_refresh_possession = yes"), 1)
+        self.assertNotIn("nd_taboo_refresh_possession", block(self.effects, "nd_taboo_monthly_update"))
+        self.assertIn("nd_taboo_country_monthly = yes", block(strip_comments(read(JE)), "on_monthly_pulse"))
+
+    def test_restraint_groups_weigh_the_arsenal(self):
+        dv = strip_comments(read(DETERRENCE_VALUES))
+        term = block(dv, "nd_ig_term_possession_value")
+        for needle in ("nd_ig_class_restraint = yes", "nd_taboo_burden_value >= nd_taboo_burden_step_full",
+                       "nd_taboo_burden_value >= nd_taboo_burden_step_mild"):
+            self.assertIn(needle, term)
+        self.assertNotIn("nd_ig_posture_judged", term)
+        self.assertIn("add = nd_ig_term_possession_value", block(dv, "nd_ig_stance_value"))
+        self.assertIn("THIS.Var('nd_ig_term_possession').GetValue", loc_value("nd_home_terms_restraint"))
+
+    def test_modifier_has_loc(self):
+        keys = loc_keys()
+        self.assertIn("nd_taboo_possession_cost", keys)
+        self.assertIn("nd_taboo_possession_cost_desc", keys)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -969,6 +969,7 @@ nd_ig_store_opinion = {
 	set_variable = { name = nd_ig_term_authority value = nd_ig_term_authority_value }
 	set_variable = { name = nd_ig_term_strain value = nd_ig_term_strain_value }
 	set_variable = { name = nd_ig_term_business value = nd_ig_term_business_value }
+	set_variable = { name = nd_ig_term_possession value = nd_ig_term_possession_value }
 	set_variable = { name = nd_ig_stance value = nd_ig_stance_value }
 }
 
@@ -1004,6 +1005,10 @@ nd_ig_clear_opinion = {
 	if = {
 		limit = { has_variable = nd_ig_term_business }
 		remove_variable = nd_ig_term_business
+	}
+	if = {
+		limit = { has_variable = nd_ig_term_possession }
+		remove_variable = nd_ig_term_possession
 	}
 	if = {
 		limit = { has_variable = nd_ig_stance }

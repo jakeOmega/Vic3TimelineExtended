@@ -684,7 +684,8 @@ class TestInterestGroupClasses(unittest.TestCase):
 
 
 IG_VARS = ["nd_ig_class", "nd_ig_lean", "nd_ig_strength", "nd_ig_term_doctrine", "nd_ig_term_readiness",
-           "nd_ig_term_authority", "nd_ig_term_strain", "nd_ig_term_business", "nd_ig_stance"]
+           "nd_ig_term_authority", "nd_ig_term_strain", "nd_ig_term_business", "nd_ig_term_possession",
+           "nd_ig_stance"]
 
 
 class TestInterestGroupOpinion(unittest.TestCase):

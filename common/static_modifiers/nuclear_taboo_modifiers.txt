@@ -1,0 +1,18 @@
+﻿# ============================================================================
+# THE NUCLEAR TABOO — static modifiers
+# ============================================================================
+# Design: docs/superpowers/specs/2026-09-26-nuclear-taboo-design.md. Writers:
+#   nd_taboo_possession_cost   nd_taboo_refresh_possession (je_nuclear_program
+#                              scope, multiplier = root.var:nd_taboo_burden_cached)
+# ============================================================================
+
+# The bomb's standing, turned against its holder as the world comes to hold it
+# in horror: per unit of burden (0-1). nuclear_power's +30 % prestige and +25 %
+# leverage generation are left as they are; at a full burden this takes a
+# fifty-warhead arsenal to -15 % prestige and no leverage bonus. Its fields are
+# nd_taboo_possession_prestige_pct and _leverage_pct / 100.
+nd_taboo_possession_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	country_prestige_mult = -0.45
+	country_leverage_generation_mult = -0.25
+}

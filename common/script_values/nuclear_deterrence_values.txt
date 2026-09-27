@@ -1262,6 +1262,26 @@ nd_ig_term_business_value = {
 	}
 }
 
+# The nuclear taboo (nuclear_taboo_values.txt §4.4): restraint groups object to
+# the arsenal itself once the world holds the bomb in horror, and more to a big
+# one. Not tenure-gated — holding warheads is not a posture choice.
+nd_ig_term_possession_value = {
+	value = 0
+	if = {
+		limit = { nd_ig_class_restraint = yes }
+		owner = {
+			if = {
+				limit = { nd_taboo_burden_value >= nd_taboo_burden_step_full }
+				add = -2
+			}
+			else_if = {
+				limit = { nd_taboo_burden_value >= nd_taboo_burden_step_mild }
+				add = -1
+			}
+		}
+	}
+}
+
 # The capped total the approval band is read from: ±1 for a mild militarist
 # or restraint group, ±2 otherwise.
 nd_ig_stance_value = {
@@ -1270,6 +1290,7 @@ nd_ig_stance_value = {
 	add = nd_ig_term_authority_value
 	add = nd_ig_term_strain_value
 	add = nd_ig_term_business_value
+	add = nd_ig_term_possession_value
 	if = {
 		limit = {
 			nd_ig_is_fixed_class = no

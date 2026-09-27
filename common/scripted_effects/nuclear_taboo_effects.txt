@@ -209,3 +209,48 @@ nd_taboo_note_use = {
 		debug_log = "TE_TABOO: a nuclear weapon was used; score now [SCOPE.ScriptValue('nd_disp_taboo')|1]"
 	}
 }
+
+# ----------------------------------------------------------------------------
+# THE COUNTRY HALF — je_nuclear_program's monthly pulse, ROOT = this country
+# ----------------------------------------------------------------------------
+# Every per-country piece of the taboo that applies a modifier or must run
+# with ROOT = the country. Each refresh below is called exactly once here: a
+# second call in the same block would read a modifier the first had just
+# added or removed as still absent or present.
+nd_taboo_country_monthly = {
+	if = {
+		limit = { has_global_variable = nd_taboo }
+		nd_taboo_refresh_possession = yes
+	}
+}
+
+# The possession cost on the entry (je_nuclear_program, the upkeep's scope).
+# The engine re-reads a modifier's multiplier on later ticks, so the modifier
+# is put on once and the cache updated each month — nd_apply_posture_modifiers'
+# upkeep pattern. The cache is never removed (modifier_multiplier_var_audit);
+# ROOT must be this country, which is why this runs only from the entry's
+# pulse. It comes off when the burden is 0 — below a taboo of 40, or unarmed:
+# the entry no longer closes on disarmament.
+nd_taboo_refresh_possession = {
+	set_variable = { name = nd_taboo_burden_cached value = nd_taboo_burden_value }
+	if = {
+		limit = { var:nd_taboo_burden_cached > 0 }
+		je:je_nuclear_program ?= {
+			if = {
+				limit = { NOT = { has_modifier = nd_taboo_possession_cost } }
+				add_modifier = {
+					name = nd_taboo_possession_cost
+					multiplier = root.var:nd_taboo_burden_cached
+				}
+			}
+		}
+	}
+	else = {
+		je:je_nuclear_program ?= {
+			if = {
+				limit = { has_modifier = nd_taboo_possession_cost }
+				remove_modifier = nd_taboo_possession_cost
+			}
+		}
+	}
+}
