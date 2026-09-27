@@ -2,9 +2,18 @@
 # Vic3TimelineExtended — modern (post-vanilla) ship types
 # =============================================================================
 # These ships extend vanilla 1.13's ship roster into the mod's late-era timeline.
-# Each ship is loosely modeled on a vanilla parent type and reuses that parent's
-# modification slots (ship_mod_<parent>_*) so we don't duplicate every armor /
-# guns / propulsion / range tier.
+# Each ship is loosely modeled on a vanilla parent type. Nine carry their own
+# armor / guns / propulsion / range sets (ship_mod_<ship>_* in
+# common/ship_modifications/extra_ship_modifications.txt): asw_destroyer,
+# nuclear_submarine, guided_missile_ship, nuclear_supercarrier, arsenal_ship,
+# expeditionary_sea_base, hypersonic_missile_platform, pulsed_laser_escort and
+# swarm_coordination_vessel. The other ten reuse one of those sets or a vanilla
+# parent's (ship_mod_<parent>_*): stealth_attack_submarine and
+# autonomous_swarm_submarine use nuclear_submarine's, stealth_battlecruiser
+# arsenal_ship's, antimatter_battleship hypersonic_missile_platform's,
+# orbital_support_amphibious_mothership expeditionary_sea_base's;
+# fleet_carrier uses vanilla aircraft_carrier's, networked_air_defense_cruiser
+# light_cruiser's, and the three troop ships troop_ship's.
 #
 # Era / tech mapping (covers all 4 roles every era 6-12 with 2-3 era overlap):
 #   era 6  bombing_aircraft             → fleet_carrier                     (capital)

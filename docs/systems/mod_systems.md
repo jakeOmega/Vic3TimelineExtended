@@ -1569,7 +1569,7 @@ Each surviving JE has monthly pulse events plus a fail-state event (except Post-
 **Mechanic:**
 - Country variable `var:sol_expectations_shift` tracks the adaptive shift applied via a static modifier
 - Monthly: `gap = (average_sol + target_add) - average_expected_sol`, then `shift += gap * rate + monthly_bias`
-- Rate derived from half-life: `rate = ln(2) / (half_life_years × 12)` (default 5y → ~0.01155/month)
+- Rate derived from half-life: `rate = ln(2) / (half_life_years × 12)` (default 10y → ~0.00578/month)
 - At equilibrium: `average_expected_sol ≈ average_sol + target_add` (shift stabilizes at whatever bridges the gap)
 - Applied via `sol_expectations_adaptive_shift` static modifier with `multiplier = shift`
 - Shift threshold: only applied when |shift| > 0.05 (avoids modifier clutter in steady state)
@@ -1584,10 +1584,10 @@ Each surviving JE has monthly pulse events plus a fail-state event (except Post-
 **NOT converted** (intentionally): Engine-hardcoded code static modifiers (base_values, tax_modifier_*, unincorporated_state) and temporary DLC/event modifiers (expecting_riches_forever, etc.) — these are either unchangeable or correctly handled by the adaptive lag.
 
 **Tuning:**
-- `sol_expectations_half_life_years = 5` — script value controlling convergence speed. Change this single value to tune. 5y = ~50% adapted after 5y, ~75% after 10y, ~94% after 20y.
+- `sol_expectations_half_life_years = 10` — script value controlling convergence speed. Change this single value to tune. 10y = ~50% adapted after 10y, ~75% after 20y, ~94% after 40y.
 
 **Modifiers:**
-- `country_sol_expectation_adaptation_rate_mult` (percent, script_only) — scales the adaptation rate. +50% = faster convergence (~3.3y half-life).
+- `country_sol_expectation_adaptation_rate_mult` (percent, script_only) — scales the adaptation rate. +50% = faster convergence (~6.7y half-life at the default 10y).
 - `country_sol_expectations_shift_add` (decimals=2, script_only) — persistent monthly bias added to shift. Positive = expectations rise faster.
 - `country_sol_expectations_target_add` (decimals=1, script_only) — permanent offset to the convergence target. Positive = people expect more than actual SoL.
 
@@ -1600,7 +1600,7 @@ Each surviving JE has monthly pulse events plus a fail-state event (except Post-
 **Static modifier:** `sol_expectations_adaptive_shift` — applied at country level with `multiplier = shift_value`. Base modifier provides +1 to all three strata expected_sol_add, so multiplier directly controls the SoL shift.
 
 **Script values** (in `extra_script_values.txt`):
-- `sol_expectations_half_life_years` — half-life parameter in years (default 5)
+- `sol_expectations_half_life_years` — half-life parameter in years (default 10)
 - `sol_expectations_adaptation_rate_value` — derived monthly rate, scaled by modifier, clamped [0.001, 0.1]
 - `sol_expectations_gap_value` — (average_sol + target_add) - average_expected_sol
 - `sol_expectations_shift_value` — current shift variable, used as modifier multiplier
