@@ -190,12 +190,15 @@ ww_lend_lease_button = {
 	name = "WW_LEND_LEASE_BUTTON"
 	desc = "WW_LEND_LEASE_BUTTON_DESC"
 
+	# Available during both leadup (supporting rearmament of allies) and active
+	# war. "Active war" is the world's war, not ours: it used to read our own
+	# ww_active_phase, which only belligerents hold, so the branch never helped
+	# the outsider this button is for.
 	visible = {
 		NOT = { je:je_world_war = { has_modifier = ww_lend_lease_modifier } }
-		# Available during both leadup (supporting rearmament of allies) and active war
 		OR = {
 			ww_ideological_tension >= 40
-			has_variable = ww_active_phase
+			ww_world_war_is_being_fought = yes
 		}
 		is_at_war = no
 	}
@@ -204,7 +207,8 @@ ww_lend_lease_button = {
 		value = 0
 		if = {
 			limit = {
-				has_variable = ww_active_phase
+				ww_world_war_is_being_fought = yes
+				NOT = { country_is_ww_belligerent = yes }
 				is_at_war = no
 				country_rank >= rank_value:great_power
 			}
@@ -228,7 +232,7 @@ ww_lend_lease_button = {
 			text = WW_LEND_LEASE_POSSIBLE_TT
 			OR = {
 				ww_ideological_tension >= 40
-				has_variable = ww_active_phase
+				ww_world_war_is_being_fought = yes
 			}
 		}
 	}
@@ -495,14 +499,24 @@ ww_stop_wartime_rationing_button = {
 }
 
 # ---- LATE ENTRY: Join the War ----
+# A great power outside a world war that is being fought enters it on the
+# defenders' side (ww_enter_war_on_defender_side, shared with
+# world_war_events.20 option a). The button used to be visible only with
+# ww_active_phase, which only belligerents hold, and fired
+# world_war_events.20, which turns away a country that has a side: no outsider
+# ever saw it, and a belligerent's click did nothing but start the cooldown.
+# It joins directly rather than through .20, whose five-year event cooldown
+# outlasts the one-year ww_late_entry_cooldown and could swallow the click.
 
 ww_join_war_button = {
 	name = "WW_JOIN_WAR_BUTTON"
 	desc = "WW_JOIN_WAR_BUTTON_DESC"
 
 	visible = {
-		has_variable = ww_active_phase
+		NOT = { country_is_ww_belligerent = yes }
+		NOT = { has_variable = ww_peace_concluded }
 		is_at_war = no
+		ww_world_war_is_being_fought = yes
 	}
 
 	ai_chance = {
@@ -557,15 +571,11 @@ ww_join_war_button = {
 	}
 
 	possible = {
-		NOT = { has_modifier = ww_late_entry_cooldown }
 		custom_tooltip = {
 			text = WW_JOIN_WAR_POSSIBLE_TT
-			has_variable = ww_active_phase
+			NOT = { has_modifier = ww_late_entry_cooldown }
 			is_at_war = no
-			any_country = {
-				has_variable = ww_aggressor_side
-				is_at_war = yes
-			}
+			ww_world_war_open_to_entrants = yes
 		}
 		custom_tooltip = {
 			text = WW_JOIN_WAR_NEEDS_MAJOR_POWER
@@ -574,12 +584,24 @@ ww_join_war_button = {
 	}
 
 	effect = {
-		# Fire the join-war event which handles the actual diplomatic play joining
-		trigger_event = { id = world_war_events.20 }
-		add_modifier = {
-			name = ww_late_entry_cooldown
-			days = 365
-			is_decaying = yes
+		hidden_effect = {
+			random_country = {
+				limit = {
+					has_variable = ww_aggressor_side
+					is_at_war = yes
+					country_rank >= rank_value:great_power
+				}
+				save_scope_as = ww_main_aggressor
+			}
+			random_country = {
+				limit = {
+					has_variable = ww_defender_side
+					is_at_war = yes
+					country_rank >= rank_value:great_power
+				}
+				save_scope_as = ww_main_defender
+			}
 		}
+		ww_enter_war_on_defender_side = yes
 	}
 }

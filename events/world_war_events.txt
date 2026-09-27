@@ -961,47 +961,9 @@ world_war_events.20 = {
 				add = 3
 			}
 		}
-		# Join the existing war on the defender's side
-		scope:ww_main_defender = {
-			every_scope_war = {
-				limit = {
-					is_war_participant = scope:ww_main_aggressor
-				}
-				join_war = {
-					target = root
-					side = scope:ww_main_defender
-				}
-			}
-		}
-		custom_tooltip = {
-			text = WW_JOIN_DEFENDER_TT
-			set_variable = ww_active_phase
-			set_variable = ww_defender_side
-			set_variable = { name = ww_years_elapsed value = 0 }
-			set_variable = { name = ww_months_counter value = 0 }
-		}
-		add_modifier = {
-			name = ww_fresh_forces_modifier
-			days = normal_modifier_time
-			is_decaying = yes
-		}
-		if = {
-			limit = { country_is_democratic = yes }
-			add_modifier = {
-				name = ww_arsenal_of_democracy_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
-		add_loyalists = {
-			value = large_radicals
-			pop_type = soldiers
-		}
-		add_modifier = {
-			name = ww_late_entry_cooldown
-			days = 365
-			is_decaying = yes
-		}
+		# Join the existing war on the defender's side (shared with
+		# ww_join_war_button)
+		ww_enter_war_on_defender_side = yes
 	}
 
 	# Option B: Provide lend-lease support only - stay out of direct combat

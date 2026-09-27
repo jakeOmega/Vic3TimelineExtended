@@ -137,6 +137,33 @@ world_war_conditions_met = {
 	}
 }
 
+# --- True while a world war is being fought: an aggressor-side belligerent is
+# at war. Any scope; read from belligerents and outsiders alike. The side
+# variables sit only on belligerents, so a country's own ww_active_phase says
+# nothing about whether a war is on for anyone else.
+ww_world_war_is_being_fought = {
+	any_country = {
+		has_variable = ww_aggressor_side
+		is_at_war = yes
+	}
+}
+
+# --- True if a late entrant has a side to join: a great power of each side is
+# at war (world_war_events.20 option a and ww_join_war_button pick one of each
+# as scope:ww_main_aggressor / scope:ww_main_defender). Any scope.
+ww_world_war_open_to_entrants = {
+	any_country = {
+		has_variable = ww_aggressor_side
+		is_at_war = yes
+		country_rank >= rank_value:great_power
+	}
+	any_country = {
+		has_variable = ww_defender_side
+		is_at_war = yes
+		country_rank >= rank_value:great_power
+	}
+}
+
 # --- True if this country can join an ongoing world war late ---
 can_join_world_war = {
 	country_rank >= rank_value:major_power
@@ -145,10 +172,7 @@ can_join_world_war = {
 	NOT = { has_variable = ww_defender_side }
 	NOT = { has_modifier = ww_late_entry_cooldown }
 	# A world war must be happening
-	any_country = {
-		has_variable = ww_aggressor_side
-		is_at_war = yes
-	}
+	ww_world_war_is_being_fought = yes
 }
 
 # --- True if country is an active belligerent (has a side assignment) ---
