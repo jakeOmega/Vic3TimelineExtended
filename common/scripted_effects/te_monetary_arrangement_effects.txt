@@ -840,7 +840,8 @@ te_monetary_update_anchor_peg = {
 		change_variable = { name = te_peg_confidence subtract = te_mon_fx_overvaluation_drain }
 	}
 	else = {
-		change_variable = { name = te_peg_confidence add = 1 }
+		# +3 / +2 / +1 by the dashboard's band, as a gold peg heals.
+		change_variable = { name = te_peg_confidence add = te_mon_peg_confidence_heal }
 	}
 	# A treaty swap line's +2 and the bloc's cooperation +1 (5b), in one value.
 	change_variable = { name = te_peg_confidence add = te_mon_backstop_confidence }

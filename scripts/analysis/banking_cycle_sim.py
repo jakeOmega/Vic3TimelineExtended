@@ -1263,6 +1263,15 @@ def bank_gold_limit(cfg: Config, state: State) -> float:
     return max(1.0, state.gdp * K.sv("te_mon_bank_gold_limit_share"))
 
 
+def peg_confidence_heal(confidence: float) -> float:
+    """te_mon_peg_confidence_heal: the monthly recovery for confidence's band."""
+    if confidence < K.sv("te_mon_peg_doubted_below"):
+        return K.sv("te_mon_peg_heal_doubted")
+    if confidence < K.sv("te_mon_peg_watched_below"):
+        return K.sv("te_mon_peg_heal_watched")
+    return K.sv("te_mon_peg_heal_trusted")
+
+
 def monetary_update_gold(cfg: Config, state: State, world_rate: float) -> None:
     limit = bank_gold_limit(cfg, state)
     if not state.bank_gold_seeded:
@@ -1317,8 +1326,9 @@ def monetary_update_gold(cfg: Config, state: State, world_rate: float) -> None:
         if state.scaled_debt >= 0.5:
             move -= 2
         state.peg_confidence += move
-    elif gap >= 0 and state.gold_hot_money <= 0:
-        state.peg_confidence += 1
+    elif gap >= 0 and (gap > 0 or state.gold_hot_money <= 0):
+        # Hot money blocks the heal only while it is leaving (gap <= 0).
+        state.peg_confidence += peg_confidence_heal(state.peg_confidence)
     state.peg_confidence = max(0.0, min(100.0, state.peg_confidence))
 
     if state.peg_defend_months > 0:

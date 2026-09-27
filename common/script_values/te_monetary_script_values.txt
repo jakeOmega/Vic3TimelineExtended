@@ -329,7 +329,8 @@
 #                                                   faces a world rate containing
 #                                                   itself (owner decision H)
 #   te_peg_confidence       0 to 100    displayed   §12.3. Seeds at 100; te_peg.1
-#                                                   fires at <= 20
+#                                                   fires at <= 20; recovers
+#                                                   te_mon_peg_confidence_heal
 #   te_peg_crisis_cooldown  0 to te_mon_peg_crisis_cooldown_months
 #                                                   months before te_peg.1 may be
 #                                                   offered again; set by step 10
@@ -3091,6 +3092,55 @@ te_mon_peg_confidence_per_pp = {
 
 te_mon_peg_crisis_threshold = {
 	value = 20
+}
+
+# The dashboard's three words for confidence (te_mon_peg_state): Doubted under
+# the first, Watched under the second, Trusted from there. The recovery below
+# is keyed on the same bands, so the tooltip can say it in those words.
+te_mon_peg_doubted_below = {
+	value = 40
+}
+
+te_mon_peg_watched_below = {
+	value = 70
+}
+
+# Recovery a month, out of trouble, by band (ruling Q10, revised 2026-09-27):
+# fastest where it is lowest. At a flat +1 a Devalue at 50 took twenty months
+# to read Trusted again and a country at 20 more than four years; now ten, and
+# about two. Near the top it stays a point a month — the last stretch of trust
+# is the slow one.
+te_mon_peg_heal_doubted = {
+	value = 3
+}
+
+te_mon_peg_heal_watched = {
+	value = 2
+}
+
+te_mon_peg_heal_trusted = {
+	value = 1
+}
+
+# This month's recovery, for whichever band confidence is in. Read by step 10
+# (te_monetary_update_gold) and by a treaty pegger's step
+# (te_monetary_update_anchor_peg) — each tests its own conditions first.
+te_mon_peg_confidence_heal = {
+	value = te_mon_peg_heal_trusted
+	if = {
+		limit = {
+			has_variable = te_peg_confidence
+			var:te_peg_confidence < te_mon_peg_doubted_below
+		}
+		value = te_mon_peg_heal_doubted
+	}
+	else_if = {
+		limit = {
+			has_variable = te_peg_confidence
+			var:te_peg_confidence < te_mon_peg_watched_below
+		}
+		value = te_mon_peg_heal_watched
+	}
 }
 
 # Months before the convertibility crisis may be offered again; the same
