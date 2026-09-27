@@ -379,29 +379,18 @@ cultural_pull_from_monuments = {
 	add = cultural_pull_from_grand_monuments
 }
 
-# Total Grand Monument levels in this state, across all dedications.
-# State scope. See common/buildings/grand_monuments.txt.
-grand_monument_levels_in_state = {
-	value = 0
-	every_scope_building = {
-		limit = {
-			is_building_group = bg_grand_monuments
-			level >= 1
-		}
-		add = level
-	}
-}
-
-# Grand Monument pull. HARD CAPPED, unlike the one-off wonders above: Grand Monuments
-# are infinitely repeatable, so an uncapped per-building bonus would let a rich country
-# farm cultural hegemony without limit. 20 monument levels nationwide = +1 pull, to a
-# ceiling of +5 (reached at 100 levels).
+# Grand Monument pull: standing grandeur (every monument not contested) through
+# the doubling curve with a first step of 10, capped at 5 steps (+5, the old
+# ceiling). gm_s_culture is set by gm_country_refresh (gm_effects.txt); absent
+# until a country's first refresh. Spec
+# docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md §2.4.
 cultural_pull_from_grand_monuments = {
 	value = 0
-	every_scope_state = {
-		add = grand_monument_levels_in_state
+	if = {
+		limit = { has_variable = gm_s_culture }
+		value = var:gm_s_culture
+		multiply = gm_step_culture
 	}
-	divide = 20
 	max = 5
 }
 

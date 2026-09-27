@@ -312,3 +312,276 @@ gm_add_local = {
 		add_modifier = { name = gm_local_$KEY$ multiplier = var:gm_local_steps }
 	}
 }
+
+# ---- Ledgers (§4.3, §5) --------------------------------------------------------
+# Country scope. Every reward and cost of a contest choice, and vanity
+# backlash, goes into a decaying ledger, never a stacking modifier. Ledgers back
+# multipliers, so they are zeroed, never removed.
+gm_init_ledger = {
+	if = {
+		limit = {
+			NOT = { has_variable = $VAR$ }
+		}
+		set_variable = { name = $VAR$ value = 0 }
+	}
+}
+
+gm_init_ledgers = {
+	gm_init_ledger = { VAR = gm_teardown_ledger }
+	gm_init_ledger = { VAR = gm_vanity_ledger }
+	gm_init_ledger = { VAR = gm_ig_ledger_armed_forces }
+	gm_init_ledger = { VAR = gm_ig_ledger_devout }
+	gm_init_ledger = { VAR = gm_ig_ledger_industrialists }
+	gm_init_ledger = { VAR = gm_ig_ledger_intelligentsia }
+	gm_init_ledger = { VAR = gm_ig_ledger_landowners }
+	gm_init_ledger = { VAR = gm_ig_ledger_petty_bourgeoisie }
+	gm_init_ledger = { VAR = gm_ig_ledger_rural_folk }
+	gm_init_ledger = { VAR = gm_ig_ledger_trade_unions }
+}
+
+gm_decay = {
+	change_variable = { name = $VAR$ multiply = $RATE$ }
+	if = {
+		limit = {
+			var:$VAR$ < 0.05
+			var:$VAR$ > -0.05
+		}
+		set_variable = { name = $VAR$ value = 0 }
+	}
+}
+
+# Once a month (gm_country_monthly), never on a mid-month refresh.
+gm_decay_ledgers = {
+	gm_decay = { VAR = gm_teardown_ledger RATE = 0.96 }
+	gm_decay = { VAR = gm_vanity_ledger RATE = 0.92 }
+	gm_decay = { VAR = gm_ig_ledger_armed_forces RATE = 0.97 }
+	gm_decay = { VAR = gm_ig_ledger_devout RATE = 0.97 }
+	gm_decay = { VAR = gm_ig_ledger_industrialists RATE = 0.97 }
+	gm_decay = { VAR = gm_ig_ledger_intelligentsia RATE = 0.97 }
+	gm_decay = { VAR = gm_ig_ledger_landowners RATE = 0.97 }
+	gm_decay = { VAR = gm_ig_ledger_petty_bourgeoisie RATE = 0.97 }
+	gm_decay = { VAR = gm_ig_ledger_rural_folk RATE = 0.97 }
+	gm_decay = { VAR = gm_ig_ledger_trade_unions RATE = 0.97 }
+}
+
+# ---- The national refresh (§2.4) ---------------------------------------------
+# Country scope, ROOT = the country: the monthly pulse, monument_events.20,
+# a scripted GUI effect or a country event option. Never call it where ROOT is
+# a state, building, law or character: the multipliers resolve against ROOT.
+gm_country_refresh = {
+	gm_init_ledgers = yes
+	clear_variable_list = gm_states
+	every_scope_state = {
+		limit = { has_building = building_grand_monument }
+		set_variable = { name = gm_grandeur value = gm_state_grandeur }
+		gm_state_first_sight = yes
+		owner = {
+			add_to_variable_list = { name = gm_states target = prev }
+		}
+	}
+	gm_set_opposition_ig = yes
+	gm_compute_totals = yes
+	gm_apply_national_modifiers = yes
+}
+
+# Country scope. The monthly pulse: decay, then refresh; gm_active keeps the
+# pulse running while a ledger fades after the last monument has gone.
+gm_country_monthly = {
+	gm_init_ledgers = yes
+	gm_decay_ledgers = yes
+	gm_country_refresh = yes
+	if = {
+		limit = {
+			NOT = { any_scope_state = { has_building = building_grand_monument } }
+			gm_ledgers_idle = yes
+		}
+		if = {
+			limit = { has_variable = gm_active }
+			remove_variable = gm_active
+		}
+	}
+	else = {
+		set_variable = gm_active
+	}
+}
+
+# Country scope. The strongest IG outside the government, as a flag: the
+# opponent of a monument to the Leader (§1).
+gm_set_opposition_ig = {
+	set_variable = { name = gm_opposition_ig value = flag:none }
+	ordered_interest_group = {
+		limit = { is_in_government = no }
+		order_by = ig_clout
+		position = 0
+		check_range_bounds = no
+		gm_ig_to_flag_on_owner = { VAR = gm_opposition_ig }
+	}
+}
+
+# Country scope. Grandeur -> step count and next step, along the curve with
+# first step $F$ (5 or 10).
+gm_set_steps = {
+	set_variable = { name = gm_curve_in value = var:$IN$ }
+	set_variable = { name = $OUT$ value = gm_curve_steps_f$F$ }
+	set_variable = { name = $NEXT$ value = gm_curve_next_f$F$ }
+}
+
+gm_compute_totals = {
+	set_variable = { name = gm_g_standing value = gm_sum_standing }
+	set_variable = { name = gm_g_regime value = gm_sum_regime }
+	set_variable = { name = gm_g_leader value = gm_sum_leader }
+	set_variable = { name = gm_g_religious value = gm_sum_religious }
+	set_variable = { name = gm_g_war_memorial value = gm_sum_war_memorial }
+	set_variable = { name = gm_g_artistic value = gm_sum_artistic }
+	set_variable = { name = gm_g_scientific value = gm_sum_scientific }
+	set_variable = { name = gm_g_industrial value = gm_sum_industrial }
+	gm_set_steps = { IN = gm_g_standing OUT = gm_s_standing NEXT = gm_n_standing F = 5 }
+	gm_set_steps = { IN = gm_g_standing OUT = gm_s_culture NEXT = gm_n_culture F = 10 }
+	gm_set_steps = { IN = gm_g_regime OUT = gm_s_regime NEXT = gm_n_regime F = 10 }
+	gm_set_steps = { IN = gm_g_leader OUT = gm_s_leader NEXT = gm_n_leader F = 5 }
+	gm_set_steps = { IN = gm_g_religious OUT = gm_s_religious NEXT = gm_n_religious F = 5 }
+	gm_set_steps = { IN = gm_g_war_memorial OUT = gm_s_war_memorial NEXT = gm_n_war_memorial F = 5 }
+	gm_set_steps = { IN = gm_g_artistic OUT = gm_s_artistic NEXT = gm_n_artistic F = 5 }
+	gm_set_steps = { IN = gm_g_scientific OUT = gm_s_scientific NEXT = gm_n_scientific F = 5 }
+	gm_set_steps = { IN = gm_g_industrial OUT = gm_s_industrial NEXT = gm_n_industrial F = 5 }
+	gm_set_steps = { IN = gm_teardown_ledger OUT = gm_s_teardown NEXT = gm_n_teardown F = 5 }
+	gm_compute_ig = { IG = armed_forces }
+	gm_compute_ig = { IG = devout }
+	gm_compute_ig = { IG = industrialists }
+	gm_compute_ig = { IG = intelligentsia }
+	gm_compute_ig = { IG = landowners }
+	gm_compute_ig = { IG = petty_bourgeoisie }
+	gm_compute_ig = { IG = rural_folk }
+	gm_compute_ig = { IG = trade_unions }
+	set_variable = { name = gm_count_monuments value = gm_sum_monuments }
+	set_variable = { name = gm_count_contested value = gm_sum_contested }
+}
+
+# Country scope. One IG's net grandeur (§2.4): its ledger, plus each Fits
+# monument it approves of, minus each it opposes, minus each contested
+# monument whose new order it is (the standing penalty, §4.2). The result goes
+# through the curve on its absolute value, with the sign put back: one cap per
+# IG, across all monuments.
+gm_compute_ig = {
+	set_variable = { name = gm_ig_net_$IG$ value = var:gm_ig_ledger_$IG$ }
+	every_scope_state = {
+		limit = { has_building = building_grand_monument }
+		if = {
+			limit = {
+				gm_state_status_fits = yes
+				gm_state_approved_by_$IG$ = yes
+			}
+			owner = {
+				change_variable = { name = gm_ig_net_$IG$ add = prev.var:gm_grandeur }
+			}
+		}
+		if = {
+			limit = {
+				gm_state_status_fits = yes
+				gm_state_opposed_by_$IG$ = yes
+			}
+			owner = {
+				change_variable = { name = gm_ig_net_$IG$ subtract = prev.var:gm_grandeur }
+			}
+		}
+		if = {
+			limit = {
+				gm_state_is_contested = yes
+				has_variable = gm_base_ig
+				var:gm_base_ig = flag:$IG$
+			}
+			owner = {
+				change_variable = { name = gm_ig_net_$IG$ subtract = prev.var:gm_grandeur }
+			}
+		}
+	}
+	if = {
+		limit = { var:gm_ig_net_$IG$ >= 0 }
+		set_variable = { name = gm_curve_in value = var:gm_ig_net_$IG$ }
+		set_variable = { name = gm_s_ig_$IG$ value = gm_curve_steps_f5 }
+	}
+	else = {
+		set_variable = {
+			name = gm_curve_in
+			value = {
+				value = var:gm_ig_net_$IG$
+				multiply = -1
+			}
+		}
+		set_variable = {
+			name = gm_s_ig_$IG$
+			value = {
+				value = gm_curve_steps_f5
+				multiply = -1
+			}
+		}
+	}
+}
+
+# Country scope, ROOT = the country. Every national modifier lives on the
+# journal entry (§2.4); the `?=` skips the months before it is active.
+gm_apply_national_modifiers = {
+	je:je_grand_monuments ?= {
+		gm_remove_national_modifiers = yes
+		gm_add_national = { NAME = gm_national_prestige VAR = gm_s_standing }
+		gm_add_national = { NAME = gm_national_legitimacy VAR = gm_s_regime }
+		gm_add_national = { NAME = gm_national_leader VAR = gm_s_leader }
+		gm_add_national = { NAME = gm_national_religious VAR = gm_s_religious }
+		gm_add_national = { NAME = gm_national_war_memorial VAR = gm_s_war_memorial }
+		gm_add_national = { NAME = gm_national_artistic VAR = gm_s_artistic }
+		gm_add_national = { NAME = gm_national_scientific VAR = gm_s_scientific }
+		gm_add_national = { NAME = gm_national_industrial VAR = gm_s_industrial }
+		gm_add_national = { NAME = gm_national_teardown VAR = gm_s_teardown }
+		gm_add_national = { NAME = gm_national_vanity VAR = gm_vanity_ledger }
+		gm_add_national_signed = { NAME = gm_ig_approval_armed_forces VAR = gm_s_ig_armed_forces }
+		gm_add_national_signed = { NAME = gm_ig_approval_devout VAR = gm_s_ig_devout }
+		gm_add_national_signed = { NAME = gm_ig_approval_industrialists VAR = gm_s_ig_industrialists }
+		gm_add_national_signed = { NAME = gm_ig_approval_intelligentsia VAR = gm_s_ig_intelligentsia }
+		gm_add_national_signed = { NAME = gm_ig_approval_landowners VAR = gm_s_ig_landowners }
+		gm_add_national_signed = { NAME = gm_ig_approval_petty_bourgeoisie VAR = gm_s_ig_petty_bourgeoisie }
+		gm_add_national_signed = { NAME = gm_ig_approval_rural_folk VAR = gm_s_ig_rural_folk }
+		gm_add_national_signed = { NAME = gm_ig_approval_trade_unions VAR = gm_s_ig_trade_unions }
+	}
+}
+
+# Journal-entry scope.
+gm_remove_national_modifiers = {
+	remove_modifier = gm_national_prestige
+	remove_modifier = gm_national_legitimacy
+	remove_modifier = gm_national_leader
+	remove_modifier = gm_national_religious
+	remove_modifier = gm_national_war_memorial
+	remove_modifier = gm_national_artistic
+	remove_modifier = gm_national_scientific
+	remove_modifier = gm_national_industrial
+	remove_modifier = gm_national_teardown
+	remove_modifier = gm_national_vanity
+	remove_modifier = gm_ig_approval_armed_forces
+	remove_modifier = gm_ig_approval_devout
+	remove_modifier = gm_ig_approval_industrialists
+	remove_modifier = gm_ig_approval_intelligentsia
+	remove_modifier = gm_ig_approval_landowners
+	remove_modifier = gm_ig_approval_petty_bourgeoisie
+	remove_modifier = gm_ig_approval_rural_folk
+	remove_modifier = gm_ig_approval_trade_unions
+}
+
+# Journal-entry scope; the variable is ROOT's (the country's).
+gm_add_national = {
+	if = {
+		limit = { root.var:$VAR$ > 0.001 }
+		add_modifier = { name = $NAME$ multiplier = root.var:$VAR$ }
+	}
+}
+
+gm_add_national_signed = {
+	if = {
+		limit = {
+			OR = {
+				root.var:$VAR$ > 0.001
+				root.var:$VAR$ < -0.001
+			}
+		}
+		add_modifier = { name = $NAME$ multiplier = root.var:$VAR$ }
+	}
+}

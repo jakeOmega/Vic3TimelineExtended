@@ -1,0 +1,48 @@
+﻿# ============================================================================
+# The Monuments journal entry (spec §6)
+# ============================================================================
+# Activates when the country owns a Grand Monument; goes when it owns none and
+# no ledger is still fading (plan decision 3); comes back with the next
+# monument. Holds the national modifiers (gm_apply_national_modifiers), which
+# go with it. No `immediate`: nothing here a revolution's winner should lose.
+# The widgets (Task 9) show the national lines and one row per monument.
+
+je_grand_monuments = {
+	icon = "gfx/interface/icons/building_icons/building_government_administration.dds"
+	group = je_group_internal_affairs
+
+	possible = {
+		gm_system_enabled = yes
+		any_scope_state = { has_building = building_grand_monument }
+	}
+
+	invalid = {
+		OR = {
+			gm_system_enabled = no
+			AND = {
+				NOT = {
+					any_scope_state = { has_building = building_grand_monument }
+				}
+				gm_ledgers_idle = yes
+			}
+		}
+	}
+
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_grand_monuments_status_contested
+				trigger = {
+					any_scope_state = { gm_state_is_contested = yes }
+				}
+			}
+			triggered_desc = {
+				desc = je_grand_monuments_status
+				trigger = { always = yes }
+			}
+		}
+	}
+
+	weight = 400
+	should_update_on_player_command = yes
+}

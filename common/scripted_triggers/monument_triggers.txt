@@ -221,3 +221,157 @@ gm_state_takes_heritage_skin = {
 		gm_state_has_pm = { PM = pm_monument_war_memorial }
 	}
 }
+
+# ======================================================================
+#  IG alignment (spec §1): which IG a monument pleases or offends
+# ======================================================================
+# State scope, for a monument whose status is Fits (gm_compute_ig checks).
+# Timeless dedications have no opponents on purpose; the regime ones are
+# divisive. The Leader's pair is dynamic: the ruler's own IG approves, and the
+# strongest IG outside the government (gm_opposition_ig, set on the country by
+# gm_set_opposition_ig each refresh) opposes. test_grand_monument_registry.py
+# pins every pair against its DEDICATIONS table.
+
+gm_state_leader_ig_is = {
+	gm_state_kind_ruler = yes
+	owner = {
+		ruler ?= { interest_group ?= { is_interest_group_type = ig_$IG$ } }
+	}
+}
+
+gm_state_leader_opposed_by = {
+	gm_state_kind_ruler = yes
+	owner = {
+		has_variable = gm_opposition_ig
+		var:gm_opposition_ig = flag:$IG$
+	}
+}
+
+gm_state_approved_by_armed_forces = {
+	OR = {
+		gm_state_has_pm = { PM = pm_monument_war_memorial }
+		gm_state_leader_ig_is = { IG = armed_forces }
+	}
+}
+
+gm_state_opposed_by_armed_forces = {
+	gm_state_leader_opposed_by = { IG = armed_forces }
+}
+
+gm_state_approved_by_devout = {
+	OR = {
+		gm_state_has_pm = { PM = pm_monument_religious }
+		gm_state_leader_ig_is = { IG = devout }
+	}
+}
+
+gm_state_opposed_by_devout = {
+	gm_state_leader_opposed_by = { IG = devout }
+}
+
+gm_state_approved_by_industrialists = {
+	OR = {
+		gm_state_has_pm = { PM = pm_monument_industrial }
+		gm_state_leader_ig_is = { IG = industrialists }
+	}
+}
+
+gm_state_opposed_by_industrialists = {
+	OR = {
+		gm_state_has_pm = { PM = pm_monument_revolution }
+		gm_state_leader_opposed_by = { IG = industrialists }
+	}
+}
+
+gm_state_approved_by_intelligentsia = {
+	OR = {
+		gm_state_has_pm = { PM = pm_monument_republic }
+		gm_state_has_pm = { PM = pm_monument_artistic }
+		gm_state_has_pm = { PM = pm_monument_scientific }
+		gm_state_leader_ig_is = { IG = intelligentsia }
+	}
+}
+
+gm_state_opposed_by_intelligentsia = {
+	OR = {
+		gm_state_has_pm = { PM = pm_monument_crown }
+		gm_state_leader_opposed_by = { IG = intelligentsia }
+	}
+}
+
+gm_state_approved_by_landowners = {
+	OR = {
+		gm_state_has_pm = { PM = pm_monument_crown }
+		gm_state_leader_ig_is = { IG = landowners }
+	}
+}
+
+gm_state_opposed_by_landowners = {
+	OR = {
+		gm_state_has_pm = { PM = pm_monument_republic }
+		gm_state_leader_opposed_by = { IG = landowners }
+	}
+}
+
+gm_state_approved_by_petty_bourgeoisie = {
+	OR = {
+		gm_state_has_pm = { PM = pm_monument_civic }
+		gm_state_leader_ig_is = { IG = petty_bourgeoisie }
+	}
+}
+
+gm_state_opposed_by_petty_bourgeoisie = {
+	gm_state_leader_opposed_by = { IG = petty_bourgeoisie }
+}
+
+gm_state_approved_by_rural_folk = {
+	OR = {
+		gm_state_has_pm = { PM = pm_monument_naturalist }
+		gm_state_leader_ig_is = { IG = rural_folk }
+	}
+}
+
+gm_state_opposed_by_rural_folk = {
+	gm_state_leader_opposed_by = { IG = rural_folk }
+}
+
+gm_state_approved_by_trade_unions = {
+	OR = {
+		gm_state_has_pm = { PM = pm_monument_revolution }
+		gm_state_has_pm = { PM = pm_monument_athletic }
+		gm_state_leader_ig_is = { IG = trade_unions }
+	}
+}
+
+gm_state_opposed_by_trade_unions = {
+	gm_state_leader_opposed_by = { IG = trade_unions }
+}
+
+# ======================================================================
+#  Ledgers (spec §4.3, §5)
+# ======================================================================
+# Country scope. A ledger no longer worth a modifier.
+gm_ledger_idle = {
+	OR = {
+		NOT = { has_variable = $VAR$ }
+		AND = {
+			var:$VAR$ < 0.5
+			var:$VAR$ > -0.5
+		}
+	}
+}
+
+# Country scope. Nothing left fading: with no monument either, the journal
+# entry goes (plan decision 3).
+gm_ledgers_idle = {
+	gm_ledger_idle = { VAR = gm_teardown_ledger }
+	gm_ledger_idle = { VAR = gm_vanity_ledger }
+	gm_ledger_idle = { VAR = gm_ig_ledger_armed_forces }
+	gm_ledger_idle = { VAR = gm_ig_ledger_devout }
+	gm_ledger_idle = { VAR = gm_ig_ledger_industrialists }
+	gm_ledger_idle = { VAR = gm_ig_ledger_intelligentsia }
+	gm_ledger_idle = { VAR = gm_ig_ledger_landowners }
+	gm_ledger_idle = { VAR = gm_ig_ledger_petty_bourgeoisie }
+	gm_ledger_idle = { VAR = gm_ig_ledger_rural_folk }
+	gm_ledger_idle = { VAR = gm_ig_ledger_trade_unions }
+}

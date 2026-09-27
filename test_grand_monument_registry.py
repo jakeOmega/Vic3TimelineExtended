@@ -589,5 +589,136 @@ class LocalPulseTests(unittest.TestCase):
             self.assertIn(f"value = {n} }}", code)
 
 
+# ---- Task 5: the national refresh, IG alignment, ledgers, the JE ---------------------
+
+class NationalTests(unittest.TestCase):
+    def setUp(self):
+        self.t, self.e, self.v = read(TRIGGERS), read(EFFECTS), read(VALUES)
+
+    def test_ig_alignment_matches_the_table(self):
+        for ig in IGS:
+            approve = squash(block(self.t, f"gm_state_approved_by_{ig}"))
+            oppose = squash(block(self.t, f"gm_state_opposed_by_{ig}"))
+            for d in DEDICATIONS:
+                self.assertEqual(f"PM = pm_monument_{d.key} }}" in approve, d.approve == ig, f"{ig} approves {d.key}")
+                self.assertEqual(f"PM = pm_monument_{d.key} }}" in oppose, d.oppose == ig, f"{ig} opposes {d.key}")
+            self.assertIn(f"gm_state_leader_ig_is = {{ IG = {ig} }}", approve)
+            self.assertIn(f"gm_state_leader_opposed_by = {{ IG = {ig} }}", oppose)
+
+    def test_leader_pair_is_dynamic(self):
+        self.assertIn("ruler ?= { interest_group ?= { is_interest_group_type = ig_$IG$ } }",
+                      squash(block(self.t, "gm_state_leader_ig_is")))
+        self.assertIn("var:gm_opposition_ig = flag:$IG$", squash(block(self.t, "gm_state_leader_opposed_by")))
+        opp = squash(block(self.e, "gm_set_opposition_ig"))
+        self.assertIn("limit = { is_in_government = no } order_by = ig_clout position = 0", opp)
+        self.assertIn("gm_ig_to_flag_on_owner = { VAR = gm_opposition_ig }", opp)
+
+    def test_sums_follow_the_status_table(self):
+        self.assertIn("limit = { gm_state_counts_standing = yes } add = gm_state_grandeur",
+                      squash(block(self.v, "gm_sum_standing")))
+        self.assertIn("gm_state_status_fits = yes OR = { gm_state_kind_regime = yes gm_state_kind_ruler = yes }",
+                      squash(block(self.v, "gm_sum_regime")))
+        for key in NATIONAL:
+            self.assertIn(f"gm_state_status_fits = yes gm_state_has_pm = {{ PM = pm_monument_{key} }}",
+                          squash(block(self.v, f"gm_sum_{key}")))
+
+    def test_totals_use_the_right_curves(self):
+        body = squash(block(self.e, "gm_compute_totals"))
+        self.assertIn("gm_set_steps = { IN = gm_g_standing OUT = gm_s_standing NEXT = gm_n_standing F = 5 }", body)
+        self.assertIn("gm_set_steps = { IN = gm_g_standing OUT = gm_s_culture NEXT = gm_n_culture F = 10 }", body)
+        self.assertIn("gm_set_steps = { IN = gm_g_regime OUT = gm_s_regime NEXT = gm_n_regime F = 10 }", body)
+        self.assertIn("gm_set_steps = { IN = gm_teardown_ledger OUT = gm_s_teardown NEXT = gm_n_teardown F = 5 }", body)
+        for key in NATIONAL:
+            self.assertIn(f"set_variable = {{ name = gm_g_{key} value = gm_sum_{key} }}", body)
+            self.assertIn(f"gm_set_steps = {{ IN = gm_g_{key} OUT = gm_s_{key} NEXT = gm_n_{key} F = 5 }}", body)
+        for ig in IGS:
+            self.assertIn(f"gm_compute_ig = {{ IG = {ig} }}", body)
+        steps = squash(block(self.e, "gm_set_steps"))
+        self.assertIn("value = gm_curve_steps_f$F$", steps)
+        self.assertIn("value = gm_curve_next_f$F$", steps)
+
+    def test_ig_net(self):
+        body = squash(block(self.e, "gm_compute_ig"))
+        self.assertTrue(body.startswith("set_variable = { name = gm_ig_net_$IG$ value = var:gm_ig_ledger_$IG$ }"))
+        self.assertIn("gm_state_approved_by_$IG$ = yes } owner = { change_variable = { name = gm_ig_net_$IG$ add = prev.var:gm_grandeur } }", body)
+        self.assertIn("gm_state_opposed_by_$IG$ = yes } owner = { change_variable = { name = gm_ig_net_$IG$ subtract = prev.var:gm_grandeur } }", body)
+        self.assertIn("gm_state_is_contested = yes has_variable = gm_base_ig var:gm_base_ig = flag:$IG$", body)
+        self.assertIn("multiply = -1", body)
+
+    def test_national_modifiers_on_the_je_from_root(self):
+        body = squash(block(self.e, "gm_apply_national_modifiers"))
+        self.assertTrue(body.startswith("je:je_grand_monuments ?= { gm_remove_national_modifiers = yes"))
+        pairs = [("gm_national_prestige", "gm_s_standing"), ("gm_national_legitimacy", "gm_s_regime"),
+                 ("gm_national_teardown", "gm_s_teardown"), ("gm_national_vanity", "gm_vanity_ledger")]
+        pairs += [(f"gm_national_{k}", f"gm_s_{k}") for k in NATIONAL]
+        for name, var in pairs:
+            self.assertIn(f"gm_add_national = {{ NAME = {name} VAR = {var} }}", body)
+        for ig in IGS:
+            self.assertIn(f"gm_add_national_signed = {{ NAME = gm_ig_approval_{ig} VAR = gm_s_ig_{ig} }}", body)
+        removed = squash(block(self.e, "gm_remove_national_modifiers"))
+        for name, _ in top_level_blocks(read(MODIFIERS)):
+            if name.startswith(("gm_national_", "gm_ig_approval_")):
+                self.assertIn(f"remove_modifier = {name}", removed)
+        self.assertIn("multiplier = root.var:$VAR$", squash(block(self.e, "gm_add_national")))
+        self.assertIn("multiplier = root.var:$VAR$", squash(block(self.e, "gm_add_national_signed")))
+
+    def test_refresh_order(self):
+        body = squash(block(self.e, "gm_country_refresh"))
+        order = ["gm_init_ledgers = yes", "clear_variable_list = gm_states",
+                 "set_variable = { name = gm_grandeur value = gm_state_grandeur }",
+                 "gm_state_first_sight = yes", "add_to_variable_list = { name = gm_states target = prev }",
+                 "gm_set_opposition_ig = yes", "gm_compute_totals = yes", "gm_apply_national_modifiers = yes"]
+        positions = [body.find(s) for s in order]
+        self.assertNotIn(-1, positions, dict(zip(order, positions)))
+        self.assertEqual(positions, sorted(positions))
+
+    def test_ledgers(self):
+        init = squash(block(self.e, "gm_init_ledgers"))
+        decay = squash(block(self.e, "gm_decay_ledgers"))
+        idle = squash(block(self.t, "gm_ledgers_idle"))
+        for var in ["gm_teardown_ledger", "gm_vanity_ledger"] + [f"gm_ig_ledger_{ig}" for ig in IGS]:
+            self.assertIn(f"gm_init_ledger = {{ VAR = {var} }}", init)
+            self.assertIn(f"gm_ledger_idle = {{ VAR = {var} }}", idle)
+        self.assertIn("gm_decay = { VAR = gm_teardown_ledger RATE = 0.96 }", decay)
+        self.assertIn("gm_decay = { VAR = gm_vanity_ledger RATE = 0.92 }", decay)
+        for ig in IGS:
+            self.assertIn(f"gm_decay = {{ VAR = gm_ig_ledger_{ig} RATE = 0.97 }}", decay)
+        snap = squash(block(self.e, "gm_decay"))
+        self.assertIn("var:$VAR$ < 0.05 var:$VAR$ > -0.05 } set_variable = { name = $VAR$ value = 0 }", snap)
+        self.assertNotRegex(strip_comments(self.e), r"remove_variable = gm_(teardown|vanity|ig)_ledger")
+        monthly = squash(block(self.e, "gm_country_monthly"))
+        self.assertLess(monthly.find("gm_decay_ledgers = yes"), monthly.find("gm_country_refresh = yes"))
+
+    def test_je_lifecycle(self):
+        je = read(JE)
+        self.assertIn("any_scope_state = { has_building = building_grand_monument }", squash(block(je, "possible")))
+        invalid = squash(block(je, "invalid"))
+        self.assertIn("gm_system_enabled = no", invalid)
+        self.assertIn("gm_ledgers_idle = yes", invalid)
+        self.assertIsNone(block(je, "immediate"), "nothing a revolution's winner would lose")
+        for key in ("je_grand_monuments", "je_grand_monuments_reason", "je_grand_monuments_status",
+                    "je_grand_monuments_status_contested"):
+            self.assertIn(key, loc())
+
+    def test_refresh_event_and_hooks(self):
+        ev = squash(raw_block_at(read(EVENTS), r"(?m)^monument_events\.20\s*=\s*\{"))
+        self.assertIn("type = country_event hidden = yes", ev)
+        self.assertIn("immediate = { gm_country_refresh = yes }", ev)
+        oa = read(ON_ACTIONS)
+        self.assertIn("gm_country_on_action", squash(block(oa, "on_monthly_pulse_country")))
+        self.assertIn("gm_country_monthly = yes", squash(block(oa, "gm_country_on_action")))
+        for hook, oa_name in (("on_law_activated", "gm_law_activated_on_action"),
+                              ("on_new_ruler", "gm_new_ruler_on_action")):
+            self.assertIn(oa_name, squash(block(oa, hook)))
+            self.assertIn("trigger_event = { id = monument_events.20 }", squash(block(oa, oa_name)))
+
+    def test_cultural_pull(self):
+        text = read(CULTURAL)
+        body = squash(block(text, "cultural_pull_from_grand_monuments"))
+        self.assertIn("value = var:gm_s_culture", body)
+        self.assertIn("max = 5", body)
+        self.assertIsNone(block(text, "grand_monument_levels_in_state"))
+
+
 if __name__ == "__main__":
     unittest.main()

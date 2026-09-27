@@ -142,3 +142,129 @@ gm_status_code = {
 		value = 4
 	}
 }
+
+# ---- National sums (§2.3, §2.4), country scope ---------------------------------
+# Standing grandeur: every monument that is not contested (prestige, cultural pull).
+gm_sum_standing = {
+	value = 0
+	every_scope_state = {
+		limit = { gm_state_counts_standing = yes }
+		add = gm_state_grandeur
+	}
+}
+
+# Regime grandeur: regime and ruler monuments that fit (legitimacy).
+gm_sum_regime = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			gm_state_status_fits = yes
+			OR = {
+				gm_state_kind_regime = yes
+				gm_state_kind_ruler = yes
+			}
+		}
+		add = gm_state_grandeur
+	}
+}
+
+# One per dedication with a national effect of its own.
+gm_sum_leader = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			gm_state_status_fits = yes
+			gm_state_has_pm = { PM = pm_monument_leader }
+		}
+		add = gm_state_grandeur
+	}
+}
+
+gm_sum_religious = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			gm_state_status_fits = yes
+			gm_state_has_pm = { PM = pm_monument_religious }
+		}
+		add = gm_state_grandeur
+	}
+}
+
+gm_sum_war_memorial = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			gm_state_status_fits = yes
+			gm_state_has_pm = { PM = pm_monument_war_memorial }
+		}
+		add = gm_state_grandeur
+	}
+}
+
+gm_sum_artistic = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			gm_state_status_fits = yes
+			gm_state_has_pm = { PM = pm_monument_artistic }
+		}
+		add = gm_state_grandeur
+	}
+}
+
+gm_sum_scientific = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			gm_state_status_fits = yes
+			gm_state_has_pm = { PM = pm_monument_scientific }
+		}
+		add = gm_state_grandeur
+	}
+}
+
+gm_sum_industrial = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			gm_state_status_fits = yes
+			gm_state_has_pm = { PM = pm_monument_industrial }
+		}
+		add = gm_state_grandeur
+	}
+}
+
+gm_sum_monuments = {
+	value = 0
+	every_scope_state = {
+		limit = { has_building = building_grand_monument }
+		add = 1
+	}
+}
+
+gm_sum_contested = {
+	value = 0
+	every_scope_state = {
+		limit = { gm_state_is_contested = yes }
+		add = 1
+	}
+}
+
+# ---- Displays (country scope; guarded: a save older than the system has none
+# of these variables until the first refresh) -----------------------------------
+gm_display_count = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_count_monuments }
+		value = var:gm_count_monuments
+	}
+}
+
+gm_display_contested = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_count_contested }
+		value = var:gm_count_contested
+	}
+}

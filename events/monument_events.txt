@@ -614,3 +614,23 @@ monument_events.10 = {
 		ai_chance = { base = 1 }
 	}
 }
+
+# ============================================================================
+# Event 20: refresh (hidden plumbing)
+# ============================================================================
+# A country event, so ROOT is the country and the national modifiers'
+# multipliers resolve against it. Fired by the hooks whose ROOT is not the
+# country (law activated, new ruler, state owner change, a level finished) and
+# after a ceremony.
+monument_events.20 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		gm_system_enabled = yes
+	}
+
+	immediate = {
+		gm_country_refresh = yes
+	}
+}
