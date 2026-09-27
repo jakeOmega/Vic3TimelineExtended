@@ -1,6 +1,6 @@
 """Peg confidence's monthly recovery (ruling Q10, revised 2026-09-27).
 
-Two things are pinned here, both run on the real script through the small
+Three things are pinned here, all run on the real script through the small
 interpreter in test_banking_external_tools:
 
 * the recovery is banded — +3 under 40 (Doubted), +2 under 70 (Watched), +1
@@ -8,7 +8,9 @@ interpreter in test_banking_external_tools:
 * borrowed gold blocks a gold peg's recovery only while it is LEAVING, at a gap
   of 0 or under. A peg-defence bank parks a tenth or three over the world rate
   (ruling Q5), so while any hot money at all blocked it, every AI on gold and
-  every delegated player bank stayed frozen wherever the last crisis left it.
+  every delegated player bank stayed frozen wherever the last crisis left it;
+* an almost-empty vault's +2 is capped at the healthy heal, so it never
+  recovers faster than a healthy vault (+1 from 70).
 
 The simulator's port (scripts/analysis/banking_cycle_sim.py) is checked against
 the same cases.
@@ -100,6 +102,26 @@ class GoldPegHealCondition(unittest.TestCase):
                                  ('add', '=', 'te_mon_peg_confidence_heal')]])
 
 
+class LowVaultRecovery(unittest.TestCase):
+    """Under pressure the positive term is +2, capped at the healthy heal, so an
+    almost-empty vault never recovers faster than a healthy one (+1 from 70)."""
+
+    def move(self, confidence):
+        s = peg_script(scaled_debt=0.2)
+        s.vars.update(te_peg_confidence=confidence, te_gold_flow_gap=0, te_gold_hot_money=0)
+        return s.number('te_mon_peg_confidence_move')
+
+    def test_capped_at_the_healthy_heal(self):
+        for confidence, move in ((10, 2), (39, 2), (50, 2), (69, 2), (70, 1), (95, 1)):
+            self.assertEqual(self.move(confidence), move, confidence)
+
+    def test_never_faster_than_a_healthy_vault(self):
+        s = peg_script()
+        for confidence in range(0, 101, 5):
+            s.vars['te_peg_confidence'] = confidence
+            self.assertLessEqual(self.move(confidence), s.number('te_mon_peg_confidence_heal'))
+
+
 class SimulatorPort(unittest.TestCase):
     def step(self, *, gap, hot, confidence, bank_gold=1e6):
         from scripts.analysis.banking_cycle_sim import Config, State, monetary_update_gold
@@ -115,6 +137,11 @@ class SimulatorPort(unittest.TestCase):
 
     def test_sim_holds_while_borrowed_gold_leaves(self):
         self.assertEqual(self.step(gap=0, hot=100000, confidence=50), 50)
+
+    def test_sim_caps_the_low_vault_term(self):
+        # 1e5 against a limit of 0.2 x 1e7: a twentieth, under pressure.
+        self.assertEqual(self.step(gap=0, hot=0, confidence=50, bank_gold=1e5), 52)
+        self.assertEqual(self.step(gap=0, hot=0, confidence=80, bank_gold=1e5), 81)
 
 
 if __name__ == '__main__':

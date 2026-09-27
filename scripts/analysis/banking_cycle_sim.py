@@ -1320,7 +1320,8 @@ def monetary_update_gold(cfg: Config, state: State, world_rate: float) -> None:
         elif gap < 0:
             move = gap * per_pp
         else:
-            move = 2.0
+            # Capped at the healthy heal: +2, or +1 from 70.
+            move = min(K.sv("te_mon_peg_pressure_heal"), peg_confidence_heal(state.peg_confidence))
         if phase_of(state.finance_cycle_value) in (PANIC, DOWNTURN):
             move -= 2
         if state.scaled_debt >= 0.5:

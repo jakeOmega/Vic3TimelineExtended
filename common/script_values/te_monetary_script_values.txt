@@ -3122,6 +3122,14 @@ te_mon_peg_heal_trusted = {
 	value = 1
 }
 
+# The under-pressure recovery (te_mon_peg_confidence_move) at a gap >= 0: this,
+# or the healthy heal above if that is less. Without the cap an almost-empty
+# vault out-recovered a healthy one from 70 up (+2 against +1), which read on
+# the dashboard as "let the vault run dry to regain trust faster".
+te_mon_peg_pressure_heal = {
+	value = 2
+}
+
 # This month's recovery, for whichever band confidence is in. Read by step 10
 # (te_monetary_update_gold) and by a treaty pegger's step
 # (te_monetary_update_anchor_peg) — each tests its own conditions first.
@@ -3254,7 +3262,9 @@ te_mon_peg_devalue_revaluation = {
 #      that wants to leave and cannot is exactly what a run on the peg is
 #   -2 in a panic or downturn
 #   -2 if scaled_debt >= 0.5
-#   +2 when the gap is >= 0 and nothing is queueing to leave
+#   +2 when the gap is >= 0 and nothing is queueing to leave — capped at
+#      te_mon_peg_confidence_heal (so +1 from 70), because an almost-empty
+#      vault must never rebuild trust faster than a healthy one (2026-09-27)
 te_mon_peg_confidence_move = {
 	value = 0
 	if = {
@@ -3279,7 +3289,10 @@ te_mon_peg_confidence_move = {
 		}
 	}
 	else = {
-		add = 2
+		add = {
+			value = te_mon_peg_confidence_heal
+			max = te_mon_peg_pressure_heal
+		}
 	}
 	if = {
 		limit = {

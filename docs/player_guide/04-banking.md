@@ -512,7 +512,7 @@ tenth of its limit:
 | Each point your rate is below the World Rate | −3 |
 | Downturn or Panic | −2 |
 | Debt at half your credit limit or more | −2 |
-| Rate at or above the World Rate | +2 |
+| Rate at or above the World Rate | +2 (+1 at 70 or more) |
 
 With more gold in the vault, it recovers while your rate is at or above the
 world's and no Borrowed Gold is leaving. Borrowed Gold leaves only once your
