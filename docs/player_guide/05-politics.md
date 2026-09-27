@@ -21,7 +21,7 @@ grouped here by theme, and ten further laws join base-game law groups.
 |---|---|---|
 | Minority Rights | Violent Hostility, Ghettoization, Discrimination, Cultural Assimilation, Indifference, Protection, Affirmative Action | How the state treats cultural and religious minorities. |
 | LGBTQ+ Rights | Active Persecution, Legal Limbo, Basic Protections, Anti-Discrimination Laws, Full Equality and Protection | Legal status of LGBTQ+ people. |
-| Criminal Justice | Punishment-Focused Criminal Justice, Restorative Justice, Rehabilitation-Focused Criminal Justice | Prisons, policing and reintegration. |
+| Criminal Justice | Penal Labor Camps, Punishment-Focused Criminal Justice, Restorative Justice, Rehabilitation-Focused Criminal Justice | Prisons, policing and reintegration. Penal Labor Camps needs Mass Surveillance and one of Autocracy, Single-Party State or Outlawed Dissent: it trades legitimacy, the Intelligentsia's and Trade Unions' support and a stronger liberal opposition for authority, easier suppression and a small boost to mines, logging camps, plantations and rubber plantations. |
 | Family & Reproductive Policy | Traditional Family Structure, Pro-Natalist Subsidies, State-Sponsored Family Planning, Population Control Measures, Communal Child-Rearing | Birth rates, dependents and the working-age share. |
 | Language Policy | Local Vernacular, Civic Monolingualism, Multilingual Federalism, Linguistic Purity, State-Led Language Reform, Ubiquitous Translation | Assimilation, separatism and acceptance by language. |
 | Human Augmentation | No Augmentation, Human Purity, Medical Augmentation Only, Unrestricted Augmentation, Regulated Augmentation Market, Mandatory Augmentation | Cybernetic and genetic implants, from Brain-Computer Interfaces on. |

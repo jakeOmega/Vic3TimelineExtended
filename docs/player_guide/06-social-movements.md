@@ -20,7 +20,7 @@ described in [The mod's new laws](05-politics.md#the-mods-new-laws).
 | Civil Rights Movement | Civil Rights Movement (era 7), while an incorporated state holds pops below Provisional Acceptance | Movement Support reaches 100, or you enact Affirmative Action, or Universal Citizenship together with Protection | Movement Support falls to 0, or the Civil Rights political movement is gone | None |
 | Human Augmentation Debate | Human Augmentation or Brain-Computer Interfaces (era 11) | Regulated Augmentation Market, Unrestricted Augmentation or Mandatory Augmentation | Human Purity | 20 years |
 | Digital Rights & Surveillance | Automated Surveillance or Cybersecurity (era 9) | Strong Privacy Rights | Intrusive Surveillance System and Ministry of Intelligence and Security Established, both at once | 15 years |
-| Mental Health Crisis | Mental Health Awareness (era 10) | Rehabilitation-Focused Criminal Justice and the Social Security institution at level 4 or higher | Punishment-Focused Criminal Justice once you have researched Decline of Organized Religion | 20 years |
+| Mental Health Crisis | Mental Health Awareness (era 10) | Rehabilitation-Focused Criminal Justice and the Social Security institution at level 4 or higher | Punishment-Focused Criminal Justice or Penal Labor Camps once you have researched Decline of Organized Religion | 20 years |
 | Post-Scarcity Transition | Universal Basic Income (era 10) | Post-Scarcity Economy law | Never | 30 years |
 
 ## The Civil Rights Movement journal entry
@@ -170,7 +170,7 @@ Rehabilitation-Focused Criminal Justice unlocks with the technology that opens
 the crisis, so raising Social Security to level 4 is usually the slow half.
 Researching Decline of Organized Religion while Punishment-Focused Criminal
 Justice, the law every country starts with, is in force fails the crisis on the
-spot. The events deal with burnout, youth mental health, addiction, veterans'
+spot, and Penal Labor Camps fails it the same way. The events deal with burnout, youth mental health, addiction, veterans'
 PTSD and a care-home scandal.
 
 ### The post-scarcity debate
