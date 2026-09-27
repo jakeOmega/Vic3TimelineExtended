@@ -75,9 +75,13 @@ CATEGORIES = {
                "silhouette, one strong accent color, " + PAINTED)),
     # The figure stands on the slab lifted from vanilla (icon_render.plinth_template).
     # Asking FLUX for the pedestal drew one detached from its figure.
+    # The lens toolbar ignores `texture`: the engine loads
+    # lens_toolbar_icons/<key>.dds for every action without show_in_lens = no,
+    # and vanilla's is a byte-identical copy of the action icon. `write` keeps
+    # that copy (see generate_icons.sync_lens_copies).
     "diplomatic_action": dict(
         folder="diplomatic_action_icons", size=100, mode="plinth", fill=0.8,
-        entity_dir="common/diplomatic_actions", field="texture",
+        entity_dir="common/diplomatic_actions", field="texture", lens_folder="lens_toolbar_icons",
         style=("{subject}, a compact miniature sculpture, simple chunky silhouette, " + PAINTED)),
     "building": dict(
         folder="building_icons", size=256, mode="framed",

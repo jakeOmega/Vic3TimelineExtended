@@ -15,7 +15,9 @@ Reads the registry (icon_prompts.py) and takes each category through:
           (icon_dds.py), to gfx/interface/icons/<folder>/<key>.dds. A DDS is
           rewritten when its pick (seed or subject) changed since it was
           written (recorded in <work>/written.json); otherwise it is left
-          alone, so to force one, delete it.
+          alone, so to force one, delete it. For diplomatic actions it also
+          keeps lens_toolbar_icons/<key>.dds a copy of the icon: the lens
+          toolbar loads that path by key and ignores `texture`.
   wire    point each accepted entity's icon line at its DDS. Only entities whose
           DDS exists are touched, and an entity already pointing there is left
           byte-for-byte alone.
@@ -76,6 +78,51 @@ _DEF_RE = re.compile(r"^([A-Za-z0-9_\-]+)\s*=\s*\{")
 def _code(line: str) -> str:
     """The line without its comment or quoted strings, for brace counting."""
     return re.sub(r'"[^"]*"', '""', line.split("#", 1)[0])
+
+
+def hidden_from_lens(cat: str, root: Path = MOD_ROOT) -> set[str]:
+    """Keys whose block sets `show_in_lens = no` at depth 1."""
+    spec = CATEGORIES[cat]
+    hidden: set[str] = set()
+    for path in sorted((root / spec["entity_dir"]).rglob("*.txt")):
+        key, depth = None, 0
+        for line in path.read_text(encoding="utf-8-sig", errors="replace").split("\n"):
+            code = _code(line)
+            if depth == 0:
+                m = _DEF_RE.match(line)
+                key = m.group(1) if m else None
+            elif depth == 1 and key and re.match(r"\s*show_in_lens\s*=\s*no\b", code):
+                hidden.add(key)
+            depth += code.count("{") - code.count("}")
+    return hidden
+
+
+def sync_lens_copies(cat: str, only: set[str], root: Path = MOD_ROOT, dry_run: bool = False) -> list[str]:
+    """Make lens_toolbar_icons/<key>.dds a copy of each generated action icon.
+
+    Only for categories with a `lens_folder`, only for entities shown in the
+    lens, and only where the icon's DDS exists. Returns the keys whose copy was
+    (or would be) written.
+    """
+    spec = CATEGORIES[cat]
+    if "lens_folder" not in spec:
+        return []
+    lens_dir = root / "gfx" / "interface" / "icons" / spec["lens_folder"]
+    hidden = hidden_from_lens(cat, root)
+    changed = []
+    for key, e in generated(cat, only).items():
+        src = root / icon_path(cat, key)
+        if not accepted(e) or key in hidden or not src.exists():
+            continue
+        dest = lens_dir / f"{key}.dds"
+        data = src.read_bytes()
+        if dest.exists() and dest.read_bytes() == data:
+            continue
+        if not dry_run:
+            lens_dir.mkdir(parents=True, exist_ok=True)
+            dest.write_bytes(data)
+        changed.append(key)
+    return changed
 
 
 def current_icons(cat: str, root: Path = MOD_ROOT) -> dict[str, str]:
@@ -245,6 +292,9 @@ def stage_write(cat: str, only: set[str], work: Path) -> None:
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     manifest_path.write_text(json.dumps(manifest, indent=1, sort_keys=True))
     print(f"write: {wrote} DDS files written in {out_dir}")
+    lens = sync_lens_copies(cat, only)
+    if lens:
+        print(f"write: {len(lens)} lens-toolbar copies updated in {CATEGORIES[cat]['lens_folder']}")
 
 
 def stage_wire(cat: str, only: set[str], dry_run: bool) -> None:

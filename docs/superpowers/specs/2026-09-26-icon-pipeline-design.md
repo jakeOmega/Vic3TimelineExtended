@@ -144,6 +144,7 @@ About 250 icons were generated in one session: era 6 techs, all treaty articles 
   - context that locates the object (a convoy on water, not on land);
   - complete sets (a full round table of chairs).
 - **Small flaws on an otherwise good candidate can be retouched instead of rerolled.** A painter's signature on the background, or lettering on a flat surface, is removed in the raw render. Fill each marked pixel by interpolating between the clean pixels on either side of it in the same row, then delete the DDS and run `write` again (a retouch leaves the pick unchanged, so it must be forced); `compose` redoes any render newer than its composed file. The edited raw is in gitignored `generated_images/`, so the committed DDS is the only record. This was done for `laser_technology` ("SK" on the casing) and `satellite_communications` (a signature).
+- **Check how the engine finds a category's icon before wiring it.** Diplomatic actions have two icons: `texture =` for the country menu, and `lens_toolbar_icons/<key>.dds`, loaded by key, for the lens bar. #535 wired only the first, and the lens bar kept its placeholders until the follow-up made `write` keep the lens copy. `scripting_best_practices.md` already documented this. Search it for the category before building the next one: decrees, institutions and principles may have their own second lookups.
 - **Three more tools came out of the session:**
   - the `"use"` state, for a better vanilla icon;
   - insertion of a missing icon line, since the covert operations had none;
