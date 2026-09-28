@@ -4,7 +4,7 @@
 
 principle_construction_4 = {
 	icon  = "gfx/interface/icons/principles_icons/construction.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_modern_tools_pb_principles_bool = yes
@@ -24,7 +24,7 @@ principle_construction_4 = {
 
 principle_construction_5 = {
 	icon  = "gfx/interface/icons/principles_icons/construction.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_robotics_pb_principles_bool = yes
@@ -47,7 +47,7 @@ principle_construction_5 = {
 
 principle_internal_trade_4 = {
 	icon = "gfx/interface/icons/principles_icons/internal_trade.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_keynesian_pb_principles_bool = yes
@@ -74,7 +74,7 @@ principle_internal_trade_4 = {
 
 principle_internal_trade_5 = {
 	icon = "gfx/interface/icons/principles_icons/internal_trade.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_containerization_pb_principles_bool = yes
@@ -103,7 +103,7 @@ principle_internal_trade_5 = {
 
 principle_market_unification_4 = {
 	icon = "gfx/interface/icons/principles_icons/market_unification.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_igo_pb_principles_bool = yes
@@ -137,7 +137,7 @@ principle_market_unification_4 = {
 
 principle_market_unification_5 = {
 	icon = "gfx/interface/icons/principles_icons/market_unification.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_satcom_pb_principles_bool = yes
@@ -175,7 +175,7 @@ principle_market_unification_5 = {
 
 principle_vassalization_4 = {
 	icon = "gfx/interface/icons/principles_icons/vassals_subjects.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_rocketry_pb_principles_bool = yes
@@ -199,7 +199,7 @@ principle_vassalization_4 = {
 
 principle_vassalization_5 = {
 	icon = "gfx/interface/icons/principles_icons/vassals_subjects.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_tactical_nukes_pb_principles_bool = yes
@@ -301,7 +301,7 @@ REPLACE:principle_advanced_research_3 = {
 
 principle_advanced_research_4 = {
 	icon = "gfx/interface/icons/principles_icons/advanced_research.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_nuclear_weapons_pb_principles_bool = yes
@@ -349,7 +349,7 @@ principle_advanced_research_4 = {
 
 principle_advanced_research_5 = {
 	icon = "gfx/interface/icons/principles_icons/advanced_research.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_knowledge_economy_pb_principles_bool = yes
@@ -404,7 +404,7 @@ principle_advanced_research_5 = {
 
 principle_defensive_cooperation_4 = {
 	icon = "gfx/interface/icons/principles_icons/defensive_coorperation.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_combined_arms_pb_principles_bool = yes
@@ -435,7 +435,7 @@ principle_defensive_cooperation_4 = {
 
 principle_defensive_cooperation_5 = {
 	icon = "gfx/interface/icons/principles_icons/defensive_coorperation.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_anti_war_pb_principles_bool = yes
@@ -472,7 +472,7 @@ principle_defensive_cooperation_5 = {
 
 principle_aggressive_coordination_4 = {
 	icon = "gfx/interface/icons/principles_icons/aggressive_coordination.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_combined_arms_pb_principles_bool = yes
@@ -507,7 +507,7 @@ principle_aggressive_coordination_4 = {
 
 principle_aggressive_coordination_5 = {
 	icon = "gfx/interface/icons/principles_icons/aggressive_coordination.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_ncw_pb_principles_bool = yes
@@ -552,7 +552,7 @@ principle_aggressive_coordination_5 = {
 
 principle_external_trade_4 = {
 	icon = "gfx/interface/icons/principles_icons/external_trade.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_television_pb_principles_bool = yes
@@ -580,7 +580,7 @@ principle_external_trade_4 = {
 
 principle_external_trade_5 = {
 	icon = "gfx/interface/icons/principles_icons/external_trade.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_cellular_pb_principles_bool = yes
@@ -611,7 +611,7 @@ principle_external_trade_5 = {
 
 principle_food_standardization_4 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_modern_vaccines_pb_principles_bool = yes
@@ -639,7 +639,7 @@ principle_food_standardization_4 = {
 
 principle_food_standardization_5 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_gene_splicing_pb_principles_bool = yes
@@ -670,7 +670,7 @@ principle_food_standardization_5 = {
 
 principle_police_coordination_4 = {
 	icon = "gfx/interface/icons/principles_icons/dedicated_police.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_mass_surveillance_pb_principles_bool = yes
@@ -706,7 +706,7 @@ principle_police_coordination_4 = {
 
 principle_police_coordination_5 = {
 	icon = "gfx/interface/icons/principles_icons/dedicated_police.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_auto_surveillance_pb_principles_bool = yes
@@ -748,7 +748,7 @@ principle_police_coordination_5 = {
 
 principle_transport_4 = {
 	icon = "gfx/interface/icons/principles_icons/transport.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_modern_skyscrapers_pb_principles_bool = yes
@@ -770,7 +770,7 @@ principle_transport_4 = {
 
 principle_transport_5 = {
 	icon = "gfx/interface/icons/principles_icons/transport.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_supply_chain_pb_principles_bool = yes
@@ -798,7 +798,7 @@ principle_transport_5 = {
 
 principle_military_industry_4 = {
 	icon = "gfx/interface/icons/principles_icons/military_industry.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_motorized_artillery_pb_principles_bool = yes
@@ -821,7 +821,7 @@ principle_military_industry_4 = {
 
 principle_military_industry_5 = {
 	icon = "gfx/interface/icons/principles_icons/military_industry.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_icbm_pb_principles_bool = yes
@@ -848,7 +848,7 @@ principle_military_industry_5 = {
 
 principle_colonial_offices_4 = {
 	icon = "gfx/interface/icons/principles_icons/colonial_offices.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_decolonization_pb_principles_bool = yes
@@ -885,7 +885,7 @@ principle_colonial_offices_4 = {
 
 principle_colonial_offices_5 = {
 	icon = "gfx/interface/icons/principles_icons/colonial_offices.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_globalization_pb_principles_bool = yes
@@ -997,7 +997,7 @@ REPLACE:principle_foreign_investment_3 = {
 
 principle_foreign_investment_4 = {
 	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	# Members can always invest in power bloc coutries of lower rank
 	# Does not generate a tooltip, so a dummy modifier is required to show this effect
@@ -1033,7 +1033,7 @@ principle_foreign_investment_4 = {
 
 principle_foreign_investment_5 = {
 	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	# Members can always invest in power bloc coutries of lower rank
 	# Does not generate a tooltip, so a dummy modifier is required to show this effect
@@ -1074,7 +1074,7 @@ principle_foreign_investment_5 = {
 
 principle_creative_legislature_4 = {
 	icon = "gfx/interface/icons/principles_icons/creative_legislature.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_mass_media_pb_principles_bool = yes
@@ -1098,7 +1098,7 @@ principle_creative_legislature_4 = {
 
 principle_creative_legislature_5 = {
 	icon = "gfx/interface/icons/principles_icons/creative_legislature.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_www_pb_principles_bool = yes
@@ -1127,7 +1127,7 @@ principle_creative_legislature_5 = {
 
 principle_freedom_of_movement_4 = {
 	icon = "gfx/interface/icons/principles_icons/freedom_of_movement.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_mass_media_pb_principles_bool = yes
@@ -1152,7 +1152,7 @@ principle_freedom_of_movement_4 = {
 
 principle_freedom_of_movement_5 = {
 	icon = "gfx/interface/icons/principles_icons/freedom_of_movement.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_www_pb_principles_bool = yes
@@ -1180,7 +1180,7 @@ principle_freedom_of_movement_5 = {
 
 principle_divine_economics_4 = {
 	icon = "gfx/interface/icons/principles_icons/divine_economy.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_mass_media_pb_principles_bool = yes
@@ -1211,7 +1211,7 @@ principle_divine_economics_4 = {
 
 principle_divine_economics_5 = {
 	icon = "gfx/interface/icons/principles_icons/divine_economy.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_social_media_pb_principles_bool = yes
@@ -1248,7 +1248,7 @@ principle_divine_economics_5 = {
 
 principle_exploit_members_4 = {
 	icon = "gfx/interface/icons/principles_icons/exploitation_of_members.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_mass_media_pb_principles_bool = yes
@@ -1288,7 +1288,7 @@ principle_exploit_members_4 = {
 
 principle_exploit_members_5 = {
 	icon = "gfx/interface/icons/principles_icons/exploitation_of_members.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_social_media_pb_principles_bool = yes
@@ -1437,7 +1437,7 @@ principle_sacred_civics_3_mod = {
 
 principle_sacred_civics_4_mod = {
 	icon = "gfx/interface/icons/principles_icons/sacred_civics.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_mass_media_pb_principles_bool = yes
@@ -1474,7 +1474,7 @@ principle_sacred_civics_4_mod = {
 
 principle_sacred_civics_5_mod = {
 	icon = "gfx/interface/icons/principles_icons/sacred_civics.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_social_media_pb_principles_bool = yes
@@ -1514,7 +1514,7 @@ principle_sacred_civics_5_mod = {
 
 principle_ideological_truth_4 = {
 	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_mass_media_pb_principles_bool = yes
@@ -1543,7 +1543,7 @@ principle_ideological_truth_4 = {
 
 principle_ideological_truth_5 = {
 	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_social_media_pb_principles_bool = yes
@@ -1683,7 +1683,7 @@ principle_cultural_unity_3 = {
 
 principle_cultural_unity_4 = {
 	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_marketing_research_pb_principles_bool = yes
@@ -1728,7 +1728,7 @@ principle_cultural_unity_4 = {
 
 principle_cultural_unity_5 = {
 	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_globalization_pb_principles_bool = yes
@@ -1871,7 +1871,7 @@ principle_cultural_plurality_3 = {
 
 principle_cultural_plurality_4 = {
 	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_civil_rights_pb_principles_bool = yes
@@ -1905,7 +1905,7 @@ principle_cultural_plurality_4 = {
 
 principle_cultural_plurality_5 = {
 	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_globalization_pb_principles_bool = yes
@@ -2044,7 +2044,7 @@ principle_education_3 = {
 
 principle_education_4 = {
 	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_mass_media_pb_principles_bool = yes
@@ -2091,7 +2091,7 @@ principle_education_4 = {
 
 principle_education_5 = {
 	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_www_pb_principles_bool = yes
@@ -2217,7 +2217,7 @@ principle_diplomacy_3 = {
 
 principle_diplomacy_4 = {
 	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_mass_media_pb_principles_bool = yes
@@ -2256,7 +2256,7 @@ principle_diplomacy_4 = {
 
 principle_diplomacy_5 = {
 	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_www_pb_principles_bool = yes
@@ -2385,7 +2385,7 @@ principle_environmental_sustainability_3 = {
 
 principle_environmental_sustainability_4 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_clean_energy_pb_principles_bool = yes
@@ -2415,7 +2415,7 @@ principle_environmental_sustainability_4 = {
 
 principle_environmental_sustainability_5 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_clean_energy_pb_principles_bool = yes
@@ -2579,7 +2579,7 @@ principle_urban_planning_3 = {
 
 principle_urban_planning_4 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_workflow_opt_pb_principles_bool = yes
@@ -2621,7 +2621,7 @@ principle_urban_planning_4 = {
 
 principle_urban_planning_5 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_digital_ed_pb_principles_bool = yes
@@ -2795,7 +2795,7 @@ principle_rural_3 = {
 
 principle_rural_4 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_advanced_agri_stats_pb_principles_bool = yes
@@ -2835,7 +2835,7 @@ principle_rural_4 = {
 
 principle_rural_5 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_green_revolution_pb_principles_bool = yes
@@ -2978,7 +2978,7 @@ principle_global_security_3 = {
 
 principle_global_security_4 = {
 	icon = "gfx/interface/icons/principles_icons/dedicated_police.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_tactical_nukes_pb_principles_bool = yes
@@ -3020,7 +3020,7 @@ principle_global_security_4 = {
 
 principle_global_security_5 = {
 	icon = "gfx/interface/icons/principles_icons/dedicated_police.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_rapid_deploy_pb_principles_bool = yes
@@ -3150,7 +3150,7 @@ principle_healthcare_3 = {
 
 principle_healthcare_4 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_modern_vaccines_pb_principles_bool = yes
@@ -3180,7 +3180,7 @@ principle_healthcare_4 = {
 
 principle_healthcare_5 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_modern_pharma_pb_principles_bool = yes
@@ -3300,7 +3300,7 @@ principle_welfare_3 = {
 
 principle_welfare_4 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_public_works_pb_principles_bool = yes
@@ -3333,7 +3333,7 @@ principle_welfare_4 = {
 
 principle_welfare_5 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_social_media_pb_principles_bool = yes
@@ -3431,7 +3431,7 @@ principle_artistic_expression_3 = {
 
 principle_artistic_expression_4 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_mass_media_pb_principles_bool = yes
@@ -3460,7 +3460,7 @@ principle_artistic_expression_4 = {
 
 principle_artistic_expression_5 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_social_media_pb_principles_bool = yes
@@ -3574,7 +3574,7 @@ principle_military_training_3 = {
 
 principle_military_training_4 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_combined_arms_pb_principles_bool = yes
@@ -3599,7 +3599,7 @@ principle_military_training_4 = {
 
 principle_military_training_5 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_rapid_deploy_pb_principles_bool = yes
@@ -3704,7 +3704,7 @@ principle_engineering_and_logistics_3 = {
 
 principle_engineering_and_logistics_4 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_combined_arms_pb_principles_bool = yes
@@ -3729,7 +3729,7 @@ principle_engineering_and_logistics_4 = {
 
 principle_engineering_and_logistics_5 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_rapid_deploy_pb_principles_bool = yes
@@ -3766,7 +3766,7 @@ principle_engineering_and_logistics_5 = {
 
 principle_navy_4 = {
 	icon = "gfx/interface/icons/principles_icons/fleet_unification.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	visible = {
 		has_dlc_feature = ep2_content
@@ -3811,7 +3811,7 @@ principle_navy_4 = {
 
 principle_navy_5 = {
 	icon = "gfx/interface/icons/principles_icons/fleet_unification.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	visible = {
 		has_dlc_feature = ep2_content
@@ -3860,7 +3860,7 @@ principle_navy_5 = {
 
 principle_companies_4 = {
 	icon = "gfx/interface/icons/principles_icons/companies.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_modern_urban_planning_pb_principles_bool = yes
@@ -3885,7 +3885,7 @@ principle_companies_4 = {
 
 principle_companies_5 = {
 	icon = "gfx/interface/icons/principles_icons/companies.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_globalization_pb_principles_bool = yes
@@ -3914,7 +3914,7 @@ principle_companies_5 = {
 
 principle_shared_canon_4 = {
 	icon = "gfx/interface/icons/principles_icons/shared_canon.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_mass_media_pb_principles_bool = yes
@@ -3945,7 +3945,7 @@ principle_shared_canon_4 = {
 
 principle_shared_canon_5 = {
 	icon = "gfx/interface/icons/principles_icons/shared_canon.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_social_media_pb_principles_bool = yes
@@ -4071,7 +4071,7 @@ principle_multilateral_institutions_3 = {
 
 principle_multilateral_institutions_4 = {
 	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
 		modifier:country_igo_pb_principles_bool = yes
@@ -4107,7 +4107,7 @@ principle_multilateral_institutions_4 = {
 
 principle_multilateral_institutions_5 = {
 	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
 		modifier:country_igo_pb_principles_bool = yes
@@ -4302,7 +4302,7 @@ principle_monetary_union_3 = {
 
 principle_monetary_union_4 = {
 	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	# The monetary union is part of the monetary layer, so the simplified setting
 	# of banking_system_rule hides all five tiers: with no dial anywhere there is
@@ -4345,7 +4345,7 @@ principle_monetary_union_4 = {
 
 principle_monetary_union_5 = {
 	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	# The monetary union is part of the monetary layer, so the simplified setting
 	# of banking_system_rule hides all five tiers: with no dial anywhere there is
