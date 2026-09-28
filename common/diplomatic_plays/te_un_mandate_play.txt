@@ -51,7 +51,7 @@ dp_te_un_mandate_restore_state = {
 		}
 	}
 
-	ai_acceptance_max = 90 # REVIEWED 2026-09-18: diplomatic-play field, not an effect/trigger — vanilla dp_return_state uses it (game/common/diplomatic_plays/00_diplomatic_plays.txt:146). effect_trigger_validity_audit has no schema for this entity type.
+	ai_acceptance_max = 90
 
 	on_weekly_pulse = {}
 
