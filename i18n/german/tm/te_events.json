@@ -7599,6 +7599,1946 @@
   "en": "Academics Walk Out",
   "de": "Akademiker verlassen den Saal"
  },
+ "ministry_law_events.34.a": {
+  "en": "Pause to plug the leaks",
+  "de": "Innehalten, um die Lecks zu stopfen"
+ },
+ "ministry_law_events.34.b": {
+  "en": "Press through and hunt the whistleblowers later",
+  "de": "Durchsetzen und die Whistleblower später zur Rechenschaft ziehen"
+ },
+ "ministry_law_events.34.d": {
+  "en": "Documents leaked from preliminary work on [SCOPE.sLaw('current_law_scope').GetName] have made their way to opposition journals. The [SCOPE.gsInterestGroup('opposing_ig').GetName] make excellent use of them.",
+  "de": "Aus den Vorarbeiten zu [SCOPE.sLaw('current_law_scope').GetName] durchgesickerte Dokumente haben ihren Weg in oppositionelle Zeitschriften gefunden. Die [SCOPE.gsInterestGroup('opposing_ig').GetName] machen sich ausgiebig darüber her."
+ },
+ "ministry_law_events.34.f": {
+  "en": "\\\"I signed an oath of secrecy. I did not sign an oath of complicity. The two are not the same, and the public deserves to know the difference.\\\"\\n\\n\\\"And the cost of that distinction?\\\"\\n\\n\\\"My career. Possibly my freedom. Likely my pension. The public will receive the documents. I will receive the consequences. The two are also not the same — but they are linked.\\\"",
+  "de": "„Ich habe einen Eid der Verschwiegenheit geschworen. Ich habe keinen Eid der Mittäterschaft geschworen. Das ist nicht dasselbe, und die Öffentlichkeit hat ein Recht, den Unterschied zu kennen.“\\n\\n„Und was kostet diese Unterscheidung?“\\n\\n„Meine Karriere. Womöglich meine Freiheit. Wahrscheinlich meine Pension. Die Öffentlichkeit erhält die Dokumente. Ich erhalte die Konsequenzen. Auch das ist nicht dasselbe – aber es hängt zusammen.“"
+ },
+ "ministry_law_events.34.t": {
+  "en": "Whistleblowers Emerge",
+  "de": "Whistleblower treten hervor"
+ },
+ "ministry_law_events.35.a": {
+  "en": "Withdraw to refine the regulatory scope",
+  "de": "Zurückziehen, um den Regelungsumfang zu überarbeiten"
+ },
+ "ministry_law_events.35.b": {
+  "en": "Press through over the lobby's objections",
+  "de": "Trotz der Einwände der Lobby durchsetzen"
+ },
+ "ministry_law_events.35.d": {
+  "en": "Major manufacturers have mounted an unprecedented lobbying effort against [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] argue that the new oversight will paralyze ordinary commerce.",
+  "de": "Namhafte Hersteller haben eine beispiellose Lobbykampagne gegen [SCOPE.sLaw('current_law_scope').GetName] gestartet. Die [SCOPE.gsInterestGroup('opposing_ig').GetName] argumentieren, die neue Aufsicht werde den gewöhnlichen Handel lahmlegen."
+ },
+ "ministry_law_events.35.f": {
+  "en": "\\\"You want a ministry to protect consumers from defective products. We agree, in principle. We disagree, in particular, about which products are defective. Welcome to the next decade of litigation.\\\"\\n\\n\\\"And in the meantime?\\\"\\n\\n\\\"In the meantime, the products are still sold. The lawsuits move slowly. The consumers continue to consume. The lawyers grow wealthier. The cycle has a steady-state economy of its own.\\\"",
+  "de": "„Sie wollen ein Ministerium, das die Verbraucher vor fehlerhaften Produkten schützt. Grundsätzlich stimmen wir zu. Im Einzelnen sind wir uneins, welche Produkte fehlerhaft sind. Willkommen im nächsten Jahrzehnt der Rechtsstreitigkeiten.“\\n\\n„Und in der Zwischenzeit?“\\n\\n„In der Zwischenzeit werden die Produkte weiterhin verkauft. Die Klagen ziehen sich hin. Die Verbraucher konsumieren weiter. Die Anwälte werden reicher. Der Kreislauf hat seine eigene stabile Wirtschaft.“"
+ },
+ "ministry_law_events.35.t": {
+  "en": "Corporate Counter-Lobby",
+  "de": "Gegenlobby der Konzerne"
+ },
+ "ministry_law_events.36.a": {
+  "en": "Pause to consult affected neighborhoods",
+  "de": "Innehalten, um betroffene Stadtviertel anzuhören"
+ },
+ "ministry_law_events.36.b": {
+  "en": "Press through despite local resistance",
+  "de": "Trotz Widerstands vor Ort durchsetzen"
+ },
+ "ministry_law_events.36.d": {
+  "en": "Residents of major cities have organized against the urban-planning provisions of [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] frame the bill as bulldozers-by-bureaucracy.",
+  "de": "Die Bewohner großer Städte haben sich gegen die städtebaulichen Bestimmungen von [SCOPE.sLaw('current_law_scope').GetName] organisiert. Die [SCOPE.gsInterestGroup('opposing_ig').GetName] bezeichnen den Gesetzentwurf als Abrissbirne der Bürokratie."
+ },
+ "ministry_law_events.36.f": {
+  "en": "\\\"I lived on this block when the city wall stood across the road. I will not be moved by a ministry that has not yet drawn breath.\\\"\\n\\n\\\"The ministry promises generous compensation.\\\"\\n\\n\\\"Compensation is for what you can replace. I cannot replace the schoolhouse my children attended, or the corner where I met my wife. The ministry's compensation is for a house. I have a home. They are not the same thing.\\\"",
+  "de": "„Ich habe schon auf diesem Block gewohnt, als die Stadtmauer noch quer über der Straße stand. Ich lasse mich nicht von einem Ministerium vertreiben, das noch nicht einmal Luft geholt hat.“\\n\\n„Das Ministerium verspricht großzügige Entschädigung.“\\n\\n„Entschädigung gibt es für das, was man ersetzen kann. Ich kann das Schulhaus nicht ersetzen, das meine Kinder besucht haben, oder die Ecke, an der ich meine Frau kennengelernt habe. Die Entschädigung des Ministeriums gilt einem Haus. Ich habe ein Zuhause. Das ist nicht dasselbe.“"
+ },
+ "ministry_law_events.36.t": {
+  "en": "Neighborhood Resistance",
+  "de": "Widerstand im Viertel"
+ },
+ "ministry_law_events.37.a": {
+  "en": "Withdraw - sacred ground is not for legislation",
+  "de": "Zurückziehen – heiliger Boden ist keine Sache der Gesetzgebung"
+ },
+ "ministry_law_events.37.b": {
+  "en": "Press through despite religious protest",
+  "de": "Trotz religiöser Proteste durchsetzen"
+ },
+ "ministry_law_events.37.d": {
+  "en": "Religious authorities have organized public demonstrations against [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] decry it as state intrusion into matters of conscience.",
+  "de": "Religiöse Autoritäten haben öffentliche Demonstrationen gegen [SCOPE.sLaw('current_law_scope').GetName] organisiert. Die [SCOPE.gsInterestGroup('opposing_ig').GetName] verurteilen es als staatlichen Eingriff in Gewissensfragen."
+ },
+ "ministry_law_events.37.f": {
+  "en": "\\\"Render unto Caesar what is Caesar's, but the ministry you propose to create asks Caesar to render unto itself what belongs to God. It is not a bargain we recognize.\\\"\\n\\n\\\"The ministry does not propose to legislate God.\\\"\\n\\n\\\"It proposes to legislate the practices through which we approach Him. The distinction is theological. The effect is administrative. The two collapse the moment the inspector arrives at the door of the church.\\\"",
+  "de": "„Gebt dem Kaiser, was des Kaisers ist – doch das Ministerium, das Sie schaffen wollen, verlangt vom Kaiser, sich selbst zu geben, was Gottes ist. Diesen Handel erkennen wir nicht an.“\\n\\n„Das Ministerium beabsichtigt nicht, Gott zu regeln.“\\n\\n„Es beabsichtigt, die Praktiken zu regeln, mit denen wir uns Ihm nähern. Der Unterschied ist theologisch. Die Wirkung ist administrativ. Beides fällt zusammen, sobald der Inspektor vor der Kirchentür steht.“"
+ },
+ "ministry_law_events.37.t": {
+  "en": "The Faithful Protest",
+  "de": "Der Protest der Gläubigen"
+ },
+ "ministry_law_events.38.a": {
+  "en": "Defer - address domestic needs first",
+  "de": "Aufschieben – zuerst die Bedürfnisse im Inland angehen"
+ },
+ "ministry_law_events.38.b": {
+  "en": "Press through - aid is a strategic investment",
+  "de": "Durchsetzen – Hilfe ist eine strategische Investition"
+ },
+ "ministry_law_events.38.d": {
+  "en": "Critics seize on domestic hardship to argue against [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] frame foreign aid as money taken from the mouths of struggling citizens.",
+  "de": "Kritiker nutzen die Not im eigenen Land, um gegen [SCOPE.sLaw('current_law_scope').GetName] zu argumentieren. Die [SCOPE.gsInterestGroup('opposing_ig').GetName] stellen Auslandshilfe als Geld dar, das notleidenden Bürgern aus dem Mund genommen wird."
+ },
+ "ministry_law_events.38.f": {
+  "en": "\\\"Charity, the proverb says, begins at home. Yet here we are about to charter a ministry to send our wealth abroad while our own children go without. Explain that, if you can.\\\"\\n\\n\\\"The aid creates allies we will need.\\\"\\n\\n\\\"Allies for the next war, perhaps. Today's children cannot wait for the next war to receive their dinner. The voters know this. They will remember it on the next ballot.\\\"",
+  "de": "„Nächstenliebe, sagt das Sprichwort, beginnt zu Hause. Und doch stehen wir kurz davor, ein Ministerium zu gründen, das unseren Wohlstand ins Ausland schickt, während unsere eigenen Kinder darben. Erklären Sie mir das, wenn Sie können.“\\n\\n„Die Hilfe schafft Verbündete, die wir brauchen werden.“\\n\\n„Verbündete für den nächsten Krieg, vielleicht. Die Kinder von heute können nicht auf den nächsten Krieg warten, um ihr Abendessen zu bekommen. Die Wähler wissen das. Sie werden sich bei der nächsten Wahl daran erinnern.“"
+ },
+ "ministry_law_events.38.t": {
+  "en": "Domestic Priorities Trump Foreign",
+  "de": "Inland vor Ausland"
+ },
+ "ministry_law_events.39.a": {
+  "en": "Competitive examinations - take the best",
+  "de": "Leistungsprüfungen – die Besten auswählen"
+ },
+ "ministry_law_events.39.b": {
+  "en": "Patronage appointments - reward loyalty",
+  "de": "Günstlingswirtschaft – Loyalität belohnen"
+ },
+ "ministry_law_events.39.d": {
+  "en": "The new ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its staff. The intelligentsia argue for competitive examinations; the governing party argues for patronage that rewards political support. Both make their case in the corridor.",
+  "de": "Das neue Ministerium unter [SCOPE.sLaw('current_law_scope').GetName] braucht sein Personal. Die Intelligenz plädiert für Leistungsprüfungen, die Regierungspartei für eine Günstlingswirtschaft, die politische Unterstützung belohnt. Beide Seiten tragen ihre Argumente im Flur vor."
+ },
+ "ministry_law_events.39.f": {
+  "en": "\\\"You can staff this ministry with the best people, or with your people. Both are reasonable answers — to different questions about what the ministry is for.\\\"\\n\\n\\\"What is the difference, in operation?\\\"\\n\\n\\\"The best people will tell you when your policy will fail. Your people will help you fail more comfortably. Both have their uses. The question is whether the ministry exists to succeed or to govern.\\\"",
+  "de": "„Sie können dieses Ministerium mit den Besten besetzen oder mit Ihren Leuten. Beides sind vernünftige Antworten – auf unterschiedliche Fragen darüber, wozu das Ministerium da ist.“\\n\\n„Was macht das in der Praxis für einen Unterschied?“\\n\\n„Die Besten sagen Ihnen, wann Ihre Politik scheitern wird. Ihre Leute helfen Ihnen, bequemer zu scheitern. Beides hat seinen Nutzen. Die Frage ist, ob das Ministerium da ist, um erfolgreich zu sein, oder um zu regieren.“"
+ },
+ "ministry_law_events.39.t": {
+  "en": "Professional or Loyalist Staffing?",
+  "de": "Fachpersonal oder Gefolgsleute?"
+ },
+ "ministry_law_events.4.a": {
+  "en": "Swift dissolution is best - rip off the bandage.",
+  "de": "Eine rasche Auflösung ist am besten – reißen wir das Pflaster ab."
+ },
+ "ministry_law_events.4.b": {
+  "en": "Offer generous severance and retraining.",
+  "de": "Großzügige Abfindungen und Umschulungen anbieten."
+ },
+ "ministry_law_events.4.d": {
+  "en": "With the proposed passage of [SCOPE.sLaw('current_law_scope').GetName], hundreds of government employees face the prospect of redundancy. The corridors of the soon-to-be-dissolved ministry are filled with anxious functionaries, their desks already half-packed, their futures uncertain.",
+  "de": "Mit der geplanten Verabschiedung von [SCOPE.sLaw('current_law_scope').GetName] droht Hunderten Staatsbediensteten die Entlassung. Die Flure des bald aufzulösenden Ministeriums sind voller besorgter Beamter, deren Schreibtische bereits halb geräumt sind und deren Zukunft ungewiss ist."
+ },
+ "ministry_law_events.4.f": {
+  "en": "Twenty-three years I have given to this ministry. Twenty-three years of filing, stamping, and indexing. And now they tell me my services are no longer required. I suppose I shall have to learn what it is that ordinary people do with their afternoons.",
+  "de": "Dreiundzwanzig Jahre habe ich diesem Ministerium gewidmet. Dreiundzwanzig Jahre Ablegen, Stempeln und Katalogisieren. Und jetzt sagt man mir, meine Dienste würden nicht mehr gebraucht. Ich werde wohl lernen müssen, was gewöhnliche Menschen mit ihren Nachmittagen anfangen."
+ },
+ "ministry_law_events.4.t": {
+  "en": "The Redundant Clerks",
+  "de": "Die überzähligen Beamten"
+ },
+ "ministry_law_events.40.a": {
+  "en": "Keep it lean",
+  "de": "Schlank halten"
+ },
+ "ministry_law_events.40.b": {
+  "en": "Fund it generously",
+  "de": "Großzügig finanzieren"
+ },
+ "ministry_law_events.40.d": {
+  "en": "The budget hearing for [SCOPE.sLaw('current_law_scope').GetName] reaches the moment of truth. Industry wants a lean operation; small-business representatives want generous funding to ensure quality delivery. The split is sharp.",
+  "de": "Die Haushaltsanhörung zu [SCOPE.sLaw('current_law_scope').GetName] erreicht den Moment der Wahrheit. Die Industrie will einen schlanken Betrieb, Vertreter der Kleinunternehmer wollen großzügige Mittel für eine qualitätsvolle Umsetzung. Die Kluft ist tief."
+ },
+ "ministry_law_events.40.f": {
+  "en": "\\\"Every coin in the budget came from someone's pocket. The question is whether it returns as service or whether it stays as savings.\\\"\\n\\n\\\"And which is better for the country?\\\"\\n\\n\\\"The country has no single answer. The pocket that emptied wants the savings. The hand that waits in line for service wants the service. The ministry exists in the gap between these two answers. Choose which side of the gap you stand on.\\\"",
+  "de": "„Jede Münze im Haushalt stammt aus irgendjemandes Tasche. Die Frage ist, ob sie als Dienstleistung zurückkommt oder als Ersparnis liegen bleibt.“\\n\\n„Und was ist besser für das Land?“\\n\\n„Das Land hat keine einheitliche Antwort. Die geleerte Tasche will die Ersparnis. Die Hand, die in der Schlange auf Dienstleistung wartet, will die Dienstleistung. Das Ministerium existiert in der Lücke zwischen diesen beiden Antworten. Wählen Sie, auf welcher Seite der Lücke Sie stehen.“"
+ },
+ "ministry_law_events.40.t": {
+  "en": "Lean Operation or Generous Funding?",
+  "de": "Schlanker Betrieb oder großzügige Mittel?"
+ },
+ "ministry_law_events.41.a": {
+  "en": "Consolidate authority",
+  "de": "Zuständigkeiten bündeln"
+ },
+ "ministry_law_events.41.b": {
+  "en": "Coexist with existing departments",
+  "de": "Neben bestehenden Behörden bestehen"
+ },
+ "ministry_law_events.41.d": {
+  "en": "The new ministry under [SCOPE.sLaw('current_law_scope').GetName] must define its scope. Reformers want it to consolidate authority from existing departments; traditionalists want it to coexist alongside them. The administrative diagram is the policy.",
+  "de": "Das neue Ministerium unter [SCOPE.sLaw('current_law_scope').GetName] muss seinen Zuständigkeitsbereich festlegen. Reformer wollen, dass es Zuständigkeiten bestehender Behörden bündelt, Traditionalisten wollen, dass es neben ihnen bestehen bleibt. Das Organigramm ist die Politik."
+ },
+ "ministry_law_events.41.f": {
+  "en": "\\\"A ministry that consolidates is a ministry that gets things done. A ministry that coexists is a ministry that keeps the peace. The state needs both — but cannot have both at once.\\\"\\n\\n\\\"Then we choose consolidation, and accept the noise.\\\"\\n\\n\\\"Then you choose the noise. The consolidation comes second, after the political negotiations the noise requires. The order matters. Choose consolidation first, and you spend two years apologizing for it.\\\"",
+  "de": "„Ein Ministerium, das bündelt, ist ein Ministerium, das etwas erreicht. Ein Ministerium, das koexistiert, ist ein Ministerium, das den Frieden wahrt. Der Staat braucht beides – kann aber nicht beides zugleich haben.“\\n\\n„Dann entscheiden wir uns für die Bündelung und nehmen den Lärm in Kauf.“\\n\\n„Dann entscheiden Sie sich für den Lärm. Die Bündelung kommt erst danach, nach den politischen Verhandlungen, die der Lärm erfordert. Die Reihenfolge zählt. Entscheiden Sie sich zuerst für die Bündelung, und Sie verbringen zwei Jahre damit, sich dafür zu entschuldigen.“"
+ },
+ "ministry_law_events.41.t": {
+  "en": "Consolidate or Coexist?",
+  "de": "Bündeln oder koexistieren?"
+ },
+ "ministry_law_events.42.a": {
+  "en": "Swift dissolution",
+  "de": "Rasche Auflösung"
+ },
+ "ministry_law_events.42.b": {
+  "en": "Phased wind-down",
+  "de": "Stufenweiser Rückbau"
+ },
+ "ministry_law_events.42.d": {
+  "en": "The wind-down of the ministry under [SCOPE.sLaw('current_law_scope').GetName] needs a timeline. Industry wants a swift dissolution to reduce costs; small-business interests want a phased approach that preserves continuity. Pick the rhythm.",
+  "de": "Der Rückbau des Ministeriums unter [SCOPE.sLaw('current_law_scope').GetName] braucht einen Zeitplan. Die Industrie will eine rasche Auflösung, um Kosten zu senken; kleinunternehmerische Interessen wollen ein stufenweises Vorgehen, das Kontinuität wahrt. Wählen Sie den Rhythmus."
+ },
+ "ministry_law_events.42.f": {
+  "en": "\\\"Rip off the bandage and you spare the patient long suffering. Peel it slowly and you spare the patient sudden shock. We disagree about the patient.\\\"\\n\\n\\\"Who is the patient?\\\"\\n\\n\\\"The ministry's staff, in one telling. The country's businesses, in another. The state's reputation, in a third. Each version of the patient requires a different bandage. Pick the patient and the method follows.\\\"",
+  "de": "„Reißt man das Pflaster ab, erspart man dem Patienten langes Leiden. Zieht man es langsam ab, erspart man dem Patienten den plötzlichen Schock. Wir sind uns über den Patienten uneins.“\\n\\n„Wer ist der Patient?“\\n\\n„Das Personal des Ministeriums, in einer Lesart. Die Unternehmen des Landes, in einer anderen. Der Ruf des Staates, in einer dritten. Jede Version des Patienten verlangt ein anderes Pflaster. Wählen Sie den Patienten, und die Methode folgt daraus.“"
+ },
+ "ministry_law_events.42.t": {
+  "en": "Swift or Phased Dissolution?",
+  "de": "Rasche oder stufenweise Auflösung?"
+ },
+ "ministry_law_events.43.a": {
+  "en": "Civilian leadership",
+  "de": "Zivile Führung"
+ },
+ "ministry_law_events.43.b": {
+  "en": "General leadership",
+  "de": "Führung durch Generäle"
+ },
+ "ministry_law_events.43.d": {
+  "en": "The ministry of war under [SCOPE.sLaw('current_law_scope').GetName] needs a leadership model. Civilian reformers want a civilian-led ministry with military advisors; the general staff wants a general-led ministry with civilian oversight.",
+  "de": "Das Kriegsministerium unter [SCOPE.sLaw('current_law_scope').GetName] braucht ein Führungsmodell. Zivile Reformer wollen ein zivil geführtes Ministerium mit militärischen Beratern; der Generalstab will ein von Generälen geführtes Ministerium mit ziviler Aufsicht."
+ },
+ "ministry_law_events.43.f": {
+  "en": "\\\"A ministry of war run by civilians can be reasoned with. A ministry of war run by generals can be trusted. We have always preferred one or the other.\\\"\\n\\n\\\"And which leads to fewer wars?\\\"\\n\\n\\\"Neither, historically. The civilians invent wars the generals would have refused. The generals fight wars the civilians would have negotiated out of. Both kinds of war are wars. Pick the kind you wish to lose more rarely.\\\"",
+  "de": "„Mit einem von Zivilisten geführten Kriegsministerium kann man vernünftig reden. Einem von Generälen geführten Kriegsministerium kann man vertrauen. Wir haben stets das eine oder das andere bevorzugt.“\\n\\n„Und was führt zu weniger Kriegen?“\\n\\n„Historisch gesehen keines von beiden. Die Zivilisten erfinden Kriege, die die Generäle abgelehnt hätten. Die Generäle führen Kriege, die die Zivilisten wegverhandelt hätten. Beide Arten von Krieg sind Kriege. Wählen Sie die Art, die Sie seltener verlieren möchten.“"
+ },
+ "ministry_law_events.43.t": {
+  "en": "Civilian-Led or General-Led?",
+  "de": "Zivil geführt oder von Generälen geführt?"
+ },
+ "ministry_law_events.44.a": {
+  "en": "Adopt a hawkish doctrine",
+  "de": "Eine falkenhafte Doktrin verfolgen"
+ },
+ "ministry_law_events.44.b": {
+  "en": "Adopt a dovish doctrine",
+  "de": "Eine taubenhafte Doktrin verfolgen"
+ },
+ "ministry_law_events.44.d": {
+  "en": "The doctrine of the ministry of foreign affairs under [SCOPE.sLaw('current_law_scope').GetName] needs setting. The general staff wants a hawkish posture; the intelligentsia argues for engagement-first diplomacy. The doctrine echoes for decades.",
+  "de": "Die Doktrin des Außenministeriums unter [SCOPE.sLaw('current_law_scope').GetName] muss festgelegt werden. Der Generalstab will eine falkenhafte Haltung; die Intelligenz plädiert für eine Diplomatie, die zuerst auf Dialog setzt. Die Doktrin wirkt Jahrzehnte nach."
+ },
+ "ministry_law_events.44.f": {
+  "en": "\\\"You can speak softly and carry a big stick, or you can speak loudly and skip the stick. The first works longer, but only if you can credibly threaten the second.\\\"\\n\\n\\\"And the stick we carry?\\\"\\n\\n\\\"Is the navy. Is the army. Is the willingness to use them. The diplomats do not need to mention any of this to be heard mentioning it. That is the whole point of speaking softly.\\\"",
+  "de": "„Man kann leise sprechen und einen großen Knüppel tragen, oder man kann laut sprechen und auf den Knüppel verzichten. Ersteres wirkt länger – aber nur, wenn man Letzteres glaubwürdig androhen kann.“\\n\\n„Und der Knüppel, den wir tragen?“\\n\\n„Das ist die Marine. Das ist das Heer. Das ist die Bereitschaft, sie einzusetzen. Die Diplomaten müssen nichts davon erwähnen, um damit gehört zu werden. Genau das ist der Sinn des leisen Sprechens.“"
+ },
+ "ministry_law_events.44.t": {
+  "en": "Hawkish or Dovish Diplomacy?",
+  "de": "Falkenhafte oder taubenhafte Diplomatie?"
+ },
+ "ministry_law_events.45.a": {
+  "en": "Adopt protectionist tariffs",
+  "de": "Protektionistische Zölle einführen"
+ },
+ "ministry_law_events.45.b": {
+  "en": "Embrace free trade",
+  "de": "Freihandel umarmen"
+ },
+ "ministry_law_events.45.d": {
+  "en": "The ministry of commerce under [SCOPE.sLaw('current_law_scope').GetName] needs its founding orientation. Industrialists want protectionist tariffs to nurture home production; merchants want free trade to lower input costs.",
+  "de": "Das Handelsministerium unter [SCOPE.sLaw('current_law_scope').GetName] braucht seine Gründungsausrichtung. Industrielle wollen protektionistische Zölle, um die heimische Produktion zu fördern; Kaufleute wollen Freihandel, um die Vorleistungskosten zu senken."
+ },
+ "ministry_law_events.45.f": {
+  "en": "\\\"Protect the factories and you raise the price of bread. Open the borders and you raise the unemployment of factory workers. The ministry will be remembered for the choice.\\\"\\n\\n\\\"And the unemployed worker who pays less for bread?\\\"\\n\\n\\\"Eats more cheaply while looking for work in industries that no longer exist. The bread is a small consolation. The choice rests on which constituency screams loudest at the ballot box.\\\"",
+  "de": "„Schützen Sie die Fabriken, steigt der Brotpreis. Öffnen Sie die Grenzen, steigt die Arbeitslosigkeit der Fabrikarbeiter. Man wird sich an das Ministerium wegen dieser Wahl erinnern.“\\n\\n„Und der arbeitslose Arbeiter, der weniger für Brot zahlt?“\\n\\n„Isst billiger, während er nach Arbeit in Branchen sucht, die es nicht mehr gibt. Das Brot ist ein schwacher Trost. Die Wahl hängt davon ab, welche Wählergruppe an der Urne am lautesten schreit.“"
+ },
+ "ministry_law_events.45.t": {
+  "en": "Protectionist or Free Trade?",
+  "de": "Protektionismus oder Freihandel?"
+ },
+ "ministry_law_events.46.a": {
+  "en": "State-curated patronage",
+  "de": "Staatlich kuratierte Förderung"
+ },
+ "ministry_law_events.46.b": {
+  "en": "Independent artist grants",
+  "de": "Unabhängige Künstlerstipendien"
+ },
+ "ministry_law_events.46.d": {
+  "en": "The ministry of culture under [SCOPE.sLaw('current_law_scope').GetName] needs its patronage model. Religious authorities want state-curated patronage with content guidance; artists want independent grants free of editorial direction.",
+  "de": "Das Kulturministerium unter [SCOPE.sLaw('current_law_scope').GetName] braucht sein Förderungsmodell. Religiöse Autoritäten wollen eine staatlich kuratierte Förderung mit inhaltlichen Vorgaben; Künstler wollen unabhängige Stipendien ohne redaktionelle Einmischung."
+ },
+ "ministry_law_events.46.f": {
+  "en": "\\\"You can pay for art that pleases you, or for art that surprises you. The first builds monuments; the second builds new ideas. Pick the kind of country you want.\\\"\\n\\n\\\"And which kind of country lasts longer?\\\"\\n\\n\\\"The monument-building country is remembered. The idea-building country is borrowed from. Both kinds of legacy are real. Neither is automatic. The ministry's choice is which kind of legacy it intends to invest in.\\\"",
+  "de": "„Sie können Kunst bezahlen, die Ihnen gefällt, oder Kunst, die Sie überrascht. Ersteres errichtet Denkmäler, Letzteres schafft neue Ideen. Wählen Sie, welche Art von Land Sie wollen.“\\n\\n„Und welche Art von Land hat länger Bestand?“\\n\\n„An das denkmalbauende Land erinnert man sich. Vom ideenbauenden Land leiht man sich Dinge aus. Beide Arten von Vermächtnis sind real. Keine kommt von selbst. Die Wahl des Ministeriums entscheidet, in welche Art von Vermächtnis es investieren will.“"
+ },
+ "ministry_law_events.46.t": {
+  "en": "State-Curated or Independent Grants?",
+  "de": "Staatlich kuratiert oder unabhängige Stipendien?"
+ },
+ "ministry_law_events.47.a": {
+  "en": "Pro-capital framework",
+  "de": "Kapitalfreundlicher Rahmen"
+ },
+ "ministry_law_events.47.b": {
+  "en": "Pro-labor framework",
+  "de": "Arbeiterfreundlicher Rahmen"
+ },
+ "ministry_law_events.47.d": {
+  "en": "The ministry of labor under [SCOPE.sLaw('current_law_scope').GetName] needs its operating philosophy. Industrialists want a pro-capital framework prioritizing flexibility; the trade unions want a pro-labor framework prioritizing protection.",
+  "de": "Das Arbeitsministerium unter [SCOPE.sLaw('current_law_scope').GetName] braucht seine Grundausrichtung. Industrielle wollen einen kapitalfreundlichen Rahmen, der Flexibilität in den Vordergrund stellt; die Gewerkschaften wollen einen arbeiterfreundlichen Rahmen, der Schutz in den Vordergrund stellt."
+ },
+ "ministry_law_events.47.f": {
+  "en": "\\\"The ministry will spend the next generation deciding cases. The framework you give it now will tilt every verdict.\\\"\\n\\n\\\"And the framework is what?\\\"\\n\\n\\\"Whose interests the ministry presumes are paramount when the two sides disagree. The presumption can be revisited, but it usually is not. The first framework becomes the precedent, and the precedent becomes the law.\\\"",
+  "de": "„Das Ministerium wird die nächste Generation damit verbringen, Fälle zu entscheiden. Der Rahmen, den Sie ihm jetzt geben, wird jedes Urteil beeinflussen.“\\n\\n„Und was ist der Rahmen?“\\n\\n„Wessen Interessen das Ministerium für vorrangig hält, wenn sich die beiden Seiten uneinig sind. Diese Annahme kann überdacht werden, wird es aber meist nicht. Der erste Rahmen wird zum Präzedenzfall, und der Präzedenzfall wird zum Gesetz.“"
+ },
+ "ministry_law_events.47.t": {
+  "en": "Pro-Capital or Pro-Labor?",
+  "de": "Kapitalfreundlich oder arbeiterfreundlich?"
+ },
+ "ministry_law_events.48.a": {
+  "en": "Strict mandatory regulations",
+  "de": "Strenge, verpflichtende Vorschriften"
+ },
+ "ministry_law_events.48.b": {
+  "en": "Voluntary industry standards",
+  "de": "Freiwillige Industriestandards"
+ },
+ "ministry_law_events.48.d": {
+  "en": "The environmental ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its enforcement model. Scientists want strict mandatory regulations with criminal penalties; industry wants voluntary standards with industry-led monitoring.",
+  "de": "Das Umweltministerium unter [SCOPE.sLaw('current_law_scope').GetName] braucht sein Durchsetzungsmodell. Wissenschaftler wollen strenge, verpflichtende Vorschriften mit strafrechtlichen Sanktionen; die Industrie will freiwillige Standards mit Überwachung durch die Branche selbst."
+ },
+ "ministry_law_events.48.f": {
+  "en": "\\\"Mandate compliance and you breed resistance. Invite cooperation and you breed minimum effort. The state chooses which kind of failure it can tolerate.\\\"\\n\\n\\\"Is there a third option?\\\"\\n\\n\\\"There is. Mandate compliance and inspect rigorously. The inspections cost money the bill has not allocated. So we end up with a fourth option — mandate compliance, inspect occasionally, and pretend the inspections are doing their job.\\\"",
+  "de": "„Schreiben Sie die Einhaltung vor, züchten Sie Widerstand heran. Laden Sie zur Kooperation ein, züchten Sie Minimalaufwand heran. Der Staat wählt, welche Art von Versagen er tolerieren kann.“\\n\\n„Gibt es eine dritte Option?“\\n\\n„Die gibt es. Einhaltung vorschreiben und streng kontrollieren. Die Kontrollen kosten Geld, das der Gesetzentwurf nicht vorsieht. Also landen wir bei einer vierten Option – Einhaltung vorschreiben, gelegentlich kontrollieren und so tun, als würden die Kontrollen ihre Aufgabe erfüllen.“"
+ },
+ "ministry_law_events.48.t": {
+  "en": "Strict or Voluntary Regulations?",
+  "de": "Strenge oder freiwillige Vorschriften?"
+ },
+ "ministry_law_events.49.a": {
+  "en": "Domestic surveillance focus",
+  "de": "Fokus auf Inlandsüberwachung"
+ },
+ "ministry_law_events.49.b": {
+  "en": "Foreign intelligence focus",
+  "de": "Fokus auf Auslandsaufklärung"
+ },
+ "ministry_law_events.49.d": {
+  "en": "The intelligence ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its primary remit. The general staff wants a domestic-surveillance focus; the intelligentsia argues for a foreign-intelligence focus that keeps secret police at bay.",
+  "de": "Das Geheimdienstministerium unter [SCOPE.sLaw('current_law_scope').GetName] braucht seinen Hauptauftrag. Der Generalstab will den Fokus auf Inlandsüberwachung legen; die Intelligenz plädiert für einen Fokus auf Auslandsaufklärung, der die Geheimpolizei in Schach hält."
+ },
+ "ministry_law_events.49.f": {
+  "en": "\\\"Look outward and you protect the borders. Look inward and you protect the regime. They are not the same thing.\\\"\\n\\n\\\"And the regime is, in turn, what guards the borders.\\\"\\n\\n\\\"So they say, in the speeches. In practice, the inward-looking service grows; the outward-looking service is starved. The regime ends up well-defended against its own citizens and surprised by its actual enemies.\\\"",
+  "de": "„Blicken Sie nach außen, schützen Sie die Grenzen. Blicken Sie nach innen, schützen Sie das Regime. Das ist nicht dasselbe.“\\n\\n„Und das Regime ist wiederum das, was die Grenzen bewacht.“\\n\\n„So heißt es in den Reden. In der Praxis wächst der nach innen blickende Dienst, während der nach außen blickende Dienst darbt. Das Regime endet gut verteidigt gegen die eigenen Bürger und überrascht von seinen tatsächlichen Feinden.“"
+ },
+ "ministry_law_events.49.t": {
+  "en": "Domestic or Foreign Focus?",
+  "de": "Inland oder Ausland?"
+ },
+ "ministry_law_events.5.a": {
+  "en": "Civilian oversight is non-negotiable.",
+  "de": "Zivile Aufsicht steht nicht zur Debatte."
+ },
+ "ministry_law_events.5.b": {
+  "en": "Grant operational autonomy to ease the transition.",
+  "de": "Operative Eigenständigkeit gewähren, um den Übergang zu erleichtern."
+ },
+ "ministry_law_events.5.d": {
+  "en": "Senior officers of the [SCOPE.gsInterestGroup('armed_forces_ig').GetName] have submitted a pointed memorandum regarding the proposed [SCOPE.sLaw('current_law_scope').GetName]. They insist that military matters require military expertise, and that civilian bureaucrats have no business directing the affairs of war.",
+  "de": "Hochrangige Offiziere der [SCOPE.gsInterestGroup('armed_forces_ig').GetName] haben ein scharf formuliertes Memorandum zum geplanten [SCOPE.sLaw('current_law_scope').GetName] vorgelegt. Sie beharren darauf, dass militärische Angelegenheiten militärischen Sachverstand erfordern und zivile Bürokraten in Kriegsangelegenheiten nichts zu suchen haben."
+ },
+ "ministry_law_events.5.f": {
+  "en": "The Field Marshal was blunt: 'You may legislate all you wish about the procurement of boot-leather and the allocation of rations. But the moment a clerk in a morning coat presumes to tell me how to deploy a brigade, I shall tender my resignation and advise my officers to do the same.'",
+  "de": "Der Feldmarschall wurde deutlich: ‚Legiferieren Sie, so viel Sie wollen, über die Beschaffung von Stiefelleder und die Zuteilung von Rationen. Doch sobald ein Beamter im Gehrock sich anmaßt, mir zu sagen, wie ich eine Brigade einzusetzen habe, werde ich meinen Rücktritt einreichen und meinen Offizieren raten, dasselbe zu tun.‘"
+ },
+ "ministry_law_events.5.t": {
+  "en": "The Generals' War Room",
+  "de": "Das Kriegszimmer der Generäle"
+ },
+ "ministry_law_events.50.a": {
+  "en": "Generous resettlement",
+  "de": "Großzügige Umsiedlung"
+ },
+ "ministry_law_events.50.b": {
+  "en": "Restrictive resettlement",
+  "de": "Restriktive Umsiedlung"
+ },
+ "ministry_law_events.50.d": {
+  "en": "The refugee-affairs ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its founding posture. The intelligentsia wants generous resettlement; religious authorities want restrictive resettlement to preserve domestic harmony.",
+  "de": "Das Flüchtlingsministerium unter [SCOPE.sLaw('current_law_scope').GetName] braucht seine Grundhaltung. Die Intelligenz will eine großzügige Umsiedlung; religiöse Autoritäten wollen eine restriktive Umsiedlung, um den inneren Frieden zu wahren."
+ },
+ "ministry_law_events.50.f": {
+  "en": "\\\"Open the door and you welcome the stranger. Keep it shut and you reassure the neighbor. The state must decide which welcome matters more.\\\"\\n\\n\\\"And the neighbors who do not feel reassured?\\\"\\n\\n\\\"Will vote for someone who promises to shut the door. The political mathematics is unforgiving. The moral mathematics is the opposite. The bill cannot satisfy both.\\\"",
+  "de": "„Öffnen Sie die Tür, heißen Sie den Fremden willkommen. Halten Sie sie geschlossen, beruhigen Sie den Nachbarn. Der Staat muss entscheiden, welches Willkommen mehr zählt.“\\n\\n„Und die Nachbarn, die sich nicht beruhigt fühlen?“\\n\\n„Werden jemanden wählen, der verspricht, die Tür zu schließen. Die politische Mathematik ist gnadenlos. Die moralische Mathematik ist das Gegenteil. Der Gesetzentwurf kann nicht beiden gerecht werden.“"
+ },
+ "ministry_law_events.50.t": {
+  "en": "Generous or Restrictive Resettlement?",
+  "de": "Großzügige oder restriktive Umsiedlung?"
+ },
+ "ministry_law_events.51.a": {
+  "en": "State-controlled propaganda",
+  "de": "Staatlich kontrollierte Propaganda"
+ },
+ "ministry_law_events.51.b": {
+  "en": "Private partnership model",
+  "de": "Modell privater Partnerschaften"
+ },
+ "ministry_law_events.51.d": {
+  "en": "The propaganda ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its operating model. The general staff wants state-controlled output; industrialists want a private-partnership model that contracts out production.",
+  "de": "Das Propagandaministerium unter [SCOPE.sLaw('current_law_scope').GetName] braucht sein Betriebsmodell. Der Generalstab will staatlich kontrollierte Produktion; Industrielle wollen ein Modell privater Partnerschaften, das die Produktion auslagert."
+ },
+ "ministry_law_events.51.f": {
+  "en": "\\\"State propaganda speaks with one voice — yours. Privatized propaganda speaks with many voices — all working for the same paycheck. Pick your poison.\\\"\\n\\n\\\"And which serves the country better?\\\"\\n\\n\\\"Neither is for the country. Both are for whoever pays. The question is whether you prefer your propaganda obvious or disguised. The first you can argue with. The second you can only outbid.\\\"",
+  "de": "„Staatliche Propaganda spricht mit einer Stimme – Ihrer. Privatisierte Propaganda spricht mit vielen Stimmen – alle für denselben Lohn. Suchen Sie sich Ihr Gift aus.“\\n\\n„Und welche dient dem Land besser?“\\n\\n„Keine dient dem Land. Beide dienen dem, der zahlt. Die Frage ist, ob Sie Ihre Propaganda lieber offensichtlich oder getarnt hätten. Der einen kann man widersprechen. Die andere kann man nur überbieten.“"
+ },
+ "ministry_law_events.51.t": {
+  "en": "State-Controlled or Private Partnership?",
+  "de": "Staatlich kontrolliert oder private Partnerschaft?"
+ },
+ "ministry_law_events.52.a": {
+  "en": "Basic research focus",
+  "de": "Fokus auf Grundlagenforschung"
+ },
+ "ministry_law_events.52.b": {
+  "en": "Applied research focus",
+  "de": "Fokus auf angewandte Forschung"
+ },
+ "ministry_law_events.52.d": {
+  "en": "The science ministry under [SCOPE.sLaw('current_law_scope').GetName] needs a research priority. The intelligentsia wants basic-research focus; industry wants applied-research focus with commercial outcomes prioritized.",
+  "de": "Das Wissenschaftsministerium unter [SCOPE.sLaw('current_law_scope').GetName] braucht eine Forschungspriorität. Die Intelligenz will den Fokus auf Grundlagenforschung; die Industrie will den Fokus auf angewandte Forschung mit Vorrang für kommerzielle Ergebnisse."
+ },
+ "ministry_law_events.52.f": {
+  "en": "\\\"Fund curiosity and you may never see the return. Fund applications and you will never see the breakthroughs that would have come from the curiosity.\\\"\\n\\n\\\"How much of each?\\\"\\n\\n\\\"That is the question that requires fifty years of evidence to answer, and we have a budget meeting on Thursday. The political balance is what gets written into the founding statute. The scientific balance is what the founding statute fails to predict.\\\"",
+  "de": "„Finanzieren Sie Neugier, sehen Sie vielleicht nie die Rendite. Finanzieren Sie Anwendungen, sehen Sie nie die Durchbrüche, die aus der Neugier entstanden wären.“\\n\\n„Wie viel von jedem?“\\n\\n„Das ist die Frage, die fünfzig Jahre an Belegen braucht, um beantwortet zu werden, und wir haben am Donnerstag eine Haushaltssitzung. Das politische Gleichgewicht ist das, was ins Gründungsstatut geschrieben wird. Das wissenschaftliche Gleichgewicht ist das, was das Gründungsstatut nicht vorhersieht.“"
+ },
+ "ministry_law_events.52.t": {
+  "en": "Basic or Applied Research?",
+  "de": "Grundlagen- oder angewandte Forschung?"
+ },
+ "ministry_law_events.53.a": {
+  "en": "Permissive standards",
+  "de": "Nachsichtige Standards"
+ },
+ "ministry_law_events.53.b": {
+  "en": "Restrictive standards",
+  "de": "Restriktive Standards"
+ },
+ "ministry_law_events.53.d": {
+  "en": "The thought-control ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its default standard. The intelligentsia wants permissive standards with narrow exceptions; the general staff wants restrictive standards with narrow tolerances.",
+  "de": "Das Ministerium für Gedankenkontrolle unter [SCOPE.sLaw('current_law_scope').GetName] braucht seinen Grundstandard. Die Intelligenz will nachsichtige Standards mit engen Ausnahmen; der Generalstab will restriktive Standards mit engen Toleranzen."
+ },
+ "ministry_law_events.53.f": {
+  "en": "\\\"You will be wrong sometimes. The question is whether you would rather be wrong by permitting what should have been refused, or refusing what should have been permitted.\\\"\\n\\n\\\"And which error is worse?\\\"\\n\\n\\\"That depends on whose ox is gored. The newspaper editor will tell you that refusing what should have been permitted is worse, until his own publication is denied a license. Then he will tell you the other way.\\\"",
+  "de": "„Sie werden manchmal falschliegen. Die Frage ist, ob Sie lieber falschliegen, indem Sie erlauben, was hätte verweigert werden sollen, oder indem Sie verweigern, was hätte erlaubt werden sollen.“\\n\\n„Und welcher Fehler wiegt schwerer?“\\n\\n„Das hängt davon ab, wessen Ochse geschlachtet wird. Der Zeitungsredakteur wird Ihnen sagen, dass es schlimmer ist, zu verweigern, was hätte erlaubt werden sollen – bis seiner eigenen Publikation die Lizenz verweigert wird. Dann sagt er es Ihnen andersherum.“"
+ },
+ "ministry_law_events.53.t": {
+  "en": "Permissive or Restrictive Standards?",
+  "de": "Nachsichtige oder restriktive Standards?"
+ },
+ "ministry_law_events.54.a": {
+  "en": "Strict mandatory standards",
+  "de": "Strenge, verpflichtende Standards"
+ },
+ "ministry_law_events.54.b": {
+  "en": "Industry-led self-regulation",
+  "de": "Selbstregulierung durch die Branche"
+ },
+ "ministry_law_events.54.d": {
+  "en": "The consumer-protection ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its enforcement model. Small-business representatives want strict mandatory standards; industrialists want industry-led self-regulation.",
+  "de": "Das Verbraucherschutzministerium unter [SCOPE.sLaw('current_law_scope').GetName] braucht sein Durchsetzungsmodell. Vertreter der Kleinunternehmer wollen strenge, verpflichtende Standards; Industrielle wollen eine Selbstregulierung durch die Branche."
+ },
+ "ministry_law_events.54.f": {
+  "en": "\\\"Let the industry write the rules and the rules will be lenient. Let the regulators write them and the rules will be unworkable. Someone always writes them.\\\"\\n\\n\\\"Can they write them together?\\\"\\n\\n\\\"They can sit in the same room and agree on words that mean different things to each side. The lawyers will then earn handsome fees explaining which meaning prevails. The country pays for the lawyers either way.\\\"",
+  "de": "„Lässt man die Industrie die Regeln schreiben, werden sie nachgiebig. Lässt man die Aufsichtsbehörden sie schreiben, werden sie unpraktikabel. Irgendjemand schreibt sie immer.“\\n\\n„Können sie sie gemeinsam schreiben?“\\n\\n„Sie können im selben Raum sitzen und sich auf Worte einigen, die für jede Seite etwas anderes bedeuten. Die Anwälte verdienen dann stattliche Honorare damit, zu erklären, welche Bedeutung sich durchsetzt. Das Land bezahlt so oder so für die Anwälte.“"
+ },
+ "ministry_law_events.54.t": {
+  "en": "Strict or Industry-Led Standards?",
+  "de": "Strenge Standards oder Selbstregulierung?"
+ },
+ "ministry_law_events.55.a": {
+  "en": "Density-focused planning",
+  "de": "Dichtefokussierte Planung"
+ },
+ "ministry_law_events.55.b": {
+  "en": "Sprawl-friendly zoning",
+  "de": "Zersiedlungsfreundliche Flächennutzung"
+ },
+ "ministry_law_events.55.d": {
+  "en": "The urban-planning ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its model. The intelligentsia wants density-focused planning; landowners want sprawl-friendly zoning that preserves property values.",
+  "de": "Das Ministerium für Stadtplanung unter [SCOPE.sLaw('current_law_scope').GetName] braucht sein Modell. Die Intelligenz will eine dichtefokussierte Planung; Großgrundbesitzer wollen eine zersiedlungsfreundliche Flächennutzung, die die Grundstückswerte erhält."
+ },
+ "ministry_law_events.55.f": {
+  "en": "\\\"Build the city up and you cram strangers into one neighborhood. Build the city out and you pave the countryside. Both choices will be remembered as a betrayal by someone.\\\"\\n\\n\\\"And the population must live somewhere.\\\"\\n\\n\\\"The population must, yes. The question is whose neighborhood absorbs them. The ministry's first decision tells the country which constituencies it will be willing to inconvenience, and which it will not.\\\"",
+  "de": "„Bauen Sie die Stadt in die Höhe, pferchen Sie Fremde in ein Viertel. Bauen Sie die Stadt in die Breite, pflastern Sie das Umland zu. Beide Entscheidungen wird irgendjemand als Verrat empfinden.“\\n\\n„Und die Bevölkerung muss irgendwo leben.“\\n\\n„Das muss sie, ja. Die Frage ist, wessen Viertel sie aufnimmt. Die erste Entscheidung des Ministeriums sagt dem Land, welche Wählergruppen es bereit ist, zu belasten – und welche nicht.“"
+ },
+ "ministry_law_events.55.t": {
+  "en": "Density or Sprawl?",
+  "de": "Dichte oder Zersiedlung?"
+ },
+ "ministry_law_events.56.a": {
+  "en": "Established faith privileges",
+  "de": "Privilegien für die Staatsreligion"
+ },
+ "ministry_law_events.56.b": {
+  "en": "Pluralist framework",
+  "de": "Pluralistischer Rahmen"
+ },
+ "ministry_law_events.56.d": {
+  "en": "The religion ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its founding model. Religious authorities want established-faith privileges; the intelligentsia wants a pluralist framework treating all confessions equally.",
+  "de": "Das Religionsministerium unter [SCOPE.sLaw('current_law_scope').GetName] braucht sein Gründungsmodell. Religiöse Autoritäten wollen Privilegien für die Staatsreligion; die Intelligenz will einen pluralistischen Rahmen, der alle Konfessionen gleich behandelt."
+ },
+ "ministry_law_events.56.f": {
+  "en": "\\\"Privilege one faith and you cement its claim on the public square. Treat them equally and you reduce them all to one private option among many. The choice is the future of the soul of the country.\\\"\\n\\n\\\"And what does the country's soul prefer?\\\"\\n\\n\\\"The country's soul is not a single thing. The majority's soul wants its faith honoured. The minorities' souls want their existence respected. The ministry's choice tells everyone which of these the state intends to deliver.\\\"",
+  "de": "„Bevorzugen Sie einen Glauben, zementieren Sie seinen Anspruch auf den öffentlichen Raum. Behandeln Sie alle gleich, reduzieren Sie sie alle auf eine private Option unter vielen. Die Wahl entscheidet über die Zukunft der Seele des Landes.“\\n\\n„Und was bevorzugt die Seele des Landes?“\\n\\n„Die Seele des Landes ist keine einzelne Sache. Die Seele der Mehrheit will, dass ihr Glaube geehrt wird. Die Seelen der Minderheiten wollen, dass ihre Existenz geachtet wird. Die Wahl des Ministeriums sagt allen, welches davon der Staat zu liefern gedenkt.“"
+ },
+ "ministry_law_events.56.t": {
+  "en": "Established Faith or Pluralist?",
+  "de": "Staatsreligion oder Pluralismus?"
+ },
+ "ministry_law_events.57.a": {
+  "en": "Strategic allocation",
+  "de": "Strategische Vergabe"
+ },
+ "ministry_law_events.57.b": {
+  "en": "Humanitarian allocation",
+  "de": "Humanitäre Vergabe"
+ },
+ "ministry_law_events.57.d": {
+  "en": "The international-aid ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its allocation principle. The general staff wants strategic allocation tied to alliance interests; the intelligentsia wants humanitarian allocation tied to need.",
+  "de": "Das Ministerium für internationale Hilfe unter [SCOPE.sLaw('current_law_scope').GetName] braucht sein Vergabeprinzip. Der Generalstab will eine strategische Vergabe nach Bündnisinteressen; die Intelligenz will eine humanitäre Vergabe nach Bedarf."
+ },
+ "ministry_law_events.57.f": {
+  "en": "\\\"Foreign aid is policy by other means. The question is which means — 'help our friends,' or 'help those who need it most.' These are different ministries dressed up alike.\\\"\\n\\n\\\"And the public's view?\\\"\\n\\n\\\"The public alternates. In peacetime the public prefers humanitarian. In tense moments the public prefers strategic. The bill must pick one. The bill's first minister will spend the next four years apologizing for the unchosen one.\\\"",
+  "de": "„Auslandshilfe ist Politik mit anderen Mitteln. Die Frage ist, mit welchen Mitteln – ‚unseren Freunden helfen‘ oder ‚denen helfen, die es am nötigsten brauchen‘. Das sind unterschiedliche Ministerien im selben Gewand.“\\n\\n„Und die Meinung der Öffentlichkeit?“\\n\\n„Die Öffentlichkeit schwankt. In Friedenszeiten bevorzugt sie das Humanitäre. In angespannten Momenten bevorzugt sie das Strategische. Der Gesetzentwurf muss sich für eines entscheiden. Der erste Minister des Gesetzentwurfs wird die nächsten vier Jahre damit verbringen, sich für das nicht Gewählte zu entschuldigen.“"
+ },
+ "ministry_law_events.57.t": {
+  "en": "Strategic or Humanitarian Aid?",
+  "de": "Strategische oder humanitäre Hilfe?"
+ },
+ "ministry_law_events.58.a": {
+  "en": "Grant existing works a ten-year phase-in.",
+  "de": "Bestehenden Betrieben eine zehnjährige Übergangsfrist gewähren."
+ },
+ "ministry_law_events.58.b": {
+  "en": "The standards apply to everyone, from the first day.",
+  "de": "Die Standards gelten für alle, vom ersten Tag an."
+ },
+ "ministry_law_events.58.d": {
+  "en": "As [SCOPE.sLaw('current_law_scope').GetName] moves through the legislature, the [SCOPE.gsInterestGroup('industrialists_ig').GetName] have arrived with a proposal rather than a protest. They accept that a Ministry of the Environment is coming; what they ask is that existing works be given a decade to adapt before the new standards bite in full. A temporary grandfather clause, they argue, would let industry modernize on its own schedule and spare the treasury a wave of closures. Conservationists warn that a ten-year exemption is ten more years of poisoned rivers.",
+  "de": "Während [SCOPE.sLaw('current_law_scope').GetName] das Parlament durchläuft, sind die [SCOPE.gsInterestGroup('industrialists_ig').GetName] nicht mit einem Protest, sondern mit einem Vorschlag erschienen. Sie akzeptieren, dass ein Umweltministerium kommt; was sie verlangen, ist ein Jahrzehnt Zeit für bestehende Betriebe, um sich anzupassen, bevor die neuen Standards mit voller Härte greifen. Eine befristete Bestandsschutzklausel, so ihr Argument, würde der Industrie erlauben, sich nach eigenem Zeitplan zu modernisieren, und der Staatskasse eine Welle von Schließungen ersparen. Naturschützer warnen, dass eine zehnjährige Ausnahme zehn weitere Jahre vergifteter Flüsse bedeutet."
+ },
+ "ministry_law_events.58.f": {
+  "en": "\\\"We are not asking you to abandon the ministry,\\\" the manufacturer said. \\\"We are asking you not to bankrupt every foundry built before its inspectors were born.\\\"\\n\\n\\\"And in ten years?\\\"\\n\\n\\\"In ten years the old foundries will be gone or rebuilt, and your inspectors will find nothing to object to.\\\"\\n\\nThe minister-designate made a note. She had heard the phrase 'in ten years' before, and it had always meant 'not yet.'",
+  "de": "„Wir bitten Sie nicht, das Ministerium aufzugeben“, sagte der Fabrikant. „Wir bitten Sie, nicht jede Gießerei in den Ruin zu treiben, die gebaut wurde, bevor ihre Inspektoren geboren waren.“\\n\\n„Und in zehn Jahren?“\\n\\n„In zehn Jahren werden die alten Gießereien verschwunden oder umgebaut sein, und Ihre Inspektoren werden nichts zu beanstanden finden.“\\n\\nDie designierte Ministerin machte sich eine Notiz. Sie hatte den Satz ‚in zehn Jahren‘ schon einmal gehört, und er hatte immer ‚noch nicht‘ bedeutet."
+ },
+ "ministry_law_events.58.t": {
+  "en": "The Grandfather Clause",
+  "de": "Der Bestandsschutz"
+ },
+ "ministry_law_events.59.a": {
+  "en": "Make the grandfather clause permanent.",
+  "de": "Die Bestandsschutzklausel dauerhaft machen."
+ },
+ "ministry_law_events.59.b": {
+  "en": "The phase-in is over. Let it lapse.",
+  "de": "Die Übergangsfrist ist vorbei. Sie auslaufen lassen."
+ },
+ "ministry_law_events.59.d": {
+  "en": "The ten-year grandfather clause attached to [SCOPE.sLaw('sunset_law').GetName] has run its course. Older works that were spared the ministry's full standards must now meet them, and the [SCOPE.gsInterestGroup('industrialists_ig').GetName] have returned to argue that the transition was never long enough. Making the exemption permanent would keep industry's goodwill, at the cost of admitting that the phase-in was a fiction; letting it lapse honors the bargain as written and delivers the cleaner air that was promised a decade ago.",
+  "de": "Die zehnjährige Bestandsschutzklausel zu [SCOPE.sLaw('sunset_law').GetName] hat ihre Zeit hinter sich. Ältere Betriebe, denen die vollen Standards des Ministeriums erspart geblieben waren, müssen sie nun erfüllen, und die [SCOPE.gsInterestGroup('industrialists_ig').GetName] sind zurückgekehrt, um zu argumentieren, dass der Übergang nie lang genug war. Die Ausnahme dauerhaft zu machen, würde das Wohlwollen der Industrie erhalten – um den Preis des Eingeständnisses, dass die Übergangsfrist eine Fiktion war; sie auslaufen zu lassen, ehrt den Handel wie vereinbart und liefert die sauberere Luft, die vor einem Jahrzehnt versprochen wurde."
+ },
+ "ministry_law_events.59.f": {
+  "en": "\\\"The clause expired at midnight,\\\" the inspector said, laying the citation on the desk. \\\"Your furnaces are now subject to the standard.\\\"\\n\\n\\\"We were promised a transition.\\\"\\n\\n\\\"You were given one. It lasted ten years. This,\\\" he tapped the paper, \\\"is what comes after a transition.\\\"",
+  "de": "„Die Klausel ist um Mitternacht ausgelaufen“, sagte der Inspektor und legte den Bescheid auf den Schreibtisch. „Ihre Öfen unterliegen jetzt dem Standard.“\\n\\n„Man hat uns einen Übergang versprochen.“\\n\\n„Man hat Ihnen einen gegeben. Er dauerte zehn Jahre. Das hier“, er tippte auf das Papier, „ist das, was nach einem Übergang kommt.“"
+ },
+ "ministry_law_events.59.t": {
+  "en": "The Phase-In Ends",
+  "de": "Das Ende der Übergangsfrist"
+ },
+ "ministry_law_events.6.a": {
+  "en": "This debacle proves we need a proper ministry!",
+  "de": "Dieses Debakel beweist, dass wir ein richtiges Ministerium brauchen!"
+ },
+ "ministry_law_events.6.b": {
+  "en": "Use the incident to build a careful consensus.",
+  "de": "Den Vorfall nutzen, um sorgfältig einen Konsens aufzubauen."
+ },
+ "ministry_law_events.6.d": {
+  "en": "A [concept_diplomatic_incident] with a foreign power has exposed the embarrassing inadequacy of our current foreign affairs apparatus. Communiqués were bungled, protocols were ignored, and the resulting misunderstanding nearly escalated into a crisis - lending fresh urgency to the case for [SCOPE.sLaw('current_law_scope').GetName].",
+  "de": "Ein [concept_diplomatic_incident] mit einer fremden Macht hat die peinliche Unzulänglichkeit unseres derzeitigen Außenapparats offengelegt. Kommuniqués wurden verpfuscht, Protokolle missachtet, und das daraus entstandene Missverständnis eskalierte beinahe zu einer Krise – was der Sache von [SCOPE.sLaw('current_law_scope').GetName] neue Dringlichkeit verleiht."
+ },
+ "ministry_law_events.6.f": {
+  "en": "The ambassador, it transpires, greeted the foreign dignitary with the traditional salutation for a funeral rather than a state banquet. The dignitary was not amused. I am told relations have been set back by approximately a decade.",
+  "de": "Der Botschafter, wie sich herausstellt, begrüßte den ausländischen Würdenträger mit dem traditionellen Gruß für eine Beerdigung statt für ein Staatsbankett. Der Würdenträger war nicht amüsiert. Man sagt mir, die Beziehungen seien um etwa ein Jahrzehnt zurückgeworfen worden."
+ },
+ "ministry_law_events.6.t": {
+  "en": "The Ambassador's Dilemma",
+  "de": "Das Dilemma des Botschafters"
+ },
+ "ministry_law_events.7.a": {
+  "en": "Commerce demands coordination - push it through!",
+  "de": "Der Handel verlangt Koordination – durchsetzen!"
+ },
+ "ministry_law_events.7.b": {
+  "en": "Design the ministry to address merchant concerns.",
+  "de": "Das Ministerium so gestalten, dass es die Anliegen der Kaufleute berücksichtigt."
+ },
+ "ministry_law_events.7.d": {
+  "en": "A delegation of merchants and manufacturers, led by prominent members of the [SCOPE.gsInterestGroup('industrialists_ig').GetName], has presented a petition regarding [SCOPE.sLaw('current_law_scope').GetName]. They argue that the chaos of competing regulations and tariffs is strangling commerce, and that a coordinated ministry is essential.",
+  "de": "Eine Delegation von Kaufleuten und Fabrikanten, angeführt von prominenten Mitgliedern der [SCOPE.gsInterestGroup('industrialists_ig').GetName], hat eine Petition zu [SCOPE.sLaw('current_law_scope').GetName] eingereicht. Sie argumentieren, dass das Chaos konkurrierender Vorschriften und Zölle den Handel erstickt und ein koordiniertes Ministerium unerlässlich ist."
+ },
+ "ministry_law_events.7.f": {
+  "en": "I must apply to three different offices to export a single crate of textiles. The first grants me a permit, the second demands a different permit, and the third informs me that both permits expired yesterday. A Ministry of Commerce would, at the very least, reduce the permits to one.",
+  "de": "Ich muss mich bei drei verschiedenen Ämtern bewerben, um eine einzige Kiste Textilien zu exportieren. Das erste erteilt mir eine Genehmigung, das zweite verlangt eine andere Genehmigung, und das dritte teilt mir mit, dass beide Genehmigungen gestern abgelaufen sind. Ein Handelsministerium würde die Genehmigungen zumindest auf eine reduzieren."
+ },
+ "ministry_law_events.7.t": {
+  "en": "The Merchant's Petition",
+  "de": "Die Petition der Kaufleute"
+ },
+ "ministry_law_events.8.a": {
+  "en": "A great nation deserves a Ministry of Culture.",
+  "de": "Eine große Nation verdient ein Kulturministerium."
+ },
+ "ministry_law_events.8.b": {
+  "en": "Let the artists help design it - win their support.",
+  "de": "Die Künstler bei der Gestaltung mitwirken lassen – ihre Unterstützung gewinnen."
+ },
+ "ministry_law_events.8.d": {
+  "en": "The debate over [SCOPE.sLaw('current_law_scope').GetName] has drawn the nation's artists and intellectuals into a furious argument. Some in the [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] welcome state patronage as the foundation of a cultural renaissance, while others see it as the first step toward censorship and conformity.",
+  "de": "Die Debatte um [SCOPE.sLaw('current_law_scope').GetName] hat die Künstler und Intellektuellen der Nation in einen erbitterten Streit gezogen. Manche in der [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] begrüßen staatliche Förderung als Grundlage einer kulturellen Renaissance, während andere darin den ersten Schritt zu Zensur und Gleichschaltung sehen."
+ },
+ "ministry_law_events.8.f": {
+  "en": "The poet stood before the committee and declared that he would sooner burn his manuscripts than submit them for government approval. The painter beside him quietly noted that government approval came with a very generous stipend, and asked where one might apply.",
+  "de": "Der Dichter stand vor dem Ausschuss und erklärte, er würde eher seine Manuskripte verbrennen, als sie zur staatlichen Genehmigung vorzulegen. Der Maler neben ihm bemerkte leise, dass die staatliche Genehmigung mit einem sehr großzügigen Stipendium einhergehe, und fragte, wo man sich dafür bewerben könne."
+ },
+ "ministry_law_events.8.t": {
+  "en": "The Artist's Subsidy",
+  "de": "Das Stipendium des Künstlers"
+ },
+ "ministry_law_events.9.a": {
+  "en": "The ministry will serve the national interest - press forward!",
+  "de": "Das Ministerium dient dem nationalen Interesse – vorwärts!"
+ },
+ "ministry_law_events.9.b": {
+  "en": "Proceed carefully to minimize opposition.",
+  "de": "Vorsichtig vorgehen, um Widerstand zu minimieren."
+ },
+ "ministry_law_events.9.c": {
+  "en": "Invite the key stakeholders to shape the ministry.",
+  "de": "Die wichtigsten Interessengruppen einladen, das Ministerium mitzugestalten."
+ },
+ "ministry_law_events.9.d": {
+  "en": "The proposed [SCOPE.sLaw('current_law_scope').GetName] has ignited the eternal struggle between capital and labor. Factory owners and workers' representatives have each mounted fierce campaigns, and the question of whose interests the new ministry will serve has become the dominant political issue of the season.",
+  "de": "Das geplante [SCOPE.sLaw('current_law_scope').GetName] hat den ewigen Kampf zwischen Kapital und Arbeit entfacht. Fabrikbesitzer und Vertreter der Arbeiterschaft haben jeweils erbitterte Kampagnen gestartet, und die Frage, wessen Interessen das neue Ministerium dienen wird, ist zum beherrschenden politischen Thema der Saison geworden."
+ },
+ "ministry_law_events.9.f": {
+  "en": "The factory owner slammed his fist on the table: 'A ministry that coddles workers will bankrupt us all!' The union leader replied without blinking: 'A ministry that coddles owners already exists - it is called the rest of the government.'",
+  "de": "Der Fabrikbesitzer schlug mit der Faust auf den Tisch: ‚Ein Ministerium, das Arbeiter verhätschelt, wird uns alle ruinieren!‘ Der Gewerkschaftsführer entgegnete, ohne mit der Wimper zu zucken: ‚Ein Ministerium, das Besitzer verhätschelt, gibt es bereits – es nennt sich der Rest der Regierung.‘"
+ },
+ "ministry_law_events.9.t": {
+  "en": "Capital vs. Labor",
+  "de": "Kapital gegen Arbeit"
+ },
+ "minor_events_timelineextended.2.a": {
+  "en": "Allow the legislative process to proceed naturally",
+  "de": "Den Gesetzgebungsprozess seinen natürlichen Lauf nehmen lassen"
+ },
+ "minor_events_timelineextended.2.b": {
+  "en": "Expedite the process with minimal intervention",
+  "de": "Den Prozess mit minimalem Eingriff beschleunigen"
+ },
+ "minor_events_timelineextended.2.c": {
+  "en": "Push the law forward decisively",
+  "de": "Das Gesetz entschlossen vorantreiben"
+ },
+ "minor_events_timelineextended.2.d": {
+  "en": "As the process to pass the law begins, your advisors present an option: should we bypass some of the usual legislative process to speed the implementation of this law?\\n\\n#bold [concept_legislative_override_capacity]:#! [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_legislative_override_capacity_add')]\\n#bold [concept_authority] Cost Reduction:#! #G [ROOT.GetCountry.MakeScope.ScriptValue('forced_law_override_discount_pct_display')|0]%#!",
+  "de": "Während der Prozess zur Verabschiedung des Gesetzes beginnt, legen Ihnen Ihre Berater eine Option vor: Sollten wir einen Teil des üblichen Gesetzgebungsprozesses umgehen, um die Umsetzung dieses Gesetzes zu beschleunigen?\\n\\n#bold [concept_legislative_override_capacity]:#! [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_legislative_override_capacity_add')]\\n#bold [concept_authority]-Kostensenkung:#! #G [ROOT.GetCountry.MakeScope.ScriptValue('forced_law_override_discount_pct_display')|0]%#!"
+ },
+ "minor_events_timelineextended.2.e": {
+  "en": "Force the law through, consequences be damned",
+  "de": "Das Gesetz durchpeitschen, koste es, was es wolle"
+ },
+ "minor_events_timelineextended.2.f": {
+  "en": "Your advisors are divided. Some urge swift passage before opposition can mobilize. Others warn that forcing a law through will cost you goodwill you may need later.",
+  "de": "Ihre Berater sind gespalten. Manche drängen auf eine rasche Verabschiedung, bevor sich die Opposition formieren kann. Andere warnen, dass ein durchgepeitschtes Gesetz Sie Wohlwollen kosten wird, das Sie später brauchen könnten."
+ },
+ "minor_events_timelineextended.2.t": {
+  "en": "Forceful Legislation",
+  "de": "Gesetzgebung mit harter Hand"
+ },
+ "minor_events_timelineextended.3.a": {
+  "en": "Chart our own course - build this nation from the ground up.",
+  "de": "Unseren eigenen Kurs bestimmen – diese Nation von Grund auf aufbauen."
+ },
+ "minor_events_timelineextended.3.b": {
+  "en": "Seek support from the international community.",
+  "de": "Unterstützung von der internationalen Gemeinschaft suchen."
+ },
+ "minor_events_timelineextended.3.d": {
+  "en": "Our nation has been born from the dissolution of colonial rule. The people celebrate in the streets, but the hard work of building a country lies ahead. We must decide how to chart our course in this new era of independence.",
+  "de": "Unsere Nation ist aus der Auflösung der Kolonialherrschaft hervorgegangen. Das Volk feiert auf den Straßen, doch die harte Arbeit des Staatsaufbaus liegt noch vor uns. Wir müssen entscheiden, wie wir unseren Kurs in diesem neuen Zeitalter der Unabhängigkeit bestimmen."
+ },
+ "minor_events_timelineextended.3.f": {
+  "en": "The flag went up at dawn. By noon, the ministries were empty and the filing cabinets had been cleared out.",
+  "de": "Die Flagge wurde bei Sonnenaufgang gehisst. Bis zum Mittag waren die Ministerien leer und die Aktenschränke geräumt."
+ },
+ "minor_events_timelineextended.3.t": {
+  "en": "Independence Achieved!",
+  "de": "Die Unabhängigkeit ist erreicht!"
+ },
+ "minor_events_timelineextended.6.a": {
+  "en": "Weather the storm",
+  "de": "Den Sturm aussitzen"
+ },
+ "minor_events_timelineextended.6.capital_controls": {
+  "en": "Impose emergency capital controls",
+  "de": "Notfall-Kapitalverkehrskontrollen verhängen"
+ },
+ "minor_events_timelineextended.6.correspondent_liquidity": {
+  "en": "Inject liquidity through correspondent banks",
+  "de": "Liquidität über Korrespondenzbanken bereitstellen"
+ },
+ "minor_events_timelineextended.6.d_correction": {
+  "en": "A sharp but contained correction has swept through our financial markets, deflating some of the recent speculation. Several over-leveraged firms face losses, and nervous investors are pulling back — but the broader system appears sound for now.",
+  "de": "Eine scharfe, aber begrenzte Korrektur hat unsere Finanzmärkte erfasst und einen Teil der jüngsten Spekulation abgebaut. Mehrere überschuldete Firmen stehen vor Verlusten, und nervöse Anleger ziehen sich zurück – doch das System im Ganzen erscheint vorerst solide."
+ },
+ "minor_events_timelineextended.6.d_crash": {
+  "en": "A violent correction has ripped through our financial markets, wiping out overheated speculation and dragging the [concept_banking_cycle] sharply downward. Fortunes have evaporated, firms are folding, and the public is furious.",
+  "de": "Eine heftige Korrektur hat unsere Finanzmärkte erschüttert, überhitzte Spekulation ausgelöscht und den [concept_banking_cycle] scharf nach unten gezogen. Vermögen sind verdampft, Firmen geben auf, und die Öffentlichkeit ist wütend."
+ },
+ "minor_events_timelineextended.6.d_downturn": {
+  "en": "A significant downturn has gripped our financial markets. Share prices have fallen sharply, credit is tightening, and businesses from shipyards to textile mills are feeling the pinch. The speculative excesses of recent months are being painfully unwound.",
+  "de": "Ein erheblicher Abschwung hat unsere Finanzmärkte erfasst. Die Aktienkurse sind stark gefallen, Kredite werden knapper, und Unternehmen von Werften bis zu Textilfabriken bekommen die Folgen zu spüren. Die spekulativen Exzesse der letzten Monate werden schmerzhaft abgebaut."
+ },
+ "minor_events_timelineextended.6.d_panic": {
+  "en": "Outright panic has seized the financial system. Banks are refusing to lend, the stock exchange has suspended trading after catastrophic losses, and crowds have gathered outside shuttered credit houses. The entire edifice of speculation has come crashing down, and the effects will be felt for years.",
+  "de": "Blanke Panik hat das Finanzsystem erfasst. Banken verweigern die Kreditvergabe, die Börse hat den Handel nach katastrophalen Verlusten ausgesetzt, und vor geschlossenen Kredithäusern haben sich Menschenmengen versammelt. Das gesamte Gebäude der Spekulation ist eingestürzt, und die Folgen werden noch jahrelang zu spüren sein."
+ },
+ "minor_events_timelineextended.6.d_systemic": {
+  "en": "A cascading systemic collapse is tearing through every pillar of our financial order. Major banks are insolvent, the currency is in freefall, and the government's ability to borrow has evaporated overnight. Firms that were the backbone of the economy are ceasing operations. We are witnessing the unraveling of the financial system itself.",
+  "de": "Ein kaskadenartiger, systemischer Zusammenbruch reißt jede Säule unserer Finanzordnung mit sich. Große Banken sind zahlungsunfähig, die Währung befindet sich im freien Fall, und die Kreditfähigkeit der Regierung ist über Nacht verschwunden. Unternehmen, die das Rückgrat der Wirtschaft bildeten, stellen ihren Betrieb ein. Wir erleben, wie sich das Finanzsystem selbst auflöst."
+ },
+ "minor_events_timelineextended.6.deposit_guarantee": {
+  "en": "Activate the deposit guarantee scheme",
+  "de": "Die Einlagensicherung aktivieren"
+ },
+ "minor_events_timelineextended.6.dev_bank_lending": {
+  "en": "Direct development banks to crisis lending",
+  "de": "Entwicklungsbanken zur Krisenkreditvergabe anweisen"
+ },
+ "minor_events_timelineextended.6.discount_window": {
+  "en": "Open the emergency discount window",
+  "de": "Das Notfall-Diskontfenster öffnen"
+ },
+ "minor_events_timelineextended.6.f_correction": {
+  "en": "\\\"A necessary pruning,\\\" the bankers whisper to one another — though their smiles are a touch too tight, and the champagne remains uncorked.",
+  "de": "„Ein notwendiger Rückschnitt“, flüstern sich die Bankiers zu – auch wenn ihr Lächeln eine Spur zu angespannt wirkt und der Champagner ungeöffnet bleibt."
+ },
+ "minor_events_timelineextended.6.f_crash": {
+  "en": "\\\"The exchange floor cleared out by half past two. Men who had been millionaires at breakfast were queuing at the telegraph office by lunch, trying to reach their bankers. Most of the bankers were not answering.\\\"",
+  "de": "„Der Börsensaal war bis halb drei geräumt. Männer, die beim Frühstück noch Millionäre gewesen waren, standen zur Mittagszeit vor dem Telegrafenamt Schlange, um ihre Bankiers zu erreichen. Die meisten Bankiers meldeten sich nicht.“"
+ },
+ "minor_events_timelineextended.6.f_downturn": {
+  "en": "\\\"They assured us the market would climb forever. Now the same men who advised bold investment are quietly selling their own shares and booking passage abroad.\\\"",
+  "de": "„Man hat uns versichert, der Markt werde ewig steigen. Jetzt verkaufen dieselben Männer, die zu kühnen Investitionen rieten, still und leise ihre eigenen Aktien und buchen die Überfahrt ins Ausland.“"
+ },
+ "minor_events_timelineextended.6.f_panic": {
+  "en": "\\\"The central bank vaults may as well be empty. Every creditor is calling in every loan. The word 'solvent' has lost all meaning — who can tell when everyone owes everyone more than they have?\\\"",
+  "de": "„Die Tresore der Zentralbank könnten ebenso gut leer sein. Jeder Gläubiger fordert jeden Kredit zurück. Das Wort ‚solvent‘ hat jede Bedeutung verloren – wer kann das noch beurteilen, wenn jeder jedem mehr schuldet, als er besitzt?“"
+ },
+ "minor_events_timelineextended.6.f_systemic": {
+  "en": "\\\"There is no bottom. The ledgers are fiction, the reserves are gone, and the men who built this house of cards have already fled. What remains is a queue outside every bank in the country and no money behind the counter.\\\"",
+  "de": "„Es gibt keinen Boden. Die Bücher sind Fiktion, die Reserven sind verschwunden, und die Männer, die dieses Kartenhaus errichtet haben, sind bereits geflohen. Was bleibt, ist eine Schlange vor jeder Bank im Land und kein Geld hinter dem Schalter.“"
+ },
+ "minor_events_timelineextended.6.keynesian_stimulus": {
+  "en": "Launch a Keynesian fiscal stimulus package",
+  "de": "Ein keynesianisches Konjunkturpaket auflegen"
+ },
+ "minor_events_timelineextended.6.mutual_clearing": {
+  "en": "Convene a mutual clearing-house bailout",
+  "de": "Eine gemeinsame Rettungsaktion der Clearingstellen einberufen"
+ },
+ "minor_events_timelineextended.6.nationalize": {
+  "en": "Nationalise failing institutions",
+  "de": "Scheiternde Institute verstaatlichen"
+ },
+ "minor_events_timelineextended.6.open_market": {
+  "en": "Open-market operations and discount window",
+  "de": "Offenmarktgeschäfte und Diskontfenster"
+ },
+ "minor_events_timelineextended.6.suspend_convertibility": {
+  "en": "Suspend convertibility and declare a bank holiday",
+  "de": "Konvertibilität aussetzen und einen Bankfeiertag ausrufen"
+ },
+ "minor_events_timelineextended.6.swap_lines": {
+  "en": "Coordinate international swap lines",
+  "de": "Internationale Swap-Linien koordinieren"
+ },
+ "minor_events_timelineextended.6.t_correction": {
+  "en": "Market Correction",
+  "de": "Marktkorrektur"
+ },
+ "minor_events_timelineextended.6.t_crash": {
+  "en": "Financial Crash",
+  "de": "Finanzcrash"
+ },
+ "minor_events_timelineextended.6.t_downturn": {
+  "en": "Market Downturn",
+  "de": "Marktabschwung"
+ },
+ "minor_events_timelineextended.6.t_panic": {
+  "en": "Banking Panic",
+  "de": "Bankenpanik"
+ },
+ "minor_events_timelineextended.6.t_systemic": {
+  "en": "Systemic Collapse",
+  "de": "Systemischer Zusammenbruch"
+ },
+ "minor_events_timelineextended.7.a": {
+  "en": "Close the gates - protect domestic banks",
+  "de": "Die Tore schließen – heimische Banken schützen"
+ },
+ "minor_events_timelineextended.7.b": {
+  "en": "Maintain open markets",
+  "de": "Offene Märkte beibehalten"
+ },
+ "minor_events_timelineextended.7.capital_controls": {
+  "en": "Impose targeted capital controls",
+  "de": "Gezielte Kapitalverkehrskontrollen verhängen"
+ },
+ "minor_events_timelineextended.7.confidence_messaging": {
+  "en": "Issue statements of financial confidence",
+  "de": "Erklärungen zum Vertrauen in die Finanzlage abgeben"
+ },
+ "minor_events_timelineextended.7.d": {
+  "en": "Trouble in [SCOPE.sCountry('banking_crash_origin_country').GetName] has caused nervousness in our own markets. Banks with exposure to [SCOPE.sCountry('banking_crash_origin_country').GetAdjectiveNoFormatting] assets are reviewing their positions, and some investors are pulling back from riskier ventures.",
+  "de": "Unruhe [SCOPE.sCountry('banking_crash_origin_country').GetAltName('IN')] hat Nervosität an unseren eigenen Märkten ausgelöst. Banken mit Engagement in [SCOPE.sCountry('banking_crash_origin_country').GetAdjectiveNoFormatting|l]en Vermögenswerten überprüfen ihre Positionen, und einige Anleger ziehen sich aus riskanteren Geschäften zurück."
+ },
+ "minor_events_timelineextended.7.d_cascade": {
+  "en": "The financial turmoil in [SCOPE.sCountry('banking_crash_origin_country').GetName] has triggered a crash in our own overheated markets. Years of speculative excess left our financial system brittle, and the shock from abroad was all it took to shatter confidence. Our own bubble has burst.",
+  "de": "Die Finanzunruhen [SCOPE.sCountry('banking_crash_origin_country').GetAltName('IN')] haben einen Crash an unseren eigenen überhitzten Märkten ausgelöst. Jahre spekulativer Exzesse hatten unser Finanzsystem brüchig gemacht, und der Schock aus dem Ausland reichte aus, um das Vertrauen zu zerschlagen. Unsere eigene Blase ist geplatzt."
+ },
+ "minor_events_timelineextended.7.d_cascade_severe": {
+  "en": "The panic in [SCOPE.sCountry('banking_crash_origin_country').GetName] has ignited a full-blown crash in our own financial system. Our markets, already swollen with speculative credit, needed only a spark — and the collapse abroad provided a conflagration. Banks are calling in loans, credit is freezing, and the contagion has become our own crisis.",
+  "de": "Die Panik [SCOPE.sCountry('banking_crash_origin_country').GetAltName('IN')] hat einen ausgewachsenen Crash in unserem eigenen Finanzsystem entfacht. Unsere Märkte, bereits aufgebläht von spekulativem Kredit, brauchten nur einen Funken – und der Zusammenbruch im Ausland lieferte einen Flächenbrand. Banken fordern Kredite zurück, die Kreditvergabe friert ein, und aus der Ansteckung ist unsere eigene Krise geworden."
+ },
+ "minor_events_timelineextended.7.d_cascade_systemic": {
+  "en": "The total financial annihilation in [SCOPE.sCountry('banking_crash_origin_country').GetName] has ripped through the global financial system and detonated our own bubble. The interconnected web of credit and speculation that our bankers assured us was 'manageable risk' has unraveled in hours. This is no longer a foreign crisis — it is a systemic collapse.",
+  "de": "Die totale finanzielle Vernichtung [SCOPE.sCountry('banking_crash_origin_country').GetAltName('IN')] hat das globale Finanzsystem zerrissen und unsere eigene Blase zur Explosion gebracht. Das verflochtene Netz aus Krediten und Spekulation, das uns unsere Bankiers als ‚beherrschbares Risiko‘ versicherten, hat sich binnen Stunden aufgelöst. Dies ist keine ausländische Krise mehr – es ist ein systemischer Zusammenbruch."
+ },
+ "minor_events_timelineextended.7.d_crash": {
+  "en": "The crash in [SCOPE.sCountry('banking_crash_origin_country').GetName] has spilled across trade and credit networks into our own financial system. Banks with exposure to [SCOPE.sCountry('banking_crash_origin_country').GetAdjectiveNoFormatting] assets are scrambling to assess their losses, and domestic confidence is faltering.",
+  "de": "Der Crash [SCOPE.sCountry('banking_crash_origin_country').GetAltName('IN')] hat sich über Handels- und Kreditnetze in unser eigenes Finanzsystem ausgebreitet. Banken mit Engagement in [SCOPE.sCountry('banking_crash_origin_country').GetAdjectiveNoFormatting|l]en Vermögenswerten versuchen hektisch, ihre Verluste zu beziffern, und das Vertrauen im Inland schwindet."
+ },
+ "minor_events_timelineextended.7.d_panic": {
+  "en": "The financial panic in [SCOPE.sCountry('banking_crash_origin_country').GetName] is metastasizing. [SCOPE.sCountry('banking_crash_origin_country').GetAdjectiveNoFormatting] banks have frozen credit, and the shock is radiating through every connected market. Our own institutions face a sudden liquidity crisis as counterparty risk cascades through the system.",
+  "de": "Die Finanzpanik [SCOPE.sCountry('banking_crash_origin_country').GetAltName('IN')] breitet sich aus. [SCOPE.sCountry('banking_crash_origin_country').GetAdjectiveNoFormatting]e Banken haben die Kreditvergabe eingefroren, und der Schock strahlt auf jeden verbundenen Markt aus. Unsere eigenen Institute stehen vor einer plötzlichen Liquiditätskrise, da sich das Kontrahentenrisiko durch das System zieht."
+ },
+ "minor_events_timelineextended.7.d_systemic": {
+  "en": "The total financial collapse in [SCOPE.sCountry('banking_crash_origin_country').GetName] has triggered a global crisis of confidence. The interconnected web of credit, trade, and investment that binds our economies together is unraveling. Our own banks are hemorrhaging deposits as panic spreads faster than any government can respond.",
+  "de": "Der totale finanzielle Zusammenbruch [SCOPE.sCountry('banking_crash_origin_country').GetAltName('IN')] hat eine globale Vertrauenskrise ausgelöst. Das verflochtene Netz aus Krediten, Handel und Investitionen, das unsere Volkswirtschaften verbindet, löst sich auf. Unsere eigenen Banken verlieren rapide Einlagen, während sich die Panik schneller ausbreitet, als eine Regierung reagieren kann."
+ },
+ "minor_events_timelineextended.7.f": {
+  "en": "\\\"They say the trouble abroad is contained. Our bankers nod reassuringly. But I notice they have stopped extending new loans.\\\"",
+  "de": "„Man sagt, die Unruhen im Ausland seien unter Kontrolle. Unsere Bankiers nicken beruhigend. Doch mir fällt auf, dass sie keine neuen Kredite mehr vergeben.“"
+ },
+ "minor_events_timelineextended.7.f_cascade": {
+  "en": "\\\"We thought we were clever. We thought our bubble was different — better managed, better regulated. The wreckage from [SCOPE.sCountry('banking_crash_origin_country').GetName] proved otherwise. A house of cards falls the same in every country.\\\"",
+  "de": "„Wir hielten uns für clever. Wir dachten, unsere Blase sei anders – besser verwaltet, besser reguliert. Die Trümmer [SCOPE.sCountry('banking_crash_origin_country').GetAltName('GEN')] bewiesen das Gegenteil. Ein Kartenhaus fällt in jedem Land gleich zusammen.“"
+ },
+ "minor_events_timelineextended.7.f_severe": {
+  "en": "\\\"The telegraph brought the news from [SCOPE.sCountry('banking_crash_origin_country').GetName] at half past nine. By ten o'clock our own exchange was in freefall. By noon, three brokerage houses had closed their doors.\\\"\\n\\n\\\"And it's not even our crisis.\\\"\\n\\n\\\"It is now.\\\"",
+  "de": "„Der Telegraf brachte die Nachricht [SCOPE.sCountry('banking_crash_origin_country').GetAltName('VON')] um halb zehn. Um zehn Uhr befand sich unsere eigene Börse bereits im freien Fall. Bis Mittag hatten drei Maklerhäuser ihre Türen geschlossen.“\\n\\n„Und es ist nicht einmal unsere Krise.“\\n\\n„Jetzt schon.“"
+ },
+ "minor_events_timelineextended.7.monetary_intervention": {
+  "en": "Deploy central bank stabilization",
+  "de": "Stabilisierungsmaßnahmen der Zentralbank einsetzen"
+ },
+ "minor_events_timelineextended.7.t": {
+  "en": "Contagion from Abroad",
+  "de": "Ansteckung aus dem Ausland"
+ },
+ "minor_events_timelineextended.7.t_cascade": {
+  "en": "Cascading Financial Collapse",
+  "de": "Kaskadierender Finanzkollaps"
+ },
+ "minor_events_timelineextended.7.t_severe": {
+  "en": "Financial Contagion",
+  "de": "Finanzielle Ansteckung"
+ },
+ "minor_events_timelineextended.8.a": {
+  "en": "We must weather this storm.",
+  "de": "Wir müssen diesen Sturm überstehen."
+ },
+ "minor_events_timelineextended.8.b": {
+  "en": "Our isolation has served us well.",
+  "de": "Unsere Isolation hat sich für uns bewährt."
+ },
+ "minor_events_timelineextended.8.c": {
+  "en": "Brace for the global downturn.",
+  "de": "Uns auf den globalen Abschwung vorbereiten."
+ },
+ "minor_events_timelineextended.8.d": {
+  "en": "A wave of financial collapses has swept across the world's major economies. One by one, the great trading nations have seen their banks fail, their markets collapse, and their credit freeze. No country with open markets can escape a contraction of this scale — reduced demand, collapsing trade, and a grinding loss of confidence will weigh on our economy for years to come.",
+  "de": "Eine Welle von Finanzzusammenbrüchen hat die großen Volkswirtschaften der Welt erfasst. Eine nach der anderen haben die großen Handelsnationen erlebt, wie ihre Banken scheiterten, ihre Märkte einbrachen und ihre Kredite einfroren. Kein Land mit offenen Märkten kann einer Schrumpfung dieses Ausmaßes entgehen – sinkende Nachfrage, einbrechender Handel und ein zermürbender Vertrauensverlust werden unsere Wirtschaft noch jahrelang belasten."
+ },
+ "minor_events_timelineextended.8.d_crashed": {
+  "en": "Our own financial system was among the casualties. A cascading wave of bank failures, market panics, and credit freezes has engulfed the world's major economies — including ours. The global financial system is in ruins, and recovery will be measured in years, not months. We must prepare for a prolonged depression.",
+  "de": "Unser eigenes Finanzsystem gehörte zu den Opfern. Eine kaskadierende Welle von Bankenzusammenbrüchen, Marktpaniken und eingefrorenen Krediten hat die großen Volkswirtschaften der Welt erfasst – auch unsere. Das globale Finanzsystem liegt in Trümmern, und die Erholung wird in Jahren gemessen, nicht in Monaten. Wir müssen uns auf eine langanhaltende Depression vorbereiten."
+ },
+ "minor_events_timelineextended.8.d_isolated": {
+  "en": "A wave of financial collapses has swept the world's trading nations. Banks have failed, markets have crashed, and credit has frozen across dozens of countries. Our own economy, sheltered from the worst of international finance, has so far been largely spared — but even we cannot fully escape the chill of a world in depression.",
+  "de": "Eine Welle von Finanzzusammenbrüchen hat die Handelsnationen der Welt erfasst. In Dutzenden Ländern sind Banken gescheitert, Märkte eingebrochen und Kredite eingefroren. Unsere eigene Wirtschaft, abgeschirmt vom Schlimmsten des internationalen Finanzwesens, ist bislang weitgehend verschont geblieben – doch auch wir können der Kälte einer Welt in der Depression nicht vollständig entgehen."
+ },
+ "minor_events_timelineextended.8.d_scare": {
+  "en": "A wave of financial collapses has swept across the world's major economies. When the panic reached our own markets our banks were shaken, but they held — we were among the lucky ones. Luck does not buy immunity. No country with open markets can escape a contraction of this scale: reduced demand, collapsing trade, and a grinding loss of confidence will weigh on our economy for years to come.",
+  "de": "Eine Welle von Finanzzusammenbrüchen hat die großen Volkswirtschaften der Welt erfasst. Als die Panik unsere eigenen Märkte erreichte, gerieten unsere Banken ins Wanken, hielten aber stand – wir gehörten zu den Glücklichen. Glück verschafft keine Immunität. Kein Land mit offenen Märkten kann einer Schrumpfung dieses Ausmaßes entgehen: sinkende Nachfrage, einbrechender Handel und ein zermürbender Vertrauensverlust werden unsere Wirtschaft noch jahrelang belasten."
+ },
+ "minor_events_timelineextended.8.f": {
+  "en": "\\\"They called it a correction. Then a downturn. Then a crisis. Now they've stopped naming it. The word on everyone's lips is the one no economist wants to say: depression.\\\"",
+  "de": "„Sie nannten es eine Korrektur. Dann einen Abschwung. Dann eine Krise. Jetzt haben sie aufgehört, es zu benennen. Das Wort auf aller Lippen ist das, das kein Ökonom aussprechen will: Depression.“"
+ },
+ "minor_events_timelineextended.8.f_crashed": {
+  "en": "\\\"First it was foreign banks. Then ours. Then the factories. Then the shops. Now it's just — everything. My father says he's never seen anything like it, and he lived through the wars.\\\"\\n\\n\\\"Your father didn't have a mortgage.\\\"",
+  "de": "„Zuerst waren es ausländische Banken. Dann unsere. Dann die Fabriken. Dann die Geschäfte. Jetzt ist es einfach – alles. Mein Vater sagt, er habe so etwas noch nie erlebt, und er hat die Kriege durchlebt.“\\n\\n„Dein Vater hatte keine Hypothek.“"
+ },
+ "minor_events_timelineextended.8.t": {
+  "en": "The Great Depression",
+  "de": "Die Große Depression"
+ },
+ "minor_events_timelineextended.8.t_crashed": {
+  "en": "The Great Depression",
+  "de": "Die Große Depression"
+ },
+ "modern_election_events.1.a": {
+  "en": "Ride the wave — amplify our message.",
+  "de": "Die Welle reiten – unsere Botschaft verstärken."
+ },
+ "modern_election_events.1.b": {
+  "en": "Let the opposition have their moment in the sun.",
+  "de": "Der Opposition ihren Moment im Rampenlicht lassen."
+ },
+ "modern_election_events.1.c": {
+  "en": "Call for digital decorum in our campaigns.",
+  "de": "Digitalen Anstand in unseren Kampagnen einfordern."
+ },
+ "modern_election_events.1.d": {
+  "en": "A single social media post from the campaign trail has ignited a digital wildfire. Within hours, millions have shared it, and every news outlet in [ROOT.GetCountry.GetName] is dissecting its implications. The opposition scrambles to respond while the government weighs whether to ride the wave.",
+  "de": "Ein einzelner Social-Media-Beitrag vom Wahlkampf hat einen digitalen Flächenbrand entfacht. Innerhalb von Stunden haben ihn Millionen geteilt, und jeder Nachrichtensender [ROOT.GetCountry.GetAltName('IN')] seziert seine Auswirkungen. Die Opposition ist bemüht, zu reagieren, während die Regierung abwägt, ob sie die Welle reiten soll."
+ },
+ "modern_election_events.1.f": {
+  "en": "\\\"Did you see it? Everyone's seen it. My grandmother forwarded it to me three times.\\\"\\n\\n\\\"We've had six journalists ring the office since breakfast. Two of them wanted a comment. The other four wanted to know if it was real.\\\"\\n\\n\\\"What did you tell them?\\\"\\n\\n\\\"That we'd issue a statement by noon. That was four hours ago.\\\"",
+  "de": "„Hast du das gesehen? Jeder hat es gesehen. Meine Großmutter hat es mir dreimal weitergeleitet.“\\n\\n„Seit dem Frühstück haben sechs Journalisten im Büro angerufen. Zwei wollten einen Kommentar. Die anderen vier wollten wissen, ob es echt ist.“\\n\\n„Was hast du ihnen gesagt?“\\n\\n„Dass wir bis Mittag eine Erklärung abgeben würden. Das war vor vier Stunden.“"
+ },
+ "modern_election_events.1.t": {
+  "en": "Viral Firestorm",
+  "de": "Viraler Feuersturm"
+ },
+ "modern_election_events.10.a": {
+  "en": "Embrace the star power.",
+  "de": "Die Strahlkraft der Stars nutzen."
+ },
+ "modern_election_events.10.b": {
+  "en": "Celebrities should stay in their lane.",
+  "de": "Prominente sollten sich raushalten."
+ },
+ "modern_election_events.10.c": {
+  "en": "Two can play that game — find our own champion.",
+  "de": "Das können wir auch – unseren eigenen Fürsprecher finden."
+ },
+ "modern_election_events.10.d": {
+  "en": "A beloved cultural figure has made an unexpected public endorsement, lending their considerable social influence to a party's campaign. The endorsement dominates the news cycle and sends ripples through the electorate. Some voters are galvanized; others bristle at celebrities wading into politics.",
+  "de": "Eine beliebte Persönlichkeit des Kulturlebens hat sich unerwartet öffentlich positioniert und ihren erheblichen gesellschaftlichen Einfluss in die Kampagne einer Partei eingebracht. Das Bekenntnis beherrscht die Nachrichtenlage und löst Wellen in der Wählerschaft aus. Manche Wähler sind begeistert; andere ärgern sich über Prominente, die sich in die Politik einmischen."
+ },
+ "modern_election_events.10.f": {
+  "en": "\\\"When someone with fifty million followers says 'vote,' people listen.\\\"\\n\\n\\\"I didn't get into politics to compete with actors and athletes for attention.\\\"\\n\\n\\\"Celebrity or not, one person, one vote. The rest is just noise... very, very loud noise.\\\"",
+  "de": "„Wenn jemand mit fünfzig Millionen Followern ‚wählen‘ sagt, hören die Leute zu.“\\n\\n„Ich bin nicht in die Politik gegangen, um mit Schauspielern und Sportlern um Aufmerksamkeit zu konkurrieren.“\\n\\n„Prominent oder nicht, eine Person, eine Stimme. Der Rest ist nur Lärm … sehr, sehr lauter Lärm.“"
+ },
+ "modern_election_events.10.t": {
+  "en": "Star Power",
+  "de": "Starpower"
+ },
+ "modern_election_events.11.a": {
+  "en": "Replay it on every station!",
+  "de": "Auf jedem Sender wiederholen!"
+ },
+ "modern_election_events.11.b": {
+  "en": "Dismiss it as propaganda.",
+  "de": "Als Propaganda abtun."
+ },
+ "modern_election_events.11.c": {
+  "en": "Counter with our own broadcast.",
+  "de": "Mit einer eigenen Sendung kontern."
+ },
+ "modern_election_events.11.d": {
+  "en": "A thunderous radio address by a firebrand politician has seized the airwaves, with households across [ROOT.GetCountry.GetNameNoFlag] gathered around their wireless sets. The speech — part jeremiad, part rallying cry — has electrified supporters and horrified opponents in equal measure. Every newspaper is reprinting excerpts, and party operatives are scrambling to decide whether to amplify the broadcast or counter it before the next edition goes to print.",
+  "de": "Eine donnernde Radioansprache eines Hitzkopf-Politikers hat den Äther erobert, während sich Haushalte [ROOT.GetCountry.GetAltNameNoFlag('IN')] um ihre Rundfunkgeräte versammelt haben. Die Rede – halb Klagelied, halb Kampfruf – hat Anhänger elektrisiert und Gegner gleichermaßen entsetzt. Jede Zeitung druckt Auszüge nach, und Parteifunktionäre ringen fieberhaft um die Entscheidung, ob sie die Sendung verstärken oder kontern sollen, bevor die nächste Ausgabe in Druck geht."
+ },
+ "modern_election_events.11.f": {
+  "en": "\\\"He spoke for forty minutes. People stopped what they were doing to listen.\\\"\\n\\n\\\"All of them?\\\"\\n\\n\\\"Enough of them. The pubs went quiet. The factory whistles were ignored. My mother knit faster — she said she had to do something with her hands while her ears were taken.\\\"",
+  "de": "„Er sprach vierzig Minuten lang. Die Leute unterbrachen, was sie taten, um zuzuhören.“\\n\\n„Alle?“\\n\\n„Genug von ihnen. In den Kneipen wurde es still. Die Fabriksirenen wurden ignoriert. Meine Mutter strickte schneller – sie sagte, sie müsse etwas mit ihren Händen tun, während ihre Ohren in Beschlag genommen waren.“"
+ },
+ "modern_election_events.11.t": {
+  "en": "Voice of the Nation",
+  "de": "Die Stimme der Nation"
+ },
+ "modern_election_events.12.a": {
+  "en": "Welcome the hero into our ranks.",
+  "de": "Den Helden in unseren Reihen willkommen heißen."
+ },
+ "modern_election_events.12.b": {
+  "en": "Question their fitness for civilian office.",
+  "de": "Ihre Eignung für ein ziviles Amt infrage stellen."
+ },
+ "modern_election_events.12.c": {
+  "en": "Challenge them to a policy debate.",
+  "de": "Sie zu einer Sachdebatte herausfordern."
+ },
+ "modern_election_events.12.d": {
+  "en": "A decorated military hero, beloved by the armed forces and known to every citizen through newsreel footage, has announced their entry into the campaign. Their uniform and medals carry an authority that no civilian politician can match. The question now is whether military valor translates into political acumen — and whether the other parties can withstand such star power.",
+  "de": "Ein hochdekorierter Kriegsheld, von den Streitkräften verehrt und jedem Bürger aus der Wochenschau bekannt, hat seinen Einstieg in den Wahlkampf angekündigt. Seine Uniform und seine Orden verleihen eine Autorität, mit der kein ziviler Politiker mithalten kann. Die Frage ist nun, ob sich militärische Tapferkeit in politisches Geschick übersetzt – und ob die anderen Parteien einer solchen Strahlkraft standhalten können."
+ },
+ "modern_election_events.12.f": {
+  "en": "\\\"The crowd cheered every medal he named. Some of them were watching tears run down their cheeks.\\\"\\n\\n\\\"And his policies?\\\"\\n\\n\\\"He hasn't announced any yet. I'm not sure they'll matter. He stood on the platform in the uniform and the crowd already had him in office.\\\"",
+  "de": "„Die Menge jubelte bei jedem Orden, den er nannte. Manchen liefen dabei Tränen über die Wangen.“\\n\\n„Und seine Politik?“\\n\\n„Er hat noch keine angekündigt. Ich bin nicht sicher, ob es darauf ankommen wird. Er stand in Uniform auf dem Podium, und die Menge hatte ihn im Amt schon vor Augen.“"
+ },
+ "modern_election_events.12.t": {
+  "en": "The War Hero Steps Up",
+  "de": "Der Kriegsheld tritt an"
+ },
+ "modern_election_events.13.a": {
+  "en": "Accept the baron's endorsement.",
+  "de": "Die Unterstützung des Barons annehmen."
+ },
+ "modern_election_events.13.b": {
+  "en": "Reject the press baron's influence.",
+  "de": "Den Einfluss des Pressebarons zurückweisen."
+ },
+ "modern_election_events.13.c": {
+  "en": "Negotiate editorial independence.",
+  "de": "Redaktionelle Unabhängigkeit aushandeln."
+ },
+ "modern_election_events.13.d": {
+  "en": "The most powerful newspaper [concept_magnate] in [ROOT.GetCountry.GetNameNoFlag] has thrown the weight of their media empire behind a party. Morning editions across the nation trumpet the endorsement in bold headlines, while editorial pages dutifully fall in line. The rival press scrambles to respond, but the sheer volume of coverage is overwhelming.",
+  "de": "Der mächtigste [concept_magnate] der Zeitungsbranche [ROOT.GetCountry.GetAltNameNoFlag('GEN')] hat das Gewicht seines Medienimperiums hinter eine Partei gestellt. Die Morgenausgaben im ganzen Land verkünden die Unterstützung in fetten Schlagzeilen, während die Leitartikel pflichtschuldig einschwenken. Die rivalisierende Presse ist bemüht, zu reagieren, doch die schiere Menge der Berichterstattung ist überwältigend."
+ },
+ "modern_election_events.13.f": {
+  "en": "\\\"Did you see the morning editions?\\\"\\n\\n\\\"All eight of them. All identical. The headline writers must have been issued the headline.\\\"\\n\\n\\\"And the opposition's response?\\\"\\n\\n\\\"Page fourteen of the one paper still owned by someone else. Three column inches. Below the racing results.\\\"",
+  "de": "„Hast du die Morgenausgaben gesehen?“\\n\\n„Alle acht. Alle identisch. Den Schlagzeilenschreibern muss die Schlagzeile vorgegeben worden sein.“\\n\\n„Und die Reaktion der Opposition?“\\n\\n„Seite vierzehn der einen Zeitung, die noch jemand anderem gehört. Drei Spaltenzoll. Unter den Rennergebnissen.“"
+ },
+ "modern_election_events.13.t": {
+  "en": "Press Baron's Endorsement",
+  "de": "Die Unterstützung des Pressebarons"
+ },
+ "modern_election_events.14.a": {
+  "en": "Stoke the red scare.",
+  "de": "Die Angst vor den Roten schüren."
+ },
+ "modern_election_events.14.b": {
+  "en": "Defend civil liberties.",
+  "de": "Bürgerrechte verteidigen."
+ },
+ "modern_election_events.14.c": {
+  "en": "Propose a bipartisan anti-extremism commission.",
+  "de": "Eine überparteiliche Kommission gegen Extremismus vorschlagen."
+ },
+ "modern_election_events.14.d": {
+  "en": "Anti-communist hysteria has gripped the campaign trail. Accusations of communist infiltration dominate headlines, with candidates falling over themselves to prove their patriotic credentials. Lists of suspected sympathizers circulate in hushed tones, and any association with leftist movements — however tenuous — is treated as political poison. The atmosphere borders on paranoia.",
+  "de": "Antikommunistische Hysterie hat den Wahlkampf erfasst. Vorwürfe kommunistischer Unterwanderung beherrschen die Schlagzeilen, und die Kandidaten überschlagen sich darin, ihre patriotische Gesinnung zu beweisen. Listen mutmaßlicher Sympathisanten zirkulieren im Flüsterton, und jede Verbindung zu linken Bewegungen – so schwach sie auch sei – gilt als politisches Gift. Die Stimmung grenzt an Paranoia."
+ },
+ "modern_election_events.14.f": {
+  "en": "\\\"They asked the question on television. Live. With the microphone on.\\\"\\n\\n\\\"And the answer?\\\"\\n\\n\\\"The answer doesn't matter. Half the country heard the question. They've already decided what they think of the man being asked it. The hearing is a formality.\\\"",
+  "de": "„Sie haben die Frage im Fernsehen gestellt. Live. Bei laufendem Mikrofon.“\\n\\n„Und die Antwort?“\\n\\n„Die Antwort spielt keine Rolle. Halb das Land hat die Frage gehört. Man hat sich bereits eine Meinung über den Mann gebildet, dem sie gestellt wurde. Die Anhörung ist reine Formsache.“"
+ },
+ "modern_election_events.14.t": {
+  "en": "Red Menace",
+  "de": "Rote Gefahr"
+ },
+ "modern_election_events.15.a": {
+  "en": "Take credit for the boom.",
+  "de": "Den Boom für sich beanspruchen."
+ },
+ "modern_election_events.15.b": {
+  "en": "Warn that bubbles always burst.",
+  "de": "Davor warnen, dass Blasen immer platzen."
+ },
+ "modern_election_events.15.c": {
+  "en": "Promise to share the wealth.",
+  "de": "Versprechen, den Wohlstand zu teilen."
+ },
+ "modern_election_events.15.d": {
+  "en": "The economy of [ROOT.GetCountry.GetNameNoFlag] is booming. Factories run at full capacity, unemployment is a distant memory, and consumer confidence soars to unprecedented heights. The incumbent government naturally claims credit for the miracle, while the opposition warns that unsustainable growth will inevitably end in tears. Voters, for the moment, are content — but contentment is a fickle thing.",
+  "de": "Die Wirtschaft [ROOT.GetCountry.GetAltNameNoFlag('GEN')] boomt. Die Fabriken laufen auf Hochtouren, Arbeitslosigkeit ist eine ferne Erinnerung, und das Verbrauchervertrauen steigt auf beispiellose Höhen. Die amtierende Regierung beansprucht natürlich das Wunder für sich, während die Opposition warnt, dass untragbares Wachstum zwangsläufig in Tränen enden wird. Die Wähler sind vorerst zufrieden – doch Zufriedenheit ist eine flüchtige Sache."
+ },
+ "modern_election_events.15.f": {
+  "en": "\\\"The unemployment numbers are the best in twenty years. The polling reflects it.\\\"\\n\\n\\\"And the debt figures?\\\"\\n\\n\\\"The debt figures are also the worst in twenty years. The polling does not reflect that. We tried bringing it up at three different campaign stops. The crowd booed.\\\"",
+  "de": "„Die Arbeitslosenzahlen sind die besten seit zwanzig Jahren. Die Umfragen spiegeln das wider.“\\n\\n„Und die Schuldenzahlen?“\\n\\n„Die Schuldenzahlen sind auch die schlechtesten seit zwanzig Jahren. Das spiegeln die Umfragen nicht wider. Wir haben versucht, das bei drei verschiedenen Wahlkampfauftritten anzusprechen. Die Menge buhte.“"
+ },
+ "modern_election_events.15.t": {
+  "en": "Economic Miracle",
+  "de": "Wirtschaftswunder"
+ },
+ "modern_election_events.16.a": {
+  "en": "Champion equal rights.",
+  "de": "Für Gleichberechtigung eintreten."
+ },
+ "modern_election_events.16.b": {
+  "en": "Defend tradition and the status quo.",
+  "de": "Tradition und den Status quo verteidigen."
+ },
+ "modern_election_events.16.c": {
+  "en": "Propose gradual, measured reform.",
+  "de": "Eine schrittweise, maßvolle Reform vorschlagen."
+ },
+ "modern_election_events.16.d": {
+  "en": "The civil rights movement has burst into the campaign with undeniable force. Marchers fill the streets demanding equal treatment under the law, and every candidate must now take a stand. To champion equality risks alienating traditionalists; to ignore the movement risks being on the wrong side of history. The nation watches, and the ballot box will deliver its verdict.",
+  "de": "Die Bürgerrechtsbewegung ist mit unbestreitbarer Wucht in den Wahlkampf eingebrochen. Demonstranten füllen die Straßen und fordern Gleichbehandlung vor dem Gesetz, und jeder Kandidat muss nun Stellung beziehen. Wer sich für Gleichberechtigung starkmacht, riskiert, Traditionalisten zu verprellen; wer die Bewegung ignoriert, riskiert, auf der falschen Seite der Geschichte zu stehen. Die Nation schaut zu, und die Wahlurne wird ihr Urteil fällen."
+ },
+ "modern_election_events.16.f": {
+  "en": "\\\"Fifty thousand people. The largest demonstration since the war.\\\"\\n\\n\\\"And the candidates?\\\"\\n\\n\\\"All three of them are issuing statements claiming they have always supported the movement. Two of them are not entirely lying. The third was on record opposing it last year.\\\"",
+  "de": "„Fünfzigtausend Menschen. Die größte Demonstration seit dem Krieg.“\\n\\n„Und die Kandidaten?“\\n\\n„Alle drei geben Erklärungen ab, in denen sie behaupten, die Bewegung schon immer unterstützt zu haben. Zwei von ihnen lügen nicht ganz. Der Dritte hat sich noch letztes Jahr öffentlich dagegen ausgesprochen.“"
+ },
+ "modern_election_events.16.t": {
+  "en": "A Question of Equality",
+  "de": "Eine Frage der Gleichberechtigung"
+ },
+ "modern_election_events.17.a": {
+  "en": "Promise to expand the space program.",
+  "de": "Versprechen, das Raumfahrtprogramm auszubauen."
+ },
+ "modern_election_events.17.b": {
+  "en": "Redirect funds to earthbound problems.",
+  "de": "Mittel auf irdische Probleme umlenken."
+ },
+ "modern_election_events.17.c": {
+  "en": "Frame it as national [concept_prestige].",
+  "de": "Es als nationales [concept_prestige] darstellen."
+ },
+ "modern_election_events.17.d": {
+  "en": "Headlines blaze with news of our nation's space achievements. Rockets pierce the heavens, and the public imagination soars with them. On the campaign trail, space has become the ultimate symbol of national prowess — and the ultimate budget battleground. Candidates must choose: reach for the stars, or tend to more earthly concerns?",
+  "de": "Die Schlagzeilen glühen mit Nachrichten über die Raumfahrterfolge unserer Nation. Raketen durchstoßen den Himmel, und die Fantasie der Öffentlichkeit steigt mit ihnen empor. Im Wahlkampf ist der Weltraum zum ultimativen Symbol nationaler Stärke geworden – und zum ultimativen Schlachtfeld um den Haushalt. Die Kandidaten müssen wählen: nach den Sternen greifen oder sich irdischeren Sorgen widmen?"
+ },
+ "modern_election_events.17.f": {
+  "en": "\\\"The launch was on every channel.\\\"\\n\\n\\\"And what did the candidates say?\\\"\\n\\n\\\"The first said it proves the country can do great things. The second said the funds would be better spent on schools. The third tried to say both. The third is polling worst.\\\"",
+  "de": "„Der Start lief auf jedem Kanal.“\\n\\n„Und was sagten die Kandidaten?“\\n\\n„Der Erste sagte, es beweise, dass das Land Großes leisten kann. Der Zweite sagte, das Geld sei in Schulen besser angelegt. Der Dritte versuchte, beides zu sagen. Der Dritte liegt in den Umfragen am schlechtesten.“"
+ },
+ "modern_election_events.17.t": {
+  "en": "The Space Card",
+  "de": "Die Weltraumkarte"
+ },
+ "modern_election_events.18.a": {
+  "en": "Crack down on the [Concept('concept_agitator', 'agitators')].",
+  "de": "Gegen die [Concept('concept_agitator', 'Agitatoren')] durchgreifen."
+ },
+ "modern_election_events.18.b": {
+  "en": "Embrace the youth movement.",
+  "de": "Die Jugendbewegung willkommen heißen."
+ },
+ "modern_election_events.18.c": {
+  "en": "Open a dialogue with student leaders.",
+  "de": "Einen Dialog mit den Studentenführern beginnen."
+ },
+ "modern_election_events.18.d": {
+  "en": "Students at the nation's universities have erupted in protest, their anger spilling from lecture halls into the streets. Banners denounce government policy, teach-ins draw hundreds, and the evening news carries images of young idealists facing down authority. The movement has injected raw energy into the campaign — energy that could fuel a political revolution or provoke a brutal backlash.",
+  "de": "Studenten an den Universitäten des Landes sind in Protest ausgebrochen, ihr Zorn schwappt aus den Hörsälen auf die Straßen. Transparente verurteilen die Regierungspolitik, Lehrveranstaltungen zum Zeitgeschehen ziehen Hunderte an, und die Abendnachrichten zeigen Bilder junger Idealisten, die sich der Obrigkeit entgegenstellen. Die Bewegung hat rohe Energie in den Wahlkampf gebracht – Energie, die eine politische Revolution befeuern oder eine brutale Gegenreaktion auslösen könnte."
+ },
+ "modern_election_events.18.f": {
+  "en": "\\\"There are five thousand of them on the lawn.\\\"\\n\\n\\\"And what do they want?\\\"\\n\\n\\\"They want to be heard. They are willing to be specific later. The first demand is that the men with the average age of fifty-eight come down and listen.\\\"",
+  "de": "„Es sind fünftausend von ihnen auf dem Rasen.“\\n\\n„Und was wollen sie?“\\n\\n„Sie wollen gehört werden. Konkret werden sie später. Die erste Forderung ist, dass die Männer mit einem Durchschnittsalter von achtundfünfzig herunterkommen und zuhören.“"
+ },
+ "modern_election_events.18.t": {
+  "en": "Campus Uprising",
+  "de": "Aufstand auf dem Campus"
+ },
+ "modern_election_events.19.a": {
+  "en": "Go on the offensive with policy attacks.",
+  "de": "Mit inhaltlichen Angriffen in die Offensive gehen."
+ },
+ "modern_election_events.19.b": {
+  "en": "Present a calm, statesmanlike image.",
+  "de": "Ein ruhiges, staatsmännisches Bild abgeben."
+ },
+ "modern_election_events.19.c": {
+  "en": "Make a bold live policy announcement.",
+  "de": "Eine kühne, live verkündete Politikankündigung machen."
+ },
+ "modern_election_events.19.d": {
+  "en": "For the first time, the leading candidates will face each other on live television. Millions will tune in, judging not just their policies but their composure, their wit, their very appearance. Political strategists are frantic — no one knows how the new medium will reshape the rules of engagement. One thing is certain: when the cameras turn on, there will be nowhere to hide.",
+  "de": "Zum ersten Mal treten die führenden Kandidaten live im Fernsehen gegeneinander an. Millionen werden zuschauen und nicht nur ihre Politik beurteilen, sondern auch ihre Fassung, ihren Witz, ihr Auftreten selbst. Politische Strategen sind in heller Aufregung – niemand weiß, wie das neue Medium die Spielregeln verändern wird. Eines ist sicher: Sobald die Kameras laufen, gibt es kein Versteck mehr."
+ },
+ "modern_election_events.19.f": {
+  "en": "\\\"Thirty million people watched the debate.\\\"\\n\\n\\\"And what did they take from it?\\\"\\n\\n\\\"They took the moment when the camera held on his face for three seconds while he tried to recall the answer. The policy positions are forgotten. The three seconds will be on every newscast for the rest of the week.\\\"",
+  "de": "„Dreißig Millionen Menschen haben die Debatte gesehen.“\\n\\n„Und was haben sie mitgenommen?“\\n\\n„Den Moment, in dem die Kamera drei Sekunden lang auf seinem Gesicht verharrte, während er nach der Antwort suchte. Die politischen Positionen sind vergessen. Die drei Sekunden werden den Rest der Woche in jeder Nachrichtensendung laufen.“"
+ },
+ "modern_election_events.19.t": {
+  "en": "The Great Debate",
+  "de": "Die große Debatte"
+ },
+ "modern_election_events.2.a": {
+  "en": "A useful fiction. Let it circulate.",
+  "de": "Eine nützliche Fiktion. Lasst sie kursieren."
+ },
+ "modern_election_events.2.b": {
+  "en": "Expose the forgery — truth still matters.",
+  "de": "Die Fälschung entlarven – die Wahrheit zählt noch."
+ },
+ "modern_election_events.2.c": {
+  "en": "Ban AI-generated content in campaigning.",
+  "de": "KI-generierte Inhalte im Wahlkampf verbieten."
+ },
+ "modern_election_events.2.d": {
+  "en": "A startlingly realistic deepfake video has surfaced showing an opposition leader making inflammatory remarks they never actually made. The fabrication is sophisticated enough that millions viewed it before anyone questioned its authenticity. The campaign must decide how to respond before the narrative calcifies.",
+  "de": "Ein erschreckend realistisches Deepfake-Video ist aufgetaucht, das einen Oppositionsführer bei aufwieglerischen Äußerungen zeigt, die er nie gemacht hat. Die Fälschung ist raffiniert genug, dass Millionen sie sahen, bevor jemand ihre Echtheit infrage stellte. Die Kampagne muss entscheiden, wie sie reagiert, bevor sich die Erzählung verfestigt."
+ },
+ "modern_election_events.2.f": {
+  "en": "\\\"It looks exactly like them. The voice, the mannerisms — I watched it twice and couldn't tell.\\\"\\n\\n\\\"The debunking came out four hours later. Fourteen outlets ran it. But the original had already been shared six million times.\\\"\\n\\n\\\"So what do we do?\\\"\\n\\nA long pause. \\\"I genuinely don't know.\\\"",
+  "de": "„Es sieht genau aus wie er. Die Stimme, die Gesten – ich habe es zweimal gesehen und konnte es nicht erkennen.“\\n\\n„Die Richtigstellung kam vier Stunden später. Vierzehn Medien griffen sie auf. Aber das Original war da schon sechs Millionen Mal geteilt worden.“\\n\\n„Was machen wir also?“\\n\\nEine lange Pause. „Ich weiß es ehrlich gesagt nicht.“"
+ },
+ "modern_election_events.2.t": {
+  "en": "The Uncanny Candidate",
+  "de": "Der unheimliche Kandidat"
+ },
+ "modern_election_events.20.a": {
+  "en": "Back the trailblazer.",
+  "de": "Die Wegbereiterin unterstützen."
+ },
+ "modern_election_events.20.b": {
+  "en": "Appeal to traditional values.",
+  "de": "An traditionelle Werte appellieren."
+ },
+ "modern_election_events.20.c": {
+  "en": "Adopt women's rights as a core platform.",
+  "de": "Frauenrechte zum Kernthema machen."
+ },
+ "modern_election_events.20.d": {
+  "en": "A trailblazing woman has risen to [concept_prominence] on the campaign trail, challenging centuries of political convention. Her candidacy has galvanized supporters who see in her the promise of a new era, while provoking fierce resistance from those who believe that some traditions should not bend. The debate over women in politics has become impossible to ignore.",
+  "de": "Eine wegbereitende Frau hat im Wahlkampf [concept_prominence] erlangt und stellt Jahrhunderte politischer Konventionen infrage. Ihre Kandidatur hat Anhänger elektrisiert, die in ihr das Versprechen einer neuen Ära sehen, während sie bei jenen, die glauben, manche Traditionen dürften sich nicht beugen, heftigen Widerstand hervorruft. Die Debatte über Frauen in der Politik lässt sich nicht mehr ignorieren."
+ },
+ "modern_election_events.20.f": {
+  "en": "\\\"She has been speaking for twenty minutes. She has not yet been interrupted.\\\"\\n\\n\\\"That is itself remarkable.\\\"\\n\\n\\\"It is. The men in the front row have been waiting for an opening to challenge her. She has given them none. She has simply continued, and the crowd has continued listening, and the men have begun to look uncomfortable in their chairs.\\\"",
+  "de": "„Sie spricht seit zwanzig Minuten. Noch ist sie nicht unterbrochen worden.“\\n\\n„Das allein ist bemerkenswert.“\\n\\n„Das ist es. Die Männer in der ersten Reihe warten auf eine Gelegenheit, sie herauszufordern. Die hat sie ihnen nicht gegeben. Sie hat einfach weitergesprochen, und die Menge hat weiter zugehört, und den Männern wird es allmählich unbehaglich auf ihren Stühlen.“"
+ },
+ "modern_election_events.20.t": {
+  "en": "A Woman's Place",
+  "de": "Der Platz einer Frau"
+ },
+ "modern_election_events.21.a": {
+  "en": "Pledge an industrial cleanup.",
+  "de": "Eine industrielle Sanierung versprechen."
+ },
+ "modern_election_events.21.b": {
+  "en": "Defend jobs over the environment.",
+  "de": "Arbeitsplätze über die Umwelt stellen."
+ },
+ "modern_election_events.21.c": {
+  "en": "Invest in green technology.",
+  "de": "In grüne Technologien investieren."
+ },
+ "modern_election_events.21.d": {
+  "en": "An industrial disaster has left a scar on the landscape and the public consciousness. Rivers run foul, communities report mysterious illnesses, and the companies responsible deflect blame with practiced ease. In the heat of the campaign, [concept_pollution_system] has become the issue no candidate can avoid. The question is whether economic growth and environmental protection can coexist.",
+  "de": "Eine Industriekatastrophe hat eine Narbe in der Landschaft und im öffentlichen Bewusstsein hinterlassen. Flüsse führen faules Wasser, Gemeinden berichten von rätselhaften Krankheiten, und die verantwortlichen Unternehmen weisen die Schuld mit geübter Leichtigkeit von sich. In der Hitze des Wahlkampfs ist [concept_pollution_system] zu dem Thema geworden, dem kein Kandidat ausweichen kann. Die Frage ist, ob Wirtschaftswachstum und Umweltschutz nebeneinander bestehen können."
+ },
+ "modern_election_events.21.f": {
+  "en": "\\\"The river outside the plant ran orange last week.\\\"\\n\\n\\\"And the plant?\\\"\\n\\n\\\"Still operating. Still employing four thousand people. The candidate who promised to shut it down has lost the local poll by twenty points. The candidate who promised to clean it up while keeping it open has won by ten.\\\"",
+  "de": "„Der Fluss vor der Anlage war letzte Woche orange.“\\n\\n„Und die Anlage?“\\n\\n„Läuft weiter. Beschäftigt weiterhin viertausend Menschen. Der Kandidat, der versprach, sie zu schließen, hat die lokale Umfrage mit zwanzig Punkten Rückstand verloren. Der Kandidat, der versprach, sie zu sanieren und offen zu halten, hat mit zehn Punkten Vorsprung gewonnen.“"
+ },
+ "modern_election_events.21.t": {
+  "en": "Toxic Legacy",
+  "de": "Giftiges Erbe"
+ },
+ "modern_election_events.22.a": {
+  "en": "Mock their lack of experience.",
+  "de": "Ihre Unerfahrenheit verspotten."
+ },
+ "modern_election_events.22.b": {
+  "en": "Embrace their populist appeal.",
+  "de": "Ihre populistische Anziehungskraft nutzen."
+ },
+ "modern_election_events.22.c": {
+  "en": "Challenge them on policy substance.",
+  "de": "Sie inhaltlich herausfordern."
+ },
+ "modern_election_events.22.d": {
+  "en": "A beloved figure from the world of entertainment — with no political experience whatsoever — has announced their candidacy. Their fame guarantees attention, their populist instincts draw crowds, and their utter disregard for political convention delights and terrifies in equal measure. The professional politicians are left spluttering: how do you debate someone who rewrites the rules?",
+  "de": "Eine beliebte Persönlichkeit aus der Unterhaltungsbranche – ohne jegliche politische Erfahrung – hat ihre Kandidatur angekündigt. Ihr Ruhm garantiert Aufmerksamkeit, ihr populistisches Gespür zieht Menschenmassen an, und ihre völlige Missachtung politischer Konventionen begeistert und entsetzt gleichermaßen. Den Berufspolitikern bleibt nur das Staunen: Wie debattiert man mit jemandem, der die Regeln neu schreibt?"
+ },
+ "modern_election_events.22.f": {
+  "en": "\\\"Forty years he has served. Three terms in cabinet. A treaty bearing his name.\\\"\\n\\n\\\"And the polls?\\\"\\n\\n\\\"The polls have him losing by twelve points. To an entertainer whose previous experience was a sitcom about a cruise ship. The voters say they want change. The entertainer is change.\\\"",
+  "de": "„Vierzig Jahre hat er gedient. Drei Amtszeiten im Kabinett. Ein Vertrag, der seinen Namen trägt.“\\n\\n„Und die Umfragen?“\\n\\n„Die Umfragen sehen ihn mit zwölf Punkten Rückstand. Gegen einen Entertainer, dessen bisherige Erfahrung eine Sitcom über ein Kreuzfahrtschiff war. Die Wähler sagen, sie wollen Wandel. Der Entertainer ist der Wandel.“"
+ },
+ "modern_election_events.22.t": {
+  "en": "The Outsider Candidate",
+  "de": "Der Außenseiter-Kandidat"
+ },
+ "modern_election_events.23.a": {
+  "en": "Endorse genetic research.",
+  "de": "Genforschung befürworten."
+ },
+ "modern_election_events.23.b": {
+  "en": "Call for a moratorium.",
+  "de": "Ein Moratorium fordern."
+ },
+ "modern_election_events.23.c": {
+  "en": "Establish a genetics ethics commission.",
+  "de": "Eine Ethikkommission für Genetik einrichten."
+ },
+ "modern_election_events.23.d": {
+  "en": "Advances in genetic engineering have forced their way into the campaign. Scientists hail the potential to cure diseases and feed the world; religious leaders warn of humanity playing God. Voters are deeply divided between excitement and apprehension, and every candidate must stake out a position on where the line between progress and hubris should be drawn.",
+  "de": "Fortschritte in der Gentechnik haben sich in den Wahlkampf gedrängt. Wissenschaftler preisen das Potenzial, Krankheiten zu heilen und die Welt zu ernähren; religiöse Führer warnen davor, dass die Menschheit Gott spielt. Die Wähler sind tief gespalten zwischen Begeisterung und Beklemmung, und jeder Kandidat muss Stellung beziehen, wo die Grenze zwischen Fortschritt und Hybris zu ziehen ist."
+ },
+ "modern_election_events.23.f": {
+  "en": "\\\"She said she would fund the research to end hereditary disease in a generation.\\\"\\n\\n\\\"And her opponent?\\\"\\n\\n\\\"Said that to engineer the human genome was to play God. Both speeches drew standing ovations. The voters applauded the cure and the soul without seeing the contradiction. The candidates noticed.\\\"",
+  "de": "„Sie sagte, sie werde die Forschung finanzieren, um Erbkrankheiten innerhalb einer Generation auszurotten.“\\n\\n„Und ihr Gegner?“\\n\\n„Sagte, das menschliche Genom zu verändern hieße, Gott zu spielen. Beide Reden erhielten stehende Ovationen. Die Wähler applaudierten der Heilung und der Seele, ohne den Widerspruch zu bemerken. Die Kandidaten bemerkten ihn.“"
+ },
+ "modern_election_events.23.t": {
+  "en": "The Genome Question",
+  "de": "Die Genomfrage"
+ },
+ "modern_election_events.24.a": {
+  "en": "Demand a security crackdown.",
+  "de": "Ein hartes Durchgreifen bei der Sicherheit fordern."
+ },
+ "modern_election_events.24.b": {
+  "en": "Warn against eroding civil liberties.",
+  "de": "Vor der Aushöhlung der Bürgerrechte warnen."
+ },
+ "modern_election_events.24.c": {
+  "en": "Propose measured, bipartisan reform.",
+  "de": "Eine maßvolle, überparteiliche Reform vorschlagen."
+ },
+ "modern_election_events.24.d": {
+  "en": "A major security incident has shaken [ROOT.GetCountry.GetNameNoFlag] to its core, and the campaign trail has been transformed overnight. The usual partisan squabbles feel suddenly trivial in the face of genuine threat. Some voices demand a forceful crackdown; others warn that surrendering liberties in the name of security plays into the enemy's hands. The nation holds its breath.",
+  "de": "Ein schwerwiegender Sicherheitsvorfall hat [ROOT.GetCountry.GetAltNameNoFlag('AKK')] bis ins Mark erschüttert, und der Wahlkampf hat sich über Nacht verändert. Die üblichen parteipolitischen Scharmützel wirken angesichts einer echten Bedrohung plötzlich belanglos. Manche Stimmen fordern ein hartes Durchgreifen; andere warnen, dass die Preisgabe von Freiheiten im Namen der Sicherheit dem Feind in die Hände spielt. Die Nation hält den Atem an."
+ },
+ "modern_election_events.24.f": {
+  "en": "\\\"The first statement came within an hour. Stern, dignified, condemning the attack.\\\"\\n\\n\\\"And the policies?\\\"\\n\\n\\\"The policies appeared within forty-eight hours. Comprehensive, detailed, costed. Most of them had been written overnight by people who had never thought about the subject until the attack happened.\\\"",
+  "de": "„Die erste Erklärung kam innerhalb einer Stunde. Streng, würdevoll, den Angriff verurteilend.“\\n\\n„Und die politischen Maßnahmen?“\\n\\n„Die Maßnahmen erschienen innerhalb von achtundvierzig Stunden. Umfassend, detailliert, durchgerechnet. Die meisten davon wurden über Nacht von Leuten geschrieben, die vor dem Anschlag nie über das Thema nachgedacht hatten.“"
+ },
+ "modern_election_events.24.t": {
+  "en": "Rally 'Round the Flag",
+  "de": "Schulterschluss"
+ },
+ "modern_election_events.25.a": {
+  "en": "Justify it as necessary for security.",
+  "de": "Es als sicherheitsnotwendig rechtfertigen."
+ },
+ "modern_election_events.25.b": {
+  "en": "Condemn the surveillance program.",
+  "de": "Das Überwachungsprogramm verurteilen."
+ },
+ "modern_election_events.25.c": {
+  "en": "Pass transparency legislation.",
+  "de": "Transparenzgesetze verabschieden."
+ },
+ "modern_election_events.25.d": {
+  "en": "A whistleblower has exposed a vast, classified surveillance program operated by the government of [ROOT.GetCountry.GetNameNoFlag]. The revelations dominate every news cycle: citizens monitored without warrant, private communications intercepted at scale, dissidents tracked. The campaign has suddenly become a referendum on the balance between security and privacy.",
+  "de": "Ein Whistleblower hat ein gewaltiges, geheimes Überwachungsprogramm der Regierung [ROOT.GetCountry.GetAltNameNoFlag('GEN')] aufgedeckt. Die Enthüllungen beherrschen jede Nachrichtenrunde: Bürger ohne richterliche Anordnung überwacht, private Kommunikation massenhaft abgefangen, Dissidenten verfolgt. Der Wahlkampf ist plötzlich zu einem Referendum über das Gleichgewicht zwischen Sicherheit und Privatsphäre geworden."
+ },
+ "modern_election_events.25.f": {
+  "en": "\\\"Four hundred pages of operational detail.\\\"\\n\\n\\\"Has anyone read them?\\\"\\n\\n\\\"The journalists have. The public has read the summary. The summary fits on a postcard. It says that the agency listens to every telephone call in the country. That is all the public needed to know.\\\"",
+  "de": "„Vierhundert Seiten operativer Details.“\\n\\n„Hat sie jemand gelesen?“\\n\\n„Die Journalisten schon. Die Öffentlichkeit hat die Zusammenfassung gelesen. Die Zusammenfassung passt auf eine Postkarte. Sie besagt, dass die Behörde jedes Telefonat im Land mithört. Mehr musste die Öffentlichkeit nicht wissen.“"
+ },
+ "modern_election_events.25.t": {
+  "en": "The Leak",
+  "de": "Das Leck"
+ },
+ "modern_election_events.26.a": {
+  "en": "Promise tariffs and protectionism.",
+  "de": "Zölle und Protektionismus versprechen."
+ },
+ "modern_election_events.26.b": {
+  "en": "Champion free trade.",
+  "de": "Für Freihandel eintreten."
+ },
+ "modern_election_events.26.c": {
+  "en": "Propose fair trade reforms.",
+  "de": "Reformen für fairen Handel vorschlagen."
+ },
+ "modern_election_events.26.d": {
+  "en": "Globalization has produced winners and losers, and on the campaign trail, the losers are making themselves heard. Shuttered factories, displaced workers, and communities left behind by the march of international commerce fuel a potent backlash. Protectionist rhetoric fills rally halls, while free-trade advocates warn that turning inward will impoverish everyone.",
+  "de": "Die Globalisierung hat Gewinner und Verlierer hervorgebracht, und im Wahlkampf machen sich die Verlierer Gehör. Geschlossene Fabriken, verdrängte Arbeiter und vom Vormarsch des internationalen Handels abgehängte Gemeinden befeuern eine kraftvolle Gegenbewegung. Protektionistische Rhetorik erfüllt die Versammlungshallen, während Verfechter des Freihandels warnen, dass eine Abschottung alle verarmen lasse."
+ },
+ "modern_election_events.26.f": {
+  "en": "\\\"He gave the speech in front of the closed factory.\\\"\\n\\n\\\"And the speech?\\\"\\n\\n\\\"Was as good as the speechwriter could manage. The factory was better. The factory said everything the speech tried to say, and said it without needing any words. The candidate stood there and let the building do the work.\\\"",
+  "de": "„Er hielt die Rede vor der geschlossenen Fabrik.“\\n\\n„Und die Rede?“\\n\\n„War so gut, wie der Redenschreiber es hinbekommen konnte. Die Fabrik war besser. Die Fabrik sagte alles, was die Rede zu sagen versuchte, und das, ohne ein Wort zu brauchen. Der Kandidat stand einfach da und ließ das Gebäude die Arbeit machen.“"
+ },
+ "modern_election_events.26.t": {
+  "en": "Trade War Rhetoric",
+  "de": "Handelskriegsrhetorik"
+ },
+ "modern_election_events.27.a": {
+  "en": "Welcome refugees with open arms.",
+  "de": "Flüchtlinge mit offenen Armen willkommen heißen."
+ },
+ "modern_election_events.27.b": {
+  "en": "Secure our borders first.",
+  "de": "Zuerst unsere Grenzen sichern."
+ },
+ "modern_election_events.27.c": {
+  "en": "Invest in climate solutions at the source.",
+  "de": "In Klimalösungen an der Wurzel investieren."
+ },
+ "modern_election_events.27.d": {
+  "en": "Climate refugees are arriving at the borders of [ROOT.GetCountry.GetNameNoFlag] in growing numbers, displaced by rising seas, failed harvests, and uninhabitable heat. The humanitarian crisis has become an electoral flashpoint, pitting compassion against concerns about resources, identity, and the limits of generosity. No candidate can afford to look away.",
+  "de": "An den Grenzen [ROOT.GetCountry.GetAltNameNoFlag('GEN')] treffen immer mehr Klimaflüchtlinge ein, vertrieben durch steigende Meeresspiegel, ausgefallene Ernten und unbewohnbare Hitze. Die humanitäre Krise ist zu einem Brennpunkt des Wahlkampfs geworden, bei dem Mitgefühl gegen Sorgen um Ressourcen, Identität und die Grenzen der Großzügigkeit steht. Kein Kandidat kann es sich leisten, wegzusehen."
+ },
+ "modern_election_events.27.f": {
+  "en": "\\\"The photograph was on every front page this morning.\\\"\\n\\n\\\"And what does it prove?\\\"\\n\\n\\\"To one party, it proves we must open the doors. To the other, it proves we must close them. Both parties believe they have won the news cycle. The photograph itself is silent on the question.\\\"",
+  "de": "„Das Foto war heute Morgen auf jeder Titelseite.“\\n\\n„Und was beweist es?“\\n\\n„Für die eine Partei beweist es, dass wir die Türen öffnen müssen. Für die andere beweist es, dass wir sie schließen müssen. Beide Parteien glauben, die Nachrichtenlage für sich gewonnen zu haben. Das Foto selbst schweigt zu der Frage.“"
+ },
+ "modern_election_events.27.t": {
+  "en": "Shores of the Displaced",
+  "de": "Ufer der Vertriebenen"
+ },
+ "modern_election_events.28.a": {
+  "en": "Let the algorithm run the show.",
+  "de": "Den Algorithmus die Regie übernehmen lassen."
+ },
+ "modern_election_events.28.b": {
+  "en": "Reject machine politics entirely.",
+  "de": "Maschinenpolitik ganz ablehnen."
+ },
+ "modern_election_events.28.c": {
+  "en": "Disclose AI use and campaign transparently.",
+  "de": "Den KI-Einsatz offenlegen und transparent Wahlkampf führen."
+ },
+ "modern_election_events.28.d": {
+  "en": "It has come to light that a major party's campaign strategy is being managed not by human operatives, but by a machine learning system. The AI analyzes polling data, crafts messaging, allocates resources, and even writes speeches. The rival parties are outraged — though several have quietly begun procurement enquiries of their own.",
+  "de": "Es ist bekannt geworden, dass die Kampagnenstrategie einer großen Partei nicht von menschlichen Mitarbeitern, sondern von einem maschinellen Lernsystem gesteuert wird. Die KI analysiert Umfragedaten, entwirft Botschaften, verteilt Ressourcen und schreibt sogar Reden. Die rivalisierenden Parteien sind empört – auch wenn mehrere still und leise eigene Beschaffungsanfragen gestellt haben."
+ },
+ "modern_election_events.28.f": {
+  "en": "\\\"There is no campaign manager.\\\"\\n\\n\\\"What do you mean, there is no campaign manager?\\\"\\n\\n\\\"The campaign manager was fired three weeks ago. The decisions are being made by the analytics system. The polling has improved. Nobody on the staff is comfortable saying so out loud.\\\"",
+  "de": "„Es gibt keinen Kampagnenleiter.“\\n\\n„Was meinst du, es gibt keinen Kampagnenleiter?“\\n\\n„Der Kampagnenleiter wurde vor drei Wochen entlassen. Die Entscheidungen trifft das Analysesystem. Die Umfragewerte haben sich verbessert. Niemand im Team ist es wohl dabei, das laut auszusprechen.“"
+ },
+ "modern_election_events.28.t": {
+  "en": "The Machine Behind the Curtain",
+  "de": "Die Maschine hinter dem Vorhang"
+ },
+ "modern_election_events.29.a": {
+  "en": "Campaign on universal basic income.",
+  "de": "Mit einem bedingungslosen Grundeinkommen Wahlkampf führen."
+ },
+ "modern_election_events.29.b": {
+  "en": "Denounce it as fiscal irresponsibility.",
+  "de": "Es als fiskalische Verantwortungslosigkeit anprangern."
+ },
+ "modern_election_events.29.c": {
+  "en": "Propose a limited pilot program.",
+  "de": "Ein begrenztes Pilotprogramm vorschlagen."
+ },
+ "modern_election_events.29.d": {
+  "en": "Universal basic income has erupted into the campaign as the most divisive economic proposal in a generation. Proponents paint a vision of liberation from drudgery, a floor beneath which no citizen can fall. Opponents brandish projections of fiscal catastrophe and warn of the death of the work ethic. In a world of increasing automation, the idea refuses to go away.",
+  "de": "Das bedingungslose Grundeinkommen ist als umstrittenster wirtschaftspolitischer Vorschlag einer Generation in den Wahlkampf eingebrochen. Befürworter zeichnen eine Vision der Befreiung von der Plackerei, eines Bodens, unter den kein Bürger fallen kann. Gegner schwingen Prognosen fiskalischer Katastrophen und warnen vor dem Tod der Arbeitsmoral. In einer Welt zunehmender Automatisierung will die Idee einfach nicht verschwinden."
+ },
+ "modern_election_events.29.f": {
+  "en": "\\\"The pilot programme has finished. We have the data.\\\"\\n\\n\\\"And?\\\"\\n\\n\\\"It worked. The recipients did not stop working. They started small businesses. They went back to school. They reported they were happier. The programme also cost more than projected. Neither party can decide which fact to lead with.\\\"",
+  "de": "„Das Pilotprogramm ist abgeschlossen. Wir haben die Daten.“\\n\\n„Und?“\\n\\n„Es hat funktioniert. Die Empfänger haben nicht aufgehört zu arbeiten. Sie haben Kleinunternehmen gegründet. Sie sind wieder zur Schule gegangen. Sie berichteten, glücklicher zu sein. Das Programm kostete auch mehr als veranschlagt. Keine der beiden Parteien kann sich entscheiden, mit welcher Tatsache sie beginnen soll.“"
+ },
+ "modern_election_events.29.t": {
+  "en": "Free Money?",
+  "de": "Gratisgeld?"
+ },
+ "modern_election_events.3.a": {
+  "en": "Pledge a comprehensive green transition.",
+  "de": "Eine umfassende grüne Wende versprechen."
+ },
+ "modern_election_events.3.b": {
+  "en": "The economy must come first.",
+  "de": "Die Wirtschaft muss an erster Stelle stehen."
+ },
+ "modern_election_events.3.c": {
+  "en": "Form a bipartisan climate task force.",
+  "de": "Eine überparteiliche Klima-Taskforce bilden."
+ },
+ "modern_election_events.3.d": {
+  "en": "Record-breaking extreme weather has devastated parts of the country just as the election campaign heats up. Flooded streets and parched farmland have made [concept_climate_policy] the single most discussed issue among voters. Every party is scrambling to articulate a position.",
+  "de": "Rekordverdächtiges Extremwetter hat Teile des Landes verwüstet, ausgerechnet als der Wahlkampf an Fahrt aufnimmt. Überflutete Straßen und ausgedörrtes Ackerland haben [concept_climate_policy] zum meistdiskutierten Thema unter den Wählern gemacht. Jede Partei ist bemüht, eine Position zu formulieren."
+ },
+ "modern_election_events.3.f": {
+  "en": "\\\"My fields haven't seen rain in four months. Tell me again how the economy is more important.\\\"\\n\\n\\\"The insurance companies are pulling out of the coast. When the market prices in catastrophe, perhaps it's time the politicians did too.\\\"\\n\\n\\\"I don't care which party fixes it. I care that someone does.\\\"",
+  "de": "„Auf meinen Feldern hat es seit vier Monaten nicht geregnet. Erklären Sie mir noch einmal, warum die Wirtschaft wichtiger ist.“\\n\\n„Die Versicherungen ziehen sich von der Küste zurück. Wenn der Markt die Katastrophe einpreist, wird es vielleicht Zeit, dass die Politik das auch tut.“\\n\\n„Mir ist egal, welche Partei es löst. Mir ist wichtig, dass es jemand tut.“"
+ },
+ "modern_election_events.3.t": {
+  "en": "Scorched Ballots",
+  "de": "Versengte Stimmzettel"
+ },
+ "modern_election_events.30.a": {
+  "en": "Blame foreign adversaries.",
+  "de": "Ausländischen Gegnern die Schuld geben."
+ },
+ "modern_election_events.30.b": {
+  "en": "Demand an election integrity review.",
+  "de": "Eine Überprüfung der Wahlintegrität fordern."
+ },
+ "modern_election_events.30.c": {
+  "en": "Deploy military cyber countermeasures.",
+  "de": "Militärische Cyber-Gegenmaßnahmen einsetzen."
+ },
+ "modern_election_events.30.d": {
+  "en": "On the eve of the vote, a cascade of failures has struck the election [concept_infrastructure] of [ROOT.GetCountry.GetNameNoFlag]. Voter rolls display errors, electronic tallying systems go dark, and confusion spreads across polling stations. Some are already calling it a cyberattack. Whether this is the work of foreign adversaries, domestic saboteurs, or mere technical failure, the integrity of the entire election is now in question.",
+  "de": "Am Vorabend der Wahl hat eine Kaskade von Ausfällen die [concept_infrastructure] der Wahl [ROOT.GetCountry.GetAltNameNoFlag('GEN')] getroffen. Wählerverzeichnisse zeigen Fehler, elektronische Auszählsysteme fallen aus, und in den Wahllokalen breitet sich Verwirrung aus. Manche sprechen bereits von einem Cyberangriff. Ob es sich um das Werk ausländischer Gegner, inländischer Saboteure oder schlicht eines technischen Versagens handelt – die Integrität der gesamten Wahl steht nun infrage."
+ },
+ "modern_election_events.30.f": {
+  "en": "\\\"Six polling stations lost power at the same minute.\\\"\\n\\n\\\"Coordinated?\\\"\\n\\n\\\"The investigators say no. The voters say yes. By morning the social platforms had circulated three competing theories about who was responsible. None of them mentioned the obvious explanation, which is that the backup generators are twenty years old and we have always known this.\\\"",
+  "de": "„Sechs Wahllokale verloren in derselben Minute den Strom.“\\n\\n„Koordiniert?“\\n\\n„Die Ermittler sagen nein. Die Wähler sagen ja. Bis zum Morgen hatten die sozialen Plattformen drei konkurrierende Theorien darüber verbreitet, wer verantwortlich sei. Keine davon nannte die naheliegende Erklärung, dass die Notstromaggregate zwanzig Jahre alt sind und wir das schon immer wussten.“"
+ },
+ "modern_election_events.30.t": {
+  "en": "Lights Out",
+  "de": "Stromausfall"
+ },
+ "modern_election_events.31.a": {
+  "en": "Embrace human enhancement.",
+  "de": "Menschliche Verbesserung annehmen."
+ },
+ "modern_election_events.31.b": {
+  "en": "Demand only natural-born candidates.",
+  "de": "Nur natürlich geborene Kandidaten fordern."
+ },
+ "modern_election_events.31.c": {
+  "en": "Regulate enhancement but allow candidacy.",
+  "de": "Verbesserung regulieren, aber die Kandidatur zulassen."
+ },
+ "modern_election_events.31.d": {
+  "en": "A politician who has openly undergone genetic enhancement has entered the race, boasting superior cognitive abilities, disease resistance, and physical stamina. Their very existence challenges fundamental assumptions about equality of opportunity in democracy. If enhanced humans gain political power, what happens to the unenhanced majority? The campaign has become a battleground for the future of the human species.",
+  "de": "Ein Politiker, der sich offen einer genetischen Verbesserung unterzogen hat, ist ins Rennen eingestiegen und rühmt sich überlegener kognitiver Fähigkeiten, Krankheitsresistenz und körperlicher Ausdauer. Seine bloße Existenz stellt grundlegende Annahmen über Chancengleichheit in der Demokratie infrage. Wenn verbesserte Menschen politische Macht erlangen, was geschieht dann mit der unverbesserten Mehrheit? Der Wahlkampf ist zum Schlachtfeld um die Zukunft der menschlichen Spezies geworden."
+ },
+ "modern_election_events.31.f": {
+  "en": "\\\"She named every supreme court ruling of the last fifty years, in order, by date.\\\"\\n\\n\\\"And her opponents?\\\"\\n\\n\\\"Are asking whether the ability to do so qualifies her for office, or merely demonstrates the unfair advantage she received in the womb. Both arguments will be tested at the ballot box. Neither will be settled there.\\\"",
+  "de": "„Sie nannte jedes Urteil des Obersten Gerichtshofs der letzten fünfzig Jahre, der Reihe nach, nach Datum.“\\n\\n„Und ihre Gegner?“\\n\\n„Fragen sich, ob diese Fähigkeit sie für das Amt qualifiziert oder nur den unfairen Vorteil demonstriert, den sie schon im Mutterleib erhielt. Beide Argumente werden an der Wahlurne auf die Probe gestellt. Keines wird dort entschieden.“"
+ },
+ "modern_election_events.31.t": {
+  "en": "Designer Candidate",
+  "de": "Designer-Kandidat"
+ },
+ "modern_election_events.32.a": {
+  "en": "Grant colonial representation.",
+  "de": "Kolonialen Gebieten Vertretung gewähren."
+ },
+ "modern_election_events.32.b": {
+  "en": "They left our soil — no representation.",
+  "de": "Sie haben unseren Boden verlassen – keine Vertretung."
+ },
+ "modern_election_events.32.c": {
+  "en": "Offer nonvoting observer status.",
+  "de": "Einen nicht stimmberechtigten Beobachterstatus anbieten."
+ },
+ "modern_election_events.32.d": {
+  "en": "Citizens of [ROOT.GetCountry.GetNameNoFlag] living in orbital habitats and off-world colonies have transmitted a formal demand for electoral representation. They contribute taxes, serve in the military, and maintain their citizenship — yet they cannot cast a ballot that counts. The campaign must now grapple with a question the founders never anticipated: does democracy extend beyond the atmosphere?",
+  "de": "Bürger [ROOT.GetCountry.GetAltNameNoFlag('GEN')], die in Orbitalhabitaten und außerirdischen Kolonien leben, haben eine formelle Forderung nach Wahlvertretung übermittelt. Sie zahlen Steuern, dienen in den Streitkräften und behalten ihre Staatsbürgerschaft – doch sie können keine zählende Stimme abgeben. Der Wahlkampf muss sich nun mit einer Frage auseinandersetzen, die die Gründerväter nie vorhergesehen haben: Reicht die Demokratie über die Atmosphäre hinaus?"
+ },
+ "modern_election_events.32.f": {
+  "en": "\\\"The petition arrived from the orbital habitat this morning.\\\"\\n\\n\\\"What does it ask?\\\"\\n\\n\\\"For the vote. They have citizenship. They pay taxes. Their children attend the same schools as our children, via the satellite link. They cannot cast a ballot. They are asking why. We do not have a good answer.\\\"",
+  "de": "„Die Petition traf heute Morgen vom Orbitalhabitat ein.“\\n\\n„Was fordert sie?“\\n\\n„Das Wahlrecht. Sie haben die Staatsbürgerschaft. Sie zahlen Steuern. Ihre Kinder besuchen über die Satellitenverbindung dieselben Schulen wie unsere Kinder. Sie können nicht wählen. Sie fragen, warum. Wir haben keine gute Antwort.“"
+ },
+ "modern_election_events.32.t": {
+  "en": "One Small Vote for Man",
+  "de": "Eine kleine Stimme für einen Menschen"
+ },
+ "modern_election_events.33.a": {
+  "en": "Endorse neural direct democracy.",
+  "de": "Neuronale direkte Demokratie befürworten."
+ },
+ "modern_election_events.33.b": {
+  "en": "Defend traditional elections.",
+  "de": "Traditionelle Wahlen verteidigen."
+ },
+ "modern_election_events.33.c": {
+  "en": "Propose voluntary neural polling.",
+  "de": "Freiwillige neuronale Befragungen vorschlagen."
+ },
+ "modern_election_events.33.d": {
+  "en": "A radical proposal has seized the campaign: replace elections entirely with neural-interface direct democracy, where citizens register their preferences in real time through brain-computer interfaces. Proponents argue this would be the purest form of democratic expression ever conceived. Critics warn of manipulation, coercion, and the erasure of deliberation. The technology exists — but should it be used?",
+  "de": "Ein radikaler Vorschlag hat den Wahlkampf erfasst: Wahlen vollständig durch eine direkte Demokratie mittels neuronaler Schnittstellen zu ersetzen, bei der Bürger ihre Präferenzen in Echtzeit über Gehirn-Computer-Schnittstellen erfassen lassen. Befürworter argumentieren, dies wäre die reinste Form demokratischen Ausdrucks, die je ersonnen wurde. Kritiker warnen vor Manipulation, Zwang und dem Verschwinden der Beratung. Die Technologie existiert – aber sollte sie eingesetzt werden?"
+ },
+ "modern_election_events.33.f": {
+  "en": "\\\"The neural-interface focus group recorded preferences down to the millisecond.\\\"\\n\\n\\\"And the preferences?\\\"\\n\\n\\\"Were sharper, more decisive than the spoken-interview group. The respondents could not explain why they had chosen as they did. They said the interface had felt like reading their own minds back to them. Several of them found the experience disturbing.\\\"",
+  "de": "„Die Fokusgruppe mit neuronaler Schnittstelle erfasste Präferenzen auf die Millisekunde genau.“\\n\\n„Und die Präferenzen?“\\n\\n„Waren schärfer, entschlossener als bei der Gruppe mit mündlichen Interviews. Die Befragten konnten nicht erklären, warum sie so entschieden hatten, wie sie es taten. Sie sagten, die Schnittstelle habe sich angefühlt, als läse man ihnen die eigenen Gedanken vor. Mehreren von ihnen war die Erfahrung unheimlich.“"
+ },
+ "modern_election_events.33.t": {
+  "en": "Thought Made Manifest",
+  "de": "Der offenbarte Gedanke"
+ },
+ "modern_election_events.34.a": {
+  "en": "Champion synthetic agriculture.",
+  "de": "Für synthetische Landwirtschaft eintreten."
+ },
+ "modern_election_events.34.b": {
+  "en": "Defend traditional farming.",
+  "de": "Traditionelle Landwirtschaft verteidigen."
+ },
+ "modern_election_events.34.c": {
+  "en": "Promise coexistence of both.",
+  "de": "Das Nebeneinander beider versprechen."
+ },
+ "modern_election_events.34.d": {
+  "en": "Synthetic food production has upended agriculture across [ROOT.GetCountry.GetNameNoFlag], and the campaign has become a proxy war between laboratory-grown futures and traditional farming communities. Industrial interests push the revolution as inevitable progress; rural communities see it as an existential threat to their way of life. Every candidate must choose a side in the battle for the nation's dinner table.",
+  "de": "Die synthetische Lebensmittelproduktion hat die Landwirtschaft [ROOT.GetCountry.GetAltNameNoFlag('GEN')] auf den Kopf gestellt, und der Wahlkampf ist zu einem Stellvertreterkrieg zwischen laborgezüchteten Zukünften und traditionellen Landwirtschaftsgemeinden geworden. Industrielle Interessen treiben die Revolution als unausweichlichen Fortschritt voran; ländliche Gemeinden sehen darin eine existenzielle Bedrohung ihrer Lebensweise. Jeder Kandidat muss im Kampf um den Esstisch der Nation Stellung beziehen."
+ },
+ "modern_election_events.34.f": {
+  "en": "\\\"The synthetic protein factory opened last month. The steak is indistinguishable.\\\"\\n\\n\\\"And the farms?\\\"\\n\\n\\\"Are losing customers. The farmer outside town asked me, at the rally, what his son was supposed to do. I did not have an answer. The candidate who claimed to have one is leading in the polls. His answer was vague, but the farmer wanted to be told something.\\\"",
+  "de": "„Die Fabrik für synthetisches Protein hat letzten Monat eröffnet. Das Steak ist nicht zu unterscheiden.“\\n\\n„Und die Höfe?“\\n\\n„Verlieren Kunden. Der Bauer vor der Stadt fragte mich bei der Kundgebung, was sein Sohn tun solle. Ich hatte keine Antwort. Der Kandidat, der eine zu haben behauptet, führt in den Umfragen. Seine Antwort war vage, aber der Bauer wollte, dass ihm etwas gesagt wurde.“"
+ },
+ "modern_election_events.34.t": {
+  "en": "Harvest of Votes",
+  "de": "Ernte der Stimmen"
+ },
+ "modern_election_events.35.a": {
+  "en": "Accelerate automation for prosperity.",
+  "de": "Automatisierung für Wohlstand beschleunigen."
+ },
+ "modern_election_events.35.b": {
+  "en": "Protect human workers.",
+  "de": "Menschliche Arbeiter schützen."
+ },
+ "modern_election_events.35.c": {
+  "en": "Phase in automation with retraining.",
+  "de": "Automatisierung stufenweise mit Umschulung einführen."
+ },
+ "modern_election_events.35.d": {
+  "en": "Autonomous systems — from self-driving vehicles to AI-managed factories — have displaced millions of workers across [ROOT.GetCountry.GetNameNoFlag]. The campaign has become a battle over the future of human labor itself. Do we accelerate into a post-work paradise, or fight to preserve the dignity of human employment? The displaced workers filling rally halls want answers, not platitudes.",
+  "de": "Autonome Systeme – von selbstfahrenden Fahrzeugen bis zu KI-gesteuerten Fabriken – haben Millionen Arbeiter [ROOT.GetCountry.GetAltNameNoFlag('IN')] verdrängt. Der Wahlkampf ist zu einem Kampf um die Zukunft der menschlichen Arbeit selbst geworden. Beschleunigen wir in ein Paradies jenseits der Arbeit, oder kämpfen wir um die Würde menschlicher Beschäftigung? Die verdrängten Arbeiter, die die Versammlungshallen füllen, wollen Antworten, keine Plattitüden."
+ },
+ "modern_election_events.35.f": {
+  "en": "\\\"The factory's output is up forty percent this year.\\\"\\n\\n\\\"And the staff?\\\"\\n\\n\\\"Down sixty. The car park used to be full at shift change. Now it has three cars in it, all belonging to security. The candidate who promises retraining is polling well. The candidate who promises to slow the automation is polling better.\\\"",
+  "de": "„Die Produktion der Fabrik ist dieses Jahr um vierzig Prozent gestiegen.“\\n\\n„Und die Belegschaft?“\\n\\n„Um sechzig gesunken. Der Parkplatz war früher beim Schichtwechsel voll. Jetzt stehen dort drei Autos, alle gehören dem Sicherheitsdienst. Der Kandidat, der Umschulung verspricht, liegt gut in den Umfragen. Der Kandidat, der verspricht, die Automatisierung zu verlangsamen, liegt besser.“"
+ },
+ "modern_election_events.35.t": {
+  "en": "The Autonomous Question",
+  "de": "Die Frage der Autonomie"
+ },
+ "modern_election_events.4.a": {
+  "en": "Deploy the targeting machine.",
+  "de": "Die Zielgruppen-Maschine einsetzen."
+ },
+ "modern_election_events.4.b": {
+  "en": "This crosses a line. Reject it.",
+  "de": "Das überschreitet eine Grenze. Ablehnen."
+ },
+ "modern_election_events.4.c": {
+  "en": "Regulate data use in campaigns.",
+  "de": "Die Datennutzung im Wahlkampf regulieren."
+ },
+ "modern_election_events.4.d": {
+  "en": "A data broker has offered our campaign access to a vast trove of personal data — browsing habits, purchase histories, social connections. With advanced analytics, the campaign could craft individually tailored messages for millions of swing voters. The technique is devastatingly effective, but its ethics are questionable.",
+  "de": "Ein Datenhändler hat unserer Kampagne Zugang zu einem gewaltigen Datenschatz angeboten – Surfgewohnheiten, Kaufhistorien, soziale Verbindungen. Mit fortschrittlicher Analytik könnte die Kampagne individuell zugeschnittene Botschaften für Millionen unentschlossener Wähler entwerfen. Die Methode ist verheerend wirksam, doch ihre Ethik ist fragwürdig."
+ },
+ "modern_election_events.4.f": {
+  "en": "\\\"We know what they fear. We know what they hope for. We can whisper exactly what each voter needs to hear.\\\"\\n\\n\\\"Is it manipulation if you're just telling people what they already believe?\\\"\\n\\n\\\"I deleted my social media accounts last week. I suggest you do the same.\\\"",
+  "de": "„Wir wissen, was sie fürchten. Wir wissen, was sie hoffen. Wir können jedem Wähler genau das zuflüstern, was er hören muss.“\\n\\n„Ist es Manipulation, wenn man den Leuten nur sagt, was sie ohnehin schon glauben?“\\n\\n„Ich habe letzte Woche meine Social-Media-Konten gelöscht. Ich empfehle dir dasselbe.“"
+ },
+ "modern_election_events.4.t": {
+  "en": "The Algorithm Knows",
+  "de": "Der Algorithmus weiß es"
+ },
+ "modern_election_events.5.a": {
+  "en": "Co-opt their message — claim it as our own.",
+  "de": "Ihre Botschaft übernehmen – als unsere eigene ausgeben."
+ },
+ "modern_election_events.5.b": {
+  "en": "Demagogues, the lot of them.",
+  "de": "Demagogen, allesamt."
+ },
+ "modern_election_events.5.c": {
+  "en": "Engage honestly with their concerns.",
+  "de": "Ehrlich auf ihre Anliegen eingehen."
+ },
+ "modern_election_events.5.d": {
+  "en": "A rally organized through social media has drawn staggering crowds to the capital. The demonstrators wave hand-painted signs railing against the establishment, demanding that the government answer to ordinary citizens rather than moneyed interests. Their energy is raw, undirected, and impossible to ignore.",
+  "de": "Eine über soziale Medien organisierte Kundgebung hat gewaltige Menschenmengen in die Hauptstadt gezogen. Die Demonstranten schwenken handgemalte Schilder gegen das Establishment und fordern, dass sich die Regierung gegenüber einfachen Bürgern verantworten soll statt gegenüber Geldinteressen. Ihre Energie ist roh, ungelenkt und unmöglich zu ignorieren."
+ },
+ "modern_election_events.5.f": {
+  "en": "\\\"They said a hundred would show. A hundred thousand came.\\\"\\n\\n\\\"The elites laugh at us from their towers. But they can't laugh at this many people.\\\"\\n\\n\\\"I've never voted before. I never thought it mattered. But when I saw that crowd, I felt like maybe it does.\\\"",
+  "de": "„Man sagte, hundert würden kommen. Hunderttausend kamen.“\\n\\n„Die Eliten lachen über uns von ihren Türmen herab. Aber über so viele Menschen können sie nicht lachen.“\\n\\n„Ich habe noch nie gewählt. Ich dachte nie, dass es etwas ändert. Aber als ich diese Menge sah, hatte ich das Gefühl, dass es vielleicht doch etwas ändert.“"
+ },
+ "modern_election_events.5.t": {
+  "en": "The People's Roar",
+  "de": "Das Brüllen des Volkes"
+ },
+ "modern_election_events.6.a": {
+  "en": "The opposition is clearly compromised.",
+  "de": "Die Opposition ist eindeutig kompromittiert."
+ },
+ "modern_election_events.6.b": {
+  "en": "Launch a full public investigation.",
+  "de": "Eine umfassende öffentliche Untersuchung einleiten."
+ },
+ "modern_election_events.6.c": {
+  "en": "Strengthen our cyber defenses quietly.",
+  "de": "Unsere Cyberabwehr still stärken."
+ },
+ "modern_election_events.6.d": {
+  "en": "Intelligence services have detected sophisticated cyber operations targeting the election. Foreign actors are amplifying divisive content, hacking campaign databases, and attempting to undermine confidence in the democratic process. The evidence is classified but undeniable.",
+  "de": "Die Geheimdienste haben ausgeklügelte Cyberoperationen gegen die Wahl entdeckt. Ausländische Akteure verstärken spalterische Inhalte, hacken Kampagnendatenbanken und versuchen, das Vertrauen in den demokratischen Prozess zu untergraben. Die Beweise sind geheim, aber unbestreitbar."
+ },
+ "modern_election_events.6.f": {
+  "en": "\\\"They don't need to change the vote count. They just need people to believe the count can't be trusted.\\\"\\n\\n\\\"The servers were breached three weeks ago. We've been watching them watch us ever since.\\\"\\n\\n\\\"Every democracy is exactly one crisis of faith away from something much worse.\\\"",
+  "de": "„Sie müssen die Stimmenzahl nicht ändern. Sie müssen nur die Leute dazu bringen, zu glauben, man könne der Zählung nicht trauen.“\\n\\n„Die Server wurden vor drei Wochen kompromittiert. Seitdem beobachten wir, wie sie uns beobachten.“\\n\\n„Jede Demokratie ist genau eine Vertrauenskrise von etwas viel Schlimmerem entfernt.“"
+ },
+ "modern_election_events.6.t": {
+  "en": "Shadows on the Ballot",
+  "de": "Schatten auf dem Stimmzettel"
+ },
+ "modern_election_events.7.a": {
+  "en": "Capital speaks. We should listen.",
+  "de": "Das Kapital spricht. Wir sollten zuhören."
+ },
+ "modern_election_events.7.b": {
+  "en": "Denounce corporate influence on democracy.",
+  "de": "Den Konzerneinfluss auf die Demokratie anprangern."
+ },
+ "modern_election_events.7.c": {
+  "en": "Spend to match — we won't be outgunned.",
+  "de": "Mithalten mit den Ausgaben – wir lassen uns nicht überbieten."
+ },
+ "modern_election_events.7.d": {
+  "en": "A constellation of corporate-backed political action committees has mobilized unprecedented spending in the election. Their advertisements saturate every medium — television, radio, social media, even targeted text messages. The money is technically legal, but its influence is distorting the campaign beyond recognition.",
+  "de": "Ein Geflecht von konzerngesponserten politischen Aktionskomitees hat beispiellose Ausgaben in der Wahl mobilisiert. Ihre Werbung durchdringt jedes Medium – Fernsehen, Radio, soziale Medien, sogar gezielte Textnachrichten. Das Geld ist formal legal, doch sein Einfluss verzerrt den Wahlkampf bis zur Unkenntlichkeit."
+ },
+ "modern_election_events.7.f": {
+  "en": "\\\"Follow the money. It always leads to the same boardrooms.\\\"\\n\\n\\\"They call it 'free speech.' Funny how free speech gets louder when you can afford more of it.\\\"\\n\\n\\\"The candidate met with three lobbyists before breakfast. By lunch, their platform had mysteriously evolved.\\\"",
+  "de": "„Folge dem Geld. Es führt immer in dieselben Sitzungssäle.“\\n\\n„Sie nennen es ‚freie Meinungsäußerung‘. Komisch, wie die freie Meinungsäußerung lauter wird, wenn man sich mehr davon leisten kann.“\\n\\n„Der Kandidat traf sich vor dem Frühstück mit drei Lobbyisten. Bis zum Mittag hatte sich sein Programm auf mysteriöse Weise weiterentwickelt.“"
+ },
+ "modern_election_events.7.t": {
+  "en": "Dark Money",
+  "de": "Schattengeld"
+ },
+ "modern_election_events.8.a": {
+  "en": "The future belongs to the young.",
+  "de": "Die Zukunft gehört der Jugend."
+ },
+ "modern_election_events.8.b": {
+  "en": "Youth and inexperience are not virtues.",
+  "de": "Jugend und Unerfahrenheit sind keine Tugenden."
+ },
+ "modern_election_events.8.c": {
+  "en": "Channel their energy into civic institutions.",
+  "de": "Ihre Energie in bürgerschaftliche Institutionen lenken."
+ },
+ "modern_election_events.8.d": {
+  "en": "Young voters across [ROOT.GetCountry.GetName] are organizing with unprecedented sophistication on social platforms. Voter registration drives, peer-to-peer outreach, and viral advocacy campaigns are turning demographics that typically stay home into a formidable electoral force. Their demands are sweeping and their patience is thin.",
+  "de": "Junge Wähler [ROOT.GetCountry.GetAltName('IN')] organisieren sich mit beispielloser Raffinesse auf sozialen Plattformen. Kampagnen zur Wählerregistrierung, Peer-to-Peer-Ansprache und virale Aufrufe verwandeln eine Bevölkerungsgruppe, die sonst zu Hause bleibt, in eine gewaltige Wahlkraft. Ihre Forderungen sind weitreichend, und ihre Geduld ist dünn."
+ },
+ "modern_election_events.8.f": {
+  "en": "\\\"We inherited the mess. We'll clean it up our way.\\\"\\n\\n\\\"My parents say politics doesn't change anything. I'm going to prove them wrong.\\\"\\n\\n\\\"They keep building a world we don't want to live in and then act surprised when we push back.\\\"",
+  "de": "„Wir haben das Chaos geerbt. Wir räumen es auf unsere Weise auf.“\\n\\n„Meine Eltern sagen, Politik ändert nichts. Ich werde ihnen das Gegenteil beweisen.“\\n\\n„Sie bauen immer weiter eine Welt, in der wir nicht leben wollen, und sind dann überrascht, wenn wir uns wehren.“"
+ },
+ "modern_election_events.8.t": {
+  "en": "Generation Next",
+  "de": "Die nächste Generation"
+ },
+ "modern_election_events.9.a": {
+  "en": "Press the advantage ruthlessly.",
+  "de": "Den Vorteil rücksichtslos ausnutzen."
+ },
+ "modern_election_events.9.a.tt": {
+  "en": "The opposing party's rival gains significant momentum while the gaffing party's campaign is severely damaged.",
+  "de": "Der Rivale der gegnerischen Partei gewinnt deutlich an Schwung, während die Kampagne der patzenden Partei schwer beschädigt wird."
+ },
+ "modern_election_events.9.b": {
+  "en": "Take the high road.",
+  "de": "Den höheren Weg wählen."
+ },
+ "modern_election_events.9.b.tt": {
+  "en": "The gaffe fades from the news cycle naturally. The gaffing party loses a small amount of momentum.",
+  "de": "Der Patzer verschwindet auf natürliche Weise aus der Nachrichtenlage. Die patzende Partei verliert etwas an Schwung."
+ },
+ "modern_election_events.9.c": {
+  "en": "Spin it into something relatable.",
+  "de": "Es zu etwas Sympathischem umdeuten."
+ },
+ "modern_election_events.9.c.tt": {
+  "en": "The gaffe is reframed as an endearing, human moment. The gaffing party recovers some momentum.",
+  "de": "Der Patzer wird als liebenswerter, menschlicher Moment umgedeutet. Die patzende Partei gewinnt etwas an Schwung zurück."
+ },
+ "modern_election_events.9.d": {
+  "en": "During a live broadcast, a prominent candidate has committed a spectacular verbal blunder. The clip has already been replayed thousands of times, spawning memes and merciless commentary. What might once have been a forgotten slip has become, in the age of instant replay, a defining moment of the campaign.",
+  "de": "Während einer Live-Übertragung hat sich ein prominenter Kandidat einen spektakulären verbalen Fehltritt geleistet. Der Ausschnitt wurde bereits Tausende Male wiederholt und hat Memes und gnadenlose Kommentare hervorgebracht. Was einst ein vergessener Versprecher gewesen wäre, ist im Zeitalter der Sofortwiederholung zu einem prägenden Moment des Wahlkampfs geworden."
+ },
+ "modern_election_events.9.f": {
+  "en": "\\\"Did they really say that? On camera? With the microphone on?\\\"\\n\\n\\\"Play it again. Slower this time.\\\"\\n\\n\\\"In the old days, a gaffe died with the evening news. Now it lives forever, and it brings friends.\\\"",
+  "de": "„Hat er das wirklich gesagt? Vor laufender Kamera? Bei eingeschaltetem Mikrofon?“\\n\\n„Spiel es noch einmal ab. Diesmal langsamer.“\\n\\n„Früher starb ein Patzer mit den Abendnachrichten. Heute lebt er ewig – und bringt Freunde mit.“"
+ },
+ "modern_election_events.9.t": {
+  "en": "Foot in Mouth",
+  "de": "Ins Fettnäpfchen"
+ },
+ "monument_events.10.a": {
+  "en": "Subsidise the tickets",
+  "de": "Die Eintrittskarten subventionieren"
+ },
+ "monument_events.10.b": {
+  "en": "Let the clubs keep the gate",
+  "de": "Den Vereinen die Einnahmen lassen"
+ },
+ "monument_events.10.d": {
+  "en": "The fixture fills the stands and empties the streets. For three hours the city argues about something that costs it nothing.",
+  "de": "Die Begegnung füllt die Ränge und leert die Straßen. Drei Stunden lang streitet die Stadt über etwas, das sie nichts kostet."
+ },
+ "monument_events.10.f": {
+  "en": "“There were men in that crowd who would not share a tram,” the constable says.\\n\\n“They shared a bench for three hours. I shall take it.” says the sergeant.",
+  "de": "„Es gab Männer in dieser Menge, die sich keine Straßenbahn geteilt hätten“, sagt der Schutzmann.\\n\\n„Sie haben sich drei Stunden lang eine Bank geteilt. Das nehme ich“, sagt der Wachtmeister."
+ },
+ "monument_events.10.t": {
+  "en": "The Crowd Roars",
+  "de": "Die Menge tobt"
+ },
+ "monument_events.11.d": {
+  "en": "The dedication is settled; the form is not. The architects have drawn it several ways, each borrowing from a tradition we claim as our own.",
+  "de": "Die Widmung steht fest; die Form nicht. Die Architekten haben sie auf mehrere Arten entworfen, jede lehnt sich an eine Tradition an, die wir als unsere eigene beanspruchen."
+ },
+ "monument_events.11.f": {
+  "en": "“Every nation builds its monuments to look older than it is,” the architect says. “The only question is which past to borrow.”",
+  "de": "„Jede Nation baut ihre Denkmäler so, dass sie älter aussehen, als sie sind“, sagt der Architekt. „Die einzige Frage ist, welche Vergangenheit man sich borgt.“"
+ },
+ "monument_events.11.faith_animist": {
+  "en": "Plant it as a sacred grove",
+  "de": "Als heiligen Hain anlegen"
+ },
+ "monument_events.11.faith_catholic": {
+  "en": "Raise it as a basilica",
+  "de": "Als Basilika errichten"
+ },
+ "monument_events.11.faith_confucian": {
+  "en": "Raise it as a temple of Confucius",
+  "de": "Als Konfuziustempel errichten"
+ },
+ "monument_events.11.faith_gelugpa": {
+  "en": "Raise it as a great monastery",
+  "de": "Als großes Kloster errichten"
+ },
+ "monument_events.11.faith_hindu": {
+  "en": "Raise it as a temple complex",
+  "de": "Als Tempelanlage errichten"
+ },
+ "monument_events.11.faith_ibadi": {
+  "en": "Raise it as a great mosque",
+  "de": "Als große Moschee errichten"
+ },
+ "monument_events.11.faith_jewish": {
+  "en": "Raise it as a great temple",
+  "de": "Als großen Tempel errichten"
+ },
+ "monument_events.11.faith_mahayana": {
+  "en": "Raise it as a pagoda",
+  "de": "Als Pagode errichten"
+ },
+ "monument_events.11.faith_oriental_orthodox": {
+  "en": "Raise it as a great church",
+  "de": "Als große Kirche errichten"
+ },
+ "monument_events.11.faith_orthodox": {
+  "en": "Raise it as an Orthodox cathedral",
+  "de": "Als orthodoxe Kathedrale errichten"
+ },
+ "monument_events.11.faith_protestant": {
+  "en": "Raise it as a cathedral",
+  "de": "Als Kathedrale errichten"
+ },
+ "monument_events.11.faith_shiite": {
+  "en": "Raise it as a shrine mosque",
+  "de": "Als Schreinmoschee errichten"
+ },
+ "monument_events.11.faith_shinto": {
+  "en": "Raise it as a grand shrine",
+  "de": "Als großen Schrein errichten"
+ },
+ "monument_events.11.faith_sikh": {
+  "en": "Raise it as a gurdwara",
+  "de": "Als Gurdwara errichten"
+ },
+ "monument_events.11.faith_sunni": {
+  "en": "Raise it as a great mosque",
+  "de": "Als große Moschee errichten"
+ },
+ "monument_events.11.faith_theravada": {
+  "en": "Raise it as a great stupa",
+  "de": "Als große Stupa errichten"
+ },
+ "monument_events.11.generic": {
+  "en": "Keep to the plain classical style",
+  "de": "Beim schlichten klassischen Stil bleiben"
+ },
+ "monument_events.11.heritage_arabic": {
+  "en": "Raise it as a caliphal hall",
+  "de": "Als kalifale Halle errichten"
+ },
+ "monument_events.11.heritage_aramaic": {
+  "en": "Raise it as a rock-cut monument",
+  "de": "Als Felsdenkmal errichten"
+ },
+ "monument_events.11.heritage_avestan": {
+  "en": "Raise it as a gate of nations",
+  "de": "Als Tor der Nationen errichten"
+ },
+ "monument_events.11.heritage_chinese": {
+  "en": "Raise it as a hall of dynasties",
+  "de": "Als Halle der Dynastien errichten"
+ },
+ "monument_events.11.heritage_coptic": {
+  "en": "Raise it as a great church",
+  "de": "Als große Kirche errichten"
+ },
+ "monument_events.11.heritage_geez": {
+  "en": "Raise it as an Aksumite stele",
+  "de": "Als aksumitische Stele errichten"
+ },
+ "monument_events.11.heritage_gothic": {
+  "en": "Raise it as a hall of heroes",
+  "de": "Als Heldenhalle errichten"
+ },
+ "monument_events.11.heritage_greek": {
+  "en": "Raise it as a pantheon",
+  "de": "Als Pantheon errichten"
+ },
+ "monument_events.11.heritage_hebrew": {
+  "en": "Raise it as a great menorah",
+  "de": "Als große Menora errichten"
+ },
+ "monument_events.11.heritage_irish": {
+  "en": "Raise it as a round tower and high cross",
+  "de": "Als Rundturm und Hochkreuz errichten"
+ },
+ "monument_events.11.heritage_latin": {
+  "en": "Raise it as a forum and triumphal column",
+  "de": "Als Forum und Triumphsäule errichten"
+ },
+ "monument_events.11.heritage_mayan": {
+  "en": "Raise it as a temple-pyramid",
+  "de": "Als Tempelpyramide errichten"
+ },
+ "monument_events.11.heritage_nahuatl": {
+  "en": "Raise it as a stepped pyramid",
+  "de": "Als Stufenpyramide errichten"
+ },
+ "monument_events.11.heritage_norse": {
+  "en": "Raise it as a rune-stone hall",
+  "de": "Als Runensteinhalle errichten"
+ },
+ "monument_events.11.heritage_pali": {
+  "en": "Raise it as a great stupa",
+  "de": "Als große Stupa errichten"
+ },
+ "monument_events.11.heritage_prussian": {
+  "en": "Raise it as a hill-fort monument",
+  "de": "Als Ringwall-Denkmal errichten"
+ },
+ "monument_events.11.heritage_sanskrit": {
+  "en": "Raise it as a pillar of dharma",
+  "de": "Als Dharma-Säule errichten"
+ },
+ "monument_events.11.heritage_slavonic": {
+  "en": "Raise it as a memorial bell tower",
+  "de": "Als Gedenkglockenturm errichten"
+ },
+ "monument_events.11.t": {
+  "en": "A Form for the Monument",
+  "de": "Eine Form für das Denkmal"
+ },
  "movement_events_te.1.a": {
   "en": "Let them march in peace",
   "de": "Lasst sie in Frieden marschieren"
