@@ -1235,17 +1235,205 @@
   "en": "The [concept_un_charter] has room for another reform",
   "de": "Die [concept_un_charter] lässt Raum für eine weitere Reform"
  },
+ "je_un_chamber_propose_topic_reform_1": {
+  "en": "#bold Charter Reform I: Standing Mandate Force and Compulsory Jurisdiction#! — raises the ceiling on [concept_un_authority] from 70 to 85, opening the Strong tier.",
+  "de": "#bold Charta-Reform I: Ständige Mandatstruppe und Verpflichtende Gerichtsbarkeit#! — hebt die Obergrenze der [concept_un_authority] von 70 auf 85 an und schaltet die Stufe Stark frei."
+ },
+ "je_un_chamber_propose_topic_reform_2": {
+  "en": "#bold Charter Reform II: Veto Restraint and the UN Levy#! — raises the ceiling on [concept_un_authority] from 85 to 100, opening the Supranational tier.",
+  "de": "#bold Charta-Reform II: Vetoeinschränkung und UN-Abgabe#! — hebt die Obergrenze der [concept_un_authority] von 85 auf 100 an und schaltet die Stufe Supranational frei."
+ },
+ "je_un_chamber_propose_topic_refugee": {
+  "en": "#bold International Refugee Resolution#! — would establish the UN High Commissioner for Refugees (UNHCR).",
+  "de": "#bold Internationale Flüchtlingsresolution#! — würde das Amt des UN-Hochkommissars für Flüchtlinge (UNHCR) einrichten."
+ },
+ "je_un_chamber_propose_topic_sanctions": {
+  "en": "#bold International Sanctions#!",
+  "de": "#bold Internationale Sanktionen#!"
+ },
+ "je_un_chamber_propose_topic_space": {
+  "en": "#bold International Space Cooperation#! — would establish the UN Office for Outer Space Affairs (UNOOSA).",
+  "de": "#bold Internationale Weltraumkooperation#! — würde das Büro der Vereinten Nationen für Weltraumfragen (UNOOSA) einrichten."
+ },
  "je_un_chamber_proposer": {
   "en": "  Proposed by [AddLocalizationIf(SCOPE.sCountry('un_chamber_proposer').Exists, SCOPE.sCountry('un_chamber_proposer').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_proposer').Exists), 'je_un_chamber_country_gone')]",
   "de": "  Eingebracht von: [AddLocalizationIf(SCOPE.sCountry('un_chamber_proposer').Exists, SCOPE.sCountry('un_chamber_proposer').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_proposer').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_proposer_gone": {
+  "en": "  Proposed by a state that is no longer on the register.",
+  "de": "  Vorgeschlagen von einem Staat, der nicht mehr verzeichnet ist."
+ },
+ "je_un_chamber_raised_agenda": {
+  "en": "    The docket also offers it, as Assembly business, at most once in two years when nothing graver is pending.",
+  "de": "    Die Tagesordnung bietet es außerdem als Angelegenheit der Versammlung an, höchstens einmal in zwei Jahren, sofern nichts Gravierenderes ansteht."
+ },
+ "je_un_chamber_raised_climate": {
+  "en": "    The docket also offers it when the world warms past 0.5, 1, 2 or 3 degrees.",
+  "de": "    Die Tagesordnung bietet es außerdem an, wenn sich die Welt um 0,5, 1, 2 oder 3 Grad erwärmt."
+ },
+ "je_un_chamber_raised_decolonization": {
+  "en": "    The docket also offers it when a colonial empire collapses, or as Assembly business.",
+  "de": "    Die Tagesordnung bietet es außerdem an, wenn ein Kolonialreich zusammenbricht, oder als Angelegenheit der Versammlung."
+ },
+ "je_un_chamber_raised_human_rights": {
+  "en": "    The docket also offers it when a war between great powers ends, or as Assembly business.",
+  "de": "    Die Tagesordnung bietet es außerdem an, wenn ein Krieg zwischen Großmächten endet, oder als Angelegenheit der Versammlung."
+ },
+ "je_un_chamber_raised_icc": {
+  "en": "    The docket also offers it when a war between great powers ends and the Declaration of Human Rights is not on the table, or as Assembly business once the Declaration is in force. On our own motion it too waits for the Declaration.",
+  "de": "    Die Tagesordnung bietet es außerdem an, wenn ein Krieg zwischen Großmächten endet und die Erklärung der Menschenrechte nicht zur Debatte steht, oder als Angelegenheit der Versammlung, sobald die Erklärung in Kraft ist. Auch auf eigenen Antrag wartet es auf die Erklärung."
+ },
+ "je_un_chamber_raised_npt": {
+  "en": "    The docket also offers it when a country builds its first nuclear weapon.",
+  "de": "    Die Tagesordnung bietet es außerdem an, wenn ein Land seine erste Atomwaffe baut."
+ },
+ "je_un_chamber_raised_physical_protection": {
+  "en": "    The docket also offers it, as Assembly business, once nuclear warheads have gone missing anywhere in the world.",
+  "de": "    Die Tagesordnung bietet es außerdem als Angelegenheit der Versammlung an, sobald irgendwo auf der Welt Atomsprengköpfe verschwunden sind."
+ },
+ "je_un_chamber_raised_space": {
+  "en": "    The docket also offers it when humanity first lands on the Moon or founds a colony.",
+  "de": "    Die Tagesordnung bietet es außerdem an, wenn die Menschheit erstmals auf dem Mond landet oder eine Kolonie gründet."
+ },
+ "je_un_chamber_reasons_intro": {
+  "en": "#lore A member counts once for every reason that moved its vote by 10 or more.#!",
+  "de": "#lore Ein Mitglied zählt einmal für jeden Grund, der seine Stimme um 10 oder mehr bewegt hat.#!"
+ },
+ "je_un_chamber_reasons_pending": {
+  "en": "#lore AI members cast their ballots in the ninth, tenth or eleventh month of the session; their reasons will appear here as they vote.#!",
+  "de": "#lore KI-Mitglieder geben ihre Stimme im neunten, zehnten oder elften Monat der Sitzung ab; ihre Gründe erscheinen hier, sobald sie abgestimmt haben.#!"
+ },
+ "je_un_chamber_recommendatory": {
+  "en": "  [concept_un_resolution_recommendatory] — it cannot be vetoed.",
+  "de": "  [concept_un_resolution_recommendatory] — gegen sie kann kein Veto eingelegt werden."
+ },
+ "je_un_chamber_regime_climate_adaptation": {
+  "en": "  #G Climate accord:#! we emit little, so the accord pays for our adaptation to the warming others cause.",
+  "de": "  #G Klimaabkommen:#! Wir emittieren wenig, daher zahlt das Abkommen für unsere Anpassung an die Erwärmung, die andere verursachen."
+ },
+ "je_un_chamber_regime_climate_emitter": {
+  "en": "  #R Climate accord:#! our market is a high emitter, so the cut in emissions is ours to make, and our heavy industry pays for it.",
+  "de": "  #R Klimaabkommen:#! Unser Markt ist ein starker Emittent, daher liegt die Emissionssenkung bei uns, und unsere Schwerindustrie zahlt dafür."
+ },
+ "je_un_chamber_regime_colonial_pressure": {
+  "en": "  #R Decolonisation:#! holding our colonial empire is harder under the declaration.",
+  "de": "  #R Dekolonisierung:#! Unser Kolonialreich zu halten, ist unter der Erklärung schwerer."
+ },
+ "je_un_chamber_regime_colony": {
+  "en": "#bold Decolonisation:#! our overlord sits in the United Nations, and its declaration strengthens our people's wish to be free.",
+  "de": "#bold Dekolonisierung:#! Unser Oberherr sitzt in den Vereinten Nationen, und seine Erklärung stärkt den Wunsch unseres Volkes nach Freiheit."
+ },
+ "je_un_chamber_regime_heritage_site": {
+  "en": "  #G World heritage:#! our wonders draw visitors and cultural pull — #R and building around them is slower.#!",
+  "de": "  #G Welterbe:#! Unsere Wunder ziehen Besucher und kulturelle Anziehungskraft an — #R und das Bauen in ihrer Nähe ist langsamer.#!"
+ },
+ "je_un_chamber_regime_icc": {
+  "en": "#bold The International Criminal Court#! can indict our ruler for a nuclear strike or an exposed attempt to overthrow a government. It would ask us to hand the accused over.",
+  "de": "#bold Der Internationale Strafgerichtshof#! kann unseren Herrscher wegen eines Atomschlags oder eines aufgedeckten Umsturzversuchs anklagen. Er würde von uns die Auslieferung des Angeklagten verlangen."
+ },
+ "je_un_chamber_regime_naval_curb": {
+  "en": "  #R Law of the Sea:#! as a great power, our fleets are held to the convention and earn us less prestige.",
+  "de": "  #R Seerecht:#! Als Großmacht sind unsere Flotten an das Übereinkommen gebunden und bringen uns weniger Prestige ein."
+ },
+ "je_un_chamber_regime_npt_guarantee": {
+  "en": "  #G Non-Proliferation Treaty:#! having no bomb, we hold the treaty's security guarantee against a nuclear strike.",
+  "de": "  #G Atomwaffensperrvertrag:#! Da wir keine Bombe besitzen, gilt für uns die Sicherheitsgarantie des Vertrags gegen einen Atomschlag."
+ },
+ "je_un_chamber_regime_npt_inspection": {
+  "en": "  #R Non-Proliferation Treaty:#! inspectors slow our nuclear programme.",
+  "de": "  #R Atomwaffensperrvertrag:#! Inspektoren verlangsamen unser Atomprogramm."
+ },
+ "je_un_chamber_regime_refugee_host": {
+  "en": "  #R Refugees:#! as one of the richest countries, we take in the refugees, and the strain.",
+  "de": "  #R Flüchtlinge:#! Als eines der reichsten Länder nehmen wir die Flüchtlinge auf — und die Belastung."
+ },
+ "je_un_chamber_regime_refugee_source": {
+  "en": "  #G Refugees:#! as one of the poorer countries, we are relieved by the convention.",
+  "de": "  #G Flüchtlinge:#! Als eines der ärmeren Länder werden wir durch das Übereinkommen entlastet."
+ },
+ "je_un_chamber_regime_rights_violator": {
+  "en": "  #R Human rights:#! our laws breach the Declaration, and our legitimacy and prestige pay for it.",
+  "de": "  #R Menschenrechte:#! Unsere Gesetze verstoßen gegen die Erklärung, und das kostet uns Legitimität und Prestige."
+ },
+ "je_un_chamber_regime_shared_intelligence": {
+  "en": "  #G Intelligence:#! members of a strong United Nations share it; covert operations against us are harder.",
+  "de": "  #G Nachrichtendienst:#! Mitglieder einer starken UN teilen ihn; verdeckte Operationen gegen uns werden dadurch schwerer."
+ },
+ "je_un_chamber_regime_space_laggard": {
+  "en": "  #G Outer space:#! far behind in the space race, we share the leaders' progress.",
+  "de": "  #G Weltraum:#! Weit abgeschlagen im Wettlauf ins All, profitieren wir vom Fortschritt der Führenden."
+ },
+ "je_un_chamber_regime_space_leader": {
+  "en": "  #R Outer space:#! leading the space race, we must share what we learn.",
+  "de": "  #R Weltraum:#! Als Führende im Wettlauf ins All müssen wir unsere Erkenntnisse teilen."
+ },
+ "je_un_chamber_regime_space_weapon": {
+  "en": "  #R Outer space:#! our orbital battlestation is barred by the treaty.",
+  "de": "  #R Weltraum:#! Unsere orbitale Kampfstation ist durch den Vertrag untersagt."
+ },
+ "je_un_chamber_regimes_header": {
+  "en": "#lore What each convention in force makes us pay or gain:#!",
+  "de": "#lore Was uns jedes geltende Übereinkommen kostet oder einbringt:#!"
+ },
+ "je_un_chamber_regimes_no_convention": {
+  "en": "No convention of the Assembly's is in force yet, so none sets terms for us.",
+  "de": "Noch ist kein Übereinkommen der Versammlung in Kraft, daher setzt keines Bedingungen für uns."
+ },
+ "je_un_chamber_regimes_none": {
+  "en": "No convention in force names us a winner or a loser. We carry each one's member modifier.",
+  "de": "Kein geltendes Übereinkommen nennt uns Gewinner oder Verlierer. Wir tragen den Mitgliedsmodifikator jedes einzelnen."
+ },
+ "je_un_chamber_regimes_scale": {
+  "en": "#lore Every convention's terms, and its member modifier, are multiplied by the UN's [concept_un_enforcement] (×[GetGlobalVariable('un_enforcement_now').GetValue|1] now). We are re-assessed when the tier changes and once a year.#!",
+  "de": "#lore Die Bedingungen jedes Übereinkommens und sein Mitgliedsmodifikator werden mit der [concept_un_enforcement] der UN multipliziert (derzeit ×[GetGlobalVariable('un_enforcement_now').GetValue|1]). Wir werden neu bewertet, wenn sich die Stufe ändert, sowie einmal im Jahr.#!"
  },
  "je_un_chamber_res_mandate_beneficiary": {
   "en": "  To be restored to [AddLocalizationIf(SCOPE.sCountry('un_chamber_res_beneficiary').Exists, SCOPE.sCountry('un_chamber_res_beneficiary').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_res_beneficiary').Exists), 'je_un_chamber_country_gone')]",
   "de": "  Zur Wiedereinsetzung von: [AddLocalizationIf(SCOPE.sCountry('un_chamber_res_beneficiary').Exists, SCOPE.sCountry('un_chamber_res_beneficiary').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_res_beneficiary').Exists), 'je_un_chamber_country_gone')]"
  },
+ "je_un_chamber_res_mandate_territory": {
+  "en": "  Territory named: #bold [SCOPE.sStateRegion('un_chamber_res_region').GetName]#!",
+  "de": "  Genanntes Gebiet: #bold [SCOPE.sStateRegion('un_chamber_res_region').GetName]#!"
+ },
+ "je_un_chamber_rule_majority": {
+  "en": "  Passage rule: a simple majority of the votes cast — those in favour must outnumber those opposed.",
+  "de": "  Beschlussregel: einfache Mehrheit der abgegebenen Stimmen — die Befürworter müssen die Gegner überstimmen."
+ },
+ "je_un_chamber_rule_supermajority": {
+  "en": "  Passage rule: a two-thirds supermajority of all [THIS.ScriptValue('un_vote_eligible_member_count')|0] members with a vote (a member two years in arrears on its [concept_un_dues] has none, nor does a member whose representation is suspended: [concept_un_suspended_representation]).",
+  "de": "  Beschlussregel: Zweidrittelmehrheit aller [THIS.ScriptValue('un_vote_eligible_member_count')|0] stimmberechtigten Mitglieder (ein Mitglied, das seit zwei Jahren mit seinen [concept_un_dues] im Rückstand ist, hat keine Stimme, ebenso wenig wie ein Mitglied mit ausgesetzter Vertretung: [concept_un_suspended_representation])."
+ },
+ "je_un_chamber_sovereignty_resent": {
+  "en": "#R Sovereignty:#! our nationalist interest groups resent the reach of so strong a United Nations. If they grow strong enough, they will demand that we leave.",
+  "de": "#R Souveränität:#! Unsere nationalistischen Interessengruppen missbilligen den Einfluss einer so starken UN. Werden sie stark genug, fordern sie unseren Austritt."
+ },
+ "je_un_chamber_sovereignty_welcome": {
+  "en": "#G Sovereignty:#! the interest groups led by humanitarians and pacifists welcome it.",
+  "de": "#G Souveränität:#! Die von Humanitären und Pazifisten geführten Interessengruppen begrüßen dies."
+ },
  "je_un_chamber_standing_header": {
   "en": "How International Standing Works",
   "de": "Wie internationales Ansehen funktioniert"
+ },
+ "je_un_chamber_status_member": {
+  "en": "#G We sit in the [concept_un_general_assembly].#! We hold no permanent seat, so we cannot [concept_un_veto] a [concept_un_resolution_binding].\\n",
+  "de": "#G Wir sind in der [concept_un_general_assembly] vertreten.#! Wir haben keinen ständigen Sitz und können daher kein [concept_un_veto] gegen eine [concept_un_resolution_binding] einlegen.\\n"
+ },
+ "je_un_chamber_status_nonmember": {
+  "en": "#v We are not a member.#! We may follow the Assembly's business, but we cast no vote.\\n",
+  "de": "#v Wir sind kein Mitglied.#! Wir dürfen die Angelegenheiten der Versammlung verfolgen, geben aber keine Stimme ab.\\n"
+ },
+ "je_un_chamber_status_permanent": {
+  "en": "#G We sit in the [concept_un_general_assembly] and hold a [concept_un_permanent_member] seat on the [concept_un_security_council].#! We may [concept_un_veto] a [concept_un_resolution_binding].\\n",
+  "de": "#G Wir sind in der [concept_un_general_assembly] vertreten und halten einen Sitz als [concept_un_permanent_member] im [concept_un_security_council].#! Wir können ein [concept_un_veto] gegen eine [concept_un_resolution_binding] einlegen.\\n"
+ },
+ "je_un_chamber_status_suspended": {
+  "en": "#R Our representation is suspended.#! We do not conduct our own foreign policy, so we cast no vote and table nothing ([concept_un_suspended_representation]). #R Nobody carries our seat:#! membership brings us nothing until our overlord sits in the Assembly and pays its [concept_un_dues], or we conduct our own foreign policy again.\\n",
+  "de": "#R Unsere Vertretung ist ausgesetzt.#! Wir betreiben keine eigene Außenpolitik, daher geben wir keine Stimme ab und bringen nichts ein ([concept_un_suspended_representation]). #R Niemand führt unseren Sitz:#! Die Mitgliedschaft bringt uns nichts, bis unser Oberherr in der Versammlung sitzt und seine [concept_un_dues] zahlt, oder bis wir wieder eigene Außenpolitik betreiben.\\n"
+ },
+ "je_un_chamber_status_suspended_carried": {
+  "en": "#R Our representation is suspended.#! We do not conduct our own foreign policy, so we cast no vote and table nothing ([concept_un_suspended_representation]). #G [THIS.GetCountry.GetOverlord.GetName] carries our seat:#! it pays our [concept_un_dues], and we keep the benefits of membership.\\n",
+  "de": "#R Unsere Vertretung ist ausgesetzt.#! Wir betreiben keine eigene Außenpolitik, daher geben wir keine Stimme ab und bringen nichts ein ([concept_un_suspended_representation]). #G [THIS.GetCountry.GetOverlord.GetAltName('NOM')|U] führt unseren Sitz:#! Unser Oberherr zahlt unsere [concept_un_dues], und wir behalten die Vorteile der Mitgliedschaft.\\n"
  },
  "je_un_chamber_sub_ballot": {
   "en": "The Ballot",
@@ -1303,6 +1491,10 @@
   "en": "Requests for Help",
   "de": "Hilfsersuchen"
  },
+ "je_un_chamber_sub_reasons": {
+  "en": "Why the Members Voted as They Did",
+  "de": "Warum die Mitglieder so abgestimmt haben"
+ },
  "je_un_chamber_sub_record": {
   "en": "Our Record",
   "de": "Unsere Bilanz"
@@ -1323,9 +1515,25 @@
   "en": "Our Standing",
   "de": "Unser Ansehen"
  },
+ "je_un_chamber_tally": {
+  "en": "  In favour #G [THIS.Var('un_res_support').GetValue|0]#!, opposed #R [THIS.Var('un_res_oppose').GetValue|0]#!.",
+  "de": "  Dafür #G [THIS.Var('un_res_support').GetValue|0]#!, dagegen #R [THIS.Var('un_res_oppose').GetValue|0]#!."
+ },
+ "je_un_chamber_tally_committed": {
+  "en": "  A further #v [THIS.Var('un_res_commit_pending').GetValue|0]#! member(s) have pledged their vote, for or against, but have not yet voted. Pledges are not votes and do not count toward the tally or the projection.",
+  "de": "  Weitere #v [THIS.Var('un_res_commit_pending').GetValue|0]#! Mitglied(er) haben ihre Stimme zugesagt, dafür oder dagegen, aber noch nicht abgestimmt. Zusagen sind keine Stimmen und zählen weder zur Auszählung noch zur Prognose."
+ },
  "je_un_chamber_target": {
   "en": "  Directed at [AddLocalizationIf(SCOPE.sCountry('un_chamber_target').Exists, SCOPE.sCountry('un_chamber_target').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_target').Exists), 'je_un_chamber_country_gone')]",
   "de": "  Gerichtet gegen: [AddLocalizationIf(SCOPE.sCountry('un_chamber_target').Exists, SCOPE.sCountry('un_chamber_target').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_target').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_target_accepted": {
+  "en": "  #v The target accepted the verdict rather than contest it.#!",
+  "de": "  #v Das Ziel akzeptierte das Urteil, statt es anzufechten.#!"
+ },
+ "je_un_chamber_target_gone": {
+  "en": "  Directed at a state that is no longer on the register.",
+  "de": "  Gerichtet gegen einen Staat, der nicht mehr verzeichnet ist."
  },
  "je_un_chamber_topic_aid_request": {
   "en": "#bold Humanitarian Aid Request#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
@@ -1343,13 +1551,29 @@
   "en": "#bold [Concept('concept_decolonization_system', 'Decolonization')] Resolution#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
   "de": "#bold Resolution zur [Concept('concept_decolonization_system', 'Dekolonisierung')]#! (Resolution Nr. [THIS.Var('un_res_seq').GetValue|0])"
  },
+ "je_un_chamber_topic_expulsion": {
+  "en": "#bold Motion to Expel a [concept_un_permanent_member]#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "de": "#bold Antrag auf Ausschluss eines [concept_un_permanent_member]#! (Resolution Nr. [THIS.Var('un_res_seq').GetValue|0])"
+ },
  "je_un_chamber_topic_heritage": {
   "en": "#bold Cultural Heritage Program#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
   "de": "#bold Programm für kulturelles Erbe#! (Resolution Nr. [THIS.Var('un_res_seq').GetValue|0])"
  },
+ "je_un_chamber_topic_human_rights": {
+  "en": "#bold Universal Declaration of Human Rights#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "de": "#bold Allgemeine Erklärung der Menschenrechte#! (Resolution Nr. [THIS.Var('un_res_seq').GetValue|0])"
+ },
  "je_un_chamber_topic_icc": {
   "en": "#bold International Criminal Court#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
   "de": "#bold Internationaler Strafgerichtshof#! (Resolution Nr. [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_in_force": {
+  "en": "    #G In force: the Assembly has adopted it in full, and it is not tabled again.#!",
+  "de": "    #G In Kraft: Die Versammlung hat es vollständig angenommen, und es wird nicht erneut vorgelegt.#!"
+ },
+ "je_un_chamber_topic_law_of_sea": {
+  "en": "#bold Convention on the Law of the Sea#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "de": "#bold Seerechtsübereinkommen#! (Resolution Nr. [THIS.Var('un_res_seq').GetValue|0])"
  },
  "je_un_chamber_topic_military_mandate": {
   "en": "#bold Authorized Military Mandate#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
@@ -1367,9 +1591,21 @@
   "en": "#bold [concept_un_peacekeeping] Deployment#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
   "de": "#bold Entsendung zur [concept_un_peacekeeping]#! (Resolution Nr. [THIS.Var('un_res_seq').GetValue|0])"
  },
+ "je_un_chamber_topic_physical_protection": {
+  "en": "#bold Physical Protection of Nuclear Material#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "de": "#bold Übereinkommen über den physischen Schutz von Kernmaterial#! (Resolution Nr. [THIS.Var('un_res_seq').GetValue|0])"
+ },
  "je_un_chamber_topic_reform": {
   "en": "#bold Charter Reform#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
   "de": "#bold Charta-Reform#! (Resolution Nr. [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_reform_1": {
+  "en": "#bold Charter Reform I: Standing Mandate Force and Compulsory Jurisdiction#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "de": "#bold Charta-Reform I: Ständige Mandatstruppe und Verpflichtende Gerichtsbarkeit#! (Resolution Nr. [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_reform_2": {
+  "en": "#bold Charter Reform II: Veto Restraint and the UN Levy#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "de": "#bold Charta-Reform II: Vetoeinschränkung und UN-Abgabe#! (Resolution Nr. [THIS.Var('un_res_seq').GetValue|0])"
  },
  "je_un_chamber_topic_refugee": {
   "en": "#bold International Refugee Resolution#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
@@ -1383,17 +1619,61 @@
   "en": "#bold International Space Cooperation#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
   "de": "#bold Internationale Weltraumkooperation#! (Resolution Nr. [THIS.Var('un_res_seq').GetValue|0])"
  },
+ "je_un_chamber_topic_unknown": {
+  "en": "#bold Resolution No. [THIS.Var('un_res_seq').GetValue|0]#!",
+  "de": "#bold Resolution Nr. [THIS.Var('un_res_seq').GetValue|0]#!"
+ },
+ "je_un_chamber_veto_overridden": {
+  "en": "  #G [concept_un_veto] cast by#! [AddLocalizationIf(SCOPE.sCountry('un_chamber_vetoer').Exists, SCOPE.sCountry('un_chamber_vetoer').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_vetoer').Exists), 'je_un_chamber_country_gone')] #G and overridden#! by a two-thirds supermajority (Charter Reform II, veto restraint).",
+  "de": "  #G [concept_un_veto] eingelegt von#! [AddLocalizationIf(SCOPE.sCountry('un_chamber_vetoer').Exists, SCOPE.sCountry('un_chamber_vetoer').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_vetoer').Exists), 'je_un_chamber_country_gone')] #G und durch eine Zweidrittelmehrheit außer Kraft gesetzt#! (Charta-Reform II, Vetoeinschränkung)."
+ },
  "je_un_chamber_vetoed_by": {
   "en": "  #R [concept_un_veto] cast by#! [AddLocalizationIf(SCOPE.sCountry('un_chamber_vetoer').Exists, SCOPE.sCountry('un_chamber_vetoer').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_vetoer').Exists), 'je_un_chamber_country_gone')]",
   "de": "  #R [concept_un_veto] eingelegt von#! [AddLocalizationIf(SCOPE.sCountry('un_chamber_vetoer').Exists, SCOPE.sCountry('un_chamber_vetoer').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_vetoer').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_vetoed_unknown": {
+  "en": "  #R A [concept_un_permanent_member] cast a [concept_un_veto]#! — the record does not name which.",
+  "de": "  #R Ein [concept_un_permanent_member] legte ein [concept_un_veto] ein#! — im Protokoll steht nicht, welches."
+ },
+ "je_un_chamber_vote_already_no_tt": {
+  "en": "Our delegation has already voted #R against#! this resolution.",
+  "de": "Unsere Delegation hat bei dieser Resolution bereits #R dagegen#! gestimmt."
+ },
+ "je_un_chamber_vote_already_veto_tt": {
+  "en": "Our delegation has already #R vetoed#! this resolution — a veto books a vote against it as well.",
+  "de": "Unsere Delegation hat gegen diese Resolution bereits #R ein Veto eingelegt#! — ein Veto zählt zugleich als Gegenstimme."
+ },
+ "je_un_chamber_vote_already_yes_tt": {
+  "en": "Our delegation has already voted #G in favour#! of this resolution.",
+  "de": "Unsere Delegation hat bei dieser Resolution bereits #G dafür#! gestimmt."
+ },
+ "je_un_chamber_vote_article_19_tt": {
+  "en": "Our delegation has a vote: we are not two years in arrears on our [concept_un_dues] (Article 19)",
+  "de": "Unsere Delegation hat eine Stimme: Wir sind mit unseren [concept_un_dues] nicht seit zwei Jahren im Rückstand (Artikel 19)"
  },
  "je_un_chamber_vote_no_label": {
   "en": "Vote Against",
   "de": "Dagegen stimmen"
  },
+ "je_un_chamber_vote_not_proposer_tt": {
+  "en": "We did not propose this resolution — a sponsor is counted in favour the moment the motion opens",
+  "de": "Wir haben diese Resolution nicht vorgeschlagen — ein Antragsteller zählt ab Eröffnung des Antrags automatisch als dafür"
+ },
+ "je_un_chamber_vote_not_yet_cast_tt": {
+  "en": "Our delegation has not yet voted on this resolution",
+  "de": "Unsere Delegation hat über diese Resolution noch nicht abgestimmt"
+ },
+ "je_un_chamber_vote_represented_tt": {
+  "en": "Our delegation is seated: we conduct our own foreign policy ([concept_un_suspended_representation])",
+  "de": "Unsere Delegation ist vertreten: Wir betreiben unsere eigene Außenpolitik ([concept_un_suspended_representation])"
+ },
  "je_un_chamber_vote_veto_cancel_label": {
   "en": "Think Again",
   "de": "Noch einmal überlegen"
+ },
+ "je_un_chamber_vote_veto_cancel_tt": {
+  "en": "Lower the veto without casting it. Nothing is recorded.",
+  "de": "Das Veto zurückziehen, ohne es einzulegen. Es wird nichts vermerkt."
  },
  "je_un_chamber_vote_veto_confirm_label": {
   "en": "Confirm the Veto",
@@ -1411,13 +1691,41 @@
   "en": "#R Opposed#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')]",
   "de": "#R Dagegen#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')]"
  },
+ "je_un_chamber_voter_entry_no_lean": {
+  "en": "#R Opposed#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')] #lore (lean [THIS.Var('un_lean_total').GetValue|+0])#!",
+  "de": "#R Dagegen#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')] #lore (Neigung [THIS.Var('un_lean_total').GetValue|+0])#!"
+ },
  "je_un_chamber_voter_entry_yes": {
   "en": "#G In favour#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')]",
   "de": "#G Dafür#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')]"
  },
+ "je_un_chamber_voter_entry_yes_lean": {
+  "en": "#G In favour#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')] #lore (lean [THIS.Var('un_lean_total').GetValue|+0])#!",
+  "de": "#G Dafür#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')] #lore (Neigung [THIS.Var('un_lean_total').GetValue|+0])#!"
+ },
  "je_un_chamber_votes_header": {
   "en": "Recorded Ballot",
   "de": "Protokollierte Abstimmung"
+ },
+ "je_un_crisis_line_clock": {
+  "en": "#R The UN is in crisis, and the world has given up on it:#! its target is below 5, so authority falls at least a quarter point a month. At this rate it #R dissolves in about [SCOPE.GetRootScope.ScriptValue('un_crisis_months_to_collapse')|0] months#!.\\n",
+  "de": "#R Die UN steckt in der Krise, und die Welt hat sie aufgegeben:#! Ihr Zielwert liegt unter 5, daher sinkt die Autorität um mindestens einen Viertelpunkt im Monat. In diesem Tempo #R löst sie sich in etwa [SCOPE.GetRootScope.ScriptValue('un_crisis_months_to_collapse')|0] Monaten auf#!.\\n"
+ },
+ "je_un_crisis_line_open": {
+  "en": "#R The UN is in crisis#! (authority below 10, for [SCOPE.GetRootScope.ScriptValue('un_disp_crisis_months')|0] months). It ends if authority climbs above 20. The crisis panel below shows who could save it.\\n",
+  "de": "#R Die UN steckt in der Krise#! (Autorität unter 10, seit [SCOPE.GetRootScope.ScriptValue('un_disp_crisis_months')|0] Monaten). Sie endet, wenn die Autorität über 20 steigt. Das Krisenpanel unten zeigt, wer sie retten könnte.\\n"
+ },
+ "je_un_hq_established": {
+  "en": "\\n#bold Headquarters:#! in [GetGlobalVariable('un_hq_state').GetState.GetName], hosted by [GetGlobalVariable('un_hq_country').GetCountry.GetName].",
+  "de": "\\n#bold Hauptsitz:#! in [GetGlobalVariable('un_hq_state').GetState.GetName], ausgerichtet [GetGlobalVariable('un_hq_country').GetCountry.GetAltName('VON')]."
+ },
+ "je_un_hq_host": {
+  "en": "\\n#bold Headquarters:#! #G here#!, in [GetGlobalVariable('un_hq_state').GetState.GetName]. We host the United Nations.",
+  "de": "\\n#bold Hauptsitz:#! #G hier#!, in [GetGlobalVariable('un_hq_state').GetState.GetName]. Wir sind Gastgeber der Vereinten Nationen."
+ },
+ "je_un_hq_host_unbuilt": {
+  "en": "\\n#bold Headquarters:#! we are the host nation, but the United Nations Headquarters has not been built yet.",
+  "de": "\\n#bold Hauptsitz:#! Wir sind die Gastgebernation, aber der Hauptsitz der Vereinten Nationen wurde noch nicht errichtet."
  },
  "je_un_led_actor_credibility": {
   "en": "#bold [THIS.Var('un_led_year').GetValue|0]#! — [AddLocalizationIf(SCOPE.sCountry('un_led_actor_disp').Exists, SCOPE.sCountry('un_led_actor_disp').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_led_actor_disp').Exists), 'je_un_chamber_country_gone')]: credibility [THIS.Var('un_led_value').GetValue|+2]",
@@ -1443,33 +1751,437 @@
   "en": "#bold [THIS.Var('un_led_year').GetValue|0]#! — the General Assembly: delivery [THIS.Var('un_led_value').GetValue|+2]",
   "de": "#bold [THIS.Var('un_led_year').GetValue|0]#! — die Generalversammlung: Umsetzung [THIS.Var('un_led_value').GetValue|+2]"
  },
+ "je_un_led_assembly_direct": {
+  "en": "#bold [THIS.Var('un_led_year').GetValue|0]#! — the General Assembly: authority [THIS.Var('un_led_value').GetValue|+2] at once",
+  "de": "#bold [THIS.Var('un_led_year').GetValue|0]#! — die Generalversammlung: Autorität [THIS.Var('un_led_value').GetValue|+2] sofort"
+ },
+ "je_un_led_assembly_order": {
+  "en": "#bold [THIS.Var('un_led_year').GetValue|0]#! — the General Assembly: peace and order [THIS.Var('un_led_value').GetValue|+2]",
+  "de": "#bold [THIS.Var('un_led_year').GetValue|0]#! — die Generalversammlung: Frieden und Ordnung [THIS.Var('un_led_value').GetValue|+2]"
+ },
+ "je_un_led_country_gone": {
+  "en": "a country no longer on the map",
+  "de": "ein Land, das nicht mehr auf der Karte existiert"
+ },
+ "je_un_led_reason_1": {
+  "en": "      #lore a resolution carried#!",
+  "de": "      #lore eine Resolution angenommen#!"
+ },
+ "je_un_led_reason_10": {
+  "en": "      #lore nuclear retaliation#!",
+  "de": "      #lore nukleare Vergeltung#!"
+ },
+ "je_un_led_reason_102": {
+  "en": "      #lore in response to: $un_events.2.t$#!",
+  "de": "      #lore als Reaktion auf: $un_events.2.t$#!"
+ },
+ "je_un_led_reason_1021": {
+  "en": "      #lore let the Assembly's case against#! $je_un_led_subject_country$ #lore lapse: not its quarrel, it said#!",
+  "de": "      #lore ließ das Verfahren der Versammlung gegen#! $je_un_led_subject_country$ #lore verjähren: nicht sein Streit, hieß es#!"
+ },
+ "je_un_led_reason_103": {
+  "en": "      #lore in response to: $un_events.3.t$#!",
+  "de": "      #lore als Reaktion auf: $un_events.3.t$#!"
+ },
+ "je_un_led_reason_1031": {
+  "en": "      #lore refused to be bound by the Declaration of Universal Human Rights#!",
+  "de": "      #lore weigerte sich, sich an die Allgemeine Erklärung der Menschenrechte zu binden#!"
+ },
+ "je_un_led_reason_104": {
+  "en": "      #lore in response to: $un_events.4.t$#!",
+  "de": "      #lore als Reaktion auf: $un_events.4.t$#!"
+ },
+ "je_un_led_reason_1041": {
+  "en": "      #lore sent a full peacekeeping force to#! $je_un_led_subject_state$#lore , where order had broken down#!",
+  "de": "      #lore entsandte eine volle Friedenstruppe nach#! $je_un_led_subject_state$#lore , wo die Ordnung zusammengebrochen war#!"
+ },
+ "je_un_led_reason_1042": {
+  "en": "      #lore sent only observers to#! $je_un_led_subject_country$#lore , where order had broken down#!",
+  "de": "      #lore entsandte nur Beobachter nach#! $je_un_led_subject_country$#lore , wo die Ordnung zusammengebrochen war#!"
+ },
  "je_un_led_reason_1043": {
   "en": "      #lore refused to help restore order in#! $je_un_led_subject_country$",
   "de": "      #lore lehnte Hilfe bei der Wiederherstellung der Ordnung in#! $je_un_led_subject_country$"
+ },
+ "je_un_led_reason_1044": {
+  "en": "      #lore sent a full peacekeeping force to#! $je_un_led_subject_country$#lore , where order had broken down#!",
+  "de": "      #lore entsandte eine volle Friedenstruppe nach#! $je_un_led_subject_country$#lore , wo die Ordnung zusammengebrochen war#!"
+ },
+ "je_un_led_reason_105": {
+  "en": "      #lore in response to: $un_events.5.t$#!",
+  "de": "      #lore als Reaktion auf: $un_events.5.t$#!"
+ },
+ "je_un_led_reason_1051": {
+  "en": "      #lore enforced the sanctions on#! $je_un_led_subject_country$ #lore strictly, at a cost to its own trade#!",
+  "de": "      #lore setzte die Sanktionen gegen#! $je_un_led_subject_country$ #lore streng durch, auf Kosten des eigenen Handels#!"
+ },
+ "je_un_led_reason_1052": {
+  "en": "      #lore enforced the sanctions on#! $je_un_led_subject_country$ #lore to the letter, and no further#!",
+  "de": "      #lore setzte die Sanktionen gegen#! $je_un_led_subject_country$ #lore buchstabengetreu durch, und nicht darüber hinaus#!"
  },
  "je_un_led_reason_1053": {
   "en": "      #lore quietly traded through the sanctions on#! $je_un_led_subject_country$",
   "de": "      #lore handelte heimlich trotz der Sanktionen gegen#! $je_un_led_subject_country$"
  },
+ "je_un_led_reason_106": {
+  "en": "      #lore in response to: $un_events.6.t$#!",
+  "de": "      #lore als Reaktion auf: $un_events.6.t$#!"
+ },
+ "je_un_led_reason_1061": {
+  "en": "      #lore defended the Charter as it stands, when the organisation had outgrown it#!",
+  "de": "      #lore verteidigte die Charta in ihrer bestehenden Form, als die Organisation längst über sie hinausgewachsen war#!"
+ },
+ "je_un_led_reason_107": {
+  "en": "      #lore in response to: $un_events.7.t$#!",
+  "de": "      #lore als Reaktion auf: $un_events.7.t$#!"
+ },
+ "je_un_led_reason_1071": {
+  "en": "      #lore mounted a major relief effort for the famine in#! $je_un_led_subject_state$",
+  "de": "      #lore leistete umfangreiche Hilfe für die Hungersnot in#! $je_un_led_subject_state$"
+ },
+ "je_un_led_reason_1072": {
+  "en": "      #lore sent a token contribution to the famine in#! $je_un_led_subject_country$",
+  "de": "      #lore leistete einen symbolischen Beitrag zur Hungersnot in#! $je_un_led_subject_country$"
+ },
  "je_un_led_reason_1073": {
   "en": "      #lore refused aid for the famine in#! $je_un_led_subject_country$",
   "de": "      #lore verweigerte Hilfe für die Hungersnot in#! $je_un_led_subject_country$"
+ },
+ "je_un_led_reason_1074": {
+  "en": "      #lore refused aid for the famine in#! $je_un_led_subject_country$#lore : a great power turning away while the UN is at the height of its authority#!",
+  "de": "      #lore verweigerte Hilfe für die Hungersnot in#! $je_un_led_subject_country$#lore : eine Großmacht, die sich abwandte, während die UN auf dem Höhepunkt ihrer Autorität steht#!"
+ },
+ "je_un_led_reason_1075": {
+  "en": "      #lore mounted a major relief effort for the famine in#! $je_un_led_subject_country$",
+  "de": "      #lore leistete umfangreiche Hilfe für die Hungersnot in#! $je_un_led_subject_country$"
+ },
+ "je_un_led_reason_108": {
+  "en": "      #lore in response to: $un_events.8.t$#!",
+  "de": "      #lore als Reaktion auf: $un_events.8.t$#!"
+ },
+ "je_un_led_reason_1081": {
+  "en": "      #lore accepted the World Court's ruling against it, in the case brought by#! $je_un_led_subject_country$",
+  "de": "      #lore akzeptierte das Urteil des Weltgerichtshofs gegen sich selbst im Verfahren von#! $je_un_led_subject_country$"
+ },
+ "je_un_led_reason_1082": {
+  "en": "      #lore contested the World Court's jurisdiction, in the case brought by#! $je_un_led_subject_country$",
+  "de": "      #lore bestritt die Zuständigkeit des Weltgerichtshofs im Verfahren von#! $je_un_led_subject_country$"
+ },
+ "je_un_led_reason_1083": {
+  "en": "      #lore defied the World Court's ruling against it, in the case brought by#! $je_un_led_subject_country$",
+  "de": "      #lore missachtete das Urteil des Weltgerichtshofs gegen sich selbst im Verfahren von#! $je_un_led_subject_country$"
+ },
+ "je_un_led_reason_109": {
+  "en": "      #lore in response to: $un_events.9.t$#!",
+  "de": "      #lore als Reaktion auf: $un_events.9.t$#!"
+ },
+ "je_un_led_reason_1091": {
+  "en": "      #lore refused a world heritage convention: culture, it said, is a domestic matter#!",
+  "de": "      #lore lehnte ein Welterbe-Übereinkommen ab: Kultur, hieß es, sei eine innere Angelegenheit#!"
+ },
+ "je_un_led_reason_10_on": {
+  "en": "      #lore struck back with a nuclear weapon at#! $je_un_led_subject_state$",
+  "de": "      #lore schlug mit einer Atomwaffe zurück gegen#! $je_un_led_subject_state$"
+ },
+ "je_un_led_reason_11": {
+  "en": "      #lore a permanent member walked out of the United Nations#!",
+  "de": "      #lore ein ständiges Mitglied verließ die Vereinten Nationen#!"
+ },
+ "je_un_led_reason_110": {
+  "en": "      #lore in response to: $un_events.10.t$#!",
+  "de": "      #lore als Reaktion auf: $un_events.10.t$#!"
+ },
+ "je_un_led_reason_1101": {
+  "en": "      #lore stood by the United Nations in its crisis, at a price in influence#!",
+  "de": "      #lore stand den Vereinten Nationen in ihrer Krise bei, um den Preis an Einfluss#!"
+ },
+ "je_un_led_reason_1102": {
+  "en": "      #lore gave the United Nations up for lost in its crisis, and took back the influence it had cost#!",
+  "de": "      #lore gab die Vereinten Nationen in ihrer Krise verloren und holte sich den dafür gezahlten Einfluss zurück#!"
+ },
+ "je_un_led_reason_111": {
+  "en": "      #lore in response to: $un_events.11.t$#!",
+  "de": "      #lore als Reaktion auf: $un_events.11.t$#!"
  },
  "je_un_led_reason_1111": {
   "en": "      #lore publicly denounced the [concept_un_veto] cast by#! $je_un_led_subject_country$",
   "de": "      #lore verurteilte öffentlich das von $je_un_led_subject_country$ eingelegte [concept_un_veto]#!"
  },
+ "je_un_led_reason_1112": {
+  "en": "      #lore accepted the [concept_un_veto] cast by#! $je_un_led_subject_country$ #lore as legitimate procedure#!",
+  "de": "      #lore akzeptierte das von#! $je_un_led_subject_country$ #lore eingelegte [concept_un_veto] als rechtmäßiges Verfahren#!"
+ },
+ "je_un_led_reason_1113": {
+  "en": "      #lore proposed abolishing the [concept_un_veto] altogether, after one was cast by#! $je_un_led_subject_country$",
+  "de": "      #lore schlug vor, das [concept_un_veto] ganz abzuschaffen, nachdem eines eingelegt worden war von#! $je_un_led_subject_country$"
+ },
+ "je_un_led_reason_112": {
+  "en": "      #lore in response to: $un_events.12.t$#!",
+  "de": "      #lore als Reaktion auf: $un_events.12.t$#!"
+ },
+ "je_un_led_reason_1121": {
+  "en": "      #lore defended its overseas development programmes against a decolonization resolution#!",
+  "de": "      #lore verteidigte seine überseeischen Entwicklungsprogramme gegen eine Dekolonisierungsresolution#!"
+ },
+ "je_un_led_reason_113": {
+  "en": "      #lore in response to: $un_events.13.t$#!",
+  "de": "      #lore als Reaktion auf: $un_events.13.t$#!"
+ },
+ "je_un_led_reason_114": {
+  "en": "      #lore in response to: $un_events.14.t$#!",
+  "de": "      #lore als Reaktion auf: $un_events.14.t$#!"
+ },
+ "je_un_led_reason_1141": {
+  "en": "      #lore refused to limit its deterrent under a Nuclear Non-Proliferation Treaty#!",
+  "de": "      #lore weigerte sich, sein Abschreckungspotenzial im Rahmen eines Atomwaffensperrvertrags zu begrenzen#!"
+ },
+ "je_un_led_reason_115": {
+  "en": "      #lore in response to: $un_events.15.t$#!",
+  "de": "      #lore als Reaktion auf: $un_events.15.t$#!"
+ },
+ "je_un_led_reason_1151": {
+  "en": "      #lore accepted international arbitration of its trade dispute with#! $je_un_led_subject_country$",
+  "de": "      #lore akzeptierte eine internationale Schlichtung seines Handelsstreits mit#! $je_un_led_subject_country$"
+ },
+ "je_un_led_reason_1152": {
+  "en": "      #lore settled its trade dispute with#! $je_un_led_subject_country$ #lore in a bilateral deal, outside the United Nations#!",
+  "de": "      #lore beendete seinen Handelsstreit mit#! $je_un_led_subject_country$ #lore in einem bilateralen Abkommen außerhalb der Vereinten Nationen#!"
+ },
+ "je_un_led_reason_1153": {
+  "en": "      #lore imposed unilateral tariffs on#! $je_un_led_subject_country$ #lore rather than accept arbitration#!",
+  "de": "      #lore verhängte einseitige Zölle gegen#! $je_un_led_subject_country$ #lore statt eine Schlichtung zu akzeptieren#!"
+ },
+ "je_un_led_reason_116": {
+  "en": "      #lore in response to: $un_events.16.t$#!",
+  "de": "      #lore als Reaktion auf: $un_events.16.t$#!"
+ },
+ "je_un_led_reason_1161": {
+  "en": "      #lore refused a pandemic preparedness convention: its own people, it said, come first#!",
+  "de": "      #lore lehnte ein Pandemievorsorge-Übereinkommen ab: das eigene Volk, hieß es, komme zuerst#!"
+ },
+ "je_un_led_reason_117": {
+  "en": "      #lore in response to: $un_events.17.t$#!",
+  "de": "      #lore als Reaktion auf: $un_events.17.t$#!"
+ },
+ "je_un_led_reason_1171": {
+  "en": "      #lore refused binding climate targets: economic growth, it said, comes first#!",
+  "de": "      #lore lehnte verbindliche Klimaziele ab: Wirtschaftswachstum, hieß es, habe Vorrang#!"
+ },
+ "je_un_led_reason_118": {
+  "en": "      #lore in response to: $un_events.18.t$#!",
+  "de": "      #lore als Reaktion auf: $un_events.18.t$#!"
+ },
+ "je_un_led_reason_1181": {
+  "en": "      #lore closed its borders to the refugees fleeing#! $je_un_led_subject_country$",
+  "de": "      #lore schloss seine Grenzen für die Flüchtlinge aus#! $je_un_led_subject_country$"
+ },
+ "je_un_led_reason_119": {
+  "en": "      #lore in response to: $un_events.19.t$#!",
+  "de": "      #lore als Reaktion auf: $un_events.19.t$#!"
+ },
+ "je_un_led_reason_1191": {
+  "en": "      #lore refused an international space cooperation treaty: space, it said, serves national interests#!",
+  "de": "      #lore lehnte einen internationalen Weltraumkooperationsvertrag ab: der Weltraum, hieß es, diene nationalen Interessen#!"
+ },
+ "je_un_led_reason_12": {
+  "en": "      #lore a motion to expel a permanent member carried#!",
+  "de": "      #lore ein Antrag auf Ausschluss eines ständigen Mitglieds wurde angenommen#!"
+ },
+ "je_un_led_reason_120": {
+  "en": "      #lore in response to: $un_events.20.t$#!",
+  "de": "      #lore als Reaktion auf: $un_events.20.t$#!"
+ },
+ "je_un_led_reason_1201": {
+  "en": "      #lore condemned the walkout led by#! $je_un_led_subject_country$#lore , and rallied the members who stayed#!",
+  "de": "      #lore verurteilte den von#! $je_un_led_subject_country$#lore angeführten Auszug und sammelte die verbliebenen Mitglieder#!"
+ },
+ "je_un_led_reason_1202": {
+  "en": "      #lore called for dialogue after the walkout led by#! $je_un_led_subject_country$",
+  "de": "      #lore forderte Dialog nach dem Auszug, angeführt von#! $je_un_led_subject_country$"
+ },
+ "je_un_led_reason_1203": {
+  "en": "      #lore joined the walkout from the Assembly led by#! $je_un_led_subject_country$",
+  "de": "      #lore schloss sich dem Auszug aus der Versammlung an, angeführt von#! $je_un_led_subject_country$"
+ },
+ "je_un_led_reason_121": {
+  "en": "      #lore in response to: $un_events.21.t$#!",
+  "de": "      #lore als Reaktion auf: $un_events.21.t$#!"
+ },
+ "je_un_led_reason_1211": {
+  "en": "      #lore refused the Convention on the Law of the Sea: its waters, it said, are its own affair#!",
+  "de": "      #lore lehnte das Seerechtsübereinkommen ab: seine Gewässer, hieß es, seien seine eigene Angelegenheit#!"
+ },
+ "je_un_led_reason_122": {
+  "en": "      #lore in response to: $un_events.22.t$#!",
+  "de": "      #lore als Reaktion auf: $un_events.22.t$#!"
+ },
+ "je_un_led_reason_1221": {
+  "en": "      #lore refused to put its soldiers under the International Criminal Court#!",
+  "de": "      #lore weigerte sich, seine Soldaten der Gerichtsbarkeit des Internationalen Strafgerichtshofs zu unterstellen#!"
+ },
+ "je_un_led_reason_1231": {
+  "en": "      #lore refused the Convention on the Physical Protection of Nuclear Material: its depots, it said, are its own business#!",
+  "de": "      #lore lehnte das Übereinkommen über den physischen Schutz von Kernmaterial ab: seine Depots, hieß es, seien seine eigene Sache#!"
+ },
+ "je_un_led_reason_13": {
+  "en": "      #lore a motion to expel a permanent member fell#!",
+  "de": "      #lore ein Antrag auf Ausschluss eines ständigen Mitglieds scheiterte#!"
+ },
+ "je_un_led_reason_134": {
+  "en": "      #lore in response to: $un_events.34.t$#!",
+  "de": "      #lore als Reaktion auf: $un_events.34.t$#!"
+ },
+ "je_un_led_reason_1341": {
+  "en": "      #lore stayed in the United Nations, against its nationalists' demand that it leave#!",
+  "de": "      #lore blieb in den Vereinten Nationen, entgegen der Forderung seiner Nationalisten nach einem Austritt#!"
+ },
+ "je_un_led_reason_14": {
+  "en": "      #lore a charter reform adopted#!",
+  "de": "      #lore eine Charta-Reform angenommen#!"
+ },
+ "je_un_led_reason_15": {
+  "en": "      #lore a member dropped the embargo the Assembly imposed#!",
+  "de": "      #lore ein Mitglied hob das von der Versammlung verhängte Embargo auf#!"
+ },
+ "je_un_led_reason_15_on": {
+  "en": "      #lore dropped the embargo the Assembly had imposed on#! $je_un_led_subject_country$",
+  "de": "      #lore beendete das von der Versammlung verhängte Embargo gegen#! $je_un_led_subject_country$"
+ },
+ "je_un_led_reason_16": {
+  "en": "      #lore a leader surrendered to the International Criminal Court#!",
+  "de": "      #lore ein Staatschef stellte sich dem Internationalen Strafgerichtshof#!"
+ },
+ "je_un_led_reason_17": {
+  "en": "      #lore an indictment of the International Criminal Court defied#!",
+  "de": "      #lore eine Anklage des Internationalen Strafgerichtshofs missachtet#!"
+ },
+ "je_un_led_reason_18": {
+  "en": "      #lore an emergency loan delivered#!",
+  "de": "      #lore ein Nothilfekredit gewährt#!"
+ },
  "je_un_led_reason_18_on": {
   "en": "      #lore an emergency loan delivered to#! $je_un_led_subject_country$",
   "de": "      #lore gewährte einen Nothilfekredit an#! $je_un_led_subject_country$"
+ },
+ "je_un_led_reason_19": {
+  "en": "      #lore a UN mission accomplished its work#!",
+  "de": "      #lore eine UN-Mission erfüllte ihren Auftrag#!"
+ },
+ "je_un_led_reason_2": {
+  "en": "      #lore a resolution carried only in weaker form, after a veto#!",
+  "de": "      #lore eine Resolution nur in abgeschwächter Form angenommen, nach einem Veto#!"
+ },
+ "je_un_led_reason_20": {
+  "en": "      #lore a UN mission failed#!",
+  "de": "      #lore eine UN-Mission scheiterte#!"
+ },
+ "je_un_led_reason_21": {
+  "en": "      #lore the peacekeeping mission in#! $je_un_led_subject_state$ #lore accomplished its work#!",
+  "de": "      #lore die Friedensmission in#! $je_un_led_subject_state$ #lore erfüllte ihren Auftrag#!"
+ },
+ "je_un_led_reason_22": {
+  "en": "      #lore the aid mission in#! $je_un_led_subject_state$ #lore accomplished its work#!",
+  "de": "      #lore die Hilfsmission in#! $je_un_led_subject_state$ #lore erfüllte ihren Auftrag#!"
+ },
+ "je_un_led_reason_23": {
+  "en": "      #lore the stabilisation mission in#! $je_un_led_subject_state$ #lore accomplished its work#!",
+  "de": "      #lore die Stabilisierungsmission in#! $je_un_led_subject_state$ #lore erfüllte ihren Auftrag#!"
+ },
+ "je_un_led_reason_24": {
+  "en": "      #lore the peacekeeping mission in#! $je_un_led_subject_state$ #lore failed#!",
+  "de": "      #lore die Friedensmission in#! $je_un_led_subject_state$ #lore scheiterte#!"
+ },
+ "je_un_led_reason_25": {
+  "en": "      #lore the aid mission in#! $je_un_led_subject_state$ #lore failed#!",
+  "de": "      #lore die Hilfsmission in#! $je_un_led_subject_state$ #lore scheiterte#!"
+ },
+ "je_un_led_reason_26": {
+  "en": "      #lore the stabilisation mission in#! $je_un_led_subject_state$ #lore failed#!",
+  "de": "      #lore die Stabilisierungsmission in#! $je_un_led_subject_state$ #lore scheiterte#!"
+ },
+ "je_un_led_reason_3": {
+  "en": "      #lore a resolution fell#!",
+  "de": "      #lore eine Resolution scheiterte#!"
+ },
+ "je_un_led_reason_4": {
+  "en": "      #lore a [concept_un_veto] cast in the Security Council#!",
+  "de": "      #lore ein [concept_un_veto] im Sicherheitsrat eingelegt#!"
+ },
+ "je_un_led_reason_5": {
+  "en": "      #lore an authorized military mandate discharged as written#!",
+  "de": "      #lore ein genehmigtes Militärmandat wie festgelegt erfüllt#!"
+ },
+ "je_un_led_reason_5_on": {
+  "en": "      #lore discharged its authorized military mandate against#! $je_un_led_subject_country$ #lore exactly as written#!",
+  "de": "      #lore erfüllte sein genehmigtes Militärmandat gegen#! $je_un_led_subject_country$ #lore genau wie festgelegt#!"
+ },
+ "je_un_led_reason_6": {
+  "en": "      #lore an authorized military mandate violated, abandoned or forfeited#!",
+  "de": "      #lore ein genehmigtes Militärmandat verletzt, aufgegeben oder verwirkt#!"
+ },
+ "je_un_led_reason_6_on": {
+  "en": "      #lore violated, abandoned or forfeited its authorized military mandate against#! $je_un_led_subject_country$",
+  "de": "      #lore verletzte, gab auf oder verwirkte sein genehmigtes Militärmandat gegen#! $je_un_led_subject_country$"
+ },
+ "je_un_led_reason_7": {
+  "en": "      #lore a sanctions regime lifted by its enforcer#!",
+  "de": "      #lore ein Sanktionsregime von seinem Vollstrecker aufgehoben#!"
+ },
+ "je_un_led_reason_7_on": {
+  "en": "      #lore lifted the sanctions the Assembly had imposed on#! $je_un_led_subject_country$",
+  "de": "      #lore beendete die von der Versammlung verhängten Sanktionen gegen#! $je_un_led_subject_country$"
+ },
+ "je_un_led_reason_8": {
+  "en": "      #lore a nuclear first strike#!",
+  "de": "      #lore ein nuklearer Erstschlag#!"
  },
  "je_un_led_reason_8_on": {
   "en": "      #lore launched a nuclear first strike on#! $je_un_led_subject_state$",
   "de": "      #lore führte einen nuklearen Erstschlag gegen#! $je_un_led_subject_state$"
  },
+ "je_un_led_reason_9": {
+  "en": "      #lore a tactical nuclear strike#!",
+  "de": "      #lore ein taktischer Atomschlag#!"
+ },
  "je_un_led_reason_9_on": {
   "en": "      #lore used a tactical nuclear weapon in#! $je_un_led_subject_state$",
   "de": "      #lore setzte eine taktische Nuklearwaffe ein in#! $je_un_led_subject_state$"
+ },
+ "je_un_led_res_carried": {
+  "en": "      #lore Resolution No. [THIS.Var('un_led_res_seq').GetValue|0] carried:#!",
+  "de": "      #lore Resolution Nr. [THIS.Var('un_led_res_seq').GetValue|0] angenommen:#!"
+ },
+ "je_un_led_res_carried_at": {
+  "en": "      #lore Resolution No. [THIS.Var('un_led_res_seq').GetValue|0], directed at#! $je_un_led_subject_country$#lore , carried:#!",
+  "de": "      #lore Resolution Nr. [THIS.Var('un_led_res_seq').GetValue|0], gerichtet gegen#! $je_un_led_subject_country$#lore , angenommen:#!"
+ },
+ "je_un_led_res_fell": {
+  "en": "      #lore Resolution No. [THIS.Var('un_led_res_seq').GetValue|0] fell:#!",
+  "de": "      #lore Resolution Nr. [THIS.Var('un_led_res_seq').GetValue|0] gescheitert:#!"
+ },
+ "je_un_led_res_fell_at": {
+  "en": "      #lore Resolution No. [THIS.Var('un_led_res_seq').GetValue|0], directed at#! $je_un_led_subject_country$#lore , fell:#!",
+  "de": "      #lore Resolution Nr. [THIS.Var('un_led_res_seq').GetValue|0], gerichtet gegen#! $je_un_led_subject_country$#lore , gescheitert:#!"
+ },
+ "je_un_led_res_reform": {
+  "en": "      #lore Resolution No. [THIS.Var('un_led_res_seq').GetValue|0] carried, and the Charter is amended:#!",
+  "de": "      #lore Resolution Nr. [THIS.Var('un_led_res_seq').GetValue|0] angenommen, und die Charta wird geändert:#!"
+ },
+ "je_un_led_res_vetoed": {
+  "en": "      #lore vetoed Resolution No. [THIS.Var('un_led_res_seq').GetValue|0]:#!",
+  "de": "      #lore Veto gegen Resolution Nr. [THIS.Var('un_led_res_seq').GetValue|0] eingelegt:#!"
+ },
+ "je_un_led_res_vetoed_at": {
+  "en": "      #lore vetoed Resolution No. [THIS.Var('un_led_res_seq').GetValue|0], directed at#! $je_un_led_subject_country$#lore :#!",
+  "de": "      #lore Veto gegen Resolution Nr. [THIS.Var('un_led_res_seq').GetValue|0], gerichtet gegen#! $je_un_led_subject_country$#lore , eingelegt:#!"
+ },
+ "je_un_led_res_weaker": {
+  "en": "      #lore Resolution No. [THIS.Var('un_led_res_seq').GetValue|0] carried only in weaker form, after a [concept_un_veto]:#!",
+  "de": "      #lore Resolution Nr. [THIS.Var('un_led_res_seq').GetValue|0] nur in abgeschwächter Form angenommen, nach einem [concept_un_veto]:#!"
+ },
+ "je_un_led_res_weaker_at": {
+  "en": "      #lore Resolution No. [THIS.Var('un_led_res_seq').GetValue|0], directed at#! $je_un_led_subject_country$#lore , carried only in weaker form, after a [concept_un_veto]:#!",
+  "de": "      #lore Resolution Nr. [THIS.Var('un_led_res_seq').GetValue|0], gerichtet gegen#! $je_un_led_subject_country$#lore , nur in abgeschwächter Form angenommen, nach einem [concept_un_veto]:#!"
  },
  "je_un_led_topic_aid_request": {
   "en": "        Humanitarian Aid Request",
@@ -1503,6 +2215,10 @@
   "en": "        International Criminal Court",
   "de": "        Internationaler Strafgerichtshof"
  },
+ "je_un_led_topic_law_of_sea": {
+  "en": "        Convention on the Law of the Sea",
+  "de": "        Seerechtsübereinkommen"
+ },
  "je_un_led_topic_military_mandate": {
   "en": "        Authorized Military Mandate",
   "de": "        Genehmigtes Militärmandat"
@@ -1527,6 +2243,14 @@
   "en": "        Charter Reform",
   "de": "        Charta-Reform"
  },
+ "je_un_led_topic_reform_1": {
+  "en": "        Charter Reform I: Standing Mandate Force and Compulsory Jurisdiction",
+  "de": "        Charta-Reform I: Ständige Mandatstruppe und Verpflichtende Gerichtsbarkeit"
+ },
+ "je_un_led_topic_reform_2": {
+  "en": "        Charter Reform II: Veto Restraint and the UN Levy",
+  "de": "        Charta-Reform II: Vetoeinschränkung und UN-Abgabe"
+ },
  "je_un_led_topic_refugee": {
   "en": "        International Refugee Resolution",
   "de": "        Internationale Flüchtlingsresolution"
@@ -1539,9 +2263,113 @@
   "en": "If we are a member",
   "de": "Falls wir Mitglied sind"
  },
+ "je_un_preview_dues_tt": {
+  "en": "Every member pays [concept_un_dues]: a share of its GDP a year that grows with the UN's tier, from 0.1% when Contested to 1% when Supranational. Withholding them saves the money but costs standing, and after 24 months in arrears our vote in the [concept_un_general_assembly].",
+  "de": "Jedes Mitglied zahlt [concept_un_dues]: einen jährlichen Anteil seines BIP, der mit der Stufe der UN wächst, von 0,1% bei Umstritten bis 1% bei Supranational. Sie zurückzuhalten spart Geld, kostet aber Ansehen — und nach 24 Monaten im Rückstand unsere Stimme in der [concept_un_general_assembly]."
+ },
+ "je_un_preview_membership_benefits_header": {
+  "en": "If our authority earns us membership benefits",
+  "de": "Wenn uns unsere Autorität Mitgliedsvorteile einbringt"
+ },
+ "je_un_preview_membership_benefits_tt": {
+  "en": "From the Contested tier ([concept_un_authority] 20+) an active member receives the membership benefits modifier, scaled by authority ÷ 50. A Moribund UN pays nothing.",
+  "de": "Ab der Stufe Umstritten ([concept_un_authority] 20+) erhält ein aktives Mitglied den Mitgliedsvorteile-Modifikator, skaliert mit Autorität ÷ 50. Eine marode UN zahlt nichts."
+ },
  "je_un_preview_npt_header": {
   "en": "If the United Nations enforces non-proliferation",
   "de": "Falls die Vereinten Nationen die Nichtverbreitung durchsetzen"
+ },
+ "je_un_preview_npt_tt": {
+  "en": "From the Strong tier, once the IAEA exists, a member without nuclear weapons is held to disarmament: any nuclear programme it runs is wiped back to nothing every week, for as long as it remains a member.",
+  "de": "Ab der Stufe Stark, sobald die IAEO besteht, ist ein Mitglied ohne Atomwaffen zur Abrüstung verpflichtet: Jedes von ihm betriebene Atomprogramm wird jede Woche auf null zurückgesetzt, solange es Mitglied bleibt."
+ },
+ "je_un_preview_pariah_header": {
+  "en": "If we stay outside while the UN is strong",
+  "de": "Wenn wir außen bleiben, während die UN stark ist"
+ },
+ "je_un_preview_pariah_tt": {
+  "en": "From the Established tier ([concept_un_authority] 45+) a country outside the UN is a pariah; from the Strong tier it also loses trade and leverage. Joining at any time clears both.",
+  "de": "Ab der Stufe Gefestigt ([concept_un_authority] 45+) ist ein Land außerhalb der UN ein Paria; ab der Stufe Stark verliert es zudem Handel und Druckmittel. Ein Beitritt zu jedem Zeitpunkt beseitigt beides."
+ },
+ "je_un_preview_war_surcharge_header": {
+  "en": "If we go to war without a mandate",
+  "de": "Wenn wir ohne Mandat in den Krieg ziehen"
+ },
+ "je_un_preview_war_surcharge_tt": {
+  "en": "From the Established tier, every war goal the initiator of a diplomatic play adds without a military mandate bound to that play costs it extra [concept_infamy]: #v 2#! at Established, #v 4#! at Strong, #v 10#! at Supranational, and twice that from Strong against a country under a UN peacekeeping deployment. Members and non-members alike.",
+  "de": "Ab der Stufe Gefestigt kostet jedes Kriegsziel, das der Initiator eines diplomatischen Spiels ohne ein an dieses Spiel gebundenes Militärmandat hinzufügt, zusätzliche [concept_infamy]: #v 2#! bei Gefestigt, #v 4#! bei Stark, #v 10#! bei Supranational, und das Doppelte davon ab Stark gegen ein Land unter einem UN-Friedenseinsatz. Für Mitglieder wie Nichtmitglieder gleichermaßen."
+ },
+ "je_un_res_why_no_burden": {
+  "en": "  #R Against#! — the cost to them: #v [THIS.Var('un_res_why_no_burden').GetValue|0]#!",
+  "de": "  #R Dagegen#! — die Kosten für sie: #v [THIS.Var('un_res_why_no_burden').GetValue|0]#!"
+ },
+ "je_un_res_why_no_glass": {
+  "en": "  #R Against#! — their own record (glass houses): #v [THIS.Var('un_res_why_no_glass').GetValue|0]#!",
+  "de": "  #R Dagegen#! — ihre eigene Vergangenheit (Glashäuser): #v [THIS.Var('un_res_why_no_glass').GetValue|0]#!"
+ },
+ "je_un_res_why_no_grounds": {
+  "en": "  #R Against#! — too thin a case against the target: #v [THIS.Var('un_res_why_no_grounds').GetValue|0]#!",
+  "de": "  #R Dagegen#! — zu dünne Beweislage gegen das Ziel: #v [THIS.Var('un_res_why_no_grounds').GetValue|0]#!"
+ },
+ "je_un_res_why_no_interests": {
+  "en": "  #R Against#! — their interests on this topic: #v [THIS.Var('un_res_why_no_interests').GetValue|0]#!",
+  "de": "  #R Dagegen#! — ihre Interessen in dieser Frage: #v [THIS.Var('un_res_why_no_interests').GetValue|0]#!"
+ },
+ "je_un_res_why_no_lobbying": {
+  "en": "  #R Against#! — lobbied against it: #v [THIS.Var('un_res_why_no_lobbying').GetValue|0]#!",
+  "de": "  #R Dagegen#! — dagegen lobbyiert: #v [THIS.Var('un_res_why_no_lobbying').GetValue|0]#!"
+ },
+ "je_un_res_why_no_pledge": {
+  "en": "  #R Against#! — a vote pledged against it: #v [THIS.Var('un_res_why_no_pledge').GetValue|0]#!",
+  "de": "  #R Dagegen#! — eine dagegen zugesagte Stimme: #v [THIS.Var('un_res_why_no_pledge').GetValue|0]#!"
+ },
+ "je_un_res_why_no_proposer": {
+  "en": "  #R Against#! — rivalry with, or dislike of, the proposer: #v [THIS.Var('un_res_why_no_proposer').GetValue|0]#!",
+  "de": "  #R Dagegen#! — Rivalität mit dem Antragsteller oder Abneigung gegen ihn: #v [THIS.Var('un_res_why_no_proposer').GetValue|0]#!"
+ },
+ "je_un_res_why_no_self": {
+  "en": "  #R Against#! — it is their own censure: #v [THIS.Var('un_res_why_no_self').GetValue|0]#!",
+  "de": "  #R Dagegen#! — es ist die eigene Rüge: #v [THIS.Var('un_res_why_no_self').GetValue|0]#!"
+ },
+ "je_un_res_why_no_target": {
+  "en": "  #R Against#! — ties to the target: #v [THIS.Var('un_res_why_no_target').GetValue|0]#!",
+  "de": "  #R Dagegen#! — Verbindungen zum Ziel: #v [THIS.Var('un_res_why_no_target').GetValue|0]#!"
+ },
+ "je_un_res_why_yes_accepted": {
+  "en": "  #G In favour#! — the target accepted the verdict: #v [THIS.Var('un_res_why_yes_accepted').GetValue|0]#!",
+  "de": "  #G Dafür#! — das Ziel akzeptierte das Urteil: #v [THIS.Var('un_res_why_yes_accepted').GetValue|0]#!"
+ },
+ "je_un_res_why_yes_grounds": {
+  "en": "  #G In favour#! — the case against the target: #v [THIS.Var('un_res_why_yes_grounds').GetValue|0]#!",
+  "de": "  #G Dafür#! — die Beweislage gegen das Ziel: #v [THIS.Var('un_res_why_yes_grounds').GetValue|0]#!"
+ },
+ "je_un_res_why_yes_interests": {
+  "en": "  #G In favour#! — their interests on this topic: #v [THIS.Var('un_res_why_yes_interests').GetValue|0]#!",
+  "de": "  #G Dafür#! — ihre Interessen in dieser Frage: #v [THIS.Var('un_res_why_yes_interests').GetValue|0]#!"
+ },
+ "je_un_res_why_yes_lobbying": {
+  "en": "  #G In favour#! — lobbied for it: #v [THIS.Var('un_res_why_yes_lobbying').GetValue|0]#!",
+  "de": "  #G Dafür#! — dafür lobbyiert: #v [THIS.Var('un_res_why_yes_lobbying').GetValue|0]#!"
+ },
+ "je_un_res_why_yes_pledge": {
+  "en": "  #G In favour#! — a vote pledged for it: #v [THIS.Var('un_res_why_yes_pledge').GetValue|0]#!",
+  "de": "  #G Dafür#! — eine dafür zugesagte Stimme: #v [THIS.Var('un_res_why_yes_pledge').GetValue|0]#!"
+ },
+ "je_un_res_why_yes_proposer": {
+  "en": "  #G In favour#! — ties to the proposer: #v [THIS.Var('un_res_why_yes_proposer').GetValue|0]#!",
+  "de": "  #G Dafür#! — Verbindungen zum Antragsteller: #v [THIS.Var('un_res_why_yes_proposer').GetValue|0]#!"
+ },
+ "je_un_res_why_yes_target": {
+  "en": "  #G In favour#! — rivalry with the target: #v [THIS.Var('un_res_why_yes_target').GetValue|0]#!",
+  "de": "  #G Dafür#! — Rivalität mit dem Ziel: #v [THIS.Var('un_res_why_yes_target').GetValue|0]#!"
+ },
+ "je_un_security_council_member": {
+  "en": "\\n#bold [concept_un_security_council]:#! [SCOPE.GetRootScope.ScriptValue('un_permanent_seat_count')|0] of 5 permanent members. #G We hold a seat#! and may [concept_un_veto] [concept_un_resolution_binding]s. Every permanent member is named in the chamber below.",
+  "de": "\\n#bold [concept_un_security_council]:#! [SCOPE.GetRootScope.ScriptValue('un_permanent_seat_count')|0] von 5 ständigen Mitgliedern. #G Wir halten einen Sitz#! und können ein [concept_un_veto] gegen [Concept('concept_un_resolution_binding', 'Verbindliche Resolutionen')] einlegen. Jedes ständige Mitglied wird in der Kammer unten genannt."
+ },
+ "je_un_security_council_nonmember": {
+  "en": "\\n#bold [concept_un_security_council]:#! [SCOPE.GetRootScope.ScriptValue('un_permanent_seat_count')|0] of 5 permanent members. We do not hold a seat. The founder is seated at the founding; every other seat goes to the [Concept('concept_great_power', 'Great Power')] member with the most [concept_prestige] that holds none, never to whoever joined first: the four beyond the founder's when the signing period closes, a year after the founding, and any seat that falls vacant later. A seat falls vacant when its holder leaves the UN, spends ten years below [Concept('concept_great_power', 'Great Power')] rank, or is expelled by a 2/3 General Assembly vote. The permanent members, and who is in line for a seat, are named in the chamber below. Only [concept_un_permanent_member]s may [concept_un_veto] binding resolutions.",
+  "de": "\\n#bold [concept_un_security_council]:#! [SCOPE.GetRootScope.ScriptValue('un_permanent_seat_count')|0] von 5 ständigen Mitgliedern. Wir halten keinen Sitz. Der Gründer erhält bei der Gründung einen Sitz; jeder weitere Sitz geht an das [Concept('concept_great_power', 'Großmacht')]-Mitglied mit dem meisten [concept_prestige], das noch keinen hält — niemals an das zuerst beigetretene: die vier über den des Gründers hinaus, wenn die Beitrittsfrist ein Jahr nach der Gründung endet, sowie jeder Sitz, der später frei wird. Ein Sitz wird frei, wenn sein Inhaber die UN verlässt, zehn Jahre unter [Concept('concept_great_power', 'Großmacht')]-Rang fällt oder durch eine Zweidrittelmehrheit der Generalversammlung ausgeschlossen wird. Die ständigen Mitglieder und wer als Nächstes für einen Sitz in Frage kommt, werden in der Kammer unten genannt. Nur [Concept('concept_un_permanent_member', 'Ständige Mitglieder')] können ein [concept_un_veto] gegen verbindliche Resolutionen einlegen."
  },
  "je_un_standing_effects_disgraced": {
   "en": "  In force: #R $un_standing_disgraced_modifier$#! — $un_standing_disgraced_modifier_desc$",
@@ -1551,6 +2379,10 @@
   "en": "  In force: #G $un_standing_exemplary_modifier$#! — $un_standing_exemplary_modifier_desc$",
   "de": "  In Kraft: #G $un_standing_exemplary_modifier$#! — $un_standing_exemplary_modifier_desc$"
  },
+ "je_un_standing_effects_neutral": {
+  "en": "  #v No standing modifier is in force. The Assembly neither rewards nor penalises a member with an unremarkable record.#!",
+  "de": "  #v Es gilt kein Ansehensmodifikator. Die Versammlung belohnt oder bestraft ein Mitglied mit unauffälliger Bilanz nicht.#!"
+ },
  "je_un_standing_effects_poor": {
   "en": "  In force: #R $un_standing_poor_modifier$#! — $un_standing_poor_modifier_desc$",
   "de": "  In Kraft: #R $un_standing_poor_modifier$#! — $un_standing_poor_modifier_desc$"
@@ -1559,20 +2391,296 @@
   "en": "  In force: #G $un_standing_respected_modifier$#! — $un_standing_respected_modifier_desc$",
   "de": "  In Kraft: #G $un_standing_respected_modifier$#! — $un_standing_respected_modifier_desc$"
  },
+ "je_un_standing_effects_withheld": {
+  "en": "  #R The benefits our standing has earned are withheld.#! Nothing is applied while the suspension holds, however high the score.",
+  "de": "  #R Die durch unser Ansehen verdienten Vorteile werden einbehalten.#! Solange die Aussetzung gilt, wird nichts angewendet, wie hoch der Wert auch sei."
+ },
+ "je_un_standing_help_intro": {
+  "en": "#bold International Standing is our own record in the organisation#! — what we have delivered and what we have complied with. It is not [concept_un_authority], which measures how much the institution itself is worth. Standing runs from 0 to 100; a new member starts at 50. Disgraced below 20, Poor 20–39, Neutral 40–59, Respected 60–79, Exemplary 80 and above.\\n",
+  "de": "#bold Internationales Ansehen ist unsere eigene Bilanz in der Organisation#! — was wir geleistet und was wir eingehalten haben. Es ist nicht dasselbe wie [concept_un_authority], die misst, wie viel die Institution selbst wert ist. Das Ansehen reicht von 0 bis 100; ein neues Mitglied beginnt bei 50. Geächtet unter 20, Schwach 20–39, Neutral 40–59, Angesehen 60–79, Vorbildlich ab 80.\\n"
+ },
+ "je_un_standing_help_limits": {
+  "en": "#bold What it will not do:#!\\n Programme accrual is capped at #bold 6 points a year#! across all five programmes together, and every gain is scaled by how far we already are from 100 — at 75 a delivery is worth half its face value, at the ceiling a tenth. Losses are never scaled down. Toggling a programme off and on again resets its clock to zero and costs 2, so there is nothing to farm. Voting is not delivery: agreeing with a resolution earns nothing, and a [concept_un_veto] is a lawful act that costs nothing — unless we had pledged that vote, in which case casting it the other way is going back on our word. A token donation or an observers-only mission earns nothing at all.\\n",
+  "de": "#bold Was es nicht bewirkt:#!\\n Der Programmzuwachs ist über alle fünf Programme zusammen auf #bold 6 Punkte im Jahr#! begrenzt, und jeder Gewinn wird danach skaliert, wie weit wir bereits von 100 entfernt sind — bei 75 ist eine Leistung nur die Hälfte ihres Nennwerts wert, an der Obergrenze ein Zehntel. Verluste werden nie herabskaliert. Ein Programm ab- und wieder anzuschalten, setzt seine Uhr auf null zurück und kostet 2, sodass sich nichts ausnutzen lässt. Abstimmen ist keine Leistung: Einer Resolution zuzustimmen, bringt nichts ein, und ein [concept_un_veto] ist ein rechtmäßiger Akt, der nichts kostet — es sei denn, wir hatten diese Stimme zugesagt; dann bricht ein Umschwenken unser Wort. Eine symbolische Spende oder ein reiner Beobachtereinsatz bringt überhaupt nichts ein.\\n"
+ },
+ "je_un_standing_help_losses": {
+  "en": "#bold What loses it:#!\\n Abandoning a programme before two years (−2). Undermining the international order (−0.15 a month, and after two years every benefit is suspended). Refusing a binding resolution, busting a sanctions regime or defying the court (−5). A rebuke (−3), a censure (−8), partial sanctions (−3), full sanctions (−6). Breaking, abandoning or forfeiting an authorized military mandate (−12, and every benefit suspended for ten years). Having our permanent seat voted away (−5, suspended five years). Going back on a vote we pledged (−4, and the favour we were owed is struck off). Walking out of the United Nations (−5; the rest of the score is frozen, not erased, and waits for us if we return).\\n",
+  "de": "#bold Was es kostet:#!\\n Ein Programm vor Ablauf von zwei Jahren aufzugeben (−2). Die internationale Ordnung zu untergraben (−0,15 im Monat, und nach zwei Jahren werden alle Vorteile ausgesetzt). Eine verbindliche Resolution abzulehnen, ein Sanktionsregime zu unterlaufen oder sich einem Gerichtsurteil zu widersetzen (−5). Eine Rüge (−3), eine Missbilligung (−8), Teilsanktionen (−3), vollständige Sanktionen (−6). Ein genehmigtes Militärmandat zu brechen, aufzugeben oder zu verwirken (−12, und alle Vorteile für zehn Jahre ausgesetzt). Den eigenen ständigen Sitz weggestimmt zu bekommen (−5, für fünf Jahre ausgesetzt). Eine zugesagte Stimme zurückzunehmen (−4, und der uns geschuldete Gefallen wird gestrichen). Aus den Vereinten Nationen auszutreten (−5; der Rest des Werts wird eingefroren, nicht gelöscht, und wartet auf uns, falls wir zurückkehren).\\n"
+ },
+ "je_un_standing_help_sources": {
+  "en": "#bold What earns it:#!\\n Each of the five ongoing programmes — peacekeeping contributions, development funding, championing human rights, arms control, championing the order — pays #bold 0.3 a month#! once it has run #bold two full years without interruption#!. Delivering real humanitarian aid or a real peacekeeping deployment pays 3. Taking on a share of an aid or peacekeeping programme the Assembly has voted through pays 2, and earns goodwill with the country that asked. Complying with a binding decision we argued against, enforcing sanctions, or accepting a ruling against us pays 2. Discharging an authorized military mandate as written pays 6. Delivering a vote we pledged pays a token amount — a kept word is worth something, but it is not a programme.\\n",
+  "de": "#bold Was es einbringt:#!\\n Jedes der fünf laufenden Programme — Friedenssicherungsbeiträge, Entwicklungsförderung, Eintreten für Menschenrechte, Rüstungskontrolle, Eintreten für die Ordnung — zahlt #bold 0,3 im Monat#!, sobald es #bold zwei volle Jahre ohne Unterbrechung#! gelaufen ist. Echte humanitäre Hilfe oder ein echter Friedenseinsatz bringt 3. Einen Anteil an einem von der Versammlung beschlossenen Hilfs- oder Friedensprogramm zu übernehmen, bringt 2 und erwirbt Wohlwollen bei dem Land, das darum bat. Eine verbindliche Entscheidung einzuhalten, gegen die wir argumentiert hatten, Sanktionen durchzusetzen oder ein Urteil gegen uns zu akzeptieren, bringt 2. Ein genehmigtes Militärmandat wie festgelegt zu erfüllen, bringt 6. Eine zugesagte Stimme abzugeben, bringt einen symbolischen Betrag — ein gehaltenes Wort ist etwas wert, aber es ist kein Programm.\\n"
+ },
+ "je_un_standing_nonmember": {
+  "en": "  #v We hold no standing: it is a record of membership, and we are outside the organisation.#!",
+  "de": "  #v Wir haben kein Ansehen: Es ist eine Bilanz der Mitgliedschaft, und wir stehen außerhalb der Organisation.#!"
+ },
+ "je_un_standing_reason_1": {
+  "en": "  Most recently: our sustained programme commitments.",
+  "de": "  Zuletzt: unsere dauerhaften Programmverpflichtungen."
+ },
+ "je_un_standing_reason_2": {
+  "en": "  Most recently: humanitarian aid we delivered.",
+  "de": "  Zuletzt: humanitäre Hilfe, die wir geleistet haben."
+ },
+ "je_un_standing_reason_20": {
+  "en": "  Most recently: #R a programme we abandoned before it had run its course.#!",
+  "de": "  Zuletzt: #R ein Programm, das wir vorzeitig aufgegeben haben.#!"
+ },
+ "je_un_standing_reason_21": {
+  "en": "  Most recently: #R our campaign against the organisation.#!",
+  "de": "  Zuletzt: #R unsere Kampagne gegen die Organisation.#!"
+ },
+ "je_un_standing_reason_22": {
+  "en": "  Most recently: #R the Assembly's censure of us.#!",
+  "de": "  Zuletzt: #R die Missbilligung der Versammlung uns gegenüber.#!"
+ },
+ "je_un_standing_reason_23": {
+  "en": "  Most recently: #R the Assembly's rebuke of us.#!",
+  "de": "  Zuletzt: #R die Rüge der Versammlung uns gegenüber.#!"
+ },
+ "je_un_standing_reason_24": {
+  "en": "  Most recently: #R the sanctions imposed on us.#!",
+  "de": "  Zuletzt: #R die gegen uns verhängten Sanktionen.#!"
+ },
+ "je_un_standing_reason_25": {
+  "en": "  Most recently: #R the partial sanctions imposed on us.#!",
+  "de": "  Zuletzt: #R die gegen uns verhängten Teilsanktionen.#!"
+ },
+ "je_un_standing_reason_26": {
+  "en": "  Most recently: #R a binding decision we defied.#!",
+  "de": "  Zuletzt: #R eine verbindliche Entscheidung, der wir uns widersetzt haben.#!"
+ },
+ "je_un_standing_reason_27": {
+  "en": "  Most recently: #R an authorization we broke.#!",
+  "de": "  Zuletzt: #R ein Mandat, das wir gebrochen haben.#!"
+ },
+ "je_un_standing_reason_28": {
+  "en": "  Most recently: #R our withdrawal from the organisation.#!",
+  "de": "  Zuletzt: #R unser Austritt aus der Organisation.#!"
+ },
+ "je_un_standing_reason_29": {
+  "en": "  Most recently: #R the permanent seat the Assembly voted away from us.#!",
+  "de": "  Zuletzt: #R der ständige Sitz, den uns die Versammlung weggestimmt hat.#!"
+ },
+ "je_un_standing_reason_3": {
+  "en": "  Most recently: peacekeepers we deployed.",
+  "de": "  Zuletzt: Friedenstruppen, die wir entsandt haben."
+ },
+ "je_un_standing_reason_30": {
+  "en": "  Most recently: a vote we had pledged and delivered.",
+  "de": "  Zuletzt: eine zugesagte Stimme, die wir abgegeben haben."
+ },
+ "je_un_standing_reason_31": {
+  "en": "  Most recently: #R a pledged vote we went back on.#!",
+  "de": "  Zuletzt: #R eine zugesagte Stimme, die wir zurückgenommen haben.#!"
+ },
+ "je_un_standing_reason_32": {
+  "en": "  Most recently: #R the UN dues we withheld.#!",
+  "de": "  Zuletzt: #R die von uns zurückgehaltenen UN-Beiträge.#!"
+ },
+ "je_un_standing_reason_33": {
+  "en": "  Most recently: #R the vote we lost for arrears on our dues.#!",
+  "de": "  Zuletzt: #R die Stimme, die wir wegen Zahlungsrückstands bei unseren Beiträgen verloren haben.#!"
+ },
+ "je_un_standing_reason_34": {
+  "en": "  Most recently: a UN mission we served in accomplished its work.",
+  "de": "  Zuletzt: eine UN-Mission, an der wir beteiligt waren, erfüllte ihren Auftrag."
+ },
+ "je_un_standing_reason_35": {
+  "en": "  Most recently: we brought a contingent home from a UN mission before its work was done.",
+  "de": "  Zuletzt: Wir holten ein Kontingent aus einer UN-Mission zurück, bevor sie ihren Auftrag erfüllt hatte."
+ },
+ "je_un_standing_reason_4": {
+  "en": "  Most recently: our share of a programme the Assembly voted through.",
+  "de": "  Zuletzt: unser Anteil an einem von der Versammlung beschlossenen Programm."
+ },
+ "je_un_standing_reason_5": {
+  "en": "  Most recently: a binding decision we complied with.",
+  "de": "  Zuletzt: eine verbindliche Entscheidung, die wir eingehalten haben."
+ },
+ "je_un_standing_reason_6": {
+  "en": "  Most recently: an authorization we discharged as written.",
+  "de": "  Zuletzt: ein Mandat, das wir wie festgelegt erfüllt haben."
+ },
+ "je_un_standing_reason_none": {
+  "en": "  Nothing has moved our standing yet.",
+  "de": "  Noch hat sich nichts auf unser Ansehen ausgewirkt."
+ },
+ "je_un_standing_suspended_undermining": {
+  "en": "  #R Benefits suspended:#! we have been working against the organisation for two years or more. They resume the month we stop.",
+  "de": "  #R Vorteile ausgesetzt:#! Wir arbeiten seit zwei Jahren oder länger gegen die Organisation. Sie setzen wieder ein, sobald wir damit aufhören."
+ },
+ "je_un_standing_suspended_violation": {
+  "en": "  #R Benefits suspended#! after a serious violation of the Assembly's trust.",
+  "de": "  #R Vorteile ausgesetzt#! nach einem schweren Vertrauensbruch gegenüber der Versammlung."
+ },
+ "je_un_standing_tier_disgraced": {
+  "en": "#R International Standing: Disgraced#! — [THIS.Var('un_standing').GetValue|0] of 100.",
+  "de": "#R Internationales Ansehen: Geächtet#! — [THIS.Var('un_standing').GetValue|0] von 100."
+ },
+ "je_un_standing_tier_exemplary": {
+  "en": "#B International Standing: Exemplary#! — [THIS.Var('un_standing').GetValue|0] of 100.",
+  "de": "#B Internationales Ansehen: Vorbildlich#! — [THIS.Var('un_standing').GetValue|0] von 100."
+ },
+ "je_un_standing_tier_neutral": {
+  "en": "#v International Standing: Neutral#! — [THIS.Var('un_standing').GetValue|0] of 100.",
+  "de": "#v Internationales Ansehen: Neutral#! — [THIS.Var('un_standing').GetValue|0] von 100."
+ },
+ "je_un_standing_tier_poor": {
+  "en": "#Y International Standing: Poor#! — [THIS.Var('un_standing').GetValue|0] of 100.",
+  "de": "#Y Internationales Ansehen: Schwach#! — [THIS.Var('un_standing').GetValue|0] von 100."
+ },
+ "je_un_standing_tier_respected": {
+  "en": "#G International Standing: Respected#! — [THIS.Var('un_standing').GetValue|0] of 100.",
+  "de": "#G Internationales Ansehen: Angesehen#! — [THIS.Var('un_standing').GetValue|0] von 100."
+ },
+ "je_un_standing_tier_unrated": {
+  "en": "#v International Standing: not yet recorded.#! The secretariat opens our file at the turn of the month.",
+  "de": "#v Internationales Ansehen: noch nicht erfasst.#! Das Sekretariat legt unsere Akte zum Monatswechsel an."
+ },
+ "je_un_standing_year_budget": {
+  "en": "  Programme accrual this year: [THIS.ScriptValue('un_standing_year_gain_display')|1] of [THIS.ScriptValue('un_standing_program_yearly_cap')|1] allowed.",
+  "de": "  Programmzuwachs in diesem Jahr: [THIS.ScriptValue('un_standing_year_gain_display')|1] von [THIS.ScriptValue('un_standing_program_yearly_cap')|1] erlaubt."
+ },
+ "je_un_statistics": {
+  "en": "\\n#bold [concept_un_general_assembly]:#! [SCOPE.GetRootScope.ScriptValue('un_member_count')|0] of [SCOPE.GetRootScope.ScriptValue('un_eligible_country_count')|0] eligible nations are represented. Members hold [SCOPE.GetRootScope.ScriptValue('un_member_gdp_share')|0]% of world [Concept('concept_gdp', 'GDP')] and [SCOPE.GetRootScope.ScriptValue('un_member_pop_share')|0]% of its population.\\n#bold [Concept('concept_great_power', 'Great Powers')]:#! [SCOPE.GetRootScope.ScriptValue('un_gp_member_count')|0] of [SCOPE.GetRootScope.ScriptValue('un_total_gp_count')|0] are members\\n",
+  "de": "\\n#bold [concept_un_general_assembly]:#! [SCOPE.GetRootScope.ScriptValue('un_member_count')|0] von [SCOPE.GetRootScope.ScriptValue('un_eligible_country_count')|0] berechtigten Nationen sind vertreten. Die Mitglieder halten [SCOPE.GetRootScope.ScriptValue('un_member_gdp_share')|0]% des weltweiten [Concept('concept_gdp', 'BIP')] und [SCOPE.GetRootScope.ScriptValue('un_member_pop_share')|0]% seiner Bevölkerung.\\n#bold [Concept('concept_great_power', 'Großmächte')]:#! [SCOPE.GetRootScope.ScriptValue('un_gp_member_count')|0] von [SCOPE.GetRootScope.ScriptValue('un_total_gp_count')|0] sind Mitglieder\\n"
+ },
+ "je_un_statistics_suspended_many": {
+  "en": "\\n#bold [concept_un_general_assembly]:#! [SCOPE.GetRootScope.ScriptValue('un_member_count')|0] of [SCOPE.GetRootScope.ScriptValue('un_eligible_country_count')|0] eligible nations are represented. [SCOPE.GetRootScope.ScriptValue('un_suspended_member_count')|0] more member states have [Concept('concept_un_suspended_representation', 'suspended representation')] because they lack diplomatic autonomy. Members hold [SCOPE.GetRootScope.ScriptValue('un_member_gdp_share')|0]% of world [Concept('concept_gdp', 'GDP')] and [SCOPE.GetRootScope.ScriptValue('un_member_pop_share')|0]% of its population.\\n#bold [Concept('concept_great_power', 'Great Powers')]:#! [SCOPE.GetRootScope.ScriptValue('un_gp_member_count')|0] of [SCOPE.GetRootScope.ScriptValue('un_total_gp_count')|0] are members\\n",
+  "de": "\\n#bold [concept_un_general_assembly]:#! [SCOPE.GetRootScope.ScriptValue('un_member_count')|0] von [SCOPE.GetRootScope.ScriptValue('un_eligible_country_count')|0] berechtigten Nationen sind vertreten. Weitere [SCOPE.GetRootScope.ScriptValue('un_suspended_member_count')|0] Mitgliedstaaten haben [Concept('concept_un_suspended_representation', 'ausgesetzte Vertretung')], da ihnen die außenpolitische Eigenständigkeit fehlt. Die Mitglieder halten [SCOPE.GetRootScope.ScriptValue('un_member_gdp_share')|0]% des weltweiten [Concept('concept_gdp', 'BIP')] und [SCOPE.GetRootScope.ScriptValue('un_member_pop_share')|0]% seiner Bevölkerung.\\n#bold [Concept('concept_great_power', 'Großmächte')]:#! [SCOPE.GetRootScope.ScriptValue('un_gp_member_count')|0] von [SCOPE.GetRootScope.ScriptValue('un_total_gp_count')|0] sind Mitglieder\\n"
+ },
+ "je_un_statistics_suspended_one": {
+  "en": "\\n#bold [concept_un_general_assembly]:#! [SCOPE.GetRootScope.ScriptValue('un_member_count')|0] of [SCOPE.GetRootScope.ScriptValue('un_eligible_country_count')|0] eligible nations are represented. 1 more member state has [Concept('concept_un_suspended_representation', 'suspended representation')] because it lacks diplomatic autonomy. Members hold [SCOPE.GetRootScope.ScriptValue('un_member_gdp_share')|0]% of world [Concept('concept_gdp', 'GDP')] and [SCOPE.GetRootScope.ScriptValue('un_member_pop_share')|0]% of its population.\\n#bold [Concept('concept_great_power', 'Great Powers')]:#! [SCOPE.GetRootScope.ScriptValue('un_gp_member_count')|0] of [SCOPE.GetRootScope.ScriptValue('un_total_gp_count')|0] are members\\n",
+  "de": "\\n#bold [concept_un_general_assembly]:#! [SCOPE.GetRootScope.ScriptValue('un_member_count')|0] von [SCOPE.GetRootScope.ScriptValue('un_eligible_country_count')|0] berechtigten Nationen sind vertreten. 1 weiterer Mitgliedstaat hat [Concept('concept_un_suspended_representation', 'ausgesetzte Vertretung')], da ihm die außenpolitische Eigenständigkeit fehlt. Die Mitglieder halten [SCOPE.GetRootScope.ScriptValue('un_member_gdp_share')|0]% des weltweiten [Concept('concept_gdp', 'BIP')] und [SCOPE.GetRootScope.ScriptValue('un_member_pop_share')|0]% seiner Bevölkerung.\\n#bold [Concept('concept_great_power', 'Großmächte')]:#! [SCOPE.GetRootScope.ScriptValue('un_gp_member_count')|0] von [SCOPE.GetRootScope.ScriptValue('un_total_gp_count')|0] sind Mitglieder\\n"
+ },
+ "je_un_status_conference": {
+  "en": "#bold No United Nations exists.#! A founding conference convened by [GetGlobalVariable('un_founding_conference').GetCountry.GetName] is in session: the new organisation is founded in #v [SCOPE.GetRootScope.ScriptValue('un_conference_months_left')|0]#! months, unless the world's leading power wrecks the conference.\\n",
+  "de": "#bold Es gibt keine Vereinten Nationen.#! Eine [GetGlobalVariable('un_founding_conference').GetCountry.GetAltName('VON')] einberufene Gründungskonferenz tagt: Die neue Organisation wird in #v [SCOPE.GetRootScope.ScriptValue('un_conference_months_left')|0]#! Monaten gegründet, sofern nicht die führende Macht der Welt die Konferenz sprengt.\\n"
+ },
+ "je_un_status_dissolved": {
+  "en": "#R The United Nations was dissolved in [SCOPE.GetRootScope.ScriptValue('un_disp_dissolved_year')|0].#! Any [concept_great_power] may convene a founding conference for a new one from [SCOPE.GetRootScope.ScriptValue('un_refounding_year')|0].\\n",
+  "de": "#R Die Vereinten Nationen wurden im Jahr [SCOPE.GetRootScope.ScriptValue('un_disp_dissolved_year')|0] aufgelöst.#! Jede [concept_great_power] kann ab [SCOPE.GetRootScope.ScriptValue('un_refounding_year')|0] eine Gründungskonferenz für eine neue Organisation einberufen.\\n"
+ },
+ "je_un_status_member": {
+  "en": "#G Active member.#! Benefits scale with authority (×authority ÷ 50, from the Contested tier up).\\n",
+  "de": "#G Aktives Mitglied.#! Die Vorteile skalieren mit der Autorität (×Autorität ÷ 50, ab der Stufe Umstritten).\\n"
+ },
+ "je_un_status_not_eligible": {
+  "en": "#v Not a member, and not eligible.#! We do not conduct our own foreign policy, so we cannot join: only an independent country, or a dominion, protectorate or tributary, may ([concept_un_suspended_representation]).\\n",
+  "de": "#v Kein Mitglied, und nicht berechtigt.#! Wir betreiben keine eigene Außenpolitik und können daher nicht beitreten: Nur ein unabhängiges Land oder ein Dominion, Protektorat oder Tributpflichtiger darf dies ([concept_un_suspended_representation]).\\n"
+ },
+ "je_un_status_not_member": {
+  "en": "#v Not a member.#! Join to gain #bold +5 Leverage#!, #bold +10% relations improvement speed#!, #bold +3% Prestige#!, #bold +3% Influence#!, and access to UN programs.\\n",
+  "de": "#v Kein Mitglied.#! Tretet bei, um #bold +5 Druckmittel#!, #bold +10% Tempo der Beziehungsverbesserung#!, #bold +3% Prestige#!, #bold +3% Einfluss#! und Zugang zu UN-Programmen zu erhalten.\\n"
+ },
+ "je_un_status_suspended": {
+  "en": "#R Member, representation suspended.#! We do not conduct our own foreign policy, so we cast no vote and table nothing, and nobody carries our seat: membership brings us nothing ([concept_un_suspended_representation]).\\n",
+  "de": "#R Mitglied, Vertretung ausgesetzt.#! Wir betreiben keine eigene Außenpolitik, daher geben wir keine Stimme ab und bringen nichts ein, und niemand führt unseren Sitz: Die Mitgliedschaft bringt uns nichts ([concept_un_suspended_representation]).\\n"
+ },
+ "je_un_status_suspended_carried": {
+  "en": "#R Member, representation suspended.#! We do not conduct our own foreign policy, so we cast no vote and table nothing. [ROOT.GetCountry.GetOverlord.GetName] carries our seat: it pays our dues, and we keep the benefits of membership ([concept_un_suspended_representation]).\\n",
+  "de": "#R Mitglied, Vertretung ausgesetzt.#! Wir betreiben keine eigene Außenpolitik, daher geben wir keine Stimme ab und bringen nichts ein. [ROOT.GetCountry.GetOverlord.GetAltName('NOM')|U] führt unseren Sitz: Unser Oberherr zahlt unsere Beiträge, und wir behalten die Vorteile der Mitgliedschaft ([concept_un_suspended_representation]).\\n"
+ },
+ "je_un_tier_line_contested": {
+  "en": "#Y [concept_un_authority]: Contested#! (20–45). Resolutions bite at half strength ([concept_un_enforcement] ×0.5). Membership benefits are paid, scaled by authority.\\n",
+  "de": "#Y [concept_un_authority]: Umstritten#! (20–45). Resolutionen wirken nur halb so stark ([concept_un_enforcement] ×0,5). Mitgliedsvorteile werden gezahlt, skaliert mit der Autorität.\\n"
+ },
+ "je_un_tier_line_established": {
+  "en": "#v [concept_un_authority]: Established#! (45–70). Binding resolutions bite in full ([concept_un_enforcement] ×1), and great powers outside the UN are treated as pariahs.\\n",
+  "de": "#v [concept_un_authority]: Gefestigt#! (45–70). Verbindliche Resolutionen wirken voll ([concept_un_enforcement] ×1), und Großmächte außerhalb der UN gelten als Paria.\\n"
+ },
+ "je_un_tier_line_moribund": {
+  "en": "#R [concept_un_authority]: Moribund#! (below 20). Resolutions are recommendations only ([concept_un_enforcement] ×0), a [concept_un_veto] costs nothing, and members receive no benefits. Power blocs fill the vacuum.\\n",
+  "de": "#R [concept_un_authority]: Marode#! (unter 20). Resolutionen sind nur Empfehlungen ([concept_un_enforcement] ×0), ein [concept_un_veto] kostet nichts, und Mitglieder erhalten keine Vorteile. Machtblöcke füllen das Vakuum.\\n"
+ },
+ "je_un_tier_line_strong": {
+  "en": "#G [concept_un_authority]: Strong#! (70–85). Resolutions bite at ×1.5 ([concept_un_enforcement]), and outsiders also lose trade and leverage. Reached only under [Concept('concept_un_charter','Charter Reform I')].\\n",
+  "de": "#G [concept_un_authority]: Stark#! (70–85). Resolutionen wirken mit ×1,5 ([concept_un_enforcement]), und Außenstehende verlieren zudem Handel und Druckmittel. Nur erreichbar unter [Concept('concept_un_charter','Charta-Reform I')].\\n"
+ },
+ "je_un_tier_line_supranational": {
+  "en": "#B [concept_un_authority]: Supranational#! (85+). Resolutions bite at ×2.5 ([concept_un_enforcement]). Reached only under [Concept('concept_un_charter','Charter Reform II')].\\n",
+  "de": "#B [concept_un_authority]: Supranational#! (85+). Resolutionen wirken mit ×2,5 ([concept_un_enforcement]). Nur erreichbar unter [Concept('concept_un_charter','Charta-Reform II')].\\n"
+ },
  "je_united_nations": {
   "en": "United Nations",
   "de": "Vereinte Nationen"
+ },
+ "je_united_nations_desc": {
+  "en": "Membership in the United Nations grants diplomatic benefits that scale with [concept_un_authority]. The institution is as strong as the world's powers make it: who joins, who champions it, and whether its decisions are carried out.",
+  "de": "Die Mitgliedschaft in den Vereinten Nationen gewährt diplomatische Vorteile, die mit der [concept_un_authority] skalieren. Die Institution ist nur so stark, wie die Mächte der Welt sie machen: wer beitritt, wer sich für sie einsetzt, und ob ihre Entscheidungen umgesetzt werden."
+ },
+ "je_united_nations_reason": {
+  "en": "The United Nations is an intergovernmental organization promoting international cooperation. Its members gain diplomatic benefits that scale with [concept_un_authority].\\n\\n#bold [concept_un_authority]#! (0–100) follows the world. Each month it moves toward a target: a base plus six pillars. #bold Participation#! is how much of the world's power is in the UN. #bold Great-power commitment#! is who champions or undermines it. #bold Credibility#! is its record of resolutions carried, vetoed and defied. #bold Funding#! is who runs its programmes. #bold Peace and order#! covers wars between members and nuclear use. #bold Delivery#! is aid, peacekeeping and mandates delivered. Every act counts in proportion to the actor's share of world [concept_prestige]. See #bold Why UN Authority Is Moving#! below.\\n\\n#bold Membership benefits#! (from the Contested tier, authority 20 or more) scale with authority ÷ 50. At 50: #G +10% relations improvement speed, +1% research speed, +3% [concept_prestige]#!. At 100: twice that.\\n\\n#bold Security Council:#! five permanent seats carry the [concept_un_veto]. The founder takes one at the founding; the others go to the [Concept('concept_great_power','Great Power')] members with the most [concept_prestige] that hold none, never to whoever joined first: when the signing period closes a year after the founding, and whenever a seat falls vacant. A seat is lost by leaving, by ten years below great-power rank, or by a two-thirds expulsion vote. The permanent members are named in the chamber.\\n\\n#bold Headquarters:#! the founder hosts the UN and may build the United Nations Headquarters in its territory. If the host leaves, another member takes over.\\n\\n#bold Specialized agencies:#! ten are founded when the General Assembly adopts the matching convention (WHO, UNESCO, UNHRC, IAEA, UNEP, UNHCR, UNOOSA, ITLOS, the ICC and the regime for the physical protection of nuclear material). The ICJ is founded when a country first accepts a World Court ruling against it.\\n\\n#bold Resolutions#! are tabled and voted on in the General Assembly chamber below. A permanent member can veto the binding ones.\\n\\n#bold Programmes#! (peacekeeping, development, human rights and arms control) each carry a cost, and count toward the UN's funding while they run.",
+  "de": "Die Vereinten Nationen sind eine zwischenstaatliche Organisation zur Förderung internationaler Zusammenarbeit. Ihre Mitglieder erhalten diplomatische Vorteile, die mit der [concept_un_authority] skalieren.\\n\\n#bold [concept_un_authority]#! (0–100) folgt der Welt. Jeden Monat bewegt sie sich auf einen Zielwert zu: eine Basis plus sechs Säulen. #bold Beteiligung#! ist, wie viel Macht der Welt in der UN steckt. #bold Engagement der Großmächte#! ist, wer sich für sie einsetzt oder sie untergräbt. #bold Glaubwürdigkeit#! ist ihre Bilanz an angenommenen, mit Veto belegten und missachteten Resolutionen. #bold Finanzierung#! ist, wer ihre Programme trägt. #bold Frieden und Ordnung#! erfasst Kriege zwischen Mitgliedern und den Einsatz von Atomwaffen. #bold Leistung#! ist geleistete Hilfe, Friedenssicherung und erfüllte Mandate. Jede Handlung zählt im Verhältnis zum Anteil des Akteurs am weltweiten [concept_prestige]. Siehe #bold Warum sich die UN-Autorität verändert#! unten.\\n\\n#bold Mitgliedsvorteile#! (ab der Stufe Umstritten, Autorität 20 oder mehr) skalieren mit Autorität ÷ 50. Bei 50: #G +10% Tempo der Beziehungsverbesserung, +1% Forschungstempo, +3% [concept_prestige]#!. Bei 100: das Doppelte.\\n\\n#bold Sicherheitsrat:#! Fünf ständige Sitze tragen das [concept_un_veto]. Der Gründer erhält bei der Gründung einen davon; die übrigen gehen an die [Concept('concept_great_power','Großmacht')]-Mitglieder mit dem meisten [concept_prestige], die noch keinen halten — nie an die zuerst beigetretenen: wenn die Beitrittsfrist ein Jahr nach der Gründung endet, und immer wenn ein Sitz frei wird. Ein Sitz geht verloren durch Austritt, durch zehn Jahre unter Großmachtrang oder durch eine Zweidrittelmehrheit für den Ausschluss. Die ständigen Mitglieder werden in der Kammer genannt.\\n\\n#bold Hauptsitz:#! Der Gründer ist Gastgeber der UN und darf den Hauptsitz der Vereinten Nationen auf seinem Gebiet errichten. Verlässt der Gastgeber die Organisation, übernimmt ein anderes Mitglied.\\n\\n#bold Sonderorganisationen:#! Zehn werden gegründet, sobald die Generalversammlung das passende Übereinkommen annimmt (WHO, UNESCO, UNHRC, IAEO, UNEP, UNHCR, UNOOSA, ITLOS, der IStGH und das Regime für den physischen Schutz von Kernmaterial). Der IGH wird gegründet, sobald ein Land erstmals ein Urteil des Weltgerichtshofs gegen sich akzeptiert.\\n\\n#bold Resolutionen#! werden in der Kammer der Generalversammlung unten eingebracht und zur Abstimmung gestellt. Ein ständiges Mitglied kann bei den verbindlichen ein Veto einlegen.\\n\\n#bold Programme#! (Friedenssicherung, Entwicklung, Menschenrechte und Rüstungskontrolle) verursachen jeweils Kosten und zählen, solange sie laufen, zur Finanzierung der UN."
  },
  "je_world_war": {
   "en": "The Gathering Storm",
   "de": "Der aufziehende Sturm"
  },
+ "je_world_war_desc": {
+  "en": "Ideological tensions are pushing the [Concept('concept_great_power', 'great powers')] toward a global war. Pick a side, prepare, or try to stop it.",
+  "de": "Ideologische Spannungen treiben die [Concept('concept_great_power', 'Großmächte')] auf einen globalen Krieg zu. Wählt eine Seite, rüstet euch, oder versucht, ihn zu verhindern."
+ },
  "je_world_war_ideology_authoritarian": {
   "en": "\\n#bold Our Ideology:#! Authoritarian",
   "de": "\\n#bold Unsere Ideologie:#! Autoritär"
  },
+ "je_world_war_ideology_communist": {
+  "en": "\\n#bold Our Ideology:#! #R Communist#!",
+  "de": "\\n#bold Unsere Ideologie:#! #R Kommunistisch#!"
+ },
+ "je_world_war_ideology_democratic": {
+  "en": "\\n#bold Our Ideology:#! #G Democratic#!",
+  "de": "\\n#bold Unsere Ideologie:#! #G Demokratisch#!"
+ },
+ "je_world_war_ideology_fascist": {
+  "en": "\\n#bold Our Ideology:#! #R Fascist#!",
+  "de": "\\n#bold Unsere Ideologie:#! #R Faschistisch#!"
+ },
  "je_world_war_ideology_nonaligned": {
   "en": "\\n#bold Our Ideology:#! Non-Aligned",
   "de": "\\n#bold Unsere Ideologie:#! Blockfrei"
+ },
+ "je_world_war_reason": {
+  "en": "Ideological tensions between the [Concept('concept_great_power', 'great powers')] are escalating. Democratic, fascist, and communist blocs eye one another with growing hostility. The world teeters on the brink of a conflict unlike any before.",
+  "de": "Die ideologischen Spannungen zwischen den [Concept('concept_great_power', 'Großmächten')] spitzen sich zu. Demokratische, faschistische und kommunistische Blöcke beäugen einander mit wachsender Feindseligkeit. Die Welt steht am Rand eines Konflikts, wie es ihn noch nie gab."
+ },
+ "je_world_war_status_active_war": {
+  "en": "#bold THE WORLD IS AT WAR.#! Our forces are engaged in total combat against the enemy bloc. Every factory, every citizen, every resource is committed to victory.",
+  "de": "#bold DIE WELT IST IM KRIEG.#! Unsere Streitkräfte stehen im totalen Kampf gegen den feindlichen Block. Jede Fabrik, jeder Bürger, jede Ressource ist dem Sieg gewidmet."
+ },
+ "je_world_war_status_crisis": {
+  "en": "#R CRISIS:#! War is imminent. The [Concept('concept_great_power', 'great powers')] have drawn their lines. Any incident could ignite the powder keg.",
+  "de": "#R KRISE:#! Der Krieg steht unmittelbar bevor. Die [Concept('concept_great_power', 'Großmächte')] haben ihre Linien gezogen. Jeder Zwischenfall könnte das Pulverfass entzünden."
+ },
+ "je_world_war_status_high_tension": {
+  "en": "#Y HIGH TENSION:#! The ideological divide deepens. Military buildups accelerate. Diplomatic channels are strained to breaking point.",
+  "de": "#Y HOHE SPANNUNG:#! Die ideologische Kluft vertieft sich. Die Aufrüstung beschleunigt sich. Die diplomatischen Kanäle sind bis zum Zerreißen gespannt."
+ },
+ "je_world_war_status_observing": {
+  "en": "The [Concept('concept_great_power', 'great powers')] are at war. We remain outside the conflict: for now. Pressure mounts to choose a side.",
+  "de": "Die [Concept('concept_great_power', 'Großmächte')] befinden sich im Krieg. Wir bleiben außerhalb des Konflikts — vorerst. Der Druck wächst, eine Seite zu wählen."
+ },
+ "je_world_war_status_post_war": {
+  "en": "The guns have fallen silent. The world holds its breath as the victors and vanquished negotiate the shape of the post-war order.",
+  "de": "Die Waffen sind verstummt. Die Welt hält den Atem an, während Sieger und Besiegte über die Gestalt der Nachkriegsordnung verhandeln."
+ },
+ "je_world_war_status_rising_tension": {
+  "en": "Tensions are rising between the ideological blocs. Arms races have begun, and border incidents grow more frequent.",
+  "de": "Die Spannungen zwischen den ideologischen Blöcken steigen. Wettrüsten haben begonnen, und Grenzzwischenfälle häufen sich."
+ },
+ "je_world_war_status_simmering": {
+  "en": "The [Concept('concept_great_power', 'great powers')] watch each other warily. Ideological differences simmer beneath the surface of diplomacy.",
+  "de": "Die [Concept('concept_great_power', 'Großmächte')] beobachten einander argwöhnisch. Ideologische Differenzen brodeln unter der Oberfläche der Diplomatie."
+ },
+ "je_world_war_status_total_war": {
+  "en": "#bold TOTAL WAR.#! #R The conflict has raged for years. Cities lie in ruins. Entire generations are being consumed by the furnace of war.#!",
+  "de": "#bold TOTALER KRIEG.#! #R Der Konflikt wütet seit Jahren. Städte liegen in Trümmern. Ganze Generationen werden vom Ofen des Krieges verzehrt.#!"
+ },
+ "je_world_war_status_war_declared": {
+  "en": "#bold WAR HAS BEEN DECLARED.#! The ideological blocs have taken up arms. The world holds its breath.",
+  "de": "#bold DER KRIEG WURDE ERKLÄRT.#! Die ideologischen Blöcke haben zu den Waffen gegriffen. Die Welt hält den Atem an."
  }
 }

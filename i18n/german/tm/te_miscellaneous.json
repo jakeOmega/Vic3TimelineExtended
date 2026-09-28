@@ -1,4 +1,464 @@
 {
+ "AI_ALREADY_GREEN_POLICIES": {
+  "en": "from already having green policies",
+  "de": "durch bereits bestehende grüne Politik"
+ },
+ "AI_ALREADY_HAS_NUKES": {
+  "en": "from already possessing nuclear weapons",
+  "de": "durch bereits vorhandenen Atomwaffenbesitz"
+ },
+ "AI_ARMED_FORCES_IN_GOVERNMENT": {
+  "en": "from the Armed Forces being [concept_in_government]",
+  "de": "durch die Streitkräfte [Concept('concept_in_government', 'in der Regierung')]"
+ },
+ "AI_DEVOUT_IN_GOVERNMENT": {
+  "en": "from the Devout being [concept_in_government]",
+  "de": "durch die Frommen [Concept('concept_in_government', 'in der Regierung')]"
+ },
+ "AI_FREE_TRADE_POLICY": {
+  "en": "from free trade policy",
+  "de": "durch Freihandelspolitik"
+ },
+ "AI_FRIENDLY_WONT_DISARM": {
+  "en": "from friendly relations preventing demands",
+  "de": "durch freundschaftliche Beziehungen, die Forderungen verhindern"
+ },
+ "AI_GOOD_RELATIONS_WITH_GP": {
+  "en": "from good relations with a [concept_great_power]",
+  "de": "durch gute Beziehungen zu einer [concept_great_power]"
+ },
+ "AI_HAS_ENVIRONMENT_MINISTRY": {
+  "en": "from having an environment ministry",
+  "de": "durch ein bestehendes Umweltministerium"
+ },
+ "AI_HAS_MILITARY_INDUSTRY": {
+  "en": "from having military industry (will be destroyed)",
+  "de": "durch vorhandene Rüstungsindustrie (wird zerstört)"
+ },
+ "AI_HEAVILY_DISCRIMINATED_CULTURE": {
+  "en": "from our culture being heavily discriminated",
+  "de": "durch starke Diskriminierung unserer Kultur"
+ },
+ "AI_HEAVILY_DISCRIMINATED_RELIGION": {
+  "en": "from our religion being heavily discriminated",
+  "de": "durch starke Diskriminierung unserer Religion"
+ },
+ "AI_HIGH_WARMING_DEMAND": {
+  "en": "from heightened climate urgency",
+  "de": "durch erhöhte Klimadringlichkeit"
+ },
+ "AI_HOSTILE_OR_BELLIGERENT": {
+  "en": "from hostile or belligerent relations",
+  "de": "durch feindselige oder kriegerische Beziehungen"
+ },
+ "AI_HOSTILE_REFUSES_DISARMAMENT": {
+  "en": "from hostile refusal to disarm",
+  "de": "durch feindselige Verweigerung der Abrüstung"
+ },
+ "AI_INDUSTRIALISTS_IN_GOVERNMENT": {
+  "en": "from Industrialists being [concept_in_government]",
+  "de": "durch die Industriellen [Concept('concept_in_government', 'in der Regierung')]"
+ },
+ "AI_IS_GREAT_POWER": {
+  "en": "from being a [concept_great_power]",
+  "de": "durch den Status als [concept_great_power]"
+ },
+ "AI_IS_MAJOR_POWER": {
+  "en": "from being a [concept_major_power]",
+  "de": "durch den Status als [concept_major_power]"
+ },
+ "AI_LAISSEZ_FAIRE_ECONOMY": {
+  "en": "from having a laissez-faire economy",
+  "de": "durch eine Laissez-faire-Wirtschaft"
+ },
+ "AI_LARGE_MILITARY_INDUSTRY": {
+  "en": "from having extensive military industry (10+ states)",
+  "de": "durch umfangreiche Rüstungsindustrie (10+ Staaten)"
+ },
+ "AI_LOW_EDUCATION_INVESTMENT": {
+  "en": "from low education investment",
+  "de": "durch geringe Investitionen in Bildung"
+ },
+ "AI_LOW_HEALTH_INVESTMENT": {
+  "en": "from low healthcare investment",
+  "de": "durch geringe Investitionen in Gesundheit"
+ },
+ "AI_LOW_STANDARD_OF_LIVING": {
+  "en": "from low [concept_sol]",
+  "de": "durch niedrigen [concept_sol]"
+ },
+ "AI_LOW_TECH_SPREAD": {
+  "en": "from low [concept_technology_spread]",
+  "de": "durch geringe [concept_technology_spread]"
+ },
+ "AI_MAJOR_CULTURAL_MINORITY": {
+  "en": "from major cultural minority present",
+  "de": "durch eine bedeutende kulturelle Minderheit"
+ },
+ "AI_MUTUAL_TRADE_VALUE": {
+  "en": "from mutual trade value",
+  "de": "durch gegenseitigen Handelswert"
+ },
+ "AI_NOT_CAPITALIST_ECONOMY": {
+  "en": "from not having a capitalist economy",
+  "de": "durch eine nicht-kapitalistische Wirtschaft"
+ },
+ "AI_PEOPLE_OF_THE_BOOK": {
+  "en": "from People of the Book laws",
+  "de": "durch Gesetze der Leute des Buches"
+ },
+ "AI_POPULATION_TO_RECOVER": {
+  "en": "from population to recover",
+  "de": "durch Bevölkerung, die sich erholen muss"
+ },
+ "AI_SAME_POWER_BLOC": {
+  "en": "from being in the same [concept_power_bloc]",
+  "de": "durch Zugehörigkeit zum selben [concept_power_bloc]"
+ },
+ "AI_SAME_RELIGION_NO_NEED": {
+  "en": "from having the same religion",
+  "de": "durch dieselbe Religion"
+ },
+ "AI_SEVERE_WARMING_DEMAND": {
+  "en": "from severe climate pressure",
+  "de": "durch starken Klimadruck"
+ },
+ "AI_SIGNIFICANT_CULTURAL_MINORITY": {
+  "en": "from significant cultural minority present",
+  "de": "durch eine erhebliche kulturelle Minderheit"
+ },
+ "AI_SIGNIFICANT_MILITARY_INDUSTRY": {
+  "en": "from having significant military industry (5+ states)",
+  "de": "durch erhebliche Rüstungsindustrie (5+ Staaten)"
+ },
+ "AI_SIGNIFICANT_RELIGIOUS_MINORITY": {
+  "en": "from significant religious minority present",
+  "de": "durch eine erhebliche religiöse Minderheit"
+ },
+ "AI_SMALL_STATE_POPULATION": {
+  "en": "from small state population",
+  "de": "durch geringe Bevölkerung des Staates"
+ },
+ "AI_SOURCE_ALREADY_GREEN": {
+  "en": "from source country already being compliant",
+  "de": "durch bereits konformes Ursprungsland"
+ },
+ "AI_SOURCE_COOPERATIVE_ECONOMY": {
+  "en": "from source having a cooperative economy",
+  "de": "durch eine genossenschaftliche Wirtschaft des Ursprungslands"
+ },
+ "AI_STATE_RELIGION_THREATENED": {
+  "en": "from feeling [concept_state_religion] threatened",
+  "de": "durch das Gefühl, die [concept_state_religion] sei bedroht"
+ },
+ "AI_TRADE_UNIONS_IN_GOVERNMENT": {
+  "en": "from Trade Unions being [concept_in_government]",
+  "de": "durch die Gewerkschafter [Concept('concept_in_government', 'in der Regierung')]"
+ },
+ "AI_WANTS_THIS_MORE_IF_ANTAGONISTIC": {
+  "en": "Antagonistic relations",
+  "de": "Feindselige Beziehungen"
+ },
+ "AI_WANTS_THIS_MORE_IF_HOSTILE": {
+  "en": "Hostile relations",
+  "de": "Feindliche Beziehungen"
+ },
+ "AI_WANTS_THIS_MORE_IF_MILITARIZED": {
+  "en": "State has [Concept('concept_military_building', 'military buildings')]",
+  "de": "Staat besitzt [Concept('concept_military_building', 'Militärgebäude')]"
+ },
+ "AI_WANTS_THIS_MORE_IF_WARY": {
+  "en": "Wary relations",
+  "de": "Misstrauische Beziehungen"
+ },
+ "ANTI_COLONIALIST_COLONIES_HELD": {
+  "en": "The country still rules colonies",
+  "de": "Das Land beherrscht noch Kolonien"
+ },
+ "ANTI_COLONIALIST_GROUP_IDEOLOGY": {
+  "en": "The interest group is Anti-Colonialist",
+  "de": "Die Interessengruppe ist antikolonialistisch"
+ },
+ "BANKING_CONTAGION_SPREAD_TT": {
+  "en": "May spread financial contagion to trade-linked countries (eligibility scales with market integration, customs unions, adjacency, economic dependence, and source-vs-target GDP — a country more than #v 20#! times the crashing economy's size is immune).",
+  "de": "Kann finanzielle Ansteckung auf handelsverbundene Länder übertragen (die Wahrscheinlichkeit skaliert mit Marktintegration, Zollunionen, Nachbarschaft, wirtschaftlicher Abhängigkeit und dem BIP-Verhältnis von Quelle zu Ziel — ein Land, das mehr als das #v 20#!-Fache der Größe der abstürzenden Wirtschaft hat, ist immun)."
+ },
+ "BANKING_POINTS_1": {
+  "en": "At least 1 free Banking Intervention Point",
+  "de": "Mindestens 1 freier Banken-Interventionspunkt"
+ },
+ "BANKING_POINTS_2": {
+  "en": "At least 2 free Banking Intervention Points",
+  "de": "Mindestens 2 freie Banken-Interventionspunkte"
+ },
+ "BANKING_POINTS_3": {
+  "en": "At least 3 free Banking Intervention Points",
+  "de": "Mindestens 3 freie Banken-Interventionspunkte"
+ },
+ "BANKING_POINTS_4": {
+  "en": "At least 4 free Banking Intervention Points",
+  "de": "Mindestens 4 freie Banken-Interventionspunkte"
+ },
+ "BANKING_POINTS_5": {
+  "en": "At least 5 free Banking Intervention Points",
+  "de": "Mindestens 5 freie Banken-Interventionspunkte"
+ },
+ "CAPITAL_CONTROLS_GP_RELATIONS_TT": {
+  "en": "#R -2#! relations with all [concept_great_power]s.",
+  "de": "#R -2#! Beziehungen zu allen [Concept('concept_great_power', 'Großmächten')]."
+ },
+ "CB_ASSET_RELIEF_DESC": {
+  "en": "The State shall purchase 'toxic' or non-performing assets from private ledgers to cleanse the [concept_banking_cycle]. This provides a clean slate for growth without the crushing weight of a credit hike.",
+  "de": "Der Staat kauft ‚toxische' oder notleidende Vermögenswerte aus privaten Bilanzen auf, um den [concept_banking_cycle] zu bereinigen. Das schafft einen sauberen Neuanfang für Wachstum, ohne die erdrückende Last einer Kreditverteuerung."
+ },
+ "CB_BAIL_IN_DESC": {
+  "en": "When a bank fails, its bondholders and large depositors take the loss instead of the taxpayer: their claims are written down and turned into the bank's new capital. It costs the treasury nothing and teaches lenders to price risk again, but the wealthy creditors who pay are furious, and debt that can be written down costs more to issue.",
+  "de": "Wenn eine Bank scheitert, tragen ihre Anleihegläubiger und Großeinleger den Verlust statt der Steuerzahler: Ihre Forderungen werden abgeschrieben und in neues Kapital der Bank umgewandelt. Das kostet die Staatskasse nichts und lehrt Kreditgeber, Risiken wieder richtig einzupreisen, doch die wohlhabenden Gläubiger, die dafür zahlen, sind wütend, und Schulden, die abgeschrieben werden können, kosten bei der Ausgabe mehr."
+ },
+ "CB_BANK_HOLIDAY_DESC": {
+  "en": "Close every bank in the country for up to ninety days, so a run has nowhere to run to. Examiners sort the sound banks from the insolvent while the doors are shut, and the panic has time to pass. Nobody can reach their money in the meantime, and commerce limps along on whatever cash is already in hand.",
+  "de": "Schließt für bis zu neunzig Tage jede Bank im Land, damit ein Ansturm ins Leere läuft. Während die Türen verschlossen sind, sondern Prüfer die soliden Banken von den insolventen, und die Panik bekommt Zeit, sich zu legen. In der Zwischenzeit kommt niemand an sein Geld, und der Handel hinkt mit dem Bargeld voran, das gerade zur Hand ist."
+ },
+ "CB_CAPITAL_CONTROLS_OUT": {
+  "en": "Capital Controls (Outflows)",
+  "de": "Kapitalverkehrskontrollen (Abflüsse)"
+ },
+ "CB_CAPITAL_CONTROLS_OUT_DESC": {
+  "en": "To prevent 'Capital Flight' during times of crisis or war, we forbid the movement of investment funds across our borders. Money that cannot leave cannot punish us for our interest rate: while controls hold, the gap between our rate and the world's moves our exchange rate, our gold and confidence in our peg only a #b quarter#! as much. They do nothing for a currency that is distrusted for its inflation or its debts — and in peacetime, every year they stay costs us more with the people whose capital we have trapped.",
+  "de": "Um ‚Kapitalflucht' in Krisen- oder Kriegszeiten zu verhindern, verbieten wir den grenzüberschreitenden Transfer von Investitionsmitteln. Geld, das nicht abfließen kann, kann uns nicht für unseren Zinssatz bestrafen: Solange die Kontrollen gelten, bewegt die Lücke zwischen unserem Zinssatz und dem der Welt unseren Wechselkurs, unser Gold und das Vertrauen in unsere Bindung nur um ein #b Viertel#! so stark. Sie bewirken nichts für eine Währung, der wegen ihrer Inflation oder ihrer Schulden misstraut wird — und in Friedenszeiten kosten sie uns mit jedem Jahr mehr Vertrauen bei den Menschen, deren Kapital wir eingesperrt haben."
+ },
+ "CB_COUNTERCYCLICAL_BUFFER_DESC": {
+  "en": "Forcing financial institutions to retain a higher percentage of their earnings during [concept_banking_cycle] boom years builds a 'war chest' for the lean years, though it slows the immediate rate of reinvestment from our wealthiest citizens.",
+  "de": "Finanzinstitute zu zwingen, in Boomjahren des [concept_banking_cycle] einen höheren Anteil ihrer Erträge einzubehalten, baut einen ‚Kriegsschatz' für die mageren Jahre auf, verlangsamt jedoch das unmittelbare Tempo der Reinvestition durch unsere wohlhabendsten Bürger."
+ },
+ "CB_DIRECTED_CREDIT_AGRI": {
+  "en": "Directed Credit to Agriculture",
+  "de": "Gelenkte Kreditvergabe an die Landwirtschaft"
+ },
+ "CB_DIRECTED_CREDIT_AGRI_DESC": {
+  "en": "Land-mortgage banks lend against farms, estates and plantations, so the countryside can drain, fence and mechanise on borrowed money. Cheap farm credit has fed more than one land boom, and every land boom has ended in foreclosures.",
+  "de": "Bodenkreditbanken vergeben Darlehen gegen Höfe, Güter und Plantagen, sodass das Land auf Pump entwässert, eingezäunt und mechanisiert werden kann. Billiger Agrarkredit hat schon manchen Bodenboom genährt, und jeder Bodenboom endete in Zwangsvollstreckungen."
+ },
+ "CB_DIRECTED_CREDIT_ARMS": {
+  "en": "Directed Credit to Armaments",
+  "de": "Gelenkte Kreditvergabe an die Rüstungsindustrie"
+ },
+ "CB_DIRECTED_CREDIT_ARMS_DESC": {
+  "en": "The State guarantees the loans of arsenals, munitions works and shipyards, and buys what they make. With the government as the buyer there is less room for speculation than in other lending, but the Intelligentsia ask what else the money could have built.",
+  "de": "Der Staat verbürgt die Kredite von Zeughäusern, Munitionsfabriken und Werften und kauft ihre Erzeugnisse. Mit der Regierung als Käufer bleibt weniger Raum für Spekulation als bei anderer Kreditvergabe, doch die Intelligenz fragt, was sonst mit dem Geld hätte gebaut werden können."
+ },
+ "CB_DIRECTED_CREDIT_ELEC": {
+  "en": "Directed Credit to Electrification & High Tech",
+  "de": "Gelenkte Kreditvergabe an Elektrifizierung und Hochtechnologie"
+ },
+ "CB_DIRECTED_CREDIT_ELEC_DESC": {
+  "en": "Public lending carries power lines where no private utility would build them, and backs the laboratories of new industry. The private utilities, which would rather set the pace of electrification themselves, fight it every step of the way.",
+  "de": "Öffentliche Kredite bringen Stromleitungen dorthin, wo kein privater Versorger sie bauen würde, und stützen die Laboratorien der neuen Industrie. Die privaten Versorger, die das Tempo der Elektrifizierung lieber selbst bestimmen würden, bekämpfen dies auf Schritt und Tritt."
+ },
+ "CB_DIRECTED_CREDIT_HEAVY": {
+  "en": "Directed Credit to Heavy Industry",
+  "de": "Gelenkte Kreditvergabe an die Schwerindustrie"
+ },
+ "CB_DIRECTED_CREDIT_HEAVY_DESC": {
+  "en": "Development banks lend to steelworks, engineering and chemical works on the State's terms, at rates no private lender would offer. The Industrialists welcome the capital; the Landowners watch credit that once went to the land go to the furnaces instead.",
+  "de": "Entwicklungsbanken vergeben Kredite an Stahlwerke, Maschinenbau und Chemiewerke zu den Bedingungen des Staates, zu Sätzen, die kein privater Kreditgeber bieten würde. Die Industriellen begrüßen das Kapital; die Grundbesitzer sehen zu, wie Kredit, der einst ins Land floss, nun stattdessen in die Hochöfen fließt."
+ },
+ "CB_DIRECTED_CREDIT_INFRA": {
+  "en": "Directed Credit to [concept_infrastructure]",
+  "de": "Gelenkte Kreditvergabe an [concept_infrastructure]"
+ },
+ "CB_DIRECTED_CREDIT_INFRA_DESC": {
+  "en": "By mandating that credit flow toward national [concept_infrastructure] and manufacturing, we can force industrialization even when the private market is hesitant. The Industrialists may chafe at the loss of control, but the State's goals must come first.",
+  "de": "Indem wir vorschreiben, dass Kredit in nationale [concept_infrastructure] und Fertigung fließt, können wir die Industrialisierung erzwingen, selbst wenn der private Markt zögert. Die Industriellen mögen sich am Kontrollverlust stören, doch die Ziele des Staates müssen an erster Stelle stehen."
+ },
+ "CB_DISABLE_ASSET_RELIEF": {
+  "en": "End Asset Relief Program",
+  "de": "Vermögensentlastungsprogramm beenden"
+ },
+ "CB_DISABLE_ASSET_RELIEF_DESC": {
+  "en": "Terminate the asset relief program and remove its ongoing support from the [concept_banking_cycle].",
+  "de": "Beendet das Vermögensentlastungsprogramm und entzieht dem [concept_banking_cycle] dessen fortlaufende Unterstützung."
+ },
+ "CB_DISABLE_BAIL_IN": {
+  "en": "End the Bail-in Regime",
+  "de": "Bail-in-Regime beenden"
+ },
+ "CB_DISABLE_BAIL_IN_DESC": {
+  "en": "Stop writing down creditors' claims. Failing banks go back to the old choice between rescue and ruin.",
+  "de": "Beendet die Abschreibung von Gläubigerforderungen. Scheiternde Banken stehen wieder vor der alten Wahl zwischen Rettung und Ruin."
+ },
+ "CB_DISABLE_BANK_HOLIDAY": {
+  "en": "Reopen the Banks",
+  "de": "Banken wieder öffnen"
+ },
+ "CB_DISABLE_BANK_HOLIDAY_DESC": {
+  "en": "End the bank holiday early and let depositors back in. The five-year wait before another one still runs.",
+  "de": "Beendet die Bankenschließung vorzeitig und lässt Einleger wieder herein. Die fünfjährige Sperrfrist bis zur nächsten läuft trotzdem weiter."
+ },
+ "CB_DISABLE_CAPITAL_CONTROLS_OUT": {
+  "en": "End Capital Controls (Outflows)",
+  "de": "Kapitalverkehrskontrollen (Abflüsse) beenden"
+ },
+ "CB_DISABLE_CAPITAL_CONTROLS_OUT_DESC": {
+  "en": "Lift the emergency restrictions on capital outflows and allow investment funds to move abroad again.",
+  "de": "Hebt die Notstandsbeschränkungen für Kapitalabflüsse auf und erlaubt Investitionsmitteln wieder den Transfer ins Ausland."
+ },
+ "CB_DISABLE_COUNTERCYCLICAL_BUFFER": {
+  "en": "End Counter-cyclical Buffer",
+  "de": "Antizyklischen Puffer beenden"
+ },
+ "CB_DISABLE_COUNTERCYCLICAL_BUFFER_DESC": {
+  "en": "Suspend the counter-cyclical capital buffer and stop forcing financial institutions to retain extra [concept_banking_cycle] reserves.",
+  "de": "Setzt den antizyklischen Kapitalpuffer aus und zwingt Finanzinstitute nicht länger, zusätzliche Reserven des [concept_banking_cycle] einzubehalten."
+ },
+ "CB_DISABLE_DIRECTED_CREDIT_AGRI": {
+  "en": "End Directed Credit to Agriculture",
+  "de": "Gelenkte Kreditvergabe an die Landwirtschaft beenden"
+ },
+ "CB_DISABLE_DIRECTED_CREDIT_AGRI_DESC": {
+  "en": "Stop steering credit to the land and return lending decisions to the market.",
+  "de": "Lenkt keinen Kredit mehr in die Landwirtschaft und überlässt Kreditentscheidungen wieder dem Markt."
+ },
+ "CB_DISABLE_DIRECTED_CREDIT_ARMS": {
+  "en": "End Directed Credit to Armaments",
+  "de": "Gelenkte Kreditvergabe an die Rüstungsindustrie beenden"
+ },
+ "CB_DISABLE_DIRECTED_CREDIT_ARMS_DESC": {
+  "en": "Stop guaranteeing the arms industry's borrowing and return lending decisions to the market.",
+  "de": "Verbürgt die Kredite der Rüstungsindustrie nicht mehr und überlässt Kreditentscheidungen wieder dem Markt."
+ },
+ "CB_DISABLE_DIRECTED_CREDIT_ELEC": {
+  "en": "End Directed Credit to Electrification & High Tech",
+  "de": "Gelenkte Kreditvergabe an Elektrifizierung und Hochtechnologie beenden"
+ },
+ "CB_DISABLE_DIRECTED_CREDIT_ELEC_DESC": {
+  "en": "Stop financing power and high technology on the State's terms and return lending decisions to the market.",
+  "de": "Finanziert Energie und Hochtechnologie nicht mehr zu den Bedingungen des Staates und überlässt Kreditentscheidungen wieder dem Markt."
+ },
+ "CB_DISABLE_DIRECTED_CREDIT_HEAVY": {
+  "en": "End Directed Credit to Heavy Industry",
+  "de": "Gelenkte Kreditvergabe an die Schwerindustrie beenden"
+ },
+ "CB_DISABLE_DIRECTED_CREDIT_HEAVY_DESC": {
+  "en": "Stop steering credit into heavy industry and return lending decisions to the market.",
+  "de": "Lenkt keinen Kredit mehr in die Schwerindustrie und überlässt Kreditentscheidungen wieder dem Markt."
+ },
+ "CB_DISABLE_DIRECTED_CREDIT_INFRA": {
+  "en": "End Directed Credit to [concept_infrastructure]",
+  "de": "Gelenkte Kreditvergabe an [concept_infrastructure] beenden"
+ },
+ "CB_DISABLE_DIRECTED_CREDIT_INFRA_DESC": {
+  "en": "Stop directing credit into [concept_infrastructure] and manufacturing and return lending decisions to the market.",
+  "de": "Lenkt keinen Kredit mehr in [concept_infrastructure] und Fertigung und überlässt Kreditentscheidungen wieder dem Markt."
+ },
+ "CB_DISABLE_EMERGENCY_IMPORT_FINANCING": {
+  "en": "End Emergency Import Financing",
+  "de": "Notfall-Importfinanzierung beenden"
+ },
+ "CB_DISABLE_EMERGENCY_IMPORT_FINANCING_DESC": {
+  "en": "End this intervention and release its reserved banking capacity.",
+  "de": "Beendet diese Maßnahme und gibt ihre reservierte Bankenkapazität wieder frei."
+ },
+ "CB_DISABLE_EMERGENCY_LIQUIDITY": {
+  "en": "End Emergency Liquidity Program",
+  "de": "Notfall-Liquiditätsprogramm beenden"
+ },
+ "CB_DISABLE_EMERGENCY_LIQUIDITY_DESC": {
+  "en": "Close the emergency liquidity facilities and withdraw the standing lender-of-last-resort support.",
+  "de": "Schließt die Notfall-Liquiditätsfazilitäten und zieht die dauerhafte Unterstützung als Kreditgeber letzter Instanz zurück."
+ },
+ "CB_DISABLE_EXPAND_DEPOSIT_GUARANTEE": {
+  "en": "End Deposit Guarantee Expansion",
+  "de": "Erweiterte Einlagensicherung beenden"
+ },
+ "CB_DISABLE_EXPAND_DEPOSIT_GUARANTEE_DESC": {
+  "en": "Scale back the expanded deposit guarantee and remove its continuing stabilizing effect.",
+  "de": "Fährt die erweiterte Einlagensicherung zurück und entfernt ihren fortlaufenden stabilisierenden Effekt."
+ },
+ "CB_DISABLE_EXPORT_CREDIT": {
+  "en": "End Export Credit Facility",
+  "de": "Exportkreditfazilität beenden"
+ },
+ "CB_DISABLE_EXPORT_CREDIT_DESC": {
+  "en": "Shut down the export credit facility, ending the subsidized lending program and its ongoing fiscal burden.",
+  "de": "Schließt die Exportkreditfazilität und beendet das subventionierte Kreditprogramm samt seiner fortlaufenden Haushaltsbelastung."
+ },
+ "CB_DISABLE_FOREIGN_BORROWING_LIMITS": {
+  "en": "End Limit Foreign-Currency Borrowing",
+  "de": "Begrenzung der Fremdwährungskredite beenden"
+ },
+ "CB_DISABLE_FOREIGN_BORROWING_LIMITS_DESC": {
+  "en": "End this intervention and release its reserved banking capacity.",
+  "de": "Beendet diese Maßnahme und gibt ihre reservierte Bankenkapazität wieder frei."
+ },
+ "CB_DISABLE_FX_SURRENDER": {
+  "en": "End Foreign Exchange Surrender Requirement",
+  "de": "Devisenabgabepflicht beenden"
+ },
+ "CB_DISABLE_FX_SURRENDER_DESC": {
+  "en": "End this intervention and release its reserved banking capacity.",
+  "de": "Beendet diese Maßnahme und gibt ihre reservierte Bankenkapazität wieder frei."
+ },
+ "CB_DISABLE_MORAL_SUASION": {
+  "en": "End Moral Suasion",
+  "de": "Moralische Überzeugung beenden"
+ },
+ "CB_DISABLE_MORAL_SUASION_DESC": {
+  "en": "Cease the Bank's informal pressure campaign and remove its cautionary guidance from the market.",
+  "de": "Beendet die informelle Drucksetzung der Bank und entfernt ihre mahnenden Hinweise an den Markt."
+ },
+ "CB_DISABLE_OPEN_MARKET_OPS": {
+  "en": "End Open-Market Operations",
+  "de": "Offenmarktgeschäfte beenden"
+ },
+ "CB_DISABLE_OPEN_MARKET_OPS_DESC": {
+  "en": "Stop the special open-market purchases and remove their continuing liquidity support.",
+  "de": "Beendet die besonderen Offenmarktkäufe und entfernt ihre fortlaufende Liquiditätsunterstützung."
+ },
+ "CB_DISABLE_RAISE_MARGIN_REQ": {
+  "en": "Lower Margin Requirements",
+  "de": "Margenanforderungen senken"
+ },
+ "CB_DISABLE_RAISE_MARGIN_REQ_DESC": {
+  "en": "Relax elevated margin requirements and remove the extra collateral burden from borrowers.",
+  "de": "Lockert die erhöhten Margenanforderungen und nimmt Kreditnehmern die zusätzliche Sicherheitenlast ab."
+ },
+ "CB_DISABLE_RESERVE_REQUIREMENTS": {
+  "en": "Lower Reserve Requirements",
+  "de": "Mindestreserveanforderungen senken"
+ },
+ "CB_DISABLE_RESERVE_REQUIREMENTS_DESC": {
+  "en": "Let the banks lend out more of their deposits again.",
+  "de": "Erlaubt den Banken wieder, einen größeren Teil ihrer Einlagen zu verleihen."
+ },
+ "CB_DISABLE_RESTRICT_INFLOWS": {
+  "en": "End Restrict Speculative Inflows",
+  "de": "Beschränkung spekulativer Zuflüsse beenden"
+ },
+ "CB_DISABLE_RESTRICT_INFLOWS_DESC": {
+  "en": "End this intervention and release its reserved banking capacity.",
+  "de": "Beendet diese Maßnahme und gibt ihre reservierte Bankenkapazität wieder frei."
+ },
+ "CB_DISABLE_STERILIZE_INFLOWS": {
+  "en": "End Sterilize Capital Inflows",
+  "de": "Sterilisierung von Kapitalzuflüssen beenden"
+ },
+ "CB_DISABLE_STERILIZE_INFLOWS_DESC": {
+  "en": "End this intervention and release its reserved banking capacity.",
+  "de": "Beendet diese Maßnahme und gibt ihre reservierte Bankenkapazität wieder frei."
+ },
+ "CB_EMERGENCY_IMPORT_FINANCING": {
+  "en": "Emergency Import Financing",
+  "de": "Notfall-Importfinanzierung"
+ },
+ "CB_EMERGENCY_IMPORT_FINANCING_DESC": {
+  "en": "Finance import credit during a financial crisis. Improves general import trade advantage; it does not create goods or bypass a blockade. Costs 0.05% of annual GDP on activation and each month, rising to 0.10% after 12 funded months. The surcharge recedes while inactive. Ends when the crisis passes or cash is insufficient.",
+  "de": "Finanziert Importkredite während einer Finanzkrise. Verbessert den allgemeinen Importhandelsvorteil; erzeugt keine Güter und umgeht keine Blockade. Kostet bei Aktivierung und danach jeden Monat 0,05% des jährlichen BIP, steigend auf 0,10% nach 12 finanzierten Monaten. Der Aufschlag sinkt bei Inaktivität. Endet, wenn die Krise vorüber ist oder die Mittel nicht mehr ausreichen."
+ },
+ "CB_EMERGENCY_LIQUIDITY_DESC": {
+  "en": "As the 'Lender of Last Resort,' we must open the vaults to provide credit to banks facing a run. It is an expensive and risky move that can reignite speculation, but it is often the fastest way to arrest a systemic panic and restore confidence.",
+  "de": "Als ‚Kreditgeber letzter Instanz' müssen wir die Tresore öffnen, um Banken, die einem Ansturm ausgesetzt sind, mit Krediten zu versorgen. Das ist ein teurer und riskanter Schritt, der neue Spekulation entfachen kann, doch oft ist es der schnellste Weg, eine systemische Panik zu stoppen und Vertrauen wiederherzustellen."
+ },
  "CB_EXPAND_DEPOSIT_GUARANTEE": {
   "en": "Expand Deposit Guarantee",
   "de": "Einlagengarantie ausweiten"
