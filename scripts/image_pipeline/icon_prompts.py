@@ -134,6 +134,13 @@ CATEGORIES = {
         # Channels above 255 are fine: the emboss multiplies by its lighting
         # (median ~0.6) before clipping.
         color=(283, 212, 185), color_bottom=(249, 115, 55), style=SILHOUETTE),
+    # Vanilla's law icons are painted objects in one tan-bronze palette; the
+    # `tinted` layout recasts a painted render in it. Read from `icon =`
+    # (Law.GetTexture, LawType.GetTexture; amendments show their parent's).
+    "law": dict(
+        folder="law_icons", size=256, mode="tinted", fill=0.9,
+        entity_dir="common/laws", field="icon",
+        style="{subject}, one chunky readable object, " + PAINTED),
     # Read only from `texture =` (Decree.GetTexture, DecreeType.GetTexture).
     "decree": dict(
         folder="decree", size=158, mode="medallion", fill=0.78, centre_lift=2.1,
@@ -568,6 +575,13 @@ ICONS: dict[str, dict[str, dict]] = {
         "decree_subsidize_immigration": {"subject": "a battered brown leather suitcase standing on a stack of gold coins", "seed": None},
         "decree_greenest_grass_campaign": {"subject": "a covered wagon drawn by two horses on a patch of vivid green grass, a big mint-green arrow pointing up behind it", "seed": None},
         "decree_resettlement_recruitment_drive": {"subject": "a small new timber house with a big mint-green arrow pointing into its open door", "seed": None},
+    },
+    # The four mod-added laws still on another law's icon.
+    "law": {
+        "law_penal_labor_camps": {"subject": "a heavy iron ball and chain lying beside a pickaxe", "seed": None},
+        "law_private_military_contractors": {"subject": "an empty modern combat helmet sitting on a tall stack of gold coins", "seed": None},
+        "law_littoral_defense": {"subject": "a squat round stone coastal gun tower on a rocky shore, a small fast patrol boat beside it", "seed": None},
+        "law_auxiliary_fleet": {"subject": "a big sealift cargo ship with army trucks and crates lashed on its deck", "seed": None},
     },
     "leader_ideology": {
         "ideology_multicultural": {"subject": "three hands clasping each other's wrists to form a triangle", "seed": 1},

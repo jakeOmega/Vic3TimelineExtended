@@ -18,6 +18,7 @@ production pipeline). Nothing here knows about a particular entity list.
                emboss           FLUX silhouette -> the PM pipeline's metallic emboss
                emboss_medallion that emboss on the disc and ring
                plinth           cutout standing on the slab lifted from vanilla
+               tinted           cutout recast in its folder's one metal (laws, institutions)
   review_sheet()  Row per entity: [current icon | 3 vanilla neighbours || candidates].
 
 Frames are not hand-drawn: `vanilla_template()` takes the per-pixel median of
@@ -414,6 +415,65 @@ def compose_plinth(raw: Image.Image, spec: dict, tmpl, target) -> Image.Image:
     return icon
 
 
+LUMA = np.array([0.299, 0.587, 0.114], dtype=np.float32)
+
+
+def tone_ramp(folder: str) -> tuple[np.ndarray, np.ndarray]:
+    """The tones of a folder whose icons are all one metal (laws, institutions).
+
+    Returns (the 0..100th percentiles of its opaque pixels' luminance, a
+    256 x 3 table of the median colour at each luminance). Luminances too rare
+    to measure take the colour interpolated from their neighbours.
+    """
+    samples = []
+    for f in sorted((vanilla_icons_dir() / folder).glob("*.dds")):
+        try:
+            a = np.asarray(load_rgba(f), dtype=np.float32)
+        except Exception:
+            continue
+        px = a[..., :3][a[..., 3] > 200]
+        samples.append(px[::max(1, len(px) // 4000)])
+    if not samples:
+        raise SystemExit(f"no .dds in {vanilla_icons_dir() / folder}: check VIC3_BASE_GAME")
+    rgb = np.concatenate(samples)
+    lum = rgb @ LUMA
+    idx = np.clip(np.rint(lum), 0, 255).astype(int)
+    lut = np.full((256, 3), np.nan, dtype=np.float32)
+    for v in range(256):
+        sel = rgb[idx == v]
+        if len(sel) >= 20:
+            lut[v] = np.median(sel, axis=0)
+    known = np.nonzero(~np.isnan(lut[:, 0]))[0]
+    for ch in range(3):
+        lut[:, ch] = np.interp(np.arange(256), known, lut[known, ch])
+    lut = np.stack([np.convolve(np.pad(lut[:, ch], 3, mode="edge"), np.ones(7) / 7, "valid")
+                    for ch in range(3)], axis=1)
+    return np.percentile(lum, np.arange(101)), lut
+
+
+def compose_tinted(raw: Image.Image, spec: dict, ramp) -> Image.Image:
+    """A painted object recast in its folder's single metal.
+
+    Vanilla's law and institution icons are painted objects in one tan-bronze
+    palette. The cutout's luminance is matched to the folder's distribution
+    (percentile for percentile), then each pixel takes the folder's colour
+    at that luminance, so shadows, highlights and brush strokes survive while
+    every hue goes.
+    """
+    quantiles, lut = ramp
+    obj = fit_square(cut_out(raw), spec["size"], spec["fill"])
+    a = np.asarray(obj, dtype=np.float32)
+    lum = a[..., :3] @ LUMA
+    opaque = a[..., 3] > 200
+    if opaque.sum() < 50:
+        return obj
+    ours = np.percentile(lum[opaque], np.arange(101)) + np.arange(101) * 1e-3  # strictly increasing
+    matched = np.interp(np.interp(lum, ours, np.arange(101)), np.arange(101), quantiles)
+    rgb = lut[np.clip(np.rint(matched), 0, 255).astype(int)]
+    out = Image.fromarray(np.clip(np.dstack([rgb, a[..., 3]]), 0, 255).astype(np.uint8), "RGBA")
+    return drop_shadow(out, max(1, spec["size"] // 128), spec["size"] / 100, 0.35)
+
+
 class Composer:
     """Compose raw renders per category, caching each category's vanilla template."""
 
@@ -431,7 +491,11 @@ class Composer:
             # A medallion's opaque pixels are mostly its dark disc: grade the
             # object against a folder of bare objects instead.
             self._target[cat] = category_grade_target(spec.get("grade_folder", spec["folder"]))
+        if mode == "tinted" and cat not in self._tmpl:
+            self._tmpl[cat] = tone_ramp(spec["folder"])
         raw = raw.convert("RGB")
+        if mode == "tinted":
+            return compose_tinted(raw, spec, self._tmpl[cat])
         if mode == "cutout":
             return compose_cutout(raw, spec, self._target[cat])
         if mode == "framed":
