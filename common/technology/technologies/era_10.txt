@@ -1,7 +1,7 @@
 ﻿machine_learning = {
 	# Smart Robots PM for Robotics Industries, High Bandwidth PM for Network Infrastructure
 	era = era_10
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/machine_learning.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -29,7 +29,7 @@
 generative_ai = {
 	# ML Assisted Code Generation PM for Software Industries
 	era = era_10
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/generative_ai.dds"
 	category = production
 
 	modifier = {
@@ -50,7 +50,7 @@ additive_manufacturing = {
 	# Smart Miners PMs for mines, 3D Printed Porcelain PM for Glassworks, 3D Printed Buildings for
 	# Construction Sectors
 	era = era_10
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/additive_manufacturing.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -71,7 +71,7 @@ additive_manufacturing = {
 advanced_structural_engineering = {
 	# Advanced Construction PM for Construction Sectors
 	era = era_10
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/advanced_structural_engineering.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -92,7 +92,7 @@ advanced_structural_engineering = {
 electric_vehicles = {
 	# Re-routes Electric Cars / Hydrogen Fuel Cell / Electric Highway PMs from clean_energy_technologies
 	era = era_10
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/electric_vehicles.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -111,7 +111,7 @@ electric_vehicles = {
 internet_of_things = {
 	# Re-routes Smart Miners PMs from additive_manufacturing
 	era = era_10
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/internet_of_things.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -127,7 +127,7 @@ internet_of_things = {
 mrna_therapeutics = {
 	# To-be-authored mRNA / gene-therapy pharma PM
 	era = era_10
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/mrna_therapeutics.dds"
 	category = society
 
 	unlocking_technologies = {
@@ -146,7 +146,7 @@ mrna_therapeutics = {
 reusable_rocketry = {
 	# Reusable Rockets PM for Launch Facilities
 	era = era_10
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/reusable_rocketry.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -166,7 +166,7 @@ reusable_rocketry = {
 hypersonic_weapons = {
 	# Railgun Tank and Hypersonic Missile Platform units
 	era = era_10
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/hypersonic_weapons.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -188,7 +188,7 @@ hypersonic_weapons = {
 directed_energy_defenses = {
 	# Directed Energy Defenses mobilization option
 	era = era_10
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/directed_energy_defenses.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -210,7 +210,7 @@ directed_energy_defenses = {
 jadc2 = {
 	# Robotic Soldiers unit
 	era = era_10
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/jadc2.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -236,7 +236,7 @@ jadc2 = {
 cyber_warfare = {
 	# Cyberwarfare Team mobilization option
 	era = era_10
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/cyber_warfare.dds"
 	category = military
 
 	modifier = {
@@ -263,7 +263,7 @@ cyber_warfare = {
 electronic_warfare = {
 	# Electronic Warfare Team mobilization option
 	era = era_10
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/electronic_warfare.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -289,7 +289,7 @@ electronic_warfare = {
 decline_of_organized_religion = {
 	# Secular Society PM for Urban Centers
 	era = era_10
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/decline_of_organized_religion.dds"
 	category = society
 
 	unlocking_technologies = {
@@ -314,7 +314,7 @@ decline_of_organized_religion = {
 
 telemedicine = {
 	era = era_10
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/telemedicine.dds"
 	category = society
 
 	unlocking_technologies = {
@@ -336,7 +336,7 @@ telemedicine = {
 universal_basic_income = {
 	# Universal Basic Income law
 	era = era_10
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/universal_basic_income.dds"
 	category = society
 
 	unlocking_technologies = {
@@ -360,7 +360,7 @@ universal_basic_income = {
 mental_health_awareness = {
 	# Rehabilitation-Focused Criminal Justice law
 	era = era_10
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/mental_health_awareness.dds"
 	category = society
 
 	unlocking_technologies = {

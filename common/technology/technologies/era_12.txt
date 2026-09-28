@@ -1,7 +1,7 @@
 ﻿artificial_intelligence = {
 	# Ultimate automation PMs for basically eveything
 	era = era_12
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/artificial_intelligence.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -23,7 +23,7 @@ advanced_nanofabrication = {
 	# Advanced AM Fabrication and Automated AM Fabrication PMs for Advanced Material Fabricator
 	# Nanorobots PM for Robotics Industries, Nanomaterial Buildings PM for Construction Sectors
 	era = era_12
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/advanced_nanofabrication.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -47,7 +47,7 @@ molecular_assemblers = {
 	# Nanobot Assemblers PM for Tooling Workshops, Self-Replicating Assemblers for Advanced Material Fabricators,
 	# Utility Fog Phalanx unit, Molecular Scanners mobilization option
 	era = era_12
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/molecular_assemblers.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -69,7 +69,7 @@ quantum_materials = {
 	# Superconducting Networks PM for Wired Telecommunications Industries,
 	# Semi-Infinite Bandwidth PM for Network Infrastructure
 	era = era_12
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/quantum_materials.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -85,7 +85,7 @@ orbital_manufacturing = {
 	# Microgravity Alloying PM for Steel Mills, Orbital Fabrication PM for Advanced Material Fabricator,
 	# Orbital Nanolithography PM for Electronics Industries
 	era = era_12
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/orbital_manufacturing.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -108,7 +108,7 @@ programmable_matter = {
 	# PM for Glassworks, Bespoke Alloys PM for Steel Mills, Advanced Sel-Replicating Assemblers
 	# PM for Advanced Material Fabricator, Programmable Food Synthesis PM for Food Industries
 	era = era_12
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/programmable_matter.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -134,7 +134,7 @@ compact_fusion_reactors = {
 	# Interstellar Mission PM for Space Program, DEW Tank unit
 	# Better Fusion Reactors PM for Fusion Plants
 	era = era_12
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/compact_fusion_reactors.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -164,7 +164,7 @@ fusion_batteries = {
 	# Fusion Battery Motors PM for Motor Industries, Fusion Battery Vehicles PM for Automotive Industries,
 	# Fusion Battery Appliances PM for Consumer Appliance Industries
 	era = era_12
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/fusion_batteries.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -190,7 +190,7 @@ fusion_batteries = {
 space_elevator = {
 	# Space Elevator Construction Site building
 	era = era_12
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/space_elevator.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -206,7 +206,7 @@ space_elevator = {
 orbital_weapon_platforms = {
 	# Orbital Weapons Platforms unit
 	era = era_12
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/orbital_weapon_platforms.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -229,7 +229,7 @@ orbital_weapon_platforms = {
 space_based_solar_power = {
 	# Space Power PM for Renewable Energy Plants
 	era = era_12
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/space_based_solar_power.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -244,7 +244,7 @@ space_based_solar_power = {
 antimatter_production = {
 	# Orbital Precision Antimatter Strikes unit
 	era = era_12
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/antimatter_production.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -267,7 +267,7 @@ antimatter_production = {
 
 biological_immortality = {
 	era = era_12
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/biological_immortality.dds"
 	category = society
 
 	unlocking_technologies = {
@@ -291,7 +291,7 @@ biological_immortality = {
 space_colonization = {
 	# Mining, Farming, Resort Colony PMs for Extraplanetary Base
 	era = era_12
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/space_colonization.dds"
 	category = society
 
 	unlocking_technologies = {
@@ -313,7 +313,7 @@ telepathic_communities = {
 	# Neural Lace Telepathy PM for Wireless Telecommunications Industries,
 	# AI-Mediated Mind Sharing PM for Software Industries
 	era = era_12
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/telepathic_communities.dds"
 	category = society
 
 	unlocking_technologies = {
@@ -340,7 +340,7 @@ telepathic_communities = {
 
 mind_backups = {
 	era = era_12
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/mind_backups.dds"
 	category = society
 
 	unlocking_technologies = {
@@ -365,7 +365,7 @@ post-scarcity_economy = {
 	# Smart LED Streetlights PM for Urban Centers,
 	# Post-Scarcity Economy law
 	era = era_12
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/post-scarcity_economy.dds"
 	category = society
 
 	unlocking_technologies = {
@@ -392,7 +392,7 @@ post-scarcity_economy = {
 neural_lace = {
 	# Neural Lace Communications PM for Wired Telecommunications Industries
 	era = era_12
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/neural_lace.dds"
 	category = society
 
 	unlocking_technologies = {

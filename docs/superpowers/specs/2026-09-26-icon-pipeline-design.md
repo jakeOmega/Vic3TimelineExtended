@@ -150,3 +150,13 @@ About 250 icons were generated in one session: era 6 techs, all treaty articles 
   - insertion of a missing icon line, since the covert operations had none;
   - review sheets at 2× for 100 px categories.
 
+### Eras 8–12 (#540)
+
+The 104 remaining techs were done one era at a time: the owner reviewed era N while era N+1 rendered. Their review changed or rerolled about one pick in six, more than the one in eight above. The new FLUX defaults found are in the registry's docstring.
+
+The retouching went beyond the row fill:
+- **Near an object's edge, fill each row from one side only.** Interpolating toward the far side pulls in the white background or a shadow; a fill that stops a few pixels short of the edge, then a light vertical blur, left no streaks.
+- **Inpaint lettering on shaded surfaces.** Where the surface under the letters is a gradient (a sun's rings, sand, a wheel hub), mask only the letter pixels and fill them with biharmonic inpainting (`skimage.restoration.inpaint_biharmonic`). Letters are the pixels well off the box's background, estimated by inpainting the whole box from its margin.
+- **Some flaws are in the cutout, not the render, so fix the composed icon.** White highlights on glass came out as holes, and a glow as grey blobs. Fill enclosed alpha holes, or clear the blobs, in `final/<name>.png`, then delete the DDS and run `write`. `write` reuses a composed file that is newer than its raw.
+- **A hand repaint is sometimes quicker than a reroll.** A laser turret's beam, a pale rod that read as a missile, was erased and redrawn as a glowing line.
+

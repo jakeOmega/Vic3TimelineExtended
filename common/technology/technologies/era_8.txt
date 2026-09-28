@@ -1,7 +1,7 @@
 ﻿advanced_materials_armor = {
 	# Reactive Armor Tank unit, Advanced Composite Armor PM for Automotive Industries
 	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/advanced_materials_armor.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -19,7 +19,7 @@
 
 predictive_logistics = {
 	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/predictive_logistics.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -45,7 +45,7 @@ predictive_logistics = {
 advanced_assembly_lines = {
 	# Unlocks Advanced Assemly Line PM in various factories
 	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/advanced_assembly_lines.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -61,7 +61,7 @@ modern_pharmaceuticals = {
 	# Synthetic Drug Plants, Neodymium Catalyzation SBR PMs for Rubber Industries,
 	# and Antibiotic Growth Promoters PMs for Livestock Ranches
 	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/modern_pharmaceuticals.dds"
 	category = society
 
 	modifier = {
@@ -84,7 +84,7 @@ containerization = {
 	# Containerized Cargo PM for Railway, High-Volume Logistics PM for Trade Centers,
 	# Container Ports and Modern Cruise Ships PM for Ports, Trade Reform decree
 	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/containerization.dds"
 	category = society
 
 	modifier = {
@@ -106,7 +106,7 @@ containerization = {
 fiber_optics = {
 	# Fiber Optics PM for Wired Telecommunication Industries. medium bandwidth for network infrastructure
 	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/fiber_optics.dds"
 	category = production
 
 	modifier = {
@@ -128,7 +128,7 @@ computer_networks = {
 	# Autonomous Launch Control Systems PM for Launch Facilities, Digital Trading PM for Financial Districts/Companies
 	# Automated Loading and Unloading PM for Railway
 	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/computer_networks.dds"
 	category = production
 
 	modifier = {
@@ -155,7 +155,7 @@ computer_networks = {
 personal_computers = {
 	# Personal Electronics PM for Consumer Appliance Industries, Cleanroom Fabs for all electronics factories
 	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/personal_computers.dds"
 	category = production
 
 	modifier = {
@@ -178,7 +178,7 @@ robotics = {
 	# Robotic Assembly Lines PM for various factories, Robotic Ship Assembly PM for civilian and military shipyards
 	# Automated Chemical Reactors PM for chemical plants, Launch Pad Robotics PM for Launch Facilities
 	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/robotics.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -199,7 +199,7 @@ robotics = {
 supersonic_aircraft = {
 	# Modern Aeroplane Production PM for Aeroplane Industries
 	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/supersonic_aircraft.dds"
 	category = military
 
 	modifier = {
@@ -222,7 +222,7 @@ supersonic_aircraft = {
 stealth_technology = {
 	# Stealth Aircraft unit
 	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/stealth_technology.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -243,7 +243,7 @@ stealth_technology = {
 
 environmental_movement = {
 	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/environmental_movement.dds"
 	category = society
 
 	modifier = {
@@ -265,7 +265,7 @@ environmental_movement = {
 sexual_revolution = {
 	# Anti-Discrimination (for LGBTQ+), Gender as Protected Class laws
 	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/sexual_revolution.dds"
 	category = society
 
 	unlocking_technologies = {
@@ -290,7 +290,7 @@ microprocessor = {
 	# Modern Microprocessors PM for Electronics Industries, Automated Mechanical Harvesters PM for Agriculture,
 	# Power Integrated Smart Systems for all power plant buildings
 	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/microprocessor.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -310,7 +310,7 @@ microprocessor = {
 gene_splicing = {
 	# Ban on Genetic Modification law
 	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/gene_splicing.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -334,7 +334,7 @@ gene_splicing = {
 computer_aided_design = {
 	# Computer-Aided Design PM for Construction Sectors
 	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/computer_aided_design.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -350,7 +350,7 @@ computer_aided_design = {
 cellular_networks = {
 	# Home Communications mobilization option
 	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/cellular_networks.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -374,7 +374,7 @@ cellular_networks = {
 barcodes_and_scanners = {
 	# Shopping Malls PM for Urban Centers
 	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/barcodes_and_scanners.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -398,7 +398,7 @@ barcodes_and_scanners = {
 precision_guided_munitions = {
 	# Marine Assault Ship (Cold-War-2 LHA), PGM-guided ship utilities, carrier obsolete chain
 	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/precision_guided_munitions.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -422,7 +422,7 @@ precision_guided_munitions = {
 infrared_night_vision = {
 	# Night Vision Gear mobilization option
 	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/infrared_night_vision.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -446,7 +446,7 @@ infrared_night_vision = {
 video_games = {
 	# Video Games PM for Arts Academy
 	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/video_games.dds"
 	category = society
 
 	unlocking_technologies = {
