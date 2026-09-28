@@ -4,7 +4,7 @@
 
 building_un_headquarters = {
 	building_group = bg_bureaucracy
-	icon = "gfx/interface/icons/building_icons/building_government_administration.dds"
+	icon = "gfx/interface/icons/building_icons/building_un_headquarters.dds"
 	expandable = yes
 	downsizeable = yes
 	unique = no
@@ -30,7 +30,7 @@ building_un_headquarters = {
 
 building_power_bloc_hq = {
 	building_group = bg_bureaucracy
-	icon = "gfx/interface/icons/building_icons/building_government_administration.dds"
+	icon = "gfx/interface/icons/building_icons/building_power_bloc_hq.dds"
 	expandable = no
 	downsizeable = no
 	unique = no
@@ -62,7 +62,7 @@ building_power_bloc_hq = {
 
 building_wonder_golden_gate_bridge = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/building_railway.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_golden_gate_bridge.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -85,7 +85,7 @@ building_wonder_golden_gate_bridge = {
 
 building_wonder_empire_state_building = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/urban_center.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_empire_state_building.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -109,7 +109,7 @@ building_wonder_empire_state_building = {
 
 building_wonder_sydney_opera_house = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/building_arts_academy.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_sydney_opera_house.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -133,7 +133,7 @@ building_wonder_sydney_opera_house = {
 
 building_wonder_cn_tower = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/urban_center.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_cn_tower.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -157,7 +157,7 @@ building_wonder_cn_tower = {
 
 building_wonder_hoover_dam = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/building_railway.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_hoover_dam.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -181,7 +181,7 @@ building_wonder_hoover_dam = {
 
 building_wonder_pentagon = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/building_government_administration.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_pentagon.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -233,7 +233,7 @@ building_wonder_kennedy_space_center = {
 
 building_wonder_aswan_high_dam = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/building_railway.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_aswan_high_dam.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -257,7 +257,7 @@ building_wonder_aswan_high_dam = {
 
 building_wonder_tokyo_tower = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/urban_center.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_tokyo_tower.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -281,7 +281,7 @@ building_wonder_tokyo_tower = {
 
 building_wonder_moscow_state_university = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/building_university.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_moscow_state_university.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -305,7 +305,7 @@ building_wonder_moscow_state_university = {
 
 building_wonder_berlin_tv_tower = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/urban_center.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_berlin_tv_tower.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -329,7 +329,7 @@ building_wonder_berlin_tv_tower = {
 
 building_wonder_azadi_tower = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/building_arts_academy.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_azadi_tower.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -353,7 +353,7 @@ building_wonder_azadi_tower = {
 
 building_wonder_kenyatta_icc = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/building_government_administration.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_kenyatta_icc.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -381,7 +381,7 @@ building_wonder_kenyatta_icc = {
 
 building_wonder_burj_khalifa = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/urban_center.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_burj_khalifa.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -405,7 +405,7 @@ building_wonder_burj_khalifa = {
 
 building_wonder_world_trade_center = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_world_trade_center.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -429,7 +429,7 @@ building_wonder_world_trade_center = {
 
 building_wonder_lotus_temple = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/building_arts_academy.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_lotus_temple.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -453,7 +453,7 @@ building_wonder_lotus_temple = {
 
 building_wonder_itaipu_dam = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/building_railway.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_itaipu_dam.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -477,7 +477,7 @@ building_wonder_itaipu_dam = {
 
 building_wonder_petronas_towers = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_petronas_towers.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -501,7 +501,7 @@ building_wonder_petronas_towers = {
 
 building_wonder_basilica_of_our_lady_of_peace = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/building_arts_academy.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_basilica_of_our_lady_of_peace.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -529,7 +529,7 @@ building_wonder_basilica_of_our_lady_of_peace = {
 
 building_wonder_three_gorges_dam = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/building_railway.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_three_gorges_dam.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -553,7 +553,7 @@ building_wonder_three_gorges_dam = {
 
 building_wonder_channel_tunnel = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/building_railway.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_channel_tunnel.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -577,7 +577,7 @@ building_wonder_channel_tunnel = {
 
 building_wonder_taipei_101 = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_taipei_101.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -601,7 +601,7 @@ building_wonder_taipei_101 = {
 
 building_wonder_lotte_world_tower = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_lotte_world_tower.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -625,7 +625,7 @@ building_wonder_lotte_world_tower = {
 
 building_wonder_gardens_by_the_bay = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/building_arts_academy.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_gardens_by_the_bay.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -649,7 +649,7 @@ building_wonder_gardens_by_the_bay = {
 
 building_wonder_abraj_al_bait = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_abraj_al_bait.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -677,7 +677,7 @@ building_wonder_abraj_al_bait = {
 
 building_wonder_shanghai_tower = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_shanghai_tower.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -701,7 +701,7 @@ building_wonder_shanghai_tower = {
 
 building_wonder_fast_telescope = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/building_university.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_fast_telescope.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -725,7 +725,7 @@ building_wonder_fast_telescope = {
 
 building_wonder_statue_of_unity = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/building_arts_academy.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_statue_of_unity.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -749,7 +749,7 @@ building_wonder_statue_of_unity = {
 
 building_wonder_golden_bridge = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/building_railway.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_golden_bridge.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -777,7 +777,7 @@ building_wonder_golden_bridge = {
 
 building_wonder_large_hadron_collider = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/building_university.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_large_hadron_collider.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -869,7 +869,7 @@ building_wonder_iter = {
 
 building_wonder_svalbard_seed_vault = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/building_university.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_svalbard_seed_vault.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -899,7 +899,7 @@ building_wonder_svalbard_seed_vault = {
 
 building_wonder_ligo = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/building_university.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_ligo.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -929,7 +929,7 @@ building_wonder_ligo = {
 
 building_wonder_continental_union_hq = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/building_government_administration.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_continental_union_hq.dds"
 	expandable = no
 	downsizeable = no
 	unique = no
@@ -970,7 +970,7 @@ building_wonder_continental_union_hq = {
 
 building_wonder_peace_palace = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/building_government_administration.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_peace_palace.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -1000,7 +1000,7 @@ building_wonder_peace_palace = {
 
 building_wonder_palais_des_nations = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/building_government_administration.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_palais_des_nations.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes

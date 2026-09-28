@@ -75,6 +75,22 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(r["states"]["technology"],
                          {"unreviewed": 2, "accepted": 1, "kept": 1, "reused": 1})
 
+    def test_check_knows_replace_or_create_definitions(self):
+        saved = ip.ICONS
+        try:
+            ip.ICONS = {"building": {k: {"subject": "a mine", "seed": None} for k in
+                                     ("building_lithium_mine", "building_iron_mine")}}
+            d = tempfile.mkdtemp()
+            bdir = Path(d) / "common" / "buildings"
+            bdir.mkdir(parents=True)
+            (bdir / "b.txt").write_text(
+                "REPLACE_OR_CREATE:building_lithium_mine = {\n}\nREPLACE:building_iron_mine = {\n}\n",
+                encoding="utf-8-sig")
+            r = ip.check(d, on_disk=set())
+        finally:
+            ip.ICONS = saved
+        self.assertEqual(r["unknown"], [("building", "building_iron_mine")])
+
     def test_only_generated_entries_render(self):
         saved = ip.ICONS
         try:
@@ -184,6 +200,19 @@ class RewriteTests(unittest.TestCase):
         self.assertEqual(p.read_bytes()[3:].decode("utf-8"),
                          text.replace("acted = {\n", 'acted = {\n\ttexture = "gfx/a.dds"\n'))
         self.assertEqual(gi.rewrite_icon_refs(p, "texture", {"acted": "gfx/a.dds"}), [])
+
+    def test_replace_or_create_is_matched_by_its_bare_key(self):
+        # Mod-added buildings are often REPLACE_OR_CREATE:; REPLACE: and INJECT:
+        # change a vanilla entity, whose own art stays.
+        text = ('REPLACE_OR_CREATE:building_lithium_mine = {\n\ticon = "gfx/old/gold_mine.dds"\n}\n'
+                'REPLACE:building_iron_mine = {\n\ticon = "gfx/old/iron_mine.dds"\n}\n'
+                'INJECT:building_gold_mine = {\n\ticon = "gfx/old/gold_mine.dds"\n}\n')
+        p = self._file(text)
+        targets = {k: f"gfx/new/{k}.dds" for k in
+                   ("building_lithium_mine", "building_iron_mine", "building_gold_mine")}
+        self.assertEqual(gi.rewrite_icon_refs(p, "icon", targets), ["building_lithium_mine"])
+        self.assertEqual(p.read_bytes()[3:].decode("utf-8"),
+                         text.replace("gfx/old/gold_mine.dds", "gfx/new/building_lithium_mine.dds", 1))
 
     def test_rewrite_is_idempotent(self):
         p = self._file()

@@ -72,7 +72,9 @@ def accepted(e: dict) -> bool:
 
 # ── reading and rewriting entity files ───────────────────────────────────
 
-_DEF_RE = re.compile(r"^([A-Za-z0-9_\-]+)\s*=\s*\{")
+# A plain definition or a REPLACE_OR_CREATE: one (mod-added buildings use it),
+# captured without the prefix. REPLACE:/INJECT: change a vanilla entity.
+_DEF_RE = re.compile(r"^(?:REPLACE_OR_CREATE:)?([A-Za-z0-9_\-]+)\s*=\s*\{")
 
 
 def _code(line: str) -> str:
@@ -153,8 +155,8 @@ def rewrite_icon_refs(path: Path, field: str, targets: dict[str, str], dry_run: 
     old icon a placeholder, which stops being true. An entity with no such
     line (the covert-operation actions had none, so the game showed no icon)
     gets one as the first line of its block, where vanilla puts it. Mod-added
-    entities are plain top-level definitions; INJECT:/REPLACE: blocks are not
-    matched.
+    entities are plain top-level or REPLACE_OR_CREATE: definitions;
+    INJECT:/REPLACE: blocks, which change a vanilla entity, are not matched.
     """
     raw = path.read_bytes()
     bom = raw.startswith(b"\xef\xbb\xbf")
