@@ -440,7 +440,7 @@ step completes, a red warning while a finished level would cause vanity
 backlash, and one row per monument with its form, dedication, grandeur and
 status.
 
-Every monument, whatever it honours, gives:
+Every monument, whatever it honors, gives:
 
 - +25 prestige for each step of standing grandeur, counting every monument that
   is not contested.
@@ -451,7 +451,7 @@ Every monument, whatever it honours, gives:
 ### Monument dedications
 
 When a level of an undedicated monument finishes, a dedication ceremony asks
-what it honours. The choice is permanent, and the ceremony's tooltips list each
+what it honors. The choice is permanent, and the ceremony's tooltips list each
 dedication's effects. An undedicated monument gives only the prestige, tourism
 and cultural pull above; the ceremony asks again at its next level.
 
@@ -493,7 +493,7 @@ the monument's row says its dedication is carved in it.
 ### Contested monuments
 
 A monument to the Crown, the Republic, the Revolution, the Leader or a faith can
-outlive what it honours. It becomes **contested** when its crown, republic or
+outlive what it honors. It becomes **contested** when its crown, republic or
 revolution falls, when its leader stops ruling for any reason, when the country
 adopts State Atheism or changes its state religion, or when another country
 takes its state. A contested monument keeps its tourism and its effect in the
@@ -511,7 +511,7 @@ time. You can also decide later from the monument's row in the journal entry.
 
 Pulling down many monuments at once gives what pulling down one of their
 combined grandeur would: each reward and resentment comes from a single total
-that fades month by month. If what a contested or heritage monument honours
+that fades month by month. If what a contested or heritage monument honors
 comes back, for example when the monarchy is restored, it counts in full again.
 Pulling it down is the only permanent choice. A shrine in a state that another
 country takes becomes heritage at once and cannot be pulled down. After a civil
