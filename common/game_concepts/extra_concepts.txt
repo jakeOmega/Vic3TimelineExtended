@@ -165,3 +165,7 @@ concept_pollution_system = {}
 concept_internal_resettlement = {
 	texture = "gfx/interface/icons/generic_icons/population.dds"
 }
+
+concept_grandeur = {
+	texture = "gfx/interface/icons/building_icons/building_government_administration.dds"
+}

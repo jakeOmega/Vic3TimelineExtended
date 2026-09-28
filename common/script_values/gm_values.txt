@@ -1,0 +1,607 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — script values
+# ============================================================================
+# Design: docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md.
+
+# ---- The doubling curve (§2.2) ---------------------------------------------
+# Every effect a monument gives grows in steps of equal size, and each step
+# costs twice the grandeur of the one before. With a first step of f, step n
+# completes at f * (2^n - 1): for f = 5, at 5, 15, 35, 75, 155, 315, 635 and
+# 1275. Inside a step the value grows linearly, so no level is wasted.
+#
+# Input: var:gm_curve_in on the current scope, which the caller sets first.
+# Output: the fractional number of steps, 0-8. Each term is one step's share,
+# clamped to 0-1 (min, then max: sequential clamps).
+gm_curve_steps_f5 = {
+	value = 0
+	add = { value = var:gm_curve_in divide = 5 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 5 divide = 10 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 15 divide = 20 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 35 divide = 40 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 75 divide = 80 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 155 divide = 160 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 315 divide = 320 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 635 divide = 640 min = 0 max = 1 }
+}
+
+gm_curve_steps_f10 = {
+	value = 0
+	add = { value = var:gm_curve_in divide = 10 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 10 divide = 20 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 30 divide = 40 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 70 divide = 80 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 150 divide = 160 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 310 divide = 320 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 630 divide = 640 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 1270 divide = 1280 min = 0 max = 1 }
+}
+
+# The grandeur at which the step now being filled completes ("next step at"
+# in the journal entry). Each later `if` overrides the earlier, so the result
+# is the smallest step end above the input; the last end once the curve is
+# complete.
+gm_curve_next_f5 = {
+	value = 1275
+	if = { limit = { var:gm_curve_in < 635 } value = 635 }
+	if = { limit = { var:gm_curve_in < 315 } value = 315 }
+	if = { limit = { var:gm_curve_in < 155 } value = 155 }
+	if = { limit = { var:gm_curve_in < 75 } value = 75 }
+	if = { limit = { var:gm_curve_in < 35 } value = 35 }
+	if = { limit = { var:gm_curve_in < 15 } value = 15 }
+	if = { limit = { var:gm_curve_in < 5 } value = 5 }
+}
+
+gm_curve_next_f10 = {
+	value = 2550
+	if = { limit = { var:gm_curve_in < 1270 } value = 1270 }
+	if = { limit = { var:gm_curve_in < 630 } value = 630 }
+	if = { limit = { var:gm_curve_in < 310 } value = 310 }
+	if = { limit = { var:gm_curve_in < 150 } value = 150 }
+	if = { limit = { var:gm_curve_in < 70 } value = 70 }
+	if = { limit = { var:gm_curve_in < 30 } value = 30 }
+	if = { limit = { var:gm_curve_in < 10 } value = 10 }
+}
+
+# ---- Per-step values (§9) ------------------------------------------------------
+# Mirrors of the static modifiers in gm_modifiers.txt, each of which carries
+# exactly one step (the multiplier is the step count). Loc reads these; the
+# registry test pins every pair equal.
+gm_step_prestige = 25
+gm_step_legitimacy = 2
+gm_step_ig = 1
+gm_step_teardown = 3
+gm_step_vanity = -3
+gm_step_tourism = 0.25
+gm_step_culture = 1
+
+gm_step_local_crown = 0.10
+gm_step_local_republic = 0.10
+gm_step_local_revolution = 0.10
+gm_step_local_leader = 0.10
+gm_step_local_religious = 0.10
+gm_step_local_civic = 0.10
+gm_step_local_war_memorial = 0.05
+gm_step_local_artistic = 0.10
+gm_step_local_naturalist = -5000
+gm_step_local_scientific = 0.00025
+gm_step_local_industrial = 0.10
+gm_step_local_athletic = -0.10
+
+gm_step_national_leader = 25
+gm_step_national_religious = 0.05
+gm_step_national_war_memorial = -0.03
+gm_step_national_artistic = 0.05
+gm_step_national_scientific = 3
+gm_step_national_industrial = 0.05
+
+# ---- Money (§6.1, plan decision 7) -------------------------------------------
+# Country scope. What a flavour event's paid option costs, and what a
+# money-in option brings.
+gm_event_cost = {
+	value = yearly_gross_income
+	multiply = -0.02
+}
+
+gm_event_income = {
+	value = yearly_gross_income
+	multiply = 0.01
+}
+
+# ---- A monument's own numbers (state scope) --------------------------------
+# Its level, or 0.
+gm_state_grandeur = {
+	value = 0
+	if = {
+		limit = { has_building = building_grand_monument }
+		value = b:building_grand_monument.level
+	}
+}
+
+# The journal entry row's status: 0 none, 1 undedicated, 2 fits (or not yet
+# judged), 3 heritage, 4 contested. A code, so the .gui tests identity rather
+# than a threshold (gui gotcha #23). Later ifs override earlier ones.
+gm_status_code = {
+	value = 0
+	if = {
+		limit = { has_building = building_grand_monument }
+		value = 2
+	}
+	if = {
+		limit = {
+			has_building = building_grand_monument
+			gm_state_is_dedicated = no
+		}
+		value = 1
+	}
+	if = {
+		limit = { gm_state_is_heritage = yes }
+		value = 3
+	}
+	if = {
+		limit = { gm_state_is_contested = yes }
+		value = 4
+	}
+}
+
+# ---- National sums (§2.3, §2.4), country scope ---------------------------------
+# Standing grandeur: every monument that is not contested (prestige, cultural pull).
+gm_sum_standing = {
+	value = 0
+	every_scope_state = {
+		limit = { gm_state_counts_standing = yes }
+		add = gm_state_grandeur
+	}
+}
+
+# Regime grandeur: regime and ruler monuments that fit (legitimacy).
+gm_sum_regime = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			gm_state_status_fits = yes
+			OR = {
+				gm_state_kind_regime = yes
+				gm_state_kind_ruler = yes
+			}
+		}
+		add = gm_state_grandeur
+	}
+}
+
+# One per dedication with a national effect of its own.
+gm_sum_leader = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			gm_state_status_fits = yes
+			gm_state_has_pm = { PM = pm_monument_leader }
+		}
+		add = gm_state_grandeur
+	}
+}
+
+gm_sum_religious = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			gm_state_status_fits = yes
+			gm_state_has_pm = { PM = pm_monument_religious }
+		}
+		add = gm_state_grandeur
+	}
+}
+
+gm_sum_war_memorial = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			gm_state_status_fits = yes
+			gm_state_has_pm = { PM = pm_monument_war_memorial }
+		}
+		add = gm_state_grandeur
+	}
+}
+
+gm_sum_artistic = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			gm_state_status_fits = yes
+			gm_state_has_pm = { PM = pm_monument_artistic }
+		}
+		add = gm_state_grandeur
+	}
+}
+
+gm_sum_scientific = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			gm_state_status_fits = yes
+			gm_state_has_pm = { PM = pm_monument_scientific }
+		}
+		add = gm_state_grandeur
+	}
+}
+
+gm_sum_industrial = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			gm_state_status_fits = yes
+			gm_state_has_pm = { PM = pm_monument_industrial }
+		}
+		add = gm_state_grandeur
+	}
+}
+
+gm_sum_monuments = {
+	value = 0
+	every_scope_state = {
+		limit = { has_building = building_grand_monument }
+		add = 1
+	}
+}
+
+gm_sum_contested = {
+	value = 0
+	every_scope_state = {
+		limit = { gm_state_is_contested = yes }
+		add = 1
+	}
+}
+
+# ---- Displays (country scope; guarded: a save older than the system has none
+# of these variables until the first refresh) -----------------------------------
+gm_display_count = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_count_monuments }
+		value = var:gm_count_monuments
+	}
+}
+
+gm_display_contested = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_count_contested }
+		value = var:gm_count_contested
+	}
+}
+
+# ---- Contests (§4.3, §4.5) ----------------------------------------------------
+# State scope. What Rededicate costs: 5,000 a level.
+gm_state_rededicate_cost = {
+	value = gm_state_grandeur
+	multiply = 5000
+}
+
+# Country scope. How many monuments the open notice (monument_events.16) names.
+gm_notice_count = {
+	value = 0
+	if = {
+		limit = { has_variable_list = gm_notice_states }
+		every_in_list = {
+			variable = gm_notice_states
+			add = 1
+		}
+	}
+}
+
+# ---- Journal entry displays (country scope) ------------------------------------
+# Every read guarded: the widget renders from the month the entry activates,
+# possibly before the first refresh has written these (gui gotcha #14).
+gm_display_prestige = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_standing }
+		value = var:gm_s_standing
+		multiply = gm_step_prestige
+	}
+}
+
+gm_display_g_standing = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_standing }
+		value = var:gm_g_standing
+	}
+}
+
+gm_display_n_standing = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_standing }
+		value = var:gm_n_standing
+	}
+}
+
+gm_display_legitimacy = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_regime }
+		value = var:gm_s_regime
+		multiply = gm_step_legitimacy
+	}
+}
+
+gm_display_g_regime = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_regime }
+		value = var:gm_g_regime
+	}
+}
+
+gm_display_n_regime = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_regime }
+		value = var:gm_n_regime
+	}
+}
+
+gm_display_culture = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_culture }
+		value = var:gm_s_culture
+		multiply = gm_step_culture
+	}
+	max = 5
+}
+
+# 0 once gm_display_culture (above) is already at its max = 5 cap (gm_step_culture
+# is 1, so that is var:gm_s_culture >= 5): past the cap, a further step buys no more
+# cultural pull, so the JE's culture line drops its "next step at" clause when this
+# is 0 (deferred item, 2026-09-27).
+gm_display_n_culture = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_n_culture
+			var:gm_s_culture < 5
+		}
+		value = var:gm_n_culture
+	}
+}
+
+gm_display_leader = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_leader }
+		value = var:gm_s_leader
+		multiply = gm_step_national_leader
+	}
+}
+
+gm_display_g_leader = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_leader }
+		value = var:gm_g_leader
+	}
+}
+
+gm_display_n_leader = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_leader }
+		value = var:gm_n_leader
+	}
+}
+
+gm_display_religious = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_religious }
+		value = var:gm_s_religious
+		multiply = gm_step_national_religious
+	}
+}
+
+gm_display_g_religious = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_religious }
+		value = var:gm_g_religious
+	}
+}
+
+gm_display_n_religious = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_religious }
+		value = var:gm_n_religious
+	}
+}
+
+gm_display_war_memorial = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_war_memorial }
+		value = var:gm_s_war_memorial
+		multiply = gm_step_national_war_memorial
+	}
+}
+
+gm_display_g_war_memorial = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_war_memorial }
+		value = var:gm_g_war_memorial
+	}
+}
+
+gm_display_n_war_memorial = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_war_memorial }
+		value = var:gm_n_war_memorial
+	}
+}
+
+gm_display_artistic = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_artistic }
+		value = var:gm_s_artistic
+		multiply = gm_step_national_artistic
+	}
+}
+
+gm_display_g_artistic = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_artistic }
+		value = var:gm_g_artistic
+	}
+}
+
+gm_display_n_artistic = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_artistic }
+		value = var:gm_n_artistic
+	}
+}
+
+gm_display_scientific = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_scientific }
+		value = var:gm_s_scientific
+		multiply = gm_step_national_scientific
+	}
+}
+
+gm_display_g_scientific = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_scientific }
+		value = var:gm_g_scientific
+	}
+}
+
+gm_display_n_scientific = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_scientific }
+		value = var:gm_n_scientific
+	}
+}
+
+gm_display_industrial = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_industrial }
+		value = var:gm_s_industrial
+		multiply = gm_step_national_industrial
+	}
+}
+
+gm_display_g_industrial = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_industrial }
+		value = var:gm_g_industrial
+	}
+}
+
+gm_display_n_industrial = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_industrial }
+		value = var:gm_n_industrial
+	}
+}
+
+gm_display_ig_armed_forces = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_ig_armed_forces }
+		value = var:gm_s_ig_armed_forces
+		multiply = gm_step_ig
+	}
+}
+
+gm_display_ig_devout = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_ig_devout }
+		value = var:gm_s_ig_devout
+		multiply = gm_step_ig
+	}
+}
+
+gm_display_ig_industrialists = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_ig_industrialists }
+		value = var:gm_s_ig_industrialists
+		multiply = gm_step_ig
+	}
+}
+
+gm_display_ig_intelligentsia = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_ig_intelligentsia }
+		value = var:gm_s_ig_intelligentsia
+		multiply = gm_step_ig
+	}
+}
+
+gm_display_ig_landowners = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_ig_landowners }
+		value = var:gm_s_ig_landowners
+		multiply = gm_step_ig
+	}
+}
+
+gm_display_ig_petty_bourgeoisie = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_ig_petty_bourgeoisie }
+		value = var:gm_s_ig_petty_bourgeoisie
+		multiply = gm_step_ig
+	}
+}
+
+gm_display_ig_rural_folk = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_ig_rural_folk }
+		value = var:gm_s_ig_rural_folk
+		multiply = gm_step_ig
+	}
+}
+
+gm_display_ig_trade_unions = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_ig_trade_unions }
+		value = var:gm_s_ig_trade_unions
+		multiply = gm_step_ig
+	}
+}
+
+gm_display_teardown = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_teardown }
+		value = var:gm_s_teardown
+		multiply = gm_step_teardown
+	}
+}
+
+gm_display_vanity = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_vanity_ledger }
+		value = var:gm_vanity_ledger
+		multiply = gm_step_vanity
+	}
+}

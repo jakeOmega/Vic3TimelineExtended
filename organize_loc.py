@@ -525,6 +525,13 @@ def categorize_key(key, technology_keys):
 
     if key in technology_keys:
         return "TECHNOLOGIES"
+    # Grand Monuments (docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md).
+    # Every loc-bearing key the system adds carries the gm_ prefix: modifiers
+    # (some end in _add-like tokens), skin names ("gm_skin_faith_*", which would
+    # otherwise match "religion"-style rules), JE lines and tooltips. Tested
+    # before every substring rule so the whole family stays in one file.
+    if key.startswith("gm_"):
+        return "MISCELLANEOUS"
     if key.startswith("setting_") or key.startswith("rule_"):
         return "GAME_RULES"
     if key.startswith("EFFECTS_ON_ACCEPTANCE_"):
@@ -824,6 +831,9 @@ def organize_all(project_directory, dry_run=False):
         for key in used_keys:
             if key in all_loc:
                 found = re.findall(r"[\$@!](\w+)[\$@!#|]", all_loc[key])
+                # `$key$` / `$key|fmt$` splices. Event-style keys contain `.` and some
+                # notification keys `-`, which the \w+ pattern above cannot match.
+                found.extend(re.findall(r"\$([\w.\-]+)(?:\|[^$]*)?\$", all_loc[key]))
                 found.extend(
                     m[1] for m in re.findall(r"\[\w+\.Get(Named)?(\w+)", all_loc[key])
                 )

@@ -125,6 +125,37 @@ class OrganizeAllUnusedTests(unittest.TestCase):
             self.assertNotIn(f" {key}:", unused)
         self.assertIn(" widget_dead:", unused)
 
+    def test_dotted_splice_keeps_key_out_of_unused(self):
+        # `\w+` excludes `.` and `-`, so a splice of a key containing either,
+        # such as `$ev.1.common_tt$` or `$tech_e-x_name|V$`, used to die at
+        # the first `.`/`-` and never count as a reference.
+        loc = (
+            "l_english:\n"
+            " ev.1.a.tt:0 \"option text\\n\\n$ev.1.common_tt$\"\n"
+            " ev.1.common_tt:0 \"shared\"\n"
+            " widget_root:0 \"$tech_e-x_name|V$\"\n"
+            " tech_e-x_name:0 \"hyphenated\"\n"
+            " ev.1.dead:0 \"never referenced\"\n"
+        )
+        with tempfile.TemporaryDirectory() as td:
+            loc_dir = os.path.join(td, "localization", "english")
+            os.makedirs(loc_dir)
+            with open(os.path.join(loc_dir, "x_l_english.yml"), "w", encoding="utf-8-sig") as fh:
+                fh.write(loc)
+            os.makedirs(os.path.join(td, "events"))
+            with open(os.path.join(td, "events", "e.txt"), "w", encoding="utf-8-sig") as fh:
+                fh.write("ev.1 = { option = { custom_tooltip = ev.1.a.tt } }\n")
+            os.makedirs(os.path.join(td, "gui"))
+            with open(os.path.join(td, "gui", "w.gui"), "w", encoding="utf-8-sig") as fh:
+                fh.write('textbox = { text = "widget_root" }\n')
+            with contextlib.redirect_stdout(io.StringIO()):
+                organize_all(td)
+            with open(os.path.join(loc_dir, "te_unused_l_english.yml"), encoding="utf-8-sig") as fh:
+                unused = fh.read()
+        for key in ("ev.1.a.tt", "ev.1.common_tt", "widget_root", "tech_e-x_name"):
+            self.assertNotIn(f" {key}:", unused)
+        self.assertIn(" ev.1.dead:", unused)
+
 
 class CategorizeInstitutionKeysTests(unittest.TestCase):
     def test_breakdown_labels_file_with_their_institution(self):

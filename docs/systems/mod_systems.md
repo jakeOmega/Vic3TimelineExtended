@@ -1042,65 +1042,23 @@ The seven **megaprojects** use a two-phase construction pattern: a buildable con
 - **Construction progress:** each month, `occupancy / 12 × building_annual_<name>_progress`, and nothing while the site has a goods shortage. Speed PMs set the annual progress: paused 0, slow 0.25, medium 0.5, fast 1.0 (about 4 / 2 / 1 years at full occupancy).
 - **Custom modifier types:** `building_annual_*_progress` and `building_total_*_progress` (script_only) in `megastructure_progress_modifier_types.txt`.
 
-## Grand Monuments (Repeatable Construction Sink)
+## Grand Monuments (Political Instrument)
 
-`building_grand_monument` exists so construction never becomes worthless: a rich country that
-has finished building everything profitable can always raise another monument. Expensive to
-build (`construction_cost_grand_monument = 10000`), nearly free to run (only `pmg_maintenance`),
-infinitely repeatable (`expandable = yes`, no `has_max_level`), and deliberately a bad
-investment — roughly a 65-year payback at base tourism price.
+A government raises a Grand Monument to what it stands for, and the next government deals with its legacy. Design: `docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md`; plan: `docs/superpowers/plans/2026-09-27-grand-monument-rework.md`. **Add a dedication:** add its row to `DEDICATIONS` in `test_grand_monument_registry.py`; the failures are the checklist.
 
-- **Files:** `common/buildings/grand_monuments.txt`, `common/production_methods/grand_monument_pms.txt`,
-  `common/production_method_groups/grand_monument_pmgs.txt`, `events/monument_events.txt`,
-  `common/on_actions/monument_events_on_actions.txt`, `bg_grand_monuments` in
-  `common/building_groups/extra_building_groups.txt`.
-- **Self-scaling by design.** Output is a flat `goods_output_tourism_add = 1`/level. Because
-  `tourism` is a luxury good with steeply convex pop demand (`popneed_tourism` ramps 1 → 622
-  across wealth tiers in `common/buy_packages/00_buy_packages.txt`), that flat output is nearly
-  worthless in 1836 and meaningful late-game with no extra script.
-- **NOT in `bg_monuments`, and that is load-bearing.** `tourism_throughput_from_monuments`
-  (`common/script_values/tourism.txt`) and `cultural_pull_from_monuments`
-  (`common/script_values/cultural_hegemony_script_values.txt`) both iterate `bg_monuments` and
-  assume its members are unique one-off wonders. A repeatable member would grant a flat +25%
-  tourism throughput and unlimited cultural pull. `bg_grand_monuments` is a **top-level group
-  with no `parent_group`**, so `is_building_group = bg_monuments` does not match it. Grand
-  Monument cultural pull is added back separately and hard-capped at +5
-  (`cultural_pull_from_grand_monuments`).
-- **The dedication ratchet.** Eight flavour PMs (civic / religious / war memorial / artistic /
-  naturalist / scientific / industrial / athletic) plus `pm_monument_undedicated`, all in one
-  `pmg_monument_dedication` group. The choice is **one-way** — see the header comment in
-  `grand_monument_pms.txt` and the scripting-best-practices note on locking a PM choice.
-- **Dedication ceremony.** `on_building_built` → `monument_events.1` (hidden `building_event`,
-  hops to the monument's `state`) → `monument_events.2`, a **`state_event` with
-  `placement = ROOT`** so the ceremony is placed on the state that built the monument rather
-  than the capital. ROOT is that state, so `activate_production_method` targets it directly and
-  every country-level gate goes through `owner`. Its `immediate` saves `scope:monument_state`
-  purely so the loc can name the state. Recurring flavour events 3–10 are still country events,
-  dispatched from `monument_events_on_action` on `on_monthly_pulse_country`.
-- **Re-ask guard.** The ceremony's `trigger` requires a monument in the state still on
-  `pm_monument_undedicated`. `has_building` alone would re-open the question every time an
-  existing monument gained a level.
-- **Option gating: hide vs tilt.** An option `trigger` *hides* the row and is reserved for
-  dedications a country has no business offering — state atheism (religious), `law_industry_banned`
-  (industrial), and the four technology gates. Everything else stays visible and is steered by
-  `ai_chance` instead. The civic dedication is never hidden: one `pm_monument_civic` is offered
-  under three mutually exclusive wordings — "to the republic", "to the Crown", "to the nation" —
-  partitioned by `monument_government_is_republican` / `monument_government_is_crowned` in
-  `common/scripted_triggers/monument_triggers.txt`. The third skin is written as `NOT` of both,
-  so a governance principle added later still gets a civic dedication rather than losing the option.
-- **Option tooltips are hand-written.** Each option wraps its `activate_production_method` in a
-  `custom_tooltip` whose `monument_events.2.*.tt` string spells out that dedication's modifiers,
-  because there is no `GetProductionMethod('key')` global promote to render a PM's effects in loc
-  (see `docs/guides/event_creation_guide.md`). Modifier *names* come from `$modifier_key$`
-  substitution so they follow renames; the *numbers* are hand-kept in sync with
-  `grand_monument_pms.txt`, which carries a TOOLTIP MIRROR header comment saying so.
-- **Scaling split.** `state_*` and `building_*_throughput_add` are `level_scaled` (genuinely
-  local); `interest_group_*` and `country_*` are `unscaled` (flat per monument) because the
-  building is repeatable in every state and country-wide effects would otherwise stack without
-  bound. **Every dedication carries a level_scaled state-local modifier**, so growing a monument
-  always pays off whichever dedication it has — the unscaled national effects sit on top of
-  that, never instead of it. Employment is `unscaled` too — a monument needs a caretaker staff, not a workforce that
-  grows with its height.
+- **Files:** `common/buildings/grand_monuments.txt`, `common/production_methods/grand_monument_pms.txt`, `common/production_method_groups/grand_monument_pmgs.txt`, `common/scripted_triggers/monument_triggers.txt`, `common/scripted_effects/gm_effects.txt`, `common/script_values/gm_values.txt`, `common/static_modifiers/gm_modifiers.txt`, `common/journal_entries/je_grand_monuments.txt`, `gui/journal_entry_widgets/grand_monuments_widget.gui`, `common/scripted_guis/gm_sguis.txt`, `common/customizable_localization/gm_custom_loc.txt`, `common/on_actions/monument_events_on_actions.txt`, `events/monument_events.txt`, `events/te_debug_monuments_events.txt`; the shared `common/scripted_triggers/te_heritage_triggers.txt`; `grand_monuments_rule` in `extra_game_rules.txt`.
+- **Grandeur and the curve.** A monument's grandeur is its level (uncapped). Every effect grows in steps, each costing twice the grandeur of the last (`gm_curve_steps_f5` / `_f10`, eight terms; `gm_curve_next_*` for the JE's "next step"). Each static modifier carries **one step** and the multiplier is the step count; `gm_step_*` script values mirror them for loc, pinned equal by the registry test.
+- **PMs carry only staff.** The dedication PMs keep the self-reference ratchet (see the file header) and `unscaled` employment; no `country_modifiers`, `state_modifiers` or goods.
+- **Where modifiers live.** Local effects (`gm_local_*`) are state modifiers refreshed by `gm_state_monthly` from `on_monthly_pulse_state`. National effects (`gm_national_*`, `gm_ig_approval_<ig>`) sit on `je:je_grand_monuments`, applied by `gm_country_refresh` with ROOT = the country (monthly, or `monument_events.20` after `on_law_activated`, `on_new_ruler`, `on_state_owner_change` and a finished level, whose ROOTs are not the country). A variable backing a multiplier is zeroed, never removed.
+- **JE activation.** `is_shown_when_inactive` auto-activates the entry for new saves the moment a country owns a Grand Monument (gated on `grand_monuments_rule` too). Because a new auto-activating JE never reaches a save that predates it, `gm_country_refresh` also calls `add_journal_entry` explicitly whenever the rule is on, a monument is owned and the entry is missing, so old saves and any save where the entry lapsed pick it back up on the next monthly pulse.
+- **Kinds and fit.** Regime (Crown, Republic, Revolution), ruler (Leader), faith (Shrine), timeless (the rest). Fit is read live each month (`gm_state_message_fits`). Records live on the **state** (buildings hold no variables): `gm_raised_by` (a bound monument fits only while that country owns it), `gm_honoree` / `gm_honoree_ig`, `gm_faith`, `gm_skin`. `gm_state_first_sight` writes them for panel picks and old saves; after that a missing record reads as "does not fit".
+- **National totals** (`gm_compute_totals`): standing grandeur (every monument not contested: prestige, cultural pull), regime grandeur (fitting regime and ruler monuments: legitimacy), one per dedication with a national effect, and one signed total per IG (approvals minus oppositions, plus its ledger, minus contested monuments whose "new order" it is), each through the curve on its absolute value. `gm_zero_ledgers`: when the last monument is gone and every ledger is idle, the ledgers are zeroed before the pulse stops.
+- **Contests** (`gm_check_contests`, skipped while the country has `te_cw_role`): a bound monument that stops fitting records `gm_base_ig` / `gm_supporter_ig` flags and becomes contested; one that fits again is restored. `gm_state_changed_hands` contests a conquered regime or ruler monument and makes a conquered shrine heritage; a monument already contested when its state changes hands is contested afresh for the new owner. The winner of a civil war adopts the loser's monuments (`gm_repair_after_civil_war`, in `te_civil_war_on_won`). Choices: `gm_state_tear_down` / `_rededicate` (rebuilt at half level through the shared ladder, which runs to 200) / `_preserve`; each writes decaying ledgers (`gm_teardown_ledger`, `gm_ig_ledger_<ig>`), so nothing stacks. Players get `monument_events.16` (and `.17` per monument); the AI decides monthly. A monument demolished from the building panel while contested is recorded as torn down by its state pulse (`gm_state_record_teardown`, which also sets `gm_active`), and the JE's `invalid` also waits until no state still carries `gm_seen`, so that teardown is applied before the entry can go.
+- **Skins** (`gm_skin`): faith skins by state religion, heritage skins by the language-reform revival partition (`te_heritage_<language>`, also called by `extra_law_events.25`), chosen in `monument_events.11`; `gm_inscription` names a revived language. The choice event is offered to players only; the AI keeps the most specific skin.
+- **Vanity backlash:** `monument_events.1` (a level finished, ROOT = the building) calls `gm_state_vanity_backlash` in hard times (`gm_country_hard_times`): radicals, and the linear `gm_vanity_ledger`.
+- **Anniversaries:** `.3`–`.10`, `.12`–`.15`, dispatched by `monument_events_on_action` for a fitting monument of level 3 or more; every option is positive, money the only cost.
+- **NOT in `bg_monuments`, and that is load-bearing.** `tourism_throughput_from_monuments` and `cultural_pull_from_monuments` iterate `bg_monuments` and assume one-off wonders. `bg_grand_monuments` is a top-level group with no `parent_group`; Grand Monument cultural pull is `cultural_pull_from_grand_monuments` (standing grandeur through the curve, at most +5).
+- **Debug:** `event te_debug_monuments.1`; `TE_MONUMENTS:` lines each month for players.
 
 ## Temporary Amendments (Sunset Clauses)
 

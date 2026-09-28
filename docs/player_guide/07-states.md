@@ -197,7 +197,8 @@ toward its cap:
 | Monuments | +10% for a Skyscraper, +25% for each monument | none |
 
 The "All modifiers" line for throughput also carries the Promote Tourism decree
-(+50%), a Grand Monument (+1% per level) and bonuses from events.
+(+50%), a Grand Monument (+25% for each step of its grandeur, see [Grand
+monuments](02-timeline.md#grand-monuments)) and bonuses from events.
 
 ## World city rankings
 

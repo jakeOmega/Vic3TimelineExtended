@@ -15,24 +15,27 @@ on_building_built = {
 on_monthly_pulse_country = {
 	on_actions = {
 		monument_events_on_action
+		gm_country_on_action
 	}
 }
 
 # Recurring monument flavour. Mirrors wonder_events_on_actions.txt: a large
-# do-nothing weight with each entry gated on actually owning a monument of that
-# dedication. Each event re-checks its own trigger, so the gates here are just
-# to keep the roll cheap.
+# do-nothing weight with each entry gated on a monument of that dedication
+# that fits and is a real landmark (level 3 or more); one event per
+# dedication. Each event re-checks its own trigger, so the gates here are
+# just to keep the roll cheap.
 monument_events_on_action = {
+	trigger = {
+		gm_system_enabled = yes
+	}
 	effect = {
 		random_list = {
 			800 = { } # overwhelmingly nothing
 
 			3 = {
 				trigger = {
-					any_scope_building = {
-						is_building_type = building_grand_monument
-						has_active_production_method = pm_monument_civic
-						level >= 3
+					any_scope_state = {
+						gm_state_holds_anniversary = { PM = pm_monument_civic }
 					}
 				}
 				trigger_event = { id = monument_events.3 }
@@ -40,10 +43,8 @@ monument_events_on_action = {
 
 			3 = {
 				trigger = {
-					any_scope_building = {
-						is_building_type = building_grand_monument
-						has_active_production_method = pm_monument_religious
-						level >= 3
+					any_scope_state = {
+						gm_state_holds_anniversary = { PM = pm_monument_religious }
 					}
 				}
 				trigger_event = { id = monument_events.4 }
@@ -51,10 +52,8 @@ monument_events_on_action = {
 
 			3 = {
 				trigger = {
-					any_scope_building = {
-						is_building_type = building_grand_monument
-						has_active_production_method = pm_monument_war_memorial
-						level >= 3
+					any_scope_state = {
+						gm_state_holds_anniversary = { PM = pm_monument_war_memorial }
 					}
 				}
 				trigger_event = { id = monument_events.5 }
@@ -62,10 +61,8 @@ monument_events_on_action = {
 
 			3 = {
 				trigger = {
-					any_scope_building = {
-						is_building_type = building_grand_monument
-						has_active_production_method = pm_monument_artistic
-						level >= 3
+					any_scope_state = {
+						gm_state_holds_anniversary = { PM = pm_monument_artistic }
 					}
 				}
 				trigger_event = { id = monument_events.6 }
@@ -73,10 +70,8 @@ monument_events_on_action = {
 
 			3 = {
 				trigger = {
-					any_scope_building = {
-						is_building_type = building_grand_monument
-						has_active_production_method = pm_monument_naturalist
-						level >= 3
+					any_scope_state = {
+						gm_state_holds_anniversary = { PM = pm_monument_naturalist }
 					}
 				}
 				trigger_event = { id = monument_events.7 }
@@ -84,10 +79,8 @@ monument_events_on_action = {
 
 			3 = {
 				trigger = {
-					any_scope_building = {
-						is_building_type = building_grand_monument
-						has_active_production_method = pm_monument_scientific
-						level >= 3
+					any_scope_state = {
+						gm_state_holds_anniversary = { PM = pm_monument_scientific }
 					}
 				}
 				trigger_event = { id = monument_events.8 }
@@ -95,10 +88,8 @@ monument_events_on_action = {
 
 			3 = {
 				trigger = {
-					any_scope_building = {
-						is_building_type = building_grand_monument
-						has_active_production_method = pm_monument_industrial
-						level >= 3
+					any_scope_state = {
+						gm_state_holds_anniversary = { PM = pm_monument_industrial }
 					}
 				}
 				trigger_event = { id = monument_events.9 }
@@ -106,15 +97,166 @@ monument_events_on_action = {
 
 			3 = {
 				trigger = {
-					any_scope_building = {
-						is_building_type = building_grand_monument
-						has_active_production_method = pm_monument_athletic
-						level >= 3
+					any_scope_state = {
+						gm_state_holds_anniversary = { PM = pm_monument_athletic }
 					}
 				}
 				trigger_event = { id = monument_events.10 }
 			}
 
+			3 = {
+				trigger = {
+					any_scope_state = {
+						gm_state_holds_anniversary = { PM = pm_monument_crown }
+					}
+				}
+				trigger_event = { id = monument_events.12 }
+			}
+
+			3 = {
+				trigger = {
+					any_scope_state = {
+						gm_state_holds_anniversary = { PM = pm_monument_republic }
+					}
+				}
+				trigger_event = { id = monument_events.13 }
+			}
+
+			3 = {
+				trigger = {
+					any_scope_state = {
+						gm_state_holds_anniversary = { PM = pm_monument_revolution }
+					}
+				}
+				trigger_event = { id = monument_events.14 }
+			}
+
+			3 = {
+				trigger = {
+					any_scope_state = {
+						gm_state_holds_anniversary = { PM = pm_monument_leader }
+					}
+				}
+				trigger_event = { id = monument_events.15 }
+			}
 		}
+	}
+}
+
+# ============================================================================
+# The local pulse (spec §2.5)
+# ============================================================================
+# State scope (ROOT = the state). A state modifier's multiplier resolves
+# against ROOT, so each monument's local modifiers are refreshed here and never
+# from the country pulse. Runs for a state with a monument, or one whose
+# monument has just gone (records or a multiplier left to clear).
+on_monthly_pulse_state = {
+	on_actions = {
+		gm_state_on_action
+	}
+}
+
+gm_state_on_action = {
+	trigger = {
+		gm_system_enabled = yes
+	}
+	effect = {
+		if = {
+			limit = {
+				OR = {
+					has_building = building_grand_monument
+					has_variable = gm_seen
+					AND = {
+						has_variable = gm_local_steps
+						var:gm_local_steps > 0
+					}
+				}
+			}
+			gm_state_monthly = yes
+		}
+	}
+}
+
+# ============================================================================
+# The national pulse (spec §2.4), and the hooks that re-read "fits" at once
+# ============================================================================
+gm_country_on_action = {
+	trigger = {
+		gm_system_enabled = yes
+	}
+	effect = {
+		if = {
+			limit = {
+				OR = {
+					any_scope_state = { has_building = building_grand_monument }
+					has_variable = gm_active
+				}
+			}
+			gm_country_monthly = yes
+		}
+	}
+}
+
+# ROOT = the law; its owner is the country. A new law can topple a crown, a
+# republic or a revolution: refresh through the hidden country event.
+on_law_activated = {
+	on_actions = {
+		gm_law_activated_on_action
+	}
+}
+
+gm_law_activated_on_action = {
+	trigger = {
+		gm_system_enabled = yes
+	}
+	effect = {
+		owner = {
+			if = {
+				limit = {
+					any_scope_state = { has_building = building_grand_monument }
+				}
+				trigger_event = { id = monument_events.20 }
+			}
+		}
+	}
+}
+
+# ROOT = the new ruler (a character). The fall of a leader.
+on_new_ruler = {
+	on_actions = {
+		gm_new_ruler_on_action
+	}
+}
+
+gm_new_ruler_on_action = {
+	trigger = {
+		gm_system_enabled = yes
+	}
+	effect = {
+		owner ?= {
+			if = {
+				limit = {
+					any_scope_state = { has_building = building_grand_monument }
+				}
+				trigger_event = { id = monument_events.20 }
+			}
+		}
+	}
+}
+
+# ROOT = the state that changed hands (conquest, cession, release, annexation).
+on_state_owner_change = {
+	on_actions = {
+		gm_state_owner_change_on_action
+	}
+}
+
+gm_state_owner_change_on_action = {
+	trigger = {
+		gm_system_enabled = yes
+		has_building = building_grand_monument
+	}
+	effect = {
+		gm_state_changed_hands = yes
 	}
 }

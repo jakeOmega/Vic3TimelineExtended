@@ -1,0 +1,116 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — scripted GUIs (spec §6)
+# ============================================================================
+# gui/journal_entry_widgets/grand_monuments_widget.gui. The three row buttons
+# pass the row's state as the saved scope gm_state; which action is chosen by
+# which scripted GUI the button points at (the covert rows' shape). A State
+# object in saved_scopes has no vanilla precedent (gui gotcha #22), so every
+# is_valid fails closed: the scope exists, we own it, it is contested.
+# monument_events.17 is the proven path to the same three choices.
+
+gm_tear_down_sgui = {
+	scope = country
+	saved_scopes = { gm_state }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		exists = scope:gm_state
+		scope:gm_state = {
+			owner = root
+			custom_tooltip = {
+				text = gm_sgui_contested_tt
+				gm_state_is_contested = yes
+			}
+		}
+	}
+
+	effect = {
+		scope:gm_state = { gm_state_choose_tear_down = yes }
+		hidden_effect = { gm_country_refresh = yes }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+gm_rededicate_sgui = {
+	scope = country
+	saved_scopes = { gm_state }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		exists = scope:gm_state
+		scope:gm_state = {
+			owner = root
+			custom_tooltip = {
+				text = gm_sgui_contested_tt
+				gm_state_is_contested = yes
+			}
+		}
+	}
+
+	effect = {
+		scope:gm_state = { gm_state_choose_rededicate = yes }
+		hidden_effect = { gm_country_refresh = yes }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+gm_preserve_sgui = {
+	scope = country
+	saved_scopes = { gm_state }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		exists = scope:gm_state
+		scope:gm_state = {
+			owner = root
+			custom_tooltip = {
+				text = gm_sgui_contested_tt
+				gm_state_is_contested = yes
+			}
+		}
+	}
+
+	effect = {
+		scope:gm_state = { gm_state_choose_preserve = yes }
+		hidden_effect = { gm_country_refresh = yes }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+# YES/NO: would a level finished now cause vanity backlash (§5)? Read-only,
+# scope-free (gotcha #22): the warning line's visibility.
+gm_hard_times_sgui = {
+	scope = country
+
+	is_shown = {
+		gm_country_hard_times = yes
+	}
+
+	is_valid = {
+		always = no
+	}
+
+	effect = { }
+
+	ai_is_valid = {
+		always = no
+	}
+}

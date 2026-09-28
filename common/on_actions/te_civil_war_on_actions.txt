@@ -114,6 +114,7 @@ te_civil_war_on_won = {
 		cr_repair_after_civil_war = yes			# #463
 		sr_repair_after_civil_war = yes			# #464
 		decol_repair_after_civil_war = yes		# PR #508
+		gm_repair_after_civil_war = yes			# Grand Monuments: adopt the loser's monuments
 		te_civil_war_clear = yes
 	}
 }

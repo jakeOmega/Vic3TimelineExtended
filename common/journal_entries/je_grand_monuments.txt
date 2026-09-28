@@ -1,0 +1,75 @@
+﻿# ============================================================================
+# The Monuments journal entry (spec §6)
+# ============================================================================
+# Activates when the country owns a Grand Monument; goes when it owns none, no
+# ledger is still fading (plan decision 3), and no state still carries
+# gm_seen (its state pulse has not yet recorded the teardown of a monument
+# that is already gone). Comes back with the next monument. Holds the
+# national modifiers (gm_apply_national_modifiers), which go with it. No
+# `immediate`: nothing here a revolution's winner should lose. The widgets
+# (Task 9) show the national lines and one row per monument.
+#
+# Activates two ways: is_shown_when_inactive below auto-activates it in new
+# saves the moment a country owns a Grand Monument (gated on the rule too,
+# per spec §7's "Disabled -> no JE"), and gm_country_refresh explicitly calls
+# add_journal_entry for saves that predate this entry's introduction, where
+# is_shown_when_inactive alone never reaches an already-running save
+# (scripting_best_practices.md § "JE Auto-Activation Requires BOTH").
+
+je_grand_monuments = {
+	icon = "gfx/interface/icons/building_icons/building_government_administration.dds"
+	group = je_group_internal_affairs
+
+	widget = {
+		gui = "gui/journal_entry_widgets/grand_monuments_widget.gui"
+		name = "widget_je_gm_national"
+		container = "custom_widget_container_1"
+	}
+
+	widget = {
+		gui = "gui/journal_entry_widgets/grand_monuments_widget.gui"
+		name = "widget_je_gm_monuments"
+		container = "custom_widget_container_2"
+	}
+
+	is_shown_when_inactive = {
+		gm_system_enabled = yes
+		any_scope_state = { has_building = building_grand_monument }
+	}
+
+	possible = {
+		gm_system_enabled = yes
+		any_scope_state = { has_building = building_grand_monument }
+	}
+
+	invalid = {
+		OR = {
+			gm_system_enabled = no
+			AND = {
+				NOT = {
+					any_scope_state = { has_building = building_grand_monument }
+				}
+				gm_ledgers_idle = yes
+				NOT = { any_scope_state = { has_variable = gm_seen } }
+			}
+		}
+	}
+
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_grand_monuments_status_contested
+				trigger = {
+					any_scope_state = { gm_state_is_contested = yes }
+				}
+			}
+			triggered_desc = {
+				desc = je_grand_monuments_status
+				trigger = { always = yes }
+			}
+		}
+	}
+
+	weight = 400
+	should_update_on_player_command = yes
+}

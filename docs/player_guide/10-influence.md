@@ -52,7 +52,7 @@ multiplier. The breakdown section lists each one for your country.
 | Prestige | Your prestige divided by 5, capped at your percentage share of world prestige. Recognized countries only. |
 | Standard of Living | Your average standard of living minus the world average (−5 to +20): in full for great powers, half for major powers, a quarter for minor powers, nothing below. |
 | Tech Leadership | +2 each time you research a technology no other country has yet, up to 30, fading by a tenth at each recount. |
-| Monuments | +3 per monument: the mod's wonders, the base game's monuments and the Space Program (power bloc statues don't count). Up to +5 more from grand monuments (+1 per 20 levels). |
+| Monuments | +3 per monument: the mod's wonders, the base game's monuments and the Space Program (power bloc statues don't count). Up to +5 more from grand monuments: +1 for each step of their combined grandeur, in steps of 10, counting only monuments that are not contested. |
 | Megaprojects | +3 for each of the seven megaproject types you have completed. |
 | Other Modifiers | Flat pull from program funding, events, tiers IV and V of the Education power bloc principle and the Cultural Exchange Program treaty article. |
 | Infamy | −0.1 per point of infamy. |

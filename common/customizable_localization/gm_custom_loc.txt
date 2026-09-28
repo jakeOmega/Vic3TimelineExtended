@@ -1,0 +1,517 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — customizable localization (spec §1.1, §4, §6)
+# ============================================================================
+# State scope: the Grand Monument in that state. First valid entry wins.
+
+gm_dedication_name = {
+	type = state
+	random_valid = no
+
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_crown } }
+		localization_key = pm_monument_crown
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_republic } }
+		localization_key = pm_monument_republic
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_revolution } }
+		localization_key = pm_monument_revolution
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_leader } }
+		localization_key = pm_monument_leader
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_religious } }
+		localization_key = pm_monument_religious
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_civic } }
+		localization_key = pm_monument_civic
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_war_memorial } }
+		localization_key = pm_monument_war_memorial
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_artistic } }
+		localization_key = pm_monument_artistic
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_naturalist } }
+		localization_key = pm_monument_naturalist
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_scientific } }
+		localization_key = pm_monument_scientific
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_industrial } }
+		localization_key = pm_monument_industrial
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_athletic } }
+		localization_key = pm_monument_athletic
+	}
+	text = {
+		localization_key = pm_monument_undedicated
+	}
+}
+
+gm_status_name = {
+	type = state
+	random_valid = no
+
+	text = {
+		trigger = { gm_state_is_contested = yes }
+		localization_key = gm_status_contested
+	}
+	text = {
+		trigger = { gm_state_is_heritage = yes }
+		localization_key = gm_status_heritage
+	}
+	text = {
+		trigger = { gm_state_is_dedicated = no }
+		localization_key = gm_status_undedicated
+	}
+	text = {
+		trigger = { gm_state_message_fits = no }
+		localization_key = gm_status_unsettled
+	}
+	text = {
+		localization_key = gm_status_fits
+	}
+}
+
+gm_base_ig_name = {
+	type = state
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_base_ig var:gm_base_ig = flag:armed_forces }
+		localization_key = ig_armed_forces
+	}
+	text = {
+		trigger = { has_variable = gm_base_ig var:gm_base_ig = flag:devout }
+		localization_key = ig_devout
+	}
+	text = {
+		trigger = { has_variable = gm_base_ig var:gm_base_ig = flag:industrialists }
+		localization_key = ig_industrialists
+	}
+	text = {
+		trigger = { has_variable = gm_base_ig var:gm_base_ig = flag:intelligentsia }
+		localization_key = ig_intelligentsia
+	}
+	text = {
+		trigger = { has_variable = gm_base_ig var:gm_base_ig = flag:landowners }
+		localization_key = ig_landowners
+	}
+	text = {
+		trigger = { has_variable = gm_base_ig var:gm_base_ig = flag:petty_bourgeoisie }
+		localization_key = ig_petty_bourgeoisie
+	}
+	text = {
+		trigger = { has_variable = gm_base_ig var:gm_base_ig = flag:rural_folk }
+		localization_key = ig_rural_folk
+	}
+	text = {
+		trigger = { has_variable = gm_base_ig var:gm_base_ig = flag:trade_unions }
+		localization_key = ig_trade_unions
+	}
+	text = {
+		localization_key = gm_ig_nobody
+	}
+}
+
+gm_supporter_ig_name = {
+	type = state
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_supporter_ig var:gm_supporter_ig = flag:armed_forces }
+		localization_key = ig_armed_forces
+	}
+	text = {
+		trigger = { has_variable = gm_supporter_ig var:gm_supporter_ig = flag:devout }
+		localization_key = ig_devout
+	}
+	text = {
+		trigger = { has_variable = gm_supporter_ig var:gm_supporter_ig = flag:industrialists }
+		localization_key = ig_industrialists
+	}
+	text = {
+		trigger = { has_variable = gm_supporter_ig var:gm_supporter_ig = flag:intelligentsia }
+		localization_key = ig_intelligentsia
+	}
+	text = {
+		trigger = { has_variable = gm_supporter_ig var:gm_supporter_ig = flag:landowners }
+		localization_key = ig_landowners
+	}
+	text = {
+		trigger = { has_variable = gm_supporter_ig var:gm_supporter_ig = flag:petty_bourgeoisie }
+		localization_key = ig_petty_bourgeoisie
+	}
+	text = {
+		trigger = { has_variable = gm_supporter_ig var:gm_supporter_ig = flag:rural_folk }
+		localization_key = ig_rural_folk
+	}
+	text = {
+		trigger = { has_variable = gm_supporter_ig var:gm_supporter_ig = flag:trade_unions }
+		localization_key = ig_trade_unions
+	}
+	text = {
+		localization_key = gm_ig_nobody
+	}
+}
+
+# The form the monument takes (§1.1), from the state variable gm_skin.
+gm_skin_name = {
+	type = state
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:faith_catholic }
+		localization_key = gm_skin_faith_catholic
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:faith_protestant }
+		localization_key = gm_skin_faith_protestant
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:faith_orthodox }
+		localization_key = gm_skin_faith_orthodox
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:faith_oriental_orthodox }
+		localization_key = gm_skin_faith_oriental_orthodox
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:faith_sunni }
+		localization_key = gm_skin_faith_sunni
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:faith_shiite }
+		localization_key = gm_skin_faith_shiite
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:faith_ibadi }
+		localization_key = gm_skin_faith_ibadi
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:faith_jewish }
+		localization_key = gm_skin_faith_jewish
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:faith_mahayana }
+		localization_key = gm_skin_faith_mahayana
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:faith_gelugpa }
+		localization_key = gm_skin_faith_gelugpa
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:faith_theravada }
+		localization_key = gm_skin_faith_theravada
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:faith_confucian }
+		localization_key = gm_skin_faith_confucian
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:faith_hindu }
+		localization_key = gm_skin_faith_hindu
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:faith_shinto }
+		localization_key = gm_skin_faith_shinto
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:faith_sikh }
+		localization_key = gm_skin_faith_sikh
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:faith_animist }
+		localization_key = gm_skin_faith_animist
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:heritage_latin }
+		localization_key = gm_skin_heritage_latin
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:heritage_hebrew }
+		localization_key = gm_skin_heritage_hebrew
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:heritage_sanskrit }
+		localization_key = gm_skin_heritage_sanskrit
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:heritage_geez }
+		localization_key = gm_skin_heritage_geez
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:heritage_slavonic }
+		localization_key = gm_skin_heritage_slavonic
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:heritage_avestan }
+		localization_key = gm_skin_heritage_avestan
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:heritage_arabic }
+		localization_key = gm_skin_heritage_arabic
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:heritage_chinese }
+		localization_key = gm_skin_heritage_chinese
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:heritage_greek }
+		localization_key = gm_skin_heritage_greek
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:heritage_irish }
+		localization_key = gm_skin_heritage_irish
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:heritage_nahuatl }
+		localization_key = gm_skin_heritage_nahuatl
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:heritage_norse }
+		localization_key = gm_skin_heritage_norse
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:heritage_gothic }
+		localization_key = gm_skin_heritage_gothic
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:heritage_mayan }
+		localization_key = gm_skin_heritage_mayan
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:heritage_prussian }
+		localization_key = gm_skin_heritage_prussian
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:heritage_aramaic }
+		localization_key = gm_skin_heritage_aramaic
+	}
+	text = {
+		localization_key = gm_skin_generic
+	}
+}
+
+# One line when the monument's skin draws on a language the country has
+# revived under language reform; empty otherwise.
+gm_inscription = {
+	type = state
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = gm_skin
+			var:gm_skin = flag:heritage_latin
+			owner = { gm_country_has_revived = { LANG = latin } }
+		}
+		localization_key = gm_inscription_latin
+	}
+	text = {
+		trigger = {
+			has_variable = gm_skin
+			var:gm_skin = flag:heritage_hebrew
+			owner = { gm_country_has_revived = { LANG = hebrew } }
+		}
+		localization_key = gm_inscription_hebrew
+	}
+	text = {
+		trigger = {
+			has_variable = gm_skin
+			var:gm_skin = flag:heritage_sanskrit
+			owner = { gm_country_has_revived = { LANG = sanskrit } }
+		}
+		localization_key = gm_inscription_sanskrit
+	}
+	text = {
+		trigger = {
+			has_variable = gm_skin
+			var:gm_skin = flag:heritage_geez
+			owner = { gm_country_has_revived = { LANG = geez } }
+		}
+		localization_key = gm_inscription_geez
+	}
+	text = {
+		trigger = {
+			has_variable = gm_skin
+			var:gm_skin = flag:heritage_slavonic
+			owner = { gm_country_has_revived = { LANG = slavonic } }
+		}
+		localization_key = gm_inscription_slavonic
+	}
+	text = {
+		trigger = {
+			has_variable = gm_skin
+			var:gm_skin = flag:heritage_avestan
+			owner = { gm_country_has_revived = { LANG = avestan } }
+		}
+		localization_key = gm_inscription_avestan
+	}
+	text = {
+		trigger = {
+			has_variable = gm_skin
+			var:gm_skin = flag:heritage_arabic
+			owner = { gm_country_has_revived = { LANG = arabic } }
+		}
+		localization_key = gm_inscription_arabic
+	}
+	text = {
+		trigger = {
+			has_variable = gm_skin
+			var:gm_skin = flag:heritage_chinese
+			owner = { gm_country_has_revived = { LANG = chinese } }
+		}
+		localization_key = gm_inscription_chinese
+	}
+	text = {
+		trigger = {
+			has_variable = gm_skin
+			var:gm_skin = flag:heritage_greek
+			owner = { gm_country_has_revived = { LANG = greek } }
+		}
+		localization_key = gm_inscription_greek
+	}
+	text = {
+		trigger = {
+			has_variable = gm_skin
+			var:gm_skin = flag:heritage_irish
+			owner = { gm_country_has_revived = { LANG = irish } }
+		}
+		localization_key = gm_inscription_irish
+	}
+	text = {
+		trigger = {
+			has_variable = gm_skin
+			var:gm_skin = flag:heritage_nahuatl
+			owner = { gm_country_has_revived = { LANG = nahuatl } }
+		}
+		localization_key = gm_inscription_nahuatl
+	}
+	text = {
+		trigger = {
+			has_variable = gm_skin
+			var:gm_skin = flag:heritage_norse
+			owner = { gm_country_has_revived = { LANG = norse } }
+		}
+		localization_key = gm_inscription_norse
+	}
+	text = {
+		trigger = {
+			has_variable = gm_skin
+			var:gm_skin = flag:heritage_gothic
+			owner = { gm_country_has_revived = { LANG = gothic } }
+		}
+		localization_key = gm_inscription_gothic
+	}
+	text = {
+		trigger = {
+			has_variable = gm_skin
+			var:gm_skin = flag:heritage_mayan
+			owner = { gm_country_has_revived = { LANG = mayan } }
+		}
+		localization_key = gm_inscription_mayan
+	}
+	text = {
+		trigger = {
+			has_variable = gm_skin
+			var:gm_skin = flag:heritage_prussian
+			owner = { gm_country_has_revived = { LANG = prussian } }
+		}
+		localization_key = gm_inscription_prussian
+	}
+	text = {
+		trigger = {
+			has_variable = gm_skin
+			var:gm_skin = flag:heritage_aramaic
+			owner = { gm_country_has_revived = { LANG = aramaic } }
+		}
+		localization_key = gm_inscription_aramaic
+	}
+	text = {
+		trigger = {
+			has_variable = gm_skin
+			var:gm_skin = flag:faith_catholic
+			owner = { gm_country_has_revived = { LANG = latin } }
+		}
+		localization_key = gm_inscription_latin
+	}
+	text = {
+		trigger = {
+			has_variable = gm_skin
+			var:gm_skin = flag:faith_jewish
+			owner = { gm_country_has_revived = { LANG = hebrew } }
+		}
+		localization_key = gm_inscription_hebrew
+	}
+	text = {
+		trigger = {
+			has_variable = gm_skin
+			var:gm_skin = flag:faith_hindu
+			owner = { gm_country_has_revived = { LANG = sanskrit } }
+		}
+		localization_key = gm_inscription_sanskrit
+	}
+	text = {
+		trigger = {
+			has_variable = gm_skin
+			var:gm_skin = flag:faith_theravada
+			owner = { gm_country_has_revived = { LANG = pali } }
+		}
+		localization_key = gm_inscription_pali
+	}
+	text = {
+		trigger = {
+			has_variable = gm_skin
+			var:gm_skin = flag:faith_oriental_orthodox
+			owner = { gm_country_has_revived = { LANG = coptic } }
+		}
+		localization_key = gm_inscription_coptic
+	}
+	text = {
+		trigger = {
+			has_variable = gm_skin
+			var:gm_skin = flag:faith_sunni
+			owner = { gm_country_has_revived = { LANG = arabic } }
+		}
+		localization_key = gm_inscription_arabic
+	}
+	text = {
+		trigger = {
+			has_variable = gm_skin
+			var:gm_skin = flag:faith_shiite
+			owner = { gm_country_has_revived = { LANG = arabic } }
+		}
+		localization_key = gm_inscription_arabic
+	}
+	text = {
+		trigger = {
+			has_variable = gm_skin
+			var:gm_skin = flag:faith_ibadi
+			owner = { gm_country_has_revived = { LANG = arabic } }
+		}
+		localization_key = gm_inscription_arabic
+	}
+	text = {
+		trigger = {
+			has_variable = gm_skin
+			var:gm_skin = flag:faith_orthodox
+			owner = { gm_country_has_revived = { LANG = slavonic } }
+		}
+		localization_key = gm_inscription_slavonic
+	}
+	text = {
+		localization_key = gm_inscription_none
+	}
+}

@@ -55,6 +55,8 @@
  notification_former_colony_ties_welcomed_notice_desc:0 "[SCOPE.sCountry('ties_former_overlord').GetName] has welcomed our proposal for closer ties."
  notification_former_colony_ties_welcomed_notice_name:0 "Closer Ties Welcomed"
  notification_former_colony_ties_welcomed_notice_tooltip:0 "#header $notification_former_colony_ties_welcomed_notice_name$#!\n$notification_former_colony_ties_welcomed_notice_desc$"
+ notification_gm_vanity_backlash_notice_desc:0 "A new level of a Grand Monument opened while the country was in default, famine or recession. The state's people resent it, and the government's legitimacy suffers for about two years."
+ notification_gm_vanity_backlash_notice_name:0 "A Palace amid Hardship"
  notification_gp_condemnation_reforms_announced_notice_desc:0 "[SCOPE.sCountry('decol_colonial_power').GetName] has acknowledged our criticism of its colonial rule and announced reforms."
  notification_gp_condemnation_reforms_announced_notice_name:0 "Colonial Reforms Announced"
  notification_gp_condemnation_reforms_announced_notice_tooltip:0 "#header $notification_gp_condemnation_reforms_announced_notice_name$#!\n$notification_gp_condemnation_reforms_announced_notice_desc$"

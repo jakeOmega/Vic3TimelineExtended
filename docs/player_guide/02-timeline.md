@@ -4,12 +4,12 @@ The base game ends in 1936 after five eras of technology. This mod moves the end
 date to 2136 and adds seven more eras, numbered 6 to 12, with 171 new
 technologies. The base game has 179, so the technology tree roughly doubles. The
 new eras bring twelve new goods, dozens of new buildings and production methods,
-a flagship building for every company, 37 wonders, seven megaprojects and a
-repeatable Grand Monument. None of this is behind a game rule: the eras and
-everything they unlock are always in the game, even when you switch off the
-systems that some of their technologies start. The one exception is the
-International Space Station wonder, which needs a Moon landing from the space
-race.
+a flagship building for every company, 37 wonders and seven megaprojects. None
+of this is behind a game rule: the eras and everything they unlock are always
+in the game, even when you switch off the systems that some of their
+technologies start. The one exception is the International Space Station
+wonder, which needs a Moon landing from the space race. The repeatable [Grand
+Monument](#grand-monuments) has a game rule of its own.
 
 ## Eras six to twelve
 
@@ -156,7 +156,7 @@ renames twelve base-game goods to fit a longer timeline.
 | Launch Capacity | Industrial | Aerospace Industry (with rocket production methods), Space Elevator, Antimatter Engine | Space programs, satellites, orbital production methods and megaprojects |
 | Advanced Materials | Industrial | Advanced Material Fabricator, Nanofabrication Center | Late-game production methods and megaproject construction; base price 4,000, the most expensive good in the game |
 | Construction Services | Industrial | Construction Sector | The construction market ([Economy and construction](03-economy.md)) |
-| Tourism | Luxury | Tourism Industry, National Park, Grand Monument and others | The pops' Tourism need |
+| Tourism | Luxury | Tourism Industry, National Park and others | The pops' Tourism need |
 | Tech-Critical Metals | Industrial | Nickel and Cobalt, Lithium, Rare Earth Metals and Platinum Group Metals Mines; also the Deep-Sea Mine and Extraplanetary Base | Electronics, robotics, modern power plants and other high-tech production methods |
 | Motor Ships | Industrial | Shipyards, from Advanced Submarine Technology | Later production methods for ports, fishing wharves and whaling stations |
 | Magnetic Drive Ships | Industrial | Shipyards, from Modern Material Science | The last tier of the same production methods |
@@ -377,44 +377,125 @@ war](12-military.md) and [Nuclear weapons](13-nuclear.md).
 ## Grand monuments
 
 The Grand Monument is a building you can raise in any state from the start of
-the game, with no level cap. It exists so that construction never runs out of
-uses: once a rich country has built everything profitable, it can always build
-another monument.
+the game. A government raises one to what it stands for: its crown, its
+republic, its revolution, its leader, its faith or the nation. Each level costs
+10,000 construction and needs only maintenance and a small caretaker staff. A
+monument's level is its **grandeur**, and it has no cap. The Grand Monuments
+game rule can switch the system off.
 
-Each level costs 10,000 construction, twice a wonder, and needs only maintenance
-and a small caretaker staff to run. Each level produces one unit of Tourism and
-raises Tourism Industry throughput in its state by 1%. That output is worth
-little early, when few pops buy tourism, and more as incomes rise, but at base
-prices a monument takes decades to repay its cost. Build one when you have
-construction to spare, not instead of industry. Every 20 levels of Grand
-Monument you own add one point of cultural pull, up to +5.
+Everything a monument gives grows with grandeur in steps. The first step takes 5
+grandeur and each further step takes twice as much as the one before, so steps
+complete at 5, 15, 35, 75, 155 and so on. Inside a step every level counts.
+Legitimacy and cultural pull take steps of 10. National effects count all your
+monuments' grandeur together, so twenty small monuments give the same national
+effects as one tall one; local effects count each monument on its own.
+
+<!-- screenshot: the Monuments journal entry with its national lines and a contested monument's row -->
+
+### The Monuments journal entry
+
+The Monuments journal entry appears when you own a Grand Monument. It lists each
+national effect with the grandeur behind it and the grandeur at which its next
+step completes, a red warning while a finished level would cause vanity
+backlash, and one row per monument with its form, dedication, grandeur and
+status.
+
+Every monument, whatever it honors, gives:
+
+- +25 prestige for each step of standing grandeur, counting every monument that
+  is not contested.
+- +25% Tourism Industry throughput in its state for each step of its own
+  grandeur, so its first five levels match one of the base game's monuments.
+- +1 cultural pull for each step of standing grandeur (steps of 10), up to +5.
 
 ### Monument dedications
 
-When a level of an undedicated Grand Monument finishes, a dedication ceremony
-event asks what it honors, and its tooltips list each dedication's effects. The
-choice is permanent: to change it, demolish the monument and build again. One
-option leaves the monument Undedicated, a plain tourist draw. An undedicated
-monument can still be dedicated later from its building panel, and the ceremony
-asks again when its next level finishes.
+When a level of an undedicated monument finishes, a dedication ceremony asks
+what it honors. The choice is permanent, and the ceremony's tooltips list each
+dedication's effects. An undedicated monument gives only the prestige, tourism
+and cultural pull above; the ceremony asks again at its next level.
 
-<!-- screenshot: the Grand Monument dedication ceremony event with its options -->
+| Dedication | Requires | Approves / objects | National, per step | In its state, per step |
+|---|---|---|---|---|
+| To the Crown | A crowned head of state | Landowners / Intelligentsia | +2 legitimacy | +10% loyalists from movements |
+| To the Republic | A republic | Intelligentsia / Landowners | +2 legitimacy | +10% loyalists from movements |
+| To the Revolution | Single-Party State or Council Republic | Trade Unions / Industrialists | +2 legitimacy | +10% loyalists from movements |
+| To the Leader | Autocracy or Single-Party State, not crowned | The ruler's own group / the strongest group outside the government | +2 legitimacy, +25 authority | +10% loyalists from movements |
+| Grand Shrine | No State Atheism | Devout | +5% Devout attraction | +10% conversion |
+| To the Nation | | Petty Bourgeoisie | | +10% loyalists from movements |
+| War Memorial | | Armed Forces | 3% less war support lost to casualties | +5% conscription rate |
+| Grand Opera House | Romanticism | Intelligentsia | +5% Intelligentsia attraction | +10% Creative Industries throughput |
+| Botanical Gardens | Romanticism | Rural Folk | | 5,000 less pollution |
+| Grand Observatory | Empiricism | Intelligentsia | +3 innovation cap | Faster literacy growth |
+| Great Exhibition Hall | Marketing Research, no Industry Banned | Industrialists | +5% Industrialists attraction | +10% migration pull |
+| Grand Stadium | Television Broadcasting | Trade Unions | | 10% lower turmoil effects |
 
-| Dedication | Requires | Effect in the state (per level) | National effect (per monument) |
-|---|---|---|---|
-| Civic Monument | | +2% loyalists from political movements | |
-| Grand Shrine | No State Atheism law | +2% conversion | +2% Devout attraction |
-| War Memorial | | +1% conscription rate | 1% less war support lost to casualties |
-| Grand Opera House | Romanticism | +2% Creative Industries throughput | +2% Intelligentsia attraction |
-| Botanical Gardens | Romanticism | Less pollution generated | |
-| Grand Observatory | Empiricism | Faster literacy growth | +2 innovation cap |
-| Great Exhibition Hall | Marketing Research, no Industry Banned law | +2% migration pull | +2% Industrialists attraction |
-| Grand Stadium | Television Broadcasting | 2% lower turmoil effects | |
+Legitimacy counts the grandeur of all your monuments to the Crown, the Republic,
+the Revolution and the Leader together, in steps of 10, and only while each
+still fits. Each interest group's approval counts the grandeur of the monuments
+it approves of, minus those it objects to, and moves by 1 per step either way.
+No number of monuments can buy a group outright: each group has one total.
 
-The technology requirements apply everywhere, but the two law conditions only
-hide the option in the ceremony event; the building panel still offers those
-dedications. The civic dedication is worded to suit your government: to the
-republic, to the Crown or to the nation.
+### Monument forms
 
-The AI rates Grand Monuments low: it considers them mainly as a great or major
-power, or in a state with a Tourism Industry, and avoids them while at war.
+A monument to the Crown, the Republic, the Revolution, the Leader or the nation,
+or a War Memorial, can take the form of your primary cultures' classical
+heritage: a forum and triumphal column for a Romance-speaking country, a hall of
+dynasties for a Chinese, Japanese or Korean one, an Aksumite stele for an
+Amharic or Tigrinya one, and so on through the classical languages that language
+reform can revive. A Grand Shrine takes the form of your state religion's great
+building: a basilica, a great mosque, a great temple, a pagoda. When more than
+one form fits, an event asks which; the AI keeps the most specific form without
+being asked. The form changes the monument's name and look, not what it does.
+If you have revived the matching language under a state-led language reform,
+the monument's row says its dedication is carved in it.
+
+### Contested monuments
+
+A monument to the Crown, the Republic, the Revolution, the Leader or a faith can
+outlive what it honors. It becomes **contested** when its crown, republic or
+revolution falls, when its leader stops ruling for any reason, when the country
+adopts State Atheism or changes its state religion, or when another country
+takes its state. A contested monument keeps its tourism and its effect in the
+state, but gives no prestige, legitimacy or approval, and the group that objected
+to its message resents it every month it stands undecided.
+
+When it happens, a notice lets you decide for all of them at once or one at a
+time. You can also decide later from the monument's row in the journal entry.
+
+| Choice | What happens |
+|---|---|
+| Pull Down | The monument and all its grandeur are gone. The new government gains legitimacy that fades over about five years. The group that objected to the old message approves and the group that raised it resents it, both fading. |
+| Rededicate | Costs 5,000 per level. The monument is rebuilt at half its level, rounded up, and the ceremony dedicates it again under your current laws. Its old supporters resent it a little. |
+| Keep as Heritage | The monument stays and its prestige returns, but under this government it lends no legitimacy and gives no approval. The group that objected resents it, less each year. |
+
+Pulling down many monuments at once gives what pulling down one of their
+combined grandeur would: each reward and resentment comes from a single total
+that fades month by month. If what a contested or heritage monument honors
+comes back, for example when the monarchy is restored, it counts in full again.
+Pulling it down is the only permanent choice. A shrine in a state that another
+country takes becomes heritage at once and cannot be pulled down. After a civil
+war the winner inherits the monuments the loser raised, and they are contested
+only if its laws no longer fit them. Demolishing a contested monument from its
+building panel counts as pulling it down.
+
+### Vanity backlash
+
+Finishing a monument level while the country is in default, in famine or in
+recession angers people: 5% of the state's pops turn radical, and legitimacy
+falls by 3 for each such level, fading over about two years. The journal entry
+shows a red warning while this would happen, so you can pause construction
+first.
+
+### Monument anniversaries
+
+Every dedication has an anniversary event that can fire once a monument of that
+dedication reaches level 3 and still fits. Each offers a choice between two
+benefits, usually for two interest groups, and the only cost is money. A
+contested or heritage monument holds no anniversaries.
+
+The AI raises monuments mainly as a great or major power, in a state with a
+Tourism Industry, or when its legitimacy is low, and never while at war or in
+hard times. It decides its contested monuments within a few months: small ones
+and those under a revolutionary government tend to come down, tall ones are kept
+as heritage, and it rededicates only with money in the treasury.

@@ -10,8 +10,12 @@ pmg_monument_dedication = {
 
 	production_methods = {
 		pm_monument_undedicated
-		pm_monument_civic
+		pm_monument_crown
+		pm_monument_republic
+		pm_monument_revolution
+		pm_monument_leader
 		pm_monument_religious
+		pm_monument_civic
 		pm_monument_war_memorial
 		pm_monument_artistic
 		pm_monument_naturalist

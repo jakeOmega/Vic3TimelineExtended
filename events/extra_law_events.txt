@@ -1852,30 +1852,24 @@ extra_law_events.25 = {
 				trigger = {
 					calc_true_if = {
 						amount >= 2
-						any_primary_culture = { has_discrimination_trait_group = language_group_romance }
-						OR = {
-							country_has_state_religion = rel:jewish
-							any_primary_culture = { has_discrimination_trait_group = language_group_semitic }
-						}
-						OR = {
-							any_primary_culture = { has_discrimination_trait_group = language_group_indo_aryan }
-							country_has_state_religion = rel:hindu
-						}
-						any_primary_culture = { OR = { has_discrimination_trait = language_amharic has_discrimination_trait = language_tigrinya } }
-						any_primary_culture = { has_discrimination_trait_group = language_group_slavic }
-						country_has_state_religion = rel:theravada
-						any_primary_culture = { has_discrimination_trait_group = language_group_iranic }
-						any_primary_culture = { has_discrimination_trait = language_arabic }
-						any_primary_culture = { OR = { has_discrimination_trait_group = language_group_sinitic has_discrimination_trait = language_japanese has_discrimination_trait = language_korean } }
-						any_primary_culture = { has_discrimination_trait_group = language_group_hellenic }
-						any_primary_culture = { has_discrimination_trait = language_gaelic }
-						country_has_state_religion = rel:oriental_orthodox
-						any_primary_culture = { has_discrimination_trait = language_nahuan }
-						any_primary_culture = { has_discrimination_trait = language_scandinavian }
-						any_primary_culture = { has_discrimination_trait_group = language_group_germanic }
-						any_primary_culture = { has_discrimination_trait = language_mayan }
-						any_primary_culture = { has_discrimination_trait_group = language_group_baltic }
-						any_primary_culture = { has_discrimination_trait = language_aramaic }
+						te_heritage_latin = yes
+						te_heritage_hebrew = yes
+						te_heritage_sanskrit = yes
+						te_heritage_geez = yes
+						te_heritage_slavonic = yes
+						te_heritage_pali = yes
+						te_heritage_avestan = yes
+						te_heritage_arabic = yes
+						te_heritage_chinese = yes
+						te_heritage_greek = yes
+						te_heritage_irish = yes
+						te_heritage_coptic = yes
+						te_heritage_nahuatl = yes
+						te_heritage_norse = yes
+						te_heritage_gothic = yes
+						te_heritage_mayan = yes
+						te_heritage_prussian = yes
+						te_heritage_aramaic = yes
 					}
 				}
 				desc = extra_law_events.25.d_multi
@@ -1989,7 +1983,7 @@ extra_law_events.25 = {
 	option = { # Revive Latin
 		name = extra_law_events.25.a_latin
 		trigger = {
-			any_primary_culture = { has_discrimination_trait_group = language_group_romance }
+			te_heritage_latin = yes
 		}
 		active_law:lawgroup_language_policy = {
 			add_amendment = { type = amendment_langreform_revived_latin sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
@@ -2011,10 +2005,7 @@ extra_law_events.25 = {
 	option = { # Revive Hebrew
 		name = extra_law_events.25.a_hebrew
 		trigger = {
-			OR = {
-				country_has_state_religion = rel:jewish
-				any_primary_culture = { has_discrimination_trait_group = language_group_semitic }
-			}
+			te_heritage_hebrew = yes
 		}
 		active_law:lawgroup_language_policy = {
 			add_amendment = { type = amendment_langreform_revived_hebrew sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
@@ -2036,10 +2027,7 @@ extra_law_events.25 = {
 	option = { # Revive Sanskrit
 		name = extra_law_events.25.a_sanskrit
 		trigger = {
-			OR = {
-				any_primary_culture = { has_discrimination_trait_group = language_group_indo_aryan }
-				country_has_state_religion = rel:hindu
-			}
+			te_heritage_sanskrit = yes
 		}
 		active_law:lawgroup_language_policy = {
 			add_amendment = { type = amendment_langreform_revived_sanskrit sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
@@ -2061,12 +2049,7 @@ extra_law_events.25 = {
 	option = { # Revive Ge'ez
 		name = extra_law_events.25.a_geez
 		trigger = {
-			any_primary_culture = {
-				OR = {
-					has_discrimination_trait = language_amharic
-					has_discrimination_trait = language_tigrinya
-				}
-			}
+			te_heritage_geez = yes
 		}
 		active_law:lawgroup_language_policy = {
 			add_amendment = { type = amendment_langreform_revived_geez sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
@@ -2084,7 +2067,7 @@ extra_law_events.25 = {
 	option = { # Revive Old Church Slavonic
 		name = extra_law_events.25.a_slavonic
 		trigger = {
-			any_primary_culture = { has_discrimination_trait_group = language_group_slavic }
+			te_heritage_slavonic = yes
 		}
 		active_law:lawgroup_language_policy = {
 			add_amendment = { type = amendment_langreform_revived_slavonic sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
@@ -2106,7 +2089,7 @@ extra_law_events.25 = {
 	option = { # Revive Pali
 		name = extra_law_events.25.a_pali
 		trigger = {
-			country_has_state_religion = rel:theravada
+			te_heritage_pali = yes
 		}
 		active_law:lawgroup_language_policy = {
 			add_amendment = { type = amendment_langreform_revived_pali sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
@@ -2128,7 +2111,7 @@ extra_law_events.25 = {
 	option = { # Revive Avestan
 		name = extra_law_events.25.a_avestan
 		trigger = {
-			any_primary_culture = { has_discrimination_trait_group = language_group_iranic }
+			te_heritage_avestan = yes
 		}
 		active_law:lawgroup_language_policy = {
 			add_amendment = { type = amendment_langreform_revived_avestan sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
@@ -2150,7 +2133,7 @@ extra_law_events.25 = {
 	option = { # Revive Classical Arabic
 		name = extra_law_events.25.a_arabic
 		trigger = {
-			any_primary_culture = { has_discrimination_trait = language_arabic }
+			te_heritage_arabic = yes
 		}
 		active_law:lawgroup_language_policy = {
 			add_amendment = { type = amendment_langreform_revived_arabic sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
@@ -2172,13 +2155,7 @@ extra_law_events.25 = {
 	option = { # Revive Literary Chinese
 		name = extra_law_events.25.a_chinese
 		trigger = {
-			any_primary_culture = {
-				OR = {
-					has_discrimination_trait_group = language_group_sinitic
-					has_discrimination_trait = language_japanese
-					has_discrimination_trait = language_korean
-				}
-			}
+			te_heritage_chinese = yes
 		}
 		active_law:lawgroup_language_policy = {
 			add_amendment = { type = amendment_langreform_revived_chinese sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
@@ -2200,7 +2177,7 @@ extra_law_events.25 = {
 	option = { # Revive Classical Greek
 		name = extra_law_events.25.a_greek
 		trigger = {
-			any_primary_culture = { has_discrimination_trait_group = language_group_hellenic }
+			te_heritage_greek = yes
 		}
 		active_law:lawgroup_language_policy = {
 			add_amendment = { type = amendment_langreform_revived_greek sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
@@ -2222,7 +2199,7 @@ extra_law_events.25 = {
 	option = { # Revive Classical Irish (Gaeilge)
 		name = extra_law_events.25.a_irish
 		trigger = {
-			any_primary_culture = { has_discrimination_trait = language_gaelic }
+			te_heritage_irish = yes
 		}
 		active_law:lawgroup_language_policy = {
 			add_amendment = { type = amendment_langreform_revived_irish sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
@@ -2244,7 +2221,7 @@ extra_law_events.25 = {
 	option = { # Revive Coptic
 		name = extra_law_events.25.a_coptic
 		trigger = {
-			country_has_state_religion = rel:oriental_orthodox
+			te_heritage_coptic = yes
 		}
 		active_law:lawgroup_language_policy = {
 			add_amendment = { type = amendment_langreform_revived_coptic sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
@@ -2266,7 +2243,7 @@ extra_law_events.25 = {
 	option = { # Revive Classical Nahuatl
 		name = extra_law_events.25.a_nahuatl
 		trigger = {
-			any_primary_culture = { has_discrimination_trait = language_nahuan }
+			te_heritage_nahuatl = yes
 		}
 		active_law:lawgroup_language_policy = {
 			add_amendment = { type = amendment_langreform_revived_nahuatl sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
@@ -2288,7 +2265,7 @@ extra_law_events.25 = {
 	option = { # Revive Old Norse
 		name = extra_law_events.25.a_norse
 		trigger = {
-			any_primary_culture = { has_discrimination_trait = language_scandinavian }
+			te_heritage_norse = yes
 		}
 		active_law:lawgroup_language_policy = {
 			add_amendment = { type = amendment_langreform_revived_norse sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
@@ -2310,7 +2287,7 @@ extra_law_events.25 = {
 	option = { # Revive Gothic
 		name = extra_law_events.25.a_gothic
 		trigger = {
-			any_primary_culture = { has_discrimination_trait_group = language_group_germanic }
+			te_heritage_gothic = yes
 		}
 		active_law:lawgroup_language_policy = {
 			add_amendment = { type = amendment_langreform_revived_gothic sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
@@ -2332,7 +2309,7 @@ extra_law_events.25 = {
 	option = { # Revive Classic Mayan
 		name = extra_law_events.25.a_mayan
 		trigger = {
-			any_primary_culture = { has_discrimination_trait = language_mayan }
+			te_heritage_mayan = yes
 		}
 		active_law:lawgroup_language_policy = {
 			add_amendment = { type = amendment_langreform_revived_mayan sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
@@ -2354,7 +2331,7 @@ extra_law_events.25 = {
 	option = { # Revive Old Prussian
 		name = extra_law_events.25.a_prussian
 		trigger = {
-			any_primary_culture = { has_discrimination_trait_group = language_group_baltic }
+			te_heritage_prussian = yes
 		}
 		active_law:lawgroup_language_policy = {
 			add_amendment = { type = amendment_langreform_revived_prussian sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
@@ -2372,7 +2349,7 @@ extra_law_events.25 = {
 	option = { # Revive Aramaic
 		name = extra_law_events.25.a_aramaic
 		trigger = {
-			any_primary_culture = { has_discrimination_trait = language_aramaic }
+			te_heritage_aramaic = yes
 		}
 		active_law:lawgroup_language_policy = {
 			add_amendment = { type = amendment_langreform_revived_aramaic sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
@@ -2397,28 +2374,7 @@ extra_law_events.25 = {
 		name = extra_law_events.25.a
 		default_option = yes
 		trigger = {
-			NOR = {
-				any_primary_culture = { has_discrimination_trait_group = language_group_romance }
-				country_has_state_religion = rel:jewish
-				any_primary_culture = { has_discrimination_trait_group = language_group_semitic }
-				any_primary_culture = { has_discrimination_trait_group = language_group_indo_aryan }
-				country_has_state_religion = rel:hindu
-				any_primary_culture = { OR = { has_discrimination_trait = language_amharic has_discrimination_trait = language_tigrinya } }
-				any_primary_culture = { has_discrimination_trait_group = language_group_slavic }
-				country_has_state_religion = rel:theravada
-				any_primary_culture = { has_discrimination_trait_group = language_group_iranic }
-				any_primary_culture = { has_discrimination_trait = language_arabic }
-				any_primary_culture = { OR = { has_discrimination_trait_group = language_group_sinitic has_discrimination_trait = language_japanese has_discrimination_trait = language_korean } }
-				any_primary_culture = { has_discrimination_trait_group = language_group_hellenic }
-				any_primary_culture = { has_discrimination_trait = language_gaelic }
-				country_has_state_religion = rel:oriental_orthodox
-				any_primary_culture = { has_discrimination_trait = language_nahuan }
-				any_primary_culture = { has_discrimination_trait = language_scandinavian }
-				any_primary_culture = { has_discrimination_trait_group = language_group_germanic }
-				any_primary_culture = { has_discrimination_trait = language_mayan }
-				any_primary_culture = { has_discrimination_trait_group = language_group_baltic }
-				any_primary_culture = { has_discrimination_trait = language_aramaic }
-			}
+			te_heritage_any = no
 		}
 		active_law:lawgroup_language_policy = {
 			add_amendment = { type = amendment_langreform_revival sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
