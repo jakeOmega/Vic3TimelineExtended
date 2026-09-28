@@ -141,6 +141,9 @@ class NumberFormatTests(unittest.TestCase):
     def test_numbers_not_in_the_english_untouched(self):
         self.assertEqual(t.localize_numbers("Plain text", "Version 2.0", "german"), "Version 2.0")
 
+    def test_percent_space_closed_as_vanilla_german_writes(self):
+        self.assertEqual(t.localize_numbers("up to 5% more", "bis zu 5 % mehr", "german"), "bis zu 5% mehr")
+
     def test_english_formats_kept_for_other_languages(self):
         self.assertEqual(t.localize_numbers("2.5", "2.5", "japanese"), "2.5")
 

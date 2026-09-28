@@ -111,5 +111,5 @@ Proper names stay as they are: companies, people, places, historical buildings, 
 - **Events** speak for the player's government in the first person plural: „Wir müssen …“, „unsere Regierung …“. Option buttons are short statements or exclamations in that voice. Flavour text (`.f`) may be literary; keep its tone.
 - **Tooltips and descriptions** are impersonal and precise: „Erhöht die …“, „Wirkt sich auf … aus“. Address the player directly (Sie) only where the English does, and sparingly.
 - **Names and labels** (modifiers, buildings, laws, buttons, journal entries) stay short. The UI boxes were sized for English, and German runs longer. Prefer a compact noun („Kapitalverkehrskontrollen“) to a paraphrase.
-- Numbers, percentages and dates come from markup. Never write a number the English doesn't have. Where the English writes a number in the prose, use German format: 2,5 for 2.5, and 1.000 for 1,000.
+- Numbers, percentages and dates come from markup. Never write a number the English doesn't have. Where the English writes a number in the prose, use German format: 2,5 for 2.5, and 1.000 for 1,000. Percentages stay closed up as the official German writes them: 10%, not 10 %.
 - Keep the English meaning, including hedges and conditions („bis zu“, „höchstens“, „sofern …“). Don't add explanations the English doesn't give.

@@ -7929,7 +7929,7 @@
  },
  "renewable_investment_modifier_desc": {
   "en": "State investment in renewable energy that requires subsidies for renewable plants, boosts renewable plant output while reducing conventional power plant [concept_throughput], speeds renewable construction, and cuts greenhouse gas emissions by 15%.",
-  "de": "Staatliche Investitionen in erneuerbare Energien, die Subventionen für erneuerbare Kraftwerke erfordern, steigern den Ausstoß erneuerbarer Kraftwerke, verringern den [concept_throughput] konventioneller Kraftwerke, beschleunigen den Bau erneuerbarer Anlagen und senken die Treibhausgasemissionen um 15 %."
+  "de": "Staatliche Investitionen in erneuerbare Energien, die Subventionen für erneuerbare Kraftwerke erfordern, steigern den Ausstoß erneuerbarer Kraftwerke, verringern den [concept_throughput] konventioneller Kraftwerke, beschleunigen den Bau erneuerbarer Anlagen und senken die Treibhausgasemissionen um 15%."
  },
  "reproductive_rights_progressive_modifier_desc": {
   "en": "Progressive reproductive rights legislation has improved women's health outcomes and earned international [concept_prestige].",

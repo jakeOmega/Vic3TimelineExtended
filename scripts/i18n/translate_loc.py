@@ -380,6 +380,12 @@ def localize_numbers(en: str, translated: str, language: str) -> str:
     and numbers the translator already converted, are left alone."""
     if language not in DECIMAL_COMMA:
         return translated
+    if language == "german" and not re.search(r"\d %", en):
+        # The official German writes 10%, not 10 %.
+        translated = "".join(
+            re.sub(r"(\d) %", r"\1%", text) if is_prose else text
+            for is_prose, text in _prose_segments(translated)
+        )
     prose = " ".join(text for is_prose, text in _prose_segments(en) if is_prose)
     swaps = {n: n.replace(".", ",") for n in _EN_DECIMAL.findall(prose)}
     swaps.update({n: n.replace(",", ".") for n in _EN_THOUSANDS.findall(prose)})

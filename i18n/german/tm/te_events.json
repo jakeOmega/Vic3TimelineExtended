@@ -15573,7 +15573,7 @@
  },
  "space_race_colony_events.2.d": {
   "en": "At 21.9 kilometers high and 600 kilometers across, Olympus Mons dwarfs anything on Earth. Our base camp is established on the lower slopes, where the gradient is so gentle it would be imperceptible to a person standing on it. The summit is above 99% of the Martian atmosphere. The caldera complex offers unique opportunities for both research and eventual geothermal energy extraction.",
-  "de": "Mit 21,9 Kilometern Höhe und 600 Kilometern Durchmesser lässt Olympus Mons alles auf der Erde winzig erscheinen. Unser Basislager liegt an den unteren Hängen, wo die Neigung so sanft ist, dass sie für einen Menschen, der darauf steht, kaum wahrnehmbar wäre. Der Gipfel liegt oberhalb von 99 % der Marsatmosphäre. Der Calderakomplex bietet einzigartige Möglichkeiten sowohl für die Forschung als auch für eine künftige geothermische Energiegewinnung."
+  "de": "Mit 21,9 Kilometern Höhe und 600 Kilometern Durchmesser lässt Olympus Mons alles auf der Erde winzig erscheinen. Unser Basislager liegt an den unteren Hängen, wo die Neigung so sanft ist, dass sie für einen Menschen, der darauf steht, kaum wahrnehmbar wäre. Der Gipfel liegt oberhalb von 99% der Marsatmosphäre. Der Calderakomplex bietet einzigartige Möglichkeiten sowohl für die Forschung als auch für eine künftige geothermische Energiegewinnung."
  },
  "space_race_colony_events.2.f": {
   "en": "\\\"From the summit, the horizon curves away in every direction. You cannot see the base of the mountain you stand on. That should terrify us, but it doesn't.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Expedition Geologist",
@@ -16845,7 +16845,7 @@
  },
  "space_race_events.43.d": {
   "en": "Long-duration habitation requires a life-support system that recycles nearly everything — air, water, and waste — with minimal resupply from Earth. Current recycling rates hover around 90%, but sustained habitation demands 98% or better. The engineering challenge is as much biological as mechanical.",
-  "de": "Langzeitbewohnung erfordert ein Lebenserhaltungssystem, das nahezu alles recycelt — Luft, Wasser und Abfall — mit minimaler Nachschubversorgung von der Erde. Die aktuellen Recyclingquoten liegen bei etwa 90 %, doch dauerhafte Bewohnung erfordert 98 % oder besser. Die technische Herausforderung ist ebenso biologischer wie mechanischer Natur."
+  "de": "Langzeitbewohnung erfordert ein Lebenserhaltungssystem, das nahezu alles recycelt — Luft, Wasser und Abfall — mit minimaler Nachschubversorgung von der Erde. Die aktuellen Recyclingquoten liegen bei etwa 90%, doch dauerhafte Bewohnung erfordert 98% oder besser. Die technische Herausforderung ist ebenso biologischer wie mechanischer Natur."
  },
  "space_race_events.43.f": {
   "en": "\\\"A submarine can stay sealed for six months. We need to stay sealed for years. The difference isn't engineering: it's ecology. We're building a biosphere in a tin can.\\\"\\n\\n— Life Support Systems Lead\\n\\n\\\"The algae reactors are the lungs. The bacterial processors are the kidneys. If either fails, everyone dies together. No pressure.\\\"\\n\\n— Lead Bioengineer, with a humorless smile",
@@ -18113,7 +18113,7 @@
  },
  "te_debug_covert.2.b": {
   "en": "Force a detection now (one operation is pinned to 100% and the real roll is run)",
-  "de": "Jetzt eine Entdeckung erzwingen (eine Operation wird auf 100 % fixiert, und der echte Wurf wird ausgeführt)"
+  "de": "Jetzt eine Entdeckung erzwingen (eine Operation wird auf 100% fixiert, und der echte Wurf wird ausgeführt)"
  },
  "te_debug_covert.2.c": {
   "en": "Cut funding to 0 and stand everything down",
@@ -18585,7 +18585,7 @@
  },
  "te_debug_monetary.4.d": {
   "en": "#lore Console-only. Nothing in the mod fires this event. The control: the same block again, with a plain number in the multiplier slot instead of a variable or a script value. Seven is a rate no country pays by coincidence.#!\\n\\n#title What to look for#!\\n#v Timed Modifiers#! on the budget panel's interest line should read #v -13.0%#! — the base offset of #v -20%#! plus seven points.\\n\\nIf it reads #v -19.0%#! instead, the multiplier is being ignored no matter what is put in it, and the fault is not the variable.\\n\\n#title Afterwards#!\\nThis leaves the country paying 7%, and the monthly update will not correct it: the applied value has not moved, so the re-apply is skipped for good. Fire #v te_debug_monetary.2#! and take its second option to restore the real rate. Run this one last.\\n\\n#title Hover first#!\\nThe option tooltip previews the modifier with its multiplier already resolved, so reading it before clicking is a free second data point.",
-  "de": "#lore Nur für die Konsole. Kein Bestandteil der Mod löst dieses Ereignis aus. Die Kontrolle: derselbe Block noch einmal, mit einer einfachen Zahl im Multiplikator-Platz statt einer Variable oder eines Skriptwerts. Sieben ist ein Zinssatz, den kein Land zufällig zahlt.#!\\n\\n#title Worauf zu achten ist#!\\n#v Zeitliche Modifikatoren#! auf der Zinszeile des Haushaltspanels sollte #v -13,0%#! anzeigen — der Basisversatz von #v -20%#! plus sieben Punkte.\\n\\nSteht dort stattdessen #v -19,0%#!, wird der Multiplikator ignoriert, egal was hineingesetzt wird, und der Fehler liegt nicht an der Variable.\\n\\n#title Danach#!\\nDas lässt das Land 7 % zahlen, und die monatliche Aktualisierung korrigiert das nicht: Der angewandte Wert hat sich nicht bewegt, sodass die erneute Anwendung dauerhaft übersprungen wird. Lösen Sie #v te_debug_monetary.2#! aus und wählen Sie dessen zweite Option, um den echten Zinssatz wiederherzustellen. Führen Sie dieses hier zuletzt aus.\\n\\n#title Zuerst mit der Maus darüberfahren#!\\nDer Options-Tooltip zeigt eine Vorschau des Modifikators mit bereits aufgelöstem Multiplikator, sodass ihn vor dem Klicken zu lesen einen zweiten Datenpunkt gratis liefert."
+  "de": "#lore Nur für die Konsole. Kein Bestandteil der Mod löst dieses Ereignis aus. Die Kontrolle: derselbe Block noch einmal, mit einer einfachen Zahl im Multiplikator-Platz statt einer Variable oder eines Skriptwerts. Sieben ist ein Zinssatz, den kein Land zufällig zahlt.#!\\n\\n#title Worauf zu achten ist#!\\n#v Zeitliche Modifikatoren#! auf der Zinszeile des Haushaltspanels sollte #v -13,0%#! anzeigen — der Basisversatz von #v -20%#! plus sieben Punkte.\\n\\nSteht dort stattdessen #v -19,0%#!, wird der Multiplikator ignoriert, egal was hineingesetzt wird, und der Fehler liegt nicht an der Variable.\\n\\n#title Danach#!\\nDas lässt das Land 7% zahlen, und die monatliche Aktualisierung korrigiert das nicht: Der angewandte Wert hat sich nicht bewegt, sodass die erneute Anwendung dauerhaft übersprungen wird. Lösen Sie #v te_debug_monetary.2#! aus und wählen Sie dessen zweite Option, um den echten Zinssatz wiederherzustellen. Führen Sie dieses hier zuletzt aus.\\n\\n#title Zuerst mit der Maus darüberfahren#!\\nDer Options-Tooltip zeigt eine Vorschau des Modifikators mit bereits aufgelöstem Multiplikator, sodass ihn vor dem Klicken zu lesen einen zweiten Datenpunkt gratis liefert."
  },
  "te_debug_monetary.4.f": {
   "en": "'Seven percent? On what authority?'\\n\\n'None whatsoever, Chancellor. That is the experiment.'",
@@ -18913,7 +18913,7 @@
  },
  "te_debug_space_race.1.a": {
   "en": "Push every running milestone to 90% of its goal",
-  "de": "Jeden laufenden Meilenstein auf 90 % seines Ziels vorantreiben"
+  "de": "Jeden laufenden Meilenstein auf 90% seines Ziels vorantreiben"
  },
  "te_debug_space_race.1.b": {
   "en": "Finish every running milestone on the next tick",

@@ -1,4 +1,1908 @@
 {
+ "TE_STATE_ANTIMATTER_TT": {
+  "en": "#bold [concept_antimatter_facility] Points#!\\n\\nTotal Generated: #v [State.GetOwner.MakeScope.ScriptValue('antimatter_total_generated_points')|0]#!\\nActive Structures: #v [State.GetOwner.MakeScope.ScriptValue('antimatter_points_consumed')|0]#!\\nReserved (incl. queued): #v [State.GetOwner.MakeScope.ScriptValue('antimatter_points_reserved')|0]#!\\nNet Available: #G [State.GetOwner.MakeScope.ScriptValue('antimatter_sub_building_slots_remaining')|0]#!\\n\\nEach [concept_antimatter_facility] level provides 5 sub-building slots for Antimatter Engines and Warhead Plants.",
+  "de": "#bold [concept_antimatter_facility]-Punkte#!\\n\\nInsgesamt erzeugt: #v [State.GetOwner.MakeScope.ScriptValue('antimatter_total_generated_points')|0]#!\\nAktive Bauten: #v [State.GetOwner.MakeScope.ScriptValue('antimatter_points_consumed')|0]#!\\nReserviert (inkl. in Warteschlange): #v [State.GetOwner.MakeScope.ScriptValue('antimatter_points_reserved')|0]#!\\nNetto verfügbar: #G [State.GetOwner.MakeScope.ScriptValue('antimatter_sub_building_slots_remaining')|0]#!\\n\\nJede Stufe der [concept_antimatter_facility] bietet 5 Nebengebäudeplätze für Antimaterie-Triebwerke und Sprengkopfanlagen."
+ },
+ "TE_STATE_ARABLE_ROW_MULT": {
+  "en": "Multiplier",
+  "de": "Multiplikator"
+ },
+ "TE_STATE_ARABLE_ROW_REGIONAL": {
+  "en": "Regional",
+  "de": "Regional"
+ },
+ "TE_STATE_ARABLE_ROW_TOTAL": {
+  "en": "Total",
+  "de": "Gesamt"
+ },
+ "TE_STATE_ARABLE_TT": {
+  "en": "#bold [concept_arable_land]#!\\n\\nTotal: #v [State.MakeScope.ScriptValue('arable_land_total')|0]#!\\nGeographic Base: #v [State.MakeScope.ScriptValue('arable_land_base')|0]#!\\nRegional Additions: #G +[State.MakeScope.ScriptValue('arable_land_from_modifiers')|0]#!\\n\\nMultiplier: [State.GetModifier.GetValueWithBreakdownFor('state_arable_land_mult')]\\n\\nAgricultural technologies and other arable-land effects expand [concept_arable_land] beyond the geographic base. In [Concept('concept_split_state', 'split states')], the regional additions line sums same-owner additions across the whole [concept_state_region] so [concept_migration_crowding] thresholds stay accurate.",
+  "de": "#bold [concept_arable_land]#!\\n\\nGesamt: #v [State.MakeScope.ScriptValue('arable_land_total')|0]#!\\nGeografische Basis: #v [State.MakeScope.ScriptValue('arable_land_base')|0]#!\\nRegionale Zuschläge: #G +[State.MakeScope.ScriptValue('arable_land_from_modifiers')|0]#!\\n\\nMultiplikator: [State.GetModifier.GetValueWithBreakdownFor('state_arable_land_mult')]\\n\\nLandwirtschaftliche Technologien und andere Effekte auf das [concept_arable_land] erweitern es über die geografische Basis hinaus. In [Concept('concept_split_state', 'Teilstaaten')] summiert die Zeile der regionalen Zuschläge alle Zuschläge desselben Besitzers in der gesamten [concept_state_region], damit die Schwellenwerte der [concept_migration_crowding] korrekt bleiben."
+ },
+ "TE_STATE_CROWDING_ROW_POP": {
+  "en": "Population",
+  "de": "Bevölkerung"
+ },
+ "TE_STATE_CROWDING_ROW_PULL": {
+  "en": "Pull Penalty",
+  "de": "Sog-Strafe"
+ },
+ "TE_STATE_CROWDING_ROW_RATIO": {
+  "en": "Ratio",
+  "de": "Quote"
+ },
+ "TE_STATE_CROWDING_ROW_THRESHOLD": {
+  "en": "Threshold",
+  "de": "Schwelle"
+ },
+ "TE_STATE_CROWDING_TT": {
+  "en": "#bold [concept_migration_crowding]#!\\n\\nPopulation: #v [State.GetPopulationSize|Kv]#!\\nCrowding Threshold: #v [State.MakeScope.ScriptValue('migration_crowding_threshold_pop')|Kv]#!\\nMigration Pull Penalty: #R -[State.MakeScope.ScriptValue('migration_crowding_pull_pct')|%0]#!\\n\\n#bold Crowding Ratio:#! #v [State.MakeScope.ScriptValue('migration_crowding_ratio')|%0]#!\\n0% is the floor where crowding starts. 100% is the 10x density knee where the formula switches from quadratic growth to a linear tail. Values above 100% mean the state is already in that linear tail.\\n\\nUrban Capacity: [State.GetModifier.GetValueWithBreakdownFor('state_migration_crowding_density_mult')]\\n\\n#bold How the curve works:#!\\nFrom the floor up to the 10x knee, crowding scales as #v 4.5 × r²#!, so the penalty ramps in gradually. Beyond the knee, it becomes #v 9 × r - 4.5#!, adding a steady #R 10 percentage points#! of migration-pull penalty for each extra 1x density above the knee.\\n\\nExamples:\\n· At the floor: #R 0%#! penalty\\n· At the 10x knee: #R 45%#! penalty\\n· At 20x density: #R 145%#! penalty\\n\\nHigher #bold Urban Capacity#! (from the Ministry of Urban Planning, the Urban Planning principles, civil highways and later technologies; national parks, forests and wildlife refuges lower it) lowers effective density, shifting the state back toward the floor so the same population produces a smaller penalty.",
+  "de": "#bold [concept_migration_crowding]#!\\n\\nBevölkerung: #v [State.GetPopulationSize|Kv]#!\\nÜberlastungsschwelle: #v [State.MakeScope.ScriptValue('migration_crowding_threshold_pop')|Kv]#!\\nMigrationssog-Strafe: #R -[State.MakeScope.ScriptValue('migration_crowding_pull_pct')|%0]#!\\n\\n#bold Überlastungsquote:#! #v [State.MakeScope.ScriptValue('migration_crowding_ratio')|%0]#!\\n0% ist die Untergrenze, ab der die Überlastung einsetzt. 100% ist der 10-fache-Dichte-Knickpunkt, an dem die Formel von quadratischem Wachstum in einen linearen Verlauf übergeht. Werte über 100% bedeuten, dass sich der Staat bereits in diesem linearen Verlauf befindet.\\n\\nStädtische Kapazität: [State.GetModifier.GetValueWithBreakdownFor('state_migration_crowding_density_mult')]\\n\\n#bold Wie die Kurve funktioniert:#!\\nVon der Untergrenze bis zum 10-fachen Knickpunkt skaliert die Überlastung als #v 4,5 × r²#!, sodass die Strafe allmählich ansteigt. Jenseits des Knickpunkts wird sie zu #v 9 × r - 4,5#! und fügt für jede weitere 1-fache Dichte über dem Knickpunkt gleichmäßig #R 10 Prozentpunkte#! Migrationssog-Strafe hinzu.\\n\\nBeispiele:\\n· An der Untergrenze: #R 0%#! Strafe\\n· Am 10-fachen Knickpunkt: #R 45%#! Strafe\\n· Bei 20-facher Dichte: #R 145%#! Strafe\\n\\nHöhere #bold Städtische Kapazität#! (durch das Stadtplanungsministerium, die Grundsätze der Stadtplanung, zivile Fernstraßen und spätere Technologien; Nationalparks, Wälder und Wildschutzgebiete senken sie) verringert die effektive Dichte und verschiebt den Staat zurück in Richtung Untergrenze, sodass dieselbe Bevölkerung eine geringere Strafe verursacht."
+ },
+ "TE_STATE_HOMELAND_TT": {
+  "en": "#bold [concept_homeland_dynamics]#!\\n\\nEach eligible culture has independent progress. Multiple homelands can form or decay in parallel, advancing monthly to #v 100%#!, without random rolls.\\n\\nCreation: a primary culture without a homeland here must reach #tooltippable #tooltip:[State.GetTooltipTag],TE_HOMELAND_CREATION_THRESHOLD_TT #v [State.MakeScope.ScriptValue('homeland_culture_form_threshold')|%0]#!#!#! of the state's population.\\nRemoval: a non-primary homeland culture must fall below #tooltippable #tooltip:[State.GetTooltipTag],TE_HOMELAND_REMOVAL_THRESHOLD_TT #v [State.MakeScope.ScriptValue('homeland_culture_disappear_threshold')|%0]#!#!#!.\\n\\nBase Rate: #v 10#! percentage points per year.\\nModified Rate: #v [State.MakeScope.ScriptValue('te_homeland_annual_progress')|2]#! points per year.\\nChange Speed: [State.GetModifier.GetValueWithBreakdownFor('state_homeland_change_speed_mult')]\\n\\nTurmoil of 25% / 50% multiplies progress by 1.25 / 1.5. Legitimacy below 25 halves progress; legitimacy of 75 or more multiplies it by 1.25.\\n\\nRequires the entire state region to have the same owner, and homeland changes to be enabled by any one of:\\n$TE_HOMELAND_UNLOCK_SOURCES$\\nLosing either condition pauses progress. A change of owner, primary-culture status, population eligibility or homeland status resets the affected culture's progress.",
+  "de": "#bold [concept_homeland_dynamics]#!\\n\\nJede infrage kommende Kultur hat einen eigenen Fortschritt. Mehrere Heimatländer können parallel entstehen oder verschwinden und schreiten monatlich bis auf #v 100%#! voran, ohne Zufallswürfe.\\n\\nEntstehung: Eine Hauptkultur ohne Heimatland hier muss #tooltippable #tooltip:[State.GetTooltipTag],TE_HOMELAND_CREATION_THRESHOLD_TT #v [State.MakeScope.ScriptValue('homeland_culture_form_threshold')|%0]#!#!#! der Bevölkerung des Staates erreichen.\\nWegfall: Eine Heimatlandkultur, die nicht Hauptkultur ist, muss unter #tooltippable #tooltip:[State.GetTooltipTag],TE_HOMELAND_REMOVAL_THRESHOLD_TT #v [State.MakeScope.ScriptValue('homeland_culture_disappear_threshold')|%0]#!#!#! fallen.\\n\\nGrundrate: #v 10#! Prozentpunkte pro Jahr.\\nAngepasste Rate: #v [State.MakeScope.ScriptValue('te_homeland_annual_progress')|2]#! Punkte pro Jahr.\\nÄnderungsgeschwindigkeit: [State.GetModifier.GetValueWithBreakdownFor('state_homeland_change_speed_mult')]\\n\\nUnruhen von 25% / 50% vervielfachen den Fortschritt mit 1,25 / 1,5. Legitimität unter 25 halbiert den Fortschritt; Legitimität von 75 oder mehr vervielfacht ihn mit 1,25.\\n\\nErfordert, dass die gesamte Staatsregion denselben Besitzer hat und Heimatlandänderungen durch eine der folgenden Bedingungen freigeschaltet sind:\\n$TE_HOMELAND_UNLOCK_SOURCES$\\nDer Verlust einer der beiden Bedingungen pausiert den Fortschritt. Ein Besitzerwechsel, eine Änderung des Hauptkultur-Status, der Bevölkerungsberechtigung oder des Heimatlandstatus setzt den Fortschritt der betroffenen Kultur zurück."
+ },
+ "TE_STATE_POINTS_ROW_AVAILABLE": {
+  "en": "Available",
+  "de": "Verfügbar"
+ },
+ "TE_STATE_POINTS_ROW_GENERATED": {
+  "en": "Generated",
+  "de": "Erzeugt"
+ },
+ "TE_STATE_SOLAR_TT": {
+  "en": "#bold [concept_solar_collector_array] Points#!\\n\\nTotal Generated: #v [State.GetOwner.MakeScope.ScriptValue('solar_total_generated_points')|0]#!\\nActive Structures: #v [State.GetOwner.MakeScope.ScriptValue('solar_points_consumed')|0]#!\\nReserved (incl. queued): #v [State.GetOwner.MakeScope.ScriptValue('solar_points_reserved')|0]#!\\nNet Available: #G [State.GetOwner.MakeScope.ScriptValue('solar_receiver_slots_remaining')|0]#!\\n\\nEach fully staffed [concept_solar_collector_array] level provides 3 sub-building slots for Solar Receivers.",
+  "de": "#bold [concept_solar_collector_array]-Punkte#!\\n\\nInsgesamt erzeugt: #v [State.GetOwner.MakeScope.ScriptValue('solar_total_generated_points')|0]#!\\nAktive Bauten: #v [State.GetOwner.MakeScope.ScriptValue('solar_points_consumed')|0]#!\\nReserviert (inkl. in Warteschlange): #v [State.GetOwner.MakeScope.ScriptValue('solar_points_reserved')|0]#!\\nNetto verfügbar: #G [State.GetOwner.MakeScope.ScriptValue('solar_receiver_slots_remaining')|0]#!\\n\\nJede voll besetzte Stufe des [concept_solar_collector_array] bietet 3 Nebengebäudeplätze für Sonnenempfänger."
+ },
+ "TE_STATE_UN_NAME_AID": {
+  "en": "Aid",
+  "de": "Hilfe"
+ },
+ "TE_STATE_UN_NAME_PEACEKEEPING": {
+  "en": "Peacekeeping",
+  "de": "Friedenssicherung"
+ },
+ "TE_STATE_UN_NAME_STABILISATION": {
+  "en": "Stabilisation",
+  "de": "Stabilisierung"
+ },
+ "TE_STATE_UN_ROW_MONTHS": {
+  "en": "Months",
+  "de": "Monate"
+ },
+ "TE_STATE_UN_ROW_PROGRESS": {
+  "en": "Progress",
+  "de": "Fortschritt"
+ },
+ "TE_STATE_UN_ROW_STRENGTH": {
+  "en": "Strength",
+  "de": "Stärke"
+ },
+ "TE_STATE_UN_ROW_TYPE": {
+  "en": "Mission",
+  "de": "Mission"
+ },
+ "TE_STATE_UN_TT": {
+  "en": "#header United Nations Mission#!\\nA UN mission is working in this state, with #v [State.MakeScope.ScriptValue('un_state_mission_contributors')|0]#! contributing countries.\\n$TOOLTIP_DELIMITER$\\nIts effect here is multiplied by its #bold strength#!, #v ×[State.MakeScope.ScriptValue('un_state_mission_strength')|2]#!: the UN's [concept_un_enforcement], less what withheld [concept_un_dues] cost the budget, and more for every contributor up to three.\\n$TOOLTIP_DELIMITER$\\nPeacekeeping succeeds after two years of peace for this country; aid when this state has no famine and a standard of living of 10; stabilisation once the collapse is over and a year has passed. A mission fails if this country is attacked or every contributor leaves, and ends after five years. The chamber of the United Nations journal entry lists every mission.",
+  "de": "#header UN-Mission#!\\nEine UN-Mission ist in diesem Staat im Einsatz, mit #v [State.MakeScope.ScriptValue('un_state_mission_contributors')|0]#! beitragenden Ländern.\\n$TOOLTIP_DELIMITER$\\nIhre Wirkung hier wird mit ihrer #bold Stärke#! multipliziert, #v ×[State.MakeScope.ScriptValue('un_state_mission_strength')|2]#!: die [concept_un_enforcement] der UN, abzüglich dessen, was zurückgehaltene [concept_un_dues] das Budget kosten, und mehr für jeden weiteren Beitragenden bis zu drei.\\n$TOOLTIP_DELIMITER$\\nFriedenssicherung gelingt nach zwei Jahren Frieden für dieses Land; Hilfe, wenn dieser Staat keine Hungersnot hat und einen Lebensstandard von 10 aufweist; Stabilisierung, sobald der Zusammenbruch vorüber ist und ein Jahr vergangen ist. Eine Mission scheitert, wenn dieses Land angegriffen wird oder alle Beitragenden abziehen, und endet nach fünf Jahren. Die Kammer des Journaleintrags der Vereinten Nationen listet jede Mission auf."
+ },
+ "UN_ARMS_CONTROL_DESC": {
+  "en": "Join UN arms control agreements. $UN_ARMS_CONTROL_EFFECTS$ Requires Humanitarian Regulations, Limited War, or War Crimes Forbidden law. While it runs, it counts toward the UN's #bold funding#! pillar in proportion to our weight in world affairs ([concept_major_power] members and above).",
+  "de": "Tritt UN-Rüstungskontrollabkommen bei. $UN_ARMS_CONTROL_EFFECTS$ Erfordert das Gesetz Humanitäre Vorschriften, Begrenzter Krieg oder Kriegsverbrechen verboten. Während es läuft, zählt es anteilig zu unserem Gewicht in den Weltgeschäften ([concept_major_power]-Mitglieder und höher) zur Säule #bold Finanzierung#! der UN."
+ },
+ "UN_CHAMPION_ORDER_DESC": {
+  "en": "Use our nation's diplomatic weight to strengthen the United Nations. While active, we count as a champion in the UN's #G great-power commitment#! pillar, weighted by our share of world power, which raises the target [concept_un_authority] moves toward. $UN_CHAMPION_ORDER_EFFECTS$ [Concept('concept_great_power', 'Great Powers')] only. Toggle off to stop.",
+  "de": "Setzt das diplomatische Gewicht unserer Nation ein, um die Vereinten Nationen zu stärken. Solange dies aktiv ist, zählen wir als Vorkämpfer in der Säule #G Großmacht-Engagement#! der UN, gewichtet nach unserem Anteil an der Weltmacht, was das Ziel anhebt, dem sich die [concept_un_authority] annähert. $UN_CHAMPION_ORDER_EFFECTS$ Nur [Concept('concept_great_power', 'Großmächte')]. Zum Beenden ausschalten."
+ },
+ "UN_CONVENE_CONFERENCE_TT": {
+  "en": "We will convene a #bold founding conference#! for a new United Nations. It sits for 12 months; then the new organisation is founded, with us as founder, headquarters host and (as a [concept_great_power]) a permanent member. It starts weak (authority 25) under the founding charter, with no reforms and no agencies. The world's leading power, if it is not us, is asked to join, stay out, or #R oppose#! — and its opposition ends the conference and bars another for ten years. Costs [concept_prestige] and [concept_bureaucracy].",
+  "de": "Wir werden eine #bold Gründungskonferenz#! für eine neue Organisation der Vereinten Nationen einberufen. Sie tagt 12 Monate; danach wird die neue Organisation gegründet, mit uns als Gründer, Sitz des Hauptquartiers und (als [concept_great_power]) Ständigem Mitglied. Sie beginnt schwach (Autorität 25) unter der Gründungscharta, ohne Reformen und ohne Organisationen. Die führende Macht der Welt wird, sofern sie nicht wir selbst sind, gebeten beizutreten, fernzubleiben oder #R Widerstand zu leisten#! — und ihr Widerstand beendet die Konferenz und verhindert eine weitere für zehn Jahre. Kostet [concept_prestige] und [concept_bureaucracy]."
+ },
+ "UN_DEFUND_DEVELOPMENT_DESC": {
+  "en": "Stop contributing to UN development programs. $UN_DEFUND_DEVELOPMENT_EFFECTS$ It stops counting toward the UN's #bold funding#! pillar.",
+  "de": "Stellt Beiträge zu UN-Entwicklungsprogrammen ein. $UN_DEFUND_DEVELOPMENT_EFFECTS$ Zählt nicht mehr zur Säule #bold Finanzierung#! der UN."
+ },
+ "UN_END_PEACEKEEPING_DESC": {
+  "en": "Withdraw our forces from peacekeeping operations. $UN_END_PEACEKEEPING_EFFECTS$ It stops counting toward the UN's #bold funding#! pillar.",
+  "de": "Zieht unsere Truppen aus Friedenssicherungseinsätzen ab. $UN_END_PEACEKEEPING_EFFECTS$ Zählt nicht mehr zur Säule #bold Finanzierung#! der UN."
+ },
+ "UN_FUND_DEVELOPMENT_DESC": {
+  "en": "Contribute to UN development programs. $UN_FUND_DEVELOPMENT_EFFECTS$ A recurring expense scaled to [Concept('concept_gdp', 'GDP')] applies while the contribution is active. Requires [concept_major_power] rank. While it runs, it counts toward the UN's #bold funding#! pillar in proportion to our weight in world affairs ([concept_major_power] members and above).",
+  "de": "Trägt zu UN-Entwicklungsprogrammen bei. $UN_FUND_DEVELOPMENT_EFFECTS$ Solange der Beitrag aktiv ist, fällt eine wiederkehrende, am [Concept('concept_gdp', 'BIP')] bemessene Ausgabe an. Erfordert den Rang [concept_major_power]. Während es läuft, zählt es anteilig zu unserem Gewicht in den Weltgeschäften ([concept_major_power]-Mitglieder und höher) zur Säule #bold Finanzierung#! der UN."
+ },
+ "UN_HUMAN_RIGHTS_DESC": {
+  "en": "Champion a human rights resolution at the UN. $UN_HUMAN_RIGHTS_EFFECTS$ Requires Multiculturalism, Universal Suffrage, or Protected Speech. While it runs, it counts toward the UN's #bold funding#! pillar in proportion to our weight in world affairs ([concept_major_power] members and above).",
+  "de": "Setzt sich bei der UN für eine Menschenrechtsresolution ein. $UN_HUMAN_RIGHTS_EFFECTS$ Erfordert Multikulturalismus, Allgemeines Wahlrecht oder Meinungsfreiheit. Während es läuft, zählt es anteilig zu unserem Gewicht in den Weltgeschäften ([concept_major_power]-Mitglieder und höher) zur Säule #bold Finanzierung#! der UN."
+ },
+ "UN_LIFT_SANCTIONS_DESC": {
+  "en": "Lift the [concept_un_sanctions] we enforce, removing their penalties, and the embargoes the Assembly imposed with them, from the country they target. Sanctions nobody enforces any more, because their enforcer left the United Nations or is gone, are lifted too; sanctions another member still enforces stay in force. $UN_LIFT_SANCTIONS_EFFECTS$",
+  "de": "Hebt die von uns durchgesetzten [concept_un_sanctions] auf, entfernt deren Strafen sowie die von der Versammlung mit ihnen verhängten Embargos gegen das Zielland. Sanktionen, die niemand mehr durchsetzt, weil ihr Durchsetzer die Vereinten Nationen verlassen hat oder nicht mehr existiert, werden ebenfalls aufgehoben; Sanktionen, die ein anderes Mitglied noch durchsetzt, bleiben in Kraft. $UN_LIFT_SANCTIONS_EFFECTS$"
+ },
+ "UN_LOBBY_ACCEPT_BASE": {
+  "en": "from pledging a vote away before the debate is even heard",
+  "de": "davon, eine Stimme zu verpfänden, bevor die Debatte überhaupt gehört wurde"
+ },
+ "UN_LOBBY_ACCEPT_OBLIGATION": {
+  "en": "from the [concept_obligation] [SCOPE.sCountry('actor').GetName] would owe us in return",
+  "de": "von der [concept_obligation], die uns [SCOPE.sCountry('actor').GetName] dafür im Gegenzug schulden würde"
+ },
+ "UN_LOBBY_ACCEPT_RELATIONS": {
+  "en": "from [SCOPE.GetRootScope.GetCountry.GetAdjectiveNoFormatting]-[SCOPE.sCountry('actor').GetAdjectiveNoFormatting] [concept_relations] being [SCOPE.GetRootScope.GetCountry.GetRelationsWithDesc(SCOPE.sCountry('actor'))]",
+  "de": "davon, dass die [concept_relations] zwischen [SCOPE.GetRootScope.GetCountry.GetAdjectiveNoFormatting] und [SCOPE.sCountry('actor').GetAdjectiveNoFormatting] als [SCOPE.GetRootScope.GetCountry.GetRelationsWithDesc(SCOPE.sCountry('actor'))] gelten"
+ },
+ "UN_LOBBY_ACCEPT_RIVALRY": {
+  "en": "from [SCOPE.sCountry('actor').GetName] being our [concept_rivalry]",
+  "de": "davon, dass [SCOPE.sCountry('actor').GetName] unsere [concept_rivalry] ist"
+ },
+ "UN_LOBBY_ACCEPT_STANDING": {
+  "en": "from the record [SCOPE.sCountry('actor').GetName] has built in the [concept_un_general_assembly]",
+  "de": "vom Ansehen, das sich [SCOPE.sCountry('actor').GetName] in der [concept_un_general_assembly] erworben hat"
+ },
+ "UN_LOBBY_ACCEPT_TARGET_ALLY": {
+  "en": "from the resolution being aimed at an ally of ours",
+  "de": "davon, dass sich die Resolution gegen einen unserer Verbündeten richtet"
+ },
+ "UN_LOBBY_ACCEPT_TARGET_BLOC": {
+  "en": "from the resolution being aimed at a fellow member of our [concept_power_bloc]",
+  "de": "davon, dass sich die Resolution gegen ein anderes Mitglied unseres [concept_power_bloc] richtet"
+ },
+ "UN_LOBBY_ACCEPT_TARGET_RIVAL": {
+  "en": "from the resolution being aimed at a [concept_rivalry] of ours",
+  "de": "davon, dass sich die Resolution gegen eine unserer [concept_rivalry] richtet"
+ },
+ "UN_PAY_DUES_DESC": {
+  "en": "Resume paying our assessed [concept_un_dues], settling at once everything we owe from the months we withheld them. A member in arrears regains its vote the moment it pays.",
+  "de": "Nimmt die Zahlung unserer veranlagten [concept_un_dues] wieder auf und begleicht sofort alles, was wir aus den Monaten des Zahlungsrückstands schulden. Ein Mitglied im Rückstand erhält seine Stimme in dem Moment zurück, in dem es zahlt."
+ },
+ "UN_PROPOSE_CHARTER_REFORM": {
+  "en": "Table a charter reform",
+  "de": "Eine Charta-Reform einbringen"
+ },
+ "UN_PROPOSE_CHARTER_REFORM_DESC": {
+  "en": "Move the [concept_un_general_assembly] to amend the [concept_un_charter]. Reform I raises the ceiling on [concept_un_authority] from 70 to 85, Reform II from 85 to 100. It may be tabled only once authority has held within 5 points of the ceiling for 24 months running, and not within five years of the last reform vote. It needs a #bold two-thirds supermajority#! of all members, and it is #bold binding#!: any [concept_un_permanent_member] may [concept_un_veto] it, and a veto blocks it outright. [Concept('concept_major_power','Major powers')] and above only.",
+  "de": "Bewegt die [concept_un_general_assembly] dazu, die [concept_un_charter] zu ändern. Reform I hebt die Obergrenze der [concept_un_authority] von 70 auf 85 an, Reform II von 85 auf 100. Sie kann nur eingebracht werden, wenn die Autorität 24 Monate lang durchgehend innerhalb von 5 Punkten der Obergrenze geblieben ist, und nicht innerhalb von fünf Jahren nach der letzten Reformabstimmung. Sie benötigt eine #bold Zweidrittelmehrheit#! aller Mitglieder und ist #bold bindend#!: Jedes [concept_un_permanent_member] kann sein [concept_un_veto] einlegen, und ein Veto blockiert sie vollständig. Nur [Concept('concept_major_power','Mittelmächte')] und höher."
+ },
+ "UN_PROPOSE_CHARTER_REFORM_TT": {
+  "en": "We will table the next reform of the [concept_un_charter] in the [concept_un_general_assembly]. It needs a #G two-thirds supermajority#! of all members, and any [concept_un_permanent_member] may [concept_un_veto] it outright. If it carries, the ceiling on [concept_un_authority] rises.",
+  "de": "Wir werden die nächste Reform der [concept_un_charter] in der [concept_un_general_assembly] einbringen. Sie benötigt eine #G Zweidrittelmehrheit#! aller Mitglieder, und jedes [concept_un_permanent_member] kann sie mit seinem [concept_un_veto] vollständig blockieren. Wird sie angenommen, steigt die Obergrenze der [concept_un_authority]."
+ },
+ "UN_PROPOSE_CONDEMN_DESC": {
+  "en": "Propose a General Assembly resolution condemning a rival nation's military aggression. Its record must give the Assembly grounds: a case strength of 30 or more (see #bold Our Exposure#! in the chamber for how a record is built). Triggers a vote among all UN members. If passed, the target receives diplomatic penalties and we gain [concept_prestige] as the resolution sponsor.",
+  "de": "Schlägt eine Resolution der Generalversammlung vor, die die militärische Aggression einer rivalisierenden Nation verurteilt. Ihr Ansehen muss der Versammlung genug Grundlage bieten: eine Fallstärke von 30 oder mehr (siehe #bold Unsere Betroffenheit#! in der Kammer dazu, wie ein solches Ansehen entsteht). Löst eine Abstimmung unter allen UN-Mitgliedern aus. Wird sie angenommen, erhält das Zielland diplomatische Strafen, und wir gewinnen als Sponsor der Resolution [concept_prestige]."
+ },
+ "UN_PROPOSE_CONDEMN_TT": {
+  "en": "#bold A General Assembly vote has been called#! to condemn military aggression. Human members can vote at once; AI members vote in the ninth to eleventh month. Results follow after a year.",
+  "de": "#bold Eine Abstimmung der Generalversammlung wurde einberufen#!, um militärische Aggression zu verurteilen. Menschliche Mitglieder können sofort abstimmen; KI-Mitglieder stimmen im neunten bis elften Monat ab. Die Ergebnisse folgen nach einem Jahr."
+ },
+ "UN_PROPOSE_EXPULSION_DESC": {
+  "en": "Call a 2/3 supermajority [concept_un_general_assembly] vote to strip a recently-vetoing [concept_un_permanent_member] of its [concept_un_security_council] seat. The motion is itself non-vetoable. If it carries, the target loses its [concept_un_veto] power for the rest of the game.",
+  "de": "Ruft eine Abstimmung der [concept_un_general_assembly] mit Zweidrittelmehrheit auf, um einem kürzlich sein Veto einlegenden [concept_un_permanent_member] seinen Sitz im [concept_un_security_council] zu entziehen. Der Antrag selbst ist nicht mit Veto blockierbar. Wird er angenommen, verliert das Ziel für den Rest des Spiels seine [concept_un_veto]-Macht."
+ },
+ "UN_PROPOSE_EXPULSION_TT": {
+  "en": "We will propose a motion in the [concept_un_general_assembly] calling for the expulsion of a [concept_un_permanent_member] who has recently abused the [concept_un_veto]. As a [concept_un_resolution_recommendatory] motion against the Council itself, it requires a #G 2/3 supermajority#! to pass.",
+  "de": "Wir werden in der [concept_un_general_assembly] einen Antrag auf Ausschluss eines [concept_un_permanent_member] einbringen, das kürzlich sein [concept_un_veto] missbraucht hat. Als [concept_un_resolution_recommendatory] gegen den Rat selbst benötigt er eine #G Zweidrittelmehrheit#!, um angenommen zu werden."
+ },
+ "UN_PROPOSE_MANDATE_DESC": {
+  "en": "Move the General Assembly to authorize us, by name, to recover one [concept_state_region] we hold a [concept_claim] on from a state whose record gives the Assembly grounds (a case strength of 60 or more; see #bold Our Exposure#! in the chamber for how a record is built). This is a #bold binding#! resolution: any [concept_un_permanent_member] may [concept_un_veto] it, and a veto blocks it outright — there is no weaker form of a licence to use force. If it carries we receive a mandate, which makes the #v $war_goal_te_un_mandate_restore_state_type_name$#! [concept_war_goal] available against that state, for that territory only, at no [concept_infamy]. Every other demand keeps its normal price, and adding any other demand against that country for territory, subjugation, regime change or humiliation voids the mandate and is condemned (reparations, opening markets and the like are allowed). Requires [concept_un_authority] 40+ and no mandate of our own already in force.",
+  "de": "Bewegt die Generalversammlung dazu, uns namentlich zu ermächtigen, eine [concept_state_region], auf die wir einen [concept_claim] haben, von einem Staat zurückzuerobern, dessen Ansehen der Versammlung genug Grundlage bietet (eine Fallstärke von 60 oder mehr; siehe #bold Unsere Betroffenheit#! in der Kammer dazu, wie ein solches Ansehen entsteht). Dies ist eine #bold bindende#! Resolution: Jedes [concept_un_permanent_member] kann sein [concept_un_veto] einlegen, und ein Veto blockiert sie vollständig — es gibt keine schwächere Form einer Lizenz zur Gewaltanwendung. Wird sie angenommen, erhalten wir ein Mandat, das das [concept_war_goal] #v $war_goal_te_un_mandate_restore_state_type_name$#! gegen diesen Staat verfügbar macht, nur für dieses Gebiet, ohne [concept_infamy]. Jede andere Forderung behält ihren normalen Preis, und das Hinzufügen einer anderen Forderung gegen dieses Land nach Gebiet, Unterwerfung, Regimewechsel oder Demütigung macht das Mandat ungültig und wird verurteilt (Reparationen, Marktöffnungen und Ähnliches sind erlaubt). Erfordert [concept_un_authority] 40+ und kein bereits bestehendes eigenes Mandat."
+ },
+ "UN_PROPOSE_MANDATE_TT": {
+  "en": "#bold A General Assembly vote has been called#! on an authorized military mandate. Human members can vote at once; AI members vote in the ninth to eleventh month, and a [concept_un_permanent_member] may [concept_un_veto] it. Results follow after a year.",
+  "de": "#bold Eine Abstimmung der Generalversammlung wurde einberufen#!, über ein autorisiertes militärisches Mandat. Menschliche Mitglieder können sofort abstimmen; KI-Mitglieder stimmen im neunten bis elften Monat ab, und ein [concept_un_permanent_member] kann sein [concept_un_veto] einlegen. Die Ergebnisse folgen nach einem Jahr."
+ },
+ "UN_PROPOSE_SANCTIONS_DESC": {
+  "en": "Propose [concept_un_sanctions] against a rival. The General Assembly will vote over a year. If passed, the target receives severe trade and diplomatic penalties, and you become the sanctions enforcer. #G UN credibility +1 if passed.#! Requires [concept_major_power] rank and an unsanctioned rival whose record gives the Assembly grounds: a case strength of 50 or more.",
+  "de": "Schlägt [concept_un_sanctions] gegen einen Rivalen vor. Die Generalversammlung stimmt über ein Jahr hinweg ab. Wird sie angenommen, erhält das Ziel schwere Handels- und diplomatische Strafen, und du wirst zum Durchsetzer der Sanktionen. #G UN-Glaubwürdigkeit +1, falls angenommen.#! Erfordert den Rang [concept_major_power] und einen nicht sanktionierten Rivalen, dessen Ansehen der Versammlung genug Grundlage bietet: eine Fallstärke von 50 oder mehr."
+ },
+ "UN_PROPOSE_SANCTIONS_TT": {
+  "en": "Propose [concept_un_sanctions] against a rival nation. The General Assembly votes on the measure over the following year: human members at once, AI members in its ninth to eleventh month.",
+  "de": "Schlägt [concept_un_sanctions] gegen eine rivalisierende Nation vor. Die Generalversammlung stimmt im folgenden Jahr über die Maßnahme ab: menschliche Mitglieder sofort, KI-Mitglieder im neunten bis elften Monat."
+ },
+ "UN_REQUEST_AID_DESC": {
+  "en": "Request the General Assembly to authorize international humanitarian assistance for our country. Triggers a vote among all UN members. If passed, contributing nations provide aid and we receive economic benefits scaled by the number of donors.",
+  "de": "Ersucht die Generalversammlung, internationale humanitäre Hilfe für unser Land zu genehmigen. Löst eine Abstimmung unter allen UN-Mitgliedern aus. Wird sie angenommen, leisten beitragende Nationen Hilfe, und wir erhalten wirtschaftliche Vorteile, die sich nach der Zahl der Geber richten."
+ },
+ "UN_REQUEST_AID_TT": {
+  "en": "#bold A General Assembly vote has been called#! to authorize humanitarian aid. Human members can vote at once; AI members vote in the ninth to eleventh month. Results follow after a year.",
+  "de": "#bold Eine Abstimmung der Generalversammlung wurde einberufen#!, um humanitäre Hilfe zu genehmigen. Menschliche Mitglieder können sofort abstimmen; KI-Mitglieder stimmen im neunten bis elften Monat ab. Die Ergebnisse folgen nach einem Jahr."
+ },
+ "UN_REQUEST_PEACEKEEPERS_DESC": {
+  "en": "Request the General Assembly to authorize deployment of peacekeeping forces to our territory. Triggers a vote among all UN members. If passed, contributing nations deploy forces and we receive stability benefits scaled by the number of contributors.",
+  "de": "Ersucht die Generalversammlung, die Entsendung von Friedenstruppen in unser Gebiet zu genehmigen. Löst eine Abstimmung unter allen UN-Mitgliedern aus. Wird sie angenommen, entsenden beitragende Nationen Truppen, und wir erhalten Stabilitätsvorteile, die sich nach der Zahl der Beitragenden richten."
+ },
+ "UN_REQUEST_PEACEKEEPERS_TT": {
+  "en": "#bold A General Assembly vote has been called#! to authorize peacekeeping deployment. Human members can vote at once; AI members vote in the ninth to eleventh month. Results follow after a year.",
+  "de": "#bold Eine Abstimmung der Generalversammlung wurde einberufen#!, um eine Friedenstruppen-Entsendung zu genehmigen. Menschliche Mitglieder können sofort abstimmen; KI-Mitglieder stimmen im neunten bis elften Monat ab. Die Ergebnisse folgen nach einem Jahr."
+ },
+ "UN_STOP_CHAMPIONING_DESC": {
+  "en": "Cease active efforts to champion the international order. $UN_STOP_CHAMPIONING_EFFECTS$",
+  "de": "Stellt die aktiven Bemühungen ein, die internationale Ordnung zu stärken. $UN_STOP_CHAMPIONING_EFFECTS$"
+ },
+ "UN_STOP_UNDERMINING_DESC": {
+  "en": "Cease active efforts to undermine the international order. $UN_STOP_UNDERMINING_EFFECTS$",
+  "de": "Stellt die aktiven Bemühungen ein, die internationale Ordnung zu untergraben. $UN_STOP_UNDERMINING_EFFECTS$"
+ },
+ "UN_UNDERMINE_ORDER_DESC": {
+  "en": "Use our nation's weight to weaken the United Nations and assert sovereign independence. While active, we count against the UN's #R great-power commitment#! pillar, weighted by our share of world power, which lowers the target [concept_un_authority] moves toward. $UN_UNDERMINE_ORDER_EFFECTS$ [Concept('concept_great_power', 'Great Powers')] only. Toggle off to stop.",
+  "de": "Setzt das Gewicht unserer Nation ein, um die Vereinten Nationen zu schwächen und die souveräne Unabhängigkeit zu behaupten. Solange dies aktiv ist, zählen wir gegen die Säule #R Großmacht-Engagement#! der UN, gewichtet nach unserem Anteil an der Weltmacht, was das Ziel senkt, dem sich die [concept_un_authority] annähert. $UN_UNDERMINE_ORDER_EFFECTS$ Nur [Concept('concept_great_power', 'Großmächte')]. Zum Beenden ausschalten."
+ },
+ "UN_VOTE_ACCEPT_TARGET_TT": {
+  "en": "Acknowledge the resolution and accept its verdict. Pre-empts #bold UN Condemnation#! / #bold [concept_un_sanctions]#! if the resolution passes — but international observers read the gesture as performative, and the regime visibly loses face at home.",
+  "de": "Nimmt die Resolution zur Kenntnis und akzeptiert ihr Urteil. Kommt einer #bold UN-Verurteilung#! / #bold [concept_un_sanctions]#! zuvor, falls die Resolution angenommen wird — doch internationale Beobachter deuten die Geste als Schauspiel, und das Regime verliert innenpolitisch sichtbar an Gesicht."
+ },
+ "UN_VOTE_AGAINST_TT": {
+  "en": "Cast our vote #bold against#! the resolution.",
+  "de": "Stimmt #bold gegen#! die Resolution."
+ },
+ "UN_VOTE_BALLOT_ALREADY_CAST_TT": {
+  "en": "#v Our vote on this resolution is already on the record — answering here changes nothing.#!",
+  "de": "#v Unsere Stimme zu dieser Resolution ist bereits protokolliert — eine Antwort hier ändert nichts.#!"
+ },
+ "UN_VOTE_COMMITMENT_BREAK_TT": {
+  "en": "#R We pledged this vote the other way.#! Casting it this way goes back on our word: #R −4 International Standing#!, #R −20 [concept_relations]#! with the country we pledged it to, and the [concept_obligation] they took on to secure the pledge is struck off — we lose the favour we were owed.",
+  "de": "#R Wir hatten diese Stimme anders zugesagt.#! Sie so abzugeben, bricht unser Wort: #R −4 Internationales Ansehen#!, #R −20 [concept_relations]#! mit dem Land, dem wir sie zugesagt hatten, und die dafür eingegangene [concept_obligation] jenes Landes wird gestrichen — wir verlieren den uns geschuldeten Gefallen."
+ },
+ "UN_VOTE_COMMITMENT_KEEP_TT": {
+  "en": "#G We pledged this vote, and this honours it.#! A small gain in International Standing, #G +10 [concept_relations]#! with the country we pledged it to, and the [concept_obligation] they owe us stands.",
+  "de": "#G Wir hatten diese Stimme zugesagt, und dies löst die Zusage ein.#! Ein kleiner Gewinn an Internationalem Ansehen, #G +10 [concept_relations]#! mit dem Land, dem wir sie zugesagt hatten, und die uns geschuldete [concept_obligation] bleibt bestehen."
+ },
+ "UN_VOTE_IN_FAVOR_TT": {
+  "en": "Cast our vote #bold in favor#! of the resolution.",
+  "de": "Stimmt #bold für#! die Resolution."
+ },
+ "UN_VOTE_VETO_MORIBUND_TT": {
+  "en": "We exercise our [concept_un_permanent_member] [concept_un_veto] to block the binding form of this resolution. The UN is #bold Moribund#!: its decisions are recommendations, and blocking one #G costs the organisation nothing#! — no credibility, no backlash, no [concept_infamy]. The proposer will still resent it.",
+  "de": "Wir üben unser [concept_un_veto] als [concept_un_permanent_member] aus, um die bindende Form dieser Resolution zu blockieren. Die UN ist #bold Marode#!: Ihre Entscheidungen sind Empfehlungen, und eine zu blockieren #G kostet die Organisation nichts#! — keine Glaubwürdigkeit, keine Gegenreaktion, keine [concept_infamy]. Der Antragsteller wird es dennoch übel nehmen."
+ },
+ "UN_VOTE_VETO_TT": {
+  "en": "We exercise our [concept_un_permanent_member] [concept_un_veto] to block the binding form of this resolution. Cost: #R UN credibility −1.5 × our weight in world affairs#!, [concept_un_veto] backlash, and (for ICC, condemnation, and peacekeeping resolutions) a small [concept_infamy] hit. If the Assembly still passes the Rome Statute and the veto stands, the last power to veto it is marked as having #R Rejected the Rome Statute#!. The General Assembly's simple majority can still pass a graduated/weak form.",
+  "de": "Wir üben unser [concept_un_veto] als [concept_un_permanent_member] aus, um die bindende Form dieser Resolution zu blockieren. Kosten: #R UN-Glaubwürdigkeit −1,5 × unser Gewicht in den Weltgeschäften#!, [concept_un_veto]-Gegenreaktion und (bei IStGH-, Verurteilungs- und Friedenssicherungsresolutionen) ein kleiner Schlag gegen die [concept_infamy]. Nimmt die Versammlung das Römische Statut trotzdem an und bleibt das Veto bestehen, wird die zuletzt einlegende Macht als #R Ablehner des Römischen Statuts#! vermerkt. Die einfache Mehrheit der Generalversammlung kann weiterhin eine abgestufte/schwache Form annehmen."
+ },
+ "UN_WITHDRAW_ARMS_CONTROL": {
+  "en": "Withdraw from Arms Control",
+  "de": "Rüstungskontrolle verlassen"
+ },
+ "UN_WITHDRAW_ARMS_CONTROL_DESC": {
+  "en": "Withdraw from arms control agreements. $UN_WITHDRAW_ARMS_CONTROL_EFFECTS$ It stops counting toward the UN's #bold funding#! pillar.",
+  "de": "Tritt aus Rüstungskontrollabkommen aus. $UN_WITHDRAW_ARMS_CONTROL_EFFECTS$ Zählt nicht mehr zur Säule #bold Finanzierung#! der UN."
+ },
+ "UN_WITHDRAW_HUMAN_RIGHTS": {
+  "en": "Withdraw Human Rights Support",
+  "de": "Menschenrechtsunterstützung zurückziehen"
+ },
+ "UN_WITHDRAW_HUMAN_RIGHTS_DESC": {
+  "en": "Withdraw our support for human rights resolutions. $UN_WITHDRAW_HUMAN_RIGHTS_EFFECTS$ It stops counting toward the UN's #bold funding#! pillar.",
+  "de": "Zieht unsere Unterstützung für Menschenrechtsresolutionen zurück. $UN_WITHDRAW_HUMAN_RIGHTS_EFFECTS$ Zählt nicht mehr zur Säule #bold Finanzierung#! der UN."
+ },
+ "UN_WITHHOLD_DUES_DESC": {
+  "en": "Stop paying our assessed [concept_un_dues]. The money is ours to keep, but withholding it weakens the funding of the United Nations, costs our international standing, and after #v 24#! months in arrears costs us our vote in the [concept_un_general_assembly] until we pay what we owe.",
+  "de": "Stellt die Zahlung unserer veranlagten [concept_un_dues] ein. Das Geld bleibt bei uns, doch das Zurückhalten schwächt die Finanzierung der Vereinten Nationen, kostet unser internationales Ansehen und kostet uns nach #v 24#! Monaten Zahlungsrückstand unsere Stimme in der [concept_un_general_assembly], bis wir das Geschuldete zahlen."
+ },
+ "VOLUNTARY_UNION_ACCEPT_ARMED_FORCES_OPPOSE": {
+  "en": "Our Armed Forces would lose their state by accepting",
+  "de": "Unsere Streitkräfte würden durch die Annahme ihren Staat verlieren"
+ },
+ "VOLUNTARY_UNION_ACCEPT_ATT_ANTAGONISTIC": {
+  "en": "We see them as antagonistic",
+  "de": "Wir sehen sie als feindselig an"
+ },
+ "VOLUNTARY_UNION_ACCEPT_ATT_BELLIGERENT": {
+  "en": "We see them as belligerent",
+  "de": "Wir sehen sie als kriegerisch an"
+ },
+ "VOLUNTARY_UNION_ACCEPT_ATT_COOPERATIVE": {
+  "en": "We see them as cooperative",
+  "de": "Wir sehen sie als kooperativ an"
+ },
+ "VOLUNTARY_UNION_ACCEPT_ATT_GENIAL": {
+  "en": "We see them as genial partners",
+  "de": "Wir sehen sie als joviale Partner an"
+ },
+ "VOLUNTARY_UNION_ACCEPT_ATT_PROTECTIVE": {
+  "en": "We feel protective toward them",
+  "de": "Wir empfinden Beschützerinstinkt für sie"
+ },
+ "VOLUNTARY_UNION_ACCEPT_ATT_WARY": {
+  "en": "We are wary of them",
+  "de": "Wir sind ihnen gegenüber misstrauisch"
+ },
+ "VOLUNTARY_UNION_ACCEPT_BASELINE": {
+  "en": "It is a great concession to dissolve our nation",
+  "de": "Es ist ein großes Zugeständnis, unsere Nation aufzulösen"
+ },
+ "VOLUNTARY_UNION_ACCEPT_CULTURAL_TIES": {
+  "en": "We have a standing cultural-ties bond with them",
+  "de": "Wir unterhalten ein dauerhaftes Band kultureller Verbundenheit mit ihnen"
+ },
+ "VOLUNTARY_UNION_ACCEPT_DIPLOMATIC_FRAMEWORK": {
+  "en": "We share a Diplomatic Framework -- soft alignment encourages union",
+  "de": "Wir teilen einen Diplomatischen Rahmen -- sanfte Ausrichtung begünstigt eine Union"
+ },
+ "VOLUNTARY_UNION_ACCEPT_NATIONALIST_IGS": {
+  "en": "Our government is led by nationalists who reject dissolution",
+  "de": "Unsere Regierung wird von Nationalisten geführt, die eine Auflösung ablehnen"
+ },
+ "VOLUNTARY_UNION_ACCEPT_OUR_BLOC_LEADER": {
+  "en": "They lead our [concept_power_bloc] -- alignment is natural",
+  "de": "Sie führen unseren [concept_power_bloc] -- Angleichung liegt nahe"
+ },
+ "VOLUNTARY_UNION_ACCEPT_PEACEFUL_IGS": {
+  "en": "Our government has pacifist or humanitarian voices",
+  "de": "Unsere Regierung hat pazifistische oder humanitäre Stimmen"
+ },
+ "VOLUNTARY_UNION_ACCEPT_PRIOR_OPENNESS": {
+  "en": "We previously signalled openness to union",
+  "de": "Wir haben zuvor Offenheit für eine Union signalisiert"
+ },
+ "VOLUNTARY_UNION_ACCEPT_PROTECTION_GREAT": {
+  "en": "As a small nation, union with a great power of our own people would shelter us under its protection",
+  "de": "Als kleine Nation würde uns eine Union mit einer Großmacht unseres eigenen Volkes unter ihren Schutz stellen"
+ },
+ "VOLUNTARY_UNION_ACCEPT_PROTECTION_MAJOR": {
+  "en": "Union with a powerful nation of our own people would offer us protection",
+  "de": "Eine Union mit einer mächtigen Nation unseres eigenen Volkes würde uns Schutz bieten"
+ },
+ "VOLUNTARY_UNION_ACCEPT_REL_AMICABLE": {
+  "en": "Our relations are amicable",
+  "de": "Unsere Beziehungen sind freundschaftlich"
+ },
+ "VOLUNTARY_UNION_ACCEPT_REL_COLD": {
+  "en": "Our relations are cold",
+  "de": "Unsere Beziehungen sind kühl"
+ },
+ "VOLUNTARY_UNION_ACCEPT_REL_CORDIAL": {
+  "en": "Our relations are cordial",
+  "de": "Unsere Beziehungen sind herzlich"
+ },
+ "VOLUNTARY_UNION_ACCEPT_REL_FRIENDLY": {
+  "en": "Our relations are friendly",
+  "de": "Unsere Beziehungen sind freundlich"
+ },
+ "VOLUNTARY_UNION_ACCEPT_REL_HOSTILE": {
+  "en": "Our relations are hostile",
+  "de": "Unsere Beziehungen sind feindselig"
+ },
+ "VOLUNTARY_UNION_ACCEPT_REL_POOR": {
+  "en": "Our relations are poor",
+  "de": "Unsere Beziehungen sind schlecht"
+ },
+ "VOLUNTARY_UNION_ACCEPT_RIVALRY": {
+  "en": "We are formal rivals",
+  "de": "Wir sind förmliche Rivalen"
+ },
+ "VOLUNTARY_UNION_DECENTRALIZED_PROPOSE_BASELINE": {
+  "en": "Baseline interest in integrating the decentralized power",
+  "de": "Grundinteresse an der Eingliederung der dezentralisierten Macht"
+ },
+ "VOLUNTARY_UNION_DECENTRALIZED_PROPOSE_SAME_CULTURE": {
+  "en": "They are kin -- a decentralized power of our own people",
+  "de": "Sie sind Verwandte -- eine dezentralisierte Macht unseres eigenen Volkes"
+ },
+ "VOLUNTARY_UNION_PROPOSE_BASELINE": {
+  "en": "Baseline interest in voluntary union",
+  "de": "Grundinteresse an einer freiwilligen Union"
+ },
+ "VOLUNTARY_UNION_PROPOSE_PRESSURE_HIGH": {
+  "en": "Strong irredentist pressure",
+  "de": "Starker irredentistischer Druck"
+ },
+ "VOLUNTARY_UNION_PROPOSE_PRESSURE_MAX": {
+  "en": "Overwhelming irredentist pressure",
+  "de": "Überwältigender irredentistischer Druck"
+ },
+ "VOLUNTARY_UNION_PROPOSE_RELATIONS_NOT_FRIENDLY": {
+  "en": "Relations are short of friendly",
+  "de": "Die Beziehungen sind nicht ganz freundlich"
+ },
+ "VOLUNTARY_UNION_PROPOSE_TARGET_OPEN": {
+  "en": "They have signalled openness to union",
+  "de": "Sie haben Offenheit für eine Union signalisiert"
+ },
+ "VOLUNTARY_UNION_PROPOSE_TILT_LEAN_WARLIKE": {
+  "en": "Our government leans toward war over union",
+  "de": "Unsere Regierung neigt eher zu Krieg als zur Union"
+ },
+ "VOLUNTARY_UNION_PROPOSE_TILT_PEACEFUL": {
+  "en": "Our government strongly prefers peaceful union",
+  "de": "Unsere Regierung bevorzugt eindeutig eine friedliche Union"
+ },
+ "VOLUNTARY_UNION_PROPOSE_TILT_WARLIKE": {
+  "en": "Our government heavily prefers conquest to merger",
+  "de": "Unsere Regierung bevorzugt deutlich Eroberung gegenüber Zusammenschluss"
+ },
+ "WAR_SUPPORT_TE_CIVIL_DEFENCE": {
+  "en": "Shelters and civil defence",
+  "de": "Schutzräume und Zivilschutz"
+ },
+ "WAR_SUPPORT_TE_COVERT_COMMS_DISRUPTED": {
+  "en": "Enemy communications disruption",
+  "de": "Störung der feindlichen Kommunikation"
+ },
+ "WAR_SUPPORT_TE_NUCLEAR_SHADOW": {
+  "en": "Enemy nuclear arsenal",
+  "de": "Feindliches Nukleararsenal"
+ },
+ "WAR_SUPPORT_TE_UN_CONDEMNED": {
+  "en": "Condemned by the United Nations",
+  "de": "Von den Vereinten Nationen verurteilt"
+ },
+ "WAR_SUPPORT_TE_UN_ENEMY_CONDEMNED": {
+  "en": "Fighting a UN-condemned enemy",
+  "de": "Kampf gegen einen von der UN verurteilten Feind"
+ },
+ "WAR_SUPPORT_TE_UN_REBUKED": {
+  "en": "Rebuked by the United Nations",
+  "de": "Von den Vereinten Nationen gerügt"
+ },
+ "WAR_SUPPORT_TE_WW_HOME_FRONT_STRAIN": {
+  "en": "Home front strain (World War)",
+  "de": "Belastung der Heimatfront (Weltkrieg)"
+ },
+ "WAR_SUPPORT_TE_WW_PROLONGED_WAR": {
+  "en": "Prolonged World War",
+  "de": "Langwieriger Weltkrieg"
+ },
+ "WW_APPEASE_BUTTON_DESC": {
+  "en": "Seek to accommodate the demands of rival powers through diplomatic concessions, hoping to avoid war. Improves diplomatic reputation but weakens military readiness. Only available for democratic nations.",
+  "de": "Versucht, den Forderungen rivalisierender Mächte durch diplomatische Zugeständnisse entgegenzukommen, in der Hoffnung, einen Krieg zu vermeiden. Verbessert das diplomatische Ansehen, schwächt aber die militärische Bereitschaft. Nur für demokratische Nationen verfügbar."
+ },
+ "WW_APPEASE_POSSIBLE_TT": {
+  "en": "Must be a democratic nation with ideological tensions above 20%.",
+  "de": "Muss eine demokratische Nation mit ideologischen Spannungen über 20% sein."
+ },
+ "WW_FULLY_RESOLVED_TT": {
+  "en": "The world war is fully resolved. The postwar order takes shape.",
+  "de": "Der Weltkrieg ist vollständig beigelegt. Die Nachkriegsordnung nimmt Gestalt an."
+ },
+ "WW_JOIN_DEFENDER_TT": {
+  "en": "We formally enter the world war on the defender's side.",
+  "de": "Wir treten dem Weltkrieg offiziell auf der Seite des Verteidigers bei."
+ },
+ "WW_JOIN_WAR_BUTTON": {
+  "en": "Enter the War",
+  "de": "In den Krieg eintreten"
+ },
+ "WW_JOIN_WAR_BUTTON_DESC": {
+  "en": "Commit our nation to the ongoing world war against the aggressor powers. Our fresh forces will have a temporary combat advantage, but we will bear the full costs of total war.",
+  "de": "Verpflichtet unsere Nation zum laufenden Weltkrieg gegen die Angreifermächte. Unsere frischen Truppen erhalten vorübergehend einen Kampfvorteil, doch wir tragen die vollen Kosten des totalen Krieges."
+ },
+ "WW_JOIN_WAR_NEEDS_MAJOR_POWER": {
+  "en": "Must be at least a [concept_major_power] to enter a world war.",
+  "de": "Muss mindestens eine [concept_major_power] sein, um einem Weltkrieg beizutreten."
+ },
+ "WW_JOIN_WAR_POSSIBLE_TT": {
+  "en": "A world war must be active, with a [Concept('concept_great_power','great power')] still fighting on each side; we must not already be at war, and we must not have recently attempted to join.",
+  "de": "Ein Weltkrieg muss aktiv sein, wobei auf jeder Seite noch eine [Concept('concept_great_power','Großmacht')] kämpft; wir dürfen uns nicht bereits im Krieg befinden und dürfen nicht kürzlich versucht haben beizutreten."
+ },
+ "WW_LEND_LEASE_BUTTON": {
+  "en": "Provide Lend-Lease",
+  "de": "Leih-und-Pacht gewähren"
+ },
+ "WW_LEND_LEASE_BUTTON_DESC": {
+  "en": "Supply military equipment and resources to nations fighting on the side we favor, without committing our own troops to combat. Boosts [concept_prestige] and influence at the cost of increased [Concept('concept_military_good', 'military goods')] spending.",
+  "de": "Liefert militärische Ausrüstung und Ressourcen an Nationen, die auf der von uns favorisierten Seite kämpfen, ohne eigene Truppen in den Kampf zu schicken. Steigert [concept_prestige] und Einfluss auf Kosten höherer Ausgaben für [Concept('concept_military_good', 'Militärwaren')]."
+ },
+ "WW_LEND_LEASE_POSSIBLE_TT": {
+  "en": "Must be at least a [concept_major_power] with ideological tensions above 40%, or during an active world war.",
+  "de": "Muss mindestens eine [concept_major_power] mit ideologischen Spannungen über 40% sein, oder es muss ein Weltkrieg aktiv sein."
+ },
+ "WW_PEACE_CONCLUDED_TT": {
+  "en": "The world war has ended. Peace is concluded.",
+  "de": "Der Weltkrieg ist beendet. Der Frieden ist geschlossen."
+ },
+ "WW_PROPAGANDA_POSSIBLE_TT": {
+  "en": "Must have researched Mass Media and be actively at war during the world war.",
+  "de": "Muss Massenmedien erforscht haben und sich während des Weltkriegs aktiv im Krieg befinden."
+ },
+ "WW_REARM_BUTTON_DESC": {
+  "en": "Initiate a major military buildup in response to rising ideological tensions. Increases military effectiveness and [concept_prestige] but raises costs and generates unrest among workers.",
+  "de": "Leitet als Reaktion auf steigende ideologische Spannungen eine große militärische Aufrüstung ein. Erhöht die militärische Wirksamkeit und [concept_prestige], steigert aber die Kosten und erzeugt Unruhe unter den Arbeitern."
+ },
+ "WW_REARM_POSSIBLE_TT": {
+  "en": "Must have researched [concept_combined_arms] with ideological tensions above 30%.",
+  "de": "Muss [concept_combined_arms] erforscht haben, bei ideologischen Spannungen über 30%."
+ },
+ "WW_STOP_APPEASE_BUTTON": {
+  "en": "End Appeasement",
+  "de": "Beschwichtigung beenden"
+ },
+ "WW_STOP_APPEASE_BUTTON_DESC": {
+  "en": "Abandon the policy of diplomatic accommodation. [concept_political_lobby_appeasement] has failed.",
+  "de": "Gibt die Politik des diplomatischen Entgegenkommens auf. [concept_political_lobby_appeasement] ist gescheitert."
+ },
+ "WW_STOP_LEND_LEASE_BUTTON": {
+  "en": "End Lend-Lease",
+  "de": "Leih-und-Pacht beenden"
+ },
+ "WW_STOP_LEND_LEASE_BUTTON_DESC": {
+  "en": "Cease supplying military equipment to foreign belligerents.",
+  "de": "Stellt die Lieferung militärischer Ausrüstung an ausländische Kriegsparteien ein."
+ },
+ "WW_STOP_REARM_BUTTON": {
+  "en": "Halt Rearmament",
+  "de": "Aufrüstung stoppen"
+ },
+ "WW_STOP_REARM_BUTTON_DESC": {
+  "en": "Scale back military buildup, reducing costs but weakening deterrence.",
+  "de": "Fährt die militärische Aufrüstung zurück, senkt die Kosten, schwächt aber die Abschreckung."
+ },
+ "WW_STOP_TOTAL_WAR_ECONOMY_BUTTON": {
+  "en": "Demobilize Economy",
+  "de": "Wirtschaft demobilisieren"
+ },
+ "WW_STOP_TOTAL_WAR_ECONOMY_BUTTON_DESC": {
+  "en": "Return the economy to peacetime production. Removes the total war economy bonuses and penalties.",
+  "de": "Stellt die Wirtschaft auf Friedensproduktion zurück. Entfernt die Boni und Strafen der Kriegswirtschaft."
+ },
+ "WW_STOP_WARTIME_RATIONING_BUTTON": {
+  "en": "End Rationing",
+  "de": "Rationierung beenden"
+ },
+ "WW_STOP_WARTIME_RATIONING_BUTTON_DESC": {
+  "en": "End wartime rationing and restore civilian consumption levels.",
+  "de": "Beendet die Kriegsrationierung und stellt den zivilen Verbrauch wieder her."
+ },
+ "WW_STOP_WAR_PROPAGANDA_BUTTON": {
+  "en": "End War Propaganda",
+  "de": "Kriegspropaganda beenden"
+ },
+ "WW_STOP_WAR_PROPAGANDA_BUTTON_DESC": {
+  "en": "Cease the government propaganda campaign.",
+  "de": "Beendet die staatliche Propagandakampagne."
+ },
+ "WW_TOTAL_WAR_ECONOMY_BUTTON": {
+  "en": "Total War Economy",
+  "de": "Totale Kriegswirtschaft"
+ },
+ "WW_TOTAL_WAR_ECONOMY_BUTTON_DESC": {
+  "en": "Redirect the entire national economy toward the war effort. Massive military bonuses and conscription boost, but severely damages civilian [concept_sol] and increases construction costs.",
+  "de": "Richtet die gesamte Volkswirtschaft auf die Kriegsanstrengung aus. Gewaltige militärische Boni und ein Schub für die Wehrpflicht, doch schädigt den zivilen [concept_sol] schwer und erhöht die Baukosten."
+ },
+ "WW_TOTAL_WAR_POSSIBLE_TT": {
+  "en": "Must have researched [concept_combined_arms] and be actively at war during the world war.",
+  "de": "Muss [concept_combined_arms] erforscht haben und sich während des Weltkriegs aktiv im Krieg befinden."
+ },
+ "WW_WARTIME_RATIONING_BUTTON": {
+  "en": "Impose Rationing",
+  "de": "Rationierung einführen"
+ },
+ "WW_WARTIME_RATIONING_BUTTON_DESC": {
+  "en": "Institute strict wartime rationing to ensure military supply. Hurts [concept_sol] but keeps agriculture functional.",
+  "de": "Führt strenge Kriegsrationierung ein, um die militärische Versorgung sicherzustellen. Schadet dem [concept_sol], hält aber die Landwirtschaft funktionsfähig."
+ },
+ "WW_WAR_PROPAGANDA_BUTTON": {
+  "en": "Launch War Propaganda",
+  "de": "Kriegspropaganda starten"
+ },
+ "WW_WAR_PROPAGANDA_BUTTON_DESC": {
+  "en": "Mobilize the press and media for the war effort. Boosts morale and authority but generates disapproval from intellectuals.",
+  "de": "Mobilisiert Presse und Medien für die Kriegsanstrengung. Steigert Moral und Autorität, erzeugt aber Missbilligung bei Intellektuellen."
+ },
+ "addiction_public_health_modifier": {
+  "en": "Addiction Public Health Program",
+  "de": "Gesundheitsprogramm gegen Sucht"
+ },
+ "agdiff_first_mover_prestige": {
+  "en": "Agricultural Innovator",
+  "de": "Landwirtschaftlicher Pionier"
+ },
+ "agdiff_modern_chemical_processes": {
+  "en": "Petrochemical Inputs Diffusion",
+  "de": "Verbreitung petrochemischer Vorprodukte"
+ },
+ "ai_assisted_governance_modifier": {
+  "en": "AI-Assisted Governance",
+  "de": "KI-gestützte Regierungsführung"
+ },
+ "ai_policing_banned_modifier": {
+  "en": "AI Policing Banned",
+  "de": "KI-Polizeiarbeit verboten"
+ },
+ "ai_strategy_un_mandate": {
+  "en": "Enforce the Mandate",
+  "de": "Das Mandat durchsetzen"
+ },
+ "amendment_corporate_data_exemption": {
+  "en": "Corporate Data Access Exemption",
+  "de": "Ausnahme beim Unternehmenszugriff auf Daten"
+ },
+ "amendment_env_grandfather_clause": {
+  "en": "Environmental Grandfather Clause",
+  "de": "Umweltrechtlicher Bestandsschutz"
+ },
+ "amendment_langreform_advisory_panel": {
+  "en": "Language Advisory Panel",
+  "de": "Sprachbeirat"
+ },
+ "amendment_langreform_minority_protection": {
+  "en": "Minority Language Protection",
+  "de": "Schutz der Minderheitensprachen"
+ },
+ "amendment_langreform_national_focus": {
+  "en": "National Language Priority",
+  "de": "Vorrang der Landessprache"
+ },
+ "amendment_langreform_powerful_academy": {
+  "en": "Language Academy Established",
+  "de": "Sprachakademie gegründet"
+ },
+ "amendment_langreform_revived_arabic": {
+  "en": "Classical Arabic Revival",
+  "de": "Wiederbelebung des klassischen Arabisch"
+ },
+ "amendment_langreform_revived_aramaic": {
+  "en": "Aramaic Revival",
+  "de": "Wiederbelebung des Aramäischen"
+ },
+ "amendment_langreform_revived_avestan": {
+  "en": "Avestan Revival",
+  "de": "Wiederbelebung des Avestischen"
+ },
+ "amendment_langreform_revived_chinese": {
+  "en": "Literary Chinese Revival",
+  "de": "Wiederbelebung des Literarischen Chinesisch"
+ },
+ "amendment_langreform_revived_coptic": {
+  "en": "Coptic Revival",
+  "de": "Wiederbelebung des Koptischen"
+ },
+ "amendment_langreform_revived_geez": {
+  "en": "Ge'ez Revival",
+  "de": "Wiederbelebung des Ge'ez"
+ },
+ "amendment_langreform_revived_gothic": {
+  "en": "Gothic Revival",
+  "de": "Wiederbelebung des Gotischen"
+ },
+ "amendment_langreform_revived_greek": {
+  "en": "Classical Greek Revival",
+  "de": "Wiederbelebung des klassischen Griechisch"
+ },
+ "amendment_langreform_revived_hebrew": {
+  "en": "Hebrew Revival",
+  "de": "Wiederbelebung des Hebräischen"
+ },
+ "amendment_langreform_revived_irish": {
+  "en": "Classical Irish Revival",
+  "de": "Wiederbelebung des klassischen Irisch"
+ },
+ "amendment_langreform_revived_latin": {
+  "en": "Latin Revival",
+  "de": "Wiederbelebung des Lateinischen"
+ },
+ "amendment_langreform_revived_mayan": {
+  "en": "Classic Mayan Revival",
+  "de": "Wiederbelebung des klassischen Maya"
+ },
+ "amendment_langreform_revived_nahuatl": {
+  "en": "Classical Nahuatl Revival",
+  "de": "Wiederbelebung des klassischen Nahuatl"
+ },
+ "amendment_langreform_revived_norse": {
+  "en": "Old Norse Revival",
+  "de": "Wiederbelebung des Altnordischen"
+ },
+ "amendment_langreform_revived_pali": {
+  "en": "Pali Revival",
+  "de": "Wiederbelebung des Pali"
+ },
+ "amendment_langreform_revived_prussian": {
+  "en": "Old Prussian Revival",
+  "de": "Wiederbelebung des Altpreußischen"
+ },
+ "amendment_langreform_revived_sanskrit": {
+  "en": "Sanskrit Revival",
+  "de": "Wiederbelebung des Sanskrit"
+ },
+ "amendment_langreform_revived_slavonic": {
+  "en": "Old Church Slavonic Revival",
+  "de": "Wiederbelebung des Altkirchenslawischen"
+ },
+ "amendment_language_naturalization_requirement": {
+  "en": "Language Requirement for Naturalization",
+  "de": "Sprachpflicht für die Einbürgerung"
+ },
+ "amendment_military_necessity_clause": {
+  "en": "Military Necessity Clause",
+  "de": "Klausel der militärischen Notwendigkeit"
+ },
+ "amendment_minority_script_preservation": {
+  "en": "Minority Script Preservation",
+  "de": "Erhalt der Minderheitenschriften"
+ },
+ "amendment_national_champion_exemption": {
+  "en": "National Champion Exemption",
+  "de": "Ausnahme für nationale Vorzeigeunternehmen"
+ },
+ "amendment_no_first_strike": {
+  "en": "No-First-Strike Pledge",
+  "de": "Verzicht auf Erstschlag"
+ },
+ "amendment_small_donor_matching": {
+  "en": "Small Donor Matching",
+  "de": "Förderausgleich für Kleinspenden"
+ },
+ "anti_colonial_momentum_modifier": {
+  "en": "Anti-Colonial Backlash",
+  "de": "Antikoloniale Gegenreaktion"
+ },
+ "anti_minority_boycott_modifier": {
+  "en": "Anti-Minority Boycott",
+  "de": "Boykott gegen Minderheiten"
+ },
+ "anti_war_movement_suppressed": {
+  "en": "Anti-War Movement Suppressed",
+  "de": "Antikriegsbewegung unterdrückt"
+ },
+ "antitrust_established_firms_carve_out": {
+  "en": "Antitrust: Established Firms Carve-Out",
+  "de": "Kartellrecht: Ausnahme für etablierte Unternehmen"
+ },
+ "antitrust_market_competition_boost": {
+  "en": "Competitive Market Surge",
+  "de": "Aufschwung durch Wettbewerb"
+ },
+ "antitrust_public_outrage_advance": {
+  "en": "Antitrust: Public Outrage Advance",
+  "de": "Kartellrecht: Öffentliche Empörung schreitet voran"
+ },
+ "antitrust_public_outrage_cautious": {
+  "en": "Antitrust: Public Outrage Cautious Advance",
+  "de": "Kartellrecht: Öffentliche Empörung – Vorsichtiger Vormarsch"
+ },
+ "antitrust_public_outrage_stall": {
+  "en": "Antitrust: Public Outrage Stall",
+  "de": "Kartellrecht: Öffentliche Empörung stockt"
+ },
+ "arms_race_escalation_modifier": {
+  "en": "Arms Race Escalation",
+  "de": "Eskalation des Wettrüstens"
+ },
+ "arms_race_ignored_modifier": {
+  "en": "Arms Race Conceded",
+  "de": "Wettrüsten aufgegeben"
+ },
+ "arms_race_rival_pressure_modifier": {
+  "en": "Arms Race Pressure",
+  "de": "Druck des Wettrüstens"
+ },
+ "art_renaissance_funded_modifier": {
+  "en": "State-Funded Art Renaissance",
+  "de": "Staatlich geförderte Kunstrenaissance"
+ },
+ "augment_ethics_board_advance": {
+  "en": "Augmentation: Ethics Board Advance",
+  "de": "Augmentierung: Ethikrat schreitet voran"
+ },
+ "augment_ethics_board_cautious": {
+  "en": "Augmentation: Ethics Board Cautious Advance",
+  "de": "Augmentierung: Ethikrat – Vorsichtiger Vormarsch"
+ },
+ "augment_ethics_board_stall": {
+  "en": "Augmentation: Ethics Board Stall",
+  "de": "Augmentierung: Ethikrat stockt"
+ },
+ "augmentation_crime_ban_modifier": {
+  "en": "Augmented Criminal Ban",
+  "de": "Verbot für augmentierte Straftäter"
+ },
+ "augmentation_debate_active_modifier": {
+  "en": "Augmentation Debate",
+  "de": "Debatte über Augmentierung"
+ },
+ "augmentation_devout_victory_modifier": {
+  "en": "Devout Victory on Augmentation",
+  "de": "Sieg der Frommen in der Augmentierungsfrage"
+ },
+ "augmentation_divide_permanent_modifier": {
+  "en": "Entrenched Augmentation Divide",
+  "de": "Verfestigte Kluft bei der Augmentierung"
+ },
+ "augmentation_ethics_board_modifier": {
+  "en": "Augmentation Ethics Board",
+  "de": "Augmentierungs-Ethikrat"
+ },
+ "augmentation_kill_switch_modifier": {
+  "en": "Augmentation Kill Switch Mandate",
+  "de": "Vorgeschriebener Notabschalter für Augmentierungen"
+ },
+ "augmentation_market_efficiency_modifier": {
+  "en": "Augmentation Market Efficiency",
+  "de": "Markteffizienz der Augmentierung"
+ },
+ "augmentation_market_forces_modifier": {
+  "en": "Augmentation Market Forces",
+  "de": "Marktkräfte der Augmentierung"
+ },
+ "augmentation_religious_anger_modifier": {
+  "en": "Religious Anger Over Augmentation",
+  "de": "Religiöser Zorn über Augmentierung"
+ },
+ "augmentation_workplace_protection_modifier": {
+  "en": "Augmentation Workplace Protection",
+  "de": "Arbeitsschutz bei Augmentierung"
+ },
+ "banking_asset_relief_excludes_bail_in_tt": {
+  "en": "$CB_BAIL_IN$ is not running: a government bails its banks out or bails them in, not both.",
+  "de": "$CB_BAIL_IN$ läuft nicht: Eine Regierung rettet ihre Banken entweder durch Bail-out oder Bail-in, nicht durch beides."
+ },
+ "banking_asset_relief_program": {
+  "en": "Asset Relief Program",
+  "de": "Vermögensentlastungsprogramm"
+ },
+ "banking_bail_in_excludes_asset_relief_tt": {
+  "en": "$CB_ASSET_RELIEF$ is not running: a government bails its banks out or bails them in, not both.",
+  "de": "$CB_ASSET_RELIEF$ läuft nicht: Eine Regierung rettet ihre Banken entweder durch Bail-out oder Bail-in, nicht durch beides."
+ },
+ "banking_bail_in_regime": {
+  "en": "Bail-in Regime",
+  "de": "Bail-in-Regelung"
+ },
+ "banking_bank_holiday_cooldown_tt": {
+  "en": "No bank holiday in the last #v 5#! years: shutting the banks is believed once, not every season.",
+  "de": "Kein Bankfeiertag in den letzten #v 5#! Jahren: Die Schließung der Banken wird einmal geglaubt, nicht jede Saison."
+ },
+ "banking_bank_holiday_momentum_tt": {
+  "en": "if the [concept_banking_cycle] is falling, its momentum is #b halved#! — the run stops.",
+  "de": "Fällt der [concept_banking_cycle], wird seine Dynamik #b halbiert#! — der Ansturm stoppt."
+ },
+ "banking_bank_holiday_phase_tt": {
+  "en": "Only in a #b downturn#! or a #b panic#!: a bank holiday stops a run, and in calmer times there is no run to stop.",
+  "de": "Nur in einem #b Abschwung#! oder einer #b Panik#!: Ein Bankfeiertag stoppt einen Ansturm, und in ruhigeren Zeiten gibt es keinen Ansturm zu stoppen."
+ },
+ "banking_bank_holiday_radicals_tt": {
+  "en": "[Concept('concept_radical', 'Radicals')] among depositors who cannot reach their money: #R 5%#! of the middle strata, #R 3%#! of the upper strata and #R 2%#! of the lower strata.",
+  "de": "[Concept('concept_radical', 'Radikale')] unter Einlegern, die nicht an ihr Geld kommen: #R 5%#! der Mittelschicht, #R 3%#! der Oberschicht und #R 2%#! der Unterschicht."
+ },
+ "banking_button_locked_by_law_tt": {
+  "en": "Tool not available under your current banking law",
+  "de": "Werkzeug unter dem aktuellen Bankengesetz nicht verfügbar"
+ },
+ "banking_button_locked_capital_controls_tt": {
+  "en": "Tool not available under your current banking law (capital controls may be imposed during wartime)",
+  "de": "Werkzeug unter dem aktuellen Bankengesetz nicht verfügbar (Kapitalverkehrskontrollen können in Kriegszeiten verhängt werden)"
+ },
+ "banking_capital_controls_out": {
+  "en": "Capital Controls on Outflows",
+  "de": "Kapitalverkehrskontrollen für Abflüsse"
+ },
+ "banking_countercyclical_capital_buffer": {
+  "en": "Countercyclical Capital Buffer",
+  "de": "Antizyklischer Kapitalpuffer"
+ },
+ "banking_crash_intervention_capital_controls": {
+  "en": "Emergency Capital Controls",
+  "de": "Kapitalverkehrskontrollen im Notfall"
+ },
+ "banking_crash_intervention_correspondent_liquidity": {
+  "en": "Correspondent Liquidity Injection",
+  "de": "Liquiditätsspritze über Korrespondenzbanken"
+ },
+ "banking_crash_intervention_deposit_guarantee": {
+  "en": "Active Deposit Guarantee",
+  "de": "Aktive Einlagensicherung"
+ },
+ "banking_crash_intervention_dev_bank_lending": {
+  "en": "Development-Bank Crisis Lending",
+  "de": "Krisenkredite der Entwicklungsbank"
+ },
+ "banking_crash_intervention_discount_window": {
+  "en": "Emergency Discount Window",
+  "de": "Notfall-Diskontfenster"
+ },
+ "banking_crash_intervention_keynesian_stimulus": {
+  "en": "Keynesian Fiscal Stimulus",
+  "de": "Keynesianisches Konjunkturprogramm"
+ },
+ "banking_crash_intervention_mutual_clearing": {
+  "en": "Mutual Clearing-House Bailout",
+  "de": "Rettung durch gegenseitiges Clearinghaus"
+ },
+ "banking_crash_intervention_nationalize": {
+  "en": "Nationalised Banking Sector",
+  "de": "Verstaatlichter Bankensektor"
+ },
+ "banking_crash_intervention_open_market": {
+  "en": "Open-Market Operations",
+  "de": "Offenmarktgeschäfte"
+ },
+ "banking_crash_intervention_suspend_convertibility": {
+  "en": "Suspended Convertibility",
+  "de": "Ausgesetzte Konvertibilität"
+ },
+ "banking_crash_intervention_swap_lines": {
+  "en": "International Swap Lines",
+  "de": "Internationale Swap-Linien"
+ },
+ "banking_crash_response_cost": {
+  "en": "Crisis Response Spending",
+  "de": "Ausgaben für Krisenreaktion"
+ },
+ "banking_crisis_capital_controls_modifier": {
+  "en": "Capital Controls",
+  "de": "Kapitalverkehrskontrollen"
+ },
+ "banking_crisis_confidence_messaging_modifier": {
+  "en": "Confidence Messaging",
+  "de": "Vertrauensbildende Kommunikation"
+ },
+ "banking_crisis_monetary_stabilization_modifier": {
+  "en": "Monetary Stabilization",
+  "de": "Geldpolitische Stabilisierung"
+ },
+ "banking_crisis_protectionism_light_modifier": {
+  "en": "Partial Trade Restrictions",
+  "de": "Teilweise Handelsbeschränkungen"
+ },
+ "banking_crisis_protectionism_modifier": {
+  "en": "Emergency Trade Restrictions",
+  "de": "Handelsbeschränkungen im Notfall"
+ },
+ "banking_cycle_status_boom": {
+  "en": "#blue #b Boom#!: widespread optimism and robust lending drive strong growth.\\n\\n#!",
+  "de": "#blue #b Boom#!: weitverbreiteter Optimismus und robuste Kreditvergabe treiben starkes Wachstum an.\\n\\n#!"
+ },
+ "banking_cycle_status_boom_cmd": {
+  "en": "#blue #b Peak Capacity#!: the economy operates near full coordination; accumulated administrative strain is a growing risk.\\n\\n#!",
+  "de": "#blue #b Spitzenauslastung#!: Die Wirtschaft arbeitet nahe an voller Koordination; die angehäufte administrative Belastung wird zu einem wachsenden Risiko.\\n\\n#!"
+ },
+ "banking_cycle_status_boom_coop": {
+  "en": "#blue #b Surplus Accumulation#!: strong reinvestment builds capacity; payout demands from workers are rising.\\n\\n#!",
+  "de": "#blue #b Überschussanhäufung#!: starke Reinvestition baut Kapazität auf; die Auszahlungsforderungen der Arbeiter steigen.\\n\\n#!"
+ },
+ "banking_cycle_status_bubble_expansion": {
+  "en": "#yellow #b Rising [concept_bubble_pressure]#!: speculative flows broaden and leverage climbs.#!\\n",
+  "de": "#yellow #b Steigender [concept_bubble_pressure]#!: spekulative Kapitalflüsse breiten sich aus, und die Verschuldung steigt.#!\\n"
+ },
+ "banking_cycle_status_bubble_expansion_cmd": {
+  "en": "#yellow #b Significant Strain#!: planning apparatus shows stress; coordination failures become common.#!\\n",
+  "de": "#yellow #b Erhebliche Belastung#!: Der Planungsapparat zeigt Stress; Koordinationsausfälle häufen sich.#!\\n"
+ },
+ "banking_cycle_status_bubble_expansion_coop": {
+  "en": "#yellow #b Growing Strain#!: unsustainable consumption commitments accumulate; councils must act.#!\\n",
+  "de": "#yellow #b Wachsende Belastung#!: nicht tragfähige Konsumverpflichtungen häufen sich an; die Räte müssen handeln.#!\\n"
+ },
+ "banking_cycle_status_bubble_extreme": {
+  "en": "#red #b Bubble Extreme#!: severe overvaluation and fragility - correction or crash is likely.#!\\n",
+  "de": "#red #b Extreme Blase#!: schwere Überbewertung und Fragilität - eine Korrektur oder ein Crash ist wahrscheinlich.#!\\n"
+ },
+ "banking_cycle_status_bubble_extreme_cmd": {
+  "en": "#red #b System Breakdown#!: bureaucratic overload approaches failure; plan enforcement collapses.#!\\n",
+  "de": "#red #b Systemzusammenbruch#!: bürokratische Überlastung nähert sich dem Versagen; die Plandurchsetzung bricht zusammen.#!\\n"
+ },
+ "banking_cycle_status_bubble_extreme_coop": {
+  "en": "#red #b System Crisis#!: cascading payout [Concept('concept_obligation', 'obligations')] threaten cooperative solvency.#!\\n",
+  "de": "#red #b Systemkrise#!: kaskadierende Auszahlungs-[Concept('concept_obligation', 'Verpflichtungen')] bedrohen die Zahlungsfähigkeit der Genossenschaften.#!\\n"
+ },
+ "banking_cycle_status_bubble_frenzy": {
+  "en": "#gold #b Bubble Frenzy#!: exuberance dominates; pricing disconnects from fundamentals.#!\\n",
+  "de": "#gold #b Blasenfrenzy#!: Überschwang dominiert; die Preisbildung löst sich von den Fundamentaldaten.#!\\n"
+ },
+ "banking_cycle_status_bubble_frenzy_cmd": {
+  "en": "#gold #b Critical Strain#!: administrative strain is severe; mass misallocation risks mount.#!\\n",
+  "de": "#gold #b Kritische Belastung#!: die administrative Belastung ist schwerwiegend; die Risiken massiver Fehlallokation wachsen.#!\\n"
+ },
+ "banking_cycle_status_bubble_frenzy_coop": {
+  "en": "#gold #b Severe Strain#!: cooperative overcommitment is acute; corrective measures are urgent.#!\\n",
+  "de": "#gold #b Schwere Belastung#!: die Überverpflichtung der Genossenschaften ist akut; Korrekturmaßnahmen sind dringend nötig.#!\\n"
+ },
+ "banking_cycle_status_bubble_stable": {
+  "en": "#white #b Building [concept_bubble_pressure]#!: pockets of speculation emerge, but risks remain manageable.#!\\n",
+  "de": "#white #b Aufbauender [concept_bubble_pressure]#!: vereinzelte Spekulationsblasen entstehen, doch die Risiken bleiben beherrschbar.#!\\n"
+ },
+ "banking_cycle_status_bubble_stable_cmd": {
+  "en": "#white #b Rising Strain#!: minor bottlenecks accumulate; administrative overhead grows.#!\\n",
+  "de": "#white #b Wachsende Belastung#!: kleinere Engpässe häufen sich an; der administrative Aufwand wächst.#!\\n"
+ },
+ "banking_cycle_status_bubble_stable_coop": {
+  "en": "#white #b Mild Overextension#!: payout [Concept('concept_obligation', 'obligations')] slightly exceed sustainable levels; manageable for now.#!\\n",
+  "de": "#white #b Leichte Überdehnung#!: Auszahlungs-[Concept('concept_obligation', 'Verpflichtungen')] übersteigen das tragfähige Niveau leicht; vorerst beherrschbar.#!\\n"
+ },
+ "banking_cycle_status_downturn": {
+  "en": "#gold #b Downturn#!: tight money and weak demand slow investment.\\n\\n#!",
+  "de": "#gold #b Abschwung#!: knappes Geld und schwache Nachfrage bremsen die Investitionen.\\n\\n#!"
+ },
+ "banking_cycle_status_downturn_cmd": {
+  "en": "#gold #b Allocation Breakdown#!: plan targets go unmet; bottlenecks spread across sectors.\\n\\n#!",
+  "de": "#gold #b Zusammenbruch der Zuteilung#!: Planvorgaben werden verfehlt; Engpässe breiten sich über die Sektoren aus.\\n\\n#!"
+ },
+ "banking_cycle_status_downturn_coop": {
+  "en": "#gold #b Consumption Shortfall#!: payouts outstrip earnings; cooperatives tighten budgets.\\n\\n#!",
+  "de": "#gold #b Konsumdefizit#!: Auszahlungen übersteigen die Einnahmen; die Genossenschaften straffen ihre Budgets.\\n\\n#!"
+ },
+ "banking_cycle_status_expansion": {
+  "en": "#green #b Expansion#!: easy credit and rising optimism fuel growth.\\n\\n#!",
+  "de": "#green #b Expansion#!: leichter Kredit und wachsender Optimismus befeuern das Wachstum.\\n\\n#!"
+ },
+ "banking_cycle_status_expansion_cmd": {
+  "en": "#green #b Accelerated Output#!: synchronisation improves; sectors begin exceeding plan targets.\\n\\n#!",
+  "de": "#green #b Beschleunigte Produktion#!: die Synchronisation verbessert sich; Sektoren beginnen, die Planvorgaben zu übertreffen.\\n\\n#!"
+ },
+ "banking_cycle_status_expansion_coop": {
+  "en": "#green #b Growing Reinvestment#!: cooperatives accumulate surpluses and reinvestment strengthens.\\n\\n#!",
+  "de": "#green #b Wachsende Reinvestition#!: Genossenschaften häufen Überschüsse an, und die Reinvestition nimmt zu.\\n\\n#!"
+ },
+ "banking_cycle_status_fast_downturn": {
+  "en": "#red #b Falling Rapidly#!: momentum is strongly negative — conditions are deteriorating fast.\\n\\n#!",
+  "de": "#red #b Rasch fallend#!: die Dynamik ist stark negativ — die Lage verschlechtert sich schnell.\\n\\n#!"
+ },
+ "banking_cycle_status_fast_downturn_cmd": {
+  "en": "#red #b Falling Rapidly#!: momentum is strongly negative — coordination metrics are deteriorating fast.\\n\\n#!",
+  "de": "#red #b Rasch fallend#!: die Dynamik ist stark negativ — die Koordinationswerte verschlechtern sich schnell.\\n\\n#!"
+ },
+ "banking_cycle_status_fast_downturn_coop": {
+  "en": "#red #b Falling Rapidly#!: momentum is strongly negative — cooperative capacity is declining fast.\\n\\n#!",
+  "de": "#red #b Rasch fallend#!: die Dynamik ist stark negativ — die Kapazität der Genossenschaften sinkt schnell.\\n\\n#!"
+ },
+ "banking_cycle_status_fast_expansion": {
+  "en": "#blue #b Rising Rapidly#!: momentum is strongly positive — the cycle is accelerating upward.\\n\\n#!",
+  "de": "#blue #b Rasch steigend#!: die Dynamik ist stark positiv — der Zyklus beschleunigt sich nach oben.\\n\\n#!"
+ },
+ "banking_cycle_status_fast_expansion_cmd": {
+  "en": "#blue #b Rising Rapidly#!: momentum is strongly positive — output metrics are climbing fast.\\n\\n#!",
+  "de": "#blue #b Rasch steigend#!: die Dynamik ist stark positiv — die Produktionswerte steigen schnell.\\n\\n#!"
+ },
+ "banking_cycle_status_fast_expansion_coop": {
+  "en": "#blue #b Rising Rapidly#!: momentum is strongly positive — cooperative reinvestment is surging.\\n\\n#!",
+  "de": "#blue #b Rasch steigend#!: die Dynamik ist stark positiv — die Reinvestition der Genossenschaften schnellt in die Höhe.\\n\\n#!"
+ },
+ "banking_cycle_status_frenzy": {
+  "en": "#red #b Frenzy#!: speculation outpaces fundamentals; risks build.\\n\\n#!#!",
+  "de": "#red #b Frenzy#!: die Spekulation überholt die Fundamentaldaten; die Risiken wachsen.\\n\\n#!#!"
+ },
+ "banking_cycle_status_frenzy_cmd": {
+  "en": "#red #b Overextension#!: targets push the system past its limits; administrative fragility builds.\\n\\n#!#!",
+  "de": "#red #b Überdehnung#!: Vorgaben treiben das System über seine Grenzen; die administrative Fragilität wächst.\\n\\n#!#!"
+ },
+ "banking_cycle_status_frenzy_coop": {
+  "en": "#red #b Overinvestment Spiral#!: unchecked reinvestment outpaces distributional needs; imbalances build.\\n\\n#!#!",
+  "de": "#red #b Überinvestitionsspirale#!: ungebremste Reinvestition überholt den Verteilungsbedarf; Ungleichgewichte wachsen.\\n\\n#!#!"
+ },
+ "banking_cycle_status_neutral": {
+  "en": "#white #b Holding Steady#!: the cycle is neither accelerating nor decelerating significantly.\\n\\n#!",
+  "de": "#white #b Stabil#!: der Zyklus beschleunigt oder verlangsamt sich nicht nennenswert.\\n\\n#!"
+ },
+ "banking_cycle_status_neutral_cmd": {
+  "en": "#white #b Holding Steady#!: the cycle is neither gaining nor losing ground.\\n\\n#!",
+  "de": "#white #b Stabil#!: der Zyklus gewinnt oder verliert nicht an Boden.\\n\\n#!"
+ },
+ "banking_cycle_status_neutral_coop": {
+  "en": "#white #b Holding Steady#!: the cycle is neither gaining nor losing ground.\\n\\n#!",
+  "de": "#white #b Stabil#!: der Zyklus gewinnt oder verliert nicht an Boden.\\n\\n#!"
+ },
+ "banking_cycle_status_no_bubble": {
+  "en": "#green #b No Bubble#!: valuations broadly track fundamentals; speculation is contained.#!\\n",
+  "de": "#green #b Keine Blase#!: die Bewertungen folgen weitgehend den Fundamentaldaten; die Spekulation ist eingedämmt.#!\\n"
+ },
+ "banking_cycle_status_no_bubble_cmd": {
+  "en": "#green #b Low Administrative Strain#!: the planning apparatus operates without significant pressure.#!\\n",
+  "de": "#green #b Geringe administrative Belastung#!: der Planungsapparat arbeitet ohne nennenswerten Druck.#!\\n"
+ },
+ "banking_cycle_status_no_bubble_coop": {
+  "en": "#green #b No Overextension#!: cooperative commitments remain within sustainable bounds.#!\\n",
+  "de": "#green #b Keine Überdehnung#!: die Verpflichtungen der Genossenschaften bleiben in tragfähigen Grenzen.#!\\n"
+ },
+ "banking_cycle_status_panic": {
+  "en": "#red #b Panic#!: credit evaporates, failures cascade, and fear rules.\\n\\n#!",
+  "de": "#red #b Panik#!: Kredit verdunstet, Zusammenbrüche kaskadieren, und die Angst regiert.\\n\\n#!"
+ },
+ "banking_cycle_status_panic_cmd": {
+  "en": "#red #b Supply Collapse#!: allocation failures cascade; critical shortages disrupt production.\\n\\n#!",
+  "de": "#red #b Versorgungszusammenbruch#!: Zuteilungsausfälle kaskadieren; kritische Engpässe stören die Produktion.\\n\\n#!"
+ },
+ "banking_cycle_status_panic_coop": {
+  "en": "#red #b Worker Crisis#!: consumption demand collapses and cooperative capital reserves are exhausted.\\n\\n#!",
+  "de": "#red #b Arbeiterkrise#!: die Konsumnachfrage bricht ein, und die Kapitalreserven der Genossenschaften sind erschöpft.\\n\\n#!"
+ },
+ "banking_cycle_status_slow_downturn": {
+  "en": "#yellow #b Drifting Down#!: momentum is mildly negative — the cycle is gradually losing ground.\\n\\n#!",
+  "de": "#yellow #b Abwärtsdrift#!: die Dynamik ist leicht negativ — der Zyklus verliert allmählich an Boden.\\n\\n#!"
+ },
+ "banking_cycle_status_slow_downturn_cmd": {
+  "en": "#yellow #b Drifting Down#!: momentum is mildly negative — coordination metrics are slipping.\\n\\n#!",
+  "de": "#yellow #b Abwärtsdrift#!: die Dynamik ist leicht negativ — die Koordinationswerte rutschen ab.\\n\\n#!"
+ },
+ "banking_cycle_status_slow_downturn_coop": {
+  "en": "#yellow #b Drifting Down#!: momentum is mildly negative — cooperative balance is slipping.\\n\\n#!",
+  "de": "#yellow #b Abwärtsdrift#!: die Dynamik ist leicht negativ — das Gleichgewicht der Genossenschaften rutscht ab.\\n\\n#!"
+ },
+ "banking_cycle_status_slow_expansion": {
+  "en": "#green #b Drifting Up#!: momentum is mildly positive — the cycle is gradually gaining ground.\\n\\n#!",
+  "de": "#green #b Aufwärtsdrift#!: die Dynamik ist leicht positiv — der Zyklus gewinnt allmählich an Boden.\\n\\n#!"
+ },
+ "banking_cycle_status_slow_expansion_cmd": {
+  "en": "#green #b Drifting Up#!: momentum is mildly positive — coordination metrics are improving.\\n\\n#!",
+  "de": "#green #b Aufwärtsdrift#!: die Dynamik ist leicht positiv — die Koordinationswerte verbessern sich.\\n\\n#!"
+ },
+ "banking_cycle_status_slow_expansion_coop": {
+  "en": "#green #b Drifting Up#!: momentum is mildly positive — cooperative reinvestment is picking up.\\n\\n#!",
+  "de": "#green #b Aufwärtsdrift#!: die Dynamik ist leicht positiv — die Reinvestition der Genossenschaften zieht an.\\n\\n#!"
+ },
+ "banking_cycle_status_stable": {
+  "en": "#white #b Stable#!: conditions are ordinary; watch the horizon.\\n\\n#!",
+  "de": "#white #b Stabil#!: die Lage ist gewöhnlich; den Horizont im Blick behalten.\\n\\n#!"
+ },
+ "banking_cycle_status_stable_cmd": {
+  "en": "#white #b Coordinated Operations#!: supply chains function reliably within plan parameters.\\n\\n#!",
+  "de": "#white #b Koordinierter Betrieb#!: die Lieferketten funktionieren zuverlässig innerhalb der Planvorgaben.\\n\\n#!"
+ },
+ "banking_cycle_status_stable_coop": {
+  "en": "#white #b Balanced Operations#!: worker consumption and cooperative capital are in reasonable equilibrium.\\n\\n#!",
+  "de": "#white #b Ausgewogener Betrieb#!: Arbeiterkonsum und Genossenschaftskapital befinden sich in vernünftigem Gleichgewicht.\\n\\n#!"
+ },
+ "banking_cycle_status_stagnation": {
+  "en": "#yellow #b Stagnation#!: lackluster growth; credit conditions are tight and investment is subdued.\\n\\n#!",
+  "de": "#yellow #b Stagnation#!: mattes Wachstum; die Kreditbedingungen sind angespannt, und die Investitionen sind gedämpft.\\n\\n#!"
+ },
+ "banking_cycle_status_stagnation_cmd": {
+  "en": "#yellow #b Administrative Bottleneck#!: coordination lags hold back output; [concept_bureaucracy] strains.\\n\\n#!",
+  "de": "#yellow #b Administrativer Engpass#!: Koordinationsverzögerungen bremsen die Produktion; die [concept_bureaucracy] wird strapaziert.\\n\\n#!"
+ },
+ "banking_cycle_status_stagnation_coop": {
+  "en": "#yellow #b Stagnant Balance#!: reinvestment lags behind distributional needs; output growth is subdued.\\n\\n#!",
+  "de": "#yellow #b Stagnierendes Gleichgewicht#!: die Reinvestition hinkt dem Verteilungsbedarf hinterher; das Produktionswachstum ist gedämpft.\\n\\n#!"
+ },
+ "banking_cycle_value_bar_name": {
+  "en": "[concept_banking_cycle] Value",
+  "de": "[concept_banking_cycle]-Wert"
+ },
+ "banking_dash_active_header": {
+  "en": "Active Policies",
+  "de": "Aktive Maßnahmen"
+ },
+ "banking_dash_available_header": {
+  "en": "Available Interventions",
+  "de": "Verfügbare Interventionen"
+ },
+ "banking_dash_band_unknown": {
+  "en": "#lore not yet known#!",
+  "de": "#lore noch unbekannt#!"
+ },
+ "banking_dash_btn_disable": {
+  "en": "Disable",
+  "de": "Deaktivieren"
+ },
+ "banking_dash_btn_enable": {
+  "en": "Enable",
+  "de": "Aktivieren"
+ },
+ "banking_dash_btn_execute": {
+  "en": "Transfer",
+  "de": "Übertragen"
+ },
+ "banking_dash_bubble_band_building": {
+  "en": "#white Building#!",
+  "de": "#white Aufbauend#!"
+ },
+ "banking_dash_bubble_band_elevated": {
+  "en": "#yellow Elevated#!",
+  "de": "#yellow Erhöht#!"
+ },
+ "banking_dash_bubble_band_high": {
+  "en": "#gold High#!",
+  "de": "#gold Hoch#!"
+ },
+ "banking_dash_bubble_band_low": {
+  "en": "#green Low#!",
+  "de": "#green Niedrig#!"
+ },
+ "banking_dash_bubble_band_severe": {
+  "en": "#red Severe#!",
+  "de": "#red Schwer#!"
+ },
+ "banking_dash_bubble_label": {
+  "en": "Bubble Pressure",
+  "de": "Blasendruck"
+ },
+ "banking_dash_bubble_tt": {
+  "en": "#header Bubble Pressure#!\\nAccumulated speculative excess. It does not move the cycle by itself, but it is the main input to the monthly crash roll and to how severe a crash is when one happens. Command and cooperative economies are far less exposed to it. Nobody knows exactly how much air is in a bubble: you see a band, not a number.\\n$TOOLTIP_DELIMITER$\\n#title Pushed each month by:#!\\n#variable [JournalEntry.GetCountry.MakeScope.ScriptValue('banking_display_bubble_monthly_add')|+=1]#! from active policies, laws and events\\nYour policy stance, currently [JournalEntry.GetCountry.GetCustom('te_mon_stance_band_name')] — [JournalEntry.GetCountry.GetCustom('te_mon_stance_bubble_effect')], on your central bank's own estimate of what your economy can bear",
+  "de": "#header Blasendruck#!\\nAngehäufter spekulativer Überschuss. Er bewegt den Zyklus nicht von selbst, ist aber der Haupteinflussfaktor für den monatlichen Crash-Wurf und dafür, wie schwer ein Crash ausfällt, wenn einer eintritt. Plan- und Genossenschaftswirtschaften sind ihm weit weniger ausgesetzt. Niemand weiß genau, wie viel Luft in einer Blase steckt: Sie sehen eine Bandbreite, keine Zahl.\\n$TOOLTIP_DELIMITER$\\n#title Wird jeden Monat erhöht durch:#!\\n#variable [JournalEntry.GetCountry.MakeScope.ScriptValue('banking_display_bubble_monthly_add')|+=1]#! durch aktive Maßnahmen, Gesetze und Ereignisse\\nIhre geldpolitische Haltung, derzeit [JournalEntry.GetCountry.GetCustom('te_mon_stance_band_name')] — [JournalEntry.GetCountry.GetCustom('te_mon_stance_bubble_effect')], nach der eigenen Einschätzung Ihrer Zentralbank, was Ihre Wirtschaft verträgt"
+ },
+ "banking_dash_bubble_warn_tag": {
+  "en": "#R (crash risk)#!",
+  "de": "#R (Crash-Risiko)#!"
+ },
+ "banking_dash_budget_label": {
+  "en": "Intervention Budget",
+  "de": "Interventionsbudget"
+ },
+ "banking_dash_budget_tt": {
+  "en": "#header Intervention Budget#!\\nPoints left to spend on interventions. Every active policy holds its cost for as long as it stays enabled, so disabling one frees its points again. Your banking, monetary and economic-system laws set how large the budget is.\\n$TOOLTIP_DELIMITER$\\n#variable [JournalEntry.GetCountry.MakeScope.ScriptValue('banking_display_points_free')|0]#! points free right now",
+  "de": "#header Interventionsbudget#!\\nVerbleibende Punkte für Interventionen. Jede aktive Maßnahme bindet ihre Kosten, solange sie aktiviert bleibt; eine Deaktivierung gibt ihre Punkte wieder frei. Ihre Bank-, Geld- und Wirtschaftsordnungsgesetze legen fest, wie groß das Budget ist.\\n$TOOLTIP_DELIMITER$\\n#variable [JournalEntry.GetCountry.MakeScope.ScriptValue('banking_display_points_free')|0]#! Punkte gerade frei"
+ },
+ "banking_dash_budget_value": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('banking_display_points_free')|0]#! free",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('banking_display_points_free')|0]#! frei"
+ },
+ "banking_dash_cat_admin": {
+  "en": "Administration",
+  "de": "Verwaltung"
+ },
+ "banking_dash_cat_allocation": {
+  "en": "Allocation & Supply",
+  "de": "Zuteilung & Versorgung"
+ },
+ "banking_dash_cat_council": {
+  "en": "Council Direction",
+  "de": "Ratsführung"
+ },
+ "banking_dash_cat_credit": {
+  "en": "Directed Credit",
+  "de": "Gelenkte Kreditvergabe"
+ },
+ "banking_dash_cat_crisis": {
+  "en": "Crisis Response",
+  "de": "Krisenreaktion"
+ },
+ "banking_dash_cat_external": {
+  "en": "External & Currency",
+  "de": "Außenwirtschaft & Währung"
+ },
+ "banking_dash_cat_investment": {
+  "en": "Investment & Credit",
+  "de": "Investition & Kredit"
+ },
+ "banking_dash_cat_membership": {
+  "en": "Membership Mobilisation",
+  "de": "Mitgliedermobilisierung"
+ },
+ "banking_dash_cat_monetary": {
+  "en": "Monetary Policy",
+  "de": "Geldpolitik"
+ },
+ "banking_dash_cat_plan": {
+  "en": "Plan Management",
+  "de": "Planverwaltung"
+ },
+ "banking_dash_cat_pool": {
+  "en": "Investment Pool Transfers",
+  "de": "Investitionsfonds-Transfers"
+ },
+ "banking_dash_cat_prudential": {
+  "en": "Prudential Regulation",
+  "de": "Aufsichtsrechtliche Regulierung"
+ },
+ "banking_dash_cat_surplus": {
+  "en": "Surplus & Reserves",
+  "de": "Überschuss & Reserven"
+ },
+ "banking_dash_conditions_header": {
+  "en": "Current Conditions",
+  "de": "Aktuelle Bedingungen"
+ },
+ "banking_dash_cost_ce_invest_pool_inject": {
+  "en": "#lore GDP-scaled#!",
+  "de": "#lore BIP-skaliert#!"
+ },
+ "banking_dash_cost_ce_invest_pool_withdraw": {
+  "en": "#lore GDP-scaled#!",
+  "de": "#lore BIP-skaliert#!"
+ },
+ "banking_dash_momentum_band_collapsing": {
+  "en": "#R Collapsing#!",
+  "de": "#R Einbrechend#!"
+ },
+ "banking_dash_momentum_band_falling": {
+  "en": "#Y Falling#!",
+  "de": "#Y Fallend#!"
+ },
+ "banking_dash_momentum_band_rising": {
+  "en": "#G Rising#!",
+  "de": "#G Steigend#!"
+ },
+ "banking_dash_momentum_band_steady": {
+  "en": "Steady",
+  "de": "Stetig"
+ },
+ "banking_dash_momentum_band_surging": {
+  "en": "#Y Surging#!",
+  "de": "#Y Sprunghaft steigend#!"
+ },
+ "banking_dash_momentum_falling_tag": {
+  "en": "#R (contracting)#!",
+  "de": "#R (schrumpfend)#!"
+ },
+ "banking_dash_momentum_label": {
+  "en": "Momentum",
+  "de": "Dynamik"
+ },
+ "banking_dash_momentum_rising_tag": {
+  "en": "#R (overheating)#!",
+  "de": "#R (überhitzend)#!"
+ },
+ "banking_dash_momentum_tt": {
+  "en": "#header Momentum#!\\nAdded to the cycle every month, so it decides how fast conditions are moving rather than where they are. You see its direction and rough strength, not the figure.\\n$TOOLTIP_DELIMITER$\\n#title Pushed each month by:#!\\nA steady decay towards zero (a tenth of current momentum)\\n#variable [JournalEntry.GetCountry.MakeScope.ScriptValue('banking_display_momentum_monthly_add')|+=1]#! from active policies, laws and events\\nYour policy stance, currently [JournalEntry.GetCountry.GetCustom('te_mon_stance_band_name')] — [JournalEntry.GetCountry.GetCustom('te_mon_stance_momentum_effect')], on your central bank's own estimate of what your economy can bear\\n#lore Plus a monthly random nudge that pulls the cycle back towards the middle of its range; the further from the middle, the stronger the pull.#!",
+  "de": "#header Dynamik#!\\nWird dem Zyklus jeden Monat hinzugefügt und bestimmt so, wie schnell sich die Lage verändert, statt wo sie steht. Sie sehen ihre Richtung und ungefähre Stärke, nicht die Zahl.\\n$TOOLTIP_DELIMITER$\\n#title Wird jeden Monat beeinflusst durch:#!\\nEinen stetigen Verfall gegen null (ein Zehntel der aktuellen Dynamik)\\n#variable [JournalEntry.GetCountry.MakeScope.ScriptValue('banking_display_momentum_monthly_add')|+=1]#! durch aktive Maßnahmen, Gesetze und Ereignisse\\nIhre geldpolitische Haltung, derzeit [JournalEntry.GetCountry.GetCustom('te_mon_stance_band_name')] — [JournalEntry.GetCountry.GetCustom('te_mon_stance_momentum_effect')], nach der eigenen Einschätzung Ihrer Zentralbank, was Ihre Wirtschaft verträgt\\n#lore Zusätzlich ein monatlicher Zufallsanstoß, der den Zyklus zur Mitte seiner Bandbreite zurückzieht; je weiter von der Mitte entfernt, desto stärker der Zug.#!"
+ },
+ "banking_dash_mon_anchor_label": {
+  "en": "Monetary Anchor",
+  "de": "Geldpolitischer Anker"
+ },
+ "banking_dash_mon_anchor_state_board": {
+  "en": "currency board on #v [JournalEntry.GetCountry.MakeScope.Var('te_mon_anchor').GetCountry.GetName]#! — rate #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_anchor_rate_display')|2]%#! + #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_anchor_spread_display')|2]#!",
+  "de": "Currency Board, angebunden an #v [JournalEntry.GetCountry.MakeScope.Var('te_mon_anchor').GetCountry.GetAltName('AKK')]#! — Zinssatz #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_anchor_rate_display')|2]%#! + #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_anchor_spread_display')|2]#!"
+ },
+ "banking_dash_mon_anchor_state_none": {
+  "en": "none — your money is your own",
+  "de": "keiner — Ihr Geld gehört Ihnen selbst"
+ },
+ "banking_dash_mon_anchor_state_peg": {
+  "en": "pegged to #v [JournalEntry.GetCountry.MakeScope.Var('te_mon_anchor').GetCountry.GetName]#! — rate #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_anchor_rate_display')|2]%#! + #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_anchor_spread_display')|2]#!",
+  "de": "gekoppelt an #v [JournalEntry.GetCountry.MakeScope.Var('te_mon_anchor').GetCountry.GetAltName('AKK')]#! — Zinssatz #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_anchor_rate_display')|2]%#! + #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_anchor_spread_display')|2]#!"
+ },
+ "banking_dash_mon_anchor_state_peg_imposed": {
+  "en": "pegged to #v [JournalEntry.GetCountry.MakeScope.Var('te_mon_anchor').GetCountry.GetName]#! #R under compulsion#! — rate #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_anchor_rate_display')|2]%#! + #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_anchor_spread_display')|2]#!",
+  "de": "gekoppelt an #v [JournalEntry.GetCountry.MakeScope.Var('te_mon_anchor').GetCountry.GetAltName('AKK')]#! #R unter Zwang#! — Zinssatz #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_anchor_rate_display')|2]%#! + #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_anchor_spread_display')|2]#!"
+ },
+ "banking_dash_mon_anchor_state_reserve": {
+  "en": "others hold your currency",
+  "de": "andere halten Ihre Währung"
+ },
+ "banking_dash_mon_anchor_state_union": {
+  "en": "common currency of #v [JournalEntry.GetCountry.MakeScope.Var('te_mon_anchor').GetCountry.GetName]#! — rate #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_anchor_rate_display')|2]%#!",
+  "de": "gemeinsame Währung #v [JournalEntry.GetCountry.MakeScope.Var('te_mon_anchor').GetCountry.GetAltName('GEN')]#! — Zinssatz #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_anchor_rate_display')|2]%#!"
+ },
+ "banking_dash_mon_anchor_tt": {
+  "en": "#header Monetary Anchor#!\\nWhether your money is tied to another country's. An anchored country #b has no dial#!: it takes its anchor's policy rate, plus a spread, and its anchor's exchange rate. It cannot monetise its deficit or buy assets — it is not its currency to print.\\n$TOOLTIP_DELIMITER$\\n#title What it buys:#! the anchor's credibility. Your expected inflation is pulled toward the anchor's target as firmly as #v 80%#! of its central bank's word is worth, if that is more than your own.\\n#title What it costs:#! your inflation, your cycle and your neutral rate stay your own, so the borrowed rate is the wrong one whenever the two economies part ways — and you cannot devalue your way out. #v $banking_dash_mon_fx_effect_label$#! shows how far you have drifted from the currency you borrowed.\\n$TOOLTIP_DELIMITER$\\n#title Three ways to be anchored:#!\\nA #v $currency_peg$#! treaty — spread #v +0.5#!, credit standing #G −0.5#! points, and a peg the markets can break.\\nA power bloc's #v common currency#! — no spread, and no peg to break: the premium rises instead.\\nA #v currency board#! — a puppet, vassal, colony or crown land uses its overlord's money, spread #v +0.25#!.\\n$TOOLTIP_DELIMITER$\\n#title As an anchor:#! every #v 5%#! of world GDP pegged to your currency is #G −0.1#! points of credit standing, to #G −0.5#!.\\n#title Credit standing from arrangements now:#! #G −[JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_arr_standing_display')|2]#!.",
+  "de": "#header Geldpolitischer Anker#!\\nOb Ihre Währung an die eines anderen Landes gebunden ist. Ein angebundenes Land #b hat kein eigenes Steuerungsrad#!: Es übernimmt den Leitzins seines Ankers zuzüglich eines Aufschlags sowie dessen Wechselkurs. Es kann sein Defizit nicht monetisieren oder Vermögenswerte aufkaufen — es ist nicht seine eigene Währung, die es drucken könnte.\\n$TOOLTIP_DELIMITER$\\n#title Was es bringt:#! die Glaubwürdigkeit des Ankers. Ihre erwartete Inflation wird so stark zum Ziel des Ankers hingezogen, wie das Wort seiner Zentralbank wert ist, bis zu #v 80%#!, sofern das mehr ist als Ihr eigenes.\\n#title Was es kostet:#! Ihre Inflation, Ihr Zyklus und Ihr neutraler Zinssatz bleiben Ihre eigenen, sodass der geliehene Zinssatz immer dann der falsche ist, wenn sich die beiden Volkswirtschaften auseinanderentwickeln — und Sie können sich nicht durch Abwertung herauswinden. #v $banking_dash_mon_fx_effect_label$#! zeigt, wie weit Sie sich von der geliehenen Währung entfernt haben.\\n$TOOLTIP_DELIMITER$\\n#title Drei Wege, angebunden zu sein:#!\\nEin #v $currency_peg$#!-Vertrag — Aufschlag #v +0,5#!, Bonität #G −0,5#! Punkte, und eine Bindung, die die Märkte brechen können.\\nDie #v Gemeinsame Währung#! eines Machtblocks — kein Aufschlag, und keine Bindung, die brechen kann: stattdessen steigt die Prämie.\\nEin #v Currency Board#! — ein Vasall, Marionettenstaat, eine Kolonie oder ein Kronland verwendet das Geld seines Oberherrn, Aufschlag #v +0,25#!.\\n$TOOLTIP_DELIMITER$\\n#title Als Anker:#! Jede #v 5%#! des Welt-BIP, die an Ihre Währung gekoppelt sind, bedeuten #G −0,1#! Punkte Bonität, bis zu #G −0,5#!.\\n#title Bonität aus bestehenden Arrangements:#! #G −[JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_arr_standing_display')|2]#!."
+ },
+ "banking_dash_mon_anchoring_tt": {
+  "en": "#header $country_inflation_anchoring_add$#!\\n$country_inflation_anchoring_add_desc$\\n$TOOLTIP_DELIMITER$\\nAbsorbing #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_pressure_anchoring')|1]%#! of the wage and price pressure above, out of #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_anchoring_capacity_display')|1]%#! it could.\\n#title Where it comes from:#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_inflation_anchoring_add')]",
+  "de": "#header $country_inflation_anchoring_add$#!\\n$country_inflation_anchoring_add_desc$\\n$TOOLTIP_DELIMITER$\\nAbsorbiert #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_pressure_anchoring')|1]%#! des oben genannten Lohn- und Preisdrucks, von den #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_anchoring_capacity_display')|1]%#!, die möglich wären.\\n#title Woher es kommt:#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_inflation_anchoring_add')]"
+ },
+ "banking_dash_mon_anchorpeg_tt": {
+  "en": "#header Peg Confidence#!\\nHow far the world believes you will hold your parity with #v [JournalEntry.GetCountry.MakeScope.Var('te_mon_anchor').GetCountry.GetName]#!. You have no rate of your own to defend it with, so it moves on one thing: #b overvaluation#! — how far their exchange rate sits above where your own currency would float.\\n$TOOLTIP_DELIMITER$\\n#title Each month:#!\\n#G +3#! while you are overvalued by #v 5#! points or less — #G +2#! once confidence reaches #v 40#!, #G +1#! once it reaches #v 70#!\\n#R −1#! for every #v 2#! points of overvaluation beyond #v 5#! (a quarter of that under capital controls)\\n#G +2#! with a #v $swap_line$#!\\n$TOOLTIP_DELIMITER$\\nOvervalued by #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_fx_overvaluation_display')|1]#! now. Your parity sits #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_peg_parity_offset_display')|1]#! points under theirs.\\nAt #v 20#! the markets force the question: shut the door, break the peg, or re-peg lower.",
+  "de": "#header Bindungsvertrauen#!\\nWie sehr die Welt glaubt, dass Sie Ihre Parität mit #v [JournalEntry.GetCountry.MakeScope.Var('te_mon_anchor').GetCountry.GetAltName('DAT')]#! halten werden. Sie haben keinen eigenen Zinssatz, um sie zu verteidigen, also hängt es an einer Sache: #b Überbewertung#! — wie weit deren Wechselkurs über dem liegt, wo Ihre eigene Währung frei notieren würde.\\n$TOOLTIP_DELIMITER$\\n#title Jeden Monat:#!\\n#G +3#!, solange Sie um #v 5#! Punkte oder weniger überbewertet sind — #G +2#!, sobald das Vertrauen #v 40#! erreicht, #G +1#!, sobald es #v 70#! erreicht\\n#R −1#! für je #v 2#! Punkte Überbewertung über #v 5#! hinaus (ein Viertel davon bei Kapitalverkehrskontrollen)\\n#G +2#! mit einer #v $swap_line$#!\\n$TOOLTIP_DELIMITER$\\nDerzeit um #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_fx_overvaluation_display')|1]#! überbewertet. Ihre Parität liegt #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_peg_parity_offset_display')|1]#! Punkte unter deren.\\nBei #v 20#! stellen die Märkte die Frage: die Tür schließen, die Bindung brechen oder niedriger neu binden."
+ },
+ "banking_dash_mon_anchorpeg_value": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.Var('te_peg_confidence').GetValue|0]#! of #v 100#!",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.Var('te_peg_confidence').GetValue|0]#! von #v 100#!"
+ },
+ "banking_dash_mon_backstops_drawn": {
+  "en": ". Drawn @money!#v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_swap_drawn_display')|D]#! of @money!#v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_swap_line_limit_display')|D]#!",
+  "de": ". Abgerufen @money!#v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_swap_drawn_display')|D]#! von @money!#v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_swap_line_limit_display')|D]#!"
+ },
+ "banking_dash_mon_backstops_label": {
+  "en": "Backstops",
+  "de": "Absicherungen"
+ },
+ "banking_dash_mon_backstops_tt": {
+  "en": "#header Backstops#!\\nPoints of risk premium your monetary treaties move, each way.\\n$TOOLTIP_DELIMITER$\\n#title Received:#!\\nA #v $swap_line$#!: #G −1#! point, #G +2#! peg confidence a month, and in a panic borrowed gold leaves at the ordinary speed instead of double. In a slump, a run on your peg or a hyperinflation the provider also lends you #v 0.1%#! of your GDP a month, to a ceiling of #v 2%#! — and a war is #b not#! one of those: a swap line is a central bank's liquidity instrument, not war finance.\\n#title It is a loan.#! Once the crisis passes the same #v 0.1%#! a month flows back, interest-free, until the balance is clear; whatever is still outstanding when the line ends is settled in one payment, into debt if that is what it takes. You may hold #b one line at a time#!.\\nA #v $lender_of_last_resort$#!: #b half#! of what your debt load adds to your premium, and imported panics start a fifth less deep. Worth nothing while your guarantor is living down a guarantee it broke — and #b less every time you call it#!: half, then #v 35%#!, then #v 20%#!, then nothing at all on the third default. Ten quiet years forget one call.\\n$TOOLTIP_DELIMITER$\\n#title Extended:#! what you grant costs you #b the recipient's benefit × its GDP ÷ yours#!, never more than the whole. Backing a minor is a sliver; backing an equal costs all of it — and a ward that defaults calls the guarantee.",
+  "de": "#header Absicherungen#!\\nPunkte der Risikoprämie, die Ihre Geldverträge in beide Richtungen bewegen.\\n$TOOLTIP_DELIMITER$\\n#title Erhalten:#!\\nEine #v $swap_line$#!: #G −1#! Punkt, #G +2#! Bindungsvertrauen im Monat, und in einer Panik verlässt geliehenes Gold zur gewöhnlichen statt zur doppelten Geschwindigkeit. In einer Rezession, bei einem Ansturm auf Ihre Bindung oder einer Hyperinflation leiht Ihnen der Geber außerdem #v 0,1%#! Ihres BIP im Monat, bis zu einer Obergrenze von #v 2%#! — und ein Krieg zählt #b nicht#! dazu: eine Swap-Linie ist ein Liquiditätsinstrument der Zentralbank, keine Kriegsfinanzierung.\\n#title Es ist ein Darlehen.#! Sobald die Krise vorüber ist, fließen dieselben #v 0,1%#! im Monat zinslos zurück, bis der Saldo ausgeglichen ist; was beim Ende der Linie noch offen ist, wird in einer Zahlung beglichen, notfalls über Schulden. Sie dürfen #b eine Linie gleichzeitig#! halten.\\nEin #v $lender_of_last_resort$#!: #b die Hälfte#! dessen, was Ihre Schuldenlast zu Ihrer Prämie hinzufügt, und importierte Paniken setzen ein Fünftel weniger tief ein. Wertlos, solange Ihr Bürge eine gebrochene Garantie wiedergutmacht — und #b bei jedem Abruf weniger wert#!: die Hälfte, dann #v 35%#!, dann #v 20%#!, dann beim dritten Zahlungsausfall gar nichts mehr. Zehn ruhige Jahre lassen einen Abruf vergessen.\\n$TOOLTIP_DELIMITER$\\n#title Gewährt:#! Was Sie gewähren, kostet Sie #b den Nutzen des Empfängers × dessen BIP ÷ Ihres#!, nie mehr als das Ganze. Einen kleinen Staat abzusichern ist ein Bruchteil; einen ebenbürtigen abzusichern kostet alles davon — und ein Schützling, der ausfällt, ruft die Garantie ab."
+ },
+ "banking_dash_mon_backstops_value": {
+  "en": "#G −[JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_arr_recipient_display')|2]#! received, #R +[JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_arr_provider_display')|2]#! extended[JournalEntry.GetCountry.GetCustom('te_mon_swap_drawn_note')]",
+  "de": "#G −[JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_arr_recipient_display')|2]#! erhalten, #R +[JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_arr_provider_display')|2]#! gewährt[JournalEntry.GetCountry.GetCustom('te_mon_swap_drawn_note')]"
+ },
+ "banking_dash_mon_band_label": {
+  "en": "Price Band",
+  "de": "Preisband"
+ },
+ "banking_dash_mon_band_tt": {
+  "en": "#header Price Band#!\\nWhich of six bands your inflation falls in. The band is a modifier on your country, so whatever it costs is in your modifier list beside everything else — this row is only where you find out that it is there.\\n$TOOLTIP_DELIMITER$\\n#title The ladder:#!\\n$banking_dash_price_band_deflation$ below #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_band_edge_deflation')|0]%#!, $banking_dash_price_band_comfort$ to #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_band_edge_elevated')|0]%#!, $banking_dash_price_band_elevated$ to #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_band_edge_high')|0]%#!, $banking_dash_price_band_high$ to #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_band_edge_very_high')|0]%#!, $banking_dash_price_band_very_high$ to #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_band_edge_hyper')|0]%#!, $banking_dash_price_band_hyper$ above that\\nThe boundaries stick: you stay in the band you are in until prices are #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_band_hysteresis')|2]%#! past the edge, so a figure resting on a boundary does not move you back and forth month after month.\\n$TOOLTIP_DELIMITER$\\n#title [JournalEntry.GetCountry.GetCustom('te_mon_inflation_band_name')]#!\\n[JournalEntry.GetCountry.GetCustom('te_mon_inflation_band_cost')]",
+  "de": "#header Preisband#!\\nIn welchem von sechs Bändern sich Ihre Inflation befindet. Das Band ist ein Modifikator auf Ihr Land, also steht das, was es kostet, wie alles andere in Ihrer Modifikatorliste — diese Zeile zeigt nur, dass es dort steht.\\n$TOOLTIP_DELIMITER$\\n#title Die Stufenleiter:#!\\n$banking_dash_price_band_deflation$ unter #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_band_edge_deflation')|0]%#!, $banking_dash_price_band_comfort$ bis #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_band_edge_elevated')|0]%#!, $banking_dash_price_band_elevated$ bis #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_band_edge_high')|0]%#!, $banking_dash_price_band_high$ bis #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_band_edge_very_high')|0]%#!, $banking_dash_price_band_very_high$ bis #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_band_edge_hyper')|0]%#!, $banking_dash_price_band_hyper$ darüber\\nDie Grenzen bleiben bestehen: Sie bleiben in dem Band, in dem Sie sich befinden, bis die Preise #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_band_hysteresis')|2]%#! über die Grenze hinausgehen, sodass ein Wert, der genau auf einer Grenze liegt, Sie nicht Monat für Monat hin- und herspringen lässt.\\n$TOOLTIP_DELIMITER$\\n#title [JournalEntry.GetCountry.GetCustom('te_mon_inflation_band_name')]#!\\n[JournalEntry.GetCountry.GetCustom('te_mon_inflation_band_cost')]"
+ },
+ "banking_dash_mon_bankgold_label": {
+  "en": "Bank's Gold Reserve",
+  "de": "Goldreserve der Bank"
+ },
+ "banking_dash_mon_bankgold_tt": {
+  "en": "#header Bank's Gold Reserve#!\\nThe gold your central bank holds against its notes. It is #b the bank's, not the treasury's#!: the government cannot spend it, and nothing that happens to it shows in your budget. It is what a gold standard actually rests on — when the world wants gold for your paper, this is what pays.\\n$TOOLTIP_DELIMITER$\\nIts limit grows with your economy, so a vault nobody tops up thins out by itself over the decades.\\nBelow #v 50%#! a bank on #v $banking_dash_mon_mandate_peg$#! starts holding its rate above the world's to draw gold in. Below #v 10%#! it can no longer pay out, and #v $banking_dash_mon_pegconf_label$#! starts to fall instead.\\n$TOOLTIP_DELIMITER$\\nTwo things fill it: a rate above the world rate, which #b borrows#! gold from abroad, and #v $banking_dash_mon_btn_recapitalise$#!, which buys it with the treasury's own money. Nothing takes it back out for the government's use.",
+  "de": "#header Goldreserve der Bank#!\\nDas Gold, das Ihre Zentralbank gegen ihre Banknoten hält. Es gehört #b der Bank, nicht der Staatskasse#!: Die Regierung kann es nicht ausgeben, und nichts, was damit geschieht, erscheint in Ihrem Haushalt. Darauf ruht ein Goldstandard tatsächlich — wenn die Welt Gold für Ihr Papier will, ist dies, was zahlt.\\n$TOOLTIP_DELIMITER$\\nIhre Obergrenze wächst mit Ihrer Wirtschaft, sodass ein Tresor, den niemand auffüllt, über die Jahrzehnte von selbst schrumpft.\\nUnter #v 50%#! beginnt eine Bank mit #v $banking_dash_mon_mandate_peg$#!, ihren Zinssatz über dem der Welt zu halten, um Gold anzuziehen. Unter #v 10%#! kann sie nicht mehr auszahlen, und stattdessen beginnt #v $banking_dash_mon_pegconf_label$#! zu fallen.\\n$TOOLTIP_DELIMITER$\\nZwei Dinge füllen sie: ein Zinssatz über dem Weltzinssatz, der Gold aus dem Ausland #b leiht#!, und #v $banking_dash_mon_btn_recapitalise$#!, wodurch es mit dem eigenen Geld der Staatskasse gekauft wird. Nichts holt es für die Nutzung durch die Regierung wieder heraus."
+ },
+ "banking_dash_mon_bankgold_value": {
+  "en": "@money!#v [JournalEntry.GetCountry.MakeScope.Var('te_bank_gold').GetValue|D]#! — #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_bank_gold_pct')|0]%#! of its limit",
+  "de": "@money!#v [JournalEntry.GetCountry.MakeScope.Var('te_bank_gold').GetValue|D]#! — #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_bank_gold_pct')|0]%#! der Obergrenze"
+ },
+ "banking_dash_mon_btn_delegate": {
+  "en": "Delegate",
+  "de": "Delegieren"
+ },
+ "banking_dash_mon_btn_recapitalise": {
+  "en": "Recapitalise the Bank",
+  "de": "Bank rekapitalisieren"
+ },
+ "banking_dash_mon_btn_take_control": {
+  "en": "Take Control",
+  "de": "Kontrolle übernehmen"
+ },
+ "banking_dash_mon_btn_union_adopt": {
+  "en": "Adopt the Common Currency",
+  "de": "Gemeinsame Währung einführen"
+ },
+ "banking_dash_mon_btn_union_leave": {
+  "en": "Leave the Common Currency",
+  "de": "Gemeinsame Währung verlassen"
+ },
+ "banking_dash_mon_btn_union_press": {
+  "en": "Press for Convergence",
+  "de": "Auf Konvergenz drängen"
+ },
+ "banking_dash_mon_btn_union_press_off": {
+  "en": "Stop Pressing",
+  "de": "Drängen einstellen"
+ },
+ "banking_dash_mon_delegation_bound": {
+  "en": "#lore Bound by mandate#!",
+  "de": "#lore An das Mandat gebunden#!"
+ },
+ "banking_dash_mon_delegation_delegated": {
+  "en": "Delegated",
+  "de": "Delegiert"
+ },
+ "banking_dash_mon_delegation_direct": {
+  "en": "Your government",
+  "de": "Ihre Regierung"
+ },
+ "banking_dash_mon_delegation_label": {
+  "en": "Delegation",
+  "de": "Delegation"
+ },
+ "banking_dash_mon_delegation_tt": {
+  "en": "#header Delegation#!\\nHand the dial to the central bank and it will set the target from its mandate every month, instead of leaving it wherever you last put it. Free to switch on, free to switch off, and when you take it back the target stays where the bank left it.\\n$TOOLTIP_DELIMITER$\\n$law_central_bank_independence$ makes the arrangement permanent and removes the switch. You cannot overrule the bank, and you cannot quietly run the economy loose in the year before a war. In exchange, lenders believe the mandate: a lower credit-standing floor, a smaller premium, and a bank that reads its own economy more accurately.\\n#lore A government that intends to inflate away a war debt should not want that law.#!",
+  "de": "#header Delegation#!\\nÜbergeben Sie der Zentralbank das Steuerungsrad, setzt sie das Ziel jeden Monat nach ihrem Mandat fest, statt es dort zu belassen, wo Sie es zuletzt eingestellt haben. Frei ein- und ausschaltbar, und wenn Sie es zurücknehmen, bleibt das Ziel dort, wo die Bank es verlassen hat.\\n$TOOLTIP_DELIMITER$\\n$law_central_bank_independence$ macht die Regelung dauerhaft und entfernt den Schalter. Sie können die Bank nicht überstimmen, und Sie können die Wirtschaft im Jahr vor einem Krieg nicht heimlich lockerer führen. Im Gegenzug glauben die Gläubiger an das Mandat: eine niedrigere Bonitätsuntergrenze, eine kleinere Prämie und eine Bank, die ihre eigene Wirtschaft genauer liest.\\n#lore Eine Regierung, die eine Kriegsschuld weginflationieren will, sollte dieses Gesetz nicht wollen.#!"
+ },
+ "banking_dash_mon_expected_label": {
+  "en": "Expected Inflation",
+  "de": "Erwartete Inflation"
+ },
+ "banking_dash_mon_expected_tt": {
+  "en": "#header Expected Inflation#!\\nWhat your lenders and your workers assume prices are going to do. It is the expensive half: inflation nobody saw coming erodes a debt, and inflation everybody expects is simply priced in.\\n$TOOLTIP_DELIMITER$\\n#title Where it lands:#!\\nIt is the floor under your borrowing. Nobody will hold your paper below a normal return over the inflation they expect, so your lenders charge at least the world reference rate plus this figure however low your own policy rate goes — which is why cutting your way out stops working.\\nOnce it strays more than #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_unanchored_tolerance')|0]%#! from your bank's target of #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_inflation_anchor')|0]%#!, they charge a premium for the doubt on top; that line is in #title $banking_dash_mon_premium_label$#!.\\nIt is not what your bank is aiming at, either: a delegated bank steers on the underlying trend, not on this figure.\\n$TOOLTIP_DELIMITER$\\nExpectations creep toward the target rather than jumping to it, and how fast depends on who is believed. An independent central bank is believed twice as quickly as a delegated one; a bank the treasury owns is barely believed at all; and a currency redeemable in metal is believed without having to say anything, which is what convertibility buys.\\n#lore Belief is also conditional: the further prices run from the target, the less of the target anybody prices in — which is how expectations come unanchored and why they are so slow to come back.#!",
+  "de": "#header Erwartete Inflation#!\\nWas Ihre Gläubiger und Ihre Arbeiter annehmen, dass die Preise tun werden. Es ist die teure Hälfte: Inflation, die niemand kommen sah, entwertet eine Schuld, und Inflation, die jeder erwartet, ist einfach eingepreist.\\n$TOOLTIP_DELIMITER$\\n#title Wo sie ankommt:#!\\nSie ist die Untergrenze unter Ihrer Kreditaufnahme. Niemand wird Ihr Papier unter einer normalen Rendite über der erwarteten Inflation halten, also verlangen Ihre Gläubiger mindestens den Weltreferenzzins plus diesen Wert, wie niedrig auch immer Ihr eigener Leitzins sinkt — deshalb funktioniert es irgendwann nicht mehr, sich herauszusenken.\\nWeicht sie um mehr als #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_unanchored_tolerance')|0]%#! vom Ziel Ihrer Bank von #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_inflation_anchor')|0]%#! ab, verlangen sie zusätzlich eine Prämie für den Zweifel; diese Zeile steht bei #title $banking_dash_mon_premium_label$#!.\\nSie ist auch nicht das, worauf Ihre Bank zielt: Eine delegierte Bank steuert nach dem zugrunde liegenden Trend, nicht nach diesem Wert.\\n$TOOLTIP_DELIMITER$\\nErwartungen nähern sich dem Ziel schrittweise an, statt zu ihm zu springen, und wie schnell das geht, hängt davon ab, wem geglaubt wird. Einer unabhängigen Zentralbank wird doppelt so schnell geglaubt wie einer delegierten; einer Bank, die der Staatskasse gehört, wird kaum geglaubt; und einer in Metall einlösbaren Währung wird geglaubt, ohne dass sie etwas sagen müsste — das ist es, was Konvertibilität erkauft.\\n#lore Glaube ist auch bedingt: Je weiter die Preise vom Ziel abweichen, desto weniger von diesem Ziel preist irgendjemand ein — so werden Erwartungen unverankert, und deshalb kehren sie so langsam zurück.#!"
+ },
+ "banking_dash_mon_fx_controls_off": {
+  "en": "#lore $concept_capital_controls$ would cut the interest-rate term to a quarter, and nothing else.#!",
+  "de": "#lore $concept_capital_controls$ würden den Zinssatz-Term auf ein Viertel kürzen, und sonst nichts.#!"
+ },
+ "banking_dash_mon_fx_controls_on": {
+  "en": "#title $banking_capital_controls_out$:#! the interest-rate term above is cut to a #v quarter#!",
+  "de": "#title $banking_capital_controls_out$:#! der obige Zinssatz-Term ist auf ein #v Viertel#! gekürzt"
+ },
+ "banking_dash_mon_fx_effect_float": {
+  "en": "exports #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_fx_export_edge_pct')|+=1]%#! · prices #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_fx_imported_display')|+=1]#! pts",
+  "de": "Exporte #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_fx_export_edge_pct')|+=1]%#! · Preise #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_fx_imported_display')|+=1]#! Pkt."
+ },
+ "banking_dash_mon_fx_effect_label": {
+  "en": "Trade and Prices",
+  "de": "Handel und Preise"
+ },
+ "banking_dash_mon_fx_effect_none": {
+  "en": "#lore none — the currency does not trade#!",
+  "de": "#lore keine — die Währung wird nicht gehandelt#!"
+ },
+ "banking_dash_mon_fx_effect_peg": {
+  "en": "overvalued by #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_fx_overvaluation_display')|1]#!",
+  "de": "überbewertet um #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_fx_overvaluation_display')|1]#!"
+ },
+ "banking_dash_mon_fx_effect_tt": {
+  "en": "#header Trade and Prices#!\\nWhat the exchange rate is doing to you.\\n$TOOLTIP_DELIMITER$\\n#title Trade:#! every point under par is #G +1.25%#! $state_export_advantage_mult$ and #R −1.25%#! $state_import_advantage_mult$ in every state, and every point over par the reverse. A weak currency also adds #R +0.05#! points of risk premium a point — debts owed abroad get heavier.\\n#title Prices:#! only a #b change#! is inflationary. Your currency is measured against its own average of the last three years (#v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_fx_avg_display')|1]#!), and each point it sits below that adds #v 0.15#! points to your cost of living — more for a market that lives by trade, less for one that barely trades. It shares the #v 6#!-point cap with the price of goods, and a delegated bank looks through it as it would a bad harvest.\\n$TOOLTIP_DELIMITER$\\n#title Under a fixed parity#! the index cannot move, so the same forces show up as #b overvaluation#!: how far par sits above where your currency would float (#v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_fx_shadow_display')|1]#!). On a gold standard every #v 2#! points of it beyond #v 5#! costs a point of #v $banking_dash_mon_pegconf_label$#! a month, not counting whatever a rate under the world's put there — your gold already pays for that. Inflate at home under a fixed parity and you price yourself out of it.\\n#title On commodity money#! there is no reserve to lose, so the same overvaluation is paid in #b prices#! instead: every point of it that your own inflation put there, beyond the first #v 2#!, takes a point off the inflation pressure you carry — coin leaving a country whose prices have run ahead of the world's. The whole of it stops at #v 6#! points of pressure, which is why a debasement or a war you have paid for in coin still shows up in your prices.",
+  "de": "#header Handel und Preise#!\\nWas der Wechselkurs mit Ihnen macht.\\n$TOOLTIP_DELIMITER$\\n#title Handel:#! Jeder Punkt unter Pari bedeutet #G +1,25%#! $state_export_advantage_mult$ und #R −1,25%#! $state_import_advantage_mult$ in jedem Staat, und jeder Punkt über Pari das Gegenteil. Eine schwache Währung fügt zudem #R +0,05#! Punkte Risikoprämie je Punkt hinzu — im Ausland geschuldete Schulden wiegen schwerer.\\n#title Preise:#! Nur eine #b Veränderung#! ist inflationär. Ihre Währung wird gegen ihren eigenen Durchschnitt der letzten drei Jahre gemessen (#v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_fx_avg_display')|1]#!), und jeder Punkt, den sie darunter liegt, fügt #v 0,15#! Punkte zu Ihren Lebenshaltungskosten hinzu — mehr für einen Markt, der vom Handel lebt, weniger für einen, der kaum handelt. Es teilt sich die #v 6#!-Punkte-Obergrenze mit dem Warenpreis, und eine delegierte Bank sieht darüber hinweg, wie bei einer schlechten Ernte.\\n$TOOLTIP_DELIMITER$\\n#title Unter einer festen Parität#! kann sich der Index nicht bewegen, sodass dieselben Kräfte als #b Überbewertung#! erscheinen: wie weit Pari über dem liegt, wo Ihre Währung frei notieren würde (#v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_fx_shadow_display')|1]#!). Bei einem Goldstandard kostet jeder #v 2#! Punkte davon über #v 5#! hinaus einen Punkt #v $banking_dash_mon_pegconf_label$#! im Monat, ohne das mitzuzählen, was ein Zinssatz unter dem der Welt dort verursacht hat — dafür zahlt bereits Ihr Gold. Inflationieren Sie im Inland unter einer festen Parität, drängen Sie sich selbst aus ihr heraus.\\n#title Bei Warengeld#! gibt es keine Reserve zu verlieren, sodass dieselbe Überbewertung stattdessen in #b Preisen#! bezahlt wird: Jeder Punkt davon, den Ihre eigene Inflation verursacht hat, über die ersten #v 2#! hinaus, nimmt einen Punkt vom Inflationsdruck, den Sie tragen — Münzen, die ein Land verlassen, dessen Preise denen der Welt vorausgeeilt sind. Das Ganze endet bei #v 6#! Punkten Druck, weshalb eine Münzverschlechterung oder ein in Münzen bezahlter Krieg sich immer noch in Ihren Preisen zeigt."
+ },
+ "banking_dash_mon_fx_label": {
+  "en": "Exchange Rate Index",
+  "de": "Wechselkursindex"
+ },
+ "banking_dash_mon_fx_state_command": {
+  "en": "#v Par#! (inconvertible)",
+  "de": "#v Pari#! (nicht konvertibel)"
+ },
+ "banking_dash_mon_fx_state_devalued": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_fx_index_display')|1]#! (devalued)",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_fx_index_display')|1]#! (abgewertet)"
+ },
+ "banking_dash_mon_fx_state_par": {
+  "en": "#v Par#! (convertible)",
+  "de": "#v Pari#! (konvertibel)"
+ },
+ "banking_dash_mon_fx_tt": {
+  "en": "#header Exchange Rate Index#!\\nHow dear your currency is to foreigners, in real terms: #v 100#! is par, lower is a weak currency, higher a strong one. Nobody sets it. On metal it #b is#! the parity and stays at par; otherwise it follows its target below, closing a twelfth of the distance each month.\\n$TOOLTIP_DELIMITER$\\n#title Where it is heading:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_fx_target_value')|1]#!\\nPar: #v 100#!\\nYour real rate against the world's (#v 4#! a point, to five points): #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_fx_term_rate')|+=1]#!\\nYour inflation against the world's #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_world_inflation_display')|1]%#! (#v 2#! a point, to ten points): #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_fx_term_inflation')|+=1]#!\\nFlight from your risk premium (#v 1.5#! a point): #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_fx_term_premium')|+=1]#!\\nEvents still working through: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_fx_shock_display')|+=1]#!\\n[JournalEntry.GetCountry.GetCustom('te_mon_fx_controls_note')]\\n$TOOLTIP_DELIMITER$\\n#lore A high rate and a weak currency are not a contradiction: the first term is what holding your money pays, the second is whether anyone trusts it. A country without a national bank takes the market's rate and earns no carry either way.#!",
+  "de": "#header Wechselkursindex#!\\nWie teuer Ihre Währung für Ausländer real ist: #v 100#! ist Pari, niedriger ist eine schwache Währung, höher eine starke. Niemand legt ihn fest. Bei Metallgeld #b ist#! er die Parität und bleibt bei Pari; andernfalls folgt er seinem Ziel unten und schließt jeden Monat ein Zwölftel der Distanz.\\n$TOOLTIP_DELIMITER$\\n#title Wohin er strebt:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_fx_target_value')|1]#!\\nPari: #v 100#!\\nIhr Realzins gegenüber dem der Welt (#v 4#! je Punkt, bis zu fünf Punkten): #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_fx_term_rate')|+=1]#!\\nIhre Inflation gegenüber der Weltinflation von #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_world_inflation_display')|1]%#! (#v 2#! je Punkt, bis zu zehn Punkten): #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_fx_term_inflation')|+=1]#!\\nFlucht vor Ihrer Risikoprämie (#v 1,5#! je Punkt): #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_fx_term_premium')|+=1]#!\\nNoch nachwirkende Ereignisse: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_fx_shock_display')|+=1]#!\\n[JournalEntry.GetCountry.GetCustom('te_mon_fx_controls_note')]\\n$TOOLTIP_DELIMITER$\\n#lore Ein hoher Zinssatz und eine schwache Währung sind kein Widerspruch: Der erste Term ist, was das Halten Ihres Geldes einbringt, der zweite, ob irgendjemand ihm vertraut. Ein Land ohne Nationalbank übernimmt den Marktzins und verdient so oder so keinen Carry.#!"
+ },
+ "banking_dash_mon_goldcarry_label": {
+  "en": "Interest on It",
+  "de": "Zinsen darauf"
+ },
+ "banking_dash_mon_goldcarry_value": {
+  "en": "@money!#v [JournalEntry.GetCountry.MakeScope.Var('te_gold_carry').GetValue|D]#! a month",
+  "de": "@money!#v [JournalEntry.GetCountry.MakeScope.Var('te_gold_carry').GetValue|D]#! im Monat"
+ },
+ "banking_dash_mon_goldflow_label": {
+  "en": "Gold Flow",
+  "de": "Goldfluss"
+ },
+ "banking_dash_mon_goldflow_tt": {
+  "en": "#header Gold Flow#!\\nGold entering or leaving your #b central bank's reserve#! this month because of the gap between your rate and the world's. It moves the #v $banking_dash_mon_bankgold_label$#!, never your treasury, so it appears nowhere in your budget.\\n$TOOLTIP_DELIMITER$\\n#title Borrowed gold in the vault:#! @money!#v [JournalEntry.GetCountry.MakeScope.Var('te_gold_hot_money').GetValue|D]#!\\nGold drawn in by a high rate is #b hot money#!: it is here for the return, and it will want to go home. The moment your rate is no longer above the world's it leaves #b first#!, at #b twice#! the ordinary speed, before any other drain begins. Attracting gold is borrowing it — #b at your own policy rate#!. It came for that return and it is paid that return, while the gold it bought sits in the vault earning nothing.\\n#title Interest on it:#! @money!#v [JournalEntry.GetCountry.MakeScope.Var('te_gold_carry').GetValue|D]#! a month\\n#lore This is the one part of all this your treasury sees: it is charged to your budget week by week as #v $te_mon_gold_carry_expense$#!. It is why nobody fills a vault this way for long — and why a government with the money simply buys the gold instead.#!\\n$TOOLTIP_DELIMITER$\\nGold stops coming in once the reserve reaches its limit. Gold stops going #b out#! when the reserve falls under a tenth of its limit — and #v $banking_dash_mon_pegconf_label$#! drains instead.\\n#lore Gold arriving pushes your prices up and gold leaving pulls them down, by about half a point of inflationary pressure for every 1% of GDP a year that moves. A country pulling gold in prices itself out of its own advantage; one bleeding gold deflates its way back.#!\\n#lore Leave the gold standard, or lose your national bank, and the borrowed gold goes home out of the vault at once.#!",
+  "de": "#header Goldfluss#!\\nGold, das diesen Monat aufgrund der Lücke zwischen Ihrem Zinssatz und dem der Welt in die #b Reserve Ihrer Zentralbank#! fließt oder sie verlässt. Es bewegt die #v $banking_dash_mon_bankgold_label$#!, niemals Ihre Staatskasse, sodass es in Ihrem Haushalt nirgends erscheint.\\n$TOOLTIP_DELIMITER$\\n#title Geliehenes Gold im Tresor:#! @money!#v [JournalEntry.GetCountry.MakeScope.Var('te_gold_hot_money').GetValue|D]#!\\nGold, das durch einen hohen Zinssatz angezogen wird, ist #b heißes Geld#!: Es ist wegen der Rendite hier und wird nach Hause wollen. In dem Moment, in dem Ihr Zinssatz nicht mehr über dem der Welt liegt, verlässt es #b als Erstes#!, mit #b doppelter#! der gewöhnlichen Geschwindigkeit, bevor jeder andere Abfluss beginnt. Gold anzuziehen heißt, es zu leihen — #b zu Ihrem eigenen Leitzins#!. Es kam für diese Rendite und erhält sie auch, während das Gold, das es kaufte, im Tresor liegt und nichts einbringt.\\n#title Zinsen darauf:#! @money!#v [JournalEntry.GetCountry.MakeScope.Var('te_gold_carry').GetValue|D]#! im Monat\\n#lore Dies ist der einzige Teil davon, den Ihre Staatskasse sieht: Er wird Ihrem Haushalt Woche für Woche als #v $te_mon_gold_carry_expense$#! belastet. Deshalb füllt niemand einen Tresor auf diese Weise lange — und deshalb kauft eine Regierung mit Geld das Gold stattdessen einfach.#!\\n$TOOLTIP_DELIMITER$\\nGold hört auf hereinzukommen, sobald die Reserve ihre Obergrenze erreicht. Gold hört auf, #b herauszufließen#!, wenn die Reserve unter ein Zehntel ihrer Obergrenze fällt — und stattdessen sinkt #v $banking_dash_mon_pegconf_label$#!.\\n#lore Einströmendes Gold treibt Ihre Preise hoch, abfließendes Gold drückt sie herunter, um etwa einen halben Punkt Inflationsdruck je 1% des BIP im Jahr, das sich bewegt. Ein Land, das Gold anzieht, drängt sich aus seinem eigenen Vorteil heraus; eines, das Gold verliert, deflationiert sich zurück.#!\\n#lore Verlassen Sie den Goldstandard oder verlieren Sie Ihre Nationalbank, kehrt das geliehene Gold sofort aus dem Tresor nach Hause zurück.#!"
+ },
+ "banking_dash_mon_goldflow_value": {
+  "en": "@money!#v [JournalEntry.GetCountry.MakeScope.Var('te_gold_flow').GetValue|D+]#! a month",
+  "de": "@money!#v [JournalEntry.GetCountry.MakeScope.Var('te_gold_flow').GetValue|D+]#! im Monat"
+ },
+ "banking_dash_mon_goldgap_label": {
+  "en": "Gap to World Rate",
+  "de": "Abstand zum Weltzins"
+ },
+ "banking_dash_mon_goldgap_tt": {
+  "en": "#header Gap to World Rate#!\\nYour policy rate less the #v $banking_dash_mon_worldrate_label$#!. Your notes are as good as gold, so a lender compares the two directly — and moves his gold to wherever it earns more.\\n$TOOLTIP_DELIMITER$\\nEach point of gap moves gold worth #v 0.2%#! of your GDP a month: #G into#! your central bank's reserve when you pay more than the world, #R out of#! it when you pay less. Nothing beyond #v 5#! points moves it any faster.\\n#lore It is the bank's gold that moves, not the treasury's. Gold coming in is lent, not earned: see #v $banking_dash_mon_goldflow_label$#!.#!",
+  "de": "#header Abstand zum Weltzins#!\\nIhr Leitzins abzüglich der #v $banking_dash_mon_worldrate_label$#!. Ihre Banknoten sind so gut wie Gold, also vergleicht ein Gläubiger beide direkt — und verschiebt sein Gold dorthin, wo es mehr einbringt.\\n$TOOLTIP_DELIMITER$\\nJeder Punkt Abstand bewegt Gold im Wert von #v 0,2%#! Ihres BIP im Monat: #G in#! die Reserve Ihrer Zentralbank, wenn Sie mehr zahlen als die Welt, #R aus ihr heraus#!, wenn Sie weniger zahlen. Über #v 5#! Punkte hinaus bewegt sich nichts schneller.\\n#lore Es ist das Gold der Bank, das sich bewegt, nicht das der Staatskasse. Hereinkommendes Gold wird geliehen, nicht verdient: siehe #v $banking_dash_mon_goldflow_label$#!.#!"
+ },
+ "banking_dash_mon_goldgap_value": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.Var('te_gold_flow_gap').GetValue|+=1]#! points",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.Var('te_gold_flow_gap').GetValue|+=1]#! Punkte"
+ },
+ "banking_dash_mon_hotmoney_label": {
+  "en": "Borrowed Gold",
+  "de": "Geliehenes Gold"
+ },
+ "banking_dash_mon_inflation_label": {
+  "en": "Inflation",
+  "de": "Inflation"
+ },
+ "banking_dash_mon_inflation_tt": {
+  "en": "#header Inflation#!\\nWhat the prices your people actually pay did over the last year. It is a reading, not a lever: you reach it through the rate, through what you print, and through the laws that set what labour costs.\\n$TOOLTIP_DELIMITER$\\n#title Where it lands:#!\\nIt comes off the #title $banking_dash_mon_paid_label$#! above. Every debt is written in money, so what prices did is a discount on what the debt cost you in real terms — the one part of borrowing a government can quietly arrange for itself, and the reason it is always tempting.\\nIt sets the real price of credit in your economy: your policy rate less this figure. Whether that is loose or tight for the economy you have is reported as your #title $banking_dash_mon_stance_label$#! below.\\nIt puts you in a #title $banking_dash_mon_band_label$#!, and the band is what inflation actually costs you.\\nPast #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_band_edge_high')|0]%#! it starts feeding itself: at that point workers bargain for next year's prices rather than last year's, and the labour laws in #title $banking_dash_mon_wage_label$#! count a second time.",
+  "de": "#header Inflation#!\\nWas die Preise, die Ihre Bevölkerung tatsächlich zahlt, im letzten Jahr getan haben. Es ist eine Messgröße, kein Hebel: Sie erreichen sie über den Zinssatz, über das, was Sie drucken, und über die Gesetze, die festlegen, was Arbeit kostet.\\n$TOOLTIP_DELIMITER$\\n#title Wo sie ankommt:#!\\nSie wird vom #title $banking_dash_mon_paid_label$#! oben abgezogen. Jede Schuld ist in Geld geschrieben, also ist das, was die Preise getan haben, ein Abschlag auf das, was die Schuld Sie real gekostet hat — der eine Teil der Kreditaufnahme, den sich eine Regierung still selbst verschaffen kann, und der Grund, warum es immer verlockend ist.\\nSie legt den realen Kreditpreis in Ihrer Wirtschaft fest: Ihr Leitzins abzüglich dieses Wertes. Ob das für die Wirtschaft, die Sie haben, locker oder straff ist, wird als Ihre #title $banking_dash_mon_stance_label$#! weiter unten ausgewiesen.\\nSie versetzt Sie in ein #title $banking_dash_mon_band_label$#!, und das Band ist, was die Inflation Sie tatsächlich kostet.\\nJenseits von #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_band_edge_high')|0]%#! beginnt sie, sich selbst zu nähren: An diesem Punkt handeln Arbeiter die Preise des nächsten Jahres statt die des letzten aus, und die Arbeitsgesetze unter #title $banking_dash_mon_wage_label$#! zählen ein zweites Mal."
+ },
+ "banking_dash_mon_mandate_growth": {
+  "en": "Growth",
+  "de": "Wachstum"
+ },
+ "banking_dash_mon_mandate_label": {
+  "en": "Mandate",
+  "de": "Mandat"
+ },
+ "banking_dash_mon_mandate_peg": {
+  "en": "Peg Defence",
+  "de": "Bindungsverteidigung"
+ },
+ "banking_dash_mon_mandate_price": {
+  "en": "Price Stability",
+  "de": "Preisstabilität"
+ },
+ "banking_dash_mon_mandate_tt": {
+  "en": "#header Mandate#!\\nThe rule a delegated bank follows when it sets the target each month. It does nothing at all while you are holding the dial yourself.\\n$TOOLTIP_DELIMITER$\\n#title $banking_dash_mon_mandate_price$#! leans against inflation first. For every point prices run above its target it puts the rate up by more than a point, so credit really does tighten as inflation climbs instead of quietly loosening. On top of that it leans against the financial cycle with its full weight: tightening into a boom, hard into a frenzy, and cutting hard in a panic. It judges the cycle by where it is heading rather than where it stands, so it stops leaning on a boom that is already turning and starts easing before a slump arrives. It will accept a slump to get prices back down.\\n#title $banking_dash_mon_mandate_growth$#! runs about a point looser and reacts only half as hard to the cycle, and it ignores inflation altogether until it passes about four percent — above that it leans on prices as hard as the other mandate does, because inflation left to run past eight percent sets off a wage spiral that no rate may be able to catch. Cheaper credit, more momentum, faster bubbles and more crashes: that is the trade, not an oversight.\\n#lore Growth will never set a tighter rate than $banking_dash_mon_mandate_price$ would, so its looseness is only worth something while there is inflation to ignore. When inflation is low, and through a downturn or a panic where the other mandate is already cutting harder than this one would, the two ask for exactly the same rate.#!\\n#title $banking_dash_mon_mandate_peg$#! holds the world rate, to the tenth of a point — up to a point above it while the vault is short of gold — so that gold does not drain away, and ignores your domestic cycle entirely. Only a convertible gold standard can run it.\\n#lore A change takes effect at the next monthly update.#!",
+  "de": "#header Mandat#!\\nDie Regel, nach der eine delegierte Bank das Ziel jeden Monat festlegt. Solange Sie das Steuerungsrad selbst halten, tut es überhaupt nichts.\\n$TOOLTIP_DELIMITER$\\n#title $banking_dash_mon_mandate_price$#! stemmt sich zuerst gegen die Inflation. Für jeden Punkt, den die Preise über ihrem Ziel liegen, hebt sie den Zinssatz um mehr als einen Punkt an, sodass sich der Kredit mit steigender Inflation wirklich verknappt, statt sich still zu lockern. Zusätzlich stemmt sie sich mit voller Kraft gegen den Finanzzyklus: straffend in einen Boom hinein, hart in eine Raserei hinein, und hart senkend in einer Panik. Sie beurteilt den Zyklus danach, wohin er sich bewegt, nicht danach, wo er steht, also hört sie auf, sich gegen einen Boom zu stemmen, der sich bereits dreht, und beginnt zu lockern, bevor eine Rezession eintrifft. Sie nimmt eine Rezession in Kauf, um die Preise wieder zu senken.\\n#title $banking_dash_mon_mandate_growth$#! läuft etwa einen Punkt lockerer und reagiert nur halb so stark auf den Zyklus, und sie ignoriert die Inflation vollständig, bis diese etwa vier Prozent übersteigt — darüber stemmt sie sich genauso hart gegen die Preise wie das andere Mandat, denn eine Inflation, die über acht Prozent hinausläuft, löst eine Lohn-Preis-Spirale aus, die kein Zinssatz mehr einholen kann. Billigerer Kredit, mehr Dynamik, schnellere Blasen und mehr Crashs: das ist der Tausch, kein Versehen.\\n#lore Wachstum wird niemals einen strafferen Zinssatz festlegen, als es $banking_dash_mon_mandate_price$ täte, also ist seine Lockerheit nur wert, solange es Inflation zu ignorieren gibt. Bei niedriger Inflation, und während eines Abschwungs oder einer Panik, in der das andere Mandat bereits härter senkt, als dieses es täte, verlangen beide exakt denselben Zinssatz.#!\\n#title $banking_dash_mon_mandate_peg$#! hält den Weltzins, auf ein Zehntel eines Punktes genau — bis zu einem Punkt darüber, solange der Tresor knapp an Gold ist —, damit kein Gold abfließt, und ignoriert Ihren Binnenzyklus vollständig. Nur ein konvertibler Goldstandard kann es betreiben.\\n#lore Eine Änderung wird bei der nächsten monatlichen Aktualisierung wirksam.#!"
+ },
+ "banking_dash_mon_monetise_label": {
+  "en": "Monetise Deficit",
+  "de": "Defizit monetisieren"
+ },
+ "banking_dash_mon_monetise_tt": {
+  "en": "#header Monetising the Deficit#!\\nHow much of your spending your bank simply creates the money for, instead of your government borrowing it. It is the oldest way to pay for a war, and the reason wars end in inflation.\\n$TOOLTIP_DELIMITER$\\nThe press belongs to the treasury rather than to the bank, so using it takes a currency your state can create, a national bank to create it through, and a bank that still takes your government's instructions. The buttons say what a step is worth and, where you cannot use it, which of those is missing.\\n#lore A change takes effect at the next monthly update.#!",
+  "de": "#header Defizitmonetisierung#!\\nWie viel Ihrer Ausgaben Ihre Bank einfach mit neu geschaffenem Geld deckt, statt dass Ihre Regierung es sich leiht. Es ist der älteste Weg, einen Krieg zu bezahlen, und der Grund, warum Kriege in Inflation enden.\\n$TOOLTIP_DELIMITER$\\nDie Notenpresse gehört der Staatskasse, nicht der Bank, also braucht ihre Nutzung eine Währung, die Ihr Staat selbst schaffen kann, eine Nationalbank, die sie schafft, und eine Bank, die noch immer den Anweisungen Ihrer Regierung folgt. Die Schaltflächen zeigen, was eine Stufe wert ist, und, wo Sie sie nicht nutzen können, was davon fehlt.\\n#lore Eine Änderung wird bei der nächsten monatlichen Aktualisierung wirksam.#!"
+ },
+ "banking_dash_mon_monetise_value": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.Var('te_monetisation_level').GetValue|0]#! of #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_monetisation_max')|0]#!",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.Var('te_monetisation_level').GetValue|0]#! von #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_monetisation_max')|0]#!"
+ },
+ "banking_dash_mon_monetise_why_allowed": {
+  "en": "Your treasury may have money printed to pay its bills",
+  "de": "Ihre Staatskasse darf Geld drucken lassen, um ihre Rechnungen zu bezahlen"
+ },
+ "banking_dash_mon_monetise_why_backed": {
+  "en": "Your currency is one your state can create at will — money redeemable in metal, and money nobody issues, cannot be printed into existence",
+  "de": "Ihre Währung ist eine, die Ihr Staat nach Belieben schaffen kann — in Metall einlösbares Geld und Geld, das niemand ausgibt, lässt sich nicht durch Drucken erzeugen"
+ },
+ "banking_dash_mon_monetise_why_cbi": {
+  "en": "Your central bank still takes instruction from your government",
+  "de": "Ihre Zentralbank folgt noch den Anweisungen Ihrer Regierung"
+ },
+ "banking_dash_mon_monetise_why_command": {
+  "en": "Your spending is financed on a market rather than allocated by a plan",
+  "de": "Ihre Ausgaben werden über einen Markt finanziert statt per Plan zugeteilt"
+ },
+ "banking_dash_mon_monetise_why_dollarised": {
+  "en": "You still have a currency of your own to print",
+  "de": "Sie haben noch immer eine eigene Währung, die Sie drucken können"
+ },
+ "banking_dash_mon_monetise_why_no_bank": {
+  "en": "You have a national bank to create the money through",
+  "de": "Sie haben eine Nationalbank, über die Sie das Geld schaffen können"
+ },
+ "banking_dash_mon_not_ready": {
+  "en": "#lore No monetary reading yet. Your treasury reports at the next monthly update.#!",
+  "de": "#lore Noch keine geldpolitische Auswertung. Ihre Staatskasse berichtet bei der nächsten monatlichen Aktualisierung.#!"
+ },
+ "banking_dash_mon_paid_label": {
+  "en": "Rate You Pay",
+  "de": "Gezahlter Zinssatz"
+ },
+ "banking_dash_mon_paid_script_tag": {
+  "en": "#lore (expected [JournalEntry.GetCountry.MakeScope.Var('te_rate_paid_pts').GetValue|1]%)#!",
+  "de": "#lore (erwartet [JournalEntry.GetCountry.MakeScope.Var('te_rate_paid_pts').GetValue|1]%)#!"
+ },
+ "banking_dash_mon_paid_tt": {
+  "en": "#header Rate You Pay#!\\nThe yearly interest on your debt, taken from the treasury's own books. Beside it is what your central bank and your lenders between them expected to charge. Both are shown on purpose — if the two part company, something outside this system is moving your rate and you can watch it happen.\\n$TOOLTIP_DELIMITER$\\n#title What adds up:#!\\n#v [JournalEntry.GetCountry.MakeScope.Var('te_market_yield').GetValue|1]%#! market yield — the higher of your #v [JournalEntry.GetCountry.MakeScope.Var('te_policy_rate').GetValue|1]%#! policy rate and the #v [JournalEntry.GetCountry.MakeScope.Var('te_mon_era_base_now').GetValue|1]%#! world reference rate plus the #v [JournalEntry.GetCountry.MakeScope.Var('te_inflation_expected').GetValue|1]%#! inflation your lenders expect of you\\n#v [JournalEntry.GetCountry.MakeScope.Var('te_premium_structural').GetValue|1]%#! credit standing\\n#v [JournalEntry.GetCountry.MakeScope.Var('te_premium_cyclical').GetValue|=+1]%#! risk premium\\n#v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_inflation_offset')|=+1]%#! inflation — every debt is written in money, so what prices actually did comes off what the debt cost you\\n#lore Whatever those four lines come to, you never pay less than #v 0.5%#!. Inflating a debt away can make borrowing very nearly free; it cannot make it free, and the floor is why the lines above may not appear to add up.#!\\n$TOOLTIP_DELIMITER$\\nNobody will hold your paper below a normal return over the inflation they expect, so cutting the rate beneath that floor stops saving you anything. And only inflation your lenders did not see coming erodes a debt: once they have priced it in, the floor rises with them and you are paying the same in real terms as before.\\n$TOOLTIP_DELIMITER$\\n#lore Percentage discounts and surcharges from elsewhere — interest-group leaders, constitutional amendments, companies, state-owned debt — scale the finished total rather than any single line of it, which is why the two figures can drift a little apart.#!",
+  "de": "#header Gezahlter Zinssatz#!\\nDie jährlichen Zinsen auf Ihre Schulden, entnommen den eigenen Büchern der Staatskasse. Daneben steht, was Ihre Zentralbank und Ihre Gläubiger zusammen zu verlangen erwartet hatten. Beides wird absichtlich gezeigt — trennen sich die Wege der beiden, bewegt etwas außerhalb dieses Systems Ihren Zinssatz, und Sie können dabei zusehen.\\n$TOOLTIP_DELIMITER$\\n#title Was sich summiert:#!\\n#v [JournalEntry.GetCountry.MakeScope.Var('te_market_yield').GetValue|1]%#! Marktrendite — der höhere Wert aus Ihrem #v [JournalEntry.GetCountry.MakeScope.Var('te_policy_rate').GetValue|1]%#! Leitzins und dem #v [JournalEntry.GetCountry.MakeScope.Var('te_mon_era_base_now').GetValue|1]%#! Weltreferenzzins zuzüglich der #v [JournalEntry.GetCountry.MakeScope.Var('te_inflation_expected').GetValue|1]%#! Inflation, die Ihre Gläubiger von Ihnen erwarten\\n#v [JournalEntry.GetCountry.MakeScope.Var('te_premium_structural').GetValue|1]%#! Bonität\\n#v [JournalEntry.GetCountry.MakeScope.Var('te_premium_cyclical').GetValue|=+1]%#! Risikoprämie\\n#v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_inflation_offset')|=+1]%#! Inflation — jede Schuld ist in Geld geschrieben, also wird von dem, was die Schuld Sie kostete, abgezogen, was die Preise tatsächlich getan haben\\n#lore Was auch immer diese vier Zeilen ergeben, Sie zahlen nie weniger als #v 0,5%#!. Eine Schuld wegzuinflationieren kann die Kreditaufnahme nahezu kostenlos machen; kostenlos machen kann sie sie nicht, und wegen dieser Untergrenze scheinen sich die obigen Zeilen manchmal nicht zu summieren.#!\\n$TOOLTIP_DELIMITER$\\nNiemand wird Ihr Papier unter einer normalen Rendite über der erwarteten Inflation halten, also spart Ihnen ein Senken des Zinssatzes unter diese Untergrenze nichts mehr. Und nur Inflation, die Ihre Gläubiger nicht kommen sahen, entwertet eine Schuld: Sobald sie diese eingepreist haben, steigt die Untergrenze mit ihr, und Sie zahlen real dasselbe wie zuvor.\\n$TOOLTIP_DELIMITER$\\n#lore Prozentuale Abschläge und Aufschläge von anderswo — Interessengruppenführer, Verfassungszusätze, Unternehmen, staatliche Schulden — skalieren die fertige Summe statt einer einzelnen Zeile davon, weshalb die beiden Werte ein wenig auseinanderdriften können.#!"
+ },
+ "banking_dash_mon_peg_state_breaking": {
+  "en": "#R Breaking#!",
+  "de": "#R Bricht#!"
+ },
+ "banking_dash_mon_peg_state_defending": {
+  "en": "#Y Being defended#!",
+  "de": "#Y Wird verteidigt#!"
+ },
+ "banking_dash_mon_peg_state_doubted": {
+  "en": "#R Doubted#!",
+  "de": "#R Angezweifelt#!"
+ },
+ "banking_dash_mon_peg_state_suspended": {
+  "en": "#R Convertibility suspended#!",
+  "de": "#R Konvertibilität ausgesetzt#!"
+ },
+ "banking_dash_mon_peg_state_trusted": {
+  "en": "#G Trusted#!",
+  "de": "#G Vertraut#!"
+ },
+ "banking_dash_mon_peg_state_watched": {
+  "en": "#Y Watched#!",
+  "de": "#Y Beobachtet#!"
+ },
+ "banking_dash_mon_pegconf_label": {
+  "en": "Peg Confidence",
+  "de": "Bindungsvertrauen"
+ },
+ "banking_dash_mon_pegconf_tt": {
+  "en": "#header Peg Confidence#!\\nHow far the world believes your central bank will go on paying gold for its notes. It only falls when the bank has almost nothing left to pay with: while the #v $banking_dash_mon_bankgold_label$#! is under a tenth of its limit. How rich your treasury is does not enter into it — unless you use it to #v $banking_dash_mon_btn_recapitalise$#!.\\n$TOOLTIP_DELIMITER$\\n#title While that lasts, each month:#!\\n#R −3#! for every point your rate sits under the world rate\\n#R −2#! in a downturn or a panic\\n#R −2#! while your debt is half your credit limit or more\\n#G +2#! (#G +1#! from #v 70#!) while your rate is at or above the world rate and no borrowed gold is waiting to leave\\n#lore Borrowed gold that wants to go home and cannot be paid counts double, and as a gap of at least half a point. That is what a run on a currency is.#!\\n$TOOLTIP_DELIMITER$\\nOut of trouble it recovers #G +3#! a month under #v 40#!, #G +2#! under #v 70#! and #G +1#! above — but only while your rate is at or above the world rate and no borrowed gold is waiting to leave. Borrowed gold waits to leave only once your rate is no longer above the world's: above it, the gold stays for the return and confidence recovers all the same. While gold is draining from a vault that can still pay, confidence holds where it is: the vault is taking the strain, and confidence only starts to fall when the vault cannot.\\nAt #v 20#! or under the question is put to you: defend the peg, suspend convertibility, or devalue.\\n#lore Suspension: #v [JournalEntry.GetCountry.MakeScope.Var('te_peg_suspended_months').GetValue|0]#! months left. Defence of the peg: #v [JournalEntry.GetCountry.MakeScope.Var('te_peg_defend_months').GetValue|0]#! months left.#!",
+  "de": "#header Bindungsvertrauen#!\\nWie sehr die Welt glaubt, dass Ihre Zentralbank weiterhin Gold für ihre Banknoten zahlen wird. Es fällt nur, wenn der Bank fast nichts mehr zum Zahlen bleibt: solange die #v $banking_dash_mon_bankgold_label$#! unter einem Zehntel ihrer Obergrenze liegt. Wie reich Ihre Staatskasse ist, spielt dabei keine Rolle — außer Sie nutzen sie, um die Bank zu #v $banking_dash_mon_btn_recapitalise$#!.\\n$TOOLTIP_DELIMITER$\\n#title Solange das andauert, jeden Monat:#!\\n#R −3#! für jeden Punkt, den Ihr Zinssatz unter dem Weltzins liegt\\n#R −2#! in einem Abschwung oder einer Panik\\n#R −2#!, solange Ihre Schulden die Hälfte Ihres Kreditlimits oder mehr betragen\\n#G +2#! (#G +1#! ab #v 70#!), solange Ihr Zinssatz auf oder über dem Weltzins liegt und kein geliehenes Gold auf die Abreise wartet\\n#lore Geliehenes Gold, das nach Hause will und nicht ausgezahlt werden kann, zählt doppelt, mit mindestens einem halben Punkt Abstand. Das ist es, was ein Ansturm auf eine Währung ist.#!\\n$TOOLTIP_DELIMITER$\\nAus der Krise heraus erholt es sich um #G +3#! im Monat unter #v 40#!, #G +2#! unter #v 70#! und #G +1#! darüber — aber nur solange Ihr Zinssatz auf oder über dem Weltzins liegt und kein geliehenes Gold auf die Abreise wartet. Geliehenes Gold wartet nur dann auf die Abreise, wenn Ihr Zinssatz nicht mehr über dem der Welt liegt: darüber bleibt das Gold wegen der Rendite, und das Vertrauen erholt sich trotzdem. Solange Gold aus einem Tresor abfließt, der noch zahlen kann, hält sich das Vertrauen: Der Tresor trägt die Last, und das Vertrauen beginnt erst zu fallen, wenn der Tresor es nicht mehr kann.\\nBei #v 20#! oder darunter wird Ihnen die Frage gestellt: die Bindung verteidigen, die Konvertibilität aussetzen oder abwerten.\\n#lore Aussetzung: noch #v [JournalEntry.GetCountry.MakeScope.Var('te_peg_suspended_months').GetValue|0]#! Monate. Verteidigung der Bindung: noch #v [JournalEntry.GetCountry.MakeScope.Var('te_peg_defend_months').GetValue|0]#! Monate.#!"
+ },
+ "banking_dash_mon_pegconf_value": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.Var('te_peg_confidence').GetValue|0]#! of #v 100#! — [JournalEntry.GetCountry.GetCustom('te_mon_peg_state')]",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.Var('te_peg_confidence').GetValue|0]#! von #v 100#! — [JournalEntry.GetCountry.GetCustom('te_mon_peg_state')]"
+ },
+ "banking_dash_mon_premium_label": {
+  "en": "Risk Premium",
+  "de": "Risikoprämie"
+ },
+ "banking_dash_mon_premium_tt": {
+  "en": "#header Risk Premium#!\\nThe half of your borrowing premium that moves: where the financial cycle stands, which crisis tools you have reached for, and how far you are already borrowed.\\nIt is charged after the credit-standing floor rather than folded into it, so a panic bites a great power exactly as hard as it bites anyone else instead of vanishing into a floor the great power was already under.\\n$TOOLTIP_DELIMITER$\\n#title Computed from your position:#!\\n#v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_scaled_debt_premium')|1]%#! debt load — nothing while your debt stays under a quarter of your credit limit, then climbing to #v +4.0%#! as it reaches the limit\\n#v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_premium_unanchored')|1]%#! unanchored expectations — nothing while your lenders expect inflation within three points of your target, then a quarter of a point for every further point they expect of you\\n#v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_premium_monetisation')|1]%#! monetisation — half a point for every level of spending you are financing by printing money rather than borrowing it\\n$TOOLTIP_DELIMITER$\\n#title From the cycle, your tools and events:#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_risk_premium_add')]",
+  "de": "#header Risikoprämie#!\\nDie bewegliche Hälfte Ihrer Kreditaufnahmeprämie: wo der Finanzzyklus steht, zu welchen Krisenwerkzeugen Sie gegriffen haben, und wie hoch Sie bereits verschuldet sind.\\nSie wird nach der Bonitätsuntergrenze aufgeschlagen statt in sie eingerechnet, sodass eine Panik eine Großmacht genauso hart trifft wie jeden anderen, statt in einer Untergrenze zu verschwinden, unter der die Großmacht bereits lag.\\n$TOOLTIP_DELIMITER$\\n#title Berechnet aus Ihrer Position:#!\\n#v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_scaled_debt_premium')|1]%#! Schuldenlast — nichts, solange Ihre Schulden unter einem Viertel Ihres Kreditlimits bleiben, dann steigend auf #v +4,0%#!, wenn sie das Limit erreichen\\n#v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_premium_unanchored')|1]%#! unverankerte Erwartungen — nichts, solange Ihre Gläubiger eine Inflation innerhalb von drei Punkten Ihres Ziels erwarten, dann ein Viertelpunkt für jeden weiteren Punkt, den sie von Ihnen erwarten\\n#v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_premium_monetisation')|1]%#! Monetisierung — ein halber Punkt für jede Stufe von Ausgaben, die Sie durch Gelddrucken statt durch Kreditaufnahme finanzieren\\n$TOOLTIP_DELIMITER$\\n#title Aus dem Zyklus, Ihren Werkzeugen und Ereignissen:#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_risk_premium_add')]"
+ },
+ "banking_dash_mon_pressure_label": {
+  "en": "Inflationary Pressure",
+  "de": "Inflationsdruck"
+ },
+ "banking_dash_mon_pressure_tt": {
+  "en": "#header $country_inflation_pressure_add$#!\\n$country_inflation_pressure_add_desc$\\n$TOOLTIP_DELIMITER$\\n#title What is pushing right now:#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_inflation_pressure_add')]",
+  "de": "#header $country_inflation_pressure_add$#!\\n$country_inflation_pressure_add_desc$\\n$TOOLTIP_DELIMITER$\\n#title Was gerade drückt:#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_inflation_pressure_add')]"
+ },
+ "banking_dash_mon_range_commodity": {
+  "en": "#lore Your coin is the commodity, so the price of credit here can never stray far from what the metal costs everywhere else. Your bank may hold its discount rate up to one point under the world's, or up to three over it: cheap money sends coin abroad, while dear money was always a bank's answer to a panic and costs only what it costs your borrowers and your treasury. Enough to lean against a season, not enough to run a policy. Prices are held from outside rather than by the dial: let your own inflation run more than a point above the world's and coin goes abroad until it stops. A formal standard would free the dial and make your reserves pay for it instead.#!",
+  "de": "#lore Ihre Münze ist die Ware selbst, also kann der Kreditpreis hier nie weit von dem abweichen, was das Metall überall sonst kostet. Ihre Bank darf ihren Diskontsatz bis zu einem Punkt unter dem der Welt halten, oder bis zu drei darüber: billiges Geld schickt Münzen ins Ausland, während teures Geld schon immer die Antwort einer Bank auf eine Panik war und nur das kostet, was es Ihre Kreditnehmer und Ihre Staatskasse kostet. Genug, um sich gegen eine Saison zu stemmen, nicht genug, um eine Politik zu betreiben. Die Preise werden von außen gehalten statt vom Rad: Lassen Sie Ihre eigene Inflation mehr als einen Punkt über der der Welt laufen, wandert Münze ins Ausland, bis es aufhört. Ein förmlicher Standard würde das Rad befreien und stattdessen Ihre Reserven dafür zahlen lassen.#!"
+ },
+ "banking_dash_mon_range_free": {
+  "en": "#lore Nothing you have promised to redeem constrains the dial: the range is yours to use, and what it costs you is what it does to your prices.#!",
+  "de": "#lore Nichts, was Sie einzulösen versprochen haben, schränkt das Rad ein: Die Spanne steht Ihnen frei zur Nutzung, und was sie Sie kostet, ist das, was sie Ihren Preisen antut.#!"
+ },
+ "banking_dash_mon_range_gold": {
+  "en": "#lore A gold standard leaves the dial free and makes your reserves pay for it: a rate under the world rate bleeds gold abroad month after month, and when the vault is nearly empty it bleeds confidence in the peg instead.#!",
+  "de": "#lore Ein Goldstandard lässt das Rad frei und lässt stattdessen Ihre Reserven dafür zahlen: Ein Zinssatz unter dem Weltzins lässt Monat für Monat Gold ins Ausland abfließen, und wenn der Tresor fast leer ist, lässt er stattdessen das Vertrauen in die Bindung abfließen.#!"
+ },
+ "banking_dash_mon_range_gold_suspended": {
+  "en": "#lore Convertibility is suspended, so nothing is redeemable and nothing constrains the dial. Your bank has a fiat currency's range for as long as the suspension lasts — and a fiat currency's inflation to go with it.#!",
+  "de": "#lore Die Konvertibilität ist ausgesetzt, also ist nichts einlösbar, und nichts schränkt das Rad ein. Ihre Bank hat, solange die Aussetzung andauert, die Spanne einer Fiat-Währung — und deren Inflation dazu.#!"
+ },
+ "banking_dash_mon_rate_label": {
+  "en": "Policy Rate",
+  "de": "Leitzins"
+ },
+ "banking_dash_mon_rate_tt": {
+  "en": "#header Policy Rate#!\\nThe price of short-term credit in your country, and the floor every other borrowing cost is built on.\\nWhere there is a central bank to set it, this is a decision: the rate closes on the chosen target by #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_drift_step')|2]#! of a point a month, so changing course takes seasons rather than weeks. A central bank running its mandate cuts #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_emergency_cut_factor')|0]×#! as fast while the financial cycle is in #yellow Stagnation#! or worse, so it is not still leaning on an economy that has already broken. Everywhere else it is simply what credit costs: an administered rate, or the world rate plus the inflation lenders expect of you plus a spread.\\n$TOOLTIP_DELIMITER$\\nA rate below what your economy can bear feeds the financial cycle's momentum and builds bubble pressure; a rate above it leans against both. Which side you are on is reported as your policy stance below.",
+  "de": "#header Leitzins#!\\nDer Preis kurzfristigen Kredits in Ihrem Land und die Grundlage, auf der jede andere Kreditaufnahmekosten aufbauen.\\nWo es eine Zentralbank gibt, die ihn festlegt, ist dies eine Entscheidung: Der Zinssatz nähert sich dem gewählten Ziel um #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_drift_step')|2]#! eines Punktes im Monat an, sodass ein Kurswechsel Jahreszeiten statt Wochen braucht. Eine Zentralbank, die ihr Mandat ausführt, senkt #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_emergency_cut_factor')|0]×#! so schnell, solange sich der Finanzzyklus in #yellow Stagnation#! oder schlimmer befindet, damit sie sich nicht weiter gegen eine bereits zusammengebrochene Wirtschaft stemmt. Überall sonst ist er einfach das, was Kredit kostet: ein administrierter Zinssatz oder der Weltzins zuzüglich der von Ihnen erwarteten Inflation der Gläubiger zuzüglich eines Aufschlags.\\n$TOOLTIP_DELIMITER$\\nEin Zinssatz unter dem, was Ihre Wirtschaft verträgt, nährt die Dynamik des Finanzzyklus und baut Blasendruck auf; ein Zinssatz darüber stemmt sich gegen beides. Auf welcher Seite Sie stehen, wird unten als Ihre geldpolitische Haltung ausgewiesen."
+ },
+ "banking_dash_mon_stance_impact_line": {
+  "en": "#lore As your bank reads it, this stance is [JournalEntry.GetCountry.GetCustom('te_mon_stance_momentum_effect')], and [JournalEntry.GetCountry.GetCustom('te_mon_stance_bubble_effect')].#!",
+  "de": "#lore Nach der Einschätzung Ihrer Bank ist diese Haltung [JournalEntry.GetCountry.GetCustom('te_mon_stance_momentum_effect')], und [JournalEntry.GetCountry.GetCustom('te_mon_stance_bubble_effect')].#!"
+ },
+ "banking_dash_mon_stance_label": {
+  "en": "Policy Stance",
+  "de": "Geldpolitische Haltung"
+ },
+ "banking_dash_mon_stance_tt": {
+  "en": "#header Policy Stance#!\\nWhether your rate is loose or tight against what your economy can bear right now. A loose stance adds to the financial cycle's momentum and builds bubble pressure; a tight one drains both. This is how the dial reaches the cycle at all.\\n$TOOLTIP_DELIMITER$\\n#title At [JournalEntry.GetCountry.GetCustom('te_mon_stance_band_name')], your rate is:#!\\n[JournalEntry.GetCountry.GetCustom('te_mon_stance_momentum_effect')]\\n[JournalEntry.GetCountry.GetCustom('te_mon_stance_bubble_effect')]\\n#lore For scale, the phase of the cycle you are in moves Momentum by 0.05 to 0.2 and Bubble Pressure by 1 to 7 a month.#!\\n$TOOLTIP_DELIMITER$\\nNobody knows what the economy can bear — not you, and not your own central bank, whose reading carries its own error. The band above is that bank's estimate, so the real push can be stronger or weaker than it says, and stepping the dial to hunt for the exact turning point will not find it.",
+  "de": "#header Geldpolitische Haltung#!\\nOb Ihr Zinssatz locker oder straff gegenüber dem ist, was Ihre Wirtschaft gerade verträgt. Eine lockere Haltung verstärkt die Dynamik des Finanzzyklus und baut Blasendruck auf; eine straffe zehrt an beidem. So erreicht das Steuerungsrad den Zyklus überhaupt erst.\\n$TOOLTIP_DELIMITER$\\n#title Bei [JournalEntry.GetCountry.GetCustom('te_mon_stance_band_name')] ist Ihr Zinssatz:#!\\n[JournalEntry.GetCountry.GetCustom('te_mon_stance_momentum_effect')]\\n[JournalEntry.GetCountry.GetCustom('te_mon_stance_bubble_effect')]\\n#lore Zum Maßstab: Die Phase des Zyklus, in der Sie sich befinden, bewegt die Dynamik um 0,05 bis 0,2 und den Blasendruck um 1 bis 7 im Monat.#!\\n$TOOLTIP_DELIMITER$\\nNiemand weiß, was die Wirtschaft verträgt — nicht Sie, und nicht einmal Ihre eigene Zentralbank, deren Einschätzung ihren eigenen Fehler trägt. Die Bandbreite oben ist die Schätzung dieser Bank, also kann der tatsächliche Effekt stärker oder schwächer sein, als sie sagt, und das Rad zu bewegen, um den genauen Wendepunkt zu suchen, wird ihn nicht finden."
+ },
+ "banking_dash_mon_standing_label": {
+  "en": "Credit Standing",
+  "de": "Bonität"
+ },
+ "banking_dash_mon_standing_tt": {
+  "en": "#header Credit Standing#!\\nThe permanent half of your borrowing premium: what lenders think your country is, rather than what is happening to it this year. Access to capital markets, your standing among the powers, your institutions and the credibility of your monetary arrangements all sit here.\\nIt is floored at #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_standing_floor')|2]%#!, so standing earned past the floor buys nothing at all. Credibility has a lower bound, and that is it.\\n$TOOLTIP_DELIMITER$\\n#title Computed from your position:#!\\n#v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_access_premium')|1]%#! capital-market access — your finance technologies, and whether you have a stock exchange at all\\n$TOOLTIP_DELIMITER$\\n#title From laws, technologies and events:#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_credit_standing_add')]",
+  "de": "#header Bonität#!\\nDie dauerhafte Hälfte Ihrer Kreditaufnahmeprämie: was Gläubiger von Ihrem Land halten, statt was ihm dieses Jahr widerfährt. Der Zugang zu den Kapitalmärkten, Ihr Ansehen unter den Mächten, Ihre Institutionen und die Glaubwürdigkeit Ihrer geldpolitischen Arrangements gehören alle hierher.\\nSie hat eine Untergrenze von #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_standing_floor')|2]%#!, sodass darüber hinaus erworbene Bonität nichts mehr einbringt. Glaubwürdigkeit hat eine Untergrenze, und das ist sie.\\n$TOOLTIP_DELIMITER$\\n#title Berechnet aus Ihrer Position:#!\\n#v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_access_premium')|1]%#! Kapitalmarktzugang — Ihre Finanztechnologien, und ob Sie überhaupt eine Börse haben\\n$TOOLTIP_DELIMITER$\\n#title Aus Gesetzen, Technologien und Ereignissen:#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_credit_standing_add')]"
+ },
+ "banking_dash_mon_sub_arrangements": {
+  "en": "International Arrangements",
+  "de": "Internationale Arrangements"
+ },
+ "banking_dash_mon_sub_bank": {
+  "en": "THE CENTRAL BANK",
+  "de": "DIE ZENTRALBANK"
+ },
+ "banking_dash_mon_sub_borrowing": {
+  "en": "WHAT BORROWING COSTS",
+  "de": "WAS KREDITAUFNAHME KOSTET"
+ },
+ "banking_dash_mon_sub_fx": {
+  "en": "EXCHANGE RATE",
+  "de": "WECHSELKURS"
+ },
+ "banking_dash_mon_sub_gold": {
+  "en": "GOLD AND THE PEG",
+  "de": "GOLD UND DIE BINDUNG"
+ },
+ "banking_dash_mon_sub_prices": {
+  "en": "PRICES",
+  "de": "PREISE"
+ },
+ "banking_dash_mon_sub_rates": {
+  "en": "THE RATE",
+  "de": "DER ZINSSATZ"
+ },
+ "banking_dash_mon_target_label": {
+  "en": "Rate Target",
+  "de": "Zinsziel"
+ },
+ "banking_dash_mon_target_tt": {
+  "en": "#header Rate Target#!\\nWhere you want the policy rate to end up. Stepping it does not move the rate today: the rate closes the gap by #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_drift_step')|2]#! of a point a month.\\nThere is no fee and no cooldown for changing it. The cost of a wrong setting is what it does to your economy, not what it costs to press.\\n$TOOLTIP_DELIMITER$\\n#title Your monetary law allows:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_target_min')|1]%#! to #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_target_max')|1]%#!\\n[JournalEntry.GetCountry.GetCustom('te_mon_dial_range_note')]",
+  "de": "#header Zinsziel#!\\nWohin Sie den Leitzins gelenkt haben wollen. Es zu verstellen bewegt den Zinssatz heute nicht: Der Zinssatz schließt die Lücke um #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_drift_step')|2]#! eines Punktes im Monat.\\nEs gibt keine Gebühr und keine Abklingzeit für eine Änderung. Die Kosten einer falschen Einstellung liegen darin, was sie Ihrer Wirtschaft antut, nicht darin, was das Drücken kostet.\\n$TOOLTIP_DELIMITER$\\n#title Ihr Geldgesetz erlaubt:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_target_min')|1]%#! bis #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_target_max')|1]%#!\\n[JournalEntry.GetCountry.GetCustom('te_mon_dial_range_note')]"
+ },
+ "banking_dash_mon_union_label": {
+  "en": "Monetary Union",
+  "de": "Währungsunion"
+ },
+ "banking_dash_mon_union_state_adopter": {
+  "en": "adopted — overvaluation premium #R +[JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_union_overvaluation_premium_display')|2]#!",
+  "de": "beigetreten — Überbewertungsprämie #R +[JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_union_overvaluation_premium_display')|2]#!"
+ },
+ "banking_dash_mon_union_state_coop": {
+  "en": "monetary cooperation",
+  "de": "geldpolitische Zusammenarbeit"
+ },
+ "banking_dash_mon_union_state_holdout": {
+  "en": "holding out",
+  "de": "hält sich zurück"
+ },
+ "banking_dash_mon_union_state_leader": {
+  "en": "your currency — #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_union_holdouts_display')|0]#! holdouts (#v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_union_refusers_display')|0]#! would refuse)",
+  "de": "Ihre Währung — #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_union_holdouts_display')|0]#! Verweigerer (#v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_union_refusers_display')|0]#! würden ablehnen)"
+ },
+ "banking_dash_mon_union_state_leader_coop": {
+  "en": "you lead — monetary cooperation only",
+  "de": "Sie führen — nur geldpolitische Zusammenarbeit"
+ },
+ "banking_dash_mon_union_state_leader_pressing": {
+  "en": "your currency — #R pressing#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_union_holdouts_display')|0]#! holdouts (#v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_union_refusers_display')|0]#! would refuse)",
+  "de": "Ihre Währung — #R drängt#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_union_holdouts_display')|0]#! Verweigerer (#v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_union_refusers_display')|0]#! würden ablehnen)"
+ },
+ "banking_dash_mon_union_state_locked": {
+  "en": "left — may re-adopt in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_union_lock_display')|0]#! months",
+  "de": "verlassen — kann in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_union_lock_display')|0]#! Monaten wieder beitreten"
+ },
+ "banking_dash_mon_union_state_member_dormant": {
+  "en": "adopted — suspended by a higher arrangement",
+  "de": "beigetreten — durch ein übergeordnetes Arrangement ausgesetzt"
+ },
+ "banking_dash_mon_union_state_outside": {
+  "en": "outside — your money does not qualify",
+  "de": "außen vor — Ihre Währung erfüllt die Voraussetzungen nicht"
+ },
+ "banking_dash_mon_union_state_pressed": {
+  "en": "holding out — #R under pressure#!",
+  "de": "hält sich zurück — #R unter Druck#!"
+ },
+ "banking_dash_mon_union_tt": {
+  "en": "#header Monetary Union#!\\nYour power bloc's monetary principle, and where you stand in it. Tiers do not stack; each includes the one before.\\n$TOOLTIP_DELIMITER$\\n#title Monetary cooperation:#! every member gets half a swap line from the leader — #G −0.5#! points of risk premium, #G +1#! peg confidence a month. The leader pays the usual cost, scaled by each member's GDP beside its own.\\n#title Common currency:#! members #b may adopt#! the leader's money. An adopter has no dial: it takes the leader's rate with no spread, its exchange rate and up to #v 80%#! of its credibility, and gains #G +5%#! $state_export_advantage_mult$ and $state_import_advantage_mult$. There is no peg to break, so overvaluation beyond #v 5#! points raises the adopter's risk premium by #R +0.1#! a point instead.\\n#title Fiscal backstop:#! the leader is lender of last resort to every adopter — half their debt-load premium, paid for by the leader, and a default calls the guarantee — and the overvaluation premium is halved.\\n$TOOLTIP_DELIMITER$\\n#title To adopt:#! fiat or digital currency with a national bank; inflation within #v 3#! points of the leader's; debt under half your credit limit — #b waived#! while the leader is pressing.\\n#title To leave:#! your currency falls at once to where it would float; #R +3#! points of credit standing decaying over ten years, an investment-pool loss, radicals, the leader's relations and the bloc's cohesion; no way back for ten years.\\n#title Pressure:#! a leader may press holdouts to converge, at #v 50#! influence per holdout. A pressed holdout loses the cooperation benefit and is put the question — and one that refuses costs the bloc cohesion and gains #v +250#! $country_leverage_resistance_add$ for ten years.",
+  "de": "#header Währungsunion#!\\nDas geldpolitische Prinzip Ihres Machtblocks, und wo Sie darin stehen. Die Stufen stapeln sich nicht; jede schließt die vorherige mit ein.\\n$TOOLTIP_DELIMITER$\\n#title Geldpolitische Zusammenarbeit:#! Jedes Mitglied erhält eine halbe Swap-Linie vom Anführer — #G −0,5#! Punkte Risikoprämie, #G +1#! Bindungsvertrauen im Monat. Der Anführer trägt die üblichen Kosten, skaliert nach dem BIP jedes Mitglieds im Verhältnis zu seinem eigenen.\\n#title Gemeinsame Währung:#! Mitglieder #b dürfen#! das Geld des Anführers übernehmen. Ein Beitretender hat kein eigenes Steuerungsrad: Er übernimmt den Zinssatz des Anführers ohne Aufschlag, dessen Wechselkurs und bis zu #v 80%#! seiner Glaubwürdigkeit, und gewinnt #G +5%#! $state_export_advantage_mult$ und $state_import_advantage_mult$. Es gibt keine Bindung, die brechen kann, also erhöht eine Überbewertung jenseits von #v 5#! Punkten stattdessen die Risikoprämie des Beitretenden um #R +0,1#! je Punkt.\\n#title Fiskalische Absicherung:#! Der Anführer ist Kreditgeber letzter Instanz für jeden Beitretenden — die Hälfte von dessen Schuldenlast-Prämie, vom Anführer getragen, und ein Zahlungsausfall ruft die Garantie ab —, und die Überbewertungsprämie wird halbiert.\\n$TOOLTIP_DELIMITER$\\n#title Zum Beitritt:#! Fiat- oder digitale Währung mit einer Nationalbank; Inflation innerhalb von #v 3#! Punkten der des Anführers; Schulden unter der Hälfte Ihres Kreditlimits — #b erlassen#!, solange der Anführer drängt.\\n#title Zum Austritt:#! Ihre Währung fällt sofort auf das Niveau, auf dem sie frei notieren würde; #R +3#! Punkte Bonität, die sich über zehn Jahre abbauen, ein Verlust im Investitionsfonds, Radikale, die Beziehungen zum Anführer und der Zusammenhalt des Blocks; zehn Jahre lang kein Weg zurück.\\n#title Druck:#! Ein Anführer kann Verweigerer zur Konvergenz drängen, für #v 50#! Einfluss je Verweigerer. Ein bedrängter Verweigerer verliert den Vorteil der Zusammenarbeit und wird vor die Frage gestellt — und wer ablehnt, kostet den Zusammenhalt des Blocks und erhält #v +250#! $country_leverage_resistance_add$ für zehn Jahre."
+ },
+ "banking_dash_mon_wage_label": {
+  "en": "Wage Pressure",
+  "de": "Lohndruck"
+ },
+ "banking_dash_mon_wage_tt": {
+  "en": "#header $country_wage_pressure_add$#!\\n$country_wage_pressure_add_desc$\\n$TOOLTIP_DELIMITER$\\n#title What your laws come to:#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_wage_pressure_add')]",
+  "de": "#header $country_wage_pressure_add$#!\\n$country_wage_pressure_add_desc$\\n$TOOLTIP_DELIMITER$\\n#title Was Ihre Gesetze ausmachen:#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_wage_pressure_add')]"
+ },
+ "banking_dash_mon_why_board": {
+  "en": "#lore As a subject without monetary autonomy you run a currency board on #v [JournalEntry.GetCountry.MakeScope.Var('te_mon_anchor').GetCountry.GetName]#!'s money: their rate plus a quarter point, their exchange rate, and half your minting goes to them. More autonomy would end it.#!",
+  "de": "#lore Als Vasall ohne geldpolitische Autonomie nutzen Sie über ein Currency Board das Geld #v [JournalEntry.GetCountry.MakeScope.Var('te_mon_anchor').GetCountry.GetAltName('GEN')]#!: deren Zinssatz plus ein Viertelpunkt, deren Wechselkurs, und die Hälfte Ihrer Münzprägung geht an sie. Mehr Autonomie würde das beenden.#!"
+ },
+ "banking_dash_mon_why_command": {
+  "en": "#lore A command economy allocates credit by plan, not by price. The rate below is administered centrally and there is no dial to turn.#!",
+  "de": "#lore Eine Planwirtschaft teilt Kredit nach Plan zu, nicht nach Preis. Der Zinssatz unten wird zentral verwaltet, und es gibt kein Rad zu drehen.#!"
+ },
+ "banking_dash_mon_why_crypto": {
+  "en": "#lore A decentralised currency has no issuer, so there is nobody to set a rate. That is the point of it, and the cost of it.#!",
+  "de": "#lore Eine dezentrale Währung hat keinen Emittenten, also gibt es niemanden, der einen Zinssatz festlegen könnte. Das ist ihr Sinn, und das ist ihr Preis.#!"
+ },
+ "banking_dash_mon_why_dollarised": {
+  "en": "#lore Your people gave up on the currency and your government followed them: prices, wages and contracts are written in foreign money now. There is no rate to set, because it is not your money — enacting a monetary law would put a currency of your own back into people's hands, at a price.#!",
+  "de": "#lore Ihre Bevölkerung hat die Währung aufgegeben, und Ihre Regierung ist ihr gefolgt: Preise, Löhne und Verträge sind jetzt in fremdem Geld geschrieben. Es gibt keinen Zinssatz festzulegen, denn es ist nicht Ihr Geld — ein Geldgesetz zu erlassen würde den Menschen wieder eine eigene Währung in die Hand geben, zu einem Preis.#!"
+ },
+ "banking_dash_mon_why_has_dial": {
+  "en": "#lore Your central bank sets the policy rate.#!",
+  "de": "#lore Ihre Zentralbank legt den Leitzins fest.#!"
+ },
+ "banking_dash_mon_why_no_bank": {
+  "en": "#lore Without a national bank there is no institution that could set a rate. You borrow at the world rate, plus whatever inflation your lenders expect of you, plus a spread; a national bank law would hand you the dial.#!",
+  "de": "#lore Ohne Nationalbank gibt es keine Institution, die einen Zinssatz festlegen könnte. Sie leihen sich Geld zum Weltzins, zuzüglich der Inflation, die Ihre Gläubiger von Ihnen erwarten, zuzüglich eines Aufschlags; ein Nationalbankgesetz würde Ihnen das Steuerungsrad übergeben.#!"
+ },
+ "banking_dash_mon_why_peg": {
+  "en": "#lore Your currency is pegged to #v [JournalEntry.GetCountry.MakeScope.Var('te_mon_anchor').GetCountry.GetName]#!'s by treaty. You take their rate plus half a point and their exchange rate; there is no rate of your own to set while the treaty stands. Withdrawing from it gives the dial back — and lets your currency fall to wherever it would have floated.#!",
+  "de": "#lore Ihre Währung ist vertraglich an die Währung #v [JournalEntry.GetCountry.MakeScope.Var('te_mon_anchor').GetCountry.GetAltName('GEN')]#! gekoppelt. Sie übernehmen deren Zinssatz plus einen halben Punkt und deren Wechselkurs; solange der Vertrag besteht, gibt es keinen eigenen Zinssatz festzulegen. Der Austritt aus ihm gibt das Steuerungsrad zurück — und lässt Ihre Währung auf das Niveau fallen, auf dem sie sonst frei notiert hätte.#!"
+ },
+ "banking_dash_mon_why_union": {
+  "en": "#lore You have adopted the common currency of your power bloc, and #v [JournalEntry.GetCountry.MakeScope.Var('te_mon_anchor').GetCountry.GetName]#! sets its rate. There is no rate of your own to set; leaving the common currency is possible, and expensive.#!",
+  "de": "#lore Sie haben die Gemeinsame Währung Ihres Machtblocks übernommen, und #v [JournalEntry.GetCountry.MakeScope.Var('te_mon_anchor').GetCountry.GetAltName('NOM')]#! legt deren Zinssatz fest. Es gibt keinen eigenen Zinssatz festzulegen; die gemeinsame Währung zu verlassen ist möglich, aber teuer.#!"
+ },
+ "banking_dash_mon_world_label": {
+  "en": "World Reference Rate",
+  "de": "Weltreferenzzins"
+ },
+ "banking_dash_mon_world_tt": {
+  "en": "#header World Reference Rate#!\\nThe long-run price of capital in the world at large. It is the same figure for every country, and it falls as the world's great powers reach later eras and capital grows plentiful.\\n$TOOLTIP_DELIMITER$\\nNobody will lend to any government below this figure plus the inflation they expect of it, whatever its central bank does — it is the floor under the #v Rate You Pay#!.\\nIt is also what the #v $banking_dash_mon_worldrate_label$#! below falls back to while no great power is setting a rate of its own.",
+  "de": "#header Weltreferenzzins#!\\nDer langfristige Preis des Kapitals in der Welt insgesamt. Er ist für jedes Land derselbe Wert und sinkt, während die Großmächte der Welt spätere Epochen erreichen und Kapital reichlicher wird.\\n$TOOLTIP_DELIMITER$\\nNiemand wird einer Regierung unterhalb dieses Wertes zuzüglich der von ihr erwarteten Inflation Geld leihen, was auch immer ihre Zentralbank tut — er ist die Untergrenze unter dem #v Gezahlten Zinssatz#!.\\nEr ist auch das, worauf der #v $banking_dash_mon_worldrate_label$#! unten zurückfällt, solange keine Großmacht einen eigenen Zinssatz festlegt."
+ },
+ "banking_dash_mon_worldrate_label": {
+  "en": "World Rate",
+  "de": "Weltzins"
+ },
+ "banking_dash_mon_worldrate_tt": {
+  "en": "#header World Rate#!\\nWhat capital actually earns in the world this month: the policy rates of the great powers that set their own, each taken net of the inflation its lenders expect, and weighted by the size of its economy. It is a #b real#! rate — a great power at 13% with 10% inflation is offering 3%, not 13%.\\n$TOOLTIP_DELIMITER$\\nA country with no national bank, or on a decentralised currency, sets no rate of its own: it borrows at this figure, plus the inflation its lenders expect of it, plus a point. A national bank on commodity money may set its discount rate from one point under this figure to three over it.\\nEvery floating currency is priced against it too: a real rate above the world's pulls the exchange rate up, one below it lets it slide.\\nOn a gold standard, gold flows toward whoever pays more than this and away from whoever pays less.\\n#lore A great power that is itself part of this average is shown the rate of the #b rest#! of the world — nobody's gold moves on a gap against themselves.#!\\n#title $banking_dash_mon_mandate_peg$#! parks the target on it.\\n$TOOLTIP_DELIMITER$\\n#lore Only great powers choosing their own rate are counted. A bank defending a peg is following this figure, not making it, and a country with no dial pays it plus a spread — count either and the world rate would be chasing itself. While nobody qualifies it rests on the #v $banking_dash_mon_world_label$#!.#!",
+  "de": "#header Weltzins#!\\nWas Kapital diesen Monat in der Welt tatsächlich einbringt: die Leitzinsen der Großmächte, die ihren eigenen festlegen, jeweils abzüglich der von ihren Gläubigern erwarteten Inflation, gewichtet nach der Größe ihrer Wirtschaft. Es ist ein #b realer#! Zinssatz — eine Großmacht mit 13% und 10% Inflation bietet 3%, nicht 13%.\\n$TOOLTIP_DELIMITER$\\nEin Land ohne Nationalbank oder mit dezentraler Währung legt keinen eigenen Zinssatz fest: Es leiht sich zu diesem Wert, zuzüglich der von seinen Gläubigern erwarteten Inflation, zuzüglich eines Punktes. Eine Nationalbank mit Warengeld darf ihren Diskontsatz von einem Punkt unter diesem Wert bis zu drei darüber festlegen.\\nAuch jede frei schwankende Währung wird an ihm gemessen: Ein Realzins über dem der Welt zieht den Wechselkurs nach oben, einer darunter lässt ihn abrutschen.\\nBei einem Goldstandard fließt Gold zu jedem, der mehr als diesen Wert zahlt, und weg von jedem, der weniger zahlt.\\n#lore Einer Großmacht, die selbst Teil dieses Durchschnitts ist, wird der Zinssatz des #b restlichen#! Teils der Welt angezeigt — niemandes Gold bewegt sich wegen einer Lücke gegen sich selbst.#!\\n#title $banking_dash_mon_mandate_peg$#! richtet das Ziel danach aus.\\n$TOOLTIP_DELIMITER$\\n#lore Es zählen nur Großmächte, die ihren eigenen Zinssatz wählen. Eine Bank, die eine Bindung verteidigt, folgt diesem Wert, statt ihn zu machen, und ein Land ohne eigenes Steuerungsrad zahlt ihn zuzüglich eines Aufschlags — würde man eines von beiden mitzählen, würde der Weltzins sich selbst hinterherjagen. Solange niemand infrage kommt, stützt er sich auf den #v $banking_dash_mon_world_label$#!.#!"
+ },
+ "banking_dash_no_active": {
+  "en": "#lore No financial intervention is currently in force.#!",
+  "de": "#lore Derzeit ist keine finanzielle Intervention in Kraft.#!"
+ },
+ "banking_dash_phase_boom_value": {
+  "en": "#blue Boom#!",
+  "de": "#blue Boom#!"
+ },
+ "banking_dash_phase_downturn_value": {
+  "en": "#gold Downturn#!",
+  "de": "#gold Abschwung#!"
+ },
+ "banking_dash_phase_expansion_value": {
+  "en": "#green Expansion#!",
+  "de": "#green Expansion#!"
+ },
+ "banking_dash_phase_frenzy_value": {
+  "en": "#red Frenzy#!",
+  "de": "#red Frenzy#!"
+ },
+ "banking_dash_phase_label": {
+  "en": "Cycle Phase",
+  "de": "Zyklusphase"
+ },
+ "banking_dash_phase_panic_value": {
+  "en": "#red Panic#!",
+  "de": "#red Panik#!"
+ },
+ "banking_dash_phase_stable_value": {
+  "en": "#white Stable#!",
+  "de": "#white Stabil#!"
+ },
+ "banking_dash_phase_stagnation_value": {
+  "en": "#yellow Stagnation#!",
+  "de": "#yellow Stagnation#!"
+ },
+ "banking_dash_phase_tt": {
+  "en": "#header Cycle Phase#!\\nWhere the financial cycle currently stands, from Panic through Stable to Frenzy. The phase decides which phase modifier is applied each month, how likely a crash is, and which interventions the situation calls for. The bar shows roughly where in the phase you are; the exact reading is not published.\\n$TOOLTIP_DELIMITER$\\n#title Pushed each month by:#!\\nCurrent momentum (see below)\\n#variable [JournalEntry.GetCountry.MakeScope.ScriptValue('banking_display_value_monthly_add')|+=1]#! directly from active policies, laws and events",
+  "de": "#header Zyklusphase#!\\nWo der Finanzzyklus derzeit steht, von Panik über Stabil bis Frenzy. Die Phase bestimmt, welcher Phasenmodifikator jeden Monat angewendet wird, wie wahrscheinlich ein Crash ist, und welche Interventionen die Lage erfordert. Der Balken zeigt ungefähr, wo innerhalb der Phase Sie sich befinden; der genaue Wert wird nicht veröffentlicht.\\n$TOOLTIP_DELIMITER$\\n#title Wird jeden Monat beeinflusst durch:#!\\nDie aktuelle Dynamik (siehe unten)\\n#variable [JournalEntry.GetCountry.MakeScope.ScriptValue('banking_display_value_monthly_add')|+=1]#! direkt durch aktive Maßnahmen, Gesetze und Ereignisse"
+ },
+ "banking_dash_price_band_comfort": {
+  "en": "Stable prices",
+  "de": "Stabile Preise"
+ },
+ "banking_dash_price_band_command": {
+  "en": "Set by plan",
+  "de": "Vom Plan festgelegt"
+ },
+ "banking_dash_price_band_cost_command": {
+  "en": "A planned economy sets its prices by administrative decision, so its band is nominal — it is recorded as stable because nothing is measuring it — and it pays none of the costs of a band. It earns none of the credit either: the #b real-wage dividend#! the stable band pays is never paid to a country whose wages and prices are both set by the same office.",
+  "de": "Eine Planwirtschaft legt ihre Preise durch Verwaltungsentscheidung fest, daher ist ihr Band nominal — es wird als stabil verzeichnet, weil nichts es misst —, und sie zahlt keine der Kosten eines Bandes. Sie erhält auch keine der Gutschriften: Die #b Reallohn-Dividende#!, die das stabile Band zahlt, wird niemals einem Land ausgezahlt, dessen Löhne und Preise beide von derselben Behörde festgelegt werden."
+ },
  "banking_dash_price_band_deflation": {
   "en": "Deflation",
   "de": "Deflation"
@@ -1781,11 +3685,11 @@
  },
  "cr_radicals_tier1_tt": {
   "en": "Radicalization (10%+)",
-  "de": "Radikalisierung (10 %+)"
+  "de": "Radikalisierung (10%+)"
  },
  "cr_radicals_tier2_tt": {
   "en": "Heavy radicalization (20%+)",
-  "de": "Starke Radikalisierung (20 %+)"
+  "de": "Starke Radikalisierung (20%+)"
  },
  "cr_segregationist_push_tt": {
   "en": "Segregationist Consolidation",
