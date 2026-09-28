@@ -539,7 +539,7 @@ Scoped object of type 'ai_regional_objective' is not valid
 ```
 
 `ai_is_regional_objective_local_country`, `ai_is_regional_objective_state` and `ai_is_regional_objective_protect_target` run `any_scope_regional_objective = { type = … }`, and the `type` comparison logs `AI Regional Objective (4294967295)`, the engine's null handle, as though the country's objective list held an empty slot. The AI evaluates them from `common/diplomatic_actions/00_relations_actions.txt` and treaty articles such as `common/treaty_articles/01_defensive_pact.txt`. About 1,300 lines in one session (2026-09-26), the second-largest source after the power-bloc invite burst. Not mod-caused as far as the log shows: the mod has no `common/ai_regional_objectives/` and none of the calling files. The null handle comes from engine-side objective bookkeeping; the scripts only read it.
-The same null handle reaches `common/diplomatic_actions/56_stake_colonial_claim.txt` (`:241`), whose own `any_scope_regional_objective` check logged it 37 times on 2026-09-26.
+The same null handle reaches `common/diplomatic_actions/56_stake_colonial_claim.txt` (`:241`), whose own `any_scope_regional_objective` check logged it 37 times on 2026-09-26. It also reaches `common/treaty_articles/02_guarantee_independence.txt` (`:188`) with no `00_ai_triggers.txt` frame in between, once on 2026-09-27.
 
 ### `common/ai_regional_objectives/00_ai_regional_objectives.txt:37` — the acquire-states objective counts against a missing map entry (1.14.4)
 
@@ -1407,6 +1407,15 @@ Failed to create battle in province
 ```
 
 Logged with a `Script error:` prefix, but it reports a decision, not a failure: vanilla's `naval_battle_size` script value (`common/script_values/command_values.txt`) judged the available units too few to spawn a battle. One line on 2026-09-26.
+
+### `controlcommands.cpp:470` — the load's set-playable step finds no player
+- source: `controlcommands.cpp:470`
+
+```
+No player found for set playable command
+```
+
+One line a few seconds after loading a save (2026-09-27, 14:58), with no script frame. The engine's console/control layer logs it when a set-playable command has no player to assign; nothing in script issues that command. Not actionable from script.
 
 ## How to triage a new error-log entry
 

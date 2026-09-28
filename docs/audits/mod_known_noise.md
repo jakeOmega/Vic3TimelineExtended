@@ -175,6 +175,17 @@ Variable 'nd_stance_professional' is used but is never set
 Variable 'nd_stance_dove' is used but is never set
 Variable 'nd_stance_business' is used but is never set
 Variable 'un_founding_window_active' is used but is never set
+Variable 'sr_active_milestone' is used but is never set
 ```
 
-`sr_clear_legacy_milestone_notice` (`space_race_effects.txt`), `nd_refresh_domestic_stance` (`nuclear_deterrence_effects.txt`) and the UN dissolution sweep (`un_ladder_effects.txt`) remove variables an older save may still hold and nothing sets any more, each behind a `has_variable` guard. The validator reports each read once per launch. The signatures name all fourteen variables, so a new never-set variable is not hidden. Tracked at `docs/audits/open_issues.md#l24-old-save-migration-cleanup-reads-variables-nothing-sets`.
+`sr_clear_legacy_milestone_notice` and `sr_cleanup_inactive_space_race_milestones` (`space_race_effects.txt`), `nd_refresh_domestic_stance` (`nuclear_deterrence_effects.txt`) and the UN dissolution sweep (`un_ladder_effects.txt`) remove variables an older save may still hold and nothing sets any more, each behind a `has_variable` guard. The validator reports each read once per launch. The signatures name all fifteen variables, so a new never-set variable is not hidden. Tracked at `docs/audits/open_issues.md#l24-old-save-migration-cleanup-reads-variables-nothing-sets`.
+
+### `jomini_eventmanager.cpp:376` — `un_vote.5` kept for events queued in older saves
+- source: `jomini_eventmanager.cpp:376`
+- tracked: `docs/audits/open_issues.md#l25-un_vote5-kept-for-events-queued-in-older-saves`
+
+```
+Event un_vote.5 is orphaned
+```
+
+`un_vote.5` (`events/un_vote_events.txt`) used to dispatch the AI ballots. Since the late ballots (#531) nothing queues it, but an older save can still hold one queued, so the event stays and now only refreshes the leans. The engine logs it as orphaned at load, once per launch. The signature names this one event, so a real mod event that loses its trigger still shows up. Tracked at `docs/audits/open_issues.md#l25-un_vote5-kept-for-events-queued-in-older-saves`.

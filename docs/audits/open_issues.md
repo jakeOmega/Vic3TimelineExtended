@@ -244,9 +244,18 @@ Suppress an intentional `event_context_audit` flag with a check-tagged `# REVIEW
 ### L24. Old-save migration cleanup reads variables nothing sets
 **Files:** `common/scripted_effects/space_race_effects.txt` (`sr_clear_legacy_milestone_notice`), `common/scripted_effects/nuclear_deterrence_effects.txt` (`nd_refresh_domestic_stance`), `common/scripted_effects/un_ladder_effects.txt` (the dissolution sweep)
 
-**Problem (2026-09-26):** Three systems strip variables an older save may still hold: the space race's single-variable milestone notice (nine `sr_notify_*`), the nuclear doctrine's country-level class scores (four `nd_stance_*`, before 2026-09-25) and the UN's founding window (`un_founding_window_active`). Nothing sets them any more, so the parse-time validator logs `Variable 'X' is used but is never set` (`jomini_effect.cpp:1139`) once per launch for each of the fourteen. Harmless: each read is a `has_variable` guard in front of a `remove_variable`. Filtered from log triage via `docs/audits/mod_known_noise.md`, which names the fourteen, so a new never-set variable still shows up.
+**Problem (2026-09-26):** Three systems strip variables an older save may still hold: the space race's single-variable milestone notice (nine `sr_notify_*`) and its retired `sr_active_milestone` (#483, 2026-09-26), the nuclear doctrine's country-level class scores (four `nd_stance_*`, before 2026-09-25) and the UN's founding window (`un_founding_window_active`). Nothing sets them any more, so the parse-time validator logs `Variable 'X' is used but is never set` (`jomini_effect.cpp:1139`) once per launch for each of the fifteen. Harmless: each read is a `has_variable` guard in front of a `remove_variable`. Filtered from log triage via `docs/audits/mod_known_noise.md`, which names the fifteen, so a new never-set variable still shows up.
 
-**Fix:** Delete the three migration blocks, and this entry, once saves from before 2026-09-25 are no longer in play (a release or two after that date).
+**Fix:** Delete the migration blocks, and this entry, once saves from before 2026-09-26 are no longer in play (a release or two after that date).
+
+---
+
+### L25. `un_vote.5` kept for events queued in older saves
+**Files:** `events/un_vote_events.txt` (`un_vote.5`)
+
+**Problem (2026-09-27):** The late AI ballots (#531) retired `un_vote.5` as the ballot dispatcher. Nothing queues it any more, but a save from before #531 can still hold one queued, so the event stays and only refreshes the leans (its definition carries a `# REVIEWED` comment for `orphaned_event_audit`). The engine logs `Event un_vote.5 is orphaned` (`jomini_eventmanager.cpp:376`) at load, once per launch. Filtered from log triage via `docs/audits/mod_known_noise.md`, whose signature names only this event.
+
+**Fix:** Delete `un_vote.5`, and this entry, once saves from before #531 (2026-09-27) are no longer in play.
 
 ---
 
