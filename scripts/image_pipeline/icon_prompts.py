@@ -131,8 +131,10 @@ CATEGORIES = {
         # Channels above 255 are fine: the emboss multiplies by its lighting
         # (median ~0.6) before clipping.
         color=(283, 212, 185), color_bottom=(249, 115, 55), style=SILHOUETTE),
+    # Read only from `texture =` (Decree.GetTexture, DecreeType.GetTexture).
     "decree": dict(
         folder="decree", size=158, mode="medallion", fill=0.78, centre_lift=2.1,
+        entity_dir="common/decrees", field="texture",
         grade_folder="invention_icons",
         style="{subject}, one chunky compact object, bright warm lighting, " + PAINTED),
 }
@@ -542,6 +544,27 @@ ICONS: dict[str, dict[str, dict]] = {
         "ideology_multicultural_ig": {"subject": "three hands clasping each other's wrists to form a triangle", "seed": None},
         "ideology_anti_colonialist": {"subject": "a raised clenched fist in front of a globe with its continents", "seed": None},
         "ideology_islamic_inheritance": {"subject": "an open book resting on an X-shaped folding wooden book stand, a small crescent moon above it", "seed": None},
+    },
+    # Mod-added decrees: 13 on road_maintenance, greenest grass on vanilla's
+    # greener grass wagon, the resettlement drive on social mobility's ladder.
+    # Vanilla's encourage_* decrees share a mint-green arrow; the migration
+    # ones here borrow it.
+    "decree": {
+        "decree_war_propaganda": {"subject": "a large brass megaphone with a red cloth streamer tied to its handle", "seed": None},
+        "decree_political_patronage": {"subject": "a gilded key on a red ribbon passed from one hand to another", "seed": None},
+        "decree_bureaucracy_reform": {"subject": "a tall stack of manila folders tied with red tape, a pair of steel scissors beside it", "seed": None},
+        "decree_cultural_emigration_initiative": {"subject": "a battered brown leather suitcase with a big mint-green arrow pointing away to the right", "seed": None},
+        "decree_pollution_control": {"subject": "a squat brick factory chimney capped with a big mint-green air filter, a green leaf beside it", "seed": None},
+        "decree_cultural_integration": {"subject": "two hands clasped in a firm handshake, one in a brown wool sleeve and one in a blue linen sleeve", "seed": None},
+        "decree_natalism_initiative": {"subject": "a wooden baby cradle with a soft blue blanket", "seed": None},
+        "decree_tax_breaks": {"subject": "a stack of gold coins beside a big mint-green arrow pointing down", "seed": None},
+        "decree_trade_reform": {"subject": "a red and white striped customs barrier raised open, a wooden cargo crate passing under it", "seed": None},
+        "decree_antiterrorism_campaign": {"subject": "a black riot shield and a police baton crossed", "seed": None},
+        "decree_promote_tourism": {"subject": "a straw sun hat and a vintage brown leather camera", "seed": None},
+        "decree_encourage_emigration": {"subject": "a small ocean liner with a big mint-green arrow pointing away to the right", "seed": None},
+        "decree_subsidize_immigration": {"subject": "a battered brown leather suitcase standing on a stack of gold coins", "seed": None},
+        "decree_greenest_grass_campaign": {"subject": "a covered wagon drawn by two horses on a patch of vivid green grass, a big mint-green arrow pointing up behind it", "seed": None},
+        "decree_resettlement_recruitment_drive": {"subject": "a small new timber house with a big mint-green arrow pointing into its open door", "seed": None},
     },
     "leader_ideology": {
         "ideology_multicultural": {"subject": "three hands clasping each other's wrists to form a triangle", "seed": None},
