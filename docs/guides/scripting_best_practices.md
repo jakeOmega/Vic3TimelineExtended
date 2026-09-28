@@ -2644,6 +2644,10 @@ Deleting a player-facing toggle whose modifier reserved a resource is the third 
 - Safe to delete cleanup files once no save games from before the migration exist.
 - Delete BOTH the scripted effect file AND the on_action file (`common/on_actions/legacy_modifier_cleanup.txt`).
 
+## Goods-Keyed Modifier Labels Splice the Good's Name
+
+Write a goods modifier's label as `"@iron! $iron$ input"`, never `"@iron! Iron input"`. A spelled-out name survives a rename: the mod called `iron` Structural Metals, `lead` Conductive and Base Metals and so on for months while most of their modifier labels still said Iron, Lead and Coal, and the mod's own `goods_*_mult` labels repeated the base-game names. Vanilla already splices in some labels (`goods_iron_output_mult:0 "$iron$ Goods Output"`, `goods_output_merchant_marine_add`). When the mod renames a good, every vanilla label that spells it out needs a spliced override in `replace/`. `scripts/analysis/check_goods_label_splices.py` enforces both (it runs in the unit suite; `--fix` repairs). Labels of buildings and building groups (`building_coal_mine_*`, `building_group_bg_coal_mining_*`) name the building, not the good, and are out of its scope.
+
 ## Localization Validation
 
 ### Server Endpoint
