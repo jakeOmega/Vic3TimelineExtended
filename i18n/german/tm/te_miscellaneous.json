@@ -1,4 +1,2804 @@
 {
+ "CB_EXPAND_DEPOSIT_GUARANTEE": {
+  "en": "Expand Deposit Guarantee",
+  "de": "Einlagengarantie ausweiten"
+ },
+ "CB_EXPAND_DEPOSIT_GUARANTEE_DESC": {
+  "en": "To prevent a total collapse of public trust during a panic, the State will guarantee the savings of the common citizen. This ensures loyalty and social stability, even as the markets tremble.",
+  "de": "Um einen völligen Zusammenbruch des öffentlichen Vertrauens während einer Panik zu verhindern, garantiert der Staat die Ersparnisse der einfachen Bürger. Das sichert Loyalität und soziale Stabilität, selbst wenn die Märkte erzittern."
+ },
+ "CB_EXPORT_CREDIT_DESC": {
+  "en": "Establishing a facility to provide subsidized, low-interest credit to firms engaged in the export of manufactured goods allows our industry to undercut foreign competitors and dominate global markets. The ongoing cost of maintaining these favorable terms is a continuous drain on the public purse.",
+  "de": "Die Einrichtung einer Stelle für subventionierte, zinsgünstige Kredite an Unternehmen im Export von Fertigwaren erlaubt es unserer Industrie, ausländische Konkurrenten zu unterbieten und die Weltmärkte zu dominieren. Die laufenden Kosten dieser günstigen Konditionen belasten die Staatskasse dauerhaft."
+ },
+ "CB_FOREIGN_BORROWING_LIMITS": {
+  "en": "Limit Foreign-Currency Borrowing",
+  "de": "Fremdwährungskredite begrenzen"
+ },
+ "CB_FOREIGN_BORROWING_LIMITS_DESC": {
+  "en": "Reduce exposure to foreign-currency debt as existing obligations mature. After 24 months, the exchange-rate component of the risk premium is halved. Protection unwinds over 24 months after lifting the limits. Domestic borrowing is more expensive and investment slows while limits operate.",
+  "de": "Verringert die Abhängigkeit von Fremdwährungsschulden, sobald bestehende Verbindlichkeiten fällig werden. Nach 24 Monaten wird der Wechselkursanteil der Risikoprämie halbiert. Nach Aufhebung der Grenzen baut sich der Schutz über 24 Monate ab. Während die Grenzen gelten, wird die Kreditaufnahme im Inland teurer, und Investitionen verlangsamen sich."
+ },
+ "CB_FX_SURRENDER_DESC": {
+  "en": "Require exporters to sell foreign earnings to the central bank. Each month, buy reserves with treasury cash, up to 0.05% of annual GDP, scaled by export reliance. Purchases cannot exceed cash in hand or space in the vault and create no hot-money liability. Exporters lose trade advantage and administration consumes bureaucracy.",
+  "de": "Verpflichtet Exporteure, ihre Deviseneinnahmen an die Zentralbank abzuführen. Jeden Monat werden Reserven mit Mitteln aus der Landeskasse angekauft, bis zu 0,05% des jährlichen BIP, skaliert nach Exportabhängigkeit. Die Käufe dürfen die verfügbaren Barmittel oder den Platz im Tresor nicht übersteigen und schaffen keine Verbindlichkeiten aus kurzfristigem Kapital. Exporteure verlieren ihren Handelsvorteil, und die Verwaltung verbraucht Bürokratie."
+ },
+ "CB_MORAL_SUASION_DESC": {
+  "en": "Sometimes a stern word from the Governor of the Bank is enough. Through informal 'arm-twisting' and guidance, we can encourage lenders to be more cautious without the need for heavy-handed legislation.",
+  "de": "Manchmal genügt ein strenges Wort des Notenbankgouverneurs. Durch informellen Druck und Zureden können wir Kreditgeber zu mehr Vorsicht bewegen, ohne auf schwerfällige Gesetzgebung zurückgreifen zu müssen."
+ },
+ "CB_OPEN_MARKET_OPS": {
+  "en": "Open-Market Operations",
+  "de": "Offenmarktgeschäfte"
+ },
+ "CB_OPEN_MARKET_OPS_DESC": {
+  "en": "The proactive purchase of government securities and commercial paper injects immediate cash into the [concept_banking_cycle], stimulating service-sector growth and encouraging new capital ventures. The bank pays for those securities with money it creates, so only a #bold fiat#! or #bold digital#! currency can do this — and only once the policy rate has run out of room to fall, because a rate cut is the cheaper way to do the same job.",
+  "de": "Der gezielte Ankauf von Staatspapieren und Handelswechseln pumpt sofort Bargeld in den [concept_banking_cycle], regt das Wachstum des Dienstleistungssektors an und fördert neue Kapitalunternehmungen. Die Notenbank bezahlt diese Papiere mit selbst geschaffenem Geld — das kann daher nur eine #bold Fiat#!- oder #bold Digitalwährung#! leisten —, und das auch nur, wenn der Leitzins keinen Spielraum zum Senken mehr hat, da eine Zinssenkung denselben Zweck günstiger erfüllt."
+ },
+ "CB_RAISE_MARGIN_REQ": {
+  "en": "Raise Margin Requirements",
+  "de": "Einschusspflichten erhöhen"
+ },
+ "CB_RAISE_MARGIN_REQ_DESC": {
+  "en": "Speculation on credit has become too common among the [concept_middle_strata]. By requiring higher upfront collateral for loans, we ensure that only stable ventures proceed, protecting the economy.",
+  "de": "Spekulation auf Kredit ist in der [concept_middle_strata] zu weit verbreitet. Indem wir höhere Sicherheiten für Kredite verlangen, stellen wir sicher, dass nur solide Unternehmungen fortgeführt werden, und schützen so die Wirtschaft."
+ },
+ "CB_RESERVE_REQUIREMENTS_DESC": {
+  "en": "Require every bank to hold a larger share of its deposits in cash or at the central bank. Less of each deposit can be lent out again, so credit — and the money it creates — grows more slowly in a boom. It needs no modern instruments: reserve rules are as old as banking regulation itself.",
+  "de": "Verpflichtet jede Bank, einen größeren Anteil ihrer Einlagen bar oder bei der Zentralbank zu halten. So kann weniger jeder Einlage erneut verliehen werden, wodurch Kredite — und das dadurch geschaffene Geld — in einem Boom langsamer wachsen. Dafür braucht es keine modernen Instrumente: Mindestreservevorschriften sind so alt wie die Bankenregulierung selbst."
+ },
+ "CB_RESTRICT_INFLOWS_DESC": {
+  "en": "Halve positive gold inflows and the exchange-rate carry from a positive real-rate gap. Outflows are unaffected. Less speculative credit means less bubble pressure, but also slower investment and reserve accumulation.",
+  "de": "Halbiert positive Goldzuflüsse sowie den Wechselkursertrag aus einer positiven Realzinslücke. Abflüsse bleiben unberührt. Weniger spekulativer Kredit bedeutet weniger Blasendruck, aber auch langsamere Investitionen und Reservebildung."
+ },
+ "CB_STERILIZE_INFLOWS_DESC": {
+  "en": "Offset three quarters of the inflation pressure from positive gold inflows, without cancelling foreign claims on the vault. Credit grows more slowly. Operations cost 0.01% of annual GDP on activation and each month and stop automatically if cash is unavailable. Outflow deflation is unchanged.",
+  "de": "Gleicht drei Viertel des Inflationsdrucks aus positiven Goldzuflüssen aus, ohne die ausländischen Ansprüche auf den Tresor aufzuheben. Der Kredit wächst langsamer. Die Maßnahmen kosten bei Aktivierung und danach jeden Monat 0,01% des jährlichen BIP und enden automatisch, wenn keine Barmittel verfügbar sind. Die Deflation durch Abflüsse bleibt unverändert."
+ },
+ "CE_ADMIN_CAMPAIGN_DESC": {
+  "en": "Launch a bureau-wide efficiency drive, replacing or removing underperforming planners. Clears significant [concept_bubble_pressure] at the cost of intelligentsia and industrialist approval.",
+  "de": "Startet eine behördenweite Effizienzoffensive, bei der leistungsschwache Planer ersetzt oder entlassen werden. Baut erheblichen [concept_bubble_pressure] ab, kostet aber die Zustimmung von Intellektuellen und Industriellen."
+ },
+ "CE_CONSOLIDATION_ORDER_DESC": {
+  "en": "Mandate the merger of redundant parallel production units into consolidated complexes. Reduces [concept_bubble_pressure] but requires investment from the pool; best used during stable periods.",
+  "de": "Ordnet die Zusammenlegung überflüssiger paralleler Produktionseinheiten zu konsolidierten Komplexen an. Verringert [concept_bubble_pressure], erfordert aber Investitionen aus dem Fonds; am besten in stabilen Zeiten einzusetzen."
+ },
+ "CE_COORDINATION_PROTOCOL_DESC": {
+  "en": "Establish a permanent multi-ministry joint committee to proactively resolve allocation conflicts. Cheap and steady; best deployed before crisis develops.",
+  "de": "Richtet einen ständigen ministeriumsübergreifenden Ausschuss ein, der Verteilungskonflikte vorausschauend löst. Günstig und beständig; am besten schon vor Ausbruch einer Krise eingesetzt."
+ },
+ "CE_CULTURAL_ASSIMILATION_BODY": {
+  "en": "Direct the [concept_bureaucracy] to extend metropolitan language, schooling, and civic identity into colonial territories. A one-shot program startup payment from the [concept_treasury] enables the apparatus; ongoing [concept_bureaucracy] and [concept_authority] costs sustain it. The reward accelerates [concept_assimilation] and [concept_conversion] in the colonies — but the policy itself politicises the colonised, accelerating radicalism in those who resist it.",
+  "de": "Weist die [concept_bureaucracy] an, Sprache, Schulwesen und staatsbürgerliche Identität des Mutterlandes auf die Kolonialgebiete auszuweiten. Eine einmalige Anschubzahlung aus der [concept_treasury] setzt den Apparat in Gang; laufende Kosten an [concept_bureaucracy] und [concept_authority] erhalten ihn. Der Lohn ist beschleunigte [concept_assimilation] und [concept_conversion] in den Kolonien — doch die Politik selbst politisiert die Kolonisierten und beschleunigt den Radikalismus derer, die sich ihr widersetzen."
+ },
+ "CE_CULTURAL_ASSIMILATION_DESC": {
+  "en": "$CE_CULTURAL_ASSIMILATION_BODY$\\n\\n#bold Bar contribution while active:#! [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_colonial_assim_effectiveness_add')] / month",
+  "de": "$CE_CULTURAL_ASSIMILATION_BODY$\\n\\n#bold Beitrag zum Balken, solange aktiv:#! [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_colonial_assim_effectiveness_add')] / Monat"
+ },
+ "CE_DISABLE_ADMIN_CAMPAIGN": {
+  "en": "End Performance Campaign",
+  "de": "Effizienzoffensive beenden"
+ },
+ "CE_DISABLE_ADMIN_CAMPAIGN_DESC": {
+  "en": "Wind down the efficiency drive and allow political relations with administrators to recover.",
+  "de": "Beendet die Effizienzoffensive und lässt die politischen Beziehungen zu den Verwaltungsbeamten sich erholen."
+ },
+ "CE_DISABLE_CONSOLIDATION_ORDER": {
+  "en": "Revoke Consolidation Order",
+  "de": "Konsolidierungsanordnung aufheben"
+ },
+ "CE_DISABLE_CONSOLIDATION_ORDER_DESC": {
+  "en": "Cancel the ongoing plant consolidation program.",
+  "de": "Beendet das laufende Programm zur Werkskonsolidierung."
+ },
+ "CE_DISABLE_COORDINATION_PROTOCOL": {
+  "en": "Dissolve Coordination Protocol",
+  "de": "Koordinationsprotokoll auflösen"
+ },
+ "CE_DISABLE_COORDINATION_PROTOCOL_DESC": {
+  "en": "Retire the joint committee and return each ministry to independent operation.",
+  "de": "Löst den gemeinsamen Ausschuss auf und gibt jedem Ministerium die eigenständige Arbeitsweise zurück."
+ },
+ "CE_DISABLE_DISTRIBUTION_UPGRADE": {
+  "en": "Suspend Distribution Upgrade",
+  "de": "Vertriebsausbau aussetzen"
+ },
+ "CE_DISABLE_DISTRIBUTION_UPGRADE_DESC": {
+  "en": "Halt the logistics investment program and free up planning budget capacity.",
+  "de": "Stoppt das Investitionsprogramm für die Logistik und schafft freie Kapazität im Planungsbudget."
+ },
+ "CE_DISABLE_EMERGENCY_ALLOCATION": {
+  "en": "Close Emergency Allocation",
+  "de": "Notzuteilung beenden"
+ },
+ "CE_DISABLE_EMERGENCY_ALLOCATION_DESC": {
+  "en": "Withdraw the priority-sector resource redirect and restore normal distribution channels.",
+  "de": "Beendet die Umleitung von Ressourcen in vorrangige Sektoren und stellt die normalen Verteilungswege wieder her."
+ },
+ "CE_DISABLE_PLAN_REVISION": {
+  "en": "Lift Plan Revision",
+  "de": "Plankorrektur aufheben"
+ },
+ "CE_DISABLE_PLAN_REVISION_DESC": {
+  "en": "Restore prior production directives and close the emergency revision order.",
+  "de": "Stellt die vorherigen Produktionsvorgaben wieder her und beendet die Notfall-Plankorrektur."
+ },
+ "CE_DISABLE_STRATEGIC_STOCKPILE": {
+  "en": "Release Strategic Stockpile",
+  "de": "Strategische Reserve freigeben"
+ },
+ "CE_DISABLE_STRATEGIC_STOCKPILE_DESC": {
+  "en": "Stand down the stockpile accumulation order and return resources to active circulation.",
+  "de": "Beendet die Anordnung zur Bevorratung und führt die Ressourcen dem aktiven Umlauf wieder zu."
+ },
+ "CE_DISABLE_TARGET_REDUCTION": {
+  "en": "Restore Production Targets",
+  "de": "Produktionsziele wiederherstellen"
+ },
+ "CE_DISABLE_TARGET_REDUCTION_DESC": {
+  "en": "Rescind the target reduction order and restore prior production commitments.",
+  "de": "Hebt die Anordnung zur Zielsenkung auf und stellt die vorherigen Produktionsvorgaben wieder her."
+ },
+ "CE_DISTRIBUTION_UPGRADE_DESC": {
+  "en": "Invest in rail, depot, and logistics capacity to permanently improve input [concept_throughput] across the planned network. Strong long-term benefit; expensive and slow: avoid during crisis.",
+  "de": "Investiert in Schienennetz, Lagerhäuser und Logistikkapazität, um den [concept_throughput] von Vorleistungen im gesamten Plannetz dauerhaft zu verbessern. Starker langfristiger Nutzen; teuer und langsam: in Krisenzeiten vermeiden."
+ },
+ "CE_EMERGENCY_ALLOCATION_DESC": {
+  "en": "Redirect critical materials and transport to a priority deficit sector. Accelerates coordination momentum but risks building new imbalances elsewhere: best used during panic or deep downturn.",
+  "de": "Leitet kritische Materialien und Transportkapazität in einen vorrangigen Mangelsektor um. Beschleunigt die Koordinationsdynamik, riskiert aber neue Ungleichgewichte an anderer Stelle: am besten in Panik oder tiefer Rezession einzusetzen."
+ },
+ "CE_INVEST_IN_DEVELOPMENT": {
+  "en": "Invest in Colonial Development",
+  "de": "In koloniale Entwicklung investieren"
+ },
+ "CE_INVEST_IN_DEVELOPMENT_BODY": {
+  "en": "Pour resources into developing [concept_infrastructure] and institutions in our colonial territories. A one-shot program startup payment from the [concept_treasury], an ongoing GDP-scaled monthly cost, and disapproval from the [GetInterestGroupVariant('ig_industrialists',GetPlayer).GetName] and [GetInterestGroupVariant('ig_petty_bourgeoisie',GetPlayer).GetName] are the price; in exchange, the colonies become a credible destination for migrants and [concept_colonial_stability] steadily rises.",
+  "de": "Lenkt Ressourcen in den Ausbau von [concept_infrastructure] und Institutionen in unseren Kolonialgebieten. Der Preis dafür sind eine einmalige Anschubzahlung aus der [concept_treasury], laufende, am BIP orientierte monatliche Kosten sowie die Missbilligung der [GetInterestGroupVariant('ig_industrialists',GetPlayer).GetName] und der [GetInterestGroupVariant('ig_petty_bourgeoisie',GetPlayer).GetName]; im Gegenzug werden die Kolonien zu einem glaubwürdigen Ziel für Migranten, und die [concept_colonial_stability] steigt stetig."
+ },
+ "CE_INVEST_IN_DEVELOPMENT_DESC": {
+  "en": "$CE_INVEST_IN_DEVELOPMENT_BODY$\\n\\n#bold Bar contribution while active:#! [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_colonial_invest_effectiveness_add')] / month",
+  "de": "$CE_INVEST_IN_DEVELOPMENT_BODY$\\n\\n#bold Beitrag zum Balken, solange aktiv:#! [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_colonial_invest_effectiveness_add')] / Monat"
+ },
+ "CE_INVEST_POOL_INJECT": {
+  "en": "Capital Injection",
+  "de": "Kapitalspritze"
+ },
+ "CE_INVEST_POOL_INJECT_DESC": {
+  "en": "Transfer funds from the state treasury into the national [concept_investment_pool], accelerating construction of planned projects. Costs #bold 0.2%#! of [Concept('concept_gdp', 'GDP')] now. While private projects are queued, the pool then spends about a 24th of itself each week and the treasury keeps topping it up.",
+  "de": "Überweist Mittel aus der Staatskasse in den nationalen [concept_investment_pool] und beschleunigt so den Bau geplanter Projekte. Kostet jetzt #bold 0,2%#! des [Concept('concept_gdp', 'BIP')]. Solange private Projekte in der Warteschlange stehen, gibt der Fonds danach wöchentlich etwa ein Vierundzwanzigstel seiner selbst aus, und die Staatskasse füllt ihn immer wieder auf."
+ },
+ "CE_INVEST_POOL_WITHDRAW": {
+  "en": "Capital Withdrawal",
+  "de": "Kapitalentnahme"
+ },
+ "CE_INVEST_POOL_WITHDRAW_DESC": {
+  "en": "Redirect funds from the national [concept_investment_pool] back to the state treasury. Withdraws up to #bold 0.2%#! of [Concept('concept_gdp', 'GDP')] (or all remaining funds if less).",
+  "de": "Leitet Mittel aus dem nationalen [concept_investment_pool] zurück in die Staatskasse. Entnimmt bis zu #bold 0,2%#! des [Concept('concept_gdp', 'BIP')] (oder alle verbleibenden Mittel, falls weniger vorhanden sind)."
+ },
+ "CE_MILITARY_GARRISON_BODY": {
+  "en": "Station military forces in colonial territories to maintain order. Costs [concept_authority], army projection, and bureaucratic capacity. While active, [concept_infamy] decays more slowly — every diplomatic incident, every war, the one-shot infamy hit on activation, all linger longer — so the international reputation cost compounds across the run.",
+  "de": "Stationiert Streitkräfte in den Kolonialgebieten, um Ordnung zu halten. Kostet [concept_authority], militärische Machtprojektion und bürokratische Kapazität. Solange aktiv, baut sich [concept_infamy] langsamer ab — jeder diplomatische Zwischenfall, jeder Krieg und der einmalige Verrufenheitsschub bei Aktivierung wirken alle länger nach —, sodass sich die Kosten für das internationale Ansehen im Lauf der Zeit summieren."
+ },
+ "CE_MILITARY_GARRISON_DESC": {
+  "en": "$CE_MILITARY_GARRISON_BODY$\\n\\n#bold Bar contribution while active:#! [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_colonial_garrison_effectiveness_add')] / month",
+  "de": "$CE_MILITARY_GARRISON_BODY$\\n\\n#bold Beitrag zum Balken, solange aktiv:#! [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_colonial_garrison_effectiveness_add')] / Monat"
+ },
+ "CE_NEEDS_COLONIAL_STATES": {
+  "en": "Must have colonial territories (non-[concept_homeland] states).",
+  "de": "Muss Kolonialgebiete besitzen (Staaten, die kein [concept_homeland] sind)."
+ },
+ "CE_NEEDS_COLONIAL_STATES_OR_SUBJECTS": {
+  "en": "Must have colonial territories (non-[concept_homeland] states) or qualifying colonial subjects.",
+  "de": "Muss Kolonialgebiete besitzen (Staaten, die kein [concept_homeland] sind) oder über geeignete koloniale Vasallen verfügen."
+ },
+ "CE_PLANNED_DECOLONIZATION_DESC": {
+  "en": "[concept_decolonization_system]: release all remaining colonial territories as independent nations in an orderly fashion. A graceful end to empire.",
+  "de": "[concept_decolonization_system]: Entlässt alle verbliebenen Kolonialgebiete in geordneter Weise in die Unabhängigkeit. Ein würdevolles Ende des Imperiums."
+ },
+ "CE_PLAN_REVISION_DESC": {
+  "en": "Force an emergency revision of overambitious production targets, reallocating inputs and easing supply-chain friction. Reduces [concept_bubble_pressure] and slows [concept_banking_momentum] accumulation.",
+  "de": "Erzwingt eine Notfall-Überarbeitung überambitionierter Produktionsziele, verteilt Vorleistungen neu und lindert Reibungen in der Versorgungskette. Verringert [concept_bubble_pressure] und verlangsamt den Aufbau von [concept_banking_momentum]."
+ },
+ "CE_RELEASE_COLONIAL_TERRITORY": {
+  "en": "Release Colonial Territory",
+  "de": "Kolonialgebiet entlassen"
+ },
+ "CE_RELEASE_COLONIAL_TERRITORY_DESC": {
+  "en": "Release one colonial territory as an independent nation. Improves stability and grants a peaceful [concept_decolonization_system] [concept_prestige] bonus.",
+  "de": "Entlässt ein Kolonialgebiet in die Unabhängigkeit. Verbessert die Stabilität und gewährt einen [concept_prestige]-Bonus für friedliche [concept_decolonization_system]."
+ },
+ "CE_REMOVE_CULTURAL_ASSIMILATION": {
+  "en": "End Cultural Assimilation",
+  "de": "Kulturelle Assimilierung beenden"
+ },
+ "CE_REMOVE_CULTURAL_ASSIMILATION_DESC": {
+  "en": "Cease the cultural [concept_assimilation] program.",
+  "de": "Beendet das Programm zur kulturellen [concept_assimilation]."
+ },
+ "CE_REMOVE_INVEST_IN_DEVELOPMENT": {
+  "en": "End Development Investment",
+  "de": "Entwicklungsinvestitionen beenden"
+ },
+ "CE_REMOVE_INVEST_IN_DEVELOPMENT_DESC": {
+  "en": "Cease the colonial development program.",
+  "de": "Beendet das koloniale Entwicklungsprogramm."
+ },
+ "CE_REMOVE_MILITARY_GARRISON": {
+  "en": "Withdraw Military Garrison",
+  "de": "Militärgarnison abziehen"
+ },
+ "CE_REMOVE_MILITARY_GARRISON_DESC": {
+  "en": "Withdraw military forces from colonial territories.",
+  "de": "Zieht die Streitkräfte aus den Kolonialgebieten ab."
+ },
+ "CE_ROUND_TABLE_CONFERENCE": {
+  "en": "Convene a Round Table Conference",
+  "de": "Rundtischkonferenz einberufen"
+ },
+ "CE_ROUND_TABLE_CONFERENCE_DESC": {
+  "en": "Negotiate a structured transition for one well-accepted colonial territory: you choose among up to three candidates and can still withdraw. The new country starts on better terms with us than one granted independence unilaterally. The legacy it inherits, as for any colony we free, follows the colonial programme we have run longest. Requires more than 200 [concept_authority]. On release, [concept_colonial_stability] rises by 1 a month for a year, and we take the same Peaceful Decolonization modifier as for a unilateral release. The [GetInterestGroupVariant('ig_intelligentsia',GetPlayer).GetName] approve; the [GetInterestGroupVariant('ig_landowners',GetPlayer).GetName] object. The Round Table is for the colonies you want to leave on good terms.",
+  "de": "Verhandelt einen geordneten Übergang für ein gut akzeptiertes Kolonialgebiet: Sie wählen unter bis zu drei Kandidaten und können noch zurücktreten. Das neue Land beginnt mit besseren Beziehungen zu uns als eines, dem einseitig die Unabhängigkeit gewährt wurde. Welches Erbe es übernimmt, richtet sich wie bei jeder von uns befreiten Kolonie nach dem Kolonialprogramm, das wir am längsten betrieben haben. Erfordert mehr als 200 [concept_authority]. Bei der Entlassung steigt die [concept_colonial_stability] ein Jahr lang um 1 pro Monat, und wir erhalten denselben Modifikator für friedliche Dekolonisierung wie bei einer einseitigen Entlassung. Die [GetInterestGroupVariant('ig_intelligentsia',GetPlayer).GetName] begrüßen dies; die [GetInterestGroupVariant('ig_landowners',GetPlayer).GetName] lehnen es ab. Die Rundtischkonferenz eignet sich für Kolonien, die wir im Guten verlassen wollen."
+ },
+ "CE_ROUND_TABLE_REQUIRES_ACCEPTABLE_COLONY": {
+  "en": "Requires at least one overseas colonial state with no severely unaccepted population.",
+  "de": "Erfordert mindestens einen überseeischen Kolonialstaat ohne schwer unakzeptierte Bevölkerung."
+ },
+ "CE_STRATEGIC_STOCKPILE_DESC": {
+  "en": "Order the accumulation of national material reserves as a buffer against sudden input shortages. A steady, defensive tool providing modest [concept_bubble_pressure] reduction at low planning cost.",
+  "de": "Ordnet den Aufbau nationaler Materialreserven als Puffer gegen plötzliche Engpässe bei Vorleistungen an. Ein beständiges, defensives Mittel, das bei geringen Planungskosten eine bescheidene Senkung des [concept_bubble_pressure] bewirkt."
+ },
+ "CE_TARGET_REDUCTION_DESC": {
+  "en": "Formally scale back overambitious plan targets to provisioned capacity, clearing systemic friction. Reduces [concept_bubble_pressure] significantly but irritates [concept_upper_strata] who invested in ambitious output projections.",
+  "de": "Senkt überambitionierte Planziele förmlich auf die vorgesehene Kapazität und beseitigt systemische Reibung. Verringert [concept_bubble_pressure] erheblich, verärgert aber die [concept_upper_strata], die in ehrgeizige Produktionsprognosen investiert hat."
+ },
+ "CE_WITHDRAW_POSSIBLE_TT": {
+  "en": "Must have funds in the [concept_investment_pool]",
+  "de": "Muss über Mittel im [concept_investment_pool] verfügen"
+ },
+ "CH_CULTURAL_INSTITUTES_DESC": {
+  "en": "Expand museums, academies, and scholarships to turn domestic culture into a more reliable source of global influence.",
+  "de": "Baut Museen, Akademien und Stipendien aus, um die heimische Kultur zu einer verlässlicheren Quelle weltweiten Einflusses zu machen."
+ },
+ "CH_CULTURAL_PROTECTIONISM_DESC": {
+  "en": "Shield domestic cultural industries from foreign competition, gaining authority and [concept_cultural_pull] at the cost of openness.",
+  "de": "Schirmt die heimische Kulturwirtschaft gegen ausländische Konkurrenz ab und gewinnt Autorität sowie [concept_cultural_pull] auf Kosten der Offenheit."
+ },
+ "CH_DECREASE_PROGRAM_FUNDING": {
+  "en": "Decrease Cultural Program Funding",
+  "de": "Förderung des Kulturprogramms senken"
+ },
+ "CH_DECREASE_PROGRAM_FUNDING_DESC": {
+  "en": "Reduce direct cultural patronage and lower its recurring financial burden by one step's worth.",
+  "de": "Verringert die direkte Kulturförderung und senkt deren laufende finanzielle Belastung um eine Stufe."
+ },
+ "CH_DISABLE_CULTURAL_INSTITUTES": {
+  "en": "Defund Cultural Institutes",
+  "de": "Förderung der Kulturinstitute einstellen"
+ },
+ "CH_DISABLE_CULTURAL_INSTITUTES_DESC": {
+  "en": "Scale back the state's cultural patronage network and recover the [concept_authority] tied up in it.",
+  "de": "Baut das staatliche Netzwerk der Kulturförderung zurück und gewinnt die darin gebundene [concept_authority] zurück."
+ },
+ "CH_DISABLE_CULTURAL_PROTECTIONISM": {
+  "en": "End Cultural Protectionism",
+  "de": "Kulturellen Protektionismus beenden"
+ },
+ "CH_DISABLE_CULTURAL_PROTECTIONISM_DESC": {
+  "en": "Relax defensive cultural policy and reopen the country to outside media and ideas.",
+  "de": "Lockert die defensive Kulturpolitik und öffnet das Land wieder für ausländische Medien und Ideen."
+ },
+ "CH_DISABLE_GLOBAL_MEDIA_CAMPAIGN": {
+  "en": "End Global Media Campaign",
+  "de": "Globale Medienkampagne beenden"
+ },
+ "CH_DISABLE_GLOBAL_MEDIA_CAMPAIGN_DESC": {
+  "en": "Stop dedicating state authority to exporting our media and narrative abroad.",
+  "de": "Setzt keine staatliche Autorität mehr dafür ein, unsere Medien und unser Narrativ ins Ausland zu tragen."
+ },
+ "CH_DISABLE_WORLD_EXPOSITION": {
+  "en": "End International Cultural Outreach",
+  "de": "Internationale Kulturarbeit beenden"
+ },
+ "CH_DISABLE_WORLD_EXPOSITION_DESC": {
+  "en": "Wind down the state-sponsored cultural outreach program and stop the ongoing expenditure.",
+  "de": "Fährt das staatlich geförderte Programm der Kulturarbeit zurück und stoppt die laufenden Ausgaben."
+ },
+ "CH_GLOBAL_MEDIA_CAMPAIGN": {
+  "en": "Launch Global Media Campaign",
+  "de": "Globale Medienkampagne starten"
+ },
+ "CH_GLOBAL_MEDIA_CAMPAIGN_DESC": {
+  "en": "Use mass media as an arm of state influence, converting authority into [concept_prestige] and [concept_cultural_pull] abroad.",
+  "de": "Setzt Massenmedien als Werkzeug staatlichen Einflusses ein und wandelt Autorität im Ausland in [concept_prestige] und [concept_cultural_pull] um."
+ },
+ "CH_INCREASE_PROGRAM_FUNDING": {
+  "en": "Increase Cultural Program Funding",
+  "de": "Förderung des Kulturprogramms erhöhen"
+ },
+ "CH_INCREASE_PROGRAM_FUNDING_DESC": {
+  "en": "Raise the funding level for direct cultural patronage. Each step adds flat [concept_cultural_pull], 5% more of it, and a matching recurring expense scaled to our GDP.",
+  "de": "Erhöht die Förderstufe der direkten Kulturförderung. Jede Stufe gibt einen festen Betrag an [concept_cultural_pull], 5% mehr davon, sowie entsprechende laufende, am BIP orientierte Ausgaben."
+ },
+ "CH_MEDIA_BLOCKED_BY_PROTECTIONISM": {
+  "en": "Cannot launch a Global Media Campaign while Cultural Protectionism is in effect.",
+  "de": "Eine Globale Medienkampagne kann nicht gestartet werden, solange Kultureller Protektionismus in Kraft ist."
+ },
+ "CH_PROGRAM_FUNDING_NOT_MAX": {
+  "en": "Funding is not already at maximum ([ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_cultural_program_max_funding_add')|0]).",
+  "de": "Die Förderung liegt noch nicht am Maximum ([ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_cultural_program_max_funding_add')|0])."
+ },
+ "CH_PROGRAM_FUNDING_NOT_MIN": {
+  "en": "Funding is above zero.",
+  "de": "Die Förderung liegt über null."
+ },
+ "CH_PROTECTIONISM_BLOCKED_BY_GLOBAL_MEDIA": {
+  "en": "Cannot enact Cultural Protectionism while a Global Media Campaign is active.",
+  "de": "Kultureller Protektionismus kann nicht beschlossen werden, solange eine Globale Medienkampagne aktiv ist."
+ },
+ "CH_REQUIRES_MASS_MEDIA_TT": {
+  "en": "Requires [GetTechnology('mass_media').GetName].",
+  "de": "Erfordert [GetTechnology('mass_media').GetName]."
+ },
+ "CH_REQUIRES_MINISTRY_TT": {
+  "en": "Requires [GetLawType('law_ministry_of_culture').GetName].",
+  "de": "Erfordert [GetLawType('law_ministry_of_culture').GetName]."
+ },
+ "CH_WORLD_EXPOSITION_DESC": {
+  "en": "Dedicate state resources to sustained cultural projection abroad — touring shows, foreign cultural centers, sponsored translations. Costs scale with GDP while the program runs.",
+  "de": "Widmet staatliche Mittel einer dauerhaften kulturellen Ausstrahlung im Ausland — Gastspielreisen, ausländische Kulturzentren, geförderte Übersetzungen. Die Kosten steigen mit dem BIP, solange das Programm läuft."
+ },
+ "COLLECTIVE_GOVERNANCE_TT_ALGORITHMIC": {
+  "en": "Under Algorithmic Governance, gains the #b Algorithmic Commons#! amendment: every citizen's feedback weighs the same in the algorithm, so wealth brings less [concept_political_strength], and grievances reach it before they harden, so [Concept('concept_political_movement','political movements')] are less active.",
+  "de": "Unter Algorithmischer Regierungsführung erhält es den Zusatz #b Algorithmische Allmende#!: Die Rückmeldung jedes Bürgers zählt im Algorithmus gleich viel, sodass Reichtum weniger [concept_political_strength] bringt, und Missstände erreichen ihn, bevor sie sich verhärten, sodass [Concept('concept_political_movement','Protestbewegungen')] weniger aktiv sind."
+ },
+ "COLLECTIVE_GOVERNANCE_TT_ANARCHIC": {
+  "en": "Under Anarchy, gains the #b Free Federation#! amendment: delegates act only on mandates from below, so a law can only be enacted with a political movement behind it.",
+  "de": "Unter Anarchie erhält es den Zusatz #b Freie Föderation#!: Delegierte handeln nur nach Mandaten von unten, sodass ein Gesetz nur mit einer Protestbewegung im Rücken erlassen werden kann."
+ },
+ "COLLECTIVE_GOVERNANCE_TT_FOLLOWS_DOP": {
+  "en": "The amendment changes whenever the Distribution of Power does.",
+  "de": "Der Zusatz ändert sich, sobald sich die Machtverteilung ändert."
+ },
+ "COLLECTIVE_GOVERNANCE_TT_PARTY": {
+  "en": "Under Single-Party State, gains the #b Collective Leadership#! amendment: the party's presidium governs together, and with no single leader for a coup to remove, the country gains +25% [concept_coup_resistance].",
+  "de": "Unter Einparteienstaat erhält es den Zusatz #b Kollektive Führung#!: Das Präsidium der Partei regiert gemeinsam, und da es keinen einzelnen Anführer gibt, den ein Putsch beseitigen könnte, erhält das Land +25% [concept_coup_resistance]."
+ },
+ "COLLECTIVE_GOVERNANCE_TT_PATRICIAN": {
+  "en": "Under an oligarchy, gains the #b Patrician Council#! amendment: the powerful govern as peers, and aristocrats and capitalists gain political strength.",
+  "de": "Unter einer Oligarchie erhält es den Zusatz #b Patrizierrat#!: Die Mächtigen regieren als Gleiche unter Gleichen, und Aristokraten sowie Kapitalisten gewinnen politische Stärke."
+ },
+ "COLLECTIVE_GOVERNANCE_TT_POPULAR": {
+  "en": "With a voting franchise, gains the #b Direct Democracy#! amendment: a law can only be enacted with a political movement behind it. Movements draw more support and radicalize more readily, but enacted laws radicalize their opponents less, laws pass more often, and votes add to [concept_legitimacy].",
+  "de": "Mit einem Wahlrecht erhält es den Zusatz #b Direkte Demokratie#!: Ein Gesetz kann nur mit einer Protestbewegung im Rücken erlassen werden. Bewegungen gewinnen mehr Unterstützung und radikalisieren sich leichter, doch erlassene Gesetze radikalisieren ihre Gegner weniger, Gesetze werden häufiger angenommen, und Abstimmungen stärken die [concept_legitimacy]."
+ },
+ "COLLECTIVE_GOVERNANCE_TT_REPEAL": {
+  "en": "The Distribution of Power no longer calls for this amendment",
+  "de": "Die Machtverteilung verlangt diesen Zusatz nicht mehr"
+ },
+ "COLLECTIVE_GOVERNANCE_TT_TECHNOCRATIC": {
+  "en": "Under Technocracy, gains the #b Collegial Administration#! amendment: the institutions govern as equal bureaus and change size faster, but decrees cost more with no one executive to issue them.",
+  "de": "Unter Technokratie erhält es den Zusatz #b Kollegiale Verwaltung#!: Die Institutionen regieren als gleichberechtigte Behörden und verändern ihre Größe schneller, doch Dekrete kosten mehr, da es keine einzelne Exekutive gibt, die sie erlässt."
+ },
+ "CONTAGION_SCARE_CYCLE_CMD_DESC": {
+  "en": "[concept_banking_cycle] Value: #R -1#! (state controls absorb most spillovers)",
+  "de": "[concept_banking_cycle]-Wert: #R -1#! (staatliche Kontrollen fangen die meisten Übergreifeffekte ab)"
+ },
+ "CONTAGION_SCARE_CYCLE_COOP_DESC": {
+  "en": "[concept_banking_cycle] Value: #R -2#! (federation spillovers are limited)",
+  "de": "[concept_banking_cycle]-Wert: #R -2#! (Übergreifeffekte in der Föderation sind begrenzt)"
+ },
+ "CONTAGION_SCARE_CYCLE_DESC": {
+  "en": "[concept_banking_cycle] Value: #R -3#! (market jitters)",
+  "de": "[concept_banking_cycle]-Wert: #R -3#! (Marktnervosität)"
+ },
+ "CONTAGION_SCARE_MOMENTUM_CMD_DESC": {
+  "en": "[concept_banking_momentum]: #N -0.5#! (state controls absorb most spillovers)",
+  "de": "[concept_banking_momentum]: #N -0,5#! (staatliche Kontrollen fangen die meisten Übergreifeffekte ab)"
+ },
+ "CONTAGION_SCARE_MOMENTUM_COOP_DESC": {
+  "en": "[concept_banking_momentum]: #N -0.5#! (federation spillovers are limited)",
+  "de": "[concept_banking_momentum]: #N -0,5#! (Übergreifeffekte in der Föderation sind begrenzt)"
+ },
+ "CONTAGION_SCARE_MOMENTUM_DESC": {
+  "en": "[concept_banking_momentum]: #N -1#! (market jitters)",
+  "de": "[concept_banking_momentum]: #N -1#! (Marktnervosität)"
+ },
+ "CONTINENT_HAS_NO_BUILDING_OF_TYPE_TT": {
+  "en": "No state in this continent may already have a building of this type.",
+  "de": "Kein Staat auf diesem Kontinent darf bereits ein Gebäude dieses Typs besitzen."
+ },
+ "COUNCIL_POINTS_1": {
+  "en": "At least #bold 1#! free council mandate point",
+  "de": "Mindestens #bold 1#! freier Ratsmandatspunkt"
+ },
+ "COUNCIL_POINTS_2": {
+  "en": "At least #bold 2#! free council mandate points",
+  "de": "Mindestens #bold 2#! freie Ratsmandatspunkte"
+ },
+ "COUNCIL_POINTS_3": {
+  "en": "At least #bold 3#! free council mandate points",
+  "de": "Mindestens #bold 3#! freie Ratsmandatspunkte"
+ },
+ "COUNCIL_POINTS_4": {
+  "en": "At least #bold 4#! free council mandate points",
+  "de": "Mindestens #bold 4#! freie Ratsmandatspunkte"
+ },
+ "CRASH_BUBBLE_CLEAR_DESC": {
+  "en": "[concept_bubble_pressure]: #G cleared#!",
+  "de": "[concept_bubble_pressure]: #G beseitigt#!"
+ },
+ "CRASH_CYCLE_VALUE_10_DESC": {
+  "en": "[concept_banking_cycle] Value crashes to #R 10#!",
+  "de": "[concept_banking_cycle]-Wert stürzt auf #R 10#! ab"
+ },
+ "CRASH_CYCLE_VALUE_20_DESC": {
+  "en": "[concept_banking_cycle] Value crashes to #R 20#!",
+  "de": "[concept_banking_cycle]-Wert stürzt auf #R 20#! ab"
+ },
+ "CRASH_CYCLE_VALUE_30_DESC": {
+  "en": "[concept_banking_cycle] Value crashes to #R 30#!",
+  "de": "[concept_banking_cycle]-Wert stürzt auf #R 30#! ab"
+ },
+ "CRASH_CYCLE_VALUE_40_DESC": {
+  "en": "[concept_banking_cycle] Value crashes to #R 40#!",
+  "de": "[concept_banking_cycle]-Wert stürzt auf #R 40#! ab"
+ },
+ "CRASH_CYCLE_VALUE_5_DESC": {
+  "en": "[concept_banking_cycle] Value crashes to #R 5#!",
+  "de": "[concept_banking_cycle]-Wert stürzt auf #R 5#! ab"
+ },
+ "CRASH_MOMENTUM_MINUS_1_DESC": {
+  "en": "[concept_banking_momentum] crashes to #N -1#!",
+  "de": "[concept_banking_momentum] stürzt auf #N -1#! ab"
+ },
+ "CRASH_MOMENTUM_MINUS_2_DESC": {
+  "en": "[concept_banking_momentum] crashes to #N -2#!",
+  "de": "[concept_banking_momentum] stürzt auf #N -2#! ab"
+ },
+ "CRASH_MOMENTUM_MINUS_3_DESC": {
+  "en": "[concept_banking_momentum] crashes to #N -3#!",
+  "de": "[concept_banking_momentum] stürzt auf #N -3#! ab"
+ },
+ "CRASH_MOMENTUM_MINUS_4_DESC": {
+  "en": "[concept_banking_momentum] crashes to #N -4#!",
+  "de": "[concept_banking_momentum] stürzt auf #N -4#! ab"
+ },
+ "CRASH_MOMENTUM_MINUS_5_DESC": {
+  "en": "[concept_banking_momentum] crashes to #N -5#!",
+  "de": "[concept_banking_momentum] stürzt auf #N -5#! ab"
+ },
+ "CRASH_SOFTEN_CAPITAL_CONTROLS_DESC": {
+  "en": "Emergency capital controls pin asset prices: [concept_banking_cycle] Value softens by #G +5#!",
+  "de": "Notfall-Kapitalverkehrskontrollen fixieren die Vermögenspreise: Der [concept_banking_cycle]-Wert mildert sich um #G +5#!"
+ },
+ "CRASH_SOFTEN_CORRESPONDENT_LIQUIDITY_DESC": {
+  "en": "Correspondent banks pool liquidity to steady the interbank market: [concept_banking_cycle] Value softens by #G +6#!, [concept_banking_momentum] softens by #G +1#!",
+  "de": "Korrespondenzbanken bündeln ihre Liquidität, um den Interbankenmarkt zu stabilisieren: Der [concept_banking_cycle]-Wert mildert sich um #G +6#!, [concept_banking_momentum] mildert sich um #G +1#!"
+ },
+ "CRASH_SOFTEN_DEPOSIT_GUARANTEE_DESC": {
+  "en": "The deposit guarantee scheme calms savers and stops the run: [concept_banking_cycle] Value softens by #G +10#!, [concept_banking_momentum] softens by #G +2#!",
+  "de": "Die Einlagengarantie beruhigt die Sparer und stoppt den Ansturm: Der [concept_banking_cycle]-Wert mildert sich um #G +10#!, [concept_banking_momentum] mildert sich um #G +2#!"
+ },
+ "CRASH_SOFTEN_DEV_BANK_LENDING_DESC": {
+  "en": "Development-bank emergency lending refloats credit lines: [concept_banking_cycle] Value softens by #G +6#!, [concept_banking_momentum] softens by #G +1#!",
+  "de": "Notfallkredite der Entwicklungsbank bringen die Kreditlinien wieder flott: Der [concept_banking_cycle]-Wert mildert sich um #G +6#!, [concept_banking_momentum] mildert sich um #G +1#!"
+ },
+ "CRASH_SOFTEN_DISCOUNT_WINDOW_DESC": {
+  "en": "The emergency discount window lends freely against good collateral: [concept_banking_cycle] Value softens by #G +5#!, [concept_banking_momentum] softens by #G +1#!",
+  "de": "Das Notfall-Diskontfenster vergibt großzügig Kredite gegen gute Sicherheiten: Der [concept_banking_cycle]-Wert mildert sich um #G +5#!, [concept_banking_momentum] mildert sich um #G +1#!"
+ },
+ "CRASH_SOFTEN_KEYNESIAN_STIMULUS_DESC": {
+  "en": "Fiscal stimulus props up aggregate demand: [concept_banking_cycle] Value softens by #G +10#!, [concept_banking_momentum] softens by #G +2#!",
+  "de": "Fiskalische Konjunkturmaßnahmen stützen die Gesamtnachfrage: Der [concept_banking_cycle]-Wert mildert sich um #G +10#!, [concept_banking_momentum] mildert sich um #G +2#!"
+ },
+ "CRASH_SOFTEN_MUTUAL_CLEARING_DESC": {
+  "en": "The mutual clearing-house bailout props up member banks: [concept_banking_cycle] Value softens by #G +4#!, [concept_banking_momentum] softens by #G +1#!",
+  "de": "Die Rettungsaktion der gemeinsamen Verrechnungsstelle stützt die Mitgliedsbanken: Der [concept_banking_cycle]-Wert mildert sich um #G +4#!, [concept_banking_momentum] mildert sich um #G +1#!"
+ },
+ "CRASH_SOFTEN_NATIONALIZE_DESC": {
+  "en": "State takeover stabilises balance sheets: [concept_banking_cycle] Value softens by #G +12#!, [concept_banking_momentum] softens by #G +3#!",
+  "de": "Die Verstaatlichung stabilisiert die Bilanzen: Der [concept_banking_cycle]-Wert mildert sich um #G +12#!, [concept_banking_momentum] mildert sich um #G +3#!"
+ },
+ "CRASH_SOFTEN_OPEN_MARKET_DESC": {
+  "en": "Open-market operations flood the system with liquidity: [concept_banking_cycle] Value softens by #G +10#!, [concept_banking_momentum] softens by #G +2#!",
+  "de": "Offenmarktgeschäfte fluten das System mit Liquidität: Der [concept_banking_cycle]-Wert mildert sich um #G +10#!, [concept_banking_momentum] mildert sich um #G +2#!"
+ },
+ "CRASH_SOFTEN_SUSPEND_CONVERTIBILITY_DESC": {
+  "en": "The convertibility freeze halts capital flight: [concept_banking_cycle] Value softens by #G +3#!, [concept_banking_momentum] softens by #G +1#!",
+  "de": "Das Einfrieren der Konvertibilität stoppt die Kapitalflucht: Der [concept_banking_cycle]-Wert mildert sich um #G +3#!, [concept_banking_momentum] mildert sich um #G +1#!"
+ },
+ "CRASH_SOFTEN_SWAP_LINES_DESC": {
+  "en": "International swap lines ease foreign-currency stress: [concept_banking_cycle] Value softens by #G +4#!, [concept_banking_momentum] softens by #G +1#!",
+  "de": "Internationale Swap-Linien lindern den Fremdwährungsdruck: Der [concept_banking_cycle]-Wert mildert sich um #G +4#!, [concept_banking_momentum] mildert sich um #G +1#!"
+ },
+ "CREATE_NEW_RELIGION_DESC": {
+  "en": "Finalize the creation of the new religion.",
+  "de": "Schließt die Gründung der neuen Religion ab."
+ },
+ "CR_COOPTATION_REQUIRES_TT": {
+  "en": "Requires non-progressive minority law (cooptation is unnecessary under protection / affirmative action)",
+  "de": "Erfordert ein nicht-progressives Minderheitengesetz (Kooptation ist unter Schutz/Förderung unnötig)"
+ },
+ "CR_COOPTATION_TOKEN_REFORM": {
+  "en": "Cooptation / Token Reform",
+  "de": "Kooptation / Alibi-Reform"
+ },
+ "CR_COOPTATION_TOKEN_REFORM_DESC": {
+  "en": "Promote moderate leaders, fund symbolic appointments, pass cosmetic statutes. Buys 12 months of demobilization, then the movement learns. Compatible with simultaneous suppression of [Concept('concept_radical', 'radicals')].",
+  "de": "Fördert gemäßigte Anführer, finanziert symbolische Ernennungen, erlässt kosmetische Gesetze. Erkauft 12 Monate Demobilisierung, danach durchschaut die Bewegung den Trick. Lässt sich mit gleichzeitiger Unterdrückung von [Concept('concept_radical', 'Radikalen')] kombinieren."
+ },
+ "CR_FEDERAL_PROTECTION_DESC": {
+  "en": "Send marshals, dispatch civil rights commissions, prosecute violations. The strongest pro-movement push, but expensive in [concept_bureaucracy] and authority. Requires at least minor-power capacity and a non-discriminatory minority law.",
+  "de": "Entsendet Ordnungskräfte, setzt Bürgerrechtskommissionen ein, verfolgt Verstöße strafrechtlich. Der stärkste Vorstoß zugunsten der Bewegung, aber teuer an [concept_bureaucracy] und Autorität. Erfordert mindestens die Kapazität einer Kleinmacht sowie ein nicht diskriminierendes Minderheitengesetz."
+ },
+ "CR_FEDERAL_PROTECTION_REQUIRES_TT": {
+  "en": "Requires non-discriminatory minority law and [concept_minor_power] rank",
+  "de": "Erfordert ein nicht diskriminierendes Minderheitengesetz und den Rang [concept_minor_power]"
+ },
+ "CR_GRADUALIST_ACCOMMODATION_DESC": {
+  "en": "Quiet desegregation, blue-ribbon committees, and 'all deliberate speed.' Pushes the bar slowly but cools [concept_turmoil]. The path of least resistance.",
+  "de": "Stille Aufhebung der Rassentrennung, hochkarätige Kommissionen und „mit aller gebotenen Eile“. Verschiebt die Grenze langsam, kühlt aber den [concept_turmoil]. Der Weg des geringsten Widerstands."
+ },
+ "CR_GRASSROOTS_ORGANIZING_DESC": {
+  "en": "Tolerate (and quietly assist) church, union, and student networks. Builds movement support steadily; raises [Concept('concept_radical', 'radicals')] as suppressed grievances find voice. Can stack with other pro-movement policies.",
+  "de": "Duldet (und unterstützt still) Netzwerke aus Kirchen, Gewerkschaften und Studentenschaft. Baut die Unterstützung der Bewegung stetig auf; erhöht [Concept('concept_radical', 'Radikale')], da unterdrückte Missstände eine Stimme finden. Lässt sich mit anderen bewegungsfreundlichen Maßnahmen kombinieren."
+ },
+ "CR_REMOVE_COOPTATION_TOKEN_REFORM": {
+  "en": "End Cooptation",
+  "de": "Kooptation beenden"
+ },
+ "CR_REMOVE_COOPTATION_TOKEN_REFORM_DESC": {
+  "en": "Stop the token-appointment program. This does not reset the 12-month window: months already spent coopting still count if the program resumes.",
+  "de": "Beendet das Programm symbolischer Ernennungen. Das setzt das 12-Monats-Fenster nicht zurück: Bereits mit Kooptation verbrachte Monate zählen weiter, falls das Programm wieder aufgenommen wird."
+ },
+ "CR_REMOVE_FEDERAL_PROTECTION": {
+  "en": "Suspend Federal Protection",
+  "de": "Bundesschutz aussetzen"
+ },
+ "CR_REMOVE_FEDERAL_PROTECTION_DESC": {
+  "en": "Stand down federal enforcement of civil rights statutes.",
+  "de": "Beendet die bundesstaatliche Durchsetzung der Bürgerrechtsgesetze."
+ },
+ "CR_REMOVE_GRADUALIST_ACCOMMODATION": {
+  "en": "End Gradualist Approach",
+  "de": "Schrittweisen Ansatz beenden"
+ },
+ "CR_REMOVE_GRADUALIST_ACCOMMODATION_DESC": {
+  "en": "Stop the slow-walk and pick a real side.",
+  "de": "Beendet das Hinauszögern und bezieht eindeutig Stellung."
+ },
+ "CR_REMOVE_GRASSROOTS_ORGANIZING": {
+  "en": "Withdraw Grassroots Support",
+  "de": "Unterstützung von ganz unten zurückziehen"
+ },
+ "CR_REMOVE_GRASSROOTS_ORGANIZING_DESC": {
+  "en": "Step back from active facilitation of organizing networks.",
+  "de": "Zieht sich aus der aktiven Förderung der Organisationsnetzwerke zurück."
+ },
+ "CR_REMOVE_SEGREGATIONIST_CONSOLIDATION": {
+  "en": "End Segregationist Push",
+  "de": "Segregationistischen Vorstoß beenden"
+ },
+ "CR_REMOVE_SEGREGATIONIST_CONSOLIDATION_DESC": {
+  "en": "Stand down the regime-consolidation effort.",
+  "de": "Beendet die Bemühungen zur Festigung des Regimes."
+ },
+ "CR_REMOVE_SUPPRESSION_CRACKDOWN": {
+  "en": "End Crackdown",
+  "de": "Durchgreifen beenden"
+ },
+ "CR_REMOVE_SUPPRESSION_CRACKDOWN_DESC": {
+  "en": "Stand down police operations against the movement.",
+  "de": "Beendet die Polizeieinsätze gegen die Bewegung."
+ },
+ "CR_SEGREGATIONIST_CONSOLIDATION_DESC": {
+  "en": "Codify the regime — pass new restrictions, formalize what was informal. The hardest push to crush the movement; massive radicalization risk if it fails.",
+  "de": "Zementiert das Regime — erlässt neue Einschränkungen und formalisiert, was bisher informell war. Der härteste Vorstoß, um die Bewegung zu zerschlagen; bei Scheitern droht massive Radikalisierung."
+ },
+ "CR_SEGREGATIONIST_REQUIRES_TT": {
+  "en": "Requires a discriminatory minority law",
+  "de": "Erfordert ein diskriminierendes Minderheitengesetz"
+ },
+ "CR_SUPPRESSION_CRACKDOWN_DESC": {
+  "en": "Police raids, surveillance, mass arrests of organizers. Pushes the bar down hard; [concept_turmoil] rises in the long run as suppression breeds martyrs.",
+  "de": "Polizeirazzien, Überwachung, Massenverhaftungen von Organisatoren. Drückt die Grenze deutlich zurück; [concept_turmoil] steigt langfristig, da Unterdrückung Märtyrer schafft."
+ },
+ "CULTURAL_UNITY_3": {
+  "en": "Cultural Unity [concept_power_bloc_principle] 3",
+  "de": "Kulturelle Einheit [concept_power_bloc_principle] 3"
+ },
+ "CULTURAL_UNITY_4": {
+  "en": "Cultural Unity [concept_power_bloc_principle] 4",
+  "de": "Kulturelle Einheit [concept_power_bloc_principle] 4"
+ },
+ "CULTURAL_UNITY_5": {
+  "en": "Cultural Unity [concept_power_bloc_principle] 5",
+  "de": "Kulturelle Einheit [concept_power_bloc_principle] 5"
+ },
+ "CUSTOM_RELIGION_BACK_DESC": {
+  "en": "Return to the previous screen.",
+  "de": "Kehrt zum vorherigen Bildschirm zurück."
+ },
+ "CUSTOM_RELIGION_NEXT_DESC": {
+  "en": "Proceed to the next screen.",
+  "de": "Fährt mit dem nächsten Bildschirm fort."
+ },
+ "CW_CAPITAL_PLAN_DESC": {
+  "en": "Member cooperatives pool surplus for a coordinated capacity investment across the light industrial sector. Strong recovery tool; avoid during [concept_bubble_pressure] expansion.",
+  "de": "Mitgliedsgenossenschaften bündeln ihre Überschüsse für eine koordinierte Kapazitätsinvestition in der Leichtindustrie. Ein starkes Mittel zur Erholung; bei wachsendem [concept_bubble_pressure] vermeiden."
+ },
+ "CW_CONSUMPTION_CEILING_DESC": {
+  "en": "A hard democratic cap on per-member consumption allowances, voted in by the Federation Council. Powerfully deflates [concept_bubble_pressure]; generates significant [concept_lower_strata] discontent.",
+  "de": "Eine vom Föderationsrat demokratisch beschlossene feste Obergrenze für die Konsumzuteilung je Mitglied. Baut [concept_bubble_pressure] kräftig ab, erzeugt aber erhebliche Unzufriedenheit in der [concept_lower_strata]."
+ },
+ "CW_COUNCIL_DIRECTIVE_DESC": {
+  "en": "A formal written guidance from the Federation Council to member cooperative boards on financial restraint. Light and cheap; provides modest [concept_bubble_pressure] reduction when used proactively.",
+  "de": "Eine förmliche schriftliche Anweisung des Föderationsrats an die Vorstände der Mitgliedsgenossenschaften zur finanziellen Zurückhaltung. Leicht und günstig; bewirkt bei vorausschauendem Einsatz eine bescheidene Senkung des [concept_bubble_pressure]."
+ },
+ "CW_CREDIT_EXPANSION_DESC": {
+  "en": "The federation authorises credit unions to expand lending capacity and reduce interest rates for member cooperatives. Provides liquidity during downturns: avoid when [concept_bubble_pressure] is already building.",
+  "de": "Die Föderation ermächtigt die Kreditgenossenschaften, ihre Kreditkapazität auszuweiten und die Zinssätze für Mitgliedsgenossenschaften zu senken. Sorgt in Abschwüngen für Liquidität: vermeiden, wenn sich bereits [concept_bubble_pressure] aufbaut."
+ },
+ "CW_DISABLE_CAPITAL_PLAN": {
+  "en": "Postpone Capital Investment Plan",
+  "de": "Investitionsplan verschieben"
+ },
+ "CW_DISABLE_CAPITAL_PLAN_DESC": {
+  "en": "Defer the coordinated investment program and return pooled surplus to individual cooperatives.",
+  "de": "Verschiebt das koordinierte Investitionsprogramm und gibt die gebündelten Überschüsse an die einzelnen Genossenschaften zurück."
+ },
+ "CW_DISABLE_CONSUMPTION_CEILING": {
+  "en": "Lift Consumption Ceiling",
+  "de": "Konsumobergrenze aufheben"
+ },
+ "CW_DISABLE_CONSUMPTION_CEILING_DESC": {
+  "en": "Remove the allowance cap and restore normal member consumption rights.",
+  "de": "Hebt die Zuteilungsgrenze auf und stellt die normalen Konsumrechte der Mitglieder wieder her."
+ },
+ "CW_DISABLE_COUNCIL_DIRECTIVE": {
+  "en": "Withdraw Council Directive",
+  "de": "Ratsanweisung zurückziehen"
+ },
+ "CW_DISABLE_COUNCIL_DIRECTIVE_DESC": {
+  "en": "Recall the advisory directive and return financial authority to individual cooperative boards.",
+  "de": "Zieht die beratende Anweisung zurück und gibt den einzelnen Genossenschaftsvorständen die finanzielle Entscheidungsgewalt zurück."
+ },
+ "CW_DISABLE_CREDIT_EXPANSION": {
+  "en": "Tighten Credit Union Lending",
+  "de": "Kreditvergabe der Kreditgenossenschaften straffen"
+ },
+ "CW_DISABLE_CREDIT_EXPANSION_DESC": {
+  "en": "Return cooperative credit unions to standard lending parameters.",
+  "de": "Stellt für die genossenschaftlichen Kreditgenossenschaften die üblichen Kreditvorgaben wieder her."
+ },
+ "CW_DISABLE_DIVIDEND_RESTRAINT": {
+  "en": "Lift Dividend Restraint",
+  "de": "Dividendenzurückhaltung aufheben"
+ },
+ "CW_DISABLE_DIVIDEND_RESTRAINT_DESC": {
+  "en": "Allow member cooperatives to resume full payout distribution.",
+  "de": "Erlaubt den Mitgliedsgenossenschaften, die volle Gewinnausschüttung wiederaufzunehmen."
+ },
+ "CW_DISABLE_MUTUAL_AID_FUND": {
+  "en": "Wind Down Mutual Aid Fund",
+  "de": "Fonds für Gegenseitige Hilfe zurückfahren"
+ },
+ "CW_DISABLE_MUTUAL_AID_FUND_DESC": {
+  "en": "Conclude the emergency mutual aid deployment and return reserves to standard oversight.",
+  "de": "Beendet den Noteinsatz des Fonds für Gegenseitige Hilfe und unterstellt die Reserven wieder der üblichen Aufsicht."
+ },
+ "CW_DISABLE_SOLIDARITY_CAMPAIGN": {
+  "en": "End Solidarity Campaign",
+  "de": "Solidaritätskampagne beenden"
+ },
+ "CW_DISABLE_SOLIDARITY_CAMPAIGN_DESC": {
+  "en": "Conclude the coordinated media campaign.",
+  "de": "Beendet die koordinierte Medienkampagne."
+ },
+ "CW_DISABLE_WORKER_BUYOUT": {
+  "en": "End Worker Buyout Program",
+  "de": "Programm zur Arbeiterübernahme beenden"
+ },
+ "CW_DISABLE_WORKER_BUYOUT_DESC": {
+  "en": "Conclude the facilitated buyout program.",
+  "de": "Beendet das geförderte Übernahmeprogramm."
+ },
+ "CW_DIVIDEND_RESTRAINT_DESC": {
+  "en": "The council votes to cap per-member payout ratios and redirect surplus to collective reinvestment funds. Reduces [concept_bubble_pressure] but requires cooperation of trade unions.",
+  "de": "Der Rat beschließt, die Ausschüttungsquote je Mitglied zu begrenzen und die Überschüsse in gemeinschaftliche Reinvestitionsfonds umzuleiten. Verringert [concept_bubble_pressure], erfordert aber die Mitwirkung der Gewerkschafter."
+ },
+ "CW_MUTUAL_AID_FUND": {
+  "en": "Mutual Aid Fund Deployment",
+  "de": "Einsatz des Fonds für Gegenseitige Hilfe"
+ },
+ "CW_MUTUAL_AID_FUND_DESC": {
+  "en": "Activate the federation's emergency mutual aid reserve to rescue cooperatives near insolvency. Expensive but essential during panic: boosts [concept_lower_strata] loyalty.",
+  "de": "Aktiviert die Notfallreserve der Föderation zur Gegenseitigen Hilfe, um Genossenschaften vor der Insolvenz zu retten. Teuer, aber in einer Panik unverzichtbar: stärkt die Loyalität der [concept_lower_strata]."
+ },
+ "CW_SOLIDARITY_CAMPAIGN_DESC": {
+  "en": "A public media campaign urging worker-owners to voluntarily moderate consumption and prioritize reinvestment. Cheap and broadly applicable; effective before crisis peaks.",
+  "de": "Eine öffentliche Medienkampagne, die Arbeitereigentümer zu freiwilliger Konsummäßigung und vorrangiger Reinvestition aufruft. Günstig und breit einsetzbar; wirksam, bevor die Krise ihren Höhepunkt erreicht."
+ },
+ "CW_WORKER_BUYOUT_DESC": {
+  "en": "Enable workers at failing enterprises to acquire them before insolvency cascades through the network. Best deployed in panic or deep downturn to preserve productive capacity.",
+  "de": "Ermöglicht es Arbeitern in angeschlagenen Betrieben, diese zu übernehmen, bevor die Insolvenz sich im Netzwerk ausbreitet. Am besten in einer Panik oder tiefen Rezession eingesetzt, um die Produktionskapazität zu erhalten."
+ },
+ "CYCLE_VALUE_12_DESC": {
+  "en": "[concept_banking_cycle] Value: #P +12#!",
+  "de": "[concept_banking_cycle]-Wert: #P +12#!"
+ },
+ "CYCLE_VALUE_2_DESC": {
+  "en": "[concept_banking_cycle] Value: #P +2#!",
+  "de": "[concept_banking_cycle]-Wert: #P +2#!"
+ },
+ "CYCLE_VALUE_3_DESC": {
+  "en": "[concept_banking_cycle] Value: #P +3#!",
+  "de": "[concept_banking_cycle]-Wert: #P +3#!"
+ },
+ "CYCLE_VALUE_5_DESC": {
+  "en": "[concept_banking_cycle] Value: #P +5#!",
+  "de": "[concept_banking_cycle]-Wert: #P +5#!"
+ },
+ "CYCLE_VALUE_MINUS_10_DESC": {
+  "en": "[concept_banking_cycle] Value: #R -10#!",
+  "de": "[concept_banking_cycle]-Wert: #R -10#!"
+ },
+ "CYCLE_VALUE_MINUS_15_DESC": {
+  "en": "[concept_banking_cycle] Value: #R -15#!",
+  "de": "[concept_banking_cycle]-Wert: #R -15#!"
+ },
+ "CYCLE_VALUE_MINUS_3_DESC": {
+  "en": "[concept_banking_cycle] Value: #R -3#!",
+  "de": "[concept_banking_cycle]-Wert: #R -3#!"
+ },
+ "CYCLE_VALUE_MINUS_5_DESC": {
+  "en": "[concept_banking_cycle] Value: #R -5#!",
+  "de": "[concept_banking_cycle]-Wert: #R -5#!"
+ },
+ "CYCLE_VALUE_MINUS_8_DESC": {
+  "en": "[concept_banking_cycle] Value: #R -8#!",
+  "de": "[concept_banking_cycle]-Wert: #R -8#!"
+ },
+ "DECREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING": {
+  "en": "Decrease Program Funding",
+  "de": "Programmfinanzierung verringern"
+ },
+ "DECREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC": {
+  "en": "Decrease the funding of the [concept_nuclear_program]. This will reduce innovation usage by #P [SCOPE.GetRootScope.ScriptValue('nuclear_weapon_program_funding_step')]#!.",
+  "de": "Verringert die Finanzierung des [concept_nuclear_program]. Das senkt den Innovationsverbrauch um #P [SCOPE.GetRootScope.ScriptValue('nuclear_weapon_program_funding_step')]#!."
+ },
+ "DIPLOMATIC_ACCEPTANCE_DIPLOMATIC_RELATIONS": {
+  "en": "Diplomatic Relations",
+  "de": "Diplomatische Beziehungen"
+ },
+ "DIPLO_ACTION_GDP_REQUIREMENT": {
+  "en": "Requires our subject's [Concept('concept_gdp', 'GDP')] to be less than [SCOPE.GetRootScope.ScriptValue('peaceful_annex_gdp_requirement_multiplier')|V]% of our GDP (@money![SCOPE.GetRootScope.ScriptValue('peaceful_annex_gdp_requirement')|D+])",
+  "de": "Erfordert, dass das [Concept('concept_gdp', 'BIP')] unseres Vasallen weniger als [SCOPE.GetRootScope.ScriptValue('peaceful_annex_gdp_requirement_multiplier')|V]% unseres BIP beträgt (@money![SCOPE.GetRootScope.ScriptValue('peaceful_annex_gdp_requirement')|D+])"
+ },
+ "DISBAND_COMPANY_BASE_RELUCTANCE": {
+  "en": "from reluctance to disband a company",
+  "de": "aus Zurückhaltung, ein Unternehmen aufzulösen"
+ },
+ "DISBAND_COMPANY_COMPETITIVE_BENEFIT": {
+  "en": "from eliminating a competing company",
+  "de": "aus der Ausschaltung eines konkurrierenden Unternehmens"
+ },
+ "DISBAND_COMPANY_ECONOMIC_SIGNIFICANCE": {
+  "en": "from the economic significance of the company",
+  "de": "aus der wirtschaftlichen Bedeutung des Unternehmens"
+ },
+ "FX_DEVALUATION_GP_RELATIONS_TT": {
+  "en": "#R -3#! relations with all [concept_great_power]s.",
+  "de": "#R -3#! Beziehungen zu allen [Concept('concept_great_power', 'Großmächten')]."
+ },
+ "GMO_plantation_building_banana_plantation": {
+  "en": "GMO Plantation",
+  "de": "GVO-Plantage"
+ },
+ "GMO_plantation_building_coffee_plantation": {
+  "en": "GMO Plantation",
+  "de": "GVO-Plantage"
+ },
+ "GMO_plantation_building_sugar_plantation": {
+  "en": "GMO Plantation",
+  "de": "GVO-Plantage"
+ },
+ "GMO_plantation_building_tea_plantation": {
+  "en": "GMO Plantation",
+  "de": "GVO-Plantage"
+ },
+ "GMO_plantation_building_tobacco_plantation": {
+  "en": "GMO Plantation",
+  "de": "GVO-Plantage"
+ },
+ "GMO_plantation_building_vineyard": {
+  "en": "GMO Plantation",
+  "de": "GVO-Plantage"
+ },
+ "GP_ACCEPT_NATIONALIZATION_TT": {
+  "en": "Publicly accept the nationalization. Other [Concept('concept_great_power', 'Great Powers')] will remember our restraint.",
+  "de": "Akzeptiert die Verstaatlichung öffentlich. Andere [Concept('concept_great_power', 'Großmächte')] werden sich an unsere Zurückhaltung erinnern."
+ },
+ "GP_MILITARY_INTERVENTION_NOTIFY_TT": {
+  "en": "All other [concept_great_power]s will be notified of our military intervention.",
+  "de": "Alle anderen [Concept('concept_great_power', 'Großmächte')] werden über unsere militärische Intervention informiert."
+ },
+ "GP_NEUTRAL_STANCE_TT": {
+  "en": "Reset our colonial policy stance to neutral.",
+  "de": "Setzt unsere koloniale Haltung auf neutral zurück."
+ },
+ "GW_CARBON_TAX_DESC": {
+  "en": "Levy a carbon tax on coal and oil industries across your market.\\n[GetStaticModifier('carbon_tax_modifier').GetDesc]\\nApplies to every country in your market. Available once global warming reaches mild levels. #bold Market leaders only#!.",
+  "de": "Erhebt eine CO2-Steuer auf die Kohle- und Ölindustrie in Ihrem gesamten Markt.\\n[GetStaticModifier('carbon_tax_modifier').GetDesc]\\nGilt für jedes Land in Ihrem Markt. Verfügbar, sobald die globale Erwärmung ein mildes Niveau erreicht. #bold Nur für Marktführer#!."
+ },
+ "GW_CARBON_TAX_ROW": {
+  "en": "Carbon Tax",
+  "de": "CO2-Steuer"
+ },
+ "GW_CLIMATE_ADAPTATION_DESC": {
+  "en": "Build [concept_climate_policy] resilience [concept_infrastructure].\\n[GetStaticModifier('climate_adaptation_modifier').GetDesc]",
+  "de": "Baut widerstandsfähige [concept_infrastructure] für die [concept_climate_policy] auf.\\n[GetStaticModifier('climate_adaptation_modifier').GetDesc]"
+ },
+ "GW_CLIMATE_ADAPTATION_ROW": {
+  "en": "Climate Adaptation",
+  "de": "Klimaanpassung"
+ },
+ "GW_EMISSION_STANDARDS_DESC": {
+  "en": "Impose binding industrial emission standards across your entire market.\\n[GetStaticModifier('emission_standards_modifier').GetDesc]\\nApplies to every country in your market. Available once global warming reaches mild levels. #bold Market leaders only#!.",
+  "de": "Erlässt verbindliche Emissionsstandards für die Industrie in Ihrem gesamten Markt.\\n[GetStaticModifier('emission_standards_modifier').GetDesc]\\nGilt für jedes Land in Ihrem Markt. Verfügbar, sobald die globale Erwärmung ein mildes Niveau erreicht. #bold Nur für Marktführer#!."
+ },
+ "GW_EMISSION_STANDARDS_ROW": {
+  "en": "Emission Standards",
+  "de": "Emissionsstandards"
+ },
+ "GW_FOSSIL_FUEL_DIVESTMENT": {
+  "en": "Mandate Fossil Fuel Divestment",
+  "de": "Rückzug aus fossilen Brennstoffen anordnen"
+ },
+ "GW_FOSSIL_FUEL_DIVESTMENT_DESC": {
+  "en": "Force state and private capital out of coal and oil industries.\\n[GetStaticModifier('fossil_fuel_divestment_modifier').GetDesc]\\nAvailable to all nations once warming reaches #v 1.0°C#!.",
+  "de": "Zwingt staatliches und privates Kapital zum Rückzug aus der Kohle- und Ölindustrie.\\n[GetStaticModifier('fossil_fuel_divestment_modifier').GetDesc]\\nFür alle Nationen verfügbar, sobald die Erwärmung #v 1,0°C#! erreicht."
+ },
+ "GW_FOSSIL_FUEL_DIVESTMENT_ROW": {
+  "en": "Fossil-Fuel Divestment",
+  "de": "Rückzug aus fossilen Brennstoffen"
+ },
+ "GW_GREEN_BUILDING_CODES": {
+  "en": "Enact Green Building Codes",
+  "de": "Grüne Bauvorschriften erlassen"
+ },
+ "GW_GREEN_BUILDING_CODES_DESC": {
+  "en": "Require energy-efficient standards in new construction.\\n[GetStaticModifier('green_building_codes_modifier').GetDesc]\\nAvailable to all nations once global warming reaches mild levels.",
+  "de": "Schreibt energieeffiziente Standards für Neubauten vor.\\n[GetStaticModifier('green_building_codes_modifier').GetDesc]\\nFür alle Nationen verfügbar, sobald die globale Erwärmung ein mildes Niveau erreicht."
+ },
+ "GW_GREEN_BUILDING_CODES_ROW": {
+  "en": "Green Building Codes",
+  "de": "Grüne Bauvorschriften"
+ },
+ "GW_PUBLIC_TRANSIT_DESC": {
+  "en": "Fund urban transit [concept_infrastructure].\\n[GetStaticModifier('public_transit_modifier').GetDesc]\\nAvailable to all nations once global warming reaches mild levels.",
+  "de": "Finanziert städtische [concept_infrastructure] für den Nahverkehr.\\n[GetStaticModifier('public_transit_modifier').GetDesc]\\nFür alle Nationen verfügbar, sobald die globale Erwärmung ein mildes Niveau erreicht."
+ },
+ "GW_PUBLIC_TRANSIT_ROW": {
+  "en": "Public Transit",
+  "de": "Öffentliche Transportmittel"
+ },
+ "GW_REMOVE_CARBON_TAX": {
+  "en": "Repeal Carbon Tax",
+  "de": "CO2-Steuer aufheben"
+ },
+ "GW_REMOVE_CARBON_TAX_DESC": {
+  "en": "Repeal the carbon tax for all countries in your market, except any bound by an emissions reduction treaty, ending the reduction to coal and oil output, the associated tax revenue, and the emissions reduction.",
+  "de": "Hebt die CO2-Steuer für alle Länder in Ihrem Markt auf, außer für solche, die durch einen Vertrag zur Emissionsminderung gebunden sind, und beendet damit die Senkung der Kohle- und Ölproduktion, die zugehörigen Steuereinnahmen und die Emissionsminderung."
+ },
+ "GW_REMOVE_CLIMATE_ADAPTATION": {
+  "en": "Cut Adaptation Funding",
+  "de": "Anpassungsförderung streichen"
+ },
+ "GW_REMOVE_CLIMATE_ADAPTATION_DESC": {
+  "en": "End the climate adaptation program and recover the ongoing authority expenditure.",
+  "de": "Beendet das Klimaanpassungsprogramm und gewinnt die laufenden Autoritätsausgaben zurück."
+ },
+ "GW_REMOVE_EMISSION_STANDARDS": {
+  "en": "Repeal Emission Standards",
+  "de": "Emissionsstandards aufheben"
+ },
+ "GW_REMOVE_EMISSION_STANDARDS_DESC": {
+  "en": "Repeal the emission standards mandate for all countries in your market, except any bound by an emissions reduction treaty, ending the compliance overhead and the associated emissions reduction.",
+  "de": "Hebt die Vorgabe der Emissionsstandards für alle Länder in Ihrem Markt auf, außer für solche, die durch einen Vertrag zur Emissionsminderung gebunden sind, und beendet damit den Verwaltungsaufwand für die Einhaltung sowie die zugehörige Emissionsminderung."
+ },
+ "GW_REMOVE_FOSSIL_FUEL_DIVESTMENT": {
+  "en": "End Fossil Fuel Divestment",
+  "de": "Rückzug aus fossilen Brennstoffen beenden"
+ },
+ "GW_REMOVE_FOSSIL_FUEL_DIVESTMENT_DESC": {
+  "en": "Lift the divestment mandate, restoring coal and oil output and losing the associated emissions benefits.",
+  "de": "Hebt die Rückzugspflicht auf, stellt die Kohle- und Ölproduktion wieder her und verliert die zugehörigen Emissionsvorteile."
+ },
+ "GW_REMOVE_GREEN_BUILDING_CODES": {
+  "en": "Repeal Green Building Codes",
+  "de": "Grüne Bauvorschriften aufheben"
+ },
+ "GW_REMOVE_GREEN_BUILDING_CODES_DESC": {
+  "en": "Repeal building efficiency standards, ending the construction savings and electricity benefits.",
+  "de": "Hebt die Effizienzstandards für Gebäude auf und beendet damit die Baukosteneinsparungen und die Stromvorteile."
+ },
+ "GW_REMOVE_PUBLIC_TRANSIT": {
+  "en": "Defund Public Transit",
+  "de": "Öffentliche Transportmittel nicht mehr fördern"
+ },
+ "GW_REMOVE_PUBLIC_TRANSIT_DESC": {
+  "en": "End public transit investment, losing the quality-of-life and construction savings.",
+  "de": "Beendet die Investitionen in öffentliche Transportmittel und verliert damit die Vorteile bei Lebensqualität und Baukosteneinsparungen."
+ },
+ "GW_REMOVE_REFORESTATION_DESC": {
+  "en": "End reforestation funding, losing the agricultural and drought-resilience benefits.",
+  "de": "Beendet die Förderung der Wiederaufforstung und verliert damit die landwirtschaftlichen Vorteile und die Widerstandsfähigkeit gegen Dürre."
+ },
+ "GW_REMOVE_RENEWABLE_INVESTMENT": {
+  "en": "End Renewable Investment",
+  "de": "Investitionen in erneuerbare Energien beenden"
+ },
+ "GW_REMOVE_RENEWABLE_INVESTMENT_DESC": {
+  "en": "End the renewable energy program for all countries in your market, except any bound by an emissions reduction treaty, restoring conventional power plant output and ending the emissions reduction.",
+  "de": "Beendet das Programm für erneuerbare Energien für alle Länder in Ihrem Markt, außer für solche, die durch einen Vertrag zur Emissionsminderung gebunden sind, stellt die Leistung konventioneller Kraftwerke wieder her und beendet die Emissionsminderung."
+ },
+ "GW_RENEWABLE_INVESTMENT_DESC": {
+  "en": "Redirect spending toward renewable energy across your market.\\n[GetStaticModifier('renewable_investment_modifier').GetDesc]\\nApplies to every country in your market. Available once global warming reaches mild levels. #bold Market leaders only#!.",
+  "de": "Lenkt Ausgaben in Ihrem gesamten Markt in erneuerbare Energien um.\\n[GetStaticModifier('renewable_investment_modifier').GetDesc]\\nGilt für jedes Land in Ihrem Markt. Verfügbar, sobald die globale Erwärmung ein mildes Niveau erreicht. #bold Nur für Marktführer#!."
+ },
+ "GW_RENEWABLE_INVESTMENT_ROW": {
+  "en": "Renewable Investment",
+  "de": "Investitionen in erneuerbare Energien"
+ },
+ "HEIR_ED_ADMIN_PLUS_1": {
+  "en": "#bold Administrative Training:#! #G +1#!",
+  "de": "#bold Verwaltungsausbildung:#! #G +1#!"
+ },
+ "HEIR_ED_DIPLO_PLUS_1": {
+  "en": "#bold Diplomatic Training:#! #G +1#!",
+  "de": "#bold Diplomatische Ausbildung:#! #G +1#!"
+ },
+ "HEIR_ED_DIPLO_PLUS_2": {
+  "en": "#bold Diplomatic Training:#! #G +2#!",
+  "de": "#bold Diplomatische Ausbildung:#! #G +2#!"
+ },
+ "HEIR_ED_IDEOLOGY_CONSERVATIVE": {
+  "en": "#bold Ideological Shift:#! #R Conservative influence +1#!",
+  "de": "#bold Ideologischer Wandel:#! #R Konservativer Einfluss +1#!"
+ },
+ "HEIR_ED_IDEOLOGY_PROGRESSIVE": {
+  "en": "#bold Ideological Shift:#! #G Progressive influence +1#!",
+  "de": "#bold Ideologischer Wandel:#! #G Progressiver Einfluss +1#!"
+ },
+ "HEIR_ED_MILITARY_PLUS_1": {
+  "en": "#bold Military Training:#! #G +1#!",
+  "de": "#bold Militärausbildung:#! #G +1#!"
+ },
+ "HEIR_ED_RANDOM_PLUS_1": {
+  "en": "#bold Random Training:#! #Y +1#! to a random skill",
+  "de": "#bold Zufällige Ausbildung:#! #Y +1#! auf eine zufällige Fähigkeit"
+ },
+ "HEIR_ED_TOTAL_MINUS_1": {
+  "en": "#bold Education Progress:#! #R -1#!",
+  "de": "#bold Ausbildungsfortschritt:#! #R -1#!"
+ },
+ "HEIR_ED_TOTAL_PLUS_1": {
+  "en": "#bold Education Progress:#! #G +1#!",
+  "de": "#bold Ausbildungsfortschritt:#! #G +1#!"
+ },
+ "HEIR_ED_TOTAL_PLUS_2": {
+  "en": "#bold Education Progress:#! #G +2#!",
+  "de": "#bold Ausbildungsfortschritt:#! #G +2#!"
+ },
+ "HEIR_ED_TOTAL_PLUS_3": {
+  "en": "#bold Education Progress:#! #G +3#!",
+  "de": "#bold Ausbildungsfortschritt:#! #G +3#!"
+ },
+ "HE_DISABLE_ADMIN_FOCUS": {
+  "en": "Stop: Administrative Focus",
+  "de": "Beenden: Verwaltungsschwerpunkt"
+ },
+ "HE_DISABLE_ADMIN_FOCUS_DESC": {
+  "en": "Remove the [concept_heir]'s focus on governance studies.",
+  "de": "Beendet den Schwerpunkt des [concept_heir] auf Verwaltungsstudien."
+ },
+ "HE_DISABLE_ADMIN_FOCUS_EFFECT_TT": {
+  "en": "Remove the [concept_heir]'s administrative education focus.",
+  "de": "Entfernt den administrativen Ausbildungsschwerpunkt des [concept_heir]."
+ },
+ "HE_DISABLE_CONSERVATIVE_DESC": {
+  "en": "Dismiss the conservative tutors.",
+  "de": "Entlässt die konservativen Erzieher."
+ },
+ "HE_DISABLE_CONSERVATIVE_EFFECT_TT": {
+  "en": "Dismiss the conservative tutors.",
+  "de": "Entlässt die konservativen Erzieher."
+ },
+ "HE_DISABLE_DIPLO_FOCUS": {
+  "en": "Stop: Diplomatic Focus",
+  "de": "Beenden: Diplomatischer Schwerpunkt"
+ },
+ "HE_DISABLE_DIPLO_FOCUS_DESC": {
+  "en": "Remove the [concept_heir]'s focus on diplomatic studies.",
+  "de": "Beendet den Schwerpunkt des [concept_heir] auf diplomatische Studien."
+ },
+ "HE_DISABLE_DIPLO_FOCUS_EFFECT_TT": {
+  "en": "Remove the [concept_heir]'s diplomatic education focus.",
+  "de": "Entfernt den diplomatischen Ausbildungsschwerpunkt des [concept_heir]."
+ },
+ "HE_DISABLE_MILITARY_FOCUS": {
+  "en": "Stop: Military Focus",
+  "de": "Beenden: Militärischer Schwerpunkt"
+ },
+ "HE_DISABLE_MILITARY_FOCUS_DESC": {
+  "en": "Remove the [concept_heir]'s focus on military training.",
+  "de": "Beendet den Schwerpunkt des [concept_heir] auf militärische Ausbildung."
+ },
+ "HE_DISABLE_MILITARY_FOCUS_EFFECT_TT": {
+  "en": "Remove the [concept_heir]'s military education focus.",
+  "de": "Entfernt den militärischen Ausbildungsschwerpunkt des [concept_heir]."
+ },
+ "HE_DISABLE_MODERATE_DESC": {
+  "en": "End moderate mentorship for the [concept_heir].",
+  "de": "Beendet die gemäßigte Mentorenschaft für den [concept_heir]."
+ },
+ "HE_DISABLE_MODERATE_EFFECT_TT": {
+  "en": "End moderate mentorship for the [concept_heir].",
+  "de": "Beendet die gemäßigte Mentorenschaft für den [concept_heir]."
+ },
+ "HE_DISABLE_PROGRESSIVE_DESC": {
+  "en": "Dismiss the progressive tutors.",
+  "de": "Entlässt die progressiven Erzieher."
+ },
+ "HE_DISABLE_PROGRESSIVE_EFFECT_TT": {
+  "en": "Dismiss the progressive tutors.",
+  "de": "Entlässt die progressiven Erzieher."
+ },
+ "HE_DISABLE_RADICAL_DESC": {
+  "en": "End [concept_radical] mentorship for the [concept_heir].",
+  "de": "Beendet die [concept_radical]-Mentorenschaft für den [concept_heir]."
+ },
+ "HE_DISABLE_RADICAL_EFFECT_TT": {
+  "en": "End [concept_radical] mentorship for the [concept_heir].",
+  "de": "Beendet die [concept_radical]-Mentorenschaft für den [concept_heir]."
+ },
+ "HE_DISABLE_REGRESSIVE_DESC": {
+  "en": "End regressive mentorship for the [concept_heir].",
+  "de": "Beendet die regressive Mentorenschaft für den [concept_heir]."
+ },
+ "HE_DISABLE_REGRESSIVE_EFFECT_TT": {
+  "en": "End regressive mentorship for the [concept_heir].",
+  "de": "Beendet die regressive Mentorenschaft für den [concept_heir]."
+ },
+ "HE_ENABLE_ADMIN_FOCUS": {
+  "en": "Administrative Focus",
+  "de": "Verwaltungsschwerpunkt"
+ },
+ "HE_ENABLE_ADMIN_FOCUS_DESC": {
+  "en": "Focus the [concept_heir]'s education on governance, law, and economic management. Each month there is a chance of advancing administrative training, which improves the likelihood of developing the #bold Skilled Administrator#! or #bold Exceptional Administrator#! traits.\\n\\nThe #bold Industrialists#! approve; the #bold Armed Forces#! see it as neglecting martial preparation.\\n\\n#R Costs 100 Authority while active.#!",
+  "de": "Richtet die Ausbildung des [concept_heir] auf Regierungsführung, Recht und Wirtschaftsverwaltung aus. Jeden Monat besteht die Chance, die Verwaltungsausbildung voranzubringen, was die Wahrscheinlichkeit erhöht, die Eigenschaften #bold Fähiger Verwalter#! oder #bold Herausragender Verwalter#! zu entwickeln.\\n\\nDie #bold Industriellen#! begrüßen dies; die #bold Streitkräfte#! sehen darin eine Vernachlässigung der militärischen Vorbereitung.\\n\\n#R Kostet 100 Autorität, solange aktiv.#!"
+ },
+ "HE_ENABLE_ADMIN_FOCUS_EFFECT_TT": {
+  "en": "Set the [concept_heir]'s education focus to #bold Administrative#!. Any existing trait focus will be replaced.",
+  "de": "Setzt den Ausbildungsschwerpunkt des [concept_heir] auf #bold Verwaltung#!. Ein bestehender Eigenschaftsschwerpunkt wird ersetzt."
+ },
+ "HE_ENABLE_CONSERVATIVE_DESC": {
+  "en": "Engage traditional and religious tutors to guide the [concept_heir] toward conservative values. May cultivate the #bold Royalist#!, #bold Traditionalist#!, #bold Authoritarian#!, or #bold Theocrat#! ideologies, or, with sustained tutoring, #bold Ethno-Nationalist#! or #bold Jingoist#!; lighter tutoring may leave them a #bold Moderate#!. Outcomes are limited to ideologies our country can have.\\n\\nThe #bold Devout#! and #bold Landowners#! approve; the #bold Intelligentsia#! and #bold Trade Unions#! are displeased.\\n\\n#R Costs 100 Authority while active.#!",
+  "de": "Verpflichtet traditionelle und religiöse Erzieher, um den [concept_heir] zu konservativen Werten zu führen. Kann die Ideologien #bold Royalist#!, #bold Traditionalist#!, #bold Autoritär#! oder #bold Theokrat#! hervorbringen oder bei anhaltender Erziehung #bold Ethnonationalist#! oder #bold Hurrapatriot#!; bei leichterer Erziehung bleibt er womöglich #bold Gemäßigt#!. Die Ergebnisse beschränken sich auf Ideologien, die unser Land haben kann.\\n\\nDie #bold Frommen#! und #bold Grundbesitzer#! begrüßen dies; die #bold Intellektuellen#! und #bold Gewerkschafter#! sind missgestimmt.\\n\\n#R Kostet 100 Autorität, solange aktiv.#!"
+ },
+ "HE_ENABLE_CONSERVATIVE_EFFECT_TT": {
+  "en": "Set the [concept_heir]'s ideology focus to #bold Conservative#!. Any existing ideology focus will be replaced.",
+  "de": "Setzt den Ideologieschwerpunkt des [concept_heir] auf #bold Konservativ#!. Ein bestehender Ideologieschwerpunkt wird ersetzt."
+ },
+ "HE_ENABLE_DIPLO_FOCUS": {
+  "en": "Diplomatic Focus",
+  "de": "Diplomatischer Schwerpunkt"
+ },
+ "HE_ENABLE_DIPLO_FOCUS_DESC": {
+  "en": "Focus the [concept_heir]'s education on languages, statecraft, and diplomatic protocol. Each month there is a chance of advancing diplomatic training, which improves the likelihood of developing the #bold Skilled Diplomat#! or #bold Exceptional Diplomat#! traits.\\n\\nThe #bold Intelligentsia#! are pleased by this scholarly approach, but the #bold Industrialists#! would prefer a more practical education.\\n\\n#R Costs 100 Authority while active.#!",
+  "de": "Richtet die Ausbildung des [concept_heir] auf Sprachen, Staatskunst und diplomatisches Protokoll aus. Jeden Monat besteht die Chance, die diplomatische Ausbildung voranzubringen, was die Wahrscheinlichkeit erhöht, die Eigenschaften #bold Fähiger Diplomat#! oder #bold Herausragender Diplomat#! zu entwickeln.\\n\\nDie #bold Intellektuellen#! freuen sich über diesen gelehrten Ansatz, doch die #bold Industriellen#! würden eine praktischere Ausbildung bevorzugen.\\n\\n#R Kostet 100 Autorität, solange aktiv.#!"
+ },
+ "HE_ENABLE_DIPLO_FOCUS_EFFECT_TT": {
+  "en": "Set the [concept_heir]'s education focus to #bold Diplomatic#!. Any existing trait focus will be replaced.",
+  "de": "Setzt den Ausbildungsschwerpunkt des [concept_heir] auf #bold Diplomatie#!. Ein bestehender Eigenschaftsschwerpunkt wird ersetzt."
+ },
+ "HE_ENABLE_MILITARY_FOCUS": {
+  "en": "Military Focus",
+  "de": "Militärischer Schwerpunkt"
+ },
+ "HE_ENABLE_MILITARY_FOCUS_DESC": {
+  "en": "Send the [concept_heir] to a military academy for training in strategy, tactics, and command. Each month there is a chance of advancing military training, which improves the likelihood of developing the #bold Skilled Commander#! or #bold Military Genius#! traits.\\n\\nThe #bold Armed Forces#! heartily approve; the #bold Intelligentsia#! would prefer a broader education.\\n\\n#R Costs 100 Authority while active.#!",
+  "de": "Schickt den [concept_heir] auf eine Militärakademie zur Ausbildung in Strategie, Taktik und Befehlsführung. Jeden Monat besteht die Chance, die Militärausbildung voranzubringen, was die Wahrscheinlichkeit erhöht, die Eigenschaften #bold Fähiger Feldherr#! oder #bold Militärisches Genie#! zu entwickeln.\\n\\nDie #bold Streitkräfte#! begrüßen dies aus vollem Herzen; die #bold Intellektuellen#! würden eine breitere Bildung bevorzugen.\\n\\n#R Kostet 100 Autorität, solange aktiv.#!"
+ },
+ "HE_ENABLE_MILITARY_FOCUS_EFFECT_TT": {
+  "en": "Set the [concept_heir]'s education focus to #bold Military#!. Any existing trait focus will be replaced.",
+  "de": "Setzt den Ausbildungsschwerpunkt des [concept_heir] auf #bold Militär#!. Ein bestehender Eigenschaftsschwerpunkt wird ersetzt."
+ },
+ "HE_ENABLE_MODERATE_DESC": {
+  "en": "Arrange mentorship from industrialists, merchants, and military officers. May push the [concept_heir] toward the #bold Industrialists#!, #bold Petty Bourgeoisie#!, or #bold Armed Forces#!.\\n\\nThe #bold Industrialists#!, #bold Petty Bourgeoisie#!, and #bold Armed Forces#! approve.\\n\\n#R Costs 100 Authority while active.#!",
+  "de": "Vermittelt Mentorenschaft durch Industrielle, Kaufleute und Militäroffiziere. Kann den [concept_heir] zu den #bold Industriellen#!, dem #bold Kleinbürgertum#! oder den #bold Streitkräften#! hinlenken.\\n\\nDie #bold Industriellen#!, das #bold Kleinbürgertum#! und die #bold Streitkräfte#! begrüßen dies.\\n\\n#R Kostet 100 Autorität, solange aktiv.#!"
+ },
+ "HE_ENABLE_MODERATE_EFFECT_TT": {
+  "en": "Set the [concept_heir]'s IG focus to #bold Moderate#!. Any existing IG focus will be replaced.",
+  "de": "Setzt den Interessengruppen-Schwerpunkt des [concept_heir] auf #bold Gemäßigt#!. Ein bestehender Interessengruppen-Schwerpunkt wird ersetzt."
+ },
+ "HE_ENABLE_PROGRESSIVE_DESC": {
+  "en": "Engage progressive and liberal-minded tutors to expose the [concept_heir] to modern ideas. May cultivate the #bold Reformer#!, #bold Liberal#!, #bold Humanitarian#!, or #bold Social Democrat#! ideologies, or, with sustained tutoring, a #bold Radical#!, #bold Communist#!, or #bold Vanguardist#! who may one day question the crown itself; lighter tutoring may leave them a #bold Moderate#!. Outcomes are limited to ideologies our country can have.\\n\\nThe #bold Intelligentsia#! and #bold Trade Unions#! approve; the #bold Devout#! and #bold Landowners#! are alarmed.\\n\\n#R Costs 100 Authority while active.#!",
+  "de": "Verpflichtet progressiv und liberal gesinnte Erzieher, um den [concept_heir] mit modernen Ideen vertraut zu machen. Kann die Ideologien #bold Reformer#!, #bold Liberal#!, #bold Humanitär#! oder #bold Sozialdemokrat#! hervorbringen oder bei anhaltender Erziehung einen #bold Radikalen#!, #bold Kommunisten#! oder #bold Vorkämpfer#!, der eines Tages die Krone selbst infrage stellen könnte; bei leichterer Erziehung bleibt er womöglich #bold Gemäßigt#!. Die Ergebnisse beschränken sich auf Ideologien, die unser Land haben kann.\\n\\nDie #bold Intellektuellen#! und #bold Gewerkschafter#! begrüßen dies; die #bold Frommen#! und #bold Grundbesitzer#! sind alarmiert.\\n\\n#R Kostet 100 Autorität, solange aktiv.#!"
+ },
+ "HE_ENABLE_PROGRESSIVE_EFFECT_TT": {
+  "en": "Set the [concept_heir]'s ideology focus to #bold Progressive#!. Any existing ideology focus will be replaced.",
+  "de": "Setzt den Ideologieschwerpunkt des [concept_heir] auf #bold Progressiv#!. Ein bestehender Ideologieschwerpunkt wird ersetzt."
+ },
+ "HE_ENABLE_RADICAL_DESC": {
+  "en": "Arrange mentorship from academics, common folk, and trade unionists. May push the [concept_heir] toward the #bold Trade Unions#!, #bold Intelligentsia#!, or #bold Rural Folk#!.\\n\\nThe #bold Intelligentsia#!, #bold Rural Folk#!, and #bold Trade Unions#! approve; the #bold Landowners#! and #bold Devout#! are appalled.\\n\\n#R Costs 100 Authority while active.#!",
+  "de": "Vermittelt Mentorenschaft durch Akademiker, einfache Leute und Gewerkschafter. Kann den [concept_heir] zu den #bold Gewerkschaftern#!, den #bold Intellektuellen#! oder den #bold Landbewohnern#! hinlenken.\\n\\nDie #bold Intellektuellen#!, #bold Landbewohner#! und #bold Gewerkschafter#! begrüßen dies; die #bold Grundbesitzer#! und #bold Frommen#! sind entsetzt.\\n\\n#R Kostet 100 Autorität, solange aktiv.#!"
+ },
+ "HE_ENABLE_RADICAL_EFFECT_TT": {
+  "en": "Set the [concept_heir]'s IG focus to #bold [concept_radical]#!. Any existing IG focus will be replaced.",
+  "de": "Setzt den Interessengruppen-Schwerpunkt des [concept_heir] auf #bold [concept_radical]#!. Ein bestehender Interessengruppen-Schwerpunkt wird ersetzt."
+ },
+ "HE_ENABLE_REGRESSIVE_DESC": {
+  "en": "Arrange mentorship from the landed gentry, the clergy, and village elders. May push the [concept_heir] toward the #bold Landowners#!, #bold Devout#!, or #bold Rural Folk#!.\\n\\nThe #bold Landowners#!, #bold Devout#!, and #bold Rural Folk#! approve; the #bold Intelligentsia#! and #bold Trade Unions#! are dismayed.\\n\\n#R Costs 100 Authority while active.#!",
+  "de": "Vermittelt Mentorenschaft durch den Landadel, den Klerus und die Dorfältesten. Kann den [concept_heir] zu den #bold Grundbesitzern#!, den #bold Frommen#! oder den #bold Landbewohnern#! hinlenken.\\n\\nDie #bold Grundbesitzer#!, #bold Frommen#! und #bold Landbewohner#! begrüßen dies; die #bold Intellektuellen#! und #bold Gewerkschafter#! sind bestürzt.\\n\\n#R Kostet 100 Autorität, solange aktiv.#!"
+ },
+ "HE_ENABLE_REGRESSIVE_EFFECT_TT": {
+  "en": "Set the [concept_heir]'s IG focus to #bold Regressive#!. Any existing IG focus will be replaced.",
+  "de": "Setzt den Interessengruppen-Schwerpunkt des [concept_heir] auf #bold Regressiv#!. Ein bestehender Interessengruppen-Schwerpunkt wird ersetzt."
+ },
+ "HIGH_CASUALTIES_10000": {
+  "en": "High Casualties (10,000+)",
+  "de": "Hohe Verluste (10.000+)"
+ },
+ "HIGH_CASUALTIES_100000": {
+  "en": "High Casualties (100,000+)",
+  "de": "Hohe Verluste (100.000+)"
+ },
+ "HIGH_CASUALTIES_1000000": {
+  "en": "High Casualties (1,000,000+)",
+  "de": "Hohe Verluste (1.000.000+)"
+ },
+ "HIGH_STANDARD_OF_LIVING": {
+  "en": "High [concept_ch_sol]",
+  "de": "Hoher [concept_ch_sol]"
+ },
+ "INCREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING": {
+  "en": "Increase Program Funding",
+  "de": "Programmfinanzierung erhöhen"
+ },
+ "INCREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC": {
+  "en": "Increase the funding of the [concept_nuclear_program]. This will cost an additional #N [SCOPE.GetRootScope.ScriptValue('nuclear_weapon_program_funding_step')]#! weekly innovation.",
+  "de": "Erhöht die Finanzierung des [concept_nuclear_program]. Das kostet zusätzlich #N [SCOPE.GetRootScope.ScriptValue('nuclear_weapon_program_funding_step')]#! wöchentliche Innovation."
+ },
+ "INFAMY_TARGET_QUANTITY_DEDUCTION_FACTOR": {
+  "en": "from target's infamy",
+  "de": "aus der Verrufenheit des Ziels"
+ },
+ "IR_ARMS_RACE_RIVAL_PRESSURE_TT": {
+  "en": "[SCOPE.sCountry('arms_race_rival').GetName] gains #bold $arms_race_rival_pressure_modifier$#! for #v 5 years#!.",
+  "de": "[SCOPE.sCountry('arms_race_rival').GetName] erhält #bold $arms_race_rival_pressure_modifier$#! für #v 5 Jahre#!."
+ },
+ "IR_ESPIONAGE_EXPOSED_RIVAL_EFFECT_TT": {
+  "en": "[SCOPE.sCountry('espionage_rival').GetName] gains #bold $espionage_agent_exposed_modifier$#! for #v 5 years#!.",
+  "de": "[SCOPE.sCountry('espionage_rival').GetName] erhält #bold $espionage_agent_exposed_modifier$#! für #v 5 Jahre#!."
+ },
+ "IR_ESPIONAGE_QUIET_EXPOSURE_RIVAL_EFFECT_TT": {
+  "en": "[SCOPE.sCountry('espionage_rival').GetName] gains #bold $espionage_agent_exposed_modifier$#! for #v 2.5 years#!.",
+  "de": "[SCOPE.sCountry('espionage_rival').GetName] erhält #bold $espionage_agent_exposed_modifier$#! für #v 2,5 Jahre#!."
+ },
+ "IR_NUCLEAR_RIVAL_RELIEF_TT": {
+  "en": "[SCOPE.sCountry('nuclear_rival').GetName] gains #bold $nuclear_standoff_relief_modifier$#! for #v 5 years#!.",
+  "de": "[SCOPE.sCountry('nuclear_rival').GetName] erhält #bold $nuclear_standoff_relief_modifier$#! für #v 5 Jahre#!."
+ },
+ "IR_NUCLEAR_RIVAL_TENSION_TT": {
+  "en": "[SCOPE.sCountry('nuclear_rival').GetName] gains #bold $nuclear_standoff_tension_modifier$#! for #v 2.5 years#! and #R gains [Concept('concept_radical', 'radicals')]#!.",
+  "de": "[SCOPE.sCountry('nuclear_rival').GetName] erhält #bold $nuclear_standoff_tension_modifier$#! für #v 2,5 Jahre#! und #R gewinnt [Concept('concept_radical', 'Radikale')]#!."
+ },
+ "IR_NUCLEAR_RIVAL_TERROR_TT": {
+  "en": "[SCOPE.sCountry('nuclear_rival').GetName] gains #bold $nuclear_standoff_terror_modifier$#! for #v 2.5 years#! and #R gains a large number of [Concept('concept_radical', 'radicals')]#!.",
+  "de": "[SCOPE.sCountry('nuclear_rival').GetName] erhält #bold $nuclear_standoff_terror_modifier$#! für #v 2,5 Jahre#! und #R gewinnt eine große Zahl an [Concept('concept_radical', 'Radikalen')]#!."
+ },
+ "IR_PROPAGANDA_RIVAL_BACKLASH_TT": {
+  "en": "[SCOPE.sCountry('propaganda_rival').GetName] gains #bold $counter_propaganda_backlash_modifier$#! for #v 5 years#!.",
+  "de": "[SCOPE.sCountry('propaganda_rival').GetName] erhält #bold $counter_propaganda_backlash_modifier$#! für #v 5 Jahre#!."
+ },
+ "IR_PROXY_CONFLICT_RIVAL_EFFECT_TT": {
+  "en": "[SCOPE.sCountry('proxy_rival').GetName] gains #bold $proxy_conflict_destabilized_modifier$#! for #v 5 years#!.",
+  "de": "[SCOPE.sCountry('proxy_rival').GetName] erhält #bold $proxy_conflict_destabilized_modifier$#! für #v 5 Jahre#!."
+ },
+ "IR_TRADE_EMBARGO_RIVAL_EFFECT_TT": {
+  "en": "[SCOPE.sCountry('embargo_rival').GetName] gains #bold $trade_embargo_suffered_modifier$#! for #v 5 years#!.",
+  "de": "[SCOPE.sCountry('embargo_rival').GetName] erhält #bold $trade_embargo_suffered_modifier$#! für #v 5 Jahre#!."
+ },
+ "IS_DECOLONIZATION_ELIGIBLE_STATE_TT": {
+  "en": "Must be a non-[concept_homeland] territory of at least 100,000 population, outside the capital's region and neighboring regions.",
+  "de": "Muss ein Gebiet sein, das kein [concept_homeland] ist, mindestens 100.000 Einwohner hat und außerhalb der Hauptstadtregion und der angrenzenden Regionen liegt."
+ },
+ "IS_OVERSEAS_COLONIAL_STATE_TT": {
+  "en": "Must be a populous non-[concept_homeland] territory outside the capital's region and neighboring regions, with either a low-acceptance indigenous population making up more than a tenth of it OR average [concept_sol] below 80% of the metropole's national average (with some non-primary population present).",
+  "de": "Muss ein bevölkerungsreiches Gebiet sein, das kein [concept_homeland] ist und außerhalb der Hauptstadtregion und der angrenzenden Regionen liegt, mit entweder einer indigenen Bevölkerung mit geringer Akzeptanz, die mehr als ein Zehntel ausmacht, ODER einem durchschnittlichen [concept_sol] unter 80% des nationalen Durchschnitts des Mutterlandes (bei Vorhandensein einer nicht-primären Bevölkerung)."
+ },
+ "IS_OVERSEAS_FROM_CAPITAL_TT": {
+  "en": "Must be outside the capital's region and all neighboring regions.",
+  "de": "Muss außerhalb der Hauptstadtregion und aller angrenzenden Regionen liegen."
+ },
+ "IS_OVERSEAS_FROM_OVERLORD_CAPITAL_TT": {
+  "en": "Must be outside the [concept_overlord]'s capital region and all neighboring regions.",
+  "de": "Muss außerhalb der Hauptstadtregion des [concept_overlord] und aller angrenzenden Regionen liegen."
+ },
+ "IS_UNINTEGRATED_CULTURALLY_DISTINCT_STATE_TT": {
+  "en": "Must be a populous non-[concept_homeland] territory with a significant low-acceptance local population.",
+  "de": "Muss ein bevölkerungsreiches Gebiet sein, das kein [concept_homeland] ist und eine bedeutende lokale Bevölkerung mit geringer Akzeptanz aufweist."
+ },
+ "LAW_CENTRAL_BANK_INDEPENDENCE_INSTITUTION_MODIFIER_TT": {
+  "en": "#n The above [concept_institution] info is misleading. Please see below for the actual effect.#!\\n\\nFor each [concept_investment_level] in [GetInstitutionType('institution_national_bank').GetName]:\\n #g +0.1%#! $country_inflation_anchoring_add$",
+  "de": "#n Die obige Information zur [concept_institution] ist irreführend. Die tatsächliche Wirkung finden Sie unten.#!\\n\\nFür jede [concept_investment_level] in [GetInstitutionType('institution_national_bank').GetName]:\\n #g +0,1%#! $country_inflation_anchoring_add$"
+ },
+ "LAW_CIVIC_MONOLINGUALISM_INSTITUTION_MODIFIER_TT": {
+  "en": "#n The above [concept_institution] info is misleading. Please see below for the actual effect.#!\\n\\nFor each [concept_investment_level] in [GetInstitutionType('institution_schools').GetName]:\\n #g +5%#! $state_assimilation_mult$",
+  "de": "#n Die obige Information zur [concept_institution] ist irreführend. Die tatsächliche Wirkung finden Sie unten.#!\\n\\nFür jede [concept_investment_level] in [GetInstitutionType('institution_schools').GetName]:\\n #g +5%#! $state_assimilation_mult$"
+ },
+ "LAW_MANDATORY_AUGMENTATION_INSTITUTION_MODIFIER_TT": {
+  "en": "#n The above [concept_institution] info is misleading. Please see below for the actual effect.#!\\n\\nFor each [concept_investment_level] in [GetInstitutionType('institution_ministry_of_war').GetName]:\\n #n -1#! $building_group_bg_military_standard_of_living_add$\\n #g -2%#! $state_mortality_mult$\\n #g +2%#! $unit_defense_mult$\\n #g +2%#! $unit_offense_mult$\\n #g +10%#! $country_military_tech_research_speed_mult$",
+  "de": "#n Die obige Information zur [concept_institution] ist irreführend. Die tatsächliche Wirkung finden Sie unten.#!\\n\\nFür jede [concept_investment_level] in [GetInstitutionType('institution_ministry_of_war').GetName]:\\n #n -1#! $building_group_bg_military_standard_of_living_add$\\n #g -2%#! $state_mortality_mult$\\n #g +2%#! $unit_defense_mult$\\n #g +2%#! $unit_offense_mult$\\n #g +10%#! $country_military_tech_research_speed_mult$"
+ },
+ "LAW_MEDICAL_AUGMENTATION_ONLY_INSTITUTION_MODIFIER_TT": {
+  "en": "#n The above [concept_institution] info is misleading. Please see below for the actual effect.#!\\n\\nFor each [concept_investment_level] in [GetInstitutionType('institution_health_system').GetName]:\\n #g -2%#! $state_mortality_mult$\\n #g +0.25#! $state_standard_of_living_add$\\n #g +1%#! $country_tech_research_speed_mult$",
+  "de": "#n Die obige Information zur [concept_institution] ist irreführend. Die tatsächliche Wirkung finden Sie unten.#!\\n\\nFür jede [concept_investment_level] in [GetInstitutionType('institution_health_system').GetName]:\\n #g -2%#! $state_mortality_mult$\\n #g +0,25#! $state_standard_of_living_add$\\n #g +1%#! $country_tech_research_speed_mult$"
+ },
+ "LAW_REGULATED_AUGMENTATION_MARKET_INSTITUTION_MODIFIER_TT": {
+  "en": "#n The above [concept_institution] info is misleading. Please see below for the actual effect.#!\\n\\nFor each [concept_investment_level] in [GetInstitutionType('institution_ministry_of_consumer_protection').GetName]:\\n #g -2%#! $state_mortality_mult$\\n #g +3%#! $country_tech_research_speed_mult$",
+  "de": "#n Die obige Information zur [concept_institution] ist irreführend. Die tatsächliche Wirkung finden Sie unten.#!\\n\\nFür jede [concept_investment_level] in [GetInstitutionType('institution_ministry_of_consumer_protection').GetName]:\\n #g -2%#! $state_mortality_mult$\\n #g +3%#! $country_tech_research_speed_mult$"
+ },
+ "LAW_STATE_LED_LANGUAGE_REFORM_EVENTS_EFFECT": {
+  "en": "Upon enactment, further events will occur in which the specifics of the language reform will be determined, shaping the cultural landscape of the nation for years to come.",
+  "de": "Nach dem Erlass werden weitere Ereignisse eintreten, in denen die Einzelheiten der Sprachreform festgelegt werden und die die kulturelle Landschaft der Nation auf Jahre hinaus prägen."
+ },
+ "NATIONALIZATION_FULL_RELATIONS_TT": {
+  "en": "#R -60#! relations with all countries that own significant portions of our economy. They will be notified.",
+  "de": "#R -60#! Beziehungen zu allen Ländern, die bedeutende Anteile unserer Wirtschaft besitzen. Sie werden benachrichtigt."
+ },
+ "NATIONALIZATION_SELECTIVE_RELATIONS_TT": {
+  "en": "#R -30#! relations with all countries that own significant portions of our economy.",
+  "de": "#R -30#! Beziehungen zu allen Ländern, die bedeutende Anteile unserer Wirtschaft besitzen."
+ },
+ "NW_PROGRESS_ADD_5_TT": {
+  "en": "#G +5#! nuclear weapons program progress.",
+  "de": "#G +5#! Fortschritt im Kernwaffenprogramm."
+ },
+ "NW_PROGRESS_SUBTRACT_10_TT": {
+  "en": "#R -10#! nuclear weapons program progress.",
+  "de": "#R -10#! Fortschritt im Kernwaffenprogramm."
+ },
+ "NW_PROGRESS_SUBTRACT_15_TT": {
+  "en": "#R -15#! nuclear weapons program progress.",
+  "de": "#R -15#! Fortschritt im Kernwaffenprogramm."
+ },
+ "NW_PROGRESS_SUBTRACT_25_TT": {
+  "en": "#R -25#! nuclear weapons program progress.",
+  "de": "#R -25#! Fortschritt im Kernwaffenprogramm."
+ },
+ "NW_PROGRESS_SUBTRACT_5_TT": {
+  "en": "#R -5#! nuclear weapons program progress.",
+  "de": "#R -5#! Fortschritt im Kernwaffenprogramm."
+ },
+ "NW_PROLIF_CRASH_TT": {
+  "en": "#G +12#! nuclear weapons program progress, paid for in bureaucratic, civilian, and academic strain.",
+  "de": "#G +12#! Fortschritt im Kernwaffenprogramm, erkauft mit bürokratischer, ziviler und akademischer Belastung."
+ },
+ "NW_PROLIF_LOBBY_TT": {
+  "en": "International pressure shaves #R -1#! progress off [SCOPE.sCountry('proliferating_country').GetName]'s program.",
+  "de": "Internationaler Druck kostet das Programm von [SCOPE.sCountry('proliferating_country').GetName] #R -1#! Fortschritt."
+ },
+ "NW_PROLIF_LOBBY_UN_TT": {
+  "en": "We take it to the United Nations: our delegation will be asked to table the #bold Non-Proliferation Treaty#! before the [concept_un_general_assembly]. If it passes, its inspections slow every threshold programme among the signatories.",
+  "de": "Wir bringen es vor die Vereinten Nationen: Unsere Delegation wird gebeten, den #bold Atomwaffensperrvertrag#! vor der [concept_un_general_assembly] einzubringen. Wird er angenommen, verlangsamen seine Inspektionen jedes Schwellenprogramm unter den Unterzeichnern."
+ },
+ "NW_PROLIF_SABOTAGE_DISCOVERY_TT": {
+  "en": "#R Exposed.#! Our operation against [SCOPE.sCountry('proliferating_country').GetName] is uncovered — diplomatic relations collapse and our reputation suffers.",
+  "de": "#R Enttarnt.#! Unsere Operation gegen [SCOPE.sCountry('proliferating_country').GetName] wird aufgedeckt — die diplomatischen Beziehungen brechen zusammen, und unser Ansehen leidet."
+ },
+ "NW_PROLIF_SABOTAGE_SUCCESS_TT": {
+  "en": "#G Success.#! Our agents infiltrate [SCOPE.sCountry('proliferating_country').GetName]'s program: #R -10#! progress.",
+  "de": "#G Erfolg.#! Unsere Agenten infiltrieren das Programm von [SCOPE.sCountry('proliferating_country').GetName]: #R -10#! Fortschritt."
+ },
+ "NW_PROLIF_ULTIMATUM_TT": {
+  "en": "Saber-rattling shaves #R -5#! progress off [SCOPE.sCountry('proliferating_country').GetName]'s [concept_nuclear_program].",
+  "de": "Säbelrasseln kostet das [concept_nuclear_program] von [SCOPE.sCountry('proliferating_country').GetName] #R -5#! Fortschritt."
+ },
+ "PLANNING_POINTS_1": {
+  "en": "At least #bold 1#! free planning budget point",
+  "de": "Mindestens #bold 1#! freier Planungsbudgetpunkt"
+ },
+ "PLANNING_POINTS_2": {
+  "en": "At least #bold 2#! free planning budget points",
+  "de": "Mindestens #bold 2#! freie Planungsbudgetpunkte"
+ },
+ "PLANNING_POINTS_3": {
+  "en": "At least #bold 3#! free planning budget points",
+  "de": "Mindestens #bold 3#! freie Planungsbudgetpunkte"
+ },
+ "PLANNING_POINTS_4": {
+  "en": "At least #bold 4#! free planning budget points",
+  "de": "Mindestens #bold 4#! freie Planungsbudgetpunkte"
+ },
+ "POLICY_ACTIVE_CARBON_TAX": {
+  "en": "Carbon Tax enacted",
+  "de": "CO2-Steuer aktiviert"
+ },
+ "POLICY_ACTIVE_CLIMATE_ADAPTATION": {
+  "en": "Climate adaptation enacted",
+  "de": "Klimaanpassung aktiviert"
+ },
+ "POLICY_ACTIVE_EMISSION_STANDARDS": {
+  "en": "Emission standards enacted",
+  "de": "Emissionsstandards aktiviert"
+ },
+ "POLICY_ACTIVE_FOSSIL_FUEL_DIVESTMENT": {
+  "en": "Fossil fuel divestment enacted",
+  "de": "Rückzug aus fossilen Brennstoffen aktiviert"
+ },
+ "POLICY_ACTIVE_PUBLIC_TRANSIT": {
+  "en": "Public transit enacted",
+  "de": "Öffentliche Transportmittel aktiviert"
+ },
+ "POLICY_ACTIVE_REFORESTATION_SUBSIDIES": {
+  "en": "Reforestation subsidies enacted",
+  "de": "Wiederaufforstungsförderung aktiviert"
+ },
+ "POLICY_ACTIVE_RENEWABLE_INVESTMENT": {
+  "en": "Renewable investment enacted",
+  "de": "Investitionen in erneuerbare Energien aktiviert"
+ },
+ "POLICY_POSSIBLE_CARBON_TAX": {
+  "en": "Wants Carbon Tax",
+  "de": "Möchte CO2-Steuer"
+ },
+ "POLICY_POSSIBLE_CLIMATE_ADAPTATION": {
+  "en": "Wants Climate Adaptation",
+  "de": "Möchte Klimaanpassung"
+ },
+ "POLICY_POSSIBLE_EMISSION_STANDARDS": {
+  "en": "Wants Emission Standards",
+  "de": "Möchte Emissionsstandards"
+ },
+ "POLICY_POSSIBLE_FOSSIL_FUEL_DIVESTMENT": {
+  "en": "Wants Fossil Fuel Divestment",
+  "de": "Möchte Rückzug aus fossilen Brennstoffen"
+ },
+ "POLICY_POSSIBLE_PUBLIC_TRANSIT": {
+  "en": "Wants Public Transit",
+  "de": "Möchte Öffentliche Transportmittel"
+ },
+ "POLICY_POSSIBLE_REFORESTATION_SUBSIDIES": {
+  "en": "Wants Reforestation Subsidies",
+  "de": "Möchte Wiederaufforstungsförderung"
+ },
+ "POLICY_POSSIBLE_RENEWABLE_INVESTMENT": {
+  "en": "Wants Renewable Investment",
+  "de": "Möchte Investitionen in erneuerbare Energien"
+ },
+ "POPULATION_TRANSFER_BLOCKED_BY_MULTICULTURAL": {
+  "en": "The receiving country does not have [GetLawType('law_multicultural').GetName]",
+  "de": "Das aufnehmende Land hat nicht [GetLawType('law_multicultural').GetName]"
+ },
+ "POPULATION_TRANSFER_BLOCKED_HIGH_ACCEPTANCE": {
+  "en": "The conceding country holds at least one [concept_cultural_community] of the receiving country's [concept_primary_cultures] with [concept_acceptance] below 60. The transfer moves every pop of all the receiving country's primary cultures that the conceding country doesn't share, including well-accepted ones.",
+  "de": "Das abtretende Land besitzt mindestens eine [concept_cultural_community] einer der [concept_primary_cultures] des aufnehmenden Landes mit einer [concept_acceptance] unter 60. Die Übertragung verschiebt alle Bevölkerungsgruppen sämtlicher Hauptkulturen des aufnehmenden Landes, die das abtretende Land nicht teilt, auch gut akzeptierte."
+ },
+ "POWER_BLOC_COHESION_LEADER_INFAMY": {
+  "en": "[concept_power_bloc_leader]'s [concept_infamy] ($identity_diplomatic$)\\n   [SCOPE.GetRootScope.GetCountry.GetName] with #v [SCOPE.GetRootScope.GetCountry.GetInfamy|-0]#!",
+  "de": "[concept_infamy] des [concept_power_bloc_leader] ($identity_diplomatic$)\\n   [SCOPE.GetRootScope.GetCountry.GetName] mit #v [SCOPE.GetRootScope.GetCountry.GetInfamy|-0]#!"
+ },
+ "POWER_BLOC_COHESION_WORST_INFAMY_DIPLOMATIC": {
+  "en": "[concept_power_bloc_member] member with highest [concept_infamy] ($identity_diplomatic$)\\n   [SCOPE.GetRootScope.GetCountry.GetPowerBloc.GetParticipantWithHighestInfamy.GetName] with #v [SCOPE.GetRootScope.GetCountry.GetPowerBloc.GetParticipantWithHighestInfamy.GetInfamy|-0]#!",
+  "de": "[concept_power_bloc_member] mit der höchsten [concept_infamy] ($identity_diplomatic$)\\n   [SCOPE.GetRootScope.GetCountry.GetPowerBloc.GetParticipantWithHighestInfamy.GetName] mit #v [SCOPE.GetRootScope.GetCountry.GetPowerBloc.GetParticipantWithHighestInfamy.GetInfamy|-0]#!"
+ },
+ "POWER_BLOC_MANDATE_PROGRESS_GLOBAL_GDP": {
+  "en": "From [concept_power_bloc] containing [SCOPE.GetRootScope.GetPowerBloc.MakeScope.ScriptValue('power_bloc_gdp_share')|V]% of world [Concept('concept_gdp', 'GDP')] ($identity_diplomatic$)",
+  "de": "Durch [concept_power_bloc], der [SCOPE.GetRootScope.GetPowerBloc.MakeScope.ScriptValue('power_bloc_gdp_share')|V]% des weltweiten [Concept('concept_gdp', 'BIP')] umfasst ($identity_diplomatic$)"
+ },
+ "POWER_BLOC_MANDATE_PROGRESS_GLOBAL_POPULATION": {
+  "en": "From [concept_power_bloc] containing [SCOPE.GetRootScope.GetPowerBloc.MakeScope.ScriptValue('power_bloc_population_share')|V]% of world population ($identity_diplomatic$)",
+  "de": "Durch [concept_power_bloc], der [SCOPE.GetRootScope.GetPowerBloc.MakeScope.ScriptValue('power_bloc_population_share')|V]% der Weltbevölkerung umfasst ($identity_diplomatic$)"
+ },
+ "PROTECT_FOREIGN_PROPERTY_RELATIONS_TT": {
+  "en": "#G +20#! relations with all countries that own significant portions of our economy.",
+  "de": "#G +20#! Beziehungen zu allen Ländern, die bedeutende Anteile unserer Wirtschaft besitzen."
+ },
+ "REQ_BASE_SCIENCE_AID_ARTICLE": {
+  "en": "Requires a Modernization Aid agreement (in force or in this treaty)",
+  "de": "Erfordert ein Abkommen zur Modernisierungshilfe (in Kraft oder in diesem Vertrag)"
+ },
+ "SEIZE_COMPANY_ACQUISITION_BENEFIT": {
+  "en": "from acquiring a rival's company",
+  "de": "aus dem Erwerb des Unternehmens eines Rivalen"
+ },
+ "SEIZE_COMPANY_ALREADY_HAS": {
+  "en": "[SCOPE.sCountry('target_country').GetName] already has a company of this type",
+  "de": "[SCOPE.sCountry('target_country').GetName] besitzt bereits ein Unternehmen dieses Typs"
+ },
+ "SEIZE_COMPANY_BASE_RELUCTANCE": {
+  "en": "from reluctance to surrender a company",
+  "de": "aus Zurückhaltung, ein Unternehmen aufzugeben"
+ },
+ "SEIZE_COMPANY_ECONOMIC_SIGNIFICANCE": {
+  "en": "from the economic significance of the company",
+  "de": "aus der wirtschaftlichen Bedeutung des Unternehmens"
+ },
+ "SR_AMBITIOUS_APPROACH_DESC": {
+  "en": "Push the boundaries of what is possible. Faster progress, but a real chance of mission failure.",
+  "de": "Verschiebt die Grenzen des Machbaren. Schnellerer Fortschritt, aber eine echte Gefahr des Missionsscheiterns."
+ },
+ "SR_AMBITIOUS_APPROACH_EFFECT": {
+  "en": "Switching to an ambitious approach: faster progress but risking mission failure.",
+  "de": "Wechsel zu einem ehrgeizigen Ansatz: schnellerer Fortschritt, aber mit dem Risiko des Missionsscheiterns."
+ },
+ "SR_DEBRIS_TREATY_RELATIONS_TT": {
+  "en": "#G +10#! relations with all spacefaring nations.",
+  "de": "#G +10#! Beziehungen zu allen raumfahrenden Nationen."
+ },
+ "SR_DECREASE_FUNDING_DESC": {
+  "en": "Reduce the resources allocated to the [concept_space_race].",
+  "de": "Verringert die für den [concept_space_race] bereitgestellten Ressourcen."
+ },
+ "SR_DECREASE_FUNDING_EFFECT": {
+  "en": "Funding reduced. Progress will slow but innovation drain is lessened.",
+  "de": "Finanzierung verringert. Der Fortschritt verlangsamt sich, doch der Innovationsverbrauch sinkt."
+ },
+ "SR_ELEVATOR_BOOST_TT": {
+  "en": "Our space elevator dramatically reduces launch costs, accelerating progress.",
+  "de": "Unser Weltraumaufzug senkt die Startkosten drastisch und beschleunigt den Fortschritt."
+ },
+ "SR_EQUATORIAL_CHOSEN_TT": {
+  "en": "We will target the Equatorial Plain: a reliable, well-mapped landing zone with modest scientific yield, granting steady [concept_prestige] and research efficiency for ten years, fading over that time.",
+  "de": "Wir werden die Äquatorialebene anvisieren: eine verlässliche, gut kartierte Landezone mit bescheidenem wissenschaftlichem Ertrag, die zehn Jahre lang stetiges [concept_prestige] und Forschungseffizienz gewährt und dabei allmählich abklingt."
+ },
+ "SR_FAR_SIDE_CHOSEN_TT": {
+  "en": "We will target the far side of the Moon: radio-shielded from Earth, perfect for deep-space observation. The radio-shielded observatory will deliver research speed and innovation gains for ten years, fading over that time.",
+  "de": "Wir werden die erdabgewandte Seite des Mondes anvisieren: gegen Funksignale von der Erde abgeschirmt, ideal für die Tiefraumbeobachtung. Das funkabgeschirmte Observatorium liefert zehn Jahre lang Forschungstempo und Innovationsgewinne und klingt dabei allmählich ab."
+ },
+ "SR_FLARE_DAMAGE_TT": {
+  "en": "The particle flux overwhelmed shielding: sensitive equipment was damaged.",
+  "de": "Der Teilchenfluss überwand die Abschirmung: Empfindliche Ausrüstung wurde beschädigt."
+ },
+ "SR_FLARE_SURVIVED_TT": {
+  "en": "Existing shielding held against the solar particle event.",
+  "de": "Die vorhandene Abschirmung hielt dem solaren Teilchenereignis stand."
+ },
+ "SR_INCREASE_FUNDING_DESC": {
+  "en": "Allocate additional resources to accelerate the [concept_space_race].",
+  "de": "Stellt zusätzliche Ressourcen bereit, um den [concept_space_race] zu beschleunigen."
+ },
+ "SR_INCREASE_FUNDING_EFFECT": {
+  "en": "Funding increased. Progress accelerates but innovation is further reduced.",
+  "de": "Finanzierung erhöht. Der Fortschritt beschleunigt sich, doch die Innovation sinkt weiter."
+ },
+ "SR_INTL_CONSORTIUM_RELATIONS_TT": {
+  "en": "#G +15#! relations with all spacefaring nations.",
+  "de": "#G +15#! Beziehungen zu allen raumfahrenden Nationen."
+ },
+ "SR_INTL_CREW_RELATIONS_TT": {
+  "en": "#G +10#! relations with all spacefaring nations.",
+  "de": "#G +10#! Beziehungen zu allen raumfahrenden Nationen."
+ },
+ "SR_INTL_PROBE_RELATIONS_TT": {
+  "en": "#G +25#! relations with all spacefaring nations.",
+  "de": "#G +25#! Beziehungen zu allen raumfahrenden Nationen."
+ },
+ "SR_ISRU_SMELTING_FAIL_TT": {
+  "en": "Regolith composition proved unsuitable for direct smelting. More research needed.",
+  "de": "Die Zusammensetzung des Regoliths erwies sich als ungeeignet für direktes Schmelzen. Weitere Forschung ist nötig."
+ },
+ "SR_ISRU_SMELTING_SUCCESS_TT": {
+  "en": "The smelting process worked: local metal production is viable.",
+  "de": "Der Schmelzprozess funktionierte: Lokale Metallproduktion ist möglich."
+ },
+ "SR_ISS_COOPERATION_RELATIONS_TT": {
+  "en": "#G +15#! relations with all spacefaring UN member nations.",
+  "de": "#G +15#! Beziehungen zu allen raumfahrenden UN-Mitgliedsnationen."
+ },
+ "SR_MANUAL_OVERRIDE_FAIL_TT": {
+  "en": "Manual control wasn't enough. A hard landing damaged equipment and set the program back.",
+  "de": "Die manuelle Steuerung reichte nicht aus. Eine harte Landung beschädigte die Ausrüstung und warf das Programm zurück."
+ },
+ "SR_MANUAL_OVERRIDE_SUCCESS_TT": {
+  "en": "The pilot seized manual control and brought the lander down safely: a remarkable feat of skill under pressure.",
+  "de": "Der Pilot übernahm die manuelle Steuerung und brachte die Landefähre sicher herunter: eine bemerkenswerte Leistung unter Druck."
+ },
+ "SR_MARS_DIRECT_CHOSEN_TT": {
+  "en": "We will attempt a direct landing on Mars: bold, fast, and high-risk. The dramatic moment will yield [concept_prestige] and cultural influence for ten years, fading over that time.",
+  "de": "Wir werden eine direkte Landung auf dem Mars versuchen: kühn, schnell und riskant. Der dramatische Moment bringt zehn Jahre lang [concept_prestige] und kulturellen Einfluss und klingt dabei allmählich ab."
+ },
+ "SR_MARS_ORBITAL_CHOSEN_TT": {
+  "en": "We will establish orbital [concept_infrastructure] around Mars before attempting a surface landing. The reusable orbital infrastructure will accelerate our research and space-program output for ten years, fading over that time.",
+  "de": "Wir werden zunächst orbitale [concept_infrastructure] um den Mars errichten, bevor wir eine Landung auf der Oberfläche versuchen. Die wiederverwendbare Orbitalinfrastruktur beschleunigt zehn Jahre lang unsere Forschung und die Leistung des Raumfahrtprogramms und klingt dabei allmählich ab."
+ },
+ "SR_MARS_ROBOTIC_CHOSEN_TT": {
+  "en": "Robotic precursors will prepare a landing site and cache supplies before human arrival. The robotic mining and survey systems will boost our space-mine output and innovation capacity, and their resource surveys will speed our research and the space-race program and raise our cultural pull, all for ten years, fading over that time.",
+  "de": "Robotische Vorläufer bereiten eine Landestelle vor und legen Vorräte an, bevor Menschen eintreffen. Die robotischen Abbau- und Erkundungssysteme steigern unsere Ausbeute an Weltraumminen und unsere Innovationskapazität, und ihre Ressourcenerkundungen beschleunigen unsere Forschung und den Wettlauf ins All und erhöhen unsere kulturelle Anziehungskraft, alles zehn Jahre lang, und klingen dabei allmählich ab."
+ },
+ "SR_MAX_FUNDING_NOT_REACHED": {
+  "en": "Funding is not yet at maximum.",
+  "de": "Die Finanzierung hat das Maximum noch nicht erreicht."
+ },
+ "SR_MIN_FUNDING_NOT_REACHED": {
+  "en": "Funding is not yet at minimum.",
+  "de": "Die Finanzierung hat das Minimum noch nicht erreicht."
+ },
+ "SR_MOON_BASE_INDUSTRIAL_CHOSEN_TT": {
+  "en": "The lunar base will be an industrial facility for mining and materials processing. Lunar mining will boost our space-mine [concept_throughput] and launch-capacity output for ten years, fading over that time.",
+  "de": "Die Mondbasis wird eine industrielle Anlage für Abbau und Materialverarbeitung sein. Der Mondabbau steigert zehn Jahre lang den [concept_throughput] unserer Weltraumminen und unsere Startkapazität und klingt dabei allmählich ab."
+ },
+ "SR_MOON_BASE_MILITARY_CHOSEN_TT": {
+  "en": "The lunar base will be a military installation providing strategic observation capabilities. The high ground will accelerate military research, broaden influence, and reduce [Concept('concept_military_good', 'military goods')] costs for ten years, fading over that time.",
+  "de": "Die Mondbasis wird eine militärische Anlage mit strategischen Beobachtungsfähigkeiten sein. Die Höhenlage beschleunigt zehn Jahre lang die militärische Forschung, erweitert den Einfluss und senkt die Kosten für [Concept('concept_military_good', 'Militärwaren')] und klingt dabei allmählich ab."
+ },
+ "SR_MOON_BASE_SCIENTIFIC_CHOSEN_TT": {
+  "en": "The lunar base will be a scientific outpost dedicated to pure research. International collaboration will raise our research speed and innovation cap for ten years, fading over that time.",
+  "de": "Die Mondbasis wird ein wissenschaftlicher Außenposten für reine Forschung sein. Internationale Zusammenarbeit erhöht zehn Jahre lang unser Forschungstempo und unsere Innovationsobergrenze und klingt dabei allmählich ab."
+ },
+ "SR_MULTINATIONAL_VESSEL_RELATIONS_TT": {
+  "en": "#G +20#! relations with all spacefaring nations.",
+  "de": "#G +20#! Beziehungen zu allen raumfahrenden Nationen."
+ },
+ "SR_NOT_ALREADY_AMBITIOUS": {
+  "en": "Not already using the Ambitious Approach.",
+  "de": "Nutzt nicht bereits den Ehrgeizigen Ansatz."
+ },
+ "SR_NOT_ALREADY_SAFE": {
+  "en": "Not already using the Safe Approach.",
+  "de": "Nutzt nicht bereits den Sicheren Ansatz."
+ },
+ "SR_NO_ELEVATOR_TT": {
+  "en": "Without a space elevator, conventional rockets must bear the full cost.",
+  "de": "Ohne Weltraumaufzug müssen konventionelle Raketen die vollen Kosten tragen."
+ },
+ "SR_OLIVE_BRANCH_RELATIONS_TT": {
+  "en": "#G +10#! relations with all nations with rocketry.",
+  "de": "#G +10#! Beziehungen zu allen Nationen mit Raketentechnik."
+ },
+ "SR_ORBITAL_CIVILIAN_CHOSEN_TT": {
+  "en": "Our first astronaut will be a civilian volunteer, demonstrating that space belongs to all humanity. The symbolic flight will translate into [concept_prestige] and cultural influence for ten years, fading over that time.",
+  "de": "Unser erster Astronaut wird ein ziviler Freiwilliger sein und damit zeigen, dass der Weltraum der ganzen Menschheit gehört. Der symbolische Flug wandelt sich zehn Jahre lang in [concept_prestige] und kulturellen Einfluss um und klingt dabei allmählich ab."
+ },
+ "SR_ORBITAL_MILITARY_CHOSEN_TT": {
+  "en": "Our first astronaut will be a military test pilot, bringing precision and discipline to the mission. The military expertise will accelerate our military research and diplomatic influence for ten years, fading over that time.",
+  "de": "Unser erster Astronaut wird ein militärischer Testpilot sein und Präzision und Disziplin in die Mission bringen. Die militärische Expertise beschleunigt zehn Jahre lang unsere militärische Forschung und unseren diplomatischen Einfluss und klingt dabei allmählich ab."
+ },
+ "SR_ORBITAL_SCIENTIST_CHOSEN_TT": {
+  "en": "Our first astronaut will be a scientist, turning orbital flight into a research mission. The scientific findings will raise our research speed and innovation cap for ten years, fading over that time.",
+  "de": "Unser erster Astronaut wird ein Wissenschaftler sein und den Orbitalflug in eine Forschungsmission verwandeln. Die wissenschaftlichen Erkenntnisse erhöhen zehn Jahre lang unser Forschungstempo und unsere Innovationsobergrenze und klingen dabei allmählich ab."
+ },
+ "SR_PROBE_ASTEROID_CHOSEN_TT": {
+  "en": "Our probe will chart the asteroid belt, yielding navigation data and prospecting surveys for future industrial expansion. The prospecting data will raise our innovation cap and speed up the space-race program for ten years, fading over that time.",
+  "de": "Unsere Sonde wird den Asteroidengürtel kartieren und Navigationsdaten sowie Erkundungsdaten für künftige industrielle Expansion liefern. Die Erkundungsdaten erhöhen zehn Jahre lang unsere Innovationsobergrenze und beschleunigen den Wettlauf ins All und klingen dabei allmählich ab."
+ },
+ "SR_PROBE_MARS_CHOSEN_TT": {
+  "en": "Our probe will target Mars, searching for evidence of water and past life. The Mars survey will yield [concept_prestige] and the strongest boost to our space-race progress for ten years, fading over that time.",
+  "de": "Unsere Sonde wird den Mars anvisieren und nach Spuren von Wasser und früherem Leben suchen. Die Mars-Erkundung bringt zehn Jahre lang [concept_prestige] und den stärksten Schub für unseren Fortschritt im Wettlauf ins All und klingt dabei allmählich ab."
+ },
+ "SR_PROBE_VENUS_CHOSEN_TT": {
+  "en": "Our probe will target Venus, studying its atmosphere and greenhouse dynamics. The atmospheric data will accelerate our research and the wider space-race program for ten years, fading over that time.",
+  "de": "Unsere Sonde wird die Venus anvisieren und ihre Atmosphäre und Treibhausdynamik untersuchen. Die Atmosphärendaten beschleunigen zehn Jahre lang unsere Forschung und das gesamte Programm des Wettlaufs ins All und klingen dabei allmählich ab."
+ },
+ "SR_PROGRESS_ADD_10_TT": {
+  "en": "#G +10#! [concept_space_race] mission progress",
+  "de": "#G +10#! Missionsfortschritt im [concept_space_race]"
+ },
+ "SR_PROGRESS_ADD_12_TT": {
+  "en": "#G +12#! [concept_space_race] mission progress",
+  "de": "#G +12#! Missionsfortschritt im [concept_space_race]"
+ },
+ "SR_PROGRESS_ADD_15_TT": {
+  "en": "#G +15#! [concept_space_race] mission progress",
+  "de": "#G +15#! Missionsfortschritt im [concept_space_race]"
+ },
+ "SR_PROGRESS_ADD_20_TT": {
+  "en": "#G +20#! [concept_space_race] mission progress",
+  "de": "#G +20#! Missionsfortschritt im [concept_space_race]"
+ },
+ "SR_PROGRESS_ADD_25_TT": {
+  "en": "#G +25#! [concept_space_race] mission progress",
+  "de": "#G +25#! Missionsfortschritt im [concept_space_race]"
+ },
+ "SR_PROGRESS_ADD_2_TT": {
+  "en": "#G +2#! [concept_space_race] mission progress",
+  "de": "#G +2#! Missionsfortschritt im [concept_space_race]"
+ },
+ "SR_PROGRESS_ADD_30_TT": {
+  "en": "#G +30#! [concept_space_race] mission progress",
+  "de": "#G +30#! Missionsfortschritt im [concept_space_race]"
+ },
+ "SR_PROGRESS_ADD_3_TT": {
+  "en": "#G +3#! [concept_space_race] mission progress",
+  "de": "#G +3#! Missionsfortschritt im [concept_space_race]"
+ },
+ "SR_PROGRESS_ADD_4_TT": {
+  "en": "#G +4#! [concept_space_race] mission progress",
+  "de": "#G +4#! Missionsfortschritt im [concept_space_race]"
+ },
+ "SR_PROGRESS_ADD_5_TT": {
+  "en": "#G +5#! [concept_space_race] mission progress",
+  "de": "#G +5#! Missionsfortschritt im [concept_space_race]"
+ },
+ "SR_PROGRESS_ADD_6_TT": {
+  "en": "#G +6#! [concept_space_race] mission progress",
+  "de": "#G +6#! Missionsfortschritt im [concept_space_race]"
+ },
+ "SR_PROGRESS_ADD_7_TT": {
+  "en": "#G +7#! [concept_space_race] mission progress",
+  "de": "#G +7#! Missionsfortschritt im [concept_space_race]"
+ },
+ "SR_PROGRESS_ADD_8_TT": {
+  "en": "#G +8#! [concept_space_race] mission progress",
+  "de": "#G +8#! Missionsfortschritt im [concept_space_race]"
+ },
+ "SR_PROGRESS_LOSE_15_PERCENT_TT": {
+  "en": "#R Lose 15%#! of current [concept_space_race] mission progress",
+  "de": "#R Verlust von 15%#! des aktuellen Missionsfortschritts im [concept_space_race]"
+ },
+ "SR_PROGRESS_LOSE_25_PERCENT_TT": {
+  "en": "#R Lose 25%#! of current [concept_space_race] mission progress",
+  "de": "#R Verlust von 25%#! des aktuellen Missionsfortschritts im [concept_space_race]"
+ },
+ "SR_PROGRESS_SUBTRACT_10_TT": {
+  "en": "#R -10#! [concept_space_race] mission progress",
+  "de": "#R -10#! Missionsfortschritt im [concept_space_race]"
+ },
+ "SR_PROGRESS_SUBTRACT_3_TT": {
+  "en": "#R -3#! [concept_space_race] mission progress",
+  "de": "#R -3#! Missionsfortschritt im [concept_space_race]"
+ },
+ "SR_PROGRESS_SUBTRACT_4_TT": {
+  "en": "#R -4#! [concept_space_race] mission progress",
+  "de": "#R -4#! Missionsfortschritt im [concept_space_race]"
+ },
+ "SR_PROGRESS_SUBTRACT_6_TT": {
+  "en": "#R -6#! [concept_space_race] mission progress",
+  "de": "#R -6#! Missionsfortschritt im [concept_space_race]"
+ },
+ "SR_PROGRESS_SUBTRACT_8_TT": {
+  "en": "#R -8#! [concept_space_race] mission progress",
+  "de": "#R -8#! Missionsfortschritt im [concept_space_race]"
+ },
+ "SR_SAFE_APPROACH_DESC": {
+  "en": "Proceed methodically and carefully. Slower progress, but minimal risk of catastrophic failure.",
+  "de": "Geht methodisch und sorgfältig vor. Langsamerer Fortschritt, aber minimales Risiko eines katastrophalen Scheiterns."
+ },
+ "SR_SAFE_APPROACH_EFFECT": {
+  "en": "Switching to a safe, methodical approach: slower but far less likely to fail.",
+  "de": "Wechsel zu einem sicheren, methodischen Ansatz: langsamer, aber deutlich geringeres Risiko des Scheiterns."
+ },
+ "SR_SHACKLETON_CHOSEN_TT": {
+  "en": "We will target Shackleton Crater: a treacherous but scientifically invaluable landing site near the lunar south pole. Polar-ice and shadowed-region observations will raise our research speed and innovation cap for ten years, fading over that time.",
+  "de": "Wir werden den Shackleton-Krater anvisieren: eine tückische, aber wissenschaftlich unschätzbare Landestelle nahe dem lunaren Südpol. Beobachtungen des Poleises und der Schattenregionen erhöhen zehn Jahre lang unser Forschungstempo und unsere Innovationsobergrenze und klingen dabei allmählich ab."
+ },
+ "SR_SHARE_DATA_RELATIONS_TT": {
+  "en": "#G +20#! relations with all spacefaring nations.",
+  "de": "#G +20#! Beziehungen zu allen raumfahrenden Nationen."
+ },
+ "SR_SHARE_FREELY_RELATIONS_TT": {
+  "en": "#G +30#! relations with all spacefaring nations.",
+  "de": "#G +30#! Beziehungen zu allen raumfahrenden Nationen."
+ },
+ "SR_TRANQUILITY_CHOSEN_TT": {
+  "en": "We will target the Sea of Tranquility: a flat, iconic expanse ideal for a symbolically powerful landing. The iconic landing will resonate culturally for a decade, fading over that time.",
+  "de": "Wir werden das Meer der Ruhe anvisieren: eine flache, ikonische Weite, ideal für eine symbolisch kraftvolle Landung. Die ikonische Landung wird ein Jahrzehnt lang kulturell nachhallen und dabei allmählich abklingen."
+ },
+ "SR_TRANSPIRATION_FAIL_TT": {
+  "en": "The experimental cooling system underperformed. Standard ablative shields will be used instead.",
+  "de": "Das experimentelle Kühlsystem blieb hinter den Erwartungen zurück. Stattdessen werden Standard-Ablativschilde verwendet."
+ },
+ "SR_TRANSPIRATION_SUCCESS_TT": {
+  "en": "The transpiration cooling system performed flawlessly.",
+  "de": "Das Transpirationskühlsystem funktionierte einwandfrei."
+ },
+ "SR_WEATHER_LAUNCH_ABORT_TT": {
+  "en": "Wind shear overwhelmed the guidance system. The launch was aborted on the pad.",
+  "de": "Windscherung überforderte das Leitsystem. Der Start wurde auf der Rampe abgebrochen."
+ },
+ "SR_WEATHER_LAUNCH_SUCCESS_TT": {
+  "en": "The vehicle threaded the gap in the weather and reached orbit successfully.",
+  "de": "Das Fahrzeug nutzte das Wetterfenster und erreichte erfolgreich die Umlaufbahn."
+ },
+ "STANDARD_OF_LIVING_LEVEL_101": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_102": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_103": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_104": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_105": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_106": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_107": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_108": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_109": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_110": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_111": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_112": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_113": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_114": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_115": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_116": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_117": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_118": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_119": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_120": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_121": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_122": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_123": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_124": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_125": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_126": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_127": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_128": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_129": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_130": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_131": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_132": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_133": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_134": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_135": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_136": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_137": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_138": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_139": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_140": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_141": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_142": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_143": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_144": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_145": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_146": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_147": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_148": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_149": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_150": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_151": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_152": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_153": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_154": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_155": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_156": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_157": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_158": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_159": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_160": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_161": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_162": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_163": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_164": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_165": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_166": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_167": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_168": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_169": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_170": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_171": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_172": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_173": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_174": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_175": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_176": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_177": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_178": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_179": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_180": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_181": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_182": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_183": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_184": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_185": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_186": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_187": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_188": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_189": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_190": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_191": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_192": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_193": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_194": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_195": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_196": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_197": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_198": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_199": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_LEVEL_200": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_101": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_102": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_103": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_104": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_105": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_106": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_107": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_108": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_109": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_110": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_111": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_112": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_113": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_114": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_115": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_116": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_117": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_118": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_119": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_120": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_121": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_122": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_123": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_124": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_125": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_126": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_127": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_128": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_129": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_130": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_131": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_132": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_133": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_134": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_135": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_136": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_137": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_138": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_139": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_140": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_141": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_142": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_143": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_144": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_145": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_146": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_147": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_148": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_149": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_150": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_151": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_152": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_153": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_154": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_155": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_156": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_157": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_158": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_159": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_160": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_161": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_162": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_163": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_164": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_165": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_166": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_167": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_168": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_169": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_170": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_171": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_172": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_173": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_174": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_175": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_176": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_177": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_178": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_179": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_180": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_181": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_182": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_183": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_184": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_185": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_186": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_187": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_188": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_189": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_190": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_191": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_192": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_193": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_194": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_195": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_196": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_197": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_198": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_199": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STANDARD_OF_LIVING_NO_ICON_LEVEL_200": {
+  "en": "Extremely Opulent",
+  "de": "Äußerst Prunkvoll"
+ },
+ "STATE_IS_IN_RECOGNIZED_CONTINENT_TT": {
+  "en": "Must be a state in a recognized continent (Africa, Europe, Americas, Asia, or the Middle East).",
+  "de": "Muss ein Staat auf einem anerkannten Kontinent sein (Afrika, Europa, Amerika, Asien oder der Nahe Osten)."
+ },
+ "STE_TELEPATHIC_ACCEPTED_TT": {
+  "en": "[SCOPE.sCountry('telepathic_proposer').GetName] also gains #bold $ste_telepathic_diplomacy$#!.",
+  "de": "[SCOPE.sCountry('telepathic_proposer').GetName] erhält ebenfalls #bold $ste_telepathic_diplomacy$#!."
+ },
+ "STE_TELEPATHIC_DECLINED_TT": {
+  "en": "[SCOPE.sCountry('telepathic_proposer').GetName] is told that we declined.",
+  "de": "[SCOPE.sCountry('telepathic_proposer').GetName] wird mitgeteilt, dass wir abgelehnt haben."
+ },
+ "STE_TELEPATHIC_PROPOSAL_TT": {
+  "en": "[SCOPE.sCountry('telepathic_partner').GetName] decides whether to open the channel. If it accepts, both governments gain #bold $ste_telepathic_diplomacy$#! and relations between us improve.",
+  "de": "[SCOPE.sCountry('telepathic_partner').GetName] entscheidet, ob der Kanal geöffnet wird. Nimmt es an, erhalten beide Regierungen #bold $ste_telepathic_diplomacy$#!, und die Beziehungen zwischen uns verbessern sich."
+ },
+ "SUMMIT_ATTEND_RELATIONS_TT": {
+  "en": "#G +5#! relations with all [concept_great_power]s.",
+  "de": "#G +5#! Beziehungen zu allen [Concept('concept_great_power', 'Großmächten')]."
+ },
+ "SUMMIT_BOYCOTT_RELATIONS_TT": {
+  "en": "#R -5#! relations with all [concept_great_power]s.",
+  "de": "#R -5#! Beziehungen zu allen [Concept('concept_great_power', 'Großmächten')]."
+ },
+ "SUMMIT_HOST_RELATIONS_TT": {
+  "en": "#G +10#! relations with all [concept_great_power]s.",
+  "de": "#G +10#! Beziehungen zu allen [Concept('concept_great_power', 'Großmächten')]."
+ },
+ "TECHNOLOGY_RESEARCHED_civil_rights_movement": {
+  "en": "Researched Civil Rights Movement",
+  "de": "Bürgerrechtsbewegung erforscht"
+ },
+ "TECHNOLOGY_RESEARCHED_social_justice_movements": {
+  "en": "Researched Social Justice Movements",
+  "de": "Soziale-Gerechtigkeit-Bewegungen erforscht"
+ },
+ "TEMPERATURE_ANOMALY_2": {
+  "en": "[concept_global_warming_system] has reached 2°C above pre-industrial levels.",
+  "de": "[concept_global_warming_system] hat 2 °C über dem vorindustriellen Niveau erreicht."
+ },
+ "TE_ARTICLE_QUANTITY_PROMPT_NUCLEAR_ARMS_LIMITATION": {
+  "en": "Warhead ceiling for each party, from #v [ArticleDraft.GetMinValidQuantity]#! to #v [ArticleDraft.GetMaxValidQuantity]#!",
+  "de": "Sprengkopf-Obergrenze für jede Partei, von #v [ArticleDraft.GetMinValidQuantity]#! bis #v [ArticleDraft.GetMaxValidQuantity]#!"
+ },
+ "TE_ARTICLE_QUANTITY_UNIT_WARHEADS": {
+  "en": "warheads",
+  "de": "Sprengköpfe"
+ },
+ "TE_CM_BUDGET_DECREASE_TT": {
+  "en": "#header Spend Less on Construction#!\\n#v Click#!: -@money!1,000 per week\\n#v Shift+Click#!: -@money!10,000\\n#v Ctrl+Click#!: -@money!100,000\\n#v Alt+Click#!: -@money!1,000,000\\n#v Right-click#!: set to 0, which stops government buying at once",
+  "de": "#header Weniger für Bau ausgeben#!\\n#v Klick#!: -@money!1.000 pro Woche\\n#v Umschalt+Klick#!: -@money!10.000\\n#v Strg+Klick#!: -@money!100.000\\n#v Alt+Klick#!: -@money!1.000.000\\n#v Rechtsklick#!: auf 0 setzen, was den staatlichen Einkauf sofort stoppt"
+ },
+ "TE_CM_BUDGET_HEADER": {
+  "en": "@money! Government spending on construction each week:",
+  "de": "@money! Staatliche Ausgaben für Bau pro Woche:"
+ },
+ "TE_CM_BUDGET_INCREASE_TT": {
+  "en": "#header Spend More on Construction#!\\n#v Click#!: +@money!1,000 per week\\n#v Shift+Click#!: +@money!10,000\\n#v Ctrl+Click#!: +@money!100,000\\n#v Alt+Click#!: +@money!1,000,000\\n#v Right-click#!: +@money!10,000,000",
+  "de": "#header Mehr für Bau ausgeben#!\\n#v Klick#!: +@money!1.000 pro Woche\\n#v Umschalt+Klick#!: +@money!10.000\\n#v Strg+Klick#!: +@money!100.000\\n#v Alt+Klick#!: +@money!1.000.000\\n#v Rechtsklick#!: +@money!10.000.000"
+ },
+ "TE_CM_BUDGET_PURCHASE_TT": {
+  "en": "#header Government Construction Budget#!\\nWhat the government spends each week buying construction from the market, paid from the [concept_treasury]. The number of points it buys follows the price, moving a quarter of the way each week toward what the budget buys, so the cost stays near the budget as prices move.\\n\\nOnly what the government queue can use this week is actually bought, so with a short queue the government spends less than the budget. Set it to 0 to halt government construction at once; private construction carries on.\\n\\nAI countries choose their own purchase, as a number of points, from their income, reserves and debt.",
+  "de": "#header Staatliches Baubudget#!\\nWas der Staat jede Woche für den Einkauf von Bau auf dem Markt ausgibt, bezahlt aus der [concept_treasury]. Die Anzahl der gekauften Punkte folgt dem Preis und bewegt sich jede Woche ein Viertel des Weges auf das zu, was das Budget kauft, sodass die Kosten bei sich verändernden Preisen nahe am Budget bleiben.\\n\\nGekauft wird nur, was die staatliche Warteschlange diese Woche tatsächlich nutzen kann, sodass der Staat bei einer kurzen Warteschlange weniger als das Budget ausgibt. Setzen Sie es auf 0, um den staatlichen Bau sofort zu stoppen; der private Bau läuft weiter.\\n\\nKI-Länder wählen ihren eigenen Einkauf als Punktzahl aus ihrem Einkommen, ihren Reserven und Schulden."
+ },
+ "TE_CM_DECREASE_TT": {
+  "en": "#header Buy Less Construction#!\\n#v Click#!: -1 per week\\n#v Shift+Click#!: -10\\n#v Ctrl+Click#!: -100\\n#v Alt+Click#!: -1,000\\n#v Right-click#!: set to 0",
+  "de": "#header Weniger Bau kaufen#!\\n#v Klick#!: -1 pro Woche\\n#v Umschalt+Klick#!: -10\\n#v Strg+Klick#!: -100\\n#v Alt+Klick#!: -1.000\\n#v Rechtsklick#!: auf 0 setzen"
+ },
+ "TE_CM_HOW_IT_WORKS": {
+  "en": "How does the construction market work?",
+  "de": "Wie funktioniert der Baumarkt?"
+ },
+ "TE_CM_HOW_IT_WORKS_BODY": {
+  "en": "#b 1. Supply.#! Construction comes from $building_construction_sector$ buildings, which sell it on the market like any factory. More levels and better production methods mean more construction; cheap wood, iron and steel make it cheaper.\\n\\n#b 2. Your purchase.#! The government buys construction from the treasury each week, set in one of two ways. Under #v Fixed Quantity#! you set how many points it buys, and the cost follows the price. Under #v Fixed Budget#! you set how much it spends, and the number of points follows the price, moving a quarter of the way toward what the budget buys each week so the purchase doesn't chase its own effect on the price. Only what the government queue can use that week is bought, so a large setting is harmless but buys nothing extra when the queue is short. Set it to 0 to stop government construction without idling the construction sector: the construction it would have bought stays on the market for private investors.\\n\\n#b 3. Private purchase.#! Investors buy for private projects automatically, spending a 24th of the investment pool each week, up to what the private queue can use: about the pool's weekly income once it settles, and still some when the income stops.\\n\\n#b 4. Delivery.#! Construction Sites, placed automatically where construction is under way, turn purchased construction into construction points. The private/government split of those points follows the two purchases instead of your economic-system law.\\n\\n#b 5. Shortages.#! Unless the Free Market Construction game rule has turned it off, factories and infrastructure also use a little construction as maintenance. When everyone together wants more than is on sale, the price rises. Every buyer still gets all it buys, only at a higher price per point: the government's purchase costs the treasury more, and the investment pool's spending buys fewer points. Watch the market line above, and add $building_construction_sector$ levels if demand keeps outrunning supply.",
+  "de": "#b 1. Angebot.#! Bau stammt aus $building_construction_sector$-Gebäuden, die ihn wie jede Fabrik auf dem Markt verkaufen. Mehr Stufen und bessere Produktionsmethoden bedeuten mehr Bau; billiges Holz, Eisen und Stahl machen ihn günstiger.\\n\\n#b 2. Ihr Einkauf.#! Der Staat kauft jede Woche Bau aus der Staatskasse, festgelegt auf eine von zwei Arten. Unter #v Feste Menge#! legen Sie fest, wie viele Punkte gekauft werden, und die Kosten folgen dem Preis. Unter #v Festes Budget#! legen Sie fest, wie viel ausgegeben wird, und die Anzahl der Punkte folgt dem Preis, wobei sich der Einkauf jede Woche ein Viertel des Weges auf das zubewegt, was das Budget kauft, damit der Einkauf nicht seiner eigenen Wirkung auf den Preis hinterherläuft. Gekauft wird nur, was die staatliche Warteschlange in dieser Woche nutzen kann, sodass eine hohe Einstellung unschädlich ist, aber nichts Zusätzliches kauft, wenn die Warteschlange kurz ist. Setzen Sie es auf 0, um den staatlichen Bau zu stoppen, ohne den Bausektor stillzulegen: Der Bau, den der Staat gekauft hätte, bleibt für private Investoren auf dem Markt.\\n\\n#b 3. Privater Einkauf.#! Investoren kaufen automatisch für private Projekte, wobei sie jede Woche ein Vierundzwanzigstel des Investitionsfonds ausgeben, bis zu dem, was die private Warteschlange nutzen kann: etwa das wöchentliche Einkommen des Fonds, sobald es sich eingependelt hat, und noch etwas, wenn das Einkommen versiegt.\\n\\n#b 4. Auslieferung.#! Baustellen, die automatisch dort errichtet werden, wo gebaut wird, wandeln gekauften Bau in Baupunkte um. Die Aufteilung dieser Punkte zwischen privat und staatlich folgt den beiden Einkäufen statt Ihrem Wirtschaftssystemgesetz.\\n\\n#b 5. Engpässe.#! Sofern die Spielregel Freie Marktbauwirtschaft ihn nicht abgeschaltet hat, verbrauchen Fabriken und Infrastruktur auch etwas Bau als Instandhaltung. Wenn alle zusammen mehr wollen, als angeboten wird, steigt der Preis. Jeder Käufer erhält weiterhin alles, was er kauft, nur zu einem höheren Preis pro Punkt: Der staatliche Einkauf kostet die Staatskasse mehr, und die Ausgaben des Investitionsfonds kaufen weniger Punkte. Beobachten Sie die Marktzeile oben und fügen Sie $building_construction_sector$-Stufen hinzu, wenn die Nachfrage das Angebot dauerhaft übersteigt."
+ },
+ "TE_CM_INCREASE_TT": {
+  "en": "#header Buy More Construction#!\\n#v Click#!: +1 per week\\n#v Shift+Click#!: +10\\n#v Ctrl+Click#!: +100\\n#v Alt+Click#!: +1,000\\n#v Right-click#!: +10,000",
+  "de": "#header Mehr Bau kaufen#!\\n#v Klick#!: +1 pro Woche\\n#v Umschalt+Klick#!: +10\\n#v Strg+Klick#!: +100\\n#v Alt+Klick#!: +1.000\\n#v Rechtsklick#!: +10.000"
+ },
+ "TE_CM_MODE_BUDGET": {
+  "en": "Fixed Budget",
+  "de": "Festes Budget"
+ },
+ "TE_CM_MODE_BUDGET_TT": {
+  "en": "#header Fixed Budget#!\\nThe government spends a set sum on construction each week, and the number of points it buys follows the price: when construction gets dearer, the same budget buys fewer points.\\n\\nEach week the purchase moves a quarter of the way toward what the budget buys at that week's price, so it gets most of the way within a month or two. It moves gradually because the government's own purchase moves the price: jumping straight to the new quantity would push the price up, cut the next week's purchase, let the price fall, and so on.\\n\\nSwitching carries the purchase over: the budget starts at what your current purchase costs, to the nearest @money!1,000.",
+  "de": "#header Festes Budget#!\\nDer Staat gibt jede Woche eine feste Summe für Bau aus, und die Anzahl der gekauften Punkte folgt dem Preis: Wird Bau teurer, kauft dasselbe Budget weniger Punkte.\\n\\nJede Woche bewegt sich der Einkauf ein Viertel des Weges auf das zu, was das Budget zum Preis dieser Woche kauft, sodass er innerhalb von ein bis zwei Monaten größtenteils dort ankommt. Er bewegt sich schrittweise, weil der staatliche Einkauf selbst den Preis beeinflusst: Ein direkter Sprung auf die neue Menge würde den Preis nach oben treiben, den Einkauf der nächsten Woche verringern, den Preis wieder fallen lassen, und so weiter.\\n\\nBeim Wechsel wird der Einkauf übernommen: Das Budget beginnt bei dem, was Ihr aktueller Einkauf kostet, gerundet auf die nächsten @money!1.000."
+ },
+ "TE_CM_MODE_QUANTITY": {
+  "en": "Fixed Quantity",
+  "de": "Feste Menge"
+ },
+ "TE_CM_MODE_QUANTITY_TT": {
+  "en": "#header Fixed Quantity#!\\nThe government buys a set number of construction points each week, and what it pays follows the price: when construction gets dearer, the same purchase costs the [concept_treasury] more.\\n\\nSwitching carries the purchase over: the quantity starts at what your budget is buying now.",
+  "de": "#header Feste Menge#!\\nDer Staat kauft jede Woche eine feste Anzahl an Baupunkten, und was er dafür bezahlt, folgt dem Preis: Wird Bau teurer, kostet derselbe Einkauf die [concept_treasury] mehr.\\n\\nBeim Wechsel wird der Einkauf übernommen: Die Menge beginnt bei dem, was Ihr Budget derzeit kauft."
+ },
+ "TE_CM_PURCHASE_TT": {
+  "en": "#header Government Construction Purchase#!\\nHow many construction points the government buys from the market each week, paid from the [concept_treasury]. Buying more lets the government queue build faster. When buyers want more construction than is on sale, the government still gets every point it buys, at a higher price.\\n\\nOnly what the government queue can use this week is actually bought, so a number larger than that costs nothing extra. Set it to 0 to halt government construction; private construction carries on.\\n\\nTo spend a set sum each week instead, switch to #v Fixed Budget#!.\\n\\nAI countries choose their own purchase from their income, reserves and debt.",
+  "de": "#header Staatlicher Baueinkauf#!\\nWie viele Baupunkte der Staat jede Woche vom Markt kauft, bezahlt aus der [concept_treasury]. Ein größerer Einkauf lässt die staatliche Warteschlange schneller bauen. Wenn Käufer mehr Bau wollen, als angeboten wird, erhält der Staat weiterhin jeden gekauften Punkt, nur zu einem höheren Preis.\\n\\nGekauft wird nur, was die staatliche Warteschlange diese Woche nutzen kann, sodass eine höhere Zahl nichts zusätzlich kostet. Setzen Sie es auf 0, um den staatlichen Bau zu stoppen; der private Bau läuft weiter.\\n\\nUm stattdessen jede Woche eine feste Summe auszugeben, wechseln Sie zu #v Festes Budget#!.\\n\\nKI-Länder wählen ihren eigenen Einkauf aus ihrem Einkommen, ihren Reserven und Schulden."
+ },
+ "TE_CM_SECTION_HEADER": {
+  "en": "Construction Market",
+  "de": "Baumarkt"
+ },
+ "TE_CM_SECTION_INTRO": {
+  "en": "@construction! [concept_construction] is a tradeable good. $building_construction_sector$ buildings produce it and sell it on the [concept_market], and Construction Sites turn what is bought into the construction points that the queues below spend. Set how much the government buys, or spends, each week; private investors buy for their own projects from the [concept_investment_pool]. How it all fits together: [concept_te_construction_market].",
+  "de": "@construction! [concept_construction] ist eine handelbare Ware. $building_construction_sector$-Gebäude produzieren ihn und verkaufen ihn auf dem [concept_market], und Baustellen wandeln das Gekaufte in die Baupunkte um, die die Warteschlangen unten verbrauchen. Legen Sie fest, wie viel der Staat jede Woche kauft oder ausgibt; private Investoren kaufen für ihre eigenen Projekte aus dem [concept_investment_pool]. Wie das alles zusammenspielt: [concept_te_construction_market]."
+ },
+ "TE_CM_STAT_BUDGET": {
+  "en": "Your budget buys: @construction! #v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_budget_quantity_target')|1]#! per week at today's price",
+  "de": "Ihr Budget kauft: @construction! #v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_budget_quantity_target')|1]#! pro Woche zum heutigen Preis"
+ },
+ "TE_CM_STAT_BUDGET_TT": {
+  "en": "#header What Your Budget Buys#!\\nBudget: @money!#v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_public_budget')|1*]#! per week\\nPrice now: @money!#v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_price')|0]#! per construction point\\nWhat the budget buys at that price: @construction! #v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_budget_quantity_target')|1]#! per week\\nPurchase set this week: @construction! #v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_public_target')|1]#! per week\\n\\nEach week the purchase moves a quarter of the way from where it is toward what the budget buys at that week's price. Only what the government queue can use is bought, and nothing while construction is paused.",
+  "de": "#header Was Ihr Budget kauft#!\\nBudget: @money!#v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_public_budget')|1*]#! pro Woche\\nPreis jetzt: @money!#v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_price')|0]#! pro Baupunkt\\nWas das Budget zu diesem Preis kauft: @construction! #v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_budget_quantity_target')|1]#! pro Woche\\nDiese Woche festgelegter Einkauf: @construction! #v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_public_target')|1]#! pro Woche\\n\\nJede Woche bewegt sich der Einkauf ein Viertel des Weges von seinem aktuellen Stand zu dem, was das Budget zum Preis dieser Woche kauft. Gekauft wird nur, was die staatliche Warteschlange nutzen kann, und nichts, solange der Bau pausiert ist."
+ },
+ "TE_CM_STAT_GOVERNMENT": {
+  "en": "Government buys: @construction! #v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_public_use')|1]#! per week, ~@money!#v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_public_cost')|1*]#! from the treasury[SelectLocalization( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_construction_market_display_public_target'), GetPlayer.MakeScope.ScriptValue('te_construction_market_display_public_use') ), 'TE_CM_STAT_GOVERNMENT_CAPPED', '' )]",
+  "de": "Staat kauft: @construction! #v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_public_use')|1]#! pro Woche, ~@money!#v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_public_cost')|1*]#! aus der Staatskasse[SelectLocalization( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_construction_market_display_public_target'), GetPlayer.MakeScope.ScriptValue('te_construction_market_display_public_use') ), 'TE_CM_STAT_GOVERNMENT_CAPPED', '' )]"
+ },
+ "TE_CM_STAT_GOVERNMENT_CAPPED": {
+  "en": " #italic (capped at what the queue can use)#!",
+  "de": " #italic (begrenzt auf das, was die Warteschlange nutzen kann)#!"
+ },
+ "TE_CM_STAT_GOVERNMENT_SET_BUDGET": {
+  "en": "Your budget of @money!#v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_public_budget')|1*]#! is set to buy: @construction! #v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_public_target')|1]#! per week",
+  "de": "Ihr Budget von @money!#v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_public_budget')|1*]#! ist darauf eingestellt zu kaufen: @construction! #v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_public_target')|1]#! pro Woche"
+ },
+ "TE_CM_STAT_GOVERNMENT_SET_QUANTITY": {
+  "en": "You have set: @construction! #v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_public_target')|0]#! per week",
+  "de": "Sie haben festgelegt: @construction! #v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_public_target')|0]#! pro Woche"
+ },
+ "TE_CM_STAT_GOVERNMENT_TT": {
+  "en": "#header Government Purchase in Force#!\\n[SelectLocalization( GetScriptedGui('te_construction_market_budget_mode_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'TE_CM_STAT_GOVERNMENT_SET_BUDGET', 'TE_CM_STAT_GOVERNMENT_SET_QUANTITY' )]\\nThe government queue can use: @construction! #v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_public_queue_cap')|1]#! per week\\nBought this week: @construction! #v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_public_use')|1]#! per week\\n\\nThe purchase in force is the smaller of the first two, and zero while construction is paused. The queue can use at most one week's maximum progress per queued level. The treasury cost is an estimate at the current price.",
+  "de": "#header Geltender staatlicher Einkauf#!\\n[SelectLocalization( GetScriptedGui('te_construction_market_budget_mode_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'TE_CM_STAT_GOVERNMENT_SET_BUDGET', 'TE_CM_STAT_GOVERNMENT_SET_QUANTITY' )]\\nDie staatliche Warteschlange kann nutzen: @construction! #v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_public_queue_cap')|1]#! pro Woche\\nDiese Woche gekauft: @construction! #v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_public_use')|1]#! pro Woche\\n\\nDer geltende Einkauf ist der kleinere der ersten beiden Werte und null, solange der Bau pausiert ist. Die Warteschlange kann je Stufe in der Warteschlange höchstens den maximalen Fortschritt einer Woche nutzen. Die Kosten für die Staatskasse sind eine Schätzung zum aktuellen Preis."
+ },
+ "TE_CM_STAT_MARKET": {
+  "en": "Your market: @construction! #v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_market_supply')|1]#! on sale, #v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_market_demand')|1]#! wanted[SelectLocalization( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_construction_market_display_market_demand'), GetPlayer.MakeScope.ScriptValue('te_construction_market_display_market_supply') ), 'TE_CM_STAT_MARKET_SHORT', '' )]",
+  "de": "Ihr Markt: @construction! #v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_market_supply')|1]#! im Angebot, #v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_market_demand')|1]#! nachgefragt[SelectLocalization( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_construction_market_display_market_demand'), GetPlayer.MakeScope.ScriptValue('te_construction_market_display_market_supply') ), 'TE_CM_STAT_MARKET_SHORT', '' )]"
+ },
+ "TE_CM_STAT_MARKET_SHORT": {
+  "en": " #R (shortage)#!",
+  "de": " #R (Engpass)#!"
+ },
+ "TE_CM_STAT_MARKET_TT": {
+  "en": "#header Construction in Your Market#!\\n#v On sale#!: construction offered by every $building_construction_sector$ in the market, plus imports.\\n#v Wanted#!: construction every buyer in the market asks for (government and private purchases, and buildings that use it for maintenance or production), plus exports.\\n\\nWhen more is wanted than is on sale, the price rises. Every buyer still receives all it buys, only at a higher price per point: the government's purchase costs the treasury more, and the investment pool's spending buys fewer points. More $building_construction_sector$ levels, or better production methods for them, are the remedy.",
+  "de": "#header Bau in Ihrem Markt#!\\n#v Im Angebot#!: Bau, der von jedem $building_construction_sector$ im Markt angeboten wird, plus Importe.\\n#v Nachgefragt#!: Bau, den jeder Käufer im Markt verlangt (staatliche und private Einkäufe sowie Gebäude, die ihn zur Instandhaltung oder Produktion nutzen), plus Exporte.\\n\\nWenn mehr nachgefragt wird, als angeboten wird, steigt der Preis. Jeder Käufer erhält weiterhin alles, was er kauft, nur zu einem höheren Preis pro Punkt: Der staatliche Einkauf kostet die Staatskasse mehr, und die Ausgaben des Investitionsfonds kaufen weniger Punkte. Mehr $building_construction_sector$-Stufen oder bessere Produktionsmethoden dafür schaffen Abhilfe."
+ },
+ "TE_CM_STAT_PRICE": {
+  "en": "Price: @money!#v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_price')|0]#! per construction point",
+  "de": "Preis: @money!#v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_price')|0]#! pro Baupunkt"
+ },
+ "TE_CM_STAT_PRICE_TT": {
+  "en": "#header Price of Construction#!\\nWhat one construction point costs right now: the [concept_market_price] of construction in your market (base @money!1000), scaled up in richer countries by [concept_construction_cost_scaling].\\n\\nThe price rises when buyers want more construction than is on sale, and falls when construction goes unsold.",
+  "de": "#header Preis für Bau#!\\nWas ein Baupunkt gerade kostet: der [concept_market_price] von Bau in Ihrem Markt (Basis @money!1000), in reicheren Ländern erhöht durch die [concept_construction_cost_scaling].\\n\\nDer Preis steigt, wenn Käufer mehr Bau wollen, als angeboten wird, und sinkt, wenn Bau unverkauft bleibt."
+ },
+ "TE_CM_STAT_PRIVATE": {
+  "en": "Private investors buy: @construction! #v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_private_use')|1]#! per week (#v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_private_share')|0]%#! of construction goes to private projects)",
+  "de": "Private Investoren kaufen: @construction! #v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_private_use')|1]#! pro Woche (#v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_private_share')|0]%#! des Baus geht an private Projekte)"
+ },
+ "TE_CM_STAT_PRIVATE_TT": {
+  "en": "#header Private Construction#!\\nInvestors buy construction for private projects automatically, paid from the [concept_investment_pool]. They spend a 24th of the pool each week, up to what the private queue can use this week. That settles at about the pool's weekly income: more when the pool has built up, less when it is running low, and still some when its income stops.\\n\\nThe share of construction points allocated to private projects is recalculated every week from the government and private purchases. Your economic-system [concept_law] does not set it while the construction market is running.",
+  "de": "#header Privatbau#!\\nInvestoren kaufen automatisch Bau für private Projekte, bezahlt aus dem [concept_investment_pool]. Sie geben jede Woche ein Vierundzwanzigstel des Fonds aus, bis zu dem, was die private Warteschlange diese Woche nutzen kann. Das pendelt sich bei etwa dem wöchentlichen Einkommen des Fonds ein: mehr, wenn sich der Fonds aufgebaut hat, weniger, wenn er knapp wird, und noch etwas, wenn sein Einkommen versiegt.\\n\\nDer Anteil der Baupunkte, der privaten Projekten zugewiesen wird, wird jede Woche aus den staatlichen und privaten Einkäufen neu berechnet. Ihr Wirtschaftssystem-[concept_law] legt ihn nicht fest, solange der Baumarkt läuft."
+ },
+ "TE_DC_SECTION_HEADER": {
+  "en": "Direct Construction",
+  "de": "Direkter Bau"
+ },
+ "TE_DC_SECTION_INTRO": {
+  "en": "The Free Market Construction game rule is off, so construction works as in the base game. Your $te_construction_market_site$ buildings are your construction sector: build, expand and downsize them like any government building. Each level provides construction points according to its production method, the government pays the wages, and the materials for each point spent are bought as in the base game. To build faster, add levels or switch to a better production method.\\n\\n#b Construction Sites must currently be built from the state view.#! This is a technical limitation that is being worked on.",
+  "de": "Die Spielregel Freie Marktbauwirtschaft ist deaktiviert, sodass der Bau wie im Basisspiel funktioniert. Ihre $te_construction_market_site$-Gebäude sind Ihr Bausektor: Bauen, erweitern und verkleinern Sie sie wie jedes staatliche Gebäude. Jede Stufe liefert je nach Produktionsmethode Baupunkte, der Staat zahlt die Löhne, und die Materialien für jeden verbrauchten Punkt werden wie im Basisspiel eingekauft. Um schneller zu bauen, fügen Sie Stufen hinzu oder wechseln Sie zu einer besseren Produktionsmethode.\\n\\n#b Baustellen müssen derzeit über die Staatenansicht errichtet werden.#! Das ist eine technische Einschränkung, an der noch gearbeitet wird."
+ },
+ "TE_DC_STAT_CAPACITY": {
+  "en": "Construction: @construction! #v [GetPlayer.MakeScope.ScriptValue('te_direct_construction_display_capacity')|1]#! per week",
+  "de": "Bau: @construction! #v [GetPlayer.MakeScope.ScriptValue('te_direct_construction_display_capacity')|1]#! pro Woche"
+ },
+ "TE_DC_STAT_CAPACITY_TT": {
+  "en": "#header Construction Capacity#!\\nEvery $te_construction_market_site$ level provides construction according to its production method, from 1 per week for $pm_wooden_buildings$ to 16 for $pm_nanomaterial_buildings$, scaled by how fully it is staffed and by its throughput. $te_direct_construction_base_modifier$ and Barracks under the Engineering & Logistics principle add to it. The base is the same for every country, so a country without Construction Sites can still build them.\\n\\nThe sites buy their method's materials only for the points your queues actually spend: wood and fabric at first, then iron, steel, glass and electricity.",
+  "de": "#header Baukapazität#!\\nJede $te_construction_market_site$-Stufe liefert je nach Produktionsmethode Bau, von 1 pro Woche für $pm_wooden_buildings$ bis 16 für $pm_nanomaterial_buildings$, skaliert nach Personalauslastung und Durchsatz. $te_direct_construction_base_modifier$ und Kasernen unter dem Prinzip Technik & Logistik erhöhen ihn zusätzlich. Die Basis ist für jedes Land gleich, sodass ein Land auch ohne Baustellen bauen kann.\\n\\nDie Baustellen kaufen die Materialien ihrer Methode nur für die Punkte, die Ihre Warteschlangen tatsächlich verbrauchen: zunächst Holz und Stoff, dann Eisen, Stahl, Glas und Elektrizität."
+ },
+ "TE_DC_STAT_SHARE": {
+  "en": "Private share: #v [GetPlayer.MakeScope.ScriptValue('te_direct_construction_law_private_share')|0]%#! of construction, set by your economic-system law",
+  "de": "Privater Anteil: #v [GetPlayer.MakeScope.ScriptValue('te_direct_construction_law_private_share')|0]%#! des Baus, festgelegt durch Ihr Wirtschaftssystemgesetz"
+ },
+ "TE_DC_STAT_SHARE_TT": {
+  "en": "#header Private Construction#!\\nAs in the base game, your economic-system [concept_law] sets the share of construction allocated to private projects, funded from the [concept_investment_pool]:\\n$law_traditionalism$: 25%\\n$law_interventionism$, $law_agrarianism$, $law_extraction_economy$, $law_industry_banned$: 50%\\n$law_laissez_faire$: 75%\\n$law_cooperative_ownership$: 35%\\n$law_command_economy$: 10%\\n\\nOther modifiers can add to it. When one queue cannot use its share in a week, the other can use the rest.",
+  "de": "#header Privatbau#!\\nWie im Basisspiel legt Ihr Wirtschaftssystem-[concept_law] den Anteil des Baus fest, der privaten Projekten zugewiesen und aus dem [concept_investment_pool] finanziert wird:\\n$law_traditionalism$: 25%\\n$law_interventionism$, $law_agrarianism$, $law_extraction_economy$, $law_industry_banned$: 50%\\n$law_laissez_faire$: 75%\\n$law_cooperative_ownership$: 35%\\n$law_command_economy$: 10%\\n\\nWeitere Modifikatoren können ihn erhöhen. Wenn eine Warteschlange ihren Anteil in einer Woche nicht nutzen kann, kann die andere den Rest nutzen."
+ },
+ "TE_EA_IR_AGENT_CAUGHT_TT": {
+  "en": "The agent is caught: [SCOPE.sCountry('espionage_catcher').GetName] decides what to do with him, and when we hear of it his reports stop.",
+  "de": "Der Agent wird gefasst: [SCOPE.sCountry('espionage_catcher').GetName] entscheidet, was mit ihm geschieht, und sobald wir davon erfahren, enden seine Meldungen."
+ },
+ "TE_EA_IR_AGENT_UNDETECTED_TT": {
+  "en": "The agent works undetected.",
+  "de": "Der Agent arbeitet unentdeckt."
+ },
+ "TE_EA_IR_BUILDUP_RIVAL_TT": {
+  "en": "[SCOPE.sCountry('arms_race_instigator').GetName] will see the buildup and decide how to answer it.",
+  "de": "[SCOPE.sCountry('arms_race_instigator').GetName] wird die Aufrüstung bemerken und entscheiden, wie darauf zu reagieren ist."
+ },
+ "TE_EA_IR_CELL_HIDDEN_TT": {
+  "en": "The cell stays hidden.",
+  "de": "Die Zelle bleibt verborgen."
+ },
+ "TE_EA_IR_CELL_UNCOVERED_TT": {
+  "en": "The cell is uncovered: [SCOPE.sCountry('terror_cell_target').GetName] traces it to us and decides how to answer.",
+  "de": "Die Zelle wird aufgedeckt: [SCOPE.sCountry('terror_cell_target').GetName] führt sie auf uns zurück und entscheidet, wie darauf zu reagieren ist."
+ },
+ "TE_EA_IR_MEDDLING_RIVAL_TT": {
+  "en": "[SCOPE.sCountry('interference_target').GetName]'s analysts will notice the campaign and trace it to us, and its government will decide how to answer.",
+  "de": "Die Analysten von [SCOPE.sCountry('interference_target').GetName] werden die Kampagne bemerken und auf uns zurückführen, und ihre Regierung wird entscheiden, wie darauf zu reagieren ist."
+ },
+ "TE_EA_IR_PROPAGANDA_RIVAL_TT": {
+  "en": "[SCOPE.sCountry('propaganda_instigator').GetName] will hear the broadcasts and decide whether to answer them.",
+  "de": "[SCOPE.sCountry('propaganda_instigator').GetName] wird die Sendungen hören und entscheiden, ob darauf reagiert wird."
+ },
+ "TE_FX_SHOCK_MINUS_10_DESC": {
+  "en": "The currency weakens: #v Exchange Rate Index#! about #R −10#! over the coming year, fading after",
+  "de": "Die Währung schwächt sich ab: #v Wechselkursindex#! um etwa #R −10#! im kommenden Jahr, danach abklingend"
+ },
+ "TE_FX_SHOCK_MINUS_5_DESC": {
+  "en": "The currency weakens: #v Exchange Rate Index#! about #R −5#! over the coming year, fading after",
+  "de": "Die Währung schwächt sich ab: #v Wechselkursindex#! um etwa #R −5#! im kommenden Jahr, danach abklingend"
+ },
+ "TE_FX_SHOCK_PLUS_5_DESC": {
+  "en": "The currency is propped up: #v Exchange Rate Index#! about #G +5#! over the coming year, fading after",
+  "de": "Die Währung wird gestützt: #v Wechselkursindex#! um etwa #G +5#! im kommenden Jahr, danach abklingend"
+ },
+ "TE_HOMELAND_CREATION": {
+  "en": "Creation",
+  "de": "Entstehung"
+ },
+ "TE_HOMELAND_CREATION_THRESHOLD": {
+  "en": "Blocked: needs #tooltippable #tooltip:[State.GetTooltipTag],TE_HOMELAND_CREATION_THRESHOLD_TT #v [State.MakeScope.ScriptValue('homeland_culture_form_threshold')|%0]#!#!#! population.",
+  "de": "Blockiert: benötigt #tooltippable #tooltip:[State.GetTooltipTag],TE_HOMELAND_CREATION_THRESHOLD_TT #v [State.MakeScope.ScriptValue('homeland_culture_form_threshold')|%0]#!#!#! Bevölkerung."
+ },
+ "TE_HOMELAND_CREATION_THRESHOLD_CLAMPED": {
+  "en": "\\nThe modifiers below total #v [State.GetModifier.GetValueFor('state_homeland_creation_threshold_add')|%0]#!, but the threshold is held between #v 10%#! and #v 90%#!.",
+  "de": "\\nDie Modifikatoren unten ergeben zusammen #v [State.GetModifier.GetValueFor('state_homeland_creation_threshold_add')|%0]#!, doch der Schwellenwert wird zwischen #v 10%#! und #v 90%#! gehalten."
+ },
+ "TE_HOMELAND_CREATION_THRESHOLD_TT": {
+  "en": "#tooltip_header Creation Threshold#!\\nA primary culture without a [concept_homeland] here needs at least #v [State.MakeScope.ScriptValue('homeland_culture_form_threshold')|%0]#! of the state's population before its homeland can start forming.[SelectLocalization(NotEqualTo_CFixedPoint(State.GetModifier.GetValueFor('state_homeland_creation_threshold_add'), State.MakeScope.ScriptValue('homeland_culture_form_threshold')), 'TE_HOMELAND_CREATION_THRESHOLD_CLAMPED', '')]\\n$TOOLTIP_DELIMITER$\\n[State.GetModifier.GetDescFor('state_homeland_creation_threshold_add')]",
+  "de": "#tooltip_header Entstehungsschwelle#!\\nEine Hauptkultur ohne [concept_homeland] hier braucht mindestens #v [State.MakeScope.ScriptValue('homeland_culture_form_threshold')|%0]#! der Bevölkerung des Staates, bevor ihr Heimatland zu entstehen beginnen kann.[SelectLocalization(NotEqualTo_CFixedPoint(State.GetModifier.GetValueFor('state_homeland_creation_threshold_add'), State.MakeScope.ScriptValue('homeland_culture_form_threshold')), 'TE_HOMELAND_CREATION_THRESHOLD_CLAMPED', '')]\\n$TOOLTIP_DELIMITER$\\n[State.GetModifier.GetDescFor('state_homeland_creation_threshold_add')]"
+ },
+ "TE_HOMELAND_NOTHING_TO_CHANGE": {
+  "en": "No culture here can gain or lose homeland status.",
+  "de": "Keine Kultur hier kann den Heimatland-Status gewinnen oder verlieren."
+ },
+ "TE_HOMELAND_PAUSED_LOCKED": {
+  "en": "Paused: needs a #tooltippable #tooltip:[State.GetTooltipTag],TE_HOMELAND_PAUSED_LOCKED_TT law, principle or technology#!#! that enables homeland changes.",
+  "de": "Pausiert: benötigt #tooltippable #tooltip:[State.GetTooltipTag],TE_HOMELAND_PAUSED_LOCKED_TT ein Gesetz, ein Prinzip oder eine Technik#!#!, die Heimatland-Änderungen ermöglicht."
+ },
+ "TE_HOMELAND_PAUSED_LOCKED_TT": {
+  "en": "#tooltip_header Enabling Homeland Changes#!\\n[State.GetOwner.GetName] has not enabled homeland changes, so no [concept_homeland] in its states can form or disappear. Any one of these enables them:\\n$TE_HOMELAND_UNLOCK_SOURCES$",
+  "de": "#tooltip_header Heimatland-Änderungen ermöglichen#!\\n[State.GetOwner.GetAltName('NOM')|U] hat Heimatland-Änderungen nicht ermöglicht, sodass in seinen Staaten kein [concept_homeland] entstehen oder verschwinden kann. Jedes der folgenden ermöglicht sie:\\n$TE_HOMELAND_UNLOCK_SOURCES$"
+ },
+ "TE_HOMELAND_PAUSED_SPLIT": {
+  "en": "Paused: region divided between owners.",
+  "de": "Pausiert: Region auf mehrere Besitzer aufgeteilt."
+ },
+ "TE_HOMELAND_PROJECT_INVALID": {
+  "en": "No longer eligible; progress resets.",
+  "de": "Nicht mehr zulässig; der Fortschritt wird zurückgesetzt."
+ },
+ "TE_HOMELAND_REMOVAL": {
+  "en": "Removal",
+  "de": "Auflösung"
+ },
+ "TE_HOMELAND_REMOVAL_THRESHOLD": {
+  "en": "Blocked: must be below #tooltippable #tooltip:[State.GetTooltipTag],TE_HOMELAND_REMOVAL_THRESHOLD_TT #v [State.MakeScope.ScriptValue('homeland_culture_disappear_threshold')|%0]#!#!#! population.",
+  "de": "Blockiert: muss unter #tooltippable #tooltip:[State.GetTooltipTag],TE_HOMELAND_REMOVAL_THRESHOLD_TT #v [State.MakeScope.ScriptValue('homeland_culture_disappear_threshold')|%0]#!#!#! Bevölkerung liegen."
+ },
+ "TE_HOMELAND_REMOVAL_THRESHOLD_CLAMPED": {
+  "en": "\\nThe modifiers below total #v [State.GetModifier.GetValueFor('state_homeland_removal_threshold_add')|%0]#!, but the threshold is held between #v 0%#! and #v 100%#!.",
+  "de": "\\nDie Modifikatoren unten ergeben zusammen #v [State.GetModifier.GetValueFor('state_homeland_removal_threshold_add')|%0]#!, doch der Schwellenwert wird zwischen #v 0%#! und #v 100%#! gehalten."
+ },
+ "TE_HOMELAND_REMOVAL_THRESHOLD_TT": {
+  "en": "#tooltip_header Removal Threshold#!\\nA non-primary culture with a [concept_homeland] here must fall below #v [State.MakeScope.ScriptValue('homeland_culture_disappear_threshold')|%0]#! of the state's population before that homeland can start being removed.[SelectLocalization(NotEqualTo_CFixedPoint(State.GetModifier.GetValueFor('state_homeland_removal_threshold_add'), State.MakeScope.ScriptValue('homeland_culture_disappear_threshold')), 'TE_HOMELAND_REMOVAL_THRESHOLD_CLAMPED', '')][SelectLocalization(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('homeland_culture_disappear_threshold'), '(CFixedPoint)0'), 'TE_HOMELAND_REMOVAL_THRESHOLD_ZERO', '')]\\n$TOOLTIP_DELIMITER$\\n[State.GetModifier.GetDescFor('state_homeland_removal_threshold_add')]",
+  "de": "#tooltip_header Auflösungsschwelle#!\\nEine nicht-primäre Kultur mit einem [concept_homeland] hier muss unter #v [State.MakeScope.ScriptValue('homeland_culture_disappear_threshold')|%0]#! der Bevölkerung des Staates fallen, bevor dieses Heimatland aufgelöst werden kann.[SelectLocalization(NotEqualTo_CFixedPoint(State.GetModifier.GetValueFor('state_homeland_removal_threshold_add'), State.MakeScope.ScriptValue('homeland_culture_disappear_threshold')), 'TE_HOMELAND_REMOVAL_THRESHOLD_CLAMPED', '')][SelectLocalization(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('homeland_culture_disappear_threshold'), '(CFixedPoint)0'), 'TE_HOMELAND_REMOVAL_THRESHOLD_ZERO', '')]\\n$TOOLTIP_DELIMITER$\\n[State.GetModifier.GetDescFor('state_homeland_removal_threshold_add')]"
+ },
+ "TE_HOMELAND_REMOVAL_THRESHOLD_ZERO": {
+  "en": "\\nAt #v 0%#! no homeland here can be removed. Laws and technologies that raise the threshold make removal possible.",
+  "de": "\\nBei #v 0%#! kann hier kein Heimatland aufgelöst werden. Gesetze und Technologien, die den Schwellenwert anheben, machen eine Auflösung möglich."
+ },
+ "TE_HOMELAND_TRACK_ACTIVE": {
+  "en": "+[State.MakeScope.ScriptValue('te_homeland_monthly_points')|2] points/month",
+  "de": "+[State.MakeScope.ScriptValue('te_homeland_monthly_points')|2] Punkte/Monat"
+ },
+ "TE_HOMELAND_TRACK_WAITING": {
+  "en": "Starts next month.",
+  "de": "Beginnt nächsten Monat."
+ },
+ "TE_HOMELAND_UNLOCK_SOURCES": {
+  "en": "[Concept('concept_law', '$concept_laws$')]: [GetLawType('law_ethnostate').GetName] ($lawgroup_citizenship$), [GetLawType('law_minority_rights_violent_hostility').GetName] ($lawgroup_minority_rights$) or [GetLawType('law_linguistic_purity').GetName] ($lawgroup_language_policy$)\\n[concept_power_bloc_principle]: [GetPowerBlocPrincipleGroup('principle_group_cultural_unity').GetName] tier II or higher in the country's [concept_power_bloc]\\n[concept_technology]: [GetTechnology('mass_media').GetName]",
+  "de": "[Concept('concept_law', '$concept_laws$')]: [GetLawType('law_ethnostate').GetName] ($lawgroup_citizenship$), [GetLawType('law_minority_rights_violent_hostility').GetName] ($lawgroup_minority_rights$) oder [GetLawType('law_linguistic_purity').GetName] ($lawgroup_language_policy$)\\n[concept_power_bloc_principle]: [GetPowerBlocPrincipleGroup('principle_group_cultural_unity').GetName] Stufe II oder höher im [concept_power_bloc] des Landes\\n[concept_technology]: [GetTechnology('mass_media').GetName]"
+ },
  "TE_STATE_ANTIMATTER_TT": {
   "en": "#bold [concept_antimatter_facility] Points#!\\n\\nTotal Generated: #v [State.GetOwner.MakeScope.ScriptValue('antimatter_total_generated_points')|0]#!\\nActive Structures: #v [State.GetOwner.MakeScope.ScriptValue('antimatter_points_consumed')|0]#!\\nReserved (incl. queued): #v [State.GetOwner.MakeScope.ScriptValue('antimatter_points_reserved')|0]#!\\nNet Available: #G [State.GetOwner.MakeScope.ScriptValue('antimatter_sub_building_slots_remaining')|0]#!\\n\\nEach [concept_antimatter_facility] level provides 5 sub-building slots for Antimatter Engines and Warhead Plants.",
   "de": "#bold [concept_antimatter_facility]-Punkte#!\\n\\nInsgesamt erzeugt: #v [State.GetOwner.MakeScope.ScriptValue('antimatter_total_generated_points')|0]#!\\nAktive Bauten: #v [State.GetOwner.MakeScope.ScriptValue('antimatter_points_consumed')|0]#!\\nReserviert (inkl. in Warteschlange): #v [State.GetOwner.MakeScope.ScriptValue('antimatter_points_reserved')|0]#!\\nNetto verfügbar: #G [State.GetOwner.MakeScope.ScriptValue('antimatter_sub_building_slots_remaining')|0]#!\\n\\nJede Stufe der [concept_antimatter_facility] bietet 5 Nebengebäudeplätze für Antimaterie-Triebwerke und Sprengkopfanlagen."
