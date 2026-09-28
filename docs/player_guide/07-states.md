@@ -192,7 +192,7 @@ toward its cap:
 |---|---|---|
 | Ports | +0.2% per Port level up to 100, then +0.04% per level up to 500 | +36% |
 | Transit | +0.1% per Railway level and per Highway level up to 100, then +0.02% per level up to 500 | +18% from each |
-| Art | +1% per Creative Industries level up to 20, +0.25% up to 100, +0.05% up to 500, +0.01% up to 1,500 | +70% |
+| Art | +1% per Creative Industry level up to 20, +0.25% up to 100, +0.05% up to 500, +0.01% up to 1,500 | +70% |
 | Parks | +25% with a National Park, rising with Base Appeal to +37.5% | +37.5% |
 | Monuments | +10% for a Skyscraper, +25% for each monument | none |
 

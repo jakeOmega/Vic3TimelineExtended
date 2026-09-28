@@ -981,6 +981,10 @@ Both can store scope references, but they differ in persistence and loc access:
 
 **Audit**: `localization_accessor_audit.py` (registered in `mod_state_server.py:POST_LOAD_GENERATORS`) catches this class statically. Catalog seeded from vanilla loc; report at `docs/engine/localization_accessor_report.md`. When extending the catalog (e.g. after a vanilla bump introduces new accessors), regenerate `localization_accessor_vanilla_extras.py` from a fresh vanilla pass — vanilla loc is the authoritative source for what the engine accepts.
 
+## Entity Name Keys Render as Raw Text: No Data Functions in Them
+
+A database entity's name key (`building_glassworks`, and presumably a good's) is shown as plain text: `[...]` data functions in it are never evaluated. #555 made eight building names `[SelectLocalization(GetPlayer.IsValid, '<b>_name_player', '<b>_name_<first>')]`, dispatching through customizable localization so the name would follow the player's technology. In game (2026-09-28) the building panel header and a building ranking row printed that expression verbatim, and the era names were removed again. The evidence it would work was indirect: modifier names evaluate `[concept_x]`, and vanilla's `ig_variant_*` keys use `GetPlayer`, but those are helper keys, not an entity's own name. Vanilla never puts a data function in an entity's name, and it has dynamic-name systems only for countries, companies, treaties, power blocs and states (`common/dynamic_*_names`, `00_dynamic_state_names.txt`). `$key$` splices do work in names and in labels that name an entity, because they are inlined at load (`goods_output_merchant_marine_add`, the mod's building throughput modifiers). A name that depends on the owner, the era or a production method is possible only on a panel whose GUI supplies the scope, such as the Grand Monument's `gm_dedication_name` (`type = state`). Before building on a loc mechanism vanilla never uses, get a one-line in-game test of it.
+
 ## Two more parse-time audits for runtime-only engine errors (#146, #147)
 
 Both registered in `POST_LOAD_AUDITS`; findings surface in the `/reload` warnings array and in `docs/engine/*_report.md`. Suppress intentional flags with an inline `# REVIEWED YYYY-MM-DD: rationale`.
@@ -2647,6 +2651,10 @@ Deleting a player-facing toggle whose modifier reserved a resource is the third 
 ### Lifecycle
 - Safe to delete cleanup files once no save games from before the migration exist.
 - Delete BOTH the scripted effect file AND the on_action file (`common/on_actions/legacy_modifier_cleanup.txt`).
+
+## Goods-Keyed Modifier Labels Splice the Good's Name
+
+Write a goods modifier's label as `"@iron! $iron$ input"`, never `"@iron! Iron input"`. A spelled-out name survives a rename: the mod called `iron` Structural Metals, `lead` Conductive and Base Metals and so on for months while most of their modifier labels still said Iron, Lead and Coal, and the mod's own `goods_*_mult` labels repeated the base-game names. Vanilla already splices in some labels (`goods_iron_output_mult:0 "$iron$ Goods Output"`, `goods_output_merchant_marine_add`). When the mod renames a good, every vanilla label that spells it out needs a spliced override in `replace/`. `scripts/analysis/check_goods_label_splices.py` enforces both (it runs in the unit suite; `--fix` repairs). Labels of buildings and building groups (`building_coal_mine_*`, `building_group_bg_coal_mining_*`) name the building, not the good, and are out of its scope.
 
 ## Localization Validation
 

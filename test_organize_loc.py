@@ -157,6 +157,41 @@ class OrganizeAllUnusedTests(unittest.TestCase):
             self.assertNotIn(f" {key}:", unused)
         self.assertIn(" ev.1.dead:", unused)
 
+    def test_replace_override_value_keeps_key_out_of_unused(self):
+        # replace/ holds overrides of vanilla keys and is never organised, but
+        # an override's value can name mod keys, here through a
+        # SelectLocalization and a $splice$.
+        replace = (
+            "l_english:\n"
+            " building_x:0 \"[SelectLocalization(GetPlayer.IsValid, 'building_x_name_player', 'building_x_name_early')]\"\n"
+            " building_y:0 \"$building_y_name$ Works\"\n"
+        )
+        loc = (
+            "l_english:\n"
+            " building_x_name_player:0 \"[GetPlayer.GetCustom('x_name')]\"\n"
+            " building_x_name_early:0 \"Early\"\n"
+            " building_y_name:0 \"Old\"\n"
+            " building_x_dead:0 \"never referenced\"\n"
+        )
+        with tempfile.TemporaryDirectory() as td:
+            loc_dir = os.path.join(td, "localization", "english")
+            os.makedirs(os.path.join(loc_dir, "replace"))
+            replace_path = os.path.join(loc_dir, "replace", "o_l_english.yml")
+            with open(replace_path, "w", encoding="utf-8-sig") as fh:
+                fh.write(replace)
+            with open(os.path.join(loc_dir, "x_l_english.yml"), "w", encoding="utf-8-sig") as fh:
+                fh.write(loc)
+            with contextlib.redirect_stdout(io.StringIO()):
+                organize_all(td)
+            with open(os.path.join(loc_dir, "te_unused_l_english.yml"), encoding="utf-8-sig") as fh:
+                unused = fh.read()
+            with open(replace_path, encoding="utf-8-sig") as fh:
+                replace_after = fh.read()
+        for key in ("building_x_name_player", "building_x_name_early", "building_y_name"):
+            self.assertNotIn(f" {key}:", unused)
+        self.assertIn(" building_x_dead:", unused)
+        self.assertEqual(replace_after, replace)
+
 
 class CategorizeInstitutionKeysTests(unittest.TestCase):
     def test_breakdown_labels_file_with_their_institution(self):

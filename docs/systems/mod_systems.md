@@ -1817,7 +1817,7 @@ The risk to be aware of: if a mod system *also* adds loyalists/radicals tied to 
 
 ## Game Rules
 
-Fourteen mod systems can be toggled on/off at game setup via `common/game_rules/extra_game_rules.txt`.
+Sixteen mod systems can be toggled on/off at game setup via `common/game_rules/extra_game_rules.txt`.
 
 | Rule | Flag (enabled) | Default | Systems Gated |
 |---|---|---|---|
@@ -1835,6 +1835,8 @@ Fourteen mod systems can be toggled on/off at game setup via `common/game_rules/
 | `social_movements_rule` | `social_movements_enabled` | enabled | 8 social movement JEs and associated events |
 | `universal_aptitude_traits_rule` | `universal_aptitude_traits_enabled` | **disabled** | Assigns admin/diplo/military aptitude traits to ALL adult characters instead of only rulers and heirs — works with Heir Education off too. With both rules off, no aptitude traits at all |
 | `free_market_construction_rule` | `free_market_construction_enabled` | enabled | The construction market (§ Construction as a Market Good); `_no_retooling` = the market without the retooling surcharge, `_no_maintenance` = the market without construction maintenance (§ Market settings without retooling or maintenance); disabled = base-game-style direct construction (§ Free Market Construction off). Read through `te_free_market_construction_on` / `_off`, which test the *disabled* flag so a save from before the rule keeps the market, and `te_pm_retooling_waived` |
+| `internal_resettlement_rule` | `internal_resettlement_enabled` | enabled | Settlement Authority and resettlement programs; `_ai_voluntary` = AI countries run only voluntary programs |
+| `grand_monuments_rule` | `grand_monuments_enabled` | enabled | Grand Monument building, dedication ceremony, contests, Monuments JE; checked as `NOT = { has_game_rule = grand_monuments_disabled }` |
 
 **`banking_system_rule` has three settings.** `banking_system_enabled`, `banking_system_simplified`
 and `banking_system_disabled`. The middle one keeps the Banking Cycle journal entry — the cycle,

@@ -191,7 +191,7 @@ Transportation is explained in [Bulk Transportation and
 freight](03-economy.md#bulk-transportation-and-freight). Four buildings are
 renamed to match: Fertilizer Plants are Chemical Plants, Electrics Industries
 are Wired Telecommunications Industries, Synthetics Plants are Synthetic Dyes
-Industries, and the Arts Academy is Creative Industries.
+Industries, and the Arts Academy is Creative Industry.
 
 ## New buildings and production methods
 
@@ -424,7 +424,7 @@ and cultural pull above; the ceremony asks again at its next level.
 | Grand Shrine | No State Atheism | Devout | +5% Devout attraction | +10% conversion |
 | To the Nation | | Petty Bourgeoisie | | +10% loyalists from movements |
 | War Memorial | | Armed Forces | 3% less war support lost to casualties | +5% conscription rate |
-| Grand Opera House | Romanticism | Intelligentsia | +5% Intelligentsia attraction | +10% Creative Industries throughput |
+| Grand Opera House | Romanticism | Intelligentsia | +5% Intelligentsia attraction | +10% Creative Industry throughput |
 | Botanical Gardens | Romanticism | Rural Folk | | 5,000 less pollution |
 | Grand Observatory | Empiricism | Intelligentsia | +3 innovation cap | Faster literacy growth |
 | Great Exhibition Hall | Marketing Research, no Industry Banned | Industrialists | +5% Industrialists attraction | +10% migration pull |
