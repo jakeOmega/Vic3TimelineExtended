@@ -351,3 +351,23 @@ grand_monuments_rule = {
 		flag = grand_monuments_disabled
 	}
 }
+
+# Era building names (common/customizable_localization/te_building_names_custom_loc.txt).
+# Enabled, eight buildings take a new name as the player's technology advances
+# (Arts Academy -> Entertainment Industry -> ...). Disabled, each keeps the one
+# name it had before the era names: Creative Industry, Wired and Wireless
+# Telecommunications Industries, Aerospace Industry, Glassworks, Consumer
+# Appliance Industries, Tourism Industry and Airport. Names only; nothing else
+# reads it. Checked as has_game_rule = era_building_names_disabled, so a save
+# started before the rule existed keeps the era names.
+era_building_names_rule = {
+	default = era_building_names_enabled
+
+	era_building_names_enabled = {
+		flag = era_building_names_enabled
+	}
+
+	era_building_names_disabled = {
+		flag = era_building_names_disabled
+	}
+}
