@@ -469,7 +469,9 @@ def chunk_glossary(chunk: list[Entry], tm: dict[str, dict], vanilla: VanillaTerm
     text = "\n".join(e.en for e in chunk)
     in_chunk = {e.key for e in chunk}
     lines = []
-    refs = sorted(referenced_keys(text) - in_chunk)
+    # Concepts first: a chunk full of building names would otherwise push the
+    # concepts (whose genders the translator needs) past the cap.
+    refs = sorted(referenced_keys(text) - in_chunk, key=lambda k: (not k.startswith("concept_"), k))
     ref_lines = []
     for key in refs:
         if key in tm:
@@ -805,7 +807,8 @@ def term_mismatches(tm: dict[str, dict], terms: dict[str, str], field: str) -> l
     stem (all but its last three letters, at least four)."""
     out = []
     for en_term, rendering in terms.items():
-        pattern = re.compile(r"(?<!\w)" + re.escape(en_term) + r"(?!\w)")
+        flags = re.IGNORECASE if " " in en_term else 0  # "Cultural pull" is "Cultural Pull"
+        pattern = re.compile(r"(?<!\w)" + re.escape(en_term) + r"(?!\w)", flags)
         stems = [w[: max(4, len(w) - 3)].casefold() for w in re.findall(r"\w+", rendering) if len(w) >= 4]
         for key, record in tm.items():
             if "base" in record or not pattern.search(record["en"]):
@@ -822,6 +825,55 @@ def cmd_check_terms(args) -> int:
         print(f"{key}: {en_term!r} should read {rendering!r}")
     print(f"{len(mismatches)} line(s) render a listed term differently.")
     return 1 if mismatches else 0
+
+
+FIX_HEADER = """# CORRECTION CHUNK {cid}: each line below is already translated, but one term
+# in it must change. For each key, the comment above it gives the current
+# translation and what to change. Rewrite the translation with that change,
+# inflected to fit, keeping everything else (wording, markup) as it is. Write
+# every key, in the same ` key:0 "…"` format as a normal chunk; the value you
+# write replaces the current translation.
+"""
+
+
+def cmd_prepare_fixes(args) -> int:
+    """Write a correction chunk: each translated line that check-terms flags
+    (and any --key given with --note), with its current translation and the
+    change to make. Merged like any chunk."""
+    language, lang_field = args.language, args.field
+    tm = load_tm(language)
+    notes: dict[str, list[str]] = defaultdict(list)
+    for key, en_term, rendering in term_mismatches(tm, load_terms(language), lang_field):
+        notes[key].append(f"'{en_term}' must read '{rendering}' (inflected as needed)")
+    for spec in args.note or []:
+        pattern, _, note = spec.partition("=")
+        rx = re.compile(pattern)
+        for key, record in tm.items():
+            if "base" not in record and rx.search(record[lang_field]):
+                notes[key].append(note)
+    if not notes:
+        print("Nothing to fix.")
+        return 0
+    work = language_dirs(language)[1]
+    manifest_path = os.path.join(work, "manifest.json")
+    with open(manifest_path, encoding="utf-8") as fh:
+        manifest = json.load(fh)
+    cid = f"f-{1 + sum(1 for c in manifest if c.startswith('f-')):03d}"
+    lines = [FIX_HEADER.format(cid=cid).rstrip(), "# === LINES ==="]
+    for key in sorted(notes):
+        record = tm[key]
+        lines.append(f"# CURRENT: {record[lang_field]}")
+        lines.append("# CHANGE:  " + "; ".join(dict.fromkeys(notes[key])))
+        lines.append(_loc_line(key, record["en"]))
+    path = os.path.join(work, "chunks", cid + ".txt")
+    with open(path, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write("\n".join(lines) + "\n")
+    manifest[cid] = {"keys": {k: tm[k]["en"] for k in sorted(notes)}, "country_names": [],
+                     "words": sum(word_count(tm[k]["en"]) for k in notes)}
+    with open(manifest_path, "w", encoding="utf-8") as fh:
+        json.dump(manifest, fh, indent=1)
+    print(f"{cid}: {len(notes)} lines to correct -> {os.path.relpath(path, REPO_ROOT)}")
+    return 0
 
 
 def cmd_status(args) -> int:
@@ -851,12 +903,15 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("status")
     rf = sub.add_parser("refresh", help="rebuild unstarted chunks' glossaries from the manifest")
     rf.add_argument("chunks", nargs="+")
+    pf = sub.add_parser("prepare-fixes", help="write a correction chunk for check-terms mismatches")
+    pf.add_argument("--note", action="append", metavar="REGEX=NOTE",
+                    help="also correct translations matching REGEX, with this instruction")
     sub.add_parser("check-terms", help="list translated lines that render a terms.json term differently")
     pr = sub.add_parser("prompt", help="print the standard agent prompt for chunks")
     pr.add_argument("chunks", nargs="+")
     args = parser.parse_args(argv)
     return {"prepare": cmd_prepare, "merge": cmd_merge, "status": cmd_status,
-            "prompt": cmd_prompt, "check-terms": cmd_check_terms, "refresh": cmd_refresh}[args.command](args)
+            "prompt": cmd_prompt, "check-terms": cmd_check_terms, "refresh": cmd_refresh, "prepare-fixes": cmd_prepare_fixes}[args.command](args)
 
 
 if __name__ == "__main__":

@@ -2213,7 +2213,7 @@
  },
  "state_custom_religion_animist_standard_of_living_add_desc": {
   "en": "A bonus or penalty to the [concept_sol] of pops following this custom religion",
-  "de": "Ein Bonus oder Malus auf den [concept_sol] von Bevölkerungsgruppen, die dieser generischen Religion angehören"
+  "de": "Ein Bonus oder Malus auf den [concept_sol] von Bevölkerungsgruppen, die dieser eigen Religion angehören"
  },
  "state_custom_religion_buddhist_standard_of_living_add": {
   "en": "[concept_sol] Modifier for $custom_religion_buddhist$",
@@ -2221,7 +2221,7 @@
  },
  "state_custom_religion_buddhist_standard_of_living_add_desc": {
   "en": "A bonus or penalty to the [concept_sol] of pops following this custom religion",
-  "de": "Ein Bonus oder Malus auf den [concept_sol] von Bevölkerungsgruppen, die dieser generischen Religion angehören"
+  "de": "Ein Bonus oder Malus auf den [concept_sol] von Bevölkerungsgruppen, die dieser eigen Religion angehören"
  },
  "state_custom_religion_christian_standard_of_living_add": {
   "en": "[concept_sol] Modifier for $custom_religion_christian$",
@@ -2229,7 +2229,7 @@
  },
  "state_custom_religion_christian_standard_of_living_add_desc": {
   "en": "A bonus or penalty to the [concept_sol] of pops following this custom religion",
-  "de": "Ein Bonus oder Malus auf den [concept_sol] von Bevölkerungsgruppen, die dieser generischen Religion angehören"
+  "de": "Ein Bonus oder Malus auf den [concept_sol] von Bevölkerungsgruppen, die dieser eigen Religion angehören"
  },
  "state_custom_religion_custom_standard_of_living_add": {
   "en": "[concept_sol] Modifier for $custom_religion_custom$",
@@ -2237,7 +2237,7 @@
  },
  "state_custom_religion_custom_standard_of_living_add_desc": {
   "en": "A bonus or penalty to the [concept_sol] of pops following this custom religion",
-  "de": "Ein Bonus oder Malus auf den [concept_sol] von Bevölkerungsgruppen, die dieser generischen Religion angehören"
+  "de": "Ein Bonus oder Malus auf den [concept_sol] von Bevölkerungsgruppen, die dieser eigen Religion angehören"
  },
  "state_custom_religion_eastern_standard_of_living_add": {
   "en": "[concept_sol] Modifier for $custom_religion_eastern$",
@@ -2245,7 +2245,7 @@
  },
  "state_custom_religion_eastern_standard_of_living_add_desc": {
   "en": "A bonus or penalty to the [concept_sol] of pops following this custom religion",
-  "de": "Ein Bonus oder Malus auf den [concept_sol] von Bevölkerungsgruppen, die dieser generischen Religion angehören"
+  "de": "Ein Bonus oder Malus auf den [concept_sol] von Bevölkerungsgruppen, die dieser eigen Religion angehören"
  },
  "state_custom_religion_jewish_standard_of_living_add": {
   "en": "[concept_sol] Modifier for $custom_religion_jewish$",
@@ -2253,7 +2253,7 @@
  },
  "state_custom_religion_jewish_standard_of_living_add_desc": {
   "en": "A bonus or penalty to the [concept_sol] of pops following this custom religion",
-  "de": "Ein Bonus oder Malus auf den [concept_sol] von Bevölkerungsgruppen, die dieser generischen Religion angehören"
+  "de": "Ein Bonus oder Malus auf den [concept_sol] von Bevölkerungsgruppen, die dieser eigen Religion angehören"
  },
  "state_custom_religion_muslim_standard_of_living_add": {
   "en": "[concept_sol] Modifier for $custom_religion_muslim$",
@@ -2261,7 +2261,7 @@
  },
  "state_custom_religion_muslim_standard_of_living_add_desc": {
   "en": "A bonus or penalty to the [concept_sol] of pops following this custom religion",
-  "de": "Ein Bonus oder Malus auf den [concept_sol] von Bevölkerungsgruppen, die dieser generischen Religion angehören"
+  "de": "Ein Bonus oder Malus auf den [concept_sol] von Bevölkerungsgruppen, die dieser eigen Religion angehören"
  },
  "state_fortification_level_add_desc": {
   "en": "The [concept_fortification_level] of this state, determined by the [concept_fortification_system]. Higher values unlock stronger defensive [concept_fortification_system] [Concept('concept_battle_condition', 'battle conditions')].",
