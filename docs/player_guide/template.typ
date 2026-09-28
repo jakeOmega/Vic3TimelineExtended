@@ -132,21 +132,30 @@
 
   // Screenshots and other images. Each is scaled to the text width, except that
   // a tall one (most UI panels are) is capped in height so it fits on a page
-  // with its caption. Setting a height alone keeps the aspect ratio; setting
-  // both would crop. The height check also stops the rule recursing. Figures
-  // float to the top or bottom of a page, so one too tall for the space left
-  // moves on without leaving the rest of the page blank.
+  // with its caption, and none is drawn larger than its natural size (its pixel
+  // density, or 72 ppi without one), so a small crop saved at 120 ppi prints at
+  // the same scale as the panels. Width and height are both set, with the
+  // aspect ratio kept and `fit: "contain"` so nothing is cropped; a set height
+  // (or an auto width, used only to measure) also stops the rule recursing.
+  // Figures float to the top or bottom of a page, so one too tall for the space
+  // left moves on without leaving the rest of the page blank.
   show figure.where(kind: image): set figure(placement: auto)
   show figure.where(kind: image): set figure.caption(position: bottom)
   show figure.caption: set text(size: 9pt, style: "italic")
   set image(width: 100%)
   let max-image-height = 17cm
   show image: it => {
-    if it.height != auto { return it }
+    if it.height != auto or it.width == auto { return it }
     layout(size => {
-      if measure(it, width: size.width).height <= max-image-height { it } else {
-        image(it.source, width: auto, height: max-image-height)
+      let natural = measure(image(it.source, width: auto))
+      let aspect = natural.height / natural.width
+      let w = calc.min(natural.width, size.width)
+      let h = w * aspect
+      if h > max-image-height {
+        h = max-image-height
+        w = h / aspect
       }
+      image(it.source, width: w, height: h, fit: "contain", alt: it.alt)
     })
   }
 

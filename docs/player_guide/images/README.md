@@ -21,7 +21,11 @@ that would benefit from one with a comment on its own line:
    `![The Banking Cycle dashboard during a Boom.](images/banking_dashboard_boom.png)`
    The caption becomes the figure caption in the PDF. Images are scaled to the
    text width, but none is drawn taller than 17 cm, so a tall panel comes out
-   narrower. Figures float to the top or bottom of a page, so one may land a
-   paragraph or two after its place in the text.
+   narrower. Nor is one drawn larger than its pixel density says (72 ppi when
+   the file has none), so a small crop, under about 800 pixels wide, would print
+   at a larger scale than the panels; save it at 120 ppi (with Pillow,
+   `im.save(path, dpi=(120, 120))`) and it prints at their scale, as
+   `UN_mission.png` does. Figures float to the top or bottom of a page, so one
+   may land a paragraph or two after its place in the text.
 3. Rebuild the PDF (`.venv/bin/python scripts/build_player_guide.py`) and commit
    the image, the chapter and the PDF together.

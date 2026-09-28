@@ -70,7 +70,7 @@ Penalty Scale shows the current multiplier.
 
 The journal entry holds three panels.
 
-<!-- screenshot: the Global Warming journal entry with the Climate Conditions and Mitigation Policies panels open -->
+![The Global Warming journal entry at 1.59 °C, status Significant: Climate Conditions, the status line, the eight Mitigation Policies (seven active) and Adoption Around the World.](images/global_warming_JE.png)
 
 Climate Conditions shows the Global Temperature with its status, the Change Last
 Year, Our Market's Emissions (with the amount captured), our Share of World

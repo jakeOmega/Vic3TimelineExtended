@@ -70,7 +70,7 @@ for a more volatile banking cycle is simply better with the Banking System off.
 Expect some laws, technologies and policies to become obvious picks when you
 turn a default system off.
 
-<!-- screenshot: the game setup screen with the mod's game rules listed -->
+![The mod's rules on the Game Rules screen, with the Cultural Hegemony tooltip open. The text under each setting says what it turns on or off.](images/game_rules.png)
 
 | Rule | Default | Settings and what they control | Chapter |
 |---|---|---|---|

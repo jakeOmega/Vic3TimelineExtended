@@ -18,7 +18,7 @@ the twentieth century, and eras 10 to 12 run from the present into the future.
 The game shows eras only by number; the periods below are the ones the mod's
 technologies were chosen to fit, so treat them as a rough guide.
 
-<!-- screenshot: the technology screen scrolled to eras 6 to 12, showing the production tree -->
+![Part of the production tree in eras 6 to 8, from Modern Materials and Television down to Cellular Networks and Personal Computers. The numeral under each icon is its era.](images/tech_tree_production_era_6_7_8.jpg)
 
 | Era | Rough period | Research cost per technology | Technologies | Broad theme |
 |---|---|---|---|---|
