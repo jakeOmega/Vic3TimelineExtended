@@ -1,0 +1,290 @@
+{
+ "notification_arms_race_pressure_desc": {
+  "en": "[SCOPE.sCountry('arms_race_rival').GetName] is matching our military buildup, increasing pressure on our defense budget.",
+  "de": "[SCOPE.sCountry('arms_race_rival').GetAltName('NOM')|U] zieht mit unserem militärischen Aufbau gleich und erhöht den Druck auf unseren Verteidigungshaushalt."
+ },
+ "notification_arms_race_pressure_name": {
+  "en": "Arms Race Pressure",
+  "de": "Druck durch Wettrüsten"
+ },
+ "notification_colonial_ceasefire_granted_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_colonial_power').GetName] has agreed a ceasefire with our independence movement and granted us independence. We are free.",
+  "de": "[SCOPE.sCountry('decol_colonial_power').GetAltName('NOM')|U] hat mit unserer Unabhängigkeitsbewegung einen Waffenstillstand vereinbart und uns die Unabhängigkeit gewährt. Wir sind frei."
+ },
+ "notification_colonial_ceasefire_granted_notice_name": {
+  "en": "Ceasefire and Independence",
+  "de": "Waffenstillstand und Unabhängigkeit"
+ },
+ "notification_colonial_crackdown_begun_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_colonial_power').GetName], our [concept_overlord], has launched a crackdown on our independence movement.",
+  "de": "[SCOPE.sCountry('decol_colonial_power').GetAltName('NOM')|U], unser [concept_overlord], hat gegen unsere Unabhängigkeitsbewegung durchgegriffen."
+ },
+ "notification_colonial_crackdown_begun_notice_name": {
+  "en": "Crackdown Begun",
+  "de": "Repression begonnen"
+ },
+ "notification_colonial_independence_granted_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_colonial_power').GetName] has granted us independence.",
+  "de": "[SCOPE.sCountry('decol_colonial_power').GetAltName('NOM')|U] hat uns die Unabhängigkeit gewährt."
+ },
+ "notification_colonial_independence_granted_notice_name": {
+  "en": "Independence Granted",
+  "de": "Unabhängigkeit gewährt"
+ },
+ "notification_colonial_negotiations_started_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_colonial_power').GetName], our [concept_overlord], has opened negotiations with us on greater autonomy.",
+  "de": "[SCOPE.sCountry('decol_colonial_power').GetAltName('NOM')|U], unser [concept_overlord], hat mit uns Verhandlungen über mehr Autonomie aufgenommen."
+ },
+ "notification_colonial_negotiations_started_notice_name": {
+  "en": "Autonomy Talks Opened",
+  "de": "Autonomiegespräche begonnen"
+ },
+ "notification_colonial_neocolonial_reforms_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_colonial_power').GetName], our [concept_overlord], has announced colonial reforms whose economic provisions favor its own firms and markets. We remain under its rule.",
+  "de": "[SCOPE.sCountry('decol_colonial_power').GetAltName('NOM')|U], unser [concept_overlord], hat koloniale Reformen angekündigt, deren wirtschaftliche Bestimmungen die eigenen Unternehmen und Märkte bevorzugen. Wir bleiben unter seiner Herrschaft."
+ },
+ "notification_colonial_neocolonial_reforms_notice_name": {
+  "en": "Reforms With Strings Attached",
+  "de": "Reformen mit Hintergedanken"
+ },
+ "notification_colonial_neocolonial_terms_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_colonial_power').GetName] has granted us independence, on economic terms that favor its own firms and markets.",
+  "de": "[SCOPE.sCountry('decol_colonial_power').GetAltName('NOM')|U] hat uns die Unabhängigkeit gewährt, zu wirtschaftlichen Bedingungen, die seine eigenen Unternehmen und Märkte bevorzugen."
+ },
+ "notification_colonial_neocolonial_terms_notice_name": {
+  "en": "Independence With Strings Attached",
+  "de": "Unabhängigkeit mit Hintergedanken"
+ },
+ "notification_colonial_reparations_paid_notice_desc": {
+  "en": "[SCOPE.sCountry('reparations_payer').GetName] has accepted our claim and paid the colonial reparations we demanded.",
+  "de": "[SCOPE.sCountry('reparations_payer').GetAltName('NOM')|U] hat unsere Forderung anerkannt und die von uns verlangten Kolonialreparationen gezahlt."
+ },
+ "notification_colonial_reparations_paid_notice_name": {
+  "en": "Reparations Paid",
+  "de": "Reparationen gezahlt"
+ },
+ "notification_colonial_reparations_refused_notice_desc": {
+  "en": "[SCOPE.sCountry('reparations_payer').GetName] has refused our demand for colonial reparations.",
+  "de": "[SCOPE.sCountry('reparations_payer').GetAltName('NOM')|U] hat unsere Forderung nach Kolonialreparationen abgelehnt."
+ },
+ "notification_colonial_reparations_refused_notice_name": {
+  "en": "Reparations Refused",
+  "de": "Reparationen abgelehnt"
+ },
+ "notification_colonial_territory_absorbed_notice_desc": {
+  "en": "[SCOPE.sCountry('collapsing_country').GetName] has been absorbed by [SCOPE.sCountry('absorbing_country').GetName] as the era of [concept_decolonization_system] reshapes the political map.",
+  "de": "[SCOPE.sCountry('collapsing_country').GetAltName('NOM')|U] wurde von [SCOPE.sCountry('absorbing_country').GetAltName('DAT')] annektiert, während das Zeitalter von [concept_decolonization_system] die politische Landkarte neu ordnet."
+ },
+ "notification_colonial_territory_absorbed_notice_name": {
+  "en": "Colonial Territory Absorbed",
+  "de": "Kolonialgebiet annektiert"
+ },
+ "notification_colonial_territory_collapsed_notice_desc": {
+  "en": "[SCOPE.sCountry('collapsing_country').GetName] has collapsed into disorganized territory, reverting to uncolonized land.",
+  "de": "[SCOPE.sCountry('collapsing_country').GetAltName('NOM')|U] ist zu unorganisiertem Gebiet zerfallen und wieder zu unkolonisiertem Land geworden."
+ },
+ "notification_colonial_territory_collapsed_notice_name": {
+  "en": "Colonial Territory Collapsed",
+  "de": "Kolonialgebiet zerfallen"
+ },
+ "notification_counter_propaganda_backlash_desc": {
+  "en": "[SCOPE.sCountry('propaganda_rival').GetName] has launched a counter-propaganda campaign that is undermining our messaging abroad.",
+  "de": "[SCOPE.sCountry('propaganda_rival').GetAltName('NOM')|U] hat eine Gegenpropagandakampagne gestartet, die unsere Botschaften im Ausland untergräbt."
+ },
+ "notification_counter_propaganda_backlash_name": {
+  "en": "Propaganda Countered",
+  "de": "Propaganda gekontert"
+ },
+ "notification_covert_severe_exposure_notice_desc": {
+  "en": "A foreign power has been caught running a covert campaign to bring down a government we stand behind. Their standing with us has suffered for it.",
+  "de": "Eine fremde Macht wurde dabei ertappt, wie sie eine verdeckte Kampagne führte, um eine Regierung zu stürzen, die wir unterstützen. Ihr Ansehen bei uns hat darunter gelitten."
+ },
+ "notification_covert_severe_exposure_notice_name": {
+  "en": "Foreign Subversion Exposed",
+  "de": "Fremde Umsturzversuche aufgedeckt"
+ },
+ "notification_decol_truce_proposal_accepted_notice_desc": {
+  "en": "[SCOPE.sCountry('truce_responder').GetName] has accepted our offer: a five-year truce now binds both our nations.",
+  "de": "[SCOPE.sCountry('truce_responder').GetAltName('NOM')|U] hat unser Angebot angenommen: Ein fünfjähriger Waffenstillstand bindet nun beide Nationen."
+ },
+ "notification_decol_truce_proposal_accepted_notice_name": {
+  "en": "Truce Accepted",
+  "de": "Waffenstillstand angenommen"
+ },
+ "notification_decol_truce_proposal_declined_notice_desc": {
+  "en": "[SCOPE.sCountry('truce_responder').GetName] has refused our offer of a five-year truce.",
+  "de": "[SCOPE.sCountry('truce_responder').GetAltName('NOM')|U] hat unser Angebot eines fünfjährigen Waffenstillstands abgelehnt."
+ },
+ "notification_decol_truce_proposal_declined_notice_name": {
+  "en": "Truce Refused",
+  "de": "Waffenstillstand abgelehnt"
+ },
+ "notification_espionage_agent_quietly_exposed_desc": {
+  "en": "One of our intelligence operatives has been quietly returned via a prisoner exchange with [SCOPE.sCountry('espionage_catcher').GetName]. Our network in the region is compromised.",
+  "de": "Einer unserer Geheimdienstagenten wurde still und leise im Rahmen eines Gefangenenaustauschs mit [SCOPE.sCountry('espionage_catcher').GetAltName('DAT')] zurückgegeben. Unser Netzwerk in der Region ist enttarnt."
+ },
+ "notification_espionage_agent_quietly_exposed_name": {
+  "en": "Agent Exchanged",
+  "de": "Agent ausgetauscht"
+ },
+ "notification_former_colony_ties_declined_notice_desc": {
+  "en": "[SCOPE.sCountry('ties_former_overlord').GetName] has turned down our proposal for closer ties.",
+  "de": "[SCOPE.sCountry('ties_former_overlord').GetAltName('NOM')|U] hat unseren Vorschlag für engere Beziehungen abgelehnt."
+ },
+ "notification_former_colony_ties_declined_notice_name": {
+  "en": "Overture Rebuffed",
+  "de": "Annäherung zurückgewiesen"
+ },
+ "notification_former_colony_ties_welcomed_notice_desc": {
+  "en": "[SCOPE.sCountry('ties_former_overlord').GetName] has welcomed our proposal for closer ties.",
+  "de": "[SCOPE.sCountry('ties_former_overlord').GetAltName('NOM')|U] hat unseren Vorschlag für engere Beziehungen begrüßt."
+ },
+ "notification_former_colony_ties_welcomed_notice_name": {
+  "en": "Closer Ties Welcomed",
+  "de": "Engere Beziehungen begrüßt"
+ },
+ "notification_gm_vanity_backlash_notice_desc": {
+  "en": "A new level of a Grand Monument opened while the country was in default, famine or recession. The state's people resent it, and the government's legitimacy suffers for about two years.",
+  "de": "Eine neue Stufe eines Großen Monuments wurde eröffnet, während sich das Land im Zahlungsausfall, in einer Hungersnot oder in einer Rezession befand. Die Bevölkerung des Staates nimmt es übel, und die Legitimität der Regierung leidet dadurch für etwa zwei Jahre."
+ },
+ "notification_gm_vanity_backlash_notice_name": {
+  "en": "A Palace amid Hardship",
+  "de": "Ein Palast inmitten der Not"
+ },
+ "notification_gp_condemnation_reforms_announced_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_colonial_power').GetName] has acknowledged our criticism of its colonial rule and announced reforms.",
+  "de": "[SCOPE.sCountry('decol_colonial_power').GetAltName('NOM')|U] hat unsere Kritik an seiner Kolonialherrschaft anerkannt und Reformen angekündigt."
+ },
+ "notification_gp_condemnation_reforms_announced_notice_name": {
+  "en": "Colonial Reforms Announced",
+  "de": "Koloniale Reformen angekündigt"
+ },
+ "notification_gp_condemnation_rejected_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_colonial_power').GetName] has rejected our condemnation of its colonial rule and doubled down.",
+  "de": "[SCOPE.sCountry('decol_colonial_power').GetAltName('NOM')|U] hat unsere Verurteilung seiner Kolonialherrschaft zurückgewiesen und sein Vorgehen noch verschärft."
+ },
+ "notification_gp_condemnation_rejected_notice_name": {
+  "en": "Condemnation Rejected",
+  "de": "Verurteilung zurückgewiesen"
+ },
+ "notification_gp_support_accepted_notice_desc": {
+  "en": "[SCOPE.sCountry('backed_colonial_power').GetName] has openly embraced our stance in defence of the colonial powers.",
+  "de": "[SCOPE.sCountry('backed_colonial_power').GetAltName('NOM')|U] hat sich offen zu unserer Haltung zur Verteidigung der Kolonialmächte bekannt."
+ },
+ "notification_gp_support_accepted_notice_name": {
+  "en": "A Colonial Power Stands With Us",
+  "de": "Eine Kolonialmacht steht uns bei"
+ },
+ "notification_gp_support_declined_notice_desc": {
+  "en": "[SCOPE.sCountry('backed_colonial_power').GetName] has publicly kept its distance from our stance in defence of the colonial powers.",
+  "de": "[SCOPE.sCountry('backed_colonial_power').GetAltName('NOM')|U] hat öffentlich Abstand von unserer Haltung zur Verteidigung der Kolonialmächte gehalten."
+ },
+ "notification_gp_support_declined_notice_name": {
+  "en": "A Colonial Power Keeps Its Distance",
+  "de": "Eine Kolonialmacht hält Abstand"
+ },
+ "notification_headlines_tech_ICBMs_desc": {
+  "en": "A successful test of an ICBM has been reported out of [SCOPE.sCountry('headlines_ICBMs_researcher').GetName]. #lore The development of rockets powerful enough to carry a payload between continents has staggering geopolitical implications. International analysts warn this technology could fundamentally alter the nature of warfare and global power dynamics... #!",
+  "de": "Ein erfolgreicher Test einer Interkontinentalrakete wurde aus [SCOPE.sCountry('headlines_ICBMs_researcher').GetAltName('DAT')] gemeldet. #lore Die Entwicklung von Raketen, die stark genug sind, um eine Nutzlast zwischen Kontinenten zu befördern, hat enorme geopolitische Auswirkungen. Internationale Analysten warnen, dass diese Technologie die Natur der Kriegsführung und die globalen Machtverhältnisse grundlegend verändern könnte... #!"
+ },
+ "notification_headlines_tech_ICBMs_name": {
+  "en": "#b ROCKETS NOW CAPABLE OF STRIKING ACROSS CONTINENTS #!",
+  "de": "#b RAKETEN JETZT FÄHIG, KONTINENTE ZU ÜBERSPANNEN #!"
+ },
+ "notification_headlines_tech_LGBTQ_rights_movement_desc": {
+  "en": "A significant social movement advocating for LGBTQ+ rights is gaining mainstream attention in [SCOPE.sCountry('headlines_LGBTQ_rights_movement_researcher').GetName]. #lore Activists are pushing for legal protections and societal acceptance for individuals with diverse sexual orientations and gender identities, challenging long-held social norms... #!",
+  "de": "Eine bedeutende soziale Bewegung, die sich für die Rechte von LGBTQ+-Personen einsetzt, gewinnt [SCOPE.sCountry('headlines_LGBTQ_rights_movement_researcher').GetAltName('IN')] zunehmend an gesellschaftlicher Aufmerksamkeit. #lore Aktivisten fordern rechtlichen Schutz und gesellschaftliche Akzeptanz für Menschen unterschiedlicher sexueller Orientierungen und Geschlechtsidentitäten und stellen damit lang etablierte soziale Normen infrage... #!"
+ },
+ "notification_headlines_tech_LGBTQ_rights_movement_name": {
+  "en": "#b CALLS FOR EQUALITY AND ACCEPTANCE GROW #!",
+  "de": "#b RUF NACH GLEICHBERECHTIGUNG UND AKZEPTANZ WIRD LAUTER #!"
+ },
+ "notification_headlines_tech_abyssal_plain_mining_desc": {
+  "en": "With the depletion of terrestrial mineral resources, companies in [SCOPE.sCountry('headlines_abyssal_plain_mining_researcher').GetName] are turning to the ocean floor for mining. #lore This abyssal-plain mining could provide access to valuable minerals, but it also raises environmental concerns... #!",
+  "de": "Angesichts der Erschöpfung der Bodenschätze an Land wenden sich Unternehmen [SCOPE.sCountry('headlines_abyssal_plain_mining_researcher').GetAltName('IN')] dem Bergbau auf dem Meeresboden zu. #lore Dieser Tiefseeebenen-Bergbau könnte Zugang zu wertvollen Mineralien verschaffen, wirft aber auch Umweltbedenken auf... #!"
+ },
+ "notification_headlines_tech_abyssal_plain_mining_name": {
+  "en": "#b MINING THE OCEAN FLOOR FOR RARE RESOURCES #!",
+  "de": "#b BERGBAU AUF DEM MEERESBODEN FÜR SELTENE ROHSTOFFE #!"
+ },
+ "notification_headlines_tech_additive_manufacturing_desc": {
+  "en": "Engineers in [SCOPE.sCountry('headlines_additive_manufacturing_researcher').GetName] have demonstrated a viable process for additive manufacturing. #lore Popularly known as '3D printing,' the technology builds items layer by layer from a digital model. Experts predict this will disrupt everything from prototyping to producing complex, on-demand parts... #!",
+  "de": "Ingenieure [SCOPE.sCountry('headlines_additive_manufacturing_researcher').GetAltName('IN')] haben ein praxistaugliches Verfahren für die additive Fertigung vorgeführt. #lore Landläufig als „3D-Druck“ bekannt, baut die Technologie Objekte Schicht für Schicht nach einem digitalen Modell auf. Experten erwarten, dass sie vom Prototypenbau bis zur Fertigung komplexer Teile nach Bedarf alles verändern wird... #!"
+ },
+ "notification_headlines_tech_additive_manufacturing_name": {
+  "en": "#b MANUFACTURING REVOLUTION: 'PRINTING' SOLID OBJECTS #!",
+  "de": "#b FERTIGUNGSREVOLUTION: FESTE OBJEKTE WERDEN „GEDRUCKT“ #!"
+ },
+ "notification_headlines_tech_advanced_agricultural_statistics_desc": {
+  "en": "Agronomists in [SCOPE.sCountry('headlines_advanced_agricultural_statistics_researcher').GetName] are applying advanced agricultural statistics to boost efficiency. #lore By analyzing crop data and livestock patterns with modern statistical methods, farms can optimize yields and resource use. The approach promises to make farming a more exact science... #!",
+  "de": "Agrarwissenschaftler [SCOPE.sCountry('headlines_advanced_agricultural_statistics_researcher').GetAltName('IN')] setzen fortschrittliche landwirtschaftliche Statistik ein, um die Effizienz zu steigern. #lore Durch die Analyse von Ernte- und Viehbestandsdaten mit modernen statistischen Methoden können Betriebe Erträge und Ressourceneinsatz optimieren. Der Ansatz verspricht, die Landwirtschaft zu einer exakteren Wissenschaft zu machen... #!"
+ },
+ "notification_headlines_tech_advanced_agricultural_statistics_name": {
+  "en": "#b FARMING BY THE NUMBERS PROMISES RECORD HARVESTS #!",
+  "de": "#b LANDWIRTSCHAFT NACH ZAHLEN VERSPRICHT REKORDERNTEN #!"
+ },
+ "notification_headlines_tech_advanced_assembly_lines_desc": {
+  "en": "Manufacturers in [SCOPE.sCountry('headlines_advanced_assembly_lines_researcher').GetName] are implementing advanced assembly lines. #lore Incorporating modular components and producing items only as needed allows for greater flexibility and reduced waste. Economists believe this will lower costs for a wide variety of consumer goods... #!",
+  "de": "Hersteller [SCOPE.sCountry('headlines_advanced_assembly_lines_researcher').GetAltName('IN')] führen fortschrittliche Fließbänder ein. #lore Der Einsatz modularer Bauteile und die Fertigung nach Bedarf ermöglichen größere Flexibilität und weniger Verschwendung. Ökonomen glauben, dass dies die Kosten für eine Vielzahl von Konsumgütern senken wird... #!"
+ },
+ "notification_headlines_tech_advanced_assembly_lines_name": {
+  "en": "#b FACTORIES ADOPT 'JUST-IN-TIME' PRODUCTION #!",
+  "de": "#b FABRIKEN SETZEN AUF „JUST-IN-TIME“-PRODUKTION #!"
+ },
+ "notification_headlines_tech_advanced_body_armor_desc": {
+  "en": "Military researchers in [SCOPE.sCountry('headlines_advanced_body_armor_researcher').GetName] have unveiled advanced body armor. #lore The use of lightweight composites and advanced ceramics offers superior protection without significantly increasing weight, a crucial factor for infantry mobility and effectiveness in combat situations... #!",
+  "de": "Militärforscher [SCOPE.sCountry('headlines_advanced_body_armor_researcher').GetAltName('IN')] haben fortschrittliche Körperschutzausrüstung vorgestellt. #lore Der Einsatz leichter Verbundwerkstoffe und moderner Keramik bietet besseren Schutz, ohne das Gewicht spürbar zu erhöhen – ein entscheidender Faktor für die Beweglichkeit und Kampfkraft der Infanterie... #!"
+ },
+ "notification_headlines_tech_advanced_body_armor_name": {
+  "en": "#b NEW COMPOSITE ARMOR INCREASES SOLDIER SURVIVABILITY #!",
+  "de": "#b NEUE VERBUNDPANZERUNG ERHÖHT ÜBERLEBENSCHANCEN DER SOLDATEN #!"
+ },
+ "notification_headlines_tech_advanced_materials_armor_desc": {
+  "en": "The armed forces of [SCOPE.sCountry('headlines_advanced_materials_armor_researcher').GetName] have begun to field vehicles with advanced materials armor. #lore By incorporating materials like Composite and Reactive Armor, military vehicles demonstrate a marked increase in their ability to withstand enemy fire, potentially changing the calculus of armored warfare... #!",
+  "de": "Die Streitkräfte [SCOPE.sCountry('headlines_advanced_materials_armor_researcher').GetAltName('GEN')] setzen nun Fahrzeuge mit fortschrittlicher Materialpanzerung ein. #lore Durch den Einsatz von Materialien wie Verbund- und Reaktivpanzerung zeigen Militärfahrzeuge eine deutlich verbesserte Widerstandsfähigkeit gegen feindlichen Beschuss, was die Logik der Panzerkriegsführung grundlegend verändern könnte... #!"
+ },
+ "notification_headlines_tech_advanced_materials_armor_name": {
+  "en": "#b NEXT-GEN ARMOR MAKES VEHICLES MORE RESILIENT #!",
+  "de": "#b PANZERUNG DER NÄCHSTEN GENERATION MACHT FAHRZEUGE WIDERSTANDSFÄHIGER #!"
+ },
+ "notification_headlines_tech_advanced_military_aircraft_desc": {
+  "en": "A new line of advanced military aircraft has been unveiled in [SCOPE.sCountry('headlines_advanced_military_aircraft_researcher').GetName]. #lore These latest designs boast superior speed, range, and armament capacity, setting a new standard for air combat and strategic [concept_power_projection] that other nations will be forced to match... #!",
+  "de": "[SCOPE.sCountry('headlines_advanced_military_aircraft_researcher').GetAltName('IN')|U] wurde eine neue Reihe fortschrittlicher Militärflugzeuge vorgestellt. #lore Diese neuesten Konstruktionen bieten überlegene Geschwindigkeit, Reichweite und Bewaffnung und setzen neue Maßstäbe für den Luftkampf und die strategische [concept_power_projection], denen andere Nationen gezwungen sein werden nachzuziehen... #!"
+ },
+ "notification_headlines_tech_advanced_military_aircraft_name": {
+  "en": "#b NEW GENERATION OF JETS DOMINATES THE SKIES #!",
+  "de": "#b NEUE GENERATION VON DÜSENJETS BEHERRSCHT DEN LUFTRAUM #!"
+ },
+ "notification_headlines_tech_advanced_nanofabrication_desc": {
+  "en": "A breakthrough in advanced nanofabrication is being reported from labs in [SCOPE.sCountry('headlines_advanced_nanofabrication_researcher').GetName]. #lore This unprecedented control over matter at the nanoscale is expected to have revolutionary applications in fields as diverse as medicine and electronics... #!",
+  "de": "Ein Durchbruch in der fortschrittlichen Nanofabrikation wird aus Laboren [SCOPE.sCountry('headlines_advanced_nanofabrication_researcher').GetAltName('IN')] gemeldet. #lore Diese beispiellose Kontrolle über Materie im Nanomaßstab dürfte revolutionäre Anwendungen in so unterschiedlichen Bereichen wie Medizin und Elektronik ermöglichen... #!"
+ },
+ "notification_headlines_tech_advanced_nanofabrication_name": {
+  "en": "#b BUILDING AT THE ATOMIC LEVEL NOW POSSIBLE #!",
+  "de": "#b BAUEN AUF ATOMARER EBENE NUN MÖGLICH #!"
+ },
+ "notification_headlines_tech_advanced_structural_engineering_desc": {
+  "en": "The construction industry of [SCOPE.sCountry('headlines_advanced_structural_engineering_researcher').GetName] is pioneering advanced structural engineering. #lore By combining high-strength composites and new welding techniques, structures can be built to be lighter and more durable, opening up new possibilities in architecture and industry... #!",
+  "de": "Die Bauindustrie [SCOPE.sCountry('headlines_advanced_structural_engineering_researcher').GetAltName('GEN')] ist Vorreiter im fortschrittlichen Bauingenieurwesen. #lore Durch die Kombination hochfester Verbundwerkstoffe mit neuen Schweißtechniken können Bauwerke leichter und langlebiger errichtet werden, was neue Möglichkeiten für Architektur und Industrie eröffnet... #!"
+ },
+ "notification_headlines_tech_advanced_structural_engineering_name": {
+  "en": "#b STRONGER, LIGHTER, BETTER: THE FUTURE OF CONSTRUCTION #!",
+  "de": "#b STÄRKER, LEICHTER, BESSER: DIE ZUKUNFT DES BAUWESENS #!"
+ },
+ "notification_headlines_tech_advanced_submarine_technology_desc": {
+  "en": "[SCOPE.sCountry('headlines_advanced_submarine_technology_researcher').GetAdjective] engineers have perfected advanced submarine technology. #lore Thanks to innovations like nuclear power and sound-dampening hulls, a new class of submarine is capable of greater speed and stealth. Naval analysts note these vessels will be exceptionally difficult to track... #!",
+  "de": "[SCOPE.sCountry('headlines_advanced_submarine_technology_researcher').GetAdjective|l]e Ingenieure haben die fortschrittliche U-Boot-Technologie perfektioniert. #lore Dank Innovationen wie Kernkraftantrieb und schalldämpfenden Rümpfen ist eine neue U-Boot-Klasse zu größerer Geschwindigkeit und Tarnung fähig. Marineanalysten weisen darauf hin, dass diese Schiffe außergewöhnlich schwer zu orten sein werden... #!"
+ },
+ "notification_headlines_tech_advanced_submarine_technology_name": {
+  "en": "#b SILENT HUNTERS PROWL THE DEEP #!",
+  "de": "#b STILLE JÄGER DURCHSTREIFEN DIE TIEFE #!"
+ },
+ "notification_headlines_tech_advanced_workflow_optimization_desc": {
+  "en": "Businesses in [SCOPE.sCountry('headlines_advanced_workflow_optimization_researcher').GetName] are seeing productivity gains through advanced workflow optimization. #lore Using the latest technology and data analysis to streamline processes, companies are cutting waste and increasing output, setting a new standard for operational management... #!",
+  "de": "Unternehmen [SCOPE.sCountry('headlines_advanced_workflow_optimization_researcher').GetAltName('IN')] verzeichnen Produktivitätsgewinne durch fortschrittliche Arbeitsablaufoptimierung. #lore Mit modernster Technologie und Datenanalyse zur Prozessoptimierung reduzieren Unternehmen Verschwendung und steigern den Ausstoß, was neue Maßstäbe für das Betriebsmanagement setzt... #!"
+ },
+ "notification_headlines_tech_advanced_workflow_optimization_name": {
+  "en": "#b DATA-DRIVEN EFFICIENCY SWEEPS INDUSTRIES #!",
+  "de": "#b DATENGETRIEBENE EFFIZIENZ ERFASST GANZE INDUSTRIEN #!"
+ }
+}
