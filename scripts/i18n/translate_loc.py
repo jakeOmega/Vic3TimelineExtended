@@ -845,6 +845,10 @@ def cmd_prepare_fixes(args) -> int:
     notes: dict[str, list[str]] = defaultdict(list)
     for key, en_term, rendering in term_mismatches(tm, load_terms(language), lang_field):
         notes[key].append(f"'{en_term}' must read '{rendering}' (inflected as needed)")
+    for spec in args.key_note or []:
+        key, _, note = spec.partition("=")
+        if key in tm:
+            notes[key].append(note)
     for spec in args.note or []:
         pattern, _, note = spec.partition("=")
         rx = re.compile(pattern)
@@ -906,6 +910,8 @@ def main(argv: list[str] | None = None) -> int:
     pf = sub.add_parser("prepare-fixes", help="write a correction chunk for check-terms mismatches")
     pf.add_argument("--note", action="append", metavar="REGEX=NOTE",
                     help="also correct translations matching REGEX, with this instruction")
+    pf.add_argument("--key-note", action="append", metavar="KEY=NOTE",
+                    help="also correct this key, with this instruction")
     sub.add_parser("check-terms", help="list translated lines that render a terms.json term differently")
     pr = sub.add_parser("prompt", help="print the standard agent prompt for chunks")
     pr.add_argument("chunks", nargs="+")
