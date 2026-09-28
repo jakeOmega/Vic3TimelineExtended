@@ -23,7 +23,7 @@
 # first. The first valid entry wins, and the trigger-less last entry is the name
 # before the first switch. Each switch is the technology that unlocks the
 # production method the new name describes, and a name that must also cover
-# buildings still on older methods says so (the Air and Space Port). Base-game
+# buildings still on older methods says so (the Skyport). Base-game
 # names keep the base game's wording and number.
 #
 # To add a building: give it a block here (opening with the rule entry), a
@@ -179,7 +179,8 @@ te_building_tourism_industry_name = {
 
 # Airport: Spaceport (Muon-Catalyzed Fusion Reactors, key
 # compact_fusion_reactors). The name has to cover airports still on the Airport
-# method too; Midland, Texas renamed its airport "Air and Space Port" in 2014.
+# method too, so it is Skyport rather than Spaceport. The word covers anything
+# that flies and has been in use since 1930s plans for city-centre airports.
 te_building_airport_name = {
 	type = country
 	random_valid = no
@@ -190,7 +191,7 @@ te_building_airport_name = {
 	}
 	text = {
 		trigger = { has_technology_researched = compact_fusion_reactors }
-		localization_key = building_airport_name_spaceport
+		localization_key = building_airport_name_skyport
 	}
 	text = {
 		trigger = { always = yes }

@@ -197,20 +197,20 @@ are Synthetic Dyes Industries.
 
 Eight buildings change their name as your technology advances. Each new name
 arrives with the technology that unlocks the production method it describes,
-such as Sound Film for the Entertainment Industry. The Air and Space Port is
-the exception: its name covers airports on either method, so it arrives with
+such as Sound Film for the Entertainment Industry. The Skyport is the
+exception: its name covers airports on either method, so it arrives with
 the Spaceport method's technology.
 
 | First name | Later names (technology) | With the rule off |
 |---|---|---|
-| Arts Academy | Entertainment Industry (Mass Media), Creative Industries (Digital Entertainment), Experience Industry (Brain-Computer Interfaces) | Creative Industries |
+| Arts Academy | Entertainment Industry (Mass Media), Creative Industry (Digital Entertainment), Experience Industry (Brain-Computer Interfaces) | Creative Industry |
 | Telephone Industries, the base game's Electrics Industries | Wired Telecommunications Industries (Modern Skyscrapers) | Wired Telecommunications Industries |
 | Radio Industries | Wireless Telecommunications Industries (Satellite Communications) | Wireless Telecommunications Industries |
 | Aircraft Industry | Aerospace Industry (Guided Missiles) | Aerospace Industry |
 | Glassworks | Glass and Plastics Industries (Plastic Mass Production) | Glassworks |
 | Consumer Appliance Industries | Consumer Electronics Industries (Personal Computers) | Consumer Appliance Industries |
 | Resorts and Hotels | Tourism Industry (Television Broadcasting) | Tourism Industry |
-| Airport | Air and Space Port (Muon-Catalyzed Fusion Reactors) | Airport |
+| Airport | Skyport (Muon-Catalyzed Fusion Reactors) | Airport |
 
 The name follows your own research, so every country's buildings of a type
 show the name your technology has reached, whatever their owners have
