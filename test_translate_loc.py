@@ -157,6 +157,15 @@ class TermCheckTests(unittest.TestCase):
                          [("b", "Tradecraft", "Spionagehandwerk")])
 
 
+class QuoteRepairTests(unittest.TestCase):
+    def test_plain_closing_quote_after_german_opening(self):
+        line = ' k:0 "„Man hört es." \\n\\n— Kommandant"\n'
+        self.assertEqual(t.repair_bare_quotes(line), '„Man hört es.“ \\n\\n— Kommandant')
+
+    def test_both_marks_plain(self):
+        self.assertEqual(t.repair_bare_quotes(' k:0 "Er sagte "Hallo" laut"'), "Er sagte „Hallo“ laut")
+
+
 class ChunkingTests(unittest.TestCase):
     def test_event_group_is_not_split(self):
         entries = [t.Entry("e_l_english.yml", f"ev.1.{s}", "word " * 10) for s in ("t", "d", "f", "a")]
@@ -222,16 +231,15 @@ class RoundTripTests(unittest.TestCase):
 
     def test_merge_accepts_good_lines_and_rejects_bad_ones(self):
         args = mock.Mock(language="german", field="de", chunks=[])
-        self.assertEqual(t.cmd_merge(args), 1)
+        self.assertEqual(t.cmd_merge(args), 1)  # law_x is still rejected
         tm = t.load_tm("german")
         self.assertEqual(tm["AFU"]["de"], "Afrikanische Union")
         self.assertEqual(tm["AFU_DAT"], {"en": "African Union", "de": "die Afrikanische Union", "base": "AFU"})
         self.assertNotIn("law_x", tm)  # dropped its concept link
-        self.assertNotIn("law_y", tm)  # bare quote inside the value
+        self.assertEqual(tm["law_y"]["de"], "Er sagte „Hallo“")  # bare quotes repaired
         with open(os.path.join(self.dirs[1], "merge_report.json"), encoding="utf-8") as fh:
             rejected = json.load(fh)["names-001"]["rejected"]
         self.assertTrue(any("concept links" in e for e in rejected["law_x"]))
-        self.assertTrue(any('bare "' in e for e in rejected["law_y"]))
         # The country forms live in the base key's file.
         self.assertTrue(os.path.isfile(os.path.join(self.dirs[0], "tm", "te_formable_countries.json")))
 

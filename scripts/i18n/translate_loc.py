@@ -636,22 +636,55 @@ def cmd_refresh(args) -> int:
     return 0
 
 
+def repair_bare_quotes(line: str) -> str | None:
+    """The value of a line whose text runs on past a bare `"` (the model closed
+    „a quotation" with a plain quote mark): everything up to the line's last
+    `"`, with each bare `"` inside turned into „ or “ by whether a quotation
+    is open. None if the line doesn't have that shape."""
+    start = line.find('"', line.find(":"))
+    end = line.rstrip().rfind('"')
+    if start == -1 or end <= start:
+        return None
+    inner = line[start + 1:end]
+    out, depth, i = [], 0, 0
+    while i < len(inner):
+        c = inner[i]
+        if c == "\\" and i + 1 < len(inner):
+            out.append(inner[i:i + 2])
+            i += 2
+            continue
+        if c == "„":
+            depth += 1
+        elif c == "“":
+            depth = max(0, depth - 1)
+        elif c == '"':
+            c = "“" if depth else "„"
+            depth = depth - 1 if depth else 1
+        out.append(c)
+        i += 1
+    return "".join(out)
+
+
 def read_output(work: str, chunk_id: str) -> tuple[dict[str, str], set[str]]:
     """Every `key:0 "value"` line from the agent's output part files, and the
-    keys whose line has text after the closing quote (a bare `"` inside the
-    value, which the game's loader would also cut at)."""
+    keys whose line had to be repaired (`repair_bare_quotes`): text after the
+    first closing quote, which the game's loader would cut at."""
     values: dict[str, str] = {}
-    broken: set[str] = set()
+    repaired: set[str] = set()
     for path in sorted(glob.glob(os.path.join(work, "out", chunk_id + ".*.txt"))):
         with open(path, encoding="utf-8-sig") as fh:
             for line in fh:
                 parsed = split_loc_line(line)
-                if parsed:
-                    values[parsed[0]] = parsed[1]
-                    trailing = parsed[2].strip()
-                    if trailing and not trailing.startswith("#"):
-                        broken.add(parsed[0])
-    return values, broken
+                if not parsed:
+                    continue
+                values[parsed[0]] = parsed[1]
+                trailing = parsed[2].strip()
+                if trailing and not trailing.startswith("#"):
+                    fixed = repair_bare_quotes(line)
+                    if fixed is not None:
+                        values[parsed[0]] = fixed
+                        repaired.add(parsed[0])
+    return values, repaired
 
 
 def cmd_merge(args) -> int:
@@ -666,7 +699,7 @@ def cmd_merge(args) -> int:
     report = {}
     totals = Counter()
     for chunk_id in chunk_ids:
-        output, broken = read_output(work, chunk_id)
+        output, repaired = read_output(work, chunk_id)
         if not output:
             continue
         info = manifest[chunk_id]
@@ -688,8 +721,8 @@ def cmd_merge(args) -> int:
                 errors, warnings = check_translation(en, value)
             else:
                 errors, warnings = ([] if value.strip() else ["empty translation"]), []
-            if key in broken:
-                errors.append('bare " inside the value (use „…“ for quotations)')
+            if key in repaired:
+                warnings = warnings + ['bare " inside the value, repaired to „…“']
             if errors:
                 rejects[key] = errors
                 continue
