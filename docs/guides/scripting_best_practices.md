@@ -305,7 +305,7 @@ state_building_my_building_max_level_add = {
 - `decimals`: Number of decimal places (0 for integers)
 - `game_data = { ai_value = N }`: Optional AI weight for PM selection
 - `boolean = yes`: For yes/no flag modifiers
-- `script_only = yes`: For modifiers used only by scripted effects (no PM/modifier display)
+- `script_only = yes`: For modifiers the engine never consumes natively; only script reads them (`modifier:X`). They still render in modifier tooltips like any other field
 
 ### Localization
 
@@ -3343,7 +3343,7 @@ Engine pattern: wrap effects in `show_as_tooltip = { ... }` and the engine rende
 
 Repo example: `events/un_vote_events.txt` `un_vote.1` option A wraps a per-topic `if = { limit = { scope:un_resolution ?= { has_tag = un_topic_X } } add_modifier = { name = ... } }` switch in `show_as_tooltip` so voters see the treaty modifier they would receive if the resolution passes — the actual `add_modifier` runs later in `un_vote.3` option A, not at vote-cast time.
 
-Second repo example: every covert diplomatic action (`common/diplomatic_actions/covert_operations.txt`) previews in its `accept_effect` the static modifiers its operation's monthly pulse will apply. Two things to know when the real apply is scaled: preview the **unscaled** modifier (no `multiplier`, no duration) under a header that says so, and state the scaling in words, rather than rendering one scaled case; and a field whose modifier type is `script_only = yes` (`country_coup_resistance_add`, the mod's `country_bubble_pressure_monthly_add`, …) is not listed in the rendered modifier, so it needs its own `custom_tooltip` line. `test_covert_launch_preview.py` pins the preview to the pulse.
+Second repo example: every covert diplomatic action (`common/diplomatic_actions/covert_operations.txt`) previews in its `accept_effect` the static modifiers its operation's monthly pulse will apply. Two things to know when the real apply is scaled: preview the **unscaled** modifier (no `multiplier`, no duration) under a header that says so, and state the scaling in words, rather than rendering one scaled case. A `script_only = yes` field (`country_coup_resistance_add`, the mod's `country_colonial_stability_drift_add`, …) *is* listed in the rendered modifier; only modifiers on other scopes (movements, states) and conditional parts need their own `custom_tooltip` line. Word those lines without "above" or "below": in the covert launch tooltip the `scope:target_country` block rendered after every root-level `custom_tooltip`, although it was scripted before them, so the "Not listed above" lines #458 shipped sat over a list that was below them and did list the field. `test_covert_launch_preview.py` pins the preview to the pulse and keeps its lines position-neutral.
 
 Don't pair `show_as_tooltip = { add_modifier = X }` with a separate scripted-effect call that *also* adds X — the engine tooltip will list the modifier twice. Either preview-only (the real apply is elsewhere) or apply-only (no wrapper needed). When you need both visibility and execution at the same site, just write `add_modifier` directly at the option level — the engine auto-tooltips it.
 
@@ -3371,7 +3371,6 @@ The engine auto-generates tooltip text for some effect-block contents and stays 
 - `trigger_event` — the chained event isn't previewed.
 - Scope iterators (`every_country`, `every_scope_state`, etc.) — the inner block's effects don't bubble up.
 - Anything inside `hidden_effect = { ... }` (intentional).
-- A `script_only = yes` modifier in any modifier block (law, amendment, static modifier). It never appears in the effects list, so name it in the `_desc` or tooltip loc (`covert_regime_change_desc`, `amendment_collective_leadership_desc`). A block whose only entries are script_only reads as "does nothing".
 
 **Antipattern**: wrapping the entire effect block in `custom_tooltip = { text = "X_DESC" ... add_modifier = ... change_variable = ... }`. The text replaces the auto-render entirely — so the modifier values that *would* have rendered automatically are now hand-typed in `X_DESC`, and they drift from the modifier definitions over time. The mod's `un_buttons.txt` had this for years before the autogen rewrite.
 

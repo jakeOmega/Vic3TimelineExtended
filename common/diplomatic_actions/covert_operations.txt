@@ -10,11 +10,14 @@
 # LAUNCH PREVIEW: each accept_effect shows what its operation does, at base
 # strength (established, priority 1). show_as_tooltip renders the same static
 # modifiers covert_ops_apply_all_phase_effects applies, unscaled and with no
-# duration; nothing in it runs. The <type>_extra_tt lines after it state what
-# the engine cannot list: script_only fields, modifiers on movements or
-# states, and conditional parts. covert_op_phase_warning_tt then says how
-# phase and priority scale all of it. test_covert_launch_preview.py keeps the
-# preview in step with the pulse.
+# duration; nothing in it runs. It lists every field, script_only ones
+# included. The <type>_extra_tt lines after it state what the engine cannot
+# list: modifiers on movements or states, and conditional parts.
+# covert_op_phase_warning_tt then says how phase and priority scale all of it.
+# In game the scope:target_country block renders after the root-level lines
+# even though it is scripted before them, so no line here may say "above" or
+# "below". test_covert_launch_preview.py keeps the preview in step with the
+# pulse.
 #
 # AI DESIGN:
 # - Low evaluation_chance (0.02–0.05) — strategic long-term decisions, not
@@ -222,9 +225,6 @@ covert_financial_subversion_action = {
 			scope:target_country = {
 				add_modifier = { name = covert_financial_subversion }
 			}
-		}
-		custom_tooltip = {
-			text = covert_financial_subversion_extra_tt
 		}
 		custom_tooltip = {
 			text = covert_op_phase_warning_tt
@@ -1317,9 +1317,6 @@ covert_destabilization_action = {
 			}
 		}
 		custom_tooltip = {
-			text = covert_destabilization_extra_tt
-		}
-		custom_tooltip = {
 			text = covert_op_phase_warning_tt
 		}
 		custom_tooltip = {
@@ -1660,9 +1657,6 @@ covert_nuclear_sabotage_action = {
 			scope:target_country = {
 				add_modifier = { name = covert_nuclear_sabotage }
 			}
-		}
-		custom_tooltip = {
-			text = covert_nuclear_sabotage_extra_tt
 		}
 		custom_tooltip = {
 			text = covert_op_phase_warning_tt

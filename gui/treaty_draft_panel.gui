@@ -972,10 +972,22 @@ types treaty_draft_panel_types
 
 				### MUTUAL AGREEMENT
 				treaty_textbox = {
-					visible = "[ArticleDraft.HasKind('mutual')]"
+					visible = "[And(ArticleDraft.HasKind('mutual'), Not(And(ArticleDraft.RequiresInput('quantity'), Not(ArticleDraft.RequiresInput('goods')))))]"
 					text = "[ArticleDraft.GetShortDesc]"
 					autoresize = yes
 					maximumsize = { 290 60 }
+					align = nobaseline
+					using = elide_fontsize_min
+					multiline = yes
+				}
+
+				### MUTUAL AGREEMENT WITH A QUANTITY (TE)
+				# Narrower, to leave room for the quantity button below.
+				treaty_textbox = {
+					visible = "[And(ArticleDraft.HasKind('mutual'), And(ArticleDraft.RequiresInput('quantity'), Not(ArticleDraft.RequiresInput('goods'))))]"
+					text = "[ArticleDraft.GetShortDesc]"
+					autoresize = yes
+					maximumsize = { 170 60 }
 					align = nobaseline
 					using = elide_fontsize_min
 					multiline = yes
@@ -1013,6 +1025,45 @@ types treaty_draft_panel_types
 						margin_left = 10
 						using = elide_fontsize_min
 						text = "TREATY_DRAFT_SELECTED_MONEY_ARTICLE_AMOUNT"
+					}
+				}
+
+				### QUANTITY (GENERIC - NOT MONEY OR GOODS)
+				button = {
+					visible = "[And(ArticleDraft.RequiresInput('quantity'), Not(Or(Or(ArticleDraft.HasType('bankroll'), ArticleDraft.HasType('money_transfer')), ArticleDraft.RequiresInput('goods'))))]"
+					tooltip = "ARTICLE_DRAFT_CLICK_TO_CHANGE"
+					enabled = "[ArticleDraft.CanBeModified]"
+					size = { 110 30 }
+					using = default_button
+
+					block "right_click_menu_onclick" {
+						onclick = "[RightClickMenuManager.Close]"
+						onclick = "[RightClickMenuManager.ToggleArticleDraftInput(TreatyDraft.Self, ArticleDraft.Self, Country.Self, PdxGuiWidget.AccessSelf, 'article_input_right_click_menu_left')]"
+					}
+
+					flowcontainer = {
+						parentanchor = vcenter
+						margin_left = 10
+						spacing = 4
+
+						textbox = {
+							parentanchor = vcenter
+							autoresize = yes
+							align = nobaseline
+							max_width = 40
+							using = elide_fontsize_min
+							text = "TE_TREATY_DRAFT_SELECTED_QUANTITY"
+						}
+
+						textbox = {
+							visible = "[ArticleDraft.HasType('nuclear_arms_limitation')]"
+							parentanchor = vcenter
+							autoresize = yes
+							align = nobaseline
+							max_width = 55
+							using = elide_fontsize_min
+							text = "TE_ARTICLE_QUANTITY_UNIT_WARHEADS"
+						}
 					}
 				}
 
@@ -1951,8 +2002,10 @@ types treaty_draft_panel_types
 			}
 
 			### Number of this Article's input options
+			# Hidden for nuclear_arms_limitation (TE) as for the money transfer:
+			# a raw quantity has no options to count.
 			available_options_number = {
-				visible = "[And( Not( ArticleType.HasFlag('is_money_transfer') ), Not( ArticleType.HasType('free_text') ) )]"
+				visible = "[And( Not( ArticleType.HasFlag('is_money_transfer') ), Not( Or( ArticleType.HasType('free_text'), ArticleType.HasType('nuclear_arms_limitation') ) ) )]"
 
 				blockoverride "text" {
 					raw_text = "#b [TreatyDraft.GetNumAvailableInputOptions(ArticleType.Self, Country.Self)|+]#!"

@@ -34,8 +34,8 @@ country_nuclear_program_pause_bool = {
 
 country_nuclear_program_progress_mult = {
 	color = good
-	percent = no
-	decimals = 2
+	percent = yes
+	decimals = 0
 	game_data = {
 		ai_value = 100
 	}
