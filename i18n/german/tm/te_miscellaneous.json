@@ -13766,5 +13766,477 @@
  "st_res_policy_label_sell_thr_down_tooltip": {
   "en": "#bold Lower the release threshold#!\\nStart releasing at a smaller premium. The release threshold cannot fall below base price, and it must stay far enough above the purchase threshold that the two bands never overlap.\\nSteps by [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_thr_step')|0].\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)22' ) ).End )]",
   "de": "#bold Die Freigabeschwelle senken#!\\nDie Freigabe bei einem geringeren Aufschlag beginnen. Die Freigabeschwelle kann nicht unter den Basispreis fallen und muss so weit über der Kaufschwelle bleiben, dass sich die beiden Bänder nie überschneiden.\\nSchritte von [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_thr_step')|0].\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)22' ) ).End )]"
+ },
+ "un_vote_physical_protection_passed_tt": {
+  "en": "The Convention on the Physical Protection of Nuclear Material was adopted. #G UN credibility +1, moving [concept_un_authority]'s target.#! Its parties' custody of their warheads counts as secured: #G half#! as many go missing whenever they change hands, and each month there is a #v 3%#! chance to find one of theirs that already has.",
+  "de": "Das Übereinkommen über den physischen Schutz von Kernmaterial wurde angenommen. #G UN-Glaubwürdigkeit +1, wodurch sich das Ziel der [concept_un_authority] verschiebt.#! Die Verwahrung der Sprengköpfe seiner Vertragsparteien gilt als gesichert: #G Nur halb so viele#! gehen bei jedem Besitzerwechsel verloren, und jeden Monat besteht eine #v 3%#! Chance, einen ihrer bereits als vermisst geltenden Sprengköpfe wiederzufinden."
+ },
+ "un_vote_reform_1_passed_tt": {
+  "en": "Charter Reform I is adopted by a two-thirds supermajority. #G The ceiling on [concept_un_authority]'s target rises from 70 to 85#!, opening the Strong tier — where sanctions become embargoes, condemnation isolates, and [concept_un_dues] rise to 0.4% of GDP — and #G UN credibility +2#!.",
+  "de": "Die Chartareform I wird mit einer Zweidrittelmehrheit angenommen. #G Die Obergrenze für das Ziel der [concept_un_authority] steigt von 70 auf 85#!, wodurch die Stufe „Stark“ freigeschaltet wird — dort werden aus Sanktionen Embargos, isoliert eine Verurteilung, und die [concept_un_dues] steigen auf 0,4% des BIP — sowie #G UN-Glaubwürdigkeit +2#!."
+ },
+ "un_vote_reform_2_passed_tt": {
+  "en": "Charter Reform II is adopted by a two-thirds supermajority. #G The ceiling on [concept_un_authority]'s target rises from 85 to 100#!, opening the Supranational tier — where [concept_un_dues] rise to 1% of GDP and every major member embargoes the sanctioned — and #G UN credibility +2#!. #Y Veto restraint:#! from now on a two-thirds supermajority carries a resolution over a [Concept('concept_un_veto','veto')].",
+  "de": "Die Chartareform II wird mit einer Zweidrittelmehrheit angenommen. #G Die Obergrenze für das Ziel der [concept_un_authority] steigt von 85 auf 100#!, wodurch die Stufe „Supranational“ freigeschaltet wird — dort steigen die [concept_un_dues] auf 1% des BIP, und jedes Großmitglied verhängt ein Embargo gegen die Sanktionierten — sowie #G UN-Glaubwürdigkeit +2#!. #Y Veto-Beschränkung:#! Von nun an setzt sich eine Zweidrittelmehrheit über ein [Concept('concept_un_veto','Veto')] hinweg."
+ },
+ "un_vote_reform_passed_tt": {
+  "en": "The Charter Reform was adopted. #G UN credibility +1.5, moving [concept_un_authority]'s target.#!",
+  "de": "Die Chartareform wurde angenommen. #G UN-Glaubwürdigkeit +1, wodurch sich das Ziel der [concept_un_authority] verschiebt.#!"
+ },
+ "un_vote_reform_passed_vetoed_tt": {
+  "en": "The charter reform carried the Assembly but was vetoed in the Security Council. Charter changes need the permanent members' consent — there is no graduated fallback, and the ceiling stays where it is.",
+  "de": "Die Chartareform fand eine Mehrheit in der Generalversammlung, wurde jedoch im Sicherheitsrat mit einem Veto belegt. Chartaänderungen bedürfen der Zustimmung der ständigen Mitglieder — es gibt keine abgestufte Ausweichlösung, und die Obergrenze bleibt unverändert."
+ },
+ "un_vote_refugee_passed_tt": {
+  "en": "The International Refugee Resolution was adopted. #G UN credibility +1, moving [concept_un_authority]'s target.#! The UN High Commissioner for Refugees (UNHCR) is established.",
+  "de": "Die Internationale Flüchtlingsresolution wurde angenommen. #G UN-Glaubwürdigkeit +1, wodurch sich das Ziel der [concept_un_authority] verschiebt.#! Das Amt des Hohen Flüchtlingskommissars der Vereinten Nationen (UNHCR) wird eingerichtet."
+ },
+ "un_vote_sanctions_passed_tt": {
+  "en": "The sanctions resolution has passed. Sanctions are now in effect against the target nation, scaled by the UN's [concept_un_enforcement] (#v ×[GetGlobalVariable('un_enforcement_now').GetValue|1]#! at the current tier). #G UN credibility +1, moving [concept_un_authority]'s target.#!",
+  "de": "Die Sanktionsresolution wurde angenommen. Gegen das Zielland gelten nun Sanktionen, skaliert nach der [concept_un_enforcement] der UN (#v ×[GetGlobalVariable('un_enforcement_now').GetValue|1]#! auf der aktuellen Stufe). #G UN-Glaubwürdigkeit +1, wodurch sich das Ziel der [concept_un_authority] verschiebt.#!"
+ },
+ "un_vote_sanctions_passed_vetoed_tt": {
+  "en": "The sanctions resolution passed the GA but was vetoed in the Security Council. #G UN credibility +0.5, moving [concept_un_authority]'s target.#! Voluntary partial sanctions only — no enforcer benefits, milder penalties on the target, scaled by the UN's [concept_un_enforcement] (#v ×[GetGlobalVariable('un_enforcement_now').GetValue|1]#!).",
+  "de": "Die Sanktionsresolution fand eine Mehrheit in der Generalversammlung, wurde jedoch im Sicherheitsrat mit einem Veto belegt. #G UN-Glaubwürdigkeit +0,5, wodurch sich das Ziel der [concept_un_authority] verschiebt.#! Es gelten nur freiwillige Teilsanktionen — keine Vorteile für Durchsetzende, mildere Strafen für das Ziel, skaliert nach der [concept_un_enforcement] der UN (#v ×[GetGlobalVariable('un_enforcement_now').GetValue|1]#!)."
+ },
+ "un_vote_space_passed_tt": {
+  "en": "The Space Cooperation Resolution was adopted. #G UN credibility +1, moving [concept_un_authority]'s target.#! The UN Office for Outer Space Affairs (UNOOSA) is established.",
+  "de": "Die Resolution zur Weltraumkooperation wurde angenommen. #G UN-Glaubwürdigkeit +1, wodurch sich das Ziel der [concept_un_authority] verschiebt.#! Das Büro der Vereinten Nationen für Weltraumfragen (UNOOSA) wird eingerichtet."
+ },
+ "un_vote_success_reward": {
+  "en": "Successful UN Resolution",
+  "de": "Erfolgreiche UN-Resolution"
+ },
+ "un_vote_veto_overridden_tt": {
+  "en": "#G The veto was overridden.#! Under Charter Reform II (veto restraint), a two-thirds supermajority of the members with a vote carries a resolution over a permanent member's veto, in its full form.",
+  "de": "#G Das Veto wurde überstimmt.#! Gemäß Chartareform II (Veto-Beschränkung) setzt sich eine Zweidrittelmehrheit der stimmberechtigten Mitglieder in voller Form über das Veto eines ständigen Mitglieds hinweg."
+ },
+ "un_walkout_condemn_modifier": {
+  "en": "Condemned Assembly Walkout",
+  "de": "Verurteilter Auszug aus der Versammlung"
+ },
+ "un_walkout_join_modifier": {
+  "en": "Joined Assembly Walkout",
+  "de": "Auszug aus der Versammlung mitgetragen"
+ },
+ "un_walkout_mediator_modifier": {
+  "en": "Assembly Walkout Mediator",
+  "de": "Vermittler beim Auszug aus der Versammlung"
+ },
+ "un_withdrawal_penalty_modifier": {
+  "en": "UN Withdrawal Consequences",
+  "de": "Folgen des UN-Austritts"
+ },
+ "veteran_mental_health_modifier": {
+  "en": "Veteran Mental Health Services",
+  "de": "Psychosoziale Versorgung für Veteranen"
+ },
+ "veterancy5": {
+  "en": "Veteran",
+  "de": "Veteran"
+ },
+ "veterancy6": {
+  "en": "Commando",
+  "de": "Kommando"
+ },
+ "veterancy7": {
+  "en": "Elite",
+  "de": "Elite"
+ },
+ "veterancy8": {
+  "en": "Legendary",
+  "de": "Legendär"
+ },
+ "veterans_peace_testimony_modifier": {
+  "en": "Veterans’ Peace Testimony",
+  "de": "Friedenszeugnis der Veteranen"
+ },
+ "veterans_testimony_movement_calming": {
+  "en": "Veterans’ Testimony (Anti-War)",
+  "de": "Zeugnis der Veteranen (Antikriegsbewegung)"
+ },
+ "voluntary_union_action_name": {
+  "en": "Voluntary Union",
+  "de": "Freiwillige Union"
+ },
+ "voluntary_union_action_notification_name": {
+  "en": "Voluntary Union",
+  "de": "Freiwillige Union"
+ },
+ "voluntary_union_action_propose_name": {
+  "en": "Propose Voluntary Union",
+  "de": "Freiwillige Union vorschlagen"
+ },
+ "voluntary_union_decentralized_action_name": {
+  "en": "Integrate Decentralized Power",
+  "de": "Dezentrale Macht integrieren"
+ },
+ "voluntary_union_decentralized_action_notification_name": {
+  "en": "Decentralized Power Integrated",
+  "de": "Dezentrale Macht integriert"
+ },
+ "voluntary_union_decentralized_action_notification_third_party_name": {
+  "en": "Decentralized Power Integrated",
+  "de": "Dezentrale Macht integriert"
+ },
+ "voluntary_union_decentralized_action_propose_name": {
+  "en": "Integrate Decentralized Power",
+  "de": "Dezentrale Macht integrieren"
+ },
+ "voluntary_union_decentralized_culture_tt": {
+  "en": "Requires the target share one of your primary cultures, until Globalization is researched — which lifts the cultural restriction entirely",
+  "de": "Erfordert, dass das Ziel eine unserer Hauptkulturen teilt, bis Globalisierung erforscht ist — danach entfällt die kulturelle Einschränkung vollständig"
+ },
+ "war_crime_coverup_modifier": {
+  "en": "Atrocity Covered Up",
+  "de": "Vertuschte Gräueltat"
+ },
+ "war_crime_reform_modifier": {
+  "en": "Military Doctrine Reform",
+  "de": "Reform der Militärdoktrin"
+ },
+ "war_crime_scandal_modifier": {
+  "en": "War Crimes Scandal",
+  "de": "Kriegsverbrechen-Skandal"
+ },
+ "war_crime_tribunal_modifier": {
+  "en": "War Crimes Tribunal",
+  "de": "Kriegsverbrechertribunal"
+ },
+ "war_goal_te_reunify_country": {
+  "en": "Reunify with [WAR_GOAL_DRAFT.GetTarget.GetName]",
+  "de": "Wiedervereinigung mit [WAR_GOAL_DRAFT.GetTarget.GetName]"
+ },
+ "war_goal_te_reunify_country_desc": {
+  "en": "[WAR_GOAL_DRAFT.GetHolder.GetName] absorbs [WAR_GOAL_DRAFT.GetTarget.GetName] in the name of national reunification.",
+  "de": "[WAR_GOAL_DRAFT.GetHolder.GetName] annektiert [WAR_GOAL_DRAFT.GetTarget.GetName] im Namen der nationalen Wiedervereinigung."
+ },
+ "war_goal_te_reunify_country_sway_desc": {
+  "en": "Try to convince [WAR_GOAL_DRAFT.GetHolder.GetName] to join our side by allowing them to reunify with [WAR_GOAL_DRAFT.GetTarget.GetName].",
+  "de": "Versucht, [WAR_GOAL_DRAFT.GetHolder.GetName] auf unsere Seite zu ziehen, indem wir ihnen die Wiedervereinigung mit [WAR_GOAL_DRAFT.GetTarget.GetName] ermöglichen."
+ },
+ "war_goal_te_reunify_country_type_desc": {
+  "en": "Annex a [concept_country] that shares our primary culture and whose [concept_homeland] we hold sweeping claims on. Cheaper in #b [concept_infamy]#! than a generic annexation when the target's states are in our cultural homeland.",
+  "de": "Annektiert ein [concept_country], das unsere Hauptkultur teilt und dessen [concept_homeland] wir mit weitreichenden Ansprüchen beanspruchen. Günstiger in #b [concept_infamy]#! als eine gewöhnliche Annexion, wenn die Staaten des Ziels in unserem kulturellen Heimatland liegen."
+ },
+ "war_goal_te_reunify_country_type_name": {
+  "en": "Reunify the Nation",
+  "de": "Die Nation wiedervereinigen"
+ },
+ "war_goal_te_un_mandate_restore_state": {
+  "en": "Recover [WAR_GOAL_DRAFT.GetTargetState.GetName] under UN mandate",
+  "de": "[WAR_GOAL_DRAFT.GetTargetState.GetName] unter UN-Mandat zurückgewinnen"
+ },
+ "war_goal_te_un_mandate_restore_state_desc": {
+  "en": "[WAR_GOAL_DRAFT.GetTarget.GetName] returns the [concept_state] of [WAR_GOAL_DRAFT.GetTargetState.GetName] to [WAR_GOAL_DRAFT.GetHolder.GetName], as the [concept_un_general_assembly] authorized. It costs no [concept_infamy]. #R Adding any other demand against that country for territory, subjugation, regime change or humiliation voids the mandate.#!",
+  "de": "[WAR_GOAL_DRAFT.GetTarget.GetName] gibt den [concept_state] [WAR_GOAL_DRAFT.GetTargetState.GetName] an [WAR_GOAL_DRAFT.GetHolder.GetName] zurück, wie von der [concept_un_general_assembly] genehmigt. Dies kostet keine [concept_infamy]. #R Jede weitere Forderung gegen dieses Land nach Gebiet, Unterwerfung, Regimewechsel oder Demütigung macht das Mandat ungültig.#!"
+ },
+ "war_goal_te_un_mandate_restore_state_sway_desc": {
+  "en": "Try to convince [WAR_GOAL_DRAFT.GetHolder.GetName] to join our side by helping them recover [WAR_GOAL_DRAFT.GetTargetState.GetName] under their UN mandate.",
+  "de": "Versucht, [WAR_GOAL_DRAFT.GetHolder.GetName] auf unsere Seite zu ziehen, indem wir ihnen helfen, [WAR_GOAL_DRAFT.GetTargetState.GetName] im Rahmen ihres UN-Mandats zurückzugewinnen."
+ },
+ "war_goal_te_un_mandate_restore_state_type_desc": {
+  "en": "Recover a [concept_state] the [concept_un_general_assembly] has authorized us by name to recover, from the state it named. Costs no #b [concept_infamy]#! while the mandate stands. Available only against that state, for that [concept_state_region], and in a single [concept_diplomatic_play] — adding any further territorial or subjugation demand against the same state voids the mandate.",
+  "de": "Gewinnt einen [concept_state] zurück, den die [concept_un_general_assembly] uns namentlich zur Rückgewinnung genehmigt hat, von dem darin genannten Staat. Kostet keine #b [concept_infamy]#!, solange das Mandat besteht. Nur gegen diesen Staat, für diese [concept_state_region] und in einem einzigen [concept_diplomatic_play] verfügbar — jede weitere Gebiets- oder Unterwerfungsforderung gegen denselben Staat macht das Mandat ungültig."
+ },
+ "war_goal_te_un_mandate_restore_state_type_name": {
+  "en": "Authorized Restoration",
+  "de": "Genehmigte Restauration"
+ },
+ "war_on_drugs_modifier": {
+  "en": "War on Drugs",
+  "de": "Krieg gegen Drogen"
+ },
+ "war_profit_tax_modifier": {
+  "en": "Excess War Profits Tax",
+  "de": "Sondersteuer auf Kriegsgewinne"
+ },
+ "war_profiteering_investigation_modifier": {
+  "en": "War Profiteering Investigation",
+  "de": "Ermittlung wegen Kriegsgewinnlerei"
+ },
+ "water_crisis_infrastructure_modifier": {
+  "en": "Water Infrastructure Investment",
+  "de": "Investition in die Wasserinfrastruktur"
+ },
+ "water_crisis_ministry_modifier": {
+  "en": "Ministry Water Management",
+  "de": "Ministerielles Wassermanagement"
+ },
+ "water_crisis_rationing_modifier": {
+  "en": "Water Rationing",
+  "de": "Wasserrationierung"
+ },
+ "we_am_annihilation_military": {
+  "en": "Antimatter Weapons Integration",
+  "de": "Integration von Antimateriewaffen"
+ },
+ "we_am_annihilation_propulsion": {
+  "en": "Antimatter Propulsion",
+  "de": "Antimaterie-Antrieb"
+ },
+ "we_am_breach_press_ahead": {
+  "en": "Accelerated Antimatter Program",
+  "de": "Beschleunigtes Antimaterieprogramm"
+ },
+ "we_am_breach_rebuild": {
+  "en": "Antimatter Safety Reconstruction",
+  "de": "Antimaterie-Sicherheitswiederaufbau"
+ },
+ "we_am_breakthrough_military": {
+  "en": "Antimatter Military Applications",
+  "de": "Militärische Antimaterie-Anwendungen"
+ },
+ "we_am_breakthrough_research": {
+  "en": "Antimatter Research Breakthrough",
+  "de": "Durchbruch in der Antimaterieforschung"
+ },
+ "we_am_incident_suppress": {
+  "en": "Suppressed Antimatter Incident",
+  "de": "Vertuschter Antimaterie-Zwischenfall"
+ },
+ "we_am_incident_transparent": {
+  "en": "Transparent Antimatter Investigation",
+  "de": "Transparente Antimaterie-Untersuchung"
+ },
+ "we_am_propulsion_civilian": {
+  "en": "Civilian Antimatter Applications",
+  "de": "Zivile Antimaterie-Anwendungen"
+ },
+ "we_am_propulsion_military": {
+  "en": "Military Antimatter Logistics",
+  "de": "Militärische Antimaterie-Logistik"
+ },
+ "we_ob_arms_race_maintain": {
+  "en": "Orbital Arms Race",
+  "de": "Orbitales Wettrüsten"
+ },
+ "we_ob_arms_race_treaty": {
+  "en": "Orbital Arms Limitation",
+  "de": "Orbitale Rüstungsbegrenzung"
+ },
+ "we_ob_deterrence_negotiate": {
+  "en": "Negotiation from Strength",
+  "de": "Verhandeln aus einer Position der Stärke"
+ },
+ "we_ob_deterrence_strength": {
+  "en": "Orbital Deterrence",
+  "de": "Orbitale Abschreckung"
+ },
+ "we_ob_highground_accelerate": {
+  "en": "Accelerated Battlestation Program",
+  "de": "Beschleunigtes Kampfstationsprogramm"
+ },
+ "we_ob_highground_assure": {
+  "en": "Diplomatic Reassurance",
+  "de": "Diplomatische Rückversicherung"
+ },
+ "we_ob_strike_defensive": {
+  "en": "Orbital Defensive Posture",
+  "de": "Orbitale Verteidigungshaltung"
+ },
+ "we_ob_strike_project": {
+  "en": "Global Strike Projection",
+  "de": "Globale Schlagkraftprojektion"
+ },
+ "we_ob_surveillance_dominance": {
+  "en": "Full Spectrum Dominance",
+  "de": "Vollspektrum-Dominanz"
+ },
+ "we_ob_surveillance_share": {
+  "en": "Allied Intelligence Sharing",
+  "de": "Geteilte Aufklärung mit Verbündeten"
+ },
+ "we_ob_weapons_test_classify": {
+  "en": "Classified Orbital Incident",
+  "de": "Geheimer Orbital-Zwischenfall"
+ },
+ "we_ob_weapons_test_relief": {
+  "en": "Debris Rain Relief Effort",
+  "de": "Hilfseinsatz nach Trümmerregen"
+ },
+ "we_sc_beam_compensate": {
+  "en": "Beam Accident Compensation",
+  "de": "Entschädigung für den Strahlenunfall"
+ },
+ "we_sc_beam_minimize": {
+  "en": "Beam Incident Downplayed",
+  "de": "Heruntergespielter Strahlenzwischenfall"
+ },
+ "we_sc_first_light_focus": {
+  "en": "Solar Collector Program Focus",
+  "de": "Fokus auf das Sonnenkollektor-Programm"
+ },
+ "we_sc_first_light_pride": {
+  "en": "Solar Collector Triumph",
+  "de": "Triumph des Sonnenkollektors"
+ },
+ "we_sc_monopoly_assert": {
+  "en": "Energy Sovereignty",
+  "de": "Energiesouveränität"
+ },
+ "we_sc_monopoly_share": {
+  "en": "Energy Licensing Agreements",
+  "de": "Energie-Lizenzabkommen"
+ },
+ "we_sc_postscarcity_research": {
+  "en": "Energy-Fueled Research",
+  "de": "Energiegetriebene Forschung"
+ },
+ "we_sc_postscarcity_subsidize": {
+  "en": "Universal Energy Subsidy",
+  "de": "Allgemeine Energiesubvention"
+ },
+ "we_sc_storm_rideout": {
+  "en": "Solar Storm Weathered",
+  "de": "Überstandener Sonnensturm"
+ },
+ "we_sc_storm_shutdown": {
+  "en": "Solar Collector Emergency Shutdown",
+  "de": "Notabschaltung des Sonnenkollektors"
+ },
+ "we_sc_surplus_export": {
+  "en": "Energy Export Boom",
+  "de": "Energieexport-Boom"
+ },
+ "we_sc_surplus_invest": {
+  "en": "Industrial Electrification Surge",
+  "de": "Schub der industriellen Elektrifizierung"
+ },
+ "we_se_astronaut_education": {
+  "en": "Space Education Initiative",
+  "de": "Weltraum-Bildungsinitiative"
+ },
+ "we_se_astronaut_industry": {
+  "en": "Astronaut Generation Workforce",
+  "de": "Astronautenausbildungsindustrie"
+ },
+ "we_se_debris_clearance": {
+  "en": "Orbital Debris Clearance",
+  "de": "Beseitigung von Orbitalschrott"
+ },
+ "we_se_debris_defense": {
+  "en": "Orbital Defense Grid",
+  "de": "Orbitales Verteidigungsnetz"
+ },
+ "we_se_gateway_open": {
+  "en": "Gateway to the Stars",
+  "de": "Tor zu den Sternen"
+ },
+ "we_se_gateway_restricted": {
+  "en": "Restricted Orbital Access",
+  "de": "Eingeschränkter Orbitalzugang"
+ },
+ "we_se_milestone_celebrate": {
+  "en": "Elevator Milestone Celebration",
+  "de": "Feier zum Meilenstein des Weltraumaufzugs"
+ },
+ "we_se_milestone_focus": {
+  "en": "Elevator Construction Focus",
+  "de": "Fokus auf den Bau des Weltraumaufzugs"
+ },
+ "we_se_shared_access": {
+  "en": "Shared Orbital Governance",
+  "de": "Geteilte orbitale Verwaltung"
+ },
+ "we_se_structural_halt": {
+  "en": "Elevator Construction Halted",
+  "de": "Bau des Weltraumaufzugs gestoppt"
+ },
+ "we_se_structural_reinforce": {
+  "en": "Elevator Reinforcement Program",
+  "de": "Verstärkungsprogramm für den Weltraumaufzug"
+ },
+ "we_se_trade_auction": {
+  "en": "Orbital Commerce Boom",
+  "de": "Boom des orbitalen Handels"
+ },
+ "we_se_trade_national": {
+  "en": "National Orbital Priority",
+  "de": "Nationale Orbitalpriorität"
+ },
+ "welfare_automation_fears_advance": {
+  "en": "Welfare: Automation Fears Advance",
+  "de": "Sozialhilfe: Automatisierungsängste – Vormarsch"
+ },
+ "welfare_automation_fears_cautious": {
+  "en": "Welfare: Automation Fears Cautious Advance",
+  "de": "Sozialhilfe: Automatisierungsängste – Vorsichtiger Vormarsch"
+ },
+ "welfare_automation_fears_stall": {
+  "en": "Welfare: Automation Fears Stall",
+  "de": "Sozialhilfe: Automatisierungsängste – Stillstand"
+ },
+ "women_combat_roles_modifier": {
+  "en": "Women in Combat Roles",
+  "de": "Frauen in Kampfrollen"
+ },
+ "ww_arsenal_of_democracy_modifier": {
+  "en": "Arsenal of Democracy",
+  "de": "Arsenal der Demokratie"
+ },
+ "ww_fresh_forces_modifier": {
+  "en": "Fresh Forces",
+  "de": "Frische Truppen"
+ },
+ "ww_ground_offensive_modifier": {
+  "en": "Ground Offensive",
+  "de": "Bodenoffensive"
+ },
+ "ww_home_front_strain_modifier": {
+  "en": "Home Front Strain",
+  "de": "Belastung der Heimatfront"
+ },
+ "ww_late_entry_cooldown": {
+  "en": "Recent Intervention Decision",
+  "de": "Kürzliche Interventionsentscheidung"
+ },
+ "ww_lend_lease_modifier": {
+  "en": "Lend-Lease Program",
+  "de": "Leih- und Pachtprogramm"
+ },
+ "ww_liberation_hero_modifier": {
+  "en": "Liberation Hero",
+  "de": "Befreiungsheld"
+ },
+ "ww_occupation_duties_modifier": {
+  "en": "Occupation Duties",
+  "de": "Besatzungspflichten"
+ },
+ "ww_prolonged_war_exhaustion_modifier": {
+  "en": "Prolonged War Weariness",
+  "de": "Anhaltende Kriegsmüdigkeit"
+ },
+ "ww_regime_change_modifier": {
+  "en": "Imposed [concept_regime_change]",
+  "de": "Aufgezwungener [concept_regime_change]"
+ },
+ "ww_rising_tensions_modifier": {
+  "en": "Rising Global Tensions",
+  "de": "Steigende globale Spannungen"
+ },
+ "ww_total_war_economy_modifier": {
+  "en": "Total War Economy",
+  "de": "Totale Kriegswirtschaft"
+ },
+ "ww_victors_peace_modifier": {
+  "en": "Victor’s Peace",
+  "de": "Frieden der Sieger"
+ },
+ "ww_war_crimes_exposed_modifier": {
+  "en": "War Crimes Exposed",
+  "de": "Aufgedeckte Kriegsverbrechen"
+ },
+ "ww_war_propaganda_modifier": {
+  "en": "War Propaganda Campaign",
+  "de": "Kriegspropagandakampagne"
+ },
+ "ww_wartime_rationing_modifier": {
+  "en": "Wartime Rationing",
+  "de": "Kriegsrationierung"
+ },
+ "youth_mental_health_funding_modifier": {
+  "en": "Youth Mental Health Funding",
+  "de": "Förderung der psychischen Gesundheit von Jugendlichen"
  }
 }

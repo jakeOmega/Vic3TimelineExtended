@@ -1,0 +1,218 @@
+{
+ "mobilization_option_advanced_logistical_support": {
+  "en": "Advanced Logistical Support",
+  "de": "Fortgeschrittene Logistikunterstützung"
+ },
+ "mobilization_option_advanced_logistical_support_desc": {
+  "en": "Advanced logistical support, including space transport and orbital communications.",
+  "de": "Fortgeschrittene Logistikunterstützung, einschließlich Raumtransport und orbitaler Kommunikation."
+ },
+ "mobilization_option_air_transport": {
+  "en": "Air Transport",
+  "de": "Lufttransport"
+ },
+ "mobilization_option_air_transport_desc": {
+  "en": "Air transport can quickly deploy troops and supplies to the front lines, increasing the speed and flexibility of military operations.",
+  "de": "Lufttransport kann Truppen und Nachschub schnell an die Front bringen und erhöht so Geschwindigkeit und Flexibilität militärischer Operationen."
+ },
+ "mobilization_option_amphibious_warfare": {
+  "en": "Amphibious Warfare Training",
+  "de": "Ausbildung in amphibischer Kriegsführung"
+ },
+ "mobilization_option_amphibious_warfare_desc": {
+  "en": "Amphibious warfare training can improve the combat effectiveness of soldiers in amphibious operations.",
+  "de": "Ausbildung in amphibischer Kriegsführung verbessert die Kampfkraft der Soldaten bei amphibischen Operationen."
+ },
+ "mobilization_option_appliances": {
+  "en": "Appliances",
+  "de": "Haushaltsgeräte"
+ },
+ "mobilization_option_appliances_desc": {
+  "en": "Appliances can improve the quality of life for soldiers by providing them with modern conveniences.",
+  "de": "Haushaltsgeräte verbessern die Lebensqualität der Soldaten, indem sie ihnen modernen Komfort bieten."
+ },
+ "mobilization_option_coffee": {
+  "en": "Coffee",
+  "de": "Kaffee"
+ },
+ "mobilization_option_coffee_desc": {
+  "en": "Keep our troops alert and awake with a steady supply of coffee.",
+  "de": "Hält unsere Truppen mit einer stetigen Kaffeeversorgung wach und aufmerksam."
+ },
+ "mobilization_option_cyberwarfare_team": {
+  "en": "Cyberwarfare Team",
+  "de": "Cyberkriegsteam"
+ },
+ "mobilization_option_cyberwarfare_team_desc": {
+  "en": "Cyberwarfare teams can disrupt enemy computer systems.",
+  "de": "Cyberkriegsteams können die Computersysteme des Feindes stören."
+ },
+ "mobilization_option_directed_energy_defenses": {
+  "en": "Directed Energy Defenses",
+  "de": "Gerichtete-Energie-Abwehr"
+ },
+ "mobilization_option_directed_energy_defenses_desc": {
+  "en": "Directed energy defenses can protect against aerial threats using high-energy lasers.",
+  "de": "Die Gerichtete-Energie-Abwehr schützt mithilfe von Hochenergielasern vor Bedrohungen aus der Luft."
+ },
+ "mobilization_option_electronic_warfare": {
+  "en": "Electronic Warfare Team",
+  "de": "Team für Elektronische Kriegsführung"
+ },
+ "mobilization_option_electronic_warfare_desc": {
+  "en": "Electronic warfare teams can disrupt enemy communications.",
+  "de": "Teams für Elektronische Kriegsführung können die Kommunikation des Feindes stören."
+ },
+ "mobilization_option_entrenchment": {
+  "en": "Entrenchment",
+  "de": "Verschanzung"
+ },
+ "mobilization_option_entrenchment_desc": {
+  "en": "Entrenchment can improve the defensive capabilities of soldiers, making them harder to dislodge from fortified positions.",
+  "de": "Verschanzung verbessert die Verteidigungsfähigkeit der Soldaten und erschwert es, sie aus befestigten Stellungen zu vertreiben."
+ },
+ "mobilization_option_exoskeleton_suits": {
+  "en": "Exoskeleton Suits",
+  "de": "Exoskelett-Anzüge"
+ },
+ "mobilization_option_exoskeleton_suits_desc": {
+  "en": "Exoskeleton suits can enhance the strength and endurance of soldiers, improving their combat effectiveness.",
+  "de": "Exoskelett-Anzüge steigern Kraft und Ausdauer der Soldaten und verbessern so ihre Kampfkraft."
+ },
+ "mobilization_option_extensive_logistical_support": {
+  "en": "Extensive Logistical Support",
+  "de": "Umfassende Logistikunterstützung"
+ },
+ "mobilization_option_extensive_logistical_support_desc": {
+  "en": "Extensive logistical support, including telecommunication networks and motorized transport.",
+  "de": "Umfassende Logistikunterstützung, einschließlich Telekommunikationsnetzen und motorisiertem Transport."
+ },
+ "mobilization_option_flight_simulators": {
+  "en": "Flight Simulators",
+  "de": "Flugsimulatoren"
+ },
+ "mobilization_option_flight_simulators_desc": {
+  "en": "Flight simulators can improve the combat effectiveness of pilots.",
+  "de": "Flugsimulatoren verbessern die Kampfkraft der Piloten."
+ },
+ "mobilization_option_home_communications": {
+  "en": "Home Communications",
+  "de": "Kommunikation mit der Heimat"
+ },
+ "mobilization_option_home_communications_desc": {
+  "en": "Home communications can improve the morale of soldiers by allowing them to stay in touch with their families and loved ones.",
+  "de": "Kommunikation mit der Heimat verbessert die Moral der Soldaten, indem sie den Kontakt zu Familie und Liebsten ermöglicht."
+ },
+ "mobilization_option_jungle_combat_training": {
+  "en": "Jungle Combat Training",
+  "de": "Ausbildung im Dschungelkampf"
+ },
+ "mobilization_option_jungle_combat_training_desc": {
+  "en": "Jungle combat training can improve the combat effectiveness of soldiers in dense tropical environments.",
+  "de": "Ausbildung im Dschungelkampf verbessert die Kampfkraft der Soldaten in dichten tropischen Umgebungen."
+ },
+ "mobilization_option_logistical_support": {
+  "en": "Logistical Support",
+  "de": "Logistikunterstützung"
+ },
+ "mobilization_option_logistical_support_desc": {
+  "en": "Logistical support, including supply depots and train transport.",
+  "de": "Logistikunterstützung, einschließlich Nachschubdepots und Bahntransport."
+ },
+ "mobilization_option_mandatory_enhancement": {
+  "en": "Mandatory Bioenhancement",
+  "de": "Verpflichtende Bio-Verbesserung"
+ },
+ "mobilization_option_mandatory_enhancement_desc": {
+  "en": "Mandatory bioenhancement can improve the physical and mental capabilities of soldiers, enhancing their combat effectiveness.",
+  "de": "Verpflichtende Bio-Verbesserung steigert die körperlichen und geistigen Fähigkeiten der Soldaten und verbessert so ihre Kampfkraft."
+ },
+ "mobilization_option_medevac_helicopters": {
+  "en": "Medevac Helicopters",
+  "de": "Rettungshubschrauber"
+ },
+ "mobilization_option_medevac_helicopters_desc": {
+  "en": "Medevac helicopters can quickly transport injured soldiers to medical facilities, reducing casualties and improving morale.",
+  "de": "Rettungshubschrauber transportieren verwundete Soldaten schnell in medizinische Einrichtungen, wodurch Verluste sinken und die Moral steigt."
+ },
+ "mobilization_option_missile_defense_system": {
+  "en": "Missile Defense System",
+  "de": "Raketenabwehrsystem"
+ },
+ "mobilization_option_missile_defense_system_desc": {
+  "en": "Missile defense systems can intercept and destroy incoming missiles.",
+  "de": "Raketenabwehrsysteme können anfliegende Raketen abfangen und zerstören."
+ },
+ "mobilization_option_modern_logistical_support": {
+  "en": "Modern Logistical Support",
+  "de": "Moderne Logistikunterstützung"
+ },
+ "mobilization_option_modern_logistical_support_desc": {
+  "en": "Modern logistical support, including air transport and satellite communications.",
+  "de": "Moderne Logistikunterstützung, einschließlich Lufttransport und Satellitenkommunikation."
+ },
+ "mobilization_option_molecular_scanners": {
+  "en": "Molecular Scanners",
+  "de": "Molekularscanner"
+ },
+ "mobilization_option_molecular_scanners_desc": {
+  "en": "Molecular scanners can detect and identify biological and chemical agents, providing crucial information for military operations.",
+  "de": "Molekularscanner können biologische und chemische Kampfstoffe erkennen und identifizieren und liefern so entscheidende Informationen für militärische Operationen."
+ },
+ "mobilization_option_mountain_combat_training": {
+  "en": "Mountain Combat Training",
+  "de": "Ausbildung im Gebirgskampf"
+ },
+ "mobilization_option_mountain_combat_training_desc": {
+  "en": "Mountain combat training can improve the combat effectiveness of soldiers in rugged mountainous terrain.",
+  "de": "Ausbildung im Gebirgskampf verbessert die Kampfkraft der Soldaten in zerklüftetem Gebirgsgelände."
+ },
+ "mobilization_option_night_vision_gear": {
+  "en": "Night Vision Gear",
+  "de": "Nachtsichtausrüstung"
+ },
+ "mobilization_option_night_vision_gear_desc": {
+  "en": "Night vision gear can improve the effectiveness of soldiers in low-light conditions.",
+  "de": "Nachtsichtausrüstung verbessert die Wirksamkeit der Soldaten bei schlechten Lichtverhältnissen."
+ },
+ "mobilization_option_radar": {
+  "en": "Radar Equipment",
+  "de": "Radarausrüstung"
+ },
+ "mobilization_option_radar_desc": {
+  "en": "Radar equipment can detect and track enemy aircraft.",
+  "de": "Radarausrüstung kann feindliche Flugzeuge erkennen und verfolgen."
+ },
+ "mobilization_option_robotic_assistance": {
+  "en": "Robotic Assistance",
+  "de": "Robotische Unterstützung"
+ },
+ "mobilization_option_robotic_assistance_desc": {
+  "en": "Robotic assistance can improve the efficiency of military operations by automating various tasks and reducing the need for human labor.",
+  "de": "Robotische Unterstützung verbessert die Effizienz militärischer Operationen, indem sie verschiedene Aufgaben automatisiert und den Bedarf an menschlicher Arbeitskraft verringert."
+ },
+ "mobilization_option_space_recon": {
+  "en": "Space Recon",
+  "de": "Weltraumaufklärung"
+ },
+ "mobilization_option_space_recon_desc": {
+  "en": "Space reconnaissance satellites can provide valuable intelligence on enemy troop movements and positions.",
+  "de": "Weltraumaufklärungssatelliten liefern wertvolle Erkenntnisse über feindliche Truppenbewegungen und -stellungen."
+ },
+ "mobilization_option_space_transport": {
+  "en": "Space Transport",
+  "de": "Raumtransport"
+ },
+ "mobilization_option_space_transport_desc": {
+  "en": "Space transport can quickly deploy troops and supplies to the front lines, increasing the speed and flexibility of military operations.",
+  "de": "Raumtransport kann Truppen und Nachschub schnell an die Front bringen und erhöht so Geschwindigkeit und Flexibilität militärischer Operationen."
+ },
+ "mobilization_option_voluntary_enhancement": {
+  "en": "Voluntary Bioenhancement",
+  "de": "Freiwillige Bio-Verbesserung"
+ },
+ "mobilization_option_voluntary_enhancement_desc": {
+  "en": "Voluntary bioenhancement can improve the physical and mental capabilities of soldiers, enhancing their combat effectiveness.",
+  "de": "Freiwillige Bio-Verbesserung steigert die körperlichen und geistigen Fähigkeiten der Soldaten und verbessert so ihre Kampfkraft."
+ }
+}

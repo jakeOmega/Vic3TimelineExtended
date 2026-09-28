@@ -1,4 +1,2048 @@
 {
+ "country_aggressor_diplomatic_play_escalation_weekly_add": {
+  "en": "Weekly Escalation in [Concept('concept_diplomatic_play', 'Diplomatic Plays')] You Initiated",
+  "de": "Wöchentliche Eskalation in von Ihnen eingeleiteten [Concept('concept_diplomatic_play', 'Diplomatiespielen')]"
+ },
+ "country_aggressor_diplomatic_play_escalation_weekly_add_desc": {
+  "en": "A flat amount of [concept_escalation] added each week to every [concept_diplomatic_play] this country initiated, applied while the play is below 100. Floored at 0; combine with the matching #V _mult#! to scale.",
+  "de": "Ein fester Betrag an [concept_escalation], der jede Woche zu jedem von diesem Land eingeleiteten [concept_diplomatic_play] hinzugefügt wird, solange das Spiel unter 100 liegt. Nach unten auf 0 begrenzt; kombiniert sich mit dem passenden #V _mult#! zur Skalierung."
+ },
+ "country_aggressor_diplomatic_play_escalation_weekly_mult": {
+  "en": "Weekly Escalation in [Concept('concept_diplomatic_play', 'Diplomatic Plays')] You Initiated",
+  "de": "Wöchentliche Eskalation in von Ihnen eingeleiteten [Concept('concept_diplomatic_play', 'Diplomatiespielen')]"
+ },
+ "country_aggressor_diplomatic_play_escalation_weekly_mult_desc": {
+  "en": "A multiplier applied to the matching #V _add#! amount of weekly [concept_escalation] for plays this country initiated.",
+  "de": "Ein Multiplikator auf den passenden #V _add#!-Betrag der wöchentlichen [concept_escalation] für von diesem Land eingeleitete Spiele."
+ },
+ "country_antimatter_facility_max_level_add": {
+  "en": "[concept_antimatter_facility] Slots",
+  "de": "[concept_antimatter_facility]-Plätze"
+ },
+ "country_antimatter_facility_max_level_add_desc": {
+  "en": "Available capacity for antimatter-powered sub-buildings. Each Antimatter Containment Facility level provides 5 slots. Each Antimatter Engine or Warhead Plant level consumes 1 slot.",
+  "de": "Verfügbare Kapazität für mit Antimaterie betriebene Unterbauten. Jede Stufe der Antimaterie-Eindämmungsanlage bietet 5 Plätze. Jede Stufe eines Antimaterie-Triebwerks oder einer Sprengkopf-Fabrik verbraucht 1 Platz."
+ },
+ "country_bank_forecast_error_add": {
+  "en": "Central Bank Forecasting Error",
+  "de": "Prognosefehler der Zentralbank"
+ },
+ "country_bank_forecast_error_add_desc": {
+  "en": "How far your central bank's reading of what the economy can bear may stray from the truth. It is why the policy stance you are shown is a band rather than a figure, and why a bank can hold the rate steady while the ground moves under it. A narrower error means fewer mistakes, not none.",
+  "de": "Wie weit die Einschätzung Ihrer Zentralbank zur Belastbarkeit der Wirtschaft von der Wahrheit abweichen kann. Deshalb wird Ihnen die geldpolitische Ausrichtung als Spanne statt als einzelne Zahl angezeigt, und deshalb kann eine Bank den Zinssatz konstant halten, während sich der Boden unter ihr verschiebt. Ein geringerer Fehler bedeutet weniger Irrtümer, nicht keine."
+ },
+ "country_banking_crash_chance_mult": {
+  "en": "[concept_banking_crash] Likelihood",
+  "de": "Wahrscheinlichkeit für [concept_banking_crash]"
+ },
+ "country_banking_crash_chance_mult_desc": {
+  "en": "Scales the probability of a [concept_banking_crash] occurring when [concept_bubble_pressure] is high. Positive values increase crash risk, negative values reduce it.",
+  "de": "Skaliert die Wahrscheinlichkeit eines [concept_banking_crash]s bei hohem [concept_bubble_pressure]. Positive Werte erhöhen das Crash-Risiko, negative verringern es."
+ },
+ "country_banking_intervention_max_add": {
+  "en": "Maximum Banking Intervention Points",
+  "de": "Maximale Interventionspunkte im Bankwesen"
+ },
+ "country_banking_intervention_max_add_desc": {
+  "en": "The maximum number of points that can be applied to regulate the [concept_banking_cycle] at once.",
+  "de": "Die maximale Anzahl an Punkten, die gleichzeitig zur Regulierung des [concept_banking_cycle] eingesetzt werden können."
+ },
+ "country_banking_random_momentum_mult": {
+  "en": "[concept_banking_cycle] Volatility",
+  "de": "Volatilität des [concept_banking_cycle]"
+ },
+ "country_banking_random_momentum_mult_desc": {
+  "en": "Scales the random [concept_banking_momentum] nudges that drive the [concept_banking_cycle]. Higher values mean larger random swings in cycle momentum.",
+  "de": "Skaliert die zufälligen [concept_banking_momentum]-Impulse, die den [concept_banking_cycle] antreiben. Höhere Werte bedeuten größere zufällige Schwankungen der Zyklusdynamik."
+ },
+ "country_bubble_pressure_monthly_add": {
+  "en": "Monthly [concept_bubble_pressure]",
+  "de": "Monatlicher [concept_bubble_pressure]"
+ },
+ "country_bubble_pressure_monthly_add_desc": {
+  "en": "An increase or decrease to the [concept_bubble_pressure] of the [concept_banking_cycle], affecting the likelihood of a financial bubble causing a [concept_banking_crash].",
+  "de": "Erhöht oder verringert den [concept_bubble_pressure] des [concept_banking_cycle] und beeinflusst so die Wahrscheinlichkeit, dass eine Finanzblase einen [concept_banking_crash] auslöst."
+ },
+ "country_colonial_assim_effectiveness_add": {
+  "en": "Colonial [concept_assimilation] Effectiveness",
+  "de": "Wirksamkeit der kolonialen [concept_assimilation]"
+ },
+ "country_colonial_assim_effectiveness_add_desc": {
+  "en": "Per-month colonial-stability bonus contributed by laws while the Cultural [concept_assimilation] policy is active. Read by the [concept_colonial_stability] bar; visible in each contributing law's tooltip and in the policy button's preview.",
+  "de": "Monatlicher Bonus auf die koloniale Stabilität, den Gesetze beisteuern, solange die Politik „Kulturelle [concept_assimilation]“ aktiv ist. Wird von der Leiste für [concept_colonial_stability] ausgelesen; sichtbar im Tooltip jedes beitragenden Gesetzes und in der Vorschau der Politik-Schaltfläche."
+ },
+ "country_colonial_garrison_effectiveness_add": {
+  "en": "Colonial Garrison Effectiveness",
+  "de": "Wirksamkeit der kolonialen Garnison"
+ },
+ "country_colonial_garrison_effectiveness_add_desc": {
+  "en": "Per-month colonial-stability bonus contributed by laws while the Military Garrison policy is active. Read by the [concept_colonial_stability] bar; visible in each contributing law's tooltip and in the policy button's preview.",
+  "de": "Monatlicher Bonus auf die koloniale Stabilität, den Gesetze beisteuern, solange die Politik „Militärgarnison“ aktiv ist. Wird von der Leiste für [concept_colonial_stability] ausgelesen; sichtbar im Tooltip jedes beitragenden Gesetzes und in der Vorschau der Politik-Schaltfläche."
+ },
+ "country_colonial_invest_effectiveness_add": {
+  "en": "Colonial Investment Effectiveness",
+  "de": "Wirksamkeit der kolonialen Investition"
+ },
+ "country_colonial_invest_effectiveness_add_desc": {
+  "en": "Per-month colonial-stability bonus contributed by laws while the Invest in Development policy is active. Read by the [concept_colonial_stability] bar; visible in each contributing law's tooltip and in the policy button's preview.",
+  "de": "Monatlicher Bonus auf die koloniale Stabilität, den Gesetze beisteuern, solange die Politik „Investition in die Entwicklung“ aktiv ist. Wird von der Leiste für [concept_colonial_stability] ausgelesen; sichtbar im Tooltip jedes beitragenden Gesetzes und in der Vorschau der Politik-Schaltfläche."
+ },
+ "country_colonial_stability_drift_add": {
+  "en": "[concept_colonial_stability] Drift",
+  "de": "[concept_colonial_stability]-Drift"
+ },
+ "country_colonial_stability_drift_add_desc": {
+  "en": "Per-month drift on the [concept_colonial_stability] bar contributed by laws and other persistent sources. Always-on (independent of policy buttons). Each contributing law shows its individual contribution in its own tooltip.",
+  "de": "Monatliche Drift auf der Leiste für [concept_colonial_stability], die Gesetze und andere dauerhafte Quellen beisteuern. Dauerhaft wirksam (unabhängig von Politik-Schaltflächen). Jedes beitragende Gesetz zeigt seinen eigenen Beitrag im jeweiligen Tooltip."
+ },
+ "country_covert_defense_economic_add": {
+  "en": "Economic Covert Defense",
+  "de": "Wirtschaftliche Spionageabwehr"
+ },
+ "country_covert_defense_economic_add_desc": {
+  "en": "Additional defense against economic [concept_covert_operations] such as financial subversion, industrial espionage and space programme espionage.",
+  "de": "Zusätzlicher Schutz gegen wirtschaftliche [concept_covert_operations] wie finanzielle Unterwanderung, Industriespionage und Spionage am Weltraumprogramm."
+ },
+ "country_covert_defense_ideological_add": {
+  "en": "Ideological Covert Defense",
+  "de": "Ideologische Spionageabwehr"
+ },
+ "country_covert_defense_ideological_add_desc": {
+  "en": "Additional defense against ideological [concept_covert_operations] such as election interference, influence campaigns, ideological subversion, destabilization, regime change and the cultivation of assets.",
+  "de": "Zusätzlicher Schutz gegen ideologische [concept_covert_operations] wie Wahleinmischung, Einflusskampagnen, ideologische Unterwanderung, Destabilisierung, Regimewechsel und das Anwerben von Kontaktpersonen."
+ },
+ "country_covert_defense_military_add": {
+  "en": "Military Covert Defense",
+  "de": "Militärische Spionageabwehr"
+ },
+ "country_covert_defense_military_add_desc": {
+  "en": "Additional defense against military [concept_covert_operations] such as military espionage, communications disruption, [concept_infrastructure] sabotage, nuclear programme sabotage and searches for loose nuclear material.",
+  "de": "Zusätzlicher Schutz gegen militärische [concept_covert_operations] wie militärische Spionage, Störung der Kommunikation, Sabotage der [concept_infrastructure], Sabotage des Nuklearprogramms und die Suche nach frei verfügbarem Nuklearmaterial."
+ },
+ "country_covert_operation_efficiency_mult": {
+  "en": "Covert Operation Efficiency",
+  "de": "Effizienz Verdeckter Operationen"
+ },
+ "country_covert_operation_efficiency_mult_desc": {
+  "en": "A bonus or penalty to the effectiveness and stealth of offensive [concept_covert_operations].",
+  "de": "Erhöht oder verringert Wirksamkeit und Tarnung offensiver [concept_covert_operations]."
+ },
+ "country_covert_operation_slot_add": {
+  "en": "Covert Operation Slots",
+  "de": "Plätze für Verdeckte Operationen"
+ },
+ "country_covert_operation_slot_add_desc": {
+  "en": "Additional simultaneous covert operation slots available to the nation.",
+  "de": "Zusätzliche gleichzeitig verfügbare Plätze für verdeckte Operationen dieser Nation."
+ },
+ "country_credit_standing_add": {
+  "en": "Credit Standing",
+  "de": "Kreditwürdigkeit"
+ },
+ "country_credit_standing_add_desc": {
+  "en": "The part of your government's borrowing rate that comes from what your country #b is#!: access to capital markets, its standing among the powers, finance technologies, banking institutions, and the credibility of its monetary regime. Lower is better. Credibility has a lower bound, though — lenders will not price any sovereign below a floor, so standing earned past that point buys nothing further.",
+  "de": "Der Teil des Kreditzinses Ihrer Regierung, der davon abhängt, was Ihr Land #b ist#!: Zugang zu Kapitalmärkten, sein Ansehen unter den Mächten, Finanztechnologien, Bankinstitutionen und die Glaubwürdigkeit seines Währungsregimes. Niedriger ist besser. Die Glaubwürdigkeit hat jedoch eine Untergrenze — Gläubiger bepreisen keinen Staat unterhalb eines Bodenwerts, sodass darüber hinaus erworbenes Ansehen nichts weiter bringt."
+ },
+ "country_credit_standing_floor_add": {
+  "en": "Credit Standing Floor",
+  "de": "Untergrenze der Kreditwürdigkeit"
+ },
+ "country_credit_standing_floor_add_desc": {
+  "en": "The least lenders will charge you for what your country is, however sound its finances become. Standing earned past this point buys nothing further, so lowering the floor is the only way to be priced any finer.",
+  "de": "Das Mindeste, was Gläubiger Ihnen für das, was Ihr Land ist, berechnen — ganz gleich, wie solide seine Finanzen werden. Über diesen Punkt hinaus erworbenes Ansehen bringt nichts weiter, sodass nur eine Absenkung der Untergrenze zu besseren Konditionen führt."
+ },
+ "country_cultural_hegemony_art_mult_desc": {
+  "en": "A bonus or penalty to the [concept_cultural_pull] generated by $fine_art$ production. Part of the [concept_cultural_hegemony_system].",
+  "de": "Erhöht oder verringert die durch die Produktion von $fine_art$ erzeugte [concept_cultural_pull]. Teil der [concept_cultural_hegemony_system]."
+ },
+ "country_cultural_program_max_funding_add": {
+  "en": "Cultural Program Maximum Funding Level",
+  "de": "Maximales Förderniveau für Kulturprogramme"
+ },
+ "country_cultural_program_max_funding_add_desc": {
+  "en": "Increases the maximum funding level available for state-backed cultural programs in the Cultural Hegemony [concept_journal_entry].",
+  "de": "Erhöht das maximal verfügbare Förderniveau für staatlich geförderte Kulturprogramme im [concept_journal_entry] „Kulturelle Hegemonie“."
+ },
+ "country_cultural_pull_add_desc": {
+  "en": "A flat bonus or penalty to the nation's [concept_cultural_pull] score, representing its global soft power influence. Contributes to [concept_cultural_pull_share].",
+  "de": "Ein fester Bonus oder Malus auf den [concept_cultural_pull]-Wert der Nation, der ihren globalen Soft-Power-Einfluss darstellt. Trägt zum [concept_cultural_pull_share] bei."
+ },
+ "country_cultural_pull_mult_desc": {
+  "en": "A percentage bonus or penalty to the nation's [concept_cultural_pull] raw score, applied after all [concept_cultural_pull_components] are summed.",
+  "de": "Ein prozentualer Bonus oder Malus auf den rohen [concept_cultural_pull]-Wert der Nation, angewendet, nachdem alle [concept_cultural_pull_components] summiert wurden."
+ },
+ "country_defender_diplomatic_play_escalation_weekly_add": {
+  "en": "Weekly Escalation in [Concept('concept_diplomatic_play', 'Diplomatic Plays')] Targeting You",
+  "de": "Wöchentliche Eskalation in gegen Sie gerichteten [Concept('concept_diplomatic_play', 'Diplomatiespielen')]"
+ },
+ "country_defender_diplomatic_play_escalation_weekly_add_desc": {
+  "en": "A flat amount of [concept_escalation] added each week to every [concept_diplomatic_play] this country is the target of. Floored at 0; combine with the matching #V _mult#! to scale.",
+  "de": "Ein fester Betrag an [concept_escalation], der jede Woche zu jedem [concept_diplomatic_play] hinzugefügt wird, dessen Ziel dieses Land ist. Nach unten auf 0 begrenzt; kombiniert sich mit dem passenden #V _mult#! zur Skalierung."
+ },
+ "country_defender_diplomatic_play_escalation_weekly_mult": {
+  "en": "Weekly Escalation in [Concept('concept_diplomatic_play', 'Diplomatic Plays')] Targeting You",
+  "de": "Wöchentliche Eskalation in gegen Sie gerichteten [Concept('concept_diplomatic_play', 'Diplomatiespielen')]"
+ },
+ "country_defender_diplomatic_play_escalation_weekly_mult_desc": {
+  "en": "A multiplier applied to the matching #V _add#! amount of weekly [concept_escalation] for plays this country is the target of.",
+  "de": "Ein Multiplikator auf den passenden #V _add#!-Betrag der wöchentlichen [concept_escalation] für Spiele, deren Ziel dieses Land ist."
+ },
+ "country_directed_credit_sectors_add": {
+  "en": "Directed Credit Priority Sectors",
+  "de": "Prioritätssektoren der Gelenkten Kreditvergabe"
+ },
+ "country_directed_credit_sectors_add_desc": {
+  "en": "How many sectors the state can steer [Concept('concept_directed_credit', 'directed credit')] toward at the same time, beyond the first.",
+  "de": "Wie viele Sektoren der Staat gleichzeitig mit [Concept('concept_directed_credit', 'gelenkter Kreditvergabe')] lenken kann, zusätzlich zum ersten."
+ },
+ "country_economic_dependence_leverage_gain_mult": {
+  "en": "Leverage from [concept_economic_dependence]",
+  "de": "Einflusshebel durch [concept_economic_dependence]"
+ },
+ "country_economic_dependence_leverage_gain_mult_desc": {
+  "en": "A multiplier for the [concept_power_bloc_leverage] gained from how much another [concept_country] relies on our [concept_market].",
+  "de": "Ein Multiplikator für den [concept_power_bloc_leverage], der daraus entsteht, wie stark ein anderes [concept_country] von unserem [concept_market] abhängt."
+ },
+ "country_enactment_success_chance_law_compulsory_primary_school_add": {
+  "en": "[concept_enactment_success] chance for [GetLawType('law_compulsory_primary_school').GetName]",
+  "de": "[concept_enactment_success]-Chance für [GetLawType('law_compulsory_primary_school').GetName]"
+ },
+ "country_enactment_success_chance_law_compulsory_primary_school_add_desc": {
+  "en": "A flat percentage point increase to the likelihood of enacting this specific law",
+  "de": "Eine feste prozentuale Erhöhung der Wahrscheinlichkeit, dieses bestimmte Gesetz zu erlassen"
+ },
+ "country_enactment_success_chance_law_free_trade_add": {
+  "en": "[concept_enactment_success] chance for [GetLawType('law_free_trade').GetName]",
+  "de": "[concept_enactment_success]-Chance für [GetLawType('law_free_trade').GetName]"
+ },
+ "country_enactment_success_chance_law_free_trade_add_desc": {
+  "en": "A flat percentage point increase to the likelihood of enacting this specific law",
+  "de": "Eine feste prozentuale Erhöhung der Wahrscheinlichkeit, dieses bestimmte Gesetz zu erlassen"
+ },
+ "country_enactment_success_chance_law_ministry_of_commerce_add": {
+  "en": "[concept_enactment_success] chance for [GetLawType('law_ministry_of_commerce').GetName]",
+  "de": "[concept_enactment_success]-Chance für [GetLawType('law_ministry_of_commerce').GetName]"
+ },
+ "country_enactment_success_chance_law_ministry_of_commerce_add_desc": {
+  "en": "A flat percentage point increase to the likelihood of enacting this specific law",
+  "de": "Eine feste prozentuale Erhöhung der Wahrscheinlichkeit, dieses bestimmte Gesetz zu erlassen"
+ },
+ "country_enactment_success_chance_law_ministry_of_consumer_protection_add": {
+  "en": "[concept_enactment_success] chance for [GetLawType('law_ministry_of_consumer_protection').GetName]",
+  "de": "[concept_enactment_success]-Chance für [GetLawType('law_ministry_of_consumer_protection').GetName]"
+ },
+ "country_enactment_success_chance_law_ministry_of_consumer_protection_add_desc": {
+  "en": "A flat percentage point increase to the likelihood of enacting this specific law",
+  "de": "Eine feste prozentuale Erhöhung der Wahrscheinlichkeit, dieses bestimmte Gesetz zu erlassen"
+ },
+ "country_enactment_success_chance_law_ministry_of_culture_add": {
+  "en": "[concept_enactment_success] chance for [GetLawType('law_ministry_of_culture').GetName]",
+  "de": "[concept_enactment_success]-Chance für [GetLawType('law_ministry_of_culture').GetName]"
+ },
+ "country_enactment_success_chance_law_ministry_of_culture_add_desc": {
+  "en": "A flat percentage point increase to the likelihood of enacting this specific law",
+  "de": "Eine feste prozentuale Erhöhung der Wahrscheinlichkeit, dieses bestimmte Gesetz zu erlassen"
+ },
+ "country_enactment_success_chance_law_ministry_of_propaganda_add": {
+  "en": "[concept_enactment_success] chance for [GetLawType('law_ministry_of_propaganda').GetName]",
+  "de": "[concept_enactment_success]-Chance für [GetLawType('law_ministry_of_propaganda').GetName]"
+ },
+ "country_enactment_success_chance_law_ministry_of_propaganda_add_desc": {
+  "en": "A flat percentage point increase to the likelihood of enacting this specific law",
+  "de": "Eine feste prozentuale Erhöhung der Wahrscheinlichkeit, dieses bestimmte Gesetz zu erlassen"
+ },
+ "country_enactment_success_chance_law_ministry_of_religion_add": {
+  "en": "[concept_enactment_success] chance for [GetLawType('law_ministry_of_religion').GetName]",
+  "de": "[concept_enactment_success]-Chance für [GetLawType('law_ministry_of_religion').GetName]"
+ },
+ "country_enactment_success_chance_law_ministry_of_religion_add_desc": {
+  "en": "A flat percentage point increase to the likelihood of enacting this specific law",
+  "de": "Eine feste prozentuale Erhöhung der Wahrscheinlichkeit, dieses bestimmte Gesetz zu erlassen"
+ },
+ "country_enactment_success_chance_law_ministry_of_science_add": {
+  "en": "[concept_enactment_success] chance for [GetLawType('law_ministry_of_science').GetName]",
+  "de": "[concept_enactment_success]-Chance für [GetLawType('law_ministry_of_science').GetName]"
+ },
+ "country_enactment_success_chance_law_ministry_of_science_add_desc": {
+  "en": "A flat percentage point increase to the likelihood of enacting this specific law",
+  "de": "Eine feste prozentuale Erhöhung der Wahrscheinlichkeit, dieses bestimmte Gesetz zu erlassen"
+ },
+ "country_enactment_success_chance_law_ministry_of_the_environment_add": {
+  "en": "[concept_enactment_success] chance for [GetLawType('law_ministry_of_the_environment').GetName]",
+  "de": "[concept_enactment_success]-Chance für [GetLawType('law_ministry_of_the_environment').GetName]"
+ },
+ "country_enactment_success_chance_law_ministry_of_the_environment_add_desc": {
+  "en": "A flat percentage point increase to the likelihood of enacting this specific law",
+  "de": "Eine feste prozentuale Erhöhung der Wahrscheinlichkeit, dieses bestimmte Gesetz zu erlassen"
+ },
+ "country_enactment_success_chance_law_ministry_of_war_add": {
+  "en": "[concept_enactment_success] chance for [GetLawType('law_ministry_of_war').GetName]",
+  "de": "[concept_enactment_success]-Chance für [GetLawType('law_ministry_of_war').GetName]"
+ },
+ "country_enactment_success_chance_law_ministry_of_war_add_desc": {
+  "en": "A flat percentage point increase to the likelihood of enacting this specific law",
+  "de": "Eine feste prozentuale Erhöhung der Wahrscheinlichkeit, dieses bestimmte Gesetz zu erlassen"
+ },
+ "country_enactment_success_chance_law_national_bank_add": {
+  "en": "[concept_enactment_success] chance for [GetLawType('law_national_bank').GetName]",
+  "de": "[concept_enactment_success]-Chance für [GetLawType('law_national_bank').GetName]"
+ },
+ "country_enactment_success_chance_law_national_bank_add_desc": {
+  "en": "A flat percentage point increase to the likelihood of enacting this specific law",
+  "de": "Eine feste prozentuale Erhöhung der Wahrscheinlichkeit, dieses bestimmte Gesetz zu erlassen"
+ },
+ "country_finance_momentum_monthly_add": {
+  "en": "Monthly [concept_banking_momentum]",
+  "de": "Monatliche [concept_banking_momentum]"
+ },
+ "country_finance_momentum_monthly_add_desc": {
+  "en": "An increase or decrease to the [concept_banking_momentum] of the [concept_banking_cycle], affecting the direction and speed of the change of financial conditions over time.",
+  "de": "Erhöht oder verringert die [concept_banking_momentum] des [concept_banking_cycle] und beeinflusst so Richtung und Geschwindigkeit der Veränderung der Finanzlage über die Zeit."
+ },
+ "country_finance_value_monthly_add": {
+  "en": "Monthly Financial Cycle Value",
+  "de": "Monatlicher Wert des Finanzzyklus"
+ },
+ "country_finance_value_monthly_add_desc": {
+  "en": "A direct monthly change to the current [concept_banking_cycle] value.",
+  "de": "Eine direkte monatliche Änderung des aktuellen Werts des [concept_banking_cycle]."
+ },
+ "country_greenhouse_gas_emissions_mult_desc": {
+  "en": "Modifies the rate at which this country contributes to global [concept_greenhouse_gas_emissions].",
+  "de": "Verändert die Rate, mit der dieses Land zu den globalen [concept_greenhouse_gas_emissions] beiträgt."
+ },
+ "country_ideology_resistance_mult": {
+  "en": "Ideology Resistance",
+  "de": "Ideologische Widerstandskraft"
+ },
+ "country_ideology_resistance_mult_desc": {
+  "en": "Resistance to foreign cultural influence from the [concept_cultural_hegemony_system]. Reduces the loss of [concept_legitimacy] from the [concept_foreign_cultural_benchmark].",
+  "de": "Widerstand gegen fremden kulturellen Einfluss durch die [concept_cultural_hegemony_system]. Verringert den Verlust an [concept_legitimacy] durch den [concept_foreign_cultural_benchmark]."
+ },
+ "country_inflation_anchoring_add": {
+  "en": "Inflation Anchoring",
+  "de": "Inflationsverankerung"
+ },
+ "country_inflation_anchoring_add_desc": {
+  "en": "How much standing upward pressure on prices a credible central bank absorbs before it reaches them. It offsets the net pressure from wages and every other standing source, up to this much — and only ever downward to zero, so it never pushes prices down on its own. A bank markets believe can hold its target without holding the economy down to do it.",
+  "de": "Wie viel dauerhaften Aufwärtsdruck auf die Preise eine glaubwürdige Zentralbank abfedert, bevor er sie erreicht. Sie gleicht den Nettodruck aus Löhnen und allen anderen dauerhaften Quellen bis zu diesem Betrag aus — und stets nur nach unten bis auf null, sodass sie die Preise nie von sich aus senkt. Einer Bank, der die Märkte zutrauen, ihr Ziel zu halten, ohne die Wirtschaft dafür abzuwürgen."
+ },
+ "country_inflation_pressure_add": {
+  "en": "Inflationary Pressure",
+  "de": "Inflationsdruck"
+ },
+ "country_inflation_pressure_add_desc": {
+  "en": "Standing upward pressure on prices — how far above expectations inflation settles for as long as this source lasts, not an amount added every month. Devaluing the currency pushes here. Money printed to pay the government pushes prices too, but it is counted on its own, from the monetisation level rather than from this figure. A negative figure pushes prices the other way. Your central bank can lean against the pressure by holding a tighter stance, and how much of it ends up in prices depends on whether anyone believes the bank's target.",
+  "de": "Dauerhafter Aufwärtsdruck auf die Preise — wie weit die Inflation über den Erwartungen einpendelt, solange diese Quelle besteht, nicht ein Betrag, der jeden Monat hinzukommt. Eine Abwertung der Währung wirkt hier hinein. Auch zur Staatsfinanzierung gedrucktes Geld treibt die Preise, wird aber gesondert erfasst, ausgehend vom Monetarisierungsgrad statt von diesem Wert. Ein negativer Wert wirkt in die andere Richtung. Ihre Zentralbank kann dem Druck mit einer strafferen Ausrichtung entgegenwirken, und wie viel davon tatsächlich in den Preisen ankommt, hängt davon ab, ob jemand an das Ziel der Bank glaubt."
+ },
+ "country_institution_cost_institution_migration_controls_mult": {
+  "en": "@bur![Nbsp][concept_bureaucracy] Cost of [GetInstitutionType('institution_migration_controls').GetName]",
+  "de": "@bur![Nbsp][concept_bureaucracy]kosten der Institution [GetInstitutionType('institution_migration_controls').GetName]"
+ },
+ "country_institution_cost_institution_migration_controls_mult_desc": {
+  "en": "An increase or reduction to the @bur![Nbsp][concept_bureaucracy] cost of the [GetInstitutionType('institution_migration_controls').GetName] [concept_institution]",
+  "de": "Erhöht oder verringert die @bur![Nbsp][concept_bureaucracy]kosten der [concept_institution] [GetInstitutionType('institution_migration_controls').GetName]"
+ },
+ "country_institution_cost_institution_ministry_of_commerce_mult": {
+  "en": "@bur![Nbsp][concept_bureaucracy] Cost of [GetInstitutionType('institution_ministry_of_commerce').GetName]",
+  "de": "@bur![Nbsp][concept_bureaucracy]kosten der Institution [GetInstitutionType('institution_ministry_of_commerce').GetName]"
+ },
+ "country_institution_cost_institution_ministry_of_commerce_mult_desc": {
+  "en": "An increase or reduction to the @bur![Nbsp][concept_bureaucracy] cost of the [GetInstitutionType('institution_ministry_of_commerce').GetName] [concept_institution]",
+  "de": "Erhöht oder verringert die @bur![Nbsp][concept_bureaucracy]kosten der [concept_institution] [GetInstitutionType('institution_ministry_of_commerce').GetName]"
+ },
+ "country_institution_cost_institution_ministry_of_consumer_protection_mult": {
+  "en": "@bur![Nbsp][concept_bureaucracy] Cost of [GetInstitutionType('institution_ministry_of_consumer_protection').GetName]",
+  "de": "@bur![Nbsp][concept_bureaucracy]kosten der Institution [GetInstitutionType('institution_ministry_of_consumer_protection').GetName]"
+ },
+ "country_institution_cost_institution_ministry_of_consumer_protection_mult_desc": {
+  "en": "An increase or reduction to the @bur![Nbsp][concept_bureaucracy] cost of the [GetInstitutionType('institution_ministry_of_consumer_protection').GetName] [concept_institution]",
+  "de": "Erhöht oder verringert die @bur![Nbsp][concept_bureaucracy]kosten der [concept_institution] [GetInstitutionType('institution_ministry_of_consumer_protection').GetName]"
+ },
+ "country_institution_cost_institution_ministry_of_culture_mult": {
+  "en": "@bur![Nbsp][concept_bureaucracy] Cost of [GetInstitutionType('institution_ministry_of_culture').GetName]",
+  "de": "@bur![Nbsp][concept_bureaucracy]kosten der Institution [GetInstitutionType('institution_ministry_of_culture').GetName]"
+ },
+ "country_institution_cost_institution_ministry_of_culture_mult_desc": {
+  "en": "An increase or reduction to the @bur![Nbsp][concept_bureaucracy] cost of the [GetInstitutionType('institution_ministry_of_culture').GetName] [concept_institution]",
+  "de": "Erhöht oder verringert die @bur![Nbsp][concept_bureaucracy]kosten der [concept_institution] [GetInstitutionType('institution_ministry_of_culture').GetName]"
+ },
+ "country_institution_cost_institution_ministry_of_foreign_affairs_mult": {
+  "en": "@bur![Nbsp][concept_bureaucracy] Cost of [GetInstitutionType('institution_ministry_of_foreign_affairs').GetName]",
+  "de": "@bur![Nbsp][concept_bureaucracy]kosten der Institution [GetInstitutionType('institution_ministry_of_foreign_affairs').GetName]"
+ },
+ "country_institution_cost_institution_ministry_of_foreign_affairs_mult_desc": {
+  "en": "An increase or reduction to the @bur![Nbsp][concept_bureaucracy] cost of the [GetInstitutionType('institution_ministry_of_foreign_affairs').GetName] [concept_institution]",
+  "de": "Erhöht oder verringert die @bur![Nbsp][concept_bureaucracy]kosten der [concept_institution] [GetInstitutionType('institution_ministry_of_foreign_affairs').GetName]"
+ },
+ "country_institution_cost_institution_ministry_of_intelligence_and_security_mult": {
+  "en": "@bur![Nbsp][concept_bureaucracy] Cost of [GetInstitutionType('institution_ministry_of_intelligence_and_security').GetName]",
+  "de": "@bur![Nbsp][concept_bureaucracy]kosten der Institution [GetInstitutionType('institution_ministry_of_intelligence_and_security').GetName]"
+ },
+ "country_institution_cost_institution_ministry_of_intelligence_and_security_mult_desc": {
+  "en": "An increase or reduction to the @bur![Nbsp][concept_bureaucracy] cost of the [GetInstitutionType('institution_ministry_of_intelligence_and_security').GetName] [concept_institution]",
+  "de": "Erhöht oder verringert die @bur![Nbsp][concept_bureaucracy]kosten der [concept_institution] [GetInstitutionType('institution_ministry_of_intelligence_and_security').GetName]"
+ },
+ "country_institution_cost_institution_ministry_of_propaganda_mult": {
+  "en": "@bur![Nbsp][concept_bureaucracy] Cost of [GetInstitutionType('institution_ministry_of_propaganda').GetName]",
+  "de": "@bur![Nbsp][concept_bureaucracy]kosten der Institution [GetInstitutionType('institution_ministry_of_propaganda').GetName]"
+ },
+ "country_institution_cost_institution_ministry_of_propaganda_mult_desc": {
+  "en": "An increase or reduction to the @bur![Nbsp][concept_bureaucracy] cost of the [GetInstitutionType('institution_ministry_of_propaganda').GetName] [concept_institution]",
+  "de": "Erhöht oder verringert die @bur![Nbsp][concept_bureaucracy]kosten der [concept_institution] [GetInstitutionType('institution_ministry_of_propaganda').GetName]"
+ },
+ "country_institution_cost_institution_ministry_of_religion_mult": {
+  "en": "@bur![Nbsp][concept_bureaucracy] Cost of [GetInstitutionType('institution_ministry_of_religion').GetName]",
+  "de": "@bur![Nbsp][concept_bureaucracy]kosten der Institution [GetInstitutionType('institution_ministry_of_religion').GetName]"
+ },
+ "country_institution_cost_institution_ministry_of_religion_mult_desc": {
+  "en": "An increase or reduction to the @bur![Nbsp][concept_bureaucracy] cost of the [GetInstitutionType('institution_ministry_of_religion').GetName] [concept_institution]",
+  "de": "Erhöht oder verringert die @bur![Nbsp][concept_bureaucracy]kosten der [concept_institution] [GetInstitutionType('institution_ministry_of_religion').GetName]"
+ },
+ "country_institution_cost_institution_ministry_of_the_environment_mult": {
+  "en": "@bur![Nbsp][concept_bureaucracy] Cost of [GetInstitutionType('institution_ministry_of_the_environment').GetName]",
+  "de": "@bur![Nbsp][concept_bureaucracy]kosten der Institution [GetInstitutionType('institution_ministry_of_the_environment').GetName]"
+ },
+ "country_institution_cost_institution_ministry_of_the_environment_mult_desc": {
+  "en": "An increase or reduction to the @bur![Nbsp][concept_bureaucracy] cost of the [GetInstitutionType('institution_ministry_of_the_environment').GetName] [concept_institution]",
+  "de": "Erhöht oder verringert die @bur![Nbsp][concept_bureaucracy]kosten der [concept_institution] [GetInstitutionType('institution_ministry_of_the_environment').GetName]"
+ },
+ "country_institution_cost_institution_ministry_of_urban_planning_mult": {
+  "en": "@bur![Nbsp][concept_bureaucracy] Cost of [GetInstitutionType('institution_ministry_of_urban_planning').GetName]",
+  "de": "@bur![Nbsp][concept_bureaucracy]kosten der Institution [GetInstitutionType('institution_ministry_of_urban_planning').GetName]"
+ },
+ "country_institution_cost_institution_ministry_of_urban_planning_mult_desc": {
+  "en": "An increase or reduction to the @bur![Nbsp][concept_bureaucracy] cost of the [GetInstitutionType('institution_ministry_of_urban_planning').GetName] [concept_institution]",
+  "de": "Erhöht oder verringert die @bur![Nbsp][concept_bureaucracy]kosten der [concept_institution] [GetInstitutionType('institution_ministry_of_urban_planning').GetName]"
+ },
+ "country_institution_cost_institution_ministry_of_war_mult": {
+  "en": "@bur![Nbsp][concept_bureaucracy] Cost of [GetInstitutionType('institution_ministry_of_war').GetName]",
+  "de": "@bur![Nbsp][concept_bureaucracy]kosten der Institution [GetInstitutionType('institution_ministry_of_war').GetName]"
+ },
+ "country_institution_cost_institution_ministry_of_war_mult_desc": {
+  "en": "An increase or reduction to the @bur![Nbsp][concept_bureaucracy] cost of the [GetInstitutionType('institution_ministry_of_war').GetName] [concept_institution]",
+  "de": "Erhöht oder verringert die @bur![Nbsp][concept_bureaucracy]kosten der [concept_institution] [GetInstitutionType('institution_ministry_of_war').GetName]"
+ },
+ "country_institution_cost_institution_national_bank_mult": {
+  "en": "@bur![Nbsp][concept_bureaucracy] Cost of [GetInstitutionType('institution_national_bank').GetName]",
+  "de": "@bur![Nbsp][concept_bureaucracy]kosten der Institution [GetInstitutionType('institution_national_bank').GetName]"
+ },
+ "country_institution_cost_institution_national_bank_mult_desc": {
+  "en": "An increase or reduction to the @bur![Nbsp][concept_bureaucracy] cost of the [GetInstitutionType('institution_national_bank').GetName] [concept_institution]",
+  "de": "Erhöht oder verringert die @bur![Nbsp][concept_bureaucracy]kosten der [concept_institution] [GetInstitutionType('institution_national_bank').GetName]"
+ },
+ "country_institution_impact_institution_ministry_of_commerce_mult": {
+  "en": "Impact of [GetInstitutionType('institution_ministry_of_commerce').GetName]",
+  "de": "Wirkung der Institution [GetInstitutionType('institution_ministry_of_commerce').GetName]"
+ },
+ "country_institution_impact_institution_ministry_of_commerce_mult_desc": {
+  "en": "An increase or reduction to the effects of the [GetInstitutionType('institution_ministry_of_commerce').GetName] [concept_institution]",
+  "de": "Erhöht oder verringert die Wirkung der [concept_institution] [GetInstitutionType('institution_ministry_of_commerce').GetName]"
+ },
+ "country_institution_impact_institution_ministry_of_foreign_affairs_mult": {
+  "en": "Impact of [GetInstitutionType('institution_ministry_of_foreign_affairs').GetName]",
+  "de": "Wirkung der Institution [GetInstitutionType('institution_ministry_of_foreign_affairs').GetName]"
+ },
+ "country_institution_impact_institution_ministry_of_foreign_affairs_mult_desc": {
+  "en": "An increase or reduction to the effects of the [GetInstitutionType('institution_ministry_of_foreign_affairs').GetName] [concept_institution]",
+  "de": "Erhöht oder verringert die Wirkung der [concept_institution] [GetInstitutionType('institution_ministry_of_foreign_affairs').GetName]"
+ },
+ "country_institution_impact_institution_ministry_of_intelligence_and_security_mult": {
+  "en": "Impact of [GetInstitutionType('institution_ministry_of_intelligence_and_security').GetName]",
+  "de": "Wirkung der Institution [GetInstitutionType('institution_ministry_of_intelligence_and_security').GetName]"
+ },
+ "country_institution_impact_institution_ministry_of_intelligence_and_security_mult_desc": {
+  "en": "An increase or reduction to the effects of the [GetInstitutionType('institution_ministry_of_intelligence_and_security').GetName] [concept_institution]",
+  "de": "Erhöht oder verringert die Wirkung der [concept_institution] [GetInstitutionType('institution_ministry_of_intelligence_and_security').GetName]"
+ },
+ "country_institution_impact_institution_ministry_of_refugee_affairs_mult": {
+  "en": "Impact of [GetInstitutionType('institution_ministry_of_refugee_affairs').GetName]",
+  "de": "Wirkung der Institution [GetInstitutionType('institution_ministry_of_refugee_affairs').GetName]"
+ },
+ "country_institution_impact_institution_ministry_of_refugee_affairs_mult_desc": {
+  "en": "An increase or reduction to the effects of the [GetInstitutionType('institution_ministry_of_refugee_affairs').GetName] [concept_institution]",
+  "de": "Erhöht oder verringert die Wirkung der [concept_institution] [GetInstitutionType('institution_ministry_of_refugee_affairs').GetName]"
+ },
+ "country_institution_impact_institution_ministry_of_science_mult": {
+  "en": "Impact of [GetInstitutionType('institution_ministry_of_science').GetName]",
+  "de": "Wirkung der Institution [GetInstitutionType('institution_ministry_of_science').GetName]"
+ },
+ "country_institution_impact_institution_ministry_of_science_mult_desc": {
+  "en": "An increase or reduction to the effects of the [GetInstitutionType('institution_ministry_of_science').GetName] [concept_institution]",
+  "de": "Erhöht oder verringert die Wirkung der [concept_institution] [GetInstitutionType('institution_ministry_of_science').GetName]"
+ },
+ "country_institution_impact_institution_ministry_of_the_environment_mult": {
+  "en": "Impact of [GetInstitutionType('institution_ministry_of_the_environment').GetName]",
+  "de": "Wirkung der Institution [GetInstitutionType('institution_ministry_of_the_environment').GetName]"
+ },
+ "country_institution_impact_institution_ministry_of_the_environment_mult_desc": {
+  "en": "An increase or reduction to the effects of the [GetInstitutionType('institution_ministry_of_the_environment').GetName] [concept_institution]",
+  "de": "Erhöht oder verringert die Wirkung der [concept_institution] [GetInstitutionType('institution_ministry_of_the_environment').GetName]"
+ },
+ "country_institution_impact_institution_ministry_of_war_mult": {
+  "en": "Impact of [GetInstitutionType('institution_ministry_of_war').GetName]",
+  "de": "Wirkung der Institution [GetInstitutionType('institution_ministry_of_war').GetName]"
+ },
+ "country_institution_impact_institution_ministry_of_war_mult_desc": {
+  "en": "An increase or reduction to the effects of the [GetInstitutionType('institution_ministry_of_war').GetName] [concept_institution]",
+  "de": "Erhöht oder verringert die Wirkung der [concept_institution] [GetInstitutionType('institution_ministry_of_war').GetName]"
+ },
+ "country_institution_impact_institution_national_bank_mult": {
+  "en": "Impact of [GetInstitutionType('institution_national_bank').GetName]",
+  "de": "Wirkung der Institution [GetInstitutionType('institution_national_bank').GetName]"
+ },
+ "country_institution_impact_institution_national_bank_mult_desc": {
+  "en": "An increase or reduction to the effects of the [GetInstitutionType('institution_national_bank').GetName] [concept_institution]",
+  "de": "Erhöht oder verringert die Wirkung der [concept_institution] [GetInstitutionType('institution_national_bank').GetName]"
+ },
+ "country_institution_impact_institution_police_mult": {
+  "en": "Impact of [GetInstitutionType('institution_police').GetName]",
+  "de": "Wirkung der Institution [GetInstitutionType('institution_police').GetName]"
+ },
+ "country_institution_impact_institution_police_mult_desc": {
+  "en": "An increase or reduction to the effects of the [GetInstitutionType('institution_police').GetName] [concept_institution]",
+  "de": "Erhöht oder verringert die Wirkung der [concept_institution] [GetInstitutionType('institution_police').GetName]"
+ },
+ "country_institution_impact_institution_schools_mult": {
+  "en": "Impact of [GetInstitutionType('institution_schools').GetName]",
+  "de": "Wirkung der Institution [GetInstitutionType('institution_schools').GetName]"
+ },
+ "country_institution_impact_institution_schools_mult_desc": {
+  "en": "An increase or reduction to the effects of the [GetInstitutionType('institution_schools').GetName] [concept_institution]",
+  "de": "Erhöht oder verringert die Wirkung der [concept_institution] [GetInstitutionType('institution_schools').GetName]"
+ },
+ "country_institution_migration_controls_max_investment_add_desc": {
+  "en": "Increases the maximum [concept_institution] [concept_investment_level] available for [GetInstitutionType('institution_migration_controls').GetName]",
+  "de": "Erhöht die maximale [concept_investment_level] der [concept_institution] [GetInstitutionType('institution_migration_controls').GetName]"
+ },
+ "country_institution_ministry_of_commerce_max_investment_add_desc": {
+  "en": "Increases the maximum [concept_institution] [concept_investment_level] available for [GetInstitutionType('institution_ministry_of_commerce').GetName]",
+  "de": "Erhöht die maximale [concept_investment_level] der [concept_institution] [GetInstitutionType('institution_ministry_of_commerce').GetName]"
+ },
+ "country_institution_ministry_of_consumer_protection_max_investment_add_desc": {
+  "en": "Increases the maximum [concept_institution] [concept_investment_level] available for [GetInstitutionType('institution_ministry_of_consumer_protection').GetName]",
+  "de": "Erhöht die maximale [concept_investment_level] der [concept_institution] [GetInstitutionType('institution_ministry_of_consumer_protection').GetName]"
+ },
+ "country_institution_ministry_of_culture_max_investment_add_desc": {
+  "en": "Increases the maximum [concept_institution] [concept_investment_level] available for [GetInstitutionType('institution_ministry_of_culture').GetName]",
+  "de": "Erhöht die maximale [concept_investment_level] der [concept_institution] [GetInstitutionType('institution_ministry_of_culture').GetName]"
+ },
+ "country_institution_ministry_of_foreign_affairs_max_investment_add_desc": {
+  "en": "Increases the maximum [concept_institution] [concept_investment_level] available for [GetInstitutionType('institution_ministry_of_foreign_affairs').GetName]",
+  "de": "Erhöht die maximale [concept_investment_level] der [concept_institution] [GetInstitutionType('institution_ministry_of_foreign_affairs').GetName]"
+ },
+ "country_institution_ministry_of_intelligence_and_security_max_investment_add_desc": {
+  "en": "Increases the maximum [concept_institution] [concept_investment_level] available for [GetInstitutionType('institution_ministry_of_intelligence_and_security').GetName]",
+  "de": "Erhöht die maximale [concept_investment_level] der [concept_institution] [GetInstitutionType('institution_ministry_of_intelligence_and_security').GetName]"
+ },
+ "country_institution_ministry_of_international_aid_max_investment_add_desc": {
+  "en": "Increases the maximum [concept_institution] [concept_investment_level] available for [GetInstitutionType('institution_ministry_of_international_aid').GetName]",
+  "de": "Erhöht die maximale [concept_investment_level] der [concept_institution] [GetInstitutionType('institution_ministry_of_international_aid').GetName]"
+ },
+ "country_institution_ministry_of_labor_max_investment_add_desc": {
+  "en": "Increases the maximum [concept_institution] [concept_investment_level] available for [GetInstitutionType('institution_ministry_of_labor').GetName]",
+  "de": "Erhöht die maximale [concept_investment_level] der [concept_institution] [GetInstitutionType('institution_ministry_of_labor').GetName]"
+ },
+ "country_institution_ministry_of_propaganda_max_investment_add_desc": {
+  "en": "Increases the maximum [concept_institution] [concept_investment_level] available for [GetInstitutionType('institution_ministry_of_propaganda').GetName]",
+  "de": "Erhöht die maximale [concept_investment_level] der [concept_institution] [GetInstitutionType('institution_ministry_of_propaganda').GetName]"
+ },
+ "country_institution_ministry_of_refugee_affairs_max_investment_add_desc": {
+  "en": "Increases the maximum [concept_institution] [concept_investment_level] available for [GetInstitutionType('institution_ministry_of_refugee_affairs').GetName]",
+  "de": "Erhöht die maximale [concept_investment_level] der [concept_institution] [GetInstitutionType('institution_ministry_of_refugee_affairs').GetName]"
+ },
+ "country_institution_ministry_of_religion_max_investment_add_desc": {
+  "en": "Increases the maximum [concept_institution] [concept_investment_level] available for [GetInstitutionType('institution_ministry_of_religion').GetName]",
+  "de": "Erhöht die maximale [concept_investment_level] der [concept_institution] [GetInstitutionType('institution_ministry_of_religion').GetName]"
+ },
+ "country_institution_ministry_of_science_max_investment_add_desc": {
+  "en": "Increases the maximum [concept_institution] [concept_investment_level] available for [GetInstitutionType('institution_ministry_of_science').GetName]",
+  "de": "Erhöht die maximale [concept_investment_level] der [concept_institution] [GetInstitutionType('institution_ministry_of_science').GetName]"
+ },
+ "country_institution_ministry_of_the_environment_max_investment_add_desc": {
+  "en": "Increases the maximum [concept_institution] [concept_investment_level] available for [GetInstitutionType('institution_ministry_of_the_environment').GetName]",
+  "de": "Erhöht die maximale [concept_investment_level] der [concept_institution] [GetInstitutionType('institution_ministry_of_the_environment').GetName]"
+ },
+ "country_institution_ministry_of_thought_control_max_investment_add_desc": {
+  "en": "Increases the maximum [concept_institution] [concept_investment_level] available for [GetInstitutionType('institution_ministry_of_thought_control').GetName]",
+  "de": "Erhöht die maximale [concept_investment_level] der [concept_institution] [GetInstitutionType('institution_ministry_of_thought_control').GetName]"
+ },
+ "country_institution_ministry_of_urban_planning_max_investment_add_desc": {
+  "en": "Increases the maximum [concept_institution] [concept_investment_level] available for [GetInstitutionType('institution_ministry_of_urban_planning').GetName]",
+  "de": "Erhöht die maximale [concept_investment_level] der [concept_institution] [GetInstitutionType('institution_ministry_of_urban_planning').GetName]"
+ },
+ "country_institution_ministry_of_war_max_investment_add_desc": {
+  "en": "Increases the maximum [concept_institution] [concept_investment_level] available for [GetInstitutionType('institution_ministry_of_war').GetName]",
+  "de": "Erhöht die maximale [concept_investment_level] der [concept_institution] [GetInstitutionType('institution_ministry_of_war').GetName]"
+ },
+ "country_institution_national_bank_max_investment_add_desc": {
+  "en": "Increases the maximum [concept_institution] [concept_investment_level] available for [GetInstitutionType('institution_national_bank').GetName]",
+  "de": "Erhöht die maximale [concept_investment_level] der [concept_institution] [GetInstitutionType('institution_national_bank').GetName]"
+ },
+ "country_institution_size_change_speed_institution_ministry_of_the_environment_mult": {
+  "en": "[GetInstitutionType('institution_ministry_of_the_environment').GetName] Size Change Speed",
+  "de": "Änderungsgeschwindigkeit der Institution [GetInstitutionType('institution_ministry_of_the_environment').GetName]"
+ },
+ "country_institution_size_change_speed_institution_ministry_of_the_environment_mult_desc": {
+  "en": "How fast you change the size of the [GetInstitutionType('institution_ministry_of_the_environment').GetName] [concept_institution]",
+  "de": "Wie schnell sich die Größe der [concept_institution] [GetInstitutionType('institution_ministry_of_the_environment').GetName] ändern lässt."
+ },
+ "country_intelligence_capacity_add": {
+  "en": "Intelligence Capacity",
+  "de": "Geheimdienstkapazität"
+ },
+ "country_intelligence_capacity_add_desc": {
+  "en": "A flat bonus or penalty to the nation's [concept_intelligence_capacity] score, representing its counterintelligence capability.",
+  "de": "Ein fester Bonus oder Malus auf den [concept_intelligence_capacity]-Wert der Nation, der ihre Spionageabwehrfähigkeit darstellt."
+ },
+ "country_intelligence_capacity_mult": {
+  "en": "Intelligence Capacity",
+  "de": "Geheimdienstkapazität"
+ },
+ "country_intelligence_capacity_mult_desc": {
+  "en": "A percentage bonus or penalty to the nation's [concept_intelligence_capacity] score.",
+  "de": "Ein prozentualer Bonus oder Malus auf den [concept_intelligence_capacity]-Wert der Nation."
+ },
+ "country_legislative_override_capacity_add_desc": {
+  "en": "How easily this regime can bypass the normal legislative process. At 2 or more, the regime can decisively push laws through despite [Concept('concept_interest_group','Interest Group')] opposition; at 4 or more, it can force them through outright. Each point also trims the [concept_authority] cost — modestly below +5 (about -3% at +2, -9% at +4) and steeply beyond it (about -20% at +5, -50% at +8, -75% at +16). Forcing a law temporarily depletes capacity, recovering over about five years, so capacity above a threshold acts as a buffer that lets the regime act again sooner and at higher tiers. Authoritarian governance, suppressive policies, centralized state structures, surveillance technology, state institutions (policing, thought control, propaganda), and certain power bloc principles raise capacity; democratic suffrage, decentralization, feudal arrangements, and protected liberties lower it.",
+  "de": "Wie leicht dieses Regime den normalen Gesetzgebungsprozess umgehen kann. Bei 2 oder mehr kann das Regime Gesetze trotz des Widerstands von [Concept('concept_interest_group','Interessengruppen')] entschlossen durchsetzen; bei 4 oder mehr kann es sie regelrecht erzwingen. Jeder Punkt senkt zudem die [concept_authority]-Kosten — moderat unterhalb von +5 (etwa -3% bei +2, -9% bei +4) und deutlich darüber hinaus (etwa -20% bei +5, -50% bei +8, -75% bei +16). Das Erzwingen eines Gesetzes erschöpft die Kapazität vorübergehend; sie erholt sich über etwa fünf Jahre, sodass Kapazität oberhalb einer Schwelle als Puffer wirkt, der es dem Regime erlaubt, früher und auf höheren Stufen erneut zu handeln. Autoritäre Regierungsführung, unterdrückerische Politik, zentralisierte Staatsstrukturen, Überwachungstechnologie, staatliche Institutionen (Polizei, Gedankenkontrolle, Propaganda) und bestimmte Machtblockprinzipien erhöhen die Kapazität; demokratisches Wahlrecht, Dezentralisierung, feudale Verhältnisse und geschützte Freiheiten senken sie."
+ },
+ "country_leverage_threshold_change_add": {
+  "en": "[concept_power_bloc_leverage] Threshold Change",
+  "de": "Änderung der [concept_power_bloc_leverage]-Schwelle"
+ },
+ "country_leverage_threshold_change_add_desc": {
+  "en": "A change in the [concept_power_bloc_leverage] threshold for a [concept_power_bloc_leader] to invite a country to their [concept_power_bloc].",
+  "de": "Eine Änderung der [concept_power_bloc_leverage]-Schwelle, ab der ein [concept_power_bloc_leader] ein Land in seinen [concept_power_bloc] einladen kann."
+ },
+ "country_nuclear_program_progress_mult": {
+  "en": "[concept_nuclear_program] Progress",
+  "de": "Fortschritt des [concept_nuclear_program]s"
+ },
+ "country_nuclear_program_progress_mult_desc": {
+  "en": "Multiplies the rate at which this country's [concept_nuclear_program] progress accrues. Values greater than 0 speed progress; negative values slow it.",
+  "de": "Multipliziert die Rate, mit der der Fortschritt des [concept_nuclear_program]s dieses Landes zunimmt. Werte über 0 beschleunigen den Fortschritt, negative Werte verlangsamen ihn."
+ },
+ "country_nuclear_weapon_attack_success_add": {
+  "en": "[concept_nuclear_strike] Success Chance",
+  "de": "Erfolgschance eines [concept_nuclear_strike]s"
+ },
+ "country_nuclear_weapon_attack_success_add_desc": {
+  "en": "The chance that our [concept_nuclear_stockpile] will successfully deliver a [concept_nuclear_strike] on their target.",
+  "de": "Die Chance, dass unser [concept_nuclear_stockpile] einen [concept_nuclear_strike] erfolgreich auf sein Ziel bringt."
+ },
+ "country_participant_diplomatic_play_escalation_weekly_add": {
+  "en": "Weekly Escalation in [Concept('concept_diplomatic_play', 'Diplomatic Plays')] You Joined",
+  "de": "Wöchentliche Eskalation in [Concept('concept_diplomatic_play', 'Diplomatiespielen')], denen Sie beigetreten sind"
+ },
+ "country_participant_diplomatic_play_escalation_weekly_add_desc": {
+  "en": "A flat amount of [concept_escalation] added each week to every [concept_diplomatic_play] this country is a committed participant in (either side). Floored at 0; stacks with the role-specific aggressor / defender contributions when applicable.",
+  "de": "Ein fester Betrag an [concept_escalation], der jede Woche zu jedem [concept_diplomatic_play] hinzugefügt wird, an dem dieses Land als gebundener Teilnehmer beteiligt ist (auf beiden Seiten). Nach unten auf 0 begrenzt; addiert sich gegebenenfalls zu den rollenspezifischen Beiträgen als Angreifer bzw. Verteidiger."
+ },
+ "country_participant_diplomatic_play_escalation_weekly_mult": {
+  "en": "Weekly Escalation in [Concept('concept_diplomatic_play', 'Diplomatic Plays')] You Joined",
+  "de": "Wöchentliche Eskalation in [Concept('concept_diplomatic_play', 'Diplomatiespielen')], denen Sie beigetreten sind"
+ },
+ "country_participant_diplomatic_play_escalation_weekly_mult_desc": {
+  "en": "A multiplier applied to the matching #V _add#! amount of weekly [concept_escalation] for plays this country has joined as a committed participant.",
+  "de": "Ein Multiplikator auf den passenden #V _add#!-Betrag der wöchentlichen [concept_escalation] für Spiele, denen dieses Land als gebundener Teilnehmer beigetreten ist."
+ },
+ "country_policy_rate_drift_speed_mult": {
+  "en": "Policy Rate Adjustment Speed",
+  "de": "Anpassungsgeschwindigkeit des Leitzinses"
+ },
+ "country_policy_rate_drift_speed_mult_desc": {
+  "en": "How quickly the policy rate closes on the target your central bank is steering for. At the baseline it covers about a third of a point a month — a point a quarter — so changing course takes seasons rather than weeks.",
+  "de": "Wie schnell sich der Leitzins dem Ziel annähert, auf das Ihre Zentralbank hinsteuert. Im Ausgangswert deckt dies etwa ein Drittel Punkt pro Monat ab — ein Punkt pro Quartal —, sodass ein Kurswechsel eher Jahreszeiten als Wochen dauert."
+ },
+ "country_policy_rate_floor_add": {
+  "en": "Lowest Policy Rate",
+  "de": "Niedrigster Leitzins"
+ },
+ "country_policy_rate_floor_add_desc": {
+  "en": "The lowest rate your central bank is able to set. Normally nothing below zero: charge savers to keep money in a bank and they will keep it in cash instead. A currency with no cash to keep can be pushed past that point.",
+  "de": "Der niedrigste Zinssatz, den Ihre Zentralbank festlegen kann. Normalerweise nichts unter null: Wer Sparern Gebühren fürs Geldhalten berechnet, treibt sie ins Bargeld. Eine Währung ohne Bargeld zum Horten lässt sich über diesen Punkt hinaus drücken."
+ },
+ "country_risk_premium_add": {
+  "en": "Risk Premium",
+  "de": "Risikoaufschlag"
+ },
+ "country_risk_premium_add_desc": {
+  "en": "The part of your government's borrowing rate that comes from what is #b happening#!: the state of the financial cycle, emergency interventions, the outcome of banking crises, the weight of debt already owed, and any default in living memory. It is charged #b on top of#! your credit standing, after the floor that standing cannot fall below — so a crisis always costs you, however sound your finances, and relief measures can pull the charge back down again.",
+  "de": "Der Teil des Kreditzinses Ihrer Regierung, der davon abhängt, was gerade #b geschieht#!: der Zustand des Finanzzyklus, Notinterventionen, der Ausgang von Bankenkrisen, die Last bereits bestehender Schulden und jeder Zahlungsausfall in lebendiger Erinnerung. Er wird #b zusätzlich zu#! Ihrer Kreditwürdigkeit berechnet, nach deren Untergrenze — eine Krise kostet Sie also immer etwas, wie solide Ihre Finanzen auch sind, und Entlastungsmaßnahmen können den Aufschlag wieder senken."
+ },
+ "country_ship_type_destroyer_construction_efficiency_add": {
+  "en": "$ship_type_destroyer$ Construction Efficiency",
+  "de": "Baueffizienz: $ship_type_destroyer$"
+ },
+ "country_ship_type_destroyer_construction_efficiency_add_desc": {
+  "en": "The efficiency of [Concept('concept_ship_type', '$ship_type_destroyer$')] @ship_construction! [concept_ship_construction]",
+  "de": "Die Effizienz des @ship_construction! [concept_ship_construction] für [Concept('concept_ship_type', '$ship_type_destroyer$')]"
+ },
+ "country_sol_expectation_adaptation_rate_mult": {
+  "en": "[concept_sol_expectations] Adaptation Rate",
+  "de": "Anpassungsrate der [concept_sol_expectations]"
+ },
+ "country_sol_expectation_adaptation_rate_mult_desc": {
+  "en": "Scales how quickly the population's [concept_sol_expectations] adapt to their actual [concept_sol]. Higher values mean expectations adjust faster.",
+  "de": "Skaliert, wie schnell sich die [concept_sol_expectations] der Bevölkerung an ihren tatsächlichen [concept_sol] anpassen. Höhere Werte bedeuten eine schnellere Anpassung der Erwartungen."
+ },
+ "country_sol_expectations_lower_offset_add": {
+  "en": "[concept_sol_expectations] [concept_lower_strata] Offset",
+  "de": "[concept_sol_expectations]-Abweichung: [concept_lower_strata]"
+ },
+ "country_sol_expectations_lower_offset_add_desc": {
+  "en": "Adjusts how much the lower class expects relative to the country average. Positive values raise the expectations of the poor; negative values mean they are more accustomed to hardship.",
+  "de": "Passt an, wie viel die Unterschicht im Verhältnis zum Landesdurchschnitt erwartet. Positive Werte erhöhen die Erwartungen der Armen; negative Werte bedeuten, dass sie eher an Entbehrungen gewöhnt sind."
+ },
+ "country_sol_expectations_lower_offset_mult": {
+  "en": "[concept_sol_expectations] [concept_lower_strata] Offset Scale",
+  "de": "[concept_sol_expectations]-Abweichung: [concept_lower_strata] (Skalierung)"
+ },
+ "country_sol_expectations_lower_offset_mult_desc": {
+  "en": "Percentage scaling of the lower class expectation offset. Positive values amplify their expectations; negative values dampen them.",
+  "de": "Prozentuale Skalierung der Erwartungsabweichung der Unterschicht. Positive Werte verstärken ihre Erwartungen; negative Werte dämpfen sie."
+ },
+ "country_sol_expectations_middle_offset_add": {
+  "en": "[concept_sol_expectations] [concept_middle_strata] Offset",
+  "de": "[concept_sol_expectations]-Abweichung: [concept_middle_strata]"
+ },
+ "country_sol_expectations_middle_offset_add_desc": {
+  "en": "Adjusts how much the middle class expects relative to the country average. Positive values raise middle-class expectations; negative values make them more accepting of modest living standards.",
+  "de": "Passt an, wie viel die Mittelschicht im Verhältnis zum Landesdurchschnitt erwartet. Positive Werte erhöhen die Erwartungen der Mittelschicht; negative Werte machen sie zufriedener mit bescheidenerem Lebensstandard."
+ },
+ "country_sol_expectations_middle_offset_mult": {
+  "en": "[concept_sol_expectations] [concept_middle_strata] Offset Scale",
+  "de": "[concept_sol_expectations]-Abweichung: [concept_middle_strata] (Skalierung)"
+ },
+ "country_sol_expectations_middle_offset_mult_desc": {
+  "en": "Percentage scaling of the middle class expectation offset. Positive values amplify their expectations; negative values dampen them.",
+  "de": "Prozentuale Skalierung der Erwartungsabweichung der Mittelschicht. Positive Werte verstärken ihre Erwartungen; negative Werte dämpfen sie."
+ },
+ "country_sol_expectations_offset_mult": {
+  "en": "[concept_sol_expectations] Offset Scale",
+  "de": "[concept_sol_expectations]-Abweichungsskalierung"
+ },
+ "country_sol_expectations_offset_mult_desc": {
+  "en": "Percentage scaling of the overall expectation offset before per-strata adjustments. Affects all classes equally.",
+  "de": "Prozentuale Skalierung der gesamten Erwartungsabweichung vor schichtspezifischen Anpassungen. Betrifft alle Schichten gleichermaßen."
+ },
+ "country_sol_expectations_shift_add": {
+  "en": "[concept_sol_expectations] Monthly Shift",
+  "de": "Monatliche Verschiebung der [concept_sol_expectations]"
+ },
+ "country_sol_expectations_shift_add_desc": {
+  "en": "A persistent monthly bias applied to the population's [concept_sol_expectations]. Positive values raise expectations over time (people expect more), negative values lower them.",
+  "de": "Eine dauerhafte monatliche Tendenz, die auf die [concept_sol_expectations] der Bevölkerung wirkt. Positive Werte erhöhen die Erwartungen mit der Zeit (die Menschen erwarten mehr), negative Werte senken sie."
+ },
+ "country_sol_expectations_shift_max_add": {
+  "en": "[concept_sol_expectations] Shift Ceiling",
+  "de": "Obergrenze der Verschiebung der [concept_sol_expectations]"
+ },
+ "country_sol_expectations_shift_max_add_desc": {
+  "en": "Sets a maximum ceiling for the [concept_sol_expectations] shift. Even if actual SoL rises far above expectations, the shift cannot exceed this value. Lower values prevent excessive complacency from rapid growth.",
+  "de": "Legt eine Obergrenze für die Verschiebung der [concept_sol_expectations] fest. Selbst wenn der tatsächliche Lebensstandard weit über die Erwartungen steigt, kann die Verschiebung diesen Wert nicht überschreiten. Niedrigere Werte verhindern übermäßige Selbstzufriedenheit durch schnelles Wachstum."
+ },
+ "country_sol_expectations_shift_min_add": {
+  "en": "[concept_sol_expectations] Shift Floor",
+  "de": "Untergrenze der Verschiebung der [concept_sol_expectations]"
+ },
+ "country_sol_expectations_shift_min_add_desc": {
+  "en": "Sets a minimum floor for the [concept_sol_expectations] shift. Even if actual SoL drops far below expectations, the shift cannot fall below this value. Higher values provide a stronger safety net against expectation collapse.",
+  "de": "Legt eine Untergrenze für die Verschiebung der [concept_sol_expectations] fest. Selbst wenn der tatsächliche Lebensstandard weit unter die Erwartungen fällt, kann die Verschiebung diesen Wert nicht unterschreiten. Höhere Werte bieten ein stärkeres Sicherheitsnetz gegen einen Erwartungseinbruch."
+ },
+ "country_sol_expectations_target_add": {
+  "en": "[concept_sol_expectations] Target Offset",
+  "de": "Zielabweichung der [concept_sol_expectations]"
+ },
+ "country_sol_expectations_target_add_desc": {
+  "en": "Offsets the target that the population's [concept_sol_expectations] converge toward. Positive values mean people permanently expect more than their actual [concept_sol]; negative values mean they expect less.",
+  "de": "Verschiebt das Ziel, auf das sich die [concept_sol_expectations] der Bevölkerung zubewegen. Positive Werte bedeuten, dass die Menschen dauerhaft mehr erwarten als ihren tatsächlichen [concept_sol]; negative Werte bedeuten, dass sie weniger erwarten."
+ },
+ "country_sol_expectations_upper_offset_add": {
+  "en": "[concept_sol_expectations] [concept_upper_strata] Offset",
+  "de": "[concept_sol_expectations]-Abweichung: [concept_upper_strata]"
+ },
+ "country_sol_expectations_upper_offset_add_desc": {
+  "en": "Adjusts how much the upper class expects relative to the country average. Positive values mean the wealthy expect even more luxury; negative values mean they are more in touch with common living standards.",
+  "de": "Passt an, wie viel die Oberschicht im Verhältnis zum Landesdurchschnitt erwartet. Positive Werte bedeuten, dass die Wohlhabenden noch mehr Luxus erwarten; negative Werte bedeuten, dass sie dem gewöhnlichen Lebensstandard näherstehen."
+ },
+ "country_sol_expectations_upper_offset_mult": {
+  "en": "[concept_sol_expectations] [concept_upper_strata] Offset Scale",
+  "de": "[concept_sol_expectations]-Abweichung: [concept_upper_strata] (Skalierung)"
+ },
+ "country_sol_expectations_upper_offset_mult_desc": {
+  "en": "Percentage scaling of the upper class expectation offset. Positive values amplify their expectations; negative values dampen them.",
+  "de": "Prozentuale Skalierung der Erwartungsabweichung der Oberschicht. Positive Werte verstärken ihre Erwartungen; negative Werte dämpfen sie."
+ },
+ "country_solar_receiver_max_level_add": {
+  "en": "Available Solar Receiver Slots",
+  "de": "Verfügbare Solarempfänger-Plätze"
+ },
+ "country_solar_receiver_max_level_add_desc": {
+  "en": "The number of additional Solar Power Receivers that can be constructed. Each level of Orbital Solar Collector adds 10 slots, and each level of Solar Power Receiver uses 1 slot.",
+  "de": "Die Anzahl zusätzlicher Solarempfänger, die gebaut werden können. Jede Stufe des Orbitalen Sonnenkollektors fügt 10 Plätze hinzu, und jede Stufe des Solarempfängers verbraucht 1 Platz."
+ },
+ "country_space_race_max_funding_add": {
+  "en": "[concept_space_race] Maximum Funding Level",
+  "de": "Maximales Förderniveau des [concept_space_race]s"
+ },
+ "country_space_race_max_funding_add_desc": {
+  "en": "Increases the maximum funding level available for the [concept_space_race] program",
+  "de": "Erhöht das maximal verfügbare Förderniveau für das [concept_space_race]-Programm"
+ },
+ "country_space_race_progress_add": {
+  "en": "[concept_space_race] Monthly Progress",
+  "de": "Monatlicher Fortschritt des [concept_space_race]s"
+ },
+ "country_space_race_progress_add_desc": {
+  "en": "Increases the rate of progress toward [concept_space_race] milestones. Contributed by aerospace buildings, space [concept_infrastructure], technologies, and partnerships.",
+  "de": "Erhöht die Fortschrittsrate hin zu den Meilensteinen des [concept_space_race]. Getragen von Luft- und Raumfahrtgebäuden, weltraumbezogener [concept_infrastructure], Technologien und Partnerschaften."
+ },
+ "country_space_race_progress_mult": {
+  "en": "[concept_space_race] Progress",
+  "de": "Fortschritt des [concept_space_race]s"
+ },
+ "country_space_race_progress_mult_desc": {
+  "en": "Multiplicative bonus to [concept_space_race] milestone progress. The Ambitious approach on active milestones provides this bonus at the cost of increased failure risk.",
+  "de": "Multiplikativer Bonus auf den Fortschritt bei den Meilensteinen des [concept_space_race]. Der ambitionierte Ansatz bei aktiven Meilensteinen gewährt diesen Bonus auf Kosten eines erhöhten Fehlschlagsrisikos."
+ },
+ "country_space_race_risk_mult": {
+  "en": "[concept_space_race] Failure Risk",
+  "de": "Fehlschlagsrisiko des [concept_space_race]s"
+ },
+ "country_space_race_risk_mult_desc": {
+  "en": "Multiplicative adjustment to [concept_space_race] failure risk. The Safe approach on active milestones reduces failure risk at the cost of slower progress.",
+  "de": "Multiplikative Anpassung des Fehlschlagsrisikos beim [concept_space_race]. Der sichere Ansatz bei aktiven Meilensteinen verringert das Fehlschlagsrisiko auf Kosten eines langsameren Fortschritts."
+ },
+ "country_st_res_aeroplanes_capacity_add": {
+  "en": "Aeroplanes Reserve Capacity",
+  "de": "Reservekapazität: Flugzeuge"
+ },
+ "country_st_res_aeroplanes_capacity_add_desc": {
+  "en": "Maximum aeroplanes that can be held in the national strategic reserve.",
+  "de": "Maximale Anzahl an Flugzeugen, die in der nationalen strategischen Reserve gelagert werden können."
+ },
+ "country_st_res_aeroplanes_decay_add": {
+  "en": "Aeroplanes Reserve Decay",
+  "de": "Reserveschwund: Flugzeuge"
+ },
+ "country_st_res_aeroplanes_decay_add_desc": {
+  "en": "Fraction of the aeroplane stockpile lost to airframe fatigue and obsolescence per year.",
+  "de": "Anteil des Flugzeugbestands, der jährlich durch Materialermüdung und Veralterung verloren geht."
+ },
+ "country_st_res_ammunition_capacity_add": {
+  "en": "Ammunition Reserve Capacity",
+  "de": "Reservekapazität: Munition"
+ },
+ "country_st_res_ammunition_capacity_add_desc": {
+  "en": "Maximum ammunition that can be held in the national strategic reserve.",
+  "de": "Maximale Menge an Munition, die in der nationalen strategischen Reserve gelagert werden kann."
+ },
+ "country_st_res_ammunition_decay_add": {
+  "en": "Ammunition Reserve Decay",
+  "de": "Reserveschwund: Munition"
+ },
+ "country_st_res_ammunition_decay_add_desc": {
+  "en": "Fraction of the ammunition stockpile lost to degradation per year.",
+  "de": "Anteil des Munitionsbestands, der jährlich durch Materialabbau verloren geht."
+ },
+ "country_st_res_artillery_capacity_add": {
+  "en": "Artillery Reserve Capacity",
+  "de": "Reservekapazität: Artillerie"
+ },
+ "country_st_res_artillery_capacity_add_desc": {
+  "en": "Maximum artillery pieces that can be held in the national strategic reserve.",
+  "de": "Maximale Anzahl an Artilleriegeschützen, die in der nationalen strategischen Reserve gelagert werden können."
+ },
+ "country_st_res_artillery_decay_add": {
+  "en": "Artillery Reserve Decay",
+  "de": "Reserveschwund: Artillerie"
+ },
+ "country_st_res_artillery_decay_add_desc": {
+  "en": "Fraction of the artillery stockpile lost to wear and obsolescence per year.",
+  "de": "Anteil des Artilleriebestands, der jährlich durch Verschleiß und Veralterung verloren geht."
+ },
+ "country_st_res_fertilizer_capacity_add": {
+  "en": "Chemicals Reserve Capacity",
+  "de": "Reservekapazität: Chemikalien"
+ },
+ "country_st_res_fertilizer_capacity_add_desc": {
+  "en": "Maximum chemicals that can be held in the national strategic reserve.",
+  "de": "Maximale Menge an Chemikalien, die in der nationalen strategischen Reserve gelagert werden kann."
+ },
+ "country_st_res_fertilizer_decay_add": {
+  "en": "Chemicals Reserve Decay",
+  "de": "Reserveschwund: Chemikalien"
+ },
+ "country_st_res_fertilizer_decay_add_desc": {
+  "en": "Fraction of the chemicals stockpile lost to caking, moisture absorption and container corrosion per year.",
+  "de": "Anteil des Chemikalienbestands, der jährlich durch Verklumpen, Feuchtigkeitsaufnahme und Behälterkorrosion verloren geht."
+ },
+ "country_st_res_grain_capacity_add": {
+  "en": "Grain Reserve Capacity",
+  "de": "Reservekapazität: Getreide"
+ },
+ "country_st_res_grain_capacity_add_desc": {
+  "en": "Maximum grain that can be held in the national strategic reserve.",
+  "de": "Maximale Menge an Getreide, die in der nationalen strategischen Reserve gelagert werden kann."
+ },
+ "country_st_res_grain_decay_add": {
+  "en": "Grain Reserve Decay",
+  "de": "Reserveschwund: Getreide"
+ },
+ "country_st_res_grain_decay_add_desc": {
+  "en": "Fraction of the grain stockpile lost to spoilage per year.",
+  "de": "Anteil des Getreidebestands, der jährlich durch Verderb verloren geht."
+ },
+ "country_st_res_oil_capacity_add": {
+  "en": "Oil Reserve Capacity",
+  "de": "Reservekapazität: Öl"
+ },
+ "country_st_res_oil_capacity_add_desc": {
+  "en": "Maximum oil that can be held in the national strategic reserve.",
+  "de": "Maximale Menge an Öl, die in der nationalen strategischen Reserve gelagert werden kann."
+ },
+ "country_st_res_oil_decay_add": {
+  "en": "Oil Reserve Decay",
+  "de": "Reserveschwund: Öl"
+ },
+ "country_st_res_oil_decay_add_desc": {
+  "en": "Fraction of the oil stockpile lost to evaporation and sludge per year.",
+  "de": "Anteil des Ölbestands, der jährlich durch Verdunstung und Schlammbildung verloren geht."
+ },
+ "country_st_res_small_arms_capacity_add": {
+  "en": "Small Arms Reserve Capacity",
+  "de": "Reservekapazität: Handfeuerwaffen"
+ },
+ "country_st_res_small_arms_capacity_add_desc": {
+  "en": "Maximum small arms that can be held in the national strategic reserve.",
+  "de": "Maximale Menge an Handfeuerwaffen, die in der nationalen strategischen Reserve gelagert werden kann."
+ },
+ "country_st_res_small_arms_decay_add": {
+  "en": "Small Arms Reserve Decay",
+  "de": "Reserveschwund: Handfeuerwaffen"
+ },
+ "country_st_res_small_arms_decay_add_desc": {
+  "en": "Fraction of the small arms stockpile lost to corrosion and obsolescence per year.",
+  "de": "Anteil des Handfeuerwaffenbestands, der jährlich durch Korrosion und Veralterung verloren geht."
+ },
+ "country_st_res_tanks_capacity_add": {
+  "en": "Tanks Reserve Capacity",
+  "de": "Reservekapazität: Panzer"
+ },
+ "country_st_res_tanks_capacity_add_desc": {
+  "en": "Maximum tanks that can be held in the national strategic reserve.",
+  "de": "Maximale Anzahl an Panzern, die in der nationalen strategischen Reserve gelagert werden kann."
+ },
+ "country_st_res_tanks_decay_add": {
+  "en": "Tanks Reserve Decay",
+  "de": "Reserveschwund: Panzer"
+ },
+ "country_st_res_tanks_decay_add_desc": {
+  "en": "Fraction of the tank stockpile lost to mechanical degradation and obsolescence per year.",
+  "de": "Anteil des Panzerbestands, der jährlich durch mechanischen Verschleiß und Veralterung verloren geht."
+ },
+ "country_st_res_weekly_rate_cap_add": {
+  "en": "Strategic Reserve Weekly Rate Cap",
+  "de": "Wöchentliche Obergrenze der Strategischen Reserve"
+ },
+ "country_st_res_weekly_rate_cap_add_desc": {
+  "en": "Maximum amount of resources that can be added to or removed from the strategic reserve each week, representing logistical constraints on how quickly reserves can be mobilized or replenished.",
+  "de": "Maximale Menge an Ressourcen, die jede Woche der strategischen Reserve hinzugefügt oder aus ihr entnommen werden kann, als Ausdruck logistischer Grenzen dafür, wie schnell Reserven mobilisiert oder aufgefüllt werden können."
+ },
+ "country_subjugation_cultural_strength_add": {
+  "en": "Subjugation Strength (Cultural)",
+  "de": "Unterwerfungsstärke (Kulturell)"
+ },
+ "country_subjugation_cultural_strength_add_desc": {
+  "en": "Bonus to your Subjugation Strength when leading a Cultural bloc and you share at least one primary culture with the target.",
+  "de": "Bonus auf Ihre Unterwerfungsstärke, wenn Sie einen Kulturblock anführen und mit dem Ziel mindestens eine Hauptkultur teilen."
+ },
+ "country_subjugation_ideological_strength_add": {
+  "en": "Subjugation Strength (Ideological)",
+  "de": "Unterwerfungsstärke (Ideologisch)"
+ },
+ "country_subjugation_ideological_strength_add_desc": {
+  "en": "Bonus to your Subjugation Strength when leading an Ideological Union and the target shares your governance [concept_power_bloc_principle] (the same Power Structure law).",
+  "de": "Bonus auf Ihre Unterwerfungsstärke, wenn Sie eine Ideologieunion anführen und das Ziel Ihr [concept_power_bloc_principle] der Regierungsführung teilt (dasselbe Machtgefüge-Gesetz)."
+ },
+ "country_subjugation_military_strength_add": {
+  "en": "Subjugation Strength (Military)",
+  "de": "Unterwerfungsstärke (Militärisch)"
+ },
+ "country_subjugation_military_strength_add_desc": {
+  "en": "Bonus to your Subjugation Strength when leading a Military Treaty Organization and your standing army is at least five times the target's.",
+  "de": "Bonus auf Ihre Unterwerfungsstärke, wenn Sie eine Militärvertragsorganisation anführen und Ihr stehendes Heer mindestens fünfmal so groß ist wie das des Ziels."
+ },
+ "country_subjugation_religious_strength_add": {
+  "en": "Subjugation Strength (Religious)",
+  "de": "Unterwerfungsstärke (Religiös)"
+ },
+ "country_subjugation_religious_strength_add_desc": {
+  "en": "Bonus to your Subjugation Strength when leading a Religious bloc and the target shares your [concept_state_religion].",
+  "de": "Bonus auf Ihre Unterwerfungsstärke, wenn Sie einen Religiösen Block anführen und das Ziel Ihre [concept_state_religion] teilt."
+ },
+ "country_subjugation_sovereign_strength_add": {
+  "en": "Subjugation Strength (Sovereign Empire)",
+  "de": "Unterwerfungsstärke (Souveränes Großreich)"
+ },
+ "country_subjugation_sovereign_strength_add_desc": {
+  "en": "Bonus to your Subjugation Strength when leading a Sovereign Empire bloc. Applies against any target regardless of religion, culture, government, or economic profile.",
+  "de": "Bonus auf Ihre Unterwerfungsstärke, wenn Sie einen Block als Souveränes Großreich anführen. Gilt gegen jedes Ziel, unabhängig von Religion, Kultur, Regierungsform oder Wirtschaftsprofil."
+ },
+ "country_subjugation_strength_add": {
+  "en": "Subjugation Strength",
+  "de": "Unterwerfungsstärke"
+ },
+ "country_subjugation_strength_add_desc": {
+  "en": "A flat bonus to your Subjugation Strength against any target. Subjugating a fellow [Concept('concept_power_bloc_member', 'bloc member')] requires a score of at least #V 1.0#! — the score's base is your [concept_prestige] divided by the target's, then divided by 20, so without bonuses you need a 20:1 prestige lead.",
+  "de": "Ein fester Bonus auf Ihre Unterwerfungsstärke gegen jedes Ziel. Die Unterwerfung eines anderen [Concept('concept_power_bloc_member', 'Blockmitglieds')] erfordert einen Wert von mindestens #V 1,0#! — die Basis des Werts ist Ihr [concept_prestige] geteilt durch das des Ziels, anschließend geteilt durch 20, sodass Sie ohne Boni einen Prestigevorsprung von 20:1 benötigen."
+ },
+ "country_subjugation_trade_strength_add": {
+  "en": "Subjugation Strength (Trade)",
+  "de": "Unterwerfungsstärke (Handel)"
+ },
+ "country_subjugation_trade_strength_add_desc": {
+  "en": "Bonus to your Subjugation Strength when leading a Trade League and the target's [concept_economic_dependence] on you is at least #b Reliant#! (level 3 of 5).",
+  "de": "Bonus auf Ihre Unterwerfungsstärke, wenn Sie eine Handelsliga anführen und die [concept_economic_dependence] des Ziels von Ihnen mindestens #b Abhängig#! ist (Stufe 3 von 5)."
+ },
+ "country_wage_pressure_add": {
+  "en": "Wage Pressure on Prices",
+  "de": "Lohndruck auf die Preise"
+ },
+ "country_wage_pressure_add_desc": {
+  "en": "Standing upward pressure on prices coming from wages — how far above expectations inflation settles while these labour and welfare laws stand. Workers who can bargain, and workers with an income floor beneath them, cost employers more, and employers pass that on. It is tracked apart from every other source of inflation because the same laws pay it back when prices are under control: while inflation is in the #b stable band#!, every #v 0.1%#! of wage pressure also nudges down what your #b lower strata expect#! of life — the pay rise was real, so the disappointment is smaller — and adds to your #b financial momentum#!, because money that holds its value gets spent. Outside that band the dividend stops, and it is never paid to a #b command economy#! or a #b dollarised#! country, neither of which earned the stability it would be paid for. Once headline inflation reaches #v 8%#! these laws count a #b second time#!, as workers who expect prices to keep rising start bargaining for the rise in advance. Laws that suppress wages carry a negative figure instead, and are paid no dividend.",
+  "de": "Dauerhafter Aufwärtsdruck auf die Preise, der von Löhnen ausgeht — wie weit die Inflation über den Erwartungen einpendelt, solange diese Arbeits- und Sozialgesetze bestehen. Arbeiter, die verhandeln können, und Arbeiter mit einer Einkommensuntergrenze unter sich, kosten Arbeitgeber mehr, und Arbeitgeber geben dies weiter. Dies wird getrennt von jeder anderen Inflationsquelle erfasst, weil dieselben Gesetze es zurückzahlen, sobald die Preise unter Kontrolle sind: Solange die Inflation in der #b stabilen Spanne#! liegt, senkt jedes #v 0,1%#! an Lohndruck auch das, was Ihre #b Unterschicht vom Leben erwartet#! — die Lohnerhöhung war real, also fällt die Enttäuschung geringer aus — und erhöht Ihre #b Finanzdynamik#!, weil Geld, das seinen Wert behält, ausgegeben wird. Außerhalb dieser Spanne entfällt die Dividende, und sie wird niemals an eine #b Kommandowirtschaft#! oder ein #b dollarisiertes#! Land gezahlt, da keines der beiden sich die Stabilität verdient hat, für die sie gezahlt würde. Sobald die Gesamtinflation #v 8%#! erreicht, zählen diese Gesetze #b ein zweites Mal#!, da Arbeiter, die mit weiter steigenden Preisen rechnen, bereits im Voraus höhere Löhne fordern. Gesetze, die Löhne unterdrücken, tragen stattdessen einen negativen Wert und erhalten keine Dividende."
+ },
+ "country_weekly_investment_pool_add": {
+  "en": "Weekly [concept_investment_pool] Change",
+  "de": "Wöchentliche Änderung des [concept_investment_pool]s"
+ },
+ "country_weekly_investment_pool_add_desc": {
+  "en": "A direct weekly change to the [concept_investment_pool].",
+  "de": "Eine direkte wöchentliche Änderung des [concept_investment_pool]s."
+ },
+ "country_weekly_investment_pool_mult": {
+  "en": "Weekly [concept_investment_pool]",
+  "de": "Wöchentlicher [concept_investment_pool]"
+ },
+ "country_weekly_investment_pool_mult_desc": {
+  "en": "A percentage change to the [concept_investment_pool] each week.",
+  "de": "Eine prozentuale Änderung des [concept_investment_pool]s jede Woche."
+ },
+ "goods_input_advanced_materials_add": {
+  "en": "@advanced_materials! Advanced Materials Input",
+  "de": "@advanced_materials! Hochleistungswerkstoffeinsatz"
+ },
+ "goods_input_advanced_materials_add_desc": {
+  "en": "The amount of @advanced_materials! Advanced Materials consumed by buildings",
+  "de": "Die Menge an @advanced_materials! Hochleistungswerkstoffen, die von Gebäuden verbraucht wird"
+ },
+ "goods_input_aeroplanes_mult": {
+  "en": "@aeroplanes! Aeroplanes Input",
+  "de": "@aeroplanes! Flugzeugeinsatz"
+ },
+ "goods_input_aeroplanes_mult_desc": {
+  "en": "The amount of @aeroplanes! Aeroplanes consumed by buildings",
+  "de": "Die Menge an @aeroplanes! Flugzeugen, die von Gebäuden verbraucht wird"
+ },
+ "goods_input_coal_mult": {
+  "en": "@coal! Coal Input",
+  "de": "@coal! Kohleeinsatz"
+ },
+ "goods_input_coal_mult_desc": {
+  "en": "The amount of @coal! Coal consumed by buildings",
+  "de": "Die Menge an @coal! Kohle, die von Gebäuden verbraucht wird"
+ },
+ "goods_input_coffee_add": {
+  "en": "@coffee! Coffee Input",
+  "de": "@coffee! Kaffee-Einsatz"
+ },
+ "goods_input_coffee_add_desc": {
+  "en": "The amount of @coffee! Coffee consumed by buildings",
+  "de": "Die Menge an @coffee! Kaffee, die von Gebäuden verbraucht wird"
+ },
+ "goods_input_construction_add": {
+  "en": "@construction! [concept_budget_construction_goods] Input",
+  "de": "@construction! [concept_budget_construction_goods]einsatz"
+ },
+ "goods_input_construction_add_desc": {
+  "en": "The amount of @construction! [concept_budget_construction_goods] consumed by buildings",
+  "de": "Die Menge an @construction! [concept_budget_construction_goods], die von Gebäuden verbraucht wird"
+ },
+ "goods_input_construction_mult": {
+  "en": "@construction! [concept_budget_construction_goods] Input",
+  "de": "@construction! [concept_budget_construction_goods]einsatz"
+ },
+ "goods_input_construction_mult_desc": {
+  "en": "The amount of @construction! [concept_budget_construction_goods] consumed by buildings",
+  "de": "Die Menge an @construction! [concept_budget_construction_goods], die von Gebäuden verbraucht wird"
+ },
+ "goods_input_consumer_appliances_add": {
+  "en": "@consumer_appliances! Consumer Appliances Input",
+  "de": "@consumer_appliances! Haushaltsgeräteeinsatz"
+ },
+ "goods_input_consumer_appliances_add_desc": {
+  "en": "The amount of @consumer_appliances! Consumer Appliances consumed by buildings",
+  "de": "Die Menge an @consumer_appliances! Haushaltsgeräten, die von Gebäuden verbraucht wird"
+ },
+ "goods_input_digital_access_add": {
+  "en": "@digital_access! Digital Access Input",
+  "de": "@digital_access! Digitalzugangseinsatz"
+ },
+ "goods_input_digital_access_add_desc": {
+  "en": "The amount of @digital_access! Digital Access consumed by buildings",
+  "de": "Die Menge an @digital_access! Digitalzugang, die von Gebäuden verbraucht wird"
+ },
+ "goods_input_digital_assets_add": {
+  "en": "@digital_assets! Software Input",
+  "de": "@digital_assets! Softwareeinsatz"
+ },
+ "goods_input_digital_assets_add_desc": {
+  "en": "The amount of @digital_assets! Software consumed by buildings",
+  "de": "Die Menge an @digital_assets! Software, die von Gebäuden verbraucht wird"
+ },
+ "goods_input_electricity_mult": {
+  "en": "@electricity! Electricity Input",
+  "de": "@electricity! Stromeinsatz"
+ },
+ "goods_input_electricity_mult_desc": {
+  "en": "The amount of @electricity! Electricity consumed by buildings",
+  "de": "Die Menge an @electricity! Strom, die von Gebäuden verbraucht wird"
+ },
+ "goods_input_electronic_components_add": {
+  "en": "@electronic_components! Electronic Components Input",
+  "de": "@electronic_components! Elektronikbauteileeinsatz"
+ },
+ "goods_input_electronic_components_add_desc": {
+  "en": "The amount of @electronic_components! Electronic Components consumed by buildings",
+  "de": "Die Menge an @electronic_components! Elektronikbauteilen, die von Gebäuden verbraucht wird"
+ },
+ "goods_input_fertilizer_mult": {
+  "en": "@fertilizer! Chemicals Input",
+  "de": "@fertilizer! Chemikalieneinsatz"
+ },
+ "goods_input_fertilizer_mult_desc": {
+  "en": "The amount of @fertilizer! Chemicals consumed by buildings",
+  "de": "Die Menge an @fertilizer! Chemikalien, die von Gebäuden verbraucht wird"
+ },
+ "goods_input_fine_art_add": {
+  "en": "@fine_art! Fine Art Input",
+  "de": "@fine_art! Einsatz an Kunst und Unterhaltung"
+ },
+ "goods_input_fine_art_add_desc": {
+  "en": "The amount of @fine_art! Fine Art consumed by buildings",
+  "de": "Die Menge an @fine_art! Kunst und Unterhaltung, die von Gebäuden verbraucht wird"
+ },
+ "goods_input_gold_add": {
+  "en": "@gold! Gold Input",
+  "de": "@gold! Goldeinsatz"
+ },
+ "goods_input_gold_add_desc": {
+  "en": "The amount of @gold! Gold consumed by buildings",
+  "de": "Die Menge an @gold! Gold, die von Gebäuden verbraucht wird"
+ },
+ "goods_input_grain_mult": {
+  "en": "@grain! Grain Input",
+  "de": "@grain! Getreideeinsatz"
+ },
+ "goods_input_grain_mult_desc": {
+  "en": "The amount of @grain! Grain consumed by buildings",
+  "de": "Die Menge an @grain! Getreide, die von Gebäuden verbraucht wird"
+ },
+ "goods_input_launch_capacity_add": {
+  "en": "@launch_capacity! Launch Capacity Input",
+  "de": "@launch_capacity! Startkapazitätseinsatz"
+ },
+ "goods_input_launch_capacity_add_desc": {
+  "en": "The amount of @launch_capacity! Launch Capacity consumed by buildings",
+  "de": "Die Menge an @launch_capacity! Startkapazität, die von Gebäuden verbraucht wird"
+ },
+ "goods_input_luxury_clothes_add": {
+  "en": "@luxury_clothes! Luxury Clothes Input",
+  "de": "@luxury_clothes! Luxuskleidungseinsatz"
+ },
+ "goods_input_luxury_clothes_add_desc": {
+  "en": "The amount of @luxury_clothes! Luxury Clothes consumed by buildings",
+  "de": "Die Menge an @luxury_clothes! Luxuskleidung, die von Gebäuden verbraucht wird"
+ },
+ "goods_input_magnetic_drive_ships_add": {
+  "en": "@magnetic_drive_ships! Magnetic Drive Ships Input",
+  "de": "@magnetic_drive_ships! Magnetantriebsschiffeinsatz"
+ },
+ "goods_input_magnetic_drive_ships_add_desc": {
+  "en": "The amount of @magnetic_drive_ships! Magnetic Drive Ships consumed by buildings",
+  "de": "Die Menge an @magnetic_drive_ships! Magnetantriebsschiffen, die von Gebäuden verbraucht wird"
+ },
+ "goods_input_merchant_marine_mult": {
+  "en": "@merchant_marine! Bulk Transportation Input",
+  "de": "@merchant_marine! Massengutverkehrseinsatz"
+ },
+ "goods_input_merchant_marine_mult_desc": {
+  "en": "The amount of @merchant_marine! Bulk Transportation consumed by buildings",
+  "de": "Die Menge an @merchant_marine! Massengutverkehr, die von Gebäuden verbraucht wird"
+ },
+ "goods_input_motor_ships_add": {
+  "en": "@motor_ships! Motor Ships Input",
+  "de": "@motor_ships! Motorschiffseinsatz"
+ },
+ "goods_input_motor_ships_add_desc": {
+  "en": "The amount of @motor_ships! Motor Ships consumed by buildings",
+  "de": "Die Menge an @motor_ships! Motorschiffen, die von Gebäuden verbraucht wird"
+ },
+ "goods_input_robotics_add": {
+  "en": "@robotics! Robotics Input",
+  "de": "@robotics! Robotikeinsatz"
+ },
+ "goods_input_robotics_add_desc": {
+  "en": "The amount of @robotics! Robotics consumed by buildings",
+  "de": "Die Menge an @robotics! Robotik, die von Gebäuden verbraucht wird"
+ },
+ "goods_input_services_add": {
+  "en": "@services! Services Input",
+  "de": "@services! Dienstleistungseinsatz"
+ },
+ "goods_input_services_add_desc": {
+  "en": "The amount of @services! Services consumed by buildings",
+  "de": "Die Menge an @services! Dienstleistungen, die von Gebäuden verbraucht wird"
+ },
+ "goods_input_tea_add": {
+  "en": "@tea! Tea Input",
+  "de": "@tea! Tee-Einsatz"
+ },
+ "goods_input_tea_add_desc": {
+  "en": "The amount of @tea! Tea consumed by buildings",
+  "de": "Die Menge an @tea! Tee, die von Gebäuden verbraucht wird"
+ },
+ "goods_input_tech_metals_add": {
+  "en": "@tech_metals! Tech Metals Input",
+  "de": "@tech_metals! Technologiemetalleinsatz"
+ },
+ "goods_input_tech_metals_add_desc": {
+  "en": "The amount of @tech_metals! Tech Metals consumed by buildings",
+  "de": "Die Menge an @tech_metals! Technologiemetallen, die von Gebäuden verbraucht wird"
+ },
+ "goods_input_wood_mult": {
+  "en": "@wood! Wood Input",
+  "de": "@wood! Holzeinsatz"
+ },
+ "goods_input_wood_mult_desc": {
+  "en": "The amount of @wood! Wood consumed by buildings",
+  "de": "Die Menge an @wood! Holz, die von Gebäuden verbraucht wird"
+ },
+ "goods_output_advanced_materials_add": {
+  "en": "@advanced_materials! Advanced Materials Output",
+  "de": "@advanced_materials! Hochleistungswerkstoffausstoß"
+ },
+ "goods_output_advanced_materials_add_desc": {
+  "en": "The amount of @advanced_materials! Advanced Materials produced by buildings",
+  "de": "Die Menge an @advanced_materials! Hochleistungswerkstoffen, die von Gebäuden produziert wird"
+ },
+ "goods_output_advanced_materials_mult": {
+  "en": "Building @advanced_materials! Advanced Materials output",
+  "de": "@advanced_materials! Hochleistungswerkstoffausstoß"
+ },
+ "goods_output_advanced_materials_mult_desc": {
+  "en": "The amount of @advanced_materials! Advanced Materials produced by buildings",
+  "de": "Die Menge an @advanced_materials! Hochleistungswerkstoffen, die von Gebäuden produziert wird"
+ },
+ "goods_output_clothes_mult": {
+  "en": "Building @clothes! Clothes output",
+  "de": "@clothes! Kleidungsausstoß"
+ },
+ "goods_output_clothes_mult_desc": {
+  "en": "A bonus or penalty to the amount of @clothes! Clothes produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @clothes! Kleidung, die von Gebäuden produziert wird"
+ },
+ "goods_output_coal_mult": {
+  "en": "Building @coal! Coal output",
+  "de": "@coal! Kohleausstoß"
+ },
+ "goods_output_coal_mult_desc": {
+  "en": "A bonus or penalty to the amount of @coal! Coal produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @coal! Kohle, die von Gebäuden produziert wird"
+ },
+ "goods_output_coffee_mult": {
+  "en": "Building @coffee! Coffee output",
+  "de": "@coffee! Kaffeeausstoß"
+ },
+ "goods_output_coffee_mult_desc": {
+  "en": "A bonus or penalty to the amount of @coffee! Coffee produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @coffee! Kaffee, die von Gebäuden produziert wird"
+ },
+ "goods_output_construction_add": {
+  "en": "@construction! [concept_budget_construction_goods] Output",
+  "de": "@construction! [concept_budget_construction_goods]ausstoß"
+ },
+ "goods_output_construction_add_desc": {
+  "en": "The amount of @construction! [concept_budget_construction_goods] produced by buildings",
+  "de": "Die Menge an @construction! [concept_budget_construction_goods], die von Gebäuden produziert wird"
+ },
+ "goods_output_construction_mult": {
+  "en": "Building @construction! Construction output",
+  "de": "@construction! Bauwarenausstoß"
+ },
+ "goods_output_construction_mult_desc": {
+  "en": "A bonus or penalty to the amount of @construction! Construction produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @construction! Bauwaren, die von Gebäuden produziert wird"
+ },
+ "goods_output_consumer_appliances_add": {
+  "en": "@consumer_appliances! Consumer Appliances Output",
+  "de": "@consumer_appliances! Haushaltsgeräteausstoß"
+ },
+ "goods_output_consumer_appliances_add_desc": {
+  "en": "The amount of @consumer_appliances! Consumer Appliances produced by buildings",
+  "de": "Die Menge an @consumer_appliances! Haushaltsgeräten, die von Gebäuden produziert wird"
+ },
+ "goods_output_consumer_appliances_mult": {
+  "en": "Building @consumer_appliances! Consumer Appliances output",
+  "de": "@consumer_appliances! Haushaltsgeräteausstoß"
+ },
+ "goods_output_consumer_appliances_mult_desc": {
+  "en": "A bonus or penalty to the amount of @consumer_appliances! Consumer Appliances produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @consumer_appliances! Haushaltsgeräte, die von Gebäuden produziert wird"
+ },
+ "goods_output_digital_access_add": {
+  "en": "@digital_access! Digital Access Output",
+  "de": "@digital_access! Digitalzugangsausstoß"
+ },
+ "goods_output_digital_access_add_desc": {
+  "en": "The amount of @digital_access! Digital Access produced by buildings",
+  "de": "Die Menge an @digital_access! Digitalzugang, die von Gebäuden produziert wird"
+ },
+ "goods_output_digital_access_mult": {
+  "en": "Building @digital_access! Digital Access output",
+  "de": "@digital_access! Digitalzugangsausstoß"
+ },
+ "goods_output_digital_access_mult_desc": {
+  "en": "A bonus or penalty to the amount of @digital_access! Digital Access produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @digital_access! Digitalzugang, die von Gebäuden produziert wird"
+ },
+ "goods_output_digital_assets_add": {
+  "en": "@digital_assets! Software Output",
+  "de": "@digital_assets! Softwareausstoß"
+ },
+ "goods_output_digital_assets_add_desc": {
+  "en": "The amount of @digital_assets! Software produced by buildings",
+  "de": "Die Menge an @digital_assets! Software, die von Gebäuden produziert wird"
+ },
+ "goods_output_digital_assets_mult": {
+  "en": "Building @digital_assets! Software output",
+  "de": "@digital_assets! Softwareausstoß"
+ },
+ "goods_output_digital_assets_mult_desc": {
+  "en": "A bonus or penalty to the amount of @digital_assets! Software produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @digital_assets! Software, die von Gebäuden produziert wird"
+ },
+ "goods_output_dye_mult": {
+  "en": "Building @dye! Dye output",
+  "de": "@dye! Farbstoffausstoß"
+ },
+ "goods_output_dye_mult_desc": {
+  "en": "A bonus or penalty to the amount of @dye! Dye produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @dye! Farbstoff, die von Gebäuden produziert wird"
+ },
+ "goods_output_electronic_components_add": {
+  "en": "@electronic_components! Electronic Components Output",
+  "de": "@electronic_components! Elektronikbauteileausstoß"
+ },
+ "goods_output_electronic_components_add_desc": {
+  "en": "The amount of @electronic_components! Electronic Components produced by buildings",
+  "de": "Die Menge an @electronic_components! Elektronikbauteilen, die von Gebäuden produziert wird"
+ },
+ "goods_output_electronic_components_mult": {
+  "en": "Building @electronic_components! Electronic Components output",
+  "de": "@electronic_components! Elektronikbauteileausstoß"
+ },
+ "goods_output_electronic_components_mult_desc": {
+  "en": "The amount of @electronic_components! Electronic Components produced by buildings",
+  "de": "Die Menge an @electronic_components! Elektronikbauteilen, die von Gebäuden produziert wird"
+ },
+ "goods_output_explosives_mult": {
+  "en": "Building @explosives! Explosives output",
+  "de": "@explosives! Sprengstoffausstoß"
+ },
+ "goods_output_explosives_mult_desc": {
+  "en": "A bonus or penalty to the amount of @explosives! Explosives produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @explosives! Sprengstoff, die von Gebäuden produziert wird"
+ },
+ "goods_output_fine_art_mult": {
+  "en": "Building @fine_art! Fine Art output",
+  "de": "@fine_art! Ausstoß an Kunst und Unterhaltung"
+ },
+ "goods_output_fine_art_mult_desc": {
+  "en": "A bonus or penalty to the amount of @fine_art! Fine Art produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @fine_art! Kunst und Unterhaltung, die von Gebäuden produziert wird"
+ },
+ "goods_output_fish_mult": {
+  "en": "Building @fish! Fish output",
+  "de": "@fish! Fischausstoß"
+ },
+ "goods_output_fish_mult_desc": {
+  "en": "A bonus or penalty to the amount of @fish! Fish produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @fish! Fisch, die von Gebäuden produziert wird"
+ },
+ "goods_output_furniture_mult": {
+  "en": "Building @furniture! Furniture output",
+  "de": "@furniture! Möbelausstoß"
+ },
+ "goods_output_furniture_mult_desc": {
+  "en": "A bonus or penalty to the amount of @furniture! Furniture produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @furniture! Möbel, die von Gebäuden produziert wird"
+ },
+ "goods_output_glass_mult": {
+  "en": "Building @glass! Glass output",
+  "de": "@glass! Glasausstoß"
+ },
+ "goods_output_glass_mult_desc": {
+  "en": "A bonus or penalty to the amount of @glass! Glass produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @glass! Glas, die von Gebäuden produziert wird"
+ },
+ "goods_output_gold_mult": {
+  "en": "Building @gold! Gold output",
+  "de": "@gold! Goldausstoß"
+ },
+ "goods_output_gold_mult_desc": {
+  "en": "A bonus or penalty to the amount of @gold! Gold produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @gold! Gold, die von Gebäuden produziert wird"
+ },
+ "goods_output_grain_mult": {
+  "en": "Building @grain! Grain output",
+  "de": "@grain! Getreideausstoß"
+ },
+ "goods_output_grain_mult_desc": {
+  "en": "A bonus or penalty to the amount of @grain! Grain produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @grain! Getreide, die von Gebäuden produziert wird"
+ },
+ "goods_output_groceries_mult": {
+  "en": "Building @groceries! Groceries output",
+  "de": "@groceries! Lebensmittelausstoß"
+ },
+ "goods_output_groceries_mult_desc": {
+  "en": "A bonus or penalty to the amount of @groceries! Groceries produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @groceries! Lebensmittel, die von Gebäuden produziert wird"
+ },
+ "goods_output_iron_mult": {
+  "en": "Building @iron! Iron output",
+  "de": "@iron! Eisenausstoß"
+ },
+ "goods_output_iron_mult_desc": {
+  "en": "A bonus or penalty to the amount of @iron! Iron produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @iron! Eisen, die von Gebäuden produziert wird"
+ },
+ "goods_output_launch_capacity_add": {
+  "en": "@launch_capacity! Launch Capacity Output",
+  "de": "@launch_capacity! Startkapazitätsausstoß"
+ },
+ "goods_output_launch_capacity_add_desc": {
+  "en": "The amount of @launch_capacity! Launch Capacity produced by buildings",
+  "de": "Die Menge an @launch_capacity! Startkapazität, die von Gebäuden produziert wird"
+ },
+ "goods_output_launch_capacity_mult": {
+  "en": "Building @launch_capacity! Launch Capacity output",
+  "de": "@launch_capacity! Startkapazitätsausstoß"
+ },
+ "goods_output_launch_capacity_mult_desc": {
+  "en": "A bonus or penalty to the amount of @launch_capacity! Launch Capacity produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @launch_capacity! Startkapazität, die von Gebäuden produziert wird"
+ },
+ "goods_output_lead_mult": {
+  "en": "Building @lead! Lead output",
+  "de": "@lead! Bleiausstoß"
+ },
+ "goods_output_lead_mult_desc": {
+  "en": "A bonus or penalty to the amount of @lead! Lead produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @lead! Blei, die von Gebäuden produziert wird"
+ },
+ "goods_output_luxury_clothes_mult": {
+  "en": "Building @luxury_clothes! Luxury Clothes output",
+  "de": "@luxury_clothes! Luxuskleidungsausstoß"
+ },
+ "goods_output_luxury_clothes_mult_desc": {
+  "en": "A bonus or penalty to the amount of @luxury_clothes! Luxury Clothes produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @luxury_clothes! Luxuskleidung, die von Gebäuden produziert wird"
+ },
+ "goods_output_luxury_furniture_mult": {
+  "en": "Building @luxury_furniture! Luxury Furniture output",
+  "de": "@luxury_furniture! Luxusmöbelausstoß"
+ },
+ "goods_output_luxury_furniture_mult_desc": {
+  "en": "A bonus or penalty to the amount of @luxury_furniture! Luxury Furniture produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @luxury_furniture! Luxusmöbel, die von Gebäuden produziert wird"
+ },
+ "goods_output_magnetic_drive_ships_add": {
+  "en": "@magnetic_drive_ships! Magnetic Drive Ships Output",
+  "de": "@magnetic_drive_ships! Magnetantriebsschiffausstoß"
+ },
+ "goods_output_magnetic_drive_ships_add_desc": {
+  "en": "The amount of @magnetic_drive_ships! Magnetic Drive Ships produced by buildings",
+  "de": "Die Menge an @magnetic_drive_ships! Magnetantriebsschiffen, die von Gebäuden produziert wird"
+ },
+ "goods_output_magnetic_drive_ships_mult": {
+  "en": "Building @magnetic_drive_ships! Magnetic Drive Ships output",
+  "de": "@magnetic_drive_ships! Magnetantriebsschiffausstoß"
+ },
+ "goods_output_magnetic_drive_ships_mult_desc": {
+  "en": "A bonus or penalty to the amount of @magnetic_drive_ships! Magnetic Drive Ships produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @magnetic_drive_ships! Magnetantriebsschiffe, die von Gebäuden produziert wird"
+ },
+ "goods_output_meat_mult": {
+  "en": "Building @meat! Meat output",
+  "de": "@meat! Fleischausstoß"
+ },
+ "goods_output_meat_mult_desc": {
+  "en": "A bonus or penalty to the amount of @meat! Meat produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @meat! Fleisch, die von Gebäuden produziert wird"
+ },
+ "goods_output_merchant_marine_mult": {
+  "en": "@merchant_marine! Bulk Transportation Output",
+  "de": "@merchant_marine! Massengutverkehrsausstoß"
+ },
+ "goods_output_merchant_marine_mult_desc": {
+  "en": "The amount of @merchant_marine! Bulk Transportation produced by buildings",
+  "de": "Die Menge an @merchant_marine! Massengutverkehr, die von Gebäuden produziert wird"
+ },
+ "goods_output_motor_ships_add": {
+  "en": "@motor_ships! Motor Ships Output",
+  "de": "@motor_ships! Motorschiffsausstoß"
+ },
+ "goods_output_motor_ships_add_desc": {
+  "en": "The amount of @motor_ships! Motor Ships produced by buildings",
+  "de": "Die Menge an @motor_ships! Motorschiffen, die von Gebäuden produziert wird"
+ },
+ "goods_output_motor_ships_mult": {
+  "en": "Building @motor_ships! Motor Ships output",
+  "de": "@motor_ships! Motorschiffsausstoß"
+ },
+ "goods_output_motor_ships_mult_desc": {
+  "en": "A bonus or penalty to the amount of @motor_ships! Motor Ships produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @motor_ships! Motorschiffe, die von Gebäuden produziert wird"
+ },
+ "goods_output_opium_mult": {
+  "en": "Building @opium! Opium output",
+  "de": "@opium! Opiumausstoß"
+ },
+ "goods_output_opium_mult_desc": {
+  "en": "A bonus or penalty to the amount of @opium! Opium produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @opium! Opium, die von Gebäuden produziert wird"
+ },
+ "goods_output_paper_mult": {
+  "en": "Building @paper! Paper output",
+  "de": "@paper! Papierausstoß"
+ },
+ "goods_output_paper_mult_desc": {
+  "en": "A bonus or penalty to the amount of @paper! Paper produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @paper! Papier, die von Gebäuden produziert wird"
+ },
+ "goods_output_porcelain_mult": {
+  "en": "Building @porcelain! Porcelain output",
+  "de": "@porcelain! Porzellanausstoß"
+ },
+ "goods_output_porcelain_mult_desc": {
+  "en": "A bonus or penalty to the amount of @porcelain! Porcelain produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @porcelain! Porzellan, die von Gebäuden produziert wird"
+ },
+ "goods_output_robotics_add": {
+  "en": "@robotics! Robotics Output",
+  "de": "@robotics! Robotikausstoß"
+ },
+ "goods_output_robotics_add_desc": {
+  "en": "The amount of @robotics! Robotics produced by buildings",
+  "de": "Die Menge an @robotics! Robotik, die von Gebäuden produziert wird"
+ },
+ "goods_output_robotics_mult": {
+  "en": "Building @robotics! Robotics output",
+  "de": "@robotics! Robotikausstoß"
+ },
+ "goods_output_robotics_mult_desc": {
+  "en": "The amount of @robotics! Robotics produced by buildings",
+  "de": "Die Menge an @robotics! Robotik, die von Gebäuden produziert wird"
+ },
+ "goods_output_rubber_mult": {
+  "en": "Building @rubber! Rubber output",
+  "de": "@rubber! Kautschukausstoß"
+ },
+ "goods_output_rubber_mult_desc": {
+  "en": "A bonus or penalty to the amount of @rubber! Rubber produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @rubber! Kautschuk, die von Gebäuden produziert wird"
+ },
+ "goods_output_services_mult": {
+  "en": "Building @services! Services output",
+  "de": "@services! Dienstleistungsausstoß"
+ },
+ "goods_output_services_mult_desc": {
+  "en": "A bonus or penalty to the amount of @services! Services produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @services! Dienstleistungen, die von Gebäuden produziert wird"
+ },
+ "goods_output_steel_mult": {
+  "en": "Building @steel! Steel output",
+  "de": "@steel! Stahlausstoß"
+ },
+ "goods_output_steel_mult_desc": {
+  "en": "A bonus or penalty to the amount of @steel! Steel produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @steel! Stahl, die von Gebäuden produziert wird"
+ },
+ "goods_output_sulfur_mult": {
+  "en": "Building @sulfur! Sulfur output",
+  "de": "@sulfur! Schwefelausstoß"
+ },
+ "goods_output_sulfur_mult_desc": {
+  "en": "A bonus or penalty to the amount of @sulfur! Sulfur produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @sulfur! Schwefel, die von Gebäuden produziert wird"
+ },
+ "goods_output_tea_mult": {
+  "en": "Building @tea! Tea output",
+  "de": "@tea! Teeausstoß"
+ },
+ "goods_output_tea_mult_desc": {
+  "en": "A bonus or penalty to the amount of @tea! Tea produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @tea! Tee, die von Gebäuden produziert wird"
+ },
+ "goods_output_tech_metals_add": {
+  "en": "@tech_metals! Tech-Critical Metals Output",
+  "de": "@tech_metals! Technologiemetallausstoß"
+ },
+ "goods_output_tech_metals_add_desc": {
+  "en": "The amount of @tech_metals! Tech-Critical Metals produced by buildings",
+  "de": "Die Menge an @tech_metals! Technologiemetallen, die von Gebäuden produziert wird"
+ },
+ "goods_output_tech_metals_mult": {
+  "en": "Building @tech_metals! Tech-Critical Metals output",
+  "de": "@tech_metals! Technologiemetallausstoß"
+ },
+ "goods_output_tech_metals_mult_desc": {
+  "en": "The amount of @tech_metals! Tech-Critical Metals produced by buildings",
+  "de": "Die Menge an @tech_metals! Technologiemetallen, die von Gebäuden produziert wird"
+ },
+ "goods_output_telephones_mult": {
+  "en": "Building @telephones! Telephones output",
+  "de": "@telephones! Telefonausstoß"
+ },
+ "goods_output_telephones_mult_desc": {
+  "en": "A bonus or penalty to the amount of @telephones! Telephones produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @telephones! Telefone, die von Gebäuden produziert wird"
+ },
+ "goods_output_tobacco_mult": {
+  "en": "Building @tobacco! Tobacco output",
+  "de": "@tobacco! Tabakausstoß"
+ },
+ "goods_output_tobacco_mult_desc": {
+  "en": "A bonus or penalty to the amount of @tobacco! Tobacco produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @tobacco! Tabak, die von Gebäuden produziert wird"
+ },
+ "goods_output_tourism_add_desc": {
+  "en": "The amount of @tourism! [concept_tourism_system] produced by buildings",
+  "de": "Die Menge an @tourism! [concept_tourism_system], die von Gebäuden produziert wird"
+ },
+ "goods_output_tourism_mult": {
+  "en": "Building @tourism! [concept_tourism_output]",
+  "de": "@tourism! [concept_tourism_output]"
+ },
+ "goods_output_tourism_mult_desc": {
+  "en": "A bonus or penalty to the amount of @tourism! [concept_tourism_system] produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @tourism! [concept_tourism_system], die von Gebäuden produziert wird"
+ },
+ "goods_output_transportation_mult": {
+  "en": "Building @transportation! Transportation output",
+  "de": "@transportation! Transportausstoß"
+ },
+ "goods_output_transportation_mult_desc": {
+  "en": "A bonus or penalty to the amount of @transportation! Transportation produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @transportation! Transport, die von Gebäuden produziert wird"
+ },
+ "goods_output_wood_mult": {
+  "en": "Building @wood! Wood output",
+  "de": "@wood! Holzausstoß"
+ },
+ "goods_output_wood_mult_desc": {
+  "en": "A bonus or penalty to the amount of @wood! Wood produced by buildings",
+  "de": "Erhöht oder verringert die Menge an @wood! Holz, die von Gebäuden produziert wird"
+ },
+ "goods_trade_advantage_digital_assets_mult": {
+  "en": "[concept_trade_advantage] for [GetGoods('digital_assets').GetName]",
+  "de": "[concept_trade_advantage] für [GetGoods('digital_assets').GetName]"
+ },
+ "goods_trade_advantage_digital_assets_mult_desc": {
+  "en": "An increase or decrease in overall [concept_trade_advantage] for [GetGoods('digital_assets').GetName].",
+  "de": "Erhöht oder verringert den gesamten [concept_trade_advantage] für [GetGoods('digital_assets').GetName]."
+ },
+ "goods_trade_advantage_fine_art_mult": {
+  "en": "[concept_trade_advantage] for [GetGoods('fine_art').GetName]",
+  "de": "[concept_trade_advantage] für [GetGoods('fine_art').GetName]"
+ },
+ "goods_trade_advantage_fine_art_mult_desc": {
+  "en": "An increase or decrease in overall [concept_trade_advantage] for [GetGoods('fine_art').GetName].",
+  "de": "Erhöht oder verringert den gesamten [concept_trade_advantage] für [GetGoods('fine_art').GetName]."
+ },
+ "state_arable_land_mult": {
+  "en": "Arable Land",
+  "de": "Ackerland"
+ },
+ "state_arable_land_mult_desc": {
+  "en": "A multiplier for the amount of [concept_arable_land] in this [concept_state].",
+  "de": "Ein Multiplikator für die Menge an [concept_arable_land] in diesem [concept_state]."
+ },
+ "state_building_afghan_nassaji_kabul_mills_max_level_add": {
+  "en": "[GetBuildingType('building_afghan_nassaji_kabul_mills').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_afghan_nassaji_kabul_mills').GetName]"
+ },
+ "state_building_afghan_nassaji_kabul_mills_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_afghan_nassaji_kabul_mills').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_afghan_nassaji_kabul_mills').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_airbus_lagardere_plant_max_level_add": {
+  "en": "[GetBuildingType('building_airbus_lagardere_plant').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_airbus_lagardere_plant').GetName]"
+ },
+ "state_building_airbus_lagardere_plant_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_airbus_lagardere_plant').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_airbus_lagardere_plant').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_airport_max_level_add": {
+  "en": "[GetBuildingType('building_airport').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_airport').GetName]"
+ },
+ "state_building_airport_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_airport').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_airport').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_aker_oslo_shipyard_max_level_add": {
+  "en": "[GetBuildingType('building_aker_oslo_shipyard').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_aker_oslo_shipyard').GetName]"
+ },
+ "state_building_aker_oslo_shipyard_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_aker_oslo_shipyard').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_aker_oslo_shipyard').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_alibaba_cainiao_park_max_level_add": {
+  "en": "[GetBuildingType('building_alibaba_cainiao_park').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_alibaba_cainiao_park').GetName]"
+ },
+ "state_building_alibaba_cainiao_park_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_alibaba_cainiao_park').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_alibaba_cainiao_park').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_allatini_thessaloniki_flour_mill_max_level_add": {
+  "en": "[GetBuildingType('building_allatini_thessaloniki_flour_mill').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_allatini_thessaloniki_flour_mill').GetName]"
+ },
+ "state_building_allatini_thessaloniki_flour_mill_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_allatini_thessaloniki_flour_mill').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_allatini_thessaloniki_flour_mill').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_alpine_donawitz_steelworks_max_level_add": {
+  "en": "[GetBuildingType('building_alpine_donawitz_steelworks').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_alpine_donawitz_steelworks').GetName]"
+ },
+ "state_building_alpine_donawitz_steelworks_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_alpine_donawitz_steelworks').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_alpine_donawitz_steelworks').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_altos_hornos_baracaldo_furnaces_max_level_add": {
+  "en": "[GetBuildingType('building_altos_hornos_baracaldo_furnaces').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_altos_hornos_baracaldo_furnaces').GetName]"
+ },
+ "state_building_altos_hornos_baracaldo_furnaces_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_altos_hornos_baracaldo_furnaces').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_altos_hornos_baracaldo_furnaces').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_amazon_fulfillment_center_max_level_add": {
+  "en": "[GetBuildingType('building_amazon_fulfillment_center').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_amazon_fulfillment_center').GetName]"
+ },
+ "state_building_amazon_fulfillment_center_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_amazon_fulfillment_center').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_amazon_fulfillment_center').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_anglo_persian_abadan_refinery_max_level_add": {
+  "en": "[GetBuildingType('building_anglo_persian_abadan_refinery').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_anglo_persian_abadan_refinery').GetName]"
+ },
+ "state_building_anglo_persian_abadan_refinery_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_anglo_persian_abadan_refinery').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_anglo_persian_abadan_refinery').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_anglo_sicilian_licata_wharf_max_level_add": {
+  "en": "[GetBuildingType('building_anglo_sicilian_licata_wharf').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_anglo_sicilian_licata_wharf').GetName]"
+ },
+ "state_building_anglo_sicilian_licata_wharf_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_anglo_sicilian_licata_wharf').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_anglo_sicilian_licata_wharf').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_ansaldo_sestri_ponente_works_max_level_add": {
+  "en": "[GetBuildingType('building_ansaldo_sestri_ponente_works').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_ansaldo_sestri_ponente_works').GetName]"
+ },
+ "state_building_ansaldo_sestri_ponente_works_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_ansaldo_sestri_ponente_works').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_ansaldo_sestri_ponente_works').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_antimatter_facility_max_level_add": {
+  "en": "[GetBuildingType('building_antimatter_facility').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_antimatter_facility').GetName]"
+ },
+ "state_building_antimatter_facility_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_antimatter_facility').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_antimatter_facility').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_anzin_colliery_max_level_add": {
+  "en": "[GetBuildingType('building_anzin_colliery').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_anzin_colliery').GetName]"
+ },
+ "state_building_anzin_colliery_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_anzin_colliery').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_anzin_colliery').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_ap_moller_copenhagen_wharf_max_level_add": {
+  "en": "[GetBuildingType('building_ap_moller_copenhagen_wharf').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_ap_moller_copenhagen_wharf').GetName]"
+ },
+ "state_building_ap_moller_copenhagen_wharf_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_ap_moller_copenhagen_wharf').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_ap_moller_copenhagen_wharf').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_apple_park_max_level_add": {
+  "en": "[GetBuildingType('building_apple_park').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_apple_park').GetName]"
+ },
+ "state_building_apple_park_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_apple_park').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_apple_park').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_argentinian_wine_mendoza_bodega_max_level_add": {
+  "en": "[GetBuildingType('building_argentinian_wine_mendoza_bodega').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_argentinian_wine_mendoza_bodega').GetName]"
+ },
+ "state_building_argentinian_wine_mendoza_bodega_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_argentinian_wine_mendoza_bodega').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_argentinian_wine_mendoza_bodega').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_armstrong_elswick_works_max_level_add": {
+  "en": "[GetBuildingType('building_armstrong_elswick_works').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_armstrong_elswick_works').GetName]"
+ },
+ "state_building_armstrong_elswick_works_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_armstrong_elswick_works').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_armstrong_elswick_works').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_asml_veldhoven_campus_max_level_add": {
+  "en": "[GetBuildingType('building_asml_veldhoven_campus').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_asml_veldhoven_campus').GetName]"
+ },
+ "state_building_asml_veldhoven_campus_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_asml_veldhoven_campus').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_asml_veldhoven_campus').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_assam_company_nazira_tea_estate_max_level_add": {
+  "en": "[GetBuildingType('building_assam_company_nazira_tea_estate').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_assam_company_nazira_tea_estate').GetName]"
+ },
+ "state_building_assam_company_nazira_tea_estate_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_assam_company_nazira_tea_estate').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_assam_company_nazira_tea_estate').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_axiom_space_hq_max_level_add": {
+  "en": "[GetBuildingType('building_axiom_space_hq').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_axiom_space_hq').GetName]"
+ },
+ "state_building_axiom_space_hq_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_axiom_space_hq').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_axiom_space_hq').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_b_grimm_bangkok_warehouse_max_level_add": {
+  "en": "[GetBuildingType('building_b_grimm_bangkok_warehouse').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_b_grimm_bangkok_warehouse').GetName]"
+ },
+ "state_building_b_grimm_bangkok_warehouse_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_b_grimm_bangkok_warehouse').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_b_grimm_bangkok_warehouse').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_bacardi_santiago_distillery_max_level_add": {
+  "en": "[GetBuildingType('building_bacardi_santiago_distillery').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_bacardi_santiago_distillery').GetName]"
+ },
+ "state_building_bacardi_santiago_distillery_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_bacardi_santiago_distillery').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_bacardi_santiago_distillery').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_bae_samlesbury_aerodrome_max_level_add": {
+  "en": "[GetBuildingType('building_bae_samlesbury_aerodrome').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_bae_samlesbury_aerodrome').GetName]"
+ },
+ "state_building_bae_samlesbury_aerodrome_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_bae_samlesbury_aerodrome').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_bae_samlesbury_aerodrome').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_basf_ludwigshafen_plant_max_level_add": {
+  "en": "[GetBuildingType('building_basf_ludwigshafen_plant').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_basf_ludwigshafen_plant').GetName]"
+ },
+ "state_building_basf_ludwigshafen_plant_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_basf_ludwigshafen_plant').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_basf_ludwigshafen_plant').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_basileiades_piraeus_works_max_level_add": {
+  "en": "[GetBuildingType('building_basileiades_piraeus_works').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_basileiades_piraeus_works').GetName]"
+ },
+ "state_building_basileiades_piraeus_works_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_basileiades_piraeus_works').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_basileiades_piraeus_works').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_bayer_leverkusen_plant_max_level_add": {
+  "en": "[GetBuildingType('building_bayer_leverkusen_plant').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_bayer_leverkusen_plant').GetName]"
+ },
+ "state_building_bayer_leverkusen_plant_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_bayer_leverkusen_plant').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_bayer_leverkusen_plant').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_bengal_coal_raniganj_mine_max_level_add": {
+  "en": "[GetBuildingType('building_bengal_coal_raniganj_mine').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_bengal_coal_raniganj_mine').GetName]"
+ },
+ "state_building_bengal_coal_raniganj_mine_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_bengal_coal_raniganj_mine').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_bengal_coal_raniganj_mine').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_bhp_broken_hill_mine_max_level_add": {
+  "en": "[GetBuildingType('building_bhp_broken_hill_mine').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_bhp_broken_hill_mine').GetName]"
+ },
+ "state_building_bhp_broken_hill_mine_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_bhp_broken_hill_mine').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_bhp_broken_hill_mine').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_bhp_mount_whaleback_mine_max_level_add": {
+  "en": "[GetBuildingType('building_bhp_mount_whaleback_mine').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_bhp_mount_whaleback_mine').GetName]"
+ },
+ "state_building_bhp_mount_whaleback_mine_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_bhp_mount_whaleback_mine').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_bhp_mount_whaleback_mine').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_blackberry_rim_campus_max_level_add": {
+  "en": "[GetBuildingType('building_blackberry_rim_campus').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_blackberry_rim_campus').GetName]"
+ },
+ "state_building_blackberry_rim_campus_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_blackberry_rim_campus').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_blackberry_rim_campus').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_boeing_everett_factory_max_level_add": {
+  "en": "[GetBuildingType('building_boeing_everett_factory').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_boeing_everett_factory').GetName]"
+ },
+ "state_building_boeing_everett_factory_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_boeing_everett_factory').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_boeing_everett_factory').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_bolckow_eston_ironworks_max_level_add": {
+  "en": "[GetBuildingType('building_bolckow_eston_ironworks').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_bolckow_eston_ironworks').GetName]"
+ },
+ "state_building_bolckow_eston_ironworks_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_bolckow_eston_ironworks').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_bolckow_eston_ironworks').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_bombay_burmah_rangoon_timber_depot_max_level_add": {
+  "en": "[GetBuildingType('building_bombay_burmah_rangoon_timber_depot').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_bombay_burmah_rangoon_timber_depot').GetName]"
+ },
+ "state_building_bombay_burmah_rangoon_timber_depot_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_bombay_burmah_rangoon_timber_depot').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_bombay_burmah_rangoon_timber_depot').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_bombay_dyeing_spring_mills_max_level_add": {
+  "en": "[GetBuildingType('building_bombay_dyeing_spring_mills').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_bombay_dyeing_spring_mills').GetName]"
+ },
+ "state_building_bombay_dyeing_spring_mills_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_bombay_dyeing_spring_mills').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_bombay_dyeing_spring_mills').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_boston_dynamics_ai_institute_max_level_add": {
+  "en": "[GetBuildingType('building_boston_dynamics_ai_institute').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_boston_dynamics_ai_institute').GetName]"
+ },
+ "state_building_boston_dynamics_ai_institute_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_boston_dynamics_ai_institute').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_boston_dynamics_ai_institute').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_bp_refinery_complex_max_level_add": {
+  "en": "[GetBuildingType('building_bp_refinery_complex').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_bp_refinery_complex').GetName]"
+ },
+ "state_building_bp_refinery_complex_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_bp_refinery_complex').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_bp_refinery_complex').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_bunge_born_buenos_aires_grain_silo_max_level_add": {
+  "en": "[GetBuildingType('building_bunge_born_buenos_aires_grain_silo').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_bunge_born_buenos_aires_grain_silo').GetName]"
+ },
+ "state_building_bunge_born_buenos_aires_grain_silo_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_bunge_born_buenos_aires_grain_silo').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_bunge_born_buenos_aires_grain_silo').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_bytedance_data_fortress_max_level_add": {
+  "en": "[GetBuildingType('building_bytedance_data_fortress').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_bytedance_data_fortress').GetName]"
+ },
+ "state_building_bytedance_data_fortress_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_bytedance_data_fortress').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_bytedance_data_fortress').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_calcutta_electric_victoria_house_max_level_add": {
+  "en": "[GetBuildingType('building_calcutta_electric_victoria_house').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_calcutta_electric_victoria_house').GetName]"
+ },
+ "state_building_calcutta_electric_victoria_house_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_calcutta_electric_victoria_house').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_calcutta_electric_victoria_house').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_caribbean_petroleum_maracaibo_depot_max_level_add": {
+  "en": "[GetBuildingType('building_caribbean_petroleum_maracaibo_depot').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_caribbean_petroleum_maracaibo_depot').GetName]"
+ },
+ "state_building_caribbean_petroleum_maracaibo_depot_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_caribbean_petroleum_maracaibo_depot').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_caribbean_petroleum_maracaibo_depot').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_carnegie_homestead_mill_max_level_add": {
+  "en": "[GetBuildingType('building_carnegie_homestead_mill').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_carnegie_homestead_mill').GetName]"
+ },
+ "state_building_carnegie_homestead_mill_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_carnegie_homestead_mill').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_carnegie_homestead_mill').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_catl_gigafactory_max_level_add": {
+  "en": "[GetBuildingType('building_catl_gigafactory').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_catl_gigafactory').GetName]"
+ },
+ "state_building_catl_gigafactory_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_catl_gigafactory').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_catl_gigafactory').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_ccci_leopoldville_depot_max_level_add": {
+  "en": "[GetBuildingType('building_ccci_leopoldville_depot').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_ccci_leopoldville_depot').GetName]"
+ },
+ "state_building_ccci_leopoldville_depot_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_ccci_leopoldville_depot').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_ccci_leopoldville_depot').GetName] in diesem Staat erreichen kann."
+ },
+ "state_building_cfr_bucharest_railway_works_max_level_add": {
+  "en": "[GetBuildingType('building_cfr_bucharest_railway_works').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_cfr_bucharest_railway_works').GetName]"
+ },
+ "state_building_cfr_bucharest_railway_works_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_cfr_bucharest_railway_works').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_cfr_bucharest_railway_works').GetName] in diesem Staat erreichen kann."
+ },
  "state_building_cgv_haut_brion_estate_max_level_add": {
   "en": "[GetBuildingType('building_cgv_haut_brion_estate').GetName] Max Level",
   "de": "Maximalstufe von [GetBuildingType('building_cgv_haut_brion_estate').GetName]"
