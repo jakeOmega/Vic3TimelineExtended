@@ -1,0 +1,1370 @@
+{
+ "EFFECTS_ON_ACCEPTANCE_law_minority_rights_affirmative_action": {
+  "en": "#tooltippable #tooltip:$BREAKDOWN_TAG$ Minority groups receive preferential treatment in education, employment, and other areas to counteract past [concept_discrimination] and promote diversity and inclusion#!#!",
+  "de": "#tooltippable #tooltip:$BREAKDOWN_TAG$ Minderheiten erhalten in Bildung, Beschäftigung und anderen Bereichen bevorzugte Behandlung, um vergangene [concept_discrimination] auszugleichen und Vielfalt und Inklusion zu fördern#!#!"
+ },
+ "EFFECTS_ON_ACCEPTANCE_law_minority_rights_cultural_assimilation": {
+  "en": "#tooltippable #tooltip:$BREAKDOWN_TAG$ Minority groups are pressured to conform to the dominant culture, leading to increased [concept_assimilation] but extensive resistance and radicalization#!#!",
+  "de": "#tooltippable #tooltip:$BREAKDOWN_TAG$ Minderheiten werden gedrängt, sich der dominanten Kultur anzupassen, was zu verstärkter [concept_assimilation] führt, aber auch zu breitem Widerstand und Radikalisierung#!#!"
+ },
+ "EFFECTS_ON_ACCEPTANCE_law_minority_rights_discrimination": {
+  "en": "#tooltippable #tooltip:$BREAKDOWN_TAG$ Minority groups face systemic [concept_discrimination] and unequal treatment in various aspects of life, such as employment, education, housing, and public services#!#!",
+  "de": "#tooltippable #tooltip:$BREAKDOWN_TAG$ Minderheiten sind systemischer [concept_discrimination] und ungleicher Behandlung in verschiedenen Lebensbereichen ausgesetzt, etwa bei Beschäftigung, Bildung, Wohnraum und öffentlichen Dienstleistungen#!#!"
+ },
+ "EFFECTS_ON_ACCEPTANCE_law_minority_rights_ghettoization": {
+  "en": "#tooltippable #tooltip:$BREAKDOWN_TAG$ Minority groups are [concept_marginalized] and isolated from the rest of society, leading to social and economic disparities, limited opportunities, and little [concept_assimilation]#!#!",
+  "de": "#tooltippable #tooltip:$BREAKDOWN_TAG$ Minderheiten werden [Concept('concept_marginalized', 'randständig')] und vom Rest der Gesellschaft isoliert, was zu sozialen und wirtschaftlichen Ungleichheiten, eingeschränkten Chancen und geringer [concept_assimilation] führt#!#!"
+ },
+ "EFFECTS_ON_ACCEPTANCE_law_minority_rights_indifference": {
+  "en": "#tooltippable #tooltip:$BREAKDOWN_TAG$ Minority groups receive little attention or support from the government, leading to social and economic disparities from private [concept_discrimination] and neglect#!#!",
+  "de": "#tooltippable #tooltip:$BREAKDOWN_TAG$ Minderheiten erhalten wenig Aufmerksamkeit oder Unterstützung von der Regierung, was durch private [concept_discrimination] und Vernachlässigung zu sozialen und wirtschaftlichen Ungleichheiten führt#!#!"
+ },
+ "EFFECTS_ON_ACCEPTANCE_law_minority_rights_protection": {
+  "en": "#tooltippable #tooltip:$BREAKDOWN_TAG$ Minority groups are supported and empowered by the government, leading to increased social inclusion and equality, though the dominant group may resent the perceived favoritism#!#!",
+  "de": "#tooltippable #tooltip:$BREAKDOWN_TAG$ Minderheiten werden von der Regierung unterstützt und gestärkt, was zu mehr sozialer Inklusion und Gleichheit führt, auch wenn die dominante Gruppe die vermeintliche Bevorzugung übel nehmen kann#!#!"
+ },
+ "EFFECTS_ON_ACCEPTANCE_law_minority_rights_violent_hostility": {
+  "en": "#tooltippable #tooltip:$BREAKDOWN_TAG$ The government actively and violently suppresses minority groups, leading to widespread [concept_discrimination], persecution, and abuses#!#!",
+  "de": "#tooltippable #tooltip:$BREAKDOWN_TAG$ Die Regierung unterdrückt Minderheiten aktiv und gewaltsam, was zu weitverbreiteter [concept_discrimination], Verfolgung und Missbrauch führt#!#!"
+ },
+ "law_active_persecution": {
+  "en": "Active Persecution",
+  "de": "Aktive Verfolgung"
+ },
+ "law_active_persecution_desc": {
+  "en": "LGBTQ+ individuals face active persecution, with laws criminalizing same-sex relationships and gender nonconformity. Severe penalties and social stigmatization limit the rights and freedoms of [concept_lgbtq_rights_movement] individuals.",
+  "de": "LGBTQ+-Personen sind aktiver Verfolgung ausgesetzt; Gesetze stellen gleichgeschlechtliche Beziehungen und Geschlechternonkonformität unter Strafe. Harte Strafen und soziale Stigmatisierung schränken die Rechte und Freiheiten von [concept_lgbtq_rights_movement]-Personen ein."
+ },
+ "law_algorithmic_governance": {
+  "en": "Algorithmic Governance",
+  "de": "Algorithmische Regierungsführung"
+ },
+ "law_algorithmic_governance_desc": {
+  "en": "A system of government where decisions are made by algorithms or artificial intelligence, based on data analysis and predictive modeling.",
+  "de": "Ein Regierungssystem, in dem Entscheidungen von Algorithmen oder künstlicher Intelligenz auf Grundlage von Datenanalyse und Vorhersagemodellen getroffen werden."
+ },
+ "law_auxiliary_fleet": {
+  "en": "Auxiliary Fleet",
+  "de": "Hilfsflotte"
+ },
+ "law_auxiliary_fleet_desc": {
+  "en": "The fleet's purpose is to sustain the army at extreme distance — sealift, [concept_naval_invasion], and forward logistics. Operational reach and amphibious capability are unmatched, but the surface combat fleet is hollowed out in favor of [Concept('concept_supply_ship', 'supply ships')] and transports.",
+  "de": "Der Zweck der Flotte ist es, das Heer über extreme Entfernungen zu versorgen — Seetransport, [concept_naval_invasion] und vorgeschobene Logistik. Operative Reichweite und amphibische Fähigkeiten sind unübertroffen, doch die Überwasserkampfflotte wird zugunsten von [Concept('concept_supply_ship', 'Versorgungsschiffen')] und Transportern ausgehöhlt."
+ },
+ "law_ban_on_genetic_modification": {
+  "en": "Ban on Genetic Modification",
+  "de": "Verbot der Genmodifikation"
+ },
+ "law_ban_on_genetic_modification_desc": {
+  "en": "Fearing the unknown consequences, the state prohibits all forms of genetic engineering.",
+  "de": "Aus Furcht vor unbekannten Folgen verbietet der Staat jede Form der Gentechnik."
+ },
+ "law_basic_protections": {
+  "en": "Basic Protections",
+  "de": "Grundlegender Schutz"
+ },
+ "law_basic_protections_desc": {
+  "en": "LGBTQ+ individuals have basic legal protections, such as decriminalization of same-sex relationships. However, [concept_lgbtq_rights_movement] protections may be limited in scope and not fully enforced.",
+  "de": "LGBTQ+-Personen genießen grundlegenden Rechtsschutz, etwa die Entkriminalisierung gleichgeschlechtlicher Beziehungen. Der [concept_lgbtq_rights_movement]-Schutz kann jedoch begrenzt sein und wird nicht immer vollständig durchgesetzt."
+ },
+ "law_central_bank_independence": {
+  "en": "Central Bank Independence",
+  "de": "Unabhängigkeit der Zentralbank"
+ },
+ "law_central_bank_independence_desc": {
+  "en": "A technocratic central bank manages liquidity and expectations. Powerful stabilization tools are available at arm’s length from day-to-day politics.",
+  "de": "Eine technokratische Zentralbank steuert Liquidität und Erwartungen. Wirkungsvolle Stabilisierungsinstrumente stehen bereit, unabhängig vom Tagesgeschäft der Politik."
+ },
+ "law_civic_monolingualism": {
+  "en": "Civic Monolingualism",
+  "de": "Staatliche Einsprachigkeit"
+ },
+ "law_civic_monolingualism_desc": {
+  "en": "Compulsory schooling and public life operate in a single civic language. Proficiency becomes a gateway to citizenship, office, and social mobility.",
+  "de": "Schulpflicht und öffentliches Leben laufen in einer einzigen Amtssprache ab. Ihre Beherrschung wird zum Schlüssel für Staatsbürgerschaft, Ämter und sozialen Aufstieg."
+ },
+ "law_command_cooperative_economy": {
+  "en": "Command/Cooperative Economy",
+  "de": "Plan-/Genossenschaftswirtschaft"
+ },
+ "law_command_cooperative_economy_desc": {
+  "en": "Large firms are socialized or reorganized into public and worker cooperatives. Prices and output are directed, prioritizing equity and stability over market competition.",
+  "de": "Große Unternehmen werden verstaatlicht oder in öffentliche und Arbeitergenossenschaften umgewandelt. Preise und Produktion werden gelenkt, wobei Gerechtigkeit und Stabilität Vorrang vor Marktwettbewerb haben."
+ },
+ "law_commodity_money": {
+  "en": "Commodity Money",
+  "de": "Warengeld"
+ },
+ "law_commodity_money_desc": {
+  "en": "A commodity, such as gold or silver, is used directly as currency. A national bank can set a discount rate on it, but can make credit no more than a point cheaper than the world's, or three points dearer — the coin is the metal, and metal leaves for wherever it earns more.",
+  "de": "Eine Ware wie Gold oder Silber dient unmittelbar als Zahlungsmittel. Eine Nationalbank kann darauf einen Diskontsatz festlegen, doch Kredit höchstens einen Punkt günstiger oder drei Punkte teurer machen als anderswo in der Welt — die Münze ist das Metall, und Metall wandert dorthin, wo es mehr einbringt."
+ },
+ "law_communal_child_rearing": {
+  "en": "Communal Child-Rearing",
+  "de": "Gemeinschaftliche Kindererziehung"
+ },
+ "law_communal_child_rearing_desc": {
+  "en": "The family is a relic of bourgeois individualism. To ensure absolute equality of opportunity and loyalty to the state above all, children will be raised collectively by the state in public crèches and dormitories.",
+  "de": "Die Familie ist ein Relikt bürgerlichen Individualismus. Um vollkommene Chancengleichheit und die Treue zum Staat über alles zu sichern, werden Kinder gemeinschaftlich vom Staat in öffentlichen Kinderkrippen und Internaten großgezogen."
+ },
+ "law_comprehensive_rights": {
+  "en": "Anti-Discrimination Laws",
+  "de": "Antidiskriminierungsgesetze"
+ },
+ "law_comprehensive_rights_desc": {
+  "en": "LGBTQ+ individuals have legal rights under [concept_lgbtq_rights_movement] legislation, including anti-[concept_discrimination] laws and protections from hate crimes. However, they may lack some aspects of full social equality, such as marriage equality or adoption rights.",
+  "de": "LGBTQ+-Personen besitzen gesetzliche Rechte im Rahmen der [concept_lgbtq_rights_movement]-Gesetzgebung, einschließlich Gesetzen gegen [concept_discrimination] und Schutz vor Hassverbrechen. Es können ihnen jedoch einige Aspekte voller sozialer Gleichheit fehlen, etwa die Ehe für alle oder Adoptionsrechte."
+ },
+ "law_corporate_genetic_licensing": {
+  "en": "Corporate Genetic Licensing",
+  "de": "Genetische Konzernlizenzierung"
+ },
+ "law_corporate_genetic_licensing_desc": {
+  "en": "Genetic modification is a profitable enterprise, and its use is restricted to licensed corporations.",
+  "de": "Genetische Veränderung ist ein einträgliches Geschäft, und ihre Nutzung ist lizenzierten Konzernen vorbehalten."
+ },
+ "law_creative_commons": {
+  "en": "Creative Commons",
+  "de": "Creative Commons"
+ },
+ "law_creative_commons_desc": {
+  "en": "Intellectual property protection is based on a Creative Commons philosophy, which encourages sharing and collaboration. Creators can choose from various licenses to determine how their works may be used, adapted, or redistributed by others.",
+  "de": "Der Schutz geistigen Eigentums beruht auf der Philosophie von Creative Commons, die Teilen und Zusammenarbeit fördert. Urheber können aus verschiedenen Lizenzen wählen, um festzulegen, wie ihre Werke von anderen genutzt, bearbeitet oder weiterverbreitet werden dürfen."
+ },
+ "law_decentralized_cryptocurrency": {
+  "en": "Decentralized Cryptocurrency",
+  "de": "Dezentralisierte Kryptowährung"
+ },
+ "law_decentralized_cryptocurrency_desc": {
+  "en": "A monetary system built on distributed cryptographic networks rather than central bank authority. Transactions are pseudonymous and resistant to state control, enabling frictionless cross-border trade but undermining tax collection and amplifying financial volatility.",
+  "de": "Ein Geldsystem, das auf verteilten kryptografischen Netzwerken statt auf der Autorität einer Zentralbank beruht. Transaktionen sind pseudonym und gegen staatliche Kontrolle widerstandsfähig, was reibungslosen grenzüberschreitenden Handel ermöglicht, aber die Steuererhebung untergräbt und die Finanzvolatilität verstärkt."
+ },
+ "law_devolution": {
+  "en": "Devolved Administration",
+  "de": "Dezentralisierte Verwaltung"
+ },
+ "law_devolution_desc": {
+  "en": "Significant powers are delegated to regional governments, granting them a high degree of autonomy.",
+  "de": "Bedeutende Befugnisse werden an regionale Regierungen übertragen, was ihnen ein hohes Maß an Autonomie verleiht."
+ },
+ "law_digital_currency": {
+  "en": "Digital Currency",
+  "de": "Digitalwährung"
+ },
+ "law_digital_currency_desc": {
+  "en": "A form of currency that exists only in digital form, with transactions conducted electronically.",
+  "de": "Eine Form von Währung, die nur in digitaler Form existiert und deren Transaktionen elektronisch abgewickelt werden."
+ },
+ "law_direct_democracy": {
+  "en": "Collective Governance",
+  "de": "Kollektive Regierungsführung"
+ },
+ "law_direct_democracy_desc": {
+  "en": "No one person holds supreme executive power. Authority rests with a body of equals: an assembly of voters, a party presidium, a college of bureaus, a federation of communes or a council of the powerful, depending on who holds power. Whoever chairs it is first among equals, not a ruler.",
+  "de": "Keine einzelne Person hält die oberste Exekutivgewalt. Die Macht liegt bei einem Gremium Gleichgestellter: einer Versammlung der Wähler, einem Parteipräsidium, einem Kollegium von Ämtern, einem Bund von Kommunen oder einem Rat der Mächtigen, je nachdem, wer die Macht innehat. Wer den Vorsitz führt, ist Erster unter Gleichen, kein Herrscher."
+ },
+ "law_directed_credit_development_banks": {
+  "en": "Directed Credit & Development Banks",
+  "de": "Gelenkte Kreditvergabe & Entwicklungsbanken"
+ },
+ "law_directed_credit_development_banks_desc": {
+  "en": "Private banks remain in the driver's seat, but state-backed development institutions co-finance priority sectors and absorb risk that private capital won't. The state guides; it does not own.",
+  "de": "Private Banken bleiben am Steuer, doch staatlich gestützte Entwicklungsinstitute finanzieren vorrangige Sektoren mit und tragen Risiken, die privates Kapital scheut. Der Staat lenkt; er besitzt nicht."
+ },
+ "law_dirigisme": {
+  "en": "Dirigiste Policy",
+  "de": "Dirigistische Politik"
+ },
+ "law_dirigisme_desc": {
+  "en": "The state cultivates national champions, coordinates cartels under supervision, and steers investment for strategic aims, accepting higher concentration to accelerate development.",
+  "de": "Der Staat fördert nationale Vorzeigeunternehmen, koordiniert Kartelle unter Aufsicht und lenkt Investitionen auf strategische Ziele, wobei er höhere Konzentration in Kauf nimmt, um die Entwicklung zu beschleunigen."
+ },
+ "law_donation_limits": {
+  "en": "Donation Limits",
+  "de": "Spendenobergrenzen"
+ },
+ "law_donation_limits_desc": {
+  "en": "Caps are placed on how much any single entity can donate to a political campaign, aiming to reduce the influence of wealth.",
+  "de": "Es werden Obergrenzen dafür festgelegt, wie viel eine einzelne Instanz an eine politische Kampagne spenden darf, um den Einfluss von Reichtum zu verringern."
+ },
+ "law_equal_inheritance": {
+  "en": "Equal Inheritance",
+  "de": "Gleiches Erbrecht"
+ },
+ "law_equal_inheritance_desc": {
+  "en": "All children inherit an equal share of the estate or assets, regardless of birth order. This system promotes fairness and equality among siblings, ensuring that wealth is distributed evenly.",
+  "de": "Alle Kinder erben einen gleichen Anteil am Nachlass oder Vermögen, unabhängig von der Geburtsreihenfolge. Dieses System fördert Fairness und Gleichheit unter Geschwistern und sorgt für eine gleichmäßige Vermögensverteilung."
+ },
+ "law_federal_system": {
+  "en": "Federal System",
+  "de": "Föderales System"
+ },
+ "law_federal_system_desc": {
+  "en": "Power is shared between the central government and its constituent political units.",
+  "de": "Die Macht wird zwischen der Zentralregierung und ihren Gliedstaaten geteilt."
+ },
+ "law_feudal_contracts": {
+  "en": "Traditional Vassalage",
+  "de": "Traditionelle Vasallität"
+ },
+ "law_feudal_contracts_desc": {
+  "en": "The state is a tapestry of personal oaths and traditional [Concept('concept_obligation', 'obligations')].",
+  "de": "Der Staat ist ein Geflecht aus persönlichen Eiden und traditionellen [Concept('concept_obligation', 'Verpflichtungen')]."
+ },
+ "law_fiat_currency": {
+  "en": "Fiat Money",
+  "de": "Fiatgeld"
+ },
+ "law_fiat_currency_desc": {
+  "en": "Money that has no intrinsic value and is not backed by a physical commodity. Its value is derived from the trust and confidence of the people who use it.",
+  "de": "Geld ohne inneren Wert, das nicht durch eine physische Ware gedeckt ist. Sein Wert ergibt sich aus dem Vertrauen der Menschen, die es verwenden."
+ },
+ "law_free_mutual_banking": {
+  "en": "Free & Mutual Banking",
+  "de": "Freies & Genossenschaftliches Bankwesen"
+ },
+ "law_free_mutual_banking_desc": {
+  "en": "A patchwork of private and cooperative banks clears through mutual arrangements. Some informal coordination is possible, but there is no true central bank.",
+  "de": "Ein Flickenteppich aus privaten und genossenschaftlichen Banken rechnet über gegenseitige Vereinbarungen ab. Informelle Abstimmung ist möglich, doch es gibt keine echte Zentralbank."
+ },
+ "law_freedom_of_contract": {
+  "en": "Freedom of Contract",
+  "de": "Vertragsfreiheit"
+ },
+ "law_freedom_of_contract_desc": {
+  "en": "The state largely abstains from competition policy. Firms may consolidate and coordinate absent fraud, prioritizing property rights and low administrative burden.",
+  "de": "Der Staat hält sich weitgehend aus der Wettbewerbspolitik heraus. Unternehmen dürfen sich zusammenschließen und abstimmen, solange kein Betrug vorliegt; Eigentumsrechte und geringe Verwaltungslast haben Vorrang."
+ },
+ "law_freedom_of_information": {
+  "en": "Freedom of Information",
+  "de": "Informationsfreiheit"
+ },
+ "law_freedom_of_information_desc": {
+  "en": "Comprehensive laws guaranteeing the public's right to access government information, subject to certain exceptions for national security or privacy concerns.",
+  "de": "Umfassende Gesetze garantieren der Öffentlichkeit das Recht auf Zugang zu Regierungsinformationen, vorbehaltlich bestimmter Ausnahmen für nationale Sicherheit oder Datenschutz."
+ },
+ "law_full_equality_and_protection": {
+  "en": "Full Equality and Protection",
+  "de": "Vollständige Gleichheit und Schutz"
+ },
+ "law_full_equality_and_protection_desc": {
+  "en": "LGBTQ+ individuals enjoy full legal and social equality under [concept_lgbtq_rights_movement] legislation, including marriage equality and adoption rights with robust protections against [concept_discrimination] and hate crimes.",
+  "de": "LGBTQ+-Personen genießen volle rechtliche und soziale Gleichstellung im Rahmen der [concept_lgbtq_rights_movement]-Gesetzgebung, einschließlich der Ehe für alle und Adoptionsrechten mit starkem Schutz vor [concept_discrimination] und Hassverbrechen."
+ },
+ "law_gold_standard": {
+  "en": "Gold Standard",
+  "de": "Goldstandard"
+ },
+ "law_gold_standard_desc": {
+  "en": "The currency is backed by a fixed amount of gold, and the government guarantees to exchange paper money for gold at a fixed rate.",
+  "de": "Die Währung ist durch eine feste Goldmenge gedeckt, und die Regierung garantiert den Umtausch von Papiergeld in Gold zu einem festen Kurs."
+ },
+ "law_guilds_chartered_monopolies": {
+  "en": "Guilds and Chartered Monopolies",
+  "de": "Zünfte und Konzessionsmonopole"
+ },
+ "law_guilds_chartered_monopolies_desc": {
+  "en": "Exclusive charters and guild privileges govern market entry. Rents flow to the crown and corporations, trading dynamism for stability and control.",
+  "de": "Exklusive Konzessionen und Zunftprivilegien regeln den Marktzugang. Die Erträge fließen der Krone und den Körperschaften zu, wodurch Dynamik gegen Stabilität und Kontrolle eingetauscht wird."
+ },
+ "law_human_purity": {
+  "en": "Human Purity",
+  "de": "Menschliche Reinheit"
+ },
+ "law_human_purity_desc": {
+  "en": "[concept_human_augmentation_system] is strictly prohibited, based on the belief that human beings should remain in their natural state. Laws enforce the preservation of human purity, and those attempting to modify themselves face severe penalties.",
+  "de": "[concept_human_augmentation_system] ist strikt verboten, ausgehend von der Überzeugung, dass der Mensch in seinem natürlichen Zustand verbleiben soll. Gesetze setzen die Bewahrung der menschlichen Reinheit durch, und wer versucht, sich selbst zu verändern, muss mit harten Strafen rechnen."
+ },
+ "law_humanitarian_regulations": {
+  "en": "Humanitarian Regulations",
+  "de": "Humanitäre Vorschriften"
+ },
+ "law_humanitarian_regulations_desc": {
+  "en": "Comprehensive protections for civilians, POWs, and wounded/sick soldiers. Emphasizes humane treatment and respect for human rights during armed conflicts.",
+  "de": "Umfassender Schutz für Zivilisten, Kriegsgefangene sowie verwundete und kranke Soldaten. Betont die menschliche Behandlung und die Achtung der Menschenrechte während bewaffneter Konflikte."
+ },
+ "law_informal_government_secrecy": {
+  "en": "Informal Government Secrecy",
+  "de": "Informelle Regierungsgeheimhaltung"
+ },
+ "law_informal_government_secrecy_desc": {
+  "en": "Limited transparency and accountability, with government information kept confidential and access restricted to certain officials or agencies.",
+  "de": "Begrenzte Transparenz und Rechenschaftspflicht; Regierungsinformationen bleiben vertraulich, und der Zugang ist bestimmten Beamten oder Behörden vorbehalten."
+ },
+ "law_intrusive_surveillance": {
+  "en": "Intrusive Surveillance System",
+  "de": "Invasives Überwachungssystem"
+ },
+ "law_intrusive_surveillance_desc": {
+  "en": "An extensive surveillance system monitors citizens' activities, both online and offline. Personal information is collected, stored, and used by the government to control and manipulate society, with little or no privacy protection.",
+  "de": "Ein umfassendes Überwachungssystem beobachtet die Aktivitäten der Bürger, online wie offline. Persönliche Daten werden von der Regierung gesammelt, gespeichert und genutzt, um die Gesellschaft zu kontrollieren und zu lenken, bei kaum oder keinem Datenschutz."
+ },
+ "law_legal_limbo": {
+  "en": "Legal Limbo",
+  "de": "Rechtliches Vakuum"
+ },
+ "law_legal_limbo_desc": {
+  "en": "LGBTQ+ rights are neither criminalized nor protected, and authorities mostly ignore the issue. This leaves LGBTQ+ individuals vulnerable to [concept_lgbtq_rights_movement] gaps, leaving them [concept_discrimination] and mistreatment, with no legal recourse or support.",
+  "de": "LGBTQ+-Rechte sind weder unter Strafe gestellt noch geschützt, und die Behörden ignorieren das Thema meist. Das setzt LGBTQ+-Personen Lücken im [concept_lgbtq_rights_movement] aus und macht sie schutzlos gegenüber [concept_discrimination] und Misshandlung, ohne rechtlichen Rückhalt oder Unterstützung."
+ },
+ "law_limited_war": {
+  "en": "Limited War",
+  "de": "Begrenzter Krieg"
+ },
+ "law_limited_war_desc": {
+  "en": "Strict restrictions on means and methods of warfare, with a focus on minimizing civilian casualties and damage to civilian [concept_infrastructure]. Prohibits the use of certain weapons and tactics, and emphasizes the [concept_power_bloc_principle] of proportionality in the use of force.",
+  "de": "Strenge Beschränkungen der Mittel und Methoden der Kriegsführung, mit dem Ziel, zivile Opfer und Schäden an ziviler [concept_infrastructure] zu minimieren. Verbietet den Einsatz bestimmter Waffen und Taktiken und betont das [concept_power_bloc_principle] der Verhältnismäßigkeit beim Einsatz von Gewalt."
+ },
+ "law_linguistic_purity": {
+  "en": "Linguistic Purity",
+  "de": "Sprachliche Reinheit"
+ },
+ "law_linguistic_purity_desc": {
+  "en": "The state suppresses minority languages in public life and enforces a single national language as a marker of loyalty and identity.",
+  "de": "Der Staat unterdrückt Minderheitensprachen im öffentlichen Leben und setzt eine einzige Nationalsprache als Zeichen von Loyalität und Identität durch."
+ },
+ "law_littoral_defense": {
+  "en": "Littoral Defense",
+  "de": "Küstenverteidigung"
+ },
+ "law_littoral_defense_desc": {
+  "en": "The fleet exists to defend the home coast, not to project power abroad. Dense flotillas of small craft and reinforced coastal [concept_fortification_system] make landings costly for any aggressor, but the navy cannot operate far from port and capital ships are deliberately neglected.",
+  "de": "Die Flotte existiert, um die heimische Küste zu verteidigen, nicht um Macht ins Ausland zu projizieren. Dichte Flottillen kleiner Boote und verstärkte küstennahe [concept_fortification_system] machen Landungen für jeden Angreifer teuer, doch die Marine kann nicht weit vom Hafen operieren, und Kapitalschiffe werden bewusst vernachlässigt."
+ },
+ "law_local_vernacular": {
+  "en": "Local Vernacular",
+  "de": "Lokale Umgangssprache"
+ },
+ "law_local_vernacular_desc": {
+  "en": "Administration and schooling follow local custom. The state sets no uniform language standard, producing a patchwork of practices and identities.",
+  "de": "Verwaltung und Schulwesen folgen lokalem Brauch. Der Staat legt keinen einheitlichen Sprachstandard fest, wodurch ein Flickenteppich an Praktiken und Identitäten entsteht."
+ },
+ "law_mandatory_augmentation": {
+  "en": "Mandatory Augmentation",
+  "de": "Verpflichtende Augmentierung"
+ },
+ "law_mandatory_augmentation_desc": {
+  "en": "[concept_human_augmentation_system] is not only allowed but mandatory for certain segments of the population or specific roles, such as military personnel or other specialized [Concept('concept_profession', 'professions')]. The government enforces and oversees the augmentation process.",
+  "de": "[concept_human_augmentation_system] ist nicht nur erlaubt, sondern für bestimmte Bevölkerungsgruppen oder Aufgaben verpflichtend, etwa für Militärpersonal oder andere spezialisierte [Concept('concept_profession', 'Berufe')]. Die Regierung setzt den Augmentierungsprozess durch und überwacht ihn."
+ },
+ "law_medical_augmentation_only": {
+  "en": "Medical Augmentation Only",
+  "de": "Nur medizinische Augmentierung"
+ },
+ "law_medical_augmentation_only_desc": {
+  "en": "[concept_human_augmentation_system] is strictly regulated and limited to medical purposes, such as correcting disabilities or treating severe illnesses. Enhancement of human abilities beyond natural limitations is prohibited.",
+  "de": "[concept_human_augmentation_system] ist streng reguliert und auf medizinische Zwecke beschränkt, etwa die Korrektur von Behinderungen oder die Behandlung schwerer Krankheiten. Die Steigerung menschlicher Fähigkeiten über die natürlichen Grenzen hinaus ist verboten."
+ },
+ "law_minimal_privacy_protection": {
+  "en": "Minimal Privacy Protection",
+  "de": "Minimaler Datenschutz"
+ },
+ "law_minimal_privacy_protection_desc": {
+  "en": "Basic privacy rights exist, primarily focused on physical spaces. No comprehensive [concept_digital_rights_system] framework exists for data protection or surveillance restrictions.",
+  "de": "Grundlegende Datenschutzrechte bestehen, vor allem mit Fokus auf physische Räume. Es gibt keinen umfassenden Rahmen für [concept_digital_rights_system] zum Schutz von Daten oder zur Beschränkung von Überwachung."
+ },
+ "law_ministry_of_commerce": {
+  "en": "Ministry of Commerce Established",
+  "de": "Handelsministerium eingerichtet"
+ },
+ "law_ministry_of_commerce_desc": {
+  "en": "The Ministry of Commerce regulates trade policies, promotes economic growth, and ensures fair business practices.",
+  "de": "Das Handelsministerium regelt die Handelspolitik, fördert das Wirtschaftswachstum und sorgt für faire Geschäftspraktiken."
+ },
+ "law_ministry_of_consumer_protection": {
+  "en": "Ministry of Consumer Protection Established",
+  "de": "Verbraucherschutzministerium eingerichtet"
+ },
+ "law_ministry_of_consumer_protection_desc": {
+  "en": "The Ministry of Consumer Protection manages the nation's consumer protection efforts, including the regulation of product safety and the enforcement of consumer rights.",
+  "de": "Das Verbraucherschutzministerium leitet die Verbraucherschutzbemühungen der Nation, einschließlich der Regulierung der Produktsicherheit und der Durchsetzung von Verbraucherrechten."
+ },
+ "law_ministry_of_culture": {
+  "en": "Ministry of Culture Established",
+  "de": "Kulturministerium eingerichtet"
+ },
+ "law_ministry_of_culture_desc": {
+  "en": "The Ministry of Culture promotes the nation's cultural heritage, arts, and creative industries, fostering national identity and cultural diversity.",
+  "de": "Das Kulturministerium fördert das kulturelle Erbe der Nation, die Künste und die Kreativwirtschaft und stärkt nationale Identität und kulturelle Vielfalt."
+ },
+ "law_ministry_of_foreign_affairs": {
+  "en": "Ministry of Foreign Affairs Established",
+  "de": "Außenministerium eingerichtet"
+ },
+ "law_ministry_of_foreign_affairs_desc": {
+  "en": "The Ministry of Foreign Affairs manages the nation's diplomatic relations, international treaties, and foreign policy.",
+  "de": "Das Außenministerium leitet die diplomatischen Beziehungen, internationalen Verträge und die Außenpolitik der Nation."
+ },
+ "law_ministry_of_intelligence_and_security": {
+  "en": "Ministry of Intelligence and Security Established",
+  "de": "Geheimdienst- und Sicherheitsministerium eingerichtet"
+ },
+ "law_ministry_of_intelligence_and_security_desc": {
+  "en": "The Ministry of Intelligence and Security manages national security, conducting intelligence operations and ensuring internal stability.",
+  "de": "Das Geheimdienst- und Sicherheitsministerium leitet die nationale Sicherheit, führt Geheimdienstoperationen durch und sichert die innere Stabilität."
+ },
+ "law_ministry_of_international_aid": {
+  "en": "Ministry of International Aid Established",
+  "de": "Ministerium für Internationale Hilfe eingerichtet"
+ },
+ "law_ministry_of_international_aid_desc": {
+  "en": "The Ministry of International Aid manages the nation's international aid efforts, including the provision of humanitarian assistance and the promotion of development.",
+  "de": "Das Ministerium für Internationale Hilfe leitet die internationalen Hilfsbemühungen der Nation, einschließlich humanitärer Hilfe und Entwicklungsförderung."
+ },
+ "law_ministry_of_propaganda": {
+  "en": "Ministry of Propaganda Established",
+  "de": "Propagandaministerium eingerichtet"
+ },
+ "law_ministry_of_propaganda_desc": {
+  "en": "The Ministry of Propaganda manages the nation's propaganda efforts, including the dissemination of information and the promotion of government policies.",
+  "de": "Das Propagandaministerium leitet die Propagandaarbeit der Nation, einschließlich der Verbreitung von Informationen und der Förderung der Regierungspolitik."
+ },
+ "law_ministry_of_refugee_affairs": {
+  "en": "Ministry of Refugee Affairs Established",
+  "de": "Flüchtlingsministerium eingerichtet"
+ },
+ "law_ministry_of_refugee_affairs_desc": {
+  "en": "The Ministry of Refugee Affairs manages the nation's refugee policies, including the processing of asylum claims and the resettlement of refugees.",
+  "de": "Das Flüchtlingsministerium leitet die Flüchtlingspolitik der Nation, einschließlich der Bearbeitung von Asylanträgen und der Umsiedlung von Flüchtlingen."
+ },
+ "law_ministry_of_religion": {
+  "en": "Ministry of Religion Established",
+  "de": "Religionsministerium eingerichtet"
+ },
+ "law_ministry_of_religion_desc": {
+  "en": "The Ministry of Religion manages the nation's religious affairs, including the regulation of religious institutions and the enforcement of religious laws.",
+  "de": "Das Religionsministerium leitet die religiösen Angelegenheiten der Nation, einschließlich der Regulierung religiöser Institutionen und der Durchsetzung religiöser Gesetze."
+ },
+ "law_ministry_of_science": {
+  "en": "Ministry of Science Established",
+  "de": "Wissenschaftsministerium eingerichtet"
+ },
+ "law_ministry_of_science_desc": {
+  "en": "The Ministry of Science manages the nation's scientific research, technological development, and innovation efforts.",
+  "de": "Das Wissenschaftsministerium leitet die wissenschaftliche Forschung, technologische Entwicklung und Innovationsarbeit der Nation."
+ },
+ "law_ministry_of_the_environment": {
+  "en": "Ministry of the Environment Established",
+  "de": "Umweltministerium eingerichtet"
+ },
+ "law_ministry_of_the_environment_desc": {
+  "en": "The Ministry of Environment is tasked with the protection and conservation of the [concept_pollution_system] and the nation's natural resources, implementing policies for clean air, water, and soil.",
+  "de": "Das Umweltministerium ist für den Schutz vor [concept_pollution_system] und die Bewahrung der natürlichen Ressourcen der Nation zuständig und setzt Maßnahmen für saubere Luft, sauberes Wasser und sauberen Boden um."
+ },
+ "law_ministry_of_thought_control": {
+  "en": "Ministry of Thought Control Established",
+  "de": "Gedankenkontrollministerium eingerichtet"
+ },
+ "law_ministry_of_thought_control_desc": {
+  "en": "The Ministry of Thought Control manages the nation's censorship and surveillance efforts, including the monitoring of communications and the suppression of dissent.",
+  "de": "Das Gedankenkontrollministerium leitet die Zensur- und Überwachungsarbeit der Nation, einschließlich der Überwachung der Kommunikation und der Unterdrückung von Widerspruch."
+ },
+ "law_ministry_of_urban_planning": {
+  "en": "Ministry of Urban Planning Established",
+  "de": "Stadtplanungsministerium eingerichtet"
+ },
+ "law_ministry_of_urban_planning_desc": {
+  "en": "The Ministry of Urban Planning manages the nation's urban planning efforts, including the development of [concept_infrastructure] and the regulation of land use.",
+  "de": "Das Stadtplanungsministerium leitet die Stadtplanung der Nation, einschließlich des Ausbaus der [concept_infrastructure] und der Regelung der Flächennutzung."
+ },
+ "law_ministry_of_war": {
+  "en": "Ministry of War Established",
+  "de": "Kriegsministerium eingerichtet"
+ },
+ "law_ministry_of_war_desc": {
+  "en": "The Ministry of War is responsible for the defense of the nation, overseeing military strategy, operations, and personnel.",
+  "de": "Das Kriegsministerium ist für die Verteidigung der Nation zuständig und beaufsichtigt Militärstrategie, Operationen und Personal."
+ },
+ "law_minority_rights_affirmative_action": {
+  "en": "Affirmative Action",
+  "de": "Affirmative Maßnahmen"
+ },
+ "law_minority_rights_affirmative_action_desc": {
+  "en": "The government implements policies to address historical [concept_discrimination] and promote equal opportunities for minority groups.",
+  "de": "Die Regierung setzt Maßnahmen um, um historische [concept_discrimination] anzugehen und Chancengleichheit für Minderheiten zu fördern."
+ },
+ "law_minority_rights_cultural_assimilation": {
+  "en": "Cultural Assimilation",
+  "de": "Kulturelle Assimilierung"
+ },
+ "law_minority_rights_cultural_assimilation_desc": {
+  "en": "The government promotes the [concept_assimilation] of minority groups into the dominant culture, suppressing their distinct identities and traditions.",
+  "de": "Die Regierung fördert die [concept_assimilation] von Minderheiten in die dominante Kultur und unterdrückt dabei ihre eigenen Identitäten und Traditionen."
+ },
+ "law_minority_rights_discrimination": {
+  "en": "Discrimination",
+  "de": "Diskriminierung"
+ },
+ "law_minority_rights_discrimination_desc": {
+  "en": "The government discriminates against minority groups, treating them as second-class citizens and limiting their rights and opportunities.",
+  "de": "Die Regierung diskriminiert Minderheiten, behandelt sie als Bürger zweiter Klasse und schränkt ihre Rechte und Möglichkeiten ein."
+ },
+ "law_minority_rights_ghettoization": {
+  "en": "Ghettoization",
+  "de": "Ghettoisierung"
+ },
+ "law_minority_rights_ghettoization_desc": {
+  "en": "The government enforces segregation and isolation of minority groups, confining them to specific areas or neighborhoods.",
+  "de": "Die Regierung erzwingt Segregation und Isolation von Minderheiten und schließt sie auf bestimmte Gebiete oder Viertel ein."
+ },
+ "law_minority_rights_indifference": {
+  "en": "Indifference",
+  "de": "Gleichgültigkeit"
+ },
+ "law_minority_rights_indifference_desc": {
+  "en": "The government is indifferent to the rights and needs of minority groups, neither actively supporting nor oppressing them.",
+  "de": "Die Regierung ist den Rechten und Bedürfnissen von Minderheiten gegenüber gleichgültig und unterstützt sie weder aktiv noch unterdrückt sie sie."
+ },
+ "law_minority_rights_protection": {
+  "en": "Protection",
+  "de": "Schutz"
+ },
+ "law_minority_rights_protection_desc": {
+  "en": "The government actively protects the rights and interests of minority groups, ensuring their safety, equality, and opportunities.",
+  "de": "Die Regierung schützt aktiv die Rechte und Interessen von Minderheiten und sichert ihre Sicherheit, Gleichheit und Chancen."
+ },
+ "law_minority_rights_violent_hostility": {
+  "en": "Violent Hostility",
+  "de": "Gewalttätige Feindseligkeit"
+ },
+ "law_minority_rights_violent_hostility_desc": {
+  "en": "Minorities are violently oppressed by the government.",
+  "de": "Minderheiten werden von der Regierung gewaltsam unterdrückt."
+ },
+ "law_moderate_data_privacy": {
+  "en": "Moderate Data Privacy",
+  "de": "Moderater Datenschutz"
+ },
+ "law_moderate_data_privacy_desc": {
+  "en": "Comprehensive data protection laws are in place, including limitations on government surveillance and private data collection. Exceptions exist for national security or public interest purposes, and enforcement may be inconsistent.",
+  "de": "Umfassende Datenschutzgesetze sind in Kraft, einschließlich Beschränkungen staatlicher Überwachung und privater Datenerhebung. Ausnahmen bestehen für nationale Sicherheit oder das öffentliche Interesse, und die Durchsetzung kann uneinheitlich sein."
+ },
+ "law_multilingual_federalism": {
+  "en": "Multilingual Federalism",
+  "de": "Mehrsprachiger Föderalismus"
+ },
+ "law_multilingual_federalism_desc": {
+  "en": "Multiple co-official languages are recognized by region, with rights to courts, schooling, and administration in the local tongue and a federal lingua franca for coordination.",
+  "de": "Mehrere gleichberechtigte Amtssprachen werden je nach Region anerkannt, mit Rechten auf Gerichte, Schulwesen und Verwaltung in der jeweiligen Landessprache sowie einer föderalen Verkehrssprache zur Koordination."
+ },
+ "law_national_bank": {
+  "en": "National Bank Established",
+  "de": "Nationalbank gegründet"
+ },
+ "law_national_bank_desc": {
+  "en": "The National Bank oversees the country's monetary policy and the [concept_banking_cycle], ensuring economic stability and [concept_financial_regulation].",
+  "de": "Die Nationalbank überwacht die Geldpolitik des Landes und den [concept_banking_cycle] und sichert wirtschaftliche Stabilität und [concept_financial_regulation]."
+ },
+ "law_neocameralism": {
+  "en": "Neocameralism",
+  "de": "Neokameralismus"
+ },
+ "law_neocameralism_desc": {
+  "en": "A political system where the state is organized as a joint-stock corporation, with shareholders having control over government functions and policies.",
+  "de": "Ein politisches System, in dem der Staat als Aktiengesellschaft organisiert ist und die Aktionäre die Kontrolle über Regierungsfunktionen und -politik innehaben."
+ },
+ "law_neocolonialism": {
+  "en": "Neocolonialism",
+  "de": "Neokolonialismus"
+ },
+ "law_neocolonialism_desc": {
+  "en": "A [concept_decolonization_system]-era form of indirect control and exploitation where powerful nations or corporations exert influence over less developed countries, often through economic, political, or cultural means.",
+  "de": "Eine Form indirekter Kontrolle und Ausbeutung im Zeitalter der [concept_decolonization_system], bei der mächtige Nationen oder Konzerne Einfluss auf weniger entwickelte Länder ausüben, oft mit wirtschaftlichen, politischen oder kulturellen Mitteln."
+ },
+ "law_net_neutrality": {
+  "en": "Net Neutrality",
+  "de": "Netzneutralität"
+ },
+ "law_net_neutrality_desc": {
+  "en": "All internet data must be treated equally, preventing service providers from creating 'fast lanes' for preferred content.",
+  "de": "Sämtliche Internetdaten müssen gleich behandelt werden, sodass Anbieter keine ‚Überholspuren' für bevorzugte Inhalte schaffen können."
+ },
+ "law_no_augmentation": {
+  "en": "No Augmentation",
+  "de": "Keine Augmentierung"
+ },
+ "law_no_augmentation_desc": {
+  "en": "[concept_human_augmentation_system] technologies mostly do not exist or are in their infancy. No augmentations have been allowed to market and society has not yet addressed the ethical, legal, and social implications of human modification.",
+  "de": "[concept_human_augmentation_system]-Technologien existieren größtenteils nicht oder stecken noch in den Anfängen. Keine Augmentierung wurde zur Marktreife zugelassen, und die Gesellschaft hat sich noch nicht mit den ethischen, rechtlichen und sozialen Folgen menschlicher Veränderung befasst."
+ },
+ "law_no_campaign_finance_laws": {
+  "en": "No Campaign Finance Laws",
+  "de": "Keine Wahlkampffinanzierungsgesetze"
+ },
+ "law_no_campaign_finance_laws_desc": {
+  "en": "The state does not regulate political donations, as no formal elections take place.",
+  "de": "Der Staat reguliert politische Spenden nicht, da keine förmlichen Wahlen stattfinden."
+ },
+ "law_no_internet_policy": {
+  "en": "No Internet Policy",
+  "de": "Keine Internetpolitik"
+ },
+ "law_no_internet_policy_desc": {
+  "en": "The state has no policy regarding the governance of global digital networks.",
+  "de": "Der Staat hat keine Politik zur Steuerung globaler digitaler Netzwerke."
+ },
+ "law_no_ip_protection": {
+  "en": "No IP Protection",
+  "de": "Kein Schutz geistigen Eigentums"
+ },
+ "law_no_ip_protection_desc": {
+  "en": "Intellectual property is not recognized or protected, allowing for open creation, distribution, and use of inventions, artistic works, and other forms of intellectual property without legal consequences or restrictions.",
+  "de": "Geistiges Eigentum wird weder anerkannt noch geschützt, sodass Erfindungen, künstlerische Werke und andere Formen geistigen Eigentums frei geschaffen, verbreitet und genutzt werden können, ohne rechtliche Folgen oder Beschränkungen."
+ },
+ "law_no_ministry_of_commerce": {
+  "en": "No Ministry of Commerce",
+  "de": "Kein Handelsministerium"
+ },
+ "law_no_ministry_of_commerce_desc": {
+  "en": "We have no Ministry of Commerce.",
+  "de": "Wir haben kein Handelsministerium."
+ },
+ "law_no_ministry_of_consumer_protection": {
+  "en": "No Ministry of Consumer Protection",
+  "de": "Kein Verbraucherschutzministerium"
+ },
+ "law_no_ministry_of_consumer_protection_desc": {
+  "en": "We have no Ministry of Consumer Protection.",
+  "de": "Wir haben kein Verbraucherschutzministerium."
+ },
+ "law_no_ministry_of_culture": {
+  "en": "No Ministry of Culture",
+  "de": "Kein Kulturministerium"
+ },
+ "law_no_ministry_of_culture_desc": {
+  "en": "We have no Ministry of Culture.",
+  "de": "Wir haben kein Kulturministerium."
+ },
+ "law_no_ministry_of_foreign_affairs": {
+  "en": "No Ministry of Foreign Affairs",
+  "de": "Kein Außenministerium"
+ },
+ "law_no_ministry_of_foreign_affairs_desc": {
+  "en": "We have no Ministry of Foreign Affairs.",
+  "de": "Wir haben kein Außenministerium."
+ },
+ "law_no_ministry_of_intelligence_and_security": {
+  "en": "No Ministry of Intelligence and Security",
+  "de": "Kein Geheimdienst- und Sicherheitsministerium"
+ },
+ "law_no_ministry_of_intelligence_and_security_desc": {
+  "en": "We have no Ministry of Intelligence and Security.",
+  "de": "Wir haben kein Geheimdienst- und Sicherheitsministerium."
+ },
+ "law_no_ministry_of_international_aid": {
+  "en": "No Ministry of International Aid",
+  "de": "Kein Ministerium für Internationale Hilfe"
+ },
+ "law_no_ministry_of_international_aid_desc": {
+  "en": "We have no Ministry of International Aid.",
+  "de": "Wir haben kein Ministerium für Internationale Hilfe."
+ },
+ "law_no_ministry_of_labor": {
+  "en": "No Ministry of Labor",
+  "de": "Kein Arbeitsministerium"
+ },
+ "law_no_ministry_of_labor_desc": {
+  "en": "We have no Ministry of Labor.",
+  "de": "Wir haben kein Arbeitsministerium."
+ },
+ "law_no_ministry_of_propaganda": {
+  "en": "No Ministry of Propaganda",
+  "de": "Kein Propagandaministerium"
+ },
+ "law_no_ministry_of_propaganda_desc": {
+  "en": "We have no Ministry of Propaganda.",
+  "de": "Wir haben kein Propagandaministerium."
+ },
+ "law_no_ministry_of_refugee_affairs": {
+  "en": "No Ministry of Refugee Affairs",
+  "de": "Kein Flüchtlingsministerium"
+ },
+ "law_no_ministry_of_refugee_affairs_desc": {
+  "en": "We have no Ministry of Refugee Affairs.",
+  "de": "Wir haben kein Flüchtlingsministerium."
+ },
+ "law_no_ministry_of_religion": {
+  "en": "No Ministry of Religion",
+  "de": "Kein Religionsministerium"
+ },
+ "law_no_ministry_of_religion_desc": {
+  "en": "We have no Ministry of Religion.",
+  "de": "Wir haben kein Religionsministerium."
+ },
+ "law_no_ministry_of_science": {
+  "en": "No Ministry of Science",
+  "de": "Kein Wissenschaftsministerium"
+ },
+ "law_no_ministry_of_science_desc": {
+  "en": "We have no Ministry of Science.",
+  "de": "Wir haben kein Wissenschaftsministerium."
+ },
+ "law_no_ministry_of_the_environment": {
+  "en": "No Ministry of the Environment",
+  "de": "Kein Umweltministerium"
+ },
+ "law_no_ministry_of_the_environment_desc": {
+  "en": "We have no Ministry of the Environment.",
+  "de": "Wir haben kein Umweltministerium."
+ },
+ "law_no_ministry_of_thought_control": {
+  "en": "No Ministry of Thought Control",
+  "de": "Kein Gedankenkontrollministerium"
+ },
+ "law_no_ministry_of_thought_control_desc": {
+  "en": "We have no Ministry of Thought Control.",
+  "de": "Wir haben kein Gedankenkontrollministerium."
+ },
+ "law_no_ministry_of_urban_planning": {
+  "en": "No Ministry of Urban Planning",
+  "de": "Kein Stadtplanungsministerium"
+ },
+ "law_no_ministry_of_urban_planning_desc": {
+  "en": "We have no Ministry of Urban Planning.",
+  "de": "Wir haben kein Stadtplanungsministerium."
+ },
+ "law_no_ministry_of_war": {
+  "en": "No Ministry of War",
+  "de": "Kein Kriegsministerium"
+ },
+ "law_no_ministry_of_war_desc": {
+  "en": "We have no Ministry of War.",
+  "de": "Wir haben kein Kriegsministerium."
+ },
+ "law_no_national_bank": {
+  "en": "No National Bank",
+  "de": "Keine Nationalbank"
+ },
+ "law_no_national_bank_desc": {
+  "en": "We have no National Bank.",
+  "de": "Wir haben keine Nationalbank."
+ },
+ "law_non_inheritable_usage_rights": {
+  "en": "Non-Inheritable Usage Rights",
+  "de": "Nicht vererbbare Nutzungsrechte"
+ },
+ "law_non_inheritable_usage_rights_desc": {
+  "en": "Property is not owned by individuals but by the community or state. Citizens are granted usage rights but cannot pass the property to their descendants. This system aims to prevent the accumulation of wealth and promote social equality.",
+  "de": "Eigentum gehört nicht Einzelpersonen, sondern der Gemeinschaft oder dem Staat. Bürger erhalten Nutzungsrechte, können das Eigentum aber nicht an ihre Nachkommen weitergeben. Dieses System soll die Anhäufung von Vermögen verhindern und soziale Gleichheit fördern."
+ },
+ "law_open_government": {
+  "en": "Open Government",
+  "de": "Offene Regierungsführung"
+ },
+ "law_open_government_desc": {
+  "en": "Government operates with transparency and accountability, proactively providing public access to information, decision-making processes, and official records.",
+  "de": "Die Regierung handelt transparent und rechenschaftspflichtig und gewährt der Öffentlichkeit von sich aus Zugang zu Informationen, Entscheidungsprozessen und amtlichen Unterlagen."
+ },
+ "law_open_source_genetics": {
+  "en": "Open-Source Genetics",
+  "de": "Open-Source-Genetik"
+ },
+ "law_open_source_genetics_desc": {
+  "en": "The genetic code is the shared heritage of all life; research and modification are placed in the public domain to accelerate progress.",
+  "de": "Der genetische Code ist das gemeinsame Erbe allen Lebens; Forschung und Veränderung werden der Allgemeinheit zugänglich gemacht, um den Fortschritt zu beschleunigen."
+ },
+ "law_open_source_innovation": {
+  "en": "Open Source Innovation",
+  "de": "Open-Source-Innovation"
+ },
+ "law_open_source_innovation_desc": {
+  "en": "Intellectual property protection is geared towards fostering innovation and collaboration, with a focus on open-source [Concept('concept_power_bloc_principle', 'principles')]. Creators are encouraged to share their work, while still retaining certain rights and receiving recognition for their contributions.",
+  "de": "Der Schutz geistigen Eigentums ist darauf ausgerichtet, Innovation und Zusammenarbeit zu fördern, mit Schwerpunkt auf Open-Source-[Concept('concept_power_bloc_principle', 'Prinzipien')]. Urheber werden ermutigt, ihre Arbeit zu teilen, behalten dabei aber bestimmte Rechte und erhalten Anerkennung für ihre Beiträge."
+ },
+ "law_partible": {
+  "en": "Partible Inheritance",
+  "de": "Realteilung"
+ },
+ "law_partible_desc": {
+  "en": "Estates are divided among multiple heirs, with some flexibility in how assets are distributed.",
+  "de": "Nachlässe werden unter mehreren Erben aufgeteilt, mit gewisser Flexibilität bei der Verteilung der Vermögenswerte."
+ },
+ "law_penal_labor_camps": {
+  "en": "Penal Labor Camps",
+  "de": "Strafarbeitslager"
+ },
+ "law_penal_labor_camps_desc": {
+  "en": "Convicts and political prisoners serve their sentences as forced labor in state camps, digging the mines, felling the forests and working the plantations. The camps cow the opposition and pay part of their own way, but a government that runs them loses the trust of its own people.",
+  "de": "Verurteilte und politische Gefangene verbüßen ihre Strafen als Zwangsarbeiter in staatlichen Lagern, graben in den Minen, fällen die Wälder und arbeiten auf den Plantagen. Die Lager schüchtern die Opposition ein und finanzieren sich teilweise selbst, doch eine Regierung, die sie betreibt, verliert das Vertrauen ihres eigenen Volkes."
+ },
+ "law_population_control_measures": {
+  "en": "Population Control Measures",
+  "de": "Bevölkerungskontrollmaßnahmen"
+ },
+ "law_population_control_measures_desc": {
+  "en": "The state takes direct action to manage the size and growth of its populace. These measures can range from strict limits on the number of children to state-guided eugenics programs, all in the name of the greater national good.",
+  "de": "Der Staat greift direkt ein, um Größe und Wachstum seiner Bevölkerung zu steuern. Diese Maßnahmen reichen von strikten Grenzen für die Kinderzahl bis zu staatlich gelenkten Eugenikprogrammen, alles im Namen des höheren nationalen Wohls."
+ },
+ "law_post-scarcity": {
+  "en": "Post-Scarcity Economy",
+  "de": "Postknappheitswirtschaft"
+ },
+ "law_post-scarcity_desc": {
+  "en": "In this economic model, advanced technologies and efficient resource management have achieved [concept_post_scarcity_system], making scarcity a thing of the past. All essential goods and services are readily available to every citizen, nullifying traditional economic challenges tied to supply and demand.",
+  "de": "In diesem Wirtschaftsmodell haben fortschrittliche Technologien und effizientes Ressourcenmanagement [concept_post_scarcity_system] erreicht, sodass Mangel der Vergangenheit angehört. Alle wesentlichen Güter und Dienstleistungen stehen jedem Bürger frei zur Verfügung, wodurch die klassischen wirtschaftlichen Herausforderungen von Angebot und Nachfrage entfallen."
+ },
+ "law_primogeniture": {
+  "en": "Primogeniture",
+  "de": "Primogenitur"
+ },
+ "law_primogeniture_desc": {
+  "en": "The eldest child, typically the firstborn son, inherits the entire estate or title of the deceased parent. This system ensures the preservation of family wealth and power within a single line of descent.",
+  "de": "Das älteste Kind, meist der erstgeborene Sohn, erbt den gesamten Nachlass oder Titel des verstorbenen Elternteils. Dieses System sichert den Erhalt von Familienvermögen und -macht innerhalb einer einzigen Erblinie."
+ },
+ "law_private_military_contractors": {
+  "en": "Private Military Contractors",
+  "de": "Private Militärdienstleister"
+ },
+ "law_private_military_contractors_desc": {
+  "en": "The state contracts private firms to wage its wars. Operations abroad gain plausible deniability and the home front tolerates protracted conflicts, but contractors are expensive, line-combat performance suffers, and reliance on mercenaries draws international suspicion.",
+  "de": "Der Staat beauftragt private Firmen mit der Kriegsführung. Operationen im Ausland gewinnen glaubhafte Abstreitbarkeit, und die Heimatfront toleriert langwierige Konflikte, doch Vertragsfirmen sind teuer, die reguläre Kampfkraft leidet, und die Abhängigkeit von Söldnern weckt internationales Misstrauen."
+ },
+ "law_pro_capital_ministry_of_labor": {
+  "en": "Pro-Capital Ministry of Labor Established",
+  "de": "Kapitalfreundliches Arbeitsministerium eingerichtet"
+ },
+ "law_pro_capital_ministry_of_labor_desc": {
+  "en": "The Ministry of Labor regulates employment laws, employer rights, and labor market conditions, aiming to ensure qualified workers are trained and employed where needed.",
+  "de": "Das Arbeitsministerium regelt Arbeitsrecht, Arbeitgeberrechte und Arbeitsmarktbedingungen mit dem Ziel, dass qualifizierte Arbeitskräfte dort ausgebildet und eingesetzt werden, wo sie gebraucht werden."
+ },
+ "law_pro_labor_ministry_of_labor": {
+  "en": "Pro-Labor Ministry of Labor Established",
+  "de": "Arbeiterfreundliches Arbeitsministerium eingerichtet"
+ },
+ "law_pro_labor_ministry_of_labor_desc": {
+  "en": "The Ministry of Labor regulates employment laws, worker rights, and labor market conditions, aiming to ensure qualified workers are trained and employed where needed.",
+  "de": "Das Arbeitsministerium regelt Arbeitsrecht, Arbeitnehmerrechte und Arbeitsmarktbedingungen mit dem Ziel, dass qualifizierte Arbeitskräfte dort ausgebildet und eingesetzt werden, wo sie gebraucht werden."
+ },
+ "law_pro_natalist_subsidies": {
+  "en": "Pro-Natalist Subsidies",
+  "de": "Geburtenfördernde Subventionen"
+ },
+ "law_pro_natalist_subsidies_desc": {
+  "en": "A growing nation needs a growing populace. The state actively encourages larger families through propaganda, tax incentives, and direct subsidies to ensure our continued strength and prosperity.",
+  "de": "Eine wachsende Nation braucht eine wachsende Bevölkerung. Der Staat fördert aktiv größere Familien durch Propaganda, Steueranreize und direkte Zuschüsse, um unsere fortdauernde Stärke und Prosperität zu sichern."
+ },
+ "law_protected_class": {
+  "en": "Protected Class",
+  "de": "Geschützte Gruppe"
+ },
+ "law_protected_class_desc": {
+  "en": "[concept_discrimination] on the basis of gender is prohibited by law, and individuals are protected from unfair treatment or bias based on gender.",
+  "de": "[concept_discrimination] aufgrund des Geschlechts ist gesetzlich verboten, und Personen sind vor ungerechter Behandlung oder Voreingenommenheit aufgrund des Geschlechts geschützt."
+ },
+ "law_prudential_narrow_banking": {
+  "en": "Prudential / Narrow Banking",
+  "de": "Vorsichtsprinzip / Enges Bankwesen"
+ },
+ "law_prudential_narrow_banking_desc": {
+  "en": "Commercial deposits are walled off from speculation. Banks can lend only against safe assets, capping crashes and volatility at the cost of slower capital formation - capitalists have less room to take risks.",
+  "de": "Geschäftseinlagen werden von der Spekulation abgeschottet. Banken dürfen nur gegen sichere Vermögenswerte Kredite vergeben, was Abstürze und Volatilität begrenzt — auf Kosten einer langsameren Kapitalbildung, denn Kapitalisten haben weniger Spielraum für Risiken."
+ },
+ "law_publicly_funded_elections": {
+  "en": "Publicly Funded Elections",
+  "de": "Öffentlich finanzierte Wahlen"
+ },
+ "law_publicly_funded_elections_desc": {
+  "en": "The state provides funding for political campaigns to create a level playing field, paid for by the taxpayer.",
+  "de": "Der Staat finanziert politische Kampagnen, um gleiche Bedingungen für alle zu schaffen — bezahlt vom Steuerzahler."
+ },
+ "law_punishment_focused_criminal_justice": {
+  "en": "Punishment-Focused Criminal Justice",
+  "de": "Strafbetontes Strafrecht"
+ },
+ "law_punishment_focused_criminal_justice_desc": {
+  "en": "A criminal justice system that emphasizes punishment and retribution, with a focus on deterrence and incapacitation.",
+  "de": "Ein Strafrechtssystem, das Bestrafung und Vergeltung betont, mit Schwerpunkt auf Abschreckung und Unschädlichmachung."
+ },
+ "law_regulated_augmentation_market": {
+  "en": "Regulated Augmentation Market",
+  "de": "Regulierter Augmentierungsmarkt"
+ },
+ "law_regulated_augmentation_market_desc": {
+  "en": "[concept_human_augmentation_system] is legal and regulated by the government, with strict controls on safety, ethical considerations, and distribution. Access to augmentation technologies is limited by factors such as affordability or [concept_pop_qualifications].",
+  "de": "[concept_human_augmentation_system] ist legal und wird von der Regierung reguliert, mit strengen Kontrollen bei Sicherheit, ethischen Erwägungen und Verteilung. Der Zugang zu Augmentierungstechnologien ist durch Faktoren wie Erschwinglichkeit oder [concept_pop_qualifications] begrenzt."
+ },
+ "law_regulated_utilities": {
+  "en": "Regulated Utilities",
+  "de": "Regulierte Versorgungsbetriebe"
+ },
+ "law_regulated_utilities_desc": {
+  "en": "Network industries are treated as natural monopolies or unbundled ‘pipes.’ Access, rates, and interconnection are set by regulators to ensure fair, reliable service.",
+  "de": "Netzindustrien werden als natürliche Monopole oder entflochtene ‚Leitungen' behandelt. Zugang, Tarife und Verbindungen werden von Regulierungsbehörden festgelegt, um einen fairen, zuverlässigen Betrieb zu gewährleisten."
+ },
+ "law_rehabilitation_focused_criminal_justice": {
+  "en": "Rehabilitation-Focused Criminal Justice",
+  "de": "Resozialisierungsorientiertes Strafrecht"
+ },
+ "law_rehabilitation_focused_criminal_justice_desc": {
+  "en": "A criminal justice system that emphasizes rehabilitation and reintegration of offenders into society.",
+  "de": "Ein Strafrechtssystem, das die Rehabilitation und Wiedereingliederung von Straftätern in die Gesellschaft betont."
+ },
+ "law_restorative_justice": {
+  "en": "Restorative Justice",
+  "de": "Wiedergutmachende Justiz"
+ },
+ "law_restorative_justice_desc": {
+  "en": "A criminal justice system that focuses on repairing harm caused by criminal behavior.",
+  "de": "Ein Strafrechtssystem, das sich auf die Wiedergutmachung von durch Straftaten verursachtem Schaden konzentriert."
+ },
+ "law_state_controlled_internet": {
+  "en": "State-Controlled Internet",
+  "de": "Staatlich kontrolliertes Internet"
+ },
+ "law_state_controlled_internet_desc": {
+  "en": "The state heavily monitors, censors, and controls all internet traffic within its borders.",
+  "de": "Der Staat überwacht, zensiert und kontrolliert den gesamten Internetverkehr innerhalb seiner Grenzen streng."
+ },
+ "law_state_eugenics_program": {
+  "en": "State Eugenics Program",
+  "de": "Staatliches Eugenikprogramm"
+ },
+ "law_state_eugenics_program_desc": {
+  "en": "The state mandates genetic screening and 'enhancements' to guide the evolution of its populace.",
+  "de": "Der Staat schreibt genetische Untersuchungen und ‚Verbesserungen' vor, um die Evolution seiner Bevölkerung zu lenken."
+ },
+ "law_state_intellectual_property": {
+  "en": "State Intellectual Property",
+  "de": "Staatliches geistiges Eigentum"
+ },
+ "law_state_intellectual_property_desc": {
+  "en": "Patents, copyrights, and industrial designs are owned by the state and licensed freely to domestic firms; foreign access is gated and expensive. State research bureaus coordinate where private R&D would otherwise duplicate effort, but the apparatus consumes administrative capacity and starves the capitalist [concept_investment_pool] of monopoly rents.",
+  "de": "Patente, Urheberrechte und Geschmacksmuster gehören dem Staat und werden inländischen Firmen frei lizenziert; ausländischer Zugang ist beschränkt und teuer. Staatliche Forschungsbehörden koordinieren, wo private Forschung und Entwicklung sonst doppelte Arbeit leisten würde, doch der Apparat verschlingt Verwaltungskapazität und entzieht dem kapitalistischen [concept_investment_pool] die Monopolgewinne."
+ },
+ "law_state_led_language_reform": {
+  "en": "State-Led Language Reform",
+  "de": "Staatlich geführte Sprachreform"
+ },
+ "law_state_led_language_reform_desc": {
+  "en": "Script changes, orthographic simplification, standard grammar, and terminology planning are mandated and funded to modernize [concept_literacy]-or to revive an ancestral or constructed language.",
+  "de": "Schriftreformen, orthografische Vereinfachung, Standardgrammatik und Terminologieplanung werden angeordnet und finanziert, um die [concept_literacy] zu modernisieren — oder um eine angestammte Sprache oder eine Plansprache wiederzubeleben."
+ },
+ "law_state_owned_banking": {
+  "en": "State-Owned Banking",
+  "de": "Staatliches Bankwesen"
+ },
+ "law_state_owned_banking_desc": {
+  "en": "Private banks have been dissolved or absorbed; all credit allocation is conducted by state-owned institutions answering to the central plan. The cycle of speculative excess and crash is replaced with the steady drumbeat of administrative capacity, but capitalist investment dries up.",
+  "de": "Private Banken wurden aufgelöst oder übernommen; die gesamte Kreditvergabe erfolgt durch staatliche Institute, die dem Zentralplan unterstehen. Der Kreislauf aus spekulativen Exzessen und Zusammenbrüchen weicht dem gleichmäßigen Takt administrativer Kapazität, doch kapitalistische Investitionen versiegen."
+ },
+ "law_state_secrets": {
+  "en": "State Secrets",
+  "de": "Staatsgeheimnisse"
+ },
+ "law_state_secrets_desc": {
+  "en": "Government information is classified as state secrets, with strict controls on access and dissemination. Unauthorized disclosure of state secrets is a criminal offense.",
+  "de": "Regierungsinformationen werden als Staatsgeheimnisse eingestuft, mit strengen Zugangs- und Verbreitungskontrollen. Die unbefugte Offenlegung von Staatsgeheimnissen ist eine Straftat."
+ },
+ "law_state_sponsored_family_planning": {
+  "en": "State-Sponsored Family Planning",
+  "de": "Staatlich geförderte Familienplanung"
+ },
+ "law_state_sponsored_family_planning_desc": {
+  "en": "Empowering citizens with the knowledge and means to choose the size of their own family is a hallmark of a modern, healthy society. The state provides education and access to contraception to manage population growth.",
+  "de": "Bürgern das Wissen und die Mittel zu geben, die Größe ihrer eigenen Familie selbst zu bestimmen, ist ein Kennzeichen einer modernen, gesunden Gesellschaft. Der Staat stellt Aufklärung und Zugang zu Verhütungsmitteln bereit, um das Bevölkerungswachstum zu steuern."
+ },
+ "law_strict_ip_protection": {
+  "en": "Strict IP Protection",
+  "de": "Strenger Schutz geistigen Eigentums"
+ },
+ "law_strict_ip_protection_desc": {
+  "en": "Intellectual property protection is heavily enforced, with extended durations for patents, copyrights, and trademarks. Infringement penalties are severe, prioritizing creator rights and revenue over collaboration and innovation.",
+  "de": "Der Schutz geistigen Eigentums wird streng durchgesetzt, mit verlängerten Laufzeiten für Patente, Urheberrechte und Marken. Verstöße werden hart bestraft, wobei Urheberrechte und Einnahmen Vorrang vor Zusammenarbeit und Innovation haben."
+ },
+ "law_strong_privacy_rights": {
+  "en": "Strong Privacy Rights",
+  "de": "Starke Datenschutzrechte"
+ },
+ "law_strong_privacy_rights_desc": {
+  "en": "Privacy rights are enshrined in the constitution or equivalent legal framework. Extensive laws protect personal privacy in both physical and digital realms, with strict [concept_digital_rights_system] laws and robust enforcement mechanisms.",
+  "de": "Datenschutzrechte sind in der Verfassung oder einem gleichwertigen Rechtsrahmen verankert. Umfassende Gesetze schützen die persönliche Privatsphäre sowohl physisch als auch digital, mit strengen Gesetzen zu [concept_digital_rights_system] und robusten Durchsetzungsmechanismen."
+ },
+ "law_total_war": {
+  "en": "Total War",
+  "de": "Totaler Krieg"
+ },
+ "law_total_war_desc": {
+  "en": "No restrictions on warfare, with all available resources and population mobilized. Civilians and civilian [concept_infrastructure] are considered legitimate targets.",
+  "de": "Keine Beschränkungen der Kriegsführung; alle verfügbaren Ressourcen und die gesamte Bevölkerung werden mobilisiert. Zivilisten und zivile [concept_infrastructure] gelten als legitime Ziele."
+ },
+ "law_traditional_family_structure": {
+  "en": "Traditional Family Structure",
+  "de": "Traditionelle Familienstruktur"
+ },
+ "law_traditional_family_structure_desc": {
+  "en": "The nuclear family is the natural bedrock of society. The state's role is not to interfere, but to uphold this institution through its example and other laws.",
+  "de": "Die Kernfamilie ist das natürliche Fundament der Gesellschaft. Die Rolle des Staates ist es nicht, einzugreifen, sondern diese Institution durch sein Vorbild und andere Gesetze zu stützen."
+ },
+ "law_traditional_heredity": {
+  "en": "Traditional Heredity",
+  "de": "Traditionelle Erbfolge"
+ },
+ "law_traditional_heredity_desc": {
+  "en": "An individual's traits are determined by their lineage and divine will. The concept of altering this inheritance is not a matter for state legislation.",
+  "de": "Die Eigenschaften eines Menschen werden durch seine Abstammung und göttlichen Willen bestimmt. Der Gedanke, dieses Erbe zu verändern, ist keine Angelegenheit staatlicher Gesetzgebung."
+ },
+ "law_traditional_ip_protection": {
+  "en": "Traditional IP Protection",
+  "de": "Traditioneller Schutz geistigen Eigentums"
+ },
+ "law_traditional_ip_protection_desc": {
+  "en": "Intellectual property is protected under a traditional system, with patents, copyrights, and trademarks offering exclusive rights to creators for a limited time. Enforcement and infringement penalties are moderate, balancing protection with innovation.",
+  "de": "Geistiges Eigentum wird durch ein traditionelles System geschützt, wobei Patente, Urheberrechte und Marken Urhebern für begrenzte Zeit exklusive Rechte gewähren. Durchsetzung und Strafen für Verstöße sind moderat und wahren das Gleichgewicht zwischen Schutz und Innovation."
+ },
+ "law_traditional_rules_of_war": {
+  "en": "Traditional Rules of War",
+  "de": "Traditionelle Kriegsregeln"
+ },
+ "law_traditional_rules_of_war_desc": {
+  "en": "Warfare is conducted according to customary [concept_rules_of_war_system] and [Concept('concept_power_bloc_principle', 'principles')], such as chivalry and just war theory. Limited protections for civilians and wounded soldiers.",
+  "de": "Die Kriegsführung folgt gewohnheitsrechtlichen [concept_rules_of_war_system] und [Concept('concept_power_bloc_principle', 'Prinzipien')] wie Rittertugend und der Lehre vom gerechten Krieg. Begrenzter Schutz für Zivilisten und verwundete Soldaten."
+ },
+ "law_trust_busting": {
+  "en": "Antitrust Enforcement",
+  "de": "Kartellrechtliche Durchsetzung"
+ },
+ "law_trust_busting_desc": {
+  "en": "Courts police cartels and abusive conduct, scrutinizing mergers case-by-case. Collusion is deterred while scale economies are preserved where lawful.",
+  "de": "Gerichte überwachen Kartelle und missbräuchliches Verhalten und prüfen Fusionen von Fall zu Fall. Absprachen werden abgeschreckt, während Skaleneffekte dort erhalten bleiben, wo sie rechtmäßig sind."
+ },
+ "law_ubiquitous_translation": {
+  "en": "Ubiquitous Translation",
+  "de": "Allgegenwärtige Übersetzung"
+ },
+ "law_ubiquitous_translation_desc": {
+  "en": "Machine and institutional translation remove most language barriers. Services must accommodate any language, shifting policy from [concept_assimilation] to seamless access.",
+  "de": "Maschinelle und institutionelle Übersetzung beseitigen die meisten Sprachbarrieren. Dienste müssen jede Sprache berücksichtigen, wodurch sich die Politik von [concept_assimilation] hin zu nahtlosem Zugang verschiebt."
+ },
+ "law_unitary_state": {
+  "en": "Unitary State",
+  "de": "Einheitsstaat"
+ },
+ "law_unitary_state_desc": {
+  "en": "All administrative power is concentrated in the hands of the central government.",
+  "de": "Alle Verwaltungsmacht ist in den Händen der Zentralregierung konzentriert."
+ },
+ "law_universal_banking_light_prudence": {
+  "en": "Universal Banking (Light Prudence)",
+  "de": "Universalbanken (Geringe Aufsicht)"
+ },
+ "law_universal_banking_light_prudence_desc": {
+  "en": "Large, diversified banks face limited prudential rules. Authorities can temper exuberance but lack a full central bank toolkit.",
+  "de": "Große, breit aufgestellte Banken unterliegen nur begrenzten Aufsichtsregeln. Die Behörden können Übertreibungen dämpfen, verfügen aber nicht über das volle Instrumentarium einer Zentralbank."
+ },
+ "law_universal_basic_income": {
+  "en": "Universal Basic Income",
+  "de": "Bedingungsloses Grundeinkommen"
+ },
+ "law_universal_basic_income_desc": {
+  "en": "A [concept_post_scarcity_system] policy providing a guaranteed, unconditional income is provided to all citizens, regardless of employment status, wealth, or other factors. This financial safety net aims to reduce poverty, stimulate economic growth, and support individual freedom and well-being.",
+  "de": "Eine [concept_post_scarcity_system]-Politik, die allen Bürgern ein garantiertes, bedingungsloses Einkommen gewährt, unabhängig von Beschäftigungsstatus, Vermögen oder anderen Faktoren. Dieses finanzielle Sicherheitsnetz soll Armut verringern, das Wirtschaftswachstum ankurbeln und individuelle Freiheit und Wohlergehen unterstützen."
+ },
+ "law_unregulated_banking": {
+  "en": "Unregulated Banking",
+  "de": "Unreguliertes Bankwesen"
+ },
+ "law_unregulated_banking_desc": {
+  "en": "Banks operate freely with minimal oversight. Credit flows cheaply - until it doesn’t. The state has no formal tools to stabilize the cycle.",
+  "de": "Banken agieren frei mit minimaler Aufsicht. Kredit fließt billig — bis er es nicht mehr tut. Der Staat verfügt über keine formalen Instrumente, um den Zyklus zu stabilisieren."
+ },
+ "law_unregulated_donations": {
+  "en": "Unregulated Donations",
+  "de": "Unregulierte Spenden"
+ },
+ "law_unregulated_donations_desc": {
+  "en": "Wealthy individuals and corporations are free to donate unlimited funds to political campaigns, ensuring their voices are heard.",
+  "de": "Wohlhabende Einzelpersonen und Konzerne dürfen unbegrenzte Mittel an politische Kampagnen spenden, damit ihre Stimme gehört wird."
+ },
+ "law_unregulated_internet": {
+  "en": "Unregulated Internet",
+  "de": "Unreguliertes Internet"
+ },
+ "law_unregulated_internet_desc": {
+  "en": "The internet is a free and open frontier of information and commerce.",
+  "de": "Das Internet ist eine freie und offene Grenzregion für Information und Handel."
+ },
+ "law_unrestricted_augmentation": {
+  "en": "Unrestricted Augmentation",
+  "de": "Uneingeschränkte Augmentierung"
+ },
+ "law_unrestricted_augmentation_desc": {
+  "en": "[concept_human_augmentation_system] is unregulated, allowing for open development, distribution, and use of enhancement technologies. This fosters rapid advancements but may result in significant ethical, social, and safety concerns.",
+  "de": "[concept_human_augmentation_system] ist unreguliert, sodass Verbesserungstechnologien frei entwickelt, verbreitet und genutzt werden können. Das fördert rasche Fortschritte, kann aber erhebliche ethische, soziale und sicherheitstechnische Bedenken aufwerfen."
+ },
+ "law_war_crimes_forbidden": {
+  "en": "War Crimes Forbidden",
+  "de": "Kriegsverbrechen verboten"
+ },
+ "law_war_crimes_forbidden_desc": {
+  "en": "Codification of laws and customs of war, including treatment of POWs and prohibition of certain weapons. Establishes the concept of war crimes and individual responsibility for violations.",
+  "de": "Kodifizierung der Gesetze und Gebräuche des Krieges, einschließlich der Behandlung von Kriegsgefangenen und des Verbots bestimmter Waffen. Begründet das Konzept der Kriegsverbrechen und der individuellen Verantwortung für Verstöße."
+ },
+ "lawgroup_LGBTQ_rights": {
+  "en": "LGBTQ+ Rights",
+  "de": "LGBTQ+-Rechte"
+ },
+ "lawgroup_LGBTQ_rights_desc": {
+  "en": "The extent to which [concept_lgbtq_rights_movement] rights are recognized, protected, and supported in society.",
+  "de": "Das Ausmaß, in dem [concept_lgbtq_rights_movement]-Rechte in der Gesellschaft anerkannt, geschützt und gefördert werden."
+ },
+ "lawgroup_antitrust": {
+  "en": "Antitrust & Market Structure",
+  "de": "Kartellrecht & Marktstruktur"
+ },
+ "lawgroup_antitrust_desc": {
+  "en": "Regulates market concentration, monopolies, mergers, and access to essential networks, balancing scale with contestability and consumer welfare.",
+  "de": "Regelt Marktkonzentration, Monopole, Fusionen und den Zugang zu wesentlichen Netzen und wahrt das Gleichgewicht zwischen Größenvorteilen, Wettbewerbsfähigkeit und Verbraucherwohl."
+ },
+ "lawgroup_criminal_justice": {
+  "en": "Criminal Justice",
+  "de": "Strafrecht"
+ },
+ "lawgroup_criminal_justice_desc": {
+  "en": "The form and function of the criminal justice system, including laws, courts, and law enforcement agencies.",
+  "de": "Form und Funktion des Strafrechtssystems, einschließlich Gesetzen, Gerichten und Strafverfolgungsbehörden."
+ },
+ "lawgroup_electoral_finance": {
+  "en": "Electoral Finance",
+  "de": "Wahlkampffinanzierung"
+ },
+ "lawgroup_electoral_finance_desc": {
+  "en": "Regulates the influence of money in political campaigns.",
+  "de": "Regelt den Einfluss von Geld auf politische Kampagnen."
+ },
+ "lawgroup_family_reproductive_policy": {
+  "en": "Family & Reproductive Policy",
+  "de": "Familien- und Fortpflanzungspolitik"
+ },
+ "lawgroup_family_reproductive_policy_desc": {
+  "en": "Determines the state's role in defining the family structure and influencing the procreation of its populace.",
+  "de": "Bestimmt die Rolle des Staates bei der Festlegung der Familienstruktur und der Einflussnahme auf die Fortpflanzung seiner Bevölkerung."
+ },
+ "lawgroup_financial_regulation": {
+  "en": "Financial Regulation",
+  "de": "Finanzregulierung"
+ },
+ "lawgroup_financial_regulation_desc": {
+  "en": "Governs the behavior of banks and financial institutions, regulating the [concept_banking_cycle] and [concept_financial_regulation].",
+  "de": "Regelt das Verhalten von Banken und Finanzinstituten und steuert den [concept_banking_cycle] und die [concept_financial_regulation]."
+ },
+ "lawgroup_genetic_rights": {
+  "en": "Genetic Rights",
+  "de": "Genetische Rechte"
+ },
+ "lawgroup_genetic_rights_desc": {
+  "en": "Regulates the use of genetic engineering on flora, fauna, and humanity itself.",
+  "de": "Regelt den Einsatz von Gentechnik an Flora, Fauna und der Menschheit selbst."
+ },
+ "lawgroup_human_augmentation": {
+  "en": "Human Augmentation",
+  "de": "Menschliche Augmentierung"
+ },
+ "lawgroup_human_augmentation_desc": {
+  "en": "The extent to which [concept_human_augmentation_system] rights and regulations, through genetics, mechanical augmentation, or other means, are recognized and managed in society.",
+  "de": "Das Ausmaß, in dem Rechte und Regelungen zur [concept_human_augmentation_system] — durch Genetik, mechanische Augmentierung oder andere Mittel — in der Gesellschaft anerkannt und gesteuert werden."
+ },
+ "lawgroup_inheritance": {
+  "en": "Inheritance Laws",
+  "de": "Erbrecht"
+ },
+ "lawgroup_inheritance_desc": {
+  "en": "The rules and regulations governing the transfer of property, assets, and wealth from one generation to the next.",
+  "de": "Die Regeln und Vorschriften für die Übertragung von Eigentum, Vermögenswerten und Reichtum von einer Generation zur nächsten."
+ },
+ "lawgroup_intellectual_property": {
+  "en": "Intellectual Property",
+  "de": "Geistiges Eigentum"
+ },
+ "lawgroup_intellectual_property_desc": {
+  "en": "The extent to which the creation, use, and distribution of intellectual property are regulated and protected in society.",
+  "de": "Das Ausmaß, in dem die Schaffung, Nutzung und Verbreitung geistigen Eigentums in der Gesellschaft reguliert und geschützt werden."
+ },
+ "lawgroup_internet_governance": {
+  "en": "Internet Governance",
+  "de": "Internet-Governance"
+ },
+ "lawgroup_internet_governance_desc": {
+  "en": "Defines the state's control over the [concept_digital_rights_system].",
+  "de": "Legt die staatliche Kontrolle über [concept_digital_rights_system] fest."
+ },
+ "lawgroup_language_policy": {
+  "en": "Language Policy",
+  "de": "Sprachpolitik"
+ },
+ "lawgroup_language_policy_desc": {
+  "en": "Governs the official status of languages, schooling standards, and how the state manages [concept_assimilation] and linguistic rights.",
+  "de": "Regelt den offiziellen Status von Sprachen, Bildungsstandards und wie der Staat [concept_assimilation] und Sprachrechte steuert."
+ },
+ "lawgroup_ministry_of_commerce": {
+  "en": "Ministry of Commerce",
+  "de": "Handelsministerium"
+ },
+ "lawgroup_ministry_of_commerce_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of Commerce allows for the regulation of trade policies, economic growth, and business practices.",
+  "de": "Als Teil des [concept_ministry_system] erlaubt die Einrichtung eines Handelsministeriums die Regulierung von Handelspolitik, Wirtschaftswachstum und Geschäftspraktiken."
+ },
+ "lawgroup_ministry_of_consumer_protection": {
+  "en": "Ministry of Consumer Protection",
+  "de": "Verbraucherschutzministerium"
+ },
+ "lawgroup_ministry_of_consumer_protection_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of Consumer Protection allows for the management of consumer rights, product safety, and fair trade practices.",
+  "de": "Als Teil des [concept_ministry_system] erlaubt die Einrichtung eines Verbraucherschutzministeriums die Verwaltung von Verbraucherrechten, Produktsicherheit und fairen Handelspraktiken."
+ },
+ "lawgroup_ministry_of_culture": {
+  "en": "Ministry of Culture",
+  "de": "Kulturministerium"
+ },
+ "lawgroup_ministry_of_culture_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of Culture allows for the promotion of national heritage, arts, and creative industries.",
+  "de": "Als Teil des [concept_ministry_system] erlaubt die Einrichtung eines Kulturministeriums die Förderung des nationalen Erbes, der Künste und der Kreativwirtschaft."
+ },
+ "lawgroup_ministry_of_foreign_affairs": {
+  "en": "Ministry of Foreign Affairs",
+  "de": "Außenministerium"
+ },
+ "lawgroup_ministry_of_foreign_affairs_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of Foreign Affairs allows for the management of diplomatic relations, international treaties, and foreign policy.",
+  "de": "Als Teil des [concept_ministry_system] erlaubt die Einrichtung eines Außenministeriums die Verwaltung diplomatischer Beziehungen, internationaler Verträge und der Außenpolitik."
+ },
+ "lawgroup_ministry_of_intelligence_and_security": {
+  "en": "Ministry of Intelligence and Security",
+  "de": "Geheimdienst- und Sicherheitsministerium"
+ },
+ "lawgroup_ministry_of_intelligence_and_security_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of Intelligence and Security allows for the management of national security, intelligence operations, and internal stability.",
+  "de": "Als Teil des [concept_ministry_system] erlaubt die Einrichtung eines Geheimdienst- und Sicherheitsministeriums die Verwaltung der nationalen Sicherheit, von Geheimdienstoperationen und der inneren Stabilität."
+ },
+ "lawgroup_ministry_of_international_aid": {
+  "en": "Ministry of International Aid",
+  "de": "Ministerium für Internationale Hilfe"
+ },
+ "lawgroup_ministry_of_international_aid_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of International Aid allows for the management of international aid efforts, humanitarian assistance, and development projects.",
+  "de": "Als Teil des [concept_ministry_system] erlaubt die Einrichtung eines Ministeriums für Internationale Hilfe die Verwaltung internationaler Hilfsbemühungen, humanitärer Hilfe und Entwicklungsprojekte."
+ },
+ "lawgroup_ministry_of_labor": {
+  "en": "Ministry of Labor",
+  "de": "Arbeitsministerium"
+ },
+ "lawgroup_ministry_of_labor_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of Labor allows for the regulation of employment laws, worker rights, and labor market conditions.",
+  "de": "Als Teil des [concept_ministry_system] erlaubt die Einrichtung eines Arbeitsministeriums die Regulierung von Arbeitsrecht, Arbeitnehmerrechten und Arbeitsmarktbedingungen."
+ },
+ "lawgroup_ministry_of_propaganda": {
+  "en": "Ministry of Propaganda",
+  "de": "Propagandaministerium"
+ },
+ "lawgroup_ministry_of_propaganda_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of Propaganda allows for the management of information dissemination, public relations, and government messaging.",
+  "de": "Als Teil des [concept_ministry_system] erlaubt die Einrichtung eines Propagandaministeriums die Verwaltung der Informationsverbreitung, der Öffentlichkeitsarbeit und der Regierungskommunikation."
+ },
+ "lawgroup_ministry_of_refugee_affairs": {
+  "en": "Ministry of Refugee Affairs",
+  "de": "Flüchtlingsministerium"
+ },
+ "lawgroup_ministry_of_refugee_affairs_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of Refugee Affairs allows for the management of refugee policies, asylum claims, and resettlement efforts.",
+  "de": "Als Teil des [concept_ministry_system] erlaubt die Einrichtung eines Flüchtlingsministeriums die Verwaltung der Flüchtlingspolitik, von Asylanträgen und Umsiedlungsbemühungen."
+ },
+ "lawgroup_ministry_of_religion": {
+  "en": "Ministry of Religion",
+  "de": "Religionsministerium"
+ },
+ "lawgroup_ministry_of_religion_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of Religion allows for the management of religious affairs, including the regulation of religious institutions and the enforcement of religious laws.",
+  "de": "Als Teil des [concept_ministry_system] erlaubt die Einrichtung eines Religionsministeriums die Verwaltung religiöser Angelegenheiten, einschließlich der Regulierung religiöser Institutionen und der Durchsetzung religiöser Gesetze."
+ },
+ "lawgroup_ministry_of_science": {
+  "en": "Ministry of Science",
+  "de": "Wissenschaftsministerium"
+ },
+ "lawgroup_ministry_of_science_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of Science allows for the management of scientific research, technological development, and innovation.",
+  "de": "Als Teil des [concept_ministry_system] erlaubt die Einrichtung eines Wissenschaftsministeriums die Verwaltung wissenschaftlicher Forschung, technologischer Entwicklung und Innovation."
+ },
+ "lawgroup_ministry_of_the_environment": {
+  "en": "Ministry of the Environment",
+  "de": "Umweltministerium"
+ },
+ "lawgroup_ministry_of_the_environment_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of the Environment allows for the protection and conservation of natural resources, environmental policies, and sustainability efforts.",
+  "de": "Als Teil des [concept_ministry_system] erlaubt die Einrichtung eines Umweltministeriums den Schutz und die Bewahrung natürlicher Ressourcen, Umweltpolitik und Nachhaltigkeitsbemühungen."
+ },
+ "lawgroup_ministry_of_thought_control": {
+  "en": "Ministry of Thought Control",
+  "de": "Gedankenkontrollministerium"
+ },
+ "lawgroup_ministry_of_thought_control_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of Thought Control allows for the management of censorship, surveillance, and suppression of dissent.",
+  "de": "Als Teil des [concept_ministry_system] erlaubt die Einrichtung eines Gedankenkontrollministeriums die Verwaltung von Zensur, Überwachung und der Unterdrückung von Widerspruch."
+ },
+ "lawgroup_ministry_of_urban_planning": {
+  "en": "Ministry of Urban Planning",
+  "de": "Stadtplanungsministerium"
+ },
+ "lawgroup_ministry_of_urban_planning_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of Urban Planning allows for the management of urban development, [concept_infrastructure], and land use policies.",
+  "de": "Als Teil des [concept_ministry_system] erlaubt die Einrichtung eines Stadtplanungsministeriums die Verwaltung der Stadtentwicklung, der [concept_infrastructure] und der Flächennutzungspolitik."
+ },
+ "lawgroup_ministry_of_war": {
+  "en": "Ministry of War",
+  "de": "Kriegsministerium"
+ },
+ "lawgroup_ministry_of_war_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of War allows for the management of military affairs, defense strategy, and national security.",
+  "de": "Als Teil des [concept_ministry_system] erlaubt die Einrichtung eines Kriegsministeriums die Verwaltung militärischer Angelegenheiten, der Verteidigungsstrategie und der nationalen Sicherheit."
+ },
+ "lawgroup_minority_rights": {
+  "en": "Minority Rights",
+  "de": "Minderheitenrechte"
+ },
+ "lawgroup_monetary_policy": {
+  "en": "Monetary Policy",
+  "de": "Geldpolitik"
+ },
+ "lawgroup_monetary_policy_desc": {
+  "en": "The form money take and the extent to which the government controls the money supply, interest rates, and inflation in the economy.",
+  "de": "Die Form, die Geld annimmt, und das Ausmaß, in dem die Regierung Geldmenge, Zinssätze und Inflation in der Wirtschaft steuert."
+ },
+ "lawgroup_national_bank": {
+  "en": "National Bank",
+  "de": "Nationalbank"
+ },
+ "lawgroup_national_bank_desc": {
+  "en": "The establishment of a National Bank allows for the regulation of monetary policy, [concept_financial_regulation], and economic growth.",
+  "de": "Die Einrichtung einer Nationalbank erlaubt die Regulierung der Geldpolitik, der [concept_financial_regulation] und des Wirtschaftswachstums."
+ },
+ "lawgroup_privacy_rights": {
+  "en": "Privacy Rights",
+  "de": "Datenschutzrechte"
+ },
+ "lawgroup_privacy_rights_desc": {
+  "en": "The extent to which personal privacy is protected and regulated in society.",
+  "de": "Das Ausmaß, in dem die persönliche Privatsphäre in der Gesellschaft geschützt und reguliert wird."
+ },
+ "lawgroup_right_to_information": {
+  "en": "Right to Information",
+  "de": "Recht auf Information"
+ },
+ "lawgroup_right_to_information_desc": {
+  "en": "The extent to which citizens have the right to access information held by the government and other public bodies.",
+  "de": "Das Ausmaß, in dem Bürger das Recht auf Zugang zu Informationen haben, die von der Regierung und anderen öffentlichen Stellen gehalten werden."
+ },
+ "lawgroup_rules_of_war": {
+  "en": "Rules of War",
+  "de": "Kriegsregeln"
+ },
+ "lawgroup_rules_of_war_desc": {
+  "en": "The extent to which the conduct of war is regulated and governed by international laws and treaties.",
+  "de": "Das Ausmaß, in dem die Kriegsführung durch internationale Gesetze und Verträge reguliert und bestimmt wird."
+ },
+ "lawgroup_state_power": {
+  "en": "State Power",
+  "de": "Staatsmacht"
+ },
+ "lawgroup_state_power_desc": {
+  "en": "Defines the distribution of power between the central government and regional administrations.",
+  "de": "Legt die Machtverteilung zwischen der Zentralregierung und den regionalen Verwaltungen fest."
+ }
+}

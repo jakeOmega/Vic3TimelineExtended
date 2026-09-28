@@ -1,0 +1,430 @@
+{
+ "company_airbus": {
+  "en": "Airbus",
+  "de": "Airbus"
+ },
+ "company_alibaba": {
+  "en": "Alibaba",
+  "de": "Alibaba"
+ },
+ "company_amazon": {
+  "en": "Amazon",
+  "de": "Amazon"
+ },
+ "company_apple": {
+  "en": "Apple",
+  "de": "Apple"
+ },
+ "company_asml": {
+  "en": "ASML",
+  "de": "ASML"
+ },
+ "company_axiom_space": {
+  "en": "Axiom Space",
+  "de": "Axiom Space"
+ },
+ "company_bae_systems": {
+  "en": "BAE Systems",
+  "de": "BAE Systems"
+ },
+ "company_basic_advanced_materials": {
+  "en": "Advanced Materials",
+  "de": "Hochleistungswerkstoffe"
+ },
+ "company_basic_advanced_materials_dynamic_name_tag_plural": {
+  "en": "Advanced Materials",
+  "de": "Hochleistungswerkstoffe"
+ },
+ "company_basic_advanced_materials_dynamic_name_tag_singular": {
+  "en": "Advanced Materials",
+  "de": "Hochleistungswerkstoffe"
+ },
+ "company_basic_aerospace": {
+  "en": "Aerospace",
+  "de": "Luft- und Raumfahrt"
+ },
+ "company_basic_aerospace_dynamic_name_tag_plural": {
+  "en": "Aerospace",
+  "de": "Luft- und Raumfahrt"
+ },
+ "company_basic_aerospace_dynamic_name_tag_singular": {
+  "en": "Aerospace",
+  "de": "Luft- und Raumfahrt"
+ },
+ "company_basic_autarky": {
+  "en": "Synthetic Fuels & Rubber",
+  "de": "Synthetische Kraftstoffe & Kautschuk"
+ },
+ "company_basic_autarky_dynamic_name_tag_plural": {
+  "en": "Synthetic Fuels & Rubber",
+  "de": "Synthetische Kraftstoffe & Kautschuk"
+ },
+ "company_basic_autarky_dynamic_name_tag_singular": {
+  "en": "Synthetic Fuel & Rubber",
+  "de": "Synthetischer Kraftstoff & Kautschuk"
+ },
+ "company_basic_biotechnology": {
+  "en": "Biotechnology",
+  "de": "Biotechnologie"
+ },
+ "company_basic_biotechnology_dynamic_name_tag_plural": {
+  "en": "Biotechnology",
+  "de": "Biotechnologie"
+ },
+ "company_basic_biotechnology_dynamic_name_tag_singular": {
+  "en": "Biotechnology",
+  "de": "Biotechnologie"
+ },
+ "company_basic_electronics": {
+  "en": "Electronics",
+  "de": "Elektronik"
+ },
+ "company_basic_electronics_dynamic_name_tag_plural": {
+  "en": "Electronics",
+  "de": "Elektronik"
+ },
+ "company_basic_electronics_dynamic_name_tag_singular": {
+  "en": "Electronics",
+  "de": "Elektronik"
+ },
+ "company_basic_entertainment": {
+  "en": "Entertainment",
+  "de": "Unterhaltung"
+ },
+ "company_basic_entertainment_dynamic_name_tag_plural": {
+  "en": "Entertainment",
+  "de": "Unterhaltung"
+ },
+ "company_basic_entertainment_dynamic_name_tag_singular": {
+  "en": "Entertainment",
+  "de": "Unterhaltung"
+ },
+ "company_basic_power": {
+  "en": "Power",
+  "de": "Energie"
+ },
+ "company_basic_power_dynamic_name_tag_plural": {
+  "en": "Power",
+  "de": "Energie"
+ },
+ "company_basic_power_dynamic_name_tag_singular": {
+  "en": "Power",
+  "de": "Energie"
+ },
+ "company_basic_software": {
+  "en": "Software",
+  "de": "Software"
+ },
+ "company_basic_software_dynamic_name_tag_plural": {
+  "en": "Software",
+  "de": "Software"
+ },
+ "company_basic_software_dynamic_name_tag_singular": {
+  "en": "Software",
+  "de": "Software"
+ },
+ "company_basic_synthetics": {
+  "en": "Synthetic Dyes & Fibers",
+  "de": "Synthetische Färbemittel & Fasern"
+ },
+ "company_basic_synthetics_dynamic_name_tag_plural": {
+  "en": "Synthetic Dyes & Fibers",
+  "de": "Synthetische Färbemittel & Fasern"
+ },
+ "company_basic_synthetics_dynamic_name_tag_singular": {
+  "en": "Synthetic Dye & Fiber",
+  "de": "Synthetisches Färbemittel & Faser"
+ },
+ "company_bayer": {
+  "en": "Bayer",
+  "de": "Bayer"
+ },
+ "company_bhp_group": {
+  "en": "BHP Group",
+  "de": "BHP Group"
+ },
+ "company_blackberry": {
+  "en": "BlackBerry",
+  "de": "BlackBerry"
+ },
+ "company_boeing": {
+  "en": "Boeing",
+  "de": "Boeing"
+ },
+ "company_boston_dynamics": {
+  "en": "Boston Dynamics",
+  "de": "Boston Dynamics"
+ },
+ "company_bp": {
+  "en": "BP",
+  "de": "BP"
+ },
+ "company_bytedance": {
+  "en": "ByteDance",
+  "de": "ByteDance"
+ },
+ "company_catl": {
+  "en": "CATL",
+  "de": "CATL"
+ },
+ "company_cochlear": {
+  "en": "Cochlear",
+  "de": "Cochlear"
+ },
+ "company_dassault_aviation": {
+  "en": "Dassault Aviation",
+  "de": "Dassault Aviation"
+ },
+ "company_disney": {
+  "en": "The Walt Disney Company",
+  "de": "The Walt Disney Company"
+ },
+ "company_dupont": {
+  "en": "DuPont",
+  "de": "DuPont"
+ },
+ "company_eni": {
+  "en": "ENI",
+  "de": "ENI"
+ },
+ "company_fanuc": {
+  "en": "FANUC",
+  "de": "FANUC"
+ },
+ "company_ferrari": {
+  "en": "Ferrari",
+  "de": "Ferrari"
+ },
+ "company_gazprom": {
+  "en": "Gazprom",
+  "de": "Gazprom"
+ },
+ "company_google": {
+  "en": "Google",
+  "de": "Google"
+ },
+ "company_hanka_precision": {
+  "en": "Hanka Precision Instruments",
+  "de": "Hanka Precision Instruments"
+ },
+ "company_hp": {
+  "en": "Hewlett-Packard",
+  "de": "Hewlett-Packard"
+ },
+ "company_huawei": {
+  "en": "Huawei",
+  "de": "Huawei"
+ },
+ "company_hyundai": {
+  "en": "Hyundai",
+  "de": "Hyundai"
+ },
+ "company_ig_farben": {
+  "en": "IG Farben",
+  "de": "IG Farben"
+ },
+ "company_ikea": {
+  "en": "IKEA",
+  "de": "IKEA"
+ },
+ "company_infosys": {
+  "en": "Infosys",
+  "de": "Infosys"
+ },
+ "company_infrastructure": {
+  "en": "Infrastructure",
+  "de": "Infrastruktur"
+ },
+ "company_infrastructure_dynamic_name_tag_plural": {
+  "en": "Infrastructure",
+  "de": "Infrastruktur"
+ },
+ "company_infrastructure_dynamic_name_tag_singular": {
+  "en": "Infrastructure",
+  "de": "Infrastruktur"
+ },
+ "company_intel": {
+  "en": "Intel",
+  "de": "Intel"
+ },
+ "company_jardine_matheson": {
+  "en": "Jardine Matheson",
+  "de": "Jardine Matheson"
+ },
+ "company_jsr": {
+  "en": "Japan Synthetic Rubber",
+  "de": "Japan Synthetic Rubber"
+ },
+ "company_jsw_steel": {
+  "en": "JSW Steel",
+  "de": "JSW Steel"
+ },
+ "company_lockheed_martin": {
+  "en": "Lockheed Martin",
+  "de": "Lockheed Martin"
+ },
+ "company_megastructure_consortium": {
+  "en": "Megastructure",
+  "de": "Megastruktur"
+ },
+ "company_megastructure_consortium_dynamic_name_tag_plural": {
+  "en": "Megastructure",
+  "de": "Megastruktur"
+ },
+ "company_megastructure_consortium_dynamic_name_tag_singular": {
+  "en": "Megastructure",
+  "de": "Megastruktur"
+ },
+ "company_michelin": {
+  "en": "Michelin",
+  "de": "Michelin"
+ },
+ "company_microsoft": {
+  "en": "Microsoft",
+  "de": "Microsoft"
+ },
+ "company_netflix": {
+  "en": "Netflix",
+  "de": "Netflix"
+ },
+ "company_neurovault": {
+  "en": "Neurovault Systems",
+  "de": "Neurovault Systems"
+ },
+ "company_nintendo": {
+  "en": "Nintendo",
+  "de": "Nintendo"
+ },
+ "company_nvidia": {
+  "en": "Nvidia",
+  "de": "Nvidia"
+ },
+ "company_openai": {
+  "en": "OpenAI",
+  "de": "OpenAI"
+ },
+ "company_oracle": {
+  "en": "Oracle",
+  "de": "Oracle"
+ },
+ "company_petrobras": {
+  "en": "Petrobras",
+  "de": "Petrobras"
+ },
+ "company_pfizer": {
+  "en": "Pfizer",
+  "de": "Pfizer"
+ },
+ "company_pirelli": {
+  "en": "Pirelli",
+  "de": "Pirelli"
+ },
+ "company_rekal": {
+  "en": "Rekal Incorporated",
+  "de": "Rekal Incorporated"
+ },
+ "company_reliance": {
+  "en": "Reliance Industries",
+  "de": "Reliance Industries"
+ },
+ "company_renault": {
+  "en": "Renault",
+  "de": "Renault"
+ },
+ "company_roche": {
+  "en": "Roche",
+  "de": "Roche"
+ },
+ "company_rolls_royce": {
+  "en": "Rolls-Royce",
+  "de": "Rolls-Royce"
+ },
+ "company_rosatom": {
+  "en": "Rosatom",
+  "de": "Rosatom"
+ },
+ "company_roscosmos": {
+  "en": "Roscosmos",
+  "de": "Roscosmos"
+ },
+ "company_samsung": {
+  "en": "Samsung",
+  "de": "Samsung"
+ },
+ "company_sap": {
+  "en": "SAP",
+  "de": "SAP"
+ },
+ "company_saudi_aramco": {
+  "en": "Saudi Aramco",
+  "de": "Saudi Aramco"
+ },
+ "company_shell": {
+  "en": "Royal Dutch Shell",
+  "de": "Royal Dutch Shell"
+ },
+ "company_shopify": {
+  "en": "Shopify",
+  "de": "Shopify"
+ },
+ "company_sibur": {
+  "en": "Sibur",
+  "de": "Sibur"
+ },
+ "company_softbank": {
+  "en": "SoftBank",
+  "de": "SoftBank"
+ },
+ "company_sony": {
+  "en": "Sony",
+  "de": "Sony"
+ },
+ "company_spacex": {
+  "en": "SpaceX",
+  "de": "SpaceX"
+ },
+ "company_tencent": {
+  "en": "Tencent",
+  "de": "Tencent"
+ },
+ "company_tessier_ashpool": {
+  "en": "Tessier-Ashpool S.A.",
+  "de": "Tessier-Ashpool S.A."
+ },
+ "company_thyssen": {
+  "en": "Thyssen",
+  "de": "Thyssen"
+ },
+ "company_toyota": {
+  "en": "Toyota",
+  "de": "Toyota"
+ },
+ "company_tsmc": {
+  "en": "TSMC",
+  "de": "TSMC"
+ },
+ "company_tycho_manufacturing": {
+  "en": "Tycho Manufacturing & Engineering",
+  "de": "Tycho Manufacturing & Engineering"
+ },
+ "company_universal": {
+  "en": "Universal Pictures",
+  "de": "Universal Pictures"
+ },
+ "company_vale": {
+  "en": "Vale",
+  "de": "Vale"
+ },
+ "company_verizon": {
+  "en": "Verizon",
+  "de": "Verizon"
+ },
+ "company_volkswagen": {
+  "en": "Volkswagen",
+  "de": "Volkswagen"
+ },
+ "company_yoyodyne_propulsion": {
+  "en": "Yoyodyne Propulsion Systems",
+  "de": "Yoyodyne Propulsion Systems"
+ }
+}

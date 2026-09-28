@@ -1,0 +1,1866 @@
+{
+ "notification_arms_race_pressure_desc": {
+  "en": "[SCOPE.sCountry('arms_race_rival').GetName] is matching our military buildup, increasing pressure on our defense budget.",
+  "de": "[SCOPE.sCountry('arms_race_rival').GetAltName('NOM')|U] zieht mit unserem militärischen Aufbau gleich und erhöht den Druck auf unseren Verteidigungshaushalt."
+ },
+ "notification_arms_race_pressure_name": {
+  "en": "Arms Race Pressure",
+  "de": "Druck durch Wettrüsten"
+ },
+ "notification_colonial_ceasefire_granted_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_colonial_power').GetName] has agreed a ceasefire with our independence movement and granted us independence. We are free.",
+  "de": "[SCOPE.sCountry('decol_colonial_power').GetAltName('NOM')|U] hat mit unserer Unabhängigkeitsbewegung einen Waffenstillstand vereinbart und uns die Unabhängigkeit gewährt. Wir sind frei."
+ },
+ "notification_colonial_ceasefire_granted_notice_name": {
+  "en": "Ceasefire and Independence",
+  "de": "Waffenstillstand und Unabhängigkeit"
+ },
+ "notification_colonial_crackdown_begun_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_colonial_power').GetName], our [concept_overlord], has launched a crackdown on our independence movement.",
+  "de": "[SCOPE.sCountry('decol_colonial_power').GetAltName('NOM')|U], unser [concept_overlord], hat gegen unsere Unabhängigkeitsbewegung durchgegriffen."
+ },
+ "notification_colonial_crackdown_begun_notice_name": {
+  "en": "Crackdown Begun",
+  "de": "Repression begonnen"
+ },
+ "notification_colonial_independence_granted_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_colonial_power').GetName] has granted us independence.",
+  "de": "[SCOPE.sCountry('decol_colonial_power').GetAltName('NOM')|U] hat uns die Unabhängigkeit gewährt."
+ },
+ "notification_colonial_independence_granted_notice_name": {
+  "en": "Independence Granted",
+  "de": "Unabhängigkeit gewährt"
+ },
+ "notification_colonial_negotiations_started_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_colonial_power').GetName], our [concept_overlord], has opened negotiations with us on greater autonomy.",
+  "de": "[SCOPE.sCountry('decol_colonial_power').GetAltName('NOM')|U], unser [concept_overlord], hat mit uns Verhandlungen über mehr Autonomie aufgenommen."
+ },
+ "notification_colonial_negotiations_started_notice_name": {
+  "en": "Autonomy Talks Opened",
+  "de": "Autonomiegespräche begonnen"
+ },
+ "notification_colonial_neocolonial_reforms_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_colonial_power').GetName], our [concept_overlord], has announced colonial reforms whose economic provisions favor its own firms and markets. We remain under its rule.",
+  "de": "[SCOPE.sCountry('decol_colonial_power').GetAltName('NOM')|U], unser [concept_overlord], hat koloniale Reformen angekündigt, deren wirtschaftliche Bestimmungen die eigenen Unternehmen und Märkte bevorzugen. Wir bleiben unter seiner Herrschaft."
+ },
+ "notification_colonial_neocolonial_reforms_notice_name": {
+  "en": "Reforms With Strings Attached",
+  "de": "Reformen mit Hintergedanken"
+ },
+ "notification_colonial_neocolonial_terms_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_colonial_power').GetName] has granted us independence, on economic terms that favor its own firms and markets.",
+  "de": "[SCOPE.sCountry('decol_colonial_power').GetAltName('NOM')|U] hat uns die Unabhängigkeit gewährt, zu wirtschaftlichen Bedingungen, die seine eigenen Unternehmen und Märkte bevorzugen."
+ },
+ "notification_colonial_neocolonial_terms_notice_name": {
+  "en": "Independence With Strings Attached",
+  "de": "Unabhängigkeit mit Hintergedanken"
+ },
+ "notification_colonial_reparations_paid_notice_desc": {
+  "en": "[SCOPE.sCountry('reparations_payer').GetName] has accepted our claim and paid the colonial reparations we demanded.",
+  "de": "[SCOPE.sCountry('reparations_payer').GetAltName('NOM')|U] hat unsere Forderung anerkannt und die von uns verlangten Kolonialreparationen gezahlt."
+ },
+ "notification_colonial_reparations_paid_notice_name": {
+  "en": "Reparations Paid",
+  "de": "Reparationen gezahlt"
+ },
+ "notification_colonial_reparations_refused_notice_desc": {
+  "en": "[SCOPE.sCountry('reparations_payer').GetName] has refused our demand for colonial reparations.",
+  "de": "[SCOPE.sCountry('reparations_payer').GetAltName('NOM')|U] hat unsere Forderung nach Kolonialreparationen abgelehnt."
+ },
+ "notification_colonial_reparations_refused_notice_name": {
+  "en": "Reparations Refused",
+  "de": "Reparationen abgelehnt"
+ },
+ "notification_colonial_territory_absorbed_notice_desc": {
+  "en": "[SCOPE.sCountry('collapsing_country').GetName] has been absorbed by [SCOPE.sCountry('absorbing_country').GetName] as the era of [concept_decolonization_system] reshapes the political map.",
+  "de": "[SCOPE.sCountry('collapsing_country').GetAltName('NOM')|U] wurde von [SCOPE.sCountry('absorbing_country').GetAltName('DAT')] annektiert, während das Zeitalter von [concept_decolonization_system] die politische Landkarte neu ordnet."
+ },
+ "notification_colonial_territory_absorbed_notice_name": {
+  "en": "Colonial Territory Absorbed",
+  "de": "Kolonialgebiet annektiert"
+ },
+ "notification_colonial_territory_collapsed_notice_desc": {
+  "en": "[SCOPE.sCountry('collapsing_country').GetName] has collapsed into disorganized territory, reverting to uncolonized land.",
+  "de": "[SCOPE.sCountry('collapsing_country').GetAltName('NOM')|U] ist zu unorganisiertem Gebiet zerfallen und wieder zu unkolonisiertem Land geworden."
+ },
+ "notification_colonial_territory_collapsed_notice_name": {
+  "en": "Colonial Territory Collapsed",
+  "de": "Kolonialgebiet zerfallen"
+ },
+ "notification_counter_propaganda_backlash_desc": {
+  "en": "[SCOPE.sCountry('propaganda_rival').GetName] has launched a counter-propaganda campaign that is undermining our messaging abroad.",
+  "de": "[SCOPE.sCountry('propaganda_rival').GetAltName('NOM')|U] hat eine Gegenpropagandakampagne gestartet, die unsere Botschaften im Ausland untergräbt."
+ },
+ "notification_counter_propaganda_backlash_name": {
+  "en": "Propaganda Countered",
+  "de": "Propaganda gekontert"
+ },
+ "notification_covert_severe_exposure_notice_desc": {
+  "en": "A foreign power has been caught running a covert campaign to bring down a government we stand behind. Their standing with us has suffered for it.",
+  "de": "Eine fremde Macht wurde dabei ertappt, wie sie eine verdeckte Kampagne führte, um eine Regierung zu stürzen, die wir unterstützen. Ihr Ansehen bei uns hat darunter gelitten."
+ },
+ "notification_covert_severe_exposure_notice_name": {
+  "en": "Foreign Subversion Exposed",
+  "de": "Fremde Umsturzversuche aufgedeckt"
+ },
+ "notification_decol_truce_proposal_accepted_notice_desc": {
+  "en": "[SCOPE.sCountry('truce_responder').GetName] has accepted our offer: a five-year truce now binds both our nations.",
+  "de": "[SCOPE.sCountry('truce_responder').GetAltName('NOM')|U] hat unser Angebot angenommen: Ein fünfjähriger Waffenstillstand bindet nun beide Nationen."
+ },
+ "notification_decol_truce_proposal_accepted_notice_name": {
+  "en": "Truce Accepted",
+  "de": "Waffenstillstand angenommen"
+ },
+ "notification_decol_truce_proposal_declined_notice_desc": {
+  "en": "[SCOPE.sCountry('truce_responder').GetName] has refused our offer of a five-year truce.",
+  "de": "[SCOPE.sCountry('truce_responder').GetAltName('NOM')|U] hat unser Angebot eines fünfjährigen Waffenstillstands abgelehnt."
+ },
+ "notification_decol_truce_proposal_declined_notice_name": {
+  "en": "Truce Refused",
+  "de": "Waffenstillstand abgelehnt"
+ },
+ "notification_espionage_agent_quietly_exposed_desc": {
+  "en": "One of our intelligence operatives has been quietly returned via a prisoner exchange with [SCOPE.sCountry('espionage_catcher').GetName]. Our network in the region is compromised.",
+  "de": "Einer unserer Geheimdienstagenten wurde still und leise im Rahmen eines Gefangenenaustauschs mit [SCOPE.sCountry('espionage_catcher').GetAltName('DAT')] zurückgegeben. Unser Netzwerk in der Region ist enttarnt."
+ },
+ "notification_espionage_agent_quietly_exposed_name": {
+  "en": "Agent Exchanged",
+  "de": "Agent ausgetauscht"
+ },
+ "notification_former_colony_ties_declined_notice_desc": {
+  "en": "[SCOPE.sCountry('ties_former_overlord').GetName] has turned down our proposal for closer ties.",
+  "de": "[SCOPE.sCountry('ties_former_overlord').GetAltName('NOM')|U] hat unseren Vorschlag für engere Beziehungen abgelehnt."
+ },
+ "notification_former_colony_ties_declined_notice_name": {
+  "en": "Overture Rebuffed",
+  "de": "Annäherung zurückgewiesen"
+ },
+ "notification_former_colony_ties_welcomed_notice_desc": {
+  "en": "[SCOPE.sCountry('ties_former_overlord').GetName] has welcomed our proposal for closer ties.",
+  "de": "[SCOPE.sCountry('ties_former_overlord').GetAltName('NOM')|U] hat unseren Vorschlag für engere Beziehungen begrüßt."
+ },
+ "notification_former_colony_ties_welcomed_notice_name": {
+  "en": "Closer Ties Welcomed",
+  "de": "Engere Beziehungen begrüßt"
+ },
+ "notification_gm_vanity_backlash_notice_desc": {
+  "en": "A new level of a Grand Monument opened while the country was in default, famine or recession. The state's people resent it, and the government's legitimacy suffers for about two years.",
+  "de": "Eine neue Stufe eines Großen Monuments wurde eröffnet, während sich das Land im Zahlungsausfall, in einer Hungersnot oder in einer Rezession befand. Die Bevölkerung des Staates nimmt es übel, und die Legitimität der Regierung leidet dadurch für etwa zwei Jahre."
+ },
+ "notification_gm_vanity_backlash_notice_name": {
+  "en": "A Palace amid Hardship",
+  "de": "Ein Palast inmitten der Not"
+ },
+ "notification_gp_condemnation_reforms_announced_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_colonial_power').GetName] has acknowledged our criticism of its colonial rule and announced reforms.",
+  "de": "[SCOPE.sCountry('decol_colonial_power').GetAltName('NOM')|U] hat unsere Kritik an seiner Kolonialherrschaft anerkannt und Reformen angekündigt."
+ },
+ "notification_gp_condemnation_reforms_announced_notice_name": {
+  "en": "Colonial Reforms Announced",
+  "de": "Koloniale Reformen angekündigt"
+ },
+ "notification_gp_condemnation_rejected_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_colonial_power').GetName] has rejected our condemnation of its colonial rule and doubled down.",
+  "de": "[SCOPE.sCountry('decol_colonial_power').GetAltName('NOM')|U] hat unsere Verurteilung seiner Kolonialherrschaft zurückgewiesen und sein Vorgehen noch verschärft."
+ },
+ "notification_gp_condemnation_rejected_notice_name": {
+  "en": "Condemnation Rejected",
+  "de": "Verurteilung zurückgewiesen"
+ },
+ "notification_gp_support_accepted_notice_desc": {
+  "en": "[SCOPE.sCountry('backed_colonial_power').GetName] has openly embraced our stance in defence of the colonial powers.",
+  "de": "[SCOPE.sCountry('backed_colonial_power').GetAltName('NOM')|U] hat sich offen zu unserer Haltung zur Verteidigung der Kolonialmächte bekannt."
+ },
+ "notification_gp_support_accepted_notice_name": {
+  "en": "A Colonial Power Stands With Us",
+  "de": "Eine Kolonialmacht steht uns bei"
+ },
+ "notification_gp_support_declined_notice_desc": {
+  "en": "[SCOPE.sCountry('backed_colonial_power').GetName] has publicly kept its distance from our stance in defence of the colonial powers.",
+  "de": "[SCOPE.sCountry('backed_colonial_power').GetAltName('NOM')|U] hat öffentlich Abstand von unserer Haltung zur Verteidigung der Kolonialmächte gehalten."
+ },
+ "notification_gp_support_declined_notice_name": {
+  "en": "A Colonial Power Keeps Its Distance",
+  "de": "Eine Kolonialmacht hält Abstand"
+ },
+ "notification_headlines_tech_ICBMs_desc": {
+  "en": "A successful test of an ICBM has been reported out of [SCOPE.sCountry('headlines_ICBMs_researcher').GetName]. #lore The development of rockets powerful enough to carry a payload between continents has staggering geopolitical implications. International analysts warn this technology could fundamentally alter the nature of warfare and global power dynamics... #!",
+  "de": "Ein erfolgreicher Test einer Interkontinentalrakete wurde aus [SCOPE.sCountry('headlines_ICBMs_researcher').GetAltName('DAT')] gemeldet. #lore Die Entwicklung von Raketen, die stark genug sind, um eine Nutzlast zwischen Kontinenten zu befördern, hat enorme geopolitische Auswirkungen. Internationale Analysten warnen, dass diese Technologie die Natur der Kriegsführung und die globalen Machtverhältnisse grundlegend verändern könnte... #!"
+ },
+ "notification_headlines_tech_ICBMs_name": {
+  "en": "#b ROCKETS NOW CAPABLE OF STRIKING ACROSS CONTINENTS #!",
+  "de": "#b RAKETEN JETZT FÄHIG, KONTINENTE ZU ÜBERSPANNEN #!"
+ },
+ "notification_headlines_tech_LGBTQ_rights_movement_desc": {
+  "en": "A significant social movement advocating for LGBTQ+ rights is gaining mainstream attention in [SCOPE.sCountry('headlines_LGBTQ_rights_movement_researcher').GetName]. #lore Activists are pushing for legal protections and societal acceptance for individuals with diverse sexual orientations and gender identities, challenging long-held social norms... #!",
+  "de": "Eine bedeutende soziale Bewegung, die sich für die Rechte von LGBTQ+-Personen einsetzt, gewinnt [SCOPE.sCountry('headlines_LGBTQ_rights_movement_researcher').GetAltName('IN')] zunehmend an gesellschaftlicher Aufmerksamkeit. #lore Aktivisten fordern rechtlichen Schutz und gesellschaftliche Akzeptanz für Menschen unterschiedlicher sexueller Orientierungen und Geschlechtsidentitäten und stellen damit lang etablierte soziale Normen infrage... #!"
+ },
+ "notification_headlines_tech_LGBTQ_rights_movement_name": {
+  "en": "#b CALLS FOR EQUALITY AND ACCEPTANCE GROW #!",
+  "de": "#b RUF NACH GLEICHBERECHTIGUNG UND AKZEPTANZ WIRD LAUTER #!"
+ },
+ "notification_headlines_tech_abyssal_plain_mining_desc": {
+  "en": "With the depletion of terrestrial mineral resources, companies in [SCOPE.sCountry('headlines_abyssal_plain_mining_researcher').GetName] are turning to the ocean floor for mining. #lore This abyssal-plain mining could provide access to valuable minerals, but it also raises environmental concerns... #!",
+  "de": "Angesichts der Erschöpfung der Bodenschätze an Land wenden sich Unternehmen [SCOPE.sCountry('headlines_abyssal_plain_mining_researcher').GetAltName('IN')] dem Bergbau auf dem Meeresboden zu. #lore Dieser Tiefseeebenen-Bergbau könnte Zugang zu wertvollen Mineralien verschaffen, wirft aber auch Umweltbedenken auf... #!"
+ },
+ "notification_headlines_tech_abyssal_plain_mining_name": {
+  "en": "#b MINING THE OCEAN FLOOR FOR RARE RESOURCES #!",
+  "de": "#b BERGBAU AUF DEM MEERESBODEN FÜR SELTENE ROHSTOFFE #!"
+ },
+ "notification_headlines_tech_additive_manufacturing_desc": {
+  "en": "Engineers in [SCOPE.sCountry('headlines_additive_manufacturing_researcher').GetName] have demonstrated a viable process for additive manufacturing. #lore Popularly known as '3D printing,' the technology builds items layer by layer from a digital model. Experts predict this will disrupt everything from prototyping to producing complex, on-demand parts... #!",
+  "de": "Ingenieure [SCOPE.sCountry('headlines_additive_manufacturing_researcher').GetAltName('IN')] haben ein praxistaugliches Verfahren für die additive Fertigung vorgeführt. #lore Landläufig als „3D-Druck“ bekannt, baut die Technologie Objekte Schicht für Schicht nach einem digitalen Modell auf. Experten erwarten, dass sie vom Prototypenbau bis zur Fertigung komplexer Teile nach Bedarf alles verändern wird... #!"
+ },
+ "notification_headlines_tech_additive_manufacturing_name": {
+  "en": "#b MANUFACTURING REVOLUTION: 'PRINTING' SOLID OBJECTS #!",
+  "de": "#b FERTIGUNGSREVOLUTION: FESTE OBJEKTE WERDEN „GEDRUCKT“ #!"
+ },
+ "notification_headlines_tech_advanced_agricultural_statistics_desc": {
+  "en": "Agronomists in [SCOPE.sCountry('headlines_advanced_agricultural_statistics_researcher').GetName] are applying advanced agricultural statistics to boost efficiency. #lore By analyzing crop data and livestock patterns with modern statistical methods, farms can optimize yields and resource use. The approach promises to make farming a more exact science... #!",
+  "de": "Agrarwissenschaftler [SCOPE.sCountry('headlines_advanced_agricultural_statistics_researcher').GetAltName('IN')] setzen fortschrittliche landwirtschaftliche Statistik ein, um die Effizienz zu steigern. #lore Durch die Analyse von Ernte- und Viehbestandsdaten mit modernen statistischen Methoden können Betriebe Erträge und Ressourceneinsatz optimieren. Der Ansatz verspricht, die Landwirtschaft zu einer exakteren Wissenschaft zu machen... #!"
+ },
+ "notification_headlines_tech_advanced_agricultural_statistics_name": {
+  "en": "#b FARMING BY THE NUMBERS PROMISES RECORD HARVESTS #!",
+  "de": "#b LANDWIRTSCHAFT NACH ZAHLEN VERSPRICHT REKORDERNTEN #!"
+ },
+ "notification_headlines_tech_advanced_assembly_lines_desc": {
+  "en": "Manufacturers in [SCOPE.sCountry('headlines_advanced_assembly_lines_researcher').GetName] are implementing advanced assembly lines. #lore Incorporating modular components and producing items only as needed allows for greater flexibility and reduced waste. Economists believe this will lower costs for a wide variety of consumer goods... #!",
+  "de": "Hersteller [SCOPE.sCountry('headlines_advanced_assembly_lines_researcher').GetAltName('IN')] führen fortschrittliche Fließbänder ein. #lore Der Einsatz modularer Bauteile und die Fertigung nach Bedarf ermöglichen größere Flexibilität und weniger Verschwendung. Ökonomen glauben, dass dies die Kosten für eine Vielzahl von Konsumgütern senken wird... #!"
+ },
+ "notification_headlines_tech_advanced_assembly_lines_name": {
+  "en": "#b FACTORIES ADOPT 'JUST-IN-TIME' PRODUCTION #!",
+  "de": "#b FABRIKEN SETZEN AUF „JUST-IN-TIME“-PRODUKTION #!"
+ },
+ "notification_headlines_tech_advanced_body_armor_desc": {
+  "en": "Military researchers in [SCOPE.sCountry('headlines_advanced_body_armor_researcher').GetName] have unveiled advanced body armor. #lore The use of lightweight composites and advanced ceramics offers superior protection without significantly increasing weight, a crucial factor for infantry mobility and effectiveness in combat situations... #!",
+  "de": "Militärforscher [SCOPE.sCountry('headlines_advanced_body_armor_researcher').GetAltName('IN')] haben fortschrittliche Körperschutzausrüstung vorgestellt. #lore Der Einsatz leichter Verbundwerkstoffe und moderner Keramik bietet besseren Schutz, ohne das Gewicht spürbar zu erhöhen – ein entscheidender Faktor für die Beweglichkeit und Kampfkraft der Infanterie... #!"
+ },
+ "notification_headlines_tech_advanced_body_armor_name": {
+  "en": "#b NEW COMPOSITE ARMOR INCREASES SOLDIER SURVIVABILITY #!",
+  "de": "#b NEUE VERBUNDPANZERUNG ERHÖHT ÜBERLEBENSCHANCEN DER SOLDATEN #!"
+ },
+ "notification_headlines_tech_advanced_materials_armor_desc": {
+  "en": "The armed forces of [SCOPE.sCountry('headlines_advanced_materials_armor_researcher').GetName] have begun to field vehicles with advanced materials armor. #lore By incorporating materials like Composite and Reactive Armor, military vehicles demonstrate a marked increase in their ability to withstand enemy fire, potentially changing the calculus of armored warfare... #!",
+  "de": "Die Streitkräfte [SCOPE.sCountry('headlines_advanced_materials_armor_researcher').GetAltName('GEN')] setzen nun Fahrzeuge mit fortschrittlicher Materialpanzerung ein. #lore Durch den Einsatz von Materialien wie Verbund- und Reaktivpanzerung zeigen Militärfahrzeuge eine deutlich verbesserte Widerstandsfähigkeit gegen feindlichen Beschuss, was die Logik der Panzerkriegsführung grundlegend verändern könnte... #!"
+ },
+ "notification_headlines_tech_advanced_materials_armor_name": {
+  "en": "#b NEXT-GEN ARMOR MAKES VEHICLES MORE RESILIENT #!",
+  "de": "#b PANZERUNG DER NÄCHSTEN GENERATION MACHT FAHRZEUGE WIDERSTANDSFÄHIGER #!"
+ },
+ "notification_headlines_tech_advanced_military_aircraft_desc": {
+  "en": "A new line of advanced military aircraft has been unveiled in [SCOPE.sCountry('headlines_advanced_military_aircraft_researcher').GetName]. #lore These latest designs boast superior speed, range, and armament capacity, setting a new standard for air combat and strategic [concept_power_projection] that other nations will be forced to match... #!",
+  "de": "[SCOPE.sCountry('headlines_advanced_military_aircraft_researcher').GetAltName('IN')|U] wurde eine neue Reihe fortschrittlicher Militärflugzeuge vorgestellt. #lore Diese neuesten Konstruktionen bieten überlegene Geschwindigkeit, Reichweite und Bewaffnung und setzen neue Maßstäbe für den Luftkampf und die strategische [concept_power_projection], denen andere Nationen gezwungen sein werden nachzuziehen... #!"
+ },
+ "notification_headlines_tech_advanced_military_aircraft_name": {
+  "en": "#b NEW GENERATION OF JETS DOMINATES THE SKIES #!",
+  "de": "#b NEUE GENERATION VON DÜSENJETS BEHERRSCHT DEN LUFTRAUM #!"
+ },
+ "notification_headlines_tech_advanced_nanofabrication_desc": {
+  "en": "A breakthrough in advanced nanofabrication is being reported from labs in [SCOPE.sCountry('headlines_advanced_nanofabrication_researcher').GetName]. #lore This unprecedented control over matter at the nanoscale is expected to have revolutionary applications in fields as diverse as medicine and electronics... #!",
+  "de": "Ein Durchbruch in der fortschrittlichen Nanofabrikation wird aus Laboren [SCOPE.sCountry('headlines_advanced_nanofabrication_researcher').GetAltName('IN')] gemeldet. #lore Diese beispiellose Kontrolle über Materie im Nanomaßstab dürfte revolutionäre Anwendungen in so unterschiedlichen Bereichen wie Medizin und Elektronik ermöglichen... #!"
+ },
+ "notification_headlines_tech_advanced_nanofabrication_name": {
+  "en": "#b BUILDING AT THE ATOMIC LEVEL NOW POSSIBLE #!",
+  "de": "#b BAUEN AUF ATOMARER EBENE NUN MÖGLICH #!"
+ },
+ "notification_headlines_tech_advanced_structural_engineering_desc": {
+  "en": "The construction industry of [SCOPE.sCountry('headlines_advanced_structural_engineering_researcher').GetName] is pioneering advanced structural engineering. #lore By combining high-strength composites and new welding techniques, structures can be built to be lighter and more durable, opening up new possibilities in architecture and industry... #!",
+  "de": "Die Bauindustrie [SCOPE.sCountry('headlines_advanced_structural_engineering_researcher').GetAltName('GEN')] ist Vorreiter im fortschrittlichen Bauingenieurwesen. #lore Durch die Kombination hochfester Verbundwerkstoffe mit neuen Schweißtechniken können Bauwerke leichter und langlebiger errichtet werden, was neue Möglichkeiten für Architektur und Industrie eröffnet... #!"
+ },
+ "notification_headlines_tech_advanced_structural_engineering_name": {
+  "en": "#b STRONGER, LIGHTER, BETTER: THE FUTURE OF CONSTRUCTION #!",
+  "de": "#b STÄRKER, LEICHTER, BESSER: DIE ZUKUNFT DES BAUWESENS #!"
+ },
+ "notification_headlines_tech_advanced_submarine_technology_desc": {
+  "en": "[SCOPE.sCountry('headlines_advanced_submarine_technology_researcher').GetAdjective] engineers have perfected advanced submarine technology. #lore Thanks to innovations like nuclear power and sound-dampening hulls, a new class of submarine is capable of greater speed and stealth. Naval analysts note these vessels will be exceptionally difficult to track... #!",
+  "de": "[SCOPE.sCountry('headlines_advanced_submarine_technology_researcher').GetAdjective|l]e Ingenieure haben die fortschrittliche U-Boot-Technologie perfektioniert. #lore Dank Innovationen wie Kernkraftantrieb und schalldämpfenden Rümpfen ist eine neue U-Boot-Klasse zu größerer Geschwindigkeit und Tarnung fähig. Marineanalysten weisen darauf hin, dass diese Schiffe außergewöhnlich schwer zu orten sein werden... #!"
+ },
+ "notification_headlines_tech_advanced_submarine_technology_name": {
+  "en": "#b SILENT HUNTERS PROWL THE DEEP #!",
+  "de": "#b STILLE JÄGER DURCHSTREIFEN DIE TIEFE #!"
+ },
+ "notification_headlines_tech_advanced_workflow_optimization_desc": {
+  "en": "Businesses in [SCOPE.sCountry('headlines_advanced_workflow_optimization_researcher').GetName] are seeing productivity gains through advanced workflow optimization. #lore Using the latest technology and data analysis to streamline processes, companies are cutting waste and increasing output, setting a new standard for operational management... #!",
+  "de": "Unternehmen [SCOPE.sCountry('headlines_advanced_workflow_optimization_researcher').GetAltName('IN')] verzeichnen Produktivitätsgewinne durch fortschrittliche Arbeitsablaufoptimierung. #lore Mit modernster Technologie und Datenanalyse zur Prozessoptimierung reduzieren Unternehmen Verschwendung und steigern den Ausstoß, was neue Maßstäbe für das Betriebsmanagement setzt... #!"
+ },
+ "notification_headlines_tech_advanced_workflow_optimization_name": {
+  "en": "#b DATA-DRIVEN EFFICIENCY SWEEPS INDUSTRIES #!",
+  "de": "#b DATENGETRIEBENE EFFIZIENZ ERFASST GANZE INDUSTRIEN #!"
+ },
+ "notification_headlines_tech_aluminum_mass_production_desc": {
+  "en": "Chemists in [SCOPE.sCountry('headlines_aluminum_mass_production_researcher').GetName] have unlocked an industrial method for aluminum mass production. #lore Once more valuable than gold, this incredibly strong and lightweight metal is now available for widespread use in everything from aviation to cookware... #!",
+  "de": "Chemiker in [SCOPE.sCountry('headlines_aluminum_mass_production_researcher').GetAltName('DAT')] haben ein industrielles Verfahren zur Massenproduktion von Aluminium entwickelt. #lore Dieses einst wertvoller als Gold gehandelte, unglaublich feste und leichte Metall steht nun für den breiten Einsatz zur Verfügung – von der Luftfahrt bis zum Kochgeschirr... #!"
+ },
+ "notification_headlines_tech_aluminum_mass_production_name": {
+  "en": "#b FORMER 'JEWELRY METAL' NOW PLENTIFUL #!",
+  "de": "#b EHEMALIGES „SCHMUCKMETALL” JETZT IM ÜBERFLUSS #!"
+ },
+ "notification_headlines_tech_animation_desc": {
+  "en": "A new form of entertainment, animation, is being pioneered by artists in [SCOPE.sCountry('headlines_animation_researcher').GetName]. #lore By rapidly displaying a sequence of drawings, a magical illusion of movement is created, opening up a novel medium for storytelling and artistic expression... #!",
+  "de": "Eine neue Unterhaltungsform, der Zeichentrickfilm, wird von Künstlern in [SCOPE.sCountry('headlines_animation_researcher').GetAltName('DAT')] entwickelt. #lore Durch das schnelle Abspielen einer Bilderfolge entsteht die magische Illusion von Bewegung – ein neues Medium für Erzählkunst und künstlerischen Ausdruck... #!"
+ },
+ "notification_headlines_tech_animation_name": {
+  "en": "#b DRAWINGS THAT MOVE DELIGHT AUDIENCES #!",
+  "de": "#b ZEICHNUNGEN, DIE SICH BEWEGEN, BEGEISTERN DAS PUBLIKUM #!"
+ },
+ "notification_headlines_tech_anti_sub_warfare_desc": {
+  "en": "The navy of [SCOPE.sCountry('headlines_anti_sub_warfare_researcher').GetName] has developed new anti-submarine warfare tactics. #lore Better sonar and homing torpedoes have improved the ability to hunt enemy submarines, a critical development for securing vital [Concept('concept_shipping_lane', 'shipping lanes')] against commerce raiders... #!",
+  "de": "Die Marine [SCOPE.sCountry('headlines_anti_sub_warfare_researcher').GetAltName('GEN')] hat neue Taktiken der U-Boot-Abwehr entwickelt. #lore Bessere Sonargeräte und zielsuchende Torpedos verbessern die Fähigkeit, feindliche U-Boote aufzuspüren – eine entscheidende Entwicklung zur Sicherung lebenswichtiger [Concept('concept_shipping_lane', 'Schifffahrtswege')] gegen Handelsstörer... #!"
+ },
+ "notification_headlines_tech_anti_sub_warfare_name": {
+  "en": "#b NEW TACTICS TO COUNTER UNDERSEA MENACE #!",
+  "de": "#b NEUE TAKTIKEN GEGEN DIE BEDROHUNG AUS DER TIEFE #!"
+ },
+ "notification_headlines_tech_anti_war_movement_desc": {
+  "en": "A growing anti-war movement has taken root in [SCOPE.sCountry('headlines_anti_war_movement_researcher').GetName], challenging government policy. #lore Composed of students, activists, and ordinary citizens, these movements are shaping public opinion and putting pressure on politicians to reconsider their military ventures... #!",
+  "de": "Eine wachsende Antikriegsbewegung hat in [SCOPE.sCountry('headlines_anti_war_movement_researcher').GetAltName('DAT')] Fuß gefasst und stellt die Regierungspolitik infrage. #lore Getragen von Studenten, Aktivisten und einfachen Bürgern, prägen diese Bewegungen die öffentliche Meinung und setzen Politiker unter Druck, ihre militärischen Unternehmungen zu überdenken... #!"
+ },
+ "notification_headlines_tech_anti_war_movement_name": {
+  "en": "#b THOUSANDS MARCH, DEMANDING 'PEACE NOW!' #!",
+  "de": "#b TAUSENDE DEMONSTRIEREN UND FORDERN: „FRIEDEN JETZT!” #!"
+ },
+ "notification_headlines_tech_antibiotic_mass_production_desc": {
+  "en": "[SCOPE.sCountry('headlines_antibiotic_mass_production_researcher').GetName] has achieved antibiotic mass production. #lore The ability to produce these miracle drugs in large quantities means that once-fatal bacterial infections can now be treated. This development is expected to have a dramatic positive effect on public health and life expectancy... #!",
+  "de": "[SCOPE.sCountry('headlines_antibiotic_mass_production_researcher').GetAltName('NOM')|U] hat die Massenproduktion von Antibiotika erreicht. #lore Die Fähigkeit, diese Wundermittel in großen Mengen herzustellen, bedeutet, dass einst tödliche bakterielle Infektionen nun behandelt werden können. Diese Entwicklung dürfte sich stark positiv auf die öffentliche Gesundheit und die Lebenserwartung auswirken... #!"
+ },
+ "notification_headlines_tech_antibiotic_mass_production_name": {
+  "en": "#b 'WONDER DRUGS' NOW WIDELY AVAILABLE #!",
+  "de": "#b „WUNDERMITTEL” JETZT WEIT VERBREITET #!"
+ },
+ "notification_headlines_tech_antimatter_production_desc": {
+  "en": "Physicists in [SCOPE.sCountry('headlines_antimatter_production_researcher').GetName] report a breakthrough in antimatter production. #lore With an incredible energy density, this substance promises to revolutionize spacecraft propulsion and power generation, though its volatility remains a significant concern... #!",
+  "de": "Physiker in [SCOPE.sCountry('headlines_antimatter_production_researcher').GetAltName('DAT')] melden einen Durchbruch bei der Antimaterie-Produktion. #lore Mit ihrer unglaublichen Energiedichte verspricht diese Substanz, Raumschiffantriebe und Energieerzeugung zu revolutionieren, auch wenn ihre Instabilität weiterhin ein erhebliches Problem darstellt... #!"
+ },
+ "notification_headlines_tech_antimatter_production_name": {
+  "en": "#b EXOTIC MATTER UNLOCKS UNPRECEDENTED ENERGY #!",
+  "de": "#b EXOTISCHE MATERIE ERSCHLIESST BEISPIELLOSE ENERGIE #!"
+ },
+ "notification_headlines_tech_art_deco_architecture_desc": {
+  "en": "A glamorous new style, Art Deco architecture, is sweeping the nation of [SCOPE.sCountry('headlines_art_deco_architecture_researcher').GetName]. #lore Defined by rich ornamentation and strong geometric forms, it has become the signature look for a new generation of prestigious buildings and a symbol of modern sophistication... #!",
+  "de": "Ein glamouröser neuer Stil, die Art-déco-Architektur, erobert [SCOPE.sCountry('headlines_art_deco_architecture_researcher').GetAltName('AKK')]. #lore Geprägt von reichem Ornamentschmuck und klaren geometrischen Formen ist sie zum Markenzeichen einer neuen Generation prestigeträchtiger Bauwerke und zum Symbol moderner Eleganz geworden... #!"
+ },
+ "notification_headlines_tech_art_deco_architecture_name": {
+  "en": "#b SLEEK LINES AND BOLD SHAPES DEFINE MODERN CITIES #!",
+  "de": "#b KLARE LINIEN UND KÜHNE FORMEN PRÄGEN DIE MODERNE STADT #!"
+ },
+ "notification_headlines_tech_artificial_intelligence_desc": {
+  "en": "Researchers in [SCOPE.sCountry('headlines_artificial_intelligence_researcher').GetName] claim to have created the first artificial general intelligence. #lore Unlike narrow AI, this machine appears capable of human-like reasoning across a range of tasks. The development raises profound questions for the future of industry, labor, and humanity itself... #!",
+  "de": "Forscher in [SCOPE.sCountry('headlines_artificial_intelligence_researcher').GetAltName('DAT')] behaupten, die erste allgemeine künstliche Intelligenz geschaffen zu haben. #lore Anders als schwache KI scheint diese Maschine zu menschenähnlichem Denken über verschiedenste Aufgabenbereiche hinweg fähig zu sein. Diese Entwicklung wirft grundlegende Fragen für die Zukunft von Industrie, Arbeit und der Menschheit selbst auf... #!"
+ },
+ "notification_headlines_tech_artificial_intelligence_name": {
+  "en": "#b A 'THINKING MACHINE' IS BORN #!",
+  "de": "#b EINE „DENKENDE MASCHINE” IST GEBOREN #!"
+ },
+ "notification_headlines_tech_asteroid_mining_desc": {
+  "en": "Corporations in [SCOPE.sCountry('headlines_asteroid_mining_researcher').GetName] have announced the first viable plans for asteroid mining. #lore The prospect of extracting valuable metals and minerals from near-earth asteroids could fuel further space exploration and create immense wealth, kicking off a new extra-terrestrial resource race... #!",
+  "de": "Konzerne in [SCOPE.sCountry('headlines_asteroid_mining_researcher').GetAltName('DAT')] haben die ersten realisierbaren Pläne für den Asteroidenbergbau vorgestellt. #lore Die Aussicht, wertvolle Metalle und Mineralien aus erdnahen Asteroiden zu gewinnen, könnte die Raumfahrt weiter vorantreiben und immensen Reichtum schaffen – der Beginn eines neuen außerirdischen Rohstoffwettlaufs... #!"
+ },
+ "notification_headlines_tech_asteroid_mining_name": {
+  "en": "#b A GOLD RUSH IN THE HEAVENS #!",
+  "de": "#b EIN GOLDRAUSCH IM ALL #!"
+ },
+ "notification_headlines_tech_augmented_reality_warfare_desc": {
+  "en": "The military of [SCOPE.sCountry('headlines_augmented_reality_warfare_researcher').GetName] is testing systems for augmented reality warfare. #lore By feeding soldiers real-time data directly into their field of vision, this technology improves situational awareness and target acquisition. Analysts are studying the potential advantages this could offer in combat... #!",
+  "de": "Das Militär [SCOPE.sCountry('headlines_augmented_reality_warfare_researcher').GetAltName('GEN')] testet Systeme für die Kriegsführung mit erweiterter Realität. #lore Indem Soldaten Echtzeitdaten direkt ins Sichtfeld eingeblendet werden, verbessert diese Technologie Lagebewusstsein und Zielerfassung. Analysten untersuchen die möglichen Vorteile, die sich daraus im Gefecht ergeben könnten... #!"
+ },
+ "notification_headlines_tech_augmented_reality_warfare_name": {
+  "en": "#b DIGITAL OVERLAYS ENHANCE THE MODERN BATTLEFIELD #!",
+  "de": "#b DIGITALE EINBLENDUNGEN VERBESSERN DAS MODERNE SCHLACHTFELD #!"
+ },
+ "notification_headlines_tech_automated_surveillance_desc": {
+  "en": "Military forces in [SCOPE.sCountry('headlines_automated_surveillance_researcher').GetName] have deployed systems for automated surveillance. #lore A network of ground sensors and aerial drones allows for constant monitoring of territory without requiring a human presence, raising questions about privacy and the future of intelligence gathering... #!",
+  "de": "Die Streitkräfte in [SCOPE.sCountry('headlines_automated_surveillance_researcher').GetAltName('DAT')] setzen Systeme zur automatisierten Überwachung ein. #lore Ein Netzwerk aus Bodensensoren und Luftdrohnen ermöglicht die ständige Überwachung von Gebieten ohne menschliche Präsenz – das wirft Fragen zu Privatsphäre und der Zukunft der Aufklärung auf... #!"
+ },
+ "notification_headlines_tech_automated_surveillance_name": {
+  "en": "#b THE UNBLINKING EYE: SURVEILLANCE GOES AUTOMATIC #!",
+  "de": "#b DAS UNBLINZELNDE AUGE: ÜBERWACHUNG WIRD AUTOMATISCH #!"
+ },
+ "notification_headlines_tech_autonomous_vehicles_desc": {
+  "en": "Inventors in [SCOPE.sCountry('headlines_autonomous_vehicles_researcher').GetName] have demonstrated the first commercially viable autonomous vehicle. #lore Vehicles capable of navigating traffic without a human driver could revolutionize transportation and logistics, though public acceptance and regulatory hurdles remain... #!",
+  "de": "Erfinder in [SCOPE.sCountry('headlines_autonomous_vehicles_researcher').GetAltName('DAT')] haben das erste kommerziell einsatzfähige autonome Fahrzeug vorgestellt. #lore Fahrzeuge, die sich ohne menschlichen Fahrer im Verkehr bewegen können, könnten Transport und Logistik revolutionieren – auch wenn öffentliche Akzeptanz und regulatorische Hürden bestehen bleiben... #!"
+ },
+ "notification_headlines_tech_autonomous_vehicles_name": {
+  "en": "#b CARS THAT DRIVE THEMSELVES HIT THE ROAD #!",
+  "de": "#b SELBSTFAHRENDE AUTOS ROLLEN AUF DIE STRASSE #!"
+ },
+ "notification_headlines_tech_barcodes_and_scanners_desc": {
+  "en": "Retailers in [SCOPE.sCountry('headlines_barcodes_and_scanners_researcher').GetName] are widely adopting barcodes and scanners. #lore This system of encoding product information into lines for quick scanning has drastically improved inventory management and checkout speed, streamlining the entire logistics chain... #!",
+  "de": "Der Einzelhandel in [SCOPE.sCountry('headlines_barcodes_and_scanners_researcher').GetAltName('DAT')] setzt zunehmend auf Strichcodes und Scanner. #lore Dieses System, das Produktinformationen in schnell scanbare Linien kodiert, hat die Lagerverwaltung und die Geschwindigkeit an der Kasse drastisch verbessert und die gesamte Logistikkette gestrafft... #!"
+ },
+ "notification_headlines_tech_barcodes_and_scanners_name": {
+  "en": "#b BLACK AND WHITE LINES TRANSFORM RETAIL #!",
+  "de": "#b SCHWARZ-WEISSE LINIEN VERÄNDERN DEN EINZELHANDEL #!"
+ },
+ "notification_headlines_tech_bergius_process_desc": {
+  "en": "Chemists in [SCOPE.sCountry('headlines_bergius_process_researcher').GetName] have perfected the Bergius process, allowing for the creation of synthetic fuel. #lore By hydrogenating coal under high pressure, liquid fuels can be produced, a crucial strategic development for any nation with limited access to natural oil reserves... #!",
+  "de": "Chemiker in [SCOPE.sCountry('headlines_bergius_process_researcher').GetAltName('DAT')] haben das Bergius-Verfahren zur Serienreife gebracht, das die Herstellung von synthetischem Kraftstoff ermöglicht. #lore Durch die Hydrierung von Kohle unter hohem Druck können flüssige Brennstoffe erzeugt werden – eine entscheidende strategische Entwicklung für jede Nation mit begrenztem Zugang zu natürlichen Ölreserven... #!"
+ },
+ "notification_headlines_tech_bergius_process_name": {
+  "en": "#b SYNTHETIC FUEL FROM COAL ANNOUNCED #!",
+  "de": "#b SYNTHETISCHER KRAFTSTOFF AUS KOHLE ANGEKÜNDIGT #!"
+ },
+ "notification_headlines_tech_bioenhanced_soldiers_desc": {
+  "en": "A military program in [SCOPE.sCountry('headlines_bioenhanced_soldiers_researcher').GetName] is reportedly creating bioenhanced soldiers. #lore The use of biotechnology to enhance the strength and intelligence of soldiers opens a Pandora's box of ethical debates and raises the specter of a new kind of arms race... #!",
+  "de": "Ein Militärprogramm in [SCOPE.sCountry('headlines_bioenhanced_soldiers_researcher').GetAltName('DAT')] erschafft Berichten zufolge biotechnisch verstärkte Soldaten. #lore Der Einsatz von Biotechnologie zur Steigerung von Kraft und Intelligenz der Soldaten öffnet eine Büchse der Pandora ethischer Debatten und lässt das Gespenst eines neuartigen Wettrüstens aufziehen... #!"
+ },
+ "notification_headlines_tech_bioenhanced_soldiers_name": {
+  "en": "#b HUMAN AUGMENTATION ENTERS MILITARY REALM #!",
+  "de": "#b MENSCHLICHE AUFRÜSTUNG HÄLT EINZUG BEIM MILITÄR #!"
+ },
+ "notification_headlines_tech_biohacking_and_human_augmentation_desc": {
+  "en": "The science of biohacking and human augmentation is advancing rapidly in [SCOPE.sCountry('headlines_biohacking_and_human_augmentation_researcher').GetName]. #lore From gene editing to neuroprosthetics, the ability to push beyond natural human limits raises profound ethical questions about what it means to be human... #!",
+  "de": "Die Wissenschaft des Biohacking und der menschlichen Aufrüstung schreitet in [SCOPE.sCountry('headlines_biohacking_and_human_augmentation_researcher').GetAltName('DAT')] rasant voran. #lore Von Genchirurgie bis zu Neuroprothesen wirft die Fähigkeit, natürliche menschliche Grenzen zu überschreiten, tiefgreifende ethische Fragen darüber auf, was es bedeutet, Mensch zu sein... #!"
+ },
+ "notification_headlines_tech_biohacking_and_human_augmentation_name": {
+  "en": "#b BEYOND HUMAN: THE AUGMENTATION DEBATE #!",
+  "de": "#b JENSEITS DES MENSCHLICHEN: DIE DEBATTE UM KÖRPERAUFRÜSTUNG #!"
+ },
+ "notification_headlines_tech_biological_immortality_desc": {
+  "en": "Scientists in [SCOPE.sCountry('headlines_biological_immortality_researcher').GetName] claim a breakthrough in achieving biological immortality. #lore While still theoretical, the prospect of arresting the aging process through genetic engineering could reshape society in unimaginable ways, posing deep social and economic questions... #!",
+  "de": "Wissenschaftler in [SCOPE.sCountry('headlines_biological_immortality_researcher').GetAltName('DAT')] behaupten einen Durchbruch auf dem Weg zur biologischen Unsterblichkeit. #lore Noch ist es theoretisch, doch die Aussicht, den Alterungsprozess durch Gentechnik aufzuhalten, könnte die Gesellschaft auf unvorstellbare Weise verändern und wirft tiefgreifende soziale und wirtschaftliche Fragen auf... #!"
+ },
+ "notification_headlines_tech_biological_immortality_name": {
+  "en": "#b SCIENTISTS CLAIM TO HAVE HALTED AGING #!",
+  "de": "#b WISSENSCHAFTLER BEHAUPTEN, DAS ALTERN GESTOPPT ZU HABEN #!"
+ },
+ "notification_headlines_tech_biotechnology_desc": {
+  "en": "[SCOPE.sCountry('headlines_biotechnology_researcher').GetAdjective] scientists are making huge leaps in biotechnology. #lore Technologies like CRISPR allow for the precise editing of genes, heralding a new era of breakthroughs in medicine and agriculture, along with intense ethical debate... #!",
+  "de": "[SCOPE.sCountry('headlines_biotechnology_researcher').GetAdjective|U]e Wissenschaftler machen riesige Fortschritte in der Biotechnologie. #lore Technologien wie CRISPR ermöglichen die präzise Bearbeitung von Genen und läuten ein neues Zeitalter der Durchbrüche in Medizin und Landwirtschaft ein – begleitet von intensiven ethischen Debatten... #!"
+ },
+ "notification_headlines_tech_biotechnology_name": {
+  "en": "#b PRECISION GENE-EDITING TOOLS DEVELOPED #!",
+  "de": "#b PRÄZISIONSWERKZEUGE FÜR DIE GENBEARBEITUNG ENTWICKELT #!"
+ },
+ "notification_headlines_tech_bombing_aircraft_desc": {
+  "en": "The development of strategic bombing aircraft in [SCOPE.sCountry('headlines_bombing_aircraft_researcher').GetName] marks a dark turn in warfare. #lore These long-range aircraft are capable of striking deep into enemy territory, targeting industrial centers and civilian populations alike. Strategists are grappling with the implications of this new dimension of total war... #!",
+  "de": "Die Entwicklung strategischer Bombenflugzeuge in [SCOPE.sCountry('headlines_bombing_aircraft_researcher').GetAltName('DAT')] markiert eine düstere Wende in der Kriegsführung. #lore Diese Langstreckenflugzeuge können tief in feindliches Gebiet vordringen und sowohl Industriezentren als auch Zivilbevölkerung treffen. Strategen ringen mit den Folgen dieser neuen Dimension des totalen Krieges... #!"
+ },
+ "notification_headlines_tech_bombing_aircraft_name": {
+  "en": "#b CITIES NOW VULNERABLE TO AERIAL ATTACK #!",
+  "de": "#b STÄDTE NUN VERWUNDBAR FÜR LUFTANGRIFFE #!"
+ },
+ "notification_headlines_tech_brain_computer_interfaces_desc": {
+  "en": "Researchers in [SCOPE.sCountry('headlines_brain_computer_interfaces_researcher').GetName] have demonstrated working brain-computer interfaces. #lore The ability to connect the human brain directly to computers opens up astonishing possibilities for medicine, communication, and human enhancement... #!",
+  "de": "Forscher in [SCOPE.sCountry('headlines_brain_computer_interfaces_researcher').GetAltName('DAT')] haben funktionierende Gehirn-Computer-Schnittstellen vorgeführt. #lore Die Fähigkeit, das menschliche Gehirn direkt mit Computern zu verbinden, eröffnet erstaunliche Möglichkeiten für Medizin, Kommunikation und die Erweiterung menschlicher Fähigkeiten... #!"
+ },
+ "notification_headlines_tech_brain_computer_interfaces_name": {
+  "en": "#b DIRECT LINK BETWEEN BRAIN AND MACHINE ACHIEVED #!",
+  "de": "#b DIREKTE VERBINDUNG ZWISCHEN GEHIRN UND MASCHINE ERREICHT #!"
+ },
+ "notification_headlines_tech_cellular_networks_desc": {
+  "en": "The launch of commercial cellular networks in [SCOPE.sCountry('headlines_cellular_networks_researcher').GetName] is changing how people communicate. #lore The ability to make phone calls from almost anywhere is transforming both business and social life, freeing communication from the confines of a building... #!",
+  "de": "Die Einführung kommerzieller Mobilfunknetze in [SCOPE.sCountry('headlines_cellular_networks_researcher').GetAltName('DAT')] verändert die Art, wie Menschen kommunizieren. #lore Die Möglichkeit, fast überall zu telefonieren, verändert Geschäfts- und Gesellschaftsleben gleichermaßen und befreit die Kommunikation aus den Mauern eines Gebäudes... #!"
+ },
+ "notification_headlines_tech_cellular_networks_name": {
+  "en": "#b PHONE CALLS UNTETHERED FROM WIRES #!",
+  "de": "#b TELEFONATE OHNE KABEL #!"
+ },
+ "notification_headlines_tech_civil_rights_movement_desc": {
+  "en": "A powerful civil rights movement has emerged in [SCOPE.sCountry('headlines_civil_rights_movement_researcher').GetName], demanding an end to systemic [concept_discrimination]. #lore Through organized protests and acts of civil disobedience, the movement is forcing a national conversation on equality and justice, with consequences that are being watched around the world... #!",
+  "de": "Eine mächtige Bürgerrechtsbewegung ist in [SCOPE.sCountry('headlines_civil_rights_movement_researcher').GetAltName('DAT')] entstanden und fordert ein Ende der systematischen [concept_discrimination]. #lore Durch organisierte Proteste und zivilen Ungehorsam erzwingt die Bewegung eine landesweite Debatte über Gleichheit und Gerechtigkeit – mit Folgen, die weltweit beobachtet werden... #!"
+ },
+ "notification_headlines_tech_civil_rights_movement_name": {
+  "en": "#b MARCHES FOR CIVIL RIGHTS CHALLENGE STATUS QUO #!",
+  "de": "#b MÄRSCHE FÜR BÜRGERRECHTE STELLEN DEN STATUS QUO INFRAGE #!"
+ },
+ "notification_headlines_tech_clean_energy_technologies_desc": {
+  "en": "[SCOPE.sCountry('headlines_clean_energy_technologies_researcher').GetName] is investing heavily in clean energy technologies. #lore With advancements in solar panels and wind turbines, generating electricity without burning fossil fuels is becoming more viable, a key step in addressing environmental concerns... #!",
+  "de": "[SCOPE.sCountry('headlines_clean_energy_technologies_researcher').GetAltName('NOM')|U] investiert massiv in saubere Energietechnologien. #lore Mit Fortschritten bei Solarmodulen und Windturbinen wird die Stromerzeugung ohne fossile Brennstoffe immer praktikabler – ein wichtiger Schritt zur Bewältigung der Umweltprobleme... #!"
+ },
+ "notification_headlines_tech_clean_energy_technologies_name": {
+  "en": "#b POWER FROM THE SUN AND WIND GROWS #!",
+  "de": "#b ENERGIE AUS SONNE UND WIND AUF DEM VORMARSCH #!"
+ },
+ "notification_headlines_tech_cloud_computing_desc": {
+  "en": "The rise of cloud computing is transforming the tech industry in [SCOPE.sCountry('headlines_cloud_computing_researcher').GetName]. #lore The delivery of computing services over the internet allows for massive, flexible data storage and processing, providing a powerful new tool for businesses and individuals... #!",
+  "de": "Der Aufstieg des Cloud-Computing verändert die Technologiebranche in [SCOPE.sCountry('headlines_cloud_computing_researcher').GetAltName('DAT')]. #lore Die Bereitstellung von Rechenleistung über das Internet ermöglicht massive, flexible Datenspeicherung und -verarbeitung und bietet Unternehmen wie Privatpersonen ein mächtiges neues Werkzeug... #!"
+ },
+ "notification_headlines_tech_cloud_computing_name": {
+  "en": "#b DATA 'IN THE CLOUD' TRANSFORMS TECH #!",
+  "de": "#b DATEN „IN DER CLOUD” VERÄNDERN DIE TECHNIKWELT #!"
+ },
+ "notification_headlines_tech_combined_arms_desc": {
+  "en": "Military theorists in [SCOPE.sCountry('headlines_combined_arms_researcher').GetName] have perfected the doctrine of combined arms. #lore By tightly coordinating infantry, armor, and air power, armed forces can achieve a battlefield effectiveness far greater than the sum of their parts, setting a new standard for military operations... #!",
+  "de": "Militärtheoretiker in [SCOPE.sCountry('headlines_combined_arms_researcher').GetAltName('DAT')] haben die Doktrin der verbundenen Waffen zur Perfektion gebracht. #lore Durch die enge Abstimmung von Infanterie, Panzertruppen und Luftstreitkräften erzielen Streitkräfte eine Gefechtswirkung, die weit über die Summe ihrer Teile hinausgeht – ein neuer Maßstab für militärische Operationen... #!"
+ },
+ "notification_headlines_tech_combined_arms_name": {
+  "en": "#b NEW DOCTRINE SYNCHRONIZES MILITARY FORCES #!",
+  "de": "#b NEUE DOKTRIN SYNCHRONISIERT DIE STREITKRÄFTE #!"
+ },
+ "notification_headlines_tech_commercial_aviation_desc": {
+  "en": "The widespread use of airplanes for passenger travel, known as commercial aviation, is making the world a smaller place. #lore Thanks to innovators in [SCOPE.sCountry('headlines_commercial_aviation_researcher').GetName], crossing oceans in hours instead of weeks is now a reality for those who can afford it... #!",
+  "de": "Der weitverbreitete Einsatz von Flugzeugen für den Passagierverkehr, bekannt als kommerzielle Luftfahrt, lässt die Welt kleiner werden. #lore Dank findiger Köpfe in [SCOPE.sCountry('headlines_commercial_aviation_researcher').GetAltName('DAT')] ist die Überquerung von Ozeanen in Stunden statt Wochen nun Realität – für alle, die es sich leisten können... #!"
+ },
+ "notification_headlines_tech_commercial_aviation_name": {
+  "en": "#b AIR TRAVEL SHRINKS THE GLOBE #!",
+  "de": "#b LUFTVERKEHR LÄSST DIE WELT SCHRUMPFEN #!"
+ },
+ "notification_headlines_tech_compact_fusion_reactors_desc": {
+  "en": "Physicists in [SCOPE.sCountry('headlines_compact_fusion_reactors_researcher').GetName] have blueprinted new compact fusion reactors. #lore These smaller, more efficient designs could be a game-changer for providing clean, cheap energy, though making them a practical reality remains a significant challenge... #!",
+  "de": "Physiker in [SCOPE.sCountry('headlines_compact_fusion_reactors_researcher').GetAltName('DAT')] haben Baupläne für neue kompakte Fusionsreaktoren entworfen. #lore Diese kleineren, effizienteren Entwürfe könnten bei der Bereitstellung sauberer, günstiger Energie alles verändern – auch wenn ihre praktische Umsetzung eine erhebliche Herausforderung bleibt... #!"
+ },
+ "notification_headlines_tech_compact_fusion_reactors_name": {
+  "en": "#b FUSION POWER IN A SMALLER PACKAGE #!",
+  "de": "#b FUSIONSENERGIE IM KLEINFORMAT #!"
+ },
+ "notification_headlines_tech_computer_aided_design_desc": {
+  "en": "[SCOPE.sCountry('headlines_computer_aided_design_researcher').GetAdjective] engineers are adopting computer-aided design. #lore The use of computers to create complex and accurate designs is transforming manufacturing and engineering, allowing for faster development and more intricate products... #!",
+  "de": "[SCOPE.sCountry('headlines_computer_aided_design_researcher').GetAdjective|U]e Ingenieure setzen auf computerunterstütztes Design. #lore Der Einsatz von Computern zur Erstellung komplexer und präziser Entwürfe verändert Fertigung und Ingenieurwesen und ermöglicht schnellere Entwicklung und ausgefeiltere Produkte... #!"
+ },
+ "notification_headlines_tech_computer_aided_design_name": {
+  "en": "#b DIGITAL BLUEPRINTS REVOLUTIONIZE ENGINEERING #!",
+  "de": "#b DIGITALE BAUPLÄNE REVOLUTIONIEREN DAS INGENIEURWESEN #!"
+ },
+ "notification_headlines_tech_computer_networks_desc": {
+  "en": "Technicians in [SCOPE.sCountry('headlines_computer_networks_researcher').GetName] are building the first computer networks. #lore The ability to connect computers to share data and resources is a foundational development, laying the groundwork for what could become a global web of information... #!",
+  "de": "Techniker in [SCOPE.sCountry('headlines_computer_networks_researcher').GetAltName('DAT')] bauen die ersten Computernetzwerke auf. #lore Die Fähigkeit, Computer zum Austausch von Daten und Ressourcen zu verbinden, ist eine grundlegende Entwicklung und legt den Grundstein für das, was einmal ein globales Informationsnetz werden könnte... #!"
+ },
+ "notification_headlines_tech_computer_networks_name": {
+  "en": "#b COMPUTERS BEGIN TO 'TALK' TO ONE ANOTHER #!",
+  "de": "#b COMPUTER BEGINNEN, MITEINANDER ZU „SPRECHEN” #!"
+ },
+ "notification_headlines_tech_computing_machines_desc": {
+  "en": "Early computing machines developed in [SCOPE.sCountry('headlines_computing_machines_researcher').GetName] are changing information processing. #lore These massive devices can automate complex calculations at speeds no human could match, leading to major advancements in science and engineering... #!",
+  "de": "Frühe Rechenmaschinen, entwickelt in [SCOPE.sCountry('headlines_computing_machines_researcher').GetAltName('DAT')], verändern die Informationsverarbeitung. #lore Diese gewaltigen Geräte können komplexe Berechnungen mit einer Geschwindigkeit automatisieren, die kein Mensch erreichen könnte, und führen zu bedeutenden Fortschritten in Wissenschaft und Technik... #!"
+ },
+ "notification_headlines_tech_computing_machines_name": {
+  "en": "#b 'ELECTRONIC BRAINS' TACKLE COMPLEX CALCULATIONS #!",
+  "de": "#b „ELEKTRONISCHE GEHIRNE” BEWÄLTIGEN KOMPLEXE BERECHNUNGEN #!"
+ },
+ "notification_headlines_tech_consumer_credit_desc": {
+  "en": "The rise of consumer credit in [SCOPE.sCountry('headlines_consumer_credit_researcher').GetName] has transformed the retail economy. #lore A system that allows people to purchase goods on credit is fueling unprecedented consumer spending, though some economists warn of the potential risks of rising debt... #!",
+  "de": "Der Aufstieg des Verbraucherkredits in [SCOPE.sCountry('headlines_consumer_credit_researcher').GetAltName('DAT')] hat den Einzelhandel verändert. #lore Ein System, das den Kauf von Waren auf Kredit erlaubt, treibt die Konsumausgaben auf ein beispielloses Niveau – auch wenn manche Ökonomen vor den Risiken steigender Verschuldung warnen... #!"
+ },
+ "notification_headlines_tech_consumer_credit_name": {
+  "en": "#b 'BUY NOW, PAY LATER' FUELS ECONOMIC GROWTH #!",
+  "de": "#b „JETZT KAUFEN, SPÄTER ZAHLEN” BEFLÜGELT DAS WIRTSCHAFTSWACHSTUM #!"
+ },
+ "notification_headlines_tech_containerization_desc": {
+  "en": "The process of containerization, pioneered in [SCOPE.sCountry('headlines_containerization_researcher').GetName], has revolutionized global trade. #lore By placing goods in standardized containers, ships and ports can operate with incredible efficiency, dramatically lowering the cost of moving goods around the world... #!",
+  "de": "Die Containerisierung, entwickelt in [SCOPE.sCountry('headlines_containerization_researcher').GetAltName('DAT')], hat den Welthandel revolutioniert. #lore Durch die Verpackung von Waren in genormten Containern können Schiffe und Häfen mit unglaublicher Effizienz arbeiten, was die Kosten für den weltweiten Warentransport drastisch senkt... #!"
+ },
+ "notification_headlines_tech_containerization_name": {
+  "en": "#b THE SIMPLE BOX THAT CHANGED GLOBAL TRADE #!",
+  "de": "#b DIE EINFACHE KISTE, DIE DEN WELTHANDEL VERÄNDERTE #!"
+ },
+ "notification_headlines_tech_contraceptive_pill_desc": {
+  "en": "The development of the contraceptive pill in [SCOPE.sCountry('headlines_contraceptive_pill_researcher').GetName] is having a massive social impact. #lore By giving women reliable control over their fertility, this small pill is playing a central role in family planning and the ongoing women's liberation movement... #!",
+  "de": "Die Entwicklung der Antibabypille in [SCOPE.sCountry('headlines_contraceptive_pill_researcher').GetAltName('DAT')] hat gewaltige gesellschaftliche Auswirkungen. #lore Indem sie Frauen verlässliche Kontrolle über ihre Fruchtbarkeit gibt, spielt diese kleine Pille eine zentrale Rolle in der Familienplanung und der laufenden Frauenbewegung... #!"
+ },
+ "notification_headlines_tech_contraceptive_pill_name": {
+  "en": "#b 'THE PILL' SPARKS SOCIAL REVOLUTION #!",
+  "de": "#b „DIE PILLE” LÖST GESELLSCHAFTLICHE REVOLUTION AUS #!"
+ },
+ "notification_headlines_tech_cryptography_desc": {
+  "en": "Masters of cryptography in [SCOPE.sCountry('headlines_cryptography_researcher').GetName] are working in secret to gain an edge in the war. #lore The art of writing and solving codes is a crucial tool for securing communications while breaking into the enemy's, providing a vital intelligence advantage... #!",
+  "de": "Meister der Kryptografie in [SCOPE.sCountry('headlines_cryptography_researcher').GetAltName('DAT')] arbeiten im Verborgenen, um sich im Krieg einen Vorteil zu verschaffen. #lore Die Kunst des Verschlüsselns und Entschlüsselns ist ein entscheidendes Mittel, um die eigene Kommunikation zu sichern und zugleich die des Feindes zu knacken – ein wichtiger nachrichtendienstlicher Vorteil... #!"
+ },
+ "notification_headlines_tech_cryptography_name": {
+  "en": "#b THE SECRET WAR OF CODES AND CIPHERS #!",
+  "de": "#b DER GEHEIME KRIEG DER CODES UND CHIFFREN #!"
+ },
+ "notification_headlines_tech_cyber_warfare_desc": {
+  "en": "As the world becomes more digital, so does conflict. [SCOPE.sCountry('headlines_cyber_warfare_researcher').GetName] is developing tools for cyber warfare, a new and invisible battlefield where nations attack and defend in cyberspace... #!",
+  "de": "Während die Welt digitaler wird, tut es auch der Konflikt. [SCOPE.sCountry('headlines_cyber_warfare_researcher').GetAltName('NOM')|U] entwickelt Werkzeuge für die Cyberkriegsführung – ein neues, unsichtbares Schlachtfeld, auf dem Nationen im Cyberraum angreifen und sich verteidigen... #!"
+ },
+ "notification_headlines_tech_cyber_warfare_name": {
+  "en": "#b CONFLICT MOVES TO THE DIGITAL REALM #!",
+  "de": "#b DER KONFLIKT VERLAGERT SICH INS DIGITALE #!"
+ },
+ "notification_headlines_tech_cybersecurity_desc": {
+  "en": "With increasing reliance on digital technologies, experts in [SCOPE.sCountry('headlines_cybersecurity_researcher').GetName] are developing new methods of cybersecurity. #lore This field is dedicated to keeping critical information and systems safe from a new generation of digital threats... #!",
+  "de": "Mit wachsender Abhängigkeit von digitalen Technologien entwickeln Experten in [SCOPE.sCountry('headlines_cybersecurity_researcher').GetAltName('DAT')] neue Methoden der Cybersicherheit. #lore Dieses Fachgebiet widmet sich dem Schutz kritischer Informationen und Systeme vor einer neuen Generation digitaler Bedrohungen... #!"
+ },
+ "notification_headlines_tech_cybersecurity_name": {
+  "en": "#b DIGITAL FORTRESSES GUARD AGAINST NEW THREATS #!",
+  "de": "#b DIGITALE FESTUNGEN SCHÜTZEN VOR NEUEN BEDROHUNGEN #!"
+ },
+ "notification_headlines_tech_decline_of_organized_religion_desc": {
+  "en": "Sociologists in [SCOPE.sCountry('headlines_decline_of_organized_religion_researcher').GetName] have noted a steady decline of organized religion. #lore A marked trend towards secularism is changing social norms and values, as fewer people affiliate with traditional religious institutions... #!",
+  "de": "Soziologen in [SCOPE.sCountry('headlines_decline_of_organized_religion_researcher').GetAltName('DAT')] haben einen stetigen Rückgang der organisierten Religion festgestellt. #lore Ein deutlicher Trend zur Säkularisierung verändert soziale Normen und Werte, da sich immer weniger Menschen traditionellen religiösen Institutionen zugehörig fühlen... #!"
+ },
+ "notification_headlines_tech_decline_of_organized_religion_name": {
+  "en": "#b RISE OF SECULARISM NOTED IN NEW SURVEYS #!",
+  "de": "#b AUFSTIEG DES SÄKULARISMUS IN NEUEN UMFRAGEN BELEGT #!"
+ },
+ "notification_headlines_tech_decolonization_desc": {
+  "en": "The process of decolonization is reshaping the world map. #lore The dismantling of old colonial empires, championed by thinkers in [SCOPE.sCountry('headlines_decolonization_researcher').GetName], has led to the birth of new independent states in a messy but necessary process of global change... #!",
+  "de": "Der Prozess der Dekolonisierung verändert die Weltkarte. #lore Die Auflösung alter Kolonialreiche, vorangetrieben von Denkern in [SCOPE.sCountry('headlines_decolonization_researcher').GetAltName('DAT')], hat zur Entstehung neuer unabhängiger Staaten geführt – ein chaotischer, aber notwendiger Prozess des globalen Wandels... #!"
+ },
+ "notification_headlines_tech_decolonization_name": {
+  "en": "#b THE AGE OF EMPIRE ENDS, NEW NATIONS EMERGE #!",
+  "de": "#b DAS ZEITALTER DER IMPERIEN ENDET, NEUE NATIONEN ENTSTEHEN #!"
+ },
+ "notification_headlines_tech_digital_education_desc": {
+  "en": "Educators in [SCOPE.sCountry('headlines_digital_education_researcher').GetName] are embracing digital education. #lore With online learning and multimedia resources, education is becoming more accessible and collaborative for students with a reliable internet connection... #!",
+  "de": "Pädagogen in [SCOPE.sCountry('headlines_digital_education_researcher').GetAltName('DAT')] setzen verstärkt auf digitale Bildung. #lore Mit Online-Lernangeboten und multimedialen Ressourcen wird Bildung für Schüler mit zuverlässigem Internetzugang zugänglicher und kooperativer... #!"
+ },
+ "notification_headlines_tech_digital_education_name": {
+  "en": "#b THE CLASSROOM OF THE FUTURE IS ONLINE #!",
+  "de": "#b DAS KLASSENZIMMER DER ZUKUNFT IST ONLINE #!"
+ },
+ "notification_headlines_tech_digital_entertainment_desc": {
+  "en": "From video games to streaming services, digital entertainment is reshaping how people spend their free time. #lore In [SCOPE.sCountry('headlines_digital_entertainment_researcher').GetName] and beyond, there are more ways than ever to be entertained or distracted from home... #!",
+  "de": "Von Videospielen bis zu Streamingdiensten verändert digitale Unterhaltung, wie Menschen ihre Freizeit verbringen. #lore In [SCOPE.sCountry('headlines_digital_entertainment_researcher').GetAltName('DAT')] und darüber hinaus gibt es mehr Möglichkeiten denn je, sich von zu Hause aus zu unterhalten oder abzulenken... #!"
+ },
+ "notification_headlines_tech_digital_entertainment_name": {
+  "en": "#b ON-DEMAND ENTERTAINMENT RESHAPES LEISURE #!",
+  "de": "#b UNTERHALTUNG AUF ABRUF VERÄNDERT DIE FREIZEIT #!"
+ },
+ "notification_headlines_tech_digital_telecommunications_desc": {
+  "en": "The switch from analog to digital telecommunications is making communication systems more efficient and versatile. #lore Companies in [SCOPE.sCountry('headlines_digital_telecommunications_researcher').GetName] are leading the charge, allowing for clearer calls and faster data transmission... #!",
+  "de": "Der Wechsel von analoger zu digitaler Telekommunikation macht Kommunikationssysteme effizienter und vielseitiger. #lore Unternehmen in [SCOPE.sCountry('headlines_digital_telecommunications_researcher').GetAltName('DAT')] gehen dabei voran und ermöglichen klarere Gespräche und schnellere Datenübertragung... #!"
+ },
+ "notification_headlines_tech_digital_telecommunications_name": {
+  "en": "#b CLEARER CALLS, FASTER DATA WITH DIGITAL #!",
+  "de": "#b KLARERE GESPRÄCHE, SCHNELLERE DATEN DURCH DIGITALTECHNIK #!"
+ },
+ "notification_headlines_tech_directed_energy_defenses_desc": {
+  "en": "The military of [SCOPE.sCountry('headlines_directed_energy_defenses_researcher').GetName] is developing directed-energy defenses. #lore By using high-energy lasers to shoot down incoming missiles and drones, this futuristic technology promises a new layer of defense against aerial threats... #!",
+  "de": "Das Militär [SCOPE.sCountry('headlines_directed_energy_defenses_researcher').GetAltName('GEN')] entwickelt Abwehrsysteme mit gerichteter Energie. #lore Durch den Einsatz von Hochenergielasern zum Abschuss anfliegender Raketen und Drohnen verspricht diese futuristische Technologie eine neue Verteidigungsebene gegen Bedrohungen aus der Luft... #!"
+ },
+ "notification_headlines_tech_directed_energy_defenses_name": {
+  "en": "#b LASERS TO FORM DEFENSIVE SHIELD #!",
+  "de": "#b LASER SOLLEN EINEN VERTEIDIGUNGSSCHILD BILDEN #!"
+ },
+ "notification_headlines_tech_directed_energy_weapons_desc": {
+  "en": "[SCOPE.sCountry('headlines_directed_energy_weapons_researcher').GetName] has tested prototype directed-energy weapons. #lore High-energy lasers and microwaves can now be used as weapons, offering a new level of precision for targeting and neutralizing threats at the speed of light... #!",
+  "de": "[SCOPE.sCountry('headlines_directed_energy_weapons_researcher').GetAltName('NOM')|U] hat Prototypen von Gerichtete-Energie-Waffen getestet. #lore Hochenergielaser und Mikrowellen lassen sich nun als Waffen einsetzen und bieten eine neue Präzision bei der Zielerfassung und Neutralisierung von Bedrohungen mit Lichtgeschwindigkeit... #!"
+ },
+ "notification_headlines_tech_directed_energy_weapons_name": {
+  "en": "#b 'RAY GUNS' NO LONGER SCIENCE FICTION #!",
+  "de": "#b „STRAHLENWAFFEN” SIND KEINE SCIENCE-FICTION MEHR #!"
+ },
+ "notification_headlines_tech_e-commerce_desc": {
+  "en": "Thanks to the internet, buying and selling goods from anywhere is now a reality. #lore This system of e-commerce, pioneered by companies in [SCOPE.sCountry('headlines_e-commerce_researcher').GetName], is a convenient new way to shop and a great way for businesses to reach new customers... #!",
+  "de": "Dank des Internets ist der Kauf und Verkauf von Waren von überall aus nun Realität. #lore Dieses System des E-Commerce, vorangetrieben von Unternehmen in [SCOPE.sCountry('headlines_e-commerce_researcher').GetAltName('DAT')], ist eine bequeme neue Art einzukaufen und eine gute Möglichkeit für Unternehmen, neue Kunden zu erreichen... #!"
+ },
+ "notification_headlines_tech_e-commerce_name": {
+  "en": "#b SHOPPING FROM HOME WITH 'E-COMMERCE' #!",
+  "de": "#b EINKAUFEN VON ZU HAUSE DURCH „E-COMMERCE” #!"
+ },
+ "notification_headlines_tech_early_nanotechnology_desc": {
+  "en": "Scientists in [SCOPE.sCountry('headlines_early_nanotechnology_researcher').GetName] are making breakthroughs in early nanotechnology. #lore The ability to manipulate materials at the atomic level could lead to incredible breakthroughs in medicine, materials, and computing... #!",
+  "de": "Wissenschaftler in [SCOPE.sCountry('headlines_early_nanotechnology_researcher').GetAltName('DAT')] erzielen Durchbrüche in der frühen Nanotechnologie. #lore Die Fähigkeit, Materialien auf atomarer Ebene zu manipulieren, könnte zu unglaublichen Durchbrüchen in Medizin, Werkstoffkunde und Datenverarbeitung führen... #!"
+ },
+ "notification_headlines_tech_early_nanotechnology_name": {
+  "en": "#b SCIENCE OF THE SMALL PROMISES BIG FUTURE #!",
+  "de": "#b DIE WISSENSCHAFT DES KLEINEN VERSPRICHT GROSSE ZUKUNFT #!"
+ },
+ "notification_headlines_tech_electronic_warfare_desc": {
+  "en": "The military of [SCOPE.sCountry('headlines_electronic_warfare_researcher').GetName] has developed capabilities for electronic warfare. #lore By disrupting enemy communications and radar with invisible radio waves, a significant advantage can be gained in battle. It is a new and subtle way to fight... #!",
+  "de": "Das Militär [SCOPE.sCountry('headlines_electronic_warfare_researcher').GetAltName('GEN')] hat Fähigkeiten zur elektronischen Kriegsführung entwickelt. #lore Durch die Störung feindlicher Kommunikation und Radaranlagen mit unsichtbaren Funkwellen lässt sich im Gefecht ein bedeutender Vorteil erringen. Es ist eine neue, unauffällige Art der Kriegsführung... #!"
+ },
+ "notification_headlines_tech_electronic_warfare_name": {
+  "en": "#b THE INVISIBLE WAR OF THE AIRWAVES #!",
+  "de": "#b DER UNSICHTBARE KRIEG DER FUNKWELLEN #!"
+ },
+ "notification_headlines_tech_environmental_movement_desc": {
+  "en": "An environmental movement dedicated to protecting the planet is gaining support in [SCOPE.sCountry('headlines_environmental_movement_researcher').GetName]. #lore It raises awareness about ecological issues like [concept_pollution_system] and pushes for more sustainable ways of living for future generations... #!",
+  "de": "Eine Umweltbewegung, die sich dem Schutz des Planeten verschrieben hat, gewinnt in [SCOPE.sCountry('headlines_environmental_movement_researcher').GetAltName('DAT')] an Zulauf. #lore Sie schärft das Bewusstsein für ökologische Fragen wie [concept_pollution_system] und setzt sich für eine nachhaltigere Lebensweise künftiger Generationen ein... #!"
+ },
+ "notification_headlines_tech_environmental_movement_name": {
+  "en": "#b A GREEN WAVE: ACTIVISTS DEMAND PLANET'S PROTECTION #!",
+  "de": "#b EINE GRÜNE WELLE: AKTIVISTEN FORDERN DEN SCHUTZ DES PLANETEN #!"
+ },
+ "notification_headlines_tech_fiber_optics_desc": {
+  "en": "A breakthrough in fiber optics by researchers in [SCOPE.sCountry('headlines_fiber_optics_researcher').GetName] promises to revolutionize communications. #lore By sending data as pulses of light through thin glass strands, faster and more efficient communication networks can be built, forming the backbone of a modern digital world... #!",
+  "de": "Ein Durchbruch in der Glasfasertechnik durch Forscher in [SCOPE.sCountry('headlines_fiber_optics_researcher').GetAltName('DAT')] verspricht, die Kommunikation zu revolutionieren. #lore Durch das Senden von Daten als Lichtimpulse durch dünne Glasfasern lassen sich schnellere und effizientere Kommunikationsnetze aufbauen, die das Rückgrat einer modernen digitalen Welt bilden... #!"
+ },
+ "notification_headlines_tech_fiber_optics_name": {
+  "en": "#b MESSAGES SENT AT THE SPEED OF LIGHT #!",
+  "de": "#b NACHRICHTEN MIT LICHTGESCHWINDIGKEIT #!"
+ },
+ "notification_headlines_tech_fluorescent_lamps_desc": {
+  "en": "Inventors in [SCOPE.sCountry('headlines_fluorescent_lamps_researcher').GetName] have perfected fluorescent lamps. #lore These new lamps are much more efficient than the old arc lamps, making electrical lighting more widespread and affordable for cities and homes... #!",
+  "de": "Erfinder in [SCOPE.sCountry('headlines_fluorescent_lamps_researcher').GetAltName('DAT')] haben die Leuchtstofflampe zur Serienreife gebracht. #lore Diese neuen Lampen sind weitaus effizienter als die alten Bogenlampen und machen elektrische Beleuchtung für Städte und Haushalte weiter verbreitet und erschwinglich... #!"
+ },
+ "notification_headlines_tech_fluorescent_lamps_name": {
+  "en": "#b EFFICIENT NEW LAMPS BRIGHTEN CITIES #!",
+  "de": "#b EFFIZIENTE NEUE LAMPEN ERHELLEN DIE STÄDTE #!"
+ },
+ "notification_headlines_tech_fusion_batteries_desc": {
+  "en": "Imagine a battery that never needs to be recharged. [SCOPE.sCountry('headlines_fusion_batteries_researcher').GetName] is developing fusion batteries, which use compact fusion reactors to power devices and vehicles for years, revolutionizing energy as we know it... #!",
+  "de": "Man stelle sich eine Batterie vor, die nie aufgeladen werden muss. [SCOPE.sCountry('headlines_fusion_batteries_researcher').GetAltName('NOM')|U] entwickelt Fusionsbatterien, die mit kompakten Fusionsreaktoren Geräte und Fahrzeuge jahrelang mit Energie versorgen – eine Revolution unseres Energieverständnisses... #!"
+ },
+ "notification_headlines_tech_fusion_batteries_name": {
+  "en": "#b THE BATTERY THAT NEVER DIES? #!",
+  "de": "#b DIE BATTERIE, DIE NIE STIRBT? #!"
+ },
+ "notification_headlines_tech_fusion_power_desc": {
+  "en": "Scientists in [SCOPE.sCountry('headlines_fusion_power_researcher').GetName] are on the verge of achieving sustained fusion power. #lore If the power of nuclear fusion can be harnessed, it could provide a nearly limitless source of clean energy. It remains the holy grail of energy production... #!",
+  "de": "Wissenschaftler in [SCOPE.sCountry('headlines_fusion_power_researcher').GetAltName('DAT')] stehen kurz davor, dauerhafte Fusionsenergie zu erreichen. #lore Gelänge es, die Kraft der Kernfusion zu nutzen, könnte sie eine nahezu unbegrenzte Quelle sauberer Energie liefern. Sie bleibt der heilige Gral der Energieerzeugung... #!"
+ },
+ "notification_headlines_tech_fusion_power_name": {
+  "en": "#b HARNESSING THE POWER OF A STAR #!",
+  "de": "#b DIE KRAFT EINES STERNS NUTZBAR GEMACHT #!"
+ },
+ "notification_headlines_tech_gene_splicing_desc": {
+  "en": "Biologists in [SCOPE.sCountry('headlines_gene_splicing_researcher').GetName] have pioneered the technique of gene splicing. #lore By cutting and pasting DNA, the very building blocks of life can be manipulated. This has opened up new possibilities for medicine and agriculture, as well as a host of ethical dilemmas... #!",
+  "de": "Biologen in [SCOPE.sCountry('headlines_gene_splicing_researcher').GetAltName('DAT')] haben die Technik der Gen-Rekombination entwickelt. #lore Durch das Schneiden und Zusammenfügen von DNA lassen sich die Bausteine des Lebens selbst manipulieren. Das eröffnet neue Möglichkeiten für Medizin und Landwirtschaft – und eine Vielzahl ethischer Dilemmata... #!"
+ },
+ "notification_headlines_tech_gene_splicing_name": {
+  "en": "#b SCIENTISTS LEARN TO CUT AND PASTE THE CODE OF LIFE #!",
+  "de": "#b WISSENSCHAFTLER LERNEN, DEN CODE DES LEBENS ZU SCHNEIDEN UND NEU ZUSAMMENZUFÜGEN #!"
+ },
+ "notification_headlines_tech_generative_ai_desc": {
+  "en": "A new form of AI can create original content, from images to music to text. #lore This generative AI, developed in labs in [SCOPE.sCountry('headlines_generative_ai_researcher').GetName], is a powerful new tool for creativity, and it's getting better all the time... #!",
+  "de": "Eine neue Form der KI kann eigenständige Inhalte erschaffen – von Bildern über Musik bis hin zu Texten. #lore Diese generative KI, entwickelt in Laboren in [SCOPE.sCountry('headlines_generative_ai_researcher').GetAltName('DAT')], ist ein mächtiges neues Werkzeug für Kreativität und wird stetig besser... #!"
+ },
+ "notification_headlines_tech_generative_ai_name": {
+  "en": "#b AI LEARNS TO CREATE ART, MUSIC, AND MORE #!",
+  "de": "#b KI LERNT, KUNST, MUSIK UND MEHR ZU ERSCHAFFEN #!"
+ },
+ "notification_headlines_tech_genetic_engineering_desc": {
+  "en": "The field of genetic engineering is leading to major breakthroughs in [SCOPE.sCountry('headlines_genetic_engineering_researcher').GetName]. #lore By manipulating the genes of organisms, new medical treatments can be developed and crops improved. It is a powerful technology, but one that must be wielded with care... #!",
+  "de": "Das Feld der Gentechnik führt in [SCOPE.sCountry('headlines_genetic_engineering_researcher').GetAltName('DAT')] zu bedeutenden Durchbrüchen. #lore Durch die Veränderung der Gene von Organismen lassen sich neue medizinische Behandlungen entwickeln und Nutzpflanzen verbessern. Es ist eine mächtige Technologie, die aber mit Vorsicht eingesetzt werden muss... #!"
+ },
+ "notification_headlines_tech_genetic_engineering_name": {
+  "en": "#b REWRITING THE BOOK OF LIFE #!",
+  "de": "#b DAS BUCH DES LEBENS WIRD NEU GESCHRIEBEN #!"
+ },
+ "notification_headlines_tech_globalization_desc": {
+  "en": "The world is becoming more interconnected through a process of globalization. #lore This acceleration of trade, communication, and cultural exchange, championed by leaders in [SCOPE.sCountry('headlines_globalization_researcher').GetName], is bringing the world closer together, for better or for worse... #!",
+  "de": "Die Welt wird durch einen Prozess der Globalisierung zunehmend vernetzt. #lore Diese Beschleunigung von Handel, Kommunikation und kulturellem Austausch, vorangetrieben von führenden Köpfen in [SCOPE.sCountry('headlines_globalization_researcher').GetAltName('DAT')], rückt die Welt näher zusammen – im Guten wie im Schlechten... #!"
+ },
+ "notification_headlines_tech_globalization_name": {
+  "en": "#b A TRULY INTERCONNECTED WORLD #!",
+  "de": "#b EINE WAHRHAFT VERNETZTE WELT #!"
+ },
+ "notification_headlines_tech_green_revolution_desc": {
+  "en": "A series of technological innovations in agriculture, spearheaded by agronomists in [SCOPE.sCountry('headlines_green_revolution_researcher').GetName], have led to a huge increase in food production. #lore This Green Revolution has helped to feed a growing world, but not without its own set of problems... #!",
+  "de": "Eine Reihe technologischer Neuerungen in der Landwirtschaft, angeführt von Agrarwissenschaftlern in [SCOPE.sCountry('headlines_green_revolution_researcher').GetAltName('DAT')], hat zu einer gewaltigen Steigerung der Nahrungsmittelproduktion geführt. #lore Diese Grüne Revolution hat geholfen, eine wachsende Welt zu ernähren – doch nicht ohne eigene Probleme... #!"
+ },
+ "notification_headlines_tech_green_revolution_name": {
+  "en": "#b NEW FARMING TECHNIQUES TO FEED THE WORLD #!",
+  "de": "#b NEUE ANBAUMETHODEN SOLLEN DIE WELT ERNÄHREN #!"
+ },
+ "notification_headlines_tech_guided_missiles_desc": {
+  "en": "Missiles can now find their own way to a target, thanks to research in [SCOPE.sCountry('headlines_guided_missiles_researcher').GetName]. #lore These guided missiles make weapons much more accurate and effective, which is bad news for any potential adversary... #!",
+  "de": "Raketen können dank Forschung in [SCOPE.sCountry('headlines_guided_missiles_researcher').GetAltName('DAT')] nun selbstständig ihr Ziel finden. #lore Diese Lenkraketen machen Waffen weitaus präziser und wirksamer – schlechte Nachrichten für jeden möglichen Gegner... #!"
+ },
+ "notification_headlines_tech_guided_missiles_name": {
+  "en": "#b 'SMART' MISSILES CAN NOW FIND THEIR OWN TARGETS #!",
+  "de": "#b „INTELLIGENTE” RAKETEN FINDEN NUN IHR ZIEL SELBST #!"
+ },
+ "notification_headlines_tech_hydraulic_fracturing_desc": {
+  "en": "A controversial but effective way to extract natural gas and oil from underground, hydraulic fracturing is booming in [SCOPE.sCountry('headlines_hydraulic_fracturing_researcher').GetName]. #lore It's a boon for the energy industry and national independence, but not so much for the environment... #!",
+  "de": "Eine umstrittene, aber wirksame Methode zur Förderung von Erdgas und Erdöl aus dem Untergrund: Das hydraulische Fracking boomt in [SCOPE.sCountry('headlines_hydraulic_fracturing_researcher').GetAltName('DAT')]. #lore Es ist ein Segen für die Energiewirtschaft und die nationale Unabhängigkeit – für die Umwelt weniger... #!"
+ },
+ "notification_headlines_tech_hydraulic_fracturing_name": {
+  "en": "#b 'FRACKING' UNLOCKS VAST ENERGY RESERVES #!",
+  "de": "#b „FRACKING” ERSCHLIESST GEWALTIGE ENERGIERESERVEN #!"
+ },
+ "notification_headlines_tech_hypersonic_weapons_desc": {
+  "en": "[SCOPE.sCountry('headlines_hypersonic_weapons_researcher').GetName] has tested new hypersonic weapons. #lore These weapons can travel at more than five times the speed of sound. They're incredibly fast and precise, and a real headache for existing defense systems... #!",
+  "de": "[SCOPE.sCountry('headlines_hypersonic_weapons_researcher').GetAltName('NOM')|U] hat neue Hyperschallwaffen getestet. #lore Diese Waffen erreichen mehr als das Fünffache der Schallgeschwindigkeit. Sie sind unglaublich schnell und präzise – und ein echtes Ärgernis für bestehende Abwehrsysteme... #!"
+ },
+ "notification_headlines_tech_hypersonic_weapons_name": {
+  "en": "#b NEW WEAPONS CAN TRAVEL FASTER THAN SOUND #!",
+  "de": "#b NEUE WAFFEN SCHNELLER ALS DER SCHALL #!"
+ },
+ "notification_headlines_tech_inertial_navigation_systems_desc": {
+  "en": "Using gyroscopes and accelerometers, inertial navigation systems developed in [SCOPE.sCountry('headlines_inertial_navigation_systems_researcher').GetName] can guide vehicles with incredible accuracy. #lore They're especially useful for ballistic missiles, submarines, and strategic bombers, helping them to stay on course without external signals... #!",
+  "de": "Mithilfe von Kreiseln und Beschleunigungsmessern können Trägheitsnavigationssysteme, entwickelt in [SCOPE.sCountry('headlines_inertial_navigation_systems_researcher').GetAltName('DAT')], Fahrzeuge mit unglaublicher Präzision führen. #lore Sie sind besonders nützlich für ballistische Raketen, U-Boote und strategische Bomber, denen sie helfen, ohne externe Signale auf Kurs zu bleiben... #!"
+ },
+ "notification_headlines_tech_inertial_navigation_systems_name": {
+  "en": "#b NAVIGATE ANYWHERE WITHOUT EXTERNAL SIGNALS #!",
+  "de": "#b NAVIGATION OHNE EXTERNE SIGNALE, ÜBERALL #!"
+ },
+ "notification_headlines_tech_infrared_night_vision_desc": {
+  "en": "This technology, perfected in [SCOPE.sCountry('headlines_infrared_night_vision_researcher').GetName], allows users to see in the dark. #lore Infrared night vision has changed the way military and security operations are conducted, giving soldiers the ability to operate effectively at night... #!",
+  "de": "Diese Technologie, zur Serienreife gebracht in [SCOPE.sCountry('headlines_infrared_night_vision_researcher').GetAltName('DAT')], erlaubt es, im Dunkeln zu sehen. #lore Infrarot-Nachtsicht hat die Art militärischer und sicherheitspolitischer Operationen verändert und gibt Soldaten die Fähigkeit, auch nachts wirksam zu handeln... #!"
+ },
+ "notification_headlines_tech_infrared_night_vision_name": {
+  "en": "#b TECHNOLOGY TURNS NIGHT INTO DAY #!",
+  "de": "#b TECHNOLOGIE MACHT AUS DER NACHT DEN TAG #!"
+ },
+ "notification_headlines_tech_integrated_circuits_desc": {
+  "en": "By putting many electronic components onto a single chip, engineers in [SCOPE.sCountry('headlines_integrated_circuits_researcher').GetName] have made electronic devices smaller, faster, and more powerful. #lore These integrated circuits are the secret behind the modern electronics revolution... #!",
+  "de": "Indem sie viele elektronische Bauteile auf einem einzigen Chip vereinen, haben Ingenieure in [SCOPE.sCountry('headlines_integrated_circuits_researcher').GetAltName('DAT')] elektronische Geräte kleiner, schneller und leistungsfähiger gemacht. #lore Diese integrierten Schaltkreise sind das Geheimnis hinter der modernen Elektronikrevolution... #!"
+ },
+ "notification_headlines_tech_integrated_circuits_name": {
+  "en": "#b AN ENTIRE CIRCUIT ON A TINY CHIP #!",
+  "de": "#b EIN GANZER SCHALTKREIS AUF EINEM WINZIGEN CHIP #!"
+ },
+ "notification_headlines_tech_intergovernmental_organizations_desc": {
+  "en": "Following initiatives from [SCOPE.sCountry('headlines_intergovernmental_organizations_researcher').GetName], nations are forming intergovernmental organizations. #lore These formal organizations allow countries to collaborate on specific issues. They're supposed to promote cooperation and make things more efficient, though that's not always the case... #!",
+  "de": "Nach Initiativen aus [SCOPE.sCountry('headlines_intergovernmental_organizations_researcher').GetAltName('DAT')] bilden Nationen zwischenstaatliche Organisationen. #lore Diese formellen Organisationen erlauben Ländern, bei bestimmten Fragen zusammenzuarbeiten. Sie sollen die Zusammenarbeit fördern und Abläufe effizienter machen – auch wenn das nicht immer gelingt... #!"
+ },
+ "notification_headlines_tech_intergovernmental_organizations_name": {
+  "en": "#b NATIONS UNITE FOR GLOBAL COOPERATION #!",
+  "de": "#b NATIONEN VEREINEN SICH FÜR GLOBALE ZUSAMMENARBEIT #!"
+ },
+ "notification_headlines_tech_isoprene_desc": {
+  "en": "Chemists in [SCOPE.sCountry('headlines_isoprene_researcher').GetName] are mass-producing isoprene. #lore It's a key ingredient in the production of synthetic rubber. This versatile material is used in everything from tires to footwear, fueling industrial growth... #!",
+  "de": "Chemiker in [SCOPE.sCountry('headlines_isoprene_researcher').GetAltName('DAT')] produzieren Isopren in Massenproduktion. #lore Es ist ein Schlüsselbestandteil bei der Herstellung von synthetischem Kautschuk. Dieses vielseitige Material wird von Reifen bis zu Schuhen in allem verwendet und treibt das industrielle Wachstum an... #!"
+ },
+ "notification_headlines_tech_isoprene_name": {
+  "en": "#b SYNTHETIC RUBBER PRODUCTION SOARS #!",
+  "de": "#b PRODUKTION VON SYNTHETISCHEM KAUTSCHUK SCHIESST IN DIE HÖHE #!"
+ },
+ "notification_headlines_tech_jadc2_desc": {
+  "en": "The military of [SCOPE.sCountry('headlines_jadc2_researcher').GetName] is implementing JADC2. #lore This military concept aims to connect all forces across every domain-air, land, sea, space, and cyber. It's designed to improve situational awareness and decision-making, creating a more effective fighting force... #!",
+  "de": "Das Militär [SCOPE.sCountry('headlines_jadc2_researcher').GetAltName('GEN')] führt JADC2 ein. #lore Dieses militärische Konzept soll alle Streitkräfte über sämtliche Bereiche hinweg verbinden – Luft, Land, See, Weltraum und Cyberspace. Es soll Lagebewusstsein und Entscheidungsfindung verbessern und eine schlagkräftigere Streitmacht schaffen... #!"
+ },
+ "notification_headlines_tech_jadc2_name": {
+  "en": "#b ALL FORCES CONNECTED IN NEW BATTLE NETWORK #!",
+  "de": "#b ALLE STREITKRÄFTE VERBUNDEN IM NEUEN GEFECHTSNETZWERK #!"
+ },
+ "notification_headlines_tech_jet_engine_technology_desc": {
+  "en": "The jet engine, perfected by engineers in [SCOPE.sCountry('headlines_jet_engine_technology_researcher').GetName], has revolutionized aviation. #lore Jet engine technology has allowed aircraft to fly faster, farther, and higher than ever before, changing the face of both military and commercial air travel... #!",
+  "de": "Das Düsentriebwerk, zur Serienreife gebracht von Ingenieuren in [SCOPE.sCountry('headlines_jet_engine_technology_researcher').GetAltName('DAT')], hat die Luftfahrt revolutioniert. #lore Die Düsentriebwerkstechnik erlaubt es Flugzeugen, schneller, weiter und höher zu fliegen als je zuvor, und verändert damit sowohl den militärischen als auch den zivilen Luftverkehr grundlegend... #!"
+ },
+ "notification_headlines_tech_jet_engine_technology_name": {
+  "en": "#b THE JET AGE HAS ARRIVED #!",
+  "de": "#b DAS DÜSENZEITALTER IST ANGEBROCHEN #!"
+ },
+ "notification_headlines_tech_keynesian_economics_desc": {
+  "en": "A new economic theory, championed by thinkers in [SCOPE.sCountry('headlines_keynesian_economics_researcher').GetName], advocates for government intervention to manage the economy. #lore Known as Keynesian economics, it's all about using public spending to stimulate growth and reduce unemployment, a popular idea in times of crisis... #!",
+  "de": "Eine neue Wirtschaftstheorie, vertreten von Denkern in [SCOPE.sCountry('headlines_keynesian_economics_researcher').GetAltName('DAT')], befürwortet staatliche Eingriffe zur Lenkung der Wirtschaft. #lore Bekannt als Keynesianismus, dreht sich alles darum, mit Staatsausgaben Wachstum anzukurbeln und Arbeitslosigkeit zu verringern – eine beliebte Idee in Krisenzeiten... #!"
+ },
+ "notification_headlines_tech_keynesian_economics_name": {
+  "en": "#b GOVERNMENT SPENDING TO TACKLE ECONOMIC CRISIS #!",
+  "de": "#b STAATSAUSGABEN GEGEN DIE WIRTSCHAFTSKRISE #!"
+ },
+ "notification_headlines_tech_knowledge_economy_desc": {
+  "en": "In this new knowledge economy emerging in [SCOPE.sCountry('headlines_knowledge_economy_researcher').GetName], knowledge is the most valuable commodity. #lore The creation and use of information are now the main drivers of growth, which means everyone needs to be a bit smarter... #!",
+  "de": "In dieser neuen Wissensökonomie, die in [SCOPE.sCountry('headlines_knowledge_economy_researcher').GetAltName('DAT')] entsteht, ist Wissen das wertvollste Gut. #lore Die Erzeugung und Nutzung von Information sind nun die wichtigsten Wachstumstreiber – das bedeutet, dass alle ein wenig klüger werden müssen... #!"
+ },
+ "notification_headlines_tech_knowledge_economy_name": {
+  "en": "#b IDEAS, NOT IRON, NOW DRIVE THE ECONOMY #!",
+  "de": "#b NICHT EISEN, SONDERN IDEEN TREIBEN NUN DIE WIRTSCHAFT AN #!"
+ },
+ "notification_headlines_tech_lab-grown_food_desc": {
+  "en": "Scientists in [SCOPE.sCountry('headlines_lab-grown_food_researcher').GetName] can now grow food in a lab, from cultured meat to other synthetic products. #lore This lab-grown food could be a more sustainable and ethical way to feed the world, if people are willing to eat it... #!",
+  "de": "Wissenschaftler in [SCOPE.sCountry('headlines_lab-grown_food_researcher').GetAltName('DAT')] können nun Lebensmittel im Labor züchten – von kultiviertem Fleisch bis zu anderen synthetischen Produkten. #lore Diese im Labor gezüchteten Lebensmittel könnten eine nachhaltigere und ethischere Art sein, die Welt zu ernähren – sofern die Menschen bereit sind, sie zu essen... #!"
+ },
+ "notification_headlines_tech_lab-grown_food_name": {
+  "en": "#b STEAKS FROM A PETRI DISH NOW A REALITY #!",
+  "de": "#b STEAKS AUS DER PETRISCHALE NUN REALITÄT #!"
+ },
+ "notification_headlines_tech_laser_technology_desc": {
+  "en": "The laser, a product of research in [SCOPE.sCountry('headlines_laser_technology_researcher').GetName], has found its way into all sorts of applications. #lore From telecommunications and medicine to manufacturing, laser technology is a precise and powerful tool with a seemingly endless number of uses... #!",
+  "de": "Der Laser, ein Produkt der Forschung in [SCOPE.sCountry('headlines_laser_technology_researcher').GetAltName('DAT')], hat seinen Weg in die verschiedensten Anwendungen gefunden. #lore Von Telekommunikation über Medizin bis zur Fertigung ist die Lasertechnik ein präzises und mächtiges Werkzeug mit scheinbar endlosen Einsatzmöglichkeiten... #!"
+ },
+ "notification_headlines_tech_laser_technology_name": {
+  "en": "#b THE POWERFUL BEAM OF LIGHT WITH ENDLESS USES #!",
+  "de": "#b DER MÄCHTIGE LICHTSTRAHL MIT ENDLOSEN EINSATZMÖGLICHKEITEN #!"
+ },
+ "notification_headlines_tech_machine_learning_desc": {
+  "en": "Computers can now be built that learn from data, thanks to machine learning research from [SCOPE.sCountry('headlines_machine_learning_researcher').GetName]. #lore This has led to a host of new technologies and applications, from medical diagnosis to self-driving cars, and it's only going to get more powerful... #!",
+  "de": "Dank maschineller Lernforschung aus [SCOPE.sCountry('headlines_machine_learning_researcher').GetAltName('DAT')] lassen sich nun Computer bauen, die aus Daten lernen. #lore Dies hat zu einer Fülle neuer Technologien und Anwendungen geführt, von medizinischer Diagnostik bis zu selbstfahrenden Autos – und es wird nur noch leistungsfähiger... #!"
+ },
+ "notification_headlines_tech_machine_learning_name": {
+  "en": "#b COMPUTERS ARE NOW ABLE TO LEARN ON THEIR OWN #!",
+  "de": "#b COMPUTER KÖNNEN NUN SELBSTSTÄNDIG LERNEN #!"
+ },
+ "notification_headlines_tech_mainframe_computers_desc": {
+  "en": "These large, powerful mainframe computers are the workhorses of big business and government in [SCOPE.sCountry('headlines_mainframe_computers_researcher').GetName]. #lore They're reliable and can handle massive amounts of data, making them essential for large-scale operations from banking to space exploration... #!",
+  "de": "Diese großen, leistungsstarken Großrechner sind die Arbeitspferde von Großunternehmen und Regierung in [SCOPE.sCountry('headlines_mainframe_computers_researcher').GetAltName('DAT')]. #lore Sie sind zuverlässig und können gewaltige Datenmengen bewältigen, was sie für Großvorhaben vom Bankwesen bis zur Raumfahrt unentbehrlich macht... #!"
+ },
+ "notification_headlines_tech_mainframe_computers_name": {
+  "en": "#b 'BIG IRON' COMPUTERS POWER MODERN INDUSTRY #!",
+  "de": "#b „BIG-IRON”-COMPUTER TREIBEN DIE MODERNE INDUSTRIE AN #!"
+ },
+ "notification_headlines_tech_marketing_research_desc": {
+  "en": "By studying what consumers want, businesses in [SCOPE.sCountry('headlines_marketing_research_researcher').GetName] can create more effective advertising and better products. #lore This new field of marketing research is all about understanding people's desires, and then selling them back to them... #!",
+  "de": "Indem sie untersuchen, was Verbraucher wollen, können Unternehmen in [SCOPE.sCountry('headlines_marketing_research_researcher').GetAltName('DAT')] wirksamere Werbung und bessere Produkte entwickeln. #lore Bei diesem neuen Feld der Marktforschung geht es darum, die Wünsche der Menschen zu verstehen – und sie ihnen dann zu verkaufen... #!"
+ },
+ "notification_headlines_tech_marketing_research_name": {
+  "en": "#b SCIENCE OF SELLING: WHAT DO CONSUMERS WANT? #!",
+  "de": "#b DIE WISSENSCHAFT DES VERKAUFENS: WAS WILL DER VERBRAUCHER? #!"
+ },
+ "notification_headlines_tech_mass_media_desc": {
+  "en": "Through various platforms, information, entertainment, and news can now be spread to a massive audience. #lore This gives the mass media in [SCOPE.sCountry('headlines_mass_media_researcher').GetName] a powerful influence over public opinion and culture... #!",
+  "de": "Über verschiedenste Kanäle lassen sich Information, Unterhaltung und Nachrichten nun an ein riesiges Publikum verbreiten. #lore Das verschafft den Massenmedien in [SCOPE.sCountry('headlines_mass_media_researcher').GetAltName('DAT')] großen Einfluss auf die öffentliche Meinung und die Kultur... #!"
+ },
+ "notification_headlines_tech_mass_media_name": {
+  "en": "#b RADIO, TV, AND NEWSPAPERS SHAPE PUBLIC OPINION #!",
+  "de": "#b RADIO, FERNSEHEN UND ZEITUNGEN PRÄGEN DIE ÖFFENTLICHE MEINUNG #!"
+ },
+ "notification_headlines_tech_mental_health_awareness_desc": {
+  "en": "The importance of mental well-being is finally being understood, thanks to a growing movement for mental health awareness in [SCOPE.sCountry('headlines_mental_health_awareness_researcher').GetName]. #lore This increased awareness is leading to better care, less stigma, and new ways to support those who are struggling... #!",
+  "de": "Die Bedeutung des seelischen Wohlbefindens wird endlich erkannt – dank einer wachsenden Bewegung für psychische Gesundheit in [SCOPE.sCountry('headlines_mental_health_awareness_researcher').GetAltName('DAT')]. #lore Dieses gestiegene Bewusstsein führt zu besserer Versorgung, weniger Stigmatisierung und neuen Wegen, Menschen in Not zu unterstützen... #!"
+ },
+ "notification_headlines_tech_mental_health_awareness_name": {
+  "en": "#b STIGMA AROUND MENTAL HEALTH BEGINS TO FADE #!",
+  "de": "#b STIGMA UM PSYCHISCHE GESUNDHEIT BEGINNT ZU SCHWINDEN #!"
+ },
+ "notification_headlines_tech_microprocessor_desc": {
+  "en": "This tiny chip, the microprocessor, is the brain of modern computers and electronic devices. #lore Its invention in [SCOPE.sCountry('headlines_microprocessor_researcher').GetName] has led to an explosion of technological innovation, changing the world in countless ways... #!",
+  "de": "Dieser winzige Chip, der Mikroprozessor, ist das Gehirn moderner Computer und elektronischer Geräte. #lore Seine Erfindung in [SCOPE.sCountry('headlines_microprocessor_researcher').GetAltName('DAT')] hat eine Explosion technologischer Innovation ausgelöst und die Welt auf unzählige Arten verändert... #!"
+ },
+ "notification_headlines_tech_microprocessor_name": {
+  "en": "#b A COMPUTER ON A SINGLE CHIP #!",
+  "de": "#b EIN COMPUTER AUF EINEM EINZIGEN CHIP #!"
+ },
+ "notification_headlines_tech_military_grade_cybersecurity_desc": {
+  "en": "The military of [SCOPE.sCountry('headlines_military_grade_cybersecurity_researcher').GetName] is developing advanced techniques to protect its most sensitive information and systems from cyber threats. #lore In the digital age, this military-grade cybersecurity is more important than ever... #!",
+  "de": "Das Militär [SCOPE.sCountry('headlines_military_grade_cybersecurity_researcher').GetAltName('GEN')] entwickelt fortschrittliche Verfahren, um seine sensibelsten Informationen und Systeme vor Cyberbedrohungen zu schützen. #lore Im digitalen Zeitalter ist diese Cybersicherheit auf Militärniveau wichtiger denn je... #!"
+ },
+ "notification_headlines_tech_military_grade_cybersecurity_name": {
+  "en": "#b DIGITAL WARFARE DEMANDS DIGITAL DEFENSES #!",
+  "de": "#b DIGITALE KRIEGSFÜHRUNG VERLANGT DIGITALE ABWEHR #!"
+ },
+ "notification_headlines_tech_mind_backups_desc": {
+  "en": "[SCOPE.sCountry('headlines_mind_backups_researcher').GetAdjective] scientists are developing the ability to store memories and consciousness in digital form. #lore These mind backups are a path to a kind of immortality, allowing a person to live on long after their physical body has failed... #!",
+  "de": "[SCOPE.sCountry('headlines_mind_backups_researcher').GetAdjective|U]e Wissenschaftler entwickeln die Fähigkeit, Erinnerungen und Bewusstsein in digitaler Form zu speichern. #lore Diese Bewusstseinssicherungen sind ein Weg zu einer Art Unsterblichkeit, der es einer Person erlaubt, lange nach dem Versagen ihres physischen Körpers weiterzuleben... #!"
+ },
+ "notification_headlines_tech_mind_backups_name": {
+  "en": "#b DIGITAL IMMORTALITY MAY SOON BE POSSIBLE #!",
+  "de": "#b DIGITALE UNSTERBLICHKEIT BALD MÖGLICH? #!"
+ },
+ "notification_headlines_tech_missile_defense_systems_desc": {
+  "en": "With anti-ballistic missiles and laser interceptors, [SCOPE.sCountry('headlines_missile_defense_systems_researcher').GetName] can now defend against incoming missile attacks. #lore These missile defense systems should improve security and strategic stability, in theory... #!",
+  "de": "Mit Abwehrraketen und Laser-Abfangsystemen kann [SCOPE.sCountry('headlines_missile_defense_systems_researcher').GetAltName('NOM')] sich nun gegen anfliegende Raketenangriffe verteidigen. #lore Diese Raketenabwehrsysteme sollen theoretisch Sicherheit und strategische Stabilität verbessern... #!"
+ },
+ "notification_headlines_tech_missile_defense_systems_name": {
+  "en": "#b DEFENSE SHIELD AGAINST MISSILES DEVELOPED #!",
+  "de": "#b VERTEIDIGUNGSSCHILD GEGEN RAKETEN ENTWICKELT #!"
+ },
+ "notification_headlines_tech_modern_automotive_technology_desc": {
+  "en": "Automakers in [SCOPE.sCountry('headlines_modern_automotive_technology_researcher').GetName] are using modern automotive technology. #lore By combining precision machining with modern features like coil spring suspension and electric starters, cars are becoming more comfortable and reliable than ever before... #!",
+  "de": "Autohersteller in [SCOPE.sCountry('headlines_modern_automotive_technology_researcher').GetAltName('DAT')] setzen auf moderne Fahrzeugtechnik. #lore Durch die Verbindung von Präzisionsfertigung mit modernen Merkmalen wie Schraubenfederung und elektrischem Anlasser werden Autos komfortabler und zuverlässiger als je zuvor... #!"
+ },
+ "notification_headlines_tech_modern_automotive_technology_name": {
+  "en": "#b MODERN AUTOMOBILES OFFER COMFORT AND RELIABILITY #!",
+  "de": "#b MODERNE AUTOMOBILE BIETEN KOMFORT UND ZUVERLÄSSIGKEIT #!"
+ },
+ "notification_headlines_tech_modern_chemical_processes_desc": {
+  "en": "New processes like the Ostwald and Haber methods have revolutionized the chemical industry in [SCOPE.sCountry('headlines_modern_chemical_processes_researcher').GetName]. #lore Thanks to these modern chemical processes, important chemicals like fertilizers and synthetic materials can now be produced on a massive scale... #!",
+  "de": "Neue Verfahren wie das Ostwald- und das Haber-Verfahren haben die chemische Industrie in [SCOPE.sCountry('headlines_modern_chemical_processes_researcher').GetAltName('DAT')] revolutioniert. #lore Dank dieser modernen chemischen Verfahren lassen sich wichtige Chemikalien wie Düngemittel und synthetische Materialien nun in gewaltigem Maßstab herstellen... #!"
+ },
+ "notification_headlines_tech_modern_chemical_processes_name": {
+  "en": "#b CHEMICAL INDUSTRY REVOLUTIONIZED #!",
+  "de": "#b CHEMISCHE INDUSTRIE REVOLUTIONIERT #!"
+ },
+ "notification_headlines_tech_modern_management_techniques_desc": {
+  "en": "New ways of organizing and managing businesses are leading to greater efficiency and productivity. #lore Theorists in [SCOPE.sCountry('headlines_modern_management_techniques_researcher').GetName] have pioneered these modern management techniques, which are being adopted across the nation... #!",
+  "de": "Neue Wege, Unternehmen zu organisieren und zu führen, sorgen für mehr Effizienz und Produktivität. #lore Theoretiker in [SCOPE.sCountry('headlines_modern_management_techniques_researcher').GetAltName('DAT')] haben diese modernen Managementmethoden entwickelt, die nun im ganzen Land übernommen werden... #!"
+ },
+ "notification_headlines_tech_modern_management_techniques_name": {
+  "en": "#b 'SCIENTIFIC MANAGEMENT' BOOSTS PRODUCTIVITY #!",
+  "de": "#b „WISSENSCHAFTLICHE BETRIEBSFÜHRUNG” STEIGERT DIE PRODUKTIVITÄT #!"
+ },
+ "notification_headlines_tech_modern_material_science_desc": {
+  "en": "From graphene to metamaterials, scientists in [SCOPE.sCountry('headlines_modern_material_science_researcher').GetName] are creating new substances with unique properties. #lore This advanced modern material science is set to revolutionize everything from electronics to aerospace... #!",
+  "de": "Von Graphen bis zu Metamaterialien erschaffen Wissenschaftler in [SCOPE.sCountry('headlines_modern_material_science_researcher').GetAltName('DAT')] neue Substanzen mit einzigartigen Eigenschaften. #lore Diese fortschrittliche moderne Materialwissenschaft wird voraussichtlich alles von der Elektronik bis zur Raumfahrt revolutionieren... #!"
+ },
+ "notification_headlines_tech_modern_material_science_name": {
+  "en": "#b 'WONDER MATERIALS' TO CHANGE THE FUTURE #!",
+  "de": "#b „WUNDERMATERIALIEN” SOLLEN DIE ZUKUNFT VERÄNDERN #!"
+ },
+ "notification_headlines_tech_modern_materials_desc": {
+  "en": "[SCOPE.sCountry('headlines_modern_materials_researcher').GetAdjective] chemists have invented new modern materials. #lore Materials like fiberglass, nylon, and Teflon are stronger, lighter, and more versatile than what came before. They've changed the way things are built and manufactured... #!",
+  "de": "[SCOPE.sCountry('headlines_modern_materials_researcher').GetAdjective|U]e Chemiker haben neue moderne Materialien erfunden. #lore Materialien wie Fiberglas, Nylon und Teflon sind stärker, leichter und vielseitiger als alles, was zuvor existierte. Sie haben die Art, wie Dinge gebaut und hergestellt werden, verändert... #!"
+ },
+ "notification_headlines_tech_modern_materials_name": {
+  "en": "#b FIBERGLASS AND NYLON: MATERIALS OF TOMORROW, TODAY #!",
+  "de": "#b FIBERGLAS UND NYLON: DIE MATERIALIEN VON MORGEN, HEUTE #!"
+ },
+ "notification_headlines_tech_modern_pharmaceuticals_desc": {
+  "en": "With new drugs and vaccines developed in [SCOPE.sCountry('headlines_modern_pharmaceuticals_researcher').GetName], huge strides in public health have been made. #lore Thanks to these modern pharmaceuticals, people are living longer, healthier lives... #!",
+  "de": "Mit neuen Medikamenten und Impfstoffen, entwickelt in [SCOPE.sCountry('headlines_modern_pharmaceuticals_researcher').GetAltName('DAT')], wurden gewaltige Fortschritte in der öffentlichen Gesundheit erzielt. #lore Dank dieser modernen Arzneimittel leben die Menschen länger und gesünder... #!"
+ },
+ "notification_headlines_tech_modern_pharmaceuticals_name": {
+  "en": "#b THE DAWN OF THE MIRACLE DRUG ERA #!",
+  "de": "#b DER BEGINN DES ZEITALTERS DER WUNDERMEDIKAMENTE #!"
+ },
+ "notification_headlines_tech_modern_skyscrapers_desc": {
+  "en": "Thanks to new architectural designs and materials pioneered in [SCOPE.sCountry('headlines_modern_skyscrapers_researcher').GetName], taller and more impressive buildings can now be built. #lore These modern skyscrapers have become symbols of the modern, urban world... #!",
+  "de": "Dank neuer architektonischer Entwürfe und Materialien, entwickelt in [SCOPE.sCountry('headlines_modern_skyscrapers_researcher').GetAltName('DAT')], lassen sich nun höhere und beeindruckendere Gebäude errichten. #lore Diese modernen Wolkenkratzer sind zu Symbolen der modernen, urbanen Welt geworden... #!"
+ },
+ "notification_headlines_tech_modern_skyscrapers_name": {
+  "en": "#b A RACE TO THE CLOUDS: SKYLINES REDEFINED #!",
+  "de": "#b EIN WETTLAUF IN DIE WOLKEN: DIE SKYLINE NEU DEFINIERT #!"
+ },
+ "notification_headlines_tech_modern_tools_desc": {
+  "en": "Tools like forklifts, now common in [SCOPE.sCountry('headlines_modern_tools_researcher').GetName], have made workplaces more efficient and safer. #lore These modern tools have improved productivity and reduced the number of accidents, which is good for everyone... #!",
+  "de": "Werkzeuge wie Gabelstapler, nun weitverbreitet in [SCOPE.sCountry('headlines_modern_tools_researcher').GetAltName('DAT')], haben Arbeitsplätze effizienter und sicherer gemacht. #lore Diese modernen Werkzeuge haben die Produktivität gesteigert und die Zahl der Unfälle gesenkt – gut für alle... #!"
+ },
+ "notification_headlines_tech_modern_tools_name": {
+  "en": "#b FORKLIFTS MODERNIZE THE WORKPLACE #!",
+  "de": "#b GABELSTAPLER MODERNISIEREN DEN ARBEITSPLATZ #!"
+ },
+ "notification_headlines_tech_modern_urban_planning_desc": {
+  "en": "By planning cities more systematically, proponents in [SCOPE.sCountry('headlines_modern_urban_planning_researcher').GetName] say more efficient, sustainable, and pleasant places to live can be created. #lore This modern urban planning is a way to bring some order to the chaos of urban growth... #!",
+  "de": "Durch systematischere Stadtplanung lassen sich, so Befürworter in [SCOPE.sCountry('headlines_modern_urban_planning_researcher').GetAltName('DAT')], effizientere, nachhaltigere und angenehmere Wohnorte schaffen. #lore Diese moderne Stadtplanung ist ein Weg, etwas Ordnung in das Chaos des städtischen Wachstums zu bringen... #!"
+ },
+ "notification_headlines_tech_modern_urban_planning_name": {
+  "en": "#b A NEW VISION FOR THE CITIES OF THE FUTURE #!",
+  "de": "#b EINE NEUE VISION FÜR DIE STÄDTE DER ZUKUNFT #!"
+ },
+ "notification_headlines_tech_modern_vaccines_desc": {
+  "en": "Vaccines for diseases like diphtheria, tetanus, and tuberculosis have saved countless lives in [SCOPE.sCountry('headlines_modern_vaccines_researcher').GetName] and abroad. #lore These modern vaccines are a cornerstone of public health, protecting populations from some of the world's most deadly diseases... #!",
+  "de": "Impfstoffe gegen Krankheiten wie Diphtherie, Tetanus und Tuberkulose haben in [SCOPE.sCountry('headlines_modern_vaccines_researcher').GetAltName('DAT')] und im Ausland unzählige Leben gerettet. #lore Diese modernen Impfstoffe sind ein Grundpfeiler der öffentlichen Gesundheit und schützen die Bevölkerung vor einigen der tödlichsten Krankheiten der Welt... #!"
+ },
+ "notification_headlines_tech_modern_vaccines_name": {
+  "en": "#b DEADLY DISEASES DEFEATED BY VACCINATION #!",
+  "de": "#b TÖDLICHE KRANKHEITEN DURCH IMPFUNG BESIEGT #!"
+ },
+ "notification_headlines_tech_molecular_assemblers_desc": {
+  "en": "Imagine machines that can build things atom by atom. #lore Scientists in [SCOPE.sCountry('headlines_molecular_assemblers_researcher').GetName] are designing these molecular assemblers, which could create highly customized goods with incredible precision, changing the very nature of manufacturing... #!",
+  "de": "Man stelle sich Maschinen vor, die Dinge Atom für Atom aufbauen können. #lore Wissenschaftler in [SCOPE.sCountry('headlines_molecular_assemblers_researcher').GetAltName('DAT')] entwerfen diese molekularen Assembler, die hochgradig individualisierte Güter mit unglaublicher Präzision herstellen könnten und damit das Wesen der Fertigung grundlegend verändern... #!"
+ },
+ "notification_headlines_tech_molecular_assemblers_name": {
+  "en": "#b BUILDING ANYTHING, ONE ATOM AT A TIME #!",
+  "de": "#b ALLES BAUEN, ATOM FÜR ATOM #!"
+ },
+ "notification_headlines_tech_motorized_artillery_desc": {
+  "en": "By putting their artillery on wheels, the army of [SCOPE.sCountry('headlines_motorized_artillery_researcher').GetName] has made it much more mobile and effective. #lore Now these big guns can keep up with the rest of their ground forces... #!",
+  "de": "Indem sie ihre Artillerie auf Räder stellte, hat die Armee [SCOPE.sCountry('headlines_motorized_artillery_researcher').GetAltName('GEN')] sie weitaus beweglicher und wirksamer gemacht. #lore Nun können diese schweren Geschütze mit dem Rest der Bodentruppen mithalten... #!"
+ },
+ "notification_headlines_tech_motorized_artillery_name": {
+  "en": "#b ARTILLERY NOW KEEPS PACE WITH ADVANCING ARMIES #!",
+  "de": "#b ARTILLERIE HÄLT NUN MIT VORRÜCKENDEN ARMEEN SCHRITT #!"
+ },
+ "notification_headlines_tech_naval_convoy_defense_desc": {
+  "en": "New strategies and technologies developed in [SCOPE.sCountry('headlines_naval_convoy_defense_researcher').GetName] are making naval convoys safer. #lore It's all about protecting the ships that carry vital goods and personnel across the seas from enemy predation... #!",
+  "de": "Neue Strategien und Technologien, entwickelt in [SCOPE.sCountry('headlines_naval_convoy_defense_researcher').GetAltName('DAT')], machen Schiffskonvois sicherer. #lore Es geht darum, die Schiffe, die lebenswichtige Güter und Personal über die Meere transportieren, vor feindlichen Angriffen zu schützen... #!"
+ },
+ "notification_headlines_tech_naval_convoy_defense_name": {
+  "en": "#b NEW TACTICS TO GUARD THE SEA LANES #!",
+  "de": "#b NEUE TAKTIKEN ZUM SCHUTZ DER SEEWEGE #!"
+ },
+ "notification_headlines_tech_naval_fire_control_systems_desc": {
+  "en": "The navy of [SCOPE.sCountry('headlines_naval_fire_control_systems_researcher').GetName] has deployed advanced systems for targeting and coordinating naval gunfire. #lore These naval fire-control systems make a ship's weapons more accurate and deadly, which is always a plus in a [concept_naval_battle]... #!",
+  "de": "Die Marine [SCOPE.sCountry('headlines_naval_fire_control_systems_researcher').GetAltName('GEN')] hat fortschrittliche Systeme zur Zielerfassung und Koordinierung des Schiffsartilleriefeuers in Dienst gestellt. #lore Diese Feuerleitsysteme machen die Waffen eines Schiffes präziser und tödlicher, was in einer [concept_naval_battle] immer ein Vorteil ist... #!"
+ },
+ "notification_headlines_tech_naval_fire_control_systems_name": {
+  "en": "#b COMPUTER-AIMED NAVAL GUNS OFFER DEADLY ACCURACY #!",
+  "de": "#b COMPUTERGESTEUERTE SCHIFFSGESCHÜTZE MIT TÖDLICHER PRÄZISION #!"
+ },
+ "notification_headlines_tech_network_centric_warfare_desc": {
+  "en": "By connecting all forces through advanced communication systems, the military of [SCOPE.sCountry('headlines_network_centric_warfare_researcher').GetName] can improve its situational awareness and decision-making. #lore It's a new way of fighting, network-centric warfare, that leverages the power of information... #!",
+  "de": "Durch die Vernetzung aller Streitkräfte mittels fortschrittlicher Kommunikationssysteme kann das Militär [SCOPE.sCountry('headlines_network_centric_warfare_researcher').GetAltName('GEN')] sein Lagebewusstsein und seine Entscheidungsfindung verbessern. #lore Es ist eine neue Art der Kriegsführung, die netzwerkzentrierte Kriegsführung, die die Macht der Information nutzt... #!"
+ },
+ "notification_headlines_tech_network_centric_warfare_name": {
+  "en": "#b FIGHTING AT THE SPEED OF INFORMATION #!",
+  "de": "#b KRIEGFÜHRUNG MIT DER GESCHWINDIGKEIT DER INFORMATION #!"
+ },
+ "notification_headlines_tech_neural_lace_desc": {
+  "en": "Researchers in [SCOPE.sCountry('headlines_neural_lace_researcher').GetName] are developing the neural lace, a brain-computer interface that allows for a seamless connection between the mind and digital devices. #lore It could enhance cognitive abilities and give users direct control over technology... #!",
+  "de": "Forscher in [SCOPE.sCountry('headlines_neural_lace_researcher').GetAltName('DAT')] entwickeln das neuronale Geflecht, eine Gehirn-Computer-Schnittstelle, die eine nahtlose Verbindung zwischen Geist und digitalen Geräten ermöglicht. #lore Es könnte kognitive Fähigkeiten steigern und Nutzern direkte Kontrolle über Technologie geben... #!"
+ },
+ "notification_headlines_tech_neural_lace_name": {
+  "en": "#b A SEAMLESS CONNECTION BETWEEN MIND AND MACHINE #!",
+  "de": "#b EINE NAHTLOSE VERBINDUNG ZWISCHEN GEIST UND MASCHINE #!"
+ },
+ "notification_headlines_tech_nuclear_energy_desc": {
+  "en": "By harnessing the power of nuclear reactions, [SCOPE.sCountry('headlines_nuclear_energy_researcher').GetName] has found a new and powerful source of energy. #lore Nuclear energy has the potential to fuel industries and reduce reliance on fossil fuels, but it comes with its own set of risks... #!",
+  "de": "Durch die Nutzung der Kraft von Kernreaktionen hat [SCOPE.sCountry('headlines_nuclear_energy_researcher').GetAltName('NOM')] eine neue, mächtige Energiequelle gefunden. #lore Kernenergie hat das Potenzial, Industrien anzutreiben und die Abhängigkeit von fossilen Brennstoffen zu verringern – birgt aber eigene Risiken... #!"
+ },
+ "notification_headlines_tech_nuclear_energy_name": {
+  "en": "#b ATOMS FOR PEACE: CLEAN ENERGY FOR THE FUTURE #!",
+  "de": "#b ATOME FÜR DEN FRIEDEN: SAUBERE ENERGIE FÜR DIE ZUKUNFT #!"
+ },
+ "notification_headlines_tech_nuclear_weapons_desc": {
+  "en": "The atomic bomb, developed in secret by [SCOPE.sCountry('headlines_nuclear_weapons_researcher').GetAdjective] scientists, has changed the world forever. #lore These incredibly powerful nuclear weapons have fundamentally altered the nature of warfare and ushered in a new era of global politics... #!",
+  "de": "Die Atombombe, im Geheimen entwickelt von [SCOPE.sCountry('headlines_nuclear_weapons_researcher').GetAdjective|l]en Wissenschaftlern, hat die Welt für immer verändert. #lore Diese unglaublich mächtigen Nuklearwaffen haben das Wesen der Kriegsführung grundlegend verändert und ein neues Zeitalter der Weltpolitik eingeläutet... #!"
+ },
+ "notification_headlines_tech_nuclear_weapons_name": {
+  "en": "#b A WEAPON THAT CAN DESTROY WORLDS #!",
+  "de": "#b EINE WAFFE, DIE WELTEN ZERSTÖREN KANN #!"
+ },
+ "notification_headlines_tech_orbital_manufacturing_desc": {
+  "en": "The unique environment of space allows for the creation of materials and products that are impossible to make on Earth. #lore Companies from [SCOPE.sCountry('headlines_orbital_manufacturing_researcher').GetName] believe orbital manufacturing could be the key to the future in space... #!",
+  "de": "Die einzigartige Umgebung des Weltraums erlaubt die Herstellung von Materialien und Produkten, die auf der Erde unmöglich zu fertigen wären. #lore Unternehmen aus [SCOPE.sCountry('headlines_orbital_manufacturing_researcher').GetAltName('DAT')] glauben, dass die Fertigung im Orbit der Schlüssel zur Zukunft im All sein könnte... #!"
+ },
+ "notification_headlines_tech_orbital_manufacturing_name": {
+  "en": "#b FACTORIES NOW ORBITING THE EARTH #!",
+  "de": "#b FABRIKEN NUN IM ERDORBIT #!"
+ },
+ "notification_headlines_tech_orbital_weapon_platforms_desc": {
+  "en": "By placing weapons in space, [SCOPE.sCountry('headlines_orbital_weapon_platforms_researcher').GetName] can have a global strike capability and a constant eye on its enemies. #lore These orbital weapon platforms represent the ultimate high ground in modern warfare... #!",
+  "de": "Durch die Stationierung von Waffen im Weltraum verschafft sich [SCOPE.sCountry('headlines_orbital_weapon_platforms_researcher').GetAltName('NOM')] eine globale Angriffsfähigkeit und ein ständiges Auge auf seine Feinde. #lore Diese orbitalen Waffenplattformen stellen die ultimative Höhenüberlegenheit in der modernen Kriegsführung dar... #!"
+ },
+ "notification_headlines_tech_orbital_weapon_platforms_name": {
+  "en": "#b THE ULTIMATE STRATEGIC HIGH GROUND #!",
+  "de": "#b DIE ULTIMATIVE STRATEGISCHE HÖHENÜBERLEGENHEIT #!"
+ },
+ "notification_headlines_tech_personal_appliances_desc": {
+  "en": "Refrigerators, washing machines, and air conditioners from [SCOPE.sCountry('headlines_personal_appliances_researcher').GetName] have made lives much more comfortable and efficient. #lore These new personal appliances have automated many daily chores, giving people more time for other things... #!",
+  "de": "Kühlschränke, Waschmaschinen und Klimaanlagen aus [SCOPE.sCountry('headlines_personal_appliances_researcher').GetAltName('DAT')] haben das Leben weitaus bequemer und effizienter gemacht. #lore Diese neuen Haushaltsgeräte haben viele alltägliche Aufgaben automatisiert und den Menschen mehr Zeit für andere Dinge verschafft... #!"
+ },
+ "notification_headlines_tech_personal_appliances_name": {
+  "en": "#b MODERN CONVENIENCES EASE HOUSEHOLD BURDENS #!",
+  "de": "#b MODERNE ANNEHMLICHKEITEN ERLEICHTERN DIE HAUSARBEIT #!"
+ },
+ "notification_headlines_tech_personal_computers_desc": {
+  "en": "The personal computer has brought the power of digital technology to the masses. #lore Companies in [SCOPE.sCountry('headlines_personal_computers_researcher').GetName] are leading the charge, changing the way people work, learn, and communicate, and opening up a world of new possibilities... #!",
+  "de": "Der Personal Computer hat die Kraft der Digitaltechnik in die breite Masse gebracht. #lore Unternehmen in [SCOPE.sCountry('headlines_personal_computers_researcher').GetAltName('DAT')] gehen dabei voran und verändern die Art, wie Menschen arbeiten, lernen und kommunizieren, und eröffnen eine Welt neuer Möglichkeiten... #!"
+ },
+ "notification_headlines_tech_personal_computers_name": {
+  "en": "#b A COMPUTER IN EVERY HOME! #!",
+  "de": "#b EIN COMPUTER IN JEDEM HAUSHALT! #!"
+ },
+ "notification_headlines_tech_personalized_medicine_desc": {
+  "en": "By tailoring medical treatments to individual patients, doctors in [SCOPE.sCountry('headlines_personalized_medicine_researcher').GetName] can make them more effective. #lore It's a new approach to healthcare, personalized medicine, that takes into account unique genetic and lifestyle factors... #!",
+  "de": "Indem sie medizinische Behandlungen auf einzelne Patienten zuschneiden, können Ärzte in [SCOPE.sCountry('headlines_personalized_medicine_researcher').GetAltName('DAT')] sie wirksamer machen. #lore Es ist ein neuer Ansatz in der Gesundheitsversorgung, die personalisierte Medizin, der einzigartige genetische und lebensstilbedingte Faktoren berücksichtigt... #!"
+ },
+ "notification_headlines_tech_personalized_medicine_name": {
+  "en": "#b MEDICAL TREATMENTS TAILORED TO YOUR DNA #!",
+  "de": "#b MEDIZINISCHE BEHANDLUNGEN, ZUGESCHNITTEN AUF IHRE DNA #!"
+ },
+ "notification_headlines_tech_photocopiers_desc": {
+  "en": "The ability to quickly and easily make copies of documents has streamlined office work in [SCOPE.sCountry('headlines_photocopiers_researcher').GetName]. #lore The photocopier is a simple but essential tool that has dramatically improved productivity in the modern workplace... #!",
+  "de": "Die Möglichkeit, schnell und einfach Kopien von Dokumenten anzufertigen, hat die Büroarbeit in [SCOPE.sCountry('headlines_photocopiers_researcher').GetAltName('DAT')] rationalisiert. #lore Der Fotokopierer ist ein einfaches, aber unentbehrliches Werkzeug, das die Produktivität am modernen Arbeitsplatz drastisch gesteigert hat... #!"
+ },
+ "notification_headlines_tech_photocopiers_name": {
+  "en": "#b INSTANT COPIES REVOLUTIONIZE THE OFFICE #!",
+  "de": "#b SOFORTKOPIEN REVOLUTIONIEREN DAS BÜRO #!"
+ },
+ "notification_headlines_tech_plastic_mass_production_desc": {
+  "en": "The mass production of plastics in [SCOPE.sCountry('headlines_plastic_mass_production_researcher').GetName] has given the world a wide range of new, lightweight, and durable products. #lore It has also, however, given us a massive environmental problem to deal with... #!",
+  "de": "Die Massenproduktion von Kunststoffen in [SCOPE.sCountry('headlines_plastic_mass_production_researcher').GetAltName('DAT')] hat der Welt eine breite Palette neuer, leichter und langlebiger Produkte beschert. #lore Sie hat uns damit aber auch ein gewaltiges Umweltproblem eingebrockt... #!"
+ },
+ "notification_headlines_tech_plastic_mass_production_name": {
+  "en": "#b PLASTIC: THE MATERIAL OF A THOUSAND USES #!",
+  "de": "#b KUNSTSTOFF: DAS MATERIAL MIT TAUSEND VERWENDUNGEN #!"
+ },
+ "notification_headlines_tech_pollution_control_desc": {
+  "en": "We're finally starting to clean up our act. #lore By managing [concept_pollution_system] from industries and cars, new pollution control initiatives in [SCOPE.sCountry('headlines_pollution_control_researcher').GetName] aim to improve air and water quality and protect public health... #!",
+  "de": "Endlich beginnen wir, unser eigenes Handeln zu bereinigen. #lore Durch die Eindämmung von [concept_pollution_system] aus Industrie und Verkehr zielen neue Initiativen zur Umweltverschmutzungskontrolle in [SCOPE.sCountry('headlines_pollution_control_researcher').GetAltName('DAT')] darauf ab, die Luft- und Wasserqualität zu verbessern und die öffentliche Gesundheit zu schützen... #!"
+ },
+ "notification_headlines_tech_pollution_control_name": {
+  "en": "#b NATIONS BEGIN TO CLEAN UP THEIR ACT #!",
+  "de": "#b NATIONEN BEGINNEN, IHR HANDELN ZU BEREINIGEN #!"
+ },
+ "notification_headlines_tech_pop_culture_desc": {
+  "en": "From music and movies to fashion and fads, the pop culture spreading from [SCOPE.sCountry('headlines_pop_culture_researcher').GetName] has a powerful influence on society. #lore It shapes trends, values, and even how people see the world... #!",
+  "de": "Von Musik und Filmen bis hin zu Mode und Trends – die Popkultur, die sich von [SCOPE.sCountry('headlines_pop_culture_researcher').GetAltName('DAT')] aus verbreitet, hat gewaltigen Einfluss auf die Gesellschaft. #lore Sie prägt Trends, Werte und sogar die Weltsicht der Menschen... #!"
+ },
+ "notification_headlines_tech_pop_culture_name": {
+  "en": "#b FROM MOVIES TO MUSIC, POP CULTURE GRIPS THE YOUTH #!",
+  "de": "#b VON FILM BIS MUSIK: POPKULTUR ERGREIFT DIE JUGEND #!"
+ },
+ "notification_headlines_tech_post-scarcity_economy_desc": {
+  "en": "What if there was enough for everyone? #lore A post-scarcity economy, made possible by advanced technology from [SCOPE.sCountry('headlines_post-scarcity_economy_researcher').GetName], could eliminate material want and redefine the very meaning of work... #!",
+  "de": "Was, wenn es für alle genug gäbe? #lore Eine Postknappheitswirtschaft, ermöglicht durch fortschrittliche Technologie aus [SCOPE.sCountry('headlines_post-scarcity_economy_researcher').GetAltName('DAT')], könnte materielle Not beseitigen und die Bedeutung von Arbeit selbst neu definieren... #!"
+ },
+ "notification_headlines_tech_post-scarcity_economy_name": {
+  "en": "#b COULD THIS BE THE END OF WANT? #!",
+  "de": "#b IST DIES DAS ENDE DER NOT? #!"
+ },
+ "notification_headlines_tech_precision_guided_munitions_desc": {
+  "en": "Smart bombs and cruise missiles developed by [SCOPE.sCountry('headlines_precision_guided_munitions_researcher').GetAdjective] engineers can now hit their targets with incredible accuracy. #lore These precision-guided munitions make military strikes more effective and reduce collateral damage, at least in theory... #!",
+  "de": "Lenkbomben und Marschflugkörper, entwickelt von [SCOPE.sCountry('headlines_precision_guided_munitions_researcher').GetAdjective|l]en Ingenieuren, können nun ihre Ziele mit unglaublicher Präzision treffen. #lore Diese präzisionsgelenkte Munition macht militärische Schläge wirksamer und verringert zumindest theoretisch die Kollateralschäden... #!"
+ },
+ "notification_headlines_tech_precision_guided_munitions_name": {
+  "en": "#b 'SMART BOMBS' CAN HIT A PINPOINT TARGET #!",
+  "de": "#b „INTELLIGENTE BOMBEN” TREFFEN PUNKTGENAU #!"
+ },
+ "notification_headlines_tech_predictive_logistics_desc": {
+  "en": "By using data to forecast supply chain needs, companies in [SCOPE.sCountry('headlines_predictive_logistics_researcher').GetName] can make their logistics more efficient and less costly. #lore This system of predictive logistics is a smarter way to get things where they need to go... #!",
+  "de": "Durch die Nutzung von Daten zur Vorhersage des Lieferkettenbedarfs können Unternehmen in [SCOPE.sCountry('headlines_predictive_logistics_researcher').GetAltName('DAT')] ihre Logistik effizienter und kostengünstiger gestalten. #lore Dieses System der vorausschauenden Logistik ist ein klügerer Weg, Dinge dorthin zu bringen, wo sie gebraucht werden... #!"
+ },
+ "notification_headlines_tech_predictive_logistics_name": {
+  "en": "#b GETTING SUPPLIES THERE BEFORE THEY'RE NEEDED #!",
+  "de": "#b NACHSCHUB DA, BEVOR ER GEBRAUCHT WIRD #!"
+ },
+ "notification_headlines_tech_programmable_matter_desc": {
+  "en": "Imagine materials that can change their shape, color, or texture on command. #lore Scientists in [SCOPE.sCountry('headlines_programmable_matter_researcher').GetName] claim programmable matter could be the next great leap in materials science, with endless possibilities... #!",
+  "de": "Man stelle sich Materialien vor, die auf Befehl ihre Form, Farbe oder Beschaffenheit ändern können. #lore Wissenschaftler in [SCOPE.sCountry('headlines_programmable_matter_researcher').GetAltName('DAT')] behaupten, programmierbare Materie könnte der nächste große Sprung in der Materialwissenschaft sein – mit endlosen Möglichkeiten... #!"
+ },
+ "notification_headlines_tech_programmable_matter_name": {
+  "en": "#b SHAPE-SHIFTING MATERIALS NOW A REALITY #!",
+  "de": "#b FORMWANDELNDE MATERIALIEN NUN REALITÄT #!"
+ },
+ "notification_headlines_tech_public_works_programs_desc": {
+  "en": "The government of [SCOPE.sCountry('headlines_public_works_programs_researcher').GetName] has initiated massive government-funded projects to build [concept_infrastructure] and improve public utilities. #lore These public works programs are a way to stimulate the economy and create jobs, especially in tough times... #!",
+  "de": "Die Regierung [SCOPE.sCountry('headlines_public_works_programs_researcher').GetAltName('GEN')] hat gewaltige staatlich finanzierte Projekte zum Ausbau der [concept_infrastructure] und zur Verbesserung öffentlicher Versorgungseinrichtungen ins Leben gerufen. #lore Diese öffentlichen Bauprogramme sind ein Mittel, um besonders in schweren Zeiten die Wirtschaft anzukurbeln und Arbeitsplätze zu schaffen... #!"
+ },
+ "notification_headlines_tech_public_works_programs_name": {
+  "en": "#b NATIONS BUILD THEIR WAY OUT OF DEPRESSION #!",
+  "de": "#b NATIONEN BAUEN SICH AUS DER DEPRESSION HERAUS #!"
+ },
+ "notification_headlines_tech_quantum_communications_desc": {
+  "en": "Quantum technology developed in [SCOPE.sCountry('headlines_quantum_communications_researcher').GetName] can provide unbreakably secure channels for communication. #lore It's the ultimate in secure messaging, protecting sensitive information from prying eyes... #!",
+  "de": "Quantentechnologie, entwickelt in [SCOPE.sCountry('headlines_quantum_communications_researcher').GetAltName('DAT')], kann unknackbar sichere Kommunikationskanäle bereitstellen. #lore Es ist das Nonplusultra der sicheren Nachrichtenübermittlung und schützt sensible Informationen vor neugierigen Blicken... #!"
+ },
+ "notification_headlines_tech_quantum_communications_name": {
+  "en": "#b THE UNBREAKABLE CODE IS HERE #!",
+  "de": "#b DER UNKNACKBARE CODE IST DA #!"
+ },
+ "notification_headlines_tech_quantum_computing_desc": {
+  "en": "By harnessing the strange principles of quantum mechanics, physicists in [SCOPE.sCountry('headlines_quantum_computing_researcher').GetName] can build computers far more powerful than anything today. #lore These devices could solve some of the world's most complex problems... #!",
+  "de": "Durch die Nutzung der seltsamen Prinzipien der Quantenmechanik können Physiker in [SCOPE.sCountry('headlines_quantum_computing_researcher').GetAltName('DAT')] Computer bauen, die weit leistungsfähiger sind als alles Heutige. #lore Diese Geräte könnten einige der komplexesten Probleme der Welt lösen... #!"
+ },
+ "notification_headlines_tech_quantum_computing_name": {
+  "en": "#b QUANTUM COMPUTERS TO SOLVE THE UNSOLVABLE #!",
+  "de": "#b QUANTENCOMPUTER SOLLEN DAS UNLÖSBARE LÖSEN #!"
+ },
+ "notification_headlines_tech_quantum_materials_desc": {
+  "en": "Engineered substances with unique quantum properties are being created in [SCOPE.sCountry('headlines_quantum_materials_researcher').GetName]. #lore These quantum materials could lead to breakthroughs in energy, computing, and telecommunications, changing the world as we know it... #!",
+  "de": "In [SCOPE.sCountry('headlines_quantum_materials_researcher').GetAltName('DAT')] werden künstlich hergestellte Substanzen mit einzigartigen Quanteneigenschaften geschaffen. #lore Diese Quantenmaterialien könnten zu Durchbrüchen in Energie, Datenverarbeitung und Telekommunikation führen und die Welt, wie wir sie kennen, verändern... #!"
+ },
+ "notification_headlines_tech_quantum_materials_name": {
+  "en": "#b ENGINEERING MATTER AT THE QUANTUM LEVEL #!",
+  "de": "#b MATERIE AUF QUANTENEBENE GESTALTET #!"
+ },
+ "notification_headlines_tech_radar_desc": {
+  "en": "This secret technology, pioneered in [SCOPE.sCountry('headlines_radar_researcher').GetName], allows for the [concept_detection] of objects at a great distance, even in darkness or fog. #lore Radar has been a crucial tool in military aviation, providing early warning of enemy attacks... #!",
+  "de": "Diese geheime Technologie, entwickelt in [SCOPE.sCountry('headlines_radar_researcher').GetAltName('DAT')], erlaubt die [concept_detection] von Objekten auf große Entfernung, selbst im Dunkeln oder Nebel. #lore Radar ist ein entscheidendes Hilfsmittel der militärischen Luftfahrt geworden und liefert Frühwarnung vor feindlichen Angriffen... #!"
+ },
+ "notification_headlines_tech_radar_name": {
+  "en": "#b UNSEEN EYE SPOTS ENEMY AIRCRAFT #!",
+  "de": "#b UNSICHTBARES AUGE ENTDECKT FEINDLICHE FLUGZEUGE #!"
+ },
+ "notification_headlines_tech_rapid_deployment_forces_desc": {
+  "en": "[SCOPE.sCountry('headlines_rapid_deployment_forces_researcher').GetName] has organized highly trained and specialized units that can be sent anywhere in the world at a moment's notice. #lore These rapid deployment forces give a nation a flexible and effective way to respond to crises... #!",
+  "de": "[SCOPE.sCountry('headlines_rapid_deployment_forces_researcher').GetAltName('NOM')|U] hat hochtrainierte Spezialeinheiten aufgestellt, die binnen Kürze überall auf der Welt entsandt werden können. #lore Diese schnellen Eingreiftruppen geben einer Nation ein flexibles und wirksames Mittel, um auf Krisen zu reagieren... #!"
+ },
+ "notification_headlines_tech_rapid_deployment_forces_name": {
+  "en": "#b ELITE TROOPS READY TO DEPLOY ANYWHERE, ANYTIME #!",
+  "de": "#b ELITETRUPPEN BEREIT ZUM EINSATZ, WANN UND WO IMMER NÖTIG #!"
+ },
+ "notification_headlines_tech_recon_satellites_desc": {
+  "en": "With satellites, [SCOPE.sCountry('headlines_recon_satellites_researcher').GetName] can now spy on any part of the world from space. #lore This has revolutionized intelligence gathering, giving nations an unprecedented view of their adversaries' military installations and movements... #!",
+  "de": "Mit Satelliten kann [SCOPE.sCountry('headlines_recon_satellites_researcher').GetAltName('NOM')] nun jeden Winkel der Welt aus dem Weltraum ausspähen. #lore Das hat die Aufklärung revolutioniert und verschafft Nationen einen beispiellosen Einblick in die militärischen Anlagen und Bewegungen ihrer Gegner... #!"
+ },
+ "notification_headlines_tech_recon_satellites_name": {
+  "en": "#b THE SPY IN THE SKY WATCHES FROM ABOVE #!",
+  "de": "#b DER SPION AM HIMMEL WACHT VON OBEN #!"
+ },
+ "notification_headlines_tech_reusable_rocketry_desc": {
+  "en": "By making their rockets reusable, visionaries in [SCOPE.sCountry('headlines_reusable_rocketry_researcher').GetName] can dramatically reduce the cost of space travel. #lore This breakthrough in reusable rocketry could open up a new era of exploration and commercial activity in space... #!",
+  "de": "Indem sie ihre Raketen wiederverwendbar machen, können Visionäre in [SCOPE.sCountry('headlines_reusable_rocketry_researcher').GetAltName('DAT')] die Kosten der Raumfahrt drastisch senken. #lore Dieser Durchbruch bei wiederverwendbaren Raketen könnte ein neues Zeitalter der Erforschung und kommerziellen Nutzung des Weltraums einläuten... #!"
+ },
+ "notification_headlines_tech_reusable_rocketry_name": {
+  "en": "#b ROCKETS THAT CAN LAND THEMSELVES #!",
+  "de": "#b RAKETEN, DIE SELBST LANDEN KÖNNEN #!"
+ },
+ "notification_headlines_tech_robotics_desc": {
+  "en": "Industrial robots have transformed factories in [SCOPE.sCountry('headlines_robotics_researcher').GetName]. #lore These robots can perform complex tasks with incredible precision and efficiency, making production lines safer and more productive... #!",
+  "de": "Industrieroboter haben die Fabriken in [SCOPE.sCountry('headlines_robotics_researcher').GetAltName('DAT')] verändert. #lore Diese Roboter können komplexe Aufgaben mit unglaublicher Präzision und Effizienz ausführen und machen Fertigungsstraßen sicherer und produktiver... #!"
+ },
+ "notification_headlines_tech_robotics_name": {
+  "en": "#b ROBOTS NOW ON THE ASSEMBLY LINE #!",
+  "de": "#b ROBOTER NUN AM FLIESSBAND #!"
+ },
+ "notification_headlines_tech_rocketry_desc": {
+  "en": "The development of modern rocketry in [SCOPE.sCountry('headlines_rocketry_researcher').GetName] has provided powerful new weapons and the ability to explore space. #lore It has been a key technology of this century, with a profound impact on warfare and science... #!",
+  "de": "Die Entwicklung der modernen Raketentechnik in [SCOPE.sCountry('headlines_rocketry_researcher').GetAltName('DAT')] hat mächtige neue Waffen und die Fähigkeit zur Erforschung des Weltraums hervorgebracht. #lore Sie war eine Schlüsseltechnologie dieses Jahrhunderts mit tiefgreifenden Auswirkungen auf Kriegsführung und Wissenschaft... #!"
+ },
+ "notification_headlines_tech_rocketry_name": {
+  "en": "#b REACHING FOR THE HEAVENS AND BEYOND #!",
+  "de": "#b NACH DEN STERNEN GREIFEN UND DARÜBER HINAUS #!"
+ },
+ "notification_headlines_tech_rural_electrification_desc": {
+  "en": "Bringing electricity to the countryside has improved the quality of life and created new economic opportunities for rural populations. #lore The rural electrification program in [SCOPE.sCountry('headlines_rural_electrification_researcher').GetName] is a key step in modernizing a nation... #!",
+  "de": "Die Elektrifizierung des Landes hat die Lebensqualität verbessert und neue wirtschaftliche Möglichkeiten für die ländliche Bevölkerung geschaffen. #lore Das Programm zur ländlichen Elektrifizierung in [SCOPE.sCountry('headlines_rural_electrification_researcher').GetAltName('DAT')] ist ein entscheidender Schritt zur Modernisierung einer Nation... #!"
+ },
+ "notification_headlines_tech_rural_electrification_name": {
+  "en": "#b LIGHTS COME TO THE COUNTRYSIDE #!",
+  "de": "#b LICHT ERREICHT DAS LAND #!"
+ },
+ "notification_headlines_tech_satellite_communications_desc": {
+  "en": "Satellites launched by [SCOPE.sCountry('headlines_satellite_communications_researcher').GetName] have provided a global communication network. #lore Now information can be transmitted instantly across the world, making the planet a much more connected place... #!",
+  "de": "Satelliten, gestartet von [SCOPE.sCountry('headlines_satellite_communications_researcher').GetAltName('DAT')], haben ein globales Kommunikationsnetz geschaffen. #lore Nun können Informationen augenblicklich um die Welt übertragen werden – der Planet ist damit weit vernetzter geworden... #!"
+ },
+ "notification_headlines_tech_satellite_communications_name": {
+  "en": "#b A GLOBAL PHONE BOOTH NOW IN ORBIT #!",
+  "de": "#b EINE GLOBALE TELEFONZELLE NUN IM ORBIT #!"
+ },
+ "notification_headlines_tech_second_wave_feminism_desc": {
+  "en": "This wave of feminism, gaining traction in [SCOPE.sCountry('headlines_second_wave_feminism_researcher').GetName], has fought for equality and personal rights for women. #lore Known as second-wave feminism, it has had a significant impact on society, changing gender roles and legal norms... #!",
+  "de": "Diese Welle des Feminismus, die in [SCOPE.sCountry('headlines_second_wave_feminism_researcher').GetAltName('DAT')] an Zulauf gewinnt, kämpft für Gleichberechtigung und persönliche Rechte von Frauen. #lore Bekannt als zweite Welle des Feminismus, hat sie die Gesellschaft maßgeblich geprägt und Geschlechterrollen sowie Rechtsnormen verändert... #!"
+ },
+ "notification_headlines_tech_second_wave_feminism_name": {
+  "en": "#b WOMEN'S LIBERATION MOVEMENT DEMANDS EQUALITY #!",
+  "de": "#b FRAUENBEFREIUNGSBEWEGUNG FORDERT GLEICHBERECHTIGUNG #!"
+ },
+ "notification_headlines_tech_semiautomatic_rifle_desc": {
+  "en": "Semi-automatic rifles like the M1 Garand, issued to the troops of [SCOPE.sCountry('headlines_semiautomatic_rifle_researcher').GetName], give infantry a much higher rate of fire. #lore The semi-automatic rifle improves their firepower and makes them more effective in a firefight... #!",
+  "de": "Halbautomatische Gewehre wie das M1 Garand, ausgegeben an die Truppen [SCOPE.sCountry('headlines_semiautomatic_rifle_researcher').GetAltName('GEN')], verschaffen der Infanterie eine weitaus höhere Feuerrate. #lore Das halbautomatische Gewehr verbessert ihre Feuerkraft und macht sie im Gefecht wirksamer... #!"
+ },
+ "notification_headlines_tech_semiautomatic_rifle_name": {
+  "en": "#b MORE FIREPOWER FOR THE AVERAGE SOLDIER #!",
+  "de": "#b MEHR FEUERKRAFT FÜR DEN EINFACHEN SOLDATEN #!"
+ },
+ "notification_headlines_tech_sexual_revolution_desc": {
+  "en": "A social movement in [SCOPE.sCountry('headlines_sexual_revolution_researcher').GetName] has challenged traditional ideas about sexuality and relationships. #lore This sexual revolution has led to greater acceptance of premarital sex, contraception, and different family structures... #!",
+  "de": "Eine gesellschaftliche Bewegung in [SCOPE.sCountry('headlines_sexual_revolution_researcher').GetAltName('DAT')] stellt traditionelle Vorstellungen von Sexualität und Beziehungen infrage. #lore Diese sexuelle Revolution hat zu größerer Akzeptanz von vorehelichem Sex, Verhütung und unterschiedlichen Familienformen geführt... #!"
+ },
+ "notification_headlines_tech_sexual_revolution_name": {
+  "en": "#b TRADITIONAL VALUES CHALLENGED BY THE YOUTH #!",
+  "de": "#b TRADITIONELLE WERTE VON DER JUGEND INFRAGE GESTELLT #!"
+ },
+ "notification_headlines_tech_smart_grids_desc": {
+  "en": "By incorporating advanced technology into electrical grids, engineers in [SCOPE.sCountry('headlines_smart_grids_researcher').GetName] can make them more efficient, reliable, and sustainable. #lore These smart grids are a smarter way to manage power... #!",
+  "de": "Durch die Einbindung fortschrittlicher Technologie in Stromnetze können Ingenieure in [SCOPE.sCountry('headlines_smart_grids_researcher').GetAltName('DAT')] diese effizienter, zuverlässiger und nachhaltiger machen. #lore Diese intelligenten Stromnetze sind ein klügerer Weg, Energie zu verwalten... #!"
+ },
+ "notification_headlines_tech_smart_grids_name": {
+  "en": "#b A SMARTER GRID FOR A SMARTER WORLD #!",
+  "de": "#b EIN INTELLIGENTERES NETZ FÜR EINE INTELLIGENTERE WELT #!"
+ },
+ "notification_headlines_tech_social_justice_movements_desc": {
+  "en": "Movements that fight for equality, fairness, and human rights are growing in [SCOPE.sCountry('headlines_social_justice_movements_researcher').GetName]. #lore These social justice movements tackle issues like racial [concept_discrimination] and economic inequality, pushing for social change through activism and advocacy... #!",
+  "de": "Bewegungen, die für Gleichheit, Fairness und Menschenrechte kämpfen, wachsen in [SCOPE.sCountry('headlines_social_justice_movements_researcher').GetAltName('DAT')]. #lore Diese Bewegungen für soziale Gerechtigkeit nehmen Themen wie rassistische [concept_discrimination] und wirtschaftliche Ungleichheit in Angriff und setzen sich durch Aktivismus für gesellschaftlichen Wandel ein... #!"
+ },
+ "notification_headlines_tech_social_justice_movements_name": {
+  "en": "#b A CALL FOR A FAIRER SOCIETY FOR ALL #!",
+  "de": "#b EIN RUF NACH EINER GERECHTEREN GESELLSCHAFT FÜR ALLE #!"
+ },
+ "notification_headlines_tech_social_media_desc": {
+  "en": "Social media platforms, emerging from [SCOPE.sCountry('headlines_social_media_researcher').GetName], have changed the way people communicate and share information. #lore They've given everyone a voice, for better or for worse, and have had a huge impact on culture and politics... #!",
+  "de": "Soziale-Medien-Plattformen, entstanden in [SCOPE.sCountry('headlines_social_media_researcher').GetAltName('DAT')], haben die Art, wie Menschen kommunizieren und Informationen teilen, verändert. #lore Sie haben jedem eine Stimme gegeben, im Guten wie im Schlechten, und Kultur und Politik gewaltig beeinflusst... #!"
+ },
+ "notification_headlines_tech_social_media_name": {
+  "en": "#b CONNECTING THE WORLD, ONE POST AT A TIME #!",
+  "de": "#b DIE WELT VERBINDEN, EIN BEITRAG NACH DEM ANDEREN #!"
+ },
+ "notification_headlines_tech_sonar_desc": {
+  "en": "By using sound to detect objects underwater, sonar has become an essential tool for naval defense in [SCOPE.sCountry('headlines_sonar_researcher').GetName]. #lore It helps navies to find submarines and other underwater threats, protecting their fleets and convoys... #!",
+  "de": "Durch den Einsatz von Schall zur Erkennung von Objekten unter Wasser ist Sonar zu einem unentbehrlichen Werkzeug der Marineverteidigung in [SCOPE.sCountry('headlines_sonar_researcher').GetAltName('DAT')] geworden. #lore Es hilft Flotten, U-Boote und andere Unterwasserbedrohungen aufzuspüren und ihre Schiffe und Konvois zu schützen... #!"
+ },
+ "notification_headlines_tech_sonar_name": {
+  "en": "#b HEARING UNDERWATER: SUBMARINES HAVE NOWHERE TO HIDE #!",
+  "de": "#b HÖREN UNTER WASSER: U-BOOTE HABEN KEIN VERSTECK MEHR #!"
+ },
+ "notification_headlines_tech_space_based_solar_power_desc": {
+  "en": "By putting massive solar collectors in orbit, visionaries in [SCOPE.sCountry('headlines_space_based_solar_power_researcher').GetName] believe a reliable and abundant source of clean energy could be established. #lore It's an ambitious idea, but one that could solve the world's energy problems for good... #!",
+  "de": "Durch die Platzierung gewaltiger Sonnenkollektoren im Orbit glauben Visionäre in [SCOPE.sCountry('headlines_space_based_solar_power_researcher').GetAltName('DAT')], eine verlässliche und reichhaltige Quelle sauberer Energie schaffen zu können. #lore Es ist eine ehrgeizige Idee, die aber die Energieprobleme der Welt endgültig lösen könnte... #!"
+ },
+ "notification_headlines_tech_space_based_solar_power_name": {
+  "en": "#b BEAMING ENERGY DOWN FROM ORBIT #!",
+  "de": "#b ENERGIE AUS DEM ORBIT ZUR ERDE GESTRAHLT #!"
+ },
+ "notification_headlines_tech_space_colonization_desc": {
+  "en": "As Earth becomes more crowded, pioneers from [SCOPE.sCountry('headlines_space_colonization_researcher').GetName] say humanity may need to look to the stars for new places to live. #lore Space colonization could be the next great chapter in human history... #!",
+  "de": "Da die Erde immer voller wird, sagen Pioniere aus [SCOPE.sCountry('headlines_space_colonization_researcher').GetAltName('DAT')], dass die Menschheit vielleicht zu den Sternen blicken muss, um neue Lebensräume zu finden. #lore Die Besiedlung des Weltraums könnte das nächste große Kapitel der Menschheitsgeschichte sein... #!"
+ },
+ "notification_headlines_tech_space_colonization_name": {
+  "en": "#b HUMANITY'S NEXT FRONTIER: THE STARS #!",
+  "de": "#b DIE NÄCHSTE GRENZE DER MENSCHHEIT: DIE STERNE #!"
+ },
+ "notification_headlines_tech_space_elevator_desc": {
+  "en": "Engineers in [SCOPE.sCountry('headlines_space_elevator_researcher').GetName] have proposed a hypothetical structure that would allow for travel between Earth and space with ease. #lore A space elevator would make space travel much cheaper and could accelerate the exploration of the cosmos... #!",
+  "de": "Ingenieure in [SCOPE.sCountry('headlines_space_elevator_researcher').GetAltName('DAT')] haben eine hypothetische Konstruktion vorgeschlagen, die mühelose Reisen zwischen Erde und Weltraum ermöglichen würde. #lore Ein Weltraumaufzug würde die Raumfahrt weitaus günstiger machen und könnte die Erforschung des Kosmos beschleunigen... #!"
+ },
+ "notification_headlines_tech_space_elevator_name": {
+  "en": "#b AN ELEVATOR TO THE STARS #!",
+  "de": "#b EIN AUFZUG ZU DEN STERNEN #!"
+ },
+ "notification_headlines_tech_space_exploration_desc": {
+  "en": "Advancements in rocketry and satellite technology in [SCOPE.sCountry('headlines_space_exploration_researcher').GetName] have allowed for the exploration of space. #lore This has opened a new era of scientific discovery and stands as a testament to human ingenuity in the great race for the heavens... #!",
+  "de": "Fortschritte in der Raketen- und Satellitentechnik in [SCOPE.sCountry('headlines_space_exploration_researcher').GetAltName('DAT')] haben die Erforschung des Weltraums ermöglicht. #lore Das hat ein neues Zeitalter wissenschaftlicher Entdeckungen eingeläutet und ist ein Beweis menschlichen Erfindergeists im großen Wettlauf um den Himmel... #!"
+ },
+ "notification_headlines_tech_space_exploration_name": {
+  "en": "#b ONE SMALL STEP FOR A MAN... #!",
+  "de": "#b EIN KLEINER SCHRITT FÜR EINEN MENSCHEN... #!"
+ },
+ "notification_headlines_tech_space_militarization_desc": {
+  "en": "As space becomes more important strategically, [SCOPE.sCountry('headlines_space_militarization_researcher').GetName] is seeing a push to develop and deploy military capabilities there. #lore This raises concerns about the weaponization of space and the need for new rules of engagement... #!",
+  "de": "Da der Weltraum strategisch immer wichtiger wird, erlebt [SCOPE.sCountry('headlines_space_militarization_researcher').GetAltName('NOM')] einen Vorstoß zur Entwicklung und Stationierung militärischer Fähigkeiten dort. #lore Das weckt Sorgen über die Bewaffnung des Weltraums und die Notwendigkeit neuer Einsatzregeln... #!"
+ },
+ "notification_headlines_tech_space_militarization_name": {
+  "en": "#b THE NEXT BATTLEFIELD IS SPACE #!",
+  "de": "#b DAS NÄCHSTE SCHLACHTFELD IST DER WELTRAUM #!"
+ },
+ "notification_headlines_tech_stainless_steel_mass_production_desc": {
+  "en": "Metallurgists in [SCOPE.sCountry('headlines_stainless_steel_mass_production_researcher').GetName] can now produce stainless steel in large quantities. #lore This corrosion-resistant and durable material is useful in a wide range of applications, from cutlery to construction... #!",
+  "de": "Metallurgen in [SCOPE.sCountry('headlines_stainless_steel_mass_production_researcher').GetAltName('DAT')] können nun Edelstahl in großen Mengen herstellen. #lore Dieses korrosionsbeständige und langlebige Material ist in den unterschiedlichsten Anwendungen nützlich, von Besteck bis zum Bauwesen... #!"
+ },
+ "notification_headlines_tech_stainless_steel_mass_production_name": {
+  "en": "#b THE END OF RUST? STAINLESS STEEL FOR EVERYONE #!",
+  "de": "#b DAS ENDE DES ROSTS? EDELSTAHL FÜR ALLE #!"
+ },
+ "notification_headlines_tech_stealth_technology_desc": {
+  "en": "By using special materials and designs, [SCOPE.sCountry('headlines_stealth_technology_researcher').GetName] can make its military assets nearly invisible to radar and other [concept_detection] systems. #lore This stealth technology is a powerful advantage in modern warfare... #!",
+  "de": "Durch den Einsatz spezieller Materialien und Bauweisen kann [SCOPE.sCountry('headlines_stealth_technology_researcher').GetAltName('NOM')] seine militärischen Einheiten für Radar und andere Systeme der [concept_detection] nahezu unsichtbar machen. #lore Diese Tarnkappentechnik ist ein mächtiger Vorteil in der modernen Kriegsführung... #!"
+ },
+ "notification_headlines_tech_stealth_technology_name": {
+  "en": "#b THE INVISIBLE AIRCRAFT IS NOW A REALITY #!",
+  "de": "#b DAS UNSICHTBARE FLUGZEUG IST NUN REALITÄT #!"
+ },
+ "notification_headlines_tech_supersonic_aircraft_desc": {
+  "en": "[SCOPE.sCountry('headlines_supersonic_aircraft_researcher').GetAdjective] pilots are now flying aircraft that can travel faster than the speed of sound. #lore These supersonic aircraft have made air travel faster and have enhanced military aviation capabilities... #!",
+  "de": "[SCOPE.sCountry('headlines_supersonic_aircraft_researcher').GetAdjective|U]e Piloten fliegen nun Flugzeuge, die schneller als der Schall sind. #lore Diese Überschallflugzeuge haben den Luftverkehr beschleunigt und die militärischen Luftfahrtfähigkeiten verbessert... #!"
+ },
+ "notification_headlines_tech_supersonic_aircraft_name": {
+  "en": "#b BREAKING THE SOUND BARRIER #!",
+  "de": "#b DIE SCHALLMAUER DURCHBROCHEN #!"
+ },
+ "notification_headlines_tech_supply_chain_management_desc": {
+  "en": "By using technology and data to optimize their supply chains, companies in [SCOPE.sCountry('headlines_supply_chain_management_researcher').GetName] can make them more efficient and less costly. #lore It's all about getting the right things to the right place at the right time... #!",
+  "de": "Durch den Einsatz von Technologie und Daten zur Optimierung ihrer Lieferketten können Unternehmen in [SCOPE.sCountry('headlines_supply_chain_management_researcher').GetAltName('DAT')] diese effizienter und kostengünstiger gestalten. #lore Es geht darum, die richtigen Dinge zur richtigen Zeit an den richtigen Ort zu bringen... #!"
+ },
+ "notification_headlines_tech_supply_chain_management_name": {
+  "en": "#b THE SCIENCE OF GETTING THINGS WHERE THEY NEED TO GO #!",
+  "de": "#b DIE WISSENSCHAFT, DINGE DORTHIN ZU BRINGEN, WO SIE HINGEHÖREN #!"
+ },
+ "notification_headlines_tech_swarm_technology_desc": {
+  "en": "By coordinating large groups of autonomous systems, the military of [SCOPE.sCountry('headlines_swarm_technology_researcher').GetName] can create powerful new tools for reconnaissance, defense, and attack. #lore With this swarm technology, the whole is truly greater than the sum of its parts... #!",
+  "de": "Durch die Koordination großer Gruppen autonomer Systeme kann das Militär [SCOPE.sCountry('headlines_swarm_technology_researcher').GetAltName('GEN')] mächtige neue Werkzeuge für Aufklärung, Verteidigung und Angriff schaffen. #lore Mit dieser Schwarmtechnologie ist das Ganze wahrhaft mehr als die Summe seiner Teile... #!"
+ },
+ "notification_headlines_tech_swarm_technology_name": {
+  "en": "#b A SWARM OF DRONES, ACTING AS ONE #!",
+  "de": "#b EIN DROHNENSCHWARM, DER ALS EINS AGIERT #!"
+ },
+ "notification_headlines_tech_synthetic_biology_desc": {
+  "en": "By designing and building new biological parts and systems, scientists in [SCOPE.sCountry('headlines_synthetic_biology_researcher').GetName] can create solutions to some of the world's most pressing problems. #lore This field of synthetic biology has enormous potential, and some significant risks... #!",
+  "de": "Durch den Entwurf und Bau neuer biologischer Bausteine und Systeme können Wissenschaftler in [SCOPE.sCountry('headlines_synthetic_biology_researcher').GetAltName('DAT')] Lösungen für einige der drängendsten Probleme der Welt schaffen. #lore Dieses Feld der synthetischen Biologie birgt enormes Potenzial – und erhebliche Risiken... #!"
+ },
+ "notification_headlines_tech_synthetic_biology_name": {
+  "en": "#b DESIGNING LIFE FROM SCRATCH #!",
+  "de": "#b LEBEN VON GRUND AUF ENTWERFEN #!"
+ },
+ "notification_headlines_tech_tactical_nuclear_weapons_desc": {
+  "en": "Military planners in [SCOPE.sCountry('headlines_tactical_nuclear_weapons_researcher').GetName] have developed smaller, more versatile nuclear weapons that can be used on the battlefield. #lore These tactical nuclear weapons expand strategic options, but also make the use of nuclear weapons a more thinkable proposition... #!",
+  "de": "Militärplaner in [SCOPE.sCountry('headlines_tactical_nuclear_weapons_researcher').GetAltName('DAT')] haben kleinere, vielseitigere Nuklearwaffen entwickelt, die auf dem Schlachtfeld eingesetzt werden können. #lore Diese taktischen Nuklearwaffen erweitern die strategischen Optionen, machen den Einsatz von Nuklearwaffen aber auch zu einer denkbareren Möglichkeit... #!"
+ },
+ "notification_headlines_tech_tactical_nuclear_weapons_name": {
+  "en": "#b BATTLEFIELD NUKES A DANGEROUS ESCALATION #!",
+  "de": "#b ATOMWAFFEN AUF DEM SCHLACHTFELD: EINE GEFÄHRLICHE ESKALATION #!"
+ },
+ "notification_headlines_tech_telemedicine_desc": {
+  "en": "By delivering healthcare services remotely, [SCOPE.sCountry('headlines_telemedicine_researcher').GetName] can improve access to care for people in underserved areas. #lore This practice of telemedicine is a more efficient way to use medical resources, and it's becoming more common all the time... #!",
+  "de": "Durch die Bereitstellung von Gesundheitsdiensten aus der Ferne kann [SCOPE.sCountry('headlines_telemedicine_researcher').GetAltName('NOM')] den Zugang zur Versorgung für Menschen in unterversorgten Gebieten verbessern. #lore Diese Praxis der Telemedizin ist eine effizientere Nutzung medizinischer Ressourcen und wird immer häufiger... #!"
+ },
+ "notification_headlines_tech_telemedicine_name": {
+  "en": "#b THE DOCTOR WILL SEE YOU NOW... ON A SCREEN #!",
+  "de": "#b DER ARZT EMPFÄNGT SIE NUN... AUF DEM BILDSCHIRM #!"
+ },
+ "notification_headlines_tech_telepathic_communities_desc": {
+  "en": "What if people could communicate directly from mind to mind? #lore Theorists in [SCOPE.sCountry('headlines_telepathic_communities_researcher').GetName] imagine telepathic communities, connected by brain-computer interfaces, could foster a new level of empathy and understanding... #!",
+  "de": "Was, wenn Menschen direkt von Geist zu Geist kommunizieren könnten? #lore Theoretiker in [SCOPE.sCountry('headlines_telepathic_communities_researcher').GetAltName('DAT')] stellen sich vor, dass telepathische Gemeinschaften, verbunden durch Gehirn-Computer-Schnittstellen, eine neue Ebene von Empathie und Verständnis fördern könnten... #!"
+ },
+ "notification_headlines_tech_telepathic_communities_name": {
+  "en": "#b A COMMUNITY OF MINDS #!",
+  "de": "#b EINE GEMEINSCHAFT DER GEISTER #!"
+ },
+ "notification_headlines_tech_television_broadcasting_desc": {
+  "en": "The rise of television broadcasting networks in [SCOPE.sCountry('headlines_television_broadcasting_researcher').GetName] has changed the way people get their news and entertainment. #lore It has become a powerful force in shaping public opinion, for better or for worse... #!",
+  "de": "Der Aufstieg der Fernsehsendernetze in [SCOPE.sCountry('headlines_television_broadcasting_researcher').GetAltName('DAT')] hat verändert, wie Menschen an Nachrichten und Unterhaltung gelangen. #lore Es ist zu einer mächtigen Kraft bei der Prägung der öffentlichen Meinung geworden, im Guten wie im Schlechten... #!"
+ },
+ "notification_headlines_tech_television_broadcasting_name": {
+  "en": "#b BROADCASTING TO THE NATION #!",
+  "de": "#b SENDUNG AN DIE NATION #!"
+ },
+ "notification_headlines_tech_television_desc": {
+  "en": "The invention of the television in [SCOPE.sCountry('headlines_television_researcher').GetName] has revolutionized entertainment and communication. #lore It has become a powerful medium for spreading information and shaping public opinion, one flickering screen at a time... #!",
+  "de": "Die Erfindung des Fernsehers in [SCOPE.sCountry('headlines_television_researcher').GetAltName('DAT')] hat Unterhaltung und Kommunikation revolutioniert. #lore Es ist zu einem mächtigen Medium geworden, um Informationen zu verbreiten und die öffentliche Meinung zu prägen, ein flimmernder Bildschirm nach dem anderen... #!"
+ },
+ "notification_headlines_tech_television_name": {
+  "en": "#b PICTURES IN YOUR LIVING ROOM #!",
+  "de": "#b BILDER IN IHREM WOHNZIMMER #!"
+ },
+ "notification_headlines_tech_terrorism_and_anti_terrorism_desc": {
+  "en": "The rise of terrorism has forced [SCOPE.sCountry('headlines_terrorism_and_anti_terrorism_researcher').GetName] to develop new strategies to protect itself. #lore This has redefined national security priorities and led to a new era of global cooperation and conflict... #!",
+  "de": "Der Aufstieg des Terrorismus hat [SCOPE.sCountry('headlines_terrorism_and_anti_terrorism_researcher').GetAltName('AKK')] gezwungen, neue Strategien zum Selbstschutz zu entwickeln. #lore Das hat die Prioritäten der nationalen Sicherheit neu definiert und ein neues Zeitalter globaler Zusammenarbeit und globalen Konflikts eingeläutet... #!"
+ },
+ "notification_headlines_tech_terrorism_and_anti_terrorism_name": {
+  "en": "#b A NEW KIND OF WARFARE #!",
+  "de": "#b EINE NEUE ART DER KRIEGSFÜHRUNG #!"
+ },
+ "notification_headlines_tech_transistors_desc": {
+  "en": "The transistor, invented by scientists in [SCOPE.sCountry('headlines_transistors_researcher').GetName], is the tiny switch that makes all modern electronics possible. #lore Its invention has led to a revolution in computing and communication, changing the world in countless ways... #!",
+  "de": "Der Transistor, erfunden von Wissenschaftlern in [SCOPE.sCountry('headlines_transistors_researcher').GetAltName('DAT')], ist der winzige Schalter, der die gesamte moderne Elektronik ermöglicht. #lore Seine Erfindung hat zu einer Revolution in Datenverarbeitung und Kommunikation geführt und die Welt auf unzählige Arten verändert... #!"
+ },
+ "notification_headlines_tech_transistors_name": {
+  "en": "#b THE TINY SWITCH THAT WILL CHANGE THE WORLD #!",
+  "de": "#b DER WINZIGE SCHALTER, DER DIE WELT VERÄNDERN WIRD #!"
+ },
+ "notification_headlines_tech_universal_basic_income_desc": {
+  "en": "The idea of giving everyone a basic income is gaining traction in [SCOPE.sCountry('headlines_universal_basic_income_researcher').GetName] as a way to address economic inequality and automation. #lore This concept of a universal basic income is a bold idea, but one that could reshape society for the better... #!",
+  "de": "Die Idee, jedem ein Grundeinkommen zu geben, gewinnt in [SCOPE.sCountry('headlines_universal_basic_income_researcher').GetAltName('DAT')] als Mittel gegen wirtschaftliche Ungleichheit und Automatisierung an Zulauf. #lore Dieses Konzept eines bedingungslosen Grundeinkommens ist eine kühne Idee, die aber die Gesellschaft zum Besseren verändern könnte... #!"
+ },
+ "notification_headlines_tech_universal_basic_income_name": {
+  "en": "#b A PAYCHECK FOR EVERYONE? #!",
+  "de": "#b EIN GEHALT FÜR ALLE? #!"
+ },
+ "notification_headlines_tech_unmanned_aerial_vehicles_desc": {
+  "en": "Drones developed in [SCOPE.sCountry('headlines_unmanned_aerial_vehicles_researcher').GetName] have changed the face of warfare. #lore These unmanned aerial vehicles allow for surveillance and precision strikes without risking the lives of pilots, providing a powerful new tool in military arsenals... #!",
+  "de": "Drohnen, entwickelt in [SCOPE.sCountry('headlines_unmanned_aerial_vehicles_researcher').GetAltName('DAT')], haben das Gesicht der Kriegsführung verändert. #lore Diese unbemannten Flugkörper ermöglichen Aufklärung und Präzisionsschläge, ohne das Leben von Piloten zu riskieren, und liefern ein mächtiges neues Werkzeug für militärische Arsenale... #!"
+ },
+ "notification_headlines_tech_unmanned_aerial_vehicles_name": {
+  "en": "#b EYES IN THE SKY: THE AGE OF THE DRONE BEGINS #!",
+  "de": "#b AUGEN AM HIMMEL: DAS ZEITALTER DER DROHNE BEGINNT #!"
+ },
+ "notification_headlines_tech_video_games_desc": {
+  "en": "Video games have become a massive new form of entertainment and art. #lore Spreading from [SCOPE.sCountry('headlines_video_games_researcher').GetName], they've had a huge influence on popular culture, and they're only getting more immersive and complex... #!",
+  "de": "Videospiele sind zu einer gewaltigen neuen Form der Unterhaltung und Kunst geworden. #lore Ausgehend von [SCOPE.sCountry('headlines_video_games_researcher').GetAltName('DAT')] haben sie großen Einfluss auf die Populärkultur gewonnen und werden nur noch immersiver und komplexer... #!"
+ },
+ "notification_headlines_tech_video_games_name": {
+  "en": "#b A NEW PASTIME: THE RISE OF VIDEO GAMES #!",
+  "de": "#b EIN NEUER ZEITVERTREIB: DER AUFSTIEG DER VIDEOSPIELE #!"
+ },
+ "notification_headlines_tech_virtual_reality_desc": {
+  "en": "Virtual reality technologies pioneered in [SCOPE.sCountry('headlines_virtual_reality_researcher').GetName] can create incredibly immersive experiences for entertainment, education, and training. #lore It's a new way to interact with the digital world, and it's full of potential... #!",
+  "de": "Virtual-Reality-Technologien, entwickelt in [SCOPE.sCountry('headlines_virtual_reality_researcher').GetAltName('DAT')], können unglaublich immersive Erlebnisse für Unterhaltung, Bildung und Training schaffen. #lore Es ist eine neue Art, mit der digitalen Welt zu interagieren, und voller Potenzial... #!"
+ },
+ "notification_headlines_tech_virtual_reality_name": {
+  "en": "#b STEPPING INTO ANOTHER WORLD #!",
+  "de": "#b DER SCHRITT IN EINE ANDERE WELT #!"
+ },
+ "notification_headlines_tech_wireless_internet_desc": {
+  "en": "Wi-Fi has made it possible to connect to the internet without cables. #lore Developed in [SCOPE.sCountry('headlines_wireless_internet_researcher').GetName], it has made life more convenient and has revolutionized the way people work, communicate, and entertain themselves... #!",
+  "de": "WLAN hat es möglich gemacht, sich ohne Kabel mit dem Internet zu verbinden. #lore Entwickelt in [SCOPE.sCountry('headlines_wireless_internet_researcher').GetAltName('DAT')], hat es das Leben bequemer gemacht und die Art, wie Menschen arbeiten, kommunizieren und sich unterhalten, revolutioniert... #!"
+ },
+ "notification_headlines_tech_wireless_internet_name": {
+  "en": "#b INTERNET WITHOUT THE WIRES #!",
+  "de": "#b INTERNET OHNE KABEL #!"
+ },
+ "notification_headlines_tech_world_wide_web_desc": {
+  "en": "The World Wide Web, developed by researchers including those in [SCOPE.sCountry('headlines_world_wide_web_researcher').GetName], has transformed the way people access and share information. #lore It has created a global platform for collaboration and innovation, connecting the world in a vast network of knowledge... #!",
+  "de": "Das World Wide Web, entwickelt von Forschern unter anderem in [SCOPE.sCountry('headlines_world_wide_web_researcher').GetAltName('DAT')], hat verändert, wie Menschen auf Informationen zugreifen und sie teilen. #lore Es hat eine globale Plattform für Zusammenarbeit und Innovation geschaffen und die Welt in einem riesigen Wissensnetz verbunden... #!"
+ },
+ "notification_headlines_tech_world_wide_web_name": {
+  "en": "#b 'WORLD WIDE WEB' CONNECTS THE GLOBE #!",
+  "de": "#b „WORLD WIDE WEB” VERBINDET DEN GLOBUS #!"
+ },
+ "notification_homeland_created_desc": {
+  "en": "A new [SCOPE.sCulture('form_culture').GetName] [concept_homeland] has been created in [SCOPE.GetRootScope.GetState.GetName].",
+  "de": "Ein neues [concept_homeland] der [SCOPE.sCulture('form_culture').GetName] wurde in [SCOPE.GetRootScope.GetState.GetName] geschaffen."
+ },
+ "notification_homeland_created_name": {
+  "en": "Homeland Created",
+  "de": "Heimatland geschaffen"
+ },
+ "notification_homeland_removed_desc": {
+  "en": "The [SCOPE.sCulture('removal_culture').GetName] [concept_homeland] in [SCOPE.GetRootScope.GetState.GetName] has been removed.",
+  "de": "Das [concept_homeland] der [SCOPE.sCulture('removal_culture').GetName] in [SCOPE.GetRootScope.GetState.GetName] wurde entfernt."
+ },
+ "notification_homeland_removed_name": {
+  "en": "Homeland Removed",
+  "de": "Heimatland entfernt"
+ },
+ "notification_ideology_anti_colonialist_added_desc": {
+  "en": "The Anticolonial Ideology has been added to the [SCOPE.gsInterestGroup('interest_group_scope').GetName] [concept_interest_group].",
+  "de": "Die antikolonialistische Ideologie wurde der [concept_interest_group] [SCOPE.gsInterestGroup('interest_group_scope').GetName] hinzugefügt."
+ },
+ "notification_ideology_anti_colonialist_added_name": {
+  "en": "Anticolonial Ideology Added",
+  "de": "Antikolonialistische Ideologie hinzugefügt"
+ },
+ "notification_ideology_multicultural_added_desc": {
+  "en": "The Multicultural Ideology has been added to the [SCOPE.gsInterestGroup('interest_group_scope').GetName] [concept_interest_group].",
+  "de": "Die multikulturelle Ideologie wurde der [concept_interest_group] [SCOPE.gsInterestGroup('interest_group_scope').GetName] hinzugefügt."
+ },
+ "notification_ideology_multicultural_added_name": {
+  "en": "Multicultural Ideology Added",
+  "de": "Multikulturelle Ideologie hinzugefügt"
+ },
+ "notification_industrial_nuke_fails_attacker_desc": {
+  "en": "Our [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] has failed.",
+  "de": "Unser [concept_nuclear_strike] auf [SCOPE.sState('target_state').GetName] ist gescheitert."
+ },
+ "notification_industrial_nuke_fails_attacker_name": {
+  "en": "Attempted [concept_nuclear_strike] Failed",
+  "de": "Versuchter [concept_nuclear_strike] gescheitert"
+ },
+ "notification_industrial_nuke_fails_defender_desc": {
+  "en": "A [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] has failed.",
+  "de": "Ein [concept_nuclear_strike] auf [SCOPE.sState('target_state').GetName] ist gescheitert."
+ },
+ "notification_industrial_nuke_fails_defender_name": {
+  "en": "Attempted [concept_nuclear_strike] Failed",
+  "de": "Versuchter [concept_nuclear_strike] gescheitert"
+ },
+ "notification_industrial_nuke_succeeds_attacker_desc": {
+  "en": "Our [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] has been successful.",
+  "de": "Unser [concept_nuclear_strike] auf [SCOPE.sState('target_state').GetName] war erfolgreich."
+ },
+ "notification_industrial_nuke_succeeds_attacker_name": {
+  "en": "[concept_nuclear_strike] Successful",
+  "de": "[concept_nuclear_strike] erfolgreich"
+ },
+ "notification_industrial_nuke_succeeds_defender_desc": {
+  "en": "A [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] has been successful.",
+  "de": "Ein [concept_nuclear_strike] auf [SCOPE.sState('target_state').GetName] war erfolgreich."
+ },
+ "notification_industrial_nuke_succeeds_defender_name": {
+  "en": "[concept_nuclear_strike] Successful",
+  "de": "[concept_nuclear_strike] erfolgreich"
+ },
+ "notification_iw_election_interference_confidence_desc": {
+  "en": "Foreign intelligence services have undermined public confidence in our electoral process. [concept_electoral_confidence] has been reduced.",
+  "de": "Ausländische Geheimdienste haben das öffentliche Vertrauen in unseren Wahlprozess untergraben. [concept_electoral_confidence] wurde verringert."
+ },
+ "notification_iw_election_interference_confidence_name": {
+  "en": "Election Interference Detected",
+  "de": "Wahleinmischung entdeckt"
+ },
+ "notification_iw_operation_cancelled_desc": {
+  "en": "A cyber operation has been terminated.",
+  "de": "Eine Cyberoperation wurde beendet."
+ },
+ "notification_iw_operation_cancelled_name": {
+  "en": "Cyber Operation Cancelled",
+  "de": "Cyberoperation abgebrochen"
+ },
+ "notification_iw_operation_launched_desc": {
+  "en": "Our intelligence services have initiated a new covert cyber operation.",
+  "de": "Unsere Geheimdienste haben eine neue verdeckte Cyberoperation eingeleitet."
+ },
+ "notification_iw_operation_launched_name": {
+  "en": "Cyber Operation Launched",
+  "de": "Cyberoperation eingeleitet"
+ },
+ "notification_nationalization_notice_desc": {
+  "en": "[SCOPE.sCountry('nationalizing_country').GetName] has nationalized foreign-owned assets in their territory, including ours.",
+  "de": "[SCOPE.sCountry('nationalizing_country').GetAltName('NOM')|U] hat ausländische Vermögenswerte auf seinem Territorium verstaatlicht, darunter auch unsere."
+ },
+ "notification_nationalization_notice_name": {
+  "en": "Foreign Assets Nationalized",
+  "de": "Ausländische Vermögenswerte verstaatlicht"
+ },
+ "notification_nd_doctrine_bound_by_law_desc": {
+  "en": "The #bold No-First-Strike Pledge#! [concept_amendment] is in force, and it binds our nuclear doctrine: we are now committed to #v No First Use#!. The law made this change, not our government, so the wait before we may next choose a doctrine runs on from our own last choice. Abandoning No First Use repudiates the pledge and strikes the amendment from our laws.",
+  "de": "Der #bold Verzicht auf den Ersteinsatz#!-[concept_amendment] ist in Kraft und bindet unsere nukleare Doktrin: Wir sind nun auf #v Kein Erstschlag#! festgelegt. Diese Änderung ging vom Gesetz aus, nicht von unserer Regierung, daher läuft die Wartezeit, bevor wir erneut eine Doktrin wählen dürfen, seit unserer eigenen letzten Wahl. Die Aufgabe von Kein Erstschlag widerruft die Erklärung und streicht den Nachtrag aus unseren Gesetzen."
+ },
+ "notification_nd_doctrine_bound_by_law_name": {
+  "en": "Doctrine Bound by Law",
+  "de": "Doktrin gesetzlich gebunden"
+ },
+ "notification_tactical_nuke_fails_attacker_desc": {
+  "en": "Our tactical [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] was stopped by their defenses.",
+  "de": "Unser taktischer [concept_nuclear_strike] auf [SCOPE.sState('target_state').GetName] wurde von ihrer Abwehr gestoppt."
+ },
+ "notification_tactical_nuke_fails_attacker_name": {
+  "en": "Tactical [concept_nuclear_strike] Failed",
+  "de": "Taktischer [concept_nuclear_strike] gescheitert"
+ },
+ "notification_tactical_nuke_fails_defender_desc": {
+  "en": "Our defenses stopped a tactical [concept_nuclear_strike] by [SCOPE.sCountry('attacking_country').GetName] on [SCOPE.sState('target_state').GetName].",
+  "de": "Unsere Abwehr stoppte einen taktischen [concept_nuclear_strike] [SCOPE.sCountry('attacking_country').GetAltName('GEN')] auf [SCOPE.sState('target_state').GetName]."
+ },
+ "notification_tactical_nuke_fails_defender_name": {
+  "en": "Tactical [concept_nuclear_strike] Stopped",
+  "de": "Taktischer [concept_nuclear_strike] gestoppt"
+ },
+ "notification_tactical_nuke_succeeds_attacker_desc": {
+  "en": "Our tactical [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] has been successful.",
+  "de": "Unser taktischer [concept_nuclear_strike] auf [SCOPE.sState('target_state').GetName] war erfolgreich."
+ },
+ "notification_tactical_nuke_succeeds_attacker_name": {
+  "en": "Tactical [concept_nuclear_strike] Successful",
+  "de": "Taktischer [concept_nuclear_strike] erfolgreich"
+ },
+ "notification_tactical_nuke_succeeds_defender_desc": {
+  "en": "[SCOPE.sCountry('attacking_country').GetName] has struck [SCOPE.sState('target_state').GetName] with a tactical [concept_nuclear_strike].",
+  "de": "[SCOPE.sCountry('attacking_country').GetAltName('NOM')|U] hat [SCOPE.sState('target_state').GetName] mit einem taktischen [concept_nuclear_strike] getroffen."
+ },
+ "notification_tactical_nuke_succeeds_defender_name": {
+  "en": "Tactical [concept_nuclear_strike] Suffered",
+  "de": "Taktischer [concept_nuclear_strike] erlitten"
+ },
+ "notification_un_article_19_notice_desc": {
+  "en": "Two years in arrears on our UN dues have cost us our vote in the General Assembly. We cast no ballot and table no resolution until we pay what we owe.",
+  "de": "Zwei Jahre Rückstand bei unseren UN-Beiträgen haben uns das Stimmrecht in der Generalversammlung gekostet. Wir geben keine Stimme ab und bringen keine Resolution ein, bis wir unsere Schulden begleichen."
+ },
+ "notification_un_article_19_notice_name": {
+  "en": "Article 19: Our Vote Is Lost",
+  "de": "Artikel 19: Unser Stimmrecht ist verloren"
+ },
+ "notification_un_charter_reform_ripe_notice_desc": {
+  "en": "UN authority has held within five points of the Charter's ceiling for two years. The next charter reform can now be tabled in the General Assembly chamber.",
+  "de": "Die UN-Autorität hat sich zwei Jahre lang innerhalb von fünf Punkten der Charta-Obergrenze gehalten. Die nächste Chartareform kann nun im Plenarsaal der Generalversammlung eingebracht werden."
+ },
+ "notification_un_charter_reform_ripe_notice_name": {
+  "en": "The Charter Has Been Outgrown",
+  "de": "Die Charta ist überholt"
+ },
+ "notification_un_conference_opened_notice_desc": {
+  "en": "A great power has convened a founding conference for a new United Nations. If the world's leading power does not wreck it, the new organisation will be founded in a year, and every country invited to sign its charter.",
+  "de": "Eine Großmacht hat eine Gründungskonferenz für eine neue Organisation der Vereinten Nationen einberufen. Sofern die führende Macht der Welt sie nicht vereitelt, wird die neue Organisation binnen eines Jahres gegründet, und jedes Land wird eingeladen, ihre Charta zu unterzeichnen."
+ },
+ "notification_un_conference_opened_notice_name": {
+  "en": "A Founding Conference",
+  "de": "Eine Gründungskonferenz"
+ },
+ "notification_un_crisis_closed_notice_desc": {
+  "en": "UN authority has climbed back above 20. The United Nations is no longer in crisis.",
+  "de": "Die UN-Autorität ist wieder über 20 gestiegen. Die Vereinten Nationen befinden sich nicht mehr in der Krise."
+ },
+ "notification_un_crisis_closed_notice_name": {
+  "en": "The UN Crisis Has Passed",
+  "de": "Die UN-Krise ist vorüber"
+ },
+ "notification_un_crisis_opened_notice_desc": {
+  "en": "UN authority has fallen below 10. The organisation is in crisis until it climbs back above 20 — and if the world gives up on it altogether, it will dissolve. The journal entry shows the clock and who could save it.",
+  "de": "Die UN-Autorität ist unter 10 gefallen. Die Organisation befindet sich in der Krise, bis sie wieder über 20 steigt – und sollte die Welt sie ganz aufgeben, wird sie sich auflösen. Der Journaleintrag zeigt die Uhr und wer sie retten könnte."
+ },
+ "notification_un_crisis_opened_notice_name": {
+  "en": "The United Nations in Crisis",
+  "de": "Die Vereinten Nationen in der Krise"
+ },
+ "notification_un_floor_open_notice_desc": {
+  "en": "The General Assembly's recess is over. Every member may table business again.",
+  "de": "Die Sitzungspause der Generalversammlung ist vorbei. Jedes Mitglied kann wieder Anträge einbringen."
+ },
+ "notification_un_floor_open_notice_name": {
+  "en": "The Floor Is Open",
+  "de": "Das Wort ist frei"
+ },
+ "notification_un_humanitarian_token_received_desc": {
+  "en": "A foreign power has provided modest humanitarian assistance to help address the ongoing crisis.",
+  "de": "Eine ausländische Macht hat bescheidene humanitäre Hilfe geleistet, um die anhaltende Krise zu bewältigen."
+ },
+ "notification_un_humanitarian_token_received_name": {
+  "en": "Humanitarian Assistance Received",
+  "de": "Humanitäre Hilfe erhalten"
+ },
+ "notification_un_mission_failed_notice_desc": {
+  "en": "A UN mission has failed: its host was attacked, it was sent home, or everyone who served in it left. The Assembly's credibility suffers.",
+  "de": "Eine UN-Mission ist gescheitert: Ihr Gastland wurde angegriffen, sie wurde nach Hause geschickt, oder alle, die in ihr dienten, haben sie verlassen. Die Glaubwürdigkeit der Versammlung leidet darunter."
+ },
+ "notification_un_mission_failed_notice_name": {
+  "en": "A UN Mission Fails",
+  "de": "Eine UN-Mission scheitert"
+ },
+ "notification_un_mission_lapsed_notice_desc": {
+  "en": "A UN mission in our country has ended with its work unfinished: its time ran out, or it had nothing left to do there.",
+  "de": "Eine UN-Mission in unserem Land hat mit unerledigter Arbeit geendet: Ihre Zeit ist abgelaufen, oder es gab dort nichts mehr für sie zu tun."
+ },
+ "notification_un_mission_lapsed_notice_name": {
+  "en": "A UN Mission Ends",
+  "de": "Eine UN-Mission endet"
+ },
+ "notification_un_mission_opened_notice_desc": {
+  "en": "The United Nations has sent a mission to one of our states. Its work is shown in the state, and in the chamber's register of missions.",
+  "de": "Die Vereinten Nationen haben eine Mission in einen unserer Bundesstaaten entsandt. Ihre Arbeit wird im Bundesstaat angezeigt sowie im Missionsregister des Plenarsaals."
+ },
+ "notification_un_mission_opened_notice_name": {
+  "en": "A UN Mission Arrives",
+  "de": "Eine UN-Mission trifft ein"
+ },
+ "notification_un_mission_reinforced_notice_desc": {
+  "en": "Another member has sent a contingent to the UN mission in one of our states. The mission grows stronger.",
+  "de": "Ein weiteres Mitglied hat ein Kontingent zur UN-Mission in einem unserer Bundesstaaten entsandt. Die Mission wird gestärkt."
+ },
+ "notification_un_mission_reinforced_notice_name": {
+  "en": "A UN Mission Reinforced",
+  "de": "Eine UN-Mission verstärkt"
+ },
+ "notification_un_mission_succeeded_notice_desc": {
+  "en": "A UN mission has accomplished its work. The Assembly's record of delivery grows, and the countries that served in it are honoured for it.",
+  "de": "Eine UN-Mission hat ihre Arbeit vollbracht. Die Erfolgsbilanz der Versammlung wächst, und die Länder, die in ihr gedient haben, werden dafür geehrt."
+ },
+ "notification_un_mission_succeeded_notice_name": {
+  "en": "A UN Mission Accomplished",
+  "de": "Eine UN-Mission vollbracht"
+ },
+ "notification_un_mission_withdrawn_notice_desc": {
+  "en": "A member has brought its contingent home from the UN mission in one of our states. A peacekeeping or stabilisation mission with nobody left to serve in it fails.",
+  "de": "Ein Mitglied hat sein Kontingent von der UN-Mission in einem unserer Bundesstaaten nach Hause geholt. Eine Friedens- oder Stabilisierungsmission, in der niemand mehr dient, scheitert."
+ },
+ "notification_un_mission_withdrawn_notice_name": {
+  "en": "A UN Contingent Goes Home",
+  "de": "Ein UN-Kontingent kehrt heim"
+ },
+ "notification_un_permanent_seat_granted_notice_desc": {
+  "en": "We have taken a permanent seat on the [concept_un_security_council]. From now on we may [concept_un_veto] a [concept_un_resolution_binding].",
+  "de": "Wir haben einen ständigen Sitz im [concept_un_security_council] übernommen. Von nun an dürfen wir eine [concept_un_resolution_binding] mit einem [concept_un_veto] belegen."
+ },
+ "notification_un_permanent_seat_granted_notice_name": {
+  "en": "A Permanent Seat",
+  "de": "Ein ständiger Sitz"
+ },
+ "notification_un_representation_restored_notice_desc": {
+  "en": "We conduct our own foreign policy again, so our delegation takes its seat in the General Assembly once more. We vote, table resolutions and pay our own dues.",
+  "de": "Wir betreiben wieder unsere eigene Außenpolitik, daher nimmt unsere Delegation erneut ihren Sitz in der Generalversammlung ein. Wir stimmen ab, bringen Resolutionen ein und zahlen unsere eigenen Beiträge."
+ },
+ "notification_un_representation_restored_notice_name": {
+  "en": "Our UN Representation Is Restored",
+  "de": "Unsere UN-Vertretung ist wiederhergestellt"
+ },
+ "notification_un_representation_suspended_notice_desc": {
+  "en": "We no longer conduct our own foreign policy, so our seat in the United Nations is suspended. We remain a member, but we cast no vote and table no resolution; any permanent seat, the headquarters and our UN programmes are given up. While our overlord sits in the Assembly and pays its dues, it pays ours and we keep the benefits of membership.",
+  "de": "Wir betreiben nicht mehr unsere eigene Außenpolitik, daher ist unser Sitz bei den Vereinten Nationen ausgesetzt. Wir bleiben Mitglied, geben aber keine Stimme ab und bringen keine Resolution ein; ein etwaiger ständiger Sitz, der Hauptsitz und unsere UN-Programme werden aufgegeben. Solange unser Suzerän in der Versammlung sitzt und seine Beiträge zahlt, zahlt er auch unsere, und wir behalten die Vorteile der Mitgliedschaft."
+ },
+ "notification_un_representation_suspended_notice_name": {
+  "en": "Our UN Representation Is Suspended",
+  "de": "Unsere UN-Vertretung ist ausgesetzt"
+ },
+ "notification_un_tariff_retaliation_received_desc": {
+  "en": "A rival has imposed unilateral tariffs on our trade. Our merchants are scrambling to find alternative markets.",
+  "de": "Ein Rivale hat einseitige Zölle auf unseren Handel verhängt. Unsere Kaufleute suchen hastig nach alternativen Märkten."
+ },
+ "notification_un_tariff_retaliation_received_name": {
+  "en": "Tariff Retaliation",
+  "de": "Zollvergeltung"
+ },
+ "notification_un_trade_deal_received_desc": {
+  "en": "[SCOPE.sCountry('un_trade_concession_offerer').GetName] has offered us trade concessions to settle our trade dispute outside the UN framework, and our merchants are already profiting from them.",
+  "de": "[SCOPE.sCountry('un_trade_concession_offerer').GetAltName('NOM')|U] hat uns Handelszugeständnisse angeboten, um unseren Handelsstreit außerhalb des UN-Rahmens beizulegen, und unsere Kaufleute profitieren bereits davon."
+ },
+ "notification_un_trade_deal_received_name": {
+  "en": "Trade Concessions Offered",
+  "de": "Handelszugeständnisse angeboten"
+ },
+ "notification_un_war_surcharge_notice_desc": {
+  "en": "We added a war goal without a military mandate from the United Nations. At its present strength, the Assembly makes every such goal cost extra infamy: 2 at the Established tier, 4 at Strong, 10 at Supranational, and twice that from Strong against a country under UN peacekeeping.",
+  "de": "Wir haben ein Kriegsziel ohne militärisches Mandat der Vereinten Nationen hinzugefügt. Bei ihrer derzeitigen Stärke lässt die Versammlung jedes solche Ziel zusätzliche Schande kosten: 2 auf der Stufe Etabliert, 4 auf Stark, 10 auf Supranational, und das Doppelte davon ab Stark gegen ein Land unter UN-Friedenssicherung."
+ },
+ "notification_un_war_surcharge_notice_name": {
+  "en": "A War Without a Mandate",
+  "de": "Ein Krieg ohne Mandat"
+ },
+ "notification_violence_against_minorities_desc": {
+  "en": "Violence has erupted against minorities in [SCOPE.GetRootScope.GetState.GetName]. Some have died and many have fled for [SCOPE.sState('migration_target').GetName].",
+  "de": "In [SCOPE.GetRootScope.GetState.GetName] ist Gewalt gegen Minderheiten ausgebrochen. Einige sind gestorben, und viele sind nach [SCOPE.sState('migration_target').GetName] geflohen."
+ },
+ "notification_violence_against_minorities_name": {
+  "en": "Violence Against Minorities",
+  "de": "Gewalt gegen Minderheiten"
+ },
+ "notification_wonder_construction_complete_antimatter_facility_desc": {
+  "en": "Construction of the Antimatter Containment Facility has been completed in [SCOPE.sState('wonder_complete_state').GetName].",
+  "de": "Der Bau der Antimaterie-Eindämmungsanlage in [SCOPE.sState('wonder_complete_state').GetName] wurde abgeschlossen."
+ },
+ "notification_wonder_construction_complete_antimatter_facility_name": {
+  "en": "Antimatter Containment Facility Completed",
+  "de": "Antimaterie-Eindämmungsanlage fertiggestellt"
+ },
+ "notification_wonder_construction_complete_consciousness_network_desc": {
+  "en": "Construction of the Consciousness Network has been completed in [SCOPE.sState('wonder_complete_state').GetName].",
+  "de": "Der Bau des Bewusstseinsnetzwerks in [SCOPE.sState('wonder_complete_state').GetName] wurde abgeschlossen."
+ },
+ "notification_wonder_construction_complete_consciousness_network_name": {
+  "en": "Consciousness Network Completed",
+  "de": "Bewusstseinsnetzwerk fertiggestellt"
+ },
+ "notification_wonder_construction_complete_mind_upload_nexus_desc": {
+  "en": "Construction of the Mind Upload Nexus has been completed in [SCOPE.sState('wonder_complete_state').GetName].",
+  "de": "Der Bau des Bewusstseins-Upload-Nexus in [SCOPE.sState('wonder_complete_state').GetName] wurde abgeschlossen."
+ },
+ "notification_wonder_construction_complete_mind_upload_nexus_name": {
+  "en": "Mind Upload Nexus Completed",
+  "de": "Bewusstseins-Upload-Nexus fertiggestellt"
+ },
+ "notification_wonder_construction_complete_nanofabrication_center_desc": {
+  "en": "Construction of the Nanofabrication Center has been completed in [SCOPE.sState('wonder_complete_state').GetName].",
+  "de": "Der Bau des Nanofabrikationszentrums in [SCOPE.sState('wonder_complete_state').GetName] wurde abgeschlossen."
+ },
+ "notification_wonder_construction_complete_nanofabrication_center_name": {
+  "en": "Nanofabrication Center Completed",
+  "de": "Nanofabrikationszentrum fertiggestellt"
+ },
+ "notification_wonder_construction_complete_orbital_battlestation_desc": {
+  "en": "Construction of the Orbital Battlestation has been completed in [SCOPE.sState('wonder_complete_state').GetName].",
+  "de": "Der Bau der Orbitalen Kampfstation in [SCOPE.sState('wonder_complete_state').GetName] wurde abgeschlossen."
+ },
+ "notification_wonder_construction_complete_orbital_battlestation_name": {
+  "en": "Orbital Battlestation Completed",
+  "de": "Orbitale Kampfstation fertiggestellt"
+ },
+ "notification_wonder_construction_complete_solar_collector_desc": {
+  "en": "Construction of the Orbital Solar Collector has been completed in [SCOPE.sState('wonder_complete_state').GetName].",
+  "de": "Der Bau des Orbitalen Sonnenkollektors in [SCOPE.sState('wonder_complete_state').GetName] wurde abgeschlossen."
+ },
+ "notification_wonder_construction_complete_solar_collector_name": {
+  "en": "Orbital Solar Collector Completed",
+  "de": "Orbitaler Sonnenkollektor fertiggestellt"
+ },
+ "notification_wonder_construction_complete_space_elevator_desc": {
+  "en": "Construction of the Space Elevator has been completed in [SCOPE.sState('wonder_complete_state').GetName].",
+  "de": "Der Bau des Weltraumaufzugs in [SCOPE.sState('wonder_complete_state').GetName] wurde abgeschlossen."
+ },
+ "notification_wonder_construction_complete_space_elevator_name": {
+  "en": "Space Elevator Completed",
+  "de": "Weltraumaufzug fertiggestellt"
+ }
+}

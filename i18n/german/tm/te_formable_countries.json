@@ -1,0 +1,3615 @@
+{
+ "AFU": {
+  "en": "African Union",
+  "de": "Afrikanische Union"
+ },
+ "AFU_ADJ": {
+  "en": "African",
+  "de": "Afrikanisch"
+ },
+ "AFU_AKK": {
+  "en": "African Union",
+  "de": "die Afrikanische Union",
+  "base": "AFU"
+ },
+ "AFU_DAT": {
+  "en": "African Union",
+  "de": "der Afrikanischen Union",
+  "base": "AFU"
+ },
+ "AFU_GEN": {
+  "en": "African Union",
+  "de": "der Afrikanischen Union",
+  "base": "AFU"
+ },
+ "AFU_IN": {
+  "en": "African Union",
+  "de": "in der Afrikanischen Union",
+  "base": "AFU"
+ },
+ "AFU_NACH": {
+  "en": "African Union",
+  "de": "in die Afrikanische Union",
+  "base": "AFU"
+ },
+ "AFU_NOM": {
+  "en": "African Union",
+  "de": "die Afrikanische Union",
+  "base": "AFU"
+ },
+ "AFU_VON": {
+  "en": "African Union",
+  "de": "von der Afrikanischen Union",
+  "base": "AFU"
+ },
+ "BHA": {
+  "en": "India",
+  "de": "Indien"
+ },
+ "BHA_ADJ": {
+  "en": "Indian",
+  "de": "Indisch"
+ },
+ "BHA_AKK": {
+  "en": "India",
+  "de": "Indien",
+  "base": "BHA"
+ },
+ "BHA_DAT": {
+  "en": "India",
+  "de": "Indien",
+  "base": "BHA"
+ },
+ "BHA_GEN": {
+  "en": "India",
+  "de": "Indiens",
+  "base": "BHA"
+ },
+ "BHA_IN": {
+  "en": "India",
+  "de": "in Indien",
+  "base": "BHA"
+ },
+ "BHA_NACH": {
+  "en": "India",
+  "de": "nach Indien",
+  "base": "BHA"
+ },
+ "BHA_NOM": {
+  "en": "India",
+  "de": "Indien",
+  "base": "BHA"
+ },
+ "BHA_VON": {
+  "en": "India",
+  "de": "von Indien",
+  "base": "BHA"
+ },
+ "DAR": {
+  "en": "Dar-Al-Islam",
+  "de": "Dar al-Islam"
+ },
+ "DAR_ADJ": {
+  "en": "Islamic",
+  "de": "Islamisch"
+ },
+ "DAR_AKK": {
+  "en": "Dar-Al-Islam",
+  "de": "Dar al-Islam",
+  "base": "DAR"
+ },
+ "DAR_DAT": {
+  "en": "Dar-Al-Islam",
+  "de": "Dar al-Islam",
+  "base": "DAR"
+ },
+ "DAR_GEN": {
+  "en": "Dar-Al-Islam",
+  "de": "Dar al-Islam",
+  "base": "DAR"
+ },
+ "DAR_IN": {
+  "en": "Dar-Al-Islam",
+  "de": "in Dar al-Islam",
+  "base": "DAR"
+ },
+ "DAR_NACH": {
+  "en": "Dar-Al-Islam",
+  "de": "nach Dar al-Islam",
+  "base": "DAR"
+ },
+ "DAR_NOM": {
+  "en": "Dar-Al-Islam",
+  "de": "Dar al-Islam",
+  "base": "DAR"
+ },
+ "DAR_VON": {
+  "en": "Dar-Al-Islam",
+  "de": "von Dar al-Islam",
+  "base": "DAR"
+ },
+ "EAF": {
+  "en": "East African Federation",
+  "de": "Ostafrikanische Föderation"
+ },
+ "EAF_ADJ": {
+  "en": "East African",
+  "de": "Ostafrikanisch"
+ },
+ "EAF_AKK": {
+  "en": "East African Federation",
+  "de": "die Ostafrikanische Föderation",
+  "base": "EAF"
+ },
+ "EAF_DAT": {
+  "en": "East African Federation",
+  "de": "der Ostafrikanischen Föderation",
+  "base": "EAF"
+ },
+ "EAF_GEN": {
+  "en": "East African Federation",
+  "de": "der Ostafrikanischen Föderation",
+  "base": "EAF"
+ },
+ "EAF_IN": {
+  "en": "East African Federation",
+  "de": "in der Ostafrikanischen Föderation",
+  "base": "EAF"
+ },
+ "EAF_NACH": {
+  "en": "East African Federation",
+  "de": "in die Ostafrikanische Föderation",
+  "base": "EAF"
+ },
+ "EAF_NOM": {
+  "en": "East African Federation",
+  "de": "die Ostafrikanische Föderation",
+  "base": "EAF"
+ },
+ "EAF_VON": {
+  "en": "East African Federation",
+  "de": "von der Ostafrikanischen Föderation",
+  "base": "EAF"
+ },
+ "EUN": {
+  "en": "European Union",
+  "de": "Europäische Union"
+ },
+ "EUN_ADJ": {
+  "en": "European",
+  "de": "Europäisch"
+ },
+ "EUN_AKK": {
+  "en": "European Union",
+  "de": "die Europäische Union",
+  "base": "EUN"
+ },
+ "EUN_DAT": {
+  "en": "European Union",
+  "de": "der Europäischen Union",
+  "base": "EUN"
+ },
+ "EUN_GEN": {
+  "en": "European Union",
+  "de": "der Europäischen Union",
+  "base": "EUN"
+ },
+ "EUN_IN": {
+  "en": "European Union",
+  "de": "in der Europäischen Union",
+  "base": "EUN"
+ },
+ "EUN_NACH": {
+  "en": "European Union",
+  "de": "in die Europäische Union",
+  "base": "EUN"
+ },
+ "EUN_NOM": {
+  "en": "European Union",
+  "de": "die Europäische Union",
+  "base": "EUN"
+ },
+ "EUN_VON": {
+  "en": "European Union",
+  "de": "von der Europäischen Union",
+  "base": "EUN"
+ },
+ "INM": {
+  "en": "Intermarium",
+  "de": "Intermarium"
+ },
+ "INM_ADJ": {
+  "en": "Intermarian",
+  "de": "Intermarisch"
+ },
+ "INM_AKK": {
+  "en": "Intermarium",
+  "de": "Intermarium",
+  "base": "INM"
+ },
+ "INM_DAT": {
+  "en": "Intermarium",
+  "de": "Intermarium",
+  "base": "INM"
+ },
+ "INM_GEN": {
+  "en": "Intermarium",
+  "de": "Intermariums",
+  "base": "INM"
+ },
+ "INM_IN": {
+  "en": "Intermarium",
+  "de": "in Intermarium",
+  "base": "INM"
+ },
+ "INM_NACH": {
+  "en": "Intermarium",
+  "de": "nach Intermarium",
+  "base": "INM"
+ },
+ "INM_NOM": {
+  "en": "Intermarium",
+  "de": "Intermarium",
+  "base": "INM"
+ },
+ "INM_VON": {
+  "en": "Intermarium",
+  "de": "von Intermarium",
+  "base": "INM"
+ },
+ "NUS": {
+  "en": "Indonesia",
+  "de": "Indonesien"
+ },
+ "NUS_ADJ": {
+  "en": "Indonesian",
+  "de": "Indonesisch"
+ },
+ "NUS_AKK": {
+  "en": "Indonesia",
+  "de": "Indonesien",
+  "base": "NUS"
+ },
+ "NUS_DAT": {
+  "en": "Indonesia",
+  "de": "Indonesien",
+  "base": "NUS"
+ },
+ "NUS_GEN": {
+  "en": "Indonesia",
+  "de": "Indonesiens",
+  "base": "NUS"
+ },
+ "NUS_IN": {
+  "en": "Indonesia",
+  "de": "in Indonesien",
+  "base": "NUS"
+ },
+ "NUS_NACH": {
+  "en": "Indonesia",
+  "de": "nach Indonesien",
+  "base": "NUS"
+ },
+ "NUS_NOM": {
+  "en": "Indonesia",
+  "de": "Indonesien",
+  "base": "NUS"
+ },
+ "NUS_VON": {
+  "en": "Indonesia",
+  "de": "von Indonesien",
+  "base": "NUS"
+ },
+ "UNA": {
+  "en": "North American Union",
+  "de": "Nordamerikanische Union"
+ },
+ "UNA_ADJ": {
+  "en": "North American",
+  "de": "Nordamerikanisch"
+ },
+ "UNA_AKK": {
+  "en": "North American Union",
+  "de": "die Nordamerikanische Union",
+  "base": "UNA"
+ },
+ "UNA_DAT": {
+  "en": "North American Union",
+  "de": "der Nordamerikanischen Union",
+  "base": "UNA"
+ },
+ "UNA_GEN": {
+  "en": "North American Union",
+  "de": "der Nordamerikanischen Union",
+  "base": "UNA"
+ },
+ "UNA_IN": {
+  "en": "North American Union",
+  "de": "in der Nordamerikanischen Union",
+  "base": "UNA"
+ },
+ "UNA_NACH": {
+  "en": "North American Union",
+  "de": "in die Nordamerikanische Union",
+  "base": "UNA"
+ },
+ "UNA_NOM": {
+  "en": "North American Union",
+  "de": "die Nordamerikanische Union",
+  "base": "UNA"
+ },
+ "UNA_VON": {
+  "en": "North American Union",
+  "de": "von der Nordamerikanischen Union",
+  "base": "UNA"
+ },
+ "UNE": {
+  "en": "United Earth",
+  "de": "Vereinte Erde"
+ },
+ "UNE_ADJ": {
+  "en": "Terran",
+  "de": "Terranisch"
+ },
+ "UNE_AKK": {
+  "en": "United Earth",
+  "de": "die Vereinte Erde",
+  "base": "UNE"
+ },
+ "UNE_DAT": {
+  "en": "United Earth",
+  "de": "der Vereinten Erde",
+  "base": "UNE"
+ },
+ "UNE_GEN": {
+  "en": "United Earth",
+  "de": "der Vereinten Erde",
+  "base": "UNE"
+ },
+ "UNE_IN": {
+  "en": "United Earth",
+  "de": "in der Vereinten Erde",
+  "base": "UNE"
+ },
+ "UNE_NACH": {
+  "en": "United Earth",
+  "de": "in die Vereinte Erde",
+  "base": "UNE"
+ },
+ "UNE_NOM": {
+  "en": "United Earth",
+  "de": "die Vereinte Erde",
+  "base": "UNE"
+ },
+ "UNE_VON": {
+  "en": "United Earth",
+  "de": "von der Vereinten Erde",
+  "base": "UNE"
+ },
+ "ZHO": {
+  "en": "China",
+  "de": "China"
+ },
+ "ZHO_ADJ": {
+  "en": "Chinese",
+  "de": "Chinesisch"
+ },
+ "ZHO_AKK": {
+  "en": "China",
+  "de": "China",
+  "base": "ZHO"
+ },
+ "ZHO_DAT": {
+  "en": "China",
+  "de": "China",
+  "base": "ZHO"
+ },
+ "ZHO_GEN": {
+  "en": "China",
+  "de": "Chinas",
+  "base": "ZHO"
+ },
+ "ZHO_IN": {
+  "en": "China",
+  "de": "in China",
+  "base": "ZHO"
+ },
+ "ZHO_NACH": {
+  "en": "China",
+  "de": "nach China",
+  "base": "ZHO"
+ },
+ "ZHO_NOM": {
+  "en": "China",
+  "de": "China",
+  "base": "ZHO"
+ },
+ "ZHO_VON": {
+  "en": "China",
+  "de": "von China",
+  "base": "ZHO"
+ },
+ "dp_leadership_african_union": {
+  "en": "African Leadership",
+  "de": "Afrikanische Führung"
+ },
+ "dp_leadership_african_union_desc": {
+  "en": "Start a $dp_leadership_african_union$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_african_union_tooltip_desc$",
+  "de": "Ein $dp_leadership_african_union$-[concept_diplomatic_play] starten\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_african_union_tooltip_desc$"
+ },
+ "dp_leadership_african_union_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the African [Concept('concept_unification', '$concept_major_unification$')].",
+  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] der afrikanischen [Concept('concept_unification', '$concept_major_unification$')] zu verdrängen."
+ },
+ "dp_leadership_china": {
+  "en": "Contest Leadership of China",
+  "de": "Führung Chinas anfechten"
+ },
+ "dp_leadership_china_desc": {
+  "en": "Wrest the leadership of the unification effort from [SCOPE.sGetEnemy.GetName].",
+  "de": "[SCOPE.sGetEnemy.GetAltName('DAT')] die Führung des Vereinigungsbestrebens entreißen."
+ },
+ "dp_leadership_dar_al_islam": {
+  "en": "Caliphal Leadership",
+  "de": "Kalifale Führung"
+ },
+ "dp_leadership_dar_al_islam_desc": {
+  "en": "Start a $dp_leadership_dar_al_islam$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_dar_al_islam_tooltip_desc$",
+  "de": "Ein $dp_leadership_dar_al_islam$-[concept_diplomatic_play] starten\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_dar_al_islam_tooltip_desc$"
+ },
+ "dp_leadership_dar_al_islam_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Islamic [Concept('concept_unification', '$concept_major_unification$')].",
+  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] der islamischen [Concept('concept_unification', '$concept_major_unification$')] zu verdrängen."
+ },
+ "dp_leadership_east_african_federation": {
+  "en": "East African Leadership",
+  "de": "Ostafrikanische Führung"
+ },
+ "dp_leadership_east_african_federation_desc": {
+  "en": "Start a $dp_leadership_east_african_federation$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_east_african_federation_tooltip_desc$",
+  "de": "Ein $dp_leadership_east_african_federation$-[concept_diplomatic_play] starten\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_east_african_federation_tooltip_desc$"
+ },
+ "dp_leadership_east_african_federation_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the East African [Concept('concept_unification', '$concept_major_unification$')].",
+  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] der ostafrikanischen [Concept('concept_unification', '$concept_major_unification$')] zu verdrängen."
+ },
+ "dp_leadership_european_union": {
+  "en": "European Leadership",
+  "de": "Europäische Führung"
+ },
+ "dp_leadership_european_union_desc": {
+  "en": "Start a $dp_leadership_european_union$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_european_union_tooltip_desc$",
+  "de": "Ein $dp_leadership_european_union$-[concept_diplomatic_play] starten\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_european_union_tooltip_desc$"
+ },
+ "dp_leadership_european_union_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the European [Concept('concept_unification', '$concept_major_unification$')].",
+  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] der europäischen [Concept('concept_unification', '$concept_major_unification$')] zu verdrängen."
+ },
+ "dp_leadership_india": {
+  "en": "Indian Leadership",
+  "de": "Indische Führung"
+ },
+ "dp_leadership_india_desc": {
+  "en": "Start a $dp_leadership_india$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_india_tooltip_desc$",
+  "de": "Ein $dp_leadership_india$-[concept_diplomatic_play] starten\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_india_tooltip_desc$"
+ },
+ "dp_leadership_india_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Indian [Concept('concept_unification', '$concept_major_unification$')].",
+  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] der indischen [Concept('concept_unification', '$concept_major_unification$')] zu verdrängen."
+ },
+ "dp_leadership_indonesia": {
+  "en": "Indonesian Leadership",
+  "de": "Indonesische Führung"
+ },
+ "dp_leadership_indonesia_desc": {
+  "en": "Start a $dp_leadership_indonesia$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_indonesia_tooltip_desc$",
+  "de": "Ein $dp_leadership_indonesia$-[concept_diplomatic_play] starten\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_indonesia_tooltip_desc$"
+ },
+ "dp_leadership_indonesia_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Indonesian [Concept('concept_unification', '$concept_major_unification$')].",
+  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] der indonesischen [Concept('concept_unification', '$concept_major_unification$')] zu verdrängen."
+ },
+ "dp_leadership_intermarium": {
+  "en": "Intermarium Leadership",
+  "de": "Führung des Intermarium"
+ },
+ "dp_leadership_intermarium_desc": {
+  "en": "Start a $dp_leadership_intermarium$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_intermarium_tooltip_desc$",
+  "de": "Ein $dp_leadership_intermarium$-[concept_diplomatic_play] starten\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_intermarium_tooltip_desc$"
+ },
+ "dp_leadership_intermarium_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Intermarium [Concept('concept_unification', '$concept_major_unification$')].",
+  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] des Intermarium-[Concept('concept_unification', '$concept_major_unification$')] zu verdrängen."
+ },
+ "dp_leadership_united_earth": {
+  "en": "Terran Leadership",
+  "de": "Terranische Führung"
+ },
+ "dp_leadership_united_earth_desc": {
+  "en": "Start a $dp_leadership_united_earth$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_united_earth_tooltip_desc$",
+  "de": "Ein $dp_leadership_united_earth$-[concept_diplomatic_play] starten\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_united_earth_tooltip_desc$"
+ },
+ "dp_leadership_united_earth_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Terran [Concept('concept_unification', '$concept_major_unification$')].",
+  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] der terranischen [Concept('concept_unification', '$concept_major_unification$')] zu verdrängen."
+ },
+ "dp_leadership_united_north_america": {
+  "en": "North American Leadership",
+  "de": "Nordamerikanische Führung"
+ },
+ "dp_leadership_united_north_america_desc": {
+  "en": "Start a $dp_leadership_united_north_america$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_united_north_america_tooltip_desc$",
+  "de": "Ein $dp_leadership_united_north_america$-[concept_diplomatic_play] starten\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_united_north_america_tooltip_desc$"
+ },
+ "dp_leadership_united_north_america_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the North American [Concept('concept_unification', '$concept_major_unification$')].",
+  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] der nordamerikanischen [Concept('concept_unification', '$concept_major_unification$')] zu verdrängen."
+ },
+ "dp_unify_african_union": {
+  "en": "Unify the African Union",
+  "de": "Die Afrikanische Union einen"
+ },
+ "dp_unify_african_union_desc": {
+  "en": "Sets the initiating [concept_war_goal] to annex all African [concept_homeland] states held by other nations.",
+  "de": "Setzt das auslösende [concept_war_goal] darauf, alle afrikanischen [concept_homeland]-Staaten zu annektieren, die von anderen Nationen gehalten werden."
+ },
+ "dp_unify_dar_al_islam": {
+  "en": "Unify the Dar-Al-Islam",
+  "de": "Dar al-Islam einen"
+ },
+ "dp_unify_dar_al_islam_desc": {
+  "en": "Sets the initiating [concept_war_goal] to annex all Islamic [concept_homeland] states held by other nations.",
+  "de": "Setzt das auslösende [concept_war_goal] darauf, alle islamischen [concept_homeland]-Staaten zu annektieren, die von anderen Nationen gehalten werden."
+ },
+ "dp_unify_east_african_federation": {
+  "en": "Unify East Africa",
+  "de": "Ostafrika einen"
+ },
+ "dp_unify_east_african_federation_desc": {
+  "en": "Sets the initiating [concept_war_goal] to annex all East African [concept_homeland] states held by other nations.",
+  "de": "Setzt das auslösende [concept_war_goal] darauf, alle ostafrikanischen [concept_homeland]-Staaten zu annektieren, die von anderen Nationen gehalten werden."
+ },
+ "dp_unify_european_union": {
+  "en": "Unify the European Union",
+  "de": "Die Europäische Union einen"
+ },
+ "dp_unify_european_union_desc": {
+  "en": "Sets the initiating [concept_war_goal] to annex all European [concept_homeland] states held by other nations.",
+  "de": "Setzt das auslösende [concept_war_goal] darauf, alle europäischen [concept_homeland]-Staaten zu annektieren, die von anderen Nationen gehalten werden."
+ },
+ "dp_unify_intermarium": {
+  "en": "Unify the Intermarium",
+  "de": "Das Intermarium einen"
+ },
+ "dp_unify_intermarium_desc": {
+  "en": "Sets the initiating [concept_war_goal] to annex all Intermarium [concept_homeland] states held by other nations.",
+  "de": "Setzt das auslösende [concept_war_goal] darauf, alle [concept_homeland]-Staaten des Intermarium zu annektieren, die von anderen Nationen gehalten werden."
+ },
+ "dp_unify_united_earth": {
+  "en": "Unify Earth",
+  "de": "Die Erde einen"
+ },
+ "dp_unify_united_earth_desc": {
+  "en": "Sets the initiating [concept_war_goal] to annex every land [concept_state] held by other nations on Earth.",
+  "de": "Setzt das auslösende [concept_war_goal] darauf, jeden von anderen Nationen gehaltenen [concept_state] auf der Erde zu annektieren."
+ },
+ "dp_unify_united_north_america": {
+  "en": "Unify North America",
+  "de": "Nordamerika einen"
+ },
+ "dp_unify_united_north_america_desc": {
+  "en": "Sets the initiating [concept_war_goal] to annex all North American [concept_homeland] states held by other nations.",
+  "de": "Setzt das auslösende [concept_war_goal] darauf, alle nordamerikanischen [concept_homeland]-Staaten zu annektieren, die von anderen Nationen gehalten werden."
+ },
+ "dyn_c_african_empire": {
+  "en": "African Empire",
+  "de": "Afrikanisches Kaiserreich"
+ },
+ "dyn_c_african_empire_AKK": {
+  "en": "African Empire",
+  "de": "das Afrikanische Kaiserreich",
+  "base": "dyn_c_african_empire"
+ },
+ "dyn_c_african_empire_DAT": {
+  "en": "African Empire",
+  "de": "dem Afrikanischen Kaiserreich",
+  "base": "dyn_c_african_empire"
+ },
+ "dyn_c_african_empire_GEN": {
+  "en": "African Empire",
+  "de": "des Afrikanischen Kaiserreiches",
+  "base": "dyn_c_african_empire"
+ },
+ "dyn_c_african_empire_IN": {
+  "en": "African Empire",
+  "de": "im Afrikanischen Kaiserreich",
+  "base": "dyn_c_african_empire"
+ },
+ "dyn_c_african_empire_NACH": {
+  "en": "African Empire",
+  "de": "ins Afrikanische Kaiserreich",
+  "base": "dyn_c_african_empire"
+ },
+ "dyn_c_african_empire_NOM": {
+  "en": "African Empire",
+  "de": "das Afrikanische Kaiserreich",
+  "base": "dyn_c_african_empire"
+ },
+ "dyn_c_african_empire_VON": {
+  "en": "African Empire",
+  "de": "vom Afrikanischen Kaiserreich",
+  "base": "dyn_c_african_empire"
+ },
+ "dyn_c_african_imperium": {
+  "en": "African Imperium",
+  "de": "Afrikanisches Imperium"
+ },
+ "dyn_c_african_imperium_AKK": {
+  "en": "African Imperium",
+  "de": "das Afrikanische Imperium",
+  "base": "dyn_c_african_imperium"
+ },
+ "dyn_c_african_imperium_DAT": {
+  "en": "African Imperium",
+  "de": "dem Afrikanischen Imperium",
+  "base": "dyn_c_african_imperium"
+ },
+ "dyn_c_african_imperium_GEN": {
+  "en": "African Imperium",
+  "de": "des Afrikanischen Imperiums",
+  "base": "dyn_c_african_imperium"
+ },
+ "dyn_c_african_imperium_IN": {
+  "en": "African Imperium",
+  "de": "im Afrikanischen Imperium",
+  "base": "dyn_c_african_imperium"
+ },
+ "dyn_c_african_imperium_NACH": {
+  "en": "African Imperium",
+  "de": "ins Afrikanische Imperium",
+  "base": "dyn_c_african_imperium"
+ },
+ "dyn_c_african_imperium_NOM": {
+  "en": "African Imperium",
+  "de": "das Afrikanische Imperium",
+  "base": "dyn_c_african_imperium"
+ },
+ "dyn_c_african_imperium_VON": {
+  "en": "African Imperium",
+  "de": "vom Afrikanischen Imperium",
+  "base": "dyn_c_african_imperium"
+ },
+ "dyn_c_african_technate": {
+  "en": "United African Technate",
+  "de": "Vereintes Afrikanisches Technat"
+ },
+ "dyn_c_african_technate_AKK": {
+  "en": "United African Technate",
+  "de": "das Vereinte Afrikanische Technat",
+  "base": "dyn_c_african_technate"
+ },
+ "dyn_c_african_technate_DAT": {
+  "en": "United African Technate",
+  "de": "dem Vereinten Afrikanischen Technat",
+  "base": "dyn_c_african_technate"
+ },
+ "dyn_c_african_technate_GEN": {
+  "en": "United African Technate",
+  "de": "des Vereinten Afrikanischen Technats",
+  "base": "dyn_c_african_technate"
+ },
+ "dyn_c_african_technate_IN": {
+  "en": "United African Technate",
+  "de": "im Vereinten Afrikanischen Technat",
+  "base": "dyn_c_african_technate"
+ },
+ "dyn_c_african_technate_NACH": {
+  "en": "United African Technate",
+  "de": "ins Vereinte Afrikanische Technat",
+  "base": "dyn_c_african_technate"
+ },
+ "dyn_c_african_technate_NOM": {
+  "en": "United African Technate",
+  "de": "das Vereinte Afrikanische Technat",
+  "base": "dyn_c_african_technate"
+ },
+ "dyn_c_african_technate_VON": {
+  "en": "United African Technate",
+  "de": "vom Vereinten Afrikanischen Technat",
+  "base": "dyn_c_african_technate"
+ },
+ "dyn_c_african_union": {
+  "en": "African Union",
+  "de": "Afrikanische Union"
+ },
+ "dyn_c_african_union_AKK": {
+  "en": "African Union",
+  "de": "die Afrikanische Union",
+  "base": "dyn_c_african_union"
+ },
+ "dyn_c_african_union_DAT": {
+  "en": "African Union",
+  "de": "der Afrikanischen Union",
+  "base": "dyn_c_african_union"
+ },
+ "dyn_c_african_union_GEN": {
+  "en": "African Union",
+  "de": "der Afrikanischen Union",
+  "base": "dyn_c_african_union"
+ },
+ "dyn_c_african_union_IN": {
+  "en": "African Union",
+  "de": "in der Afrikanischen Union",
+  "base": "dyn_c_african_union"
+ },
+ "dyn_c_african_union_NACH": {
+  "en": "African Union",
+  "de": "in die Afrikanische Union",
+  "base": "dyn_c_african_union"
+ },
+ "dyn_c_african_union_NOM": {
+  "en": "African Union",
+  "de": "die Afrikanische Union",
+  "base": "dyn_c_african_union"
+ },
+ "dyn_c_african_union_VON": {
+  "en": "African Union",
+  "de": "von der Afrikanischen Union",
+  "base": "dyn_c_african_union"
+ },
+ "dyn_c_akhand_bharat": {
+  "en": "Akhand Bharat",
+  "de": "Akhand Bharat"
+ },
+ "dyn_c_akhand_bharat_AKK": {
+  "en": "Akhand Bharat",
+  "de": "Akhand Bharat",
+  "base": "dyn_c_akhand_bharat"
+ },
+ "dyn_c_akhand_bharat_DAT": {
+  "en": "Akhand Bharat",
+  "de": "Akhand Bharat",
+  "base": "dyn_c_akhand_bharat"
+ },
+ "dyn_c_akhand_bharat_GEN": {
+  "en": "Akhand Bharat",
+  "de": "Akhand Bharat",
+  "base": "dyn_c_akhand_bharat"
+ },
+ "dyn_c_akhand_bharat_IN": {
+  "en": "Akhand Bharat",
+  "de": "in Akhand Bharat",
+  "base": "dyn_c_akhand_bharat"
+ },
+ "dyn_c_akhand_bharat_NACH": {
+  "en": "Akhand Bharat",
+  "de": "nach Akhand Bharat",
+  "base": "dyn_c_akhand_bharat"
+ },
+ "dyn_c_akhand_bharat_NOM": {
+  "en": "Akhand Bharat",
+  "de": "Akhand Bharat",
+  "base": "dyn_c_akhand_bharat"
+ },
+ "dyn_c_akhand_bharat_VON": {
+  "en": "Akhand Bharat",
+  "de": "von Akhand Bharat",
+  "base": "dyn_c_akhand_bharat"
+ },
+ "dyn_c_akhand_bharati_adj": {
+  "en": "Akhand Bharati",
+  "de": "Akhand-Bharati"
+ },
+ "dyn_c_american_imperial_adj": {
+  "en": "American Imperial",
+  "de": "Amerikanisch-Imperial"
+ },
+ "dyn_c_american_imperial_union": {
+  "en": "American Imperial Union",
+  "de": "Amerikanische Imperialunion"
+ },
+ "dyn_c_american_imperial_union_AKK": {
+  "en": "American Imperial Union",
+  "de": "die Amerikanische Imperialunion",
+  "base": "dyn_c_american_imperial_union"
+ },
+ "dyn_c_american_imperial_union_DAT": {
+  "en": "American Imperial Union",
+  "de": "der Amerikanischen Imperialunion",
+  "base": "dyn_c_american_imperial_union"
+ },
+ "dyn_c_american_imperial_union_GEN": {
+  "en": "American Imperial Union",
+  "de": "der Amerikanischen Imperialunion",
+  "base": "dyn_c_american_imperial_union"
+ },
+ "dyn_c_american_imperial_union_IN": {
+  "en": "American Imperial Union",
+  "de": "in der Amerikanischen Imperialunion",
+  "base": "dyn_c_american_imperial_union"
+ },
+ "dyn_c_american_imperial_union_NACH": {
+  "en": "American Imperial Union",
+  "de": "in die Amerikanische Imperialunion",
+  "base": "dyn_c_american_imperial_union"
+ },
+ "dyn_c_american_imperial_union_NOM": {
+  "en": "American Imperial Union",
+  "de": "die Amerikanische Imperialunion",
+  "base": "dyn_c_american_imperial_union"
+ },
+ "dyn_c_american_imperial_union_VON": {
+  "en": "American Imperial Union",
+  "de": "von der Amerikanischen Imperialunion",
+  "base": "dyn_c_american_imperial_union"
+ },
+ "dyn_c_bharati_adj": {
+  "en": "Bharati",
+  "de": "Bharati"
+ },
+ "dyn_c_bharatiya_adj": {
+  "en": "Bharatiya",
+  "de": "Bharatiya"
+ },
+ "dyn_c_bharatiya_samrajya": {
+  "en": "Bharatiya Samrajya",
+  "de": "Bharatiya Samrajya"
+ },
+ "dyn_c_bharatiya_samrajya_AKK": {
+  "en": "Bharatiya Samrajya",
+  "de": "Bharatiya Samrajya",
+  "base": "dyn_c_bharatiya_samrajya"
+ },
+ "dyn_c_bharatiya_samrajya_DAT": {
+  "en": "Bharatiya Samrajya",
+  "de": "Bharatiya Samrajya",
+  "base": "dyn_c_bharatiya_samrajya"
+ },
+ "dyn_c_bharatiya_samrajya_GEN": {
+  "en": "Bharatiya Samrajya",
+  "de": "Bharatiya Samrajya",
+  "base": "dyn_c_bharatiya_samrajya"
+ },
+ "dyn_c_bharatiya_samrajya_IN": {
+  "en": "Bharatiya Samrajya",
+  "de": "in Bharatiya Samrajya",
+  "base": "dyn_c_bharatiya_samrajya"
+ },
+ "dyn_c_bharatiya_samrajya_NACH": {
+  "en": "Bharatiya Samrajya",
+  "de": "nach Bharatiya Samrajya",
+  "base": "dyn_c_bharatiya_samrajya"
+ },
+ "dyn_c_bharatiya_samrajya_NOM": {
+  "en": "Bharatiya Samrajya",
+  "de": "Bharatiya Samrajya",
+  "base": "dyn_c_bharatiya_samrajya"
+ },
+ "dyn_c_bharatiya_samrajya_VON": {
+  "en": "Bharatiya Samrajya",
+  "de": "von Bharatiya Samrajya",
+  "base": "dyn_c_bharatiya_samrajya"
+ },
+ "dyn_c_bharatiya_vigyan_sangha": {
+  "en": "Bharatiya Vigyan Sangha",
+  "de": "Bharatiya Vigyan Sangha"
+ },
+ "dyn_c_bharatiya_vigyan_sangha_AKK": {
+  "en": "Bharatiya Vigyan Sangha",
+  "de": "Bharatiya Vigyan Sangha",
+  "base": "dyn_c_bharatiya_vigyan_sangha"
+ },
+ "dyn_c_bharatiya_vigyan_sangha_DAT": {
+  "en": "Bharatiya Vigyan Sangha",
+  "de": "Bharatiya Vigyan Sangha",
+  "base": "dyn_c_bharatiya_vigyan_sangha"
+ },
+ "dyn_c_bharatiya_vigyan_sangha_GEN": {
+  "en": "Bharatiya Vigyan Sangha",
+  "de": "Bharatiya Vigyan Sangha",
+  "base": "dyn_c_bharatiya_vigyan_sangha"
+ },
+ "dyn_c_bharatiya_vigyan_sangha_IN": {
+  "en": "Bharatiya Vigyan Sangha",
+  "de": "in Bharatiya Vigyan Sangha",
+  "base": "dyn_c_bharatiya_vigyan_sangha"
+ },
+ "dyn_c_bharatiya_vigyan_sangha_NACH": {
+  "en": "Bharatiya Vigyan Sangha",
+  "de": "nach Bharatiya Vigyan Sangha",
+  "base": "dyn_c_bharatiya_vigyan_sangha"
+ },
+ "dyn_c_bharatiya_vigyan_sangha_NOM": {
+  "en": "Bharatiya Vigyan Sangha",
+  "de": "Bharatiya Vigyan Sangha",
+  "base": "dyn_c_bharatiya_vigyan_sangha"
+ },
+ "dyn_c_bharatiya_vigyan_sangha_VON": {
+  "en": "Bharatiya Vigyan Sangha",
+  "de": "von Bharatiya Vigyan Sangha",
+  "base": "dyn_c_bharatiya_vigyan_sangha"
+ },
+ "dyn_c_caliphate_adj": {
+  "en": "Caliphal",
+  "de": "Kalifal"
+ },
+ "dyn_c_catholic_federation_of_three_seas": {
+  "en": "Catholic Federation of the Three Seas",
+  "de": "Katholische Föderation der Drei Meere"
+ },
+ "dyn_c_catholic_federation_of_three_seas_AKK": {
+  "en": "Catholic Federation of the Three Seas",
+  "de": "die Katholische Föderation der Drei Meere",
+  "base": "dyn_c_catholic_federation_of_three_seas"
+ },
+ "dyn_c_catholic_federation_of_three_seas_DAT": {
+  "en": "Catholic Federation of the Three Seas",
+  "de": "der Katholischen Föderation der Drei Meere",
+  "base": "dyn_c_catholic_federation_of_three_seas"
+ },
+ "dyn_c_catholic_federation_of_three_seas_GEN": {
+  "en": "Catholic Federation of the Three Seas",
+  "de": "der Katholischen Föderation der Drei Meere",
+  "base": "dyn_c_catholic_federation_of_three_seas"
+ },
+ "dyn_c_catholic_federation_of_three_seas_IN": {
+  "en": "Catholic Federation of the Three Seas",
+  "de": "in der Katholischen Föderation der Drei Meere",
+  "base": "dyn_c_catholic_federation_of_three_seas"
+ },
+ "dyn_c_catholic_federation_of_three_seas_NACH": {
+  "en": "Catholic Federation of the Three Seas",
+  "de": "in die Katholische Föderation der Drei Meere",
+  "base": "dyn_c_catholic_federation_of_three_seas"
+ },
+ "dyn_c_catholic_federation_of_three_seas_NOM": {
+  "en": "Catholic Federation of the Three Seas",
+  "de": "die Katholische Föderation der Drei Meere",
+  "base": "dyn_c_catholic_federation_of_three_seas"
+ },
+ "dyn_c_catholic_federation_of_three_seas_VON": {
+  "en": "Catholic Federation of the Three Seas",
+  "de": "von der Katholischen Föderation der Drei Meere",
+  "base": "dyn_c_catholic_federation_of_three_seas"
+ },
+ "dyn_c_celestial_adj": {
+  "en": "Celestial",
+  "de": "Himmlisch"
+ },
+ "dyn_c_celestial_empire": {
+  "en": "Celestial Empire",
+  "de": "Himmlisches Reich"
+ },
+ "dyn_c_celestial_empire_AKK": {
+  "en": "Celestial Empire",
+  "de": "das Himmlische Reich",
+  "base": "dyn_c_celestial_empire"
+ },
+ "dyn_c_celestial_empire_DAT": {
+  "en": "Celestial Empire",
+  "de": "dem Himmlischen Reich",
+  "base": "dyn_c_celestial_empire"
+ },
+ "dyn_c_celestial_empire_GEN": {
+  "en": "Celestial Empire",
+  "de": "des Himmlischen Reiches",
+  "base": "dyn_c_celestial_empire"
+ },
+ "dyn_c_celestial_empire_IN": {
+  "en": "Celestial Empire",
+  "de": "im Himmlischen Reich",
+  "base": "dyn_c_celestial_empire"
+ },
+ "dyn_c_celestial_empire_NACH": {
+  "en": "Celestial Empire",
+  "de": "ins Himmlische Reich",
+  "base": "dyn_c_celestial_empire"
+ },
+ "dyn_c_celestial_empire_NOM": {
+  "en": "Celestial Empire",
+  "de": "das Himmlische Reich",
+  "base": "dyn_c_celestial_empire"
+ },
+ "dyn_c_celestial_empire_VON": {
+  "en": "Celestial Empire",
+  "de": "vom Himmlischen Reich",
+  "base": "dyn_c_celestial_empire"
+ },
+ "dyn_c_celestial_peoples_adj": {
+  "en": "Celestial People's",
+  "de": "Himmlisches Volk"
+ },
+ "dyn_c_celestial_peoples_federation": {
+  "en": "Celestial People's Federation",
+  "de": "Föderation des Himmlischen Volkes"
+ },
+ "dyn_c_celestial_peoples_federation_AKK": {
+  "en": "Celestial People's Federation",
+  "de": "die Föderation des Himmlischen Volkes",
+  "base": "dyn_c_celestial_peoples_federation"
+ },
+ "dyn_c_celestial_peoples_federation_DAT": {
+  "en": "Celestial People's Federation",
+  "de": "der Föderation des Himmlischen Volkes",
+  "base": "dyn_c_celestial_peoples_federation"
+ },
+ "dyn_c_celestial_peoples_federation_GEN": {
+  "en": "Celestial People's Federation",
+  "de": "der Föderation des Himmlischen Volkes",
+  "base": "dyn_c_celestial_peoples_federation"
+ },
+ "dyn_c_celestial_peoples_federation_IN": {
+  "en": "Celestial People's Federation",
+  "de": "in der Föderation des Himmlischen Volkes",
+  "base": "dyn_c_celestial_peoples_federation"
+ },
+ "dyn_c_celestial_peoples_federation_NACH": {
+  "en": "Celestial People's Federation",
+  "de": "in die Föderation des Himmlischen Volkes",
+  "base": "dyn_c_celestial_peoples_federation"
+ },
+ "dyn_c_celestial_peoples_federation_NOM": {
+  "en": "Celestial People's Federation",
+  "de": "die Föderation des Himmlischen Volkes",
+  "base": "dyn_c_celestial_peoples_federation"
+ },
+ "dyn_c_celestial_peoples_federation_VON": {
+  "en": "Celestial People's Federation",
+  "de": "von der Föderation des Himmlischen Volkes",
+  "base": "dyn_c_celestial_peoples_federation"
+ },
+ "dyn_c_chinese_imperial_adj": {
+  "en": "Chinese Imperial",
+  "de": "Chinesisch-Kaiserlich"
+ },
+ "dyn_c_continental_adj": {
+  "en": "Continental",
+  "de": "Kontinental"
+ },
+ "dyn_c_continental_technate": {
+  "en": "Continental Technate",
+  "de": "Kontinentales Technat"
+ },
+ "dyn_c_continental_technate_AKK": {
+  "en": "Continental Technate",
+  "de": "das Kontinentale Technat",
+  "base": "dyn_c_continental_technate"
+ },
+ "dyn_c_continental_technate_DAT": {
+  "en": "Continental Technate",
+  "de": "dem Kontinentalen Technat",
+  "base": "dyn_c_continental_technate"
+ },
+ "dyn_c_continental_technate_GEN": {
+  "en": "Continental Technate",
+  "de": "des Kontinentalen Technats",
+  "base": "dyn_c_continental_technate"
+ },
+ "dyn_c_continental_technate_IN": {
+  "en": "Continental Technate",
+  "de": "im Kontinentalen Technat",
+  "base": "dyn_c_continental_technate"
+ },
+ "dyn_c_continental_technate_NACH": {
+  "en": "Continental Technate",
+  "de": "ins Kontinentale Technat",
+  "base": "dyn_c_continental_technate"
+ },
+ "dyn_c_continental_technate_NOM": {
+  "en": "Continental Technate",
+  "de": "das Kontinentale Technat",
+  "base": "dyn_c_continental_technate"
+ },
+ "dyn_c_continental_technate_VON": {
+  "en": "Continental Technate",
+  "de": "vom Kontinentalen Technat",
+  "base": "dyn_c_continental_technate"
+ },
+ "dyn_c_cosmic_soviet_adj": {
+  "en": "Cosmic Soviet",
+  "de": "Kosmisch-Sowjetisch"
+ },
+ "dyn_c_cosmic_soviet_union": {
+  "en": "Cosmic Soviet Union",
+  "de": "Kosmische Sowjetunion"
+ },
+ "dyn_c_cosmic_soviet_union_AKK": {
+  "en": "Cosmic Soviet Union",
+  "de": "die Kosmische Sowjetunion",
+  "base": "dyn_c_cosmic_soviet_union"
+ },
+ "dyn_c_cosmic_soviet_union_DAT": {
+  "en": "Cosmic Soviet Union",
+  "de": "der Kosmischen Sowjetunion",
+  "base": "dyn_c_cosmic_soviet_union"
+ },
+ "dyn_c_cosmic_soviet_union_GEN": {
+  "en": "Cosmic Soviet Union",
+  "de": "der Kosmischen Sowjetunion",
+  "base": "dyn_c_cosmic_soviet_union"
+ },
+ "dyn_c_cosmic_soviet_union_IN": {
+  "en": "Cosmic Soviet Union",
+  "de": "in der Kosmischen Sowjetunion",
+  "base": "dyn_c_cosmic_soviet_union"
+ },
+ "dyn_c_cosmic_soviet_union_NACH": {
+  "en": "Cosmic Soviet Union",
+  "de": "in die Kosmische Sowjetunion",
+  "base": "dyn_c_cosmic_soviet_union"
+ },
+ "dyn_c_cosmic_soviet_union_NOM": {
+  "en": "Cosmic Soviet Union",
+  "de": "die Kosmische Sowjetunion",
+  "base": "dyn_c_cosmic_soviet_union"
+ },
+ "dyn_c_cosmic_soviet_union_VON": {
+  "en": "Cosmic Soviet Union",
+  "de": "von der Kosmischen Sowjetunion",
+  "base": "dyn_c_cosmic_soviet_union"
+ },
+ "dyn_c_crown_of_saint_stephen": {
+  "en": "Crown of Saint Stephen",
+  "de": "Stephanskrone"
+ },
+ "dyn_c_crown_of_saint_stephen_AKK": {
+  "en": "Crown of Saint Stephen",
+  "de": "die Stephanskrone",
+  "base": "dyn_c_crown_of_saint_stephen"
+ },
+ "dyn_c_crown_of_saint_stephen_DAT": {
+  "en": "Crown of Saint Stephen",
+  "de": "der Stephanskrone",
+  "base": "dyn_c_crown_of_saint_stephen"
+ },
+ "dyn_c_crown_of_saint_stephen_GEN": {
+  "en": "Crown of Saint Stephen",
+  "de": "der Stephanskrone",
+  "base": "dyn_c_crown_of_saint_stephen"
+ },
+ "dyn_c_crown_of_saint_stephen_IN": {
+  "en": "Crown of Saint Stephen",
+  "de": "in der Stephanskrone",
+  "base": "dyn_c_crown_of_saint_stephen"
+ },
+ "dyn_c_crown_of_saint_stephen_NACH": {
+  "en": "Crown of Saint Stephen",
+  "de": "in die Stephanskrone",
+  "base": "dyn_c_crown_of_saint_stephen"
+ },
+ "dyn_c_crown_of_saint_stephen_NOM": {
+  "en": "Crown of Saint Stephen",
+  "de": "die Stephanskrone",
+  "base": "dyn_c_crown_of_saint_stephen"
+ },
+ "dyn_c_crown_of_saint_stephen_VON": {
+  "en": "Crown of Saint Stephen",
+  "de": "von der Stephanskrone",
+  "base": "dyn_c_crown_of_saint_stephen"
+ },
+ "dyn_c_crown_of_saint_stephen_adj": {
+  "en": "Hungarian",
+  "de": "Ungarisch"
+ },
+ "dyn_c_east_african_confederation": {
+  "en": "East African Confederation",
+  "de": "Ostafrikanische Konföderation"
+ },
+ "dyn_c_east_african_confederation_AKK": {
+  "en": "East African Confederation",
+  "de": "die Ostafrikanische Konföderation",
+  "base": "dyn_c_east_african_confederation"
+ },
+ "dyn_c_east_african_confederation_DAT": {
+  "en": "East African Confederation",
+  "de": "der Ostafrikanischen Konföderation",
+  "base": "dyn_c_east_african_confederation"
+ },
+ "dyn_c_east_african_confederation_GEN": {
+  "en": "East African Confederation",
+  "de": "der Ostafrikanischen Konföderation",
+  "base": "dyn_c_east_african_confederation"
+ },
+ "dyn_c_east_african_confederation_IN": {
+  "en": "East African Confederation",
+  "de": "in der Ostafrikanischen Konföderation",
+  "base": "dyn_c_east_african_confederation"
+ },
+ "dyn_c_east_african_confederation_NACH": {
+  "en": "East African Confederation",
+  "de": "in die Ostafrikanische Konföderation",
+  "base": "dyn_c_east_african_confederation"
+ },
+ "dyn_c_east_african_confederation_NOM": {
+  "en": "East African Confederation",
+  "de": "die Ostafrikanische Konföderation",
+  "base": "dyn_c_east_african_confederation"
+ },
+ "dyn_c_east_african_confederation_VON": {
+  "en": "East African Confederation",
+  "de": "von der Ostafrikanischen Konföderation",
+  "base": "dyn_c_east_african_confederation"
+ },
+ "dyn_c_east_african_federation": {
+  "en": "East African Federation",
+  "de": "Ostafrikanische Föderation"
+ },
+ "dyn_c_east_african_federation_AKK": {
+  "en": "East African Federation",
+  "de": "die Ostafrikanische Föderation",
+  "base": "dyn_c_east_african_federation"
+ },
+ "dyn_c_east_african_federation_DAT": {
+  "en": "East African Federation",
+  "de": "der Ostafrikanischen Föderation",
+  "base": "dyn_c_east_african_federation"
+ },
+ "dyn_c_east_african_federation_GEN": {
+  "en": "East African Federation",
+  "de": "der Ostafrikanischen Föderation",
+  "base": "dyn_c_east_african_federation"
+ },
+ "dyn_c_east_african_federation_IN": {
+  "en": "East African Federation",
+  "de": "in der Ostafrikanischen Föderation",
+  "base": "dyn_c_east_african_federation"
+ },
+ "dyn_c_east_african_federation_NACH": {
+  "en": "East African Federation",
+  "de": "in die Ostafrikanische Föderation",
+  "base": "dyn_c_east_african_federation"
+ },
+ "dyn_c_east_african_federation_NOM": {
+  "en": "East African Federation",
+  "de": "die Ostafrikanische Föderation",
+  "base": "dyn_c_east_african_federation"
+ },
+ "dyn_c_east_african_federation_VON": {
+  "en": "East African Federation",
+  "de": "von der Ostafrikanischen Föderation",
+  "base": "dyn_c_east_african_federation"
+ },
+ "dyn_c_east_african_imperium": {
+  "en": "East African Imperium",
+  "de": "Ostafrikanisches Imperium"
+ },
+ "dyn_c_east_african_imperium_AKK": {
+  "en": "East African Imperium",
+  "de": "das Ostafrikanische Imperium",
+  "base": "dyn_c_east_african_imperium"
+ },
+ "dyn_c_east_african_imperium_DAT": {
+  "en": "East African Imperium",
+  "de": "dem Ostafrikanischen Imperium",
+  "base": "dyn_c_east_african_imperium"
+ },
+ "dyn_c_east_african_imperium_GEN": {
+  "en": "East African Imperium",
+  "de": "des Ostafrikanischen Imperiums",
+  "base": "dyn_c_east_african_imperium"
+ },
+ "dyn_c_east_african_imperium_IN": {
+  "en": "East African Imperium",
+  "de": "im Ostafrikanischen Imperium",
+  "base": "dyn_c_east_african_imperium"
+ },
+ "dyn_c_east_african_imperium_NACH": {
+  "en": "East African Imperium",
+  "de": "ins Ostafrikanische Imperium",
+  "base": "dyn_c_east_african_imperium"
+ },
+ "dyn_c_east_african_imperium_NOM": {
+  "en": "East African Imperium",
+  "de": "das Ostafrikanische Imperium",
+  "base": "dyn_c_east_african_imperium"
+ },
+ "dyn_c_east_african_imperium_VON": {
+  "en": "East African Imperium",
+  "de": "vom Ostafrikanischen Imperium",
+  "base": "dyn_c_east_african_imperium"
+ },
+ "dyn_c_east_african_technate": {
+  "en": "East African Technate",
+  "de": "Ostafrikanisches Technat"
+ },
+ "dyn_c_east_african_technate_AKK": {
+  "en": "East African Technate",
+  "de": "das Ostafrikanische Technat",
+  "base": "dyn_c_east_african_technate"
+ },
+ "dyn_c_east_african_technate_DAT": {
+  "en": "East African Technate",
+  "de": "dem Ostafrikanischen Technat",
+  "base": "dyn_c_east_african_technate"
+ },
+ "dyn_c_east_african_technate_GEN": {
+  "en": "East African Technate",
+  "de": "des Ostafrikanischen Technats",
+  "base": "dyn_c_east_african_technate"
+ },
+ "dyn_c_east_african_technate_IN": {
+  "en": "East African Technate",
+  "de": "im Ostafrikanischen Technat",
+  "base": "dyn_c_east_african_technate"
+ },
+ "dyn_c_east_african_technate_NACH": {
+  "en": "East African Technate",
+  "de": "ins Ostafrikanische Technat",
+  "base": "dyn_c_east_african_technate"
+ },
+ "dyn_c_east_african_technate_NOM": {
+  "en": "East African Technate",
+  "de": "das Ostafrikanische Technat",
+  "base": "dyn_c_east_african_technate"
+ },
+ "dyn_c_east_african_technate_VON": {
+  "en": "East African Technate",
+  "de": "vom Ostafrikanischen Technat",
+  "base": "dyn_c_east_african_technate"
+ },
+ "dyn_c_empire_of_earth": {
+  "en": "Empire of Earth",
+  "de": "Reich der Erde"
+ },
+ "dyn_c_empire_of_earth_AKK": {
+  "en": "Empire of Earth",
+  "de": "das Reich der Erde",
+  "base": "dyn_c_empire_of_earth"
+ },
+ "dyn_c_empire_of_earth_DAT": {
+  "en": "Empire of Earth",
+  "de": "dem Reich der Erde",
+  "base": "dyn_c_empire_of_earth"
+ },
+ "dyn_c_empire_of_earth_GEN": {
+  "en": "Empire of Earth",
+  "de": "des Reiches der Erde",
+  "base": "dyn_c_empire_of_earth"
+ },
+ "dyn_c_empire_of_earth_IN": {
+  "en": "Empire of Earth",
+  "de": "im Reich der Erde",
+  "base": "dyn_c_empire_of_earth"
+ },
+ "dyn_c_empire_of_earth_NACH": {
+  "en": "Empire of Earth",
+  "de": "ins Reich der Erde",
+  "base": "dyn_c_empire_of_earth"
+ },
+ "dyn_c_empire_of_earth_NOM": {
+  "en": "Empire of Earth",
+  "de": "das Reich der Erde",
+  "base": "dyn_c_empire_of_earth"
+ },
+ "dyn_c_empire_of_earth_VON": {
+  "en": "Empire of Earth",
+  "de": "vom Reich der Erde",
+  "base": "dyn_c_empire_of_earth"
+ },
+ "dyn_c_empire_of_greater_ethiopia": {
+  "en": "Empire of Greater Ethiopia",
+  "de": "Reich von Groß-Äthiopien"
+ },
+ "dyn_c_empire_of_greater_ethiopia_AKK": {
+  "en": "Empire of Greater Ethiopia",
+  "de": "das Reich von Groß-Äthiopien",
+  "base": "dyn_c_empire_of_greater_ethiopia"
+ },
+ "dyn_c_empire_of_greater_ethiopia_DAT": {
+  "en": "Empire of Greater Ethiopia",
+  "de": "dem Reich von Groß-Äthiopien",
+  "base": "dyn_c_empire_of_greater_ethiopia"
+ },
+ "dyn_c_empire_of_greater_ethiopia_GEN": {
+  "en": "Empire of Greater Ethiopia",
+  "de": "des Reiches von Groß-Äthiopien",
+  "base": "dyn_c_empire_of_greater_ethiopia"
+ },
+ "dyn_c_empire_of_greater_ethiopia_IN": {
+  "en": "Empire of Greater Ethiopia",
+  "de": "im Reich von Groß-Äthiopien",
+  "base": "dyn_c_empire_of_greater_ethiopia"
+ },
+ "dyn_c_empire_of_greater_ethiopia_NACH": {
+  "en": "Empire of Greater Ethiopia",
+  "de": "ins Reich von Groß-Äthiopien",
+  "base": "dyn_c_empire_of_greater_ethiopia"
+ },
+ "dyn_c_empire_of_greater_ethiopia_NOM": {
+  "en": "Empire of Greater Ethiopia",
+  "de": "das Reich von Groß-Äthiopien",
+  "base": "dyn_c_empire_of_greater_ethiopia"
+ },
+ "dyn_c_empire_of_greater_ethiopia_VON": {
+  "en": "Empire of Greater Ethiopia",
+  "de": "vom Reich von Groß-Äthiopien",
+  "base": "dyn_c_empire_of_greater_ethiopia"
+ },
+ "dyn_c_empire_of_the_americas": {
+  "en": "Empire of the Americas",
+  "de": "Reich der Amerikas"
+ },
+ "dyn_c_empire_of_the_americas_AKK": {
+  "en": "Empire of the Americas",
+  "de": "das Reich der Amerikas",
+  "base": "dyn_c_empire_of_the_americas"
+ },
+ "dyn_c_empire_of_the_americas_DAT": {
+  "en": "Empire of the Americas",
+  "de": "dem Reich der Amerikas",
+  "base": "dyn_c_empire_of_the_americas"
+ },
+ "dyn_c_empire_of_the_americas_GEN": {
+  "en": "Empire of the Americas",
+  "de": "des Reiches der Amerikas",
+  "base": "dyn_c_empire_of_the_americas"
+ },
+ "dyn_c_empire_of_the_americas_IN": {
+  "en": "Empire of the Americas",
+  "de": "im Reich der Amerikas",
+  "base": "dyn_c_empire_of_the_americas"
+ },
+ "dyn_c_empire_of_the_americas_NACH": {
+  "en": "Empire of the Americas",
+  "de": "ins Reich der Amerikas",
+  "base": "dyn_c_empire_of_the_americas"
+ },
+ "dyn_c_empire_of_the_americas_NOM": {
+  "en": "Empire of the Americas",
+  "de": "das Reich der Amerikas",
+  "base": "dyn_c_empire_of_the_americas"
+ },
+ "dyn_c_empire_of_the_americas_VON": {
+  "en": "Empire of the Americas",
+  "de": "vom Reich der Amerikas",
+  "base": "dyn_c_empire_of_the_americas"
+ },
+ "dyn_c_european_imperial_adj": {
+  "en": "European Imperial",
+  "de": "Europäisch-Kaiserlich"
+ },
+ "dyn_c_european_imperial_federation": {
+  "en": "European Imperial Federation",
+  "de": "Europäische Kaiserliche Föderation"
+ },
+ "dyn_c_european_imperial_federation_AKK": {
+  "en": "European Imperial Federation",
+  "de": "die Europäische Kaiserliche Föderation",
+  "base": "dyn_c_european_imperial_federation"
+ },
+ "dyn_c_european_imperial_federation_DAT": {
+  "en": "European Imperial Federation",
+  "de": "der Europäischen Kaiserlichen Föderation",
+  "base": "dyn_c_european_imperial_federation"
+ },
+ "dyn_c_european_imperial_federation_GEN": {
+  "en": "European Imperial Federation",
+  "de": "der Europäischen Kaiserlichen Föderation",
+  "base": "dyn_c_european_imperial_federation"
+ },
+ "dyn_c_european_imperial_federation_IN": {
+  "en": "European Imperial Federation",
+  "de": "in der Europäischen Kaiserlichen Föderation",
+  "base": "dyn_c_european_imperial_federation"
+ },
+ "dyn_c_european_imperial_federation_NACH": {
+  "en": "European Imperial Federation",
+  "de": "in die Europäische Kaiserliche Föderation",
+  "base": "dyn_c_european_imperial_federation"
+ },
+ "dyn_c_european_imperial_federation_NOM": {
+  "en": "European Imperial Federation",
+  "de": "die Europäische Kaiserliche Föderation",
+  "base": "dyn_c_european_imperial_federation"
+ },
+ "dyn_c_european_imperial_federation_VON": {
+  "en": "European Imperial Federation",
+  "de": "von der Europäischen Kaiserlichen Föderation",
+  "base": "dyn_c_european_imperial_federation"
+ },
+ "dyn_c_european_imperium": {
+  "en": "European Imperium",
+  "de": "Europäisches Imperium"
+ },
+ "dyn_c_european_imperium_AKK": {
+  "en": "European Imperium",
+  "de": "das Europäische Imperium",
+  "base": "dyn_c_european_imperium"
+ },
+ "dyn_c_european_imperium_DAT": {
+  "en": "European Imperium",
+  "de": "dem Europäischen Imperium",
+  "base": "dyn_c_european_imperium"
+ },
+ "dyn_c_european_imperium_GEN": {
+  "en": "European Imperium",
+  "de": "des Europäischen Imperiums",
+  "base": "dyn_c_european_imperium"
+ },
+ "dyn_c_european_imperium_IN": {
+  "en": "European Imperium",
+  "de": "im Europäischen Imperium",
+  "base": "dyn_c_european_imperium"
+ },
+ "dyn_c_european_imperium_NACH": {
+  "en": "European Imperium",
+  "de": "ins Europäische Imperium",
+  "base": "dyn_c_european_imperium"
+ },
+ "dyn_c_european_imperium_NOM": {
+  "en": "European Imperium",
+  "de": "das Europäische Imperium",
+  "base": "dyn_c_european_imperium"
+ },
+ "dyn_c_european_imperium_VON": {
+  "en": "European Imperium",
+  "de": "vom Europäischen Imperium",
+  "base": "dyn_c_european_imperium"
+ },
+ "dyn_c_european_soviet_adj": {
+  "en": "European Soviet",
+  "de": "Europäisch-Sowjetisch"
+ },
+ "dyn_c_european_technate": {
+  "en": "European Technate",
+  "de": "Europäisches Technat"
+ },
+ "dyn_c_european_technate_AKK": {
+  "en": "European Technate",
+  "de": "das Europäische Technat",
+  "base": "dyn_c_european_technate"
+ },
+ "dyn_c_european_technate_DAT": {
+  "en": "European Technate",
+  "de": "dem Europäischen Technat",
+  "base": "dyn_c_european_technate"
+ },
+ "dyn_c_european_technate_GEN": {
+  "en": "European Technate",
+  "de": "des Europäischen Technats",
+  "base": "dyn_c_european_technate"
+ },
+ "dyn_c_european_technate_IN": {
+  "en": "European Technate",
+  "de": "im Europäischen Technat",
+  "base": "dyn_c_european_technate"
+ },
+ "dyn_c_european_technate_NACH": {
+  "en": "European Technate",
+  "de": "ins Europäische Technat",
+  "base": "dyn_c_european_technate"
+ },
+ "dyn_c_european_technate_NOM": {
+  "en": "European Technate",
+  "de": "das Europäische Technat",
+  "base": "dyn_c_european_technate"
+ },
+ "dyn_c_european_technate_VON": {
+  "en": "European Technate",
+  "de": "vom Europäischen Technat",
+  "base": "dyn_c_european_technate"
+ },
+ "dyn_c_european_union": {
+  "en": "European Union",
+  "de": "Europäische Union"
+ },
+ "dyn_c_european_union_AKK": {
+  "en": "European Union",
+  "de": "die Europäische Union",
+  "base": "dyn_c_european_union"
+ },
+ "dyn_c_european_union_DAT": {
+  "en": "European Union",
+  "de": "der Europäischen Union",
+  "base": "dyn_c_european_union"
+ },
+ "dyn_c_european_union_GEN": {
+  "en": "European Union",
+  "de": "der Europäischen Union",
+  "base": "dyn_c_european_union"
+ },
+ "dyn_c_european_union_IN": {
+  "en": "European Union",
+  "de": "in der Europäischen Union",
+  "base": "dyn_c_european_union"
+ },
+ "dyn_c_european_union_NACH": {
+  "en": "European Union",
+  "de": "in die Europäische Union",
+  "base": "dyn_c_european_union"
+ },
+ "dyn_c_european_union_NOM": {
+  "en": "European Union",
+  "de": "die Europäische Union",
+  "base": "dyn_c_european_union"
+ },
+ "dyn_c_european_union_VON": {
+  "en": "European Union",
+  "de": "von der Europäischen Union",
+  "base": "dyn_c_european_union"
+ },
+ "dyn_c_great_qing_empire": {
+  "en": "Empire of the Great Qing",
+  "de": "Reich des Großen Qing"
+ },
+ "dyn_c_great_qing_empire_AKK": {
+  "en": "Empire of the Great Qing",
+  "de": "das Reich des Großen Qing",
+  "base": "dyn_c_great_qing_empire"
+ },
+ "dyn_c_great_qing_empire_DAT": {
+  "en": "Empire of the Great Qing",
+  "de": "dem Reich des Großen Qing",
+  "base": "dyn_c_great_qing_empire"
+ },
+ "dyn_c_great_qing_empire_GEN": {
+  "en": "Empire of the Great Qing",
+  "de": "des Reiches des Großen Qing",
+  "base": "dyn_c_great_qing_empire"
+ },
+ "dyn_c_great_qing_empire_IN": {
+  "en": "Empire of the Great Qing",
+  "de": "im Reich des Großen Qing",
+  "base": "dyn_c_great_qing_empire"
+ },
+ "dyn_c_great_qing_empire_NACH": {
+  "en": "Empire of the Great Qing",
+  "de": "ins Reich des Großen Qing",
+  "base": "dyn_c_great_qing_empire"
+ },
+ "dyn_c_great_qing_empire_NOM": {
+  "en": "Empire of the Great Qing",
+  "de": "das Reich des Großen Qing",
+  "base": "dyn_c_great_qing_empire"
+ },
+ "dyn_c_great_qing_empire_VON": {
+  "en": "Empire of the Great Qing",
+  "de": "vom Reich des Großen Qing",
+  "base": "dyn_c_great_qing_empire"
+ },
+ "dyn_c_great_yuan_empire": {
+  "en": "Empire of the Great Yuan",
+  "de": "Reich des Großen Yuan"
+ },
+ "dyn_c_great_yuan_empire_AKK": {
+  "en": "Empire of the Great Yuan",
+  "de": "das Reich des Großen Yuan",
+  "base": "dyn_c_great_yuan_empire"
+ },
+ "dyn_c_great_yuan_empire_DAT": {
+  "en": "Empire of the Great Yuan",
+  "de": "dem Reich des Großen Yuan",
+  "base": "dyn_c_great_yuan_empire"
+ },
+ "dyn_c_great_yuan_empire_GEN": {
+  "en": "Empire of the Great Yuan",
+  "de": "des Reiches des Großen Yuan",
+  "base": "dyn_c_great_yuan_empire"
+ },
+ "dyn_c_great_yuan_empire_IN": {
+  "en": "Empire of the Great Yuan",
+  "de": "im Reich des Großen Yuan",
+  "base": "dyn_c_great_yuan_empire"
+ },
+ "dyn_c_great_yuan_empire_NACH": {
+  "en": "Empire of the Great Yuan",
+  "de": "ins Reich des Großen Yuan",
+  "base": "dyn_c_great_yuan_empire"
+ },
+ "dyn_c_great_yuan_empire_NOM": {
+  "en": "Empire of the Great Yuan",
+  "de": "das Reich des Großen Yuan",
+  "base": "dyn_c_great_yuan_empire"
+ },
+ "dyn_c_great_yuan_empire_VON": {
+  "en": "Empire of the Great Yuan",
+  "de": "vom Reich des Großen Yuan",
+  "base": "dyn_c_great_yuan_empire"
+ },
+ "dyn_c_greater_chinese_adj": {
+  "en": "Greater Chinese",
+  "de": "Groß-Chinesisch"
+ },
+ "dyn_c_greater_chinese_empire": {
+  "en": "Greater Chinese Empire",
+  "de": "Groß-Chinesisches Reich"
+ },
+ "dyn_c_greater_chinese_empire_AKK": {
+  "en": "Greater Chinese Empire",
+  "de": "das Groß-Chinesische Reich",
+  "base": "dyn_c_greater_chinese_empire"
+ },
+ "dyn_c_greater_chinese_empire_DAT": {
+  "en": "Greater Chinese Empire",
+  "de": "dem Groß-Chinesischen Reich",
+  "base": "dyn_c_greater_chinese_empire"
+ },
+ "dyn_c_greater_chinese_empire_GEN": {
+  "en": "Greater Chinese Empire",
+  "de": "des Groß-Chinesischen Reiches",
+  "base": "dyn_c_greater_chinese_empire"
+ },
+ "dyn_c_greater_chinese_empire_IN": {
+  "en": "Greater Chinese Empire",
+  "de": "im Groß-Chinesischen Reich",
+  "base": "dyn_c_greater_chinese_empire"
+ },
+ "dyn_c_greater_chinese_empire_NACH": {
+  "en": "Greater Chinese Empire",
+  "de": "ins Groß-Chinesische Reich",
+  "base": "dyn_c_greater_chinese_empire"
+ },
+ "dyn_c_greater_chinese_empire_NOM": {
+  "en": "Greater Chinese Empire",
+  "de": "das Groß-Chinesische Reich",
+  "base": "dyn_c_greater_chinese_empire"
+ },
+ "dyn_c_greater_chinese_empire_VON": {
+  "en": "Greater Chinese Empire",
+  "de": "vom Groß-Chinesischen Reich",
+  "base": "dyn_c_greater_chinese_empire"
+ },
+ "dyn_c_greater_ethiopian_adj": {
+  "en": "Ethiopian",
+  "de": "Äthiopisch"
+ },
+ "dyn_c_hindu_rashtra": {
+  "en": "Hindu Rashtra",
+  "de": "Hindu Rashtra"
+ },
+ "dyn_c_hindu_rashtra_AKK": {
+  "en": "Hindu Rashtra",
+  "de": "Hindu Rashtra",
+  "base": "dyn_c_hindu_rashtra"
+ },
+ "dyn_c_hindu_rashtra_DAT": {
+  "en": "Hindu Rashtra",
+  "de": "Hindu Rashtra",
+  "base": "dyn_c_hindu_rashtra"
+ },
+ "dyn_c_hindu_rashtra_GEN": {
+  "en": "Hindu Rashtra",
+  "de": "Hindu Rashtra",
+  "base": "dyn_c_hindu_rashtra"
+ },
+ "dyn_c_hindu_rashtra_IN": {
+  "en": "Hindu Rashtra",
+  "de": "in Hindu Rashtra",
+  "base": "dyn_c_hindu_rashtra"
+ },
+ "dyn_c_hindu_rashtra_NACH": {
+  "en": "Hindu Rashtra",
+  "de": "nach Hindu Rashtra",
+  "base": "dyn_c_hindu_rashtra"
+ },
+ "dyn_c_hindu_rashtra_NOM": {
+  "en": "Hindu Rashtra",
+  "de": "Hindu Rashtra",
+  "base": "dyn_c_hindu_rashtra"
+ },
+ "dyn_c_hindu_rashtra_VON": {
+  "en": "Hindu Rashtra",
+  "de": "von Hindu Rashtra",
+  "base": "dyn_c_hindu_rashtra"
+ },
+ "dyn_c_hindu_rashtra_adj": {
+  "en": "Hindu Rashtra",
+  "de": "Hindu-Rashtra"
+ },
+ "dyn_c_holy_terran_adj": {
+  "en": "Holy Terran",
+  "de": "Heilig-Terranisch"
+ },
+ "dyn_c_holy_terran_dominion": {
+  "en": "Holy Terran Dominion",
+  "de": "Heiliges Terranisches Dominion"
+ },
+ "dyn_c_holy_terran_dominion_AKK": {
+  "en": "Holy Terran Dominion",
+  "de": "das Heilige Terranische Dominion",
+  "base": "dyn_c_holy_terran_dominion"
+ },
+ "dyn_c_holy_terran_dominion_DAT": {
+  "en": "Holy Terran Dominion",
+  "de": "dem Heiligen Terranischen Dominion",
+  "base": "dyn_c_holy_terran_dominion"
+ },
+ "dyn_c_holy_terran_dominion_GEN": {
+  "en": "Holy Terran Dominion",
+  "de": "des Heiligen Terranischen Dominions",
+  "base": "dyn_c_holy_terran_dominion"
+ },
+ "dyn_c_holy_terran_dominion_IN": {
+  "en": "Holy Terran Dominion",
+  "de": "im Heiligen Terranischen Dominion",
+  "base": "dyn_c_holy_terran_dominion"
+ },
+ "dyn_c_holy_terran_dominion_NACH": {
+  "en": "Holy Terran Dominion",
+  "de": "ins Heilige Terranische Dominion",
+  "base": "dyn_c_holy_terran_dominion"
+ },
+ "dyn_c_holy_terran_dominion_NOM": {
+  "en": "Holy Terran Dominion",
+  "de": "das Heilige Terranische Dominion",
+  "base": "dyn_c_holy_terran_dominion"
+ },
+ "dyn_c_holy_terran_dominion_VON": {
+  "en": "Holy Terran Dominion",
+  "de": "vom Heiligen Terranischen Dominion",
+  "base": "dyn_c_holy_terran_dominion"
+ },
+ "dyn_c_house_of_wisdom": {
+  "en": "House of Wisdom",
+  "de": "Haus der Weisheit"
+ },
+ "dyn_c_house_of_wisdom_AKK": {
+  "en": "House of Wisdom",
+  "de": "das Haus der Weisheit",
+  "base": "dyn_c_house_of_wisdom"
+ },
+ "dyn_c_house_of_wisdom_DAT": {
+  "en": "House of Wisdom",
+  "de": "dem Haus der Weisheit",
+  "base": "dyn_c_house_of_wisdom"
+ },
+ "dyn_c_house_of_wisdom_GEN": {
+  "en": "House of Wisdom",
+  "de": "des Hauses der Weisheit",
+  "base": "dyn_c_house_of_wisdom"
+ },
+ "dyn_c_house_of_wisdom_IN": {
+  "en": "House of Wisdom",
+  "de": "im Haus der Weisheit",
+  "base": "dyn_c_house_of_wisdom"
+ },
+ "dyn_c_house_of_wisdom_NACH": {
+  "en": "House of Wisdom",
+  "de": "ins Haus der Weisheit",
+  "base": "dyn_c_house_of_wisdom"
+ },
+ "dyn_c_house_of_wisdom_NOM": {
+  "en": "House of Wisdom",
+  "de": "das Haus der Weisheit",
+  "base": "dyn_c_house_of_wisdom"
+ },
+ "dyn_c_house_of_wisdom_VON": {
+  "en": "House of Wisdom",
+  "de": "vom Haus der Weisheit",
+  "base": "dyn_c_house_of_wisdom"
+ },
+ "dyn_c_house_of_wisdom_adj": {
+  "en": "Bayt al-Hikma",
+  "de": "Bayt al-Hikma"
+ },
+ "dyn_c_imamate_of_east_africa": {
+  "en": "Imamate of East Africa",
+  "de": "Imamat Ostafrika"
+ },
+ "dyn_c_imamate_of_east_africa_AKK": {
+  "en": "Imamate of East Africa",
+  "de": "das Imamat Ostafrika",
+  "base": "dyn_c_imamate_of_east_africa"
+ },
+ "dyn_c_imamate_of_east_africa_DAT": {
+  "en": "Imamate of East Africa",
+  "de": "dem Imamat Ostafrika",
+  "base": "dyn_c_imamate_of_east_africa"
+ },
+ "dyn_c_imamate_of_east_africa_GEN": {
+  "en": "Imamate of East Africa",
+  "de": "des Imamats Ostafrika",
+  "base": "dyn_c_imamate_of_east_africa"
+ },
+ "dyn_c_imamate_of_east_africa_IN": {
+  "en": "Imamate of East Africa",
+  "de": "im Imamat Ostafrika",
+  "base": "dyn_c_imamate_of_east_africa"
+ },
+ "dyn_c_imamate_of_east_africa_NACH": {
+  "en": "Imamate of East Africa",
+  "de": "ins Imamat Ostafrika",
+  "base": "dyn_c_imamate_of_east_africa"
+ },
+ "dyn_c_imamate_of_east_africa_NOM": {
+  "en": "Imamate of East Africa",
+  "de": "das Imamat Ostafrika",
+  "base": "dyn_c_imamate_of_east_africa"
+ },
+ "dyn_c_imamate_of_east_africa_VON": {
+  "en": "Imamate of East Africa",
+  "de": "vom Imamat Ostafrika",
+  "base": "dyn_c_imamate_of_east_africa"
+ },
+ "dyn_c_imperial_federation_adj": {
+  "en": "Imperial Federal",
+  "de": "Kaiserlich-Föderal"
+ },
+ "dyn_c_imperial_federation_of_earth": {
+  "en": "Imperial Federation of Earth",
+  "de": "Kaiserliche Föderation der Erde"
+ },
+ "dyn_c_imperial_federation_of_earth_AKK": {
+  "en": "Imperial Federation of Earth",
+  "de": "die Kaiserliche Föderation der Erde",
+  "base": "dyn_c_imperial_federation_of_earth"
+ },
+ "dyn_c_imperial_federation_of_earth_DAT": {
+  "en": "Imperial Federation of Earth",
+  "de": "der Kaiserlichen Föderation der Erde",
+  "base": "dyn_c_imperial_federation_of_earth"
+ },
+ "dyn_c_imperial_federation_of_earth_GEN": {
+  "en": "Imperial Federation of Earth",
+  "de": "der Kaiserlichen Föderation der Erde",
+  "base": "dyn_c_imperial_federation_of_earth"
+ },
+ "dyn_c_imperial_federation_of_earth_IN": {
+  "en": "Imperial Federation of Earth",
+  "de": "in der Kaiserlichen Föderation der Erde",
+  "base": "dyn_c_imperial_federation_of_earth"
+ },
+ "dyn_c_imperial_federation_of_earth_NACH": {
+  "en": "Imperial Federation of Earth",
+  "de": "in die Kaiserliche Föderation der Erde",
+  "base": "dyn_c_imperial_federation_of_earth"
+ },
+ "dyn_c_imperial_federation_of_earth_NOM": {
+  "en": "Imperial Federation of Earth",
+  "de": "die Kaiserliche Föderation der Erde",
+  "base": "dyn_c_imperial_federation_of_earth"
+ },
+ "dyn_c_imperial_federation_of_earth_VON": {
+  "en": "Imperial Federation of Earth",
+  "de": "von der Kaiserlichen Föderation der Erde",
+  "base": "dyn_c_imperial_federation_of_earth"
+ },
+ "dyn_c_imperial_mexican_adj": {
+  "en": "Imperial Mexican",
+  "de": "Kaiserlich-Mexikanisch"
+ },
+ "dyn_c_indonesia_raya": {
+  "en": "Indonesia Raya",
+  "de": "Indonesia Raya"
+ },
+ "dyn_c_indonesia_raya_AKK": {
+  "en": "Indonesia Raya",
+  "de": "Indonesia Raya",
+  "base": "dyn_c_indonesia_raya"
+ },
+ "dyn_c_indonesia_raya_DAT": {
+  "en": "Indonesia Raya",
+  "de": "Indonesia Raya",
+  "base": "dyn_c_indonesia_raya"
+ },
+ "dyn_c_indonesia_raya_GEN": {
+  "en": "Indonesia Raya",
+  "de": "Indonesia Raya",
+  "base": "dyn_c_indonesia_raya"
+ },
+ "dyn_c_indonesia_raya_IN": {
+  "en": "Indonesia Raya",
+  "de": "in Indonesia Raya",
+  "base": "dyn_c_indonesia_raya"
+ },
+ "dyn_c_indonesia_raya_NACH": {
+  "en": "Indonesia Raya",
+  "de": "nach Indonesia Raya",
+  "base": "dyn_c_indonesia_raya"
+ },
+ "dyn_c_indonesia_raya_NOM": {
+  "en": "Indonesia Raya",
+  "de": "Indonesia Raya",
+  "base": "dyn_c_indonesia_raya"
+ },
+ "dyn_c_indonesia_raya_VON": {
+  "en": "Indonesia Raya",
+  "de": "von Indonesia Raya",
+  "base": "dyn_c_indonesia_raya"
+ },
+ "dyn_c_indonesia_raya_adj": {
+  "en": "Indonesia Raya",
+  "de": "Indonesia Raya"
+ },
+ "dyn_c_indonesian_technical_union": {
+  "en": "Indonesian Technical Union",
+  "de": "Indonesische Technische Union"
+ },
+ "dyn_c_indonesian_technical_union_AKK": {
+  "en": "Indonesian Technical Union",
+  "de": "die Indonesische Technische Union",
+  "base": "dyn_c_indonesian_technical_union"
+ },
+ "dyn_c_indonesian_technical_union_DAT": {
+  "en": "Indonesian Technical Union",
+  "de": "der Indonesischen Technischen Union",
+  "base": "dyn_c_indonesian_technical_union"
+ },
+ "dyn_c_indonesian_technical_union_GEN": {
+  "en": "Indonesian Technical Union",
+  "de": "der Indonesischen Technischen Union",
+  "base": "dyn_c_indonesian_technical_union"
+ },
+ "dyn_c_indonesian_technical_union_IN": {
+  "en": "Indonesian Technical Union",
+  "de": "in der Indonesischen Technischen Union",
+  "base": "dyn_c_indonesian_technical_union"
+ },
+ "dyn_c_indonesian_technical_union_NACH": {
+  "en": "Indonesian Technical Union",
+  "de": "in die Indonesische Technische Union",
+  "base": "dyn_c_indonesian_technical_union"
+ },
+ "dyn_c_indonesian_technical_union_NOM": {
+  "en": "Indonesian Technical Union",
+  "de": "die Indonesische Technische Union",
+  "base": "dyn_c_indonesian_technical_union"
+ },
+ "dyn_c_indonesian_technical_union_VON": {
+  "en": "Indonesian Technical Union",
+  "de": "von der Indonesischen Technischen Union",
+  "base": "dyn_c_indonesian_technical_union"
+ },
+ "dyn_c_intermarium": {
+  "en": "Intermarium",
+  "de": "Intermarium"
+ },
+ "dyn_c_intermarium_AKK": {
+  "en": "Intermarium",
+  "de": "Intermarium",
+  "base": "dyn_c_intermarium"
+ },
+ "dyn_c_intermarium_DAT": {
+  "en": "Intermarium",
+  "de": "Intermarium",
+  "base": "dyn_c_intermarium"
+ },
+ "dyn_c_intermarium_GEN": {
+  "en": "Intermarium",
+  "de": "Intermariums",
+  "base": "dyn_c_intermarium"
+ },
+ "dyn_c_intermarium_IN": {
+  "en": "Intermarium",
+  "de": "in Intermarium",
+  "base": "dyn_c_intermarium"
+ },
+ "dyn_c_intermarium_NACH": {
+  "en": "Intermarium",
+  "de": "nach Intermarium",
+  "base": "dyn_c_intermarium"
+ },
+ "dyn_c_intermarium_NOM": {
+  "en": "Intermarium",
+  "de": "Intermarium",
+  "base": "dyn_c_intermarium"
+ },
+ "dyn_c_intermarium_VON": {
+  "en": "Intermarium",
+  "de": "von Intermarium",
+  "base": "dyn_c_intermarium"
+ },
+ "dyn_c_islamic_federation": {
+  "en": "Islamic Federation",
+  "de": "Islamische Föderation"
+ },
+ "dyn_c_islamic_federation_AKK": {
+  "en": "Islamic Federation",
+  "de": "die Islamische Föderation",
+  "base": "dyn_c_islamic_federation"
+ },
+ "dyn_c_islamic_federation_DAT": {
+  "en": "Islamic Federation",
+  "de": "der Islamischen Föderation",
+  "base": "dyn_c_islamic_federation"
+ },
+ "dyn_c_islamic_federation_GEN": {
+  "en": "Islamic Federation",
+  "de": "der Islamischen Föderation",
+  "base": "dyn_c_islamic_federation"
+ },
+ "dyn_c_islamic_federation_IN": {
+  "en": "Islamic Federation",
+  "de": "in der Islamischen Föderation",
+  "base": "dyn_c_islamic_federation"
+ },
+ "dyn_c_islamic_federation_NACH": {
+  "en": "Islamic Federation",
+  "de": "in die Islamische Föderation",
+  "base": "dyn_c_islamic_federation"
+ },
+ "dyn_c_islamic_federation_NOM": {
+  "en": "Islamic Federation",
+  "de": "die Islamische Föderation",
+  "base": "dyn_c_islamic_federation"
+ },
+ "dyn_c_islamic_federation_VON": {
+  "en": "Islamic Federation",
+  "de": "von der Islamischen Föderation",
+  "base": "dyn_c_islamic_federation"
+ },
+ "dyn_c_islamic_socialist_republic": {
+  "en": "Islamic Socialist Republic",
+  "de": "Islamische Sozialistische Republik"
+ },
+ "dyn_c_islamic_socialist_republic_AKK": {
+  "en": "Islamic Socialist Republic",
+  "de": "die Islamische Sozialistische Republik",
+  "base": "dyn_c_islamic_socialist_republic"
+ },
+ "dyn_c_islamic_socialist_republic_DAT": {
+  "en": "Islamic Socialist Republic",
+  "de": "der Islamischen Sozialistischen Republik",
+  "base": "dyn_c_islamic_socialist_republic"
+ },
+ "dyn_c_islamic_socialist_republic_GEN": {
+  "en": "Islamic Socialist Republic",
+  "de": "der Islamischen Sozialistischen Republik",
+  "base": "dyn_c_islamic_socialist_republic"
+ },
+ "dyn_c_islamic_socialist_republic_IN": {
+  "en": "Islamic Socialist Republic",
+  "de": "in der Islamischen Sozialistischen Republik",
+  "base": "dyn_c_islamic_socialist_republic"
+ },
+ "dyn_c_islamic_socialist_republic_NACH": {
+  "en": "Islamic Socialist Republic",
+  "de": "in die Islamische Sozialistische Republik",
+  "base": "dyn_c_islamic_socialist_republic"
+ },
+ "dyn_c_islamic_socialist_republic_NOM": {
+  "en": "Islamic Socialist Republic",
+  "de": "die Islamische Sozialistische Republik",
+  "base": "dyn_c_islamic_socialist_republic"
+ },
+ "dyn_c_islamic_socialist_republic_VON": {
+  "en": "Islamic Socialist Republic",
+  "de": "von der Islamischen Sozialistischen Republik",
+  "base": "dyn_c_islamic_socialist_republic"
+ },
+ "dyn_c_islamic_sultanate": {
+  "en": "Islamic Sultanate",
+  "de": "Islamisches Sultanat"
+ },
+ "dyn_c_islamic_sultanate_AKK": {
+  "en": "Islamic Sultanate",
+  "de": "das Islamische Sultanat",
+  "base": "dyn_c_islamic_sultanate"
+ },
+ "dyn_c_islamic_sultanate_DAT": {
+  "en": "Islamic Sultanate",
+  "de": "dem Islamischen Sultanat",
+  "base": "dyn_c_islamic_sultanate"
+ },
+ "dyn_c_islamic_sultanate_GEN": {
+  "en": "Islamic Sultanate",
+  "de": "des Islamischen Sultanats",
+  "base": "dyn_c_islamic_sultanate"
+ },
+ "dyn_c_islamic_sultanate_IN": {
+  "en": "Islamic Sultanate",
+  "de": "im Islamischen Sultanat",
+  "base": "dyn_c_islamic_sultanate"
+ },
+ "dyn_c_islamic_sultanate_NACH": {
+  "en": "Islamic Sultanate",
+  "de": "ins Islamische Sultanat",
+  "base": "dyn_c_islamic_sultanate"
+ },
+ "dyn_c_islamic_sultanate_NOM": {
+  "en": "Islamic Sultanate",
+  "de": "das Islamische Sultanat",
+  "base": "dyn_c_islamic_sultanate"
+ },
+ "dyn_c_islamic_sultanate_VON": {
+  "en": "Islamic Sultanate",
+  "de": "vom Islamischen Sultanat",
+  "base": "dyn_c_islamic_sultanate"
+ },
+ "dyn_c_majapahit_revival": {
+  "en": "Majapahit Revival",
+  "de": "Wiedergeburt von Majapahit"
+ },
+ "dyn_c_majapahit_revival_AKK": {
+  "en": "Majapahit Revival",
+  "de": "die Wiedergeburt von Majapahit",
+  "base": "dyn_c_majapahit_revival"
+ },
+ "dyn_c_majapahit_revival_DAT": {
+  "en": "Majapahit Revival",
+  "de": "der Wiedergeburt von Majapahit",
+  "base": "dyn_c_majapahit_revival"
+ },
+ "dyn_c_majapahit_revival_GEN": {
+  "en": "Majapahit Revival",
+  "de": "der Wiedergeburt von Majapahit",
+  "base": "dyn_c_majapahit_revival"
+ },
+ "dyn_c_majapahit_revival_IN": {
+  "en": "Majapahit Revival",
+  "de": "in der Wiedergeburt von Majapahit",
+  "base": "dyn_c_majapahit_revival"
+ },
+ "dyn_c_majapahit_revival_NACH": {
+  "en": "Majapahit Revival",
+  "de": "in die Wiedergeburt von Majapahit",
+  "base": "dyn_c_majapahit_revival"
+ },
+ "dyn_c_majapahit_revival_NOM": {
+  "en": "Majapahit Revival",
+  "de": "die Wiedergeburt von Majapahit",
+  "base": "dyn_c_majapahit_revival"
+ },
+ "dyn_c_majapahit_revival_VON": {
+  "en": "Majapahit Revival",
+  "de": "von der Wiedergeburt von Majapahit",
+  "base": "dyn_c_majapahit_revival"
+ },
+ "dyn_c_negara_islam_adj": {
+  "en": "Indonesian Islamic",
+  "de": "Indonesisch-Islamisch"
+ },
+ "dyn_c_negara_islam_indonesia": {
+  "en": "Negara Islam Indonesia",
+  "de": "Negara Islam Indonesia"
+ },
+ "dyn_c_negara_islam_indonesia_AKK": {
+  "en": "Negara Islam Indonesia",
+  "de": "Negara Islam Indonesia",
+  "base": "dyn_c_negara_islam_indonesia"
+ },
+ "dyn_c_negara_islam_indonesia_DAT": {
+  "en": "Negara Islam Indonesia",
+  "de": "Negara Islam Indonesia",
+  "base": "dyn_c_negara_islam_indonesia"
+ },
+ "dyn_c_negara_islam_indonesia_GEN": {
+  "en": "Negara Islam Indonesia",
+  "de": "Negara Islam Indonesia",
+  "base": "dyn_c_negara_islam_indonesia"
+ },
+ "dyn_c_negara_islam_indonesia_IN": {
+  "en": "Negara Islam Indonesia",
+  "de": "in Negara Islam Indonesia",
+  "base": "dyn_c_negara_islam_indonesia"
+ },
+ "dyn_c_negara_islam_indonesia_NACH": {
+  "en": "Negara Islam Indonesia",
+  "de": "nach Negara Islam Indonesia",
+  "base": "dyn_c_negara_islam_indonesia"
+ },
+ "dyn_c_negara_islam_indonesia_NOM": {
+  "en": "Negara Islam Indonesia",
+  "de": "Negara Islam Indonesia",
+  "base": "dyn_c_negara_islam_indonesia"
+ },
+ "dyn_c_negara_islam_indonesia_VON": {
+  "en": "Negara Islam Indonesia",
+  "de": "von Negara Islam Indonesia",
+  "base": "dyn_c_negara_islam_indonesia"
+ },
+ "dyn_c_north_american_royal_adj": {
+  "en": "North American Royal",
+  "de": "Nordamerikanisch-Königlich"
+ },
+ "dyn_c_north_american_soviet_adj": {
+  "en": "North American Soviet",
+  "de": "Nordamerikanisch-Sowjetisch"
+ },
+ "dyn_c_north_american_union": {
+  "en": "North American Union",
+  "de": "Nordamerikanische Union"
+ },
+ "dyn_c_north_american_union_AKK": {
+  "en": "North American Union",
+  "de": "die Nordamerikanische Union",
+  "base": "dyn_c_north_american_union"
+ },
+ "dyn_c_north_american_union_DAT": {
+  "en": "North American Union",
+  "de": "der Nordamerikanischen Union",
+  "base": "dyn_c_north_american_union"
+ },
+ "dyn_c_north_american_union_GEN": {
+  "en": "North American Union",
+  "de": "der Nordamerikanischen Union",
+  "base": "dyn_c_north_american_union"
+ },
+ "dyn_c_north_american_union_IN": {
+  "en": "North American Union",
+  "de": "in der Nordamerikanischen Union",
+  "base": "dyn_c_north_american_union"
+ },
+ "dyn_c_north_american_union_NACH": {
+  "en": "North American Union",
+  "de": "in die Nordamerikanische Union",
+  "base": "dyn_c_north_american_union"
+ },
+ "dyn_c_north_american_union_NOM": {
+  "en": "North American Union",
+  "de": "die Nordamerikanische Union",
+  "base": "dyn_c_north_american_union"
+ },
+ "dyn_c_north_american_union_VON": {
+  "en": "North American Union",
+  "de": "von der Nordamerikanischen Union",
+  "base": "dyn_c_north_american_union"
+ },
+ "dyn_c_nusantara_empire": {
+  "en": "Nusantara Empire",
+  "de": "Reich Nusantara"
+ },
+ "dyn_c_nusantara_empire_AKK": {
+  "en": "Nusantara Empire",
+  "de": "das Reich Nusantara",
+  "base": "dyn_c_nusantara_empire"
+ },
+ "dyn_c_nusantara_empire_DAT": {
+  "en": "Nusantara Empire",
+  "de": "dem Reich Nusantara",
+  "base": "dyn_c_nusantara_empire"
+ },
+ "dyn_c_nusantara_empire_GEN": {
+  "en": "Nusantara Empire",
+  "de": "des Reiches Nusantara",
+  "base": "dyn_c_nusantara_empire"
+ },
+ "dyn_c_nusantara_empire_IN": {
+  "en": "Nusantara Empire",
+  "de": "im Reich Nusantara",
+  "base": "dyn_c_nusantara_empire"
+ },
+ "dyn_c_nusantara_empire_NACH": {
+  "en": "Nusantara Empire",
+  "de": "ins Reich Nusantara",
+  "base": "dyn_c_nusantara_empire"
+ },
+ "dyn_c_nusantara_empire_NOM": {
+  "en": "Nusantara Empire",
+  "de": "das Reich Nusantara",
+  "base": "dyn_c_nusantara_empire"
+ },
+ "dyn_c_nusantara_empire_VON": {
+  "en": "Nusantara Empire",
+  "de": "vom Reich Nusantara",
+  "base": "dyn_c_nusantara_empire"
+ },
+ "dyn_c_nusantara_empire_adj": {
+  "en": "Nusantaran",
+  "de": "Nusantarisch"
+ },
+ "dyn_c_ottoman_caliphate": {
+  "en": "Ottoman Caliphate",
+  "de": "Osmanisches Kalifat"
+ },
+ "dyn_c_ottoman_caliphate_AKK": {
+  "en": "Ottoman Caliphate",
+  "de": "das Osmanische Kalifat",
+  "base": "dyn_c_ottoman_caliphate"
+ },
+ "dyn_c_ottoman_caliphate_DAT": {
+  "en": "Ottoman Caliphate",
+  "de": "dem Osmanischen Kalifat",
+  "base": "dyn_c_ottoman_caliphate"
+ },
+ "dyn_c_ottoman_caliphate_GEN": {
+  "en": "Ottoman Caliphate",
+  "de": "des Osmanischen Kalifats",
+  "base": "dyn_c_ottoman_caliphate"
+ },
+ "dyn_c_ottoman_caliphate_IN": {
+  "en": "Ottoman Caliphate",
+  "de": "im Osmanischen Kalifat",
+  "base": "dyn_c_ottoman_caliphate"
+ },
+ "dyn_c_ottoman_caliphate_NACH": {
+  "en": "Ottoman Caliphate",
+  "de": "ins Osmanische Kalifat",
+  "base": "dyn_c_ottoman_caliphate"
+ },
+ "dyn_c_ottoman_caliphate_NOM": {
+  "en": "Ottoman Caliphate",
+  "de": "das Osmanische Kalifat",
+  "base": "dyn_c_ottoman_caliphate"
+ },
+ "dyn_c_ottoman_caliphate_VON": {
+  "en": "Ottoman Caliphate",
+  "de": "vom Osmanischen Kalifat",
+  "base": "dyn_c_ottoman_caliphate"
+ },
+ "dyn_c_ottoman_caliphate_adj": {
+  "en": "Ottoman",
+  "de": "Osmanisch"
+ },
+ "dyn_c_pan_african_socialist_federation": {
+  "en": "Pan-African Socialist Federation",
+  "de": "Panafrikanische Sozialistische Föderation"
+ },
+ "dyn_c_pan_african_socialist_federation_AKK": {
+  "en": "Pan-African Socialist Federation",
+  "de": "die Panafrikanische Sozialistische Föderation",
+  "base": "dyn_c_pan_african_socialist_federation"
+ },
+ "dyn_c_pan_african_socialist_federation_DAT": {
+  "en": "Pan-African Socialist Federation",
+  "de": "der Panafrikanischen Sozialistischen Föderation",
+  "base": "dyn_c_pan_african_socialist_federation"
+ },
+ "dyn_c_pan_african_socialist_federation_GEN": {
+  "en": "Pan-African Socialist Federation",
+  "de": "der Panafrikanischen Sozialistischen Föderation",
+  "base": "dyn_c_pan_african_socialist_federation"
+ },
+ "dyn_c_pan_african_socialist_federation_IN": {
+  "en": "Pan-African Socialist Federation",
+  "de": "in der Panafrikanischen Sozialistischen Föderation",
+  "base": "dyn_c_pan_african_socialist_federation"
+ },
+ "dyn_c_pan_african_socialist_federation_NACH": {
+  "en": "Pan-African Socialist Federation",
+  "de": "in die Panafrikanische Sozialistische Föderation",
+  "base": "dyn_c_pan_african_socialist_federation"
+ },
+ "dyn_c_pan_african_socialist_federation_NOM": {
+  "en": "Pan-African Socialist Federation",
+  "de": "die Panafrikanische Sozialistische Föderation",
+  "base": "dyn_c_pan_african_socialist_federation"
+ },
+ "dyn_c_pan_african_socialist_federation_VON": {
+  "en": "Pan-African Socialist Federation",
+  "de": "von der Panafrikanischen Sozialistischen Föderation",
+  "base": "dyn_c_pan_african_socialist_federation"
+ },
+ "dyn_c_pan_african_theocracy": {
+  "en": "Pan-African Theocracy",
+  "de": "Panafrikanische Theokratie"
+ },
+ "dyn_c_pan_african_theocracy_AKK": {
+  "en": "Pan-African Theocracy",
+  "de": "die Panafrikanische Theokratie",
+  "base": "dyn_c_pan_african_theocracy"
+ },
+ "dyn_c_pan_african_theocracy_DAT": {
+  "en": "Pan-African Theocracy",
+  "de": "der Panafrikanischen Theokratie",
+  "base": "dyn_c_pan_african_theocracy"
+ },
+ "dyn_c_pan_african_theocracy_GEN": {
+  "en": "Pan-African Theocracy",
+  "de": "der Panafrikanischen Theokratie",
+  "base": "dyn_c_pan_african_theocracy"
+ },
+ "dyn_c_pan_african_theocracy_IN": {
+  "en": "Pan-African Theocracy",
+  "de": "in der Panafrikanischen Theokratie",
+  "base": "dyn_c_pan_african_theocracy"
+ },
+ "dyn_c_pan_african_theocracy_NACH": {
+  "en": "Pan-African Theocracy",
+  "de": "in die Panafrikanische Theokratie",
+  "base": "dyn_c_pan_african_theocracy"
+ },
+ "dyn_c_pan_african_theocracy_NOM": {
+  "en": "Pan-African Theocracy",
+  "de": "die Panafrikanische Theokratie",
+  "base": "dyn_c_pan_african_theocracy"
+ },
+ "dyn_c_pan_african_theocracy_VON": {
+  "en": "Pan-African Theocracy",
+  "de": "von der Panafrikanischen Theokratie",
+  "base": "dyn_c_pan_african_theocracy"
+ },
+ "dyn_c_pan_islamic_league": {
+  "en": "Pan-Islamic League",
+  "de": "Panislamische Liga"
+ },
+ "dyn_c_pan_islamic_league_AKK": {
+  "en": "Pan-Islamic League",
+  "de": "die Panislamische Liga",
+  "base": "dyn_c_pan_islamic_league"
+ },
+ "dyn_c_pan_islamic_league_DAT": {
+  "en": "Pan-Islamic League",
+  "de": "der Panislamischen Liga",
+  "base": "dyn_c_pan_islamic_league"
+ },
+ "dyn_c_pan_islamic_league_GEN": {
+  "en": "Pan-Islamic League",
+  "de": "der Panislamischen Liga",
+  "base": "dyn_c_pan_islamic_league"
+ },
+ "dyn_c_pan_islamic_league_IN": {
+  "en": "Pan-Islamic League",
+  "de": "in der Panislamischen Liga",
+  "base": "dyn_c_pan_islamic_league"
+ },
+ "dyn_c_pan_islamic_league_NACH": {
+  "en": "Pan-Islamic League",
+  "de": "in die Panislamische Liga",
+  "base": "dyn_c_pan_islamic_league"
+ },
+ "dyn_c_pan_islamic_league_NOM": {
+  "en": "Pan-Islamic League",
+  "de": "die Panislamische Liga",
+  "base": "dyn_c_pan_islamic_league"
+ },
+ "dyn_c_pan_islamic_league_VON": {
+  "en": "Pan-Islamic League",
+  "de": "von der Panislamischen Liga",
+  "base": "dyn_c_pan_islamic_league"
+ },
+ "dyn_c_pax_americana": {
+  "en": "Pax Americana",
+  "de": "Pax Americana"
+ },
+ "dyn_c_pax_americana_AKK": {
+  "en": "Pax Americana",
+  "de": "Pax Americana",
+  "base": "dyn_c_pax_americana"
+ },
+ "dyn_c_pax_americana_DAT": {
+  "en": "Pax Americana",
+  "de": "Pax Americana",
+  "base": "dyn_c_pax_americana"
+ },
+ "dyn_c_pax_americana_GEN": {
+  "en": "Pax Americana",
+  "de": "Pax Americana",
+  "base": "dyn_c_pax_americana"
+ },
+ "dyn_c_pax_americana_IN": {
+  "en": "Pax Americana",
+  "de": "in Pax Americana",
+  "base": "dyn_c_pax_americana"
+ },
+ "dyn_c_pax_americana_NACH": {
+  "en": "Pax Americana",
+  "de": "nach Pax Americana",
+  "base": "dyn_c_pax_americana"
+ },
+ "dyn_c_pax_americana_NOM": {
+  "en": "Pax Americana",
+  "de": "Pax Americana",
+  "base": "dyn_c_pax_americana"
+ },
+ "dyn_c_pax_americana_VON": {
+  "en": "Pax Americana",
+  "de": "von Pax Americana",
+  "base": "dyn_c_pax_americana"
+ },
+ "dyn_c_pax_americana_adj": {
+  "en": "Pax Americana",
+  "de": "Pax Americana"
+ },
+ "dyn_c_peoples_republic_of_bharat": {
+  "en": "People's Republic of Bharat",
+  "de": "Volksrepublik Bharat"
+ },
+ "dyn_c_peoples_republic_of_bharat_AKK": {
+  "en": "People's Republic of Bharat",
+  "de": "die Volksrepublik Bharat",
+  "base": "dyn_c_peoples_republic_of_bharat"
+ },
+ "dyn_c_peoples_republic_of_bharat_DAT": {
+  "en": "People's Republic of Bharat",
+  "de": "der Volksrepublik Bharat",
+  "base": "dyn_c_peoples_republic_of_bharat"
+ },
+ "dyn_c_peoples_republic_of_bharat_GEN": {
+  "en": "People's Republic of Bharat",
+  "de": "der Volksrepublik Bharat",
+  "base": "dyn_c_peoples_republic_of_bharat"
+ },
+ "dyn_c_peoples_republic_of_bharat_IN": {
+  "en": "People's Republic of Bharat",
+  "de": "in der Volksrepublik Bharat",
+  "base": "dyn_c_peoples_republic_of_bharat"
+ },
+ "dyn_c_peoples_republic_of_bharat_NACH": {
+  "en": "People's Republic of Bharat",
+  "de": "in die Volksrepublik Bharat",
+  "base": "dyn_c_peoples_republic_of_bharat"
+ },
+ "dyn_c_peoples_republic_of_bharat_NOM": {
+  "en": "People's Republic of Bharat",
+  "de": "die Volksrepublik Bharat",
+  "base": "dyn_c_peoples_republic_of_bharat"
+ },
+ "dyn_c_peoples_republic_of_bharat_VON": {
+  "en": "People's Republic of Bharat",
+  "de": "von der Volksrepublik Bharat",
+  "base": "dyn_c_peoples_republic_of_bharat"
+ },
+ "dyn_c_peoples_republic_of_indonesia": {
+  "en": "People's Republic of Indonesia",
+  "de": "Volksrepublik Indonesien"
+ },
+ "dyn_c_peoples_republic_of_indonesia_AKK": {
+  "en": "People's Republic of Indonesia",
+  "de": "die Volksrepublik Indonesien",
+  "base": "dyn_c_peoples_republic_of_indonesia"
+ },
+ "dyn_c_peoples_republic_of_indonesia_DAT": {
+  "en": "People's Republic of Indonesia",
+  "de": "der Volksrepublik Indonesien",
+  "base": "dyn_c_peoples_republic_of_indonesia"
+ },
+ "dyn_c_peoples_republic_of_indonesia_GEN": {
+  "en": "People's Republic of Indonesia",
+  "de": "der Volksrepublik Indonesien",
+  "base": "dyn_c_peoples_republic_of_indonesia"
+ },
+ "dyn_c_peoples_republic_of_indonesia_IN": {
+  "en": "People's Republic of Indonesia",
+  "de": "in der Volksrepublik Indonesien",
+  "base": "dyn_c_peoples_republic_of_indonesia"
+ },
+ "dyn_c_peoples_republic_of_indonesia_NACH": {
+  "en": "People's Republic of Indonesia",
+  "de": "in die Volksrepublik Indonesien",
+  "base": "dyn_c_peoples_republic_of_indonesia"
+ },
+ "dyn_c_peoples_republic_of_indonesia_NOM": {
+  "en": "People's Republic of Indonesia",
+  "de": "die Volksrepublik Indonesien",
+  "base": "dyn_c_peoples_republic_of_indonesia"
+ },
+ "dyn_c_peoples_republic_of_indonesia_VON": {
+  "en": "People's Republic of Indonesia",
+  "de": "von der Volksrepublik Indonesien",
+  "base": "dyn_c_peoples_republic_of_indonesia"
+ },
+ "dyn_c_polish_lithuanian_commonwealth": {
+  "en": "Polish-Lithuanian Commonwealth",
+  "de": "Polnisch-Litauische Adelsrepublik"
+ },
+ "dyn_c_polish_lithuanian_commonwealth_AKK": {
+  "en": "Polish-Lithuanian Commonwealth",
+  "de": "die Polnisch-Litauische Adelsrepublik",
+  "base": "dyn_c_polish_lithuanian_commonwealth"
+ },
+ "dyn_c_polish_lithuanian_commonwealth_DAT": {
+  "en": "Polish-Lithuanian Commonwealth",
+  "de": "der Polnisch-Litauischen Adelsrepublik",
+  "base": "dyn_c_polish_lithuanian_commonwealth"
+ },
+ "dyn_c_polish_lithuanian_commonwealth_GEN": {
+  "en": "Polish-Lithuanian Commonwealth",
+  "de": "der Polnisch-Litauischen Adelsrepublik",
+  "base": "dyn_c_polish_lithuanian_commonwealth"
+ },
+ "dyn_c_polish_lithuanian_commonwealth_IN": {
+  "en": "Polish-Lithuanian Commonwealth",
+  "de": "in der Polnisch-Litauischen Adelsrepublik",
+  "base": "dyn_c_polish_lithuanian_commonwealth"
+ },
+ "dyn_c_polish_lithuanian_commonwealth_NACH": {
+  "en": "Polish-Lithuanian Commonwealth",
+  "de": "in die Polnisch-Litauische Adelsrepublik",
+  "base": "dyn_c_polish_lithuanian_commonwealth"
+ },
+ "dyn_c_polish_lithuanian_commonwealth_NOM": {
+  "en": "Polish-Lithuanian Commonwealth",
+  "de": "die Polnisch-Litauische Adelsrepublik",
+  "base": "dyn_c_polish_lithuanian_commonwealth"
+ },
+ "dyn_c_polish_lithuanian_commonwealth_VON": {
+  "en": "Polish-Lithuanian Commonwealth",
+  "de": "von der Polnisch-Litauischen Adelsrepublik",
+  "base": "dyn_c_polish_lithuanian_commonwealth"
+ },
+ "dyn_c_promethean_adj": {
+  "en": "Promethean",
+  "de": "Prometheisch"
+ },
+ "dyn_c_promethean_empire": {
+  "en": "Promethean Empire",
+  "de": "Prometheisches Reich"
+ },
+ "dyn_c_promethean_empire_AKK": {
+  "en": "Promethean Empire",
+  "de": "das Prometheische Reich",
+  "base": "dyn_c_promethean_empire"
+ },
+ "dyn_c_promethean_empire_DAT": {
+  "en": "Promethean Empire",
+  "de": "dem Prometheischen Reich",
+  "base": "dyn_c_promethean_empire"
+ },
+ "dyn_c_promethean_empire_GEN": {
+  "en": "Promethean Empire",
+  "de": "des Prometheischen Reiches",
+  "base": "dyn_c_promethean_empire"
+ },
+ "dyn_c_promethean_empire_IN": {
+  "en": "Promethean Empire",
+  "de": "im Prometheischen Reich",
+  "base": "dyn_c_promethean_empire"
+ },
+ "dyn_c_promethean_empire_NACH": {
+  "en": "Promethean Empire",
+  "de": "ins Prometheische Reich",
+  "base": "dyn_c_promethean_empire"
+ },
+ "dyn_c_promethean_empire_NOM": {
+  "en": "Promethean Empire",
+  "de": "das Prometheische Reich",
+  "base": "dyn_c_promethean_empire"
+ },
+ "dyn_c_promethean_empire_VON": {
+  "en": "Promethean Empire",
+  "de": "vom Prometheischen Reich",
+  "base": "dyn_c_promethean_empire"
+ },
+ "dyn_c_qing_imperial_adj": {
+  "en": "Qing Imperial",
+  "de": "Qing-Kaiserlich"
+ },
+ "dyn_c_rashidun_adj": {
+  "en": "Rashidun",
+  "de": "Rechtgeleitet"
+ },
+ "dyn_c_rashidun_caliphate": {
+  "en": "Rashidun Caliphate",
+  "de": "Rechtgeleitetes Kalifat"
+ },
+ "dyn_c_rashidun_caliphate_AKK": {
+  "en": "Rashidun Caliphate",
+  "de": "das Rechtgeleitete Kalifat",
+  "base": "dyn_c_rashidun_caliphate"
+ },
+ "dyn_c_rashidun_caliphate_DAT": {
+  "en": "Rashidun Caliphate",
+  "de": "dem Rechtgeleiteten Kalifat",
+  "base": "dyn_c_rashidun_caliphate"
+ },
+ "dyn_c_rashidun_caliphate_GEN": {
+  "en": "Rashidun Caliphate",
+  "de": "des Rechtgeleiteten Kalifats",
+  "base": "dyn_c_rashidun_caliphate"
+ },
+ "dyn_c_rashidun_caliphate_IN": {
+  "en": "Rashidun Caliphate",
+  "de": "im Rechtgeleiteten Kalifat",
+  "base": "dyn_c_rashidun_caliphate"
+ },
+ "dyn_c_rashidun_caliphate_NACH": {
+  "en": "Rashidun Caliphate",
+  "de": "ins Rechtgeleitete Kalifat",
+  "base": "dyn_c_rashidun_caliphate"
+ },
+ "dyn_c_rashidun_caliphate_NOM": {
+  "en": "Rashidun Caliphate",
+  "de": "das Rechtgeleitete Kalifat",
+  "base": "dyn_c_rashidun_caliphate"
+ },
+ "dyn_c_rashidun_caliphate_VON": {
+  "en": "Rashidun Caliphate",
+  "de": "vom Rechtgeleiteten Kalifat",
+  "base": "dyn_c_rashidun_caliphate"
+ },
+ "dyn_c_republic_of_china": {
+  "en": "Republic of China",
+  "de": "Republik China"
+ },
+ "dyn_c_republic_of_china_AKK": {
+  "en": "Republic of China",
+  "de": "die Republik China",
+  "base": "dyn_c_republic_of_china"
+ },
+ "dyn_c_republic_of_china_DAT": {
+  "en": "Republic of China",
+  "de": "der Republik China",
+  "base": "dyn_c_republic_of_china"
+ },
+ "dyn_c_republic_of_china_GEN": {
+  "en": "Republic of China",
+  "de": "der Republik China",
+  "base": "dyn_c_republic_of_china"
+ },
+ "dyn_c_republic_of_china_IN": {
+  "en": "Republic of China",
+  "de": "in der Republik China",
+  "base": "dyn_c_republic_of_china"
+ },
+ "dyn_c_republic_of_china_NACH": {
+  "en": "Republic of China",
+  "de": "in die Republik China",
+  "base": "dyn_c_republic_of_china"
+ },
+ "dyn_c_republic_of_china_NOM": {
+  "en": "Republic of China",
+  "de": "die Republik China",
+  "base": "dyn_c_republic_of_china"
+ },
+ "dyn_c_republic_of_china_VON": {
+  "en": "Republic of China",
+  "de": "von der Republik China",
+  "base": "dyn_c_republic_of_china"
+ },
+ "dyn_c_republic_of_india": {
+  "en": "Republic of India",
+  "de": "Republik Indien"
+ },
+ "dyn_c_republic_of_india_AKK": {
+  "en": "Republic of India",
+  "de": "die Republik Indien",
+  "base": "dyn_c_republic_of_india"
+ },
+ "dyn_c_republic_of_india_DAT": {
+  "en": "Republic of India",
+  "de": "der Republik Indien",
+  "base": "dyn_c_republic_of_india"
+ },
+ "dyn_c_republic_of_india_GEN": {
+  "en": "Republic of India",
+  "de": "der Republik Indien",
+  "base": "dyn_c_republic_of_india"
+ },
+ "dyn_c_republic_of_india_IN": {
+  "en": "Republic of India",
+  "de": "in der Republik Indien",
+  "base": "dyn_c_republic_of_india"
+ },
+ "dyn_c_republic_of_india_NACH": {
+  "en": "Republic of India",
+  "de": "in die Republik Indien",
+  "base": "dyn_c_republic_of_india"
+ },
+ "dyn_c_republic_of_india_NOM": {
+  "en": "Republic of India",
+  "de": "die Republik Indien",
+  "base": "dyn_c_republic_of_india"
+ },
+ "dyn_c_republic_of_india_VON": {
+  "en": "Republic of India",
+  "de": "von der Republik Indien",
+  "base": "dyn_c_republic_of_india"
+ },
+ "dyn_c_republic_of_indonesia": {
+  "en": "Republic of Indonesia",
+  "de": "Republik Indonesien"
+ },
+ "dyn_c_republic_of_indonesia_AKK": {
+  "en": "Republic of Indonesia",
+  "de": "die Republik Indonesien",
+  "base": "dyn_c_republic_of_indonesia"
+ },
+ "dyn_c_republic_of_indonesia_DAT": {
+  "en": "Republic of Indonesia",
+  "de": "der Republik Indonesien",
+  "base": "dyn_c_republic_of_indonesia"
+ },
+ "dyn_c_republic_of_indonesia_GEN": {
+  "en": "Republic of Indonesia",
+  "de": "der Republik Indonesien",
+  "base": "dyn_c_republic_of_indonesia"
+ },
+ "dyn_c_republic_of_indonesia_IN": {
+  "en": "Republic of Indonesia",
+  "de": "in der Republik Indonesien",
+  "base": "dyn_c_republic_of_indonesia"
+ },
+ "dyn_c_republic_of_indonesia_NACH": {
+  "en": "Republic of Indonesia",
+  "de": "in die Republik Indonesien",
+  "base": "dyn_c_republic_of_indonesia"
+ },
+ "dyn_c_republic_of_indonesia_NOM": {
+  "en": "Republic of Indonesia",
+  "de": "die Republik Indonesien",
+  "base": "dyn_c_republic_of_indonesia"
+ },
+ "dyn_c_republic_of_indonesia_VON": {
+  "en": "Republic of Indonesia",
+  "de": "von der Republik Indonesien",
+  "base": "dyn_c_republic_of_indonesia"
+ },
+ "dyn_c_republique_mondiale": {
+  "en": "République Mondiale",
+  "de": "République Mondiale"
+ },
+ "dyn_c_republique_mondiale_AKK": {
+  "en": "République Mondiale",
+  "de": "République Mondiale",
+  "base": "dyn_c_republique_mondiale"
+ },
+ "dyn_c_republique_mondiale_DAT": {
+  "en": "République Mondiale",
+  "de": "République Mondiale",
+  "base": "dyn_c_republique_mondiale"
+ },
+ "dyn_c_republique_mondiale_GEN": {
+  "en": "République Mondiale",
+  "de": "République Mondiale",
+  "base": "dyn_c_republique_mondiale"
+ },
+ "dyn_c_republique_mondiale_IN": {
+  "en": "République Mondiale",
+  "de": "in République Mondiale",
+  "base": "dyn_c_republique_mondiale"
+ },
+ "dyn_c_republique_mondiale_NACH": {
+  "en": "République Mondiale",
+  "de": "nach République Mondiale",
+  "base": "dyn_c_republique_mondiale"
+ },
+ "dyn_c_republique_mondiale_NOM": {
+  "en": "République Mondiale",
+  "de": "République Mondiale",
+  "base": "dyn_c_republique_mondiale"
+ },
+ "dyn_c_republique_mondiale_VON": {
+  "en": "République Mondiale",
+  "de": "von République Mondiale",
+  "base": "dyn_c_republique_mondiale"
+ },
+ "dyn_c_republique_mondiale_adj": {
+  "en": "Mondiale",
+  "de": "Mondiale"
+ },
+ "dyn_c_safavid_adj": {
+  "en": "Safavid",
+  "de": "Safawidisch"
+ },
+ "dyn_c_safavid_caliphate": {
+  "en": "Safavid Caliphate",
+  "de": "Safawidisches Kalifat"
+ },
+ "dyn_c_safavid_caliphate_AKK": {
+  "en": "Safavid Caliphate",
+  "de": "das Safawidische Kalifat",
+  "base": "dyn_c_safavid_caliphate"
+ },
+ "dyn_c_safavid_caliphate_DAT": {
+  "en": "Safavid Caliphate",
+  "de": "dem Safawidischen Kalifat",
+  "base": "dyn_c_safavid_caliphate"
+ },
+ "dyn_c_safavid_caliphate_GEN": {
+  "en": "Safavid Caliphate",
+  "de": "des Safawidischen Kalifats",
+  "base": "dyn_c_safavid_caliphate"
+ },
+ "dyn_c_safavid_caliphate_IN": {
+  "en": "Safavid Caliphate",
+  "de": "im Safawidischen Kalifat",
+  "base": "dyn_c_safavid_caliphate"
+ },
+ "dyn_c_safavid_caliphate_NACH": {
+  "en": "Safavid Caliphate",
+  "de": "ins Safawidische Kalifat",
+  "base": "dyn_c_safavid_caliphate"
+ },
+ "dyn_c_safavid_caliphate_NOM": {
+  "en": "Safavid Caliphate",
+  "de": "das Safawidische Kalifat",
+  "base": "dyn_c_safavid_caliphate"
+ },
+ "dyn_c_safavid_caliphate_VON": {
+  "en": "Safavid Caliphate",
+  "de": "vom Safawidischen Kalifat",
+  "base": "dyn_c_safavid_caliphate"
+ },
+ "dyn_c_sinocybernetic_adj": {
+  "en": "Sinocybernetic",
+  "de": "Sinokybernetisch"
+ },
+ "dyn_c_solomonic_african_empire": {
+  "en": "Solomonic African Empire",
+  "de": "Salomonisches Afrikanisches Reich"
+ },
+ "dyn_c_solomonic_african_empire_AKK": {
+  "en": "Solomonic African Empire",
+  "de": "das Salomonische Afrikanische Reich",
+  "base": "dyn_c_solomonic_african_empire"
+ },
+ "dyn_c_solomonic_african_empire_DAT": {
+  "en": "Solomonic African Empire",
+  "de": "dem Salomonischen Afrikanischen Reich",
+  "base": "dyn_c_solomonic_african_empire"
+ },
+ "dyn_c_solomonic_african_empire_GEN": {
+  "en": "Solomonic African Empire",
+  "de": "des Salomonischen Afrikanischen Reiches",
+  "base": "dyn_c_solomonic_african_empire"
+ },
+ "dyn_c_solomonic_african_empire_IN": {
+  "en": "Solomonic African Empire",
+  "de": "im Salomonischen Afrikanischen Reich",
+  "base": "dyn_c_solomonic_african_empire"
+ },
+ "dyn_c_solomonic_african_empire_NACH": {
+  "en": "Solomonic African Empire",
+  "de": "ins Salomonische Afrikanische Reich",
+  "base": "dyn_c_solomonic_african_empire"
+ },
+ "dyn_c_solomonic_african_empire_NOM": {
+  "en": "Solomonic African Empire",
+  "de": "das Salomonische Afrikanische Reich",
+  "base": "dyn_c_solomonic_african_empire"
+ },
+ "dyn_c_solomonic_african_empire_VON": {
+  "en": "Solomonic African Empire",
+  "de": "vom Salomonischen Afrikanischen Reich",
+  "base": "dyn_c_solomonic_african_empire"
+ },
+ "dyn_c_soviet_federation_of_north_america": {
+  "en": "Soviet Federation of North America",
+  "de": "Sowjetische Föderation Nordamerikas"
+ },
+ "dyn_c_soviet_federation_of_north_america_AKK": {
+  "en": "Soviet Federation of North America",
+  "de": "die Sowjetische Föderation Nordamerikas",
+  "base": "dyn_c_soviet_federation_of_north_america"
+ },
+ "dyn_c_soviet_federation_of_north_america_DAT": {
+  "en": "Soviet Federation of North America",
+  "de": "der Sowjetischen Föderation Nordamerikas",
+  "base": "dyn_c_soviet_federation_of_north_america"
+ },
+ "dyn_c_soviet_federation_of_north_america_GEN": {
+  "en": "Soviet Federation of North America",
+  "de": "der Sowjetischen Föderation Nordamerikas",
+  "base": "dyn_c_soviet_federation_of_north_america"
+ },
+ "dyn_c_soviet_federation_of_north_america_IN": {
+  "en": "Soviet Federation of North America",
+  "de": "in der Sowjetischen Föderation Nordamerikas",
+  "base": "dyn_c_soviet_federation_of_north_america"
+ },
+ "dyn_c_soviet_federation_of_north_america_NACH": {
+  "en": "Soviet Federation of North America",
+  "de": "in die Sowjetische Föderation Nordamerikas",
+  "base": "dyn_c_soviet_federation_of_north_america"
+ },
+ "dyn_c_soviet_federation_of_north_america_NOM": {
+  "en": "Soviet Federation of North America",
+  "de": "die Sowjetische Föderation Nordamerikas",
+  "base": "dyn_c_soviet_federation_of_north_america"
+ },
+ "dyn_c_soviet_federation_of_north_america_VON": {
+  "en": "Soviet Federation of North America",
+  "de": "von der Sowjetischen Föderation Nordamerikas",
+  "base": "dyn_c_soviet_federation_of_north_america"
+ },
+ "dyn_c_technocratic_republic_of_china": {
+  "en": "Technocratic Republic of China",
+  "de": "Technokratische Republik China"
+ },
+ "dyn_c_technocratic_republic_of_china_AKK": {
+  "en": "Technocratic Republic of China",
+  "de": "die Technokratische Republik China",
+  "base": "dyn_c_technocratic_republic_of_china"
+ },
+ "dyn_c_technocratic_republic_of_china_DAT": {
+  "en": "Technocratic Republic of China",
+  "de": "der Technokratischen Republik China",
+  "base": "dyn_c_technocratic_republic_of_china"
+ },
+ "dyn_c_technocratic_republic_of_china_GEN": {
+  "en": "Technocratic Republic of China",
+  "de": "der Technokratischen Republik China",
+  "base": "dyn_c_technocratic_republic_of_china"
+ },
+ "dyn_c_technocratic_republic_of_china_IN": {
+  "en": "Technocratic Republic of China",
+  "de": "in der Technokratischen Republik China",
+  "base": "dyn_c_technocratic_republic_of_china"
+ },
+ "dyn_c_technocratic_republic_of_china_NACH": {
+  "en": "Technocratic Republic of China",
+  "de": "in die Technokratische Republik China",
+  "base": "dyn_c_technocratic_republic_of_china"
+ },
+ "dyn_c_technocratic_republic_of_china_NOM": {
+  "en": "Technocratic Republic of China",
+  "de": "die Technokratische Republik China",
+  "base": "dyn_c_technocratic_republic_of_china"
+ },
+ "dyn_c_technocratic_republic_of_china_VON": {
+  "en": "Technocratic Republic of China",
+  "de": "von der Technokratischen Republik China",
+  "base": "dyn_c_technocratic_republic_of_china"
+ },
+ "dyn_c_terran_imperial_adj": {
+  "en": "Terran Imperial",
+  "de": "Terranisch-Kaiserlich"
+ },
+ "dyn_c_terran_imperium": {
+  "en": "Terran Imperium",
+  "de": "Terranisches Imperium"
+ },
+ "dyn_c_terran_imperium_AKK": {
+  "en": "Terran Imperium",
+  "de": "das Terranische Imperium",
+  "base": "dyn_c_terran_imperium"
+ },
+ "dyn_c_terran_imperium_DAT": {
+  "en": "Terran Imperium",
+  "de": "dem Terranischen Imperium",
+  "base": "dyn_c_terran_imperium"
+ },
+ "dyn_c_terran_imperium_GEN": {
+  "en": "Terran Imperium",
+  "de": "des Terranischen Imperiums",
+  "base": "dyn_c_terran_imperium"
+ },
+ "dyn_c_terran_imperium_IN": {
+  "en": "Terran Imperium",
+  "de": "im Terranischen Imperium",
+  "base": "dyn_c_terran_imperium"
+ },
+ "dyn_c_terran_imperium_NACH": {
+  "en": "Terran Imperium",
+  "de": "ins Terranische Imperium",
+  "base": "dyn_c_terran_imperium"
+ },
+ "dyn_c_terran_imperium_NOM": {
+  "en": "Terran Imperium",
+  "de": "das Terranische Imperium",
+  "base": "dyn_c_terran_imperium"
+ },
+ "dyn_c_terran_imperium_VON": {
+  "en": "Terran Imperium",
+  "de": "vom Terranischen Imperium",
+  "base": "dyn_c_terran_imperium"
+ },
+ "dyn_c_terran_socialist_adj": {
+  "en": "Terran Socialist",
+  "de": "Terranisch-Sozialistisch"
+ },
+ "dyn_c_terran_socialist_federation": {
+  "en": "Terran Socialist Federation",
+  "de": "Terranische Sozialistische Föderation"
+ },
+ "dyn_c_terran_socialist_federation_AKK": {
+  "en": "Terran Socialist Federation",
+  "de": "die Terranische Sozialistische Föderation",
+  "base": "dyn_c_terran_socialist_federation"
+ },
+ "dyn_c_terran_socialist_federation_DAT": {
+  "en": "Terran Socialist Federation",
+  "de": "der Terranischen Sozialistischen Föderation",
+  "base": "dyn_c_terran_socialist_federation"
+ },
+ "dyn_c_terran_socialist_federation_GEN": {
+  "en": "Terran Socialist Federation",
+  "de": "der Terranischen Sozialistischen Föderation",
+  "base": "dyn_c_terran_socialist_federation"
+ },
+ "dyn_c_terran_socialist_federation_IN": {
+  "en": "Terran Socialist Federation",
+  "de": "in der Terranischen Sozialistischen Föderation",
+  "base": "dyn_c_terran_socialist_federation"
+ },
+ "dyn_c_terran_socialist_federation_NACH": {
+  "en": "Terran Socialist Federation",
+  "de": "in die Terranische Sozialistische Föderation",
+  "base": "dyn_c_terran_socialist_federation"
+ },
+ "dyn_c_terran_socialist_federation_NOM": {
+  "en": "Terran Socialist Federation",
+  "de": "die Terranische Sozialistische Föderation",
+  "base": "dyn_c_terran_socialist_federation"
+ },
+ "dyn_c_terran_socialist_federation_VON": {
+  "en": "Terran Socialist Federation",
+  "de": "von der Terranischen Sozialistischen Föderation",
+  "base": "dyn_c_terran_socialist_federation"
+ },
+ "dyn_c_terran_technate": {
+  "en": "Terran Technate",
+  "de": "Terranisches Technat"
+ },
+ "dyn_c_terran_technate_AKK": {
+  "en": "Terran Technate",
+  "de": "das Terranische Technat",
+  "base": "dyn_c_terran_technate"
+ },
+ "dyn_c_terran_technate_DAT": {
+  "en": "Terran Technate",
+  "de": "dem Terranischen Technat",
+  "base": "dyn_c_terran_technate"
+ },
+ "dyn_c_terran_technate_GEN": {
+  "en": "Terran Technate",
+  "de": "des Terranischen Technats",
+  "base": "dyn_c_terran_technate"
+ },
+ "dyn_c_terran_technate_IN": {
+  "en": "Terran Technate",
+  "de": "im Terranischen Technat",
+  "base": "dyn_c_terran_technate"
+ },
+ "dyn_c_terran_technate_NACH": {
+  "en": "Terran Technate",
+  "de": "ins Terranische Technat",
+  "base": "dyn_c_terran_technate"
+ },
+ "dyn_c_terran_technate_NOM": {
+  "en": "Terran Technate",
+  "de": "das Terranische Technat",
+  "base": "dyn_c_terran_technate"
+ },
+ "dyn_c_terran_technate_VON": {
+  "en": "Terran Technate",
+  "de": "vom Terranischen Technat",
+  "base": "dyn_c_terran_technate"
+ },
+ "dyn_c_terran_technate_adj": {
+  "en": "Terran Technate",
+  "de": "Terranisches Technat"
+ },
+ "dyn_c_the_caliphate": {
+  "en": "The Caliphate",
+  "de": "Kalifat"
+ },
+ "dyn_c_the_caliphate_AKK": {
+  "en": "The Caliphate",
+  "de": "das Kalifat",
+  "base": "dyn_c_the_caliphate"
+ },
+ "dyn_c_the_caliphate_DAT": {
+  "en": "The Caliphate",
+  "de": "dem Kalifat",
+  "base": "dyn_c_the_caliphate"
+ },
+ "dyn_c_the_caliphate_GEN": {
+  "en": "The Caliphate",
+  "de": "des Kalifats",
+  "base": "dyn_c_the_caliphate"
+ },
+ "dyn_c_the_caliphate_IN": {
+  "en": "The Caliphate",
+  "de": "im Kalifat",
+  "base": "dyn_c_the_caliphate"
+ },
+ "dyn_c_the_caliphate_NACH": {
+  "en": "The Caliphate",
+  "de": "ins Kalifat",
+  "base": "dyn_c_the_caliphate"
+ },
+ "dyn_c_the_caliphate_NOM": {
+  "en": "The Caliphate",
+  "de": "das Kalifat",
+  "base": "dyn_c_the_caliphate"
+ },
+ "dyn_c_the_caliphate_VON": {
+  "en": "The Caliphate",
+  "de": "vom Kalifat",
+  "base": "dyn_c_the_caliphate"
+ },
+ "dyn_c_three_seas_adj": {
+  "en": "Three Seas",
+  "de": "Dreimeer"
+ },
+ "dyn_c_three_seas_socialist_federation": {
+  "en": "Federation of Three Seas Soviets",
+  "de": "Föderation der Sowjets der Drei Meere"
+ },
+ "dyn_c_three_seas_socialist_federation_AKK": {
+  "en": "Federation of Three Seas Soviets",
+  "de": "die Föderation der Sowjets der Drei Meere",
+  "base": "dyn_c_three_seas_socialist_federation"
+ },
+ "dyn_c_three_seas_socialist_federation_DAT": {
+  "en": "Federation of Three Seas Soviets",
+  "de": "der Föderation der Sowjets der Drei Meere",
+  "base": "dyn_c_three_seas_socialist_federation"
+ },
+ "dyn_c_three_seas_socialist_federation_GEN": {
+  "en": "Federation of Three Seas Soviets",
+  "de": "der Föderation der Sowjets der Drei Meere",
+  "base": "dyn_c_three_seas_socialist_federation"
+ },
+ "dyn_c_three_seas_socialist_federation_IN": {
+  "en": "Federation of Three Seas Soviets",
+  "de": "in der Föderation der Sowjets der Drei Meere",
+  "base": "dyn_c_three_seas_socialist_federation"
+ },
+ "dyn_c_three_seas_socialist_federation_NACH": {
+  "en": "Federation of Three Seas Soviets",
+  "de": "in die Föderation der Sowjets der Drei Meere",
+  "base": "dyn_c_three_seas_socialist_federation"
+ },
+ "dyn_c_three_seas_socialist_federation_NOM": {
+  "en": "Federation of Three Seas Soviets",
+  "de": "die Föderation der Sowjets der Drei Meere",
+  "base": "dyn_c_three_seas_socialist_federation"
+ },
+ "dyn_c_three_seas_socialist_federation_VON": {
+  "en": "Federation of Three Seas Soviets",
+  "de": "von der Föderation der Sowjets der Drei Meere",
+  "base": "dyn_c_three_seas_socialist_federation"
+ },
+ "dyn_c_three_seas_technical_union": {
+  "en": "Three Seas Technical Union",
+  "de": "Technische Union der Drei Meere"
+ },
+ "dyn_c_three_seas_technical_union_AKK": {
+  "en": "Three Seas Technical Union",
+  "de": "die Technische Union der Drei Meere",
+  "base": "dyn_c_three_seas_technical_union"
+ },
+ "dyn_c_three_seas_technical_union_DAT": {
+  "en": "Three Seas Technical Union",
+  "de": "der Technischen Union der Drei Meere",
+  "base": "dyn_c_three_seas_technical_union"
+ },
+ "dyn_c_three_seas_technical_union_GEN": {
+  "en": "Three Seas Technical Union",
+  "de": "der Technischen Union der Drei Meere",
+  "base": "dyn_c_three_seas_technical_union"
+ },
+ "dyn_c_three_seas_technical_union_IN": {
+  "en": "Three Seas Technical Union",
+  "de": "in der Technischen Union der Drei Meere",
+  "base": "dyn_c_three_seas_technical_union"
+ },
+ "dyn_c_three_seas_technical_union_NACH": {
+  "en": "Three Seas Technical Union",
+  "de": "in die Technische Union der Drei Meere",
+  "base": "dyn_c_three_seas_technical_union"
+ },
+ "dyn_c_three_seas_technical_union_NOM": {
+  "en": "Three Seas Technical Union",
+  "de": "die Technische Union der Drei Meere",
+  "base": "dyn_c_three_seas_technical_union"
+ },
+ "dyn_c_three_seas_technical_union_VON": {
+  "en": "Three Seas Technical Union",
+  "de": "von der Technischen Union der Drei Meere",
+  "base": "dyn_c_three_seas_technical_union"
+ },
+ "dyn_c_ujamaa_adj": {
+  "en": "Ujamaa",
+  "de": "Ujamaa"
+ },
+ "dyn_c_ujamaa_federation": {
+  "en": "Ujamaa Federation",
+  "de": "Ujamaa-Föderation"
+ },
+ "dyn_c_ujamaa_federation_AKK": {
+  "en": "Ujamaa Federation",
+  "de": "die Ujamaa-Föderation",
+  "base": "dyn_c_ujamaa_federation"
+ },
+ "dyn_c_ujamaa_federation_DAT": {
+  "en": "Ujamaa Federation",
+  "de": "der Ujamaa-Föderation",
+  "base": "dyn_c_ujamaa_federation"
+ },
+ "dyn_c_ujamaa_federation_GEN": {
+  "en": "Ujamaa Federation",
+  "de": "der Ujamaa-Föderation",
+  "base": "dyn_c_ujamaa_federation"
+ },
+ "dyn_c_ujamaa_federation_IN": {
+  "en": "Ujamaa Federation",
+  "de": "in der Ujamaa-Föderation",
+  "base": "dyn_c_ujamaa_federation"
+ },
+ "dyn_c_ujamaa_federation_NACH": {
+  "en": "Ujamaa Federation",
+  "de": "in die Ujamaa-Föderation",
+  "base": "dyn_c_ujamaa_federation"
+ },
+ "dyn_c_ujamaa_federation_NOM": {
+  "en": "Ujamaa Federation",
+  "de": "die Ujamaa-Föderation",
+  "base": "dyn_c_ujamaa_federation"
+ },
+ "dyn_c_ujamaa_federation_VON": {
+  "en": "Ujamaa Federation",
+  "de": "von der Ujamaa-Föderation",
+  "base": "dyn_c_ujamaa_federation"
+ },
+ "dyn_c_union_of_european_socialist_republics": {
+  "en": "Union of European Socialist Republics",
+  "de": "Union der Europäischen Sozialistischen Republiken"
+ },
+ "dyn_c_union_of_european_socialist_republics_AKK": {
+  "en": "Union of European Socialist Republics",
+  "de": "die Union der Europäischen Sozialistischen Republiken",
+  "base": "dyn_c_union_of_european_socialist_republics"
+ },
+ "dyn_c_union_of_european_socialist_republics_DAT": {
+  "en": "Union of European Socialist Republics",
+  "de": "der Union der Europäischen Sozialistischen Republiken",
+  "base": "dyn_c_union_of_european_socialist_republics"
+ },
+ "dyn_c_union_of_european_socialist_republics_GEN": {
+  "en": "Union of European Socialist Republics",
+  "de": "der Union der Europäischen Sozialistischen Republiken",
+  "base": "dyn_c_union_of_european_socialist_republics"
+ },
+ "dyn_c_union_of_european_socialist_republics_IN": {
+  "en": "Union of European Socialist Republics",
+  "de": "in der Union der Europäischen Sozialistischen Republiken",
+  "base": "dyn_c_union_of_european_socialist_republics"
+ },
+ "dyn_c_union_of_european_socialist_republics_NACH": {
+  "en": "Union of European Socialist Republics",
+  "de": "in die Union der Europäischen Sozialistischen Republiken",
+  "base": "dyn_c_union_of_european_socialist_republics"
+ },
+ "dyn_c_union_of_european_socialist_republics_NOM": {
+  "en": "Union of European Socialist Republics",
+  "de": "die Union der Europäischen Sozialistischen Republiken",
+  "base": "dyn_c_union_of_european_socialist_republics"
+ },
+ "dyn_c_union_of_european_socialist_republics_VON": {
+  "en": "Union of European Socialist Republics",
+  "de": "von der Union der Europäischen Sozialistischen Republiken",
+  "base": "dyn_c_union_of_european_socialist_republics"
+ },
+ "dyn_c_united_crowns_of_north_america": {
+  "en": "United Crowns of North America",
+  "de": "Vereinte Kronen Nordamerikas"
+ },
+ "dyn_c_united_crowns_of_north_america_AKK": {
+  "en": "United Crowns of North America",
+  "de": "die Vereinten Kronen Nordamerikas",
+  "base": "dyn_c_united_crowns_of_north_america"
+ },
+ "dyn_c_united_crowns_of_north_america_DAT": {
+  "en": "United Crowns of North America",
+  "de": "den Vereinten Kronen Nordamerikas",
+  "base": "dyn_c_united_crowns_of_north_america"
+ },
+ "dyn_c_united_crowns_of_north_america_GEN": {
+  "en": "United Crowns of North America",
+  "de": "der Vereinten Kronen Nordamerikas",
+  "base": "dyn_c_united_crowns_of_north_america"
+ },
+ "dyn_c_united_crowns_of_north_america_IN": {
+  "en": "United Crowns of North America",
+  "de": "in den Vereinten Kronen Nordamerikas",
+  "base": "dyn_c_united_crowns_of_north_america"
+ },
+ "dyn_c_united_crowns_of_north_america_NACH": {
+  "en": "United Crowns of North America",
+  "de": "in die Vereinten Kronen Nordamerikas",
+  "base": "dyn_c_united_crowns_of_north_america"
+ },
+ "dyn_c_united_crowns_of_north_america_NOM": {
+  "en": "United Crowns of North America",
+  "de": "die Vereinten Kronen Nordamerikas",
+  "base": "dyn_c_united_crowns_of_north_america"
+ },
+ "dyn_c_united_crowns_of_north_america_VON": {
+  "en": "United Crowns of North America",
+  "de": "von den Vereinten Kronen Nordamerikas",
+  "base": "dyn_c_united_crowns_of_north_america"
+ },
+ "dyn_c_united_earth": {
+  "en": "United Earth",
+  "de": "Vereinte Erde"
+ },
+ "dyn_c_united_earth_AKK": {
+  "en": "United Earth",
+  "de": "die Vereinte Erde",
+  "base": "dyn_c_united_earth"
+ },
+ "dyn_c_united_earth_DAT": {
+  "en": "United Earth",
+  "de": "der Vereinten Erde",
+  "base": "dyn_c_united_earth"
+ },
+ "dyn_c_united_earth_GEN": {
+  "en": "United Earth",
+  "de": "der Vereinten Erde",
+  "base": "dyn_c_united_earth"
+ },
+ "dyn_c_united_earth_IN": {
+  "en": "United Earth",
+  "de": "in der Vereinten Erde",
+  "base": "dyn_c_united_earth"
+ },
+ "dyn_c_united_earth_NACH": {
+  "en": "United Earth",
+  "de": "in die Vereinte Erde",
+  "base": "dyn_c_united_earth"
+ },
+ "dyn_c_united_earth_NOM": {
+  "en": "United Earth",
+  "de": "die Vereinte Erde",
+  "base": "dyn_c_united_earth"
+ },
+ "dyn_c_united_earth_VON": {
+  "en": "United Earth",
+  "de": "von der Vereinten Erde",
+  "base": "dyn_c_united_earth"
+ },
+ "dyn_c_vasudhaiva_kutumbakam": {
+  "en": "Vasudhaiva Kutumbakam",
+  "de": "Vasudhaiva Kutumbakam"
+ },
+ "dyn_c_vasudhaiva_kutumbakam_AKK": {
+  "en": "Vasudhaiva Kutumbakam",
+  "de": "Vasudhaiva Kutumbakam",
+  "base": "dyn_c_vasudhaiva_kutumbakam"
+ },
+ "dyn_c_vasudhaiva_kutumbakam_DAT": {
+  "en": "Vasudhaiva Kutumbakam",
+  "de": "Vasudhaiva Kutumbakam",
+  "base": "dyn_c_vasudhaiva_kutumbakam"
+ },
+ "dyn_c_vasudhaiva_kutumbakam_GEN": {
+  "en": "Vasudhaiva Kutumbakam",
+  "de": "Vasudhaiva Kutumbakam",
+  "base": "dyn_c_vasudhaiva_kutumbakam"
+ },
+ "dyn_c_vasudhaiva_kutumbakam_IN": {
+  "en": "Vasudhaiva Kutumbakam",
+  "de": "in Vasudhaiva Kutumbakam",
+  "base": "dyn_c_vasudhaiva_kutumbakam"
+ },
+ "dyn_c_vasudhaiva_kutumbakam_NACH": {
+  "en": "Vasudhaiva Kutumbakam",
+  "de": "nach Vasudhaiva Kutumbakam",
+  "base": "dyn_c_vasudhaiva_kutumbakam"
+ },
+ "dyn_c_vasudhaiva_kutumbakam_NOM": {
+  "en": "Vasudhaiva Kutumbakam",
+  "de": "Vasudhaiva Kutumbakam",
+  "base": "dyn_c_vasudhaiva_kutumbakam"
+ },
+ "dyn_c_vasudhaiva_kutumbakam_VON": {
+  "en": "Vasudhaiva Kutumbakam",
+  "de": "von Vasudhaiva Kutumbakam",
+  "base": "dyn_c_vasudhaiva_kutumbakam"
+ },
+ "dyn_c_vasudhaiva_kutumbakam_adj": {
+  "en": "Vasudhaiva",
+  "de": "Vasudhaiva"
+ },
+ "dyn_c_weltbund": {
+  "en": "Weltbund",
+  "de": "Weltbund"
+ },
+ "dyn_c_weltbund_AKK": {
+  "en": "Weltbund",
+  "de": "den Weltbund",
+  "base": "dyn_c_weltbund"
+ },
+ "dyn_c_weltbund_DAT": {
+  "en": "Weltbund",
+  "de": "dem Weltbund",
+  "base": "dyn_c_weltbund"
+ },
+ "dyn_c_weltbund_GEN": {
+  "en": "Weltbund",
+  "de": "des Weltbunds",
+  "base": "dyn_c_weltbund"
+ },
+ "dyn_c_weltbund_IN": {
+  "en": "Weltbund",
+  "de": "im Weltbund",
+  "base": "dyn_c_weltbund"
+ },
+ "dyn_c_weltbund_NACH": {
+  "en": "Weltbund",
+  "de": "in den Weltbund",
+  "base": "dyn_c_weltbund"
+ },
+ "dyn_c_weltbund_NOM": {
+  "en": "Weltbund",
+  "de": "der Weltbund",
+  "base": "dyn_c_weltbund"
+ },
+ "dyn_c_weltbund_VON": {
+  "en": "Weltbund",
+  "de": "vom Weltbund",
+  "base": "dyn_c_weltbund"
+ },
+ "dyn_c_weltbund_adj": {
+  "en": "Weltbund",
+  "de": "Weltbund"
+ },
+ "dyn_c_yuan_imperial_adj": {
+  "en": "Yuan Imperial",
+  "de": "Yuan-Kaiserlich"
+ }
+}

@@ -1,0 +1,958 @@
+{
+ "DESELECT_IDEOLOGY_ARISTOCRATIC_GOVERNANCE": {
+  "en": "@red_cross! Aristocracy",
+  "de": "@red_cross! Aristokratie"
+ },
+ "DESELECT_IDEOLOGY_ARISTOCRATIC_GOVERNANCE_DESC": {
+  "en": "Remove [GetIdeology('ideology_custom_religion_aristocratic_governance').GetName]",
+  "de": "Entfernt [GetIdeology('ideology_custom_religion_aristocratic_governance').GetName]"
+ },
+ "DESELECT_IDEOLOGY_CORPORATE_GOVERNANCE": {
+  "en": "@red_cross! Corporate Rule",
+  "de": "@red_cross! Konzernherrschaft"
+ },
+ "DESELECT_IDEOLOGY_CORPORATE_GOVERNANCE_DESC": {
+  "en": "Remove [GetIdeology('ideology_custom_religion_corporate_governance').GetName]",
+  "de": "Entfernt [GetIdeology('ideology_custom_religion_corporate_governance').GetName]"
+ },
+ "DESELECT_IDEOLOGY_EXPLOITATIVE_OUTLOOK": {
+  "en": "@red_cross! Exploitation",
+  "de": "@red_cross! Ausbeutung"
+ },
+ "DESELECT_IDEOLOGY_EXPLOITATIVE_OUTLOOK_DESC": {
+  "en": "Remove [GetIdeology('ideology_custom_religion_exploitative_outlook').GetName]",
+  "de": "Entfernt [GetIdeology('ideology_custom_religion_exploitative_outlook').GetName]"
+ },
+ "DESELECT_IDEOLOGY_FREE_MARKET_ECONOMY": {
+  "en": "@red_cross! Divine Wealth",
+  "de": "@red_cross! Göttlicher Reichtum"
+ },
+ "DESELECT_IDEOLOGY_FREE_MARKET_ECONOMY_DESC": {
+  "en": "Remove [GetIdeology('ideology_custom_religion_free_market_economy').GetName]",
+  "de": "Entfernt [GetIdeology('ideology_custom_religion_free_market_economy').GetName]"
+ },
+ "DESELECT_IDEOLOGY_IMPERIALIST_OUTLOOK": {
+  "en": "@red_cross! Imperialism",
+  "de": "@red_cross! Imperialismus"
+ },
+ "DESELECT_IDEOLOGY_IMPERIALIST_OUTLOOK_DESC": {
+  "en": "Remove [GetIdeology('ideology_custom_religion_imperialist_outlook').GetName]",
+  "de": "Entfernt [GetIdeology('ideology_custom_religion_imperialist_outlook').GetName]"
+ },
+ "DESELECT_IDEOLOGY_IMPERIAL_CULT_ECONOMY": {
+  "en": "@red_cross! Enlightened Imperial Economy",
+  "de": "@red_cross! Aufgeklärte Kaiserliche Wirtschaft"
+ },
+ "DESELECT_IDEOLOGY_IMPERIAL_CULT_ECONOMY_DESC": {
+  "en": "Remove [GetIdeology('ideology_custom_religion_imperial_cult_economy').GetName]",
+  "de": "Entfernt [GetIdeology('ideology_custom_religion_imperial_cult_economy').GetName]"
+ },
+ "DESELECT_IDEOLOGY_IMPERIAL_CULT_GOVERNANCE": {
+  "en": "@red_cross! Imperial Cult",
+  "de": "@red_cross! Kaiserkult"
+ },
+ "DESELECT_IDEOLOGY_IMPERIAL_CULT_GOVERNANCE_DESC": {
+  "en": "Remove [GetIdeology('ideology_custom_religion_imperial_cult_governance').GetName]",
+  "de": "Entfernt [GetIdeology('ideology_custom_religion_imperial_cult_governance').GetName]"
+ },
+ "DESELECT_IDEOLOGY_IMPERIAL_CULT_SOCIETY": {
+  "en": "@red_cross! Imperial Society",
+  "de": "@red_cross! Kaiserliche Gesellschaft"
+ },
+ "DESELECT_IDEOLOGY_IMPERIAL_CULT_SOCIETY_DESC": {
+  "en": "Remove [GetIdeology('ideology_custom_religion_imperial_cult_society').GetName]",
+  "de": "Entfernt [GetIdeology('ideology_custom_religion_imperial_cult_society').GetName]"
+ },
+ "DESELECT_IDEOLOGY_INCLUSIVE_SOCIETY": {
+  "en": "@red_cross! Inclusive Society",
+  "de": "@red_cross! Inklusive Gesellschaft"
+ },
+ "DESELECT_IDEOLOGY_INCLUSIVE_SOCIETY_DESC": {
+  "en": "Remove [GetIdeology('ideology_custom_religion_inclusive_society').GetName]",
+  "de": "Entfernt [GetIdeology('ideology_custom_religion_inclusive_society').GetName]"
+ },
+ "DESELECT_IDEOLOGY_ISOLATIONIST_OUTLOOK": {
+  "en": "@red_cross! Isolationism",
+  "de": "@red_cross! Isolationismus"
+ },
+ "DESELECT_IDEOLOGY_ISOLATIONIST_OUTLOOK_DESC": {
+  "en": "Remove [GetIdeology('ideology_custom_religion_isolationist_outlook').GetName]",
+  "de": "Entfernt [GetIdeology('ideology_custom_religion_isolationist_outlook').GetName]"
+ },
+ "DESELECT_IDEOLOGY_MERITOCRATIC_SOCIETY": {
+  "en": "@red_cross! Meritocracy",
+  "de": "@red_cross! Meritokratie"
+ },
+ "DESELECT_IDEOLOGY_MERITOCRATIC_SOCIETY_DESC": {
+  "en": "Remove [GetIdeology('ideology_custom_religion_meritocratic_society').GetName]",
+  "de": "Entfernt [GetIdeology('ideology_custom_religion_meritocratic_society').GetName]"
+ },
+ "DESELECT_IDEOLOGY_MILITARIST_OUTLOOK": {
+  "en": "@red_cross! Militarism",
+  "de": "@red_cross! Militarismus"
+ },
+ "DESELECT_IDEOLOGY_MILITARIST_OUTLOOK_DESC": {
+  "en": "Remove [GetIdeology('ideology_custom_religion_militarist_outlook').GetName]",
+  "de": "Entfernt [GetIdeology('ideology_custom_religion_militarist_outlook').GetName]"
+ },
+ "DESELECT_IDEOLOGY_PACIFIST_OUTLOOK": {
+  "en": "@red_cross! Pacifism",
+  "de": "@red_cross! Pazifismus"
+ },
+ "DESELECT_IDEOLOGY_PACIFIST_OUTLOOK_DESC": {
+  "en": "Remove [GetIdeology('ideology_custom_religion_pacifist_outlook').GetName]",
+  "de": "Entfernt [GetIdeology('ideology_custom_religion_pacifist_outlook').GetName]"
+ },
+ "DESELECT_IDEOLOGY_REPUBLICAN_GOVERNANCE": {
+  "en": "@red_cross! Republicanism",
+  "de": "@red_cross! Republikanismus"
+ },
+ "DESELECT_IDEOLOGY_REPUBLICAN_GOVERNANCE_DESC": {
+  "en": "Remove [GetIdeology('ideology_custom_religion_republican_governance').GetName]",
+  "de": "Entfernt [GetIdeology('ideology_custom_religion_republican_governance').GetName]"
+ },
+ "DESELECT_IDEOLOGY_SOCIALIST_ECONOMY": {
+  "en": "@red_cross! Divine Command Economy",
+  "de": "@red_cross! Göttliche Planwirtschaft"
+ },
+ "DESELECT_IDEOLOGY_SOCIALIST_ECONOMY_DESC": {
+  "en": "Remove [GetIdeology('ideology_custom_religion_socialist_economy').GetName]",
+  "de": "Entfernt [GetIdeology('ideology_custom_religion_socialist_economy').GetName]"
+ },
+ "DESELECT_IDEOLOGY_SOCIAL_DEMOCRATIC_ECONOMY": {
+  "en": "@red_cross! Social Welfare",
+  "de": "@red_cross! Soziale Wohlfahrt"
+ },
+ "DESELECT_IDEOLOGY_SOCIAL_DEMOCRATIC_ECONOMY_DESC": {
+  "en": "Remove [GetIdeology('ideology_custom_religion_social_democratic_economy').GetName]",
+  "de": "Entfernt [GetIdeology('ideology_custom_religion_social_democratic_economy').GetName]"
+ },
+ "DESELECT_IDEOLOGY_TECHNOCRATIC_GOVERNANCE": {
+  "en": "@red_cross! Technocracy",
+  "de": "@red_cross! Technokratie"
+ },
+ "DESELECT_IDEOLOGY_TECHNOCRATIC_GOVERNANCE_DESC": {
+  "en": "Remove [GetIdeology('ideology_custom_religion_technocratic_governance').GetName]",
+  "de": "Entfernt [GetIdeology('ideology_custom_religion_technocratic_governance').GetName]"
+ },
+ "DESELECT_IDEOLOGY_THEOCRATIC_ECONOMY": {
+  "en": "@red_cross! Theocratic Economy",
+  "de": "@red_cross! Theokratische Wirtschaft"
+ },
+ "DESELECT_IDEOLOGY_THEOCRATIC_ECONOMY_DESC": {
+  "en": "Remove [GetIdeology('ideology_custom_religion_theocratic_economy').GetName]",
+  "de": "Entfernt [GetIdeology('ideology_custom_religion_theocratic_economy').GetName]"
+ },
+ "DESELECT_IDEOLOGY_THEOCRATIC_GOVERNANCE": {
+  "en": "@red_cross! Theocracy",
+  "de": "@red_cross! Theokratie"
+ },
+ "DESELECT_IDEOLOGY_THEOCRATIC_GOVERNANCE_DESC": {
+  "en": "Remove [GetIdeology('ideology_custom_religion_theocratic_governance').GetName]",
+  "de": "Entfernt [GetIdeology('ideology_custom_religion_theocratic_governance').GetName]"
+ },
+ "DESELECT_IDEOLOGY_THEOCRATIC_OUTLOOK": {
+  "en": "@red_cross! Theocratic Expansion",
+  "de": "@red_cross! Theokratische Expansion"
+ },
+ "DESELECT_IDEOLOGY_THEOCRATIC_OUTLOOK_DESC": {
+  "en": "Remove [GetIdeology('ideology_custom_religion_theocratic_outlook').GetName]",
+  "de": "Entfernt [GetIdeology('ideology_custom_religion_theocratic_outlook').GetName]"
+ },
+ "DESELECT_IDEOLOGY_THEOCRATIC_SOCIETY": {
+  "en": "@red_cross! Theocratic Society",
+  "de": "@red_cross! Theokratische Gesellschaft"
+ },
+ "DESELECT_IDEOLOGY_THEOCRATIC_SOCIETY_DESC": {
+  "en": "Remove [GetIdeology('ideology_custom_religion_theocratic_society').GetName]",
+  "de": "Entfernt [GetIdeology('ideology_custom_religion_theocratic_society').GetName]"
+ },
+ "DESELECT_IDEOLOGY_TOTALITARIAN_SOCIETY": {
+  "en": "@red_cross! Totalitarianism",
+  "de": "@red_cross! Totalitarismus"
+ },
+ "DESELECT_IDEOLOGY_TOTALITARIAN_SOCIETY_DESC": {
+  "en": "Remove [GetIdeology('ideology_custom_religion_totalitarian_society').GetName]",
+  "de": "Entfernt [GetIdeology('ideology_custom_religion_totalitarian_society').GetName]"
+ },
+ "DESELECT_IDEOLOGY_TRADITIONALIST_ECONOMY": {
+  "en": "@red_cross! Traditionalism",
+  "de": "@red_cross! Traditionalismus"
+ },
+ "DESELECT_IDEOLOGY_TRADITIONALIST_ECONOMY_DESC": {
+  "en": "Remove [GetIdeology('ideology_custom_religion_traditionalist_economy').GetName]",
+  "de": "Entfernt [GetIdeology('ideology_custom_religion_traditionalist_economy').GetName]"
+ },
+ "DESELECT_IDEOLOGY_TRADITIONALIST_SOCIETY": {
+  "en": "@red_cross! Social Orthodoxy",
+  "de": "@red_cross! Soziale Orthodoxie"
+ },
+ "DESELECT_IDEOLOGY_TRADITIONALIST_SOCIETY_DESC": {
+  "en": "Remove [GetIdeology('ideology_custom_religion_traditionalist_society').GetName]",
+  "de": "Entfernt [GetIdeology('ideology_custom_religion_traditionalist_society').GetName]"
+ },
+ "DESELECT_TRAIT_IMPERIAL_CULT_HAPPY": {
+  "en": "@red_cross! Imperial Glory (happy)",
+  "de": "@red_cross! Kaiserlicher Ruhm (zufrieden)"
+ },
+ "DESELECT_TRAIT_IMPERIAL_CULT_HAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is no longer granted the $ig_trait_custom_religion_imperial_cult_happy$ #b happy #![concept_interest_group_trait]",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_imperial_cult_happy$ #b zufriedene#! [concept_interest_group_trait] nicht mehr"
+ },
+ "DESELECT_TRAIT_IMPERIAL_CULT_LOYAL": {
+  "en": "@red_cross! Loyalty to the Empire (loyal)",
+  "de": "@red_cross! Loyalität zum Reich (loyal)"
+ },
+ "DESELECT_TRAIT_IMPERIAL_CULT_LOYAL_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is no longer granted the $ig_trait_custom_religion_imperial_cult_loyal$ #b loyal #![concept_interest_group_trait]",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_imperial_cult_loyal$ #b loyale#! [concept_interest_group_trait] nicht mehr"
+ },
+ "DESELECT_TRAIT_IMPERIAL_CULT_UNHAPPY": {
+  "en": "@red_cross! Militarism and Conquest (unhappy)",
+  "de": "@red_cross! Militarismus und Eroberung (unzufrieden)"
+ },
+ "DESELECT_TRAIT_IMPERIAL_CULT_UNHAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is no longer granted the $ig_trait_custom_religion_imperial_cult_unhappy$ #b unhappy #![concept_interest_group_trait]",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_imperial_cult_unhappy$ #b unzufriedene#! [concept_interest_group_trait] nicht mehr"
+ },
+ "DESELECT_TRAIT_MARKET_LIBERAL_HAPPY": {
+  "en": "@red_cross! Prosperity Doctrine (happy)",
+  "de": "@red_cross! Wohlstandslehre (zufrieden)"
+ },
+ "DESELECT_TRAIT_MARKET_LIBERAL_HAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is no longer granted the $ig_trait_custom_religion_market_liberal_happy$ #b happy #![concept_interest_group_trait]",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_market_liberal_happy$ #b zufriedene#! [concept_interest_group_trait] nicht mehr"
+ },
+ "DESELECT_TRAIT_MARKET_LIBERAL_LOYAL": {
+  "en": "@red_cross! Investing for the Afterlife (loyal)",
+  "de": "@red_cross! Investieren fürs Jenseits (loyal)"
+ },
+ "DESELECT_TRAIT_MARKET_LIBERAL_LOYAL_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is no longer granted the $ig_trait_custom_religion_market_liberal_loyal$ #b loyal #![concept_interest_group_trait]",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_market_liberal_loyal$ #b loyale#! [concept_interest_group_trait] nicht mehr"
+ },
+ "DESELECT_TRAIT_MARKET_LIBERAL_UNHAPPY": {
+  "en": "@red_cross! Opulence and Greed (unhappy)",
+  "de": "@red_cross! Opulenz und Gier (unzufrieden)"
+ },
+ "DESELECT_TRAIT_MARKET_LIBERAL_UNHAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is no longer granted the $ig_trait_custom_religion_market_liberal_unhappy$ #b unhappy #![concept_interest_group_trait]",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_market_liberal_unhappy$ #b unzufriedene#! [concept_interest_group_trait] nicht mehr"
+ },
+ "DESELECT_TRAIT_SOCIAL_DEMOCRAT_HAPPY": {
+  "en": "@red_cross! Secular Service (happy)",
+  "de": "@red_cross! Weltlicher Dienst (zufrieden)"
+ },
+ "DESELECT_TRAIT_SOCIAL_DEMOCRAT_HAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is no longer granted the $ig_trait_custom_religion_social_democrat_happy$ #b happy #![concept_interest_group_trait]",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_social_democrat_happy$ #b zufriedene#! [concept_interest_group_trait] nicht mehr"
+ },
+ "DESELECT_TRAIT_SOCIAL_DEMOCRAT_LOYAL": {
+  "en": "@red_cross! Social Harmony (loyal)",
+  "de": "@red_cross! Soziale Harmonie (loyal)"
+ },
+ "DESELECT_TRAIT_SOCIAL_DEMOCRAT_LOYAL_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is no longer granted the $ig_trait_custom_religion_social_democrat_loyal$ #b loyal #![concept_interest_group_trait]",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_social_democrat_loyal$ #b loyale#! [concept_interest_group_trait] nicht mehr"
+ },
+ "DESELECT_TRAIT_SOCIAL_DEMOCRAT_UNHAPPY": {
+  "en": "@red_cross! Inequality and Injustice (unhappy)",
+  "de": "@red_cross! Ungleichheit und Ungerechtigkeit (unzufrieden)"
+ },
+ "DESELECT_TRAIT_SOCIAL_DEMOCRAT_UNHAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is no longer granted the $ig_trait_custom_religion_social_democrat_unhappy$ #b unhappy #![concept_interest_group_trait]",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_social_democrat_unhappy$ #b unzufriedene#! [concept_interest_group_trait] nicht mehr"
+ },
+ "DESELECT_TRAIT_THEOCRATIC_HAPPY": {
+  "en": "@red_cross! Ecumenism (happy)",
+  "de": "@red_cross! Ökumene (zufrieden)"
+ },
+ "DESELECT_TRAIT_THEOCRATIC_HAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is no longer granted the $ig_trait_custom_religion_theocratic_happy$ #b happy #![concept_interest_group_trait]",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_theocratic_happy$ #b zufriedene#! [concept_interest_group_trait] nicht mehr"
+ },
+ "DESELECT_TRAIT_THEOCRATIC_LOYAL": {
+  "en": "@red_cross! Divine Law (loyal)",
+  "de": "@red_cross! Göttliches Gesetz (loyal)"
+ },
+ "DESELECT_TRAIT_THEOCRATIC_LOYAL_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is no longer granted the $ig_trait_custom_religion_theocratic_loyal$ #b loyal #![concept_interest_group_trait]",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_theocratic_loyal$ #b loyale#! [concept_interest_group_trait] nicht mehr"
+ },
+ "DESELECT_TRAIT_THEOCRATIC_UNHAPPY": {
+  "en": "@red_cross! Religious Persecution (unhappy)",
+  "de": "@red_cross! Religiöse Verfolgung (unzufrieden)"
+ },
+ "DESELECT_TRAIT_THEOCRATIC_UNHAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is no longer granted the $ig_trait_custom_religion_theocratic_unhappy$ #b unhappy #![concept_interest_group_trait]",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_theocratic_unhappy$ #b unzufriedene#! [concept_interest_group_trait] nicht mehr"
+ },
+ "DESELECT_TRAIT_TOTALITARIAN_HAPPY": {
+  "en": "@red_cross! Unity and Conformity (happy)",
+  "de": "@red_cross! Einheit und Konformität (zufrieden)"
+ },
+ "DESELECT_TRAIT_TOTALITARIAN_HAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is no longer granted the $ig_trait_custom_religion_totalitarian_happy$ #b happy #![concept_interest_group_trait]",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_totalitarian_happy$ #b zufriedene#! [concept_interest_group_trait] nicht mehr"
+ },
+ "DESELECT_TRAIT_TOTALITARIAN_LOYAL": {
+  "en": "@red_cross! Order and Obedience (loyal)",
+  "de": "@red_cross! Ordnung und Gehorsam (loyal)"
+ },
+ "DESELECT_TRAIT_TOTALITARIAN_LOYAL_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is no longer granted the $ig_trait_custom_religion_totalitarian_loyal$ #b loyal #![concept_interest_group_trait]",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_totalitarian_loyal$ #b loyale#! [concept_interest_group_trait] nicht mehr"
+ },
+ "DESELECT_TRAIT_TOTALITARIAN_UNHAPPY": {
+  "en": "@red_cross! Repression of Dissent (unhappy)",
+  "de": "@red_cross! Unterdrückung Andersdenkender (unzufrieden)"
+ },
+ "DESELECT_TRAIT_TOTALITARIAN_UNHAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is no longer granted the $ig_trait_custom_religion_totalitarian_unhappy$ #b unhappy #![concept_interest_group_trait]",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_totalitarian_unhappy$ #b unzufriedene#! [concept_interest_group_trait] nicht mehr"
+ },
+ "DESELECT_TRAIT_TRADITIONALIST_HAPPY": {
+  "en": "@red_cross! Divine Right (happy)",
+  "de": "@red_cross! Gottesgnadentum (zufrieden)"
+ },
+ "DESELECT_TRAIT_TRADITIONALIST_HAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is no longer granted the $ig_trait_custom_religion_traditionalist_happy$ #b happy #![concept_interest_group_trait]",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_traditionalist_happy$ #b zufriedene#! [concept_interest_group_trait] nicht mehr"
+ },
+ "DESELECT_TRAIT_TRADITIONALIST_LOYAL": {
+  "en": "@red_cross! Encourage Natalism (loyal)",
+  "de": "@red_cross! Geburtenförderung (loyal)"
+ },
+ "DESELECT_TRAIT_TRADITIONALIST_LOYAL_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is no longer granted the $ig_trait_custom_religion_traditionalist_loyal$ #b loyal #![concept_interest_group_trait]",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_traditionalist_loyal$ #b loyale#! [concept_interest_group_trait] nicht mehr"
+ },
+ "DESELECT_TRAIT_TRADITIONALIST_UNHAPPY": {
+  "en": "@red_cross! Obscurantism (unhappy)",
+  "de": "@red_cross! Obskurantismus (unzufrieden)"
+ },
+ "DESELECT_TRAIT_TRADITIONALIST_UNHAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is no longer granted the $ig_trait_custom_religion_traditionalist_unhappy$ #b unhappy #![concept_interest_group_trait]",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_traditionalist_unhappy$ #b unzufriedene#! [concept_interest_group_trait] nicht mehr"
+ },
+ "SELECT_IDEOLOGY_ARISTOCRATIC_GOVERNANCE": {
+  "en": "Aristocracy",
+  "de": "Aristokratie"
+ },
+ "SELECT_IDEOLOGY_ARISTOCRATIC_GOVERNANCE_DESC": {
+  "en": "Add [GetIdeology('ideology_custom_religion_aristocratic_governance').GetName]\\n$ideology_custom_religion_aristocratic_governance_desc$",
+  "de": "Fügt [GetIdeology('ideology_custom_religion_aristocratic_governance').GetName] hinzu\\n$ideology_custom_religion_aristocratic_governance_desc$"
+ },
+ "SELECT_IDEOLOGY_CORPORATE_GOVERNANCE": {
+  "en": "Corporate Rule",
+  "de": "Konzernherrschaft"
+ },
+ "SELECT_IDEOLOGY_CORPORATE_GOVERNANCE_DESC": {
+  "en": "Add [GetIdeology('ideology_custom_religion_corporate_governance').GetName]\\n$ideology_custom_religion_corporate_governance_desc$",
+  "de": "Fügt [GetIdeology('ideology_custom_religion_corporate_governance').GetName] hinzu\\n$ideology_custom_religion_corporate_governance_desc$"
+ },
+ "SELECT_IDEOLOGY_EXPLOITATIVE_OUTLOOK": {
+  "en": "Exploitation",
+  "de": "Ausbeutung"
+ },
+ "SELECT_IDEOLOGY_EXPLOITATIVE_OUTLOOK_DESC": {
+  "en": "Add [GetIdeology('ideology_custom_religion_exploitative_outlook').GetName]\\n$ideology_custom_religion_exploitative_outlook_desc$",
+  "de": "Fügt [GetIdeology('ideology_custom_religion_exploitative_outlook').GetName] hinzu\\n$ideology_custom_religion_exploitative_outlook_desc$"
+ },
+ "SELECT_IDEOLOGY_FREE_MARKET_ECONOMY": {
+  "en": "Divine Wealth",
+  "de": "Göttlicher Reichtum"
+ },
+ "SELECT_IDEOLOGY_FREE_MARKET_ECONOMY_DESC": {
+  "en": "Add [GetIdeology('ideology_custom_religion_free_market_economy').GetName]\\n$ideology_custom_religion_free_market_economy_desc$",
+  "de": "Fügt [GetIdeology('ideology_custom_religion_free_market_economy').GetName] hinzu\\n$ideology_custom_religion_free_market_economy_desc$"
+ },
+ "SELECT_IDEOLOGY_IMPERIALIST_OUTLOOK": {
+  "en": "Imperialism",
+  "de": "Imperialismus"
+ },
+ "SELECT_IDEOLOGY_IMPERIALIST_OUTLOOK_DESC": {
+  "en": "Add [GetIdeology('ideology_custom_religion_imperialist_outlook').GetName]\\n$ideology_custom_religion_imperialist_outlook_desc$",
+  "de": "Fügt [GetIdeology('ideology_custom_religion_imperialist_outlook').GetName] hinzu\\n$ideology_custom_religion_imperialist_outlook_desc$"
+ },
+ "SELECT_IDEOLOGY_IMPERIAL_CULT_ECONOMY": {
+  "en": "Enlightened Imperial Economy",
+  "de": "Aufgeklärte Kaiserliche Wirtschaft"
+ },
+ "SELECT_IDEOLOGY_IMPERIAL_CULT_ECONOMY_DESC": {
+  "en": "Add [GetIdeology('ideology_custom_religion_imperial_cult_economy').GetName]\\n$ideology_custom_religion_imperial_cult_economy_desc$",
+  "de": "Fügt [GetIdeology('ideology_custom_religion_imperial_cult_economy').GetName] hinzu\\n$ideology_custom_religion_imperial_cult_economy_desc$"
+ },
+ "SELECT_IDEOLOGY_IMPERIAL_CULT_GOVERNANCE": {
+  "en": "Imperial Cult",
+  "de": "Kaiserkult"
+ },
+ "SELECT_IDEOLOGY_IMPERIAL_CULT_GOVERNANCE_DESC": {
+  "en": "Add [GetIdeology('ideology_custom_religion_imperial_cult_governance').GetName]\\n$ideology_custom_religion_imperial_cult_governance_desc$",
+  "de": "Fügt [GetIdeology('ideology_custom_religion_imperial_cult_governance').GetName] hinzu\\n$ideology_custom_religion_imperial_cult_governance_desc$"
+ },
+ "SELECT_IDEOLOGY_IMPERIAL_CULT_SOCIETY": {
+  "en": "Imperial Society",
+  "de": "Kaiserliche Gesellschaft"
+ },
+ "SELECT_IDEOLOGY_IMPERIAL_CULT_SOCIETY_DESC": {
+  "en": "Add [GetIdeology('ideology_custom_religion_imperial_cult_society').GetName]\\n$ideology_custom_religion_imperial_cult_society_desc$",
+  "de": "Fügt [GetIdeology('ideology_custom_religion_imperial_cult_society').GetName] hinzu\\n$ideology_custom_religion_imperial_cult_society_desc$"
+ },
+ "SELECT_IDEOLOGY_INCLUSIVE_SOCIETY": {
+  "en": "Inclusive Society",
+  "de": "Inklusive Gesellschaft"
+ },
+ "SELECT_IDEOLOGY_INCLUSIVE_SOCIETY_DESC": {
+  "en": "Add [GetIdeology('ideology_custom_religion_inclusive_society').GetName]\\n$ideology_custom_religion_inclusive_society_desc$",
+  "de": "Fügt [GetIdeology('ideology_custom_religion_inclusive_society').GetName] hinzu\\n$ideology_custom_religion_inclusive_society_desc$"
+ },
+ "SELECT_IDEOLOGY_ISOLATIONIST_OUTLOOK": {
+  "en": "Isolationism",
+  "de": "Isolationismus"
+ },
+ "SELECT_IDEOLOGY_ISOLATIONIST_OUTLOOK_DESC": {
+  "en": "Add [GetIdeology('ideology_custom_religion_isolationist_outlook').GetName]\\n$ideology_custom_religion_isolationist_outlook_desc$",
+  "de": "Fügt [GetIdeology('ideology_custom_religion_isolationist_outlook').GetName] hinzu\\n$ideology_custom_religion_isolationist_outlook_desc$"
+ },
+ "SELECT_IDEOLOGY_MERITOCRATIC_SOCIETY": {
+  "en": "Meritocracy",
+  "de": "Meritokratie"
+ },
+ "SELECT_IDEOLOGY_MERITOCRATIC_SOCIETY_DESC": {
+  "en": "Add [GetIdeology('ideology_custom_religion_meritocratic_society').GetName]\\n$ideology_custom_religion_meritocratic_society_desc$",
+  "de": "Fügt [GetIdeology('ideology_custom_religion_meritocratic_society').GetName] hinzu\\n$ideology_custom_religion_meritocratic_society_desc$"
+ },
+ "SELECT_IDEOLOGY_MILITARIST_OUTLOOK": {
+  "en": "Militarism",
+  "de": "Militarismus"
+ },
+ "SELECT_IDEOLOGY_MILITARIST_OUTLOOK_DESC": {
+  "en": "Add [GetIdeology('ideology_custom_religion_militarist_outlook').GetName]\\n$ideology_custom_religion_militarist_outlook_desc$",
+  "de": "Fügt [GetIdeology('ideology_custom_religion_militarist_outlook').GetName] hinzu\\n$ideology_custom_religion_militarist_outlook_desc$"
+ },
+ "SELECT_IDEOLOGY_PACIFIST_OUTLOOK": {
+  "en": "Pacifism",
+  "de": "Pazifismus"
+ },
+ "SELECT_IDEOLOGY_PACIFIST_OUTLOOK_DESC": {
+  "en": "Add [GetIdeology('ideology_custom_religion_pacifist_outlook').GetName]\\n$ideology_custom_religion_pacifist_outlook_desc$",
+  "de": "Fügt [GetIdeology('ideology_custom_religion_pacifist_outlook').GetName] hinzu\\n$ideology_custom_religion_pacifist_outlook_desc$"
+ },
+ "SELECT_IDEOLOGY_REPUBLICAN_GOVERNANCE": {
+  "en": "Republicanism",
+  "de": "Republikanismus"
+ },
+ "SELECT_IDEOLOGY_REPUBLICAN_GOVERNANCE_DESC": {
+  "en": "Add [GetIdeology('ideology_custom_religion_republican_governance').GetName]\\n$ideology_custom_religion_republican_governance_desc$",
+  "de": "Fügt [GetIdeology('ideology_custom_religion_republican_governance').GetName] hinzu\\n$ideology_custom_religion_republican_governance_desc$"
+ },
+ "SELECT_IDEOLOGY_SOCIALIST_ECONOMY": {
+  "en": "Divine Command Economy",
+  "de": "Göttliche Planwirtschaft"
+ },
+ "SELECT_IDEOLOGY_SOCIALIST_ECONOMY_DESC": {
+  "en": "Add [GetIdeology('ideology_custom_religion_socialist_economy').GetName]\\n$ideology_custom_religion_socialist_economy_desc$",
+  "de": "Fügt [GetIdeology('ideology_custom_religion_socialist_economy').GetName] hinzu\\n$ideology_custom_religion_socialist_economy_desc$"
+ },
+ "SELECT_IDEOLOGY_SOCIAL_DEMOCRATIC_ECONOMY": {
+  "en": "Social Welfare",
+  "de": "Soziale Wohlfahrt"
+ },
+ "SELECT_IDEOLOGY_SOCIAL_DEMOCRATIC_ECONOMY_DESC": {
+  "en": "Add [GetIdeology('ideology_custom_religion_social_democratic_economy').GetName]\\n$ideology_custom_religion_social_democratic_economy_desc$",
+  "de": "Fügt [GetIdeology('ideology_custom_religion_social_democratic_economy').GetName] hinzu\\n$ideology_custom_religion_social_democratic_economy_desc$"
+ },
+ "SELECT_IDEOLOGY_TECHNOCRATIC_GOVERNANCE": {
+  "en": "Technocracy",
+  "de": "Technokratie"
+ },
+ "SELECT_IDEOLOGY_TECHNOCRATIC_GOVERNANCE_DESC": {
+  "en": "Add [GetIdeology('ideology_custom_religion_technocratic_governance').GetName]\\n$ideology_custom_religion_technocratic_governance_desc$",
+  "de": "Fügt [GetIdeology('ideology_custom_religion_technocratic_governance').GetName] hinzu\\n$ideology_custom_religion_technocratic_governance_desc$"
+ },
+ "SELECT_IDEOLOGY_THEOCRATIC_ECONOMY": {
+  "en": "Theocratic Economy",
+  "de": "Theokratische Wirtschaft"
+ },
+ "SELECT_IDEOLOGY_THEOCRATIC_ECONOMY_DESC": {
+  "en": "Add [GetIdeology('ideology_custom_religion_theocratic_economy').GetName]\\n$ideology_custom_religion_theocratic_economy_desc$",
+  "de": "Fügt [GetIdeology('ideology_custom_religion_theocratic_economy').GetName] hinzu\\n$ideology_custom_religion_theocratic_economy_desc$"
+ },
+ "SELECT_IDEOLOGY_THEOCRATIC_GOVERNANCE": {
+  "en": "Theocracy",
+  "de": "Theokratie"
+ },
+ "SELECT_IDEOLOGY_THEOCRATIC_GOVERNANCE_DESC": {
+  "en": "Add [GetIdeology('ideology_custom_religion_theocratic_governance').GetName]\\n$ideology_custom_religion_theocratic_governance_desc$",
+  "de": "Fügt [GetIdeology('ideology_custom_religion_theocratic_governance').GetName] hinzu\\n$ideology_custom_religion_theocratic_governance_desc$"
+ },
+ "SELECT_IDEOLOGY_THEOCRATIC_OUTLOOK": {
+  "en": "Theocratic Expansion",
+  "de": "Theokratische Expansion"
+ },
+ "SELECT_IDEOLOGY_THEOCRATIC_OUTLOOK_DESC": {
+  "en": "Add [GetIdeology('ideology_custom_religion_theocratic_outlook').GetName]\\n$ideology_custom_religion_theocratic_outlook_desc$",
+  "de": "Fügt [GetIdeology('ideology_custom_religion_theocratic_outlook').GetName] hinzu\\n$ideology_custom_religion_theocratic_outlook_desc$"
+ },
+ "SELECT_IDEOLOGY_THEOCRATIC_SOCIETY": {
+  "en": "Theocratic Society",
+  "de": "Theokratische Gesellschaft"
+ },
+ "SELECT_IDEOLOGY_THEOCRATIC_SOCIETY_DESC": {
+  "en": "Add [GetIdeology('ideology_custom_religion_theocratic_society').GetName]\\n$ideology_custom_religion_theocratic_society_desc$",
+  "de": "Fügt [GetIdeology('ideology_custom_religion_theocratic_society').GetName] hinzu\\n$ideology_custom_religion_theocratic_society_desc$"
+ },
+ "SELECT_IDEOLOGY_TOTALITARIAN_SOCIETY": {
+  "en": "Totalitarianism",
+  "de": "Totalitarismus"
+ },
+ "SELECT_IDEOLOGY_TOTALITARIAN_SOCIETY_DESC": {
+  "en": "Add [GetIdeology('ideology_custom_religion_totalitarian_society').GetName]\\n$ideology_custom_religion_totalitarian_society_desc$",
+  "de": "Fügt [GetIdeology('ideology_custom_religion_totalitarian_society').GetName] hinzu\\n$ideology_custom_religion_totalitarian_society_desc$"
+ },
+ "SELECT_IDEOLOGY_TRADITIONALIST_ECONOMY": {
+  "en": "Traditionalism",
+  "de": "Traditionalismus"
+ },
+ "SELECT_IDEOLOGY_TRADITIONALIST_ECONOMY_DESC": {
+  "en": "Add [GetIdeology('ideology_custom_religion_traditionalist_economy').GetName]\\n$ideology_custom_religion_traditionalist_economy_desc$",
+  "de": "Fügt [GetIdeology('ideology_custom_religion_traditionalist_economy').GetName] hinzu\\n$ideology_custom_religion_traditionalist_economy_desc$"
+ },
+ "SELECT_IDEOLOGY_TRADITIONALIST_SOCIETY": {
+  "en": "Social Orthodoxy",
+  "de": "Soziale Orthodoxie"
+ },
+ "SELECT_IDEOLOGY_TRADITIONALIST_SOCIETY_DESC": {
+  "en": "Add [GetIdeology('ideology_custom_religion_traditionalist_society').GetName]\\n$ideology_custom_religion_traditionalist_society_desc$",
+  "de": "Fügt [GetIdeology('ideology_custom_religion_traditionalist_society').GetName] hinzu\\n$ideology_custom_religion_traditionalist_society_desc$"
+ },
+ "SELECT_TRAIT_IMPERIAL_CULT_HAPPY": {
+  "en": "Imperial Glory (happy)",
+  "de": "Kaiserlicher Ruhm (zufrieden)"
+ },
+ "SELECT_TRAIT_IMPERIAL_CULT_HAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_imperial_cult_happy$ #b happy #![concept_interest_group_trait]\\n$ig_trait_custom_religion_imperial_cult_happy_desc$\\n\\n #b $state_decree_cost_mult$: #!#g -10%#!",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_imperial_cult_happy$ #b zufriedene#! [concept_interest_group_trait]\\n$ig_trait_custom_religion_imperial_cult_happy_desc$\\n\\n #b $state_decree_cost_mult$: #!#g -10%#!"
+ },
+ "SELECT_TRAIT_IMPERIAL_CULT_LOYAL": {
+  "en": "Loyalty to the Empire (loyal)",
+  "de": "Loyalität zum Reich (loyal)"
+ },
+ "SELECT_TRAIT_IMPERIAL_CULT_LOYAL_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_imperial_cult_loyal$ #b loyal #![concept_interest_group_trait]\\n$ig_trait_custom_religion_imperial_cult_loyal_desc$\\n\\n #b $country_authority_mult$: #!#g +10%#!",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_imperial_cult_loyal$ #b loyale#! [concept_interest_group_trait]\\n$ig_trait_custom_religion_imperial_cult_loyal_desc$\\n\\n #b $country_authority_mult$: #!#g +10%#!"
+ },
+ "SELECT_TRAIT_IMPERIAL_CULT_UNHAPPY": {
+  "en": "Militarism and Conquest (unhappy)",
+  "de": "Militarismus und Eroberung (unzufrieden)"
+ },
+ "SELECT_TRAIT_IMPERIAL_CULT_UNHAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_imperial_cult_unhappy$ #b unhappy #![concept_interest_group_trait]\\n$ig_trait_custom_religion_imperial_cult_unhappy_desc$\\n\\n #b $state_conversion_mult$: #!#r -25%#!",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_imperial_cult_unhappy$ #b unzufriedene#! [concept_interest_group_trait]\\n$ig_trait_custom_religion_imperial_cult_unhappy_desc$\\n\\n #b $state_conversion_mult$: #!#r -25%#!"
+ },
+ "SELECT_TRAIT_MARKET_LIBERAL_HAPPY": {
+  "en": "Prosperity Doctrine (happy)",
+  "de": "Wohlstandslehre (zufrieden)"
+ },
+ "SELECT_TRAIT_MARKET_LIBERAL_HAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_market_liberal_happy$ #b happy #![concept_interest_group_trait]\\n$ig_trait_custom_religion_market_liberal_happy_desc$\\n\\n #b $country_state_religion_wages_mult$: #!#g +10%#!",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_market_liberal_happy$ #b zufriedene#! [concept_interest_group_trait]\\n$ig_trait_custom_religion_market_liberal_happy_desc$\\n\\n #b $country_state_religion_wages_mult$: #!#g +10%#!"
+ },
+ "SELECT_TRAIT_MARKET_LIBERAL_LOYAL": {
+  "en": "Investing for the Afterlife (loyal)",
+  "de": "Investieren fürs Jenseits (loyal)"
+ },
+ "SELECT_TRAIT_MARKET_LIBERAL_LOYAL_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_market_liberal_loyal$ #b loyal #![concept_interest_group_trait]\\n$ig_trait_custom_religion_market_liberal_loyal_desc$\\n\\n #b $state_capitalists_investment_pool_efficiency_mult$: #!#g +10%#!",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_market_liberal_loyal$ #b loyale#! [concept_interest_group_trait]\\n$ig_trait_custom_religion_market_liberal_loyal_desc$\\n\\n #b $state_capitalists_investment_pool_efficiency_mult$: #!#g +10%#!"
+ },
+ "SELECT_TRAIT_MARKET_LIBERAL_UNHAPPY": {
+  "en": "Opulence and Greed (unhappy)",
+  "de": "Opulenz und Gier (unzufrieden)"
+ },
+ "SELECT_TRAIT_MARKET_LIBERAL_UNHAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_market_liberal_unhappy$ #b unhappy #![concept_interest_group_trait]\\n$ig_trait_custom_religion_market_liberal_unhappy_desc$\\n\\n #b $state_upper_strata_expected_sol_add$: #!#r +3#!",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_market_liberal_unhappy$ #b unzufriedene#! [concept_interest_group_trait]\\n$ig_trait_custom_religion_market_liberal_unhappy_desc$\\n\\n #b $state_upper_strata_expected_sol_add$: #!#r +3#!"
+ },
+ "SELECT_TRAIT_SOCIAL_DEMOCRAT_HAPPY": {
+  "en": "Secular Service (happy)",
+  "de": "Weltlicher Dienst (zufrieden)"
+ },
+ "SELECT_TRAIT_SOCIAL_DEMOCRAT_HAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_social_democrat_happy$ #b happy #![concept_interest_group_trait]\\n$ig_trait_custom_religion_social_democrat_happy_desc$\\n\\n #b $country_bureaucracy_mult$: #!#g +10%#!",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_social_democrat_happy$ #b zufriedene#! [concept_interest_group_trait]\\n$ig_trait_custom_religion_social_democrat_happy_desc$\\n\\n #b $country_bureaucracy_mult$: #!#g +10%#!"
+ },
+ "SELECT_TRAIT_SOCIAL_DEMOCRAT_LOYAL": {
+  "en": "Social Harmony (loyal)",
+  "de": "Soziale Harmonie (loyal)"
+ },
+ "SELECT_TRAIT_SOCIAL_DEMOCRAT_LOYAL_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_social_democrat_loyal$ #b loyal #![concept_interest_group_trait]\\n$ig_trait_custom_religion_social_democrat_loyal_desc$\\n\\n #b $state_lower_strata_expected_sol_add$: #!#g -1#!\\n #b $country_bureaucracy_investment_cost_factor_mult$: #!#g -10%#!",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_social_democrat_loyal$ #b loyale#! [concept_interest_group_trait]\\n$ig_trait_custom_religion_social_democrat_loyal_desc$\\n\\n #b $state_lower_strata_expected_sol_add$: #!#g -1#!\\n #b $country_bureaucracy_investment_cost_factor_mult$: #!#g -10%#!"
+ },
+ "SELECT_TRAIT_SOCIAL_DEMOCRAT_UNHAPPY": {
+  "en": "Inequality and Injustice (unhappy)",
+  "de": "Ungleichheit und Ungerechtigkeit (unzufrieden)"
+ },
+ "SELECT_TRAIT_SOCIAL_DEMOCRAT_UNHAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_social_democrat_unhappy$ #b unhappy #![concept_interest_group_trait]\\n$ig_trait_custom_religion_social_democrat_unhappy_desc$\\n\\n #b $state_radicals_from_political_movements_mult$: #!#r +10%#!",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_social_democrat_unhappy$ #b unzufriedene#! [concept_interest_group_trait]\\n$ig_trait_custom_religion_social_democrat_unhappy_desc$\\n\\n #b $state_radicals_from_political_movements_mult$: #!#r +10%#!"
+ },
+ "SELECT_TRAIT_THEOCRATIC_HAPPY": {
+  "en": "Ecumenism (happy)",
+  "de": "Ökumene (zufrieden)"
+ },
+ "SELECT_TRAIT_THEOCRATIC_HAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_theocratic_happy$ #b happy #![concept_interest_group_trait]\\n$ig_trait_custom_religion_theocratic_happy_desc$\\n\\n #b $country_influence_mult$: #!#g +25%#!",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_theocratic_happy$ #b zufriedene#! [concept_interest_group_trait]\\n$ig_trait_custom_religion_theocratic_happy_desc$\\n\\n #b $country_influence_mult$: #!#g +25%#!"
+ },
+ "SELECT_TRAIT_THEOCRATIC_LOYAL": {
+  "en": "Divine Law (loyal)",
+  "de": "Göttliches Gesetz (loyal)"
+ },
+ "SELECT_TRAIT_THEOCRATIC_LOYAL_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_theocratic_loyal$ #b loyal #![concept_interest_group_trait]\\n$ig_trait_custom_religion_theocratic_loyal_desc$\\n\\n #b $state_conversion_mult$: #!#g +25%#!",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_theocratic_loyal$ #b loyale#! [concept_interest_group_trait]\\n$ig_trait_custom_religion_theocratic_loyal_desc$\\n\\n #b $state_conversion_mult$: #!#g +25%#!"
+ },
+ "SELECT_TRAIT_THEOCRATIC_UNHAPPY": {
+  "en": "Religious Persecution (unhappy)",
+  "de": "Religiöse Verfolgung (unzufrieden)"
+ },
+ "SELECT_TRAIT_THEOCRATIC_UNHAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_theocratic_unhappy$ #b unhappy #![concept_interest_group_trait]\\n$ig_trait_custom_religion_theocratic_unhappy_desc$\\n\\n #b $state_assimilation_mult$: #!#r -25%#!",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_theocratic_unhappy$ #b unzufriedene#! [concept_interest_group_trait]\\n$ig_trait_custom_religion_theocratic_unhappy_desc$\\n\\n #b $state_assimilation_mult$: #!#r -25%#!"
+ },
+ "SELECT_TRAIT_TOTALITARIAN_HAPPY": {
+  "en": "Unity and Conformity (happy)",
+  "de": "Einheit und Konformität (zufrieden)"
+ },
+ "SELECT_TRAIT_TOTALITARIAN_HAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_totalitarian_happy$ #b happy #![concept_interest_group_trait]\\n$ig_trait_custom_religion_totalitarian_happy_desc$\\n\\n #b $political_movement_radicalism_mult$: #!#g -10%#!",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_totalitarian_happy$ #b zufriedene#! [concept_interest_group_trait]\\n$ig_trait_custom_religion_totalitarian_happy_desc$\\n\\n #b $political_movement_radicalism_mult$: #!#g -10%#!"
+ },
+ "SELECT_TRAIT_TOTALITARIAN_LOYAL": {
+  "en": "Order and Obedience (loyal)",
+  "de": "Ordnung und Gehorsam (loyal)"
+ },
+ "SELECT_TRAIT_TOTALITARIAN_LOYAL_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_totalitarian_loyal$ #b loyal #![concept_interest_group_trait]\\n$ig_trait_custom_religion_totalitarian_loyal_desc$\\n\\n #b $country_institution_cost_institution_police_mult$: #!#g -25%#!",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_totalitarian_loyal$ #b loyale#! [concept_interest_group_trait]\\n$ig_trait_custom_religion_totalitarian_loyal_desc$\\n\\n #b $country_institution_cost_institution_police_mult$: #!#g -25%#!"
+ },
+ "SELECT_TRAIT_TOTALITARIAN_UNHAPPY": {
+  "en": "Repression of Dissent (unhappy)",
+  "de": "Unterdrückung Andersdenkender (unzufrieden)"
+ },
+ "SELECT_TRAIT_TOTALITARIAN_UNHAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_totalitarian_unhappy$ #b unhappy #![concept_interest_group_trait]\\n$ig_trait_custom_religion_totalitarian_unhappy_desc$\\n\\n #b $country_radicals_from_legitimacy_mult$: #!#r +10%#!",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_totalitarian_unhappy$ #b unzufriedene#! [concept_interest_group_trait]\\n$ig_trait_custom_religion_totalitarian_unhappy_desc$\\n\\n #b $country_radicals_from_legitimacy_mult$: #!#r +10%#!"
+ },
+ "SELECT_TRAIT_TRADITIONALIST_HAPPY": {
+  "en": "Divine Right (happy)",
+  "de": "Gottesgnadentum (zufrieden)"
+ },
+ "SELECT_TRAIT_TRADITIONALIST_HAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_traditionalist_happy$ #b happy #![concept_interest_group_trait]\\n$ig_trait_custom_religion_traditionalist_happy_desc$\\n\\n #b $country_authority_mult$: #!#g +10%#!",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_traditionalist_happy$ #b zufriedene#! [concept_interest_group_trait]\\n$ig_trait_custom_religion_traditionalist_happy_desc$\\n\\n #b $country_authority_mult$: #!#g +10%#!"
+ },
+ "SELECT_TRAIT_TRADITIONALIST_LOYAL": {
+  "en": "Encourage Natalism (loyal)",
+  "de": "Geburtenförderung (loyal)"
+ },
+ "SELECT_TRAIT_TRADITIONALIST_LOYAL_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_traditionalist_loyal$ #b loyal #![concept_interest_group_trait]\\n$ig_trait_custom_religion_traditionalist_loyal_desc$\\n\\n #b $state_birth_rate_mult$: #!#g +2.5%#!",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_traditionalist_loyal$ #b loyale#! [concept_interest_group_trait]\\n$ig_trait_custom_religion_traditionalist_loyal_desc$\\n\\n #b $state_birth_rate_mult$: #!#g +2,5%#!"
+ },
+ "SELECT_TRAIT_TRADITIONALIST_UNHAPPY": {
+  "en": "Obscurantism (unhappy)",
+  "de": "Obskurantismus (unzufrieden)"
+ },
+ "SELECT_TRAIT_TRADITIONALIST_UNHAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_traditionalist_unhappy$ #b unhappy #![concept_interest_group_trait]\\n$ig_trait_custom_religion_traditionalist_unhappy_desc$\\n\\n #b $state_education_access_add$: #!#r -10%#!",
+  "de": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] erhält die $ig_trait_custom_religion_traditionalist_unhappy$ #b unzufriedene#! [concept_interest_group_trait]\\n$ig_trait_custom_religion_traditionalist_unhappy_desc$\\n\\n #b $state_education_access_add$: #!#r -10%#!"
+ },
+ "concept_custom_religion": {
+  "en": "Custom Religion",
+  "de": "Benutzerdefinierte Religion"
+ },
+ "concept_custom_religion_desc": {
+  "en": "A syncretic religion created by blending elements of existing religious traditions. Tracked through a [concept_journal_entry] system that allows countries to develop a unique faith combining aspects of their population's diverse religious backgrounds.",
+  "de": "Eine synkretistische Religion, die durch die Vermischung von Elementen bestehender religiöser Traditionen entsteht. Sie wird durch ein [concept_journal_entry]-System verfolgt, das es Ländern erlaubt, einen einzigartigen Glauben zu entwickeln, der Aspekte der vielfältigen religiösen Hintergründe ihrer Bevölkerung vereint."
+ },
+ "concept_decline_of_religion": {
+  "en": "Decline of Religion",
+  "de": "Niedergang der Religion"
+ },
+ "concept_decline_of_religion_desc": {
+  "en": "A secularization trend reflecting the declining social influence of religious institutions. Tied to the Ministry of Religion [concept_institution]. May be partially countered by [concept_religious_revival] events. The secularization campaign decision can accelerate the process.",
+  "de": "Ein Säkularisierungstrend, der den schwindenden gesellschaftlichen Einfluss religiöser Institutionen widerspiegelt. Gebunden an die [concept_institution] Ministerium für Religion. Kann teilweise durch Ereignisse der [Concept('concept_religious_revival', 'Religiösen Erweckung')] ausgeglichen werden. Die Entscheidung zur Säkularisierungskampagne kann den Prozess beschleunigen."
+ },
+ "custom_religion_name_a": {
+  "en": "Celestial Brotherhood",
+  "de": "Himmlische Bruderschaft"
+ },
+ "custom_religion_name_b": {
+  "en": "The Path of Divine Liberation",
+  "de": "Der Pfad der Göttlichen Befreiung"
+ },
+ "custom_religion_name_c": {
+  "en": "Neohellenism",
+  "de": "Neohellenismus"
+ },
+ "custom_religion_name_d": {
+  "en": "Prosperity of the Redeemed",
+  "de": "Wohlstand der Erlösten"
+ },
+ "custom_religion_name_e": {
+  "en": "Universal Love Collective",
+  "de": "Kollektiv der Universellen Liebe"
+ },
+ "custom_religion_name_f": {
+  "en": "Sons of the Sacred Thunder",
+  "de": "Söhne des Heiligen Donners"
+ },
+ "custom_religion_name_g": {
+  "en": "Temple of the Living Dawn",
+  "de": "Tempel der Lebendigen Morgenröte"
+ },
+ "custom_religion_name_h": {
+  "en": "Church of the Reborn Savior",
+  "de": "Kirche des Wiedergeborenen Erlösers"
+ },
+ "custom_religion_name_i": {
+  "en": "Guardians of the Golden Lotus",
+  "de": "Wächter des Goldenen Lotos"
+ },
+ "custom_religion_name_j": {
+  "en": "The Manifest Revelation",
+  "de": "Die Manifeste Offenbarung"
+ },
+ "custom_religion_name_k": {
+  "en": "Anointed Church",
+  "de": "Gesalbte Kirche"
+ },
+ "custom_religion_name_l": {
+  "en": "Neo-Zen Emancipation",
+  "de": "Neo-Zen-Emanzipation"
+ },
+ "custom_religion_name_m": {
+  "en": "Imperial Cult",
+  "de": "Kaiserkult"
+ },
+ "custom_religion_name_n": {
+  "en": "Martyrs of the Pure Light",
+  "de": "Märtyrer des Reinen Lichts"
+ },
+ "custom_religion_name_o": {
+  "en": "The Eternal Flow",
+  "de": "Der Ewige Fluss"
+ },
+ "custom_religion_name_p": {
+  "en": "Dominion of the Infinite Flame",
+  "de": "Herrschaft der Unendlichen Flamme"
+ },
+ "custom_religion_name_q": {
+  "en": "The Sacred Coil",
+  "de": "Die Heilige Spirale"
+ },
+ "custom_religion_name_r": {
+  "en": "Church of the Sacred Machine",
+  "de": "Kirche der Heiligen Maschine"
+ },
+ "custom_religion_name_s": {
+  "en": "Union of the Blessed",
+  "de": "Bund der Gesegneten"
+ },
+ "custom_religion_name_t": {
+  "en": "Brotherhood of the Soul",
+  "de": "Bruderschaft der Seele"
+ },
+ "ig_trait_custom_religion_imperial_cult_happy": {
+  "en": "Imperial Glory",
+  "de": "Kaiserlicher Ruhm"
+ },
+ "ig_trait_custom_religion_imperial_cult_happy_desc": {
+  "en": "Our religious authorities have declared that the empire is divinely ordained and that its ruler is a divine figure, encouraging the faithful to work for the glory and prosperity of the realm.",
+  "de": "Unsere religiösen Autoritäten haben erklärt, dass das Reich göttlich bestimmt und sein Herrscher eine göttliche Gestalt sei, und ermutigen die Gläubigen, für den Ruhm und Wohlstand des Reiches zu wirken."
+ },
+ "ig_trait_custom_religion_imperial_cult_loyal": {
+  "en": "Loyalty to the Empire",
+  "de": "Loyalität zum Reich"
+ },
+ "ig_trait_custom_religion_imperial_cult_loyal_desc": {
+  "en": "Our religious authorities have called for the faithful to pledge their loyalty to the empire and its ruler, believing that obedience and devotion to the state are essential for the prosperity and security of the realm.",
+  "de": "Unsere religiösen Autoritäten haben die Gläubigen aufgerufen, dem Reich und seinem Herrscher die Treue zu schwören, denn Gehorsam und Hingabe an den Staat seien für Wohlstand und Sicherheit des Reiches unerlässlich."
+ },
+ "ig_trait_custom_religion_imperial_cult_unhappy": {
+  "en": "Militarism and Conquest",
+  "de": "Militarismus und Eroberung"
+ },
+ "ig_trait_custom_religion_imperial_cult_unhappy_desc": {
+  "en": "Our subjects have come to view this religion as a mere arm of the state, hampering conversion efforts.",
+  "de": "Unsere Untertanen betrachten diese Religion mittlerweile als bloßes Werkzeug des Staates, was die Bekehrungsbemühungen behindert."
+ },
+ "ig_trait_custom_religion_market_liberal_happy": {
+  "en": "Prosperity Doctrine",
+  "de": "Wohlstandslehre"
+ },
+ "ig_trait_custom_religion_market_liberal_happy_desc": {
+  "en": "Our religious authorities have declared that wealth and prosperity are signs of divine favor, encouraging the faithful to see a rise in their material fortunes as a blessing from the divine.",
+  "de": "Unsere religiösen Autoritäten haben erklärt, dass Reichtum und Wohlstand Zeichen göttlicher Gunst seien, und ermutigen die Gläubigen, einen Zuwachs ihres materiellen Vermögens als göttlichen Segen zu betrachten."
+ },
+ "ig_trait_custom_religion_market_liberal_loyal": {
+  "en": "Investing for the Afterlife",
+  "de": "Investieren fürs Jenseits"
+ },
+ "ig_trait_custom_religion_market_liberal_loyal_desc": {
+  "en": "Our religious authorities have called for the faithful to invest in the future, believing that wealth and prosperity in this life will be rewarded in the afterlife.",
+  "de": "Unsere religiösen Autoritäten haben die Gläubigen aufgerufen, in die Zukunft zu investieren, denn Reichtum und Wohlstand in diesem Leben würden im Jenseits belohnt."
+ },
+ "ig_trait_custom_religion_market_liberal_unhappy": {
+  "en": "Opulence and Greed",
+  "de": "Opulenz und Gier"
+ },
+ "ig_trait_custom_religion_market_liberal_unhappy_desc": {
+  "en": "Our religious authorities have called for the faithful to pursue wealth and material gain at all costs, and many are seeing their current situation as insufficiently opulent.",
+  "de": "Unsere religiösen Autoritäten haben die Gläubigen aufgerufen, Reichtum und materiellen Gewinn um jeden Preis zu verfolgen, und viele empfinden ihre gegenwärtige Lage als unzureichend prächtig."
+ },
+ "ig_trait_custom_religion_social_democrat_happy": {
+  "en": "Secular Service",
+  "de": "Weltlicher Dienst"
+ },
+ "ig_trait_custom_religion_social_democrat_happy_desc": {
+  "en": "Our religious authorities have declared that service to the community and the common good is a sacred duty, encouraging the faithful to find fulfillment in helping others.",
+  "de": "Unsere religiösen Autoritäten haben erklärt, dass der Dienst an der Gemeinschaft und dem Gemeinwohl eine heilige Pflicht sei, und ermutigen die Gläubigen, Erfüllung darin zu finden, anderen zu helfen."
+ },
+ "ig_trait_custom_religion_social_democrat_loyal": {
+  "en": "Social Harmony",
+  "de": "Soziale Harmonie"
+ },
+ "ig_trait_custom_religion_social_democrat_loyal_desc": {
+  "en": "Our religious authorities have called for the faithful to work together for the common good, believing that social harmony and cooperation are essential for a just and equitable society.",
+  "de": "Unsere religiösen Autoritäten haben die Gläubigen aufgerufen, gemeinsam für das Gemeinwohl zu wirken, denn soziale Harmonie und Zusammenarbeit seien für eine gerechte und faire Gesellschaft unerlässlich."
+ },
+ "ig_trait_custom_religion_social_democrat_unhappy": {
+  "en": "Inequality and Injustice",
+  "de": "Ungleichheit und Ungerechtigkeit"
+ },
+ "ig_trait_custom_religion_social_democrat_unhappy_desc": {
+  "en": "Our religious authorities have called for the faithful to address social inequality and injustice, believing that these issues are a violation of divine [Concept('concept_power_bloc_principle', 'principles')] and a threat to social harmony.",
+  "de": "Unsere religiösen Autoritäten haben die Gläubigen aufgerufen, soziale Ungleichheit und Ungerechtigkeit anzugehen, denn diese Missstände verletzten göttliche [Concept('concept_power_bloc_principle', 'Prinzipien')] und bedrohten die soziale Harmonie."
+ },
+ "ig_trait_custom_religion_theocratic_happy": {
+  "en": "Ecumenism",
+  "de": "Ökumene"
+ },
+ "ig_trait_custom_religion_theocratic_happy_desc": {
+  "en": "Our religious authorities are working on behalf of the state to assist our diplomatic efforts.",
+  "de": "Unsere religiösen Autoritäten wirken im Namen des Staates mit, um unsere diplomatischen Bemühungen zu unterstützen."
+ },
+ "ig_trait_custom_religion_theocratic_loyal": {
+  "en": "Divine Law",
+  "de": "Göttliches Gesetz"
+ },
+ "ig_trait_custom_religion_theocratic_loyal_desc": {
+  "en": "The favor of our religious authorities has allowed the state to cooperate with the church in converting the populace.",
+  "de": "Die Gunst unserer religiösen Autoritäten hat es dem Staat ermöglicht, mit der Kirche bei der Bekehrung der Bevölkerung zusammenzuarbeiten."
+ },
+ "ig_trait_custom_religion_theocratic_unhappy": {
+  "en": "Religious Persecution",
+  "de": "Religiöse Verfolgung"
+ },
+ "ig_trait_custom_religion_theocratic_unhappy_desc": {
+  "en": "Our religious authorities have called for the suppression of other faiths. Unfortunately, the faithful have taken this to mean that they should be hostile to other cultures.",
+  "de": "Unsere religiösen Autoritäten haben zur Unterdrückung anderer Glaubensrichtungen aufgerufen. Leider haben die Gläubigen dies dahingehend verstanden, dass sie anderen Kulturen feindselig gegenübertreten sollten."
+ },
+ "ig_trait_custom_religion_totalitarian_happy": {
+  "en": "Unity and Conformity",
+  "de": "Einheit und Konformität"
+ },
+ "ig_trait_custom_religion_totalitarian_happy_desc": {
+  "en": "Our religious authorities have declared that violent opposition to the state and its leaders is a sin, encouraging the faithful to embrace unity and conformity for the greater good.",
+  "de": "Unsere religiösen Autoritäten haben erklärt, dass gewaltsamer Widerstand gegen den Staat und seine Führer eine Sünde sei, und ermutigen die Gläubigen, Einheit und Konformität zum höheren Wohl anzunehmen."
+ },
+ "ig_trait_custom_religion_totalitarian_loyal": {
+  "en": "Order and Obedience",
+  "de": "Ordnung und Gehorsam"
+ },
+ "ig_trait_custom_religion_totalitarian_loyal_desc": {
+  "en": "Our religious authorities have called for the faithful to obey the state and its leaders without question, believing that order and obedience are essential for the maintenance of social stability and the preservation of divine authority.",
+  "de": "Unsere religiösen Autoritäten haben die Gläubigen aufgerufen, dem Staat und seinen Führern ohne Widerspruch zu gehorchen, denn Ordnung und Gehorsam seien für die Wahrung der sozialen Stabilität und den Erhalt der göttlichen Autorität unerlässlich."
+ },
+ "ig_trait_custom_religion_totalitarian_unhappy": {
+  "en": "Repression of Dissent",
+  "de": "Unterdrückung Andersdenkender"
+ },
+ "ig_trait_custom_religion_totalitarian_unhappy_desc": {
+  "en": "Our religious authorities have called for the suppression of dissent and nonconformity, leading to repression and violence against minority groups and those who oppose the state.",
+  "de": "Unsere religiösen Autoritäten haben zur Unterdrückung von Widerspruch und Nonkonformität aufgerufen, was zu Repression und Gewalt gegen Minderheiten und Staatsgegner führt."
+ },
+ "ig_trait_custom_religion_traditionalist_happy": {
+  "en": "Divine Right",
+  "de": "Gottesgnadentum"
+ },
+ "ig_trait_custom_religion_traditionalist_happy_desc": {
+  "en": "Our religious authorities have declared that our society is divinely ordained and that our people are blessed by the divine.",
+  "de": "Unsere religiösen Autoritäten haben erklärt, dass unsere Gesellschaft göttlich bestimmt und unser Volk vom Göttlichen gesegnet sei."
+ },
+ "ig_trait_custom_religion_traditionalist_loyal": {
+  "en": "Encourage Natalism",
+  "de": "Geburtenförderung"
+ },
+ "ig_trait_custom_religion_traditionalist_loyal_desc": {
+  "en": "Our religious authorities have called for an increase in the birth rate among our faithful, believing that a larger population will strengthen our society and ensure the continuity of our traditions.",
+  "de": "Unsere religiösen Autoritäten haben zu einer höheren Geburtenrate unter den Gläubigen aufgerufen, denn eine größere Bevölkerung werde unsere Gesellschaft stärken und den Fortbestand unserer Traditionen sichern."
+ },
+ "ig_trait_custom_religion_traditionalist_unhappy": {
+  "en": "Obscurantism",
+  "de": "Obskurantismus"
+ },
+ "ig_trait_custom_religion_traditionalist_unhappy_desc": {
+  "en": "Our religious authorities have called for the suppression of knowledge and the restriction of information, believing that ignorance is a virtue and that enlightenment leads to heresy.",
+  "de": "Unsere religiösen Autoritäten haben zur Unterdrückung von Wissen und zur Einschränkung von Informationen aufgerufen, denn Unwissenheit sei eine Tugend und Aufklärung führe zu Ketzerei."
+ },
+ "ministry_religion_established_faith": {
+  "en": "Religion Ministry: Established Faith Privileges",
+  "de": "Religionsministerium: Privilegien der Staatsreligion"
+ },
+ "ministry_religion_pluralist": {
+  "en": "Religion Ministry: Pluralist Framework",
+  "de": "Religionsministerium: Pluralistischer Rahmen"
+ },
+ "ministry_religion_pulpit_advance": {
+  "en": "Religion Ministry: Pulpit Advance",
+  "de": "Religionsministerium: Kanzelvorstoß"
+ },
+ "ministry_religion_pulpit_advance_desc": {
+  "en": "A strong positive boost to ministry law enactment progress from a recent event.",
+  "de": "Ein starker positiver Schub für den Fortschritt der Gesetzeserlassung des Ministeriums durch ein jüngstes Ereignis."
+ },
+ "ministry_religion_pulpit_cautious": {
+  "en": "Religion Ministry: Pulpit Cautious Advance",
+  "de": "Religionsministerium: Vorsichtiger Kanzelvormarsch"
+ },
+ "ministry_religion_pulpit_cautious_desc": {
+  "en": "A smaller positive boost to ministry law enactment progress from a recent event.",
+  "de": "Ein kleinerer positiver Schub für den Fortschritt der Gesetzeserlassung des Ministeriums durch ein jüngstes Ereignis."
+ },
+ "ministry_religion_pulpit_stall": {
+  "en": "Religion Ministry: Pulpit Stall",
+  "de": "Religionsministerium: Kanzelstillstand"
+ },
+ "new_religions_regulated_modifier": {
+  "en": "New Religions Regulated",
+  "de": "Neue Religionen reguliert"
+ },
+ "new_religions_regulated_modifier_desc": {
+  "en": "Regulation of new [Concept('concept_religious_movement', 'religious movements')] provides order but limits spiritual freedom.",
+  "de": "Die Regulierung neuer [Concept('concept_religious_movement', 'Religionsbewegungen')] sorgt für Ordnung, schränkt aber die geistige Freiheit ein."
+ },
+ "state_war_support_monthly_add_religion": {
+  "en": "Fervor Monthly Add",
+  "de": "Inbrunst: Monatlicher Zuwachs"
+ },
+ "state_war_support_monthly_add_religion_desc": {
+  "en": "[concept_war_support] added monthly, multiplied by the [concept_clout] of the [GetInterestGroupVariant('ig_devout',GetPlayer).GetNameWithCountryVariant]. Each [Concept('concept_state','$concept_state$')] adds its share by population. Displayed in event tooltips as 'From Events'.",
+  "de": "[concept_war_support]-Zuwachs pro Monat, multipliziert mit dem [concept_clout] der [GetInterestGroupVariant('ig_devout',GetPlayer).GetNameWithCountryVariant]. Jeder [Concept('concept_state','$concept_state$')] trägt seinen Anteil nach Bevölkerung bei. Wird in Ereignis-Tooltips als „Durch Ereignisse“ angezeigt."
+ }
+}

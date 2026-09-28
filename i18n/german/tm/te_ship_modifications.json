@@ -1,0 +1,930 @@
+{
+ "ship_mod_arsenal_ship_armor_high": {
+  "en": "Heavy Composite Plate",
+  "de": "Schwere Verbundpanzerplatte"
+ },
+ "ship_mod_arsenal_ship_armor_high_desc": {
+  "en": "Maximum-density composite armor over every critical compartment. A missile box built to absorb counter-fire.",
+  "de": "Verbundpanzerung mit maximaler Dichte über jedem kritischen Abteil. Eine Raketenplattform, gebaut, um Gegenfeuer zu absorbieren."
+ },
+ "ship_mod_arsenal_ship_armor_light": {
+  "en": "Composite Plate",
+  "de": "Verbundpanzerplatte"
+ },
+ "ship_mod_arsenal_ship_armor_light_desc": {
+  "en": "Standard composite naval plate. Adequate for blue-water operations under air cover.",
+  "de": "Standard-Verbundpanzerung der Marine. Ausreichend für Hochseeoperationen unter Luftdeckung."
+ },
+ "ship_mod_arsenal_ship_armor_medium": {
+  "en": "Reinforced Composite",
+  "de": "Verstärkter Verbundwerkstoff"
+ },
+ "ship_mod_arsenal_ship_armor_medium_desc": {
+  "en": "Multi-layer composite with Kevlar inserts protecting magazines and engineering spaces.",
+  "de": "Mehrschichtiger Verbundwerkstoff mit Kevlar-Einlagen, der Magazine und Maschinenräume schützt."
+ },
+ "ship_mod_arsenal_ship_guns_high": {
+  "en": "Saturated VLS Cells",
+  "de": "Gesättigte VLS-Zellen"
+ },
+ "ship_mod_arsenal_ship_guns_high_desc": {
+  "en": "Hull packed with VLS cells from stem to stern. One ship's first salvo can wipe out a small fleet's defensive picture.",
+  "de": "Rumpf von Bug bis Heck mit VLS-Zellen vollgepackt. Die erste Salve eines einzigen Schiffes kann die Verteidigung einer kleinen Flotte auslöschen."
+ },
+ "ship_mod_arsenal_ship_guns_light": {
+  "en": "Standard VLS Cells",
+  "de": "Standard-VLS-Zellen"
+ },
+ "ship_mod_arsenal_ship_guns_light_desc": {
+  "en": "A single 64-cell vertical launching system. The minimum loadout to count as an arsenal ship.",
+  "de": "Ein einzelnes vertikales Startsystem mit 64 Zellen. Die Mindestausstattung, um als Arsenalschiff zu gelten."
+ },
+ "ship_mod_arsenal_ship_guns_medium": {
+  "en": "Expanded VLS Cells",
+  "de": "Erweiterte VLS-Zellen"
+ },
+ "ship_mod_arsenal_ship_guns_medium_desc": {
+  "en": "Multiple VLS modules totaling several hundred cells, with mixed anti-ship and land-attack rounds.",
+  "de": "Mehrere VLS-Module mit insgesamt mehreren hundert Zellen, bestückt mit einer Mischung aus Anti-Schiffs- und Landangriffsmunition."
+ },
+ "ship_mod_arsenal_ship_propulsion_high": {
+  "en": "Heavy Integrated Drive",
+  "de": "Schwerer integrierter Antrieb"
+ },
+ "ship_mod_arsenal_ship_propulsion_high_desc": {
+  "en": "Full integrated electric propulsion sourced from gas-turbine generators. Powers both propulsion and the future weapons load with margin.",
+  "de": "Voll integrierter elektrischer Antrieb, gespeist von Gasturbinengeneratoren. Versorgt sowohl den Antrieb als auch künftige Waffensysteme mit Leistungsreserve."
+ },
+ "ship_mod_arsenal_ship_propulsion_light": {
+  "en": "Diesel-Gas Turbine",
+  "de": "Diesel-Gasturbine"
+ },
+ "ship_mod_arsenal_ship_propulsion_light_desc": {
+  "en": "Hybrid plant: diesel for cruise, gas turbine for sprint. Cost-effective and serviceable.",
+  "de": "Hybridanlage: Diesel für Marschfahrt, Gasturbine für Höchstgeschwindigkeit. Kosteneffizient und wartungsfreundlich."
+ },
+ "ship_mod_arsenal_ship_propulsion_medium": {
+  "en": "Combined Diesel-Electric",
+  "de": "Kombinierter Diesel-Elektro-Antrieb"
+ },
+ "ship_mod_arsenal_ship_propulsion_medium_desc": {
+  "en": "Integrated electric drive on a diesel-electric power bus. Quieter and more efficient than direct mechanical drive.",
+  "de": "Integrierter Elektroantrieb an einer diesel-elektrischen Stromschiene. Leiser und effizienter als ein direkter mechanischer Antrieb."
+ },
+ "ship_mod_arsenal_ship_range_high": {
+  "en": "Strategic Magazines",
+  "de": "Strategische Magazine"
+ },
+ "ship_mod_arsenal_ship_range_high_desc": {
+  "en": "Maximum magazine capacity plus reload-at-sea fittings. Essentially unlimited firepower while replenishment ships are available.",
+  "de": "Maximale Magazinkapazität plus Ausrüstung zum Nachladen auf See. Praktisch unbegrenzte Feuerkraft, solange Nachschubschiffe verfügbar sind."
+ },
+ "ship_mod_arsenal_ship_range_light": {
+  "en": "Tactical Magazines",
+  "de": "Taktische Magazine"
+ },
+ "ship_mod_arsenal_ship_range_light_desc": {
+  "en": "Single-engagement magazine load. Limited to one major naval action before resupply.",
+  "de": "Magazinbeladung für ein einzelnes Gefecht. Reicht nur für eine größere Seeschlacht vor dem Nachschub."
+ },
+ "ship_mod_arsenal_ship_range_medium": {
+  "en": "Operational Magazines",
+  "de": "Operative Magazine"
+ },
+ "ship_mod_arsenal_ship_range_medium_desc": {
+  "en": "Sustained-operations magazine load supports multiple engagements without leaving the theater.",
+  "de": "Magazinbeladung für anhaltende Operationen, die mehrere Gefechte ermöglicht, ohne das Einsatzgebiet zu verlassen."
+ },
+ "ship_mod_asw_destroyer_armor_high": {
+  "en": "Acoustic-Stealth Hull",
+  "de": "Akustisch getarnter Rumpf"
+ },
+ "ship_mod_asw_destroyer_armor_high_desc": {
+  "en": "Sound-dampening hull treatment paired with double-layered armor plating. Both harder to find and harder to sink.",
+  "de": "Schalldämmende Rumpfbehandlung kombiniert mit doppellagiger Panzerung. Sowohl schwerer zu finden als auch schwerer zu versenken."
+ },
+ "ship_mod_asw_destroyer_armor_light": {
+  "en": "Standard Hull Plating",
+  "de": "Standard-Rumpfpanzerung"
+ },
+ "ship_mod_asw_destroyer_armor_light_desc": {
+  "en": "Modern naval-grade steel hull. The baseline expectation for any postwar destroyer.",
+  "de": "Moderner Schiffsrumpf aus Marinestahl. Der Mindeststandard für jeden Nachkriegszerstörer."
+ },
+ "ship_mod_asw_destroyer_armor_medium": {
+  "en": "Reinforced Hull Plating",
+  "de": "Verstärkte Rumpfpanzerung"
+ },
+ "ship_mod_asw_destroyer_armor_medium_desc": {
+  "en": "Welded composite plate over high-tensile steel. Survives anti-ship missile glancing hits and torpedo near-misses.",
+  "de": "Geschweißte Verbundplatten über hochfestem Stahl. Übersteht Streiftreffer von Anti-Schiffs-Raketen und Beinahetreffer von Torpedos."
+ },
+ "ship_mod_asw_destroyer_guns_high": {
+  "en": "Heavy ASW Battery",
+  "de": "Schwere U-Jagd-Batterie"
+ },
+ "ship_mod_asw_destroyer_guns_high_desc": {
+  "en": "Vertical-launch ASROC cells, towed sonar array, and Mk-46 lightweight torpedoes. A nuclear submarine's worst day.",
+  "de": "Vertikal startende ASROC-Zellen, geschlepptes Sonar-Array und leichte Mk-46-Torpedos. Der Albtraum jedes Atom-U-Boots."
+ },
+ "ship_mod_asw_destroyer_guns_light": {
+  "en": "Light ASW Battery",
+  "de": "Leichte U-Jagd-Batterie"
+ },
+ "ship_mod_asw_destroyer_guns_light_desc": {
+  "en": "Standard depth-charge mounts and a 5-inch dual-purpose gun. Sufficient against snorkeling diesel boats.",
+  "de": "Standard-Wasserbombenwerfer und ein 5-Zoll-Mehrzweckgeschütz. Ausreichend gegen schnorchelnde Diesel-U-Boote."
+ },
+ "ship_mod_asw_destroyer_guns_medium": {
+  "en": "Standard ASW Suite",
+  "de": "Standard-U-Jagd-Ausrüstung"
+ },
+ "ship_mod_asw_destroyer_guns_medium_desc": {
+  "en": "Hedgehog and Limbo ahead-throwing weapons paired with homing torpedo tubes. The post-war destroyer standard.",
+  "de": "Vorausschießende Hedgehog- und Limbo-Waffen kombiniert mit Zielsuch-Torpedorohren. Der Standard der Nachkriegszerstörer."
+ },
+ "ship_mod_asw_destroyer_propulsion_high": {
+  "en": "Combined Diesel-Electric / Gas Turbine",
+  "de": "Kombinierter Diesel-Elektro-/Gasturbinenantrieb"
+ },
+ "ship_mod_asw_destroyer_propulsion_high_desc": {
+  "en": "CODAG plant: diesel-electric for quiet patrol, gas turbine for sprint pursuit. Best of both regimes.",
+  "de": "CODAG-Anlage: diesel-elektrisch für leise Patrouillenfahrt, Gasturbine für die Verfolgungsjagd. Das Beste aus beiden Welten."
+ },
+ "ship_mod_asw_destroyer_propulsion_light": {
+  "en": "Standard Diesel-Electric Drive",
+  "de": "Standard-Diesel-elektrischer Antrieb"
+ },
+ "ship_mod_asw_destroyer_propulsion_light_desc": {
+  "en": "Reliable, quiet, fuel-efficient. Ideal for sub-hunting where engine noise gives you away.",
+  "de": "Zuverlässig, leise, kraftstoffsparend. Ideal für die U-Jagd, wo Maschinenlärm einen verrät."
+ },
+ "ship_mod_asw_destroyer_propulsion_medium": {
+  "en": "Twin-Shaft Gas Turbine",
+  "de": "Zweiwellen-Gasturbine"
+ },
+ "ship_mod_asw_destroyer_propulsion_medium_desc": {
+  "en": "Aviation-derived gas turbines drive twin shafts. Faster than the diesel-electric option but louder and thirstier.",
+  "de": "Von der Luftfahrt abgeleitete Gasturbinen treiben zwei Wellen an. Schneller als die diesel-elektrische Variante, aber lauter und durstiger."
+ },
+ "ship_mod_asw_destroyer_range_high": {
+  "en": "Extended Bluewater Loadout",
+  "de": "Erweiterte Hochsee-Ausstattung"
+ },
+ "ship_mod_asw_destroyer_range_high_desc": {
+  "en": "Sustainment for indefinite forward deployment, with onboard cold storage and replenishment-at-sea fittings.",
+  "de": "Versorgung für unbegrenzten Vorwärtseinsatz mit Kühllagerung an Bord und Ausrüstung zum Nachschub auf See."
+ },
+ "ship_mod_asw_destroyer_range_light": {
+  "en": "Coastal Patrol Loadout",
+  "de": "Küstenpatrouillen-Ausstattung"
+ },
+ "ship_mod_asw_destroyer_range_light_desc": {
+  "en": "Provisions for short coastal patrols. Designed to refuel from a tender every few days.",
+  "de": "Proviant für kurze Küstenpatrouillen. Ausgelegt für die Betankung durch ein Versorgungsschiff alle paar Tage."
+ },
+ "ship_mod_asw_destroyer_range_medium": {
+  "en": "Standard Bluewater Loadout",
+  "de": "Standard-Hochsee-Ausstattung"
+ },
+ "ship_mod_asw_destroyer_range_medium_desc": {
+  "en": "Provisioning sufficient for several weeks of bluewater operations away from a tender.",
+  "de": "Proviant für mehrere Wochen Hochseeoperationen fernab eines Versorgungsschiffs."
+ },
+ "ship_mod_expeditionary_sea_base_armor_high": {
+  "en": "Hardened Mission Hull",
+  "de": "Gehärteter Einsatzrumpf"
+ },
+ "ship_mod_expeditionary_sea_base_armor_high_desc": {
+  "en": "Compartmentalized hardened hull with redundant damage-control trunks. Survives hits a normal auxiliary would not.",
+  "de": "Unterteilter, gehärteter Rumpf mit redundanten Schadenskontrollschächten. Übersteht Treffer, die ein gewöhnliches Hilfsschiff nicht überstehen würde."
+ },
+ "ship_mod_expeditionary_sea_base_armor_light": {
+  "en": "Standard Mercantile Hull",
+  "de": "Standard-Handelsschiffrumpf"
+ },
+ "ship_mod_expeditionary_sea_base_armor_light_desc": {
+  "en": "Auxiliary-grade hull. Optimized for cargo capacity, not combat survivability.",
+  "de": "Rumpf in Hilfsschiffqualität. Optimiert für Frachtkapazität, nicht für Gefechtsüberlebensfähigkeit."
+ },
+ "ship_mod_expeditionary_sea_base_armor_medium": {
+  "en": "Reinforced Auxiliary Hull",
+  "de": "Verstärkter Hilfsschiffrumpf"
+ },
+ "ship_mod_expeditionary_sea_base_armor_medium_desc": {
+  "en": "Selectively reinforced bulkheads protect critical mission-systems compartments and the helicopter hangar.",
+  "de": "Selektiv verstärkte Schotten schützen kritische Abteile für Einsatzsysteme und den Hubschrauberhangar."
+ },
+ "ship_mod_expeditionary_sea_base_guns_high": {
+  "en": "Heavy Defensive Battery",
+  "de": "Schwere Verteidigungsbatterie"
+ },
+ "ship_mod_expeditionary_sea_base_guns_high_desc": {
+  "en": "Mixed gun and missile defenses across the superstructure. The ship can hold off light attackers without escorts.",
+  "de": "Gemischte Geschütz- und Raketenabwehr über den gesamten Aufbau verteilt. Das Schiff kann leichte Angreifer auch ohne Geleitschutz abwehren."
+ },
+ "ship_mod_expeditionary_sea_base_guns_light": {
+  "en": "Defensive Battery",
+  "de": "Verteidigungsbatterie"
+ },
+ "ship_mod_expeditionary_sea_base_guns_light_desc": {
+  "en": "Light point-defense guns and CIWS mounts. Self-defense only.",
+  "de": "Leichte Nahbereichsgeschütze und CIWS-Lafetten. Nur zur Selbstverteidigung."
+ },
+ "ship_mod_expeditionary_sea_base_guns_medium": {
+  "en": "Multi-Role Battery",
+  "de": "Mehrzweckbatterie"
+ },
+ "ship_mod_expeditionary_sea_base_guns_medium_desc": {
+  "en": "Light surface-to-air cells plus reinforced point defense. Capable of escorting itself in low-threat areas.",
+  "de": "Leichte Boden-Luft-Zellen plus verstärkte Nahbereichsverteidigung. Kann sich in Gebieten geringer Bedrohung selbst eskortieren."
+ },
+ "ship_mod_expeditionary_sea_base_propulsion_high": {
+  "en": "Heavy Cruising Drive",
+  "de": "Schwerer Reiseantrieb"
+ },
+ "ship_mod_expeditionary_sea_base_propulsion_high_desc": {
+  "en": "High-power diesel-electric plant. Keeps pace with most amphibious task groups even in heavy seas.",
+  "de": "Leistungsstarke diesel-elektrische Anlage. Hält auch bei schwerer See mit den meisten amphibischen Verbänden mit."
+ },
+ "ship_mod_expeditionary_sea_base_propulsion_light": {
+  "en": "Cruising Drive",
+  "de": "Reiseantrieb"
+ },
+ "ship_mod_expeditionary_sea_base_propulsion_light_desc": {
+  "en": "Economical mercantile drive. Slow but cheap to run.",
+  "de": "Sparsamer Handelsschiffantrieb. Langsam, aber günstig im Betrieb."
+ },
+ "ship_mod_expeditionary_sea_base_propulsion_medium": {
+  "en": "Sustained Cruising Drive",
+  "de": "Ausdauernder Reiseantrieb"
+ },
+ "ship_mod_expeditionary_sea_base_propulsion_medium_desc": {
+  "en": "Improved diesel powerplant rated for continuous high-load operation. Better suited to keeping up with surface task groups.",
+  "de": "Verbesserte Dieselanlage, ausgelegt für dauerhaften Volllastbetrieb. Besser geeignet, um mit Überwasserverbänden mitzuhalten."
+ },
+ "ship_mod_expeditionary_sea_base_range_high": {
+  "en": "Theater Logistics",
+  "de": "Logistik für das Einsatzgebiet"
+ },
+ "ship_mod_expeditionary_sea_base_range_high_desc": {
+  "en": "Maximum-capacity logistics suite with onboard fabrication. The sea base becomes a self-sustaining forward operating site.",
+  "de": "Logistikpaket mit maximaler Kapazität und Fertigung an Bord. Die Seebasis wird zu einem autarken vorgeschobenen Stützpunkt."
+ },
+ "ship_mod_expeditionary_sea_base_range_light": {
+  "en": "Forward Logistics",
+  "de": "Vorgeschobene Logistik"
+ },
+ "ship_mod_expeditionary_sea_base_range_light_desc": {
+  "en": "Standard sea-base provisioning. Sustains a small expeditionary force for weeks.",
+  "de": "Standardversorgung der Seebasis. Versorgt eine kleine Expeditionsstreitmacht wochenlang."
+ },
+ "ship_mod_expeditionary_sea_base_range_medium": {
+  "en": "Sustained Logistics",
+  "de": "Ausdauernde Logistik"
+ },
+ "ship_mod_expeditionary_sea_base_range_medium_desc": {
+  "en": "Expanded vehicle and provisioning storage. Enables sustained forward operations for a [concept_battalion]-sized force.",
+  "de": "Erweiterter Fahrzeug- und Vorratslagerraum. Ermöglicht anhaltende Vorwärtsoperationen für eine Streitmacht in der Größe eines [concept_battalion]."
+ },
+ "ship_mod_guided_missile_ship_armor_high": {
+  "en": "Hardened Combatant Hull",
+  "de": "Gehärteter Kampfschiffrumpf"
+ },
+ "ship_mod_guided_missile_ship_armor_high_desc": {
+  "en": "Compartmentalized double hull with Kevlar splinter shielding throughout. The missile box that takes a punch.",
+  "de": "Unterteilter Doppelrumpf mit durchgehender Kevlar-Splitterschutzverkleidung. Die Raketenplattform, die etwas einstecken kann."
+ },
+ "ship_mod_guided_missile_ship_armor_light": {
+  "en": "Standard Naval Hull",
+  "de": "Standard-Marinerumpf"
+ },
+ "ship_mod_guided_missile_ship_armor_light_desc": {
+  "en": "Conventional steel hull with damage-control compartmentalization. Adequate against shrapnel and small-caliber fire.",
+  "de": "Herkömmlicher Stahlrumpf mit Schadenskontroll-Unterteilung. Ausreichend gegen Splitter und Beschuss kleinen Kalibers."
+ },
+ "ship_mod_guided_missile_ship_armor_medium": {
+  "en": "Reinforced Composite Hull",
+  "de": "Verstärkter Verbundrumpf"
+ },
+ "ship_mod_guided_missile_ship_armor_medium_desc": {
+  "en": "Composite plating over the magazines and engineering spaces. Cuts the chance of a missile hit going catastrophic.",
+  "de": "Verbundpanzerung über Magazinen und Maschinenräumen. Verringert die Wahrscheinlichkeit, dass ein Raketentreffer katastrophale Folgen hat."
+ },
+ "ship_mod_guided_missile_ship_guns_high": {
+  "en": "Saturated Missile Battery",
+  "de": "Gesättigte Raketenbatterie"
+ },
+ "ship_mod_guided_missile_ship_guns_high_desc": {
+  "en": "Vertical-launch cells across the foredeck and aft. Throws enough missiles in one salvo to overwhelm any defense.",
+  "de": "Vertikale Startzellen über Vor- und Achterdeck verteilt. Verschießt genug Raketen in einer Salve, um jede Verteidigung zu überwältigen."
+ },
+ "ship_mod_guided_missile_ship_guns_light": {
+  "en": "Single Missile Battery",
+  "de": "Einzelne Raketenbatterie"
+ },
+ "ship_mod_guided_missile_ship_guns_light_desc": {
+  "en": "An eight-cell launcher for early subsonic anti-ship missiles. A coastal escort with stand-off teeth.",
+  "de": "Ein Achtzellen-Starter für frühe Unterschall-Anti-Schiffs-Raketen. Ein Küstengeleitschiff mit Reichweitenbiss."
+ },
+ "ship_mod_guided_missile_ship_guns_medium": {
+  "en": "Twin Missile Battery",
+  "de": "Doppelte Raketenbatterie"
+ },
+ "ship_mod_guided_missile_ship_guns_medium_desc": {
+  "en": "Two-bank launcher firing both anti-ship and surface-to-air missiles. Multi-role at the cost of magazine depth.",
+  "de": "Doppelbank-Starter, der sowohl Anti-Schiffs- als auch Boden-Luft-Raketen verschießt. Vielseitig, auf Kosten der Magazintiefe."
+ },
+ "ship_mod_guided_missile_ship_propulsion_high": {
+  "en": "Combined-Cycle Drive",
+  "de": "Kombikreislauf-Antrieb"
+ },
+ "ship_mod_guided_missile_ship_propulsion_high_desc": {
+  "en": "CODAG plant for quiet cruise and high-power sprint. The mature destroyer powerplant.",
+  "de": "CODAG-Anlage für leise Marschfahrt und leistungsstarken Spurt. Die ausgereifte Antriebsanlage des Zerstörers."
+ },
+ "ship_mod_guided_missile_ship_propulsion_light": {
+  "en": "Diesel-Electric Drive",
+  "de": "Diesel-elektrischer Antrieb"
+ },
+ "ship_mod_guided_missile_ship_propulsion_light_desc": {
+  "en": "Quiet and fuel-efficient. Adequate cruise speed but unimpressive sprint.",
+  "de": "Leise und kraftstoffsparend. Ausreichende Reisegeschwindigkeit, aber unbeeindruckender Spurt."
+ },
+ "ship_mod_guided_missile_ship_propulsion_medium": {
+  "en": "Gas Turbine Drive",
+  "de": "Gasturbinenantrieb"
+ },
+ "ship_mod_guided_missile_ship_propulsion_medium_desc": {
+  "en": "Aero-derivative gas turbines on twin shafts. Sprints with the carriers.",
+  "de": "Von der Luftfahrt abgeleitete Gasturbinen auf zwei Wellen. Hält mit Flugzeugträgern mit."
+ },
+ "ship_mod_guided_missile_ship_range_high": {
+  "en": "Theater Magazines",
+  "de": "Magazine für das Einsatzgebiet"
+ },
+ "ship_mod_guided_missile_ship_range_high_desc": {
+  "en": "Maximum-load magazine arrangement. The ship can sustain a campaign at sea given any replenishment route.",
+  "de": "Magazinanordnung mit maximaler Ladung. Das Schiff kann einen Feldzug auf See durchhalten, sofern eine Nachschubroute besteht."
+ },
+ "ship_mod_guided_missile_ship_range_light": {
+  "en": "Standard Magazines",
+  "de": "Standardmagazine"
+ },
+ "ship_mod_guided_missile_ship_range_light_desc": {
+  "en": "Routine missile and gun ammunition load — enough for a single high-tempo engagement.",
+  "de": "Übliche Raketen- und Geschützmunitionsbeladung – genug für ein einzelnes intensives Gefecht."
+ },
+ "ship_mod_guided_missile_ship_range_medium": {
+  "en": "Extended Magazines",
+  "de": "Erweiterte Magazine"
+ },
+ "ship_mod_guided_missile_ship_range_medium_desc": {
+  "en": "Augmented magazine capacity supports multiple engagements without returning to port.",
+  "de": "Erweiterte Magazinkapazität ermöglicht mehrere Gefechte, ohne in den Hafen zurückzukehren."
+ },
+ "ship_mod_hypersonic_missile_platform_armor_high": {
+  "en": "Plasma Defense Hull",
+  "de": "Plasmaabwehrrumpf"
+ },
+ "ship_mod_hypersonic_missile_platform_armor_high_desc": {
+  "en": "Active plasma-window defense disperses incoming directed-energy weapons. Critical against later-era laser threats.",
+  "de": "Aktive Plasmafenster-Abwehr streut ankommende gerichtete Energiewaffen. Entscheidend gegen Laserbedrohungen späterer Epochen."
+ },
+ "ship_mod_hypersonic_missile_platform_armor_light": {
+  "en": "Stealthed Composite Hull",
+  "de": "Getarnter Verbundrumpf"
+ },
+ "ship_mod_hypersonic_missile_platform_armor_light_desc": {
+  "en": "Radar-absorbent composite hull. Reduces [concept_detection] range and incidental damage.",
+  "de": "Radarabsorbierender Verbundrumpf. Verringert die [concept_detection]-Reichweite und Streuschäden."
+ },
+ "ship_mod_hypersonic_missile_platform_armor_medium": {
+  "en": "Energetic Reactive Plating",
+  "de": "Energetische Reaktivpanzerung"
+ },
+ "ship_mod_hypersonic_missile_platform_armor_medium_desc": {
+  "en": "Reactive armor panels detonate outward to disrupt incoming kinetic projectiles. Effective against shaped-charge anti-ship warheads.",
+  "de": "Reaktivpanzerplatten detonieren nach außen, um ankommende kinetische Geschosse zu stören. Wirksam gegen Hohlladungssprengköpfe von Anti-Schiffs-Waffen."
+ },
+ "ship_mod_hypersonic_missile_platform_guns_high": {
+  "en": "Heavy MaRV Salvo",
+  "de": "Schwere MaRV-Salve"
+ },
+ "ship_mod_hypersonic_missile_platform_guns_high_desc": {
+  "en": "Maneuvering reentry vehicles with terminal-phase course correction. No fixed defense intercepts them reliably.",
+  "de": "Manövrierfähige Wiedereintrittskörper mit Kurskorrektur in der Endphase. Keine feste Verteidigung kann sie zuverlässig abfangen."
+ },
+ "ship_mod_hypersonic_missile_platform_guns_light": {
+  "en": "Single Hypersonic Salvo",
+  "de": "Einzelne Hyperschallsalve"
+ },
+ "ship_mod_hypersonic_missile_platform_guns_light_desc": {
+  "en": "A single battery of glide-vehicle hypersonic missiles. Devastating accuracy at theater range.",
+  "de": "Eine einzelne Batterie hyperschallschneller Gleitkörper-Raketen. Verheerende Treffgenauigkeit über die gesamte Reichweite des Einsatzgebiets."
+ },
+ "ship_mod_hypersonic_missile_platform_guns_medium": {
+  "en": "Dual-Mode Salvo Battery",
+  "de": "Zweimodus-Salvenbatterie"
+ },
+ "ship_mod_hypersonic_missile_platform_guns_medium_desc": {
+  "en": "Mixed boost-glide and air-breathing hypersonic missiles. Different defenses, different counters.",
+  "de": "Gemischte Boost-Glide- und luftatmende Hyperschallraketen. Unterschiedliche Abwehrsysteme, unterschiedliche Gegenmaßnahmen."
+ },
+ "ship_mod_hypersonic_missile_platform_propulsion_high": {
+  "en": "Superconducting Magnetic Drive",
+  "de": "Supraleitender Magnetantrieb"
+ },
+ "ship_mod_hypersonic_missile_platform_propulsion_high_desc": {
+  "en": "Cryogenic superconducting motors with magnetohydrodynamic thrust assist. Silent, efficient, fast.",
+  "de": "Kryogene supraleitende Motoren mit magnetohydrodynamischer Schubunterstützung. Leise, effizient, schnell."
+ },
+ "ship_mod_hypersonic_missile_platform_propulsion_light": {
+  "en": "Combined-Cycle Drive",
+  "de": "Kombikreislauf-Antrieb"
+ },
+ "ship_mod_hypersonic_missile_platform_propulsion_light_desc": {
+  "en": "Combined gas-and-steam cycle drives twin shafts. The mature surface-combatant powerplant.",
+  "de": "Kombinierter Gas-Dampf-Kreislauf treibt zwei Wellen an. Die ausgereifte Antriebsanlage des Überwasserkampfschiffs."
+ },
+ "ship_mod_hypersonic_missile_platform_propulsion_medium": {
+  "en": "Integrated Electric Propulsion",
+  "de": "Integrierter Elektroantrieb"
+ },
+ "ship_mod_hypersonic_missile_platform_propulsion_medium_desc": {
+  "en": "Full IEP with high-density power bus. Powers the propulsion and any future directed-energy fitments.",
+  "de": "Vollständiger integrierter Elektroantrieb mit hochdichter Stromschiene. Versorgt den Antrieb und künftige Systeme gerichteter Energie."
+ },
+ "ship_mod_hypersonic_missile_platform_range_high": {
+  "en": "Global Strike Range",
+  "de": "Globale Schlagreichweite"
+ },
+ "ship_mod_hypersonic_missile_platform_range_high_desc": {
+  "en": "Maximum-range hypersonic glide vehicles plus extended endurance package. The ship can hold any target on Earth at risk.",
+  "de": "Hyperschallgleitkörper mit maximaler Reichweite plus erweitertes Ausdauerpaket. Das Schiff kann jedes Ziel der Erde bedrohen."
+ },
+ "ship_mod_hypersonic_missile_platform_range_light": {
+  "en": "Theater Strike Range",
+  "de": "Schlagreichweite für das Einsatzgebiet"
+ },
+ "ship_mod_hypersonic_missile_platform_range_light_desc": {
+  "en": "Magazine load configured for theater-scale strike operations.",
+  "de": "Magazinbeladung, ausgelegt für Schlagoperationen im gesamten Einsatzgebiet."
+ },
+ "ship_mod_hypersonic_missile_platform_range_medium": {
+  "en": "Continental Strike Range",
+  "de": "Kontinentale Schlagreichweite"
+ },
+ "ship_mod_hypersonic_missile_platform_range_medium_desc": {
+  "en": "Extended-range missile complement and supporting magazines. Continental-scale reach from a single position.",
+  "de": "Raketenbestückung erweiterter Reichweite mit unterstützenden Magazinen. Kontinentale Reichweite von einer einzigen Position aus."
+ },
+ "ship_mod_nuclear_submarine_armor_high": {
+  "en": "Deep-Diving Pressure Hull",
+  "de": "Tiefsee-Druckrumpf"
+ },
+ "ship_mod_nuclear_submarine_armor_high_desc": {
+  "en": "Titanium-alloy pressure hull. Operates below the layer where surface escorts cannot detect or attack it.",
+  "de": "Druckrumpf aus Titanlegierung. Operiert unterhalb der Schicht, in der Überwassereskorten es weder orten noch angreifen können."
+ },
+ "ship_mod_nuclear_submarine_armor_light": {
+  "en": "Pressure Hull",
+  "de": "Druckrumpf"
+ },
+ "ship_mod_nuclear_submarine_armor_light_desc": {
+  "en": "HY-80 high-yield steel pressure hull. Standard for a first-generation nuclear attack submarine.",
+  "de": "Druckrumpf aus hochfestem HY-80-Stahl. Standard für ein nuklear angetriebenes Jagd-U-Boot der ersten Generation."
+ },
+ "ship_mod_nuclear_submarine_armor_medium": {
+  "en": "Reinforced Pressure Hull",
+  "de": "Verstärkter Druckrumpf"
+ },
+ "ship_mod_nuclear_submarine_armor_medium_desc": {
+  "en": "HY-100 hull with anechoic tile coating. Goes deeper, runs quieter.",
+  "de": "HY-100-Rumpf mit schallschluckender Fliesenbeschichtung. Taucht tiefer, läuft leiser."
+ },
+ "ship_mod_nuclear_submarine_guns_high": {
+  "en": "Mk-48 ADCAP Battery",
+  "de": "Mk-48-ADCAP-Batterie"
+ },
+ "ship_mod_nuclear_submarine_guns_high_desc": {
+  "en": "Advanced-capability heavyweight torpedoes plus vertical-launch anti-ship missile cells. Few capital ships survive a successful approach.",
+  "de": "Schwere Torpedos mit erweiterten Fähigkeiten plus vertikal startende Anti-Schiffs-Raketenzellen. Nur wenige Großkampfschiffe überstehen einen erfolgreichen Anflug."
+ },
+ "ship_mod_nuclear_submarine_guns_light": {
+  "en": "Mk-37 Torpedo Battery",
+  "de": "Mk-37-Torpedobatterie"
+ },
+ "ship_mod_nuclear_submarine_guns_light_desc": {
+  "en": "First-generation electric homing torpedoes in standard 21-inch tubes. Lethal against unsuspecting surface ships.",
+  "de": "Elektrische Zielsuchtorpedos der ersten Generation in Standard-21-Zoll-Rohren. Tödlich gegen ahnungslose Überwasserschiffe."
+ },
+ "ship_mod_nuclear_submarine_guns_medium": {
+  "en": "Wire-Guided Torpedo Suite",
+  "de": "Drahtgelenkte Torpedoausrüstung"
+ },
+ "ship_mod_nuclear_submarine_guns_medium_desc": {
+  "en": "Wire-guided, swim-out torpedoes paired with the early SUBROC anti-submarine missile. The submarine becomes a long-range stalker.",
+  "de": "Drahtgelenkte Ausschwimm-Torpedos kombiniert mit der frühen SUBROC-U-Jagd-Rakete. Das U-Boot wird zum Langstreckenjäger."
+ },
+ "ship_mod_nuclear_submarine_propulsion_high": {
+  "en": "S8G Natural-Circulation Reactor",
+  "de": "S8G-Naturumlaufreaktor"
+ },
+ "ship_mod_nuclear_submarine_propulsion_high_desc": {
+  "en": "Natural-circulation reactor — no main coolant pumps below patrol speed. The quietest plant ever put to sea.",
+  "de": "Naturumlaufreaktor – keine Hauptkühlmittelpumpen unterhalb der Patrouillengeschwindigkeit. Die leiseste je zur See gebrachte Anlage."
+ },
+ "ship_mod_nuclear_submarine_propulsion_light": {
+  "en": "S5W Reactor Plant",
+  "de": "S5W-Reaktoranlage"
+ },
+ "ship_mod_nuclear_submarine_propulsion_light_desc": {
+  "en": "First-generation pressurized-water naval reactor. The early standard for nuclear-powered submarines.",
+  "de": "Druckwasser-Marinereaktor der ersten Generation. Der frühe Standard für atomgetriebene U-Boote."
+ },
+ "ship_mod_nuclear_submarine_propulsion_medium": {
+  "en": "S6G Reactor Plant",
+  "de": "S6G-Reaktoranlage"
+ },
+ "ship_mod_nuclear_submarine_propulsion_medium_desc": {
+  "en": "Second-generation reactor with quieter pumped-coolant flow. Faster and harder to track.",
+  "de": "Reaktor der zweiten Generation mit leiserem Zwangsumlauf-Kühlkreislauf. Schneller und schwerer zu orten."
+ },
+ "ship_mod_nuclear_submarine_range_high": {
+  "en": "Indefinite Patrol Provisioning",
+  "de": "Unbegrenzte Patrouillenversorgung"
+ },
+ "ship_mod_nuclear_submarine_range_high_desc": {
+  "en": "Onboard mass-balance and food-printing systems. Patrol duration is limited only by crew morale.",
+  "de": "Bordeigene Stoffkreislauf- und Lebensmitteldrucksysteme. Die Patrouillendauer wird nur noch durch die Moral der Besatzung begrenzt."
+ },
+ "ship_mod_nuclear_submarine_range_light": {
+  "en": "Patrol Provisioning",
+  "de": "Patrouillenversorgung"
+ },
+ "ship_mod_nuclear_submarine_range_light_desc": {
+  "en": "Standard 60-day patrol stores. Adequate for routine cruises within friendly waters.",
+  "de": "Standardvorräte für 60 Tage Patrouille. Ausreichend für routinemäßige Fahrten in befreundeten Gewässern."
+ },
+ "ship_mod_nuclear_submarine_range_medium": {
+  "en": "Strategic Patrol Provisioning",
+  "de": "Strategische Patrouillenversorgung"
+ },
+ "ship_mod_nuclear_submarine_range_medium_desc": {
+  "en": "90-day patrol stores with redundant air-revitalization equipment. Suited to deterrent patrols anywhere on Earth.",
+  "de": "Vorräte für 90 Tage Patrouille mit redundanter Luftregenerationsanlage. Geeignet für Abschreckungspatrouillen an jedem Ort der Erde."
+ },
+ "ship_mod_nuclear_supercarrier_armor_high": {
+  "en": "Reinforced Damage-Control Hull",
+  "de": "Verstärkter Schadenskontrollrumpf"
+ },
+ "ship_mod_nuclear_supercarrier_armor_high_desc": {
+  "en": "Layered armor protection with redundant damage-control trunks throughout. The carrier that fights through hits and keeps launching.",
+  "de": "Mehrschichtiger Panzerschutz mit durchgehend redundanten Schadenskontrollschächten. Der Träger, der Treffer wegsteckt und weiter startet."
+ },
+ "ship_mod_nuclear_supercarrier_armor_light": {
+  "en": "Compartmentalized Hull",
+  "de": "Unterteilter Rumpf"
+ },
+ "ship_mod_nuclear_supercarrier_armor_light_desc": {
+  "en": "Multi-bulkhead hull design with armored flight deck. Standard for postwar fleet carriers.",
+  "de": "Rumpfkonstruktion mit zahlreichen Schotten und gepanzertem Flugdeck. Standard für Flottenträger der Nachkriegszeit."
+ },
+ "ship_mod_nuclear_supercarrier_armor_medium": {
+  "en": "Composite Hull Plating",
+  "de": "Verbund-Rumpfpanzerung"
+ },
+ "ship_mod_nuclear_supercarrier_armor_medium_desc": {
+  "en": "Hardened composite plate over the reactor spaces and aviation magazines. Mitigates the worst-case scenarios.",
+  "de": "Gehärtete Verbundplatten über Reaktorräumen und Flugzeugmagazinen. Mindert die schlimmsten Szenarien."
+ },
+ "ship_mod_nuclear_supercarrier_guns_high": {
+  "en": "Fleet Strike Group",
+  "de": "Flotten-Schlagverband"
+ },
+ "ship_mod_nuclear_supercarrier_guns_high_desc": {
+  "en": "Maximum-strike-density air wing — multi-role fighters, stand-off bombers, refueling tankers. [concept_power_projection] in air-frame form.",
+  "de": "Luftgeschwader mit maximaler Schlagdichte – Mehrzweckjäger, Bomber mit Stand-off-Fähigkeit, Tankflugzeuge. [concept_power_projection] in Flugzeugform."
+ },
+ "ship_mod_nuclear_supercarrier_guns_light": {
+  "en": "Fleet Air Defense Wing",
+  "de": "Flotten-Luftverteidigungsgeschwader"
+ },
+ "ship_mod_nuclear_supercarrier_guns_light_desc": {
+  "en": "An air group composed primarily of interceptors and anti-submarine helicopters. Optimized for fleet defense.",
+  "de": "Ein Luftgeschwader, das hauptsächlich aus Abfangjägern und U-Jagd-Hubschraubern besteht. Optimiert für die Flottenverteidigung."
+ },
+ "ship_mod_nuclear_supercarrier_guns_medium": {
+  "en": "Composite Carrier Air Wing",
+  "de": "Gemischtes Trägerluftgeschwader"
+ },
+ "ship_mod_nuclear_supercarrier_guns_medium_desc": {
+  "en": "Mixed wing of strike fighters, electronic-warfare aircraft, and AEW. The post-1960s carrier standard.",
+  "de": "Gemischtes Geschwader aus Mehrzweckkampfflugzeugen, Elektronischer-Kampfführungs-Flugzeugen und Frühwarnflugzeugen. Der Trägerstandard nach den 1960er-Jahren."
+ },
+ "ship_mod_nuclear_supercarrier_propulsion_high": {
+  "en": "Heavy Twin-Reactor Plant",
+  "de": "Schwere Doppelreaktoranlage"
+ },
+ "ship_mod_nuclear_supercarrier_propulsion_high_desc": {
+  "en": "Twin A6W reactors with electric-drive integration. Indefinite range, blistering top speed, full damage redundancy.",
+  "de": "Zwei A6W-Reaktoren mit integriertem Elektroantrieb. Unbegrenzte Reichweite, rasante Höchstgeschwindigkeit, volle Schadensredundanz."
+ },
+ "ship_mod_nuclear_supercarrier_propulsion_light": {
+  "en": "Single-Reactor Plant",
+  "de": "Einzelreaktoranlage"
+ },
+ "ship_mod_nuclear_supercarrier_propulsion_light_desc": {
+  "en": "A single A4W naval reactor drives all four shafts via reduction gearing. Adequate cruise; modest sprint.",
+  "de": "Ein einzelner A4W-Marinereaktor treibt über ein Untersetzungsgetriebe alle vier Wellen an. Ausreichende Marschfahrt, bescheidener Spurt."
+ },
+ "ship_mod_nuclear_supercarrier_propulsion_medium": {
+  "en": "Twin-Reactor Plant",
+  "de": "Doppelreaktoranlage"
+ },
+ "ship_mod_nuclear_supercarrier_propulsion_medium_desc": {
+  "en": "Twin A4W reactors on independent shaft pairs. Survives a hit to one reactor and keeps moving.",
+  "de": "Zwei A4W-Reaktoren auf unabhängigen Wellenpaaren. Übersteht einen Treffer in einem Reaktor und bleibt manövrierfähig."
+ },
+ "ship_mod_nuclear_supercarrier_range_high": {
+  "en": "Permanent Strike Group",
+  "de": "Dauerhafter Schlagverband"
+ },
+ "ship_mod_nuclear_supercarrier_range_high_desc": {
+  "en": "Maximum stores capacity plus replenishment integration. The carrier remains at sea for the entire campaign.",
+  "de": "Maximale Vorratskapazität plus Nachschubintegration. Der Träger bleibt für den gesamten Feldzug auf See."
+ },
+ "ship_mod_nuclear_supercarrier_range_light": {
+  "en": "Coastal Operations",
+  "de": "Küsteneinsätze"
+ },
+ "ship_mod_nuclear_supercarrier_range_light_desc": {
+  "en": "Storage configured for short forward-deployed cruises. The carrier still needs the home port nearby.",
+  "de": "Lagerkapazität für kurze vorgeschobene Einsatzfahrten ausgelegt. Der Träger benötigt weiterhin einen nahen Heimathafen."
+ },
+ "ship_mod_nuclear_supercarrier_range_medium": {
+  "en": "Forward Strike Group",
+  "de": "Vorgeschobener Schlagverband"
+ },
+ "ship_mod_nuclear_supercarrier_range_medium_desc": {
+  "en": "Provisioning for sustained forward-deployed operations with periodic underway replenishment.",
+  "de": "Versorgung für anhaltende vorgeschobene Operationen mit regelmäßigem Nachschub auf See."
+ },
+ "ship_mod_pulsed_laser_escort_armor_high": {
+  "en": "Adaptive Thermal Hull",
+  "de": "Adaptiver Thermalrumpf"
+ },
+ "ship_mod_pulsed_laser_escort_armor_high_desc": {
+  "en": "Phase-change cooling channels embedded in the armor distribute incident heat. Resists sustained DEW engagements.",
+  "de": "In die Panzerung eingebettete Phasenwechsel-Kühlkanäle verteilen einfallende Hitze. Widersteht anhaltendem Beschuss durch gerichtete Energiewaffen."
+ },
+ "ship_mod_pulsed_laser_escort_armor_light": {
+  "en": "Heat-Resistant Hull",
+  "de": "Hitzebeständiger Rumpf"
+ },
+ "ship_mod_pulsed_laser_escort_armor_light_desc": {
+  "en": "Ceramic-impregnated composite hull. Resists thermal damage from directed-energy fire.",
+  "de": "Keramikimprägnierter Verbundrumpf. Widersteht thermischen Schäden durch Beschuss mit gerichteter Energie."
+ },
+ "ship_mod_pulsed_laser_escort_armor_medium": {
+  "en": "Reflective Composite Hull",
+  "de": "Reflektierender Verbundrumpf"
+ },
+ "ship_mod_pulsed_laser_escort_armor_medium_desc": {
+  "en": "Mirrored coatings over the heat-resistant substrate. Bounces a meaningful fraction of incoming laser energy.",
+  "de": "Verspiegelte Beschichtungen über dem hitzebeständigen Untergrund. Reflektiert einen nennenswerten Teil der ankommenden Laserenergie."
+ },
+ "ship_mod_pulsed_laser_escort_guns_high": {
+  "en": "Pulsed Laser Array",
+  "de": "Gepulstes Laser-Array"
+ },
+ "ship_mod_pulsed_laser_escort_guns_high_desc": {
+  "en": "Phase-locked turret array delivers focused pulses with sub-millisecond timing. Lethal against capital ships at line of sight.",
+  "de": "Phasensynchronisiertes Turm-Array liefert fokussierte Pulse mit Sub-Millisekunden-Präzision. Tödlich gegen Großkampfschiffe in Sichtlinie."
+ },
+ "ship_mod_pulsed_laser_escort_guns_light": {
+  "en": "Single Laser Battery",
+  "de": "Einzelne Laserbatterie"
+ },
+ "ship_mod_pulsed_laser_escort_guns_light_desc": {
+  "en": "One main directed-energy turret with supporting capacitor bank. Effective against soft targets and missiles.",
+  "de": "Ein Haupt-Turm für gerichtete Energie mit unterstützender Kondensatorbank. Wirksam gegen weiche Ziele und Raketen."
+ },
+ "ship_mod_pulsed_laser_escort_guns_medium": {
+  "en": "Multi-Spectrum Laser Suite",
+  "de": "Multispektrale Laseranlage"
+ },
+ "ship_mod_pulsed_laser_escort_guns_medium_desc": {
+  "en": "Multiple wavelength bands in independent turrets. Penetrates a wider range of armor and counter-laser defenses.",
+  "de": "Mehrere Wellenlängenbänder in unabhängigen Türmen. Durchdringt ein breiteres Spektrum an Panzerung und Laserabwehrsystemen."
+ },
+ "ship_mod_pulsed_laser_escort_propulsion_high": {
+  "en": "Sustained High-Power Drive",
+  "de": "Ausdauernder Hochleistungsantrieb"
+ },
+ "ship_mod_pulsed_laser_escort_propulsion_high_desc": {
+  "en": "Triple-redundant turbine generators with cryogenic capacitor banking. Sustains weapon-fire and propulsion simultaneously.",
+  "de": "Dreifach redundante Turbinengeneratoren mit kryogener Kondensatorbank. Versorgt Waffenbeschuss und Antrieb gleichzeitig."
+ },
+ "ship_mod_pulsed_laser_escort_propulsion_light": {
+  "en": "Power-Density Drive",
+  "de": "Leistungsdichte-Antrieb"
+ },
+ "ship_mod_pulsed_laser_escort_propulsion_light_desc": {
+  "en": "Compact gas-turbine plant balanced for the ship's electrical demands.",
+  "de": "Kompakte Gasturbinenanlage, abgestimmt auf den elektrischen Bedarf des Schiffs."
+ },
+ "ship_mod_pulsed_laser_escort_propulsion_medium": {
+  "en": "High-Power Drive",
+  "de": "Hochleistungsantrieb"
+ },
+ "ship_mod_pulsed_laser_escort_propulsion_medium_desc": {
+  "en": "Augmented turbine generators with heavy-load DC bus. The standard plant for a directed-energy combatant.",
+  "de": "Verstärkte Turbinengeneratoren mit hochbelastbarer Gleichstromschiene. Die Standardanlage für ein Kampfschiff mit gerichteter Energie."
+ },
+ "ship_mod_pulsed_laser_escort_range_high": {
+  "en": "Sustained Capacitor Bank",
+  "de": "Ausdauernde Kondensatorbank"
+ },
+ "ship_mod_pulsed_laser_escort_range_high_desc": {
+  "en": "Maximum-capacity hybrid capacitor and battery stack with onboard fast-charge generation. Effectively unlimited weapon fire.",
+  "de": "Hybrid-Kondensator- und Batteriestapel mit maximaler Kapazität und bordeigener Schnellladeerzeugung. Praktisch unbegrenzter Waffenbeschuss."
+ },
+ "ship_mod_pulsed_laser_escort_range_light": {
+  "en": "Capacitor Bank",
+  "de": "Kondensatorbank"
+ },
+ "ship_mod_pulsed_laser_escort_range_light_desc": {
+  "en": "Standard capacitor stack supports limited high-rate-of-fire engagements.",
+  "de": "Standard-Kondensatorstapel ermöglicht begrenzte Gefechte mit hoher Feuerrate."
+ },
+ "ship_mod_pulsed_laser_escort_range_medium": {
+  "en": "Heavy Capacitor Bank",
+  "de": "Schwere Kondensatorbank"
+ },
+ "ship_mod_pulsed_laser_escort_range_medium_desc": {
+  "en": "Expanded capacitor and supercapacitor stack. Many sustained engagements before recharge.",
+  "de": "Erweiterter Kondensator- und Superkondensatorstapel. Viele anhaltende Gefechte vor dem Wiederaufladen."
+ },
+ "ship_mod_swarm_coordination_vessel_armor_high": {
+  "en": "Self-Healing Composite Hull",
+  "de": "Selbstheilender Verbundrumpf"
+ },
+ "ship_mod_swarm_coordination_vessel_armor_high_desc": {
+  "en": "Active polymer composite redistributes itself to seal small breaches. The ship literally repairs minor damage on the fly.",
+  "de": "Aktiver Polymerverbundwerkstoff verteilt sich selbst neu, um kleine Lecks abzudichten. Das Schiff repariert kleinere Schäden buchstäblich im laufenden Betrieb."
+ },
+ "ship_mod_swarm_coordination_vessel_armor_light": {
+  "en": "Networked Hull Sensors",
+  "de": "Vernetzte Rumpfsensoren"
+ },
+ "ship_mod_swarm_coordination_vessel_armor_light_desc": {
+  "en": "Distributed strain and damage sensors. Damage-control teams have real-time hull awareness.",
+  "de": "Verteilte Spannungs- und Schadenssensoren. Schadenskontrollteams erhalten Rumpfdaten in Echtzeit."
+ },
+ "ship_mod_swarm_coordination_vessel_armor_medium": {
+  "en": "Distributed Damage Control",
+  "de": "Verteilte Schadenskontrolle"
+ },
+ "ship_mod_swarm_coordination_vessel_armor_medium_desc": {
+  "en": "Automated damage-control nodes seal compartments and route firefighting resources without crew intervention.",
+  "de": "Automatisierte Schadenskontrollknoten dichten Abteile ab und lenken Brandbekämpfungsressourcen ohne Eingreifen der Besatzung."
+ },
+ "ship_mod_swarm_coordination_vessel_guns_high": {
+  "en": "Saturated Drone Swarm",
+  "de": "Gesättigter Drohnenschwarm"
+ },
+ "ship_mod_swarm_coordination_vessel_guns_high_desc": {
+  "en": "Maximum hangar capacity with on-board drone fabrication. The vessel projects a self-replicating, distributed combat presence.",
+  "de": "Maximale Hangarkapazität mit Drohnenfertigung an Bord. Das Schiff projiziert eine sich selbst reproduzierende, verteilte Kampfpräsenz."
+ },
+ "ship_mod_swarm_coordination_vessel_guns_light": {
+  "en": "Drone Hangar",
+  "de": "Drohnenhangar"
+ },
+ "ship_mod_swarm_coordination_vessel_guns_light_desc": {
+  "en": "Compact internal drone bay launches and recovers a modest drone swarm continuously.",
+  "de": "Kompakte interne Drohnenbucht startet und birgt kontinuierlich einen bescheidenen Drohnenschwarm."
+ },
+ "ship_mod_swarm_coordination_vessel_guns_medium": {
+  "en": "Expanded Drone Hangar",
+  "de": "Erweiterter Drohnenhangar"
+ },
+ "ship_mod_swarm_coordination_vessel_guns_medium_desc": {
+  "en": "Multi-deck drone bay with simultaneous launch and recovery from flight, surface, and submerged drone classes.",
+  "de": "Mehrdeck-Drohnenbucht mit gleichzeitigem Start und Bergung von Luft-, Überwasser- und Unterwasserdrohnenklassen."
+ },
+ "ship_mod_swarm_coordination_vessel_propulsion_high": {
+  "en": "Distributed Power Mesh",
+  "de": "Verteiltes Stromnetz"
+ },
+ "ship_mod_swarm_coordination_vessel_propulsion_high_desc": {
+  "en": "Mesh-topology power network with autonomous reconfiguration. No part of the ship loses power unless the entire ship does.",
+  "de": "Stromnetz in Maschentopologie mit autonomer Neukonfiguration. Kein Teil des Schiffs verliert Strom, es sei denn das gesamte Schiff tut es."
+ },
+ "ship_mod_swarm_coordination_vessel_propulsion_light": {
+  "en": "Networked Power Plant",
+  "de": "Vernetzte Energieanlage"
+ },
+ "ship_mod_swarm_coordination_vessel_propulsion_light_desc": {
+  "en": "Distributed gas-turbine generators on a redundant power network. Survives single-point failures.",
+  "de": "Verteilte Gasturbinengeneratoren an einem redundanten Stromnetz. Übersteht Einzelausfälle."
+ },
+ "ship_mod_swarm_coordination_vessel_propulsion_medium": {
+  "en": "Integrated Power Network",
+  "de": "Integriertes Stromnetz"
+ },
+ "ship_mod_swarm_coordination_vessel_propulsion_medium_desc": {
+  "en": "Fully integrated electric propulsion with priority-rerouting bus. Power flows where it's needed in milliseconds.",
+  "de": "Voll integrierter Elektroantrieb mit priorisierender Umleitungsschiene. Strom fließt innerhalb von Millisekunden dorthin, wo er gebraucht wird."
+ },
+ "ship_mod_swarm_coordination_vessel_range_high": {
+  "en": "Drone Strategic Base",
+  "de": "Strategische Drohnenbasis"
+ },
+ "ship_mod_swarm_coordination_vessel_range_high_desc": {
+  "en": "Onboard drone fabrication, repair, and stockpiling. The vessel's drone swarm is regenerated faster than it is attrited.",
+  "de": "Drohnenfertigung, -reparatur und -lagerung an Bord. Der Drohnenschwarm des Schiffs regeneriert sich schneller, als er abgenutzt wird."
+ },
+ "ship_mod_swarm_coordination_vessel_range_light": {
+  "en": "Drone Refit Bay",
+  "de": "Drohnen-Umrüstbucht"
+ },
+ "ship_mod_swarm_coordination_vessel_range_light_desc": {
+  "en": "Onboard drone rearming and minor refit capability. Sustains drone operations for limited engagements.",
+  "de": "Drohnen-Wiederbewaffnung und kleinere Umrüstungen an Bord. Erhält Drohnenoperationen für begrenzte Gefechte aufrecht."
+ },
+ "ship_mod_swarm_coordination_vessel_range_medium": {
+  "en": "Drone Forward Base",
+  "de": "Vorgeschobene Drohnenbasis"
+ },
+ "ship_mod_swarm_coordination_vessel_range_medium_desc": {
+  "en": "Full drone refit, rearming, and field repair facilities. Sustains a drone air group through extended operations.",
+  "de": "Vollständige Anlagen zur Umrüstung, Wiederbewaffnung und Feldreparatur von Drohnen. Erhält ein Drohnen-Luftgeschwader über längere Operationen aufrecht."
+ },
+ "utility_mod_aegis_air_defense": {
+  "en": "Aegis Air Defense",
+  "de": "Aegis-Luftverteidigung"
+ },
+ "utility_mod_aegis_air_defense_desc": {
+  "en": "Networked phased-array radars and surface-to-air missile cells provide layered fleet air defense, particularly effective at engaging missile-armed surface combatants before they reach launch range.",
+  "de": "Vernetzte Phased-Array-Radare und Boden-Luft-Raketenzellen bieten eine gestaffelte Luftverteidigung der Flotte und sind besonders wirksam gegen raketenbewaffnete Überwasserkampfschiffe, bevor diese in Abschussreichweite gelangen."
+ },
+ "utility_mod_ballistic_missile_bay": {
+  "en": "Ballistic Missile Bay",
+  "de": "Ballistische Raketenbucht"
+ },
+ "utility_mod_ballistic_missile_bay_desc": {
+  "en": "Vertical-launch missile cells turn the ship into a long-range bombardment platform, dramatically increasing its [concept_blockade_strength] and [Concept('concept_hull_attack_damage', 'hull damage')].",
+  "de": "Vertikal startende Raketenzellen verwandeln das Schiff in eine Langstreckenbombardierungsplattform und erhöhen seine [concept_blockade_strength] und seinen [Concept('concept_hull_attack_damage', 'Rumpf-Angriffsschaden')] drastisch."
+ },
+ "utility_mod_composite_armor_plating": {
+  "en": "Composite Armor Plating",
+  "de": "Verbundpanzerung"
+ },
+ "utility_mod_composite_armor_plating_desc": {
+  "en": "Layered ceramic-and-metal-matrix composite armor with reactive elements absorbs and deflects modern anti-ship munitions, reducing both incoming damage and the chance of catastrophic critical hits.",
+  "de": "Mehrschichtige Verbundpanzerung aus Keramik- und Metallmatrix mit Reaktivelementen absorbiert und lenkt moderne Anti-Schiffs-Munition ab und verringert sowohl den eingehenden Schaden als auch die Wahrscheinlichkeit katastrophaler kritischer Treffer."
+ },
+ "utility_mod_dew_point_defense": {
+  "en": "DEW Point Defense",
+  "de": "DEW-Nahbereichsverteidigung"
+ },
+ "utility_mod_dew_point_defense_desc": {
+  "en": "Directed-energy point-defense turrets shoot down incoming missiles and aircraft, sharply reducing the ship's vulnerability and contributing to fleet [concept_screening].",
+  "de": "Nahbereichstürme mit gerichteter Energie schießen ankommende Raketen und Flugzeuge ab, verringern die Verwundbarkeit des Schiffs erheblich und tragen zur [concept_screening] der Flotte bei."
+ },
+ "utility_mod_drone_complement": {
+  "en": "Drone Complement",
+  "de": "Drohnenkontingent"
+ },
+ "utility_mod_drone_complement_desc": {
+  "en": "An onboard drone hangar and control suite that improves the ship's accuracy and [concept_screening] capability while extending [concept_detection] range.",
+  "de": "Ein bordeigener Drohnenhangar mit Steuerungssystem, der die Treffgenauigkeit und [concept_screening]-Fähigkeit des Schiffs verbessert und gleichzeitig die [concept_detection]-Reichweite erhöht."
+ },
+ "utility_mod_helicopter_pad": {
+  "en": "Helicopter Pad",
+  "de": "Hubschrauberlandeplatz"
+ },
+ "utility_mod_helicopter_pad_desc": {
+  "en": "A flight deck and hangar for naval helicopters and tilt-rotor aircraft, expanding the ship's troop transport and amphibious assault capabilities.",
+  "de": "Ein Flugdeck und Hangar für Marinehubschrauber und Kipprotor-Flugzeuge, das die Truppentransport- und amphibischen Angriffsfähigkeiten des Schiffs erweitert."
+ },
+ "utility_mod_sonar_suite": {
+  "en": "Sonar Suite",
+  "de": "Sonaranlage"
+ },
+ "utility_mod_sonar_suite_desc": {
+  "en": "Active and passive sonar arrays paired with depth-charge mounts. Devastating against submarines, with greatly improved general [concept_detection].",
+  "de": "Aktive und passive Sonar-Arrays kombiniert mit Wasserbombenwerfern. Verheerend gegen U-Boote, mit deutlich verbesserter allgemeiner [concept_detection]."
+ },
+ "utility_mod_underway_replenishment": {
+  "en": "Underway Replenishment",
+  "de": "Nachschub auf See"
+ },
+ "utility_mod_underway_replenishment_desc": {
+  "en": "Specialized fuel and stores transfer systems allow the ship to be resupplied at sea, dramatically extending operational range and time-on-station.",
+  "de": "Spezialisierte Systeme zur Treibstoff- und Vorratsübergabe ermöglichen es, das Schiff auf See zu versorgen, was die Einsatzreichweite und Stehzeit im Einsatzgebiet drastisch erhöht."
+ }
+}

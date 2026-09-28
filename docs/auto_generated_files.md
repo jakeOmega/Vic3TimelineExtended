@@ -90,7 +90,7 @@ Generated on every `scripts/deploy.sh` run into the gitignored `build/` folder, 
 
 | Deployed as | Staged at | Owner script | Notes |
 |---|---|---|---|
-| `localization/<language>/**/*_l_<language>.yml` for the ten non-English game languages | `build/localization/<language>/` | `scripts/generators/gen_non_english_loc.py` | A copy of every file under `localization/english/` (`replace/` included), byte-identical apart from the `l_<language>:` header and the file-name suffix. The game shows raw keys, not English, for a key the player's language lacks. The deploy watcher ignores `build/`; the main rsync excludes these folders so its `--delete` leaves them alone. |
+| `localization/<language>/**/*_l_<language>.yml` for the ten non-English game languages | `build/localization/<language>/` | `scripts/generators/gen_non_english_loc.py` | A copy of every file under `localization/english/` (`replace/` included), byte-identical apart from the `l_<language>:` header and the file-name suffix, except that a language with a translation memory (`i18n/<language>/tm/*.json`, written by `scripts/i18n/translate_loc.py merge`) has each translated value swapped in and its declined country-name forms (`<TAG>_NOM`, …) added after the base key. Untranslated keys, and keys whose English changed beyond a small tweak, stay English. Edit translations in the TM, never in the staged `.yml`; see `i18n/README.md`. The game shows raw keys, not English, for a key the player's language lacks. The deploy watcher ignores `build/`; the main rsync excludes these folders so its `--delete` leaves them alone. |
 
 ## "One-shot generator" outputs (committed; may be hand-edited afterwards)
 

@@ -1,0 +1,466 @@
+{
+ "BUILDING_MAP_LIST_PANEL_PROFIT_IMPACT_TOOLTIP": {
+  "en": "#header Predicted [SelectLocalization(ObjectsEqual(MapListBuildingPanel.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] after expansion#!\\n(Excluding [Concept('concept_building_wage','$concept_building_wages$')])\\n$TOOLTIP_DELIMITER$\\nA prediction of how much expanding this building would affect its weekly [SelectLocalization(ObjectsEqual(MapListBuildingPanel.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')].",
+  "de": "#header Voraussichtliche [SelectLocalization(ObjectsEqual(MapListBuildingPanel.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] nach dem Ausbau#!\\n(ohne [Concept('concept_building_wage','$concept_building_wages$')])\\n$TOOLTIP_DELIMITER$\\nEine Prognose, wie stark sich der Ausbau dieses Gebäudes auf seine wöchentlichen [SelectLocalization(ObjectsEqual(MapListBuildingPanel.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] auswirken würde."
+ },
+ "CAN_EXPAND_BUILDING_TOOLTIP": {
+  "en": "#header $BUILD_OR_EXPAND$ [BUILDING_TYPE.GetName] in [STATE.GetName]#! (Size: [BUILDING.GetExpansionLevelBreakdownDesc])\\n[AddLocalizationIf( Not(STATE.GetOwner.IsLocalPlayer), 'CAN_EXPAND_BUILDING_TOOLTIP_FOREIGN' )]#tooltippable #tooltip:[GetRawTextTooltipTag('$PROFIT_IMPACT_DESC$')] #v @money!$PROFIT_IMPACT|K+=$#!#!#! Predicted [SelectLocalization(Or(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), BUILDING.GetBuildingType.IsMilitaryBuilding), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / week\\n[ConcatIfNeitherEmpty('$PRODUCTIVITY$', '\\n')][ConcatIfNeitherEmpty('$QUALIFICATIONS$', '\\n')][SelectLocalization( LessThan_CFixedPoint(State.GetConstructionEfficiency, '(CFixedPoint)0'), 'CONSTRUCTION_QUEUE_STATE_CONSTRUCTION_EFFICIENCY_WARNING', '')]$TOOLTIP_DELIMITER$\\n@construction! $REQUIRED_CONSTRUCTION|v0$ [concept_construction] ($CONSTRUCTION_COST_CHANGE$)\\n$EXPAND_BUILDING_TT_NATIONAL_MAINTENANCE$\\n\\n$PRODUCTION_BREAKDOWN$\\n\\n[STATE.GetMarketAccessStatus]\\nAvailable Labor: [State.GetNumSubsistenceWorkingAdults|Dv] [GetPopType('peasants').GetName] [SelectLocalization( GreaterThan_int64(State.GetNumUnemployedWorkingAdults, '(int64)0'), 'AND_UNEMPLOYED', '' )][ConcatIfNeitherEmpty('$PORT_INFO$', '\\n')]\\n\\n$KEY_MODIFIER_INSTRUCTIONS$",
+  "de": "#header $BUILD_OR_EXPAND$ [BUILDING_TYPE.GetName] in [STATE.GetName]#! (Größe: [BUILDING.GetExpansionLevelBreakdownDesc])\\n[AddLocalizationIf( Not(STATE.GetOwner.IsLocalPlayer), 'CAN_EXPAND_BUILDING_TOOLTIP_FOREIGN' )]#tooltippable #tooltip:[GetRawTextTooltipTag('$PROFIT_IMPACT_DESC$')] #v @money!$PROFIT_IMPACT|K+=$#!#!#! Voraussichtlich(e) [SelectLocalization(Or(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), BUILDING.GetBuildingType.IsMilitaryBuilding), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / Woche\\n[ConcatIfNeitherEmpty('$PRODUCTIVITY$', '\\n')][ConcatIfNeitherEmpty('$QUALIFICATIONS$', '\\n')][SelectLocalization( LessThan_CFixedPoint(State.GetConstructionEfficiency, '(CFixedPoint)0'), 'CONSTRUCTION_QUEUE_STATE_CONSTRUCTION_EFFICIENCY_WARNING', '')]$TOOLTIP_DELIMITER$\\n@construction! $REQUIRED_CONSTRUCTION|v0$ [concept_construction] ($CONSTRUCTION_COST_CHANGE$)\\n$EXPAND_BUILDING_TT_NATIONAL_MAINTENANCE$\\n\\n$PRODUCTION_BREAKDOWN$\\n\\n[STATE.GetMarketAccessStatus]\\nVerfügbare Arbeitskräfte: [State.GetNumSubsistenceWorkingAdults|Dv] [GetPopType('peasants').GetName] [SelectLocalization( GreaterThan_int64(State.GetNumUnemployedWorkingAdults, '(int64)0'), 'AND_UNEMPLOYED', '' )][ConcatIfNeitherEmpty('$PORT_INFO$', '\\n')]\\n\\n$KEY_MODIFIER_INSTRUCTIONS$"
+ },
+ "CULTURAL_COMMUNITY_DECAYING_ACCEPTANCE_DELTA_DESC": {
+  "en": "$VALUE|0+=$ from Cultural Integration (will increase by [CulturalCommunity.GetState.MakeScope.ScriptValue('total_state_yearly_cultural_acceptance_add')] per year)",
+  "de": "$VALUE|0+=$ durch Kulturelle Integration (steigt jährlich um [CulturalCommunity.GetState.MakeScope.ScriptValue('total_state_yearly_cultural_acceptance_add')])"
+ },
+ "EXPANSION_PROFIT_IMPACT": {
+  "en": "#header Predicted [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] of new level#!\\n#v @money!$VAL|K+=$#! Predicted [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / week\\n(Excluding [Concept('concept_building_wage','$concept_building_wages$')])\\n$TOOLTIP_DELIMITER$\\n$IMPACT_DETAILS$\\n\\n$BUILDING_PREDICTION_DISCLAIMER$",
+  "de": "#header Voraussichtliche [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] der neuen Stufe#!\\n#v @money!$VAL|K+=$#! Voraussichtliche [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / Woche\\n(ohne [Concept('concept_building_wage','$concept_building_wages$')])\\n$TOOLTIP_DELIMITER$\\n$IMPACT_DETAILS$\\n\\n$BUILDING_PREDICTION_DISCLAIMER$"
+ },
+ "academics_desc": {
+  "en": "Researchers, doctors, lawyers and other educated professionals, especially those studying and teaching in academic institutions. Politically, they are at the forefront of the Intelligentsia.",
+  "de": "Forscher, Ärzte, Anwälte und andere gebildete Fachleute, insbesondere jene, die an akademischen Institutionen studieren und lehren. Politisch stehen sie an der Spitze der Intellektuellen."
+ },
+ "building_art_academy": {
+  "en": "Creative Industry",
+  "de": "Kreativindustrie"
+ },
+ "building_chemical_plant": {
+  "en": "Chemical Plants",
+  "de": "Chemiewerke"
+ },
+ "building_electrics_industry": {
+  "en": "Wired Telecommunications Industries",
+  "de": "Kabelgebundene Telekommunikationsindustrie"
+ },
+ "building_synthetics_plant": {
+  "en": "Synthetic Dyes Industries",
+  "de": "Industrie für synthetische Färbemittel"
+ },
+ "coal": {
+  "en": "Energy and Carbon Minerals",
+  "de": "Energie- und Kohlenstoffmineralien"
+ },
+ "company_basic_electrics": {
+  "en": "Telecommunications",
+  "de": "Telekommunikation"
+ },
+ "company_basic_electrics_dynamic_name_tag_plural": {
+  "en": "Telecommunications",
+  "de": "Telekommunikation"
+ },
+ "company_basic_electrics_dynamic_name_tag_singular": {
+  "en": "Telecommunication",
+  "de": "Telekommunikation"
+ },
+ "concept_harvest_condition": {
+  "en": "Local Condition",
+  "de": "Lokale Bedingung"
+ },
+ "concept_harvest_condition_desc": {
+  "en": "A $concept_harvest_condition$ is an occurrence that affects a [Concept('concept_country','$concept_country_possessive$')] local economy with a variable [Concept('concept_harvest_condition_intensity','$concept_harvest_condition_intensity_short$')], duration, and range. It is generally a natural phenomenon and can have either #g positive#! or #r negative#! effects on the [Concept('concept_state','$concept_states$')] it affects. $concept_harvest_conditions$ will mostly affect the [concept_throughput] of agricultural [Concept('concept_building','$concept_buildings$')], but they can also have an effect on your [Concept('concept_pop','$concept_population$')] and $concept_states$ in other ways, such as reducing available [concept_infrastructure].\\n\\n$concept_harvest_conditions$ will often affect $concept_states$ surrounding their #b epicenter#!. In such cases, the [concept_harvest_condition_intensity] will generally decrease as the distance to the #b epicenter#! increases.\\n\\n#title Potential $concept_harvest_conditions$:#!#indent_newline:3 \\n[GetHarvestConditionTypesList]#!",
+  "de": "Eine $concept_harvest_condition$ ist ein Ereignis, das die lokale Wirtschaft [Concept('concept_country','$concept_country_possessive$')] mit variabler [Concept('concept_harvest_condition_intensity','$concept_harvest_condition_intensity_short$')], Dauer und Reichweite beeinflusst. Es handelt sich in der Regel um ein Naturphänomen, das entweder #g positive#! oder #r negative#! Auswirkungen auf den betroffenen [Concept('concept_state','$concept_states$')] haben kann. $concept_harvest_conditions$ wirken sich meist auf den [concept_throughput] landwirtschaftlicher [Concept('concept_building','$concept_buildings$')] aus, können aber auch Ihre [Concept('concept_pop','$concept_population$')] und $concept_states$ auf andere Weise beeinflussen, etwa durch eine Verringerung der verfügbaren [concept_infrastructure].\\n\\n$concept_harvest_conditions$ betreffen oft $concept_states$ rund um ihr #b Epizentrum#!. In solchen Fällen nimmt die [concept_harvest_condition_intensity] mit zunehmender Entfernung vom #b Epizentrum#! meist ab.\\n\\n#title Mögliche $concept_harvest_conditions$:#!#indent_newline:3 \\n[GetHarvestConditionTypesList]#!"
+ },
+ "concept_harvest_condition_intensity": {
+  "en": "Intensity",
+  "de": "Intensität"
+ },
+ "concept_harvest_conditions": {
+  "en": "Local Conditions",
+  "de": "Lokale Bedingungen"
+ },
+ "country_institution_cost_institution_home_affairs_mult": {
+  "en": "@bur![Nbsp][concept_bureaucracy] Cost of [GetInstitutionType('institution_home_affairs').GetName]",
+  "de": "@bur![Nbsp][concept_bureaucracy]-Kosten für [GetInstitutionType('institution_home_affairs').GetName]"
+ },
+ "country_institution_cost_institution_home_affairs_mult_desc": {
+  "en": "An increase or reduction to the @bur![Nbsp][concept_bureaucracy] cost of the [GetInstitutionType('institution_home_affairs').GetName] [concept_institution]",
+  "de": "Eine Erhöhung oder Senkung der @bur![Nbsp][concept_bureaucracy]-Kosten der [concept_institution] [GetInstitutionType('institution_home_affairs').GetName]"
+ },
+ "cultural_erasure": {
+  "en": "Latent Hostility",
+  "de": "Latente Feindseligkeit"
+ },
+ "fertilizer": {
+  "en": "Chemicals",
+  "de": "Chemikalien"
+ },
+ "fine_art": {
+  "en": "Art and Entertainment",
+  "de": "Kunst und Unterhaltung"
+ },
+ "glass": {
+  "en": "Glass and Plastics",
+  "de": "Glas und Kunststoffe"
+ },
+ "goods_input_coal_add": {
+  "en": "@coal! $coal$ input",
+  "de": "@coal! $coal$-Einsatz"
+ },
+ "goods_input_coal_add_desc": {
+  "en": "The amount of @coal! $coal$ consumed by buildings",
+  "de": "Wie viel @coal! $coal$ von Gebäuden verbraucht wird"
+ },
+ "goods_input_fertilizer_add": {
+  "en": "@fertilizer! $fertilizer$ Input",
+  "de": "@fertilizer! $fertilizer$-Einsatz"
+ },
+ "goods_input_fertilizer_add_desc": {
+  "en": "The amount of @fertilizer! $fertilizer$ consumed by buildings",
+  "de": "Wie viel @fertilizer! $fertilizer$ von Gebäuden verbraucht wird"
+ },
+ "goods_input_glass_add": {
+  "en": "@glass! $glass$ input",
+  "de": "@glass! $glass$-Einsatz"
+ },
+ "goods_input_glass_add_desc": {
+  "en": "The amount of @glass! $glass$ consumed by buildings",
+  "de": "Wie viel @glass! $glass$ von Gebäuden verbraucht wird"
+ },
+ "goods_input_iron_add": {
+  "en": "@iron! $iron$ input",
+  "de": "@iron! $iron$-Einsatz"
+ },
+ "goods_input_iron_add_desc": {
+  "en": "The amount of @iron! $iron$ consumed by buildings",
+  "de": "Wie viel @iron! $iron$ von Gebäuden verbraucht wird"
+ },
+ "goods_input_lead_add": {
+  "en": "@lead! $lead$ input",
+  "de": "@lead! $lead$-Einsatz"
+ },
+ "goods_input_lead_add_desc": {
+  "en": "The amount of @lead! $lead$ consumed by buildings",
+  "de": "Wie viel @lead! $lead$ von Gebäuden verbraucht wird"
+ },
+ "goods_input_opium_add": {
+  "en": "@opium! $opium$ input",
+  "de": "@opium! $opium$-Einsatz"
+ },
+ "goods_input_opium_add_desc": {
+  "en": "The amount of @opium! $opium$ consumed by buildings",
+  "de": "Wie viel @opium! $opium$ von Gebäuden verbraucht wird"
+ },
+ "goods_input_radios_add": {
+  "en": "@radios! $radios$ input",
+  "de": "@radios! $radios$-Einsatz"
+ },
+ "goods_input_radios_add_desc": {
+  "en": "The amount of @radios! $radios$ consumed by buildings",
+  "de": "Wie viel @radios! $radios$ von Gebäuden verbraucht wird"
+ },
+ "goods_input_radios_mult": {
+  "en": "@radios![Nbsp]$radios$ input",
+  "de": "@radios![Nbsp]$radios$-Einsatz"
+ },
+ "goods_input_radios_mult_desc": {
+  "en": "The amount of @radios![Nbsp]$radios$ consumed by buildings",
+  "de": "Wie viel @radios![Nbsp]$radios$ von Gebäuden verbraucht wird"
+ },
+ "goods_input_sulfur_add": {
+  "en": "@sulfur! $sulfur$ input",
+  "de": "@sulfur! $sulfur$-Einsatz"
+ },
+ "goods_input_sulfur_add_desc": {
+  "en": "The amount of @sulfur! $sulfur$ consumed by buildings",
+  "de": "Wie viel @sulfur! $sulfur$ von Gebäuden verbraucht wird"
+ },
+ "goods_input_telephones_add": {
+  "en": "@telephones! $telephones$ input",
+  "de": "@telephones! $telephones$-Einsatz"
+ },
+ "goods_input_telephones_add_desc": {
+  "en": "The amount of @telephones! $telephones$ consumed by buildings",
+  "de": "Wie viel @telephones! $telephones$ von Gebäuden verbraucht wird"
+ },
+ "goods_input_transportation_add": {
+  "en": "@transportation! $transportation$ input",
+  "de": "@transportation! $transportation$-Einsatz"
+ },
+ "goods_input_transportation_add_desc": {
+  "en": "The amount of @transportation! $transportation$ consumed by buildings",
+  "de": "Wie viel @transportation! $transportation$ von Gebäuden verbraucht wird"
+ },
+ "goods_output_coal_add": {
+  "en": "@coal! $coal$ output",
+  "de": "@coal! $coal$-Ausstoß"
+ },
+ "goods_output_coal_add_desc": {
+  "en": "The amount of @coal! $coal$ produced by buildings",
+  "de": "Wie viel @coal! $coal$ von Gebäuden produziert wird"
+ },
+ "goods_output_fertilizer_add": {
+  "en": "@fertilizer! $fertilizer$ Output",
+  "de": "@fertilizer! $fertilizer$-Ausstoß"
+ },
+ "goods_output_fertilizer_add_desc": {
+  "en": "The amount of @fertilizer! $fertilizer$ produced by buildings",
+  "de": "Wie viel @fertilizer! $fertilizer$ von Gebäuden produziert wird"
+ },
+ "goods_output_fertilizer_mult": {
+  "en": "Building @fertilizer! $fertilizer$ output",
+  "de": "Gebäude-Ausstoß: @fertilizer! $fertilizer$"
+ },
+ "goods_output_fertilizer_mult_desc": {
+  "en": "A bonus or penalty to the amount of @fertilizer! $fertilizer$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @fertilizer! $fertilizer$ von Gebäuden produziert wird"
+ },
+ "goods_output_fine_art_add": {
+  "en": "@fine_art! $fine_art$ output",
+  "de": "@fine_art! $fine_art$-Ausstoß"
+ },
+ "goods_output_fine_art_add_desc": {
+  "en": "The amount of @fine_art! $fine_art$ produced by buildings",
+  "de": "Wie viel @fine_art! $fine_art$ von Gebäuden produziert wird"
+ },
+ "goods_output_glass_add": {
+  "en": "@glass! $glass$ output",
+  "de": "@glass! $glass$-Ausstoß"
+ },
+ "goods_output_glass_add_desc": {
+  "en": "The amount of @glass! $glass$ produced by buildings",
+  "de": "Wie viel @glass! $glass$ von Gebäuden produziert wird"
+ },
+ "goods_output_iron_add": {
+  "en": "@iron! $iron$ output",
+  "de": "@iron! $iron$-Ausstoß"
+ },
+ "goods_output_iron_add_desc": {
+  "en": "The amount of @iron! $iron$ produced by buildings",
+  "de": "Wie viel @iron! $iron$ von Gebäuden produziert wird"
+ },
+ "goods_output_lead_add": {
+  "en": "@lead! $lead$ output",
+  "de": "@lead! $lead$-Ausstoß"
+ },
+ "goods_output_lead_add_desc": {
+  "en": "The amount of @lead! $lead$ produced by buildings",
+  "de": "Wie viel @lead! $lead$ von Gebäuden produziert wird"
+ },
+ "goods_output_opium_add": {
+  "en": "@opium! $opium$ output",
+  "de": "@opium! $opium$-Ausstoß"
+ },
+ "goods_output_opium_add_desc": {
+  "en": "The amount of @opium! $opium$ produced by buildings",
+  "de": "Wie viel @opium! $opium$ von Gebäuden produziert wird"
+ },
+ "goods_output_radios_add": {
+  "en": "@radios! $radios$ output",
+  "de": "@radios! $radios$-Ausstoß"
+ },
+ "goods_output_radios_add_desc": {
+  "en": "The amount of @radios! $radios$ produced by buildings",
+  "de": "Wie viel @radios! $radios$ von Gebäuden produziert wird"
+ },
+ "goods_output_radios_mult": {
+  "en": "Building @radios! $radios$ output",
+  "de": "Gebäude-Ausstoß: @radios! $radios$"
+ },
+ "goods_output_radios_mult_desc": {
+  "en": "A bonus or penalty to the amount of @radios! $radios$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @radios! $radios$ von Gebäuden produziert wird"
+ },
+ "goods_output_sulfur_add": {
+  "en": "@sulfur! $sulfur$ output",
+  "de": "@sulfur! $sulfur$-Ausstoß"
+ },
+ "goods_output_sulfur_add_desc": {
+  "en": "The amount of @sulfur! $sulfur$ produced by buildings",
+  "de": "Wie viel @sulfur! $sulfur$ von Gebäuden produziert wird"
+ },
+ "goods_output_telephones_add": {
+  "en": "@telephones! $telephones$ output",
+  "de": "@telephones! $telephones$-Ausstoß"
+ },
+ "goods_output_telephones_add_desc": {
+  "en": "The amount of @telephones! $telephones$ produced by buildings",
+  "de": "Wie viel @telephones! $telephones$ von Gebäuden produziert wird"
+ },
+ "goods_output_transportation_add": {
+  "en": "@transportation! $transportation$ output",
+  "de": "@transportation! $transportation$-Ausstoß"
+ },
+ "goods_output_transportation_add_desc": {
+  "en": "The amount of @transportation! $transportation$ produced by buildings",
+  "de": "Wie viel @transportation! $transportation$ von Gebäuden produziert wird"
+ },
+ "institution_health_system": {
+  "en": "Ministry of Health",
+  "de": "Gesundheitsministerium"
+ },
+ "institution_police": {
+  "en": "Ministry of Public Safety",
+  "de": "Ministerium für öffentliche Sicherheit"
+ },
+ "institution_schools": {
+  "en": "Ministry of Education",
+  "de": "Bildungsministerium"
+ },
+ "iron": {
+  "en": "Structural Metals",
+  "de": "Strukturmetalle"
+ },
+ "law_cultural_exclusion": {
+  "en": "Assimilatory Citizenship",
+  "de": "Assimilatorische Bürgerschaft"
+ },
+ "law_cultural_exclusion_desc": {
+  "en": "The state is open to all who are willing to merge into the national identity. Naturalization is a process of cultural adoption, requiring the abandonment of outside traditions.",
+  "de": "Der Staat steht allen offen, die bereit sind, in der nationalen Identität aufzugehen. Einbürgerung ist ein Prozess kultureller Anpassung, der die Aufgabe fremder Traditionen verlangt."
+ },
+ "law_ethnostate": {
+  "en": "Ancestral Citizenship",
+  "de": "Angestammte Bürgerschaft"
+ },
+ "law_ethnostate_desc": {
+  "en": "Citizenship is an immutable trait derived from the 'Right of Blood.' Only those of the core ancestral lineage are recognized as legal members of the nation.",
+  "de": "Die Staatsbürgerschaft ist ein unveränderliches Merkmal, das sich vom „Recht des Blutes“ ableitet. Nur wer der eigentlichen Ahnenlinie entstammt, gilt als rechtmäßiges Mitglied der Nation."
+ },
+ "law_multicultural": {
+  "en": "Universal Citizenship",
+  "de": "Universelle Bürgerschaft"
+ },
+ "law_multicultural_desc": {
+  "en": "Citizenship is a matter of residency and the 'Right of Soil.' Every resident born within the borders is a full member of the nation, regardless of heritage or creed.",
+  "de": "Die Staatsbürgerschaft richtet sich nach dem Wohnsitz und dem „Recht des Bodens“. Jeder innerhalb der Grenzen geborene Einwohner ist vollwertiges Mitglied der Nation, unabhängig von Herkunft oder Glauben."
+ },
+ "law_national_supremacy": {
+  "en": "Cultural Citizenship",
+  "de": "Kulturelle Bürgerschaft"
+ },
+ "law_national_supremacy_desc": {
+  "en": "Membership in the nation is determined by adherence to its primary spirit. Citizenship is reserved for those who share the language, traditions, and heritage of the dominant culture.",
+  "de": "Die Zugehörigkeit zur Nation bestimmt sich nach der Treue zu ihrem prägenden Geist. Die Staatsbürgerschaft bleibt jenen vorbehalten, die Sprache, Traditionen und Erbe der dominanten Kultur teilen."
+ },
+ "law_racial_segregation": {
+  "en": "Racialized Citizenship",
+  "de": "Rassifizierte Bürgerschaft"
+ },
+ "law_racial_segregation_desc": {
+  "en": "Citizenship is stratified based on perceived racial or ancestral proximity. Preference is given to specific lineages regardless of their cultural or linguistic adoption.",
+  "de": "Die Staatsbürgerschaft ist nach wahrgenommener rassischer oder abstammungsmäßiger Nähe abgestuft. Bestimmte Abstammungslinien werden bevorzugt, unabhängig davon, wie sehr sie sich kulturell oder sprachlich angepasst haben."
+ },
+ "law_subjecthood": {
+  "en": "Sovereign Subjecthood",
+  "de": "Souveräne Klientelschaft"
+ },
+ "law_subjecthood_desc": {
+  "en": "The state defines its people foremostly as subjects of a sovereign. Legal identity is tied to local tradition and community loyalty rather than a centralized national status.",
+  "de": "Der Staat definiert sein Volk in erster Linie als Untertanen eines Souveräns. Die rechtliche Identität ist an lokale Tradition und Gemeinschaftstreue gebunden, nicht an einen zentralisierten nationalen Status."
+ },
+ "lead": {
+  "en": "Conductive and Base Metals",
+  "de": "Leit- und Basismetalle"
+ },
+ "merchant_marine": {
+  "en": "Bulk Transportation",
+  "de": "Massengutverkehr"
+ },
+ "no_veterancy": {
+  "en": "Recruit",
+  "de": "Rekrut"
+ },
+ "opium": {
+  "en": "Drugs",
+  "de": "Drogen"
+ },
+ "pm_artificial_fertilizers": {
+  "en": "Basic Chemical Production",
+  "de": "Einfache Chemieproduktion"
+ },
+ "pm_film_art": {
+  "en": "Moving Pictures",
+  "de": "Laufbilder"
+ },
+ "pm_improved_fertilizer": {
+  "en": "Refined Chemical Processes",
+  "de": "Verfeinerte chemische Verfahren"
+ },
+ "pm_nitrogen_fixation": {
+  "en": "Synthetic Nitrogen Production",
+  "de": "Synthetische Stickstoffproduktion"
+ },
+ "pm_no_maintenance": {
+  "en": "No Maintenance",
+  "de": "Kein Unterhalt"
+ },
+ "pm_photographic_art": {
+  "en": "Photography",
+  "de": "Fotografie"
+ },
+ "pmg_fertilizer_production": {
+  "en": "Chemicals Production",
+  "de": "Chemikalienproduktion"
+ },
+ "prestige_good_brunn_type_engines": {
+  "en": "High-Performance Engines",
+  "de": "Hochleistungsmotoren"
+ },
+ "prestige_good_generic_fertilizer": {
+  "en": "Specialty Reagents",
+  "de": "Spezialreagenzien"
+ },
+ "prestige_good_generic_opium": {
+  "en": "Potent Formulations",
+  "de": "Hochwirksame Präparate"
+ },
+ "principle_advanced_research_1_desc": {
+  "en": "The bloc cultivates a class of engineers and scientific thinkers, drawing the intelligentsia toward member states.",
+  "de": "Der Block fördert eine Klasse von Ingenieuren und Wissenschaftlern und zieht damit die Intelligenzija zu den Mitgliedstaaten."
+ },
+ "principle_advanced_research_2_desc": {
+  "en": "Research output picks up: innovation capacity grows and engineers gain political weight.",
+  "de": "Die Forschungsleistung steigt: Die Innovationskapazität wächst, und Ingenieure gewinnen an politischem Gewicht."
+ },
+ "principle_advanced_research_3_desc": {
+  "en": "Directed research accelerates across all tech trees, with academics gaining visible political influence.",
+  "de": "Gelenkte Forschung beschleunigt sich in allen Technologiebäumen, und Akademiker gewinnen spürbar an politischem Einfluss."
+ },
+ "radios": {
+  "en": "Wireless Telecommunication Gear",
+  "de": "Drahtlose Telekommunikationsgeräte"
+ },
+ "second_rate_citizen": {
+  "en": "Provisional Acceptance",
+  "de": "Vorläufige Akzeptanz"
+ },
+ "stockpile_navy_requirement_coal_add": {
+  "en": "Navy @coal! $coal$ Consumption",
+  "de": "Marineverbrauch: @coal! $coal$"
+ },
+ "stockpile_navy_requirement_coal_add_desc": {
+  "en": "Increases how much @coal! $coal$ the navy consumes",
+  "de": "Erhöht, wie viel @coal! $coal$ die Marine verbraucht"
+ },
+ "sulfur": {
+  "en": "Chemical and Industrial Minerals",
+  "de": "Chemie- und Industriemineralien"
+ },
+ "telephones": {
+  "en": "Wired Telecommunication Gear",
+  "de": "Kabelgebundene Telekommunikationsgeräte"
+ },
+ "transportation": {
+  "en": "Personal Transportation",
+  "de": "Individualverkehr"
+ },
+ "veterancy0": {
+  "en": "Green",
+  "de": "Unerfahren"
+ },
+ "veterancy1": {
+  "en": "Regular",
+  "de": "Regulär"
+ },
+ "veterancy2": {
+  "en": "Disciplined",
+  "de": "Diszipliniert"
+ },
+ "veterancy3": {
+  "en": "Hardened",
+  "de": "Kampferprobt"
+ },
+ "veterancy4": {
+  "en": "Seasoned",
+  "de": "Erfahren"
+ }
+}
