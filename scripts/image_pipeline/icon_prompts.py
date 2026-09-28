@@ -17,7 +17,7 @@ better than the borrowed one (vanilla's crossed-out guarantee for withdrawing
 one); never rendered, and `wire` points the entity at it.
 A subject describes one physical object, with its material and colour. FLUX
 fills in whatever a subject leaves open, and review kept catching the same
-defaults (September 2026, ~250 icons):
+defaults (September 2026, ~350 icons):
 - Unnamed colours drift to real-world defaults: "paper banknotes" drew US
   dollars. No screens with text, no currency, flags or faces.
 - Words that imply writing get written: "voting card" drew VOTE, "holy book"
@@ -34,6 +34,15 @@ defaults (September 2026, ~250 icons):
 - Anything hung from a crossbeam reads as a gallows (a pole with a hanging
   bulb, a marionette on its frame).
 - In the plinth layout, "on a stand" or "on a base" adds a second pedestal.
+- Printed and branded objects bring their print: a circuit board its
+  silkscreen, a controller PlayStation symbols, a sci-fi rifle a maker's
+  logo, a sun a play-button triangle. Etched lines or plain buttons work.
+- A "blank screen" renders pale, and the cutout empties it, leaving the
+  device hollow. Give the screen a dark or coloured glow (a heartbeat line).
+- Glows and halos around an object turn into grey blobs after the cutout.
+- An unqualified object gets its usual context: a helmet comes with a
+  soldier wearing it (write "an empty helmet"), and a "globe" is a plain
+  green ball (name the Earth's continents and oceans).
 When both candidates miss, change the subject. When the idea is right and the
 renders are weak, `generate_icons.py --seeds 4` adds two more candidates and
 keeps the first two.
