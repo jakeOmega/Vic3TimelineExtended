@@ -1,4 +1,12 @@
 {
+ "TEMPERATURE_ANOMALY_0.5": {
+  "en": "Global warming has reached 0.5°C above pre-industrial levels.",
+  "de": "Die globale Erwärmung hat 0,5 °C über dem vorindustriellen Niveau erreicht."
+ },
+ "TEMPERATURE_ANOMALY_1.5": {
+  "en": "Global warming has reached 1.5°C above pre-industrial levels.",
+  "de": "Die globale Erwärmung hat 1,5 °C über dem vorindustriellen Niveau erreicht."
+ },
  "agricultural_diffusion_events.1.a": {
   "en": "Our agriculture will adapt.",
   "de": "Unsere Landwirtschaft wird sich anpassen."
@@ -17374,5 +17382,1729 @@
  "surveillance_events.4.t": {
   "en": "Predictive Policing",
   "de": "Vorausschauende Polizeiarbeit"
+ },
+ "surveillance_events.5.a": {
+  "en": "Strengthen cybersecurity defenses",
+  "de": "Cybersicherheitsmaßnahmen verstärken"
+ },
+ "surveillance_events.5.b": {
+  "en": "Retaliate with counter-espionage",
+  "de": "Mit Gegenspionage vergelten"
+ },
+ "surveillance_events.5.c": {
+  "en": "Justify domestic surveillance expansion",
+  "de": "Ausweitung der Inlandsüberwachung rechtfertigen"
+ },
+ "surveillance_events.5.d": {
+  "en": "Intelligence services have uncovered evidence that a rival power has been conducting systematic cyber-espionage against our government and critical [concept_infrastructure]. The breach is extensive and has compromised sensitive data.",
+  "de": "Unsere Geheimdienste haben Beweise dafür entdeckt, dass eine rivalisierende Macht systematische Cyberspionage gegen unsere Regierung und kritische [concept_infrastructure] betrieben hat. Der Einbruch ist weitreichend und hat sensible Daten kompromittiert."
+ },
+ "surveillance_events.5.d_exposed": {
+  "en": "The foreign espionage operation our counterintelligence recently exposed was only the part we could see. Tracing its infrastructure, analysts have found that the same service had been conducting systematic cyber-espionage against our government and critical [concept_infrastructure] for far longer than anyone suspected. The breach is extensive and has compromised sensitive data.",
+  "de": "Die ausländische Spionageoperation, die unsere Spionageabwehr kürzlich aufgedeckt hat, war nur der sichtbare Teil. Bei der Rückverfolgung ihrer Infrastruktur haben unsere Analysten festgestellt, dass derselbe Dienst schon weit länger als vermutet systematische Cyberspionage gegen unsere Regierung und kritische [concept_infrastructure] betrieben hat. Der Einbruch ist weitreichend und hat sensible Daten kompromittiert."
+ },
+ "surveillance_events.5.f": {
+  "en": "The breach was discovered on a Monday. By Thursday, the analysts had mapped its extent. By Friday, they wished they hadn't.\\n\\n\\\"How long had they been inside?\\\" the minister asked.\\n\\n\\\"Two years. Possibly three. The earliest indicators of presence predate our current logging system.\\\"\\n\\n\\\"And what did they take?\\\"\\n\\n\\\"Everything they could find. Personnel files. Operational records. The complete schedule of cabinet meetings. They knew when you would be where, and with whom, for the last eighteen months.\\\"\\n\\n\\\"And what did they do with what they took?\\\"\\n\\n\\\"That is the question we cannot answer. The answer is in the consequences of decisions you have already made, and we have no way of unpicking which of those decisions were affected.\\\"",
+  "de": "Der Einbruch wurde an einem Montag entdeckt. Bis Donnerstag hatten die Analysten sein Ausmaß kartiert. Bis Freitag wünschten sie sich, sie hätten es nicht getan.\\n\\n„Wie lange waren sie schon drin?“, fragte der Minister.\\n\\n„Zwei Jahre. Vielleicht drei. Die frühesten Anzeichen ihrer Präsenz reichen weiter zurück als unser aktuelles Protokollsystem.“\\n\\n„Und was haben sie mitgenommen?“\\n\\n„Alles, was sie finden konnten. Personalakten. Einsatzunterlagen. Den vollständigen Terminplan der Kabinettssitzungen. Sie wussten, wann Sie wo sein würden und mit wem, für die letzten achtzehn Monate.“\\n\\n„Und was haben sie mit dem getan, was sie mitgenommen haben?“\\n\\n„Das ist die Frage, die wir nicht beantworten können. Die Antwort liegt in den Folgen von Entscheidungen, die Sie bereits getroffen haben, und wir haben keine Möglichkeit herauszufinden, welche dieser Entscheidungen betroffen waren.“"
+ },
+ "surveillance_events.5.t": {
+  "en": "Foreign Cyber-Espionage",
+  "de": "Ausländische Cyberspionage"
+ },
+ "te_debug_ch.1.a": {
+  "en": "A — Set up: Ministry of Culture, funding cap 4, funding at 2, Outreach + Institutes + Protectionism running",
+  "de": "A – Einrichten: Kulturministerium, Förderobergrenze 4, Förderung bei 2, Außenarbeit + Institute + Protektionismus laufen"
+ },
+ "te_debug_ch.1.b": {
+  "en": "B — Put us at rank 1 on the board",
+  "de": "B – Uns auf Rang 1 der Tabelle setzen"
+ },
+ "te_debug_ch.1.c": {
+  "en": "C — Fill the board with others and put us at rank 14 of 168",
+  "de": "C – Die Tabelle mit anderen füllen und uns auf Rang 14 von 168 setzen"
+ },
+ "te_debug_ch.1.d": {
+  "en": "#lore Console-only. Nothing in the mod fires this event; it exists so the Cultural Hegemony journal entry's widget can be driven into its awkward states by hand.#!\\n\\nPick one effect per firing, then re-run #v event te_debug_ch.1#! for the next. The next yearly cultural-hegemony pulse recomputes the real leaderboard over anything set here.",
+  "de": "#lore Nur für die Konsole. Kein Bestandteil der Mod löst dieses Ereignis aus; es existiert, damit sich das Widget des Journaleintrags Kulturelle Hegemonie von Hand in seine unbequemen Zustände versetzen lässt.#!\\n\\nWählen Sie pro Auslösung einen Effekt aus und führen Sie dann #v event te_debug_ch.1#! erneut für den nächsten aus. Der nächste jährliche Kulturelle-Hegemonie-Impuls berechnet die echte Rangliste neu und überschreibt alles, was hier gesetzt wurde."
+ },
+ "te_debug_ch.1.d_option": {
+  "en": "D — Empty board slot 5 (the annexed case)",
+  "de": "D – Tabellenplatz 5 leeren (der annektierte Fall)"
+ },
+ "te_debug_ch.1.e": {
+  "en": "E — Repeal the Ministry of Culture and watch all four programmes stop",
+  "de": "E – Das Kulturministerium abschaffen und beobachten, wie alle vier Programme stoppen"
+ },
+ "te_debug_ch.1.g": {
+  "en": "F — Recount now: leaderboard, political-model census and baseline movement pressure",
+  "de": "F – Jetzt neu auszählen: Rangliste, Zählung der politischen Modelle und grundlegender Bewegungsdruck"
+ },
+ "te_debug_ch.1.h": {
+  "en": "G — Stage Our Model Abroad: make us rank 1 and fire it",
+  "de": "G – „Unser Modell im Ausland“ inszenieren: uns auf Rang 1 setzen und es auslösen"
+ },
+ "te_debug_ch.1.i": {
+  "en": "H — Stage Rival Models, The Model Falters and Domino for us as a follower",
+  "de": "H – „Rivalisierende Modelle“, „Das Modell gerät ins Wanken“ und „Domino“ für uns als Nachahmer inszenieren"
+ },
+ "te_debug_ch.1.t": {
+  "en": "Cultural Hegemony Test Console",
+  "de": "Testkonsole: Kulturelle Hegemonie"
+ },
+ "te_debug_colonial_empire.1.a": {
+  "en": "Solidified (95)",
+  "de": "Gefestigt (95)"
+ },
+ "te_debug_colonial_empire.1.b": {
+  "en": "Stable (75)",
+  "de": "Stabil (75)"
+ },
+ "te_debug_colonial_empire.1.c": {
+  "en": "Strained (50)",
+  "de": "Angespannt (50)"
+ },
+ "te_debug_colonial_empire.1.d": {
+  "en": "Console-only. Drops the [concept_colonial_stability] bar into any of the five bands so the widget's tier label, next-band boundary, phase-modifier row and subject-pressure effects can all be seen in one session.",
+  "de": "Nur für die Konsole. Versetzt die Anzeige für [concept_colonial_stability] in eines der fünf Bänder, sodass sich die Stufenbezeichnung des Widgets, die nächste Bandgrenze, die Zeile der Phasenmodifikatoren und die Druckeffekte auf Klientelländer in einer Sitzung betrachten lassen."
+ },
+ "te_debug_colonial_empire.1.e": {
+  "en": "Collapsing (10)",
+  "de": "Zusammenbrechend (10)"
+ },
+ "te_debug_colonial_empire.1.f": {
+  "en": "The cartographers await instruction.",
+  "de": "Die Kartografen warten auf Anweisungen."
+ },
+ "te_debug_colonial_empire.1.opt_d": {
+  "en": "Crumbling (30)",
+  "de": "Bröckelnd (30)"
+ },
+ "te_debug_colonial_empire.1.opt_f": {
+  "en": "Just refresh the panel (and log it)",
+  "de": "Nur das Panel aktualisieren (und protokollieren)"
+ },
+ "te_debug_colonial_empire.1.t": {
+  "en": "TEST: Colonial Stability Bands",
+  "de": "TEST: Bänder der Kolonialen Stabilität"
+ },
+ "te_debug_colonial_empire.2.a": {
+  "en": "Every other great power condemns us",
+  "de": "Jede andere Großmacht verurteilt uns"
+ },
+ "te_debug_colonial_empire.2.b": {
+  "en": "Two great powers back us instead",
+  "de": "Zwei Großmächte unterstützen uns stattdessen"
+ },
+ "te_debug_colonial_empire.2.c": {
+  "en": "Clear every colonial stance",
+  "de": "Jede koloniale Haltung löschen"
+ },
+ "te_debug_colonial_empire.2.d": {
+  "en": "Console-only. Sets up great-power pressure at each escalation step, and opens each of the three decolonization confirmations through the same shared effect the widget and the AI button use. Nothing is released until you pick an option in the confirmation, and each one offers Reconsider.",
+  "de": "Nur für die Konsole. Baut auf jeder Eskalationsstufe Großmachtdruck auf und öffnet jede der drei Entkolonialisierungs-Bestätigungen über denselben gemeinsamen Effekt, den auch das Widget und die KI-Schaltfläche verwenden. Nichts wird freigegeben, bevor Sie in der Bestätigung eine Option wählen, und jede bietet die Option Überdenken an."
+ },
+ "te_debug_colonial_empire.2.e": {
+  "en": "Open: Round Table Conference",
+  "de": "Öffnen: Rundtischkonferenz"
+ },
+ "te_debug_colonial_empire.2.f": {
+  "en": "The despatches are ready to send.",
+  "de": "Die Depeschen sind versandbereit."
+ },
+ "te_debug_colonial_empire.2.g": {
+  "en": "Log the decolonization diagnostics",
+  "de": "Die Entkolonialisierungsdiagnose protokollieren"
+ },
+ "te_debug_colonial_empire.2.opt_d": {
+  "en": "Open: Release a Colonial Territory",
+  "de": "Öffnen: Ein Kolonialgebiet freigeben"
+ },
+ "te_debug_colonial_empire.2.opt_f": {
+  "en": "Open: Planned Full Decolonization",
+  "de": "Öffnen: Geplante vollständige Entkolonialisierung"
+ },
+ "te_debug_colonial_empire.2.t": {
+  "en": "TEST: Pressure and Decolonization",
+  "de": "TEST: Druck und Entkolonialisierung"
+ },
+ "te_debug_covert.1.a": {
+  "en": "Funding 0 - Dormant",
+  "de": "Finanzierung 0 – Ruhend"
+ },
+ "te_debug_covert.1.b": {
+  "en": "Funding 1 - Operational",
+  "de": "Finanzierung 1 – Einsatzbereit"
+ },
+ "te_debug_covert.1.c": {
+  "en": "Funding 2 - Professional",
+  "de": "Finanzierung 2 – Professionell"
+ },
+ "te_debug_covert.1.d": {
+  "en": "Console-only shortcuts for testing the covert-warfare command centre. None of these can happen in normal play.\\n\\nEach option puts funding at an exact level and reapplies everything that depends on it, so the ladder row, the weekly cost, the counterintelligence bonus and the detection factors should all move in the same instant.\\n\\n#R Level 0 stands every running operation down#! - each pact's requirement to maintain fails at its next evaluation.",
+  "de": "Nur für die Konsole: Abkürzungen zum Testen der Kommandozentrale der Verdeckten Kriegsführung. Nichts davon kann im normalen Spiel vorkommen.\\n\\nJede Option setzt die Finanzierung auf eine genaue Stufe und wendet alles neu an, was davon abhängt, sodass sich die Stufenleiste, die wöchentlichen Kosten, der Spionageabwehrbonus und die Entdeckungsfaktoren alle im selben Moment ändern sollten.\\n\\n#R Stufe 0 stellt jede laufende Operation ein#! – die Erhaltungsvoraussetzung jedes Pakts scheitert bei seiner nächsten Auswertung."
+ },
+ "te_debug_covert.1.e": {
+  "en": "Funding 3 - Covert Network",
+  "de": "Finanzierung 3 – Verdecktes Netzwerk"
+ },
+ "te_debug_covert.1.f": {
+  "en": "The budget line is the whole service.",
+  "de": "Der Haushaltsposten ist der gesamte Dienst."
+ },
+ "te_debug_covert.1.g": {
+  "en": "Funding 4 - Black Budget",
+  "de": "Finanzierung 4 – Schwarzer Haushalt"
+ },
+ "te_debug_covert.1.h": {
+  "en": "Funding 5 - Deep State",
+  "de": "Finanzierung 5 – Tiefer Staat"
+ },
+ "te_debug_covert.1.t": {
+  "en": "Covert Warfare Test Console: Funding",
+  "de": "Testkonsole Verdeckte Kriegsführung: Finanzierung"
+ },
+ "te_debug_covert.2.a": {
+  "en": "Seed four operations, one per phase (two fully operational)",
+  "de": "Vier Operationen anlegen, eine pro Phase (zwei voll einsatzbereit)"
+ },
+ "te_debug_covert.2.b": {
+  "en": "Force a detection now (one operation is pinned to 100% and the real roll is run)",
+  "de": "Jetzt eine Entdeckung erzwingen (eine Operation wird auf 100 % fixiert, und der echte Wurf wird ausgeführt)"
+ },
+ "te_debug_covert.2.c": {
+  "en": "Cut funding to 0 and stand everything down",
+  "de": "Finanzierung auf 0 kürzen und alles einstellen"
+ },
+ "te_debug_covert.2.d": {
+  "en": "Console-only shortcuts for testing the operation rows. None of these can happen in normal play.\\n\\nSeeding plants four operations against one eligible country - industrial espionage at month 5, an influence campaign at month 11, military espionage at month 14 and a fully-operational destabilization at month 14 - so all three phase layouts show at once, two operations tip over their boundary at the next monthly pulse, and the severe-tier third-party blowback is reachable if the destabilization is later caught. It raises funding to level 2 (Professional) first if the service is dormant.\\n\\nForcing detection burns one operation, sends the target the detection event, and writes the record the command centre reads back as #italic Counterintelligence exposed ...#!\\n\\nRe-deriving the display state is what the first monthly pulse after loading an older save does: use it if the phase lines are missing from rows restored from a save made before this widget shipped.\\n\\nRaising priority runs the same effect as the row's priority stepper, without the button, so it works even if the stepper stays greyed out: upkeep and detection change immediately, and the scaled effect modifiers follow at the start of next month.",
+  "de": "Nur für die Konsole: Abkürzungen zum Testen der Operationszeilen. Nichts davon kann im normalen Spiel vorkommen.\\n\\nDas Anlegen platziert vier Operationen gegen ein geeignetes Land – Industriespionage in Monat 5, eine Einflusskampagne in Monat 11, Militärspionage in Monat 14 und eine voll einsatzbereite Destabilisierung in Monat 14 –, sodass alle drei Phasenlayouts gleichzeitig zu sehen sind, zwei Operationen beim nächsten monatlichen Impuls ihre Grenze überschreiten und die schwere Stufe des Rückschlags durch Dritte erreichbar wird, falls die Destabilisierung später entdeckt wird. Ist der Dienst ruhend, wird die Finanzierung zuerst auf Stufe 2 (Professionell) angehoben.\\n\\nEine erzwungene Entdeckung verbraucht eine Operation, sendet dem Ziel das Entdeckungsereignis und schreibt den Eintrag, den die Kommandozentrale als #italic Spionageabwehr aufgedeckt ...#! wieder ausliest.\\n\\nDie Neuableitung des Anzeigezustands entspricht dem, was der erste monatliche Impuls nach dem Laden eines älteren Spielstands tut: Verwenden Sie sie, wenn den aus einem Spielstand von vor der Einführung dieses Widgets wiederhergestellten Zeilen die Phasenzeilen fehlen.\\n\\nDas Anheben der Priorität führt denselben Effekt aus wie der Prioritätsregler der Zeile, nur ohne die Schaltfläche, sodass es auch funktioniert, wenn der Regler ausgegraut bleibt: Unterhalt und Entdeckung ändern sich sofort, die skalierten Effektmodifikatoren folgen zu Beginn des nächsten Monats."
+ },
+ "te_debug_covert.2.e": {
+  "en": "Age every operation by a year",
+  "de": "Jede Operation um ein Jahr altern lassen"
+ },
+ "te_debug_covert.2.f": {
+  "en": "Four dead drops, one bad week.",
+  "de": "Vier tote Briefkästen, eine schlechte Woche."
+ },
+ "te_debug_covert.2.g": {
+  "en": "Re-derive the rows' display state",
+  "de": "Den Anzeigezustand der Zeilen neu ableiten"
+ },
+ "te_debug_covert.2.h": {
+  "en": "Raise one operation to maximum priority (through the real step effect; upkeep and detection change now, effects at next month's pulse)",
+  "de": "Eine Operation auf maximale Priorität anheben (über den echten Stufeneffekt; Unterhalt und Entdeckung ändern sich sofort, Effekte beim Impuls des nächsten Monats)"
+ },
+ "te_debug_covert.2.i": {
+  "en": "Raise every network to full strength (detection drops now; new operations start 5 months along)",
+  "de": "Jedes Netzwerk auf volle Stärke anheben (Entdeckung sinkt sofort; neue Operationen starten 5 Monate im Voraus)"
+ },
+ "te_debug_covert.2.j": {
+  "en": "Run one month of network growth and decay now",
+  "de": "Jetzt einen Monat Netzwerkwachstum und -verfall ausführen"
+ },
+ "te_debug_covert.2.t": {
+  "en": "Covert Warfare Test Console: Operations",
+  "de": "Testkonsole Verdeckte Kriegsführung: Operationen"
+ },
+ "te_debug_covert.3.a": {
+  "en": "Set Tradecraft to 45 (Established)",
+  "de": "Spionagehandwerk auf 45 setzen (Etabliert)"
+ },
+ "te_debug_covert.3.b": {
+  "en": "Set Tradecraft to 85 (Veteran)",
+  "de": "Spionagehandwerk auf 85 setzen (Veteran)"
+ },
+ "te_debug_covert.3.c": {
+  "en": "Run one monthly Tradecraft pass",
+  "de": "Einen monatlichen Spionagehandwerk-Durchlauf ausführen"
+ },
+ "te_debug_covert.3.d": {
+  "en": "Console test harness for the agency experience score (slice 5). Set the score, then check the command centre's Tradecraft line, its tooltip, the priority stepper and the per-type cap.",
+  "de": "Konsolen-Testgerüst für den Erfahrungswert der Behörde (Abschnitt 5). Setzen Sie den Wert und prüfen Sie dann die Spionagehandwerk-Zeile der Kommandozentrale, ihren Tooltip, den Prioritätsregler und die Obergrenze je Typ."
+ },
+ "te_debug_covert.3.f": {
+  "en": "Not for play.",
+  "de": "Nicht für den Spielbetrieb."
+ },
+ "te_debug_covert.3.t": {
+  "en": "Covert Warfare Test Console: Tradecraft",
+  "de": "Testkonsole Verdeckte Kriegsführung: Spionagehandwerk"
+ },
+ "te_debug_covert.4.a": {
+  "en": "Plant the four new operations",
+  "de": "Die vier neuen Operationen platzieren"
+ },
+ "te_debug_covert.4.b": {
+  "en": "Set Tradecraft to Seasoned (65)",
+  "de": "Spionagehandwerk auf Erfahren (65) setzen"
+ },
+ "te_debug_covert.4.d": {
+  "en": "Console-only shortcuts for the four slice-6 operations. None of these can happen in normal play.\\n\\nPlanting declares a rivalry with one valid country and runs regime change and asset cultivation against it; nuclear sabotage goes against a country whose programme is running and space espionage against one ahead of us in the space race, each only if such a country exists. All four start fully operational, so their effects land at the next monthly pulse. Tradecraft is set to Seasoned (65).",
+  "de": "Nur für die Konsole: Abkürzungen für die vier Operationen aus Abschnitt 6. Nichts davon kann im normalen Spiel vorkommen.\\n\\nDas Platzieren erklärt einem gültigen Land eine Rivalität und richtet Regimewechsel und Quellenanwerbung gegen es; nukleare Sabotage richtet sich gegen ein Land mit laufendem Programm und Weltraumspionage gegen eines, das im Wettlauf ins All vor uns liegt, jeweils nur, falls ein solches Land existiert. Alle vier starten voll einsatzbereit, sodass ihre Effekte beim nächsten monatlichen Impuls eintreten. Spionagehandwerk wird auf Erfahren (65) gesetzt."
+ },
+ "te_debug_covert.4.f": {
+  "en": "Test harness. Check debug.log after the next monthly pulse.",
+  "de": "Testgerüst. Nach dem nächsten monatlichen Impuls debug.log prüfen."
+ },
+ "te_debug_covert.4.t": {
+  "en": "Covert Test Console: New Operations",
+  "de": "Testkonsole Verdeckt: Neue Operationen"
+ },
+ "te_debug_covert.5.a": {
+  "en": "Every network to strength 50 (their service: capacity and technologies)",
+  "de": "Jedes Netzwerk auf Stärke 50 (ihr Dienst: Kapazität und Technologien)"
+ },
+ "te_debug_covert.5.b": {
+  "en": "Every network to strength 80 (also their operations against us)",
+  "de": "Jedes Netzwerk auf Stärke 80 (auch ihre Operationen gegen uns)"
+ },
+ "te_debug_covert.5.c": {
+  "en": "Every network's target starts cultivating assets against us",
+  "de": "Das Ziel jedes Netzwerks beginnt, Quellen gegen uns anzuwerben"
+ },
+ "te_debug_covert.5.d": {
+  "en": "Console-only shortcuts for the network intelligence reports (slice 7). None of these can happen in normal play. Seed an operation first (te_debug_covert.2) so there is a network.\\n\\nStrength 50 is the first tier: each network row shows the target's intelligence capacity and technology count beside ours, and says its operations against us need 75. Strength 80 is the second: the row also counts them, usually 0.\\n\\nThe third option makes every network's target run cultivate assets against us (its funding is raised to 1 if it has none) and refreshes the reports, so a second-tier row's count goes up by one. Force a detection afterwards (te_debug_covert.2) and a row that falls below 75 drops back to the first tier the same day.",
+  "de": "Nur für die Konsole: Abkürzungen für die Netzwerk-Geheimdienstberichte (Abschnitt 7). Nichts davon kann im normalen Spiel vorkommen. Legen Sie zuerst eine Operation an (te_debug_covert.2), damit ein Netzwerk existiert.\\n\\nStärke 50 ist die erste Stufe: Jede Netzwerkzeile zeigt die Geheimdienstkapazität und Technologiezahl des Ziels neben unserer eigenen und gibt an, dass seine Operationen gegen uns 75 benötigen. Stärke 80 ist die zweite Stufe: Die Zeile zählt sie zusätzlich, meist 0.\\n\\nDie dritte Option lässt das Ziel jedes Netzwerks Quellen gegen uns anwerben (dessen Finanzierung wird auf 1 angehoben, falls es keine hat) und aktualisiert die Berichte, sodass sich die Zählung einer Zeile der zweiten Stufe um eins erhöht. Erzwingen Sie danach eine Entdeckung (te_debug_covert.2), und eine Zeile, die unter 75 fällt, kehrt noch am selben Tag zur ersten Stufe zurück."
+ },
+ "te_debug_covert.5.f": {
+  "en": "Test harness. Nothing here is real intelligence.",
+  "de": "Testgerüst. Nichts hier ist echte Aufklärung."
+ },
+ "te_debug_covert.5.t": {
+  "en": "Covert Test Console: Network Intelligence",
+  "de": "Testkonsole Verdeckt: Netzwerk-Geheimdienst"
+ },
+ "te_debug_deterrence.1.a": {
+  "en": "Arm us with ten warheads and initialise the posture",
+  "de": "Uns mit zehn Sprengköpfen bewaffnen und die Haltung initialisieren"
+ },
+ "te_debug_deterrence.1.b": {
+  "en": "Satisfy doctrine and authority tenure; lift any readiness lock",
+  "de": "Doktrin und Amtszeit der Autorität erfüllen; jede Bereitschaftssperre aufheben"
+ },
+ "te_debug_deterrence.1.c": {
+  "en": "Research radar, missiles, satellites, submarines, tactical weapons and mainframe computers",
+  "de": "Radar, Raketen, Satelliten, U-Boote, taktische Waffen und Großrechner erforschen"
+ },
+ "te_debug_deterrence.1.desc": {
+  "en": "Console-only shortcuts for testing the posture and crisis panels of the Nuclear Weapons journal entry. None of these can happen in normal play.",
+  "de": "Nur für die Konsole: Abkürzungen zum Testen der Haltungs- und Krisenpanels des Journaleintrags Nuklearwaffen. Nichts davon kann im normalen Spiel vorkommen."
+ },
+ "te_debug_deterrence.1.e": {
+  "en": "High alert for six months already, strain at 70",
+  "de": "Bereits seit sechs Monaten in höchster Alarmbereitschaft, Belastung bei 70"
+ },
+ "te_debug_deterrence.1.f": {
+  "en": "Run te_debug_deterrence.1 first: the entry activates once a warhead exists.",
+  "de": "Zuerst te_debug_deterrence.1 ausführen: Der Eintrag aktiviert sich, sobald ein Sprengkopf existiert."
+ },
+ "te_debug_deterrence.1.g": {
+  "en": "Recessed at once (warheads in storage)",
+  "de": "Sofort Zurückgehalten (Sprengköpfe eingelagert)"
+ },
+ "te_debug_deterrence.1.h": {
+  "en": "Automatic Retaliation at once (with its technology)",
+  "de": "Sofort Automatische Vergeltung (mit der zugehörigen Technologie)"
+ },
+ "te_debug_deterrence.1.t": {
+  "en": "Deterrence Console: Arsenal and Posture",
+  "de": "Abschreckungskonsole: Arsenal und Haltung"
+ },
+ "te_debug_deterrence.2.a": {
+  "en": "The Unconfirmed Warning",
+  "de": "Die unbestätigte Warnung"
+ },
+ "te_debug_deterrence.2.b": {
+  "en": "Silence from the Capital (needs delegated authority)",
+  "de": "Schweigen aus der Hauptstadt (erfordert delegierte Autorität)"
+ },
+ "te_debug_deterrence.2.c": {
+  "en": "The Cost of Permanent Alert",
+  "de": "Der Preis der Daueralarmbereitschaft"
+ },
+ "te_debug_deterrence.2.desc": {
+  "en": "Fire one incident chain now, or force the monthly roll to fire every month.",
+  "de": "Jetzt eine Zwischenfallkette auslösen oder den monatlichen Wurf erzwingen, sodass er jeden Monat auslöst."
+ },
+ "te_debug_deterrence.2.e": {
+  "en": "A Routine Mishap",
+  "de": "Ein routinemäßiges Missgeschick"
+ },
+ "te_debug_deterrence.2.f": {
+  "en": "Each chain checks its own eligibility; an ineligible one does nothing or falls back to a routine mishap.",
+  "de": "Jede Kette prüft ihre eigene Berechtigung; eine nicht berechtigte tut nichts oder fällt auf ein routinemäßiges Missgeschick zurück."
+ },
+ "te_debug_deterrence.2.g": {
+  "en": "The Exercise They Mistook (needs a crisis)",
+  "de": "Die verkannte Übung (erfordert eine Krise)"
+ },
+ "te_debug_deterrence.2.h": {
+  "en": "The Monopoly Window (needs the conditions)",
+  "de": "Das Monopolfenster (erfordert die Bedingungen)"
+ },
+ "te_debug_deterrence.2.i": {
+  "en": "Toggle forced incident odds",
+  "de": "Erzwungene Zwischenfallchance umschalten"
+ },
+ "te_debug_deterrence.2.t": {
+  "en": "Deterrence Console: Incidents",
+  "de": "Abschreckungskonsole: Zwischenfälle"
+ },
+ "te_debug_deterrence.3.a": {
+  "en": "We warn them privately",
+  "de": "Wir warnen sie vertraulich"
+ },
+ "te_debug_deterrence.3.b": {
+  "en": "We issue them a public ultimatum",
+  "de": "Wir stellen ihnen ein öffentliches Ultimatum"
+ },
+ "te_debug_deterrence.3.c": {
+  "en": "They issue us a public ultimatum",
+  "de": "Sie stellen uns ein öffentliches Ultimatum"
+ },
+ "te_debug_deterrence.3.desc": {
+  "en": "Opens a nuclear crisis with a random neighbour, bypassing the diplomatic actions' eligibility.",
+  "de": "Öffnet eine nukleare Krise mit einem zufälligen Nachbarn und umgeht dabei die Berechtigungsprüfung der diplomatischen Aktionen."
+ },
+ "te_debug_deterrence.3.f": {
+  "en": "With no real dispute the crisis is classed as an alert standoff.",
+  "de": "Ohne echten Streitpunkt wird die Krise als Alarm-Patt eingestuft."
+ },
+ "te_debug_deterrence.3.t": {
+  "en": "Deterrence Console: Open a Crisis",
+  "de": "Abschreckungskonsole: Eine Krise eröffnen"
+ },
+ "te_debug_deterrence.4.a": {
+  "en": "Bring the deadline to now",
+  "de": "Die Frist auf jetzt vorziehen"
+ },
+ "te_debug_deterrence.4.b": {
+  "en": "Make it acute",
+  "de": "Sie akut machen"
+ },
+ "te_debug_deterrence.4.c": {
+  "en": "The target concedes",
+  "de": "Das Ziel gibt nach"
+ },
+ "te_debug_deterrence.4.desc": {
+  "en": "Moves our live crisis along through its real code paths.",
+  "de": "Bewegt unsere laufende Krise entlang ihrer echten Codepfade voran."
+ },
+ "te_debug_deterrence.4.e": {
+  "en": "Both sides stand down",
+  "de": "Beide Seiten deeskalieren"
+ },
+ "te_debug_deterrence.4.f": {
+  "en": "The deadline fires on the next weekly tick.",
+  "de": "Die Frist läuft beim nächsten wöchentlichen Tick ab."
+ },
+ "te_debug_deterrence.4.g": {
+  "en": "The Exercise They Mistook",
+  "de": "Die verkannte Übung"
+ },
+ "te_debug_deterrence.4.t": {
+  "en": "Deterrence Console: Push the Crisis",
+  "de": "Abschreckungskonsole: Die Krise vorantreiben"
+ },
+ "te_debug_deterrence.5.a": {
+  "en": "Re-observe every estimate now",
+  "de": "Jetzt jede Schätzung neu beobachten"
+ },
+ "te_debug_deterrence.5.b": {
+  "en": "Guarantee a neighbour",
+  "de": "Einem Nachbarn eine Garantie geben"
+ },
+ "te_debug_deterrence.5.desc": {
+  "en": "Re-observe every public arsenal estimate, or give a neighbour our nuclear guarantee in force at once.",
+  "de": "Jede öffentliche Arsenalschätzung neu beobachten oder einem Nachbarn sofort unsere nukleare Garantie in Kraft geben."
+ },
+ "te_debug_deterrence.5.f": {
+  "en": "The leaderboard recounts immediately.",
+  "de": "Die Rangliste wird sofort neu ausgezählt."
+ },
+ "te_debug_deterrence.5.t": {
+  "en": "Deterrence Console: Estimates and Guarantees",
+  "de": "Abschreckungskonsole: Schätzungen und Garantien"
+ },
+ "te_debug_gw.1.a": {
+  "en": "Set warming to 0.5°C (Moderate)",
+  "de": "Erwärmung auf 0,5 °C setzen (Moderat)"
+ },
+ "te_debug_gw.1.b": {
+  "en": "Set warming to 1.0°C (Significant)",
+  "de": "Erwärmung auf 1,0 °C setzen (Erheblich)"
+ },
+ "te_debug_gw.1.c": {
+  "en": "Set warming to 2.0°C (Severe)",
+  "de": "Erwärmung auf 2,0 °C setzen (Schwer)"
+ },
+ "te_debug_gw.1.d": {
+  "en": "Set warming to 3.2°C (Catastrophic)",
+  "de": "Erwärmung auf 3,2 °C setzen (Katastrophal)"
+ },
+ "te_debug_gw.1.desc": {
+  "en": "Console-only shortcuts for testing the climate dashboard. Nothing in the mod fires this event, and every option skips the gates a player would face.\\n\\n#lore With the global warming rule enabled, setting the temperature also fires the one-shot warming threshold events for every tier it crosses at the next monthly pulse, which is deliberate: it exercises the real path. With the rule disabled there are no threshold events, and the monthly pulse puts the temperature back to 0.#!",
+  "de": "Nur für die Konsole: Abkürzungen zum Testen des Klima-Dashboards. Kein Bestandteil der Mod löst dieses Ereignis aus, und jede Option umgeht die Hürden, denen ein Spieler begegnen würde.\\n\\n#lore Ist die Regel für globale Erwärmung aktiviert, löst das Setzen der Temperatur beim nächsten monatlichen Impuls auch die einmaligen Erwärmungsschwellen-Ereignisse für jede überschrittene Stufe aus – das ist beabsichtigt: Es übt den echten Pfad aus. Ist die Regel deaktiviert, gibt es keine Schwellen-Ereignisse, und der monatliche Impuls setzt die Temperatur wieder auf 0.#!"
+ },
+ "te_debug_gw.1.e": {
+  "en": "Cool the world back to 0.05°C (below the activation threshold)",
+  "de": "Die Welt zurück auf 0,05 °C abkühlen (unter der Aktivierungsschwelle)"
+ },
+ "te_debug_gw.1.f": {
+  "en": "Bind us to an emissions-reduction treaty (locks repeals)",
+  "de": "Uns an einen Emissionssenkungsvertrag binden (sperrt Aufhebungen)"
+ },
+ "te_debug_gw.1.flavor": {
+  "en": "'The models are unambiguous, minister.'\\n\\n'Then get better models.'",
+  "de": "„Die Modelle sind eindeutig, Minister.“\\n\\n„Dann besorgen Sie bessere Modelle.“"
+ },
+ "te_debug_gw.1.g": {
+  "en": "Release us from the emissions-reduction treaty",
+  "de": "Uns aus dem Emissionssenkungsvertrag entlassen"
+ },
+ "te_debug_gw.1.h": {
+  "en": "Make us a market member under a great power that taxes carbon",
+  "de": "Uns zum Marktmitglied unter einer Großmacht machen, die Kohlenstoff besteuert"
+ },
+ "te_debug_gw.1.i": {
+  "en": "Recompute the yearly figures now",
+  "de": "Die Jahreszahlen jetzt neu berechnen"
+ },
+ "te_debug_gw.1.j": {
+  "en": "Adopt all eight mitigation policies",
+  "de": "Alle acht Minderungspolitiken einführen"
+ },
+ "te_debug_gw.1.k": {
+  "en": "Repeal all eight mitigation policies",
+  "de": "Alle acht Minderungspolitiken aufheben"
+ },
+ "te_debug_gw.1.l": {
+  "en": "Log every country's AI climate will to debug.log (search GW_AI_WILL)",
+  "de": "Den KI-Klimawillen jedes Landes in debug.log protokollieren (nach GW_AI_WILL suchen)"
+ },
+ "te_debug_gw.1.m": {
+  "en": "Set warming to 4.2°C (Apocalyptic)",
+  "de": "Erwärmung auf 4,2 °C setzen (Apokalyptisch)"
+ },
+ "te_debug_gw.1.t": {
+  "en": "Climate Test Console",
+  "de": "Klima-Testkonsole"
+ },
+ "te_debug_monetary.1.a": {
+  "en": "Run one monthly update now (target, drift, premium, inflation, rate paid, stance)",
+  "de": "Jetzt eine monatliche Aktualisierung ausführen (Ziel, Drift, Prämie, Inflation, gezahlter Zins, Ausrichtung)"
+ },
+ "te_debug_monetary.1.b": {
+  "en": "Recompute the yearly growth term against this instant's GDP, then pulse",
+  "de": "Den jährlichen Wachstumsterm gegen das BIP dieses Augenblicks neu berechnen, dann Impuls auslösen"
+ },
+ "te_debug_monetary.1.c": {
+  "en": "Re-read the world reference rate, then pulse",
+  "de": "Den weltweiten Referenzzins neu einlesen, dann Impuls auslösen"
+ },
+ "te_debug_monetary.1.d": {
+  "en": "#lore Console-only. Nothing in the mod fires this event; it prints the monetary state of this country exactly as the last monthly update left it, including the numbers no player is ever shown.#!\\n\\n#title The dial#!\\nRegime: #v [ROOT.GetVariable('te_mon_regime').GetValue|0]#! — 0 bankless, 1 commodity, 2 gold, 3 fiat, 4 digital, 5 crypto, 6 command\\nDelegated: #v [ROOT.GetVariable('te_mon_delegated').GetValue|0]#!   Mandate: #v [ROOT.GetVariable('te_mon_mandate').GetValue|0]#! — 1 price stability, 2 growth, 3 peg defence\\nTarget: #v [ROOT.GetVariable('te_policy_rate_target').GetValue|1]#!   Policy rate: #v [ROOT.GetVariable('te_policy_rate').GetValue|2]#!\\n\\n#title The rate, in the order it is built#!\\n#lore Everything here is what the last pulse stored, except the figures marked #v now#! and the structural floor, which are script values re-evaluated as you read them. Those four price THIS month's expectations while the stored premium prices last month's — step 5 runs before step 6 — so they need not add up to the last decimal.#!\\nReference rate: #v [ROOT.GetVariable('te_mon_era_base_now').GetValue|2]#! + expected inflation #v [ROOT.GetVariable('te_inflation_expected').GetValue|2]#! = the lenders' floor   ·   Policy rate: #v [ROOT.GetVariable('te_policy_rate').GetValue|2]#!\\n#v Market yield#!: #v [ROOT.GetVariable('te_market_yield').GetValue|2]#! — whichever of those two is higher\\n#v +#! Credit standing (structural): #v [ROOT.GetVariable('te_premium_structural').GetValue|2]#!   of which capital-market access #v [SCOPE.GetRootScope.ScriptValue('te_mon_access_premium')|2]#! now, floored at #v [SCOPE.GetRootScope.ScriptValue('te_mon_standing_floor')|2]#!\\n#v +#! Risk premium (cyclical): #v [ROOT.GetVariable('te_premium_cyclical').GetValue|2]#!   of which debt load #v [SCOPE.GetRootScope.ScriptValue('te_mon_scaled_debt_premium')|2]#! now, unanchored expectations #v [SCOPE.GetRootScope.ScriptValue('te_mon_premium_unanchored')|2]#! now, monetisation #v [SCOPE.GetRootScope.ScriptValue('te_mon_premium_monetisation')|2]#! now\\n#v −#! Headline inflation: #v [ROOT.GetVariable('te_inflation').GetValue|2]#!\\n#v =#! Rate paid: #v [ROOT.GetVariable('te_rate_paid_pts').GetValue|2]#!   Written into the modifier: #v [ROOT.GetVariable('te_rate_paid_applied').GetValue|2]#!\\n\\n#title Hidden state — debug only#!\\nReference rate: #v [ROOT.GetVariable('te_mon_era_base_now').GetValue|2]#!   Growth term: #v [ROOT.GetVariable('te_mon_growth_term').GetValue|2]#!   Walk: #v [ROOT.GetVariable('te_neutral_walk').GetValue|2]#!\\nNeutral rate: #v [ROOT.GetVariable('te_neutral_rate').GetValue|2]#!   Estimation error: #v [ROOT.GetVariable('te_neutral_error').GetValue|2]#!\\nStance gap: #v [ROOT.GetVariable('te_mon_stance_gap').GetValue|2]#!   Band: #v [ROOT.GetVariable('te_mon_stance_band').GetValue|0]#! — 1 very loose to 5 very tight\\nLast year's GDP: #v [ROOT.GetVariable('te_mon_gdp_last_year').GetValue|0]#!\\n\\n#title Inflation — debug only#!\\nHeadline: #v [ROOT.GetVariable('te_inflation').GetValue|2]#!   Core: #v [ROOT.GetVariable('te_inflation_core').GetValue|2]#!   Expected: #v [ROOT.GetVariable('te_inflation_expected').GetValue|2]#!   Noise: #v [ROOT.GetVariable('te_inflation_noise').GetValue|2]#!\\nBand: #v [ROOT.GetVariable('te_inflation_band').GetValue|0]#! — 1 deflation, 2 comfort, 3 elevated, 4 high, 5 very high, 6 hyper   Applied: #v [ROOT.GetVariable('te_inflation_band_applied').GetValue|0]#! — the same 1-6, 7 dollarised (no band), 0 none yet\\nCost-push: #v [ROOT.GetVariable('te_cost_push').GetValue|2]#!   Basket index: #v [ROOT.GetVariable('te_basket_index').GetValue|4]#!   Basket average: #v [ROOT.GetVariable('te_basket_avg').GetValue|4]#!   Seeded: #v [ROOT.GetVariable('te_basket_seeded').GetValue|0]#!\\nDeficit % of GDP: #v [ROOT.GetVariable('te_mon_deficit_pct').GetValue|2]#! — §17 check 12: a real deficit is a few % of GDP. If this reads in the hundreds, the budget flows were already annual and te_mon_deficit_annualise_factor goes to 1\\nMonetisation level: #v [ROOT.GetVariable('te_monetisation_level').GetValue|0]#!   Minting written into the modifier: #v [ROOT.GetVariable('te_monetisation_minting_applied').GetValue|0]#!   Dollarised: #v [ROOT.GetVariable('te_mon_dollarised').GetValue|0]#!   Hyperinflation crisis cooldown: #v [ROOT.GetVariable('te_mon_hyper_cooldown').GetValue|0]#! months — 0 means te_inflation.1 may be offered\\nSustained-stance months: #v [ROOT.GetVariable('te_mon_stance_months').GetValue|0]#! — negative loose, positive tight, capped at +/-11; the §13 politics arrive at +/-6   Stance politics applied: #v [ROOT.GetVariable('te_mon_stance_politics_applied').GetValue|0]#! — 0 neither, 1 tight, 2 loose   Wage dividend written into the modifier: #v [ROOT.GetVariable('te_mon_wage_dividend_applied').GetValue|2]#!   What the laws are worth: #v [SCOPE.GetRootScope.ScriptValue('te_mon_wage_dividend_units')|2]#! units of +0.1pp — paid only while the band is 2, so a difference between these two is the gate, not the laws\\n#lore te_basket_market_owner is a scope variable and has no numeric read-out; check it with the market's owner on the country panel.#!\\n\\n#title Inflation pressure — debug only#!\\n#lore Every term is a level in percentage points: how far above expectations inflation settles while it lasts. The sum is hidden state — it inverts to the stance gap, and from there to the neutral rate — so it is printed here and nowhere else.#!\\nStance: #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_stance')|2]#!   Cycle phase: #v [SCOPE.GetRootScope.ScriptValue('te_mon_phase_pressure')|2]#!   Bubble: #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_bubble')|2]#!   Deficit: #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_deficit')|2]#!\\nMonetisation: #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_monetisation')|2]#!   QE: #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_qe')|2]#!   Wage + event pressure: #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_modifiers')|2]#!   Wage-price spiral: #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_wage_spiral')|2]#! — the positive wage half counted a second time, and only above the high band edge   Noise: #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_noise')|2]#!   Regime pull: #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_regime_pull')|2]#!\\nGold flow (price-specie, last month's flow): #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_gold_flow')|2]#!   Commodity specie (price gap against the world): #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_commodity_specie')|2]#! — off a gap of #v [SCOPE.GetRootScope.ScriptValue('te_mon_commodity_specie_gap')|2]#! pp, of which the first #v [SCOPE.GetRootScope.ScriptValue('te_mon_commodity_specie_tolerance')|1]#! is free\\nTotal pressure: #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_total')|2]#! — the gold-supply term is still deferred and absent. Gold, the peg and the world rate: #v event te_debug_monetary.8#!\\nAnchor: #v [SCOPE.GetRootScope.ScriptValue('te_mon_inflation_anchor')|2]#!   Credibility c: #v [SCOPE.GetRootScope.ScriptValue('te_mon_credibility_c')|2]#!   c effective: #v [SCOPE.GetRootScope.ScriptValue('te_mon_credibility_eff')|3]#!   Expectations move toward: #v [SCOPE.GetRootScope.ScriptValue('te_mon_expectation_target')|2]#! at #v [SCOPE.GetRootScope.ScriptValue('te_mon_expectation_alpha')|4]#! a month\\n\\n#title The basket — debug only#!\\n#lore Signed premium against base price on this country's market, as a fraction: -0.12 is 12 percent below base. These reads are UNGATED, unlike the index itself — a good the market has never traded is exactly the case §9.3 wants read in a running game, and an engine complaint about one of these is that answer.#!\\nGrain: #v [SCOPE.GetRootScope.ScriptValue('te_mon_price_rel_grain')|3]#!   Clothes: #v [SCOPE.GetRootScope.ScriptValue('te_mon_price_rel_clothes')|3]#!   Coal: #v [SCOPE.GetRootScope.ScriptValue('te_mon_price_rel_coal')|3]#!   Oil: #v [SCOPE.GetRootScope.ScriptValue('te_mon_price_rel_oil')|3]#!\\nFish: #v [SCOPE.GetRootScope.ScriptValue('te_mon_price_rel_fish')|3]#!   Meat: #v [SCOPE.GetRootScope.ScriptValue('te_mon_price_rel_meat')|3]#!   Wood: #v [SCOPE.GetRootScope.ScriptValue('te_mon_price_rel_wood')|3]#!   Fabric: #v [SCOPE.GetRootScope.ScriptValue('te_mon_price_rel_fabric')|3]#!\\nWeighted index as computed: #v [SCOPE.GetRootScope.ScriptValue('te_mon_basket_index_value')|4]#!",
+  "de": "#lore Nur für die Konsole. Kein Bestandteil der Mod löst dieses Ereignis aus; es gibt den geldpolitischen Zustand dieses Landes exakt so aus, wie ihn die letzte monatliche Aktualisierung hinterlassen hat, einschließlich der Zahlen, die kein Spieler je zu sehen bekommt.#!\\n\\n#title Der Zinsregler#!\\nRegime: #v [ROOT.GetVariable('te_mon_regime').GetValue|0]#! — 0 bankenlos, 1 Warengeld, 2 Gold, 3 Fiatgeld, 4 digital, 5 Krypto, 6 Kommando\\nDelegiert: #v [ROOT.GetVariable('te_mon_delegated').GetValue|0]#!   Mandat: #v [ROOT.GetVariable('te_mon_mandate').GetValue|0]#! — 1 Preisstabilität, 2 Wachstum, 3 Bindungsverteidigung\\nZiel: #v [ROOT.GetVariable('te_policy_rate_target').GetValue|1]#!   Leitzins: #v [ROOT.GetVariable('te_policy_rate').GetValue|2]#!\\n\\n#title Der Zinssatz, in der Reihenfolge seines Aufbaus#!\\n#lore Alles hier ist das, was der letzte Impuls gespeichert hat, außer den mit #v jetzt#! markierten Werten und der strukturellen Untergrenze, die Skriptwerte sind und beim Lesen neu ausgewertet werden. Diese vier bepreisen die Erwartungen DIESES Monats, während die gespeicherte Prämie die des letzten Monats bepreist – Schritt 5 läuft vor Schritt 6 –, sodass sie sich nicht bis zur letzten Dezimalstelle addieren müssen.#!\\nReferenzzins: #v [ROOT.GetVariable('te_mon_era_base_now').GetValue|2]#! + erwartete Inflation #v [ROOT.GetVariable('te_inflation_expected').GetValue|2]#! = die Untergrenze der Kreditgeber   ·   Leitzins: #v [ROOT.GetVariable('te_policy_rate').GetValue|2]#!\\n#v Marktrendite#!: #v [ROOT.GetVariable('te_market_yield').GetValue|2]#! — je nachdem, welcher der beiden höher ist\\n#v +#! Kreditwürdigkeit (strukturell): #v [ROOT.GetVariable('te_premium_structural').GetValue|2]#!   davon Kapitalmarktzugang #v [SCOPE.GetRootScope.ScriptValue('te_mon_access_premium')|2]#! jetzt, mit Untergrenze bei #v [SCOPE.GetRootScope.ScriptValue('te_mon_standing_floor')|2]#!\\n#v +#! Risikoprämie (zyklisch): #v [ROOT.GetVariable('te_premium_cyclical').GetValue|2]#!   davon Schuldenlast #v [SCOPE.GetRootScope.ScriptValue('te_mon_scaled_debt_premium')|2]#! jetzt, unverankerte Erwartungen #v [SCOPE.GetRootScope.ScriptValue('te_mon_premium_unanchored')|2]#! jetzt, Monetisierung #v [SCOPE.GetRootScope.ScriptValue('te_mon_premium_monetisation')|2]#! jetzt\\n#v −#! Gesamtinflation: #v [ROOT.GetVariable('te_inflation').GetValue|2]#!\\n#v =#! Gezahlter Zins: #v [ROOT.GetVariable('te_rate_paid_pts').GetValue|2]#!   In den Modifikator geschrieben: #v [ROOT.GetVariable('te_rate_paid_applied').GetValue|2]#!\\n\\n#title Verborgener Zustand — nur Debug#!\\nReferenzzins: #v [ROOT.GetVariable('te_mon_era_base_now').GetValue|2]#!   Wachstumsterm: #v [ROOT.GetVariable('te_mon_growth_term').GetValue|2]#!   Zufallslauf: #v [ROOT.GetVariable('te_neutral_walk').GetValue|2]#!\\nNeutraler Zins: #v [ROOT.GetVariable('te_neutral_rate').GetValue|2]#!   Schätzfehler: #v [ROOT.GetVariable('te_neutral_error').GetValue|2]#!\\nAusrichtungslücke: #v [ROOT.GetVariable('te_mon_stance_gap').GetValue|2]#!   Band: #v [ROOT.GetVariable('te_mon_stance_band').GetValue|0]#! — 1 sehr locker bis 5 sehr straff\\nBIP des Vorjahres: #v [ROOT.GetVariable('te_mon_gdp_last_year').GetValue|0]#!\\n\\n#title Inflation — nur Debug#!\\nGesamt: #v [ROOT.GetVariable('te_inflation').GetValue|2]#!   Kern: #v [ROOT.GetVariable('te_inflation_core').GetValue|2]#!   Erwartet: #v [ROOT.GetVariable('te_inflation_expected').GetValue|2]#!   Rauschen: #v [ROOT.GetVariable('te_inflation_noise').GetValue|2]#!\\nBand: #v [ROOT.GetVariable('te_inflation_band').GetValue|0]#! — 1 Deflation, 2 Komfort, 3 erhöht, 4 hoch, 5 sehr hoch, 6 Hyper   Angewandt: #v [ROOT.GetVariable('te_inflation_band_applied').GetValue|0]#! — dieselben 1-6, 7 dollarisiert (kein Band), 0 noch keins\\nAngebotsdruck: #v [ROOT.GetVariable('te_cost_push').GetValue|2]#!   Warenkorbindex: #v [ROOT.GetVariable('te_basket_index').GetValue|4]#!   Warenkorbdurchschnitt: #v [ROOT.GetVariable('te_basket_avg').GetValue|4]#!   Initialisiert: #v [ROOT.GetVariable('te_basket_seeded').GetValue|0]#!\\nDefizit in % des BIP: #v [ROOT.GetVariable('te_mon_deficit_pct').GetValue|2]#! — §17 Prüfung 12: Ein echtes Defizit liegt bei einigen % des BIP. Steht hier eine Zahl im Hunderterbereich, waren die Haushaltsflüsse bereits jährlich, und te_mon_deficit_annualise_factor geht auf 1\\nMonetisierungsstufe: #v [ROOT.GetVariable('te_monetisation_level').GetValue|0]#!   In den Modifikator geschriebene Geldschöpfung: #v [ROOT.GetVariable('te_monetisation_minting_applied').GetValue|0]#!   Dollarisiert: #v [ROOT.GetVariable('te_mon_dollarised').GetValue|0]#!   Abklingzeit der Hyperinflationskrise: #v [ROOT.GetVariable('te_mon_hyper_cooldown').GetValue|0]#! Monate — 0 bedeutet, te_inflation.1 kann angeboten werden\\nMonate anhaltender Ausrichtung: #v [ROOT.GetVariable('te_mon_stance_months').GetValue|0]#! — negativ locker, positiv straff, gedeckelt bei +/-11; die §13-Politik greift bei +/-6   Angewandte Ausrichtungspolitik: #v [ROOT.GetVariable('te_mon_stance_politics_applied').GetValue|0]#! — 0 keine, 1 straff, 2 locker   In den Modifikator geschriebene Lohndividende: #v [ROOT.GetVariable('te_mon_wage_dividend_applied').GetValue|2]#!   Was die Gesetze wert sind: #v [SCOPE.GetRootScope.ScriptValue('te_mon_wage_dividend_units')|2]#! Einheiten von +0,1pp — nur ausgezahlt, solange das Band 2 ist, sodass eine Abweichung zwischen diesen beiden am Tor liegt, nicht an den Gesetzen\\n#lore te_basket_market_owner ist eine Skopusvariable ohne numerische Anzeige; prüfen Sie sie über den Marktbesitzer im Länderpanel.#!\\n\\n#title Inflationsdruck — nur Debug#!\\n#lore Jeder Term ist eine Stufe in Prozentpunkten: wie weit die Inflation über den Erwartungen einpendelt, solange sie anhält. Die Summe ist verborgener Zustand — sie kehrt sich zur Ausrichtungslücke um und von dort zum neutralen Zins —, weshalb sie hier und sonst nirgends ausgegeben wird.#!\\nAusrichtung: #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_stance')|2]#!   Zyklusphase: #v [SCOPE.GetRootScope.ScriptValue('te_mon_phase_pressure')|2]#!   Blase: #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_bubble')|2]#!   Defizit: #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_deficit')|2]#!\\nMonetisierung: #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_monetisation')|2]#!   QE: #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_qe')|2]#!   Lohn- und Ereignisdruck: #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_modifiers')|2]#!   Lohn-Preis-Spirale: #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_wage_spiral')|2]#! — die positive Lohnhälfte ein zweites Mal gezählt, und nur oberhalb der Grenze des hohen Bands   Rauschen: #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_noise')|2]#!   Regimesog: #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_regime_pull')|2]#!\\nGoldfluss (Preis-Edelmetall, Fluss des letzten Monats): #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_gold_flow')|2]#!   Waren-Edelmetall (Preislücke zur Welt): #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_commodity_specie')|2]#! — bei einer Lücke von #v [SCOPE.GetRootScope.ScriptValue('te_mon_commodity_specie_gap')|2]#! pp, wovon die ersten #v [SCOPE.GetRootScope.ScriptValue('te_mon_commodity_specie_tolerance')|1]#! frei sind\\nGesamtdruck: #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_total')|2]#! — der Goldangebotsterm ist noch zurückgestellt und fehlt. Gold, die Bindung und der Weltzins: #v event te_debug_monetary.8#!\\nAnker: #v [SCOPE.GetRootScope.ScriptValue('te_mon_inflation_anchor')|2]#!   Glaubwürdigkeit c: #v [SCOPE.GetRootScope.ScriptValue('te_mon_credibility_c')|2]#!   c effektiv: #v [SCOPE.GetRootScope.ScriptValue('te_mon_credibility_eff')|3]#!   Erwartungen bewegen sich zu: #v [SCOPE.GetRootScope.ScriptValue('te_mon_expectation_target')|2]#! mit #v [SCOPE.GetRootScope.ScriptValue('te_mon_expectation_alpha')|4]#! pro Monat\\n\\n#title Der Warenkorb — nur Debug#!\\n#lore Vorzeichenbehaftete Prämie gegenüber dem Basispreis auf dem Markt dieses Landes, als Bruchteil: -0,12 bedeutet 12 Prozent unter dem Basiswert. Diese Werte sind UNGEGATET, anders als der Index selbst — eine Ware, die der Markt noch nie gehandelt hat, ist genau der Fall, den §9,3 in einem laufenden Spiel gelesen sehen will, und eine Engine-Beschwerde zu einem dieser Werte ist diese Antwort.#!\\nGetreide: #v [SCOPE.GetRootScope.ScriptValue('te_mon_price_rel_grain')|3]#!   Kleidung: #v [SCOPE.GetRootScope.ScriptValue('te_mon_price_rel_clothes')|3]#!   Kohle: #v [SCOPE.GetRootScope.ScriptValue('te_mon_price_rel_coal')|3]#!   Öl: #v [SCOPE.GetRootScope.ScriptValue('te_mon_price_rel_oil')|3]#!\\nFisch: #v [SCOPE.GetRootScope.ScriptValue('te_mon_price_rel_fish')|3]#!   Fleisch: #v [SCOPE.GetRootScope.ScriptValue('te_mon_price_rel_meat')|3]#!   Holz: #v [SCOPE.GetRootScope.ScriptValue('te_mon_price_rel_wood')|3]#!   Stoff: #v [SCOPE.GetRootScope.ScriptValue('te_mon_price_rel_fabric')|3]#!\\nBerechneter gewichteter Index: #v [SCOPE.GetRootScope.ScriptValue('te_mon_basket_index_value')|4]#!"
+ },
+ "te_debug_monetary.1.f": {
+  "en": "'And what, precisely, is the natural rate of interest?'\\n\\n'Nobody knows, Chancellor. That is rather the point.'",
+  "de": "„Und was genau ist der natürliche Zinssatz?“\\n\\n„Das weiß niemand, Kanzler. Das ist eigentlich der Punkt.“"
+ },
+ "te_debug_monetary.1.t": {
+  "en": "Monetary Policy Test Console",
+  "de": "Testkonsole Geldpolitik"
+ },
+ "te_debug_monetary.1.z": {
+  "en": "Close",
+  "de": "Schließen"
+ },
+ "te_debug_monetary.10.a": {
+  "en": "Pin a debug kind-1 anchor on the largest dial economy",
+  "de": "Einen Debug-Anker der Art 1 an die größte Volkswirtschaft mit eigenem Zinsregler heften"
+ },
+ "te_debug_monetary.10.b": {
+  "en": "Release the debug anchor",
+  "de": "Den Debug-Anker lösen"
+ },
+ "te_debug_monetary.10.c": {
+  "en": "Set peg confidence to 25",
+  "de": "Bindungsvertrauen auf 25 setzen"
+ },
+ "te_debug_monetary.10.d": {
+  "en": "#lore Console-only. Nothing in the mod fires this event.#!\\n\\n#title The anchored state#!\\nKind: #v [ROOT.GetVariable('te_mon_anchor_kind').GetValue|0]#! (0 none, 1 treaty peg, 2 bloc currency, 3 currency board)   Anchor: #v [SCOPE.sCountry('te_debug_anchor').GetName]#! (itself = none)   Scans monthly: #v [ROOT.GetVariable('te_mon_arr_scan').GetValue|0]#!\\nAnchor's rate (copy): #v [ROOT.GetVariable('te_mon_anchor_rate').GetValue|2]#! + spread #v [SCOPE.GetRootScope.ScriptValue('te_mon_anchor_spread')|2]#!   Own policy rate: #v [ROOT.GetVariable('te_policy_rate').GetValue|2]#!\\nAnchor's index (copy): #v [ROOT.GetVariable('te_mon_anchor_fx_index').GetValue|2]#!   Parity offset: #v [ROOT.GetVariable('te_mon_peg_parity_offset').GetValue|2]#!   Own index: #v [ROOT.GetVariable('te_fx_index').GetValue|2]#!   Shadow: #v [ROOT.GetVariable('te_fx_shadow').GetValue|2]#!   Overvaluation: #v [ROOT.GetVariable('te_mon_overvaluation').GetValue|2]#!\\nCredibility c: own #v [SCOPE.GetRootScope.ScriptValue('te_mon_credibility_c_own')|2]#!, anchor's #v [ROOT.GetVariable('te_mon_anchor_c').GetValue|2]#!, in use #v [SCOPE.GetRootScope.ScriptValue('te_mon_credibility_c')|2]#!   Inflation anchor in use: #v [SCOPE.GetRootScope.ScriptValue('te_mon_inflation_anchor')|2]#!\\n\\n#title The peg#!\\nPeg confidence: #v [ROOT.GetVariable('te_peg_confidence').GetValue|1]#!   Crisis cooldown: #v [ROOT.GetVariable('te_peg_crisis_cooldown').GetValue|0]#!   Forced controls, months left: #v [ROOT.GetVariable('te_mon_emergency_controls_months').GetValue|0]#!   Drain this month: #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_overvaluation_drain')|2]#!\\n\\n#title Backstops#!\\nSwap recipient: #v [ROOT.GetVariable('te_mon_swap_recipient').GetValue|0]#!   Ward: #v [ROOT.GetVariable('te_mon_lolr_ward').GetValue|0]#!   Renege clock: #v [ROOT.GetVariable('te_mon_lolr_suspended_months').GetValue|0]#!   Default cooldown: #v [ROOT.GetVariable('te_mon_lolr_default_cooldown').GetValue|0]#!\\nReceived #v [ROOT.GetVariable('te_mon_arr_recipient_pts').GetValue|2]#! (applied #v [ROOT.GetVariable('te_mon_arr_recipient_applied').GetValue|2]#!)   Extended #v [ROOT.GetVariable('te_mon_arr_provider_pts').GetValue|2]#! (applied #v [ROOT.GetVariable('te_mon_arr_provider_applied').GetValue|2]#!)   Standing #v [ROOT.GetVariable('te_mon_arr_standing_pts').GetValue|2]#! (applied #v [ROOT.GetVariable('te_mon_arr_standing_applied').GetValue|2]#!)\\n\\n#title Currency board (5c)#!\\nMonths at an extreme band: #v [ROOT.GetVariable('te_mon_board_wrong_months').GetValue|0]#! (lever at 6; on: #v [ROOT.GetVariable('te_mon_board_lever_applied').GetValue|0]#!)   Own flat minting: #v [SCOPE.GetRootScope.ScriptValue('te_mon_board_seigniorage_from_subject')|0]#! × 2   Seigniorage from subjects: #v [ROOT.GetVariable('te_mon_board_seigniorage_pts').GetValue|0]#! (applied #v [ROOT.GetVariable('te_mon_board_seigniorage_applied').GetValue|0]#!)\\n\\n#title Common currency (5b)#!\\nAdopted: #v [ROOT.GetVariable('te_mon_union_member').GetValue|0]#!   Re-adoption lock: #v [ROOT.GetVariable('te_mon_union_lock_months').GetValue|0]#!   Ask cooldown: #v [ROOT.GetVariable('te_mon_union_ask_cooldown').GetValue|0]#!   Question signature: #v [ROOT.GetVariable('te_mon_union_q_state').GetValue|0]#!   Adoption score: #v [SCOPE.GetRootScope.ScriptValue('te_mon_union_adopt_score')|0]#! (> 0 adopts)\\nOvervaluation premium: #v [SCOPE.GetRootScope.ScriptValue('te_mon_premium_union_overvaluation')|2]#!   As leader — pressing: #v [ROOT.GetVariable('te_mon_union_pressing').GetValue|0]#!, holdouts #v [ROOT.GetVariable('te_mon_union_holdouts').GetValue|0]#!, would refuse #v [ROOT.GetVariable('te_mon_union_refusers').GetValue|0]#!\\nGDP pegged to us (m): #v [ROOT.GetVariable('te_mon_anchored_gdp_m').GetValue|2]#!   World GDP (m): #v [GetGlobalVariable('te_mon_world_gdp_m').GetValue|0]#!\\nTier 4 banking union on: #v [ROOT.GetVariable('te_mon_union_banking_applied').GetValue|0]#!   Tier 5 reserve on: #v [ROOT.GetVariable('te_mon_union_reserve_applied').GetValue|0]#!   Seigniorage (£/wk): #v [ROOT.GetVariable('te_mon_union_seigniorage_pts').GetValue|0]#! (applied #v [ROOT.GetVariable('te_mon_union_seigniorage_applied').GetValue|0]#!)",
+  "de": "#lore Nur für die Konsole. Kein Bestandteil der Mod löst dieses Ereignis aus.#!\\n\\n#title Der verankerte Zustand#!\\nArt: #v [ROOT.GetVariable('te_mon_anchor_kind').GetValue|0]#! (0 keine, 1 Vertragsbindung, 2 Blockwährung, 3 Currency Board)   Anker: #v [SCOPE.sCountry('te_debug_anchor').GetName]#! (sich selbst = keiner)   Scannt monatlich: #v [ROOT.GetVariable('te_mon_arr_scan').GetValue|0]#!\\nZinssatz des Ankers (Kopie): #v [ROOT.GetVariable('te_mon_anchor_rate').GetValue|2]#! + Spanne #v [SCOPE.GetRootScope.ScriptValue('te_mon_anchor_spread')|2]#!   Eigener Leitzins: #v [ROOT.GetVariable('te_policy_rate').GetValue|2]#!\\nIndex des Ankers (Kopie): #v [ROOT.GetVariable('te_mon_anchor_fx_index').GetValue|2]#!   Paritätsabweichung: #v [ROOT.GetVariable('te_mon_peg_parity_offset').GetValue|2]#!   Eigener Index: #v [ROOT.GetVariable('te_fx_index').GetValue|2]#!   Schatten: #v [ROOT.GetVariable('te_fx_shadow').GetValue|2]#!   Überbewertung: #v [ROOT.GetVariable('te_mon_overvaluation').GetValue|2]#!\\nGlaubwürdigkeit c: eigene #v [SCOPE.GetRootScope.ScriptValue('te_mon_credibility_c_own')|2]#!, die des Ankers #v [ROOT.GetVariable('te_mon_anchor_c').GetValue|2]#!, verwendet #v [SCOPE.GetRootScope.ScriptValue('te_mon_credibility_c')|2]#!   Verwendeter Inflationsanker: #v [SCOPE.GetRootScope.ScriptValue('te_mon_inflation_anchor')|2]#!\\n\\n#title Die Bindung#!\\nBindungsvertrauen: #v [ROOT.GetVariable('te_peg_confidence').GetValue|1]#!   Krisen-Abklingzeit: #v [ROOT.GetVariable('te_peg_crisis_cooldown').GetValue|0]#!   Erzwungene Kontrollen, Monate übrig: #v [ROOT.GetVariable('te_mon_emergency_controls_months').GetValue|0]#!   Abfluss diesen Monat: #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_overvaluation_drain')|2]#!\\n\\n#title Auffangnetze#!\\nSwap-Empfänger: #v [ROOT.GetVariable('te_mon_swap_recipient').GetValue|0]#!   Schützling: #v [ROOT.GetVariable('te_mon_lolr_ward').GetValue|0]#!   Bruchuhr: #v [ROOT.GetVariable('te_mon_lolr_suspended_months').GetValue|0]#!   Ausfall-Abklingzeit: #v [ROOT.GetVariable('te_mon_lolr_default_cooldown').GetValue|0]#!\\nErhalten #v [ROOT.GetVariable('te_mon_arr_recipient_pts').GetValue|2]#! (angewandt #v [ROOT.GetVariable('te_mon_arr_recipient_applied').GetValue|2]#!)   Gewährt #v [ROOT.GetVariable('te_mon_arr_provider_pts').GetValue|2]#! (angewandt #v [ROOT.GetVariable('te_mon_arr_provider_applied').GetValue|2]#!)   Eigenstand #v [ROOT.GetVariable('te_mon_arr_standing_pts').GetValue|2]#! (angewandt #v [ROOT.GetVariable('te_mon_arr_standing_applied').GetValue|2]#!)\\n\\n#title Currency Board (5c)#!\\nMonate in einem Extremband: #v [ROOT.GetVariable('te_mon_board_wrong_months').GetValue|0]#! (Hebel bei 6; aktiv: #v [ROOT.GetVariable('te_mon_board_lever_applied').GetValue|0]#!)   Eigene pauschale Geldschöpfung: #v [SCOPE.GetRootScope.ScriptValue('te_mon_board_seigniorage_from_subject')|0]#! × 2   Seigniorage von Nebenländern: #v [ROOT.GetVariable('te_mon_board_seigniorage_pts').GetValue|0]#! (angewandt #v [ROOT.GetVariable('te_mon_board_seigniorage_applied').GetValue|0]#!)\\n\\n#title Gemeinsame Währung (5b)#!\\nBeigetreten: #v [ROOT.GetVariable('te_mon_union_member').GetValue|0]#!   Wiederbeitrittssperre: #v [ROOT.GetVariable('te_mon_union_lock_months').GetValue|0]#!   Abklingzeit der Anfrage: #v [ROOT.GetVariable('te_mon_union_ask_cooldown').GetValue|0]#!   Fragesignatur: #v [ROOT.GetVariable('te_mon_union_q_state').GetValue|0]#!   Beitrittswert: #v [SCOPE.GetRootScope.ScriptValue('te_mon_union_adopt_score')|0]#! (> 0 tritt bei)\\nÜberbewertungsprämie: #v [SCOPE.GetRootScope.ScriptValue('te_mon_premium_union_overvaluation')|2]#!   Als Anführer — drängend: #v [ROOT.GetVariable('te_mon_union_pressing').GetValue|0]#!, Verweigerer #v [ROOT.GetVariable('te_mon_union_holdouts').GetValue|0]#!, würden ablehnen #v [ROOT.GetVariable('te_mon_union_refusers').GetValue|0]#!\\nAn uns gebundenes BIP (Mio.): #v [ROOT.GetVariable('te_mon_anchored_gdp_m').GetValue|2]#!   Welt-BIP (Mio.): #v [GetGlobalVariable('te_mon_world_gdp_m').GetValue|0]#!\\nStufe-4-Bankenunion aktiv: #v [ROOT.GetVariable('te_mon_union_banking_applied').GetValue|0]#!   Stufe-5-Reserve aktiv: #v [ROOT.GetVariable('te_mon_union_reserve_applied').GetValue|0]#!   Seigniorage (£/Woche): #v [ROOT.GetVariable('te_mon_union_seigniorage_pts').GetValue|0]#! (angewandt #v [ROOT.GetVariable('te_mon_union_seigniorage_applied').GetValue|0]#!)"
+ },
+ "te_debug_monetary.10.dd": {
+  "en": "Run the arrangement discovery now",
+  "de": "Die Vereinbarungserkennung jetzt ausführen"
+ },
+ "te_debug_monetary.10.e": {
+  "en": "Run one monthly update now",
+  "de": "Jetzt eine monatliche Aktualisierung ausführen"
+ },
+ "te_debug_monetary.10.f": {
+  "en": "#lore Console-only. §19 rows 5a–5c's exit criteria and how to stage each are in the header above this event in events/te_debug_monetary_events.txt.#!",
+  "de": "#lore Nur für die Konsole. Die Austrittskriterien für §19-Zeilen 5a–5c und wie man jede davon inszeniert, stehen im Kopfbereich über diesem Ereignis in events/te_debug_monetary_events.txt.#!"
+ },
+ "te_debug_monetary.10.t": {
+  "en": "Monetary Debug — International Arrangements",
+  "de": "Geld-Debug — Internationale Vereinbarungen"
+ },
+ "te_debug_monetary.10.z": {
+  "en": "Close",
+  "de": "Schließen"
+ },
+ "te_debug_monetary.11.a": {
+  "en": "Pin a debug swap line from the largest dial economy",
+  "de": "Eine Debug-Swap-Linie von der größten Volkswirtschaft mit eigenem Zinsregler festmachen"
+ },
+ "te_debug_monetary.11.b": {
+  "en": "Release the debug swap line (settles any balance)",
+  "de": "Die Debug-Swap-Linie lösen (gleicht jeden Saldo aus)"
+ },
+ "te_debug_monetary.11.c": {
+  "en": "Force one month of financial crisis",
+  "de": "Einen Monat Finanzkrise erzwingen"
+ },
+ "te_debug_monetary.11.d": {
+  "en": "#lore Console-only. Nothing in the mod fires this event.#!\\n\\n#title The swap line (6a)#!\\nRecipient: #v [ROOT.GetVariable('te_mon_swap_recipient').GetValue|0]#!   Provider: #v [SCOPE.sCountry('te_debug_swap_provider').GetName]#! (itself = none)   Debug line pinned: #v [ROOT.GetVariable('te_mon_debug_swap_on').GetValue|0]#!\\nDrawn: @money!#v [ROOT.GetVariable('te_mon_swap_drawn').GetValue|D]#! of @money!#v [SCOPE.GetRootScope.ScriptValue('te_mon_swap_line_limit')|D]#!   Room left: @money!#v [SCOPE.GetRootScope.ScriptValue('te_mon_swap_draw_room')|D]#!   A month's draw: @money!#v [SCOPE.GetRootScope.ScriptValue('te_mon_swap_crisis_draw')|D]#!\\nIn a financial crisis: #v [SCOPE.GetRootScope.ScriptValue('te_mon_debug_in_financial_crisis')|0]#!   In an external one (war counts): #v [SCOPE.GetRootScope.ScriptValue('te_mon_debug_in_external_crisis')|0]#!\\n\\n#title The guarantee's record (6a)#!\\nCalls: #v [ROOT.GetVariable('te_mon_lolr_calls').GetValue|0]#!   Prior calls (what prices the next one): #v [SCOPE.GetRootScope.ScriptValue('te_mon_lolr_calls_prior')|0]#!   Months to forget one: #v [ROOT.GetVariable('te_mon_lolr_call_forget').GetValue|0]#!\\nRelief share now: #v [SCOPE.GetRootScope.ScriptValue('te_mon_lolr_relief_share')|2]#!   Relief in points: #v [SCOPE.GetRootScope.ScriptValue('te_mon_lolr_relief')|2]#!   Next honour cost: @money!#v [SCOPE.GetRootScope.ScriptValue('te_mon_lolr_honour_cost')|D]#!   Next cooldown: #v [SCOPE.GetRootScope.ScriptValue('te_mon_lolr_default_cooldown_months')|0]#! months\\n\\n#title Coercion (6c)#!\\nImposed pegger: #v [SCOPE.GetRootScope.ScriptValue('te_mon_debug_is_imposed_pegger')|0]#!   Under receivership: #v [ROOT.GetVariable('te_mon_receivership').GetValue|0]#!   Receiver: #v [SCOPE.sCountry('te_debug_receiver').GetName]#! (itself = none)   Months under the exit threshold: #v [ROOT.GetVariable('te_mon_receivership_clear_months').GetValue|0]#!\\nThe take, a month: @money!#v [SCOPE.GetRootScope.ScriptValue('te_mon_receivership_take')|D]#!   Spread in use: #v [SCOPE.GetRootScope.ScriptValue('te_mon_anchor_spread')|2]#!",
+  "de": "#lore Nur für die Konsole. Kein Bestandteil der Mod löst dieses Ereignis aus.#!\\n\\n#title Die Swap-Linie (6a)#!\\nEmpfänger: #v [ROOT.GetVariable('te_mon_swap_recipient').GetValue|0]#!   Geber: #v [SCOPE.sCountry('te_debug_swap_provider').GetName]#! (sich selbst = keiner)   Debug-Linie festgemacht: #v [ROOT.GetVariable('te_mon_debug_swap_on').GetValue|0]#!\\nAbgerufen: @money!#v [ROOT.GetVariable('te_mon_swap_drawn').GetValue|D]#! von @money!#v [SCOPE.GetRootScope.ScriptValue('te_mon_swap_line_limit')|D]#!   Verbleibender Spielraum: @money!#v [SCOPE.GetRootScope.ScriptValue('te_mon_swap_draw_room')|D]#!   Abruf eines Monats: @money!#v [SCOPE.GetRootScope.ScriptValue('te_mon_swap_crisis_draw')|D]#!\\nIn einer Finanzkrise: #v [SCOPE.GetRootScope.ScriptValue('te_mon_debug_in_financial_crisis')|0]#!   In einer äußeren (Krieg zählt): #v [SCOPE.GetRootScope.ScriptValue('te_mon_debug_in_external_crisis')|0]#!\\n\\n#title Bilanz der Garantie (6a)#!\\nAbrufe: #v [ROOT.GetVariable('te_mon_lolr_calls').GetValue|0]#!   Frühere Abrufe (was den nächsten bepreist): #v [SCOPE.GetRootScope.ScriptValue('te_mon_lolr_calls_prior')|0]#!   Monate bis einer vergessen wird: #v [ROOT.GetVariable('te_mon_lolr_call_forget').GetValue|0]#!\\nEntlastungsanteil jetzt: #v [SCOPE.GetRootScope.ScriptValue('te_mon_lolr_relief_share')|2]#!   Entlastung in Punkten: #v [SCOPE.GetRootScope.ScriptValue('te_mon_lolr_relief')|2]#!   Nächste Erfüllungskosten: @money!#v [SCOPE.GetRootScope.ScriptValue('te_mon_lolr_honour_cost')|D]#!   Nächste Abklingzeit: #v [SCOPE.GetRootScope.ScriptValue('te_mon_lolr_default_cooldown_months')|0]#! Monate\\n\\n#title Nötigung (6c)#!\\nAuferlegter Binder: #v [SCOPE.GetRootScope.ScriptValue('te_mon_debug_is_imposed_pegger')|0]#!   Unter Zwangsverwaltung: #v [ROOT.GetVariable('te_mon_receivership').GetValue|0]#!   Verwalter: #v [SCOPE.sCountry('te_debug_receiver').GetName]#! (sich selbst = keiner)   Monate unter der Austrittsschwelle: #v [ROOT.GetVariable('te_mon_receivership_clear_months').GetValue|0]#!\\nDer Anteil, pro Monat: @money!#v [SCOPE.GetRootScope.ScriptValue('te_mon_receivership_take')|D]#!   Verwendete Spanne: #v [SCOPE.GetRootScope.ScriptValue('te_mon_anchor_spread')|2]#!"
+ },
+ "te_debug_monetary.11.dd": {
+  "en": "Cycle the ward's call counter 0 → 1 → 2 → 3 → 0",
+  "de": "Den Abrufzähler des Schützlings durchlaufen lassen 0 → 1 → 2 → 3 → 0"
+ },
+ "te_debug_monetary.11.e": {
+  "en": "Clear the drawn balance without settling it",
+  "de": "Den abgerufenen Saldo löschen, ohne ihn auszugleichen"
+ },
+ "te_debug_monetary.11.f": {
+  "en": "#lore Console-only. P6-1–P6-6 and P6-12 and how to stage each are in the header above this event in events/te_debug_monetary_events.txt.#!",
+  "de": "#lore Nur für die Konsole. P6-1–P6-6 und P6-12 sowie wie man jede davon inszeniert, stehen im Kopfbereich über diesem Ereignis in events/te_debug_monetary_events.txt.#!"
+ },
+ "te_debug_monetary.11.t": {
+  "en": "Monetary Debug — Leverage and Coercion",
+  "de": "Geld-Debug — Druckmittel und Nötigung"
+ },
+ "te_debug_monetary.11.z": {
+  "en": "Close",
+  "de": "Schließen"
+ },
+ "te_debug_monetary.2.a": {
+  "en": "Re-apply the pair with the production multiplier (var:te_rate_paid_applied)",
+  "de": "Das Paar mit dem Produktionsmultiplikator erneut anwenden (var:te_rate_paid_applied)"
+ },
+ "te_debug_monetary.2.b": {
+  "en": "Undo: zero the applied value, then run a real monthly update",
+  "de": "Rückgängig: den angewandten Wert auf null setzen, dann eine echte monatliche Aktualisierung ausführen"
+ },
+ "te_debug_monetary.2.d": {
+  "en": "#lore Console-only. Nothing in the mod fires this event. It re-applies the two interest modifiers with exactly the multiplier the monthly update uses, but from here instead of from game start — which tells a first-application timing fault apart from a multiplier form that never worked at all.#!\\n\\n#title What to look for#!\\nOpen the budget panel and hover the interest line. #v Timed Modifiers#! is the sum of the base offset (#v -20%#!) and whatever the multiplier produced.\\n\\nRate paid now: #v [ROOT.GetVariable('te_rate_paid_pts').GetValue|1]#!   Written into the modifier: #v [ROOT.GetVariable('te_rate_paid_applied').GetValue|1]#!\\n\\nIf the multiplier resolves, Timed Modifiers reads #v -20%#! plus that second number. If it still reads #v -19.0%#!, the multiplier came out as 1 again, exactly as it does on day one.\\n\\nThe second option is the undo — it forces the real monthly update to rewrite the pair, and it is the only way back after the literal-7 control in #v te_debug_monetary.4#!. It also drifts the policy rate one month's worth, like any pulse.\\n\\n#title Hover first#!\\nThe option tooltip previews the modifier with its multiplier already resolved, so reading it before clicking is a free second data point.",
+  "de": "#lore Nur für die Konsole. Kein Bestandteil der Mod löst dieses Ereignis aus. Es wendet die beiden Zinsmodifikatoren erneut an, mit genau dem Multiplikator, den die monatliche Aktualisierung verwendet, aber von hier aus statt vom Spielstart — was einen Zeitpunktfehler bei der Erstanwendung von einer Multiplikatorform unterscheidet, die nie funktioniert hat.#!\\n\\n#title Worauf zu achten ist#!\\nÖffnen Sie das Haushaltspanel und fahren Sie mit der Maus über die Zinszeile. #v Zeitliche Modifikatoren#! ist die Summe aus dem Basisversatz (#v -20%#!) und dem, was der Multiplikator ergeben hat.\\n\\nGezahlter Zins jetzt: #v [ROOT.GetVariable('te_rate_paid_pts').GetValue|1]#!   In den Modifikator geschrieben: #v [ROOT.GetVariable('te_rate_paid_applied').GetValue|1]#!\\n\\nLöst sich der Multiplikator auf, zeigt Zeitliche Modifikatoren #v -20%#! plus jene zweite Zahl. Steht dort weiterhin #v -19,0%#!, kam der Multiplikator wieder als 1 heraus, genau wie am ersten Tag.\\n\\nDie zweite Option ist das Rückgängigmachen — sie zwingt die echte monatliche Aktualisierung, das Paar neu zu schreiben, und ist der einzige Weg zurück nach der Literal-7-Kontrolle in #v te_debug_monetary.4#!. Sie lässt außerdem den Leitzins um einen Monat weiterdriften, wie jeder Impuls.\\n\\n#title Zuerst mit der Maus darüberfahren#!\\nDer Options-Tooltip zeigt eine Vorschau des Modifikators mit bereits aufgelöstem Multiplikator, sodass ihn vor dem Klicken zu lesen einen zweiten Datenpunkt gratis liefert."
+ },
+ "te_debug_monetary.2.f": {
+  "en": "'We changed nothing, Chancellor. We simply wrote the same number down a second time.'\\n\\n'And?'\\n\\n'This time the ledger believed it.'",
+  "de": "„Wir haben nichts geändert, Kanzler. Wir haben lediglich dieselbe Zahl ein zweites Mal aufgeschrieben.“\\n\\n„Und?“\\n\\n„Diesmal hat das Kontobuch es geglaubt.“"
+ },
+ "te_debug_monetary.2.t": {
+  "en": "Interest Multiplier Test: Variable Form",
+  "de": "Zinsmultiplikator-Test: Variablenform"
+ },
+ "te_debug_monetary.2.z": {
+  "en": "Close",
+  "de": "Schließen"
+ },
+ "te_debug_monetary.3.a": {
+  "en": "Re-apply the pair with a named script value as the multiplier",
+  "de": "Das Paar mit einem benannten Skriptwert als Multiplikator erneut anwenden"
+ },
+ "te_debug_monetary.3.d": {
+  "en": "#lore Console-only. Nothing in the mod fires this event. Same block as #v te_debug_monetary.2#!, same two modifiers, but the multiplier slot holds a named script value that reads the same variable behind a guard instead of reading it directly.#!\\n\\n#title What to look for#!\\n#v Timed Modifiers#! on the budget panel's interest line is the base offset (#v -20%#!) plus whatever the multiplier produced.\\n\\nRate paid now: #v [ROOT.GetVariable('te_rate_paid_pts').GetValue|1]#!   Written into the modifier: #v [ROOT.GetVariable('te_rate_paid_applied').GetValue|1]#!\\n\\n#v -20%#! plus that second number means the script value resolved the variable. #v -17.0%#! means it ran but could not see the variable and took its fallback of 3. #v -19.0%#! means the multiplier was ignored outright.\\n\\nRun #v te_debug_monetary.2#! first, so the two forms are compared against the same starting point.\\n\\n#title Hover first#!\\nThe option tooltip previews the modifier with its multiplier already resolved, so reading it before clicking is a free second data point.",
+  "de": "#lore Nur für die Konsole. Kein Bestandteil der Mod löst dieses Ereignis aus. Derselbe Block wie #v te_debug_monetary.2#!, dieselben zwei Modifikatoren, aber der Multiplikator-Platz enthält einen benannten Skriptwert, der dieselbe Variable hinter einer Absicherung liest, statt sie direkt zu lesen.#!\\n\\n#title Worauf zu achten ist#!\\n#v Zeitliche Modifikatoren#! auf der Zinszeile des Haushaltspanels ist der Basisversatz (#v -20%#!) plus dem, was der Multiplikator ergeben hat.\\n\\nGezahlter Zins jetzt: #v [ROOT.GetVariable('te_rate_paid_pts').GetValue|1]#!   In den Modifikator geschrieben: #v [ROOT.GetVariable('te_rate_paid_applied').GetValue|1]#!\\n\\n#v -20%#! plus jene zweite Zahl bedeutet, der Skriptwert hat die Variable aufgelöst. #v -17,0%#! bedeutet, er lief, konnte die Variable aber nicht sehen und griff auf seinen Ausweichwert von 3 zurück. #v -19,0%#! bedeutet, der Multiplikator wurde gänzlich ignoriert.\\n\\nFühren Sie zuerst #v te_debug_monetary.2#! aus, damit die beiden Formen gegen denselben Ausgangspunkt verglichen werden.\\n\\n#title Zuerst mit der Maus darüberfahren#!\\nDer Options-Tooltip zeigt eine Vorschau des Modifikators mit bereits aufgelöstem Multiplikator, sodass ihn vor dem Klicken zu lesen einen zweiten Datenpunkt gratis liefert."
+ },
+ "te_debug_monetary.3.f": {
+  "en": "'The clerk would not accept the figure, so we sent it through a second clerk.'\\n\\n'Did that help?'\\n\\n'We are about to find out.'",
+  "de": "„Der Sachbearbeiter wollte die Zahl nicht akzeptieren, also haben wir sie durch einen zweiten Sachbearbeiter geschickt.“\\n\\n„Hat das geholfen?“\\n\\n„Das werden wir gleich herausfinden.“"
+ },
+ "te_debug_monetary.3.t": {
+  "en": "Interest Multiplier Test: Script Value Form",
+  "de": "Zinsmultiplikator-Test: Skriptwertform"
+ },
+ "te_debug_monetary.3.z": {
+  "en": "Close",
+  "de": "Schließen"
+ },
+ "te_debug_monetary.4.a": {
+  "en": "Re-apply the pair with a literal multiplier of 7",
+  "de": "Das Paar mit einem wörtlichen Multiplikator von 7 erneut anwenden"
+ },
+ "te_debug_monetary.4.d": {
+  "en": "#lore Console-only. Nothing in the mod fires this event. The control: the same block again, with a plain number in the multiplier slot instead of a variable or a script value. Seven is a rate no country pays by coincidence.#!\\n\\n#title What to look for#!\\n#v Timed Modifiers#! on the budget panel's interest line should read #v -13.0%#! — the base offset of #v -20%#! plus seven points.\\n\\nIf it reads #v -19.0%#! instead, the multiplier is being ignored no matter what is put in it, and the fault is not the variable.\\n\\n#title Afterwards#!\\nThis leaves the country paying 7%, and the monthly update will not correct it: the applied value has not moved, so the re-apply is skipped for good. Fire #v te_debug_monetary.2#! and take its second option to restore the real rate. Run this one last.\\n\\n#title Hover first#!\\nThe option tooltip previews the modifier with its multiplier already resolved, so reading it before clicking is a free second data point.",
+  "de": "#lore Nur für die Konsole. Kein Bestandteil der Mod löst dieses Ereignis aus. Die Kontrolle: derselbe Block noch einmal, mit einer einfachen Zahl im Multiplikator-Platz statt einer Variable oder eines Skriptwerts. Sieben ist ein Zinssatz, den kein Land zufällig zahlt.#!\\n\\n#title Worauf zu achten ist#!\\n#v Zeitliche Modifikatoren#! auf der Zinszeile des Haushaltspanels sollte #v -13,0%#! anzeigen — der Basisversatz von #v -20%#! plus sieben Punkte.\\n\\nSteht dort stattdessen #v -19,0%#!, wird der Multiplikator ignoriert, egal was hineingesetzt wird, und der Fehler liegt nicht an der Variable.\\n\\n#title Danach#!\\nDas lässt das Land 7 % zahlen, und die monatliche Aktualisierung korrigiert das nicht: Der angewandte Wert hat sich nicht bewegt, sodass die erneute Anwendung dauerhaft übersprungen wird. Lösen Sie #v te_debug_monetary.2#! aus und wählen Sie dessen zweite Option, um den echten Zinssatz wiederherzustellen. Führen Sie dieses hier zuletzt aus.\\n\\n#title Zuerst mit der Maus darüberfahren#!\\nDer Options-Tooltip zeigt eine Vorschau des Modifikators mit bereits aufgelöstem Multiplikator, sodass ihn vor dem Klicken zu lesen einen zweiten Datenpunkt gratis liefert."
+ },
+ "te_debug_monetary.4.f": {
+  "en": "'Seven percent? On what authority?'\\n\\n'None whatsoever, Chancellor. That is the experiment.'",
+  "de": "„Sieben Prozent? Auf wessen Befehl?“\\n\\n„Auf gar keinen, Kanzler. Das ist eben das Experiment.“"
+ },
+ "te_debug_monetary.4.t": {
+  "en": "Interest Multiplier Test: Literal Control",
+  "de": "Zinsmultiplikator-Test: Wörtliche Kontrolle"
+ },
+ "te_debug_monetary.4.z": {
+  "en": "Close",
+  "de": "Schließen"
+ },
+ "te_debug_monetary.5.a": {
+  "en": "Pin: fiat currency, a national bank, no independence, delegation off, target 5",
+  "de": "Festmachen: Fiatgeld, eine Nationalbank, keine Unabhängigkeit, Delegation aus, Ziel 5"
+ },
+ "te_debug_monetary.5.b": {
+  "en": "Unpin: hand the dial back to the bank (delegation on)",
+  "de": "Lösen: den Zinsregler an die Bank zurückgeben (Delegation an)"
+ },
+ "te_debug_monetary.5.d": {
+  "en": "#lore Console-only. Nothing in the mod fires this event. Every AI country is delegated, so an observer run never exercises the path a human takes — a target the player sets and then leaves alone. This pins the country onto that path.#!\\n\\n#title What the pin changes#!\\nIn order: if the country is #v Traditionalist#! or runs a #v Command Economy#! it is moved to #v Interventionism#!, or to #v Agrarianism#! where Serfdom would have thrown Interventionism back; then #v National Bank#! goes on; then #v Central Bank Independence#! or #v State-Owned Banking#!, if held, are replaced with #v Universal Banking#!, because both of those replace the manual credibility anchor with a stronger or a weaker one; then #v Fiat Currency#!. One case lands elsewhere: a country coming out of a #v Command Economy#! while holding #v State-Owned Banking#! has already been moved to #v Directed Credit#! by the law-consistency sweep before that step is reached, and is left there. The pin still holds — Directed Credit is neither of the two anchors, so the target is yours and the credibility is the manual one — but the financial cycle stays quieter than it would under Universal Banking. Finally the dollarisation flag is cleared, delegation is turned off, and the target is set to #v 5#!.\\n\\n#title Why the order#!\\nThe laws are set directly rather than enacted. That skips the enactment, the interest-group reaction and the clean-up that normally follows a monetary law — which is why the dollarisation flag has to be cleared here by hand, and why clearing it this way also skips the new-currency premium a real exit from dollarisation would pay. What it does #v not#! skip is the law-consistency sweep, which runs after every direct activation and undoes any pair the law files forbid. Traditionalism forbids a National Bank, and Fiat Currency without a bank falls back to Commodity Money, so a pin that set the bank first would leave the country with no dial at all.\\n\\n#title If it does not hold#!\\nThe pin re-opens this event when the country still has no dial of its own, and the title above says so. The usual cause is an economic system with nowhere consistent to go: #v Anarchy#!, #v Factory Councils#! and #v Women in the Fields#! each forbid both of the landing laws, so the sweep sends the country back where it came from. Change the offending law by hand on the politics screen and pin again.\\n\\n#title What the pin costs#!\\nLeaving Central Bank Independence gives up its credit-standing bonus, so the rate paid after a pin is not the rate paid before it — take your baseline #v after#!. The banking regulation swap also makes the financial cycle noticeably more volatile.\\n\\n#title Unpinning#!\\nThe second option only gives the dial back to the central bank. It does #v not#! restore the laws: this event never recorded what they were. Put them back by hand, or reload the save.",
+  "de": "#lore Nur für die Konsole. Kein Bestandteil der Mod löst dieses Ereignis aus. Jedes KI-Land ist delegiert, sodass ein Beobachter-Durchlauf nie den Pfad ausübt, den ein Mensch nimmt — ein Ziel, das der Spieler setzt und dann in Ruhe lässt. Dies macht das Land auf diesem Pfad fest.#!\\n\\n#title Was das Festmachen ändert#!\\nDer Reihe nach: Ist das Land #v Traditionalistisch#! oder betreibt eine #v Planwirtschaft#!, wird es zu #v Interventionismus#! verschoben, oder zu #v Agrarismus#!, wo Leibeigenschaft Interventionismus zurückgeworfen hätte; dann wird #v Nationalbank#! aktiviert; dann werden #v Unabhängigkeit der Zentralbank#! oder #v Staatliches Bankwesen#!, falls gehalten, durch #v Universalbanken#! ersetzt, weil beide den manuellen Glaubwürdigkeitsanker durch einen stärkeren oder einen schwächeren ersetzen; dann #v Fiatgeld#!. Ein Fall landet anderswo: Ein Land, das aus einer #v Planwirtschaft#! kommt und dabei #v Staatliches Bankwesen#! hält, wurde vom Gesetzeskonsistenz-Durchlauf bereits zu #v Gelenkter Kreditvergabe#! verschoben, bevor dieser Schritt erreicht wird, und bleibt dort. Das Festmachen gilt weiterhin — Gelenkte Kreditvergabe ist keiner der beiden Anker, also gehört das Ziel Ihnen und die Glaubwürdigkeit ist die manuelle —, aber der Finanzzyklus bleibt ruhiger, als er es unter Universalbanken wäre. Schließlich wird die Dollarisierungsmarke gelöscht, die Delegation abgeschaltet, und das Ziel wird auf #v 5#! gesetzt.\\n\\n#title Warum diese Reihenfolge#!\\nDie Gesetze werden direkt gesetzt statt erlassen. Das überspringt den Erlass, die Reaktion der Interessengruppen und die Aufräumarbeiten, die normalerweise auf ein Geldgesetz folgen — weshalb die Dollarisierungsmarke hier von Hand gelöscht werden muss, und weshalb dieses Löschen auch die Neuwährungsprämie überspringt, die ein echter Ausstieg aus der Dollarisierung kosten würde. Was es #v nicht#! überspringt, ist der Gesetzeskonsistenz-Durchlauf, der nach jeder direkten Aktivierung läuft und jedes Paar rückgängig macht, das die Gesetzesdateien verbieten. Traditionalismus verbietet eine Nationalbank, und Fiatgeld ohne Bank fällt auf Warengeld zurück, sodass ein Festmachen, das zuerst die Bank setzt, das Land ganz ohne Zinsregler zurücklassen würde.\\n\\n#title Wenn es nicht hält#!\\nDas Festmachen öffnet dieses Ereignis erneut, wenn das Land immer noch keinen eigenen Zinsregler hat, und der obige Titel sagt das auch. Die übliche Ursache ist ein Wirtschaftssystem ohne konsistentes Ziel: #v Anarchie#!, #v Fabrikräte#! und #v Frauen auf den Feldern#! verbieten jeweils beide Landegesetze, sodass der Durchlauf das Land dorthin zurückschickt, woher es kam. Ändern Sie das störende Gesetz von Hand auf dem Politikbildschirm und machen Sie erneut fest.\\n\\n#title Was das Festmachen kostet#!\\nDas Verlassen von Unabhängigkeit der Zentralbank gibt deren Kreditwürdigkeitsbonus auf, sodass der gezahlte Zins nach einem Festmachen nicht der gezahlte Zins davor ist — nehmen Sie Ihren Ausgangswert #v danach#!. Der Wechsel der Bankenregulierung macht den Finanzzyklus zudem merklich volatiler.\\n\\n#title Lösen#!\\nDie zweite Option gibt nur den Zinsregler an die Zentralbank zurück. Sie stellt die Gesetze #v nicht#! wieder her: Dieses Ereignis hat nie festgehalten, welche es waren. Setzen Sie sie von Hand zurück, oder laden Sie den Spielstand neu."
+ },
+ "te_debug_monetary.5.f": {
+  "en": "'And who sets the rate now, Chancellor?'\\n\\n'I do.'\\n\\n'I see. And who talks you out of it?'",
+  "de": "„Und wer setzt jetzt den Zinssatz, Kanzler?“\\n\\n„Ich.“\\n\\n„Verstehe. Und wer redet es Ihnen aus?“"
+ },
+ "te_debug_monetary.5.t": {
+  "en": "Monetary Harness: Pin a Manual Target",
+  "de": "Geld-Testgerüst: Ein manuelles Ziel festmachen"
+ },
+ "te_debug_monetary.5.t_blocked": {
+  "en": "Monetary Harness: The Pin Is Not In Place",
+  "de": "Geld-Testgerüst: Das Festmachen ist nicht wirksam"
+ },
+ "te_debug_monetary.5.z": {
+  "en": "Close",
+  "de": "Schließen"
+ },
+ "te_debug_monetary.6.a": {
+  "en": "Run twelve monthly updates now (one year)",
+  "de": "Jetzt zwölf monatliche Aktualisierungen ausführen (ein Jahr)"
+ },
+ "te_debug_monetary.6.b": {
+  "en": "Run sixty monthly updates now (five years)",
+  "de": "Jetzt sechzig monatliche Aktualisierungen ausführen (fünf Jahre)"
+ },
+ "te_debug_monetary.6.d": {
+  "en": "#lore Console-only. Nothing in the mod fires this event. It runs the monetary monthly update over and over in one click, so a drift that takes years can be read in a second.#!\\n\\n#title What moves#!\\nEverything the monthly update owns: the policy rate closing on its target, core and expected inflation, the trailing price average, both premiums, the inflation band and its modifier, the sustained-stance counter, and all three random walks — one draw of each per month, the same as any pulse.\\n\\n#title What does not#!\\nThe calendar. No timed modifier ages, the banking cycle's phase and bubble stay exactly where they are, the yearly growth snapshot does not run (it would read one instant's economy against itself), the budget does not move so the deficit term is frozen at today's figure, and prices do not move — so the basket's shock term quietly decays to nothing over a long run. Read a fast-forward as #v this month's economy, repeated#!, not as five years of history.\\n\\n#title If inflation runs away#!\\nShould headline cross the hyperinflation edge mid-run, the crisis event fires and the rest of the run is skipped, so the state you read afterwards is the month the crisis arrived rather than years of unanswered popups. Answer it, then run this again.",
+  "de": "#lore Nur für die Konsole. Kein Bestandteil der Mod löst dieses Ereignis aus. Es führt die monatliche Geld-Aktualisierung mit einem Klick immer wieder aus, sodass eine Drift, die Jahre braucht, in einer Sekunde ablesbar wird.#!\\n\\n#title Was sich bewegt#!\\nAlles, was der monatlichen Aktualisierung gehört: der sich seinem Ziel annähernde Leitzins, Kern- und erwartete Inflation, der gleitende Preisdurchschnitt, beide Prämien, das Inflationsband und sein Modifikator, der Zähler anhaltender Ausrichtung und alle drei Zufallsläufe — je eine Ziehung pro Monat, genau wie bei jedem Impuls.\\n\\n#title Was sich nicht bewegt#!\\nDer Kalender. Kein zeitlicher Modifikator altert, Phase und Blase des Bankzyklus bleiben genau, wo sie sind, die jährliche Wachstumsmomentaufnahme läuft nicht (sie würde die Wirtschaft eines Augenblicks gegen sich selbst lesen), der Haushalt bewegt sich nicht, sodass der Defizitterm auf der heutigen Zahl eingefroren bleibt, und die Preise bewegen sich nicht — sodass der Schockterm des Warenkorbs über einen langen Lauf leise auf null abklingt. Lesen Sie einen Vorlauf als #v die Wirtschaft dieses Monats, wiederholt#!, nicht als fünf Jahre Geschichte.\\n\\n#title Wenn die Inflation durchgeht#!\\nÜberschreitet die Gesamtinflation mitten im Lauf die Hyperinflationsgrenze, löst das Krisenereignis aus, und der Rest des Laufs wird übersprungen, sodass der Zustand, den Sie danach ablesen, der Monat ist, in dem die Krise eintrat, statt Jahre unbeantworteter Popups. Beantworten Sie es, und führen Sie dies dann erneut aus."
+ },
+ "te_debug_monetary.6.f": {
+  "en": "'The Governor asks how the ledgers look five years out.'\\n\\n'Tell him to come back on Thursday. I shall have lived them by then.'",
+  "de": "„Der Gouverneur fragt, wie die Bücher in fünf Jahren aussehen.“\\n\\n„Sagen Sie ihm, er soll am Donnerstag wiederkommen. Bis dahin werde ich sie durchlebt haben.“"
+ },
+ "te_debug_monetary.6.t": {
+  "en": "Monetary Harness: Fast-Forward",
+  "de": "Geld-Testgerüst: Vorlauf"
+ },
+ "te_debug_monetary.6.z": {
+  "en": "Close",
+  "de": "Schließen"
+ },
+ "te_debug_monetary.7.a": {
+  "en": "Seed the worked example: inflation and expectations at 2, dial at 5, nothing monetised",
+  "de": "Das Musterbeispiel initialisieren: Inflation und Erwartungen bei 2, Zinsregler bei 5, nichts monetisiert"
+ },
+ "te_debug_monetary.7.b": {
+  "en": "Go to war: monetise at level 3, and leave the dial at 5",
+  "de": "In den Krieg ziehen: auf Stufe 3 monetisieren und den Zinsregler bei 5 belassen"
+ },
+ "te_debug_monetary.7.c": {
+  "en": "Peace: stop monetising, and still leave the dial where it is",
+  "de": "Frieden: die Monetisierung stoppen und den Zinsregler dennoch belassen, wo er ist"
+ },
+ "te_debug_monetary.7.d": {
+  "en": "#lore Console-only. Nothing in the mod fires this event. It sets up the design's own worked example — a war paid for with the printing press, and a peace that refuses to pay for it — so the numbers can be checked against the ones the design predicts.#!\\n\\n#title The three steps#!\\n#v Seed#! puts the country at the textbook fixed point: inflation, core and expectations all at 2, the dial and the rate at 5, nothing being monetised, and the hidden estimate of the natural rate parked so the stance is exactly neutral. It then runs one month, so that the premium, the market yield and the rate paid are worked out from the seed instead of being left over from whatever the country was before. From there the rate paid should sit still, month after month.\\n\\n#v War#! turns the printing press to its highest setting and leaves the dial alone. Expect inflation near #v 13#! and expectations lagging near #v 6.5#! after two years, and the rate paid falling to well under a point — a war financed at almost nothing.\\n\\n#v Peace#! stops the press and, deliberately, still does not raise the dial. This is the path the design has to make unattractive: the rate paid must climb back #v above#! what it was before the war once expectations catch up, and the inflation bands have to make living at 12 to 20 percent worse than the disinflation would have been.\\n\\n#title Pin first#!\\nThe war option only appears for a country that may actually monetise. If it is missing, run the pin in #v te_debug_monetary.5#! and come back.\\n\\n#title Reading it#!\\nUse #v te_debug_monetary.6#! to advance the months and #v te_debug_monetary.1#! to read the result. The rate paid before the war is your baseline; the design's figure of 5 percent assumes a risk premium of exactly two, which no real country has.",
+  "de": "#lore Nur für die Konsole. Kein Bestandteil der Mod löst dieses Ereignis aus. Es richtet das eigene Musterbeispiel des Entwurfs ein — ein mit der Notenpresse bezahlter Krieg und ein Frieden, der sich weigert, dafür zu zahlen —, sodass sich die Zahlen gegen die vom Entwurf vorhergesagten prüfen lassen.#!\\n\\n#title Die drei Schritte#!\\n#v Initialisieren#! versetzt das Land in den Lehrbuch-Fixpunkt: Inflation, Kern und Erwartungen alle bei 2, Zinsregler und Zinssatz bei 5, nichts wird monetisiert, und die verborgene Schätzung des natürlichen Zinses ist so geparkt, dass die Ausrichtung exakt neutral ist. Danach läuft ein Monat, sodass Prämie, Marktrendite und gezahlter Zins aus der Initialisierung errechnet werden, statt Reste dessen zu sein, was das Land zuvor war. Von dort an sollte der gezahlte Zins Monat für Monat stillstehen.\\n\\n#v Krieg#! dreht die Notenpresse auf die höchste Stufe und lässt den Zinsregler unberührt. Erwarten Sie nach zwei Jahren eine Inflation nahe #v 13#! und Erwartungen, die nahe #v 6,5#! hinterherhinken, sowie einen gezahlten Zins, der auf deutlich unter einen Punkt fällt — ein Krieg, der fast umsonst finanziert wird.\\n\\n#v Frieden#! stoppt die Presse und hebt, absichtlich, den Zinsregler weiterhin nicht an. Das ist der Pfad, den der Entwurf unattraktiv machen muss: Der gezahlte Zins muss wieder #v über#! den Stand vor dem Krieg klettern, sobald die Erwartungen aufholen, und die Inflationsbänder müssen ein Leben bei 12 bis 20 Prozent schlimmer machen, als es die Disinflation gewesen wäre.\\n\\n#title Zuerst festmachen#!\\nDie Kriegsoption erscheint nur für ein Land, das tatsächlich monetisieren darf. Fehlt sie, führen Sie das Festmachen in #v te_debug_monetary.5#! aus und kommen Sie zurück.\\n\\n#title Es ablesen#!\\nVerwenden Sie #v te_debug_monetary.6#!, um die Monate voranzutreiben, und #v te_debug_monetary.1#!, um das Ergebnis abzulesen. Der gezahlte Zins vor dem Krieg ist Ihr Ausgangswert; die Entwurfszahl von 5 Prozent setzt eine Risikoprämie von genau zwei voraus, die kein echtes Land hat."
+ },
+ "te_debug_monetary.7.f": {
+  "en": "'The war is paid for, Chancellor.'\\n\\n'With what?'\\n\\n'With next decade, mostly.'",
+  "de": "„Der Krieg ist bezahlt, Kanzler.“\\n\\n„Womit?“\\n\\n„Größtenteils mit dem nächsten Jahrzehnt.“"
+ },
+ "te_debug_monetary.7.t": {
+  "en": "Monetary Harness: The Monetised War",
+  "de": "Geld-Testgerüst: Der monetisierte Krieg"
+ },
+ "te_debug_monetary.7.z": {
+  "en": "Close",
+  "de": "Schließen"
+ },
+ "te_debug_monetary.8.a": {
+  "en": "Add 2 points to the world rate",
+  "de": "2 Punkte zum Weltzins hinzufügen"
+ },
+ "te_debug_monetary.8.b": {
+  "en": "Remove the world-rate offset",
+  "de": "Den Weltzins-Versatz entfernen"
+ },
+ "te_debug_monetary.8.c": {
+  "en": "Set peg confidence to 25",
+  "de": "Bindungsvertrauen auf 25 setzen"
+ },
+ "te_debug_monetary.8.d": {
+  "en": "#lore Console-only. Nothing in the mod fires this event. None of these figures is hidden state; the two globals are simply printed nowhere else.#!\\n\\n#title The world rate#!\\nWorld rate (global): #v [GetGlobalVariable('te_world_rate').GetValue|3]#!   This country's copy: #v [ROOT.GetVariable('te_mon_world_rate_now').GetValue|3]#!   Reference rate: #v [ROOT.GetVariable('te_mon_era_base_now').GetValue|2]#!\\nAccumulators — sum of weight x real rate: #v [GetGlobalVariable('te_world_rate_acc_num').GetValue|3]#!   sum of weight (GDP in millions of the discretionary great powers): #v [GetGlobalVariable('te_world_rate_acc_den').GetValue|3]#! — both 0 means nobody is discretionary and the world rate is the reference rate\\nDebug offset: #v [GetGlobalVariable('te_world_rate_debug_offset').GetValue|1]#! — blank when none is set\\nThis country's weight and weighted real rate, if it were counted: #v [SCOPE.GetRootScope.ScriptValue('te_mon_world_rate_weight')|3]#! / #v [SCOPE.GetRootScope.ScriptValue('te_mon_world_rate_weighted_real')|3]#!\\n\\n#title Gold#!\\nGap: #v [ROOT.GetVariable('te_gold_flow_gap').GetValue|2]#!   Flow this month: #v [ROOT.GetVariable('te_gold_flow').GetValue|0]#!   as % of GDP a year: #v [ROOT.GetVariable('te_gold_flow_pct').GetValue|2]#!   Pressure it adds next month: #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_gold_flow')|2]#!\\nOne point of gap is worth: #v [SCOPE.GetRootScope.ScriptValue('te_mon_gold_flow_unit')|0]#! a month   Room left for inflow: #v [SCOPE.GetRootScope.ScriptValue('te_mon_gold_inflow_room')|0]#!   Hot money: #v [ROOT.GetVariable('te_gold_hot_money').GetValue|0]#!   Carry this month: #v [ROOT.GetVariable('te_gold_carry').GetValue|0]#!   Own share of the world-rate accumulators (0 / 0 unless this country is in the average): #v [ROOT.GetVariable('te_mon_world_own_num').GetValue|3]#! / #v [ROOT.GetVariable('te_mon_world_own_den').GetValue|3]#!\\nBank vault: #v [ROOT.GetVariable('te_bank_gold').GetValue|0]#! of a limit of #v [SCOPE.GetRootScope.ScriptValue('te_mon_bank_gold_limit')|0]#! = #v [SCOPE.GetRootScope.ScriptValue('te_mon_bank_gold_scaled')|3]#!   seeded: #v [ROOT.GetVariable('te_bank_gold_seeded').GetValue|0]#!   (the TREASURY's scaled reserves, for comparison: #v [SCOPE.GetRootScope.ScriptValue('te_mon_debug_scaled_reserves')|3]#!)\\nOne recapitalisation step: #v [SCOPE.GetRootScope.ScriptValue('te_mon_bank_recap_amount')|0]#!   Carry as written into the budget modifier, weekly: #v [ROOT.GetVariable('te_gold_carry_applied').GetValue|0]#!\\n\\n#title The peg#!\\nConfidence: #v [ROOT.GetVariable('te_peg_confidence').GetValue|1]#!   Move this month if under pressure: #v [SCOPE.GetRootScope.ScriptValue('te_mon_peg_confidence_move')|1]#!   Crisis cooldown: #v [ROOT.GetVariable('te_peg_crisis_cooldown').GetValue|0]#!\\nDefending, months left: #v [ROOT.GetVariable('te_peg_defend_months').GetValue|0]#!   Suspended, months left: #v [ROOT.GetVariable('te_peg_suspended_months').GetValue|0]#!\\nPeg-defence formula: #v [SCOPE.GetRootScope.ScriptValue('te_mon_peg_defence_target')|2]#! — world rate + half of a shortfall of #v [SCOPE.GetRootScope.ScriptValue('te_mon_peg_shortfall_pp')|2]#!   Target floor / ceiling now: #v [SCOPE.GetRootScope.ScriptValue('te_mon_target_min')|0]#! / #v [SCOPE.GetRootScope.ScriptValue('te_mon_target_max')|0]#!",
+  "de": "#lore Nur für die Konsole. Kein Bestandteil der Mod löst dieses Ereignis aus. Keiner dieser Werte ist verborgener Zustand; die beiden globalen Variablen werden lediglich sonst nirgends ausgegeben.#!\\n\\n#title Der Weltzins#!\\nWeltzins (global): #v [GetGlobalVariable('te_world_rate').GetValue|3]#!   Kopie dieses Landes: #v [ROOT.GetVariable('te_mon_world_rate_now').GetValue|3]#!   Referenzzins: #v [ROOT.GetVariable('te_mon_era_base_now').GetValue|2]#!\\nAkkumulatoren — Summe aus Gewicht x Realzins: #v [GetGlobalVariable('te_world_rate_acc_num').GetValue|3]#!   Summe des Gewichts (BIP in Millionen der frei entscheidenden Großmächte): #v [GetGlobalVariable('te_world_rate_acc_den').GetValue|3]#! — beide 0 bedeutet, niemand ist frei entscheidend, und der Weltzins ist der Referenzzins\\nDebug-Versatz: #v [GetGlobalVariable('te_world_rate_debug_offset').GetValue|1]#! — leer, wenn keiner gesetzt ist\\nGewicht dieses Landes und gewichteter Realzins, würde es mitgezählt: #v [SCOPE.GetRootScope.ScriptValue('te_mon_world_rate_weight')|3]#! / #v [SCOPE.GetRootScope.ScriptValue('te_mon_world_rate_weighted_real')|3]#!\\n\\n#title Gold#!\\nLücke: #v [ROOT.GetVariable('te_gold_flow_gap').GetValue|2]#!   Fluss diesen Monat: #v [ROOT.GetVariable('te_gold_flow').GetValue|0]#!   als % des BIP im Jahr: #v [ROOT.GetVariable('te_gold_flow_pct').GetValue|2]#!   Druck, den er nächsten Monat hinzufügt: #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_gold_flow')|2]#!\\nEin Punkt Lücke ist wert: #v [SCOPE.GetRootScope.ScriptValue('te_mon_gold_flow_unit')|0]#! pro Monat   Verbleibender Raum für Zufluss: #v [SCOPE.GetRootScope.ScriptValue('te_mon_gold_inflow_room')|0]#!   Heißes Geld: #v [ROOT.GetVariable('te_gold_hot_money').GetValue|0]#!   Übertrag diesen Monat: #v [ROOT.GetVariable('te_gold_carry').GetValue|0]#!   Eigener Anteil an den Weltzins-Akkumulatoren (0 / 0, außer das Land geht in den Durchschnitt ein): #v [ROOT.GetVariable('te_mon_world_own_num').GetValue|3]#! / #v [ROOT.GetVariable('te_mon_world_own_den').GetValue|3]#!\\nBanktresor: #v [ROOT.GetVariable('te_bank_gold').GetValue|0]#! von einer Grenze von #v [SCOPE.GetRootScope.ScriptValue('te_mon_bank_gold_limit')|0]#! = #v [SCOPE.GetRootScope.ScriptValue('te_mon_bank_gold_scaled')|3]#!   initialisiert: #v [ROOT.GetVariable('te_bank_gold_seeded').GetValue|0]#!   (die skalierten Reserven des STAATSSCHATZES zum Vergleich: #v [SCOPE.GetRootScope.ScriptValue('te_mon_debug_scaled_reserves')|3]#!)\\nEin Rekapitalisierungsschritt: #v [SCOPE.GetRootScope.ScriptValue('te_mon_bank_recap_amount')|0]#!   Als Übertrag in den Haushaltsmodifikator geschrieben, wöchentlich: #v [ROOT.GetVariable('te_gold_carry_applied').GetValue|0]#!\\n\\n#title Die Bindung#!\\nVertrauen: #v [ROOT.GetVariable('te_peg_confidence').GetValue|1]#!   Bewegung diesen Monat, falls unter Druck: #v [SCOPE.GetRootScope.ScriptValue('te_mon_peg_confidence_move')|1]#!   Krisen-Abklingzeit: #v [ROOT.GetVariable('te_peg_crisis_cooldown').GetValue|0]#!\\nVerteidigend, Monate übrig: #v [ROOT.GetVariable('te_peg_defend_months').GetValue|0]#!   Ausgesetzt, Monate übrig: #v [ROOT.GetVariable('te_peg_suspended_months').GetValue|0]#!\\nBindungsverteidigungs-Formel: #v [SCOPE.GetRootScope.ScriptValue('te_mon_peg_defence_target')|2]#! — Weltzins + die Hälfte eines Fehlbetrags von #v [SCOPE.GetRootScope.ScriptValue('te_mon_peg_shortfall_pp')|2]#!   Ziel-Unter-/Obergrenze jetzt: #v [SCOPE.GetRootScope.ScriptValue('te_mon_target_min')|0]#! / #v [SCOPE.GetRootScope.ScriptValue('te_mon_target_max')|0]#!"
+ },
+ "te_debug_monetary.8.f": {
+  "en": "#lore Console-only. §19 row 3's exit criteria and how to stage each are in the header above this event in events/te_debug_monetary_events.txt.#!",
+  "de": "#lore Nur für die Konsole. Die Austrittskriterien für §19-Zeile 3 und wie man jede davon inszeniert, stehen im Kopfbereich über diesem Ereignis in events/te_debug_monetary_events.txt.#!"
+ },
+ "te_debug_monetary.8.t": {
+  "en": "Monetary Debug — Gold and the Peg",
+  "de": "Geld-Debug — Gold und die Bindung"
+ },
+ "te_debug_monetary.8.z": {
+  "en": "Close",
+  "de": "Schließen"
+ },
+ "te_debug_monetary.9.a": {
+  "en": "Level shock: shadow index −20",
+  "de": "Niveauschock: Schattenindex −20"
+ },
+ "te_debug_monetary.9.b": {
+  "en": "Event shock: nominal −26 (about −10)",
+  "de": "Ereignisschock: nominal −26 (etwa −10)"
+ },
+ "te_debug_monetary.9.c": {
+  "en": "Set the controls counter to 60 months",
+  "de": "Den Kontrollzähler auf 60 Monate setzen"
+ },
+ "te_debug_monetary.9.d": {
+  "en": "#lore Console-only. Nothing in the mod fires this event. Nothing here is hidden state; the globals are simply printed nowhere else.#!\\n\\n#title The index#!\\nIndex: #v [ROOT.GetVariable('te_fx_index').GetValue|2]#!   Shadow (where it would float): #v [ROOT.GetVariable('te_fx_shadow').GetValue|2]#!   Overvaluation: #v [ROOT.GetVariable('te_mon_overvaluation').GetValue|2]#!   Devalued months left: #v [ROOT.GetVariable('te_fx_devalued_months').GetValue|0]#!\\nTarget now: #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_target_value')|2]#! = 100 + rate #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_term_rate')|2]#! + inflation #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_term_inflation')|2]#! + premium #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_term_premium')|2]#! + shock #v [ROOT.GetVariable('te_fx_shock').GetValue|2]#!\\nInflation this currency is judged on (core on metal, expected otherwise): #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_inflation_read')|2]#!   controls_damp: #v [SCOPE.GetRootScope.ScriptValue('te_mon_controls_damp')|2]#!\\n\\n#title World inflation#!\\nGlobal: #v [GetGlobalVariable('te_world_inflation').GetValue|3]#!   This country's copy, own share excluded: #v [ROOT.GetVariable('te_mon_world_inflation_now').GetValue|3]#!\\nAccumulators — sum of weight x inflation: #v [GetGlobalVariable('te_world_inflation_acc_num').GetValue|3]#!   sum of weight: #v [GetGlobalVariable('te_world_inflation_acc_den').GetValue|3]#!   own share: #v [ROOT.GetVariable('te_mon_world_infl_own_num').GetValue|3]#! / #v [ROOT.GetVariable('te_mon_world_infl_own_den').GetValue|3]#!\\n\\n#title Consequences#!\\nWeak points applied: #v [ROOT.GetVariable('te_fx_weak_applied').GetValue|2]#!   Strong points applied: #v [ROOT.GetVariable('te_fx_strong_applied').GetValue|2]#!   FX premium (off last month's index): #v [SCOPE.GetRootScope.ScriptValue('te_mon_premium_fx')|2]#!\\nThree-year average: #v [ROOT.GetVariable('te_fx_avg').GetValue|2]#!   Openness band: #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_openness')|1]#!   Imported inflation: #v [ROOT.GetVariable('te_fx_imported').GetValue|2]#!   Cost-push in all: #v [ROOT.GetVariable('te_cost_push').GetValue|2]#!\\n\\n#title Capital controls#!\\nPeacetime months held: #v [ROOT.GetVariable('te_capital_controls_months').GetValue|0]#!   Fatigue steps applied: #v [ROOT.GetVariable('te_capital_controls_fatigue_applied').GetValue|2]#!   Overvaluation drain on the peg this month: #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_overvaluation_drain')|2]#!",
+  "de": "#lore Nur für die Konsole. Kein Bestandteil der Mod löst dieses Ereignis aus. Nichts hier ist verborgener Zustand; die globalen Variablen werden lediglich sonst nirgends ausgegeben.#!\\n\\n#title Der Index#!\\nIndex: #v [ROOT.GetVariable('te_fx_index').GetValue|2]#!   Schatten (wo er frei schwanken würde): #v [ROOT.GetVariable('te_fx_shadow').GetValue|2]#!   Überbewertung: #v [ROOT.GetVariable('te_mon_overvaluation').GetValue|2]#!   Abgewertet, Monate übrig: #v [ROOT.GetVariable('te_fx_devalued_months').GetValue|0]#!\\nZiel jetzt: #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_target_value')|2]#! = 100 + Zins #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_term_rate')|2]#! + Inflation #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_term_inflation')|2]#! + Prämie #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_term_premium')|2]#! + Schock #v [ROOT.GetVariable('te_fx_shock').GetValue|2]#!\\nInflation, an der diese Währung gemessen wird (Kern bei Metall, sonst erwartet): #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_inflation_read')|2]#!   controls_damp: #v [SCOPE.GetRootScope.ScriptValue('te_mon_controls_damp')|2]#!\\n\\n#title Weltinflation#!\\nGlobal: #v [GetGlobalVariable('te_world_inflation').GetValue|3]#!   Kopie dieses Landes, eigener Anteil ausgeschlossen: #v [ROOT.GetVariable('te_mon_world_inflation_now').GetValue|3]#!\\nAkkumulatoren — Summe aus Gewicht x Inflation: #v [GetGlobalVariable('te_world_inflation_acc_num').GetValue|3]#!   Summe des Gewichts: #v [GetGlobalVariable('te_world_inflation_acc_den').GetValue|3]#!   eigener Anteil: #v [ROOT.GetVariable('te_mon_world_infl_own_num').GetValue|3]#! / #v [ROOT.GetVariable('te_mon_world_infl_own_den').GetValue|3]#!\\n\\n#title Folgen#!\\nAngewandte Schwachpunkte: #v [ROOT.GetVariable('te_fx_weak_applied').GetValue|2]#!   Angewandte Stärkepunkte: #v [ROOT.GetVariable('te_fx_strong_applied').GetValue|2]#!   FX-Prämie (vom Index des letzten Monats): #v [SCOPE.GetRootScope.ScriptValue('te_mon_premium_fx')|2]#!\\nDreijahresdurchschnitt: #v [ROOT.GetVariable('te_fx_avg').GetValue|2]#!   Offenheitsband: #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_openness')|1]#!   Importierte Inflation: #v [ROOT.GetVariable('te_fx_imported').GetValue|2]#!   Angebotsdruck insgesamt: #v [ROOT.GetVariable('te_cost_push').GetValue|2]#!\\n\\n#title Kapitalverkehrskontrollen#!\\nMonate in Friedenszeiten gehalten: #v [ROOT.GetVariable('te_capital_controls_months').GetValue|0]#!   Angewandte Ermüdungsschritte: #v [ROOT.GetVariable('te_capital_controls_fatigue_applied').GetValue|2]#!   Überbewertungsabfluss auf die Bindung diesen Monat: #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_overvaluation_drain')|2]#!"
+ },
+ "te_debug_monetary.9.e": {
+  "en": "Run one monthly update now",
+  "de": "Jetzt eine monatliche Aktualisierung ausführen"
+ },
+ "te_debug_monetary.9.f": {
+  "en": "#lore Console-only. §19 row 4's exit criteria and how to stage each are in the header above this event in events/te_debug_monetary_events.txt.#!",
+  "de": "#lore Nur für die Konsole. Die Austrittskriterien für §19-Zeile 4 und wie man jede davon inszeniert, stehen im Kopfbereich über diesem Ereignis in events/te_debug_monetary_events.txt.#!"
+ },
+ "te_debug_monetary.9.t": {
+  "en": "Monetary Debug — The Exchange Rate",
+  "de": "Geld-Debug — Der Wechselkurs"
+ },
+ "te_debug_monetary.9.z": {
+  "en": "Close",
+  "de": "Schließen"
+ },
+ "te_debug_monuments.1.a": {
+  "en": "Raise a level-20 monument in the capital and hold its ceremony",
+  "de": "Ein Monument der Stufe 20 in der Hauptstadt errichten und seine Zeremonie abhalten"
+ },
+ "te_debug_monuments.1.b": {
+  "en": "Run this month's monument pass now",
+  "de": "Den Monument-Durchlauf dieses Monats jetzt ausführen"
+ },
+ "te_debug_monuments.1.c": {
+  "en": "Contest our tallest regime, ruler or faith monument and open its notice",
+  "de": "Unser höchstes Regime-, Herrscher- oder Glaubensmonument anfechten und seine Mitteilung öffnen"
+ },
+ "te_debug_monuments.1.d": {
+  "en": "Vanity backlash at the capital's monument",
+  "de": "Eitelkeitsgegenreaktion am Monument der Hauptstadt"
+ },
+ "te_debug_monuments.1.desc": {
+  "en": "Grand Monument test tools. Each writes TE_MONUMENTS: lines to debug.log.",
+  "de": "Testwerkzeuge für Große Monumente. Jedes schreibt TE_MONUMENTS:-Zeilen in debug.log."
+ },
+ "te_debug_monuments.1.e": {
+  "en": "Print every monument total to debug.log",
+  "de": "Jede Monumentsumme in debug.log ausgeben"
+ },
+ "te_debug_monuments.1.flavor": {
+  "en": "Console only.",
+  "de": "Nur Konsole."
+ },
+ "te_debug_monuments.1.t": {
+  "en": "Debug: Grand Monuments",
+  "de": "Debug: Große Monumente"
+ },
+ "te_debug_nuclear.1.a": {
+  "en": "Fund the programme to step 3, and arm three rivals",
+  "de": "Das Programm auf Stufe 3 finanzieren und drei Rivalen bewaffnen"
+ },
+ "te_debug_nuclear.1.b": {
+  "en": "Cut funding to nothing",
+  "de": "Die Finanzierung auf null kürzen"
+ },
+ "te_debug_nuclear.1.c": {
+  "en": "Bring the next warhead to the brink of completion",
+  "de": "Den nächsten Sprengkopf an den Rand der Fertigstellung bringen"
+ },
+ "te_debug_nuclear.1.d": {
+  "en": "Put five warheads in the stockpile now",
+  "de": "Jetzt fünf Sprengköpfe ins Arsenal legen"
+ },
+ "te_debug_nuclear.1.desc": {
+  "en": "Console-only shortcuts for testing the nuclear programme panel. None of these can happen in normal play.\\n\\nRun them as a great power that has researched $nuclear_weapons$, or the journal entry will not be active and the panels will correctly draw nothing.\\n\\nFunding to step 3 also arms the three strongest rival great powers, so the Nuclear Powers section has rows to draw. Bringing a warhead to the brink sets progress to the goal and lets the next weekly pulse finish it through the real code path, so the world-first check, the production rate change and the first-device year all happen for real — advance one week to see it.",
+  "de": "Nur für die Konsole: Abkürzungen zum Testen des Nuklearprogramm-Panels. Nichts davon kann im normalen Spiel vorkommen.\\n\\nFühren Sie sie als Großmacht aus, die $nuclear_weapons$ erforscht hat, sonst ist der Journaleintrag nicht aktiv, und die Panels zeigen zu Recht nichts an.\\n\\nFinanzierung auf Stufe 3 bewaffnet außerdem die drei stärksten rivalisierenden Großmächte, sodass der Abschnitt Nuklearmächte Zeilen zum Zeichnen hat. Einen Sprengkopf an den Rand zu bringen setzt den Fortschritt auf das Ziel und lässt ihn beim nächsten wöchentlichen Impuls über den echten Codepfad fertigstellen, sodass die Weltweit-Erste-Prüfung, die Änderung der Produktionsrate und das Jahr der ersten Waffe alle wirklich stattfinden — eine Woche vorspulen, um es zu sehen."
+ },
+ "te_debug_nuclear.1.e": {
+  "en": "Empty every arsenal in the world",
+  "de": "Jedes Arsenal der Welt leeren"
+ },
+ "te_debug_nuclear.1.f": {
+  "en": "'How long, then?'\\n\\n'That depends entirely on how much of the future you are willing to spend.'",
+  "de": "„Wie lange dann?“\\n\\n„Das hängt ganz davon ab, wie viel von der Zukunft Sie bereit sind auszugeben.“"
+ },
+ "te_debug_nuclear.1.t": {
+  "en": "Nuclear Programme Test Console",
+  "de": "Testkonsole Nuklearprogramm"
+ },
+ "te_debug_nuclear.2.a": {
+  "en": "Freeze the programme, as a pause treaty would",
+  "de": "Das Programm einfrieren, wie es ein Pausenvertrag täte"
+ },
+ "te_debug_nuclear.2.b": {
+  "en": "Lift the freeze",
+  "de": "Das Einfrieren aufheben"
+ },
+ "te_debug_nuclear.2.c": {
+  "en": "Impose disarmament (deactivates the journal entry)",
+  "de": "Abrüstung auferlegen (deaktiviert den Journaleintrag)"
+ },
+ "te_debug_nuclear.2.d": {
+  "en": "Lift disarmament (reactivates it)",
+  "de": "Abrüstung aufheben (reaktiviert ihn)"
+ },
+ "te_debug_nuclear.2.desc": {
+  "en": "The two states that stop a programme, each applied and lifted.\\n\\nA freeze should grey out both funding controls with the pause named as the failing condition, and within one week the funding modifier should be gone from the journal entry itself — check the entry's modifier list, not only the panel.\\n\\nDisarmament makes the entry's requirements fail, so the entry deactivates: the panels vanish and only the status line speaks. Lifting it reactivates the entry and re-runs its activation effect, which is where the stockpile has to survive. It should survive however long disarmament stood — the pulse branch that empties a stockpile cannot run once the entry is inactive, and only the disarmament treaty article itself empties one. A stockpile of 0 on the way back is a finding, not expected behaviour.",
+  "de": "Die beiden Zustände, die ein Programm stoppen, jeweils angewandt und aufgehoben.\\n\\nEin Einfrieren sollte beide Finanzierungsregler ausgrauen, mit der Pause als fehlschlagender Bedingung genannt, und binnen einer Woche sollte der Finanzierungsmodifikator aus dem Journaleintrag selbst verschwunden sein — prüfen Sie die Modifikatorliste des Eintrags, nicht nur das Panel.\\n\\nAbrüstung lässt die Anforderungen des Eintrags fehlschlagen, sodass der Eintrag deaktiviert: Die Panels verschwinden, und nur die Statuszeile spricht noch. Das Aufheben reaktiviert den Eintrag und führt seinen Aktivierungseffekt erneut aus, und genau dort muss das Arsenal überleben. Es sollte überleben, so lange die Abrüstung auch bestand — der Impulszweig, der ein Arsenal leert, kann nicht laufen, solange der Eintrag inaktiv ist, und nur der Abrüstungsvertragsartikel selbst leert eines. Ein Arsenal von 0 bei der Rückkehr ist ein Befund, kein erwartetes Verhalten."
+ },
+ "te_debug_nuclear.2.f": {
+  "en": "'The treaty does not say we must forget how.'",
+  "de": "„Der Vertrag sagt nicht, dass wir verlernen müssen, wie es geht.“"
+ },
+ "te_debug_nuclear.2.t": {
+  "en": "Nuclear Programme Blockers",
+  "de": "Blockaden des Nuklearprogramms"
+ },
+ "te_debug_nuclear.3.a": {
+  "en": "Taboo to 20",
+  "de": "Tabu auf 20"
+ },
+ "te_debug_nuclear.3.b": {
+  "en": "Taboo to 85",
+  "de": "Tabu auf 85"
+ },
+ "te_debug_nuclear.3.c": {
+  "en": "Ten more years without use",
+  "de": "Zehn weitere Jahre ohne Einsatz"
+ },
+ "te_debug_nuclear.3.d": {
+  "en": "Run the world's monthly step",
+  "de": "Den monatlichen Weltschritt ausführen"
+ },
+ "te_debug_nuclear.3.desc": {
+  "en": "Console harness for the nuclear taboo. Set the score, age the tradition of non-use, run the monthly step, or note a renunciation of ten warheads by us. The step logs a TE_TABOO: line.",
+  "de": "Testgerüst für das nukleare Tabu. Setzen Sie den Wert, lassen Sie die Tradition des Nichteinsatzes altern, führen Sie den monatlichen Schritt aus, oder vermerken Sie einen Verzicht auf zehn Sprengköpfe durch uns. Der Schritt protokolliert eine TE_TABOO:-Zeile."
+ },
+ "te_debug_nuclear.3.e": {
+  "en": "Note a renunciation of 10 warheads",
+  "de": "Einen Verzicht auf 10 Sprengköpfe vermerken"
+ },
+ "te_debug_nuclear.3.f": {
+  "en": "Debug",
+  "de": "Debug"
+ },
+ "te_debug_nuclear.3.t": {
+  "en": "Debug: the Nuclear Taboo",
+  "de": "Debug: das Nukleare Tabu"
+ },
+ "te_debug_nuclear.3.tt_20": {
+  "en": "The nuclear taboo is set to 20",
+  "de": "Das Nukleare Tabu wird auf 20 gesetzt"
+ },
+ "te_debug_nuclear.3.tt_85": {
+  "en": "The nuclear taboo is set to 85",
+  "de": "Das Nukleare Tabu wird auf 85 gesetzt"
+ },
+ "te_debug_nuclear.3.tt_age": {
+  "en": "Ten years are added to the tradition of non-use",
+  "de": "Zehn Jahre werden zur Tradition des Nichteinsatzes hinzugefügt"
+ },
+ "te_debug_nuclear.3.tt_renounce": {
+  "en": "We are noted as having given up ten warheads. If we are still armed, the next monthly step books us a breakout",
+  "de": "Wir werden vermerkt, zehn Sprengköpfe aufgegeben zu haben. Sind wir noch bewaffnet, verbucht uns der nächste monatliche Schritt einen Ausbruch"
+ },
+ "te_debug_nuclear.3.tt_step": {
+  "en": "The world's monthly taboo step runs now",
+  "de": "Der monatliche Tabu-Schritt der Welt läuft jetzt"
+ },
+ "te_debug_resettlement.1.a": {
+  "en": "Found a Settlement Authority in our emptiest frontier",
+  "de": "Eine Siedlungsbehörde in unserer leersten Grenzregion gründen"
+ },
+ "te_debug_resettlement.1.b": {
+  "en": "Run this month's resettlement now",
+  "de": "Die Umsiedlung dieses Monats jetzt ausführen"
+ },
+ "te_debug_resettlement.1.c": {
+  "en": "Close one of our Settlement Authorities",
+  "de": "Eine unserer Siedlungsbehörden schließen"
+ },
+ "te_debug_resettlement.1.d": {
+  "en": "Log the frontier numbers",
+  "de": "Die Grenzregionszahlen protokollieren"
+ },
+ "te_debug_resettlement.1.desc": {
+  "en": "Test the Settlement Authority. Every option writes TE_RESETTLEMENT: lines to debug.log.",
+  "de": "Die Siedlungsbehörde testen. Jede Option schreibt TE_RESETTLEMENT:-Zeilen in debug.log."
+ },
+ "te_debug_resettlement.1.flavor": {
+  "en": "Console only.",
+  "de": "Nur Konsole."
+ },
+ "te_debug_resettlement.1.t": {
+  "en": "Debug: Internal Resettlement",
+  "de": "Debug: Interne Umsiedlung"
+ },
+ "te_debug_space_race.1.a": {
+  "en": "Push every running milestone to 90% of its goal",
+  "de": "Jeden laufenden Meilenstein auf 90 % seines Ziels vorantreiben"
+ },
+ "te_debug_space_race.1.b": {
+  "en": "Finish every running milestone on the next tick",
+  "de": "Jeden laufenden Meilenstein beim nächsten Tick abschließen"
+ },
+ "te_debug_space_race.1.c": {
+  "en": "Force a setback now (progress loss, safety review, cooldown)",
+  "de": "Jetzt einen Rückschlag erzwingen (Fortschrittsverlust, Sicherheitsüberprüfung, Abklingzeit)"
+ },
+ "te_debug_space_race.1.d": {
+  "en": "Console-only shortcuts for testing the milestone panel. None of these can happen in normal play.\\n\\nThey act on every space race milestone that is currently running, so activate one or two entries first. The rival option writes flags that are not backed by a journal entry, so the monthly cleanup wipes them again — pause the game, run it, then open the panel.",
+  "de": "Nur für die Konsole: Abkürzungen zum Testen des Meilenstein-Panels. Nichts davon kann im normalen Spiel vorkommen.\\n\\nSie wirken auf jeden gerade laufenden Meilenstein des Wettlaufs ins All, also aktivieren Sie zuerst ein oder zwei Einträge. Die Rivalen-Option schreibt Marken, die von keinem Journaleintrag gestützt werden, sodass die monatliche Bereinigung sie wieder löscht — pausieren Sie das Spiel, führen Sie sie aus, und öffnen Sie dann das Panel."
+ },
+ "te_debug_space_race.1.e": {
+  "en": "Clear the setback cooldown",
+  "de": "Die Rückschlag-Abklingzeit löschen"
+ },
+ "te_debug_space_race.1.f": {
+  "en": "'What does the panel do if the programme is nine tenths done and on fire?'\\n\\n'Let us find out.'",
+  "de": "„Was macht das Panel, wenn das Programm zu neun Zehnteln fertig ist und in Flammen steht?“\\n\\n„Das werden wir gleich herausfinden.“"
+ },
+ "te_debug_space_race.1.g": {
+  "en": "Put a rival programme in the other top powers",
+  "de": "Ein rivalisierendes Programm bei den anderen Spitzenmächten platzieren"
+ },
+ "te_debug_space_race.1.h": {
+  "en": "Let another power claim 'the first' on every milestone I have not won",
+  "de": "Eine andere Macht „das Erste“ bei jedem Meilenstein beanspruchen lassen, den ich nicht gewonnen habe"
+ },
+ "te_debug_space_race.1.i": {
+  "en": "Give 'the first' back on every milestone I have not won",
+  "de": "„Das Erste“ bei jedem Meilenstein zurückgeben, den ich nicht gewonnen habe"
+ },
+ "te_debug_space_race.1.j": {
+  "en": "Fire a real setback event on my most advanced running milestone",
+  "de": "Ein echtes Rückschlagereignis bei meinem am weitesten fortgeschrittenen laufenden Meilenstein auslösen"
+ },
+ "te_debug_space_race.1.k": {
+  "en": "Have the two most prestigious other powers both report Suborbital Flight (popups arrive in 14 days)",
+  "de": "Die beiden angesehensten anderen Mächte beide den Suborbitalflug melden lassen (Popups treffen in 14 Tagen ein)"
+ },
+ "te_debug_space_race.1.t": {
+  "en": "Space Race Test Console",
+  "de": "Testkonsole Wettlauf ins All"
+ },
+ "te_debug_space_race.1.z": {
+  "en": "Close",
+  "de": "Schließen"
+ },
+ "te_debug_un.1.a": {
+  "en": "Found the United Nations and seat the powers",
+  "de": "Die Vereinten Nationen gründen und die Mächte aufnehmen"
+ },
+ "te_debug_un.1.b": {
+  "en": "Grant me a mandate against a neighbour",
+  "de": "Mir ein Mandat gegen einen Nachbarn gewähren"
+ },
+ "te_debug_un.1.c": {
+  "en": "Set my standing to Exemplary (85)",
+  "de": "Mein Ansehen auf Vorbildlich (85) setzen"
+ },
+ "te_debug_un.1.d": {
+  "en": "Console-only shortcuts for testing the United Nations systems. None of these can happen in normal play.\\n\\nFounding seats you and every great and major power as members (run it twice if the chamber still says non-member). The mandate option claims a neighbouring state for you and authorizes its recovery without a vote — open a diplomatic play against its owner to see the authorized war goal. Standing changes show in your modifiers after the next monthly tick.\\n\\nDooming the UN sets its authority to 1 and its credibility and order ledgers to their floors: the crisis opens at the next monthly update, the collapse clock runs, and it dissolves a few months later. Dissolving does it at once. After a dissolution the Found button convenes a founding conference once the cooldown is skipped; skipping again while a conference sits ends its year at the next monthly update.",
+  "de": "Nur für die Konsole: Abkürzungen zum Testen der Systeme der Vereinten Nationen. Nichts davon kann im normalen Spiel vorkommen.\\n\\nDie Gründung nimmt Sie und jede Groß- und Mittelmacht als Mitglieder auf (zweimal ausführen, falls die Kammer weiterhin Nichtmitglied meldet). Die Mandatsoption beansprucht für Sie einen Nachbarstaat und genehmigt seine Rückgewinnung ohne Abstimmung — eröffnen Sie eine diplomatische Aktion gegen seinen Besitzer, um das genehmigte Kriegsziel zu sehen. Ansehensänderungen zeigen sich in Ihren Modifikatoren nach dem nächsten monatlichen Tick.\\n\\nDie UN zum Untergang zu verurteilen setzt ihre Autorität auf 1 und ihre Glaubwürdigkeits- und Ordnungsbücher auf ihre Untergrenzen: Die Krise öffnet sich bei der nächsten monatlichen Aktualisierung, die Zusammenbruchsuhr läuft, und sie löst sich einige Monate später auf. Auflösen tut es sofort. Nach einer Auflösung beruft die Schaltfläche Gründen eine Gründungskonferenz ein, sobald die Abklingzeit übersprungen wird; erneutes Überspringen, während eine Konferenz tagt, beendet ihr Jahr bei der nächsten monatlichen Aktualisierung."
+ },
+ "te_debug_un.1.e": {
+  "en": "Set my standing to Disgraced (10)",
+  "de": "Mein Ansehen auf Geächtet (10) setzen"
+ },
+ "te_debug_un.1.f": {
+  "en": "'Is this in order?'\\n\\n'Nothing about this is in order.'",
+  "de": "„Ist das ordnungsgemäß?“\\n\\n„An dem hier ist gar nichts ordnungsgemäß.“"
+ },
+ "te_debug_un.1.g": {
+  "en": "Have another member propose a condemnation I can vote on",
+  "de": "Ein anderes Mitglied eine Verurteilung vorschlagen lassen, über die ich abstimmen kann"
+ },
+ "te_debug_un.1.h": {
+  "en": "Clear the floor (discard the open resolution)",
+  "de": "Das Plenum räumen (die offene Resolution verwerfen)"
+ },
+ "te_debug_un.1.i": {
+  "en": "Doom the UN (crisis next month, dissolution a few months on)",
+  "de": "Die UN zum Untergang verurteilen (Krise nächsten Monat, Auflösung einige Monate später)"
+ },
+ "te_debug_un.1.j": {
+  "en": "Dissolve the UN now",
+  "de": "Die UN jetzt auflösen"
+ },
+ "te_debug_un.1.k": {
+  "en": "Put the next charter reform on the table",
+  "de": "Die nächste Chartareform auf den Tisch legen"
+ },
+ "te_debug_un.1.l": {
+  "en": "Skip the refounding cooldown (or end a founding conference's year)",
+  "de": "Die Neugründungs-Abklingzeit überspringen (oder das Jahr einer Gründungskonferenz beenden)"
+ },
+ "te_debug_un.1.m": {
+  "en": "Open the docket now (take up the gravest situation at once)",
+  "de": "Die Tagesordnung jetzt öffnen (sofort die schwerwiegendste Lage aufgreifen)"
+ },
+ "te_debug_un.1.n": {
+  "en": "Stage a grievance against us (the strongest member is caught spying on us) and open the docket",
+  "de": "Eine Beschwerde gegen uns inszenieren (das stärkste Mitglied wird bei Spionage gegen uns erwischt) und die Tagesordnung öffnen"
+ },
+ "te_debug_un.1.o": {
+  "en": "Raise the UN one tier (the charter reform it needs, and authority at its floor)",
+  "de": "Die UN um eine Stufe anheben (die dafür nötige Chartareform, und Autorität an ihrer Untergrenze)"
+ },
+ "te_debug_un.1.p": {
+  "en": "Put us two years in arrears on our dues (Article 19 takes our vote)",
+  "de": "Uns zwei Jahre mit unseren Beiträgen in Rückstand bringen (Artikel 19 entzieht uns die Stimme)"
+ },
+ "te_debug_un.1.q": {
+  "en": "Have the International Criminal Court indict our ruler",
+  "de": "Den Internationalen Strafgerichtshof unseren Herrscher anklagen lassen"
+ },
+ "te_debug_un.1.r": {
+  "en": "Have our nationalists demand that we leave the UN",
+  "de": "Unsere Nationalisten fordern lassen, dass wir die UN verlassen"
+ },
+ "te_debug_un.1.s": {
+  "en": "Have the emergency lending facility offered to us",
+  "de": "Uns die Nothilfefazilität anbieten lassen"
+ },
+ "te_debug_un.1.t": {
+  "en": "UN Test Console",
+  "de": "UN-Testkonsole"
+ },
+ "te_debug_un.1.u": {
+  "en": "Send a UN peacekeeping mission to our most devastated state",
+  "de": "Eine UN-Friedensmission in unseren am stärksten verwüsteten Bundesstaat entsenden"
+ },
+ "te_debug_un.1.v": {
+  "en": "Puppet a random minor member, or move our subject member along: puppet, protectorate, independent",
+  "de": "Ein zufälliges kleines Mitglied zum Marionettenstaat machen, oder unser Klientelmitglied weiterbewegen: Marionette, Protektorat, unabhängig"
+ },
+ "te_debug_un.1.w": {
+  "en": "Wipe my UN journal entry as a won revolution does (modifiers gone, record kept); the next month rebuilds it",
+  "de": "Meinen UN-Journaleintrag löschen, wie es eine gewonnene Revolution tut (Modifikatoren weg, Aufzeichnung bleibt); der nächste Monat baut ihn wieder auf"
+ },
+ "te_debug_un.1.z": {
+  "en": "Close",
+  "de": "Schließen"
+ },
+ "te_inflation.1.a": {
+  "en": "Call in every note. We begin again.",
+  "de": "Jede Banknote einziehen. Wir fangen neu an."
+ },
+ "te_inflation.1.a.tt": {
+  "en": "The old notes are called in and reissued at a new value. Inflation, and what people expect of it, fall back to #b 5%#! — a new currency inherits the credibility the old one spent, not the credibility of a country that never inflated. Any monetisation of the deficit stops with the notes it was printed on.",
+  "de": "Die alten Scheine werden eingezogen und zu einem neuen Wert neu ausgegeben. Die Inflation, und was die Menschen von ihr erwarten, fällt zurück auf #b 5%#! — eine neue Währung erbt die Glaubwürdigkeit, die die alte verbraucht hat, nicht die Glaubwürdigkeit eines Landes, das nie inflationiert hat. Jede Monetisierung des Defizits endet mit den Scheinen, auf die es gedruckt wurde."
+ },
+ "te_inflation.1.b": {
+  "en": "Let them keep the foreign money. They already have.",
+  "de": "Lasst sie das fremde Geld behalten. Sie tun es bereits."
+ },
+ "te_inflation.1.b.tt": {
+  "en": "Prices, wages and contracts pass to a foreign currency, and the inflation ends with the notes it was printed on. Monetary policy is made abroad from now on, the deficit can no longer be monetised, and #b three quarters of the minting income#! a state earns by issuing the money its people use is gone for as long as the arrangement stands. The mint's books close on it with next month's accounts. Putting a currency of your own back into people's hands — by enacting any monetary law — is founding one, and lenders charge more for it for #b a decade#!. If the new money is nobody's promise but yours it also starts where a currency reform starts, near #b 5%#!; make it redeemable in metal and the promise carries the prices instead, leaving only the dearer borrowing.",
+  "de": "Preise, Löhne und Verträge gehen zu einer fremden Währung über, und die Inflation endet mit den Scheinen, auf die sie gedruckt wurde. Die Geldpolitik wird von nun an im Ausland gemacht, das Defizit kann nicht mehr monetisiert werden, und #b drei Viertel der Prägeeinnahmen#!, die ein Staat durch die Ausgabe des von seinem Volk genutzten Geldes verdient, sind verloren, solange die Regelung besteht. Die Bücher der Münzstätte schließen damit zu den Konten des nächsten Monats ab. Dem Volk eine eigene Währung zurückzugeben — durch den Erlass irgendeines Geldgesetzes — heißt, eine zu gründen, und Kreditgeber verlangen dafür für #b ein Jahrzehnt#! einen Aufschlag. Ist das neue Geld niemandes Versprechen außer Ihrem eigenen, beginnt es zudem dort, wo eine Währungsreform beginnt, nahe #b 5%#!; machen Sie es in Metall einlösbar, und das Versprechen trägt stattdessen die Preise, sodass nur die teurere Kreditaufnahme bleibt."
+ },
+ "te_inflation.1.c": {
+  "en": "It will pass. Everything passes.",
+  "de": "Es wird vergehen. Alles vergeht."
+ },
+ "te_inflation.1.c.tt": {
+  "en": "Nothing is done. The economy goes on paying what hyperinflation costs it, and the question is put again in #b two years#! if the currency has not righted itself before then.",
+  "de": "Es wird nichts unternommen. Die Wirtschaft zahlt weiter, was die Hyperinflation sie kostet, und die Frage wird in #b zwei Jahren#! erneut gestellt, falls sich die Währung bis dahin nicht erholt hat."
+ },
+ "te_inflation.1.d": {
+  "en": "Prices in [ROOT.GetCountry.GetName] are rewritten by the hour, and the government's own notes are refused across the counter as often as they are taken. Wages are spent the day they are paid, because a day is long enough to lose their value. What is left to decide is not whether the currency has failed, but what is to stand in its place.",
+  "de": "Die Preise [ROOT.GetCountry.GetAltName('IN')] werden stündlich neu geschrieben, und die eigenen Banknoten der Regierung werden am Schalter ebenso oft abgelehnt wie angenommen. Löhne werden noch am Tag ausgegeben, an dem sie gezahlt werden, denn ein Tag genügt, um ihren Wert zu verlieren. Was noch zu entscheiden bleibt, ist nicht, ob die Währung versagt hat, sondern was an ihre Stelle treten soll."
+ },
+ "te_inflation.1.f": {
+  "en": "\\\"Three times today. Three times, and it is not yet noon.\\\"\\n\\nThe baker does not look up. There is a stub of chalk in his fist and a board where the painted price used to be, and he has stopped troubling to wipe the old numbers off — they are crossed through instead, one under the next, a little column of the morning.\\n\\n\\\"My boy brings the money from the works at eleven. My wife spends it by twelve. If she is slow, we eat less that evening. That is the whole of it, sir. That is the whole of the economy, and you are welcome to write it down.\\\"",
+  "de": "„Dreimal heute. Dreimal, und es ist noch nicht einmal Mittag.“\\n\\nDer Bäcker blickt nicht auf. In seiner Faust steckt ein Kreidestummel, und da, wo einst der aufgemalte Preis stand, ist nur noch eine Tafel, und er macht sich nicht einmal mehr die Mühe, die alten Zahlen abzuwischen — stattdessen sind sie durchgestrichen, eine unter der nächsten, eine kleine Kolonne des Vormittags.\\n\\n„Mein Junge bringt das Geld um elf aus der Fabrik. Meine Frau gibt es bis zwölf aus. Ist sie langsam, essen wir abends weniger. Das ist die ganze Geschichte, mein Herr. Das ist die ganze Wirtschaft, und Sie dürfen es gerne aufschreiben.“"
+ },
+ "te_inflation.1.t": {
+  "en": "Not Worth the Paper",
+  "de": "Nicht das Papier wert"
+ },
+ "te_lolr.1.a": {
+  "en": "We gave our word. Pay.",
+  "de": "Wir haben unser Wort gegeben. Zahlen."
+ },
+ "te_lolr.1.b": {
+  "en": "Their debts are not ours.",
+  "de": "Ihre Schulden sind nicht unsere."
+ },
+ "te_lolr.1.b.tt": {
+  "en": "You #b withdraw from the treaty#!. For #b five years#! every other guarantee you have given is #b worth nothing#! to the country that holds it: guarantees are only worth the last one honoured.",
+  "de": "Sie #b treten aus dem Vertrag zurück#!. Für #b fünf Jahre#! ist jede andere von Ihnen gegebene Garantie für das Land, das sie hält, #b nichts wert#!: Garantien sind nur so viel wert wie die zuletzt eingehaltene."
+ },
+ "te_lolr.1.b.union.tt": {
+  "en": "No treaty binds us, so there is none to leave. For #b five years#! our backstop is #b suspended#!: no country that uses our currency — nor any we have guaranteed by treaty — can count on us to stand behind its debts. A promise is only worth the last one kept.",
+  "de": "Kein Vertrag bindet uns, also gibt es keinen, den wir verlassen könnten. Für #b fünf Jahre#! ist unser Rückhalt #b ausgesetzt#!: Kein Land, das unsere Währung nutzt — und keines, dem wir vertraglich eine Garantie gegeben haben —, kann darauf zählen, dass wir für seine Schulden einstehen. Ein Versprechen ist nur so viel wert wie das zuletzt gehaltene."
+ },
+ "te_lolr.1.d": {
+  "en": "[SCOPE.sCountry('te_lolr_ward').GetName] has defaulted. We are its lender of last resort — we said so, in a treaty, and its creditors lent on the strength of our name as much as theirs. They are at our door this morning. The sum is large. So is what every other government that holds our guarantee will conclude if we decline to pay it.",
+  "de": "[SCOPE.sCountry('te_lolr_ward').GetAltName('NOM')|U] ist zahlungsunfähig geworden. Wir sind sein Kreditgeber letzter Instanz — wir haben es so gesagt, in einem Vertrag, und seine Gläubiger haben ebenso auf die Stärke unseres Namens verliehen wie auf seinen eigenen. Sie stehen heute Morgen vor unserer Tür. Die Summe ist groß. Das ist auch das, was jede andere Regierung, die unsere Garantie hält, daraus schließen wird, falls wir uns weigern zu zahlen."
+ },
+ "te_lolr.1.d_union": {
+  "en": "[SCOPE.sCountry('te_lolr_ward').GetName] has defaulted. No treaty binds us to it, but it uses our currency, and the leader of a monetary union is its lender of last resort whether or not anyone wrote it down. Its creditors lent on the strength of the common money as much as on its own, and they are at our door this morning. The sum is large. So is what every other government that uses our money will conclude if we decline to pay it.",
+  "de": "[SCOPE.sCountry('te_lolr_ward').GetAltName('NOM')|U] ist zahlungsunfähig geworden. Kein Vertrag bindet uns an es, aber es nutzt unsere Währung, und der Anführer einer Währungsunion ist sein Kreditgeber letzter Instanz, ob es nun irgendwo niedergeschrieben wurde oder nicht. Seine Gläubiger haben ebenso auf die Stärke des gemeinsamen Geldes verliehen wie auf sein eigenes, und sie stehen heute Morgen vor unserer Tür. Die Summe ist groß. Das ist auch das, was jede andere Regierung, die unser Geld nutzt, daraus schließen wird, falls wir uns weigern zu zahlen."
+ },
+ "te_lolr.1.f": {
+  "en": "\\\"Lend freely, at a high rate, on good collateral — and if you have promised to, lend anyway.\\\"",
+  "de": "„Leihen Sie großzügig, zu hohem Zins, gegen gute Sicherheiten — und wenn Sie es versprochen haben, leihen Sie trotzdem.“"
+ },
+ "te_lolr.1.t": {
+  "en": "The Guarantee Is Called",
+  "de": "Die Garantie wird abgerufen"
+ },
+ "te_lolr.2.a_honoured": {
+  "en": "We will not forget who stood by us.",
+  "de": "Wir werden nicht vergessen, wer zu uns gestanden hat."
+ },
+ "te_lolr.2.a_refused": {
+  "en": "We will not forget who walked away.",
+  "de": "Wir werden nicht vergessen, wer sich abgewandt hat."
+ },
+ "te_lolr.2.d_honoured": {
+  "en": "Our default has been answered. [SCOPE.sCountry('te_lolr_guarantor').GetName], our lender of last resort, has paid our creditors @money![ROOT.GetCountry.MakeScope.Var('te_lolr_paid').GetValue|D] from its own treasury. The markets that were pricing our collapse this morning are pricing its credit instead, and for once they are pricing it high.",
+  "de": "Unsere Zahlungsunfähigkeit wurde beantwortet. [SCOPE.sCountry('te_lolr_guarantor').GetAltName('NOM')|U], unser Kreditgeber letzter Instanz, hat unsere Gläubiger mit @money![ROOT.GetCountry.MakeScope.Var('te_lolr_paid').GetValue|D] aus der eigenen Staatskasse ausgezahlt. Die Märkte, die heute Morgen noch unseren Zusammenbruch einpreisten, preisen stattdessen seine Bonität ein, und für einmal bewerten sie sie hoch."
+ },
+ "te_lolr.2.d_refused": {
+  "en": "Our default has been answered, and the answer is no. [SCOPE.sCountry('te_lolr_guarantor').GetName], our lender of last resort, has declined to stand behind our debts. Our creditors have been told to look to us alone, and every other country that relied on its word has been told something too.",
+  "de": "Unsere Zahlungsunfähigkeit wurde beantwortet, und die Antwort lautet nein. [SCOPE.sCountry('te_lolr_guarantor').GetAltName('NOM')|U], unser Kreditgeber letzter Instanz, hat sich geweigert, für unsere Schulden einzustehen. Unseren Gläubigern wurde gesagt, sie sollen sich allein an uns halten, und jedem anderen Land, das sich auf sein Wort verlassen hat, wurde ebenfalls etwas gesagt."
+ },
+ "te_lolr.2.f": {
+  "en": "\\\"They sent the cable at nine. It was two lines long.\\\"\\n\\n\\\"Which two lines?\\\"\\n\\n\\\"That depends on which morning you are asking about. There is only ever one cable, and only ever two lines. The whole of the next ten years is in which two.\\\"",
+  "de": "„Sie haben das Telegramm um neun geschickt. Es war zwei Zeilen lang.“\\n\\n„Welche zwei Zeilen?“\\n\\n„Das hängt davon ab, nach welchem Morgen Sie fragen. Es gibt immer nur ein Telegramm und immer nur zwei Zeilen. Die ganzen nächsten zehn Jahre stecken darin, welche beiden es sind.“"
+ },
+ "te_lolr.2.t_honoured": {
+  "en": "Our Guarantor Pays",
+  "de": "Unser Garantiegeber zahlt"
+ },
+ "te_lolr.2.t_refused": {
+  "en": "Our Guarantor Walks Away",
+  "de": "Unser Garantiegeber wendet sich ab"
+ },
+ "te_map_modes.1.a": {
+  "en": "Tourism appeal",
+  "de": "Touristische Attraktivität"
+ },
+ "te_map_modes.1.b": {
+  "en": "GDP per capita",
+  "de": "BIP pro Kopf"
+ },
+ "te_map_modes.1.c": {
+  "en": "Greenhouse gas emissions",
+  "de": "Treibhausgasemissionen"
+ },
+ "te_map_modes.1.d": {
+  "en": "Our cartographers stand ready to redraw the world map by whatever measure interests us most. Pick a metric below, then switch to the #b [concept_migration_pull]#! map mode — its color gradient will read as the metric we have chosen rather than as actual migration appeal.\\n\\n#italic Re-open this decision and pick #b Clear#! before switching to another metric.#!",
+  "de": "Unsere Kartografen stehen bereit, die Weltkarte nach jedem Maß neu zu zeichnen, das uns am meisten interessiert. Wählen Sie unten eine Kennzahl aus und wechseln Sie dann in den Kartenmodus #b [concept_migration_pull]#! — sein Farbverlauf zeigt dann die gewählte Kennzahl statt der tatsächlichen Migrationsanziehung.\\n\\n#italic Öffnen Sie diese Entscheidung erneut und wählen Sie #b Löschen#!, bevor Sie zu einer anderen Kennzahl wechseln.#!"
+ },
+ "te_map_modes.1.e_clear": {
+  "en": "Clear overlay",
+  "de": "Overlay löschen"
+ },
+ "te_map_modes.1.f": {
+  "en": "Maps are arguments, not records — and tonight we choose the argument.",
+  "de": "Karten sind Argumente, keine Aufzeichnungen — und heute Nacht wählen wir das Argument."
+ },
+ "te_map_modes.1.f_dismiss": {
+  "en": "Never mind.",
+  "de": "Schon gut."
+ },
+ "te_map_modes.1.t": {
+  "en": "Cartographic Survey",
+  "de": "Kartografische Vermessung"
+ },
+ "te_peg.1.a": {
+  "en": "Raise the rate until the gold comes back.",
+  "de": "Den Zins anheben, bis das Gold zurückkommt."
+ },
+ "te_peg.1.a.tt": {
+  "en": "For #b one year#! your rate target cannot be set lower than #b four points above the world rate#! — whoever holds the dial, you or your central bank. #v Peg Confidence#! rises by #G 40#!. A rate that far above what your economy can bear is a downturn, and that is the price of the peg.",
+  "de": "Für #b ein Jahr#! kann Ihr Zinsziel nicht niedriger gesetzt werden als #b vier Punkte über dem Weltzins#! — egal, wer den Zinsregler hält, Sie oder Ihre Zentralbank. #v Bindungsvertrauen#! steigt um #G 40#!. Ein Zins, der so weit über dem liegt, was Ihre Wirtschaft verträgt, ist ein Abschwung, und das ist der Preis der Bindung."
+ },
+ "te_peg.1.b": {
+  "en": "Suspend payment in gold. For the duration.",
+  "de": "Die Zahlung in Gold aussetzen. Für die Dauer."
+ },
+ "te_peg.1.b.tt": {
+  "en": "For #b five years#! the currency no longer converts. The gold standard stays on the statute book, but the central bank runs a paper currency: the rate target is free, inflation is what disciplines it, gold neither enters nor leaves — any borrowed gold stays frozen on your books — and #v $banking_dash_mon_mandate_peg$#! gives way to #v $banking_dash_mon_mandate_price$#!. Convertibility then resumes with #v Peg Confidence#! at #v 50#!.",
+  "de": "Für #b fünf Jahre#! ist die Währung nicht mehr konvertierbar. Der Goldstandard bleibt im Gesetzbuch, aber die Zentralbank führt eine Papierwährung: Das Zinsziel ist frei, die Inflation ist das, was es diszipliniert, Gold fließt weder ein noch aus — geliehenes Gold bleibt auf Ihren Büchern eingefroren —, und #v $banking_dash_mon_mandate_peg$#! weicht #v $banking_dash_mon_mandate_price$#!. Die Konvertibilität wird dann wieder aufgenommen, mit #v Bindungsvertrauen#! bei #v 50#!."
+ },
+ "te_peg.1.c": {
+  "en": "The peg holds. The price of gold does not.",
+  "de": "Die Bindung hält. Der Goldpreis nicht."
+ },
+ "te_peg.1.c.tt": {
+  "en": "The currency is re-pegged at a lower value. The gold already in the central bank's vault is worth more of it — the reserve gains #b 15%#! of its limit — #v Peg Confidence#! is reset to #v 50#!, and the great powers you have just undercut will not thank you. Your #v Exchange Rate Index#! drops to #v 88#! and climbs back to par over five years: #G +15%#! $state_export_advantage_mult$ and #R −15%#! $state_import_advantage_mult$ at first, half of it gone in under two years. Dearer imports work through your prices for two years.",
+  "de": "Die Währung wird zu einem niedrigeren Wert neu gebunden. Das bereits im Tresor der Zentralbank liegende Gold ist mehr davon wert — die Reserve gewinnt #b 15%#! ihrer Grenze hinzu —, #v Bindungsvertrauen#! wird auf #v 50#! zurückgesetzt, und die Großmächte, die Sie gerade unterboten haben, werden es Ihnen nicht danken. Ihr #v Wechselkursindex#! fällt auf #v 88#! und klettert über fünf Jahre zurück zur Parität: zunächst #G +15%#! $state_export_advantage_mult$ und #R −15%#! $state_import_advantage_mult$, wovon binnen unter zwei Jahren die Hälfte verschwunden ist. Teurere Importe wirken sich zwei Jahre lang auf Ihre Preise aus."
+ },
+ "te_peg.1.d": {
+  "en": "The gold is nearly gone, and everyone who holds a note of [ROOT.GetCountry.GetAdjective] issue knows it. The central bank has gone on paying out coin for paper because the law says it must, to a queue that grows longer each morning it is seen to pay. Nobody any longer asks whether the promise can be kept at the present rate. They ask what the government will do on the day it cannot.",
+  "de": "Das Gold ist beinahe aufgebraucht, und jeder, der eine Banknote [ROOT.GetCountry.GetAdjective|l]er Ausgabe hält, weiß es. Die Zentralbank zahlt weiterhin Münze für Papier aus, weil das Gesetz es verlangt, an eine Schlange, die jeden Morgen länger wird, an dem sie beim Zahlen gesehen wird. Niemand fragt mehr, ob das Versprechen zum gegenwärtigen Kurs gehalten werden kann. Man fragt, was die Regierung an dem Tag tun wird, an dem es nicht mehr geht."
+ },
+ "te_peg.1.f": {
+  "en": "\\\"The gold is leaving the vaults faster than it arrives. Every shipment abroad is a vote of no confidence in our currency.\\\"\\n\\n\\\"Then raise rates.\\\"\\n\\n\\\"And bankrupt every manufacturer who borrowed at the old rate? There must be another way.\\\"\\n\\n\\\"There are two. You will like them less.\\\"",
+  "de": "„Das Gold verlässt die Tresore schneller, als es ankommt. Jede Sendung ins Ausland ist ein Misstrauensvotum gegen unsere Währung.“\\n\\n„Dann erhöhen Sie die Zinsen.“\\n\\n„Und jeden Fabrikanten ruinieren, der zum alten Zinssatz geliehen hat? Es muss einen anderen Weg geben.“\\n\\n„Es gibt zwei. Sie werden sie weniger mögen.“"
+ },
+ "te_peg.1.t": {
+  "en": "The Run on the Vault",
+  "de": "Der Ansturm auf den Tresor"
+ },
+ "te_peg.2.a": {
+  "en": "Shut the door. Nobody takes money out.",
+  "de": "Die Tür schließen. Niemand nimmt Geld heraus."
+ },
+ "te_peg.2.a.tt": {
+  "en": "#b Capital controls#! are forced on for #b one year#!, whatever your banking tools say: they cut the overvaluation drain to a quarter, and they wear on Industrialists, the Petite Bourgeoisie and the investment pool like any other controls held outside a crisis. #v Peg Confidence#! rises by #G 40#!. Nothing about the overvaluation itself changes.",
+  "de": "#b Kapitalverkehrskontrollen#! werden für #b ein Jahr#! erzwungen, ungeachtet Ihrer Bankwerkzeuge: Sie senken den Überbewertungsabfluss auf ein Viertel und zehren an Industriellen, Kleinbürgern und dem Investitionspool wie jede andere außerhalb einer Krise gehaltene Kontrolle. #v Bindungsvertrauen#! steigt um #G 40#!. An der Überbewertung selbst ändert sich nichts."
+ },
+ "te_peg.2.b": {
+  "en": "Break the peg.",
+  "de": "Die Bindung brechen."
+ },
+ "te_peg.2.b.tt": {
+  "en": "You #b withdraw from the treaty#! that carries the peg — and from every other article in it. Your dial returns, your exchange rate falls at once to where it would have floated, and that fall feeds into your prices over the following years.",
+  "de": "Sie #b treten aus dem Vertrag zurück#!, der die Bindung trägt — und aus jedem anderen Artikel darin. Ihr Zinsregler kehrt zurück, Ihr Wechselkurs fällt sofort dorthin, wo er frei geschwankt hätte, und dieser Fall wirkt sich in den folgenden Jahren auf Ihre Preise aus."
+ },
+ "te_peg.2.c": {
+  "en": "Re-peg, lower.",
+  "de": "Neu binden, niedriger."
+ },
+ "te_peg.2.c.tt": {
+  "en": "You keep the peg at a #b worse parity#!: your exchange rate drops by #b half your overvaluation#! and stays that far under theirs. #v Peg Confidence#! returns to #v 50#!, not 100 — a parity that moved once can move again.",
+  "de": "Sie behalten die Bindung bei einer #b schlechteren Parität#!: Ihr Wechselkurs sinkt um #b die Hälfte Ihrer Überbewertung#! und bleibt so weit unter deren Wert. #v Bindungsvertrauen#! kehrt auf #v 50#! zurück, nicht auf 100 — eine Parität, die sich einmal bewegt hat, kann sich wieder bewegen."
+ },
+ "te_peg.2.d": {
+  "en": "Our currency is fixed to [SCOPE.sCountry('te_peg_anchor_country').GetName]'s, and the markets no longer believe it. Prices and wages here have run ahead of theirs for too long: at the promised parity our goods are dear, our reserves are leaving, and every trader in the capital is asking what our money would fetch if we let it go. We have no rate of our own to raise. What we do have is a border, a treaty, and a number that could be changed.",
+  "de": "Unsere Währung ist an die Währung [SCOPE.sCountry('te_peg_anchor_country').GetAltName('GEN')] gebunden, und die Märkte glauben es nicht mehr. Die Preise und Löhne hier sind den ihren schon zu lange vorausgeeilt: Zur versprochenen Parität sind unsere Waren teuer, unsere Reserven schwinden, und jeder Händler in der Hauptstadt fragt sich, was unser Geld einbrächte, ließen wir es frei. Wir haben keinen eigenen Zins, den wir anheben könnten. Was wir haben, ist eine Grenze, ein Vertrag und eine Zahl, die sich ändern ließe."
+ },
+ "te_peg.2.f": {
+  "en": "\\\"A parity is a promise about the future, made by people who will not be in office when it falls due.\\\"",
+  "de": "„Eine Parität ist ein Versprechen über die Zukunft, gegeben von Leuten, die nicht mehr im Amt sein werden, wenn es fällig wird.“"
+ },
+ "te_peg.2.t": {
+  "en": "The Peg Under Siege",
+  "de": "Die Bindung unter Belagerung"
+ },
+ "te_union.1.a": {
+  "en": "Our future is in the union.",
+  "de": "Unsere Zukunft liegt in der Union."
+ },
+ "te_union.1.b": {
+  "en": "We will keep our own money.",
+  "de": "Wir behalten unser eigenes Geld."
+ },
+ "te_union.1.b.tt": {
+  "en": "You remain outside, and keep your dial. While the leader presses you go on missing the cooperation benefit.",
+  "de": "Sie bleiben außen vor und behalten Ihren Zinsregler. Solange der Anführer drängt, entgeht Ihnen weiterhin der Kooperationsvorteil."
+ },
+ "te_union.1.d": {
+  "en": "[SCOPE.sCountry('te_union_leader').GetName] has stopped hinting. Its envoys arrive with charts: the bloc's trade, the cost of changing money at every border, the rate at which our bonds sell beside theirs. The cooperation between our central banks, they add, is naturally under review while the question is open. They do not mention that a single currency means a single interest rate, and that it will be set in their capital for their economy. They do not have to. Everybody in the room knows.",
+  "de": "[SCOPE.sCountry('te_union_leader').GetAltName('NOM')|U] deutet nicht mehr nur an. Seine Gesandten kommen mit Diagrammen: der Handel des Blocks, die Kosten des Geldwechsels an jeder Grenze, der Kurs, zu dem unsere Anleihen neben ihren gehandelt werden. Die Zusammenarbeit zwischen unseren Zentralbanken, fügen sie hinzu, steht natürlich auf dem Prüfstand, solange die Frage offen ist. Sie erwähnen nicht, dass eine einzige Währung einen einzigen Leitzins bedeutet, und dass dieser in ihrer Hauptstadt für ihre Wirtschaft festgelegt wird. Das müssen sie auch nicht. Jeder im Raum weiß es."
+ },
+ "te_union.1.f": {
+  "en": "\\\"You may have any monetary policy you like, as long as it is ours.\\\"",
+  "de": "„Sie können jede Geldpolitik haben, die Sie wollen, solange es unsere ist.“"
+ },
+ "te_union.1.t": {
+  "en": "The Question of the Common Currency",
+  "de": "Die Frage der Gemeinsamen Währung"
+ },
+ "treaty_article_events.1.a": {
+  "en": "Quietly thank our partners",
+  "de": "Unseren Partnern still danken"
+ },
+ "treaty_article_events.1.b": {
+  "en": "Harden our counter-espionage",
+  "de": "Unsere Spionageabwehr verstärken"
+ },
+ "treaty_article_events.1.c": {
+  "en": "Publicize the success",
+  "de": "Den Erfolg öffentlich machen"
+ },
+ "treaty_article_events.1.d": {
+  "en": "Our intelligence partners have intercepted communications revealing an imminent terror plot on our soil. Thanks to our information-sharing agreement with [SCOPE.sCountry('intel_partner').GetName], the conspirators were identified before they could act.",
+  "de": "Unsere Geheimdienstpartner haben Kommunikation abgefangen, die einen bevorstehenden Terroranschlag auf unserem Boden offenbart. Dank unseres Informationsaustauschabkommens mit [SCOPE.sCountry('intel_partner').GetAltName('DAT')] wurden die Verschwörer identifiziert, bevor sie handeln konnten."
+ },
+ "treaty_article_events.1.f": {
+  "en": "\\\"The intercept came in at three in the morning. Forty minutes later, every suspect was under surveillance.\\\"\\n\\n\\\"And if we hadn't had the agreement?\\\"\\n\\n\\\"Then we'd be reading about it in the newspapers instead.\\\"",
+  "de": "„Der Abfangbericht kam um drei Uhr morgens rein. Vierzig Minuten später stand jeder Verdächtige unter Beobachtung.“\\n\\n„Und wenn wir das Abkommen nicht gehabt hätten?“\\n\\n„Dann würden wir stattdessen davon in den Zeitungen lesen.“"
+ },
+ "treaty_article_events.1.t": {
+  "en": "Eyes in the Dark",
+  "de": "Augen in der Dunkelheit"
+ },
+ "treaty_article_events.10.a": {
+  "en": "Resettle the displaced with government support",
+  "de": "Die Vertriebenen mit staatlicher Unterstützung umsiedeln"
+ },
+ "treaty_article_events.10.b": {
+  "en": "They must fend for themselves",
+  "de": "Sie müssen für sich selbst sorgen"
+ },
+ "treaty_article_events.10.c": {
+  "en": "Use this for nation-building",
+  "de": "Dies für den Nationenaufbau nutzen"
+ },
+ "treaty_article_events.10.d": {
+  "en": "The human reality of forced population transfers is becoming impossible to ignore. Families torn from ancestral homes, communities scattered, lives rebuilt from nothing. The bureaucratic language of treaties cannot mask the misery.",
+  "de": "Die menschliche Wirklichkeit erzwungener Bevölkerungsverschiebungen lässt sich nicht länger ignorieren. Familien, aus angestammten Heimstätten gerissen, Gemeinschaften zerstreut, Leben, die aus dem Nichts wiederaufgebaut werden müssen. Die bürokratische Sprache der Verträge kann das Elend nicht verbergen."
+ },
+ "treaty_article_events.10.f": {
+  "en": "\\\"They arrived with nothing. Some of them couldn't even say where they were from: the name of their town had already been changed.\\\"\\n\\n\\\"What do they need?\\\"\\n\\n\\\"Everything. They need everything.\\\"",
+  "de": "„Sie kamen mit nichts an. Manche konnten nicht einmal sagen, woher sie kamen: Der Name ihrer Stadt war bereits geändert worden.“\\n\\n„Was brauchen sie?“\\n\\n„Alles. Sie brauchen alles.“"
+ },
+ "treaty_article_events.10.t": {
+  "en": "The Uprooted",
+  "de": "Die Entwurzelten"
+ },
+ "treaty_article_events.11.a": {
+  "en": "Celebrate this diplomatic triumph",
+  "de": "Diesen diplomatischen Triumph feiern"
+ },
+ "treaty_article_events.11.b": {
+  "en": "Deepen the cultural ties further",
+  "de": "Die kulturellen Bande weiter vertiefen"
+ },
+ "treaty_article_events.11.d": {
+  "en": "Our cultural exchange agreement with [SCOPE.sCountry('exchange_partner').GetName] has produced a remarkable blossoming of artistic and intellectual cooperation. Their artists exhibit in our galleries, our writers are being translated in their universities, and the world is taking notice of this flourishing partnership.",
+  "de": "Unser Kulturaustauschabkommen mit [SCOPE.sCountry('exchange_partner').GetAltName('DAT')] hat eine bemerkenswerte Blüte künstlerischer und intellektueller Zusammenarbeit hervorgebracht. Ihre Künstler stellen in unseren Galerien aus, unsere Schriftsteller werden an ihren Universitäten übersetzt, und die Welt nimmt Notiz von dieser aufblühenden Partnerschaft."
+ },
+ "treaty_article_events.11.f": {
+  "en": "\\\"The exhibition drew thirty thousand visitors in a week. The embassy says it's done more for relations than a decade of state dinners.\\\"\\n\\n\\\"And the critics?\\\"\\n\\n\\\"Even they admit it's extraordinary work. Though they'd never say so on the record.\\\"",
+  "de": "„Die Ausstellung zog in einer Woche dreißigtausend Besucher an. Die Botschaft sagt, das habe den Beziehungen mehr genützt als ein Jahrzehnt an Staatsbanketten.“\\n\\n„Und die Kritiker?“\\n\\n„Sogar sie geben zu, dass es außergewöhnliche Arbeit ist. Wenn auch nie öffentlich.“"
+ },
+ "treaty_article_events.11.t": {
+  "en": "A Meeting of Minds",
+  "de": "Eine Begegnung der Geister"
+ },
+ "treaty_article_events.12.a": {
+  "en": "Cultural openness is worth the controversy",
+  "de": "Kulturelle Offenheit ist die Kontroverse wert"
+ },
+ "treaty_article_events.12.b": {
+  "en": "Scale back the exchange programs",
+  "de": "Die Austauschprogramme zurückfahren"
+ },
+ "treaty_article_events.12.d": {
+  "en": "Traditionalist voices are growing louder [concept_in_opposition] to our cultural exchange agreement with [SCOPE.sCountry('exchange_partner').GetName]. They claim that foreign art, music, and ideas are corrupting national values and undermining our cultural identity. Protests have been organized, and several cultural institutions have faced pressure to cancel planned events.",
+  "de": "Traditionalistische Stimmen werden immer lauter [Concept('concept_in_opposition', 'in Opposition')] zu unserem Kulturaustauschabkommen mit [SCOPE.sCountry('exchange_partner').GetAltName('DAT')]. Sie behaupten, ausländische Kunst, Musik und Ideen würden die nationalen Werte verderben und unsere kulturelle Identität untergraben. Proteste wurden organisiert, und mehrere Kultureinrichtungen sahen sich unter Druck gesetzt, geplante Veranstaltungen abzusagen."
+ },
+ "treaty_article_events.12.f": {
+  "en": "\\\"They burned a stack of foreign novels in the town square yesterday. Said it was a patriotic act.\\\"\\n\\n\\\"What did the mayor do?\\\"\\n\\n\\\"Stood there and watched. He has an election coming up.\\\"",
+  "de": "„Sie haben gestern auf dem Marktplatz einen Stapel ausländischer Romane verbrannt. Nannten es einen patriotischen Akt.“\\n\\n„Was hat der Bürgermeister getan?“\\n\\n„Stand da und sah zu. Er hat bald eine Wahl vor sich.“"
+ },
+ "treaty_article_events.12.t": {
+  "en": "The Culture Wars",
+  "de": "Die Kulturkämpfe"
+ },
+ "treaty_article_events.2.a": {
+  "en": "Blame our partners in public",
+  "de": "Unseren Partnern öffentlich die Schuld geben"
+ },
+ "treaty_article_events.2.b": {
+  "en": "Accept the failure quietly",
+  "de": "Das Scheitern still hinnehmen"
+ },
+ "treaty_article_events.2.c": {
+  "en": "Our defenses have been compromised",
+  "de": "Unsere Verteidigung wurde kompromittiert"
+ },
+ "treaty_article_events.2.d": {
+  "en": "A critical intelligence report from [SCOPE.sCountry('intel_partner').GetName] arrived in good time — and then sat in our own translation queue while bureaucratic confusion and interdepartmental rivalry passed it from office to office. By the time the warning reached the right desk, the damage was done. The pact delivered; our own ministry did not.",
+  "de": "Ein kritischer Geheimdienstbericht [SCOPE.sCountry('intel_partner').GetAltName('VON')] traf rechtzeitig ein — und blieb dann in unserer eigenen Übersetzungswarteschlange liegen, während bürokratisches Durcheinander und Rivalitäten zwischen Behörden ihn von Amt zu Amt weiterreichten. Bis die Warnung den richtigen Schreibtisch erreichte, war der Schaden bereits geschehen. Der Pakt hat geliefert; unser eigenes Ministerium nicht."
+ },
+ "treaty_article_events.2.f": {
+  "en": "\\\"The file sat in a translation queue for eleven days. Eleven days.\\\"\\n\\n\\\"Somebody will answer for this.\\\"\\n\\n\\\"Somebody always does. Never the right somebody.\\\"",
+  "de": "„Die Akte lag elf Tage in einer Übersetzungswarteschlange. Elf Tage.“\\n\\n„Jemand wird dafür geradestehen.“\\n\\n„Das tut immer irgendjemand. Nie der Richtige.“"
+ },
+ "treaty_article_events.2.t": {
+  "en": "The Dead Drop",
+  "de": "Der Tote Briefkasten"
+ },
+ "treaty_article_events.3.a": {
+  "en": "Celebrate this cultural renaissance",
+  "de": "Diese kulturelle Renaissance feiern"
+ },
+ "treaty_article_events.3.b": {
+  "en": "Channel it into our national identity",
+  "de": "Sie in unsere nationale Identität lenken"
+ },
+ "treaty_article_events.3.d": {
+  "en": "The protections afforded to minority communities under recent treaty [Concept('concept_obligation', 'obligations')] have borne unexpected fruit. Artists, writers, and thinkers from previously [concept_marginalized] groups are producing remarkable work, and international attention is turning toward our flourishing cultural scene.",
+  "de": "Der Schutz, den Minderheitengemeinschaften unter den jüngsten vertraglichen [Concept('concept_obligation', 'Verpflichtungen')] gewährt wird, hat unerwartete Früchte getragen. Künstler, Schriftsteller und Denker aus zuvor [Concept('concept_marginalized', 'randständigen')] Gruppen schaffen bemerkenswerte Werke, und die internationale Aufmerksamkeit richtet sich auf unsere aufblühende Kulturszene."
+ },
+ "treaty_article_events.3.f": {
+  "en": "\\\"Have you read the new collection? Extraordinary stuff.\\\"\\n\\n\\\"I hear the Royal Academy wants to commission a series.\\\"\\n\\n\\\"Three years ago they couldn't get published. Funny how that works.\\\"",
+  "de": "„Haben Sie die neue Sammlung gelesen? Außergewöhnliches Zeug.“\\n\\n„Ich höre, die Königliche Akademie will eine Reihe in Auftrag geben.“\\n\\n„Vor drei Jahren fanden sie keinen Verleger. Komisch, wie sich das entwickelt.“"
+ },
+ "treaty_article_events.3.t": {
+  "en": "Cultural Renaissance",
+  "de": "Kulturelle Renaissance"
+ },
+ "treaty_article_events.4.a": {
+  "en": "Crack down on the [Concept('concept_agitator', 'agitators')]",
+  "de": "Gegen die [Concept('concept_agitator', 'Agitatoren')] durchgreifen"
+ },
+ "treaty_article_events.4.b": {
+  "en": "Try to address their concerns",
+  "de": "Versuchen, auf ihre Anliegen einzugehen"
+ },
+ "treaty_article_events.4.d": {
+  "en": "Our treaty [Concept('concept_obligation', 'obligations')] to protect minority populations have provoked a furious backlash among nationalist elements. Pamphlets circulate denouncing the government as traitors to the nation, and ugly incidents are being reported in several provinces.",
+  "de": "Unsere [Concept('concept_obligation', 'Verpflichtungen')] zur nuklearen Abrüstung haben uns die letzte Garantie der nationalen Sicherheit genommen, und die Generäle wollen, dass die Regierung genau weiß, was sie davon halten."
+ },
+ "treaty_article_events.4.f": {
+  "en": "\\\"They say we're selling the country to foreigners. That the old ways are dying.\\\"\\n\\n\\\"The old ways include burning people's homes.\\\"\\n\\n\\\"Try explaining that to a mob.\\\"",
+  "de": "„Sie sagen, wir würden das Land an Ausländer verkaufen. Dass die alten Sitten sterben.“\\n\\n„Zu den alten Sitten gehört, Häuser von Menschen niederzubrennen.“\\n\\n„Versuchen Sie das mal einem Mob zu erklären.“"
+ },
+ "treaty_article_events.4.t": {
+  "en": "Blood and Soil",
+  "de": "Blut und Boden"
+ },
+ "treaty_article_events.5.a": {
+  "en": "Reassure them: conventional forces remain strong",
+  "de": "Sie beruhigen: Die konventionellen Streitkräfte bleiben stark"
+ },
+ "treaty_article_events.5.b": {
+  "en": "Purge the loudest dissenters",
+  "de": "Die lautesten Widersacher säubern"
+ },
+ "treaty_article_events.5.c": {
+  "en": "Hint that this is only temporary",
+  "de": "Andeuten, dass dies nur vorübergehend ist"
+ },
+ "treaty_article_events.5.d": {
+  "en": "The senior officer corps is barely containing its rage. Our nuclear disarmament [Concept('concept_obligation', 'obligations')] have stripped away the ultimate guarantee of national security, and the generals want the government to know exactly how they feel about it.",
+  "de": "Das hohe Offizierskorps kann seine Wut kaum zügeln. Unsere [Concept('concept_obligation', 'Verpflichtungen')] zur nuklearen Abrüstung haben die letzte Garantie der nationalen Sicherheit genommen, und die Generäle wollen die Regierung genau wissen lassen, was sie davon halten."
+ },
+ "treaty_article_events.5.f": {
+  "en": "\\\"The Field Marshal threw his medals on the table. Said he didn't earn them to watch the country disarm itself.\\\"\\n\\n\\\"And the Defense Minister?\\\"\\n\\n\\\"Pretended to be on a telephone call.\\\"",
+  "de": "„Der Feldmarschall hat seine Orden auf den Tisch geworfen. Sagte, er habe sie sich nicht verdient, um zuzusehen, wie sich das Land selbst entwaffnet.“\\n\\n„Und der Verteidigungsminister?“\\n\\n„Tat so, als würde er telefonieren.“"
+ },
+ "treaty_article_events.5.t": {
+  "en": "The Generals' Fury",
+  "de": "Der Zorn der Generäle"
+ },
+ "treaty_article_events.6.a": {
+  "en": "Adopt the new methods",
+  "de": "Die neuen Methoden übernehmen"
+ },
+ "treaty_article_events.6.b": {
+  "en": "Focus on our own strengths",
+  "de": "Uns auf unsere eigenen Stärken konzentrieren"
+ },
+ "treaty_article_events.6.d": {
+  "en": "Combined military exercises with [SCOPE.sCountry('exercise_partner').GetName] have exceeded all expectations. Our officers have returned with fresh tactical insights and a profound respect for their counterparts' methods.",
+  "de": "Gemeinsame Militärübungen mit [SCOPE.sCountry('exercise_partner').GetAltName('DAT')] haben alle Erwartungen übertroffen. Unsere Offiziere sind mit neuen taktischen Erkenntnissen und tiefem Respekt vor den Methoden ihrer Kollegen zurückgekehrt."
+ },
+ "treaty_article_events.6.f": {
+  "en": "\\\"Their field engineers bridged a river in twenty minutes. Twenty minutes! Our best time was forty-five.\\\"\\n\\n\\\"What did the Colonel say?\\\"\\n\\n\\\"He said we're going to learn how to do it in fifteen.\\\"",
+  "de": "„Ihre Pioniere haben einen Fluss in zwanzig Minuten überbrückt. Zwanzig Minuten! Unsere beste Zeit war fünfundvierzig.“\\n\\n„Was hat der Oberst gesagt?“\\n\\n„Er sagte, wir werden lernen, es in fünfzehn zu schaffen.“"
+ },
+ "treaty_article_events.6.t": {
+  "en": "Lessons Learned",
+  "de": "Gelernte Lektionen"
+ },
+ "treaty_article_events.7.a": {
+  "en": "Expand the programs",
+  "de": "Die Programme ausweiten"
+ },
+ "treaty_article_events.7.b": {
+  "en": "Redirect toward technical education",
+  "de": "Auf technische Bildung umlenken"
+ },
+ "treaty_article_events.7.d": {
+  "en": "The foreign-funded education initiative is producing remarkable results. A new generation of students is emerging with skills and perspectives that promise to transform our economy and society.",
+  "de": "Die aus dem Ausland finanzierte Bildungsinitiative erzielt bemerkenswerte Ergebnisse. Eine neue Generation von Schülern entsteht, mit Fähigkeiten und Perspektiven, die unsere Wirtschaft und Gesellschaft zu verändern versprechen."
+ },
+ "treaty_article_events.7.f": {
+  "en": "\\\"The village school had forty pupils last year. This year, one hundred and twelve.\\\"\\n\\n\\\"And the exam results?\\\"\\n\\n\\\"Three of them qualified for the national engineering program. First time ever from that district.\\\"",
+  "de": "„Die Dorfschule hatte letztes Jahr vierzig Schüler. Dieses Jahr sind es hundertzwölf.“\\n\\n„Und die Prüfungsergebnisse?“\\n\\n„Drei von ihnen haben sich für das nationale Ingenieursprogramm qualifiziert. Zum ersten Mal überhaupt aus diesem Bezirk.“"
+ },
+ "treaty_article_events.7.t": {
+  "en": "Seeds of Knowledge",
+  "de": "Samen des Wissens"
+ },
+ "treaty_article_events.8.a": {
+  "en": "This is the price of peace",
+  "de": "Das ist der Preis des Friedens"
+ },
+ "treaty_article_events.8.b": {
+  "en": "Promise the hawks it is temporary",
+  "de": "Den Falken versprechen, dass es vorübergehend ist"
+ },
+ "treaty_article_events.8.d": {
+  "en": "Our frozen [concept_nuclear_program] has become a lightning rod for domestic discontent. Hawks in the military and the industrial lobby are united in their fury, while moderates argue that the freeze is a small price to pay for international stability.",
+  "de": "Unser eingefrorenes [concept_nuclear_program] ist zum Blitzableiter für die Unzufriedenheit im Inland geworden. Falken im Militär und in der Industrielobby sind vereint in ihrer Wut, während Gemäßigte argumentieren, das Einfrieren sei ein kleiner Preis für internationale Stabilität."
+ },
+ "treaty_article_events.8.f": {
+  "en": "\\\"Every month those facilities sit idle, we fall further behind.\\\"\\n\\n\\\"Behind whom? That's precisely the point of the freeze.\\\"\\n\\n\\\"You can't freeze ambition. Only delay it.\\\"",
+  "de": "„Jeden Monat, den diese Anlagen stillstehen, fallen wir weiter zurück.“\\n\\n„Hinter wem? Das ist genau der Sinn des Einfrierens.“\\n\\n„Man kann Ehrgeiz nicht einfrieren. Nur aufschieben.“"
+ },
+ "treaty_article_events.8.t": {
+  "en": "The Frozen Program",
+  "de": "Das eingefrorene Programm"
+ },
+ "treaty_article_events.9.a": {
+  "en": "Accept the dependency for now",
+  "de": "Die Abhängigkeit vorerst hinnehmen"
+ },
+ "treaty_article_events.9.b": {
+  "en": "Assert our own capabilities",
+  "de": "Unsere eigenen Fähigkeiten geltend machen"
+ },
+ "treaty_article_events.9.d": {
+  "en": "Our reliance on [SCOPE.sCountry('security_provider').GetName]'s security assistance is becoming uncomfortable. Their advisors are embedded in our institutions, their methods shape our doctrine, and the question is being asked more loudly: whose security are we really building?",
+  "de": "Unsere Abhängigkeit von der Sicherheitshilfe [SCOPE.sCountry('security_provider').GetAltName('GEN')] wird unangenehm. Ihre Berater sind fest in unseren Institutionen verankert, ihre Methoden prägen unsere Doktrin, und die Frage wird immer lauter gestellt: Wessen Sicherheit bauen wir hier eigentlich auf?"
+ },
+ "treaty_article_events.9.f": {
+  "en": "\\\"The foreign advisors now outnumber our own staff in three departments.\\\"\\n\\n\\\"Do they take orders from us or from their embassy?\\\"\\n\\n\\\"Does it matter, as long as the funding continues?\\\"\\n\\n\\\"It will matter. Eventually.\\\"",
+  "de": "„Die ausländischen Berater sind unserem eigenen Personal in drei Abteilungen inzwischen zahlenmäßig überlegen.“\\n\\n„Nehmen sie Befehle von uns entgegen oder von ihrer Botschaft?“\\n\\n„Spielt das eine Rolle, solange die Finanzierung weiterläuft?“\\n\\n„Es wird eine Rolle spielen. Irgendwann.“"
+ },
+ "treaty_article_events.9.t": {
+  "en": "Strings Attached",
+  "de": "Mit Bedingungen verknüpft"
+ },
+ "un_events.1.a": {
+  "en": "Sign the Charter. We believe in this vision.",
+  "de": "Die Charta unterzeichnen. Wir glauben an diese Vision."
+ },
+ "un_events.1.a_pending_tt": {
+  "en": "We become a founding member of the United Nations. Our membership takes effect when our United Nations [concept_journal_entry] opens.",
+  "de": "Wir werden Gründungsmitglied der Vereinten Nationen. Unsere Mitgliedschaft tritt in Kraft, sobald sich unser [concept_journal_entry] Vereinte Nationen öffnet."
+ },
+ "un_events.1.b": {
+  "en": "We shall observe, but not yet commit.",
+  "de": "Wir werden beobachten, uns aber noch nicht binden."
+ },
+ "un_events.1.c": {
+  "en": "This undermines our sovereignty.",
+  "de": "Das untergräbt unsere Souveränität."
+ },
+ "un_events.1.d": {
+  "en": "The United Nations has been founded, and [ROOT.GetCountry.GetName] has been invited to sign its charter as a founding member. Membership promises a seat at the table of global governance, but carries [Concept('concept_obligation', 'obligations')]: international courts, collective security, and the subordination of national interests to the common good.",
+  "de": "Die Vereinten Nationen wurden gegründet, und [ROOT.GetCountry.GetAltName('NOM')] wurde eingeladen, ihre Charta als Gründungsmitglied zu unterzeichnen. Die Mitgliedschaft verspricht einen Platz am Tisch der globalen Ordnung, bringt jedoch [Concept('concept_obligation', 'Verpflichtungen')] mit sich: internationale Gerichte, kollektive Sicherheit und die Unterordnung nationaler Interessen unter das Gemeinwohl."
+ },
+ "un_events.1.d_authoritarian": {
+  "en": "The United Nations has been established, and its charter is open for signature. For [ROOT.GetCountry.GetName], a seat at the table means influence - but membership carries [Concept('concept_obligation', 'obligations')], including international courts, collective security, and tolerating the interference of lesser powers in our affairs.",
+  "de": "Die Vereinten Nationen wurden gegründet, und ihre Charta steht zur Unterzeichnung offen. Für [ROOT.GetCountry.GetAltName('AKK')] bedeutet ein Platz am Tisch Einfluss — doch die Mitgliedschaft bringt [Concept('concept_obligation', 'Verpflichtungen')] mit sich, darunter internationale Gerichte, kollektive Sicherheit und das Hinnehmen der Einmischung geringerer Mächte in unsere Angelegenheiten."
+ },
+ "un_events.1.d_council": {
+  "en": "The workers of the world have long dreamed of international solidarity - now that dream takes institutional form. The United Nations has been founded to keep the peace, and by signing its charter [ROOT.GetCountry.GetName] can help shape this new order in the interest of the working class - though the capitalist powers intend to use it for their own hegemony.",
+  "de": "Die Arbeiter der Welt haben lange von internationaler Solidarität geträumt — jetzt nimmt dieser Traum institutionelle Form an. Die Vereinten Nationen wurden gegründet, um den Frieden zu wahren, und durch die Unterzeichnung ihrer Charta kann [ROOT.GetCountry.GetAltName('NOM')] diese neue Ordnung im Interesse der Arbeiterklasse mitgestalten — auch wenn die kapitalistischen Mächte beabsichtigen, sie für ihre eigene Hegemonie zu nutzen."
+ },
+ "un_events.1.d_founder": {
+  "en": "\\n\\nThe invitation comes from [SCOPE.sCountry('un_charter_founder').GetName], which founded the organisation.",
+  "de": "\\n\\nDie Einladung kommt [SCOPE.sCountry('un_charter_founder').GetAltName('VON')], das die Organisation gegründet hat."
+ },
+ "un_events.1.d_refounded": {
+  "en": "\\n\\nThis is not the world's first United Nations. The last one dissolved, its authority spent; [SCOPE.sCountry('un_charter_founder').GetName] convened the conference that founded its successor, and now invites us to sign the new charter.",
+  "de": "\\n\\nDies sind nicht die ersten Vereinten Nationen der Welt. Die letzten haben sich aufgelöst, ihre Autorität aufgebraucht; [SCOPE.sCountry('un_charter_founder').GetAltName('NOM')] hat die Konferenz einberufen, die ihren Nachfolger gegründet hat, und lädt uns nun ein, die neue Charta zu unterzeichnen."
+ },
+ "un_events.1.d_theocratic": {
+  "en": "The United Nations has been founded, and its charter awaits our signature. For [ROOT.GetCountry.GetName], guided by divine law, this is a test of faith: can an assembly of nations with vastly different moral foundations serve justice? Membership would grant us a platform for moral governance, but also mean accepting the equal standing of nations whose laws offend the divine order.",
+  "de": "Die Vereinten Nationen wurden gegründet, und ihre Charta wartet auf unsere Unterschrift. Für [ROOT.GetCountry.GetAltName('AKK')], geleitet vom göttlichen Gesetz, ist dies eine Glaubensprobe: Kann eine Versammlung von Nationen mit völlig unterschiedlichen moralischen Grundlagen der Gerechtigkeit dienen? Die Mitgliedschaft würde uns eine Plattform für moralische Führung verschaffen, bedeutete aber auch, die Gleichrangigkeit von Nationen zu akzeptieren, deren Gesetze die göttliche Ordnung verletzen."
+ },
+ "un_events.1.f": {
+  "en": "The ambassador set down his pen and stared at the document. 'Do you know,' he said to no one in particular, 'how many treaties have promised to end all wars?'\\n\\n'Every single one of them,' his aide replied. 'And yet here we are, drafting another.'\\n\\n'Yes. And yet here we are.'",
+  "de": "Der Botschafter legte seinen Federhalter ab und starrte auf das Dokument. „Wissen Sie“, sagte er zu niemand Bestimmtem, „wie viele Verträge versprochen haben, alle Kriege zu beenden?“\\n\\n„Jeder einzelne von ihnen“, erwiderte sein Adjutant. „Und doch sitzen wir hier und entwerfen einen weiteren.“\\n\\n„Ja. Und doch sitzen wir hier.“"
+ },
+ "un_events.1.t": {
+  "en": "The United Nations Charter",
+  "de": "Die Charta der Vereinten Nationen"
+ },
+ "un_events.10.a": {
+  "en": "Stand by the organisation.",
+  "de": "Zur Organisation stehen."
+ },
+ "un_events.10.a_tt": {
+  "en": "We spend influence to shore up the UN's credibility. Championing the order from the journal entry would count for more, for as long as we keep it up.",
+  "de": "Wir setzen Einfluss ein, um die Glaubwürdigkeit der UN zu stützen. Die Ordnung aus dem Journaleintrag heraus zu verteidigen würde mehr zählen, solange wir es durchhalten."
+ },
+ "un_events.10.b": {
+  "en": "Wait and see.",
+  "de": "Abwarten."
+ },
+ "un_events.10.b_tt": {
+  "en": "We do nothing, for good or ill. The crisis runs its course.",
+  "de": "Wir tun nichts, im Guten wie im Schlechten. Die Krise nimmt ihren Lauf."
+ },
+ "un_events.10.c": {
+  "en": "The UN has failed. Let it go.",
+  "de": "Die UN hat versagt. Lasst sie los."
+ },
+ "un_events.10.d": {
+  "en": "The United Nations faces a crisis of [concept_legitimacy]. Its [concept_un_authority] has fallen below 10: resolutions are ignored, great powers act as they please, and members wonder aloud what the institution is for. As a [concept_great_power], [ROOT.GetCountry.GetName] is one of the few powers whose choice can still matter.",
+  "de": "Die Vereinten Nationen stehen vor einer Krise der [concept_legitimacy]. Ihre [concept_un_authority] ist unter 10 gefallen: Resolutionen werden ignoriert, Großmächte handeln, wie es ihnen beliebt, und Mitglieder fragen sich laut, wofür die Institution noch da ist. Als [concept_great_power] ist [ROOT.GetCountry.GetAltName('NOM')] eine der wenigen Mächte, deren Entscheidung noch etwas bewirken kann."
+ },
+ "un_events.10.d_authoritarian": {
+  "en": "The United Nations faces a crisis of [concept_legitimacy] — its [concept_un_authority] below 10, its resolutions flouted, its chamber a platform for moral grandstanding. For [ROOT.GetCountry.GetName], the question is whether to prop up an institution that constrains us, or let it wither.",
+  "de": "Die Vereinten Nationen stehen vor einer Krise der [concept_legitimacy] — ihre [concept_un_authority] unter 10, ihre Resolutionen missachtet, ihre Kammer eine Bühne für moralische Selbstdarstellung. Für [ROOT.GetCountry.GetAltName('AKK')] stellt sich die Frage, ob man eine Institution stützt, die uns einschränkt, oder sie verkümmern lässt."
+ },
+ "un_events.10.d_clock": {
+  "en": "\\n\\n#R The world has given up on it.#! Its target is below 5, so its authority is falling at least a quarter point a month: at this rate it #R dissolves in about [ROOT.GetCountry.MakeScope.ScriptValue('un_crisis_months_to_collapse')|0] months#!, taking its headquarters, agencies, conventions and mandates with it.",
+  "de": "\\n\\n#R Die Welt hat sie aufgegeben.#! Ihr Zielwert liegt unter 5, sodass ihre Autorität um mindestens einen Viertelpunkt im Monat fällt: In diesem Tempo #R löst sie sich in etwa [ROOT.GetCountry.MakeScope.ScriptValue('un_crisis_months_to_collapse')|0] Monaten auf#!, und reißt ihr Hauptquartier, ihre Agenturen, Konventionen und Mandate mit sich."
+ },
+ "un_events.10.d_council": {
+  "en": "The United Nations faces a crisis of [concept_legitimacy], its [concept_un_authority] below 10. For [ROOT.GetCountry.GetName], this exposes the fundamental contradiction — the institution was designed to preserve a capitalist world order, and now that order is crumbling. The question is whether to salvage this bourgeois institution or accelerate its collapse.",
+  "de": "Die Vereinten Nationen stehen vor einer Krise der [concept_legitimacy], ihre [concept_un_authority] unter 10. Für [ROOT.GetCountry.GetAltName('AKK')] offenbart das den grundlegenden Widerspruch — die Institution wurde geschaffen, um eine kapitalistische Weltordnung zu bewahren, und nun bröckelt diese Ordnung. Die Frage ist, ob man diese bürgerliche Institution rettet oder ihren Zusammenbruch beschleunigt."
+ },
+ "un_events.10.d_linger": {
+  "en": "\\n\\nIts target is still 5 or more, so it will linger in crisis rather than collapse — unless the world turns further against it. The crisis ends if its authority climbs back above 20.",
+  "de": "\\n\\nIhr Zielwert liegt noch bei 5 oder darüber, sodass sie eher in der Krise verharrt als zusammenbricht — es sei denn, die Welt wendet sich weiter gegen sie. Die Krise endet, wenn ihre Autorität wieder über 20 steigt."
+ },
+ "un_events.10.d_member": {
+  "en": "\\n\\nWe are a member. Standing by it now would add to its credibility in proportion to our weight in world affairs (#v ×[ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!); championing the order from the journal entry would lift its target by about #v [ROOT.GetCountry.MakeScope.ScriptValue('un_crisis_rescue_gain')|1]#!.",
+  "de": "\\n\\nWir sind Mitglied. Jetzt zu ihr zu stehen würde ihre Glaubwürdigkeit im Verhältnis zu unserem Gewicht in Weltangelegenheiten steigern (#v ×[ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!); die Ordnung aus dem Journaleintrag heraus zu verteidigen würde ihren Zielwert um etwa #v [ROOT.GetCountry.MakeScope.ScriptValue('un_crisis_rescue_gain')|1]#! anheben."
+ },
+ "un_events.10.d_outsider": {
+  "en": "\\n\\nWe stand outside it. Joining now would bring our share of world power in with us and lift its target by about #v [ROOT.GetCountry.MakeScope.ScriptValue('un_crisis_rescue_gain')|1]#!.",
+  "de": "\\n\\nWir stehen außerhalb von ihr. Jetzt beizutreten würde unseren Anteil an der Weltmacht mitbringen und ihren Zielwert um etwa #v [ROOT.GetCountry.MakeScope.ScriptValue('un_crisis_rescue_gain')|1]#! anheben."
+ },
+ "un_events.10.e": {
+  "en": "Join it, and save it.",
+  "de": "Beitreten und sie retten."
+ },
+ "un_events.10.e_tt": {
+  "en": "We join the United Nations now, bound by every convention it has ratified. Our share of world power counts toward its participation pillar from next month.",
+  "de": "Wir treten den Vereinten Nationen jetzt bei, gebunden an jede Konvention, die sie ratifiziert haben. Unser Anteil an der Weltmacht zählt ab nächstem Monat zu ihrer Teilnahmesäule."
+ },
+ "un_events.10.f": {
+  "en": "'When I joined the diplomatic service,' the old ambassador said, swirling his brandy, 'this building meant something. Resolutions had teeth. Delegations arrived with instructions to compromise.'\\n\\n'And now?'\\n\\n'Now they arrive with instructions to be seen arriving. It is theater, my dear boy. Very expensive theater.'",
+  "de": "„Als ich in den diplomatischen Dienst eintrat“, sagte der alte Botschafter und schwenkte seinen Brandy, „bedeutete dieses Gebäude noch etwas. Resolutionen hatten Biss. Delegationen kamen mit der Anweisung, Kompromisse zu schließen.“\\n\\n„Und heute?“\\n\\n„Heute kommen sie mit der Anweisung, gesehen zu werden, wie sie ankommen. Es ist Theater, mein lieber Junge. Sehr teures Theater.“"
+ },
+ "un_events.10.t": {
+  "en": "The United Nations in Crisis",
+  "de": "Die Vereinten Nationen in der Krise"
  }
 }
