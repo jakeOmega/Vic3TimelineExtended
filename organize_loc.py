@@ -831,6 +831,9 @@ def organize_all(project_directory, dry_run=False):
         for key in used_keys:
             if key in all_loc:
                 found = re.findall(r"[\$@!](\w+)[\$@!#|]", all_loc[key])
+                # `$key$` / `$key|fmt$` splices. Event-style keys contain `.` and some
+                # notification keys `-`, which the \w+ pattern above cannot match.
+                found.extend(re.findall(r"\$([\w.\-]+)(?:\|[^$]*)?\$", all_loc[key]))
                 found.extend(
                     m[1] for m in re.findall(r"\[\w+\.Get(Named)?(\w+)", all_loc[key])
                 )
