@@ -9,7 +9,8 @@ of this is behind a game rule: the eras and everything they unlock are always
 in the game, even when you switch off the systems that some of their
 technologies start. The one exception is the International Space Station
 wonder, which needs a Moon landing from the space race. The repeatable [Grand
-Monument](#grand-monuments) has a game rule of its own.
+Monument](#grand-monuments) has a game rule of its own, and so do the
+[building names that change with the era](#buildings-named-for-their-era).
 
 ## Eras six to twelve
 
@@ -200,20 +201,22 @@ such as Sound Film for the Entertainment Industry. The Air and Space Port is
 the exception: its name covers airports on either method, so it arrives with
 the Spaceport method's technology.
 
-| First name | Later names (technology) |
-|---|---|
-| Arts Academy | Entertainment Industry (Mass Media), Creative Industries (Digital Entertainment), Experience Industry (Brain-Computer Interfaces) |
-| Telephone Industries, the base game's Electrics Industries | Wired Telecommunications Industries (Modern Skyscrapers) |
-| Radio Industries | Wireless Telecommunications Industries (Satellite Communications) |
-| Aircraft Industry | Aerospace Industry (Guided Missiles) |
-| Glassworks | Glass and Plastics Industries (Plastic Mass Production) |
-| Consumer Appliance Industries | Consumer Electronics Industries (Personal Computers) |
-| Resorts and Hotels | Tourism Industry (Television Broadcasting) |
-| Airport | Air and Space Port (Muon-Catalyzed Fusion Reactors) |
+| First name | Later names (technology) | With the rule off |
+|---|---|---|
+| Arts Academy | Entertainment Industry (Mass Media), Creative Industries (Digital Entertainment), Experience Industry (Brain-Computer Interfaces) | Creative Industries |
+| Telephone Industries, the base game's Electrics Industries | Wired Telecommunications Industries (Modern Skyscrapers) | Wired Telecommunications Industries |
+| Radio Industries | Wireless Telecommunications Industries (Satellite Communications) | Wireless Telecommunications Industries |
+| Aircraft Industry | Aerospace Industry (Guided Missiles) | Aerospace Industry |
+| Glassworks | Glass and Plastics Industries (Plastic Mass Production) | Glassworks |
+| Consumer Appliance Industries | Consumer Electronics Industries (Personal Computers) | Consumer Appliance Industries |
+| Resorts and Hotels | Tourism Industry (Television Broadcasting) | Tourism Industry |
+| Airport | Air and Space Port (Muon-Catalyzed Fusion Reactors) | Airport |
 
 The name follows your own research, so every country's buildings of a type
 show the name your technology has reached, whatever their owners have
-researched. The rest of this guide uses a building's first name unless it is
+researched. The Era Building Names game rule, on by default, controls this.
+With it off, each building keeps the single name in the last column for the
+whole game. The rest of this guide uses a building's first name unless it is
 describing a later era.
 
 ## New buildings and production methods
