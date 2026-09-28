@@ -708,7 +708,7 @@ releases the program at once, unless a treaty's ceiling still holds you.
 
 Dismantle the Arsenal needs warheads, peace, no nuclear crisis and no civil
 war. It takes 12 months, one more for every 10 warheads above 20, and at most
-36. The warheads go over that time, the last month taking whatever is left.
+36. The warheads go at an even pace over that time.
 Until it ends, your readiness is ordered down to Recessed and can't be raised,
 and the program is held. Recessed forces can't launch, so once there you can't
 answer a strike. A war doesn't stop the dismantling; a civil war of your own

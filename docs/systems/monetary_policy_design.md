@@ -1353,9 +1353,10 @@ failures and no audit findings. File inventory and the architectural rules: `mod
 - **A gold-standard country can sign a `currency_peg`.** It then has no dial, so gold flows
   stop and its vault and hot money freeze as under a suspension; its index is the anchor's.
   Coherent, odd, and cheap to forbid in `te_mon_can_peg_to` if it reads wrongly.
-- **The four article keys `*_effects_desc` / `*_article_short_desc` land in
-  `te_unused_l_english.yml`**, like every existing article's: `organize_loc.py` cannot see
-  engine-constructed keys. The file is loaded, so they render; the detection gap is old.
+- **~~The four article keys `*_effects_desc` / `*_article_short_desc` land in
+  `te_unused_l_english.yml`~~** — resolved: since #366 `organize_loc.py`'s
+  `find_treaty_article_keys` treats them as used, and since #357 each article's keys all
+  file together in `te_concepts_l_english.yml`.
 - **Hooks fire a day late on purpose** (`days = 1`), so the treaty's own state has settled
   before the discovery walks it. Whether `on_entry_into_force` would see the treaty in
   `any_scope_treaty` with no delay is unknown and no longer matters.
@@ -1531,7 +1532,8 @@ absent until §17 check 22 says it is needed) and C4 (both pretexts are `in_defa
   anchored country's rate. If a profile ever shows it, the fix is a stored `te_mon_anchor_imposed`
   flag written beside `te_mon_anchor_kind` in `te_monetary_anchor_changed`.
 - **The engine-built `*_effects_desc` keys for 113 and 114 are hand-written**, in
-  `te_unused_l_english.yml`, like every other article's — §0.8's known roughness, unchanged.
+  `te_concepts_l_english.yml` with the rest of each article's keys (§0.8's `te_unused`
+  roughness was fixed by #366 / #357).
   The three shipped articles' keys were also rewritten for 6a's and 6b's changes, so they are a
   second place that has to move when the constants do.
 - **Nothing was done about §15B.3's "general pattern"** beyond what H6 ruled: the weak side's
@@ -3746,8 +3748,8 @@ contract) in the variable contract, discovered beside the guarantee roles;
 `te_mon_anchor_spread_peg_imposed`, `te_mon_receivership_take`, the twelve-month exit
 counter; `te_mon_is_imposed_pegger` (the peg article walk with the type); the `OR = {
 has_type … }` edits listed under C1; the `te_peg.2` option trigger; the AI `desc` keys and
-the two articles' name / desc / effects / short-desc keys (the engine-built `*_effects_desc`
-keys land in `te_unused_l_english.yml` like every article's — §0.8 known roughness);
+the two articles' name / desc / effects / short-desc keys (all in
+`te_concepts_l_english.yml` — §0.8's `te_unused` roughness was fixed by #366 / #357);
 `treaty_articles_reference.md` gains two rows; `mod_systems.md`.
 
 ### 15C.4 Checks and the harness (P6-1…13)

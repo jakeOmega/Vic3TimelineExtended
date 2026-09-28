@@ -4715,6 +4715,18 @@
  te_debug_monetary.9.z:0 "Close"
 
 #
+# TE_DEBUG_MONUMENTS
+#
+ te_debug_monuments.1.a:0 "Raise a level-20 monument in the capital and hold its ceremony"
+ te_debug_monuments.1.b:0 "Run this month's monument pass now"
+ te_debug_monuments.1.c:0 "Contest our tallest regime, ruler or faith monument and open its notice"
+ te_debug_monuments.1.d:0 "Vanity backlash at the capital's monument"
+ te_debug_monuments.1.desc:0 "Grand Monument test tools. Each writes TE_MONUMENTS: lines to debug.log."
+ te_debug_monuments.1.e:0 "Print every monument total to debug.log"
+ te_debug_monuments.1.flavor:0 "Console only."
+ te_debug_monuments.1.t:0 "Debug: Grand Monuments"
+
+#
 # TE_DEBUG_NUCLEAR
 #
  te_debug_nuclear.1.a:0 "Fund the programme to step 3, and arm three rivals"
@@ -4745,18 +4757,6 @@
  te_debug_nuclear.3.tt_age:0 "Ten years are added to the tradition of non-use"
  te_debug_nuclear.3.tt_renounce:0 "We are noted as having given up ten warheads. If we are still armed, the next monthly step books us a breakout"
  te_debug_nuclear.3.tt_step:0 "The world's monthly taboo step runs now"
-
-#
-# TE_DEBUG_MONUMENTS
-#
- te_debug_monuments.1.a:0 "Raise a level-20 monument in the capital and hold its ceremony"
- te_debug_monuments.1.b:0 "Run this month's monument pass now"
- te_debug_monuments.1.c:0 "Contest our tallest regime, ruler or faith monument and open its notice"
- te_debug_monuments.1.d:0 "Vanity backlash at the capital's monument"
- te_debug_monuments.1.desc:0 "Grand Monument test tools. Each writes TE_MONUMENTS: lines to debug.log."
- te_debug_monuments.1.e:0 "Print every monument total to debug.log"
- te_debug_monuments.1.flavor:0 "Console only."
- te_debug_monuments.1.t:0 "Debug: Grand Monuments"
 
 #
 # TE_DEBUG_RESETTLEMENT

@@ -267,6 +267,84 @@ class OriginHandlerSchemaTests(unittest.TestCase):
         self.assertEqual(r["matches"], [])
 
 
+class TypeKeyAndListingTests(unittest.TestCase):
+    """#326 — /engine-docs/<type>/<name> returns that entry (it used to return
+    the whole unfiltered listing), and the listing says when it was capped."""
+
+    def setUp(self):
+        self._original = mss.engine_docs
+        mss.engine_docs = {
+            "triggers": [
+                {"name": "active_lens", "origin": "vanilla", "scopes": ["none"]},
+                {"name": "primary_cultures_percent_country", "origin": "vanilla",
+                 "example": "primary_cultures_percent_country >= 0.5",
+                 "scopes": ["country"]},
+                {"name": "primary_cultures_percent_state", "origin": "vanilla",
+                 "scopes": ["state"]},
+            ],
+            "event-targets": [
+                {"name": "num_active_ships", "input_scopes": ["country"]},
+                {"name": "num_active_ships", "input_scopes": ["military_formation"]},
+            ],
+            "modifiers": [
+                {"name": "country_authority_add", "origin": "vanilla", "decimals": 0},
+            ],
+        }
+
+    def tearDown(self):
+        mss.engine_docs = self._original
+
+    def _call(self, parts, params=None):
+        return mss.ModStateHandler._engine_docs(self=None, parts=parts, params=params or {})
+
+    def test_key_returns_that_entry_only(self):
+        r = self._call(["triggers", "primary_cultures_percent_country"])
+        self.assertTrue(r["found"])
+        self.assertEqual(r["type"], "triggers")
+        self.assertEqual(len(r["matches"]), 1)
+        # The full entry, not origin's field subset.
+        self.assertEqual(r["matches"][0]["example"], "primary_cultures_percent_country >= 0.5")
+        r = self._call(["modifiers", "country_authority_add"])
+        self.assertEqual(r["matches"][0]["decimals"], 0)
+
+    def test_key_keeps_repeated_names(self):
+        r = self._call(["event-targets", "num_active_ships"])
+        self.assertEqual(len(r["matches"]), 2)
+
+    def test_unknown_key_is_404_with_close_matches(self):
+        with self.assertRaises(mss.NotFound) as ctx:
+            self._call(["triggers", "primary_cultures_percent_countr"])
+        self.assertEqual(ctx.exception.status, 404)
+        self.assertIn("primary_cultures_percent_country", ctx.exception.payload["did_you_mean"])
+
+    def test_key_in_the_wrong_type_names_the_right_one(self):
+        with self.assertRaises(mss.NotFound) as ctx:
+            self._call(["triggers", "country_authority_add"])
+        self.assertEqual(ctx.exception.payload["defined_in_types"], ["modifiers"])
+
+    def test_extra_segment_is_400(self):
+        with self.assertRaises(mss.BadRequest) as ctx:
+            self._call(["triggers", "active_lens", "extra"])
+        self.assertEqual(ctx.exception.status, 400)
+
+    def test_listing_reports_truncation(self):
+        r = self._call(["triggers"], {"limit": ["1"]})
+        self.assertEqual(r["count"], 3)
+        self.assertEqual(r["returned"], 1)
+        self.assertTrue(r["truncated"])
+        self.assertEqual(len(r["entries"]), 1)
+
+    def test_listing_untruncated(self):
+        r = self._call(["triggers"], {"q": ["primary_cultures"]})
+        self.assertEqual(r["count"], 2)
+        self.assertEqual(r["returned"], 2)
+        self.assertFalse(r["truncated"])
+
+    def test_unknown_type_still_404(self):
+        with self.assertRaises(mss.NotFound):
+            self._call(["no-such-type"])
+
+
 class LocFunctionIndexTests(unittest.TestCase):
     """Verify the loc-function index discovers canonical data-system functions
     from vanilla loc + GUI files. Integration-flavored: skip when vanilla

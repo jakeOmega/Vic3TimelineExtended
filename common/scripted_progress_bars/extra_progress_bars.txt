@@ -29,7 +29,7 @@ banking_cycle_momentum_bar = {
 banking_policy_stance_bar = {
 	name = "banking_policy_stance_bar_name"
 	desc = "banking_policy_stance_bar_name"
-	second_desc = "banking_policy_stance_bar_second" # REVIEWED 2026-09-20: scripted-progress-bar field, not an effect/trigger — vanilla 00_great_game_progress_bars.txt:4 uses it; the audit has no schema for this entity type
+	second_desc = "banking_policy_stance_bar_second"
 
 	double_sided_gold = yes
 

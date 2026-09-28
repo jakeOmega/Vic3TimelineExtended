@@ -632,9 +632,31 @@ nd_taboo_dismantle_months_value = {
 	max = nd_taboo_dismantle_max_months
 }
 
-# This month's retirements while dismantling: what is left divided by the
-# months left, rounded down, so the warheads go evenly across the whole
-# period and the last month takes the rest (spec §5.2).
+# The whole schedule's length: nd_taboo_dismantle_months_value's formula on
+# the stock dismantling began with, so it holds steady while the stock falls.
+nd_taboo_dismantle_total_months_value = {
+	value = 0
+	if = {
+		limit = { has_variable = nd_dismantle_start_stock }
+		value = var:nd_dismantle_start_stock
+		subtract = nd_taboo_dismantle_free_warheads
+		min = 0
+		divide = nd_taboo_dismantle_warheads_per_month
+		floor = yes
+		add = nd_taboo_dismantle_base_months
+		max = nd_taboo_dismantle_max_months
+	}
+}
+
+# This month's retirements while dismantling: what the schedule says should
+# be gone by the end of this month, less what is already gone, so the
+# warheads go evenly across the whole period (spec §5.2). The old
+# stock ÷ months left, rounded down, retired nothing for the first half of
+# a small arsenal's schedule (6 warheads over 12 months: none for six
+# months, then one a month; #528); this spreads them one every other month.
+# Never more than we hold, since a civil war can take stock mid-schedule,
+# and the last month takes whatever is left. A dismantling begun without
+# nd_dismantle_start_stock keeps the old division.
 nd_taboo_dismantle_this_month_value = {
 	value = 0
 	if = {
@@ -642,9 +664,32 @@ nd_taboo_dismantle_this_month_value = {
 			has_variable = nd_dismantle_months_left
 			var:nd_dismantle_months_left > 0
 		}
-		value = nd_stockpile
-		divide = var:nd_dismantle_months_left
-		floor = yes
+		if = {
+			limit = { var:nd_dismantle_months_left <= 1 }
+			value = nd_stockpile
+		}
+		else_if = {
+			limit = { has_variable = nd_dismantle_start_stock }
+			# Months elapsed, this one included
+			value = nd_taboo_dismantle_total_months_value
+			subtract = var:nd_dismantle_months_left
+			add = 1
+			min = 1
+			multiply = var:nd_dismantle_start_stock
+			divide = nd_taboo_dismantle_total_months_value
+			round = yes
+			if = {
+				limit = { has_variable = nd_dismantle_retired }
+				subtract = var:nd_dismantle_retired
+			}
+			min = 0
+			max = nd_stockpile
+		}
+		else = {
+			value = nd_stockpile
+			divide = var:nd_dismantle_months_left
+			floor = yes
+		}
 	}
 }
 

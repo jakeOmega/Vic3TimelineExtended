@@ -121,6 +121,12 @@ banking_effect_cb_disable_capital_controls_outflow = {
 banking_effect_cb_emergency_liquidity_program = {
 	te_history_record_banking_marker = { MARK = on_cb_emergency_liquidity_program }
 	je:je_banking_cycle = { add_modifier = { name = banking_emergency_liquidity_program } }
+	# A new opening, so a law that closes it may refund it again
+	# (remove_banking_market_modifiers_effect, extra_effects.txt).
+	if = {
+		limit = { has_variable = banking_eliq_strip_refunded }
+		remove_variable = banking_eliq_strip_refunded
+	}
 	# Big shock absorber
 	custom_tooltip = {
 		text = "BUBBLE_PRESSURE_10_DESC"

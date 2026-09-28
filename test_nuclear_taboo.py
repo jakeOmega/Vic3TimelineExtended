@@ -602,8 +602,20 @@ class TestExits(unittest.TestCase):
     def test_dismantling_runs_its_full_length(self):
         values = strip_comments(read(TABOO_VALUES))
         this_month = block(values, "nd_taboo_dismantle_this_month_value")
-        self.assertIn("divide = var:nd_dismantle_months_left", this_month)
-        self.assertIn("floor = yes", this_month)
+        # #528: paced against the whole schedule (start stock x months
+        # elapsed / total, less what is already retired), capped at the
+        # stock, and the last month takes the rest. The stock / months-left
+        # floor retired nothing for the first half of a small schedule.
+        self.assertIn("multiply = var:nd_dismantle_start_stock", this_month)
+        self.assertIn("divide = nd_taboo_dismantle_total_months_value", this_month)
+        self.assertIn("subtract = var:nd_dismantle_retired", this_month)
+        self.assertIn("round = yes", this_month)
+        self.assertIn("max = nd_stockpile", this_month)
+        last = this_month[this_month.index("var:nd_dismantle_months_left <= 1"):]
+        self.assertIn("value = nd_stockpile", last[: last.index("}", last.index("}") + 1)])
+        total = block(values, "nd_taboo_dismantle_total_months_value")
+        self.assertIn("value = var:nd_dismantle_start_stock", total)
+        self.assertIn("max = nd_taboo_dismantle_max_months", total)
         self.assertNotRegex(values, r"(?m)^nd_taboo_dismantle_per_month_value = ")
         step = block(self.taboo, "nd_taboo_dismantle_step")
         complete_at = step.index("nd_taboo_dismantle_complete = yes")

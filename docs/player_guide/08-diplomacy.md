@@ -1,6 +1,6 @@
 # Diplomacy
 
-The mod adds 36 treaty articles, extra escalation in diplomatic plays, events
+The mod adds 35 treaty articles, extra escalation in diplomatic plays, events
 between rival powers, a reunification system for divided nations, two more tiers
 of power bloc principles, and ten late-game formable countries. None of this has
 a game rule or journal entry of its own: it works through the base game's treaty
