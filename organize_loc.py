@@ -801,6 +801,20 @@ def find_quoted_loc_args(value):
     return _QUOTED_ARG_RE.findall("".join(parts))
 
 
+def loc_value_refs(value):
+    """Return the loc keys a loc value renders by name."""
+    found = re.findall(r"[\$@!](\w+)[\$@!#|]", value)
+    # `$key$` / `$key|fmt$` splices. Event-style keys contain `.` and some
+    # notification keys `-`, which the \w+ pattern above cannot match.
+    found.extend(re.findall(r"\$([\w.\-]+)(?:\|[^$]*)?\$", value))
+    found.extend(m[1] for m in re.findall(r"\[\w+\.Get(Named)?(\w+)", value))
+    found.extend(find_quoted_loc_args(value))
+    # Embedded tooltips: `#tooltip:[X.GetTooltipTag],KEY` (and the
+    # `;tooltip:` / bare `#tooltip:KEY` forms) render KEY on hover.
+    found.extend(re.findall(r"tooltip:(?:[^,\s\"]+,)?(\w+)", value))
+    return found
+
+
 # ---------------------------------------------------------------------------
 # Main organiser
 # ---------------------------------------------------------------------------
@@ -840,6 +854,16 @@ def organize_all(project_directory, dry_run=False):
     technology_keys = find_technology_keys(project_directory)
     treaty_article_of = treaty_article_families(project_directory)
 
+    # Overrides in replace/ are never organised, but an override's value can
+    # name mod keys (the era building names make `building_art_academy` a
+    # SelectLocalization over two te_buildings keys), so those count as used.
+    replace_dir = os.path.join(loc_dir, "replace")
+    if os.path.isdir(replace_dir):
+        for fname in sorted(os.listdir(replace_dir)):
+            if fname.endswith(".yml"):
+                for value in _read_loc_file(os.path.join(replace_dir, fname)).values():
+                    used_keys.update(k for k in loc_value_refs(value) if k in all_keys)
+
     # Auto-add _desc companions
     for key in list(used_keys):
         desc_key = f"{key}_desc"
@@ -851,17 +875,7 @@ def organize_all(project_directory, dry_run=False):
         newly_found = set()
         for key in used_keys:
             if key in all_loc:
-                found = re.findall(r"[\$@!](\w+)[\$@!#|]", all_loc[key])
-                # `$key$` / `$key|fmt$` splices. Event-style keys contain `.` and some
-                # notification keys `-`, which the \w+ pattern above cannot match.
-                found.extend(re.findall(r"\$([\w.\-]+)(?:\|[^$]*)?\$", all_loc[key]))
-                found.extend(
-                    m[1] for m in re.findall(r"\[\w+\.Get(Named)?(\w+)", all_loc[key])
-                )
-                found.extend(find_quoted_loc_args(all_loc[key]))
-                # Embedded tooltips: `#tooltip:[X.GetTooltipTag],KEY` (and the
-                # `;tooltip:` / bare `#tooltip:KEY` forms) render KEY on hover.
-                found.extend(re.findall(r"tooltip:(?:[^,\s\"]+,)?(\w+)", all_loc[key]))
+                found = loc_value_refs(all_loc[key])
                 for fk in found:
                     if fk in all_keys and fk not in used_keys:
                         newly_found.add(fk)
