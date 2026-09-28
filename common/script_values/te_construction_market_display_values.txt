@@ -9,13 +9,25 @@
 # unguarded read of a missing variable logs "Failed to fetch variable" each
 # time (a country formed mid-game has none of these until its setup event).
 
-# The purchase the player has set (the number in the +/- box).
+# The purchase the player has set, in points a week: the number in the +/- box,
+# or, in Fixed Budget mode, the quantity the budget is buying now.
 te_construction_market_display_public_target = {
+	value = te_construction_market_public_setting
+}
+
+# Fixed Budget mode: the weekly budget (the figure in the +/- box).
+te_construction_market_display_public_budget = {
 	value = 0
 	if = {
-		limit = { has_variable = te_construction_market_public_target }
-		value = var:te_construction_market_public_target
+		limit = { has_variable = te_construction_market_public_budget }
+		value = var:te_construction_market_public_budget
 	}
+}
+
+# Fixed Budget mode: what the budget buys at today's price, which the quantity
+# bought moves toward a quarter of the way each week.
+te_construction_market_display_budget_quantity_target = {
+	value = te_construction_market_budget_quantity_target
 }
 
 # How much the government queue can absorb in a week: each queued level takes

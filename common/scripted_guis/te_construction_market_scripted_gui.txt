@@ -2,10 +2,19 @@
 # Based on the third-party "Free Market Construction" mod. See README.md.
 #
 # Bound from gui/construction_panel.gui to the +/- buttons in the construction
-# queue panel. Each handler nudges the country's public-construction buy target
-# (te_construction_market_public_target) by a fixed amount: 1 (default click),
-# 10 (shift), 100 (ctrl), 1000 (alt), 10000 (right-click). On the decrease
-# side, right-click resets to 0 instead of stepping by 10000.
+# queue panel. The government purchase is set in one of two modes, chosen with
+# the panel's mode buttons (te_construction_market_set_{quantity,budget}_mode):
+#
+# - Fixed Quantity (the default): each handler nudges the country's
+#   public-construction buy target (te_construction_market_public_target) by a
+#   fixed amount: 1 (default click), 10 (shift), 100 (ctrl), 1000 (alt), 10000
+#   (right-click). On the decrease side, right-click resets to 0 instead of
+#   stepping by 10000.
+# - Fixed Budget: the te_construction_market_{increase,decrease}_budget_*
+#   handlers nudge the weekly budget (te_construction_market_public_budget) by
+#   1,000 / 10,000 / 100,000 / 1,000,000, right-click +10,000,000 or reset; the
+#   quantity bought follows the budget over a few weeks
+#   (te_construction_market_update_budget_quantity).
 #
 # Every handler is shown only while the construction market runs
 # (te_free_market_construction_on): with free_market_construction_rule
@@ -307,5 +316,299 @@ te_construction_market_rule_on_sgui = {
 	}
 
 	effect = {
+	}
+}
+
+# Read-only: which of the two purchase modes the panel shows — the
+# Fixed Budget controls or the Fixed Quantity ones. Also answers the mode
+# buttons' highlight and the mode-dependent tooltips.
+te_construction_market_budget_mode_sgui = {
+
+	scope = country
+
+	is_shown = {
+		te_free_market_construction_on = yes
+		te_construction_market_budget_mode_on = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		always = no
+	}
+
+	effect = {
+	}
+}
+
+# Mode buttons. Each carries the purchase in force over into the other mode;
+# see te_construction_market_switch_to_budget_mode.
+te_construction_market_set_quantity_mode = {
+
+	scope = country
+
+	is_shown = {
+		te_free_market_construction_on = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		te_construction_market_budget_mode_on = yes
+	}
+
+	effect = {
+		te_construction_market_switch_to_quantity_mode = yes
+	}
+}
+
+te_construction_market_set_budget_mode = {
+
+	scope = country
+
+	is_shown = {
+		te_free_market_construction_on = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		te_construction_market_budget_mode_on = no
+	}
+
+	effect = {
+		te_construction_market_switch_to_budget_mode = yes
+	}
+}
+
+# Fixed Budget +/- buttons.
+te_construction_market_increase_budget_1000 = {
+
+	scope = country
+
+	is_shown = {
+		te_free_market_construction_on = yes
+		te_construction_market_budget_mode_on = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		always = yes
+	}
+
+	effect = {
+		te_construction_market_change_budget = { AMOUNT = 1000 }
+	}
+}
+
+te_construction_market_increase_budget_10000 = {
+
+	scope = country
+
+	is_shown = {
+		te_free_market_construction_on = yes
+		te_construction_market_budget_mode_on = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		always = yes
+	}
+
+	effect = {
+		te_construction_market_change_budget = { AMOUNT = 10000 }
+	}
+}
+
+te_construction_market_increase_budget_100000 = {
+
+	scope = country
+
+	is_shown = {
+		te_free_market_construction_on = yes
+		te_construction_market_budget_mode_on = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		always = yes
+	}
+
+	effect = {
+		te_construction_market_change_budget = { AMOUNT = 100000 }
+	}
+}
+
+te_construction_market_increase_budget_1000000 = {
+
+	scope = country
+
+	is_shown = {
+		te_free_market_construction_on = yes
+		te_construction_market_budget_mode_on = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		always = yes
+	}
+
+	effect = {
+		te_construction_market_change_budget = { AMOUNT = 1000000 }
+	}
+}
+
+te_construction_market_increase_budget_10000000 = {
+
+	scope = country
+
+	is_shown = {
+		te_free_market_construction_on = yes
+		te_construction_market_budget_mode_on = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		always = yes
+	}
+
+	effect = {
+		te_construction_market_change_budget = { AMOUNT = 10000000 }
+	}
+}
+
+te_construction_market_decrease_budget_1000 = {
+
+	scope = country
+
+	is_shown = {
+		te_free_market_construction_on = yes
+		te_construction_market_budget_mode_on = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		has_variable = te_construction_market_public_budget
+		var:te_construction_market_public_budget >= 1000
+	}
+
+	effect = {
+		te_construction_market_change_budget = { AMOUNT = -1000 }
+	}
+}
+
+te_construction_market_decrease_budget_10000 = {
+
+	scope = country
+
+	is_shown = {
+		te_free_market_construction_on = yes
+		te_construction_market_budget_mode_on = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		has_variable = te_construction_market_public_budget
+		var:te_construction_market_public_budget >= 10000
+	}
+
+	effect = {
+		te_construction_market_change_budget = { AMOUNT = -10000 }
+	}
+}
+
+te_construction_market_decrease_budget_100000 = {
+
+	scope = country
+
+	is_shown = {
+		te_free_market_construction_on = yes
+		te_construction_market_budget_mode_on = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		has_variable = te_construction_market_public_budget
+		var:te_construction_market_public_budget >= 100000
+	}
+
+	effect = {
+		te_construction_market_change_budget = { AMOUNT = -100000 }
+	}
+}
+
+te_construction_market_decrease_budget_1000000 = {
+
+	scope = country
+
+	is_shown = {
+		te_free_market_construction_on = yes
+		te_construction_market_budget_mode_on = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		has_variable = te_construction_market_public_budget
+		var:te_construction_market_public_budget >= 1000000
+	}
+
+	effect = {
+		te_construction_market_change_budget = { AMOUNT = -1000000 }
+	}
+}
+
+te_construction_market_decrease_budget_reset = {
+
+	scope = country
+
+	is_shown = {
+		te_free_market_construction_on = yes
+		te_construction_market_budget_mode_on = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		has_variable = te_construction_market_public_budget
+		var:te_construction_market_public_budget >= 1
+	}
+
+	effect = {
+		te_construction_market_clear_budget = yes
 	}
 }

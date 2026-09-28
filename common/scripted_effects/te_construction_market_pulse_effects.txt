@@ -19,6 +19,8 @@ te_construction_market_on_weekly_pulse = {
 			#this = market.owner
 		}
 		te_construction_market_update_price_stabilizer = yes
+		# Before the sites are sized: it moves the Fixed Budget purchase.
+		te_construction_market_update_budget_quantity = yes
 		te_construction_market_country_update_data = yes
 		if = {
 			limit = {

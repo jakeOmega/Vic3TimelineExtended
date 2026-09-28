@@ -25,6 +25,15 @@ te_free_market_construction_off = {
 	has_game_rule = free_market_construction_disabled
 }
 
+# The government purchase is set as a weekly budget (the construction panel's
+# Fixed Budget mode) rather than as a quantity (Fixed Quantity, the default).
+# Set and cleared by the panel's mode buttons
+# (common/scripted_guis/te_construction_market_scripted_gui.txt); the AI always
+# sets a quantity, so its weekly purchase clears it. Scope: country
+te_construction_market_budget_mode_on = {
+	has_variable = te_construction_market_budget_mode
+}
+
 # The engine's pm_retooling modifier (a building that switches production
 # methods, common/static_modifiers/extra_modifiers.txt) is removed as soon as
 # it appears: te_remove_waived_pm_retooling.

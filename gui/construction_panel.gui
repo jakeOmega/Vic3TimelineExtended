@@ -975,8 +975,9 @@ types construction_panel
 				direction = vertical
 
 				### MOD: construction-market section (te_construction_market) ###
-				# The construction good's purchase control, a live read-out of
-				# where construction is going, and an expandable explanation.
+				# The construction good's purchase control (a weekly quantity or a
+				# weekly budget, by mode), a live read-out of where construction is
+				# going, and an expandable explanation.
 				# Figures: te_construction_market_display_* in
 				# common/script_values/te_construction_market_display_values.txt.
 				# Text: the TE_CM_* keys. The open flag of the explanation lives in
@@ -1011,7 +1012,81 @@ types construction_panel
 						align = left|nobaseline
 					}
 
+					### PURCHASE MODE
+					# Fixed Quantity (the government buys a set number of points a
+					# week, the cost floats with the price) or Fixed Budget (it spends
+					# a set sum a week, the quantity follows the price over a few
+					# weeks). The highlighted button is the mode in force; the other
+					# switches to it. te_construction_market_budget_mode_sgui answers
+					# which mode is in force, here and below.
+					flowcontainer = {
+						parentanchor = hcenter
+						spacing = 5
+						margin_top = 5
+
+						filter_button = {
+							visible = "[GetScriptedGui('te_construction_market_budget_mode_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+							tooltip = "TE_CM_MODE_QUANTITY_TT"
+
+							blockoverride "size" {
+								size = { 200 32 }
+							}
+
+							blockoverride "text" {
+								text = "TE_CM_MODE_QUANTITY"
+							}
+
+							blockoverride "onclick" {
+								onclick = "[GetScriptedGui('te_construction_market_set_quantity_mode').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+							}
+						}
+
+						filter_background_selected = {
+							visible = "[Not( GetScriptedGui('te_construction_market_budget_mode_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+							tooltip = "TE_CM_MODE_QUANTITY_TT"
+
+							blockoverride "size" {
+								size = { 200 32 }
+							}
+
+							blockoverride "text" {
+								text = "TE_CM_MODE_QUANTITY"
+							}
+						}
+
+						filter_button = {
+							visible = "[Not( GetScriptedGui('te_construction_market_budget_mode_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+							tooltip = "TE_CM_MODE_BUDGET_TT"
+
+							blockoverride "size" {
+								size = { 200 32 }
+							}
+
+							blockoverride "text" {
+								text = "TE_CM_MODE_BUDGET"
+							}
+
+							blockoverride "onclick" {
+								onclick = "[GetScriptedGui('te_construction_market_set_budget_mode').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+							}
+						}
+
+						filter_background_selected = {
+							visible = "[GetScriptedGui('te_construction_market_budget_mode_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+							tooltip = "TE_CM_MODE_BUDGET_TT"
+
+							blockoverride "size" {
+								size = { 200 32 }
+							}
+
+							blockoverride "text" {
+								text = "TE_CM_MODE_BUDGET"
+							}
+						}
+					}
+
 					textbox = {
+						visible = "[Not( GetScriptedGui('te_construction_market_budget_mode_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 						text = "GOVERNMENT_CONSTRUCTION_BOUGHT"
 						tooltip = "TE_CM_PURCHASE_TT"
 						parentanchor = hcenter|top
@@ -1022,7 +1097,21 @@ types construction_panel
 						align = center|nobaseline
 					}
 
+					textbox = {
+						visible = "[GetScriptedGui('te_construction_market_budget_mode_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						text = "TE_CM_BUDGET_HEADER"
+						tooltip = "TE_CM_BUDGET_PURCHASE_TT"
+						parentanchor = hcenter|top
+						margin_top = 5
+						autoresize = yes
+						multiline = yes
+						max_width = @panel_width_minus_10
+						align = center|nobaseline
+					}
+
+					### FIXED QUANTITY CONTROL
 					flowcontainer = {
+						visible = "[Not( GetScriptedGui('te_construction_market_budget_mode_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 						spacing = 10
 						parentanchor = hcenter
 
@@ -1080,6 +1169,65 @@ types construction_panel
 						}
 					}
 
+					### FIXED BUDGET CONTROL
+					flowcontainer = {
+						visible = "[GetScriptedGui('te_construction_market_budget_mode_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						spacing = 10
+						parentanchor = hcenter
+
+						### LESS
+						button_icon_minus_action = {
+							size = { 35 35 }
+							parentanchor = vcenter
+							datacontext = "[GetScriptedGui('te_construction_market_decrease_budget_1000')]"
+							visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End)]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End)]"
+							tooltip = "TE_CM_BUDGET_DECREASE_TT"
+							click_modifiers = {
+								ondefault = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+								onshift = "[GetScriptedGui('te_construction_market_decrease_budget_10000').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+								onctrl = "[GetScriptedGui('te_construction_market_decrease_budget_100000').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+								onalt = "[GetScriptedGui('te_construction_market_decrease_budget_1000000').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+							}
+							onrightclick = "[GetScriptedGui('te_construction_market_decrease_budget_reset').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						}
+
+						### BUDGET
+						container = {
+							parentanchor = vcenter
+							tooltip = "TE_CM_STAT_GOVERNMENT_TT"
+							background = {
+								using = entry_bg
+								margin = { 10 -2 }
+							}
+
+							textbox = {
+								text = "TE_CM_BUDGET_BOX"
+								align = hcenter|nobaseline
+								using = fontsize_large
+								size = { 120 35 }
+								elide = right
+							}
+						}
+
+						### MORE
+						button_icon_plus_action = {
+							size = { 35 35 }
+							parentanchor = vcenter
+							datacontext = "[GetScriptedGui('te_construction_market_increase_budget_1000')]"
+							visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End)]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End)]"
+							tooltip = "TE_CM_BUDGET_INCREASE_TT"
+							click_modifiers = {
+								ondefault = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+								onshift = "[GetScriptedGui('te_construction_market_increase_budget_10000').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+								onctrl = "[GetScriptedGui('te_construction_market_increase_budget_100000').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+								onalt = "[GetScriptedGui('te_construction_market_increase_budget_1000000').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+							}
+							onrightclick = "[GetScriptedGui('te_construction_market_increase_budget_10000000').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						}
+					}
+
 					### LIVE READ-OUT
 					flowcontainer = {
 						parentanchor = hcenter
@@ -1090,6 +1238,16 @@ types construction_panel
 						textbox = {
 							text = "TE_CM_STAT_GOVERNMENT"
 							tooltip = "TE_CM_STAT_GOVERNMENT_TT"
+							autoresize = yes
+							multiline = yes
+							max_width = @panel_width_minus_10
+							align = left|nobaseline
+						}
+
+						textbox = {
+							visible = "[GetScriptedGui('te_construction_market_budget_mode_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+							text = "TE_CM_STAT_BUDGET"
+							tooltip = "TE_CM_STAT_BUDGET_TT"
 							autoresize = yes
 							multiline = yes
 							max_width = @panel_width_minus_10
