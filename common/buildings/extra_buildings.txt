@@ -171,7 +171,7 @@ REPLACE_OR_CREATE:building_synthetics_plant_coal = {
 
 REPLACE_OR_CREATE:building_synthetics_plant_wood = {
 	building_group = bg_heavy_industry
-	icon = "gfx/interface/icons/goods_icons/wood.dds"
+	icon = "gfx/interface/icons/building_icons/building_synthetics_plant_wood.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -367,7 +367,7 @@ REPLACE:building_electrics_industry = {
 
 REPLACE_OR_CREATE:building_electrics_industry_radio = {
 	building_group = bg_heavy_industry
-	icon = "gfx/interface/icons/goods_icons/radios.dds"
+	icon = "gfx/interface/icons/building_icons/building_electrics_industry_radio.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -1476,7 +1476,7 @@ REPLACE_OR_CREATE:building_rare_earth_metals_mine = {
 
 REPLACE_OR_CREATE:building_platinum_group_metals_mine = {
 	building_group = bg_discoverable_mining
-	icon = "gfx/interface/icons/building_icons/gold_mine.dds"
+	icon = "gfx/interface/icons/building_icons/building_platinum_group_metals_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
 

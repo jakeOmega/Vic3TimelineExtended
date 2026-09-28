@@ -233,7 +233,7 @@ building_wonder_kennedy_space_center = {
 
 building_wonder_aswan_high_dam = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/building_railway.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_aswan_high_dam.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -353,7 +353,7 @@ building_wonder_azadi_tower = {
 
 building_wonder_kenyatta_icc = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/building_government_administration.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_kenyatta_icc.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -777,7 +777,7 @@ building_wonder_golden_bridge = {
 
 building_wonder_large_hadron_collider = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/building_university.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_large_hadron_collider.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -899,7 +899,7 @@ building_wonder_svalbard_seed_vault = {
 
 building_wonder_ligo = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/building_university.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_ligo.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
