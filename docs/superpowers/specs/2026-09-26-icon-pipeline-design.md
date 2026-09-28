@@ -127,6 +127,25 @@ The owner approved all 170 subjects and asked for era 6 first (37 techs) before 
 - **Diplomatic actions** (7) have a new `plinth` layout. The slab is lifted from vanilla, per the owner's call. `icon_render.plinth_template()` takes the median over the 16 vanilla icons whose green-topped stone slab sits in the common place. On the top face, where every figure stands, each pixel takes the median over only the icons in which it is still green, which recovers the bare marble and its rim. A pixel must be bare in a quarter of the icons, so a figure's own green parts don't count. The figure is cut out, stood on the top face and given a contact shadow. The prompt no longer asks FLUX for a pedestal.
 - **Reuse** (`"use": <path>`): four actions have a better vanilla icon than the one they borrowed. Withdraw Nuclear Umbrella gets `guarantee_independence_obligation` (the crossed-out guarantee), Colonial Culture Change gets `change_culture`, and the two cultural-force actions get the `force_culture` crest. `wire` points them there, with nothing rendered.
 
+## Building slice (2026-09-27)
+
+**Triage.** 316 mod-added buildings borrowed an icon on 2026-09-27. The owner chose the first batch:
+
+| Group | Count | Borrowed | Decision |
+|---|---|---|---|
+| Wonders | 34 | generic vanilla art: dams on `building_railway`, towers on `urban_center` | generate: vanilla gives each monument its own icon, and FLUX knows the landmarks |
+| System buildings | 11 | Grand Monument, Settlement Authority, SR Hub and Silo, UN HQ and Power Bloc HQ on `building_government_administration`; Military Base, Youth Centers, three sci-fi power buildings | generate |
+| Industry variants | 9 | eight synthetics-plant variants and the radio industry on **goods** icons, which have no frame | generate 8; Synthetic Clothes keeps vanilla's synthetics plant |
+| Mines | 14 | the five vanilla mine icons | generate, each ore named by colour and form |
+| Construction Site | 1 | `construction_camp` | keep |
+| Company buildings | 247 | 190 on their company's logo, by design (`docs/vanilla/vanilla_company_buildings_reference.md`); 45 `building_generic_*` on `skyscraper.dds`; 12 on `basic_*` company icons | out of scope for this batch |
+
+Two company-logo problems turned up and belong to a logo pass, not this one: 76 of the mod's own company logos are the `gen_placeholder_company_icons.py` "PLACEHOLDER" card, which the flagship building shows too, and five flagships sit on another company's logo (DuPont on Pfizer's, Shell on ASML's, IG Farben on SAP's, JSR on Fanuc's, Sibur on Gazprom's; `/duplicate-images` flags them).
+
+**Layout.** The prototype's `framed` style is unchanged: the render fills the frame lifted from vanilla, so the cutout rules for white surfaces and glows don't apply. Subjects follow vanilla's two building layouts. Monuments are the landmark alone. Industrial buildings put the plant behind and its product large in the foreground (vanilla's iron mine has an ingot, its synthetics plant two vials), which is what tells fourteen mines apart at 256 px.
+
+**Wiring.** Building icons are read only from `icon =` (`BuildingType.GetIcon` in `building_browser_panel.gui`); there is no second lookup like the lens toolbar. 28 of the targets are `REPLACE_OR_CREATE:` definitions in `extra_buildings.txt`, so `wire` and `--validate` now match that prefix and capture the bare key. `REPLACE:` and `INJECT:` still don't match: they change a vanilla building, whose own art stays.
+
 ## Review lessons (2026-09-27)
 
 About 250 icons were generated in one session: era 6 techs, all treaty articles and all diplomatic actions. The owner reviewed every batch on annotated sheets and changed about one pick in eight.
