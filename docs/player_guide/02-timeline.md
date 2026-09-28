@@ -99,8 +99,8 @@ Backups, Molecular Assemblers and Telepathic Communities each unlock a
 Post-Scarcity Economy are among the last technologies in the tree.
 
 Some of the mod's buildings arrive earlier, with base-game technologies: the
-Aerospace Industry with Military Aviation, the Highway with Paved Roads, and the
-Tourism Industry with Romanticism.
+Aircraft Industry with Military Aviation, the Highway with Paved Roads, and
+Resorts and Hotels with Romanticism.
 
 ### Agricultural diffusion
 
@@ -156,7 +156,7 @@ renames twelve base-game goods to fit a longer timeline.
 | Launch Capacity | Industrial | Aerospace Industry (with rocket production methods), Space Elevator, Antimatter Engine | Space programs, satellites, orbital production methods and megaprojects |
 | Advanced Materials | Industrial | Advanced Material Fabricator, Nanofabrication Center | Late-game production methods and megaproject construction; base price 4,000, the most expensive good in the game |
 | Construction Services | Industrial | Construction Sector | The construction market ([Economy and construction](03-economy.md)) |
-| Tourism | Luxury | Tourism Industry, National Park and others | The pops' Tourism need |
+| Tourism | Luxury | Resorts and Hotels, National Park and others | The pops' Tourism need |
 | Tech-Critical Metals | Industrial | Nickel and Cobalt, Lithium, Rare Earth Metals and Platinum Group Metals Mines; also the Deep-Sea Mine and Extraplanetary Base | Electronics, robotics, modern power plants and other high-tech production methods |
 | Motor Ships | Industrial | Shipyards, from Advanced Submarine Technology | Later production methods for ports, fishing wharves and whaling stations |
 | Magnetic Drive Ships | Industrial | Shipyards, from Modern Material Science | The last tier of the same production methods |
@@ -188,19 +188,33 @@ the same goods underneath, so base-game buildings still make and use them.
 Chemicals is the base game's fertilizer. Farms and plantations still take it,
 and dozens of modern industrial production methods now take it too. Bulk
 Transportation is explained in [Bulk Transportation and
-freight](03-economy.md#bulk-transportation-and-freight). Three buildings are
-renamed to match: Fertilizer Plants are Chemical Plants, Electrics Industries
-are Wired Telecommunications Industries, and Synthetics Plants are Synthetic
-Dyes Industries.
+freight](03-economy.md#bulk-transportation-and-freight). Two buildings are
+renamed to match: Fertilizer Plants are Chemical Plants, and Synthetics Plants
+are Synthetic Dyes Industries.
 
-The Arts Academy changes its name as your technology advances. It is Art
-Academies at the start, Entertainment Industry once you research Mass Media,
-Creative Industries with Digital Entertainment, and Experience Industry with
-Brain-Computer Interfaces. Each of these technologies unlocks the production
-method the new name describes: Sound Film, Digital Streaming and
-Neurostimulation. The name follows your own research, so every country's
-academies show the name your technology has reached, whatever their owners
-have researched.
+### Buildings named for their era
+
+Eight buildings change their name as your technology advances. Each new name
+arrives with the technology that unlocks the production method it describes,
+such as Sound Film for the Entertainment Industry. The Air and Space Port is
+the exception: its name covers airports on either method, so it arrives with
+the Spaceport method's technology.
+
+| First name | Later names (technology) |
+|---|---|
+| Arts Academy | Entertainment Industry (Mass Media), Creative Industries (Digital Entertainment), Experience Industry (Brain-Computer Interfaces) |
+| Telephone Industries, the base game's Electrics Industries | Wired Telecommunications Industries (Modern Skyscrapers) |
+| Radio Industries | Wireless Telecommunications Industries (Satellite Communications) |
+| Aircraft Industry | Aerospace Industry (Guided Missiles) |
+| Glassworks | Glass and Plastics Industries (Plastic Mass Production) |
+| Consumer Appliance Industries | Consumer Electronics Industries (Personal Computers) |
+| Resorts and Hotels | Tourism Industry (Television Broadcasting) |
+| Airport | Air and Space Port (Muon-Catalyzed Fusion Reactors) |
+
+The name follows your own research, so every country's buildings of a type
+show the name your technology has reached, whatever their owners have
+researched. The rest of this guide uses a building's first name unless it is
+describing a later era.
 
 ## New buildings and production methods
 
@@ -233,11 +247,11 @@ Resort Colony production method, which produces art and tourism instead.
 | Family | Buildings |
 |---|---|
 | Synthetics | The base game's Synthetics Plants split into twelve buildings, one per product: Synthetic Dyes Industries, Synthetic Clothes Industries, Synthetic Fuel Works, Synthetic Rubber Works, Pharmaceutical Industries, Carbon Conversion Works, Phenolic Resin Panels Plant, Artificial Sweeteners Plant, Cultured Meat Plant, Cultured Produce Facility, Beverage Concentrates Plant and Integrated Biorefinery. |
-| Electrics | The base game's Electrics Industries split into Wired Telecommunications Industries, Wireless Telecommunications Industries and Consumer Appliance Industries. |
-| High technology | Electronic Components and Semiconductor Industry, Robotics Industry, Software Industry, Network Infrastructure, Advanced Material Fabricator, Aerospace Industry. |
+| Electrics | The base game's Electrics Industries split into Telephone Industries, Radio Industries and Consumer Appliance Industries, each renamed in a later era ([Buildings named for their era](#buildings-named-for-their-era)). |
+| High technology | Electronic Components and Semiconductor Industry, Robotics Industry, Software Industry, Network Infrastructure, Advanced Material Fabricator, Aircraft Industry. |
 | Power | Hydro Plant, Nuclear Plant, Renewable Energy Plant and Fusion Plant, alongside the base game's Power Plants. |
 | Transport | Airport and Highway, both producing Personal and Bulk Transportation. |
-| Leisure | Tourism Industry and National Park ([States and population](07-states.md)). |
+| Leisure | National Park, and Resorts and Hotels ([States and population](07-states.md)). |
 | Government | Space Program ([The space race](15-space.md)), which counts as a monument like the wonders below; State Youth Centers, which need Pro-Natalist Subsidies, State-Sponsored Family Planning, Communal Child-Rearing, State Eugenics Program or Mandatory Augmentation; and Military Base ([Military and war](12-military.md)). |
 
 ### Later production methods for existing buildings
@@ -297,7 +311,7 @@ need a large enough building of their industry.
 The mod adds 37 wonders: landmarks of the twentieth and twenty-first centuries.
 Each costs 5,000 construction, has one level, and exists once in the world.
 Wonders, like the base game's monuments and the Space Program, count as
-monuments: each one raises Tourism Industry throughput in its state by 25% and
+monuments: each one raises Resorts and Hotels throughput in its state by 25% and
 adds 3 cultural pull ([Where cultural pull comes
 from](10-influence.md#where-cultural-pull-comes-from)).
 
@@ -413,7 +427,7 @@ Every monument, whatever it honors, gives:
 
 - +25 prestige for each step of standing grandeur, counting every monument that
   is not contested.
-- +25% Tourism Industry throughput in its state for each step of its own
+- +25% Resorts and Hotels throughput in its state for each step of its own
   grandeur, so its first five levels match one of the base game's monuments.
 - +1 cultural pull for each step of standing grandeur (steps of 10), up to +5.
 
@@ -433,7 +447,7 @@ and cultural pull above; the ceremony asks again at its next level.
 | Grand Shrine | No State Atheism | Devout | +5% Devout attraction | +10% conversion |
 | To the Nation | | Petty Bourgeoisie | | +10% loyalists from movements |
 | War Memorial | | Armed Forces | 3% less war support lost to casualties | +5% conscription rate |
-| Grand Opera House | Romanticism | Intelligentsia | +5% Intelligentsia attraction | +10% Art Academies throughput |
+| Grand Opera House | Romanticism | Intelligentsia | +5% Intelligentsia attraction | +10% Arts Academy throughput |
 | Botanical Gardens | Romanticism | Rural Folk | | 5,000 less pollution |
 | Grand Observatory | Empiricism | Intelligentsia | +3 innovation cap | Faster literacy growth |
 | Great Exhibition Hall | Marketing Research, no Industry Banned | Industrialists | +5% Industrialists attraction | +10% migration pull |
@@ -503,8 +517,8 @@ dedication reaches level 3 and still fits. Each offers a choice between two
 benefits, usually for two interest groups, and the only cost is money. A
 contested or heritage monument holds no anniversaries.
 
-The AI raises monuments mainly as a great or major power, in a state with a
-Tourism Industry, or when its legitimacy is low, and never while at war or in
+The AI raises monuments mainly as a great or major power, in a state with
+Resorts and Hotels, or when its legitimacy is low, and never while at war or in
 hard times. It decides its contested monuments within a few months: small ones
 and those under a revolutionary government tend to come down, tall ones are kept
 as heritage, and it rededicates only with money in the treasury.

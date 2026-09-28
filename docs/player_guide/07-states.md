@@ -161,11 +161,12 @@ society laws](05-politics.md#rights-and-society-laws).
 
 ## State tourism
 
-Tourism is a luxury good in the mod, made by the Tourism Industry building
-(unlocked by Romanticism, see [The extended timeline](02-timeline.md)) and
-bought by wealthy pops. Two state modifiers, refreshed monthly and shown on the
-tourism card, set how much a Tourism Industry makes: Tourism Output and Tourism
-Throughput.
+Tourism is a luxury good in the mod, made by the Resorts and Hotels building
+(unlocked by Romanticism and called the Tourism Industry from Television
+Broadcasting, see [Buildings named for their
+era](02-timeline.md#buildings-named-for-their-era)) and bought by wealthy pops.
+Two state modifiers, refreshed monthly and shown on the tourism card, set how
+much the building makes: Tourism Output and Tourism Throughput.
 
 ### Tourism output
 
@@ -192,7 +193,7 @@ toward its cap:
 |---|---|---|
 | Ports | +0.2% per Port level up to 100, then +0.04% per level up to 500 | +36% |
 | Transit | +0.1% per Railway level and per Highway level up to 100, then +0.02% per level up to 500 | +18% from each |
-| Art | +1% per level of Art Academies up to 20, +0.25% up to 100, +0.05% up to 500, +0.01% up to 1,500 | +70% |
+| Art | +1% per Arts Academy level up to 20, +0.25% up to 100, +0.05% up to 500, +0.01% up to 1,500 | +70% |
 | Parks | +25% with a National Park, rising with Base Appeal to +37.5% | +37.5% |
 | Monuments | +10% for a Skyscraper, +25% for each monument | none |
 
