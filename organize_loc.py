@@ -200,23 +200,34 @@ def find_treaty_article_keys(project_directory):
     Added 2026-09-21 after `[concept_leverage]` inside five exiled
     `*_effects_desc` values spammed debug.log 612 times a session.
     """
-    article_keys = set()
+    return set(treaty_article_families(project_directory))
+
+
+_TREATY_ARTICLE_SUFFIXES = (
+    "", "_desc", "_effects_desc", "_article_short_desc",
+    "_effect_desc_first", "_effect_desc_third", "_effect_desc_global",
+    "_pact_desc",
+)
+
+
+def treaty_article_families(project_directory):
+    """Map every engine-built treaty-article key to its article: `{key: article}`.
+
+    `find_treaty_article_keys` uses the keys; `categorize_key` uses the map to
+    file an article's whole family together (#357).
+    """
+    families = {}
     articles_path = os.path.join(project_directory, "common", "treaty_articles")
     if not os.path.isdir(articles_path):
-        return article_keys
-    suffixes = [
-        "", "_desc", "_effects_desc", "_article_short_desc",
-        "_effect_desc_first", "_effect_desc_third", "_effect_desc_global",
-        "_pact_desc",
-    ]
+        return families
     for file in os.listdir(articles_path):
         if file.endswith(".txt"):
             with open(os.path.join(articles_path, file), "r", encoding="utf-8-sig") as f:
                 matches = re.findall(r"^([\w\.-]+)\s*=\s*{", f.read(), re.MULTILINE)
                 for base_key in matches:
-                    for suffix in suffixes:
-                        article_keys.add(f"{base_key}{suffix}")
-    return article_keys
+                    for suffix in _TREATY_ARTICLE_SUFFIXES:
+                        families[f"{base_key}{suffix}"] = base_key
+    return families
 
 
 def find_political_movement_keys(project_directory):
@@ -517,8 +528,17 @@ CATEGORIES = [
 ]
 
 
-def categorize_key(key, technology_keys):
-    """Assigns a category to a localization key."""
+def categorize_key(key, technology_keys, treaty_article_of=None):
+    """Assigns a category to a localization key.
+
+    `treaty_article_of` is `treaty_article_families()`'s map. A treaty
+    article's keys all file wherever its `<article>_desc` does, so the family
+    never splits across files (#357): `lender_of_last_resort` has four tokens
+    and `science_aid_2` a digit, so their bare names used to fall to
+    MISCELLANEOUS while the `_desc` keys went to CONCEPTS.
+    """
+    if treaty_article_of and key in treaty_article_of:
+        return categorize_key(f"{treaty_article_of[key]}_desc", technology_keys)
     # --- Event keys (namespace.N or namespace.N.suffix) ---
     if _EVENT_KEY_RE.match(key):
         return "EVENTS"
@@ -818,6 +838,7 @@ def organize_all(project_directory, dry_run=False):
     used_keys.update(find_parameterized_keys(project_directory, all_keys))
 
     technology_keys = find_technology_keys(project_directory)
+    treaty_article_of = treaty_article_families(project_directory)
 
     # Auto-add _desc companions
     for key in list(used_keys):
@@ -864,7 +885,10 @@ def organize_all(project_directory, dry_run=False):
     # ── 3. Categorise every key ───────────────────────────────────────────
     categorized: dict[str, dict[str, str]] = defaultdict(dict)
     for key, value in all_loc.items():
-        cat = "UNUSED" if key in unused_keys else categorize_key(key, technology_keys)
+        cat = (
+            "UNUSED" if key in unused_keys
+            else categorize_key(key, technology_keys, treaty_article_of)
+        )
         categorized[cat][key] = value
 
     # ── 4. Sub-sort EVENTS by namespace for readability ───────────────────

@@ -187,6 +187,39 @@ class ScanRootTests(unittest.TestCase):
         )
         self.assertIn(("je_x", "unresolved-helper-call"), _flagged(m.audit()))
 
+    def test_scripted_gui_schema_clean_and_bogus_effect_flagged(self):
+        # #305: common/scripted_guis/ is scanned, with the SGUI schema fields
+        # (scripted_guis.md) valid and a dangling call in `effect` flagged.
+        m = _Mod(
+            {
+                "common/scripted_guis/g.txt": "my_sgui = {\n"
+                "\tscope = country\n\tsaved_scopes = { target }\n"
+                "\tis_shown = { always = yes }\n\tis_valid = { always = yes }\n"
+                "\tai_is_valid = { always = no }\n"
+                "\teffect = { add_modifier = { name = x } }\n}\n"
+                "my_bad_sgui = {\n\tscope = country\n"
+                "\teffect = {\n\t\tbogus_helper = yes\n\t}\n}\n"
+            }
+        )
+        self.assertEqual(
+            _flagged(m.audit()), {("bogus_helper", "unresolved-helper-call")}
+        )
+
+    def test_customizable_localization_schema_not_flagged(self):
+        # #305: custom-loc fields as vanilla uses them; `fallback = yes` and
+        # `log_loc_errors = no` would otherwise read as helper calls.
+        m = _Mod(
+            {
+                "common/customizable_localization/c.txt": "my_loc = {\n"
+                "\ttype = country\n\tlog_loc_errors = no\n\trandom_valid = no\n"
+                "\ttext = {\n\t\ttrigger = { always = yes }\n"
+                "\t\tlocalization_key = my_loc_a\n\t}\n"
+                "\ttext = {\n\t\tlocalization_key = my_loc_b\n\t\tfallback = yes\n\t}\n}\n"
+                "my_child = {\n\tparent = my_loc\n\tsuffix = x\n}\n"
+            }
+        )
+        self.assertEqual(_flagged(m.audit()), set())
+
     def test_scalar_script_value_name_harvested(self):
         # Bare `name = <number>` script values are definitions too, and are
         # callable by name from anywhere.

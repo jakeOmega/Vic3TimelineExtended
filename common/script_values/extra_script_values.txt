@@ -2080,8 +2080,10 @@ emergency_liquidity_program_activation_cost = {
 	round = yes
 }
 
+# The country in scope, not root: the law-change strip pays it too
+# (te_banking_economy_law_cleanup), from on_law_activated, where ROOT is the law.
 emergency_liquidity_program_deactivation_refund = {
-	value = root.gdp
+	value = gdp
 	multiply = 0.01 # 1% of GDP
 	round = yes
 }
