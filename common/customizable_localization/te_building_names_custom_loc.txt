@@ -1,0 +1,48 @@
+﻿# ============================================================================
+# ERA BUILDING NAMES — customizable localization
+# ============================================================================
+# Buildings whose name fits only part of the timeline. The building's name key
+# (localization/english/replace/timeline_extended_override_l_english.yml) reads
+#
+#   [SelectLocalization(GetPlayer.IsValid, '<building>_name_player', '<building>_name_<first>')]
+#
+# and <building>_name_player (te_buildings_l_english.yml) calls the block below
+# on the player. So the name follows the *player's* technology: every country's
+# buildings of that type read the same name, and each multiplayer client sees
+# the name for its own tech. The building's own owner or production methods
+# cannot be used, because the engine looks up a building type's name with no
+# building in context. The GetPlayer.IsValid guard covers screens that render
+# with no player, such as game concepts opened from the main menu; there the
+# first-era name shows.
+#
+# Each block lists the latest era first. The first valid entry wins, and the
+# trigger-less last entry is the name before the first switch.
+#
+# To add a building: give it a block here, a <building>_name_player key and one
+# key per name in te_buildings_l_english.yml, and point its name key in the
+# override file at the SelectLocalization line above.
+
+# Arts Academy. Each switch is the tech that unlocks the production method
+# giving the new name its meaning: Sound Film (Mass Media), Digital Streaming
+# (Digital Entertainment) and Neurostimulation (Brain-Computer Interfaces).
+te_building_art_academy_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_technology_researched = brain_computer_interfaces }
+		localization_key = building_art_academy_name_experience
+	}
+	text = {
+		trigger = { has_technology_researched = digital_entertainment }
+		localization_key = building_art_academy_name_creative
+	}
+	text = {
+		trigger = { has_technology_researched = mass_media }
+		localization_key = building_art_academy_name_entertainment
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = building_art_academy_name_academies
+	}
+}
