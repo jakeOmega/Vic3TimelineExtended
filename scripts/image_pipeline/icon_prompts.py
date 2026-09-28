@@ -285,7 +285,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "orbital_manufacturing": {"subject": "a space station module with a robotic arm assembling a glowing crystal", "seed": 1},
         "programmable_matter": {"subject": "a shimmering silver liquid-metal blob reshaping itself into a cube and a sphere", "seed": 1},
         "quantum_materials": {"subject": "a glowing iridescent crystal block levitating above a superconducting disc", "seed": 1},
-        "biological_immortality": {"subject": "a glass hourglass with a green sprouting sprig growing inside it", "seed": 0},
+        "biological_immortality": {"subject": "a glass hourglass with a green sprouting sprig growing inside it", "seed": 1},
         "mind_backups": {"subject": "a glowing crystal data cube with the faint shape of a brain inside", "seed": 1},
         "neural_lace": {"subject": "a delicate glowing silver mesh net shaped like a human brain", "seed": 1},
         "post-scarcity_economy": {"subject": "an overflowing cornucopia horn spilling fruit, bread and gleaming gadgets", "seed": 1},
