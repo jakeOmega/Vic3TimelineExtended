@@ -418,6 +418,41 @@ class ModifierGrantScanTests(unittest.TestCase):
             mss._GRANT_OPENER_RE.match("lab-grown_food = {").group(1), "lab-grown_food")
 
 
+class ExtractModifierFieldsTests(unittest.TestCase):
+    """#336 — /modifier-search's field walker keeps registered booleans."""
+
+    # Parsed shape: every value is an (operator, value) tuple.
+    RAW = ("=", {
+        "modifier": ("=", {
+            "country_minting_mult": ("=", "0.1"),
+            "country_can_create_unbacked_money_bool": ("=", "yes"),
+            "country_banking_lock_asset_relief_bool": ("=", "no"),
+        }),
+        "is_shown_when_inactive": ("=", "yes"),
+        "possible": ("=", {"is_at_war": ("=", "yes")}),
+    })
+    REGISTERED = {
+        "country_minting_mult",
+        "country_can_create_unbacked_money_bool",
+        "country_banking_lock_asset_relief_bool",
+    }
+
+    def test_registered_boolean_kept_as_string(self):
+        out = mss._extract_modifier_fields(self.RAW, bool_keys=self.REGISTERED)
+        self.assertEqual(out["country_can_create_unbacked_money_bool"], "yes")
+        self.assertEqual(out["country_banking_lock_asset_relief_bool"], "no")
+        self.assertEqual(out["country_minting_mult"], 0.1)
+
+    def test_unregistered_yes_flags_dropped(self):
+        out = mss._extract_modifier_fields(self.RAW, bool_keys=self.REGISTERED)
+        self.assertNotIn("is_shown_when_inactive", out)
+        self.assertNotIn("is_at_war", out)
+
+    def test_without_registry_only_numerics(self):
+        out = mss._extract_modifier_fields(self.RAW)
+        self.assertEqual(out, {"country_minting_mult": 0.1})
+
+
 class ModifierGrantLookupTests(unittest.TestCase):
     """Live import-level test against the real mod tree (no server needed)."""
     def test_invalid_identifier(self):

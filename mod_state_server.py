@@ -3505,8 +3505,14 @@ def _vocabulary_index() -> dict[str, list[str]]:
     return out
 
 
-def _extract_modifier_fields(obj, prefix=""):
-    """Walk parsed data and collect field names that look like modifiers (contain _ + end with _add/_mult etc)."""
+def _extract_modifier_fields(obj, prefix="", bool_keys=None):
+    """Walk parsed data and collect field names that look like modifiers (contain _ + end with _add/_mult etc).
+
+    Numeric values are kept as floats. A `yes`/`no` value is kept (as the
+    string) only when its key is in `bool_keys`, the registered modifier types:
+    boolean modifiers are granted as `country_x_bool = yes`, and restricting
+    them to registered names keeps the ~15k trigger/flag lines like
+    `is_at_war = yes` or `default_option = yes` out (#336)."""
     found = {}
     if isinstance(obj, dict):
         for k, v in obj.items():
@@ -3519,12 +3525,14 @@ def _extract_modifier_fields(obj, prefix=""):
                         fv = float(val)
                         found[k] = fv
                     except (ValueError, TypeError):
-                        pass
+                        if (bool_keys and isinstance(val, str)
+                                and val.lower() in ("yes", "no") and k in bool_keys):
+                            found[k] = val.lower()
             if isinstance(v, (dict, tuple, list)):
-                found.update(_extract_modifier_fields(v, prefix))
+                found.update(_extract_modifier_fields(v, prefix, bool_keys))
     elif isinstance(obj, (tuple, list)):
         for item in obj:
-            found.update(_extract_modifier_fields(item, prefix))
+            found.update(_extract_modifier_fields(item, prefix, bool_keys))
     return found
 
 
@@ -6605,12 +6613,15 @@ class ModStateHandler(BaseHTTPRequestHandler):
 
         results = []
         seen = set()
+        # Registered modifier types (mod + vanilla), so boolean grants
+        # (`country_x_bool = yes`) are indexed too (#336).
+        modifier_types = set((ms.get_data("Modifier Types") or {}).keys())
         for etype in ms.mod_parsers:
             data = ms.get_data(etype)
             if not data:
                 continue
             for eid, raw in data.items():
-                modifiers = _extract_modifier_fields(raw)
+                modifiers = _extract_modifier_fields(raw, bool_keys=modifier_types)
                 matching = {k: v for k, v in modifiers.items() if query in k.lower()}
                 if matching:
                     results.append({
