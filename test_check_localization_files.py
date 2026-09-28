@@ -91,6 +91,20 @@ class HeaderTests(unittest.TestCase):
         self.assertEqual(len(problems), 1)
         self.assertIn("no content", problems[0])
 
+    def test_header_follows_the_file_name_language(self):
+        text = BOM + 'l_german:\n TE_ALPHA:0 "Alpha"\n'
+        self.assertEqual(_check(text, name="te_test_l_german.yml"), [])
+
+    def test_english_header_in_a_german_file_is_flagged(self):
+        problems = _check(GOOD, name="te_test_l_german.yml")
+        self.assertEqual(len(problems), 1)
+        self.assertIn("expected 'l_german:'", problems[0])
+
+    def test_name_without_language_suffix_is_flagged(self):
+        problems = _check(GOOD, name="te_test.yml")
+        self.assertEqual(len(problems), 1)
+        self.assertIn("_l_<language>.yml", problems[0])
+
 
 class DuplicateKeyTests(unittest.TestCase):
     def test_duplicate_key_reports_both_lines(self):

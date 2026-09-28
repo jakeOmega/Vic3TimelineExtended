@@ -2207,6 +2207,10 @@ This renders "Art Production" as a hoverable link with the description tooltip.
 ### Best Practice
 When displaying a multi-component breakdown (like Cultural Hegemony score), create a game concept for **each component** so players can hover to understand what drives each line. Include the formula or key drivers in the concept description.
 
+## Loc Files Are Per Language, With No English Fallback
+
+The loader reads a loc file's language from its `_l_<language>.yml` suffix, and the file's first line must be the matching `l_<language>:`; vanilla's `localization/modifiers/` folder mixes all eleven languages, so the folder name is only convention. A key missing from the player's language renders as the raw key; the game does not fall back to English. That is why most multi-language Workshop mods ship all eleven folders. This mod writes only English, so `scripts/deploy.sh` ships an English copy per language (`scripts/generators/gen_non_english_loc.py`, staged in the gitignored `build/`). Add new loc to `localization/english/` only; the copies follow on the next deploy.
+
 ## Localization Formatting Codes
 
 ### Text Formatting

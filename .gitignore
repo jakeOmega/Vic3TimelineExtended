@@ -47,3 +47,7 @@ scratch
 
 # Player guide build intermediate (scripts/build_player_guide.py)
 docs/player_guide/.player_guide.typ
+# Deploy-time staging (scripts/deploy.sh): the English loc copied once per non-English
+# game language by scripts/generators/gen_non_english_loc.py. Committing it would put
+# ten copies of every English loc change into each diff.
+/build/

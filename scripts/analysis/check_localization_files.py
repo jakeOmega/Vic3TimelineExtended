@@ -1,16 +1,20 @@
 """CI sanity check for the mod's localization YAML files.
 
 The Clausewitz loc loader is silently unforgiving: a file without the UTF-8 BOM,
-or whose first line is not `l_english:`, is dropped whole (every key in it renders
-as its raw key in-game), and a key defined twice inside one file silently keeps
-only the last definition. None of that produces a log line, so it is exactly the
+or whose first line is not `l_<language>:` for the language its name ends in, is
+dropped whole (every key in it renders as its raw key in-game), and a key defined
+twice inside one file silently keeps only the last definition. None of that produces a log line, so it is exactly the
 class of breakage CI should catch.
 
 Checks, per `localization/**/*.yml`:
   1. the file starts with a UTF-8 BOM (EF BB BF)
   2. the bytes decode as UTF-8
-  3. the first non-blank, non-comment line is `l_english:`
+  3. the name ends in `_l_<language>.yml` and the first non-blank, non-comment
+     line is the matching `l_<language>:` (so `x_l_german.yml` needs `l_german:`)
   4. no localization key is defined twice within the same file
+
+Pass a directory to check other trees too, e.g. the deploy-time language copies
+`scripts/generators/gen_non_english_loc.py` stages under `build/localization/`.
 
 Usage:
     python3 scripts/analysis/check_localization_files.py [paths...]
@@ -31,6 +35,9 @@ BOM = b"\xef\xbb\xbf"
 
 # `KEY:0 "value"` / `KEY: "value"` — the key is the leading token before the colon.
 _KEY_RE = re.compile(r'^\s*([A-Za-z0-9_.\-]+):\s*\d*\s*"')
+
+# The loader takes a file's language from its `_l_<language>.yml` suffix.
+_LANGUAGE_SUFFIX_RE = re.compile(r"_l_([a-z_]+)\.yml$")
 
 
 def iter_loc_files(roots: list[str]) -> list[str]:
@@ -70,6 +77,14 @@ def check_file(path: str) -> list[str]:
 
     lines = text.splitlines()
 
+    suffix = _LANGUAGE_SUFFIX_RE.search(os.path.basename(path))
+    if suffix is None:
+        problems.append(
+            f"{rel}:1: name does not end in `_l_<language>.yml` — the game "
+            f"reads a loc file's language from that suffix"
+        )
+    expected_header = f"l_{suffix.group(1) if suffix else 'english'}:"
+
     header_line = None
     for index, line in enumerate(lines, start=1):
         stripped = line.strip()
@@ -79,11 +94,11 @@ def check_file(path: str) -> list[str]:
         break
 
     if header_line is None:
-        problems.append(f"{rel}:1: file has no content (expected `l_english:`)")
-    elif header_line[1] != "l_english:":
+        problems.append(f"{rel}:1: file has no content (expected `{expected_header}`)")
+    elif header_line[1] != expected_header:
         problems.append(
             f"{rel}:{header_line[0]}: first non-blank line is "
-            f"{header_line[1]!r}, expected 'l_english:'"
+            f"{header_line[1]!r}, expected {expected_header!r}"
         )
 
     seen: dict[str, int] = {}
@@ -92,7 +107,7 @@ def check_file(path: str) -> list[str]:
         if not match:
             continue
         key = match.group(1)
-        if key == "l_english":
+        if f"{key}:" == expected_header:
             continue
         if key in seen:
             problems.append(

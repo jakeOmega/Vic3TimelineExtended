@@ -20,7 +20,7 @@ should_ignore() {
   local relative_path="${changed_path#"$REPO_ROOT"/}"
 
   case "$relative_path" in
-    .git|.git/*|.venv|.venv/*|generated_images|generated_images/*|__pycache__|__pycache__/*|*.pyc|*.log|*.log.*|*.pid)
+    .git|.git/*|.venv|.venv/*|build|build/*|generated_images|generated_images/*|__pycache__|__pycache__/*|*.pyc|*.log|*.log.*|*.pid)
       return 0
       ;;
   esac
@@ -54,12 +54,13 @@ run_deploy() {
 
 snapshot_signature() {
   find "$REPO_ROOT" \
-    \( -path "$REPO_ROOT/.git" -o -path "$REPO_ROOT/.venv" -o -path "$REPO_ROOT/generated_images" -o -name '__pycache__' \) -prune \
+    \( -path "$REPO_ROOT/.git" -o -path "$REPO_ROOT/.venv" -o -path "$REPO_ROOT/build" -o -path "$REPO_ROOT/generated_images" -o -name '__pycache__' \) -prune \
     -o -type f ! -name '*.pyc' ! -name '*.log' ! -name '*.pid' -printf '%T@ %p\n' | sort
 }
 
 watch_with_inotify() {
-  local exclude_regex='(^|/)(\.git|\.venv|generated_images)(/|$)|(^|/)__pycache__(/|$)|\.pyc$|\.log(\..*)?$|\.pid$'
+  # build/ is deploy.sh's own staging output; watching it would re-run every deploy that changed a staged file.
+  local exclude_regex='(^|/)(\.git|\.venv|build|generated_images)(/|$)|(^|/)__pycache__(/|$)|\.pyc$|\.log(\..*)?$|\.pid$'
 
   log "Watching $REPO_ROOT with inotifywait"
   log 'Ready'

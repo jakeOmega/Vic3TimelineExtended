@@ -206,7 +206,7 @@ The Clausewitz engine reads only these top-level entries (everything else stays 
 | `common/` | All Paradox entity types — laws, technologies, buildings, journal entries, events triggers / effects / buttons, static modifiers, modifier-type definitions, treaty articles, decrees, decisions, ideologies, interest groups, …. The mod uses every vanilla entity type plus a few mod-only directories. |
 | `events/` | One event file per system (banking_cycle, decolonization, world_war, space_race, …). 38 files. |
 | `gui/` | Overridden / extended panels and widgets. Many vanilla panels are copied wholesale and then patched. |
-| `localization/english/` | YAML loc files. The 29 `te_*_l_english.yml` files are auto-categorized by `organize_loc.py`. The `replace/` subfolder contains overrides for vanilla loc keys (e.g. `merchant_marine` → "Bulk Transportation"). |
+| `localization/english/` | YAML loc files. The 29 `te_*_l_english.yml` files are auto-categorized by `organize_loc.py`. The `replace/` subfolder contains overrides for vanilla loc keys (e.g. `merchant_marine` → "Bulk Transportation"). The mod is English-only: `scripts/deploy.sh` ships an English copy under each of the game's ten other languages (generated at deploy time, not committed), so players in those languages read English rather than raw keys. |
 | `gfx/` | Event pictures, interface icons, portraits, unit illustrations. |
 | `map_data/state_regions/` | Per-region resource deposits, regenerated from `deposits_config.json` by `resources.py`. |
 | `.metadata/metadata.json` | Mod metadata — name, version, supported game version, tags. Vic3 reads this instead of a top-level `descriptor.mod`, which this mod does **not** have; the deploy script copies the whole directory. There is no `thumbnail.png` yet either; `scripts/deploy.sh` already carries the include, so one will ship the day it is added. |
@@ -269,7 +269,7 @@ Files at the repo root form the data-server spine plus a handful of one-shot gen
 
 | Path | Role |
 |---|---|
-| `scripts/deploy.sh` | rsync the engine-required top-level entries (`common/`, `events/`, `gui/`, `gfx/`, `localization/`, `map_data/`, `.metadata/`, plus `thumbnail.png` once one exists) into the Paradox mod folder. Dry-run by default; pass `--apply` to actually copy. Override target via `VIC3_MOD_DEPLOY_TARGET=...`. |
+| `scripts/deploy.sh` | rsync the engine-required top-level entries (`common/`, `events/`, `gui/`, `gfx/`, `localization/`, `map_data/`, `.metadata/`, plus `thumbnail.png` once one exists) into the Paradox mod folder, then the non-English loc copies staged by `gen_non_english_loc.py`. Dry-run by default; pass `--apply` to actually copy. Override target via `VIC3_MOD_DEPLOY_TARGET=...`. |
 | `scripts/watch_deploy_on_edit.sh` | Continuous deploy watcher (inotifywait with polling fallback). Auto-started by VS Code via `.vscode/tasks.json`. |
 | `scripts/format_paradox_tabs.py` | Re-tabs brace-based Paradox `.txt` files from inferred brace depth. Only safe for brace-format `.txt` — *never* on YAML / JSON / Python. `--check` for CI-style verification. |
 | `scripts/snapshot_balance.py` | Snapshots PM balance metrics into `docs/data/balance_snapshot.json` for diff-based reviews. |
@@ -281,6 +281,7 @@ Files at the repo root form the data-server spine plus a handful of one-shot gen
 | `scripts/analysis/check_post_load_rosters.py` | Fails if a `POST_LOAD_REGENERATORS` / `POST_LOAD_AUDITS` module in `mod_state_server.py` is not documented in `CLAUDE.md`, `docs/guides/python_tools.md` and `docs/auto_generated_files.md`. Guarded by `test_post_load_rosters.py`. |
 | `scripts/generators/gen_event.py` | Event scaffolder. `next-id` / `batch` / `scaffold` subcommands. Generates Paradox event boilerplate + loc keys from compact JSON specs. |
 | `scripts/generators/gen_loc_files.py` | Historical one-shot: dumped loc YAML for `extra_law_events` / `ministry_law_events`. `organize_loc.py` has since folded those keys into the `te_*` files, so re-running it would resurrect stale duplicates. |
+| `scripts/generators/gen_non_english_loc.py` | Stages one copy of `localization/english/` per non-English game language (`build/localization/<language>/`, header and file suffix renamed, `replace/` included). Run by `scripts/deploy.sh` on every deploy; writes only changed files and prunes copies whose English source is gone. `--list-languages` prints the ten folder names. Pinned by `test_gen_non_english_loc.py`. |
 | `scripts/generators/gen_formable_regions.py`, `gen_fleet_entities.py` | Generate `common/geographic_regions/te_formable_regions_generated.txt` and `gfx/map/fleet_entities/02_extra_fleet_entities.txt`. Manual rerun after a vanilla strategic-region or fleet-entity change. |
 | `scripts/generators/gen_banking_events.py` | Generator for banking-cycle event templates. |
 | `scripts/generators/gen_vanilla_company_buildings.py`, `gen_vanilla_company_injects.py` | Generates the vanilla-company-building cluster (one building/PM set per vanilla company) and the corresponding `INJECT:` blocks for vanilla company definitions. |
@@ -362,7 +363,7 @@ The deploy target is autodetected by `scripts/setup.py` (typically `/mnt/c/Users
 
 ### Continuous integration
 
-Every pull request — and every push to `main` — runs `.github/workflows/ci.yml` on GitHub Actions against Python 3.11 and 3.12: byte-compilation, the full unittest suite, `ruff check .`, the Paradox tab-indentation check, a localization sanity pass (UTF-8 BOM, `l_english:` header, no duplicate keys within a file), a post-load roster / docs-drift check, a DDS header scan that rejects block-compressed textures whose dimensions are not multiples of 4, and the eight offline audits. (The `push` trigger is scoped to `main` on purpose: `pull_request` already covers branches, so an unscoped `push` would run the whole matrix twice per commit.) None of it needs a Victoria 3 install, so any failing step reproduces locally with the same command; audits that require the vanilla game deliberately stay out of CI.
+Every pull request — and every push to `main` — runs `.github/workflows/ci.yml` on GitHub Actions against Python 3.11 and 3.12: byte-compilation, the full unittest suite, `ruff check .`, the Paradox tab-indentation check, a localization sanity pass (UTF-8 BOM, an `l_<language>:` header matching the file name, no duplicate keys within a file), a post-load roster / docs-drift check, a DDS header scan that rejects block-compressed textures whose dimensions are not multiples of 4, and the eight offline audits. (The `push` trigger is scoped to `main` on purpose: `pull_request` already covers branches, so an unscoped `push` would run the whole matrix twice per commit.) None of it needs a Victoria 3 install, so any failing step reproduces locally with the same command; audits that require the vanilla game deliberately stay out of CI.
 
 ### Dependencies
 
