@@ -10,6 +10,12 @@
 # Windows side (reached from WSL via /mnt/c/...). Only files the Clausewitz
 # engine actually needs are copied; Python tools, docs, tests, logs, and the
 # .git directory stay behind.
+#
+# Localization for the ten non-English game languages is not in the repo. The
+# game shows raw keys, not English, for a key the player's language lacks, so
+# this script first stages an English copy per language into build/localization/
+# (scripts/generators/gen_non_english_loc.py; build/ is gitignored and ignored
+# by the deploy watcher) and syncs it to <mod>/localization/<language>/.
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -36,6 +42,22 @@ RSYNC_FLAGS=(
 )
 [[ "$APPLY" -eq 0 ]] && RSYNC_FLAGS+=(--dry-run)
 
+LOC_GEN="$REPO_ROOT/scripts/generators/gen_non_english_loc.py"
+LOC_STAGE="$REPO_ROOT/build/localization"
+mapfile -t LOC_LANGS < <(python3 "$LOC_GEN" --list-languages)
+if [[ ${#LOC_LANGS[@]} -eq 0 ]]; then
+  echo "Could not list languages from $LOC_GEN" >&2
+  exit 1
+fi
+# The main sync must leave the staged language folders alone, or its --delete
+# would remove them from the target on every run.
+LOC_EXCLUDES=()
+LOC_INCLUDES=()
+for lang in "${LOC_LANGS[@]}"; do
+  LOC_EXCLUDES+=(--exclude="/localization/$lang/")
+  LOC_INCLUDES+=(--include="/$lang/***")
+done
+
 # Include only game-required top-level entries; exclude everything else.
 # Trailing /*** means "this directory and everything under it".
 INCLUDES=(
@@ -44,6 +66,7 @@ INCLUDES=(
   --include=/events
   --include=/events/***
   --include=/localization
+  "${LOC_EXCLUDES[@]}"
   --include=/localization/***
   --include=/gui
   --include=/gui/***
@@ -73,7 +96,16 @@ if [[ ! -d "$DEST" ]]; then
   exit 1
 fi
 
+# Stage the non-English copies first, so a misnamed English loc file stops the
+# deploy before anything is synced. Only changed files are rewritten, so the
+# staged mtimes stay put for rsync -t.
+python3 "$LOC_GEN" --out "$LOC_STAGE" --quiet
+
 rsync "${RSYNC_FLAGS[@]}" "${INCLUDES[@]}" "$REPO_ROOT/" "$DEST/"
+
+# Sync just the staged language folders; --exclude=/* keeps this pass's
+# --delete away from localization/english/.
+rsync "${RSYNC_FLAGS[@]}" "${LOC_INCLUDES[@]}" --exclude='/*' "$LOC_STAGE/" "$DEST/localization/"
 
 if [[ "$APPLY" -eq 0 ]]; then
   echo

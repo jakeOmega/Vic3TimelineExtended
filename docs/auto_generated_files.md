@@ -84,6 +84,14 @@ All generator-produced docs files live under `docs/engine/`. Manually-curated au
 | `docs/data/tech_modifier_baseline.json`, `docs/data/tech_modifier_pattern_baseline.json` | `scripts/analysis/tech_modifier_baseline.py` | refreshed via `scripts/analysis/tech_balance_audit.py --refresh-baseline` |
 | `docs/data/balance_snapshot.json` | `scripts/snapshot_balance.py` | manual run; snapshot before vanilla bumps |
 
+## Deploy-time outputs (not committed)
+
+Generated on every `scripts/deploy.sh` run into the gitignored `build/` folder, then synced into the Paradox mod folder. They never appear in the repo, so there is nothing to hand-edit; change the English source.
+
+| Deployed as | Staged at | Owner script | Notes |
+|---|---|---|---|
+| `localization/<language>/**/*_l_<language>.yml` for the ten non-English game languages | `build/localization/<language>/` | `scripts/generators/gen_non_english_loc.py` | A copy of every file under `localization/english/` (`replace/` included), byte-identical apart from the `l_<language>:` header and the file-name suffix. The game shows raw keys, not English, for a key the player's language lacks. The deploy watcher ignores `build/`; the main rsync excludes these folders so its `--delete` leaves them alone. |
+
 ## "One-shot generator" outputs (committed; may be hand-edited afterwards)
 
 These are written by scripts that the team runs occasionally to *bootstrap* content. After bootstrap, the committed file is the source of truth and can be hand-edited. Re-running a generator may overwrite hand edits or, for `gen_vanilla_company_buildings.py`, duplicate everything it wrote — see each row.
