@@ -171,6 +171,21 @@ CATEGORIES = {
         folder="character_trait_icons", size=320, card_size=(240, 320), frame=(184, 129, 128),
         mode="card", fill=(0.7, 0.6), entity_dir="common/character_traits", field="texture",
         color=(99, 101, 101), color_bottom=(65, 45, 43), style=SILHOUETTE),
+    # Harvest conditions (150 px, HarvestConditionType.GetIcon): a painted
+    # scene inside a round copper rim, which `framed` lifts from vanilla like
+    # the building frame.
+    "harvest_condition": dict(
+        folder="harvest_condition_icons", size=150, mode="framed",
+        entity_dir="common/harvest_condition_types", field="icon",
+        style=("{subject}, simple painted illustration of one clear scene, muted colours, soft "
+               "painterly brush strokes, the subject fills the center of the image")),
+    # Power bloc identities (~200 px, PowerBlocIdentity.GetIcon): one ornate,
+    # often gilded object on a transparent background. The background field
+    # is shared by every identity, vanilla's too.
+    "power_bloc_identity": dict(
+        folder="central_identity_pillars_icons", size=200, mode="cutout", fill=0.92,
+        entity_dir="common/power_bloc_identities", field="icon",
+        style="{subject}, one ornate readable object, " + PAINTED),
     # Read only from `texture =` (Decree.GetTexture, DecreeType.GetTexture).
     "decree": dict(
         folder="decree", size=158, mode="medallion", fill=0.78,
@@ -669,6 +684,16 @@ ICONS: dict[str, dict[str, dict]] = {
         "trait_combined_arms_armor": {"subject": "a battle tank charging forward, side view", "seed": None},
         "trait_combined_arms_air_superiority": {"subject": "a fighter plane diving steeply", "seed": None},
         "trait_combined_arms_full_spectrum": {"subject": "a tank, a fighter plane and an infantry soldier grouped together as one emblem", "seed": None},
+    },
+    # The mod's financial "harvest conditions", on law icons.
+    "harvest_condition": {
+        "financial_panic": {"subject": "a crowd of small figures rushing at the shut doors of a columned bank under a dark stormy sky", "seed": None},
+        "market_downturn": {"subject": "a row of shuttered shop fronts on an empty grey street at dusk, dry leaves blowing past", "seed": None},
+        "bull_market": {"subject": "a charging bull in front of a bright golden sunrise", "seed": None},
+    },
+    # Diplomatic Framework, on the Ideological Union's lectern.
+    "power_bloc_identity": {
+        "identity_diplomatic": {"subject": "a rolled treaty parchment with a red wax seal, a gilded olive branch laid across it", "seed": None},
     },
     "leader_ideology": {
         "ideology_multicultural": {"subject": "three hands clasping each other's wrists to form a triangle", "seed": 1},
