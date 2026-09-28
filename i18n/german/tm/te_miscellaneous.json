@@ -8135,6 +8135,418 @@
   "en": "Hall of Dynasties",
   "de": "Halle der Dynastien"
  },
+ "gm_skin_heritage_geez": {
+  "en": "Aksumite Stele",
+  "de": "Aksumitische Stele"
+ },
+ "gm_skin_heritage_gothic": {
+  "en": "Hall of Heroes",
+  "de": "Halle der Helden"
+ },
+ "gm_skin_heritage_greek": {
+  "en": "Pantheon",
+  "de": "Pantheon"
+ },
+ "gm_skin_heritage_hebrew": {
+  "en": "Great Menorah",
+  "de": "Große Menora"
+ },
+ "gm_skin_heritage_irish": {
+  "en": "Round Tower and High Cross",
+  "de": "Rundturm und Hochkreuz"
+ },
+ "gm_skin_heritage_latin": {
+  "en": "Forum and Triumphal Column",
+  "de": "Forum und Triumphsäule"
+ },
+ "gm_skin_heritage_mayan": {
+  "en": "Temple-Pyramid",
+  "de": "Tempelpyramide"
+ },
+ "gm_skin_heritage_nahuatl": {
+  "en": "Stepped Pyramid",
+  "de": "Stufenpyramide"
+ },
+ "gm_skin_heritage_norse": {
+  "en": "Rune-Stone Hall",
+  "de": "Runensteinhalle"
+ },
+ "gm_skin_heritage_prussian": {
+  "en": "Hill-Fort Monument",
+  "de": "Wallburg-Denkmal"
+ },
+ "gm_skin_heritage_sanskrit": {
+  "en": "Pillar of Dharma",
+  "de": "Säule des Dharma"
+ },
+ "gm_skin_heritage_slavonic": {
+  "en": "Memorial Bell Tower",
+  "de": "Gedenkglockenturm"
+ },
+ "gm_status_contested": {
+  "en": "#R Contested#!",
+  "de": "#R Umstritten#!"
+ },
+ "gm_status_fits": {
+  "en": "#G Stands#!",
+  "de": "#G Steht#!"
+ },
+ "gm_status_heritage": {
+  "en": "Heritage",
+  "de": "Erbe"
+ },
+ "gm_status_undedicated": {
+  "en": "Undedicated",
+  "de": "Nicht geweiht"
+ },
+ "gm_status_unsettled": {
+  "en": "Unsettled",
+  "de": "Nicht besiedelt"
+ },
+ "gm_tear_down_tt": {
+  "en": "Pull it down. The new order gains legitimacy that fades over about five years, and #v [THIS.GetState.GetCustom('gm_base_ig_name')]#! approve; #v [THIS.GetState.GetCustom('gm_supporter_ig_name')]#! resent it. All of its [concept_grandeur] is lost.",
+  "de": "Reißt es nieder. Die neue Ordnung gewinnt Legitimität, die über etwa fünf Jahre verblasst, und #v [THIS.GetState.GetCustom('gm_base_ig_name')]#! begrüßen es; #v [THIS.GetState.GetCustom('gm_supporter_ig_name')]#! nehmen es übel. Seine gesamte [concept_grandeur] geht verloren."
+ },
+ "gov_corporate_state_autocracy": {
+  "en": "Corporate Autocracy",
+  "de": "Korporative Autokratie"
+ },
+ "gov_corporate_state_democracy": {
+  "en": "Corporate Democracy",
+  "de": "Korporative Demokratie"
+ },
+ "gov_corporate_state_single_party_state": {
+  "en": "Corporate Syndicalism",
+  "de": "Korporativer Syndikalismus"
+ },
+ "govprin_popular_assembly_advance": {
+  "en": "Governance: Popular Assembly Advance",
+  "de": "Regierungsführung: Volksversammlung – Vorstoß"
+ },
+ "govprin_popular_assembly_cautious": {
+  "en": "Governance: Popular Assembly Cautious Advance",
+  "de": "Regierungsführung: Volksversammlung – Vorsichtiger Vorstoß"
+ },
+ "govprin_popular_assembly_stall": {
+  "en": "Governance: Popular Assembly Stall",
+  "de": "Regierungsführung: Volksversammlung – Stillstand"
+ },
+ "govprin_technocrat_showcase_advance": {
+  "en": "Governance: Technocrat Showcase Advance",
+  "de": "Regierungsführung: Vorzeigeprojekt – Vorstoß"
+ },
+ "govprin_technocrat_showcase_cautious": {
+  "en": "Governance: Technocrat Showcase Cautious Advance",
+  "de": "Regierungsführung: Vorzeigeprojekt – Vorsichtiger Vorstoß"
+ },
+ "govprin_technocrat_showcase_stall": {
+  "en": "Governance: Technocrat Showcase Stall",
+  "de": "Regierungsführung: Vorzeigeprojekt – Stillstand"
+ },
+ "gp_anti_colonial_policy_modifier": {
+  "en": "Anti-Colonial Policy",
+  "de": "Antikoloniale Politik"
+ },
+ "gp_condemns_colonialism_modifier": {
+  "en": "International Condemnation of Colonialism",
+  "de": "Internationale Verurteilung des Kolonialismus"
+ },
+ "gp_economic_sanctions_modifier": {
+  "en": "Economic Sanctions",
+  "de": "Wirtschaftssanktionen"
+ },
+ "gp_intervention_condemned_modifier": {
+  "en": "Intervention Condemned",
+  "de": "Intervention verurteilt"
+ },
+ "gp_intervention_target_modifier": {
+  "en": "Foreign Intervention",
+  "de": "Ausländische Intervention"
+ },
+ "gp_military_intervention_modifier": {
+  "en": "Military Intervention Abroad",
+  "de": "Militärische Intervention im Ausland"
+ },
+ "gp_moral_authority_modifier": {
+  "en": "Moral Authority",
+  "de": "Moralische Autorität"
+ },
+ "gp_pro_colonial_policy_modifier": {
+  "en": "Pro-Colonial Policy",
+  "de": "Prokoloniale Politik"
+ },
+ "gp_supports_colonialism_modifier": {
+  "en": "[concept_great_power] Support for Colonial Holdings",
+  "de": "[concept_great_power]-Unterstützung für Kolonialbesitz"
+ },
+ "great_depression_bystander_modifier": {
+  "en": "Global Depression",
+  "de": "Globale Depression"
+ },
+ "great_depression_isolated_modifier": {
+  "en": "Global Depression (Sheltered)",
+  "de": "Globale Depression (Abgeschirmt)"
+ },
+ "green_building_codes_modifier": {
+  "en": "Green Building Codes",
+  "de": "Grüne Bauvorschriften"
+ },
+ "green_tech_boom_modifier": {
+  "en": "Green Technology Boom",
+  "de": "Boom der grünen Technologie"
+ },
+ "green_tech_market_modifier": {
+  "en": "Market-Led Green Growth",
+  "de": "Marktgetriebenes grünes Wachstum"
+ },
+ "green_tech_stimulus_modifier": {
+  "en": "Green Technology Stimulus",
+  "de": "Konjunkturprogramm für grüne Technologie"
+ },
+ "gw_cond_cut_label": {
+  "en": "Emissions Cut In Force",
+  "de": "Geltende Emissionssenkung"
+ },
+ "gw_cond_cut_tt": {
+  "en": "How far this market's emissions are being held below what its oil and coal consumption would otherwise produce, from every mitigation policy in force.\\n\\n#lore A live reading: it moves the moment a policy is adopted or repealed, not at the next tick.#!",
+  "de": "Wie weit die Emissionen dieses Marktes unter dem gehalten werden, was sein Öl- und Kohleverbrauch sonst verursachen würde, durch jede geltende Minderungspolitik.\\n\\n#lore Ein Live-Wert: Er ändert sich in dem Moment, in dem eine Politik beschlossen oder aufgehoben wird, nicht erst beim nächsten Tick.#!"
+ },
+ "gw_cond_cut_value": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_emissions_cut_pct_display')|0]#!% (#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_policies_active_count_display')|0]#! of 8 policies)",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_emissions_cut_pct_display')|0]#!% (#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_policies_active_count_display')|0]#! von 8 Politiken)"
+ },
+ "gw_cond_emis_label": {
+  "en": "Our Market's Emissions",
+  "de": "Die Emissionen unseres Marktes"
+ },
+ "gw_cond_emis_tt": {
+  "en": "Annual greenhouse-gas output of the whole market this country belongs to, from its oil and coal consumption, less whatever its synthetic-fuel plants capture.\\n\\n#lore Emissions are a property of a market, not of one member: the figure is stored on the market leader and every member reads the same number. Updated each January.#!",
+  "de": "Der jährliche Treibhausgasausstoß des gesamten Marktes, dem dieses Land angehört, aus seinem Öl- und Kohleverbrauch, abzüglich dessen, was seine Anlagen für synthetische Kraftstoffe auffangen.\\n\\n#lore Emissionen sind eine Eigenschaft eines Marktes, nicht eines einzelnen Mitglieds: Der Wert wird beim Marktführer gespeichert, und jedes Mitglied liest dieselbe Zahl. Wird jeden Januar aktualisiert.#!"
+ },
+ "gw_cond_emis_value": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_market_emis_display')|0]#! (#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_capture_display')|0]#! captured)",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_market_emis_display')|0]#! (#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_capture_display')|0]#! aufgefangen)"
+ },
+ "gw_cond_in_force": {
+  "en": "The policy is currently in force",
+  "de": "Die Politik ist derzeit in Kraft"
+ },
+ "gw_cond_leads_market": {
+  "en": "We lead our own market",
+  "de": "Wir führen unseren eigenen Markt an"
+ },
+ "gw_cond_not_in_force": {
+  "en": "The policy is not already in force",
+  "de": "Die Politik ist noch nicht in Kraft"
+ },
+ "gw_cond_not_treaty_bound": {
+  "en": "We are not bound by an emissions-reduction treaty",
+  "de": "Wir sind nicht an einen Vertrag zur Emissionssenkung gebunden"
+ },
+ "gw_cond_penalty_label": {
+  "en": "Warming Penalty Scale",
+  "de": "Erwärmungs-Strafskala"
+ },
+ "gw_cond_penalty_tt": {
+  "en": "The penalties below are applied to this country every month, with every value multiplied by the current temperature anomaly. At the scale shown, multiply each line by that figure.\\n$TOOLTIP_DELIMITER$\\n[GetStaticModifier('global_warming').GetDesc]",
+  "de": "Die untenstehenden Strafen werden diesem Land jeden Monat auferlegt, wobei jeder Wert mit der aktuellen Temperaturanomalie multipliziert wird. Bei der gezeigten Skala jede Zeile mit dieser Zahl multiplizieren.\\n$TOOLTIP_DELIMITER$\\n[GetStaticModifier('global_warming').GetDesc]"
+ },
+ "gw_cond_role_label": {
+  "en": "Our Role",
+  "de": "Unsere Rolle"
+ },
+ "gw_cond_role_tt": {
+  "en": "Only the leader of a market can adopt or repeal the three market-wide policies - a carbon tax, renewable investment and emission standards - and they then bind every member of that market.\\n\\n#lore The other five policies are ours alone, whoever leads the market.#!",
+  "de": "Nur der Anführer eines Marktes kann die drei marktweiten Politiken – eine CO2-Steuer, Investitionen in erneuerbare Energien und Emissionsstandards – beschließen oder aufheben, und sie binden dann jedes Mitglied dieses Marktes.\\n\\n#lore Die anderen fünf Politiken gehören uns allein, ganz gleich, wer den Markt anführt.#!"
+ },
+ "gw_cond_share_label": {
+  "en": "Share of World Emissions",
+  "de": "Anteil an den weltweiten Emissionen"
+ },
+ "gw_cond_share_tt": {
+  "en": "This market's share of world annual emissions - the honest measure of how much of the warming is ours to fix.\\n\\n#lore A market that captures more carbon than it emits reads 0% here and shows its negative figure in the emissions row. Updated each January.#!",
+  "de": "Der Anteil dieses Marktes an den weltweiten Jahresemissionen – das ehrliche Maß dafür, wie viel der Erwärmung wir zu verantworten haben.\\n\\n#lore Ein Markt, der mehr Kohlenstoff auffängt, als er ausstößt, zeigt hier 0% und weist seinen negativen Wert in der Emissionszeile aus. Wird jeden Januar aktualisiert.#!"
+ },
+ "gw_cond_temp_label": {
+  "en": "Global Temperature",
+  "de": "Globale Temperatur"
+ },
+ "gw_cond_temp_tt": {
+  "en": "The [concept_temperature_anomaly]: how far the planet has warmed above its pre-industrial average. The journal entry's bar runs to #v 4°C#!, the point at which the model treats the damage as unbounded.\\n\\n#lore Every nation carries the same anomaly; what differs is how much of it each economy caused.#!",
+  "de": "Die [concept_temperature_anomaly]: wie weit sich der Planet über seinen vorindustriellen Durchschnitt hinaus erwärmt hat. Der Balken des Journals reicht bis #v 4°C#!, dem Punkt, an dem das Modell den Schaden als unbegrenzt behandelt.\\n\\n#lore Jede Nation trägt dieselbe Anomalie; was sich unterscheidet, ist, wie viel davon jede Volkswirtschaft verursacht hat.#!"
+ },
+ "gw_cond_trend_label": {
+  "en": "Change Last Year",
+  "de": "Veränderung im letzten Jahr"
+ },
+ "gw_cond_trend_tt": {
+  "en": "Warming added over the last completed calendar year, measured from the change in world cumulative emissions.\\n\\n#lore Re-based every January, so it holds steady through the year rather than flickering monthly.#!",
+  "de": "Die im letzten abgeschlossenen Kalenderjahr hinzugekommene Erwärmung, gemessen an der Veränderung der weltweiten kumulativen Emissionen.\\n\\n#lore Wird jeden Januar neu berechnet, so bleibt sie über das Jahr stabil, statt monatlich zu schwanken.#!"
+ },
+ "gw_cond_warming_mild": {
+  "en": "Global warming has reached #v 0.5°C#!",
+  "de": "Die globale Erwärmung hat #v 0,5°C#! erreicht"
+ },
+ "gw_cond_warming_moderate": {
+  "en": "Global warming has reached #v 1.0°C#!",
+  "de": "Die globale Erwärmung hat #v 1,0°C#! erreicht"
+ },
+ "gw_hist_chart_share_legend": {
+  "en": "#lore per cent of world annual emissions - steps each January#!",
+  "de": "#lore Prozent der weltweiten Jahresemissionen – ändert sich jeden Januar#!"
+ },
+ "gw_hist_chart_share_title": {
+  "en": "Our Share of World Emissions",
+  "de": "Unser Anteil an den weltweiten Emissionen"
+ },
+ "gw_hist_chart_temp_legend": {
+  "en": "#lore °C above pre-industrial, 0-4 - steps each January#!",
+  "de": "#lore °C über vorindustriellem Niveau, 0–4 – ändert sich jeden Januar#!"
+ },
+ "gw_hist_chart_temp_title": {
+  "en": "Global Temperature",
+  "de": "Globale Temperatur"
+ },
+ "gw_market_role_leader": {
+  "en": "Market Leader",
+  "de": "Marktführer"
+ },
+ "gw_market_role_member": {
+  "en": "Market Member",
+  "de": "Marktmitglied"
+ },
+ "gw_policies_none_yet": {
+  "en": "#lore No mitigation policy is in force. Every row below is available, or says what it is waiting for.#!",
+  "de": "#lore Keine Minderungspolitik ist in Kraft. Jede Zeile unten ist verfügbar oder zeigt an, worauf sie noch wartet.#!"
+ },
+ "gw_policy_status_active": {
+  "en": "#G Active#!",
+  "de": "#G Aktiv#!"
+ },
+ "gw_policy_status_by_leader": {
+  "en": "#lore set by market leader#!",
+  "de": "#lore vom Marktführer festgelegt#!"
+ },
+ "gw_policy_status_inactive": {
+  "en": "#grey Inactive#!",
+  "de": "#grey Inaktiv#!"
+ },
+ "gw_tier_short_apocalyptic": {
+  "en": "#R Apocalyptic#!",
+  "de": "#R Apokalyptisch#!"
+ },
+ "gw_tier_short_catastrophic": {
+  "en": "#R Catastrophic#!",
+  "de": "#R Katastrophal#!"
+ },
+ "gw_tier_short_moderate": {
+  "en": "#Y Moderate#!",
+  "de": "#Y Moderat#!"
+ },
+ "gw_tier_short_negligible": {
+  "en": "#G Negligible#!",
+  "de": "#G Vernachlässigbar#!"
+ },
+ "gw_tier_short_severe": {
+  "en": "#R Severe#!",
+  "de": "#R Schwerwiegend#!"
+ },
+ "gw_tier_short_significant": {
+  "en": "#O Significant#!",
+  "de": "#O Erheblich#!"
+ },
+ "gw_tier_short_slight": {
+  "en": "#Y Slight#!",
+  "de": "#Y Gering#!"
+ },
+ "gw_world_n_carbon_tax": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_world_n_carbon_tax_display')|0]#! nations",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_world_n_carbon_tax_display')|0]#! Staaten"
+ },
+ "gw_world_n_climate_adaptation": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_world_n_climate_adaptation_display')|0]#! nations",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_world_n_climate_adaptation_display')|0]#! Staaten"
+ },
+ "gw_world_n_emission_standards": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_world_n_emission_standards_display')|0]#! nations",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_world_n_emission_standards_display')|0]#! Staaten"
+ },
+ "gw_world_n_fossil_fuel_divestment": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_world_n_fossil_fuel_divestment_display')|0]#! nations",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_world_n_fossil_fuel_divestment_display')|0]#! Staaten"
+ },
+ "gw_world_n_green_building_codes": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_world_n_green_building_codes_display')|0]#! nations",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_world_n_green_building_codes_display')|0]#! Staaten"
+ },
+ "gw_world_n_public_transit": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_world_n_public_transit_display')|0]#! nations",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_world_n_public_transit_display')|0]#! Staaten"
+ },
+ "gw_world_n_reforestation": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_world_n_reforestation_display')|0]#! nations",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_world_n_reforestation_display')|0]#! Staaten"
+ },
+ "gw_world_n_renewable_investment": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_world_n_renewable_investment_display')|0]#! nations",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_world_n_renewable_investment_display')|0]#! Staaten"
+ },
+ "hate_crime_investigation_modifier": {
+  "en": "Hate Crime Investigation",
+  "de": "Ermittlungen zu Hassverbrechen"
+ },
+ "heir_ed_ideology_focus_active": {
+  "en": "[concept_heir] Education: Ideology Tutors",
+  "de": "[concept_heir]-Erziehung: Ideologie-Tutoren"
+ },
+ "heir_ed_ig_focus_active": {
+  "en": "[concept_heir] Education: Factional Mentors",
+  "de": "[concept_heir]-Erziehung: Fraktionsmentoren"
+ },
+ "heir_ed_trait_focus_active": {
+  "en": "[concept_heir] Education: Skill Tutors",
+  "de": "[concept_heir]-Erziehung: Fähigkeiten-Tutoren"
+ },
+ "heir_education_grace_period": {
+  "en": "Education Grace Period",
+  "de": "Erbenerziehung: Schonfrist"
+ },
+ "heir_education_innovation_cost": {
+  "en": "Heir Education",
+  "de": "Erbenerziehung"
+ },
+ "heir_education_progress_bar_name": {
+  "en": "Education Progress",
+  "de": "Erziehungsfortschritt"
+ },
+ "human_purity_enforced_modifier": {
+  "en": "Human Purity Enforced",
+  "de": "Menschliche Reinheit durchgesetzt"
+ },
+ "human_rights_reform_pledge_modifier": {
+  "en": "Human Rights Reform Pledge",
+  "de": "Reformversprechen für Menschenrechte"
+ },
+ "humanitarian_aid_action_break_name": {
+  "en": "End Humanitarian Aid",
+  "de": "Humanitäre Hilfe beenden"
+ },
+ "humanitarian_aid_action_name": {
+  "en": "Humanitarian Aid",
+  "de": "Humanitäre Hilfe"
+ },
+ "humanitarian_aid_action_notification_break_name": {
+  "en": "Humanitarian Aid Ended",
+  "de": "Humanitäre Hilfe beendet"
+ },
+ "humanitarian_aid_action_notification_name": {
+  "en": "Humanitarian Aid Given",
+  "de": "Humanitäre Hilfe geleistet"
+ },
+ "humanitarian_aid_action_propose_name": {
+  "en": "Humanitarian Aid",
+  "de": "Humanitäre Hilfe"
+ },
  "ig_approval_negative_modifier": {
   "en": "Disapproves of Policy",
   "de": "Missbilligt die Politik"
@@ -8146,6 +8558,2394 @@
  "ig_approval_very_negative_modifier": {
   "en": "Strongly Disapproves of Policy",
   "de": "Missbilligt die Politik stark"
+ },
+ "imperial_federation_act_civilizing_mission": {
+  "en": "Civilizing Mission Compact",
+  "de": "Zivilisierungsmissions-Pakt"
+ },
+ "imperial_federation_act_iron_fist": {
+  "en": "Imperial Federation Act",
+  "de": "Reichsföderationsakte"
+ },
+ "inherit_succession_dispute_advance": {
+  "en": "Inheritance: Succession Dispute Advance",
+  "de": "Erbfolge: Nachfolgestreit – Vorstoß"
+ },
+ "inherit_succession_dispute_cautious": {
+  "en": "Inheritance: Succession Dispute Cautious Advance",
+  "de": "Erbfolge: Nachfolgestreit – Vorsichtiger Vorstoß"
+ },
+ "inherit_succession_dispute_stall": {
+  "en": "Inheritance: Succession Dispute Stall",
+  "de": "Erbfolge: Nachfolgestreit – Stillstand"
+ },
+ "intelligence_failure_exposure_modifier": {
+  "en": "Intelligence Security Exposure",
+  "de": "Aufgedecktes Sicherheitsleck"
+ },
+ "intelligence_sharing_defense_shield_modifier": {
+  "en": "Allied Intelligence Shield",
+  "de": "Geheimdienstschild der Verbündeten"
+ },
+ "intelligence_tip_off_defense_modifier": {
+  "en": "Counter-Espionage Hardening",
+  "de": "Verstärkte Spionageabwehr"
+ },
+ "intelligence_tip_off_modifier": {
+  "en": "Intelligence Cooperation Dividend",
+  "de": "Kooperationsdividende der Geheimdienste"
+ },
+ "intelligence_victory_showcase_modifier": {
+  "en": "Public Intelligence Victory",
+  "de": "Öffentlicher Geheimdiensterfolg"
+ },
+ "international_criticism_movement_radicalism": {
+  "en": "Human Rights Criticism",
+  "de": "Menschenrechtskritik"
+ },
+ "internet_viral_campaign_advance": {
+  "en": "Internet Governance: Viral Campaign Advance",
+  "de": "Internet-Governance: Virale Kampagne – Vorstoß"
+ },
+ "internet_viral_campaign_cautious": {
+  "en": "Internet Governance: Viral Campaign Cautious Advance",
+  "de": "Internet-Governance: Virale Kampagne – Vorsichtiger Vorstoß"
+ },
+ "internet_viral_campaign_stall": {
+  "en": "Internet Governance: Viral Campaign Stall",
+  "de": "Internet-Governance: Virale Kampagne – Stillstand"
+ },
+ "ip_piracy_debate_advance": {
+  "en": "Intellectual Property: Piracy Debate Advance",
+  "de": "Geistiges Eigentum: Piraterie-Debatte – Vorstoß"
+ },
+ "ip_piracy_debate_cautious": {
+  "en": "Intellectual Property: Piracy Debate Cautious Advance",
+  "de": "Geistiges Eigentum: Piraterie-Debatte – Vorsichtiger Vorstoß"
+ },
+ "ip_piracy_debate_stall": {
+  "en": "Intellectual Property: Piracy Debate Stall",
+  "de": "Geistiges Eigentum: Piraterie-Debatte – Stillstand"
+ },
+ "ip_public_domain_expansion": {
+  "en": "Intellectual Property: Public Domain Expansion",
+  "de": "Geistiges Eigentum: Erweiterung der Gemeinfreiheit"
+ },
+ "iron_fist_path_modifier": {
+  "en": "The Iron Fist",
+  "de": "Die Eiserne Faust"
+ },
+ "irr_cultural_ties_modifier": {
+  "en": "Cultural Ties Strengthened",
+  "de": "Kulturelle Bindungen gestärkt"
+ },
+ "irr_offered_union_modifier": {
+  "en": "Voluntary Union Offered",
+  "de": "Freiwillige Union angeboten"
+ },
+ "irr_open_to_union_modifier": {
+  "en": "Open to Union",
+  "de": "Offen für Union"
+ },
+ "irr_rejected_union_modifier": {
+  "en": "Union Proposal Rejected",
+  "de": "Unionsvorschlag abgelehnt"
+ },
+ "irr_seek_war_blessing": {
+  "en": "Seek Blessing for Reunification",
+  "de": "Segen für Wiedervereinigung erbitten"
+ },
+ "irr_seek_war_blessing_action_name": {
+  "en": "Seek Blessing for Reunification",
+  "de": "Segen für Wiedervereinigung erbitten"
+ },
+ "irr_seek_war_blessing_action_notification_name": {
+  "en": "Blessing for Reunification Sought",
+  "de": "Segen für Wiedervereinigung erbeten"
+ },
+ "irr_seek_war_blessing_action_propose_name": {
+  "en": "Seek Blessing for Reunification",
+  "de": "Segen für Wiedervereinigung erbitten"
+ },
+ "irr_seek_war_blessing_effect_tt": {
+  "en": "Our [Concept('concept_power_bloc_leader', 'bloc leader')] will be asked to bless a war to reunify [SCOPE.sCountry('target_country').GetName] with us. If it agrees, our [concept_power_bloc] will not stand in the way of that war for #v 5 years#!; the reunification [concept_war_goal]'s other requirements, above all enough [Concept('concept_claim', 'claims')] on their [concept_homeland] states, still apply. If it refuses, our [concept_relations] with it fall by #N 10#!, and the refusal stirs up radicals at home for #v 5 years#!, during which we cannot ask again",
+  "de": "Unser [Concept('concept_power_bloc_leader', 'Blockanführer')] wird gebeten, einen Krieg zur Wiedervereinigung mit [SCOPE.sCountry('target_country').GetAltName('DAT')] zu segnen. Stimmt er zu, wird unser [concept_power_bloc] diesem Krieg #v 5 Jahre#! lang nicht im Weg stehen; die übrigen Voraussetzungen des Wiedervereinigungs-[concept_war_goal]s, vor allem genug [Concept('concept_claim', 'Ansprüche')] auf ihre [concept_homeland]-Staaten, gelten weiterhin. Lehnt er ab, fallen unsere [concept_relations] zu ihm um #N 10#!, und die Ablehnung wiegelt zu Hause für #v 5 Jahre#! Radikale auf, in denen wir nicht erneut fragen können"
+ },
+ "irr_union_forbidden_modifier": {
+  "en": "[Concept('concept_power_bloc_leader', 'Bloc Leader')] Forbade Union",
+  "de": "[Concept('concept_power_bloc_leader', 'Blockanführer')] hat die Union untersagt"
+ },
+ "irr_war_blessing_candidate_tt": {
+  "en": "[SCOPE.sCountry('target_country').GetName] is a candidate for reunification: it shares one of our [concept_primary_cultures] and holds no [concept_homeland] of a people we do not share, it holds a homeland state of ours that we [Concept('concept_claim', 'claim')] and where our people still live, it borders us or we both have a coast, and neither of us is a subject of the other's overlord",
+  "de": "[SCOPE.sCountry('target_country').GetAltName('NOM')] ist ein Kandidat für die Wiedervereinigung: Es teilt eine unserer [concept_primary_cultures] und hält kein [concept_homeland] eines Volkes, das wir nicht teilen, es hält einen unserer Heimatstaaten, auf den wir [Concept('concept_claim', 'Anspruch erheben')] und in dem unser Volk noch lebt, es grenzt an uns oder wir haben beide eine Küste, und keiner von uns ist Klientelstaat des Oberherrn des anderen"
+ },
+ "irr_war_blessing_driver_tt": {
+  "en": "Our government gives the reunification cause a voice: a law such as $law_ethnostate$, $law_national_supremacy$, $law_council_republic$ or $law_multicultural$, a governing [concept_interest_group] whose leader's ideology takes up the cause, or the Chinese reunification journal entry",
+  "de": "Unsere Regierung verleiht der Sache der Wiedervereinigung eine Stimme: ein Gesetz wie $law_ethnostate$, $law_national_supremacy$, $law_council_republic$ oder $law_multicultural$, eine regierende [concept_interest_group], deren Anführerideologie sich der Sache annimmt, oder das chinesische Wiedervereinigungs-Journal"
+ },
+ "irr_war_blessing_no_standing_approval_tt": {
+  "en": "We do not already hold our [Concept('concept_power_bloc_leader', 'bloc leader')]'s blessing for a war of reunification",
+  "de": "Wir besitzen noch nicht den Segen unseres [Concept('concept_power_bloc_leader', 'Blockanführers')] für einen Wiedervereinigungskrieg"
+ },
+ "irr_war_blessing_not_historic_unification_tt": {
+  "en": "[SCOPE.sCountry('target_country').GetName] is not in the midst of a historic unification of its own (German, Italian or Chinese), which follows its own path",
+  "de": "[SCOPE.sCountry('target_country').GetAltName('NOM')] befindet sich nicht mitten in einer eigenen historischen Einigung (deutsch, italienisch oder chinesisch), die ihrem eigenen Pfad folgt"
+ },
+ "irr_war_blessing_not_pending_tt": {
+  "en": "We are not already awaiting our [Concept('concept_power_bloc_leader', 'bloc leader')]'s answer to such a request",
+  "de": "Wir warten nicht bereits auf die Antwort unseres [Concept('concept_power_bloc_leader', 'Blockanführers')] auf ein solches Gesuch"
+ },
+ "irr_war_blessing_not_vetoed_tt": {
+  "en": "Our [Concept('concept_power_bloc_leader', 'bloc leader')] has not refused us such a blessing in the last #v 5 years#!",
+  "de": "Unser [Concept('concept_power_bloc_leader', 'Blockanführer')] hat uns einen solchen Segen in den letzten #v 5 Jahren#! nicht verweigert"
+ },
+ "irr_war_vetoed_modifier": {
+  "en": "War Bid Vetoed by [Concept('concept_power_bloc_leader', 'Bloc Leader')]",
+  "de": "Kriegsgesuch von [Concept('concept_power_bloc_leader', 'Blockanführer')] per Veto abgelehnt"
+ },
+ "iw_at_war_or_play_tt": {
+  "en": "Must be at war with them, or in a [concept_diplomatic_play] against them (wartime operation)",
+  "de": "Muss mit ihnen im Krieg oder in einem [concept_diplomatic_play] gegen sie stehen (Kriegsoperation)"
+ },
+ "iw_burned_phase_est": {
+  "en": "its network still being established",
+  "de": "sein Netzwerk befindet sich noch im Aufbau"
+ },
+ "iw_burned_phase_full": {
+  "en": "fully operational after more than a year in place",
+  "de": "seit über einem Jahr im Einsatz und voll einsatzbereit"
+ },
+ "iw_burned_phase_prep": {
+  "en": "still in its preparatory phase",
+  "de": "noch in der Vorbereitungsphase"
+ },
+ "iw_decrease_funding_button": {
+  "en": "Decrease Covert Funding",
+  "de": "Verdeckte Finanzierung verringern"
+ },
+ "iw_decrease_funding_effect_tt": {
+  "en": "Funding level: [GetPlayer.MakeScope.ScriptValue('covert_funding_level_display')|0] -> [GetPlayer.MakeScope.ScriptValue('covert_funding_next_level_down')|0]\\nNew weekly cost: @money!#R [GetPlayer.MakeScope.ScriptValue('covert_operation_cost_at_next_down')|D]#!/week[GetPlayer.GetCustom('covert_decrease_funding_warning')]",
+  "de": "Finanzierungsstufe: [GetPlayer.MakeScope.ScriptValue('covert_funding_level_display')|0] -> [GetPlayer.MakeScope.ScriptValue('covert_funding_next_level_down')|0]\\nNeue wöchentliche Kosten: @money!#R [GetPlayer.MakeScope.ScriptValue('covert_operation_cost_at_next_down')|D]#!/Woche[GetPlayer.GetCustom('covert_decrease_funding_warning')]"
+ },
+ "iw_decrease_warning_blocks_launch": {
+  "en": "\\n#R Stepping down to zero blocks any new operation#! until funding returns to level 1.",
+  "de": "\\n#R Die Rückstufung auf null blockiert jede neue Operation#!, bis die Finanzierung wieder Stufe 1 erreicht."
+ },
+ "iw_decrease_warning_none": {
+  "en": "\\n#italic Lower funding costs less but raises the monthly chance that an operation is detected.#!",
+  "de": "\\n#italic Geringere Finanzierung kostet weniger, erhöht aber die monatliche Chance, dass eine Operation entdeckt wird.#!"
+ },
+ "iw_decrease_warning_stands_down": {
+  "en": "\\n@warning! #R Stepping down to zero stands every running operation down.#! All [GetPlayer.MakeScope.ScriptValue('covert_active_display')|0] of them lapse, and the months already invested are lost.",
+  "de": "\\n@warning! #R Die Rückstufung auf null beendet jede laufende Operation.#! Alle [GetPlayer.MakeScope.ScriptValue('covert_active_display')|0] davon laufen aus, und die bereits investierten Monate gehen verloren."
+ },
+ "iw_exposure_tier_mild": {
+  "en": "routine espionage",
+  "de": "routinemäßige Spionage"
+ },
+ "iw_exposure_tier_mild_note": {
+  "en": "\\n#lore If this is exposed, the world treats it as routine espionage: little infamy, a modest cooling with the target.#!",
+  "de": "\\n#lore Wird dies aufgedeckt, behandelt die Welt es als routinemäßige Spionage: wenig Verrufenheit, eine leichte Abkühlung zum Ziel.#!"
+ },
+ "iw_exposure_tier_moderate": {
+  "en": "interference in the internal affairs of a sovereign state",
+  "de": "Einmischung in die inneren Angelegenheiten eines souveränen Staates"
+ },
+ "iw_exposure_tier_moderate_note": {
+  "en": "\\n#lore If this is exposed, the world treats it as interference in another country's internal affairs: real infamy and a serious bilateral breach.#!",
+  "de": "\\n#lore Wird dies aufgedeckt, behandelt die Welt es als Einmischung in die inneren Angelegenheiten eines anderen Landes: spürbare Verrufenheit und ein ernster bilateraler Bruch.#!"
+ },
+ "iw_exposure_tier_severe": {
+  "en": "an attempt to bring down a sitting government",
+  "de": "ein Versuch, eine amtierende Regierung zu stürzen"
+ },
+ "iw_exposure_tier_severe_note": {
+  "en": "\\n#lore If this is exposed, the world treats it as an attempt to bring down a government: heavy infamy, a severe breach with the target, and every country tied to them cools towards us as well.#!",
+  "de": "\\n#lore Wird dies aufgedeckt, behandelt die Welt es als Versuch, eine Regierung zu stürzen: schwere Verrufenheit, ein schwerer Bruch mit dem Ziel, und jedes mit ihm verbundene Land kühlt uns gegenüber ebenfalls ab.#!"
+ },
+ "iw_exposure_tier_war": {
+  "en": "wartime sabotage",
+  "de": "Kriegssabotage"
+ },
+ "iw_exposure_tier_war_note": {
+  "en": "\\n#lore If this is exposed once the war has started, the world shrugs — sabotage between belligerents costs nothing at all. Exposed during the run-up, it reads as manufacturing the war, and costs as much infamy as an attempt to bring down a government.#!",
+  "de": "\\n#lore Wird dies aufgedeckt, nachdem der Krieg begonnen hat, zuckt die Welt nur mit den Schultern – Sabotage zwischen Kriegsparteien kostet überhaupt nichts. Wird sie im Vorfeld aufgedeckt, gilt sie als Kriegstreiberei und kostet so viel Verrufenheit wie ein Versuch, eine Regierung zu stürzen.#!"
+ },
+ "iw_funding_name_0": {
+  "en": "Dormant",
+  "de": "Ruhend"
+ },
+ "iw_funding_name_1": {
+  "en": "Operational",
+  "de": "Einsatzbereit"
+ },
+ "iw_funding_name_2": {
+  "en": "Professional",
+  "de": "Professionell"
+ },
+ "iw_funding_name_3": {
+  "en": "Covert Network",
+  "de": "Verdecktes Netzwerk"
+ },
+ "iw_funding_name_4": {
+  "en": "Black Budget",
+  "de": "Schwarzer Haushalt"
+ },
+ "iw_funding_name_5": {
+  "en": "Deep State",
+  "de": "Tiefer Staat"
+ },
+ "iw_funding_not_max_tt": {
+  "en": "Funding is not already at maximum ([GetPlayer.MakeScope.ScriptValue('iw_funding_level_max')])",
+  "de": "Die Finanzierung ist noch nicht auf dem Maximum ([GetPlayer.MakeScope.ScriptValue('iw_funding_level_max')])"
+ },
+ "iw_funding_not_min_tt": {
+  "en": "Funding is not already at minimum (0)",
+  "de": "Die Finanzierung ist noch nicht auf dem Minimum (0)"
+ },
+ "iw_funding_not_zero_tt": {
+  "en": "Funding level must be at least 1 to launch operations",
+  "de": "Die Finanzierungsstufe muss mindestens 1 betragen, um Operationen zu starten"
+ },
+ "iw_funding_state_dormant": {
+  "en": "#R Unfunded.#! No operation can be launched until funding reaches level 1.",
+  "de": "#R Unfinanziert.#! Keine Operation kann gestartet werden, bis die Finanzierung Stufe 1 erreicht."
+ },
+ "iw_funding_state_dormant_with_ops": {
+  "en": "#R Unfunded.#! The pacts still standing do nothing and will lapse.",
+  "de": "#R Unfinanziert.#! Die noch bestehenden Pakte bewirken nichts und laufen aus."
+ },
+ "iw_funding_state_ready": {
+  "en": "#G Funded, with nothing running.#! Base maintenance buys the defensive benefits below.",
+  "de": "#G Finanziert, aber nichts läuft.#! Die Grundunterhaltung kauft die unten stehenden defensiven Vorteile."
+ },
+ "iw_funding_state_running": {
+  "en": "#G Operations are active.#! Each runs at its own phase strength and carries its own detection risk.",
+  "de": "#G Operationen sind aktiv.#! Jede läuft mit ihrer eigenen Phasenstärke und trägt ihr eigenes Entdeckungsrisiko."
+ },
+ "iw_has_available_slot_tt": {
+  "en": "Has an available Covert Operation slot",
+  "de": "Hat einen freien Platz für eine verdeckte Operation"
+ },
+ "iw_increase_funding_button": {
+  "en": "Increase Covert Funding",
+  "de": "Verdeckte Finanzierung erhöhen"
+ },
+ "iw_increase_funding_effect_tt": {
+  "en": "Funding level: [GetPlayer.MakeScope.ScriptValue('covert_funding_level_display')|0] -> [GetPlayer.MakeScope.ScriptValue('covert_funding_next_level_up')|0]\\nNew weekly cost: @money!#R [GetPlayer.MakeScope.ScriptValue('covert_operation_cost_at_next_up')|D]#!/week\\n#italic Higher funding buys better tradecraft: less detection risk and more counterintelligence capacity. The ladder in the command centre lists what every level gives.#!",
+  "de": "Finanzierungsstufe: [GetPlayer.MakeScope.ScriptValue('covert_funding_level_display')|0] -> [GetPlayer.MakeScope.ScriptValue('covert_funding_next_level_up')|0]\\nNeue wöchentliche Kosten: @money!#R [GetPlayer.MakeScope.ScriptValue('covert_operation_cost_at_next_up')|D]#!/Woche\\n#italic Höhere Finanzierung kauft besseres Spionagehandwerk: weniger Entdeckungsrisiko und mehr Abwehrkapazität. Die Stufenleiter in der Kommandozentrale listet auf, was jede Stufe bringt.#!"
+ },
+ "iw_no_cordial_relations_tt": {
+  "en": "Cannot run this operation against nations with cordial relations or better",
+  "de": "Kann nicht gegen Nationen durchgeführt werden, zu denen herzliche Beziehungen oder besser bestehen"
+ },
+ "iw_no_duplicate_target_tt": {
+  "en": "Not already running this operation against this country",
+  "de": "Diese Operation läuft noch nicht gegen dieses Land"
+ },
+ "iw_no_good_relations_tt": {
+  "en": "Cannot launch hostile operations against nations with amicable relations or better",
+  "de": "Feindselige Operationen können nicht gegen Nationen gestartet werden, zu denen freundschaftliche Beziehungen oder besser bestehen"
+ },
+ "iw_no_intel_sharing_tt": {
+  "en": "Cannot target nations with an active Intelligence Sharing Pact",
+  "de": "Kann keine Nationen mit aktivem Geheimdienst-Kooperationspakt ins Visier nehmen"
+ },
+ "iw_no_truce_tt": {
+  "en": "Cannot target nations you have a truce with",
+  "de": "Kann keine Nationen ins Visier nehmen, mit denen ein Waffenstillstand besteht"
+ },
+ "iw_op_name_comms_disruption": {
+  "en": "Communications Disruption",
+  "de": "Kommunikationsstörung"
+ },
+ "iw_op_name_cultivate_assets": {
+  "en": "Asset Cultivation",
+  "de": "Quellenwerbung"
+ },
+ "iw_op_name_destabilization": {
+  "en": "Destabilization",
+  "de": "Destabilisierung"
+ },
+ "iw_op_name_election_interference": {
+  "en": "Election Interference",
+  "de": "Wahleinmischung"
+ },
+ "iw_op_name_financial_subversion": {
+  "en": "Financial Subversion",
+  "de": "Finanzielle Subversion"
+ },
+ "iw_op_name_ideological_subversion": {
+  "en": "Ideological Subversion",
+  "de": "Ideologische Subversion"
+ },
+ "iw_op_name_industrial_espionage": {
+  "en": "Industrial Espionage",
+  "de": "Industriespionage"
+ },
+ "iw_op_name_influence_campaign": {
+  "en": "Influence Campaign",
+  "de": "Einflusskampagne"
+ },
+ "iw_op_name_infrastructure_sabotage": {
+  "en": "Infrastructure Sabotage",
+  "de": "Infrastruktursabotage"
+ },
+ "iw_op_name_military_espionage": {
+  "en": "Military Espionage",
+  "de": "Militärspionage"
+ },
+ "iw_op_name_nuclear_sabotage": {
+  "en": "Nuclear Programme Sabotage",
+  "de": "Sabotage des Nuklearprogramms"
+ },
+ "iw_op_name_regime_change": {
+  "en": "Regime Change",
+  "de": "Regimewechsel"
+ },
+ "iw_op_name_secure_material": {
+  "en": "Loose Material Search",
+  "de": "Suche nach ungesichertem Nuklearmaterial"
+ },
+ "iw_op_name_space_espionage": {
+  "en": "Space Programme Espionage",
+  "de": "Spionage im Raumfahrtprogramm"
+ },
+ "iw_op_name_unknown": {
+  "en": "an unidentified operation",
+  "de": "eine nicht identifizierte Operation"
+ },
+ "iw_priority_3_needs_tradecraft_tt": {
+  "en": "Priority #v 3#! needs an agency of at least #bold Established#! Tradecraft (#v [GetPlayer.MakeScope.ScriptValue('covert_tradecraft_tier_2_floor')|0]#!)",
+  "de": "Priorität #v 3#! erfordert eine Behörde mit mindestens #bold etabliertem#! Spionagehandwerk (#v [GetPlayer.MakeScope.ScriptValue('covert_tradecraft_tier_2_floor')|0]#!)"
+ },
+ "iw_priority_cultivate_fixed_tt": {
+  "en": "Asset cultivation has nothing for priority to multiply: it stays at priority #v 1#!",
+  "de": "Quellenwerbung hat nichts, das die Priorität multiplizieren könnte: Sie bleibt bei Priorität #v 1#!"
+ },
+ "iw_priority_not_max_tt": {
+  "en": "Priority is not already at its maximum ([GetPlayer.MakeScope.ScriptValue('covert_op_priority_max')|0])",
+  "de": "Die Priorität ist noch nicht auf ihrem Maximum ([GetPlayer.MakeScope.ScriptValue('covert_op_priority_max')|0])"
+ },
+ "iw_priority_not_min_tt": {
+  "en": "Priority is above the lowest level (1)",
+  "de": "Die Priorität liegt über der niedrigsten Stufe (1)"
+ },
+ "iw_priority_op_known_tt": {
+  "en": "The operation on this row can be identified",
+  "de": "Die Operation in dieser Zeile kann identifiziert werden"
+ },
+ "iw_priority_op_ours_tt": {
+  "en": "This operation is one of ours and is still running",
+  "de": "Diese Operation ist eine unserer eigenen und läuft noch"
+ },
+ "iw_priority_to_1_tt": {
+  "en": "Priority becomes #v 1#!: the operation works at its base strength, takes one share of the covert budget and adds nothing to its own detection risk.\\n#italic Detection changes now. Raising it also raises upkeep now; the effects follow at the start of next month. Lowering it lowers upkeep only once the effects have followed.#!",
+  "de": "Die Priorität wird #v 1#!: Die Operation wirkt mit ihrer Grundstärke, beansprucht einen Anteil des verdeckten Budgets und erhöht ihr eigenes Entdeckungsrisiko nicht.\\n#italic Die Entdeckung ändert sich sofort. Eine Erhöhung erhöht auch sofort den Unterhalt; die Effekte folgen erst zu Beginn des nächsten Monats. Eine Senkung senkt den Unterhalt erst, wenn die Effekte gefolgt sind.#!"
+ },
+ "iw_priority_to_2_tt": {
+  "en": "Priority becomes #v 2#!: its effect is multiplied by #G [GetPlayer.MakeScope.ScriptValue('covert_op_priority_2_effect_mult')|2]#!, its share of the covert budget by #R [GetPlayer.MakeScope.ScriptValue('covert_op_priority_2_cost_mult')|1]#!, and its monthly detection risk rises by #R [GetPlayer.MakeScope.ScriptValue('covert_op_priority_2_detect_display')|0]#! points before [concept_covert_efficiency].\\n#italic Detection changes now. Raising it also raises upkeep now; the effects follow at the start of next month. Lowering it lowers upkeep only once the effects have followed.#!",
+  "de": "Die Priorität wird #v 2#!: Ihr Effekt wird mit #G [GetPlayer.MakeScope.ScriptValue('covert_op_priority_2_effect_mult')|2]#! multipliziert, ihr Anteil am verdeckten Budget mit #R [GetPlayer.MakeScope.ScriptValue('covert_op_priority_2_cost_mult')|1]#!, und ihr monatliches Entdeckungsrisiko steigt um #R [GetPlayer.MakeScope.ScriptValue('covert_op_priority_2_detect_display')|0]#! Punkte vor [concept_covert_efficiency].\\n#italic Die Entdeckung ändert sich sofort. Eine Erhöhung erhöht auch sofort den Unterhalt; die Effekte folgen erst zu Beginn des nächsten Monats. Eine Senkung senkt den Unterhalt erst, wenn die Effekte gefolgt sind.#!"
+ },
+ "iw_priority_to_3_tt": {
+  "en": "Priority becomes #v 3#!: its effect is multiplied by #G [GetPlayer.MakeScope.ScriptValue('covert_op_priority_3_effect_mult')|2]#!, its share of the covert budget by #R [GetPlayer.MakeScope.ScriptValue('covert_op_priority_3_cost_mult')|1]#!, and its monthly detection risk rises by #R [GetPlayer.MakeScope.ScriptValue('covert_op_priority_3_detect_display')|0]#! points before [concept_covert_efficiency].\\n#italic The last step buys less than the first and costs more: an agency cannot put everything at the top.#!\\n#italic Detection changes now. Raising it also raises upkeep now; the effects follow at the start of next month. Lowering it lowers upkeep only once the effects have followed.#!",
+  "de": "Die Priorität wird #v 3#!: Ihr Effekt wird mit #G [GetPlayer.MakeScope.ScriptValue('covert_op_priority_3_effect_mult')|2]#! multipliziert, ihr Anteil am verdeckten Budget mit #R [GetPlayer.MakeScope.ScriptValue('covert_op_priority_3_cost_mult')|1]#!, und ihr monatliches Entdeckungsrisiko steigt um #R [GetPlayer.MakeScope.ScriptValue('covert_op_priority_3_detect_display')|0]#! Punkte vor [concept_covert_efficiency].\\n#italic Der letzte Schritt bringt weniger als der erste und kostet mehr: Eine Behörde kann nicht alles an die Spitze stellen.#!\\n#italic Die Entdeckung ändert sich sofort. Eine Erhöhung erhöht auch sofort den Unterhalt; die Effekte folgen erst zu Beginn des nächsten Monats. Eine Senkung senkt den Unterhalt erst, wenn die Effekte gefolgt sind.#!"
+ },
+ "iw_requires_rivalry_tt": {
+  "en": "Must have declared a [concept_rivalry] with them",
+  "de": "Muss ihnen gegenüber eine [concept_rivalry] erklärt haben"
+ },
+ "iw_severe_ops_need_tradecraft_tt": {
+  "en": "Needs an agency of at least #bold Seasoned#! Tradecraft (#v [GetPlayer.MakeScope.ScriptValue('covert_tradecraft_tier_3_floor')|0]#!)",
+  "de": "Erfordert eine Behörde mit mindestens #bold erfahrenem#! Spionagehandwerk (#v [GetPlayer.MakeScope.ScriptValue('covert_tradecraft_tier_3_floor')|0]#!)"
+ },
+ "iw_stand_down_effect_tt": {
+  "en": "The operation ends and its pact is withdrawn, freeing its slot.",
+  "de": "Die Operation endet, und ihr Pakt wird aufgekündigt, wodurch ihr Platz frei wird."
+ },
+ "iw_stand_down_op_matches_tt": {
+  "en": "This operation is one of ours and is still running",
+  "de": "Diese Operation ist eine unserer eigenen und läuft noch"
+ },
+ "iw_stand_down_target_known_tt": {
+  "en": "The target of this operation can be identified",
+  "de": "Das Ziel dieser Operation kann identifiziert werden"
+ },
+ "iw_target_ahead_in_space_tt": {
+  "en": "Target must have completed a space race milestone we have not",
+  "de": "Das Ziel muss einen Meilenstein des Wettlaufs ins All erreicht haben, den wir noch nicht haben"
+ },
+ "iw_target_has_elections_tt": {
+  "en": "Target must have some form of elected legislature",
+  "de": "Das Ziel muss über eine Form von gewählter Legislative verfügen"
+ },
+ "iw_target_has_loose_material_tt": {
+  "en": "Warheads from the target's arsenal must be unaccounted for",
+  "de": "Sprengköpfe aus dem Arsenal des Ziels müssen unauffindbar sein"
+ },
+ "iw_target_has_movements_tt": {
+  "en": "Target must have at least one active [concept_political_movement]",
+  "de": "Das Ziel muss mindestens eine aktive [concept_political_movement] haben"
+ },
+ "iw_target_not_decentralized_tt": {
+  "en": "Cannot target decentralized powers — they have no centralized state to subvert",
+  "de": "Kann keine dezentralisierten Mächte ins Visier nehmen — sie haben keinen zentralisierten Staat, den man unterwandern könnte"
+ },
+ "iw_target_not_in_bloc_tt": {
+  "en": "Target must not be in your [concept_power_bloc]",
+  "de": "Das Ziel darf nicht in unserem [concept_power_bloc] sein"
+ },
+ "iw_target_nuclear_programme_standing_tt": {
+  "en": "Target must still have a nuclear weapons programme that is not paused by treaty or given up",
+  "de": "Das Ziel muss noch ein Nuklearwaffenprogramm haben, das nicht durch einen Vertrag pausiert oder aufgegeben wurde"
+ },
+ "iw_target_nuclear_programme_tt": {
+  "en": "Target must be running a funded nuclear weapons programme",
+  "de": "Das Ziel muss ein finanziertes Nuklearwaffenprogramm betreiben"
+ },
+ "iw_target_tech_advantage_tt": {
+  "en": "Target must have researched more technologies than we have",
+  "de": "Das Ziel muss mehr Technologien erforscht haben als wir"
+ },
+ "iw_tradecraft_reason_0": {
+  "en": "#italic No operation has yet taught our service anything.#!",
+  "de": "#italic Noch hat keine Operation unserem Dienst etwas beigebracht.#!"
+ },
+ "iw_tradecraft_reason_1": {
+  "en": "#italic Last change: #G our running operations#! taught our officers their trade.#!",
+  "de": "#italic Letzte Änderung: #G unsere laufenden Operationen#! lehrten unsere Offiziere ihr Handwerk.#!"
+ },
+ "iw_tradecraft_reason_20": {
+  "en": "#italic Last change: #R an espionage operation was exposed.#!#!",
+  "de": "#italic Letzte Änderung: #R eine Spionageoperation wurde aufgedeckt.#!#!"
+ },
+ "iw_tradecraft_reason_21": {
+  "en": "#italic Last change: #R an operation meddling in a foreign government was exposed.#!#!",
+  "de": "#italic Letzte Änderung: #R eine Operation, die sich in eine fremde Regierung einmischte, wurde aufgedeckt.#!#!"
+ },
+ "iw_tradecraft_reason_22": {
+  "en": "#italic Last change: #R an operation against a foreign state itself was exposed.#!#!",
+  "de": "#italic Letzte Änderung: #R eine Operation gegen einen fremden Staat selbst wurde aufgedeckt.#!#!"
+ },
+ "iw_tradecraft_reason_23": {
+  "en": "#italic Last change: #R a wartime sabotage operation was exposed.#!#!",
+  "de": "#italic Letzte Änderung: #R eine Kriegssabotage-Operation wurde aufgedeckt.#!#!"
+ },
+ "iw_tradecraft_reason_24": {
+  "en": "#italic Last change: #R with no operation running, our officers' skills are going stale.#!#!",
+  "de": "#italic Letzte Änderung: #R ohne laufende Operation lassen die Fähigkeiten unserer Offiziere nach.#!#!"
+ },
+ "iw_tradecraft_tier_name_0": {
+  "en": "Untested",
+  "de": "Ungetestet"
+ },
+ "iw_tradecraft_tier_name_1": {
+  "en": "Fledgling",
+  "de": "Unerfahren"
+ },
+ "iw_tradecraft_tier_name_2": {
+  "en": "Established",
+  "de": "Etabliert"
+ },
+ "iw_tradecraft_tier_name_3": {
+  "en": "Seasoned",
+  "de": "Erfahren"
+ },
+ "iw_tradecraft_tier_name_4": {
+  "en": "Veteran",
+  "de": "Veteran"
+ },
+ "joint_exercises_success_modifier": {
+  "en": "Joint Exercise Insights",
+  "de": "Erkenntnisse aus gemeinsamen Übungen"
+ },
+ "langpol_cultural_resistance_advance": {
+  "en": "Language Policy: Cultural Resistance Advance",
+  "de": "Sprachpolitik: Kultureller Widerstand – Vorstoß"
+ },
+ "langpol_cultural_resistance_cautious": {
+  "en": "Language Policy: Cultural Resistance Cautious Advance",
+  "de": "Sprachpolitik: Kultureller Widerstand – Vorsichtiger Vorstoß"
+ },
+ "langpol_cultural_resistance_stall": {
+  "en": "Language Policy: Cultural Resistance Stall",
+  "de": "Sprachpolitik: Kultureller Widerstand – Stillstand"
+ },
+ "langreform_intensive_transition_cost": {
+  "en": "Intensive Language Campaign",
+  "de": "Intensive Sprachkampagne"
+ },
+ "langreform_minimal_transition_cost": {
+  "en": "Language Reform Transition",
+  "de": "Sprachreform-Übergang"
+ },
+ "langreform_ministry_transition_cost": {
+  "en": "Ministry Language Reform",
+  "de": "Ministerielle Sprachreform"
+ },
+ "language_reform_reeducation_tooltip": {
+  "en": "Creating a constructed language or reviving a dormant tongue is a long-term, state-led cultural program that demands substantial [concept_bureaucracy] and administrative effort. Expect heavy upfront costs and sustained investment over a couple of decades to develop curricula, print materials, train teachers, and build institutions.",
+  "de": "Eine Plansprache zu schaffen oder eine ruhende Sprache wiederzubeleben, ist ein langfristiges, staatlich geführtes Kulturprogramm, das erhebliche [concept_bureaucracy] und Verwaltungsaufwand erfordert. Rechnen Sie mit hohen Anfangskosten und anhaltenden Investitionen über mehrere Jahrzehnte, um Lehrpläne zu entwickeln, Materialien zu drucken, Lehrer auszubilden und Institutionen aufzubauen."
+ },
+ "lgbtq_backlash_ig_modifier": {
+  "en": "Religious Backlash",
+  "de": "Religiöse Gegenreaktion"
+ },
+ "lgbtq_cultural_shift_civil_rights_movement_modifier": {
+  "en": "Cultural Acceptance Momentum",
+  "de": "Dynamik der kulturellen Akzeptanz"
+ },
+ "lgbtq_cultural_shift_modifier": {
+  "en": "LGBTQ+ Cultural Visibility",
+  "de": "Kulturelle Sichtbarkeit von LGBTQ+"
+ },
+ "lgbtq_devout_support_modifier": {
+  "en": "Devout Support",
+  "de": "Unterstützung der Frommen"
+ },
+ "lgbtq_military_ban_modifier": {
+  "en": "LGBTQ+ Military Ban",
+  "de": "Militärverbot für LGBTQ+"
+ },
+ "lgbtq_military_inclusion_modifier": {
+  "en": "LGBTQ+ Military Inclusion",
+  "de": "Militärische Inklusion von LGBTQ+"
+ },
+ "lgbtq_public_petition_advance": {
+  "en": "LGBTQ Rights: Public Petition Advance",
+  "de": "LGBTQ-Rechte: Öffentliche Petition – Vorstoß"
+ },
+ "lgbtq_public_petition_cautious": {
+  "en": "LGBTQ Rights: Public Petition Cautious Advance",
+  "de": "LGBTQ-Rechte: Öffentliche Petition – Vorsichtiger Vorstoß"
+ },
+ "lgbtq_public_petition_stall": {
+  "en": "LGBTQ Rights: Public Petition Stall",
+  "de": "LGBTQ-Rechte: Öffentliche Petition – Stillstand"
+ },
+ "lgbtq_reform_civil_rights_movement_modifier": {
+  "en": "Reform Leverage",
+  "de": "Reformhebel"
+ },
+ "lgbtq_reform_leverage_modifier": {
+  "en": "LGBTQ+ Reform Momentum",
+  "de": "Reformdynamik für LGBTQ+"
+ },
+ "mandate_system_transition_modifier": {
+  "en": "Mandate System Transition",
+  "de": "Übergang des Mandatssystems"
+ },
+ "mandatory_work_programs_modifier": {
+  "en": "Mandatory Work Programs",
+  "de": "Pflichtarbeitsprogramme"
+ },
+ "martyrdom_suppression_movement_radicalism": {
+  "en": "Martyrdom Suppressed (Civil Rights)",
+  "de": "Märtyrertum unterdrückt (Bürgerrechte)"
+ },
+ "me_ai_content_ban_modifier": {
+  "en": "AI Campaign Content Ban",
+  "de": "KI-Inhalteverbot im Wahlkampf"
+ },
+ "me_ai_transparency_modifier": {
+  "en": "AI Campaign Transparency",
+  "de": "KI-Transparenz im Wahlkampf"
+ },
+ "me_anti_communist_campaign_modifier": {
+  "en": "Anti-Communist Campaign",
+  "de": "Antikommunistische Kampagne"
+ },
+ "me_border_security_campaign_modifier": {
+  "en": "Border Security Campaign",
+  "de": "Grenzsicherheitskampagne"
+ },
+ "me_campaign_spending_spree_modifier": {
+  "en": "Campaign Spending Spree",
+  "de": "Wahlkampf-Einkaufstour"
+ },
+ "me_climate_pledge_modifier": {
+  "en": "Green Transition Pledge",
+  "de": "Versprechen zum grünen Wandel"
+ },
+ "me_colonial_representation_modifier": {
+  "en": "Colonial Representation Granted",
+  "de": "Koloniale Vertretung gewährt"
+ },
+ "me_cyber_defense_modifier": {
+  "en": "Hardened Cyber Defenses",
+  "de": "Verstärkte Cyberabwehr"
+ },
+ "me_data_regulation_modifier": {
+  "en": "Campaign Data Regulations",
+  "de": "Datenschutzregeln im Wahlkampf"
+ },
+ "me_deepfake_exposed_modifier": {
+  "en": "Deepfake Debunked",
+  "de": "Deepfake entlarvt"
+ },
+ "me_digital_decorum_modifier": {
+  "en": "Campaign of Civility",
+  "de": "Kampagne des Anstands"
+ },
+ "me_election_infrastructure_hardened_modifier": {
+  "en": "Election Infrastructure Hardened",
+  "de": "Wahlinfrastruktur gehärtet"
+ },
+ "me_equal_rights_platform_modifier": {
+  "en": "Equal Rights Platform",
+  "de": "Programm für Gleichberechtigung"
+ },
+ "me_foreign_interference_investigation_modifier": {
+  "en": "Election Interference Investigation",
+  "de": "Ermittlungen zur Wahleinmischung"
+ },
+ "me_genetics_ethics_commission_modifier": {
+  "en": "Genetics Ethics Commission",
+  "de": "Ethikkommission für Genetik"
+ },
+ "me_media_savvy_modifier": {
+  "en": "Media Savvy",
+  "de": "Medienkompetenz"
+ },
+ "me_neural_democracy_modifier": {
+  "en": "Neural Democracy Experiment",
+  "de": "Experiment der neuronalen Demokratie"
+ },
+ "me_open_borders_campaign_modifier": {
+  "en": "Open Borders Campaign",
+  "de": "Kampagne für offene Grenzen"
+ },
+ "me_pollution_cleanup_modifier": {
+  "en": "Pollution Cleanup Pledge",
+  "de": "Versprechen zur Umweltsanierung"
+ },
+ "me_security_crackdown_modifier": {
+  "en": "Security Crackdown",
+  "de": "Hartes Durchgreifen"
+ },
+ "me_space_program_pledge_modifier": {
+  "en": "Space Program Pledge",
+  "de": "Versprechen zum Raumfahrtprogramm"
+ },
+ "me_transparency_act_modifier": {
+  "en": "Transparency Act",
+  "de": "Transparenzgesetz"
+ },
+ "mental_health_crisis_active_modifier": {
+  "en": "Mental Health Crisis",
+  "de": "Krise der psychischen Gesundheit"
+ },
+ "mental_health_crisis_ignored_modifier": {
+  "en": "Mental Health Crisis Ignored",
+  "de": "Krise der psychischen Gesundheit ignoriert"
+ },
+ "mental_health_infrastructure_modifier": {
+  "en": "Mental Health Infrastructure",
+  "de": "Infrastruktur für psychische Gesundheit"
+ },
+ "mental_health_leave_modifier": {
+  "en": "Mental Health Leave",
+  "de": "Urlaub für psychische Gesundheit"
+ },
+ "mental_health_neglect_modifier": {
+  "en": "Mental Health Neglect",
+  "de": "Vernachlässigung der psychischen Gesundheit"
+ },
+ "military_disarmament_anger_modifier": {
+  "en": "Military Discontent",
+  "de": "Militärische Unzufriedenheit"
+ },
+ "military_disarmament_purge_modifier": {
+  "en": "Officer Corps Purge",
+  "de": "Säuberung des Offizierskorps"
+ },
+ "military_doctrine_prestige_modifier": {
+  "en": "Military Doctrine Confidence",
+  "de": "Vertrauen in die Militärdoktrin"
+ },
+ "military_neural_program_modifier": {
+  "en": "Military Neural Program",
+  "de": "Militärisches Neuralprogramm"
+ },
+ "mind_upload_nexus_progress": {
+  "en": "Mind Upload Nexus Progress",
+  "de": "Fortschritt: Bewusstseins-Upload-Nexus"
+ },
+ "ministry_aid_distant_advance": {
+  "en": "International Aid Ministry: Distant Crisis Advance",
+  "de": "Ministerium für internationale Hilfe: Ferne Krise – Vorstoß"
+ },
+ "ministry_aid_distant_cautious": {
+  "en": "International Aid Ministry: Distant Crisis Cautious Advance",
+  "de": "Ministerium für internationale Hilfe: Ferne Krise – Vorsichtiger Vorstoß"
+ },
+ "ministry_aid_distant_stall": {
+  "en": "International Aid Ministry: Distant Crisis Stall",
+  "de": "Ministerium für internationale Hilfe: Ferne Krise – Stillstand"
+ },
+ "ministry_commerce_free_trade": {
+  "en": "Commerce Ministry: Free Trade",
+  "de": "Handelsministerium: Freihandel"
+ },
+ "ministry_commerce_trade_advance": {
+  "en": "Commerce Ministry: Trade Advance",
+  "de": "Handelsministerium: Handel – Vorstoß"
+ },
+ "ministry_commerce_trade_cautious": {
+  "en": "Commerce Ministry: Trade Cautious Advance",
+  "de": "Handelsministerium: Handel – Vorsichtiger Vorstoß"
+ },
+ "ministry_commerce_trade_stall": {
+  "en": "Commerce Ministry: Trade Stall",
+  "de": "Handelsministerium: Handel – Stillstand"
+ },
+ "ministry_consumer_industry_led": {
+  "en": "Consumer Protection Ministry: Industry Self-Regulation",
+  "de": "Verbraucherschutzministerium: Selbstregulierung der Industrie"
+ },
+ "ministry_consumer_tainted_advance": {
+  "en": "Consumer Protection Ministry: Tainted Product Advance",
+  "de": "Verbraucherschutzministerium: Verunreinigtes Produkt – Vorstoß"
+ },
+ "ministry_consumer_tainted_cautious": {
+  "en": "Consumer Protection Ministry: Tainted Product Cautious Advance",
+  "de": "Verbraucherschutzministerium: Verunreinigtes Produkt – Vorsichtiger Vorstoß"
+ },
+ "ministry_consumer_tainted_stall": {
+  "en": "Consumer Protection Ministry: Tainted Product Stall",
+  "de": "Verbraucherschutzministerium: Verunreinigtes Produkt – Stillstand"
+ },
+ "ministry_culture_independent_grants": {
+  "en": "Culture Ministry: Independent Grants",
+  "de": "Kulturministerium: Unabhängige Förderung"
+ },
+ "ministry_culture_patronage_advance": {
+  "en": "Culture Ministry: Patronage Advance",
+  "de": "Kulturministerium: Mäzenatentum – Vorstoß"
+ },
+ "ministry_culture_patronage_cautious": {
+  "en": "Culture Ministry: Patronage Cautious Advance",
+  "de": "Kulturministerium: Mäzenatentum – Vorsichtiger Vorstoß"
+ },
+ "ministry_culture_patronage_stall": {
+  "en": "Culture Ministry: Patronage Stall",
+  "de": "Kulturministerium: Mäzenatentum – Stillstand"
+ },
+ "ministry_culture_state_curated": {
+  "en": "Culture Ministry: State-Curated",
+  "de": "Kulturministerium: Staatlich kuratiert"
+ },
+ "ministry_env_pollution_reduction": {
+  "en": "Cleaner Smokestacks",
+  "de": "Sauberere Schornsteine"
+ },
+ "ministry_env_smokestacks_advance": {
+  "en": "Environment Ministry: Smokestacks Advance",
+  "de": "Umweltministerium: Schornsteine – Vorstoß"
+ },
+ "ministry_env_smokestacks_cautious": {
+  "en": "Environment Ministry: Smokestacks Cautious Advance",
+  "de": "Umweltministerium: Schornsteine – Vorsichtiger Vorstoß"
+ },
+ "ministry_env_smokestacks_stall": {
+  "en": "Environment Ministry: Smokestacks Stall",
+  "de": "Umweltministerium: Schornsteine – Stillstand"
+ },
+ "ministry_env_strict_mandatory": {
+  "en": "Environment Ministry: Strict Mandatory Regulations",
+  "de": "Umweltministerium: Strenge Pflichtvorschriften"
+ },
+ "ministry_intel_domestic_focus": {
+  "en": "Intelligence Ministry: Domestic Focus",
+  "de": "Geheimdienstministerium: Inlandsfokus"
+ },
+ "ministry_intel_foreign_focus": {
+  "en": "Intelligence Ministry: Foreign Focus",
+  "de": "Geheimdienstministerium: Auslandsfokus"
+ },
+ "ministry_intel_shadow_advance": {
+  "en": "Intelligence Ministry: Shadow Files Advance",
+  "de": "Geheimdienstministerium: Schattenakten – Vorstoß"
+ },
+ "ministry_intel_shadow_cautious": {
+  "en": "Intelligence Ministry: Shadow Files Cautious Advance",
+  "de": "Geheimdienstministerium: Schattenakten – Vorsichtiger Vorstoß"
+ },
+ "ministry_intel_shadow_stall": {
+  "en": "Intelligence Ministry: Shadow Files Stall",
+  "de": "Geheimdienstministerium: Schattenakten – Stillstand"
+ },
+ "ministry_labor_pro_capital": {
+  "en": "Labor Ministry: Pro-Capital",
+  "de": "Arbeitsministerium: Kapitalfreundlich"
+ },
+ "ministry_labor_pro_labor": {
+  "en": "Labor Ministry: Pro-Labor",
+  "de": "Arbeitsministerium: Arbeiterfreundlich"
+ },
+ "ministry_labor_struggle_advance": {
+  "en": "Labor Ministry: Struggle Advance",
+  "de": "Arbeitsministerium: Arbeitskampf – Vorstoß"
+ },
+ "ministry_labor_struggle_cautious": {
+  "en": "Labor Ministry: Struggle Cautious Advance",
+  "de": "Arbeitsministerium: Arbeitskampf – Vorsichtiger Vorstoß"
+ },
+ "ministry_labor_struggle_stall": {
+  "en": "Labor Ministry: Struggle Stall",
+  "de": "Arbeitsministerium: Arbeitskampf – Stillstand"
+ },
+ "ministry_prop_loudspeaker_advance": {
+  "en": "Propaganda Ministry: Loudspeaker Advance",
+  "de": "Propagandaministerium: Lautsprecher – Vorstoß"
+ },
+ "ministry_prop_loudspeaker_cautious": {
+  "en": "Propaganda Ministry: Loudspeaker Cautious Advance",
+  "de": "Propagandaministerium: Lautsprecher – Vorsichtiger Vorstoß"
+ },
+ "ministry_prop_loudspeaker_stall": {
+  "en": "Propaganda Ministry: Loudspeaker Stall",
+  "de": "Propagandaministerium: Lautsprecher – Stillstand"
+ },
+ "ministry_prop_private_partnership": {
+  "en": "Propaganda Ministry: Private Partnership",
+  "de": "Propagandaministerium: Private Partnerschaft"
+ },
+ "ministry_prop_state_controlled": {
+  "en": "Propaganda Ministry: State-Controlled",
+  "de": "Propagandaministerium: Staatlich kontrolliert"
+ },
+ "ministry_refugee_crisis_advance": {
+  "en": "Refugee Affairs Ministry: Crisis Advance",
+  "de": "Ministerium für Flüchtlingsangelegenheiten: Krise – Vorstoß"
+ },
+ "ministry_refugee_crisis_cautious": {
+  "en": "Refugee Affairs Ministry: Crisis Cautious Advance",
+  "de": "Ministerium für Flüchtlingsangelegenheiten: Krise – Vorsichtiger Vorstoß"
+ },
+ "ministry_refugee_crisis_stall": {
+  "en": "Refugee Affairs Ministry: Crisis Stall",
+  "de": "Ministerium für Flüchtlingsangelegenheiten: Krise – Stillstand"
+ },
+ "ministry_sci_applied_focus": {
+  "en": "Science Ministry: Applied Research Focus",
+  "de": "Wissenschaftsministerium: Fokus auf angewandte Forschung"
+ },
+ "ministry_sci_basic_focus": {
+  "en": "Science Ministry: Basic Research Focus",
+  "de": "Wissenschaftsministerium: Fokus auf Grundlagenforschung"
+ },
+ "ministry_sci_laboratory_advance": {
+  "en": "Science Ministry: Laboratory Advance",
+  "de": "Wissenschaftsministerium: Labor – Vorstoß"
+ },
+ "ministry_sci_laboratory_cautious": {
+  "en": "Science Ministry: Laboratory Cautious Advance",
+  "de": "Wissenschaftsministerium: Labor – Vorsichtiger Vorstoß"
+ },
+ "ministry_sci_laboratory_stall": {
+  "en": "Science Ministry: Laboratory Stall",
+  "de": "Wissenschaftsministerium: Labor – Stillstand"
+ },
+ "ministry_thought_watchers_advance": {
+  "en": "Thought Control Ministry: Watchers Advance",
+  "de": "Ministerium für Gedankenkontrolle: Wächter – Vorstoß"
+ },
+ "ministry_thought_watchers_cautious": {
+  "en": "Thought Control Ministry: Watchers Cautious Advance",
+  "de": "Ministerium für Gedankenkontrolle: Wächter – Vorsichtiger Vorstoß"
+ },
+ "ministry_thought_watchers_stall": {
+  "en": "Thought Control Ministry: Watchers Stall",
+  "de": "Ministerium für Gedankenkontrolle: Wächter – Stillstand"
+ },
+ "ministry_urban_density_focused": {
+  "en": "Urban Planning Ministry: Density-Focused",
+  "de": "Stadtplanungsministerium: Fokus auf Dichte"
+ },
+ "ministry_urban_housing_strain": {
+  "en": "Urban Infrastructure Strain",
+  "de": "Belastete Stadtinfrastruktur"
+ },
+ "ministry_urban_sprawl_advance": {
+  "en": "Urban Planning Ministry: Urban Sprawl Advance",
+  "de": "Stadtplanungsministerium: Zersiedlung – Vorstoß"
+ },
+ "ministry_urban_sprawl_cautious": {
+  "en": "Urban Planning Ministry: Urban Sprawl Cautious Advance",
+  "de": "Stadtplanungsministerium: Zersiedlung – Vorsichtiger Vorstoß"
+ },
+ "ministry_urban_sprawl_friendly": {
+  "en": "Urban Planning Ministry: Sprawl-Friendly",
+  "de": "Stadtplanungsministerium: Zersiedlungsfreundlich"
+ },
+ "ministry_urban_sprawl_stall": {
+  "en": "Urban Planning Ministry: Sprawl Stall",
+  "de": "Stadtplanungsministerium: Zersiedlung – Stillstand"
+ },
+ "ministry_war_civilian_led": {
+  "en": "War Ministry: Civilian-Led",
+  "de": "Kriegsministerium: Zivil geführt"
+ },
+ "ministry_war_general_led": {
+  "en": "War Ministry: General-Led",
+  "de": "Kriegsministerium: Von Generälen geführt"
+ },
+ "ministry_war_generals_advance": {
+  "en": "Ministry of War: Generals Advance",
+  "de": "Kriegsministerium: Generäle – Vorstoß"
+ },
+ "ministry_war_generals_cautious": {
+  "en": "Ministry of War: Generals Cautious Advance",
+  "de": "Kriegsministerium: Generäle – Vorsichtiger Vorstoß"
+ },
+ "ministry_war_generals_stall": {
+  "en": "War Ministry: Generals’ War Room Stall",
+  "de": "Kriegsministerium: Kriegsraum der Generäle – Stillstand"
+ },
+ "minority_business_protection_modifier": {
+  "en": "Minority Business Protection",
+  "de": "Schutz für Minderheitsunternehmen"
+ },
+ "minority_protection_state_modifier": {
+  "en": "Minority Protection",
+  "de": "Minderheitenschutz"
+ },
+ "minority_reform_movement_radicalism": {
+  "en": "Reform Push (Civil Rights)",
+  "de": "Reformdrang (Bürgerrechte)"
+ },
+ "minority_rights_reform_push_modifier": {
+  "en": "Minority Rights Reform Push",
+  "de": "Reformdrang für Minderheitenrechte"
+ },
+ "minrights_solidarity_march_advance": {
+  "en": "Minority Rights: Solidarity March Advance",
+  "de": "Minderheitenrechte: Solidaritätsmarsch – Vorstoß"
+ },
+ "minrights_solidarity_march_cautious": {
+  "en": "Minority Rights: Solidarity March Cautious Advance",
+  "de": "Minderheitenrechte: Solidaritätsmarsch – Vorsichtiger Vorstoß"
+ },
+ "minrights_solidarity_march_stall": {
+  "en": "Minority Rights: Solidarity March Stall",
+  "de": "Minderheitenrechte: Solidaritätsmarsch – Stillstand"
+ },
+ "monpol_currency_devaluation_pressure": {
+  "en": "Debased Currency: Prices Rising",
+  "de": "Entwertete Währung: Steigende Preise"
+ },
+ "monpol_currency_stability_pressure": {
+  "en": "Stabilized Currency: Prices Steadying",
+  "de": "Stabilisierte Währung: Preise stabilisieren sich"
+ },
+ "monpol_gold_hoarders_advance": {
+  "en": "Monetary Policy: Gold Hoarders Advance",
+  "de": "Geldpolitik: Goldhorter – Vorstoß"
+ },
+ "monpol_gold_hoarders_cautious": {
+  "en": "Monetary Policy: Gold Hoarders Cautious Advance",
+  "de": "Geldpolitik: Goldhorter – Vorsichtiger Vorstoß"
+ },
+ "monpol_gold_hoarders_stall": {
+  "en": "Monetary Policy: Gold Hoarders Stall",
+  "de": "Geldpolitik: Goldhorter – Stillstand"
+ },
+ "monpol_printing_press_advance": {
+  "en": "Monetary Policy: Printing Press Advance",
+  "de": "Geldpolitik: Notenpresse – Vorstoß"
+ },
+ "monpol_printing_press_cautious": {
+  "en": "Monetary Policy: Printing Press Cautious Advance",
+  "de": "Geldpolitik: Notenpresse – Vorsichtiger Vorstoß"
+ },
+ "monpol_printing_press_stall": {
+  "en": "Monetary Policy: Printing Press Stall",
+  "de": "Geldpolitik: Notenpresse – Stillstand"
+ },
+ "moral_panic_dismissed_modifier": {
+  "en": "Moral Panic Dismissed",
+  "de": "Moralpanik abgewiesen"
+ },
+ "nation_building_controversy_modifier": {
+  "en": "Nation-Building Controversy",
+  "de": "Kontroverse um Nationenbildung"
+ },
+ "nation_building_investment_modifier": {
+  "en": "Nation Building Investment",
+  "de": "Investition in Nationenbildung"
+ },
+ "nation_building_unity_modifier": {
+  "en": "Nation-Building Unity",
+  "de": "Einheit durch Nationenbildung"
+ },
+ "nd_ai_armed_rival": {
+  "en": "A rival of ours holds nuclear weapons",
+  "de": "Ein Rivale von uns besitzt Nuklearwaffen"
+ },
+ "nd_ai_beneficiary_at_war": {
+  "en": "They are at war: we would be taking on a live commitment",
+  "de": "Sie befinden sich im Krieg: Wir würden eine laufende Verpflichtung übernehmen"
+ },
+ "nd_ai_warheads_next_door": {
+  "en": "Their warheads are next door",
+  "de": "Ihre Sprengköpfe liegen direkt nebenan"
+ },
+ "nd_ai_warheads_unaccounted_for": {
+  "en": "Warheads from their arsenal are unaccounted for",
+  "de": "Sprengköpfe aus ihrem Arsenal sind unauffindbar"
+ },
+ "nd_ai_we_are_unarmed": {
+  "en": "We have no nuclear weapons of our own",
+  "de": "Wir besitzen selbst keine Nuklearwaffen"
+ },
+ "nd_authority_1": {
+  "en": "Central Authorization",
+  "de": "Zentrale Genehmigung"
+ },
+ "nd_authority_2": {
+  "en": "Conditional Delegation",
+  "de": "Bedingte Delegation"
+ },
+ "nd_authority_3": {
+  "en": "Launch on Warning",
+  "de": "Start bei Vorwarnung"
+ },
+ "nd_authority_4": {
+  "en": "Automatic Retaliation",
+  "de": "Automatische Vergeltung"
+ },
+ "nd_cd_backed_line": {
+  "en": "#v [THIS.Var('nd_cd_backed').GetValue|+0]#!  A protector has declared for the threatened side",
+  "de": "#v [THIS.Var('nd_cd_backed').GetValue|+0]#!  Eine Schutzmacht hat sich für die bedrohte Seite erklärt"
+ },
+ "nd_cd_counter_line": {
+  "en": "#v [THIS.Var('nd_cd_counter').GetValue|+0]#!  It was answered with a counter-threat",
+  "de": "#v [THIS.Var('nd_cd_counter').GetValue|+0]#!  Sie wurde mit einer Gegendrohung beantwortet"
+ },
+ "nd_cd_dampened_line": {
+  "en": "#v ×0.7#!  The threatened side has no arsenal and no armed protector",
+  "de": "#v ×0,7#!  Die bedrohte Seite hat kein Arsenal und keine bewaffnete Schutzmacht"
+ },
+ "nd_cd_exercise_line": {
+  "en": "#v [THIS.Var('nd_cd_exercise').GetValue|+0]#!  An exercise is under way",
+  "de": "#v [THIS.Var('nd_cd_exercise').GetValue|+0]#!  Eine Übung ist im Gange"
+ },
+ "nd_cd_issuer_readiness_line": {
+  "en": "#v [THIS.Var('nd_cd_issuer_readiness').GetValue|+0]#!  The threatening side's readiness",
+  "de": "#v [THIS.Var('nd_cd_issuer_readiness').GetValue|+0]#!  Die Bereitschaft der drohenden Seite"
+ },
+ "nd_cd_public_line": {
+  "en": "#v [THIS.Var('nd_cd_public').GetValue|+0]#!  The threat is public",
+  "de": "#v [THIS.Var('nd_cd_public').GetValue|+0]#!  Die Drohung ist öffentlich"
+ },
+ "nd_cd_reliability_line": {
+  "en": "#v [THIS.Var('nd_cd_reliability').GetValue|+0]#!  The threatening side's command reliability",
+  "de": "#v [THIS.Var('nd_cd_reliability').GetValue|+0]#!  Die Befehlszuverlässigkeit der drohenden Seite"
+ },
+ "nd_cd_stage_line": {
+  "en": "#v [THIS.Var('nd_cd_stage').GetValue|+0]#!  The stage",
+  "de": "#v [THIS.Var('nd_cd_stage').GetValue|+0]#!  Die Stufe"
+ },
+ "nd_cd_talks_line": {
+  "en": "#v [THIS.Var('nd_cd_talks').GetValue|+0]#!  Talks are open",
+  "de": "#v [THIS.Var('nd_cd_talks').GetValue|+0]#!  Gespräche sind offen"
+ },
+ "nd_cd_target_readiness_line": {
+  "en": "#v [THIS.Var('nd_cd_target_readiness').GetValue|+0]#!  The threatened side's readiness",
+  "de": "#v [THIS.Var('nd_cd_target_readiness').GetValue|+0]#!  Die Bereitschaft der bedrohten Seite"
+ },
+ "nd_cd_total_line": {
+  "en": "#v = [THIS.ScriptValue('nd_display_crisis_danger')|0]#!  (held between 0 and 100)",
+  "de": "#v = [THIS.ScriptValue('nd_display_crisis_danger')|0]#!  (gehalten zwischen 0 und 100)"
+ },
+ "nd_cd_weeks_line": {
+  "en": "#v [THIS.Var('nd_cd_weeks').GetValue|+0]#!  How long it has run",
+  "de": "#v [THIS.Var('nd_cd_weeks').GetValue|+0]#!  Wie lange es schon läuft"
+ },
+ "nd_concession_long_1": {
+  "en": "The side that concedes backs down in the diplomatic play, and the other side wins it — war goals and all.",
+  "de": "Die nachgebende Seite zieht sich aus dem Diplomatiespiel zurück, und die andere Seite gewinnt es — samt Kriegszielen."
+ },
+ "nd_concession_long_2": {
+  "en": "The side that concedes loses #R 35#! war support in the war, which can force it to capitulate.",
+  "de": "Die nachgebende Seite verliert #R 35#! Kriegsunterstützung im Krieg, was sie zur Kapitulation zwingen kann."
+ },
+ "nd_concession_long_3": {
+  "en": "The side that concedes leaves the protected country alone: it backs down in the play, or loses #R 35#! war support in that war.",
+  "de": "Die nachgebende Seite lässt das geschützte Land in Ruhe: Sie zieht sich aus dem Spiel zurück oder verliert #R 35#! Kriegsunterstützung in diesem Krieg."
+ },
+ "nd_concession_long_4": {
+  "en": "The side that concedes has its weapons programme frozen for #v 10#! years.",
+  "de": "Bei der nachgebenden Seite wird das Waffenprogramm für #v 10#! Jahre eingefroren."
+ },
+ "nd_concession_long_5": {
+  "en": "The side that concedes stands its forces down to Routine, held there for #v 24#! months.",
+  "de": "Die nachgebende Seite stuft ihre Streitkräfte auf Routine zurück und hält sie dort für #v 24#! Monate."
+ },
+ "nd_concession_past_they_1": {
+  "en": "They backed down in the diplomatic play, and our side won it.",
+  "de": "Sie zogen sich aus dem Diplomatiespiel zurück, und unsere Seite gewann es."
+ },
+ "nd_concession_past_they_2": {
+  "en": "Their war support in our war fell by #R 35#!.",
+  "de": "Ihre Kriegsunterstützung in unserem Krieg fiel um #R 35#!."
+ },
+ "nd_concession_past_they_3": {
+  "en": "They left the country we protect alone: they backed down in the play, or their war support in that war fell by #R 35#!.",
+  "de": "Sie ließen das Land, das wir schützen, in Ruhe: Sie zogen sich aus dem Spiel zurück, oder ihre Kriegsunterstützung in diesem Krieg fiel um #R 35#!."
+ },
+ "nd_concession_past_they_4": {
+  "en": "Their weapons programme is frozen for #v 10#! years.",
+  "de": "Ihr Waffenprogramm ist für #v 10#! Jahre eingefroren."
+ },
+ "nd_concession_past_they_5": {
+  "en": "Their forces stood down to #v Routine#!, and are held there for #v 24#! months.",
+  "de": "Ihre Streitkräfte wurden auf #v Routine#! zurückgestuft und dort für #v 24#! Monate gehalten."
+ },
+ "nd_concession_past_we_1": {
+  "en": "We backed down in the diplomatic play, and their side won it.",
+  "de": "Wir zogen uns aus dem Diplomatiespiel zurück, und ihre Seite gewann es."
+ },
+ "nd_concession_past_we_2": {
+  "en": "Our war support in the war with them fell by #R 35#!.",
+  "de": "Unsere Kriegsunterstützung im Krieg mit ihnen fiel um #R 35#!."
+ },
+ "nd_concession_past_we_3": {
+  "en": "We left the country they protect alone: we backed down in the play, or our war support in that war fell by #R 35#!.",
+  "de": "Wir ließen das Land, das sie schützen, in Ruhe: Wir zogen uns aus dem Spiel zurück, oder unsere Kriegsunterstützung in diesem Krieg fiel um #R 35#!."
+ },
+ "nd_concession_past_we_4": {
+  "en": "Our weapons programme is frozen for #v 10#! years.",
+  "de": "Unser Waffenprogramm ist für #v 10#! Jahre eingefroren."
+ },
+ "nd_concession_past_we_5": {
+  "en": "Our forces stood down to #v Routine#!, and are held there for #v 24#! months.",
+  "de": "Unsere Streitkräfte wurden auf #v Routine#! zurückgestuft und dort für #v 24#! Monate gehalten."
+ },
+ "nd_concession_short_1": {
+  "en": "Loses the play",
+  "de": "Verliert das Spiel"
+ },
+ "nd_concession_short_2": {
+  "en": "War support #R -35#!",
+  "de": "Kriegsunterstützung #R -35#!"
+ },
+ "nd_concession_short_3": {
+  "en": "Leaves the protected alone",
+  "de": "Lässt den Geschützten in Ruhe"
+ },
+ "nd_concession_short_4": {
+  "en": "Programme frozen #v 10#! years",
+  "de": "Programm für #v 10#! Jahre eingefroren"
+ },
+ "nd_concession_short_5": {
+  "en": "Stands down #v 24#! months",
+  "de": "Zurückgestuft für #v 24#! Monate"
+ },
+ "nd_crisis_coercive_success": {
+  "en": "Nuclear Brinkmanship Rewarded",
+  "de": "Nukleare Kraftprobe belohnt"
+ },
+ "nd_crisis_demand_1": {
+  "en": "back down in the diplomatic play between them",
+  "de": "im Diplomatiespiel zwischen ihnen nachzugeben"
+ },
+ "nd_crisis_demand_2": {
+  "en": "give up the war",
+  "de": "den Krieg aufzugeben"
+ },
+ "nd_crisis_demand_3": {
+  "en": "leave the country it protects alone",
+  "de": "das Land, das es beschützt, in Ruhe zu lassen"
+ },
+ "nd_crisis_demand_4": {
+  "en": "freeze its nuclear weapons programme",
+  "de": "sein Nuklearwaffenprogramm einzufrieren"
+ },
+ "nd_crisis_demand_5": {
+  "en": "stand its nuclear forces down",
+  "de": "seine Nuklearstreitkräfte herunterzufahren"
+ },
+ "nd_crisis_dispute_1": {
+  "en": "A diplomatic play",
+  "de": "Ein Diplomatiespiel"
+ },
+ "nd_crisis_dispute_2": {
+  "en": "A war",
+  "de": "Ein Krieg"
+ },
+ "nd_crisis_dispute_3": {
+  "en": "An attack on a guaranteed country",
+  "de": "Ein Angriff auf ein garantiertes Land"
+ },
+ "nd_crisis_dispute_4": {
+  "en": "A weapons programme",
+  "de": "Ein Waffenprogramm"
+ },
+ "nd_crisis_dispute_5": {
+  "en": "Forces on alert",
+  "de": "Streitkräfte in Alarmbereitschaft"
+ },
+ "nd_crisis_mutual_restraint": {
+  "en": "Mutual Nuclear Restraint",
+  "de": "Gegenseitige Nukleare Zurückhaltung"
+ },
+ "nd_crisis_opponent_line": {
+  "en": "Against #bold [THIS.GetCountry.GetName]#!",
+  "de": "Gegen #bold [THIS.GetCountry.GetName]#!"
+ },
+ "nd_crisis_programme_freeze": {
+  "en": "Weapons Programme Frozen",
+  "de": "Waffenprogramm eingefroren"
+ },
+ "nd_crisis_public_0": {
+  "en": "private",
+  "de": "privat"
+ },
+ "nd_crisis_public_1": {
+  "en": "public",
+  "de": "öffentlich"
+ },
+ "nd_crisis_role_1": {
+  "en": "We made the threat",
+  "de": "Wir haben die Drohung ausgesprochen"
+ },
+ "nd_crisis_role_2": {
+  "en": "We are the target",
+  "de": "Wir sind das Ziel"
+ },
+ "nd_crisis_stage_1": {
+  "en": "Warning",
+  "de": "Warnung"
+ },
+ "nd_crisis_stage_2": {
+  "en": "Confrontation",
+  "de": "Konfrontation"
+ },
+ "nd_crisis_stage_3": {
+  "en": "#R Acute#!",
+  "de": "#R Akut#!"
+ },
+ "nd_crisis_stood_firm": {
+  "en": "Faced Down a Nuclear Threat",
+  "de": "Einer nuklearen Drohung standgehalten"
+ },
+ "nd_danger_word_0": {
+  "en": "#G Contained#!",
+  "de": "#G Eingedämmt#!"
+ },
+ "nd_danger_word_1": {
+  "en": "#Y Tense#!",
+  "de": "#Y Angespannt#!"
+ },
+ "nd_danger_word_2": {
+  "en": "#R Dangerous#!",
+  "de": "#R Gefährlich#!"
+ },
+ "nd_danger_word_3": {
+  "en": "#R Critical#!",
+  "de": "#R Kritisch#!"
+ },
+ "nd_doctrine_1": {
+  "en": "No First Use",
+  "de": "Kein Erstschlag"
+ },
+ "nd_doctrine_2": {
+  "en": "Existential Deterrence",
+  "de": "Existenzielle Abschreckung"
+ },
+ "nd_doctrine_3": {
+  "en": "Flexible First Use",
+  "de": "Flexibler Erstschlag"
+ },
+ "nd_doctrine_4": {
+  "en": "Nuclear Compellence",
+  "de": "Nukleare Nötigung"
+ },
+ "nd_doctrine_5": {
+  "en": "Nuclear Warfighting",
+  "de": "Nukleare Kriegsführung"
+ },
+ "nd_doctrine_mod_1": {
+  "en": "Doctrine: No First Use",
+  "de": "Doktrin: Kein Erstschlag"
+ },
+ "nd_doctrine_mod_2": {
+  "en": "Doctrine: Existential Deterrence",
+  "de": "Doktrin: Existenzielle Abschreckung"
+ },
+ "nd_doctrine_mod_3": {
+  "en": "Doctrine: Flexible First Use",
+  "de": "Doktrin: Flexibler Erstschlag"
+ },
+ "nd_doctrine_mod_4": {
+  "en": "Doctrine: Nuclear Compellence",
+  "de": "Doktrin: Nukleare Nötigung"
+ },
+ "nd_doctrine_mod_5": {
+  "en": "Doctrine: Nuclear Warfighting",
+  "de": "Doktrin: Nukleare Kriegsführung"
+ },
+ "nd_ft_reason_1": {
+  "en": "Backed: the threatening side's doctrine permits a nuclear strike in this war now. Pressure to concede +10.",
+  "de": "Gedeckt: Die Doktrin der drohenden Seite erlaubt jetzt einen Nuklearschlag in diesem Krieg. Druck zum Nachgeben +10."
+ },
+ "nd_ft_reason_2": {
+  "en": "Backed: under Nuclear Compellence or Warfighting, a threat that is defied licenses a strike. Pressure to concede +10.",
+  "de": "Gedeckt: Unter Nuklearer Nötigung oder Nuklearer Kriegsführung berechtigt eine missachtete Drohung zu einem Schlag. Druck zum Nachgeben +10."
+ },
+ "nd_ft_reason_3": {
+  "en": "Uncertain: Flexible First Use would allow a strike only if this became a war that went badly or reached core territory.",
+  "de": "Ungewiss: Flexibler Erstschlag würde einen Schlag nur erlauben, wenn dies zu einem Krieg würde, der schlecht liefe oder das Kernland erreichte."
+ },
+ "nd_ft_reason_4": {
+  "en": "Uncertain: Existential Deterrence covers what is at stake here — survival, core territory, or a protected country — if this becomes a war.",
+  "de": "Ungewiss: Existenzielle Abschreckung deckt das ab, was hier auf dem Spiel steht — Überleben, Kernland oder ein geschütztes Land —, falls dies zu einem Krieg wird."
+ },
+ "nd_ft_reason_5": {
+  "en": "A bluff: the threatening side's doctrine does not allow a first strike here. Pressure to concede -25.",
+  "de": "Ein Bluff: Die Doktrin der drohenden Seite erlaubt hier keinen Erstschlag. Druck zum Nachgeben -25."
+ },
+ "nd_ft_reason_6": {
+  "en": "A bluff: the threatening side's Rules of War law forbids a nuclear strike. Pressure to concede -25.",
+  "de": "Ein Bluff: Das Gesetz der Kriegsregeln der drohenden Seite verbietet einen Nuklearschlag. Druck zum Nachgeben -25."
+ },
+ "nd_ft_reason_7": {
+  "en": "A bluff: the threatening side has pledged No First Use. Pressure to concede -35.",
+  "de": "Ein Bluff: Die drohende Seite hat Kein Erstschlag zugesagt. Druck zum Nachgeben -35."
+ },
+ "nd_ft_reason_unknown": {
+  "en": "Not yet assessed: the figures update each week.",
+  "de": "Noch nicht bewertet: Die Zahlen werden jede Woche aktualisiert."
+ },
+ "nd_ft_word_backed": {
+  "en": "#G Backed#!",
+  "de": "#G Gedeckt#!"
+ },
+ "nd_ft_word_bluff": {
+  "en": "#R A bluff#!",
+  "de": "#R Ein Bluff#!"
+ },
+ "nd_ft_word_uncertain": {
+  "en": "#Y Uncertain#!",
+  "de": "#Y Ungewiss#!"
+ },
+ "nd_home_line_business": {
+  "en": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — business",
+  "de": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — Wirtschaft"
+ },
+ "nd_home_line_business_hawkish": {
+  "en": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — business, hawkish",
+  "de": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — Wirtschaft, falkenhaft"
+ },
+ "nd_home_line_business_restrained": {
+  "en": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — business, restrained",
+  "de": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — Wirtschaft, zurückhaltend"
+ },
+ "nd_home_line_militarist": {
+  "en": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — militarist",
+  "de": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — Militaristen"
+ },
+ "nd_home_line_militarist_mild": {
+  "en": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — militarist (mild)",
+  "de": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — Militaristen (mild)"
+ },
+ "nd_home_line_officers": {
+  "en": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — officers",
+  "de": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — Offiziere"
+ },
+ "nd_home_line_officers_hawkish": {
+  "en": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — officers, hawkish",
+  "de": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — Offiziere, falkenhaft"
+ },
+ "nd_home_line_officers_restrained": {
+  "en": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — officers, restrained",
+  "de": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — Offiziere, zurückhaltend"
+ },
+ "nd_home_line_restraint": {
+  "en": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — restraint",
+  "de": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — Zurückhaltung"
+ },
+ "nd_home_line_restraint_mild": {
+  "en": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — restraint (mild)",
+  "de": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — Zurückhaltung (mild)"
+ },
+ "nd_home_list_none": {
+  "en": "#lore No interest group holds a view on our posture.#!",
+  "de": "#lore Keine Interessengruppe hat eine Meinung zu unserer Haltung.#!"
+ },
+ "nd_home_list_not_reviewed": {
+  "en": "#lore Not reviewed yet: the interest groups judge our posture at the start of each month.#!",
+  "de": "#lore Noch nicht bewertet: Die Interessengruppen beurteilen unsere Haltung zu Beginn jedes Monats.#!"
+ },
+ "nd_home_list_reviewed": {
+  "en": "#lore Reviewed monthly.#!",
+  "de": "#lore Wird monatlich bewertet.#!"
+ },
+ "nd_home_list_waiting": {
+  "en": "#lore Opinions of our doctrine and readiness start in #v [THIS.ScriptValue('nd_display_stance_months_left')|0]#! months; the Industrialists' business concerns count already.#!",
+  "de": "#lore Meinungen zu unserer Doktrin und Bereitschaft beginnen in #v [THIS.ScriptValue('nd_display_stance_months_left')|0]#! Monaten; die wirtschaftlichen Anliegen der Industriellen zählen schon jetzt.#!"
+ },
+ "nd_home_terms_business": {
+  "en": "#lore       long alerts and open crises [THIS.Var('nd_ig_term_business').GetValue|+0]#!",
+  "de": "#lore       lange Alarmbereitschaft und offene Krisen [THIS.Var('nd_ig_term_business').GetValue|+0]#!"
+ },
+ "nd_home_terms_business_lean": {
+  "en": "#lore       long alerts and open crises [THIS.Var('nd_ig_term_business').GetValue|+0] · doctrine [THIS.Var('nd_ig_term_doctrine').GetValue|+0]#!",
+  "de": "#lore       lange Alarmbereitschaft und offene Krisen [THIS.Var('nd_ig_term_business').GetValue|+0] · Doktrin [THIS.Var('nd_ig_term_doctrine').GetValue|+0]#!"
+ },
+ "nd_home_terms_militarist": {
+  "en": "#lore       doctrine [THIS.Var('nd_ig_term_doctrine').GetValue|+0] · readiness [THIS.Var('nd_ig_term_readiness').GetValue|+0]#!",
+  "de": "#lore       Doktrin [THIS.Var('nd_ig_term_doctrine').GetValue|+0] · Bereitschaft [THIS.Var('nd_ig_term_readiness').GetValue|+0]#!"
+ },
+ "nd_home_terms_officers": {
+  "en": "#lore       doctrine [THIS.Var('nd_ig_term_doctrine').GetValue|+0] · readiness [THIS.Var('nd_ig_term_readiness').GetValue|+0] · crew strain [THIS.Var('nd_ig_term_strain').GetValue|+0]#!",
+  "de": "#lore       Doktrin [THIS.Var('nd_ig_term_doctrine').GetValue|+0] · Bereitschaft [THIS.Var('nd_ig_term_readiness').GetValue|+0] · Belastung der Mannschaft [THIS.Var('nd_ig_term_strain').GetValue|+0]#!"
+ },
+ "nd_home_terms_restraint": {
+  "en": "#lore       doctrine [THIS.Var('nd_ig_term_doctrine').GetValue|+0] · readiness [THIS.Var('nd_ig_term_readiness').GetValue|+0] · launch authority [THIS.Var('nd_ig_term_authority').GetValue|+0] · the arsenal itself [THIS.Var('nd_ig_term_possession').GetValue|+0]#!",
+  "de": "#lore       Doktrin [THIS.Var('nd_ig_term_doctrine').GetValue|+0] · Bereitschaft [THIS.Var('nd_ig_term_readiness').GetValue|+0] · Startbefugnis [THIS.Var('nd_ig_term_authority').GetValue|+0] · das Arsenal selbst [THIS.Var('nd_ig_term_possession').GetValue|+0]#!"
+ },
+ "nd_incident_coverup_exposed": {
+  "en": "Nuclear Cover-Up Exposed",
+  "de": "Nukleare Vertuschung aufgedeckt"
+ },
+ "nd_last_crisis_line": {
+  "en": "#lore Last crisis:#! [THIS.GetCountry.GetName]",
+  "de": "#lore Letzte Krise:#! [THIS.GetCountry.GetName]"
+ },
+ "nd_last_outcome_backed_down": {
+  "en": "#R The threat was abandoned.#!",
+  "de": "#R Die Drohung wurde aufgegeben.#!"
+ },
+ "nd_last_outcome_conceded": {
+  "en": "#R We conceded.#!",
+  "de": "#R Wir haben nachgegeben.#!"
+ },
+ "nd_last_outcome_expired": {
+  "en": "It lapsed with nothing settled.",
+  "de": "Sie lief aus, ohne dass etwas geklärt wurde."
+ },
+ "nd_last_outcome_neutral": {
+  "en": "The dispute ended without a clear winner.",
+  "de": "Der Streit endete ohne klaren Sieger."
+ },
+ "nd_last_outcome_standdown": {
+  "en": "Both sides stood down together.",
+  "de": "Beide Seiten standen gemeinsam herunter."
+ },
+ "nd_last_outcome_stood_firm": {
+  "en": "#G We faced the threat down.#!",
+  "de": "#G Wir haben der Drohung standgehalten.#!"
+ },
+ "nd_last_outcome_use": {
+  "en": "#R It ended in nuclear use.#!",
+  "de": "#R Es endete im nuklearen Einsatz.#!"
+ },
+ "nd_last_outcome_war_ended": {
+  "en": "The war it was about has ended.",
+  "de": "Der Krieg, um den es ging, ist beendet."
+ },
+ "nd_last_outcome_win": {
+  "en": "#G Our objective was achieved.#!",
+  "de": "#G Unser Ziel wurde erreicht.#!"
+ },
+ "nd_next_pressure_none": {
+  "en": "Not before a Confrontation",
+  "de": "Nicht vor einer Konfrontation"
+ },
+ "nd_next_pressure_paused": {
+  "en": "Paused: talks are open",
+  "de": "Pausiert: Gespräche sind offen"
+ },
+ "nd_next_pressure_weeks": {
+  "en": "In #v [THIS.ScriptValue('nd_display_next_pressure_weeks')|0]#! weeks",
+  "de": "In #v [THIS.ScriptValue('nd_display_next_pressure_weeks')|0]#! Wochen"
+ },
+ "nd_nuclear_ultimatum_action": {
+  "en": "Public Nuclear Ultimatum",
+  "de": "Öffentliches Nuklear-Ultimatum"
+ },
+ "nd_nuclear_ultimatum_action_action_notification_name": {
+  "en": "Nuclear Ultimatum",
+  "de": "Nuklear-Ultimatum"
+ },
+ "nd_nuclear_ultimatum_action_action_notification_third_party_name": {
+  "en": "Nuclear Ultimatum from [INITIATOR_COUNTRY.GetName]",
+  "de": "Nuklear-Ultimatum von [INITIATOR_COUNTRY.GetAltName('DAT')]"
+ },
+ "nd_nuclear_ultimatum_action_action_propose_name": {
+  "en": "Issue a Public Nuclear Ultimatum",
+  "de": "Ein öffentliches Nuklear-Ultimatum stellen"
+ },
+ "nd_nuclear_warning_action": {
+  "en": "Private Nuclear Warning",
+  "de": "Private Nuklearwarnung"
+ },
+ "nd_nuclear_warning_action_action_notification_name": {
+  "en": "Private Nuclear Warning",
+  "de": "Private Nuklearwarnung"
+ },
+ "nd_nuclear_warning_action_action_propose_name": {
+  "en": "Issue a Private Nuclear Warning",
+  "de": "Eine private Nuklearwarnung aussprechen"
+ },
+ "nd_pledge_broken_mod": {
+  "en": "Broken Nuclear Pledge",
+  "de": "Gebrochene nukleare Zusage"
+ },
+ "nd_pledge_state_broken": {
+  "en": "#R We broke a nuclear pledge#! — remembered for ten years",
+  "de": "#R Wir haben eine nukleare Zusage gebrochen#! – zehn Jahre lang in Erinnerung"
+ },
+ "nd_pledge_state_holding": {
+  "en": "#G Our non-use pledges hold#!",
+  "de": "#G Unsere Nichteinsatz-Zusagen halten#!"
+ },
+ "nd_pledge_state_none": {
+  "en": "No pledges given",
+  "de": "Keine Zusagen abgegeben"
+ },
+ "nd_posture_approval_minus_1": {
+  "en": "Nuclear Posture: Uneasy",
+  "de": "Nukleare Haltung: Unbehaglich"
+ },
+ "nd_posture_approval_minus_2": {
+  "en": "Nuclear Posture: Opposed",
+  "de": "Nukleare Haltung: Ablehnend"
+ },
+ "nd_posture_approval_plus_1": {
+  "en": "Nuclear Posture: Approving",
+  "de": "Nukleare Haltung: Zustimmend"
+ },
+ "nd_posture_approval_plus_2": {
+  "en": "Nuclear Posture: Enthusiastic",
+  "de": "Nukleare Haltung: Begeistert"
+ },
+ "nd_readiness_0": {
+  "en": "Recessed",
+  "de": "Eingelagert"
+ },
+ "nd_readiness_1": {
+  "en": "Routine",
+  "de": "Routine"
+ },
+ "nd_readiness_2": {
+  "en": "Heightened",
+  "de": "Erhöht"
+ },
+ "nd_readiness_3": {
+  "en": "High Alert",
+  "de": "Hohe Alarmbereitschaft"
+ },
+ "nd_readiness_mod_2": {
+  "en": "Heightened Nuclear Readiness",
+  "de": "Erhöhte nukleare Bereitschaft"
+ },
+ "nd_readiness_mod_3": {
+  "en": "Nuclear Forces on High Alert",
+  "de": "Nuklearstreitkräfte in hoher Alarmbereitschaft"
+ },
+ "nd_readiness_moving_0": {
+  "en": " #lore (standing down to Recessed)#!",
+  "de": " #lore (Rückstufung auf „Eingelagert“)#!"
+ },
+ "nd_readiness_moving_1": {
+  "en": " #lore (standing down to Routine)#!",
+  "de": " #lore (Rückstufung auf „Routine“)#!"
+ },
+ "nd_readiness_moving_1_up": {
+  "en": " #lore (mating the warheads: moving up to Routine)#!",
+  "de": " #lore (Scharfmachen der Sprengköpfe: Hochstufung auf „Routine“)#!"
+ },
+ "nd_readiness_moving_2": {
+  "en": " #lore (moving to Heightened)#!",
+  "de": " #lore (Hochstufung auf „Erhöht“)#!"
+ },
+ "nd_readiness_moving_3": {
+  "en": " #lore (moving to High Alert)#!",
+  "de": " #lore (Hochstufung auf „Hohe Alarmbereitschaft“)#!"
+ },
+ "nd_repudiate_pledge_action": {
+  "en": "Repudiate Non-Use Pledge",
+  "de": "Nichteinsatz-Zusage widerrufen"
+ },
+ "nd_repudiate_pledge_action_action_notification_name": {
+  "en": "Non-Use Pledge Repudiated",
+  "de": "Nichteinsatz-Zusage widerrufen"
+ },
+ "nd_repudiate_pledge_action_action_notification_third_party_name": {
+  "en": "[INITIATOR_COUNTRY.GetName] Repudiates Non-Use Pledge",
+  "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] widerruft die Nichteinsatz-Zusage"
+ },
+ "nd_repudiate_pledge_action_action_propose_name": {
+  "en": "Repudiate the Pledge",
+  "de": "Die Zusage widerrufen"
+ },
+ "nd_risk_band_0": {
+  "en": "#G Very low#!",
+  "de": "#G Sehr gering#!"
+ },
+ "nd_risk_band_1": {
+  "en": "#G Low#!",
+  "de": "#G Gering#!"
+ },
+ "nd_risk_band_2": {
+  "en": "#Y Elevated#!",
+  "de": "#Y Gehoben#!"
+ },
+ "nd_risk_band_3": {
+  "en": "#R High#!",
+  "de": "#R Hoch#!"
+ },
+ "nd_stage_next_1": {
+  "en": "Now a private #v Warning#!. It becomes a #v Confrontation#! if the threat is refused or answered with a counter-threat, made public, or backed by an exercise.",
+  "de": "Derzeit eine private #v Warnung#!. Sie wird zur #v Konfrontation#!, wenn die Drohung abgelehnt oder mit einer Gegendrohung beantwortet, öffentlich gemacht oder durch eine Übung untermauert wird."
+ },
+ "nd_stage_next_2": {
+  "en": "Now a #v Confrontation#!. It turns #R Acute#! at danger #v 70#!, when the threatening side holds firm at its deadline, when it is at High Alert while the other side is at Heightened or higher, if the play becomes a war, or after an intercepted launch.",
+  "de": "Derzeit eine #v Konfrontation#!. Sie wird bei Gefahr #v 70#! #R akut#!, wenn die drohende Seite an ihrer Frist festhält, wenn sie sich in Hoher Alarmbereitschaft befindet, während die andere Seite Erhöht oder höher ist, wenn das Spiel zu einem Krieg wird, oder nach einem abgefangenen Start."
+ },
+ "nd_stage_next_3": {
+  "en": "Now #R Acute#!, the last stage. From here it ends only in an outcome.",
+  "de": "Derzeit #R Akut#!, die letzte Stufe. Von hier aus endet sie nur in einem Ausgang."
+ },
+ "nd_stakes_long_private": {
+  "en": "If they concede, our credibility rises by 10. If we back down it falls by 5. A mutual stand-down raises it by 5.",
+  "de": "Geben sie nach, steigt unsere Glaubwürdigkeit um 10. Weichen wir zurück, sinkt sie um 5. Ein gegenseitiger Rückzug erhöht sie um 5."
+ },
+ "nd_stakes_long_public": {
+  "en": "If they concede, our credibility rises by 15. If we back down it falls by 15, and by 5 more if our doctrine made it a bluff; if the deadline lapses, by 10. A mutual stand-down costs 5, unless we were defending.",
+  "de": "Geben sie nach, steigt unsere Glaubwürdigkeit um 15. Weichen wir zurück, sinkt sie um 15, und um 5 weitere, wenn unsere Doktrin es zu einem Bluff machte; läuft die Frist ab, um 10. Ein gegenseitiger Rückzug kostet 5, außer wir waren in der Verteidigung."
+ },
+ "nd_stakes_long_target": {
+  "en": "If we concede, our credibility falls by 5. If they back down, ours rises by 10. A mutual stand-down raises it by 5.",
+  "de": "Geben wir nach, sinkt unsere Glaubwürdigkeit um 5. Weichen sie zurück, steigt unsere um 10. Ein gegenseitiger Rückzug erhöht sie um 5."
+ },
+ "nd_struck_own_people": {
+  "en": "Nuclear Weapons Used on Our Own People",
+  "de": "Nuklearwaffen gegen das eigene Volk eingesetzt"
+ },
+ "nd_system_outcome_held": {
+  "en": "An officer at the relay station refused to pass the order on until the capital answered. Nothing flew.",
+  "de": "Ein Offizier an der Relaisstation weigerte sich, den Befehl weiterzuleiten, bis die Hauptstadt antwortete. Nichts flog."
+ },
+ "nd_system_outcome_recalled": {
+  "en": "The system did what it was built to do — and the capital caught it with seconds left. The launch was recalled, but the country it took for the attacker saw every step of it.",
+  "de": "Das System tat, wofür es gebaut wurde — und die Hauptstadt erwischte es mit Sekunden Vorsprung. Der Start wurde zurückgerufen, aber das Land, das es für den Angreifer hielt, sah jeden Schritt davon."
+ },
+ "nd_system_outcome_struck": {
+  "en": "The system did what it was built to do. By the time the capital understood, the missiles had struck the country it took for the attacker.",
+  "de": "Das System tat, wofür es gebaut wurde. Als die Hauptstadt es verstand, hatten die Raketen bereits das Land getroffen, das sie für den Angreifer hielt."
+ },
+ "nd_taboo_ai_accept_burden": {
+  "en": "The burden of our arsenal",
+  "de": "Die Last unseres Arsenals"
+ },
+ "nd_taboo_ai_accept_taboo": {
+  "en": "The world's horror of the bomb",
+  "de": "Das Entsetzen der Welt vor der Bombe"
+ },
+ "nd_taboo_ai_arms_base": {
+  "en": "An arms-control commitment",
+  "de": "Eine Rüstungskontroll-Verpflichtung"
+ },
+ "nd_taboo_ai_arms_growth": {
+  "en": "The ceiling forbids the arsenal we want",
+  "de": "Die Obergrenze verbietet das Arsenal, das wir wollen"
+ },
+ "nd_taboo_ai_arms_militarist": {
+  "en": "Our government would never accept limits on the bomb",
+  "de": "Unsere Regierung würde niemals Grenzen für die Bombe akzeptieren"
+ },
+ "nd_taboo_ai_arms_parity": {
+  "en": "We would give up more warheads than they would",
+  "de": "Wir würden mehr Sprengköpfe aufgeben als sie"
+ },
+ "nd_taboo_arms_other_party_tt": {
+  "en": "They hold nuclear weapons or run a programme to build them",
+  "de": "Sie besitzen Nuklearwaffen oder betreiben ein Programm, um sie zu bauen"
+ },
+ "nd_taboo_arms_party_tt": {
+  "en": "We hold nuclear weapons or run a programme to build them",
+  "de": "Wir besitzen Nuklearwaffen oder betreiben ein Programm, um sie zu bauen"
+ },
+ "nd_taboo_arms_quantity_tt": {
+  "en": "A ceiling of at least one warhead is set",
+  "de": "Eine Obergrenze von mindestens einem Sprengkopf ist festgelegt"
+ },
+ "nd_taboo_arsenal_ceiling": {
+  "en": "Held to #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_warhead_ceiling')|0]#! warheads",
+  "de": "Gehalten bei #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_warhead_ceiling')|0]#! Sprengköpfen"
+ },
+ "nd_taboo_arsenal_dismantling": {
+  "en": "#R Being dismantled#!: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_dismantle_months_left')|0]#! months left, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_dismantle_per_month')|0]#! warheads this month",
+  "de": "#R Wird demontiert#!: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_dismantle_months_left')|0]#! Monate übrig, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_dismantle_per_month')|0]#! Sprengköpfe diesen Monat"
+ },
+ "nd_taboo_arsenal_free": {
+  "en": "No ceiling",
+  "de": "Keine Obergrenze"
+ },
+ "nd_taboo_arsenal_treaty": {
+  "en": "Held to #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_treaty_ceiling')|0]#! warheads by an arms-control treaty",
+  "de": "Durch einen Rüstungskontrollvertrag bei #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_treaty_ceiling')|0]#! Sprengköpfen gehalten"
+ },
+ "nd_taboo_band_1": {
+  "en": "Normalised",
+  "de": "Normalisiert"
+ },
+ "nd_taboo_band_2": {
+  "en": "Fragile",
+  "de": "Brüchig"
+ },
+ "nd_taboo_band_3": {
+  "en": "Established",
+  "de": "Etabliert"
+ },
+ "nd_taboo_band_4": {
+  "en": "Strong",
+  "de": "Stark"
+ },
+ "nd_taboo_band_5": {
+  "en": "Absolute",
+  "de": "Absolut"
+ },
+ "nd_taboo_bd_base": {
+  "en": "#v [GetGlobalVariable('nd_tb_base').GetValue|+0]#!  Where every nuclear age begins",
+  "de": "#v [GetGlobalVariable('nd_tb_base').GetValue|+0]#!  Wo jedes Nuklearzeitalter beginnt"
+ },
+ "nd_taboo_bd_ledger": {
+  "en": "#v [GetGlobalVariable('nd_tb_ledger').GetValue|+1]#!  What the world has done lately — uses, threats, renunciations — halving every four years",
+  "de": "#v [GetGlobalVariable('nd_tb_ledger').GetValue|+1]#!  Was die Welt zuletzt getan hat — Einsätze, Drohungen, Verzichtserklärungen — halbiert sich alle vier Jahre"
+ },
+ "nd_taboo_bd_postures": {
+  "en": "#v [GetGlobalVariable('nd_tb_postures').GetValue|+1]#!  The nuclear powers' doctrines: No First Use and warheads in storage raise it, compellence and warfighting lower it",
+  "de": "#v [GetGlobalVariable('nd_tb_postures').GetValue|+1]#!  Die Doktrinen der Nuklearmächte: Kein Erstschlag und eingelagerte Sprengköpfe erhöhen es, Nötigung und Kriegsführung senken es"
+ },
+ "nd_taboo_bd_restraint": {
+  "en": "#v [GetGlobalVariable('nd_tb_restraint').GetValue|+1]#!  Restraint: non-use pledges, arms-control treaties, and states that gave the bomb up",
+  "de": "#v [GetGlobalVariable('nd_tb_restraint').GetValue|+1]#!  Zurückhaltung: Nichteinsatz-Zusagen, Rüstungskontrollverträge und Staaten, die die Bombe aufgegeben haben"
+ },
+ "nd_taboo_bd_target": {
+  "en": "#v = [GetGlobalVariable('nd_taboo_target').GetValue|1]#!  Drift alone reaches 55 at most; beyond that takes cooperation",
+  "de": "#v = [GetGlobalVariable('nd_taboo_target').GetValue|1]#!  Drift allein erreicht höchstens 55; darüber hinaus braucht es Zusammenarbeit"
+ },
+ "nd_taboo_bd_tradition": {
+  "en": "#v [GetGlobalVariable('nd_tb_tradition').GetValue|+1]#!  The tradition of non-use: #v [GetGlobalVariable('nd_taboo_quiet_years').GetValue|0]#! years' worth, full at #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_tradition_cap')|0]#!",
+  "de": "#v [GetGlobalVariable('nd_tb_tradition').GetValue|+1]#!  Die Tradition des Nichteinsatzes: #v [GetGlobalVariable('nd_taboo_quiet_years').GetValue|0]#! Jahre wert, voll bei #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_tradition_cap')|0]#!"
+ },
+ "nd_taboo_bd_un": {
+  "en": "#v [GetGlobalVariable('nd_tb_un').GetValue|+1]#!  The United Nations: the Non-Proliferation Treaty and the Physical Protection convention, as strong as the organisation's authority",
+  "de": "#v [GetGlobalVariable('nd_tb_un').GetValue|+1]#!  Die Vereinten Nationen: der Atomwaffensperrvertrag und das Übereinkommen zum physischen Schutz, so stark wie die Autorität der Organisation"
+ },
+ "nd_taboo_burden_hint_cut": {
+  "en": "\\n\\nOur restraint groups would ease at #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_step_down_warheads')|0]#! warheads or fewer.",
+  "de": "\\n\\nUnsere Zurückhaltungsgruppen würden sich bei #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_step_down_warheads')|0]#! Sprengköpfen oder weniger beruhigen."
+ },
+ "nd_taboo_burden_hint_only_dismantling": {
+  "en": "\\n\\nOnly giving up the arsenal would ease our restraint groups now.",
+  "de": "\\n\\nNur die Aufgabe des Arsenals würde unsere Zurückhaltungsgruppen jetzt beruhigen."
+ },
+ "nd_taboo_ceiling_none": {
+  "en": "#v None#!",
+  "de": "#v Keine#!"
+ },
+ "nd_taboo_ceiling_set": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_warhead_ceiling')|0]#! warheads",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_warhead_ceiling')|0]#! Sprengköpfe"
+ },
+ "nd_taboo_civil_defence": {
+  "en": "Civil Defence",
+  "de": "Zivilschutz"
+ },
+ "nd_taboo_civil_defence_desc": {
+  "en": "Shelters, sirens and drills. For ten years an enemy's arsenal drains our war support half as fast.",
+  "de": "Bunker, Sirenen und Übungen. Zehn Jahre lang zehrt das Arsenal eines Feindes nur halb so schnell an unserer Kriegsunterstützung."
+ },
+ "nd_taboo_heading_down": {
+  "en": "#R (falling)#!",
+  "de": "#R (sinkend)#!"
+ },
+ "nd_taboo_heading_steady": {
+  "en": "(steady)",
+  "de": "(stabil)"
+ },
+ "nd_taboo_heading_up": {
+  "en": "#G (rising)#!",
+  "de": "#G (steigend)#!"
+ },
+ "nd_taboo_hist_legend": {
+  "en": "#lore 0-100, sampled monthly#!",
+  "de": "#lore 0–100, monatlich erfasst#!"
+ },
+ "nd_taboo_hist_target_legend": {
+  "en": "#lore where the world's state was pulling it, 0-100#!",
+  "de": "#lore wohin der Zustand der Welt es zog, 0–100#!"
+ },
+ "nd_taboo_hist_target_title": {
+  "en": "Where the Taboo Was Heading",
+  "de": "Wohin sich das Tabu entwickelte"
+ },
+ "nd_taboo_hist_title": {
+  "en": "The Nuclear Taboo",
+  "de": "Das Nukleare Tabu"
+ },
+ "nd_taboo_last_use_before": {
+  "en": "Nuclear weapons have been used in war.",
+  "de": "Nuklearwaffen wurden im Krieg eingesetzt."
+ },
+ "nd_taboo_last_use_never": {
+  "en": "No nuclear weapon has ever been used in war.",
+  "de": "Noch nie wurde eine Nuklearwaffe im Krieg eingesetzt."
+ },
+ "nd_taboo_last_use_year_known": {
+  "en": "The last nuclear weapon used in war fell in #v [GetGlobalVariable('nd_taboo_last_use_year').GetValue|0]#!.",
+  "de": "Die letzte im Krieg eingesetzte Nuklearwaffe fiel im Jahr #v [GetGlobalVariable('nd_taboo_last_use_year').GetValue|0]#!."
+ },
+ "nd_taboo_norm_champion": {
+  "en": "Champion of the Taboo",
+  "de": "Vorkämpfer des Tabus"
+ },
+ "nd_taboo_norm_champion_desc": {
+  "en": "We speak for the world's horror of the bomb, and the world listens.",
+  "de": "Wir sprechen für das Entsetzen der Welt vor der Bombe, und die Welt hört zu."
+ },
+ "nd_taboo_opt_champion": {
+  "en": "Champion the norm abroad",
+  "de": "Die Norm im Ausland vertreten"
+ },
+ "nd_taboo_opt_cut": {
+  "en": "Cut our arsenal in half",
+  "de": "Unser Arsenal halbieren"
+ },
+ "nd_taboo_opt_dismantle": {
+  "en": "Take our arsenal apart",
+  "de": "Unser Arsenal demontieren"
+ },
+ "nd_taboo_opt_firm": {
+  "en": "Our deterrent is not negotiable",
+  "de": "Unsere Abschreckung ist nicht verhandelbar"
+ },
+ "nd_taboo_opt_hold": {
+  "en": "Say publicly that nothing has changed",
+  "de": "Öffentlich erklären, dass sich nichts geändert hat"
+ },
+ "nd_taboo_opt_modernise": {
+  "en": "Modernise the arsenal",
+  "de": "Das Arsenal modernisieren"
+ },
+ "nd_taboo_opt_nfu": {
+  "en": "Pledge never to use it first",
+  "de": "Geloben, es nie zuerst einzusetzen"
+ },
+ "nd_taboo_opt_programme": {
+  "en": "Put more into our own programme",
+  "de": "Mehr in unser eigenes Programm investieren"
+ },
+ "nd_taboo_opt_protector": {
+  "en": "Seek the shelter of a friendly nuclear power",
+  "de": "Schutz bei einer befreundeten Nuklearmacht suchen"
+ },
+ "nd_taboo_opt_quiet": {
+  "en": "Keep out of the powers' quarrel",
+  "de": "Uns aus dem Streit der Mächte heraushalten"
+ },
+ "nd_taboo_opt_shelters": {
+  "en": "Build shelters and civil defence",
+  "de": "Bunker und Zivilschutz aufbauen"
+ },
+ "nd_taboo_possession_cost": {
+  "en": "The Burden of the Bomb",
+  "de": "Die Last der Bombe"
+ },
+ "nd_taboo_possession_cost_desc": {
+  "en": "The world holds nuclear weapons in horror, and it holds that horror against those who keep them. The weight grows with the nuclear taboo above 40 and with our arsenal up to fifty warheads: a small deterrent is tolerated far more than a large one.",
+  "de": "Die Welt betrachtet Nuklearwaffen mit Entsetzen, und sie hält dieses Entsetzen gegen jene, die sie behalten. Die Last wächst mit dem nuklearen Tabu über 40 und mit unserem Arsenal bis zu fünfzig Sprengköpfen: Eine kleine Abschreckung wird weit eher geduldet als eine große."
+ },
+ "nd_taboo_programme_held": {
+  "en": "Programme Held",
+  "de": "Programm angehalten"
+ },
+ "nd_taboo_programme_held_desc": {
+  "en": "We are at our arsenal ceiling, set by us or by an arms-control treaty, or taking our arsenal apart: the programme builds nothing and cannot be funded.",
+  "de": "Wir haben unsere Arsenal-Obergrenze erreicht, sei sie von uns oder durch einen Rüstungskontrollvertrag festgelegt, oder wir demontieren unser Arsenal: Das Programm baut nichts und kann nicht finanziert werden."
+ },
+ "nd_taboo_renounced": {
+  "en": "Renounced the Bomb",
+  "de": "Der Bombe abgeschworen"
+ },
+ "nd_taboo_renounced_desc": {
+  "en": "We took our own nuclear arsenal apart. We have no programme and are counted as a non-nuclear state; taking the bomb up again is a decision, and the world would see it as a breakout.",
+  "de": "Wir haben unser eigenes Nukleararsenal demontiert. Wir haben kein Programm und gelten als nichtnuklearer Staat; die Bombe wieder aufzunehmen ist eine Entscheidung, und die Welt würde es als Ausbruch werten."
+ },
+ "nd_taboo_renunciation_prestige": {
+  "en": "The Bomb Renounced",
+  "de": "Verzicht auf die Bombe"
+ },
+ "nd_taboo_renunciation_prestige_desc": {
+  "en": "The world honours a state that gave up the bomb of its own accord — the more, the more it has come to fear the weapon.",
+  "de": "Die Welt ehrt einen Staat, der die Bombe aus eigenem Antrieb aufgegeben hat — umso mehr, je mehr sie gelernt hat, die Waffe zu fürchten."
+ },
+ "nd_taboo_resume_programme": {
+  "en": "Resume the Nuclear Programme",
+  "de": "Das Nuklearprogramm wiederaufnehmen"
+ },
+ "nd_taboo_resume_programme_desc": {
+  "en": "We gave up the bomb. We can end our renunciation — at a price in the world's regard that grows with the nuclear taboo, and the day we are armed again the world will call it a breakout.",
+  "de": "Wir haben die Bombe aufgegeben. Wir können unseren Verzicht beenden — zu einem Preis im Ansehen der Welt, der mit dem nuklearen Tabu wächst, und an dem Tag, an dem wir wieder bewaffnet sind, wird die Welt es einen Ausbruch nennen."
+ },
+ "nd_taboo_status_1": {
+  "en": "The nuclear taboo stands at #v [GetGlobalVariable('nd_taboo').GetValue|0]#!, #bold $nd_taboo_band_1$#!: the bomb is treated as one weapon among others.\\n",
+  "de": "Das nukleare Tabu steht bei #v [GetGlobalVariable('nd_taboo').GetValue|0]#!, #bold $nd_taboo_band_1$#!: Die Bombe wird als eine Waffe unter anderen behandelt.\\n"
+ },
+ "nd_taboo_status_2": {
+  "en": "The nuclear taboo stands at #v [GetGlobalVariable('nd_taboo').GetValue|0]#!, #bold $nd_taboo_band_2$#!: the bomb is feared, but its use is still argued for.\\n",
+  "de": "Das nukleare Tabu steht bei #v [GetGlobalVariable('nd_taboo').GetValue|0]#!, #bold $nd_taboo_band_2$#!: Die Bombe wird gefürchtet, aber ihr Einsatz wird noch diskutiert.\\n"
+ },
+ "nd_taboo_status_3": {
+  "en": "The nuclear taboo stands at #v [GetGlobalVariable('nd_taboo').GetValue|0]#!, #bold $nd_taboo_band_3$#!: using the bomb is widely held to be wrong.\\n",
+  "de": "Das nukleare Tabu steht bei #v [GetGlobalVariable('nd_taboo').GetValue|0]#!, #bold $nd_taboo_band_3$#!: Der Einsatz der Bombe gilt weithin als falsch.\\n"
+ },
+ "nd_taboo_status_4": {
+  "en": "The nuclear taboo stands at #v [GetGlobalVariable('nd_taboo').GetValue|0]#!, #bold $nd_taboo_band_4$#!: the bomb is seen as unusable, and even holding one draws censure.\\n",
+  "de": "Das nukleare Tabu steht bei #v [GetGlobalVariable('nd_taboo').GetValue|0]#!, #bold $nd_taboo_band_4$#!: Die Bombe gilt als unbenutzbar, und schon ihr Besitz zieht Tadel nach sich.\\n"
+ },
+ "nd_taboo_status_5": {
+  "en": "The nuclear taboo stands at #v [GetGlobalVariable('nd_taboo').GetValue|0]#!, #bold $nd_taboo_band_5$#!: the bomb is beyond the pale, and holding one marks a state apart.\\n",
+  "de": "Das nukleare Tabu steht bei #v [GetGlobalVariable('nd_taboo').GetValue|0]#!, #bold $nd_taboo_band_5$#!: Die Bombe ist jenseits des Vertretbaren, und ihr Besitz hebt einen Staat von anderen ab.\\n"
+ },
+ "nd_taboo_tt_already_dismantling": {
+  "en": "We are already taking our arsenal apart",
+  "de": "Wir demontieren unser Arsenal bereits"
+ },
+ "nd_taboo_tt_ceiling_at_floor": {
+  "en": "The ceiling cannot go below one warhead; to go further, dismantle the arsenal",
+  "de": "Die Obergrenze kann nicht unter einen Sprengkopf sinken; um weiter zu gehen, das Arsenal demontieren"
+ },
+ "nd_taboo_tt_ceiling_lift": {
+  "en": "Lift the arsenal ceiling we set: the programme may build again, up to any ceiling a treaty still holds us to",
+  "de": "Die von uns gesetzte Arsenal-Obergrenze aufheben: Das Programm darf wieder bauen, bis zu jeder Obergrenze, an die uns noch ein Vertrag bindet"
+ },
+ "nd_taboo_tt_ceiling_lower": {
+  "en": "Hold our arsenal to #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_ceiling_lowered_value')|0]#! warheads; those above it are taken apart, a tenth of the excess a month, and each strengthens the nuclear taboo a little",
+  "de": "Unser Arsenal auf #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_ceiling_lowered_value')|0]#! Sprengköpfe begrenzen; die darüber werden demontiert, ein Zehntel des Überschusses pro Monat, und jeder stärkt das nukleare Tabu ein wenig"
+ },
+ "nd_taboo_tt_ceiling_raise": {
+  "en": "Allow up to #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_ceiling_raised_value')|0]#! warheads",
+  "de": "Bis zu #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_ceiling_raised_value')|0]#! Sprengköpfe erlauben"
+ },
+ "nd_taboo_tt_champion_relations": {
+  "en": "The great powers that hold nuclear weapons take it as a lecture: relations #R -5#! with each",
+  "de": "Die Großmächte, die Nuklearwaffen besitzen, nehmen es als Belehrung: Beziehungen #R -5#! mit jeder von ihnen"
+ },
+ "nd_taboo_tt_condemn_open": {
+  "en": "No condemnation has come before the Assembly within the cooldown, or this is a nuclear use, which it can always take up",
+  "de": "Innerhalb der Abklingzeit wurde der Versammlung keine Verurteilung vorgelegt, oder dies ist ein nuklearer Einsatz, den sie jederzeit aufgreifen kann"
+ },
+ "nd_taboo_tt_dismantle_start": {
+  "en": "Take our #v [GetPlayer.MakeScope.ScriptValue('nd_stockpile')|0]#! warheads apart over #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_dismantle_months_value')|0]#! months. Until the last is gone they stay in storage, the programme builds nothing, and we can halt at a price. When it is done we renounce the bomb: the world's regard grows with the nuclear taboo, and taking it up again would be a breakout",
+  "de": "Unsere #v [GetPlayer.MakeScope.ScriptValue('nd_stockpile')|0]#! Sprengköpfe über #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_dismantle_months_value')|0]#! Monate demontieren. Bis der letzte weg ist, bleiben sie eingelagert, das Programm baut nichts, und wir können gegen einen Preis abbrechen. Ist es geschehen, schwören wir der Bombe ab: Das Ansehen der Welt wächst mit dem nuklearen Tabu, und sie wieder aufzunehmen wäre ein Ausbruch"
+ },
+ "nd_taboo_tt_dismantling_owns_it": {
+  "en": "While we dismantle the arsenal, the dismantling sets its size",
+  "de": "Solange wir das Arsenal demontieren, bestimmt die Demontage seine Größe"
+ },
+ "nd_taboo_tt_halt": {
+  "en": "Halt the dismantling: what is taken apart stays gone. Our credibility falls by #R 10#!, and the nuclear taboo weakens",
+  "de": "Die Demontage anhalten: Was demontiert wurde, bleibt weg. Unsere Glaubwürdigkeit sinkt um #R 10#!, und das nukleare Tabu schwächt sich ab"
+ },
+ "nd_taboo_tt_modernise": {
+  "en": "Reliability #G +10#!, survivability #G +5#!",
+  "de": "Zuverlässigkeit #G +10#!, Überlebensfähigkeit #G +5#!"
+ },
+ "nd_taboo_tt_need_no_civil_war": {
+  "en": "Not while we are fighting a civil war",
+  "de": "Nicht, während wir einen Bürgerkrieg führen"
+ },
+ "nd_taboo_tt_need_no_crisis": {
+  "en": "Not while we are in a nuclear crisis",
+  "de": "Nicht, während wir uns in einer nuklearen Krise befinden"
+ },
+ "nd_taboo_tt_need_peace": {
+  "en": "Not while we are at war",
+  "de": "Nicht, während wir uns im Krieg befinden"
+ },
+ "nd_taboo_tt_no_ceiling": {
+  "en": "We have set no arsenal ceiling",
+  "de": "Wir haben keine Arsenal-Obergrenze festgelegt"
+ },
+ "nd_taboo_tt_not_dismantling": {
+  "en": "We are not dismantling our arsenal",
+  "de": "Wir demontieren unser Arsenal nicht"
+ },
+ "nd_taboo_tt_opt_cut": {
+  "en": "Hold our arsenal to #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_half_arsenal_value')|0]#! warheads: those above it are taken apart, a tenth of the excess a month",
+  "de": "Unser Arsenal auf #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_half_arsenal_value')|0]#! Sprengköpfe begrenzen: die darüber werden demontiert, ein Zehntel des Überschusses pro Monat"
+ },
+ "nd_taboo_tt_protector": {
+  "en": "Relations #G +15#! with a friendly nuclear power",
+  "de": "Beziehungen #G +15#! mit einer befreundeten Nuklearmacht"
+ },
+ "nd_taboo_tt_quiet_relations": {
+  "en": "The great powers that hold nuclear weapons appreciate our silence: relations #G +5#! with each",
+  "de": "Die Großmächte, die Nuklearwaffen besitzen, schätzen unser Schweigen: Beziehungen #G +5#! mit jeder von ihnen"
+ },
+ "nd_taboo_tt_readiness_dismantling": {
+  "en": "Our warheads stay in storage until the last is taken apart",
+  "de": "Unsere Sprengköpfe bleiben eingelagert, bis der letzte demontiert ist"
+ },
+ "nd_taboo_tt_renounce_relations": {
+  "en": "Relations improve by #G [GetPlayer.MakeScope.ScriptValue('nd_taboo_renounce_relations_value')|0]#! with every country",
+  "de": "Beziehungen verbessern sich um #G [GetPlayer.MakeScope.ScriptValue('nd_taboo_renounce_relations_value')|0]#! mit jedem Land"
+ },
+ "nd_taboo_tt_resume_no_standing": {
+  "en": "We lack the standing to run a weapons programme: resuming only ends our renunciation. A programme needs great-power standing, a major power's missiles, or a patron's aid",
+  "de": "Uns fehlt das Ansehen, um ein Waffenprogramm zu betreiben: Eine Wiederaufnahme beendet nur unseren Verzicht. Ein Programm braucht Großmacht-Ansehen, die Raketen einer Großmacht oder die Hilfe eines Schutzherrn"
+ },
+ "nd_taboo_tt_resume_relations": {
+  "en": "Relations worsen by #R [GetPlayer.MakeScope.ScriptValue('nd_taboo_resume_relations_value')|0]#! with every country",
+  "de": "Beziehungen verschlechtern sich um #R [GetPlayer.MakeScope.ScriptValue('nd_taboo_resume_relations_value')|0]#! mit jedem Land"
+ },
+ "nd_taboo_tt_shelters_war_support": {
+  "en": "For ten years, an enemy's arsenal drains our war support half as fast",
+  "de": "Zehn Jahre lang zehrt das Arsenal eines Feindes nur halb so schnell an unserer Kriegsunterstützung"
+ },
+ "nd_taboo_tt_strike_answer": {
+  "en": "An answer to a nuclear strike: #G no#! [concept_infamy]. The nuclear taboo, now #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_value')|0]#!, still falls — by half what a first use would cost it.",
+  "de": "Eine Antwort auf einen Nuklearschlag: #G keine#! [concept_infamy]. Das nukleare Tabu, jetzt #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_value')|0]#!, sinkt dennoch — um die Hälfte dessen, was ein Ersteinsatz es kosten würde."
+ },
+ "nd_taboo_tt_strike_first_use": {
+  "en": "If it gets through: #R +[GetPlayer.MakeScope.ScriptValue('nd_taboo_infamy_strategic')|0]#! [concept_infamy], and relations #R [GetPlayer.MakeScope.ScriptValue('nd_taboo_world_relations_strategic')|0]#! with every country but theirs. The nuclear taboo stands at #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_value')|0]#!: the higher it stands, the more the world recoils.",
+  "de": "Kommt er durch: #R +[GetPlayer.MakeScope.ScriptValue('nd_taboo_infamy_strategic')|0]#! [concept_infamy], und Beziehungen #R [GetPlayer.MakeScope.ScriptValue('nd_taboo_world_relations_strategic')|0]#! mit jedem Land außer ihrem. Das nukleare Tabu steht bei #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_value')|0]#!: je höher es steht, desto mehr schreckt die Welt zurück."
+ },
+ "nd_taboo_tt_tactical_first_use": {
+  "en": "If it gets through: #R +[GetPlayer.MakeScope.ScriptValue('nd_taboo_infamy_tactical')|0]#! [concept_infamy], and relations #R [GetPlayer.MakeScope.ScriptValue('nd_taboo_world_relations_tactical')|0]#! with every country but theirs. The nuclear taboo stands at #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_value')|0]#!: the higher it stands, the more the world recoils.",
+  "de": "Kommt er durch: #R +[GetPlayer.MakeScope.ScriptValue('nd_taboo_infamy_tactical')|0]#! [concept_infamy], und Beziehungen #R [GetPlayer.MakeScope.ScriptValue('nd_taboo_world_relations_tactical')|0]#! mit jedem Land außer ihrem. Das nukleare Tabu steht bei #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_value')|0]#!: je höher es steht, desto mehr schreckt die Welt zurück."
+ },
+ "nd_taboo_tt_verdict_failed": {
+  "en": "The nuclear taboo #R weakens#!: the world let a nuclear use pass. #R -3#! on the ledger of what the world remembers",
+  "de": "Das nukleare Tabu #R schwächt sich ab#!: Die Welt ließ einen nuklearen Einsatz durchgehen. #R -3#! auf dem Konto dessen, woran sich die Welt erinnert"
+ },
+ "nd_taboo_tt_verdict_passed": {
+  "en": "The nuclear taboo #G strengthens#!: the world said no. #G +2#! at once, and #G +3#! on the ledger of what the world remembers",
+  "de": "Das nukleare Tabu #G stärkt sich#!: Die Welt sagte nein. #G +2#! sofort, und #G +3#! auf dem Konto dessen, woran sich die Welt erinnert"
+ },
+ "nd_taboo_w_btn_dismantle": {
+  "en": "Begin",
+  "de": "Beginnen"
+ },
+ "nd_taboo_w_btn_halt": {
+  "en": "Halt",
+  "de": "Anhalten"
+ },
+ "nd_taboo_w_btn_lift": {
+  "en": "Lift",
+  "de": "Aufheben"
+ },
+ "nd_taboo_w_ceiling_label": {
+  "en": "Arsenal ceiling",
+  "de": "Arsenal-Obergrenze"
+ },
+ "nd_taboo_w_ceiling_tt": {
+  "en": "#tooltip_header Arsenal Ceiling#!\\n$TOOLTIP_DELIMITER$\\nThe most warheads we will hold. Those above it are taken apart, a tenth of the excess a month, and the programme builds nothing while we are at or above it. Every warhead retired strengthens the nuclear taboo a little. Raising or lifting the ceiling costs nothing.[JournalEntry.GetCountry.GetCustom('nd_taboo_burden_hint')]",
+  "de": "#tooltip_header Arsenal-Obergrenze#!\\n$TOOLTIP_DELIMITER$\\nDie meisten Sprengköpfe, die wir halten werden. Die darüber werden demontiert, ein Zehntel des Überschusses pro Monat, und das Programm baut nichts, solange wir sie erreichen oder überschreiten. Jeder ausgemusterte Sprengkopf stärkt das nukleare Tabu ein wenig. Die Obergrenze anzuheben oder aufzuheben kostet nichts.[JournalEntry.GetCountry.GetCustom('nd_taboo_burden_hint')]"
+ },
+ "nd_taboo_w_dismantle_label": {
+  "en": "Dismantle the arsenal",
+  "de": "Das Arsenal demontieren"
+ },
+ "nd_taboo_w_dismantle_tt": {
+  "en": "#tooltip_header Dismantle the Arsenal#!\\n$TOOLTIP_DELIMITER$\\nTake every warhead apart and renounce the bomb, as South Africa did in 1989. It takes a year, and longer for a large arsenal. The world's regard for it grows with the nuclear taboo.",
+  "de": "#tooltip_header Das Arsenal demontieren#!\\n$TOOLTIP_DELIMITER$\\nJeden Sprengkopf demontieren und der Bombe abschwören, wie Südafrika es 1989 tat. Es dauert ein Jahr, bei einem großen Arsenal länger. Das Ansehen der Welt dafür wächst mit dem nuklearen Tabu."
+ },
+ "nd_taboo_w_halt_label": {
+  "en": "Halt the dismantling",
+  "de": "Die Demontage anhalten"
+ },
+ "nd_taboo_w_halt_tt": {
+  "en": "#tooltip_header Halt the Dismantling#!\\n$TOOLTIP_DELIMITER$\\nStop taking the arsenal apart. What is gone stays gone, and a reversal made in public costs credibility.",
+  "de": "#tooltip_header Die Demontage anhalten#!\\n$TOOLTIP_DELIMITER$\\nDie Demontage des Arsenals stoppen. Was weg ist, bleibt weg, und eine öffentliche Kehrtwende kostet Glaubwürdigkeit."
+ },
+ "nd_taboo_w_lift_label": {
+  "en": "Lift the arsenal ceiling",
+  "de": "Die Arsenal-Obergrenze aufheben"
+ },
+ "nd_taboo_w_lift_tt": {
+  "en": "#tooltip_header Lift the Ceiling#!\\n$TOOLTIP_DELIMITER$\\nNo limit on our arsenal but what the programme can build.",
+  "de": "#tooltip_header Die Obergrenze aufheben#!\\n$TOOLTIP_DELIMITER$\\nKeine Grenze für unser Arsenal außer dem, was das Programm bauen kann."
+ },
+ "nd_taboo_w_status_label": {
+  "en": "Arsenal",
+  "de": "Arsenal"
+ },
+ "nd_taboo_w_status_tt": {
+  "en": "#tooltip_header Arsenal#!\\n$TOOLTIP_DELIMITER$\\nWhether we hold our arsenal to a ceiling, or are taking it apart. A smaller arsenal is cheaper to hold in a world that fears the bomb.[JournalEntry.GetCountry.GetCustom('nd_taboo_burden_hint')]",
+  "de": "#tooltip_header Arsenal#!\\n$TOOLTIP_DELIMITER$\\nOb wir unser Arsenal auf eine Obergrenze begrenzen oder es demontieren. Ein kleineres Arsenal ist in einer Welt, die die Bombe fürchtet, günstiger zu halten.[JournalEntry.GetCountry.GetCustom('nd_taboo_burden_hint')]"
+ },
+ "nd_tt_act_accept_standdown": {
+  "en": "We accept, and the crisis ends:",
+  "de": "Wir nehmen an, und die Krise endet:"
+ },
+ "nd_tt_act_back_down": {
+  "en": "We abandon the threat, and the crisis ends",
+  "de": "Wir geben die Drohung auf, und die Krise endet"
+ },
+ "nd_tt_act_counter": {
+  "en": "We answer threat with threat",
+  "de": "Wir beantworten Drohung mit Drohung"
+ },
+ "nd_tt_act_execute": {
+  "en": "#R We carry out the threat: a nuclear strike on them.#!",
+  "de": "#R Wir setzen die Drohung um: einen Nuklearschlag gegen sie.#!"
+ },
+ "nd_tt_act_exercise": {
+  "en": "An exercise they can see — and could mistake for the real thing",
+  "de": "Eine Übung, die sie sehen können — und für den Ernstfall halten könnten"
+ },
+ "nd_tt_act_extend": {
+  "en": "We give them #v 6#! more weeks. Hesitation is noticed",
+  "de": "Wir geben ihnen #v 6#! weitere Wochen. Zögern wird bemerkt"
+ },
+ "nd_tt_act_fight_conventional": {
+  "en": "We fight without nuclear weapons. The threat was not carried out, everyone saw, and our #v credibility#! falls",
+  "de": "Wir kämpfen ohne Nuklearwaffen. Die Drohung wurde nicht wahrgemacht, jeder sah es, und unsere #v Glaubwürdigkeit#! sinkt"
+ },
+ "nd_tt_act_go_public": {
+  "en": "The threat becomes a public ultimatum",
+  "de": "Die Drohung wird zu einem öffentlichen Ultimatum"
+ },
+ "nd_tt_act_hold": {
+  "en": "We hold firm: the crisis turns #R Acute#!",
+  "de": "Wir bleiben standhaft: die Krise wird #R akut#!"
+ },
+ "nd_tt_act_refuse_talks": {
+  "en": "We refuse to stand down, and talks close",
+  "de": "Wir weigern uns, herunterzufahren, und die Gespräche schließen"
+ },
+ "nd_tt_act_reject": {
+  "en": "We refuse, and leave them to decide what their threat meant",
+  "de": "Wir weigern uns und überlassen es ihnen, zu entscheiden, was ihre Drohung bedeutete"
+ },
+ "nd_tt_act_stand_firm": {
+  "en": "We do not bend. Nothing changes: they press again in #v 6#! weeks, and the deadline is theirs to act on",
+  "de": "Wir geben nicht nach. Nichts ändert sich: Sie drängen in #v 6#! Wochen erneut, und die Frist liegt bei ihnen, zu handeln"
+ },
+ "nd_tt_act_talks": {
+  "en": "We propose a mutual stand-down",
+  "de": "Wir schlagen einen gegenseitigen Rückzug vor"
+ },
+ "nd_tt_act_yield": {
+  "en": "We give them what they demand, and the crisis ends:",
+  "de": "Wir geben ihnen, was sie fordern, und die Krise endet:"
+ },
+ "nd_tt_alert_held": {
+  "en": "Our readiness stays where it is, and we ask [SCOPE.sCountry('nd_exerciser').GetName] through the usual channels what it thinks it is doing",
+  "de": "Unsere Bereitschaft bleibt, wo sie ist, und wir fragen [SCOPE.sCountry('nd_exerciser').GetName] auf dem üblichen Weg, was es sich dabei denkt"
+ },
+ "nd_tt_allies_alarmed": {
+  "en": "Every country we protect: relations #R -10#!. Every subject under our nuclear umbrella: #R +5#! liberty desire. A crisis against any of them now weighs our arsenal at half while our warheads stay in storage",
+  "de": "Jedes Land, das wir schützen: Beziehungen #R -10#!. Jeder Klientelstaat unter unserem nuklearen Schutzschirm: #R +5#! Freiheitsverlangen. Eine Krise gegen einen von ihnen gewichtet unser Arsenal jetzt nur zur Hälfte, während unsere Sprengköpfe eingelagert bleiben"
+ },
+ "nd_tt_already_current": {
+  "en": "This is not already our choice",
+  "de": "Dies ist noch nicht unsere Wahl"
+ },
+ "nd_tt_already_public": {
+  "en": "The threat is still private",
+  "de": "Die Drohung ist noch privat"
+ },
+ "nd_tt_already_under_umbrella": {
+  "en": "They are not our direct subject — a subject is already under our nuclear umbrella",
+  "de": "Sie sind nicht unser direkter Klientelstaat — ein Klientelstaat steht bereits unter unserem nuklearen Schutzschirm"
+ },
+ "nd_tt_assemble_for_retaliation": {
+  "en": "Our warheads are put back on their delivery systems (readiness #v Routine#!, two weeks away). When they are ready, and if we are still at war with the country that struck us, we decide how to answer",
+  "de": "Unsere Sprengköpfe werden wieder auf ihre Trägersysteme aufgesetzt (Bereitschaft #v Routine#!, zwei Wochen entfernt). Sind sie bereit und befinden wir uns noch im Krieg mit dem Land, das uns getroffen hat, entscheiden wir, wie wir antworten"
+ },
+ "nd_tt_assistance_provider_armed": {
+  "en": "The country paying must hold nuclear warheads of its own: it needs the expertise",
+  "de": "Das zahlende Land muss selbst Nuklearsprengköpfe besitzen: Es braucht die Expertise"
+ },
+ "nd_tt_assistance_target_eligible": {
+  "en": "The other country must hold nuclear warheads, or have warheads from its arsenal unaccounted for",
+  "de": "Das andere Land muss Nuklearsprengköpfe besitzen oder unauffindbare Sprengköpfe aus seinem Arsenal haben"
+ },
+ "nd_tt_authority_adopted_1": {
+  "en": "Launch authority becomes #v Central Authorization#!. It can next be changed in a year.",
+  "de": "Die Startbefugnis wird #v Zentrale Genehmigung#!. Sie kann frühestens in einem Jahr erneut geändert werden."
+ },
+ "nd_tt_authority_adopted_2": {
+  "en": "Launch authority becomes #v Conditional Delegation#!. It can next be changed in a year.",
+  "de": "Die Startbefugnis wird #v Bedingte Delegation#!. Sie kann frühestens in einem Jahr erneut geändert werden."
+ },
+ "nd_tt_authority_adopted_3": {
+  "en": "Launch authority becomes #v Launch on Warning#!. It can next be changed in a year.",
+  "de": "Die Startbefugnis wird #v Start bei Vorwarnung#!. Sie kann frühestens in einem Jahr erneut geändert werden."
+ },
+ "nd_tt_authority_adopted_4": {
+  "en": "Launch authority becomes #v Automatic Retaliation#!. It can next be changed in a year.",
+  "de": "Die Startbefugnis wird #v Automatische Vergeltung#!. Sie kann frühestens in einem Jahr erneut geändert werden."
+ },
+ "nd_tt_authority_consequence": {
+  "en": "#R An incident can now end in a launch without further approval from us.#! The chance that someone in the chain halts it is shown in the Forces section.",
+  "de": "#R Ein Vorfall kann jetzt ohne weitere Genehmigung von uns in einem Start enden.#! Die Chance, dass jemand in der Befehlskette ihn aufhält, wird im Abschnitt Streitkräfte angezeigt."
+ },
+ "nd_tt_authority_consequence_automatic": {
+  "en": "#R A nuclear strike on our cities will be answered in full — up to three warheads — without a decision from us,#! and a weapons accident at home during a war or an acute crisis can be read as an attack. Upkeep rises by @money!#v [GetPlayer.MakeScope.ScriptValue('nd_upkeep_weekly_automatic_step')|D]#!/week",
+  "de": "#R Ein Nuklearschlag auf unsere Städte wird ohne unsere Entscheidung voll erwidert — bis zu drei Sprengköpfe —,#! und ein Waffenunfall im Inland während eines Krieges oder einer akuten Krise kann als Angriff gedeutet werden. Der Unterhalt steigt um @money!#v [GetPlayer.MakeScope.ScriptValue('nd_upkeep_weekly_automatic_step')|D]#!/Woche"
+ },
+ "nd_tt_authority_tenure": {
+  "en": "Our launch authority has been in force at least a year",
+  "de": "Unsere Startbefugnis ist seit mindestens einem Jahr in Kraft"
+ },
+ "nd_tt_bp_accept": {
+  "en": "Our #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! warheads are taken apart. [SCOPE.sCountry('nd_bp_lead').GetName] holds a treaty that keeps us disarmed, and every great power that pressed us guarantees us against nuclear attack, binding for ten years",
+  "de": "Unsere #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! Sprengköpfe werden demontiert. [SCOPE.sCountry('nd_bp_lead').GetAltName('NOM')] hält einen Vertrag, der uns entwaffnet hält, und jede Großmacht, die uns bedrängt hat, garantiert uns für zehn Jahre bindend Schutz vor einem Nuklearangriff"
+ },
+ "nd_tt_bp_accept_relations": {
+  "en": "Every great power that pressed us: relations with us #G +20#!",
+  "de": "Jede Großmacht, die uns bedrängt hat: Beziehungen mit uns #G +20#!"
+ },
+ "nd_tt_bp_press": {
+  "en": "We join the powers pressing [SCOPE.sCountry('nd_bp_state').GetName] to give up its warheads. If it accepts, we guarantee it against nuclear attack for at least ten years (a #R 100#! influence upkeep), and the power with the largest economy among us also holds its disarmament (#R 200#! more). If it refuses, relations with us #R -20#!",
+  "de": "Wir schließen uns den Mächten an, die [SCOPE.sCountry('nd_bp_state').GetAltName('AKK')] drängen, seine Sprengköpfe aufzugeben. Nimmt es an, garantieren wir ihm für mindestens zehn Jahre Schutz vor einem Nuklearangriff (ein Einflussunterhalt von #R 100#!), und die Macht mit der größten Wirtschaft unter uns sichert auch seine Entwaffnung ab (#R 200#! mehr). Weigert es sich, Beziehungen mit uns #R -20#!"
+ },
+ "nd_tt_bp_refuse": {
+  "en": "We keep our warheads, and their upkeep. Every great power that pressed us: relations with us #R -20#!, and for ten years the great powers are readier to demand our disarmament",
+  "de": "Wir behalten unsere Sprengköpfe und deren Unterhalt. Jede Großmacht, die uns bedrängt hat: Beziehungen mit uns #R -20#!, und zehn Jahre lang sind die Großmächte eher bereit, unsere Entwaffnung zu fordern"
+ },
+ "nd_tt_cooldown_clear": {
+  "en": "We have not had a nuclear crisis with them in the last two years (waived in war)",
+  "de": "Wir hatten in den letzten zwei Jahren keine nukleare Krise mit ihnen (im Krieg ausgesetzt)"
+ },
+ "nd_tt_counter_danger": {
+  "en": "The crisis danger rises by #R 10#! while our counter-threat stands",
+  "de": "Die Krisengefahr steigt um #R 10#!, solange unsere Gegendrohung besteht"
+ },
+ "nd_tt_credibility_down_10": {
+  "en": "Our #v credibility#! falls by #R 10#!",
+  "de": "Unsere #v Glaubwürdigkeit#! sinkt um #R 10#!"
+ },
+ "nd_tt_credibility_down_15": {
+  "en": "Our #v credibility#! falls by #R 15#!",
+  "de": "Unsere #v Glaubwürdigkeit#! sinkt um #R 15#!"
+ },
+ "nd_tt_credibility_down_3": {
+  "en": "Our #v credibility#! falls by #R 3#!",
+  "de": "Unsere #v Glaubwürdigkeit#! sinkt um #R 3#!"
+ },
+ "nd_tt_credibility_down_5": {
+  "en": "Our #v credibility#! falls by #R 5#!",
+  "de": "Unsere #v Glaubwürdigkeit#! sinkt um #R 5#!"
+ },
+ "nd_tt_credibility_down_5_bluff": {
+  "en": "Every government knew our doctrine did not allow this: our #v credibility#! falls by #R 5#! more",
+  "de": "Jede Regierung wusste, dass unsere Doktrin dies nicht erlaubte: unsere #v Glaubwürdigkeit#! sinkt um #R 5#! weiter"
+ },
+ "nd_tt_credibility_up_10": {
+  "en": "Our #v credibility#! rises by #G 10#!",
+  "de": "Unsere #v Glaubwürdigkeit#! steigt um #G 10#!"
+ },
+ "nd_tt_credibility_up_15": {
+  "en": "Our #v credibility#! rises by #G 15#!",
+  "de": "Unsere #v Glaubwürdigkeit#! steigt um #G 15#!"
+ },
+ "nd_tt_credibility_up_3": {
+  "en": "Our #v credibility#! rises by #G 3#!",
+  "de": "Unsere #v Glaubwürdigkeit#! steigt um #G 3#!"
+ },
+ "nd_tt_credibility_up_5": {
+  "en": "Our #v credibility#! rises by #G 5#!",
+  "de": "Unsere #v Glaubwürdigkeit#! steigt um #G 5#!"
+ },
+ "nd_tt_crisis_stale": {
+  "en": "#lore This crisis has ended or changed. Nothing happens.#!",
+  "de": "#lore Diese Krise ist beendet oder hat sich verändert. Nichts geschieht.#!"
+ },
+ "nd_tt_crisis_turns_acute": {
+  "en": "Our crisis with them turns #R acute#!",
+  "de": "Unsere Krise mit ihnen wird #R akut#!"
+ },
+ "nd_tt_cw_custodian_accept": {
+  "en": "[SCOPE.sCountry('nd_cw_helper').GetName] secures our custody for as long as this civil war lasts: #G half#! as many of our warheads go missing whenever they change hands, and we may let it take them apart without losing one",
+  "de": "[SCOPE.sCountry('nd_cw_helper').GetAltName('NOM')] sichert unsere Verwahrung, solange dieser Bürgerkrieg dauert: #G halb#! so viele unserer Sprengköpfe gehen verloren, wann immer sie den Besitzer wechseln, und wir dürfen es sie ohne Verlust demontieren lassen"
+ },
+ "nd_tt_cw_deny_custodian_relations": {
+  "en": "[SCOPE.sCountry('nd_cw_helper').GetName]: relations with us #G +15#!",
+  "de": "[SCOPE.sCountry('nd_cw_helper').GetAltName('NOM')]: Beziehungen mit uns #G +15#!"
+ },
+ "nd_tt_cw_deny_hurried": {
+  "en": "Taken apart in haste, #R [ROOT.GetCountry.MakeScope.Var('nd_cw_deny_lost').GetValue|0]#! of our warheads go missing before they can be counted",
+  "de": "In der Eile demontiert, gehen #R [ROOT.GetCountry.MakeScope.Var('nd_cw_deny_lost').GetValue|0]#! unserer Sprengköpfe verloren, bevor sie gezählt werden können"
+ },
+ "nd_tt_cw_deny_keep": {
+  "en": "Nothing changes now. If [SCOPE.sCountry('nd_cw_rebel').GetName] wins, it inherits the #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! warheads we still hold, less those that go missing as they change hands",
+  "de": "Jetzt ändert sich nichts. Gewinnt [SCOPE.sCountry('nd_cw_rebel').GetAltName('NOM')], erbt es die #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! Sprengköpfe, die wir noch halten, abzüglich jener, die beim Besitzerwechsel verloren gehen"
+ },
+ "nd_tt_cw_deny_rest": {
+  "en": "The rest are dismantled: nothing is left for [SCOPE.sCountry('nd_cw_rebel').GetName] to inherit, but we have no warheads either, and the world stops believing we are armed",
+  "de": "Der Rest wird demontiert: Für [SCOPE.sCountry('nd_cw_rebel').GetAltName('AKK')] bleibt nichts zu erben, aber wir haben auch keine Sprengköpfe mehr, und die Welt glaubt nicht mehr, dass wir bewaffnet sind"
+ },
+ "nd_tt_cw_deny_supervised": {
+  "en": "All #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! of our warheads are taken apart under [SCOPE.sCountry('nd_cw_helper').GetName]'s supervision: none go missing, nothing is left for [SCOPE.sCountry('nd_cw_rebel').GetName] to inherit, and the world stops believing we are armed",
+  "de": "Alle #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! unserer Sprengköpfe werden unter der Aufsicht [SCOPE.sCountry('nd_cw_helper').GetAltName('GEN')] demontiert: Keine gehen verloren, für [SCOPE.sCountry('nd_cw_rebel').GetAltName('AKK')] bleibt nichts zu erben, und die Welt glaubt nicht mehr, dass wir bewaffnet sind"
+ },
+ "nd_tt_cw_dismantle": {
+  "en": "All #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! of our warheads are dismantled: none go to the rebels and none go missing, but we have none left, and the world stops believing we are armed",
+  "de": "Alle #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! unserer Sprengköpfe werden demontiert: Keine gehen an die Rebellen, und keine gehen verloren, aber wir haben keine mehr, und die Welt glaubt nicht mehr, dass wir bewaffnet sind"
+ },
+ "nd_tt_cw_dismantle_relations": {
+  "en": "Every other country: relations with us #G +10#!",
+  "de": "Jedes andere Land: Beziehungen mit uns #G +10#!"
+ },
+ "nd_tt_cw_split_hold": {
+  "en": "The rebels seize #R [ROOT.GetCountry.MakeScope.Var('nd_cw_hold_taken').GetValue|0]#! of our warheads, #R [ROOT.GetCountry.MakeScope.Var('nd_cw_hold_lost').GetValue|0]#! more go missing in the confusion, and we keep #v [ROOT.GetCountry.MakeScope.Var('nd_cw_hold_kept').GetValue|0]#!",
+  "de": "Die Rebellen erbeuten #R [ROOT.GetCountry.MakeScope.Var('nd_cw_hold_taken').GetValue|0]#! unserer Sprengköpfe, #R [ROOT.GetCountry.MakeScope.Var('nd_cw_hold_lost').GetValue|0]#! weitere gehen im Chaos verloren, und wir behalten #v [ROOT.GetCountry.MakeScope.Var('nd_cw_hold_kept').GetValue|0]#!"
+ },
+ "nd_tt_cw_split_pull": {
+  "en": "Only commanders who hold launch authority can take weapons over with them: the rebels seize #R [ROOT.GetCountry.MakeScope.Var('nd_cw_pull_taken').GetValue|0]#!, #R [ROOT.GetCountry.MakeScope.Var('nd_cw_pull_lost').GetValue|0]#! go missing, and we keep #v [ROOT.GetCountry.MakeScope.Var('nd_cw_pull_kept').GetValue|0]#!",
+  "de": "Nur Befehlshaber mit Startbefugnis können Waffen mit sich nehmen: Die Rebellen erbeuten #R [ROOT.GetCountry.MakeScope.Var('nd_cw_pull_taken').GetValue|0]#!, #R [ROOT.GetCountry.MakeScope.Var('nd_cw_pull_lost').GetValue|0]#! gehen verloren, und wir behalten #v [ROOT.GetCountry.MakeScope.Var('nd_cw_pull_kept').GetValue|0]#!"
+ },
+ "nd_tt_cw_withdrawn": {
+  "en": "Our warheads go into storage at once (readiness #v Recessed#!) and stay there until every civil war of ours is over: we cannot use them in this war, answer a strike with them, or raise our readiness",
+  "de": "Unsere Sprengköpfe werden sofort eingelagert (Bereitschaft #v Eingelagert#!) und bleiben dort, bis jeder unserer Bürgerkriege vorbei ist: Wir können sie in diesem Krieg nicht einsetzen, einen Schlag mit ihnen beantworten oder unsere Bereitschaft erhöhen"
+ },
+ "nd_tt_cwr_back_gov": {
+  "en": "[SCOPE.sCountry('nd_cwr_gov').GetName]'s war support in its civil war #G +5#!",
+  "de": "Die Kriegsunterstützung [SCOPE.sCountry('nd_cwr_gov').GetAltName('GEN')] in ihrem Bürgerkrieg #G +5#!"
+ },
+ "nd_tt_cwr_back_rebels": {
+  "en": "[SCOPE.sCountry('nd_cwr_reb').GetName]'s war support in its civil war #G +5#!",
+  "de": "Die Kriegsunterstützung [SCOPE.sCountry('nd_cwr_reb').GetAltName('GEN')] in ihrem Bürgerkrieg #G +5#!"
+ },
+ "nd_tt_cwr_offer": {
+  "en": "[SCOPE.sCountry('nd_cwr_gov').GetName] is offered our technicians and money to guard and count its warheads for as long as the war lasts. If it accepts, #G half#! as many of its warheads go missing whenever they change hands, and it may let us take them apart without losing one",
+  "de": "[SCOPE.sCountry('nd_cwr_gov').GetAltName('DAT')] werden unsere Techniker und unser Geld angeboten, um seine Sprengköpfe zu bewachen und zu zählen, solange der Krieg dauert. Nimmt es an, geht nur noch #G die Hälfte#! seiner Sprengköpfe verloren, wann immer sie den Besitzer wechseln, und es darf uns sie ohne Verlust demontieren lassen"
+ },
+ "nd_tt_dispute_proliferation": {
+  "en": "Their weapons programme is running, and they are our rival or we are antagonistic towards them",
+  "de": "Ihr Waffenprogramm läuft, und sie sind unser Rivale, oder wir stehen ihnen antagonistisch gegenüber"
+ },
+ "nd_tt_doctrine_adopted_1": {
+  "en": "Our doctrine becomes #v No First Use#!:\\n[GetStaticModifier('nd_doctrine_mod_1').GetDesc]\\nIt can next be changed in two years.",
+  "de": "Unsere Doktrin wird #v Kein Erstschlag#!:\\n[GetStaticModifier('nd_doctrine_mod_1').GetDesc]\\nSie kann frühestens in zwei Jahren erneut geändert werden."
+ },
+ "nd_tt_doctrine_adopted_2": {
+  "en": "Our doctrine becomes #v Existential Deterrence#!:\\n[GetStaticModifier('nd_doctrine_mod_2').GetDesc]\\nIt can next be changed in two years.",
+  "de": "Unsere Doktrin wird #v Existenzielle Abschreckung#!:\\n[GetStaticModifier('nd_doctrine_mod_2').GetDesc]\\nSie kann frühestens in zwei Jahren erneut geändert werden."
+ },
+ "nd_tt_doctrine_adopted_3": {
+  "en": "Our doctrine becomes #v Flexible First Use#!:\\n[GetStaticModifier('nd_doctrine_mod_3').GetDesc]\\nIt can next be changed in two years.",
+  "de": "Unsere Doktrin wird #v Flexibler Erstschlag#!:\\n[GetStaticModifier('nd_doctrine_mod_3').GetDesc]\\nSie kann frühestens in zwei Jahren erneut geändert werden."
+ },
+ "nd_tt_doctrine_adopted_4": {
+  "en": "Our doctrine becomes #v Nuclear Compellence#!:\\n[GetStaticModifier('nd_doctrine_mod_4').GetDesc]\\nIt can next be changed in two years.",
+  "de": "Unsere Doktrin wird #v Nukleare Nötigung#!:\\n[GetStaticModifier('nd_doctrine_mod_4').GetDesc]\\nSie kann frühestens in zwei Jahren erneut geändert werden."
+ },
+ "nd_tt_doctrine_adopted_5": {
+  "en": "Our doctrine becomes #v Nuclear Warfighting#!:\\n[GetStaticModifier('nd_doctrine_mod_5').GetDesc]\\nIt can next be changed in two years.",
+  "de": "Unsere Doktrin wird #v Nukleare Kriegsführung#!:\\n[GetStaticModifier('nd_doctrine_mod_5').GetDesc]\\nSie kann frühestens in zwei Jahren erneut geändert werden."
  },
  "principle_monetary_union_1": {
   "en": "Monetary Cooperation",
