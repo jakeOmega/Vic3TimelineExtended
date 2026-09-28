@@ -521,14 +521,14 @@ ICONS: dict[str, dict[str, dict]] = {
         "mobilization_option_home_communications": {"subject": "a chunky old telephone handset with a thick coiled cord beside a sealed envelope", "seed": 1},
         "mobilization_option_robotic_assistance": {"subject": "a chunky industrial robot arm with thick jointed segments and a two-fingered gripper claw", "seed": 1},
         "mobilization_option_logistical_support": {"subject": "a stack of three wooden supply crates on a short railway flatcar, side view", "seed": 1},
-        "mobilization_option_extensive_logistical_support": {"subject": "a stack of three wooden supply crates in front of a canvas-covered military cargo truck, side view", "seed": None},
+        "mobilization_option_extensive_logistical_support": {"subject": "a stack of three wooden supply crates in front of a canvas-covered military cargo truck, side view", "seed": 3},
         "mobilization_option_modern_logistical_support": {"subject": "a big round parachute canopy with thick cords lowering a stack of three wooden supply crates", "seed": 0},
         "mobilization_option_advanced_logistical_support": {"subject": "a stack of three wooden supply crates beside a cone-shaped space capsule with a round hatch", "seed": 1},
         # supplements
         "mobilization_option_coffee": {"subject": "a coffee cup on a saucer with thick wavy steam rising from it and three coffee beans beside it", "seed": 1},
         "mobilization_option_appliances": {"subject": "an electric kettle and a pop-up toaster side by side", "seed": 0},
         # transport
-        "mobilization_option_air_transport": {"subject": "a big four-engine propeller cargo plane with a high wing, side view", "seed": None},
+        "mobilization_option_air_transport": {"subject": "a big four-engine propeller cargo plane with a high wing, side view", "seed": 2},
         "mobilization_option_space_transport": {"subject": "a tall multi-stage rocket lifting off on a thick billowing exhaust plume", "seed": 1},
         "mobilization_option_entrenchment": {"subject": "a spade stuck upright in a wall of stacked sandbags", "seed": 1},
         # reconnaissance
@@ -538,20 +538,20 @@ ICONS: dict[str, dict[str, dict]] = {
         "mobilization_option_radar": {"subject": "a big dish-shaped radar antenna tilted upward on a thick pedestal mount", "seed": 0},
         "mobilization_option_night_vision_gear": {"subject": "an empty combat helmet with night vision goggles of two thick tube lenses mounted on its front", "seed": 1},
         "mobilization_option_missile_defense_system": {"subject": "a truck-mounted launcher with four thick box-shaped missile canisters raised at a steep angle, one missile leaving on a short thick flame", "seed": 1},
-        "mobilization_option_directed_energy_defenses": {"subject": "a squat turret on a thick pedestal firing one long thick straight beam diagonally up to the top right corner, where a small missile bursts into a star-shaped flash", "seed": None},
+        "mobilization_option_directed_energy_defenses": {"subject": "a squat turret on a thick pedestal firing one long thick straight beam diagonally up to the top right corner, where a small missile bursts into a star-shaped flash", "seed": 1},
         "mobilization_option_cyberwarfare_team": {"subject": "an open laptop computer with a big skull and crossbones on its screen", "seed": 0},
-        "mobilization_option_electronic_warfare": {"subject": "a military backpack radio set with a thick antenna, a big bold lightning bolt striking diagonally across its front", "seed": None},
+        "mobilization_option_electronic_warfare": {"subject": "a military backpack radio set with a thick antenna, a big bold lightning bolt striking diagonally across its front", "seed": 0},
         "mobilization_option_exoskeleton_suits": {"subject": "a soldier striding in a bulky powered exoskeleton suit with thick mechanical leg and arm braces, side view", "seed": 1},
         # medic support
         "mobilization_option_medevac_helicopters": {"subject": "a medical helicopter with a big cross on its side and thick rotor blades, side view", "seed": 1},
         # training. The two enhancement options run on the augmentation laws and
         # consume robotics and electronics: cybernetic, not chemical.
-        "mobilization_option_voluntary_enhancement": {"subject": "a big open robotic hand with thick jointed metal fingers, palm facing forward", "seed": None},
+        "mobilization_option_voluntary_enhancement": {"subject": "a big open robotic hand with thick jointed metal fingers, palm facing forward", "seed": 1},
         "mobilization_option_mandatory_enhancement": {"subject": "a jointed robotic forearm and mechanical hand with a heavy iron shackle and chain locked around its wrist", "seed": 0},
-        "mobilization_option_jungle_combat_training": {"subject": "a machete crossed over one big broad banana leaf", "seed": None},
+        "mobilization_option_jungle_combat_training": {"subject": "a machete crossed over one big broad banana leaf", "seed": 1},
         "mobilization_option_mountain_combat_training": {"subject": "an ice axe crossed over a jagged snow-capped mountain peak", "seed": 1},
-        "mobilization_option_flight_simulators": {"subject": "an aircraft control joystick with a trigger and thumb buttons, a small jet fighter plane flying above it", "seed": None},
-        "mobilization_option_amphibious_warfare": {"subject": "a flat-bottomed military landing craft with its front ramp lowered onto a sandy beach, side view", "seed": None},
+        "mobilization_option_flight_simulators": {"subject": "an aircraft control joystick with a trigger and thumb buttons, a small jet fighter plane flying above it", "seed": 1},
+        "mobilization_option_amphibious_warfare": {"subject": "a flat-bottomed military landing craft with its front ramp lowered onto a sandy beach, side view", "seed": 1},
     },
     # Mod-added ideologies on another ideology's (or an IG's) icon. The 24
     # ideology_custom_religion_* variants keep their base ideology's icon, as

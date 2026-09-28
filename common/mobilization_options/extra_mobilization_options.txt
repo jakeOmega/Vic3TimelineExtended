@@ -126,7 +126,7 @@ mobilization_option_logistical_support = {
 }
 
 mobilization_option_extensive_logistical_support = {
-	texture = "gfx/interface/icons/mobilization_options/luxurious_supplies.dds"
+	texture = "gfx/interface/icons/mobilization_options/mobilization_option_extensive_logistical_support.dds"
 
 	possible = {
 		scope:military_formation = {
@@ -479,7 +479,7 @@ REPLACE:mobilization_option_rail_transport = {
 }
 
 mobilization_option_air_transport = {
-	texture = "gfx/interface/icons/mobilization_options/aerial_reconaissance.dds"
+	texture = "gfx/interface/icons/mobilization_options/mobilization_option_air_transport.dds"
 
 	possible = {
 		scope:military_formation = {
@@ -907,7 +907,7 @@ mobilization_option_missile_defense_system = {
 }
 
 mobilization_option_directed_energy_defenses = {
-	texture = "gfx/interface/icons/mobilization_options/machinegunners.dds"
+	texture = "gfx/interface/icons/mobilization_options/mobilization_option_directed_energy_defenses.dds"
 
 	possible = {
 		market ?= {
@@ -1015,7 +1015,7 @@ mobilization_option_cyberwarfare_team = {
 }
 
 mobilization_option_electronic_warfare = {
-	texture = "gfx/interface/icons/mobilization_options/machinegunners.dds"
+	texture = "gfx/interface/icons/mobilization_options/mobilization_option_electronic_warfare.dds"
 
 	possible = {
 		market ?= {
@@ -1322,7 +1322,7 @@ mobilization_option_medevac_helicopters = {
 }
 
 mobilization_option_voluntary_enhancement = {
-	texture = "gfx/interface/icons/mobilization_options/machinegunners.dds"
+	texture = "gfx/interface/icons/mobilization_options/mobilization_option_voluntary_enhancement.dds"
 
 	possible = {
 		OR = {
@@ -1412,7 +1412,7 @@ mobilization_option_mandatory_enhancement = {
 }
 
 mobilization_option_jungle_combat_training = {
-	texture = "gfx/interface/icons/mobilization_options/machinegunners.dds"
+	texture = "gfx/interface/icons/mobilization_options/mobilization_option_jungle_combat_training.dds"
 
 	unlocking_principles = {
 		principle_military_training_3
@@ -1516,7 +1516,7 @@ mobilization_option_mountain_combat_training = {
 }
 
 mobilization_option_flight_simulators = {
-	texture = "gfx/interface/icons/mobilization_options/machinegunners.dds"
+	texture = "gfx/interface/icons/mobilization_options/mobilization_option_flight_simulators.dds"
 
 	unlocking_principles = {
 		principle_military_training_5
@@ -1575,7 +1575,7 @@ mobilization_option_flight_simulators = {
 }
 
 mobilization_option_amphibious_warfare = {
-	texture = "gfx/interface/icons/mobilization_options/machinegunners.dds"
+	texture = "gfx/interface/icons/mobilization_options/mobilization_option_amphibious_warfare.dds"
 
 	unlocking_principles = {
 		principle_engineering_and_logistics_3
