@@ -4,10 +4,12 @@ monthly pulse (covert_ops_apply_all_phase_effects) actually applies.
 
 Each action's accept_effect renders the operation's static modifiers with
 show_as_tooltip, at base strength (established, priority 1): unscaled, no
-duration. What the engine cannot list there (script_only fields, modifiers
-on political movements or states, conditional parts) is stated by the
-action's <type>_extra_tt line instead; STATED below is that table, and its
-numbers are checked against extra_modifiers.txt.
+duration. The engine lists every field of a rendered modifier, script_only
+ones included (a script_only type only lacks a native engine consumer).
+What it cannot list there (modifiers on political movements or states,
+conditional parts) is stated by the action's <type>_extra_tt line instead;
+STATED below is that table, and its numbers are checked against
+extra_modifiers.txt.
 
 Nothing inside show_as_tooltip runs. An add_modifier outside one would put a
 permanent, unscaled modifier on the launch click, so every add_modifier in
@@ -16,7 +18,6 @@ the actions file must sit inside one.
 Run: python3 -m unittest test_covert_launch_preview -v
 """
 
-import json
 import re
 import unittest
 
@@ -31,8 +32,6 @@ from test_covert_op_registry import (
 )
 
 MODIFIERS = ROOT / "common/static_modifiers/extra_modifiers.txt"
-MOD_TYPE_DIR = ROOT / "common/modifier_type_definitions"
-VANILLA_TYPES = ROOT / "vanilla_parsed/common/modifier_types.json"
 
 HEADER_TT = "covert_op_preview_header_tt"
 PHASE_TT = "covert_op_phase_warning_tt"
@@ -42,8 +41,6 @@ SELF_NOTE_TT = "covert_op_self_effect_note_tt"
 # preview's engine lines cannot show, and the line that states it at base
 # strength. "pct" renders 0.15 as 15%, "num" renders 0.35 as 0.35.
 STATED = (
-    ("covert_financial_subversion_extra_tt", "covert_financial_subversion",
-     "country_bubble_pressure_monthly_add", "num"),
     ("covert_infrastructure_sabotage_extra_tt", "covert_infrastructure_sabotage",
      "state_infrastructure_mult", "pct"),
     ("covert_infrastructure_sabotage_extra_tt", "covert_infrastructure_sabotage",
@@ -54,12 +51,6 @@ STATED = (
      "political_movement_radicalism_add", "pct"),
     ("covert_ideological_subversion_extra_tt", "covert_ideological_subversion",
      "political_movement_pop_attraction_mult", "pct"),
-    ("covert_destabilization_extra_tt", "covert_destabilization_resist",
-     "country_colonial_stability_drift_add", "num"),
-    ("covert_regime_change_extra_tt", "covert_regime_change",
-     "country_coup_resistance_add", "num"),
-    ("covert_nuclear_sabotage_extra_tt", "covert_nuclear_sabotage",
-     "country_nuclear_program_progress_mult", "pct"),
 )
 
 BLOCK_OPENER = re.compile(r"([\w:.@$]+)\s*=\s*\{|\}")
@@ -139,20 +130,6 @@ def _fields(modifier):
     return {k: float(v) for k, v in re.findall(r"(?m)^\t(\w+) = (-?[\d.]+)\s*$", block)}
 
 
-def _script_only_types():
-    names = set()
-    for path in sorted(MOD_TYPE_DIR.glob("*.txt")):
-        body = _strip_comments(path.read_text(encoding="utf-8-sig"))
-        for m in re.finditer(r"(?m)^(\w+)\s*=\s*\{(.*?)^\}", body, re.S):
-            if re.search(r"script_only\s*=\s*yes", m.group(2)):
-                names.add(m.group(1))
-    vanilla = json.loads(VANILLA_TYPES.read_text(encoding="utf-8"))
-    for name, (_, spec) in vanilla.items():
-        if isinstance(spec, dict) and spec.get("script_only") == ["=", "yes"]:
-            names.add(name)
-    return names
-
-
 def _fmt(value, kind):
     v = abs(value) * (100 if kind == "pct" else 1)
     return ("%g" % v) + ("%" if kind == "pct" else "")
@@ -182,7 +159,7 @@ class LaunchPreviewTests(unittest.TestCase):
                 self.assertLessEqual(own | target, pulse[t]["all"])
 
     def test_every_applied_field_is_shown_or_stated(self):
-        pulse, script_only = _pulse(), _script_only_types()
+        pulse = _pulse()
         stated = {(mod, field): key for key, mod, field, _ in STATED}
         for t in TYPES:
             own, target = _preview(t)
@@ -190,7 +167,7 @@ class LaunchPreviewTests(unittest.TestCase):
             for mod in sorted(pulse[t]["all"]):
                 for field in _fields(mod):
                     with self.subTest(type=t, modifier=mod, field=field):
-                        if mod in own | target and field not in script_only:
+                        if mod in own | target:
                             self.assertNotIn((mod, field), stated, "rendered by the engine and stated too")
                             continue
                         self.assertIn((mod, field), stated, "neither rendered nor stated")
@@ -217,6 +194,16 @@ class LaunchPreviewTests(unittest.TestCase):
                 if has_effects:
                     self.assertLess(accept.index(HEADER_TT), accept.index("show_as_tooltip"))
                     self.assertLess(accept.index("show_as_tooltip"), accept.index(PHASE_TT))
+
+    def test_preview_lines_are_position_neutral(self):
+        # In game the scope:target_country block renders after the root-level
+        # lines even though it is scripted before them, so "Not listed above"
+        # sat over a list that was below it and did list the field.
+        loc = _loc()
+        for t in TYPES:
+            for key in re.findall(r"text = (\w+)", _accept_effect(t)):
+                with self.subTest(type=t, key=key):
+                    self.assertNotRegex(loc.get(key, ""), r"(?i)\b(above|below)\b")
 
     def test_preview_keys_exist(self):
         loc = _loc()

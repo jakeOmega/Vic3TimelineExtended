@@ -516,9 +516,9 @@ class PreviewTextTests(unittest.TestCase):
     """What a player reads must include what the modifier lists can't show."""
 
     def test_collective_leadership_names_its_hidden_effect(self):
-        # country_coup_resistance_mult is script_only: it never renders in the
-        # amendment's modifier list, so the loc has to say it (the
-        # covert_regime_change_desc precedent).
+        # The loc names the amendment's coup-resistance effect. (Its
+        # original premise, that the script_only field never renders in the
+        # modifier list, was wrong: script_only fields do render.)
         value = EXPRESSION_MODIFIERS["amendment_collective_leadership"]["country_coup_resistance_mult"]
         phrase = f"+{round(float(value) * 100)}% [concept_coup_resistance]"
         loc = _loc()
