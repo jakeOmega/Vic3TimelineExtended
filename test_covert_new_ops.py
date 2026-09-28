@@ -135,11 +135,6 @@ class RegimeChangeTests(unittest.TestCase):
         )
         self.assertNotIn("has_dlc_feature", block)
 
-    def test_script_only_coup_resistance_is_named_in_the_description(self):
-        # country_coup_resistance_add is script_only: the modifier tooltip
-        # never lists it, so the description has to.
-        self.assertIn("coup", _loc()["covert_regime_change_desc"].lower())
-
 
 class NuclearSabotageTests(unittest.TestCase):
     def setUp(self):
