@@ -71,7 +71,7 @@ financial_panic = {
 
 	# Visuals
 	color = { 180 30 30 }
-	icon = "gfx/interface/icons/law_icons/command_economy.dds" # Placeholder
+	icon = "gfx/interface/icons/harvest_condition_icons/financial_panic.dds"
 }
 
 market_downturn = {
@@ -120,7 +120,7 @@ market_downturn = {
 	}
 
 	color = { 200 100 100 }
-	icon = "gfx/interface/icons/law_icons/interventionism.dds" # Placeholder
+	icon = "gfx/interface/icons/harvest_condition_icons/market_downturn.dds"
 }
 
 # POSITIVE FINANCIAL CONDITIONS
@@ -172,5 +172,5 @@ bull_market = {
 	}
 
 	color = { 100 200 100 }
-	icon = "gfx/interface/icons/law_icons/free_trade.dds" # Placeholder
+	icon = "gfx/interface/icons/harvest_condition_icons/bull_market.dds"
 }

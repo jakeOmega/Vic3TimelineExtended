@@ -91,7 +91,7 @@ Each row: current placeholder | three vanilla neighbours ‖ two generated candi
 7. **Review loop.** A contact sheet per batch beside vanilla neighbours (the prototype's `contact_sheet()`). Rejects get a new seed or an edited subject. Reject real currency, flags, lettering and recognisable faces: FLUX adds them unasked (`docs/guides/event_creation_guide.md`, from #502's review).
 8. **Docs.** Rows in `docs/auto_generated_files.md` for each new output folder; the script table in `docs/guides/python_tools.md`.
 
-**Priority:** techs, treaty articles, decrees, institutions, principles, ideologies, mobilization options, IG traits, diplomatic actions, then buildings once their allowlist entries are triaged.
+**Priority:** techs, treaty articles, decrees, institutions, principles, ideologies, mobilization options, IG traits, diplomatic actions, then buildings once their allowlist entries are triaged. The second batch (2026-09-28) followed the owner's own order; see its section below.
 
 ## Runtime (RTX 3080 10 GB, 39 GB RAM, WSL2)
 
@@ -153,6 +153,60 @@ Two company-logo problems turned up and belong to a logo pass, not this one: 76 
 - **The picture has to say what the building does.** A carbon-capture plant drawn as a power station "looks more like an emitter". FLUX adds chimneys to anything called a plant or given columns, whatever the prompt says against them; a low hall "whose whole front is a wall of big round black fans" came out clean.
 - **FLUX won't count sides or draw an L.** Eight Pentagon renders came out octagonal, and LIGO's arms parallel, crossed, single or tripled, whatever the subject said. Image-to-image from a drawn sketch does not help: FLUX.1-schnell either returns a flat sketch unchanged or loses its shape (the starting noise level is `floor(steps × strength) / steps`, and the jump comes between 0.69 and 0.75). What worked was **repairing a good render geometrically, then repainting it lightly**. For the Pentagon: mark the octagon's eight roof corners, fit a homography from a regular octagon to them, warp radially on that ground plane into a regular pentagon (concentric rings stay concentric), then run image-to-image at strength 0.5–0.56 with 32 steps to blend the seams (0.62 wrote lettering on a facade). For LIGO, whose 4 km arms have to read as 4 km: take a render with one arm receding to the horizon, read it as flat ground under a pitched camera (horizon row, focal length), rotate each half of the ground ±45° about the corner and project it back, so the arm becomes a right-angled V with a level horizon, then polish at strength 0.5. Shearing the image instead narrows the V or smears it. The result is installed as a new seed's raw with a matching `.prompt.txt`; the committed DDS is the only record.
 - **Wonders mostly came right first time**, as FLUX knows the landmarks. The misses were a monument read as a rocket (Aswan's lotus tower), a detector hall read as a pit (LHC), a floating disc (Kenyatta), and lettering on a podium, plinth or slab (Sydney, Statue of Unity, LIGO), retouched or avoided.
+
+## Second batch: the smaller categories (2026-09-28)
+
+The owner's order: mobilization options, ideologies, decrees, the four remaining laws, institutions, IG traits, the combined-arms character traits, harvest conditions and the one power bloc identity. Each category renders while the previous one is reviewed. `~/flux_runs/run_cat.sh <log> <category> <seeds> <keys...>` queues one category's render and compose.
+
+Every category below is read only from its entity's icon field; the engine has no second lookup like the lens bar. The GUI functions are `MobilizationOption.GetTexture`, `Ideology.GetTexture`, `Decree.GetTexture`, `Law.GetTexture` (amendments show their parent's icon), `Institution.GetIcon`, `InterestGroupTrait.GetTexture`, `CharacterTrait.GetTexture`, `HarvestConditionType.GetIcon` and `PowerBlocIdentity.GetIcon`.
+
+| Category | Count | Layout | Notes |
+|---|---|---|---|
+| Mobilization options | 27 | `emboss`, with a colour gradient | 14 were on `machinegunners.dds` |
+| Ideologies | 3 IG, 6 leader | `emboss_medallion` | `leader_ideology` is a second category (silver on teal, `ideology_leader/`); the 24 `custom_religion_*` variants keep their base icon, as vanilla's do |
+| Decrees | 15 | `medallion`, with the disc colour set | 13 were on `road_maintenance` |
+| Laws | 4 | `tinted` (new) | penal labor camps, private military contractors, littoral defense, auxiliary fleet |
+| Institutions | 17 | `tinted` | `icon` only; `background_texture` (a 3500×220 painted strip) stays borrowed |
+| IG traits | 15 | `card` (new), one category per approval slot | the traditionalist trio is the Devout IG's own set and stays |
+| Character traits | 6 | `card` | the combined-arms traits are `type = condition`, so the condition card |
+| Harvest conditions | 3 | `framed` | the round rim lifts like the building frame |
+| Power bloc identity | 1 | `cutout` | Diplomatic Framework |
+
+**Silhouettes.** The first mobilization renders showed two failures of the plain silhouette prompt. Outline-only parts (an envelope, a coiled cord) embossed to hairlines, and a locomotive ran off the canvas, which the emboss cut square. The shared `SILHOUETTE` style now asks for thick chunky shapes with a few bold white cut-outs, no outlines, and the whole object inside a wide margin. The emboss bevels every edge, so a subject still has to avoid thin parts: a beam, an antenna, radio waves. Wide objects in side view come out thin, because the fit is to the longer side; a cargo plane climbing at an angle fills more of the icon than one seen level.
+
+**Colour is fitted, not picked.** Vanilla's copper, gold and silver shift in hue from top to bottom, not just in brightness. Mobilization copper runs pinkish (181,128,106) to orange-brown (148,73,38). `embossed()` takes an optional `color_bottom` and blends a render in each colour row by row; the style is linear in its colour, so that is exact. The two colours are fitted by rendering a few candidates, measuring the median of the top and bottom quarters of the shape, scaling each colour by target over measured, and repeating until it settles (three or four rounds). The emboss's lighting has a median of about 0.6, so a fitted channel can exceed 255; the style multiplies before it clips. The same fit set the ideology gold and silver, and the IG-trait and character-trait pictograms (one colour pair per card colour, since vanilla tints the pictogram towards its card).
+
+**Fit the size to vanilla too.** Ideology symbols at `fill` 0.60 spanned 123 of 220 px; vanilla's median is 156, so `fill` is 0.75.
+
+**A median disc can be wrong.** The decree disc, sampled from the folder median just inside the ring, came out grey-green (69,89,84) where vanilla's is near-black teal (28,42,42). Decree objects crowd that band, so the median there is part object. A medallion category can now set `disc = (centre, edge)`. Decrees use colours measured on vanilla's bare disc pixels.
+
+**`tinted`: one metal, from vanilla.** Vanilla law and institution icons are painted objects in a single tan-bronze palette. `tone_ramp()` reads the folder's luminance distribution and its median colour at each luminance. `compose_tinted()` cuts the render out, matches its luminance to that distribution percentile for percentile, and maps each pixel through the ramp. Shading and brush strokes survive while every hue goes. Institutions take the ramp from `law_icons`, because `institution_icons` also holds the dark disc the GUI draws them over.
+
+**`card`: a blank card lifted from vanilla.** IG traits (124×162) and character traits (240×320) are cards whose frame colour carries meaning: the approval slot (gold loyal, green happy, rust unhappy) or the trait type (pink condition, grey skill, blue personality). Frame colours are sampled 3 px inside the card's left edge at mid-height. `card_template()` works from the folder's cards with that frame colour. On each card a pixel is bare unless it lies within 3 px of dark (pictograms have light highlights and edges), except the card's own vines: pixels in the top or bottom band that are dark on at least 90% of cards.
+- Outside a central ellipse, a pixel is the median over the cards on which it is bare, which keeps the frame, corner ornaments and edge shadow.
+- Inside it, the Gaussian-weighted average of every bare observation on every card (normalized convolution): a smooth gradient in the card's colours, like vanilla's middles, which the new pictogram mostly covers.
+
+Three earlier versions failed:
+- A median over bare cards in the middle kept ghosts of the pictograms, plus fragments along the bottom that read as text.
+- Biharmonic inpainting of the cleanest card overshot into white, blue and black blobs.
+- Filling from the plain median pulled the pictograms' dark in.
+
+The pictogram's `fill` is (width, height) of the card. Vanilla's span about 0.8 × 0.7; the first try at 0.7 × 0.6 looked small.
+
+**What FLUX added unasked** (see also the registry docstring):
+- A subject naming a device wrote its name: "radio jammer" drew JAMMER.
+- A camera came with a brand ("Catear").
+- Gold coins came with $ signs, and a customs gate's posts with numbered plates.
+- A laser turret read as a camera or a searchlight until it fired a beam at a target.
+- A landing craft read as a ferry, a flight simulator as a lunar lander, a parachute as vanilla's hot-air balloon, and a night-vision helmet seen from the front as a face.
+
+**Retouching, second batch.** Three small tools live in `~/flux_runs/tools/`. Each keeps the untouched raw in `~/flux_runs/originals/`, and after a retouch the DDS is deleted and written again.
+- **`fill_white_holes.py`.** FLUX sometimes draws a silhouette part as white inside a black outline (an envelope, a toaster, a capsule window, a tank's front plate), and the emboss cuts it out. The tool fills each enclosed white region after shrinking it by `--groove` px, so the part turns solid and keeps an engraved line where its outline was. `--min-area` spares wheel rings and slots. `--close` bridges small outline gaps. A region open to the background on a whole side is not enclosed: fill that polygon by hand.
+- **`inpaint_boxes.py`.** Paints out hull numbers, emblems, truck lettering and painters' signatures, filling each box biharmonically from a margin. Keep the margin off neighbouring surfaces, or white background or dark trim bleeds in.
+- **Mirroring.** Promote Tourism's camera had a second lens ring drawn over the first. Where the ring crossed the lens, the lens's own mirror image about its centre restored it; elsewhere, the leather was mirrored from the other side of the symmetric camera body. Soft-edged masks hide the seams, and the mask must cover the old ring's rim or a ghost of it shows.
+- **Stray specks in a silhouette.** Dark connected parts under 1% of the largest one can be whitened in the raw (Fire Support).
+
+**Pairs share a symbol.** An ideology held by both an IG and a leader (Multiculturalist, Anti-Colonialist) uses one subject in both categories. The same prompt and seed render the same picture, so the two looks match.
 
 ## Review lessons (2026-09-27)
 

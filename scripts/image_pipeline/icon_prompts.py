@@ -21,8 +21,12 @@ defaults (September 2026, ~350 icons):
 - Unnamed colours drift to real-world defaults: "paper banknotes" drew US
   dollars. No screens with text, no currency, flags or faces.
 - Words that imply writing get written: "voting card" drew VOTE, "holy book"
-  HOLY, "payment-plan tag" Payment, a share certificate its title. Name the
-  object, not its purpose ("a small green wooden block").
+  HOLY, "payment-plan tag" Payment, a share certificate its title, "radio
+  jammer" JAMMER. Name the object, not its purpose ("a small green wooden
+  block").
+- Gold coins come with $ signs ("plain gold coins each stamped with a small
+  star"), a camera with a brand name, a customs gate's posts with numbered
+  plates. Zoom the raw render of any pick with coins, devices or signage.
 - Vehicles and aircraft come with insignia: a red star, a US Army star,
   roundels, red crosses on a bomber. Choose an unmarked candidate; saying "no
   markings" does not stop them.
@@ -49,6 +53,14 @@ defaults (September 2026, ~350 icons):
   those out, and ask for ", loosely hand-painted with visible brush
   strokes" in the subject rather than editing the category style, which
   would change every approved prompt.
+- In the embossed layouts (mobilization options, ideologies, trait cards) the
+  bevel turns thin parts into dark hairlines: a beam, an antenna, radio
+  waves, fronds. Ask for thick shapes. A wide object seen side-on fits the
+  icon's width and comes out thin; an angled view fills more of it.
+- Some objects read as something else at icon size: a laser turret as a
+  camera (make it fire at a target), a landing craft as a ferry, a flight
+  simulator pod as a lunar lander, a parachute as a hot-air balloon, a
+  helmet seen from the front as a face.
 When both candidates miss, change the subject. When the idea is right and the
 renders are weak, `generate_icons.py --seeds 4` adds two more candidates and
 keeps the first two.
@@ -71,8 +83,14 @@ KEEP = "keep"
 PAINTED = ("stylized hand-painted video game icon, painterly digital art with visible "
            "brush strokes, soft 3D shading, warm muted palette, blank unmarked surfaces, "
            "three-quarter view from slightly above, centered, isolated on a plain white background")
-SILHOUETTE = ("a solid black silhouette of {subject}, simple flat pictogram stencil, "
-              "bold clean shapes, no outline, on a plain white background")
+# For the embossed categories. A plainer "solid black silhouette ... bold clean
+# shapes" drew outline-only parts (an envelope, a coiled cord) that emboss to
+# hairlines, and let a locomotive run off the canvas, which the emboss then cut
+# square.
+SILHOUETTE = ("a bold solid black silhouette icon of {subject}, simple flat pictogram stencil, "
+              "thick chunky shapes with a few bold white cut-out details, no thin lines, no outlines, "
+              "no hatching, the whole object fully visible and centered with a wide white margin on "
+              "every side, on a plain white background")
 
 # folder/size/mode/fill/style drive rendering and composing. A category that
 # `generate_icons.py` produces also names where its entities live
@@ -104,14 +122,88 @@ CATEGORIES = {
         style=("aerial three-quarter view of {subject}, detailed painted illustration "
                "of a miniature diorama, warm golden afternoon light, muted earthy "
                "palette, surrounding landscape, the building fills the center of the image")),
+    # Ideology icons are read only from `icon =` (Ideology.GetTexture). IG
+    # ideologies are gold on a crimson disc; leader (character) ideologies
+    # silver on teal, in ideology_leader/. Vanilla gives an ideology held by
+    # both an IG and a leader one symbol in both looks (abolitionist's chains).
     "ideology": dict(
-        folder="ideology_icons", size=220, mode="emboss_medallion", fill=0.60,
-        color=(255, 228, 175), centre_lift=1.25, style=SILHOUETTE),
+        folder="ideology_icons", size=220, mode="emboss_medallion", fill=0.75,
+        entity_dir="common/ideologies", field="icon",
+        # fill 0.75: vanilla's symbols span ~156 of 220 px (0.60 gave 123).
+        # Colours fitted like mobilization's: symbol top (201,178,140), bottom (174,141,94).
+        color=(281, 254, 207), color_bottom=(257, 204, 131), centre_lift=1.25, style=SILHOUETTE),
+    "leader_ideology": dict(
+        folder="ideology_icons/ideology_leader", size=220, mode="emboss_medallion", fill=0.75,
+        entity_dir="common/ideologies", field="icon",
+        # Symbol top (179,186,196), bottom (124,132,146): a bluish silver.
+        color=(261, 269, 281), color_bottom=(172, 184, 207), centre_lift=1.25, style=SILHOUETTE),
+    # Read only from `texture =` (MobilizationOption.GetTexture); no second lookup.
     "mobilization_option": dict(
         folder="mobilization_options", size=208, mode="emboss", fill=0.86,
-        color=(240, 140, 90), style=SILHOUETTE),
+        entity_dir="common/mobilization_options", field="texture",
+        # Fitted so the top and bottom quarters' median colours match
+        # vanilla's 19 icons: (181,128,106) pinkish, (148,73,38) orange-brown.
+        # Channels above 255 are fine: the emboss multiplies by its lighting
+        # (median ~0.6) before clipping.
+        color=(283, 212, 185), color_bottom=(249, 115, 55), style=SILHOUETTE),
+    # Vanilla's law icons are painted objects in one tan-bronze palette; the
+    # `tinted` layout recasts a painted render in it. Read from `icon =`
+    # (Law.GetTexture, LawType.GetTexture; amendments show their parent's).
+    "law": dict(
+        folder="law_icons", size=256, mode="tinted", fill=0.9,
+        entity_dir="common/laws", field="icon",
+        style="{subject}, one chunky readable object, " + PAINTED),
+    # The same metal as laws. The ramp comes from law_icons: institution_icons
+    # also holds institution_icon_bg, the dark disc the GUI draws them over.
+    # Only `icon =` is wired; `background_texture` (a 3500x220 painted strip in
+    # illustrations/institutions/) is a different layout.
+    "institution": dict(
+        folder="institution_icons", ramp_folder="law_icons", size=256, mode="tinted", fill=0.9,
+        entity_dir="common/institutions", field="icon",
+        style="{subject}, one chunky readable object, " + PAINTED),
+    # IG trait cards (124x162, InterestGroupTrait.GetTexture): a dark embossed
+    # pictogram on a card whose colour is the trait's approval slot, gold for
+    # loyal, green for happy, rust for unhappy. One category per slot, since
+    # the card is per category; card_template() lifts each from vanilla.
+    # The pictogram takes a tint from its card, as vanilla's do: colours fitted
+    # per slot to the top and bottom quarters of vanilla's pictograms.
+    **{f"ig_trait_{slot}": dict(
+        folder="ig_trait_icons", size=162, card_size=(124, 162), frame=frame, mode="card",
+        fill=(0.82, 0.7), entity_dir="common/interest_group_traits", field="icon",
+        color=top, color_bottom=bottom, style=SILHOUETTE)
+       for slot, frame, top, bottom in (
+           ("loyal", (251, 249, 140), (119, 94, 73), (140, 102, 73)),
+           ("happy", (145, 173, 121), (122, 151, 122), (68, 89, 65)),
+           ("unhappy", (190, 124, 100), (90, 82, 84), (152, 116, 96)))},
+    # Character traits (240x320, CharacterTrait.GetTexture) use the same card
+    # layout; the frame colour is the trait's type: condition pink (184,129,128
+    # where card_template samples it), skill grey (151,149,139), personality
+    # blue (125,147,158). Pictogram colours fitted to vanilla's condition cards.
+    "character_trait": dict(
+        folder="character_trait_icons", size=320, card_size=(240, 320), frame=(184, 129, 128),
+        mode="card", fill=(0.8, 0.72), entity_dir="common/character_traits", field="texture",
+        color=(99, 101, 101), color_bottom=(65, 45, 43), style=SILHOUETTE),
+    # Harvest conditions (150 px, HarvestConditionType.GetIcon): a painted
+    # scene inside a round copper rim, which `framed` lifts from vanilla like
+    # the building frame.
+    "harvest_condition": dict(
+        folder="harvest_condition_icons", size=150, mode="framed",
+        entity_dir="common/harvest_condition_types", field="icon",
+        style=("{subject}, simple painted illustration of one clear scene, muted colours, soft "
+               "painterly brush strokes, the subject fills the center of the image")),
+    # Power bloc identities (~200 px, PowerBlocIdentity.GetIcon): one ornate,
+    # often gilded object on a transparent background. The background field
+    # is shared by every identity, vanilla's too.
+    "power_bloc_identity": dict(
+        folder="central_identity_pillars_icons", size=200, mode="cutout", fill=0.92,
+        entity_dir="common/power_bloc_identities", field="icon",
+        style="{subject}, one ornate readable object, " + PAINTED),
+    # Read only from `texture =` (Decree.GetTexture, DecreeType.GetTexture).
     "decree": dict(
-        folder="decree", size=158, mode="medallion", fill=0.78, centre_lift=2.1,
+        folder="decree", size=158, mode="medallion", fill=0.78,
+        # Vanilla's disc, measured on its bare pixels: centre, then edge.
+        disc=((28, 42, 42), (25, 44, 50)),
+        entity_dir="common/decrees", field="texture",
         grade_folder="invention_icons",
         style="{subject}, one chunky compact object, bright warm lighting, " + PAINTED),
 }
@@ -470,6 +562,163 @@ ICONS: dict[str, dict[str, dict]] = {
         "building_phosphate_mine": {"subject": "a wide open-cast mine with pale tan terraces and a long conveyor belt, with a heap of pale grey-tan phosphate rock pellets in the foreground", "seed": 0},
         "building_potash_mine": {"subject": "a mine with a tall headframe beside huge pink salt heaps, with a pile of pink and red potash salt crystals in the foreground", "seed": 0},
         "building_industrial_mineral_salt_mine": {"subject": "shallow salt evaporation pans and white salt heaps with conveyor belts, with a pile of large white salt crystals and grey gypsum chunks in the foreground", "seed": 1},
+    },
+    "mobilization_option": {
+        # Mod-added options on a vanilla icon (14 on machinegunners), by group.
+        # The emboss bevels every edge, so a thin part (a beam, an antenna,
+        # radio waves) comes out as a dark hairline: ask for thick shapes.
+        # supplies: the four logistics tiers share the crate stack, as vanilla's
+        # supply tiers share their tins.
+        "mobilization_option_home_communications": {"subject": "a chunky old telephone handset with a thick coiled cord beside a sealed envelope", "seed": 1},
+        "mobilization_option_robotic_assistance": {"subject": "a chunky industrial robot arm with thick jointed segments and a two-fingered gripper claw", "seed": 1},
+        "mobilization_option_logistical_support": {"subject": "a stack of three wooden supply crates on a short railway flatcar, side view", "seed": 1},
+        "mobilization_option_extensive_logistical_support": {"subject": "a stack of three wooden supply crates in front of a canvas-covered military cargo truck, side view", "seed": 3},
+        "mobilization_option_modern_logistical_support": {"subject": "a big round parachute canopy with thick cords lowering a stack of three wooden supply crates", "seed": 0},
+        "mobilization_option_advanced_logistical_support": {"subject": "a stack of three wooden supply crates beside a cone-shaped space capsule with a round hatch", "seed": 1},
+        # supplements
+        "mobilization_option_coffee": {"subject": "a coffee cup on a saucer with thick wavy steam rising from it and three coffee beans beside it", "seed": 1},
+        "mobilization_option_appliances": {"subject": "an electric kettle and a pop-up toaster side by side", "seed": 0},
+        # transport
+        "mobilization_option_air_transport": {"subject": "a big four-engine propeller cargo plane with a high wing, side view", "seed": 2},
+        "mobilization_option_space_transport": {"subject": "a tall multi-stage rocket lifting off on a thick billowing exhaust plume", "seed": 1},
+        "mobilization_option_entrenchment": {"subject": "a spade stuck upright in a wall of stacked sandbags", "seed": 1},
+        # reconnaissance
+        "mobilization_option_space_recon": {"subject": "a reconnaissance satellite: a boxy body with a big round camera lens and two wide rectangular solar panel wings", "seed": 1},
+        "mobilization_option_molecular_scanners": {"subject": "a big magnifying glass held over a molecule model of five linked balls", "seed": 0},
+        # special weapons
+        "mobilization_option_radar": {"subject": "a big dish-shaped radar antenna tilted upward on a thick pedestal mount", "seed": 1},
+        "mobilization_option_night_vision_gear": {"subject": "an empty combat helmet with night vision goggles of two thick tube lenses mounted on its front", "seed": 1},
+        "mobilization_option_missile_defense_system": {"subject": "a truck-mounted launcher with four thick box-shaped missile canisters raised at a steep angle, one missile leaving on a short thick flame", "seed": 1},
+        "mobilization_option_directed_energy_defenses": {"subject": "a squat turret on a thick pedestal firing one long thick straight beam diagonally up to the top right corner, where a small missile bursts into a star-shaped flash", "seed": 1},
+        "mobilization_option_cyberwarfare_team": {"subject": "an open laptop computer with a big skull and crossbones on its screen", "seed": 1},
+        "mobilization_option_electronic_warfare": {"subject": "a military backpack radio set with a thick antenna, a big bold lightning bolt striking diagonally across its front", "seed": 0},
+        "mobilization_option_exoskeleton_suits": {"subject": "a soldier striding in a bulky powered exoskeleton suit with thick mechanical leg and arm braces, side view", "seed": 1},
+        # medic support
+        "mobilization_option_medevac_helicopters": {"subject": "a medical helicopter with a big cross on its side and thick rotor blades, side view", "seed": 1},
+        # training. The two enhancement options run on the augmentation laws and
+        # consume robotics and electronics: cybernetic, not chemical.
+        "mobilization_option_voluntary_enhancement": {"subject": "a big open robotic hand with thick jointed metal fingers, palm facing forward", "seed": 1},
+        "mobilization_option_mandatory_enhancement": {"subject": "a jointed robotic forearm and mechanical hand with a heavy iron shackle and chain locked around its wrist", "seed": 0},
+        "mobilization_option_jungle_combat_training": {"subject": "a machete crossed over one big broad banana leaf", "seed": 1},
+        "mobilization_option_mountain_combat_training": {"subject": "an ice axe crossed over a jagged snow-capped mountain peak", "seed": 1},
+        "mobilization_option_flight_simulators": {"subject": "an aircraft control joystick with a trigger and thumb buttons, a small jet fighter plane flying above it", "seed": 1},
+        "mobilization_option_amphibious_warfare": {"subject": "a flat-bottomed military landing craft with its front ramp lowered onto a sandy beach, side view", "seed": 1},
+    },
+    # Mod-added ideologies on another ideology's (or an IG's) icon. The 24
+    # ideology_custom_religion_* variants keep their base ideology's icon, as
+    # vanilla's variants do (papal_paternalistic on paternalistic).
+    # An ideology an IG and a leader both hold shares its subject, as vanilla's
+    # do; the same subject and seed render the same symbol in both looks.
+    "ideology": {
+        "ideology_multicultural_ig": {"subject": "three hands clasping each other's wrists to form a triangle", "seed": 0},
+        "ideology_anti_colonialist": {"subject": "a raised clenched fist in front of a globe with its continents, a thick white outline all around the fist separating it from the globe", "seed": 1},
+        "ideology_islamic_inheritance": {"subject": "an open book resting on an X-shaped folding wooden book stand, a small crescent moon above it", "seed": 1},
+    },
+    # Mod-added decrees: 13 on road_maintenance, greenest grass on vanilla's
+    # greener grass wagon, the resettlement drive on social mobility's ladder.
+    # Vanilla's encourage_* decrees share a mint-green arrow; the migration
+    # ones here borrow it.
+    "decree": {
+        "decree_war_propaganda": {"subject": "a large brass megaphone with a red cloth streamer tied to its handle", "seed": 1},
+        "decree_political_patronage": {"subject": "a gilded key on a red ribbon passed from one hand to another", "seed": 0},
+        "decree_bureaucracy_reform": {"subject": "a tall stack of manila folders tied with red tape, a pair of steel scissors beside it", "seed": 0},
+        "decree_cultural_emigration_initiative": {"subject": "a battered brown leather suitcase with a big mint-green arrow pointing away to the right", "seed": 1},
+        "decree_pollution_control": {"subject": "a squat brick factory chimney capped with a big mint-green air filter, a green leaf beside it", "seed": 0},
+        "decree_cultural_integration": {"subject": "two hands clasped in a firm handshake, one in a brown wool sleeve and one in a blue linen sleeve", "seed": 1},
+        "decree_natalism_initiative": {"subject": "a wooden baby cradle with a soft blue blanket", "seed": 0},
+        # "a stack of gold coins" drew $ signs on every coin.
+        "decree_tax_breaks": {"subject": "a stack of plain gold coins each stamped with a small star, beside a big mint-green arrow pointing down", "seed": 0},
+        # A customs gate came with numbered plates on its posts.
+        "decree_trade_reform": {"subject": "a red and white striped boom barrier arm raised up on a squat post, a wooden cargo crate on the ground beside it", "seed": 0},
+        "decree_antiterrorism_campaign": {"subject": "a black riot shield and a police baton crossed", "seed": 1},
+        # s1 is retouched: FLUX drew a second lens ring over the first.
+        "decree_promote_tourism": {"subject": "a straw sun hat and a vintage brown leather camera", "seed": 1},
+        "decree_encourage_emigration": {"subject": "a small ocean liner with a big mint-green arrow pointing away to the right", "seed": 0},
+        "decree_subsidize_immigration": {"subject": "a battered brown leather suitcase standing on a stack of gold coins", "seed": 0},
+        "decree_greenest_grass_campaign": {"subject": "a covered wagon drawn by two horses on a patch of vivid green grass, a big mint-green arrow pointing up behind it", "seed": 1},
+        "decree_resettlement_recruitment_drive": {"subject": "a small new timber house with a big mint-green arrow pointing into its open door", "seed": 0},
+    },
+    # The four mod-added laws still on another law's icon.
+    "law": {
+        "law_penal_labor_camps": {"subject": "a heavy iron ball and chain lying beside a pickaxe", "seed": 0},
+        "law_private_military_contractors": {"subject": "an empty modern combat helmet sitting on a tall stack of gold coins", "seed": 0},
+        "law_littoral_defense": {"subject": "a squat round stone coastal gun tower on a rocky shore, a small fast patrol boat beside it", "seed": 1},
+        # s1 is retouched: hull number, bow emblems and truck lettering painted out.
+        "law_auxiliary_fleet": {"subject": "a big sealift cargo ship with army trucks and crates lashed on its deck", "seed": 1},
+    },
+    # Mod-added institutions, all on one of vanilla's seven icons.
+    "institution": {
+        "institution_ministry_of_war": {"subject": "two crossed cavalry sabres behind a round iron army helmet", "seed": 1},
+        "institution_ministry_of_commerce": {"subject": "a bulging leather money pouch beside a stack of coins", "seed": 1},
+        "institution_ministry_of_foreign_affairs": {"subject": "a rolled treaty scroll tied with a ribbon and a wax seal, a quill pen beside it", "seed": 0},
+        # "a classical bank building" wrote BANK on its pediment.
+        "institution_national_bank": {"subject": "a stack of gold bars on the steps of a classical building front with tall columns and a plain blank triangular pediment", "seed": 0},
+        "institution_ministry_of_culture": {"subject": "a laurel-crowned marble bust beside a painter's palette with brushes", "seed": 1},
+        "institution_ministry_of_labor": {"subject": "a worker's flat cap resting on an anvil with a hammer", "seed": 1},
+        "institution_ministry_of_the_environment": {"subject": "a young oak sapling growing from a mound of earth, a watering can beside it", "seed": 0},
+        "institution_ministry_of_intelligence_and_security": {"subject": "a large magnifying glass lying across a sealed dossier folder", "seed": 1},
+        "institution_ministry_of_refugee_affairs": {"subject": "a canvas relief tent with a bundle and a suitcase in front of it", "seed": 0},
+        "institution_ministry_of_propaganda": {"subject": "a big vintage broadcast microphone on a stand", "seed": 0},
+        "institution_ministry_of_science": {"subject": "a brass microscope beside a round-bottomed glass flask", "seed": 0},
+        "institution_ministry_of_thought_control": {"subject": "a large padlock locking a closed book shut", "seed": 1},
+        "institution_ministry_of_consumer_protection": {"subject": "a wicker shopping basket of groceries in front of a round shield", "seed": 1},
+        "institution_ministry_of_urban_planning": {"subject": "a small architectural model of a city block with a drafting compass leaning on it", "seed": 0},
+        "institution_ministry_of_religion": {"subject": "a large brass bell standing on the ground beside a lit candle", "seed": 1},
+        "institution_ministry_of_international_aid": {"subject": "a wooden supply crate with a cross on its side, a sack of grain beside it", "seed": 0},
+        "institution_migration_controls": {"subject": "a wooden rubber stamp standing on an ink pad beside a small booklet", "seed": 0},
+    },
+    # The custom-religion IG traits on another trait's card (all but the
+    # traditionalist trio, which is the Devout IG's own set). Slot = category.
+    "ig_trait_loyal": {
+        "ig_trait_custom_religion_market_liberal_loyal": {"subject": "a stack of coins with a small seedling sprouting from the top", "seed": 0},
+        "ig_trait_custom_religion_social_democrat_loyal": {"subject": "three simple human figures standing arm in arm", "seed": 0},
+        "ig_trait_custom_religion_totalitarian_loyal": {"subject": "an armoured gauntlet gripping a shepherd's crook", "seed": 0},
+        "ig_trait_custom_religion_imperial_cult_loyal": {"subject": "a crown above a raised open hand taking an oath", "seed": 1},
+        "ig_trait_custom_religion_theocratic_loyal": {"subject": "a judge's gavel resting on an open book", "seed": 1},
+    },
+    "ig_trait_happy": {
+        "ig_trait_custom_religion_market_liberal_happy": {"subject": "two praying hands pressed together around a single plain coin stamped with a star", "seed": 0},
+        "ig_trait_custom_religion_social_democrat_happy": {"subject": "a ladle over a steaming soup pot", "seed": 1},
+        "ig_trait_custom_religion_totalitarian_happy": {"subject": "a grid of identical small human figures in neat rows", "seed": 0},
+        "ig_trait_custom_religion_imperial_cult_happy": {"subject": "a radiant crown with bold rays behind it", "seed": 0},
+        "ig_trait_custom_religion_theocratic_happy": {"subject": "two hands clasped in a handshake over an open book", "seed": 0},
+    },
+    "ig_trait_unhappy": {
+        "ig_trait_custom_religion_market_liberal_unhappy": {"subject": "a fat bulging money sack spilling coins", "seed": 1},
+        "ig_trait_custom_religion_social_democrat_unhappy": {"subject": "a lopsided balance scale, its left pan sunk low and heaped with coins, its right pan raised high and empty", "seed": 0},
+        "ig_trait_custom_religion_totalitarian_unhappy": {"subject": "a heavy military boot stamping down on a quill pen", "seed": 1},
+        "ig_trait_custom_religion_imperial_cult_unhappy": {"subject": "a sword crossed over a sceptre behind a round shield", "seed": 1},
+        "ig_trait_custom_religion_theocratic_unhappy": {"subject": "a flaming torch crossed with a pitchfork", "seed": 1},
+    },
+    # The combined-arms general traits (type = condition, so the condition
+    # card) on vanilla skill and personality icons.
+    "character_trait": {
+        "trait_combined_arms_infantry_screen": {"subject": "a line of three infantry soldiers kneeling with rifles raised, side view", "seed": 1},
+        "trait_combined_arms_fire_support": {"subject": "a field artillery howitzer firing, a bold burst of flame at its muzzle", "seed": 1},
+        "trait_combined_arms_recon": {"subject": "a mounted scout on horseback raising binoculars to his eyes", "seed": 0},
+        "trait_combined_arms_armor": {"subject": "a battle tank charging forward, side view", "seed": 1},
+        "trait_combined_arms_air_superiority": {"subject": "a fighter plane diving steeply", "seed": 0},
+        # s2 is retouched: the tank's front plate filled (FLUX drew it hollow) and a hull star removed.
+        "trait_combined_arms_full_spectrum": {"subject": "a fighter plane flying low over a tank, an infantry soldier standing beside the tank, all overlapping as one compact group", "seed": 2},
+    },
+    # The mod's financial "harvest conditions", on law icons.
+    "harvest_condition": {
+        # market_downturn and bull_market s0 are retouched: painters' signatures along the bottom.
+        "financial_panic": {"subject": "a crowd of small figures rushing at the shut doors of a columned bank under a dark stormy sky", "seed": 0},
+        "market_downturn": {"subject": "a row of shuttered shop fronts on an empty grey street at dusk, dry leaves blowing past", "seed": 0},
+        "bull_market": {"subject": "a charging bull in front of a bright golden sunrise", "seed": 0},
+    },
+    # Diplomatic Framework, on the Ideological Union's lectern.
+    "power_bloc_identity": {
+        "identity_diplomatic": {"subject": "a rolled treaty parchment with a red wax seal, a gilded olive branch laid across it", "seed": 0},
+    },
+    "leader_ideology": {
+        "ideology_multicultural": {"subject": "three hands clasping each other's wrists to form a triangle", "seed": 0},
+        "ideology_anti_colonialist_leader": {"subject": "a raised clenched fist in front of a globe with its continents, a thick white outline all around the fist separating it from the globe", "seed": 1},
+        "ideology_multicultural_inclusive": {"subject": "three hands clasping each other's wrists to form a triangle around a heart", "seed": 0},
+        "ideology_environmentalists": {"subject": "a broad oak tree with a round leafy crown and spreading roots", "seed": 0},
+        "ideology_optimist_transhumanist": {"subject": "a DNA double helix rising in front of a half sun with bold rays", "seed": 1},
+        "ideology_corporate": {"subject": "a leather briefcase in front of a tall skyscraper", "seed": 1},
     },
 }
 
