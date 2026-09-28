@@ -8985,8 +8985,10 @@ template article_input_fixed_bottom {
 		minimumsize = { 400 -1 }
 		datacontext = "[ArticleDraft.GetArticleType]"
 
+		# Also hidden for a quantity-only article (TE): like the money
+		# transfer, it has no list above the divider.
 		divider_clean = {
-			visible = "[Not(Or(ArticleDraft.HasType('bankroll'), ArticleDraft.HasType('money_transfer')))]"
+			visible = "[Not(Or(Or(ArticleDraft.HasType('bankroll'), ArticleDraft.HasType('money_transfer')), And(ArticleDraft.RequiresInput('quantity'), Not(ArticleDraft.RequiresInput('goods')))))]"
 			parentanchor = hcenter
 		}
 
@@ -8997,6 +8999,14 @@ template article_input_fixed_bottom {
 			### MONEY TRANSFER
 			article_input_select_money = {
 				visible = "[Or(ArticleDraft.HasType('bankroll'), ArticleDraft.HasType('money_transfer'))]"
+			}
+
+			### QUANTITY (GENERIC - NOT MONEY OR GOODS)
+			# Vanilla draws its quantity inputs only for money_transfer and
+			# goods_transfer, by type name, so any other article with a
+			# `quantity` input (nuclear_arms_limitation) had no field to fill.
+			article_input_select_quantity = {
+				visible = "[And(ArticleDraft.RequiresInput('quantity'), Not(Or(Or(ArticleDraft.HasType('bankroll'), ArticleDraft.HasType('money_transfer')), ArticleDraft.RequiresInput('goods'))))]"
 			}
 
 			### STATE
@@ -11731,6 +11741,103 @@ types article_input_types
 					using = elide_fontsize_min
 					max_width = 100
 					text = "SLASH_PER_WEEK"
+				}
+			}
+		}
+	}
+
+	### QUANTITY (GENERIC - NOT MONEY OR GOODS)
+	# article_input_select_money without the money: the article's own icon,
+	# no per-week suffix and no percentage. What the number counts is stated
+	# per article type.
+	type article_input_select_quantity = container {
+		minimumsize = { 300 50 }
+
+		flowcontainer = {
+			parentanchor = center
+			direction = vertical
+			spacing = 5
+
+			textbox = {
+				visible = "[ArticleDraft.HasType('nuclear_arms_limitation')]"
+				parentanchor = hcenter
+				autoresize = yes
+				align = hcenter|nobaseline
+				using = elide_fontsize_min
+				max_width = 380
+				text = "TE_ARTICLE_QUANTITY_PROMPT_NUCLEAR_ARMS_LIMITATION"
+			}
+
+			scrollbar = {
+				parentanchor = hcenter
+				direction = horizontal
+				size = { 240 20 }
+				value = "[ArticleDraft.GetQuantity]"
+
+				min = "[ArticleDraft.GetMinValidQuantity]"
+				max = "[ArticleDraft.GetMaxValidQuantity]"
+				step = 1.0
+				wheelstep = 1.0
+
+				onvaluechanged = "[ArticleDraft.OnQuantityChangedSlider]"
+
+				track = {
+					using = SettingsValueTrack
+				}
+
+				slider = {
+					using = SettingsValueSlider
+				}
+
+				dec_button = {
+					using = SettingsValueDecButton
+				}
+
+				inc_button = {
+					using = SettingsValueIncButton
+				}
+			}
+
+			flowcontainer = {
+				parentanchor = hcenter
+				spacing = 5
+
+				icon = {
+					parentanchor = vcenter
+					size = { 40 40 }
+					texture = "[ArticleDraft.GetIcon]"
+				}
+
+				# Set the amount
+				editbox = {
+					name = "treaty_quantity_edit"
+					parentanchor = vcenter
+					maxcharacters = 30
+					size = { 150 40 }
+					alwaystransparent = no
+					focuspolicy = click
+					focus_on_visible = no
+					align = nobaseline
+					margin_left = 10
+
+					background = {
+						using = text_edit_bg
+					}
+
+					text = "[ArticleDraft.GetQuantity]"
+					ontextedited = "[ArticleDraft.OnInputTextChanged]"
+					text_validator = "[ArticleDraft.GetQuantityValidator]"
+					oneditingfinished = "[ArticleDraft.OnQuantityChanged]"
+				}
+
+				textbox = {
+					visible = "[ArticleDraft.HasType('nuclear_arms_limitation')]"
+					parentanchor = vcenter
+					align = nobaseline
+					autoresize = yes
+					using = elide_fontsize_min
+					max_width = 100
+					text = "TE_ARTICLE_QUANTITY_UNIT_WARHEADS"
 				}
 			}
 		}
