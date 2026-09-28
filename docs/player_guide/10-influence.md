@@ -20,7 +20,7 @@ Its panels show your tier, share and world rank, the cultural programs, and
 collapsible sections for your pull breakdown, the top ten cultural powers, the
 world's political models and a history chart of your share.
 
-<!-- screenshot: the Cultural Hegemony journal entry with the breakdown and the top-ten board expanded -->
+![The lower sections of the Cultural Hegemony journal entry: where our pull comes from, the top ten cultural powers with each one's change since the last recount, and the world's political models weighted by cultural pull.](images/cultural_hegemony.png)
 
 ### Cultural share and influence tiers
 
