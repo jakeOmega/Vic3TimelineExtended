@@ -25,87 +25,11 @@ buildings:
   - building_nanofabrication_center
   - building_nanofabrication_center_construction_site
   reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/building_icons/building_arts_academy.dds
-  entities:
-  - building_art_academy
-  - building_wonder_azadi_tower
-  - building_wonder_basilica_of_our_lady_of_peace
-  - building_wonder_gardens_by_the_bay
-  - building_wonder_lotus_temple
-  - building_wonder_statue_of_unity
-  - building_wonder_sydney_opera_house
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/building_icons/building_barracks.dds
-  entities:
-  - building_barrack
-  - building_military_base
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/building_icons/building_government_administration.dds
-  entities:
-  - building_government_administration
-  - building_power_bloc_hq
-  - building_resettlement_colony
-  - building_strategic_reserve_hub
-  - building_strategic_reserve_silo
-  - building_un_headquarters
-  - building_wonder_continental_union_hq
-  - building_wonder_kenyatta_icc
-  - building_wonder_palais_des_nations
-  - building_wonder_peace_palace
-  - building_wonder_pentagon
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/building_icons/building_railway.dds
-  entities:
-  - building_railway
-  - building_wonder_aswan_high_dam
-  - building_wonder_channel_tunnel
-  - building_wonder_golden_bridge
-  - building_wonder_golden_gate_bridge
-  - building_wonder_hoover_dam
-  - building_wonder_itaipu_dam
-  - building_wonder_three_gorges_dam
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/building_icons/building_university.dds
-  entities:
-  - building_university
-  - building_wonder_fast_telescope
-  - building_wonder_large_hadron_collider
-  - building_wonder_ligo
-  - building_wonder_moscow_state_university
-  - building_wonder_svalbard_seed_vault
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/building_icons/coal_mine.dds
-  entities:
-  - building_coal_mine
-  - building_graphite_mine
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
 - image: gfx/interface/icons/building_icons/construction_camp.dds
   entities:
   - building_construction_sector
   - te_construction_market_site
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/building_icons/gold_mine.dds
-  entities:
-  - building_gold_mine
-  - building_lithium_mine
-  - building_nickel_cobalt_mine
-  - building_platinum_group_metals_mine
-  - building_rare_earth_metals_mine
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/building_icons/iron_mine.dds
-  entities:
-  - building_bauxite_mine
-  - building_chromium_mine
-  - building_iron_mine
-  - building_manganese_mine
-  - building_specialty_alloy_metal_mine
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/building_icons/lead_mine.dds
-  entities:
-  - building_copper_mine
-  - building_lead_mine
-  - building_precious_minor_base_metal_mine
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+  reason: the Construction Site is a construction camp; kept in the building icon review (2026-09-27)
 - image: gfx/interface/icons/building_icons/network.dds
   entities:
   - building_consciousness_network
@@ -118,13 +42,6 @@ buildings:
   entities:
   - building_nuclear_plant
   - building_wonder_iter
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/building_icons/power_plant.dds
-  entities:
-  - building_antimatter_engine
-  - building_antimatter_facility
-  - building_power_plant
-  - building_solar_receiver
   reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
 - image: gfx/interface/icons/building_icons/skyscraper.dds
   entities:
@@ -174,13 +91,7 @@ buildings:
   - building_generic_textile_depot
   - building_generic_vintner_hall
   - building_skyscraper
-  - building_wonder_abraj_al_bait
-  - building_wonder_lotte_world_tower
-  - building_wonder_petronas_towers
-  - building_wonder_shanghai_tower
-  - building_wonder_taipei_101
-  - building_wonder_world_trade_center
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+  reason: placeholder - the generic company buildings borrow vanilla's skyscraper until a company-building icon pass; the 2026-09-27 building icon batch covered non-company buildings only
 - image: gfx/interface/icons/building_icons/space.dds
   entities:
   - building_aerospace_industry
@@ -205,28 +116,11 @@ buildings:
   - building_solar_collector_construction_site
   - building_space_elevator_construction_site
   reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/building_icons/sulfur_mine.dds
-  entities:
-  - building_industrial_mineral_salt_mine
-  - building_phosphate_mine
-  - building_potash_mine
-  - building_sulfur_mine
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
 - image: gfx/interface/icons/building_icons/synthetics_plants.dds
   entities:
   - building_synthetics_plant
   - building_synthetics_plant_silk
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/building_icons/urban_center.dds
-  entities:
-  - building_state_youth_centers
-  - building_urban_center
-  - building_wonder_berlin_tv_tower
-  - building_wonder_burj_khalifa
-  - building_wonder_cn_tower
-  - building_wonder_empire_state_building
-  - building_wonder_tokyo_tower
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+  reason: Synthetic Clothes Industries is a synthetics-plant variant; vanilla's art fits, kept in the building icon review (2026-09-27)
 - image: gfx/interface/icons/company_icons/basic_construction.dds
   entities:
   - building_megastructure_consortium_hq

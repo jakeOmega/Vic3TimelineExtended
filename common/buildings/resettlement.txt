@@ -26,7 +26,7 @@ building_resettlement_colony = {
 		pmg_resettlement_transportation
 	}
 
-	icon = "gfx/interface/icons/building_icons/building_government_administration.dds"
+	icon = "gfx/interface/icons/building_icons/building_resettlement_colony.dds"
 
 	required_construction = construction_cost_low
 
