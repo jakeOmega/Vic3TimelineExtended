@@ -492,7 +492,7 @@ class Composer:
             # object against a folder of bare objects instead.
             self._target[cat] = category_grade_target(spec.get("grade_folder", spec["folder"]))
         if mode == "tinted" and cat not in self._tmpl:
-            self._tmpl[cat] = tone_ramp(spec["folder"])
+            self._tmpl[cat] = tone_ramp(spec.get("ramp_folder", spec["folder"]))
         raw = raw.convert("RGB")
         if mode == "tinted":
             return compose_tinted(raw, spec, self._tmpl[cat])

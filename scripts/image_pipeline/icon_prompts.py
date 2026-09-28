@@ -141,6 +141,14 @@ CATEGORIES = {
         folder="law_icons", size=256, mode="tinted", fill=0.9,
         entity_dir="common/laws", field="icon",
         style="{subject}, one chunky readable object, " + PAINTED),
+    # The same metal as laws. The ramp comes from law_icons: institution_icons
+    # also holds institution_icon_bg, the dark disc the GUI draws them over.
+    # Only `icon =` is wired; `background_texture` (a 3500x220 painted strip in
+    # illustrations/institutions/) is a different layout.
+    "institution": dict(
+        folder="institution_icons", ramp_folder="law_icons", size=256, mode="tinted", fill=0.9,
+        entity_dir="common/institutions", field="icon",
+        style="{subject}, one chunky readable object, " + PAINTED),
     # Read only from `texture =` (Decree.GetTexture, DecreeType.GetTexture).
     "decree": dict(
         folder="decree", size=158, mode="medallion", fill=0.78, centre_lift=2.1,
@@ -582,6 +590,26 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_private_military_contractors": {"subject": "an empty modern combat helmet sitting on a tall stack of gold coins", "seed": None},
         "law_littoral_defense": {"subject": "a squat round stone coastal gun tower on a rocky shore, a small fast patrol boat beside it", "seed": None},
         "law_auxiliary_fleet": {"subject": "a big sealift cargo ship with army trucks and crates lashed on its deck", "seed": None},
+    },
+    # Mod-added institutions, all on one of vanilla's seven icons.
+    "institution": {
+        "institution_ministry_of_war": {"subject": "two crossed cavalry sabres behind a round iron army helmet", "seed": None},
+        "institution_ministry_of_commerce": {"subject": "a bulging leather money pouch beside a stack of coins", "seed": None},
+        "institution_ministry_of_foreign_affairs": {"subject": "a rolled treaty scroll tied with a ribbon and a wax seal, a quill pen beside it", "seed": None},
+        "institution_national_bank": {"subject": "a classical bank building front with tall columns and a triangular pediment", "seed": None},
+        "institution_ministry_of_culture": {"subject": "a laurel-crowned marble bust beside a painter's palette with brushes", "seed": None},
+        "institution_ministry_of_labor": {"subject": "a worker's flat cap resting on an anvil with a hammer", "seed": None},
+        "institution_ministry_of_the_environment": {"subject": "a young oak sapling growing from a mound of earth, a watering can beside it", "seed": None},
+        "institution_ministry_of_intelligence_and_security": {"subject": "a large magnifying glass lying across a sealed dossier folder", "seed": None},
+        "institution_ministry_of_refugee_affairs": {"subject": "a canvas relief tent with a bundle and a suitcase in front of it", "seed": None},
+        "institution_ministry_of_propaganda": {"subject": "a big vintage broadcast microphone on a stand", "seed": None},
+        "institution_ministry_of_science": {"subject": "a brass microscope beside a round-bottomed glass flask", "seed": None},
+        "institution_ministry_of_thought_control": {"subject": "a large padlock locking a closed book shut", "seed": None},
+        "institution_ministry_of_consumer_protection": {"subject": "a wicker shopping basket of groceries in front of a round shield", "seed": None},
+        "institution_ministry_of_urban_planning": {"subject": "a small architectural model of a city block with a drafting compass leaning on it", "seed": None},
+        "institution_ministry_of_religion": {"subject": "a large brass bell standing on the ground beside a lit candle", "seed": None},
+        "institution_ministry_of_international_aid": {"subject": "a wooden supply crate with a cross on its side, a sack of grain beside it", "seed": None},
+        "institution_migration_controls": {"subject": "a wooden rubber stamp standing on an ink pad beside a small booklet", "seed": None},
     },
     "leader_ideology": {
         "ideology_multicultural": {"subject": "three hands clasping each other's wrists to form a triangle", "seed": 1},
