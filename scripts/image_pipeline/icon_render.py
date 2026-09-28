@@ -273,7 +273,21 @@ def embossed(raw: Image.Image, spec: dict, size: int) -> Image.Image:
     canvas[(side - h) // 2:(side - h) // 2 + h, (side - w) // 2:(side - w) // 2 + w] = mask
     m = np.asarray(Image.fromarray((canvas * 255).astype(np.uint8)).resize((size, size), Image.LANCZOS),
                    dtype=np.float64) / 255
-    return Image.fromarray(apply_metallic_style(m, spec["color"]), "RGBA")
+    top = apply_metallic_style(m, spec["color"])
+    if "color_bottom" not in spec:
+        return Image.fromarray(top, "RGBA")
+    # Vanilla's copper shifts hue down the shape, pinkish at the top to
+    # orange-brown at the bottom, not just darker. The style is linear in its
+    # colour, so blending a render in each colour row by row over the shape's
+    # height gives that gradient.
+    bottom = apply_metallic_style(m, spec["color_bottom"])
+    rows = np.nonzero((m > 0.5).any(axis=1))[0]
+    t = np.zeros((size, 1, 1))
+    if len(rows):
+        t[:, 0, 0] = np.clip((np.arange(size) - rows[0]) / max(rows[-1] - rows[0], 1), 0, 1)
+    out = top.astype(np.float64) * (1 - t) + bottom.astype(np.float64) * t
+    out[..., 3] = top[..., 3]
+    return Image.fromarray(np.clip(out + 0.5, 0, 255).astype(np.uint8), "RGBA")
 
 
 def compose_medallion(raw: Image.Image, spec: dict, tmpl, target, obj: Image.Image | None = None) -> Image.Image:

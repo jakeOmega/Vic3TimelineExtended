@@ -269,5 +269,36 @@ class DdsWriterTests(unittest.TestCase):
                          [9, 8, 8, 8, 7])
 
 
+@unittest.skipIf(icon_dds is None, "Pillow is not installed")
+class EmbossGradientTests(unittest.TestCase):
+    """`color_bottom` shades the emboss from `color` at the shape's top to it at its bottom."""
+
+    def setUp(self):
+        try:
+            import scipy  # noqa: F401  (gen_pm_icons' outline)
+        except ImportError:
+            self.skipTest("scipy is not installed")
+        import icon_render
+        self.embossed = icon_render.embossed
+        raw = np.full((256, 256, 3), 255, np.uint8)
+        raw[40:216, 70:186] = 0  # a black upright bar on white
+        self.raw = Image.fromarray(raw)
+        self.spec = {"fill": 0.86, "color": (200, 120, 80)}
+
+    def test_one_colour_is_unchanged(self):
+        plain = np.asarray(self.embossed(self.raw, self.spec, 64))
+        same = np.asarray(self.embossed(self.raw, dict(self.spec, color_bottom=self.spec["color"]), 64))
+        self.assertLessEqual(np.abs(plain.astype(int) - same).max(), 1)
+
+    def test_top_takes_color_bottom_takes_color_bottom(self):
+        a = np.asarray(self.embossed(self.raw, dict(self.spec, color=(200, 200, 200), color_bottom=(200, 50, 50)), 64))
+        rows = np.nonzero((a[..., 3] > 200).any(axis=1))[0]
+        cols = slice(28, 36)  # the middle of the bar, clear of the bevel
+        top, bottom = a[rows[0] + 6, cols, :3].mean(0), a[rows[-1] - 6, cols, :3].mean(0)
+        self.assertGreater(top[1] / top[0], 0.8)     # grey at the top
+        self.assertLess(bottom[1] / bottom[0], 0.4)  # red at the bottom
+        self.assertTrue((a[..., 3] == np.asarray(self.embossed(self.raw, self.spec, 64))[..., 3]).all())
+
+
 if __name__ == "__main__":
     unittest.main()
