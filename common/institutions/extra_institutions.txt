@@ -1,5 +1,5 @@
 ﻿institution_ministry_of_war = {
-	icon = "gfx/interface/icons/institution_icons/police.dds"
+	icon = "gfx/interface/icons/institution_icons/institution_ministry_of_war.dds"
 	background_texture = "gfx/interface/illustrations/institutions/police.dds"
 	modifier = {
 		unit_army_experience_gain_add = 0.2
@@ -13,7 +13,7 @@
 }
 
 institution_ministry_of_commerce = {
-	icon = "gfx/interface/icons/institution_icons/schools.dds"
+	icon = "gfx/interface/icons/institution_icons/institution_ministry_of_commerce.dds"
 	background_texture = "gfx/interface/illustrations/institutions/schools.dds"
 	modifier = {
 		state_trade_advantage_mult = 0.05
@@ -24,7 +24,7 @@ institution_ministry_of_commerce = {
 }
 
 institution_ministry_of_foreign_affairs = {
-	icon = "gfx/interface/icons/institution_icons/schools.dds"
+	icon = "gfx/interface/icons/institution_icons/institution_ministry_of_foreign_affairs.dds"
 	background_texture = "gfx/interface/illustrations/institutions/schools.dds"
 	modifier = {
 		country_improve_relations_speed_mult = 0.1
@@ -59,7 +59,7 @@ institution_national_bank = {
 }
 
 institution_ministry_of_culture = {
-	icon = "gfx/interface/icons/institution_icons/schools.dds"
+	icon = "gfx/interface/icons/institution_icons/institution_ministry_of_culture.dds"
 	background_texture = "gfx/interface/illustrations/institutions/schools.dds"
 	modifier = {
 		state_assimilation_mult = 0.1
@@ -73,14 +73,14 @@ institution_ministry_of_culture = {
 }
 
 institution_ministry_of_labor = {
-	icon = "gfx/interface/icons/institution_icons/social_security.dds"
+	icon = "gfx/interface/icons/institution_icons/institution_ministry_of_labor.dds"
 	background_texture = "gfx/interface/illustrations/institutions/social_security.dds"
 	modifier = {
 	}
 }
 
 institution_ministry_of_the_environment = {
-	icon = "gfx/interface/icons/institution_icons/workplace_safety.dds"
+	icon = "gfx/interface/icons/institution_icons/institution_ministry_of_the_environment.dds"
 	background_texture = "gfx/interface/illustrations/institutions/workplace_safety.dds"
 	modifier = {
 		building_group_bg_mining_throughput_add = -0.01
@@ -94,7 +94,7 @@ institution_ministry_of_the_environment = {
 }
 
 institution_ministry_of_intelligence_and_security = {
-	icon = "gfx/interface/icons/institution_icons/home_affairs.dds"
+	icon = "gfx/interface/icons/institution_icons/institution_ministry_of_intelligence_and_security.dds"
 	background_texture = "gfx/interface/illustrations/institutions/home_affairs.dds"
 	modifier = {
 		country_intelligence_capacity_add = 4
@@ -104,7 +104,7 @@ institution_ministry_of_intelligence_and_security = {
 }
 
 institution_ministry_of_refugee_affairs = {
-	icon = "gfx/interface/icons/institution_icons/social_security.dds"
+	icon = "gfx/interface/icons/institution_icons/institution_ministry_of_refugee_affairs.dds"
 	background_texture = "gfx/interface/illustrations/institutions/social_security.dds"
 	modifier = {
 		state_yearly_cultural_acceptance_add = 0.2
@@ -115,7 +115,7 @@ institution_ministry_of_refugee_affairs = {
 }
 
 institution_ministry_of_propaganda = {
-	icon = "gfx/interface/icons/institution_icons/colonization.dds"
+	icon = "gfx/interface/icons/institution_icons/institution_ministry_of_propaganda.dds"
 	background_texture = "gfx/interface/illustrations/institutions/colonization.dds"
 	modifier = {
 		country_authority_add = 100
@@ -129,7 +129,7 @@ institution_ministry_of_propaganda = {
 }
 
 institution_ministry_of_science = {
-	icon = "gfx/interface/icons/institution_icons/schools.dds"
+	icon = "gfx/interface/icons/institution_icons/institution_ministry_of_science.dds"
 	background_texture = "gfx/interface/illustrations/institutions/schools.dds"
 	modifier = {
 		country_academics_pol_str_mult = 0.05
@@ -139,7 +139,7 @@ institution_ministry_of_science = {
 }
 
 institution_ministry_of_thought_control = {
-	icon = "gfx/interface/icons/institution_icons/home_affairs.dds"
+	icon = "gfx/interface/icons/institution_icons/institution_ministry_of_thought_control.dds"
 	background_texture = "gfx/interface/illustrations/institutions/home_affairs.dds"
 
 	modifier = {
@@ -151,7 +151,7 @@ institution_ministry_of_thought_control = {
 }
 
 institution_ministry_of_consumer_protection = {
-	icon = "gfx/interface/icons/institution_icons/health_service.dds"
+	icon = "gfx/interface/icons/institution_icons/institution_ministry_of_consumer_protection.dds"
 	background_texture = "gfx/interface/illustrations/institutions/health_service.dds"
 
 	modifier = {
@@ -163,7 +163,7 @@ institution_ministry_of_consumer_protection = {
 }
 
 institution_ministry_of_urban_planning = {
-	icon = "gfx/interface/icons/institution_icons/schools.dds"
+	icon = "gfx/interface/icons/institution_icons/institution_ministry_of_urban_planning.dds"
 	background_texture = "gfx/interface/illustrations/institutions/schools.dds"
 
 	modifier = {
@@ -175,7 +175,7 @@ institution_ministry_of_urban_planning = {
 }
 
 institution_ministry_of_religion = {
-	icon = "gfx/interface/icons/institution_icons/schools.dds"
+	icon = "gfx/interface/icons/institution_icons/institution_ministry_of_religion.dds"
 	background_texture = "gfx/interface/illustrations/institutions/schools.dds"
 
 	modifier = {
@@ -187,7 +187,7 @@ institution_ministry_of_religion = {
 }
 
 institution_ministry_of_international_aid = {
-	icon = "gfx/interface/icons/institution_icons/social_security.dds"
+	icon = "gfx/interface/icons/institution_icons/institution_ministry_of_international_aid.dds"
 	background_texture = "gfx/interface/illustrations/institutions/social_security.dds"
 
 	modifier = {
@@ -197,7 +197,7 @@ institution_ministry_of_international_aid = {
 }
 
 institution_migration_controls = {
-	icon = "gfx/interface/icons/institution_icons/home_affairs.dds"
+	icon = "gfx/interface/icons/institution_icons/institution_migration_controls.dds"
 	background_texture = "gfx/interface/illustrations/institutions/home_affairs.dds"
 
 	modifier = {
