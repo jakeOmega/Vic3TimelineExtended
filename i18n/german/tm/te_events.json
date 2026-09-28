@@ -19106,5 +19106,1465 @@
  "un_events.10.t": {
   "en": "The United Nations in Crisis",
   "de": "Die Vereinten Nationen in der Krise"
+ },
+ "un_events.101.a": {
+  "en": "We are grateful for this generosity.",
+  "de": "Wir sind dankbar für diese Großzügigkeit."
+ },
+ "un_events.101.b": {
+  "en": "We accept the aid, but we are not a charity case.",
+  "de": "Wir nehmen die Hilfe an, doch wir sind kein Bittsteller."
+ },
+ "un_events.101.d": {
+  "en": "[SCOPE.sCountry('aid_donor').GetName] has mounted a major humanitarian relief effort for [ROOT.GetCountry.GetName] through the United Nations. Convoys of food, medicine, and emergency supplies are arriving at our ports and airfields.",
+  "de": "[SCOPE.sCountry('aid_donor').GetAltName('NOM')|U] hat über die Vereinten Nationen eine groß angelegte humanitäre Hilfsaktion für [ROOT.GetCountry.GetAltName('AKK')] gestartet. Konvois mit Nahrungsmitteln, Medikamenten und Notversorgungsgütern treffen in unseren Häfen und auf unseren Flugplätzen ein."
+ },
+ "un_events.101.f": {
+  "en": "The crates bore foreign markings and foreign flags. The dockworkers unloaded them in silence.\\n\\n'Grain,' the port supervisor noted, checking his manifest. 'Rice. Medical supplies. Powdered milk.' He looked up. 'Enough to feed the northern provinces for a month.'\\n\\n'And after the month?'\\n\\nHe folded the manifest and tucked it into his coat. 'After the month, we will need another shipment, and another reason to be grateful.'",
+  "de": "Die Kisten trugen fremde Kennzeichen und fremde Flaggen. Die Hafenarbeiter luden sie schweigend aus.\\n\\n„Getreide“, notierte der Hafenaufseher und prüfte seine Ladeliste. „Reis. Medizinische Versorgung. Milchpulver.“ Er blickte auf. „Genug, um die nördlichen Provinzen einen Monat lang zu versorgen.“\\n\\n„Und danach?“\\n\\nEr faltete die Ladeliste zusammen und steckte sie in seinen Mantel. „Nach diesem Monat brauchen wir eine weitere Lieferung – und einen weiteren Grund zur Dankbarkeit.“"
+ },
+ "un_events.101.t": {
+  "en": "International Aid Arrives",
+  "de": "Internationale Hilfe trifft ein"
+ },
+ "un_events.102.a": {
+  "en": "Welcome the peacekeepers. Stability comes first.",
+  "de": "Begrüßt die Friedenstruppen. Stabilität geht vor."
+ },
+ "un_events.102.b": {
+  "en": "This is an affront to our sovereignty.",
+  "de": "Das ist eine Beleidigung unserer Souveränität."
+ },
+ "un_events.102.d": {
+  "en": "[SCOPE.sCountry('peacekeeping_donor').GetName] has deployed a peacekeeping force to [ROOT.GetCountry.GetName] under a United Nations mandate. Blue-helmeted soldiers now patrol our streets. Their presence brings stability, but raises questions about sovereignty.",
+  "de": "[SCOPE.sCountry('peacekeeping_donor').GetAltName('NOM')|U] hat unter einem Mandat der Vereinten Nationen eine Friedenstruppe [ROOT.GetCountry.GetAltName('NACH')] entsandt. Blauhelmsoldaten patrouillieren nun durch unsere Straßen. Ihre Präsenz bringt Stabilität, wirft aber Fragen zur Souveränität auf."
+ },
+ "un_events.102.f": {
+  "en": "The child stared at the foreign soldier standing on the corner, his blue helmet catching the afternoon sun. The soldier smiled and waved. The child did not wave back.\\n\\n'Who are they?' the child asked his mother.\\n\\n'They are here to help,' she said, without conviction.\\n\\n'Help with what?'\\n\\nShe took his hand and walked a little faster. 'With everything we could not do ourselves.'",
+  "de": "Das Kind starrte den fremden Soldaten an, der an der Ecke stand, sein Blauhelm im Nachmittagslicht glänzend. Der Soldat lächelte und winkte. Das Kind winkte nicht zurück.\\n\\n„Wer sind die?“, fragte das Kind seine Mutter.\\n\\n„Sie sind hier, um zu helfen“, sagte sie, ohne Überzeugung.\\n\\n„Wobei helfen?“\\n\\nSie nahm seine Hand und ging etwas schneller. „Bei allem, was wir nicht selbst schaffen konnten.“"
+ },
+ "un_events.102.t": {
+  "en": "Foreign Peacekeepers on Our Soil",
+  "de": "Fremde Friedenstruppen auf unserem Boden"
+ },
+ "un_events.103.a": {
+  "en": "We are grateful for the assistance.",
+  "de": "Wir sind dankbar für die Unterstützung."
+ },
+ "un_events.103.b": {
+  "en": "Our people belong here, not in exile.",
+  "de": "Unser Volk gehört hierher, nicht ins Exil."
+ },
+ "un_events.103.d": {
+  "en": "The General Assembly has adopted the refugee convention [SCOPE.sCountry('resettlement_host').GetName] tabled, and with it [SCOPE.sCountry('resettlement_host').GetName] has secured a UN resettlement programme for the displaced of [ROOT.GetCountry.GetName]. Thousands of our people are being offered new homes abroad. For them, it is a lifeline. For our country, the departure of so many citizens is a complicated blessing.",
+  "de": "Die Generalversammlung hat die von [SCOPE.sCountry('resettlement_host').GetAltName('DAT')] eingebrachte Flüchtlingskonvention verabschiedet, und damit hat [SCOPE.sCountry('resettlement_host').GetAltName('NOM')] ein UN-Umsiedlungsprogramm für die Vertriebenen [ROOT.GetCountry.GetAltName('GEN')] gesichert. Tausenden unserer Landsleute werden neue Heimstätten im Ausland angeboten. Für sie ist es eine Rettungsleine. Für unser Land ist der Weggang so vieler Bürger ein zwiespältiger Segen."
+ },
+ "un_events.103.f": {
+  "en": "At the airport, the families queued with suitcases held together by rope and prayer. A grandmother clutched a photograph of a house that no longer stood.\\n\\n'Will we come back?' the boy asked.\\n\\nHis father hoisted him onto his shoulders so he could see the departure board. 'When there is something to come back to,' he said. He did not look at his wife when he said it.",
+  "de": "Am Flughafen standen die Familien Schlange, ihre Koffer nur von Seilen und Gebeten zusammengehalten. Eine Großmutter umklammerte das Foto eines Hauses, das nicht mehr stand.\\n\\n„Kommen wir zurück?“, fragte der Junge.\\n\\nSein Vater hob ihn auf seine Schultern, damit er die Abflugtafel sehen konnte. „Wenn es etwas gibt, zu dem man zurückkehren kann“, sagte er. Dabei sah er seine Frau nicht an."
+ },
+ "un_events.103.t": {
+  "en": "Our People Resettled Abroad",
+  "de": "Unser Volk im Ausland angesiedelt"
+ },
+ "un_events.11.a": {
+  "en": "Denounce this obstruction publicly.",
+  "de": "Verurteilt diese Blockade öffentlich."
+ },
+ "un_events.11.b": {
+  "en": "The [concept_un_veto] is legitimate procedure.",
+  "de": "Das [concept_un_veto] ist ein rechtmäßiges Verfahren."
+ },
+ "un_events.11.c": {
+  "en": "Propose abolishing the [concept_un_veto] entirely.",
+  "de": "Schlagt vor, das [concept_un_veto] vollständig abzuschaffen."
+ },
+ "un_events.11.d": {
+  "en": "[SCOPE.sCountry('veto_power').GetName] has cast its [concept_un_veto] in the Security Council against the resolution we tabled.",
+  "de": "[SCOPE.sCountry('veto_power').GetAltName('NOM')|U] hat im Sicherheitsrat sein [concept_un_veto] gegen die von uns eingebrachte Resolution eingelegt."
+ },
+ "un_events.11.d_after_mandate": {
+  "en": "\\n\\nThe vote is still open, but a military mandate has no weaker form: the authorization is dead, whatever the Assembly votes.",
+  "de": "\\n\\nDie Abstimmung läuft noch, doch ein militärisches Mandat kennt keine schwächere Form: Die Ermächtigung ist hinfällig, wie die Versammlung auch abstimmt."
+ },
+ "un_events.11.d_after_open": {
+  "en": "\\n\\nThe vote is still open, but the resolution's binding form is dead. If the Assembly still carries it, only a weaker, non-binding form will pass.",
+  "de": "\\n\\nDie Abstimmung läuft noch, doch die bindende Form der Resolution ist hinfällig. Nimmt die Versammlung sie dennoch an, tritt nur eine schwächere, unverbindliche Form in Kraft."
+ },
+ "un_events.11.d_after_override": {
+  "en": "\\n\\nThe vote is still open. Under the reformed Charter, if two-thirds of the members with a vote carry the resolution, the veto is overridden and it passes in full.",
+  "de": "\\n\\nDie Abstimmung läuft noch. Nach der reformierten Charta wird das Veto außer Kraft gesetzt und die Resolution tritt in vollem Umfang in Kraft, sofern zwei Drittel der stimmberechtigten Mitglieder sie annehmen."
+ },
+ "un_events.11.d_after_reform": {
+  "en": "\\n\\nA charter reform needs the consent of every permanent member: the reform is dead, whatever the Assembly votes.",
+  "de": "\\n\\nEine Chartareform braucht die Zustimmung jedes Ständigen Mitglieds: Die Reform ist hinfällig, wie die Versammlung auch abstimmt."
+ },
+ "un_events.11.d_authoritarian": {
+  "en": "[SCOPE.sCountry('veto_power').GetName] has deployed its [concept_un_veto] in the Security Council against the resolution we tabled. The [SCOPE.sCountry('veto_power').GetAdjective] regime shows no interest in the niceties of multilateral diplomacy.",
+  "de": "[SCOPE.sCountry('veto_power').GetAltName('NOM')|U] hat im Sicherheitsrat sein [concept_un_veto] gegen die von uns eingebrachte Resolution eingesetzt. Das [SCOPE.sCountry('veto_power').GetAdjective|l]e Regime zeigt kein Interesse an den Feinheiten multilateraler Diplomatie."
+ },
+ "un_events.11.d_council": {
+  "en": "The council republic of [SCOPE.sCountry('veto_power').GetName] has wielded its [concept_un_veto] in the Security Council against the resolution we tabled. The [SCOPE.sCountry('veto_power').GetAdjective] delegation invoked the right of sovereign nations to resist imperialist coercion.",
+  "de": "Die Räterepublik [SCOPE.sCountry('veto_power').GetName] hat im Sicherheitsrat ihr [concept_un_veto] gegen die von uns eingebrachte Resolution eingesetzt. Die [SCOPE.sCountry('veto_power').GetAdjective|l]e Delegation berief sich auf das Recht souveräner Nationen, sich imperialistischem Zwang zu widersetzen."
+ },
+ "un_events.11.d_theocratic": {
+  "en": "The theocratic government of [SCOPE.sCountry('veto_power').GetName] has exercised its [concept_un_veto] in the Security Council against the resolution we tabled, on moral grounds rooted in their interpretation of divine law.",
+  "de": "Die theokratische Regierung [SCOPE.sCountry('veto_power').GetAltName('GEN')] hat im Sicherheitsrat ihr [concept_un_veto] gegen die von uns eingebrachte Resolution eingesetzt, aus moralischen Gründen, die in ihrer Auslegung des göttlichen Gesetzes wurzeln."
+ },
+ "un_events.11.f": {
+  "en": "The chamber erupted. Delegates shouted across the aisle; the chair's gavel cracked against wood like a pistol shot.\\n\\nIn the corridor afterward, a junior diplomat loosened his tie. 'We spent six months drafting that resolution,' he said. 'Six months of negotiations, concessions, rewording. And one raised hand killed it.'\\n\\nHis colleague shrugged. 'That is how it works.'\\n\\nThe junior diplomat said nothing. He already knew that.",
+  "de": "Der Saal geriet in Aufruhr. Delegierte schrien über den Gang hinweg; der Hammer des Vorsitzenden krachte aufs Holz wie ein Pistolenschuss.\\n\\nSpäter im Korridor lockerte ein junger Diplomat seine Krawatte. „Wir haben sechs Monate an dieser Resolution gearbeitet“, sagte er. „Sechs Monate voller Verhandlungen, Zugeständnisse, Umformulierungen. Und eine gehobene Hand hat sie zunichtegemacht.“\\n\\nSein Kollege zuckte mit den Schultern. „So läuft das eben.“\\n\\nDer junge Diplomat sagte nichts. Er wusste es bereits."
+ },
+ "un_events.11.t": {
+  "en": "Security Council [concept_un_veto] Crisis",
+  "de": "[concept_un_veto]-Krise im Sicherheitsrat"
+ },
+ "un_events.12.a": {
+  "en": "Champion [concept_decolonization_system]. Free all peoples!",
+  "de": "Setzt euch für die [concept_decolonization_system] ein. Befreit alle Völker!"
+ },
+ "un_events.12.b": {
+  "en": "Defend our development programs.",
+  "de": "Verteidigt unsere Entwicklungsprogramme."
+ },
+ "un_events.12.d": {
+  "en": "Newly independent nations are pressing for the General Assembly to take up a sweeping declaration calling for the immediate end of colonialism in all its forms, and for the [Concept('concept_great_power', 'great powers')] to relinquish their overseas territories. Nothing has been tabled yet: we could table it.",
+  "de": "Neu unabhängige Nationen drängen darauf, dass die Generalversammlung eine weitreichende Erklärung aufgreift, die das sofortige Ende des Kolonialismus in all seinen Formen fordert – und dass die [Concept('concept_great_power', 'Großmächte')] ihre überseeischen Gebiete aufgeben. Noch ist nichts eingebracht worden: Wir könnten es einbringen."
+ },
+ "un_events.12.d_cause_collapse": {
+  "en": "The colonial empire of [SCOPE.sCountry('un_dkt_subject').GetName] has collapsed, and every delegation is asking which will be next.\\n\\n",
+  "de": "Das Kolonialreich [SCOPE.sCountry('un_dkt_subject').GetAltName('GEN')] ist zusammengebrochen, und jede Delegation fragt sich, wer als Nächstes an der Reihe ist.\\n\\n"
+ },
+ "un_events.12.d_colonial": {
+  "en": "Newly independent nations are pressing for the General Assembly to take up a declaration calling for the immediate end of colonialism, and [ROOT.GetCountry.GetName], as a power with overseas dependencies, would find itself in the crosshairs. Its sponsors argue that all colonial relationships are inherently exploitative. Nothing has been tabled yet.",
+  "de": "Neu unabhängige Nationen drängen darauf, dass die Generalversammlung eine Erklärung aufgreift, die das sofortige Ende des Kolonialismus fordert, und [ROOT.GetCountry.GetAltName('NOM')] geriete als Macht mit überseeischen Besitzungen damit ins Fadenkreuz. Ihre Befürworter argumentieren, jede koloniale Beziehung sei ihrem Wesen nach ausbeuterisch. Noch ist nichts eingebracht worden."
+ },
+ "un_events.12.d_council": {
+  "en": "Newly independent nations are pressing for the General Assembly to take up a declaration on the end of colonialism - a cause that strikes at the heart of our revolutionary [Concept('concept_power_bloc_principle', 'principles')]. Nothing has been tabled yet. Our delegation could table it, and make the colonial powers answer for centuries of plunder.",
+  "de": "Neu unabhängige Nationen drängen darauf, dass die Generalversammlung eine Erklärung zum Ende des Kolonialismus aufgreift – eine Sache, die den Kern unserer revolutionären [Concept('concept_power_bloc_principle', 'Prinzipien')] trifft. Noch ist nichts eingebracht worden. Unsere Delegation könnte sie einbringen und die Kolonialmächte für Jahrhunderte der Plünderung zur Rechenschaft ziehen."
+ },
+ "un_events.12.f": {
+  "en": "The new delegate adjusted the flag on his desk - a flag that had not existed three years ago - and addressed the chamber.\\n\\n'My country was administered, developed, and civilized, so we are told, for one hundred and forty years,' he said. 'In all that time, not one of our administrators thought to ask us whether we wished to be civilized. We have come here today to provide the answer.'",
+  "de": "Der neue Delegierte richtete die Flagge auf seinem Pult – eine Flagge, die es vor drei Jahren noch nicht gegeben hatte – und wandte sich an den Saal.\\n\\n„Mein Land wurde, so sagt man uns, hundertvierzig Jahre lang verwaltet, entwickelt und zivilisiert“, sagte er. „In all dieser Zeit ist keinem unserer Verwalter in den Sinn gekommen, uns zu fragen, ob wir zivilisiert werden wollten. Wir sind heute hierhergekommen, um die Antwort zu geben.“"
+ },
+ "un_events.12.t": {
+  "en": "Decolonization Resolution",
+  "de": "Resolution zur Dekolonisierung"
+ },
+ "un_events.14.a": {
+  "en": "Table the treaty before the General Assembly.",
+  "de": "Bringt den Vertrag vor der Generalversammlung ein."
+ },
+ "un_events.14.c": {
+  "en": "Our deterrent is non-negotiable.",
+  "de": "Unsere Abschreckung steht nicht zur Verhandlung."
+ },
+ "un_events.14.d": {
+  "en": "Delegations at the United Nations are pressing for a Nuclear Non-Proliferation Treaty - a binding agreement to prevent the spread of nuclear weapons and promote disarmament. Nothing is before the General Assembly yet: we could table it. For [ROOT.GetCountry.GetName], without a nuclear arsenal, the treaty offers protection from proliferation by rival states.",
+  "de": "Delegationen bei den Vereinten Nationen drängen auf einen Vertrag über die Nichtverbreitung von Kernwaffen – ein bindendes Abkommen, um die Verbreitung von Kernwaffen zu verhindern und Abrüstung zu fördern. Noch liegt nichts vor der Generalversammlung: Wir könnten ihn einbringen. Für [ROOT.GetCountry.GetAltName('AKK')], ohne eigenes Kernwaffenarsenal, bietet der Vertrag Schutz vor der Proliferation durch rivalisierende Staaten."
+ },
+ "un_events.14.d_aspiring": {
+  "en": "Delegations at the United Nations are pressing for a Nuclear Non-Proliferation Treaty, and nothing is before the General Assembly yet. The timing could not be worse for [ROOT.GetCountry.GetName] - our [concept_nuclear_program] is underway but not yet complete. Binding ourselves to the treaty would effectively end our pursuit of the ultimate deterrent.",
+  "de": "Delegationen bei den Vereinten Nationen drängen auf einen Vertrag über die Nichtverbreitung von Kernwaffen, und noch liegt nichts vor der Generalversammlung. Der Zeitpunkt könnte für [ROOT.GetCountry.GetAltName('AKK')] kaum ungünstiger sein – unser [concept_nuclear_program] läuft, ist aber noch nicht abgeschlossen. Uns an den Vertrag zu binden würde unser Streben nach der ultimativen Abschreckung faktisch beenden."
+ },
+ "un_events.14.d_cause_other": {
+  "en": "[SCOPE.sCountry('un_dkt_subject').GetName] has built its first nuclear weapon, and the Assembly means to stop the next.\\n\\n",
+  "de": "[SCOPE.sCountry('un_dkt_subject').GetAltName('NOM')|U] hat seine erste Kernwaffe gebaut, und die Versammlung will die nächste verhindern.\\n\\n"
+ },
+ "un_events.14.d_cause_self": {
+  "en": "Our first nuclear weapon has the whole Assembly talking, and the talk is of making sure there is never another new nuclear power.\\n\\n",
+  "de": "Unsere erste Kernwaffe ist das Gesprächsthema der gesamten Versammlung, und man spricht davon, dafür zu sorgen, dass nie wieder eine neue Atommacht entsteht.\\n\\n"
+ },
+ "un_events.14.d_nuclear": {
+  "en": "Delegations at the United Nations are pressing for a Nuclear Non-Proliferation Treaty, and nothing is before the General Assembly yet. As a nuclear-armed state, [ROOT.GetCountry.GetName] occupies a complicated position - the treaty would legitimize our existing arsenal while preventing rivals from developing their own, but commits us to eventual disarmament.",
+  "de": "Delegationen bei den Vereinten Nationen drängen auf einen Vertrag über die Nichtverbreitung von Kernwaffen, und noch liegt nichts vor der Generalversammlung. Als Atommacht befindet sich [ROOT.GetCountry.GetAltName('NOM')] in einer schwierigen Lage – der Vertrag würde unser bestehendes Arsenal legitimieren und zugleich Rivalen daran hindern, ein eigenes aufzubauen, verpflichtet uns aber zur schrittweisen Abrüstung."
+ },
+ "un_events.14.f": {
+  "en": "The physicist adjusted his reading glasses and studied the treaty text. 'It is an elegant piece of hypocrisy,' he said. 'Those who have the bomb promise to someday give it up. Those who do not have the bomb promise never to build one. And everyone pretends not to notice the asymmetry.'\\n\\n'Will it work?' his colleague asked.\\n\\n'It will work precisely as long as everyone is more afraid of the alternative.'",
+  "de": "Der Physiker rückte seine Lesebrille zurecht und studierte den Vertragstext. „Das ist ein elegantes Stück Heuchelei“, sagte er. „Wer die Bombe hat, verspricht, sie irgendwann aufzugeben. Wer sie nicht hat, verspricht, nie eine zu bauen. Und alle tun so, als bemerkten sie die Schieflage nicht.“\\n\\n„Wird es funktionieren?“, fragte sein Kollege.\\n\\n„Es wird genau so lange funktionieren, wie alle die Alternative mehr fürchten.“"
+ },
+ "un_events.14.t": {
+  "en": "Nuclear Non-Proliferation Treaty",
+  "de": "Vertrag über die Nichtverbreitung von Kernwaffen"
+ },
+ "un_events.15.a": {
+  "en": "Accept international arbitration.",
+  "de": "Akzeptiert die internationale Schlichtung."
+ },
+ "un_events.15.b": {
+  "en": "Negotiate a bilateral deal.",
+  "de": "Verhandelt ein bilaterales Abkommen."
+ },
+ "un_events.15.c": {
+  "en": "Impose unilateral tariffs.",
+  "de": "Verhängt einseitige Zölle."
+ },
+ "un_events.15.d": {
+  "en": "A major trade dispute between [ROOT.GetCountry.GetName] and [SCOPE.sCountry('trade_rival').GetName] has been brought before the United Nations for arbitration. Both sides accuse the other of unfair practices - dumping goods below cost, subsidizing industries, and erecting hidden barriers.",
+  "de": "Ein schwerer Handelsstreit zwischen [ROOT.GetCountry.GetAltName('DAT')] und [SCOPE.sCountry('trade_rival').GetAltName('DAT')] wurde den Vereinten Nationen zur Schlichtung vorgelegt. Beide Seiten werfen einander unlautere Praktiken vor – Dumpingpreise unter den Gestehungskosten, Subventionen für die eigene Industrie und das Errichten versteckter Handelshemmnisse."
+ },
+ "un_events.15.d_command": {
+  "en": "A trade dispute with [SCOPE.sCountry('trade_rival').GetName] has been escalated to the United Nations. Our command economy operates on [Concept('concept_power_bloc_principle', 'principles')] that our rivals consider inherently unfair - state-directed pricing looks like dumping to a free-market observer.",
+  "de": "Ein Handelsstreit mit [SCOPE.sCountry('trade_rival').GetAltName('DAT')] wurde vor die Vereinten Nationen gebracht. Unsere Planwirtschaft beruht auf [Concept('concept_power_bloc_principle', 'Prinzipien')], die unsere Rivalen für grundsätzlich unfair halten – staatlich gelenkte Preise wirken auf einen Beobachter der freien Marktwirtschaft wie Dumping."
+ },
+ "un_events.15.d_embargo": {
+  "en": "\\n\\nAt the heart of the dispute is an embargo between us and [SCOPE.sCountry('trade_rival').GetName], both members of the United Nations, and the General Assembly has put it on its docket.",
+  "de": "\\n\\nIm Kern des Streits steht ein Embargo zwischen uns und [SCOPE.sCountry('trade_rival').GetAltName('DAT')], beide Mitglieder der Vereinten Nationen, und die Generalversammlung hat die Angelegenheit auf ihre Tagesordnung gesetzt."
+ },
+ "un_events.15.d_protectionist": {
+  "en": "A trade dispute with [SCOPE.sCountry('trade_rival').GetName] has been escalated to the United Nations. Our protectionist trade policies, designed to nurture domestic industry, are under attack as violations of free trade [Concept('concept_power_bloc_principle', 'principles')].",
+  "de": "Ein Handelsstreit mit [SCOPE.sCountry('trade_rival').GetAltName('DAT')] wurde vor die Vereinten Nationen gebracht. Unsere protektionistische Handelspolitik, die die heimische Industrie fördern soll, steht als Verstoß gegen die [Concept('concept_power_bloc_principle', 'Prinzipien')] des freien Handels in der Kritik."
+ },
+ "un_events.15.f": {
+  "en": "'Their textiles undercut ours by forty percent,' the manufacturer said, jabbing the table with a thick finger. 'Forty percent! No honest factory can compete with that.'\\n\\nThe trade attaché folded his hands. 'Their workers earn a tenth of what yours do. Is that unfair, or is it merely inconvenient?'\\n\\n'To my workers, sir, the distinction is academic.'",
+  "de": "„Ihre Textilien unterbieten unsere um vierzig Prozent“, sagte der Fabrikant und stieß mit einem dicken Finger auf den Tisch. „Vierzig Prozent! Keine ehrliche Fabrik kann damit mithalten.“\\n\\nDer Handelsattaché faltete die Hände. „Ihre Arbeiter verdienen ein Zehntel dessen, was Ihre verdienen. Ist das unfair, oder nur unbequem?“\\n\\n„Für meine Arbeiter, mein Herr, ist der Unterschied rein akademisch.“"
+ },
+ "un_events.15.t": {
+  "en": "International Trade Dispute",
+  "de": "Internationaler Handelsstreit"
+ },
+ "un_events.16.a": {
+  "en": "Table a pandemic preparedness convention.",
+  "de": "Bringt eine Konvention zur Pandemievorsorge ein."
+ },
+ "un_events.16.c": {
+  "en": "Our people come first.",
+  "de": "Unser Volk geht vor."
+ },
+ "un_events.16.d": {
+  "en": "Public-health experts warn that modern travel could carry a new disease across continents within weeks, and delegations at the United Nations are pressing for a pandemic preparedness convention: shared medical data, pooled research, a global stockpile of treatments, and a world health agency to coordinate them. Nothing is before the General Assembly yet: we could table it.",
+  "de": "Experten für öffentliche Gesundheit warnen, dass moderne Reisetätigkeit eine neue Krankheit binnen Wochen über Kontinente hinweg tragen könnte, und Delegationen bei den Vereinten Nationen drängen auf eine Konvention zur Pandemievorsorge: gemeinsame Gesundheitsdaten, gebündelte Forschung, ein globaler Vorrat an Behandlungsmitteln und eine Weltgesundheitsbehörde zur Koordination. Noch liegt nichts vor der Generalversammlung: Wir könnten sie einbringen."
+ },
+ "un_events.16.d_authoritarian": {
+  "en": "Delegations at the United Nations are pressing for a pandemic preparedness convention and a world health agency to coordinate it. For [ROOT.GetCountry.GetName], our centralized system already gives us tools that democratic nations lack - we can impose quarantines and direct production with unmatched efficiency - and sharing our data would mean sharing our weaknesses. Nothing is before the General Assembly yet: we could table it.",
+  "de": "Delegationen bei den Vereinten Nationen drängen auf eine Konvention zur Pandemievorsorge und eine Weltgesundheitsbehörde zu ihrer Koordination. Für [ROOT.GetCountry.GetAltName('AKK')] gibt uns unser zentralisiertes System bereits Mittel, die demokratischen Staaten fehlen – wir können Quarantänen verhängen und die Produktion mit unerreichter Effizienz lenken –, und unsere Daten zu teilen hieße, unsere Schwächen zu teilen. Noch liegt nichts vor der Generalversammlung: Wir könnten sie einbringen."
+ },
+ "un_events.16.d_liberal": {
+  "en": "Delegations at the United Nations are pressing for a pandemic preparedness convention and a world health agency to coordinate it. For [ROOT.GetCountry.GetName], our open society means the question is already front-page news, and the public expects us to act before the next outbreak, not after it. Nothing is before the General Assembly yet: we could table it.",
+  "de": "Delegationen bei den Vereinten Nationen drängen auf eine Konvention zur Pandemievorsorge und eine Weltgesundheitsbehörde zu ihrer Koordination. Für [ROOT.GetCountry.GetAltName('AKK')] steht die Frage dank unserer offenen Gesellschaft bereits auf den Titelseiten, und die Öffentlichkeit erwartet, dass wir vor dem nächsten Ausbruch handeln, nicht danach. Noch liegt nichts vor der Generalversammlung: Wir könnten sie einbringen."
+ },
+ "un_events.16.f": {
+  "en": "The doctor laid the exercise report on the minister's desk. 'In our simulation, the strain crossed three borders before the first case was confirmed,' she said. 'By then it was in every capital.'\\n\\n'Must we really share our data with foreigners?'\\n\\nShe looked at him as though he had asked whether water was wet. 'The virus will not care about your diplomatic reservations. Share the data now, or bury more people later. Those are the options.'",
+  "de": "Die Ärztin legte den Übungsbericht auf den Schreibtisch des Ministers. „In unserer Simulation überquerte der Erreger drei Grenzen, bevor der erste Fall bestätigt wurde“, sagte sie. „Da war er bereits in jeder Hauptstadt.“\\n\\n„Müssen wir unsere Daten wirklich mit Ausländern teilen?“\\n\\nSie sah ihn an, als hätte er gefragt, ob Wasser nass sei. „Dem Virus sind Ihre diplomatischen Bedenken gleichgültig. Teilen Sie die Daten jetzt, oder begraben Sie später mehr Menschen. Das sind die Optionen.“"
+ },
+ "un_events.16.t": {
+  "en": "Pandemic Preparedness",
+  "de": "Pandemievorsorge"
+ },
+ "un_events.17.a": {
+  "en": "Propose binding targets to the General Assembly.",
+  "de": "Schlagt der Generalversammlung verbindliche Ziele vor."
+ },
+ "un_events.17.c": {
+  "en": "Economic growth comes first.",
+  "de": "Wirtschaftswachstum geht vor."
+ },
+ "un_events.17.d": {
+  "en": "Delegations at the United Nations are pressing for a binding climate accord that would commit member states to specific emissions reduction targets. The scientific consensus is clear, but the economic costs of compliance are staggering. Nothing is before the General Assembly yet: we could table it.",
+  "de": "Delegationen bei den Vereinten Nationen drängen auf ein bindendes Klimaabkommen, das die Mitgliedstaaten auf konkrete Emissionsminderungsziele verpflichten würde. Der wissenschaftliche Konsens ist eindeutig, doch die wirtschaftlichen Kosten der Einhaltung sind gewaltig. Noch liegt nichts vor der Generalversammlung: Wir könnten es einbringen."
+ },
+ "un_events.17.d_cause_threshold": {
+  "en": "The world has warmed past another threshold, and the delegations of low-lying nations will not let the Assembly look away.\\n\\n",
+  "de": "Die Welt hat sich über eine weitere Schwelle hinaus erwärmt, und die Delegationen der tief liegenden Länder lassen der Versammlung keine Möglichkeit, wegzusehen.\\n\\n"
+ },
+ "un_events.17.d_command": {
+  "en": "Delegations at the United Nations are pressing for binding climate targets, and nothing is before the General Assembly yet. For [ROOT.GetCountry.GetName], where the state directs production, compliance would mean rewriting our industrial plans from the top down - a massive undertaking, but one our system is uniquely capable of executing.",
+  "de": "Delegationen bei den Vereinten Nationen drängen auf verbindliche Klimaziele, und noch liegt nichts vor der Generalversammlung. Für [ROOT.GetCountry.GetAltName('AKK')], wo der Staat die Produktion lenkt, würde die Einhaltung bedeuten, unsere Industriepläne von Grund auf neu zu schreiben – ein gewaltiges Unterfangen, doch eines, das unser System wie kein anderes bewältigen kann."
+ },
+ "un_events.17.d_laissez": {
+  "en": "Delegations at the United Nations are pressing for binding emissions targets that would require [ROOT.GetCountry.GetName] to fundamentally alter our economic model, and nothing is before the General Assembly yet. Industrialists are already lobbying against them, arguing the targets would cripple our competitiveness.",
+  "de": "Delegationen bei den Vereinten Nationen drängen auf verbindliche Emissionsziele, die [ROOT.GetCountry.GetAltName('AKK')] zwingen würden, unser Wirtschaftsmodell grundlegend zu ändern, und noch liegt nichts vor der Generalversammlung. Industrielle machen bereits Lobbyarbeit dagegen und argumentieren, die Ziele würden unsere Wettbewerbsfähigkeit lähmen."
+ },
+ "un_events.17.f": {
+  "en": "The delegate from the sinking island nation spread a map across the table. 'This is my country,' she said, tracing the coastline with her finger. 'This -' she drew a line two inches inland '- is my country in thirty years.'\\n\\nThe industrial minister across the table cleared his throat. 'We sympathize, of course. But you must understand, our economy -'\\n\\n'Your economy,' she said, folding the map, 'is what is drowning mine.'",
+  "de": "Die Delegierte der versinkenden Inselnation breitete eine Karte auf dem Tisch aus. „Das ist mein Land“, sagte sie und fuhr mit dem Finger die Küstenlinie nach. „Das hier“ – sie zog eine Linie fünf Zentimeter landeinwärts – „ist mein Land in dreißig Jahren.“\\n\\nDer Industrieminister ihr gegenüber räusperte sich. „Wir haben natürlich Verständnis. Aber Sie müssen verstehen, unsere Wirtschaft –“\\n\\n„Ihre Wirtschaft“, sagte sie und faltete die Karte zusammen, „ist es, die meine ertränkt.“"
+ },
+ "un_events.17.t": {
+  "en": "Climate Change Resolution",
+  "de": "Resolution zum Klimawandel"
+ },
+ "un_events.18.a": {
+  "en": "Table a refugee convention before the Assembly.",
+  "de": "Bringt eine Flüchtlingskonvention vor der Versammlung ein."
+ },
+ "un_events.18.c": {
+  "en": "Close the borders. Not our problem.",
+  "de": "Schließt die Grenzen. Nicht unser Problem."
+ },
+ "un_events.18.d": {
+  "en": "\\n\\nDelegations at the United Nations are pressing for an international refugee convention: resettlement shared among the members, run by a UN refugee agency. Nothing is before the General Assembly yet. We could table it.",
+  "de": "\\n\\nDelegationen bei den Vereinten Nationen drängen auf eine internationale Flüchtlingskonvention: Umsiedlung, geteilt unter den Mitgliedern und verwaltet von einem UN-Flüchtlingswerk. Noch liegt nichts vor der Generalversammlung. Wir könnten sie einbringen."
+ },
+ "un_events.18.d_closed": {
+  "en": "\\n\\nDelegations at the United Nations are pressing for a convention that would share resettlement quotas among the members. For [ROOT.GetCountry.GetName], with our closed borders, quotas are unwelcome. Nothing is before the General Assembly yet: we could table it ourselves, leave it to another delegation, or make our position plain.",
+  "de": "\\n\\nDelegationen bei den Vereinten Nationen drängen auf eine Konvention, die Umsiedlungsquoten unter den Mitgliedern aufteilen würde. Für [ROOT.GetCountry.GetAltName('AKK')] sind Quoten angesichts unserer geschlossenen Grenzen unwillkommen. Noch liegt nichts vor der Generalversammlung: Wir könnten sie selbst einbringen, einer anderen Delegation überlassen oder unsere Haltung deutlich machen."
+ },
+ "un_events.18.d_famine": {
+  "en": "Famine in [SCOPE.sCountry('refugee_source').GetName] has driven hundreds of thousands from their homes, and the camps along its borders are filling faster than aid can reach them.",
+  "de": "Die Hungersnot [SCOPE.sCountry('refugee_source').GetAltName('IN')] hat Hunderttausende aus ihrer Heimat vertrieben, und die Lager entlang der Landesgrenzen füllen sich schneller, als Hilfe sie erreichen kann."
+ },
+ "un_events.18.d_hardship": {
+  "en": "Hardship in [SCOPE.sCountry('refugee_source').GetName] is driving its people abroad in growing numbers, and its neighbours are straining to receive them.",
+  "de": "Die Not [SCOPE.sCountry('refugee_source').GetAltName('IN')] treibt immer mehr Menschen des Landes ins Ausland, und die Nachbarstaaten haben Mühe, sie aufzunehmen."
+ },
+ "un_events.18.d_open": {
+  "en": "\\n\\nWith our open borders, [ROOT.GetCountry.GetName] is already a destination for many of them, and the numbers test even our generous [concept_infrastructure]. Delegations at the United Nations are pressing for a convention that would share resettlement among the members under a UN refugee agency. Nothing is before the General Assembly yet. We could table it.",
+  "de": "\\n\\nMit unseren offenen Grenzen ist [ROOT.GetCountry.GetAltName('NOM')] für viele von ihnen bereits ein Zielland, und die Zahlen stellen selbst unsere großzügige [concept_infrastructure] auf die Probe. Delegationen bei den Vereinten Nationen drängen auf eine Konvention, die Umsiedlung unter den Mitgliedern durch ein UN-Flüchtlingswerk aufteilen würde. Noch liegt nichts vor der Generalversammlung. Wir könnten sie einbringen."
+ },
+ "un_events.18.d_war": {
+  "en": "The war in [SCOPE.sCountry('refugee_source').GetName] has driven hundreds of thousands from their homes, and the camps along its borders are filling faster than aid can reach them.",
+  "de": "Der Krieg [SCOPE.sCountry('refugee_source').GetAltName('IN')] hat Hunderttausende aus ihrer Heimat vertrieben, und die Lager entlang der Landesgrenzen füllen sich schneller, als Hilfe sie erreichen kann."
+ },
+ "un_events.18.f": {
+  "en": "The border guard studied the woman's papers - or rather, the scrap of cardboard that served as papers. Behind her, the queue stretched to the horizon. Children slept standing up, leaning against their mothers' legs.\\n\\n'These documents are not valid,' he said.\\n\\nShe looked at him with the flat patience of someone who has been told this before. 'Neither is the country that issued them. It does not exist anymore. So here I am.'",
+  "de": "Der Grenzbeamte prüfte die Papiere der Frau – oder vielmehr das Stück Pappe, das als Papiere diente. Hinter ihr reichte die Schlange bis zum Horizont. Kinder schliefen im Stehen, an die Beine ihrer Mütter gelehnt.\\n\\n„Diese Dokumente sind nicht gültig“, sagte er.\\n\\nSie sah ihn mit der stumpfen Geduld an, die man erwirbt, wenn man das schon oft gehört hat. „Ebenso wenig das Land, das sie ausgestellt hat. Es existiert nicht mehr. Also bin ich hier.“"
+ },
+ "un_events.18.t": {
+  "en": "International Refugee Crisis",
+  "de": "Internationale Flüchtlingskrise"
+ },
+ "un_events.19.a": {
+  "en": "Table a space cooperation treaty. To the stars together.",
+  "de": "Bringt einen Vertrag zur Weltraumkooperation ein. Gemeinsam zu den Sternen."
+ },
+ "un_events.19.c": {
+  "en": "Space serves national interests.",
+  "de": "Der Weltraum dient nationalen Interessen."
+ },
+ "un_events.19.d": {
+  "en": "Delegations at the United Nations are pressing for an international space cooperation treaty - a joint effort to build an orbital research station and share the costs of exploration. Nothing is before the General Assembly yet: we could table it. For [ROOT.GetCountry.GetName], this is a chance to lead one of humanity's greatest endeavors.",
+  "de": "Delegationen bei den Vereinten Nationen drängen auf einen internationalen Vertrag zur Weltraumkooperation – ein gemeinsames Vorhaben, eine Forschungsstation im Orbit zu errichten und sich die Kosten der Erforschung zu teilen. Noch liegt nichts vor der Generalversammlung: Wir könnten ihn einbringen. Für [ROOT.GetCountry.GetAltName('AKK')] ist dies eine Gelegenheit, eines der größten Unterfangen der Menschheit anzuführen."
+ },
+ "un_events.19.d_authoritarian": {
+  "en": "Delegations at the United Nations are pressing for an international space cooperation treaty, and nothing is before the General Assembly yet. For [ROOT.GetCountry.GetName], space is as much a military and [concept_prestige] asset as a scientific one. Sharing it would compromise strategic advantages.",
+  "de": "Delegationen bei den Vereinten Nationen drängen auf einen internationalen Vertrag zur Weltraumkooperation, und noch liegt nichts vor der Generalversammlung. Für [ROOT.GetCountry.GetAltName('AKK')] ist der Weltraum ebenso sehr ein militärisches und [concept_prestige]-Gut wie ein wissenschaftliches. Ihn zu teilen würde strategische Vorteile gefährden."
+ },
+ "un_events.19.d_cause_world": {
+  "en": "Humanity has reached another world, and the question of who may claim the heavens can no longer wait.\\n\\n",
+  "de": "Die Menschheit hat eine weitere Welt erreicht, und die Frage, wer den Himmel für sich beanspruchen darf, duldet keinen Aufschub mehr.\\n\\n"
+ },
+ "un_events.19.d_council": {
+  "en": "Delegations at the United Nations are pressing for international space cooperation, and nothing is before the General Assembly yet. For [ROOT.GetCountry.GetName], the conquest of space represents the triumph of collective planning - we will not easily share our achievements with the bourgeois powers.",
+  "de": "Delegationen bei den Vereinten Nationen drängen auf internationale Weltraumkooperation, und noch liegt nichts vor der Generalversammlung. Für [ROOT.GetCountry.GetAltName('AKK')] steht die Eroberung des Weltraums für den Triumph kollektiver Planung – unsere Errungenschaften werden wir den bürgerlichen Mächten nicht leichtfertig überlassen."
+ },
+ "un_events.19.f": {
+  "en": "The mission director stood before the assembled delegations and pointed to the architectural model of the station. 'Twelve modules,' he said. 'Six nations. One orbit.'\\n\\n'And whose flag flies on the outside?' someone asked from the back.\\n\\nThe director permitted himself a thin smile. 'That, excellency, is precisely the question we are here to avoid.'",
+  "de": "Der Missionsdirektor stand vor den versammelten Delegationen und zeigte auf das Architekturmodell der Station. „Zwölf Module“, sagte er. „Sechs Nationen. Eine Umlaufbahn.“\\n\\n„Und wessen Flagge weht außen?“, fragte jemand von hinten.\\n\\nDer Direktor gestattete sich ein schmales Lächeln. „Das, Exzellenz, ist genau die Frage, die wir hier vermeiden wollen.“"
+ },
+ "un_events.19.t": {
+  "en": "International Space Cooperation",
+  "de": "Internationale Weltraumkooperation"
+ },
+ "un_events.2.a": {
+  "en": "Table a resolution condemning [SCOPE.sCountry('condemned_country').GetName].",
+  "de": "Bringt eine Resolution ein, die [SCOPE.sCountry('condemned_country').GetAltName('AKK')] verurteilt."
+ },
+ "un_events.2.b": {
+  "en": "Call for sanctions against [SCOPE.sCountry('condemned_country').GetName].",
+  "de": "Fordert Sanktionen gegen [SCOPE.sCountry('condemned_country').GetAltName('AKK')]."
+ },
+ "un_events.2.c": {
+  "en": "Ask the Assembly for peacekeepers.",
+  "de": "Bittet die Versammlung um Friedenstruppen."
+ },
+ "un_events.2.court": {
+  "en": "Bring a case before the World Court.",
+  "de": "Bringt den Fall vor den Internationalen Gerichtshof."
+ },
+ "un_events.2.court_tt": {
+  "en": "[SCOPE.sCountry('condemned_country').GetName] will be summoned before the World Court. No vote is held and no grounds are needed.",
+  "de": "[SCOPE.sCountry('condemned_country').GetAltName('NOM')|U] wird vor den Internationalen Gerichtshof geladen. Es findet keine Abstimmung statt, und es sind keine Gründe erforderlich."
+ },
+ "un_events.2.d": {
+  "en": "The General Assembly has put the conduct of [SCOPE.sCountry('condemned_country').GetName] on its docket, and it has fallen to us to decide whether the Assembly acts.",
+  "de": "Die Generalversammlung hat das Verhalten [SCOPE.sCountry('condemned_country').GetAltName('GEN')] auf ihre Tagesordnung gesetzt, und es liegt an uns zu entscheiden, ob die Versammlung handelt."
+ },
+ "un_events.2.d_covert": {
+  "en": "An operation run by [SCOPE.sCountry('condemned_country').GetAdjective] intelligence has been exposed. The affair is on the General Assembly's docket, and it has fallen to us, as a member with a stake in the matter, to decide whether the Assembly acts.",
+  "de": "Eine Operation des [SCOPE.sCountry('condemned_country').GetAdjective|l]en Geheimdienstes ist aufgeflogen. Die Angelegenheit steht auf der Tagesordnung der Generalversammlung, und es liegt an uns, als Mitglied mit eigenem Interesse an der Sache, zu entscheiden, ob die Versammlung handelt."
+ },
+ "un_events.2.d_covert_ours": {
+  "en": "An operation run against us by [SCOPE.sCountry('condemned_country').GetAdjective] intelligence has been exposed. The General Assembly has put the affair on its docket, and as the injured party we have the first word: we may ask the members to condemn it, call for sanctions, take [SCOPE.sCountry('condemned_country').GetName] before the World Court, or leave the matter to the Council.",
+  "de": "Eine gegen uns gerichtete Operation des [SCOPE.sCountry('condemned_country').GetAdjective|l]en Geheimdienstes ist aufgeflogen. Die Generalversammlung hat die Angelegenheit auf ihre Tagesordnung gesetzt, und als geschädigte Partei haben wir das erste Wort: Wir können die Mitglieder auffordern, sie zu verurteilen, Sanktionen fordern, [SCOPE.sCountry('condemned_country').GetAltName('AKK')] vor den Internationalen Gerichtshof bringen oder die Sache dem Rat überlassen."
+ },
+ "un_events.2.d_grounds": {
+  "en": "\\n\\nThe Assembly's file on [SCOPE.sCountry('condemned_country').GetName] gives a case of #v [SCOPE.sCountry('condemned_country').MakeScope.ScriptValue('un_case_strength')|0]#! out of 100. A condemnation needs 30, sanctions 50. A case before the World Court needs no grounds, but the accused must be a member.",
+  "de": "\\n\\nDie Akte der Versammlung zu [SCOPE.sCountry('condemned_country').GetAltName('DAT')] ergibt eine Beweislage von #v [SCOPE.sCountry('condemned_country').MakeScope.ScriptValue('un_case_strength')|0]#! von 100. Eine Verurteilung braucht 30, Sanktionen 50. Ein Verfahren vor dem Internationalen Gerichtshof braucht keine Gründe, doch der Beschuldigte muss Mitglied sein."
+ },
+ "un_events.2.d_nuclear": {
+  "en": "[SCOPE.sCountry('condemned_country').GetName] has used a nuclear weapon. The strike is on the General Assembly's docket, and it has fallen to us, as a member with a stake in the matter, to decide whether the Assembly acts.",
+  "de": "[SCOPE.sCountry('condemned_country').GetAltName('NOM')|U] hat eine Kernwaffe eingesetzt. Der Angriff steht auf der Tagesordnung der Generalversammlung, und es liegt an uns, als Mitglied mit eigenem Interesse an der Sache, zu entscheiden, ob die Versammlung handelt."
+ },
+ "un_events.2.d_nuclear_ours": {
+  "en": "[SCOPE.sCountry('condemned_country').GetName] has used a nuclear weapon against us. The General Assembly has put the strike on its docket, and as the injured party we have the first word: we may ask the members to condemn it, call for sanctions, take [SCOPE.sCountry('condemned_country').GetName] before the World Court, or leave the matter to the Council.",
+  "de": "[SCOPE.sCountry('condemned_country').GetAltName('NOM')|U] hat eine Kernwaffe gegen uns eingesetzt. Die Generalversammlung hat den Angriff auf ihre Tagesordnung gesetzt, und als geschädigte Partei haben wir das erste Wort: Wir können die Mitglieder auffordern, ihn zu verurteilen, Sanktionen fordern, [SCOPE.sCountry('condemned_country').GetAltName('AKK')] vor den Internationalen Gerichtshof bringen oder die Sache dem Rat überlassen."
+ },
+ "un_events.2.d_place": {
+  "en": "\\n\\nThe worst of the devastation is in [SCOPE.sState('un_dkt_place').GetName].",
+  "de": "\\n\\nAm schwersten betroffen ist [SCOPE.sState('un_dkt_place').GetName]."
+ },
+ "un_events.2.d_war": {
+  "en": "[SCOPE.sCountry('condemned_country').GetName] has waged a war of aggression on a member of the United Nations for months, and left devastation behind it. The war is on the General Assembly's docket, and it has fallen to us, as a member with a stake in the matter, to decide whether the Assembly acts.",
+  "de": "[SCOPE.sCountry('condemned_country').GetAltName('NOM')|U] führt seit Monaten einen Angriffskrieg gegen ein Mitglied der Vereinten Nationen und hat Verwüstung hinterlassen. Der Krieg steht auf der Tagesordnung der Generalversammlung, und es liegt an uns, als Mitglied mit eigenem Interesse an der Sache, zu entscheiden, ob die Versammlung handelt."
+ },
+ "un_events.2.d_war_ours": {
+  "en": "[SCOPE.sCountry('condemned_country').GetName] has waged war on us for months, and our land lies in ruins. The General Assembly has put the war on its docket, and as the member attacked we have the first word: we may ask the members to condemn the aggression, call for sanctions, ask for peacekeepers, take [SCOPE.sCountry('condemned_country').GetName] before the World Court, or leave the matter to the Council.",
+  "de": "[SCOPE.sCountry('condemned_country').GetAltName('NOM')|U] führt seit Monaten Krieg gegen uns, und unser Land liegt in Trümmern. Die Generalversammlung hat den Krieg auf ihre Tagesordnung gesetzt, und als angegriffenes Mitglied haben wir das erste Wort: Wir können die Mitglieder auffordern, die Aggression zu verurteilen, Sanktionen fordern, um Friedenstruppen bitten, [SCOPE.sCountry('condemned_country').GetAltName('AKK')] vor den Internationalen Gerichtshof bringen oder die Sache dem Rat überlassen."
+ },
+ "un_events.2.e": {
+  "en": "Leave the matter to the Council.",
+  "de": "Überlasst die Sache dem Rat."
+ },
+ "un_events.2.f": {
+  "en": "The ambassador had rehearsed the speech on the plane, again in the car, and once more in the corridor outside the chamber. At the lectern he set his notes aside.\\n\\n'You all know what happened,' he said. 'The only question before this Assembly is whether it happened to all of us, or only to us.'",
+  "de": "Der Botschafter hatte die Rede im Flugzeug geübt, noch einmal im Auto und ein drittes Mal im Korridor vor dem Saal. Am Rednerpult legte er seine Notizen beiseite.\\n\\n„Sie alle wissen, was geschehen ist“, sagte er. „Die einzige Frage vor dieser Versammlung ist, ob es uns allen widerfahren ist – oder nur uns.“"
+ },
+ "un_events.2.g": {
+  "en": "It is not our quarrel.",
+  "de": "Es ist nicht unser Streit."
+ },
+ "un_events.2.pass_tt": {
+  "en": "The matter passes to a member with a stake in it, which may take it up in our place.",
+  "de": "Die Angelegenheit geht an ein Mitglied mit eigenem Interesse an der Sache, das sie an unserer Stelle aufgreifen kann."
+ },
+ "un_events.2.t": {
+  "en": "An Appeal to the Assembly",
+  "de": "Ein Appell an die Versammlung"
+ },
+ "un_events.2.t_ours": {
+  "en": "We Appeal to the Assembly",
+  "de": "Wir appellieren an die Versammlung"
+ },
+ "un_events.20.a": {
+  "en": "Condemn the walkout. Rally the faithful.",
+  "de": "Verurteilt den Auszug. Sammelt die Getreuen."
+ },
+ "un_events.20.b": {
+  "en": "Call for dialogue and reconciliation.",
+  "de": "Ruft zu Dialog und Versöhnung auf."
+ },
+ "un_events.20.c": {
+  "en": "Join the walkout.",
+  "de": "Schließt euch dem Auszug an."
+ },
+ "un_events.20.d": {
+  "en": "The delegation of [SCOPE.sCountry('walkout_leader').GetName] has walked out of the United Nations and renounced its membership, accusing the Assembly of bias and hypocrisy. Its aligned nations are watching to see who follows.",
+  "de": "Die Delegation [SCOPE.sCountry('walkout_leader').GetAltName('GEN')] hat die Vereinten Nationen verlassen und ihre Mitgliedschaft aufgekündigt, unter dem Vorwurf, die Versammlung sei parteiisch und heuchlerisch. Die mit ihr verbündeten Nationen beobachten, wer folgt."
+ },
+ "un_events.20.d_authoritarian": {
+  "en": "The regime in [SCOPE.sCountry('walkout_leader').GetName] has walked out of the United Nations altogether, accusing the institution of meddling in sovereign affairs.",
+  "de": "Das Regime [SCOPE.sCountry('walkout_leader').GetAltName('IN')] hat die Vereinten Nationen vollständig verlassen und wirft der Institution vor, sich in souveräne Angelegenheiten einzumischen."
+ },
+ "un_events.20.d_council": {
+  "en": "The council republic of [SCOPE.sCountry('walkout_leader').GetName] has walked out of the United Nations. On the way out, the [SCOPE.sCountry('walkout_leader').GetAdjective] ambassador denounced the institution as a tool of capitalist hegemony.",
+  "de": "Die Räterepublik [SCOPE.sCountry('walkout_leader').GetName] hat die Vereinten Nationen verlassen. Beim Abgang verurteilte der [SCOPE.sCountry('walkout_leader').GetAdjective|l]e Botschafter die Institution als Werkzeug kapitalistischer Hegemonie."
+ },
+ "un_events.20.d_hq": {
+  "en": "\\n\\nThe walkout unfolds at the UN headquarters in [SCOPE.sState('un_hq_state').GetCityHubName], where empty seats stand as a visible rebuke to the institution's authority.",
+  "de": "\\n\\nDer Auszug spielt sich im UN-Hauptquartier in [SCOPE.sState('un_hq_state').GetCityHubName] ab, wo leere Sitze als sichtbarer Vorwurf an die Autorität der Institution stehen."
+ },
+ "un_events.20.d_theocratic": {
+  "en": "[SCOPE.sCountry('walkout_leader').GetName] has walked out of the United Nations, condemning the institution for promoting values incompatible with divine law.",
+  "de": "[SCOPE.sCountry('walkout_leader').GetAltName('NOM')|U] hat die Vereinten Nationen verlassen und wirft der Institution vor, Werte zu fördern, die mit dem göttlichen Gesetz unvereinbar sind."
+ },
+ "un_events.20.f": {
+  "en": "The doors slammed. The echo rolled across the chamber like a judgment. For a long moment, no one spoke.\\n\\nThen the secretary-general removed his reading glasses and looked at the empty seats. 'Well,' he said, with the calm of a man watching his house burn from a safe distance. 'I suppose we shall have to manage without them.'\\n\\n'Can we?' his aide whispered.\\n\\n'That, my dear fellow, is the question this institution was built to answer.'",
+  "de": "Die Türen schlugen zu. Das Echo rollte wie ein Urteil durch den Saal. Für einen langen Moment sprach niemand.\\n\\nDann nahm der Generalsekretär seine Lesebrille ab und blickte auf die leeren Sitze. „Nun“, sagte er, mit der Ruhe eines Mannes, der sein Haus aus sicherer Entfernung brennen sieht, „dann müssen wir wohl ohne sie auskommen.“\\n\\n„Können wir das?“, flüsterte sein Adjutant.\\n\\n„Das, mein lieber Freund, ist genau die Frage, zu deren Beantwortung diese Institution gegründet wurde.“"
+ },
+ "un_events.20.t": {
+  "en": "Assembly Walkout",
+  "de": "Auszug aus der Versammlung"
+ },
+ "un_events.21.a": {
+  "en": "Propose the Convention to the General Assembly.",
+  "de": "Schlagt der Generalversammlung die Konvention vor."
+ },
+ "un_events.21.c": {
+  "en": "Our waters are our own affair.",
+  "de": "Unsere Gewässer sind unsere eigene Angelegenheit."
+ },
+ "un_events.21.d": {
+  "en": "The United Nations is drafting a landmark convention to codify the law of the sea — establishing territorial waters, exclusive economic zones, and freedom of navigation. For [ROOT.GetCountry.GetName], this could mean secure trade routes and arbitrated disputes, or it could mean ceding naval sovereignty to an international tribunal.",
+  "de": "Die Vereinten Nationen entwerfen eine wegweisende Konvention zur Kodifizierung des Seerechts – mit Hoheitsgewässern, ausschließlichen Wirtschaftszonen und Freiheit der Schifffahrt. Für [ROOT.GetCountry.GetAltName('AKK')] könnte das sichere Handelsrouten und geschlichtete Streitigkeiten bedeuten – oder die Abtretung maritimer Souveränität an ein internationales Tribunal."
+ },
+ "un_events.21.d_naval": {
+  "en": "As a [concept_great_power], [ROOT.GetCountry.GetName] has significant naval interests at stake in the proposed Convention on the Law of the Sea. The framework would protect trade routes and establish exclusive economic zones — but it would also limit unilateral maritime projection.",
+  "de": "Als [concept_great_power] hat [ROOT.GetCountry.GetAltName('NOM')] erhebliche maritime Interessen auf dem Spiel, wenn es um die vorgeschlagene Konvention zum Seerecht geht. Der Rahmen würde Handelsrouten schützen und ausschließliche Wirtschaftszonen einrichten – aber auch die einseitige Machtprojektion zur See einschränken."
+ },
+ "un_events.21.f": {
+  "en": "The ambassador studied the chart spread across the conference table, its blue expanse divided into neat colored zones. 'You propose,' she said carefully, 'to draw lines on the ocean.'\\n\\n'We propose,' the chairman replied, 'to replace the lines that guns draw with ones that words draw.'\\n\\n'And when someone ignores the words?'\\n\\nThe chairman looked out the window at the harbor. 'Then at least we shall know exactly which line they crossed.'",
+  "de": "Die Botschafterin studierte die Karte, die über den Konferenztisch ausgebreitet lag, ihre blaue Fläche in ordentliche farbige Zonen unterteilt. „Sie schlagen vor“, sagte sie vorsichtig, „Linien auf den Ozean zu ziehen.“\\n\\n„Wir schlagen vor“, erwiderte der Vorsitzende, „die Linien, die Kanonen ziehen, durch solche zu ersetzen, die Worte ziehen.“\\n\\n„Und wenn jemand die Worte ignoriert?“\\n\\nDer Vorsitzende blickte aus dem Fenster auf den Hafen. „Dann wissen wir wenigstens genau, welche Linie überschritten wurde.“"
+ },
+ "un_events.21.t": {
+  "en": "Convention on the Law of the Sea",
+  "de": "Konvention zum Seerecht"
+ },
+ "un_events.22.a": {
+  "en": "Propose the Rome Statute to the General Assembly.",
+  "de": "Schlagt der Generalversammlung das Römische Statut vor."
+ },
+ "un_events.22.c": {
+  "en": "We will not submit our soldiers to foreign courts.",
+  "de": "Wir werden unsere Soldaten keinen ausländischen Gerichten unterwerfen."
+ },
+ "un_events.22.d": {
+  "en": "Delegates at the United Nations have drafted a statute to establish a permanent International Criminal Court with jurisdiction over genocide, war crimes, and crimes against humanity. For [ROOT.GetCountry.GetName], joining would signal commitment to international justice — but it would also mean submitting citizens, including military personnel, to foreign prosecution.",
+  "de": "Delegierte bei den Vereinten Nationen haben ein Statut entworfen, das einen ständigen Internationalen Strafgerichtshof mit Zuständigkeit für Völkermord, Kriegsverbrechen und Verbrechen gegen die Menschlichkeit errichten würde. Für [ROOT.GetCountry.GetAltName('AKK')] wäre ein Beitritt ein Bekenntnis zur internationalen Gerechtigkeit – bedeutete aber auch, Bürger, einschließlich Militärangehöriger, ausländischer Strafverfolgung zu unterwerfen."
+ },
+ "un_events.22.d_atwar": {
+  "en": "Even as [ROOT.GetCountry.GetName] wages war, delegates at the United Nations have proposed a permanent International Criminal Court. The timing could not be worse — joining now would expose our military commanders to investigation by a foreign tribunal.",
+  "de": "Während [ROOT.GetCountry.GetAltName('NOM')] noch Krieg führt, haben Delegierte bei den Vereinten Nationen einen ständigen Internationalen Strafgerichtshof vorgeschlagen. Der Zeitpunkt könnte kaum ungünstiger sein – ein Beitritt jetzt würde unsere militärischen Befehlshaber der Ermittlung durch ein ausländisches Tribunal aussetzen."
+ },
+ "un_events.22.d_authoritarian": {
+  "en": "The United Nations has proposed an International Criminal Court to prosecute war crimes and crimes against humanity. For [ROOT.GetCountry.GetName], this represents an unacceptable intrusion into sovereign affairs — our courts, our justice, our standards.",
+  "de": "Die Vereinten Nationen haben einen Internationalen Strafgerichtshof zur Verfolgung von Kriegsverbrechen und Verbrechen gegen die Menschlichkeit vorgeschlagen. Für [ROOT.GetCountry.GetAltName('AKK')] stellt dies einen inakzeptablen Eingriff in souveräne Angelegenheiten dar – unsere Gerichte, unsere Gerechtigkeit, unsere Maßstäbe."
+ },
+ "un_events.22.f": {
+  "en": "The legal scholar adjusted his spectacles and addressed the committee. 'The question before us is simple,' he said. 'Shall the powerful be accountable, or shall they merely be powerful?'\\n\\nThe military attaché in the back row leaned toward his colleague. 'And who,' he whispered, 'shall guard the guardians?'\\n\\n'That,' the scholar replied, having excellent hearing, 'is the entire point of this court.'",
+  "de": "Der Rechtsgelehrte rückte seine Brille zurecht und wandte sich an den Ausschuss. „Die Frage vor uns ist einfach“, sagte er. „Sollen die Mächtigen zur Rechenschaft gezogen werden, oder sollen sie nur mächtig bleiben?“\\n\\nDer Militärattaché in der hinteren Reihe beugte sich zu seinem Kollegen. „Und wer“, flüsterte er, „bewacht die Wächter?“\\n\\n„Das“, erwiderte der Gelehrte, dessen Gehör ausgezeichnet war, „ist genau der Zweck dieses Gerichts.“"
+ },
+ "un_events.22.t": {
+  "en": "International Criminal Court",
+  "de": "Internationaler Strafgerichtshof"
+ },
+ "un_events.23.a": {
+  "en": "Propose the Convention to the General Assembly.",
+  "de": "Schlagt der Generalversammlung die Konvention vor."
+ },
+ "un_events.23.c": {
+  "en": "Our depots are our own business.",
+  "de": "Unsere Depots sind unsere eigene Angelegenheit."
+ },
+ "un_events.23.d": {
+  "en": "Nuclear warheads have gone missing in the world, lost when arsenals changed hands, and the United Nations is drafting a convention to stop it happening again: every party would guard, count and report its nuclear material to a common standard, and help the others find what has already been lost. For [ROOT.GetCountry.GetName], that means foreign standards in our depots — and fewer warheads loose in the world.",
+  "de": "Weltweit sind Kernsprengköpfe abhandengekommen, verloren beim Wechsel von Arsenalen, und die Vereinten Nationen entwerfen eine Konvention, um das künftig zu verhindern: Jede Partei würde ihr Kernmaterial nach einem gemeinsamen Standard bewachen, zählen und melden und den anderen helfen, das bereits Verlorene wiederzufinden. Für [ROOT.GetCountry.GetAltName('AKK')] bedeutet das fremde Standards in unseren Depots – und weniger frei umherziehende Sprengköpfe in der Welt."
+ },
+ "un_events.23.d_struck": {
+  "en": "A stolen nuclear warhead has already been turned on [ROOT.GetCountry.GetName]. The United Nations is drafting a convention to make it the last: every party would guard, count and report its nuclear material to a common standard, and help the others find what has already been lost. Our delegation has been asked to table it.",
+  "de": "Ein gestohlener Kernsprengkopf wurde bereits gegen [ROOT.GetCountry.GetAltName('AKK')] eingesetzt. Die Vereinten Nationen entwerfen eine Konvention, damit dies der letzte Fall bleibt: Jede Partei würde ihr Kernmaterial nach einem gemeinsamen Standard bewachen, zählen und melden und den anderen helfen, das bereits Verlorene wiederzufinden. Unsere Delegation wurde gebeten, sie einzubringen."
+ },
+ "un_events.23.f": {
+  "en": "The Convention on the Physical Protection of Nuclear Material was opened for signature in 1980. In 2005, after the attacks of September 2001, its parties extended it from material in international transport to material in storage and in use.",
+  "de": "Die Konvention über den physischen Schutz von Kernmaterial wurde 1980 zur Unterzeichnung aufgelegt. Im Jahr 2005, nach den Anschlägen vom September 2001, erweiterten ihre Vertragsparteien sie von Material im internationalen Transport auf Material in Lagerung und Nutzung."
+ },
+ "un_events.23.t": {
+  "en": "Physical Protection of Nuclear Material",
+  "de": "Physischer Schutz von Kernmaterial"
+ },
+ "un_events.3.a": {
+  "en": "Propose the declaration to the General Assembly.",
+  "de": "Schlagt der Generalversammlung die Erklärung vor."
+ },
+ "un_events.3.c": {
+  "en": "We will not be bound by this.",
+  "de": "Wir werden uns davon nicht binden lassen."
+ },
+ "un_events.3.d": {
+  "en": "Delegations at the United Nations are pressing for a Universal Declaration of Human Rights, setting fundamental freedoms as the common standard for all peoples and nations. Nothing is before the General Assembly yet: we could table the declaration ourselves. Championing it would signal our commitment to the international order, though some of its provisions may conflict with domestic policy. Parties that run coercive resettlement programs at home would be penalized for it.",
+  "de": "Delegationen bei den Vereinten Nationen drängen auf eine Allgemeine Erklärung der Menschenrechte, die grundlegende Freiheiten als gemeinsamen Standard für alle Völker und Nationen festschreibt. Noch liegt nichts vor der Generalversammlung: Wir könnten die Erklärung selbst einbringen. Sie zu befürworten würde unser Bekenntnis zur internationalen Ordnung signalisieren, auch wenn manche ihrer Bestimmungen der Innenpolitik zuwiderlaufen könnten. Parteien, die im eigenen Land Zwangsumsiedlungsprogramme betreiben, würden dafür bestraft."
+ },
+ "un_events.3.d_authoritarian": {
+  "en": "A committee of idealists has drafted a Universal Declaration of Human Rights, and delegations are pressing for someone to table it before the General Assembly. For [ROOT.GetCountry.GetName], where the state ensures order, many of these so-called rights are tools of subversion dressed as [Concept('concept_power_bloc_principle', 'principles')]. Yet opposing it outright would make us a pariah.",
+  "de": "Ein Ausschuss von Idealisten hat eine Allgemeine Erklärung der Menschenrechte entworfen, und Delegationen drängen darauf, dass sie jemand vor der Generalversammlung einbringt. Für [ROOT.GetCountry.GetAltName('AKK')], wo der Staat für Ordnung sorgt, sind viele dieser sogenannten Rechte Werkzeuge der Subversion, getarnt als [Concept('concept_power_bloc_principle', 'Prinzipien')]. Sie offen abzulehnen würde uns jedoch zum Paria machen."
+ },
+ "un_events.3.d_cause_war": {
+  "en": "The war between the great powers has only just ended, and the chamber is full of delegates who mean never to see another.\\n\\n",
+  "de": "Der Krieg zwischen den Großmächten ist erst kürzlich zu Ende gegangen, und der Saal ist voller Delegierter, die entschlossen sind, nie wieder einen zu erleben.\\n\\n"
+ },
+ "un_events.3.d_council": {
+  "en": "Delegations are pressing for a Universal Declaration of Human Rights to be tabled before the General Assembly. For [ROOT.GetCountry.GetName], it affirms rights our revolution was fought to secure - work, education, social security. But it also enshrines bourgeois civil liberties historically used to protect the exploiting class.",
+  "de": "Delegationen drängen darauf, dass eine Allgemeine Erklärung der Menschenrechte vor der Generalversammlung eingebracht wird. Für [ROOT.GetCountry.GetAltName('AKK')] bekräftigt sie Rechte, für die unsere Revolution gekämpft hat – Arbeit, Bildung, soziale Sicherheit. Doch sie verankert auch bürgerliche Freiheitsrechte, die historisch dem Schutz der ausbeutenden Klasse dienten."
+ },
+ "un_events.3.d_theocratic": {
+  "en": "Delegations are pressing for a Universal Declaration of Human Rights to be tabled before the General Assembly. For [ROOT.GetCountry.GetName], where law derives from divine authority, some provisions align with sacred teachings - the dignity of the person, the prohibition of torture. But others contradict the divine order, particularly concerning freedom of religion.",
+  "de": "Delegationen drängen darauf, dass eine Allgemeine Erklärung der Menschenrechte vor der Generalversammlung eingebracht wird. Für [ROOT.GetCountry.GetAltName('AKK')], wo das Recht von göttlicher Autorität abgeleitet ist, stehen manche Bestimmungen im Einklang mit den heiligen Lehren – die Würde der Person, das Verbot der Folter. Andere aber widersprechen der göttlichen Ordnung, insbesondere in Fragen der Religionsfreiheit."
+ },
+ "un_events.3.f": {
+  "en": "'Article One,' the chairwoman read aloud. 'All human beings are born free and equal in dignity and rights.' She looked up from the page. 'Does any delegation object?'\\n\\nA long silence. Then, from the back row, a dry voice: 'To the sentiment, Madam Chair, no one objects. To the enforcement - that is where the arguments begin.'",
+  "de": "„Artikel eins“, las die Vorsitzende laut vor. „Alle Menschen sind frei und gleich an Würde und Rechten geboren.“ Sie blickte von der Seite auf. „Widerspricht eine Delegation?“\\n\\nEin langes Schweigen. Dann, aus der hinteren Reihe, eine trockene Stimme: „Dem Gedanken, Frau Vorsitzende, widerspricht niemand. Bei der Durchsetzung – da beginnen die Streitigkeiten.“"
+ },
+ "un_events.3.t": {
+  "en": "Declaration of Universal Human Rights",
+  "de": "Allgemeine Erklärung der Menschenrechte"
+ },
+ "un_events.30.a": {
+  "en": "A dark day for the world.",
+  "de": "Ein dunkler Tag für die Welt."
+ },
+ "un_events.30.b": {
+  "en": "Good riddance.",
+  "de": "Dem Himmel sei Dank."
+ },
+ "un_events.30.d": {
+  "en": "It is over. Its [concept_un_authority] exhausted, its members gone their own ways, the United Nations has been dissolved. Its headquarters is being demolished, its agencies have lapsed, its conventions bind no one, and every mandate it issued is void. The power blocs are already moving into the space it leaves.\\n\\nNo new organisation can be founded for twenty years — and then only if the world's leading power does not stand in the way.",
+  "de": "Es ist vorbei. Ihre [concept_un_authority] erschöpft, ihre Mitglieder eigene Wege gegangen, sind die Vereinten Nationen aufgelöst worden. Ihr Hauptquartier wird abgerissen, ihre Organisationen sind erloschen, ihre Konventionen binden niemanden mehr, und jedes von ihnen erteilte Mandat ist hinfällig. Die Machtblöcke rücken bereits in den Raum vor, den sie hinterlassen.\\n\\nZwanzig Jahre lang kann keine neue Organisation gegründet werden – und selbst dann nur, wenn die führende Macht der Welt sich dem nicht in den Weg stellt."
+ },
+ "un_events.30.f": {
+  "en": "The last Secretary-General lowered the blue flag himself. There were no speeches; the delegates who might have made them had already gone home.\\n\\n'We will build another,' said the young attaché at his side.\\n\\n'Perhaps,' he said. 'Your grandchildren will. They will think they invented it.'",
+  "de": "Der letzte Generalsekretär senkte die blaue Flagge selbst. Es gab keine Reden; die Delegierten, die sie hätten halten können, waren bereits nach Hause gegangen.\\n\\n„Wir werden eine neue bauen“, sagte der junge Attaché an seiner Seite.\\n\\n„Vielleicht“, sagte er. „Ihre Enkel werden es tun. Sie werden glauben, sie hätten sie erfunden.“"
+ },
+ "un_events.30.t": {
+  "en": "The United Nations Dissolves",
+  "de": "Die Vereinten Nationen lösen sich auf"
+ },
+ "un_events.31.a": {
+  "en": "Join as a founding member.",
+  "de": "Tretet als Gründungsmitglied bei."
+ },
+ "un_events.31.a_tt": {
+  "en": "When the conference concludes, we join the new United Nations as a founding member — and, as a [concept_great_power], stand for a permanent seat. Seats go to the Great Power members with the most [concept_prestige] when the signing period closes, a year after the founding.",
+  "de": "Wenn die Konferenz endet, treten wir den neuen Vereinten Nationen als Gründungsmitglied bei – und bewerben uns als [concept_great_power] um einen ständigen Sitz. Die Sitze gehen an die Großmacht-Mitglieder mit dem meisten [concept_prestige], wenn die Unterzeichnungsfrist endet, ein Jahr nach der Gründung."
+ },
+ "un_events.31.b": {
+  "en": "Stay out, but let it be founded.",
+  "de": "Bleibt fern, doch lasst sie gründen."
+ },
+ "un_events.31.b_tt": {
+  "en": "The new organisation will be founded without us. We may join it later, as any country may.",
+  "de": "Die neue Organisation wird ohne uns gegründet. Wir können ihr später beitreten, wie jedes Land es kann."
+ },
+ "un_events.31.c": {
+  "en": "Oppose the refounding.",
+  "de": "Widersetzt euch der Neugründung."
+ },
+ "un_events.31.c_tt": {
+  "en": "#R The conference collapses.#! No new United Nations may be convened for ten years, and the world will remember who stopped it.",
+  "de": "#R Die Konferenz scheitert.#! Zehn Jahre lang können keine neuen Vereinten Nationen einberufen werden, und die Welt wird sich erinnern, wer sie gestoppt hat."
+ },
+ "un_events.31.d": {
+  "en": "[SCOPE.sCountry('un_conference_convener').GetName] has convened a founding conference for a new United Nations, and every delegation is watching us. As the world's leading power, [ROOT.GetCountry.GetName] can join the new organisation as a founding member, stay out of it — or oppose the refounding outright, which would end the conference and bar another for ten years.\\n\\nIf the conference is not wrecked, the new UN is founded in a year: weak, under the founding charter, with no reforms and no agencies.",
+  "de": "[SCOPE.sCountry('un_conference_convener').GetAltName('NOM')|U] hat eine Gründungskonferenz für neue Vereinte Nationen einberufen, und jede Delegation beobachtet uns. Als führende Macht der Welt kann [ROOT.GetCountry.GetAltName('NOM')] der neuen Organisation als Gründungsmitglied beitreten, ihr fernbleiben – oder sich der Neugründung offen widersetzen, was die Konferenz beenden und eine weitere zehn Jahre lang verhindern würde.\\n\\nWird die Konferenz nicht zum Scheitern gebracht, werden die neuen Vereinten Nationen in einem Jahr gegründet: schwach, unter der Gründungscharta, ohne Reformen und ohne Organisationen."
+ },
+ "un_events.31.f": {
+  "en": "'They want us in the photograph,' the foreign minister said. 'They need us in it.'\\n\\n'And if we are not?'\\n\\n'Then there is no photograph. That is the whole of our leverage — and it is a great deal.'",
+  "de": "„Sie wollen uns auf dem Foto“, sagte der Außenminister. „Sie brauchen uns darauf.“\\n\\n„Und wenn wir nicht dabei sind?“\\n\\n„Dann gibt es kein Foto. Das ist unser gesamtes Druckmittel – und das ist eine ganze Menge.“"
+ },
+ "un_events.31.t": {
+  "en": "A Founding Conference",
+  "de": "Eine Gründungskonferenz"
+ },
+ "un_events.32.a": {
+  "en": "They will regret this.",
+  "de": "Das werden sie bereuen."
+ },
+ "un_events.32.d": {
+  "en": "Our founding conference is over before it began. [SCOPE.sCountry('un_conference_wrecker').GetName], the world's leading power, has come out against a new United Nations, and without it the delegations will not sign. No new conference may be convened for ten years.",
+  "de": "Unsere Gründungskonferenz ist vorbei, bevor sie begonnen hat. [SCOPE.sCountry('un_conference_wrecker').GetAltName('NOM')], die führende Macht der Welt, hat sich gegen neue Vereinte Nationen ausgesprochen, und ohne sie werden die Delegationen nicht unterzeichnen. Zehn Jahre lang kann keine neue Konferenz einberufen werden."
+ },
+ "un_events.32.f": {
+  "en": "The chairs had been set out in a great semicircle, each with its little flag. By evening the porters were stacking them again.",
+  "de": "Die Stühle waren in einem großen Halbkreis aufgestellt worden, jeder mit seiner kleinen Flagge. Bis zum Abend stapelten die Hausdiener sie schon wieder."
+ },
+ "un_events.32.t": {
+  "en": "The Conference Collapses",
+  "de": "Die Konferenz scheitert"
+ },
+ "un_events.33.a": {
+  "en": "Hand the accused to the court",
+  "de": "Übergebt den Angeklagten dem Gericht"
+ },
+ "un_events.33.a_tt": {
+  "en": "[SCOPE.sCharacter('un_icc_accused').GetFullName] is handed to the International Criminal Court and goes into exile. The next in line takes power.",
+  "de": "[SCOPE.sCharacter('un_icc_accused').GetFullName] wird dem Internationalen Strafgerichtshof übergeben und geht ins Exil. Der oder die Nächste in der Erbfolge übernimmt die Macht."
+ },
+ "un_events.33.b": {
+  "en": "The court has no authority here",
+  "de": "Das Gericht hat hier keine Befugnis"
+ },
+ "un_events.33.b_tt": {
+  "en": "[SCOPE.sCharacter('un_icc_accused').GetFullName] stays. The court's indictment stands, and the Assembly remembers who refused it.",
+  "de": "[SCOPE.sCharacter('un_icc_accused').GetFullName] bleibt. Die Anklage des Gerichts bleibt bestehen, und die Versammlung merkt sich, wer sie zurückgewiesen hat."
+ },
+ "un_events.33.d_jurisdiction": {
+  "en": " [ROOT.GetCountry.GetName] never ratified the court's statute, but the Assembly now claims the court's jurisdiction over every nation, and the world is watching to see whether we submit to it.",
+  "de": " [ROOT.GetCountry.GetAltName('NOM')] hat das Statut des Gerichts nie ratifiziert, doch die Versammlung beansprucht nun die Zuständigkeit des Gerichts über jede Nation, und die Welt beobachtet, ob wir uns fügen."
+ },
+ "un_events.33.d_nuclear": {
+  "en": "The prosecutor of the International Criminal Court has unsealed an indictment of [SCOPE.sCharacter('un_icc_accused').GetFullName] for the nuclear strike launched by [ROOT.GetCountry.GetAdjective] forces. The court asks that the accused be handed over to answer the charge.",
+  "de": "Der Ankläger des Internationalen Strafgerichtshofs hat eine Anklage gegen [SCOPE.sCharacter('un_icc_accused').GetFullName] wegen des von [ROOT.GetCountry.GetAdjective|l]en Streitkräften ausgeführten Kernwaffenschlags erhoben. Das Gericht verlangt, dass der Angeklagte zur Beantwortung der Anklage übergeben wird."
+ },
+ "un_events.33.d_ratified": {
+  "en": " The world is watching to see whether [ROOT.GetCountry.GetName] honours a court it swore to recognise.",
+  "de": " Die Welt beobachtet, ob [ROOT.GetCountry.GetAltName('NOM')] ein Gericht respektiert, dessen Anerkennung es beschworen hat."
+ },
+ "un_events.33.d_regime_change": {
+  "en": "The prosecutor of the International Criminal Court has unsealed an indictment of [SCOPE.sCharacter('un_icc_accused').GetFullName] for the exposed plot to overthrow a foreign government. The court asks that the accused be handed over to answer the charge.",
+  "de": "Der Ankläger des Internationalen Strafgerichtshofs hat eine Anklage gegen [SCOPE.sCharacter('un_icc_accused').GetFullName] wegen des aufgedeckten Plans zum Sturz einer fremden Regierung erhoben. Das Gericht verlangt, dass der Angeklagte zur Beantwortung der Anklage übergeben wird."
+ },
+ "un_events.33.f": {
+  "en": "\\\"No one is above the law.\\\"\\n\\n\\\"No one ever is, until the law comes for them.\\\"",
+  "de": "„Niemand steht über dem Gesetz.“\\n\\n„Das ist nie jemand – bis das Gesetz nach ihm greift.“"
+ },
+ "un_events.33.t": {
+  "en": "The Court Indicts Our Leader",
+  "de": "Das Gericht klagt unseren Anführer an"
+ },
+ "un_events.34.a": {
+  "en": "They are right. We will leave.",
+  "de": "Sie haben recht. Wir treten aus."
+ },
+ "un_events.34.b": {
+  "en": "Buy their patience with concessions",
+  "de": "Erkauft ihre Geduld mit Zugeständnissen"
+ },
+ "un_events.34.c": {
+  "en": "We stay, whatever they say",
+  "de": "Wir bleiben, was sie auch sagen"
+ },
+ "un_events.34.d": {
+  "en": "The United Nations has grown into something its founders never imagined: its resolutions are enforced, its embargoes bite, its dues are a levy on our wealth. To [SCOPE.sInterestGroup('un_sov_ig').GetName] it is a foreign government in all but name. They are in the streets and in the chamber, demanding that [ROOT.GetCountry.GetName] take back its sovereignty and leave.",
+  "de": "Die Vereinten Nationen sind zu etwas geworden, das sich ihre Gründer nie vorgestellt hätten: Ihre Resolutionen werden durchgesetzt, ihre Embargos zeigen Wirkung, ihre Beiträge sind eine Abgabe auf unseren Wohlstand. Für [SCOPE.sInterestGroup('un_sov_ig').GetName] ist das nichts anderes als eine fremde Regierung, nur ohne den Namen. Sie gehen auf die Straße und in den Saal und fordern, dass [ROOT.GetCountry.GetAltName('NOM')] seine Souveränität zurückerlangt und austritt."
+ },
+ "un_events.34.f": {
+  "en": "\\\"We did not win our independence to hand it to a committee in a glass tower.\\\"",
+  "de": "„Wir haben unsere Unabhängigkeit nicht erkämpft, um sie einem Ausschuss in einem gläsernen Turm zu übergeben.“"
+ },
+ "un_events.34.t": {
+  "en": "Sovereignty First",
+  "de": "Souveränität zuerst"
+ },
+ "un_events.35.a": {
+  "en": "Accept the facility and its conditions",
+  "de": "Nehmt die Fazilität und ihre Bedingungen an"
+ },
+ "un_events.35.a_confidence_tt": {
+  "en": "#G Confidence in our banking system recovers somewhat#! (the financial cycle rises by 10).",
+  "de": "#G Das Vertrauen in unser Bankensystem erholt sich etwas#! (der Finanzzyklus steigt um 10)."
+ },
+ "un_events.35.a_tt": {
+  "en": "We receive @money!#v [ROOT.GetCountry.MakeScope.ScriptValue('un_loan_amount_value')|D]#! at once, and repay #v 110%#! of it over five years as a weekly expense. The conditions hold for as long.",
+  "de": "Wir erhalten sofort @money!#v [ROOT.GetCountry.MakeScope.ScriptValue('un_loan_amount_value')|D]#! und zahlen davon #v 110%#! über fünf Jahre als wöchentliche Ausgabe zurück. Die Bedingungen gelten so lange."
+ },
+ "un_events.35.b": {
+  "en": "We will weather this alone",
+  "de": "Wir stehen das allein durch"
+ },
+ "un_events.35.b_tt": {
+  "en": "We refuse the facility and face the crisis with what we have.",
+  "de": "Wir lehnen die Fazilität ab und begegnen der Krise mit dem, was wir haben."
+ },
+ "un_events.35.d": {
+  "en": "The contagion has reached [ROOT.GetCountry.GetName]. Depositors queue outside the banks, credit has frozen, and the treasury cannot borrow at any price it can pay. The United Nations offers an emergency loan from the budget its members' dues provide: @money![ROOT.GetCountry.MakeScope.ScriptValue('un_loan_amount_value')|D] now, repaid with interest over five years. The money comes with conditions, written by creditors who do not have to stand for election here.",
+  "de": "Die Ansteckung hat [ROOT.GetCountry.GetAltName('AKK')] erreicht. Einleger stehen vor den Banken Schlange, der Kreditmarkt ist eingefroren, und der Fiskus kann sich zu keinem Preis mehr Geld leihen, den er noch aufbringen kann. Die Vereinten Nationen bieten einen Nothilfekredit aus dem Haushalt, den die Beiträge ihrer Mitglieder speisen: @money![ROOT.GetCountry.MakeScope.ScriptValue('un_loan_amount_value')|D] sofort, mit Zinsen über fünf Jahre zurückzuzahlen. Das Geld kommt mit Bedingungen, verfasst von Gläubigern, die sich hier keiner Wahl stellen müssen."
+ },
+ "un_events.35.f": {
+  "en": "\\\"The terms are not negotiable.\\\"\\n\\n\\\"Then it is not a loan. It is a verdict.\\\"",
+  "de": "„Die Bedingungen sind nicht verhandelbar.“\\n\\n„Dann ist es kein Kredit. Es ist ein Urteil.“"
+ },
+ "un_events.35.t": {
+  "en": "An Emergency Lending Facility",
+  "de": "Eine Nothilfefazilität"
+ },
+ "un_events.36.a": {
+  "en": "Ratify them",
+  "de": "Ratifiziert sie"
+ },
+ "un_events.36.b": {
+  "en": "Stay outside them",
+  "de": "Bleibt außen vor"
+ },
+ "un_events.36.b_tt": {
+  "en": "We stay outside the conventions passed in our absence. We will not be asked again; a convention binds only the members that ratify it.",
+  "de": "Wir bleiben außerhalb der in unserer Abwesenheit verabschiedeten Konventionen. Wir werden nicht noch einmal gefragt; eine Konvention bindet nur die Mitglieder, die sie ratifizieren."
+ },
+ "un_events.36.d": {
+  "en": "Our delegation has taken its seat in the General Assembly again. While our foreign policy was not our own, the Assembly passed conventions we were never asked to ratify. The other members took their decision when each was passed; ours is now, once.",
+  "de": "Unsere Delegation hat ihren Sitz in der Generalversammlung wieder eingenommen. Solange unsere Außenpolitik nicht in unserer eigenen Hand lag, verabschiedete die Versammlung Konventionen, zu deren Ratifizierung wir nie gefragt wurden. Die anderen Mitglieder trafen ihre Entscheidung, als jede einzelne verabschiedet wurde; unsere fällt jetzt, ein einziges Mal."
+ },
+ "un_events.36.f": {
+  "en": "\\\"The Secretariat keeps the instruments open for signature. It does not keep them open for ever.\\\"",
+  "de": "„Das Sekretariat hält die Vertragswerke zur Unterzeichnung offen. Für immer offen hält es sie nicht.“"
+ },
+ "un_events.36.t": {
+  "en": "Conventions Passed in Our Absence",
+  "de": "In unserer Abwesenheit verabschiedete Konventionen"
+ },
+ "un_events.4.a": {
+  "en": "Deploy a full peacekeeping force.",
+  "de": "Entsendet eine vollständige Friedenstruppe."
+ },
+ "un_events.4.b": {
+  "en": "Send observers only.",
+  "de": "Entsendet nur Beobachter."
+ },
+ "un_events.4.c": {
+  "en": "We cannot spare the resources.",
+  "de": "Wir können die Mittel nicht entbehren."
+ },
+ "un_events.4.d": {
+  "en": "Order has broken down in [SCOPE.sCountry('peacekeeping_target').GetName]. The General Assembly has put the collapse on its docket, and the Secretary-General has asked the powers able to help to send peacekeepers. [ROOT.GetCountry.GetName] is among them.",
+  "de": "Die Ordnung [SCOPE.sCountry('peacekeeping_target').GetAltName('IN')] ist zusammengebrochen. Die Generalversammlung hat den Zusammenbruch auf ihre Tagesordnung gesetzt, und der Generalsekretär hat die Mächte, die helfen können, um die Entsendung von Friedenstruppen gebeten. [ROOT.GetCountry.GetAltName('NOM')|U] gehört dazu."
+ },
+ "un_events.4.f": {
+  "en": "The colonel studied the deployment orders and folded them carefully into his breast pocket. 'Blue helmets,' he said to his adjutant. 'Rules of engagement that would embarrass a traffic warden. No authority to fire unless fired upon, and even then, only if committee approves.'\\n\\nHe paused at the door. 'Still. Someone has to stand between the guns.'",
+  "de": "Der Oberst studierte die Einsatzbefehle und faltete sie sorgfältig in seine Brusttasche. „Blauhelme“, sagte er zu seinem Adjutanten. „Einsatzregeln, die selbst einen Verkehrspolizisten in Verlegenheit brächten. Keine Feuererlaubnis, außer man wird selbst beschossen, und selbst dann nur, wenn der Ausschuss zustimmt.“\\n\\nEr hielt an der Tür inne. „Trotzdem. Irgendjemand muss sich zwischen die Waffen stellen.“"
+ },
+ "un_events.4.t": {
+  "en": "A State Has Collapsed",
+  "de": "Ein Staat ist zusammengebrochen"
+ },
+ "un_events.5.a": {
+  "en": "Enforce the sanctions strictly.",
+  "de": "Setzt die Sanktionen strikt durch."
+ },
+ "un_events.5.b": {
+  "en": "Partial compliance - the letter of the law.",
+  "de": "Teilweise Einhaltung – der Buchstabe des Gesetzes."
+ },
+ "un_events.5.c": {
+  "en": "Quietly profit from the gaps.",
+  "de": "Profitiert still von den Lücken."
+ },
+ "un_events.5.d": {
+  "en": "The [concept_un_sanctions] against [SCOPE.sCountry('sanctioned_country').GetName] are now in effect, but enforcement requires active cooperation from member states. Strict compliance will hurt our own trade routes; the alternative is to quietly circumvent a regime we ourselves asked the Assembly to impose.",
+  "de": "Die [concept_un_sanctions] gegen [SCOPE.sCountry('sanctioned_country').GetAltName('AKK')] sind nun in Kraft, doch ihre Durchsetzung erfordert die aktive Mitwirkung der Mitgliedstaaten. Strikte Einhaltung würde unsere eigenen Handelsrouten schädigen; die Alternative ist, ein Regime, das wir selbst von der Versammlung gefordert haben, still zu umgehen."
+ },
+ "un_events.5.d_founder": {
+  "en": "The [concept_un_sanctions] against [SCOPE.sCountry('sanctioned_country').GetName] are now in effect, but enforcement requires active cooperation from member states. Strict compliance will hurt our own trade routes; the alternative is to quietly circumvent the very institution we helped create.",
+  "de": "Die [concept_un_sanctions] gegen [SCOPE.sCountry('sanctioned_country').GetAltName('AKK')] sind nun in Kraft, doch ihre Durchsetzung erfordert die aktive Mitwirkung der Mitgliedstaaten. Strikte Einhaltung würde unsere eigenen Handelsrouten schädigen; die Alternative ist, genau die Institution still zu umgehen, die wir mitgeschaffen haben."
+ },
+ "un_events.5.f": {
+  "en": "'The manifest says fertilizer,' the customs inspector said, turning the page with exaggerated slowness. 'Quite a lot of fertilizer.' He looked up. 'For a country with no farms.'\\n\\nThe shipping agent smiled and slid an envelope across the desk. 'A clerical error. I'm sure you understand.'",
+  "de": "„Im Manifest steht Dünger“, sagte der Zollbeamte und blätterte mit übertriebener Langsamkeit um. „Ziemlich viel Dünger.“ Er blickte auf. „Für ein Land ohne Bauernhöfe.“\\n\\nDer Frachtagent lächelte und schob einen Umschlag über den Tisch. „Ein Schreibfehler. Sie verstehen sicher.“"
+ },
+ "un_events.5.t": {
+  "en": "Enforcing the Sanctions Regime",
+  "de": "Durchsetzung des Sanktionsregimes"
+ },
+ "un_events.6.a": {
+  "en": "Table the reform. The UN must grow.",
+  "de": "Bringt die Reform ein. Die UN muss wachsen."
+ },
+ "un_events.6.b": {
+  "en": "Defend the Charter as it stands.",
+  "de": "Verteidigt die Charta, wie sie ist."
+ },
+ "un_events.6.d": {
+  "en": "For two years the United Nations has pressed against the ceiling its founders wrote into the Charter, and a coalition of delegations now demands the next reform. As a [concept_great_power], [ROOT.GetCountry.GetName] can table it — a two-thirds supermajority of every member, and no [concept_un_veto] from the permanent seats — or defend the Charter as it stands.",
+  "de": "Seit zwei Jahren stoßen die Vereinten Nationen an die Obergrenze, die ihre Gründer in die Charta geschrieben haben, und eine Koalition von Delegationen fordert nun die nächste Reform. Als [concept_great_power] kann [ROOT.GetCountry.GetAltName('NOM')] sie einbringen – eine Zweidrittelmehrheit aller Mitglieder, und kein [concept_un_veto] von den ständigen Sitzen – oder die Charta verteidigen, wie sie ist."
+ },
+ "un_events.6.d_authoritarian": {
+  "en": "The United Nations has outgrown its Charter, and a coalition demands the next reform. For [ROOT.GetCountry.GetName], a stronger Assembly is a stronger constraint on our freedom of action — and Reform II would restrain the [concept_un_veto] itself. Championing it might buy goodwill; defending the Charter preserves our influence.",
+  "de": "Die Vereinten Nationen sind über ihre Charta hinausgewachsen, und eine Koalition fordert die nächste Reform. Für [ROOT.GetCountry.GetAltName('AKK')] ist eine stärkere Versammlung eine stärkere Fessel für unseren Handlungsspielraum – und Reform II würde das [concept_un_veto] selbst einschränken. Es zu befürworten könnte Wohlwollen erkaufen; die Charta zu verteidigen bewahrt unseren Einfluss."
+ },
+ "un_events.6.d_council": {
+  "en": "The United Nations has outgrown its Charter, and a coalition demands the next reform. As a council republic, [ROOT.GetCountry.GetName] can champion democratising the world order — arguing that the [concept_un_veto] power of a few [Concept('concept_great_power', 'great powers')] is fundamentally undemocratic — though a stronger Assembly binds us as well.",
+  "de": "Die Vereinten Nationen sind über ihre Charta hinausgewachsen, und eine Koalition fordert die nächste Reform. Als Räterepublik kann [ROOT.GetCountry.GetAltName('NOM')] die Demokratisierung der Weltordnung anführen – mit dem Argument, dass die [concept_un_veto]-Macht weniger [Concept('concept_great_power', 'Großmächte')] grundsätzlich undemokratisch sei –, auch wenn eine stärkere Versammlung uns ebenfalls bindet."
+ },
+ "un_events.6.d_hq": {
+  "en": "\\n\\nDelegates have gathered at the UN headquarters in [SCOPE.sState('un_hq_state').GetCityHubName], where the halls are thick with backroom deals.",
+  "de": "\\n\\nDelegierte haben sich im UN-Hauptquartier in [SCOPE.sState('un_hq_state').GetCityHubName] versammelt, wo die Flure voller Hinterzimmerdeals sind."
+ },
+ "un_events.6.f": {
+  "en": "'We are told this body represents the world,' the ambassador said, adjusting his spectacles. 'And yet the same five nations have held the same five seats since before half the countries in this room existed.'\\n\\nThe delegate from the permanent member state glanced at his papers. 'The matter has been raised before,' he replied. 'The committee will take it under advisement.'\\n\\nIt had been taken under advisement eleven times.",
+  "de": "„Man sagt uns, dieses Gremium vertrete die Welt“, sagte der Botschafter und rückte seine Brille zurecht. „Und doch halten dieselben fünf Nationen dieselben fünf Sitze, seit die Hälfte der Länder in diesem Saal noch gar nicht existierte.“\\n\\nDer Delegierte des Ständigen Mitglieds warf einen Blick auf seine Unterlagen. „Die Angelegenheit wurde bereits erörtert“, erwiderte er. „Der Ausschuss wird sie zur Kenntnis nehmen.“\\n\\nSie war schon elfmal zur Kenntnis genommen worden."
+ },
+ "un_events.6.t": {
+  "en": "The Charter Has Been Outgrown",
+  "de": "Der Charta entwachsen"
+ },
+ "un_events.7.a": {
+  "en": "Mount a major humanitarian relief effort.",
+  "de": "Startet eine groß angelegte humanitäre Hilfsaktion."
+ },
+ "un_events.7.b": {
+  "en": "Contribute what we can spare.",
+  "de": "Steuert bei, was wir entbehren können."
+ },
+ "un_events.7.c": {
+  "en": "This is not our responsibility.",
+  "de": "Das ist nicht unsere Verantwortung."
+ },
+ "un_events.7.d": {
+  "en": "Reports from [SCOPE.sCountry('crisis_country').GetName] paint a dire picture - widespread famine, displacement, and suffering on a massive scale. The United Nations has issued an urgent appeal for humanitarian assistance from member states.",
+  "de": "Berichte aus [SCOPE.sCountry('crisis_country').GetAltName('DAT')] zeichnen ein düsteres Bild – weitverbreitete Hungersnot, Vertreibung und Leid in gewaltigem Ausmaß. Die Vereinten Nationen haben einen dringenden Aufruf zur humanitären Hilfe an die Mitgliedstaaten gerichtet."
+ },
+ "un_events.7.d_place": {
+  "en": "\\n\\nThe worst of it is in [SCOPE.sState('crisis_state').GetName].",
+  "de": "\\n\\nAm schlimmsten betroffen ist [SCOPE.sState('crisis_state').GetName]."
+ },
+ "un_events.7.f": {
+  "en": "The relief coordinator set down the telegram and pressed her palms flat against the desk. 'Three hundred thousand displaced,' she said. 'That is the confirmed figure. The actual number is anyone's guess.'\\n\\nHer aide handed her a coffee, gone cold. 'How much can we send?'\\n\\n'The question is not how much we can send. The question is how much we are willing to be seen not sending.'",
+  "de": "Die Hilfskoordinatorin legte das Telegramm ab und presste die Handflächen flach auf den Schreibtisch. „Dreihunderttausend Vertriebene“, sagte sie. „Das ist die bestätigte Zahl. Die tatsächliche Zahl kann man nur schätzen.“\\n\\nIhr Assistent reichte ihr einen inzwischen kalten Kaffee. „Wie viel können wir schicken?“\\n\\n„Die Frage ist nicht, wie viel wir schicken können. Die Frage ist, wie viel wir bereit sind, öffentlich nicht zu schicken.“"
+ },
+ "un_events.7.t": {
+  "en": "Humanitarian Crisis Demands Response",
+  "de": "Humanitäre Krise verlangt eine Antwort"
+ },
+ "un_events.8.a": {
+  "en": "Accept the ruling. We must uphold the law.",
+  "de": "Akzeptiert das Urteil. Wir müssen das Recht wahren."
+ },
+ "un_events.8.b": {
+  "en": "Contest the court's jurisdiction.",
+  "de": "Bestreitet die Zuständigkeit des Gerichts."
+ },
+ "un_events.8.c": {
+  "en": "We do not recognize this verdict.",
+  "de": "Wir erkennen dieses Urteil nicht an."
+ },
+ "un_events.8.d": {
+  "en": "The International Court of Justice has issued a ruling against [ROOT.GetCountry.GetName], citing violations of international humanitarian law. The ruling is non-binding but carries enormous symbolic weight. Compliance would require modifications to our military conduct and possible reparations.",
+  "de": "Der Internationale Gerichtshof hat ein Urteil gegen [ROOT.GetCountry.GetAltName('AKK')] gefällt und dabei Verstöße gegen das humanitäre Völkerrecht angeführt. Das Urteil ist nicht bindend, trägt aber enormes symbolisches Gewicht. Seine Befolgung würde Änderungen an unserem militärischen Vorgehen und möglicherweise Reparationen erfordern."
+ },
+ "un_events.8.d_covert": {
+  "en": "The International Court of Justice has issued a ruling against [ROOT.GetCountry.GetName], finding that a covert operation run by our intelligence services violated another state's sovereignty. The ruling is non-binding but carries enormous symbolic weight. Compliance would mean reining in our intelligence services and possible reparations.",
+  "de": "Der Internationale Gerichtshof hat ein Urteil gegen [ROOT.GetCountry.GetAltName('AKK')] gefällt und festgestellt, dass eine verdeckte Operation unserer Geheimdienste die Souveränität eines anderen Staates verletzt hat. Das Urteil ist nicht bindend, trägt aber enormes symbolisches Gewicht. Seine Befolgung würde bedeuten, unsere Geheimdienste zu zügeln, und möglicherweise Reparationen."
+ },
+ "un_events.8.d_plaintiff": {
+  "en": "\\n\\nThe case was brought by [SCOPE.sCountry('court_plaintiff').GetName].",
+  "de": "\\n\\nDie Klage wurde von [SCOPE.sCountry('court_plaintiff').GetAltName('DAT')] eingereicht."
+ },
+ "un_events.8.f": {
+  "en": "'The court has ruled,' the foreign minister said, tossing the document onto the cabinet table. 'We are, it seems, in violation of seventeen articles of international law that half the world's nations have never read.'\\n\\n'And the other half?' the defence minister asked.\\n\\n'The other half would prefer we hadn't read them either.'",
+  "de": "„Das Gericht hat entschieden“, sagte der Außenminister und warf das Dokument auf den Kabinettstisch. „Wir verstoßen, so scheint es, gegen siebzehn Artikel des Völkerrechts, die die Hälfte der Nationen dieser Welt nie gelesen hat.“\\n\\n„Und die andere Hälfte?“, fragte der Verteidigungsminister.\\n\\n„Die andere Hälfte hätte es lieber auch nicht gelesen.“"
+ },
+ "un_events.8.t": {
+  "en": "International Court Rules Against Us",
+  "de": "Der Internationale Gerichtshof entscheidet gegen uns"
+ },
+ "un_events.9.a": {
+  "en": "Table a heritage convention before the Assembly.",
+  "de": "Bringt eine Konvention zum Kulturerbe vor der Versammlung ein."
+ },
+ "un_events.9.c": {
+  "en": "Culture is a domestic matter.",
+  "de": "Kultur ist eine innere Angelegenheit."
+ },
+ "un_events.9.d": {
+  "en": "Delegations at the United Nations are pressing for a convention to identify and preserve sites of outstanding cultural and natural heritage, with a UN agency to keep the list. Nothing is before the General Assembly yet: we could table it. Sites within [ROOT.GetCountry.GetName] could be listed, adding to our [concept_prestige], though it would mean funding their upkeep and accepting international oversight.",
+  "de": "Delegationen bei den Vereinten Nationen drängen auf eine Konvention zur Bestimmung und zum Erhalt von Stätten von herausragendem kulturellem und natürlichem Erbe, mit einer UN-Behörde, die die Liste führt. Noch liegt nichts vor der Generalversammlung: Wir könnten sie einbringen. Stätten [ROOT.GetCountry.GetAltName('IN')] könnten gelistet werden, was unser [concept_prestige] mehrt, würde aber bedeuten, ihren Unterhalt zu finanzieren und internationale Aufsicht zu akzeptieren."
+ },
+ "un_events.9.f": {
+  "en": "The antiquarian ran his hand across the ancient stonework. 'This wall is older than our nation,' he said. 'Older than most nations.'\\n\\nThe treasury official beside him frowned at the estimate. 'And the cost of preserving it is older than my patience. Can we not simply photograph it and move on?'\\n\\n'You can photograph a ruin. You cannot photograph what it meant to stand.'",
+  "de": "Der Altertumsforscher fuhr mit der Hand über das uralte Mauerwerk. „Diese Mauer ist älter als unsere Nation“, sagte er. „Älter als die meisten Nationen.“\\n\\nDer Finanzbeamte neben ihm runzelte die Stirn über den Kostenvoranschlag. „Und die Kosten für ihren Erhalt sind älter als meine Geduld. Können wir sie nicht einfach fotografieren und weiterziehen?“\\n\\n„Eine Ruine kann man fotografieren. Was es bedeutete, dass sie stand, kann man nicht fotografieren.“"
+ },
+ "un_events.9.t": {
+  "en": "Protecting World Heritage",
+  "de": "Schutz des Welterbes"
+ },
+ "un_mandate.1.a": {
+  "en": "So it is recorded.",
+  "de": "So wird es festgehalten."
+ },
+ "un_mandate.1.d_abandoned": {
+  "en": "We raised the play the Assembly authorized and then walked away from it. The mandate is void, and the chamber has noted that its name was spent on a war we would not fight. #R UN credibility −3#! (weighted by our weight in world affairs), and the censure of the organisation falls on us.",
+  "de": "Wir haben das von der Versammlung genehmigte Diplomatiespiel eröffnet und es dann fallengelassen. Das Mandat ist hinfällig, und der Saal hat vermerkt, dass sein Name für einen Krieg verausgabt wurde, den wir nicht führen wollten. #R UN-Glaubwürdigkeit −3#! (gewichtet nach unserem Gewicht in der Weltpolitik), und die Rüge der Organisation trifft uns."
+ },
+ "un_mandate.1.d_complied": {
+  "en": "[AddLocalizationIf(SCOPE.sStateRegion('un_mandate_closed_region').Exists, SCOPE.sStateRegion('un_mandate_closed_region').GetName)] is ours again, taken under the authority of the General Assembly and by the terms it set. The mandate is discharged. #G UN delivery +2#! (weighted by our weight in world affairs), and the organisation's standing is the better for having been obeyed.",
+  "de": "[AddLocalizationIf(SCOPE.sStateRegion('un_mandate_closed_region').Exists, SCOPE.sStateRegion('un_mandate_closed_region').GetName)] gehört wieder uns, eingenommen unter der Autorität der Generalversammlung und nach den von ihr gesetzten Bedingungen. Das Mandat ist erfüllt. #G UN-Erfüllung +2#! (gewichtet nach unserem Gewicht in der Weltpolitik), und das Ansehen der Organisation profitiert davon, dass ihm gehorcht wurde."
+ },
+ "un_mandate.1.d_complied_forfeit": {
+  "en": "The territory is ours — but we took it after leaving the organisation whose authorization we were using. The chamber does not recognise a mandate exercised by a state that has walked out of it. #R UN credibility −3#! (weighted by our weight in world affairs), and the censure that would have gone to a violator falls on us instead.",
+  "de": "Das Gebiet gehört uns – doch wir haben es genommen, nachdem wir die Organisation verlassen hatten, deren Ermächtigung wir nutzten. Der Saal erkennt kein Mandat an, das von einem Staat ausgeübt wird, der aus ihr ausgetreten ist. #R UN-Glaubwürdigkeit −3#! (gewichtet nach unserem Gewicht in der Weltpolitik), und die Rüge, die einem Regelverletzer gegolten hätte, trifft stattdessen uns."
+ },
+ "un_mandate.1.d_expired": {
+  "en": "Five years have passed and the authorization has lapsed unexercised. The Assembly's licence was never a standing one; pressing the claim now would be an ordinary war, at an ordinary price.",
+  "de": "Fünf Jahre sind vergangen, und die Ermächtigung ist ungenutzt verfallen. Die Lizenz der Versammlung war nie von Dauer; den Anspruch jetzt durchzusetzen wäre ein gewöhnlicher Krieg, zum gewöhnlichen Preis."
+ },
+ "un_mandate.1.d_violated": {
+  "en": "We were authorized to recover one territory from [AddLocalizationIf(SCOPE.sCountry('un_mandate_closed_target').Exists, SCOPE.sCountry('un_mandate_closed_target').GetName)] and we demanded more than that. The mandate is void, the authorized war goal is no longer ours to take, and the chamber has been shown exactly what its authorizations are worth. #R UN credibility −3#! (weighted by our weight in world affairs), and the censure of the organisation.",
+  "de": "Wir waren ermächtigt, ein Gebiet von [AddLocalizationIf(SCOPE.sCountry('un_mandate_closed_target').Exists, SCOPE.sCountry('un_mandate_closed_target').GetName)] zurückzugewinnen, und wir forderten mehr als das. Das Mandat ist hinfällig, das genehmigte Kriegsziel steht uns nicht mehr zu, und dem Saal wurde genau gezeigt, was seine Ermächtigungen wert sind. #R UN-Glaubwürdigkeit −3#! (gewichtet nach unserem Gewicht in der Weltpolitik), und die Rüge der Organisation."
+ },
+ "un_mandate.1.d_void": {
+  "en": "The mandate can no longer be exercised on the terms the Assembly set — the territory changed hands, a party to it ceased to exist, or we are no longer a member of the body that issued it. No censure attaches; the authorization simply is not there any more.",
+  "de": "Das Mandat kann nicht mehr zu den von der Versammlung gesetzten Bedingungen ausgeübt werden – das Gebiet hat den Besitzer gewechselt, eine daran beteiligte Partei ist untergegangen, oder wir sind nicht mehr Mitglied des Gremiums, das es erteilt hat. Es folgt keine Rüge; die Ermächtigung ist schlicht nicht mehr vorhanden."
+ },
+ "un_mandate.1.f": {
+  "en": "'The resolution said one province.'\\n\\n'The resolution said a great many things.'",
+  "de": "„Die Resolution sprach von einer Provinz.“\\n\\n„Die Resolution sprach von sehr vielem.“"
+ },
+ "un_mandate.1.t_abandoned": {
+  "en": "The Mandate Abandoned",
+  "de": "Das aufgegebene Mandat"
+ },
+ "un_mandate.1.t_complied": {
+  "en": "The Mandate Discharged",
+  "de": "Das erfüllte Mandat"
+ },
+ "un_mandate.1.t_expired": {
+  "en": "The Mandate Lapses",
+  "de": "Das Mandat verfällt"
+ },
+ "un_mandate.1.t_violated": {
+  "en": "The Mandate Exceeded",
+  "de": "Das überschrittene Mandat"
+ },
+ "un_mandate.1.t_void": {
+  "en": "The Mandate Falls Away",
+  "de": "Das hinfällige Mandat"
+ },
+ "un_mandate.2.a": {
+  "en": "Understood.",
+  "de": "Verstanden."
+ },
+ "un_mandate.2.d": {
+  "en": "Our [concept_diplomatic_play] against [SCOPE.sCountry('un_mandate_notice_target').GetName] now carries the demand the [concept_un_general_assembly] authorized: the return of [SCOPE.sStateRegion('un_mandate_notice_region').GetName]. That demand costs us no [concept_infamy], and the mandate is now bound to this play — it cannot be carried into another.\\n\\n#bold What the mandate does not cover:#! any other demand against that country for territory, subjugation, regime change or humiliation. Adding one to this play #R voids the mandate#!: the Assembly condemns us, [concept_un_authority] falls, and our standing benefits are suspended for ten years. Backing down from the play forfeits it in the same way.\\n\\nOther demands — war reparations, opening markets and the like — are allowed, at their normal price.",
+  "de": "Unser [concept_diplomatic_play] gegen [SCOPE.sCountry('un_mandate_notice_target').GetAltName('AKK')] trägt nun die von der [concept_un_general_assembly] genehmigte Forderung: die Rückgabe von [SCOPE.sStateRegion('un_mandate_notice_region').GetName]. Diese Forderung kostet uns keine [concept_infamy], und das Mandat ist nun an dieses Diplomatiespiel gebunden – es kann nicht in ein anderes übertragen werden.\\n\\n#bold Was das Mandat nicht abdeckt:#! jede weitere Forderung gegen dieses Land nach Gebiet, Unterwerfung, Regimewechsel oder Demütigung. Eine solche diesem Diplomatiespiel hinzuzufügen #R macht das Mandat hinfällig#!: Die Versammlung verurteilt uns, die [concept_un_authority] sinkt, und unsere Vorzugsrechte werden zehn Jahre lang ausgesetzt. Sich aus dem Diplomatiespiel zurückzuziehen lässt es auf dieselbe Weise verfallen.\\n\\nAndere Forderungen – Kriegsreparationen, die Öffnung von Märkten und Ähnliches – sind erlaubt, zum gewöhnlichen Preis."
+ },
+ "un_mandate.2.f": {
+  "en": "'One province, Minister. Those are the words on the paper.'\\n\\n'Then let us hope the generals can read.'",
+  "de": "„Eine Provinz, Minister. Das steht auf dem Papier.“\\n\\n„Dann hoffen wir, dass die Generäle lesen können.“"
+ },
+ "un_mandate.2.t": {
+  "en": "The Mandate Invoked",
+  "de": "Berufung auf das Mandat"
+ },
+ "un_vote.1.a": {
+  "en": "We vote in favor.",
+  "de": "Wir stimmen dafür."
+ },
+ "un_vote.1.a_target": {
+  "en": "We accept the resolution.",
+  "de": "Wir akzeptieren die Resolution."
+ },
+ "un_vote.1.b": {
+  "en": "We vote against.",
+  "de": "Wir stimmen dagegen."
+ },
+ "un_vote.1.b_target": {
+  "en": "We refuse the resolution.",
+  "de": "Wir lehnen die Resolution ab."
+ },
+ "un_vote.1.d": {
+  "en": "A resolution has been proposed to the General Assembly. All member states are called upon to cast their vote.",
+  "de": "Der Generalversammlung wurde eine Resolution vorgelegt. Alle Mitgliedstaaten sind aufgerufen, ihre Stimme abzugeben."
+ },
+ "un_vote.1.d_aid_request": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has brought a request for international humanitarian assistance before the General Assembly. The country faces severe hardship and asks the international community for coordinated relief. A vote in favor commits member nations to provide aid and resources.",
+  "de": "[SCOPE.sCountry('un_vote_proposer').GetAltName('NOM')|U] hat der Generalversammlung ein Ersuchen um internationale humanitäre Hilfe vorgelegt. Das Land steht vor schwerer Not und bittet die internationale Gemeinschaft um koordinierte Hilfe. Eine Zustimmung verpflichtet die Mitgliedsnationen, Hilfe und Mittel bereitzustellen."
+ },
+ "un_vote.1.d_climate": {
+  "en": "The General Assembly has received a proposal for a binding Climate Accord from [SCOPE.sCountry('un_vote_proposer').GetName], requiring member states to commit to specific emissions reduction targets. A vote in favor commits our country to binding limits on industrial [concept_pollution_system].",
+  "de": "Die Generalversammlung hat von [SCOPE.sCountry('un_vote_proposer').GetAltName('DAT')] einen Vorschlag für ein bindendes Klimaabkommen erhalten, das die Mitgliedstaaten auf konkrete Emissionsminderungsziele verpflichten würde. Eine Zustimmung verpflichtet unser Land zu bindenden Grenzwerten für industrielle [concept_pollution_system]."
+ },
+ "un_vote.1.d_condemn": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has brought a resolution before the General Assembly calling for the formal condemnation of [SCOPE.sCountry('un_vote_target').GetName] for its military aggression. The eyes of the world are upon us - how shall [ROOT.GetCountry.GetName] vote?",
+  "de": "[SCOPE.sCountry('un_vote_proposer').GetAltName('NOM')|U] hat der Generalversammlung eine Resolution vorgelegt, die die förmliche Verurteilung [SCOPE.sCountry('un_vote_target').GetAltName('GEN')] wegen dessen militärischer Aggression fordert. Die Augen der Welt sind auf uns gerichtet – wie soll [ROOT.GetCountry.GetAltName('NOM')] abstimmen?"
+ },
+ "un_vote.1.d_condemn_target": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has brought a resolution before the General Assembly calling for the formal condemnation of [ROOT.GetCountry.GetName] for our military aggression. The accusation is now ours to answer. We may rise in defiance of the verdict, or bow our heads and accept the censure of the assembly.",
+  "de": "[SCOPE.sCountry('un_vote_proposer').GetAltName('NOM')|U] hat der Generalversammlung eine Resolution vorgelegt, die die förmliche Verurteilung [ROOT.GetCountry.GetAltName('GEN')] wegen unserer militärischen Aggression fordert. Die Anklage liegt nun bei uns zu beantworten. Wir können uns dem Urteil trotzig widersetzen oder die Köpfe senken und die Rüge der Versammlung hinnehmen."
+ },
+ "un_vote.1.d_decolonization": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has brought a [concept_decolonization_system] resolution before the General Assembly, calling on all administering powers to take immediate steps to transfer power to the peoples of non-self-governing territories. A vote in favor declares our support for the right of all peoples to self-determination.",
+  "de": "[SCOPE.sCountry('un_vote_proposer').GetAltName('NOM')|U] hat der Generalversammlung eine Resolution zur [concept_decolonization_system] vorgelegt, die alle Verwaltungsmächte auffordert, unverzüglich Schritte zur Machtübergabe an die Völker nicht selbstverwalteter Gebiete einzuleiten. Eine Zustimmung erklärt unsere Unterstützung für das Recht aller Völker auf Selbstbestimmung."
+ },
+ "un_vote.1.d_expulsion": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has put a motion before the General Assembly calling for the expulsion of [SCOPE.sCountry('un_vote_target').GetName] from the [concept_un_security_council]. The motion cites recent abuses of the [concept_un_veto] and demands that [SCOPE.sCountry('un_vote_target').GetName] forfeit its [concept_un_permanent_member] seat. As a non-vetoable [concept_un_resolution_recommendatory], the motion requires a #G 2/3 supermajority#! to pass.",
+  "de": "[SCOPE.sCountry('un_vote_proposer').GetAltName('NOM')|U] hat der Generalversammlung einen Antrag vorgelegt, der den Ausschluss [SCOPE.sCountry('un_vote_target').GetAltName('GEN')] aus dem [concept_un_security_council] fordert. Der Antrag verweist auf jüngsten Missbrauch des [concept_un_veto] und verlangt, dass [SCOPE.sCountry('un_vote_target').GetAltName('NOM')] seinen Sitz als [concept_un_permanent_member] verliert. Als nicht mit einem Veto belegbare [concept_un_resolution_recommendatory] braucht der Antrag eine #G Zweidrittelmehrheit#!, um angenommen zu werden."
+ },
+ "un_vote.1.d_expulsion_target": {
+  "en": "An ill-conceived motion has been put before the General Assembly: [SCOPE.sCountry('un_vote_proposer').GetName] is calling for our expulsion from the [concept_un_security_council], citing our principled exercise of the [concept_un_veto]. The motion requires a #G 2/3 supermajority#! to pass — sufficient delegations remain in our orbit to defeat it.",
+  "de": "Der Generalversammlung wurde ein unbedachter Antrag vorgelegt: [SCOPE.sCountry('un_vote_proposer').GetAltName('NOM')] fordert unseren Ausschluss aus dem [concept_un_security_council] und verweist dabei auf unseren prinzipientreuen Einsatz des [concept_un_veto]. Der Antrag braucht eine #G Zweidrittelmehrheit#!, um angenommen zu werden – genug Delegationen stehen weiterhin in unserem Einflussbereich, um ihn zu Fall zu bringen."
+ },
+ "un_vote.1.d_heritage": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed the establishment of an international cultural heritage program to protect and preserve sites of outstanding universal value. A vote in favor commits our country to participate in the conservation effort.",
+  "de": "[SCOPE.sCountry('un_vote_proposer').GetAltName('NOM')|U] hat die Einrichtung eines internationalen Kulturerbe-Programms zum Schutz und Erhalt von Stätten von außergewöhnlichem universellem Wert vorgeschlagen. Eine Zustimmung verpflichtet unser Land, sich an den Erhaltungsbemühungen zu beteiligen."
+ },
+ "un_vote.1.d_human_rights": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed a Universal Declaration of Human Rights to the General Assembly, establishing fundamental freedoms as the common standard for all peoples and nations. A vote in favor means our country ratifies the declaration and commits to upholding its [Concept('concept_power_bloc_principle', 'principles')]. Parties that run coercive resettlement programs at home will be penalized for it.",
+  "de": "[SCOPE.sCountry('un_vote_proposer').GetAltName('NOM')|U] hat der Generalversammlung eine Allgemeine Erklärung der Menschenrechte vorgeschlagen, die grundlegende Freiheiten als gemeinsamen Standard für alle Völker und Nationen festschreibt. Eine Zustimmung bedeutet, dass unser Land die Erklärung ratifiziert und sich verpflichtet, ihre [Concept('concept_power_bloc_principle', 'Prinzipien')] zu wahren. Parteien, die im eigenen Land Zwangsumsiedlungsprogramme betreiben, werden dafür bestraft."
+ },
+ "un_vote.1.d_icc": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed the Rome Statute establishing a permanent International Criminal Court with jurisdiction over genocide, war crimes, and crimes against humanity. A vote in favor submits our military and political leadership to international criminal jurisdiction.",
+  "de": "[SCOPE.sCountry('un_vote_proposer').GetAltName('NOM')|U] hat das Römische Statut vorgeschlagen, das einen ständigen Internationalen Strafgerichtshof mit Zuständigkeit für Völkermord, Kriegsverbrechen und Verbrechen gegen die Menschlichkeit errichtet. Eine Zustimmung unterwirft unsere militärische und politische Führung internationaler Strafgerichtsbarkeit."
+ },
+ "un_vote.1.d_law_of_sea": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed a Convention on the Law of the Sea, establishing territorial waters, exclusive economic zones, and international maritime law. A vote in favor commits our country to international arbitration of maritime disputes and shared stewardship of the oceans.",
+  "de": "[SCOPE.sCountry('un_vote_proposer').GetAltName('NOM')|U] hat eine Konvention zum Seerecht vorgeschlagen, die Hoheitsgewässer, ausschließliche Wirtschaftszonen und internationales Seerecht festlegt. Eine Zustimmung verpflichtet unser Land zur internationalen Schlichtung maritimer Streitigkeiten und zur gemeinsamen Verwaltung der Ozeane."
+ },
+ "un_vote.1.d_military_mandate": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has asked the General Assembly to authorize it, by name, to take back territory held by [SCOPE.sCountry('un_vote_target').GetName] — a state this chamber has already had occasion to censure. The resolution is narrow: one [concept_state_region], one claimant, one war, and nothing else. It is also the gravest thing this body can do. Carried, it lends the organisation's name to a war someone else will fight; refused, the claim stays a grievance and the Assembly keeps its hands clean. How shall [ROOT.GetCountry.GetName] vote?",
+  "de": "[SCOPE.sCountry('un_vote_proposer').GetAltName('NOM')|U] hat die Generalversammlung gebeten, sie namentlich zu ermächtigen, Gebiet zurückzuerobern, das [SCOPE.sCountry('un_vote_target').GetAltName('NOM')] hält – ein Staat, den dieser Saal bereits Anlass hatte zu rügen. Die Resolution ist eng gefasst: eine [concept_state_region], ein Anspruchsteller, ein Krieg, und nichts weiter. Es ist zugleich das Schwerwiegendste, was dieses Gremium tun kann. Angenommen, leiht sie den Namen der Organisation einem Krieg, den ein anderer führen wird; abgelehnt, bleibt der Anspruch eine Beschwerde, und die Versammlung hält sich die Hände rein. Wie soll [ROOT.GetCountry.GetAltName('NOM')] abstimmen?"
+ },
+ "un_vote.1.d_military_mandate_target": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has asked the General Assembly to authorize a war against us — to license, in the organisation's own name, the seizure of territory we hold. We sit in this chamber too, and we may vote. To vote against is to deny the charge and dare them to come without a mandate. To vote in favour is to concede the claim before a shot is fired, and to be seen to have conceded it.",
+  "de": "[SCOPE.sCountry('un_vote_proposer').GetAltName('NOM')|U] hat die Generalversammlung gebeten, einen Krieg gegen uns zu genehmigen – im Namen der Organisation die Eroberung von Gebiet zu lizenzieren, das wir halten. Auch wir sitzen in diesem Saal und dürfen abstimmen. Dagegen zu stimmen heißt, die Anschuldigung zurückzuweisen und sie herauszufordern, ohne Mandat anzugreifen. Dafür zu stimmen heißt, den Anspruch anzuerkennen, bevor ein Schuss fällt – und dabei gesehen zu werden, wie man ihn anerkennt."
+ },
+ "un_vote.1.d_npt": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has brought the Nuclear Non-Proliferation Treaty before the General Assembly. A vote in favor commits [ROOT.GetCountry.GetName] to the treaty's terms - renouncing the pursuit of nuclear weapons and accepting international inspections.",
+  "de": "[SCOPE.sCountry('un_vote_proposer').GetAltName('NOM')|U] hat der Generalversammlung den Vertrag über die Nichtverbreitung von Kernwaffen vorgelegt. Eine Zustimmung verpflichtet [ROOT.GetCountry.GetAltName('AKK')] zu den Bedingungen des Vertrags – dem Verzicht auf das Streben nach Kernwaffen und der Annahme internationaler Inspektionen."
+ },
+ "un_vote.1.d_pandemic": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed a resolution for coordinated international pandemic response, establishing shared research protocols and mutual assistance frameworks. A vote in favor commits our country to full data-sharing and resource cooperation during health emergencies.",
+  "de": "[SCOPE.sCountry('un_vote_proposer').GetAltName('NOM')|U] hat eine Resolution für eine koordinierte internationale Pandemiebekämpfung vorgeschlagen, die gemeinsame Forschungsprotokolle und Rahmenwerke für gegenseitige Hilfe schafft. Eine Zustimmung verpflichtet unser Land während Gesundheitsnotständen zu vollständigem Datenaustausch und zur Zusammenarbeit bei Ressourcen."
+ },
+ "un_vote.1.d_peacekeeping_request": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has requested the deployment of [concept_un_peacekeeping] forces to stabilize its territory. The General Assembly must vote on whether to authorize the mission. A vote in favor commits contributing nations to deploy forces and bear the costs of the operation.",
+  "de": "[SCOPE.sCountry('un_vote_proposer').GetAltName('NOM')|U] hat die Entsendung von [concept_un_peacekeeping]-Truppen zur Stabilisierung seines Territoriums beantragt. Die Generalversammlung muss darüber abstimmen, ob sie den Einsatz genehmigt. Eine Zustimmung verpflichtet die beitragenden Nationen, Truppen zu entsenden und die Kosten des Einsatzes zu tragen."
+ },
+ "un_vote.1.d_physical_protection": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed a Convention on the Physical Protection of Nuclear Material. A vote in favor commits our country to guard, count and report its nuclear material to a common standard, and to help other parties find warheads that have gone missing.",
+  "de": "[SCOPE.sCountry('un_vote_proposer').GetAltName('NOM')|U] hat eine Konvention über den physischen Schutz von Kernmaterial vorgeschlagen. Eine Zustimmung verpflichtet unser Land, sein Kernmaterial nach einem gemeinsamen Standard zu bewachen, zu zählen und zu melden und anderen Parteien zu helfen, abhandengekommene Sprengköpfe wiederzufinden."
+ },
+ "un_vote.1.d_reform": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has tabled a reform of the [concept_un_charter] that would raise the ceiling on the United Nations' [concept_un_authority]. It needs a two-thirds supermajority of all members, and any [concept_un_permanent_member] may [concept_un_veto] it outright. A vote in favour endorses a stronger organisation — one that will bind us too.",
+  "de": "[SCOPE.sCountry('un_vote_proposer').GetAltName('NOM')|U] hat eine Reform der [concept_un_charter] eingebracht, die die Obergrenze der [concept_un_authority] der Vereinten Nationen anheben würde. Sie braucht eine Zweidrittelmehrheit aller Mitglieder, und jedes [concept_un_permanent_member] kann sie mit seinem [concept_un_veto] rundweg blockieren. Eine Zustimmung befürwortet eine stärkere Organisation – eine, die auch uns binden wird."
+ },
+ "un_vote.1.d_refugee": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has brought a resolution before the General Assembly calling for a coordinated international response to the refugee crisis. A vote in favor commits our country to accepting resettlement quotas and providing humanitarian assistance.",
+  "de": "[SCOPE.sCountry('un_vote_proposer').GetAltName('NOM')|U] hat der Generalversammlung eine Resolution vorgelegt, die eine koordinierte internationale Antwort auf die Flüchtlingskrise fordert. Eine Zustimmung verpflichtet unser Land, Umsiedlungsquoten zu akzeptieren und humanitäre Hilfe zu leisten."
+ },
+ "un_vote.1.d_sanctions": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed international sanctions against [SCOPE.sCountry('un_vote_target').GetName] before the General Assembly. Sanctions would impose severe trade and diplomatic penalties on the target nation. A vote in favor supports the enforcement of the international order.",
+  "de": "[SCOPE.sCountry('un_vote_proposer').GetAltName('NOM')|U] hat der Generalversammlung internationale Sanktionen gegen [SCOPE.sCountry('un_vote_target').GetAltName('AKK')] vorgeschlagen. Die Sanktionen würden der Zielnation schwere Handels- und diplomatische Strafen auferlegen. Eine Zustimmung unterstützt die Durchsetzung der internationalen Ordnung."
+ },
+ "un_vote.1.d_sanctions_target": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed international sanctions against [ROOT.GetCountry.GetName] before the General Assembly. Trade barriers and diplomatic isolation loom over us. We may stand firm against the resolution, or accept the censure and seek a path back into good standing with the international community.",
+  "de": "[SCOPE.sCountry('un_vote_proposer').GetAltName('NOM')|U] hat der Generalversammlung internationale Sanktionen gegen [ROOT.GetCountry.GetAltName('AKK')] vorgeschlagen. Handelsschranken und diplomatische Isolation drohen uns. Wir können der Resolution standhaft widerstehen oder die Rüge hinnehmen und einen Weg zurück in gutes Ansehen bei der internationalen Gemeinschaft suchen."
+ },
+ "un_vote.1.d_space": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed an international space cooperation agreement, pooling resources and sharing research for the peaceful exploration of outer space. A vote in favor commits our country to joint missions and technology sharing.",
+  "de": "[SCOPE.sCountry('un_vote_proposer').GetAltName('NOM')|U] hat ein internationales Abkommen zur Weltraumkooperation vorgeschlagen, das Ressourcen bündelt und Forschung für die friedliche Erforschung des Weltraums teilt. Eine Zustimmung verpflichtet unser Land zu gemeinsamen Missionen und Technologieaustausch."
+ },
+ "un_vote.1.f": {
+  "en": "'All those in favor,' the president of the assembly intoned, 'shall signify by raising their placards. All those against, likewise.'\\n\\nThe delegates shifted in their seats. Some glanced at allies for reassurance. Others stared straight ahead, already decided. Everyone understood that the real negotiations had happened in the corridors long before this moment.",
+  "de": "„Alle, die dafür sind“, intonierte der Präsident der Versammlung, „bekunden dies durch das Heben ihrer Tafeln. Alle, die dagegen sind, ebenso.“\\n\\nDie Delegierten rutschten auf ihren Sitzen. Manche blickten Verbündete an, auf der Suche nach Rückversicherung. Andere starrten geradeaus, bereits entschieden. Alle wussten, dass die eigentlichen Verhandlungen längst in den Fluren stattgefunden hatten, lange vor diesem Moment."
+ },
+ "un_vote.1.later": {
+  "en": "We will decide later.",
+  "de": "Wir entscheiden später."
+ },
+ "un_vote.1.t": {
+  "en": "UN General Assembly Vote",
+  "de": "Abstimmung der UN-Generalversammlung"
+ },
+ "un_vote.1.t_aid_request": {
+  "en": "Humanitarian Aid Request Vote",
+  "de": "Abstimmung über das Ersuchen um humanitäre Hilfe"
+ },
+ "un_vote.1.t_climate": {
+  "en": "Climate Accord Vote",
+  "de": "Abstimmung über das Klimaabkommen"
+ },
+ "un_vote.1.t_condemn": {
+  "en": "Condemnation Resolution Vote",
+  "de": "Abstimmung über die Verurteilungsresolution"
+ },
+ "un_vote.1.t_decolonization": {
+  "en": "Decolonization Resolution Vote",
+  "de": "Abstimmung über die Dekolonisierungsresolution"
+ },
+ "un_vote.1.t_expulsion": {
+  "en": "Motion to Expel a Permanent Member",
+  "de": "Antrag auf Ausschluss eines Ständigen Mitglieds"
+ },
+ "un_vote.1.t_heritage": {
+  "en": "Cultural Heritage Program Vote",
+  "de": "Abstimmung über das Kulturerbe-Programm"
+ },
+ "un_vote.1.t_human_rights": {
+  "en": "Human Rights Declaration Vote",
+  "de": "Abstimmung über die Menschenrechtserklärung"
+ },
+ "un_vote.1.t_icc": {
+  "en": "International Criminal Court Vote",
+  "de": "Abstimmung über den Internationalen Strafgerichtshof"
+ },
+ "un_vote.1.t_law_of_sea": {
+  "en": "Convention on the Law of the Sea Vote",
+  "de": "Abstimmung über die Konvention zum Seerecht"
+ },
+ "un_vote.1.t_military_mandate": {
+  "en": "Authorized Military Mandate Vote",
+  "de": "Abstimmung über das genehmigte militärische Mandat"
+ },
+ "un_vote.1.t_npt": {
+  "en": "Non-Proliferation Treaty Vote",
+  "de": "Abstimmung über den Nichtverbreitungsvertrag"
+ },
+ "un_vote.1.t_pandemic": {
+  "en": "Pandemic Response Vote",
+  "de": "Abstimmung über die Pandemiebekämpfung"
+ },
+ "un_vote.1.t_peacekeeping_request": {
+  "en": "Peacekeeping Deployment Vote",
+  "de": "Abstimmung über die Entsendung von Friedenstruppen"
+ },
+ "un_vote.1.t_physical_protection": {
+  "en": "Physical Protection of Nuclear Material Vote",
+  "de": "Abstimmung über den physischen Schutz von Kernmaterial"
+ },
+ "un_vote.1.t_reform": {
+  "en": "Charter Reform Vote",
+  "de": "Abstimmung über die Chartareform"
+ },
+ "un_vote.1.t_refugee": {
+  "en": "International Refugee Resolution Vote",
+  "de": "Abstimmung über die internationale Flüchtlingsresolution"
+ },
+ "un_vote.1.t_sanctions": {
+  "en": "International Sanctions Vote",
+  "de": "Abstimmung über internationale Sanktionen"
+ },
+ "un_vote.1.t_space": {
+  "en": "Space Cooperation Resolution Vote",
+  "de": "Abstimmung über die Weltraumkooperationsresolution"
+ },
+ "un_vote.1.veto": {
+  "en": "Cast our [concept_un_veto] (block the binding form)",
+  "de": "Legt unser [concept_un_veto] ein (blockiert die bindende Form)"
+ },
+ "un_vote.2.a": {
+  "en": "So it is decided.",
+  "de": "Dann ist es beschlossene Sache."
+ },
+ "un_vote.2.d_aid_request_failed": {
+  "en": "The humanitarian aid request by [SCOPE.sCountry('un_vote_proposer').GetName] has been rejected by the General Assembly. The vote failed [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Domestic suffering continues without international relief.",
+  "de": "Das Ersuchen [SCOPE.sCountry('un_vote_proposer').GetAltName('GEN')] um humanitäre Hilfe wurde von der Generalversammlung abgelehnt. Die Abstimmung scheiterte mit [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] zu [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0] Stimmen. Das Leid im Land hält ohne internationale Hilfe an."
+ },
+ "un_vote.2.d_aid_request_passed": {
+  "en": "The General Assembly has voted to authorize a humanitarian aid program for [SCOPE.sCountry('un_vote_proposer').GetName]. Member nations have committed to providing material assistance and resources. The vote carried [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0].",
+  "de": "Die Generalversammlung hat für ein humanitäres Hilfsprogramm für [SCOPE.sCountry('un_vote_proposer').GetAltName('AKK')] gestimmt. Die Mitgliedsnationen haben sich verpflichtet, materielle Hilfe und Mittel bereitzustellen. Die Abstimmung wurde mit [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] zu [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0] Stimmen angenommen."
+ },
+ "un_vote.2.d_climate_failed": {
+  "en": "The proposed Climate Accord has failed in the General Assembly. Industrial economies and their allies successfully blocked the resolution, arguing that binding emissions targets would cripple economic growth. The atmosphere, it seems, must wait for the balance sheets to improve.",
+  "de": "Das vorgeschlagene Klimaabkommen ist in der Generalversammlung gescheitert. Industrienationen und ihre Verbündeten blockierten die Resolution erfolgreich mit dem Argument, verbindliche Emissionsziele würden das Wirtschaftswachstum lähmen. Die Atmosphäre muss, so scheint es, warten, bis sich die Bilanzen bessern."
+ },
+ "un_vote.2.d_climate_passed": {
+  "en": "The Climate Accord has been adopted by the General Assembly with a decisive majority. Binding emissions targets are now enshrined in international law. A landmark moment - though the hard work of implementation lies ahead.",
+  "de": "Das Klimaabkommen wurde von der Generalversammlung mit deutlicher Mehrheit angenommen. Verbindliche Emissionsziele sind nun im Völkerrecht verankert. Ein historischer Moment – auch wenn die eigentliche Arbeit der Umsetzung noch bevorsteht."
+ },
+ "un_vote.2.d_condemn_failed": {
+  "en": "The condemnation resolution against [SCOPE.sCountry('un_vote_target').GetName] has failed to achieve a majority in the General Assembly. Divided loyalties and geopolitical calculations have shielded the aggressor from international censure. A dark day for the international order.",
+  "de": "Die Verurteilungsresolution gegen [SCOPE.sCountry('un_vote_target').GetAltName('AKK')] hat in der Generalversammlung keine Mehrheit gefunden. Geteilte Loyalitäten und geopolitisches Kalkül haben den Aggressor vor internationaler Rüge geschützt. Ein dunkler Tag für die internationale Ordnung."
+ },
+ "un_vote.2.d_condemn_passed": {
+  "en": "The General Assembly has voted to formally condemn the military aggression of [SCOPE.sCountry('un_vote_target').GetName]. The resolution carried by a clear majority, sending an unambiguous message: the international community will not stand silent in the face of naked aggression.",
+  "de": "Die Generalversammlung hat die militärische Aggression [SCOPE.sCountry('un_vote_target').GetAltName('GEN')] förmlich verurteilt. Die Resolution wurde mit klarer Mehrheit angenommen und sendet eine unmissverständliche Botschaft: Die internationale Gemeinschaft wird angesichts nackter Aggression nicht schweigen."
+ },
+ "un_vote.2.d_condemn_passed_vetoed": {
+  "en": "The General Assembly's condemnation of [SCOPE.sCountry('un_vote_target').GetName] passed by simple majority, but the [concept_un_security_council] [concept_un_veto] reduced it to a non-binding rebuke. The signal is sent — but it carries no formal weight in international law.",
+  "de": "Die Verurteilung [SCOPE.sCountry('un_vote_target').GetAltName('GEN')] durch die Generalversammlung wurde mit einfacher Mehrheit angenommen, doch das [concept_un_veto] im [concept_un_security_council] hat sie zu einer unverbindlichen Rüge herabgestuft. Das Signal ist gesendet – trägt aber kein förmliches Gewicht im Völkerrecht."
+ },
+ "un_vote.2.d_decolonization_failed": {
+  "en": "The [concept_decolonization_system] Resolution has failed to pass the General Assembly. Colonial powers and their allies marshalled enough votes to block the declaration. The subject peoples of the world must wait longer for the international community to champion their cause.",
+  "de": "Die Resolution zur [concept_decolonization_system] hat in der Generalversammlung keine Mehrheit gefunden. Kolonialmächte und ihre Verbündeten mobilisierten genug Stimmen, um die Erklärung zu blockieren. Die unterworfenen Völker der Welt müssen länger darauf warten, dass die internationale Gemeinschaft sich für ihre Sache einsetzt."
+ },
+ "un_vote.2.d_decolonization_passed": {
+  "en": "The [concept_decolonization_system] Resolution has been adopted by the General Assembly with an overwhelming majority. The international community has declared in no uncertain terms that colonialism in all its forms must come to an end. Colonial powers face mounting pressure to accelerate the transfer of sovereignty.",
+  "de": "Die Resolution zur [concept_decolonization_system] wurde von der Generalversammlung mit überwältigender Mehrheit angenommen. Die internationale Gemeinschaft hat unmissverständlich erklärt, dass der Kolonialismus in all seinen Formen enden muss. Die Kolonialmächte geraten zunehmend unter Druck, die Machtübergabe zu beschleunigen."
+ },
+ "un_vote.2.d_expulsion_failed": {
+  "en": "The motion to expel [SCOPE.sCountry('un_vote_target').GetName] fell short of the required #G 2/3 supermajority#!: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] for, [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0] against. [SCOPE.sCountry('un_vote_target').GetName] keeps its seat — and remembers who voted yes.",
+  "de": "Der Antrag auf Ausschluss [SCOPE.sCountry('un_vote_target').GetAltName('GEN')] verfehlte die erforderliche #G Zweidrittelmehrheit#!: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] dafür, [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0] dagegen. [SCOPE.sCountry('un_vote_target').GetAltName('NOM')] behält seinen Sitz – und merkt sich, wer mit Ja gestimmt hat."
+ },
+ "un_vote.2.d_expulsion_passed": {
+  "en": "The motion has carried by [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0] — a clear #G 2/3 supermajority#!. [SCOPE.sCountry('un_vote_target').GetName] forfeits its [concept_un_permanent_member] seat on the [concept_un_security_council]. No eligible [Concept('concept_great_power', 'Great Power')] member outside the Council stands ready to take it — the seat stands open until one does.",
+  "de": "Der Antrag wurde mit [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] zu [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0] Stimmen angenommen – eine klare #G Zweidrittelmehrheit#!. [SCOPE.sCountry('un_vote_target').GetAltName('NOM')] verliert seinen Sitz als [concept_un_permanent_member] im [concept_un_security_council]. Kein infrage kommendes Mitglied außerhalb des Rates steht als [Concept('concept_great_power', 'Großmacht')] bereit, ihn zu übernehmen – der Sitz bleibt offen, bis eines dazu bereit ist."
+ },
+ "un_vote.2.d_expulsion_passed_promoted": {
+  "en": "The motion has carried by [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0] — a clear #G 2/3 supermajority#!. [SCOPE.sCountry('un_vote_target').GetName] forfeits its [concept_un_permanent_member] seat on the [concept_un_security_council], and [SCOPE.sCountry('un_vote_promoted').GetName] — the [Concept('concept_great_power', 'Great Power')] member with the most [concept_prestige] outside the Council — takes it. The post-WWII balance shifts.",
+  "de": "Der Antrag wurde mit [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] zu [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0] Stimmen angenommen – eine klare #G Zweidrittelmehrheit#!. [SCOPE.sCountry('un_vote_target').GetAltName('NOM')] verliert seinen Sitz als [concept_un_permanent_member] im [concept_un_security_council], und [SCOPE.sCountry('un_vote_promoted').GetAltName('NOM')] – das [Concept('concept_great_power', 'Großmacht')]-Mitglied mit dem meisten [concept_prestige] außerhalb des Rates – übernimmt ihn. Das Gleichgewicht der Nachkriegsordnung verschiebt sich."
+ },
+ "un_vote.2.d_failed": {
+  "en": "The resolution has failed to achieve a majority in the General Assembly. The proposing delegation gathers its papers in silence.",
+  "de": "Die Resolution hat in der Generalversammlung keine Mehrheit gefunden. Die vorschlagende Delegation sammelt schweigend ihre Unterlagen ein."
+ },
+ "un_vote.2.d_heritage_failed": {
+  "en": "The Cultural Heritage Program has failed to achieve a majority in the General Assembly. The world's irreplaceable cultural sites will have to rely on national protection alone - an uncertain prospect at best.",
+  "de": "Das Kulturerbe-Programm hat in der Generalversammlung keine Mehrheit gefunden. Die unersetzlichen kulturellen Stätten der Welt müssen sich allein auf nationalen Schutz verlassen – eine bestenfalls ungewisse Aussicht."
+ },
+ "un_vote.2.d_heritage_passed": {
+  "en": "The Cultural Heritage Program has been adopted by the General Assembly. The United Nations Educational, Scientific and Cultural Organization is established to protect and preserve the world's cultural and natural heritage for future generations.",
+  "de": "Das Kulturerbe-Programm wurde von der Generalversammlung angenommen. Die Organisation der Vereinten Nationen für Bildung, Wissenschaft und Kultur wird gegründet, um das kulturelle und natürliche Erbe der Welt für künftige Generationen zu schützen und zu bewahren."
+ },
+ "un_vote.2.d_human_rights_failed": {
+  "en": "The proposed Universal Declaration of Human Rights has failed to achieve majority support in the General Assembly. Too many nations found its provisions inconvenient, its aspirations too demanding. The dream of a universal standard for human dignity has been deferred.",
+  "de": "Die vorgeschlagene Allgemeine Erklärung der Menschenrechte hat in der Generalversammlung keine Mehrheit gefunden. Zu vielen Nationen waren ihre Bestimmungen unbequem, ihre Ansprüche zu hoch. Der Traum von einem universellen Standard für die Würde des Menschen wurde aufgeschoben."
+ },
+ "un_vote.2.d_human_rights_passed": {
+  "en": "The Universal Declaration of Human Rights has been adopted by the General Assembly with overwhelming support. A new chapter in international law begins - fundamental freedoms are now the declared standard of the civilized world. The UN Human Rights Council is established to monitor compliance.",
+  "de": "Die Allgemeine Erklärung der Menschenrechte wurde von der Generalversammlung mit überwältigender Zustimmung angenommen. Ein neues Kapitel des Völkerrechts beginnt – grundlegende Freiheiten sind nun der erklärte Standard der zivilisierten Welt. Der UN-Menschenrechtsrat wird gegründet, um die Einhaltung zu überwachen."
+ },
+ "un_vote.2.d_icc_failed": {
+  "en": "The Rome Statute establishing an International Criminal Court has been rejected by the General Assembly. [Concept('concept_great_power', 'Great powers')] and nations at war proved unwilling to submit their sovereignty to international criminal jurisdiction. Accountability, it seems, remains an aspiration.",
+  "de": "Das Römische Statut zur Errichtung eines Internationalen Strafgerichtshofs wurde von der Generalversammlung abgelehnt. [Concept('concept_great_power', 'Großmächte')] und Staaten im Krieg zeigten sich nicht bereit, ihre Souveränität internationaler Strafgerichtsbarkeit zu unterwerfen. Rechenschaftspflicht bleibt, so scheint es, ein Wunschtraum."
+ },
+ "un_vote.2.d_icc_passed": {
+  "en": "The Rome Statute has been adopted by the General Assembly, establishing the International Criminal Court (ICC) with permanent jurisdiction over genocide, war crimes, and crimes against humanity. A historic moment for international justice — though several [Concept('concept_major_power', 'major powers')] have conspicuously refused to join.",
+  "de": "Das Römische Statut wurde von der Generalversammlung angenommen und errichtet den Internationalen Strafgerichtshof (IStGH) mit ständiger Zuständigkeit für Völkermord, Kriegsverbrechen und Verbrechen gegen die Menschlichkeit. Ein historischer Moment für die internationale Gerechtigkeit – auch wenn sich mehrere [Concept('concept_major_power', 'Mittelmächte')] auffällig geweigert haben beizutreten."
+ },
+ "un_vote.2.d_icc_passed_vetoed": {
+  "en": "The Rome Statute referral was vetoed in the [concept_un_security_council]. The General Assembly's simple majority instead issued a symbolic censure — a formal expression of concern with no court jurisdiction attached. Accountability, again, deferred.",
+  "de": "Die Überweisung des Römischen Statuts wurde im [concept_un_security_council] mit einem Veto blockiert. Die einfache Mehrheit der Generalversammlung sprach stattdessen eine symbolische Rüge aus – eine förmliche Besorgniserklärung ohne gerichtliche Zuständigkeit. Rechenschaftspflicht, erneut aufgeschoben."
+ },
+ "un_vote.2.d_law_of_sea_failed": {
+  "en": "The Convention on the Law of the Sea has failed to pass the General Assembly. Maritime powers were unwilling to submit their naval prerogatives to international arbitration. The oceans remain a contested frontier.",
+  "de": "Die Konvention zum Seerecht fand in der Generalversammlung keine Mehrheit. Seemächte waren nicht bereit, ihre maritimen Vorrechte internationaler Schlichtung zu unterwerfen. Die Ozeane bleiben eine umkämpfte Grenze."
+ },
+ "un_vote.2.d_law_of_sea_passed": {
+  "en": "The Convention on the Law of the Sea has been adopted by the General Assembly. The International Tribunal for the Law of the Sea (ITLOS) is established to adjudicate maritime disputes and enforce the new framework of territorial waters and exclusive economic zones.",
+  "de": "Die Konvention zum Seerecht wurde von der Generalversammlung angenommen. Der Internationale Seegerichtshof (ISGH) wird gegründet, um maritime Streitigkeiten zu entscheiden und den neuen Rahmen aus Hoheitsgewässern und ausschließlichen Wirtschaftszonen durchzusetzen."
+ },
+ "un_vote.2.d_military_mandate_failed": {
+  "en": "The General Assembly declined to authorize the mandate. The claim remains a claim, and any attempt to press it will be an ordinary war, priced accordingly.",
+  "de": "Die Generalversammlung lehnte es ab, das Mandat zu genehmigen. Der Anspruch bleibt ein Anspruch, und jeder Versuch, ihn durchzusetzen, wird ein gewöhnlicher Krieg sein, entsprechend bepreist."
+ },
+ "un_vote.2.d_military_mandate_passed": {
+  "en": "The General Assembly has authorized the mandate. For the next five years we may pursue the named territory against the named state without incurring [concept_infamy] — in one [concept_diplomatic_play], for that territory, and for nothing else. Any further territorial or subjugation demand we make against that state in the same war voids the authorization and calls the chamber's censure down on us instead.",
+  "de": "Die Generalversammlung hat das Mandat genehmigt. Für die nächsten fünf Jahre dürfen wir das benannte Gebiet gegen den benannten Staat verfolgen, ohne [concept_infamy] auf uns zu ziehen – in einem [concept_diplomatic_play], für dieses Gebiet, und für nichts anderes. Jede weitere territoriale Forderung oder Unterwerfungsforderung, die wir im selben Krieg gegen diesen Staat erheben, macht die Ermächtigung hinfällig und zieht stattdessen die Rüge des Saals auf uns."
+ },
+ "un_vote.2.d_military_mandate_passed_vetoed": {
+  "en": "The Assembly carried the resolution and a [concept_un_permanent_member] struck it down. There is no lesser form of a licence to use force — either this body authorizes a war or it does not — so the mandate is blocked outright. The majority is on the record, and nothing else.",
+  "de": "Die Versammlung nahm die Resolution an, und ein [concept_un_permanent_member] warf sie zu Fall. Es gibt keine schwächere Form einer Erlaubnis zur Gewaltanwendung – entweder genehmigt dieses Gremium einen Krieg, oder es tut es nicht –, also ist das Mandat rundweg blockiert. Die Mehrheit ist aktenkundig, und sonst nichts."
+ },
+ "un_vote.2.d_npt_failed": {
+  "en": "The Nuclear Non-Proliferation Treaty has failed to pass the General Assembly. Nuclear powers and aspiring states alike found common cause in rejecting constraints on their arsenals. The atom remains unbound by international law.",
+  "de": "Der Vertrag über die Nichtverbreitung von Kernwaffen fand in der Generalversammlung keine Mehrheit. Atommächte wie auch nach der Bombe strebende Staaten fanden eine gemeinsame Sache darin, Einschränkungen ihrer Arsenale abzulehnen. Das Atom bleibt vom Völkerrecht ungebunden."
+ },
+ "un_vote.2.d_npt_passed": {
+  "en": "The Nuclear Non-Proliferation Treaty has been adopted by the General Assembly with a strong majority. The international community has spoken clearly against the spread of nuclear weapons. The International Atomic Energy Agency is established to enforce the treaty's provisions.",
+  "de": "Der Vertrag über die Nichtverbreitung von Kernwaffen wurde von der Generalversammlung mit deutlicher Mehrheit angenommen. Die internationale Gemeinschaft hat sich klar gegen die Verbreitung von Kernwaffen ausgesprochen. Die Internationale Atomenergiebehörde wird gegründet, um die Bestimmungen des Vertrags durchzusetzen."
+ },
+ "un_vote.2.d_pandemic_failed": {
+  "en": "The Pandemic Cooperation Resolution has failed to pass the General Assembly. National sovereignty concerns and economic anxieties proved stronger than the call for international health cooperation. Each nation will face the next epidemic alone.",
+  "de": "Die Resolution zur Pandemiekooperation fand in der Generalversammlung keine Mehrheit. Bedenken um die nationale Souveränität und wirtschaftliche Ängste erwiesen sich als stärker als der Ruf nach internationaler Gesundheitszusammenarbeit. Jede Nation wird der nächsten Epidemie allein begegnen."
+ },
+ "un_vote.2.d_pandemic_passed": {
+  "en": "The Pandemic Cooperation Resolution has been adopted by the General Assembly. The World Health Organization is established to coordinate international public health response, share medical research, and provide early warning of future outbreaks.",
+  "de": "Die Resolution zur Pandemiekooperation wurde von der Generalversammlung angenommen. Die Weltgesundheitsorganisation wird gegründet, um die internationale Reaktion im Bereich der öffentlichen Gesundheit zu koordinieren, medizinische Forschung zu teilen und frühzeitig vor künftigen Ausbrüchen zu warnen."
+ },
+ "un_vote.2.d_passed": {
+  "en": "The resolution has passed the General Assembly with a clear majority. The international community has spoken.",
+  "de": "Die Resolution wurde von der Generalversammlung mit klarer Mehrheit angenommen. Die internationale Gemeinschaft hat gesprochen."
+ },
+ "un_vote.2.d_peacekeeping_request_failed": {
+  "en": "The request for [concept_un_peacekeeping] forces by [SCOPE.sCountry('un_vote_proposer').GetName] has been rejected by the General Assembly. The vote failed [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. The requesting nation must face its crisis alone.",
+  "de": "Das Ersuchen [SCOPE.sCountry('un_vote_proposer').GetAltName('GEN')] um [concept_un_peacekeeping]-Truppen wurde von der Generalversammlung abgelehnt. Die Abstimmung scheiterte mit [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] zu [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0] Stimmen. Die ersuchende Nation muss ihrer Krise allein begegnen."
+ },
+ "un_vote.2.d_peacekeeping_request_passed": {
+  "en": "The General Assembly has voted to authorize peacekeeping operations in [SCOPE.sCountry('un_vote_proposer').GetName]. Contributing nations will deploy forces under the UN flag. The vote carried [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0].",
+  "de": "Die Generalversammlung hat für die Genehmigung von Friedenssicherungseinsätzen [SCOPE.sCountry('un_vote_proposer').GetAltName('IN')] gestimmt. Die beitragenden Nationen werden Truppen unter der UN-Flagge entsenden. Die Abstimmung wurde mit [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] zu [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0] Stimmen angenommen."
+ },
+ "un_vote.2.d_peacekeeping_request_passed_vetoed": {
+  "en": "The peacekeeping deployment was vetoed in the [concept_un_security_council], but the General Assembly's simple majority authorized an [concept_un_peacekeeping] observer mission instead. Unarmed monitors will report on the situation; no contributing forces are deployed.",
+  "de": "Die Entsendung der Friedenstruppen wurde im [concept_un_security_council] durch ein Veto blockiert, doch die einfache Mehrheit der Generalversammlung genehmigte stattdessen eine [concept_un_peacekeeping]-Beobachtermission. Unbewaffnete Beobachter werden über die Lage berichten; es werden keine Truppen entsandt."
+ },
+ "un_vote.2.d_peacekeeping_request_passed_weak": {
+  "en": "The General Assembly carried the request for peacekeepers, but an organisation of so little authority cannot field a force: no member will put its soldiers under a flag the world does not yet respect. An [concept_un_peacekeeping] observer mission goes instead. Unarmed monitors will report on the situation; no contributing forces are deployed.",
+  "de": "Die Generalversammlung nahm das Ersuchen um Friedenstruppen an, doch eine Organisation mit so geringer Autorität kann keine Truppe aufstellen: Kein Mitglied wird seine Soldaten unter eine Flagge stellen, die die Welt noch nicht respektiert. Stattdessen geht eine [concept_un_peacekeeping]-Beobachtermission. Unbewaffnete Beobachter werden über die Lage berichten; es werden keine Truppen entsandt."
+ },
+ "un_vote.2.d_physical_protection_failed": {
+  "en": "The Convention on the Physical Protection of Nuclear Material has failed to pass the General Assembly. The nuclear powers would not have foreign standards in their depots. Whatever has gone missing stays missing.",
+  "de": "Die Konvention über den physischen Schutz von Kernmaterial fand in der Generalversammlung keine Mehrheit. Die Atommächte wollten keine fremden Standards in ihren Depots. Was verschwunden ist, bleibt verschwunden."
+ },
+ "un_vote.2.d_physical_protection_passed": {
+  "en": "The Convention on the Physical Protection of Nuclear Material has been adopted by the General Assembly. Its parties will guard, count and report their nuclear material to a common standard, and help one another find what has gone missing.",
+  "de": "Die Konvention über den physischen Schutz von Kernmaterial wurde von der Generalversammlung angenommen. Ihre Vertragsparteien werden ihr Kernmaterial nach einem gemeinsamen Standard bewachen, zählen und melden und einander helfen, Verschwundenes wiederzufinden."
+ },
+ "un_vote.2.d_reform_failed": {
+  "en": "The charter reform has failed to reach the two-thirds supermajority it needed. The Charter stands as it was written, and the organisation's ceiling with it.",
+  "de": "Die Chartareform verfehlte die erforderliche Zweidrittelmehrheit. Die Charta bleibt, wie sie geschrieben wurde, und mit ihr die Obergrenze der Organisation."
+ },
+ "un_vote.2.d_reform_passed": {
+  "en": "The Charter has been amended. A two-thirds supermajority of the General Assembly voted the reform through and no permanent member stood in its way: the ceiling on the United Nations' [concept_un_authority] is raised, and a stronger organisation becomes possible.",
+  "de": "Die Charta wurde geändert. Eine Zweidrittelmehrheit der Generalversammlung stimmte der Reform zu, und kein Ständiges Mitglied stellte sich ihr in den Weg: Die Obergrenze der [concept_un_authority] der Vereinten Nationen wird angehoben, und eine stärkere Organisation wird möglich."
+ },
+ "un_vote.2.d_reform_passed_vetoed": {
+  "en": "The charter reform had its supermajority in the General Assembly, but a [concept_un_security_council] [concept_un_veto] blocks it outright. Charter changes need the permanent members' consent — there is no graduated fallback. The Assembly disperses, frustrated.",
+  "de": "Die Chartareform hatte ihre Mehrheit in der Generalversammlung, doch ein [concept_un_veto] im [concept_un_security_council] blockiert sie rundweg. Änderungen der Charta brauchen die Zustimmung der Ständigen Mitglieder – es gibt keine abgestufte Rückfallebene. Die Versammlung zerstreut sich, frustriert."
+ },
+ "un_vote.2.d_refugee_failed": {
+  "en": "The International Refugee Resolution has failed to pass the General Assembly. Fears of uncontrolled migration and economic burden proved too great for many delegations. The world's refugees remain without an international champion.",
+  "de": "Die Internationale Flüchtlingsresolution fand in der Generalversammlung keine Mehrheit. Die Furcht vor unkontrollierter Migration und wirtschaftlicher Belastung erwies sich für viele Delegationen als zu groß. Die Flüchtlinge der Welt bleiben ohne internationalen Fürsprecher."
+ },
+ "un_vote.2.d_refugee_passed": {
+  "en": "The International Refugee Resolution has been adopted by the General Assembly. The UN High Commissioner for Refugees is established to coordinate international protection and assistance for displaced persons worldwide.",
+  "de": "Die Internationale Flüchtlingsresolution wurde von der Generalversammlung angenommen. Das Amt des UN-Hochkommissars für Flüchtlinge wird eingerichtet, um internationalen Schutz und Hilfe für Vertriebene weltweit zu koordinieren."
+ },
+ "un_vote.2.d_sanctions_failed": {
+  "en": "The proposed sanctions against [SCOPE.sCountry('un_vote_target').GetName] have been rejected by the General Assembly. The vote failed [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. The target nation escapes international censure.",
+  "de": "Die vorgeschlagenen Sanktionen gegen [SCOPE.sCountry('un_vote_target').GetAltName('AKK')] wurden von der Generalversammlung abgelehnt. Die Abstimmung scheiterte mit [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] zu [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0] Stimmen. Die Zielnation entgeht der internationalen Rüge."
+ },
+ "un_vote.2.d_sanctions_passed": {
+  "en": "The General Assembly has voted to impose international sanctions on [SCOPE.sCountry('un_vote_target').GetName]. The resolution carried [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Trade restrictions and diplomatic penalties are now in effect.",
+  "de": "Die Generalversammlung hat für die Verhängung internationaler Sanktionen gegen [SCOPE.sCountry('un_vote_target').GetAltName('AKK')] gestimmt. Die Resolution wurde mit [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] zu [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0] Stimmen angenommen. Handelsbeschränkungen und diplomatische Strafen sind nun in Kraft."
+ },
+ "un_vote.2.d_sanctions_passed_vetoed": {
+  "en": "The binding sanctions resolution was vetoed in the [concept_un_security_council]. The General Assembly's simple majority converted it to a voluntary partial-sanctions framework — supporting nations may apply trade penalties, but there is no enforcement mechanism. [SCOPE.sCountry('un_vote_target').GetName] suffers a milder reputational and trade hit.",
+  "de": "Die bindende Sanktionsresolution wurde im [concept_un_security_council] durch ein Veto blockiert. Die einfache Mehrheit der Generalversammlung wandelte sie in ein freiwilliges Teilsanktionsrahmenwerk um – unterstützende Nationen dürfen Handelsstrafen verhängen, doch es gibt keinen Durchsetzungsmechanismus. [SCOPE.sCountry('un_vote_target').GetAltName('NOM')] erleidet einen milderen Ansehens- und Handelsschaden."
+ },
+ "un_vote.2.d_space_failed": {
+  "en": "The Space Cooperation Resolution has failed to pass the General Assembly. National [concept_prestige] and military concerns overrode the call for shared exploration. The heavens, it seems, will be contested rather than shared.",
+  "de": "Die Weltraumkooperationsresolution fand in der Generalversammlung keine Mehrheit. Nationales [concept_prestige] und militärische Bedenken überwogen den Ruf nach gemeinsamer Erforschung. Der Himmel wird, so scheint es, umkämpft bleiben statt geteilt zu werden."
+ },
+ "un_vote.2.d_space_passed": {
+  "en": "The Space Cooperation Resolution has been adopted by the General Assembly. The UN Office for Outer Space Affairs is established to coordinate peaceful international cooperation in the exploration and use of outer space.",
+  "de": "Die Weltraumkooperationsresolution wurde von der Generalversammlung angenommen. Das UN-Büro für Weltraumfragen wird eingerichtet, um die friedliche internationale Zusammenarbeit bei der Erforschung und Nutzung des Weltraums zu koordinieren."
+ },
+ "un_vote.2.f_failed": {
+  "en": "The president's gavel fell with a hollow sound. 'The resolution has not achieved the required majority,' he announced. 'It is hereby rejected.'\\n\\nThe proposing delegation gathered their papers in silence. A sympathetic colleague leaned over: 'You can always try again next year.'\\n\\n'Next year,' came the tired reply, 'may be too late.'",
+  "de": "Der Hammer des Präsidenten fiel mit einem dumpfen Klang. „Die Resolution hat die erforderliche Mehrheit nicht erreicht“, verkündete er. „Sie ist hiermit abgelehnt.“\\n\\nDie vorschlagende Delegation sammelte schweigend ihre Unterlagen ein. Ein mitfühlender Kollege beugte sich hinüber: „Ihr könnt es nächstes Jahr ja wieder versuchen.“\\n\\n„Nächstes Jahr“, kam die müde Antwort, „könnte zu spät sein.“"
+ },
+ "un_vote.2.f_passed": {
+  "en": "The president's gavel fell. For a moment, the chamber erupted - one side in applause, the other in stony silence.\\n\\n'The resolution is adopted,' the president announced. 'Let the record show that the General Assembly has spoken.'\\n\\nWhether anyone would listen was, as always, another matter entirely.",
+  "de": "Der Hammer des Präsidenten fiel. Für einen Moment geriet der Saal in Aufruhr – die eine Seite applaudierte, die andere verharrte in eisigem Schweigen.\\n\\n„Die Resolution ist angenommen“, verkündete der Präsident. „Das Protokoll soll festhalten, dass die Generalversammlung gesprochen hat.“\\n\\nOb jemand zuhören würde, stand, wie immer, auf einem ganz anderen Blatt."
+ },
+ "un_vote.2.t": {
+  "en": "General Assembly Vote Results",
+  "de": "Ergebnisse der Abstimmung der Generalversammlung"
+ },
+ "un_vote.3.a": {
+  "en": "Very well.",
+  "de": "Nun gut."
+ },
+ "un_vote.3.b": {
+  "en": "Accept the resolution.",
+  "de": "Akzeptiert die Resolution."
+ },
+ "un_vote.3.b_convention": {
+  "en": "Ratify it after all.",
+  "de": "Ratifiziert sie doch noch."
+ },
+ "un_vote.3.c_convention": {
+  "en": "Refuse to ratify it.",
+  "de": "Weigert euch, sie zu ratifizieren."
+ },
+ "un_vote.3.c_convention_tt": {
+  "en": "#bold We stay outside the convention.#! None of its obligations — and none of its benefits — apply to us; it binds every member that ratifies it. The Assembly takes note of the refusal:",
+  "de": "#bold Wir bleiben außerhalb der Konvention.#! Keine ihrer Pflichten – und keiner ihrer Vorteile – gilt für uns; sie bindet jedes Mitglied, das sie ratifiziert. Die Versammlung nimmt die Weigerung zur Kenntnis:"
+ },
+ "un_vote.3.c_decision": {
+  "en": "Denounce the decision.",
+  "de": "Verurteilt die Entscheidung."
+ },
+ "un_vote.3.c_decision_tt": {
+  "en": "#bold This does not stop the resolution.#! It is a decision of the whole Assembly and stands whatever we say. Refusing to comply means denouncing it on the record — a statement, and nothing more — and the statement costs us:",
+  "de": "#bold Dies hält die Resolution nicht auf.#! Sie ist eine Entscheidung der gesamten Versammlung und bleibt bestehen, was wir auch sagen. Die Befolgung zu verweigern bedeutet, sie öffentlich zu verurteilen – eine Erklärung, und nichts weiter –, und diese Erklärung kostet uns:"
+ },
+ "un_vote.3.c_pledge": {
+  "en": "Refuse to take part.",
+  "de": "Weigert euch, teilzunehmen."
+ },
+ "un_vote.3.c_pledge_tt": {
+  "en": "#bold We take no part.#! The effort goes ahead with the members who contribute, and we pay nothing towards it. The Assembly takes note of the refusal:",
+  "de": "#bold Wir nehmen nicht teil.#! Das Vorhaben geht mit den beitragenden Mitgliedern voran, und wir zahlen nichts dazu. Die Versammlung nimmt die Weigerung zur Kenntnis:"
+ },
+ "un_vote.3.d_choice_convention": {
+  "en": "\\n\\nWe voted against it. A convention binds only the members that ratify it: we may ratify it after all, or stay outside it.",
+  "de": "\\n\\nWir haben dagegen gestimmt. Eine Konvention bindet nur die Mitglieder, die sie ratifizieren: Wir können sie doch noch ratifizieren oder außen vor bleiben."
+ },
+ "un_vote.3.d_choice_decision": {
+  "en": "\\n\\nWe voted against it, but it is a decision of the whole Assembly and it stands whatever we answer. We may accept it, or denounce it on the record — which changes nothing about the decision itself, and costs us for the defiance.",
+  "de": "\\n\\nWir haben dagegen gestimmt, doch es ist eine Entscheidung der gesamten Versammlung und bleibt bestehen, wie wir auch antworten. Wir können sie akzeptieren oder sie öffentlich verurteilen – was an der Entscheidung selbst nichts ändert und uns für den Widerstand etwas kostet."
+ },
+ "un_vote.3.d_choice_pledge": {
+  "en": "\\n\\nWe voted against it. The Assembly now asks its members to take part: we may join the effort after all, or refuse.",
+  "de": "\\n\\nWir haben dagegen gestimmt. Die Versammlung bittet ihre Mitglieder nun um Beteiligung: Wir können uns dem Vorhaben doch noch anschließen oder ablehnen."
+ },
+ "un_vote.3.d_failed": {
+  "en": "The General Assembly has concluded its vote. The resolution proposed by [SCOPE.sCountry('un_vote_proposer').GetName] has #R failed#! with [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] votes in favor and [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0] against.",
+  "de": "Die Generalversammlung hat ihre Abstimmung abgeschlossen. Die von [SCOPE.sCountry('un_vote_proposer').GetAltName('DAT')] vorgeschlagene Resolution ist mit [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] Stimmen dafür und [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0] dagegen #R gescheitert#!."
+ },
+ "un_vote.3.d_passed": {
+  "en": "The General Assembly has concluded its vote. The resolution proposed by [SCOPE.sCountry('un_vote_proposer').GetName] has #G passed#! with [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] votes in favor and [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0] against.",
+  "de": "Die Generalversammlung hat ihre Abstimmung abgeschlossen. Die von [SCOPE.sCountry('un_vote_proposer').GetAltName('DAT')] vorgeschlagene Resolution wurde mit [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] Stimmen dafür und [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0] dagegen #G angenommen#!."
+ },
+ "un_vote.3.t": {
+  "en": "General Assembly Vote Results",
+  "de": "Ergebnisse der Abstimmung der Generalversammlung"
  }
 }
