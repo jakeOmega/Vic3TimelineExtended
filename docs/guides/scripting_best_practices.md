@@ -4155,6 +4155,8 @@ The consequence is that a cheat, a test harness or a scripted grant **cannot ass
 
 Also worth knowing: some countries have **no** consistent landing spot, and the sweep will keep bouncing them. Survey the target law group's `disallowing_laws` before assuming one exists.
 
+**An `on_law_activated` hook can run more than once per law change.** A hook in the list that calls `activate_law` (`banking_law_cascade_on_law_activated` forcing State-Owned Banking; the consistency sweep bouncing a law) fires a nested `on_law_activated`, which runs every hook again before the outer list moves on. A `remove_modifier` in the nested run may not be visible to the outer run's `has_modifier`. So a hook that pays or grants something must key it on a variable it sets in the same block, never on the modifier alone. Duplicate history markers are harmless, because the chart only checks for a flag, but money isn't. `te_banking_economy_law_cleanup` pays Emergency Liquidity's refund once per opening through `banking_eliq_strip_refunded` (#549).
+
 ## An `add_modifier` `multiplier` Scales EVERY Field — Split Off an Unscaled Companion
 
 `add_modifier = { name = X multiplier = <script value> }` multiplies **every field** of `X`, not just the one you were thinking about. That is the point when all of `X`'s fields share a unit (a `_cost` modifier, a rate-paid unit modifier), and a trap the moment they do not.
