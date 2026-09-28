@@ -892,7 +892,10 @@ _SCALING_WRAPPERS: frozenset[str] = frozenset({
     "workforce_scaled", "level_scaled", "unscaled", "timed_modifier",
 })
 
-_GRANT_OPENER_RE = re.compile(r"^\s*(?:INJECT:|REPLACE:)?([A-Za-z_][\w]*)\s*=\s*\{")
+# Entity ids may contain `-` (`post-scarcity_economy`, `law_post-scarcity`,
+# `e-commerce`, #327); the first character stays a letter/underscore so a
+# `-1 = {` or `value = -1` line can never open an entity.
+_GRANT_OPENER_RE = re.compile(r"^\s*(?:INJECT:|REPLACE:)?([A-Za-z_][\w-]*)\s*=\s*\{")
 _GRANT_LINE_RE = re.compile(
     r"^\s*([a-z_][a-z0-9_]*)\s*=\s*(-?\d+(?:\.\d+)?|yes|no)\s*$"
 )

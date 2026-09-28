@@ -397,6 +397,26 @@ class ModifierGrantScanTests(unittest.TestCase):
         self.assertEqual(len(out), 1)
         self.assertEqual(out[0]["value"], 0.5)
 
+    def test_hyphenated_entity_id(self):
+        # #327: `post-scarcity_economy = {` never opened an entity, so its
+        # grants were silently dropped.
+        out = self._scan(
+            "post-scarcity_economy = {\n\tmodifier = {\n\t\ttarget_mod = 0.2\n\t}\n}\n",
+            entity_type="Technologies")
+        self.assertEqual(len(out), 1)
+        self.assertEqual(out[0]["entity_id"], "post-scarcity_economy")
+        out = self._scan(
+            "INJECT:pan-nationalism = {\n\tmodifier = {\n\t\ttarget_mod = 1\n\t}\n}\n",
+            entity_type="Technologies")
+        self.assertEqual([g["entity_id"] for g in out], ["pan-nationalism"])
+
+    def test_opener_rejects_leading_hyphen(self):
+        self.assertIsNone(mss._GRANT_OPENER_RE.match("\t-1 = {"))
+        self.assertIsNone(mss._GRANT_OPENER_RE.match("\tvalue = -1"))
+        self.assertIsNone(mss._GRANT_OPENER_RE.match("\tx >= {"))
+        self.assertEqual(
+            mss._GRANT_OPENER_RE.match("lab-grown_food = {").group(1), "lab-grown_food")
+
 
 class ModifierGrantLookupTests(unittest.TestCase):
     """Live import-level test against the real mod tree (no server needed)."""
