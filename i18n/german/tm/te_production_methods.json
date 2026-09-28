@@ -1,4 +1,2804 @@
 {
+ "pm_consciousness_network_open": {
+  "en": "Open Network",
+  "de": "Offenes Netzwerk"
+ },
+ "pm_consciousness_network_social_control": {
+  "en": "Social Control Network",
+  "de": "Netzwerk sozialer Kontrolle"
+ },
+ "pm_construction_no_effect": {
+  "en": "No Effect",
+  "de": "Kein Effekt"
+ },
+ "pm_construction_principle_2": {
+  "en": "Construction Principle 2",
+  "de": "Bauprinzip 2"
+ },
+ "pm_consumer_appliances": {
+  "en": "Consumer Appliances Production",
+  "de": "Haushaltsgeräteproduktion"
+ },
+ "pm_container_ports": {
+  "en": "Container Ports",
+  "de": "Containerhäfen"
+ },
+ "pm_containerized_cargo": {
+  "en": "Containerized Cargo",
+  "de": "Containerfracht"
+ },
+ "pm_continuous_bleaching": {
+  "en": "Continuous Bleaching",
+  "de": "Kontinuierliches Bleichen"
+ },
+ "pm_continuous_miners_building_coal_mine": {
+  "en": "Continuous Miners",
+  "de": "Kontinuierliche Abbaumaschinen"
+ },
+ "pm_continuous_miners_building_gold_mine": {
+  "en": "Continuous Miners",
+  "de": "Kontinuierliche Abbaumaschinen"
+ },
+ "pm_continuous_miners_building_iron_mine": {
+  "en": "Continuous Miners",
+  "de": "Kontinuierliche Abbaumaschinen"
+ },
+ "pm_continuous_miners_building_lead_mine": {
+  "en": "Continuous Miners",
+  "de": "Kontinuierliche Abbaumaschinen"
+ },
+ "pm_continuous_miners_building_sulfur_mine": {
+  "en": "Continuous Miners",
+  "de": "Kontinuierliche Abbaumaschinen"
+ },
+ "pm_continuous_miners_building_tech_metals_mine": {
+  "en": "Continuous Miners",
+  "de": "Kontinuierliche Abbaumaschinen"
+ },
+ "pm_continuous_processing": {
+  "en": "Continuous Processing",
+  "de": "Kontinuierliche Verarbeitung"
+ },
+ "pm_cordoba_railway_alta_gracia_works": {
+  "en": "Córdoba Railway Alta Gracia Works",
+  "de": "Córdoba-Eisenbahnwerke Alta Gracia"
+ },
+ "pm_cramp_philadelphia_shipyard": {
+  "en": "Cramp Philadelphia Shipyard",
+  "de": "Cramp-Werft Philadelphia"
+ },
+ "pm_csfa_sicilian_sulfur_depot": {
+  "en": "CSFA Sicilian Sulfur Depot",
+  "de": "CSFA-Schwefeldepot Sizilien"
+ },
+ "pm_customized_clothing": {
+  "en": "Customized Clothing",
+  "de": "Maßgeschneiderte Kleidung"
+ },
+ "pm_dassault_merignac_plant": {
+  "en": "Dassault Merignac Plant",
+  "de": "Dassault-Werk Mérignac"
+ },
+ "pm_de_beers_sorting_office": {
+  "en": "De Beers Sorting Office",
+  "de": "De-Beers-Sortierbüro"
+ },
+ "pm_debarkers_and_chippers": {
+  "en": "Debarkers and Chippers",
+  "de": "Entrindungs- und Hackmaschinen"
+ },
+ "pm_decentralized_religious_structures": {
+  "en": "Decentralized Religious Structures",
+  "de": "Dezentrale religiöse Strukturen"
+ },
+ "pm_deep_space_exploration": {
+  "en": "Deep Space Exploration",
+  "de": "Tiefraumerkundung"
+ },
+ "pm_deep_well": {
+  "en": "Deep Well",
+  "de": "Tiefbohrung"
+ },
+ "pm_department_stores": {
+  "en": "Department Stores",
+  "de": "Kaufhäuser"
+ },
+ "pm_designed_apple_orchards": {
+  "en": "Designed Apple Orchards",
+  "de": "Gestaltete Apfelhaine"
+ },
+ "pm_designed_citrus_orchards": {
+  "en": "Designed Citrus Orchards",
+  "de": "Gestaltete Zitrushaine"
+ },
+ "pm_designed_crops": {
+  "en": "Designed Crops",
+  "de": "Gestaltete Nutzpflanzen"
+ },
+ "pm_designed_crops_rice_farm": {
+  "en": "Designed Crops Rice Farm",
+  "de": "Gestaltete Reisfarm-Nutzpflanzen"
+ },
+ "pm_designed_fig_orchards": {
+  "en": "Designed Fig Orchards",
+  "de": "Gestaltete Feigenhaine"
+ },
+ "pm_designed_potatoes": {
+  "en": "Designed Potatoes",
+  "de": "Gestaltete Kartoffeln"
+ },
+ "pm_diesel_electric_ferries": {
+  "en": "Diesel-Electric Ferries",
+  "de": "Diesel-elektrische Fähren"
+ },
+ "pm_diesel_pump_building_tech_metals_mine": {
+  "en": "Diesel Pump",
+  "de": "Dieselpumpe"
+ },
+ "pm_diesel_shipbuilding": {
+  "en": "Diesel-Powered Shipbuilding",
+  "de": "Dieselbetriebener Schiffbau"
+ },
+ "pm_diesel_shipbuilding_desc": {
+  "en": "Heavy diesel and turbine-driven oceangoing ships displace coal-fired steamers as the workhorses of trade and transport.",
+  "de": "Schwere Diesel- und turbinengetriebene Hochseeschiffe verdrängen kohlebefeuerte Dampfer als Arbeitspferde des Handels und Transports."
+ },
+ "pm_digital_creation_tools": {
+  "en": "Digital Creation Tools",
+  "de": "Digitale Kreativwerkzeuge"
+ },
+ "pm_digital_streaming": {
+  "en": "Digital Streaming",
+  "de": "Digitales Streaming"
+ },
+ "pm_digital_trading": {
+  "en": "Digital Trading",
+  "de": "Digitaler Handel"
+ },
+ "pm_directed_energy_point_defense": {
+  "en": "Directed Energy Point Defense",
+  "de": "Punktverteidigung mit gerichteter Energie"
+ },
+ "pm_directed_energy_point_defense_desc": {
+  "en": "High-energy lasers that burn incoming warheads out of the sky, raising this [Concept('concept_state','$concept_state$')]'s chance of stopping a [concept_nuclear_strike] further than interceptor missiles can.",
+  "de": "Hochenergielaser, die anfliegende Sprengköpfe vom Himmel brennen und die Chance dieses [Concept('concept_state','$concept_state$')], einen [concept_nuclear_strike] abzuwehren, stärker erhöhen als es Abfangraketen können."
+ },
+ "pm_directional_drilling_rigs": {
+  "en": "Directional Drilling Rigs",
+  "de": "Richtbohranlagen"
+ },
+ "pm_disney_world": {
+  "en": "Disney World",
+  "de": "Disney World"
+ },
+ "pm_distributed_control_systems": {
+  "en": "Distributed Control Systems",
+  "de": "Verteilte Steuerungssysteme"
+ },
+ "pm_distributed_control_systems_explosives_factory": {
+  "en": "Distributed Control Systems",
+  "de": "Verteilte Steuerungssysteme"
+ },
+ "pm_dmc_mulhouse_mills": {
+  "en": "DMC Mulhouse Mills",
+  "de": "DMC-Mühlen Mulhouse"
+ },
+ "pm_double-decker_passenger_carriages": {
+  "en": "Double-Decker Passenger Carriages",
+  "de": "Doppelstock-Personenwagen"
+ },
+ "pm_douro_wine_lodge": {
+  "en": "Douro Wine Lodge",
+  "de": "Douro-Weinlager"
+ },
+ "pm_dragline_excavators_coal_mine": {
+  "en": "Dragline Excavators",
+  "de": "Schürfkübelbagger"
+ },
+ "pm_dragline_excavators_gold_mine": {
+  "en": "Dragline Excavators",
+  "de": "Schürfkübelbagger"
+ },
+ "pm_dragline_excavators_iron_mine": {
+  "en": "Dragline Excavators",
+  "de": "Schürfkübelbagger"
+ },
+ "pm_dragline_excavators_lead_mine": {
+  "en": "Dragline Excavators",
+  "de": "Schürfkübelbagger"
+ },
+ "pm_dragline_excavators_sulfur_mine": {
+  "en": "Dragline Excavators",
+  "de": "Schürfkübelbagger"
+ },
+ "pm_dragline_excavators_tech_metals_mine": {
+  "en": "Dragline Excavators",
+  "de": "Schürfkübelbagger"
+ },
+ "pm_drone_delivery_systems": {
+  "en": "Drone Delivery Systems",
+  "de": "Drohnen-Liefersysteme"
+ },
+ "pm_dupont_experimental_station": {
+  "en": "DuPont Experimental Station",
+  "de": "DuPont-Versuchsstation"
+ },
+ "pm_duro_la_felguera_steelworks": {
+  "en": "Duro La Felguera Steelworks",
+  "de": "Duro-La-Felguera-Stahlwerke"
+ },
+ "pm_dynamite_building_tech_metals_mine": {
+  "en": "Dynamite",
+  "de": "Dynamit"
+ },
+ "pm_e-commerce": {
+  "en": "E-Commerce",
+  "de": "E-Commerce"
+ },
+ "pm_earth_orbit": {
+  "en": "Earth Orbit",
+  "de": "Erdumlaufbahn"
+ },
+ "pm_earthwork_fortifications": {
+  "en": "Earthwork Fortifications",
+  "de": "Erdschanzen"
+ },
+ "pm_ectogenesis": {
+  "en": "Ectogenesis",
+  "de": "Ektogenese"
+ },
+ "pm_education_no_effect": {
+  "en": "No Cultural Mandate",
+  "de": "Kein kulturelles Mandat"
+ },
+ "pm_eea_dock_sud_power_station": {
+  "en": "EEA Dock Sud Power Station",
+  "de": "EEA-Kraftwerk Dock Sud"
+ },
+ "pm_effluent_filtration": {
+  "en": "Effluent Filtration",
+  "de": "Abwasserfiltration"
+ },
+ "pm_egyptian_rail_cairo_central": {
+  "en": "Egyptian Rail Cairo Central",
+  "de": "Egyptian-Rail-Bahnhof Kairo Central"
+ },
+ "pm_eic_trading_house": {
+  "en": "East India Company Trading House",
+  "de": "Ostindien-Kompanie-Handelshaus"
+ },
+ "pm_el_aguila_tampico_refinery": {
+  "en": "El Águila Tampico Refinery",
+  "de": "El-Águila-Raffinerie Tampico"
+ },
+ "pm_elastomeric_blends": {
+  "en": "Elastomeric Blends",
+  "de": "Elastomermischungen"
+ },
+ "pm_electric_cars": {
+  "en": "Electric Car Production",
+  "de": "Elektroautoproduktion"
+ },
+ "pm_electric_civil_highway": {
+  "en": "Electric Civil Highway",
+  "de": "Elektrische Zivilstraße"
+ },
+ "pm_electric_industrial_highway": {
+  "en": "Electric Industrial Highway",
+  "de": "Elektrische Industriestraße"
+ },
+ "pm_electricidad_caracas_power_house": {
+  "en": "Electricidad de Caracas Power House",
+  "de": "Electricidad-de-Caracas-Kraftwerk"
+ },
+ "pm_electrified_rotary_drilling_rigs": {
+  "en": "Electrified Rotary Drilling Rigs",
+  "de": "Elektrifizierte Drehbohranlagen"
+ },
+ "pm_electrochemical_machining": {
+  "en": "Electrochemical Machining",
+  "de": "Elektrochemische Bearbeitung"
+ },
+ "pm_electroenzymatic_synthesis": {
+  "en": "Electroenzymatic Synthesis",
+  "de": "Elektroenzymatische Synthese"
+ },
+ "pm_electromagnetic_projectors": {
+  "en": "Electromagnetic Projectors",
+  "de": "Elektromagnetische Projektoren"
+ },
+ "pm_electronic_brokerage": {
+  "en": "Electronic Brokerage",
+  "de": "Elektronischer Börsenhandel"
+ },
+ "pm_elso_budapesti_steam_mill": {
+  "en": "Első Budapesti Steam Mill",
+  "de": "Első-Budapesti-Dampfmühle"
+ },
+ "pm_engineering_and_logistics_no_effect": {
+  "en": "No Effect",
+  "de": "Kein Effekt"
+ },
+ "pm_eni_palazzo": {
+  "en": "Palazzo ENI",
+  "de": "Palazzo ENI"
+ },
+ "pm_ericsson_telefonplan": {
+  "en": "Ericsson Telefonplan",
+  "de": "Ericsson Telefonplan"
+ },
+ "pm_erste_brunner_maschinenwerk": {
+  "en": "Erste Brünner Maschinenwerk",
+  "de": "Erste Brünner Maschinenwerk"
+ },
+ "pm_espana_industrial_sants_mills": {
+  "en": "España Industrial Sants Mills",
+  "de": "España-Industrial-Mühlen Sants"
+ },
+ "pm_estaleiro_maua_niteroi_dockyard": {
+  "en": "Estaleiro Mauá Niterói Dockyard",
+  "de": "Estaleiro-Mauá-Werft Niterói"
+ },
+ "pm_estanifera_llallagua_tin_concentrator": {
+  "en": "Estañífera Llallagua Tin Concentrator",
+  "de": "Estañífera-Zinnaufbereitungsanlage Llallagua"
+ },
+ "pm_ethiopian_railway_dire_dawa_depot": {
+  "en": "Ethiopian Railway Dire Dawa Depot",
+  "de": "Ethiopian-Railway-Depot Dire Dawa"
+ },
+ "pm_eugenics_programs": {
+  "en": "Eugenics Programs",
+  "de": "Eugenik-Programme"
+ },
+ "pm_extreme_bandwidth": {
+  "en": "Extreme Bandwidth",
+  "de": "Extreme Bandbreite"
+ },
+ "pm_famae_santiago_arsenal": {
+  "en": "FAMAE Santiago Arsenal",
+  "de": "FAMAE-Arsenal Santiago"
+ },
+ "pm_fanuc_forest": {
+  "en": "The FANUC Forest",
+  "de": "Der FANUC-Wald"
+ },
+ "pm_fcm_la_seyne_shipyard": {
+  "en": "FCM La Seyne Shipyard",
+  "de": "FCM-Werft La Seyne"
+ },
+ "pm_ferranti_hollinwood_works": {
+  "en": "Ferranti Hollinwood Works",
+  "de": "Ferranti-Werke Hollinwood"
+ },
+ "pm_ferrari_maranello_factory": {
+  "en": "Ferrari Maranello Factory",
+  "de": "Ferrari-Fabrik Maranello"
+ },
+ "pm_fiat_lingotto_factory": {
+  "en": "FIAT Lingotto Factory",
+  "de": "FIAT-Fabrik Lingotto"
+ },
+ "pm_fiber_optics": {
+  "en": "Fiber Optics",
+  "de": "Glasfaseroptik"
+ },
+ "pm_flexible_packaging": {
+  "en": "Flexible Packaging",
+  "de": "Flexible Verpackungen"
+ },
+ "pm_flow_chemistry_production": {
+  "en": "Flow Chemistry Production",
+  "de": "Durchflusschemie-Produktion"
+ },
+ "pm_focus_balanced_production": {
+  "en": "Balanced Production",
+  "de": "Ausgewogene Produktion"
+ },
+ "pm_focus_balanced_production_desc": {
+  "en": "Civilian and military orders are worked in parallel without prioritization. No change to civilian output or naval construction capacity.",
+  "de": "Zivile und militärische Aufträge werden ohne Priorisierung parallel bearbeitet. Keine Änderung der zivilen Produktion oder der Marinebaukapazität."
+ },
+ "pm_focus_civilian_production": {
+  "en": "Civilian Hull Production",
+  "de": "Zivile Rumpfproduktion"
+ },
+ "pm_focus_civilian_production_desc": {
+  "en": "Concentrate dockyard labor and slipways on merchant hulls. Civilian shipping output rises sharply, but national naval construction capacity is reduced as warship orders go to the back of the queue.",
+  "de": "Konzentriert Werftarbeiter und Hellinge auf Handelsschiffsrümpfe. Die zivile Schiffsproduktion steigt stark an, doch die nationale Marinebaukapazität sinkt, da Kriegsschiffsaufträge ans Ende der Warteschlange rücken."
+ },
+ "pm_focus_naval_production": {
+  "en": "Naval Priority",
+  "de": "Marinepriorität"
+ },
+ "pm_focus_naval_production_desc": {
+  "en": "Shift slipway allocation toward warships. National naval construction capacity rises, with a corresponding cut to civilian hull output.",
+  "de": "Verlagert die Hellingkapazität zugunsten von Kriegsschiffen. Die nationale Marinebaukapazität steigt, mit einem entsprechenden Rückgang der zivilen Rumpfproduktion."
+ },
+ "pm_focus_wartime_mobilization": {
+  "en": "Wartime Mobilization",
+  "de": "Kriegsmobilisierung"
+ },
+ "pm_focus_wartime_mobilization_desc": {
+  "en": "Mobilize the dockyard for all-out naval production. Civilian shipping is heavily curtailed in exchange for a major boost to national naval construction capacity. Requires Total War.",
+  "de": "Mobilisiert die Werft für die totale Kriegsschiffsproduktion. Die zivile Schifffahrt wird stark eingeschränkt, im Austausch für einen erheblichen Anstieg der nationalen Marinebaukapazität. Erfordert totalen Krieg."
+ },
+ "pm_foochow_mawei_dockyard": {
+  "en": "Foochow Mawei Dockyard",
+  "de": "Foochow-Werft Mawei"
+ },
+ "pm_food_additives": {
+  "en": "Food Additives",
+  "de": "Lebensmittelzusatzstoffe"
+ },
+ "pm_ford_rouge_plant": {
+  "en": "Ford Rouge Plant",
+  "de": "Ford-Werk Rouge"
+ },
+ "pm_fracking": {
+  "en": "Fracking",
+  "de": "Fracking"
+ },
+ "pm_franco_belge_raismes_works": {
+  "en": "Franco-Belge Raismes Works",
+  "de": "Franco-Belge-Werke Raismes"
+ },
+ "pm_fully_automated_content_creation": {
+  "en": "Fully Automated Content Creation",
+  "de": "Vollautomatisierte Inhaltserstellung"
+ },
+ "pm_fundicao_ipanema_sorocaba_foundry": {
+  "en": "Fundição Ipanema Sorocaba Foundry",
+  "de": "Fundição-Ipanema-Gießerei Sorocaba"
+ },
+ "pm_fundidora_monterrey_blast_furnace": {
+  "en": "Fundidora Monterrey Blast Furnace",
+  "de": "Fundidora-Hochofen Monterrey"
+ },
+ "pm_fusion_battery_appliances": {
+  "en": "Fusion Battery Appliances",
+  "de": "Fusionsbatterie-Haushaltsgeräte"
+ },
+ "pm_fusion_battery_motors": {
+  "en": "Fusion Battery Motors",
+  "de": "Fusionsbatterie-Motoren"
+ },
+ "pm_fusion_battery_vehicles": {
+  "en": "Fusion Battery Vehicles",
+  "de": "Fusionsbatterie-Fahrzeuge"
+ },
+ "pm_fusion_ssto_craft": {
+  "en": "Fusion SSTO Craft",
+  "de": "Fusions-SSTO-Raumschiffe"
+ },
+ "pm_galician_boryslaw_oil_field": {
+  "en": "Galician Borysław Oil Field",
+  "de": "Galizisches Ölfeld Borysław"
+ },
+ "pm_garrison_duty": {
+  "en": "Garrison Duty",
+  "de": "Garnisonsdienst"
+ },
+ "pm_gas_turbine_engines": {
+  "en": "Gas Turbine Engines",
+  "de": "Gasturbinentriebwerke"
+ },
+ "pm_gavrilovic_petrinja_meatworks": {
+  "en": "Gavrilović Petrinja Meatworks",
+  "de": "Gavrilović-Fleischwerk Petrinja"
+ },
+ "pm_gazprom_lakhta_center": {
+  "en": "The Lakhta Center",
+  "de": "Das Lachta-Zentrum"
+ },
+ "pm_ge_schenectady_works": {
+  "en": "GE Schenectady Works",
+  "de": "GE-Werke Schenectady"
+ },
+ "pm_generic_arsenal": {
+  "en": "Arsenal",
+  "de": "Arsenal"
+ },
+ "pm_generic_assay_office": {
+  "en": "Precious Metal Assaying",
+  "de": "Edelmetallprüfung"
+ },
+ "pm_generic_chem_works": {
+  "en": "Chemical Works",
+  "de": "Chemiewerk"
+ },
+ "pm_generic_cold_storage": {
+  "en": "Cold Storage",
+  "de": "Kühllager"
+ },
+ "pm_generic_colonial_depot": {
+  "en": "Colonial Commodity Trade",
+  "de": "Kolonialwarenhandel"
+ },
+ "pm_generic_corporate_university": {
+  "en": "Corporate University",
+  "de": "Unternehmensakademie"
+ },
+ "pm_generic_data_fortress": {
+  "en": "National Data Fortress",
+  "de": "Nationale Datenfestung"
+ },
+ "pm_generic_dry_dock": {
+  "en": "Dry Dock",
+  "de": "Trockendock"
+ },
+ "pm_generic_dye_fiber_park": {
+  "en": "Dye & Fiber Research",
+  "de": "Farbstoff- und Faserforschung"
+ },
+ "pm_generic_electronics_lab": {
+  "en": "Electronics Research",
+  "de": "Elektronikforschung"
+ },
+ "pm_generic_exhibition_centre": {
+  "en": "National Exhibition Centre",
+  "de": "Nationales Ausstellungszentrum"
+ },
+ "pm_generic_export_warehouse": {
+  "en": "Cash Crop Export",
+  "de": "Exportanbau"
+ },
+ "pm_generic_financial_center": {
+  "en": "International Financial Center",
+  "de": "Internationales Finanzzentrum"
+ },
+ "pm_generic_fish_market": {
+  "en": "Fish Market",
+  "de": "Fischmarkt"
+ },
+ "pm_generic_foundry_complex": {
+  "en": "Foundry Complex",
+  "de": "Gießereikomplex"
+ },
+ "pm_generic_furniture_showroom": {
+  "en": "Furniture Showroom",
+  "de": "Möbelausstellungsraum"
+ },
+ "pm_generic_granary_complex": {
+  "en": "Granary Complex",
+  "de": "Kornspeicherkomplex"
+ },
+ "pm_generic_hq_skyscraper": {
+  "en": "Corporate Headquarters Skyscraper",
+  "de": "Konzernzentrale-Wolkenkratzer"
+ },
+ "pm_generic_industrial_city": {
+  "en": "Private Industrial City",
+  "de": "Private Industriestadt"
+ },
+ "pm_generic_industrial_zone": {
+  "en": "Specialized Industrial Zone",
+  "de": "Spezialisierte Industriezone"
+ },
+ "pm_generic_logistics_hub": {
+  "en": "National Logistics Hub",
+  "de": "Nationaler Logistikknoten"
+ },
+ "pm_generic_lumber_yard": {
+  "en": "Lumber Yard",
+  "de": "Holzlagerplatz"
+ },
+ "pm_generic_machine_shop": {
+  "en": "Machine Shop",
+  "de": "Maschinenwerkstatt"
+ },
+ "pm_generic_materials_lab": {
+  "en": "Advanced Materials Laboratory",
+  "de": "Fortschrittliches Materiallabor"
+ },
+ "pm_generic_media_hq": {
+  "en": "Global Media Headquarters",
+  "de": "Globaler Medienhauptsitz"
+ },
+ "pm_generic_mega_factory": {
+  "en": "Mega-Factory Complex",
+  "de": "Mega-Fabrikkomplex"
+ },
+ "pm_generic_mineral_refinery": {
+  "en": "Mineral Refining",
+  "de": "Mineralaufbereitung"
+ },
+ "pm_generic_monument_to_industry": {
+  "en": "Monument to Industry",
+  "de": "Denkmal der Industrie"
+ },
+ "pm_generic_motor_works": {
+  "en": "Motor Works",
+  "de": "Motorenwerk"
+ },
+ "pm_generic_ordnance_depot": {
+  "en": "Ordnance Depot",
+  "de": "Rüstungsdepot"
+ },
+ "pm_generic_ore_processing": {
+  "en": "Ore Smelting",
+  "de": "Erzverhüttung"
+ },
+ "pm_generic_paper_mill_complex": {
+  "en": "Paper Mill Complex",
+  "de": "Papierfabrikkomplex"
+ },
+ "pm_generic_pipeline_terminus": {
+  "en": "Cross-Continental Pipeline Terminus",
+  "de": "Kontinentale Pipeline-Endstation"
+ },
+ "pm_generic_power_hub": {
+  "en": "High-Efficiency Power Hub",
+  "de": "Hocheffizienter Energieknoten"
+ },
+ "pm_generic_proving_grounds": {
+  "en": "Strategic Proving Grounds",
+  "de": "Strategisches Testgelände"
+ },
+ "pm_generic_rail_nexus": {
+  "en": "Intercontinental Rail Nexus",
+  "de": "Interkontinentaler Eisenbahnknoten"
+ },
+ "pm_generic_rd_complex": {
+  "en": "Central R&D Complex",
+  "de": "Zentraler F&E-Komplex"
+ },
+ "pm_generic_resource_depository": {
+  "en": "National Resource Depository",
+  "de": "Nationales Ressourcendepot"
+ },
+ "pm_generic_robotics_institute": {
+  "en": "Automation & Robotics Institute",
+  "de": "Institut für Automation und Robotik"
+ },
+ "pm_generic_shipping_terminal": {
+  "en": "Global Shipping Terminal",
+  "de": "Globales Frachtterminal"
+ },
+ "pm_generic_silk_exchange": {
+  "en": "Silk and Dye Trade",
+  "de": "Seiden- und Farbstoffhandel"
+ },
+ "pm_generic_spaceport": {
+  "en": "Spaceport",
+  "de": "Weltraumbahnhof"
+ },
+ "pm_generic_tank_farm": {
+  "en": "Tank Farm",
+  "de": "Tanklager"
+ },
+ "pm_generic_textile_depot": {
+  "en": "Textile Depot",
+  "de": "Textildepot"
+ },
+ "pm_generic_vintner_hall": {
+  "en": "Wine and Fruit Processing",
+  "de": "Wein- und Obstverarbeitung"
+ },
+ "pm_geophysical_survey_techniques_coal_mine": {
+  "en": "Geophysical Survey Techniques",
+  "de": "Geophysikalische Vermessungstechniken"
+ },
+ "pm_geophysical_survey_techniques_gold_mine": {
+  "en": "Geophysical Survey Techniques",
+  "de": "Geophysikalische Vermessungstechniken"
+ },
+ "pm_geophysical_survey_techniques_iron_mine": {
+  "en": "Geophysical Survey Techniques",
+  "de": "Geophysikalische Vermessungstechniken"
+ },
+ "pm_geophysical_survey_techniques_lead_mine": {
+  "en": "Geophysical Survey Techniques",
+  "de": "Geophysikalische Vermessungstechniken"
+ },
+ "pm_geophysical_survey_techniques_sulfur_mine": {
+  "en": "Geophysical Survey Techniques",
+  "de": "Geophysikalische Vermessungstechniken"
+ },
+ "pm_geophysical_survey_techniques_tech_metals_mine": {
+  "en": "Geophysical Survey Techniques",
+  "de": "Geophysikalische Vermessungstechniken"
+ },
+ "pm_getzner_bludenz_textile_works": {
+  "en": "Getzner Bludenz Textile Works",
+  "de": "Textilwerke Getzner Bludenz"
+ },
+ "pm_glassworks_closed_loop_recycling": {
+  "en": "Closed-Loop Recycling",
+  "de": "Kreislaufrecycling"
+ },
+ "pm_glassworks_fume_extraction": {
+  "en": "Fume Extraction",
+  "de": "Rauchgasabsaugung"
+ },
+ "pm_global_ports": {
+  "en": "Global Ports",
+  "de": "Globale Häfen"
+ },
+ "pm_googleplex": {
+  "en": "The Googleplex",
+  "de": "Der Googleplex"
+ },
+ "pm_gotaverken_gothenburg_shipyard": {
+  "en": "Götaverken Gothenburg Shipyard",
+  "de": "Götaverken-Werft Göteborg"
+ },
+ "pm_gran_azucarera_aranjuez_refinery": {
+  "en": "Gran Azucarera Aranjuez Refinery",
+  "de": "Gran-Azucarera-Raffinerie Aranjuez"
+ },
+ "pm_graphene_electric_motors": {
+  "en": "Graphene Electric Motors",
+  "de": "Graphen-Elektromotoren"
+ },
+ "pm_great_indian_railway_jamalpur_works": {
+  "en": "Great Indian Railway Jamalpur Works",
+  "de": "Great-Indian-Railway-Werke Jamalpur"
+ },
+ "pm_green_assembly": {
+  "en": "Green Assembly",
+  "de": "Grüne Montage"
+ },
+ "pm_guinness_st_james_gate_brewery": {
+  "en": "Guinness St. James's Gate Brewery",
+  "de": "Guinness-Brauerei St. James's Gate"
+ },
+ "pm_guthrie_singapore_agency": {
+  "en": "Guthrie Singapore Agency House",
+  "de": "Guthrie-Handelshaus Singapur"
+ },
+ "pm_gwr_swindon_works": {
+  "en": "GWR Swindon Works",
+  "de": "GWR-Werke Swindon"
+ },
+ "pm_hanka_precision_hq": {
+  "en": "Hanka Cybernetics Division",
+  "de": "Hanka Cybernetics Division"
+ },
+ "pm_hanseong_jeongi_gwanghwamun_station": {
+  "en": "Hanseong Jeongi Gwanghwamun Station",
+  "de": "Hanseong Jeongi Gwanghwamun Station"
+ },
+ "pm_hanyang_arsenal_iron_works": {
+  "en": "Hanyang Arsenal Iron Works",
+  "de": "Hanyang-Arsenal-Eisenwerke"
+ },
+ "pm_hardened_positions": {
+  "en": "Hardened Positions",
+  "de": "Befestigte Stellungen"
+ },
+ "pm_hbc_york_factory": {
+  "en": "HBC York Factory",
+  "de": "HBC York-Fabrik"
+ },
+ "pm_high_bandwidth": {
+  "en": "High Bandwidth",
+  "de": "Hohe Bandbreite"
+ },
+ "pm_high_fructose_syrup": {
+  "en": "High-Fructose Syrup",
+  "de": "Fruktosesirup"
+ },
+ "pm_high_pressure_hydraulic_pump_building_coal_mine": {
+  "en": "High-Pressure Hydraulic Pump",
+  "de": "Hochdruck-Hydraulikpumpe"
+ },
+ "pm_high_pressure_hydraulic_pump_building_gold_mine": {
+  "en": "High-Pressure Hydraulic Pump",
+  "de": "Hochdruck-Hydraulikpumpe"
+ },
+ "pm_high_pressure_hydraulic_pump_building_iron_mine": {
+  "en": "High-Pressure Hydraulic Pump",
+  "de": "Hochdruck-Hydraulikpumpe"
+ },
+ "pm_high_pressure_hydraulic_pump_building_lead_mine": {
+  "en": "High-Pressure Hydraulic Pump",
+  "de": "Hochdruck-Hydraulikpumpe"
+ },
+ "pm_high_pressure_hydraulic_pump_building_sulfur_mine": {
+  "en": "High-Pressure Hydraulic Pump",
+  "de": "Hochdruck-Hydraulikpumpe"
+ },
+ "pm_high_pressure_hydraulic_pump_building_tech_metals_mine": {
+  "en": "High-Pressure Hydraulic Pump",
+  "de": "Hochdruck-Hydraulikpumpe"
+ },
+ "pm_high_pressure_sodium_streetlights": {
+  "en": "High Pressure Sodium Streetlights",
+  "de": "Hochdruck-Natriumdampf-Straßenlaternen"
+ },
+ "pm_hispano_suiza_barcelona_factory": {
+  "en": "Hispano-Suiza Barcelona Factory",
+  "de": "Hispano-Suiza-Fabrik Barcelona"
+ },
+ "pm_hobbyist_ownership": {
+  "en": "Hobbyist Management",
+  "de": "Hobbybetrieb"
+ },
+ "pm_hp_labs": {
+  "en": "HP Labs",
+  "de": "HP Labs"
+ },
+ "pm_hq_cultural_coalition": {
+  "en": "World Cultural Center",
+  "de": "Weltkulturzentrum"
+ },
+ "pm_hq_diplomatic_framework": {
+  "en": "Palace of Nations",
+  "de": "Völkerbundpalast"
+ },
+ "pm_hq_ideological_union": {
+  "en": "Central Committee Headquarters",
+  "de": "Hauptsitz des Zentralkomitees"
+ },
+ "pm_hq_military_treaty": {
+  "en": "Alliance Command",
+  "de": "Bündniskommando"
+ },
+ "pm_hq_religious_convocation": {
+  "en": "Seat of the Faith",
+  "de": "Sitz des Glaubens"
+ },
+ "pm_hq_sovereign_empire": {
+  "en": "Seat of the Empire",
+  "de": "Reichssitz"
+ },
+ "pm_hq_trade_league": {
+  "en": "Global Trade Center",
+  "de": "Globales Handelszentrum"
+ },
+ "pm_huawei_ox_horn_campus": {
+  "en": "Huawei Ox Horn Campus",
+  "de": "Huawei-Campus Ox Horn"
+ },
+ "pm_hughes_yuzovka_steelworks": {
+  "en": "Hughes Yuzovka Steelworks",
+  "de": "Hughes-Stahlwerke Yuzovka"
+ },
+ "pm_hydraulic_equipment": {
+  "en": "Hydraulic Equipment",
+  "de": "Hydraulikausrüstung"
+ },
+ "pm_hydraulic_equipment_building_rice_farm": {
+  "en": "Hydraulic Equipment",
+  "de": "Hydraulikausrüstung"
+ },
+ "pm_hydrogen_fuel_cell_engines": {
+  "en": "Hydrogen Fuel Cell Engines",
+  "de": "Wasserstoff-Brennstoffzellenmotoren"
+ },
+ "pm_hyundai_ulsan_factory": {
+  "en": "Hyundai Ulsan Factory",
+  "de": "Hyundai-Fabrik Ulsan"
+ },
+ "pm_ig_farben_buna_werke": {
+  "en": "IG Farben Buna-Werke",
+  "de": "IG Farben Buna-Werke"
+ },
+ "pm_ikea_almhult_campus": {
+  "en": "IKEA Älmhult Campus",
+  "de": "IKEA-Campus Älmhult"
+ },
+ "pm_ilva_bagnoli_steelworks": {
+  "en": "ILVA Bagnoli Steelworks",
+  "de": "ILVA-Stahlwerke Bagnoli"
+ },
+ "pm_imperial_arsenal_golden_horn": {
+  "en": "Imperial Arsenal Golden Horn",
+  "de": "Kaiserliches Arsenal Goldenes Horn"
+ },
+ "pm_imperial_tobacco_wills_factory": {
+  "en": "Imperial Tobacco Wills' Factory",
+  "de": "Imperial-Tobacco-Wills-Fabrik"
+ },
+ "pm_improved_crop_rotation": {
+  "en": "Improved Crop Rotation",
+  "de": "Verbesserte Fruchtfolge"
+ },
+ "pm_industrial_highway": {
+  "en": "Industrial Highway",
+  "de": "Industriestraße"
+ },
+ "pm_industrial_robotics": {
+  "en": "Industrial Robotics",
+  "de": "Industrierobotik"
+ },
+ "pm_influencers_and_content_creators": {
+  "en": "Decentralized Digital Media",
+  "de": "Dezentrale digitale Medien"
+ },
+ "pm_infosys_mysore_campus": {
+  "en": "Infosys Mysore Campus",
+  "de": "Infosys-Campus Mysore"
+ },
+ "pm_ingolstadt_power_station": {
+  "en": "Ingolstadt Power Station",
+  "de": "Kraftwerk Ingolstadt"
+ },
+ "pm_injection_molding": {
+  "en": "Injection Molding",
+  "de": "Spritzguss"
+ },
+ "pm_integrated_circuits": {
+  "en": "Integrated Circuits",
+  "de": "Integrierte Schaltkreise"
+ },
+ "pm_integrated_optical_chip_networks": {
+  "en": "Integrated Optical Chip Networks",
+  "de": "Integrierte optische Chip-Netzwerke"
+ },
+ "pm_intel_ronler_acres": {
+  "en": "Intel Ronler Acres Campus",
+  "de": "Intel-Campus Ronler Acres"
+ },
+ "pm_intelligent_drilling_rigs": {
+  "en": "Intelligent Drilling Rigs",
+  "de": "Intelligente Bohranlagen"
+ },
+ "pm_intelligent_manufacturing_systems": {
+  "en": "Intelligent Manufacturing Systems",
+  "de": "Intelligente Fertigungssysteme"
+ },
+ "pm_internet_communications": {
+  "en": "Internet Communications",
+  "de": "Internetkommunikation"
+ },
+ "pm_interstellar_mission": {
+  "en": "Interstellar Mission",
+  "de": "Interstellare Mission"
+ },
+ "pm_iranian_state_railway_veresk_station": {
+  "en": "Iranian State Railway Veresk Station",
+  "de": "Iranische Staatseisenbahnen Station Veresk"
+ },
+ "pm_izhevsk_arms_factory": {
+  "en": "Izhevsk Arms Factory",
+  "de": "Ischewsk-Waffenfabrik"
+ },
+ "pm_jardine_princeps_house": {
+  "en": "Jardine Princeps House",
+  "de": "Jardine-Princeps-Haus"
+ },
+ "pm_jet_age_tourism": {
+  "en": "Jet Age Tourism",
+  "de": "Düsenzeit-Tourismus"
+ },
+ "pm_jiangnan_nanjing_brocade_hall": {
+  "en": "Jiangnan Nanjing Brocade Hall",
+  "de": "Jiangnan-Brokathalle Nanjing"
+ },
+ "pm_jingdezhen_imperial_kiln": {
+  "en": "Jingdezhen Imperial Kiln",
+  "de": "Kaiserlicher Brennofen Jingdezhen"
+ },
+ "pm_john_brown_clydebank_yard": {
+  "en": "John Brown Clydebank Yard",
+  "de": "John-Brown-Werft Clydebank"
+ },
+ "pm_john_holt_lagos_trading_house": {
+  "en": "John Holt Lagos Trading House",
+  "de": "John-Holt-Handelshaus Lagos"
+ },
+ "pm_jsr_yokkaichi_complex": {
+  "en": "JSR Yokkaichi Complex",
+  "de": "JSR-Komplex Yokkaichi"
+ },
+ "pm_jsw_vijayanagar_works": {
+  "en": "JSW Vijayanagar Works",
+  "de": "JSW-Werke Vijayanagar"
+ },
+ "pm_kablin_zarate_paper_mill": {
+  "en": "Kablín Zárate Paper Mill",
+  "de": "Kablín-Zárate-Papierfabrik"
+ },
+ "pm_kaiping_tangshan_colliery": {
+  "en": "Kaiping Tangshan Colliery",
+  "de": "Kaiping-Zeche Tangshan"
+ },
+ "pm_kinkozan_kiyomizu_kiln": {
+  "en": "Kinkozan Kiyomizu Kiln",
+  "de": "Kinkozan-Brennofen Kiyomizu"
+ },
+ "pm_kirgizian_copper_smelter": {
+  "en": "Kirgizian Copper Smelter",
+  "de": "Kirgisische Kupferhütte"
+ },
+ "pm_klanicko_belgrade_slaughterhouse": {
+  "en": "Klaničko Belgrade Slaughterhouse",
+  "de": "Klaničko-Schlachthof Belgrad"
+ },
+ "pm_klein_galician_paper_mill": {
+  "en": "Klein Galician Paper Mill",
+  "de": "Klein-Papierfabrik Galizien"
+ },
+ "pm_kouppas_piraeus_foundry": {
+  "en": "Kouppas Piraeus Foundry",
+  "de": "Kouppas-Gießerei Piräus"
+ },
+ "pm_kraft_pulping": {
+  "en": "Kraft Pulping",
+  "de": "Kraft-Zellstoffherstellung"
+ },
+ "pm_krupp_essen_works": {
+  "en": "Krupp Essen Works",
+  "de": "Krupp-Werke Essen"
+ },
+ "pm_la_rosada_buenos_aires_arsenal": {
+  "en": "La Rosada Buenos Aires Arsenal",
+  "de": "La-Rosada-Arsenal Buenos Aires"
+ },
+ "pm_lab_am_fabrication": {
+  "en": "Lab Advanced Material Fabrication",
+  "de": "Labor für fortschrittliche Materialfertigung"
+ },
+ "pm_lanfang_pontianak_kongsi_house": {
+  "en": "Lanfang Pontianak Kongsi House",
+  "de": "Lanfang-Kongsi-Haus Pontianak"
+ },
+ "pm_large_scale_earth_movers_coal_mine": {
+  "en": "Large Scale Earth Movers",
+  "de": "Großraum-Erdbewegungsmaschinen"
+ },
+ "pm_large_scale_earth_movers_gold_mine": {
+  "en": "Large Scale Earth Movers",
+  "de": "Großraum-Erdbewegungsmaschinen"
+ },
+ "pm_large_scale_earth_movers_iron_mine": {
+  "en": "Large Scale Earth Movers",
+  "de": "Großraum-Erdbewegungsmaschinen"
+ },
+ "pm_large_scale_earth_movers_lead_mine": {
+  "en": "Large Scale Earth Movers",
+  "de": "Großraum-Erdbewegungsmaschinen"
+ },
+ "pm_large_scale_earth_movers_sulfur_mine": {
+  "en": "Large Scale Earth Movers",
+  "de": "Großraum-Erdbewegungsmaschinen"
+ },
+ "pm_large_scale_earth_movers_tech_metals_mine": {
+  "en": "Large-Scale Earth Movers",
+  "de": "Großraum-Erdbewegungsmaschinen"
+ },
+ "pm_laser_excavation_technology_coal_mine": {
+  "en": "Laser Excavation Technology",
+  "de": "Laser-Abbautechnologie"
+ },
+ "pm_laser_excavation_technology_gold_mine": {
+  "en": "Laser Excavation Technology",
+  "de": "Laser-Abbautechnologie"
+ },
+ "pm_laser_excavation_technology_iron_mine": {
+  "en": "Laser Excavation Technology",
+  "de": "Laser-Abbautechnologie"
+ },
+ "pm_laser_excavation_technology_lead_mine": {
+  "en": "Laser Excavation Technology",
+  "de": "Laser-Abbautechnologie"
+ },
+ "pm_laser_excavation_technology_sulfur_mine": {
+  "en": "Laser Excavation Technology",
+  "de": "Laser-Abbautechnologie"
+ },
+ "pm_laser_excavation_technology_tech_metals_mine": {
+  "en": "Laser Excavation Technology",
+  "de": "Laser-Abbautechnologie"
+ },
+ "pm_led_streetlights": {
+  "en": "LED Streetlights",
+  "de": "LED-Straßenlaternen"
+ },
+ "pm_lee_wilson_plantation_depot": {
+  "en": "Lee Wilson Plantation Depot",
+  "de": "Lee-Wilson-Plantagendepot"
+ },
+ "pm_lilpop_warsaw_metalworks": {
+  "en": "Lilpop Warsaw Metalworks",
+  "de": "Lilpop-Metallwerke Warschau"
+ },
+ "pm_lkab_kiruna_mine": {
+  "en": "LKAB Kiruna Mine",
+  "de": "LKAB-Mine Kiruna"
+ },
+ "pm_local_network": {
+  "en": "Local Network",
+  "de": "Lokales Netzwerk"
+ },
+ "pm_lockheed_skunk_works": {
+  "en": "Skunk Works",
+  "de": "Skunk Works"
+ },
+ "pm_logistics_hub": {
+  "en": "Logistics Hub",
+  "de": "Logistikknoten"
+ },
+ "pm_low_bandwidth": {
+  "en": "Low Bandwidth",
+  "de": "Niedrige Bandbreite"
+ },
+ "pm_machine_learning_assisted_code_generation": {
+  "en": "ML Assisted Code Generation",
+  "de": "ML-gestützte Codegenerierung"
+ },
+ "pm_madura_mills_madurai_complex": {
+  "en": "Madura Mills Madurai Complex",
+  "de": "Madura-Mills-Komplex Madurai"
+ },
+ "pm_maglev_trains": {
+  "en": "Maglev Trains",
+  "de": "Magnetschwebebahnen"
+ },
+ "pm_magnetic_drive_cruise_ships": {
+  "en": "Magnetic Drive Cruise Ships",
+  "de": "Magnetantrieb-Kreuzfahrtschiffe"
+ },
+ "pm_magnetic_drive_cruise_ships_desc": {
+  "en": "Long-range cruise lines built around magnetic drive propulsion offer a transport class that consumer-appliance comforts and digital networks elevate further.",
+  "de": "Langstrecken-Kreuzfahrtlinien, die auf Magnetantrieb setzen, bieten eine Transportklasse, die durch den Komfort von Haushaltsgeräten und digitale Netzwerke weiter aufgewertet wird."
+ },
+ "pm_magnetic_drive_ports": {
+  "en": "Magnetic Drive Ports",
+  "de": "Magnetantrieb-Häfen"
+ },
+ "pm_magnetic_drive_ports_desc": {
+  "en": "Magnetically-driven ships docking at automated terminals push [concept_throughput] far past containerization-era levels. Heavy electronic and digital [concept_infrastructure] required.",
+  "de": "Magnetisch angetriebene Schiffe, die an automatisierten Terminals anlegen, treiben den [concept_throughput] weit über das Niveau des Container-Zeitalters hinaus. Umfangreiche elektronische und digitale [concept_infrastructure] erforderlich."
+ },
+ "pm_magnetic_drive_trawlers": {
+  "en": "Magnetic Drive Trawlers",
+  "de": "Magnetantrieb-Trawler"
+ },
+ "pm_magnetic_drive_trawlers_desc": {
+  "en": "Sensor-guided fishing vessels with magnetic drive propulsion track shoals across whole ocean basins. Sustained yields are unmatched by earlier fleets.",
+  "de": "Sensorgesteuerte Fischereifahrzeuge mit Magnetantrieb verfolgen Fischschwärme über ganze Ozeanbecken hinweg. Frühere Flotten erreichen diese nachhaltigen Erträge nicht."
+ },
+ "pm_magnetic_drive_whaling_ships": {
+  "en": "Magnetic Drive Whaling Ships",
+  "de": "Magnetantrieb-Walfangschiffe"
+ },
+ "pm_magnetic_drive_whaling_ships_desc": {
+  "en": "Late-era whalers with electronic prey [concept_detection] and magnetic drive propulsion outproduce diesel fleets at the cost of meaningful [concept_pollution_system] and fuel demand.",
+  "de": "Walfänger der Spätzeit mit elektronischer Beute-[concept_detection] und Magnetantrieb übertreffen Dieselflotten in der Ausbeute, allerdings auf Kosten spürbarer [concept_pollution_system] und eines hohen Treibstoffbedarfs."
+ },
+ "pm_manfred_weiss_csepel_works": {
+  "en": "Manfred Weiss Csepel Works",
+  "de": "Manfred-Weiss-Werke Csepel"
+ },
+ "pm_manor_house_ai_ownership": {
+  "en": "AI Management",
+  "de": "KI-Verwaltung"
+ },
+ "pm_manor_house_principle_rural_1": {
+  "en": "Rural [concept_power_bloc_principle] Manor House",
+  "de": "Ländliches [concept_power_bloc_principle]-Gutshaus"
+ },
+ "pm_mantero_como_silk_mill": {
+  "en": "Mantero Como Silk Mill",
+  "de": "Mantero-Seidenmühle Como"
+ },
+ "pm_mantetsu_dalian_railway_hub": {
+  "en": "Mantetsu Dalian Railway Hub",
+  "de": "Mantetsu-Eisenbahnknoten Dalian"
+ },
+ "pm_manual_assembly": {
+  "en": "Manual Assembly",
+  "de": "Manuelle Montage"
+ },
+ "pm_manual_batch_processing": {
+  "en": "Manual Batch Processing",
+  "de": "Manuelle Chargenverarbeitung"
+ },
+ "pm_manual_production": {
+  "en": "Manual Production & Operations",
+  "de": "Manuelle Produktion & Betrieb"
+ },
+ "pm_maple_tottenham_court_showroom": {
+  "en": "Maple Tottenham Court Showroom",
+  "de": "Maple-Ausstellungsraum Tottenham Court"
+ },
+ "pm_markwald_bangkok_rice_mill": {
+  "en": "Markwald Bangkok Rice Mill",
+  "de": "Markwald-Reismühle Bangkok"
+ },
+ "pm_mars_mission": {
+  "en": "Mars Mission",
+  "de": "Mars-Mission"
+ },
+ "pm_mass_marketing_building_furniture_manufactory": {
+  "en": "Mass Marketing",
+  "de": "Massenmarketing"
+ },
+ "pm_mass_marketing_building_textile_mill": {
+  "en": "Mass Marketing",
+  "de": "Massenmarketing"
+ },
+ "pm_mass_produced_packaged_food": {
+  "en": "Mass-Produced Packaged Food",
+  "de": "Massenproduzierte abgepackte Lebensmittel"
+ },
+ "pm_mass_tourism": {
+  "en": "Mass Tourism",
+  "de": "Massentourismus"
+ },
+ "pm_massed_produced_plastics": {
+  "en": "Mass-Produced Plastics",
+  "de": "Massenproduzierte Kunststoffe"
+ },
+ "pm_massey_harris_toronto_implement_works": {
+  "en": "Massey-Harris Toronto Implement Works",
+  "de": "Massey-Harris-Werke Toronto"
+ },
+ "pm_material_handling_equipment": {
+  "en": "Material Handling Equipment",
+  "de": "Fördertechnik"
+ },
+ "pm_mav_budapest_locomotive_works": {
+  "en": "MÁV Budapest Locomotive Works",
+  "de": "MÁV-Lokomotivwerke Budapest"
+ },
+ "pm_media_corporations": {
+  "en": "Media Corporations",
+  "de": "Medienkonzerne"
+ },
+ "pm_medium_bandwidth": {
+  "en": "Medium Bandwidth",
+  "de": "Mittlere Bandbreite"
+ },
+ "pm_medium_well": {
+  "en": "Medium Well",
+  "de": "Mittlere Bohrung"
+ },
+ "pm_megastructure_consortium_hq": {
+  "en": "Megastructure Operations",
+  "de": "Megastruktur-Betrieb"
+ },
+ "pm_meissen_porcelain_manufactory": {
+  "en": "Meissen Porcelain Manufactory",
+  "de": "Meissener Porzellanmanufaktur"
+ },
+ "pm_metamaterial_explosives": {
+  "en": "Metamaterial Explosives",
+  "de": "Metamaterial-Sprengstoffe"
+ },
+ "pm_metamaterial_explosives_building_coal_mine": {
+  "en": "Metamaterial Explosives",
+  "de": "Metamaterial-Sprengstoffe"
+ },
+ "pm_metamaterial_explosives_building_gold_mine": {
+  "en": "Metamaterial Explosives",
+  "de": "Metamaterial-Sprengstoffe"
+ },
+ "pm_metamaterial_explosives_building_iron_mine": {
+  "en": "Metamaterial Explosives",
+  "de": "Metamaterial-Sprengstoffe"
+ },
+ "pm_metamaterial_explosives_building_lead_mine": {
+  "en": "Metamaterial Explosives",
+  "de": "Metamaterial-Sprengstoffe"
+ },
+ "pm_metamaterial_explosives_building_sulfur_mine": {
+  "en": "Metamaterial Explosives",
+  "de": "Metamaterial-Sprengstoffe"
+ },
+ "pm_metamaterial_explosives_building_tech_metals_mine": {
+  "en": "Metamaterial Explosives",
+  "de": "Metamaterial-Sprengstoffe"
+ },
+ "pm_mfo_oerlikon_works": {
+  "en": "MFO Oerlikon Works",
+  "de": "MFO-Werke Oerlikon"
+ },
+ "pm_michelin_clermont_ferrand": {
+  "en": "Michelin Clermont-Ferrand Works",
+  "de": "Michelin-Werke Clermont-Ferrand"
+ },
+ "pm_microfiber_blends": {
+  "en": "Microfiber Blends",
+  "de": "Mikrofasermischungen"
+ },
+ "pm_microgravity_alloying": {
+  "en": "Microgravity Alloying",
+  "de": "Mikrogravitations-Legierungsherstellung"
+ },
+ "pm_microsoft_redmond_campus": {
+  "en": "Microsoft Redmond Campus",
+  "de": "Microsoft-Campus Redmond"
+ },
+ "pm_military_base": {
+  "en": "Military Base Operations",
+  "de": "Militärbasisbetrieb"
+ },
+ "pm_military_research": {
+  "en": "Military Research",
+  "de": "Militärforschung"
+ },
+ "pm_mind_upload_nexus": {
+  "en": "Mind Upload Nexus",
+  "de": "Bewusstseins-Upload-Nexus"
+ },
+ "pm_mind_upload_nexus_construction_fast": {
+  "en": "Mind Upload Nexus Construction (1 year)",
+  "de": "Bau des Bewusstseins-Upload-Nexus (1 Jahr)"
+ },
+ "pm_mind_upload_nexus_construction_medium": {
+  "en": "Mind Upload Nexus Construction (2 years)",
+  "de": "Bau des Bewusstseins-Upload-Nexus (2 Jahre)"
+ },
+ "pm_mind_upload_nexus_construction_paused": {
+  "en": "Mind Upload Nexus Construction (Paused)",
+  "de": "Bau des Bewusstseins-Upload-Nexus (Pausiert)"
+ },
+ "pm_mind_upload_nexus_construction_slow": {
+  "en": "Mind Upload Nexus Construction (4 years)",
+  "de": "Bau des Bewusstseins-Upload-Nexus (4 Jahre)"
+ },
+ "pm_misr_mahalla_textile_complex": {
+  "en": "Misr Mahalla Textile Complex",
+  "de": "Misr-Textilkomplex Mahalla"
+ },
+ "pm_missile_defense_battery": {
+  "en": "Missile Defense Battery",
+  "de": "Raketenabwehrbatterie"
+ },
+ "pm_missile_defense_battery_desc": {
+  "en": "Radar-guided interceptor missiles that raise this [Concept('concept_state','$concept_state$')]'s chance of stopping an incoming [concept_nuclear_strike], on top of the defenses our technology gives every state.",
+  "de": "Radargelenkte Abfangraketen, die die Chance dieses [Concept('concept_state','$concept_state$')], einen anfliegenden [concept_nuclear_strike] abzuwehren, zusätzlich zu den Verteidigungsmaßnahmen erhöhen, die unsere Technologie jedem Staat verleiht."
+ },
+ "pm_mitsubishi_nagasaki_shipyard": {
+  "en": "Mitsubishi Nagasaki Shipyard",
+  "de": "Mitsubishi-Werft Nagasaki"
+ },
+ "pm_mitsui_trading_house": {
+  "en": "Mitsui Trading House",
+  "de": "Mitsui-Handelshaus"
+ },
+ "pm_modern_apple_orchards": {
+  "en": "Modern Apple Orchards",
+  "de": "Moderne Apfelhaine"
+ },
+ "pm_modern_automobile_production": {
+  "en": "Modern Automobiles",
+  "de": "Moderne Automobile"
+ },
+ "pm_modern_cartridges": {
+  "en": "Modern Cartridges",
+  "de": "Moderne Patronen"
+ },
+ "pm_modern_citrus_orchards": {
+  "en": "Modern Citrus Orchards",
+  "de": "Moderne Zitrushaine"
+ },
+ "pm_modern_coal-fired_plant": {
+  "en": "Modern Coal-Fired Plant",
+  "de": "Modernes Kohlekraftwerk"
+ },
+ "pm_modern_company_shipbuilding": {
+  "en": "Modern Shipbuilding",
+  "de": "Moderner Schiffbau"
+ },
+ "pm_modern_company_shipbuilding_desc": {
+  "en": "The yard retools for diesel-era hulls, switching its output from steam-powered ships to motor ships. The company's classic identity gives way to standardized modern shipbuilding.",
+  "de": "Die Werft rüstet für Schiffsrümpfe des Dieselzeitalters um und stellt die Produktion von dampfbetriebenen Schiffen auf Motorschiffe um. Die klassische Identität des Unternehmens weicht einem standardisierten modernen Schiffbau."
+ },
+ "pm_modern_cruise_ships": {
+  "en": "Modern Cruise Ships",
+  "de": "Moderne Kreuzfahrtschiffe"
+ },
+ "pm_modern_design_porcelain": {
+  "en": "Modern Design Porcelain",
+  "de": "Porzellan im modernen Design"
+ },
+ "pm_modern_farming": {
+  "en": "Modern Farming",
+  "de": "Moderne Landwirtschaft"
+ },
+ "pm_modern_farming_rice_farm": {
+  "en": "Modern Farming",
+  "de": "Moderne Landwirtschaft"
+ },
+ "pm_modern_fig_orchards": {
+  "en": "Modern Fig Orchards",
+  "de": "Moderne Feigenhaine"
+ },
+ "pm_modern_microprocessors": {
+  "en": "Modern Microprocessors",
+  "de": "Moderne Mikroprozessoren"
+ },
+ "pm_modern_oil-fired_plant": {
+  "en": "Modern Oil-Fired Plant",
+  "de": "Modernes Ölkraftwerk"
+ },
+ "pm_modern_potatoes": {
+  "en": "Modern Potatoes",
+  "de": "Moderne Kartoffeln"
+ },
+ "pm_modern_tourism": {
+  "en": "Modern Tourism",
+  "de": "Moderner Tourismus"
+ },
+ "pm_modular_shipbuilding": {
+  "en": "Modular Shipbuilding",
+  "de": "Modularer Schiffbau"
+ },
+ "pm_mokta_el_hadid_beni_saf_mine": {
+  "en": "Mokta el Hadid Beni Saf Mine",
+  "de": "Mokta-el-Hadid-Mine Beni Saf"
+ },
+ "pm_molecular_foundry": {
+  "en": "Molecular Foundry",
+  "de": "Molekulargießerei"
+ },
+ "pm_monument_artistic": {
+  "en": "Grand Opera House",
+  "de": "Große Oper"
+ },
+ "pm_monument_artistic_desc": {
+  "en": "A concert hall, an opera house, a national gallery. Pleases the Intelligentsia. #R The dedication is permanent.#!",
+  "de": "Eine Konzerthalle, ein Opernhaus, eine Nationalgalerie. Erfreut die Intellektuellen. #R Die Widmung ist dauerhaft.#!"
+ },
+ "pm_monument_athletic": {
+  "en": "Grand Stadium",
+  "de": "Großes Stadion"
+ },
+ "pm_monument_athletic_desc": {
+  "en": "An arena, a stadium, an olympic complex. Pleases the Trade Unions. #R The dedication is permanent.#!",
+  "de": "Eine Arena, ein Stadion, ein olympischer Komplex. Erfreut die Gewerkschafter. #R Die Widmung ist dauerhaft.#!"
+ },
+ "pm_monument_civic": {
+  "en": "To the Nation",
+  "de": "Der Nation"
+ },
+ "pm_monument_civic_desc": {
+  "en": "Not to a party and not to a house, but to the country itself. Pleases the Petty Bourgeoisie, and never falls with a government. #R The dedication is permanent.#!",
+  "de": "Nicht einer Partei und nicht einem Haus, sondern dem Land selbst gewidmet. Erfreut das Kleinbürgertum und fällt nie mit einer Regierung. #R Die Widmung ist dauerhaft.#!"
+ },
+ "pm_monument_crown": {
+  "en": "To the Crown",
+  "de": "Der Krone"
+ },
+ "pm_monument_crown_desc": {
+  "en": "Dynastic portraits, a royal box, a procession that passes beneath it. Lends legitimacy while the country is crowned, and becomes contested if the crown falls. #R The dedication is permanent.#!",
+  "de": "Dynastische Porträts, eine königliche Loge, ein Umzug, der darunter hindurchzieht. Verleiht Legitimität, solange das Land eine Krone trägt, und wird umstritten, wenn die Krone fällt. #R Die Widmung ist dauerhaft.#!"
+ },
+ "pm_monument_industrial": {
+  "en": "Great Exhibition Hall",
+  "de": "Großartige Ausstellungshalle"
+ },
+ "pm_monument_industrial_desc": {
+  "en": "A permanent world's fair. Pleases the Industrialists. #R The dedication is permanent.#!",
+  "de": "Eine dauerhafte Weltausstellung. Erfreut die Industriellen. #R Die Widmung ist dauerhaft.#!"
+ },
+ "pm_monument_leader": {
+  "en": "To the Leader",
+  "de": "Dem Staatsoberhaupt"
+ },
+ "pm_monument_leader_desc": {
+  "en": "A statue of the head of state, raised while they rule. Lends legitimacy and authority while they rule, and becomes contested when they are gone. #R The dedication is permanent.#!",
+  "de": "Eine Statue des Staatsoberhaupts, errichtet während seiner Herrschaft. Verleiht Legitimität und Autorität, solange es herrscht, und wird umstritten, sobald es nicht mehr im Amt ist. #R Die Widmung ist dauerhaft.#!"
+ },
+ "pm_monument_naturalist": {
+  "en": "Botanical Gardens",
+  "de": "Botanischer Garten"
+ },
+ "pm_monument_naturalist_desc": {
+  "en": "Glasshouses, an arboretum, a great public park. Pleases the Rural Folk. #R The dedication is permanent.#!",
+  "de": "Gewächshäuser, ein Arboretum, ein großer öffentlicher Park. Erfreut die Landbewohner. #R Die Widmung ist dauerhaft.#!"
+ },
+ "pm_monument_religious": {
+  "en": "Grand Shrine",
+  "de": "Großer Schrein"
+ },
+ "pm_monument_religious_desc": {
+  "en": "A cathedral, a temple, a mosque built to outlast the government that paid for it. Pleases the Devout, and becomes contested if the country abandons the faith it honours. #R The dedication is permanent.#!",
+  "de": "Eine Kathedrale, ein Tempel, eine Moschee, gebaut, um die Regierung zu überdauern, die sie finanziert hat. Erfreut die Frommen und wird umstritten, wenn das Land den Glauben aufgibt, den es ehrt. #R Die Widmung ist dauerhaft.#!"
+ },
+ "pm_monument_republic": {
+  "en": "To the Republic",
+  "de": "Der Republik"
+ },
+ "pm_monument_republic_desc": {
+  "en": "Oaths of office, a wreath each year, a square named for the republic. Lends legitimacy while the country is a republic, and becomes contested if the republic falls. #R The dedication is permanent.#!",
+  "de": "Amtseide, jährlich ein Kranz, ein nach der Republik benannter Platz. Verleiht Legitimität, solange das Land eine Republik ist, und wird umstritten, wenn die Republik fällt. #R Die Widmung ist dauerhaft.#!"
+ },
+ "pm_monument_revolution": {
+  "en": "To the Revolution",
+  "de": "Der Revolution"
+ },
+ "pm_monument_revolution_desc": {
+  "en": "Banners, a tomb for the martyrs, a stage for the anniversary. Lends legitimacy under a single party or a council republic, and becomes contested if that regime falls. #R The dedication is permanent.#!",
+  "de": "Banner, ein Grabmal für die Märtyrer, eine Bühne für den Jahrestag. Verleiht Legitimität unter einer Einheitspartei oder einer Räterepublik und wird umstritten, wenn dieses Regime fällt. #R Die Widmung ist dauerhaft.#!"
+ },
+ "pm_monument_scientific": {
+  "en": "Grand Observatory",
+  "de": "Große Sternwarte"
+ },
+ "pm_monument_scientific_desc": {
+  "en": "A telescope, a planetarium, a museum of the sciences. Pleases the Intelligentsia. #R The dedication is permanent.#!",
+  "de": "Ein Teleskop, ein Planetarium, ein Museum der Wissenschaften. Erfreut die Intellektuellen. #R Die Widmung ist dauerhaft.#!"
+ },
+ "pm_monument_undedicated": {
+  "en": "Undedicated",
+  "de": "Ungewidmet"
+ },
+ "pm_monument_undedicated_desc": {
+  "en": "The stone is up; the meaning is not yet settled. An undedicated monument gives prestige and draws visitors, nothing more. #R The dedication, once chosen, is permanent.#!",
+  "de": "Der Stein steht; die Bedeutung ist noch nicht festgelegt. Ein ungewidmetes Denkmal verleiht Prestige und zieht Besucher an, nicht mehr. #R Die Widmung ist, einmal gewählt, dauerhaft.#!"
+ },
+ "pm_monument_war_memorial": {
+  "en": "War Memorial",
+  "de": "Kriegerdenkmal"
+ },
+ "pm_monument_war_memorial_desc": {
+  "en": "Names cut into stone, and a place to read them. Pleases the Armed Forces. #R The dedication is permanent.#!",
+  "de": "In Stein gemeißelte Namen und ein Ort, sie zu lesen. Erfreut die Streitkräfte. #R Die Widmung ist dauerhaft.#!"
+ },
+ "pm_moon_mission": {
+  "en": "Moon Mission",
+  "de": "Mondmission"
+ },
+ "pm_morozov_orekhovo_zuevo_mills": {
+  "en": "Morozov Orekhovo-Zuevo Mills",
+  "de": "Morozov-Mühlen Orechowo-Sujewo"
+ },
+ "pm_moscow_irrigation_cotton_depot": {
+  "en": "Moscow Irrigation Cotton Depot",
+  "de": "Moskauer Bewässerungs-Baumwolldepot"
+ },
+ "pm_moser_karlsbad_glass_works": {
+  "en": "Moser Karlsbad Glass Works",
+  "de": "Moser-Glaswerke Karlsbad"
+ },
+ "pm_motor_trawlers": {
+  "en": "Motor Trawlers",
+  "de": "Motortrawler"
+ },
+ "pm_motor_trawlers_desc": {
+  "en": "Diesel-powered trawlers replace coal-burning steam fleets, working farther and longer for far higher catches but consuming oil and coordinated by ship-to-shore radio.",
+  "de": "Dieselbetriebene Trawler ersetzen kohlebefeuerte Dampfflotten, arbeiten weiter draußen und länger für weitaus höhere Fänge, verbrauchen jedoch Öl und werden per Schiff-Land-Funk koordiniert."
+ },
+ "pm_motor_whaling_ships": {
+  "en": "Motor Whaling Ships",
+  "de": "Motor-Walfangschiffe"
+ },
+ "pm_motor_whaling_ships_desc": {
+  "en": "Diesel whalers with onboard processing reach distant whaling grounds and refine carcasses at sea, doubling meat and oil yields at the cost of heavy fuel consumption.",
+  "de": "Dieselwalfänger mit Verarbeitung an Bord erreichen entlegene Fanggründe und verarbeiten die Kadaver auf See, wodurch sich die Fleisch- und Ölerträge verdoppeln – auf Kosten eines hohen Treibstoffverbrauchs."
+ },
+ "pm_mozambique_company_beira_concession": {
+  "en": "Mozambique Company Beira Concession",
+  "de": "Mosambik-Company-Konzession Beira"
+ },
+ "pm_multicore_processors": {
+  "en": "Multicore Processors",
+  "de": "Mehrkernprozessoren"
+ },
+ "pm_multimodal_transit": {
+  "en": "Multimodal Transit",
+  "de": "Multimodaler Verkehr"
+ },
+ "pm_nam_dinh_textile_plant": {
+  "en": "Nam Định Textile Plant",
+  "de": "Nam-Định-Textilwerk"
+ },
+ "pm_nanobot_assemblers": {
+  "en": "Nanobot Assemblers",
+  "de": "Nanobot-Assembler"
+ },
+ "pm_nanofabrication_center": {
+  "en": "Nanofabrication Center",
+  "de": "Nanofabrikationszentrum"
+ },
+ "pm_nanofabrication_center_construction_fast": {
+  "en": "Nanofabrication Center Construction (1 year)",
+  "de": "Bau des Nanofabrikationszentrums (1 Jahr)"
+ },
+ "pm_nanofabrication_center_construction_medium": {
+  "en": "Nanofabrication Center Construction (2 years)",
+  "de": "Bau des Nanofabrikationszentrums (2 Jahre)"
+ },
+ "pm_nanofabrication_center_construction_paused": {
+  "en": "Nanofabrication Center Construction (Paused)",
+  "de": "Bau des Nanofabrikationszentrums (Pausiert)"
+ },
+ "pm_nanofabrication_center_construction_slow": {
+  "en": "Nanofabrication Center Construction (4 years)",
+  "de": "Bau des Nanofabrikationszentrums (4 Jahre)"
+ },
+ "pm_nanomaterial_buildings": {
+  "en": "Nanomaterial Buildings",
+  "de": "Nanomaterial-Gebäude"
+ },
+ "pm_nanorobots": {
+  "en": "Nanorobots",
+  "de": "Nanoroboter"
+ },
+ "pm_national_forest": {
+  "en": "National Forest",
+  "de": "Staatswald"
+ },
+ "pm_national_labs": {
+  "en": "National Labs",
+  "de": "Nationale Forschungslabore"
+ },
+ "pm_national_park": {
+  "en": "National Park",
+  "de": "Nationalpark"
+ },
+ "pm_national_wildlife_refuge": {
+  "en": "National Wildlife Refuge",
+  "de": "Nationales Wildschutzgebiet"
+ },
+ "pm_natural_nurturing": {
+  "en": "Natural Nurturing",
+  "de": "Natürliche Pflege"
+ },
+ "pm_naval_fortification_integrated_defense": {
+  "en": "Integrated Coastal Defense",
+  "de": "Integrierte Küstenverteidigung"
+ },
+ "pm_naval_fortification_integrated_defense_desc": {
+  "en": "A unified radar, sonar, and missile-defense network that fuses sensor data from across the coast into a single fire-control picture, enabling automated engagement of incoming missiles, aircraft, and surface threats. Demands heavy investment in advanced telecommunications and electronics.",
+  "de": "Ein einheitliches Radar-, Sonar- und Raketenabwehrnetzwerk, das Sensordaten von der gesamten Küste zu einem einzigen Feuerleitbild zusammenführt und die automatisierte Bekämpfung anfliegender Raketen, Flugzeuge und Seeziele ermöglicht. Erfordert hohe Investitionen in fortschrittliche Telekommunikation und Elektronik."
+ },
+ "pm_naval_fortification_missile_battery": {
+  "en": "Coastal Missile Battery",
+  "de": "Küsten-Raketenbatterie"
+ },
+ "pm_naval_fortification_missile_battery_desc": {
+  "en": "Hardened anti-ship missile launchers, fire-control radar, and a manned command bunker. Guided sea-skimmers replace classical coastal artillery, dramatically extending engagement range against landing fleets.",
+  "de": "Gehärtete Anti-Schiffs-Raketenwerfer, Feuerleitradar und ein bemannter Kommandobunker. Gelenkte Tiefflieger-Seezielflugkörper ersetzen die klassische Küstenartillerie und erweitern die Bekämpfungsreichweite gegen Landungsflotten erheblich."
+ },
+ "pm_nederlandse_petroleum_pangkalan_depot": {
+  "en": "Nederlandse Petroleum Pangkalan Depot",
+  "de": "Nederlandse-Petroleum-Depot Pangkalan"
+ },
+ "pm_neodymium_catalyzation": {
+  "en": "Neodymium Catalyzation SBR",
+  "de": "Neodym-Katalyse SBR"
+ },
+ "pm_netflix_animation_studios": {
+  "en": "Netflix Animation Studios",
+  "de": "Netflix-Animationsstudios"
+ },
+ "pm_networked_control_systems": {
+  "en": "Packet-Switched Control Links",
+  "de": "Paketvermittelte Steuerungsverbindungen"
+ },
+ "pm_networked_munitions": {
+  "en": "Networked Munitions",
+  "de": "Vernetzte Munition"
+ },
+ "pm_networked_small_arms": {
+  "en": "Networked Small Arms",
+  "de": "Vernetzte Handfeuerwaffen"
+ },
+ "pm_neural_lace_communications": {
+  "en": "Neural Lace Communications",
+  "de": "Neural-Lace-Kommunikation"
+ },
+ "pm_neural_lace_telepathy": {
+  "en": "Neural Lace Telepathy",
+  "de": "Neural-Lace-Telepathie"
+ },
+ "pm_neuromorphic_computing": {
+  "en": "Neuromorphic Computing",
+  "de": "Neuromorphes Computing"
+ },
+ "pm_neurostimulation": {
+  "en": "Neurostimulation",
+  "de": "Neurostimulation"
+ },
+ "pm_neurovault_hq": {
+  "en": "Neurovault Research",
+  "de": "Neurovault-Forschung"
+ },
+ "pm_nhm_factorij_batavia": {
+  "en": "NHM Factorij Batavia",
+  "de": "NHM-Faktorei Batavia"
+ },
+ "pm_nintendo_development_center": {
+  "en": "Nintendo Development Center",
+  "de": "Nintendo-Entwicklungszentrum"
+ },
+ "pm_nioc_masjed_soleyman_field": {
+  "en": "NIOC Masjed Soleyman Field",
+  "de": "NIOC-Ölfeld Masjed Soleyman"
+ },
+ "pm_no_branding_building": {
+  "en": "Local Recognition",
+  "de": "Lokale Bekanntheit"
+ },
+ "pm_no_construction_automation": {
+  "en": "No Construction Automation",
+  "de": "Keine Bauautomatisierung"
+ },
+ "pm_no_effluent_filtration": {
+  "en": "No Effluent Filtration",
+  "de": "Keine Abwasserfiltration"
+ },
+ "pm_no_emissions_control": {
+  "en": "No Emissions Control",
+  "de": "Keine Emissionskontrolle"
+ },
+ "pm_no_facility_emission_standards": {
+  "en": "No Facility Emission Standards",
+  "de": "Keine Anlagen-Emissionsstandards"
+ },
+ "pm_no_glassworks_fume_ventilation": {
+  "en": "No Fume Ventilation",
+  "de": "Keine Rauchgaslüftung"
+ },
+ "pm_no_maintenance_desc": {
+  "en": "Buildings pay no [concept_construction] as upkeep: the Free Market Construction game rule has turned construction maintenance off, or the construction market altogether.",
+  "de": "Gebäude zahlen keinen [concept_construction] als Unterhalt: Die Spielregel Freie Marktbauwirtschaft hat entweder den Bauunterhalt oder den gesamten Baumarkt abgeschaltet."
+ },
+ "pm_no_missile_defense": {
+  "en": "No Missile Defense",
+  "de": "Keine Raketenabwehr"
+ },
+ "pm_no_precision_environmental_management": {
+  "en": "No Environmental Management",
+  "de": "Kein Umweltmanagement"
+ },
+ "pm_no_rockets": {
+  "en": "Aircraft Only",
+  "de": "Nur Flugzeuge"
+ },
+ "pm_no_synthesis_scrubbing": {
+  "en": "No Synthesis Scrubbing",
+  "de": "Keine Synthesegasreinigung"
+ },
+ "pm_no_tailings_management": {
+  "en": "No Tailings Management",
+  "de": "Keine Rückstandsbehandlung"
+ },
+ "pm_no_water_personal_transport": {
+  "en": "No Water Personal Transport",
+  "de": "Kein Wasser-Personenverkehr"
+ },
+ "pm_nobel_baku_refinery": {
+  "en": "Nobel Baku Refinery",
+  "de": "Nobel-Raffinerie Baku"
+ },
+ "pm_noda_shoyu_goyogura": {
+  "en": "Noda Shoyu Goyōgura",
+  "de": "Noda Shoyu Goyōgura"
+ },
+ "pm_nokia_cable_works": {
+  "en": "Nokia Cable Works",
+  "de": "Nokia-Kabelwerk"
+ },
+ "pm_norsk_hydro_rjukan_plant": {
+  "en": "Norsk Hydro Rjukan Plant",
+  "de": "Norsk-Hydro-Werk Rjukan"
+ },
+ "pm_nvidia_endeavor_campus": {
+  "en": "Nvidia Endeavor Campus",
+  "de": "Nvidia-Campus Endeavor"
+ },
+ "pm_nylon": {
+  "en": "Nylon Production",
+  "de": "Nylonproduktion"
+ },
+ "pm_ocean_mine": {
+  "en": "Deep-Sea Mining",
+  "de": "Tiefseebergbau"
+ },
+ "pm_ocmc_unsan_gold_mines": {
+  "en": "OCMC Unsan Gold Mines",
+  "de": "OCMC-Goldminen Unsan"
+ },
+ "pm_ocp_khouribga_mine": {
+  "en": "OCP Khouribga Mine",
+  "de": "OCP-Mine Khouribga"
+ },
+ "pm_oevg_steyr_arms_works": {
+  "en": "OEWG Steyr Arms Works",
+  "de": "OEWG-Waffenwerke Steyr"
+ },
+ "pm_offshore_rigs": {
+  "en": "Offshore Rigs",
+  "de": "Offshore-Bohrinseln"
+ },
+ "pm_ong_lung_sheng_tea_warehouse": {
+  "en": "Ong Lung Sheng Tea Warehouse",
+  "de": "Ong-Lung-Sheng-Teelager"
+ },
+ "pm_openai_research_lab": {
+  "en": "OpenAI Research Laboratory",
+  "de": "OpenAI-Forschungslabor"
+ },
+ "pm_opium_ghazipur_factory": {
+  "en": "Opium Ghazipur Factory",
+  "de": "Opiumfabrik Ghazipur"
+ },
+ "pm_oracle_cloud_data_center": {
+  "en": "Oracle Cloud Data Center",
+  "de": "Oracle-Cloud-Rechenzentrum"
+ },
+ "pm_orbital_battlestation": {
+  "en": "Orbital Battlestation",
+  "de": "Orbitale Kampfstation"
+ },
+ "pm_orbital_battlestation_construction_fast": {
+  "en": "Orbital Battlestation Construction (1 year)",
+  "de": "Bau der Orbitalen Kampfstation (1 Jahr)"
+ },
+ "pm_orbital_battlestation_construction_medium": {
+  "en": "Orbital Battlestation Construction (2 years)",
+  "de": "Bau der Orbitalen Kampfstation (2 Jahre)"
+ },
+ "pm_orbital_battlestation_construction_paused": {
+  "en": "Orbital Battlestation Construction (Paused)",
+  "de": "Bau der Orbitalen Kampfstation (Pausiert)"
+ },
+ "pm_orbital_battlestation_construction_slow": {
+  "en": "Orbital Battlestation Construction (4 years)",
+  "de": "Bau der Orbitalen Kampfstation (4 Jahre)"
+ },
+ "pm_orbital_fabrication": {
+  "en": "Orbital Fabrication",
+  "de": "Orbitale Fertigung"
+ },
+ "pm_orbital_nanolithography": {
+  "en": "Orbital Nanolithography",
+  "de": "Orbitale Nanolithografie"
+ },
+ "pm_ore_sorting_and_separation_technology_coal_mine": {
+  "en": "Ore Sorting and Separation Technology",
+  "de": "Erzsortierungs- und Trenntechnologie"
+ },
+ "pm_ore_sorting_and_separation_technology_gold_mine": {
+  "en": "Ore Sorting and Separation Technology",
+  "de": "Erzsortierungs- und Trenntechnologie"
+ },
+ "pm_ore_sorting_and_separation_technology_iron_mine": {
+  "en": "Ore Sorting and Separation Technology",
+  "de": "Erzsortierungs- und Trenntechnologie"
+ },
+ "pm_ore_sorting_and_separation_technology_lead_mine": {
+  "en": "Ore Sorting and Separation Technology",
+  "de": "Erzsortierungs- und Trenntechnologie"
+ },
+ "pm_ore_sorting_and_separation_technology_sulfur_mine": {
+  "en": "Ore Sorting and Separation Technology",
+  "de": "Erzsortierungs- und Trenntechnologie"
+ },
+ "pm_ore_sorting_and_separation_technology_tech_metals_mine": {
+  "en": "Ore Sorting and Separation Technology",
+  "de": "Erzsortierungs- und Trenntechnologie"
+ },
+ "pm_orient_express_sirkeci_terminal": {
+  "en": "Orient Express Sirkeci Terminal",
+  "de": "Orient-Express-Terminal Sirkeci"
+ },
+ "pm_oriental_dev_kunsan_granary": {
+  "en": "Oriental Development Kunsan Granary",
+  "de": "Oriental-Development-Kornspeicher Kunsan"
+ },
+ "pm_panama_company_culebra_cut": {
+  "en": "Panama Company Culebra Cut",
+  "de": "Panama-Company-Culebra-Durchstich"
+ },
+ "pm_paradox_kvarnholmen_studio": {
+  "en": "Paradox Kvarnholmen Studio",
+  "de": "Paradox-Studio Kvarnholmen"
+ },
+ "pm_partial_bulk_transport": {
+  "en": "Partial Bulk Transport",
+  "de": "Teilweiser Massenguttransport"
+ },
+ "pm_pedro_domecq_jerez_bodega": {
+  "en": "Pedro Domecq Jerez Bodega",
+  "de": "Pedro-Domecq-Bodega Jerez"
+ },
+ "pm_performance_textiles": {
+  "en": "Performance Textiles",
+  "de": "Funktionstextilien"
+ },
+ "pm_pernambuco_recife_cotton_mill": {
+  "en": "Pernambuco Recife Cotton Mill",
+  "de": "Pernambuco-Baumwollspinnerei Recife"
+ },
+ "pm_perskhlopok_cotton_combines": {
+  "en": "Perskhlopok Cotton Combines",
+  "de": "Perschlopok-Baumwollkombinate"
+ },
+ "pm_personal_electronics": {
+  "en": "Personal Electronics",
+  "de": "Persönliche Elektronikgeräte"
+ },
+ "pm_persshelk_silk_reeling_house": {
+  "en": "Persshëlk Silk Reeling House",
+  "de": "Persshëlk-Seidenhaspelhaus"
+ },
+ "pm_peruvian_amazon_iquitos_depot": {
+  "en": "Peruvian Amazon Iquitos Depot",
+  "de": "Peruanisches Amazonas-Depot Iquitos"
+ },
+ "pm_petrobras_cenpes_center": {
+  "en": "Cenpes Research Center",
+  "de": "Cenpes-Forschungszentrum"
+ },
+ "pm_petroleum_dyes": {
+  "en": "Petroleum Dyes",
+  "de": "Erdölfarbstoffe"
+ },
+ "pm_pfizer_rd_campus": {
+  "en": "Pfizer Global R&D Campus",
+  "de": "Pfizer Global R&D Campus"
+ },
+ "pm_philips_eindhoven_natlab": {
+  "en": "Philips Eindhoven NatLab",
+  "de": "Philips-NatLab Eindhoven"
+ },
+ "pm_pirelli_bicocca_plant": {
+  "en": "Pirelli Bicocca Plant",
+  "de": "Pirelli-Werk Bicocca"
+ },
+ "pm_polyester": {
+  "en": "Polyester Production",
+  "de": "Polyesterproduktion"
+ },
+ "pm_polyisoprene_rubber": {
+  "en": "Polyisoprene Rubber",
+  "de": "Polyisopren-Kautschuk"
+ },
+ "pm_polymerization_processes": {
+  "en": "Polymerization Processes",
+  "de": "Polymerisationsverfahren"
+ },
+ "pm_portalis_lyon_silk_house": {
+  "en": "Portalis Lyon Silk House",
+  "de": "Portalis-Seidenhaus Lyon"
+ },
+ "pm_power_bloc_statue_cultural": {
+  "en": "Cultural Coalition",
+  "de": "Kulturelle Koalition"
+ },
+ "pm_power_bloc_statue_diplomatic": {
+  "en": "Diplomatic Framework",
+  "de": "Diplomatischer Rahmen"
+ },
+ "pm_power_centralized_control_systems": {
+  "en": "Power Centralized Control Systems",
+  "de": "Zentrale Kraftwerkssteuerungssysteme"
+ },
+ "pm_power_integrated_smart_systems": {
+  "en": "Power Integrated Smart Systems",
+  "de": "Integrierte intelligente Kraftwerkssysteme"
+ },
+ "pm_power_manual_operation": {
+  "en": "Power Manual Operation",
+  "de": "Manueller Kraftwerksbetrieb"
+ },
+ "pm_precision_agriculture": {
+  "en": "Precision Agriculture",
+  "de": "Präzisionslandwirtschaft"
+ },
+ "pm_precision_guided_shells": {
+  "en": "Precision-Guided Shells",
+  "de": "Präzisionsgelenkte Granaten"
+ },
+ "pm_predictive_maintenance_systems": {
+  "en": "Predictive Maintenance Systems",
+  "de": "Vorausschauende Wartungssysteme"
+ },
+ "pm_prefabricated_building_components": {
+  "en": "Prefabricated Building Components",
+  "de": "Vorgefertigte Bauteile"
+ },
+ "pm_principle_advanced_research_4": {
+  "en": "Research Mandate",
+  "de": "Forschungsmandat"
+ },
+ "pm_principle_advanced_research_4_desc": {
+  "en": "When the bloc holds the Advanced Research [concept_power_bloc_principle], the university is reorganised around frontier research: hundreds of academics employed per level, paper consumed in volume, innovation feeding directly into the country's research.",
+  "de": "Hält der Block das [concept_power_bloc_principle] Fortschrittliche Forschung, wird die Universität um Spitzenforschung herum neu organisiert: Hunderte Akademiker werden pro Stufe beschäftigt, Papier wird in großen Mengen verbraucht, und Innovation fließt direkt in die Forschung des Landes ein."
+ },
+ "pm_principle_artistic_expression_2": {
+  "en": "Artistic Expression [concept_power_bloc_principle] 2",
+  "de": "Künstlerischer Ausdruck [concept_power_bloc_principle] 2"
+ },
+ "pm_principle_education_4": {
+  "en": "Cultural Center",
+  "de": "Kulturzentrum"
+ },
+ "pm_principle_education_4_desc": {
+  "en": "When the bloc holds the Education [concept_power_bloc_principle], the university opens its doors as a cultural center, producing services and fine art and projecting the bloc's [concept_cultural_pull] abroad.",
+  "de": "Hält der Block das [concept_power_bloc_principle] Bildung, öffnet die Universität ihre Türen als Kulturzentrum, produziert Dienstleistungen und Kunst und projiziert die [concept_cultural_pull] des Blocks ins Ausland."
+ },
+ "pm_principle_engineering_and_logistics": {
+  "en": "Engineering and Logisitics [concept_power_bloc_principle] 1",
+  "de": "Ingenieurwesen und Logistik [concept_power_bloc_principle] 1"
+ },
+ "pm_programmable_fibers": {
+  "en": "Programmable Fibers",
+  "de": "Programmierbare Fasern"
+ },
+ "pm_programmable_food_synthesis": {
+  "en": "Programmable Food Synthesis",
+  "de": "Programmierbare Nahrungssynthese"
+ },
+ "pm_programmable_matter_artillery": {
+  "en": "Programmable-Matter Artillery",
+  "de": "Programmierbare-Materie-Artillerie"
+ },
+ "pm_programmable_matter_clothing": {
+  "en": "Programmable Matter",
+  "de": "Programmierbare Materie"
+ },
+ "pm_programmable_matter_furniture": {
+  "en": "Programmable Matter",
+  "de": "Programmierbare Materie"
+ },
+ "pm_programmable_matter_small_arms": {
+  "en": "Programmable Matter Small Arms",
+  "de": "Programmierbare-Materie-Handfeuerwaffen"
+ },
+ "pm_programmable_munitions": {
+  "en": "Programmable Munitions",
+  "de": "Programmierbare Munition"
+ },
+ "pm_programmable_paper": {
+  "en": "Programmable Paper",
+  "de": "Programmierbares Papier"
+ },
+ "pm_programmable_plastics": {
+  "en": "Programmable Plastics",
+  "de": "Programmierbare Kunststoffe"
+ },
+ "pm_programmable_sweetness": {
+  "en": "Programmable Sweetness",
+  "de": "Programmierbare Süße"
+ },
+ "pm_prussian_railway_directorate": {
+  "en": "Prussian Railway Directorate",
+  "de": "Preußische Eisenbahndirektion"
+ },
+ "pm_punchcards": {
+  "en": "Punchcards",
+  "de": "Lochkarten"
+ },
+ "pm_purse_seine_nets": {
+  "en": "Purse Seine Nets",
+  "de": "Ringwadennetze"
+ },
+ "pm_putilov_works": {
+  "en": "Putilov Works",
+  "de": "Putilow-Werke"
+ },
+ "pm_quantum_communications": {
+  "en": "Quantum Communications",
+  "de": "Quantenkommunikation"
+ },
+ "pm_quantum_dot_pigments": {
+  "en": "Quantum Dot Pigments",
+  "de": "Quantenpunkt-Pigmente"
+ },
+ "pm_rac_sitka_trading_post": {
+  "en": "RAC Sitka Trading Post",
+  "de": "RAC-Handelsposten Sitka"
+ },
+ "pm_rail_transport_mine_infrastructure_4": {
+  "en": "Extensive Rail Transport",
+  "de": "Ausgedehnter Eisenbahntransport"
+ },
+ "pm_ralli_odessa_grain_elevator": {
+  "en": "Ralli Odessa Grain Elevator",
+  "de": "Ralli-Getreidespeicher Odessa"
+ },
+ "pm_ramirez_vila_real_cannery": {
+  "en": "Ramirez Vila Real Cannery",
+  "de": "Ramirez-Konservenfabrik Vila Real"
+ },
+ "pm_regional_branding_building_furniture_manufactory": {
+  "en": "Regional Marketing",
+  "de": "Regionales Marketing"
+ },
+ "pm_regional_branding_building_textile_mill": {
+  "en": "Regional Marketing",
+  "de": "Regionales Marketing"
+ },
+ "pm_reinforced_concrete_buildings": {
+  "en": "Reinforced Concrete Buildings",
+  "de": "Stahlbetongebäude"
+ },
+ "pm_rekal_hq": {
+  "en": "Rekal Memory Services",
+  "de": "Rekal Memory Services"
+ },
+ "pm_reliance_jamnagar_refinery": {
+  "en": "Jamnagar Refinery",
+  "de": "Raffinerie Jamnagar"
+ },
+ "pm_remote_work": {
+  "en": "Remote Work",
+  "de": "Fernarbeit"
+ },
+ "pm_renault_billancourt_plant": {
+  "en": "Renault Billancourt Plant",
+  "de": "Renault-Werk Billancourt"
+ },
+ "pm_resettlement_airlift": {
+  "en": "Airlift",
+  "de": "Luftbrücke"
+ },
+ "pm_resettlement_airlift_desc": {
+  "en": "Chartered flights move the greatest numbers.",
+  "de": "Charterflüge bringen die meisten Menschen."
+ },
+ "pm_resettlement_development_program": {
+  "en": "Development Program",
+  "de": "Entwicklungsprogramm"
+ },
+ "pm_resettlement_development_program_desc": {
+  "en": "Jobs, housing and schools waiting before the settlers arrive. Recruits as Organized Colonization does, plus machinists, engineers and clerks, at least second-class citizens.$resettlement_programme_bonus_pm_line$",
+  "de": "Arbeitsplätze, Wohnraum und Schulen stehen schon bereit, bevor die Siedler eintreffen. Rekrutiert wie bei der Organisierten Kolonisierung, zusätzlich Maschinisten, Ingenieure und Angestellte, die mindestens Bürger zweiter Klasse sind.$resettlement_programme_bonus_pm_line$"
+ },
+ "pm_resettlement_homesteads": {
+  "en": "Homesteads",
+  "de": "Heimstätten"
+ },
+ "pm_resettlement_homesteads_desc": {
+  "en": "Settlers break new ground, and farms, ranches and subsistence farming here are more productive. No arable land is added.$resettlement_settlement_bonus_pm_line$",
+  "de": "Siedler erschließen neues Land; Farmen, Ranches und Subsistenzlandwirtschaft sind hier produktiver. Es wird kein zusätzliches Ackerland hinzugefügt.$resettlement_settlement_bonus_pm_line$"
+ },
+ "pm_resettlement_land_grants": {
+  "en": "Land Grants",
+  "de": "Landzuweisungen"
+ },
+ "pm_resettlement_land_grants_desc": {
+  "en": "Free land for those willing to work it. Recruits the unemployed and peasants of the lower strata who are at least second-class citizens; peasants cannot leave under Serfdom.$resettlement_programme_bonus_pm_line$",
+  "de": "Freies Land für alle, die bereit sind, es zu bestellen. Rekrutiert Arbeitslose und Bauern der unteren Schicht, die mindestens Bürger zweiter Klasse sind; unter Leibeigenschaft dürfen Bauern nicht abwandern.$resettlement_programme_bonus_pm_line$"
+ },
+ "pm_resettlement_managed_retreat": {
+  "en": "Managed Retreat",
+  "de": "Geordneter Rückzug"
+ },
+ "pm_resettlement_managed_retreat_desc": {
+  "en": "Moving people out of harm's way, with compensation. Recruits every free person from coastal states while we suffer coastal flooding, and from states contaminated by a nuclear strike or accident.$resettlement_programme_bonus_pm_line$",
+  "de": "Menschen werden gegen Entschädigung aus der Gefahrenzone gebracht. Rekrutiert jede freie Person aus Küstenstaaten, solange wir unter Küstenüberflutung leiden, sowie aus Staaten, die durch einen Nuklearschlag oder -unfall verseucht sind.$resettlement_programme_bonus_pm_line$"
+ },
+ "pm_resettlement_military_colonies": {
+  "en": "Military Colonies",
+  "de": "Militärkolonien"
+ },
+ "pm_resettlement_military_colonies_desc": {
+  "en": "Soldier-settlers who farm the frontier and hold it. Recruits the unemployed and peasants of the lower strata who are fully accepted. Turmoil in this state has less effect.$resettlement_programme_bonus_pm_line$",
+  "de": "Soldatensiedler, die die Grenze bestellen und halten. Rekrutiert Arbeitslose und Bauern der unteren Schicht, die vollständig akzeptiert sind. Unruhen in diesem Staat wirken sich schwächer aus.$resettlement_programme_bonus_pm_line$"
+ },
+ "pm_resettlement_motor_transport": {
+  "en": "Motor Transport",
+  "de": "Kraftfahrzeugtransport"
+ },
+ "pm_resettlement_motor_transport_desc": {
+  "en": "Truck and bus convoys reach where the railway does not.",
+  "de": "Lastwagen- und Buskonvois erreichen Orte, die die Eisenbahn nicht erreicht."
+ },
+ "pm_resettlement_organized_colonization": {
+  "en": "Organized Colonization",
+  "de": "Organisierte Kolonisierung"
+ },
+ "pm_resettlement_organized_colonization_desc": {
+  "en": "Subsidized passage, land and credit along the railway. Recruits the unemployed, peasants and laborers of the lower strata who are at least second-class citizens.$resettlement_programme_bonus_pm_line$",
+  "de": "Subventionierte Überfahrt, Land und Kredit entlang der Eisenbahn. Rekrutiert Arbeitslose, Bauern und Arbeiter der unteren Schicht, die mindestens Bürger zweiter Klasse sind.$resettlement_programme_bonus_pm_line$"
+ },
+ "pm_resettlement_overland": {
+  "en": "Overland",
+  "de": "Landweg"
+ },
+ "pm_resettlement_overland_desc": {
+  "en": "Wagons and marching columns.",
+  "de": "Wagenkolonnen und Fußmärsche."
+ },
+ "pm_resettlement_penal_transportation": {
+  "en": "Penal Transportation",
+  "de": "Sträflingstransport"
+ },
+ "pm_resettlement_penal_transportation_desc": {
+  "en": "Convicts and the politically unreliable, shipped to the frontier. Recruits lower-strata pops in which at least a fifth are radicals. Some die on the way, and life here is harsher.$resettlement_programme_bonus_pm_line$$resettlement_declaration_pm_line$",
+  "de": "Sträflinge und politisch Unzuverlässige werden an die Grenze verschickt. Rekrutiert Bevölkerungsgruppen der unteren Schicht, in denen mindestens ein Fünftel radikal ist. Manche sterben auf dem Weg, und das Leben hier ist härter.$resettlement_programme_bonus_pm_line$$resettlement_declaration_pm_line$"
+ },
+ "pm_resettlement_planned_towns": {
+  "en": "Planned Towns",
+  "de": "Geplante Städte"
+ },
+ "pm_resettlement_planned_towns_desc": {
+  "en": "Streets, utilities and housing laid out before the settlers arrive. Construction here is faster.$resettlement_settlement_bonus_pm_line$",
+  "de": "Straßen, Versorgungseinrichtungen und Wohnraum sind angelegt, bevor die Siedler eintreffen. Der Bau geht hier schneller voran.$resettlement_settlement_bonus_pm_line$"
+ },
+ "pm_resettlement_rail_steamship": {
+  "en": "Rail and Steamship",
+  "de": "Eisenbahn und Dampfschiff"
+ },
+ "pm_resettlement_rail_steamship_desc": {
+  "en": "Settler trains and chartered steamers carry more people each month.",
+  "de": "Siedlerzüge und gecharterte Dampfer befördern jeden Monat mehr Menschen."
+ },
+ "pm_resettlement_rustication": {
+  "en": "Rustication",
+  "de": "Landverschickung"
+ },
+ "pm_resettlement_rustication_desc": {
+  "en": "Urban workers sent down to the countryside to learn from the peasants. Recruits laborers and clerks outside agriculture. The laborers and clerks left behind turn radical.$resettlement_programme_bonus_pm_line$$resettlement_declaration_pm_line$",
+  "de": "Städtische Arbeiter werden aufs Land geschickt, um von den Bauern zu lernen. Rekrutiert Arbeiter und Angestellte außerhalb der Landwirtschaft. Die zurückbleibenden Arbeiter und Angestellten werden radikal.$resettlement_programme_bonus_pm_line$$resettlement_declaration_pm_line$"
+ },
+ "pm_resettlement_special_settlements": {
+  "en": "Special Settlements",
+  "de": "Sondersiedlungen"
+ },
+ "pm_resettlement_special_settlements_desc": {
+  "en": "Landholding farmers deported under collectivization. Recruits farmers wherever they are. Many die on the way; the farmers left behind turn radical.$resettlement_programme_bonus_pm_line$$resettlement_declaration_pm_line$",
+  "de": "Landbesitzende Bauern werden im Zuge der Kollektivierung deportiert. Rekrutiert Bauern, wo immer sie sich befinden. Viele sterben auf dem Weg; die zurückbleibenden Bauern werden radikal.$resettlement_programme_bonus_pm_line$$resettlement_declaration_pm_line$"
+ },
+ "pm_resettlement_work_settlements": {
+  "en": "Work Settlements",
+  "de": "Arbeitssiedlungen"
+ },
+ "pm_resettlement_work_settlements_desc": {
+  "en": "Settlers are put to work on arrival, in the Authority's own gangs, the mines and the timber camps. Mines and logging camps here are more productive.$resettlement_settlement_bonus_pm_line$",
+  "de": "Siedler werden bei ihrer Ankunft eingesetzt, in den eigenen Arbeitstrupps der Behörde, in Minen und Holzfällerlagern. Minen und Holzfällerlager sind hier produktiver.$resettlement_settlement_bonus_pm_line$"
+ },
+ "pm_reusable_rockets": {
+  "en": "Reusable Rockets",
+  "de": "Wiederverwendbare Raketen"
+ },
+ "pm_rheinmetall_unterluss_proving_ground": {
+  "en": "Rheinmetall Unterlüß Proving Ground",
+  "de": "Rheinmetall-Testgelände Unterlüß"
+ },
+ "pm_ricordi_galleria_vittorio_emanuele": {
+  "en": "Ricordi Galleria Vittorio Emanuele",
+  "de": "Ricordi Galleria Vittorio Emanuele"
+ },
+ "pm_robotic_assembly_handling": {
+  "en": "Robotic Assembly & Handling",
+  "de": "Robotische Montage & Handhabung"
+ },
+ "pm_robotic_assembly_lines": {
+  "en": "Robotic Assembly Lines",
+  "de": "Robotische Montagebänder"
+ },
+ "pm_robotic_assembly_lines_building_furniture_manufactory": {
+  "en": "Robotic Assembly Lines",
+  "de": "Robotische Montagebänder"
+ },
+ "pm_robotic_assembly_lines_building_motor_industry": {
+  "en": "Robotic Assembly Lines",
+  "de": "Robotische Montagebänder"
+ },
+ "pm_robotic_assembly_lines_building_tooling_workshop": {
+  "en": "Robotic Assembly Lines",
+  "de": "Robotische Montagebänder"
+ },
+ "pm_robotic_food_processing": {
+  "en": "Robotic Food Processing",
+  "de": "Robotische Lebensmittelverarbeitung"
+ },
+ "pm_robotic_service_providers": {
+  "en": "Robotic Service Providers",
+  "de": "Robotische Dienstleister"
+ },
+ "pm_robotic_ship_assembly": {
+  "en": "Robotic Ship Assembly",
+  "de": "Robotische Schiffsmontage"
+ },
+ "pm_robots": {
+  "en": "Robots",
+  "de": "Roboter"
+ },
+ "pm_roche_tower": {
+  "en": "The Roche Tower",
+  "de": "Der Roche-Turm"
+ },
+ "pm_rocket_artillery": {
+  "en": "Rocket Artillery",
+  "de": "Raketenartillerie"
+ },
+ "pm_rodriguez_arguelles_havana_tobacco_house": {
+  "en": "Rodríguez Argüelles Havana Tobacco House",
+  "de": "Rodríguez-Argüelles-Tabakhaus Havanna"
+ },
+ "pm_rolls_royce_derby_works": {
+  "en": "Rolls-Royce Derby Works",
+  "de": "Rolls-Royce-Werke Derby"
+ },
+ "pm_romanian_star_ploiesti_refinery": {
+  "en": "Romanian Star Ploiești Refinery",
+  "de": "Romanian-Star-Raffinerie Ploiești"
+ },
+ "pm_rosatom_mayak_association": {
+  "en": "Mayak Production Association",
+  "de": "Mayak-Produktionsvereinigung"
+ },
+ "pm_roscosmos_vostochny_cosmodrome": {
+  "en": "Vostochny Cosmodrome",
+  "de": "Kosmodrom Wostotschny"
+ },
+ "pm_rossi_sao_leopoldo_arms_factory": {
+  "en": "Rossi São Leopoldo Arms Factory",
+  "de": "Rossi-Waffenfabrik São Leopoldo"
+ },
+ "pm_sailing_ships": {
+  "en": "Sailing Ships",
+  "de": "Segelschiffe"
+ },
+ "pm_saint_etienne_arms_manufactory": {
+  "en": "Saint-Étienne Arms Manufactory",
+  "de": "Saint-Étienne-Waffenmanufaktur"
+ },
+ "pm_samsung_digital_city": {
+  "en": "Samsung Digital City",
+  "de": "Samsung Digital City"
+ },
+ "pm_san_miguel_manila_brewery": {
+  "en": "San Miguel Manila Brewery",
+  "de": "San-Miguel-Brauerei Manila"
+ },
+ "pm_sandford_newcastle_natal_ironworks": {
+  "en": "Sandford Newcastle Natal Ironworks",
+  "de": "Sandford-Eisenwerke Newcastle, Natal"
+ },
+ "pm_sansinena_avellaneda_frigorifico": {
+  "en": "Sansinena Avellaneda Frigorífico",
+  "de": "Sansinena-Frigorífico Avellaneda"
+ },
+ "pm_sao_paulo_railway_paranapiacaba_workshop": {
+  "en": "São Paulo Railway Paranapiacaba Workshop",
+  "de": "São-Paulo-Railway-Werkstatt Paranapiacaba"
+ },
+ "pm_sap_headquarters": {
+  "en": "SAP SE Headquarters",
+  "de": "SAP-SE-Hauptsitz"
+ },
+ "pm_sassoon_bombay_docks": {
+  "en": "Sassoon Bombay Docks",
+  "de": "Sassoon-Docks Bombay"
+ },
+ "pm_satellite_communications": {
+  "en": "Satellite Communications",
+  "de": "Satellitenkommunikation"
+ },
+ "pm_saudi_aramco_abqaiq_plant": {
+  "en": "Abqaiq Plant",
+  "de": "Abqaiq-Anlage"
+ },
+ "pm_schichau_elbing_shipyard": {
+  "en": "Schichau Elbing Shipyard",
+  "de": "Schichau-Werft Elbing"
+ },
+ "pm_schneider_le_creusot": {
+  "en": "Schneider Le Creusot Works",
+  "de": "Schneider-Werke Le Creusot"
+ },
+ "pm_secn_ferrol_shipyard": {
+  "en": "SECN Ferrol Shipyard",
+  "de": "SECN-Werft Ferrol"
+ },
+ "pm_secular_society": {
+  "en": "Secular Society",
+  "de": "Säkulare Gesellschaft"
+ },
+ "pm_self-healing_packaging": {
+  "en": "Self-Healing Packaging",
+  "de": "Selbstheilende Verpackungen"
+ },
+ "pm_self_growing_paper": {
+  "en": "Self-Growing Paper",
+  "de": "Selbstwachsendes Papier"
+ },
+ "pm_self_improving_AI_systems": {
+  "en": "Self-Improving AI Systems",
+  "de": "Selbstverbessernde KI-Systeme"
+ },
+ "pm_self_optimizing_production": {
+  "en": "Self-Optimizing Production",
+  "de": "Selbstoptimierende Produktion"
+ },
+ "pm_self_replicating_assemblers": {
+  "en": "Self-Replicating Assemblers",
+  "de": "Selbstreplizierende Assembler"
+ },
+ "pm_semiautomatic_rifles": {
+  "en": "Semi-automatic Rifles",
+  "de": "Halbautomatische Gewehre"
+ },
+ "pm_semiinfinite_bandwidth": {
+  "en": "Semi-Infinite Bandwidth",
+  "de": "Nahezu unendliche Bandbreite"
+ },
+ "pm_settling_ponds": {
+  "en": "Settling Ponds",
+  "de": "Absetzbecken"
+ },
+ "pm_sfct_hon_gai_collieries": {
+  "en": "SFCT Hòn Gai Collieries",
+  "de": "SFCT-Zechen Hòn Gai"
+ },
+ "pm_shallow_well": {
+  "en": "Shallow Well",
+  "de": "Flachbohrung"
+ },
+ "pm_shell_pernis_refinery": {
+  "en": "Shell Pernis Refinery",
+  "de": "Shell-Raffinerie Pernis"
+ },
+ "pm_sherkat_shemali_cotton_gin": {
+  "en": "Sherkat-e Shemali Cotton Gin",
+  "de": "Sherkat-e-Schemali-Egreniermaschinen"
+ },
+ "pm_sherkate_eslamiya_isfahan_mill": {
+  "en": "Sherkat-e Eslamiya Isfahan Mill",
+  "de": "Sherkat-e-Eslamiya-Mühle Isfahan"
+ },
+ "pm_shopify_fulfillment_hub": {
+  "en": "Shopify Fulfillment Network Hub",
+  "de": "Shopify-Fulfillment-Netzwerkknoten"
+ },
+ "pm_shopping_malls": {
+  "en": "Shopping Malls",
+  "de": "Einkaufszentren"
+ },
+ "pm_siam_electric_wat_liab_station": {
+  "en": "Siam Electricity Wat Liab Power Station",
+  "de": "Siam-Electricity-Kraftwerk Wat Liab"
+ },
+ "pm_sibur_tobolsk_complex": {
+  "en": "Sibur Tobolsk Complex",
+  "de": "Sibur-Komplex Tobolsk"
+ },
+ "pm_siemens_erlangen_campus": {
+  "en": "Siemens Erlangen Campus",
+  "de": "Siemens-Campus Erlangen"
+ },
+ "pm_skidders_and_forwarders": {
+  "en": "Skidders and Forwarders",
+  "de": "Rückeschlepper und Forwarder"
+ },
+ "pm_skoda_pilsen_works": {
+  "en": "Škoda Pilsen Works",
+  "de": "Škoda-Werke Pilsen"
+ },
+ "pm_smart_fuzes": {
+  "en": "Smart Fuzes",
+  "de": "Intelligente Zünder"
+ },
+ "pm_smart_led_streetlights": {
+  "en": "Smart LED Streetlights",
+  "de": "Intelligente LED-Straßenlaternen"
+ },
+ "pm_smart_miners_building_coal_mine": {
+  "en": "Smart Miners",
+  "de": "Intelligente Abbaumaschinen"
+ },
+ "pm_smart_miners_building_gold_mine": {
+  "en": "Smart Miners",
+  "de": "Intelligente Abbaumaschinen"
+ },
+ "pm_smart_miners_building_iron_mine": {
+  "en": "Smart Miners",
+  "de": "Intelligente Abbaumaschinen"
+ },
+ "pm_smart_miners_building_lead_mine": {
+  "en": "Smart Miners",
+  "de": "Intelligente Abbaumaschinen"
+ },
+ "pm_smart_miners_building_sulfur_mine": {
+  "en": "Smart Miners",
+  "de": "Intelligente Abbaumaschinen"
+ },
+ "pm_smart_miners_building_tech_metals_mine": {
+  "en": "Smart Miners",
+  "de": "Intelligente Abbaumaschinen"
+ },
+ "pm_smart_phones": {
+  "en": "Smart Phones",
+  "de": "Smartphones"
+ },
+ "pm_smart_robots": {
+  "en": "Smart Robots",
+  "de": "Intelligente Roboter"
+ },
+ "pm_softbank_vision_fund_hq": {
+  "en": "The Vision Fund Headquarters",
+  "de": "Der Vision-Fund-Hauptsitz"
+ },
+ "pm_solar_collector": {
+  "en": "Solar Collector Maintenance",
+  "de": "Solarkollektor-Wartung"
+ },
+ "pm_solar_collector_construction_fast": {
+  "en": "Solar Collector Construction (1 years)",
+  "de": "Bau des Solarkollektors (1 Jahr)"
+ },
+ "pm_solar_collector_construction_medium": {
+  "en": "Solar Collector Construction (2 years)",
+  "de": "Bau des Solarkollektors (2 Jahre)"
+ },
+ "pm_solar_collector_construction_paused": {
+  "en": "Solar Collector Construction (Paused)",
+  "de": "Bau des Solarkollektors (Pausiert)"
+ },
+ "pm_solar_collector_construction_slow": {
+  "en": "Solar Collector Construction (4 years)",
+  "de": "Bau des Solarkollektors (4 Jahre)"
+ },
+ "pm_solar_colonization": {
+  "en": "Solar Colonization",
+  "de": "Besiedlung des Sonnensystems"
+ },
+ "pm_solar_receiver": {
+  "en": "Solar Power Receiver",
+  "de": "Solarempfänger"
+ },
+ "pm_sony_pictures_studios": {
+  "en": "Sony Pictures Studios",
+  "de": "Sony Pictures Studios"
+ },
+ "pm_sound_film": {
+  "en": "Sound Film",
+  "de": "Tonfilm"
+ },
+ "pm_space_colony_mining": {
+  "en": "Mining Colony",
+  "de": "Bergbaukolonie"
+ },
+ "pm_space_colony_vacation": {
+  "en": "Resort Colony",
+  "de": "Ferienkolonie"
+ },
+ "pm_space_elevator": {
+  "en": "Space Elevator",
+  "de": "Weltraumaufzug"
+ },
+ "pm_space_elevator_construction_fast": {
+  "en": "Space Elevator Construction (1 year)",
+  "de": "Bau des Weltraumaufzugs (1 Jahr)"
+ },
+ "pm_space_elevator_construction_medium": {
+  "en": "Space Elevator Construction (2 years)",
+  "de": "Bau des Weltraumaufzugs (2 Jahre)"
+ },
+ "pm_space_elevator_construction_paused": {
+  "en": "Space Elevator Construction (Paused)",
+  "de": "Bau des Weltraumaufzugs (Pausiert)"
+ },
+ "pm_space_elevator_construction_slow": {
+  "en": "Space Elevator Construction (4 years)",
+  "de": "Bau des Weltraumaufzugs (4 Jahre)"
+ },
+ "pm_space_mine": {
+  "en": "Asteroid Mine",
+  "de": "Asteroidenmine"
+ },
+ "pm_space_tourism": {
+  "en": "Space Tourism",
+  "de": "Weltraumtourismus"
+ },
+ "pm_spaceport": {
+  "en": "Spaceport",
+  "de": "Weltraumbahnhof"
+ },
+ "pm_spacex_starbase": {
+  "en": "Starbase",
+  "de": "Starbase"
+ },
+ "pm_st_res_hub_reserve": {
+  "en": "Reserve Control",
+  "de": "Reservekontrolle"
+ },
+ "pm_st_res_hub_reserve_desc": {
+  "en": "The Strategic Reserve [concept_journal_entry] sets whether each reserve good is being accumulated, released, or idled.",
+  "de": "Der [concept_journal_entry] Strategische Reserve legt fest, ob jedes Reservegut angesammelt, freigegeben oder pausiert wird."
+ },
+ "pm_st_res_silo_capacity": {
+  "en": "Silo Storage",
+  "de": "Silolagerung"
+ },
+ "pm_st_res_silo_capacity_desc": {
+  "en": "Stores grain, ammunition, oil, small arms, artillery, aeroplanes, tanks, and chemicals for the national strategic reserve.",
+  "de": "Lagert Getreide, Munition, Öl, Handfeuerwaffen, Artillerie, Flugzeuge, Panzer und Chemikalien für die nationale strategische Reserve."
+ },
+ "pm_standard_oil_refinery": {
+  "en": "Standard Oil Refinery",
+  "de": "Standard-Oil-Raffinerie"
+ },
+ "pm_standardized_aerospace_production": {
+  "en": "Standardized Production",
+  "de": "Standardisierte Produktion"
+ },
+ "pm_state_directed_media": {
+  "en": "State-Directed Media",
+  "de": "Staatlich gelenkte Medien"
+ },
+ "pm_steam_paddleboats": {
+  "en": "Steam Paddleboats",
+  "de": "Raddampfer"
+ },
+ "pm_steel_brothers_syriam_depot": {
+  "en": "Steel Brothers Syriam Depot",
+  "de": "Steel-Brothers-Depot Syriam"
+ },
+ "pm_stf_fiume_torpedo_works": {
+  "en": "STF Fiume Torpedo Works",
+  "de": "STF-Torpedowerke Fiume"
+ },
+ "pm_stt_haskoy_shipyard": {
+  "en": "STT Hasköy Shipyard",
+  "de": "STT-Werft Hasköy"
+ },
+ "pm_styrene_butadiene_rubber": {
+  "en": "Styrene-Butadiene Rubber",
+  "de": "Styrol-Butadien-Kautschuk"
+ },
+ "pm_sudamericana_valparaiso_pier": {
+  "en": "Sudamericana Valparaíso Pier",
+  "de": "Sudamericana-Pier Valparaíso"
+ },
+ "pm_suez_company_ismailia_hq": {
+  "en": "Suez Company Ismailia [concept_hq]",
+  "de": "Suez-Company-[concept_hq] Ismailia"
+ },
+ "pm_sumitomo_besshi_mine": {
+  "en": "Sumitomo Besshi Mine",
+  "de": "Sumitomo-Mine Besshi"
+ },
+ "pm_sunhwaguk_seoul_tobacco_factory": {
+  "en": "Sunhwaguk Seoul Tobacco Factory",
+  "de": "Sunhwaguk-Tabakfabrik Seoul"
+ },
+ "pm_superconducting_networks": {
+  "en": "Superconducting Networks",
+  "de": "Supraleitende Netzwerke"
+ },
+ "pm_swarm_coordinated_tanks": {
+  "en": "Swarm-Coordinated Tanks",
+  "de": "Schwarmkoordinierte Panzer"
+ },
+ "pm_swarm_release_munitions": {
+  "en": "Swarm-Release Munitions",
+  "de": "Schwarm-Abwurfmunition"
+ },
+ "pm_synthetic_bacteria_am_fabrication": {
+  "en": "Synthetic Bacteria Advanced Material Fabrication",
+  "de": "Fertigung fortschrittlicher Materialien mit synthetischen Bakterien"
+ },
+ "pm_synthetic_biomass": {
+  "en": "Synthetic Biomass",
+  "de": "Synthetische Biomasse"
+ },
+ "pm_synthetic_coal": {
+  "en": "Synthetic Coal",
+  "de": "Synthetische Kohle"
+ },
+ "pm_synthetic_drinks": {
+  "en": "Synthetic Drinks",
+  "de": "Synthetische Getränke"
+ },
+ "pm_synthetic_fruit": {
+  "en": "Synthetic Fruit",
+  "de": "Synthetisches Obst"
+ },
+ "pm_synthetic_meat": {
+  "en": "Synthetic Meat",
+  "de": "Synthetisches Fleisch"
+ },
+ "pm_synthetic_oil_1": {
+  "en": "Synthetic Oil",
+  "de": "Synthetisches Öl"
+ },
+ "pm_synthetic_oil_2": {
+  "en": "Oil-Producing Bacteria",
+  "de": "Ölproduzierende Bakterien"
+ },
+ "pm_synthetic_opium": {
+  "en": "Pharmaceuticals",
+  "de": "Pharmazeutika"
+ },
+ "pm_synthetic_wood": {
+  "en": "Synthetic Wood",
+  "de": "Synthetisches Holz"
+ },
+ "pm_tailings_treatment": {
+  "en": "Tailings Treatment",
+  "de": "Rückstandsaufbereitung"
+ },
+ "pm_tashkent_railroad_workshops": {
+  "en": "Tashkent Railroad Workshops",
+  "de": "Taschkent-Eisenbahnwerkstätten"
+ },
+ "pm_tata_jamshedpur_works": {
+  "en": "Tata Jamshedpur Works",
+  "de": "Tata-Werke Jamshedpur"
+ },
+ "pm_te_construction_market_base": {
+  "en": "Basic Construction Market",
+  "de": "Grundlegender Baumarkt"
+ },
+ "pm_teletype_communications": {
+  "en": "Teletype Communications",
+  "de": "Fernschreiber-Kommunikation"
+ },
+ "pm_television": {
+  "en": "Television Production",
+  "de": "Fernsehproduktion"
+ },
+ "pm_tencent_seafront_towers": {
+  "en": "Tencent Seafront Towers",
+  "de": "Tencent Seafront Towers"
+ },
+ "pm_territorial_defense": {
+  "en": "Territorial Defense",
+  "de": "Territorialverteidigung"
+ },
+ "pm_tessier_ashpool_hq": {
+  "en": "Tessier-Ashpool Operations",
+  "de": "Tessier-Ashpool Operations"
+ },
+ "pm_textile_finishing_machinery": {
+  "en": "Textile Finishing Machinery",
+  "de": "Textilveredelungsmaschinen"
+ },
+ "pm_thonet_bystrice_bentwood_factory": {
+  "en": "Thonet Bystřice Bentwood Factory",
+  "de": "Thonet-Bugholzfabrik Bystřice"
+ },
+ "pm_thyssen_steelworks": {
+  "en": "Thyssen Steelworks",
+  "de": "Thyssen-Stahlwerke"
+ },
+ "pm_tobacco_regie_cibali_factory": {
+  "en": "Tobacco Régie Cibali Factory",
+  "de": "Tobacco-Régie-Fabrik Cibali"
+ },
+ "pm_tokyo_electric_asakusa_station": {
+  "en": "Tokyo Electric Asakusa Power Station",
+  "de": "Tokyo-Electric-Kraftwerk Asakusa"
+ },
+ "pm_tourism": {
+  "en": "Tourism",
+  "de": "Tourismus"
+ },
+ "pm_tower_cranes": {
+  "en": "Tower Cranes",
+  "de": "Turmdrehkräne"
+ },
+ "pm_toyota_kaikan_plant": {
+  "en": "Toyota Kaikan Museum & Plant",
+  "de": "Toyota-Kaikan-Museum & Werk"
+ },
+ "pm_trade_center_trade_quantity_advanced_1": {
+  "en": "Managed Global Trade",
+  "de": "Gelenkter Welthandel"
+ },
+ "pm_trade_center_trade_quantity_advanced_2": {
+  "en": "High-Volume Logistics",
+  "de": "Hochvolumen-Logistik"
+ },
+ "pm_trade_center_trade_quantity_advanced_3": {
+  "en": "Just-in-Time Logistics",
+  "de": "Just-in-Time-Logistik"
+ },
+ "pm_trade_center_trade_quantity_advanced_4": {
+  "en": "Autonomous Logistics",
+  "de": "Autonome Logistik"
+ },
+ "pm_transistors": {
+  "en": "Transistors",
+  "de": "Transistoren"
+ },
+ "pm_trubia_cannon_foundry": {
+  "en": "Trubia Cannon Foundry",
+  "de": "Trubia-Kanonengießerei"
+ },
+ "pm_tsmc_fab_18": {
+  "en": "TSMC Fab 18",
+  "de": "TSMC Fab 18"
+ },
+ "pm_turkish_petroleum_kirkuk_depot": {
+  "en": "Turkish Petroleum Kirkuk Depot",
+  "de": "Turkish-Petroleum-Depot Kirkuk"
+ },
  "pm_twisted_pair_copper_cables": {
   "en": "Twisted Pair Copper Cables",
   "de": "Twisted-Pair-Kupferkabel"
