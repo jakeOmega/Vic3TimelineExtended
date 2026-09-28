@@ -1033,99 +1033,99 @@ button = {
 
 ## Creating Standalone Panels
 
-To create an entirely new panel (not overriding an existing one), use the **scripted widgets** system.
+A widget registered in `gui/scripted_widgets/*.txt` is created at startup, on top of the HUD, without replacing any vanilla file. Vanilla documents the mechanism in `game/gui/scripted_widgets/scripted_widgets.md`. Workshop mods add windows and HUD buttons this way (Historical Record, Statistics, Demography). `docs/systems/system_panels_feasibility.md` surveys them, along with what it would take to move a journal entry's UI into such a window.
 
-### Step 1: Create the GUI File
+### Step 1: Register the Widget
 
-Create `gui/my_custom_panel.gui`:
+Create `gui/scripted_widgets/te_widgets.txt` with one `gui_file_path = widget_name` per line:
 
 ```
-my_custom_panel = {
-    # Using default_popup type for window chrome
-    type = default_popup
-    name = "my_custom_panel"
-    
-    visible = "[GetVariableSystem.Exists('my_custom_panel_open')]"
-    parentanchor = center
-    movable = yes
-    layer = popups
-    allow_outside = yes
-    
-    blockoverride "window_header_name" {
-        text = "MY_PANEL_TITLE"
-    }
-    
-    blockoverride "header_close_button_visibility" {
-        visible = yes
-    }
-    
-    blockoverride "header_close_button" {
-        onclick = "[GetVariableSystem.Clear('my_custom_panel_open')]"
-    }
-    
-    blockoverride "entire_scrollarea" {
-        scrollarea = {
-            layoutpolicy_horizontal = expanding
-            layoutpolicy_vertical = expanding
-            
-            scrollwidget = {
-                flowcontainer = {
-                    direction = vertical
-                    spacing = 10
-                    margin = { 15 10 }
-                    
-                    # Panel content here
-                    textbox = {
-                        text = "Hello from custom panel!"
-                        using = Font_Size_Big
-                        autoresize = yes
-                    }
-                    
-                    # Data-bound content
-                    textbox = {
-                        text = "[GetPlayer.GetName] Statistics"
-                        autoresize = yes
-                    }
-                }
-            }
-            
-            scrollbar_vertical = {
-                using = Scrollbar_Vertical
-            }
-        }
-    }
+gui/te_example_window.gui = te_example_window
+```
+
+Every file in the folder loads, so each mod ships its own. The widget name must match the `name` of a top-level widget in that `.gui`. The same file may list several widgets.
+
+### Step 2: Create the Window
+
+This is Demography's shipping shape (`demography_cmf_panel.gui`, Workshop `3759720467`), trimmed and renamed. It instances vanilla's `default_block_window` type (`block_windows.gui:317`), so the window gets the native header, back and close buttons and scroll area, and sits where vanilla's side panels sit:
+
+```
+widget = {
+	name = "te_example_window"
+	size = { 100% 100% }
+	layer = layer_ingame_menu
+	visible = "[GetMetaPlayer.GetPlayedOrObservedCountry.IsValid]"   # scripted widgets exist from the main menu on
+
+	# The engine does not close this window when a vanilla panel or the ledger opens.
+	# These two do (the Community Mod Framework's com_gui_sidebar.gui does the same).
+	widget = { state = { trigger_when = "[InformationPanelBar.IsAnyPanelOpen]" on_finish = "[GetVariableSystem.Clear('te_open_window')]" } }
+	widget = { state = { trigger_when = "[MapListPanelManager.IsVisible]" on_finish = "[GetVariableSystem.Clear('te_open_window')]" } }
+
+	vbox = {
+		parentanchor = top|left
+		layoutpolicy_horizontal = expanding
+		layoutpolicy_vertical = expanding
+		margin_top = 85
+
+		widget = {
+			layoutpolicy_horizontal = expanding
+			layoutpolicy_vertical = expanding
+			hbox = {
+				layoutpolicy_horizontal = expanding
+				layoutpolicy_vertical = expanding
+				te_example_panel = {}
+				expand = {}
+			}
+		}
+	}
+}
+
+types te_example_window_types {
+	type te_example_panel = default_block_window {
+		name = "te_example_panel"
+		datacontext = "[AccessPlayer]"
+		visible = "[GetVariableSystem.HasValue('te_open_window', 'te_example')]"
+
+		blockoverride "animation_state_block" {
+			state = {
+				name = _show
+				on_start = "[InformationPanelBar.ClosePanel]"          # close any vanilla side panel...
+				on_start = "[MapListPanelManager.CloseCurrentPanel]"   # ...and the ledger
+			}
+		}
+		blockoverride "window_header_name" { text = "TE_EXAMPLE_HEADER" }
+		blockoverride "header_back_button" { onclick = "[GetVariableSystem.Clear('te_open_window')]" }
+		blockoverride "header_close_button" { onclick = "[GetVariableSystem.Clear('te_open_window')]" }
+		blockoverride "fixed_top" {}
+		blockoverride "scrollarea_content" {
+			flowcontainer = {
+				direction = vertical
+				# content
+			}
+		}
+	}
 }
 ```
 
-### Step 2: Register the Widget
-
-Create `gui/scripted_widgets/my_widgets.txt`:
-
-```
-gui/my_custom_panel.gui = my_custom_panel
-```
-
-Each line is `gui_file_path = widget_name`. The widget is auto-created at startup.
+The close button keeps Escape: `default_block_window` sets `shortcut = "close_window"` outside the `header_close_button` block. An earlier version of this section instanced the window as `my_custom_panel = { type = default_popup … }`. That is not how a type is instanced: a type is used by its own name, as in `default_popup = { … }` or `te_example_panel = {}` above.
 
 ### Step 3: Add an Open Button
 
-Add a button to an existing panel (requires overriding that panel's file):
+The button does not need a vanilla file replaced. Shipping shapes:
+- **Its own scripted widget, pinned beside or below the sidebar.** Historical Record (Workshop `3772525185`) registers `historical_record_button`: a `window` with `layer = top`, `parentanchor = top|left` and `position = { 74 93 }`, holding a vanilla `sidepanel_button_small` whose `onclick` toggles the window's variable. The sidebar itself sits at `{ 0 200 }`, and its last button, Map List, is at +580 (`information_panel_bar.gui`), so a fixed position below it stays put. `using = hud_visibility` (a `topbar.gui` template) hides the button on the pause and game-over screens, but it does not get the sidebar's own hide animation or hover label.
+- **The Community Mod Framework's sidebar registry**, when the player runs CMF (`docs/systems/system_panels_feasibility.md` § 7.2).
+- **A button in a journal entry widget or another panel**: `onclick = "[GetVariableSystem.Set('te_open_window', 'te_example')]"`.
 
-```
-button = {
-    text = "OPEN_MY_PANEL"
-    onclick = "[GetVariableSystem.Set('my_custom_panel_open', 'open')]"
-}
-```
+Replacing `information_panel_bar.gui` also works, but it is a 790-line full-file replacement, and CMF redefines that type (gotcha #30).
 
 ### Key Points
 
-- `GetVariableSystem` controls client-side visibility — NOT saved in save files
-- `layer = popups` ensures the panel renders above other panels
-- `movable = yes` allows the player to drag the window
-- `allow_outside = yes` lets the panel extend outside its parent
-- The widget name in the `.gui` file and the registration `.txt` must match
-- **Scripted widgets files are additive** — multiple mods can have their own files
+- `GetVariableSystem` is client-side and not saved, so whether a window is open is per player and per session.
+- Scripted widgets are created at startup, before a game loads. Gate the root on `GetMetaPlayer.GetPlayedOrObservedCountry.IsValid` (this also hides it in observer mode), and put any game-object `datacontext` below that gate, not on the root.
+- A scripted-widget window is not in the engine's panel stack. Without the `_show` `ClosePanel` and the two `trigger_when` widgets above, it stays open on top of Budget, and Budget on top of it.
+- To show a journal entry's data in a window, set `GetPlayerJournalEntry('<key>')` as the datacontext (gotcha #29).
+- The widget name in the `.gui` and in the registration `.txt` must match.
+- **Scripted widget files are additive.** Multiple mods can each ship their own.
 
 ---
 
@@ -1470,6 +1470,7 @@ These can coexist across multiple mods without conflict:
 | File Type | Location | Notes |
 |---|---|---|
 | Panel overrides | `gui/existing_panel.gui` | Replaces vanilla entirely |
+| Type redefinitions | any `gui/*.gui` declaring a vanilla `type` | Replaces that one type. Which of two definitions wins is untested (gotcha #30) |
 
 If two mods both override `gui/construction_panel.gui`, only one loads (load order dependent). This is the #1 source of mod incompatibility.
 
@@ -1506,7 +1507,7 @@ If two mods both override `gui/construction_panel.gui`, only one loads (load ord
 
 11. **`Var().GetCountry.GetName` is unreliable** for country variables — it rendered blank when tested in this mod, though vanilla 1.14 does ship the chain (`ep2_04_l_english.yml`, `ip4_misc_01_l_english.yml`). Two workarounds, in order of preference. (a) If the variable is yours to write, store the country's **capital** and chain `Var('cap').GetState.GetCountry.GetName` — what the covert-operations widget does with `iw_target_capital`. (b) If the variable belongs to data you must not change — a read-only view over someone else's script containers — navigate it **in script** from a `scripted_gui` and render the result with `[GetScriptedGui('x').ExecuteTooltip(GuiScope.SetRoot(<obj>.MakeScope).End)]`, printing `[THIS.GetCountry.GetName]` on each `custom_tooltip` line. That is vanilla's own shape for a country variable list (`je_hispanoamerica_not_recognized_countries_sgui` + `HISPANOAMERICA_RECOGNITION_COUNTRIES_LIST_ENTRY` in `ip4_spain_l_english.yml`), and it brings the annexed-country guard `AddLocalizationIf(THIS.GetCountry.Exists, 'FALLBACK_KEY')` with it. `gui/journal_entry_widgets/un_chamber_widget.gui` is this mod's worked example.
 
-12. **Map markers/HUD overlays cannot be added.** The HUD is engine-level. Mods can override existing HUD files but cannot add new map layers or HUD elements.
+12. **HUD elements *can* be added, through scripted widgets rather than by overriding the HUD.** An earlier version of this entry said the HUD was engine-level and that mods could not add HUD elements. That was wrong. A widget registered in `gui/scripted_widgets/*.txt` is created at startup on top of the HUD (vanilla documents this in `game/gui/scripted_widgets/scripted_widgets.md`), and Workshop mods ship sidebar buttons and full windows that way without replacing any vanilla file. See [Creating Standalone Panels](#creating-standalone-panels). The other half of the old entry, that mods cannot add map markers or map layers, has not been re-checked.
 
 13. **`trigger_when` + `on_finish` in state blocks** can auto-execute scripted_gui effects. This is the pattern for extracting GUI-only data (like `GetConstructionGoodsExpenses`) into game variables.
 
@@ -1564,6 +1565,21 @@ Data error in loc string 'te_hist_tt_markers'
 27. **In one `ExecuteTooltip`, every line printed in a country's scope is gathered under that country's first appearance.** The UN chamber's Missions in the Field printed each mission's contributors with `every_in_list = { variable = un_msn_contributors custom_tooltip_no_bullet = ... }` inside an `ordered_in_global_list` over the missions. Spain served in two missions: the first listed "Spain" three times (an unindented scope header, then both missions' lines, indented) and the second did not list it at all. A save read with the `check_save_history_order.py` decoder showed both contributor lists holding one Spain each, so the data was right and the rendering wrong. Countries that appear once render normally, which is why it looks intermittent. Any builder that iterates entries and prints inside a country scope per entry is exposed, whenever a country can recur across entries: voters across archived resolutions, contributors across missions. Two fixes, both shipped: (a) print from the entry's own scope, never the country's: `ordered_in_list = { variable = X limit = { exists = this } order_by = gdp position = N check_range_bounds = no save_temporary_scope_as = x_disp }`, then a line at the entry's scope that reads `SCOPE.sCountry('x_disp')`, guarded by `any_in_list = { variable = X count >= N+1 exists = this }` (gotcha #25). An iterator block that prints nothing adds no header; the mission register's host line has always entered the host's scope this way. `un_chamber_mission_contributor_at` unrolls eight positions. (b) Give each entry its own GUI row, with its own `ExecuteTooltip` and the entry's number passed as `op`. The archive's Voting Details does this, one row per resolution through `un_chamber_history_details_row_sgui`. Use (b) when the list per entry is long, such as a ballot. Gotcha #18's "both headers on top, one undivided list below" may be the same mechanism seen from the other side. `test_un_chamber_mission_slots.py` fails if the mission entry goes back to printing inside the contributor's scope.
 
 28. **Vanilla draws a treaty article's input widgets by article *type name*, so a new article with an input can open an empty Add dialog.** `article_input_fixed_bottom` in `right_click_menu.gui` shows the quantity slider only for `HasType('money_transfer')` / `'bankroll'`, and the goods-and-amount one only for `goods_transfer`. `nuclear_arms_limitation` (`required_inputs = { quantity }`) therefore opened a dialog with its title, two dividers and a greyed Add button, and the engine logged nothing. `ArticleDraft.RequiresInput('<input>')` / `Article.RequiresInput('<input>')` accept any key from `required_inputs`, including `company` and `quantity`, which vanilla's GUI never tests. Give each new input shape a generic branch in all three places: the Add dialog (`article_input_items` for a list, `article_input_fixed_bottom` for the selected value), the draft row (`article_draft` in `treaty_draft_panel.gui`) and the signed row (`article` in `treaty_panel.gui`). The `### COMPANY (GENERIC)` and `### QUANTITY (GENERIC - NOT MONEY OR GOODS)` blocks are the worked examples. A mutual row spans both columns, and its short-desc textbox (290 in the draft, 310 signed) already fills it next to the two influence costs, so narrow it for the input case rather than appending a widget. Also hide `available_options_number` on the article-type button, which otherwise counts options for an input that has none. `test_treaty_article_input_widgets.py` fails when an input of a mod article has no branch in one of the three places.
+
+29. **`GetPlayerJournalEntry('<key>')` gives any panel a journal entry's data.** It is a global promote returning `JournalEntry`; `Country.GetJournalEntry(<key>)` is the country form. Vanilla uses it with a literal key: `states_panel.gui:1059` sets `datacontext = "[GetPlayerJournalEntry('je_meiji_restoration')]"` on a button in the state view.
+    - **What works under it.** Every `JournalEntry.*` expression a JE widget uses, and the widget's loc. That includes `GetScriptedButtons` (drawn with vanilla's `scripted_journal_entry_button` type, `journal_entry.gui:988`), `GetScriptedProgressBars` and `IsActive`.
+      The exception is a loc string shown as the `tooltip` of a `datamodel` item. It gets a fresh context without `JournalEntry` (gotcha #24), in a window just as in the journal.
+    - **Gate it.** Vanilla shows that block only after a scripted GUI's `is_shown` passes `owner ?= { has_journal_entry = je_meiji_restoration }` (`journal_entry_sguis.txt:110`). Do the same, and put the datacontext on a child of the gated widget.
+    - **Untested:** what it returns for an entry the player lacks or holds inactive.
+
+    `docs/systems/system_panels_feasibility.md` § 3.2 uses this to show the journal widgets in a standalone window.
+
+30. **A vanilla type can be redefined from a differently named file instead of replacing the whole file.** The Community Mod Framework (Workshop `3385002128`) redefines 29 vanilla types this way. Examples: `type information_panel_bar` inside `types com_sidebar_overwrite { … }` in `com_gui_sidebar.gui`, `type society_panel` in `com_gui_society_panel.gui`, `type journal_entry_panel` in `com_gui_journal_entry.gui`. CMF names these files `00_…` / `com_…`.
+    - **Why use it.** One type replaced instead of a 2,000-line file means less to merge each patch.
+    - **Untested: which of two definitions wins.** CMF's naming fits both "first loaded wins, alphabetically across vanilla and mods" and "mods load after vanilla, and the last definition wins".
+    - **Compatibility, either way.** CMF redefines 11 types that this mod customizes through its full-file replacements: `journal_entry_panel`, `mobilization_widget`, the production-method and building-details items, and the state-buildings content. With CMF enabled, one side's changes to each are dropped without a log line.
+
+    The type list and a test plan are in `docs/systems/system_panels_feasibility.md` § 7.3–7.4 and § 8.
 
 ---
 
