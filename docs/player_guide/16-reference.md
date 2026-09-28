@@ -16,7 +16,7 @@ campaign meets them. "Rule" names the game rule that can switch the system off;
 | Construction market | From the start. You set the government's weekly purchase in the construction panel. | Free Market Construction | [Economy and construction](03-economy.md#the-construction-market) |
 | Adaptive standard-of-living expectations, Construction Cost Scaling, Bulk Transportation | Always on. | none | [Economy and construction](03-economy.md) |
 | Migration crowding, Homeland Dynamics, tourism, world city rankings | Always on, shown in the state panel. Homeland changes also need an enabling law, principle or the Mass Media technology. | none | [States and population](07-states.md) |
-| Grand Monument | From the start, in any state. | none | [The extended timeline](02-timeline.md#grand-monuments) |
+| Grand Monument | From the start, in any state. | Grand Monuments | [The extended timeline](02-timeline.md#grand-monuments) |
 | Settlement Authority | From the start, in a thinly populated frontier state region. Programs unlock with technologies and laws. | Internal Resettlement | [States and population](07-states.md#internal-resettlement) |
 | Global Warming journal entry | Listed from the start; becomes active for every country once warming reaches 0.1 °C. | Global Warming | [Climate and pollution](14-climate.md#the-global-warming-journal-entry) |
 | Strategic Reserve journal entry | Shown once you research Logistics; active once you build a Strategic Reserve Hub. | none | [Economy and construction](03-economy.md#the-strategic-reserve) |
@@ -69,7 +69,8 @@ Terms the mod introduces, or uses in its own sense.
 | Exchange Rate Index | The real value of your currency, where 100 is par. | [Banking and monetary policy](04-banking.md#the-exchange-rate-index-and-capital-controls) |
 | Flagship building | A company's own unique building, built by the government while the company's prosperity bonus is active. | [The extended timeline](02-timeline.md#company-flagship-buildings) |
 | Foreign Cultural Benchmark | The legitimacy penalty on a country whose cultural share trails the hegemon's by more than about three points. It grows with the gap. | [Cultural hegemony and covert warfare](10-influence.md#legitimacy-pressure-on-trailing-countries) |
-| Grand Monument | A repeatable building with no level cap that absorbs spare construction for a little tourism. | [The extended timeline](02-timeline.md#grand-monuments) |
+| Grand Monument | A building a government raises to what it stands for. Its effects grow with its grandeur, and it can become contested when what it honours falls. | [The extended timeline](02-timeline.md#grand-monuments) |
+| Grandeur | A Grand Monument's level. Its effects grow in steps, each taking twice the grandeur of the one before. | [The extended timeline](02-timeline.md#grand-monuments) |
 | Intelligence capacity | The size of your intelligence agency. It sets detection odds in both directions. | [Cultural hegemony and covert warfare](10-influence.md#intelligence-capacity-and-operation-slots) |
 | International standing | Your own record in the UN, from 0 to 100, separate from UN Authority. It starts at 50 when you join, raises or lowers your diplomatic reputation, and sways votes on your resolutions. | [The United Nations](09-united-nations.md#international-standing) |
 | Intervention budget | Points that your active banking tools draw on: 1 to 7 from your financial regulation law, and one more each from National Bank Established and a power bloc's banking union. | [Banking and monetary policy](04-banking.md#current-conditions-and-the-intervention-budget) |
