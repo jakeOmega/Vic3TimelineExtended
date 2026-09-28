@@ -2937,7 +2937,7 @@
  },
  "cultural_hegemony.13.d": {
   "en": "Diplomats negotiate in our tongue. Scientists publish in it. Merchants trade in it. The [ROOT.GetCountry.GetAdjective] language has become one of the world's great languages of diplomacy and science — a lingua franca that opens doors and shapes thought. We can formalize its reach through state-sponsored academies abroad, or let the invisible hand of commerce and scholarship continue its work.",
-  "de": "Diplomaten verhandeln in unserer Sprache. Wissenschaftler veröffentlichen in ihr. Kaufleute handeln in ihr. Die [ROOT.GetCountry.GetAdjective|l]e Sprache ist zu einer der großen Sprachen der Diplomatie und Wissenschaft der Welt geworden — einer Lingua franca, die Türen öffnet und Denken formt. Wir können ihre Reichweite durch staatlich geförderte Akademien im Ausland festigen oder die unsichtbare Hand von Handel und Gelehrsamkeit ihr Werk fortsetzen lassen."
+  "de": "Diplomaten verhandeln in unserer Sprache. Wissenschaftler veröffentlichen in ihr. Kaufleute handeln in ihr. Die [ROOT.GetCountry.GetAdjective|l]e Sprache ist zu einer der großen Sprachen der Diplomatie und Wissenschaft der Welt geworden — einer Verkehrssprache, die Türen öffnet und Denken formt. Wir können ihre Reichweite durch staatlich geförderte Akademien im Ausland festigen oder die unsichtbare Hand von Handel und Gelehrsamkeit ihr Werk fortsetzen lassen."
  },
  "cultural_hegemony.13.f": {
   "en": "\\\"When they dream of a better future, they dream in our words.\\\"\\n\\n\\\"And when they dream of revolution?\\\"\\n\\n\\\"The same words. The same syntax. The same metaphors of progress and reaction. We did not intend it. We simply published more, in more places, for longer. The language followed the books, and the dreams followed the language.\\\"",
@@ -2945,7 +2945,7 @@
  },
  "cultural_hegemony.13.t": {
   "en": "Lingua Franca",
-  "de": "Lingua Franca"
+  "de": "Verkehrssprache"
  },
  "cultural_hegemony.14.a": {
   "en": "Embrace the entertainment — let the people enjoy it",
@@ -3561,11 +3561,11 @@
  },
  "decolonization_events.2.d": {
   "en": "[SCOPE.sCountry('pressuring_power').GetName], which has declared itself against colonial rule, has called upon us to accelerate the dissolution of our colonial holdings, including our overlordship of [SCOPE.sCountry('pressured_subject').GetName]. Its diplomats are pressing the case in every capital that will listen.",
-  "de": "[SCOPE.sCountry('pressuring_power').GetAltName('NOM')|U] hat sich gegen die Kolonialherrschaft ausgesprochen und fordert uns auf, die Auflösung unserer Kolonialbesitzungen zu beschleunigen, einschließlich unserer Oberherrschaft über [SCOPE.sCountry('pressured_subject').GetAltName('AKK')]. Die dortigen Diplomaten machen sich in jeder Hauptstadt stark, die zuhört."
+  "de": "[SCOPE.sCountry('pressuring_power').GetAltName('NOM')|U] hat sich gegen die Kolonialherrschaft ausgesprochen und fordert uns auf, die Auflösung unserer Kolonialbesitzungen zu beschleunigen, einschließlich unserer Suzeränität über [SCOPE.sCountry('pressured_subject').GetAltName('AKK')]. Die dortigen Diplomaten machen sich in jeder Hauptstadt stark, die zuhört."
  },
  "decolonization_events.2.d_many": {
   "en": "[SCOPE.sCountry('pressuring_power').GetName] and other [Concept('concept_great_power', 'great powers')] that have declared against colonial rule have called upon us to accelerate the dissolution of our colonial holdings, including our overlordship of [SCOPE.sCountry('pressured_subject').GetName]. Foreign governments are voicing growing disapproval.",
-  "de": "[SCOPE.sCountry('pressuring_power').GetAltName('NOM')|U] und andere [Concept('concept_great_power', 'Großmächte')], die sich gegen die Kolonialherrschaft ausgesprochen haben, haben uns aufgefordert, die Auflösung unserer Kolonialbesitzungen zu beschleunigen, einschließlich unserer Oberherrschaft über [SCOPE.sCountry('pressured_subject').GetAltName('AKK')]. Ausländische Regierungen äußern wachsende Missbilligung."
+  "de": "[SCOPE.sCountry('pressuring_power').GetAltName('NOM')|U] und andere [Concept('concept_great_power', 'Großmächte')], die sich gegen die Kolonialherrschaft ausgesprochen haben, haben uns aufgefordert, die Auflösung unserer Kolonialbesitzungen zu beschleunigen, einschließlich unserer Suzeränität über [SCOPE.sCountry('pressured_subject').GetAltName('AKK')]. Ausländische Regierungen äußern wachsende Missbilligung."
  },
  "decolonization_events.2.f": {
   "en": "\\\"The resolution passed with an overwhelming majority,\\\" the ambassador reported, adjusting his spectacles. \\\"Twenty-three in favor. We were... not among them.\\\"\\n\\n\\\"And what precisely does this resolution demand?\\\"\\n\\n\\\"A timetable. For the orderly transfer of sovereignty to... well, to everyone we currently govern who would rather govern themselves.\\\"\\n\\nA long silence.\\n\\n\\\"Which is all of them, presumably.\\\"",
@@ -3973,7 +3973,7 @@
  },
  "decolonization_events.52.t": {
   "en": "The Intelligentsia Petition",
-  "de": "Die Petition der Intelligenzija"
+  "de": "Die Petition der Intellektuellen"
  },
  "decolonization_events.53.a": {
   "en": "Open the gates. Let them speak.",
@@ -5277,7 +5277,7 @@
  },
  "extra_law_events.29.f": {
   "en": "'You want to break up our largest company,' the industrialist said. 'The one that employs more people than any other. The one that keeps us competitive abroad.'\\n\\n'We want to break up a monopoly that fixes prices and crushes competitors.'\\n\\n'Same thing, from different angles.' He leaned back. 'I'll offer you this: exempt the national champion, and I'll deliver the votes you need for everything else.'\\n\\nThe reformer stared at the ceiling. It was, she reflected, a very ugly ceiling. 'Let me think about it.'",
-  "de": "‚Sie wollen unser größtes Unternehmen zerschlagen‘, sagte der Industrielle. ‚Dasjenige, das mehr Menschen beschäftigt als jedes andere. Dasjenige, das uns im Ausland wettbewerbsfähig hält.‘\\n\\n‚Wir wollen ein Monopol zerschlagen, das Preise festsetzt und Konkurrenten zermalmt.‘\\n\\n‚Dasselbe, nur aus anderem Blickwinkel.‘ Er lehnte sich zurück. ‚Ich biete Ihnen Folgendes an: Nehmen Sie den Vorzeigekonzern aus, und ich liefere Ihnen die Stimmen, die Sie für alles andere brauchen.‘\\n\\nDie Reformerin starrte an die Decke. Es war, wie sie fand, eine sehr hässliche Decke. ‚Lassen Sie mich darüber nachdenken.‘"
+  "de": "‚Sie wollen unser größtes Unternehmen zerschlagen‘, sagte der Industrielle. ‚Dasjenige, das mehr Menschen beschäftigt als jedes andere. Dasjenige, das uns im Ausland wettbewerbsfähig hält.‘\\n\\n‚Wir wollen ein Monopol zerschlagen, das Preise festsetzt und Konkurrenten zermalmt.‘\\n\\n‚Dasselbe, nur aus anderem Blickwinkel.‘ Er lehnte sich zurück. ‚Ich biete Ihnen Folgendes an: Nehmen Sie den nationalen Vorzeigekonzern aus, und ich liefere Ihnen die Stimmen, die Sie für alles andere brauchen.‘\\n\\nDie Reformerin starrte an die Decke. Es war, wie sie fand, eine sehr hässliche Decke. ‚Lassen Sie mich darüber nachdenken.‘"
  },
  "extra_law_events.29.t": {
   "en": "The Trust Question",
@@ -5357,7 +5357,7 @@
  },
  "extra_law_events.32.a": {
   "en": "Pledge never to strike first with nuclear weapons.",
-  "de": "Geloben, nie als Erste Atomwaffen einzusetzen."
+  "de": "Geloben, nie als Erste Nuklearwaffen einzusetzen."
  },
  "extra_law_events.32.b": {
   "en": "Carve out a military necessity exception.",
@@ -5465,11 +5465,11 @@
  },
  "extra_law_events.36.d_atheism": {
   "en": "The abolition of [concept_state_religion] has set the country ablaze with outrage. Clergymen denounce the government from every pulpit. Landowners warn of divine retribution. Even moderate citizens who supported separation of church and state recoil at the totality of the measure.",
-  "de": "Die Abschaffung der [concept_state_religion] hat das Land in Empörung entflammt. Geistliche prangern die Regierung von jeder Kanzel herab an. Landbesitzer warnen vor göttlicher Vergeltung. Selbst gemäßigte Bürger, die die Trennung von Kirche und Staat unterstützten, schrecken vor der Kompromisslosigkeit der Maßnahme zurück."
+  "de": "Die Abschaffung der [concept_state_religion] hat das Land in Empörung entflammt. Geistliche prangern die Regierung von jeder Kanzel herab an. Grundbesitzer warnen vor göttlicher Vergeltung. Selbst gemäßigte Bürger, die die Trennung von Kirche und Staat unterstützten, schrecken vor der Kompromisslosigkeit der Maßnahme zurück."
  },
  "extra_law_events.36.d_collectivized": {
   "en": "The seizure and collectivization of agricultural land has provoked a furious backlash from the countryside. Landowners barricade their estates, farmers resist the surveyors, and provincial officials quietly refuse to enforce the [concept_decree].",
-  "de": "Die Beschlagnahme und Kollektivierung landwirtschaftlicher Flächen hat auf dem Land eine wütende Gegenreaktion ausgelöst. Landbesitzer verbarrikadieren ihre Güter, Bauern widersetzen sich den Landvermessern, und Provinzbeamte verweigern still die Durchsetzung des [concept_decree]."
+  "de": "Die Beschlagnahme und Kollektivierung landwirtschaftlicher Flächen hat auf dem Land eine wütende Gegenreaktion ausgelöst. Grundbesitzer verbarrikadieren ihre Güter, Bauern widersetzen sich den Landvermessern, und Provinzbeamte verweigern still die Durchsetzung des [concept_decree]."
  },
  "extra_law_events.36.d_command": {
   "en": "The nationalization of the economy has triggered panic among the propertied classes. Factories are being stripped of their owners, banks placed under state receivership. The commercial quarters stand half-shuttered as capitalists scramble to move their assets abroad.",
@@ -7221,7 +7221,7 @@
  },
  "international_relations_events.8.d": {
   "en": "In the diplomatic confrontation now under way, [SCOPE.sCountry('nuclear_rival').GetName] stands on the other side from us - and like us, it holds nuclear weapons. Every step in the dispute is now weighed against the unthinkable, and military commanders on both sides are waiting to learn how hard their governments mean to push.",
-  "de": "In der diplomatischen Konfrontation, die nun im Gange ist, steht [SCOPE.sCountry('nuclear_rival').GetAltName('NOM')] uns gegenüber - und wie wir verfügt es über Kernwaffen. Jeder Schritt in diesem Streit wird nun gegen das Undenkbare abgewogen, und die Militärführungen beider Seiten warten darauf zu erfahren, wie weit ihre Regierungen zu gehen bereit sind."
+  "de": "In der diplomatischen Konfrontation, die nun im Gange ist, steht [SCOPE.sCountry('nuclear_rival').GetAltName('NOM')] uns gegenüber - und wie wir verfügt es über Nuklearwaffen. Jeder Schritt in diesem Streit wird nun gegen das Undenkbare abgewogen, und die Militärführungen beider Seiten warten darauf zu erfahren, wie weit ihre Regierungen zu gehen bereit sind."
  },
  "international_relations_events.8.f": {
   "en": "The telephone rings at three in the morning. The aide's voice is strained.\\n\\n\\\"Sir, their foreign minister has said it again on the radio. They will not back down.\\\"\\n\\nA long pause.\\n\\n\\\"And our commanders?\\\"\\n\\n\\\"Waiting to hear what we say next, sir. So is the rest of the world.\\\"",
@@ -11589,7 +11589,7 @@
  },
  "nuclear_custody.10.f": {
   "en": "In the Budapest Memorandum of December 1994, the United States, Britain and Russia gave Ukraine assurances of its independence and its borders. Ukraine gave up what was then the world's third-largest nuclear arsenal.",
-  "de": "Im Budapester Memorandum vom Dezember 1994 gaben die United States, Großbritannien und Russland der Ukraine Zusicherungen für ihre Unabhängigkeit und ihre Grenzen. Die Ukraine gab dafür das damals drittgrößte Nukleararsenal der Welt auf."
+  "de": "Im Budapester Memorandum vom Dezember 1994 gaben die Vereinigten Staaten, Großbritannien und Russland der Ukraine Zusicherungen für ihre Unabhängigkeit und ihre Grenzen. Die Ukraine gab dafür das damals drittgrößte Nukleararsenal der Welt auf."
  },
  "nuclear_custody.10.t": {
   "en": "A New Nuclear State",
@@ -11741,7 +11741,7 @@
  },
  "nuclear_custody.6.f": {
   "en": "In December 1991, as the Soviet Union came apart, the United States Congress voted money to help secure and dismantle its weapons. The Nunn–Lugar programme went on to deactivate more than seven thousand warheads.",
-  "de": "Im Dezember 1991, als die Sowjetunion zerfiel, bewilligte der Kongress der United States Mittel, um bei der Sicherung und Demontage ihrer Waffen zu helfen. Das Nunn-Lugar-Programm deaktivierte in der Folge mehr als siebentausend Sprengköpfe."
+  "de": "Im Dezember 1991, als die Sowjetunion zerfiel, bewilligte der Kongress der Vereinigten Staaten Mittel, um bei der Sicherung und Demontage ihrer Waffen zu helfen. Das Nunn-Lugar-Programm deaktivierte in der Folge mehr als siebentausend Sprengköpfe."
  },
  "nuclear_custody.6.t": {
   "en": "A Nuclear Power Divided",
@@ -11781,7 +11781,7 @@
  },
  "nuclear_custody.8.f": {
   "en": "In 1994, in Project Sapphire, American specialists flew nearly six hundred kilograms of weapons-grade uranium out of Kazakhstan, where it had been kept under little more than a padlock.",
-  "de": "1994 flogen die United States im Rahmen der Operation Sapphire fast sechshundert Kilogramm waffenfähiges Uran aus Kasachstan aus, wo es unter kaum mehr als einem Vorhängeschloss verwahrt worden war."
+  "de": "1994 flogen die Vereinigten Staaten im Rahmen der Operation Sapphire fast sechshundert Kilogramm waffenfähiges Uran aus Kasachstan aus, wo es unter kaum mehr als einem Vorhängeschloss verwahrt worden war."
  },
  "nuclear_custody.8.t": {
   "en": "Our Offer to Secure Their Arsenal",
@@ -11877,7 +11877,7 @@
  },
  "nuclear_incident.11.f": {
   "en": "\\\"If it is an exercise, going to high alert tells them we believed it could be real.\\\"\\n\\n\\\"And if it is not an exercise?\\\"\\n\\n\\\"Then it will not matter very much what it tells them.\\\"",
-  "de": "„Wenn es eine Übung ist, sagt ihnen die höchste Alarmstufe, dass wir es für möglicherweise echt gehalten haben.“\\n\\n„Und wenn es keine Übung ist?“\\n\\n„Dann wird es kaum noch eine Rolle spielen, was es ihnen sagt.“"
+  "de": "„Wenn es eine Übung ist, sagt ihnen die Hohe Alarmbereitschaft, dass wir es für möglicherweise echt gehalten haben.“\\n\\n„Und wenn es keine Übung ist?“\\n\\n„Dann wird es kaum noch eine Rolle spielen, was es ihnen sagt.“"
  },
  "nuclear_incident.11.t": {
   "en": "Is This the Real Thing?",
@@ -12401,7 +12401,7 @@
  },
  "nuclear_loose.9.f": {
   "en": "In 1998, in Operation Auburn Endeavor, the United States flew highly enriched uranium out of a research institute near Tbilisi, where the fighting of the civil war had come within a few miles.",
-  "de": "1998 flogen die United States im Rahmen der Operation Auburn Endeavor hochangereichertes Uran aus einem Forschungsinstitut nahe Tiflis aus, wo die Kämpfe des Bürgerkriegs bis auf wenige Kilometer herangerückt waren."
+  "de": "1998 flogen die Vereinigten Staaten im Rahmen der Operation Auburn Endeavor hochangereichertes Uran aus einem Forschungsinstitut nahe Tiflis aus, wo die Kämpfe des Bürgerkriegs bis auf wenige Kilometer herangerückt waren."
  },
  "nuclear_loose.9.t": {
   "en": "Loose Material Secured",
@@ -12889,7 +12889,7 @@
  },
  "nuclear_weapon_events.22.d": {
   "en": "A mass movement against nuclear weapons has taken root across our cities. Tens of thousands march through the streets carrying banners depicting mushroom clouds and demanding disarmament. The protesters cut across class and political lines, unified by a primal fear of atomic annihilation.",
-  "de": "Eine Massenbewegung gegen Atomwaffen hat in unseren Städten Fuß gefasst. Zehntausende ziehen mit Bannern, die Atompilze zeigen, durch die Straßen und fordern Abrüstung. Die Demonstranten überwinden Klassen- und Parteigrenzen, geeint durch die uralte Angst vor der atomaren Vernichtung."
+  "de": "Eine Massenbewegung gegen Nuklearwaffen hat in unseren Städten Fuß gefasst. Zehntausende ziehen mit Bannern, die Atompilze zeigen, durch die Straßen und fordern Abrüstung. Die Demonstranten überwinden Klassen- und Parteigrenzen, geeint durch die uralte Angst vor der atomaren Vernichtung."
  },
  "nuclear_weapon_events.22.f": {
   "en": "\\\"They are carrying photographs of the cities that were hit.\\\"\\n\\n\\\"And how many of them?\\\"\\n\\n\\\"Fifty thousand at the parliament gates this morning. By Friday it will be a hundred thousand at the defense ministry. The photographs do not need arguments. The photographs are the argument. Whatever we say in response will sound clinical, and the clinical sounds like complicity.\\\"",
@@ -13065,7 +13065,7 @@
  },
  "nuclear_weapon_events.9.d": {
   "en": "[SCOPE.sCountry('first_nuke_country').GetName] has successfully completed its nuclear weapons program and now possesses a nuclear arsenal. Another nation joins the growing circle of nuclear powers, and the calculus of deterrence grows ever more complex.",
-  "de": "[SCOPE.sCountry('first_nuke_country').GetAltName('NOM')] hat sein Atomwaffenprogramm erfolgreich abgeschlossen und verfügt nun über ein nukleares Arsenal. Eine weitere Nation tritt dem wachsenden Kreis der Atommächte bei, und die Logik der Abschreckung wird immer komplexer."
+  "de": "[SCOPE.sCountry('first_nuke_country').GetAltName('NOM')] hat sein Nuklearwaffenprogramm erfolgreich abgeschlossen und verfügt nun über ein nukleares Arsenal. Eine weitere Nation tritt dem wachsenden Kreis der Atommächte bei, und die Logik der Abschreckung wird immer komplexer."
  },
  "nuclear_weapon_events.9.d_world_first": {
   "en": "[SCOPE.sCountry('first_nuke_country').GetName] has detonated a nuclear weapon - the first in human history. In a single blinding instant, the rules of warfare, diplomacy, and survival have been rewritten. A single nation now holds the power to erase cities from the map. Every government, every general staff, every foreign ministry must reckon with a world where total annihilation is no longer theoretical.",
@@ -13073,7 +13073,7 @@
  },
  "nuclear_weapon_events.9.f": {
   "en": "The proliferation of nuclear weapons continues. As more nations acquire the bomb, the web of deterrence grows more tangled - and more fragile. One miscalculation, one rogue commander, one failed diplomacy could unravel it all.",
-  "de": "Die Verbreitung von Atomwaffen schreitet voran. Je mehr Nationen die Bombe erlangen, desto verworrener — und brüchiger — wird das Geflecht der Abschreckung. Eine einzige Fehleinschätzung, ein durchdrehender Kommandeur, ein Scheitern der Diplomatie könnte alles zum Einsturz bringen."
+  "de": "Die Verbreitung von Nuklearwaffen schreitet voran. Je mehr Nationen die Bombe erlangen, desto verworrener — und brüchiger — wird das Geflecht der Abschreckung. Eine einzige Fehleinschätzung, ein durchdrehender Kommandeur, ein Scheitern der Diplomatie könnte alles zum Einsturz bringen."
  },
  "nuclear_weapon_events.9.f_world_first": {
   "en": "The world has been forever altered as [SCOPE.sCountry('first_nuke_country').GetName] demonstrates its newfound power. The detonation of this nuclear weapon marks the dawn of an era where the threat of total annihilation hangs over every nation. The balance of power is irrevocably changed, and all must now reckon with the devastating potential of this technology. The age of nuclear deterrence has begun, and with it, a shadow has been cast across the future of mankind.",
@@ -14033,7 +14033,7 @@
  },
  "social_tensions_events.1.a": {
   "en": "Launch a security crackdown",
-  "de": "Eine harte Sicherheitsoffensive starten"
+  "de": "Ein hartes Durchgreifen starten"
  },
  "social_tensions_events.1.b": {
   "en": "Rally national resilience",
@@ -15353,7 +15353,7 @@
  },
  "space_race_colony_events.1.d": {
   "en": "Our colonists have established a settlement within the largest canyon system in the solar system. The Marineris Rift stretches over 4,000 kilometers: longer than the continental United States. The canyon walls provide natural radiation shielding, and the sheltered microclimate offers marginally higher atmospheric pressure than the open surface.",
-  "de": "Unsere Kolonisten haben eine Siedlung im größten Canyonsystem des Sonnensystems errichtet. Der Marineris-Grabenbruch erstreckt sich über 4.000 Kilometer: länger als die kontinentalen United States. Die Canyonwände bieten natürlichen Strahlenschutz, und das geschützte Mikroklima bringt einen geringfügig höheren Atmosphärendruck als die offene Oberfläche."
+  "de": "Unsere Kolonisten haben eine Siedlung im größten Canyonsystem des Sonnensystems errichtet. Der Marineris-Grabenbruch erstreckt sich über 4.000 Kilometer: länger als die kontinentalen Vereinigten Staaten. Die Canyonwände bieten natürlichen Strahlenschutz, und das geschützte Mikroklima bringt einen geringfügig höheren Atmosphärendruck als die offene Oberfläche."
  },
  "space_race_colony_events.1.f": {
   "en": "\\\"Four thousand kilometers of canyon, and we're building a city at the bottom of it. The engineers think we're mad. The geologists think we're geniuses.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Colony Chief Engineer",
@@ -17005,7 +17005,7 @@
  },
  "space_race_events.5.f": {
   "en": "\\\"Shackleton is a geologist's dream and a pilot's nightmare. The crater rim gets sunlight, but one degree off course and you're in permanent shadow at minus 170 Celsius.\\\"\\n\\n— Landing Site Review Board\\n\\n\\\"The equatorial sites are boring. Safe, yes. But boring. And boring doesn't win the space race.\\\"\\n\\n— Program Chief Scientist",
-  "de": "„Shackleton ist der Traum eines Geologen und der Albtraum eines Piloten. Der Kraterrand bekommt Sonnenlicht, aber ein Grad Kursabweichung, und man steckt bei minus 170 Grad Celsius im ewigen Schatten.“\\n\\n— Prüfungsgremium für Landestellen\\n\\n„Die äquatorialen Standorte sind langweilig. Sicher, ja. Aber langweilig. Und langweilig gewinnt kein Wettrennen ins All.“\\n\\n— Chefwissenschaftlerin des Programms"
+  "de": "„Shackleton ist der Traum eines Geologen und der Albtraum eines Piloten. Der Kraterrand bekommt Sonnenlicht, aber ein Grad Kursabweichung, und man steckt bei minus 170 Grad Celsius im ewigen Schatten.“\\n\\n— Prüfungsgremium für Landestellen\\n\\n„Die äquatorialen Standorte sind langweilig. Sicher, ja. Aber langweilig. Und langweilig gewinnt keinen Wettlauf ins All.“\\n\\n— Chefwissenschaftlerin des Programms"
  },
  "space_race_events.5.t": {
   "en": "Where the Eagle Shall Land",
@@ -18209,7 +18209,7 @@
  },
  "te_debug_covert.5.d": {
   "en": "Console-only shortcuts for the network intelligence reports (slice 7). None of these can happen in normal play. Seed an operation first (te_debug_covert.2) so there is a network.\\n\\nStrength 50 is the first tier: each network row shows the target's intelligence capacity and technology count beside ours, and says its operations against us need 75. Strength 80 is the second: the row also counts them, usually 0.\\n\\nThe third option makes every network's target run cultivate assets against us (its funding is raised to 1 if it has none) and refreshes the reports, so a second-tier row's count goes up by one. Force a detection afterwards (te_debug_covert.2) and a row that falls below 75 drops back to the first tier the same day.",
-  "de": "Nur für die Konsole: Abkürzungen für die Netzwerk-Geheimdienstberichte (Abschnitt 7). Nichts davon kann im normalen Spiel vorkommen. Legen Sie zuerst eine Operation an (te_debug_covert.2), damit ein Netzwerk existiert.\\n\\nStärke 50 ist die erste Stufe: Jede Netzwerkzeile zeigt die Geheimdienstkapazität und Technologiezahl des Ziels neben unserer eigenen und gibt an, dass seine Operationen gegen uns 75 benötigen. Stärke 80 ist die zweite Stufe: Die Zeile zählt sie zusätzlich, meist 0.\\n\\nDie dritte Option lässt das Ziel jedes Netzwerks Quellen gegen uns anwerben (dessen Finanzierung wird auf 1 angehoben, falls es keine hat) und aktualisiert die Berichte, sodass sich die Zählung einer Zeile der zweiten Stufe um eins erhöht. Erzwingen Sie danach eine Entdeckung (te_debug_covert.2), und eine Zeile, die unter 75 fällt, kehrt noch am selben Tag zur ersten Stufe zurück."
+  "de": "Nur für die Konsole: Abkürzungen für die Netzwerk-Geheimdienstberichte (Abschnitt 7). Nichts davon kann im normalen Spiel vorkommen. Legen Sie zuerst eine Operation an (te_debug_covert.2), damit ein Netzwerk existiert.\\n\\nStärke 50 ist die erste Stufe: Jede Netzwerkzeile zeigt die Geheimdienstkapazität und Technologiezahl des Ziels neben unserer eigenen und gibt an, dass seine Operationen gegen uns 75 benötigen. Stärke 80 ist die zweite Stufe: Die Zeile zählt sie zusätzlich, meist 0.\\n\\nDie dritte Option lässt das Ziel jedes Netzwerks die Operation Netzwerk aufbauen gegen uns starten (dessen Finanzierung wird auf 1 angehoben, falls es keine hat) und aktualisiert die Berichte, sodass sich die Zählung einer Zeile der zweiten Stufe um eins erhöht. Erzwingen Sie danach eine Entdeckung (te_debug_covert.2), und eine Zeile, die unter 75 fällt, kehrt noch am selben Tag zur ersten Stufe zurück."
  },
  "te_debug_covert.5.f": {
   "en": "Test harness. Nothing here is real intelligence.",
@@ -18237,7 +18237,7 @@
  },
  "te_debug_deterrence.1.e": {
   "en": "High alert for six months already, strain at 70",
-  "de": "Bereits seit sechs Monaten in höchster Alarmbereitschaft, Belastung bei 70"
+  "de": "Bereits seit sechs Monaten in Hoher Alarmbereitschaft, Belastung bei 70"
  },
  "te_debug_deterrence.1.f": {
   "en": "Run te_debug_deterrence.1 first: the entry activates once a warhead exists.",
@@ -18477,7 +18477,7 @@
  },
  "te_debug_monetary.10.d": {
   "en": "#lore Console-only. Nothing in the mod fires this event.#!\\n\\n#title The anchored state#!\\nKind: #v [ROOT.GetVariable('te_mon_anchor_kind').GetValue|0]#! (0 none, 1 treaty peg, 2 bloc currency, 3 currency board)   Anchor: #v [SCOPE.sCountry('te_debug_anchor').GetName]#! (itself = none)   Scans monthly: #v [ROOT.GetVariable('te_mon_arr_scan').GetValue|0]#!\\nAnchor's rate (copy): #v [ROOT.GetVariable('te_mon_anchor_rate').GetValue|2]#! + spread #v [SCOPE.GetRootScope.ScriptValue('te_mon_anchor_spread')|2]#!   Own policy rate: #v [ROOT.GetVariable('te_policy_rate').GetValue|2]#!\\nAnchor's index (copy): #v [ROOT.GetVariable('te_mon_anchor_fx_index').GetValue|2]#!   Parity offset: #v [ROOT.GetVariable('te_mon_peg_parity_offset').GetValue|2]#!   Own index: #v [ROOT.GetVariable('te_fx_index').GetValue|2]#!   Shadow: #v [ROOT.GetVariable('te_fx_shadow').GetValue|2]#!   Overvaluation: #v [ROOT.GetVariable('te_mon_overvaluation').GetValue|2]#!\\nCredibility c: own #v [SCOPE.GetRootScope.ScriptValue('te_mon_credibility_c_own')|2]#!, anchor's #v [ROOT.GetVariable('te_mon_anchor_c').GetValue|2]#!, in use #v [SCOPE.GetRootScope.ScriptValue('te_mon_credibility_c')|2]#!   Inflation anchor in use: #v [SCOPE.GetRootScope.ScriptValue('te_mon_inflation_anchor')|2]#!\\n\\n#title The peg#!\\nPeg confidence: #v [ROOT.GetVariable('te_peg_confidence').GetValue|1]#!   Crisis cooldown: #v [ROOT.GetVariable('te_peg_crisis_cooldown').GetValue|0]#!   Forced controls, months left: #v [ROOT.GetVariable('te_mon_emergency_controls_months').GetValue|0]#!   Drain this month: #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_overvaluation_drain')|2]#!\\n\\n#title Backstops#!\\nSwap recipient: #v [ROOT.GetVariable('te_mon_swap_recipient').GetValue|0]#!   Ward: #v [ROOT.GetVariable('te_mon_lolr_ward').GetValue|0]#!   Renege clock: #v [ROOT.GetVariable('te_mon_lolr_suspended_months').GetValue|0]#!   Default cooldown: #v [ROOT.GetVariable('te_mon_lolr_default_cooldown').GetValue|0]#!\\nReceived #v [ROOT.GetVariable('te_mon_arr_recipient_pts').GetValue|2]#! (applied #v [ROOT.GetVariable('te_mon_arr_recipient_applied').GetValue|2]#!)   Extended #v [ROOT.GetVariable('te_mon_arr_provider_pts').GetValue|2]#! (applied #v [ROOT.GetVariable('te_mon_arr_provider_applied').GetValue|2]#!)   Standing #v [ROOT.GetVariable('te_mon_arr_standing_pts').GetValue|2]#! (applied #v [ROOT.GetVariable('te_mon_arr_standing_applied').GetValue|2]#!)\\n\\n#title Currency board (5c)#!\\nMonths at an extreme band: #v [ROOT.GetVariable('te_mon_board_wrong_months').GetValue|0]#! (lever at 6; on: #v [ROOT.GetVariable('te_mon_board_lever_applied').GetValue|0]#!)   Own flat minting: #v [SCOPE.GetRootScope.ScriptValue('te_mon_board_seigniorage_from_subject')|0]#! × 2   Seigniorage from subjects: #v [ROOT.GetVariable('te_mon_board_seigniorage_pts').GetValue|0]#! (applied #v [ROOT.GetVariable('te_mon_board_seigniorage_applied').GetValue|0]#!)\\n\\n#title Common currency (5b)#!\\nAdopted: #v [ROOT.GetVariable('te_mon_union_member').GetValue|0]#!   Re-adoption lock: #v [ROOT.GetVariable('te_mon_union_lock_months').GetValue|0]#!   Ask cooldown: #v [ROOT.GetVariable('te_mon_union_ask_cooldown').GetValue|0]#!   Question signature: #v [ROOT.GetVariable('te_mon_union_q_state').GetValue|0]#!   Adoption score: #v [SCOPE.GetRootScope.ScriptValue('te_mon_union_adopt_score')|0]#! (> 0 adopts)\\nOvervaluation premium: #v [SCOPE.GetRootScope.ScriptValue('te_mon_premium_union_overvaluation')|2]#!   As leader — pressing: #v [ROOT.GetVariable('te_mon_union_pressing').GetValue|0]#!, holdouts #v [ROOT.GetVariable('te_mon_union_holdouts').GetValue|0]#!, would refuse #v [ROOT.GetVariable('te_mon_union_refusers').GetValue|0]#!\\nGDP pegged to us (m): #v [ROOT.GetVariable('te_mon_anchored_gdp_m').GetValue|2]#!   World GDP (m): #v [GetGlobalVariable('te_mon_world_gdp_m').GetValue|0]#!\\nTier 4 banking union on: #v [ROOT.GetVariable('te_mon_union_banking_applied').GetValue|0]#!   Tier 5 reserve on: #v [ROOT.GetVariable('te_mon_union_reserve_applied').GetValue|0]#!   Seigniorage (£/wk): #v [ROOT.GetVariable('te_mon_union_seigniorage_pts').GetValue|0]#! (applied #v [ROOT.GetVariable('te_mon_union_seigniorage_applied').GetValue|0]#!)",
-  "de": "#lore Nur für die Konsole. Kein Bestandteil der Mod löst dieses Ereignis aus.#!\\n\\n#title Der verankerte Zustand#!\\nArt: #v [ROOT.GetVariable('te_mon_anchor_kind').GetValue|0]#! (0 keine, 1 Vertragsbindung, 2 Blockwährung, 3 Currency Board)   Anker: #v [SCOPE.sCountry('te_debug_anchor').GetName]#! (sich selbst = keiner)   Scannt monatlich: #v [ROOT.GetVariable('te_mon_arr_scan').GetValue|0]#!\\nZinssatz des Ankers (Kopie): #v [ROOT.GetVariable('te_mon_anchor_rate').GetValue|2]#! + Spanne #v [SCOPE.GetRootScope.ScriptValue('te_mon_anchor_spread')|2]#!   Eigener Leitzins: #v [ROOT.GetVariable('te_policy_rate').GetValue|2]#!\\nIndex des Ankers (Kopie): #v [ROOT.GetVariable('te_mon_anchor_fx_index').GetValue|2]#!   Paritätsabweichung: #v [ROOT.GetVariable('te_mon_peg_parity_offset').GetValue|2]#!   Eigener Index: #v [ROOT.GetVariable('te_fx_index').GetValue|2]#!   Schatten: #v [ROOT.GetVariable('te_fx_shadow').GetValue|2]#!   Überbewertung: #v [ROOT.GetVariable('te_mon_overvaluation').GetValue|2]#!\\nGlaubwürdigkeit c: eigene #v [SCOPE.GetRootScope.ScriptValue('te_mon_credibility_c_own')|2]#!, die des Ankers #v [ROOT.GetVariable('te_mon_anchor_c').GetValue|2]#!, verwendet #v [SCOPE.GetRootScope.ScriptValue('te_mon_credibility_c')|2]#!   Verwendeter Inflationsanker: #v [SCOPE.GetRootScope.ScriptValue('te_mon_inflation_anchor')|2]#!\\n\\n#title Die Bindung#!\\nBindungsvertrauen: #v [ROOT.GetVariable('te_peg_confidence').GetValue|1]#!   Krisen-Abklingzeit: #v [ROOT.GetVariable('te_peg_crisis_cooldown').GetValue|0]#!   Erzwungene Kontrollen, Monate übrig: #v [ROOT.GetVariable('te_mon_emergency_controls_months').GetValue|0]#!   Abfluss diesen Monat: #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_overvaluation_drain')|2]#!\\n\\n#title Auffangnetze#!\\nSwap-Empfänger: #v [ROOT.GetVariable('te_mon_swap_recipient').GetValue|0]#!   Schützling: #v [ROOT.GetVariable('te_mon_lolr_ward').GetValue|0]#!   Bruchuhr: #v [ROOT.GetVariable('te_mon_lolr_suspended_months').GetValue|0]#!   Ausfall-Abklingzeit: #v [ROOT.GetVariable('te_mon_lolr_default_cooldown').GetValue|0]#!\\nErhalten #v [ROOT.GetVariable('te_mon_arr_recipient_pts').GetValue|2]#! (angewandt #v [ROOT.GetVariable('te_mon_arr_recipient_applied').GetValue|2]#!)   Gewährt #v [ROOT.GetVariable('te_mon_arr_provider_pts').GetValue|2]#! (angewandt #v [ROOT.GetVariable('te_mon_arr_provider_applied').GetValue|2]#!)   Eigenstand #v [ROOT.GetVariable('te_mon_arr_standing_pts').GetValue|2]#! (angewandt #v [ROOT.GetVariable('te_mon_arr_standing_applied').GetValue|2]#!)\\n\\n#title Currency Board (5c)#!\\nMonate in einem Extremband: #v [ROOT.GetVariable('te_mon_board_wrong_months').GetValue|0]#! (Hebel bei 6; aktiv: #v [ROOT.GetVariable('te_mon_board_lever_applied').GetValue|0]#!)   Eigene pauschale Geldschöpfung: #v [SCOPE.GetRootScope.ScriptValue('te_mon_board_seigniorage_from_subject')|0]#! × 2   Seigniorage von Nebenländern: #v [ROOT.GetVariable('te_mon_board_seigniorage_pts').GetValue|0]#! (angewandt #v [ROOT.GetVariable('te_mon_board_seigniorage_applied').GetValue|0]#!)\\n\\n#title Gemeinsame Währung (5b)#!\\nBeigetreten: #v [ROOT.GetVariable('te_mon_union_member').GetValue|0]#!   Wiederbeitrittssperre: #v [ROOT.GetVariable('te_mon_union_lock_months').GetValue|0]#!   Abklingzeit der Anfrage: #v [ROOT.GetVariable('te_mon_union_ask_cooldown').GetValue|0]#!   Fragesignatur: #v [ROOT.GetVariable('te_mon_union_q_state').GetValue|0]#!   Beitrittswert: #v [SCOPE.GetRootScope.ScriptValue('te_mon_union_adopt_score')|0]#! (> 0 tritt bei)\\nÜberbewertungsprämie: #v [SCOPE.GetRootScope.ScriptValue('te_mon_premium_union_overvaluation')|2]#!   Als Anführer — drängend: #v [ROOT.GetVariable('te_mon_union_pressing').GetValue|0]#!, Verweigerer #v [ROOT.GetVariable('te_mon_union_holdouts').GetValue|0]#!, würden ablehnen #v [ROOT.GetVariable('te_mon_union_refusers').GetValue|0]#!\\nAn uns gebundenes BIP (Mio.): #v [ROOT.GetVariable('te_mon_anchored_gdp_m').GetValue|2]#!   Welt-BIP (Mio.): #v [GetGlobalVariable('te_mon_world_gdp_m').GetValue|0]#!\\nStufe-4-Bankenunion aktiv: #v [ROOT.GetVariable('te_mon_union_banking_applied').GetValue|0]#!   Stufe-5-Reserve aktiv: #v [ROOT.GetVariable('te_mon_union_reserve_applied').GetValue|0]#!   Seigniorage (£/Woche): #v [ROOT.GetVariable('te_mon_union_seigniorage_pts').GetValue|0]#! (angewandt #v [ROOT.GetVariable('te_mon_union_seigniorage_applied').GetValue|0]#!)"
+  "de": "#lore Console-only. Nothing in the mod fires this event.#!\\n\\n#title Der verankerte Zustand#!\\nArt: #v [ROOT.GetVariable('te_mon_anchor_kind').GetValue|0]#! (0 keine, 1 Vertragsbindung, 2 Blockwährung, 3 Currency Board)   Anker: #v [SCOPE.sCountry('te_debug_anchor').GetName]#! (sich selbst = keiner)   Scannt monatlich: #v [ROOT.GetVariable('te_mon_arr_scan').GetValue|0]#!\\nZinssatz des Ankers (Kopie): #v [ROOT.GetVariable('te_mon_anchor_rate').GetValue|2]#! + Spanne #v [SCOPE.GetRootScope.ScriptValue('te_mon_anchor_spread')|2]#!   Eigener Leitzins: #v [ROOT.GetVariable('te_policy_rate').GetValue|2]#!\\nIndex des Ankers (Kopie): #v [ROOT.GetVariable('te_mon_anchor_fx_index').GetValue|2]#!   Paritätsabweichung: #v [ROOT.GetVariable('te_mon_peg_parity_offset').GetValue|2]#!   Eigener Index: #v [ROOT.GetVariable('te_fx_index').GetValue|2]#!   Schatten: #v [ROOT.GetVariable('te_fx_shadow').GetValue|2]#!   Überbewertung: #v [ROOT.GetVariable('te_mon_overvaluation').GetValue|2]#!\\nGlaubwürdigkeit c: eigene #v [SCOPE.GetRootScope.ScriptValue('te_mon_credibility_c_own')|2]#!, die des Ankers #v [ROOT.GetVariable('te_mon_anchor_c').GetValue|2]#!, verwendet #v [SCOPE.GetRootScope.ScriptValue('te_mon_credibility_c')|2]#!   Verwendeter Inflationsanker: #v [SCOPE.GetRootScope.ScriptValue('te_mon_inflation_anchor')|2]#!\\n\\n#title Die Bindung#!\\nBindungsvertrauen: #v [ROOT.GetVariable('te_peg_confidence').GetValue|1]#!   Krisen-Abklingzeit: #v [ROOT.GetVariable('te_peg_crisis_cooldown').GetValue|0]#!   Erzwungene Kontrollen, Monate übrig: #v [ROOT.GetVariable('te_mon_emergency_controls_months').GetValue|0]#!   Abfluss diesen Monat: #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_overvaluation_drain')|2]#!\\n\\n#title Auffangnetze#!\\nSwap-Empfänger: #v [ROOT.GetVariable('te_mon_swap_recipient').GetValue|0]#!   Schützling: #v [ROOT.GetVariable('te_mon_lolr_ward').GetValue|0]#!   Bruchuhr: #v [ROOT.GetVariable('te_mon_lolr_suspended_months').GetValue|0]#!   Ausfall-Abklingzeit: #v [ROOT.GetVariable('te_mon_lolr_default_cooldown').GetValue|0]#!\\nErhalten #v [ROOT.GetVariable('te_mon_arr_recipient_pts').GetValue|2]#! (angewandt #v [ROOT.GetVariable('te_mon_arr_recipient_applied').GetValue|2]#!)   Gewährt #v [ROOT.GetVariable('te_mon_arr_provider_pts').GetValue|2]#! (angewandt #v [ROOT.GetVariable('te_mon_arr_provider_applied').GetValue|2]#!)   Eigenstand #v [ROOT.GetVariable('te_mon_arr_standing_pts').GetValue|2]#! (angewandt #v [ROOT.GetVariable('te_mon_arr_standing_applied').GetValue|2]#!)\\n\\n#title Currency Board (5c)#!\\nMonate in einem Extremband: #v [ROOT.GetVariable('te_mon_board_wrong_months').GetValue|0]#! (Hebel bei 6; aktiv: #v [ROOT.GetVariable('te_mon_board_lever_applied').GetValue|0]#!)   Eigene pauschale Geldschöpfung: #v [SCOPE.GetRootScope.ScriptValue('te_mon_board_seigniorage_from_subject')|0]#! × 2   Seigniorage von Klientelländern: #v [ROOT.GetVariable('te_mon_board_seigniorage_pts').GetValue|0]#! (angewandt #v [ROOT.GetVariable('te_mon_board_seigniorage_applied').GetValue|0]#!)\\n\\n#title Gemeinsame Währung (5b)#!\\nBeigetreten: #v [ROOT.GetVariable('te_mon_union_member').GetValue|0]#!   Wiederbeitrittssperre: #v [ROOT.GetVariable('te_mon_union_lock_months').GetValue|0]#!   Abklingzeit der Anfrage: #v [ROOT.GetVariable('te_mon_union_ask_cooldown').GetValue|0]#!   Fragesignatur: #v [ROOT.GetVariable('te_mon_union_q_state').GetValue|0]#!   Beitrittswert: #v [SCOPE.GetRootScope.ScriptValue('te_mon_union_adopt_score')|0]#! (> 0 tritt bei)\\nÜberbewertungsprämie: #v [SCOPE.GetRootScope.ScriptValue('te_mon_premium_union_overvaluation')|2]#!   Als Anführer — drängend: #v [ROOT.GetVariable('te_mon_union_pressing').GetValue|0]#!, Verweigerer #v [ROOT.GetVariable('te_mon_union_holdouts').GetValue|0]#!, würden ablehnen #v [ROOT.GetVariable('te_mon_union_refusers').GetValue|0]#!\\nAn uns gebundenes BIP (Mio.): #v [ROOT.GetVariable('te_mon_anchored_gdp_m').GetValue|2]#!   Welt-BIP (Mio.): #v [GetGlobalVariable('te_mon_world_gdp_m').GetValue|0]#!\\nStufe-4-Bankenunion aktiv: #v [ROOT.GetVariable('te_mon_union_banking_applied').GetValue|0]#!   Stufe-5-Reserve aktiv: #v [ROOT.GetVariable('te_mon_union_reserve_applied').GetValue|0]#!   Seigniorage (£/Woche): #v [ROOT.GetVariable('te_mon_union_seigniorage_pts').GetValue|0]#! (angewandt #v [ROOT.GetVariable('te_mon_union_seigniorage_applied').GetValue|0]#!)"
  },
  "te_debug_monetary.10.dd": {
   "en": "Run the arrangement discovery now",
@@ -18637,7 +18637,7 @@
  },
  "te_debug_monetary.6.d": {
   "en": "#lore Console-only. Nothing in the mod fires this event. It runs the monetary monthly update over and over in one click, so a drift that takes years can be read in a second.#!\\n\\n#title What moves#!\\nEverything the monthly update owns: the policy rate closing on its target, core and expected inflation, the trailing price average, both premiums, the inflation band and its modifier, the sustained-stance counter, and all three random walks — one draw of each per month, the same as any pulse.\\n\\n#title What does not#!\\nThe calendar. No timed modifier ages, the banking cycle's phase and bubble stay exactly where they are, the yearly growth snapshot does not run (it would read one instant's economy against itself), the budget does not move so the deficit term is frozen at today's figure, and prices do not move — so the basket's shock term quietly decays to nothing over a long run. Read a fast-forward as #v this month's economy, repeated#!, not as five years of history.\\n\\n#title If inflation runs away#!\\nShould headline cross the hyperinflation edge mid-run, the crisis event fires and the rest of the run is skipped, so the state you read afterwards is the month the crisis arrived rather than years of unanswered popups. Answer it, then run this again.",
-  "de": "#lore Nur für die Konsole. Kein Bestandteil der Mod löst dieses Ereignis aus. Es führt die monatliche Geld-Aktualisierung mit einem Klick immer wieder aus, sodass eine Drift, die Jahre braucht, in einer Sekunde ablesbar wird.#!\\n\\n#title Was sich bewegt#!\\nAlles, was der monatlichen Aktualisierung gehört: der sich seinem Ziel annähernde Leitzins, Kern- und erwartete Inflation, der gleitende Preisdurchschnitt, beide Prämien, das Inflationsband und sein Modifikator, der Zähler anhaltender Ausrichtung und alle drei Zufallsläufe — je eine Ziehung pro Monat, genau wie bei jedem Impuls.\\n\\n#title Was sich nicht bewegt#!\\nDer Kalender. Kein zeitlicher Modifikator altert, Phase und Blase des Bankzyklus bleiben genau, wo sie sind, die jährliche Wachstumsmomentaufnahme läuft nicht (sie würde die Wirtschaft eines Augenblicks gegen sich selbst lesen), der Haushalt bewegt sich nicht, sodass der Defizitterm auf der heutigen Zahl eingefroren bleibt, und die Preise bewegen sich nicht — sodass der Schockterm des Warenkorbs über einen langen Lauf leise auf null abklingt. Lesen Sie einen Vorlauf als #v die Wirtschaft dieses Monats, wiederholt#!, nicht als fünf Jahre Geschichte.\\n\\n#title Wenn die Inflation durchgeht#!\\nÜberschreitet die Gesamtinflation mitten im Lauf die Hyperinflationsgrenze, löst das Krisenereignis aus, und der Rest des Laufs wird übersprungen, sodass der Zustand, den Sie danach ablesen, der Monat ist, in dem die Krise eintrat, statt Jahre unbeantworteter Popups. Beantworten Sie es, und führen Sie dies dann erneut aus."
+  "de": "#lore Console-only. Nothing in the mod fires this event. It runs the monetary monthly update over and over in one click, so a drift that takes years can be read in a second.#!\\n\\n#title Was sich bewegt#!\\nAlles, was der monatlichen Aktualisierung gehört: der sich seinem Ziel annähernde Leitzins, Kern- und erwartete Inflation, der gleitende Preisdurchschnitt, beide Prämien, das Inflationsband und sein Modifikator, der Zähler anhaltender Ausrichtung und alle drei Zufallsläufe — je eine Ziehung pro Monat, genau wie bei jedem Impuls.\\n\\n#title Was sich nicht bewegt#!\\nDer Kalender. Kein zeitlicher Modifikator altert, Phase und Blase des Bankenzyklus bleiben genau, wo sie sind, die jährliche Wachstumsmomentaufnahme läuft nicht (sie würde die Wirtschaft eines Augenblicks gegen sich selbst lesen), der Haushalt bewegt sich nicht, sodass der Defizitterm auf der heutigen Zahl eingefroren bleibt, und die Preise bewegen sich nicht — sodass der Schockterm des Warenkorbs über einen langen Lauf leise auf null abklingt. Lesen Sie einen Vorlauf als #v die Wirtschaft dieses Monats, wiederholt#!, nicht als fünf Jahre Geschichte.\\n\\n#title Wenn die Inflation durchgeht#!\\nÜberschreitet die Gesamtinflation mitten im Lauf die Hyperinflationsgrenze, löst das Krisenereignis aus, und der Rest des Laufs wird übersprungen, sodass der Zustand, den Sie danach ablesen, der Monat ist, in dem die Krise eintrat, statt Jahre unbeantworteter Popups. Beantworten Sie es, und führen Sie dies dann erneut aus."
  },
  "te_debug_monetary.6.f": {
   "en": "'The Governor asks how the ledgers look five years out.'\\n\\n'Tell him to come back on Thursday. I shall have lived them by then.'",
@@ -19805,7 +19805,7 @@
  },
  "un_events.14.d": {
   "en": "Delegations at the United Nations are pressing for a Nuclear Non-Proliferation Treaty - a binding agreement to prevent the spread of nuclear weapons and promote disarmament. Nothing is before the General Assembly yet: we could table it. For [ROOT.GetCountry.GetName], without a nuclear arsenal, the treaty offers protection from proliferation by rival states.",
-  "de": "Delegationen bei den Vereinten Nationen drängen auf einen Vertrag über die Nichtverbreitung von Kernwaffen – ein bindendes Abkommen, um die Verbreitung von Kernwaffen zu verhindern und Abrüstung zu fördern. Noch liegt nichts vor der Generalversammlung: Wir könnten ihn einbringen. Für [ROOT.GetCountry.GetAltName('AKK')], ohne eigenes Kernwaffenarsenal, bietet der Vertrag Schutz vor der Proliferation durch rivalisierende Staaten."
+  "de": "Delegationen bei den Vereinten Nationen drängen auf einen Vertrag über die Nichtverbreitung von Nuklearwaffen – ein bindendes Abkommen, um die Verbreitung von Nuklearwaffen zu verhindern und Abrüstung zu fördern. Noch liegt nichts vor der Generalversammlung: Wir könnten ihn einbringen. Für [ROOT.GetCountry.GetAltName('AKK')], ohne eigenes Nuklearwaffenarsenal, bietet der Vertrag Schutz vor der Proliferation durch rivalisierende Staaten."
  },
  "un_events.14.d_aspiring": {
   "en": "Delegations at the United Nations are pressing for a Nuclear Non-Proliferation Treaty, and nothing is before the General Assembly yet. The timing could not be worse for [ROOT.GetCountry.GetName] - our [concept_nuclear_program] is underway but not yet complete. Binding ourselves to the treaty would effectively end our pursuit of the ultimate deterrent.",
@@ -20729,7 +20729,7 @@
  },
  "un_vote.1.d_npt": {
   "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has brought the Nuclear Non-Proliferation Treaty before the General Assembly. A vote in favor commits [ROOT.GetCountry.GetName] to the treaty's terms - renouncing the pursuit of nuclear weapons and accepting international inspections.",
-  "de": "[SCOPE.sCountry('un_vote_proposer').GetAltName('NOM')|U] hat der Generalversammlung den Vertrag über die Nichtverbreitung von Kernwaffen vorgelegt. Eine Zustimmung verpflichtet [ROOT.GetCountry.GetAltName('AKK')] zu den Bedingungen des Vertrags – dem Verzicht auf das Streben nach Kernwaffen und der Annahme internationaler Inspektionen."
+  "de": "[SCOPE.sCountry('un_vote_proposer').GetAltName('NOM')|U] hat der Generalversammlung den Vertrag über die Nichtverbreitung von Nuklearwaffen vorgelegt. Eine Zustimmung verpflichtet [ROOT.GetCountry.GetAltName('AKK')] zu den Bedingungen des Vertrags – dem Verzicht auf das Streben nach Nuklearwaffen und der Annahme internationaler Inspektionen."
  },
  "un_vote.1.d_pandemic": {
   "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed a resolution for coordinated international pandemic response, establishing shared research protocols and mutual assistance frameworks. A vote in favor commits our country to full data-sharing and resource cooperation during health emergencies.",
@@ -20961,7 +20961,7 @@
  },
  "un_vote.2.d_npt_passed": {
   "en": "The Nuclear Non-Proliferation Treaty has been adopted by the General Assembly with a strong majority. The international community has spoken clearly against the spread of nuclear weapons. The International Atomic Energy Agency is established to enforce the treaty's provisions.",
-  "de": "Der Vertrag über die Nichtverbreitung von Kernwaffen wurde von der Generalversammlung mit deutlicher Mehrheit angenommen. Die internationale Gemeinschaft hat sich klar gegen die Verbreitung von Kernwaffen ausgesprochen. Die Internationale Atomenergiebehörde wird gegründet, um die Bestimmungen des Vertrags durchzusetzen."
+  "de": "Der Vertrag über die Nichtverbreitung von Nuklearwaffen wurde von der Generalversammlung mit deutlicher Mehrheit angenommen. Die internationale Gemeinschaft hat sich klar gegen die Verbreitung von Nuklearwaffen ausgesprochen. Die Internationale Atomenergiebehörde wird gegründet, um die Bestimmungen des Vertrags durchzusetzen."
  },
  "un_vote.2.d_pandemic_failed": {
   "en": "The Pandemic Cooperation Resolution has failed to pass the General Assembly. National sovereignty concerns and economic anxieties proved stronger than the call for international health cooperation. Each nation will face the next epidemic alone.",

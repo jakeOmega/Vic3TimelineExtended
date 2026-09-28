@@ -17,7 +17,7 @@
  },
  "academics_desc": {
   "en": "Researchers, doctors, lawyers and other educated professionals, especially those studying and teaching in academic institutions. Politically, they are at the forefront of the Intelligentsia.",
-  "de": "Forscher, Ärzte, Anwälte und andere gebildete Fachleute, insbesondere jene, die an akademischen Institutionen studieren und lehren. Politisch stehen sie an der Spitze der Intelligenzija."
+  "de": "Forscher, Ärzte, Anwälte und andere gebildete Fachleute, insbesondere jene, die an akademischen Institutionen studieren und lehren. Politisch stehen sie an der Spitze der Intellektuellen."
  },
  "building_art_academy": {
   "en": "Creative Industry",
@@ -461,6 +461,6 @@
  },
  "veterancy4": {
   "en": "Seasoned",
-  "de": "Veteran"
+  "de": "Erfahren"
  }
 }

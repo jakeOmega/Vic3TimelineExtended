@@ -277,7 +277,7 @@
  },
  "pm_ap_moller_copenhagen_wharf": {
   "en": "A.P. Møller Copenhagen Wharf",
-  "de": "A.P.-Møller-Kai Copenhagen"
+  "de": "A.P.-Møller-Kai Kopenhagen"
  },
  "pm_apple_park": {
   "en": "Apple Park",
@@ -577,7 +577,7 @@
  },
  "pm_chr_hansen_copenhagen_laboratory": {
   "en": "Chr. Hansen Copenhagen Laboratory",
-  "de": "Chr.-Hansen-Labor Copenhagen"
+  "de": "Chr.-Hansen-Labor Kopenhagen"
  },
  "pm_chromium_substitution": {
   "en": "Chromium Substitution",
@@ -2849,7 +2849,7 @@
  },
  "pm_resettlement_penal_transportation": {
   "en": "Penal Transportation",
-  "de": "Sträflingstransport"
+  "de": "Strafverschickung"
  },
  "pm_resettlement_penal_transportation_desc": {
   "en": "Convicts and the politically unreliable, shipped to the frontier. Recruits lower-strata pops in which at least a fifth are radicals. Some die on the way, and life here is harsher.$resettlement_programme_bonus_pm_line$$resettlement_declaration_pm_line$",
@@ -2873,7 +2873,7 @@
  },
  "pm_resettlement_rustication": {
   "en": "Rustication",
-  "de": "Landverschickung"
+  "de": "Landverbannung"
  },
  "pm_resettlement_rustication_desc": {
   "en": "Urban workers sent down to the countryside to learn from the peasants. Recruits laborers and clerks outside agriculture. The laborers and clerks left behind turn radical.$resettlement_programme_bonus_pm_line$$resettlement_declaration_pm_line$",
@@ -3637,7 +3637,7 @@
  },
  "pm_wonder_kenyatta_icc": {
   "en": "Kenyatta ICC",
-  "de": "Kenyatta ICC"
+  "de": "Kenyatta IStGH"
  },
  "pm_wonder_large_hadron_collider": {
   "en": "Large Hadron Collider",
@@ -3785,7 +3785,7 @@
  },
  "pmg_ap_moller_copenhagen_wharf": {
   "en": "A.P. Møller Copenhagen Wharf",
-  "de": "A.P.-Møller-Kai Copenhagen"
+  "de": "A.P.-Møller-Kai Kopenhagen"
  },
  "pmg_apple_park": {
   "en": "Apple Park",
@@ -4097,7 +4097,7 @@
  },
  "pmg_chr_hansen_copenhagen_laboratory": {
   "en": "Chr. Hansen Copenhagen Laboratory",
-  "de": "Chr.-Hansen-Labor Copenhagen"
+  "de": "Chr.-Hansen-Labor Kopenhagen"
  },
  "pmg_coats_ferguslie_mills": {
   "en": "Coats Ferguslie Mills",
@@ -5433,7 +5433,7 @@
  },
  "pmg_wonder_kenyatta_icc": {
   "en": "Kenyatta ICC",
-  "de": "Kenyatta ICC"
+  "de": "Kenyatta IStGH"
  },
  "pmg_wonder_large_hadron_collider": {
   "en": "Large Hadron Collider",

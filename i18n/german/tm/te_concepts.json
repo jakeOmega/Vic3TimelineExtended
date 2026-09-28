@@ -1069,11 +1069,11 @@
  },
  "amendment_national_champion_exemption_desc": {
   "en": "An [concept_amendment] exempting the nation's largest company from antitrust breakup, preserving a 'national champion' capable of competing internationally.",
-  "de": "Ein [concept_amendment], der das größte Unternehmen der Nation von einer kartellrechtlichen Zerschlagung ausnimmt und damit einen „nationalen Champion“ bewahrt, der international konkurrenzfähig ist."
+  "de": "Ein [concept_amendment], der das größte Unternehmen der Nation von einer kartellrechtlichen Zerschlagung ausnimmt und damit einen „nationalen Vorzeigekonzern“ bewahrt, der international konkurrenzfähig ist."
  },
  "amendment_no_first_strike_desc": {
   "en": "An [concept_amendment] formally committing the nation never to initiate the use of nuclear weapons, enhancing diplomatic standing. While it is in force, our nuclear doctrine is held at #v No First Use#!; abandoning that doctrine repudiates the pledge and strikes this amendment from our laws.",
-  "de": "Ein [concept_amendment], der die Nation formell verpflichtet, niemals als Erste Kernwaffen einzusetzen, was das diplomatische Ansehen stärkt. Solange er in Kraft ist, ist unsere Nukleardoktrin auf #v Kein Erstschlag#! festgelegt; die Aufgabe dieser Doktrin verletzt das Versprechen und streicht diesen Nachtrag aus unseren Gesetzen."
+  "de": "Ein [concept_amendment], der die Nation formell verpflichtet, niemals als Erste Nuklearwaffen einzusetzen, was das diplomatische Ansehen stärkt. Solange er in Kraft ist, ist unsere Nukleardoktrin auf #v Kein Erstschlag#! festgelegt; die Aufgabe dieser Doktrin verletzt das Versprechen und streicht diesen Nachtrag aus unseren Gesetzen."
  },
  "amendment_official_bilingualism": {
   "en": "Official Bilingualism",
@@ -2645,7 +2645,7 @@
  },
  "concept_covert_operations_desc": {
   "en": "[concept_covert_operations] launched against rival nations via [Concept('concept_diplomatic_action', 'diplomatic actions')]. Fourteen types are available:\\n• #bold Election Interference#! — Reduces target [concept_legitimacy] (target must have an elected legislature)\\n• #bold Financial Subversion#! — Increases target [concept_bubble_pressure], risking a [concept_banking_crash]\\n• #bold Industrial Espionage#! — Boosts your production tech spread and innovation (target must have researched more technologies than you)\\n• #bold Military Espionage#! — Boosts your military tech spread and unit effectiveness\\n• #bold Influence Campaign#! — Reduces target leverage resistance (requires [concept_power_bloc] leadership; target outside your bloc)\\n• #bold Ideological Subversion#! — Boosts movements matching your ideology in target (target must have a political movement)\\n• #bold Destabilization#! — Boosts separatist movements and general radicalism in target (target must have a political movement)\\n• #bold Regime Change#! — Erodes target [concept_legitimacy] and coup resistance, and pushes any coup under way there (requires a [concept_rivalry] and #bold Seasoned#! Tradecraft; not against your own subject)\\n• #bold Nuclear Programme Sabotage#! — Slows the target's nuclear weapons programme (requires a funded programme and #bold Seasoned#! Tradecraft)\\n• #bold Space Programme Espionage#! — Speeds your [concept_space_race] milestones and lowers their risk (target must be ahead of you)\\n• #bold Cultivate Assets#! — No effect on the target; builds your network there faster than any other operation (not against your own subject)\\n• #bold Secure Loose Material#! — No effect on the target; may find and destroy nuclear warheads missing from its arsenal (target must have lost warheads)\\n• #bold [concept_infrastructure] Sabotage#! — Reduces target infrastructure and [concept_throughput] (war, or a [concept_diplomatic_play] against them)\\n• #bold Communications Disruption#! — Reduces target military offense and defense (war, or a [concept_diplomatic_play] against them)\\nOnly the two sabotage operations need a war, or a [concept_diplomatic_play] against the target; the rest run in peace or war. A truce or an Intelligence Sharing Pact with the target blocks every operation. Amicable relations or better block Election Interference, Financial Subversion, Ideological Subversion and both sabotage operations; cordial or better blocks Destabilization. Only Regime Change requires a [concept_rivalry].\\nEach operation occupies a slot and requires funding. Operations risk [concept_operation_detection] each month. Unused slots provide a domestic intelligence bonus.",
-  "de": "[concept_covert_operations] gegen rivalisierende Nationen mittels [Concept('concept_diplomatic_action', 'Diplomatenaktionen')] gestartet. Vierzehn Arten sind verfügbar:\\n• #bold Wahleinmischung#! — Senkt die [concept_legitimacy] des Ziels (das Ziel muss eine gewählte Legislative haben)\\n• #bold Finanzielle Subversion#! — Erhöht den [concept_bubble_pressure] des Ziels und riskiert einen [concept_banking_crash]\\n• #bold Industriespionage#! — Steigert die Verbreitung deiner Produktionstechnologien und deine Innovation (das Ziel muss mehr Technologien erforscht haben als du)\\n• #bold Militärspionage#! — Steigert die Verbreitung deiner Militärtechnologien und die Einheiteneffektivität\\n• #bold Einflusskampagne#! — Senkt den Hebelwiderstand des Ziels (erfordert die Führung eines [concept_power_bloc]; Ziel außerhalb deines Blocks)\\n• #bold Ideologische Subversion#! — Fördert Bewegungen im Ziel, die deiner Ideologie entsprechen (das Ziel muss eine Protestbewegung haben)\\n• #bold Destabilisierung#! — Fördert separatistische Bewegungen und allgemeinen Radikalismus im Ziel (das Ziel muss eine Protestbewegung haben)\\n• #bold Regimewechsel#! — Untergräbt die [concept_legitimacy] und den Putschwiderstand des Ziels und begünstigt jeden dort laufenden Putsch (erfordert eine [concept_rivalry] und #bold Erfahrene#! Tradecraft; nicht gegen den eigenen Klientelstaat)\\n• #bold Sabotage des Nuklearprogramms#! — Verlangsamt das Kernwaffenprogramm des Ziels (erfordert ein finanziertes Programm und #bold Erfahrene#! Tradecraft)\\n• #bold Weltraumprogrammspionage#! — Beschleunigt deine [concept_space_race]-Meilensteine und senkt deren Risiko (das Ziel muss dir voraus sein)\\n• #bold Netzwerk aufbauen#! — Keine Wirkung auf das Ziel; baut dort dein Netzwerk schneller auf als jede andere Operation (nicht gegen den eigenen Klientelstaat)\\n• #bold Loses Nuklearmaterial sichern#! — Keine Wirkung auf das Ziel; kann aus dessen Arsenal fehlende Kernwaffen aufspüren und zerstören (das Ziel muss Sprengköpfe verloren haben)\\n• #bold [concept_infrastructure]-Sabotage#! — Senkt die Infrastruktur und den [concept_throughput] des Ziels (Krieg oder ein [concept_diplomatic_play] gegen das Ziel)\\n• #bold Kommunikationsstörung#! — Senkt Angriffs- und Verteidigungswerte des gegnerischen Militärs (Krieg oder ein [concept_diplomatic_play] gegen das Ziel)\\nNur die beiden Sabotageoperationen erfordern einen Krieg oder ein [concept_diplomatic_play] gegen das Ziel; die übrigen laufen in Krieg wie Frieden. Ein Waffenstillstand oder ein Geheimdienst-Kooperationspakt mit dem Ziel blockiert jede Operation. Freundschaftliche Beziehungen oder besser blockieren Wahleinmischung, Finanzielle Subversion, Ideologische Subversion und beide Sabotageoperationen; herzliche Beziehungen oder besser blockieren Destabilisierung. Nur Regimewechsel erfordert eine [concept_rivalry].\\nJede Operation belegt einen Slot und erfordert Finanzierung. Operationen riskieren monatlich eine [concept_operation_detection]. Ungenutzte Slots gewähren einen Bonus auf die Inlandsaufklärung."
+  "de": "[concept_covert_operations] gegen rivalisierende Nationen mittels [Concept('concept_diplomatic_action', 'Diplomatenaktionen')] gestartet. Vierzehn Arten sind verfügbar:\\n• #bold Wahleinmischung#! — Senkt die [concept_legitimacy] des Ziels (das Ziel muss eine gewählte Legislative haben)\\n• #bold Finanzielle Subversion#! — Erhöht den [concept_bubble_pressure] des Ziels und riskiert einen [concept_banking_crash]\\n• #bold Industriespionage#! — Steigert die Verbreitung deiner Produktionstechnologien und deine Innovation (das Ziel muss mehr Technologien erforscht haben als du)\\n• #bold Militärspionage#! — Steigert die Verbreitung deiner Militärtechnologien und die Einheiteneffektivität\\n• #bold Einflusskampagne#! — Senkt den Hebelwiderstand des Ziels (erfordert die Führung eines [concept_power_bloc]; Ziel außerhalb deines Blocks)\\n• #bold Ideologische Subversion#! — Fördert Bewegungen im Ziel, die deiner Ideologie entsprechen (das Ziel muss eine Protestbewegung haben)\\n• #bold Destabilisierung#! — Fördert separatistische Bewegungen und allgemeinen Radikalismus im Ziel (das Ziel muss eine Protestbewegung haben)\\n• #bold Regimewechsel#! — Untergräbt die [concept_legitimacy] und den Putschwiderstand des Ziels und begünstigt jeden dort laufenden Putsch (erfordert eine [concept_rivalry] und #bold Erfahrenes#! Spionagehandwerk; nicht gegen den eigenen Klientelstaat)\\n• #bold Sabotage des Nuklearprogramms#! — Verlangsamt das Nuklearwaffenprogramm des Ziels (erfordert ein finanziertes Programm und #bold Erfahrenes#! Spionagehandwerk)\\n• #bold Weltraumprogrammspionage#! — Beschleunigt deine [concept_space_race]-Meilensteine und senkt deren Risiko (das Ziel muss dir voraus sein)\\n• #bold Netzwerk aufbauen#! — Keine Wirkung auf das Ziel; baut dort dein Netzwerk schneller auf als jede andere Operation (nicht gegen den eigenen Klientelstaat)\\n• #bold Loses Nuklearmaterial sichern#! — Keine Wirkung auf das Ziel; kann aus dessen Arsenal fehlende Nuklearwaffen aufspüren und zerstören (das Ziel muss Sprengköpfe verloren haben)\\n• #bold [concept_infrastructure]-Sabotage#! — Senkt die Infrastruktur und den [concept_throughput] des Ziels (Krieg oder ein [concept_diplomatic_play] gegen das Ziel)\\n• #bold Kommunikationsstörung#! — Senkt Angriffs- und Verteidigungswerte des gegnerischen Militärs (Krieg oder ein [concept_diplomatic_play] gegen das Ziel)\\nNur die beiden Sabotageoperationen erfordern einen Krieg oder ein [concept_diplomatic_play] gegen das Ziel; die übrigen laufen in Krieg wie Frieden. Ein Waffenstillstand oder ein Geheimdienst-Kooperationspakt mit dem Ziel blockiert jede Operation. Freundschaftliche Beziehungen oder besser blockieren Wahleinmischung, Finanzielle Subversion, Ideologische Subversion und beide Sabotageoperationen; herzliche Beziehungen oder besser blockieren Destabilisierung. Nur Regimewechsel erfordert eine [concept_rivalry].\\nJede Operation belegt einen Slot und erfordert Finanzierung. Operationen riskieren monatlich eine [concept_operation_detection]. Ungenutzte Slots gewähren einen Bonus auf die Inlandsaufklärung."
  },
  "concept_covert_warfare_system_desc": {
   "en": "A covert warfare system where nations build [concept_intelligence_capacity] defenses and launch [concept_covert_operations] against rivals. Defense has two layers: general IC (from technologies, [Concept('concept_institution', 'institutions')], [concept_literacy], [Concept('concept_gdp', 'GDP')]) and type-specific defense (Economic, Military, Ideological — from relevant laws). A truce or an Intelligence Sharing Pact with the target blocks every operation; amicable relations or better block five of them, and cordial or better blocks Destabilization. Offensive operations can undermine enemy [concept_legitimacy], destabilize finances, steal technology, weaken [concept_power_bloc] resistance, subvert foreign movements, boost separatists, sabotage [concept_infrastructure], or disrupt military communications. Unused operation slots provide domestic intelligence benefits. The journal entry opens once a country holds more operation slots than every country of its rank gets for free; the first extra slot comes from the Ministry of Intelligence and Security law or the Mainframe Computers technology. Can be toggled via game rules.",
@@ -2881,7 +2881,7 @@
  },
  "concept_nuclear_stockpile_desc": {
   "en": "The quantity of nuclear weapons a country possesses. Only its [concept_nuclear_program] builds them: funding advances the programme's progress, and each time the progress bar fills, one warhead is added. A strike spends one, and a disarmament treaty takes them all. A larger stockpile increases deterrence value but may provoke international concern.",
-  "de": "Die Anzahl der Kernwaffen, die ein Land besitzt. Nur sein [concept_nuclear_program] baut sie: Finanzierung treibt den Fortschritt des Programms voran, und jedes Mal, wenn der Fortschrittsbalken sich füllt, kommt ein Sprengkopf hinzu. Ein Schlag verbraucht einen, und ein Abrüstungsvertrag nimmt sie alle. Ein größeres Arsenal erhöht den Abschreckungswert, kann aber internationale Besorgnis hervorrufen."
+  "de": "Die Anzahl der Nuklearwaffen, die ein Land besitzt. Nur sein [concept_nuclear_program] baut sie: Finanzierung treibt den Fortschritt des Programms voran, und jedes Mal, wenn der Fortschrittsbalken sich füllt, kommt ein Sprengkopf hinzu. Ein Schlag verbraucht einen, und ein Abrüstungsvertrag nimmt sie alle. Ein größeres Arsenal erhöht den Abschreckungswert, kann aber internationale Besorgnis hervorrufen."
  },
  "concept_nuclear_strike": {
   "en": "Nuclear Strike",
@@ -2989,7 +2989,7 @@
  },
  "concept_te_construction_market_desc": {
   "en": "In Timeline Extended, [concept_construction] is a tradeable good rather than a fixed national pool of points.\\n\\n#b Supply#!: each $building_construction_sector$ buys wood, iron, steel and the like, and sells construction on the [concept_market] like any other factory. Better production methods produce more per level.\\n\\n#b Purchase#!: every week the government buys construction, paid from the [concept_treasury]. In the construction panel you set either how much it buys, and the cost follows the price, or how much it spends, and the quantity follows the price over a few weeks. Private investors buy for their own projects from the [concept_investment_pool]. Each purchase is capped at what its construction queue can use that week.\\n\\n#b Delivery#!: Construction Sites, placed automatically in states with construction under way, turn purchased construction into construction points. The private/government split of those points follows the two purchases; your economic-system [concept_law] no longer sets it.\\n\\n#b Maintenance#!: factories and infrastructure use a little construction as upkeep, and much more while they retool after switching production methods, so a growing economy needs a growing construction sector.\\n\\n#b Price#!: the more construction buyers want compared with what is on sale, the higher its price, and [concept_construction_cost_scaling] makes each point cost more in richer countries. When supply runs short, every buyer still gets all it buys, only at a higher price per point, so the government pays more and the [concept_investment_pool]'s spending buys fewer points.\\n\\nThe Free Market Construction game rule can waive the retooling cost or all maintenance at game setup, or turn all of this off for base-game construction: the Construction Site then becomes your construction sector, built and expanded like any government building.",
-  "de": "In Timeline Extended ist der [concept_construction] eine handelbare Ware statt eines festen nationalen Punktepools.\\n\\n#b Angebot#!: Jeder $building_construction_sector$ kauft Holz, Eisen, Stahl und Ähnliches und verkauft Bau auf dem [concept_market] wie jede andere Fabrik. Bessere Produktionsmethoden erzeugen pro Stufe mehr.\\n\\n#b Einkauf#!: Jede Woche kauft die Regierung Bau, bezahlt aus der [concept_treasury]. Im Baupanel legst du entweder fest, wie viel gekauft wird — dann folgen die Kosten dem Preis —, oder wie viel ausgegeben wird — dann folgt die Menge dem Preis über einige Wochen. Private Investoren kaufen für ihre eigenen Projekte aus dem [concept_investment_pool]. Jeder Einkauf ist auf das begrenzt, was die jeweilige Bauwarteschlange in dieser Woche nutzen kann.\\n\\n#b Lieferung#!: Baustellen, die automatisch in Staaten mit laufendem Bau platziert werden, verwandeln gekauften Bau in Baupunkte. Die Aufteilung dieser Punkte zwischen privat und staatlich folgt den beiden Einkäufen; dein wirtschaftspolitisches [concept_law] legt sie nicht mehr fest.\\n\\n#b Instandhaltung#!: Fabriken und Infrastruktur verbrauchen etwas Bau als Unterhalt, und deutlich mehr, während sie nach einem Wechsel der Produktionsmethode umgerüstet werden, sodass eine wachsende Wirtschaft einen wachsenden Bausektor braucht.\\n\\n#b Preis#!: Je mehr Bau die Käufer im Verhältnis zum Angebot wollen, desto höher sein Preis, und die [concept_construction_cost_scaling] lässt jeden Punkt in reicheren Ländern mehr kosten. Wird das Angebot knapp, erhält jeder Käufer weiterhin alles, was er kauft, nur zu einem höheren Preis pro Punkt, sodass die Regierung mehr zahlt und die Ausgaben des [concept_investment_pool] weniger Punkte kaufen.\\n\\nDie Spielregel Freimarkt-Bauwesen kann die Umrüstkosten oder die gesamte Instandhaltung bei der Spieleinrichtung erlassen, oder all dies für den Bau des Basisspiels abschalten: Die Baustelle wird dann zu deinem Bausektor, gebaut und erweitert wie jedes andere Regierungsgebäude."
+  "de": "In Timeline Extended ist der [concept_construction] eine handelbare Ware statt eines festen nationalen Punktepools.\\n\\n#b Angebot#!: Jeder $building_construction_sector$ kauft Holz, Eisen, Stahl und Ähnliches und verkauft Bau auf dem [concept_market] wie jede andere Fabrik. Bessere Produktionsmethoden erzeugen pro Stufe mehr.\\n\\n#b Einkauf#!: Jede Woche kauft die Regierung Bau, bezahlt aus der [concept_treasury]. Im Baupanel legst du entweder fest, wie viel gekauft wird — dann folgen die Kosten dem Preis —, oder wie viel ausgegeben wird — dann folgt die Menge dem Preis über einige Wochen. Private Investoren kaufen für ihre eigenen Projekte aus dem [concept_investment_pool]. Jeder Einkauf ist auf das begrenzt, was die jeweilige Bauwarteschlange in dieser Woche nutzen kann.\\n\\n#b Lieferung#!: Baustellen, die automatisch in Staaten mit laufendem Bau platziert werden, verwandeln gekauften Bau in Baupunkte. Die Aufteilung dieser Punkte zwischen privat und staatlich folgt den beiden Einkäufen; dein wirtschaftspolitisches [concept_law] legt sie nicht mehr fest.\\n\\n#b Instandhaltung#!: Fabriken und Infrastruktur verbrauchen etwas Bau als Unterhalt, und deutlich mehr, während sie nach einem Wechsel der Produktionsmethode umgerüstet werden, sodass eine wachsende Wirtschaft einen wachsenden Bausektor braucht.\\n\\n#b Preis#!: Je mehr Bau die Käufer im Verhältnis zum Angebot wollen, desto höher sein Preis, und die [concept_construction_cost_scaling] lässt jeden Punkt in reicheren Ländern mehr kosten. Wird das Angebot knapp, erhält jeder Käufer weiterhin alles, was er kauft, nur zu einem höheren Preis pro Punkt, sodass die Regierung mehr zahlt und die Ausgaben des [concept_investment_pool] weniger Punkte kaufen.\\n\\nDie Spielregel Freie Marktbauwirtschaft kann die Umrüstkosten oder die gesamte Instandhaltung bei der Spieleinrichtung erlassen, oder all dies für den Bau des Basisspiels abschalten: Die Baustelle wird dann zu deinem Bausektor, gebaut und erweitert wie jedes andere Regierungsgebäude."
  },
  "concept_temperature_anomaly": {
   "en": "Temperature Anomaly",
@@ -3133,7 +3133,7 @@
  },
  "concept_un_resolution_binding_desc": {
   "en": "A resolution that compels action: sanctions, peacekeeping deployments, ICC referrals, formal condemnations, and UN charter reforms. Binding resolutions need [concept_un_security_council] consent — any [concept_un_permanent_member] can [concept_un_veto] them. A vetoed binding resolution that still has GA majority passes only in graduated/weak form (voluntary sanctions, observer mission, symbolic censure, non-binding rebuke). UN charter reform is the one binding type with no graduated fallback — a veto blocks it outright.",
-  "de": "Eine Resolution, die zum Handeln zwingt: Sanktionen, Entsendungen von Friedenstruppen, ICC-Verweisungen, förmliche Verurteilungen und Chartareformen der UN. Verbindliche Resolutionen benötigen die Zustimmung des [concept_un_security_council] — jedes [concept_un_permanent_member] kann gegen sie ein [concept_un_veto] einlegen. Eine mit Veto belegte verbindliche Resolution, die dennoch die Mehrheit der GV hat, tritt nur in abgestufter/schwacher Form in Kraft (freiwillige Sanktionen, Beobachtermission, symbolische Rüge, unverbindlicher Tadel). Die UN-Chartareform ist der einzige verbindliche Typ ohne abgestuften Ersatz — ein Veto blockiert sie vollständig."
+  "de": "Eine Resolution, die zum Handeln zwingt: Sanktionen, Entsendungen von Friedenstruppen, IStGH-Verweisungen, förmliche Verurteilungen und Chartareformen der UN. Verbindliche Resolutionen benötigen die Zustimmung des [concept_un_security_council] — jedes [concept_un_permanent_member] kann gegen sie ein [concept_un_veto] einlegen. Eine mit Veto belegte verbindliche Resolution, die dennoch die Mehrheit der GV hat, tritt nur in abgestufter/schwacher Form in Kraft (freiwillige Sanktionen, Beobachtermission, symbolische Rüge, unverbindlicher Tadel). Die UN-Chartareform ist der einzige verbindliche Typ ohne abgestuften Ersatz — ein Veto blockiert sie vollständig."
  },
  "concept_un_resolution_recommendatory_desc": {
   "en": "A resolution that declares norms, opens a treaty for signature, or coordinates voluntary cooperation: human rights declarations, the NPT, climate accords, heritage and [concept_decolonization_system] resolutions, pandemic and refugee programs, the law of the sea, space partnerships, and humanitarian aid. Recommendatory resolutions pass on simple [concept_un_general_assembly] majority and cannot be vetoed.",
@@ -3153,7 +3153,7 @@
  },
  "concept_un_specialized_agencies_desc": {
   "en": "Standing organizations of the United Nations. Ten are founded when the General Assembly adopts the matching convention: WHO (pandemic response), UNESCO (heritage protection), UNHRC (human rights monitoring), IAEA (nuclear non-proliferation), UNEP (climate), UNHCR (refugees), UNOOSA (space cooperation), ITLOS (the law of the sea), the ICC (international criminal justice) and the regime for the physical protection of nuclear material. The ICJ (international court) is founded when a country first accepts a World Court ruling against it. Each agency, once founded, provides ongoing benefits to members and unlocks further resolution types.",
-  "de": "Ständige Organisationen der Vereinten Nationen. Zehn werden gegründet, wenn die Generalversammlung die passende Konvention annimmt: die WHO (Pandemiebekämpfung), die UNESCO (Schutz des Kulturerbes), der UNHRC (Überwachung der Menschenrechte), die IAEA (nukleare Nichtverbreitung), das UNEP (Klima), der UNHCR (Flüchtlinge), das UNOOSA (Weltraumkooperation), der ITLOS (das Seerecht), der ICC (internationale Strafjustiz) und das Regime für den physischen Schutz von Nuklearmaterial. Der ICJ (internationaler Gerichtshof) wird gegründet, wenn ein Land erstmals ein Urteil des Weltgerichtshofs gegen sich selbst akzeptiert. Jede Organisation bietet nach ihrer Gründung fortlaufende Vorteile für Mitglieder und schaltet weitere Resolutionsarten frei."
+  "de": "Ständige Organisationen der Vereinten Nationen. Zehn werden gegründet, wenn die Generalversammlung die passende Konvention annimmt: die WHO (Pandemiebekämpfung), die UNESCO (Schutz des Kulturerbes), der UNHRC (Überwachung der Menschenrechte), die IAEO (nukleare Nichtverbreitung), das UNEP (Klima), der UNHCR (Flüchtlinge), das UNOOSA (Weltraumkooperation), der ITLOS (das Seerecht), der IStGH (internationale Strafjustiz) und das Regime für den physischen Schutz von Nuklearmaterial. Der ICJ (internationaler Gerichtshof) wird gegründet, wenn ein Land erstmals ein Urteil des Weltgerichtshofs gegen sich selbst akzeptiert. Jede Organisation bietet nach ihrer Gründung fortlaufende Vorteile für Mitglieder und schaltet weitere Resolutionsarten frei."
  },
  "concept_un_suspended_representation_desc": {
   "en": "A member of the United Nations that no longer conducts its own foreign policy keeps its membership, but its representation is suspended. Only an independent country, or a dominion, protectorate or tributary, conducts its own. A puppet, vassal, colony, personal union, crown land or chartered company does not, and neither does a decentralized nation. A suspended member casts no vote, tables nothing, holds no permanent seat and does not host the headquarters. It is treated as part of its overlord abroad: while its overlord sits in the [concept_un_general_assembly] and pays its [concept_un_dues], the overlord pays for its seat and it keeps the benefits of membership. Its representation is restored as soon as it conducts its own foreign policy again.",
@@ -3165,7 +3165,7 @@
  },
  "concept_un_veto_desc": {
   "en": "A power held by [concept_un_permanent_member]s to block [concept_un_resolution_binding]. A vote stays open for a year (AI members cast their ballots in its ninth, tenth or eleventh month), and until it closes a permanent member can choose to [concept_un_veto] instead of voting yes/no. The veto kills the full binding form of the resolution — the GA's simple majority can still push through a graduated/weak form, except for charter reform and a military mandate, which are blocked outright. Once the [concept_un_charter] carries both reforms, a two-thirds supermajority of the members with a vote overrides a veto on any binding resolution except charter reform. Every veto is a debit to the UN's credibility, weighted by the vetoer's weight in world affairs, which lowers [concept_un_authority]'s target; it also cuts the vetoer's influence for a time, applies a temporary diplomatic isolation modifier, and adds [concept_infamy] when used to block punitive resolutions (ICC, condemnation, peacekeeping requests). While the UN is Moribund a veto costs none of this.",
-  "de": "Eine Befugnis der [Concept('concept_un_permanent_member', 'ständigen Mitglieder')], [concept_un_resolution_binding] zu blockieren. Eine Abstimmung bleibt ein Jahr offen (KI-Mitglieder geben ihre Stimme im neunten, zehnten oder elften Monat ab), und bis sie schließt, kann ein ständiges Mitglied sich statt für Ja/Nein für ein [concept_un_veto] entscheiden. Das Veto tötet die volle verbindliche Form der Resolution — die einfache Mehrheit der GV kann dennoch eine abgestufte/schwache Form durchsetzen, außer bei Chartareform und einem militärischen Mandat, die vollständig blockiert werden. Sobald die [concept_un_charter] beide Reformen trägt, hebt eine Zweidrittelmehrheit der stimmberechtigten Mitglieder ein Veto auf jede verbindliche Resolution außer der Chartareform auf. Jedes Veto belastet die Glaubwürdigkeit der UN, gewichtet nach dem weltpolitischen Gewicht des Vetostellers, was das Ziel der [concept_un_authority] senkt; es verringert außerdem für eine Zeit den Einfluss des Vetostellers, verhängt einen zeitweiligen Modifikator für diplomatische Isolation und fügt [concept_infamy] hinzu, wenn es genutzt wird, um strafende Resolutionen zu blockieren (ICC, Verurteilung, Friedenssicherungsersuchen). Solange die UN Marode ist, kostet ein Veto nichts davon."
+  "de": "Eine Befugnis der [Concept('concept_un_permanent_member', 'ständigen Mitglieder')], [concept_un_resolution_binding] zu blockieren. Eine Abstimmung bleibt ein Jahr offen (KI-Mitglieder geben ihre Stimme im neunten, zehnten oder elften Monat ab), und bis sie schließt, kann ein ständiges Mitglied sich statt für Ja/Nein für ein [concept_un_veto] entscheiden. Das Veto tötet die volle verbindliche Form der Resolution — die einfache Mehrheit der GV kann dennoch eine abgestufte/schwache Form durchsetzen, außer bei Chartareform und einem militärischen Mandat, die vollständig blockiert werden. Sobald die [concept_un_charter] beide Reformen trägt, hebt eine Zweidrittelmehrheit der stimmberechtigten Mitglieder ein Veto auf jede verbindliche Resolution außer der Chartareform auf. Jedes Veto belastet die Glaubwürdigkeit der UN, gewichtet nach dem weltpolitischen Gewicht des Vetostellers, was das Ziel der [concept_un_authority] senkt; es verringert außerdem für eine Zeit den Einfluss des Vetostellers, verhängt einen zeitweiligen Modifikator für diplomatische Isolation und fügt [concept_infamy] hinzu, wenn es genutzt wird, um strafende Resolutionen zu blockieren (IStGH, Verurteilung, Friedenssicherungsersuchen). Solange die UN Marode ist, kostet ein Veto nichts davon."
  },
  "concept_united_nations_system_desc": {
   "en": "An international organization that can form once certain global conditions are met. Countries can join via treaty article. UN membership provides diplomatic bonuses and access to UN voting topics. The UN also enables cross-system bonuses including space partnerships and joint scientific endeavors like the International Space Station.",
@@ -3337,11 +3337,11 @@
  },
  "country_add_anticolonial_ideology_to_igs_bool_desc": {
   "en": "Add the Anticolonial Ideology to the Trade Unions and Intelligentsia [Concept('concept_interest_group', 'interest groups')].",
-  "de": "Fügt die Antikoloniale Ideologie den [Concept('concept_interest_group', 'Interessengruppen')] der Gewerkschafter und der Intelligenzija hinzu."
+  "de": "Fügt die Antikoloniale Ideologie den [Concept('concept_interest_group', 'Interessengruppen')] der Gewerkschafter und der Intellektuellen hinzu."
  },
  "country_add_multicultural_ideology_to_intelligentsia_bool_desc": {
   "en": "Add the Multicultural Ideology to the Intelligentsia [concept_interest_group].",
-  "de": "Fügt der [concept_interest_group] der Intelligenzija die Multikulturelle Ideologie hinzu."
+  "de": "Fügt der [concept_interest_group] der Intellektuellen die Multikulturelle Ideologie hinzu."
  },
  "country_banking_lock_asset_relief_bool_desc": {
   "en": "The current [concept_financial_regulation] law disallows government purchase of distressed financial assets.",
@@ -3441,11 +3441,11 @@
  },
  "country_nuclear_disarmament_bool_desc": {
   "en": "This country has agreed to give up its nuclear weapons.",
-  "de": "Dieses Land hat zugestimmt, seine Kernwaffen aufzugeben."
+  "de": "Dieses Land hat zugestimmt, seine Nuklearwaffen aufzugeben."
  },
  "country_nuclear_program_pause_bool_desc": {
   "en": "Nuclear weapons development is halted, by a freeze agreed in a treaty or at an arsenal ceiling: the programme builds nothing and cannot be funded.",
-  "de": "Die Entwicklung von Kernwaffen ist gestoppt, durch ein vertraglich vereinbartes Einfrieren oder eine erreichte Arsenalobergrenze: Das Programm produziert nichts und kann nicht finanziert werden."
+  "de": "Die Entwicklung von Nuklearwaffen ist gestoppt, durch ein vertraglich vereinbartes Einfrieren oder eine erreichte Arsenalobergrenze: Das Programm produziert nichts und kann nicht finanziert werden."
  },
  "country_receiving_nuclear_program_aid_bool_desc": {
   "en": "This country is receiving aid to develop its [concept_nuclear_program].",
@@ -3853,11 +3853,11 @@
  },
  "covert_nuclear_sabotage_action_desc": {
   "en": "Infiltrate a foreign nuclear weapons programme and quietly sabotage it — faulty parts, failed centrifuges, scientists who stop coming to work — slowing its progress towards the bomb, or towards its next warhead. Requires the target to be running a funded programme and an agency of at least #bold Seasoned#! Tradecraft.$iw_exposure_tier_severe_note$",
-  "de": "Infiltriert ein ausländisches Kernwaffenprogramm und sabotiert es im Stillen — fehlerhafte Teile, ausgefallene Zentrifugen, Wissenschaftler, die nicht mehr zur Arbeit erscheinen — und verlangsamt so den Fortschritt zur Bombe oder zum nächsten Sprengkopf. Erfordert, dass das Ziel ein finanziertes Programm betreibt, sowie eine Behörde mit mindestens #bold erfahrenem#! Spionagehandwerk.$iw_exposure_tier_severe_note$"
+  "de": "Infiltriert ein ausländisches Nuklearwaffenprogramm und sabotiert es im Stillen — fehlerhafte Teile, ausgefallene Zentrifugen, Wissenschaftler, die nicht mehr zur Arbeit erscheinen — und verlangsamt so den Fortschritt zur Bombe oder zum nächsten Sprengkopf. Erfordert, dass das Ziel ein finanziertes Programm betreibt, sowie eine Behörde mit mindestens #bold erfahrenem#! Spionagehandwerk.$iw_exposure_tier_severe_note$"
  },
  "covert_nuclear_sabotage_desc": {
   "en": "Centrifuges fail, parts arrive faulty and scientists disappear. Our nuclear weapons programme progresses #R 25%#! more slowly at the operation's base strength, and up to [GetPlayer.MakeScope.ScriptValue('covert_op_mult_p3_pri3')|1] times that at its strongest.",
-  "de": "Zentrifugen fallen aus, Teile kommen fehlerhaft an, und Wissenschaftler verschwinden. Unser Kernwaffenprogramm schreitet bei der Grundstärke der Operation #R 25%#! langsamer voran, und bei ihrer stärksten Ausprägung bis zum [GetPlayer.MakeScope.ScriptValue('covert_op_mult_p3_pri3')|1]-Fachen davon."
+  "de": "Zentrifugen fallen aus, Teile kommen fehlerhaft an, und Wissenschaftler verschwinden. Unser Nuklearwaffenprogramm schreitet bei der Grundstärke der Operation #R 25%#! langsamer voran, und bei ihrer stärksten Ausprägung bis zum [GetPlayer.MakeScope.ScriptValue('covert_op_mult_p3_pri3')|1]-Fachen davon."
  },
  "covert_op_heightened_vigilance_modifier_desc": {
   "en": "A detected espionage operation has prompted a comprehensive review of counterintelligence measures.",
@@ -4337,7 +4337,7 @@
  },
  "eco_terrorism_crackdown_modifier_desc": {
   "en": "A security crackdown following eco-terrorist attacks has reduced civil liberties but restored order.",
-  "de": "Ein Sicherheitsdurchgreifen nach öko-terroristischen Anschlägen hat die bürgerlichen Freiheiten eingeschränkt, aber die Ordnung wiederhergestellt."
+  "de": "Ein hartes Durchgreifen nach öko-terroristischen Anschlägen hat die bürgerlichen Freiheiten eingeschränkt, aber die Ordnung wiederhergestellt."
  },
  "education_aid": {
   "en": "Education Aid",
@@ -4905,7 +4905,7 @@
  },
  "gov_collective_algorithmic_commons": {
   "en": "Algorithmic Commons",
-  "de": "Algorithmisches Gemeingut"
+  "de": "Algorithmische Allmende"
  },
  "gov_collective_algorithmic_commons_desc": {
   "en": "An open algorithm governs, held in common. Its Steward keeps it running but cannot override it, and no one stands above it.",
@@ -5549,7 +5549,7 @@
  },
  "iw_op_exposed_desc_nuclear_sabotage": {
   "en": "Faulty parts, failed centrifuges and scientists who stop coming to work. While it runs, its target's nuclear weapons programme advances more slowly.",
-  "de": "Fehlerhafte Teile, ausgefallene Zentrifugen und Wissenschaftler, die nicht mehr zur Arbeit erscheinen. Solange sie läuft, schreitet das Kernwaffenprogramm des Ziels langsamer voran."
+  "de": "Fehlerhafte Teile, ausgefallene Zentrifugen und Wissenschaftler, die nicht mehr zur Arbeit erscheinen. Solange sie läuft, schreitet das Nuklearwaffenprogramm des Ziels langsamer voran."
  },
  "iw_op_exposed_desc_regime_change": {
   "en": "Bankrolling a government's disaffected officers and opposition. While it runs, its target's [concept_legitimacy] and resistance to a coup erode and its movements radicalise; once fully operational, it pushes forward any coup already under way.",
@@ -6157,7 +6157,7 @@
  },
  "ministry_budget_cautious": {
   "en": "Ministry: Budget Cautious Advance",
-  "de": "Ministerium: Vorsichtiger Budgetfortschritt"
+  "de": "Ministerium: Vorsichtiger Budgetvormarsch"
  },
  "ministry_budget_cautious_desc": {
   "en": "A smaller positive boost to ministry law enactment progress from a recent event.",
@@ -6221,7 +6221,7 @@
  },
  "ministry_dissolution_cautious": {
   "en": "Ministry: Dissolution Cautious Advance",
-  "de": "Ministerium: Vorsichtiger Auflösungsfortschritt"
+  "de": "Ministerium: Vorsichtiger Auflösungsvormarsch"
  },
  "ministry_dissolution_cautious_desc": {
   "en": "A smaller positive boost to ministry law enactment progress from a recent event.",
@@ -6317,7 +6317,7 @@
  },
  "ministry_staffing_cautious": {
   "en": "Ministry: Staffing Cautious Advance",
-  "de": "Ministerium: Vorsichtiger Personalfortschritt"
+  "de": "Ministerium: Vorsichtiger Personalvormarsch"
  },
  "ministry_staffing_cautious_desc": {
   "en": "A smaller positive boost to ministry law enactment progress from a recent event.",
@@ -6361,7 +6361,7 @@
  },
  "ministry_turf_cautious": {
   "en": "Ministry: Turf Cautious Advance",
-  "de": "Ministerium: Vorsichtiger Revierfortschritt"
+  "de": "Ministerium: Vorsichtiger Reviervormarsch"
  },
  "ministry_turf_cautious_desc": {
   "en": "A smaller positive boost to ministry law enactment progress from a recent event.",
@@ -6601,7 +6601,7 @@
  },
  "nd_crisis_programme_freeze_desc": {
   "en": "We agreed to freeze our nuclear weapons programme under threat.",
-  "de": "Wir haben zugestimmt, unser Atomwaffenprogramm unter Druck einzufrieren."
+  "de": "Wir haben zugestimmt, unser Nuklearwaffenprogramm unter Druck einzufrieren."
  },
  "nd_crisis_stood_firm_desc": {
   "en": "We refused to give way to nuclear coercion, and prevailed.",
@@ -6617,15 +6617,15 @@
  },
  "nd_doctrine_mod_1_desc": {
   "en": "We have pledged never to be the first to use nuclear weapons.",
-  "de": "Wir haben zugesagt, niemals als Erste Atomwaffen einzusetzen."
+  "de": "Wir haben zugesagt, niemals als Erste Nuklearwaffen einzusetzen."
  },
  "nd_doctrine_mod_2_desc": {
   "en": "Our nuclear weapons exist to guarantee our survival.",
-  "de": "Unsere Atomwaffen existieren, um unser Überleben zu sichern."
+  "de": "Unsere Nuklearwaffen existieren, um unser Überleben zu sichern."
  },
  "nd_doctrine_mod_3_desc": {
   "en": "We may use nuclear weapons first against a stronger conventional attacker.",
-  "de": "Wir dürfen gegen einen konventionell überlegenen Angreifer als Erste Atomwaffen einsetzen."
+  "de": "Wir dürfen gegen einen konventionell überlegenen Angreifer als Erste Nuklearwaffen einsetzen."
  },
  "nd_doctrine_mod_4_desc": {
   "en": "Our threats are backed by a willingness to strike first.",
@@ -6633,7 +6633,7 @@
  },
  "nd_doctrine_mod_5_desc": {
   "en": "Nuclear weapons are an instrument of any war we fight.",
-  "de": "Atomwaffen sind ein Instrument in jedem Krieg, den wir führen."
+  "de": "Nuklearwaffen sind ein Instrument in jedem Krieg, den wir führen."
  },
  "nd_exercise_cost": {
   "en": "Nuclear Exercises and Alerts",
@@ -6717,7 +6717,7 @@
  },
  "nd_pledge_broken_mod_desc": {
   "en": "We broke a public promise about nuclear weapons.",
-  "de": "Wir haben ein öffentliches Versprechen über Atomwaffen gebrochen."
+  "de": "Wir haben ein öffentliches Versprechen über Nuklearwaffen gebrochen."
  },
  "nd_posture_approval_minus_1_desc": {
   "en": "This interest group is uneasy about our nuclear posture.",
@@ -6749,31 +6749,31 @@
  },
  "nd_readiness_mod_3_desc": {
   "en": "Our nuclear forces are on high alert, ready to launch at short notice.",
-  "de": "Unsere Nuklearstreitkräfte befinden sich in höchster Alarmbereitschaft und sind kurzfristig einsatzbereit."
+  "de": "Unsere Nuklearstreitkräfte befinden sich in Hoher Alarmbereitschaft und sind kurzfristig einsatzbereit."
  },
  "nd_repudiate_pledge_action_action_notification_desc": {
   "en": "[INITIATOR_COUNTRY.GetName] has repudiated its nuclear non-use pledge with [TARGET_COUNTRY.GetName].",
-  "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat sein Versprechen des Nuklearwaffenverzichts gegenüber [TARGET_COUNTRY.GetAltName('DAT')] widerrufen."
+  "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat seine Nichteinsatz-Zusage gegenüber [TARGET_COUNTRY.GetAltName('DAT')] widerrufen."
  },
  "nd_repudiate_pledge_action_action_notification_third_party_desc": {
   "en": "[INITIATOR_COUNTRY.GetName] has repudiated its nuclear non-use pledge with [TARGET_COUNTRY.GetName].",
-  "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat sein Versprechen des Nuklearwaffenverzichts gegenüber [TARGET_COUNTRY.GetAltName('DAT')] widerrufen."
+  "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat seine Nichteinsatz-Zusage gegenüber [TARGET_COUNTRY.GetAltName('DAT')] widerrufen."
  },
  "nd_repudiate_pledge_action_desc": {
   "en": "Renounce our pledge never to use nuclear weapons against them. The only way past a pledge short of being struck first, and a broken promise the world will remember.",
-  "de": "Unser Versprechen aufkündigen, niemals Atomwaffen gegen sie einzusetzen. Der einzige Weg über ein Versprechen hinaus, außer selbst zuerst getroffen zu werden – und ein gebrochenes Versprechen, das die Welt nicht vergessen wird."
+  "de": "Unser Versprechen aufkündigen, niemals Nuklearwaffen gegen sie einzusetzen. Der einzige Weg über ein Versprechen hinaus, außer selbst zuerst getroffen zu werden – und ein gebrochenes Versprechen, das die Welt nicht vergessen wird."
  },
  "nd_repudiate_pledge_action_effect_desc_first": {
   "en": "[COUNTRY.GetAdjectiveNoFlag] repudiates its non-use pledge with [TARGET_COUNTRY.GetName]",
-  "de": "[COUNTRY.GetAdjectiveNoFlag|l]e Regierung widerruft ihr Verzichtsversprechen gegenüber [TARGET_COUNTRY.GetName]"
+  "de": "[COUNTRY.GetAdjectiveNoFlag|l]e Regierung widerruft ihre Nichteinsatz-Zusage gegenüber [TARGET_COUNTRY.GetName]"
  },
  "nd_repudiate_pledge_action_effect_desc_global": {
   "en": "Our non-use pledge with them ends",
-  "de": "Unser Verzichtsversprechen mit ihnen endet"
+  "de": "Unsere Nichteinsatz-Zusage mit ihnen endet"
  },
  "nd_repudiate_pledge_action_effect_desc_third": {
   "en": "[COUNTRY.GetName] has repudiated its nuclear non-use pledge with [TARGET_COUNTRY.GetName]",
-  "de": "[COUNTRY.GetAltName('NOM')|U] hat sein nukleares Verzichtsversprechen gegenüber [TARGET_COUNTRY.GetAltName('DAT')] widerrufen"
+  "de": "[COUNTRY.GetAltName('NOM')|U] hat seine nukleare Nichteinsatz-Zusage gegenüber [TARGET_COUNTRY.GetAltName('DAT')] widerrufen"
  },
  "nd_status_armed": {
   "en": "\\nDoctrine: #v [ROOT.GetCountry.GetCustom('nd_doctrine_name')]#! · Readiness: #v [ROOT.GetCountry.GetCustom('nd_readiness_name')]#! · Authority: #v [ROOT.GetCountry.GetCustom('nd_authority_name')]#!",
@@ -6785,7 +6785,7 @@
  },
  "nd_struck_own_people_desc": {
   "en": "We used nuclear weapons in our own civil war. Whoever governs, the country will not forget it for a generation.",
-  "de": "Wir haben Atomwaffen in unserem eigenen Bürgerkrieg eingesetzt. Wer auch immer regiert, das Land wird es eine Generation lang nicht vergessen."
+  "de": "Wir haben Nuklearwaffen in unserem eigenen Bürgerkrieg eingesetzt. Wer auch immer regiert, das Land wird es eine Generation lang nicht vergessen."
  },
  "nd_upkeep_cost": {
   "en": "Nuclear Deterrent Upkeep",
@@ -6797,7 +6797,7 @@
  },
  "nd_weapons_accident_contamination_desc": {
   "en": "An accident with nuclear weapons has contaminated this state.",
-  "de": "Ein Unfall mit Atomwaffen hat diesen Staat kontaminiert."
+  "de": "Ein Unfall mit Nuklearwaffen hat diesen Staat kontaminiert."
  },
  "nd_withdraw_umbrella_action_action_notification_break_desc": {
   "en": "[INITIATOR_COUNTRY.GetName] counts us under its nuclear umbrella again.",
@@ -6825,7 +6825,7 @@
  },
  "neo_luddite_crackdown_modifier_desc": {
   "en": "A security crackdown on anti-technology extremists has restored order but consumed security resources.",
-  "de": "Ein Sicherheitseinsatz gegen technikfeindliche Extremisten hat die Ordnung wiederhergestellt, aber Sicherheitsressourcen verbraucht."
+  "de": "Ein hartes Durchgreifen gegen technikfeindliche Extremisten hat die Ordnung wiederhergestellt, aber Sicherheitsressourcen verbraucht."
  },
  "neo_luddite_suppressed_modifier_desc": {
   "en": "Arrests and surveillance have crushed the neo-Luddite movement, but created martyrs.",
@@ -6869,11 +6869,11 @@
  },
  "nuclear_brinkmanship_modifier": {
   "en": "Nuclear Brinkmanship",
-  "de": "Atomare Kraftprobe"
+  "de": "Nukleare Kraftprobe"
  },
  "nuclear_brinkmanship_modifier_desc": {
   "en": "A nuclear standoff has placed the nation on high alert. Military readiness is at maximum but the civilian population lives in fear.",
-  "de": "Eine nukleare Konfrontation hat die Nation in höchste Alarmbereitschaft versetzt. Die militärische Bereitschaft ist maximal, doch die Zivilbevölkerung lebt in Angst."
+  "de": "Eine nukleare Konfrontation hat die Nation in Hohe Alarmbereitschaft versetzt. Die militärische Bereitschaft ist maximal, doch die Zivilbevölkerung lebt in Angst."
  },
  "nuclear_civilian_applications": {
   "en": "Nuclear Civilian Applications",
@@ -6881,11 +6881,11 @@
  },
  "nuclear_civilian_applications_desc": {
   "en": "Breakthroughs from nuclear weapons research have yielded civilian applications in energy, medicine, and materials science.",
-  "de": "Durchbrüche aus der Atomwaffenforschung haben zivile Anwendungen in Energie, Medizin und Materialwissenschaft hervorgebracht."
+  "de": "Durchbrüche aus der Nuklearwaffenforschung haben zivile Anwendungen in Energie, Medizin und Materialwissenschaft hervorgebracht."
  },
  "nuclear_crash_program_strain_desc": {
   "en": "Bureaucratic, industrial, and academic resources diverted to a rushed nuclear weapons program.",
-  "de": "Bürokratische, industrielle und akademische Ressourcen, die in ein überstürztes Atomwaffenprogramm umgeleitet wurden."
+  "de": "Bürokratische, industrielle und akademische Ressourcen, die in ein überstürztes Nuklearwaffenprogramm umgeleitet wurden."
  },
  "nuclear_deescalation_modifier": {
   "en": "Nuclear De-escalation",
@@ -6901,15 +6901,15 @@
  },
  "nuclear_disarmament_article_short_desc": {
   "en": "[SOURCE_COUNTRY.GetNameNoFormatting] will dismantle its nuclear weapons program",
-  "de": "[SOURCE_COUNTRY.GetAltNameNoFormatting('NOM')|U] wird sein Atomwaffenprogramm abbauen"
+  "de": "[SOURCE_COUNTRY.GetAltNameNoFormatting('NOM')|U] wird sein Nuklearwaffenprogramm abbauen"
  },
  "nuclear_disarmament_desc": {
   "en": "An agreement under which a country dismantles its [concept_nuclear_program] and gives up its nuclear weapons.",
-  "de": "Ein Abkommen, unter dem ein Land sein [concept_nuclear_program] abbaut und seine Atomwaffen aufgibt."
+  "de": "Ein Abkommen, unter dem ein Land sein [concept_nuclear_program] abbaut und seine Nuklearwaffen aufgibt."
  },
  "nuclear_disarmament_effects_desc": {
   "en": "• The disarming country loses its whole [concept_nuclear_stockpile] and all [concept_nuclear_program] progress, and its program funding drops to zero.\\n• While the treaty stands it cannot run a nuclear program or launch a [concept_nuclear_strike].\\n• Can be enforced as a war goal.",
-  "de": "• Das abrüstende Land verliert sein gesamtes [concept_nuclear_stockpile] und den gesamten Fortschritt seines [concept_nuclear_program], und seine Programmfinanzierung sinkt auf null.\\n• Solange der Vertrag besteht, kann es kein Atomwaffenprogramm betreiben oder einen [concept_nuclear_strike] ausführen.\\n• Kann als Kriegsziel durchgesetzt werden."
+  "de": "• Das abrüstende Land verliert sein gesamtes [concept_nuclear_stockpile] und den gesamten Fortschritt seines [concept_nuclear_program], und seine Programmfinanzierung sinkt auf null.\\n• Solange der Vertrag besteht, kann es kein Nuklearprogramm betreiben oder einen [concept_nuclear_strike] ausführen.\\n• Kann als Kriegsziel durchgesetzt werden."
  },
  "nuclear_freeze_tension_modifier_desc": {
   "en": "A frozen [concept_nuclear_program] has become a source of domestic political tension.",
@@ -6949,27 +6949,27 @@
  },
  "nuclear_program_aid": {
   "en": "Nuclear Program Aid",
-  "de": "Hilfe für das Atomprogramm"
+  "de": "Hilfe für das Nuklearprogramm"
  },
  "nuclear_program_aid_article_short_desc": {
   "en": "[SOURCE_COUNTRY.GetNameNoFormatting] will aid the nuclear weapons program of [TARGET_COUNTRY.GetNameNoFormatting]",
-  "de": "[SOURCE_COUNTRY.GetAltNameNoFormatting('NOM')|U] wird das Atomwaffenprogramm [TARGET_COUNTRY.GetAltNameNoFormatting('GEN')] unterstützen"
+  "de": "[SOURCE_COUNTRY.GetAltNameNoFormatting('NOM')|U] wird das Nuklearwaffenprogramm [TARGET_COUNTRY.GetAltNameNoFormatting('GEN')] unterstützen"
  },
  "nuclear_program_aid_desc": {
   "en": "[concept_nuclear_program] Aid allows a country to provide assistance to another country in developing its nuclear program.",
-  "de": "[concept_nuclear_program]-Hilfe erlaubt es einem Land, ein anderes Land bei der Entwicklung seines Atomprogramms zu unterstützen."
+  "de": "[concept_nuclear_program]-Hilfe erlaubt es einem Land, ein anderes Land bei der Entwicklung seines Nuklearprogramms zu unterstützen."
  },
  "nuclear_program_aid_effects_desc": {
   "en": "• Provides [concept_nuclear_program] assistance to the target country, enabling them to develop nuclear weapons.",
-  "de": "• Gewährt dem Zielland [concept_nuclear_program]-Hilfe und ermöglicht ihm damit die Entwicklung von Atomwaffen."
+  "de": "• Gewährt dem Zielland [concept_nuclear_program]-Hilfe und ermöglicht ihm damit die Entwicklung von Nuklearwaffen."
  },
  "nuclear_program_pause": {
   "en": "Nuclear Program Freeze",
-  "de": "Einfrieren des Atomprogramms"
+  "de": "Einfrieren des Nuklearprogramms"
  },
  "nuclear_program_pause_article_short_desc": {
   "en": "[SOURCE_COUNTRY.GetNameNoFormatting] will freeze its nuclear weapons program",
-  "de": "[SOURCE_COUNTRY.GetAltNameNoFormatting('NOM')|U] wird sein Atomwaffenprogramm einfrieren"
+  "de": "[SOURCE_COUNTRY.GetAltNameNoFormatting('NOM')|U] wird sein Nuklearwaffenprogramm einfrieren"
  },
  "nuclear_program_pause_desc": {
   "en": "An agreement under which a country stops investing in its [concept_nuclear_program]. Weapons it has already built, and progress it has already made, are kept.",
@@ -7025,7 +7025,7 @@
  },
  "nuclear_weapon_program_funding_desc": {
   "en": "Represents the current level of funding devoted to the nuclear weapons program.",
-  "de": "Stellt die aktuelle Höhe der Finanzierung des Atomwaffenprogramms dar."
+  "de": "Stellt die aktuelle Höhe der Finanzierung des Nuklearwaffenprogramms dar."
  },
  "nuke_success_chance_desc": {
   "en": "Our attack chance modifier: [GetPlayer.GetModifier.GetValueWithBreakdownFor('country_nuclear_weapon_attack_success_add')]\\nTheir defense chance modifier: [SCOPE.sState('target_state').GetModifier.GetValueWithBreakdownFor('state_nuclear_weapon_defense_chance_add')]\\nSuccess chance: #tooltippable #tooltip:[GetPlayer.GetTooltipTag],nuke_success_final_chance_breakdown_tt #g [SCOPE.ScriptValue('nuclear_strike_success_chance')]%#!#!#!",
@@ -7465,7 +7465,7 @@
  },
  "principle_education_4_desc": {
   "en": "Mass media and civic [concept_literacy] reshape the bloc into a destination for foreign talent. Universities project cultural soft power abroad and an educated populace resists ideological subversion.",
-  "de": "Massenmedien und staatsbürgerliche [concept_literacy] formen den Block zu einem Ziel für ausländische Talente. Universitäten projizieren kulturelle Soft Power ins Ausland, und eine gebildete Bevölkerung widersteht ideologischer Unterwanderung."
+  "de": "Massenmedien und staatsbürgerliche [concept_literacy] formen den Block zu einem Ziel für ausländische Talente. Universitäten projizieren kulturelle Soft Power ins Ausland, und eine gebildete Bevölkerung widersteht ideologischer Subversion."
  },
  "principle_education_5_desc": {
   "en": "Universal [concept_literacy] and global media networks make the bloc the world's cultural hegemon. Foreign-born talent assimilates rapidly; rival blocs' cultural pressure breaks against bloc literacy.",
@@ -8145,7 +8145,7 @@
  },
  "rti_whistleblower_cautious": {
   "en": "Right to Information: Whistleblower Cautious Advance",
-  "de": "Recht auf Information: Vorsichtiger Whistleblower-Fortschritt"
+  "de": "Recht auf Information: Vorsichtiger Whistleblower-Vormarsch"
  },
  "rti_whistleblower_cautious_desc": {
   "en": "A smaller positive boost to law enactment progress from a recent event.",
@@ -10157,11 +10157,11 @@
  },
  "un_member_modifier_desc": {
   "en": "This country is a member of the United Nations. What membership brings is listed under UN Membership Privileges: a member whose representation is suspended draws them only while its overlord carries its seat.",
-  "de": "Dieses Land ist Mitglied der Vereinten Nationen. Was die Mitgliedschaft bringt, ist unter UN-Mitgliedschaftsprivilegien aufgeführt: Ein Mitglied, dessen Vertretung ausgesetzt ist, erhält sie nur, solange sein Oberherr seinen Sitz wahrnimmt."
+  "de": "Dieses Land ist Mitglied der Vereinten Nationen. Was die Mitgliedschaft bringt, ist unter UN-Mitgliedschaftsprivilegien aufgeführt: Ein Mitglied, dessen Vertretung ausgesetzt ist, erhält sie nur, solange sein Suzerän seinen Sitz wahrnimmt."
  },
  "un_member_privileges_modifier_desc": {
   "en": "What a seat in the United Nations brings. Drawn by every represented member, and by a member whose representation is suspended ([concept_un_suspended_representation]) while its overlord sits in the Assembly and pays its [concept_un_dues].",
-  "de": "Was ein Sitz bei den Vereinten Nationen bringt. Erhalten von jedem vertretenen Mitglied sowie von einem Mitglied, dessen Vertretung ausgesetzt ist ([concept_un_suspended_representation]), solange sein Oberherr in der Versammlung sitzt und seine [concept_un_dues] zahlt."
+  "de": "Was ein Sitz bei den Vereinten Nationen bringt. Erhalten von jedem vertretenen Mitglied sowie von einem Mitglied, dessen Vertretung ausgesetzt ist ([concept_un_suspended_representation]), solange sein Suzerän in der Versammlung sitzt und seine [concept_un_dues] zahlt."
  },
  "un_membership_benefits_modifier_desc": {
   "en": "Scaled benefits from UN membership. Higher [concept_un_authority] means greater rewards for cooperation.",
@@ -10289,7 +10289,7 @@
  },
  "un_refugee_source_brain_drain_modifier_desc": {
   "en": "The departure of thousands of citizens has created a brain drain, reducing living standards and migration pull.",
-  "de": "Der Weggang Tausender Bürger hat eine Abwanderung von Fachkräften verursacht, was den Lebensstandard und die Migrationsanziehung verringert."
+  "de": "Der Weggang Tausender Bürger hat einen Braindrain verursacht, was den Lebensstandard und die Migrationsanziehung verringert."
  },
  "un_refugee_source_relief_modifier_desc": {
   "en": "International resettlement programs have eased the burden of displacement, modestly improving living standards.",
@@ -10313,7 +10313,7 @@
  },
  "un_regime_colony_liberty_modifier_desc": {
   "en": "This colony's overlord sits in a United Nations that has declared for decolonisation, and its people take the declaration at its word. Scaled by UN enforcement.",
-  "de": "Der Oberherr dieser Kolonie sitzt in Vereinten Nationen, die sich für Dekolonisierung ausgesprochen haben, und die Bevölkerung nimmt die Erklärung beim Wort. Skaliert nach der Durchsetzungskraft der UN."
+  "de": "Der Suzerän dieser Kolonie sitzt in Vereinten Nationen, die sich für Dekolonisierung ausgesprochen haben, und die Bevölkerung nimmt die Erklärung beim Wort. Skaliert nach der Durchsetzungskraft der UN."
  },
  "un_regime_heritage_site_modifier_desc": {
   "en": "This country holds a wonder of the world under UNESCO's protection: more visitors and cultural pull, and slower building around what is protected. Scaled by UN enforcement.",
@@ -10325,7 +10325,7 @@
  },
  "un_regime_npt_guarantee_modifier_desc": {
   "en": "This country has no nuclear weapons. The Non-Proliferation Treaty's security guarantee makes a nuclear strike on it harder to carry through. Scaled by UN enforcement.",
-  "de": "Dieses Land besitzt keine Kernwaffen. Die Sicherheitsgarantie des Nichtverbreitungsvertrags erschwert einen Nuklearschlag gegen es. Skaliert nach der Durchsetzungskraft der UN."
+  "de": "Dieses Land besitzt keine Nuklearwaffen. Die Sicherheitsgarantie des Nichtverbreitungsvertrags erschwert einen Nuklearschlag gegen es. Skaliert nach der Durchsetzungskraft der UN."
  },
  "un_regime_npt_inspection_modifier_desc": {
   "en": "This country is running a nuclear programme without the bomb. The Non-Proliferation Treaty's inspectors slow it. Scaled by UN enforcement.",

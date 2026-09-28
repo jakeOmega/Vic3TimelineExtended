@@ -81,7 +81,7 @@
  },
  "covert_financial_subversion_action_pact_desc": {
   "en": "We are conducting covert financial subversion against [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], destabilizing their financial markets.",
-  "de": "Wir betreiben verdeckte Finanzsubversion gegen [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] und destabilisieren damit deren Finanzmärkte."
+  "de": "Wir betreiben verdeckte finanzielle Subversion gegen [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] und destabilisieren damit deren Finanzmärkte."
  },
  "covert_ideological_subversion_action_pact_desc": {
   "en": "We are covertly promoting our ideology within [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], supporting sympathetic [Concept('concept_political_movement', 'political movements')].",
@@ -101,11 +101,11 @@
  },
  "covert_military_espionage_action_pact_desc": {
   "en": "We are conducting military espionage against [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], gathering intelligence on their armed forces.",
-  "de": "Wir betreiben militärische Spionage gegen [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] und sammeln Erkenntnisse über deren Streitkräfte."
+  "de": "Wir betreiben Militärspionage gegen [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] und sammeln Erkenntnisse über deren Streitkräfte."
  },
  "covert_nuclear_sabotage_action_pact_desc": {
   "en": "We are sabotaging the nuclear weapons programme of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
-  "de": "Wir sabotieren das Kernwaffenprogramm von [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
+  "de": "Wir sabotieren das Nuklearwaffenprogramm von [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
  },
  "covert_regime_change_action_pact_desc": {
   "en": "We are bankrolling a change of government in [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
@@ -213,7 +213,7 @@
  },
  "intelligence_sharing_pact": {
   "en": "Intelligence Sharing Pact",
-  "de": "Geheimdienst-Austauschpakt"
+  "de": "Geheimdienst-Kooperationspakt"
  },
  "intelligence_sharing_pact_article_short_desc": {
   "en": "Both countries will share intelligence",
@@ -241,7 +241,7 @@
  },
  "ministry_fa_diplomacy_cautious": {
   "en": "Foreign Affairs Ministry: Diplomacy Cautious Advance",
-  "de": "Ministerium für Äußere Angelegenheiten: Vorsichtiger diplomatischer Fortschritt"
+  "de": "Ministerium für Äußere Angelegenheiten: Vorsichtiger diplomatischer Vormarsch"
  },
  "ministry_fa_diplomacy_cautious_desc": {
   "en": "A smaller positive boost to ministry law enactment progress from a recent event.",

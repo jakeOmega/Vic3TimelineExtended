@@ -101,7 +101,7 @@
  },
  "country_covert_defense_economic_add_desc": {
   "en": "Additional defense against economic [concept_covert_operations] such as financial subversion, industrial espionage and space programme espionage.",
-  "de": "Zusätzlicher Schutz gegen wirtschaftliche [concept_covert_operations] wie finanzielle Unterwanderung, Industriespionage und Spionage am Weltraumprogramm."
+  "de": "Zusätzlicher Schutz gegen wirtschaftliche [concept_covert_operations] wie finanzielle Subversion, Industriespionage und Spionage am Weltraumprogramm."
  },
  "country_covert_defense_ideological_add": {
   "en": "Ideological Covert Defense",
@@ -109,7 +109,7 @@
  },
  "country_covert_defense_ideological_add_desc": {
   "en": "Additional defense against ideological [concept_covert_operations] such as election interference, influence campaigns, ideological subversion, destabilization, regime change and the cultivation of assets.",
-  "de": "Zusätzlicher Schutz gegen ideologische [concept_covert_operations] wie Wahleinmischung, Einflusskampagnen, ideologische Unterwanderung, Destabilisierung, Regimewechsel und das Anwerben von Kontaktpersonen."
+  "de": "Zusätzlicher Schutz gegen ideologische [concept_covert_operations] wie Wahleinmischung, Einflusskampagnen, ideologische Subversion, Destabilisierung, Regimewechsel und das Anwerben von Kontaktpersonen."
  },
  "country_covert_defense_military_add": {
   "en": "Military Covert Defense",
@@ -117,7 +117,7 @@
  },
  "country_covert_defense_military_add_desc": {
   "en": "Additional defense against military [concept_covert_operations] such as military espionage, communications disruption, [concept_infrastructure] sabotage, nuclear programme sabotage and searches for loose nuclear material.",
-  "de": "Zusätzlicher Schutz gegen militärische [concept_covert_operations] wie militärische Spionage, Störung der Kommunikation, Sabotage der [concept_infrastructure], Sabotage des Nuklearprogramms und die Suche nach frei verfügbarem Nuklearmaterial."
+  "de": "Zusätzlicher Schutz gegen militärische [concept_covert_operations] wie Militärspionage, Kommunikationsstörung, Sabotage der [concept_infrastructure], Sabotage des Nuklearprogramms und die Suche nach frei verfügbarem Nuklearmaterial."
  },
  "country_covert_operation_efficiency_mult": {
   "en": "Covert Operation Efficiency",

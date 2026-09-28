@@ -5,7 +5,7 @@
  },
  "AI_ALREADY_HAS_NUKES": {
   "en": "from already possessing nuclear weapons",
-  "de": "durch bereits vorhandenen Atomwaffenbesitz"
+  "de": "durch bereits vorhandenen Nuklearwaffenbesitz"
  },
  "AI_ARMED_FORCES_IN_GOVERNMENT": {
   "en": "from the Armed Forces being [concept_in_government]",
@@ -245,7 +245,7 @@
  },
  "CB_DIRECTED_CREDIT_ARMS_DESC": {
   "en": "The State guarantees the loans of arsenals, munitions works and shipyards, and buys what they make. With the government as the buyer there is less room for speculation than in other lending, but the Intelligentsia ask what else the money could have built.",
-  "de": "Der Staat verbürgt die Kredite von Zeughäusern, Munitionsfabriken und Werften und kauft ihre Erzeugnisse. Mit der Regierung als Käufer bleibt weniger Raum für Spekulation als bei anderer Kreditvergabe, doch die Intelligenz fragt, was sonst mit dem Geld hätte gebaut werden können."
+  "de": "Der Staat verbürgt die Kredite von Zeughäusern, Munitionsfabriken und Werften und kauft ihre Erzeugnisse. Mit der Regierung als Käufer bleibt weniger Raum für Spekulation als bei anderer Kreditvergabe, doch die Intellektuellen fragen, was sonst mit dem Geld hätte gebaut werden können."
  },
  "CB_DIRECTED_CREDIT_ELEC": {
   "en": "Directed Credit to Electrification & High Tech",
@@ -1725,27 +1725,27 @@
  },
  "NW_PROGRESS_ADD_5_TT": {
   "en": "#G +5#! nuclear weapons program progress.",
-  "de": "#G +5#! Fortschritt im Kernwaffenprogramm."
+  "de": "#G +5#! Fortschritt im Nuklearwaffenprogramm."
  },
  "NW_PROGRESS_SUBTRACT_10_TT": {
   "en": "#R -10#! nuclear weapons program progress.",
-  "de": "#R -10#! Fortschritt im Kernwaffenprogramm."
+  "de": "#R -10#! Fortschritt im Nuklearwaffenprogramm."
  },
  "NW_PROGRESS_SUBTRACT_15_TT": {
   "en": "#R -15#! nuclear weapons program progress.",
-  "de": "#R -15#! Fortschritt im Kernwaffenprogramm."
+  "de": "#R -15#! Fortschritt im Nuklearwaffenprogramm."
  },
  "NW_PROGRESS_SUBTRACT_25_TT": {
   "en": "#R -25#! nuclear weapons program progress.",
-  "de": "#R -25#! Fortschritt im Kernwaffenprogramm."
+  "de": "#R -25#! Fortschritt im Nuklearwaffenprogramm."
  },
  "NW_PROGRESS_SUBTRACT_5_TT": {
   "en": "#R -5#! nuclear weapons program progress.",
-  "de": "#R -5#! Fortschritt im Kernwaffenprogramm."
+  "de": "#R -5#! Fortschritt im Nuklearwaffenprogramm."
  },
  "NW_PROLIF_CRASH_TT": {
   "en": "#G +12#! nuclear weapons program progress, paid for in bureaucratic, civilian, and academic strain.",
-  "de": "#G +12#! Fortschritt im Kernwaffenprogramm, erkauft mit bürokratischer, ziviler und akademischer Belastung."
+  "de": "#G +12#! Fortschritt im Nuklearwaffenprogramm, erkauft mit bürokratischer, ziviler und akademischer Belastung."
  },
  "NW_PROLIF_LOBBY_TT": {
   "en": "International pressure shaves #R -1#! progress off [SCOPE.sCountry('proliferating_country').GetName]'s program.",
@@ -3677,7 +3677,7 @@
  },
  "WAR_SUPPORT_TE_COVERT_COMMS_DISRUPTED": {
   "en": "Enemy communications disruption",
-  "de": "Störung der feindlichen Kommunikation"
+  "de": "Feindliche Kommunikationsstörung"
  },
  "WAR_SUPPORT_TE_NUCLEAR_SHADOW": {
   "en": "Enemy nuclear arsenal",
@@ -3973,7 +3973,7 @@
  },
  "amendment_national_champion_exemption": {
   "en": "National Champion Exemption",
-  "de": "Ausnahme für nationale Vorzeigeunternehmen"
+  "de": "Ausnahme für den nationalen Vorzeigekonzern"
  },
  "amendment_no_first_strike": {
   "en": "No-First-Strike Pledge",
@@ -4605,7 +4605,7 @@
  },
  "banking_dash_mon_anchor_tt": {
   "en": "#header Monetary Anchor#!\\nWhether your money is tied to another country's. An anchored country #b has no dial#!: it takes its anchor's policy rate, plus a spread, and its anchor's exchange rate. It cannot monetise its deficit or buy assets — it is not its currency to print.\\n$TOOLTIP_DELIMITER$\\n#title What it buys:#! the anchor's credibility. Your expected inflation is pulled toward the anchor's target as firmly as #v 80%#! of its central bank's word is worth, if that is more than your own.\\n#title What it costs:#! your inflation, your cycle and your neutral rate stay your own, so the borrowed rate is the wrong one whenever the two economies part ways — and you cannot devalue your way out. #v $banking_dash_mon_fx_effect_label$#! shows how far you have drifted from the currency you borrowed.\\n$TOOLTIP_DELIMITER$\\n#title Three ways to be anchored:#!\\nA #v $currency_peg$#! treaty — spread #v +0.5#!, credit standing #G −0.5#! points, and a peg the markets can break.\\nA power bloc's #v common currency#! — no spread, and no peg to break: the premium rises instead.\\nA #v currency board#! — a puppet, vassal, colony or crown land uses its overlord's money, spread #v +0.25#!.\\n$TOOLTIP_DELIMITER$\\n#title As an anchor:#! every #v 5%#! of world GDP pegged to your currency is #G −0.1#! points of credit standing, to #G −0.5#!.\\n#title Credit standing from arrangements now:#! #G −[JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_arr_standing_display')|2]#!.",
-  "de": "#header Geldpolitischer Anker#!\\nOb Ihre Währung an die eines anderen Landes gebunden ist. Ein angebundenes Land #b hat kein eigenes Steuerungsrad#!: Es übernimmt den Leitzins seines Ankers zuzüglich eines Aufschlags sowie dessen Wechselkurs. Es kann sein Defizit nicht monetisieren oder Vermögenswerte aufkaufen — es ist nicht seine eigene Währung, die es drucken könnte.\\n$TOOLTIP_DELIMITER$\\n#title Was es bringt:#! die Glaubwürdigkeit des Ankers. Ihre erwartete Inflation wird so stark zum Ziel des Ankers hingezogen, wie das Wort seiner Zentralbank wert ist, bis zu #v 80%#!, sofern das mehr ist als Ihr eigenes.\\n#title Was es kostet:#! Ihre Inflation, Ihr Zyklus und Ihr neutraler Zinssatz bleiben Ihre eigenen, sodass der geliehene Zinssatz immer dann der falsche ist, wenn sich die beiden Volkswirtschaften auseinanderentwickeln — und Sie können sich nicht durch Abwertung herauswinden. #v $banking_dash_mon_fx_effect_label$#! zeigt, wie weit Sie sich von der geliehenen Währung entfernt haben.\\n$TOOLTIP_DELIMITER$\\n#title Drei Wege, angebunden zu sein:#!\\nEin #v $currency_peg$#!-Vertrag — Aufschlag #v +0,5#!, Bonität #G −0,5#! Punkte, und eine Bindung, die die Märkte brechen können.\\nDie #v Gemeinsame Währung#! eines Machtblocks — kein Aufschlag, und keine Bindung, die brechen kann: stattdessen steigt die Prämie.\\nEin #v Currency Board#! — ein Vasall, Marionettenstaat, eine Kolonie oder ein Kronland verwendet das Geld seines Oberherrn, Aufschlag #v +0,25#!.\\n$TOOLTIP_DELIMITER$\\n#title Als Anker:#! Jede #v 5%#! des Welt-BIP, die an Ihre Währung gekoppelt sind, bedeuten #G −0,1#! Punkte Bonität, bis zu #G −0,5#!.\\n#title Bonität aus bestehenden Arrangements:#! #G −[JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_arr_standing_display')|2]#!."
+  "de": "#header Geldpolitischer Anker#!\\nOb Ihre Währung an die eines anderen Landes gebunden ist. Ein angebundenes Land #b hat kein eigenes Steuerungsrad#!: Es übernimmt den Leitzins seines Ankers zuzüglich eines Aufschlags sowie dessen Wechselkurs. Es kann sein Defizit nicht monetisieren oder Vermögenswerte aufkaufen — es ist nicht seine eigene Währung, die es drucken könnte.\\n$TOOLTIP_DELIMITER$\\n#title Was es bringt:#! die Glaubwürdigkeit des Ankers. Ihre erwartete Inflation wird so stark zum Ziel des Ankers hingezogen, wie das Wort seiner Zentralbank wert ist, bis zu #v 80%#!, sofern das mehr ist als Ihr eigenes.\\n#title Was es kostet:#! Ihre Inflation, Ihr Zyklus und Ihr neutraler Zinssatz bleiben Ihre eigenen, sodass der geliehene Zinssatz immer dann der falsche ist, wenn sich die beiden Volkswirtschaften auseinanderentwickeln — und Sie können sich nicht durch Abwertung herauswinden. #v $banking_dash_mon_fx_effect_label$#! zeigt, wie weit Sie sich von der geliehenen Währung entfernt haben.\\n$TOOLTIP_DELIMITER$\\n#title Drei Wege, angebunden zu sein:#!\\nEin #v $currency_peg$#!-Vertrag — Aufschlag #v +0,5#!, Bonität #G −0,5#! Punkte, und eine Bindung, die die Märkte brechen können.\\nDie #v Gemeinsame Währung#! eines Machtblocks — kein Aufschlag, und keine Bindung, die brechen kann: stattdessen steigt die Prämie.\\nEin #v Currency Board#! — ein Vasall, Marionettenstaat, eine Kolonie oder ein Kronland verwendet das Geld seines Suzeräns, Aufschlag #v +0,25#!.\\n$TOOLTIP_DELIMITER$\\n#title Als Anker:#! Jede #v 5%#! des Welt-BIP, die an Ihre Währung gekoppelt sind, bedeuten #G −0,1#! Punkte Bonität, bis zu #G −0,5#!.\\n#title Bonität aus bestehenden Arrangements:#! #G −[JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_arr_standing_display')|2]#!."
  },
  "banking_dash_mon_anchoring_tt": {
   "en": "#header $country_inflation_anchoring_add$#!\\n$country_inflation_anchoring_add_desc$\\n$TOOLTIP_DELIMITER$\\nAbsorbing #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_pressure_anchoring')|1]%#! of the wage and price pressure above, out of #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_anchoring_capacity_display')|1]%#! it could.\\n#title Where it comes from:#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_inflation_anchoring_add')]",
@@ -6521,11 +6521,11 @@
  },
  "covert_cultivate_assets_action_action_notification_break_name": {
   "en": "Asset Cultivation Ended",
-  "de": "Netzwerkaufbau beendet"
+  "de": "Quellenanwerbung beendet"
  },
  "covert_cultivate_assets_action_action_notification_name": {
   "en": "Asset Cultivation Begun",
-  "de": "Netzwerkaufbau begonnen"
+  "de": "Quellenanwerbung begonnen"
  },
  "covert_cultivate_assets_action_action_propose_name": {
   "en": "Start Cultivating Assets",
@@ -6761,7 +6761,7 @@
  },
  "covert_op_capacity_cultivate_assets_tt": {
   "en": "No asset cultivation slots available — reduce active asset cultivation operations or increase covert capacity.",
-  "de": "Keine Plätze für Netzwerkaufbau verfügbar — aktive Netzwerkaufbau-Operationen reduzieren oder verdeckte Kapazität erhöhen."
+  "de": "Keine Plätze für Quellenanwerbung verfügbar — aktive Quellenanwerbung-Operationen reduzieren oder verdeckte Kapazität erhöhen."
  },
  "covert_op_capacity_destabilization_tt": {
   "en": "No destabilization slots available — reduce active destabilization operations or increase covert capacity.",
@@ -7113,7 +7113,7 @@
  },
  "ele_amend_no_first_strike_tt": {
   "en": "This [concept_amendment] is available when we have researched #bold Nuclear Weapons#! and are enacting #bold Humanitarian Regulations#! or #bold Limited War#!.\\n\\nOnce the law passes, it binds our nuclear doctrine to #v No First Use#!, whatever we hold now, and an arsenal we build later starts under it. Abandoning No First Use while it is on our laws repudiates the pledge and strikes the amendment.",
-  "de": "Dieser [concept_amendment] ist verfügbar, wenn wir #bold Nuklearwaffen#! erforscht haben und #bold Humanitäre Vorschriften#! oder #bold Begrenzter Krieg#! erlassen.\\n\\nSobald das Gesetz verabschiedet ist, bindet es unsere nukleare Doktrin an #v Kein Ersteinsatz#!, was auch immer wir derzeit vertreten, und ein später aufgebautes Arsenal beginnt darunter. Wird Kein Ersteinsatz aufgegeben, während er in unseren Gesetzen steht, widerruft dies das Versprechen und streicht den Nachtrag."
+  "de": "Dieser [concept_amendment] ist verfügbar, wenn wir #bold Nuklearwaffen#! erforscht haben und #bold Humanitäre Vorschriften#! oder #bold Begrenzter Krieg#! erlassen.\\n\\nSobald das Gesetz verabschiedet ist, bindet es unsere nukleare Doktrin an #v Kein Erstschlag#!, was auch immer wir derzeit vertreten, und ein später aufgebautes Arsenal beginnt darunter. Wird Kein Erstschlag aufgegeben, während er in unseren Gesetzen steht, widerruft dies das Versprechen und streicht den Nachtrag."
  },
  "electfin_donor_scandal_advance": {
   "en": "Electoral Finance: Donor Scandal Advance",
@@ -7765,7 +7765,7 @@
  },
  "gm_je_line_culture": {
   "en": "#b Cultural pull#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_culture')|1]#! of +5[SelectLocalization(EqualTo_CFixedPoint(JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_culture'), '(CFixedPoint)0'), '', 'gm_je_line_culture_next')]",
-  "de": "#b Kultureller Sog#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_culture')|1]#! von +5[SelectLocalization(EqualTo_CFixedPoint(JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_culture'), '(CFixedPoint)0'), '', 'gm_je_line_culture_next')]"
+  "de": "#b Kulturelle Anziehungskraft#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_culture')|1]#! von +5[SelectLocalization(EqualTo_CFixedPoint(JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_culture'), '(CFixedPoint)0'), '', 'gm_je_line_culture_next')]"
  },
  "gm_je_line_culture_next": {
   "en": "; next step at [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_culture')|0] [concept_grandeur]",
@@ -8225,7 +8225,7 @@
  },
  "govprin_popular_assembly_cautious": {
   "en": "Governance: Popular Assembly Cautious Advance",
-  "de": "Regierungsführung: Volksversammlung – Vorsichtiger Vorstoß"
+  "de": "Regierungsführung: Volksversammlung – Vorsichtiger Vormarsch"
  },
  "govprin_popular_assembly_stall": {
   "en": "Governance: Popular Assembly Stall",
@@ -8237,7 +8237,7 @@
  },
  "govprin_technocrat_showcase_cautious": {
   "en": "Governance: Technocrat Showcase Cautious Advance",
-  "de": "Regierungsführung: Vorzeigeprojekt – Vorsichtiger Vorstoß"
+  "de": "Regierungsführung: Vorzeigeprojekt – Vorsichtiger Vormarsch"
  },
  "govprin_technocrat_showcase_stall": {
   "en": "Governance: Technocrat Showcase Stall",
@@ -8573,7 +8573,7 @@
  },
  "inherit_succession_dispute_cautious": {
   "en": "Inheritance: Succession Dispute Cautious Advance",
-  "de": "Erbfolge: Nachfolgestreit – Vorsichtiger Vorstoß"
+  "de": "Erbfolge: Nachfolgestreit – Vorsichtiger Vormarsch"
  },
  "inherit_succession_dispute_stall": {
   "en": "Inheritance: Succession Dispute Stall",
@@ -8609,7 +8609,7 @@
  },
  "internet_viral_campaign_cautious": {
   "en": "Internet Governance: Viral Campaign Cautious Advance",
-  "de": "Internet-Governance: Virale Kampagne – Vorsichtiger Vorstoß"
+  "de": "Internet-Governance: Virale Kampagne – Vorsichtiger Vormarsch"
  },
  "internet_viral_campaign_stall": {
   "en": "Internet Governance: Viral Campaign Stall",
@@ -8621,7 +8621,7 @@
  },
  "ip_piracy_debate_cautious": {
   "en": "Intellectual Property: Piracy Debate Cautious Advance",
-  "de": "Geistiges Eigentum: Piraterie-Debatte – Vorsichtiger Vorstoß"
+  "de": "Geistiges Eigentum: Piraterie-Debatte – Vorsichtiger Vormarsch"
  },
  "ip_piracy_debate_stall": {
   "en": "Intellectual Property: Piracy Debate Stall",
@@ -8677,7 +8677,7 @@
  },
  "irr_war_blessing_candidate_tt": {
   "en": "[SCOPE.sCountry('target_country').GetName] is a candidate for reunification: it shares one of our [concept_primary_cultures] and holds no [concept_homeland] of a people we do not share, it holds a homeland state of ours that we [Concept('concept_claim', 'claim')] and where our people still live, it borders us or we both have a coast, and neither of us is a subject of the other's overlord",
-  "de": "[SCOPE.sCountry('target_country').GetAltName('NOM')] ist ein Kandidat für die Wiedervereinigung: Es teilt eine unserer [concept_primary_cultures] und hält kein [concept_homeland] eines Volkes, das wir nicht teilen, es hält einen unserer Heimatstaaten, auf den wir [Concept('concept_claim', 'Anspruch erheben')] und in dem unser Volk noch lebt, es grenzt an uns oder wir haben beide eine Küste, und keiner von uns ist Klientelstaat des Oberherrn des anderen"
+  "de": "[SCOPE.sCountry('target_country').GetAltName('NOM')] ist ein Kandidat für die Wiedervereinigung: Es teilt eine unserer [concept_primary_cultures] und hält kein [concept_homeland] eines Volkes, das wir nicht teilen, es hält einen unserer Heimatstaaten, auf den wir [Concept('concept_claim', 'Anspruch erheben')] und in dem unser Volk noch lebt, es grenzt an uns oder wir haben beide eine Küste, und keiner von uns ist Klientelstaat des Suzeräns des anderen"
  },
  "irr_war_blessing_driver_tt": {
   "en": "Our government gives the reunification cause a voice: a law such as $law_ethnostate$, $law_national_supremacy$, $law_council_republic$ or $law_multicultural$, a governing [concept_interest_group] whose leader's ideology takes up the cause, or the Chinese reunification journal entry",
@@ -8861,7 +8861,7 @@
  },
  "iw_op_name_cultivate_assets": {
   "en": "Asset Cultivation",
-  "de": "Quellenwerbung"
+  "de": "Quellenanwerbung"
  },
  "iw_op_name_destabilization": {
   "en": "Destabilization",
@@ -8921,7 +8921,7 @@
  },
  "iw_priority_cultivate_fixed_tt": {
   "en": "Asset cultivation has nothing for priority to multiply: it stays at priority #v 1#!",
-  "de": "Quellenwerbung hat nichts, das die Priorität multiplizieren könnte: Sie bleibt bei Priorität #v 1#!"
+  "de": "Quellenanwerbung hat nichts, das die Priorität multiplizieren könnte: Sie bleibt bei Priorität #v 1#!"
  },
  "iw_priority_not_max_tt": {
   "en": "Priority is not already at its maximum ([GetPlayer.MakeScope.ScriptValue('covert_op_priority_max')|0])",
@@ -9065,7 +9065,7 @@
  },
  "langpol_cultural_resistance_cautious": {
   "en": "Language Policy: Cultural Resistance Cautious Advance",
-  "de": "Sprachpolitik: Kultureller Widerstand – Vorsichtiger Vorstoß"
+  "de": "Sprachpolitik: Kultureller Widerstand – Vorsichtiger Vormarsch"
  },
  "langpol_cultural_resistance_stall": {
   "en": "Language Policy: Cultural Resistance Stall",
@@ -9117,7 +9117,7 @@
  },
  "lgbtq_public_petition_cautious": {
   "en": "LGBTQ Rights: Public Petition Cautious Advance",
-  "de": "LGBTQ-Rechte: Öffentliche Petition – Vorsichtiger Vorstoß"
+  "de": "LGBTQ-Rechte: Öffentliche Petition – Vorsichtiger Vormarsch"
  },
  "lgbtq_public_petition_stall": {
   "en": "LGBTQ Rights: Public Petition Stall",
@@ -9277,7 +9277,7 @@
  },
  "ministry_aid_distant_cautious": {
   "en": "International Aid Ministry: Distant Crisis Cautious Advance",
-  "de": "Ministerium für internationale Hilfe: Ferne Krise – Vorsichtiger Vorstoß"
+  "de": "Ministerium für internationale Hilfe: Ferne Krise – Vorsichtiger Vormarsch"
  },
  "ministry_aid_distant_stall": {
   "en": "International Aid Ministry: Distant Crisis Stall",
@@ -9293,7 +9293,7 @@
  },
  "ministry_commerce_trade_cautious": {
   "en": "Commerce Ministry: Trade Cautious Advance",
-  "de": "Handelsministerium: Handel – Vorsichtiger Vorstoß"
+  "de": "Handelsministerium: Handel – Vorsichtiger Vormarsch"
  },
  "ministry_commerce_trade_stall": {
   "en": "Commerce Ministry: Trade Stall",
@@ -9309,7 +9309,7 @@
  },
  "ministry_consumer_tainted_cautious": {
   "en": "Consumer Protection Ministry: Tainted Product Cautious Advance",
-  "de": "Verbraucherschutzministerium: Verunreinigtes Produkt – Vorsichtiger Vorstoß"
+  "de": "Verbraucherschutzministerium: Verunreinigtes Produkt – Vorsichtiger Vormarsch"
  },
  "ministry_consumer_tainted_stall": {
   "en": "Consumer Protection Ministry: Tainted Product Stall",
@@ -9325,7 +9325,7 @@
  },
  "ministry_culture_patronage_cautious": {
   "en": "Culture Ministry: Patronage Cautious Advance",
-  "de": "Kulturministerium: Mäzenatentum – Vorsichtiger Vorstoß"
+  "de": "Kulturministerium: Mäzenatentum – Vorsichtiger Vormarsch"
  },
  "ministry_culture_patronage_stall": {
   "en": "Culture Ministry: Patronage Stall",
@@ -9345,7 +9345,7 @@
  },
  "ministry_env_smokestacks_cautious": {
   "en": "Environment Ministry: Smokestacks Cautious Advance",
-  "de": "Umweltministerium: Schornsteine – Vorsichtiger Vorstoß"
+  "de": "Umweltministerium: Schornsteine – Vorsichtiger Vormarsch"
  },
  "ministry_env_smokestacks_stall": {
   "en": "Environment Ministry: Smokestacks Stall",
@@ -9369,7 +9369,7 @@
  },
  "ministry_intel_shadow_cautious": {
   "en": "Intelligence Ministry: Shadow Files Cautious Advance",
-  "de": "Geheimdienstministerium: Schattenakten – Vorsichtiger Vorstoß"
+  "de": "Geheimdienstministerium: Schattenakten – Vorsichtiger Vormarsch"
  },
  "ministry_intel_shadow_stall": {
   "en": "Intelligence Ministry: Shadow Files Stall",
@@ -9389,7 +9389,7 @@
  },
  "ministry_labor_struggle_cautious": {
   "en": "Labor Ministry: Struggle Cautious Advance",
-  "de": "Arbeitsministerium: Arbeitskampf – Vorsichtiger Vorstoß"
+  "de": "Arbeitsministerium: Arbeitskampf – Vorsichtiger Vormarsch"
  },
  "ministry_labor_struggle_stall": {
   "en": "Labor Ministry: Struggle Stall",
@@ -9401,7 +9401,7 @@
  },
  "ministry_prop_loudspeaker_cautious": {
   "en": "Propaganda Ministry: Loudspeaker Cautious Advance",
-  "de": "Propagandaministerium: Lautsprecher – Vorsichtiger Vorstoß"
+  "de": "Propagandaministerium: Lautsprecher – Vorsichtiger Vormarsch"
  },
  "ministry_prop_loudspeaker_stall": {
   "en": "Propaganda Ministry: Loudspeaker Stall",
@@ -9421,7 +9421,7 @@
  },
  "ministry_refugee_crisis_cautious": {
   "en": "Refugee Affairs Ministry: Crisis Cautious Advance",
-  "de": "Ministerium für Flüchtlingsangelegenheiten: Krise – Vorsichtiger Vorstoß"
+  "de": "Ministerium für Flüchtlingsangelegenheiten: Krise – Vorsichtiger Vormarsch"
  },
  "ministry_refugee_crisis_stall": {
   "en": "Refugee Affairs Ministry: Crisis Stall",
@@ -9441,7 +9441,7 @@
  },
  "ministry_sci_laboratory_cautious": {
   "en": "Science Ministry: Laboratory Cautious Advance",
-  "de": "Wissenschaftsministerium: Labor – Vorsichtiger Vorstoß"
+  "de": "Wissenschaftsministerium: Labor – Vorsichtiger Vormarsch"
  },
  "ministry_sci_laboratory_stall": {
   "en": "Science Ministry: Laboratory Stall",
@@ -9453,7 +9453,7 @@
  },
  "ministry_thought_watchers_cautious": {
   "en": "Thought Control Ministry: Watchers Cautious Advance",
-  "de": "Ministerium für Gedankenkontrolle: Wächter – Vorsichtiger Vorstoß"
+  "de": "Ministerium für Gedankenkontrolle: Wächter – Vorsichtiger Vormarsch"
  },
  "ministry_thought_watchers_stall": {
   "en": "Thought Control Ministry: Watchers Stall",
@@ -9473,7 +9473,7 @@
  },
  "ministry_urban_sprawl_cautious": {
   "en": "Urban Planning Ministry: Urban Sprawl Cautious Advance",
-  "de": "Stadtplanungsministerium: Zersiedlung – Vorsichtiger Vorstoß"
+  "de": "Stadtplanungsministerium: Zersiedlung – Vorsichtiger Vormarsch"
  },
  "ministry_urban_sprawl_friendly": {
   "en": "Urban Planning Ministry: Sprawl-Friendly",
@@ -9497,7 +9497,7 @@
  },
  "ministry_war_generals_cautious": {
   "en": "Ministry of War: Generals Cautious Advance",
-  "de": "Kriegsministerium: Generäle – Vorsichtiger Vorstoß"
+  "de": "Kriegsministerium: Generäle – Vorsichtiger Vormarsch"
  },
  "ministry_war_generals_stall": {
   "en": "War Ministry: Generals’ War Room Stall",
@@ -9525,7 +9525,7 @@
  },
  "minrights_solidarity_march_cautious": {
   "en": "Minority Rights: Solidarity March Cautious Advance",
-  "de": "Minderheitenrechte: Solidaritätsmarsch – Vorsichtiger Vorstoß"
+  "de": "Minderheitenrechte: Solidaritätsmarsch – Vorsichtiger Vormarsch"
  },
  "minrights_solidarity_march_stall": {
   "en": "Minority Rights: Solidarity March Stall",
@@ -9545,7 +9545,7 @@
  },
  "monpol_gold_hoarders_cautious": {
   "en": "Monetary Policy: Gold Hoarders Cautious Advance",
-  "de": "Geldpolitik: Goldhorter – Vorsichtiger Vorstoß"
+  "de": "Geldpolitik: Goldhorter – Vorsichtiger Vormarsch"
  },
  "monpol_gold_hoarders_stall": {
   "en": "Monetary Policy: Gold Hoarders Stall",
@@ -9557,7 +9557,7 @@
  },
  "monpol_printing_press_cautious": {
   "en": "Monetary Policy: Printing Press Cautious Advance",
-  "de": "Geldpolitik: Notenpresse – Vorsichtiger Vorstoß"
+  "de": "Geldpolitik: Notenpresse – Vorsichtiger Vormarsch"
  },
  "monpol_printing_press_stall": {
   "en": "Monetary Policy: Printing Press Stall",
@@ -10601,7 +10601,7 @@
  },
  "nd_taboo_tt_resume_no_standing": {
   "en": "We lack the standing to run a weapons programme: resuming only ends our renunciation. A programme needs great-power standing, a major power's missiles, or a patron's aid",
-  "de": "Uns fehlt das Ansehen, um ein Waffenprogramm zu betreiben: Eine Wiederaufnahme beendet nur unseren Verzicht. Ein Programm braucht Großmacht-Ansehen, die Raketen einer Großmacht oder die Hilfe eines Schutzherrn"
+  "de": "Uns fehlt das Ansehen, um ein Waffenprogramm zu betreiben: Eine Wiederaufnahme beendet nur unseren Verzicht. Ein Programm braucht Großmacht-Ansehen, die Raketen einer Mittelmacht oder die Hilfe eines Schutzherrn"
  },
  "nd_taboo_tt_resume_relations": {
   "en": "Relations worsen by #R [GetPlayer.MakeScope.ScriptValue('nd_taboo_resume_relations_value')|0]#! with every country",
@@ -10745,7 +10745,7 @@
  },
  "nd_tt_allies_alarmed": {
   "en": "Every country we protect: relations #R -10#!. Every subject under our nuclear umbrella: #R +5#! liberty desire. A crisis against any of them now weighs our arsenal at half while our warheads stay in storage",
-  "de": "Jedes Land, das wir schützen: Beziehungen #R -10#!. Jeder Klientelstaat unter unserem nuklearen Schutzschirm: #R +5#! Freiheitsverlangen. Eine Krise gegen einen von ihnen gewichtet unser Arsenal jetzt nur zur Hälfte, während unsere Sprengköpfe eingelagert bleiben"
+  "de": "Jedes Land, das wir schützen: Beziehungen #R -10#!. Jeder Klientelstaat unter unserem nuklearen Schutzschirm: #R +5#! Freiheitsdrang. Eine Krise gegen einen von ihnen gewichtet unser Arsenal jetzt nur zur Hälfte, während unsere Sprengköpfe eingelagert bleiben"
  },
  "nd_tt_already_current": {
   "en": "This is not already our choice",
@@ -11177,7 +11177,7 @@
  },
  "nd_tt_open_bluff_flexible": {
   "en": "#R A bluff:#! #v Flexible First Use#! permits a strike only when we are losing to them or they threaten our territory. They know our doctrine: their pressure to concede #R -25#!",
-  "de": "#R Ein Bluff:#! #v Flexibler Ersteinsatz#! erlaubt einen Schlag nur, wenn wir gegen sie im Verlieren sind oder sie unser Gebiet bedrohen. Sie kennen unsere Doktrin: ihr Druck nachzugeben #R -25#!"
+  "de": "#R Ein Bluff:#! #v Flexibler Erstschlag#! erlaubt einen Schlag nur, wenn wir gegen sie im Verlieren sind oder sie unser Gebiet bedrohen. Sie kennen unsere Doktrin: ihr Druck nachzugeben #R -25#!"
  },
  "nd_tt_open_bluff_law": {
   "en": "#R A bluff:#! our #v Rules of War#! law forbids a nuclear strike. Their pressure to concede #R -25#!",
@@ -11185,7 +11185,7 @@
  },
  "nd_tt_open_bluff_nfu": {
   "en": "#R A bluff:#! we have pledged #v No First Use#!. Their pressure to concede #R -35#!",
-  "de": "#R Ein Bluff:#! wir haben #v Kein Ersteinsatz#! zugesagt. Ihr Druck nachzugeben #R -35#!"
+  "de": "#R Ein Bluff:#! wir haben #v Kein Erstschlag#! zugesagt. Ihr Druck nachzugeben #R -35#!"
  },
  "nd_tt_open_f_aggressive": {
   "en": "  Their ruler is aggressive: #R -15#!",
@@ -11305,7 +11305,7 @@
  },
  "nd_tt_pledge_permits_strike": {
   "en": "No non-use pledge with this enemy stands in the way",
-  "de": "Kein Verzichtsversprechen gegenüber diesem Feind steht im Weg"
+  "de": "Keine Nichteinsatz-Zusage gegenüber diesem Feind steht im Weg"
  },
  "nd_tt_readiness_locked": {
   "en": "No stand-down agreement or concession holds our readiness at Routine or below",
@@ -11341,7 +11341,7 @@
  },
  "nd_tt_recessed_alarms_allies": {
   "en": "#R The countries we protect will be alarmed#! when our warheads reach storage: #v credibility#! #R -5#!, relations #R -10#! with each of them, #R +5#! liberty desire for each subject under our umbrella — every time we go to Recessed",
-  "de": "#R Die Länder, die wir schützen, werden alarmiert sein#!, sobald unsere Sprengköpfe eingelagert werden: #v Glaubwürdigkeit#! #R -5#!, Beziehungen #R -10#! zu jedem von ihnen, #R +5#! Freiheitsdrang für jedes Nebenland unter unserem Schutzschirm — jedes Mal, wenn wir zu Eingelagert wechseln"
+  "de": "#R Die Länder, die wir schützen, werden alarmiert sein#!, sobald unsere Sprengköpfe eingelagert werden: #v Glaubwürdigkeit#! #R -5#!, Beziehungen #R -10#! zu jedem von ihnen, #R +5#! Freiheitsdrang für jedes Klientelland unter unserem Schutzschirm — jedes Mal, wenn wir zu Eingelagert wechseln"
  },
  "nd_tt_refuse_talks_no_pressure_yet": {
   "en": "There is no pressure before a #v Confrontation#!",
@@ -11501,11 +11501,11 @@
  },
  "nd_w_authority_choice_3": {
   "en": "Launch on Warning",
-  "de": "Start bei Warnung"
+  "de": "Start bei Vorwarnung"
  },
  "nd_w_authority_choice_3_tt": {
   "en": "#tooltip_header Launch on Warning#!\\n$TOOLTIP_DELIMITER$\\nOur missiles fly on warning, before the enemy's arrive. The most credible response for vulnerable forces — and a false warning can become a launch under standing orders.\\n\\n#R An incident can end in a launch without further approval.#!",
-  "de": "#tooltip_header Start bei Warnung#!\\n$TOOLTIP_DELIMITER$\\nUnsere Raketen starten bei Warnung, bevor die des Feindes eintreffen. Die glaubwürdigste Antwort für verwundbare Streitkräfte — und eine Fehlwarnung kann unter stehendem Befehl zu einem Start werden.\\n\\n#R Ein Zwischenfall kann ohne weitere Genehmigung in einem Start enden.#!"
+  "de": "#tooltip_header Start bei Vorwarnung#!\\n$TOOLTIP_DELIMITER$\\nUnsere Raketen starten bei Vorwarnung, bevor die des Feindes eintreffen. Die glaubwürdigste Antwort für verwundbare Streitkräfte — und eine Fehlwarnung kann unter stehendem Befehl zu einem Start werden.\\n\\n#R Ein Zwischenfall kann ohne weitere Genehmigung in einem Start enden.#!"
  },
  "nd_w_authority_choice_4": {
   "en": "Automatic Retaliation",
@@ -11521,11 +11521,11 @@
  },
  "nd_w_authority_legend": {
   "en": "Launch authority can be changed once a year. Delegation needs radar; launch on warning needs missiles as well; automatic retaliation also needs mainframe computers.",
-  "de": "Die Startbefugnis kann einmal im Jahr geändert werden. Delegation erfordert Radar; Start bei Warnung erfordert zusätzlich Raketen; automatische Vergeltung erfordert außerdem Großrechner."
+  "de": "Die Startbefugnis kann einmal im Jahr geändert werden. Delegation erfordert Radar; Start bei Vorwarnung erfordert zusätzlich Raketen; automatische Vergeltung erfordert außerdem Großrechner."
  },
  "nd_w_authority_tt": {
   "en": "#tooltip_header Launch authority#!\\n$TOOLTIP_DELIMITER$\\nWho may act when the warning is uncertain. Under central authorization nothing is launched unless the government orders it. Under conditional delegation or launch on warning, an incident can end in a launch with #bold no further approval#! — only the chance that someone in the chain refuses stands in the way. Under automatic retaliation, a strike on our cities is answered in full by the system.",
-  "de": "#tooltip_header Startbefugnis#!\\n$TOOLTIP_DELIMITER$\\nWer handeln darf, wenn die Warnung ungewiss ist. Unter zentraler Genehmigung wird nichts gestartet, außer die Regierung ordnet es an. Unter bedingter Delegation oder Start bei Warnung kann ein Zwischenfall #bold ohne weitere Genehmigung#! in einem Start enden — nur die Chance, dass jemand in der Kette sich weigert, steht im Weg. Unter automatischer Vergeltung wird ein Schlag gegen unsere Städte vollständig vom System beantwortet."
+  "de": "#tooltip_header Startbefugnis#!\\n$TOOLTIP_DELIMITER$\\nWer handeln darf, wenn die Warnung ungewiss ist. Unter zentraler Genehmigung wird nichts gestartet, außer die Regierung ordnet es an. Unter bedingter Delegation oder Start bei Vorwarnung kann ein Zwischenfall #bold ohne weitere Genehmigung#! in einem Start enden — nur die Chance, dass jemand in der Kette sich weigert, steht im Weg. Unter automatischer Vergeltung wird ein Schlag gegen unsere Städte vollständig vom System beantwortet."
  },
  "nd_w_btn_adopt": {
   "en": "Adopt",
@@ -11709,11 +11709,11 @@
  },
  "nd_w_doctrine_choice_1": {
   "en": "No First Use",
-  "de": "Kein Ersteinsatz"
+  "de": "Kein Erstschlag"
  },
  "nd_w_doctrine_choice_1_tt": {
   "en": "#tooltip_header No First Use#!\\n$TOOLTIP_DELIMITER$\\nWe will use nuclear weapons only in retaliation. Reassuring to neighbours, weak for coercion, and popular with those who fear the bomb. Leaving it later is a repudiation.\\n\\n[GetStaticModifier('nd_doctrine_mod_1').GetDesc]",
-  "de": "#tooltip_header Kein Ersteinsatz#!\\n$TOOLTIP_DELIMITER$\\nWir setzen Nuklearwaffen nur zur Vergeltung ein. Beruhigend für Nachbarn, schwach für Nötigung und beliebt bei denen, die die Bombe fürchten. Es später aufzugeben ist ein Widerruf.\\n\\n[GetStaticModifier('nd_doctrine_mod_1').GetDesc]"
+  "de": "#tooltip_header Kein Erstschlag#!\\n$TOOLTIP_DELIMITER$\\nWir setzen Nuklearwaffen nur zur Vergeltung ein. Beruhigend für Nachbarn, schwach für Nötigung und beliebt bei denen, die die Bombe fürchten. Es später aufzugeben ist ein Widerruf.\\n\\n[GetStaticModifier('nd_doctrine_mod_1').GetDesc]"
  },
  "nd_w_doctrine_choice_2": {
   "en": "Existential Deterrence",
@@ -11725,11 +11725,11 @@
  },
  "nd_w_doctrine_choice_3": {
   "en": "Flexible First Use",
-  "de": "Flexibler Ersteinsatz"
+  "de": "Flexibler Erstschlag"
  },
  "nd_w_doctrine_choice_3_tt": {
   "en": "#tooltip_header Flexible First Use#!\\n$TOOLTIP_DELIMITER$\\nWe may use them first in a war we are losing, or when our core is threatened — a check on a stronger conventional attacker. Limited use never guarantees a limited answer.\\n\\n[GetStaticModifier('nd_doctrine_mod_3').GetDesc]",
-  "de": "#tooltip_header Flexibler Ersteinsatz#!\\n$TOOLTIP_DELIMITER$\\nWir dürfen sie als Erste einsetzen, in einem Krieg, den wir verlieren, oder wenn unser Kernland bedroht ist — eine Bremse gegen einen stärkeren konventionellen Angreifer. Begrenzter Einsatz garantiert nie eine begrenzte Antwort.\\n\\n[GetStaticModifier('nd_doctrine_mod_3').GetDesc]"
+  "de": "#tooltip_header Flexibler Erstschlag#!\\n$TOOLTIP_DELIMITER$\\nWir dürfen sie als Erste einsetzen, in einem Krieg, den wir verlieren, oder wenn unser Kernland bedroht ist — eine Bremse gegen einen stärkeren konventionellen Angreifer. Begrenzter Einsatz garantiert nie eine begrenzte Antwort.\\n\\n[GetStaticModifier('nd_doctrine_mod_3').GetDesc]"
  },
  "nd_w_doctrine_choice_4": {
   "en": "Nuclear Compellence",
@@ -11757,11 +11757,11 @@
  },
  "nd_w_doctrine_legend": {
   "en": "A doctrine can be changed once every two years. Leaving No First Use repudiates a public pledge.",
-  "de": "Eine Doktrin kann alle zwei Jahre geändert werden. Kein Ersteinsatz zu verlassen widerruft ein öffentliches Versprechen."
+  "de": "Eine Doktrin kann alle zwei Jahre geändert werden. Kein Erstschlag zu verlassen widerruft ein öffentliches Versprechen."
  },
  "nd_w_doctrine_tt": {
   "en": "#tooltip_header Doctrine#!\\n$TOOLTIP_DELIMITER$\\nWhen we say we will use nuclear weapons. It decides which strikes our government may order — against an enemy we are at war with — and it has a price abroad and at home.\\n\\nRetaliation is always permitted. A pledge of no first use can only be left by repudiating it.",
-  "de": "#tooltip_header Doktrin#!\\n$TOOLTIP_DELIMITER$\\nWann wir sagen, dass wir Nuklearwaffen einsetzen werden. Sie entscheidet, welche Schläge unsere Regierung anordnen darf — gegen einen Feind, mit dem wir im Krieg stehen — und sie hat ihren Preis im Ausland wie im Inland.\\n\\nVergeltung ist immer erlaubt. Ein Versprechen des Kein-Ersteinsatzes kann nur durch Widerruf verlassen werden."
+  "de": "#tooltip_header Doktrin#!\\n$TOOLTIP_DELIMITER$\\nWann wir sagen, dass wir Nuklearwaffen einsetzen werden. Sie entscheidet, welche Schläge unsere Regierung anordnen darf — gegen einen Feind, mit dem wir im Krieg stehen — und sie hat ihren Preis im Ausland wie im Inland.\\n\\nVergeltung ist immer erlaubt. Ein Versprechen des Kein-Erstschlags kann nur durch Widerruf verlassen werden."
  },
  "nd_w_forces_header": {
   "en": "Readiness and Launch Authority",
@@ -11785,7 +11785,7 @@
  },
  "nd_w_hold_tt": {
   "en": "#tooltip_header If a delegated launch begins#!\\n$TOOLTIP_DELIMITER$\\nUnder conditional delegation or launch on warning, a false warning or a commander who believes the war has begun can start a launch that the government never approves. This is the chance that someone in the chain refuses. It follows command reliability and safeguards, falls if we punish those who question orders, and is lower under launch on warning.",
-  "de": "#tooltip_header Wenn ein delegierter Start beginnt#!\\n$TOOLTIP_DELIMITER$\\nUnter bedingter Delegation oder Start bei Warnung kann eine Fehlwarnung oder ein Kommandeur, der glaubt, der Krieg habe begonnen, einen Start auslösen, den die Regierung nie genehmigt. Das ist die Chance, dass jemand in der Kette sich weigert. Sie folgt der Befehlszuverlässigkeit und den Sicherungen, sinkt, wenn wir diejenigen bestrafen, die Befehle infrage stellen, und ist unter Start bei Warnung niedriger."
+  "de": "#tooltip_header Wenn ein delegierter Start beginnt#!\\n$TOOLTIP_DELIMITER$\\nUnter bedingter Delegation oder Start bei Vorwarnung kann eine Fehlwarnung oder ein Kommandeur, der glaubt, der Krieg habe begonnen, einen Start auslösen, den die Regierung nie genehmigt. Das ist die Chance, dass jemand in der Kette sich weigert. Sie folgt der Befehlszuverlässigkeit und den Sicherungen, sinkt, wenn wir diejenigen bestrafen, die Befehle infrage stellen, und ist unter Start bei Vorwarnung niedriger."
  },
  "nd_w_home_header": {
   "en": "At Home",
@@ -11921,11 +11921,11 @@
  },
  "nd_w_umbrella_tt": {
   "en": "#tooltip_header Nuclear umbrella#!\\n$TOOLTIP_DELIMITER$\\nOur direct subjects count as under our nuclear guarantee without a treaty: our arsenal lifts the nuclear shadow from their war support, weighs in any crisis against them, and we are asked to answer when they are threatened or struck. A nuclear strike on one of them lets us retaliate under any doctrine.\\n\\nWithdrawing it is a diplomatic action on the subject: #R +10#! liberty desire at once, and more every week while it stands.",
-  "de": "#tooltip_header Nuklearer Schutzschirm#!\\n$TOOLTIP_DELIMITER$\\nUnsere unmittelbaren Nebenländer gelten ohne Vertrag als unter unserer nuklearen Garantie: Unser Arsenal nimmt ihrer Kriegsunterstützung den nuklearen Schatten, fällt in jeder Krise gegen sie ins Gewicht, und wir werden aufgefordert zu reagieren, wenn sie bedroht oder getroffen werden. Ein Nuklearschlag gegen eines von ihnen erlaubt uns Vergeltung nach jeder Doktrin.\\n\\nIhn aufzukündigen ist eine diplomatische Aktion gegenüber dem Nebenland: sofort #R +10#! Freiheitsdrang, und jede Woche mehr, solange er besteht."
+  "de": "#tooltip_header Nuklearer Schutzschirm#!\\n$TOOLTIP_DELIMITER$\\nUnsere unmittelbaren Klientelländer gelten ohne Vertrag als unter unserer nuklearen Garantie: Unser Arsenal nimmt ihrer Kriegsunterstützung den nuklearen Schatten, fällt in jeder Krise gegen sie ins Gewicht, und wir werden aufgefordert zu reagieren, wenn sie bedroht oder getroffen werden. Ein Nuklearschlag gegen eines von ihnen erlaubt uns Vergeltung nach jeder Doktrin.\\n\\nIhn aufzukündigen ist eine diplomatische Aktion gegenüber dem Klientelland: sofort #R +10#! Freiheitsdrang, und jede Woche mehr, solange er besteht."
  },
  "nd_w_umbrella_value": {
   "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_umbrella_count')|0]#! subjects",
-  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_umbrella_count')|0]#! Nebenländer"
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_umbrella_count')|0]#! Klientelländer"
  },
  "nd_w_upkeep_label": {
   "en": "Upkeep",
@@ -14193,7 +14193,7 @@
  },
  "statepower_autonomy_debate_cautious": {
   "en": "State Power: Autonomy Debate Cautious Advance",
-  "de": "Staatsmacht: Autonomiedebatte schreitet vorsichtig voran"
+  "de": "Staatsmacht: Autonomiedebatte – Vorsichtiger Vormarsch"
  },
  "statepower_autonomy_debate_stall": {
   "en": "State Power: Autonomy Debate Stall",
@@ -14837,11 +14837,11 @@
  },
  "te_mon_board_subject_desc": {
   "en": "We have no money of our own: we issue our overlord's, against their reserves, and half of what our mint earns is theirs. More autonomy would end it.",
-  "de": "Wir haben kein eigenes Geld: Wir geben das unseres Oberherrn aus, gedeckt durch dessen Reserven, und die Hälfte dessen, was unsere Prägeanstalt einnimmt, gehört ihm. Mehr Autonomie würde dem ein Ende setzen."
+  "de": "Wir haben kein eigenes Geld: Wir geben das unseres Suzeräns aus, gedeckt durch dessen Reserven, und die Hälfte dessen, was unsere Prägeanstalt einnimmt, gehört ihm. Mehr Autonomie würde dem ein Ende setzen."
  },
  "te_mon_board_wrong_stance": {
   "en": "The Overlord’s Rate",
-  "de": "Der Zinssatz des Oberherrn"
+  "de": "Der Zinssatz des Suzeräns"
  },
  "te_mon_board_wrong_stance_desc": {
   "en": "For half a year and more the interest rate we are made to use has been plainly wrong for us — far too tight, or far too loose — because it is set for somebody else's economy. It lasts until our policy stance leaves the extreme.",
@@ -16509,7 +16509,7 @@
  },
  "un_vote_reform_2_passed_tt": {
   "en": "Charter Reform II is adopted by a two-thirds supermajority. #G The ceiling on [concept_un_authority]'s target rises from 85 to 100#!, opening the Supranational tier — where [concept_un_dues] rise to 1% of GDP and every major member embargoes the sanctioned — and #G UN credibility +2#!. #Y Veto restraint:#! from now on a two-thirds supermajority carries a resolution over a [Concept('concept_un_veto','veto')].",
-  "de": "Die Chartareform II wird mit einer Zweidrittelmehrheit angenommen. #G Die Obergrenze für das Ziel der [concept_un_authority] steigt von 85 auf 100#!, wodurch die Stufe „Supranational“ freigeschaltet wird — dort steigen die [concept_un_dues] auf 1% des BIP, und jedes Großmitglied verhängt ein Embargo gegen die Sanktionierten — sowie #G UN-Glaubwürdigkeit +2#!. #Y Veto-Beschränkung:#! Von nun an setzt sich eine Zweidrittelmehrheit über ein [Concept('concept_un_veto','Veto')] hinweg."
+  "de": "Die Chartareform II wird mit einer Zweidrittelmehrheit angenommen. #G Die Obergrenze für das Ziel der [concept_un_authority] steigt von 85 auf 100#!, wodurch die Stufe „Supranational“ freigeschaltet wird — dort steigen die [concept_un_dues] auf 1% des BIP, und jedes Großmitglied verhängt ein Embargo gegen die Sanktionierten — sowie #G UN-Glaubwürdigkeit +2#!. #Y Vetoeinschränkung:#! Von nun an setzt sich eine Zweidrittelmehrheit über ein [Concept('concept_un_veto','Veto')] hinweg."
  },
  "un_vote_reform_passed_tt": {
   "en": "The Charter Reform was adopted. #G UN credibility +1.5, moving [concept_un_authority]'s target.#!",
@@ -16541,7 +16541,7 @@
  },
  "un_vote_veto_overridden_tt": {
   "en": "#G The veto was overridden.#! Under Charter Reform II (veto restraint), a two-thirds supermajority of the members with a vote carries a resolution over a permanent member's veto, in its full form.",
-  "de": "#G Das Veto wurde überstimmt.#! Gemäß Chartareform II (Veto-Beschränkung) setzt sich eine Zweidrittelmehrheit der stimmberechtigten Mitglieder in voller Form über das Veto eines ständigen Mitglieds hinweg."
+  "de": "#G Das Veto wurde überstimmt.#! Gemäß Chartareform II (Vetoeinschränkung) setzt sich eine Zweidrittelmehrheit der stimmberechtigten Mitglieder in voller Form über das Veto eines ständigen Mitglieds hinweg."
  },
  "un_walkout_condemn_modifier": {
   "en": "Condemned Assembly Walkout",

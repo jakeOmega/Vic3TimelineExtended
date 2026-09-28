@@ -1057,7 +1057,7 @@
  },
  "notification_headlines_tech_nuclear_weapons_desc": {
   "en": "The atomic bomb, developed in secret by [SCOPE.sCountry('headlines_nuclear_weapons_researcher').GetAdjective] scientists, has changed the world forever. #lore These incredibly powerful nuclear weapons have fundamentally altered the nature of warfare and ushered in a new era of global politics... #!",
-  "de": "Die Atombombe, im Geheimen entwickelt von [SCOPE.sCountry('headlines_nuclear_weapons_researcher').GetAdjective|l]en Wissenschaftlern, hat die Welt für immer verändert. #lore Diese unglaublich mächtigen Kernwaffen haben das Wesen der Kriegsführung grundlegend verändert und ein neues Zeitalter der Weltpolitik eingeläutet... #!"
+  "de": "Die Atombombe, im Geheimen entwickelt von [SCOPE.sCountry('headlines_nuclear_weapons_researcher').GetAdjective|l]en Wissenschaftlern, hat die Welt für immer verändert. #lore Diese unglaublich mächtigen Nuklearwaffen haben das Wesen der Kriegsführung grundlegend verändert und ein neues Zeitalter der Weltpolitik eingeläutet... #!"
  },
  "notification_headlines_tech_nuclear_weapons_name": {
   "en": "#b A WEAPON THAT CAN DESTROY WORLDS #!",
@@ -1409,7 +1409,7 @@
  },
  "notification_headlines_tech_tactical_nuclear_weapons_desc": {
   "en": "Military planners in [SCOPE.sCountry('headlines_tactical_nuclear_weapons_researcher').GetName] have developed smaller, more versatile nuclear weapons that can be used on the battlefield. #lore These tactical nuclear weapons expand strategic options, but also make the use of nuclear weapons a more thinkable proposition... #!",
-  "de": "Militärplaner in [SCOPE.sCountry('headlines_tactical_nuclear_weapons_researcher').GetAltName('DAT')] haben kleinere, vielseitigere Kernwaffen entwickelt, die auf dem Schlachtfeld eingesetzt werden können. #lore Diese taktischen Kernwaffen erweitern die strategischen Optionen, machen den Einsatz von Kernwaffen aber auch zu einer denkbareren Möglichkeit... #!"
+  "de": "Militärplaner in [SCOPE.sCountry('headlines_tactical_nuclear_weapons_researcher').GetAltName('DAT')] haben kleinere, vielseitigere Nuklearwaffen entwickelt, die auf dem Schlachtfeld eingesetzt werden können. #lore Diese taktischen Nuklearwaffen erweitern die strategischen Optionen, machen den Einsatz von Nuklearwaffen aber auch zu einer denkbareren Möglichkeit... #!"
  },
  "notification_headlines_tech_tactical_nuclear_weapons_name": {
   "en": "#b BATTLEFIELD NUKES A DANGEROUS ESCALATION #!",
@@ -1609,7 +1609,7 @@
  },
  "notification_nd_doctrine_bound_by_law_desc": {
   "en": "The #bold No-First-Strike Pledge#! [concept_amendment] is in force, and it binds our nuclear doctrine: we are now committed to #v No First Use#!. The law made this change, not our government, so the wait before we may next choose a doctrine runs on from our own last choice. Abandoning No First Use repudiates the pledge and strikes the amendment from our laws.",
-  "de": "Der #bold Verzicht auf den Ersteinsatz#!-[concept_amendment] ist in Kraft und bindet unsere nukleare Doktrin: Wir sind nun auf #v Kein Ersteinsatz#! festgelegt. Diese Änderung ging vom Gesetz aus, nicht von unserer Regierung, daher läuft die Wartezeit, bevor wir erneut eine Doktrin wählen dürfen, seit unserer eigenen letzten Wahl. Die Aufgabe von Kein Ersteinsatz widerruft die Erklärung und streicht den Nachtrag aus unseren Gesetzen."
+  "de": "Der #bold Verzicht auf den Ersteinsatz#!-[concept_amendment] ist in Kraft und bindet unsere nukleare Doktrin: Wir sind nun auf #v Kein Erstschlag#! festgelegt. Diese Änderung ging vom Gesetz aus, nicht von unserer Regierung, daher läuft die Wartezeit, bevor wir erneut eine Doktrin wählen dürfen, seit unserer eigenen letzten Wahl. Die Aufgabe von Kein Erstschlag widerruft die Erklärung und streicht den Nachtrag aus unseren Gesetzen."
  },
  "notification_nd_doctrine_bound_by_law_name": {
   "en": "Doctrine Bound by Law",
@@ -1769,7 +1769,7 @@
  },
  "notification_un_representation_suspended_notice_desc": {
   "en": "We no longer conduct our own foreign policy, so our seat in the United Nations is suspended. We remain a member, but we cast no vote and table no resolution; any permanent seat, the headquarters and our UN programmes are given up. While our overlord sits in the Assembly and pays its dues, it pays ours and we keep the benefits of membership.",
-  "de": "Wir betreiben nicht mehr unsere eigene Außenpolitik, daher ist unser Sitz bei den Vereinten Nationen ausgesetzt. Wir bleiben Mitglied, geben aber keine Stimme ab und bringen keine Resolution ein; ein etwaiger ständiger Sitz, der Hauptsitz und unsere UN-Programme werden aufgegeben. Solange unser Oberherr in der Versammlung sitzt und seine Beiträge zahlt, zahlt er auch unsere, und wir behalten die Vorteile der Mitgliedschaft."
+  "de": "Wir betreiben nicht mehr unsere eigene Außenpolitik, daher ist unser Sitz bei den Vereinten Nationen ausgesetzt. Wir bleiben Mitglied, geben aber keine Stimme ab und bringen keine Resolution ein; ein etwaiger ständiger Sitz, der Hauptsitz und unsere UN-Programme werden aufgegeben. Solange unser Suzerän in der Versammlung sitzt und seine Beiträge zahlt, zahlt er auch unsere, und wir behalten die Vorteile der Mitgliedschaft."
  },
  "notification_un_representation_suspended_notice_name": {
   "en": "Our UN Representation Is Suspended",

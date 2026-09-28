@@ -829,11 +829,11 @@
  },
  "je_iw_op_row_financial_subversion": {
   "en": "• #Y Financial Subversion#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
-  "de": "• #Y Finanzielle Unterwanderung#! gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltName('AKK')]"
+  "de": "• #Y Finanzielle Subversion#! gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltName('AKK')]"
  },
  "je_iw_op_row_ideological_subversion": {
   "en": "• #Y Ideological Subversion#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
-  "de": "• #Y Ideologische Unterwanderung#! gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltName('AKK')]"
+  "de": "• #Y Ideologische Subversion#! gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltName('AKK')]"
  },
  "je_iw_op_row_industrial_espionage": {
   "en": "• #G Industrial Espionage#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
@@ -953,7 +953,7 @@
  },
  "je_iw_tradecraft_tooltip": {
   "en": "#bold How Tradecraft moves#!\\nEach month, every operation past its preparatory phase adds up to #G [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_gain_per_op')|1]#!, and one still preparatory #G [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_prep_gain_fraction')|1]#! (at most [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_ops_counted')|0] operations' worth count; this month #v [JournalEntry.GetCountry.MakeScope.Var('iw_tradecraft_ops').GetValue|1]#!). Gains shrink above half.\\nAn exposed operation costs #R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_loss_mild')|0]#! (espionage), #R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_loss_moderate')|0]#! (meddling), #R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_loss_severe')|0]#! (attacking the state) or #R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_loss_war')|0]#! (wartime sabotage). With no operation running it drifts down by #R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_decay')|2]#! a month.\\n\\n#bold Each tier#! adds to [concept_intelligence_capacity] and grows our networks #G [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_net_gain_pct_display')|0]%#! faster:\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_intelligence_capacity_mult')]\\n\\n#bold Unlocks#!\\nFledgling at [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_1_floor')|0]; #bold Established#! at [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_2_floor')|0]: operations may run at priority 3; #bold Seasoned#! at [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_3_floor')|0]; #bold Veteran#! at [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_4_floor')|0]: one more operation of each type.\\n#italic Nothing already running is ever ended when Tradecraft falls.#!",
-  "de": "#bold Wie sich das Spionagehandwerk entwickelt#!\\nJeden Monat trägt jede Operation jenseits ihrer Vorbereitungsphase bis zu #G [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_gain_per_op')|1]#! bei, und eine noch vorbereitende #G [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_prep_gain_fraction')|1]#! (höchstens [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_ops_counted')|0] Operationen zählen; diesen Monat #v [JournalEntry.GetCountry.MakeScope.Var('iw_tradecraft_ops').GetValue|1]#!). Über der Hälfte schrumpfen die Zugewinne.\\nEine aufgedeckte Operation kostet #R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_loss_mild')|0]#! (Spionage), #R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_loss_moderate')|0]#! (Einmischung), #R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_loss_severe')|0]#! (Angriff auf den Staat) oder #R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_loss_war')|0]#! (Sabotage im Krieg). Ohne laufende Operation sinkt es um #R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_decay')|2]#! im Monat.\\n\\n#bold Jede Stufe#! erhöht die [concept_intelligence_capacity] und lässt unsere Netzwerke #G [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_net_gain_pct_display')|0]%#! schneller wachsen:\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_intelligence_capacity_mult')]\\n\\n#bold Freischaltungen#!\\nAngehend ab [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_1_floor')|0]; #bold Etabliert#! ab [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_2_floor')|0]: Operationen können mit Priorität 3 laufen; #bold Erfahren#! ab [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_3_floor')|0]; #bold Veteran#! ab [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_4_floor')|0]: eine weitere Operation jeden Typs.\\n#italic Nichts bereits Laufendes wird jemals beendet, wenn das Spionagehandwerk sinkt.#!"
+  "de": "#bold Wie sich das Spionagehandwerk entwickelt#!\\nJeden Monat trägt jede Operation jenseits ihrer Vorbereitungsphase bis zu #G [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_gain_per_op')|1]#! bei, und eine noch vorbereitende #G [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_prep_gain_fraction')|1]#! (höchstens [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_ops_counted')|0] Operationen zählen; diesen Monat #v [JournalEntry.GetCountry.MakeScope.Var('iw_tradecraft_ops').GetValue|1]#!). Über der Hälfte schrumpfen die Zugewinne.\\nEine aufgedeckte Operation kostet #R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_loss_mild')|0]#! (Spionage), #R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_loss_moderate')|0]#! (Einmischung), #R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_loss_severe')|0]#! (Angriff auf den Staat) oder #R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_loss_war')|0]#! (Sabotage im Krieg). Ohne laufende Operation sinkt es um #R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_decay')|2]#! im Monat.\\n\\n#bold Jede Stufe#! erhöht die [concept_intelligence_capacity] und lässt unsere Netzwerke #G [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_net_gain_pct_display')|0]%#! schneller wachsen:\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_intelligence_capacity_mult')]\\n\\n#bold Freischaltungen#!\\nUnerfahren ab [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_1_floor')|0]; #bold Etabliert#! ab [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_2_floor')|0]: Operationen können mit Priorität 3 laufen; #bold Erfahren#! ab [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_3_floor')|0]; #bold Veteran#! ab [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_4_floor')|0]: eine weitere Operation jeden Typs.\\n#italic Nichts bereits Laufendes wird jemals beendet, wenn das Spionagehandwerk sinkt.#!"
  },
  "je_mental_health_crisis": {
   "en": "Mental Health Crisis",
@@ -981,7 +981,7 @@
  },
  "je_nuclear_program_desc": {
   "en": "Build nuclear weapons, decide when we say we will use them and how ready our forces stand, and live through the crises they bring — the threats we make and the ones made against us.",
-  "de": "Bauen Sie Atomwaffen, entscheiden Sie, wann wir erklären, sie einzusetzen, und wie einsatzbereit unsere Streitkräfte stehen, und durchleben Sie die Krisen, die sie mit sich bringen — die Drohungen, die wir aussprechen, und jene, die gegen uns gerichtet werden."
+  "de": "Bauen Sie Nuklearwaffen, entscheiden Sie, wann wir erklären, sie einzusetzen, und wie einsatzbereit unsere Streitkräfte stehen, und durchleben Sie die Krisen, die sie mit sich bringen — die Drohungen, die wir aussprechen, und jene, die gegen uns gerichtet werden."
  },
  "je_nuclear_program_reason": {
   "en": "A weapons programme is the most expensive thing a state can build out of pure research, and whoever finishes first changes every calculation made about them. Once built, an arsenal is not only a stock of weapons. It is a promise about when they will be used, a standing force that must be paid for and kept ready, and a chain of command that has to hold under pressure. Every choice here buys something abroad or at home, and every one of them changes how likely it is that something goes wrong.",
@@ -1077,7 +1077,7 @@
  },
  "je_nuclear_program_widget_taboo_burden_tt": {
   "en": "#tooltip_header The Burden of the Bomb#!\\n$TOOLTIP_DELIMITER$\\nThe world holds nuclear weapons in horror, and holds it against those who keep them: from a taboo of 40 up, the larger our arsenal (up to fifty warheads), the heavier the burden. It turns the bomb's prestige against us, takes away the leverage it brought, and sets our restraint-minded interest groups against the arsenal itself. Hold the arsenal to a ceiling, or give it up, to lighten it.",
-  "de": "#tooltip_header Die Last der Bombe#!\\n$TOOLTIP_DELIMITER$\\nDie Welt begegnet Atomwaffen mit Entsetzen und hält es denen vor, die sie besitzen: ab einem Tabu von 40 gilt, je größer unser Arsenal (bis zu fünfzig Sprengköpfe), desto schwerer die Last. Sie kehrt das Prestige der Bombe gegen uns, nimmt uns den Verhandlungsvorteil, den sie brachte, und wendet unsere zurückhaltungsorientierten Interessengruppen gegen das Arsenal selbst. Begrenzen Sie das Arsenal auf eine Obergrenze, oder geben Sie es auf, um die Last zu verringern."
+  "de": "#tooltip_header Die Last der Bombe#!\\n$TOOLTIP_DELIMITER$\\nDie Welt begegnet Nuklearwaffen mit Entsetzen und hält es denen vor, die sie besitzen: ab einem Tabu von 40 gilt, je größer unser Arsenal (bis zu fünfzig Sprengköpfe), desto schwerer die Last. Sie kehrt das Prestige der Bombe gegen uns, nimmt uns den Verhandlungsvorteil, den sie brachte, und wendet unsere zurückhaltungsorientierten Interessengruppen gegen das Arsenal selbst. Begrenzen Sie das Arsenal auf eine Obergrenze, oder geben Sie es auf, um die Last zu verringern."
  },
  "je_nuclear_program_widget_taboo_burden_value": {
   "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_burden_pct')|0]%#! · prestige #R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_prestige_cost_pct')|0]%#! · leverage #R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_leverage_cost_pct')|0]%#!",
@@ -1105,7 +1105,7 @@
  },
  "je_nuclear_program_widget_taboo_score_tt": {
   "en": "#tooltip_header The Nuclear Taboo#!\\n$TOOLTIP_DELIMITER$\\nHow unthinkable the world finds nuclear weapons. It moves each month toward where the world's state puts it:\\n",
-  "de": "#tooltip_header Das Nukleare Tabu#!\\n$TOOLTIP_DELIMITER$\\nWie undenkbar die Welt Atomwaffen findet. Es bewegt sich jeden Monat dorthin, wo der Zustand der Welt es ansetzt:\\n"
+  "de": "#tooltip_header Das Nukleare Tabu#!\\n$TOOLTIP_DELIMITER$\\nWie undenkbar die Welt Nuklearwaffen findet. Es bewegt sich jeden Monat dorthin, wo der Zustand der Welt es ansetzt:\\n"
  },
  "je_nuclear_program_widget_taboo_strategic_label": {
   "en": "First use on a city",
@@ -2717,7 +2717,7 @@
  },
  "je_un_chamber_dues_suspended": {
   "en": "#bold [concept_un_dues]:#! none of our own while our representation is suspended. Our overlord is assessed for our seat if it is represented.",
-  "de": "#bold [concept_un_dues]:#! keine eigenen, solange unsere Vertretung ausgesetzt ist. Unser Oberherr wird für unseren Sitz veranlagt, sofern dieser vertreten ist."
+  "de": "#bold [concept_un_dues]:#! keine eigenen, solange unsere Vertretung ausgesetzt ist. Unser Suzerän wird für unseren Sitz veranlagt, sofern dieser vertreten ist."
  },
  "je_un_chamber_dues_withheld": {
   "en": "#bold [concept_un_dues]:#! #R withheld.#! We are #v [THIS.ScriptValue('un_disp_arrears_months')|0]#! months in arrears and owe @money!#v [THIS.ScriptValue('un_disp_arrears_owed')|D]#!. In #v [THIS.ScriptValue('un_disp_article_19_months_left')|0]#! more months we lose our vote in the [concept_un_general_assembly] (Article 19).",
@@ -2745,7 +2745,7 @@
  },
  "je_un_chamber_exposure_help": {
   "en": "#lore The record fades by half every five years. It grows with every war we begin without a mandate (more against a greater power), every binding resolution we refuse, every sanctions regime we bust, every ruling of the court we defy, every mandate we abuse, every severe covert operation of ours that is exposed, and every nuclear strike. Infamy counts as well, up to 50. A country with a clean record cannot be censured, sanctioned or made the target of a mandate at all.#!",
-  "de": "#lore Die Bilanz halbiert sich alle fünf Jahre. Sie wächst mit jedem Krieg, den wir ohne Mandat beginnen (mehr gegen eine größere Macht), jeder verbindlichen Resolution, der wir uns widersetzen, jedem Sanktionsregime, das wir brechen, jedem Gerichtsurteil, dem wir trotzen, jedem Mandat, das wir missbrauchen, jeder unserer schweren verdeckten Operationen, die aufgedeckt wird, und jedem Atomschlag. Infamie zählt ebenfalls, bis zu 50. Ein Land mit sauberer Bilanz kann überhaupt nicht gerügt, sanktioniert oder zum Ziel eines Mandats gemacht werden.#!"
+  "de": "#lore Die Bilanz halbiert sich alle fünf Jahre. Sie wächst mit jedem Krieg, den wir ohne Mandat beginnen (mehr gegen eine größere Macht), jeder verbindlichen Resolution, der wir uns widersetzen, jedem Sanktionsregime, das wir brechen, jedem Gerichtsurteil, dem wir trotzen, jedem Mandat, das wir missbrauchen, jeder unserer schweren verdeckten Operationen, die aufgedeckt wird, und jedem Atomschlag. Verrufenheit zählt ebenfalls, bis zu 50. Ein Land mit sauberer Bilanz kann überhaupt nicht gerügt, sanktioniert oder zum Ziel eines Mandats gemacht werden.#!"
  },
  "je_un_chamber_exposure_mandate": {
   "en": "#R Our record would support an authorized military mandate against us#! (60 or more) — and sanctions and a condemnation too.",
@@ -2761,7 +2761,7 @@
  },
  "je_un_chamber_exposure_standing_case": {
   "en": "#R A standing case of [THIS.ScriptValue('un_case_standing_value')|0]:#! a supranational United Nations holds every outsider of [concept_major_power] rank, and every outsider with a nuclear programme or arsenal, answerable for staying out. Joining ends it.",
-  "de": "#R Ein bestehender Fall von [THIS.ScriptValue('un_case_standing_value')|0]:#! eine supranationale UN hält jeden Außenstehenden ab dem Rang [concept_major_power] sowie jeden Außenstehenden mit Atomprogramm oder -arsenal für sein Fernbleiben verantwortlich. Ein Beitritt beendet dies."
+  "de": "#R Ein bestehender Fall von [THIS.ScriptValue('un_case_standing_value')|0]:#! eine supranationale UN hält jeden Außenstehenden ab dem Rang [concept_major_power] sowie jeden Außenstehenden mit Nuklearprogramm oder -arsenal für sein Fernbleiben verantwortlich. Ein Beitritt beendet dies."
  },
  "je_un_chamber_grounds": {
   "en": "  #bold Grounds:#! the case against the target stood at #v [THIS.Var('un_res_case').GetValue|0]#! when it was tabled; this topic needs #v [THIS.ScriptValue('un_res_case_threshold')|0]#!.",
@@ -3397,7 +3397,7 @@
  },
  "je_un_chamber_regime_colony": {
   "en": "#bold Decolonisation:#! our overlord sits in the United Nations, and its declaration strengthens our people's wish to be free.",
-  "de": "#bold Dekolonisierung:#! Unser Oberherr sitzt in den Vereinten Nationen, und seine Erklärung stärkt den Wunsch unseres Volkes nach Freiheit."
+  "de": "#bold Dekolonisierung:#! Unser Suzerän sitzt in den Vereinten Nationen, und seine Erklärung stärkt den Wunsch unseres Volkes nach Freiheit."
  },
  "je_un_chamber_regime_heritage_site": {
   "en": "  #G World heritage:#! our wonders draw visitors and cultural pull — #R and building around them is slower.#!",
@@ -3417,7 +3417,7 @@
  },
  "je_un_chamber_regime_npt_inspection": {
   "en": "  #R Non-Proliferation Treaty:#! inspectors slow our nuclear programme.",
-  "de": "  #R Atomwaffensperrvertrag:#! Inspektoren verlangsamen unser Atomprogramm."
+  "de": "  #R Atomwaffensperrvertrag:#! Inspektoren verlangsamen unser Nuklearprogramm."
  },
  "je_un_chamber_regime_refugee_host": {
   "en": "  #R Refugees:#! as one of the richest countries, we take in the refugees, and the strain.",
@@ -3505,11 +3505,11 @@
  },
  "je_un_chamber_status_suspended": {
   "en": "#R Our representation is suspended.#! We do not conduct our own foreign policy, so we cast no vote and table nothing ([concept_un_suspended_representation]). #R Nobody carries our seat:#! membership brings us nothing until our overlord sits in the Assembly and pays its [concept_un_dues], or we conduct our own foreign policy again.\\n",
-  "de": "#R Unsere Vertretung ist ausgesetzt.#! Wir betreiben keine eigene Außenpolitik, daher geben wir keine Stimme ab und bringen nichts ein ([concept_un_suspended_representation]). #R Niemand führt unseren Sitz:#! Die Mitgliedschaft bringt uns nichts, bis unser Oberherr in der Versammlung sitzt und seine [concept_un_dues] zahlt, oder bis wir wieder eigene Außenpolitik betreiben.\\n"
+  "de": "#R Unsere Vertretung ist ausgesetzt.#! Wir betreiben keine eigene Außenpolitik, daher geben wir keine Stimme ab und bringen nichts ein ([concept_un_suspended_representation]). #R Niemand führt unseren Sitz:#! Die Mitgliedschaft bringt uns nichts, bis unser Suzerän in der Versammlung sitzt und seine [concept_un_dues] zahlt, oder bis wir wieder eigene Außenpolitik betreiben.\\n"
  },
  "je_un_chamber_status_suspended_carried": {
   "en": "#R Our representation is suspended.#! We do not conduct our own foreign policy, so we cast no vote and table nothing ([concept_un_suspended_representation]). #G [THIS.GetCountry.GetOverlord.GetName] carries our seat:#! it pays our [concept_un_dues], and we keep the benefits of membership.\\n",
-  "de": "#R Unsere Vertretung ist ausgesetzt.#! Wir betreiben keine eigene Außenpolitik, daher geben wir keine Stimme ab und bringen nichts ein ([concept_un_suspended_representation]). #G [THIS.GetCountry.GetOverlord.GetAltName('NOM')|U] führt unseren Sitz:#! Unser Oberherr zahlt unsere [concept_un_dues], und wir behalten die Vorteile der Mitgliedschaft.\\n"
+  "de": "#R Unsere Vertretung ist ausgesetzt.#! Wir betreiben keine eigene Außenpolitik, daher geben wir keine Stimme ab und bringen nichts ein ([concept_un_suspended_representation]). #G [THIS.GetCountry.GetOverlord.GetAltName('NOM')|U] führt unseren Sitz:#! Unser Suzerän zahlt unsere [concept_un_dues], und wir behalten die Vorteile der Mitgliedschaft.\\n"
  },
  "je_un_chamber_sub_ballot": {
   "en": "The Ballot",
@@ -3937,15 +3937,15 @@
  },
  "je_un_led_reason_1081": {
   "en": "      #lore accepted the World Court's ruling against it, in the case brought by#! $je_un_led_subject_country$",
-  "de": "      #lore akzeptierte das Urteil des Weltgerichtshofs gegen sich selbst im Verfahren von#! $je_un_led_subject_country$"
+  "de": "      #lore akzeptierte das Urteil des Internationalen Gerichtshofs gegen sich selbst im Verfahren von#! $je_un_led_subject_country$"
  },
  "je_un_led_reason_1082": {
   "en": "      #lore contested the World Court's jurisdiction, in the case brought by#! $je_un_led_subject_country$",
-  "de": "      #lore bestritt die Zuständigkeit des Weltgerichtshofs im Verfahren von#! $je_un_led_subject_country$"
+  "de": "      #lore bestritt die Zuständigkeit des Internationalen Gerichtshofs im Verfahren von#! $je_un_led_subject_country$"
  },
  "je_un_led_reason_1083": {
   "en": "      #lore defied the World Court's ruling against it, in the case brought by#! $je_un_led_subject_country$",
-  "de": "      #lore missachtete das Urteil des Weltgerichtshofs gegen sich selbst im Verfahren von#! $je_un_led_subject_country$"
+  "de": "      #lore missachtete das Urteil des Internationalen Gerichtshofs gegen sich selbst im Verfahren von#! $je_un_led_subject_country$"
  },
  "je_un_led_reason_109": {
   "en": "      #lore in response to: $un_events.9.t$#!",
@@ -4357,7 +4357,7 @@
  },
  "je_un_preview_npt_tt": {
   "en": "From the Strong tier, once the IAEA exists, a member without nuclear weapons is held to disarmament: any nuclear programme it runs is wiped back to nothing every week, for as long as it remains a member.",
-  "de": "Ab der Stufe Stark, sobald die IAEO besteht, ist ein Mitglied ohne Atomwaffen zur Abrüstung verpflichtet: Jedes von ihm betriebene Atomprogramm wird jede Woche auf null zurückgesetzt, solange es Mitglied bleibt."
+  "de": "Ab der Stufe Stark, sobald die IAEO besteht, ist ein Mitglied ohne Nuklearwaffen zur Abrüstung verpflichtet: Jedes von ihm betriebene Nuklearprogramm wird jede Woche auf null zurückgesetzt, solange es Mitglied bleibt."
  },
  "je_un_preview_pariah_header": {
   "en": "If we stay outside while the UN is strong",
@@ -4365,7 +4365,7 @@
  },
  "je_un_preview_pariah_tt": {
   "en": "From the Established tier ([concept_un_authority] 45+) a country outside the UN is a pariah; from the Strong tier it also loses trade and leverage. Joining at any time clears both.",
-  "de": "Ab der Stufe Gefestigt ([concept_un_authority] 45+) ist ein Land außerhalb der UN ein Paria; ab der Stufe Stark verliert es zudem Handel und Druckmittel. Ein Beitritt zu jedem Zeitpunkt beseitigt beides."
+  "de": "Ab der Stufe Etabliert ([concept_un_authority] 45+) ist ein Land außerhalb der UN ein Paria; ab der Stufe Stark verliert es zudem Handel und Druckmittel. Ein Beitritt zu jedem Zeitpunkt beseitigt beides."
  },
  "je_un_preview_war_surcharge_header": {
   "en": "If we go to war without a mandate",
@@ -4373,7 +4373,7 @@
  },
  "je_un_preview_war_surcharge_tt": {
   "en": "From the Established tier, every war goal the initiator of a diplomatic play adds without a military mandate bound to that play costs it extra [concept_infamy]: #v 2#! at Established, #v 4#! at Strong, #v 10#! at Supranational, and twice that from Strong against a country under a UN peacekeeping deployment. Members and non-members alike.",
-  "de": "Ab der Stufe Gefestigt kostet jedes Kriegsziel, das der Initiator eines diplomatischen Spiels ohne ein an dieses Spiel gebundenes Militärmandat hinzufügt, zusätzliche [concept_infamy]: #v 2#! bei Gefestigt, #v 4#! bei Stark, #v 10#! bei Supranational, und das Doppelte davon ab Stark gegen ein Land unter einem UN-Friedenseinsatz. Für Mitglieder wie Nichtmitglieder gleichermaßen."
+  "de": "Ab der Stufe Etabliert kostet jedes Kriegsziel, das der Initiator eines diplomatischen Spiels ohne ein an dieses Spiel gebundenes Militärmandat hinzufügt, zusätzliche [concept_infamy]: #v 2#! bei Etabliert, #v 4#! bei Stark, #v 10#! bei Supranational, und das Doppelte davon ab Stark gegen ein Land unter einem UN-Friedenseinsatz. Für Mitglieder wie Nichtmitglieder gleichermaßen."
  },
  "je_un_res_why_no_burden": {
   "en": "  #R Against#! — the cost to them: #v [THIS.Var('un_res_why_no_burden').GetValue|0]#!",
@@ -4657,7 +4657,7 @@
  },
  "je_un_status_suspended_carried": {
   "en": "#R Member, representation suspended.#! We do not conduct our own foreign policy, so we cast no vote and table nothing. [ROOT.GetCountry.GetOverlord.GetName] carries our seat: it pays our dues, and we keep the benefits of membership ([concept_un_suspended_representation]).\\n",
-  "de": "#R Mitglied, Vertretung ausgesetzt.#! Wir betreiben keine eigene Außenpolitik, daher geben wir keine Stimme ab und bringen nichts ein. [ROOT.GetCountry.GetOverlord.GetAltName('NOM')|U] führt unseren Sitz: Unser Oberherr zahlt unsere Beiträge, und wir behalten die Vorteile der Mitgliedschaft ([concept_un_suspended_representation]).\\n"
+  "de": "#R Mitglied, Vertretung ausgesetzt.#! Wir betreiben keine eigene Außenpolitik, daher geben wir keine Stimme ab und bringen nichts ein. [ROOT.GetCountry.GetOverlord.GetAltName('NOM')|U] führt unseren Sitz: Unser Suzerän zahlt unsere Beiträge, und wir behalten die Vorteile der Mitgliedschaft ([concept_un_suspended_representation]).\\n"
  },
  "je_un_tier_line_contested": {
   "en": "#Y [concept_un_authority]: Contested#! (20–45). Resolutions bite at half strength ([concept_un_enforcement] ×0.5). Membership benefits are paid, scaled by authority.\\n",
@@ -4665,7 +4665,7 @@
  },
  "je_un_tier_line_established": {
   "en": "#v [concept_un_authority]: Established#! (45–70). Binding resolutions bite in full ([concept_un_enforcement] ×1), and great powers outside the UN are treated as pariahs.\\n",
-  "de": "#v [concept_un_authority]: Gefestigt#! (45–70). Verbindliche Resolutionen wirken voll ([concept_un_enforcement] ×1), und Großmächte außerhalb der UN gelten als Paria.\\n"
+  "de": "#v [concept_un_authority]: Etabliert#! (45–70). Verbindliche Resolutionen wirken voll ([concept_un_enforcement] ×1), und Großmächte außerhalb der UN gelten als Paria.\\n"
  },
  "je_un_tier_line_moribund": {
   "en": "#R [concept_un_authority]: Moribund#! (below 20). Resolutions are recommendations only ([concept_un_enforcement] ×0), a [concept_un_veto] costs nothing, and members receive no benefits. Power blocs fill the vacuum.\\n",
