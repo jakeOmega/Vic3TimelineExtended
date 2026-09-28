@@ -19,6 +19,7 @@ production pipeline). Nothing here knows about a particular entity list.
                emboss_medallion that emboss on the disc and ring
                plinth           cutout standing on the slab lifted from vanilla
                tinted           cutout recast in its folder's one metal (laws, institutions)
+               card             dark pictogram on a blank card lifted from vanilla (IG traits)
   review_sheet()  Row per entity: [current icon | 3 vanilla neighbours || candidates].
 
 Frames are not hand-drawn: `vanilla_template()` takes the per-pixel median of
@@ -474,6 +475,82 @@ def compose_tinted(raw: Image.Image, spec: dict, ramp) -> Image.Image:
     return drop_shadow(out, max(1, spec["size"] // 128), spec["size"] / 100, 0.35)
 
 
+def card_template(folder: str, size: tuple[int, int], frame: tuple[int, int, int]) -> np.ndarray:
+    """The blank card vanilla's IG traits are drawn on, in one approval slot's frame colour.
+
+    The per-pixel median over the folder's cards whose frame matches `frame`
+    keeps the frame, the ornament and the edge shadow. In the middle, where
+    every card has its dark pictogram, a pixel instead takes the median over
+    only the cards in which it is bare: not within a few pixels of dark, since
+    a pictogram's highlights and edges are light. Pixels bare in too few cards
+    take the nearest bare pixel's colour. What is left of the pictograms still
+    shows as faint ghosts, so an ellipse in the middle, which the new
+    pictogram mostly covers, fades into a blurred copy; the corner ornaments
+    stay sharp.
+    """
+    from scipy.ndimage import binary_dilation, distance_transform_edt, gaussian_filter
+
+    w, h = size
+    stack = []
+    for f in sorted((vanilla_icons_dir() / folder).glob("*.dds")):
+        try:
+            a = np.asarray(load_rgba(f), dtype=np.float32)
+        except Exception:
+            continue
+        if a.shape[:2] != (h, w):
+            continue
+        xs = np.nonzero(a[h // 2, :, 3] > 200)[0]
+        if len(xs) and np.abs(a[h // 2, xs.min() + 3, :3] - frame).max() < 30:
+            stack.append(a)
+    if len(stack) < 3:
+        raise SystemExit(f"only {len(stack)} cards with frame {frame} in {vanilla_icons_dir() / folder}: "
+                         "check VIC3_BASE_GAME")
+    arr = np.stack(stack)
+    card = np.median(arr, axis=0)
+    interior = np.zeros((h, w), bool)
+    interior[round(h * 0.09):round(h * 0.9), round(w * 0.13):round(w * 0.87)] = True
+    dark = (arr[..., :3] @ LUMA) < 120
+    # Dark on most cards in the top or bottom band: the card's own vines. (The
+    # middle is dark on most cards too, under their pictograms.)
+    band = np.zeros((h, w), bool)
+    band[:round(h * 0.2)] = band[round(h * 0.75):] = True
+    ornament = band & (dark.mean(axis=0) > 0.9)
+    bare = ~np.stack([binary_dilation(d & ~ornament, iterations=3) for d in dark])
+    import warnings
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)
+        bare_med = np.nanmedian(np.where(bare[..., None], arr, np.nan), axis=0)
+    hole = interior & ~ornament & ((bare.sum(axis=0) < max(2, len(stack) // 3)) | np.isnan(bare_med[..., 0]))
+    keep = interior & ~hole & ~ornament
+    card[keep] = bare_med[keep]
+    if hole.any():
+        # From the nearest bare card pixel, not a dark vine beside the hole.
+        _, (iy, ix) = distance_transform_edt(hole | binary_dilation(ornament, iterations=2),
+                                             return_indices=True)
+        filled = card[iy, ix]
+        soft = np.stack([gaussian_filter(filled[..., c], 3) for c in range(4)], axis=-1)
+        card[hole] = soft[hole]
+    yy, xx = np.mgrid[0:h, 0:w]
+    ell = np.clip(3 * (1 - np.hypot((xx - w / 2) / (w * 0.42), (yy - h / 2) / (h * 0.47))), 0, 1)[..., None]
+    blurred = np.stack([gaussian_filter(card[..., c], 5) for c in range(3)], axis=-1)
+    card[..., :3] = card[..., :3] * (1 - ell) + blurred * ell
+    return card
+
+
+def compose_card(raw: Image.Image, spec: dict, card: np.ndarray) -> Image.Image:
+    """The dark embossed pictogram, centred on the slot's card."""
+    h, w = card.shape[:2]
+    obj = embossed(raw, dict(spec, fill=0.98), 2 * h)
+    bbox = obj.getchannel("A").point(lambda v: 255 if v > 16 else 0).getbbox()
+    if bbox:
+        obj = obj.crop(bbox)
+    scale = min(w * spec["fill"][0] / obj.width, h * spec["fill"][1] / obj.height)
+    obj = resize_premultiplied(obj, (max(1, round(obj.width * scale)), max(1, round(obj.height * scale))))
+    icon = Image.fromarray(np.clip(card, 0, 255).astype(np.uint8), "RGBA")
+    icon.alpha_composite(obj, ((w - obj.width) // 2, round(h * 0.49 - obj.height / 2)))
+    return icon
+
+
 class Composer:
     """Compose raw renders per category, caching each category's vanilla template."""
 
@@ -493,9 +570,13 @@ class Composer:
             self._target[cat] = category_grade_target(spec.get("grade_folder", spec["folder"]))
         if mode == "tinted" and cat not in self._tmpl:
             self._tmpl[cat] = tone_ramp(spec.get("ramp_folder", spec["folder"]))
+        if mode == "card" and cat not in self._tmpl:
+            self._tmpl[cat] = card_template(spec["folder"], spec["card_size"], spec["frame"])
         raw = raw.convert("RGB")
         if mode == "tinted":
             return compose_tinted(raw, spec, self._tmpl[cat])
+        if mode == "card":
+            return compose_card(raw, spec, self._tmpl[cat])
         if mode == "cutout":
             return compose_cutout(raw, spec, self._target[cat])
         if mode == "framed":
