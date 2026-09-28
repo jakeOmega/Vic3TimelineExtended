@@ -5121,7 +5121,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/modifier-search?q=<name>", "desc": "Validate / discover modifier keys against the engine catalog."},
                 {"path": "/modifier-grants/<name>?scope=both", "desc": "Reverse lookup: every law/tech/principle/amendment/decree/building/static-modifier that GRANTS modifier <name>, with file:line + value."},
                 {"path": "/modifier-patterns/<sub?>", "desc": "Modifier pattern catalog and discovered families."},
-                {"path": "/engine-docs/<section>/<key?>", "desc": "Engine reference (effects/triggers/modifiers/event-targets/on-actions/custom-localization)."},
+                {"path": "/engine-docs/<type>/<name?>", "desc": "Engine reference (effects/triggers/modifiers/event-targets/on-actions/custom-localization). With <name>: that one entry, or 404 with did_you_mean. Listing: ?q=&scope=&mask=&origin=&group=, capped at ?limit= (default 500); check `truncated` (`count` is the filtered total, `returned` the entries sent). Also /engine-docs/origin/<name> (every type), /engine-docs/usage/<name> (vanilla call sites), /engine-docs/loc-functions/<name?>."},
                 {"path": "/dev-docs/<section?>", "desc": "Vanilla developer-reference markdown docs."},
                 {"path": "/technology-effects/<tech>", "desc": "Aggregate of all effects applied by a tech."},
                 {"path": "/event-magnitude-audit", "desc": "Hardcoded fast-scaling event-value audit."},
@@ -7833,7 +7833,15 @@ class ModStateHandler(BaseHTTPRequestHandler):
     # ---- engine docs ------------------------------------------------------
     def _engine_docs(self, parts, params):
         """GET /engine-docs                      - list available doc types
-        GET /engine-docs/<type>               - list all entries of a type
+        GET /engine-docs/<type>               - list entries of a type, capped
+                                                at ?limit=N (default 500);
+                                                `count` is the filtered total,
+                                                `returned` / `truncated` say
+                                                whether `entries` holds all of it
+        GET /engine-docs/<type>/<name>        - the entry named <name> in that
+                                                type (full entry), or 404 with
+                                                `did_you_mean` and the other
+                                                types that define <name>
         GET /engine-docs/<type>?q=<search>    - search entries
         GET /engine-docs/<type>?scope=<scope> - filter by scope
         GET /engine-docs/<type>?mask=<mask>   - filter by mask (modifiers only)
@@ -8010,6 +8018,31 @@ class ModStateHandler(BaseHTTPRequestHandler):
             raise NotFound(f"Unknown engine doc type: {doc_type}. Available: {list(engine_docs.keys())}")
 
         entries = engine_docs[doc_type]
+
+        # /engine-docs/<type>/<name> — one entry of that type. Used to fall
+        # through to the unfiltered listing, silently dropping <name> (#326).
+        if len(parts) > 2:
+            raise BadRequest(
+                f"Usage: /engine-docs/{doc_type}/<name> (one name segment)."
+            )
+        if len(parts) == 2:
+            name = parts[1]
+            matches = [e for e in entries if e.get("name") == name]
+            if not matches:
+                raise NotFound(
+                    f"{doc_type}/{name}",
+                    did_you_mean=difflib.get_close_matches(
+                        name, [e.get("name", "") for e in entries], n=5, cutoff=0.6
+                    ),
+                    defined_in_types=[
+                        t for t, es in engine_docs.items()
+                        if t != doc_type and any(e.get("name") == name for e in es)
+                    ],
+                    hint="GET /engine-docs/origin/<name> searches every doc type; "
+                         "/engine-docs/usage/<name> finds vanilla call sites.",
+                )
+            # A list: event-targets repeats some names (one entry per scope form).
+            return {"type": doc_type, "name": name, "found": True, "matches": matches}
         query = params.get("q", [""])[0].lower()
         scope_filter = params.get("scope", [""])[0].lower()
         mask_filter = params.get("mask", [""])[0].lower()
@@ -8052,12 +8085,18 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 "grouped_patterns": grouped,
                 "ungrouped_count": len(ungrouped),
                 "ungrouped": ungrouped[:limit],
+                "truncated": len(ungrouped) > limit,
             }
 
+        # `count` is the filtered total; `entries` is capped at `limit`, so a
+        # client scanning it must check `truncated` (#326).
+        page = filtered[:limit]
         return {
             "type": doc_type,
             "count": len(filtered),
-            "entries": filtered[:limit],
+            "returned": len(page),
+            "truncated": len(page) < len(filtered),
+            "entries": page,
         }
 
     # ---- developer reference docs -----------------------------------------

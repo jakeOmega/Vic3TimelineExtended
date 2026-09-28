@@ -354,6 +354,17 @@ kill $(cat mod_state_server.pid)
 ```
 Startup and the reload both run the full post-load chain against the worktree, regenerators included; that is the point, since it shows the churn the branch would produce on the next reload of `main`. Sort `git status` afterwards: `docs/engine/*` is regenerated audit output; discard it (`git checkout -- docs/engine/`) unless the branch would normally commit that report. Anything under `common/` or `localization/` is regeneration churn: commit it if the branch caused it (e.g. `organize_loc` placing new keys, `bom_normalizer` restoring a BOM), and discard it if it is vanilla-version drift (see `/status` `versions`). `VIC3_SKIP_DIGESTS_FETCH=1` keeps this throwaway server off the Modding-Digests clone, which it would otherwise fetch and fast-forward alongside the main server. Stop it by its PID file, not `pkill -f "m.PORT=8951"`: that pattern also matches the shell running the `pkill`, which kills your own command. Used to reload-check each branch of the #428–#430 wave (#441–#444) while the main server kept serving `main`.
 
+**Exercising an endpoint by module import** (no server at all, ~4 s): build `ms` from the snapshot and call the handler method with a stub `self`:
+```python
+import mod_state_server as m, vanilla_parsed
+from mod_state import ModState
+snap = vanilla_parsed.load(m.VANILLA_PARSED_DIR)
+m.ms = ModState(m.base_game_paths, m.mod_paths, vanilla_data=snap.data)
+m.ms.localization = dict(snap.localization)  # vanilla loc only; without it `name` fields come back as raw keys
+m.ModStateHandler._modifier_search(None, {"q": ["country_banking_lock"]})
+```
+`/engine-docs` also needs `m._load_engine_docs()`, which rewrites the reference files under `docs/engine/` and creates the gitignored `engine_coverage_report.md` and `error_log_digest.md` there. Run `git checkout -- docs/engine/` afterwards.
+
 ### Vanilla data source: `vanilla_parsed/` or the game files
 
 ModState's vanilla half — every entity type in `mod_state.VANILLA_COMMON_DIRS` (the one list; the server's `base_game_paths` derives from it) plus the English loc dict — can come from two places:
@@ -413,9 +424,9 @@ This blocks a page in the user's browser from driving the server (CSRF / DNS reb
 |---|---|
 | **200 → 403** | Every route, any method, when the `Host`/`Origin` gate rejects the request. |
 | **200 → 503** | `"<X> data not loaded"` on `/laws`, `/principles`, `/amendments`, `/technologies`, `/buildings`, `/goods`, `/combat-units`, `/ideologies`, `/events`, `/institutions`, `/journal-entries`, `/diplomatic-actions`, `/treaty-articles`, `/decisions`, `/script-values`, `/decrees`, `/on-actions`, `/production-methods`, `/scripted-effects`, `/scripted-triggers`, `/tech-tree/<id>`, `/technology-effects/<id>`, `/event-balance`, `/event-balance/issues`. Also `/production-methods?building=<id>` (`"Required data not loaded"`), `/validate/engine-coverage` (`"Mod state or engine docs not loaded"`), and `/engine-docs/usage/<name>` when the vanilla `common/` dir is missing. Body is unchanged apart from an added `hint` — but **`curl -f` now fails on these**, which is the point. |
-| **200 → 400** | Missing or malformed input: `/localize` (no key) · `/unlocalize` (no text) · `/search`, `/modifier-search` (no `?q`) · `/references` (no key) · `/tech-tree`, `/unlocked-by`, `/technology-effects` (no id) · `/diff` (missing type/id) · `/filter` (no type, or no `?field`) · `/loc-keys` (fewer than 2 segments) · `/gui` (no sub-endpoint) · `/gui/render-sites` (no key) · `/gui/render-paths` (no type, or unknown `?field`) · `/modifier-grants` (no name, or malformed) · `/modifier-patterns?expand=` (pattern without a placeholder, or missing the placeholder value) · `/event-balance` (no id / `?ids` / `?prefix` / `?file`). |
+| **200 → 400** | Missing or malformed input: `/localize` (no key) · `/unlocalize` (no text) · `/search`, `/modifier-search` (no `?q`) · `/references` (no key) · `/tech-tree`, `/unlocked-by`, `/technology-effects` (no id) · `/diff` (missing type/id) · `/filter` (no type, or no `?field`) · `/loc-keys` (fewer than 2 segments) · `/gui` (no sub-endpoint) · `/gui/render-sites` (no key) · `/gui/render-paths` (no type, or unknown `?field`) · `/modifier-grants` (no name, or malformed) · `/modifier-patterns?expand=` (pattern without a placeholder, or missing the placeholder value) · `/event-balance` (no id / `?ids` / `?prefix` / `?file`) · `/engine-docs/<type>/<name>/<extra segment>` (#326). |
 | **404 → 400** | `/engine-docs/origin` and `/engine-docs/usage` called with no `<name>` — the usage hint used to ride on a `KeyError`. |
-| **200 → 404** | `/logs/<family>/diff` when the `?against=` generation doesn't exist · `/loc-keys/<UnknownType>/<id>` · `/gui/render-paths/<UnmappedEntityType>`. |
+| **200 → 404** | `/logs/<family>/diff` when the `?against=` generation doesn't exist · `/loc-keys/<UnknownType>/<id>` · `/gui/render-paths/<UnmappedEntityType>` · `/engine-docs/<type>/<unknown name>` (#326; it used to return the whole listing). |
 | **404 → 500** | A genuine `KeyError` inside a handler (a server bug, not a missing entity). All 500 bodies are now `{"error": "<ExceptionType>: <msg>"}`. |
 | **200 → 500** | `/engine-docs/usage/<name>` when the vanilla scan itself fails (timeout / scan error). |
 
@@ -583,12 +594,13 @@ from the auto-generated cost-comment block in PM bodies via
 |---|---|---|
 | `/technology-effects/<tech_id>` | GET | ALL effects of a technology: direct modifiers, unlocked PMs (with modifier details), buildings, combat units, laws, institutions, decisions, journal entries, diplomatic actions, company types, mobilization options, and dependent technologies |
 | `/engine-docs` | GET | List available engine doc types with entry counts |
-| `/engine-docs/<type>` | GET | List all entries of a type (effects, triggers, modifiers, event-targets, on-actions, custom-localization) |
+| `/engine-docs/<type>` | GET | List entries of a type (effects, triggers, modifiers, event-targets, on-actions, custom-localization): `{type, count, returned, truncated, entries}`. `entries` is capped at `?limit=` (default 500) and `count` is the filtered total, so **check `truncated`** before scanning `entries` client-side (#326). |
+| `/engine-docs/<type>/<name>` | GET | The entry named `<name>` in that type: `{type, name, found, matches: [<full entry>]}` (a list, since event-targets repeats some names). Unknown name → 404 with `did_you_mean` (close names in that type) and `defined_in_types` (other types that have it, e.g. a trigger looked up under `effects`). `/engine-docs/origin/<name>` searches every type instead. |
 | `/engine-docs/<type>?q=<search>` | GET | Search entries by name or description |
 | `/engine-docs/<type>?scope=<scope>` | GET | Filter by scope (e.g. `?scope=building`, `?scope=country`) |
 | `/engine-docs/<type>?mask=<mask>` | GET | Filter modifiers by mask |
 | `/engine-docs/<type>?group=true` | GET | Group similar modifiers by pattern (e.g. `building_{name}_throughput_add`) |
-| `/engine-docs/<type>?limit=<n>` | GET | Limit results (default 500) |
+| `/engine-docs/<type>?limit=<n>` | GET | Limit results (default 500); `truncated` says whether the cap cut anything (`group=true` caps `ungrouped` the same way) |
 | `/engine-docs/<type>?origin=vanilla\|mod` | GET | Filter by origin tag (modifiers + custom-localization only) |
 | `/engine-docs/origin/<name>` | GET | Disambiguation lookup: returns the origin (`vanilla` or `mod`) of a modifier / trigger / effect / event_target / on_action / custom_localization name across all doc types **plus the full schema** (description, example, scopes, traits, reads, targets). Use before assuming a name is engine-native — the recurring "is this engine-recognized or mod-declared?" question. Also use as a one-curl trigger-schema lookup: "does `is_in_geographic_region` exist, what scope, what syntax?". Vanilla entries the mod cosmetically redeclares are tagged `mod_redeclares=true` while origin stays `vanilla` (engine semantics are vanilla's). Mod-only entries include `defined_in`. |
 | `/engine-docs/usage/<name>` | GET | Real-world call sites of `<name>` from vanilla `common/`. Returns file:line + 4-line snippets per hit (params `limit`, `before`, `after`, `include_defs`). Use when the engine docs don't cover an identifier (post-1.13.5 `triggers.log` is missing names like `has_treaty_defensive_pact_with`, `has_treaty_alliance_with`) or when you want canonical argument shapes from real script. Default filter excludes column-0 definitions and `trigger_localization/` label cross-references. ~6s per query on WSL+NTFS. |
