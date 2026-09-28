@@ -143,6 +143,7 @@ te_debug_colonial_empire.2 = { # REVIEWED 2026-09-18: console-only test event (`
 			}
 			order_by = country_rank
 			max = 2
+			check_range_bounds = no
 			set_variable = gp_pro_colonial_stance
 		}
 		colonial_empire_refresh_display = yes

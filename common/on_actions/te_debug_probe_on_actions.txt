@@ -16,6 +16,14 @@
 # country, on its first monthly pulse after the load. te_probe_loc_value stays
 # on that country: a debug_log renders as it runs, but removing the variable in
 # the same block would make a deferred render read 0 and look like a failure.
+#
+# Re-armed 2026-09-27 (marker _v2): the first firing went into a debug.log that
+# rotated away before anyone read it. Lines 9 and 10 were added then. They ask
+# which scope a ScriptValue read evaluates against when THIS is not ROOT: the
+# capital holds 9 and the country (ROOT) holds 7. The TE_RESETTLEMENT lines
+# printed -1 through SCOPE.ScriptValue from a state under a country ROOT and
+# were moved to THIS.ScriptValue on the strength of it; line 9 printing 9 and
+# line 10 printing 7 confirms that move.
 # ============================================================================
 
 on_monthly_pulse_country = {
@@ -29,12 +37,12 @@ te_debug_probe_loc_accessors = {
 		if = {
 			limit = {
 				is_ai = no
-				NOT = { has_global_variable = te_probe_loc_accessors_done }
+				NOT = { has_global_variable = te_probe_loc_accessors_v2_done }
 			}
-			set_global_variable = { name = te_probe_loc_accessors_done value = 1 }
+			set_global_variable = { name = te_probe_loc_accessors_v2_done value = 1 }
 			set_variable = { name = te_probe_loc_value value = 7 }
 			save_scope_as = te_probe_country
-			debug_log = "TE_PROBE_LOC 0 control: every line below should end in 7"
+			debug_log = "TE_PROBE_LOC 0 control: lines 1-8 should end in 7"
 			debug_log = "TE_PROBE_LOC 1 THIS.GetVariable (the colonial and decolonization debug lines): [THIS.GetVariable('te_probe_loc_value').GetValue]"
 			debug_log = "TE_PROBE_LOC 2 SCOPE.sCountry().GetVariable (the GW_AI_WILL readout): [SCOPE.sCountry('te_probe_country').GetVariable('te_probe_loc_value').GetValue]"
 			debug_log = "TE_PROBE_LOC 3 THIS.GetCountry.MakeScope.Var (vanilla loc's form): [THIS.GetCountry.MakeScope.Var('te_probe_loc_value').GetValue|0]"
@@ -43,6 +51,11 @@ te_debug_probe_loc_accessors = {
 			debug_log = "TE_PROBE_LOC 6 SCOPE.ScriptValue wrapper (the documented workaround): [SCOPE.ScriptValue('te_probe_loc_value_sv')|0]"
 			debug_log = "TE_PROBE_LOC 7 THIS.GetCountry.MakeScope.ScriptValue wrapper (vanilla loc's form): [THIS.GetCountry.MakeScope.ScriptValue('te_probe_loc_value_sv')|0]"
 			debug_log = "TE_PROBE_LOC 8 SCOPE.sCountry().MakeScope.ScriptValue wrapper (for a saved country): [SCOPE.sCountry('te_probe_country').MakeScope.ScriptValue('te_probe_loc_value_sv')|0]"
+			capital = {
+				set_variable = { name = te_probe_loc_value value = 9 }
+				debug_log = "TE_PROBE_LOC 9 THIS.ScriptValue from the capital (9 = the current scope, 7 = ROOT): [THIS.ScriptValue('te_probe_loc_value_sv')|0]"
+				debug_log = "TE_PROBE_LOC 10 SCOPE.ScriptValue from the capital (9 = the current scope, 7 = ROOT): [SCOPE.ScriptValue('te_probe_loc_value_sv')|0]"
+			}
 		}
 	}
 }

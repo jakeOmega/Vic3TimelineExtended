@@ -1,0 +1,113 @@
+﻿# ============================================================================
+# OLD-SAVE REPAIRS — one-off fixes for saves made under an older mod version.
+# ============================================================================
+# Each repair carries a marker line:
+#   # OLD-SAVE REPAIR (#<issue>): remove after <YYYY-MM-DD> or at vanilla <X.Y>, whichever comes first.
+# test_old_save_repairs.py fails CI once the committed vanilla snapshot
+# (vanilla_parsed/manifest.json) reaches <X.Y>, so the repair goes in the
+# vanilla-patch migration PR: saves from before a major vanilla version are not
+# expected to carry over. A scheduled reminder covers the date. Delete the
+# repair's block, and this file once it holds none.
+# ============================================================================
+
+on_monthly_pulse = {
+	on_actions = {
+		te_repair_double_criminal_justice_law
+	}
+}
+
+# OLD-SAVE REPAIR (#547): remove after 2026-11-27 or at vanilla 1.15, whichever comes first.
+#
+# #520 added law_penal_labor_camps to lawgroup_criminal_justice, first in file
+# order. Loading a save from before it switched Penal Labor Camps on in every
+# country then alive and left the old law on beside it: 115 of 154 countries in
+# the owner's campaign held Penal Labor Camps + Punishment-Focused, and the
+# player, who later enacted Restorative Justice (which replaced Penal Labor),
+# held Punishment-Focused + Restorative. Read with
+# scripts/analysis/save_country_probe.py --law-conflicts.
+#
+# The law kept: Restorative or Rehabilitation-Focused (enacted after the load)
+# over Punishment-Focused (the law before #520) over Penal Labor Camps (switched
+# on by the load). The group is cleared, then the kept law activated: vanilla's
+# own order (law_technocracy's on_activate). activate_law alone cannot do it:
+# te_fix_inconsistent_lawgroup_criminal_justice has run activate_law on
+# Punishment-Focused every month for 73 of the 115, which lack every gate law
+# for Penal Labor, and they stayed broken. None of the four laws has an
+# on_activate or on_deactivate block, so clearing and re-activating one has no
+# side effect beyond on_law_activated's consistency sweeps.
+#
+# Monthly and idempotent: a country is touched only while it holds two of the
+# four. A TE_CJ_REPAIR line for the same country in two months running means
+# the repair does not hold. Restorative and Rehabilitation-Focused together
+# (never observed) are left alone.
+te_repair_double_criminal_justice_law = {
+	effect = {
+		every_country = {
+			limit = {
+				NAND = {
+					has_law = law_type:law_restorative_justice
+					has_law = law_type:law_rehabilitation_focused_criminal_justice
+				}
+				OR = {
+					AND = {
+						has_law = law_type:law_penal_labor_camps
+						has_law = law_type:law_punishment_focused_criminal_justice
+					}
+					AND = {
+						OR = {
+							has_law = law_type:law_penal_labor_camps
+							has_law = law_type:law_punishment_focused_criminal_justice
+						}
+						OR = {
+							has_law = law_type:law_restorative_justice
+							has_law = law_type:law_rehabilitation_focused_criminal_justice
+						}
+					}
+				}
+			}
+			# Decide before touching the group: 1 Punishment-Focused,
+			# 2 Restorative, 3 Rehabilitation-Focused.
+			if = {
+				limit = { has_law = law_type:law_restorative_justice }
+				set_local_variable = { name = te_cj_keep value = 2 }
+			}
+			else_if = {
+				limit = { has_law = law_type:law_rehabilitation_focused_criminal_justice }
+				set_local_variable = { name = te_cj_keep value = 3 }
+			}
+			else = {
+				set_local_variable = { name = te_cj_keep value = 1 }
+			}
+			if = {
+				limit = { has_law = law_type:law_penal_labor_camps }
+				deactivate_law = law_type:law_penal_labor_camps
+			}
+			if = {
+				limit = { has_law = law_type:law_punishment_focused_criminal_justice }
+				deactivate_law = law_type:law_punishment_focused_criminal_justice
+			}
+			if = {
+				limit = { has_law = law_type:law_restorative_justice }
+				deactivate_law = law_type:law_restorative_justice
+			}
+			if = {
+				limit = { has_law = law_type:law_rehabilitation_focused_criminal_justice }
+				deactivate_law = law_type:law_rehabilitation_focused_criminal_justice
+			}
+			if = {
+				limit = { local_var:te_cj_keep = 1 }
+				activate_law = law_type:law_punishment_focused_criminal_justice
+				debug_log = "TE_CJ_REPAIR: [THIS.GetCountry.GetNameNoFormatting] held two criminal-justice laws; kept Punishment-Focused"
+			}
+			else_if = {
+				limit = { local_var:te_cj_keep = 2 }
+				activate_law = law_type:law_restorative_justice
+				debug_log = "TE_CJ_REPAIR: [THIS.GetCountry.GetNameNoFormatting] held two criminal-justice laws; kept Restorative Justice"
+			}
+			else = {
+				activate_law = law_type:law_rehabilitation_focused_criminal_justice
+				debug_log = "TE_CJ_REPAIR: [THIS.GetCountry.GetNameNoFormatting] held two criminal-justice laws; kept Rehabilitation-Focused"
+			}
+		}
+	}
+}

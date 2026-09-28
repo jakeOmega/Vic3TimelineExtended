@@ -234,8 +234,9 @@ resettlement_take_from_source = {
 		}
 		resettlement_source_consequences = yes
 		# Per-source line (§13). Script-value wrapper, no .MakeScope; the
-		# state is named by debug_log_scopes.
-		debug_log = "TE_RESETTLEMENT: source gave [SCOPE.ScriptValue('resettlement_debug_taken_now')|0] recruits"
+		# state is named by debug_log_scopes. THIS, not SCOPE: SCOPE.ScriptValue
+		# evaluates against ROOT (the country here) and printed -1.
+		debug_log = "TE_RESETTLEMENT: source gave [THIS.ScriptValue('resettlement_debug_taken_now')|0] recruits"
 		debug_log_scopes = yes
 	}
 }
@@ -372,8 +373,9 @@ resettlement_run_destination = {
 	# .MakeScope and .Var(...).GetValue are rejected/silent inside debug_log
 	# (docs/guides/scripting_best_practices.md § "debug_log Loc-String
 	# Templating Limitations"); read the numbers through script-value
-	# wrappers instead, and let debug_log_scopes name the state.
-	debug_log = "TE_RESETTLEMENT: program [SCOPE.ScriptValue('resettlement_debug_programme')|0]: [SCOPE.ScriptValue('resettlement_debug_arrived')|0] arrived, [SCOPE.ScriptValue('resettlement_debug_died')|0] died in transit, [SCOPE.ScriptValue('resettlement_debug_remaining')|0] of capacity unused"
+	# wrappers instead, and let debug_log_scopes name the state. Through THIS:
+	# SCOPE.ScriptValue evaluates against ROOT, the country, and printed -1.
+	debug_log = "TE_RESETTLEMENT: program [THIS.ScriptValue('resettlement_debug_programme')|0]: [THIS.ScriptValue('resettlement_debug_arrived')|0] arrived, [THIS.ScriptValue('resettlement_debug_died')|0] died in transit, [THIS.ScriptValue('resettlement_debug_remaining')|0] of capacity unused"
 	debug_log_scopes = yes
 }
 
@@ -475,10 +477,11 @@ resettlement_state_monthly = {
 # (docs/guides/scripting_best_practices.md § "Buildings Have No Variables").
 # root.var: in the multiplier is right whether the engine resolves it against
 # ROOT or against the building, and the state's variables are never removed.
+# Confirmed in game (2026-09-27, a one-launch probe since deleted): the
+# arrivals readout on the building read the month's arrivals, not 1.
 resettlement_refresh_destination_readout = {
 	every_scope_building = {
 		limit = { is_building_type = building_resettlement_colony }
-		te_debug_rs_readout_probe_building = yes # TEMPORARY PROBE: delete after one launch
 		remove_modifier = resettlement_arrivals
 		remove_modifier = resettlement_transit_deaths
 		if = {
@@ -490,7 +493,6 @@ resettlement_refresh_destination_readout = {
 			add_modifier = { name = resettlement_transit_deaths multiplier = root.var:rs_died }
 		}
 	}
-	te_debug_rs_readout_probe_state = yes # TEMPORARY PROBE: delete after one launch
 }
 
 # State scope: a destination, from the state pulse. One refresh site for the
