@@ -106,7 +106,7 @@ containerization = {
 fiber_optics = {
 	# Fiber Optics PM for Wired Telecommunication Industries. medium bandwidth for network infrastructure
 	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/fiber_optics.dds"
 	category = production
 
 	modifier = {
@@ -178,7 +178,7 @@ robotics = {
 	# Robotic Assembly Lines PM for various factories, Robotic Ship Assembly PM for civilian and military shipyards
 	# Automated Chemical Reactors PM for chemical plants, Launch Pad Robotics PM for Launch Facilities
 	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/robotics.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -265,7 +265,7 @@ environmental_movement = {
 sexual_revolution = {
 	# Anti-Discrimination (for LGBTQ+), Gender as Protected Class laws
 	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/sexual_revolution.dds"
 	category = society
 
 	unlocking_technologies = {
@@ -350,7 +350,7 @@ computer_aided_design = {
 cellular_networks = {
 	# Home Communications mobilization option
 	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/cellular_networks.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -398,7 +398,7 @@ barcodes_and_scanners = {
 precision_guided_munitions = {
 	# Marine Assault Ship (Cold-War-2 LHA), PGM-guided ship utilities, carrier obsolete chain
 	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/precision_guided_munitions.dds"
 	category = military
 
 	unlocking_technologies = {
