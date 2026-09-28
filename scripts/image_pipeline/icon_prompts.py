@@ -611,7 +611,7 @@ ICONS: dict[str, dict[str, dict]] = {
     # do; the same subject and seed render the same symbol in both looks.
     "ideology": {
         "ideology_multicultural_ig": {"subject": "three hands clasping each other's wrists to form a triangle", "seed": 0},
-        "ideology_anti_colonialist": {"subject": "a raised clenched fist in front of a globe with its continents", "seed": 1},
+        "ideology_anti_colonialist": {"subject": "a raised clenched fist in front of a globe with its continents, a thick white outline all around the fist separating it from the globe", "seed": None},
         "ideology_islamic_inheritance": {"subject": "an open book resting on an X-shaped folding wooden book stand, a small crescent moon above it", "seed": 1},
     },
     # Mod-added decrees: 13 on road_maintenance, greenest grass on vanilla's
@@ -631,6 +631,7 @@ ICONS: dict[str, dict[str, dict]] = {
         # A customs gate came with numbered plates on its posts.
         "decree_trade_reform": {"subject": "a red and white striped boom barrier arm raised up on a squat post, a wooden cargo crate on the ground beside it", "seed": None},
         "decree_antiterrorism_campaign": {"subject": "a black riot shield and a police baton crossed", "seed": 1},
+        # s1 is retouched: FLUX drew a second lens ring over the first.
         "decree_promote_tourism": {"subject": "a straw sun hat and a vintage brown leather camera", "seed": 1},
         "decree_encourage_emigration": {"subject": "a small ocean liner with a big mint-green arrow pointing away to the right", "seed": 0},
         "decree_subsidize_immigration": {"subject": "a battered brown leather suitcase standing on a stack of gold coins", "seed": 0},
@@ -659,9 +660,9 @@ ICONS: dict[str, dict[str, dict]] = {
         "institution_ministry_of_refugee_affairs": {"subject": "a canvas relief tent with a bundle and a suitcase in front of it", "seed": 0},
         "institution_ministry_of_propaganda": {"subject": "a big vintage broadcast microphone on a stand", "seed": 0},
         "institution_ministry_of_science": {"subject": "a brass microscope beside a round-bottomed glass flask", "seed": 0},
-        "institution_ministry_of_thought_control": {"subject": "a large padlock locking a closed book shut", "seed": 0},
+        "institution_ministry_of_thought_control": {"subject": "a large padlock locking a closed book shut", "seed": 1},
         "institution_ministry_of_consumer_protection": {"subject": "a wicker shopping basket of groceries in front of a round shield", "seed": 1},
-        "institution_ministry_of_urban_planning": {"subject": "a small architectural model of a city block with a drafting compass leaning on it", "seed": 1},
+        "institution_ministry_of_urban_planning": {"subject": "a small architectural model of a city block with a drafting compass leaning on it", "seed": 0},
         "institution_ministry_of_religion": {"subject": "a large brass bell standing on the ground beside a lit candle", "seed": 1},
         "institution_ministry_of_international_aid": {"subject": "a wooden supply crate with a cross on its side, a sack of grain beside it", "seed": 0},
         "institution_migration_controls": {"subject": "a wooden rubber stamp standing on an ink pad beside a small booklet", "seed": 0},
@@ -711,7 +712,7 @@ ICONS: dict[str, dict[str, dict]] = {
     },
     "leader_ideology": {
         "ideology_multicultural": {"subject": "three hands clasping each other's wrists to form a triangle", "seed": 0},
-        "ideology_anti_colonialist_leader": {"subject": "a raised clenched fist in front of a globe with its continents", "seed": 1},
+        "ideology_anti_colonialist_leader": {"subject": "a raised clenched fist in front of a globe with its continents, a thick white outline all around the fist separating it from the globe", "seed": None},
         "ideology_multicultural_inclusive": {"subject": "three hands clasping each other's wrists to form a triangle around a heart", "seed": 0},
         "ideology_environmentalists": {"subject": "a broad oak tree with a round leafy crown and spreading roots", "seed": 0},
         "ideology_optimist_transhumanist": {"subject": "a DNA double helix rising in front of a half sun with bold rays", "seed": 1},
