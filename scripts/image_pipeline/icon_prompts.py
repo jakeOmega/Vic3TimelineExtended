@@ -694,10 +694,10 @@ ICONS: dict[str, dict[str, dict]] = {
     # card) on vanilla skill and personality icons.
     "character_trait": {
         "trait_combined_arms_infantry_screen": {"subject": "a line of three infantry soldiers kneeling with rifles raised, side view", "seed": 1},
-        "trait_combined_arms_fire_support": {"subject": "a field artillery howitzer firing, a bold burst of flame at its muzzle", "seed": 0},
+        "trait_combined_arms_fire_support": {"subject": "a field artillery howitzer firing, a bold burst of flame at its muzzle", "seed": 1},
         "trait_combined_arms_recon": {"subject": "a mounted scout on horseback raising binoculars to his eyes", "seed": 0},
         "trait_combined_arms_armor": {"subject": "a battle tank charging forward, side view", "seed": 1},
-        "trait_combined_arms_air_superiority": {"subject": "a fighter plane diving steeply", "seed": 1},
+        "trait_combined_arms_air_superiority": {"subject": "a fighter plane diving steeply", "seed": 0},
         # s2 is retouched: the tank's front plate filled (FLUX drew it hollow) and a hull star removed.
         "trait_combined_arms_full_spectrum": {"subject": "a fighter plane flying low over a tank, an infantry soldier standing beside the tank, all overlapping as one compact group", "seed": 2},
     },
