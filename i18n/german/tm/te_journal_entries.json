@@ -1,4 +1,24 @@
 {
+ "je_augmentation_status_banned": {
+  "en": "Augmentation technology is banned or strictly forbidden. Society has rejected mechanical enhancement of the human body.",
+  "de": "Augmentierungstechnologie ist verboten oder strikt untersagt. Die Gesellschaft hat die mechanische Erweiterung des menschlichen Körpers abgelehnt."
+ },
+ "je_augmentation_status_mandatory": {
+  "en": "Augmentation is mandatory for all citizens. The state enforces technological enhancement as a civic duty.",
+  "de": "Augmentierung ist für alle Bürger verpflichtend. Der Staat setzt technologische Erweiterung als Bürgerpflicht durch."
+ },
+ "je_augmentation_status_medical": {
+  "en": "Augmentation is permitted only for medical purposes. Therapeutic prosthetics and corrective implants are allowed, but elective enhancement is prohibited.",
+  "de": "Augmentierung ist nur zu medizinischen Zwecken erlaubt. Therapeutische Prothesen und korrigierende Implantate sind zulässig, elektive Erweiterung jedoch verboten."
+ },
+ "je_augmentation_status_regulated": {
+  "en": "Augmentation is legal but subject to government regulation. Citizens may enhance themselves within approved guidelines.",
+  "de": "Augmentierung ist legal, unterliegt aber staatlicher Regulierung. Bürger dürfen sich innerhalb genehmigter Richtlinien erweitern lassen."
+ },
+ "je_augmentation_status_unrestricted": {
+  "en": "The augmentation market operates freely with no government oversight. Any enhancement is available to those who can afford it.",
+  "de": "Der Augmentierungsmarkt arbeitet frei ohne staatliche Aufsicht. Jede Erweiterung steht jenen offen, die sie sich leisten können."
+ },
  "je_banking_cycle_command_economy": {
   "en": "Logistics & Allocation Gauge",
   "de": "Logistik- und Zuteilungsanzeige"
@@ -6,6 +26,22 @@
  "je_banking_cycle_cooperative_ownership": {
   "en": "Cooperative Finance Dashboard",
   "de": "Genossenschaftliches Finanz-Dashboard"
+ },
+ "je_banking_cycle_desc": {
+  "en": "Steer the boom-bust cycle through the policy rate, prudential regulation, and bailouts to keep credit flowing without inflating bubbles.",
+  "de": "Den Boom-Bust-Zyklus über Leitzins, umsichtige Regulierung und Rettungsaktionen steuern, um den Kreditfluss aufrechtzuerhalten, ohne Blasen aufzublähen."
+ },
+ "je_banking_cycle_reason_command_economy": {
+  "en": "In a Command Economy the cycle should be read as a logistics coordination gauge: momentum and [concept_bubble_pressure] track supply-chain synchronization and administrative strain rather than investor confidence. Use plan revisions, emergency allocations and production target reductions to resolve bottlenecks.",
+  "de": "In einer Planwirtschaft sollte der Zyklus als Messgröße für die logistische Koordination gelesen werden: Momentum und [concept_bubble_pressure] erfassen die Synchronisation der Lieferketten und die administrative Belastung statt des Anlegervertrauens. Nutzen Sie Plananpassungen, Notzuteilungen und die Senkung von Produktionszielen, um Engpässe zu lösen."
+ },
+ "je_banking_cycle_reason_cooperative_ownership": {
+  "en": "Under Cooperative Ownership the cycle tracks the balance between worker consumption and capital availability. High [concept_bubble_pressure] reflects excessive payouts and low reinvestment; interventions include mutual aid funds and council directives to prioritize long-term viability.",
+  "de": "Unter Genossenschaftsbesitz erfasst der Zyklus das Gleichgewicht zwischen Arbeiterkonsum und Kapitalverfügbarkeit. Hoher [concept_bubble_pressure] spiegelt übermäßige Ausschüttungen und geringe Reinvestition wider; Interventionen umfassen Fonds auf Gegenseitigkeit und Ratsanweisungen, um die langfristige Tragfähigkeit zu priorisieren."
+ },
+ "je_banking_cycle_reason_market": {
+  "en": "In a Market Economy the [concept_banking_cycle] should be read as a liquidity and sentiment gauge: momentum captures investor-driven growth, while [concept_bubble_pressure] signals overvaluation and systemic fragility. Steer the cycle with the policy rate, macroprudential tightening, targeted bailouts, and open-market operations; [concept_fx_swap_lines] are arranged with another country by treaty. Apply measured regulatory tightening and liquidity drains to cool speculative excess; when contagion risk appears, deploy guarantees, asset-relief, or emergency liquidity to preserve credit and the real economy. Expect political trade-offs — some tools slow growth or strain public finances.",
+  "de": "In einer Marktwirtschaft sollte der [concept_banking_cycle] als Messgröße für Liquidität und Stimmung gelesen werden: Momentum erfasst investorengetriebenes Wachstum, während [concept_bubble_pressure] Überbewertung und systemische Fragilität signalisiert. Steuern Sie den Zyklus mit dem Leitzins, makroprudenzieller Straffung, gezielten Rettungsaktionen und Offenmarktgeschäften; [concept_fx_swap_lines] werden per Vertrag mit einem anderen Land vereinbart. Wenden Sie maßvolle regulatorische Straffung und Liquiditätsabzug an, um spekulative Exzesse abzukühlen; erscheint Ansteckungsrisiko, setzen Sie Garantien, Vermögensentlastung oder Notliquidität ein, um Kredit und Realwirtschaft zu erhalten. Erwarten Sie politische Zielkonflikte — manche Instrumente bremsen das Wachstum oder belasten die Staatsfinanzen."
  },
  "je_banking_cycle_title_market": {
   "en": "Boom & Bust Cycle",
@@ -27,6 +63,10 @@
   "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('country_art_share_pct_display')|1]% → [JournalEntry.GetCountry.MakeScope.ScriptValue('country_art_share_pct_diminished_display')|1]% after [concept_ch_art_diminishing_returns]",
   "de": "[JournalEntry.GetCountry.MakeScope.ScriptValue('country_art_share_pct_display')|1]% → [JournalEntry.GetCountry.MakeScope.ScriptValue('country_art_share_pct_diminished_display')|1]% nach [concept_ch_art_diminishing_returns]"
  },
+ "je_ch_widget_bd_art_tt": {
+  "en": "#title Art Production#!\\nOur share of the world's fine-art output, weighted by our art multiplier of #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_art_mult_pct_display')|0]%#!. A dominant share runs into [concept_ch_art_diminishing_returns].",
+  "de": "#title Kunstproduktion#!\\nUnser Anteil an der weltweiten Feinkunstproduktion, gewichtet mit unserem Kunstmultiplikator von #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_art_mult_pct_display')|0]%#!. Ein dominanter Anteil stößt auf [concept_ch_art_diminishing_returns]."
+ },
  "je_ch_widget_bd_global_raw_detail": {
   "en": "of a world total of [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_global_raw_display')|0]",
   "de": "von einem Weltgesamtwert von [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_global_raw_display')|0]"
@@ -43,9 +83,21 @@
   "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sol_display')|1] against a world average of [JournalEntry.GetCountry.MakeScope.ScriptValue('global_average_sol_display')|1]",
   "de": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sol_display')|1] gegenüber einem Weltdurchschnitt von [JournalEntry.GetCountry.MakeScope.ScriptValue('global_average_sol_display')|1]"
  },
+ "je_ch_widget_bd_tech_detail": {
+  "en": "#lore world firsts, decaying each year#!",
+  "de": "#lore Welt-Erstleistungen, die jedes Jahr abklingen#!"
+ },
  "je_ch_widget_board_header": {
   "en": "Top Cultural Powers",
   "de": "Führende Kulturmächte"
+ },
+ "je_ch_widget_board_legend": {
+  "en": "#lore Recounted about twice a year, and after every war. The bracketed figure is the change since the last recount.#!",
+  "de": "#lore Wird etwa zweimal jährlich neu gezählt, sowie nach jedem Krieg. Der Wert in Klammern ist die Veränderung seit der letzten Zählung.#!"
+ },
+ "je_ch_widget_board_us": {
+  "en": "We are ranked #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_rank_self_display')|0]#! of [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_ranked_total_display')|0] countries with any [concept_cultural_pull].",
+  "de": "Wir stehen auf Platz #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_rank_self_display')|0]#! von [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_ranked_total_display')|0] Ländern mit jeglicher [concept_cultural_pull]."
  },
  "je_ch_widget_breakdown_header": {
   "en": "Where Our Pull Comes From",
@@ -71,9 +123,25 @@
   "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_share_display')|1]%#! (countries running it: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_aligned_display')|0]#!)",
   "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_share_display')|1]%#! (Länder, die es verfolgen: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_aligned_display')|0]#!)"
  },
+ "je_ch_widget_model_tt": {
+  "en": "The political model of the world's leading cultural power, and how much of the world's culture comes from countries running something in the same family: their combined cultural pull, not a head count.\\n\\nEvery country that trails the hegemon feels a constant push toward the political movements matching this model. The push is nothing while the model is marginal and grows with its share of world culture; its current strength is #v ×[JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_pressure_mult')|2]#!. Events can add a temporary spike on top. Recounted with the leaderboard, about twice a year.",
+  "de": "Das politische Modell der weltweit führenden Kulturmacht, und wie viel der Weltkultur von Ländern stammt, die etwas aus derselben Familie betreiben: ihre kombinierte kulturelle Anziehungskraft, nicht eine Kopfzahl.\\n\\nJedes Land, das hinter dem Hegemon zurückbleibt, verspürt einen ständigen Druck hin zu den politischen Bewegungen, die diesem Modell entsprechen. Der Druck ist gleich null, solange das Modell marginal ist, und wächst mit seinem Anteil an der Weltkultur; seine aktuelle Stärke beträgt #v ×[JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_pressure_mult')|2]#!. Ereignisse können vorübergehend einen zusätzlichen Ausschlag hinzufügen. Wird zusammen mit der Rangliste etwa zweimal jährlich neu gezählt."
+ },
  "je_ch_widget_models_header": {
   "en": "Political Models of the World",
   "de": "Politische Modelle der Welt"
+ },
+ "je_ch_widget_models_legend": {
+  "en": "Every country's political model, weighted by its cultural pull. Slices run clockwise from the top in the order listed; models with under half a percent are left off the list.",
+  "de": "Das politische Modell jedes Landes, gewichtet nach seiner kulturellen Anziehungskraft. Die Segmente verlaufen im Uhrzeigersinn von oben in der aufgeführten Reihenfolge; Modelle unter einem halben Prozent werden aus der Liste ausgelassen."
+ },
+ "je_ch_widget_models_pending": {
+  "en": "The first census of the world's political models is taken at the next leaderboard recount.",
+  "de": "Die erste Erhebung der politischen Modelle der Welt erfolgt bei der nächsten Neuzählung der Rangliste."
+ },
+ "je_ch_widget_models_pie_tt": {
+  "en": "Share of world culture by political model: the combined cultural pull of every country running each one. The leading cultural power's model pushes matching movements abroad, harder the bigger its slice.",
+  "de": "Anteil an der Weltkultur nach politischem Modell: die kombinierte kulturelle Anziehungskraft jedes Landes, das jeweils eines betreibt. Das Modell der führenden Kulturmacht drängt passende Bewegungen im Ausland, umso stärker, je größer sein Segment."
  },
  "je_ch_widget_prog_institutes": {
   "en": "Cultural Institutes",
@@ -99,9 +167,17 @@
   "en": "World rank",
   "de": "Weltrang"
  },
+ "je_ch_widget_rank_tt": {
+  "en": "Our place among every country with any [concept_cultural_pull] at all, as of the last recount. Countries with none are not counted.",
+  "de": "Unser Platz unter allen Ländern mit überhaupt einer [concept_cultural_pull], Stand der letzten Zählung. Länder ohne jede werden nicht mitgezählt."
+ },
  "je_ch_widget_rank_value": {
   "en": "Rank #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_rank_self_display')|0]#! of [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_ranked_total_display')|0]",
   "de": "Rang #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_rank_self_display')|0]#! von [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_ranked_total_display')|0]"
+ },
+ "je_ch_widget_share_tt": {
+  "en": "#title [concept_cultural_pull_share]#!\\nOur raw [concept_cultural_pull] as a percentage of every country's raw pull added together, so it stays meaningful as the world's population and output grow. The bar is full at 50%.\\nRaw score #v [JournalEntry.GetCountry.MakeScope.ScriptValue('cultural_pull_raw_display')|1]#! of a world total of #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_global_raw_display')|0]#!.\\n#lore The world total is recomputed about twice a year and after every war, so this share can step slightly without our own output changing.#!",
+  "de": "#title [concept_cultural_pull_share]#!\\nUnsere rohe [concept_cultural_pull] als Prozentsatz der aufsummierten rohen Anziehungskraft aller Länder, damit sie aussagekräftig bleibt, während Weltbevölkerung und -produktion wachsen. Der Balken ist bei 50% voll.\\nRohwert #v [JournalEntry.GetCountry.MakeScope.ScriptValue('cultural_pull_raw_display')|1]#! von einer Weltsumme von #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_global_raw_display')|0]#!.\\n#lore Die Weltsumme wird etwa zweimal jährlich und nach jedem Krieg neu berechnet, sodass sich dieser Anteil leicht verschieben kann, ohne dass sich unsere eigene Produktion ändert.#!"
  },
  "je_ch_widget_share_value": {
   "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('cultural_pull_display')|1]%#! of global influence",
@@ -115,9 +191,77 @@
   "en": "Civil Rights Movement",
   "de": "Bürgerrechtsbewegung"
  },
+ "je_civil_rights_complete_bar_tt": {
+  "en": "Movement support reaches 100",
+  "de": "Bewegungsunterstützung erreicht 100"
+ },
+ "je_civil_rights_desc": {
+  "en": "A [concept_political_movement] demanding equal rights for discriminated communities has taken root. How we respond will shape our nation's character.",
+  "de": "Eine [concept_political_movement], die gleiche Rechte für diskriminierte Gemeinschaften fordert, hat Wurzeln geschlagen. Wie wir reagieren, wird den Charakter unserer Nation prägen."
+ },
+ "je_civil_rights_reason": {
+  "en": "Discriminated communities are demanding equal treatment under the law.",
+  "de": "Diskriminierte Gemeinschaften fordern gleiche Behandlung vor dem Gesetz."
+ },
+ "je_civil_rights_status_active": {
+  "en": "The movement is on the front page. Marches draw crowds, and the cabinet is forced to take public positions. Compromise proposals circulate; some cities have already moved on their own.",
+  "de": "Die Bewegung ist auf der Titelseite. Demonstrationen ziehen Menschenmengen an, und das Kabinett ist gezwungen, öffentlich Stellung zu beziehen. Kompromissvorschläge kursieren; einige Städte haben bereits eigenständig gehandelt."
+ },
+ "je_civil_rights_status_growing": {
+  "en": "Sit-ins and chapter networks are spreading. Sympathetic editorials are starting to outnumber dismissive ones. Pressure is building, but the levers of power haven't moved.",
+  "de": "Sitzstreiks und Ortsgruppennetzwerke breiten sich aus. Wohlwollende Leitartikel beginnen, die abweisenden zu überwiegen. Der Druck wächst, doch die Machthebel haben sich noch nicht bewegt."
+ },
+ "je_civil_rights_status_imminent": {
+  "en": "Reform is at the door. Mass mobilization meets cabinet-level proposals; a march on the capital is a question of weeks, not years. The country is choosing what it will be.",
+  "de": "Die Reform steht vor der Tür. Massenmobilisierung trifft auf Vorschläge auf Kabinettsebene; ein Marsch auf die Hauptstadt ist eine Frage von Wochen, nicht Jahren. Das Land entscheidet, was es sein wird."
+ },
+ "je_civil_rights_status_marginal": {
+  "en": "The movement is marginal — small chapters, scattered leafleting, and a press that still calls them [Concept('concept_agitator', 'agitators')]. Most of the country has not yet decided this is a story.",
+  "de": "Die Bewegung ist marginal — kleine Ortsgruppen, vereinzelte Flugblätter und eine Presse, die sie noch als [Concept('concept_agitator', 'Agitatoren')] bezeichnet. Der größte Teil des Landes hat noch nicht entschieden, dass dies eine Geschichte ist."
+ },
+ "je_civil_rights_status_pressuring": {
+  "en": "The movement now sets the tempo. Legislators position themselves around the next vote. Backlash organizes openly, and confrontations sharpen. The status quo is no longer cheap to defend.",
+  "de": "Die Bewegung gibt nun das Tempo vor. Abgeordnete positionieren sich vor der nächsten Abstimmung. Die Gegenreaktion organisiert sich offen, und die Konfrontationen verschärfen sich. Der Status quo ist nicht mehr billig zu verteidigen."
+ },
  "je_colonial_empire": {
   "en": "Colonial Empire",
   "de": "Kolonialreich"
+ },
+ "je_colonial_empire_band_at_cap": {
+  "en": "#G the cap#!",
+  "de": "#G die Obergrenze#!"
+ },
+ "je_colonial_empire_band_collapsing": {
+  "en": "#R Collapsing#!",
+  "de": "#R Kollabierend#!"
+ },
+ "je_colonial_empire_band_crumbling": {
+  "en": "#R Crumbling#!",
+  "de": "#R Zerfallend#!"
+ },
+ "je_colonial_empire_band_headline": {
+  "en": "Currently [JournalEntry.GetCountry.GetCustom('colonial_empire_tier_name')] — next band [JournalEntry.GetCountry.GetCustom('colonial_empire_next_band_name')] at #v [JournalEntry.GetCountry.MakeScope.Var('colonial_empire_next_boundary').GetValue|0]#!\\n#bold Projected this month:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]#!",
+  "de": "Derzeit [JournalEntry.GetCountry.GetCustom('colonial_empire_tier_name')] — nächste Stufe [JournalEntry.GetCountry.GetCustom('colonial_empire_next_band_name')] bei #v [JournalEntry.GetCountry.MakeScope.Var('colonial_empire_next_boundary').GetValue|0]#!\\n#bold Prognose für diesen Monat:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]#!"
+ },
+ "je_colonial_empire_band_solidified": {
+  "en": "#G Solidified#!",
+  "de": "#G Gefestigt#!"
+ },
+ "je_colonial_empire_band_stable": {
+  "en": "#G Stable#!",
+  "de": "#G Stabil#!"
+ },
+ "je_colonial_empire_band_strained": {
+  "en": "#O Strained#!",
+  "de": "#O Angespannt#!"
+ },
+ "je_colonial_empire_band_unknown": {
+  "en": "#lore unknown#!",
+  "de": "#lore unbekannt#!"
+ },
+ "je_colonial_empire_bar_headline": {
+  "en": "#bold Stability:#! #v [JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)|%0]#!   #lore hover for the full term-by-term monthly breakdown#!",
+  "de": "#bold Stabilität:#! #v [JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)|%0]#!   #lore zum Überfahren für die vollständige monatliche Aufschlüsselung nach Begriffen#!"
  },
  "je_colonial_empire_btn_disable": {
   "en": "Disable",
@@ -131,21 +275,89 @@
   "en": "Review the options…",
   "de": "Optionen überprüfen …"
  },
+ "je_colonial_empire_candidates_largest": {
+  "en": "#lore Largest:#! #bold [JournalEntry.GetCountry.MakeScope.Var('colonial_empire_largest_eligible_state').GetState.GetName]#!",
+  "de": "#lore Größtes:#! #bold [JournalEntry.GetCountry.MakeScope.Var('colonial_empire_largest_eligible_state').GetState.GetName]#!"
+ },
+ "je_colonial_empire_candidates_row": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.Var('colonial_empire_eligible_count').GetValue|0]#! eligible territories  ·  a Round Table would accept #v [JournalEntry.GetCountry.MakeScope.Var('colonial_empire_round_table_count').GetValue|0]#! of them",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.Var('colonial_empire_eligible_count').GetValue|0]#! geeignete Gebiete  ·  ein Runder Tisch würde #v [JournalEntry.GetCountry.MakeScope.Var('colonial_empire_round_table_count').GetValue|0]#! davon akzeptieren"
+ },
+ "je_colonial_empire_complete_tt": {
+  "en": "Completes when the Colonial Stability bar holds at #G 100#! for 60 sustained months (current: #v [ROOT.GetCountry.MakeScope.Var('colonial_at_100_months').GetValue|0] / 60#!). Drops below 100 reset the counter. Alternatively, completes when the Imperial Federation Act is taken; that decision separately requires sustaining the Solidified band (bar ≥ 90) for 36 months (current: #v [ROOT.GetCountry.MakeScope.Var('colonial_solidified_months').GetValue|0] / 36#!) plus the Act's other prerequisites.",
+  "de": "Wird abgeschlossen, wenn der Balken der Kolonialen Stabilität für 60 ununterbrochene Monate bei #G 100#! bleibt (aktuell: #v [ROOT.GetCountry.MakeScope.Var('colonial_at_100_months').GetValue|0] / 60#!). Ein Absinken unter 100 setzt den Zähler zurück. Alternativ wird es abgeschlossen, wenn der Imperiale-Föderation-Akt beschlossen wird; diese Entscheidung erfordert separat, die Gefestigt-Stufe (Balken ≥ 90) für 36 Monate zu halten (aktuell: #v [ROOT.GetCountry.MakeScope.Var('colonial_solidified_months').GetValue|0] / 36#!) sowie die übrigen Voraussetzungen des Akts."
+ },
+ "je_colonial_empire_condemner_entry_tt": {
+  "en": "#R Condemning#! — [THIS.GetCountry.GetName] (@prestige! #v [THIS.GetCountry.GetPrestige|0]#!)",
+  "de": "#R Verurteilend#! — [THIS.GetCountry.GetName] (@prestige! #v [THIS.GetCountry.GetPrestige|0]#!)"
+ },
+ "je_colonial_empire_conditions_body": {
+  "en": "#title Where that comes from:#!\\n  Base imperial decline: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_base')|=+2]#!\\n  Laws, [concept_technology|E]s and recent events: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_laws')|=+2]#!\\n  Domestic [concept_interest_group|E]s: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_igs')|=+2]#!\\n  Rank and standing: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_rank')|=+2]#!\\n  Active programmes: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_policies')|=+2]#!\\n  War, revolution and [concept_turmoil]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_domestic')|=+2]#!\\n  Imperial overreach: #v [JournalEntry.GetCountry.MakeScope.Var('colonial_empire_d_overreach').GetValue|=+2]#!\\n  [concept_great_power|E] pressure: #v [JournalEntry.GetCountry.MakeScope.Var('colonial_empire_d_gp').GetValue|=+2]#!\\n  Colonial acceptance: #v [JournalEntry.GetCountry.MakeScope.Var('colonial_empire_d_acceptance').GetValue|=+2]#!\\n  Monthly limit of ±[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_cap')|2]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_cap_display')|=+2]#!",
+  "de": "#title Woher das kommt:#!\\n  Grundlegender imperialer Niedergang: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_base')|=+2]#!\\n  Gesetze, [concept_technology|E]en und jüngste Ereignisse: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_laws')|=+2]#!\\n  Innenpolitische [concept_interest_group|E]n: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_igs')|=+2]#!\\n  Rang und Ansehen: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_rank')|=+2]#!\\n  Aktive Programme: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_policies')|=+2]#!\\n  Krieg, Revolution und [concept_turmoil]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_domestic')|=+2]#!\\n  Imperiale Überdehnung: #v [JournalEntry.GetCountry.MakeScope.Var('colonial_empire_d_overreach').GetValue|=+2]#!\\n  [concept_great_power|E]druck: #v [JournalEntry.GetCountry.MakeScope.Var('colonial_empire_d_gp').GetValue|=+2]#!\\n  Koloniale Akzeptanz: #v [JournalEntry.GetCountry.MakeScope.Var('colonial_empire_d_acceptance').GetValue|=+2]#!\\n  Monatliche Grenze von ±[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_cap')|2]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_cap_display')|=+2]#!"
+ },
+ "je_colonial_empire_conditions_pending": {
+  "en": "#lore The full breakdown appears after the next monthly assessment.#!",
+  "de": "#lore Die vollständige Aufschlüsselung erscheint nach der nächsten monatlichen Bewertung.#!"
+ },
+ "je_colonial_empire_cost_assimilation": {
+  "en": "#lore [concept_bureaucracy] drag, one-off#! @money![JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_assimilate_startup_cost_display')|D]  ·  #lore stability#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_assim_effectiveness_display')|=+2]#!#lore /mo#!",
+  "de": "#lore [concept_bureaucracy]-Belastung, einmalig#! @money![JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_assimilate_startup_cost_display')|D]  ·  #lore Stabilität#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_assim_effectiveness_display')|=+2]#!#lore /Mon.#!"
+ },
+ "je_colonial_empire_cost_garrison": {
+  "en": "#lore Ongoing [concept_authority] upkeep and [concept_infamy] on activation#!  ·  #lore stability#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_garrison_effectiveness_display')|=+2]#!#lore /mo#!",
+  "de": "#lore Laufender [concept_authority]-Unterhalt und [concept_infamy] bei Aktivierung#!  ·  #lore Stabilität#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_garrison_effectiveness_display')|=+2]#!#lore /Mon.#!"
+ },
+ "je_colonial_empire_cost_invest": {
+  "en": "#lore Upkeep#! @money![JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_monthly_expense')|D]#lore /mo, one-off#! @money![JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_startup_cost_display')|D]  ·  #lore stability#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_effectiveness_display')|=+2]#!#lore /mo#!",
+  "de": "#lore Unterhalt#! @money![JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_monthly_expense')|D]#lore /Mon., einmalig#! @money![JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_startup_cost_display')|D]  ·  #lore Stabilität#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_effectiveness_display')|=+2]#!#lore /Mon.#!"
+ },
+ "je_colonial_empire_decision_planned": {
+  "en": "#bold Planned Full Decolonization#!\\n#lore Wind up the entire colonial empire at once. Every eligible territory is listed for confirmation before anything is released, and you can withdraw.#!",
+  "de": "#bold Geplante vollständige Dekolonisierung#!\\n#lore Das gesamte Kolonialreich auf einmal auflösen. Jedes geeignete Gebiet wird zur Bestätigung aufgelistet, bevor etwas freigegeben wird, und Sie können jederzeit zurücktreten.#!"
+ },
+ "je_colonial_empire_decision_release": {
+  "en": "#bold Release a Colonial Territory#!\\n#lore A unilateral grant of independence to one colony and the states around it. You will be shown up to three candidates, with what each release would cost you, and can withdraw without releasing anything.#!",
+  "de": "#bold Ein koloniales Gebiet freigeben#!\\n#lore Eine einseitige Unabhängigkeitsgewährung an eine Kolonie und die umliegenden Staaten. Es werden Ihnen bis zu drei Kandidaten gezeigt, mit den Kosten, die jede Freigabe verursachen würde, und Sie können zurücktreten, ohne etwas freizugeben.#!"
+ },
+ "je_colonial_empire_decision_round_table": {
+  "en": "#bold Round Table Conference#!\\n#lore A negotiated transition for one well-accepted colony. It needs more than 200 [concept_authority] and angers the [GetInterestGroupVariant('ig_landowners',GetPlayer).GetName], but the new country starts on better terms with us, and the boost to [concept_colonial_stability] lasts longer than after a unilateral release. You will be shown up to three candidates and can withdraw.#!",
+  "de": "#bold Konferenz am Runden Tisch#!\\n#lore Ein ausgehandelter Übergang für eine gut akzeptierte Kolonie. Er erfordert mehr als 200 [concept_authority] und verärgert die [GetInterestGroupVariant('ig_landowners',GetPlayer).GetName], doch das neue Land beginnt mit besseren Beziehungen zu uns, und der Aufschwung der [concept_colonial_stability] hält länger an als nach einer einseitigen Freigabe. Es werden Ihnen bis zu drei Kandidaten gezeigt, und Sie können zurücktreten.#!"
+ },
  "je_colonial_empire_decisions_header": {
   "en": "Decolonization",
   "de": "Dekolonisierung"
+ },
+ "je_colonial_empire_desc": {
+  "en": "The age of [concept_decolonization_system] is at hand. Whether through direct overseas possessions or colonial subjects, choose between integration, devolution, or repression for our overseas holdings.",
+  "de": "Das Zeitalter der [concept_decolonization_system] ist angebrochen. Ob durch direkte Überseebesitzungen oder koloniale Untertanen, wählen Sie zwischen Integration, Machtübertragung oder Unterdrückung für unsere Überseebesitzungen."
+ },
+ "je_colonial_empire_fail_tt": {
+  "en": "Fails when the Colonial Stability bar reaches #R 0#! — the colonial system collapses. Up to three colonial territories break away as independent nations, each taking the connected lands that are its people's [concept_homeland]. Our colonial subjects' [concept_liberty_desire] surges, and this journal cannot return for ten years. Unless years of development or assimilation programmes let us negotiate the withdrawal, the collapse also costs [concept_prestige] and [concept_sol] for years.",
+  "de": "Scheitert, wenn der Balken der Kolonialen Stabilität #R 0#! erreicht — das koloniale System bricht zusammen. Bis zu drei koloniale Gebiete spalten sich als unabhängige Nationen ab, jede nimmt die verbundenen Länder mit, die das [concept_homeland] ihres Volkes sind. Der [concept_liberty_desire] unserer kolonialen Untertanen schnellt in die Höhe, und dieser Journaleintrag kann zehn Jahre lang nicht zurückkehren. Sofern uns nicht jahrelange Entwicklungs- oder Assimilationsprogramme erlauben, den Rückzug auszuhandeln, kostet der Zusammenbruch zudem für Jahre [concept_prestige] und [concept_sol]."
  },
  "je_colonial_empire_history_header": {
   "en": "History",
   "de": "Verlauf"
  },
+ "je_colonial_empire_negotiated_tt": {
+  "en": "Up to three colonial territories peacefully gain independence, with retained ties to the metropole.",
+  "de": "Bis zu drei koloniale Gebiete erlangen friedlich ihre Unabhängigkeit, wobei die Bindungen zum Mutterland erhalten bleiben."
+ },
  "je_colonial_empire_phase_row": {
   "en": "#title While in this band:#! [JournalEntry.GetCountry.GetCustom('colonial_empire_phase_modifier')]",
   "de": "#title Solange in dieser Stufe:#! [JournalEntry.GetCountry.GetCustom('colonial_empire_phase_modifier')]"
  },
+ "je_colonial_empire_phase_unknown": {
+  "en": "#lore not yet assessed#!",
+  "de": "#lore noch nicht bewertet#!"
+ },
  "je_colonial_empire_pressure_header": {
   "en": "International Pressure",
   "de": "Internationaler Druck"
+ },
+ "je_colonial_empire_pressure_quiet_tt": {
+  "en": "#G No [concept_great_power] is pressing us over our colonies.#!",
+  "de": "#G Keine [concept_great_power] setzt uns wegen unserer Kolonien unter Druck.#!"
  },
  "je_colonial_empire_programmes_header": {
   "en": "Colonial Programmes",

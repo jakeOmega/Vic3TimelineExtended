@@ -2303,6 +2303,478 @@
   "en": "Asset Price Uncertainty",
   "de": "Unsicherheit bei Vermögenspreisen"
  },
+ "banking_event_austerity": {
+  "en": "Government Austerity",
+  "de": "Staatliche Sparpolitik"
+ },
+ "banking_event_austerity_desc": {
+  "en": "Severe spending cuts have been imposed to reassure bond markets, reducing borrowing costs but cutting bureaucratic capacity.",
+  "de": "Drastische Ausgabenkürzungen wurden verhängt, um die Anleihemärkte zu beruhigen; sie senken die Kreditkosten, kürzen aber die bürokratische Kapazität."
+ },
+ "banking_event_bailout_cost": {
+  "en": "International Bailout",
+  "de": "Internationale Rettungsaktion"
+ },
+ "banking_event_bailout_cost_desc": {
+  "en": "Emergency financial assistance to a trading partner.",
+  "de": "Finanzielle Nothilfe für einen Handelspartner."
+ },
+ "banking_event_bailout_goodwill": {
+  "en": "International Financial Goodwill",
+  "de": "Internationales finanzielles Wohlwollen"
+ },
+ "banking_event_bailout_goodwill_desc": {
+  "en": "Our generous financial assistance has earned us diplomatic goodwill.",
+  "de": "Unsere großzügige finanzielle Unterstützung hat uns diplomatisches Wohlwollen eingebracht."
+ },
+ "banking_event_bank_holiday": {
+  "en": "Bank Holiday Disruption",
+  "de": "Störung durch Bankfeiertag"
+ },
+ "banking_event_bank_holiday_desc": {
+  "en": "The temporary closure of all banks is disrupting normal commerce.",
+  "de": "Die vorübergehende Schließung aller Banken stört den normalen Geschäftsverkehr."
+ },
+ "banking_event_cb_independence": {
+  "en": "Central Bank Independence",
+  "de": "Unabhängigkeit der Zentralbank"
+ },
+ "banking_event_cb_independence_desc": {
+  "en": "The government has affirmed the central bank's independence, bolstering market confidence and reducing borrowing costs.",
+  "de": "Die Regierung hat die Unabhängigkeit der Zentralbank bekräftigt, was das Marktvertrauen stärkt und die Kreditkosten senkt."
+ },
+ "banking_event_commercial_paper": {
+  "en": "Commercial Paper Market",
+  "de": "Markt für Commercial Paper"
+ },
+ "banking_event_commercial_paper_desc": {
+  "en": "Short-term business lending instruments are lubricating the wheels of commerce.",
+  "de": "Kurzfristige Kreditinstrumente für Unternehmen schmieren die Räder des Handels."
+ },
+ "banking_event_consolidation_boom": {
+  "en": "Bank Consolidation Boom",
+  "de": "Bankenkonsolidierungsboom"
+ },
+ "banking_event_consolidation_boom_desc": {
+  "en": "The consolidation of the banking sector has created larger, more efficient institutions that are channeling capital more effectively into the services economy.",
+  "de": "Die Konsolidierung des Bankensektors hat größere, effizientere Institute geschaffen, die Kapital wirksamer in die Dienstleistungswirtschaft lenken."
+ },
+ "banking_event_cooperative_growth": {
+  "en": "Cooperative Banking Growth",
+  "de": "Wachstum des Genossenschaftsbankwesens"
+ },
+ "banking_event_cooperative_growth_desc": {
+  "en": "Agricultural cooperatives are providing affordable credit to rural communities.",
+  "de": "Landwirtschaftliche Genossenschaften bieten ländlichen Gemeinden erschwingliche Kredite."
+ },
+ "banking_event_credit_rebalance": {
+  "en": "Credit Rebalancing",
+  "de": "Kreditumschichtung"
+ },
+ "banking_event_credit_rebalance_desc": {
+  "en": "Government policy is redirecting credit from oversaturated industrial sectors toward consumer-facing enterprises.",
+  "de": "Die Regierungspolitik lenkt Kredite von übersättigten Industriesektoren hin zu verbrauchernahen Unternehmen um."
+ },
+ "banking_event_currency_collapse": {
+  "en": "Currency Collapse",
+  "de": "Währungskollaps"
+ },
+ "banking_event_currency_collapse_desc": {
+  "en": "The national currency has lost significant value, disrupting trade and damaging our international [concept_prestige].",
+  "de": "Die Landeswährung hat erheblich an Wert verloren, was den Handel stört und unser internationales [concept_prestige] beschädigt."
+ },
+ "banking_event_default_rural_impact": {
+  "en": "Rural Credit Impact",
+  "de": "Auswirkung auf den ländlichen Kredit"
+ },
+ "banking_event_default_rural_impact_desc": {
+  "en": "Temporary negative impact on agricultural [concept_throughput] due to cooperative shortfall adjustments.",
+  "de": "Vorübergehende negative Auswirkung auf den landwirtschaftlichen [concept_throughput] durch Anpassungen wegen genossenschaftlicher Fehlbeträge."
+ },
+ "banking_event_deposit_guarantee_emergency": {
+  "en": "Emergency Deposit Guarantee",
+  "de": "Einlagengarantie im Notfall"
+ },
+ "banking_event_deposit_guarantee_emergency_desc": {
+  "en": "The government has guaranteed all bank deposits in an emergency measure to halt the bank run, at significant fiscal cost.",
+  "de": "Die Regierung hat als Notfallmaßnahme alle Bankeinlagen garantiert, um den Ansturm auf die Banken zu stoppen, was den Staatshaushalt erheblich belastet."
+ },
+ "banking_event_deposit_insurance": {
+  "en": "Deposit Insurance",
+  "de": "Einlagensicherung"
+ },
+ "banking_event_deposit_insurance_desc": {
+  "en": "Government-backed deposit insurance is bolstering public confidence in the banking system.",
+  "de": "Staatlich abgesicherte Einlagensicherung stärkt das öffentliche Vertrauen in das Bankensystem."
+ },
+ "banking_event_derivatives_crackdown": {
+  "en": "Derivatives Crackdown",
+  "de": "Vorgehen gegen Derivate"
+ },
+ "banking_event_derivatives_crackdown_desc": {
+  "en": "Aggressive prosecution of financial fraud has chilled the derivatives market, reducing services output and raising borrowing costs.",
+  "de": "Die aggressive Verfolgung von Finanzbetrug hat den Derivatemarkt abgekühlt, die Dienstleistungsproduktion verringert und die Kreditkosten erhöht."
+ },
+ "banking_event_dual_mandate": {
+  "en": "Dual Central Bank Mandate",
+  "de": "Doppeltes Mandat der Zentralbank"
+ },
+ "banking_event_dual_mandate_desc": {
+  "en": "The central bank has been restructured with a dual mandate for both price stability and employment, modestly supporting growth.",
+  "de": "Die Zentralbank wurde mit einem doppelten Mandat für Preisstabilität und Beschäftigung neu ausgerichtet, was das Wachstum leicht unterstützt."
+ },
+ "banking_event_emergency_controls": {
+  "en": "Emergency Capital Controls",
+  "de": "Kapitalverkehrskontrollen im Notfall"
+ },
+ "banking_event_emergency_controls_desc": {
+  "en": "Emergency restrictions on capital movement have been imposed to stem a currency crisis, constraining trade.",
+  "de": "Notfallbeschränkungen für den Kapitalverkehr wurden verhängt, um eine Währungskrise einzudämmen, was den Handel beeinträchtigt."
+ },
+ "banking_event_fintech_growth": {
+  "en": "Financial Technology Growth",
+  "de": "Wachstum der Finanztechnologie"
+ },
+ "banking_event_fintech_growth_desc": {
+  "en": "Technology-driven financial firms are making services faster and cheaper.",
+  "de": "Technologiegetriebene Finanzunternehmen machen Dienstleistungen schneller und günstiger."
+ },
+ "banking_event_fx_defense": {
+  "en": "Foreign Exchange Defense",
+  "de": "Verteidigung des Devisenkurses"
+ },
+ "banking_event_fx_defense_desc": {
+  "en": "The central bank is burning through foreign reserves to defend the currency, at significant fiscal cost.",
+  "de": "Die Zentralbank verbraucht ihre Devisenreserven, um die Währung zu verteidigen, was den Staatshaushalt erheblich belastet."
+ },
+ "banking_event_gold_defense": {
+  "en": "Gold Standard Defense",
+  "de": "Verteidigung des Goldstandards"
+ },
+ "banking_event_gold_defense_desc": {
+  "en": "High interest rates are being maintained to defend the gold peg, restricting credit availability.",
+  "de": "Hohe Zinssätze werden aufrechterhalten, um die Goldbindung zu verteidigen, was die Kreditverfügbarkeit einschränkt."
+ },
+ "banking_event_green_bonds": {
+  "en": "Green Bond Program",
+  "de": "Programm für grüne Anleihen"
+ },
+ "banking_event_green_bonds_desc": {
+  "en": "Bonds financing environmental [concept_infrastructure] projects.",
+  "de": "Anleihen zur Finanzierung von Umweltprojekten der [concept_infrastructure]."
+ },
+ "banking_event_harvest_subsidy": {
+  "en": "Harvest Emergency Subsidies",
+  "de": "Ernte-Nothilfesubventionen"
+ },
+ "banking_event_harvest_subsidy_cost": {
+  "en": "Harvest Subsidy Fiscal Cost",
+  "de": "Haushaltskosten der Erntesubvention"
+ },
+ "banking_event_harvest_subsidy_cost_desc": {
+  "en": "Government spending on agricultural emergency subsidies.",
+  "de": "Staatsausgaben für landwirtschaftliche Nothilfesubventionen."
+ },
+ "banking_event_harvest_subsidy_desc": {
+  "en": "Government grain imports and agricultural subsidies are cushioning the rural economy at fiscal cost.",
+  "de": "Staatliche Getreideimporte und Agrarsubventionen federn die ländliche Wirtschaft ab, was den Staatshaushalt belastet."
+ },
+ "banking_event_housing_boom": {
+  "en": "Housing Construction Boom",
+  "de": "Wohnungsbauboom"
+ },
+ "banking_event_housing_boom_desc": {
+  "en": "Easy mortgage credit is driving a massive construction boom.",
+  "de": "Leicht zugängliche Hypothekenkredite treiben einen gewaltigen Bauboom an."
+ },
+ "banking_event_import_and_subsidy": {
+  "en": "Import & Subsidy Program",
+  "de": "Import- und Subventionsprogramm"
+ },
+ "banking_event_import_and_subsidy_cost": {
+  "en": "Import & Subsidy Expenses",
+  "de": "Ausgaben für Import und Subvention"
+ },
+ "banking_event_import_and_subsidy_cost_desc": {
+  "en": "Ongoing fiscal expenses from subsidising food imports and direct purchases to stabilise markets.",
+  "de": "Laufende Haushaltsausgaben für die Subventionierung von Nahrungsmittelimporten und Direktkäufe zur Stabilisierung der Märkte."
+ },
+ "banking_event_import_and_subsidy_desc": {
+  "en": "Temporary import measures and subsidies to cover agricultural shortfalls; lowers domestic agricultural [concept_throughput] while stabilizing supplies.",
+  "de": "Vorübergehende Importmaßnahmen und Subventionen zum Ausgleich landwirtschaftlicher Engpässe; senkt den heimischen landwirtschaftlichen [concept_throughput], während sie die Versorgung stabilisiert."
+ },
+ "banking_event_insurance_reserves": {
+  "en": "Insurance Reserve Requirements",
+  "de": "Rücklagenpflicht für Versicherungen"
+ },
+ "banking_event_insurance_reserves_desc": {
+  "en": "Forced reserve increases in the insurance sector have reduced financial services output.",
+  "de": "Erzwungene Erhöhungen der Rücklagen im Versicherungssektor haben die Produktion von Finanzdienstleistungen verringert."
+ },
+ "banking_event_interbank_guarantee": {
+  "en": "Interbank Guarantee Costs",
+  "de": "Kosten der Interbankengarantie"
+ },
+ "banking_event_interbank_guarantee_desc": {
+  "en": "Government guarantees of interbank [Concept('concept_obligation', 'obligations')].",
+  "de": "Staatliche Garantien für Interbank-[Concept('concept_obligation', 'Verpflichtungen')]."
+ },
+ "banking_event_investigation_chill": {
+  "en": "Financial Investigation Chill",
+  "de": "Abschreckung durch Finanzermittlung"
+ },
+ "banking_event_investigation_chill_desc": {
+  "en": "An official investigation into asset price valuations has spooked the financial sector, dampening services output as banks and investors adopt a wait-and-see posture.",
+  "de": "Eine offizielle Untersuchung der Vermögensbewertungen hat den Finanzsektor verschreckt und dämpft die Dienstleistungsproduktion, da Banken und Investoren eine abwartende Haltung einnehmen."
+ },
+ "banking_event_joint_stock_boom": {
+  "en": "Joint-Stock Company Boom",
+  "de": "Boom der Aktiengesellschaften"
+ },
+ "banking_event_joint_stock_boom_desc": {
+  "en": "A proliferation of joint-stock companies is fueling industrial investment.",
+  "de": "Eine Zunahme von Aktiengesellschaften befeuert industrielle Investitionen."
+ },
+ "banking_event_managed_devaluation": {
+  "en": "Managed Currency Devaluation",
+  "de": "Gesteuerte Währungsabwertung"
+ },
+ "banking_event_managed_devaluation_desc": {
+  "en": "A controlled devaluation has cheapened exports, boosting manufacturing at the cost of international credibility.",
+  "de": "Eine kontrollierte Abwertung hat Exporte verbilligt und die Fertigung angekurbelt, auf Kosten der internationalen Glaubwürdigkeit."
+ },
+ "banking_event_mbs_boom": {
+  "en": "Mortgage Securities Boom",
+  "de": "Boom der Hypothekenpapiere"
+ },
+ "banking_event_mbs_boom_desc": {
+  "en": "Mortgage-backed securities are fueling construction and financial services.",
+  "de": "Hypothekenbesicherte Wertpapiere befeuern das Baugewerbe und die Finanzdienstleistungen."
+ },
+ "banking_event_merchant_prosperity": {
+  "en": "Banking Sector Prosperity",
+  "de": "Wohlstand des Bankensektors"
+ },
+ "banking_event_merchant_prosperity_desc": {
+  "en": "Strong banking sector profits are boosting confidence in financial services.",
+  "de": "Starke Gewinne des Bankensektors stärken das Vertrauen in die Finanzdienstleistungen."
+ },
+ "banking_event_microfinance": {
+  "en": "Microfinance Growth",
+  "de": "Wachstum der Mikrofinanzierung"
+ },
+ "banking_event_microfinance_cost": {
+  "en": "Microfinance Fiscal Cost",
+  "de": "Haushaltskosten der Mikrofinanzierung"
+ },
+ "banking_event_microfinance_cost_desc": {
+  "en": "Government spending on microfinance programs.",
+  "de": "Staatsausgaben für Mikrofinanzierungsprogramme."
+ },
+ "banking_event_microfinance_desc": {
+  "en": "Small loans to entrepreneurs are stimulating grassroots economic activity.",
+  "de": "Kleinkredite an Unternehmer beleben die wirtschaftliche Aktivität an der Basis."
+ },
+ "banking_event_new_instrument_boom": {
+  "en": "Financial Innovation Boom",
+  "de": "Boom der Finanzinnovation"
+ },
+ "banking_event_new_instrument_boom_desc": {
+  "en": "A novel financial instrument is unlocking new channels of investment, boosting manufacturing [concept_throughput] as capital flows more freely to productive enterprise.",
+  "de": "Ein neuartiges Finanzinstrument erschließt neue Investitionskanäle und steigert den [concept_throughput] der Fertigung, da Kapital freier in produktive Unternehmen fließt."
+ },
+ "banking_event_partial_default": {
+  "en": "Default Fears",
+  "de": "Zahlungsausfallängste"
+ },
+ "banking_event_partial_default_desc": {
+  "en": "The government has shown that it may not honour all of its obligations. Lenders are charging for the risk, and its standing abroad has suffered.",
+  "de": "Die Regierung hat gezeigt, dass sie möglicherweise nicht alle ihre Verpflichtungen erfüllen kann. Kreditgeber lassen sich das Risiko bezahlen, und ihr Ansehen im Ausland hat gelitten."
+ },
+ "banking_event_pension_stability": {
+  "en": "Pension Fund Stability",
+  "de": "Stabilität der Pensionsfonds"
+ },
+ "banking_event_pension_stability_desc": {
+  "en": "Growing pension funds provide a stable, long-term source of capital.",
+  "de": "Wachsende Pensionsfonds bieten eine stabile, langfristige Kapitalquelle."
+ },
+ "banking_event_predatory_crackdown": {
+  "en": "Lending Practice Reforms",
+  "de": "Reform der Kreditvergabepraxis"
+ },
+ "banking_event_predatory_crackdown_desc": {
+  "en": "Crackdown on predatory lending is temporarily constraining the financial sector.",
+  "de": "Das Vorgehen gegen Wucherkredite schränkt den Finanzsektor vorübergehend ein."
+ },
+ "banking_event_provincial_exchange": {
+  "en": "Provincial Exchange Growth",
+  "de": "Wachstum der Provinzbörsen"
+ },
+ "banking_event_provincial_exchange_desc": {
+  "en": "New provincial stock exchanges are expanding access to capital markets.",
+  "de": "Neue Provinzbörsen erweitern den Zugang zu den Kapitalmärkten."
+ },
+ "banking_event_qe_stimulus": {
+  "en": "Monetary Stimulus",
+  "de": "Geldpolitisches Stimulusprogramm"
+ },
+ "banking_event_qe_stimulus_desc": {
+  "en": "Central bank bond-buying program is reducing borrowing costs.",
+  "de": "Das Anleihekaufprogramm der Zentralbank senkt die Kreditkosten."
+ },
+ "banking_event_quiet_rescue": {
+  "en": "Quiet Financial Rescue",
+  "de": "Stille Finanzrettung"
+ },
+ "banking_event_quiet_rescue_desc": {
+  "en": "The government has quietly arranged a bailout of a failing financial institution, at considerable fiscal cost.",
+  "de": "Die Regierung hat still und leise die Rettung eines angeschlagenen Finanzinstituts eingefädelt, was den Staatshaushalt erheblich belastet."
+ },
+ "banking_event_railway_fever": {
+  "en": "Railway Investment Fever",
+  "de": "Eisenbahn-Investitionsfieber"
+ },
+ "banking_event_railway_fever_desc": {
+  "en": "A wave of railway investment is channeling capital into [concept_infrastructure] expansion.",
+  "de": "Eine Welle von Eisenbahninvestitionen lenkt Kapital in den Ausbau der [concept_infrastructure]."
+ },
+ "banking_event_rating_crackdown": {
+  "en": "Credit Rating Reforms",
+  "de": "Reform der Kreditbewertung"
+ },
+ "banking_event_rating_crackdown_desc": {
+  "en": "Overhaul of the credit rating system is temporarily disrupting financial markets.",
+  "de": "Die Überarbeitung des Kreditbewertungssystems stört vorübergehend die Finanzmärkte."
+ },
+ "banking_event_rural_credit": {
+  "en": "Emergency Rural Credit",
+  "de": "Ländlicher Notkredit"
+ },
+ "banking_event_rural_credit_cost": {
+  "en": "Rural Credit Fiscal Cost",
+  "de": "Haushaltskosten des ländlichen Kredits"
+ },
+ "banking_event_rural_credit_cost_desc": {
+  "en": "Government spending on emergency rural credit programs.",
+  "de": "Staatsausgaben für ländliche Notkreditprogramme."
+ },
+ "banking_event_rural_credit_desc": {
+  "en": "Government-backed emergency lending is propping up the rural credit system at fiscal cost.",
+  "de": "Staatlich abgesicherte Notkredite stützen das ländliche Kreditsystem, was den Staatshaushalt belastet."
+ },
+ "banking_event_scandal_fallout": {
+  "en": "Banking Scandal Fallout",
+  "de": "Nachwirkungen eines Bankenskandals"
+ },
+ "banking_event_scandal_fallout_desc": {
+  "en": "A banking scandal has shaken confidence in financial institutions.",
+  "de": "Ein Bankenskandal hat das Vertrauen in die Finanzinstitute erschüttert."
+ },
+ "banking_event_selective_bailout": {
+  "en": "Selective Bank Bailout",
+  "de": "Selektive Bankenrettung"
+ },
+ "banking_event_selective_bailout_cost": {
+  "en": "Bailout Fiscal Cost",
+  "de": "Haushaltskosten der Rettungsaktion"
+ },
+ "banking_event_selective_bailout_cost_desc": {
+  "en": "Government spending on the selective bank bailout.",
+  "de": "Staatsausgaben für die selektive Bankenrettung."
+ },
+ "banking_event_selective_bailout_desc": {
+  "en": "The government has bailed out key banking institutions, stabilizing the system but creating moral hazard.",
+  "de": "Die Regierung hat zentrale Bankinstitute gerettet, was das System stabilisiert, aber moralisches Risiko schafft."
+ },
+ "banking_event_shadow_regulation": {
+  "en": "Shadow Banking Regulation",
+  "de": "Regulierung des Schattenbankwesens"
+ },
+ "banking_event_shadow_regulation_desc": {
+  "en": "Bringing shadow banks under regulation has reduced systemic risk but contracted credit availability and financial services output.",
+  "de": "Die Regulierung der Schattenbanken hat das Systemrisiko verringert, aber die Kreditverfügbarkeit und die Produktion von Finanzdienstleistungen eingeschränkt."
+ },
+ "banking_event_sovereign_wealth_fund": {
+  "en": "Sovereign Wealth Fund",
+  "de": "Staatsfonds"
+ },
+ "banking_event_sovereign_wealth_fund_cost": {
+  "en": "Sovereign Wealth Fund Cost",
+  "de": "Kosten des Staatsfonds"
+ },
+ "banking_event_sovereign_wealth_fund_cost_desc": {
+  "en": "Government contributions to the sovereign wealth fund.",
+  "de": "Staatliche Einzahlungen in den Staatsfonds."
+ },
+ "banking_event_sovereign_wealth_fund_desc": {
+  "en": "A state investment fund is building a reserve against future downturns, enhancing national [concept_prestige].",
+  "de": "Ein staatlicher Investitionsfonds baut eine Rücklage gegen künftige Abschwünge auf und steigert das nationale [concept_prestige]."
+ },
+ "banking_event_student_debt_relief": {
+  "en": "Student Debt Relief",
+  "de": "Entlastung bei Studienschulden"
+ },
+ "banking_event_student_debt_relief_cost": {
+  "en": "Student Debt Relief Costs",
+  "de": "Kosten der Entlastung bei Studienschulden"
+ },
+ "banking_event_student_debt_relief_cost_desc": {
+  "en": "Government spending on education debt relief.",
+  "de": "Staatsausgaben für die Entlastung bei Bildungsschulden."
+ },
+ "banking_event_student_debt_relief_desc": {
+  "en": "Programs to relieve the burden of education debt.",
+  "de": "Programme zur Entlastung der Bildungsschulden."
+ },
+ "banking_event_telegraph_settlement": {
+  "en": "Modern Financial Settlements",
+  "de": "Moderne Finanzabwicklungen"
+ },
+ "banking_event_telegraph_settlement_desc": {
+  "en": "Rapid interbank settlements are boosting the efficiency of financial services.",
+  "de": "Schnelle Interbankenabwicklungen steigern die Effizienz der Finanzdienstleistungen."
+ },
+ "banking_event_trade_bills": {
+  "en": "Trade Bill Market",
+  "de": "Markt für Handelswechsel"
+ },
+ "banking_event_trade_bills_desc": {
+  "en": "Refined trade bills are expanding the volume and reach of commerce.",
+  "de": "Verfeinerte Handelswechsel erweitern das Volumen und die Reichweite des Handels."
+ },
+ "banking_event_trust_collapse": {
+  "en": "Trust Company Collapse",
+  "de": "Zusammenbruch einer Trust-Gesellschaft"
+ },
+ "banking_event_trust_collapse_desc": {
+  "en": "The failure of a major trust company has damaged confidence in financial institutions.",
+  "de": "Der Zusammenbruch einer großen Trust-Gesellschaft hat das Vertrauen in die Finanzinstitute beschädigt."
+ },
+ "banking_event_venture_boom": {
+  "en": "Venture Capital Boom",
+  "de": "Wagniskapitalboom"
+ },
+ "banking_event_venture_boom_desc": {
+  "en": "Venture capital funds are driving innovation and industrial growth.",
+  "de": "Wagniskapitalfonds treiben Innovation und industrielles Wachstum an."
+ },
+ "colonial_stability_negative_event": {
+  "en": "Colonial Crisis",
+  "de": "Kolonialkrise"
+ },
+ "colonial_stability_negative_event_desc": {
+  "en": "Recent events have destabilized our colonial holdings.",
+  "de": "Jüngste Ereignisse haben unsere Kolonialbesitzungen destabilisiert."
+ },
+ "colonial_stability_positive_event": {
+  "en": "Positive Colonial Development",
+  "de": "Positive koloniale Entwicklung"
+ },
+ "colonial_stability_positive_event_desc": {
+  "en": "Recent events have improved the stability of our colonial holdings.",
+  "de": "Jüngste Ereignisse haben die Stabilität unserer Kolonialbesitzungen verbessert."
+ },
  "covert_warfare.1.a": {
   "en": "Recall our operatives and apologize through back-channels",
   "de": "Unsere Agenten abziehen und über Hinterkanäle entschuldigen"
@@ -6175,6 +6647,62 @@
   "en": "The Pirate's Dilemma",
   "de": "Das Dilemma des Piraten"
  },
+ "forced_law_through_event": {
+  "en": "Authority Spent Bypassing Procedure",
+  "de": "Autorität für die Umgehung des Verfahrens aufgewendet"
+ },
+ "forced_law_through_event_consequences_large": {
+  "en": "Political Elite Bypassed",
+  "de": "Politische Elite übergangen"
+ },
+ "forced_law_through_event_consequences_large_desc": {
+  "en": "The regime forced a law through the legislature without the consent of the political class. [concept_legitimacy] has cratered, and opposition movements are radicalizing.",
+  "de": "Das Regime hat ein Gesetz ohne die Zustimmung der politischen Klasse durch die Legislative gepeitscht. Die [concept_legitimacy] ist eingebrochen, und oppositionelle Bewegungen radikalisieren sich."
+ },
+ "forced_law_through_event_consequences_medium": {
+  "en": "Sidelined Political Class",
+  "de": "Ausgebootete politische Klasse"
+ },
+ "forced_law_through_event_consequences_medium_desc": {
+  "en": "The political elite were bypassed when this law was pushed through. Movements that disapproved have new grievances to organize around.",
+  "de": "Die politische Elite wurde übergangen, als dieses Gesetz durchgesetzt wurde. Bewegungen, die dagegen waren, haben neue Beschwerden, um die sie sich organisieren können."
+ },
+ "forced_law_through_event_consequences_small": {
+  "en": "Elite Grumbling",
+  "de": "Murren der Elite"
+ },
+ "forced_law_through_event_consequences_small_desc": {
+  "en": "Opposition [Concept('concept_interest_group', 'interest groups')] resent being bypassed.",
+  "de": "Oppositionelle [Concept('concept_interest_group', 'Interessengruppen')] nehmen es übel, übergangen zu werden."
+ },
+ "forced_law_through_event_desc": {
+  "en": "Authority committed to ramming a law through over the political elite's objections.",
+  "de": "Autorität aufgewendet, um ein Gesetz gegen den Widerstand der politischen Elite durchzupeitschen."
+ },
+ "forced_law_through_event_enactment_large": {
+  "en": "Legislature Overridden",
+  "de": "Legislative überstimmt"
+ },
+ "forced_law_through_event_enactment_large_desc": {
+  "en": "The regime is forcing this law through wholesale, brushing every legislative hurdle aside via its [concept_legislative_override_capacity].",
+  "de": "Das Regime setzt dieses Gesetz vollständig durch und wischt mithilfe seiner [concept_legislative_override_capacity] jede legislative Hürde beiseite."
+ },
+ "forced_law_through_event_enactment_medium": {
+  "en": "Procedure Sidelined",
+  "de": "Verfahren übergangen"
+ },
+ "forced_law_through_event_enactment_medium_desc": {
+  "en": "The regime is decisively pushing this law forward, bypassing the usual political mediation through its [concept_legislative_override_capacity].",
+  "de": "Das Regime treibt dieses Gesetz entschlossen voran und umgeht mithilfe seiner [concept_legislative_override_capacity] die übliche politische Vermittlung."
+ },
+ "forced_law_through_event_enactment_small": {
+  "en": "Light [Concept('concept_legislative_override_capacity','Legislative Override')]",
+  "de": "Leichte [Concept('concept_legislative_override_capacity','Legislative Durchsetzung')]"
+ },
+ "forced_law_through_event_enactment_small_desc": {
+  "en": "The regime is greasing the wheels to expedite this law's passage.",
+  "de": "Das Regime schmiert die Räder, um die Verabschiedung dieses Gesetzes zu beschleunigen."
+ },
  "formation_te.1.a": {
   "en": "Our claims extend to all of the subcontinent.",
   "de": "Unsere Ansprüche erstrecken sich auf den gesamten Subkontinent."
@@ -6230,6 +6758,14 @@
  "formation_te.2.t": {
   "en": "Merdeka — The Free Archipelago",
   "de": "Merdeka — Der freie Archipel"
+ },
+ "heir_education_event_cooldown": {
+  "en": "Education Event Cooldown",
+  "de": "Abklingzeit für Erziehungsereignisse"
+ },
+ "heir_education_event_cooldown_desc": {
+  "en": "The [concept_heir]'s education continues without interruption for the time being.",
+  "de": "Die Erziehung des [concept_heir] wird vorerst ohne Unterbrechung fortgesetzt."
  },
  "heir_education_events.1.a": {
   "en": "Encourage them to excel!",
@@ -11250,6 +11786,14 @@
  "nuclear_custody.8.t": {
   "en": "Our Offer to Secure Their Arsenal",
   "de": "Unser Angebot, ihr Arsenal zu sichern"
+ },
+ "nuclear_event_prestige": {
+  "en": "Nuclear Achievement",
+  "de": "Nukleare Errungenschaft"
+ },
+ "nuclear_event_prestige_desc": {
+  "en": "This country's nuclear capabilities have affected its standing in the eyes of the world.",
+  "de": "Die nuklearen Fähigkeiten dieses Landes haben sein Ansehen in den Augen der Welt beeinflusst."
  },
  "nuclear_incident.1.a": {
   "en": "Trust the duty officer. We wait for a second confirmation.",
@@ -20566,5 +21110,925 @@
  "un_vote.3.t": {
   "en": "General Assembly Vote Results",
   "de": "Ergebnisse der Abstimmung der Generalversammlung"
+ },
+ "wonder_events.1.a": {
+  "en": "Let the world know what we've achieved.",
+  "de": "Lasst die Welt wissen, was wir erreicht haben."
+ },
+ "wonder_events.1.b": {
+  "en": "The work continues. We rest when it's done.",
+  "de": "Die Arbeit geht weiter. Wir ruhen uns aus, wenn sie fertig ist."
+ },
+ "wonder_events.1.d": {
+  "en": "Engineers report that the space elevator's tether, spooling down from the counterweight station in geostationary orbit, has entered the lower atmosphere and is approaching the ground anchor site. The [ROOT.GetCountry.GetAdjectiveNoFormatting] space program is the talk of the world's scientific community.",
+  "de": "Ingenieure melden, dass das Kabel des Weltraumlifts, das von der Gegengewichtsstation im geostationären Orbit herabgelassen wird, in die untere Atmosphäre eingetreten ist und sich der Bodenverankerung nähert. Das [ROOT.GetCountry.GetAdjectiveNoFormatting]e Weltraumprogramm ist das Gesprächsthema der wissenschaftlichen Welt."
+ },
+ "wonder_events.1.f": {
+  "en": "\\\"Do you see it? That thread coming down from the sky, so thin you can barely make it out?\\\"\\n\\n\\\"I see it. The first real ladder to the stars.\\\"\\n\\n\\\"We'll remember this day. The day gravity became optional.\\\"",
+  "de": "\\\"Siehst du es? Dieser Faden, der vom Himmel herabkommt, so dünn, dass man ihn kaum erkennen kann?\\\"\\n\\n\\\"Ich sehe es. Die erste echte Leiter zu den Sternen.\\\"\\n\\n\\\"Wir werden uns an diesen Tag erinnern. Den Tag, an dem die Schwerkraft optional wurde.\\\""
+ },
+ "wonder_events.1.t": {
+  "en": "The Tether Descends",
+  "de": "Das Kabel senkt sich"
+ },
+ "wonder_events.10.a": {
+  "en": "This is a day our nation will never forget.",
+  "de": "Das ist ein Tag, den unsere Nation nie vergessen wird."
+ },
+ "wonder_events.10.b": {
+  "en": "Beautiful, but the real work starts now.",
+  "de": "Wunderschön, aber die eigentliche Arbeit beginnt jetzt."
+ },
+ "wonder_events.10.d": {
+  "en": "The first orbital solar collector has completed alignment and begun transmitting power via microwave beam to the ground rectenna. Instruments confirm a steady output, and the [ROOT.GetCountry.GetAdjectiveNoFormatting] solar collector program is officially operational.",
+  "de": "Der erste orbitale Sonnenkollektor hat die Ausrichtung abgeschlossen und überträgt nun Energie per Mikrowellenstrahl an die Bodenrectenna. Instrumente bestätigen eine stabile Leistung, und das [ROOT.GetCountry.GetAdjectiveNoFormatting]e Sonnenkollektorprogramm ist offiziell einsatzbereit."
+ },
+ "wonder_events.10.f": {
+  "en": "\\\"The rectenna is live. Gigawatts, pouring in from orbit: invisible, silent, and continuous. You can't see the beam, but you can see the lights coming on across the grid.\\\"\\n\\n\\\"It doesn't look like much.\\\"\\n\\n\\\"That's the beauty of it. The most powerful energy source in history, and it's invisible.\\\"",
+  "de": "\\\"Die Rectenna ist aktiv. Gigawatt strömen aus dem Orbit herein: unsichtbar, lautlos und ununterbrochen. Man sieht den Strahl nicht, aber man sieht, wie im ganzen Netz die Lichter angehen.\\\"\\n\\n\\\"Sieht nicht nach viel aus.\\\"\\n\\n\\\"Das ist gerade das Schöne daran. Die stärkste Energiequelle der Geschichte, und sie ist unsichtbar.\\\""
+ },
+ "wonder_events.10.t": {
+  "en": "First Light",
+  "de": "Erstes Licht"
+ },
+ "wonder_events.11.a": {
+  "en": "Compensate the farmers and implement new safeguards.",
+  "de": "Die Bauern entschädigen und neue Schutzmaßnahmen einführen."
+ },
+ "wonder_events.11.b": {
+  "en": "Issue a statement. Downplay the risks.",
+  "de": "Eine Erklärung abgeben. Die Risiken herunterspielen."
+ },
+ "wonder_events.11.d": {
+  "en": "A calibration error in the orbital collector's phased array causes the microwave beam to drift off the rectenna, irradiating several square kilometers of surrounding countryside. Prolonged exposure damages crops and disrupts electronics across the affected zone. Public alarm is considerable.",
+  "de": "Ein Kalibrierungsfehler im Phasenarray des orbitalen Kollektors lässt den Mikrowellenstrahl von der Rectenna abdriften und mehrere Quadratkilometer des umliegenden Landes bestrahlen. Die anhaltende Einwirkung schädigt Ernten und stört Elektronik in der gesamten betroffenen Zone. Die öffentliche Beunruhigung ist erheblich."
+ },
+ "wonder_events.11.f": {
+  "en": "\\\"The beam drifted three degrees off the rectenna. Three degrees! Every electronic device in the zone is dead, and the crops are cooked from microwave exposure.\\\"\\n\\n\\\"Could it have hit a city?\\\"\\n\\n\\\"If the error had been in the other direction? Absolutely.\\\"",
+  "de": "\\\"Der Strahl ist drei Grad von der Rectenna abgedriftet. Drei Grad! Jedes elektronische Gerät in der Zone ist hin, und die Ernten sind durch die Mikrowellenstrahlung verkocht.\\\"\\n\\n\\\"Hätte er eine Stadt treffen können?\\\"\\n\\n\\\"Wenn der Fehler in die andere Richtung gegangen wäre? Absolut.\\\""
+ },
+ "wonder_events.11.t": {
+  "en": "Beam Misalignment",
+  "de": "Fehlausrichtung des Strahls"
+ },
+ "wonder_events.12.a": {
+  "en": "Invest in electrification of heavy industry.",
+  "de": "In die Elektrifizierung der Schwerindustrie investieren."
+ },
+ "wonder_events.12.b": {
+  "en": "Export the surplus through our trade networks.",
+  "de": "Den Überschuss über unsere Handelsnetze exportieren."
+ },
+ "wonder_events.12.d": {
+  "en": "The orbital solar collector is producing power far in excess of current demand. Electricity prices have plummeted, making energy-intensive industries suddenly viable at scales previously unimaginable.",
+  "de": "Der orbitale Sonnenkollektor erzeugt weit mehr Energie, als derzeit benötigt wird. Die Strompreise sind eingebrochen, wodurch energieintensive Industrien plötzlich in einem zuvor unvorstellbaren Maßstab rentabel werden."
+ },
+ "wonder_events.12.f": {
+  "en": "\\\"We're generating more power than we can use. Factories that were marginal are now printing money. The smelters alone have tripled output.\\\"\\n\\n\\\"And this is only one collector.\\\"",
+  "de": "\\\"Wir erzeugen mehr Energie, als wir verbrauchen können. Fabriken, die kaum rentabel waren, drucken jetzt Geld. Allein die Hütten haben ihre Produktion verdreifacht.\\\"\\n\\n\\\"Und das ist erst ein einziger Kollektor.\\\""
+ },
+ "wonder_events.12.t": {
+  "en": "The Power Surplus",
+  "de": "Der Energieüberschuss"
+ },
+ "wonder_events.13.a": {
+  "en": "Subsidize energy costs for all citizens.",
+  "de": "Die Energiekosten für alle Bürger subventionieren."
+ },
+ "wonder_events.13.b": {
+  "en": "Pour the surplus into research.",
+  "de": "Den Überschuss in die Forschung stecken."
+ },
+ "wonder_events.13.d": {
+  "en": "With the solar collector array at full capacity, the nation effectively has access to unlimited clean energy. The implications extend far beyond mere electricity; this is a fundamental transformation of what civilization can achieve.",
+  "de": "Mit dem Sonnenkollektor-Array auf voller Kapazität hat die Nation praktisch Zugang zu unbegrenzter sauberer Energie. Die Auswirkungen reichen weit über bloßen Strom hinaus; dies ist ein grundlegender Wandel dessen, was die Zivilisation zu leisten vermag."
+ },
+ "wonder_events.13.f": {
+  "en": "\\\"Do you know what unlimited energy means? Unlimited fresh water. Unlimited agriculture. Unlimited manufacturing. The only constraint on human ambition is human imagination.\\\"\\n\\n\\\"And the other nations?\\\"\\n\\n\\\"They'll either buy our power or build their own.\\\"",
+  "de": "\\\"Wisst ihr, was unbegrenzte Energie bedeutet? Unbegrenztes Frischwasser. Unbegrenzte Landwirtschaft. Unbegrenzte Fertigung. Die einzige Grenze menschlichen Strebens ist die menschliche Vorstellungskraft.\\\"\\n\\n\\\"Und die anderen Nationen?\\\"\\n\\n\\\"Sie werden entweder unseren Strom kaufen oder ihren eigenen bauen.\\\""
+ },
+ "wonder_events.13.t": {
+  "en": "The End of Night",
+  "de": "Das Ende der Nacht"
+ },
+ "wonder_events.14.a": {
+  "en": "Emergency shutdown. We cannot risk the array.",
+  "de": "Notabschaltung. Wir können das Array nicht riskieren."
+ },
+ "wonder_events.14.b": {
+  "en": "The shielding will hold. Keep the collectors online.",
+  "de": "Die Abschirmung wird halten. Die Kollektoren am Netz lassen."
+ },
+ "wonder_events.14.d": {
+  "en": "Astronomers detect a massive coronal mass ejection heading directly for the orbital collector array. The electromagnetic pulse could damage the collectors' sensitive electronics if they remain operational.",
+  "de": "Astronomen entdecken einen gewaltigen koronalen Massenauswurf, der direkt auf das orbitale Kollektor-Array zusteuert. Der elektromagnetische Puls könnte die empfindliche Elektronik der Kollektoren beschädigen, wenn sie in Betrieb bleiben."
+ },
+ "wonder_events.14.f": {
+  "en": "\\\"The sun giveth and the sun taketh away. This CME could fry every circuit board in the array if we don't shut down.\\\"\\n\\n\\\"And if we do shut down?\\\"\\n\\n\\\"Half the continent loses power for a month.\\\"",
+  "de": "\\\"Die Sonne gibt, und die Sonne nimmt. Dieser CME könnte jede Platine im Array durchbrennen lassen, wenn wir nicht abschalten.\\\"\\n\\n\\\"Und wenn wir abschalten?\\\"\\n\\n\\\"Dann verliert ein halber Kontinent für einen Monat den Strom.\\\""
+ },
+ "wonder_events.14.t": {
+  "en": "Solar Storm Warning",
+  "de": "Warnung vor Sonnensturm"
+ },
+ "wonder_events.15.a": {
+  "en": "Access to our technology is access to our strength.",
+  "de": "Zugang zu unserer Technologie ist Zugang zu unserer Stärke."
+ },
+ "wonder_events.15.b": {
+  "en": "Offer licensing agreements. Control through cooperation.",
+  "de": "Lizenzabkommen anbieten. Kontrolle durch Kooperation."
+ },
+ "wonder_events.15.d": {
+  "en": "International voices accuse [ROOT.GetCountry.GetName] of monopolizing orbital energy, arguing that sunlight in space belongs to all humanity. Several nations call for the solar collectors to be placed under international oversight.",
+  "de": "Internationale Stimmen beschuldigen [ROOT.GetCountry.GetAltName('AKK')], die orbitale Energie zu monopolisieren, und argumentieren, dass Sonnenlicht im All der gesamten Menschheit gehöre. Mehrere Nationen fordern, die Sonnenkollektoren unter internationale Aufsicht zu stellen."
+ },
+ "wonder_events.15.f": {
+  "en": "\\\"They want our collectors. Publicly they call it fair access. Privately they call it the energy weapon.\\\"\\n\\n\\\"Are they wrong? We could shut off power to half the world's receivers if we chose.\\\"\\n\\n\\\"Which is precisely why we won't give it up.\\\"",
+  "de": "\\\"Sie wollen unsere Kollektoren. Öffentlich nennen sie es fairen Zugang. Privat nennen sie es die Energiewaffe.\\\"\\n\\n\\\"Liegen sie falsch? Wir könnten die halbe Welt vom Strom abschneiden, wenn wir wollten.\\\"\\n\\n\\\"Genau deshalb geben wir es nicht her.\\\""
+ },
+ "wonder_events.15.t": {
+  "en": "The Sunlight Monopoly",
+  "de": "Das Sonnenlichtmonopol"
+ },
+ "wonder_events.2.a": {
+  "en": "Halt construction until we understand the problem.",
+  "de": "Den Bau stoppen, bis wir das Problem verstehen."
+ },
+ "wonder_events.2.b": {
+  "en": "Reinforce the weak points and press on.",
+  "de": "Die Schwachstellen verstärken und weitermachen."
+ },
+ "wonder_events.2.d": {
+  "en": "Monitoring stations detect alarming oscillations in the space elevator's tether during construction. Engineers warn that resonance patterns could lead to catastrophic failure if not addressed immediately.",
+  "de": "Überwachungsstationen registrieren beunruhigende Schwingungen im Kabel des Weltraumlifts während der Bauphase. Ingenieure warnen, dass Resonanzmuster zu einem katastrophalen Versagen führen könnten, wenn nicht sofort gehandelt wird."
+ },
+ "wonder_events.2.f": {
+  "en": "\\\"The readings are off the charts. The tether is singing, and not in a good way.\\\"\\n\\n\\\"How long before it becomes critical?\\\"\\n\\n\\\"If we're lucky? Weeks. If we're not, we find out the hard way.\\\"",
+  "de": "\\\"Die Messwerte sprengen jede Skala. Das Kabel singt, und nicht auf eine gute Art.\\\"\\n\\n\\\"Wie lange, bis es kritisch wird?\\\"\\n\\n\\\"Wenn wir Glück haben? Wochen. Wenn nicht, erfahren wir es auf die harte Tour.\\\""
+ },
+ "wonder_events.2.t": {
+  "en": "Structural Anomaly",
+  "de": "Strukturanomalie"
+ },
+ "wonder_events.20.a": {
+  "en": "Accelerate the program. Finish before they react.",
+  "de": "Das Programm beschleunigen. Fertigstellen, bevor sie reagieren."
+ },
+ "wonder_events.20.b": {
+  "en": "Reassure the international community.",
+  "de": "Die internationale Gemeinschaft beruhigen."
+ },
+ "wonder_events.20.d": {
+  "en": "Intelligence reports indicate that rival nations are deeply alarmed by the orbital weapons platform [concept_under_construction]. Military attaches have been recalled, and defensive postures are shifting worldwide.",
+  "de": "Geheimdienstberichte deuten darauf hin, dass rivalisierende Nationen durch die orbitale Waffenplattform [concept_under_construction] zutiefst alarmiert sind. Militärattachés wurden zurückbeordert, und weltweit verschieben sich die Verteidigungshaltungen."
+ },
+ "wonder_events.20.f": {
+  "en": "\\\"They're watching us build it. Every spy satellite, every signals intercept. They know what this is.\\\"\\n\\n\\\"Good. Let them watch. By the time it's operational, the balance of power will have shifted permanently.\\\"\\n\\n\\\"Or they try to stop us before it's finished.\\\"\\n\\n\\\"That's why we have the Navy.\\\"",
+  "de": "\\\"Sie beobachten, wie wir es bauen. Jeder Spionagesatellit, jede abgefangene Funkverbindung. Sie wissen, was das ist.\\\"\\n\\n\\\"Gut. Sollen sie zusehen. Bis es einsatzbereit ist, wird sich das Kräftegleichgewicht dauerhaft verschoben haben.\\\"\\n\\n\\\"Oder sie versuchen, uns zu stoppen, bevor es fertig ist.\\\"\\n\\n\\\"Dafür haben wir die Marine.\\\""
+ },
+ "wonder_events.20.t": {
+  "en": "The High Ground",
+  "de": "Die Kommandohöhe"
+ },
+ "wonder_events.21.a": {
+  "en": "Full spectrum dominance. This is ours alone.",
+  "de": "Umfassende Dominanz. Das gehört uns allein."
+ },
+ "wonder_events.21.b": {
+  "en": "Share selective intelligence with allies.",
+  "de": "Ausgewählte Erkenntnisse mit Verbündeten teilen."
+ },
+ "wonder_events.21.d": {
+  "en": "The orbital battlestation's sensor suite can track individual vehicles and resolve meter-scale objects across the globe. Every major military movement on Earth is visible in real time. The intelligence advantage is decisive.",
+  "de": "Die Sensorik der orbitalen Kampfstation kann einzelne Fahrzeuge verfolgen und Objekte im Meterbereich weltweit auflösen. Jede größere militärische Bewegung auf der Erde ist in Echtzeit sichtbar. Der nachrichtendienstliche Vorteil ist entscheidend."
+ },
+ "wonder_events.21.f": {
+  "en": "\\\"We can see their armor columns marshaling. We can track every warship in every ocean. We can watch their missile convoys move in real time.\\\"\\n\\n\\\"And they know we can see them?\\\"\\n\\n\\\"That's the best part. They know, and they can't do a thing about it.\\\"",
+  "de": "\\\"Wir sehen, wie sich ihre Panzerkolonnen sammeln. Wir verfolgen jedes Kriegsschiff auf jedem Ozean. Wir beobachten ihre Raketenkonvois in Echtzeit.\\\"\\n\\n\\\"Und sie wissen, dass wir sie sehen können?\\\"\\n\\n\\\"Das ist das Beste daran. Sie wissen es, und sie können nichts dagegen tun.\\\""
+ },
+ "wonder_events.21.t": {
+  "en": "Eye of God",
+  "de": "Auge Gottes"
+ },
+ "wonder_events.22.a": {
+  "en": "Strength invites no challenge.",
+  "de": "Stärke fordert niemanden heraus."
+ },
+ "wonder_events.22.b": {
+  "en": "Negotiate from this position of strength.",
+  "de": "Aus dieser Position der Stärke verhandeln."
+ },
+ "wonder_events.22.d": {
+  "en": "The orbital battlestation has fundamentally altered the global strategic calculus. No conventional force can challenge a nation with orbital fire support, and rival powers are beginning to seek diplomatic accommodation.",
+  "de": "Die orbitale Kampfstation hat das globale strategische Kalkül grundlegend verändert. Keine konventionelle Streitmacht kann eine Nation mit orbitaler Feuerunterstützung herausfordern, und rivalisierende Mächte beginnen, diplomatische Verständigung zu suchen."
+ },
+ "wonder_events.22.f": {
+  "en": "\\\"Three border disputes settled this month. Two territorial claims abandoned. One unilateral ceasefire.\\\"\\n\\n\\\"All without firing a shot.\\\"\\n\\n\\\"The best weapons are the ones you never use.\\\"",
+  "de": "\\\"Drei Grenzstreitigkeiten diesen Monat beigelegt. Zwei Gebietsansprüche fallengelassen. Ein einseitiger Waffenstillstand.\\\"\\n\\n\\\"Und das alles, ohne einen Schuss abzufeuern.\\\"\\n\\n\\\"Die besten Waffen sind die, die man nie benutzt.\\\""
+ },
+ "wonder_events.22.t": {
+  "en": "Peace Through Superior Firepower",
+  "de": "Frieden durch überlegene Feuerkraft"
+ },
+ "wonder_events.23.a": {
+  "en": "Launch a massive relief effort.",
+  "de": "Eine groß angelegte Hilfsaktion starten."
+ },
+ "wonder_events.23.b": {
+  "en": "Classify the incident. National security demands it.",
+  "de": "Den Vorfall als geheim einstufen. Die nationale Sicherheit verlangt es."
+ },
+ "wonder_events.23.d": {
+  "en": "A targeting malfunction on the orbital battlestation causes a kinetic impactor to fire along an unintended trajectory. The projectile strikes the ocean near a coastal city, and the resulting shockwave shatters windows, capsizes boats, and injures dozens on shore.",
+  "de": "Eine Zielfehlfunktion an der orbitalen Kampfstation lässt einen kinetischen Einschlagskörper auf einer ungewollten Flugbahn abfeuern. Das Geschoss schlägt im Meer nahe einer Küstenstadt ein, und die entstehende Druckwelle zerschmettert Fenster, lässt Boote kentern und verletzt Dutzende an Land."
+ },
+ "wonder_events.23.f": {
+  "en": "\\\"The impactor hit water twelve kilometers from the harbor. The shockwave alone did this much damage.\\\"\\n\\n\\\"If it had struck land?\\\"\\n\\n\\\"A crater the size of a city block. And it's on every news feed on the planet.\\\"",
+  "de": "\\\"Der Einschlagskörper hat zwölf Kilometer vor dem Hafen das Wasser getroffen. Allein die Druckwelle hat diesen Schaden angerichtet.\\\"\\n\\n\\\"Und wenn er Land getroffen hätte?\\\"\\n\\n\\\"Ein Krater von der Größe eines Häuserblocks. Und es ist in jedem Nachrichtensender der Welt.\\\""
+ },
+ "wonder_events.23.t": {
+  "en": "Misfire from Orbit",
+  "de": "Fehlschuss aus dem Orbit"
+ },
+ "wonder_events.24.a": {
+  "en": "Maintain strategic superiority at any cost.",
+  "de": "Die strategische Überlegenheit um jeden Preis bewahren."
+ },
+ "wonder_events.24.b": {
+  "en": "Propose an orbital arms limitation treaty.",
+  "de": "Ein Abkommen zur Begrenzung orbitaler Rüstung vorschlagen."
+ },
+ "wonder_events.24.d": {
+  "en": "Rival powers have begun their own orbital weapons programs in response to the [ROOT.GetCountry.GetAdjectiveNoFormatting] battlestation. The militarization of space is accelerating beyond anyone's projections.",
+  "de": "Rivalisierende Mächte haben als Antwort auf die [ROOT.GetCountry.GetAdjectiveNoFormatting]e Kampfstation eigene orbitale Waffenprogramme gestartet. Die Militarisierung des Weltraums schreitet schneller voran, als irgendjemand vorausgesagt hatte."
+ },
+ "wonder_events.24.f": {
+  "en": "\\\"They're building their own. Crude, compared to ours, but give them five years.\\\"\\n\\n\\\"Then we need to stay five years ahead.\\\"\\n\\n\\\"That's what they said about nuclear weapons. We ended up with enough to destroy the world twelve times over.\\\"\\n\\n\\\"Thirteen. But who's counting?\\\"",
+  "de": "\\\"Sie bauen ihre eigene. Primitiv im Vergleich zu unserer, aber gebt ihnen fünf Jahre.\\\"\\n\\n\\\"Dann müssen wir fünf Jahre voraus bleiben.\\\"\\n\\n\\\"Das hat man auch bei den Nuklearwaffen gesagt. Am Ende hatten wir genug, um die Welt zwölfmal zu zerstören.\\\"\\n\\n\\\"Dreizehnmal. Aber wer zählt schon mit?\\\""
+ },
+ "wonder_events.24.t": {
+  "en": "Arms Race in Orbit",
+  "de": "Wettrüsten im Orbit"
+ },
+ "wonder_events.25.a": {
+  "en": "Project power globally. Let the world take note.",
+  "de": "Macht weltweit demonstrieren. Die Welt soll es zur Kenntnis nehmen."
+ },
+ "wonder_events.25.b": {
+  "en": "The capability alone is deterrent enough.",
+  "de": "Allein die Fähigkeit ist Abschreckung genug."
+ },
+ "wonder_events.25.d": {
+  "en": "The orbital battlestation has achieved global strike capability. Kinetic energy weapons can reach any point on Earth within minutes, delivering devastating force without nuclear fallout.",
+  "de": "Die orbitale Kampfstation hat globale Schlagkraft erreicht. Kinetische Energiewaffen können jeden Punkt der Erde innerhalb von Minuten erreichen und verheerende Zerstörungskraft ohne nuklearen Fallout entfesseln."
+ },
+ "wonder_events.25.f": {
+  "en": "\\\"Tungsten rods, six meters long and half a meter across, dropped from orbit at eight kilometers per second. No warhead needed. The kinetic energy alone is equivalent to dozens of tons of high explosive.\\\"\\n\\n\\\"And no radiation.\\\"\\n\\n\\\"Clean. Precise. And we can put one through any roof on Earth within thirty minutes.\\\"",
+  "de": "\\\"Wolframstäbe, sechs Meter lang und einen halben Meter im Durchmesser, aus dem Orbit abgeworfen mit acht Kilometern pro Sekunde. Kein Sprengkopf nötig. Allein die kinetische Energie entspricht dutzenden Tonnen hochexplosivem Sprengstoff.\\\"\\n\\n\\\"Und keine Strahlung.\\\"\\n\\n\\\"Sauber. Präzise. Und wir können innerhalb von dreißig Minuten jedes Dach der Erde durchschlagen.\\\""
+ },
+ "wonder_events.25.t": {
+  "en": "Rods from God",
+  "de": "Stäbe Gottes"
+ },
+ "wonder_events.26.a": {
+  "en": "We built to protect. Today we prove it.",
+  "de": "Wir haben gebaut, um zu schützen. Heute beweisen wir es."
+ },
+ "wonder_events.26.d": {
+  "en": "Astronomers detect a near-Earth asteroid on a collision course with a populated region. The orbital battlestation, originally designed for warfare, is the only asset capable of deflecting it in time.",
+  "de": "Astronomen entdecken einen erdnahen Asteroiden auf Kollisionskurs mit einer besiedelten Region. Die orbitale Kampfstation, ursprünglich für die Kriegsführung konzipiert, ist das einzige Mittel, das ihn rechtzeitig ablenken kann."
+ },
+ "wonder_events.26.f": {
+  "en": "\\\"The irony isn't lost on me. We built a weapon to threaten our enemies, and it just saved us all.\\\"\\n\\n\\\"The asteroid was three hundred meters across. It would have leveled a region the size of a small country.\\\"\\n\\n\\\"Fire the interceptors.\\\"\\n\\n\\\"Interceptors away. God help us all.\\\"",
+  "de": "\\\"Die Ironie entgeht mir nicht. Wir haben eine Waffe gebaut, um unsere Feinde zu bedrohen, und sie hat gerade uns alle gerettet.\\\"\\n\\n\\\"Der Asteroid hatte einen Durchmesser von dreihundert Metern. Er hätte eine Region von der Größe eines kleinen Landes dem Erdboden gleichgemacht.\\\"\\n\\n\\\"Feuert die Abfangraketen.\\\"\\n\\n\\\"Abfangraketen unterwegs. Gott stehe uns bei.\\\""
+ },
+ "wonder_events.26.t": {
+  "en": "The Shield of Civilization",
+  "de": "Der Schild der Zivilisation"
+ },
+ "wonder_events.3.a": {
+  "en": "Open the gateway to all who can pay.",
+  "de": "Das Tor für alle öffnen, die zahlen können."
+ },
+ "wonder_events.3.b": {
+  "en": "This is a national asset. Access is a privilege.",
+  "de": "Das ist ein nationales Gut. Zugang ist ein Privileg."
+ },
+ "wonder_events.3.d": {
+  "en": "The completed space elevator has made orbital access routine. Scientists, entrepreneurs, and diplomats from across the globe petition for access to [ROOT.GetCountry.GetAdjectiveNoFormatting] orbital facilities.",
+  "de": "Der fertiggestellte Weltraumlift hat den Zugang zum Orbit zur Routine gemacht. Wissenschaftler, Unternehmer und Diplomaten aus aller Welt ersuchen um Zugang zu den [ROOT.GetCountry.GetAdjectiveNoFormatting]en orbitalen Anlagen."
+ },
+ "wonder_events.3.f": {
+  "en": "\\\"Thirty hours. That's all it takes to climb from the ground to geostationary orbit. The electromagnetic climbers run day and night. The old rockets seem like covered wagons by comparison.\\\"\\n\\n\\\"And everyone wants a ticket.\\\"",
+  "de": "\\\"Dreißig Stunden. Mehr braucht es nicht, um vom Boden bis in den geostationären Orbit zu klettern. Die elektromagnetischen Kletterkapseln laufen Tag und Nacht. Die alten Raketen wirken im Vergleich wie Planwagen.\\\"\\n\\n\\\"Und jeder will ein Ticket.\\\""
+ },
+ "wonder_events.3.t": {
+  "en": "Gateway to the Stars",
+  "de": "Tor zu den Sternen"
+ },
+ "wonder_events.30.a": {
+  "en": "Fund expanded antimatter research.",
+  "de": "Die Antimaterieforschung ausweiten und finanzieren."
+ },
+ "wonder_events.30.b": {
+  "en": "Prioritize military applications immediately.",
+  "de": "Militärische Anwendungen sofort priorisieren."
+ },
+ "wonder_events.30.d": {
+  "en": "Scientists at the [concept_antimatter_facility] report stable containment of macroscopic quantities of antihydrogen for the first time. The breakthrough opens the door to practical antimatter applications.",
+  "de": "Wissenschaftler der [concept_antimatter_facility] melden erstmals die stabile Eindämmung makroskopischer Mengen von Antiwasserstoff. Der Durchbruch öffnet die Tür zu praktischen Antimaterie-Anwendungen."
+ },
+ "wonder_events.30.f": {
+  "en": "\\\"One milligram. That's what we have. One milligram of antihydrogen, suspended in a Penning trap.\\\"\\n\\n\\\"One milligram. The energy equivalent of forty-three tons of TNT.\\\"\\n\\n\\\"Imagine what we'll do with a gram.\\\"",
+  "de": "\\\"Ein Milligramm. Das ist alles, was wir haben. Ein Milligramm Antiwasserstoff, gehalten in einer Penning-Falle.\\\"\\n\\n\\\"Ein Milligramm. Das Energieäquivalent von dreiundvierzig Tonnen TNT.\\\"\\n\\n\\\"Stellt euch vor, was wir mit einem Gramm anstellen werden.\\\""
+ },
+ "wonder_events.30.t": {
+  "en": "Breakthrough at the Collider",
+  "de": "Durchbruch am Beschleuniger"
+ },
+ "wonder_events.31.a": {
+  "en": "Rebuild with improved safety protocols.",
+  "de": "Mit verbesserten Sicherheitsprotokollen wiederaufbauen."
+ },
+ "wonder_events.31.b": {
+  "en": "The risks are acceptable. Press ahead.",
+  "de": "Die Risiken sind vertretbar. Weitermachen."
+ },
+ "wonder_events.31.d": {
+  "en": "A magnetic containment failure at the [concept_antimatter_facility] causes a localized annihilation event. The explosion destroys a wing of the facility and kills dozens of scientists and engineers.",
+  "de": "Ein Ausfall der magnetischen Eindämmung in der [concept_antimatter_facility] löst ein lokal begrenztes Annihilationsereignis aus. Die Explosion zerstört einen Flügel der Anlage und tötet Dutzende Wissenschaftler und Ingenieure."
+ },
+ "wonder_events.31.f": {
+  "en": "\\\"The magnetic field fluctuated for less than a nanosecond. That's all it took. The antimatter touched the containment wall and...\\\"\\n\\n\\\"How much was released?\\\"\\n\\n\\\"Micrograms. The blast equivalent of a hundred kilograms of high explosive, concentrated in a point smaller than an atom. The containment wing did its job: barely.\\\"",
+  "de": "\\\"Das Magnetfeld schwankte für weniger als eine Nanosekunde. Mehr brauchte es nicht. Die Antimaterie berührte die Eindämmungswand und...\\\"\\n\\n\\\"Wie viel wurde freigesetzt?\\\"\\n\\n\\\"Mikrogramm. Die Sprengkraft entspricht hundert Kilogramm hochexplosivem Sprengstoff, konzentriert auf einen Punkt kleiner als ein Atom. Der Eindämmungsflügel hat seine Aufgabe erfüllt: gerade so.\\\""
+ },
+ "wonder_events.31.t": {
+  "en": "Containment Breach",
+  "de": "Bruch der Eindämmung"
+ },
+ "wonder_events.32.a": {
+  "en": "Integrate antimatter weapons into our arsenal.",
+  "de": "Antimateriewaffen in unser Arsenal integrieren."
+ },
+ "wonder_events.32.b": {
+  "en": "Focus on propulsion. Mobility wins wars.",
+  "de": "Auf Antriebstechnik konzentrieren. Beweglichkeit gewinnt Kriege."
+ },
+ "wonder_events.32.d": {
+  "en": "Antimatter-catalyzed propulsion and weapons systems are entering the prototype phase. Military planners are ecstatic. Formations with antimatter-powered logistics will have limitless range, and antimatter warheads will render conventional arsenals obsolete.",
+  "de": "Antimateriegestützte Antriebs- und Waffensysteme treten in die Prototypenphase ein. Militärplaner sind begeistert. Verbände mit antimateriegetriebener Logistik werden grenzenlose Reichweite haben, und Antimateriesprengköpfe werden konventionelle Arsenale obsolet machen."
+ },
+ "wonder_events.32.f": {
+  "en": "\\\"An antimatter-fueled aircraft never needs to land. A fleet with antimatter propulsion can sustain operations indefinitely at maximum speed.\\\"\\n\\n\\\"And the weapons?\\\"\\n\\n\\\"A warhead with a milligram of antimatter has the yield of a massive conventional bomb. Scale it up from there.\\\"",
+  "de": "\\\"Ein antimateriebetriebenes Flugzeug muss nie landen. Eine Flotte mit Antimaterieantrieb kann unbegrenzt mit Höchstgeschwindigkeit operieren.\\\"\\n\\n\\\"Und die Waffen?\\\"\\n\\n\\\"Ein Sprengkopf mit einem Milligramm Antimaterie hat die Sprengkraft einer gewaltigen konventionellen Bombe. Und das ist erst der Anfang.\\\""
+ },
+ "wonder_events.32.t": {
+  "en": "The Power of Annihilation",
+  "de": "Die Macht der Annihilation"
+ },
+ "wonder_events.33.a": {
+  "en": "Let our arsenal speak for us.",
+  "de": "Lasst unser Arsenal für uns sprechen."
+ },
+ "wonder_events.33.b": {
+  "en": "Power without diplomacy is tyranny.",
+  "de": "Macht ohne Diplomatie ist Tyrannei."
+ },
+ "wonder_events.33.d": {
+  "en": "The mere existence of practical antimatter weapons has fundamentally altered the diplomatic landscape. Nations that once challenged [ROOT.GetCountry.GetName] now seek accommodation and alliance.",
+  "de": "Die bloße Existenz praktikabler Antimateriewaffen hat die diplomatische Landschaft grundlegend verändert. Nationen, die einst [ROOT.GetCountry.GetAltName('AKK')] herausgefordert haben, suchen nun Verständigung und Bündnis."
+ },
+ "wonder_events.33.f": {
+  "en": "\\\"The ambassadors are very polite now. Have you noticed?\\\"\\n\\n\\\"There's nothing quite like the ability to annihilate a city with a warhead the size of a suitcase to improve diplomatic relations.\\\"\\n\\n\\\"An oversimplification.\\\"\\n\\n\\\"But not an inaccurate one.\\\"",
+  "de": "\\\"Die Botschafter sind jetzt sehr höflich. Ist euch das aufgefallen?\\\"\\n\\n\\\"Nichts verbessert die diplomatischen Beziehungen so sehr wie die Fähigkeit, eine Stadt mit einem koffergroßen Sprengkopf auszulöschen.\\\"\\n\\n\\\"Eine Vereinfachung.\\\"\\n\\n\\\"Aber keine falsche.\\\""
+ },
+ "wonder_events.33.t": {
+  "en": "Antimatter Diplomacy",
+  "de": "Antimateriediplomatie"
+ },
+ "wonder_events.34.a": {
+  "en": "Full transparency. Open the facility to inspectors.",
+  "de": "Volle Transparenz. Die Anlage für Inspektoren öffnen."
+ },
+ "wonder_events.34.b": {
+  "en": "Suppress the details. National security demands it.",
+  "de": "Die Einzelheiten unterdrücken. Die nationale Sicherheit verlangt es."
+ },
+ "wonder_events.34.d": {
+  "en": "An accident during routine antimatter transfer causes an uncontrolled release of energy. The resulting explosion is detected by monitoring stations worldwide, triggering international alarm.",
+  "de": "Ein Unfall bei einem routinemäßigen Antimaterietransfer verursacht eine unkontrollierte Freisetzung von Energie. Die daraus resultierende Explosion wird von Überwachungsstationen weltweit registriert und löst internationalen Alarm aus."
+ },
+ "wonder_events.34.f": {
+  "en": "\\\"The seismographs registered it as a 3.5. Except it wasn't an earthquake.\\\"\\n\\n\\\"How many casualties?\\\"\\n\\n\\\"Thirty-seven confirmed. The facility will need months of repair.\\\"\\n\\n\\\"And the international reaction?\\\"\\n\\n\\\"Exactly what you'd expect when an unexplained explosion with the seismic signature of a bomb goes off inside a classified facility.\\\"",
+  "de": "\\\"Die Seismographen haben eine Stärke von 3,5 registriert. Nur war es kein Erdbeben.\\\"\\n\\n\\\"Wie viele Opfer?\\\"\\n\\n\\\"Siebenunddreißig bestätigt. Die Anlage braucht Monate für die Reparatur.\\\"\\n\\n\\\"Und die internationale Reaktion?\\\"\\n\\n\\\"Genau das, was man erwarten würde, wenn in einer geheimen Anlage eine ungeklärte Explosion mit der seismischen Signatur einer Bombe stattfindet.\\\""
+ },
+ "wonder_events.34.t": {
+  "en": "The Annihilation Incident",
+  "de": "Der Annihilationsvorfall"
+ },
+ "wonder_events.35.a": {
+  "en": "Revolutionize military logistics.",
+  "de": "Die militärische Logistik revolutionieren."
+ },
+ "wonder_events.35.b": {
+  "en": "Commerce transforms nations more than armies.",
+  "de": "Handel verändert Nationen mehr als Armeen."
+ },
+ "wonder_events.35.d": {
+  "en": "The [concept_antimatter_facility] is now producing enough fuel to power a new generation of engines. Antimatter propulsion makes global logistics trivial and opens the door to rapid interplanetary transit.",
+  "de": "Die [concept_antimatter_facility] produziert nun genug Treibstoff, um eine neue Generation von Triebwerken anzutreiben. Antimaterieantrieb macht globale Logistik trivial und öffnet die Tür zu schnellem interplanetarem Transit."
+ },
+ "wonder_events.35.f": {
+  "en": "\\\"Earth to Mars in three weeks. Earth to Jupiter in two months. These aren't projections. These are timetables.\\\"\\n\\n\\\"And military applications?\\\"\\n\\n\\\"Any formation, anywhere on Earth, within hours. The concept of distance as a strategic constraint is over.\\\"",
+  "de": "\\\"Erde bis Mars in drei Wochen. Erde bis Jupiter in zwei Monaten. Das sind keine Prognosen. Das sind Fahrpläne.\\\"\\n\\n\\\"Und militärische Anwendungen?\\\"\\n\\n\\\"Jeder Verband, überall auf der Erde, innerhalb von Stunden. Das Konzept der Entfernung als strategische Grenze ist Geschichte.\\\""
+ },
+ "wonder_events.35.t": {
+  "en": "The Annihilation Drive",
+  "de": "Der Annihilationsantrieb"
+ },
+ "wonder_events.4.a": {
+  "en": "Auction orbital slots to the highest bidder.",
+  "de": "Orbitalplätze an den Meistbietenden versteigern."
+ },
+ "wonder_events.4.b": {
+  "en": "Prioritize our own national industries.",
+  "de": "Unsere eigenen nationalen Industrien bevorzugen."
+ },
+ "wonder_events.4.d": {
+  "en": "At the space elevator's current capacity, orbital commerce has become routine. Nations and corporations compete for launch slots, and the elevator state has become a nexus of unprecedented trade.",
+  "de": "Bei der aktuellen Kapazität des Weltraumlifts ist der orbitale Handel zur Routine geworden. Nationen und Konzerne konkurrieren um Startplätze, und der Staat des Aufzugs ist zu einem Knotenpunkt beispiellosen Handels geworden."
+ },
+ "wonder_events.4.f": {
+  "en": "\\\"Silk, spices, gold. Those were the treasures of the old roads. Ours carry advanced materials, processed data, and the hopes of ten billion people.\\\"\\n\\n\\\"And the profits are rather better.\\\"",
+  "de": "\\\"Seide, Gewürze, Gold. Das waren die Schätze der alten Straßen. Unsere transportieren hochentwickelte Materialien, verarbeitete Daten und die Hoffnungen von zehn Milliarden Menschen.\\\"\\n\\n\\\"Und die Gewinne sind erheblich besser.\\\""
+ },
+ "wonder_events.4.t": {
+  "en": "The New Silk Road",
+  "de": "Die neue Seidenstraße"
+ },
+ "wonder_events.5.a": {
+  "en": "Launch an emergency debris clearance mission.",
+  "de": "Eine Notfallmission zur Trümmerbeseitigung starten."
+ },
+ "wonder_events.5.b": {
+  "en": "Deploy automated defense systems along the cable.",
+  "de": "Automatisierte Verteidigungssysteme entlang des Kabels stationieren."
+ },
+ "wonder_events.5.d": {
+  "en": "A cascade of orbital debris threatens the space elevator's cable and nearby orbital [concept_infrastructure]. Without intervention, a runaway chain of collisions could render low Earth orbit unusable for decades.",
+  "de": "Eine Kaskade von Weltraumschrott bedroht das Kabel des Weltraumlifts und die umliegende orbitale [concept_infrastructure]. Ohne Eingreifen könnte eine außer Kontrolle geratene Kollisionskette den erdnahen Orbit für Jahrzehnte unbrauchbar machen."
+ },
+ "wonder_events.5.f": {
+  "en": "One collision becomes ten. Ten becomes a thousand. A thousand becomes a wall of shrapnel moving at eight kilometers per second.\\n\\nAnd our elevator cable is sitting right in the path.",
+  "de": "Aus einer Kollision werden zehn. Aus zehn werden tausend. Aus tausend wird eine Wand aus Splittern, die sich mit acht Kilometern pro Sekunde bewegt.\\n\\nUnd unser Aufzugskabel sitzt genau in ihrem Weg."
+ },
+ "wonder_events.5.t": {
+  "en": "Kessler Syndrome",
+  "de": "Kessler-Syndrom"
+ },
+ "wonder_events.6.a": {
+  "en": "Fund advanced space education programs.",
+  "de": "Fortgeschrittene Raumfahrt-Bildungsprogramme finanzieren."
+ },
+ "wonder_events.6.b": {
+  "en": "Channel their talent into industry.",
+  "de": "Ihr Talent in die Industrie lenken."
+ },
+ "wonder_events.6.d": {
+  "en": "A generation raised in the shadow of the space elevator has come of age. These young engineers and scientists grew up treating orbital access as routine, and their ambitions are correspondingly vast.",
+  "de": "Eine Generation, die im Schatten des Weltraumlifts aufgewachsen ist, hat das Erwachsenenalter erreicht. Diese jungen Ingenieure und Wissenschaftler sind damit groß geworden, den Zugang zum Orbit als selbstverständlich zu betrachten, und ihre Ambitionen sind entsprechend gewaltig."
+ },
+ "wonder_events.6.f": {
+  "en": "\\\"When I was young, space was a dream. For my students, it's a commute. Do you understand what that means?\\\"\\n\\n\\\"It means they'll build things we can't even imagine.\\\"",
+  "de": "\\\"Als ich jung war, war das All ein Traum. Für meine Studenten ist es ein Arbeitsweg. Versteht ihr, was das bedeutet?\\\"\\n\\n\\\"Es bedeutet, dass sie Dinge bauen werden, die wir uns nicht einmal vorstellen können.\\\""
+ },
+ "wonder_events.6.t": {
+  "en": "The Astronaut Generation",
+  "de": "Die Astronautengeneration"
+ },
+ "wonder_events.7.a": {
+  "en": "The stars belong to those who reach them first.",
+  "de": "Die Sterne gehören denen, die sie zuerst erreichen."
+ },
+ "wonder_events.7.b": {
+  "en": "Propose a shared governance framework.",
+  "de": "Einen gemeinsamen Ordnungsrahmen vorschlagen."
+ },
+ "wonder_events.7.d": {
+  "en": "Foreign powers demand that orbital [concept_infrastructure] be governed under international law, arguing that no single nation should control access to space. The diplomatic pressure is mounting.",
+  "de": "Fremde Mächte fordern, dass die orbitale [concept_infrastructure] internationalem Recht unterstellt wird, und argumentieren, dass keine einzelne Nation den Zugang zum Weltraum kontrollieren solle. Der diplomatische Druck wächst."
+ },
+ "wonder_events.7.f": {
+  "en": "\\\"The elevator was built with our money, our engineers, our vision. And now they want to make it a commons?\\\"\\n\\n\\\"They don't want to share it. They want to control what we do with it.\\\"\\n\\n\\\"Then let them build their own.\\\"",
+  "de": "\\\"Der Aufzug wurde mit unserem Geld, unseren Ingenieuren, unserer Vision gebaut. Und jetzt wollen sie ihn zum Gemeingut machen?\\\"\\n\\n\\\"Sie wollen ihn nicht teilen. Sie wollen kontrollieren, was wir damit tun.\\\"\\n\\n\\\"Dann sollen sie ihren eigenen bauen.\\\""
+ },
+ "wonder_events.7.t": {
+  "en": "Orbital Sovereignty",
+  "de": "Orbitale Souveränität"
+ },
+ "world_war_events.1.a": {
+  "en": "We will not yield an inch.",
+  "de": "Wir werden keinen Zoll nachgeben."
+ },
+ "world_war_events.1.b": {
+  "en": "Open negotiations.",
+  "de": "Verhandlungen aufnehmen."
+ },
+ "world_war_events.1.c": {
+  "en": "Issue a counter-ultimatum.",
+  "de": "Ein Gegenultimatum stellen."
+ },
+ "world_war_events.1.d": {
+  "en": "[SCOPE.sCountry('ideological_rival').GetName] has formally delivered a series of provocative demands to our government, challenging our ideological stance on the world stage. Their aggressive posture threatens to destabilize the fragile peace between the [Concept('concept_great_power', 'great powers')].",
+  "de": "[SCOPE.sCountry('ideological_rival').GetAltName('NOM')|U] hat unserer Regierung förmlich eine Reihe provokanter Forderungen überbracht und damit unsere ideologische Haltung auf der Weltbühne infrage gestellt. Ihre aggressive Haltung droht, den brüchigen Frieden zwischen den [Concept('concept_great_power', 'Großmächten')] zu erschüttern."
+ },
+ "world_war_events.1.f": {
+  "en": "The foreign minister read the demands aloud, then set the paper down and removed his spectacles.\\n\\n'They wish us to renounce our system of government,' he said. 'Publicly. Before the world press.'\\n\\nThe room was quiet for a long time.\\n\\n'And if we refuse?'\\n\\n'Then, I rather think, we shall have our answer about whether they want peace or something else entirely.'",
+  "de": "Der Außenminister las die Forderungen laut vor, legte dann das Papier nieder und nahm seine Brille ab.\\n\\n'Sie wollen, dass wir unserem Regierungssystem abschwören', sagte er. 'Öffentlich. Vor der Weltpresse.'\\n\\nDer Raum blieb lange still.\\n\\n'Und wenn wir uns weigern?'\\n\\n'Dann, denke ich, werden wir unsere Antwort darauf haben, ob sie Frieden wollen oder etwas ganz anderes.'"
+ },
+ "world_war_events.1.t": {
+  "en": "Ideological Confrontation",
+  "de": "Ideologische Konfrontation"
+ },
+ "world_war_events.10.a": {
+  "en": "Sell war bonds!",
+  "de": "Kriegsanleihen verkaufen!"
+ },
+ "world_war_events.10.b": {
+  "en": "Use this moment for conscription.",
+  "de": "Den Moment für die Wehrpflicht nutzen."
+ },
+ "world_war_events.10.d": {
+  "en": "A surge of patriotic fervor sweeps the nation. Citizens line the streets waving flags, factories run double shifts, and volunteers flood recruitment offices. The will to fight has never been stronger.",
+  "de": "Eine Welle patriotischer Begeisterung erfasst die Nation. Bürger säumen mit Flaggen schwenkend die Straßen, Fabriken laufen in Doppelschichten, und Freiwillige strömen in die Rekrutierungsbüros. Der Kampfeswille war nie stärker."
+ },
+ "world_war_events.10.f": {
+  "en": "The factory foreman wiped his hands on his apron and addressed the morning shift. 'Double production this week,' he said. 'The front needs shells more than you need sleep.'\\n\\nNo one complained. The woman at the lathe had received a telegram yesterday. Her husband was not coming home. She picked up her tools and worked a sixteen-hour shift without a word.",
+  "de": "Der Vorarbeiter wischte sich die Hände an seiner Schürze ab und wandte sich an die Frühschicht. 'Diese Woche die Produktion verdoppeln', sagte er. 'Die Front braucht Granaten dringender, als ihr Schlaf braucht.'\\n\\nNiemand beschwerte sich. Die Frau an der Drehbank hatte gestern ein Telegramm erhalten. Ihr Mann würde nicht nach Hause kommen. Sie nahm ihr Werkzeug und arbeitete wortlos eine sechzehnstündige Schicht."
+ },
+ "world_war_events.10.t": {
+  "en": "Home Front Rally",
+  "de": "Aufbruch an der Heimatfront"
+ },
+ "world_war_events.100.a": {
+  "en": "Impose a harsh peace.",
+  "de": "Einen harten Frieden diktieren."
+ },
+ "world_war_events.100.b": {
+  "en": "Seek a just and lasting peace.",
+  "de": "Einen gerechten und dauerhaften Frieden anstreben."
+ },
+ "world_war_events.100.c": {
+  "en": "Establish a new world order.",
+  "de": "Eine neue Weltordnung errichten."
+ },
+ "world_war_events.100.d": {
+  "en": "The guns have fallen silent at last. The victorious powers gather to redraw the map of the world and shape the post-war order. The decisions made here will echo for generations.",
+  "de": "Die Geschütze sind endlich verstummt. Die siegreichen Mächte versammeln sich, um die Weltkarte neu zu zeichnen und die Nachkriegsordnung zu gestalten. Die hier getroffenen Entscheidungen werden noch Generationen nachhallen."
+ },
+ "world_war_events.100.d_defeated": {
+  "en": "The guns have fallen silent, and the war is lost. Our enemies have forced us to concede what they fought for, and the victorious powers now gather to settle the peace. Whatever else they ask of us, we are in no position to refuse.",
+  "de": "Die Geschütze sind verstummt, und der Krieg ist verloren. Unsere Feinde haben uns gezwungen, das zuzugestehen, wofür sie gekämpft haben, und die siegreichen Mächte versammeln sich nun, um den Frieden zu regeln. Was auch immer sie sonst noch von uns verlangen, wir sind nicht in der Lage, es zu verweigern."
+ },
+ "world_war_events.100.d_no_victory": {
+  "en": "The guns have fallen silent at last, but the war has ended without a victory for us. There are no terms for us to dictate, and none to receive: only the dead to bury, and an army to bring home.",
+  "de": "Die Geschütze sind endlich verstummt, doch der Krieg hat für uns ohne Sieg geendet. Es gibt keine Bedingungen, die wir diktieren können, und keine, die wir entgegennehmen: nur Tote zu begraben und ein Heer, das heimzuholen ist."
+ },
+ "world_war_events.100.demobilize": {
+  "en": "Bring the soldiers home.",
+  "de": "Die Soldaten nach Hause holen."
+ },
+ "world_war_events.100.f": {
+  "en": "The delegates filed into the palace hall in silence. Chandeliers blazed overhead; below, the carpet was threadbare from the boots of soldiers quartered there during the siege.\\n\\n'Shall we begin?' the chairman asked.\\n\\nA diplomat from the losing side studied his hands. 'We are here to receive your terms,' he said. 'Let us not pretend this is a negotiation.'\\n\\nThe chairman permitted himself a thin smile. 'Quite right. Shall we call it an opportunity instead?'",
+  "de": "Die Delegierten zogen schweigend in den Palastsaal ein. Über ihnen strahlten Kronleuchter; darunter war der Teppich von den Stiefeln der Soldaten, die während der Belagerung dort einquartiert waren, ganz abgetreten.\\n\\n'Sollen wir beginnen?', fragte der Vorsitzende.\\n\\nEin Diplomat der unterlegenen Seite betrachtete seine Hände. 'Wir sind hier, um Ihre Bedingungen entgegenzunehmen', sagte er. 'Lassen Sie uns nicht so tun, als wäre dies eine Verhandlung.'\\n\\nDer Vorsitzende gestattete sich ein dünnes Lächeln. 'Ganz recht. Sollen wir es stattdessen eine Gelegenheit nennen?'"
+ },
+ "world_war_events.100.f_no_victory": {
+  "en": "The armistice was signed in a railway carriage on a siding nobody could find on the map. Neither delegation stayed for lunch.\\n\\n'So who won?' a young aide asked on the train home.\\n\\nThe general watched the fields go past, still cratered, still strung with wire. 'The undertakers,' he said.",
+  "de": "Der Waffenstillstand wurde in einem Eisenbahnwaggon auf einem Nebengleis unterzeichnet, das niemand auf der Karte finden konnte. Keine der Delegationen blieb zum Mittagessen.\\n\\n'Wer hat also gewonnen?', fragte ein junger Adjutant auf der Heimfahrt im Zug.\\n\\nDer General beobachtete die vorbeiziehenden Felder, noch von Kratern übersät, noch mit Draht durchzogen. 'Die Leichenbestatter', sagte er."
+ },
+ "world_war_events.100.stand_ready": {
+  "en": "This is not the end. Keep the army ready.",
+  "de": "Das ist nicht das Ende. Die Armee einsatzbereit halten."
+ },
+ "world_war_events.100.t": {
+  "en": "The Peace Conference",
+  "de": "Die Friedenskonferenz"
+ },
+ "world_war_events.101.a": {
+  "en": "Accept the new order.",
+  "de": "Die neue Ordnung akzeptieren."
+ },
+ "world_war_events.101.b": {
+  "en": "Resist the occupation.",
+  "de": "Der Besatzung Widerstand leisten."
+ },
+ "world_war_events.101.d": {
+  "en": "The victorious powers have demanded a complete transformation of our government. Our former ideology - the one we fought and bled for - is to be dismantled. A new political order will be imposed upon us.",
+  "de": "Die siegreichen Mächte haben eine vollständige Umgestaltung unserer Regierung gefordert. Unsere bisherige Ideologie - jene, für die wir gekämpft und geblutet haben - soll zerschlagen werden. Eine neue politische Ordnung wird uns auferlegt."
+ },
+ "world_war_events.101.f": {
+  "en": "The foreign officer placed the document on the desk with the careful courtesy of a man delivering a death sentence. 'Your new constitution,' he said. 'We have taken the liberty of drafting it.'\\n\\nThe minister stared at the seal - not his nation's seal, but theirs. 'And if we object to its provisions?'\\n\\n'You misunderstand your position. You may object to the font.'",
+  "de": "Der fremde Offizier legte das Dokument mit der sorgsamen Höflichkeit eines Mannes, der ein Todesurteil überbringt, auf den Schreibtisch. 'Ihre neue Verfassung', sagte er. 'Wir haben uns die Freiheit genommen, sie zu entwerfen.'\\n\\nDer Minister starrte auf das Siegel - nicht das Siegel seiner Nation, sondern ihres. 'Und wenn wir gegen ihre Bestimmungen Einspruch erheben?'\\n\\n'Sie missverstehen Ihre Lage. Sie dürfen gegen die Schriftart Einspruch erheben.'"
+ },
+ "world_war_events.101.t": {
+  "en": "Regime Change",
+  "de": "Regimewechsel"
+ },
+ "world_war_events.102.a": {
+  "en": "Accept the aid.",
+  "de": "Die Hilfe annehmen."
+ },
+ "world_war_events.102.b": {
+  "en": "We will rebuild alone.",
+  "de": "Wir werden allein wiederaufbauen."
+ },
+ "world_war_events.102.d": {
+  "en": "The victorious powers have offered substantial aid to rebuild our shattered nation. Their generosity comes with strings attached - closer economic ties, political alignment, and a permanent military presence. But the alternative is years of poverty and isolation.",
+  "de": "Die siegreichen Mächte haben umfangreiche Hilfe zum Wiederaufbau unserer zerschlagenen Nation angeboten. Ihre Großzügigkeit ist an Bedingungen geknüpft - engere Wirtschaftsbeziehungen, politische Anlehnung und eine dauerhafte militärische Präsenz. Doch die Alternative sind Jahre der Armut und Isolation."
+ },
+ "world_war_events.102.f": {
+  "en": "The trucks arrived at dawn, stenciled with foreign markings. Canned meat, steel girders, sacks of cement. The mayor stood in the rubble of what had been the town hall and watched them unload.\\n\\n'Generous of them,' his deputy muttered.\\n\\n'Generous.' The mayor kicked a piece of masonry. 'Last year they dropped bombs on us. This year, powdered milk. I suppose that is what they call the arc of civilization.'",
+  "de": "Die Lastwagen trafen bei Tagesanbruch ein, mit fremden Aufschriften versehen. Dosenfleisch, Stahlträger, Zementsäcke. Der Bürgermeister stand in den Trümmern des einstigen Rathauses und sah beim Entladen zu.\\n\\n'Großzügig von ihnen', murmelte sein Stellvertreter.\\n\\n'Großzügig.' Der Bürgermeister trat gegen ein Stück Mauerwerk. 'Letztes Jahr haben sie Bomben auf uns geworfen. Dieses Jahr Milchpulver. Ich nehme an, das nennt man den Bogen der Zivilisation.'"
+ },
+ "world_war_events.102.t": {
+  "en": "Reconstruction Aid",
+  "de": "Wiederaufbauhilfe"
+ },
+ "world_war_events.103.a": {
+  "en": "Prosecute the war criminals.",
+  "de": "Die Kriegsverbrecher anklagen."
+ },
+ "world_war_events.103.b": {
+  "en": "Focus on healing, not vengeance.",
+  "de": "Auf Heilung setzen, nicht auf Rache."
+ },
+ "world_war_events.103.c": {
+  "en": "Bury the evidence.",
+  "de": "Die Beweise verschwinden lassen."
+ },
+ "world_war_events.103.d": {
+  "en": "As the fog of war lifts, horrifying revelations emerge about atrocities committed during the conflict. Mass graves, forced labor, systematic brutality - the scale of the crimes shocks the world. The question is: what do we do about it?",
+  "de": "Während sich der Nebel des Krieges lichtet, kommen entsetzliche Enthüllungen über die während des Konflikts begangenen Gräueltaten ans Licht. Massengräber, Zwangsarbeit, systematische Brutalität - das Ausmaß der Verbrechen erschüttert die Welt. Die Frage ist: Was unternehmen wir dagegen?"
+ },
+ "world_war_events.103.f": {
+  "en": "The prosecutor held up the photograph. The courtroom fell silent.\\n\\n'The defendant claims he was following orders,' she said. 'Let us examine what those orders produced.'\\n\\nIn the dock, the old soldier stared straight ahead. He had not spoken since the trial began. His lawyer had advised him to show remorse. He showed nothing at all, and in its way, that was the most damning testimony of the week.",
+  "de": "Die Anklägerin hielt das Foto hoch. Im Gerichtssaal wurde es still.\\n\\n'Der Angeklagte behauptet, er habe nur Befehle befolgt', sagte sie. 'Sehen wir uns an, was diese Befehle hervorgebracht haben.'\\n\\nAuf der Anklagebank starrte der alte Soldat geradeaus. Er hatte seit Beginn des Prozesses kein Wort gesprochen. Sein Anwalt hatte ihm geraten, Reue zu zeigen. Er zeigte gar nichts, und auf seine Weise war das die vernichtendste Aussage der ganzen Woche."
+ },
+ "world_war_events.103.t": {
+  "en": "War Crimes Tribunal",
+  "de": "Kriegsverbrechertribunal"
+ },
+ "world_war_events.104.a": {
+  "en": "Establish our sphere of influence.",
+  "de": "Unsere Einflusssphäre errichten."
+ },
+ "world_war_events.104.b": {
+  "en": "Champion self-determination.",
+  "de": "Für Selbstbestimmung eintreten."
+ },
+ "world_war_events.104.c": {
+  "en": "Focus on domestic recovery.",
+  "de": "Auf die Erholung im Inland konzentrieren."
+ },
+ "world_war_events.104.d": {
+  "en": "With the great conflict behind us, the victorious powers must decide what kind of world they wish to build. Spheres of influence, new alliances, and international institutions are all on the table.",
+  "de": "Mit dem großen Konflikt hinter uns müssen die siegreichen Mächte entscheiden, was für eine Welt sie erschaffen wollen. Einflusssphären, neue Bündnisse und internationale Institutionen stehen alle zur Debatte."
+ },
+ "world_war_events.104.d_neutral": {
+  "en": "With the great conflict behind them, the powers that won it are redrawing the map and deciding what kind of world will follow. We did not share in their victory, and they will not ask our leave, but we must still decide what part we will play in the order they are building.",
+  "de": "Mit dem großen Konflikt hinter sich zeichnen die Mächte, die ihn gewonnen haben, die Karte neu und entscheiden, welche Welt darauf folgen wird. Wir hatten keinen Anteil an ihrem Sieg, und sie werden uns nicht um Erlaubnis fragen, doch wir müssen dennoch entscheiden, welche Rolle wir in der Ordnung spielen werden, die sie errichten."
+ },
+ "world_war_events.104.f": {
+  "en": "'We have won the war,' the prime minister said, pouring himself a brandy. 'Now we must win the peace, which, I am given to understand, is considerably more difficult.'\\n\\n'Spheres of influence?'\\n\\n'Naturally. The question is how large a sphere our friends will permit us, and how small a sphere we can persuade our enemies to accept.'\\n\\nHe raised his glass. 'To the new world order. May it last longer than the one we just buried.'",
+  "de": "'Wir haben den Krieg gewonnen', sagte der Premierminister und schenkte sich einen Brandy ein. 'Jetzt müssen wir den Frieden gewinnen, was, wie man mir versichert hat, erheblich schwieriger ist.'\\n\\n'Einflusssphären?'\\n\\n'Natürlich. Die Frage ist, wie groß eine Sphäre unsere Freunde uns zugestehen werden, und wie klein eine Sphäre wir unsere Feinde zu akzeptieren überreden können.'\\n\\nEr hob sein Glas. 'Auf die neue Weltordnung. Möge sie länger währen als jene, die wir gerade zu Grabe getragen haben.'"
+ },
+ "world_war_events.104.f_neutral": {
+  "en": "'They are carving up the world,' the foreign secretary said, 'and we have not been invited to the table.'\\n\\n'Should we have been?'\\n\\nShe considered the question. 'No. But I should like us to be in the room when they come to the parts that concern us.'",
+  "de": "'Sie teilen die Welt unter sich auf', sagte die Außenministerin, 'und wir wurden nicht an den Tisch geladen.'\\n\\n'Hätten wir werden sollen?'\\n\\nSie überlegte. 'Nein. Aber ich würde es begrüßen, wenn wir im Raum wären, sobald sie zu den Teilen kommen, die uns betreffen.'"
+ },
+ "world_war_events.104.t": {
+  "en": "The Post-War Order",
+  "de": "Die Nachkriegsordnung"
+ },
+ "world_war_events.105.a": {
+  "en": "Prepare for the long struggle.",
+  "de": "Sich auf den langen Kampf vorbereiten."
+ },
+ "world_war_events.105.b": {
+  "en": "Seek peaceful coexistence.",
+  "de": "Friedliche Koexistenz anstreben."
+ },
+ "world_war_events.105.d": {
+  "en": "The war is over, but already the seeds of the next conflict are being sown. [SCOPE.sCountry('new_rival_power').GetName] - once our ally of convenience - now stands as the greatest rival to our vision of the world. Two superpowers, two ideologies, one world.",
+  "de": "Der Krieg ist vorbei, doch schon wird die Saat für den nächsten Konflikt gelegt. [SCOPE.sCountry('new_rival_power').GetAltName('NOM')|U] - einst unser Verbündeter aus Zweckmäßigkeit - ist nun der größte Rivale unserer Vision der Welt. Zwei Supermächte, zwei Ideologien, eine Welt."
+ },
+ "world_war_events.105.f": {
+  "en": "The intelligence briefing was three pages long. The analyst summarized it in one sentence: 'They no longer need us, and they have stopped pretending otherwise.'\\n\\nThe defence minister closed the folder. 'Six months ago they were our allies.'\\n\\n'Six months ago we had a common enemy. Now we are each other's.'",
+  "de": "Das Geheimdienst-Briefing war drei Seiten lang. Der Analyst fasste es in einem Satz zusammen: 'Sie brauchen uns nicht mehr, und sie geben nicht länger vor, das Gegenteil zu tun.'\\n\\nDer Verteidigungsminister schloss die Akte. 'Vor sechs Monaten waren sie noch unsere Verbündeten.'\\n\\n'Vor sechs Monaten hatten wir einen gemeinsamen Feind. Jetzt sind wir einander der Feind.'"
+ },
+ "world_war_events.105.t": {
+  "en": "The New Rivalry",
+  "de": "Die neue Rivalität"
+ },
+ "world_war_events.11.a": {
+  "en": "Strengthen air defenses.",
+  "de": "Die Luftverteidigung stärken."
+ },
+ "world_war_events.11.b": {
+  "en": "Retaliate in kind.",
+  "de": "Mit gleicher Münze zurückschlagen."
+ },
+ "world_war_events.11.c": {
+  "en": "Focus on the ground war.",
+  "de": "Auf den Landkrieg konzentrieren."
+ },
+ "world_war_events.11.d": {
+  "en": "Enemy bombers have struck our cities, leaving [concept_devastation] in their wake. Fires burn through the night as rescue crews dig through the rubble. The civilian toll mounts, but so does our resolve.",
+  "de": "Feindliche Bomber haben unsere Städte getroffen und hinterlassen [concept_devastation]. Feuer brennen die ganze Nacht, während Rettungskräfte sich durch die Trümmer graben. Die zivilen Opferzahlen steigen, doch ebenso unsere Entschlossenheit."
+ },
+ "world_war_events.11.f": {
+  "en": "The sirens woke the children first. Then the thunder came - not from the sky but from the street, where the grocery had stood that morning.\\n\\nThe warden found the family in the cellar, covered in plaster dust, the youngest still clutching a wooden horse. 'Everyone accounted for?' he asked.\\n\\n'Everyone,' the mother said. She did not mention the cat, or the kitchen, or the life they had built above ground. There would be time for that later. Or there would not.",
+  "de": "Die Sirenen weckten zuerst die Kinder. Dann kam der Donner - nicht vom Himmel, sondern von der Straße, wo an diesem Morgen noch der Lebensmittelladen gestanden hatte.\\n\\nDer Luftschutzwart fand die Familie im Keller, bedeckt mit Gipsstaub, das Jüngste noch immer ein Holzpferd umklammernd. 'Ist jeder da?', fragte er.\\n\\n'Jeder', sagte die Mutter. Sie erwähnte nicht die Katze, nicht die Küche, nicht das Leben, das sie über der Erde aufgebaut hatten. Dafür würde später Zeit sein. Oder auch nicht."
+ },
+ "world_war_events.11.t": {
+  "en": "Strategic Bombing",
+  "de": "Strategisches Bombardement"
+ },
+ "world_war_events.12.a": {
+  "en": "Support the resistance.",
+  "de": "Den Widerstand unterstützen."
+ },
+ "world_war_events.12.b": {
+  "en": "Rein them in: no attacks without army orders.",
+  "de": "Sie zügeln: keine Angriffe ohne Befehl der Armee."
+ },
+ "world_war_events.12.d": {
+  "en": "In the occupied territories, a resistance movement has taken root. Brave men and women sabotage enemy supply lines, shelter fugitives, and maintain a flicker of hope in the darkness of occupation.",
+  "de": "In den besetzten Gebieten hat eine Widerstandsbewegung Wurzeln geschlagen. Mutige Männer und Frauen sabotieren feindliche Versorgungslinien, verstecken Flüchtige und bewahren einen Funken Hoffnung in der Dunkelheit der Besatzung."
+ },
+ "world_war_events.12.f": {
+  "en": "The baker slid the loaves across the counter and, beneath them, a folded note. The customer pocketed it without looking.\\n\\n'Same time Thursday?' she asked.\\n\\n'If the flour holds out.'\\n\\nNeither smiled. In occupied territory, a smile between strangers was as conspicuous as a gunshot.",
+  "de": "Der Bäcker schob die Laibe über die Theke und darunter einen gefalteten Zettel. Die Kundin steckte ihn ein, ohne hinzusehen.\\n\\n'Gleiche Zeit am Donnerstag?', fragte sie.\\n\\n'Wenn das Mehl reicht.'\\n\\nKeiner von beiden lächelte. In besetztem Gebiet war ein Lächeln zwischen Fremden so auffällig wie ein Schuss."
+ },
+ "world_war_events.12.t": {
+  "en": "Resistance Movement",
+  "de": "Widerstandsbewegung"
+ },
+ "world_war_events.2.a": {
+  "en": "Demand a formal apology.",
+  "de": "Eine förmliche Entschuldigung fordern."
+ },
+ "world_war_events.2.b": {
+  "en": "Downplay the incident.",
+  "de": "Den Vorfall herunterspielen."
+ },
+ "world_war_events.2.c": {
+  "en": "Mobilize troops to the border.",
+  "de": "Truppen an die Grenze mobilisieren."
+ },
+ "world_war_events.2.d": {
+  "en": "A violent skirmish has erupted along the frontier with [SCOPE.sCountry('border_rival').GetName]. Shots were fired and casualties reported. Both sides blame the other. The incident threatens to spiral into something far larger.",
+  "de": "Ein gewaltsames Gefecht ist entlang der Grenze zu [SCOPE.sCountry('border_rival').GetAltName('DAT')] ausgebrochen. Schüsse fielen, und Opfer wurden gemeldet. Beide Seiten geben sich gegenseitig die Schuld. Der Vorfall droht, sich zu etwas weitaus Größerem auszuweiten."
+ },
+ "world_war_events.2.f": {
+  "en": "The lieutenant's hands were still shaking when he filed the report. 'They crossed the line,' he said. 'I gave the order to fire.'\\n\\n'And the casualties?'\\n\\n'Three of theirs. One of ours. A corporal, twenty-two years old.'\\n\\nThe colonel closed the file. Somewhere between this desk and the capital, those numbers would become a crisis.",
+  "de": "Die Hände des Leutnants zitterten noch, als er den Bericht einreichte. 'Sie haben die Linie überschritten', sagte er. 'Ich gab den Feuerbefehl.'\\n\\n'Und die Opfer?'\\n\\n'Drei von ihnen. Einer von uns. Ein Obergefreiter, zweiundzwanzig Jahre alt.'\\n\\nDer Oberst schloss die Akte. Irgendwo zwischen diesem Schreibtisch und der Hauptstadt würden diese Zahlen zu einer Krise werden."
+ },
+ "world_war_events.2.t": {
+  "en": "Border Incident",
+  "de": "Grenzzwischenfall"
+ },
+ "world_war_events.20.a": {
+  "en": "Enter the war against the aggressors.",
+  "de": "In den Krieg gegen die Aggressoren eintreten."
+ },
+ "world_war_events.20.b": {
+  "en": "Provide material support only.",
+  "de": "Nur materielle Unterstützung leisten."
+ },
+ "world_war_events.20.c": {
+  "en": "Maintain our neutrality.",
+  "de": "Unsere Neutralität wahren."
+ },
+ "world_war_events.20.d": {
+  "en": "The world war rages on, and we have remained on the sidelines. But the balance of power is shifting, and neutrality grows ever more untenable. [SCOPE.sCountry('ww_main_aggressor').GetName] grows stronger with each passing month. If we do not act soon, the window of opportunity may close forever.",
+  "de": "Der Weltkrieg tobt weiter, und wir sind am Rand geblieben. Doch das Kräfteverhältnis verschiebt sich, und Neutralität wird zunehmend unhaltbar. [SCOPE.sCountry('ww_main_aggressor').GetAltName('NOM')|U] wird mit jedem Monat stärker. Handeln wir nicht bald, könnte sich das Zeitfenster für immer schließen."
+ },
+ "world_war_events.20.f": {
+  "en": "The general spread the map across the cabinet table and tapped the front line with a blunt finger. 'Here,' he said. 'And here. If they break through, there will be nothing between them and the coast.'\\n\\n'And if we intervene?'\\n\\n'Then we are at war.' He folded his arms. 'But if we do not intervene, excellency, we shall be at their mercy - which, I assure you, is considerably worse.'",
+  "de": "Der General breitete die Karte auf dem Kabinettstisch aus und tippte mit einem stumpfen Finger auf die Frontlinie. 'Hier', sagte er. 'Und hier. Wenn sie durchbrechen, liegt nichts mehr zwischen ihnen und der Küste.'\\n\\n'Und wenn wir eingreifen?'\\n\\n'Dann sind wir im Krieg.' Er verschränkte die Arme. 'Aber wenn wir nicht eingreifen, Exzellenz, sind wir ihrer Gnade ausgeliefert - was, das versichere ich Ihnen, erheblich schlimmer ist.'"
+ },
+ "world_war_events.20.t": {
+  "en": "The Hour of Decision",
+  "de": "Die Stunde der Entscheidung"
+ },
+ "world_war_events.3.a": {
+  "en": "Guarantee [SCOPE.sCountry('crisis_victim').GetName]'s sovereignty.",
+  "de": "Die Souveränität [SCOPE.sCountry('crisis_victim').GetAltName('GEN')] garantieren."
+ },
+ "world_war_events.3.a_bound": {
+  "en": "Remind [SCOPE.sCountry('crisis_aggressor').GetName] of our commitments to [SCOPE.sCountry('crisis_victim').GetName].",
+  "de": "[SCOPE.sCountry('crisis_aggressor').GetAltName('AKK')] an unsere Verpflichtungen gegenüber [SCOPE.sCountry('crisis_victim').GetAltName('DAT')] erinnern."
+ },
+ "world_war_events.3.b": {
+  "en": "This is not our fight.",
+  "de": "Das ist nicht unser Kampf."
+ },
+ "world_war_events.3.c": {
+  "en": "Mobilize in [SCOPE.sCountry('crisis_victim').GetName]'s defense.",
+  "de": "Zur Verteidigung [SCOPE.sCountry('crisis_victim').GetAltName('GEN')] mobilisieren."
+ },
+ "world_war_events.3.d": {
+  "en": "[SCOPE.sCountry('crisis_aggressor').GetName] has opened a diplomatic play against [SCOPE.sCountry('crisis_victim').GetName], a smaller nation in our sphere of influence, and is pressing it for concessions and political subservience. If we do not act, the balance of power may shift irrevocably.",
+  "de": "[SCOPE.sCountry('crisis_aggressor').GetAltName('NOM')|U] hat ein Diplomatiespiel gegen [SCOPE.sCountry('crisis_victim').GetAltName('AKK')] eröffnet, eine kleinere Nation in unserer Einflusssphäre, und verlangt von ihr Zugeständnisse und politische Unterwürfigkeit. Handeln wir nicht, könnte sich das Kräfteverhältnis unwiderruflich verschieben."
+ },
+ "world_war_events.3.f": {
+  "en": "The ambassador from the small nation placed both palms flat on the table, as if to steady himself. 'If your guarantees mean nothing,' he said, 'then say so plainly, and we will make other arrangements.'\\n\\n'What arrangements?' the foreign minister asked.\\n\\n'The only kind available to nations without powerful friends: surrender.'",
+  "de": "Der Botschafter der kleinen Nation legte beide Handflächen flach auf den Tisch, als wolle er sich abstützen. 'Wenn Ihre Garantien nichts bedeuten', sagte er, 'dann sagen Sie es offen, und wir werden andere Vorkehrungen treffen.'\\n\\n'Welche Vorkehrungen?', fragte der Außenminister.\\n\\n'Die einzige Art, die Nationen ohne mächtige Freunde offensteht: Kapitulation.'"
+ },
+ "world_war_events.3.t": {
+  "en": "Diplomatic Crisis",
+  "de": "Diplomatiekrise"
+ },
+ "world_war_events.30.a": {
+  "en": "We must push through to victory.",
+  "de": "Wir müssen bis zum Sieg durchhalten."
+ },
+ "world_war_events.30.b": {
+  "en": "Explore diplomatic channels.",
+  "de": "Diplomatische Kanäle ausloten."
+ },
+ "world_war_events.30.d": {
+  "en": "The war has dragged on far longer than anyone expected. Casualty lists grow longer by the day, food is scarce, and the civilian population is exhausted. Voices demanding peace grow louder - but our enemies show no sign of surrender.",
+  "de": "Der Krieg hat sich weit länger hingezogen, als irgendjemand erwartet hatte. Die Verlustlisten werden von Tag zu Tag länger, Nahrung ist knapp, und die Zivilbevölkerung ist erschöpft. Die Stimmen, die Frieden fordern, werden lauter - doch unsere Feinde zeigen keine Anzeichen einer Kapitulation."
+ },
+ "world_war_events.30.f": {
+  "en": "The postman no longer knocked. He simply left the telegrams on the step, because the sound of knocking had become something the women on this street could not bear to hear.\\n\\n'Another one,' the neighbor said, watching from her window. 'The Hendersons.'\\n\\n'That's their third son.'\\n\\nSilence. Somewhere, a church bell rang. It had been ringing for so many funerals that no one could remember the last time it rang for joy.",
+  "de": "Der Postbote klopfte nicht mehr. Er legte die Telegramme einfach auf die Stufe, denn das Geräusch des Klopfens war zu etwas geworden, das die Frauen in dieser Straße nicht mehr ertragen konnten.\\n\\n'Noch eins', sagte die Nachbarin und beobachtete vom Fenster aus. 'Die Hendersons.'\\n\\n'Das ist ihr dritter Sohn.'\\n\\nStille. Irgendwo läutete eine Kirchenglocke. Sie hatte für so viele Beerdigungen geläutet, dass sich niemand mehr erinnern konnte, wann sie zuletzt aus Freude geläutet hatte."
+ },
+ "world_war_events.30.t": {
+  "en": "War Weariness",
+  "de": "Kriegsmüdigkeit"
+ },
+ "world_war_events.31.a": {
+  "en": "Hold the line. They will break before we do.",
+  "de": "Die Linie halten. Sie werden vor uns zusammenbrechen."
+ },
+ "world_war_events.31.b": {
+  "en": "Open armistice talks.",
+  "de": "Waffenstillstandsgespräche aufnehmen."
+ },
+ "world_war_events.31.d": {
+  "en": "Two years on, the front has not moved. Every offensive has bled out in the same few miles of churned earth, and the war aims we set out with are no closer than the day the guns first spoke. The general staff insists the next push will break them. The public, reading the same casualty lists as last month and the month before, is no longer sure what 'breaking them' would even mean.",
+  "de": "Zwei Jahre später hat sich die Front nicht bewegt. Jede Offensive ist in denselben paar Meilen aufgewühlter Erde verblutet, und die Kriegsziele, mit denen wir aufgebrochen sind, sind uns nicht nähergerückt als am Tag, an dem die Geschütze zum ersten Mal sprachen. Der Generalstab beharrt darauf, dass der nächste Vorstoß sie brechen wird. Die Öffentlichkeit, die dieselben Verlustlisten liest wie letzten Monat und den davor, ist sich nicht mehr sicher, was 'sie brechen' überhaupt bedeuten würde."
+ },
+ "world_war_events.31.f": {
+  "en": "The staff car had been stuck behind a supply column for forty minutes, which gave the minister time to study the map on his knees.\\n\\nThe line on it was the same line as in the spring. The same line as the autumn before that. Someone had drawn a fresh arrow over the old ones in a different colour of ink, and the arrows underneath showed through like bruises.\\n\\n'How far did we get this time?' he asked.\\n\\nThe colonel did not look up. 'Far enough to see their wire,' he said. 'Same as always.'",
+  "de": "Der Stabswagen hatte vierzig Minuten hinter einer Nachschubkolonne festgesteckt, was dem Minister Zeit gab, die Karte auf seinen Knien zu studieren.\\n\\nDie Linie darauf war dieselbe wie im Frühjahr. Dieselbe wie im Herbst davor. Jemand hatte in einer anderen Tintenfarbe einen frischen Pfeil über die alten gezeichnet, und die darunterliegenden Pfeile schimmerten durch wie blaue Flecken.\\n\\n'Wie weit sind wir diesmal gekommen?', fragte er.\\n\\nDer Oberst blickte nicht auf. 'Weit genug, um ihren Draht zu sehen', sagte er. 'Wie immer.'"
+ },
+ "world_war_events.31.t": {
+  "en": "Stalemate on the Front",
+  "de": "Patt an der Front"
+ },
+ "world_war_events.4.a": {
+  "en": "Deliver the demands.",
+  "de": "Die Forderungen überbringen."
+ },
+ "world_war_events.4.b": {
+  "en": "Hold back. Not yet.",
+  "de": "Zurückhalten. Noch nicht."
+ },
+ "world_war_events.4.d": {
+  "en": "Our quarrel with [SCOPE.sCountry('ww_demand_target').GetName] has become a contest between two irreconcilable systems of government. The foreign ministry has drafted a set of demands: that [SCOPE.sCountry('ww_demand_target').GetName] publicly renounce its hostility to our system and silence its propaganda against us. Once delivered, the demands will force [SCOPE.sCountry('ww_demand_target').GetName] to answer, and whatever it answers, the fragile peace between the [Concept('concept_great_power', 'great powers')] will be tested.",
+  "de": "Unser Zwist mit [SCOPE.sCountry('ww_demand_target').GetAltName('DAT')] ist zu einem Wettstreit zweier unvereinbarer Regierungssysteme geworden. Das Außenministerium hat eine Reihe von Forderungen ausgearbeitet: dass [SCOPE.sCountry('ww_demand_target').GetAltName('NOM')] öffentlich seiner Feindseligkeit gegenüber unserem System abschwört und seine Propaganda gegen uns zum Schweigen bringt. Einmal überbracht, werden die Forderungen [SCOPE.sCountry('ww_demand_target').GetAltName('AKK')] zu einer Antwort zwingen, und was auch immer es antwortet, der brüchige Frieden zwischen den [Concept('concept_great_power', 'Großmächten')] wird auf die Probe gestellt."
+ },
+ "world_war_events.4.f": {
+  "en": "'It is a strong note,' the foreign minister said, sliding the draft across the desk. 'Some would say too strong.'\\n\\nThe premier read it twice. 'Will they accept?'\\n\\n'No. But they will have to refuse in public, and that is rather the point.'",
+  "de": "'Das ist eine scharfe Note', sagte der Außenminister und schob den Entwurf über den Schreibtisch. 'Manche würden sagen, zu scharf.'\\n\\nDer Premier las sie zweimal. 'Werden sie annehmen?'\\n\\n'Nein. Aber sie werden öffentlich ablehnen müssen, und genau das ist der Sinn der Sache.'"
+ },
+ "world_war_events.4.t": {
+  "en": "Ideological Demands",
+  "de": "Ideologische Forderungen"
+ },
+ "world_war_events.5.a": {
+  "en": "To arms! For our nation and our cause!",
+  "de": "Zu den Waffen! Für unsere Nation und unsere Sache!"
+ },
+ "world_war_events.5.b": {
+  "en": "Stand down. Not this time.",
+  "de": "Zurückziehen. Diesmal nicht."
+ },
+ "world_war_events.5.d": {
+  "en": "Years of mounting tension have brought us to the brink of war with [SCOPE.sCountry('war_target').GetName]. The general staff reports that the army is ready and asks for the order to move. If we give it, [SCOPE.sCountry('war_target').GetName] and its friends will answer, and the [Concept('concept_great_power', 'great powers')] will be drawn in one by one to the most devastating war in human history. If we do not, the moment will pass, and perhaps the initiative with it.",
+  "de": "Jahre wachsender Spannungen haben uns an den Rand eines Krieges mit [SCOPE.sCountry('war_target').GetAltName('DAT')] gebracht. Der Generalstab meldet, dass die Armee bereit ist, und bittet um den Marschbefehl. Geben wir ihn, werden [SCOPE.sCountry('war_target').GetAltName('NOM')] und seine Freunde antworten, und die [Concept('concept_great_power', 'Großmächte')] werden nach und nach in den verheerendsten Krieg der Menschheitsgeschichte hineingezogen. Tun wir es nicht, wird der Moment verstreichen, und vielleicht die Initiative mit ihm."
+ },
+ "world_war_events.5.f": {
+  "en": "The chief of the general staff did not sit down. 'The divisions are at the railheads,' he said. 'The plans are current. I need only your signature.'\\n\\nThe minister looked at the order for a long time. Outside, a tram bell rang; somewhere a café was opening its shutters, as though it were an ordinary morning.\\n\\n'And if I do not sign?'\\n\\n'Then you will have to explain to them,' the general said, nodding at the window, 'why we built all this and then lost our nerve.'",
+  "de": "Der Chef des Generalstabs setzte sich nicht. 'Die Divisionen stehen an den Verladebahnhöfen', sagte er. 'Die Pläne sind aktuell. Ich brauche nur Ihre Unterschrift.'\\n\\nDer Minister betrachtete den Befehl lange. Draußen läutete eine Straßenbahnklingel; irgendwo öffnete ein Café seine Fensterläden, als wäre es ein ganz gewöhnlicher Morgen.\\n\\n'Und wenn ich nicht unterschreibe?'\\n\\n'Dann werden Sie ihnen erklären müssen', sagte der General mit einem Nicken zum Fenster, 'warum wir all das aufgebaut und dann die Nerven verloren haben.'"
+ },
+ "world_war_events.5.t": {
+  "en": "The Brink of War",
+  "de": "Am Rande des Krieges"
  }
 }

@@ -1,0 +1,354 @@
+{
+ "rule_banking_system_rule": {
+  "en": "Banking System",
+  "de": "Bankwesen"
+ },
+ "rule_covert_warfare_rule": {
+  "en": "Covert Warfare",
+  "de": "Verdeckte Kriegsführung"
+ },
+ "rule_cultural_hegemony_rule": {
+  "en": "Cultural Hegemony",
+  "de": "Kulturelle Hegemonie"
+ },
+ "rule_custom_religions_allowed_rule": {
+  "en": "Custom Religion Allowed",
+  "de": "Benutzerdefinierte Religion erlaubt"
+ },
+ "rule_decolonization_rule": {
+  "en": "Decolonization",
+  "de": "Dekolonisierung"
+ },
+ "rule_free_market_construction_rule": {
+  "en": "Free Market Construction",
+  "de": "Freie Marktbauwirtschaft"
+ },
+ "rule_global_warming_rule": {
+  "en": "Global Warming",
+  "de": "Globale Erwärmung"
+ },
+ "rule_grand_monuments_rule": {
+  "en": "Grand Monuments",
+  "de": "Große Monumente"
+ },
+ "rule_heir_education_rule": {
+  "en": "Heir Education",
+  "de": "Erbenerziehung"
+ },
+ "rule_internal_resettlement_rule": {
+  "en": "Internal Resettlement",
+  "de": "Interne Umsiedlung"
+ },
+ "rule_nuclear_weapons_rule": {
+  "en": "Nuclear Weapons",
+  "de": "Nuklearwaffen"
+ },
+ "rule_social_movements_rule": {
+  "en": "Social Movements",
+  "de": "Soziale Bewegungen"
+ },
+ "rule_space_race_rule": {
+  "en": "Space Race",
+  "de": "Wettlauf ins All"
+ },
+ "rule_united_nations_rule": {
+  "en": "United Nations",
+  "de": "Vereinte Nationen"
+ },
+ "rule_universal_aptitude_traits_rule": {
+  "en": "Universal Aptitude Traits",
+  "de": "Universelle Begabungsmerkmale"
+ },
+ "rule_world_war_rule": {
+  "en": "World War",
+  "de": "Weltkrieg"
+ },
+ "setting_banking_system_disabled": {
+  "en": "Banking System Disabled",
+  "de": "Bankwesen deaktiviert"
+ },
+ "setting_banking_system_disabled_desc": {
+  "en": "The [concept_banking_cycle] [concept_journal_entry] is disabled. [concept_financial_regulation] laws keep their general economic effects, such as Urban Center [concept_throughput], [concept_investment_pool] contributions, innovation, and government [concept_dividends], but banking-specific modifiers are inactive.",
+  "de": "Der [concept_banking_cycle]-[concept_journal_entry] ist deaktiviert. [concept_financial_regulation]-Gesetze behalten ihre allgemeinen wirtschaftlichen Effekte, etwa den [concept_throughput] der Stadtzentren, Beiträge zum [concept_investment_pool], Innovation und staatliche [concept_dividends], doch bankspezifische Modifikatoren sind inaktiv."
+ },
+ "setting_banking_system_enabled": {
+  "en": "Banking System Enabled",
+  "de": "Bankwesen aktiviert"
+ },
+ "setting_banking_system_enabled_desc": {
+  "en": "The [concept_banking_cycle] [concept_journal_entry] is active. [concept_financial_regulation] laws provide banking intervention tools, momentum effects, and crash chance modifiers that interact with the banking cycle system.",
+  "de": "Der [concept_banking_cycle]-[concept_journal_entry] ist aktiv. [concept_financial_regulation]-Gesetze bieten Instrumente zur Bankenintervention, Momentum-Effekte und Modifikatoren für die Crash-Wahrscheinlichkeit, die mit dem Bankenzyklus-System interagieren."
+ },
+ "setting_banking_system_simplified": {
+  "en": "Banking System Simplified",
+  "de": "Bankwesen vereinfacht"
+ },
+ "setting_banking_system_simplified_desc": {
+  "en": "The [concept_banking_cycle] [concept_journal_entry] is active, but without the monetary-policy layer built on top of it. There is no policy interest rate to set, no inflation, no exchange rate, and no international monetary arrangements such as currency pegs, swap lines or a shared currency. Your government still borrows at a rate of its own — the world reference rate plus the risk premium your standing earns — you simply do not steer it.",
+  "de": "Der [concept_banking_cycle]-[concept_journal_entry] ist aktiv, jedoch ohne die darauf aufbauende geldpolitische Ebene. Es gibt keinen Leitzins zum Festlegen, keine Inflation, keinen Wechselkurs und keine internationalen Währungsarrangements wie Wechselkursbindungen, Swap-Linien oder eine gemeinsame Währung. Ihre Regierung leiht sich weiterhin zu einem eigenen Zinssatz — dem weltweiten Referenzzins zuzüglich des Risikoaufschlags, den Ihr Ansehen erwirtschaftet —, Sie steuern ihn nur nicht selbst."
+ },
+ "setting_covert_warfare_disabled": {
+  "en": "Covert Warfare Disabled",
+  "de": "Verdeckte Kriegsführung deaktiviert"
+ },
+ "setting_covert_warfare_disabled_desc": {
+  "en": "The covert warfare [concept_journal_entry] is disabled. [concept_intelligence_capacity] modifiers from technologies still appear but [concept_covert_operations] are unavailable.",
+  "de": "Der Verdeckte-Kriegsführung-[concept_journal_entry] ist deaktiviert. [concept_intelligence_capacity]-Modifikatoren aus Technologien erscheinen weiterhin, aber [concept_covert_operations] sind nicht verfügbar."
+ },
+ "setting_covert_warfare_enabled": {
+  "en": "Covert Warfare Enabled",
+  "de": "Verdeckte Kriegsführung aktiviert"
+ },
+ "setting_covert_warfare_enabled_desc": {
+  "en": "The [concept_covert_warfare_system] [concept_journal_entry] is active. Nations build [concept_intelligence_capacity] through technology and [concept_literacy], and can launch [concept_covert_operations] against rivals. Unused operation slots boost domestic defense.",
+  "de": "Der [concept_covert_warfare_system]-[concept_journal_entry] ist aktiv. Nationen bauen ihre [concept_intelligence_capacity] durch Technologie und [concept_literacy] auf und können [concept_covert_operations] gegen Rivalen starten. Ungenutzte Operationsplätze stärken die Inlandsverteidigung."
+ },
+ "setting_cultural_hegemony_disabled": {
+  "en": "Cultural Hegemony Disabled",
+  "de": "Kulturelle Hegemonie deaktiviert"
+ },
+ "setting_cultural_hegemony_disabled_desc": {
+  "en": "The cultural hegemony [concept_journal_entry] is disabled. [concept_cultural_pull] modifiers from technologies and events still apply to tooltips but have no gameplay effect.",
+  "de": "Der Kulturelle-Hegemonie-[concept_journal_entry] ist deaktiviert. [concept_cultural_pull]-Modifikatoren aus Technologien und Ereignissen erscheinen weiterhin in Tooltips, haben aber keine Auswirkung auf das Spielgeschehen."
+ },
+ "setting_cultural_hegemony_enabled": {
+  "en": "Cultural Hegemony Enabled",
+  "de": "Kulturelle Hegemonie aktiviert"
+ },
+ "setting_cultural_hegemony_enabled_desc": {
+  "en": "The [concept_cultural_hegemony_system] [concept_journal_entry] is active. Nations compete for global cultural influence through art, [concept_prestige], living standards, and technology. The dominant cultural power attracts migrants, and events can let countries under its influence gain research speed by opening up to its culture.",
+  "de": "Der [concept_cultural_hegemony_system]-[concept_journal_entry] ist aktiv. Nationen konkurrieren durch Kunst, [concept_prestige], Lebensstandard und Technologie um globalen kulturellen Einfluss. Die dominante Kulturmacht zieht Migranten an, und Ereignisse können Ländern unter ihrem Einfluss ermöglichen, durch Öffnung gegenüber ihrer Kultur an Forschungsgeschwindigkeit zu gewinnen."
+ },
+ "setting_custom_religions_allowed": {
+  "en": "Custom Religions Allowed",
+  "de": "Benutzerdefinierte Religionen erlaubt"
+ },
+ "setting_custom_religions_allowed_desc": {
+  "en": "Custom religions are allowed in this game. You will receive a [concept_journal_entry] allowing you to select the ideology and name of your religion.",
+  "de": "Benutzerdefinierte Religionen sind in dieser Partie erlaubt. Sie erhalten einen [concept_journal_entry], mit dem Sie die Ideologie und den Namen Ihrer Religion wählen können."
+ },
+ "setting_custom_religions_not_allowed": {
+  "en": "Custom Religions Not Allowed",
+  "de": "Benutzerdefinierte Religionen nicht erlaubt"
+ },
+ "setting_custom_religions_not_allowed_desc": {
+  "en": "Custom religions are not allowed in this game.",
+  "de": "Benutzerdefinierte Religionen sind in dieser Partie nicht erlaubt."
+ },
+ "setting_decolonization_disabled": {
+  "en": "Decolonization Disabled",
+  "de": "Dekolonisierung deaktiviert"
+ },
+ "setting_decolonization_disabled_desc": {
+  "en": "The colonial empire [concept_journal_entry] is disabled. [concept_decolonization_system] technology effects still apply but the decolonization event chain and [concept_colonial_stability] tracking are inactive.",
+  "de": "Der Kolonialreich-[concept_journal_entry] ist deaktiviert. Die Technologieeffekte der [concept_decolonization_system] gelten weiterhin, aber die Ereigniskette der Dekolonisierung und die Erfassung der [concept_colonial_stability] sind inaktiv."
+ },
+ "setting_decolonization_enabled": {
+  "en": "Decolonization Enabled",
+  "de": "Dekolonisierung aktiviert"
+ },
+ "setting_decolonization_enabled_desc": {
+  "en": "The colonial empire [concept_journal_entry] is active. Nations with overseas colonies face [concept_decolonization_system] pressures, [concept_colonial_stability] tracking, and related events after researching decolonization technology.",
+  "de": "Der Kolonialreich-[concept_journal_entry] ist aktiv. Nationen mit Überseekolonien sehen sich nach der Erforschung der Dekolonisierungstechnologie dem Druck der [concept_decolonization_system], der Erfassung der [concept_colonial_stability] und zugehörigen Ereignissen gegenüber."
+ },
+ "setting_free_market_construction_disabled": {
+  "en": "Free Market Construction Disabled",
+  "de": "Freie Marktbauwirtschaft deaktiviert"
+ },
+ "setting_free_market_construction_disabled_desc": {
+  "en": "Construction works as in the base game. The $te_construction_market_site$ is your construction sector: the government builds and expands it, and each level provides construction points according to its production method. There is no construction good and no construction maintenance, and your economic-system law sets the private share of construction. The materials for each construction point spent are bought as in the base game. Every country gets a small base of construction, and AI countries keep the Construction Sites they have.\\n\\n#b Construction Sites must currently be built from the state view.#! This is a technical limitation that is being worked on.",
+  "de": "Der Bau funktioniert wie im Basisspiel. Der $te_construction_market_site$ ist Ihr Bausektor: Die Regierung baut und erweitert ihn, und jede Stufe liefert Baupunkte gemäß ihrer Produktionsmethode. Es gibt kein Baugut und keine Bauunterhaltung, und Ihr wirtschaftspolitisches Gesetz legt den privaten Anteil am Bau fest. Die Materialien für jeden ausgegebenen Baupunkt werden wie im Basisspiel gekauft. Jedes Land erhält eine kleine Grundmenge an Bau, und KI-Länder behalten ihre vorhandenen Baustellen.\\n\\n#b Baustellen müssen derzeit aus der Staatenansicht heraus errichtet werden.#! Dies ist eine technische Einschränkung, an der noch gearbeitet wird."
+ },
+ "setting_free_market_construction_enabled": {
+  "en": "Free Market Construction Enabled",
+  "de": "Freie Marktbauwirtschaft aktiviert"
+ },
+ "setting_free_market_construction_enabled_desc": {
+  "en": "[concept_construction] is a tradeable good. $building_construction_sector$ buildings sell it on the market, the government buys the amount you set each week in the construction panel, and investors buy for private projects from the [concept_investment_pool]. Industry and infrastructure use a little construction as maintenance, and much more while they retool after switching production methods. The private share of construction follows the two purchases instead of your economic-system law. See [concept_te_construction_market].",
+  "de": "[concept_construction] ist ein handelbares Gut. $building_construction_sector$-Gebäude verkaufen es auf dem Markt, die Regierung kauft die Menge, die Sie jede Woche im Baupanel festlegen, und Investoren kaufen für private Projekte aus dem [concept_investment_pool]. Industrie und Infrastruktur verbrauchen etwas Bau als Unterhalt und deutlich mehr, während sie nach einem Wechsel der Produktionsmethode umgerüstet werden. Der private Anteil am Bau folgt den beiden Käufen statt Ihrem wirtschaftspolitischen Gesetz. Siehe [concept_te_construction_market]."
+ },
+ "setting_free_market_construction_no_maintenance": {
+  "en": "Free Market Construction without Maintenance",
+  "de": "Freie Marktbauwirtschaft ohne Unterhalt"
+ },
+ "setting_free_market_construction_no_maintenance_desc": {
+  "en": "As Free Market Construction Enabled, but buildings use no construction as maintenance, so switching production methods costs no construction either. [concept_construction] is still a tradeable good: $building_construction_sector$ buildings sell it on the market, the government buys the amount you set each week in the construction panel, investors buy for private projects from the [concept_investment_pool], and a few company buildings use it in their production. The private share of construction follows the two purchases instead of your economic-system law. See [concept_te_construction_market].",
+  "de": "Wie Freie Marktbauwirtschaft aktiviert, jedoch verbrauchen Gebäude keinen Bau als Unterhalt, sodass auch der Wechsel der Produktionsmethode keinen Bau kostet. [concept_construction] bleibt ein handelbares Gut: $building_construction_sector$-Gebäude verkaufen es auf dem Markt, die Regierung kauft die Menge, die Sie jede Woche im Baupanel festlegen, Investoren kaufen für private Projekte aus dem [concept_investment_pool], und einige Firmengebäude verwenden es in ihrer Produktion. Der private Anteil am Bau folgt den beiden Käufen statt Ihrem wirtschaftspolitischen Gesetz. Siehe [concept_te_construction_market]."
+ },
+ "setting_free_market_construction_no_retooling": {
+  "en": "Free Market Construction without Retooling Costs",
+  "de": "Freie Marktbauwirtschaft ohne Umrüstkosten"
+ },
+ "setting_free_market_construction_no_retooling_desc": {
+  "en": "As Free Market Construction Enabled, but buildings do not retool: switching production methods does not raise the construction a building uses as maintenance. [concept_construction] is a tradeable good: $building_construction_sector$ buildings sell it on the market, the government buys the amount you set each week in the construction panel, and investors buy for private projects from the [concept_investment_pool]. Industry and infrastructure use a little construction as maintenance, and the private share of construction follows the two purchases instead of your economic-system law. See [concept_te_construction_market].",
+  "de": "Wie Freie Marktbauwirtschaft aktiviert, jedoch rüsten Gebäude nicht um: Ein Wechsel der Produktionsmethode erhöht nicht den Bau, den ein Gebäude als Unterhalt verbraucht. [concept_construction] ist ein handelbares Gut: $building_construction_sector$-Gebäude verkaufen es auf dem Markt, die Regierung kauft die Menge, die Sie jede Woche im Baupanel festlegen, und Investoren kaufen für private Projekte aus dem [concept_investment_pool]. Industrie und Infrastruktur verbrauchen etwas Bau als Unterhalt, und der private Anteil am Bau folgt den beiden Käufen statt Ihrem wirtschaftspolitischen Gesetz. Siehe [concept_te_construction_market]."
+ },
+ "setting_global_warming_disabled": {
+  "en": "Global Warming Disabled",
+  "de": "Globale Erwärmung deaktiviert"
+ },
+ "setting_global_warming_disabled_desc": {
+  "en": "The global warming [concept_journal_entry] is disabled. There is no climate change: greenhouse gas emissions are not tracked, the world does not warm, and no climate events occur. Policies and technologies that reduce [concept_pollution_system] still do so.",
+  "de": "Der Globale-Erwärmung-[concept_journal_entry] ist deaktiviert. Es gibt keinen Klimawandel: Treibhausgasemissionen werden nicht erfasst, die Welt erwärmt sich nicht, und es treten keine Klimaereignisse auf. Maßnahmen und Technologien, die die [concept_pollution_system] verringern, tun dies weiterhin."
+ },
+ "setting_global_warming_enabled": {
+  "en": "Global Warming Enabled",
+  "de": "Globale Erwärmung aktiviert"
+ },
+ "setting_global_warming_enabled_desc": {
+  "en": "The global warming [concept_journal_entry] is active. Greenhouse gas emissions are tracked and climate policies affect global temperature rise. Environmental modifiers provide both emissions reduction and [concept_pollution_system] reduction effects.",
+  "de": "Der Globale-Erwärmung-[concept_journal_entry] ist aktiv. Treibhausgasemissionen werden erfasst, und Klimapolitik beeinflusst den globalen Temperaturanstieg. Umweltmodifikatoren verringern sowohl die Emissionen als auch die [concept_pollution_system]."
+ },
+ "setting_grand_monuments_disabled": {
+  "en": "Grand Monuments Disabled",
+  "de": "Große Monumente deaktiviert"
+ },
+ "setting_grand_monuments_disabled_desc": {
+  "en": "The Grand Monument cannot be built, and no monument ceremony, contest or journal entry runs.",
+  "de": "Das Große Monument kann nicht errichtet werden, und es läuft weder eine Einweihungszeremonie noch ein Wettbewerb noch ein Journaleintrag dazu."
+ },
+ "setting_grand_monuments_enabled": {
+  "en": "Grand Monuments Enabled",
+  "de": "Große Monumente aktiviert"
+ },
+ "setting_grand_monuments_enabled_desc": {
+  "en": "Countries may raise Grand Monuments to their crown, republic, revolution, leader, faith or nation. What a monument honours can fall with the regime that raised it, and the next government decides whether to pull it down, rededicate it or keep it as heritage.",
+  "de": "Länder können Große Monumente zu Ehren ihrer Krone, Republik, Revolution, ihres Anführers, Glaubens oder ihrer Nation errichten. Was ein Monument ehrt, kann mit dem Regime fallen, das es errichtet hat, und die nächste Regierung entscheidet, ob sie es abreißt, umwidmet oder als Kulturerbe erhält."
+ },
+ "setting_heir_education_disabled": {
+  "en": "Heir Education Disabled",
+  "de": "Erbenerziehung deaktiviert"
+ },
+ "setting_heir_education_disabled_desc": {
+  "en": "The [concept_heir] education [concept_journal_entry] is disabled. Heirs do not receive education investments and their future capabilities are unaffected by this system. Characters only have administrative, diplomatic, and military aptitude traits if Universal Aptitude Traits is enabled.",
+  "de": "Der [concept_heir]-Erziehungs-[concept_journal_entry] ist deaktiviert. Erben erhalten keine Erziehungsinvestitionen, und ihre künftigen Fähigkeiten werden von diesem System nicht beeinflusst. Charaktere besitzen administrative, diplomatische und militärische Begabungsmerkmale nur, wenn Universelle Begabungsmerkmale aktiviert ist."
+ },
+ "setting_heir_education_enabled": {
+  "en": "Heir Education Enabled",
+  "de": "Erbenerziehung aktiviert"
+ },
+ "setting_heir_education_enabled_desc": {
+  "en": "The [concept_heir] education [concept_journal_entry] is active. Nations can invest in the education of their heirs, affecting their future capabilities and governance.",
+  "de": "Der [concept_heir]-Erziehungs-[concept_journal_entry] ist aktiv. Nationen können in die Erziehung ihrer Erben investieren, was deren künftige Fähigkeiten und Regierungsführung beeinflusst."
+ },
+ "setting_internal_resettlement_ai_voluntary": {
+  "en": "Internal Resettlement: AI Voluntary Only",
+  "de": "Interne Umsiedlung: Nur freiwillig für KI"
+ },
+ "setting_internal_resettlement_ai_voluntary_desc": {
+  "en": "As enabled, but AI countries run only voluntary programs. Penal Transportation, Special Settlements and Rustication remain open to players.",
+  "de": "Wie aktiviert, jedoch führen KI-Länder nur freiwillige Programme durch. Strafverschickung, Sondersiedlungen und Landverbannung bleiben für Spieler weiterhin offen."
+ },
+ "setting_internal_resettlement_disabled": {
+  "en": "Internal Resettlement Disabled",
+  "de": "Interne Umsiedlung deaktiviert"
+ },
+ "setting_internal_resettlement_disabled_desc": {
+  "en": "The Settlement Authority cannot be built and no resettlement programs run.",
+  "de": "Die Siedlungsbehörde kann nicht errichtet werden, und es laufen keine Umsiedlungsprogramme."
+ },
+ "setting_internal_resettlement_enabled": {
+  "en": "Internal Resettlement Enabled",
+  "de": "Interne Umsiedlung aktiviert"
+ },
+ "setting_internal_resettlement_enabled_desc": {
+  "en": "Countries may build a Settlement Authority on a thinly populated frontier and run government resettlement programs into it, from land grants to penal transportation, as their laws allow.",
+  "de": "Länder können an einer dünn besiedelten Grenze eine Siedlungsbehörde errichten und je nach ihren Gesetzen staatliche Umsiedlungsprogramme dorthin betreiben, von Landzuweisungen bis zur Strafverschickung."
+ },
+ "setting_nuclear_weapons_disabled": {
+  "en": "Nuclear Weapons Disabled",
+  "de": "Nuklearwaffen deaktiviert"
+ },
+ "setting_nuclear_weapons_disabled_desc": {
+  "en": "The nuclear weapons [concept_journal_entry] is disabled. Nuclear weapons technology can still be researched but the [concept_nuclear_program] progression, stockpile tracking, and related events are inactive.",
+  "de": "Der Nuklearwaffen-[concept_journal_entry] ist deaktiviert. Nuklearwaffentechnologie kann weiterhin erforscht werden, aber der Fortschritt des [concept_nuclear_program], die Erfassung des Arsenals und zugehörige Ereignisse sind inaktiv."
+ },
+ "setting_nuclear_weapons_enabled": {
+  "en": "Nuclear Weapons Enabled",
+  "de": "Nuklearwaffen aktiviert"
+ },
+ "setting_nuclear_weapons_enabled_desc": {
+  "en": "The nuclear weapons [concept_journal_entry] is active. [Concept('concept_great_power', 'Great powers')] and eligible [Concept('concept_major_power', 'major powers')] can pursue nuclear weapons programs with funding levels, stockpile tracking, and related diplomatic consequences.",
+  "de": "Der Nuklearwaffen-[concept_journal_entry] ist aktiv. [Concept('concept_great_power', 'Großmächte')] und berechtigte [Concept('concept_major_power', 'Mittelmächte')] können Nuklearwaffenprogramme mit festlegbaren Finanzierungsstufen, Arsenalerfassung und zugehörigen diplomatischen Folgen verfolgen."
+ },
+ "setting_social_movements_disabled": {
+  "en": "Social Movements Disabled",
+  "de": "Soziale Bewegungen deaktiviert"
+ },
+ "setting_social_movements_disabled_desc": {
+  "en": "The social movement journal entries are disabled: civil rights, human augmentation, digital rights and surveillance, the post-scarcity transition, and the mental health crisis, together with the events those entries fire. Related technologies and laws still exist, and social events that do not come from these entries, such as those on feminism, LGBTQ+ rights, religion, anti-war and transhumanist movements, and the environment, still occur.",
+  "de": "Die Journaleinträge der sozialen Bewegungen sind deaktiviert: Bürgerrechte, menschliche Augmentierung, digitale Rechte und Überwachung, der Übergang zum Post-Scarcity-Zeitalter und die Krise der psychischen Gesundheit, zusammen mit den Ereignissen, die diese Einträge auslösen. Zugehörige Technologien und Gesetze bestehen weiterhin, und soziale Ereignisse, die nicht aus diesen Einträgen stammen, etwa zu Feminismus, LGBTQ+-Rechten, Religion, Antikriegs- und transhumanistischen Bewegungen sowie der Umwelt, treten weiterhin auf."
+ },
+ "setting_social_movements_enabled": {
+  "en": "Social Movements Enabled",
+  "de": "Soziale Bewegungen aktiviert"
+ },
+ "setting_social_movements_enabled_desc": {
+  "en": "The social movement journal entries are active. As nations research the relevant technologies, they work through civil rights, human augmentation debates, digital rights and surveillance, the post-scarcity transition, and mental health awareness.",
+  "de": "Die Journaleinträge der sozialen Bewegungen sind aktiv. Während Nationen die entsprechenden Technologien erforschen, durchlaufen sie Bürgerrechte, Debatten um menschliche Augmentierung, digitale Rechte und Überwachung, den Übergang zum Post-Scarcity-Zeitalter und das Bewusstsein für psychische Gesundheit."
+ },
+ "setting_space_race_disabled": {
+  "en": "[concept_space_race] Disabled",
+  "de": "[concept_space_race] deaktiviert"
+ },
+ "setting_space_race_disabled_desc": {
+  "en": "The [concept_space_race] journal entries are disabled. Space-related technologies can still be researched but the milestone competition system, funding programs, and space race events are inactive.",
+  "de": "Die Journaleinträge des [concept_space_race] sind deaktiviert. Raumfahrtbezogene Technologien können weiterhin erforscht werden, aber das Meilenstein-Wettbewerbssystem, die Finanzierungsprogramme und die Ereignisse des Wettlaufs ins All sind inaktiv."
+ },
+ "setting_space_race_enabled": {
+  "en": "[concept_space_race] Enabled",
+  "de": "[concept_space_race] aktiviert"
+ },
+ "setting_space_race_enabled_desc": {
+  "en": "The [concept_space_race] journal entries are active. [Concept('concept_great_power', 'Great powers')] and [Concept('concept_major_power', 'major powers')] compete through a milestone-based progression from suborbital flight to interstellar probes, with funding levels affecting progress speed.",
+  "de": "Die Journaleinträge des [concept_space_race] sind aktiv. [Concept('concept_great_power', 'Großmächte')] und [Concept('concept_major_power', 'Mittelmächte')] konkurrieren in einem meilensteinbasierten Fortschritt vom suborbitalen Flug bis zu interstellaren Sonden, wobei die Finanzierungsstufe die Fortschrittsgeschwindigkeit beeinflusst."
+ },
+ "setting_united_nations_disabled": {
+  "en": "United Nations Disabled",
+  "de": "Vereinte Nationen deaktiviert"
+ },
+ "setting_united_nations_disabled_desc": {
+  "en": "The United Nations [concept_journal_entry] is disabled. Intergovernmental organization technology can still be researched but the UN founding, membership, voting, and related diplomatic events are inactive.",
+  "de": "Der Vereinte-Nationen-[concept_journal_entry] ist deaktiviert. Die Technologie für zwischenstaatliche Organisationen kann weiterhin erforscht werden, aber die Gründung der UN, die Mitgliedschaft, Abstimmungen und zugehörige diplomatische Ereignisse sind inaktiv."
+ },
+ "setting_united_nations_enabled": {
+  "en": "United Nations Enabled",
+  "de": "Vereinte Nationen aktiviert"
+ },
+ "setting_united_nations_enabled_desc": {
+  "en": "The United Nations [concept_journal_entry] is active. Nations can found and join the UN, participate in General Assembly votes, contribute to peacekeeping, and engage with UN-related diplomatic events.",
+  "de": "Der Vereinte-Nationen-[concept_journal_entry] ist aktiv. Nationen können die UN gründen und ihr beitreten, an Abstimmungen der Generalversammlung teilnehmen, sich an Friedenssicherung beteiligen und mit UN-bezogenen diplomatischen Ereignissen befasst sein."
+ },
+ "setting_universal_aptitude_traits_disabled": {
+  "en": "Universal Aptitude Traits Disabled",
+  "de": "Universelle Begabungsmerkmale deaktiviert"
+ },
+ "setting_universal_aptitude_traits_disabled_desc": {
+  "en": "Administrative, diplomatic, and military aptitude traits only exist alongside Heir Education. With Heir Education enabled, only rulers and heirs have them: a character who leaves the throne loses their aptitude traits, and regains the same ones if they return to power. Other characters (such as [concept_interest_group] leaders and generals) remain without them. With Heir Education also disabled, no character has aptitude traits.",
+  "de": "Administrative, diplomatische und militärische Begabungsmerkmale existieren nur zusammen mit Erbenerziehung. Ist Erbenerziehung aktiviert, besitzen nur Herrscher und Erben sie: Ein Charakter, der den Thron verlässt, verliert seine Begabungsmerkmale und erhält bei Rückkehr an die Macht dieselben zurück. Andere Charaktere (etwa Anführer von [concept_interest_group] und Generäle) bleiben ohne sie. Ist Erbenerziehung ebenfalls deaktiviert, besitzt kein Charakter Begabungsmerkmale."
+ },
+ "setting_universal_aptitude_traits_enabled": {
+  "en": "Universal Aptitude Traits Enabled",
+  "de": "Universelle Begabungsmerkmale aktiviert"
+ },
+ "setting_universal_aptitude_traits_enabled_desc": {
+  "en": "Every adult character is assigned administrative, diplomatic, and military aptitude traits, even with Heir Education disabled (the traits simply cannot be shaped through education). Useful for total conversions where any character might gain a political role.",
+  "de": "Jeder erwachsene Charakter erhält administrative, diplomatische und militärische Begabungsmerkmale zugewiesen, auch bei deaktivierter Erbenerziehung (die Merkmale können dann nur nicht durch Erziehung geformt werden). Nützlich für Total Conversions, in denen jeder Charakter eine politische Rolle erhalten könnte."
+ },
+ "setting_world_war_disabled": {
+  "en": "World War Disabled",
+  "de": "Weltkrieg deaktiviert"
+ },
+ "setting_world_war_disabled_desc": {
+  "en": "The world war [concept_journal_entry] is disabled. Ideological tensions and world war events will not occur.",
+  "de": "Der Weltkrieg-[concept_journal_entry] ist deaktiviert. Ideologische Spannungen und Weltkriegsereignisse treten nicht auf."
+ },
+ "setting_world_war_enabled": {
+  "en": "World War Enabled",
+  "de": "Weltkrieg aktiviert"
+ },
+ "setting_world_war_enabled_desc": {
+  "en": "The world war [concept_journal_entry] is active for [Concept('concept_great_power', 'great powers')]. Ideological tensions between great powers can escalate into a global conflict with leadup, active war, and post-war phases.",
+  "de": "Der Weltkrieg-[concept_journal_entry] ist aktiv für [Concept('concept_great_power', 'Großmächte')]. Ideologische Spannungen zwischen Großmächten können sich zu einem globalen Konflikt mit Vorlauf-, aktiver Kriegs- und Nachkriegsphase ausweiten."
+ }
+}
