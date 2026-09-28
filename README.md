@@ -58,7 +58,7 @@ The toggleable subset of these (banking cycle, world war, etc.) is gated on per-
 
 ## Game rules (toggleable systems)
 
-Sixteen mod systems can be turned on or off at game setup, and one more rule sets how buildings are named. Defaults below; full list in `common/game_rules/extra_game_rules.txt`. Disabled systems hide their journal entry, bypass their on-actions, and skip their events — but baseline content (laws, techs, buildings, modifiers) still applies.
+Sixteen mod systems can be turned on or off at game setup. Defaults below; full list in `common/game_rules/extra_game_rules.txt`. Disabled systems hide their journal entry, bypass their on-actions, and skip their events — but baseline content (laws, techs, buildings, modifiers) still applies.
 
 | Rule | Default | What it gates |
 |---|---|---|
@@ -78,7 +78,6 @@ Sixteen mod systems can be turned on or off at game setup, and one more rule set
 | `free_market_construction_rule` | enabled | The construction market: construction as a tradeable good bought by the government and investors, construction maintenance on industry and infrastructure, a private share that follows the purchases. *Without Retooling Costs*: the same, but switching a building's production methods no longer multiplies its construction maintenance. *Without Maintenance*: the market with no construction maintenance at all (and so no retooling cost). *Disabled*: base-game construction — the Construction Site becomes the construction sector (built and expanded by the government, points straight from its production method), no construction good or maintenance, and the economic-system law sets the private share; every country gets a small base of construction (+5 a week), and AI countries can't shed their Construction Sites outside default |
 | `internal_resettlement_rule` | enabled | The Settlement Authority and government resettlement programs. *AI voluntary only*: AI countries run only voluntary programs (penal transportation, special settlements and rustication stay open to players). *Disabled*: no Settlement Authority |
 | `grand_monuments_rule` | enabled | The Grand Monument building, its dedication ceremony, contests and the Monuments journal entry |
-| `era_building_names_rule` | enabled | Names only. Eight buildings (Arts Academy, Electrics, Radio and Aerospace Industries, Glassworks, Consumer Appliance Industries, Tourism Industry, Airport) take era names from the player's technology (`common/customizable_localization/te_building_names_custom_loc.txt`); *disabled* gives each one fixed name |
 
 Every rule but `banking_system_rule`, `free_market_construction_rule` and
 `internal_resettlement_rule` is a straight on/off pair; the first has a third, *simplified*

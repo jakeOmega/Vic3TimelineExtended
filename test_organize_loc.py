@@ -159,8 +159,8 @@ class OrganizeAllUnusedTests(unittest.TestCase):
 
     def test_replace_override_value_keeps_key_out_of_unused(self):
         # replace/ holds overrides of vanilla keys and is never organised, but
-        # an override's value can name mod keys: the era building names make
-        # building_art_academy a SelectLocalization over two mod keys.
+        # an override's value can name mod keys, here through a
+        # SelectLocalization and a $splice$.
         replace = (
             "l_english:\n"
             " building_x:0 \"[SelectLocalization(GetPlayer.IsValid, 'building_x_name_player', 'building_x_name_early')]\"\n"
