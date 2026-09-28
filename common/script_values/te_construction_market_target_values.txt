@@ -21,6 +21,33 @@ te_construction_market_private_spending_target = {
 }
 
 
+# The government purchase the player has set, as construction points a week:
+#   Fixed Quantity (default): the number in the construction panel's +/- box
+#   Fixed Budget:             the quantity the weekly budget is buying now
+#                             (var:te_construction_market_budget_quantity,
+#                             moved each week by
+#                             te_construction_market_update_budget_quantity)
+te_construction_market_public_setting = {
+	value = 0
+	if = {
+		limit = {
+			te_construction_market_budget_mode_on = yes
+		}
+		if = {
+			limit = {
+				has_variable = te_construction_market_budget_quantity
+			}
+			value = var:te_construction_market_budget_quantity
+		}
+	}
+	else_if = {
+		limit = {
+			has_variable = te_construction_market_public_target
+		}
+		value = var:te_construction_market_public_target
+	}
+}
+
 te_construction_market_public_use_target = {
 	if = {
 		limit = {
@@ -30,14 +57,14 @@ te_construction_market_public_use_target = {
 			limit = {
 				is_construction_paused = no
 			}
-			value = var:te_construction_market_public_target
+			value = te_construction_market_public_setting
 			# Cap at what the government queue can absorb this week, mirroring
 			# the private-side cap in te_construction_market_private_use_target.
 			# A player-set target above that would otherwise buy construction
 			# the government queue can't use. Only the effective use is capped;
-			# the variable (the number shown in the construction panel) keeps
-			# the player's setting. The AI's target is already capped the same
-			# way in te_construction_market_ai_purchase_target.
+			# the variables (the number or budget shown in the construction
+			# panel) keep the player's setting. The AI's target is already
+			# capped the same way in te_construction_market_ai_purchase_target.
 			max = {
 				value = construction_queue_num_queued_government_levels
 				multiply = modifier:country_max_weekly_construction_progress_add
@@ -175,4 +202,92 @@ te_construction_market_price_stabilizer_next_value = {
 			}
 		}
 	}
+}
+
+# ----------------------------------------------------------------------------
+# Fixed Budget mode (te_construction_market_budget_mode_on)
+# ----------------------------------------------------------------------------
+# The player sets what the government spends a week
+# (var:te_construction_market_public_budget) instead of how much it buys. The
+# quantity bought (var:te_construction_market_budget_quantity) moves each
+# weekly pulse a quarter of the way toward what the budget buys at that week's
+# price (te_construction_market_update_budget_quantity).
+#
+# Why only part of the way: the government's purchase is a large share of the
+# demand in its market, so the purchase moves the price it is divided by.
+# Setting the quantity to budget / price outright would chase that: buy more,
+# the price rises, buy less next week, the price falls, and so on. If a 1%
+# larger purchase raises the price by e%, closing 1/N of the gap each week
+# multiplies what is left of it by 1 - (1 + e) / N. At N = 1 that is -e, an
+# overshoot every week that grows once e > 1; at N = 4 it stays positive, a
+# steady approach without overshooting, up to e = 3.
+TE_CONSTRUCTION_MARKET_BUDGET_SHIFT_WEEKS = 4
+
+# What the weekly budget buys at this week's price.
+te_construction_market_budget_quantity_target = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_construction_market_public_budget
+		}
+		value = var:te_construction_market_public_budget
+		divide = {
+			value = te_construction_market_price
+			min = 1
+		}
+	}
+}
+
+# How far that is from the quantity being bought now.
+te_construction_market_budget_quantity_gap = {
+	value = te_construction_market_budget_quantity_target
+	if = {
+		limit = {
+			has_variable = te_construction_market_budget_quantity
+		}
+		subtract = var:te_construction_market_budget_quantity
+	}
+}
+
+# Next week's quantity: a quarter of the gap closed. Within a point of the
+# target it takes the target, so a budget cut to 0 reaches 0 instead of
+# approaching it forever.
+te_construction_market_budget_quantity_next_value = {
+	value = te_construction_market_budget_quantity_target
+	if = {
+		limit = {
+			has_variable = te_construction_market_budget_quantity
+			OR = {
+				te_construction_market_budget_quantity_gap > 1
+				te_construction_market_budget_quantity_gap < -1
+			}
+		}
+		value = te_construction_market_budget_quantity_gap
+		divide = TE_CONSTRUCTION_MARKET_BUDGET_SHIFT_WEEKS
+		add = var:te_construction_market_budget_quantity
+	}
+}
+
+# Switching from Fixed Quantity to Fixed Budget carries the purchase over, so
+# nothing changes at the switch: the quantity to start from is the purchase in
+# force this week, or, while none is (an empty government queue, or
+# construction paused), the quantity set.
+te_construction_market_budget_seed_quantity = {
+	value = te_construction_market_public_use_target
+	if = {
+		limit = {
+			te_construction_market_public_use_target <= 0
+		}
+		value = te_construction_market_public_setting
+	}
+}
+
+# ...and the budget is what that costs at this week's price, to the nearest
+# 1,000 (the smallest budget step in the panel).
+te_construction_market_budget_seed = {
+	value = te_construction_market_budget_seed_quantity
+	multiply = te_construction_market_price
+	divide = 1000
+	round = yes
+	multiply = 1000
 }

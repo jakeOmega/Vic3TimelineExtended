@@ -13,7 +13,7 @@ campaign meets them. "Rule" names the game rule that can switch the system off;
 
 | System | When it appears | Rule | Chapter |
 |---|---|---|---|
-| Construction market | From the start. You set the government's weekly purchase in the construction panel. | Free Market Construction | [Economy and construction](03-economy.md#the-construction-market) |
+| Construction market | From the start. You set the government's weekly purchase in the construction panel, as a number of points or as a budget. | Free Market Construction | [Economy and construction](03-economy.md#the-construction-market) |
 | Adaptive standard-of-living expectations, Construction Cost Scaling, Bulk Transportation | Always on. | none | [Economy and construction](03-economy.md) |
 | Migration crowding, Homeland Dynamics, tourism, world city rankings | Always on, shown in the state panel. Homeland changes also need an enabling law, principle or the Mass Media technology. | none | [States and population](07-states.md) |
 | Grand Monument | From the start, in any state. | Grand Monuments | [The extended timeline](02-timeline.md#grand-monuments) |

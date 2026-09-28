@@ -101,11 +101,36 @@ National Queue tab.
 
 | Line | What it shows |
 |---|---|
-| Purchase control | The government purchase you have set. Click for ±1, Shift+Click ±10, Ctrl+Click ±100, Alt+Click ±1,000. Right-click on the plus adds 10,000; right-click on the minus sets 0. |
+| Fixed Quantity / Fixed Budget | Whether you set the government purchase as a number of points or as weekly spending. The lit button is the mode in force; click the other to switch. |
+| Purchase control | The government purchase you have set. Fixed Quantity: click for ±1, Shift+Click ±10, Ctrl+Click ±100, Alt+Click ±1,000; right-click on the plus adds 10,000. Fixed Budget: click for ±£1,000, Shift+Click ±£10,000, Ctrl+Click ±£100,000, Alt+Click ±£1,000,000; right-click on the plus adds £10,000,000. In both, right-click on the minus sets 0. |
 | Government buys | Points bought this week and the approximate treasury cost. "Capped at what the queue can use" appears when your setting is higher than the queue can take. |
+| Your budget buys | Fixed Budget only: how many points a week your budget buys at today's price, which is where the government purchase is heading. |
 | Private investors buy | Points investors bought this week and the share of construction going to private projects. |
 | Price | What one construction point costs now: the market price, raised in rich countries by Construction Cost Scaling. |
 | Your market | Construction on sale (including imports) against construction wanted (every buyer, including maintenance and exports). A red "shortage" marks demand above supply. |
+
+### Fixed quantity or fixed budget
+
+The two buttons above the purchase control set what you fix and what follows the
+price.
+
+| Mode | You set | What follows the price | Use it for |
+|---|---|---|---|
+| Fixed Quantity (default) | Points the government buys each week | The treasury cost, at once | A set build rate, such as finishing a queue by a date or rebuilding after a war |
+| Fixed Budget | What the government spends each week | The points it buys, over a few weeks | A set cost: spending stays near your figure while the price moves |
+
+Under Fixed Budget, the purchase moves each week a quarter of the way toward what
+the budget buys at that week's price. A change goes about two-thirds of the way
+in a month and nine-tenths in two months. The delay is deliberate. The
+government's purchase moves the price, so a purchase that jumped straight to
+what the budget buys would push the price up, buy less the next week, let the
+price fall, and swing back and forth. Setting the budget to 0 stops government
+buying at once.
+
+Switching keeps the purchase in force. Fixed Budget starts at what your current
+purchase costs, to the nearest £1,000, and Fixed Quantity starts at the number
+of points your budget is buying. In both modes only what the queue can use is
+bought, so with a short queue a Fixed Budget spends less than you set.
 
 ### Free Market Construction settings
 
@@ -140,7 +165,8 @@ or the government queue builds nothing.
 wastes nothing. With a long queue, though, a high setting buys all of it: that
 is expensive for your budget, and a government buying heavily pushes up the
 price for every buyer in your market, investors included. Set the purchase to
-what you can afford rather than to the maximum. To stop government construction
+what you can afford rather than to the maximum, or switch to Fixed Budget and
+set the weekly spending directly. To stop government construction
 while private building carries on, set it to 0; the sector keeps selling to
 investors.
 - Watch the market line. A standing shortage keeps the price high, which means
@@ -157,10 +183,11 @@ market settings the game places and removes them as needed, and if you downsize
 the last one, construction stops for about two weeks until a new one appears in
 your capital.
 
-AI countries choose their own purchase each week. They spend roughly their net
-income, more when their gold reserves are full and less when they carry debt.
-They cut back when a war or banking stress meets thin reserves, and buy at least
-10 points a week while their government queue has anything in it.
+AI countries choose their own purchase each week, always as a fixed quantity.
+They spend roughly their net income, more when their gold reserves are full and
+less when they carry debt. They cut back when a war or banking stress meets thin
+reserves, and buy at least 10 points a week while their government queue has
+anything in it.
 
 ## Construction costs in rich countries
 
