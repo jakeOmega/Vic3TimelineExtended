@@ -146,6 +146,14 @@ Two company-logo problems turned up and belong to a logo pass, not this one: 76 
 
 **Wiring.** Building icons are read only from `icon =` (`BuildingType.GetIcon` in `building_browser_panel.gui`); there is no second lookup like the lens toolbar. 28 of the targets are `REPLACE_OR_CREATE:` definitions in `extra_buildings.txt`, so `wire` and `--validate` now match that prefix and capture the bare key. `REPLACE:` and `INJECT:` still don't match: they change a vanilla building, whose own art stays.
 
+**Review (2026-09-27).** 67 icons, first render at 2 seeds; the owner accepted the first 34 wonder picks unchanged. Of the rest, 18 needed another render:
+
+- **A product in front of a plant must have no fixed size.** Heaps of ore, grain or crates sit fine at building scale. A walkie-talkie, a jar, bottles or a chrome bar come out as big as the building, and photographic beside vanilla's painted scenes. The owner's rule: drop them (nine subjects).
+- **The painted look has to be asked for in the subject** (", loosely hand-painted with visible brush strokes"); changing the category's style would re-render every approved icon. It also brings painters' signatures and white canvas edges into the corners. The frame covers the bottom few percent, so check the composed icon, not the raw render, before retouching.
+- **The picture has to say what the building does.** A carbon-capture plant drawn as a power station "looks more like an emitter". FLUX adds chimneys to anything called a plant or given columns, whatever the prompt says against them; a low hall "whose whole front is a wall of big round black fans" came out clean.
+- **FLUX won't count sides or draw an L.** Eight Pentagon renders came out octagonal and LIGO's arms parallel or crossed, whatever the subject said. Four more seeds found LIGO's L. For the Pentagon, image-to-image from a drawn sketch (`FluxImg2ImgPipeline` with the cached embedding) keeps the geometry, but FLUX.1-schnell either keeps the sketch unchanged or loses its shape: the starting noise level is `floor(steps × strength) / steps`, the sketch survived 0.625 and was lost at 0.75, so search that band with 32 steps.
+- **Wonders mostly came right first time**, as FLUX knows the landmarks. The misses were a monument read as a rocket (Aswan's lotus tower), a detector hall read as a pit (LHC), a floating disc (Kenyatta), and lettering on a podium, plinth or slab (Sydney, Statue of Unity, LIGO), retouched or avoided.
+
 ## Review lessons (2026-09-27)
 
 About 250 icons were generated in one session: era 6 techs, all treaty articles and all diplomatic actions. The owner reviewed every batch on annotated sheets and changed about one pick in eight.
