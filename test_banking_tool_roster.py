@@ -151,7 +151,28 @@ class RosterTests(unittest.TestCase):
         block = _top_level_block(_text(CLEANUP), "remove_banking_market_modifiers_effect = {")
         for tool in _tools():
             with self.subTest(tool=tool):
-                self.assertIn("remove_modifier = %s\n" % _modifier(tool), block)
+                self.assertRegex(
+                    block,
+                    r"banking_strip_tool = \{ MODIFIER = %s\s+MARK = off_%s \}"
+                    % (re.escape(_modifier(tool)), re.escape(tool)),
+                )
+
+    def test_law_strip_marks_each_tool_as_its_manual_disable_does(self):
+        # A tool a law switches off (planning, cooperative or market) posts
+        # the same off_* history marker as its manual Disable, so the chart
+        # shows it ending (te_banking_economy_law_cleanup, #337 follow-up).
+        manual = {}
+        for m in re.finditer(r"(?ms)^banking_effect_\w+_disable_\w+ = \{\n(.*?)^\}", _text(EFFECTS)):
+            mark = re.search(r"MARK = (off_\w+) \}", m.group(1))
+            removed = re.search(r"remove_modifier = (\w+) \}", m.group(1))
+            if mark and removed:
+                manual[removed.group(1)] = mark.group(1)
+        pairs = re.findall(
+            r"banking_strip_tool = \{ MODIFIER = (\w+)\s+MARK = (\w+) \}", _text(CLEANUP))
+        self.assertTrue(pairs)
+        for modifier, mark in pairs:
+            with self.subTest(modifier=modifier):
+                self.assertEqual(manual.get(modifier), mark)
 
     def test_each_active_trigger_is_in_the_active_policy_list(self):
         block = _top_level_block(_text(DASH_SGUIS), "banking_dash_any_policy_active = {")
