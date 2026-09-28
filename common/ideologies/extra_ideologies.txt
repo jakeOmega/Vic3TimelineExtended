@@ -1,5 +1,5 @@
 ﻿ideology_environmentalists = {
-	icon = "gfx/interface/icons/ig_icons/rural_folk.dds"
+	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_environmentalists.dds"
 
 	character_ideology = yes
 
@@ -139,7 +139,7 @@
 }
 
 ideology_multicultural = {
-	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_humanitarism.dds"
+	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_multicultural.dds"
 
 	character_ideology = yes
 
@@ -228,7 +228,7 @@ ideology_multicultural = {
 }
 
 ideology_multicultural_ig = {
-	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_humanitarism.dds"
+	icon = "gfx/interface/icons/ideology_icons/ideology_multicultural_ig.dds"
 
 	priority = 200
 	lawgroup_citizenship = {
@@ -259,7 +259,7 @@ ideology_multicultural_ig = {
 # Tech-gated evolution of ideology_multicultural: adds LGBTQ rights opinions
 # Available after sexual_revolution tech, representing the broadening of civil rights
 ideology_multicultural_inclusive = {
-	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_humanitarism.dds"
+	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_multicultural_inclusive.dds"
 
 	character_ideology = yes
 
@@ -358,7 +358,7 @@ ideology_multicultural_inclusive = {
 # ideology_anti_colonialist_leader below, the same split as
 # ideology_multicultural / ideology_multicultural_ig.
 ideology_anti_colonialist = {
-	icon = "gfx/interface/icons/ideology_icons/abolitionist.dds"
+	icon = "gfx/interface/icons/ideology_icons/ideology_anti_colonialist.dds"
 
 	priority = 200
 
@@ -378,7 +378,7 @@ ideology_anti_colonialist = {
 # toward countries where the question is live: they still hold colonies, or
 # colonial laws are in force.
 ideology_anti_colonialist_leader = {
-	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_abolitionist.dds"
+	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_anti_colonialist_leader.dds"
 
 	character_ideology = yes
 
@@ -563,7 +563,7 @@ ideology_optimist_transhumanist = {
 }
 
 ideology_islamic_inheritance = {
-	icon = "gfx/interface/icons/ideology_icons/moralist.dds"
+	icon = "gfx/interface/icons/ideology_icons/ideology_islamic_inheritance.dds"
 
 	priority = 200
 
@@ -576,7 +576,7 @@ ideology_islamic_inheritance = {
 }
 
 ideology_corporate = {
-	icon = "gfx/interface/icons/ideology_icons/laissez_faire.dds"
+	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_corporate.dds"
 
 	priority = 200
 

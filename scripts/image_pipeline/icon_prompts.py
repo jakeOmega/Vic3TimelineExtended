@@ -115,13 +115,16 @@ CATEGORIES = {
     # silver on teal, in ideology_leader/. Vanilla gives an ideology held by
     # both an IG and a leader one symbol in both looks (abolitionist's chains).
     "ideology": dict(
-        folder="ideology_icons", size=220, mode="emboss_medallion", fill=0.60,
+        folder="ideology_icons", size=220, mode="emboss_medallion", fill=0.75,
         entity_dir="common/ideologies", field="icon",
-        color=(255, 228, 175), centre_lift=1.25, style=SILHOUETTE),
+        # fill 0.75: vanilla's symbols span ~156 of 220 px (0.60 gave 123).
+        # Colours fitted like mobilization's: symbol top (201,178,140), bottom (174,141,94).
+        color=(281, 254, 207), color_bottom=(257, 204, 131), centre_lift=1.25, style=SILHOUETTE),
     "leader_ideology": dict(
-        folder="ideology_icons/ideology_leader", size=220, mode="emboss_medallion", fill=0.60,
+        folder="ideology_icons/ideology_leader", size=220, mode="emboss_medallion", fill=0.75,
         entity_dir="common/ideologies", field="icon",
-        color=(225, 230, 235), centre_lift=1.25, style=SILHOUETTE),
+        # Symbol top (179,186,196), bottom (124,132,146): a bluish silver.
+        color=(261, 269, 281), color_bottom=(172, 184, 207), centre_lift=1.25, style=SILHOUETTE),
     # Read only from `texture =` (MobilizationOption.GetTexture); no second lookup.
     "mobilization_option": dict(
         folder="mobilization_options", size=208, mode="emboss", fill=0.86,
@@ -541,9 +544,9 @@ ICONS: dict[str, dict[str, dict]] = {
     # An ideology an IG and a leader both hold shares its subject, as vanilla's
     # do; the same subject and seed render the same symbol in both looks.
     "ideology": {
-        "ideology_multicultural_ig": {"subject": "three hands clasping each other's wrists to form a triangle", "seed": None},
-        "ideology_anti_colonialist": {"subject": "a raised clenched fist in front of a globe with its continents", "seed": None},
-        "ideology_islamic_inheritance": {"subject": "an open book resting on an X-shaped folding wooden book stand, a small crescent moon above it", "seed": None},
+        "ideology_multicultural_ig": {"subject": "three hands clasping each other's wrists to form a triangle", "seed": 1},
+        "ideology_anti_colonialist": {"subject": "a raised clenched fist in front of a globe with its continents", "seed": 1},
+        "ideology_islamic_inheritance": {"subject": "an open book resting on an X-shaped folding wooden book stand, a small crescent moon above it", "seed": 1},
     },
     # Mod-added decrees: 13 on road_maintenance, greenest grass on vanilla's
     # greener grass wagon, the resettlement drive on social mobility's ladder.
@@ -567,12 +570,12 @@ ICONS: dict[str, dict[str, dict]] = {
         "decree_resettlement_recruitment_drive": {"subject": "a small new timber house with a big mint-green arrow pointing into its open door", "seed": None},
     },
     "leader_ideology": {
-        "ideology_multicultural": {"subject": "three hands clasping each other's wrists to form a triangle", "seed": None},
-        "ideology_anti_colonialist_leader": {"subject": "a raised clenched fist in front of a globe with its continents", "seed": None},
-        "ideology_multicultural_inclusive": {"subject": "three hands clasping each other's wrists to form a triangle around a heart", "seed": None},
-        "ideology_environmentalists": {"subject": "a broad oak tree with a round leafy crown and spreading roots", "seed": None},
-        "ideology_optimist_transhumanist": {"subject": "a human hand and a jointed robotic hand reaching toward each other, fingertips almost touching", "seed": None},
-        "ideology_corporate": {"subject": "a leather briefcase in front of a tall skyscraper", "seed": None},
+        "ideology_multicultural": {"subject": "three hands clasping each other's wrists to form a triangle", "seed": 1},
+        "ideology_anti_colonialist_leader": {"subject": "a raised clenched fist in front of a globe with its continents", "seed": 1},
+        "ideology_multicultural_inclusive": {"subject": "three hands clasping each other's wrists to form a triangle around a heart", "seed": 1},
+        "ideology_environmentalists": {"subject": "a broad oak tree with a round leafy crown and spreading roots", "seed": 0},
+        "ideology_optimist_transhumanist": {"subject": "a DNA double helix rising in front of a half sun with bold rays", "seed": None},
+        "ideology_corporate": {"subject": "a leather briefcase in front of a tall skyscraper", "seed": 1},
     },
 }
 
