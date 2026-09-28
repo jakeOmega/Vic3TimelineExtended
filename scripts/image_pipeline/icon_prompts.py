@@ -698,7 +698,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "trait_combined_arms_recon": {"subject": "a mounted scout on horseback raising binoculars to his eyes", "seed": 0},
         "trait_combined_arms_armor": {"subject": "a battle tank charging forward, side view", "seed": 1},
         "trait_combined_arms_air_superiority": {"subject": "a fighter plane diving steeply", "seed": 1},
-        "trait_combined_arms_full_spectrum": {"subject": "a fighter plane flying low over a tank, an infantry soldier standing beside the tank, all overlapping as one compact group", "seed": None},
+        # s2 is retouched: the tank's front plate filled (FLUX drew it hollow) and a hull star removed.
+        "trait_combined_arms_full_spectrum": {"subject": "a fighter plane flying low over a tank, an infantry soldier standing beside the tank, all overlapping as one compact group", "seed": 2},
     },
     # The mod's financial "harvest conditions", on law icons.
     "harvest_condition": {

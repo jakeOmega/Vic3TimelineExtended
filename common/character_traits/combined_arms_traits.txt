@@ -165,7 +165,7 @@ trait_combined_arms_air_superiority = {
 
 trait_combined_arms_full_spectrum = {
 	type = condition
-	texture = "gfx/interface/icons/character_trait_icons/direct.dds"
+	texture = "gfx/interface/icons/character_trait_icons/trait_combined_arms_full_spectrum.dds"
 
 	character_modifier = {
 	}

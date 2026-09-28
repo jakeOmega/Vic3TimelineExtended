@@ -138,29 +138,6 @@ buildings:
   - building_axiom_space_hq
   - building_yoyodyne_propulsion_hq
   reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-decrees:
-- image: gfx/interface/icons/decree/decree_greener_grass_campaign.dds
-  entities:
-  - decree_greener_grass_campaign
-  - decree_greenest_grass_campaign
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/decree/decree_road_maintenance.dds
-  entities:
-  - decree_antiterrorism_campaign
-  - decree_bureaucracy_reform
-  - decree_cultural_emigration_initiative
-  - decree_cultural_integration
-  - decree_encourage_emigration
-  - decree_natalism_initiative
-  - decree_political_patronage
-  - decree_pollution_control
-  - decree_promote_tourism
-  - decree_road_maintenance
-  - decree_subsidize_immigration
-  - decree_tax_breaks
-  - decree_trade_reform
-  - decree_war_propaganda
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
 technologies:
 - image: gfx/interface/icons/invention_icons/aniline.dds
   entities:
@@ -500,11 +477,6 @@ laws:
   - law_state_led_language_reform
   - law_ubiquitous_translation
   reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/law_icons/colonial_resettlement.dds
-  entities:
-  - law_auxiliary_fleet
-  - law_colonial_resettlement
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
 - images:
   - gfx/interface/icons/law_icons/command_cooperative_economy.dds
   - gfx/interface/icons/law_icons/dirigisme.dds
@@ -671,11 +643,6 @@ laws:
   - law_moderate_data_privacy
   - law_strong_privacy_rights
   reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/law_icons/national_guard.dds
-  entities:
-  - law_littoral_defense
-  - law_national_guard
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
 - images:
   - gfx/interface/icons/law_icons/net_neutrality.dds
   - gfx/interface/icons/law_icons/state_controlled_internet.dds
@@ -745,9 +712,3 @@ laws:
   - law_rehabilitation_focused_criminal_justice
   - law_restorative_justice
   reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/law_icons/secret_police.dds
-  entities:
-  - law_penal_labor_camps
-  - law_private_military_contractors
-  - law_secret_police
-  reason: law_penal_labor_camps reuses vanilla's Secret Police icon by design (no new texture; the political police fill the camps). The law_private_military_contractors share predates it - verify intent and rewrite, or remove this entry to re-flag
