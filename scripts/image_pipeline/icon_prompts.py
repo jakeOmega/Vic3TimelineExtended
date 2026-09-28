@@ -43,6 +43,12 @@ defaults (September 2026, ~350 icons):
 - An unqualified object gets its usual context: a helmet comes with a
   soldier wearing it (write "an empty helmet"), and a "globe" is a plain
   green ball (name the Earth's continents and oceans).
+- In the framed building layout, a product in front of the plant must have
+  no fixed size: heaps of ore, grain or crates work, but a walkie-talkie, a
+  jar or bottles come out as big as the building, and photographic. Leave
+  those out, and ask for ", loosely hand-painted with visible brush
+  strokes" in the subject rather than editing the category style, which
+  would change every approved prompt.
 When both candidates miss, change the subject. When the idea is right and the
 renders are weak, `generate_icons.py --seeds 4` adds two more candidates and
 keeps the first two.
@@ -426,7 +432,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "building_resettlement_colony": {"subject": "a small frontier land office with a porch, surrounded by rows of new timber houses and freshly fenced plots going up, piles of lumber and covered wagons, open grassland and forest beyond", "seed": 1},
         "building_strategic_reserve_hub": {"subject": "a large fenced national stockpile depot: rows of long concrete warehouses, a tall grain elevator, round white fuel storage tanks and stacked crates, with a railway siding", "seed": 0},
         "building_strategic_reserve_silo": {"subject": "a remote storage depot of three tall round concrete silos and a grass-covered earth bunker with a steel door, behind a wire fence in open countryside", "seed": 0},
-        "building_military_base": {"subject": "a modern military base: rows of low barracks around a parade ground, vehicle sheds, a concrete bunker and a watchtower inside a walled perimeter, green grass and trees around it, loosely hand-painted with visible brush strokes", "seed": None},
+        "building_military_base": {"subject": "a modern military base: rows of low barracks around a parade ground, vehicle sheds, a concrete bunker and a watchtower inside a walled perimeter, green grass and trees around it, loosely hand-painted with visible brush strokes", "seed": 1},
         "building_state_youth_centers": {"subject": "a modern community youth centre, a low building of red brick and glass with a gymnasium roof, beside a running track and a football pitch with small figures playing", "seed": 0},
         "building_solar_receiver": {"subject": "a vast circular field of dark mesh antenna panels in rows on a desert plain around a central control building, a pale beam of light descending from the sky onto its centre", "seed": 0},
         "building_antimatter_facility": {"subject": "a futuristic research complex around a huge ring-shaped particle accelerator, with a round steel and glass containment dome at its centre holding a small glowing violet sphere", "seed": 0},
@@ -435,18 +441,18 @@ ICONS: dict[str, dict[str, dict]] = {
         # Industry variants: vanilla's industrial layout, the plant behind and
         # its product large in the foreground. They were on goods icons.
         "building_synthetics_plant_silk": {"subject": "a chemical plant with a large bolt of shiny synthetic fabric in the foreground", "seed": KEEP},  # vanilla's synthetics plant fits
-        "building_synthetics_plant_coal": {"subject": "a clean modern carbon capture plant: a long bank of large fans in air-intake towers feeding tall silver reactor columns, green trees around it, no chimneys and no smoke, loosely hand-painted with visible brush strokes", "seed": None},
+        "building_synthetics_plant_coal": {"subject": "a direct air capture facility: a long low flat-roofed steel building whose whole front is a wall of big round black fans, beside rows of squat white storage tanks, all low to the ground in green forest, loosely hand-painted with visible brush strokes", "seed": None},
         "building_synthetics_plant_wood": {"subject": "a modern resin panel factory: long halls with big resin vats and pipes, a yard of stacked honey-brown panels being loaded onto trucks, green trees around it, loosely hand-painted with visible brush strokes", "seed": None},
-        "building_synthetics_plant_sugar": {"subject": "a clean white chemical plant with round steel reactor tanks and pipework, beside green sugar cane fields, loosely hand-painted with visible brush strokes", "seed": None},
-        "building_synthetics_plant_meat": {"subject": "a clean white laboratory factory with rows of round steel bioreactor tanks linked by pipes and glass-roofed lab halls, green lawns around it, loosely hand-painted with visible brush strokes", "seed": None},
+        "building_synthetics_plant_sugar": {"subject": "a clean white chemical plant with round steel reactor tanks and pipework, beside green sugar cane fields, loosely hand-painted with visible brush strokes", "seed": 1},
+        "building_synthetics_plant_meat": {"subject": "a clean white laboratory factory with rows of round steel bioreactor tanks linked by pipes and glass-roofed lab halls, green lawns around it, loosely hand-painted with visible brush strokes", "seed": 1},
         "building_synthetics_plant_fruit": {"subject": "a glass vertical farm building with stacked shelves of green plants under pink grow lights, with a wooden crate of red apples and oranges in the foreground", "seed": 0},
-        "building_synthetics_plant_drinks": {"subject": "a beverage plant with tall steel mixing tanks, pipes and a loading dock with delivery trucks, beside green orchards, loosely hand-painted with visible brush strokes", "seed": None},
+        "building_synthetics_plant_drinks": {"subject": "a beverage plant with tall steel mixing tanks, pipes and a loading dock with delivery trucks, beside green orchards, loosely hand-painted with visible brush strokes", "seed": 1},
         "building_synthetics_plant_biomass": {"subject": "a biorefinery with tall steel fermentation towers and tanks beside green fields, with a heap of golden grain in the foreground", "seed": 1},
         "building_electrics_industry_radio": {"subject": "an electronics factory with a tall lattice radio mast and satellite dishes on its roof, a row of tall transmitter towers beside it, green hills around it, loosely hand-painted with visible brush strokes", "seed": None},
         # Mines, on the five vanilla mine icons: the ore's colour and form tell
         # them apart, in the same layout.
         "building_manganese_mine": {"subject": "a mine with a timber headframe and ore sheds on dark rocky ground, with a heap of lumpy black-brown manganese ore nodules in the foreground", "seed": 0},
-        "building_chromium_mine": {"subject": "a terraced open-pit mine in dark grey rock, a processing plant and a long ore conveyor at its rim, loosely hand-painted with visible brush strokes", "seed": None},
+        "building_chromium_mine": {"subject": "a terraced open-pit mine in dark grey rock, a processing plant and a long ore conveyor at its rim, loosely hand-painted with visible brush strokes", "seed": 2},
         "building_specialty_alloy_metal_mine": {"subject": "a mountainside mine with a steel headframe and ore bins, with a bundle of dull grey tungsten rods and dark metallic ore crystals in the foreground", "seed": 1},
         "building_copper_mine": {"subject": "a huge stepped open-pit copper mine with terraced orange-brown walls and a turquoise pool at the bottom, with a stack of shiny reddish copper ingots in the foreground", "seed": 0},
         "building_bauxite_mine": {"subject": "an open-pit mine cut into deep red earth with trucks on its terraces, with a heap of red-brown bauxite ore pebbles in the foreground", "seed": 1},
