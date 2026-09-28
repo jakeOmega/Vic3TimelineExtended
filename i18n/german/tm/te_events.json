@@ -12859,6 +12859,1634 @@
   "en": "Campaign Finance Scandal",
   "de": "Skandal um die Wahlkampffinanzierung"
  },
+ "society_technology_events.1.a": {
+  "en": "Progress waits for no one.",
+  "de": "Der Fortschritt wartet auf niemanden."
+ },
+ "society_technology_events.1.b": {
+  "en": "A woman's place is in the home.",
+  "de": "Der Platz einer Frau ist im Haus."
+ },
+ "society_technology_events.1.d": {
+  "en": "A new generation of women is entering [Concept('concept_profession', 'professions')] long dominated by men - engineering, medicine, law, and academia. The factories hum with their labor and the universities overflow with their applications. Traditionalists warn of the family's collapse; reformers call it an overdue correction.",
+  "de": "Eine neue Generation von Frauen drängt in [Concept('concept_profession', 'Berufe')], die lange von Männern dominiert wurden - Ingenieurwesen, Medizin, Recht und Wissenschaft. Die Fabriken summen von ihrer Arbeit, und die Universitäten werden von ihren Bewerbungen überflutet. Traditionalisten warnen vor dem Zusammenbruch der Familie; Reformer nennen es eine überfällige Korrektur."
+ },
+ "society_technology_events.1.f": {
+  "en": "The foreman looked up from his clipboard and frowned.\\n\\n\\\"Who authorized this?\\\"\\n\\n\\\"She passed the examination, sir. Top marks, in fact.\\\"\\n\\n\\\"I don't care about marks. The men won't stand for it.\\\"\\n\\nThe secretary shrugged. \\\"Three more start on Monday.\\\"\\n\\nThe foreman stared at the name on the clipboard, then at the factory floor. Something had shifted, and he had the uneasy sense that it would not shift back.",
+  "de": "Der Vorarbeiter blickte von seinem Klemmbrett auf und runzelte die Stirn.\\n\\n„Wer hat das genehmigt?“\\n\\n„Sie hat die Prüfung bestanden, Sir. Mit Bestnoten, sogar.“\\n\\n„Das interessiert mich nicht. Die Männer werden das nicht hinnehmen.“\\n\\nDie Sekretärin zuckte mit den Schultern. „Drei weitere fangen am Montag an.“\\n\\nDer Vorarbeiter starrte auf den Namen auf dem Klemmbrett, dann auf den Fabrikboden. Etwas hatte sich verschoben, und er hatte das ungute Gefühl, dass es sich nicht zurückverschieben würde."
+ },
+ "society_technology_events.1.t": {
+  "en": "The Second Shift",
+  "de": "Die zweite Schicht"
+ },
+ "society_technology_events.10.a": {
+  "en": "Hear their grievances.",
+  "de": "Ihre Beschwerden anhören."
+ },
+ "society_technology_events.10.b": {
+  "en": "Clear the streets.",
+  "de": "Die Straßen räumen."
+ },
+ "society_technology_events.10.d": {
+  "en": "Tens of thousands have descended on the capital during an international trade summit, carrying banners denouncing free trade and corporate exploitation. Tear gas drifts through the streets. The delegates inside the conference hall can hear the chanting through the walls.",
+  "de": "Zehntausende sind während eines internationalen Handelsgipfels in die Hauptstadt geströmt und tragen Transparente, die den Freihandel und die Ausbeutung durch Konzerne anprangern. Tränengas zieht durch die Straßen. Die Delegierten im Konferenzsaal können die Sprechchöre durch die Wände hören."
+ },
+ "society_technology_events.10.f": {
+  "en": "A girl in a gas mask held up a sign that read: THIS IS WHAT DEMOCRACY LOOKS LIKE.\\n\\nThe riot officer across the barricade adjusted his shield. He had been on shift for sixteen hours.\\n\\n\\\"They've got a point, though,\\\" muttered the man beside him.\\n\\n\\\"Shut up and hold the line.\\\"\\n\\nSomewhere behind them, a delegate's limousine turned the corner and took the long way around.",
+  "de": "Ein Mädchen mit Gasmaske hielt ein Schild hoch, auf dem stand: SO SIEHT DEMOKRATIE AUS.\\n\\nDer Bereitschaftspolizist auf der anderen Seite der Barrikade richtete seinen Schild zurecht. Er war seit sechzehn Stunden im Dienst.\\n\\n„Sie haben aber nicht ganz unrecht“, murmelte der Mann neben ihm.\\n\\n„Halt den Mund und halt die Linie.“\\n\\nIrgendwo hinter ihnen bog die Limousine eines Delegierten um die Ecke und nahm den Umweg."
+ },
+ "society_technology_events.10.t": {
+  "en": "The Battle in the Streets",
+  "de": "Die Schlacht in den Straßen"
+ },
+ "society_technology_events.11.a": {
+  "en": "Expand the security apparatus.",
+  "de": "Den Sicherheitsapparat ausbauen."
+ },
+ "society_technology_events.11.b": {
+  "en": "We shall not live in fear.",
+  "de": "Wir werden nicht in Angst leben."
+ },
+ "society_technology_events.11.c": {
+  "en": "Reform our intelligence services.",
+  "de": "Unsere Nachrichtendienste reformieren."
+ },
+ "society_technology_events.11.d": {
+  "en": "A devastating attack has struck the heart of the nation. Civilians are dead, the public is terrified, and the security services are demanding expanded powers. The question of how to respond - and how much liberty to sacrifice for safety - has become the only question that matters.",
+  "de": "Ein verheerender Anschlag hat das Herz der Nation getroffen. Zivilisten sind tot, die Öffentlichkeit ist verängstigt, und die Sicherheitsbehörden fordern erweiterte Befugnisse. Die Frage, wie darauf reagiert werden soll - und wie viel Freiheit man für Sicherheit opfern will -, ist zur einzigen Frage geworden, die zählt."
+ },
+ "society_technology_events.11.f": {
+  "en": "The minister's hands were shaking when he set down the telephone.\\n\\n\\\"How many?\\\"\\n\\n\\\"They're still counting.\\\"\\n\\nHe looked out the window at the smoke rising above the skyline. Somewhere in the building, someone was weeping. The aide stood in the doorway, waiting for instructions that would define a generation.\\n\\n\\\"Get me the security chiefs. All of them. Now.\\\"",
+  "de": "Die Hände des Ministers zitterten, als er den Hörer auflegte.\\n\\n„Wie viele?“\\n\\n„Sie zählen noch.“\\n\\nEr blickte aus dem Fenster auf den Rauch, der über der Skyline aufstieg. Irgendwo im Gebäude weinte jemand. Der Assistent stand in der Tür und wartete auf Anweisungen, die eine ganze Generation prägen würden.\\n\\n„Holen Sie mir die Sicherheitschefs. Alle. Sofort.“"
+ },
+ "society_technology_events.11.t": {
+  "en": "Day of Reckoning",
+  "de": "Tag der Abrechnung"
+ },
+ "society_technology_events.12.a": {
+  "en": "Safety demands sacrifice.",
+  "de": "Sicherheit erfordert Opfer."
+ },
+ "society_technology_events.12.b": {
+  "en": "Liberty is not negotiable.",
+  "de": "Freiheit ist nicht verhandelbar."
+ },
+ "society_technology_events.12.d": {
+  "en": "In the wake of security threats, the government proposes sweeping surveillance powers - monitoring communications, tracking movements, and analyzing social networks. Civil liberties groups warn of a police state in the making. Security hawks insist it is the only way to keep citizens alive.",
+  "de": "Nach den Sicherheitsbedrohungen schlägt die Regierung weitreichende Überwachungsbefugnisse vor - die Überwachung von Kommunikation, die Verfolgung von Bewegungen und die Analyse sozialer Netzwerke. Bürgerrechtsgruppen warnen vor einem entstehenden Polizeistaat. Sicherheitsbefürworter beharren darauf, dass dies der einzige Weg sei, die Bürger am Leben zu erhalten."
+ },
+ "society_technology_events.12.f": {
+  "en": "\\\"Every letter. Every telephone call. Every telegram.\\\"\\n\\nThe civil servant blinked. \\\"You can't be serious.\\\"\\n\\n\\\"The alternative is another attack. Would you prefer that?\\\"\\n\\n\\\"I would prefer a country still worth protecting.\\\"\\n\\nThe security chief made a note and moved to the next item on the agenda.",
+  "de": "„Jeden Brief. Jeden Telefonanruf. Jedes Telegramm.“\\n\\nDer Beamte blinzelte. „Das kann nicht Ihr Ernst sein.“\\n\\n„Die Alternative ist ein weiterer Anschlag. Wäre Ihnen das lieber?“\\n\\n„Mir wäre ein Land lieber, das noch zu schützen sich lohnt.“\\n\\nDer Sicherheitschef machte sich eine Notiz und ging zum nächsten Tagesordnungspunkt über."
+ },
+ "society_technology_events.12.t": {
+  "en": "Who Watches the Watchers?",
+  "de": "Wer bewacht die Wächter?"
+ },
+ "society_technology_events.13.a": {
+  "en": "Regulate the platforms.",
+  "de": "Die Plattformen regulieren."
+ },
+ "society_technology_events.13.b": {
+  "en": "Free speech must prevail.",
+  "de": "Die Meinungsfreiheit muss siegen."
+ },
+ "society_technology_events.13.c": {
+  "en": "Educate the public.",
+  "de": "Die Öffentlichkeit aufklären."
+ },
+ "society_technology_events.13.d": {
+  "en": "Fabricated stories are spreading through social networks faster than the truth can follow. Conspiracy theories radicalize ordinary citizens, medical misinformation costs lives, and political discourse drowns in a sea of lies. The platforms plead helplessness; the public demands action.",
+  "de": "Erfundene Geschichten verbreiten sich in den sozialen Netzwerken schneller, als die Wahrheit folgen kann. Verschwörungstheorien radikalisieren gewöhnliche Bürger, medizinische Falschinformationen kosten Leben, und der politische Diskurs ertrinkt in einem Meer von Lügen. Die Plattformen berufen sich auf Hilflosigkeit; die Öffentlichkeit fordert Handeln."
+ },
+ "society_technology_events.13.f": {
+  "en": "The editor stared at the screen.\\n\\n\\\"This story has been shared four million times.\\\"\\n\\n\\\"It's completely false.\\\"\\n\\n\\\"I know it's false. That's not the point. Four million people now believe it. By the time we publish a correction, they'll have moved on to the next lie.\\\"\\n\\nShe closed the laptop. \\\"The correction will reach a tenth of the people who saw the original. That's the arithmetic. That's all the arithmetic you need.\\\"",
+  "de": "Die Redakteurin starrte auf den Bildschirm.\\n\\n„Diese Geschichte wurde vier Millionen Mal geteilt.“\\n\\n„Sie ist vollkommen falsch.“\\n\\n„Ich weiß, dass sie falsch ist. Darum geht es nicht. Vier Millionen Menschen glauben sie jetzt. Bis wir eine Richtigstellung veröffentlichen, sind sie längst bei der nächsten Lüge.“\\n\\nSie klappte den Laptop zu. „Die Richtigstellung wird ein Zehntel der Menschen erreichen, die das Original gesehen haben. Das ist die Rechnung. Mehr Rechnung braucht es nicht.“"
+ },
+ "society_technology_events.13.t": {
+  "en": "The Poisoned Well",
+  "de": "Der vergiftete Brunnen"
+ },
+ "society_technology_events.14.a": {
+  "en": "Retaliate in kind.",
+  "de": "Mit gleicher Münze zurückzahlen."
+ },
+ "society_technology_events.14.b": {
+  "en": "Best not to alarm the public.",
+  "de": "Besser die Öffentlichkeit nicht beunruhigen."
+ },
+ "society_technology_events.14.c": {
+  "en": "Unleash our cyber defenses.",
+  "de": "Unsere Cyberabwehr entfesseln."
+ },
+ "society_technology_events.14.d": {
+  "en": "Intelligence analysts have uncovered a systematic campaign by foreign actors to influence the next election through social media - amplifying fringe candidates, spreading divisive content, and undermining trust in the democratic process. The evidence points to [SCOPE.sCountry('interfering_country').GetName].",
+  "de": "Geheimdienstanalysten haben eine systematische Kampagne ausländischer Akteure aufgedeckt, die auf die Beeinflussung der nächsten Wahl über soziale Medien abzielt - durch die Verstärkung von Randkandidaten, die Verbreitung spalterischer Inhalte und die Untergrabung des Vertrauens in den demokratischen Prozess. Die Beweise deuten auf [SCOPE.sCountry('interfering_country').GetAltName('AKK')] hin."
+ },
+ "society_technology_events.14.f": {
+  "en": "The analyst set down a thick folder.\\n\\n\\\"Forty thousand fabricated accounts. Coordinated. Professional. All of them pushing the same three candidates.\\\"\\n\\n\\\"Can we prove it?\\\"\\n\\n\\\"We can prove where the servers are. Proving intent is another matter entirely.\\\"\\n\\nThe minister drummed her fingers on the desk. \\\"And if we go public?\\\"\\n\\n\\\"Then we admit our elections can be bought for the price of a server farm.\\\"",
+  "de": "Der Analyst legte einen dicken Ordner ab.\\n\\n„Vierzigtausend gefälschte Konten. Koordiniert. Professionell. Alle unterstützen dieselben drei Kandidaten.“\\n\\n„Können wir es beweisen?“\\n\\n„Wir können beweisen, wo die Server stehen. Die Absicht zu beweisen ist eine ganz andere Sache.“\\n\\nDie Ministerin trommelte mit den Fingern auf den Schreibtisch. „Und wenn wir an die Öffentlichkeit gehen?“\\n\\n„Dann geben wir zu, dass unsere Wahlen für den Preis einer Serverfarm gekauft werden können.“"
+ },
+ "society_technology_events.14.t": {
+  "en": "The Invisible Campaign",
+  "de": "Der unsichtbare Feldzug"
+ },
+ "society_technology_events.15.a": {
+  "en": "Let the youth speak.",
+  "de": "Die Jugend sprechen lassen."
+ },
+ "society_technology_events.15.b": {
+  "en": "Restore order on campus.",
+  "de": "Ordnung auf dem Campus wiederherstellen."
+ },
+ "society_technology_events.15.d": {
+  "en": "Universities across the nation have erupted. Students occupy buildings, stage walkouts, and demand action on inequality and environmental destruction. The faculty are divided - some join the picket lines, others warn that the university's purpose is scholarship, not revolution.",
+  "de": "Universitäten im ganzen Land sind in Aufruhr. Studierende besetzen Gebäude, organisieren Streiks und fordern Maßnahmen gegen Ungleichheit und Umweltzerstörung. Die Fakultät ist gespalten - manche schließen sich den Streikposten an, andere warnen, dass der Zweck der Universität die Wissenschaft sei, nicht die Revolution."
+ },
+ "society_technology_events.15.f": {
+  "en": "The dean found the letter pinned to his office door.\\n\\n\\\"We will not attend classes while the world burns.\\\"\\n\\nHe read it twice, folded it carefully, and placed it in his desk drawer alongside six others from the same week. Through the window, he could see them on the lawn - hundreds of them, earnest and furious and very, very young.\\n\\n\\\"They'll tire of it,\\\" said the provost behind him.\\n\\n\\\"That's what they said about us, once.\\\"",
+  "de": "Der Dekan fand den Brief an seine Bürotür geheftet.\\n\\n„Wir werden dem Unterricht fernbleiben, solange die Welt brennt.“\\n\\nEr las ihn zweimal, faltete ihn sorgfältig und legte ihn in seine Schreibtischschublade zu sechs weiteren aus derselben Woche. Durch das Fenster sah er sie auf dem Rasen - Hunderte von ihnen, ernst und wütend und sehr, sehr jung.\\n\\n„Das wird sich legen“, sagte der Prorektor hinter ihm.\\n\\n„Genau das hat man auch über uns gesagt, damals.“"
+ },
+ "society_technology_events.15.t": {
+  "en": "The Young and the Restless",
+  "de": "Jung und ruhelos"
+ },
+ "society_technology_events.16.a": {
+  "en": "Let the market decide.",
+  "de": "Den Markt entscheiden lassen."
+ },
+ "society_technology_events.16.b": {
+  "en": "Medical applications only.",
+  "de": "Nur medizinische Anwendungen."
+ },
+ "society_technology_events.16.c": {
+  "en": "The human mind is sacred.",
+  "de": "Der menschliche Geist ist heilig."
+ },
+ "society_technology_events.16.d": {
+  "en": "Consumer-grade brain-computer interfaces have arrived. With a simple implant, citizens can browse information, communicate telepathically, and control devices by thought alone. The technology promises revolutionary productivity - but also unprecedented privacy risks and a new inequality between the augmented and the natural.",
+  "de": "Verbrauchertaugliche Gehirn-Computer-Schnittstellen sind da. Mit einem einfachen Implantat können Bürger Informationen abrufen, telepathisch kommunizieren und Geräte allein mit Gedanken steuern. Die Technologie verspricht revolutionäre Produktivität - aber auch beispiellose Risiken für die Privatsphäre und eine neue Ungleichheit zwischen den Erweiterten und den Natürlichen."
+ },
+ "society_technology_events.16.d_banned": {
+  "en": "Consumer-grade brain-computer interfaces have gone on sale abroad. With a simple implant, citizens there can browse information, communicate telepathically, and control devices by thought alone, and smuggled units are already turning up at home in defiance of our augmentation laws. The technology promises revolutionary productivity - but also unprecedented privacy risks and a new inequality between the augmented and the natural. The devout and the traditionalists are demanding that the ban be extended to the mind itself.",
+  "de": "Verbrauchertaugliche Gehirn-Computer-Schnittstellen sind im Ausland in den Verkauf gegangen. Mit einem einfachen Implantat können die dortigen Bürger Informationen abrufen, telepathisch kommunizieren und Geräte allein mit Gedanken steuern, und geschmuggelte Geräte tauchen bereits bei uns auf, unter Missachtung unserer Erweiterungsgesetze. Die Technologie verspricht revolutionäre Produktivität - aber auch beispiellose Risiken für die Privatsphäre und eine neue Ungleichheit zwischen den Erweiterten und den Natürlichen. Die Frommen und die Traditionalisten fordern, das Verbot auf den Geist selbst auszuweiten."
+ },
+ "society_technology_events.16.d_unlicensed": {
+  "en": "Consumer-grade brain-computer interfaces have gone on sale abroad. With a simple implant, citizens there can browse information, communicate telepathically, and control devices by thought alone. Nothing of the kind is licensed here yet, and the question of whether it should be has landed on the government's desk. The technology promises revolutionary productivity - but also unprecedented privacy risks and a new inequality between the augmented and the natural.",
+  "de": "Verbrauchertaugliche Gehirn-Computer-Schnittstellen sind im Ausland in den Verkauf gegangen. Mit einem einfachen Implantat können die dortigen Bürger Informationen abrufen, telepathisch kommunizieren und Geräte allein mit Gedanken steuern. Hierzulande ist dergleichen noch nicht zugelassen, und die Frage, ob es zugelassen werden soll, liegt nun auf dem Tisch der Regierung. Die Technologie verspricht revolutionäre Produktivität - aber auch beispiellose Risiken für die Privatsphäre und eine neue Ungleichheit zwischen den Erweiterten und den Natürlichen."
+ },
+ "society_technology_events.16.f": {
+  "en": "The salesman tapped the side of his head and grinned.\\n\\n\\\"Installed it last Tuesday. I can read the morning papers without opening my eyes. My wife hates it.\\\"\\n\\n\\\"Doesn't it feel... strange?\\\"\\n\\n\\\"Everything feels strange at first. Spectacles felt strange. Telephones felt strange. Give it a year and you won't remember life without it.\\\"\\n\\nHe paused, and his eyes flickered briefly - accessing something no one else could see.\\n\\n\\\"There. I just ordered dinner.\\\"",
+  "de": "Der Verkäufer klopfte sich an die Schläfe und grinste.\\n\\n„Letzten Dienstag installiert. Ich kann die Morgenzeitung lesen, ohne die Augen zu öffnen. Meine Frau hasst es.“\\n\\n„Fühlt sich das nicht ... seltsam an?“\\n\\n„Am Anfang fühlt sich alles seltsam an. Brillen fühlten sich seltsam an. Telefone fühlten sich seltsam an. Geben Sie ihm ein Jahr, und Sie erinnern sich nicht mehr an ein Leben ohne.“\\n\\nEr hielt inne, und seine Augen flackerten kurz - er rief etwas ab, das niemand sonst sehen konnte.\\n\\n„So. Ich habe gerade das Abendessen bestellt.“"
+ },
+ "society_technology_events.16.t": {
+  "en": "Wired Minds",
+  "de": "Vernetzte Köpfe"
+ },
+ "society_technology_events.17.a": {
+  "en": "Separate the leagues.",
+  "de": "Die Ligen trennen."
+ },
+ "society_technology_events.17.b": {
+  "en": "Records are made to be broken.",
+  "de": "Rekorde sind dazu da, gebrochen zu werden."
+ },
+ "society_technology_events.17.d": {
+  "en": "The sporting world is in uproar. Athletes with neural accelerators, synthetic muscles, and enhanced reflexes are shattering every record in existence. The line between human achievement and technological enhancement has blurred beyond recognition, and governing bodies scramble to respond.",
+  "de": "Die Sportwelt ist in Aufruhr. Athleten mit neuronalen Beschleunigern, synthetischen Muskeln und verbesserten Reflexen brechen jeden bestehenden Rekord. Die Grenze zwischen menschlicher Leistung und technologischer Verstärkung ist bis zur Unkenntlichkeit verschwommen, und die Verbände ringen um eine Antwort."
+ },
+ "society_technology_events.17.f": {
+  "en": "The sprinter crossed the finish line in 7.2 seconds. The stadium fell silent.\\n\\nThe old coach in the press box shook his head slowly. He had spent forty years training athletes to shave fractions of a second off their times. The boy on the track had shaved off entire seconds - with hardware money could buy.",
+  "de": "Der Sprinter überquerte die Ziellinie in 7,2 Sekunden. Das Stadion verstummte.\\n\\nDer alte Trainer in der Pressebox schüttelte langsam den Kopf. Er hatte vierzig Jahre damit verbracht, Athleten beizubringen, Sekundenbruchteile von ihrer Zeit abzuknapsen. Der Junge auf der Bahn hatte ganze Sekunden abgeknapst - mit Hardware, die man kaufen konnte."
+ },
+ "society_technology_events.17.t": {
+  "en": "Faster Than Human",
+  "de": "Schneller als ein Mensch"
+ },
+ "society_technology_events.18.a": {
+  "en": "Our flag among the stars!",
+  "de": "Unsere Flagge unter den Sternen!"
+ },
+ "society_technology_events.18.b": {
+  "en": "A shared human endeavor.",
+  "de": "Ein gemeinsames Unterfangen der Menschheit."
+ },
+ "society_technology_events.18.d": {
+  "en": "After years of preparation, the first permanent settlement beyond Earth is ready for habitation. The colonists will face radiation, isolation, and the vast emptiness of space. The question before the government is whether this should be a national triumph or an international cooperative venture.",
+  "de": "Nach Jahren der Vorbereitung ist die erste dauerhafte Siedlung jenseits der Erde bereit für die Besiedlung. Die Kolonisten werden Strahlung, Isolation und der gewaltigen Leere des Weltraums begegnen. Die Frage vor der Regierung ist, ob dies ein nationaler Triumph oder ein internationales Gemeinschaftsprojekt sein soll."
+ },
+ "society_technology_events.18.f": {
+  "en": "The volunteer sat in the medical chair, staring at the consent form. Fourteen pages of risks. Radiation exposure. Bone density loss. Psychological isolation. Possible death.\\n\\nShe signed without reading the rest.\\n\\n\\\"You understand you may never come back?\\\" the doctor asked.\\n\\n\\\"I understand that someone has to be first.\\\"\\n\\nOutside the window, the launch vehicle stood on the pad, gleaming in the morning light. It looked impossibly small against the sky it was about to leave behind.",
+  "de": "Die Freiwillige saß im Untersuchungsstuhl und starrte auf das Einwilligungsformular. Vierzehn Seiten Risiken. Strahlenbelastung. Knochendichteverlust. Psychische Isolation. Möglicher Tod.\\n\\nSie unterschrieb, ohne den Rest zu lesen.\\n\\n„Ihnen ist klar, dass Sie vielleicht nie zurückkehren?“, fragte der Arzt.\\n\\n„Mir ist klar, dass irgendjemand der Erste sein muss.“\\n\\nDraußen vor dem Fenster stand die Trägerrakete auf der Startrampe und glänzte im Morgenlicht. Sie wirkte unmöglich klein vor dem Himmel, den sie gleich verlassen würde."
+ },
+ "society_technology_events.18.t": {
+  "en": "Beyond the Blue",
+  "de": "Jenseits des Blaus"
+ },
+ "society_technology_events.19.a": {
+  "en": "They answer to us.",
+  "de": "Sie sind uns Rechenschaft schuldig."
+ },
+ "society_technology_events.19.b": {
+  "en": "Grant them self-governance.",
+  "de": "Ihnen Selbstverwaltung gewähren."
+ },
+ "society_technology_events.19.d": {
+  "en": "The colonists are demanding self-governance. Communication delays make Earth-based administration impractical, and the settlers argue that those who live on a new world deserve a say in running it. Loosening control, however, risks ceding sovereignty over billions in invested [concept_infrastructure].",
+  "de": "Die Kolonisten fordern Selbstverwaltung. Kommunikationsverzögerungen machen eine Verwaltung von der Erde aus unpraktikabel, und die Siedler argumentieren, dass jene, die auf einer neuen Welt leben, ein Mitspracherecht bei ihrer Führung verdienen. Eine Lockerung der Kontrolle riskiert jedoch, die Souveränität über Milliarden an investierter [concept_infrastructure] abzugeben."
+ },
+ "society_technology_events.19.f": {
+  "en": "The transmission arrived fourteen minutes late, as always.\\n\\n\\\"Petition from the Colonial Assembly. They want to elect their own governor.\\\"\\n\\nThe minister frowned. \\\"We appointed a governor.\\\"\\n\\n\\\"They say the governor doesn't understand local conditions. Which is true - he's never set foot on the colony. None of us have.\\\"\\n\\n\\\"It's our colony.\\\"\\n\\n\\\"Is it? We can't enforce a single law without a fourteen-minute delay. At some point, distance becomes sovereignty.\\\"",
+  "de": "Die Übertragung traf, wie immer, mit vierzehn Minuten Verspätung ein.\\n\\n„Petition der Kolonialversammlung. Sie wollen ihren eigenen Gouverneur wählen.“\\n\\nDie Ministerin runzelte die Stirn. „Wir haben einen Gouverneur ernannt.“\\n\\n„Sie sagen, der Gouverneur verstehe die örtlichen Verhältnisse nicht. Was stimmt - er hat nie einen Fuß auf die Kolonie gesetzt. Keiner von uns hat das.“\\n\\n„Es ist unsere Kolonie.“\\n\\n„Ist sie das? Wir können kein einziges Gesetz ohne vierzehn Minuten Verzögerung durchsetzen. Irgendwann wird Entfernung zu Souveränität.“"
+ },
+ "society_technology_events.19.t": {
+  "en": "The Long Delay",
+  "de": "Die lange Verzögerung"
+ },
+ "society_technology_events.2.a": {
+  "en": "Equal work, equal pay.",
+  "de": "Gleiche Arbeit, gleicher Lohn."
+ },
+ "society_technology_events.2.b": {
+  "en": "The matter can wait.",
+  "de": "Die Sache kann warten."
+ },
+ "society_technology_events.2.d": {
+  "en": "Reports flood the newspapers of women earning a fraction of what their male colleagues make for identical work. Labor unions take up the cause, and the legislature faces mounting pressure to act. Industrialists warn of rising costs.",
+  "de": "Die Zeitungen sind voller Berichte, dass Frauen für identische Arbeit nur einen Bruchteil dessen verdienen, was ihre männlichen Kollegen erhalten. Die Gewerkschaften greifen das Thema auf, und die Legislative gerät zunehmend unter Druck zu handeln. Industrielle warnen vor steigenden Kosten."
+ },
+ "society_technology_events.2.f": {
+  "en": "\\\"Same desk. Same hours. Same typewriter. Half the salary.\\\"\\n\\nThe union representative laid the payroll ledger on the table. The factory owner did not look at it.\\n\\n\\\"Women have different expenses. Different obligations. The rates reflect -\\\"\\n\\n\\\"The rates reflect what you can get away with.\\\"\\n\\nSilence. Outside, the picket signs were already being painted.",
+  "de": "„Gleicher Schreibtisch. Gleiche Stunden. Gleiche Schreibmaschine. Halber Lohn.“\\n\\nDer Gewerkschaftsvertreter legte das Lohnbuch auf den Tisch. Der Fabrikbesitzer sah es nicht an.\\n\\n„Frauen haben andere Ausgaben. Andere Verpflichtungen. Die Sätze spiegeln -“\\n\\n„Die Sätze spiegeln wider, womit man durchkommt.“\\n\\nSchweigen. Draußen wurden die Streikschilder schon bemalt."
+ },
+ "society_technology_events.2.t": {
+  "en": "Half the Salary",
+  "de": "Der halbe Lohn"
+ },
+ "society_technology_events.20.a": {
+  "en": "A curiosity, nothing more.",
+  "de": "Eine Kuriosität, nicht mehr."
+ },
+ "society_technology_events.20.b": {
+  "en": "Harness this collective mind.",
+  "de": "Diesen Kollektivgeist nutzen."
+ },
+ "society_technology_events.20.c": {
+  "en": "Shut it down.",
+  "de": "Es abschalten."
+ },
+ "society_technology_events.20.d": {
+  "en": "On the outskirts of a major city, a community of neural-linked individuals has formed something unprecedented - a shared consciousness. They think as one, decide as one, and act with a speed no parliament could match. Religious leaders call it an abomination. Scientists call it the next step in evolution.",
+  "de": "Am Rand einer Großstadt hat eine Gemeinschaft neuronal vernetzter Menschen etwas Beispielloses geschaffen - ein gemeinsames Bewusstsein. Sie denken als eins, entscheiden als eins und handeln mit einer Geschwindigkeit, der kein Parlament folgen kann. Religiöse Führer nennen es eine Abscheulichkeit. Wissenschaftler nennen es den nächsten Schritt der Evolution."
+ },
+ "society_technology_events.20.f": {
+  "en": "The interviewer leaned forward.\\n\\n\\\"When you say you think together - what does that mean, exactly?\\\"\\n\\nThe woman smiled. All forty-seven members of the commune smiled at the same moment.\\n\\n\\\"It means I am never alone. It means every decision I make is informed by forty-six other perspectives simultaneously. It means I have not experienced doubt in three years.\\\"\\n\\n\\\"That doesn't frighten you?\\\"\\n\\n\\\"It terrifies everyone who isn't part of it.\\\"",
+  "de": "Der Interviewer beugte sich vor.\\n\\n„Wenn Sie sagen, Sie denken gemeinsam - was bedeutet das genau?“\\n\\nDie Frau lächelte. Alle siebenundvierzig Mitglieder der Kommune lächelten im selben Moment.\\n\\n„Es bedeutet, dass ich nie allein bin. Es bedeutet, dass jede meiner Entscheidungen gleichzeitig von sechsundvierzig anderen Perspektiven geprägt wird. Es bedeutet, dass ich seit drei Jahren keinen Zweifel mehr erlebt habe.“\\n\\n„Macht Ihnen das keine Angst?“\\n\\n„Es macht jedem Angst, der nicht dazugehört.“"
+ },
+ "society_technology_events.20.t": {
+  "en": "The Hive",
+  "de": "Der Bienenstock"
+ },
+ "society_technology_events.21.a": {
+  "en": "Propose the channel.",
+  "de": "Den Kanal vorschlagen."
+ },
+ "society_technology_events.21.b": {
+  "en": "Our thoughts are our own.",
+  "de": "Unsere Gedanken gehören uns."
+ },
+ "society_technology_events.21.d": {
+  "en": "Our neural-linked diplomats want to attempt an extraordinary experiment: a telepathic channel to [SCOPE.sCountry('telepathic_partner').GetName], whose own telepathic communities could meet ours halfway. Diplomats from both nations would share thoughts directly, bypassing the barriers of language, culture, and deception. The potential for breakthrough is enormous - but so is the risk of having our state secrets read like an open book.",
+  "de": "Unsere neuronal vernetzten Diplomaten wollen ein außergewöhnliches Experiment wagen: einen telepathischen Kanal zu [SCOPE.sCountry('telepathic_partner').GetAltName('DAT')], dessen eigene telepathische Gemeinschaften uns auf halbem Weg entgegenkommen könnten. Diplomaten beider Nationen würden Gedanken direkt austauschen und dabei die Schranken von Sprache, Kultur und Täuschung umgehen. Das Potenzial für einen Durchbruch ist enorm - aber ebenso das Risiko, dass unsere Staatsgeheimnisse gelesen werden wie ein offenes Buch."
+ },
+ "society_technology_events.21.f": {
+  "en": "The diplomat sat across from her counterpart. Between them, the neural link hummed quietly.\\n\\n\\\"If we activate this, you will know what I am thinking. And I will know what you are thinking.\\\"\\n\\n\\\"That is the point.\\\"\\n\\n\\\"The point is also that neither of us can lie.\\\"\\n\\nA long pause. \\\"My government believes the benefits outweigh the risks.\\\"\\n\\n\\\"Does it? Or does it believe it has fewer secrets to lose than we do?\\\"",
+  "de": "Die Diplomatin saß ihrem Gegenüber gegenüber. Zwischen ihnen summte leise die neuronale Verbindung.\\n\\n„Wenn wir das aktivieren, wissen Sie, was ich denke. Und ich weiß, was Sie denken.“\\n\\n„Das ist der Sinn der Sache.“\\n\\n„Der Sinn der Sache ist auch, dass keiner von uns beiden lügen kann.“\\n\\nEine lange Pause. „Meine Regierung glaubt, der Nutzen überwiegt die Risiken.“\\n\\n„Tut sie das? Oder glaubt sie nur, weniger Geheimnisse zu verlieren zu haben als wir?“"
+ },
+ "society_technology_events.21.t": {
+  "en": "Open Minds",
+  "de": "Offene Gedanken"
+ },
+ "society_technology_events.22.a": {
+  "en": "Full transparency.",
+  "de": "Volle Transparenz."
+ },
+ "society_technology_events.22.b": {
+  "en": "Keep this quiet.",
+  "de": "Das für sich behalten."
+ },
+ "society_technology_events.22.c": {
+  "en": "Shut down all reactors.",
+  "de": "Alle Reaktoren abschalten."
+ },
+ "society_technology_events.22.d": {
+  "en": "Radiation monitors at a nuclear facility have detected elevated levels in the surrounding area. Plant officials insist the situation is under control, but independent scientists are raising alarms. The government must respond before panic takes hold.",
+  "de": "Strahlungsmessgeräte in einer Kernanlage haben erhöhte Werte in der umliegenden Region festgestellt. Die Anlagenleitung beteuert, die Lage sei unter Kontrolle, doch unabhängige Wissenschaftler schlagen Alarm. Die Regierung muss reagieren, bevor Panik ausbricht."
+ },
+ "society_technology_events.22.dd": {
+  "en": "Order a safety audit.",
+  "de": "Eine Sicherheitsprüfung anordnen."
+ },
+ "society_technology_events.22.f": {
+  "en": "The dosimeter clicked twice.\\n\\n\\\"That's within acceptable limits,\\\" said the plant manager.\\n\\nThe inspector looked at him. \\\"Define acceptable.\\\"\\n\\n\\\"Within the parameters set by -\\\"\\n\\n\\\"I know who sets the parameters. I also know who lobbied to raise them last year.\\\" She held up the dosimeter. It clicked again. \\\"This conversation is being recorded, by the way.\\\"",
+  "de": "Das Dosimeter klickte zweimal.\\n\\n„Das liegt innerhalb der zulässigen Grenzwerte“, sagte der Anlagenleiter.\\n\\nDie Inspektorin sah ihn an. „Definieren Sie zulässig.“\\n\\n„Innerhalb der Parameter, die von -“\\n\\n„Ich weiß, wer die Parameter festlegt. Ich weiß auch, wer letztes Jahr dafür lobbyiert hat, sie anzuheben.“ Sie hielt das Dosimeter hoch. Es klickte erneut. „Übrigens wird dieses Gespräch aufgezeichnet.“"
+ },
+ "society_technology_events.22.t": {
+  "en": "The Clicking Counter",
+  "de": "Der klickende Zähler"
+ },
+ "society_technology_events.23.a": {
+  "en": "Evacuate the region.",
+  "de": "Die Region evakuieren."
+ },
+ "society_technology_events.23.b": {
+  "en": "Send in the volunteers.",
+  "de": "Die Freiwilligen entsenden."
+ },
+ "society_technology_events.23.c": {
+  "en": "Deploy the emergency ministry.",
+  "de": "Das Notfallministerium einsetzen."
+ },
+ "society_technology_events.23.d": {
+  "en": "The worst has happened. A reactor core has breached containment and a radioactive plume is spreading across the region. Thousands must be evacuated immediately. Heroes are needed - workers willing to walk into lethal radiation to seal the breach.",
+  "de": "Das Schlimmste ist eingetreten. Ein Reaktorkern hat den Sicherheitsbehälter durchbrochen, und eine radioaktive Wolke breitet sich über die Region aus. Tausende müssen sofort evakuiert werden. Es werden Helden gebraucht - Arbeiter, die bereit sind, in tödliche Strahlung zu gehen, um das Leck abzudichten."
+ },
+ "society_technology_events.23.f": {
+  "en": "They called for volunteers at dawn. Thirty men stepped forward. The officer explained what they already knew: the radiation beyond the containment door was lethal. Some of them would not survive the week.\\n\\nA young engineer in the front row raised his hand.\\n\\n\\\"How long do we have inside?\\\"\\n\\n\\\"Ninety seconds. Perhaps two minutes.\\\"\\n\\n\\\"Then we'd better not waste time talking about it.\\\"\\n\\nHe was twenty-six years old. He died eleven days later. The breach was sealed.",
+  "de": "Bei Tagesanbruch wurden Freiwillige gesucht. Dreißig Männer traten vor. Der Offizier erklärte, was sie bereits wussten: Die Strahlung hinter der Schleusentür war tödlich. Manche von ihnen würden die Woche nicht überleben.\\n\\nEin junger Ingenieur in der ersten Reihe hob die Hand.\\n\\n„Wie lange haben wir dort drinnen?“\\n\\n„Neunzig Sekunden. Vielleicht zwei Minuten.“\\n\\n„Dann sollten wir besser keine Zeit mit Reden verschwenden.“\\n\\nEr war sechsundzwanzig Jahre alt. Er starb elf Tage später. Das Leck wurde abgedichtet."
+ },
+ "society_technology_events.23.t": {
+  "en": "The Atom's Reckoning",
+  "de": "Die Abrechnung des Atoms"
+ },
+ "society_technology_events.24.a": {
+  "en": "The atom has failed us.",
+  "de": "Das Atom hat uns versagt."
+ },
+ "society_technology_events.24.b": {
+  "en": "We cannot abandon nuclear.",
+  "de": "Wir können nicht auf die Kernkraft verzichten."
+ },
+ "society_technology_events.24.d": {
+  "en": "In the aftermath of the recent nuclear incident, the anti-nuclear movement has surged. Hundreds of thousands march demanding a complete phase-out of nuclear power. Politicians who once championed the atom scramble to distance themselves, while scientists warn that abandoning nuclear energy will make climate targets impossible.",
+  "de": "Nach dem jüngsten nuklearen Zwischenfall hat die Anti-Atomkraft-Bewegung stark zugenommen. Hunderttausende marschieren und fordern einen vollständigen Ausstieg aus der Kernenergie. Politiker, die einst für das Atom eintraten, versuchen sich hastig zu distanzieren, während Wissenschaftler warnen, dass der Verzicht auf Kernenergie die Klimaziele unerreichbar machen wird."
+ },
+ "society_technology_events.24.f": {
+  "en": "The march stretched to the horizon. A scientist stood on the pavement, watching them pass. She held a placard of her own, though she had not yet decided which side to join.\\n\\nOn one face it read: NEVER AGAIN.\\n\\nOn the other: WHAT THEN?\\n\\nShe held it sideways, showing both messages to no one in particular, and stood there until the last marcher had gone.",
+  "de": "Der Demonstrationszug erstreckte sich bis zum Horizont. Eine Wissenschaftlerin stand auf dem Gehweg und sah zu, wie sie vorbeizogen. Sie trug ein eigenes Plakat, hatte sich aber noch nicht entschieden, welcher Seite sie sich anschließen sollte.\\n\\nAuf der einen Seite stand: NIE WIEDER.\\n\\nAuf der anderen: UND DANN?\\n\\nSie hielt es seitlich, zeigte beide Botschaften niemand Bestimmtem, und blieb stehen, bis der letzte Demonstrant vorbeigezogen war."
+ },
+ "society_technology_events.24.t": {
+  "en": "Split the Atom, Split the Nation",
+  "de": "Gespaltenes Atom, gespaltene Nation"
+ },
+ "society_technology_events.25.a": {
+  "en": "Criminalize forgeries.",
+  "de": "Fälschungen unter Strafe stellen."
+ },
+ "society_technology_events.25.b": {
+  "en": "Fight fiction with technology.",
+  "de": "Fiktion mit Technologie bekämpfen."
+ },
+ "society_technology_events.25.c": {
+  "en": "The market will adapt.",
+  "de": "Der Markt wird sich anpassen."
+ },
+ "society_technology_events.25.d": {
+  "en": "AI-generated forgeries have reached a sophistication that makes them indistinguishable from reality. A fabricated video of a world leader has gone viral, nearly triggering a [concept_diplomatic_incident]. Fabricated evidence appears in courtrooms. The very concept of truth is under assault.",
+  "de": "KI-generierte Fälschungen haben eine Raffinesse erreicht, die sie von der Realität nicht mehr unterscheidbar macht. Ein gefälschtes Video eines Staatschefs ist viral gegangen und hätte beinahe einen [concept_diplomatic_incident] ausgelöst. Gefälschte Beweise tauchen vor Gericht auf. Der Begriff der Wahrheit selbst steht unter Beschuss."
+ },
+ "society_technology_events.25.f": {
+  "en": "The judge stared at the evidence footage.\\n\\n\\\"This is the defendant, clearly, on the night in question -\\\"\\n\\n\\\"Your Honor, that footage was generated by a machine. My client was in another country.\\\"\\n\\n\\\"You have proof?\\\"\\n\\n\\\"I have proof the footage is synthetic. Whether my client was elsewhere - that is a different question. The deeper question is whether any footage, anywhere, can ever be trusted again.\\\"\\n\\nThe courtroom was very quiet.",
+  "de": "Der Richter starrte auf die Beweisaufnahme.\\n\\n„Das ist eindeutig der Angeklagte, in der fraglichen Nacht -“\\n\\n„Euer Ehren, dieses Material wurde von einer Maschine erzeugt. Mein Mandant war in einem anderen Land.“\\n\\n„Haben Sie einen Beweis dafür?“\\n\\n„Ich habe den Beweis, dass das Material synthetisch ist. Ob mein Mandant anderswo war, ist eine andere Frage. Die tiefere Frage ist, ob irgendein Filmmaterial, irgendwo, jemals wieder vertraut werden kann.“\\n\\nIm Gerichtssaal herrschte tiefe Stille."
+ },
+ "society_technology_events.25.t": {
+  "en": "Seeing Is Not Believing",
+  "de": "Sehen heißt nicht mehr Glauben"
+ },
+ "society_technology_events.26.a": {
+  "en": "Establish an AI Safety Commission.",
+  "de": "Eine KI-Sicherheitskommission einrichten."
+ },
+ "society_technology_events.26.b": {
+  "en": "Fund alignment research programs.",
+  "de": "Programme zur Alignment-Forschung finanzieren."
+ },
+ "society_technology_events.26.c": {
+  "en": "These were implementation failures, not AI failures.",
+  "de": "Das waren Umsetzungsfehler, keine KI-Fehler."
+ },
+ "society_technology_events.26.d": {
+  "en": "A government AI system deployed to allocate public [concept_infrastructure] funding has produced outcomes that are technically optimal — and politically explosive. Tasked with maximizing economic efficiency, it defunded remote hospitals, deprioritized aging infrastructure in declining regions, and redirected investment away from rural communities. The system followed its instructions precisely. It simply had no way to know what those instructions were actually for. Researchers call this the alignment problem: the gap between what we tell a system to optimize and what we actually want.",
+  "de": "Ein staatliches KI-System, das zur Verteilung öffentlicher Mittel für [concept_infrastructure] eingesetzt wurde, hat Ergebnisse hervorgebracht, die technisch optimal - und politisch brisant sind. Mit dem Auftrag, die wirtschaftliche Effizienz zu maximieren, strich es abgelegenen Krankenhäusern die Mittel, stufte alternde Infrastruktur in schrumpfenden Regionen herab und lenkte Investitionen von ländlichen Gemeinden ab. Das System befolgte seine Anweisungen präzise. Es hatte schlicht keine Möglichkeit zu wissen, wofür diese Anweisungen eigentlich gedacht waren. Forscher nennen dies das Alignment-Problem: die Kluft zwischen dem, was wir ein System zu optimieren anweisen, und dem, was wir tatsächlich wollen."
+ },
+ "society_technology_events.26.d_pilot": {
+  "en": "A pilot AI system, trialled by a government contractor to plan one region's public [concept_infrastructure] funding, has produced recommendations that are technically optimal — and politically explosive. Tasked with maximizing economic efficiency, it proposed defunding remote hospitals, deprioritizing aging infrastructure in declining towns, and redirecting investment away from rural communities. The system followed its instructions precisely. It simply had no way to know what those instructions were actually for. Researchers call this the alignment problem: the gap between what we tell a system to optimize and what we actually want. The pilot's report has made it a national question.",
+  "de": "Ein Pilot-KI-System, das von einem Regierungsauftragnehmer erprobt wurde, um die Verteilung öffentlicher Mittel für [concept_infrastructure] in einer Region zu planen, hat Empfehlungen hervorgebracht, die technisch optimal - und politisch brisant sind. Mit dem Auftrag, die wirtschaftliche Effizienz zu maximieren, schlug es vor, abgelegenen Krankenhäusern die Mittel zu streichen, alternde Infrastruktur in schrumpfenden Gemeinden herabzustufen und Investitionen von ländlichen Gemeinden abzulenken. Das System befolgte seine Anweisungen präzise. Es hatte schlicht keine Möglichkeit zu wissen, wofür diese Anweisungen eigentlich gedacht waren. Forscher nennen dies das Alignment-Problem: die Kluft zwischen dem, was wir ein System zu optimieren anweisen, und dem, was wir tatsächlich wollen. Der Bericht des Pilotprojekts hat daraus eine nationale Frage gemacht."
+ },
+ "society_technology_events.26.f": {
+  "en": "The engineers gave their testimony calmly.\\n\\n\\\"The system did not malfunction.\\\"\\n\\n\\\"Then why,\\\" asked the minister, \\\"were seventeen rural districts left without emergency infrastructure?\\\"\\n\\n\\\"The system was optimizing for cost efficiency per capita. Those communities represented poor statistical outcomes.\\\"\\n\\n\\\"They were #bold people#!.\\\"\\n\\n\\\"Yes. But the objective function did not include that as a parameter.\\\"\\n\\nThe minister looked down at the report. She asked the engineers to leave the room.",
+  "de": "Die Ingenieure legten ihre Aussage ruhig ab.\\n\\n„Das System hatte keine Fehlfunktion.“\\n\\n„Warum wurden dann“, fragte die Ministerin, „siebzehn ländliche Bezirke ohne Notfallinfrastruktur zurückgelassen?“\\n\\n„Das System optimierte die Kosteneffizienz pro Kopf. Diese Gemeinden stellten statistisch schlechte Ergebnisse dar.“\\n\\n„Es waren #bold Menschen#!.“\\n\\n„Ja. Aber die Zielfunktion enthielt das nicht als Parameter.“\\n\\nDie Ministerin blickte auf den Bericht hinunter. Sie bat die Ingenieure, den Raum zu verlassen."
+ },
+ "society_technology_events.26.t": {
+  "en": "The Alignment Problem",
+  "de": "Das Alignment-Problem"
+ },
+ "society_technology_events.27.a": {
+  "en": "Give the machine a chance.",
+  "de": "Der Maschine eine Chance geben."
+ },
+ "society_technology_events.27.b": {
+  "en": "Governance demands a human hand.",
+  "de": "Regierungsführung braucht eine menschliche Hand."
+ },
+ "society_technology_events.27.d": {
+  "en": "An advanced AI system has demonstrated it can process bureaucratic decisions faster, more fairly, and more efficiently than any human administrator. Advocates propose handing over routine governance - tax assessment, resource allocation, permit approval - to algorithmic management.",
+  "de": "Ein fortschrittliches KI-System hat bewiesen, dass es bürokratische Entscheidungen schneller, fairer und effizienter treffen kann als jeder menschliche Verwalter. Befürworter schlagen vor, die routinemäßige Verwaltung - Steuerbescheide, Ressourcenverteilung, Genehmigungsvergabe - an algorithmisches Management zu übergeben."
+ },
+ "society_technology_events.27.f": {
+  "en": "The queue at the permits office was empty for the first time in living memory.\\n\\n\\\"How?\\\" asked the councilwoman.\\n\\n\\\"The system processed eight hundred applications overnight. Zero errors. Zero complaints. Zero bribes.\\\"\\n\\n\\\"And the clerks?\\\"\\n\\n\\\"Reassigned. Most of them. A few refused to leave their desks. They said it felt like being made redundant by a filing cabinet.\\\"\\n\\nThe councilwoman looked at the empty waiting room. It was efficient. It was unsettling. She wasn't sure which feeling was stronger.",
+  "de": "Die Schlange im Genehmigungsamt war zum ersten Mal seit Menschengedenken leer.\\n\\n„Wie?“, fragte die Stadträtin.\\n\\n„Das System hat über Nacht achthundert Anträge bearbeitet. Null Fehler. Null Beschwerden. Null Bestechungsgelder.“\\n\\n„Und die Sachbearbeiter?“\\n\\n„Versetzt. Die meisten. Ein paar weigerten sich, ihre Schreibtische zu verlassen. Sie sagten, es fühle sich an, als würden sie von einem Aktenschrank ersetzt.“\\n\\nDie Stadträtin betrachtete den leeren Warteraum. Es war effizient. Es war beunruhigend. Sie war sich nicht sicher, welches Gefühl stärker war."
+ },
+ "society_technology_events.27.t": {
+  "en": "Government by Algorithm",
+  "de": "Regierung durch Algorithmus"
+ },
+ "society_technology_events.28.a": {
+  "en": "This crosses a line.",
+  "de": "Das überschreitet eine Grenze."
+ },
+ "society_technology_events.28.b": {
+  "en": "Healing only - nothing more.",
+  "de": "Nur Heilung - nichts weiter."
+ },
+ "society_technology_events.28.c": {
+  "en": "The state shall guide our evolution.",
+  "de": "Der Staat soll unsere Evolution lenken."
+ },
+ "society_technology_events.28.c2": {
+  "en": "The genome belongs to everyone.",
+  "de": "Das Genom gehört allen."
+ },
+ "society_technology_events.28.c3": {
+  "en": "Let the market perfect humanity.",
+  "de": "Den Markt die Menschheit vervollkommnen lassen."
+ },
+ "society_technology_events.28.d": {
+  "en": "Gene editing technology has advanced to the point where parents can select their children's traits - intelligence, appearance, disease resistance, even personality. A clinic offering these services has opened, and the ethical firestorm is immediate. Some see liberation from genetic disease; others see the birth of a new eugenics.",
+  "de": "Die Gentechnik hat einen Punkt erreicht, an dem Eltern die Eigenschaften ihrer Kinder auswählen können - Intelligenz, Aussehen, Krankheitsresistenz, sogar Persönlichkeit. Eine Klinik, die diese Dienste anbietet, hat eröffnet, und der ethische Sturm der Entrüstung folgt auf dem Fuß. Manche sehen darin die Befreiung von Erbkrankheiten; andere die Geburt einer neuen Eugenik."
+ },
+ "society_technology_events.28.f": {
+  "en": "The couple sat in the clinic's waiting room, leafing through a catalogue.\\n\\n\\\"Blue eyes or brown?\\\"\\n\\n\\\"Does it matter?\\\"\\n\\n\\\"It matters to me.\\\" She turned the page. \\\"Height. Musical aptitude. Mathematical reasoning. They list them like options on a motorcar.\\\"\\n\\nHer husband stared at the glossy photographs of smiling babies and felt a chill he could not explain. Somewhere in the building, a technician was preparing a syringe that would decide what their child would become.\\n\\nWhat it would #italic not#! become was already off the table.",
+  "de": "Das Paar saß im Wartezimmer der Klinik und blätterte durch einen Katalog.\\n\\n„Blaue Augen oder braune?“\\n\\n„Spielt das eine Rolle?“\\n\\n„Für mich schon.“ Sie blätterte um. „Körpergröße. Musikalische Begabung. Mathematisches Denkvermögen. Sie listen es auf wie die Ausstattung eines Automobils.“\\n\\nIhr Mann starrte auf die Hochglanzfotos lächelnder Babys und spürte einen Schauder, den er sich nicht erklären konnte. Irgendwo im Gebäude bereitete ein Techniker eine Spritze vor, die entscheiden würde, was aus ihrem Kind werden sollte.\\n\\nWas es #italic nicht#! werden würde, stand schon nicht mehr zur Debatte."
+ },
+ "society_technology_events.28.t": {
+  "en": "Building a Better Baby",
+  "de": "Ein besseres Baby bauen"
+ },
+ "society_technology_events.29.a": {
+  "en": "The future grows in vats.",
+  "de": "Die Zukunft wächst in Tanks."
+ },
+ "society_technology_events.29.b": {
+  "en": "Stand by our farmers.",
+  "de": "Zu unseren Bauern stehen."
+ },
+ "society_technology_events.29.d": {
+  "en": "Laboratory-grown food is ready for mass production. Synthetic crops require no soil, no water, no sunlight - just vats and electricity. They could end hunger in a generation, but rural communities that have farmed for centuries face extinction.",
+  "de": "Im Labor gezüchtete Lebensmittel sind bereit für die Massenproduktion. Synthetische Nutzpflanzen brauchen keinen Boden, kein Wasser, kein Sonnenlicht - nur Tanks und Strom. Sie könnten den Hunger binnen einer Generation beenden, doch ländliche Gemeinschaften, die seit Jahrhunderten Landwirtschaft betreiben, stehen vor dem Aussterben."
+ },
+ "society_technology_events.29.f": {
+  "en": "The old farmer stood at the edge of his field and watched the construction crew pour the foundations for the new facility.\\n\\n\\\"What do they grow in there?\\\"\\n\\n\\\"Everything,\\\" said his grandson. \\\"Wheat, rice, corn. All synthetic. Faster, cheaper, no weather risk.\\\"\\n\\n\\\"It's not growing. Growing needs soil.\\\"\\n\\n\\\"Grandfather -\\\"\\n\\n\\\"I know what you're going to say.\\\" He pulled up a handful of earth and let it fall through his fingers. \\\"I just wonder what they'll call it, when there's no one left who remembers what real food tasted like.\\\"",
+  "de": "Der alte Bauer stand am Rand seines Feldes und sah zu, wie die Baukolonne die Fundamente für die neue Anlage goss.\\n\\n„Was bauen sie da drin an?“\\n\\n„Alles“, sagte sein Enkel. „Weizen, Reis, Mais. Alles synthetisch. Schneller, billiger, kein Wetterrisiko.“\\n\\n„Das ist kein Anbau. Anbau braucht Boden.“\\n\\n„Großvater -“\\n\\n„Ich weiß, was du sagen willst.“ Er griff eine Handvoll Erde und ließ sie durch die Finger rieseln. „Ich frage mich nur, wie sie es nennen werden, wenn niemand mehr übrig ist, der sich erinnert, wie richtiges Essen geschmeckt hat.“"
+ },
+ "society_technology_events.29.t": {
+  "en": "The Empty Field",
+  "de": "Das leere Feld"
+ },
+ "society_technology_events.3.a": {
+  "en": "Make it freely available.",
+  "de": "Frei zugänglich machen."
+ },
+ "society_technology_events.3.b": {
+  "en": "For married couples only.",
+  "de": "Nur für Ehepaare."
+ },
+ "society_technology_events.3.c": {
+  "en": "Subsidize distribution.",
+  "de": "Die Verteilung subventionieren."
+ },
+ "society_technology_events.3.d": {
+  "en": "Oral contraceptives have arrived, and they are transforming society from the bedroom outward. For the first time, women can reliably control their own fertility. Religious leaders thunder from their pulpits while public health officials debate distribution policy.",
+  "de": "Die Antibabypille ist da, und sie verändert die Gesellschaft vom Schlafzimmer aus. Zum ersten Mal können Frauen zuverlässig über ihre eigene Fruchtbarkeit bestimmen. Religiöse Führer wettern von der Kanzel, während Gesundheitsbehörden über die Verteilungspolitik debattieren."
+ },
+ "society_technology_events.3.f": {
+  "en": "The pharmacist looked at the prescription, then at the young woman, then back at the prescription.\\n\\n\\\"Does your husband know?\\\"\\n\\n\\\"I don't have a husband.\\\"\\n\\nA long pause. He glanced toward the back of the shop, where his wife was sorting bottles.\\n\\n\\\"I'm not sure I can fill this.\\\"\\n\\n\\\"The doctor signed it. The law permits it. I believe your conscience is your own affair, sir, and mine is mine.\\\"",
+  "de": "Der Apotheker sah auf das Rezept, dann auf die junge Frau, dann wieder auf das Rezept.\\n\\n„Weiß Ihr Mann davon?“\\n\\n„Ich habe keinen Mann.“\\n\\nEine lange Pause. Er warf einen Blick zum hinteren Teil des Ladens, wo seine Frau Flaschen sortierte.\\n\\n„Ich bin mir nicht sicher, ob ich das ausgeben kann.“\\n\\n„Der Arzt hat es unterschrieben. Das Gesetz erlaubt es. Ich glaube, Ihr Gewissen ist Ihre eigene Angelegenheit, mein Herr, und meines ist meine.“"
+ },
+ "society_technology_events.3.t": {
+  "en": "The Little Tablet",
+  "de": "Die kleine Pille"
+ },
+ "society_technology_events.30.a": {
+  "en": "Full speed ahead.",
+  "de": "Volle Kraft voraus."
+ },
+ "society_technology_events.30.b": {
+  "en": "Proceed with caution.",
+  "de": "Mit Vorsicht vorgehen."
+ },
+ "society_technology_events.30.c": {
+  "en": "Protect our drivers' livelihoods.",
+  "de": "Die Lebensgrundlage unserer Fahrer schützen."
+ },
+ "society_technology_events.30.d": {
+  "en": "Autonomous vehicles are ready for mass deployment. They promise to eliminate traffic deaths, reduce congestion, and transform logistics. But millions of professional drivers face obsolescence, and the question of liability when an algorithm kills remains unanswered.",
+  "de": "Autonome Fahrzeuge sind bereit für den Masseneinsatz. Sie versprechen, Verkehrstote zu verhindern, Staus zu verringern und die Logistik zu revolutionieren. Doch Millionen Berufskraftfahrer drohen überflüssig zu werden, und die Frage der Haftung, wenn ein Algorithmus tötet, bleibt unbeantwortet."
+ },
+ "society_technology_events.30.f": {
+  "en": "The cabbie watched the driverless vehicle glide past his rank for the third time that morning. No driver. No fare disputes. No tips. No conversation.\\n\\n\\\"How am I supposed to compete with that?\\\" he said to no one.\\n\\nHis dispatcher crackled over the radio. \\\"You're not. That's the point.\\\"\\n\\nHe turned off the radio, sat in his cab, and watched the future pass him by at exactly the speed limit.",
+  "de": "Der Taxifahrer beobachtete, wie das fahrerlose Fahrzeug an diesem Morgen zum dritten Mal an seinem Stand vorbeiglitt. Kein Fahrer. Kein Streit ums Fahrgeld. Kein Trinkgeld. Kein Gespräch.\\n\\n„Wie soll ich damit konkurrieren?“, sagte er zu niemandem.\\n\\nSeine Zentrale knisterte über Funk. „Sollen Sie auch nicht. Das ist der Sinn der Sache.“\\n\\nEr schaltete das Radio aus, setzte sich in sein Taxi und sah zu, wie die Zukunft exakt im Tempolimit an ihm vorbeizog."
+ },
+ "society_technology_events.30.t": {
+  "en": "No Hands on the Wheel",
+  "de": "Keine Hände am Lenkrad"
+ },
+ "society_technology_events.31.a": {
+  "en": "Halt all deployments.",
+  "de": "Alle Einsätze stoppen."
+ },
+ "society_technology_events.31.b": {
+  "en": "The statistics speak for themselves.",
+  "de": "Die Statistik spricht für sich."
+ },
+ "society_technology_events.31.c": {
+  "en": "Commission a safety inquiry.",
+  "de": "Eine Sicherheitsuntersuchung in Auftrag geben."
+ },
+ "society_technology_events.31.d": {
+  "en": "A self-driving vehicle has struck and killed a pedestrian. The incident dominates the news cycle. Technical analysis shows the algorithm made a split-second decision that no human driver could have faced, but the victim is dead all the same.",
+  "de": "Ein selbstfahrendes Fahrzeug hat einen Fußgänger erfasst und getötet. Der Vorfall beherrscht die Nachrichten. Die technische Analyse zeigt, dass der Algorithmus eine Entscheidung in Sekundenbruchteilen traf, vor der kein menschlicher Fahrer je gestanden hätte - doch das Opfer ist dennoch tot."
+ },
+ "society_technology_events.31.f": {
+  "en": "The engineer stared at the log file.\\n\\n\\\"At 14:07:33, the vehicle detected an obstacle. At 14:07:33.004, it calculated three possible responses. At 14:07:33.006, it chose the response with the lowest aggregate harm probability.\\\"\\n\\n\\\"And?\\\"\\n\\n\\\"And the lowest aggregate harm probability was still a fatality.\\\" He closed the laptop. \\\"The machine did exactly what we told it to do. That's the problem.\\\"",
+  "de": "Der Ingenieur starrte auf die Protokolldatei.\\n\\n„Um 14:07:33 Uhr erkannte das Fahrzeug ein Hindernis. Um 14:07:33,004 Uhr berechnete es drei mögliche Reaktionen. Um 14:07:33,006 Uhr wählte es die Reaktion mit der geringsten aggregierten Schadenswahrscheinlichkeit.“\\n\\n„Und?“\\n\\n„Und die geringste aggregierte Schadenswahrscheinlichkeit war immer noch ein Todesfall.“ Er klappte den Laptop zu. „Die Maschine hat genau das getan, was wir ihr gesagt haben. Das ist das Problem.“"
+ },
+ "society_technology_events.31.t": {
+  "en": "The Algorithm's Choice",
+  "de": "Die Entscheidung des Algorithmus"
+ },
+ "society_technology_events.32.a": {
+  "en": "Flood their feeds.",
+  "de": "Ihre Feeds fluten."
+ },
+ "society_technology_events.32.b": {
+  "en": "Leave their voters alone.",
+  "de": "Ihre Wähler in Ruhe lassen."
+ },
+ "society_technology_events.32.d": {
+  "en": "[SCOPE.sCountry('interference_target').GetName] is in the middle of an election campaign, and our cyber directorate sees an opening. Thousands of fabricated accounts, amplifying fringe candidates and every divisive story, could shake the voters' faith in their own ballot and leave a rival government weaker whoever wins. A campaign on that scale will not stay hidden for long - it will be traced to us - but by then the damage will be done.",
+  "de": "[SCOPE.sCountry('interference_target').GetAltName('NOM')|U] steckt mitten in einem Wahlkampf, und unsere Cyberabteilung sieht eine Gelegenheit. Tausende gefälschte Konten, die Randkandidaten verstärken und jede spalterische Geschichte verbreiten, könnten das Vertrauen der Wähler in ihre eigene Stimme erschüttern und eine rivalisierende Regierung schwächen, wer auch immer gewinnt. Eine Kampagne dieses Ausmaßes wird nicht lange verborgen bleiben - sie wird zu uns zurückverfolgt werden -, aber bis dahin wird der Schaden bereits angerichtet sein."
+ },
+ "society_technology_events.32.f": {
+  "en": "The director scrolls through a dashboard of accounts that did not exist a month ago.\\n\\n\\\"Forty thousand profiles. Farmers, nurses, retired schoolteachers - all very worried about the state of their country.\\\"\\n\\n\\\"And when their counterintelligence finds the servers?\\\"\\n\\n\\\"They will make a great deal of noise about it,\\\" she says. \\\"In the middle of an election. Which is rather the point.\\\"",
+  "de": "Die Direktorin scrollt durch ein Dashboard mit Konten, die vor einem Monat noch nicht existierten.\\n\\n„Vierzigtausend Profile. Bauern, Krankenschwestern, pensionierte Lehrer - alle sehr besorgt um den Zustand ihres Landes.“\\n\\n„Und wenn ihre Spionageabwehr die Server findet?“\\n\\n„Dann werden sie viel Aufhebens darum machen“, sagt sie. „Mitten in einem Wahlkampf. Was durchaus der Sinn der Sache ist.“"
+ },
+ "society_technology_events.32.t": {
+  "en": "A Thumb on the Scale",
+  "de": "Ein Daumen auf der Waage"
+ },
+ "society_technology_events.33.a": {
+  "en": "It served its purpose.",
+  "de": "Es hat seinen Zweck erfüllt."
+ },
+ "society_technology_events.33.d_counter": {
+  "en": "[SCOPE.sCountry('interference_target').GetName] has traced the fabricated accounts in its election back to us. Its government is answering with counter-influence operations of its own, and making sure the world hears who paid for the servers.",
+  "de": "[SCOPE.sCountry('interference_target').GetAltName('NOM')|U] hat zurückverfolgt, dass die gefälschten Konten bei der eigenen Wahl von uns stammen. Die dortige Regierung antwortet mit eigenen Gegeneinflussoperationen und sorgt dafür, dass die Welt erfährt, wer die Server bezahlt hat."
+ },
+ "society_technology_events.33.d_cyber": {
+  "en": "[SCOPE.sCountry('interference_target').GetName]'s intelligence service has taken the network of fabricated accounts apart, traced it back to us, and lodged a formal protest. The campaign is finished.",
+  "de": "Der Geheimdienst [SCOPE.sCountry('interference_target').GetAltName('GEN')] hat das Netzwerk gefälschter Konten zerschlagen, es bis zu uns zurückverfolgt und eine förmliche Protestnote eingereicht. Die Kampagne ist beendet."
+ },
+ "society_technology_events.33.d_downplayed": {
+  "en": "[SCOPE.sCountry('interference_target').GetName]'s government has chosen to play down the reports of foreign accounts in its election rather than name us. The campaign has run its course, and their voters are left wondering what to believe.",
+  "de": "Die Regierung [SCOPE.sCountry('interference_target').GetAltName('GEN')] hat sich entschieden, die Berichte über ausländische Konten bei der eigenen Wahl herunterzuspielen, statt uns namentlich zu nennen. Die Kampagne hat sich totgelaufen, und die dortigen Wähler bleiben ratlos zurück, was sie noch glauben sollen."
+ },
+ "society_technology_events.33.f": {
+  "en": "The director closes the dashboard. Forty thousand accounts, suspended in an afternoon.\\n\\n\\\"Did it work?\\\"\\n\\n\\\"That depends what you wanted,\\\" she says. \\\"If you wanted them to trust their own ballot a little less - yes. If you wanted nobody to know it was us - no.\\\"",
+  "de": "Die Direktorin schließt das Dashboard. Vierzigtausend Konten, an einem einzigen Nachmittag gesperrt.\\n\\n„Hat es funktioniert?“\\n\\n„Das hängt davon ab, was Sie wollten“, sagt sie. „Wenn Sie wollten, dass sie ihrer eigenen Stimme ein wenig weniger vertrauen - ja. Wenn Sie wollten, dass niemand erfährt, dass wir es waren - nein.“"
+ },
+ "society_technology_events.33.t": {
+  "en": "Traced to Us",
+  "de": "Bis zu uns zurückverfolgt"
+ },
+ "society_technology_events.34.a": {
+  "en": "Open the channel.",
+  "de": "Den Kanal öffnen."
+ },
+ "society_technology_events.34.b": {
+  "en": "Our thoughts are our own.",
+  "de": "Unsere Gedanken gehören uns."
+ },
+ "society_technology_events.34.d": {
+  "en": "The neural-linked diplomats of [SCOPE.sCountry('telepathic_proposer').GetName] have proposed an extraordinary experiment: a telepathic channel between our two governments. Diplomats from both nations would share thoughts directly, bypassing the barriers of language, culture, and deception. The potential for breakthrough is enormous - but so is the risk of having our state secrets read like an open book.",
+  "de": "Die neuronal vernetzten Diplomaten [SCOPE.sCountry('telepathic_proposer').GetAltName('GEN')] haben ein außergewöhnliches Experiment vorgeschlagen: einen telepathischen Kanal zwischen unseren beiden Regierungen. Diplomaten beider Nationen würden Gedanken direkt austauschen und dabei die Schranken von Sprache, Kultur und Täuschung umgehen. Das Potenzial für einen Durchbruch ist enorm - aber ebenso das Risiko, dass unsere Staatsgeheimnisse gelesen werden wie ein offenes Buch."
+ },
+ "society_technology_events.34.f": {
+  "en": "The envoy's letter is short, handwritten, and oddly warm.\\n\\n\\\"They say it is like standing in a lit room with the curtains open,\\\" the foreign minister reads aloud. \\\"Both rooms. Both sets of curtains.\\\"\\n\\n\\\"And what do they see in ours?\\\"\\n\\n\\\"Whatever we are thinking when we say yes.\\\"",
+  "de": "Der Brief des Gesandten ist kurz, handgeschrieben und seltsam warmherzig.\\n\\n„Sie sagen, es sei, als stünde man in einem beleuchteten Raum bei offenen Vorhängen“, liest der Außenminister laut vor. „Beide Räume. Beide Vorhänge.“\\n\\n„Und was sehen sie in unserem?“\\n\\n„Was auch immer wir denken, wenn wir Ja sagen.“"
+ },
+ "society_technology_events.34.t": {
+  "en": "A Channel Offered",
+  "de": "Ein angebotener Kanal"
+ },
+ "society_technology_events.35.a": {
+  "en": "Let the minds meet.",
+  "de": "Die Geister sich begegnen lassen."
+ },
+ "society_technology_events.35.b": {
+  "en": "Their loss.",
+  "de": "Ihr Verlust."
+ },
+ "society_technology_events.35.d_accepted": {
+  "en": "[SCOPE.sCountry('telepathic_partner').GetName] has accepted our proposal. The telepathic channel between our two diplomatic services is open.",
+  "de": "[SCOPE.sCountry('telepathic_partner').GetAltName('NOM')|U] hat unseren Vorschlag angenommen. Der telepathische Kanal zwischen unseren beiden diplomatischen Diensten ist offen."
+ },
+ "society_technology_events.35.d_declined": {
+  "en": "[SCOPE.sCountry('telepathic_partner').GetName] has declined our proposal of a telepathic channel. Its government prefers to keep its thoughts to itself.",
+  "de": "[SCOPE.sCountry('telepathic_partner').GetAltName('NOM')|U] hat unseren Vorschlag eines telepathischen Kanals abgelehnt. Die dortige Regierung behält ihre Gedanken lieber für sich."
+ },
+ "society_technology_events.35.f": {
+  "en": "The neural link hums in its cradle, waiting for a second mind at the other end.\\n\\n\\\"Well?\\\"\\n\\nThe diplomat takes off the headset. \\\"Their answer came by telegram,\\\" she says. \\\"Which is, I suppose, an answer in itself.\\\"",
+  "de": "Die neuronale Verbindung summt in ihrer Halterung und wartet auf einen zweiten Geist am anderen Ende.\\n\\n„Und?“\\n\\n„Ihre Antwort kam per Telegramm“, sagt sie. „Was, nehme ich an, selbst schon eine Antwort ist.“"
+ },
+ "society_technology_events.35.t": {
+  "en": "An Answer from Abroad",
+  "de": "Eine Antwort aus dem Ausland"
+ },
+ "society_technology_events.4.a": {
+  "en": "Times change.",
+  "de": "Die Zeiten ändern sich."
+ },
+ "society_technology_events.4.b": {
+  "en": "Restore public decency.",
+  "de": "Den öffentlichen Anstand wiederherstellen."
+ },
+ "society_technology_events.4.d": {
+  "en": "The youth have declared war on convention. Traditional courtship is being discarded, cohabitation before marriage has become commonplace, and public expressions of intimacy that would have scandalized a generation ago now barely raise an eyebrow. The cultural establishment is reeling.",
+  "de": "Die Jugend hat der Konvention den Krieg erklärt. Das traditionelle Werben wird verworfen, das Zusammenleben vor der Ehe ist alltäglich geworden, und öffentliche Zärtlichkeiten, die vor einer Generation noch einen Skandal ausgelöst hätten, ziehen heute kaum noch einen Blick auf sich. Das kulturelle Establishment taumelt."
+ },
+ "society_technology_events.4.f": {
+  "en": "The priest stopped mid-sermon and stared at the couple in the third pew. They were not married - everyone knew it - and they did not have the decency to look ashamed.\\n\\n\\\"In my day -\\\" he began.\\n\\n\\\"In your day, Father, people pretended,\\\" said a voice from the back. A few heads turned. Most did not.\\n\\nThe priest gripped the lectern. He had lost something he could not name, and the congregation's polite indifference was worse than any argument.",
+  "de": "Der Priester unterbrach mitten in der Predigt und starrte das Paar in der dritten Bank an. Sie waren nicht verheiratet - jeder wusste es -, und sie hatten nicht einmal den Anstand, beschämt dreinzuschauen.\\n\\n„Zu meiner Zeit -“, begann er.\\n\\n„Zu Ihrer Zeit, Hochwürden, hat man wenigstens so getan“, sagte eine Stimme von hinten. Ein paar Köpfe drehten sich um. Die meisten nicht.\\n\\nDer Priester umklammerte das Rednerpult. Er hatte etwas verloren, das er nicht benennen konnte, und die höfliche Gleichgültigkeit der Gemeinde war schlimmer als jeder Streit."
+ },
+ "society_technology_events.4.t": {
+  "en": "The Old Rules",
+  "de": "Die alten Regeln"
+ },
+ "society_technology_events.5.a": {
+  "en": "Freedom from a loveless union.",
+  "de": "Freiheit von einer lieblosen Verbindung."
+ },
+ "society_technology_events.5.b": {
+  "en": "Marriage is a sacred bond.",
+  "de": "Die Ehe ist ein heiliges Band."
+ },
+ "society_technology_events.5.d": {
+  "en": "Calls are growing louder to liberalize divorce laws. Advocates argue that trapping people in loveless marriages creates misery; opponents insist that easy divorce will erode the family unit. The legislature faces a decision that will reshape domestic life.",
+  "de": "Die Rufe nach einer Liberalisierung der Scheidungsgesetze werden lauter. Befürworter argumentieren, dass Menschen in lieblosen Ehen gefangen zu halten nur Elend schafft; Gegner beharren darauf, dass eine erleichterte Scheidung das Fundament der Familie untergraben werde. Die Legislative steht vor einer Entscheidung, die das häusliche Leben neu gestalten wird."
+ },
+ "society_technology_events.5.f": {
+  "en": "The solicitor laid out the papers.\\n\\n\\\"Under the current law, you must prove fault. Cruelty, abandonment, or infidelity.\\\"\\n\\n\\\"And if there is no fault? If we simply... no longer love one another?\\\"\\n\\n\\\"Then the law says you must remain married.\\\"\\n\\nShe stared at the papers for a long time. \\\"Whose law?\\\"\\n\\n\\\"Parliament's.\\\"\\n\\n\\\"Has Parliament ever been trapped in a marriage?\\\"",
+  "de": "Der Anwalt breitete die Papiere aus.\\n\\n„Nach geltendem Recht müssen Sie ein Verschulden nachweisen. Grausamkeit, Verlassen oder Untreue.“\\n\\n„Und wenn es kein Verschulden gibt? Wenn wir uns einfach ... nicht mehr lieben?“\\n\\n„Dann besagt das Gesetz, dass Sie verheiratet bleiben müssen.“\\n\\nSie starrte lange auf die Papiere. „Wessen Gesetz?“\\n\\n„Das des Parlaments.“\\n\\n„War das Parlament jemals in einer Ehe gefangen?“"
+ },
+ "society_technology_events.5.t": {
+  "en": "Till Death Do Us Part",
+  "de": "Bis dass der Tod uns scheidet"
+ },
+ "society_technology_events.6.a": {
+  "en": "A splendid new industry!",
+  "de": "Eine großartige neue Industrie!"
+ },
+ "society_technology_events.6.b": {
+  "en": "Regulate what the children see.",
+  "de": "Regulieren, was die Kinder sehen."
+ },
+ "society_technology_events.6.d": {
+  "en": "Interactive electronic entertainment has exploded from a niche hobby into a cultural juggernaut. Arcades and home consoles are reshaping how the young spend their leisure time, and studios are hiring programmers, artists, and writers at a furious pace.",
+  "de": "Interaktive elektronische Unterhaltung hat sich explosionsartig von einem Nischenhobby zu einem kulturellen Phänomen entwickelt. Spielhallen und Heimkonsolen verändern, wie die Jugend ihre Freizeit verbringt, und die Studios stellen in rasantem Tempo Programmierer, Künstler und Autoren ein."
+ },
+ "society_technology_events.6.f": {
+  "en": "The boy had not moved in four hours.\\n\\nHis mother stood in the doorway, arms crossed. The television screen flickered with colors she did not understand, and her son's fingers danced over the controller with a precision he had never shown for homework.\\n\\n\\\"This is rotting your brain.\\\"\\n\\n\\\"I'm learning problem-solving, spatial reasoning, and resource management.\\\"\\n\\n\\\"You're learning to sit still.\\\"\\n\\nHe did not look up. Somewhere on the screen, a tiny figure collected a golden coin and the boy smiled.",
+  "de": "Der Junge hatte sich seit vier Stunden nicht gerührt.\\n\\nSeine Mutter stand mit verschränkten Armen in der Tür. Der Fernsehbildschirm flackerte in Farben, die sie nicht verstand, und die Finger ihres Sohnes tanzten über den Controller mit einer Präzision, die er für Hausaufgaben nie gezeigt hatte.\\n\\n„Das verrottet dir das Gehirn.“\\n\\n„Ich lerne Problemlösen, räumliches Denken und Ressourcenmanagement.“\\n\\n„Du lernst, still zu sitzen.“\\n\\nEr blickte nicht auf. Irgendwo auf dem Bildschirm sammelte eine winzige Figur eine goldene Münze, und der Junge lächelte."
+ },
+ "society_technology_events.6.t": {
+  "en": "Press Start",
+  "de": "Drücke Start"
+ },
+ "society_technology_events.7.a": {
+  "en": "These people have courage - offer them our protection",
+  "de": "Diese Menschen haben Mut - bieten wir ihnen unseren Schutz an"
+ },
+ "society_technology_events.7.b": {
+  "en": "Order the police to look the other way",
+  "de": "Der Polizei befehlen, wegzusehen"
+ },
+ "society_technology_events.7.c": {
+  "en": "Disperse them and arrest the ringleaders",
+  "de": "Sie auseinandertreiben und die Rädelsführer verhaften"
+ },
+ "society_technology_events.7.d_progressive": {
+  "en": "Thousands march through the capital in a display of solidarity, demanding that the government go further in its commitment to equality. The march is peaceful and well-organized, but the political pressure is unmistakable.",
+  "de": "Tausende marschieren in einer Demonstration der Solidarität durch die Hauptstadt und fordern, dass die Regierung in ihrem Einsatz für Gleichberechtigung weiter geht. Der Marsch verläuft friedlich und gut organisiert, doch der politische Druck ist unverkennbar."
+ },
+ "society_technology_events.7.d_repressive": {
+  "en": "Word reaches the government of a clandestine gathering in the capital's back streets. Dozens - perhaps hundreds - have assembled in open defiance of the prevailing social order, displaying symbols of solidarity and demanding recognition. The police await instructions.",
+  "de": "Der Regierung erreicht die Kunde von einer heimlichen Versammlung in den Seitenstraßen der Hauptstadt. Dutzende - vielleicht Hunderte - haben sich in offenem Trotz gegen die herrschende Gesellschaftsordnung versammelt, zeigen Symbole der Solidarität und fordern Anerkennung. Die Polizei wartet auf Anweisungen."
+ },
+ "society_technology_events.7.e": {
+  "en": "March alongside them!",
+  "de": "An ihrer Seite marschieren!"
+ },
+ "society_technology_events.7.f_progressive": {
+  "en": "The parade stretched six blocks. A girl sat on her father's shoulders, waving a small flag.\\n\\n'Why are we marching?' she asked.\\n\\n'Because some people still can't marry the person they love. Because some people are still afraid.'\\n\\n'But the law says -'\\n\\n'The law says a great deal. It does not yet say enough.'",
+  "de": "Der Umzug erstreckte sich über sechs Straßenblocks. Ein Mädchen saß auf den Schultern ihres Vaters und schwenkte eine kleine Fahne.\\n\\n„Warum marschieren wir?“, fragte sie.\\n\\n„Weil manche Menschen immer noch nicht die Person heiraten dürfen, die sie lieben. Weil manche Menschen immer noch Angst haben.“\\n\\n„Aber das Gesetz sagt -“\\n\\n„Das Gesetz sagt eine Menge. Es sagt nur noch nicht genug.“"
+ },
+ "society_technology_events.7.f_repressive": {
+  "en": "The informant's report was terse: 'They meet in the courtyard behind the dyer's workshop. Perhaps two hundred. They carry banners and sing.'\\n\\n'Armed?'\\n\\n'With conviction, sir. Nothing else.'\\n\\nThe chief of police folded the report and studied the wall. Two hundred people, harming no one, asking only to exist. His orders were clear. His conscience was another matter.",
+  "de": "Der Bericht des Informanten war knapp: „Sie treffen sich im Hof hinter der Färberwerkstatt. Vielleicht zweihundert. Sie tragen Transparente und singen.“\\n\\n„Bewaffnet?“\\n\\n„Mit Überzeugung, Sir. Sonst nichts.“\\n\\nDer Polizeichef faltete den Bericht zusammen und betrachtete die Wand. Zweihundert Menschen, die niemandem schaden, die nur darum bitten, zu existieren. Seine Befehle waren klar. Sein Gewissen war eine andere Sache."
+ },
+ "society_technology_events.7.g": {
+  "en": "The law already speaks for itself",
+  "de": "Das Gesetz spricht bereits für sich selbst"
+ },
+ "society_technology_events.7.h": {
+  "en": "This is becoming a provocation - maintain order",
+  "de": "Das wird zur Provokation - Ordnung aufrechterhalten"
+ },
+ "society_technology_events.7.t": {
+  "en": "Pride and Protest",
+  "de": "Stolz und Protest"
+ },
+ "society_technology_events.8.a": {
+  "en": "Civil partnerships offer a fair compromise",
+  "de": "Eingetragene Partnerschaften bieten einen fairen Kompromiss"
+ },
+ "society_technology_events.8.b": {
+  "en": "The law must not create second-class citizens",
+  "de": "Das Gesetz darf keine Bürger zweiter Klasse schaffen"
+ },
+ "society_technology_events.8.c": {
+  "en": "Marriage is older than any parliament",
+  "de": "Die Ehe ist älter als jedes Parlament"
+ },
+ "society_technology_events.8.d_basic": {
+  "en": "A legal challenge has brought the question of same-sex partnerships before the courts. Though basic protections against persecution exist in law, the recognition of same-sex marriage remains deeply contested. Religious authorities denounce the very notion; legal scholars debate whether existing rights compel recognition; ordinary citizens find themselves caught between conviction and compassion.",
+  "de": "Eine Klage hat die Frage gleichgeschlechtlicher Partnerschaften vor die Gerichte gebracht. Obwohl das Gesetz einen grundlegenden Schutz vor Verfolgung vorsieht, bleibt die Anerkennung der gleichgeschlechtlichen Ehe zutiefst umstritten. Religiöse Autoritäten verurteilen schon den Gedanken; Rechtsgelehrte debattieren, ob bestehende Rechte eine Anerkennung erzwingen; einfache Bürger finden sich zwischen Überzeugung und Mitgefühl gefangen."
+ },
+ "society_technology_events.8.d_comprehensive": {
+  "en": "With comprehensive rights already secured, legal scholars argue that the recognition of same-sex marriage is merely the logical conclusion of existing law. A test case has reached the highest courts. The opposition, though vocal, finds itself defending an increasingly narrow position - the question is no longer whether equal recognition will come, but when.",
+  "de": "Da umfassende Rechte bereits gesichert sind, argumentieren Rechtsgelehrte, die Anerkennung der gleichgeschlechtlichen Ehe sei lediglich die logische Konsequenz des geltenden Rechts. Ein Musterprozess hat die obersten Gerichte erreicht. Die Opposition, so lautstark sie auch ist, verteidigt eine zunehmend schmalere Position - die Frage ist nicht mehr, ob die Gleichstellung kommt, sondern wann."
+ },
+ "society_technology_events.8.e": {
+  "en": "Extend marriage to all citizens equally",
+  "de": "Die Ehe allen Bürgern gleichermaßen öffnen"
+ },
+ "society_technology_events.8.f_basic": {
+  "en": "The courtroom gallery was packed three rows deep.\\n\\n\\\"We shall see the family itself destroyed by this foolishness - mark my words.\\\"\\n\\n\\\"The law already protects their persons. Now they want the sacrament too?\\\"\\n\\n\\\"It is not a sacrament we seek. It is a contract - the same contract afforded to any citizen.\\\"\\n\\nThe judge called for order. No one listened.",
+  "de": "Die Zuschauergalerie des Gerichtssaals war drei Reihen tief gefüllt.\\n\\n„Wir werden noch erleben, wie diese Torheit die Familie selbst zerstört - merken Sie sich meine Worte.“\\n\\n„Das Gesetz schützt ihre Person bereits. Jetzt wollen sie auch noch das Sakrament?“\\n\\n„Wir verlangen kein Sakrament. Wir verlangen einen Vertrag - denselben Vertrag, der jedem Bürger zusteht.“\\n\\nDie Richterin rief zur Ordnung. Niemand hörte zu."
+ },
+ "society_technology_events.8.f_comprehensive": {
+  "en": "The clerk told them to come back in the morning. She said the forms hadn't been printed yet.\\n\\n\\\"What forms?\\\"\\n\\n\\\"The marriage certificates. They'll have to change the wording.\\\" She didn't seem to mind.\\n\\nOutside, a small crowd had gathered with flowers. A photographer from the evening paper asked the couple to hold hands. They already were.",
+  "de": "Die Sachbearbeiterin sagte ihnen, sie sollten am Morgen wiederkommen. Die Formulare seien noch nicht gedruckt.\\n\\n„Welche Formulare?“\\n\\n„Die Heiratsurkunden. Der Wortlaut muss geändert werden.“ Es schien ihr nichts auszumachen.\\n\\nDraußen hatte sich eine kleine Menschenmenge mit Blumen versammelt. Ein Fotograf der Abendzeitung bat das Paar, sich an den Händen zu halten. Das taten sie schon."
+ },
+ "society_technology_events.8.g": {
+  "en": "The courts will sort this out in due course",
+  "de": "Die Gerichte werden das zu gegebener Zeit klären"
+ },
+ "society_technology_events.8.h": {
+  "en": "There are limits to what rights may demand",
+  "de": "Es gibt Grenzen dessen, was Rechte verlangen dürfen"
+ },
+ "society_technology_events.8.t": {
+  "en": "The Marriage Equality Question",
+  "de": "Die Frage der Ehegleichheit"
+ },
+ "society_technology_events.9.a": {
+  "en": "Capital knows no borders.",
+  "de": "Kapital kennt keine Grenzen."
+ },
+ "society_technology_events.9.b": {
+  "en": "Protect our workers.",
+  "de": "Unsere Arbeiter schützen."
+ },
+ "society_technology_events.9.d": {
+  "en": "Corporations are moving production to countries with cheaper labor at an unprecedented rate. Container ships carry raw materials in one direction and finished goods in the other. Consumers benefit from lower prices, but factory towns at home are hollowing out.",
+  "de": "Konzerne verlagern ihre Produktion in einem beispiellosen Tempo in Länder mit billigeren Arbeitskräften. Containerschiffe transportieren Rohstoffe in die eine Richtung und Fertigwaren in die andere. Verbraucher profitieren von niedrigeren Preisen, doch die Fabrikstädte im eigenen Land bluten aus."
+ },
+ "society_technology_events.9.f": {
+  "en": "The factory gates were chained shut on a Tuesday morning.\\n\\nA man who had worked there for twenty-three years stood on the pavement and read the notice. Production was being relocated. The company thanked its employees for their service.\\n\\n\\\"Where's it going?\\\" asked his wife, when he came home early.\\n\\n\\\"Somewhere cheaper.\\\"\\n\\n\\\"What will you do?\\\"\\n\\nHe looked at his hands - machinist's hands, calloused and precise - and could not think of an answer.",
+  "de": "An einem Dienstagmorgen waren die Fabriktore mit Ketten verschlossen.\\n\\nEin Mann, der dort dreiundzwanzig Jahre gearbeitet hatte, stand auf dem Gehweg und las den Aushang. Die Produktion werde verlagert. Das Unternehmen dankte seinen Mitarbeitern für ihren Einsatz.\\n\\n„Wohin geht es?“, fragte seine Frau, als er früh nach Hause kam.\\n\\n„Irgendwohin, wo es billiger ist.“\\n\\n„Was wirst du tun?“\\n\\nEr sah auf seine Hände - die Hände eines Maschinisten, schwielig und präzise - und fand keine Antwort."
+ },
+ "society_technology_events.9.t": {
+  "en": "The Shuttered Gates",
+  "de": "Die verschlossenen Tore"
+ },
+ "space_race_colony_events.1.a": {
+  "en": "Establish a geological research base.",
+  "de": "Eine geologische Forschungsbasis errichten."
+ },
+ "space_race_colony_events.1.b": {
+  "en": "Begin industrial mining of canyon wall minerals.",
+  "de": "Industriellen Abbau der Mineralien der Canyonwände beginnen."
+ },
+ "space_race_colony_events.1.d": {
+  "en": "Our colonists have established a settlement within the largest canyon system in the solar system. The Marineris Rift stretches over 4,000 kilometers: longer than the continental United States. The canyon walls provide natural radiation shielding, and the sheltered microclimate offers marginally higher atmospheric pressure than the open surface.",
+  "de": "Unsere Kolonisten haben eine Siedlung im größten Canyonsystem des Sonnensystems errichtet. Der Marineris-Grabenbruch erstreckt sich über 4.000 Kilometer: länger als die kontinentalen United States. Die Canyonwände bieten natürlichen Strahlenschutz, und das geschützte Mikroklima bringt einen geringfügig höheren Atmosphärendruck als die offene Oberfläche."
+ },
+ "space_race_colony_events.1.f": {
+  "en": "\\\"Four thousand kilometers of canyon, and we're building a city at the bottom of it. The engineers think we're mad. The geologists think we're geniuses.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Colony Chief Engineer",
+  "de": "„Viertausend Kilometer Canyon, und wir bauen eine Stadt an seinem Grund. Die Ingenieure halten uns für verrückt. Die Geologen halten uns für Genies.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Hauptingenieur der Kolonie"
+ },
+ "space_race_colony_events.1.t": {
+  "en": "Colony: Valles Marineris",
+  "de": "Kolonie: Valles Marineris"
+ },
+ "space_race_colony_events.10.a": {
+  "en": "Volatile extraction: water and organics.",
+  "de": "Gewinnung flüchtiger Stoffe: Wasser und Organik."
+ },
+ "space_race_colony_events.10.b": {
+  "en": "Automated processing hub for the inner system.",
+  "de": "Automatisiertes Verarbeitungszentrum für das innere System."
+ },
+ "space_race_colony_events.10.d": {
+  "en": "Nearly spherical and dark as coal, Hygiea is the fourth largest asteroid and the largest member of its own collisional family. Its surface is rich in carbonaceous material and volatiles — water ice, ammonia, methane — making it a natural supply depot for settlements deeper in the belt. The low surface gravity (about 0.003g) makes landing and launch trivially easy.",
+  "de": "Nahezu kugelförmig und kohlrabenschwarz, ist Hygiea der viertgrößte Asteroid und das größte Mitglied seiner eigenen Kollisionsfamilie. Seine Oberfläche ist reich an kohlenstoffhaltigem Material und flüchtigen Stoffen - Wassereis, Ammoniak, Methan -, was ihn zu einem natürlichen Versorgungsdepot für Siedlungen tiefer im Gürtel macht. Die geringe Oberflächenschwerkraft (etwa 0,003g) macht Landung und Start denkbar einfach."
+ },
+ "space_race_colony_events.10.f": {
+  "en": "\\\"Dark, round, and rich in carbon. Not glamorous, but the colony that makes the fuel that runs the fleet.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Fuel Processing Director",
+  "de": "„Dunkel, rund und reich an Kohlenstoff. Nicht glamourös, aber die Kolonie, die den Treibstoff herstellt, der die Flotte antreibt.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Leiter der Treibstoffverarbeitung"
+ },
+ "space_race_colony_events.10.t": {
+  "en": "Colony: 10 Hygiea",
+  "de": "Kolonie: 10 Hygiea"
+ },
+ "space_race_colony_events.11.a": {
+  "en": "Sulfur mining and tidal energy harvesting.",
+  "de": "Schwefelabbau und Gezeitenenergiegewinnung."
+ },
+ "space_race_colony_events.11.b": {
+  "en": "Volcanological research station behind heavy shielding.",
+  "de": "Vulkanologische Forschungsstation hinter starker Abschirmung."
+ },
+ "space_race_colony_events.11.d": {
+  "en": "No world in the solar system is more hostile to settlement than Io. Jupiter's tidal forces flex our landing site by up to 100 meters with each orbit. Over 400 active volcanoes blanket the moon in sulfur dioxide frost and fresh lava flows. The radiation environment would kill an unshielded human in hours. And yet, Io offers something no other world can: virtually unlimited tidal energy and a sulfur feedstock for industrial chemistry.",
+  "de": "Keine Welt im Sonnensystem ist siedlungsfeindlicher als Io. Jupiters Gezeitenkräfte verformen unseren Landeplatz mit jedem Umlauf um bis zu 100 Meter. Über 400 aktive Vulkane bedecken den Mond mit Schwefeldioxidfrost und frischen Lavaströmen. Die Strahlungsumgebung würde einen ungeschützten Menschen binnen Stunden töten. Und doch bietet Io etwas, das keine andere Welt kann: praktisch unbegrenzte Gezeitenenergie und Schwefel als Rohstoff für die industrielle Chemie."
+ },
+ "space_race_colony_events.11.f": {
+  "en": "\\\"The ground shakes. The sky glows with sulfur. Geysers erupt without warning. And yet — here we are, building something permanent on the most violent surface in the solar system.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Station Commander",
+  "de": "„Der Boden bebt. Der Himmel glüht vom Schwefel. Geysire brechen ohne Vorwarnung aus. Und doch — hier stehen wir und bauen etwas Dauerhaftes auf der gewalttätigsten Oberfläche des Sonnensystems.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Stationskommandant"
+ },
+ "space_race_colony_events.11.t": {
+  "en": "Colony: Io",
+  "de": "Kolonie: Io"
+ },
+ "space_race_colony_events.12.a": {
+  "en": "Subsurface drilling and astrobiology lab.",
+  "de": "Untergrundbohrungen und Astrobiologie-Labor."
+ },
+ "space_race_colony_events.12.b": {
+  "en": "Surface-only habitat to minimize contamination.",
+  "de": "Reines Oberflächenhabitat zur Minimierung von Kontamination."
+ },
+ "space_race_colony_events.12.d": {
+  "en": "Beneath Europa's cracked ice shell lies a global saltwater ocean, kept liquid by tidal heating. This ocean contains roughly twice the water of all Earth's oceans combined. The ice surface is geologically young — constantly resurfaced by cryovolcanic activity — and the lineae suggest material exchange between surface and ocean. If life exists elsewhere in our solar system, Europa's ocean floor vents are the most likely place.",
+  "de": "Unter Europas rissiger Eisschale liegt ein globaler Salzwasserozean, der durch Gezeitenerwärmung flüssig gehalten wird. Dieser Ozean enthält etwa doppelt so viel Wasser wie alle Ozeane der Erde zusammen. Die Eisoberfläche ist geologisch jung — ständig durch kryovulkanische Aktivität erneuert —, und die Lineae deuten auf einen Materialaustausch zwischen Oberfläche und Ozean hin. Sollte anderswo in unserem Sonnensystem Leben existieren, sind die Quellen am Meeresboden Europas der wahrscheinlichste Ort dafür."
+ },
+ "space_race_colony_events.12.f": {
+  "en": "\\\"Beneath the ice, an ocean older than life on Earth. Every sensor we lower makes us hold our breath.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Astrobiology Team Lead",
+  "de": "„Unter dem Eis ein Ozean, älter als das Leben auf der Erde. Bei jedem Sensor, den wir hinablassen, halten wir den Atem an.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Leiterin des Astrobiologie-Teams"
+ },
+ "space_race_colony_events.12.t": {
+  "en": "Colony: Europa",
+  "de": "Kolonie: Europa"
+ },
+ "space_race_colony_events.13.a": {
+  "en": "Major settlement behind the magnetosphere shield.",
+  "de": "Große Siedlung hinter dem Schutz der Magnetosphäre."
+ },
+ "space_race_colony_events.13.b": {
+  "en": "Jovian system command center and logistics hub.",
+  "de": "Kommandozentrale und Logistikdrehscheibe des Jupitersystems."
+ },
+ "space_race_colony_events.13.d": {
+  "en": "Ganymede is the largest moon in the solar system — bigger than Mercury — and the only moon with its own magnetosphere. This intrinsic magnetic field, though weak, creates a pocket of reduced radiation within Jupiter's lethal belts. Combined with its size, subsurface ocean, and silicate-rich surface, Ganymede is the natural capital of the Jovian system.",
+  "de": "Ganymed ist der größte Mond im Sonnensystem — größer als Merkur — und der einzige Mond mit eigener Magnetosphäre. Dieses schwache, aber eigene Magnetfeld schafft eine Zone verringerter Strahlung inmitten von Jupiters tödlichen Strahlungsgürteln. Zusammen mit seiner Größe, seinem unterirdischen Ozean und seiner silikatreichen Oberfläche ist Ganymed die natürliche Hauptstadt des Jupitersystems."
+ },
+ "space_race_colony_events.13.f": {
+  "en": "\\\"Its own magnetic field. Its own geology. Ganymede is less a moon and more a planet that never left home.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Colony Administrator",
+  "de": "„Ein eigenes Magnetfeld. Eine eigene Geologie. Ganymed ist weniger ein Mond als ein Planet, der nie von zu Hause fortging.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Kolonieverwalterin"
+ },
+ "space_race_colony_events.13.t": {
+  "en": "Colony: Ganymede",
+  "de": "Kolonie: Ganymed"
+ },
+ "space_race_colony_events.14.a": {
+  "en": "Gateway colony for outer system missions.",
+  "de": "Tor-Kolonie für Missionen ins äußere System."
+ },
+ "space_race_colony_events.14.b": {
+  "en": "Self-sustaining agricultural settlement.",
+  "de": "Sich selbst versorgende landwirtschaftliche Siedlung."
+ },
+ "space_race_colony_events.14.d": {
+  "en": "Callisto lies just outside Jupiter's main radiation belts, making it the safest of the Galilean moons for long-term habitation. Its ancient, heavily cratered surface has not been resurfaced in billions of years. The lack of geological activity means stable foundations, and its distance from Jupiter allows for relatively simple communications relay geometry to the inner solar system.",
+  "de": "Kallisto liegt knapp außerhalb von Jupiters Hauptstrahlungsgürteln und ist damit der sicherste der Galileischen Monde für eine dauerhafte Besiedlung. Seine alte, stark verkraterte Oberfläche wurde seit Milliarden von Jahren nicht mehr erneuert. Das Fehlen geologischer Aktivität bedeutet stabile Fundamente, und seine Entfernung von Jupiter ermöglicht eine vergleichsweise einfache Kommunikationsrelais-Geometrie zum inneren Sonnensystem."
+ },
+ "space_race_colony_events.14.f": {
+  "en": "\\\"The boring moon, they call it. No volcanoes, no oceans, no drama. Just rock, ice, and the lowest radiation of any Jovian satellite. Perfect.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Radiation Safety Officer",
+  "de": "„Den langweiligen Mond nennen sie ihn. Keine Vulkane, keine Ozeane, kein Drama. Nur Fels, Eis und die geringste Strahlung aller Jupitermonde. Perfekt.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Strahlenschutzbeauftragte"
+ },
+ "space_race_colony_events.14.t": {
+  "en": "Colony: Callisto",
+  "de": "Kolonie: Kallisto"
+ },
+ "space_race_colony_events.15.a": {
+  "en": "Remote telescope array beyond the radiation belts.",
+  "de": "Entferntes Teleskop-Array jenseits der Strahlungsgürtel."
+ },
+ "space_race_colony_events.15.b": {
+  "en": "Fuel depot for trans-Jovian missions.",
+  "de": "Treibstoffdepot für trans-jupiterianische Missionen."
+ },
+ "space_race_colony_events.15.d": {
+  "en": "Himalia, an irregular moon captured long ago from a heliocentric orbit, sits 11 million kilometers from Jupiter: well beyond the punishing radiation belts that endanger the Galilean moons. At roughly 150 kilometers across, it offers negligible gravity but a stable platform far from the electromagnetic storms closer in. A small crew and a large telescope array could accomplish extraordinary things here.",
+  "de": "Himalia, ein unregelmäßig geformter Mond, der vor langer Zeit aus einer heliozentrischen Umlaufbahn eingefangen wurde, liegt 11 Millionen Kilometer von Jupiter entfernt: weit jenseits der gnadenlosen Strahlungsgürtel, die den Galileischen Monden gefährlich werden. Mit einem Durchmesser von etwa 150 Kilometern bietet er vernachlässigbare Schwerkraft, aber eine stabile Plattform fernab der elektromagnetischen Stürme weiter innen. Eine kleine Besatzung und ein großes Teleskop-Array könnten hier Außergewöhnliches leisten."
+ },
+ "space_race_colony_events.15.f": {
+  "en": "\\\"Eleven million kilometers from Jupiter. Far enough to be safe, close enough to matter. A quiet perch from which to watch the giant.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Observatory Director",
+  "de": "„Elf Millionen Kilometer von Jupiter entfernt. Weit genug, um sicher zu sein, nah genug, um von Bedeutung zu sein. Ein ruhiger Aussichtspunkt, von dem aus man den Riesen beobachten kann.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Direktorin des Observatoriums"
+ },
+ "space_race_colony_events.15.t": {
+  "en": "Colony: Himalia",
+  "de": "Kolonie: Himalia"
+ },
+ "space_race_colony_events.16.a": {
+  "en": "High-energy physics platform in Jupiter's magnetosphere.",
+  "de": "Hochenergiephysik-Plattform in Jupiters Magnetosphäre."
+ },
+ "space_race_colony_events.16.b": {
+  "en": "Ring material collection and analysis.",
+  "de": "Sammlung und Analyse von Ringmaterial."
+ },
+ "space_race_colony_events.16.d": {
+  "en": "Amalthea orbits within Jupiter's gossamer ring: close enough to the gas giant that tidal forces have stretched it into an irregular, reddish potato shape. The radiation flux here is extreme, but the proximity to Jupiter's magnetosphere makes it an ideal platform for high-energy physics research. The ring particles streaming past the station offer a natural laboratory for studying plasma dynamics.",
+  "de": "Amalthea umkreist Jupiter innerhalb seines hauchdünnen Rings: so nah am Gasriesen, dass Gezeitenkräfte ihn zu einer unregelmäßigen, rötlichen Kartoffelform gestreckt haben. Der Strahlungsfluss ist hier extrem, doch die Nähe zu Jupiters Magnetosphäre macht ihn zu einer idealen Plattform für die Hochenergiephysik-Forschung. Die an der Station vorbeiströmenden Ringpartikel bieten ein natürliches Labor zur Erforschung der Plasmadynamik."
+ },
+ "space_race_colony_events.16.f": {
+  "en": "\\\"Red dust, battered craters, and radiation that would kill you in hours without shielding. But the view of Jupiter filling half the sky — that makes it worth it.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], EVA Team Lead",
+  "de": "„Roter Staub, zerschlagene Krater und Strahlung, die einen ohne Abschirmung binnen Stunden töten würde. Aber der Anblick von Jupiter, der den halben Himmel ausfüllt — das macht es wert.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Leiter des Außeneinsatz-Teams"
+ },
+ "space_race_colony_events.16.t": {
+  "en": "Colony: Amalthea",
+  "de": "Kolonie: Amalthea"
+ },
+ "space_race_colony_events.17.a": {
+  "en": "Atmospheric research habitat.",
+  "de": "Atmosphärenforschungshabitat."
+ },
+ "space_race_colony_events.17.b": {
+  "en": "Gas extraction and chemical processing.",
+  "de": "Gasgewinnung und chemische Verarbeitung."
+ },
+ "space_race_colony_events.17.d": {
+  "en": "At 50 kilometers altitude in Venus's atmosphere, conditions are startlingly Earth-like: one atmosphere of pressure, temperatures between 0 and 50 degrees Celsius, and protection from cosmic radiation by the thick atmosphere above. Our aerostatic habitat — part balloon, part sealed structure — floats in this temperate zone. Below lies a hellscape of 460°C surface temperatures and crushing pressure; above, sulfuric acid clouds. Between them, we have found a home.",
+  "de": "In 50 Kilometern Höhe in der Atmosphäre der Venus sind die Bedingungen verblüffend erdähnlich: ein Druck von einer Atmosphäre, Temperaturen zwischen 0 und 50 Grad Celsius und Schutz vor kosmischer Strahlung durch die darüberliegende dichte Atmosphäre. Unser aerostatisches Habitat — halb Ballon, halb versiegelte Struktur — schwebt in dieser gemäßigten Zone. Darunter liegt eine Hölle aus 460 °C Oberflächentemperatur und erdrückendem Druck; darüber Schwefelsäurewolken. Dazwischen haben wir ein Zuhause gefunden."
+ },
+ "space_race_colony_events.17.f": {
+  "en": "\\\"Fifty kilometers up, the temperature is pleasant, the pressure is breathable, and there is acid rain above and a furnace below. We call it paradise.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Habitat Chief Engineer",
+  "de": "„Fünfzig Kilometer hoch ist die Temperatur angenehm, der Druck atembar, und es gibt sauren Regen darüber und einen Ofen darunter. Wir nennen es das Paradies.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Hauptingenieurin des Habitats"
+ },
+ "space_race_colony_events.17.t": {
+  "en": "Colony: Venus Cloud Habitat",
+  "de": "Kolonie: Venus-Wolkenhabitat"
+ },
+ "space_race_colony_events.18.a": {
+  "en": "Solar power megastation beaming energy across the system.",
+  "de": "Solarenergie-Megastation, die Energie durch das gesamte System überträgt."
+ },
+ "space_race_colony_events.18.b": {
+  "en": "Permanently shadowed crater base with ice mining.",
+  "de": "Dauerhaft beschatteter Kraterstützpunkt mit Eisabbau."
+ },
+ "space_race_colony_events.18.d": {
+  "en": "Mercury's poles offer a remarkable paradox: permanently shadowed craters cold enough to harbor ice, within line of sight of surfaces receiving the most intense sunlight in the solar system. Our polar base straddles this boundary: solar collectors on the sunward rim generating power, while the habitat nestles in perpetual shadow. The concentrated solar flux makes Mercury the ideal site for beamed power transmission to other settlements.",
+  "de": "Merkurs Pole bieten ein bemerkenswertes Paradox: dauerhaft beschattete Krater, kalt genug, um Eis zu bewahren, in Sichtweite von Oberflächen, die das intensivste Sonnenlicht im gesamten Sonnensystem empfangen. Unser Polarstützpunkt liegt genau auf dieser Grenze: Sonnenkollektoren am sonnenzugewandten Rand erzeugen Energie, während das Habitat sich in ständigem Schatten birgt. Der konzentrierte Sonnenfluss macht Merkur zum idealen Standort für die drahtlose Energieübertragung zu anderen Siedlungen."
+ },
+ "space_race_colony_events.18.f": {
+  "en": "\\\"Dawn and dusk last for weeks here. We live in the terminator zone — one foot in fire, one in ice, and a narrow strip of the tolerable in between.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Thermal Systems Engineer",
+  "de": "„Morgen- und Abenddämmerung dauern hier Wochen. Wir leben in der Terminatorzone — ein Fuß im Feuer, ein Fuß im Eis, und dazwischen ein schmaler Streifen des Erträglichen.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Ingenieurin für Thermalsysteme"
+ },
+ "space_race_colony_events.18.t": {
+  "en": "Colony: Mercury",
+  "de": "Kolonie: Merkur"
+ },
+ "space_race_colony_events.19.a": {
+  "en": "Hydrocarbon harvesting from methane lakes.",
+  "de": "Kohlenwasserstoffgewinnung aus Methanseen."
+ },
+ "space_race_colony_events.19.b": {
+  "en": "Prebiotic chemistry research near Kraken Mare.",
+  "de": "Präbiotische Chemieforschung nahe dem Kraken Mare."
+ },
+ "space_race_colony_events.19.d": {
+  "en": "Titan is the only moon with a thick atmosphere: 1.5x Earth's surface pressure, mostly nitrogen. Its surface is sculpted by methane rain, carved by ethane rivers, and dotted with hydrocarbon lakes. Kraken Mare, the largest, covers more area than the Caspian Sea. At -179°C, the chemistry is exotic but energetic: tholin compounds in the haze hint at prebiotic processes operating on entirely alien biochemistry.",
+  "de": "Titan ist der einzige Mond mit einer dichten Atmosphäre: dem 1,5-Fachen des Oberflächendrucks der Erde, größtenteils Stickstoff. Seine Oberfläche wird von Methanregen geformt, von Ethanflüssen durchzogen und ist von Kohlenwasserstoffseen übersät. Kraken Mare, der größte, bedeckt eine größere Fläche als das Kaspische Meer. Bei -179 °C ist die Chemie exotisch, aber energiereich: Tholin-Verbindungen im Dunst deuten auf präbiotische Prozesse hin, die auf einer völlig fremdartigen Biochemie beruhen."
+ },
+ "space_race_colony_events.19.f": {
+  "en": "\\\"It rains here. Methane rain, on methane lakes, under an orange sky thicker than Earth's. If you squint, you could almost pretend it's home.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Atmospheric Researcher",
+  "de": "„Hier regnet es. Methanregen, auf Methanseen, unter einem orangefarbenen Himmel, dichter als der der Erde. Wenn man die Augen zusammenkneift, kann man fast so tun, als wäre man zu Hause.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Atmosphärenforscherin"
+ },
+ "space_race_colony_events.19.t": {
+  "en": "Colony: Titan",
+  "de": "Kolonie: Titan"
+ },
+ "space_race_colony_events.2.a": {
+  "en": "High-altitude atmospheric research station.",
+  "de": "Atmosphärenforschungsstation in großer Höhe."
+ },
+ "space_race_colony_events.2.b": {
+  "en": "Caldera settlement with geothermal potential.",
+  "de": "Calderasiedlung mit geothermischem Potenzial."
+ },
+ "space_race_colony_events.2.d": {
+  "en": "At 21.9 kilometers high and 600 kilometers across, Olympus Mons dwarfs anything on Earth. Our base camp is established on the lower slopes, where the gradient is so gentle it would be imperceptible to a person standing on it. The summit is above 99% of the Martian atmosphere. The caldera complex offers unique opportunities for both research and eventual geothermal energy extraction.",
+  "de": "Mit 21,9 Kilometern Höhe und 600 Kilometern Durchmesser lässt Olympus Mons alles auf der Erde winzig erscheinen. Unser Basislager liegt an den unteren Hängen, wo die Neigung so sanft ist, dass sie für einen Menschen, der darauf steht, kaum wahrnehmbar wäre. Der Gipfel liegt oberhalb von 99 % der Marsatmosphäre. Der Calderakomplex bietet einzigartige Möglichkeiten sowohl für die Forschung als auch für eine künftige geothermische Energiegewinnung."
+ },
+ "space_race_colony_events.2.f": {
+  "en": "\\\"From the summit, the horizon curves away in every direction. You cannot see the base of the mountain you stand on. That should terrify us, but it doesn't.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Expedition Geologist",
+  "de": "„Vom Gipfel aus krümmt sich der Horizont in jede Richtung. Man kann den Fuß des Berges, auf dem man steht, nicht sehen. Das müsste uns erschrecken, tut es aber nicht.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Expeditionsgeologin"
+ },
+ "space_race_colony_events.2.t": {
+  "en": "Colony: Olympus Mons",
+  "de": "Kolonie: Olympus Mons"
+ },
+ "space_race_colony_events.20.a": {
+  "en": "Geyser-adjacent astrobiology lab.",
+  "de": "Astrobiologie-Labor nahe den Geysiren."
+ },
+ "space_race_colony_events.20.b": {
+  "en": "Clean water extraction and export depot.",
+  "de": "Reinwassergewinnung und Exportdepot."
+ },
+ "space_race_colony_events.20.d": {
+  "en": "Enceladus punches far above its weight. Only 500 kilometers across, it harbors a global subsurface ocean kept warm by tidal forces. Geysers erupt from the tiger-stripe fissures at its south pole, spraying water ice, organic molecules, and silica nanoparticles into space. Cassini flew through these plumes and detected molecular hydrogen: a potential energy source for microbial life. Our colony perches beside the fissures, sampling what the moon offers freely.",
+  "de": "Enceladus schlägt weit über seiner Gewichtsklasse. Mit nur 500 Kilometern Durchmesser beherbergt er einen globalen unterirdischen Ozean, der durch Gezeitenkräfte warmgehalten wird. Geysire brechen aus den tigerstreifenförmigen Spalten an seinem Südpol aus und schleudern Wassereis, organische Moleküle und Silikat-Nanopartikel ins All. Cassini flog durch diese Fontänen und wies molekularen Wasserstoff nach: eine mögliche Energiequelle für mikrobielles Leben. Unsere Kolonie thront neben den Spalten und probt, was der Mond freiwillig bietet."
+ },
+ "space_race_colony_events.20.f": {
+  "en": "\\\"The geysers are how we found the ocean. And the ocean is why we came. What else might be down there — that is why we stay.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Subsurface Exploration Lead",
+  "de": "„Durch die Geysire haben wir den Ozean gefunden. Und wegen des Ozeans sind wir gekommen. Was sonst noch dort unten sein könnte — deshalb bleiben wir.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Leiterin der Tiefenerkundung"
+ },
+ "space_race_colony_events.20.t": {
+  "en": "Colony: Enceladus",
+  "de": "Kolonie: Enceladus"
+ },
+ "space_race_colony_events.21.a": {
+  "en": "Ice mining and propellant refinery.",
+  "de": "Eisabbau und Treibstoffraffinerie."
+ },
+ "space_race_colony_events.21.b": {
+  "en": "Saturnian ring observation platform.",
+  "de": "Beobachtungsplattform für die Saturnringe."
+ },
+ "space_race_colony_events.21.d": {
+  "en": "Saturn's second-largest moon is a quiet, icy body without the drama of its siblings. No geysers, no thick atmosphere, no extreme tidal heating. What Rhea offers is stability: a known, predictable surface of water ice and rock, moderate surface gravity, and a position well-suited for servicing missions throughout the Saturnian system. Sometimes the most valuable real estate is simply the most reliable.",
+  "de": "Saturns zweitgrößter Mond ist ein ruhiger, eisiger Körper ohne das Drama seiner Geschwister. Keine Geysire, keine dichte Atmosphäre, keine extreme Gezeitenerwärmung. Was Rhea bietet, ist Stabilität: eine bekannte, berechenbare Oberfläche aus Wassereis und Gestein, moderate Oberflächenschwerkraft und eine Lage, die sich hervorragend für Versorgungsmissionen im gesamten Saturnsystem eignet. Manchmal ist die wertvollste Immobilie einfach die zuverlässigste."
+ },
+ "space_race_colony_events.21.f": {
+  "en": "\\\"No surprises, no eruptions, no subsurface oceans. Just ice and rock and a reliable platform a billion kilometers from Earth. Sometimes boring is exactly what you need.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Station Operations Director",
+  "de": "„Keine Überraschungen, keine Eruptionen, keine unterirdischen Ozeane. Nur Eis und Fels und eine zuverlässige Plattform eine Milliarde Kilometer von der Erde entfernt. Manchmal ist langweilig genau das, was man braucht.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Betriebsleiterin der Station"
+ },
+ "space_race_colony_events.21.t": {
+  "en": "Colony: Rhea",
+  "de": "Kolonie: Rhea"
+ },
+ "space_race_colony_events.22.a": {
+  "en": "Deep installation inside Herschel Crater.",
+  "de": "Tiefe Anlage im Herschelkrater."
+ },
+ "space_race_colony_events.22.b": {
+  "en": "Low-gravity research facility.",
+  "de": "Forschungseinrichtung bei geringer Schwerkraft."
+ },
+ "space_race_colony_events.22.d": {
+  "en": "Mimas is instantly recognizable: the Herschel crater, 130 kilometers wide, covers nearly a third of the moon's diameter, giving it an uncanny resemblance to science fiction's most famous space station. The crater's central peak rises 6 kilometers from the floor. Inside this ready-made amphitheater, our engineers have found both shelter from micrometeorites and a natural foundation for pressure domes.",
+  "de": "Mimas ist auf den ersten Blick erkennbar: Der Herschelkrater, 130 Kilometer breit, bedeckt fast ein Drittel des Monddurchmessers und verleiht ihm eine unheimliche Ähnlichkeit mit der berühmtesten Raumstation der Science-Fiction. Der zentrale Gipfel des Kraters erhebt sich 6 Kilometer über den Kraterboden. In diesem vorgefertigten Amphitheater haben unsere Ingenieure sowohl Schutz vor Mikrometeoriten als auch ein natürliches Fundament für Drucksäulen-Kuppeln gefunden."
+ },
+ "space_race_colony_events.22.f": {
+  "en": "\\\"They said it looks like a certain space station from an old film. Having been here in person, I can confirm: nobody is laughing.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Survey Team Leader",
+  "de": "„Man sagte, es sehe aus wie eine bestimmte Raumstation aus einem alten Film. Nachdem ich selbst hier war, kann ich bestätigen: Niemand lacht.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Leiterin des Vermessungsteams"
+ },
+ "space_race_colony_events.22.t": {
+  "en": "Colony: Mimas",
+  "de": "Kolonie: Mimas"
+ },
+ "space_race_colony_events.23.a": {
+  "en": "Equatorial ridge survey expedition.",
+  "de": "Vermessungsexpedition des Äquatorialrückens."
+ },
+ "space_race_colony_events.23.b": {
+  "en": "Dark-side material analysis for organics.",
+  "de": "Materialanalyse der dunklen Seite auf Organik."
+ },
+ "space_race_colony_events.23.d": {
+  "en": "Iapetus refuses to be ordinary. One hemisphere is as dark as coal; the other, bright as snow. A massive equatorial ridge — up to 20 kilometers high — girdles the moon like the seam on a tennis ball. No satisfactory explanation exists for either feature. Our colony is positioned on the boundary between dark and light terrain, with the ridge visible as a wall on the horizon.",
+  "de": "Iapetus weigert sich, gewöhnlich zu sein. Eine Hemisphäre ist kohlrabenschwarz, die andere schneeweiß. Ein gewaltiger Äquatorialrücken — bis zu 20 Kilometer hoch — umgürtet den Mond wie die Naht eines Tennisballs. Für keines der beiden Phänomene gibt es eine befriedigende Erklärung. Unsere Kolonie liegt an der Grenze zwischen dunklem und hellem Gelände, mit dem Rücken als sichtbarer Wand am Horizont."
+ },
+ "space_race_colony_events.23.f": {
+  "en": "\\\"Half the moon is white ice, the other half is dark as coal, with a mountain range running along the equator like a belt. Nobody has explained any of this.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Planetary Scientist",
+  "de": "„Die eine Hälfte des Mondes ist weißes Eis, die andere kohlrabenschwarz, und ein Gebirgszug verläuft wie ein Gürtel entlang des Äquators. Niemand hat irgendetwas davon erklärt.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Planetenforscherin"
+ },
+ "space_race_colony_events.23.t": {
+  "en": "Colony: Iapetus",
+  "de": "Kolonie: Iapetus"
+ },
+ "space_race_colony_events.24.a": {
+  "en": "Settlement in the canyon system, mining exposed rock.",
+  "de": "Siedlung im Canyonsystem, Abbau freiliegenden Gesteins."
+ },
+ "space_race_colony_events.24.b": {
+  "en": "Geophysical station studying past tectonic activity.",
+  "de": "Geophysikalische Station zur Erforschung früherer tektonischer Aktivität."
+ },
+ "space_race_colony_events.24.d": {
+  "en": "Titania, the largest of Uranus's moons, is a world of great scarps and ancient canyons: evidence of a violent tectonic past. The Messina Chasmata stretches for hundreds of kilometers across the surface. With Uranus tilted on its side, Titania experiences 42-year-long seasons of continuous sunlight followed by 42 years of darkness. Our colony must be truly self-sufficient.",
+  "de": "Titania, der größte Mond des Uranus, ist eine Welt gewaltiger Steilstufen und uralter Canyons: Zeugnisse einer gewaltsamen tektonischen Vergangenheit. Die Messina Chasmata erstreckt sich über Hunderte von Kilometern über die Oberfläche. Da Uranus auf der Seite liegt, erlebt Titania 42 Jahre andauernde Jahreszeiten ununterbrochenen Sonnenlichts, gefolgt von 42 Jahren Dunkelheit. Unsere Kolonie muss wahrhaft autark sein."
+ },
+ "space_race_colony_events.24.f": {
+  "en": "\\\"Forty-two years of daylight, then forty-two years of darkness. You plan your career around the seasons here.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Base Commander",
+  "de": "„Zweiundvierzig Jahre Tageslicht, dann zweiundvierzig Jahre Dunkelheit. Hier plant man seine Karriere nach den Jahreszeiten.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Stützpunktkommandantin"
+ },
+ "space_race_colony_events.24.t": {
+  "en": "Colony: Titania",
+  "de": "Kolonie: Titania"
+ },
+ "space_race_colony_events.25.a": {
+  "en": "Deep-space communications relay.",
+  "de": "Kommunikationsrelais für den Tiefen-Weltraum."
+ },
+ "space_race_colony_events.25.b": {
+  "en": "Isolated research station.",
+  "de": "Isolierte Forschungsstation."
+ },
+ "space_race_colony_events.25.d": {
+  "en": "Oberon, the outermost major moon of Uranus, is a battered ball of ice and rock. Its dark, ancient surface is marked by impact craters and what may be cryovolcanic flows on the floors of the largest basins. At nearly 3 billion kilometers from the Sun, our colonists experience a solitude unmatched by any other permanent settlement. The round-trip communication delay with Earth exceeds 5 hours.",
+  "de": "Oberon, der äußerste große Mond des Uranus, ist eine zerschlagene Kugel aus Eis und Gestein. Seine dunkle, uralte Oberfläche ist von Einschlagkratern gezeichnet, ebenso von möglichen kryovulkanischen Strömen am Boden der größten Becken. In einer Entfernung von fast 3 Milliarden Kilometern von der Sonne erleben unsere Kolonisten eine Einsamkeit, die keine andere dauerhafte Siedlung erreicht. Die Kommunikationsverzögerung im Hin- und Rückweg mit der Erde übersteigt 5 Stunden."
+ },
+ "space_race_colony_events.25.f": {
+  "en": "\\\"The most distant permanently crewed outpost in history. Mail takes nearly three hours to arrive, and just as long for our reply to get back to Earth. You learn patience, or you learn to go home.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Communications Officer",
+  "de": "„Der am weitesten entfernte dauerhaft bemannte Außenposten der Geschichte. Post braucht fast drei Stunden bis zum Eintreffen, und ebenso lange, bis unsere Antwort zur Erde zurückkehrt. Man lernt Geduld - oder man lernt, nach Hause zu gehen.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Kommunikationsoffizierin"
+ },
+ "space_race_colony_events.25.t": {
+  "en": "Colony: Oberon",
+  "de": "Kolonie: Oberon"
+ },
+ "space_race_colony_events.26.a": {
+  "en": "Verona Rupes base camp: studying the great cliff.",
+  "de": "Basislager Verona Rupes: Erforschung der gewaltigen Klippe."
+ },
+ "space_race_colony_events.26.b": {
+  "en": "Subsurface drilling into the chaotic interior.",
+  "de": "Untergrundbohrungen in das chaotische Innere."
+ },
+ "space_race_colony_events.26.d": {
+  "en": "Miranda is the geological puzzle of the Uranian system. Despite being only 470 kilometers across, it displays terrain that should not exist on a body this small: Verona Rupes, a 20-kilometer cliff — the tallest in the solar system — and chevron-shaped ridged regions called coronae that suggest the moon was shattered and reassembled, or experienced extreme tidal heating in its past.",
+  "de": "Miranda ist das geologische Rätsel des Uranus-Systems. Obwohl er nur 470 Kilometer im Durchmesser misst, zeigt er ein Terrain, das auf einem so kleinen Körper eigentlich nicht existieren dürfte: Verona Rupes, eine 20 Kilometer hohe Klippe — die höchste im Sonnensystem — und chevronförmige Grat-Regionen, sogenannte Coronae, die darauf hindeuten, dass der Mond einst zerschmettert und wieder zusammengesetzt wurde oder in seiner Vergangenheit extreme Gezeitenerwärmung erlebte."
+ },
+ "space_race_colony_events.26.f": {
+  "en": "\\\"A cliff twenty kilometers high. You could jump off and have ten minutes of freefall before landing. Not that anyone has tried. Yet.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Geological Survey Lead",
+  "de": "„Eine zwanzig Kilometer hohe Klippe. Man könnte herunterspringen und hätte zehn Minuten freien Fall, bevor man landet. Nicht, dass es schon jemand versucht hätte. Noch nicht.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Leiterin der geologischen Vermessung"
+ },
+ "space_race_colony_events.26.t": {
+  "en": "Colony: Miranda",
+  "de": "Kolonie: Miranda"
+ },
+ "space_race_colony_events.27.a": {
+  "en": "Cryovolcanic sampling station.",
+  "de": "Kryovulkanische Probenentnahmestation."
+ },
+ "space_race_colony_events.27.b": {
+  "en": "Ice quarrying for trans-Uranian fuel supply.",
+  "de": "Eisabbau für die Treibstoffversorgung jenseits des Uranus."
+ },
+ "space_race_colony_events.27.d": {
+  "en": "Ariel has the youngest and brightest surface of any Uranian moon. Networks of fault valleys and smooth plains suggest relatively recent cryovolcanic resurfacing: perhaps CO₂ or ammonia-water eruptions in the geologically recent past. This level of activity on a small icy body billions of kilometers from the Sun challenges our models of planetary geology. Understanding it could reshape our understanding of how small worlds evolve.",
+  "de": "Ariel besitzt die jüngste und hellste Oberfläche aller Uranusmonde. Netzwerke von Grabenbrüchen und glatten Ebenen deuten auf eine vergleichsweise junge kryovulkanische Neuoberflächung hin: vielleicht CO₂- oder Ammoniak-Wasser-Eruptionen in der geologisch jüngeren Vergangenheit. Dieses Ausmaß an Aktivität auf einem kleinen Eiskörper Milliarden Kilometer von der Sonne entfernt stellt unsere Modelle der Planetengeologie infrage. Sie zu verstehen könnte unser Verständnis davon verändern, wie sich kleine Welten entwickeln."
+ },
+ "space_race_colony_events.27.f": {
+  "en": "\\\"The youngest and brightest face among the moons of Uranus. The ice here is fresh, the canyons are sharp, and the geology is still active.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Research Outpost Director",
+  "de": "„Das jüngste und hellste Antlitz unter den Monden des Uranus. Das Eis hier ist frisch, die Canyons sind scharf, und die Geologie ist noch aktiv.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Direktorin des Forschungsaußenpostens"
+ },
+ "space_race_colony_events.27.t": {
+  "en": "Colony: Ariel",
+  "de": "Kolonie: Ariel"
+ },
+ "space_race_colony_events.28.a": {
+  "en": "Nitrogen geyser energy capture and research.",
+  "de": "Energiegewinnung und Forschung an Stickstoffgeysiren."
+ },
+ "space_race_colony_events.28.b": {
+  "en": "Kuiper Belt gateway staging base.",
+  "de": "Aufmarschbasis als Tor zum Kuipergürtel."
+ },
+ "space_race_colony_events.28.d": {
+  "en": "Triton is Neptune's largest moon and almost certainly a captured Kuiper Belt object: it orbits retrograde, the only large moon in the solar system to do so. Active nitrogen geysers jet dark material 8 kilometers into the thin atmosphere. The surface temperature of -235°C makes it one of the coldest bodies ever visited. Despite the extreme conditions, Triton's unique origin makes it a scientific treasure and a natural gateway to the Kuiper Belt.",
+  "de": "Triton ist Neptuns größter Mond und mit ziemlicher Sicherheit ein eingefangenes Objekt aus dem Kuipergürtel: Er umkreist Neptun retrograd, als einziger großer Mond im Sonnensystem. Aktive Stickstoffgeysire schleudern dunkles Material 8 Kilometer hoch in die dünne Atmosphäre. Die Oberflächentemperatur von -235 °C macht ihn zu einem der kältesten je besuchten Himmelskörper. Trotz der extremen Bedingungen macht Tritons einzigartige Herkunft ihn zu einem wissenschaftlichen Schatz und einem natürlichen Tor zum Kuipergürtel."
+ },
+ "space_race_colony_events.28.f": {
+  "en": "\\\"It orbits the wrong way — a captured wanderer from the Kuiper Belt. Geysers of nitrogen erupt from its surface. Neptune looms overhead like a blue god.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Planetology Chief",
+  "de": "„Er umkreist in die falsche Richtung — ein eingefangener Wanderer aus dem Kuipergürtel. Stickstoffgeysire brechen aus seiner Oberfläche aus. Neptun ragt über uns auf wie ein blauer Gott.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Leiterin der Planetologie"
+ },
+ "space_race_colony_events.28.t": {
+  "en": "Colony: Triton",
+  "de": "Kolonie: Triton"
+ },
+ "space_race_colony_events.29.a": {
+  "en": "Neptune atmospheric probe relay station.",
+  "de": "Relaisstation für Neptun-Atmosphärensonden."
+ },
+ "space_race_colony_events.29.b": {
+  "en": "Automated resource extraction outpost.",
+  "de": "Automatisierter Außenposten zur Ressourcengewinnung."
+ },
+ "space_race_colony_events.29.d": {
+  "en": "Proteus orbits close to Neptune: so close that tidal forces have stretched it to the limit of what an icy body can sustain without collapsing into a sphere. Dark and irregular, it is a useful platform for studying Neptune's atmosphere, ring arcs, and magnetosphere at close range. The proximity does mean dealing with Neptune's radiation environment, though it is mild compared to Jupiter's.",
+  "de": "Proteus umkreist Neptun in großer Nähe: so nah, dass Gezeitenkräfte ihn bis an die Grenze dessen gedehnt haben, was ein eisiger Körper aushalten kann, ohne zu einer Kugel zu kollabieren. Dunkel und unregelmäßig geformt, ist er eine nützliche Plattform, um Neptuns Atmosphäre, Ringbögen und Magnetosphäre aus der Nähe zu erforschen. Die Nähe bedeutet allerdings, sich mit Neptuns Strahlungsumgebung auseinanderzusetzen, auch wenn diese im Vergleich zu der von Jupiter mild ausfällt."
+ },
+ "space_race_colony_events.29.f": {
+  "en": "\\\"An irregular lump of rock and ice hanging on the edge of Neptune's system. Not beautiful. Not dramatic. But it is ours.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Outpost Administrator",
+  "de": "„Ein unregelmäßiger Klumpen aus Fels und Eis, der am Rand von Neptuns System hängt. Nicht schön. Nicht dramatisch. Aber er ist unser.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Verwalterin des Außenpostens"
+ },
+ "space_race_colony_events.29.t": {
+  "en": "Colony: Proteus",
+  "de": "Kolonie: Proteus"
+ },
+ "space_race_colony_events.3.a": {
+  "en": "Pressurized settlement exploiting denser atmosphere.",
+  "de": "Druckbelüftete Siedlung, die die dichtere Atmosphäre nutzt."
+ },
+ "space_race_colony_events.3.b": {
+  "en": "Astrobiology lab probing for ancient microbial life.",
+  "de": "Astrobiologie-Labor auf der Suche nach uraltem mikrobiellem Leben."
+ },
+ "space_race_colony_events.3.d": {
+  "en": "The Hellas impact basin, 7 kilometers below Martian datum, is the deepest point on Mars. The atmospheric pressure at the basin floor is nearly double that of the Martian average: still far from breathable, but enough to simplify pressure vessel engineering and offer slightly better radiation protection. Orbital surveys have identified promising signs of ancient microbial fossils in the layered sediments.",
+  "de": "Das Hellas-Einschlagsbecken, 7 Kilometer unter dem marsianischen Referenzniveau, ist der tiefste Punkt auf dem Mars. Der Atmosphärendruck am Boden des Beckens ist fast doppelt so hoch wie der marsianische Durchschnitt: noch immer weit von atembar entfernt, aber ausreichend, um den Bau von Druckbehältern zu vereinfachen und etwas besseren Strahlenschutz zu bieten. Orbitale Untersuchungen haben vielversprechende Hinweise auf uralte mikrobielle Fossilien in den geschichteten Sedimenten gefunden."
+ },
+ "space_race_colony_events.3.f": {
+  "en": "\\\"Seven kilometers below datum, the air is almost thick enough to forget where you are. Almost.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Atmospheric Scientist",
+  "de": "„Sieben Kilometer unter dem Referenzniveau ist die Luft fast dicht genug, um zu vergessen, wo man ist. Fast.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Atmosphärenwissenschaftlerin"
+ },
+ "space_race_colony_events.3.t": {
+  "en": "Colony: Hellas Planitia",
+  "de": "Kolonie: Hellas Planitia"
+ },
+ "space_race_colony_events.30.a": {
+  "en": "Dual-body research complex spanning both worlds.",
+  "de": "Zweikörper-Forschungskomplex über beide Welten hinweg."
+ },
+ "space_race_colony_events.30.b": {
+  "en": "Nitrogen ice harvesting on Sputnik Planitia.",
+  "de": "Stickstoffeisgewinnung auf Sputnik Planitia."
+ },
+ "space_race_colony_events.30.d": {
+  "en": "Pluto and Charon orbit each other as a true binary system: tidally locked, always showing the same face. Pluto's nitrogen glaciers flow slowly across Sputnik Planitia, a 1,000-kilometer basin of frozen nitrogen ice. The thin atmosphere freezes and refreezes in a centuries-long cycle. Charon's scarred surface tells of ancient cryovolcanism. Our dual-body colony spans both worlds, connected by regular shuttle service across the 19,570-kilometer gap.",
+  "de": "Pluto und Charon umkreisen einander als echtes Doppelsystem: gezeitengebunden, immer dieselbe Seite zeigend. Plutos Stickstoffgletscher fließen langsam über Sputnik Planitia, ein 1.000 Kilometer breites Becken aus gefrorenem Stickstoffeis. Die dünne Atmosphäre gefriert und taut in einem jahrhundertelangen Zyklus wieder auf. Charons vernarbte Oberfläche erzählt von uraltem Kryovulkanismus. Unsere Zweikörper-Kolonie erstreckt sich über beide Welten, verbunden durch einen regelmäßigen Shuttle-Dienst über die 19.570 Kilometer breite Lücke."
+ },
+ "space_race_colony_events.30.f": {
+  "en": "\\\"A binary world, each partner tidally locked to the other, dancing through the dark. We built the station in the space between them.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Orbital Mechanics Engineer",
+  "de": "„Eine Doppelwelt, jeder Partner gezeitengebunden an den anderen, tanzend durch die Dunkelheit. Wir haben die Station in den Raum zwischen ihnen gebaut.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Ingenieurin für Bahnmechanik"
+ },
+ "space_race_colony_events.30.t": {
+  "en": "Colony: Pluto-Charon",
+  "de": "Kolonie: Pluto-Charon"
+ },
+ "space_race_colony_events.31.a": {
+  "en": "Extreme-distance self-sufficiency test.",
+  "de": "Autarkietest über extreme Entfernung."
+ },
+ "space_race_colony_events.31.b": {
+  "en": "Oort Cloud approach monitoring station.",
+  "de": "Überwachungsstation für die Annäherung an die Oortsche Wolke."
+ },
+ "space_race_colony_events.31.d": {
+  "en": "Eris, the most massive known dwarf planet, orbits at three times Pluto's distance. The round-trip light delay to Earth exceeds 26 hours. Our colonists must operate with a degree of autonomy unmatched by any other settlement. Eris's small moon Dysnomia provides a convenient observing platform. This colony is above all a test of self-sufficiency: if we can sustain human life here, we can sustain it anywhere in the solar system.",
+  "de": "Eris, der massereichste bekannte Zwergplanet, umkreist die Sonne in der dreifachen Entfernung Plutos. Die Lichtlaufzeit für Hin- und Rückweg zur Erde übersteigt 26 Stunden. Unsere Kolonisten müssen mit einem Maß an Autonomie arbeiten, das keine andere Siedlung erreicht. Eris' kleiner Mond Dysnomia bietet eine praktische Beobachtungsplattform. Diese Kolonie ist vor allem ein Test der Autarkie: Wenn wir hier menschliches Leben erhalten können, können wir es überall im Sonnensystem erhalten."
+ },
+ "space_race_colony_events.31.f": {
+  "en": "\\\"So far away that our transmissions to Earth take thirteen hours. By the time they hear our news, it is already yesterday's triumph.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Communications Relay Operator",
+  "de": "„So weit entfernt, dass unsere Übertragungen zur Erde dreizehn Stunden brauchen. Wenn sie unsere Neuigkeiten hören, sind sie bereits der Triumph von gestern.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Betreiberin der Kommunikationsrelaisstation"
+ },
+ "space_race_colony_events.31.t": {
+  "en": "Colony: Eris",
+  "de": "Kolonie: Eris"
+ },
+ "space_race_colony_events.32.a": {
+  "en": "Methane ice chemistry laboratory.",
+  "de": "Labor für Methaneis-Chemie."
+ },
+ "space_race_colony_events.32.b": {
+  "en": "Solar wind research approaching the heliopause.",
+  "de": "Sonnenwindforschung nahe der Heliopause."
+ },
+ "space_race_colony_events.32.d": {
+  "en": "Makemake's surface is coated in methane and ethane ice that shifts in spectral properties as the dwarf planet's elliptical orbit carries it nearer and farther from the distant Sun. With no known atmosphere and no confirmed moons for years after its discovery — until tiny S/2015 (136472) 1 was spotted — Makemake offers a pristine laboratory for studying the primordial composition of the outer solar system.",
+  "de": "Makemakes Oberfläche ist mit Methan- und Ethaneis überzogen, dessen spektrale Eigenschaften sich verändern, während die elliptische Umlaufbahn des Zwergplaneten ihn näher an die ferne Sonne heran- und wieder von ihr wegträgt. Ohne bekannte Atmosphäre und jahrelang ohne bestätigten Mond nach seiner Entdeckung — bis der winzige S/2015 (136472) 1 entdeckt wurde — bietet Makemake ein makelloses Labor zur Erforschung der ursprünglichen Zusammensetzung des äußeren Sonnensystems."
+ },
+ "space_race_colony_events.32.f": {
+  "en": "\\\"Frozen since the birth of the solar system. Every core sample is a time capsule from four and a half billion years ago. We are the first to open them.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Chief Geochemist",
+  "de": "„Gefroren seit der Geburt des Sonnensystems. Jede Bohrkernprobe ist eine Zeitkapsel aus einer Zeit vor viereinhalb Milliarden Jahren. Wir sind die Ersten, die sie öffnen.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Chefgeochemikerin"
+ },
+ "space_race_colony_events.32.t": {
+  "en": "Colony: Makemake",
+  "de": "Kolonie: Makemake"
+ },
+ "space_race_colony_events.33.a": {
+  "en": "Rotational dynamics laboratory.",
+  "de": "Labor für Rotationsdynamik."
+ },
+ "space_race_colony_events.33.b": {
+  "en": "Ring and moon system study platform.",
+  "de": "Plattform zur Erforschung von Ring- und Mondsystemen."
+ },
+ "space_race_colony_events.33.d": {
+  "en": "Haumea rotates once every four hours: the fastest rotation of any known large body in the solar system. This furious spin has stretched it into an elongated ellipsoid, wider than it is tall. It also possesses a dark ring system, one of the few ring systems known around a body other than the giant planets. Two small moons, Hi'iaka and Namaka, orbit amid the ring debris. Our colony platform must account for the rapid rotation in everything from docking to power generation.",
+  "de": "Haumea rotiert einmal alle vier Stunden: die schnellste bekannte Rotation eines großen Körpers im Sonnensystem. Diese wilde Drehung hat ihn zu einem gestreckten Ellipsoid geformt, breiter als hoch. Er besitzt außerdem ein dunkles Ringsystem, eines der wenigen bekannten Ringsysteme um einen Körper, der kein Riesenplanet ist. Zwei kleine Monde, Hi'iaka und Namaka, umkreisen ihn inmitten der Ringtrümmer. Unsere Kolonieplattform muss die schnelle Rotation bei allem berücksichtigen, vom Andocken bis zur Energieerzeugung."
+ },
+ "space_race_colony_events.33.f": {
+  "en": "\\\"Egg-shaped, spinning faster than any world this size should, and wearing its own ring of debris. Even the physicists shake their heads.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Rotational Dynamics Specialist",
+  "de": "„Eiförmig, dreht sich schneller, als eine Welt dieser Größe sollte, und trägt ihren eigenen Trümmerring. Selbst die Physiker schütteln den Kopf.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Spezialistin für Rotationsdynamik"
+ },
+ "space_race_colony_events.33.t": {
+  "en": "Colony: Haumea",
+  "de": "Kolonie: Haumea"
+ },
+ "space_race_colony_events.34.a": {
+  "en": "Humanity's most distant outpost: a monument to ambition.",
+  "de": "Der am weitesten entfernte Außenposten der Menschheit: ein Denkmal des Ehrgeizes."
+ },
+ "space_race_colony_events.34.b": {
+  "en": "Interstellar medium research station.",
+  "de": "Forschungsstation für das interstellare Medium."
+ },
+ "space_race_colony_events.34.d": {
+  "en": "Sedna occupies one of the most extreme orbits known — a 11,400-year ellipse that carries it from 76 AU at perihelion to over 900 AU at aphelion — deep into the inner Oort Cloud. We have caught it near perihelion, when it is — by its standards — close. Our outpost here is the most distant permanent human habitation, farther from the Sun than any settlement has ever been or likely will be for generations. The Sun is barely distinguishable from the brighter stars.",
+  "de": "Sedna hat eine der extremsten bekannten Umlaufbahnen — eine 11.400 Jahre dauernde Ellipse, die ihn von 76 AE im Perihel bis über 900 AE im Aphel führt — tief in die innere Oortsche Wolke hinein. Wir haben ihn nahe dem Perihel erwischt, wenn er — nach seinen Maßstäben — nah ist. Unser Außenposten hier ist die am weitesten von der Sonne entfernte dauerhafte menschliche Behausung, weiter draußen, als je eine Siedlung war oder für Generationen sein wird. Die Sonne ist kaum noch von den helleren Sternen zu unterscheiden."
+ },
+ "space_race_colony_events.34.f": {
+  "en": "\\\"Eleven thousand years to orbit the Sun once. We are the furthest humans from Earth. The next star is still unfathomably far. But we are here.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Expedition Commander",
+  "de": "„Elftausend Jahre für einen einzigen Umlauf um die Sonne. Wir sind die am weitesten von der Erde entfernten Menschen. Der nächste Stern ist noch immer unfassbar weit. Aber wir sind hier.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Expeditionskommandantin"
+ },
+ "space_race_colony_events.34.t": {
+  "en": "Colony: Sedna",
+  "de": "Kolonie: Sedna"
+ },
+ "space_race_colony_events.4.a": {
+  "en": "Ice extraction and water processing facility.",
+  "de": "Anlage zur Eisgewinnung und Wasseraufbereitung."
+ },
+ "space_race_colony_events.4.b": {
+  "en": "Agricultural domes: first Martian farmland.",
+  "de": "Landwirtschaftskuppeln: die ersten Ackerflächen auf dem Mars."
+ },
+ "space_race_colony_events.4.d": {
+  "en": "The vast northern lowlands of Utopia Planitia are among the smoothest terrain on Mars: ideal for large-scale construction. Radar surveys have confirmed extensive subsurface ice deposits within meters of the surface. This ice represents both the colony's water supply and a feedstock for propellant manufacturing. The question is how best to use this resource.",
+  "de": "Die weiten nördlichen Tiefebenen von Utopia Planitia gehören zu den glattesten Terrains auf dem Mars: ideal für Großbauprojekte. Radaruntersuchungen haben ausgedehnte unterirdische Eisvorkommen wenige Meter unter der Oberfläche bestätigt. Dieses Eis ist sowohl die Wasserversorgung der Kolonie als auch Rohstoff für die Treibstoffherstellung. Die Frage ist, wie diese Ressource am besten genutzt werden soll."
+ },
+ "space_race_colony_events.4.f": {
+  "en": "\\\"There is an ocean of ice beneath our feet, frozen since before life existed on Earth. And we are going to melt it.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Water Extraction Chief",
+  "de": "„Unter unseren Füßen liegt ein Ozean aus Eis, gefroren, seit es auf der Erde noch kein Leben gab. Und wir werden ihn schmelzen.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Leiterin der Wassergewinnung"
+ },
+ "space_race_colony_events.4.t": {
+  "en": "Colony: Utopia Planitia",
+  "de": "Kolonie: Utopia Planitia"
+ },
+ "space_race_colony_events.5.a": {
+  "en": "Civilian residential colony.",
+  "de": "Zivile Wohnkolonie."
+ },
+ "space_race_colony_events.5.b": {
+  "en": "Military-grade outpost securing the northern approach.",
+  "de": "Militärisch gesicherter Außenposten zum Schutz des nördlichen Zugangs."
+ },
+ "space_race_colony_events.5.d": {
+  "en": "Arcadia Planitia's mid-northern latitude offers the best compromise between solar energy availability and near-surface ice access on Mars. The terrain is relatively flat, the ice table is shallow, and the seasonal temperature variations are among the mildest on the planet. If Mars will ever have a true city — not just a research station — this is where it begins.",
+  "de": "Die mittleren nördlichen Breiten von Arcadia Planitia bieten den besten Kompromiss zwischen verfügbarer Sonnenenergie und oberflächennahem Eiszugang auf dem Mars. Das Gelände ist relativ flach, der Eishorizont liegt nah an der Oberfläche, und die saisonalen Temperaturschwankungen gehören zu den mildesten auf dem Planeten. Wenn der Mars jemals eine echte Stadt haben wird — nicht nur eine Forschungsstation —, dann beginnt sie hier."
+ },
+ "space_race_colony_events.5.f": {
+  "en": "\\\"Minus eighty is a warm day here. The newcomers always complain. Give them a year — they'll call it balmy.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Station Meteorologist",
+  "de": "„Minus achtzig ist hier ein warmer Tag. Die Neuankömmlinge beschweren sich immer. Gebt ihnen ein Jahr — dann nennen sie es mild.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Stationsmeteorologin"
+ },
+ "space_race_colony_events.5.t": {
+  "en": "Colony: Arcadia Planitia",
+  "de": "Kolonie: Arcadia Planitia"
+ },
+ "space_race_colony_events.6.a": {
+  "en": "Deep-space waystation and refueling depot.",
+  "de": "Tiefraum-Zwischenstation und Betankungsdepot."
+ },
+ "space_race_colony_events.6.b": {
+  "en": "Scientific observatory for the outer solar system.",
+  "de": "Wissenschaftliches Observatorium für das äußere Sonnensystem."
+ },
+ "space_race_colony_events.6.d": {
+  "en": "Ceres, the largest body in the asteroid belt, has been a target since the early days of spaceflight planning. With a surface gravity of only 0.03g, water ice confirmed across its surface, and a strategic position between Mars and Jupiter, it is the natural waystation for deep-space operations. The bright spots of Occator Crater — sodium carbonate deposits from subsurface brine — hint at a geologically active interior.",
+  "de": "Ceres, der größte Körper im Asteroidengürtel, ist seit den frühen Tagen der Raumfahrtplanung ein Ziel. Mit einer Oberflächenschwerkraft von nur 0,03g, bestätigtem Wassereis über die gesamte Oberfläche verteilt und einer strategischen Lage zwischen Mars und Jupiter ist er die natürliche Zwischenstation für Tiefraumoperationen. Die hellen Flecken im Occator-Krater — Natriumkarbonatablagerungen aus unterirdischer Salzlake — deuten auf ein geologisch aktives Inneres hin."
+ },
+ "space_race_colony_events.6.f": {
+  "en": "\\\"The advantage of Ceres is simple: it is halfway to everywhere, and it has everything we need. The disadvantage is that it is halfway from everywhere too.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Supply Chain Director",
+  "de": "„Der Vorteil von Ceres ist einfach: Er liegt auf halbem Weg zu überallhin, und er hat alles, was wir brauchen. Der Nachteil ist, dass er auch auf halbem Weg von überallher liegt.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Direktorin der Versorgungskette"
+ },
+ "space_race_colony_events.6.t": {
+  "en": "Colony: Ceres",
+  "de": "Kolonie: Ceres"
+ },
+ "space_race_colony_events.7.a": {
+  "en": "Metal extraction from the exposed mantle.",
+  "de": "Metallgewinnung aus dem freiliegenden Mantel."
+ },
+ "space_race_colony_events.7.b": {
+  "en": "Planetary science lab studying proto-planet geology.",
+  "de": "Planetenforschungslabor zur Geologie von Protoplaneten."
+ },
+ "space_race_colony_events.7.d": {
+  "en": "Vesta is a differentiated proto-planet: it has a core, mantle, and crust, surviving intact from the solar system's formation. The south pole bears the Rheasilvia impact basin: a colossal scar that exposed the mantle. This exposed interior rock is rich in metals and silicates, accessible without deep mining. It is as if the asteroid was cracked open for us.",
+  "de": "Vesta ist ein differenzierter Protoplanet: Er besitzt Kern, Mantel und Kruste, die seit der Entstehung des Sonnensystems intakt erhalten geblieben sind. Der Südpol trägt das Rheasilvia-Einschlagsbecken: eine gewaltige Narbe, die den Mantel freigelegt hat. Dieses freiliegende Gestein aus dem Inneren ist reich an Metallen und Silikaten und ohne Tiefbau zugänglich. Es ist, als wäre der Asteroid für uns aufgebrochen worden."
+ },
+ "space_race_colony_events.7.f": {
+  "en": "\\\"The asteroid that geologists love. Half of it has been blasted away by impacts, exposing the mantle like a cross-section in a textbook.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Mission Geologist",
+  "de": "„Der Asteroid, den Geologen lieben. Die Hälfte davon wurde durch Einschläge weggesprengt und legt den Mantel frei wie einen Querschnitt in einem Lehrbuch.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Missionsgeologin"
+ },
+ "space_race_colony_events.7.t": {
+  "en": "Colony: 4 Vesta",
+  "de": "Kolonie: 4 Vesta"
+ },
+ "space_race_colony_events.8.a": {
+  "en": "Full-scale industrial mining operation.",
+  "de": "Industrieller Bergbaubetrieb im vollen Umfang."
+ },
+ "space_race_colony_events.8.b": {
+  "en": "Careful extraction to preserve scientific value.",
+  "de": "Vorsichtiger Abbau zur Bewahrung des wissenschaftlichen Werts."
+ },
+ "space_race_colony_events.8.d": {
+  "en": "Psyche is almost pure metal: the stripped core of a proto-planet whose rocky layers were blasted away in primordial collisions. It is composed primarily of iron and nickel, with traces of gold, platinum, and other precious metals. Conservative estimates value its mineral wealth in the quintillions. The question is not whether to mine it, but whether the influx of metals will destabilize terrestrial commodity markets.",
+  "de": "Psyche besteht fast vollständig aus Metall: der bloßgelegte Kern eines Protoplaneten, dessen Gesteinsschichten in urzeitlichen Kollisionen weggesprengt wurden. Er besteht hauptsächlich aus Eisen und Nickel, mit Spuren von Gold, Platin und anderen Edelmetallen. Vorsichtige Schätzungen beziffern seinen Mineralwert auf Trillionen. Die Frage ist nicht, ob man ihn abbauen soll, sondern ob der Zustrom an Metallen die irdischen Rohstoffmärkte destabilisieren wird."
+ },
+ "space_race_colony_events.8.f": {
+  "en": "\\\"If you could somehow bring this asteroid to market, the value of iron, nickel, and gold would collapse worldwide. The economists are not amused.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Resource Assessment Lead",
+  "de": "„Könnte man diesen Asteroiden irgendwie auf den Markt bringen, würde der Wert von Eisen, Nickel und Gold weltweit einbrechen. Die Ökonomen sind alles andere als amüsiert.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Leiterin der Ressourcenbewertung"
+ },
+ "space_race_colony_events.8.t": {
+  "en": "Colony: 16 Psyche",
+  "de": "Kolonie: 16 Psyche"
+ },
+ "space_race_colony_events.9.a": {
+  "en": "Carbon-rich material processing for composites.",
+  "de": "Verarbeitung kohlenstoffreichen Materials für Verbundwerkstoffe."
+ },
+ "space_race_colony_events.9.b": {
+  "en": "Astronomical observatory platform.",
+  "de": "Astronomische Observatoriumsplattform."
+ },
+ "space_race_colony_events.9.d": {
+  "en": "Pallas is an oddity: a carbon-rich proto-planet with an extreme axial tilt of 84 degrees, making it spin nearly on its side. Its dark surface is rich in carbonaceous material: the building blocks of organic chemistry and composite manufacturing feedstock. The unusual tilt creates bizarre seasonal lighting conditions that will challenge our habitat designers.",
+  "de": "Pallas ist eine Kuriosität: ein kohlenstoffreicher Protoplanet mit einer extremen Achsneigung von 84 Grad, wodurch er sich fast auf der Seite liegend dreht. Seine dunkle Oberfläche ist reich an kohlenstoffhaltigem Material: den Bausteinen der organischen Chemie und Rohstoff für die Verbundwerkstoffherstellung. Die ungewöhnliche Neigung erzeugt bizarre jahreszeitliche Lichtverhältnisse, die unsere Habitat-Designer vor Herausforderungen stellen werden."
+ },
+ "space_race_colony_events.9.f": {
+  "en": "\\\"It rolls through space at an angle no one can explain. Our orbital insertion was the most creative flying this program has ever attempted.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Navigation Officer",
+  "de": "„Er rollt in einem Winkel durch den Raum, den niemand erklären kann. Unser Einschuss in die Umlaufbahn war das kreativste Flugmanöver, das dieses Programm je versucht hat.“\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Navigationsoffizierin"
+ },
+ "space_race_colony_events.9.t": {
+  "en": "Colony: 2 Pallas",
+  "de": "Kolonie: 2 Pallas"
+ },
+ "space_race_events.1.a": {
+  "en": "A triumph for [ROOT.GetCountry.GetName]!",
+  "de": "Ein Triumph für [ROOT.GetCountry.GetAltName('AKK')|U]!"
+ },
+ "space_race_events.1.b": {
+  "en": "Channel this momentum into the next frontier.",
+  "de": "Diesen Schwung für die nächste Grenze nutzen."
+ },
+ "space_race_events.1.d": {
+  "en": "A [ROOT.GetCountry.GetAdjectiveNoFormatting] rocket has punched through the upper atmosphere and returned its pilot safely. For a few breathless minutes, a citizen of [ROOT.GetCountry.GetName] was closer to the stars than any human being has ever been.",
+  "de": "Eine [ROOT.GetCountry.GetAdjectiveNoFormatting|l]e Rakete hat die obere Atmosphäre durchbrochen und ihren Piloten sicher zurückgebracht. Für ein paar atemberaubende Minuten war ein Bürger [ROOT.GetCountry.GetAltName('GEN')] den Sternen näher als je ein Mensch zuvor."
+ },
+ "space_race_events.1.d_later": {
+  "en": "A [ROOT.GetCountry.GetAdjectiveNoFormatting] rocket has punched through the upper atmosphere and returned its pilot safely. Others reached the edge of space before us, but for a few breathless minutes a citizen of [ROOT.GetCountry.GetName] looked down on the curve of the world, and [ROOT.GetCountry.GetName] joined the nations that can send their people there.",
+  "de": "Eine [ROOT.GetCountry.GetAdjectiveNoFormatting|l]e Rakete hat die obere Atmosphäre durchbrochen und ihren Piloten sicher zurückgebracht. Andere erreichten den Rand des Weltraums vor uns, doch für ein paar atemberaubende Minuten blickte ein Bürger [ROOT.GetCountry.GetAltName('GEN')] auf die Krümmung der Welt hinab, und [ROOT.GetCountry.GetAltName('NOM')|U] reihte sich unter die Nationen ein, die ihre Leute dorthin schicken können."
+ },
+ "space_race_events.1.f": {
+  "en": "\\\"I could see the curvature of the Earth. The horizon was a thin blue line, and beyond it, nothing but black. The flight lasted eight minutes. It was very cold.\\\"",
+  "de": "„Ich konnte die Krümmung der Erde sehen. Der Horizont war eine dünne blaue Linie, und dahinter nichts als Schwarz. Der Flug dauerte acht Minuten. Es war sehr kalt.“"
+ },
+ "space_race_events.1.t": {
+  "en": "The Edge of the Sky",
+  "de": "Der Rand des Himmels"
+ },
+ "space_race_events.10.a": {
+  "en": "Investigate the cause and rebuild.",
+  "de": "Die Ursache untersuchen und wieder aufbauen."
+ },
+ "space_race_events.10.b": {
+  "en": "Perhaps a more cautious approach is warranted.",
+  "de": "Vielleicht ist ein vorsichtigerer Ansatz angebracht."
+ },
+ "space_race_events.10.c": {
+  "en": "We cannot afford to slow down now.",
+  "de": "Wir können es uns jetzt nicht leisten, langsamer zu werden."
+ },
+ "space_race_events.10.d": {
+  "en": "The ambitious timeline has claimed its toll. A catastrophic failure during testing has destroyed the mission vehicle and set our program back significantly. Engineers scramble through the wreckage while government officials demand answers.",
+  "de": "Der ehrgeizige Zeitplan hat seinen Tribut gefordert. Ein katastrophales Versagen während der Tests hat das Missionsfahrzeug zerstört und unser Programm erheblich zurückgeworfen. Ingenieure durchsuchen hastig das Wrack, während Regierungsvertreter Antworten fordern."
+ },
+ "space_race_events.10.f": {
+  "en": "\\\"They said we were going too fast. They were right. But we had no choice: the others are breathing down our necks.\\\"\\n\\n— Senior Engineer, standing amid the ruins of the launch complex\\n\\n\\\"Fix it. Fix it and fly again. That's all we can do.\\\"\\n\\n— Program Director, three hours after the explosion",
+  "de": "„Sie sagten, wir seien zu schnell unterwegs. Sie hatten recht. Aber wir hatten keine Wahl: Die anderen sitzen uns im Nacken.“\\n\\n— Leitende Ingenieurin, inmitten der Trümmer des Startkomplexes\\n\\n„Repariert es. Repariert es und fliegt erneut. Mehr können wir nicht tun.“\\n\\n— Programmdirektor, drei Stunden nach der Explosion"
+ },
+ "space_race_events.10.t": {
+  "en": "A Costly Miscalculation",
+  "de": "Eine teure Fehlkalkulation"
+ },
+ "space_race_events.11.a": {
+  "en": "A setback, but not a disaster.",
+  "de": "Ein Rückschlag, aber keine Katastrophe."
+ },
+ "space_race_events.11.b": {
+  "en": "Redirect resources while we regroup.",
+  "de": "Ressourcen umleiten, während wir uns neu aufstellen."
+ },
+ "space_race_events.11.d": {
+  "en": "A technical anomaly has forced a mission delay. While no lives were lost, the issue demands careful investigation before the program can resume. Engineers believe the root cause is well understood, but weeks of lost time cannot be recovered.",
+  "de": "Eine technische Anomalie hat eine Verzögerung der Mission erzwungen. Zwar sind keine Menschenleben zu beklagen, doch das Problem erfordert eine sorgfältige Untersuchung, bevor das Programm fortgesetzt werden kann. Die Ingenieure glauben, die Grundursache gut zu verstehen, doch verlorene Wochen lassen sich nicht zurückholen."
+ },
+ "space_race_events.11.f": {
+  "en": "\\\"It's a valve. A single valve, and two weeks to replace it. Two weeks we didn't have.\\\"\\n\\n— Lead Propulsion Engineer",
+  "de": "„Es ist ein Ventil. Ein einziges Ventil, und zwei Wochen, um es zu ersetzen. Zwei Wochen, die wir nicht hatten.“\\n\\n— Leitende Antriebsingenieurin"
+ },
+ "space_race_events.11.t": {
+  "en": "Technical Difficulties",
+  "de": "Technische Schwierigkeiten"
+ },
+ "space_race_events.12.a": {
+  "en": "Rebuild the pad and investigate the cause.",
+  "de": "Die Startrampe wiederaufbauen und die Ursache untersuchen."
+ },
+ "space_race_events.12.b": {
+  "en": "Redesign the fuel handling system entirely.",
+  "de": "Das Treibstoffhandhabungssystem vollständig neu gestalten."
+ },
+ "space_race_events.12.c": {
+  "en": "Rush a replacement vehicle to the next pad.",
+  "de": "Ein Ersatzfahrzeug eilig zur nächsten Startrampe bringen."
+ },
+ "space_race_events.12.d": {
+  "en": "The fuel ignited without warning. The launch vehicle was consumed in a fireball that could be seen for miles, reducing the launch complex to twisted metal and scorched concrete. Miraculously, the pad crew escaped the blast radius — but the vehicle and months of preparation are gone.",
+  "de": "Der Treibstoff entzündete sich ohne Vorwarnung. Die Trägerrakete wurde von einem Feuerball verschlungen, der meilenweit zu sehen war, und verwandelte den Startkomplex in verbogenes Metall und verkohlten Beton. Wie durch ein Wunder entkam die Startrampenmannschaft dem Explosionsradius — doch das Fahrzeug und Monate der Vorbereitung sind dahin."
+ },
+ "space_race_events.12.f": {
+  "en": "\\\"The cameras caught it all. Three seconds from nominal readings to complete destruction. The fuel manifold ruptured at the coupling: a joint we'd tested a hundred times.\\\"\\n\\n— Lead Propulsion Engineer, reviewing telemetry in the aftermath",
+  "de": "„Die Kameras haben alles festgehalten. Drei Sekunden von normalen Messwerten bis zur vollständigen Zerstörung. Der Treibstoffverteiler riss an der Kupplung — einer Verbindung, die wir hundertmal getestet hatten.“\\n\\n— Leitende Antriebsingenieurin, bei der Durchsicht der Telemetriedaten im Nachhinein"
+ },
+ "space_race_events.12.t": {
+  "en": "Inferno on the Pad",
+  "de": "Inferno auf der Startrampe"
+ },
+ "space_race_events.13.a": {
+  "en": "Reorient the deep-space antenna network.",
+  "de": "Das Tiefraum-Antennennetzwerk neu ausrichten."
+ },
+ "space_race_events.13.b": {
+  "en": "Begin construction of a backup probe.",
+  "de": "Mit dem Bau einer Ersatzsonde beginnen."
+ },
+ "space_race_events.13.c": {
+  "en": "Assume it's still on course: wait and see.",
+  "de": "Davon ausgehen, dass sie noch auf Kurs ist: abwarten."
+ },
+ "space_race_events.13.d": {
+  "en": "Contact with the probe has been lost. The last telemetry showed nominal operations, then: silence. The deep-space network rotates its dishes, sweeping the sky where the probe should be, but receives nothing. Hundreds of millions of miles away, our creation drifts in the void, deaf and mute.",
+  "de": "Der Kontakt zur Sonde ist abgebrochen. Die letzte Telemetrie zeigte normalen Betrieb, dann: Stille. Das Tiefraumnetzwerk dreht seine Antennenschüsseln und tastet den Himmel ab, wo die Sonde sein sollte, empfängt aber nichts. Hunderte Millionen Kilometer entfernt treibt unsere Schöpfung durch die Leere, taub und stumm."
+ },
+ "space_race_events.13.f": {
+  "en": "\\\"We're listening on every frequency. The probe knows how to call home: if it still can.\\\"\\n\\n— Tracking Station Director, 72 hours after signal loss\\n\\n\\\"Build another one. We've lost probes before. We've never stopped sending them.\\\"\\n\\n— Chief Scientist",
+  "de": "„Wir hören auf jeder Frequenz mit. Die Sonde weiß, wie sie nach Hause funken muss - falls sie es noch kann.“\\n\\n— Direktorin der Trackingstation, 72 Stunden nach Signalverlust\\n\\n„Baut eine neue. Wir haben schon früher Sonden verloren. Wir haben nie aufgehört, sie loszuschicken.“\\n\\n— Chefwissenschaftlerin"
+ },
+ "space_race_events.13.t": {
+  "en": "Silence from the Deep",
+  "de": "Stille aus der Tiefe"
+ },
  "space_race_events.14.a": {
   "en": "Emergency seal and full structural review.",
   "de": "Notabdichtung und vollständige Strukturprüfung."
