@@ -4147,6 +4147,1594 @@
   "en": "The Bankers' Lobby",
   "de": "Die Bankenlobby"
  },
+ "extra_law_events.10.a": {
+  "en": "The civilized world demands restraint!",
+  "de": "Die zivilisierte Welt fordert Zurückhaltung!"
+ },
+ "extra_law_events.10.b": {
+  "en": "Build a bipartisan coalition for lasting reform.",
+  "de": "Eine überparteiliche Koalition für dauerhafte Reformen schmieden."
+ },
+ "extra_law_events.10.d": {
+  "en": "Harrowing accounts of battlefield atrocities have reached the newspapers, shocking the public conscience. Photographs of civilian suffering and descriptions of indiscriminate bombardment have galvanized support for the proposed [SCOPE.sLaw('current_law_scope').GetName] legislation.",
+  "de": "Erschütternde Berichte über Gräueltaten auf dem Schlachtfeld haben die Zeitungen erreicht und das öffentliche Gewissen erschüttert. Fotografien vom Leid der Zivilbevölkerung und Schilderungen wahlloser Bombardierungen haben die Unterstützung für das geplante Gesetz [SCOPE.sLaw('current_law_scope').GetName] beflügelt."
+ },
+ "extra_law_events.10.f": {
+  "en": "\\\"I have seen things in the field that I shall carry to my grave. If the purpose of war is to defend civilization, then we must not abandon civilization in its prosecution. There must be lines that even the victorious dare not cross.\\\"",
+  "de": "„Ich habe im Feld Dinge gesehen, die ich bis ins Grab tragen werde. Wenn der Zweck des Krieges darin besteht, die Zivilisation zu verteidigen, dürfen wir die Zivilisation nicht in seiner Führung aufgeben. Es muss Grenzen geben, die selbst die Sieger nicht zu überschreiten wagen.“"
+ },
+ "extra_law_events.10.t": {
+  "en": "Reports from the Front",
+  "de": "Berichte von der Front"
+ },
+ "extra_law_events.11.a": {
+  "en": "Overrule the generals - this is a matter of [concept_power_bloc_principle].",
+  "de": "Die Generäle überstimmen - dies ist eine Frage des [Concept('concept_power_bloc_principle', 'Prinzips')]."
+ },
+ "extra_law_events.11.b": {
+  "en": "Accommodate their concerns to keep them on side.",
+  "de": "Ihre Bedenken berücksichtigen, um sie bei der Stange zu halten."
+ },
+ "extra_law_events.11.d": {
+  "en": "Senior officers of the [SCOPE.gsInterestGroup('armed_forces_ig').GetName] have submitted a memorandum to the government protesting the proposed [SCOPE.sLaw('current_law_scope').GetName]. They argue that binding the hands of commanders in wartime will cost more lives than it saves.",
+  "de": "Hochrangige Offiziere der [SCOPE.gsInterestGroup('armed_forces_ig').GetName] haben der Regierung ein Memorandum vorgelegt, in dem sie gegen das geplante Gesetz [SCOPE.sLaw('current_law_scope').GetName] protestieren. Sie argumentieren, dass es im Krieg mehr Menschenleben koste, den Befehlshabern die Hände zu binden, als es rette."
+ },
+ "extra_law_events.11.f": {
+  "en": "\\\"With the greatest respect, gentlemen of the legislature have never held a field command. War is not a gentleman's game. If you tie our hands with these regulations, the enemy will not reciprocate, and it is our soldiers - not yours - who will pay the price.\\\"",
+  "de": "„Bei allem Respekt, meine Herren von der Legislative hatten noch nie ein Feldkommando inne. Krieg ist kein Spiel für feine Herren. Wenn Sie uns mit diesen Vorschriften die Hände binden, wird der Feind nicht mit gleicher Münze zurückzahlen, und es sind unsere Soldaten - nicht Ihre -, die den Preis dafür zahlen werden.“"
+ },
+ "extra_law_events.11.t": {
+  "en": "The Generals Object",
+  "de": "Die Generäle protestieren"
+ },
+ "extra_law_events.12.a": {
+  "en": "Rehabilitation is the mark of a civilized nation.",
+  "de": "Resozialisierung ist das Kennzeichen einer zivilisierten Nation."
+ },
+ "extra_law_events.12.b": {
+  "en": "Frame it as tough-on-crime reform to win over the skeptics.",
+  "de": "Es als „Hartes Durchgreifen gegen Kriminalität“ ausgeben, um die Zweifler zu überzeugen."
+ },
+ "extra_law_events.12.d": {
+  "en": "A prominent member of the [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] has published a treatise arguing that the purpose of the justice system should not be vengeance, but the restoration of the offender to productive membership in society.",
+  "de": "Ein prominentes Mitglied der [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] hat eine Abhandlung veröffentlicht, in der argumentiert wird, dass der Zweck des Justizsystems nicht Vergeltung sein sollte, sondern die Wiedereingliederung des Täters als produktives Mitglied der Gesellschaft."
+ },
+ "extra_law_events.12.f": {
+  "en": "\\\"The man who emerges from our prisons today is harder, angrier, and less capable of honest work than the day he entered. We have built factories of recidivism and called them houses of justice. There must be a better way.\\\"",
+  "de": "„Der Mann, der heute aus unseren Gefängnissen entlassen wird, ist härter, zorniger und weniger fähig zu ehrlicher Arbeit als an dem Tag, an dem er eintrat. Wir haben Fabriken der Rückfälligkeit gebaut und sie Häuser der Gerechtigkeit genannt. Es muss einen besseren Weg geben.“"
+ },
+ "extra_law_events.12.t": {
+  "en": "A Question of Punishment",
+  "de": "Eine Frage der Bestrafung"
+ },
+ "extra_law_events.13.a": {
+  "en": "A common tongue strengthens national unity.",
+  "de": "Eine gemeinsame Sprache stärkt die nationale Einheit."
+ },
+ "extra_law_events.13.b": {
+  "en": "Make concessions to the periphery to ease passage.",
+  "de": "Der Peripherie Zugeständnisse machen, um die Verabschiedung zu erleichtern."
+ },
+ "extra_law_events.13.d": {
+  "en": "Our proposed language reforms have met fierce resistance from the [SCOPE.gsInterestGroup('opposing_ig').GetName], who see the legislation as an assault on the cultural identity of communities across the nation.",
+  "de": "Unsere geplanten Sprachreformen sind auf heftigen Widerstand der [SCOPE.gsInterestGroup('opposing_ig').GetName] gestoßen, die in dem Gesetz einen Angriff auf die kulturelle Identität von Gemeinschaften im ganzen Land sehen."
+ },
+ "extra_law_events.13.f": {
+  "en": "\\\"A language is not merely a tool for commerce. It is the vessel of a people's history, their songs, their prayers. The schoolmaster told me last week that his pupils no longer know the words to the harvest hymn. He has been teaching it for thirty years.\\\"",
+  "de": "„Eine Sprache ist nicht bloß ein Werkzeug für den Handel. Sie ist das Gefäß der Geschichte eines Volkes, seiner Lieder, seiner Gebete. Der Schulmeister erzählte mir letzte Woche, dass seine Schüler die Worte des Erntelieds nicht mehr kennen. Er unterrichtet es seit dreißig Jahren.“"
+ },
+ "extra_law_events.13.t": {
+  "en": "Tongues of the Nation",
+  "de": "Sprachen der Nation"
+ },
+ "extra_law_events.14.a": {
+  "en": "Expose the corruption and push for reform!",
+  "de": "Die Korruption aufdecken und auf Reformen drängen!"
+ },
+ "extra_law_events.14.b": {
+  "en": "Use this quietly as leverage - no need for spectacle.",
+  "de": "Dies still als Druckmittel nutzen - kein Spektakel nötig."
+ },
+ "extra_law_events.14.d": {
+  "en": "An investigation has revealed that several prominent politicians received lavish gifts and secret payments from wealthy donors in exchange for favorable legislation. The public is outraged, and reformers are seizing the moment to push for [SCOPE.sLaw('current_law_scope').GetName].",
+  "de": "Eine Untersuchung hat ergeben, dass mehrere prominente Politiker von wohlhabenden Spendern üppige Geschenke und geheime Zahlungen im Austausch für wohlwollende Gesetzgebung erhalten haben. Die Öffentlichkeit ist empört, und Reformer nutzen den Moment, um auf [SCOPE.sLaw('current_law_scope').GetName] zu drängen."
+ },
+ "extra_law_events.14.f": {
+  "en": "\\\"The honorable member's vote, it seems, was not so much cast as it was purchased. One wonders if the legislature might save time by simply auctioning off its seats to the highest bidder.\\\"",
+  "de": "„Die Stimme des ehrenwerten Abgeordneten wurde, wie es scheint, weniger abgegeben als vielmehr gekauft. Man fragt sich, ob die Legislative nicht Zeit sparen könnte, indem sie ihre Sitze einfach an den Meistbietenden versteigert.“"
+ },
+ "extra_law_events.14.t": {
+  "en": "A Donor Scandal",
+  "de": "Ein Spendenskandal"
+ },
+ "extra_law_events.15.a": {
+  "en": "Our proposed reform will settle this question.",
+  "de": "Unsere geplante Reform wird diese Frage klären."
+ },
+ "extra_law_events.15.b": {
+  "en": "Allow the regions a voice in the drafting process.",
+  "de": "Den Regionen ein Mitspracherecht bei der Ausarbeitung einräumen."
+ },
+ "extra_law_events.15.d": {
+  "en": "A petition signed by regional leaders and local dignitaries has arrived at the capital, either demanding greater autonomy for the provinces or insisting on stronger central authority. The debate over [SCOPE.sLaw('current_law_scope').GetName] has become a lightning rod for longstanding tensions.",
+  "de": "Eine von regionalen Anführern und örtlichen Würdenträgern unterzeichnete Petition ist in der Hauptstadt eingetroffen, die entweder größere Autonomie für die Provinzen fordert oder auf einer stärkeren Zentralgewalt besteht. Die Debatte über [SCOPE.sLaw('current_law_scope').GetName] ist zum Blitzableiter für alte Spannungen geworden."
+ },
+ "extra_law_events.15.f": {
+  "en": "\\\"The question is not merely one of administration, but of identity. Does a citizen owe loyalty first to the province that raised him, or to the nation that protects him? The answer to this question will shape our republic for generations.\\\"",
+  "de": "„Die Frage ist nicht bloß eine der Verwaltung, sondern der Identität. Schuldet ein Bürger seine Loyalität zuerst der Provinz, die ihn großgezogen hat, oder der Nation, die ihn beschützt? Die Antwort auf diese Frage wird unsere Republik auf Generationen prägen.“"
+ },
+ "extra_law_events.15.t": {
+  "en": "The Question of Autonomy",
+  "de": "Die Frage der Autonomie"
+ },
+ "extra_law_events.16.a": {
+  "en": "Progress demands that we push the boundaries!",
+  "de": "Der Fortschritt verlangt, dass wir die Grenzen verschieben!"
+ },
+ "extra_law_events.16.b": {
+  "en": "Appoint an ethics board to reassure the public.",
+  "de": "Einen Ethikrat einsetzen, um die Öffentlichkeit zu beruhigen."
+ },
+ "extra_law_events.16.d": {
+  "en": "A parliamentary committee has convened to hear testimony on the proposed [SCOPE.sLaw('current_law_scope').GetName] legislation. Scientists from the [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] present dazzling demonstrations, while members of the [SCOPE.gsInterestGroup('devout_ig').GetName] warn of a society divided between the enhanced and the natural.",
+  "de": "Ein parlamentarischer Ausschuss ist zusammengetreten, um Zeugenaussagen zum geplanten Gesetz [SCOPE.sLaw('current_law_scope').GetName] anzuhören. Wissenschaftler der [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] präsentieren verblüffende Vorführungen, während Mitglieder der [SCOPE.gsInterestGroup('devout_ig').GetName] vor einer Gesellschaft warnen, die zwischen den Verbesserten und den Natürlichen gespalten ist."
+ },
+ "extra_law_events.16.f": {
+  "en": "\\\"The witness removed his glove to reveal a hand of articulated steel, each finger moving with uncanny precision. 'I lost the original in a factory press,' he said. 'The replacement is better. The question before you today is simple: should the rest of me be allowed to catch up?'\\\"",
+  "de": "„Der Zeuge zog seinen Handschuh aus, um eine Hand aus gegliedertem Stahl zu enthüllen, deren Finger sich mit unheimlicher Präzision bewegten. ‚Das Original habe ich in einer Fabrikpresse verloren‘, sagte er. ‚Der Ersatz ist besser. Die Frage, die sich Ihnen heute stellt, ist einfach: Sollte der Rest von mir aufholen dürfen?‘“"
+ },
+ "extra_law_events.16.t": {
+  "en": "The Augmentation Hearing",
+  "de": "Die Anhörung zur Augmentierung"
+ },
+ "extra_law_events.17.a": {
+  "en": "All children deserve an equal share.",
+  "de": "Allen Kindern steht ein gleicher Anteil zu."
+ },
+ "extra_law_events.17.b": {
+  "en": "Offer a transition period to ease the landowners' fears.",
+  "de": "Eine Übergangsfrist anbieten, um die Ängste der Landbesitzer zu lindern."
+ },
+ "extra_law_events.17.d": {
+  "en": "The proposed changes to inheritance law have provoked outrage among the [SCOPE.gsInterestGroup('landowners_ig').GetName]. The eldest sons of several prominent families have petitioned the government, warning that dividing their estates will destroy the great houses that form the backbone of rural society.",
+  "de": "Die geplanten Änderungen des Erbrechts haben bei den [SCOPE.gsInterestGroup('landowners_ig').GetName] Empörung ausgelöst. Die ältesten Söhne mehrerer angesehener Familien haben die Regierung in einer Petition gewarnt, dass die Aufteilung ihrer Güter die großen Häuser zerstören werde, die das Rückgrat der ländlichen Gesellschaft bilden."
+ },
+ "extra_law_events.17.f": {
+  "en": "\\\"My father built this estate with his own hands, and his father before him. Now you tell me I must share it equally with my younger brothers, one of whom has not visited in five years and the other of whom is a notorious gambler? This is not justice - this is vandalism.\\\"",
+  "de": "„Mein Vater hat dieses Gut mit seinen eigenen Händen erbaut, und sein Vater vor ihm. Und nun sagen Sie mir, ich müsse es zu gleichen Teilen mit meinen jüngeren Brüdern teilen, von denen der eine seit fünf Jahren nicht zu Besuch war und der andere ein notorischer Spieler ist? Das ist keine Gerechtigkeit - das ist Vandalismus.“"
+ },
+ "extra_law_events.17.t": {
+  "en": "The Eldest Son's Complaint",
+  "de": "Die Klage des ältesten Sohnes"
+ },
+ "extra_law_events.18.a": {
+  "en": "The petitioners shall be heard - their cause is just.",
+  "de": "Die Petenten sollen gehört werden - ihre Sache ist gerecht."
+ },
+ "extra_law_events.18.b": {
+  "en": "Work quietly behind the scenes to defuse opposition.",
+  "de": "Still im Hintergrund arbeiten, um den Widerstand zu entschärfen."
+ },
+ "extra_law_events.18.d": {
+  "en": "A group of citizens has delivered a moving petition to the legislature, sharing personal stories of [concept_discrimination] and asking for the protections promised by [SCOPE.sLaw('current_law_scope').GetName]. The petition has generated significant public sympathy, though the [SCOPE.gsInterestGroup('devout_ig').GetName] have denounced it.",
+  "de": "Eine Gruppe von Bürgern hat der Legislative eine bewegende Petition überreicht, in der sie persönliche Geschichten von [concept_discrimination] schildern und um den Schutz bitten, den [SCOPE.sLaw('current_law_scope').GetName] verspricht. Die Petition hat erhebliche öffentliche Sympathie hervorgerufen, auch wenn die [SCOPE.gsInterestGroup('devout_ig').GetName] sie verurteilt haben."
+ },
+ "extra_law_events.18.f": {
+  "en": "\\\"We do not ask for special treatment. We ask only to walk the same streets, hold the same jobs, and love the same as any other citizen of this nation, without fear of the magistrate's knock upon the door.\\\"",
+  "de": "„Wir bitten nicht um Sonderbehandlung. Wir bitten nur darum, dieselben Straßen zu gehen, dieselben Arbeitsplätze zu haben und ebenso zu lieben wie jeder andere Bürger dieser Nation, ohne Angst vor dem Klopfen des Richters an der Tür.“"
+ },
+ "extra_law_events.18.t": {
+  "en": "Petitions of the Heart",
+  "de": "Petitionen des Herzens"
+ },
+ "extra_law_events.19.a": {
+  "en": "The demographic future of the nation is at stake!",
+  "de": "Die demografische Zukunft der Nation steht auf dem Spiel!"
+ },
+ "extra_law_events.19.b": {
+  "en": "Frame it as supporting families to build consensus.",
+  "de": "Es als Familienförderung darstellen, um Konsens zu schaffen."
+ },
+ "extra_law_events.19.d": {
+  "en": "Our proposed changes to family policy have ignited a passionate debate. Supporters argue that the demographic future of the nation hangs in the balance, while opponents insist that the bedroom is no place for the heavy hand of the state.",
+  "de": "Unsere geplanten Änderungen der Familienpolitik haben eine leidenschaftliche Debatte entfacht. Befürworter argumentieren, dass die demografische Zukunft der Nation auf dem Spiel stehe, während Gegner beharren, dass das Schlafzimmer kein Ort für die schwere Hand des Staates sei."
+ },
+ "extra_law_events.19.f": {
+  "en": "'The birthrate is a national security issue,' the minister said, jabbing his finger at the chart. 'We cannot field an army, staff a factory, or fund a pension without children.'\\n\\n'And you propose to get them how, precisely?' the opposition leader replied. 'By offering tax credits? By banning certain choices? The bedroom is the one room in the house where the state has never been welcome.'\\n\\n'The state is welcome wherever the future of the nation is decided.'\\n\\n'Then God help us all.'",
+  "de": "„Die Geburtenrate ist eine Frage der nationalen Sicherheit“, sagte der Minister und tippte mit dem Finger auf die Grafik. „Wir können weder ein Heer aufstellen noch eine Fabrik besetzen noch eine Rente finanzieren ohne Kinder.“\\n\\n„Und wie genau schlagen Sie vor, sie zu bekommen?“, erwiderte der Oppositionsführer. „Mit Steuervergünstigungen? Mit dem Verbot bestimmter Entscheidungen? Das Schlafzimmer ist der einzige Raum im Haus, in dem der Staat noch nie willkommen war.“\\n\\n„Der Staat ist willkommen, wo immer über die Zukunft der Nation entschieden wird.“\\n\\n„Dann helfe uns Gott.“"
+ },
+ "extra_law_events.19.t": {
+  "en": "The Cradle and the State",
+  "de": "Die Wiege und der Staat"
+ },
+ "extra_law_events.2.a": {
+  "en": "This proves exactly why we need stronger regulation!",
+  "de": "Das beweist genau, warum wir strengere Regulierung brauchen!"
+ },
+ "extra_law_events.2.b": {
+  "en": "Calm the markets first, then proceed carefully.",
+  "de": "Zuerst die Märkte beruhigen, dann vorsichtig fortfahren."
+ },
+ "extra_law_events.2.d": {
+  "en": "A wave of panic has swept through the financial houses as depositors, alarmed by rumors about the coming regulatory changes, have begun withdrawing their savings. Queues stretch around the block at several major institutions.",
+  "de": "Eine Welle der Panik hat die Finanzhäuser erfasst, da Einleger, alarmiert durch Gerüchte über die bevorstehenden regulatorischen Änderungen, begonnen haben, ihre Ersparnisse abzuheben. Vor mehreren großen Instituten bilden sich Schlangen um den ganzen Häuserblock."
+ },
+ "extra_law_events.2.f": {
+  "en": "\\\"I asked the teller for my money and he had the audacity to tell me to come back next week! Next week! By then these new laws will have turned my savings into wallpaper!\\\"",
+  "de": "„Ich verlangte vom Schalterbeamten mein Geld, und er hatte die Frechheit, mir zu sagen, ich solle nächste Woche wiederkommen! Nächste Woche! Bis dahin werden diese neuen Gesetze meine Ersparnisse in Tapete verwandelt haben!“"
+ },
+ "extra_law_events.2.t": {
+  "en": "A Run on the Banks",
+  "de": "Ein Ansturm auf die Banken"
+ },
+ "extra_law_events.20.a": {
+  "en": "The people have a right to know!",
+  "de": "Das Volk hat ein Recht darauf, es zu erfahren!"
+ },
+ "extra_law_events.20.b": {
+  "en": "Manage the revelations carefully to avoid chaos.",
+  "de": "Die Enthüllungen behutsam steuern, um Chaos zu vermeiden."
+ },
+ "extra_law_events.20.c": {
+  "en": "Use the leaks as leverage to silence the opposition.",
+  "de": "Die Lecks als Druckmittel nutzen, um die Opposition zum Schweigen zu bringen."
+ },
+ "extra_law_events.20.d": {
+  "en": "A mid-ranking government clerk has leaked a trove of classified documents to the press, revealing years of hidden malfeasance and waste. The timing could not be better for our push toward [SCOPE.sLaw('current_law_scope').GetName], though the establishment is furious.",
+  "de": "Ein Regierungsbeamter mittleren Rangs hat eine Fülle geheimer Dokumente an die Presse durchsickern lassen, die jahrelanges verborgenes Fehlverhalten und Verschwendung offenlegen. Der Zeitpunkt könnte für unseren Vorstoß in Richtung [SCOPE.sLaw('current_law_scope').GetName] kaum besser sein, auch wenn das Establishment außer sich ist."
+ },
+ "extra_law_events.20.f": {
+  "en": "\\\"I knew what I was risking when I walked into that newspaper office. But I also know what it costs a nation when its government operates in the dark. Sunlight, they say, is the best disinfectant.\\\"",
+  "de": "„Ich wusste, was ich riskierte, als ich diese Zeitungsredaktion betrat. Aber ich weiß auch, was es eine Nation kostet, wenn ihre Regierung im Dunkeln agiert. Sonnenlicht, sagt man, ist das beste Desinfektionsmittel.“"
+ },
+ "extra_law_events.20.t": {
+  "en": "The Whistleblower",
+  "de": "Der Whistleblower"
+ },
+ "extra_law_events.21.a": {
+  "en": "March with them - show the world we are changing!",
+  "de": "Mit ihnen marschieren - der Welt zeigen, dass wir uns wandeln!"
+ },
+ "extra_law_events.21.b": {
+  "en": "Support the cause from the legislature floor.",
+  "de": "Die Sache vom Parlamentsplenum aus unterstützen."
+ },
+ "extra_law_events.21.d": {
+  "en": "Thousands of citizens have taken to the streets in a peaceful march demanding equal rights and protections under [SCOPE.sLaw('current_law_scope').GetName]. The procession stretches through the heart of the capital, drawing international attention.",
+  "de": "Tausende Bürger sind in einem friedlichen Marsch auf die Straße gegangen und fordern gleiche Rechte und den Schutz durch [SCOPE.sLaw('current_law_scope').GetName]. Der Zug erstreckt sich durch das Herz der Hauptstadt und zieht internationale Aufmerksamkeit auf sich."
+ },
+ "extra_law_events.21.f": {
+  "en": "\\\"They marched in silence for the first mile. Then someone began to sing, and by the time they reached the steps of the legislature, ten thousand voices carried the melody. It was, by any measure, the most powerful argument ever made without a single word of debate.\\\"",
+  "de": "„Sie marschierten die erste Meile schweigend. Dann begann jemand zu singen, und als sie die Stufen des Parlaments erreichten, trugen zehntausend Stimmen die Melodie. Es war, nach jedem Maßstab, das kraftvollste Argument, das je ohne ein einziges Debattenwort vorgebracht wurde.“"
+ },
+ "extra_law_events.21.t": {
+  "en": "A March for Dignity",
+  "de": "Ein Marsch für Würde"
+ },
+ "extra_law_events.22.a": {
+  "en": "The machines free us - we must share the bounty!",
+  "de": "Die Maschinen befreien uns - wir müssen den Gewinn teilen!"
+ },
+ "extra_law_events.22.b": {
+  "en": "Phase it in gradually to win over industry.",
+  "de": "Schrittweise einführen, um die Industrie zu gewinnen."
+ },
+ "extra_law_events.22.d": {
+  "en": "The relentless march of automation has left thousands without work, and the [SCOPE.gsInterestGroup('trade_unions_ig').GetName] are demanding radical action. Proponents of [SCOPE.sLaw('current_law_scope').GetName] argue that when machines do the work, the bounty must be shared with all.",
+  "de": "Der unaufhaltsame Vormarsch der Automatisierung hat Tausende arbeitslos gemacht, und die [SCOPE.gsInterestGroup('trade_unions_ig').GetName] fordern radikale Maßnahmen. Befürworter von [SCOPE.sLaw('current_law_scope').GetName] argumentieren, dass der Gewinn mit allen geteilt werden muss, wenn die Maschinen die Arbeit verrichten."
+ },
+ "extra_law_events.22.f": {
+  "en": "\\\"The loom does not eat. The steam-hammer does not sleep. The calculating engine does not demand a pension. And yet the men they replaced must still feed their families. If the machines have taken the work, then the machines must pay the wages.\\\"",
+  "de": "„Der Webstuhl isst nicht. Der Dampfhammer schläft nicht. Die Rechenmaschine verlangt keine Rente. Und doch müssen die Männer, die sie ersetzt haben, weiterhin ihre Familien ernähren. Wenn die Maschinen die Arbeit übernommen haben, dann müssen die Maschinen auch den Lohn zahlen.“"
+ },
+ "extra_law_events.22.t": {
+  "en": "The Automation Question",
+  "de": "Die Frage der Automatisierung"
+ },
+ "extra_law_events.23.a": {
+  "en": "The demonstration speaks for itself - forge ahead!",
+  "de": "Die Vorführung spricht für sich selbst - weiter voran!"
+ },
+ "extra_law_events.23.b": {
+  "en": "Build public understanding before proceeding.",
+  "de": "Erst Verständnis in der Öffentlichkeit schaffen, bevor wir fortfahren."
+ },
+ "extra_law_events.23.d": {
+  "en": "Proponents of algorithmic governance have organized a dramatic public demonstration, allowing a prototype system to allocate a city's budget in real time. The results are impressive - eliminating waste, optimizing services, and doing it all in minutes rather than months.",
+  "de": "Befürworter der algorithmischen Verwaltung haben eine spektakuläre öffentliche Vorführung organisiert, bei der ein Prototyp-System den Haushalt einer Stadt in Echtzeit verteilt. Die Ergebnisse sind beeindruckend - Verschwendung wird beseitigt, Dienstleistungen werden optimiert, und all das in Minuten statt Monaten."
+ },
+ "extra_law_events.23.f": {
+  "en": "\\\"The machine does not accept bribes. It does not favor one district over another because of a cousin's connections. It simply calculates the optimal outcome and executes it. Whether this is liberation or damnation, I confess, I cannot yet tell.\\\"",
+  "de": "„Die Maschine nimmt keine Bestechungsgelder an. Sie bevorzugt keinen Bezirk vor einem anderen wegen der Beziehungen eines Cousins. Sie berechnet einfach das optimale Ergebnis und führt es aus. Ob dies Befreiung oder Verdammnis ist, kann ich, wie ich gestehen muss, noch nicht sagen.“"
+ },
+ "extra_law_events.23.t": {
+  "en": "The Algorithmic Showcase",
+  "de": "Die algorithmische Leistungsschau"
+ },
+ "extra_law_events.24.a": {
+  "en": "Ride the popular wave - push the reform through!",
+  "de": "Die Welle der Popularität nutzen - die Reform durchsetzen!"
+ },
+ "extra_law_events.24.b": {
+  "en": "Bring the opposition into the process.",
+  "de": "Die Opposition in den Prozess einbinden."
+ },
+ "extra_law_events.24.d": {
+  "en": "A mass gathering of citizens has spontaneously organized in the capital's central square, debating policy and passing informal resolutions by show of hands. The [SCOPE.gsInterestGroup('opposing_ig').GetName] view this spectacle with alarm, but supporters of [SCOPE.sLaw('current_law_scope').GetName] see it as proof that the people are ready to govern themselves.",
+  "de": "Auf dem zentralen Platz der Hauptstadt hat sich spontan eine Massenversammlung von Bürgern gebildet, die über Politik debattieren und informelle Beschlüsse per Handzeichen fassen. Die [SCOPE.gsInterestGroup('opposing_ig').GetName] betrachten dieses Schauspiel mit Beunruhigung, doch Anhänger von [SCOPE.sLaw('current_law_scope').GetName] sehen darin den Beweis, dass das Volk bereit ist, sich selbst zu regieren."
+ },
+ "extra_law_events.24.f": {
+  "en": "\\\"For a single afternoon, the square was not a marketplace but a parliament. Fishmongers debated with professors, and the vote of a seamstress carried the same weight as that of a factory owner. It was, depending upon one's disposition, either the dawn of a new age or the beginning of the end.\\\"",
+  "de": "„Für einen einzigen Nachmittag war der Platz kein Marktplatz, sondern ein Parlament. Fischhändler debattierten mit Professoren, und die Stimme einer Näherin wog ebenso schwer wie die eines Fabrikbesitzers. Es war, je nach Gemüt des Betrachters, entweder die Morgendämmerung eines neuen Zeitalters oder der Anfang vom Ende.“"
+ },
+ "extra_law_events.24.t": {
+  "en": "The People's Assembly",
+  "de": "Die Volksversammlung"
+ },
+ "extra_law_events.25.a": {
+  "en": "Revive a classical or ancestral tongue.",
+  "de": "Eine klassische oder angestammte Sprache wiederbeleben."
+ },
+ "extra_law_events.25.a_arabic": {
+  "en": "Revive Classical Arabic, the language of the Quran.",
+  "de": "Das klassische Arabisch wiederbeleben, die Sprache des Korans."
+ },
+ "extra_law_events.25.a_aramaic": {
+  "en": "Revive Aramaic, the lingua franca of antiquity.",
+  "de": "Das Aramäische wiederbeleben, die Verkehrssprache der Antike."
+ },
+ "extra_law_events.25.a_avestan": {
+  "en": "Revive Avestan, the tongue of Zoroaster.",
+  "de": "Das Avestische wiederbeleben, die Sprache Zarathustras."
+ },
+ "extra_law_events.25.a_chinese": {
+  "en": "Revive Literary Chinese, the classical script.",
+  "de": "Das literarische Chinesisch wiederbeleben, die klassische Schriftsprache."
+ },
+ "extra_law_events.25.a_coptic": {
+  "en": "Revive Coptic, the language of the ancient church.",
+  "de": "Das Koptische wiederbeleben, die Sprache der alten Kirche."
+ },
+ "extra_law_events.25.a_geez": {
+  "en": "Revive Ge'ez, the tongue of our ancient faith.",
+  "de": "Das Ge'ez wiederbeleben, die Sprache unseres alten Glaubens."
+ },
+ "extra_law_events.25.a_gothic": {
+  "en": "Revive Gothic, the earliest written Germanic tongue.",
+  "de": "Das Gotische wiederbeleben, die früheste schriftlich überlieferte germanische Sprache."
+ },
+ "extra_law_events.25.a_greek": {
+  "en": "Revive Classical Greek, the language of philosophy.",
+  "de": "Das klassische Griechisch wiederbeleben, die Sprache der Philosophie."
+ },
+ "extra_law_events.25.a_hebrew": {
+  "en": "Revive Hebrew, the language of scripture.",
+  "de": "Das Hebräische wiederbeleben, die Sprache der Heiligen Schrift."
+ },
+ "extra_law_events.25.a_irish": {
+  "en": "Revive Classical Irish, the tongue of saints and scholars.",
+  "de": "Das klassische Irisch wiederbeleben, die Sprache der Heiligen und Gelehrten."
+ },
+ "extra_law_events.25.a_latin": {
+  "en": "Revive Latin, the tongue of law and learning.",
+  "de": "Das Latein wiederbeleben, die Sprache des Rechts und der Gelehrsamkeit."
+ },
+ "extra_law_events.25.a_mayan": {
+  "en": "Revive Classic Mayan, the language of the glyphs.",
+  "de": "Das klassische Maya wiederbeleben, die Sprache der Glyphen."
+ },
+ "extra_law_events.25.a_nahuatl": {
+  "en": "Revive Classical Nahuatl, the language of the empire.",
+  "de": "Das klassische Nahuatl wiederbeleben, die Sprache des Reiches."
+ },
+ "extra_law_events.25.a_norse": {
+  "en": "Revive Old Norse, the tongue of the sagas.",
+  "de": "Das Altnordische wiederbeleben, die Sprache der Sagen."
+ },
+ "extra_law_events.25.a_pali": {
+  "en": "Revive Pali, the language of the Dharma.",
+  "de": "Das Pali wiederbeleben, die Sprache des Dharma."
+ },
+ "extra_law_events.25.a_prussian": {
+  "en": "Revive Old Prussian, the lost Baltic tongue.",
+  "de": "Das Altpreußische wiederbeleben, die verlorene baltische Sprache."
+ },
+ "extra_law_events.25.a_sanskrit": {
+  "en": "Revive Sanskrit, the perfected language.",
+  "de": "Das Sanskrit wiederbeleben, die vollendete Sprache."
+ },
+ "extra_law_events.25.a_slavonic": {
+  "en": "Revive Old Church Slavonic, the sacred script.",
+  "de": "Das Altkirchenslawische wiederbeleben, die heilige Schriftsprache."
+ },
+ "extra_law_events.25.b": {
+  "en": "Construct an entirely new language.",
+  "de": "Eine völlig neue Sprache konstruieren."
+ },
+ "extra_law_events.25.c": {
+  "en": "Simplify and standardize the existing language.",
+  "de": "Die bestehende Sprache vereinfachen und vereinheitlichen."
+ },
+ "extra_law_events.25.d_arabic": {
+  "en": "With the state-led language reform now underway, the government must choose its fundamental character. Scholars of Classical Arabic argue that the language of the Quran, of al-Khwarizmi and Ibn Khaldun, already possesses the grammar, vocabulary, and [concept_prestige] to serve as a modern standard. Others propose a constructed language designed for simplicity and universal access. Pragmatists favour the least disruptive path: simplify the existing language, standardize its script, and unite its dialects.",
+  "de": "Nun, da die staatlich gelenkte Sprachreform im Gange ist, muss die Regierung deren grundlegenden Charakter festlegen. Gelehrte des klassischen Arabisch argumentieren, dass die Sprache des Korans, al-Chwarizmis und Ibn Chalduns bereits über die Grammatik, den Wortschatz und das [concept_prestige] verfüge, um als moderner Standard zu dienen. Andere schlagen eine Plansprache vor, die auf Einfachheit und allgemeine Zugänglichkeit ausgelegt ist. Pragmatiker bevorzugen den am wenigsten störenden Weg: die bestehende Sprache vereinfachen, ihre Schrift vereinheitlichen und ihre Dialekte zusammenführen."
+ },
+ "extra_law_events.25.d_aramaic": {
+  "en": "With the state-led language reform now underway, the government must choose its fundamental character. Scholars of the ancient Near East champion Aramaic - once the lingua franca of empires from Assyria to Persia, the language of the Talmud and of Christ himself. Its modern descendants survive in scattered communities, but a state-backed revival could restore it to [concept_prominence]. Others propose a constructed language. Pragmatists favour standardizing the existing language.",
+  "de": "Nun, da die staatlich gelenkte Sprachreform im Gange ist, muss die Regierung deren grundlegenden Charakter festlegen. Gelehrte des alten Nahen Ostens setzen sich für das Aramäische ein - einst die Verkehrssprache von Reichen von Assyrien bis Persien, die Sprache des Talmuds und Christi selbst. Seine modernen Nachfahren überleben in verstreuten Gemeinschaften, doch eine staatlich geförderte Wiederbelebung könnte ihm neue [concept_prominence] verleihen. Andere schlagen eine Plansprache vor. Pragmatiker bevorzugen die Vereinheitlichung der bestehenden Sprache."
+ },
+ "extra_law_events.25.d_baltic": {
+  "en": "With the state-led language reform now underway, the government must choose its fundamental character. Philologists propose reviving Old Prussian - the extinct Baltic tongue known from catechisms and vocabularies, prized by linguists for its extraordinary archaism. Its revival would be an act of cultural resurrection without precedent. Others propose a constructed language. The cautious middle counsels standardization of the existing language.",
+  "de": "Nun, da die staatlich gelenkte Sprachreform im Gange ist, muss die Regierung deren grundlegenden Charakter festlegen. Philologen schlagen vor, das Altpreußische wiederzubeleben - die ausgestorbene baltische Sprache, die aus Katechismen und Wörterlisten bekannt ist und von Sprachwissenschaftlern für ihre außergewöhnliche Altertümlichkeit geschätzt wird. Ihre Wiederbelebung wäre ein Akt kultureller Auferstehung ohnegleichen. Andere schlagen eine Plansprache vor. Die vorsichtige Mitte rät zur Vereinheitlichung der bestehenden Sprache."
+ },
+ "extra_law_events.25.d_celtic": {
+  "en": "With the state-led language reform now underway, the government must choose its fundamental character. Gaelic scholars champion Classical Irish - the language of the monasteries, the Brehon laws, and an unbroken literary tradition stretching back to the earliest texts in any European vernacular. Others propose a constructed language, modern and accessible. Administrators counsel pragmatism: simplify and standardize the existing language, unite its dialects, and make it teachable.",
+  "de": "Nun, da die staatlich gelenkte Sprachreform im Gange ist, muss die Regierung deren grundlegenden Charakter festlegen. Gälische Gelehrte setzen sich für das klassische Irisch ein - die Sprache der Klöster, der Brehon-Gesetze und einer ungebrochenen literarischen Tradition, die bis zu den frühesten Texten in irgendeiner europäischen Volkssprache zurückreicht. Andere schlagen eine Plansprache vor, modern und zugänglich. Verwaltungsbeamte raten zu Pragmatismus: die bestehende Sprache vereinfachen und vereinheitlichen, ihre Dialekte zusammenführen und sie lehrbar machen."
+ },
+ "extra_law_events.25.d_coptic": {
+  "en": "With the state-led language reform now underway, the government must choose its fundamental character. The clergy advocate the revival of Coptic - the last descendant of the language of the pharaohs, preserved through centuries of liturgy in the ancient church. Modernists propose a constructed language, purpose-built for the demands of the age. Officials urge the most practical course: simplify the existing language and standardize its written forms.",
+  "de": "Nun, da die staatlich gelenkte Sprachreform im Gange ist, muss die Regierung deren grundlegenden Charakter festlegen. Der Klerus befürwortet die Wiederbelebung des Koptischen - dem letzten Nachfahren der Sprache der Pharaonen, bewahrt durch Jahrhunderte der Liturgie in der alten Kirche. Modernisten schlagen eine Plansprache vor, eigens für die Anforderungen der Zeit geschaffen. Beamte drängen auf den praktischsten Weg: die bestehende Sprache vereinfachen und ihre Schriftformen vereinheitlichen."
+ },
+ "extra_law_events.25.d_default": {
+  "en": "With the state-led language reform now underway, the government must choose its fundamental character. Should we reach back into history and revive a classical or ancestral tongue as the basis for a modern standard? Or forge something entirely new - a constructed language designed from first [Concept('concept_power_bloc_principle', 'principles')] for logic, clarity, and ease of learning? The most cautious voices urge a simpler path: take the language as it is, prune its irregularities, standardize its spelling, and unify its dialects.",
+  "de": "Nun, da die staatlich gelenkte Sprachreform im Gange ist, muss die Regierung deren grundlegenden Charakter festlegen. Sollen wir in die Geschichte zurückgreifen und eine klassische oder angestammte Sprache als Grundlage für einen modernen Standard wiederbeleben? Oder etwas völlig Neues schmieden - eine Plansprache, von Grund auf nach [Concept('concept_power_bloc_principle', 'Prinzipien')] der Logik, Klarheit und Lernleichtigkeit entworfen? Die vorsichtigsten Stimmen raten zu einem einfacheren Weg: die Sprache nehmen, wie sie ist, ihre Unregelmäßigkeiten beschneiden, ihre Rechtschreibung vereinheitlichen und ihre Dialekte zusammenführen."
+ },
+ "extra_law_events.25.d_east_asian": {
+  "en": "With the state-led language reform now underway, the government must choose its fundamental character. Traditionalist scholars advocate a return to the classical written language - the literary tongue of centuries of philosophy, law, and poetry - as the foundation for a modernized standard. Reformers propose something more radical: an entirely new constructed writing system, phonetic and accessible to all classes. A third camp argues for simplification of the existing script - reducing stroke counts, standardizing variant forms, and making [concept_literacy] attainable for the common people.",
+  "de": "Nun, da die staatlich gelenkte Sprachreform im Gange ist, muss die Regierung deren grundlegenden Charakter festlegen. Traditionalistische Gelehrte befürworten eine Rückkehr zur klassischen Schriftsprache - der literarischen Sprache jahrhundertelanger Philosophie, Rechtsprechung und Dichtung - als Grundlage für einen modernisierten Standard. Reformer schlagen etwas Radikaleres vor: ein völlig neues, konstruiertes Schriftsystem, phonetisch und für alle Schichten zugänglich. Ein drittes Lager plädiert für die Vereinfachung der bestehenden Schrift - weniger Strichzahlen, vereinheitlichte Variantenformen und [concept_literacy] für das einfache Volk erreichbar machen."
+ },
+ "extra_law_events.25.d_geez": {
+  "en": "With the state-led language reform now underway, the government must choose its fundamental character. Monastic scholars urge the revival of Ge'ez - the ancient liturgical tongue preserved in centuries of manuscript tradition - as the foundation for a modern literary standard. Others advocate a constructed language, rational and accessible. Administrators suggest the most practical course: simplify and standardize the existing language, reconciling regional variations.",
+  "de": "Nun, da die staatlich gelenkte Sprachreform im Gange ist, muss die Regierung deren grundlegenden Charakter festlegen. Klostergelehrte drängen auf die Wiederbelebung des Ge'ez - der alten liturgischen Sprache, bewahrt in Jahrhunderten handschriftlicher Überlieferung - als Grundlage für einen modernen literarischen Standard. Andere befürworten eine Plansprache, rational und zugänglich. Verwaltungsbeamte schlagen den praktischsten Weg vor: die bestehende Sprache vereinfachen und vereinheitlichen und regionale Unterschiede ausgleichen."
+ },
+ "extra_law_events.25.d_germanic": {
+  "en": "With the state-led language reform now underway, the government must choose its fundamental character. Antiquarian scholars advocate the revival of Gothic - the earliest attested Germanic language, known through Wulfila's fourth-century Bible translation. Its archaic structure, they argue, represents the purest foundation upon which to build a modern standard. Others propose a constructed language. Administrators prefer the simplest course: standardize the existing language.",
+  "de": "Nun, da die staatlich gelenkte Sprachreform im Gange ist, muss die Regierung deren grundlegenden Charakter festlegen. Altertumsgelehrte befürworten die Wiederbelebung des Gotischen - der frühesten bezeugten germanischen Sprache, bekannt durch Wulfilas Bibelübersetzung aus dem vierten Jahrhundert. Ihre archaische Struktur stelle, so ihr Argument, die reinste Grundlage dar, auf der sich ein moderner Standard errichten lasse. Andere schlagen eine Plansprache vor. Verwaltungsbeamte bevorzugen den einfachsten Weg: die bestehende Sprache vereinheitlichen."
+ },
+ "extra_law_events.25.d_hellenic": {
+  "en": "With the state-led language reform now underway, the government must choose its fundamental character. Classicists argue passionately for a return to the Attic standard - the tongue of Plato, Thucydides, and the New Testament - purged of centuries of foreign accretion. Modernists counter with the vision of an entirely new constructed grammar, accessible to all citizens. Pragmatists urge restraint: simplify and standardize the existing language, bridging the gulf between the written and spoken forms.",
+  "de": "Nun, da die staatlich gelenkte Sprachreform im Gange ist, muss die Regierung deren grundlegenden Charakter festlegen. Altphilologen plädieren leidenschaftlich für eine Rückkehr zum attischen Standard - der Sprache Platons, Thukydides' und des Neuen Testaments -, bereinigt von Jahrhunderten fremder Anhäufungen. Modernisten entgegnen mit der Vision einer völlig neuen, konstruierten Grammatik, zugänglich für alle Bürger. Pragmatiker mahnen zur Zurückhaltung: die bestehende Sprache vereinfachen und vereinheitlichen und die Kluft zwischen Schrift- und Umgangssprache überbrücken."
+ },
+ "extra_law_events.25.d_indic": {
+  "en": "With the state-led language reform now underway, the government must choose its fundamental character. Sanskrit scholars argue for a revival of the sacred classical language - a tongue of unmatched grammatical precision that could unify the educated classes across regional divides. Linguists from the universities propose a novel approach: a constructed language combining the best features of our linguistic heritage into a modern, regular grammar. Administrators favour the practical option: standardize and simplify the existing language, reconciling regional dialects and streamlining its script.",
+  "de": "Nun, da die staatlich gelenkte Sprachreform im Gange ist, muss die Regierung deren grundlegenden Charakter festlegen. Sanskrit-Gelehrte plädieren für eine Wiederbelebung der heiligen klassischen Sprache - einer Sprache von unerreichter grammatischer Präzision, die die gebildeten Schichten über regionale Gräben hinweg vereinen könnte. Linguisten von den Universitäten schlagen einen neuartigen Ansatz vor: eine Plansprache, die die besten Merkmale unseres sprachlichen Erbes zu einer modernen, regelmäßigen Grammatik vereint. Verwaltungsbeamte bevorzugen die praktische Option: die bestehende Sprache vereinheitlichen und vereinfachen, regionale Dialekte ausgleichen und ihre Schrift straffen."
+ },
+ "extra_law_events.25.d_iranic": {
+  "en": "With the state-led language reform now underway, the government must choose its fundamental character. Learned antiquarians advocate a return to Avestan, the sacred tongue of the Gathas and the Zoroastrian priesthood, as the purest expression of our linguistic heritage. Reformers prefer to build something new: a rationally designed language for the modern age. The cautious middle counsels simplification - standardize the existing language, prune its foreign borrowings, and settle the question of script.",
+  "de": "Nun, da die staatlich gelenkte Sprachreform im Gange ist, muss die Regierung deren grundlegenden Charakter festlegen. Gelehrte Altertumsforscher befürworten eine Rückkehr zum Avestischen, der heiligen Sprache der Gathas und der zoroastrischen Priesterschaft, als reinsten Ausdruck unseres sprachlichen Erbes. Reformer bevorzugen es, etwas Neues zu schaffen: eine rational entworfene Sprache für das moderne Zeitalter. Die vorsichtige Mitte rät zur Vereinfachung - die bestehende Sprache vereinheitlichen, ihre fremden Lehnwörter beschneiden und die Frage der Schrift klären."
+ },
+ "extra_law_events.25.d_mayan": {
+  "en": "With the state-led language reform now underway, the government must choose its fundamental character. Scholars and daykeepers advocate the revival of Classic Mayan - the courtly language of Tikal, Palenque, and Copán, preserved in an intricate hieroglyphic script that encoded one of the ancient world's great literary traditions. Others propose a constructed language. Pragmatists urge standardization of the existing tongues.",
+  "de": "Nun, da die staatlich gelenkte Sprachreform im Gange ist, muss die Regierung deren grundlegenden Charakter festlegen. Gelehrte und Tageshüter befürworten die Wiederbelebung des klassischen Maya - der höfischen Sprache von Tikal, Palenque und Copán, bewahrt in einer kunstvollen Hieroglyphenschrift, die eine der großen literarischen Traditionen der antiken Welt festhielt. Andere schlagen eine Plansprache vor. Pragmatiker drängen auf die Vereinheitlichung der bestehenden Sprachen."
+ },
+ "extra_law_events.25.d_multi": {
+  "en": "With the state-led language reform now underway, the government must choose its fundamental character. The nation's linguistic diversity has produced a rare abundance of candidates: scholars from each cultural tradition champion their own ancestral tongue, each with centuries of literature, law, and sacred texts to recommend it. The debate is fiercer for the competition - choosing any single classical language risks alienating others. Some propose sidestepping the quarrel entirely with a constructed language, rational and neutral. Pragmatists urge the simplest path: standardize the existing common tongue and let the classical languages rest in the academy.",
+  "de": "Nun, da die staatlich gelenkte Sprachreform im Gange ist, muss die Regierung deren grundlegenden Charakter festlegen. Die sprachliche Vielfalt der Nation hat eine seltene Fülle von Kandidaten hervorgebracht: Gelehrte jeder kulturellen Tradition setzen sich für ihre eigene angestammte Sprache ein, jede mit Jahrhunderten an Literatur, Recht und heiligen Texten, die für sie sprechen. Die Debatte ist durch den Wettstreit umso erbitterter - die Wahl irgendeiner einzelnen klassischen Sprache birgt das Risiko, andere zu entfremden. Manche schlagen vor, den Streit ganz zu umgehen und eine Plansprache zu schaffen, rational und neutral. Pragmatiker drängen auf den einfachsten Weg: die bestehende Verkehrssprache vereinheitlichen und die klassischen Sprachen in der Akademie ruhen lassen."
+ },
+ "extra_law_events.25.d_nahuatl": {
+  "en": "With the state-led language reform now underway, the government must choose its fundamental character. Indigenous scholars argue for Classical Nahuatl - the courtly language of the Aztec Triple Alliance, whose poetry and legal codes rival any in sophistication. Others propose a constructed language, rational and new. Pragmatists counsel standardization of the existing tongues, bridging the gulf between regional varieties.",
+  "de": "Nun, da die staatlich gelenkte Sprachreform im Gange ist, muss die Regierung deren grundlegenden Charakter festlegen. Indigene Gelehrte plädieren für das klassische Nahuatl - die höfische Sprache des aztekischen Dreibunds, dessen Dichtung und Gesetzeswerke es an Kultiviertheit mit jeder anderen aufnehmen können. Andere schlagen eine Plansprache vor, rational und neu. Pragmatiker raten zur Vereinheitlichung der bestehenden Sprachen und zur Überbrückung der Kluft zwischen den regionalen Varietäten."
+ },
+ "extra_law_events.25.d_norse": {
+  "en": "With the state-led language reform now underway, the government must choose its fundamental character. Philologists and romantics champion Old Norse - the language of the Eddas, the sagas, and the Althing, the voice of a shared Scandinavian heritage. Linguists propose a constructed language, modern and regular. Administrators favour the familiar path: simplify the existing language, reconcile its written and spoken forms, and unify regional spelling.",
+  "de": "Nun, da die staatlich gelenkte Sprachreform im Gange ist, muss die Regierung deren grundlegenden Charakter festlegen. Philologen und Romantiker setzen sich für das Altnordische ein - die Sprache der Edden, der Sagen und des Allthings, die Stimme eines gemeinsamen skandinavischen Erbes. Linguisten schlagen eine Plansprache vor, modern und regelmäßig. Verwaltungsbeamte bevorzugen den vertrauten Weg: die bestehende Sprache vereinfachen, ihre Schrift- und Umgangsform in Einklang bringen und die regionale Rechtschreibung vereinheitlichen."
+ },
+ "extra_law_events.25.d_romance": {
+  "en": "With the state-led language reform now underway, the government must choose its fundamental character. Classicists in the academy propose a return to the roots - reviving Latin, the mother of our tongue, as a common language of learning, diplomacy, and administration. Modernists counter with a bolder vision: a constructed language, designed from scratch for logical grammar and universal accessibility. Pragmatists urge the simplest path: standardize the existing language, unify spellings, and simplify its most bewildering irregularities.",
+  "de": "Nun, da die staatlich gelenkte Sprachreform im Gange ist, muss die Regierung deren grundlegenden Charakter festlegen. Altphilologen an der Akademie schlagen eine Rückkehr zu den Wurzeln vor - die Wiederbelebung des Lateinischen, der Mutter unserer Sprache, als gemeinsame Sprache der Gelehrsamkeit, Diplomatie und Verwaltung. Modernisten entgegnen mit einer kühneren Vision: einer Plansprache, von Grund auf für logische Grammatik und allgemeine Zugänglichkeit entworfen. Pragmatiker drängen auf den einfachsten Weg: die bestehende Sprache vereinheitlichen, die Rechtschreibung vereinigen und ihre verwirrendsten Unregelmäßigkeiten vereinfachen."
+ },
+ "extra_law_events.25.d_semitic": {
+  "en": "With the state-led language reform now underway, the government must choose its fundamental character. Some scholars champion the revival of a classical tongue - Hebrew, the language of scripture and scholarship, reborn as a modern vehicle for law, commerce, and science. Others propose an entirely new constructed language, designed from first [Concept('concept_power_bloc_principle', 'principles')] for clarity and ease of learning. A third faction urges pragmatism: simplify and standardize the existing language, purging archaic irregularities and unifying regional dialects.",
+  "de": "Nun, da die staatlich gelenkte Sprachreform im Gange ist, muss die Regierung deren grundlegenden Charakter festlegen. Manche Gelehrte setzen sich für die Wiederbelebung einer klassischen Sprache ein - Hebräisch, die Sprache der Heiligen Schrift und der Gelehrsamkeit, wiedergeboren als modernes Mittel für Recht, Handel und Wissenschaft. Andere schlagen eine völlig neue Plansprache vor, von Grund auf nach [Concept('concept_power_bloc_principle', 'Prinzipien')] der Klarheit und Lernleichtigkeit entworfen. Eine dritte Fraktion drängt auf Pragmatismus: die bestehende Sprache vereinfachen und vereinheitlichen, archaische Unregelmäßigkeiten beseitigen und regionale Dialekte zusammenführen."
+ },
+ "extra_law_events.25.d_slavic": {
+  "en": "With the state-led language reform now underway, the government must choose its fundamental character. Ecclesiastical scholars champion Old Church Slavonic - the sacred literary language that has united Slavic peoples across centuries of liturgy and learning. Linguists propose a more radical path: an entirely new constructed language, free from the weight of tradition. Practical-minded officials urge the simplest reform: standardize the existing language, smooth its irregularities, and bring its spelling into line with modern usage.",
+  "de": "Nun, da die staatlich gelenkte Sprachreform im Gange ist, muss die Regierung deren grundlegenden Charakter festlegen. Kirchliche Gelehrte setzen sich für das Altkirchenslawische ein - die heilige literarische Sprache, die slawische Völker über Jahrhunderte der Liturgie und Gelehrsamkeit hinweg vereint hat. Linguisten schlagen einen radikaleren Weg vor: eine völlig neue Plansprache, frei von der Last der Tradition. Praktisch veranlagte Beamte drängen auf die einfachste Reform: die bestehende Sprache vereinheitlichen, ihre Unregelmäßigkeiten glätten und ihre Rechtschreibung mit dem modernen Sprachgebrauch in Einklang bringen."
+ },
+ "extra_law_events.25.f": {
+  "en": "The three professors sat before the committee like defendants awaiting sentencing. The classicist spoke first: 'Revive the old tongue. It has the weight of centuries behind it.'\\n\\n'Centuries of irrelevance,' the linguist countered. 'Build something new. Something logical. Something a child can learn in a year.'\\n\\nThe pragmatist, who had been cleaning his spectacles, looked up. 'Or we could simply fix what we already have. Fewer revolutions, fewer dictionaries to reprint.'\\n\\nThe committee chair sighed. 'Gentlemen, you were supposed to agree.'",
+  "de": "Die drei Professoren saßen vor dem Ausschuss wie Angeklagte, die auf ihr Urteil warten. Der Altphilologe sprach zuerst: ‚Belebt die alte Sprache wieder. Sie hat das Gewicht der Jahrhunderte hinter sich.‘\\n\\n‚Jahrhunderte der Bedeutungslosigkeit‘, entgegnete der Linguist. ‚Baut etwas Neues. Etwas Logisches. Etwas, das ein Kind in einem Jahr lernen kann.‘\\n\\nDer Pragmatiker, der gerade seine Brille geputzt hatte, blickte auf. ‚Oder wir richten einfach, was wir bereits haben. Weniger Umwälzungen, weniger Wörterbücher, die neu gedruckt werden müssen.‘\\n\\nDer Ausschussvorsitzende seufzte. ‚Meine Herren, Sie sollten sich doch einig werden.‘"
+ },
+ "extra_law_events.25.t": {
+  "en": "The Nature of the Reform",
+  "de": "Das Wesen der Reform"
+ },
+ "extra_law_events.26.a": {
+  "en": "Establish a powerful academy with regulatory authority.",
+  "de": "Eine mächtige Akademie mit Regelungsbefugnis einrichten."
+ },
+ "extra_law_events.26.b": {
+  "en": "A consultative panel of scholars will suffice.",
+  "de": "Ein beratendes Gremium aus Gelehrten wird genügen."
+ },
+ "extra_law_events.26.d": {
+  "en": "The language reform has advanced far enough that the question of institutional authority can no longer be deferred. Who shall govern the evolving standard - settling disputes over grammar, coining new technical terms, and policing loan-word policy? Proponents of a powerful regulatory academy argue that only binding rulings can ensure nationwide consistency. Others prefer a lighter consultative panel of scholars whose recommendations carry moral weight but no force of law.",
+  "de": "Die Sprachreform ist weit genug fortgeschritten, dass die Frage der institutionellen Autorität nicht länger aufgeschoben werden kann. Wer soll über den sich entwickelnden Standard wachen - Streitigkeiten über Grammatik schlichten, neue Fachbegriffe prägen und die Politik der Lehnwörter überwachen? Befürworter einer mächtigen Regelungsakademie argumentieren, dass nur verbindliche Entscheidungen landesweite Einheitlichkeit sicherstellen können. Andere bevorzugen ein leichteres beratendes Gremium aus Gelehrten, dessen Empfehlungen moralisches Gewicht, aber keine Gesetzeskraft haben."
+ },
+ "extra_law_events.26.f": {
+  "en": "\\\"Give me twelve grammarians with the power of decree and I shall give you a language fit for science, commerce, and diplomacy within a generation. Give me twelve grammarians without it, and I shall give you twelve conflicting style guides.\\\"",
+  "de": "„Gebt mir zwölf Grammatiker mit Erlassbefugnis, und ich gebe euch binnen einer Generation eine Sprache, die Wissenschaft, Handel und Diplomatie gewachsen ist. Gebt mir zwölf Grammatiker ohne diese Befugnis, und ich gebe euch zwölf widersprüchliche Stilrichtlinien.“"
+ },
+ "extra_law_events.26.t": {
+  "en": "The Language Academy",
+  "de": "Die Sprachakademie"
+ },
+ "extra_law_events.27.a": {
+  "en": "Include minority language revival programmes.",
+  "de": "Wiederbelebungsprogramme für Minderheitensprachen einbeziehen."
+ },
+ "extra_law_events.27.b": {
+  "en": "The national language must come first.",
+  "de": "Die Nationalsprache muss Vorrang haben."
+ },
+ "extra_law_events.27.d": {
+  "en": "As the state-led language reform reshapes the linguistic landscape, delegations from minority communities have arrived in the capital with a plea: do not let the national language project become a weapon against their mother tongues. They ask for funding for regional-language schools, bilingual signage, and official recognition of minority literary traditions. Nationalists counter that the entire purpose of the reform is unity - and that dividing resources among dozens of regional tongues will only slow progress.",
+  "de": "Während die staatlich gelenkte Sprachreform die sprachliche Landschaft neu gestaltet, sind Delegationen von Minderheitengemeinschaften mit einer Bitte in der Hauptstadt eingetroffen: Lasst das Nationalsprachenprojekt nicht zu einer Waffe gegen ihre Muttersprachen werden. Sie fordern Finanzierung für Schulen in Regionalsprachen, zweisprachige Beschilderung und die offizielle Anerkennung literarischer Traditionen von Minderheiten. Nationalisten entgegnen, der eigentliche Zweck der Reform sei die Einheit - und die Aufteilung der Mittel auf Dutzende Regionalsprachen werde den Fortschritt nur verlangsamen."
+ },
+ "extra_law_events.27.f": {
+  "en": "\\\"We do not ask you to stop building bridges - only to remember that some of us live on both sides of the river. Our children can learn the national tongue without being forced to forget the lullabies their grandmothers sang.\\\"",
+  "de": "„Wir bitten Sie nicht, aufzuhören, Brücken zu bauen - nur daran zu denken, dass manche von uns auf beiden Seiten des Flusses leben. Unsere Kinder können die Nationalsprache lernen, ohne gezwungen zu sein, die Wiegenlieder ihrer Großmütter zu vergessen.“"
+ },
+ "extra_law_events.27.t": {
+  "en": "Voices From the Margin",
+  "de": "Stimmen vom Rand"
+ },
+ "extra_law_events.28.a": {
+  "en": "Guarantee minority script preservation.",
+  "de": "Die Erhaltung der Minderheitenschrift garantieren."
+ },
+ "extra_law_events.28.b": {
+  "en": "Enshrine official bilingualism.",
+  "de": "Amtliche Zweisprachigkeit festschreiben."
+ },
+ "extra_law_events.28.c": {
+  "en": "Pass the law as written - no [Concept('concept_amendment', 'amendments')].",
+  "de": "Das Gesetz wie verfasst verabschieden - keine [Concept('concept_amendment', 'Nachträge')]."
+ },
+ "extra_law_events.28.d": {
+  "en": "The [SCOPE.sLaw('current_law_scope').GetName] bill has stalled in committee as rival factions propose amendments to shape the final law. Minority-language advocates want protections written into the text, while others push for official recognition of a second language. Each [concept_amendment] would help secure enough votes to pass the bill - but each comes with political baggage.",
+  "de": "Der Gesetzentwurf [SCOPE.sLaw('current_law_scope').GetName] ist im Ausschuss ins Stocken geraten, da rivalisierende Fraktionen Änderungen vorschlagen, um das endgültige Gesetz zu formen. Fürsprecher der Minderheitensprachen wollen Schutzbestimmungen in den Text aufnehmen, während andere auf die offizielle Anerkennung einer zweiten Sprache drängen. Jeder [concept_amendment] würde helfen, genügend Stimmen für die Verabschiedung des Gesetzes zu sichern - doch jeder bringt auch politischen Ballast mit sich."
+ },
+ "extra_law_events.28.f": {
+  "en": "'I have the votes to kill this bill,' the minority delegate said, 'and the inclination to use them. Unless you give us something.'\\n\\n'What do you want?'\\n\\n'Script preservation. Our alphabet in our schools. Official recognition that our language exists.'\\n\\nThe drafter rubbed his temples. 'That wasn't in the original bill.'\\n\\n'Neither was my vote. Shall we negotiate, or shall we both go home empty-handed?'",
+  "de": "‚Ich habe die Stimmen, um dieses Gesetz zu Fall zu bringen‘, sagte der Delegierte der Minderheit, ‚und die Absicht, sie zu nutzen. Es sei denn, Sie geben uns etwas.‘\\n\\n‚Was wollen Sie?‘\\n\\n‚Erhaltung unserer Schrift. Unser Alphabet in unseren Schulen. Die offizielle Anerkennung, dass unsere Sprache existiert.‘\\n\\nDer Verfasser rieb sich die Schläfen. ‚Das stand nicht im ursprünglichen Entwurf.‘\\n\\n‚Meine Stimme auch nicht. Sollen wir verhandeln, oder sollen wir beide mit leeren Händen nach Hause gehen?‘"
+ },
+ "extra_law_events.28.t": {
+  "en": "The Language Compromise",
+  "de": "Der Sprachkompromiss"
+ },
+ "extra_law_events.29.a": {
+  "en": "Exempt our national champion from breakup.",
+  "de": "Unseren nationalen Vorzeigekonzern von der Zerschlagung ausnehmen."
+ },
+ "extra_law_events.29.b": {
+  "en": "Give cooperatives preferential treatment.",
+  "de": "Genossenschaften bevorzugt behandeln."
+ },
+ "extra_law_events.29.c": {
+  "en": "The law needs no carve-outs.",
+  "de": "Das Gesetz braucht keine Ausnahmeregelungen."
+ },
+ "extra_law_events.29.d": {
+  "en": "As the [SCOPE.sLaw('current_law_scope').GetName] legislation works its way through the halls of power, two competing visions have emerged. The [SCOPE.gsInterestGroup('industrialists_ig').GetName] propose exempting the nation's largest enterprise from breakup - a 'national champion' clause that would preserve our ability to compete on the world stage. Meanwhile, the [SCOPE.gsInterestGroup('unions_ig').GetName] counter with a cooperative preference [concept_amendment], arguing that worker-owned enterprises should receive favorable treatment under the new rules.",
+  "de": "Während sich das Gesetz [SCOPE.sLaw('current_law_scope').GetName] seinen Weg durch die Machtzentren bahnt, haben sich zwei konkurrierende Visionen herausgebildet. Die [SCOPE.gsInterestGroup('industrialists_ig').GetName] schlagen vor, das größte Unternehmen der Nation von der Zerschlagung auszunehmen - eine Klausel für einen „nationalen Vorzeigekonzern“, die unsere Fähigkeit erhalten würde, auf der Weltbühne zu konkurrieren. Die [SCOPE.gsInterestGroup('unions_ig').GetName] hingegen entgegnen mit einem [concept_amendment] zur Bevorzugung von Genossenschaften und argumentieren, dass Unternehmen in Arbeiterhand unter den neuen Regeln vorteilhaft behandelt werden sollten."
+ },
+ "extra_law_events.29.e": {
+  "en": "Grant a ten-year transition period instead.",
+  "de": "Stattdessen eine zehnjährige Übergangsfrist gewähren."
+ },
+ "extra_law_events.29.f": {
+  "en": "'You want to break up our largest company,' the industrialist said. 'The one that employs more people than any other. The one that keeps us competitive abroad.'\\n\\n'We want to break up a monopoly that fixes prices and crushes competitors.'\\n\\n'Same thing, from different angles.' He leaned back. 'I'll offer you this: exempt the national champion, and I'll deliver the votes you need for everything else.'\\n\\nThe reformer stared at the ceiling. It was, she reflected, a very ugly ceiling. 'Let me think about it.'",
+  "de": "‚Sie wollen unser größtes Unternehmen zerschlagen‘, sagte der Industrielle. ‚Dasjenige, das mehr Menschen beschäftigt als jedes andere. Dasjenige, das uns im Ausland wettbewerbsfähig hält.‘\\n\\n‚Wir wollen ein Monopol zerschlagen, das Preise festsetzt und Konkurrenten zermalmt.‘\\n\\n‚Dasselbe, nur aus anderem Blickwinkel.‘ Er lehnte sich zurück. ‚Ich biete Ihnen Folgendes an: Nehmen Sie den Vorzeigekonzern aus, und ich liefere Ihnen die Stimmen, die Sie für alles andere brauchen.‘\\n\\nDie Reformerin starrte an die Decke. Es war, wie sie fand, eine sehr hässliche Decke. ‚Lassen Sie mich darüber nachdenken.‘"
+ },
+ "extra_law_events.29.t": {
+  "en": "The Trust Question",
+  "de": "Die Frage der Trusts"
+ },
+ "extra_law_events.3.a": {
+  "en": "The old monetary order must give way to progress.",
+  "de": "Die alte Geldordnung muss dem Fortschritt weichen."
+ },
+ "extra_law_events.3.b": {
+  "en": "Bring the opposition into the conversation.",
+  "de": "Die Opposition ins Gespräch einbinden."
+ },
+ "extra_law_events.3.d": {
+  "en": "A heated debate has erupted over our proposed monetary reforms. The [SCOPE.gsInterestGroup('opposing_ig').GetName] have rallied behind the old monetary order, arguing that abandoning it will bring ruin upon the nation's finances.",
+  "de": "Eine hitzige Debatte ist über unsere geplanten Währungsreformen entbrannt. Die [SCOPE.gsInterestGroup('opposing_ig').GetName] haben sich hinter die alte Geldordnung gestellt und argumentieren, dass deren Aufgabe die Staatsfinanzen ruinieren werde."
+ },
+ "extra_law_events.3.f": {
+  "en": "\\\"You shall not press down upon the brow of labor this crown of gold! You shall not crucify mankind upon a cross of metal! The wealth of a nation is measured in its industry, not in bars locked away in a vault.\\\"",
+  "de": "„Ihr sollt der Stirn der arbeitenden Menschen nicht diese Krone aus Gold aufdrücken! Ihr sollt die Menschheit nicht an ein Kreuz aus Metall schlagen! Der Reichtum einer Nation bemisst sich an ihrer Industrie, nicht an Barren, die in einem Tresor eingeschlossen sind.“"
+ },
+ "extra_law_events.3.t": {
+  "en": "The Gold Question",
+  "de": "Die Goldfrage"
+ },
+ "extra_law_events.30.a": {
+  "en": "Accept mandatory minimum sentences.",
+  "de": "Verbindliche Mindeststrafen akzeptieren."
+ },
+ "extra_law_events.30.b": {
+  "en": "Introduce a community service alternative.",
+  "de": "Eine Alternative in Form von gemeinnütziger Arbeit einführen."
+ },
+ "extra_law_events.30.c": {
+  "en": "Hold the line - no concessions.",
+  "de": "Standhaft bleiben - keine Zugeständnisse."
+ },
+ "extra_law_events.30.d": {
+  "en": "Reform of the criminal justice system has ignited fierce debate about the proper balance between punishment and rehabilitation. Opponents of the bill are willing to vote for it - but only if their preferred [concept_amendment] is attached. The compromise would weaken the law's ideological purity but might be the only path to passage.",
+  "de": "Die Reform des Strafjustizsystems hat eine hitzige Debatte über das richtige Gleichgewicht zwischen Strafe und Resozialisierung entfacht. Die Gegner des Gesetzentwurfs sind bereit, dafür zu stimmen - jedoch nur, wenn ihr bevorzugter [concept_amendment] angefügt wird. Der Kompromiss würde die ideologische Reinheit des Gesetzes schwächen, könnte aber der einzige Weg zu seiner Verabschiedung sein."
+ },
+ "extra_law_events.30.f": {
+  "en": "The magistrate had seen both systems in practice. 'You want my honest opinion?' he asked the committee.\\n\\n'That is why we invited you.'\\n\\n'Mandatory minimums fill the prisons. Community service empties them. Neither, on its own, reduces crime.' He folded his hands. 'But one costs the treasury a great deal more than the other, and I shall leave it to you to guess which.'\\n\\n'And if we pass the bill without either [concept_amendment]?'\\n\\n'Then you will have a law that everyone admires and no one can enforce.'",
+  "de": "Der Richter hatte beide Systeme in der Praxis erlebt. ‚Wollen Sie meine ehrliche Meinung hören?‘, fragte er den Ausschuss.\\n\\n‚Deshalb haben wir Sie eingeladen.‘\\n\\n‚Mindeststrafen füllen die Gefängnisse. Gemeinnützige Arbeit leert sie. Keines von beidem senkt für sich genommen die Kriminalität.‘ Er faltete die Hände. ‚Aber eines kostet die Staatskasse weit mehr als das andere, und ich überlasse es Ihnen, zu erraten, welches.‘\\n\\n‚Und wenn wir das Gesetz ohne einen der beiden [concept_amendment] verabschieden?‘\\n\\n‚Dann haben Sie ein Gesetz, das alle bewundern und das niemand durchsetzen kann.‘"
+ },
+ "extra_law_events.30.t": {
+  "en": "The Sentencing Debate",
+  "de": "Die Debatte um das Strafmaß"
+ },
+ "extra_law_events.31.a": {
+  "en": "Allow a corporate data access exemption.",
+  "de": "Eine Ausnahmeregelung für den Datenzugriff von Unternehmen zulassen."
+ },
+ "extra_law_events.31.b": {
+  "en": "Add whistleblower protections.",
+  "de": "Schutzbestimmungen für Whistleblower hinzufügen."
+ },
+ "extra_law_events.31.c": {
+  "en": "The bill is fine as it stands.",
+  "de": "Der Entwurf ist so, wie er ist, in Ordnung."
+ },
+ "extra_law_events.31.d": {
+  "en": "The privacy bill has attracted strange bedfellows. The [SCOPE.gsInterestGroup('industrialists_ig').GetName] want a carve-out allowing businesses to collect personal data for commercial purposes - claiming that innovation requires information. Meanwhile, the [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] push for whistleblower protections, arguing that no privacy law is complete without shields for those who expose government wrongdoing.",
+  "de": "Der Datenschutzentwurf hat seltsame Bündnispartner zusammengeführt. Die [SCOPE.gsInterestGroup('industrialists_ig').GetName] wollen eine Ausnahmeregelung, die es Unternehmen erlaubt, personenbezogene Daten zu kommerziellen Zwecken zu sammeln - mit der Begründung, Innovation brauche Information. Die [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] hingegen drängen auf Schutzbestimmungen für Whistleblower und argumentieren, kein Datenschutzgesetz sei vollständig ohne Schutz für jene, die Fehlverhalten der Regierung aufdecken."
+ },
+ "extra_law_events.31.e": {
+  "en": "Allow a three-year compliance grace period.",
+  "de": "Eine dreijährige Übergangsfrist für die Umsetzung gewähren."
+ },
+ "extra_law_events.31.f": {
+  "en": "'The industrialists want a clause permitting commercial data collection,' the aide said. 'The intelligentsia want whistleblower protections written in.'\\n\\n'And if I give one side what they want?'\\n\\n'The other side kills the bill.'\\n\\nThe legislator rubbed her eyes and looked at the stack of [Concept('concept_amendment', 'amendments')] on her desk. There were forty-seven of them. She had read eleven.\\n\\n'What does the current draft do?'\\n\\n'Nothing that anyone particularly wants, ma'am.'",
+  "de": "‚Die Industriellen wollen eine Klausel, die die kommerzielle Datensammlung erlaubt‘, sagte der Berater. ‚Die Intelligenzija will Schutzbestimmungen für Whistleblower im Text verankert sehen.‘\\n\\n‚Und wenn ich der einen Seite gebe, was sie will?‘\\n\\n‚Dann bringt die andere Seite den Entwurf zu Fall.‘\\n\\nDie Abgeordnete rieb sich die Augen und blickte auf den Stapel [Concept('concept_amendment', 'Nachträge')] auf ihrem Schreibtisch. Es waren siebenundvierzig. Sie hatte elf gelesen.\\n\\n‚Was bewirkt der aktuelle Entwurf?‘\\n\\n‚Nichts, das sich irgendjemand besonders wünscht, Madam.‘"
+ },
+ "extra_law_events.31.t": {
+  "en": "The Privacy Bargain",
+  "de": "Der Datenschutz-Kuhhandel"
+ },
+ "extra_law_events.32.a": {
+  "en": "Pledge never to strike first with nuclear weapons.",
+  "de": "Geloben, nie als Erste Atomwaffen einzusetzen."
+ },
+ "extra_law_events.32.b": {
+  "en": "Carve out a military necessity exception.",
+  "de": "Eine Ausnahme für militärische Notwendigkeit herausnehmen."
+ },
+ "extra_law_events.32.c": {
+  "en": "The law needs no additional clauses.",
+  "de": "Das Gesetz braucht keine zusätzlichen Klauseln."
+ },
+ "extra_law_events.32.d": {
+  "en": "The debate over the rules of war has reached a critical juncture. The [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] urge us to adopt a no-first-strike pledge for our most terrible weapons - a gesture they say would enhance our diplomatic standing enormously. The [SCOPE.gsInterestGroup('military_ig').GetName], however, demand a 'military necessity' clause that would preserve the flexibility of our commanders in the field.",
+  "de": "Die Debatte über die Regeln der Kriegsführung hat einen kritischen Punkt erreicht. Die [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] drängen uns, ein Gelöbnis des Verzichts auf den Ersteinsatz unserer schrecklichsten Waffen abzulegen - eine Geste, die, wie sie sagen, unser diplomatisches Ansehen enorm stärken würde. Die [SCOPE.gsInterestGroup('military_ig').GetName] hingegen fordern eine Klausel zur „militärischen Notwendigkeit“, die unseren Befehlshabern im Feld ihre Flexibilität erhalten würde."
+ },
+ "extra_law_events.32.d_no_pledge": {
+  "en": "The debate over the rules of war has reached a critical juncture. The [SCOPE.gsInterestGroup('military_ig').GetName] demand a 'military necessity' clause that would preserve the flexibility of our commanders in the field, while reformers insist the law should stand as written.",
+  "de": "Die Debatte über die Regeln der Kriegsführung hat einen kritischen Punkt erreicht. Die [SCOPE.gsInterestGroup('military_ig').GetName] fordern eine Klausel zur „militärischen Notwendigkeit“, die unseren Befehlshabern im Feld ihre Flexibilität erhalten würde, während Reformer darauf bestehen, dass das Gesetz so bleiben soll, wie es verfasst ist."
+ },
+ "extra_law_events.32.f": {
+  "en": "\\\"The laws of war are written by those who have never heard a shell burst overhead. But it is those who have who must enforce them - and they know, as the legislators do not, that war refuses to obey legislation.\\\"",
+  "de": "„Die Gesetze des Krieges werden von jenen geschrieben, die nie eine Granate über sich haben einschlagen hören. Doch es sind jene, die es erlebt haben, die sie durchsetzen müssen - und sie wissen, was die Gesetzgeber nicht wissen: dass der Krieg sich weigert, der Gesetzgebung zu gehorchen.“"
+ },
+ "extra_law_events.32.t": {
+  "en": "Laws of the New Battlefield",
+  "de": "Gesetze des neuen Schlachtfelds"
+ },
+ "extra_law_events.33.a": {
+  "en": "Match small donations with public funds.",
+  "de": "Kleinspenden mit öffentlichen Mitteln aufstocken."
+ },
+ "extra_law_events.33.b": {
+  "en": "The existing provisions are sufficient.",
+  "de": "Die bestehenden Regelungen sind ausreichend."
+ },
+ "extra_law_events.33.d": {
+  "en": "The [SCOPE.gsInterestGroup('unions_ig').GetName] have proposed a popular [concept_amendment] to the campaign finance bill: a small donor matching programme in which the government matches modest individual contributions, multiplying the political voice of ordinary citizens. The measure would strengthen grassroots participation but add to the bureaucratic cost of elections.",
+  "de": "Die [SCOPE.gsInterestGroup('unions_ig').GetName] haben einen populären [concept_amendment] zum Gesetz über die Wahlkampffinanzierung vorgeschlagen: ein Programm zur Aufstockung von Kleinspenden, bei dem der Staat bescheidene Einzelbeiträge verdoppelt und so die politische Stimme gewöhnlicher Bürger vervielfacht. Die Maßnahme würde die Basisbeteiligung stärken, aber die bürokratischen Kosten von Wahlen erhöhen."
+ },
+ "extra_law_events.33.f": {
+  "en": "\\\"A farmer's penny, matched by the state, becomes worth as much as a factory owner's guinea. The Treasury has calculated the cost. The Chancellor has not yet shared the figure with Parliament.\\\"",
+  "de": "„Der Groschen eines Bauern, vom Staat verdoppelt, wird so viel wert wie die Guinee eines Fabrikbesitzers. Das Schatzamt hat die Kosten berechnet. Der Kanzler hat die Zahl dem Parlament noch nicht mitgeteilt.“"
+ },
+ "extra_law_events.33.t": {
+  "en": "Small Donors, Big Voices",
+  "de": "Kleine Spender, große Stimmen"
+ },
+ "extra_law_events.34.a": {
+  "en": "Grant the religious exemption.",
+  "de": "Die religiöse Ausnahmeregelung gewähren."
+ },
+ "extra_law_events.34.b": {
+  "en": "No exceptions - the law applies to all.",
+  "de": "Keine Ausnahmen - das Gesetz gilt für alle."
+ },
+ "extra_law_events.34.d": {
+  "en": "The [SCOPE.gsInterestGroup('devout_ig').GetName] have made their position clear: they will cease their opposition to [SCOPE.sLaw('current_law_scope').GetName] if - and only if - a religious exemption clause is added. Houses of worship, religious schools, and faith-based charities would be exempt from the law's requirements. It is a bitter pill for reformers, but without it the bill may never pass.",
+  "de": "Die [SCOPE.gsInterestGroup('devout_ig').GetName] haben ihre Position deutlich gemacht: Sie werden ihren Widerstand gegen [SCOPE.sLaw('current_law_scope').GetName] nur dann aufgeben, wenn eine Klausel zur religiösen Ausnahme hinzugefügt wird. Gotteshäuser, religiöse Schulen und glaubensbasierte Wohltätigkeitsorganisationen wären von den Anforderungen des Gesetzes ausgenommen. Das ist eine bittere Pille für Reformer, doch ohne sie könnte der Entwurf niemals verabschiedet werden."
+ },
+ "extra_law_events.34.f": {
+  "en": "\\\"Render unto Caesar the things which are Caesar's, they said. But when Caesar legislates the bedroom, even the pulpit has an opinion.\\\"\\n\\n\\\"And do the parishioners listen?\\\"\\n\\n\\\"They listen. Whether they obey is a different question. The bill will pass or fall by what they do in the polling booth, not by what they nod at in the pew.\\\"",
+  "de": "„Gebet dem Kaiser, was des Kaisers ist, hieß es. Doch wenn der Kaiser das Schlafzimmer per Gesetz regelt, hat selbst die Kanzel eine Meinung.“\\n\\n„Und hören die Gemeindemitglieder zu?“\\n\\n„Sie hören zu. Ob sie gehorchen, ist eine andere Frage. Der Entwurf wird durch das stehen oder fallen, was sie in der Wahlkabine tun, nicht durch das, wozu sie in der Kirchenbank nicken.“"
+ },
+ "extra_law_events.34.t": {
+  "en": "A Question of Conscience",
+  "de": "Eine Gewissensfrage"
+ },
+ "extra_law_events.35.a": {
+  "en": "A measured, gradual transition.",
+  "de": "Ein maßvoller, schrittweiser Übergang."
+ },
+ "extra_law_events.35.b": {
+  "en": "Launch an intensive national education campaign.",
+  "de": "Eine intensive landesweite Bildungskampagne starten."
+ },
+ "extra_law_events.35.c": {
+  "en": "Offer minimal administrative support.",
+  "de": "Minimale verwaltungstechnische Unterstützung anbieten."
+ },
+ "extra_law_events.35.d": {
+  "en": "The reformed language has been chosen, but the question of implementation remains. Hundreds of thousands of civil servants, teachers, lawyers, and clerks must learn new terminology, new orthography, new conventions. The entire apparatus of the state must be retooled.",
+  "de": "Die reformierte Sprache wurde gewählt, doch die Frage der Umsetzung bleibt bestehen. Hunderttausende Beamte, Lehrer, Juristen und Schreiber müssen neue Terminologie, neue Rechtschreibung, neue Konventionen erlernen. Der gesamte Apparat des Staates muss neu ausgerichtet werden."
+ },
+ "extra_law_events.35.dd": {
+  "en": "Ministry-backed cultural rollout.",
+  "de": "Vom Ministerium getragene kulturelle Einführung."
+ },
+ "extra_law_events.35.f": {
+  "en": "\\\"How long until we can write our own names properly?\\\" asked a clerk in the records office.\\n\\n\\\"That depends,\\\" his supervisor replied, carefully consulting a phrasebook. \\\"On whether the Ministry considers you a priority.\\\"",
+  "de": "„Wie lange dauert es noch, bis wir unsere eigenen Namen richtig schreiben können?“, fragte ein Schreiber im Meldeamt.\\n\\n„Das kommt darauf an“, erwiderte sein Vorgesetzter und schlug vorsichtig in einem Sprachführer nach. „Ob das Ministerium Sie als Priorität einstuft.“"
+ },
+ "extra_law_events.35.t": {
+  "en": "The Implementation Question",
+  "de": "Die Frage der Umsetzung"
+ },
+ "extra_law_events.36.a": {
+  "en": "We shall not be deterred!",
+  "de": "Wir lassen uns nicht abschrecken!"
+ },
+ "extra_law_events.36.b": {
+  "en": "Perhaps we moved too quickly.",
+  "de": "Vielleicht sind wir zu schnell vorgegangen."
+ },
+ "extra_law_events.36.d": {
+  "en": "The new law has sent shockwaves through the established order. Resistance is mounting across all strata of society.",
+  "de": "Das neue Gesetz hat Schockwellen durch die etablierte Ordnung gesandt. Der Widerstand wächst in allen Schichten der Gesellschaft."
+ },
+ "extra_law_events.36.d_atheism": {
+  "en": "The abolition of [concept_state_religion] has set the country ablaze with outrage. Clergymen denounce the government from every pulpit. Landowners warn of divine retribution. Even moderate citizens who supported separation of church and state recoil at the totality of the measure.",
+  "de": "Die Abschaffung der [concept_state_religion] hat das Land in Empörung entflammt. Geistliche prangern die Regierung von jeder Kanzel herab an. Landbesitzer warnen vor göttlicher Vergeltung. Selbst gemäßigte Bürger, die die Trennung von Kirche und Staat unterstützten, schrecken vor der Kompromisslosigkeit der Maßnahme zurück."
+ },
+ "extra_law_events.36.d_collectivized": {
+  "en": "The seizure and collectivization of agricultural land has provoked a furious backlash from the countryside. Landowners barricade their estates, farmers resist the surveyors, and provincial officials quietly refuse to enforce the [concept_decree].",
+  "de": "Die Beschlagnahme und Kollektivierung landwirtschaftlicher Flächen hat auf dem Land eine wütende Gegenreaktion ausgelöst. Landbesitzer verbarrikadieren ihre Güter, Bauern widersetzen sich den Landvermessern, und Provinzbeamte verweigern still die Durchsetzung des [concept_decree]."
+ },
+ "extra_law_events.36.d_command": {
+  "en": "The nationalization of the economy has triggered panic among the propertied classes. Factories are being stripped of their owners, banks placed under state receivership. The commercial quarters stand half-shuttered as capitalists scramble to move their assets abroad.",
+  "de": "Die Verstaatlichung der Wirtschaft hat unter den besitzenden Schichten Panik ausgelöst. Fabriken werden ihren Eigentümern entzogen, Banken unter staatliche Zwangsverwaltung gestellt. Die Handelsviertel stehen halb verrammelt, während Kapitalisten hastig versuchen, ihr Vermögen ins Ausland zu schaffen."
+ },
+ "extra_law_events.36.d_communal": {
+  "en": "The abolition of the traditional family structure has provoked an enormous backlash. Churches rail against the godlessness of communal child-rearing, landowners decry the destruction of inheritance, and even many workers look on with unease as the state assumes authority over their children.",
+  "de": "Die Abschaffung der traditionellen Familienstruktur hat eine gewaltige Gegenreaktion ausgelöst. Kirchen wettern gegen die Gottlosigkeit der gemeinschaftlichen Kindererziehung, Landbesitzer beklagen die Zerstörung des Erbrechts, und selbst viele Arbeiter sehen mit Unbehagen zu, wie der Staat die Verantwortung für ihre Kinder übernimmt."
+ },
+ "extra_law_events.36.d_cooperative": {
+  "en": "The mandate of cooperative ownership has thrown the commercial classes into open revolt. Factory owners organize protests, investors withdraw their capital, and shopkeepers paint angry slogans on their shutters. Only the most committed ideologues welcome the change.",
+  "de": "Die Vorschrift des genossenschaftlichen Eigentums hat die Handelsschichten in offenen Aufruhr versetzt. Fabrikbesitzer organisieren Proteste, Investoren ziehen ihr Kapital ab, und Ladenbesitzer malen zornige Parolen auf ihre Rollläden. Nur die überzeugtesten Ideologen begrüßen den Wandel."
+ },
+ "extra_law_events.36.f": {
+  "en": "\\\"They have gone mad,\\\" the old merchant said, folding his newspaper with trembling hands. \\\"Utterly, irretrievably mad.\\\"\\n\\n\\\"Mad?\\\" his son replied. \\\"Or merely ahead of their time?\\\"\\n\\n\\\"There is no difference, boy. Not when the mobs are at the gates.\\\"",
+  "de": "„Sie sind verrückt geworden“, sagte der alte Kaufmann und faltete mit zitternden Händen seine Zeitung zusammen. „Vollkommen, unrettbar verrückt.“\\n\\n„Verrückt?“, erwiderte sein Sohn. „Oder nur ihrer Zeit voraus?“\\n\\n„Das macht keinen Unterschied, mein Junge. Nicht, wenn die Mobs vor den Toren stehen.“"
+ },
+ "extra_law_events.36.t": {
+  "en": "Societal Tremors",
+  "de": "Gesellschaftliche Erschütterungen"
+ },
+ "extra_law_events.37.a": {
+  "en": "Yield to their demands - the bill is shelved",
+  "de": "Ihren Forderungen nachgeben - der Entwurf wird auf Eis gelegt"
+ },
+ "extra_law_events.37.b": {
+  "en": "Press on, and let the markets do their worst",
+  "de": "Weitermachen und die Märkte ihr Schlimmstes tun lassen"
+ },
+ "extra_law_events.37.d": {
+  "en": "The [SCOPE.gsInterestGroup('opposing_ig').GetName] have closed ranks against [SCOPE.sLaw('current_law_scope').GetName]. Their lobbyists pace the corridors of power, calling in every favor and dropping every hint of capital flight.",
+  "de": "Die [SCOPE.gsInterestGroup('opposing_ig').GetName] haben gegen [SCOPE.sLaw('current_law_scope').GetName] die Reihen geschlossen. Ihre Lobbyisten durchstreifen die Korridore der Macht, fordern jeden Gefallen ein und lassen jede Andeutung von Kapitalflucht fallen."
+ },
+ "extra_law_events.37.f": {
+  "en": "\\\"Make no mistake — if this passes in its current form, we cannot guarantee the depositors will remain calm. We do not issue threats. We merely describe weather.\\\"\\n\\n\\\"You describe the weather you intend to make.\\\"\\n\\n\\\"That is one interpretation. The other is that we describe weather we have spent forty years learning to read.\\\"",
+  "de": "„Machen Sie sich nichts vor — wenn dies in seiner jetzigen Form durchgeht, können wir nicht garantieren, dass die Einleger ruhig bleiben. Wir sprechen keine Drohungen aus. Wir beschreiben lediglich das Wetter.“\\n\\n„Sie beschreiben das Wetter, das Sie zu machen gedenken.“\\n\\n„Das ist eine Auslegung. Die andere ist, dass wir ein Wetter beschreiben, das wir seit vierzig Jahren lesen gelernt haben.“"
+ },
+ "extra_law_events.37.t": {
+  "en": "Bankers Block the Bill",
+  "de": "Bankiers blockieren den Entwurf"
+ },
+ "extra_law_events.38.a": {
+  "en": "Pause the bill until the panic subsides",
+  "de": "Den Entwurf aussetzen, bis die Panik abklingt"
+ },
+ "extra_law_events.38.b": {
+  "en": "Push through - the panic is itself an argument for reform",
+  "de": "Durchsetzen - die Panik selbst ist ein Argument für die Reform"
+ },
+ "extra_law_events.38.d": {
+  "en": "A run on the country's largest commercial banks has erupted in the major cities. Newspapers describe lines stretching for blocks, and the [SCOPE.gsInterestGroup('opposing_ig').GetName] blame the proposed [SCOPE.sLaw('current_law_scope').GetName] for spooking depositors.",
+  "de": "In den großen Städten ist ein Ansturm auf die größten Geschäftsbanken des Landes ausgebrochen. Zeitungen berichten von Schlangen, die sich über ganze Häuserblocks erstrecken, und die [SCOPE.gsInterestGroup('opposing_ig').GetName] machen das geplante Gesetz [SCOPE.sLaw('current_law_scope').GetName] dafür verantwortlich, die Einleger verschreckt zu haben."
+ },
+ "extra_law_events.38.f": {
+  "en": "\\\"I withdrew my savings yesterday. My neighbor did the same. The notes said the system was sound. The notes also said it would never come to this.\\\"\\n\\n\\\"And tomorrow?\\\"\\n\\n\\\"Tomorrow I see whether the bank still opens its doors. If it does, my savings buy me a week. If it does not, my savings buy me nothing — and neither do anyone else's.\\\"",
+  "de": "„Ich habe gestern meine Ersparnisse abgehoben. Mein Nachbar hat dasselbe getan. Die Mitteilungen sagten, das System sei solide. Die Mitteilungen sagten auch, es werde nie so weit kommen.“\\n\\n„Und morgen?“\\n\\n„Morgen sehe ich, ob die Bank noch ihre Türen öffnet. Wenn ja, kaufen mir meine Ersparnisse eine Woche. Wenn nicht, kaufen mir meine Ersparnisse gar nichts — und den Ersparnissen aller anderen ergeht es ebenso.“"
+ },
+ "extra_law_events.38.t": {
+  "en": "Bank Run Triggers Doubt",
+  "de": "Bankenansturm sät Zweifel"
+ },
+ "extra_law_events.39.a": {
+  "en": "Withdraw the bill to stem the outflow",
+  "de": "Den Entwurf zurückziehen, um den Abfluss zu stoppen"
+ },
+ "extra_law_events.39.a_warning": {
+  "en": "Withdraw the bill before the gold takes flight",
+  "de": "Den Entwurf zurückziehen, bevor das Gold die Flucht ergreift"
+ },
+ "extra_law_events.39.b": {
+  "en": "Hold firm - the standard's defenders cannot dictate to the nation",
+  "de": "Standhaft bleiben - die Verteidiger des Standards können der Nation nichts diktieren"
+ },
+ "extra_law_events.39.d": {
+  "en": "Word of the proposed [SCOPE.sLaw('current_law_scope').GetName] has triggered a quiet exodus of specie from the vaults. The [SCOPE.gsInterestGroup('opposing_ig').GetName] warn of imminent insolvency if the legislation moves forward.",
+  "de": "Die Kunde vom geplanten Gesetz [SCOPE.sLaw('current_law_scope').GetName] hat einen stillen Auszug von Hartgeld aus den Tresoren ausgelöst. Die [SCOPE.gsInterestGroup('opposing_ig').GetName] warnen vor drohender Zahlungsunfähigkeit, sollte die Gesetzgebung voranschreiten."
+ },
+ "extra_law_events.39.d_warning": {
+  "en": "Word of the proposed [SCOPE.sLaw('current_law_scope').GetName] has alarmed the holders of specie. The [SCOPE.gsInterestGroup('opposing_ig').GetName] warn that gold will quietly leave the country the moment the legislation moves forward, and predict insolvency if it does.",
+  "de": "Die Kunde vom geplanten Gesetz [SCOPE.sLaw('current_law_scope').GetName] hat die Besitzer von Hartgeld alarmiert. Die [SCOPE.gsInterestGroup('opposing_ig').GetName] warnen, dass das Gold das Land in dem Moment still verlassen werde, in dem die Gesetzgebung voranschreitet, und sagen im Falle dessen Zahlungsunfähigkeit voraus."
+ },
+ "extra_law_events.39.f": {
+  "en": "\\\"Gold flows to where it is welcome and away from where it is suspect. The mere shadow of this bill has sent it overseas. What will the substance do?\\\"\\n\\n\\\"The gold returns when the policy proves wise.\\\"\\n\\n\\\"The gold does not return on faith. It returns on evidence, and the evidence takes years. Meanwhile the vaults are empty and the interest rates climb.\\\"",
+  "de": "„Gold fließt dorthin, wo es willkommen ist, und flieht dort, wo es verdächtigt wird. Schon der bloße Schatten dieses Entwurfs hat es ins Ausland getrieben. Was wird die eigentliche Sache bewirken?“\\n\\n„Das Gold kehrt zurück, wenn sich die Politik als klug erweist.“\\n\\n„Das Gold kehrt nicht auf Vertrauen zurück. Es kehrt auf Beweise zurück, und die Beweise brauchen Jahre. In der Zwischenzeit sind die Tresore leer und die Zinsen steigen.“"
+ },
+ "extra_law_events.39.f_warning": {
+  "en": "\\\"Gold flows to where it is welcome and away from where it is suspect. The mere shadow of this bill will send it overseas. What will the substance do?\\\"\\n\\n\\\"The gold returns when the policy proves wise.\\\"\\n\\n\\\"The gold does not return on faith. It returns on evidence, and the evidence takes years.\\\"",
+  "de": "„Gold fließt dorthin, wo es willkommen ist, und flieht dort, wo es verdächtigt wird. Schon der bloße Schatten dieses Entwurfs wird es ins Ausland treiben. Was wird die eigentliche Sache bewirken?“\\n\\n„Das Gold kehrt zurück, wenn sich die Politik als klug erweist.“\\n\\n„Das Gold kehrt nicht auf Vertrauen zurück. Es kehrt auf Beweise zurück, und die Beweise brauchen Jahre.“"
+ },
+ "extra_law_events.39.t": {
+  "en": "Gold Outflow Crisis",
+  "de": "Krise des Goldabflusses"
+ },
+ "extra_law_events.39.t_warning": {
+  "en": "Fears of a Gold Outflow",
+  "de": "Ängste vor einem Goldabfluss"
+ },
+ "extra_law_events.4.a": {
+  "en": "The power to print is the power to prosper!",
+  "de": "Die Macht zu drucken ist die Macht zu gedeihen!"
+ },
+ "extra_law_events.4.b": {
+  "en": "Build an academic consensus first.",
+  "de": "Zuerst einen wissenschaftlichen Konsens schaffen."
+ },
+ "extra_law_events.4.d": {
+  "en": "Advocates of the new fiat currency system have made a compelling case before the legislature: the ability to control the money supply will allow the government to smooth out the devastating boom-and-bust cycles that have plagued the nation.",
+  "de": "Befürworter des neuen Fiatgeldsystems haben vor der Legislative überzeugend argumentiert: Die Fähigkeit, die Geldmenge zu steuern, werde es der Regierung erlauben, die verheerenden Boom-und-Bust-Zyklen abzufedern, die die Nation heimgesucht haben."
+ },
+ "extra_law_events.4.f": {
+  "en": "\\\"The gold bugs would have us chained to a lump of metal dug from the earth, when the true wealth of a nation flows from the creativity and labor of its people. Give me a printing press and I shall give you full employment!\\\"",
+  "de": "„Die Goldanhänger würden uns an einen aus der Erde gegrabenen Klumpen Metall ketten, während der wahre Reichtum einer Nation aus der Schaffenskraft und Arbeit ihres Volkes fließt. Gebt mir eine Druckerpresse, und ich gebe euch Vollbeschäftigung!“"
+ },
+ "extra_law_events.4.t": {
+  "en": "The Printing Press of Money",
+  "de": "Die Gelddruckerpresse"
+ },
+ "extra_law_events.40.a": {
+  "en": "Concede ground - the bill stalls",
+  "de": "Boden preisgeben - der Entwurf stockt"
+ },
+ "extra_law_events.40.b": {
+  "en": "Push through despite the panic",
+  "de": "Trotz der Panik durchsetzen"
+ },
+ "extra_law_events.40.d": {
+  "en": "Industry has caught wind of the proposed currency reform under [SCOPE.sLaw('current_law_scope').GetName] and reacted with the worst possible interpretation. The [SCOPE.gsInterestGroup('opposing_ig').GetName] warn of imminent runaway prices.",
+  "de": "Die Industrie hat Wind von der geplanten Währungsreform unter [SCOPE.sLaw('current_law_scope').GetName] bekommen und mit der denkbar schlechtesten Deutung reagiert. Die [SCOPE.gsInterestGroup('opposing_ig').GetName] warnen vor bevorstehenden außer Kontrolle geratenden Preisen."
+ },
+ "extra_law_events.40.f": {
+  "en": "\\\"A barrel of flour cost ten coins this morning. Twelve this afternoon. What will it cost tomorrow if the printing press is unchained?\\\"\\n\\n\\\"It is not the press that drives the price. It is the speculator hoarding the flour.\\\"\\n\\n\\\"Find me a speculator and I will sell him my last sack. The price is the price. The reason is whatever you say it is.\\\"",
+  "de": "„Ein Fass Mehl kostete heute Morgen zehn Münzen. Zwölf am Nachmittag. Was wird es morgen kosten, wenn die Druckerpresse entfesselt wird?“\\n\\n„Nicht die Presse treibt den Preis. Es ist der Spekulant, der das Mehl hortet.“\\n\\n„Zeigen Sie mir einen Spekulanten, und ich verkaufe ihm meinen letzten Sack. Der Preis ist der Preis. Der Grund ist, was immer Sie sagen, dass er sei.“"
+ },
+ "extra_law_events.40.t": {
+  "en": "The Spectre of Runaway Prices",
+  "de": "Das Gespenst außer Kontrolle geratener Preise"
+ },
+ "extra_law_events.41.a": {
+  "en": "Withdraw - the privacy concerns are real",
+  "de": "Zurückziehen - die Datenschutzbedenken sind real"
+ },
+ "extra_law_events.41.b": {
+  "en": "Push through - and accept the intellectuals' opposition",
+  "de": "Durchsetzen - und den Widerstand der Intellektuellen hinnehmen"
+ },
+ "extra_law_events.41.d": {
+  "en": "The [SCOPE.gsInterestGroup('opposing_ig').GetName] have organized public hearings condemning [SCOPE.sLaw('current_law_scope').GetName] as an assault on the dignity of the private citizen. Pamphlets and broadsheets carry their arguments into every parlor.",
+  "de": "Die [SCOPE.gsInterestGroup('opposing_ig').GetName] haben öffentliche Anhörungen organisiert, in denen [SCOPE.sLaw('current_law_scope').GetName] als Angriff auf die Würde des Privatbürgers verurteilt wird. Flugschriften und Zeitungsblätter tragen ihre Argumente in jedes Wohnzimmer."
+ },
+ "extra_law_events.41.f": {
+  "en": "\\\"A government that knows everything is a government that fears everything. We have not fought for centuries to install a watchman in our own bedroom.\\\"\\n\\n\\\"The watchman will keep you safe.\\\"\\n\\n\\\"The watchman will keep me observed. There is a difference, and the next generation will learn it the hard way if we forget it now.\\\"",
+  "de": "„Eine Regierung, die alles weiß, ist eine Regierung, die alles fürchtet. Wir haben nicht jahrhundertelang gekämpft, um einen Wächter in unser eigenes Schlafzimmer zu stellen.“\\n\\n„Der Wächter wird Sie beschützen.“\\n\\n„Der Wächter wird mich überwachen. Das ist ein Unterschied, und die nächste Generation wird ihn auf die harte Tour lernen, wenn wir ihn jetzt vergessen.“"
+ },
+ "extra_law_events.41.t": {
+  "en": "Civil Liberties Outcry",
+  "de": "Aufschrei um die Bürgerrechte"
+ },
+ "extra_law_events.42.a": {
+  "en": "Yield to the public mood and pause the bill",
+  "de": "Der öffentlichen Stimmung nachgeben und den Entwurf aussetzen"
+ },
+ "extra_law_events.42.b": {
+  "en": "Press through the opposition's noise",
+  "de": "Sich durch den Lärm der Opposition durchsetzen"
+ },
+ "extra_law_events.42.d": {
+  "en": "Opponents of [SCOPE.sLaw('current_law_scope').GetName] have mounted a coordinated communications campaign in the press. The [SCOPE.gsInterestGroup('opposing_ig').GetName] have spent freely to flood the channels with counter-messaging.",
+  "de": "Gegner von [SCOPE.sLaw('current_law_scope').GetName] haben eine koordinierte Kommunikationskampagne in der Presse gestartet. Die [SCOPE.gsInterestGroup('opposing_ig').GetName] haben freigiebig Geld ausgegeben, um die Kanäle mit Gegenbotschaften zu fluten."
+ },
+ "extra_law_events.42.f": {
+  "en": "\\\"You can fight bad speech with more speech. Or you can pass a law. Only one of these reflects credit on a free people.\\\"\\n\\n\\\"And the other?\\\"\\n\\n\\\"The other reflects credit on whoever holds the pen when the law is drafted. That is a more practical kind of credit, but it is not the same kind.\\\"",
+  "de": "„Man kann schlechten Reden mit mehr Reden begegnen. Oder man kann ein Gesetz erlassen. Nur eines davon macht einem freien Volk Ehre.“\\n\\n„Und das andere?“\\n\\n„Das andere macht demjenigen Ehre, der die Feder führt, wenn das Gesetz verfasst wird. Das ist eine praktischere Art von Ehre, aber nicht dieselbe Art.“"
+ },
+ "extra_law_events.42.t": {
+  "en": "The Counter-Campaign",
+  "de": "Die Gegenkampagne"
+ },
+ "extra_law_events.43.a": {
+  "en": "Bow to public conscience and shelve the bill",
+  "de": "Sich dem öffentlichen Gewissen beugen und den Entwurf auf Eis legen"
+ },
+ "extra_law_events.43.b": {
+  "en": "Stay the course - science cannot be ruled by superstition",
+  "de": "Kurs halten - die Wissenschaft darf nicht vom Aberglauben beherrscht werden"
+ },
+ "extra_law_events.43.d": {
+  "en": "Sermons across the country have denounced [SCOPE.sLaw('current_law_scope').GetName] as an affront to natural order. The [SCOPE.gsInterestGroup('opposing_ig').GetName] have mobilized congregations to write their representatives in unprecedented numbers.",
+  "de": "Predigten im ganzen Land haben [SCOPE.sLaw('current_law_scope').GetName] als Affront gegen die natürliche Ordnung angeprangert. Die [SCOPE.gsInterestGroup('opposing_ig').GetName] haben Gemeinden mobilisiert, die in beispielloser Zahl an ihre Abgeordneten schreiben."
+ },
+ "extra_law_events.43.f": {
+  "en": "\\\"There are doors that man was not meant to open. The next generation will inherit our restraint, or our hubris. May God forgive us if we choose the latter.\\\"\\n\\n\\\"And what shall the next generation do without the restraint?\\\"\\n\\n\\\"They will pass their own laws. They always do. But by then we shall not be the ones who handed them the keys.\\\"",
+  "de": "„Es gibt Türen, die der Mensch nicht öffnen sollte. Die nächste Generation wird unsere Zurückhaltung erben, oder unseren Hochmut. Möge Gott uns vergeben, wenn wir Letzteres wählen.“\\n\\n„Und was soll die nächste Generation ohne die Zurückhaltung tun?“\\n\\n„Sie werden ihre eigenen Gesetze erlassen. Das tun sie immer. Aber dann werden wir nicht diejenigen sein, die ihnen die Schlüssel in die Hand gegeben haben.“"
+ },
+ "extra_law_events.43.t": {
+  "en": "Pulpit Against Progress",
+  "de": "Die Kanzel gegen den Fortschritt"
+ },
+ "extra_law_events.44.a": {
+  "en": "Take their threats at face value and withdraw",
+  "de": "Ihre Drohungen ernst nehmen und zurückziehen"
+ },
+ "extra_law_events.44.b": {
+  "en": "Press the case - the trusts have shown the public exactly who they are",
+  "de": "Die Sache durchziehen - die Trusts haben der Öffentlichkeit genau gezeigt, wer sie sind"
+ },
+ "extra_law_events.44.d": {
+  "en": "The [SCOPE.gsInterestGroup('opposing_ig').GetName] have organized an unprecedented public counter-offensive against [SCOPE.sLaw('current_law_scope').GetName]. Their newspapers thunder warnings of economic collapse if the legislation passes.",
+  "de": "Die [SCOPE.gsInterestGroup('opposing_ig').GetName] haben eine beispiellose öffentliche Gegenoffensive gegen [SCOPE.sLaw('current_law_scope').GetName] organisiert. Ihre Zeitungen donnern Warnungen vor wirtschaftlichem Zusammenbruch, sollte die Gesetzgebung verabschiedet werden."
+ },
+ "extra_law_events.44.f": {
+  "en": "\\\"Break us up and you break the engine that built this nation. The trusts are not enemies of prosperity — they ARE prosperity.\\\"\\n\\n\\\"And the small firms you destroyed to become so?\\\"\\n\\n\\\"Were the engines of a smaller nation. We built a larger one. You may take the larger one apart if you wish, but you will not get the smaller one back.\\\"",
+  "de": "„Zerschlagen Sie uns, und Sie zerschlagen den Motor, der diese Nation erbaut hat. Die Trusts sind keine Feinde des Wohlstands — sie SIND der Wohlstand.“\\n\\n„Und die kleinen Firmen, die Sie zerstört haben, um dies zu werden?“\\n\\n„Waren die Motoren einer kleineren Nation. Wir haben eine größere erbaut. Sie mögen die größere auseinandernehmen, wenn Sie wollen, aber die kleinere bekommen Sie nicht zurück.“"
+ },
+ "extra_law_events.44.t": {
+  "en": "Captains of Industry Rally",
+  "de": "Die Industriekapitäne mobilisieren"
+ },
+ "extra_law_events.45.a": {
+  "en": "Withdraw the bill - the academy's voice matters",
+  "de": "Den Entwurf zurückziehen - die Stimme der Akademie zählt"
+ },
+ "extra_law_events.45.b": {
+  "en": "Press on - the scholars overstate the consequences",
+  "de": "Weitermachen - die Gelehrten übertreiben die Folgen"
+ },
+ "extra_law_events.45.d": {
+  "en": "Petitions signed by the country's leading academics circulate against [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] warn that the proposed regime will choke the free flow of ideas that learning depends on.",
+  "de": "Von den führenden Wissenschaftlern des Landes unterzeichnete Petitionen zirkulieren gegen [SCOPE.sLaw('current_law_scope').GetName]. Die [SCOPE.gsInterestGroup('opposing_ig').GetName] warnen, dass die geplante Regelung den freien Fluss der Ideen ersticken werde, von dem die Gelehrsamkeit abhängt."
+ },
+ "extra_law_events.45.f": {
+  "en": "\\\"Knowledge unshared is knowledge wasted. We do not pen our students inside libraries, nor should we pen ideas inside ledgers.\\\"\\n\\n\\\"And the researcher who needs to eat?\\\"\\n\\n\\\"Will eat, because society values learning. Or will starve, because we have decided not to. The arithmetic is the same — only the moral is different.\\\"",
+  "de": "„Ungeteiltes Wissen ist vergeudetes Wissen. Wir sperren unsere Studenten nicht in Bibliotheken ein, und wir sollten auch Ideen nicht in Rechnungsbüchern einsperren.“\\n\\n„Und der Forscher, der essen muss?“\\n\\n„Wird essen, weil die Gesellschaft die Gelehrsamkeit schätzt. Oder wird hungern, weil wir uns dagegen entschieden haben. Die Rechnung ist dieselbe — nur die Moral ist eine andere.“"
+ },
+ "extra_law_events.45.t": {
+  "en": "Scholars in Revolt",
+  "de": "Gelehrte im Aufstand"
+ },
+ "extra_law_events.46.a": {
+  "en": "Defer to the military's professional judgment",
+  "de": "Dem fachlichen Urteil des Militärs den Vorrang geben"
+ },
+ "extra_law_events.46.b": {
+  "en": "Press through despite the brass's complaints",
+  "de": "Trotz der Beschwerden der Generalität durchsetzen"
+ },
+ "extra_law_events.46.d": {
+  "en": "The [SCOPE.gsInterestGroup('opposing_ig').GetName] have leaked memoranda to the press arguing that [SCOPE.sLaw('current_law_scope').GetName] will tie commanders' hands in the next war. Editorials demand the government answer the charge.",
+  "de": "Die [SCOPE.gsInterestGroup('opposing_ig').GetName] haben Memoranden an die Presse durchsickern lassen, in denen argumentiert wird, dass [SCOPE.sLaw('current_law_scope').GetName] den Befehlshabern im nächsten Krieg die Hände binden werde. Leitartikel fordern, die Regierung müsse sich zu dem Vorwurf äußern."
+ },
+ "extra_law_events.46.f": {
+  "en": "\\\"You ask my men to fight an enemy that obeys no rules — and to do so with one arm bound behind their backs. I cannot in good conscience send them out under such terms.\\\"\\n\\n\\\"The rules exist for the ages, General. Not for one campaign.\\\"\\n\\n\\\"And the men who die in the campaign will be remembered for the ages. Or perhaps not. Perhaps the ages will be too busy congratulating themselves on their principles.\\\"",
+  "de": "„Sie verlangen von meinen Männern, gegen einen Feind zu kämpfen, der keine Regeln befolgt — und das mit einem hinter dem Rücken gefesselten Arm. Ich kann sie guten Gewissens nicht unter solchen Bedingungen ins Feld schicken.“\\n\\n„Die Regeln bestehen für die Ewigkeit, General. Nicht für einen einzelnen Feldzug.“\\n\\n„Und die Männer, die in dem Feldzug sterben, wird man auf ewig in Erinnerung behalten. Oder vielleicht auch nicht. Vielleicht wird die Nachwelt zu sehr damit beschäftigt sein, sich zu ihren Prinzipien zu beglückwünschen.“"
+ },
+ "extra_law_events.46.t": {
+  "en": "Generals Question the Wisdom",
+  "de": "Generäle stellen die Klugheit infrage"
+ },
+ "extra_law_events.47.a": {
+  "en": "Accept the petition's concerns and pause",
+  "de": "Die Bedenken der Petition annehmen und pausieren"
+ },
+ "extra_law_events.47.b": {
+  "en": "Push through - civilian authority decides",
+  "de": "Durchsetzen - die zivile Gewalt entscheidet"
+ },
+ "extra_law_events.47.d": {
+  "en": "A formal petition signed by hundreds of serving officers has been delivered to the parliament. The [SCOPE.gsInterestGroup('opposing_ig').GetName] frame [SCOPE.sLaw('current_law_scope').GetName] as a civilian intrusion into military judgment.",
+  "de": "Eine formelle, von Hunderten aktiven Offizieren unterzeichnete Petition wurde dem Parlament übergeben. Die [SCOPE.gsInterestGroup('opposing_ig').GetName] stellen [SCOPE.sLaw('current_law_scope').GetName] als zivilen Eingriff in militärisches Ermessen dar."
+ },
+ "extra_law_events.47.f": {
+  "en": "\\\"We do not seek to govern; we seek only to be permitted to do our duty. Bind us with these rules and we will keep them — and lose the next war for our trouble.\\\"\\n\\n\\\"You petition the parliament. The parliament's job is to decide.\\\"\\n\\n\\\"The parliament's job is to decide. Ours is to fight. When the decisions of one make the duties of the other impossible, someone must say so. We are saying so.\\\"",
+  "de": "„Wir wollen nicht regieren; wir wollen nur unsere Pflicht erfüllen dürfen. Binden Sie uns mit diesen Regeln, und wir werden sie einhalten — und für unsere Mühe den nächsten Krieg verlieren.“\\n\\n„Sie richten eine Petition an das Parlament. Die Aufgabe des Parlaments ist es, zu entscheiden.“\\n\\n„Die Aufgabe des Parlaments ist es, zu entscheiden. Unsere ist es, zu kämpfen. Wenn die Entscheidungen der einen die Pflichten der anderen unmöglich machen, muss jemand das sagen. Wir sagen es.“"
+ },
+ "extra_law_events.47.t": {
+  "en": "The Officers' Petition",
+  "de": "Die Petition der Offiziere"
+ },
+ "extra_law_events.48.a": {
+  "en": "Heed the law-and-order voices and withdraw",
+  "de": "Auf die Stimmen für Recht und Ordnung hören und zurückziehen"
+ },
+ "extra_law_events.48.b": {
+  "en": "Press forward - knee-jerk reaction is not policy",
+  "de": "Vorwärtsdrängen - eine Kurzschlussreaktion ist keine Politik"
+ },
+ "extra_law_events.48.d": {
+  "en": "Press campaigns sponsored by the [SCOPE.gsInterestGroup('opposing_ig').GetName] denounce [SCOPE.sLaw('current_law_scope').GetName] as a softening of public safety. Lurid accounts of recent crimes fill the front pages.",
+  "de": "Von den [SCOPE.gsInterestGroup('opposing_ig').GetName] finanzierte Pressekampagnen prangern [SCOPE.sLaw('current_law_scope').GetName] als Aufweichung der öffentlichen Sicherheit an. Reißerische Berichte über jüngste Verbrechen füllen die Titelseiten."
+ },
+ "extra_law_events.48.f": {
+  "en": "\\\"Compassion for the criminal is cruelty to the victim. The voters know this in their bones, even when their representatives pretend not to.\\\"\\n\\n\\\"And what would the victim have us do?\\\"\\n\\n\\\"The victim would have us prevent the next crime. Whether that means longer sentences or better schools is the argument we ought to be having — instead we are arguing about whether the criminal is feeling sufficient remorse.\\\"",
+  "de": "„Mitgefühl für den Verbrecher ist Grausamkeit gegenüber dem Opfer. Die Wähler wissen das in ihrem tiefsten Inneren, selbst wenn ihre Abgeordneten so tun, als wüssten sie es nicht.“\\n\\n„Und was würde das Opfer von uns verlangen?“\\n\\n„Das Opfer würde von uns verlangen, das nächste Verbrechen zu verhindern. Ob das längere Strafen oder bessere Schulen bedeutet, ist die Debatte, die wir eigentlich führen sollten — stattdessen streiten wir darüber, ob der Verbrecher genügend Reue empfindet.“"
+ },
+ "extra_law_events.48.t": {
+  "en": "Tough on Crime",
+  "de": "Hartes Durchgreifen gegen Kriminalität"
+ },
+ "extra_law_events.49.a": {
+  "en": "Defer - cultural identity is not negotiable",
+  "de": "Aufschieben - kulturelle Identität steht nicht zur Verhandlung"
+ },
+ "extra_law_events.49.b": {
+  "en": "Press through despite the cultural opposition",
+  "de": "Trotz des kulturellen Widerstands durchsetzen"
+ },
+ "extra_law_events.49.d": {
+  "en": "Cultural societies and local press have mobilized against [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] warn that the bill will erase generations of linguistic heritage.",
+  "de": "Kulturvereine und die örtliche Presse haben gegen [SCOPE.sLaw('current_law_scope').GetName] mobilgemacht. Die [SCOPE.gsInterestGroup('opposing_ig').GetName] warnen, dass der Entwurf Generationen sprachlichen Erbes auslöschen werde."
+ },
+ "extra_law_events.49.f": {
+  "en": "\\\"A people without its language is a people without its memory. We will not sit silent while you legislate our grandmothers into footnotes.\\\"\\n\\n\\\"The law does not forbid the language. It only requires the official one.\\\"\\n\\n\\\"A language not used in the marketplace, not heard in the courthouse, not taught in the schoolhouse — what becomes of such a language? It becomes a museum exhibit. We are not yet ready to be museum exhibits.\\\"",
+  "de": "„Ein Volk ohne seine Sprache ist ein Volk ohne sein Gedächtnis. Wir werden nicht schweigend zusehen, wie Sie unsere Großmütter in Fußnoten verbannen.“\\n\\n„Das Gesetz verbietet die Sprache nicht. Es verlangt nur die offizielle.“\\n\\n„Eine Sprache, die nicht auf dem Marktplatz benutzt, nicht im Gerichtssaal gehört, nicht im Schulhaus gelehrt wird — was wird aus einer solchen Sprache? Sie wird zum Museumsstück. Wir sind noch nicht bereit, Museumsstücke zu sein.“"
+ },
+ "extra_law_events.49.t": {
+  "en": "The Mother Tongue Defended",
+  "de": "Die Muttersprache verteidigt"
+ },
+ "extra_law_events.5.a": {
+  "en": "This outrage proves the need for our proposed law!",
+  "de": "Dieser Skandal beweist die Notwendigkeit unseres geplanten Gesetzes!"
+ },
+ "extra_law_events.5.b": {
+  "en": "Proceed quietly - don't overplay our hand.",
+  "de": "Still fortfahren - unser Blatt nicht überreizen."
+ },
+ "extra_law_events.5.c": {
+  "en": "Frame it as a security matter and force the issue.",
+  "de": "Es als Sicherheitsfrage darstellen und die Sache erzwingen."
+ },
+ "extra_law_events.5.d": {
+  "en": "A journalist has published a damning exposé revealing that government agents have been intercepting the private correspondence of ordinary citizens. The revelations have ignited a fierce public debate about the proper limits of state surveillance.",
+  "de": "Ein Journalist hat eine vernichtende Enthüllung veröffentlicht, die zeigt, dass Regierungsagenten die private Korrespondenz gewöhnlicher Bürger abgefangen haben. Die Enthüllungen haben eine hitzige öffentliche Debatte über die angemessenen Grenzen staatlicher Überwachung entfacht."
+ },
+ "extra_law_events.5.d_exposure": {
+  "en": "A journalist has published a damning exposé showing how easily the private correspondence of ordinary citizens can be intercepted — by officials, by criminals, by anyone with the right equipment and a little patience. The revelations have ignited a fierce public debate about the proper limits of surveillance and the protections the law owes its citizens.",
+  "de": "Ein Journalist hat eine vernichtende Enthüllung veröffentlicht, die zeigt, wie leicht die private Korrespondenz gewöhnlicher Bürger abgefangen werden kann — von Beamten, von Kriminellen, von jedem mit der richtigen Ausrüstung und etwas Geduld. Die Enthüllungen haben eine hitzige öffentliche Debatte über die angemessenen Grenzen der Überwachung und den Schutz entfacht, den das Gesetz seinen Bürgern schuldet."
+ },
+ "extra_law_events.5.f": {
+  "en": "\\\"They read my letters to my mother. My mother! And for what? Because I once attended a lecture by a man who attended a lecture by a man the police found suspicious? This is not security - this is tyranny dressed in a clerk's coat.\\\"",
+  "de": "„Sie haben meine Briefe an meine Mutter gelesen. Meine Mutter! Und wofür? Weil ich einst einen Vortrag von einem Mann besuchte, der einen Vortrag von einem Mann besuchte, den die Polizei für verdächtig hielt? Das ist keine Sicherheit - das ist Tyrannei im Beamtenmantel.“"
+ },
+ "extra_law_events.5.f_exposure": {
+  "en": "\\\"She opened my letter in front of the committee. Steamed it open, read it aloud, sealed it again, and not one of us could tell. If a reporter can do that with a kettle, what could a ministry do with a budget? Nobody is reading our letters yet. I would like it to stay that way.\\\"",
+  "de": "„Sie öffnete meinen Brief vor dem Ausschuss. Dampfte ihn auf, las ihn laut vor, versiegelte ihn wieder, und keiner von uns konnte es erkennen. Wenn eine Reporterin das mit einem Wasserkessel kann, was könnte dann ein Ministerium mit einem Budget? Noch liest niemand unsere Briefe. Ich möchte, dass es dabei bleibt.“"
+ },
+ "extra_law_events.5.t": {
+  "en": "The Wiretapping Scandal",
+  "de": "Der Abhörskandal"
+ },
+ "extra_law_events.5.t_exposure": {
+  "en": "The Interception Exposé",
+  "de": "Die Enthüllung über das Abfangen"
+ },
+ "extra_law_events.50.a": {
+  "en": "Withdraw - the bill needs reworking before it can bind anyone",
+  "de": "Zurückziehen - der Entwurf muss überarbeitet werden, bevor er irgendjemanden binden kann"
+ },
+ "extra_law_events.50.b": {
+  "en": "Pass it anyway - imperfect reform beats none",
+  "de": "Trotzdem verabschieden - eine unvollkommene Reform ist besser als keine"
+ },
+ "extra_law_events.50.d": {
+  "en": "Investigative reports have surfaced documenting how the [SCOPE.gsInterestGroup('opposing_ig').GetName] are routing campaign funds through new opaque channels to avoid [SCOPE.sLaw('current_law_scope').GetName]. The bill suddenly looks toothless.",
+  "de": "Investigative Berichte sind aufgetaucht, die dokumentieren, wie die [SCOPE.gsInterestGroup('opposing_ig').GetName] Wahlkampfgelder über neue undurchsichtige Kanäle leiten, um [SCOPE.sLaw('current_law_scope').GetName] zu umgehen. Der Entwurf wirkt plötzlich zahnlos."
+ },
+ "extra_law_events.50.f": {
+  "en": "\\\"Pass any law you wish. Money is water — it finds the cracks. Until you address the cracks, all your laws are just bureaucratic theater.\\\"\\n\\n\\\"Then where are the cracks?\\\"\\n\\n\\\"In the disclosure rules. In the bearer-bond loophole. In the offshore registries. In all the places the bill was carefully written not to mention.\\\"",
+  "de": "„Verabschieden Sie, welches Gesetz Sie wollen. Geld ist wie Wasser — es findet die Risse. Solange Sie die Risse nicht angehen, sind all Ihre Gesetze nur bürokratisches Theater.“\\n\\n„Wo also sind die Risse?“\\n\\n„In den Offenlegungsvorschriften. In der Lücke bei Inhaberschuldverschreibungen. In den Offshore-Registern. In all den Stellen, die der Entwurf sorgfältig unerwähnt lässt.“"
+ },
+ "extra_law_events.50.t": {
+  "en": "Money in the Shadows",
+  "de": "Geld im Schatten"
+ },
+ "extra_law_events.51.a": {
+  "en": "Defer to regional concerns and withdraw",
+  "de": "Den regionalen Bedenken den Vorrang geben und zurückziehen"
+ },
+ "extra_law_events.51.b": {
+  "en": "Press through over regional objections",
+  "de": "Trotz regionaler Einwände durchsetzen"
+ },
+ "extra_law_events.51.d": {
+  "en": "Provincial assemblies have declared [SCOPE.sLaw('current_law_scope').GetName] an overreach. The [SCOPE.gsInterestGroup('opposing_ig').GetName] are coordinating a multi-regional campaign against the bill's passage.",
+  "de": "Provinzversammlungen haben [SCOPE.sLaw('current_law_scope').GetName] zu einer Kompetenzüberschreitung erklärt. Die [SCOPE.gsInterestGroup('opposing_ig').GetName] koordinieren eine überregionale Kampagne gegen die Verabschiedung des Entwurfs."
+ },
+ "extra_law_events.51.f": {
+  "en": "\\\"We did not join this union to be told from afar how to govern our own valleys. If this passes, the next petition you receive may be a less polite one.\\\"\\n\\n\\\"Is that a threat?\\\"\\n\\n\\\"It is a forecast. The provinces have memories, and memories of being overruled by capitals last longer than the people who do the overruling.\\\"",
+  "de": "„Wir sind dieser Union nicht beigetreten, um uns aus der Ferne sagen zu lassen, wie wir unsere eigenen Täler regieren sollen. Wenn dies durchgeht, könnte die nächste Petition, die Sie erhalten, eine weniger höfliche sein.“\\n\\n„Ist das eine Drohung?“\\n\\n„Es ist eine Prognose. Die Provinzen haben ein Gedächtnis, und die Erinnerung daran, von Hauptstädten überstimmt worden zu sein, überdauert die Menschen, die überstimmt haben.“"
+ },
+ "extra_law_events.51.t": {
+  "en": "Regional Resistance",
+  "de": "Regionaler Widerstand"
+ },
+ "extra_law_events.52.a": {
+  "en": "Bow to the moral consensus and shelve the bill",
+  "de": "Sich dem moralischen Konsens beugen und den Entwurf auf Eis legen"
+ },
+ "extra_law_events.52.b": {
+  "en": "Press forward - progress requires answering hard questions",
+  "de": "Vorwärtsdrängen - Fortschritt erfordert, schwierige Fragen zu beantworten"
+ },
+ "extra_law_events.52.d": {
+  "en": "Religious authorities and medical ethicists have united against [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] warn that the bill will set the country down a path from which there is no return.",
+  "de": "Religiöse Autoritäten und medizinische Ethiker haben sich gegen [SCOPE.sLaw('current_law_scope').GetName] vereint. Die [SCOPE.gsInterestGroup('opposing_ig').GetName] warnen, dass der Entwurf das Land auf einen Weg ohne Umkehr führen werde."
+ },
+ "extra_law_events.52.f": {
+  "en": "\\\"The body is a temple — not a workshop. Once we license the alteration of human nature, we lose the right to call ourselves human in any meaningful sense.\\\"\\n\\n\\\"And the child born with a disease the alteration could cure?\\\"\\n\\n\\\"Is suffering as humans have always suffered. We do not abolish the disease by abolishing what makes us human. We bear the suffering. That is what it means to be human.\\\"",
+  "de": "„Der Körper ist ein Tempel — keine Werkstatt. Sobald wir die Veränderung der menschlichen Natur zulassen, verlieren wir das Recht, uns in irgendeinem bedeutsamen Sinne Menschen zu nennen.“\\n\\n„Und das Kind, das mit einer Krankheit geboren wird, die die Veränderung heilen könnte?“\\n\\n„Leidet, wie Menschen schon immer gelitten haben. Wir schaffen die Krankheit nicht ab, indem wir abschaffen, was uns zu Menschen macht. Wir tragen das Leiden. Das ist es, was es bedeutet, Mensch zu sein.“"
+ },
+ "extra_law_events.52.t": {
+  "en": "The Sanctity of the Body",
+  "de": "Die Unantastbarkeit des Körpers"
+ },
+ "extra_law_events.53.a": {
+  "en": "Defer - changing succession is a generational project",
+  "de": "Aufschieben - die Erbfolge zu ändern ist ein Generationenprojekt"
+ },
+ "extra_law_events.53.b": {
+  "en": "Press through - the old families have had their share",
+  "de": "Durchsetzen - die alten Familien hatten ihren Anteil"
+ },
+ "extra_law_events.53.d": {
+  "en": "Old families have closed ranks against [SCOPE.sLaw('current_law_scope').GetName], leveraging centuries of accumulated influence. The [SCOPE.gsInterestGroup('opposing_ig').GetName] frame the bill as confiscatory in everything but name.",
+  "de": "Alte Familien haben gegen [SCOPE.sLaw('current_law_scope').GetName] die Reihen geschlossen und Jahrhunderte angehäuften Einflusses in die Waagschale geworfen. Die [SCOPE.gsInterestGroup('opposing_ig').GetName] stellen den Entwurf als de facto Enteignung dar."
+ },
+ "extra_law_events.53.f": {
+  "en": "\\\"You propose to dispose of our grandfathers' work with a stroke of the pen. Forgive us if we find this less than persuasive.\\\"\\n\\n\\\"Your grandfathers' work is also our grandfathers' work. They built the country we live in. We propose to share it differently.\\\"\\n\\n\\\"You propose to take it. The euphemism is admirable, but the result is the same.\\\"",
+  "de": "„Sie schlagen vor, das Werk unserer Großväter mit einem Federstrich zu beseitigen. Verzeihen Sie, wenn wir das weniger als überzeugend finden.“\\n\\n„Das Werk Ihrer Großväter ist auch das Werk unserer Großväter. Sie haben das Land erbaut, in dem wir leben. Wir schlagen vor, es anders zu teilen.“\\n\\n„Sie schlagen vor, es zu nehmen. Der Euphemismus ist bewundernswert, aber das Ergebnis ist dasselbe.“"
+ },
+ "extra_law_events.53.t": {
+  "en": "Houses of the Aggrieved",
+  "de": "Häuser der Verbitterten"
+ },
+ "extra_law_events.54.a": {
+  "en": "Defer - it is not the right moment",
+  "de": "Aufschieben - es ist nicht der richtige Moment"
+ },
+ "extra_law_events.54.b": {
+  "en": "Press through - rights cannot wait on prejudice",
+  "de": "Durchsetzen - Rechte dürfen nicht auf Vorurteile warten"
+ },
+ "extra_law_events.54.d": {
+  "en": "Sermons across the country denounce [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] have organized petition drives and public rallies in unprecedented numbers.",
+  "de": "Predigten im ganzen Land prangern [SCOPE.sLaw('current_law_scope').GetName] an. Die [SCOPE.gsInterestGroup('opposing_ig').GetName] haben Unterschriftenaktionen und öffentliche Kundgebungen in beispielloser Zahl organisiert."
+ },
+ "extra_law_events.54.f": {
+  "en": "\\\"We are not bigots — we are conservatives. There is a difference, and the law you propose threatens to abolish it.\\\"\\n\\n\\\"What is the difference?\\\"\\n\\n\\\"A bigot believes the wrong people exist. A conservative believes the right people deserve the world they grew up in. The law you propose tells the conservative he has been the bigot all along.\\\"",
+  "de": "„Wir sind keine Eiferer — wir sind Konservative. Das ist ein Unterschied, und das Gesetz, das Sie vorschlagen, droht ihn zu tilgen.“\\n\\n„Worin besteht der Unterschied?“\\n\\n„Ein Eiferer glaubt, dass es die falschen Menschen gibt. Ein Konservativer glaubt, dass den richtigen Menschen die Welt zusteht, in der sie aufgewachsen sind. Das Gesetz, das Sie vorschlagen, sagt dem Konservativen, dass er die ganze Zeit der Eiferer war.“"
+ },
+ "extra_law_events.54.t": {
+  "en": "Pulpit Outcry",
+  "de": "Aufschrei von der Kanzel"
+ },
+ "extra_law_events.55.a": {
+  "en": "Withdraw - some matters belong to families, not legislators",
+  "de": "Zurückziehen - manche Dinge gehören den Familien, nicht den Gesetzgebern"
+ },
+ "extra_law_events.55.b": {
+  "en": "Press through - demographic policy is the state's concern",
+  "de": "Durchsetzen - Bevölkerungspolitik ist Sache des Staates"
+ },
+ "extra_law_events.55.d": {
+  "en": "A nationwide movement has coalesced around opposition to [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] frame it as state intrusion into the most sacred domestic sphere.",
+  "de": "Eine landesweite Bewegung hat sich um den Widerstand gegen [SCOPE.sLaw('current_law_scope').GetName] formiert. Die [SCOPE.gsInterestGroup('opposing_ig').GetName] stellen es als staatlichen Eingriff in den heiligsten häuslichen Bereich dar."
+ },
+ "extra_law_events.55.f": {
+  "en": "\\\"The state has no business in the nursery. Pass this and you will have the people you deserve — and the demographic crisis you have engineered.\\\"\\n\\n\\\"The state already pays for the schools the nursery sends children to.\\\"\\n\\n\\\"And we send the children gladly. We do not send them to be raised. That is a distinction the bill collapses, and the country will feel the loss in twenty years.\\\"",
+  "de": "„Der Staat hat im Kinderzimmer nichts verloren. Verabschieden Sie das, und Sie werden das Volk bekommen, das Sie verdienen — und die demografische Krise, die Sie selbst herbeigeführt haben.“\\n\\n„Der Staat bezahlt bereits die Schulen, in die das Kinderzimmer die Kinder schickt.“\\n\\n„Und wir schicken die Kinder gerne. Wir schicken sie nicht dorthin, um erzogen zu werden. Das ist ein Unterschied, den der Entwurf verwischt, und das Land wird den Verlust in zwanzig Jahren spüren.“"
+ },
+ "extra_law_events.55.t": {
+  "en": "Family Values Movement",
+  "de": "Die Bewegung für Familienwerte"
+ },
+ "extra_law_events.56.a": {
+  "en": "Yield to security concerns and pause",
+  "de": "Den Sicherheitsbedenken nachgeben und pausieren"
+ },
+ "extra_law_events.56.b": {
+  "en": "Press through - the public's right to know is not a security risk",
+  "de": "Durchsetzen - das Recht der Öffentlichkeit auf Information ist kein Sicherheitsrisiko"
+ },
+ "extra_law_events.56.d": {
+  "en": "The [SCOPE.gsInterestGroup('opposing_ig').GetName] have warned in unusually public terms that [SCOPE.sLaw('current_law_scope').GetName] will compromise vital state functions. Editorial pages quote anonymous officials forecasting disaster.",
+  "de": "Die [SCOPE.gsInterestGroup('opposing_ig').GetName] haben in ungewöhnlich offener Weise gewarnt, dass [SCOPE.sLaw('current_law_scope').GetName] wichtige staatliche Funktionen gefährden werde. Leitartikel zitieren anonyme Beamte, die ein Unheil voraussagen."
+ },
+ "extra_law_events.56.f": {
+  "en": "\\\"Sunlight, we are told, is the best disinfectant. It is also the best way to read your enemy's mail. We cannot expose every file to public view without exposing the country to its rivals.\\\"\\n\\n\\\"The bill provides exemptions for matters of state security.\\\"\\n\\n\\\"The exemptions are for what we declare. The damage is from what we miss. We will miss things. We always do.\\\"",
+  "de": "„Sonnenlicht, so heißt es, ist das beste Desinfektionsmittel. Es ist auch der beste Weg, die Post des Feindes zu lesen. Wir können nicht jede Akte öffentlich zugänglich machen, ohne das Land seinen Rivalen preiszugeben.“\\n\\n„Der Entwurf sieht Ausnahmen für Fragen der Staatssicherheit vor.“\\n\\n„Die Ausnahmen gelten für das, was wir angeben. Der Schaden entsteht durch das, was wir übersehen. Wir werden Dinge übersehen. Das tun wir immer.“"
+ },
+ "extra_law_events.56.t": {
+  "en": "State Secrets in Question",
+  "de": "Staatsgeheimnisse infrage gestellt"
+ },
+ "extra_law_events.57.a": {
+  "en": "Withdraw - the public mood is not yet there",
+  "de": "Zurückziehen - die öffentliche Stimmung ist noch nicht so weit"
+ },
+ "extra_law_events.57.b": {
+  "en": "Press through - rights cannot wait on majoritarian comfort",
+  "de": "Durchsetzen - Rechte dürfen nicht auf das Wohlbefinden der Mehrheit warten"
+ },
+ "extra_law_events.57.d": {
+  "en": "Counter-demonstrations have erupted in response to [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] frame the bill as preferential treatment that the majority will not tolerate.",
+  "de": "Gegendemonstrationen sind als Reaktion auf [SCOPE.sLaw('current_law_scope').GetName] ausgebrochen. Die [SCOPE.gsInterestGroup('opposing_ig').GetName] stellen den Entwurf als Bevorzugung dar, die die Mehrheit nicht dulden werde."
+ },
+ "extra_law_events.57.f": {
+  "en": "\\\"We have nothing against them. We only object to being told we must love them, by people who do not know our towns and have never lived alongside them.\\\"\\n\\n\\\"The law does not legislate love.\\\"\\n\\n\\\"It legislates the consequences of withholding it. The distinction is academic when one is the schoolteacher being told what to teach.\\\"",
+  "de": "„Wir haben nichts gegen sie. Wir wehren uns nur dagegen, von Leuten, die unsere Städte nicht kennen und nie neben ihnen gelebt haben, gesagt zu bekommen, wir müssten sie lieben.“\\n\\n„Das Gesetz schreibt keine Liebe vor.“\\n\\n„Es schreibt die Folgen vor, sie zu verweigern. Der Unterschied ist rein akademisch, wenn man der Lehrer ist, dem gesagt wird, was er zu unterrichten hat.“"
+ },
+ "extra_law_events.57.t": {
+  "en": "Majority Backlash",
+  "de": "Gegenreaktion der Mehrheit"
+ },
+ "extra_law_events.58.a": {
+  "en": "Concede - capital flight is a real risk",
+  "de": "Nachgeben - Kapitalflucht ist ein reales Risiko"
+ },
+ "extra_law_events.58.b": {
+  "en": "Press through - the rich threaten, then comply",
+  "de": "Durchsetzen - die Reichen drohen, fügen sich dann aber"
+ },
+ "extra_law_events.58.d": {
+  "en": "The [SCOPE.gsInterestGroup('opposing_ig').GetName] have begun publicly discussing relocation of investments abroad if [SCOPE.sLaw('current_law_scope').GetName] passes. The talk alone is already moving markets.",
+  "de": "Die [SCOPE.gsInterestGroup('opposing_ig').GetName] haben begonnen, öffentlich über die Verlagerung von Investitionen ins Ausland zu sprechen, sollte [SCOPE.sLaw('current_law_scope').GetName] verabschiedet werden. Schon die bloßen Gerüchte bewegen die Märkte."
+ },
+ "extra_law_events.58.f": {
+  "en": "\\\"You may legislate generosity, but you cannot legislate the wealth that pays for it. Make us your enemies and we will simply become someone else's friends.\\\"\\n\\n\\\"And your factories?\\\"\\n\\n\\\"The factories cannot move. But the next factories can be built elsewhere. And the orders from abroad can flow to someone else's workers. The capital we hold is the smallest part of what we control.\\\"",
+  "de": "„Sie können Großzügigkeit per Gesetz vorschreiben, aber nicht den Reichtum, der sie bezahlt. Machen Sie uns zu Ihren Feinden, und wir werden einfach zu den Freunden von jemand anderem.“\\n\\n„Und Ihre Fabriken?“\\n\\n„Die Fabriken können nicht umziehen. Aber die nächsten Fabriken können anderswo gebaut werden. Und die Aufträge aus dem Ausland können zu den Arbeitern eines anderen fließen. Das Kapital, das wir halten, ist der kleinste Teil dessen, was wir kontrollieren.“"
+ },
+ "extra_law_events.58.t": {
+  "en": "Capital Flight Threatens",
+  "de": "Drohende Kapitalflucht"
+ },
+ "extra_law_events.59.a": {
+  "en": "Withdraw and address the failure first",
+  "de": "Zurückziehen und erst das Versagen aufarbeiten"
+ },
+ "extra_law_events.59.b": {
+  "en": "Press through - one failure is not a verdict",
+  "de": "Durchsetzen - ein Fehlschlag ist kein Urteilsspruch"
+ },
+ "extra_law_events.59.d": {
+  "en": "A high-profile failure of an algorithmic governance pilot has hit the news. Critics seize on it as evidence that [SCOPE.sLaw('current_law_scope').GetName] is dangerous folly, and the [SCOPE.gsInterestGroup('opposing_ig').GetName] demand the bill be reconsidered.",
+  "de": "Ein aufsehenerregendes Scheitern eines Pilotprojekts zur algorithmischen Verwaltung hat die Nachrichten erreicht. Kritiker nutzen es als Beweis dafür, dass [SCOPE.sLaw('current_law_scope').GetName] gefährlicher Unsinn ist, und die [SCOPE.gsInterestGroup('opposing_ig').GetName] fordern, den Entwurf zu überdenken."
+ },
+ "extra_law_events.59.f": {
+  "en": "\\\"The model that was supposed to optimize the city's waste collection has, somehow, optimized a fleet of trucks straight into the river. This is what we are about to put in charge of our laws.\\\"\\n\\n\\\"The model has been fixed.\\\"\\n\\n\\\"The model has been patched. There is a difference. The next failure will be in a different optimization, and the optimization after that. We will be patching the model when the trucks have been on the riverbed for a decade.\\\"",
+  "de": "„Das Modell, das die Müllabfuhr der Stadt optimieren sollte, hat es irgendwie geschafft, eine Flotte von Lastwagen direkt in den Fluss zu optimieren. Das ist es, dem wir im Begriff sind, unsere Gesetze anzuvertrauen.“\\n\\n„Das Modell wurde repariert.“\\n\\n„Das Modell wurde geflickt. Das ist ein Unterschied. Der nächste Fehlschlag wird bei einer anderen Optimierung liegen, und der danach bei der nächsten. Wir werden das Modell noch flicken, wenn die Lastwagen seit einem Jahrzehnt auf dem Flussgrund liegen.“"
+ },
+ "extra_law_events.59.t": {
+  "en": "The Algorithm Fails",
+  "de": "Der Algorithmus versagt"
+ },
+ "extra_law_events.6.a": {
+  "en": "Ride the wave - let the campaign build pressure.",
+  "de": "Die Welle reiten - die Kampagne Druck aufbauen lassen."
+ },
+ "extra_law_events.6.b": {
+  "en": "Channel the energy into a measured public consultation.",
+  "de": "Die Energie in eine maßvolle öffentliche Konsultation lenken."
+ },
+ "extra_law_events.6.d": {
+  "en": "A grassroots campaign organized by the [SCOPE.gsInterestGroup('supporting_ig').GetName] has gone viral across the nation's digital networks, generating enormous public interest in our proposed [SCOPE.sLaw('current_law_scope').GetName] legislation.",
+  "de": "Eine von den [SCOPE.gsInterestGroup('supporting_ig').GetName] organisierte Basiskampagne hat sich in den digitalen Netzwerken der Nation viral verbreitet und ein enormes öffentliches Interesse an unserem geplanten Gesetz [SCOPE.sLaw('current_law_scope').GetName] geweckt."
+ },
+ "extra_law_events.6.f": {
+  "en": "\\\"It started as a single post on a message board. Within forty-eight hours it had been shared by millions. The censors blocked the original site on Thursday. By Friday there were twelve mirrors.\\\"",
+  "de": "„Es begann als ein einzelner Beitrag in einem Forum. Innerhalb von achtundvierzig Stunden wurde er von Millionen geteilt. Die Zensoren sperrten die ursprüngliche Seite am Donnerstag. Bis Freitag gab es zwölf Spiegelseiten.“"
+ },
+ "extra_law_events.6.t": {
+  "en": "The Viral Campaign",
+  "de": "Die virale Kampagne"
+ },
+ "extra_law_events.60.a": {
+  "en": "Pause and address the demagogue problem",
+  "de": "Pausieren und das Demagogenproblem angehen"
+ },
+ "extra_law_events.60.b": {
+  "en": "Press through - the people will learn by doing",
+  "de": "Durchsetzen - das Volk wird durch Erfahrung lernen"
+ },
+ "extra_law_events.60.d": {
+  "en": "Trial runs of direct citizen voting under preview of [SCOPE.sLaw('current_law_scope').GetName] have been captured by populist agitators. The [SCOPE.gsInterestGroup('opposing_ig').GetName] argue this confirms their worst fears about mob rule.",
+  "de": "Testläufe direkter Bürgerabstimmungen im Vorgriff auf [SCOPE.sLaw('current_law_scope').GetName] sind von populistischen Aufwieglern vereinnahmt worden. Die [SCOPE.gsInterestGroup('opposing_ig').GetName] argumentieren, dies bestätige ihre schlimmsten Befürchtungen über die Pöbelherrschaft."
+ },
+ "extra_law_events.60.f": {
+  "en": "\\\"The crowd that cheered loudest in the square last night was the one that voted to demolish the public library. This is the wisdom you propose to make sovereign?\\\"\\n\\n\\\"The crowd will learn.\\\"\\n\\n\\\"The crowd will learn after the library is gone. The argument for democracy is not that the crowd is wise — it is that someone has to choose, and a king is no better. But let us at least be honest about the company we keep.\\\"",
+  "de": "„Die Menge, die letzte Nacht auf dem Platz am lautesten jubelte, war jene, die dafür stimmte, die öffentliche Bibliothek abzureißen. Ist das die Weisheit, die Sie zur Souveränität erheben wollen?“\\n\\n„Die Menge wird lernen.“\\n\\n„Die Menge wird lernen, nachdem die Bibliothek verschwunden ist. Das Argument für die Demokratie ist nicht, dass die Menge weise ist — es ist, dass irgendjemand wählen muss, und ein König ist nicht besser. Aber seien wir wenigstens ehrlich darüber, in welcher Gesellschaft wir uns befinden.“"
+ },
+ "extra_law_events.60.t": {
+  "en": "Demagogues at the Forum",
+  "de": "Demagogen auf dem Forum"
+ },
+ "extra_law_events.61.a": {
+  "en": "Pre-clear with industry",
+  "de": "Vorab mit der Industrie abstimmen"
+ },
+ "extra_law_events.61.b": {
+  "en": "Air it publicly first",
+  "de": "Es zuerst öffentlich vorstellen"
+ },
+ "extra_law_events.61.d": {
+  "en": "The drafting committee for [SCOPE.sLaw('current_law_scope').GetName] faces a choice: pre-clear the bill with the affected institutions, or build a public mandate by airing it in the press first. Each path costs the goodwill of the other side.",
+  "de": "Der Ausschuss zur Ausarbeitung von [SCOPE.sLaw('current_law_scope').GetName] steht vor einer Wahl: den Entwurf vorab mit den betroffenen Institutionen abstimmen oder erst ein öffentliches Mandat aufbauen, indem er in der Presse vorgestellt wird. Jeder Weg kostet das Wohlwollen der jeweils anderen Seite."
+ },
+ "extra_law_events.61.f": {
+  "en": "\\\"Show us the bill before the public sees it, and we will give you the benefit of our experience. Read about it in the morning paper, and we will give you the benefit of our resistance.\\\"\\n\\n\\\"That sounds remarkably like blackmail.\\\"\\n\\n\\\"It is consultation. Whether you call it blackmail depends on whether you think the consultation should be optional.\\\"",
+  "de": "„Zeigen Sie uns den Entwurf, bevor die Öffentlichkeit ihn sieht, und wir schenken Ihnen den Nutzen unserer Erfahrung. Lesen wir davon in der Morgenzeitung, schenken wir Ihnen den Nutzen unseres Widerstands.“\\n\\n„Das klingt bemerkenswert nach Erpressung.“\\n\\n„Es ist Konsultation. Ob Sie es Erpressung nennen, hängt davon ab, ob Sie glauben, die Konsultation solle freiwillig sein.“"
+ },
+ "extra_law_events.61.t": {
+  "en": "Industry or Public Consultation?",
+  "de": "Industrie oder öffentliche Konsultation?"
+ },
+ "extra_law_events.62.a": {
+  "en": "Crack down on the speculators",
+  "de": "Hart gegen die Spekulanten vorgehen"
+ },
+ "extra_law_events.62.b": {
+  "en": "Build out deposit guarantees",
+  "de": "Einlagensicherungen ausbauen"
+ },
+ "extra_law_events.62.d": {
+  "en": "With panic spreading, the bill's drafters face a fork: punish those who caused the panic, or insure the public against the next one. The [SCOPE.sLaw('current_law_scope').GetName] can lean either way.",
+  "de": "Während sich die Panik ausbreitet, stehen die Verfasser des Entwurfs vor einer Weggabelung: jene bestrafen, die die Panik verursacht haben, oder die Öffentlichkeit gegen die nächste absichern. [SCOPE.sLaw('current_law_scope').GetName] kann sich in beide Richtungen neigen."
+ },
+ "extra_law_events.62.d_memory": {
+  "en": "With the memory of the last panic still fresh, the bill's drafters face a fork: punish those who caused it, or insure the public against the next one. The [SCOPE.sLaw('current_law_scope').GetName] can lean either way.",
+  "de": "Während die Erinnerung an die letzte Panik noch frisch ist, stehen die Verfasser des Entwurfs vor einer Weggabelung: jene bestrafen, die sie verursacht haben, oder die Öffentlichkeit gegen die nächste absichern. [SCOPE.sLaw('current_law_scope').GetName] kann sich in beide Richtungen neigen."
+ },
+ "extra_law_events.62.f": {
+  "en": "\\\"You can hunt the wolves, or you can build a stronger fence. We argue for both, of course — but if forced to choose, we have very different favorites.\\\"\\n\\n\\\"Which side are you on?\\\"\\n\\n\\\"The side that has lost the most sheep. Which makes us, today, the side that argues loudest for the wolf hunt. Tomorrow we may argue for the fence.\\\"",
+  "de": "„Man kann die Wölfe jagen, oder man kann einen stärkeren Zaun bauen. Wir plädieren natürlich für beides — aber wenn wir wählen müssten, haben wir sehr unterschiedliche Favoriten.“\\n\\n„Auf welcher Seite stehen Sie?“\\n\\n„Auf der Seite, die die meisten Schafe verloren hat. Das macht uns heute zu der Seite, die am lautesten für die Wolfsjagd plädiert. Morgen plädieren wir vielleicht für den Zaun.“"
+ },
+ "extra_law_events.62.t": {
+  "en": "Crackdown or Guarantees?",
+  "de": "Durchgreifen oder Garantien?"
+ },
+ "extra_law_events.63.a": {
+  "en": "Settle with the aristocracy",
+  "de": "Sich mit dem Adel arrangieren"
+ },
+ "extra_law_events.63.b": {
+  "en": "Align with the industrialists",
+  "de": "Sich mit den Industriellen verbünden"
+ },
+ "extra_law_events.63.d": {
+  "en": "Currency reform under [SCOPE.sLaw('current_law_scope').GetName] needs an anchor. Old wealth wants the gold-bond foundation; new wealth wants the production-and-trade foundation. The country must choose one constituency to keep close.",
+  "de": "Die Währungsreform unter [SCOPE.sLaw('current_law_scope').GetName] braucht einen Anker. Der alte Reichtum will die Grundlage aus Gold und Anleihen; der neue Reichtum will die Grundlage aus Produktion und Handel. Das Land muss sich entscheiden, welcher Wählerschaft es nahesteht."
+ },
+ "extra_law_events.63.f": {
+  "en": "\\\"A currency reflects the people who hold it. Whose hands matter more to you — those that have always held wealth, or those that are making it now?\\\"\\n\\n\\\"Both. We need both.\\\"\\n\\n\\\"You need both, but you must choose one to anchor the law. The unchosen one will adapt. The chosen one will dictate. Pick which dictation you find more tolerable.\\\"",
+  "de": "„Eine Währung spiegelt die Menschen wider, die sie halten. Wessen Hände sind Ihnen wichtiger — jene, die schon immer Reichtum besaßen, oder jene, die ihn jetzt schaffen?“\\n\\n„Beide. Wir brauchen beide.“\\n\\n„Sie brauchen beide, aber Sie müssen eine wählen, um das Gesetz daran zu verankern. Die nicht gewählte wird sich anpassen. Die gewählte wird diktieren. Wählen Sie, welches Diktat Sie eher ertragen können.“"
+ },
+ "extra_law_events.63.t": {
+  "en": "Aristocratic or Industrial Currency?",
+  "de": "Aristokratische oder industrielle Währung?"
+ },
+ "extra_law_events.64.a": {
+  "en": "Index wages to inflation",
+  "de": "Löhne an die Inflation koppeln"
+ },
+ "extra_law_events.64.b": {
+  "en": "Protect cross-border capital",
+  "de": "Grenzüberschreitendes Kapital schützen"
+ },
+ "extra_law_events.64.d": {
+  "en": "The fiat-currency framework needs a safety valve. Labor wants wages indexed to inflation; capital wants a clause shielding cross-border investments from currency moves. Both clauses, naturally, are mutually exclusive.",
+  "de": "Das Fiatgeldsystem braucht ein Sicherheitsventil. Die Arbeiterschaft will Löhne, die an die Inflation gekoppelt sind; das Kapital will eine Klausel, die grenzüberschreitende Investitionen vor Währungsschwankungen schützt. Beide Klauseln schließen sich naturgemäß gegenseitig aus."
+ },
+ "extra_law_events.64.f": {
+  "en": "\\\"You will protect one of us at the expense of the other. Pick wisely. The party you fail to protect today will remember it for a long time.\\\"\\n\\n\\\"Then we will protect both.\\\"\\n\\n\\\"You cannot. The clauses are mutually exclusive. Whichever one survives the markup tells me where the next election will be lost.\\\"",
+  "de": "„Sie werden einen von uns auf Kosten des anderen schützen. Wählen Sie weise. Die Partei, die Sie heute nicht schützen, wird sich lange daran erinnern.“\\n\\n„Dann schützen wir beide.“\\n\\n„Das können Sie nicht. Die Klauseln schließen sich gegenseitig aus. Welche die Ausschussberatung übersteht, sagt mir, wo die nächste Wahl verloren geht.“"
+ },
+ "extra_law_events.64.t": {
+  "en": "Index Wages or Protect Capital?",
+  "de": "Löhne koppeln oder Kapital schützen?"
+ },
+ "extra_law_events.65.a": {
+  "en": "Civil liberties carve-outs",
+  "de": "Ausnahmen für Bürgerrechte"
+ },
+ "extra_law_events.65.b": {
+  "en": "National security exemptions",
+  "de": "Ausnahmen für die nationale Sicherheit"
+ },
+ "extra_law_events.65.d": {
+  "en": "The privacy bill [SCOPE.sLaw('current_law_scope').GetName] needs a carve-out clause. Civil libertarians want exemptions for journalists and lawyers; the security state wants exemptions for national-security investigations. Each clause closes the other's door.",
+  "de": "Der Datenschutzentwurf [SCOPE.sLaw('current_law_scope').GetName] braucht eine Ausnahmeklausel. Bürgerrechtler wollen Ausnahmen für Journalisten und Anwälte; der Sicherheitsapparat will Ausnahmen für Ermittlungen im Bereich der nationalen Sicherheit. Jede Klausel verschließt die Tür der anderen."
+ },
+ "extra_law_events.65.f": {
+  "en": "\\\"Either the journalist can keep her source, or the spy can name his target. A law that promises both promises one and delivers the other.\\\"\\n\\n\\\"Which one would it deliver?\\\"\\n\\n\\\"The spy. It always delivers the spy. The journalist gets the language of protection; the spy gets the implementing regulation.\\\"",
+  "de": "„Entweder die Journalistin kann ihre Quelle schützen, oder der Spion kann sein Ziel benennen. Ein Gesetz, das beides verspricht, verspricht das eine und liefert das andere.“\\n\\n„Welches würde es liefern?“\\n\\n„Den Spion. Es liefert immer den Spion. Die Journalistin bekommt den Wortlaut des Schutzes; der Spion bekommt die Durchführungsverordnung.“"
+ },
+ "extra_law_events.65.t": {
+  "en": "Civil Liberties or National Security?",
+  "de": "Bürgerrechte oder nationale Sicherheit?"
+ },
+ "extra_law_events.66.a": {
+  "en": "Bake in freedom safeguards",
+  "de": "Freiheitsgarantien fest verankern"
+ },
+ "extra_law_events.66.b": {
+  "en": "Establish a moderation framework",
+  "de": "Ein Moderationssystem einrichten"
+ },
+ "extra_law_events.66.d": {
+  "en": "The internet bill [SCOPE.sLaw('current_law_scope').GetName] reaches the moderation question. The free-speech contingent wants safeguards against takedowns; the safety contingent wants a content-moderation framework. Choose one as the bill's frame.",
+  "de": "Der Internetentwurf [SCOPE.sLaw('current_law_scope').GetName] gelangt zur Frage der Moderation. Das Lager der Meinungsfreiheit will Schutzmaßnahmen gegen Löschungen; das Sicherheitslager will ein System zur Inhaltsmoderation. Wählen Sie eines als Rahmen des Entwurfs."
+ },
+ "extra_law_events.66.f": {
+  "en": "\\\"You wrote a law about communication. You will end up writing a law about everything that can be communicated. Choose your principle now — you will not get to choose it later.\\\"\\n\\n\\\"The principle is freedom, with safeguards.\\\"\\n\\n\\\"The principle is one of those two words. Whichever you write first will swallow the other within five years of the bill's passage. Pick the one you can live with.\\\"",
+  "de": "„Sie haben ein Gesetz über Kommunikation geschrieben. Am Ende werden Sie ein Gesetz über alles geschrieben haben, was kommuniziert werden kann. Wählen Sie jetzt Ihr Prinzip — später werden Sie es nicht mehr wählen können.“\\n\\n„Das Prinzip lautet Freiheit, mit Schutzmaßnahmen.“\\n\\n„Das Prinzip ist eines dieser beiden Wörter. Welches Sie zuerst schreiben, wird das andere binnen fünf Jahren nach der Verabschiedung des Entwurfs verschlingen. Wählen Sie das, mit dem Sie leben können.“"
+ },
+ "extra_law_events.66.t": {
+  "en": "Freedom Safeguards or Content Moderation?",
+  "de": "Freiheitsgarantien oder Inhaltsmoderation?"
+ },
+ "extra_law_events.67.a": {
+  "en": "Permit broad research exemption",
+  "de": "Eine weitreichende Forschungsausnahme zulassen"
+ },
+ "extra_law_events.67.b": {
+  "en": "Honor religious carve-outs",
+  "de": "Religiöse Ausnahmen respektieren"
+ },
+ "extra_law_events.67.d": {
+  "en": "Genetic-research legislation under [SCOPE.sLaw('current_law_scope').GetName] needs a final clause. Scientists ask for a broad research exemption; religious authorities ask for explicit carve-outs allowing them to refuse procedures. Both cannot fit cleanly.",
+  "de": "Die Gesetzgebung zur Genforschung unter [SCOPE.sLaw('current_law_scope').GetName] braucht eine abschließende Klausel. Wissenschaftler fordern eine weitreichende Forschungsausnahme; religiöse Autoritäten fordern ausdrückliche Ausnahmen, die es ihnen erlauben, Verfahren abzulehnen. Beides passt nicht sauber zusammen."
+ },
+ "extra_law_events.67.f": {
+  "en": "\\\"Conscience and curiosity are both rights, but they ask for different things from the law. The state must side with one, even if it claims to honor both.\\\"\\n\\n\\\"And if I side with curiosity?\\\"\\n\\n\\\"Then the priest will hear his conscience overruled in his own pulpit. He will live with it. He will also vote, and his neighbors will too.\\\"",
+  "de": "„Gewissen und Neugier sind beides Rechte, doch sie verlangen Unterschiedliches vom Gesetz. Der Staat muss sich auf eine Seite stellen, auch wenn er behauptet, beide zu achten.“\\n\\n„Und wenn ich mich auf die Seite der Neugier stelle?“\\n\\n„Dann wird der Priester hören, wie sein Gewissen in seiner eigenen Kanzel überstimmt wird. Er wird damit leben. Er wird auch wählen, und seine Nachbarn ebenso.“"
+ },
+ "extra_law_events.67.t": {
+  "en": "Research Exemption or Religious Carve-Outs?",
+  "de": "Forschungsausnahme oder religiöse Ausnahmen?"
+ },
+ "extra_law_events.68.a": {
+  "en": "Carve out the established firms",
+  "de": "Ausnahmen für etablierte Unternehmen schaffen"
+ },
+ "extra_law_events.68.b": {
+  "en": "Apply enforcement strictly",
+  "de": "Die Durchsetzung streng anwenden"
+ },
+ "extra_law_events.68.d": {
+  "en": "The antitrust bill [SCOPE.sLaw('current_law_scope').GetName] faces its key question: do established firms get a transition carve-out, or does enforcement apply across the board? Small business and big business want opposite answers.",
+  "de": "Der Kartellrechtsentwurf [SCOPE.sLaw('current_law_scope').GetName] steht vor seiner Schlüsselfrage: Erhalten etablierte Unternehmen eine Übergangsausnahme, oder gilt die Durchsetzung für alle gleichermaßen? Kleinunternehmen und Großunternehmen wollen entgegengesetzte Antworten."
+ },
+ "extra_law_events.68.f": {
+  "en": "\\\"Apply the law strictly and you destroy what works. Carve out the giants and you protect what doesn't. The voters will judge whichever choice you make.\\\"\\n\\n\\\"And how shall they judge?\\\"\\n\\n\\\"By the prices in the shops next year. By the wages they take home in five. By how many of them work for the carve-outs in ten. The judgment is slow, but it is exact.\\\"",
+  "de": "„Wenden Sie das Gesetz streng an, und Sie zerstören, was funktioniert. Nehmen Sie die Giganten aus, und Sie schützen, was nicht funktioniert. Die Wähler werden über jede Entscheidung, die Sie treffen, urteilen.“\\n\\n„Und wie sollen sie urteilen?“\\n\\n„Anhand der Preise in den Läden nächstes Jahr. Anhand der Löhne, die sie in fünf Jahren nach Hause bringen. Anhand der Zahl derer, die in zehn Jahren für die Ausgenommenen arbeiten. Das Urteil ist langsam, aber es ist genau.“"
+ },
+ "extra_law_events.68.t": {
+  "en": "Carve-Out the Big Firms or Apply Strictly?",
+  "de": "Große Unternehmen ausnehmen oder streng durchgreifen?"
+ },
+ "extra_law_events.69.a": {
+  "en": "Strengthen creator protections",
+  "de": "Den Schutz von Urhebern stärken"
+ },
+ "extra_law_events.69.b": {
+  "en": "Expand the public domain",
+  "de": "Das Gemeinfreie ausweiten"
+ },
+ "extra_law_events.69.d": {
+  "en": "The intellectual-property framework in [SCOPE.sLaw('current_law_scope').GetName] tilts one way or the other. Established creators want strong protection; libraries, researchers, and reformers want public-domain expansion. The drafting committee picks a side.",
+  "de": "Der Rahmen für geistiges Eigentum in [SCOPE.sLaw('current_law_scope').GetName] neigt sich in die eine oder andere Richtung. Etablierte Urheber wollen starken Schutz; Bibliotheken, Forscher und Reformer wollen eine Ausweitung des Gemeinfreien. Der Ausschuss zur Ausarbeitung wählt eine Seite."
+ },
+ "extra_law_events.69.f": {
+  "en": "\\\"The painter wants to be paid. The student wants to learn. The law must decide which of them is harder to refuse.\\\"\\n\\n\\\"They will both want both.\\\"\\n\\n\\\"They will both ask for both. Granting both is a different matter. The question is which one gets to call us niggardly when we fall short — and the answer is in the structure of the law, not its sentiments.\\\"",
+  "de": "„Der Maler will bezahlt werden. Der Student will lernen. Das Gesetz muss entscheiden, wem von beiden man schwerer eine Absage erteilen kann.“\\n\\n„Beide werden beides wollen.“\\n\\n„Beide werden um beides bitten. Beides zu gewähren, ist eine andere Sache. Die Frage ist, wer von ihnen uns knauserig nennen darf, wenn wir zu kurz greifen — und die Antwort liegt in der Struktur des Gesetzes, nicht in seinen Absichtserklärungen.“"
+ },
+ "extra_law_events.69.t": {
+  "en": "Creator Protection or Public Domain?",
+  "de": "Urheberschutz oder Gemeinfreiheit?"
+ },
+ "extra_law_events.7.a": {
+  "en": "Science must not be shackled by superstition!",
+  "de": "Die Wissenschaft darf nicht vom Aberglauben gefesselt werden!"
+ },
+ "extra_law_events.7.b": {
+  "en": "Invite the clergy into the drafting process.",
+  "de": "Den Klerus in den Ausarbeitungsprozess einbeziehen."
+ },
+ "extra_law_events.7.d": {
+  "en": "The proposed changes to our genetic legislation have sparked a furious moral debate. The [SCOPE.gsInterestGroup('devout_ig').GetName] have organized public sermons denouncing the 'arrogance of man,' while scientists plead for the freedom to pursue breakthroughs that could end hereditary disease.",
+  "de": "Die geplanten Änderungen unserer Gengesetzgebung haben eine erbitterte moralische Debatte entfacht. Die [SCOPE.gsInterestGroup('devout_ig').GetName] haben öffentliche Predigten organisiert, die die ‚Anmaßung des Menschen‘ anprangern, während Wissenschaftler um die Freiheit bitten, Durchbrüche zu verfolgen, die Erbkrankheiten beenden könnten."
+ },
+ "extra_law_events.7.f": {
+  "en": "\\\"To rewrite the very code of life written by the Almighty is to commit the sin of Prometheus. But then, Prometheus did bring us fire, and we have yet to return it.\\\"",
+  "de": "„Den Code des Lebens selbst neu zu schreiben, den der Allmächtige verfasst hat, heißt, die Sünde des Prometheus zu begehen. Doch andererseits brachte uns Prometheus das Feuer, und wir haben es noch nicht zurückgegeben.“"
+ },
+ "extra_law_events.7.t": {
+  "en": "The Ethics of the Gene",
+  "de": "Die Ethik des Gens"
+ },
+ "extra_law_events.70.a": {
+  "en": "Hold the line on strict humanitarian rules",
+  "de": "An strengen humanitären Regeln festhalten"
+ },
+ "extra_law_events.70.b": {
+  "en": "Accept realpolitik exemptions",
+  "de": "Realpolitische Ausnahmen akzeptieren"
+ },
+ "extra_law_events.70.d": {
+  "en": "The rules-of-war bill [SCOPE.sLaw('current_law_scope').GetName] needs a final shape. Reformers want a clean humanitarian code; the military wants explicit exemptions for operational realities. The principle is not negotiable, except that it now is.",
+  "de": "Der Entwurf zu den Regeln der Kriegsführung [SCOPE.sLaw('current_law_scope').GetName] braucht seine endgültige Form. Reformer wollen ein reines humanitäres Regelwerk; das Militär will ausdrückliche Ausnahmen für die operative Wirklichkeit. Das Prinzip ist nicht verhandelbar - außer dass es das nun eben doch ist."
+ },
+ "extra_law_events.70.f": {
+  "en": "\\\"A clean code looks beautiful in the abstract and falls apart in the field. An exemption-riddled code looks ugly on paper and survives the contact with reality. Choose which kind of ugliness you can live with.\\\"\\n\\n\\\"The exemption-riddled code creates the abuses it pretends to prevent.\\\"\\n\\n\\\"And the clean code creates martyrs out of officers who could not, in practice, obey it. Pick your scandal. The press will write about whichever you give them.\\\"",
+  "de": "„Ein reines Regelwerk sieht in der Theorie schön aus und zerfällt im Feld. Ein von Ausnahmen durchlöchertes Regelwerk sieht auf dem Papier hässlich aus und übersteht den Kontakt mit der Wirklichkeit. Wählen Sie, mit welcher Art von Hässlichkeit Sie leben können.“\\n\\n„Das von Ausnahmen durchlöcherte Regelwerk schafft die Missstände, die es vorgibt zu verhindern.“\\n\\n„Und das reine Regelwerk macht Märtyrer aus Offizieren, die es in der Praxis nicht befolgen konnten. Wählen Sie Ihren Skandal. Die Presse wird über das schreiben, was immer Sie ihr geben.“"
+ },
+ "extra_law_events.70.t": {
+  "en": "Strict Humanitarian Code or Realpolitik Exemptions?",
+  "de": "Strenges humanitäres Regelwerk oder realpolitische Ausnahmen?"
+ },
  "movement_events_te.1.a": {
   "en": "Let them march in peace",
   "de": "Lasst sie in Frieden marschieren"
