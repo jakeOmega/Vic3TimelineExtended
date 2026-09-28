@@ -732,6 +732,32 @@ def cmd_prompt(args) -> int:
     return 0
 
 
+def term_mismatches(tm: dict[str, dict], terms: dict[str, str], field: str) -> list[tuple[str, str, str]]:
+    """(key, English term, expected rendering) for each translated line whose
+    English uses a listed term but whose translation lacks that rendering.
+    Inflection is allowed: each word of the rendering need only appear by its
+    stem (all but its last three letters, at least four)."""
+    out = []
+    for en_term, rendering in terms.items():
+        pattern = re.compile(r"(?<!\w)" + re.escape(en_term) + r"(?!\w)")
+        stems = [w[: max(4, len(w) - 3)].casefold() for w in re.findall(r"\w+", rendering) if len(w) >= 4]
+        for key, record in tm.items():
+            if "base" in record or not pattern.search(record["en"]):
+                continue
+            text = record[field].casefold()
+            if not all(stem in text for stem in stems):
+                out.append((key, en_term, rendering))
+    return sorted(out)
+
+
+def cmd_check_terms(args) -> int:
+    mismatches = term_mismatches(load_tm(args.language), load_terms(args.language), args.field)
+    for key, en_term, rendering in mismatches:
+        print(f"{key}: {en_term!r} should read {rendering!r}")
+    print(f"{len(mismatches)} line(s) render a listed term differently.")
+    return 1 if mismatches else 0
+
+
 def cmd_status(args) -> int:
     entries = load_english()
     state = classify(entries, load_tm(args.language))
@@ -757,11 +783,12 @@ def main(argv: list[str] | None = None) -> int:
     m = sub.add_parser("merge")
     m.add_argument("chunks", nargs="*")
     sub.add_parser("status")
+    sub.add_parser("check-terms", help="list translated lines that render a terms.json term differently")
     pr = sub.add_parser("prompt", help="print the standard agent prompt for chunks")
     pr.add_argument("chunks", nargs="+")
     args = parser.parse_args(argv)
     return {"prepare": cmd_prepare, "merge": cmd_merge, "status": cmd_status,
-            "prompt": cmd_prompt}[args.command](args)
+            "prompt": cmd_prompt, "check-terms": cmd_check_terms}[args.command](args)
 
 
 if __name__ == "__main__":

@@ -145,6 +145,18 @@ class NumberFormatTests(unittest.TestCase):
         self.assertEqual(t.localize_numbers("2.5", "2.5", "japanese"), "2.5")
 
 
+class TermCheckTests(unittest.TestCase):
+    def test_inflected_rendering_passes_other_rendering_flagged(self):
+        tm = {
+            "a": {"en": "Boosts Tradecraft", "de": "Stärkt das Spionagehandwerks"},
+            "b": {"en": "Seasoned Tradecraft", "de": "Erfahrene Tradecraft"},
+            "c": {"en": "Unrelated", "de": "Anders"},
+            "AFU_DAT": {"en": "Tradecraft", "de": "x", "base": "AFU"},
+        }
+        self.assertEqual(t.term_mismatches(tm, {"Tradecraft": "Spionagehandwerk"}, "de"),
+                         [("b", "Tradecraft", "Spionagehandwerk")])
+
+
 class ChunkingTests(unittest.TestCase):
     def test_event_group_is_not_split(self):
         entries = [t.Entry("e_l_english.yml", f"ev.1.{s}", "word " * 10) for s in ("t", "d", "f", "a")]
