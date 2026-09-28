@@ -1,0 +1,242 @@
+{
+ "battle_condition_fortified_bastion": {
+  "en": "Fortified Bastion",
+  "de": "Befestigte Bastion"
+ },
+ "battle_condition_fortified_bastion_desc": {
+  "en": "A purpose-built bastion of hardened positions, interlocking firing arcs, and protected reserves — designed to absorb modern firepower and bleed the assault.",
+  "de": "Eine eigens errichtete Bastion aus verstärkten Stellungen, sich überschneidenden Schussfeldern und geschützten Reserven — gebaut, um moderne Feuerkraft aufzufangen und den Angriff verbluten zu lassen."
+ },
+ "battle_condition_fortified_position": {
+  "en": "Fortified Position",
+  "de": "Befestigte Stellung"
+ },
+ "battle_condition_fortified_position_desc": {
+  "en": "The defender holds prepared field fortifications — earthworks, trenches, and forward strongpoints — multiplying defensive depth at the cost of maneuver.",
+  "de": "Der Verteidiger hält vorbereitete Feldbefestigungen — Erdwälle, Schützengräben und vorgeschobene Stützpunkte —, die die Verteidigungstiefe vervielfachen, auf Kosten der Beweglichkeit."
+ },
+ "battle_condition_fortified_stronghold": {
+  "en": "Fortified Stronghold",
+  "de": "Befestigte Festung"
+ },
+ "battle_condition_fortified_stronghold_desc": {
+  "en": "Layered concrete bunkers and pre-sited fields of fire turn the battle space into a regional stronghold. Attackers must grind through every emplacement.",
+  "de": "Gestaffelte Betonbunker und vorbereitete Schussfelder verwandeln das Schlachtfeld in eine regionale Festung. Angreifer müssen sich durch jede einzelne Stellung kämpfen."
+ },
+ "battle_condition_impregnable_fortress": {
+  "en": "Impregnable Fortress",
+  "de": "Uneinnehmbare Festung"
+ },
+ "battle_condition_impregnable_fortress_desc": {
+  "en": "Decades of territorial-defense investment have produced an effectively impregnable fortress complex. The attacker faces overwhelming layered defense at every axis of approach.",
+  "de": "Jahrzehntelange Investitionen in die Landesverteidigung haben einen praktisch uneinnehmbaren Festungskomplex geschaffen. Der Angreifer sieht sich auf jeder Angriffsachse einer überwältigenden, gestaffelten Verteidigung gegenüber."
+ },
+ "combat_unit_group_aircraft": {
+  "en": "Aircraft",
+  "de": "Flugzeuge"
+ },
+ "combat_unit_group_tanks": {
+  "en": "Heavy Tanks",
+  "de": "Schwere Panzer"
+ },
+ "combat_unit_type_DEW_tank": {
+  "en": "DEW Tank",
+  "de": "DEW-Panzer"
+ },
+ "combat_unit_type_DEW_tank_desc": {
+  "en": "DEW tanks are equipped with directed-energy weapons, which can fire powerful beams of energy at enemy targets.\\n\\nCost at base prices: #N @money!89100 #!\\nCost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_DEW_tank')|0] #!",
+  "de": "DEW-Panzer sind mit gerichteten Energiewaffen ausgerüstet, die mächtige Energiestrahlen auf feindliche Ziele abfeuern können.\\n\\nKosten zu Grundpreisen: #N @money!89100 #!\\nKosten zu aktuellen [Concept('concept_market_price', 'Marktpreisen')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_DEW_tank')|0] #!"
+ },
+ "combat_unit_type_armored_infantry": {
+  "en": "Armored Infantry",
+  "de": "Gepanzerte Infanterie"
+ },
+ "combat_unit_type_armored_infantry_desc": {
+  "en": "Armored infantry fight mounted in armored vehicles, not just travel in them, providing protection and mobility on the battlefield.\\n\\nCost at base prices: #N @money!1100 #!\\nCost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_armored_infantry')|0] #!",
+  "de": "Gepanzerte Infanterie kämpft in gepanzerten Fahrzeugen, statt nur darin zu reisen, und bietet so Schutz und Beweglichkeit auf dem Schlachtfeld.\\n\\nKosten zu Grundpreisen: #N @money!1100 #!\\nKosten zu aktuellen [Concept('concept_market_price', 'Marktpreisen')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_armored_infantry')|0] #!"
+ },
+ "combat_unit_type_bioenhanced_marines": {
+  "en": "Bioenhanced Marines",
+  "de": "Bioverstärkte Marineinfanterie"
+ },
+ "combat_unit_type_bioenhanced_marines_desc": {
+  "en": "Marines whose biology has been re-engineered for combat: heightened reflexes, fatigue resistance, accelerated wound healing, and pharmacologically-managed cognition. A small bioenhanced detachment can match the combat output of a much larger conventional force.\\n\\nCost at base prices: #N @money!54710 #!\\nCost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_bioenhanced_marines')|0] #!",
+  "de": "Marineinfanteristen, deren Biologie für den Kampf umgestaltet wurde: gesteigerte Reflexe, Ermüdungsresistenz, beschleunigte Wundheilung und pharmakologisch gesteuerte Kognition. Ein kleines bioverstärktes Kommando kann die Kampfkraft einer weit größeren konventionellen Truppe erreichen.\\n\\nKosten zu Grundpreisen: #N @money!54710 #!\\nKosten zu aktuellen [Concept('concept_market_price', 'Marktpreisen')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_bioenhanced_marines')|0] #!"
+ },
+ "combat_unit_type_bomber_aircraft": {
+  "en": "Propeller Aircraft",
+  "de": "Propellerflugzeuge"
+ },
+ "combat_unit_type_bomber_aircraft_desc": {
+  "en": "Early aircraft capable of delivering bombs or establishing air superiority.\\n\\nCost at base prices: #N @money!7400 #!\\nCost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_bomber_aircraft')|0] #!",
+  "de": "Frühe Flugzeuge, die Bomben abwerfen oder die Luftüberlegenheit erringen können.\\n\\nKosten zu Grundpreisen: #N @money!7400 #!\\nKosten zu aktuellen [Concept('concept_market_price', 'Marktpreisen')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_bomber_aircraft')|0] #!"
+ },
+ "combat_unit_type_combined_arms_marines": {
+  "en": "Combined Arms Marines",
+  "de": "Marineinfanterie der Verbundenen Waffengattungen"
+ },
+ "combat_unit_type_combined_arms_marines_desc": {
+  "en": "Marines integrated with mechanized vehicles, attack helicopters, and modern combined-arms doctrine. Capable of seizing a beachhead and pushing inland against entrenched defenders without waiting for follow-on forces.\\n\\nCost at base prices: #N @money!2170 #!\\nCost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_combined_arms_marines')|0] #!",
+  "de": "Marineinfanterie, integriert mit mechanisierten Fahrzeugen, Kampfhubschraubern und moderner Doktrin der verbundenen Waffengattungen. Fähig, einen Brückenkopf zu erobern und gegen verschanzte Verteidiger ins Landesinnere vorzustoßen, ohne auf Nachschubtruppen zu warten.\\n\\nKosten zu Grundpreisen: #N @money!2170 #!\\nKosten zu aktuellen [Concept('concept_market_price', 'Marktpreisen')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_combined_arms_marines')|0] #!"
+ },
+ "combat_unit_type_grey_goo": {
+  "en": "Utility Fog Phalanx",
+  "de": "Utility-Fog-Phalanx"
+ },
+ "combat_unit_type_grey_goo_desc": {
+  "en": "Self-organizing clouds of programmable nanomachines that reshape themselves to the battlefield. Utility fog can harden into shields, disperse into reconnaissance dust, or engulf enemies in microscopic disassembly.\\n\\nCost at base prices: #N @money!24150 #!\\nCost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_grey_goo')|0] #!",
+  "de": "Selbstorganisierende Wolken programmierbarer Nanomaschinen, die sich dem Schlachtfeld anpassen. Utility Fog kann zu Schilden erhärten, sich in Aufklärungsstaub zerstreuen oder Feinde in mikroskopischer Zersetzung verschlingen.\\n\\nKosten zu Grundpreisen: #N @money!24150 #!\\nKosten zu aktuellen [Concept('concept_market_price', 'Marktpreisen')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_grey_goo')|0] #!"
+ },
+ "combat_unit_type_guided_artillery_projectiles": {
+  "en": "Guided Artillery Projectiles",
+  "de": "Gelenkte Artilleriegeschosse"
+ },
+ "combat_unit_type_guided_artillery_projectiles_desc": {
+  "en": "Guided artillery projectiles enable precision artillery strikes previously out of reach.\\n\\nCost at base prices: #N @money!3880 #!\\nCost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_guided_artillery_projectiles')|0] #!",
+  "de": "Gelenkte Artilleriegeschosse ermöglichen präzise Artillerieschläge, die zuvor unerreichbar waren.\\n\\nKosten zu Grundpreisen: #N @money!3880 #!\\nKosten zu aktuellen [Concept('concept_market_price', 'Marktpreisen')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_guided_artillery_projectiles')|0] #!"
+ },
+ "combat_unit_type_holographic_ambush_combat_vehicle": {
+  "en": "Holographic Ambush Combat Vehicle",
+  "de": "Holografisches Hinterhalt-Kampffahrzeug"
+ },
+ "combat_unit_type_holographic_ambush_combat_vehicle_desc": {
+  "en": "Holographic ambush combat vehicles are capable of projecting holographic decoys to confuse and distract enemy forces.\\n\\nCost at base prices: #N @money!33600 #!\\nCost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_holographic_ambush_combat_vehicle')|0] #!",
+  "de": "Holografische Hinterhalt-Kampffahrzeuge können holografische Täuschkörper projizieren, um feindliche Truppen zu verwirren und abzulenken.\\n\\nKosten zu Grundpreisen: #N @money!33600 #!\\nKosten zu aktuellen [Concept('concept_market_price', 'Marktpreisen')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_holographic_ambush_combat_vehicle')|0] #!"
+ },
+ "combat_unit_type_jet_powered_fighters": {
+  "en": "Jet-Powered Aircraft",
+  "de": "Düsenflugzeuge"
+ },
+ "combat_unit_type_jet_powered_fighters_desc": {
+  "en": "Jet-powered aircraft are faster and more maneuverable than propeller-driven aircraft, enabling more effective air combat.\\n\\nCost at base prices: #N @money!13800 #!\\nCost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_jet_powered_fighters')|0] #!",
+  "de": "Düsenflugzeuge sind schneller und wendiger als propellergetriebene Flugzeuge und ermöglichen wirkungsvolleren Luftkampf.\\n\\nKosten zu Grundpreisen: #N @money!13800 #!\\nKosten zu aktuellen [Concept('concept_market_price', 'Marktpreisen')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_jet_powered_fighters')|0] #!"
+ },
+ "combat_unit_type_light_scout_tanks": {
+  "en": "Modern Scout Tank",
+  "de": "Moderner Spähpanzer"
+ },
+ "combat_unit_type_light_scout_tanks_desc": {
+  "en": "Modern scout tanks are fast and maneuverable, providing reconnaissance and support for ground forces.\\n\\nCost at base prices: #N @money!6630 #!\\nCost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_light_scout_tanks')|0] #!",
+  "de": "Moderne Spähpanzer sind schnell und wendig und liefern Aufklärung und Unterstützung für Bodentruppen.\\n\\nKosten zu Grundpreisen: #N @money!6630 #!\\nKosten zu aktuellen [Concept('concept_market_price', 'Marktpreisen')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_light_scout_tanks')|0] #!"
+ },
+ "combat_unit_type_main_battle_tank": {
+  "en": "Main Battle Tanks",
+  "de": "Kampfpanzer"
+ },
+ "combat_unit_type_main_battle_tank_desc": {
+  "en": "Main battle tanks are heavily armored and armed with powerful cannons, providing the backbone of ground forces.\\n\\nCost at base prices: #N @money!9500 #!\\nCost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_main_battle_tank')|0] #!",
+  "de": "Kampfpanzer sind schwer gepanzert und mit mächtigen Kanonen bewaffnet und bilden das Rückgrat der Bodentruppen.\\n\\nKosten zu Grundpreisen: #N @money!9500 #!\\nKosten zu aktuellen [Concept('concept_market_price', 'Marktpreisen')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_main_battle_tank')|0] #!"
+ },
+ "combat_unit_type_motorized_artillery": {
+  "en": "Motorized Artillery",
+  "de": "Motorisierte Artillerie"
+ },
+ "combat_unit_type_motorized_artillery_desc": {
+  "en": "Motorized artillery combines the power of traditional artillery with the mobility and speed of motor vehicles.\\n\\nCost at base prices: #N @money!1900 #!\\nCost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_motorized_artillery')|0] #!",
+  "de": "Motorisierte Artillerie verbindet die Feuerkraft klassischer Artillerie mit der Beweglichkeit und Geschwindigkeit von Kraftfahrzeugen.\\n\\nKosten zu Grundpreisen: #N @money!1900 #!\\nKosten zu aktuellen [Concept('concept_market_price', 'Marktpreisen')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_motorized_artillery')|0] #!"
+ },
+ "combat_unit_type_networked_guided_artillery_projectiles": {
+  "en": "Networked Guided Artillery Projectiles",
+  "de": "Vernetzte gelenkte Artilleriegeschosse"
+ },
+ "combat_unit_type_networked_guided_artillery_projectiles_desc": {
+  "en": "Networked guided artillery projectiles enable precisely placed and timed barrages of artillery fire.\\n\\nCost at base prices: #N @money!9600 #!\\nCost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_networked_guided_artillery_projectiles')|0] #!",
+  "de": "Vernetzte gelenkte Artilleriegeschosse ermöglichen präzise platzierte und zeitlich abgestimmte Artillerie-Sperrfeuer.\\n\\nKosten zu Grundpreisen: #N @money!9600 #!\\nKosten zu aktuellen [Concept('concept_market_price', 'Marktpreisen')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_networked_guided_artillery_projectiles')|0] #!"
+ },
+ "combat_unit_type_networked_marines": {
+  "en": "Networked Marines",
+  "de": "Vernetzte Marineinfanterie"
+ },
+ "combat_unit_type_networked_marines_desc": {
+  "en": "Marine fireteams fighting alongside companion drones, exoskeletons, and joint all-domain command (JADC2) data feeds. Each operator commands a small swarm of robotic combatants, multiplying their effective firepower while reducing personnel exposure.\\n\\nCost at base prices: #N @money!24600 #!\\nCost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_networked_marines')|0] #!",
+  "de": "Marineinfanterie-Trupps, die gemeinsam mit Begleitdrohnen, Exoskeletten und Datenströmen des Joint All-Domain Command (JADC2) kämpfen. Jeder Soldat befehligt einen kleinen Schwarm robotischer Kämpfer, was die effektive Feuerkraft vervielfacht und zugleich die Gefährdung des Personals verringert.\\n\\nKosten zu Grundpreisen: #N @money!24600 #!\\nKosten zu aktuellen [Concept('concept_market_price', 'Marktpreisen')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_networked_marines')|0] #!"
+ },
+ "combat_unit_type_orbital_bombardment": {
+  "en": "Orbital Bombardment",
+  "de": "Orbitalbombardement"
+ },
+ "combat_unit_type_orbital_bombardment_desc": {
+  "en": "Orbital bombardment is the use of space-based weapons platforms to deliver powerful and precise strikes on enemy targets.\\n\\nCost at base prices: #N @money!18900 #!\\nCost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_orbital_bombardment')|0] #!",
+  "de": "Orbitalbombardement nutzt weltraumgestützte Waffenplattformen, um mächtige, präzise Schläge gegen feindliche Ziele zu führen.\\n\\nKosten zu Grundpreisen: #N @money!18900 #!\\nKosten zu aktuellen [Concept('concept_market_price', 'Marktpreisen')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_orbital_bombardment')|0] #!"
+ },
+ "combat_unit_type_orbital_precision_antimatter_strikes": {
+  "en": "Orbital Precision Antimatter Strikes",
+  "de": "Orbitale Präzisions-Antimaterieschläge"
+ },
+ "combat_unit_type_orbital_precision_antimatter_strikes_desc": {
+  "en": "Orbital precision antimatter strikes are the most powerful and precise weapons in existence, capable of destroying entire armies in a single strike.\\n\\nCost at base prices: #N @money!38700 #!\\nCost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_orbital_precision_antimatter_strikes')|0] #!",
+  "de": "Orbitale Präzisions-Antimaterieschläge sind die mächtigsten und präzisesten Waffen, die es gibt, fähig, ganze Armeen mit einem einzigen Schlag zu vernichten.\\n\\nKosten zu Grundpreisen: #N @money!38700 #!\\nKosten zu aktuellen [Concept('concept_market_price', 'Marktpreisen')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_orbital_precision_antimatter_strikes')|0] #!"
+ },
+ "combat_unit_type_orbital_tactical_vehicles": {
+  "en": "Orbital Tactical Vehicles",
+  "de": "Orbitale Taktikfahrzeuge"
+ },
+ "combat_unit_type_orbital_tactical_vehicles_desc": {
+  "en": "Orbital tactical vehicles are capable of deploying from space to the battlefield, providing a powerful and versatile means of transportation.\\n\\nCost at base prices: #N @money!77600 #!\\nCost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_orbital_tactical_vehicles')|0] #!",
+  "de": "Orbitale Taktikfahrzeuge können aus dem Weltraum direkt auf das Schlachtfeld verlegt werden und bieten ein mächtiges, vielseitiges Transportmittel.\\n\\nKosten zu Grundpreisen: #N @money!77600 #!\\nKosten zu aktuellen [Concept('concept_market_price', 'Marktpreisen')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_orbital_tactical_vehicles')|0] #!"
+ },
+ "combat_unit_type_orbital_weapons_platforms": {
+  "en": "Orbital Weapons Platforms",
+  "de": "Orbitale Waffenplattformen"
+ },
+ "combat_unit_type_orbital_weapons_platforms_desc": {
+  "en": "Orbital weapons platforms are advanced space-based weapons systems, able to deliver powerful strikes on enemy targets from orbit or deploy to the battlefield.\\n\\nCost at base prices: #N @money!137600 #!\\nCost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_orbital_weapons_platforms')|0] #!",
+  "de": "Orbitale Waffenplattformen sind hochentwickelte weltraumgestützte Waffensysteme, die aus der Umlaufbahn mächtige Schläge gegen feindliche Ziele führen oder auf das Schlachtfeld verlegt werden können.\\n\\nKosten zu Grundpreisen: #N @money!137600 #!\\nKosten zu aktuellen [Concept('concept_market_price', 'Marktpreisen')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_orbital_weapons_platforms')|0] #!"
+ },
+ "combat_unit_type_railgun_tank": {
+  "en": "Railgun Tank",
+  "de": "Railgun-Panzer"
+ },
+ "combat_unit_type_railgun_tank_desc": {
+  "en": "Railgun tanks are equipped with powerful railguns, which can fire projectiles at extremely high velocities.\\n\\nCost at base prices: #N @money!46560 #!\\nCost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_railgun_tank')|0] #!",
+  "de": "Railgun-Panzer sind mit mächtigen Railguns ausgerüstet, die Geschosse mit extrem hoher Geschwindigkeit abfeuern können.\\n\\nKosten zu Grundpreisen: #N @money!46560 #!\\nKosten zu aktuellen [Concept('concept_market_price', 'Marktpreisen')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_railgun_tank')|0] #!"
+ },
+ "combat_unit_type_reactive_armor_tank": {
+  "en": "Reactive Armor Tank",
+  "de": "Panzer mit Reaktivpanzerung"
+ },
+ "combat_unit_type_reactive_armor_tank_desc": {
+  "en": "Reactive armor tanks are equipped with reactive armor, which can reduce the effectiveness of enemy anti-tank weapons.\\n\\nCost at base prices: #N @money!16550 #!\\nCost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_reactive_armor_tank')|0] #!",
+  "de": "Panzer mit Reaktivpanzerung sind mit Reaktivpanzerung ausgerüstet, die die Wirksamkeit feindlicher Panzerabwehrwaffen verringern kann.\\n\\nKosten zu Grundpreisen: #N @money!16550 #!\\nKosten zu aktuellen [Concept('concept_market_price', 'Marktpreisen')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_reactive_armor_tank')|0] #!"
+ },
+ "combat_unit_type_robotic_soldiers": {
+  "en": "Robotic Soldiers",
+  "de": "Robotersoldaten"
+ },
+ "combat_unit_type_robotic_soldiers_desc": {
+  "en": "Robotic soldiers are autonomous combat units that can be deployed in place of human soldiers.\\n\\nCost at base prices: #N @money!5950 #!\\nCost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_robotic_soldiers')|0] #!",
+  "de": "Robotersoldaten sind autonome Kampfeinheiten, die anstelle menschlicher Soldaten eingesetzt werden können.\\n\\nKosten zu Grundpreisen: #N @money!5950 #!\\nKosten zu aktuellen [Concept('concept_market_price', 'Marktpreisen')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_robotic_soldiers')|0] #!"
+ },
+ "combat_unit_type_stealth_aircraft": {
+  "en": "Stealth Aircraft",
+  "de": "Tarnkappenflugzeug"
+ },
+ "combat_unit_type_stealth_aircraft_desc": {
+  "en": "Stealth aircraft are designed to avoid detection by enemy radar, enabling them to penetrate enemy airspace and strike targets with minimal risk.\\n\\nCost at base prices: #N @money!29000 #!\\nCost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_stealth_aircraft')|0] #!",
+  "de": "Tarnkappenflugzeuge sind darauf ausgelegt, der Erfassung durch feindliches Radar zu entgehen, sodass sie feindlichen Luftraum durchdringen und Ziele mit minimalem Risiko angreifen können.\\n\\nKosten zu Grundpreisen: #N @money!29000 #!\\nKosten zu aktuellen [Concept('concept_market_price', 'Marktpreisen')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_stealth_aircraft')|0] #!"
+ },
+ "combat_unit_type_stealth_marines": {
+  "en": "Stealth Marines",
+  "de": "Tarnkappen-Marineinfanterie"
+ },
+ "combat_unit_type_stealth_marines_desc": {
+  "en": "Special-operations marines equipped with stealth gear, encrypted comms, and small-unit tactics. They infiltrate before the main landing, neutralize coastal sensors and command nodes, and devastate static defenses through surgical strikes.\\n\\nCost at base prices: #N @money!7040 #!\\nCost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_stealth_marines')|0] #!",
+  "de": "Spezialeinheiten der Marineinfanterie, ausgerüstet mit Tarnausrüstung, verschlüsselter Kommunikation und Kleingruppentaktik. Sie infiltrieren vor der Hauptlandung, schalten Küstensensoren und Führungsknoten aus und zerschlagen statische Verteidigungsanlagen durch chirurgische Schläge.\\n\\nKosten zu Grundpreisen: #N @money!7040 #!\\nKosten zu aktuellen [Concept('concept_market_price', 'Marktpreisen')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_stealth_marines')|0] #!"
+ },
+ "combat_unit_type_stealth_reconnaissance_drone_carrier": {
+  "en": "Stealth Reconnaissance Drone Carrier",
+  "de": "Tarnkappen-Aufklärungsdrohnenträger"
+ },
+ "combat_unit_type_stealth_reconnaissance_drone_carrier_desc": {
+  "en": "Stealth reconnaissance drone carriers are capable of deploying large numbers of stealth reconnaissance drones to gather intelligence on enemy positions and movements.\\n\\nCost at base prices: #N @money!17400 #!\\nCost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_stealth_reconnaissance_drone_carrier')|0] #!",
+  "de": "Tarnkappen-Aufklärungsdrohnenträger können eine Vielzahl von Tarnkappen-Aufklärungsdrohnen einsetzen, um Erkenntnisse über feindliche Stellungen und Bewegungen zu gewinnen.\\n\\nKosten zu Grundpreisen: #N @money!17400 #!\\nKosten zu aktuellen [Concept('concept_market_price', 'Marktpreisen')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_stealth_reconnaissance_drone_carrier')|0] #!"
+ },
+ "combat_unit_type_swarm_bots": {
+  "en": "Swarm Bots",
+  "de": "Schwarmroboter"
+ },
+ "combat_unit_type_swarm_bots_desc": {
+  "en": "Swarm bots are small, autonomous robots that can be deployed in large numbers to overwhelm enemy forces.\\n\\nCost at base prices: #N @money!11910 #!\\nCost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_swarm_bots')|0] #!",
+  "de": "Schwarmroboter sind kleine, autonome Roboter, die in großer Zahl eingesetzt werden können, um feindliche Kräfte zu überwältigen.\\n\\nKosten zu Grundpreisen: #N @money!11910 #!\\nKosten zu aktuellen [Concept('concept_market_price', 'Marktpreisen')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_swarm_bots')|0] #!"
+ }
+}

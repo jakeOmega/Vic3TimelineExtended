@@ -1,4 +1,24 @@
 {
+ "BUILDING_MAP_LIST_PANEL_PROFIT_IMPACT_TOOLTIP": {
+  "en": "#header Predicted [SelectLocalization(ObjectsEqual(MapListBuildingPanel.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] after expansion#!\\n(Excluding [Concept('concept_building_wage','$concept_building_wages$')])\\n$TOOLTIP_DELIMITER$\\nA prediction of how much expanding this building would affect its weekly [SelectLocalization(ObjectsEqual(MapListBuildingPanel.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')].",
+  "de": "#header Voraussichtliche [SelectLocalization(ObjectsEqual(MapListBuildingPanel.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] nach dem Ausbau#!\\n(ohne [Concept('concept_building_wage','$concept_building_wages$')])\\n$TOOLTIP_DELIMITER$\\nEine Prognose, wie stark sich der Ausbau dieses Gebäudes auf seine wöchentlichen [SelectLocalization(ObjectsEqual(MapListBuildingPanel.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] auswirken würde."
+ },
+ "CAN_EXPAND_BUILDING_TOOLTIP": {
+  "en": "#header $BUILD_OR_EXPAND$ [BUILDING_TYPE.GetName] in [STATE.GetName]#! (Size: [BUILDING.GetExpansionLevelBreakdownDesc])\\n[AddLocalizationIf( Not(STATE.GetOwner.IsLocalPlayer), 'CAN_EXPAND_BUILDING_TOOLTIP_FOREIGN' )]#tooltippable #tooltip:[GetRawTextTooltipTag('$PROFIT_IMPACT_DESC$')] #v @money!$PROFIT_IMPACT|K+=$#!#!#! Predicted [SelectLocalization(Or(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), BUILDING.GetBuildingType.IsMilitaryBuilding), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / week\\n[ConcatIfNeitherEmpty('$PRODUCTIVITY$', '\\n')][ConcatIfNeitherEmpty('$QUALIFICATIONS$', '\\n')][SelectLocalization( LessThan_CFixedPoint(State.GetConstructionEfficiency, '(CFixedPoint)0'), 'CONSTRUCTION_QUEUE_STATE_CONSTRUCTION_EFFICIENCY_WARNING', '')]$TOOLTIP_DELIMITER$\\n@construction! $REQUIRED_CONSTRUCTION|v0$ [concept_construction] ($CONSTRUCTION_COST_CHANGE$)\\n$EXPAND_BUILDING_TT_NATIONAL_MAINTENANCE$\\n\\n$PRODUCTION_BREAKDOWN$\\n\\n[STATE.GetMarketAccessStatus]\\nAvailable Labor: [State.GetNumSubsistenceWorkingAdults|Dv] [GetPopType('peasants').GetName] [SelectLocalization( GreaterThan_int64(State.GetNumUnemployedWorkingAdults, '(int64)0'), 'AND_UNEMPLOYED', '' )][ConcatIfNeitherEmpty('$PORT_INFO$', '\\n')]\\n\\n$KEY_MODIFIER_INSTRUCTIONS$",
+  "de": "#header $BUILD_OR_EXPAND$ [BUILDING_TYPE.GetName] in [STATE.GetName]#! (Größe: [BUILDING.GetExpansionLevelBreakdownDesc])\\n[AddLocalizationIf( Not(STATE.GetOwner.IsLocalPlayer), 'CAN_EXPAND_BUILDING_TOOLTIP_FOREIGN' )]#tooltippable #tooltip:[GetRawTextTooltipTag('$PROFIT_IMPACT_DESC$')] #v @money!$PROFIT_IMPACT|K+=$#!#!#! Voraussichtlich(e) [SelectLocalization(Or(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), BUILDING.GetBuildingType.IsMilitaryBuilding), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / Woche\\n[ConcatIfNeitherEmpty('$PRODUCTIVITY$', '\\n')][ConcatIfNeitherEmpty('$QUALIFICATIONS$', '\\n')][SelectLocalization( LessThan_CFixedPoint(State.GetConstructionEfficiency, '(CFixedPoint)0'), 'CONSTRUCTION_QUEUE_STATE_CONSTRUCTION_EFFICIENCY_WARNING', '')]$TOOLTIP_DELIMITER$\\n@construction! $REQUIRED_CONSTRUCTION|v0$ [concept_construction] ($CONSTRUCTION_COST_CHANGE$)\\n$EXPAND_BUILDING_TT_NATIONAL_MAINTENANCE$\\n\\n$PRODUCTION_BREAKDOWN$\\n\\n[STATE.GetMarketAccessStatus]\\nVerfügbare Arbeitskräfte: [State.GetNumSubsistenceWorkingAdults|Dv] [GetPopType('peasants').GetName] [SelectLocalization( GreaterThan_int64(State.GetNumUnemployedWorkingAdults, '(int64)0'), 'AND_UNEMPLOYED', '' )][ConcatIfNeitherEmpty('$PORT_INFO$', '\\n')]\\n\\n$KEY_MODIFIER_INSTRUCTIONS$"
+ },
+ "CULTURAL_COMMUNITY_DECAYING_ACCEPTANCE_DELTA_DESC": {
+  "en": "$VALUE|0+=$ from Cultural Integration (will increase by [CulturalCommunity.GetState.MakeScope.ScriptValue('total_state_yearly_cultural_acceptance_add')] per year)",
+  "de": "$VALUE|0+=$ durch Kulturelle Integration (steigt jährlich um [CulturalCommunity.GetState.MakeScope.ScriptValue('total_state_yearly_cultural_acceptance_add')])"
+ },
+ "EXPANSION_PROFIT_IMPACT": {
+  "en": "#header Predicted [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] of new level#!\\n#v @money!$VAL|K+=$#! Predicted [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / week\\n(Excluding [Concept('concept_building_wage','$concept_building_wages$')])\\n$TOOLTIP_DELIMITER$\\n$IMPACT_DETAILS$\\n\\n$BUILDING_PREDICTION_DISCLAIMER$",
+  "de": "#header Voraussichtliche [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] der neuen Stufe#!\\n#v @money!$VAL|K+=$#! Voraussichtliche [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / Woche\\n(ohne [Concept('concept_building_wage','$concept_building_wages$')])\\n$TOOLTIP_DELIMITER$\\n$IMPACT_DETAILS$\\n\\n$BUILDING_PREDICTION_DISCLAIMER$"
+ },
+ "academics_desc": {
+  "en": "Researchers, doctors, lawyers and other educated professionals, especially those studying and teaching in academic institutions. Politically, they are at the forefront of the Intelligentsia.",
+  "de": "Forscher, Ärzte, Anwälte und andere gebildete Fachleute, insbesondere jene, die an akademischen Institutionen studieren und lehren. Politisch stehen sie an der Spitze der Intelligenzija."
+ },
  "building_art_academy": {
   "en": "Creative Industries",
   "de": "Kreativindustrie"
@@ -35,6 +55,10 @@
   "en": "Local Condition",
   "de": "Lokale Bedingung"
  },
+ "concept_harvest_condition_desc": {
+  "en": "A $concept_harvest_condition$ is an occurrence that affects a [Concept('concept_country','$concept_country_possessive$')] local economy with a variable [Concept('concept_harvest_condition_intensity','$concept_harvest_condition_intensity_short$')], duration, and range. It is generally a natural phenomenon and can have either #g positive#! or #r negative#! effects on the [Concept('concept_state','$concept_states$')] it affects. $concept_harvest_conditions$ will mostly affect the [concept_throughput] of agricultural [Concept('concept_building','$concept_buildings$')], but they can also have an effect on your [Concept('concept_pop','$concept_population$')] and $concept_states$ in other ways, such as reducing available [concept_infrastructure].\\n\\n$concept_harvest_conditions$ will often affect $concept_states$ surrounding their #b epicenter#!. In such cases, the [concept_harvest_condition_intensity] will generally decrease as the distance to the #b epicenter#! increases.\\n\\n#title Potential $concept_harvest_conditions$:#!#indent_newline:3 \\n[GetHarvestConditionTypesList]#!",
+  "de": "Eine $concept_harvest_condition$ ist ein Ereignis, das die lokale Wirtschaft [Concept('concept_country','$concept_country_possessive$')] mit variabler [Concept('concept_harvest_condition_intensity','$concept_harvest_condition_intensity_short$')], Dauer und Reichweite beeinflusst. Es handelt sich in der Regel um ein Naturphänomen, das entweder #g positive#! oder #r negative#! Auswirkungen auf den betroffenen [Concept('concept_state','$concept_states$')] haben kann. $concept_harvest_conditions$ wirken sich meist auf den [concept_throughput] landwirtschaftlicher [Concept('concept_building','$concept_buildings$')] aus, können aber auch Ihre [Concept('concept_pop','$concept_population$')] und $concept_states$ auf andere Weise beeinflussen, etwa durch eine Verringerung der verfügbaren [concept_infrastructure].\\n\\n$concept_harvest_conditions$ betreffen oft $concept_states$ rund um ihr #b Epizentrum#!. In solchen Fällen nimmt die [concept_harvest_condition_intensity] mit zunehmender Entfernung vom #b Epizentrum#! meist ab.\\n\\n#title Mögliche $concept_harvest_conditions$:#!#indent_newline:3 \\n[GetHarvestConditionTypesList]#!"
+ },
  "concept_harvest_condition_intensity": {
   "en": "Intensity",
   "de": "Intensität"
@@ -46,6 +70,10 @@
  "country_institution_cost_institution_home_affairs_mult": {
   "en": "@bur![Nbsp][concept_bureaucracy] Cost of [GetInstitutionType('institution_home_affairs').GetName]",
   "de": "@bur![Nbsp][concept_bureaucracy]-Kosten für [GetInstitutionType('institution_home_affairs').GetName]"
+ },
+ "country_institution_cost_institution_home_affairs_mult_desc": {
+  "en": "An increase or reduction to the @bur![Nbsp][concept_bureaucracy] cost of the [GetInstitutionType('institution_home_affairs').GetName] [concept_institution]",
+  "de": "Eine Erhöhung oder Senkung der @bur![Nbsp][concept_bureaucracy]-Kosten der [concept_institution] [GetInstitutionType('institution_home_affairs').GetName]"
  },
  "cultural_erasure": {
   "en": "Latent Hostility",
@@ -67,17 +95,33 @@
   "en": "@fertilizer! Chemicals Input",
   "de": "@fertilizer! Chemikalieneinsatz"
  },
+ "goods_input_fertilizer_add_desc": {
+  "en": "The amount of @fertilizer! Chemicals consumed by buildings",
+  "de": "Die Menge an @fertilizer! Chemikalien, die von Gebäuden verbraucht wird"
+ },
  "goods_output_fertilizer_add": {
   "en": "@fertilizer! Chemicals Output",
   "de": "@fertilizer! Chemikalienausstoß"
+ },
+ "goods_output_fertilizer_add_desc": {
+  "en": "The amount of @fertilizer! Chemicals produced by buildings",
+  "de": "Die Menge an @fertilizer! Chemikalien, die von Gebäuden produziert wird"
  },
  "goods_output_fertilizer_mult": {
   "en": "Building @fertilizer! Chemicals output",
   "de": "Gebäude-Ausstoß an @fertilizer! Chemikalien"
  },
+ "goods_output_fertilizer_mult_desc": {
+  "en": "A bonus or penalty to the amount of @fertilizer! Chemicals produced by buildings",
+  "de": "Ein Bonus oder Malus auf die Menge an @fertilizer! Chemikalien, die von Gebäuden produziert wird"
+ },
  "goods_output_radios_mult": {
   "en": "Building @radios! Wireless Telecommunication Gear output",
   "de": "Gebäude-Ausstoß an @radios! drahtlosen Telekommunikationsgeräten"
+ },
+ "goods_output_radios_mult_desc": {
+  "en": "A bonus or penalty to the amount of @radios! Wireless Telecommunication Gear produced by buildings",
+  "de": "Ein Bonus oder Malus auf die Menge an @radios! Drahtlosen Telekommunikationsgeräten, die von Gebäuden produziert wird"
  },
  "institution_health_system": {
   "en": "Ministry of Health",
@@ -99,25 +143,49 @@
   "en": "Assimilatory Citizenship",
   "de": "Assimilatorische Bürgerschaft"
  },
+ "law_cultural_exclusion_desc": {
+  "en": "The state is open to all who are willing to merge into the national identity. Naturalization is a process of cultural adoption, requiring the abandonment of outside traditions.",
+  "de": "Der Staat steht allen offen, die bereit sind, in der nationalen Identität aufzugehen. Einbürgerung ist ein Prozess kultureller Anpassung, der die Aufgabe fremder Traditionen verlangt."
+ },
  "law_ethnostate": {
   "en": "Ancestral Citizenship",
   "de": "Angestammte Bürgerschaft"
+ },
+ "law_ethnostate_desc": {
+  "en": "Citizenship is an immutable trait derived from the 'Right of Blood.' Only those of the core ancestral lineage are recognized as legal members of the nation.",
+  "de": "Die Staatsbürgerschaft ist ein unveränderliches Merkmal, das sich vom „Recht des Blutes“ ableitet. Nur wer der eigentlichen Ahnenlinie entstammt, gilt als rechtmäßiges Mitglied der Nation."
  },
  "law_multicultural": {
   "en": "Universal Citizenship",
   "de": "Universelle Bürgerschaft"
  },
+ "law_multicultural_desc": {
+  "en": "Citizenship is a matter of residency and the 'Right of Soil.' Every resident born within the borders is a full member of the nation, regardless of heritage or creed.",
+  "de": "Die Staatsbürgerschaft richtet sich nach dem Wohnsitz und dem „Recht des Bodens“. Jeder innerhalb der Grenzen geborene Einwohner ist vollwertiges Mitglied der Nation, unabhängig von Herkunft oder Glauben."
+ },
  "law_national_supremacy": {
   "en": "Cultural Citizenship",
   "de": "Kulturelle Bürgerschaft"
+ },
+ "law_national_supremacy_desc": {
+  "en": "Membership in the nation is determined by adherence to its primary spirit. Citizenship is reserved for those who share the language, traditions, and heritage of the dominant culture.",
+  "de": "Die Zugehörigkeit zur Nation bestimmt sich nach der Treue zu ihrem prägenden Geist. Die Staatsbürgerschaft bleibt jenen vorbehalten, die Sprache, Traditionen und Erbe der dominanten Kultur teilen."
  },
  "law_racial_segregation": {
   "en": "Racialized Citizenship",
   "de": "Rassifizierte Bürgerschaft"
  },
+ "law_racial_segregation_desc": {
+  "en": "Citizenship is stratified based on perceived racial or ancestral proximity. Preference is given to specific lineages regardless of their cultural or linguistic adoption.",
+  "de": "Die Staatsbürgerschaft ist nach wahrgenommener rassischer oder abstammungsmäßiger Nähe abgestuft. Bestimmte Abstammungslinien werden bevorzugt, unabhängig davon, wie sehr sie sich kulturell oder sprachlich angepasst haben."
+ },
  "law_subjecthood": {
   "en": "Sovereign Subjecthood",
   "de": "Souveräne Klientelschaft"
+ },
+ "law_subjecthood_desc": {
+  "en": "The state defines its people foremostly as subjects of a sovereign. Legal identity is tied to local tradition and community loyalty rather than a centralized national status.",
+  "de": "Der Staat definiert sein Volk in erster Linie als Untertanen eines Souveräns. Die rechtliche Identität ist an lokale Tradition und Gemeinschaftstreue gebunden, nicht an einen zentralisierten nationalen Status."
  },
  "lead": {
   "en": "Conductive and Base Metals",
@@ -174,6 +242,18 @@
  "prestige_good_generic_opium": {
   "en": "Potent Formulations",
   "de": "Hochwirksame Präparate"
+ },
+ "principle_advanced_research_1_desc": {
+  "en": "The bloc cultivates a class of engineers and scientific thinkers, drawing the intelligentsia toward member states.",
+  "de": "Der Block fördert eine Klasse von Ingenieuren und Wissenschaftlern und zieht damit die Intelligenzija zu den Mitgliedstaaten."
+ },
+ "principle_advanced_research_2_desc": {
+  "en": "Research output picks up: innovation capacity grows and engineers gain political weight.",
+  "de": "Die Forschungsleistung steigt: Die Innovationskapazität wächst, und Ingenieure gewinnen an politischem Gewicht."
+ },
+ "principle_advanced_research_3_desc": {
+  "en": "Directed research accelerates across all tech trees, with academics gaining visible political influence.",
+  "de": "Gelenkte Forschung beschleunigt sich in allen Technologiebäumen, und Akademiker gewinnen spürbar an politischem Einfluss."
  },
  "radios": {
   "en": "Wireless Telecommunication Gear",

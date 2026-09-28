@@ -1,4 +1,1500 @@
 {
+ "ADDITIONAL_NUKE_CREATED": {
+  "en": "Additional Nuclear Weapon Created and Stockpiled",
+  "de": "Zusätzliche Kernwaffe hergestellt und eingelagert"
+ },
+ "AI_ALREADY_MULTICULTURAL": {
+  "en": "from already having multicultural laws",
+  "de": "durch bereits bestehende multikulturelle Gesetze"
+ },
+ "AI_ANTAGONISTIC_ATTITUDE": {
+  "en": "from antagonistic relations",
+  "de": "durch feindselige Beziehungen"
+ },
+ "AI_BAD_RELATIONS": {
+  "en": "from poor relations",
+  "de": "durch schlechte Beziehungen"
+ },
+ "AI_BELLIGERENT_ATTITUDE": {
+  "en": "from belligerent relations",
+  "de": "durch kriegerische Beziehungen"
+ },
+ "AI_COMMAND_ECONOMY": {
+  "en": "from having a command economy",
+  "de": "durch eine Planwirtschaft"
+ },
+ "AI_COMMON_RIVAL": {
+  "en": "from having a common rival",
+  "de": "durch einen gemeinsamen Rivalen"
+ },
+ "AI_CONCILIATORY_ATTITUDE": {
+  "en": "from conciliatory relations",
+  "de": "durch versöhnliche Beziehungen"
+ },
+ "AI_COOPERATIVE_ATTITUDE": {
+  "en": "from cooperative relations",
+  "de": "durch kooperative Beziehungen"
+ },
+ "AI_COOPERATIVE_ECONOMY": {
+  "en": "from having a cooperative economy",
+  "de": "durch eine genossenschaftliche Wirtschaft"
+ },
+ "AI_CORDIAL_RELATIONS": {
+  "en": "from cordial relations",
+  "de": "durch herzliche Beziehungen"
+ },
+ "AI_CULTURAL_TENSION": {
+  "en": "from cultural tensions",
+  "de": "durch kulturelle Spannungen"
+ },
+ "AI_CULTURAL_UNREST": {
+  "en": "from severe cultural unrest",
+  "de": "durch schwere kulturelle Unruhen"
+ },
+ "AI_CULTURE_DISCRIMINATED": {
+  "en": "from our culture being discriminated",
+  "de": "durch die Diskriminierung unserer Kultur"
+ },
+ "AI_DEFIANT_SUBJECT": {
+  "en": "from defiant subject",
+  "de": "durch einen trotzigen Klientelstaat"
+ },
+ "AI_DISCRIMINATORY_LAWS": {
+  "en": "from having discriminatory laws",
+  "de": "durch diskriminierende Gesetze"
+ },
+ "AI_DOMINEERING_ATTITUDE": {
+  "en": "from domineering attitude",
+  "de": "durch herrschsüchtige Haltung"
+ },
+ "AI_ETHNOSTATE": {
+  "en": "from being an ethnostate",
+  "de": "durch das Bestehen als Ethnostaat"
+ },
+ "AI_EXPANSIONIST_GOVERNMENT": {
+  "en": "from expansionist government",
+  "de": "durch eine expansionistische Regierung"
+ },
+ "AI_FRIENDLY_ATTITUDE": {
+  "en": "from friendly relations",
+  "de": "durch freundschaftliche Beziehungen"
+ },
+ "AI_FRIENDLY_RELATIONS": {
+  "en": "from friendly relations",
+  "de": "durch freundschaftliche Beziehungen"
+ },
+ "AI_GOOD_RELATIONS": {
+  "en": "from good relations",
+  "de": "durch gute Beziehungen"
+ },
+ "AI_HAS_CLAIMS": {
+  "en": "from having territorial claims",
+  "de": "durch bestehende Gebietsansprüche"
+ },
+ "AI_HAS_RIVALS": {
+  "en": "from having rivals",
+  "de": "durch bestehende Rivalen"
+ },
+ "AI_HIGH_WARMING": {
+  "en": "from high global warming pressure",
+  "de": "durch hohen Druck der globalen Erwärmung"
+ },
+ "AI_HOSTILE_ATTITUDE": {
+  "en": "from hostile relations",
+  "de": "durch feindselige Beziehungen"
+ },
+ "AI_INTERVENTIONIST_ECONOMY": {
+  "en": "from having an interventionist economy",
+  "de": "durch eine interventionistische Wirtschaft"
+ },
+ "AI_IS_ALLY": {
+  "en": "from being allied",
+  "de": "durch ein Bündnis"
+ },
+ "AI_IS_RIVAL": {
+  "en": "from being a rival",
+  "de": "durch die Rivalität"
+ },
+ "AI_LOW_INNOVATION": {
+  "en": "from low innovation",
+  "de": "durch geringe Innovation"
+ },
+ "AI_LOW_LEGITIMACY": {
+  "en": "from low legitimacy",
+  "de": "durch geringe Legitimität"
+ },
+ "AI_LOW_LITERACY": {
+  "en": "from low literacy",
+  "de": "durch geringe Alphabetisierung"
+ },
+ "AI_LOYAL_ATTITUDE": {
+  "en": "from loyal attitude",
+  "de": "durch loyale Haltung"
+ },
+ "AI_MERCANTILIST_IMPERIALIST": {
+  "en": "from mercantilist imperialism",
+  "de": "durch merkantilistischen Imperialismus"
+ },
+ "AI_MERCANTILIST_POLICY": {
+  "en": "from mercantilist trade policy",
+  "de": "durch merkantilistische Handelspolitik"
+ },
+ "AI_MILITARIST_GOVERNMENT": {
+  "en": "from militarist government",
+  "de": "durch eine militaristische Regierung"
+ },
+ "AI_MILLET_SYSTEM": {
+  "en": "from millet system tolerance",
+  "de": "durch die Toleranz des Millet-Systems"
+ },
+ "AI_MULTICULTURAL_LAWS": {
+  "en": "from having multicultural laws",
+  "de": "durch multikulturelle Gesetze"
+ },
+ "AI_NATIONALIST_GOVERNMENT": {
+  "en": "from nationalist government",
+  "de": "durch eine nationalistische Regierung"
+ },
+ "AI_NATIONAL_MILITIA": {
+  "en": "from having national militia",
+  "de": "durch eine Nationalmiliz"
+ },
+ "AI_NATIONAL_SUPREMACY": {
+  "en": "from national supremacy laws",
+  "de": "durch Gesetze der nationalen Vorherrschaft"
+ },
+ "AI_PROTECTIONIST_POLICY": {
+  "en": "from protectionist trade policy",
+  "de": "durch protektionistische Handelspolitik"
+ },
+ "AI_PROTECTIVE_ATTITUDE": {
+  "en": "from protective attitude",
+  "de": "durch beschützende Haltung"
+ },
+ "AI_REBELLIOUS_SUBJECT": {
+  "en": "from rebellious subject",
+  "de": "durch einen aufständischen Klientelstaat"
+ },
+ "AI_RELIGION_DISCRIMINATED": {
+  "en": "from our religion being discriminated",
+  "de": "durch die Diskriminierung unserer Religion"
+ },
+ "AI_REVOLUTION": {
+  "en": "from ongoing revolution",
+  "de": "durch eine andauernde Revolution"
+ },
+ "AI_SAME_RELIGION": {
+  "en": "from sharing the same religion",
+  "de": "durch die gemeinsame Religion"
+ },
+ "AI_SECULAR_STATE": {
+  "en": "from being a secular state",
+  "de": "durch das Bestehen als säkularer Staat"
+ },
+ "AI_SHARED_HERITAGE": {
+  "en": "from shared cultural heritage",
+  "de": "durch das gemeinsame kulturelle Erbe"
+ },
+ "AI_SHARED_RIVALS": {
+  "en": "from having shared rivals",
+  "de": "durch gemeinsame Rivalen"
+ },
+ "AI_STATE_RELIGION": {
+  "en": "from having a [concept_state_religion]",
+  "de": "durch eine [concept_state_religion]"
+ },
+ "AI_TARGET_TURMOIL": {
+  "en": "from [concept_turmoil] in target country",
+  "de": "durch [concept_turmoil] im Zielland"
+ },
+ "AI_TOLERANT_LAWS": {
+  "en": "from having tolerant religious laws",
+  "de": "durch tolerante Religionsgesetze"
+ },
+ "AI_WARY_ATTITUDE": {
+  "en": "from wary relations",
+  "de": "durch misstrauische Beziehungen"
+ },
+ "AT_WAR": {
+  "en": "At War",
+  "de": "Im Krieg"
+ },
+ "BANKING_CURR_MODIFIERS": {
+  "en": "\\nFinancial Cycle Modifiers:\\nMonthly Cycle Value: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_finance_value_monthly_add')]    Monthly Momentum: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_finance_momentum_monthly_add')]    Monthly [concept_bubble_pressure]: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_bubble_pressure_monthly_add')]\\n",
+  "de": "\\nModifikatoren des Finanzzyklus:\\nMonatlicher Zykluswert: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_finance_value_monthly_add')]    Monatliches Momentum: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_finance_momentum_monthly_add')]    Monatlicher [concept_bubble_pressure]: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_bubble_pressure_monthly_add')]\\n"
+ },
+ "CB_ASSET_RELIEF": {
+  "en": "Asset Relief Program",
+  "de": "Vermögensentlastungsprogramm"
+ },
+ "CB_BAIL_IN": {
+  "en": "Bail-in Regime",
+  "de": "Bail-in-Regime"
+ },
+ "CB_BANK_HOLIDAY": {
+  "en": "Declare a Bank Holiday",
+  "de": "Bankfeiertag ausrufen"
+ },
+ "CB_COUNTERCYCLICAL_BUFFER": {
+  "en": "Enable Counter-cyclical Buffer",
+  "de": "Antizyklischen Puffer aktivieren"
+ },
+ "CB_EMERGENCY_LIQUIDITY": {
+  "en": "Emergency Liquidity Program",
+  "de": "Notliquiditätsprogramm"
+ },
+ "CB_EXPORT_CREDIT": {
+  "en": "Export Credit Facility",
+  "de": "Exportkreditfazilität"
+ },
+ "CB_FX_SURRENDER": {
+  "en": "Foreign Exchange Surrender Requirement",
+  "de": "Devisenabgabepflicht"
+ },
+ "CB_MORAL_SUASION": {
+  "en": "Moral Suasion",
+  "de": "Moralische Einflussnahme"
+ },
+ "CB_RESERVE_REQUIREMENTS": {
+  "en": "Raise Reserve Requirements",
+  "de": "Mindestreserveanforderungen erhöhen"
+ },
+ "CB_RESTRICT_INFLOWS": {
+  "en": "Restrict Speculative Inflows",
+  "de": "Spekulative Kapitalzuflüsse beschränken"
+ },
+ "CB_STERILIZE_INFLOWS": {
+  "en": "Sterilize Capital Inflows",
+  "de": "Kapitalzuflüsse sterilisieren"
+ },
+ "CE_ADMIN_CAMPAIGN": {
+  "en": "Administrative Performance Campaign",
+  "de": "Verwaltungsleistungskampagne"
+ },
+ "CE_CONSOLIDATION_ORDER": {
+  "en": "Plant Consolidation Order",
+  "de": "Anordnung zur Werkskonsolidierung"
+ },
+ "CE_COORDINATION_PROTOCOL": {
+  "en": "Inter-Sectoral Coordination Protocol",
+  "de": "Protokoll zur sektorübergreifenden Koordination"
+ },
+ "CE_CULTURAL_ASSIMILATION": {
+  "en": "Cultural Assimilation Program",
+  "de": "Programm zur Kulturellen Assimilierung"
+ },
+ "CE_DISTRIBUTION_UPGRADE": {
+  "en": "Central Distribution Upgrade",
+  "de": "Ausbau der zentralen Verteilung"
+ },
+ "CE_EMERGENCY_ALLOCATION": {
+  "en": "Emergency Resource Allocation",
+  "de": "Notfall-Ressourcenzuteilung"
+ },
+ "CE_MILITARY_GARRISON": {
+  "en": "Deploy Military Garrison",
+  "de": "Militärgarnison entsenden"
+ },
+ "CE_PLANNED_DECOLONIZATION": {
+  "en": "Planned Full Decolonization",
+  "de": "Geplante vollständige Dekolonisierung"
+ },
+ "CE_PLAN_REVISION": {
+  "en": "Emergency Plan Revision",
+  "de": "Notfall-Planrevision"
+ },
+ "CE_STRATEGIC_STOCKPILE": {
+  "en": "Strategic Material Stockpile",
+  "de": "Strategische Materialreserve"
+ },
+ "CE_TARGET_REDUCTION": {
+  "en": "Production Target Reduction",
+  "de": "Senkung der Produktionsziele"
+ },
+ "CH_CULTURAL_INSTITUTES": {
+  "en": "Fund Cultural Institutes",
+  "de": "Kulturinstitute finanzieren"
+ },
+ "CH_CULTURAL_PROTECTIONISM": {
+  "en": "Enact Cultural Protectionism",
+  "de": "Kulturellen Protektionismus erlassen"
+ },
+ "CH_WORLD_EXPOSITION": {
+  "en": "Begin International Cultural Outreach",
+  "de": "Internationale Kulturarbeit beginnen"
+ },
+ "CREATE_NEW_RELIGION": {
+  "en": "Create New Religion",
+  "de": "Neue Religion gründen"
+ },
+ "CR_FEDERAL_PROTECTION": {
+  "en": "Federal Civil Rights Protection",
+  "de": "Bundesweiter Bürgerrechtsschutz"
+ },
+ "CR_GRADUALIST_ACCOMMODATION": {
+  "en": "Gradualist Accommodation",
+  "de": "Schrittweise Anpassung"
+ },
+ "CR_GRASSROOTS_ORGANIZING": {
+  "en": "Encourage Grassroots Organizing",
+  "de": "Basisorganisierung fördern"
+ },
+ "CR_SEGREGATIONIST_CONSOLIDATION": {
+  "en": "Segregationist Consolidation",
+  "de": "Segregationistische Konsolidierung"
+ },
+ "CR_SUPPRESSION_CRACKDOWN": {
+  "en": "Suppression / Crackdown",
+  "de": "Unterdrückung / Durchgreifen"
+ },
+ "CUSTOM_RELIGION_BACK": {
+  "en": "Back",
+  "de": "Zurück"
+ },
+ "CUSTOM_RELIGION_NEXT": {
+  "en": "Next",
+  "de": "Weiter"
+ },
+ "CW_CAPITAL_PLAN": {
+  "en": "Collective Capital Investment Plan",
+  "de": "Kollektiver Kapitalinvestitionsplan"
+ },
+ "CW_CONSUMPTION_CEILING": {
+  "en": "Consumption Ceiling Resolution",
+  "de": "Resolution zur Verbrauchsobergrenze"
+ },
+ "CW_COUNCIL_DIRECTIVE": {
+  "en": "Federation Council Advisory Directive",
+  "de": "Beratende Direktive des Föderationsrats"
+ },
+ "CW_CREDIT_EXPANSION": {
+  "en": "Cooperative Credit Union Expansion",
+  "de": "Ausbau der genossenschaftlichen Kreditvereine"
+ },
+ "CW_DIVIDEND_RESTRAINT": {
+  "en": "Dividend Restraint Resolution",
+  "de": "Resolution zur Dividendenzurückhaltung"
+ },
+ "CW_SOLIDARITY_CAMPAIGN": {
+  "en": "Worker Solidarity Campaign",
+  "de": "Kampagne für Arbeitersolidarität"
+ },
+ "CW_WORKER_BUYOUT": {
+  "en": "Worker Buyout Facilitation",
+  "de": "Erleichterung des Arbeiter-Buyouts"
+ },
+ "DESELECT_ANIMIST": {
+  "en": "@red_cross! Animist",
+  "de": "@red_cross! Animistisch"
+ },
+ "DESELECT_ANIMIST_DESC": {
+  "en": "Remove Animist beliefs and traditions from our new religion.",
+  "de": "Entfernt animistische Glaubensvorstellungen und Traditionen aus unserer neuen Religion."
+ },
+ "DESELECT_BUDDHIST": {
+  "en": "@red_cross! Buddhist",
+  "de": "@red_cross! Buddhistisch"
+ },
+ "DESELECT_BUDDHIST_DESC": {
+  "en": "Remove Buddhist beliefs and traditions from our new religion.",
+  "de": "Entfernt buddhistische Glaubensvorstellungen und Traditionen aus unserer neuen Religion."
+ },
+ "DESELECT_CHRISTIAN": {
+  "en": "@red_cross! Christian",
+  "de": "@red_cross! Christlich"
+ },
+ "DESELECT_CHRISTIAN_DESC": {
+  "en": "Remove Christian beliefs and traditions from our new religion.",
+  "de": "Entfernt christliche Glaubensvorstellungen und Traditionen aus unserer neuen Religion."
+ },
+ "DESELECT_CUSTOM": {
+  "en": "@red_cross! Custom",
+  "de": "@red_cross! Eigene"
+ },
+ "DESELECT_CUSTOM_DESC": {
+  "en": "Remove any custom beliefs or traditions from our new religion.",
+  "de": "Entfernt alle eigenen Glaubensvorstellungen oder Traditionen aus unserer neuen Religion."
+ },
+ "DESELECT_EASTERN": {
+  "en": "@red_cross! Eastern",
+  "de": "@red_cross! Östlich"
+ },
+ "DESELECT_EASTERN_DESC": {
+  "en": "Remove Eastern beliefs and traditions from our new religion.",
+  "de": "Entfernt östliche Glaubensvorstellungen und Traditionen aus unserer neuen Religion."
+ },
+ "DESELECT_JUDAISM": {
+  "en": "@red_cross! Judaism",
+  "de": "@red_cross! Judentum"
+ },
+ "DESELECT_JUDAISM_DESC": {
+  "en": "Remove Jewish beliefs and traditions from our new religion.",
+  "de": "Entfernt jüdische Glaubensvorstellungen und Traditionen aus unserer neuen Religion."
+ },
+ "DESELECT_MUSLIM": {
+  "en": "@red_cross! Muslim",
+  "de": "@red_cross! Muslimisch"
+ },
+ "DESELECT_MUSLIM_DESC": {
+  "en": "Remove Islamic beliefs and traditions from our new religion.",
+  "de": "Entfernt islamische Glaubensvorstellungen und Traditionen aus unserer neuen Religion."
+ },
+ "DESELECT_NAME_DESC": {
+  "en": "Deselect this name for your custom religion.",
+  "de": "Diesen Namen für Ihre eigene Religion abwählen."
+ },
+ "FIRST_NUKE_CREATED": {
+  "en": "First Nuclear Weapon Created and Stockpiled. Future weapons will be created more quickly.",
+  "de": "Erste Kernwaffe hergestellt und eingelagert. Künftige Waffen werden schneller hergestellt."
+ },
+ "GDPPERCAPITA": {
+  "en": "$GDP_SHORT$ per Capita:\\n     Local/National\\n@money!#bold $GDP_per_capita$/@money![State.GetCountry.GetGDPPerCapita|2*]#!",
+  "de": "$GDP_SHORT$ pro Kopf:\\n     Lokal/National\\n@money!#bold $GDP_per_capita$/@money![State.GetCountry.GetGDPPerCapita|2*]#!"
+ },
+ "GOVERNMENT_CONSTRUCTION_BOUGHT": {
+  "en": "@construction! Construction the government buys each week:",
+  "de": "@construction! Bauleistung, die die Regierung jede Woche zukauft:"
+ },
+ "GW_CARBON_TAX": {
+  "en": "Implement Carbon Tax",
+  "de": "CO2-Steuer einführen"
+ },
+ "GW_CLIMATE_ADAPTATION": {
+  "en": "Fund Climate Adaptation",
+  "de": "Klimaanpassung finanzieren"
+ },
+ "GW_EMISSION_STANDARDS": {
+  "en": "Mandate Emission Standards",
+  "de": "Emissionsstandards vorschreiben"
+ },
+ "GW_PUBLIC_TRANSIT": {
+  "en": "Invest in Public Transit",
+  "de": "In Öffentliche Transportmittel investieren"
+ },
+ "GW_REFORESTATION": {
+  "en": "Subsidise Reforestation",
+  "de": "Aufforstung subventionieren"
+ },
+ "GW_REFORESTATION_DESC": {
+  "en": "Fund large-scale tree planting and land restoration.\\n[GetStaticModifier('reforestation_subsidies_modifier').GetDesc]\\nAvailable to all nations once global warming reaches mild levels.",
+  "de": "Finanziert groß angelegte Baumpflanzungen und Landrenaturierung.\\n[GetStaticModifier('reforestation_subsidies_modifier').GetDesc]\\nVerfügbar für alle Nationen, sobald die globale Erwärmung ein mildes Niveau erreicht."
+ },
+ "GW_REFORESTATION_ROW": {
+  "en": "Reforestation Subsidies",
+  "de": "Aufforstungssubventionen"
+ },
+ "GW_REMOVE_REFORESTATION": {
+  "en": "End Reforestation Subsidies",
+  "de": "Aufforstungssubventionen beenden"
+ },
+ "GW_RENEWABLE_INVESTMENT": {
+  "en": "Invest in Renewables",
+  "de": "In Erneuerbare investieren"
+ },
+ "HE_DISABLE_CONSERVATIVE": {
+  "en": "Stop: Conservative Tutors",
+  "de": "Stopp: Konservative Tutoren"
+ },
+ "HE_DISABLE_MODERATE": {
+  "en": "Stop: Moderate Mentors",
+  "de": "Stopp: Moderate Mentoren"
+ },
+ "HE_DISABLE_PROGRESSIVE": {
+  "en": "Stop: Progressive Tutors",
+  "de": "Stopp: Progressive Tutoren"
+ },
+ "HE_DISABLE_RADICAL": {
+  "en": "Stop: Radical Mentors",
+  "de": "Stopp: Radikale Mentoren"
+ },
+ "HE_DISABLE_REGRESSIVE": {
+  "en": "Stop: Regressive Mentors",
+  "de": "Stopp: Regressive Mentoren"
+ },
+ "HE_ENABLE_CONSERVATIVE": {
+  "en": "Conservative Tutors",
+  "de": "Konservative Tutoren"
+ },
+ "HE_ENABLE_MODERATE": {
+  "en": "Moderate Mentors",
+  "de": "Moderate Mentoren"
+ },
+ "HE_ENABLE_PROGRESSIVE": {
+  "en": "Progressive Tutors",
+  "de": "Progressive Tutoren"
+ },
+ "HE_ENABLE_RADICAL": {
+  "en": "Radical Mentors",
+  "de": "Radikale Mentoren"
+ },
+ "HE_ENABLE_REGRESSIVE": {
+  "en": "Regressive Mentors",
+  "de": "Regressive Mentoren"
+ },
+ "HIGH_LITERACY": {
+  "en": "High Literacy",
+  "de": "Hohe Alphabetisierung"
+ },
+ "MINORITY_RIGHTS_VIOLATED": {
+  "en": "Minority Rights Violated",
+  "de": "Minderheitenrechte verletzt"
+ },
+ "POP_HIGH_POLLUTION": {
+  "en": "High Local Pollution",
+  "de": "Hohe lokale Verschmutzung"
+ },
+ "RULER_TITLE_COORDINATOR": {
+  "en": "Coordinator",
+  "de": "Koordinator"
+ },
+ "RULER_TITLE_DIRECTOR": {
+  "en": "Director",
+  "de": "Direktor"
+ },
+ "RULER_TITLE_MARSHAL": {
+  "en": "Marshal",
+  "de": "Marschall"
+ },
+ "RULER_TITLE_STEWARD": {
+  "en": "Steward",
+  "de": "Verwalter"
+ },
+ "RULER_TITLE_SYNDIC": {
+  "en": "Syndic",
+  "de": "Syndikus"
+ },
+ "SELECT_ANIMIST": {
+  "en": "Animist",
+  "de": "Animistisch"
+ },
+ "SELECT_ANIMIST_DESC": {
+  "en": "Our new religion will be based on Animist beliefs and traditions.",
+  "de": "Unsere neue Religion wird auf animistischen Glaubensvorstellungen und Traditionen beruhen."
+ },
+ "SELECT_BUDDHIST": {
+  "en": "Buddhist",
+  "de": "Buddhistisch"
+ },
+ "SELECT_BUDDHIST_DESC": {
+  "en": "Our new religion will be based on Buddhist beliefs and traditions.",
+  "de": "Unsere neue Religion wird auf buddhistischen Glaubensvorstellungen und Traditionen beruhen."
+ },
+ "SELECT_CHRISTIAN": {
+  "en": "Christian",
+  "de": "Christlich"
+ },
+ "SELECT_CHRISTIAN_DESC": {
+  "en": "Our new religion will be based on Christian beliefs and traditions.",
+  "de": "Unsere neue Religion wird auf christlichen Glaubensvorstellungen und Traditionen beruhen."
+ },
+ "SELECT_CUSTOM": {
+  "en": "Custom",
+  "de": "Eigene"
+ },
+ "SELECT_CUSTOM_DESC": {
+  "en": "Our new religion will not be based on any existing beliefs or traditions.",
+  "de": "Unsere neue Religion wird auf keinen bestehenden Glaubensvorstellungen oder Traditionen beruhen."
+ },
+ "SELECT_EASTERN": {
+  "en": "Eastern",
+  "de": "Östlich"
+ },
+ "SELECT_EASTERN_DESC": {
+  "en": "Our new religion will be based on Eastern beliefs and traditions.",
+  "de": "Unsere neue Religion wird auf östlichen Glaubensvorstellungen und Traditionen beruhen."
+ },
+ "SELECT_JUDAISM": {
+  "en": "Judaism",
+  "de": "Judentum"
+ },
+ "SELECT_JUDAISM_DESC": {
+  "en": "Our new religion will be based on Jewish beliefs and traditions.",
+  "de": "Unsere neue Religion wird auf jüdischen Glaubensvorstellungen und Traditionen beruhen."
+ },
+ "SELECT_MUSLIM": {
+  "en": "Muslim",
+  "de": "Muslimisch"
+ },
+ "SELECT_MUSLIM_DESC": {
+  "en": "Our new religion will be based on Islamic beliefs and traditions.",
+  "de": "Unsere neue Religion wird auf islamischen Glaubensvorstellungen und Traditionen beruhen."
+ },
+ "SELECT_NAME_DESC": {
+  "en": "Select this name for your custom religion.",
+  "de": "Diesen Namen für Ihre eigene Religion auswählen."
+ },
+ "SR_AMBITIOUS_APPROACH": {
+  "en": "Ambitious Approach",
+  "de": "Ambitionierter Ansatz"
+ },
+ "SR_DECREASE_FUNDING": {
+  "en": "Decrease Funding",
+  "de": "Finanzierung verringern"
+ },
+ "SR_INCREASE_FUNDING": {
+  "en": "Increase Funding",
+  "de": "Finanzierung erhöhen"
+ },
+ "SR_SAFE_APPROACH": {
+  "en": "Safe Approach",
+  "de": "Sicherer Ansatz"
+ },
+ "SUBJECTS": {
+  "en": "Subjects",
+  "de": "Klientelstaaten"
+ },
+ "TP_EXP_TOOLTIP": {
+  "en": "#tooltip_header Export Reliance#!\\nFraction of your market's [concept_sell_orders] filled by exports to [Country.GetName].\\n\\nHigher values mean this partner absorbs more of your exports.",
+  "de": "#tooltip_header Exportabhängigkeit#!\\nAnteil der [concept_sell_orders] Ihres Marktes, der durch Exporte nach [Country.GetName] gedeckt wird.\\n\\nHöhere Werte bedeuten, dass dieser Partner mehr Ihrer Exporte aufnimmt."
+ },
+ "TP_IMP_TOOLTIP": {
+  "en": "#tooltip_header Import Reliance#!\\nFraction of your market's [concept_buy_orders] filled by imports from [Country.GetName].\\n\\nHigher values mean greater dependency on this partner for your imports.",
+  "de": "#tooltip_header Importabhängigkeit#!\\nAnteil der [concept_buy_orders] Ihres Marktes, der durch Importe aus [Country.GetName] gedeckt wird.\\n\\nHöhere Werte bedeuten eine größere Abhängigkeit von diesem Partner bei Ihren Importen."
+ },
+ "UN_ARMS_CONTROL": {
+  "en": "Join Arms Control Treaty",
+  "de": "Rüstungskontrollvertrag beitreten"
+ },
+ "UN_CHAMPION_ORDER": {
+  "en": "Champion International Order",
+  "de": "Internationale Ordnung verfechten"
+ },
+ "UN_DEFUND_DEVELOPMENT": {
+  "en": "Withdraw Development Funding",
+  "de": "Entwicklungsfinanzierung zurückziehen"
+ },
+ "UN_END_PEACEKEEPING": {
+  "en": "End Peacekeeping Contribution",
+  "de": "Friedenssicherungsbeitrag beenden"
+ },
+ "UN_FOUND": {
+  "en": "Found the United Nations",
+  "de": "Die Vereinten Nationen gründen"
+ },
+ "UN_FOUND_DESC": {
+  "en": "Establish the United Nations as an international body for diplomacy and cooperation. Requires #bold [concept_great_power]#! status and #bold Intergovernmental Organizations#! technology. Costs [concept_prestige] and [concept_bureaucracy]. The founding nation becomes the first member, hosts the headquarters, and gains a permanent Security Council seat. #bold If a UN has been dissolved,#! this instead convenes a founding conference for a new one, which the world's leading power may join, stay out of, or wreck.",
+  "de": "Errichtet die Vereinten Nationen als internationales Gremium für Diplomatie und Zusammenarbeit. Erfordert #bold [concept_great_power]#!-Status und die Technologie #bold Zwischenstaatliche Organisationen#!. Kostet [concept_prestige] und [concept_bureaucracy]. Die Gründernation wird erstes Mitglied, ist Sitz des Hauptquartiers und erhält einen ständigen Sitz im Sicherheitsrat. #bold Wurde eine UN bereits aufgelöst,#! beruft dies stattdessen eine Gründungskonferenz für eine neue ein, der die führende Macht der Welt beitreten, fernbleiben oder die sie zum Scheitern bringen kann."
+ },
+ "UN_FUND_DEVELOPMENT": {
+  "en": "Fund Development Programs",
+  "de": "Entwicklungsprogramme finanzieren"
+ },
+ "UN_HUMAN_RIGHTS": {
+  "en": "Champion Human Rights Resolution",
+  "de": "Menschenrechtsresolution verfechten"
+ },
+ "UN_JOIN": {
+  "en": "Join the United Nations",
+  "de": "Den Vereinten Nationen beitreten"
+ },
+ "UN_JOIN_DESC": {
+  "en": "Join the United Nations. Membership grants #G +10% relations improvement speed#!, #G +5 leverage generation#!, #G +3% [concept_prestige]#!, #G +3% influence#! and #G −5% defender diplomatic play escalation#!. From the Contested tier ([concept_un_authority] 20+), also receive scaled membership benefits (#G +10% relations improvement speed, +1% research speed, +3% [concept_prestige]#! at authority 50, scaling with authority). Binds us to every convention the Assembly has already ratified, and enables all UN policy programs.",
+  "de": "Tritt den Vereinten Nationen bei. Die Mitgliedschaft gewährt #G +10% Geschwindigkeit der Beziehungsverbesserung#!, #G +5 Hebelwirkungsgenerierung#!, #G +3% [concept_prestige]#!, #G +3% Einfluss#! und #G −5% Eskalation diplomatischer Spielzüge des Verteidigers#!. Ab der Stufe „Umstritten“ ([concept_un_authority] 20+) erhalten wir zudem gestaffelte Mitgliedschaftsvorteile (#G +10% Geschwindigkeit der Beziehungsverbesserung, +1% Forschungsgeschwindigkeit, +3% [concept_prestige]#! bei Autorität 50, mit der Autorität skalierend). Bindet uns an jede von der Versammlung bereits ratifizierte Konvention und schaltet alle UN-Politikprogramme frei."
+ },
+ "UN_LEAVE": {
+  "en": "Leave the United Nations",
+  "de": "Die Vereinten Nationen verlassen"
+ },
+ "UN_LEAVE_DESC": {
+  "en": "Withdraw from the United Nations. #R Ends every UN commitment and benefit#! (membership, Security Council seats, peacekeeping, development, aid, human rights, arms control and every ratified convention). #R Sanctions against us stay in force.#! For 5 years, decaying: #R −25% relations improvement speed#! and #R −5% [concept_prestige]#!, and we cannot rejoin. If we host the headquarters, it passes to another member and our #bold United Nations Headquarters#! building is #R demolished#!.",
+  "de": "Tritt aus den Vereinten Nationen aus. #R Beendet jede UN-Verpflichtung und jeden UN-Vorteil#! (Mitgliedschaft, Sicherheitsratssitze, Friedenssicherung, Entwicklung, Hilfe, Menschenrechte, Rüstungskontrolle und jede ratifizierte Konvention). #R Sanktionen gegen uns bleiben in Kraft.#! Für 5 Jahre, abklingend: #R −25% Geschwindigkeit der Beziehungsverbesserung#! und #R −5% [concept_prestige]#!, und wir können nicht wieder beitreten. Sind wir Sitz des Hauptquartiers, geht dieser an ein anderes Mitglied über, und unser Gebäude #bold Hauptsitz der Vereinten Nationen#! wird #R abgerissen#!."
+ },
+ "UN_LIFT_SANCTIONS": {
+  "en": "Lift Sanctions",
+  "de": "Sanktionen aufheben"
+ },
+ "UN_PAY_DUES": {
+  "en": "Pay our UN dues",
+  "de": "Unsere UN-Beiträge zahlen"
+ },
+ "UN_PEACEKEEPING": {
+  "en": "Contribute to Peacekeeping",
+  "de": "Zur Friedenssicherung beitragen"
+ },
+ "UN_PEACEKEEPING_DESC": {
+  "en": "Commit military resources to [concept_un_peacekeeping]. $UN_PEACEKEEPING_EFFECTS$ A recurring expense scaled to [Concept('concept_gdp', 'GDP')] applies while peacekeeping is active. Requires [concept_major_power] rank. Peacekeeping events may deploy forces abroad for additional [concept_prestige]. While it runs, it counts toward the UN's #bold funding#! pillar in proportion to our weight in world affairs ([concept_major_power] members and above).",
+  "de": "Stellt militärische Mittel für die [concept_un_peacekeeping] bereit. $UN_PEACEKEEPING_EFFECTS$ Solange die Friedenssicherung aktiv ist, fällt eine wiederkehrende, am [Concept('concept_gdp', 'BIP')] skalierte Ausgabe an. Erfordert den Rang [concept_major_power]. Friedenssicherungsereignisse können Truppen für zusätzliches [concept_prestige] ins Ausland entsenden. Solange sie läuft, zählt sie anteilig zu unserem Gewicht in der Weltpolitik zur #bold Finanzierungs#!-Säule der UN ([concept_major_power]-Mitglieder und höher)."
+ },
+ "UN_PROPOSE_CONDEMN": {
+  "en": "Propose Condemnation",
+  "de": "Verurteilung vorschlagen"
+ },
+ "UN_PROPOSE_EXPULSION": {
+  "en": "Move to expel a permanent member",
+  "de": "Antrag auf Ausschluss eines ständigen Mitglieds stellen"
+ },
+ "UN_PROPOSE_MANDATE": {
+  "en": "Move for a Military Mandate",
+  "de": "Antrag auf ein Militärmandat stellen"
+ },
+ "UN_PROPOSE_SANCTIONS": {
+  "en": "Propose Sanctions",
+  "de": "Sanktionen vorschlagen"
+ },
+ "UN_REQUEST_AID": {
+  "en": "Request Humanitarian Aid",
+  "de": "Humanitäre Hilfe anfordern"
+ },
+ "UN_REQUEST_PEACEKEEPERS": {
+  "en": "Request UN Peacekeepers",
+  "de": "UN-Friedenstruppen anfordern"
+ },
+ "UN_STOP_CHAMPIONING": {
+  "en": "Stop Championing Order",
+  "de": "Verfechten der Ordnung beenden"
+ },
+ "UN_STOP_UNDERMINING": {
+  "en": "Stop Undermining Order",
+  "de": "Untergraben der Ordnung beenden"
+ },
+ "UN_UNDERMINE_ORDER": {
+  "en": "Undermine International Order",
+  "de": "Internationale Ordnung untergraben"
+ },
+ "UN_WITHHOLD_DUES": {
+  "en": "Withhold our UN dues",
+  "de": "Unsere UN-Beiträge zurückhalten"
+ },
+ "WW_APPEASE_BUTTON": {
+  "en": "Pursue Appeasement",
+  "de": "Beschwichtigungspolitik verfolgen"
+ },
+ "WW_REARM_BUTTON": {
+  "en": "Begin Rearmament",
+  "de": "Aufrüstung beginnen"
+ },
+ "addiction_public_health_modifier_desc": {
+  "en": "A public health approach to addiction has improved outcomes and reduced mortality.",
+  "de": "Ein Ansatz der öffentlichen Gesundheit gegenüber Sucht hat die Ergebnisse verbessert und die Sterblichkeit gesenkt."
+ },
+ "adopt_local_culture": {
+  "en": "Adopt Local Culture",
+  "de": "Lokale Kultur annehmen"
+ },
+ "adopt_local_culture_desc": {
+  "en": "Our state exists entirely outside of the [Concept('concept_homeland', 'homelands')] of our primary culture. Perhaps it is time for the local culture to become our primary culture.",
+  "de": "Unser Staat liegt vollständig außerhalb der [Concept('concept_homeland', 'Heimatländer')] unserer Hauptkultur. Vielleicht ist es Zeit, dass die lokale Kultur zu unserer Hauptkultur wird."
+ },
+ "advanced_materials": {
+  "en": "Advanced Materials",
+  "de": "Hochleistungswerkstoffe"
+ },
+ "agdiff_biotechnology": {
+  "en": "Agricultural Biotechnology Diffusion",
+  "de": "Verbreitung landwirtschaftlicher Biotechnologie"
+ },
+ "agdiff_biotechnology_desc": {
+  "en": "Micronutrient-enriched cultivars, salt-tolerant varieties, and marker-assisted breeding programs have spread internationally through foundation-led humanitarian deployment and commercial licensing.",
+  "de": "Mit Mikronährstoffen angereicherte Sorten, salztolerante Varietäten und markergestützte Zuchtprogramme haben sich international verbreitet, durch stiftungsgeführte humanitäre Einsätze und kommerzielle Lizenzierung."
+ },
+ "agdiff_first_mover_prestige_desc": {
+  "en": "We were the first to develop and deploy a transformative agricultural technology, and the world has taken notice.",
+  "de": "Wir waren die Ersten, die eine umwälzende landwirtschaftliche Technologie entwickelten und einsetzten, und die Welt hat es bemerkt."
+ },
+ "agdiff_gene_splicing": {
+  "en": "Transgenic Crop Diffusion",
+  "de": "Verbreitung transgener Nutzpflanzen"
+ },
+ "agdiff_gene_splicing_desc": {
+  "en": "Insect-resistant and herbicide-tolerant transgenic seed lines have entered the international commercial seed trade. Even nations without indigenous biotech research now have access to higher-yielding cultivars.",
+  "de": "Insektenresistente und herbizidtolerante transgene Saatlinien sind in den internationalen kommerziellen Saatguthandel eingetreten. Selbst Nationen ohne eigene Biotech-Forschung haben nun Zugang zu ertragreicheren Sorten."
+ },
+ "agdiff_green_revolution": {
+  "en": "Green Revolution Diffusion",
+  "de": "Verbreitung der Grünen Revolution"
+ },
+ "agdiff_green_revolution_desc": {
+  "en": "Semi-dwarf high-yield cereal varieties, integrated fertilizer-irrigation packages, and the agronomic extension services that deploy them have crossed borders. Norman Borlaug and the international agricultural research centres (CIMMYT, IRRI) have ensured the techniques reach even the nations that did not pioneer them.",
+  "de": "Halbzwergige, ertragreiche Getreidesorten, integrierte Dünge- und Bewässerungspakete sowie die landwirtschaftlichen Beratungsdienste, die sie verbreiten, haben Grenzen überschritten. Norman Borlaug und die internationalen Agrarforschungszentren (CIMMYT, IRRI) haben dafür gesorgt, dass die Techniken selbst die Nationen erreichen, die sie nicht als Erste entwickelt haben."
+ },
+ "agdiff_modern_chemical_processes_desc": {
+  "en": "Ammonium nitrate, urea, and phosphate fertilizers, along with the catalytic and process control techniques that produce them, are now available on the global market regardless of who first industrialized them.",
+  "de": "Ammoniumnitrat-, Harnstoff- und Phosphatdünger sowie die katalytischen und prozesstechnischen Verfahren, die sie herstellen, sind nun auf dem Weltmarkt verfügbar, unabhängig davon, wer sie zuerst industrialisiert hat."
+ },
+ "agdiff_nitrogen_fixation": {
+  "en": "Synthetic Fertilizer Diffusion",
+  "de": "Verbreitung synthetischer Düngemittel"
+ },
+ "agdiff_nitrogen_fixation_desc": {
+  "en": "The Haber-Bosch process — industrial synthesis of ammonia from atmospheric nitrogen — has propagated beyond its inventors. Even nations that did not develop the technique benefit as the techniques and equipment become commercially available.",
+  "de": "Das Haber-Bosch-Verfahren — die industrielle Synthese von Ammoniak aus atmosphärischem Stickstoff — hat sich über seine Erfinder hinaus verbreitet. Selbst Nationen, die das Verfahren nicht entwickelt haben, profitieren, da Technik und Ausrüstung kommerziell verfügbar werden."
+ },
+ "ai_assisted_governance_modifier_desc": {
+  "en": "AI assists human bureaucrats rather than replacing them, improving efficiency while maintaining employment.",
+  "de": "KI unterstützt menschliche Bürokraten, statt sie zu ersetzen, und verbessert die Effizienz bei gleichbleibender Beschäftigung."
+ },
+ "ai_bureaucracy_modifier": {
+  "en": "AI Bureaucratic Automation",
+  "de": "KI-Verwaltungsautomatisierung"
+ },
+ "ai_bureaucracy_modifier_desc": {
+  "en": "AI systems have replaced much of the traditional [concept_bureaucracy], dramatically improving efficiency but causing unemployment.",
+  "de": "KI-Systeme haben einen Großteil der traditionellen [concept_bureaucracy] ersetzt, was die Effizienz drastisch verbessert, aber Arbeitslosigkeit verursacht."
+ },
+ "ai_policing_banned_modifier_desc": {
+  "en": "A ban on AI in law enforcement protects civil liberties but limits security capabilities.",
+  "de": "Ein Verbot von KI in der Strafverfolgung schützt die bürgerlichen Freiheiten, schränkt aber die Sicherheitsfähigkeiten ein."
+ },
+ "ai_strategy_irredentist": {
+  "en": "Irredentist Pressure",
+  "de": "Irredentistischer Druck"
+ },
+ "ai_strategy_irredentist_desc": {
+  "en": "Pursue reunification with same-culture neighbors whose home states we hold claims on. Government ideology shapes whether the path is warlike or peaceful, but both paths remain available.",
+  "de": "Verfolgt die Wiedervereinigung mit kulturgleichen Nachbarn, auf deren Heimatstaaten wir Ansprüche halten. Die Regierungsideologie bestimmt, ob der Weg kriegerisch oder friedlich verläuft, doch beide Wege bleiben offen."
+ },
+ "ai_strategy_un_mandate_desc": {
+  "en": "Exercise an authorization the [concept_un_general_assembly] has granted us: recover the named [concept_state_region] from the named state, and take nothing else from it.",
+  "de": "Nutzt eine Befugnis, die uns die [concept_un_general_assembly] erteilt hat: die genannte [concept_state_region] vom genannten Staat zurückzugewinnen, ohne ihm sonst etwas zu nehmen."
+ },
+ "alternative_service_modifier": {
+  "en": "Alternative Service Program",
+  "de": "Zivildienstprogramm"
+ },
+ "alternative_service_modifier_desc": {
+  "en": "An alternative service program for conscientious objectors has reduced military manpower but eased social tensions.",
+  "de": "Ein Zivildienstprogramm für Kriegsdienstverweigerer hat die militärische Personalstärke verringert, aber soziale Spannungen gemildert."
+ },
+ "amendment_collective_administration": {
+  "en": "Collegial Administration",
+  "de": "Kollegiale Verwaltung"
+ },
+ "amendment_collective_administration_desc": {
+  "en": "The institutions govern as equal bureaus, each in its own field. They adapt quickly, but decrees cost more with no one executive to issue them.",
+  "de": "Die Institutionen regieren als gleichberechtigte Ämter, jedes in seinem eigenen Bereich. Sie passen sich schnell an, doch Erlasse kosten mehr, da keine einzelne Exekutive sie erteilt."
+ },
+ "amendment_collective_algorithmic_commons": {
+  "en": "Algorithmic Commons",
+  "de": "Algorithmische Allmende"
+ },
+ "amendment_collective_algorithmic_commons_desc": {
+  "en": "The algorithm is held in common and answers to no Director. Every citizen's feedback weighs the same in it, whatever their wealth, and because grievances reach it directly, political movements are less active.",
+  "de": "Der Algorithmus wird gemeinschaftlich verwaltet und ist keinem Direktor unterstellt. Die Rückmeldung jedes Bürgers zählt darin gleich viel, unabhängig vom Vermögen, und weil Beschwerden ihn direkt erreichen, sind politische Bewegungen weniger aktiv."
+ },
+ "amendment_collective_direct_democracy": {
+  "en": "Direct Democracy",
+  "de": "Direkte Demokratie"
+ },
+ "amendment_collective_direct_democracy_desc": {
+  "en": "The voters decide directly. A law passes only when a political movement carries it.",
+  "de": "Die Wähler entscheiden direkt. Ein Gesetz wird nur verabschiedet, wenn eine politische Bewegung es trägt."
+ },
+ "amendment_collective_free_federation": {
+  "en": "Free Federation",
+  "de": "Freie Föderation"
+ },
+ "amendment_collective_free_federation_desc": {
+  "en": "Delegates act only on mandates from below. A law passes only when a political movement carries it.",
+  "de": "Delegierte handeln nur auf Mandate von unten. Ein Gesetz wird nur verabschiedet, wenn eine politische Bewegung es trägt."
+ },
+ "amendment_collective_leadership": {
+  "en": "Collective Leadership",
+  "de": "Kollektive Führung"
+ },
+ "amendment_collective_leadership_desc": {
+  "en": "The party's presidium governs together. With no single leader for a coup to remove, the country gains +25% [concept_coup_resistance], an effect the amendment's modifier list does not show.",
+  "de": "Das Präsidium der Partei regiert gemeinsam. Da es keinen einzelnen Anführer gibt, den ein Putsch beseitigen könnte, erhält das Land +25% [concept_coup_resistance], ein Effekt, den die Modifikatorliste des Nachtrags nicht anzeigt."
+ },
+ "amendment_collective_patrician_council": {
+  "en": "Patrician Council",
+  "de": "Patrizierrat"
+ },
+ "amendment_collective_patrician_council_desc": {
+  "en": "The powerful govern as peers, and aristocrats and capitalists hold more of the country's political strength.",
+  "de": "Die Mächtigen regieren als Gleiche, und Aristokraten und Kapitalisten halten einen größeren Anteil der politischen Stärke des Landes."
+ },
+ "amendment_community_service": {
+  "en": "Community Service Alternative",
+  "de": "Alternative Gemeinnützige Arbeit"
+ },
+ "amendment_community_service_desc": {
+  "en": "An [concept_amendment] allowing community service as an alternative to incarceration for non-violent offenses, introducing a restorative element to an otherwise punishment-focused system.",
+  "de": "Ein [concept_amendment], der gemeinnützige Arbeit als Alternative zur Inhaftierung bei gewaltfreien Straftaten erlaubt und damit ein restauratives Element in ein sonst strafzentriertes System einführt."
+ },
+ "amendment_compromise_modifier": {
+  "en": "Compromise Amendment",
+  "de": "Kompromiss-Nachtrag"
+ },
+ "amendment_compromise_modifier_desc": {
+  "en": "Accepting an [concept_amendment] has broadened the coalition in favour of the law, easing its passage.",
+  "de": "Die Annahme eines [concept_amendment] hat die Koalition zugunsten des Gesetzes erweitert und seine Verabschiedung erleichtert."
+ },
+ "amendment_cooperative_preference": {
+  "en": "Worker Cooperative Preference",
+  "de": "Bevorzugung von Arbeitergenossenschaften"
+ },
+ "amendment_cooperative_preference_desc": {
+  "en": "An [concept_amendment] giving worker-owned cooperatives preferential treatment in antitrust enforcement, encouraging democratic ownership of industry.",
+  "de": "Ein [concept_amendment], der Arbeitergenossenschaften bei der Kartellrechtsdurchsetzung bevorzugt behandelt und damit demokratisches Eigentum an der Industrie fördert."
+ },
+ "amendment_corporate_data_exemption_desc": {
+  "en": "An [concept_amendment] carving out an exception that allows businesses to collect and use personal data for commercial purposes under privacy law.",
+  "de": "Ein [concept_amendment], der eine Ausnahme schafft, die es Unternehmen erlaubt, personenbezogene Daten im Rahmen des Datenschutzrechts für kommerzielle Zwecke zu erheben und zu nutzen."
+ },
+ "amendment_env_grandfather_clause_desc": {
+  "en": "An [concept_amendment] exempting existing industrial works from part of the Ministry of the Environment's standards, softening its pollution and emissions reductions while industry adapts.",
+  "de": "Ein [concept_amendment], der bestehende Industriewerke von einem Teil der Standards des Umweltministeriums ausnimmt und dessen Verringerung von Verschmutzung und Emissionen abmildert, während die Industrie sich anpasst."
+ },
+ "amendment_langreform_advisory_panel_desc": {
+  "en": "A panel of scholars publishes authoritative guidelines on language use, carrying moral weight without force of law.",
+  "de": "Ein Gremium von Gelehrten veröffentlicht maßgebliche Richtlinien zum Sprachgebrauch, die moralisches Gewicht tragen, aber keine Gesetzeskraft haben."
+ },
+ "amendment_langreform_constructed": {
+  "en": "Constructed Language",
+  "de": "Plansprache"
+ },
+ "amendment_langreform_constructed_desc": {
+  "en": "The state has adopted an entirely new constructed language designed for logical grammar and universal accessibility, accelerating technological exchange at the cost of traditional cultural bonds.",
+  "de": "Der Staat hat eine völlig neue Plansprache übernommen, die auf logische Grammatik und universelle Zugänglichkeit ausgelegt ist, was den technologischen Austausch beschleunigt, aber traditionelle kulturelle Bindungen kostet."
+ },
+ "amendment_langreform_minority_protection_desc": {
+  "en": "The state language reform includes protections and revival programmes for minority and regional languages, reducing separatist sentiment.",
+  "de": "Die staatliche Sprachreform umfasst Schutzmaßnahmen und Wiederbelebungsprogramme für Minderheiten- und Regionalsprachen und verringert separatistische Stimmungen."
+ },
+ "amendment_langreform_national_focus_desc": {
+  "en": "The state language reform concentrates all resources on promoting the national language, accelerating [concept_assimilation] but fueling minority resentment.",
+  "de": "Die staatliche Sprachreform konzentriert alle Ressourcen auf die Förderung der Nationalsprache, beschleunigt die [concept_assimilation], schürt aber den Unmut der Minderheiten."
+ },
+ "amendment_langreform_powerful_academy_desc": {
+  "en": "A powerful state language academy has been established with authority to regulate terminology, grammar, and orthography.",
+  "de": "Eine mächtige staatliche Sprachakademie wurde gegründet, mit der Befugnis, Terminologie, Grammatik und Rechtschreibung zu regeln."
+ },
+ "amendment_langreform_revival": {
+  "en": "Classical Language Revival",
+  "de": "Wiederbelebung der klassischen Sprache"
+ },
+ "amendment_langreform_revival_desc": {
+  "en": "The state is reviving a classical or ancestral language as the modern national standard, inspiring cultural pride and religious fervor.",
+  "de": "Der Staat belebt eine klassische oder angestammte Sprache als modernen nationalen Standard wieder, was kulturellen Stolz und religiösen Eifer beflügelt."
+ },
+ "amendment_langreform_revived_arabic_desc": {
+  "en": "The state has chosen to revive Classical Arabic as the literary and administrative standard, building on its [concept_prestige] as the language of the Quran, of philosophy, mathematics, and poetry.",
+  "de": "Der Staat hat sich entschieden, das klassische Arabisch als literarischen und administrativen Standard wiederzubeleben, aufbauend auf seinem [concept_prestige] als Sprache des Korans, der Philosophie, der Mathematik und der Dichtung."
+ },
+ "amendment_langreform_revived_aramaic_desc": {
+  "en": "The state has chosen to revive Aramaic, the ancient lingua franca of the Near East and the language of the Talmud and early Christianity, as the foundation for a modern national standard.",
+  "de": "Der Staat hat sich entschieden, das Aramäische wiederzubeleben, die antike Verkehrssprache Nahosts und die Sprache des Talmuds und des frühen Christentums, als Grundlage für einen modernen nationalen Standard."
+ },
+ "amendment_langreform_revived_avestan_desc": {
+  "en": "The state has chosen to revive Avestan, the sacred tongue of the Zoroastrian Gathas, as the foundation for a national language rooted in the deepest antiquity.",
+  "de": "Der Staat hat sich entschieden, das Avestische wiederzubeleben, die heilige Sprache der zoroastrischen Gathas, als Grundlage für eine Nationalsprache, die in tiefster Antike wurzelt."
+ },
+ "amendment_langreform_revived_chinese_desc": {
+  "en": "The state has chosen to revive Literary Chinese as the national written standard, drawing on the classical tradition shared across centuries of East Asian scholarship, law, and governance.",
+  "de": "Der Staat hat sich entschieden, das literarische Chinesisch als nationalen Schriftstandard wiederzubeleben, gestützt auf die klassische Tradition, die Jahrhunderte ostasiatischer Gelehrsamkeit, Rechtsprechung und Regierungsführung verbindet."
+ },
+ "amendment_langreform_revived_coptic_desc": {
+  "en": "The state has chosen to revive Coptic, the last descendant of the language of the pharaohs, preserved through centuries of Christian liturgy as the foundation for a modern literary standard.",
+  "de": "Der Staat hat sich entschieden, das Koptische wiederzubeleben, den letzten Nachfahren der Sprache der Pharaonen, bewahrt durch Jahrhunderte christlicher Liturgie, als Grundlage für einen modernen literarischen Standard."
+ },
+ "amendment_langreform_revived_geez_desc": {
+  "en": "The state has chosen to revive Ge'ez, the ancient liturgical tongue preserved through centuries of monastic manuscript tradition, as the basis for a modern literary standard.",
+  "de": "Der Staat hat sich entschieden, das Ge'ez wiederzubeleben, die antike liturgische Sprache, bewahrt durch Jahrhunderte klösterlicher Handschriftentradition, als Grundlage für einen modernen literarischen Standard."
+ },
+ "amendment_langreform_revived_gothic_desc": {
+  "en": "The state has chosen to revive Gothic, the earliest attested Germanic language, known through Wulfila's fourth-century Bible translation, as the scholarly foundation for a modern standard.",
+  "de": "Der Staat hat sich entschieden, das Gotische wiederzubeleben, die früheste bezeugte germanische Sprache, bekannt durch Wulfilas Bibelübersetzung aus dem vierten Jahrhundert, als gelehrte Grundlage für einen modernen Standard."
+ },
+ "amendment_langreform_revived_greek_desc": {
+  "en": "The state has chosen to revive Classical Greek as the national scholarly standard, harnessing the language of philosophy, democracy, and the sciences.",
+  "de": "Der Staat hat sich entschieden, das klassische Griechisch als nationalen Gelehrtenstandard wiederzubeleben und sich damit die Sprache der Philosophie, der Demokratie und der Wissenschaften zunutze zu machen."
+ },
+ "amendment_langreform_revived_hebrew_desc": {
+  "en": "The state has chosen to revive Hebrew as the modern national language, transforming an ancient scriptural tongue into a living vehicle for law, commerce, and science.",
+  "de": "Der Staat hat sich entschieden, das Hebräische als moderne Nationalsprache wiederzubeleben und eine antike Schriftsprache in ein lebendiges Werkzeug für Recht, Handel und Wissenschaft zu verwandeln."
+ },
+ "amendment_langreform_revived_irish_desc": {
+  "en": "The state has chosen to revive Classical Irish as the national literary standard, drawing on the oldest vernacular literature in Western Europe and centuries of Gaelic legal, poetic, and monastic tradition.",
+  "de": "Der Staat hat sich entschieden, das klassische Irisch als nationalen Literaturstandard wiederzubeleben, gestützt auf die älteste Volkssprachenliteratur Westeuropas und Jahrhunderte gälischer Rechts-, Dicht- und Klostertradition."
+ },
+ "amendment_langreform_revived_latin_desc": {
+  "en": "The state has chosen to revive Latin as the national scholarly and administrative standard, drawing on centuries of Western legal, diplomatic, and ecclesiastical tradition.",
+  "de": "Der Staat hat sich entschieden, das Latein als nationalen Gelehrten- und Verwaltungsstandard wiederzubeleben, gestützt auf Jahrhunderte westlicher Rechts-, Diplomatie- und Kirchentradition."
+ },
+ "amendment_langreform_revived_mayan_desc": {
+  "en": "The state has chosen to revive Classic Mayan as the national literary standard, restoring the courtly language of Tikal, Palenque, and Copán and its intricate hieroglyphic script.",
+  "de": "Der Staat hat sich entschieden, das klassische Maya als nationalen Literaturstandard wiederzubeleben und damit die höfische Sprache von Tikal, Palenque und Copán samt ihrer kunstvollen Hieroglyphenschrift wiederherzustellen."
+ },
+ "amendment_langreform_revived_nahuatl_desc": {
+  "en": "The state has chosen to revive Classical Nahuatl, the courtly language of the Aztec Triple Alliance, renowned for its poetry, legal codes, and philosophical discourse.",
+  "de": "Der Staat hat sich entschieden, das klassische Nahuatl wiederzubeleben, die höfische Sprache des aztekischen Dreibunds, berühmt für ihre Dichtung, ihre Rechtskodizes und ihren philosophischen Diskurs."
+ },
+ "amendment_langreform_revived_norse_desc": {
+  "en": "The state has chosen to revive Old Norse as the national standard, drawing on the language of the Eddas, the sagas, and the oldest parliamentary tradition in Europe.",
+  "de": "Der Staat hat sich entschieden, das Altnordische als nationalen Standard wiederzubeleben, gestützt auf die Sprache der Edden, der Sagas und der ältesten parlamentarischen Tradition Europas."
+ },
+ "amendment_langreform_revived_pali_desc": {
+  "en": "The state has chosen to revive Pali, the canonical language of Theravada Buddhism, as the national scholarly standard - a tongue of elegant simplicity and monastic discipline.",
+  "de": "Der Staat hat sich entschieden, das Pali wiederzubeleben, die kanonische Sprache des Theravada-Buddhismus, als nationalen Gelehrtenstandard - eine Sprache von eleganter Schlichtheit und klösterlicher Disziplin."
+ },
+ "amendment_langreform_revived_prussian_desc": {
+  "en": "The state has chosen to revive Old Prussian, the extinct Baltic tongue prized by linguists for its extraordinary archaism, in an unprecedented act of cultural resurrection.",
+  "de": "Der Staat hat sich entschieden, das Altpreußische wiederzubeleben, die ausgestorbene baltische Sprache, von Linguisten für ihren außerordentlichen Archaismus geschätzt, in einem beispiellosen Akt kultureller Wiedererweckung."
+ },
+ "amendment_langreform_revived_sanskrit_desc": {
+  "en": "The state has chosen to revive Sanskrit as the foundation of the national language, harnessing its unmatched grammatical precision and vast philosophical-scientific literature.",
+  "de": "Der Staat hat sich entschieden, das Sanskrit als Grundlage der Nationalsprache wiederzubeleben und sich seine unerreichte grammatische Präzision und seine gewaltige philosophisch-wissenschaftliche Literatur zunutze zu machen."
+ },
+ "amendment_langreform_revived_slavonic_desc": {
+  "en": "The state has chosen to revive Old Church Slavonic as a pan-Slavic literary standard, drawing on its centuries of use as the sacred language of Orthodox Slavic civilization.",
+  "de": "Der Staat hat sich entschieden, das Altkirchenslawische als panslawischen Literaturstandard wiederzubeleben, gestützt auf seine jahrhundertelange Verwendung als heilige Sprache der orthodox-slawischen Zivilisation."
+ },
+ "amendment_langreform_simplification": {
+  "en": "Language Simplification",
+  "de": "Sprachvereinfachung"
+ },
+ "amendment_langreform_simplification_desc": {
+  "en": "The state is standardizing and simplifying the national language, making it more accessible to learners and boosting education.",
+  "de": "Der Staat standardisiert und vereinfacht die Nationalsprache, macht sie für Lernende zugänglicher und stärkt die Bildung."
+ },
+ "amendment_language_naturalization_requirement_desc": {
+  "en": "An [concept_amendment] requiring proficiency in the national language as a condition for citizenship, linking language policy to immigration law.",
+  "de": "Ein [concept_amendment], der Kenntnisse der Nationalsprache zur Voraussetzung für die Staatsbürgerschaft macht und damit Sprachpolitik mit Einwanderungsrecht verknüpft."
+ },
+ "amendment_mandatory_minimums": {
+  "en": "Mandatory Minimum Sentences",
+  "de": "Verpflichtende Mindeststrafen"
+ },
+ "amendment_mandatory_minimums_desc": {
+  "en": "An [concept_amendment] establishing mandatory minimum prison terms for certain offenses, introduced as a compromise to pass rehabilitation-focused justice reform.",
+  "de": "Ein [concept_amendment], der für bestimmte Straftaten verpflichtende Mindestfreiheitsstrafen festlegt, eingeführt als Kompromiss, um eine auf Resozialisierung ausgerichtete Justizreform durchzusetzen."
+ },
+ "amendment_military_necessity_clause_desc": {
+  "en": "An [concept_amendment] carving out exceptions for 'military necessity' in humanitarian regulations, appeasing the armed forces at the cost of international reputation.",
+  "de": "Ein [concept_amendment], der Ausnahmen für „militärische Notwendigkeit“ in humanitären Vorschriften schafft und damit die Streitkräfte besänftigt, auf Kosten des internationalen Ansehens."
+ },
+ "amendment_minority_script_preservation_desc": {
+  "en": "An [concept_amendment] requiring that minority writing systems be taught alongside the reformed national script in regions where they are traditionally used.",
+  "de": "Ein [concept_amendment], der vorschreibt, dass in Regionen, in denen sie traditionell verwendet werden, Minderheitenschriftsysteme neben der reformierten Nationalschrift gelehrt werden."
+ },
+ "amendment_national_champion_exemption_desc": {
+  "en": "An [concept_amendment] exempting the nation's largest company from antitrust breakup, preserving a 'national champion' capable of competing internationally.",
+  "de": "Ein [concept_amendment], der das größte Unternehmen der Nation von einer kartellrechtlichen Zerschlagung ausnimmt und damit einen „nationalen Champion“ bewahrt, der international konkurrenzfähig ist."
+ },
+ "amendment_no_first_strike_desc": {
+  "en": "An [concept_amendment] formally committing the nation never to initiate the use of nuclear weapons, enhancing diplomatic standing. While it is in force, our nuclear doctrine is held at #v No First Use#!; abandoning that doctrine repudiates the pledge and strikes this amendment from our laws.",
+  "de": "Ein [concept_amendment], der die Nation formell verpflichtet, niemals als Erste Kernwaffen einzusetzen, was das diplomatische Ansehen stärkt. Solange er in Kraft ist, ist unsere Nukleardoktrin auf #v Kein Erstschlag#! festgelegt; die Aufgabe dieser Doktrin verletzt das Versprechen und streicht diesen Nachtrag aus unseren Gesetzen."
+ },
+ "amendment_official_bilingualism": {
+  "en": "Official Bilingualism",
+  "de": "Offizielle Zweisprachigkeit"
+ },
+ "amendment_official_bilingualism_desc": {
+  "en": "An [concept_amendment] establishing the most widely spoken minority language as a co-official language alongside the national tongue, with all government services available in both.",
+  "de": "Ein [concept_amendment], der die am weitesten verbreitete Minderheitensprache neben der Nationalsprache zur Mitamtssprache erklärt, mit allen staatlichen Dienstleistungen in beiden Sprachen."
+ },
+ "amendment_purist_modifier": {
+  "en": "Unamended Bill",
+  "de": "Unveränderte Vorlage"
+ },
+ "amendment_purist_modifier_desc": {
+  "en": "Rejecting proposed [Concept('concept_amendment', 'amendments')] preserves the bill's purity, though building consensus may be harder.",
+  "de": "Die Ablehnung vorgeschlagener [Concept('concept_amendment', 'Nachträge')] bewahrt die Reinheit der Vorlage, auch wenn ein Konsens schwerer zu erreichen sein kann."
+ },
+ "amendment_religious_exemption": {
+  "en": "Religious Exemption Clause",
+  "de": "Klausel zur religiösen Ausnahme"
+ },
+ "amendment_religious_exemption_desc": {
+  "en": "An [concept_amendment] exempting religious institutions from LGBTQ protections, a compromise that gets the devout on board but limits the law's reach.",
+  "de": "Ein [concept_amendment], der religiöse Institutionen von LGBTQ-Schutzbestimmungen ausnimmt, ein Kompromiss, der die Gläubigen ins Boot holt, aber die Reichweite des Gesetzes einschränkt."
+ },
+ "amendment_small_donor_matching_desc": {
+  "en": "An [concept_amendment] requiring the government to match small individual campaign donations, boosting grassroots political participation.",
+  "de": "Ein [concept_amendment], der die Regierung verpflichtet, kleine private Wahlkampfspenden aufzustocken, was die politische Beteiligung an der Basis fördert."
+ },
+ "amendment_whistleblower_shield": {
+  "en": "Whistleblower Protection Act",
+  "de": "Whistleblower-Schutzgesetz"
+ },
+ "amendment_whistleblower_shield_desc": {
+  "en": "An [concept_amendment] protecting government employees who expose malfeasance from prosecution, boosting transparency at the cost of state authority.",
+  "de": "Ein [concept_amendment], der Regierungsangestellte, die Missstände aufdecken, vor Strafverfolgung schützt und damit Transparenz auf Kosten der Staatsautorität fördert."
+ },
+ "anglo_union": {
+  "en": "Anglosphere",
+  "de": "Anglosphäre"
+ },
+ "anti_colonial_momentum_modifier_desc": {
+  "en": "The crackdown on anti-colonial intellectuals has only strengthened their movement.",
+  "de": "Das harte Durchgreifen gegen antikoloniale Intellektuelle hat ihre Bewegung nur gestärkt."
+ },
+ "anti_minority_boycott_modifier_desc": {
+  "en": "State-encouraged boycotts of minority businesses are deepening social divisions and breeding resentment.",
+  "de": "Staatlich geförderte Boykotte von Minderheitenbetrieben vertiefen die gesellschaftliche Spaltung und schüren Ressentiments."
+ },
+ "antimatter_facility_progress": {
+  "en": "[concept_antimatter_facility] Progress",
+  "de": "Fortschritt: [concept_antimatter_facility]"
+ },
+ "antimatter_facility_progress_desc": {
+  "en": "Tracks accumulated progress toward completing the Antimatter Containment Facility.",
+  "de": "Verfolgt den angesammelten Fortschritt beim Bau der Antimaterie-Eindämmungsanlage."
+ },
+ "antitrust_public_outrage_advance_desc": {
+  "en": "A strong positive boost to law enactment progress from a recent event.",
+  "de": "Ein starker positiver Schub für den Fortschritt der Gesetzeseinführung durch ein kürzliches Ereignis."
+ },
+ "antitrust_public_outrage_cautious_desc": {
+  "en": "A smaller positive boost to law enactment progress from a recent event.",
+  "de": "Ein kleinerer positiver Schub für den Fortschritt der Gesetzeseinführung durch ein kürzliches Ereignis."
+ },
+ "antitrust_strict_enforcement": {
+  "en": "Antitrust: Strict Enforcement",
+  "de": "Kartellrecht: Strikte Durchsetzung"
+ },
+ "arabic_union": {
+  "en": "Arabic Union",
+  "de": "Arabische Union"
+ },
+ "arctic_adaptation_modifier": {
+  "en": "Arctic Adaptation Research",
+  "de": "Arktische Anpassungsforschung"
+ },
+ "arctic_adaptation_modifier_desc": {
+  "en": "Having accepted the inevitability of polar ice loss, we are redirecting resources from futile coastal defense into adaptation research. Our [concept_prestige] suffers but our scientists find new opportunities.",
+  "de": "Da wir den unvermeidlichen Verlust des Polareises akzeptiert haben, lenken wir Ressourcen von vergeblicher Küstenverteidigung in die Anpassungsforschung um. Unser [concept_prestige] leidet, doch unsere Wissenschaftler finden neue Möglichkeiten."
+ },
+ "arctic_melting_modifier": {
+  "en": "Melting Ice Caps",
+  "de": "Schmelzende Eiskappen"
+ },
+ "arctic_melting_modifier_desc": {
+  "en": "The polar ice caps are melting at an alarming rate, disrupting [Concept('concept_shipping_lane', 'shipping lanes')], devastating fishing grounds, and raising sea levels across all coastal regions.",
+  "de": "Die polaren Eiskappen schmelzen alarmierend schnell, stören [Concept('concept_shipping_lane', 'Schifffahrtswege')], verwüsten Fischgründe und lassen den Meeresspiegel in allen Küstenregionen steigen."
+ },
+ "arms_race_escalation_modifier_desc": {
+  "en": "Our nation is engaged in a dangerous arms race, pouring resources into military expansion to match a rival power's buildup.",
+  "de": "Unsere Nation befindet sich in einem gefährlichen Wettrüsten und steckt Ressourcen in den Ausbau der Streitkräfte, um mit der Aufrüstung einer rivalisierenden Macht Schritt zu halten."
+ },
+ "arms_race_ignored_modifier_desc": {
+  "en": "We chose not to match our rival's military buildup, saving resources but weakening our deterrent posture.",
+  "de": "Wir haben uns entschieden, mit der Aufrüstung unseres Rivalen nicht Schritt zu halten, was Ressourcen spart, aber unsere Abschreckung schwächt."
+ },
+ "arms_race_rival_pressure_modifier_desc": {
+  "en": "A rival power is matching our military expansion, forcing increased defense spending.",
+  "de": "Eine rivalisierende Macht hält mit unserem militärischen Ausbau Schritt und zwingt uns zu höheren Verteidigungsausgaben."
+ },
+ "art_renaissance_funded_modifier_desc": {
+  "en": "Government funding for the arts provides meaning and purpose in a post-scarcity society, boosting [concept_prestige].",
+  "de": "Staatliche Kunstförderung verleiht einer Gesellschaft jenseits der Knappheit Sinn und Zweck und steigert das [concept_prestige]."
+ },
+ "assassinate_domestic": {
+  "en": "Assassinate",
+  "de": "Ermorden"
+ },
+ "assassinate_domestic_desc": {
+  "en": "Assassinate a domestic target.",
+  "de": "Ein inländisches Ziel ermorden."
+ },
+ "assassinate_foreign": {
+  "en": "Assassinate",
+  "de": "Ermorden"
+ },
+ "assassinate_foreign_desc": {
+  "en": "Assassinate a foreign target.",
+  "de": "Ein ausländisches Ziel ermorden."
+ },
+ "assimilation_legacy_modifier": {
+  "en": "Cultural Assimilation Legacy",
+  "de": "Erbe der Kulturellen Assimilierung"
+ },
+ "atlantic_charter": {
+  "en": "Atlantic Charter",
+  "de": "Atlantik-Charta"
+ },
+ "augment_ethics_board_advance_desc": {
+  "en": "A strong positive boost to law enactment progress from a recent event.",
+  "de": "Ein starker positiver Schub für den Fortschritt der Gesetzeseinführung durch ein kürzliches Ereignis."
+ },
+ "augment_ethics_board_cautious_desc": {
+  "en": "A smaller positive boost to law enactment progress from a recent event.",
+  "de": "Ein kleinerer positiver Schub für den Fortschritt der Gesetzeseinführung durch ein kürzliches Ereignis."
+ },
+ "augment_health_panic": {
+  "en": "Augmentation Health Scare",
+  "de": "Gesundheitspanik um Augmentierung"
+ },
+ "augment_permissive_ethics": {
+  "en": "Augmentation: Permissive Ethics",
+  "de": "Augmentierung: Freizügige Ethik"
+ },
+ "augment_restrictive_ethics": {
+  "en": "Augmentation: Restrictive Ethics",
+  "de": "Augmentierung: Restriktive Ethik"
+ },
+ "augmentation_ban_modifier": {
+  "en": "Augmentation Ban",
+  "de": "Augmentierungsverbot"
+ },
+ "augmentation_ban_modifier_desc": {
+  "en": "The augmentation ban reduces social tension but stifles innovation.",
+  "de": "Das Augmentierungsverbot verringert gesellschaftliche Spannungen, erstickt aber Innovation."
+ },
+ "augmentation_crackdown_modifier": {
+  "en": "Augmentation Crackdown",
+  "de": "Durchgreifen gegen Augmentierung"
+ },
+ "augmentation_crackdown_modifier_desc": {
+  "en": "The crackdown on black market implants restores order at bureaucratic cost.",
+  "de": "Das Durchgreifen gegen Schwarzmarktimplantate stellt die Ordnung wieder her, auf bürokratische Kosten."
+ },
+ "augmentation_crime_ban_modifier_desc": {
+  "en": "Banning augmentation for convicted criminals has reduced recidivism but drawn criticism from civil rights advocates.",
+  "de": "Das Verbot der Augmentierung für verurteilte Straftäter hat die Rückfallquote gesenkt, aber Kritik von Bürgerrechtlern hervorgerufen."
+ },
+ "augmentation_debate_active_modifier_desc": {
+  "en": "The augmentation debate drives innovation but creates social disruption.",
+  "de": "Die Debatte um Augmentierung treibt die Innovation voran, sorgt aber für gesellschaftliche Unruhe."
+ },
+ "augmentation_devout_victory_modifier_desc": {
+  "en": "Religious authorities have won major concessions on augmentation restrictions, boosting their influence.",
+  "de": "Religiöse Autoritäten haben bedeutende Zugeständnisse bei den Augmentierungsbeschränkungen erwirkt und ihren Einfluss gestärkt."
+ },
+ "augmentation_divide_modifier": {
+  "en": "Augmentation Divide",
+  "de": "Augmentierungsgraben"
+ },
+ "augmentation_divide_modifier_desc": {
+  "en": "The divide between augmented and natural citizens creates ongoing social tension.",
+  "de": "Der Graben zwischen augmentierten und natürlichen Bürgern erzeugt anhaltende gesellschaftliche Spannungen."
+ },
+ "augmentation_divide_permanent_modifier_desc": {
+  "en": "Exempting the already-augmented has written the divide into law. The tension it breeds fades over a decade.",
+  "de": "Die Ausnahme für bereits Augmentierte hat den Graben ins Gesetz geschrieben. Die dadurch entstehende Spannung klingt über ein Jahrzehnt ab."
+ },
+ "augmentation_ethics_board_modifier_desc": {
+  "en": "An ethics board provides oversight of augmentation technology, building trust at bureaucratic cost.",
+  "de": "Ein Ethikrat beaufsichtigt die Augmentierungstechnologie und schafft Vertrauen, auf bürokratische Kosten."
+ },
+ "augmentation_integrated_modifier": {
+  "en": "Augmentation Integrated",
+  "de": "Augmentierung integriert"
+ },
+ "augmentation_integrated_modifier_desc": {
+  "en": "Augmentation technology has been equitably integrated into society.",
+  "de": "Die Augmentierungstechnologie wurde gerecht in die Gesellschaft integriert."
+ },
+ "augmentation_kill_switch_modifier_desc": {
+  "en": "Mandatory kill switches in all augmentation implants deter criminal use but reduce their effectiveness.",
+  "de": "Verpflichtende Notabschaltungen in allen Augmentierungsimplantaten schrecken vor krimineller Nutzung ab, verringern aber deren Wirksamkeit."
+ },
+ "augmentation_mandate_modifier": {
+  "en": "Augmentation Mandate",
+  "de": "Augmentierungspflicht"
+ },
+ "augmentation_mandate_modifier_desc": {
+  "en": "Mandatory augmentation for certain [Concept('concept_profession', 'professions')] drives innovation but creates backlash among traditionalists.",
+  "de": "Verpflichtende Augmentierung für bestimmte [Concept('concept_profession', 'Berufe')] treibt die Innovation voran, erzeugt aber Gegenwehr bei Traditionalisten."
+ },
+ "augmentation_market_efficiency_modifier_desc": {
+  "en": "Allowing companies to prefer augmented workers has increased productivity but deepened the augmentation divide.",
+  "de": "Die Erlaubnis für Unternehmen, augmentierte Arbeitskräfte zu bevorzugen, hat die Produktivität gesteigert, aber den Augmentierungsgraben vertieft."
+ },
+ "augmentation_market_forces_modifier_desc": {
+  "en": "Unregulated augmentation markets benefit the wealthy elite while the unaugmented working class falls further behind.",
+  "de": "Unregulierte Augmentierungsmärkte begünstigen die wohlhabende Elite, während die nicht augmentierte Arbeiterschicht weiter zurückfällt."
+ },
+ "augmentation_regulation_modifier": {
+  "en": "Augmentation Regulation",
+  "de": "Augmentierungsregulierung"
+ },
+ "augmentation_regulation_modifier_desc": {
+  "en": "Augmentation regulation balances safety with innovation.",
+  "de": "Die Augmentierungsregulierung wägt Sicherheit gegen Innovation ab."
+ },
+ "augmentation_religious_anger_modifier_desc": {
+  "en": "Religious authorities are furious over the government's permissive stance on human augmentation.",
+  "de": "Religiöse Autoritäten sind empört über die freizügige Haltung der Regierung zur menschlichen Augmentierung."
+ },
+ "augmentation_subsidies_modifier": {
+  "en": "Augmentation Subsidies",
+  "de": "Augmentierungssubventionen"
+ },
+ "augmentation_subsidies_modifier_desc": {
+  "en": "Government subsidies make augmentation accessible, driving innovation at a cost.",
+  "de": "Staatliche Subventionen machen Augmentierung zugänglich und treiben die Innovation voran – das hat seinen Preis."
+ },
+ "augmentation_subsidy_modifier": {
+  "en": "Augmentation Subsidies",
+  "de": "Augmentierungssubventionen"
+ },
+ "augmentation_subsidy_modifier_desc": {
+  "en": "Government subsidies for human augmentation have improved [concept_sol] across all strata but strain the [concept_bureaucracy].",
+  "de": "Staatliche Subventionen für menschliche Augmentierung haben den [concept_sol] in allen Schichten verbessert, belasten aber die [concept_bureaucracy]."
+ },
+ "augmentation_workplace_protection_modifier_desc": {
+  "en": "Legal protections for unaugmented workers prevent workplace [concept_discrimination] and maintain social stability.",
+  "de": "Gesetzliche Schutzmaßnahmen für nicht augmentierte Arbeitskräfte verhindern [concept_discrimination] am Arbeitsplatz und erhalten die gesellschaftliche Stabilität."
+ },
+ "augmented_police_modifier": {
+  "en": "Augmented Police Force",
+  "de": "Augmentierte Polizeikräfte"
+ },
+ "augmented_police_modifier_desc": {
+  "en": "Deploying augmented officers in law enforcement has dramatically reduced crime at the cost of civil liberties concerns.",
+  "de": "Der Einsatz augmentierter Beamter in der Strafverfolgung hat die Kriminalität drastisch gesenkt, auf Kosten von Bedenken hinsichtlich der Bürgerrechte."
+ },
+ "automation_slowdown_modifier": {
+  "en": "Automation Slowdown",
+  "de": "Automatisierungsverlangsamung"
+ },
+ "automation_slowdown_modifier_desc": {
+  "en": "The government has slowed automation to address public concerns, maintaining employment at the cost of productivity.",
+  "de": "Die Regierung hat die Automatisierung verlangsamt, um Bedenken der Öffentlichkeit zu begegnen, und erhält so die Beschäftigung auf Kosten der Produktivität."
+ },
+ "banking_asset_relief_program_desc": {
+  "en": "Applies the effects of the Asset Relief Program banking policy.",
+  "de": "Wendet die Effekte der Bankenpolitik Vermögensentlastungsprogramm an."
+ },
+ "banking_bail_in_regime_desc": {
+  "en": "Applies the effects of the Bail-in Regime banking policy.",
+  "de": "Wendet die Effekte der Bankenpolitik Bail-in-Regime an."
+ },
+ "banking_bank_holiday": {
+  "en": "Bank Holiday",
+  "de": "Bankfeiertag"
+ },
+ "banking_bank_holiday_desc": {
+  "en": "Applies the effects of the Bank Holiday banking policy.",
+  "de": "Wendet die Effekte der Bankenpolitik Bankfeiertag an."
+ },
+ "banking_capital_controls_out_desc": {
+  "en": "Applies the effects of the Capital Controls on Outflows banking policy.",
+  "de": "Wendet die Effekte der Bankenpolitik Kapitalverkehrskontrollen bei Abflüssen an."
+ },
+ "banking_countercyclical_capital_buffer_desc": {
+  "en": "Applies the effects of the Counter-cyclical Capital Buffer banking policy.",
+  "de": "Wendet die Effekte der Bankenpolitik Antizyklischer Kapitalpuffer an."
+ },
+ "banking_crash_intervention_capital_controls_desc": {
+  "en": "Cross-border capital movements have been restricted by emergency [concept_decree]. The bleeding stops; foreign trade and influence both suffer.",
+  "de": "Grenzüberschreitende Kapitalbewegungen wurden durch einen dringlichen [concept_decree] eingeschränkt. Die Blutung stoppt; Außenhandel und Einfluss leiden beide darunter."
+ },
+ "banking_crash_intervention_correspondent_liquidity_desc": {
+  "en": "Established correspondent banks are channeling emergency liquidity to weaker institutions, holding the system together at the cost of latent inflation.",
+  "de": "Etablierte Korrespondenzbanken leiten Notliquidität an schwächere Institute weiter und halten das System zusammen, auf Kosten latenter Inflation."
+ },
+ "banking_crash_intervention_deposit_guarantee_desc": {
+  "en": "All deposits at chartered banks are now formally insured. Bank runs subside; the contingent liability sits on the public balance sheet.",
+  "de": "Alle Einlagen bei konzessionierten Banken sind nun formell versichert. Bankstürme ebben ab; die Eventualverbindlichkeit lastet auf der öffentlichen Bilanz."
+ },
+ "banking_crash_intervention_dev_bank_lending_desc": {
+  "en": "State development banks are extending emergency credit to viable firms, modestly boosting [concept_infrastructure] capacity at fiscal cost.",
+  "de": "Staatliche Entwicklungsbanken vergeben Notkredite an überlebensfähige Unternehmen und steigern die [concept_infrastructure]-Kapazität leicht, auf fiskalische Kosten."
+ },
+ "banking_crash_intervention_discount_window_desc": {
+  "en": "The central bank is lending freely against good collateral at a penalty rate. Liquidity is restored at the cost of mild bubble-pressure regrowth.",
+  "de": "Die Zentralbank vergibt großzügig Kredite gegen gute Sicherheiten zu einem Strafzins. Die Liquidität wird wiederhergestellt, auf Kosten eines leichten erneuten Anstiegs des Blasendrucks."
+ },
+ "banking_crash_intervention_keynesian_stimulus_desc": {
+  "en": "Aggressive deficit spending is sustaining demand through the slump. Manufacturing [concept_throughput] holds up, with sustained fiscal cost and latent overheating risk.",
+  "de": "Aggressive Defizitausgaben stützen die Nachfrage durch die Rezession. Der [concept_throughput] der Fertigung hält sich, bei anhaltenden fiskalischen Kosten und latentem Überhitzungsrisiko."
+ },
+ "banking_crash_intervention_mutual_clearing_desc": {
+  "en": "Banks are pooling reserves to backstop one another. Counterparty trust slowly returns, but industrialists resent the cost-sharing.",
+  "de": "Banken bündeln ihre Reserven, um sich gegenseitig abzusichern. Das Vertrauen zwischen den Geschäftspartnern kehrt langsam zurück, doch die Industriellen missbilligen die Kostenteilung."
+ },
+ "banking_crash_intervention_nationalize_desc": {
+  "en": "Failing institutions have been taken into state hands. Capitalists are furious; the labour movement applauds; the public purse bleeds.",
+  "de": "Scheiternde Institute wurden verstaatlicht. Die Kapitalisten sind empört; die Arbeiterbewegung applaudiert; die Staatskasse blutet."
+ },
+ "banking_crash_intervention_open_market_desc": {
+  "en": "The central bank is conducting aggressive open-market operations and lender-of-last-resort lending. Confidence rebuilds, with mild inflationary pressure as the price.",
+  "de": "Die Zentralbank betreibt aggressive Offenmarktgeschäfte und tritt als Kreditgeber letzter Instanz auf. Das Vertrauen erholt sich, zum Preis eines leichten Inflationsdrucks."
+ },
+ "banking_crash_intervention_suspend_convertibility_desc": {
+  "en": "A bank holiday and freeze on currency convertibility have steadied the panic, but exporters and creditors are paying the price.",
+  "de": "Ein Bankfeiertag und das Einfrieren der Währungskonvertibilität haben die Panik gedämpft, doch Exporteure und Gläubiger zahlen den Preis dafür."
+ },
+ "banking_crash_intervention_swap_lines_desc": {
+  "en": "Foreign central banks are providing emergency currency swaps. Imports are easier and contagion risk falls — but our diplomatic bargaining position is constrained.",
+  "de": "Ausländische Zentralbanken stellen Not-Währungsswaps bereit. Importe werden einfacher, und das Ansteckungsrisiko sinkt — doch unsere diplomatische Verhandlungsposition ist eingeschränkt."
+ },
+ "banking_crash_response_cost_desc": {
+  "en": "Emergency outlays from the treasury to contain the financial crisis.",
+  "de": "Notausgaben der Staatskasse zur Eindämmung der Finanzkrise."
+ },
+ "banking_crisis_protectionism_modifier_desc": {
+  "en": "Emergency capital controls and trade restrictions imposed to contain financial contagion.",
+  "de": "Notfall-Kapitalverkehrskontrollen und Handelsbeschränkungen, verhängt zur Eindämmung der Finanzansteckung."
+ },
+ "banking_cycle_progress_desc": {
+  "en": "Free Intervention Points: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_banking_intervention_max_add')]/[ROOT.ScriptValue('banking_law_base_points_value')]",
+  "de": "Freie Interventionspunkte: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_banking_intervention_max_add')]/[ROOT.ScriptValue('banking_law_base_points_value')]"
+ },
+ "banking_cycle_progress_desc_command": {
+  "en": "Free Planning Budget: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_banking_intervention_max_add')]/[ROOT.ScriptValue('banking_law_base_points_value')]",
+  "de": "Freies Planungsbudget: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_banking_intervention_max_add')]/[ROOT.ScriptValue('banking_law_base_points_value')]"
+ },
+ "banking_cycle_progress_desc_coop": {
+  "en": "Free Council Mandate Points: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_banking_intervention_max_add')]/[ROOT.ScriptValue('banking_law_base_points_value')]",
+  "de": "Freie Ratsmandatspunkte: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_banking_intervention_max_add')]/[ROOT.ScriptValue('banking_law_base_points_value')]"
+ },
+ "banking_directed_credit_agriculture_desc": {
+  "en": "Applies the effects of the Directed Credit to Agriculture banking policy.",
+  "de": "Wendet die Effekte der Bankenpolitik Gelenkte Kreditvergabe an die Landwirtschaft an."
+ },
+ "banking_directed_credit_armaments_desc": {
+  "en": "Applies the effects of the Directed Credit to Armaments banking policy.",
+  "de": "Wendet die Effekte der Bankenpolitik Gelenkte Kreditvergabe an die Rüstungsindustrie an."
+ },
+ "banking_directed_credit_electrification_desc": {
+  "en": "Applies the effects of the Directed Credit to Electrification & High Tech banking policy.",
+  "de": "Wendet die Effekte der Bankenpolitik Gelenkte Kreditvergabe an Elektrifizierung & Hochtechnologie an."
+ },
+ "banking_directed_credit_heavy_industry_desc": {
+  "en": "Applies the effects of the Directed Credit to Heavy Industry banking policy.",
+  "de": "Wendet die Effekte der Bankenpolitik Gelenkte Kreditvergabe an die Schwerindustrie an."
+ },
+ "banking_directed_credit_infrastructure_desc": {
+  "en": "Applies the effects of the Directed Credit for [concept_infrastructure] banking policy.",
+  "de": "Wendet die Effekte der Bankenpolitik Gelenkte Kreditvergabe für [concept_infrastructure] an."
+ },
+ "banking_emergency_liquidity_program_desc": {
+  "en": "Applies the effects of the Emergency Liquidity Program banking policy.",
+  "de": "Wendet die Effekte der Bankenpolitik Notliquiditätsprogramm an."
+ },
+ "banking_expand_deposit_guarantee_desc": {
+  "en": "Applies the effects of the Expand Deposit Guarantee banking policy.",
+  "de": "Wendet die Effekte der Bankenpolitik Einlagensicherung ausweiten an."
+ },
+ "banking_export_credit_facility_desc": {
+  "en": "Applies the effects of the Export Credit Facility banking policy.",
+  "de": "Wendet die Effekte der Bankenpolitik Exportkreditfazilität an."
+ },
+ "banking_fx_devaluation": {
+  "en": "Currency Devaluation",
+  "de": "Währungsabwertung"
+ },
+ "banking_fx_devaluation_desc": {
+  "en": "A banking tool from an earlier version. It is converted into a weak Exchange Rate Index and removed on the next monthly update.",
+  "de": "Ein Bankinstrument aus einer früheren Version. Es wird bei der nächsten monatlichen Aktualisierung in einen schwachen Wechselkursindex umgewandelt und entfernt."
+ },
+ "banking_fx_support": {
+  "en": "Foreign Exchange Support",
+  "de": "Devisenstützung"
+ },
+ "banking_fx_support_desc": {
+  "en": "A banking tool from an earlier version. It is converted into a strong Exchange Rate Index and removed on the next monthly update.",
+  "de": "Ein Bankinstrument aus einer früheren Version. Es wird bei der nächsten monatlichen Aktualisierung in einen starken Wechselkursindex umgewandelt und entfernt."
+ },
+ "banking_fx_surrender": {
+  "en": "Foreign Exchange Surrender Requirement",
+  "de": "Devisenabgabepflicht"
+ },
+ "banking_fx_swap_lines_desc": {
+  "en": "Applies the effects of the FX Swap Lines banking policy.",
+  "de": "Wendet die Effekte der Bankenpolitik Devisen-Swap-Linien an."
+ },
+ "banking_moral_suasion": {
+  "en": "Moral Suasion",
+  "de": "Moralische Einflussnahme"
+ },
+ "banking_moral_suasion_desc": {
+  "en": "Applies the effects of the Moral Suasion banking policy.",
+  "de": "Wendet die Effekte der Bankenpolitik Moralische Einflussnahme an."
+ },
  "bg_biotechnology": {
   "en": "Biotechnology",
   "de": "Biotechnologie"
