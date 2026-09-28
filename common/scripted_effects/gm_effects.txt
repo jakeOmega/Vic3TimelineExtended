@@ -26,8 +26,18 @@ gm_state_first_sight = {
 			limit = { gm_state_is_bound = yes }
 			set_variable = { name = gm_raised_by value = owner }
 		}
+		# Gate the record, not gm_state_leader_fits: adding the gate there would
+		# wrongly contest a Leader monument when the same ruler moves from
+		# Autocracy to another law. With no honoree recorded, the monument
+		# reads "does not fit" and is contested on the same refresh (spec §1) —
+		# a panel-picked Leader under a parliamentary republic or a crowned
+		# monarchy never earns the commission's regime legitimacy, authority
+		# and IG approval it should not have.
 		if = {
-			limit = { gm_state_kind_ruler = yes }
+			limit = {
+				gm_state_kind_ruler = yes
+				owner = { gm_can_raise_leader_monument = yes }
+			}
 			gm_state_record_honoree = yes
 		}
 		if = {
@@ -166,8 +176,16 @@ gm_state_default_faith_skin = {
 
 # State scope. The first heritage skin in the revival partition's order that
 # the owner can claim; else no change. Reverse order: a later match overrides,
-# so the partition's first wins.
+# so the partition's first wins, EXCEPT Hebrew. te_heritage_hebrew is a
+# group-level match (any primary culture in language_group_semitic), less
+# specific than the single-language Arabic, Ge'ez and Aramaic skins it would
+# otherwise beat by sitting later in the list, so Hebrew is applied first and
+# everything else overrides it. The last line re-applies Hebrew once more,
+# but only for a Jewish state religion, so a Jewish state building a new
+# temple still gets it back even against a Ladino (Latin) or Yiddish
+# (Gothic) primary culture that would otherwise win the reverse-order race.
 gm_state_default_heritage_skin = {
+	gm_state_try_heritage_skin = { H = hebrew }
 	gm_state_try_heritage_skin = { H = aramaic }
 	gm_state_try_heritage_skin = { H = prussian }
 	gm_state_try_heritage_skin = { H = mayan }
@@ -184,8 +202,13 @@ gm_state_default_heritage_skin = {
 	gm_state_try_heritage_skin = { H = slavonic }
 	gm_state_try_heritage_skin = { H = geez }
 	gm_state_try_heritage_skin = { H = sanskrit }
-	gm_state_try_heritage_skin = { H = hebrew }
 	gm_state_try_heritage_skin = { H = latin }
+	if = {
+		limit = {
+			owner = { country_has_state_religion = rel:jewish }
+		}
+		gm_state_try_heritage_skin = { H = hebrew }
+	}
 }
 
 gm_state_try_faith_skin = {
@@ -662,7 +685,22 @@ gm_check_contests = {
 				}
 				gm_state_adopt_for_winner = yes
 			}
+			# A shrine this country did not raise always becomes heritage, whatever
+			# the route it arrived by: outright conquest, a secession that drops
+			# te_cw_role on the new country (te_civil_war_on_actions.txt), or a
+			# civil war of this country's own that ends with a foreign shrine
+			# still in hand. Runs before the lift/contest branches so it wins over
+			# "contest" for a bound-but-foreign shrine the loop hasn't seen yet.
 			if = {
+				limit = {
+					gm_state_kind_faith = yes
+					gm_state_raised_by_owner = no
+					gm_state_is_heritage = no
+				}
+				gm_state_lift_contest = yes
+				set_variable = gm_heritage
+			}
+			else_if = {
 				limit = {
 					OR = {
 						gm_state_is_contested = yes

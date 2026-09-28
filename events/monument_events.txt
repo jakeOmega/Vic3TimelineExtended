@@ -1221,15 +1221,6 @@ monument_events.11 = {
 	}
 
 	option = {
-		name = monument_events.11.heritage_hebrew
-		trigger = {
-			var:gm_skin_axis = flag:heritage
-			owner = { te_heritage_hebrew = yes }
-		}
-		gm_state_choose_skin = { SKIN = heritage_hebrew }
-	}
-
-	option = {
 		name = monument_events.11.heritage_sanskrit
 		trigger = {
 			var:gm_skin_axis = flag:heritage
@@ -1371,6 +1362,21 @@ monument_events.11 = {
 			owner = { te_heritage_aramaic = yes }
 		}
 		gm_state_choose_skin = { SKIN = heritage_aramaic }
+	}
+
+	# Hebrew last among the heritage options (before the generic fallback):
+	# te_heritage_hebrew is a group-level match (any primary culture in
+	# language_group_semitic), less specific than the single-language Arabic,
+	# Ge'ez and Aramaic triggers above it, so an expired event (no
+	# default_option; the first valid option is taken) offers those forms to
+	# a Semitic-language country before it falls through to Hebrew.
+	option = {
+		name = monument_events.11.heritage_hebrew
+		trigger = {
+			var:gm_skin_axis = flag:heritage
+			owner = { te_heritage_hebrew = yes }
+		}
+		gm_state_choose_skin = { SKIN = heritage_hebrew }
 	}
 
 	# Always offered, last: with no default_option, an expired event takes the

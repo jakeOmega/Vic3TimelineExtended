@@ -506,7 +506,14 @@ class RecordTests(unittest.TestCase):
         self.assertIn("gm_state_is_dedicated = yes NOT = { has_variable = gm_seen }", body)
         self.assertIn("set_variable = gm_seen", body)
         self.assertIn("limit = { gm_state_is_bound = yes } set_variable = { name = gm_raised_by value = owner }", body)
-        self.assertIn("limit = { gm_state_kind_ruler = yes } gm_state_record_honoree = yes", body)
+        # Recording the honoree is gated on the commission (gm_can_raise_leader_monument),
+        # not just on being a ruler monument: a Leader picked in the building panel
+        # under a government that cannot commission one must record no honoree, so it
+        # reads "does not fit" and is contested (I2). gm_state_leader_fits stays ungated.
+        self.assertIn("limit = { gm_state_kind_ruler = yes owner = { gm_can_raise_leader_monument = yes } } "
+                      "gm_state_record_honoree = yes", body)
+        self.assertNotIn("owner = { gm_can_raise_leader_monument = yes }",
+                          squash(block(read(TRIGGERS), "gm_state_leader_fits")))
         self.assertIn("limit = { gm_state_kind_faith = yes } gm_state_record_faith = yes", body)
         self.assertIn("gm_state_set_default_skin = yes", body)
         honoree = squash(block(self.e, "gm_state_record_honoree"))
@@ -538,7 +545,21 @@ class RecordTests(unittest.TestCase):
             order.append(m.group(1))
             if m.group(1) in HERITAGE_AS_FAITH:
                 self.assertEqual(m.group(2), HERITAGE_AS_FAITH[m.group(1)])
-        self.assertEqual(order, list(reversed(HERITAGES)), "reverse order: the partition's first wins")
+        # I3: reverse order (the partition's first wins), EXCEPT Hebrew, which
+        # is a group-level (Semitic) match less specific than the single-language
+        # Arabic, Ge'ez and Aramaic skins, so it is applied first and everything
+        # else overrides it -- then re-applied once more, last, but only for a
+        # Jewish state religion.
+        rest = [h for h in reversed(HERITAGES) if h != "hebrew"]
+        self.assertEqual(order, ["hebrew"] + rest + ["hebrew"],
+                          "hebrew first (loses to everything), then re-applied last for a Jewish state religion")
+        self.assertLess(order.index("hebrew"), order.index("arabic"))
+        self.assertLess(order.index("hebrew"), order.index("geez"))
+        self.assertLess(order.index("hebrew"), order.index("aramaic"))
+        self.assertIn("owner = { country_has_state_religion = rel:jewish } } "
+                      "gm_state_try_heritage_skin = { H = hebrew }", heritage)
+        self.assertTrue(heritage.endswith("gm_state_try_heritage_skin = { H = hebrew } }"),
+                         "hebrew's Jewish re-apply is the last line")
 
     def test_skin_helpers(self):
         self.assertIn("owner = { religion = rel:$R$ } } set_variable = { name = gm_skin value = flag:faith_$R$ }",
@@ -752,8 +773,16 @@ class ContestTests(unittest.TestCase):
         self.assertTrue(body.startswith("if = { limit = { NOT = { has_variable = te_cw_role } }"))
         self.assertIn("limit = { gm_state_is_dedicated = yes gm_state_is_bound = yes }", body)
         self.assertIn("owner = { has_variable = gm_cw_adopting } } gm_state_adopt_for_winner = yes", body)
+        # A shrine this country did not raise always becomes heritage, whatever
+        # the route it arrived by (conquest, a secession that drops te_cw_role,
+        # or a civil war of this country's own), and this branch must run
+        # before the lift/contest else_ifs so it wins over "contest".
+        heritage = "gm_state_kind_faith = yes gm_state_raised_by_owner = no gm_state_is_heritage = no } gm_state_lift_contest = yes set_variable = gm_heritage"
+        self.assertIn(heritage, body)
         self.assertIn("gm_state_is_heritage = yes } gm_state_message_fits = yes } gm_state_lift_contest = yes", body)
         self.assertIn("gm_state_is_heritage = no gm_state_message_fits = no } gm_state_contest = yes", body)
+        self.assertLess(body.find(heritage), body.find("gm_state_is_contested = yes gm_state_is_heritage = yes"))
+        self.assertEqual(body.count("else_if ="), 2, "the lift and contest branches follow the new heritage if")
 
     def test_months_count_once_a_month(self):
         self.assertNotIn("add = 1", squash(block(self.e, "gm_check_contests")))
@@ -1024,9 +1053,17 @@ class SkinTests(unittest.TestCase):
     def test_an_option_per_skin_generic_last(self):
         options = self._options()
         names = [n for n, _ in options]
+        # I3: heritage_hebrew comes after heritage_arabic, heritage_geez and
+        # heritage_aramaic (the last of the single-language matches), so an
+        # expired event (no default_option) takes one of those over the
+        # group-level Hebrew match for a Semitic-language country.
+        heritages_in_option_order = tuple(h for h in HERITAGES if h != "hebrew") + ("hebrew",)
         expected = ([f"landmark_{k}" for k, _ in LANDMARKS] + [f"faith_{f}" for f in FAITHS]
-                    + [f"heritage_{h}" for h in HERITAGES] + ["generic"])
+                    + [f"heritage_{h}" for h in heritages_in_option_order] + ["generic"])
         self.assertEqual(names, expected)
+        self.assertLess(names.index("heritage_hebrew"), names.index("generic"))
+        for h in ("arabic", "geez", "aramaic"):
+            self.assertLess(names.index(f"heritage_{h}"), names.index("heritage_hebrew"))
         bodies = dict(options)
         for f in FAITHS:
             self.assertIn(f"var:gm_skin_axis = flag:faith owner = {{ religion = rel:{f} }}", bodies[f"faith_{f}"])
