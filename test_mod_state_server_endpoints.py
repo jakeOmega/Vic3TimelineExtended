@@ -1373,6 +1373,30 @@ class ErrorBodyStatusTests(unittest.TestCase):
         self.assertEqual(ctx.exception.status, 404)
         self.assertIn("to diff against", ctx.exception.payload["error"])
 
+    def test_logs_debug_log_param_hides_and_isolates_trace_output(self):
+        fd, path = tempfile.mkstemp(suffix=".log")
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            f.write(
+                "[20:00:01][jomini_effect_impl.cpp:454]: common/scripted_effects/x.txt:5: TE_X: probe line\n"
+                "[20:00:01][jomini_effect_impl.cpp:2501]: State X (x1)\n"
+                "Root: Country Y (2)\n"
+                "[20:00:02][jomini_scriptvalue.cpp:1659]: Value of wrong type in 'common/scripted_effects/x.txt:9'. Got value of type 'none'\n"
+            )
+        info = types.SimpleNamespace(family="debug", generation=0, path=path,
+                                     to_dict=lambda: {"family": "debug"})
+        base = {"mod_only": ["false"], "dedupe": ["false"]}
+        try:
+            with mock.patch("game_log_reader.list_logs", return_value=[info]):
+                shown = mss.ModStateHandler._logs(self.handler, ["debug"], dict(base))
+                hidden = mss.ModStateHandler._logs(self.handler, ["debug"], {**base, "debug_log": ["hide"]})
+                only = mss.ModStateHandler._logs(self.handler, ["debug"], {**base, "debug_log": ["only"]})
+        finally:
+            os.remove(path)
+        self.assertEqual(shown["total"], 3)
+        self.assertEqual([e["source"] for e in hidden["entries"]], ["jomini_scriptvalue.cpp:1659"])
+        self.assertEqual({e["category"] for e in only["entries"]}, {"debug_log"})
+        self.assertEqual(only["total"], 2)
+
     def test_loc_keys_usage_is_400_and_unknown_type_is_404(self):
         with mock.patch.object(mss, "ms", _StubModState()):
             with self.assertRaises(mss.BadRequest):

@@ -199,6 +199,10 @@ Walk the validator's reported unknowns. For each:
 
 After each batch of edits: `curl -X POST http://localhost:8950/reload?engine_only=true` then `curl http://localhost:8950/validate/engine-coverage` to verify removed-modifier count drops.
 
+## 6a. Retire old-save repairs
+
+Code that repairs saves from an older mod version carries a marker, `# OLD-SAVE REPAIR (#N): remove after YYYY-MM-DD or at vanilla X.Y, whichever comes first.`, mostly in `common/on_actions/te_old_save_repairs.txt`. Once `vanilla_parsed/` is rebuilt for version X.Y, `test_old_save_repairs.py` fails, naming each one. Delete the repair's block, and the file once it is empty. The old-save cleanup tracked in `docs/audits/open_issues.md` (L24, L25) is the same kind of code without a marker: check whether it can go too.
+
 ## 6b. Vanilla constants the mod mirrors (silent-drift check)
 
 A separate class from step 6's breakages: values the mod **copies or cancels** rather than references. Vanilla changing one produces **no error, no log line and no validator finding** — the mod keeps loading and quietly computes the wrong number. Re-read each row against the new vanilla on every bump.

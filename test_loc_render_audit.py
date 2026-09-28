@@ -3,6 +3,7 @@
 Covers the pure check_value detector, loc-line parsing + REVIEWED suppression,
 an end-to-end tempdir run with mixed clean/bad/suppressed values, and a
 vanilla-clean calibration (the bracket-tag check must be 0 on vanilla loc).
+The treaty-article scope check gets the same three layers.
 """
 from __future__ import annotations
 
@@ -11,7 +12,9 @@ import tempfile
 import unittest
 
 from loc_render_audit import (
+    article_type_text_key,
     audit,
+    check_article_scope,
     check_quoted_expansion,
     check_quoted_name,
     check_value,
@@ -119,6 +122,56 @@ class CheckQuotedNameTests(unittest.TestCase):
         self.assertTrue(self._flagged("$base$ Bonus", {"base": "Victor's Peace"}))
 
 
+class ArticleScopeTests(unittest.TestCase):
+    """A treaty article's `_desc` / `_effects_desc` renders with no article
+    instance, so `[SOURCE_COUNTRY…]` there promotes to nullptr."""
+
+    ARTICLES = {"enforce_emissions_reduction", "trade_pact", "trade_pact_effects",
+                "aid", "aid_extended"}
+
+    def test_key_matching_is_exact(self):
+        self.assertEqual(article_type_text_key("aid_desc", self.ARTICLES), ("aid", "_desc"))
+        self.assertEqual(article_type_text_key("aid_effects_desc", self.ARTICLES),
+                         ("aid", "_effects_desc"))
+        self.assertEqual(article_type_text_key("aid_extended_desc", self.ARTICLES),
+                         ("aid_extended", "_desc"))
+        self.assertIsNone(article_type_text_key("aid_article_short_desc", self.ARTICLES))
+        self.assertIsNone(article_type_text_key("aid_crisis_desc", self.ARTICLES))
+        self.assertIsNone(article_type_text_key("ai_desc", self.ARTICLES))
+        self.assertIsNone(article_type_text_key(
+            "aid_proposal_notification_effects_desc", self.ARTICLES))
+
+    def test_effects_suffix_checked_before_desc(self):
+        # `trade_pact_effects_desc` is `trade_pact`'s effects text, not the
+        # `_desc` of the article named `trade_pact_effects`.
+        self.assertEqual(article_type_text_key("trade_pact_effects_desc", self.ARTICLES),
+                         ("trade_pact", "_effects_desc"))
+
+    def _scopes(self, value):
+        issues = check_article_scope(value, "aid", "_desc")
+        return issues[0][1] if issues else ""
+
+    def test_every_instance_scope_flagged(self):
+        for scope in ("SOURCE_COUNTRY", "TARGET_COUNTRY", "FIRST_COUNTRY",
+                      "SECOND_COUNTRY", "ROOT", "SCOPE"):
+            self.assertIn(f"`[{scope}…]`", self._scopes(f"x [{scope}.GetName] y"), scope)
+
+    def test_scope_as_argument_flagged(self):
+        self.assertIn("SOURCE_COUNTRY",
+                      self._scopes("[SelectLocalization(SOURCE_COUNTRY.IsAtWar, 'a', 'b')]"))
+
+    def test_concept_links_and_quoted_literals_not_flagged(self):
+        self.assertEqual(check_article_scope(
+            "[Concept('concept_country', '$concept_countries$')] and [concept_tariffs]",
+            "aid", "_desc"), [])
+        self.assertEqual(check_article_scope(
+            "[SelectLocalization(GetPlayer.IsAtWar, 'ROOT.x', 'SCOPE')]",
+            "aid", "_desc"), [])
+
+    def test_chain_tail_not_flagged(self):
+        self.assertEqual(check_article_scope("[GetPlayer.ROOT]", "aid", "_desc"), [])
+
+
 class ParseLineTests(unittest.TestCase):
     def test_extracts_key_value_trailing(self):
         parsed = _parse_loc_line(' my_key:0 "the [b]value[/b]" # REVIEWED 2026-05-21: ok\n')
@@ -215,6 +268,75 @@ class EndToEndTests(unittest.TestCase):
         self.assertEqual([(f.loc_key, f.issue) for f in result.flags],
                          [("uses", "quoted_arg_expansion")])
 
+    # The line as shipped before the 2026-09-27 fix (88 debug.log errors).
+    EMISSIONS_EFFECTS_LINE = (
+        ' enforce_emissions_reduction_effects_desc:0 "\u2022 Forces the source market '
+        'leader to enable all major greenhouse gas mitigation policies.\\n\u2022 Current '
+        'annual market emissions: #v [SOURCE_COUNTRY.MakeScope.ScriptValue('
+        '\'market_greenhouse_gas_emissions_script_value_display\')]#!\\n\u2022 Blocks '
+        'policy rollback while the treaty is active.\\n\u2022 Applies additional penalties '
+        'to fossil fuel and legacy power expansion.\\n\u2022 Can be enforced in war or '
+        'offered as a negotiated concession."\n'
+    )
+
+    def _write_articles(self, td, body):
+        rel = os.path.join("common", "treaty_articles", "t.txt")
+        os.makedirs(os.path.dirname(os.path.join(td, rel)), exist_ok=True)
+        with open(os.path.join(td, rel), "w", encoding="utf-8") as fh:
+            fh.write(body)
+
+    def test_article_scope_in_type_text_flagged(self):
+        with tempfile.TemporaryDirectory() as td:
+            self._write(
+                td,
+                'l_english:\n'
+                + self.EMISSIONS_EFFECTS_LINE
+                + ' enforce_emissions_reduction_article_short_desc:0 "[SOURCE_COUNTRY.GetNameNoFormatting] will enforce"\n'
+                ' enforce_emissions_reduction_desc:0 "A static gist."\n'
+                ' trade_pact_desc:0 "[TARGET_COUNTRY.GetNameNoFormatting] opens its market"\n'
+                ' trade_pact_article_short_desc:0 "[TARGET_COUNTRY.GetNameNoFormatting] opens its market"\n'
+                ' trade_pact_reviewed_effects_desc:0 "[SOURCE_COUNTRY.GetName] pays"\n'
+                ' market_leader_desc:0 "[SOURCE_COUNTRY.GetName] leads"\n',
+            )
+            self._write_articles(
+                td,
+                "# comment = {\n"
+                "enforce_emissions_reduction = {\n\tkind = directed\n}\n"
+                "trade_pact = {\n\tnested_block = {\n\t}\n}\n",
+            )
+            result = audit(mod_path=td)
+        got = sorted((f.loc_key, f.issue, f.line) for f in result.flags)
+        self.assertEqual(got, [
+            ("enforce_emissions_reduction_effects_desc", "article_desc_scope", 2),
+            ("trade_pact_desc", "article_desc_scope", 5),
+        ])
+        emissions = next(f for f in result.flags if f.line == 2)
+        self.assertIn("`[SOURCE_COUNTRY…]`", emissions.detail)
+        self.assertIn("enforce_emissions_reduction_article_short_desc", emissions.detail)
+        pact = next(f for f in result.flags if f.line == 5)
+        self.assertIn("`[TARGET_COUNTRY…]`", pact.detail)
+
+    def test_article_scope_reviewed_and_inject(self):
+        with tempfile.TemporaryDirectory() as td:
+            self._write(
+                td,
+                'l_english:\n'
+                ' alliance_effects_desc:0 "[FIRST_COUNTRY.GetName] joins" # REVIEWED 2026-09-27: demo\n'
+                ' defensive_pact_desc:0 "[SCOPE.sCountry(\'target\').GetName] is defended"\n'
+                ' nested_block_desc:0 "[ROOT.GetName]"\n',
+            )
+            self._write_articles(
+                td,
+                "INJECT:alliance = {\n\tcost = 10\n}\n"
+                "REPLACE:defensive_pact = {\n\tnested_block = {\n\t}\n}\n",
+            )
+            result = audit(mod_path=td)
+        got = sorted((f.loc_key, f.issue, bool(f.exemption)) for f in result.flags)
+        self.assertEqual(got, [
+            ("alliance_effects_desc", "article_desc_scope", True),
+            ("defensive_pact_desc", "article_desc_scope", False),
+        ])
+
     def test_report_renders(self):
         with tempfile.TemporaryDirectory() as td:
             self._write(td, 'l_english:\n bad:0 "[b]x[/b]"\n')
@@ -276,6 +398,17 @@ class VanillaCleanTests(unittest.TestCase):
             len(nested), 0,
             f"unexpected nested-bracket flags in vanilla English loc: "
             f"{[(f.file, f.line, f.detail) for f in nested[:5]]}",
+        )
+
+    def test_vanilla_article_type_text_has_no_instance_scopes(self):
+        # 0 of vanilla's 68 `_desc` / `_effects_desc` values uses a data
+        # expression other than a concept link; that is the rule's basis.
+        result = audit(mod_path=VANILLA_GAME)
+        scoped = [f for f in result.flags if f.issue == "article_desc_scope"]
+        self.assertEqual(
+            len(scoped), 0,
+            f"unexpected article-scope flags in vanilla loc: "
+            f"{[(f.file, f.line, f.loc_key) for f in scoped[:5]]}",
         )
 
 

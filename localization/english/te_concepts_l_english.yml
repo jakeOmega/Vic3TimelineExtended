@@ -1105,7 +1105,7 @@
  enforce_emissions_reduction:0 "Enforce Emissions Reduction"
  enforce_emissions_reduction_article_short_desc:0 "[SOURCE_COUNTRY.GetNameNoFormatting] will enforce market-wide emissions reduction policies (#v [SOURCE_COUNTRY.MakeScope.ScriptValue('market_greenhouse_gas_emissions_script_value_display')]#! annual market emissions)"
  enforce_emissions_reduction_desc:0 "An agreement forcing a market leader to maintain comprehensive greenhouse gas reduction policies across its market while accepting additional restrictions on fossil fuel expansion."
- enforce_emissions_reduction_effects_desc:0 "• Forces the source market leader to enable all major greenhouse gas mitigation policies.\n• Current annual market emissions: #v [SOURCE_COUNTRY.MakeScope.ScriptValue('market_greenhouse_gas_emissions_script_value_display')]#!\n• Blocks policy rollback while the treaty is active.\n• Applies additional penalties to fossil fuel and legacy power expansion.\n• Can be enforced in war or offered as a negotiated concession."
+ enforce_emissions_reduction_effects_desc:0 "• Forces the source market leader to enable all major greenhouse gas mitigation policies.\n• Blocks policy rollback while the treaty is active.\n• Applies additional penalties to fossil fuel and legacy power expansion.\n• Can be enforced in war or offered as a negotiated concession."
  enforce_privatization:0 "Enforce Privatization"
  enforce_privatization_article_short_desc:0 "[SOURCE_COUNTRY.GetNameNoFormatting] will [concept_privatize] state enterprises"
  enforce_privatization_desc:0 "An agreement forcing a country to [concept_privatize] state-owned enterprises, transferring economic control from the government to private interests."

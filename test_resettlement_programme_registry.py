@@ -656,10 +656,13 @@ class TransferTests(unittest.TestCase):
                       squash(block(read(RS_ON_ACTIONS), "resettlement_country_on_action")))
 
     def test_each_source_is_logged(self):
-        # Spec §13: TE_RESETTLEMENT: lines name each month's sources.
+        # Spec §13: TE_RESETTLEMENT: lines name each month's sources. THIS, not
+        # SCOPE: in debug_log, SCOPE.ScriptValue reads ROOT (the country) and
+        # printed -1 for the state's variable (2026-09-27 log).
         body = squash(block(read(EFFECTS), "resettlement_take_from_source"))
         logged = body[body.index("limit = { var:rs_taken_now > 0 }"):]
-        self.assertIn("[SCOPE.ScriptValue('resettlement_debug_taken_now')|0]", logged)
+        self.assertIn("[THIS.ScriptValue('resettlement_debug_taken_now')|0]", logged)
+        self.assertNotIn("SCOPE.ScriptValue", logged)
         self.assertIn("TE_RESETTLEMENT:", logged)
         self.assertIn("debug_log_scopes = yes", logged)
         self.assertNotIn("MakeScope", body)

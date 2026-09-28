@@ -5495,9 +5495,15 @@ class ModStateHandler(BaseHTTPRequestHandler):
             Use `?vanilla_bugs=hide&mod_noise=hide` for a fully-clean triage
             view, or `?mod_only=unknown` to surface uncategorized engine
             entries that the canonical filters hide.
+        GET /logs/<family>?debug_log=show|hide|only
+            — keep (default) / drop / keep-only script `debug_log` output
+              (category `debug_log`: every `jomini_effect_impl.cpp` line,
+              including the `debug_log_scopes` dump). Triage hides it; read
+              probe and trace lines with `?debug_log=only&q=TE_`.
         """
         from game_log_reader import (
             list_logs, parse_log, filter_mod_only, filter_external_mods, filter_entries,
+            filter_debug_log,
             dedupe, summarize, diff_against_backup, cluster_sessions,
             load_vanilla_bug_registry, load_mod_noise_registry, tag_vanilla_bugs,
         )
@@ -5619,6 +5625,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
             include_external = (params.get("include_external") or [default_external])[0].lower() == "true"
             vanilla_bugs_mode = (params.get("vanilla_bugs") or ["show"])[0].lower()
             mod_noise_mode = (params.get("mod_noise") or ["show"])[0].lower()
+            debug_log_mode = (params.get("debug_log") or ["show"])[0].lower()
             current_entries = parse_log(match.path)
             against_entries = parse_log(against_match.path)
             # Tag noise first so the mod_only=unknown filter can examine
@@ -5631,6 +5638,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
             if not include_external:
                 current_entries = filter_external_mods(current_entries)
                 against_entries = filter_external_mods(against_entries)
+            current_entries = filter_debug_log(current_entries, debug_log_mode)
+            against_entries = filter_debug_log(against_entries, debug_log_mode)
             return {
                 "current": match.to_dict(),
                 "against": against_match.to_dict(),
@@ -5661,6 +5670,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         include_external = (params.get("include_external") or [default_external])[0].lower() == "true"
         if not include_external:
             entries = filter_external_mods(entries)
+        entries = filter_debug_log(entries, (params.get("debug_log") or ["show"])[0].lower())
         entries = filter_entries(
             entries,
             q=(params.get("q") or [None])[0],
