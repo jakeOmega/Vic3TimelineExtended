@@ -5,8 +5,7 @@ text after the good is renamed: the mod calls `iron` Structural Metals, yet for 
 long time its modifier tooltips said "Iron input". Vanilla already splices in
 some labels (`goods_iron_output_mult:0 "$iron$ Goods Output"`,
 `goods_output_merchant_marine_add`), and the mod follows it everywhere, so a
-good's name lives in exactly one key and every label follows a rename,
-including a name that changes with the era.
+good's name lives in exactly one key and every label follows a rename.
 
 Checks:
   1. Every goods-keyed modifier label the mod defines (any `*_add` / `*_mult`

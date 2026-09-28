@@ -855,8 +855,8 @@ def organize_all(project_directory, dry_run=False):
     treaty_article_of = treaty_article_families(project_directory)
 
     # Overrides in replace/ are never organised, but an override's value can
-    # name mod keys (the era building names make `building_art_academy` a
-    # SelectLocalization over two te_buildings keys), so those count as used.
+    # name mod keys (a `$splice$` or a SelectLocalization argument), so those
+    # count as used.
     replace_dir = os.path.join(loc_dir, "replace")
     if os.path.isdir(replace_dir):
         for fname in sorted(os.listdir(replace_dir)):
