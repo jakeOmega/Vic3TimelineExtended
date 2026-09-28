@@ -419,8 +419,8 @@ class VanillaTerms:
         by_term: dict[str, Counter] = defaultdict(Counter)
         for key, en in self.en.items():
             tr = self.tr.get(key)
-            if not tr or en != en.strip() or not 1 <= len(en.split()) <= 4:
-                continue
+            if not tr or tr == en or en != en.strip() or not 1 <= len(en.split()) <= 4:
+                continue  # (tr == en: a vanilla line left untranslated says nothing)
             if re.search(r"[\[\]$#@\\|]", en + tr) or not re.match(r"[A-Z]", en):
                 continue
             # A lone word matched in free text misleads more than it helps: a
@@ -614,6 +614,28 @@ def cmd_prepare(args) -> int:
     return 0
 
 
+def cmd_refresh(args) -> int:
+    """Rebuild the given chunks' files (glossary header included) from the
+    manifest, keeping each chunk's keys: picks up terms and TM entries added
+    since `prepare`, for chunks no agent has started yet."""
+    language, lang_field = args.language, args.field
+    entries = load_english()
+    by_key = {e.key: e for e in entries}
+    tm = load_tm(language)
+    glossary_keys = {e.key for e in entries if is_glossary_entry(e)}
+    vanilla = VanillaTerms(language)
+    terms = load_terms(language)
+    work = language_dirs(language)[1]
+    with open(os.path.join(work, "manifest.json"), encoding="utf-8") as fh:
+        manifest = json.load(fh)
+    for cid in args.chunks:
+        chunk = [by_key[k] for k in manifest[cid]["keys"] if k in by_key]
+        glossary = chunk_glossary(chunk, tm, vanilla, glossary_keys, lang_field, terms=terms)
+        write_chunk(os.path.join(work, "chunks", cid + ".txt"), cid, chunk, glossary, [], language)
+        print(f"{cid}: {len(chunk)} keys, {len(glossary)} glossary lines")
+    return 0
+
+
 def read_output(work: str, chunk_id: str) -> tuple[dict[str, str], set[str]]:
     """Every `key:0 "value"` line from the agent's output part files, and the
     keys whose line has text after the closing quote (a bare `"` inside the
@@ -783,12 +805,14 @@ def main(argv: list[str] | None = None) -> int:
     m = sub.add_parser("merge")
     m.add_argument("chunks", nargs="*")
     sub.add_parser("status")
+    rf = sub.add_parser("refresh", help="rebuild unstarted chunks' glossaries from the manifest")
+    rf.add_argument("chunks", nargs="+")
     sub.add_parser("check-terms", help="list translated lines that render a terms.json term differently")
     pr = sub.add_parser("prompt", help="print the standard agent prompt for chunks")
     pr.add_argument("chunks", nargs="+")
     args = parser.parse_args(argv)
     return {"prepare": cmd_prepare, "merge": cmd_merge, "status": cmd_status,
-            "prompt": cmd_prompt, "check-terms": cmd_check_terms}[args.command](args)
+            "prompt": cmd_prompt, "check-terms": cmd_check_terms, "refresh": cmd_refresh}[args.command](args)
 
 
 if __name__ == "__main__":

@@ -7938,5 +7938,1641 @@
  "movement_events_te.9.t": {
   "en": "Neural Implant Human Trials",
   "de": "Humanversuche mit Neuralimplantaten"
+ },
+ "nuclear_weapon_events.22.a": {
+  "en": "Address their concerns in parliament.",
+  "de": "Ihre Anliegen im Parlament ansprechen."
+ },
+ "nuclear_weapon_events.22.b": {
+  "en": "The program protects us all — they will understand in time.",
+  "de": "Das Programm schützt uns alle — sie werden es mit der Zeit verstehen."
+ },
+ "nuclear_weapon_events.22.c": {
+  "en": "Disperse the protests before they grow further.",
+  "de": "Die Proteste auflösen, bevor sie weiter anwachsen."
+ },
+ "nuclear_weapon_events.22.d": {
+  "en": "A mass movement against nuclear weapons has taken root across our cities. Tens of thousands march through the streets carrying banners depicting mushroom clouds and demanding disarmament. The protesters cut across class and political lines, unified by a primal fear of atomic annihilation.",
+  "de": "Eine Massenbewegung gegen Atomwaffen hat in unseren Städten Fuß gefasst. Zehntausende ziehen mit Bannern, die Atompilze zeigen, durch die Straßen und fordern Abrüstung. Die Demonstranten überwinden Klassen- und Parteigrenzen, geeint durch die uralte Angst vor der atomaren Vernichtung."
+ },
+ "nuclear_weapon_events.22.f": {
+  "en": "\\\"They are carrying photographs of the cities that were hit.\\\"\\n\\n\\\"And how many of them?\\\"\\n\\n\\\"Fifty thousand at the parliament gates this morning. By Friday it will be a hundred thousand at the defense ministry. The photographs do not need arguments. The photographs are the argument. Whatever we say in response will sound clinical, and the clinical sounds like complicity.\\\"",
+  "de": "\\\"Sie tragen Fotografien der getroffenen Städte bei sich.\\\"\\n\\n\\\"Und wie viele sind es?\\\"\\n\\n\\\"Heute Morgen fünfzigtausend vor den Toren des Parlaments. Bis Freitag werden es hunderttausend vor dem Verteidigungsministerium sein. Die Fotografien brauchen keine Argumente. Die Fotografien sind das Argument. Was auch immer wir erwidern, es wird klinisch klingen, und klinisch klingt wie Mittäterschaft.\\\""
+ },
+ "nuclear_weapon_events.22.t": {
+  "en": "The Mushroom Cloud's Shadow",
+  "de": "Im Schatten des Atompilzes"
+ },
+ "nuclear_weapon_events.23.a": {
+  "en": "Let them talk. The work continues.",
+  "de": "Sie sollen reden. Die Arbeit geht weiter."
+ },
+ "nuclear_weapon_events.23.d": {
+  "en": "Foreign intelligence services have concluded that our [concept_nuclear_program] is close to its first device. Our rivals, our neighbours and the great powers have all been briefed, and each is now deciding how to answer: with diplomatic pressure, with threats, or by hurrying programmes of their own. Some of those answers may set our work back.",
+  "de": "Ausländische Geheimdienste sind zu dem Schluss gekommen, dass unser [concept_nuclear_program] kurz vor seinem ersten Sprengsatz steht. Unsere Rivalen, unsere Nachbarn und die Großmächte wurden alle informiert, und jeder von ihnen entscheidet nun, wie er reagieren soll: mit diplomatischem Druck, mit Drohungen oder indem er eigene Programme beschleunigt. Manche dieser Antworten könnten unsere Arbeit zurückwerfen."
+ },
+ "nuclear_weapon_events.23.f": {
+  "en": "\\\"How long have they known?\\\"\\n\\n\\\"Long enough to brief their allies. The cables went out this week.\\\"\\n\\n\\\"Then we have lost the element of surprise.\\\"\\n\\n\\\"We never had it. A programme this size has a signature: the power draw, the ore purchases, the physicists who stopped publishing. All we have lost is the pretence.\\\"",
+  "de": "\\\"Wie lange wissen sie es schon?\\\"\\n\\n\\\"Lange genug, um ihre Verbündeten zu informieren. Die Depeschen gingen diese Woche raus.\\\"\\n\\n\\\"Dann haben wir das Überraschungsmoment verloren.\\\"\\n\\n\\\"Das hatten wir nie. Ein Programm dieser Größe hinterlässt Spuren: der Stromverbrauch, die Erzkäufe, die Physiker, die aufgehört haben zu publizieren. Verloren haben wir nur den Anschein.\\\""
+ },
+ "nuclear_weapon_events.23.t": {
+  "en": "The World Takes Notice",
+  "de": "Die Welt wird aufmerksam"
+ },
+ "nuclear_weapon_events.24.a": {
+  "en": "The moment has passed. Stand the crews down.",
+  "de": "Der Moment ist vorbei. Die Mannschaften abziehen."
+ },
+ "nuclear_weapon_events.24.b": {
+  "en": "One weapon, on their most important city.",
+  "de": "Eine Waffe, auf ihre wichtigste Stadt."
+ },
+ "nuclear_weapon_events.24.c": {
+  "en": "Everything we promised them.",
+  "de": "Alles, was wir ihnen versprochen haben."
+ },
+ "nuclear_weapon_events.24.d": {
+  "en": "Our warheads are back on their delivery systems. They lay in storage when [SCOPE.sCountry('attacking_country').GetName] struck us, and we could not answer then. We are still at war with [SCOPE.sCountry('attacking_country').GetName], and the answer we held back can be given now.",
+  "de": "Unsere Gefechtsköpfe sind wieder auf ihren Trägersystemen. Sie lagerten, als [SCOPE.sCountry('attacking_country').GetAltName('NOM')] uns angriff, und wir konnten damals nicht antworten. Wir befinden uns noch immer im Krieg mit [SCOPE.sCountry('attacking_country').GetAltName('DAT')], und die Antwort, die wir zurückgehalten haben, kann jetzt gegeben werden."
+ },
+ "nuclear_weapon_events.24.e": {
+  "en": "The system answers, now that it can.",
+  "de": "Das System antwortet, jetzt, da es kann."
+ },
+ "nuclear_weapon_events.24.f": {
+  "en": "\\\"The keys are in. Say the word.\\\"",
+  "de": "\\\"Die Schlüssel sind drin. Sag das Wort.\\\""
+ },
+ "nuclear_weapon_events.24.t": {
+  "en": "Our Forces Are Ready",
+  "de": "Unsere Streitkräfte sind bereit"
+ },
+ "nuclear_weapon_events.3.a": {
+  "en": "We have stared into the abyss and emerged unscathed.",
+  "de": "Wir haben in den Abgrund geblickt und sind unversehrt daraus hervorgegangen."
+ },
+ "nuclear_weapon_events.3.d": {
+  "en": "[SCOPE.sCountry('attacking_country').GetName] has attempted to launch a [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName]! Our defenses have stopped the attack.",
+  "de": "[SCOPE.sCountry('attacking_country').GetAltName('NOM')] hat versucht, einen [concept_nuclear_strike] auf [SCOPE.sState('target_state').GetName] zu starten! Unsere Verteidigungssysteme haben den Angriff gestoppt."
+ },
+ "nuclear_weapon_events.3.f": {
+  "en": "Against all odds, our defensive systems have thwarted a catastrophe of unimaginable scale. The enemy's missile was intercepted before it could rain destruction upon our land. The air is thick with relief, but the specter of what could have been looms large. Our vigilance has saved countless lives, yet we know that such a reprieve may not come again so easily. We must remain ever watchful.",
+  "de": "Gegen alle Widerstände haben unsere Verteidigungssysteme eine Katastrophe unvorstellbaren Ausmaßes verhindert. Die feindliche Rakete wurde abgefangen, bevor sie Zerstörung über unser Land bringen konnte. Die Erleichterung liegt greifbar in der Luft, doch das Gespenst dessen, was hätte sein können, bleibt bedrohlich präsent. Unsere Wachsamkeit hat unzählige Leben gerettet, doch wir wissen, dass eine solche Gnadenfrist nicht so leicht wiederkehren mag. Wir müssen wachsam bleiben."
+ },
+ "nuclear_weapon_events.3.t": {
+  "en": "Nuclear Nightmare Averted",
+  "de": "Atomarer Albtraum abgewendet"
+ },
+ "nuclear_weapon_events.4.a": {
+  "en": "We must strengthen our resolve and prepare for what comes next.",
+  "de": "Wir müssen unsere Entschlossenheit stärken und uns auf das vorbereiten, was als Nächstes kommt."
+ },
+ "nuclear_weapon_events.4.d": {
+  "en": "Our nuclear forces attempted to launch a [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName], but their defenses have stopped the attack.",
+  "de": "Unsere Nuklearstreitkräfte haben versucht, einen [concept_nuclear_strike] auf [SCOPE.sState('target_state').GetName] zu starten, doch ihre Verteidigungssysteme haben den Angriff gestoppt."
+ },
+ "nuclear_weapon_events.4.f": {
+  "en": "In a moment fraught with tension, our missiles soared towards their target, only to be intercepted by the enemy’s defenses. The strike that was meant to cripple their resolve has failed, leaving us vulnerable to their retaliation. Our plans have been thwarted, and the opportunity to deal a decisive blow has slipped through our fingers. The silence after the explosion of hopes is deafening, but we must brace for the storm that may soon follow.",
+  "de": "In einem Moment größter Anspannung schossen unsere Raketen ihrem Ziel entgegen, nur um von der feindlichen Verteidigung abgefangen zu werden. Der Schlag, der ihre Entschlossenheit brechen sollte, ist gescheitert und lässt uns nun verwundbar für ihre Vergeltung zurück. Unsere Pläne wurden durchkreuzt, und die Gelegenheit zu einem entscheidenden Schlag ist uns durch die Finger geglitten. Die Stille nach dem Zerplatzen unserer Hoffnungen ist ohrenbetäubend, doch wir müssen uns auf den Sturm wappnen, der bald folgen könnte."
+ },
+ "nuclear_weapon_events.4.t": {
+  "en": "Our Strike Falls Short",
+  "de": "Unser Schlag verfehlt sein Ziel"
+ },
+ "nuclear_weapon_events.5.a": {
+  "en": "Our enemy has crossed a line that cannot be ignored.",
+  "de": "Unser Feind hat eine Grenze überschritten, die nicht ignoriert werden kann."
+ },
+ "nuclear_weapon_events.5.d": {
+  "en": "A tactical [concept_nuclear_strike] has been launched on [SCOPE.sState('target_state').GetName] by [SCOPE.sCountry('attacking_country').GetName]!",
+  "de": "Ein taktischer [concept_nuclear_strike] wurde von [SCOPE.sCountry('attacking_country').GetAltName('DAT')] auf [SCOPE.sState('target_state').GetName] ausgeführt!"
+ },
+ "nuclear_weapon_events.5.d_installations": {
+  "en": "A tactical [concept_nuclear_strike] has been launched on [SCOPE.sState('target_state').GetName] by [SCOPE.sCountry('attacking_country').GetName]! The blast destroyed #v [SCOPE.sState('target_state').MakeScope.Var('tactical_nuclear_strike_levels_destroyed').GetValue|0]#! levels of our naval fortifications and military bases there.",
+  "de": "Ein taktischer [concept_nuclear_strike] wurde von [SCOPE.sCountry('attacking_country').GetAltName('DAT')] auf [SCOPE.sState('target_state').GetName] ausgeführt! Die Explosion zerstörte dort #v [SCOPE.sState('target_state').MakeScope.Var('tactical_nuclear_strike_levels_destroyed').GetValue|0]#! Stufen unserer Marinebefestigungen und Militärbasen."
+ },
+ "nuclear_weapon_events.5.f": {
+  "en": "A focused wave of destruction has struck our military installations in [SCOPE.sState('target_state').GetName]. The precision of the attack is undeniable, and our losses are severe. An estimated #v [SCOPE.sState('target_state').MakeScope.Var('tactical_nuclear_strike_killed_population').GetValue]#! people were killed in the immediate [concept_devastation], and that number will surely rise in the coming weeks. Yet, this strike has not only claimed the lives of soldiers but also innocent civilians caught in the crossfire. The landscape is scarred with craters, and the smoke of burning fields blots out the sun. The enemy’s audacity in deploying such a weapon will not go unanswered.",
+  "de": "Eine gezielte Zerstörungswelle hat unsere militärischen Anlagen in [SCOPE.sState('target_state').GetName] getroffen. Die Präzision des Angriffs ist unbestreitbar, und unsere Verluste sind schwer. Schätzungsweise #v [SCOPE.sState('target_state').MakeScope.Var('tactical_nuclear_strike_killed_population').GetValue]#! Menschen kamen in der unmittelbaren [concept_devastation] ums Leben, und diese Zahl wird in den kommenden Wochen gewiss noch steigen. Doch dieser Schlag hat nicht nur das Leben von Soldaten gefordert, sondern auch das unschuldiger Zivilisten, die zwischen die Fronten gerieten. Die Landschaft ist von Kratern übersät, und der Rauch brennender Felder verdunkelt die Sonne. Die Dreistigkeit des Feindes, eine solche Waffe einzusetzen, wird nicht unbeantwortet bleiben."
+ },
+ "nuclear_weapon_events.5.t": {
+  "en": "Tactical [concept_devastation] in [SCOPE.sState('target_state').GetName]",
+  "de": "Taktische [concept_devastation] in [SCOPE.sState('target_state').GetName]"
+ },
+ "nuclear_weapon_events.6.a": {
+  "en": "This is a victory, but it comes at a grave cost.",
+  "de": "Dies ist ein Sieg, doch er hat einen hohen Preis."
+ },
+ "nuclear_weapon_events.6.a_commander": {
+  "en": "Our officer acted on the authority we delegated. What follows is ours to answer for.",
+  "de": "Unser Offizier handelte im Rahmen der Befugnis, die wir übertragen haben. Was folgt, müssen wir verantworten."
+ },
+ "nuclear_weapon_events.6.d": {
+  "en": "We have successfully launched a tactical [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName]!",
+  "de": "Wir haben erfolgreich einen taktischen [concept_nuclear_strike] auf [SCOPE.sState('target_state').GetName] ausgeführt!"
+ },
+ "nuclear_weapon_events.6.d_commander": {
+  "en": "One of our units, cut off from the capital, has fired a tactical [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] on its own authority, under the delegation we granted it.",
+  "de": "Eine unserer Einheiten, von der Hauptstadt abgeschnitten, hat auf eigene Verantwortung, im Rahmen der ihr erteilten Vollmacht, einen taktischen [concept_nuclear_strike] auf [SCOPE.sState('target_state').GetName] ausgeführt."
+ },
+ "nuclear_weapon_events.6.f": {
+  "en": "Our tactical [concept_nuclear_strike] has hit its mark with devastating accuracy. Enemy forces have been decimated, and their strategic positions lie in ruins. An estimated #v [SCOPE.sState('target_state').MakeScope.Var('tactical_nuclear_strike_killed_population').GetValue]#! people were killed in the immediate [concept_devastation], and that number will surely rise in the coming weeks. While civilian areas were not the primary target, collateral damage has occurred, and the human cost is not lost on us. This action has sent a clear message to our adversaries: we possess the means and the will to defend our nation by any means necessary.",
+  "de": "Unser taktischer [concept_nuclear_strike] hat sein Ziel mit verheerender Genauigkeit getroffen. Feindliche Truppen wurden dezimiert, ihre strategischen Stellungen liegen in Trümmern. Schätzungsweise #v [SCOPE.sState('target_state').MakeScope.Var('tactical_nuclear_strike_killed_population').GetValue]#! Menschen kamen in der unmittelbaren [concept_devastation] ums Leben, und diese Zahl wird in den kommenden Wochen gewiss noch steigen. Zivile Gebiete waren zwar nicht das eigentliche Ziel, doch es kam zu Kollateralschäden, und die menschlichen Kosten sind uns bewusst. Diese Aktion hat unseren Gegnern eine klare Botschaft gesendet: Wir besitzen die Mittel und den Willen, unsere Nation mit allen notwendigen Mitteln zu verteidigen."
+ },
+ "nuclear_weapon_events.6.f_commander": {
+  "en": "The capital learned of it from the unit's own report. The weapon struck the enemy's forces in [SCOPE.sState('target_state').GetName], and an estimated #v [SCOPE.sState('target_state').MakeScope.Var('tactical_nuclear_strike_killed_population').GetValue]#! people were killed in the immediate [concept_devastation], a number that will surely rise in the coming weeks. The commander believed the order had been given, or that no one was left to give it. The procedure said that was enough — we wrote it, and the world will hold us to what our officer did with it.",
+  "de": "Die Hauptstadt erfuhr davon erst aus dem Bericht der Einheit selbst. Die Waffe traf die feindlichen Truppen in [SCOPE.sState('target_state').GetName], und schätzungsweise #v [SCOPE.sState('target_state').MakeScope.Var('tactical_nuclear_strike_killed_population').GetValue]#! Menschen kamen in der unmittelbaren [concept_devastation] ums Leben, eine Zahl, die in den kommenden Wochen gewiss noch steigen wird. Der Kommandeur glaubte, der Befehl sei erteilt worden, oder dass niemand mehr übrig sei, um ihn zu erteilen. Das Verfahren besagte, das genüge — wir haben es so geschrieben, und die Welt wird uns dafür verantwortlich machen, was unser Offizier daraus gemacht hat."
+ },
+ "nuclear_weapon_events.6.t": {
+  "en": "Tactical Strike Launched",
+  "de": "Taktischer Schlag ausgeführt"
+ },
+ "nuclear_weapon_events.7.a": {
+  "en": "We must remain vigilant; the danger is far from over.",
+  "de": "Wir müssen wachsam bleiben; die Gefahr ist noch lange nicht vorüber."
+ },
+ "nuclear_weapon_events.7.d": {
+  "en": "[SCOPE.sCountry('attacking_country').GetName] has attempted to launch a tactical [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName]! Our defenses have stopped the attack.",
+  "de": "[SCOPE.sCountry('attacking_country').GetAltName('NOM')] hat versucht, einen taktischen [concept_nuclear_strike] auf [SCOPE.sState('target_state').GetName] auszuführen! Unsere Verteidigungssysteme haben den Angriff gestoppt."
+ },
+ "nuclear_weapon_events.7.f": {
+  "en": "Our nation stands shielded today by the prowess of our defensive systems. The enemy’s tactical strike was intercepted, averting what could have been a calamitous loss of life and [concept_infrastructure]. The sky above remains clear, but the threat lingers in the hearts of all who witnessed the near-catastrophe. The world has come to the brink, but we have pulled back, if only for a moment.",
+  "de": "Unsere Nation steht heute geschützt durch die Stärke unserer Verteidigungssysteme. Der taktische Schlag des Feindes wurde abgefangen und ein verheerender Verlust an Menschenleben und [concept_infrastructure] damit abgewendet. Der Himmel über uns bleibt klar, doch die Bedrohung bleibt in den Herzen all jener bestehen, die die Beinahe-Katastrophe miterlebt haben. Die Welt ist an den Abgrund getreten, doch wir haben uns zurückgezogen, wenn auch nur für einen Moment."
+ },
+ "nuclear_weapon_events.7.t": {
+  "en": "Tactical Nuclear Attack Prevented",
+  "de": "Taktischer Atomangriff verhindert"
+ },
+ "nuclear_weapon_events.8.a": {
+  "en": "This is a setback, but we will find another way.",
+  "de": "Dies ist ein Rückschlag, doch wir werden einen anderen Weg finden."
+ },
+ "nuclear_weapon_events.8.d": {
+  "en": "Our tactical nuclear forces attempted to launch a strike on [SCOPE.sState('target_state').GetName], but their defenses have stopped the attack.",
+  "de": "Unsere taktischen Nuklearstreitkräfte haben versucht, einen Schlag auf [SCOPE.sState('target_state').GetName] auszuführen, doch ihre Verteidigungssysteme haben den Angriff gestoppt."
+ },
+ "nuclear_weapon_events.8.f": {
+  "en": "Our tactical [concept_nuclear_strike] has been met with failure as the enemy’s defenses proved too strong. The missiles, so carefully prepared and aimed, were intercepted before they could deliver their deadly payload. The momentary silence that follows the failure is filled with dread, as we anticipate what our enemies might do in response. Our plans lie in ruins, but we must not falter.",
+  "de": "Unser taktischer [concept_nuclear_strike] ist gescheitert, da sich die feindliche Verteidigung als zu stark erwiesen hat. Die sorgfältig vorbereiteten und ausgerichteten Raketen wurden abgefangen, bevor sie ihre tödliche Fracht abliefern konnten. Die kurze Stille nach dem Scheitern ist von Grauen erfüllt, während wir abwarten, was unsere Feinde als Antwort unternehmen könnten. Unsere Pläne liegen in Trümmern, doch wir dürfen nicht wanken."
+ },
+ "nuclear_weapon_events.8.t": {
+  "en": "Failed Tactical Strike",
+  "de": "Gescheiterter taktischer Schlag"
+ },
+ "nuclear_weapon_events.9.a": {
+  "en": "The arms race intensifies.",
+  "de": "Das Wettrüsten verschärft sich."
+ },
+ "nuclear_weapon_events.9.a_world_first": {
+  "en": "The world will never be the same.",
+  "de": "Die Welt wird nie mehr dieselbe sein."
+ },
+ "nuclear_weapon_events.9.d": {
+  "en": "[SCOPE.sCountry('first_nuke_country').GetName] has successfully completed its nuclear weapons program and now possesses a nuclear arsenal. Another nation joins the growing circle of nuclear powers, and the calculus of deterrence grows ever more complex.",
+  "de": "[SCOPE.sCountry('first_nuke_country').GetAltName('NOM')] hat sein Atomwaffenprogramm erfolgreich abgeschlossen und verfügt nun über ein nukleares Arsenal. Eine weitere Nation tritt dem wachsenden Kreis der Atommächte bei, und die Logik der Abschreckung wird immer komplexer."
+ },
+ "nuclear_weapon_events.9.d_world_first": {
+  "en": "[SCOPE.sCountry('first_nuke_country').GetName] has detonated a nuclear weapon - the first in human history. In a single blinding instant, the rules of warfare, diplomacy, and survival have been rewritten. A single nation now holds the power to erase cities from the map. Every government, every general staff, every foreign ministry must reckon with a world where total annihilation is no longer theoretical.",
+  "de": "[SCOPE.sCountry('first_nuke_country').GetAltName('NOM')] hat eine Atomwaffe gezündet — die erste in der Geschichte der Menschheit. In einem einzigen blendenden Augenblick wurden die Regeln von Krieg, Diplomatie und Überleben neu geschrieben. Eine einzelne Nation besitzt nun die Macht, Städte von der Landkarte zu tilgen. Jede Regierung, jeder Generalstab, jedes Außenministerium muss sich mit einer Welt auseinandersetzen, in der die totale Vernichtung keine Theorie mehr ist."
+ },
+ "nuclear_weapon_events.9.f": {
+  "en": "The proliferation of nuclear weapons continues. As more nations acquire the bomb, the web of deterrence grows more tangled - and more fragile. One miscalculation, one rogue commander, one failed diplomacy could unravel it all.",
+  "de": "Die Verbreitung von Atomwaffen schreitet voran. Je mehr Nationen die Bombe erlangen, desto verworrener — und brüchiger — wird das Geflecht der Abschreckung. Eine einzige Fehleinschätzung, ein durchdrehender Kommandeur, ein Scheitern der Diplomatie könnte alles zum Einsturz bringen."
+ },
+ "nuclear_weapon_events.9.f_world_first": {
+  "en": "The world has been forever altered as [SCOPE.sCountry('first_nuke_country').GetName] demonstrates its newfound power. The detonation of this nuclear weapon marks the dawn of an era where the threat of total annihilation hangs over every nation. The balance of power is irrevocably changed, and all must now reckon with the devastating potential of this technology. The age of nuclear deterrence has begun, and with it, a shadow has been cast across the future of mankind.",
+  "de": "Die Welt hat sich für immer verändert, da [SCOPE.sCountry('first_nuke_country').GetAltName('NOM')] seine neu erlangte Macht unter Beweis stellt. Die Zündung dieser Atomwaffe markiert den Anbruch einer Ära, in der die Drohung totaler Vernichtung über jeder Nation schwebt. Das Machtgleichgewicht hat sich unwiderruflich verändert, und alle müssen sich nun mit dem verheerenden Potenzial dieser Technologie auseinandersetzen. Das Zeitalter der nuklearen Abschreckung hat begonnen, und mit ihm ist ein Schatten auf die Zukunft der Menschheit gefallen."
+ },
+ "nuclear_weapon_events.9.t": {
+  "en": "[SCOPE.sCountry('first_nuke_country').GetName] Joins the Nuclear Club",
+  "de": "[SCOPE.sCountry('first_nuke_country').GetAltName('NOM')] tritt dem Atomclub bei"
+ },
+ "nuclear_weapon_events.9.t_world_first": {
+  "en": "[SCOPE.sCountry('first_nuke_country').GetName] Unleashes the Atomic Age",
+  "de": "[SCOPE.sCountry('first_nuke_country').GetAltName('NOM')] entfesselt das Atomzeitalter"
+ },
+ "post_scarcity_events.1.a": {
+  "en": "Expand UBI programs",
+  "de": "Grundeinkommensprogramme ausweiten"
+ },
+ "post_scarcity_events.1.a_emergency": {
+  "en": "Introduce emergency income support",
+  "de": "Eine Not-Einkommenshilfe einführen"
+ },
+ "post_scarcity_events.1.b": {
+  "en": "Retrain the workforce",
+  "de": "Die Arbeitskräfte umschulen"
+ },
+ "post_scarcity_events.1.c": {
+  "en": "Suppress the protests",
+  "de": "Die Proteste unterdrücken"
+ },
+ "post_scarcity_events.1.d": {
+  "en": "Automation has made millions of workers redundant. Angry crowds fill the streets, demanding the government address the growing crisis of purposelessness. The old economic order is crumbling.",
+  "de": "Die Automatisierung hat Millionen Arbeiter überflüssig gemacht. Wütende Menschenmengen füllen die Straßen und fordern von der Regierung, die wachsende Krise der Sinnlosigkeit anzugehen. Die alte Wirtschaftsordnung bröckelt."
+ },
+ "post_scarcity_events.1.f": {
+  "en": "The factory ran three shifts. None of them required a single human worker. The former employees gathered outside the gates each morning out of habit.\\n\\n\\\"What are they waiting for?\\\" the supervisor asked the security chief.\\n\\n\\\"They are not waiting. They are remembering. The gates open at the same hour every day. The crowd has been gathering at the same hour for thirty years. It will take more than two months of unemployment to change that.\\\"\\n\\n\\\"And when the habit fades?\\\"\\n\\n\\\"When the habit fades, we will discover what they have decided to do instead. So far they have not decided.\\\"",
+  "de": "Die Fabrik lief in drei Schichten. Keine von ihnen brauchte auch nur einen einzigen menschlichen Arbeiter. Die ehemaligen Beschäftigten versammelten sich jeden Morgen aus Gewohnheit vor den Toren.\\n\\n\\\"Worauf warten sie?\\\", fragte der Vorarbeiter den Sicherheitschef.\\n\\n\\\"Sie warten nicht. Sie erinnern sich. Die Tore öffnen jeden Tag zur gleichen Stunde. Die Menge versammelt sich seit dreißig Jahren zur gleichen Stunde. Es braucht mehr als zwei Monate Arbeitslosigkeit, um das zu ändern.\\\"\\n\\n\\\"Und wenn die Gewohnheit verblasst?\\\"\\n\\n\\\"Wenn die Gewohnheit verblasst, werden wir erfahren, was sie stattdessen beschlossen haben zu tun. Bisher haben sie sich noch nicht entschieden.\\\""
+ },
+ "post_scarcity_events.1.t": {
+  "en": "Mass Unemployment Protests",
+  "de": "Proteste gegen Massenarbeitslosigkeit"
+ },
+ "post_scarcity_events.2.a": {
+  "en": "Fund a cultural renaissance for national prestige",
+  "de": "Eine kulturelle Renaissance für nationales Prestige fördern"
+ },
+ "post_scarcity_events.2.b": {
+  "en": "Mandatory civic service",
+  "de": "Verpflichtender Gesellschaftsdienst"
+ },
+ "post_scarcity_events.2.c": {
+  "en": "People will figure it out",
+  "de": "Die Menschen werden es schon herausfinden"
+ },
+ "post_scarcity_events.2.d": {
+  "en": "With basic needs met and work no longer necessary, a crisis of meaning sweeps through society. Depression and aimlessness rise as people struggle to find purpose in a world where labor is obsolete.",
+  "de": "Da die Grundbedürfnisse gedeckt sind und Arbeit nicht mehr notwendig ist, erfasst eine Sinnkrise die Gesellschaft. Depression und Ziellosigkeit nehmen zu, während die Menschen darum ringen, in einer Welt, in der Arbeit überflüssig geworden ist, einen Sinn zu finden."
+ },
+ "post_scarcity_events.2.f": {
+  "en": "The man sat in a comfortable apartment — rent paid, food delivered, nothing required of him — and stared at the ceiling until noon.\\n\\nA caseworker called.\\n\\n\\\"How are you settling in?\\\" she asked.\\n\\n\\\"I am settled. I am settled and I am bored and I am surprised at how heavy boredom feels.\\\"\\n\\n\\\"There are programmes for that. Classes, volunteer placements, community groups.\\\"\\n\\n\\\"I know. I have not yet decided which programme will be the one I am ashamed of having needed.\\\"",
+  "de": "Der Mann saß in einer komfortablen Wohnung — die Miete bezahlt, das Essen geliefert, nichts von ihm verlangt — und starrte bis zum Mittag an die Decke.\\n\\nEine Sachbearbeiterin rief an.\\n\\n\\\"Wie kommen Sie zurecht?\\\", fragte sie.\\n\\n\\\"Ich bin zurechtgekommen. Ich bin zurechtgekommen, und mir ist langweilig, und ich bin überrascht, wie schwer sich Langeweile anfühlt.\\\"\\n\\n\\\"Dafür gibt es Programme. Kurse, Freiwilligenstellen, Gemeinschaftsgruppen.\\\"\\n\\n\\\"Ich weiß. Ich habe mich noch nicht entschieden, für welches Programm ich mich schämen werde, es gebraucht zu haben.\\\""
+ },
+ "post_scarcity_events.2.t": {
+  "en": "The Meaning Crisis",
+  "de": "Die Sinnkrise"
+ },
+ "post_scarcity_events.200.a": {
+  "en": "A new chapter in human civilization.",
+  "de": "Ein neues Kapitel der menschlichen Zivilisation."
+ },
+ "post_scarcity_events.200.d": {
+  "en": "[ROOT.GetCountry.GetName] has achieved what was once thought impossible: a post-scarcity economy. Automation and advanced production have rendered material want a thing of the past for most citizens.",
+  "de": "[ROOT.GetCountry.GetAltName('NOM')] hat erreicht, was einst für unmöglich gehalten wurde: eine Postknappheitswirtschaft. Automatisierung und fortschrittliche Produktion haben materielle Not für die meisten Bürger zu etwas Vergangenem gemacht."
+ },
+ "post_scarcity_events.200.f": {
+  "en": "\\\"From each according to their ability,\\\" the old economist said. \\\"To each according to their needs.\\\"\\n\\n\\\"And what does that mean, now that it is actually the description rather than the slogan?\\\"\\n\\n\\\"It means we have to be honest about ability. It means we have to be honest about need. Neither category is as obvious as the slogan made it sound. We are about to spend the next century arguing the definitions.\\\"",
+  "de": "\\\"Jeder nach seinen Fähigkeiten\\\", sagte der alte Ökonom, \\\"jedem nach seinen Bedürfnissen.\\\"\\n\\n\\\"Und was bedeutet das jetzt, da es tatsächlich die Beschreibung ist und nicht mehr die Parole?\\\"\\n\\n\\\"Es bedeutet, dass wir ehrlich über Fähigkeit sein müssen. Es bedeutet, dass wir ehrlich über Bedürftigkeit sein müssen. Keine der beiden Kategorien ist so eindeutig, wie es die Parole klingen ließ. Wir werden das nächste Jahrhundert damit verbringen, über die Definitionen zu streiten.\\\""
+ },
+ "post_scarcity_events.200.t": {
+  "en": "Beyond Scarcity",
+  "de": "Jenseits der Knappheit"
+ },
+ "post_scarcity_events.3.a": {
+  "en": "Automate government",
+  "de": "Die Regierung automatisieren"
+ },
+ "post_scarcity_events.3.b": {
+  "en": "Hybrid AI-human administration",
+  "de": "Hybride KI-Mensch-Verwaltung"
+ },
+ "post_scarcity_events.3.c": {
+  "en": "Keep humans in charge",
+  "de": "Menschen das Sagen lassen"
+ },
+ "post_scarcity_events.3.d": {
+  "en": "AI systems have advanced to the point where they can replace human bureaucrats entirely. Government functions from tax collection to urban planning could be handled by algorithms more efficiently than any human administrator. But many question the wisdom of surrendering governance to machines.",
+  "de": "KI-Systeme haben einen Stand erreicht, an dem sie menschliche Bürokraten vollständig ersetzen können. Regierungsaufgaben, von der Steuererhebung bis zur Stadtplanung, könnten von Algorithmen effizienter erledigt werden als von jedem menschlichen Verwalter. Doch viele bezweifeln, dass es klug ist, die Regierungsgewalt Maschinen zu überlassen."
+ },
+ "post_scarcity_events.3.f": {
+  "en": "The permit was approved in eleven seconds. The applicant had expected a six-week wait. He wasn't sure whether to be relieved or unsettled.\\n\\nHe asked the clerk who had filed his application.\\n\\n\\\"There is no clerk,\\\" she said. \\\"There is a screen and a server. I am here to direct you to them and to confirm that you spoke to a person at some point in the process. The system has decided you are not a fraud. The system has decided you qualify. The system has decided faster than any human ever could.\\\"\\n\\n\\\"And if it is wrong?\\\"\\n\\n\\\"Then you appeal. To another system. Which will decide that question in twelve seconds.\\\"",
+  "de": "Die Genehmigung wurde binnen elf Sekunden erteilt. Der Antragsteller hatte mit einer sechswöchigen Wartezeit gerechnet. Er wusste nicht recht, ob er erleichtert oder beunruhigt sein sollte.\\n\\nEr fragte die Angestellte, die seinen Antrag bearbeitet hatte.\\n\\n\\\"Es gibt keine Angestellte\\\", sagte sie. \\\"Es gibt einen Bildschirm und einen Server. Ich bin hier, um Sie zu ihnen zu leiten und zu bestätigen, dass Sie irgendwann im Verfahren mit einem Menschen gesprochen haben. Das System hat entschieden, dass Sie kein Betrüger sind. Das System hat entschieden, dass Sie berechtigt sind. Das System hat schneller entschieden, als es je ein Mensch könnte.\\\"\\n\\n\\\"Und wenn es sich irrt?\\\"\\n\\n\\\"Dann legen Sie Widerspruch ein. Bei einem anderen System. Das diese Frage in zwölf Sekunden entscheiden wird.\\\""
+ },
+ "post_scarcity_events.3.t": {
+  "en": "AI Replaces Bureaucrats",
+  "de": "KI ersetzt Bürokraten"
+ },
+ "post_scarcity_events.4.a": {
+  "en": "Crack down and expand safety net",
+  "de": "Hart durchgreifen und das soziale Netz ausweiten"
+ },
+ "post_scarcity_events.4.b": {
+  "en": "Address root causes",
+  "de": "Die Ursachen bekämpfen"
+ },
+ "post_scarcity_events.4.c": {
+  "en": "Heavy-handed suppression",
+  "de": "Rücksichtslose Unterdrückung"
+ },
+ "post_scarcity_events.4.d": {
+  "en": "A radical anti-technology movement has attacked automation [concept_infrastructure], destroying factories and data centers. Calling themselves the \\\"New Luddites,\\\" they argue that machines are stealing human purpose and dignity. Their violence has divided public opinion.",
+  "de": "Eine radikale technikfeindliche Bewegung hat die [concept_infrastructure] der Automatisierung angegriffen und Fabriken sowie Rechenzentren zerstört. Sie nennen sich selbst die „Neuen Ludditen“ und behaupten, Maschinen würden dem Menschen Sinn und Würde rauben. Ihre Gewalt hat die öffentliche Meinung gespalten."
+ },
+ "post_scarcity_events.4.f": {
+  "en": "They smashed the assembly line with crowbars and set the server room on fire. The company had the replacement units operational within a week.\\n\\n\\\"Was it worth it?\\\" the journalist asked the surviving organizer.\\n\\n\\\"The factory replaced the units. The factory did not replace the conversation. The country is talking about what we did. The country had not been talking about what the factories had done. We are not winning. We are no longer being ignored.\\\"",
+  "de": "Sie zertrümmerten das Fließband mit Brecheisen und setzten den Serverraum in Brand. Innerhalb einer Woche hatte die Firma die Ersatzeinheiten wieder in Betrieb.\\n\\n\\\"Hat es sich gelohnt?\\\", fragte der Journalist den überlebenden Organisator.\\n\\n\\\"Die Fabrik hat die Einheiten ersetzt. Die Fabrik hat das Gespräch nicht ersetzt. Das Land spricht darüber, was wir getan haben. Das Land hatte nicht darüber gesprochen, was die Fabriken getan hatten. Wir gewinnen nicht. Aber wir werden nicht mehr ignoriert.\\\""
+ },
+ "post_scarcity_events.4.t": {
+  "en": "Neo-Luddite Terrorism",
+  "de": "Neo-luddistischer Terrorismus"
+ },
+ "post_scarcity_events.5.a": {
+  "en": "Fund a national arts program",
+  "de": "Ein nationales Kunstprogramm fördern"
+ },
+ "post_scarcity_events.5.b": {
+  "en": "Let creativity flourish organically",
+  "de": "Kreativität organisch gedeihen lassen"
+ },
+ "post_scarcity_events.5.c": {
+  "en": "Channel into productive output",
+  "de": "In produktive Leistung lenken"
+ },
+ "post_scarcity_events.5.d": {
+  "en": "Freed from the necessity of labor, citizens are pouring their energy into creative pursuits. A cultural renaissance is blossoming: art, music, literature, and philosophy flourish as humanity explores what it means to live beyond scarcity.",
+  "de": "Von der Notwendigkeit zu arbeiten befreit, stecken die Bürger ihre Energie in kreative Betätigungen. Eine kulturelle Renaissance blüht auf: Kunst, Musik, Literatur und Philosophie gedeihen, während die Menschheit erkundet, was es bedeutet, jenseits der Knappheit zu leben."
+ },
+ "post_scarcity_events.5.f": {
+  "en": "With nothing to earn and nowhere to be, she picked up a paintbrush for the first time in thirty years.\\n\\nHer daughter visited that weekend and stared at the painting on the easel.\\n\\n\\\"Mother. I did not know you painted.\\\"\\n\\n\\\"I did not, for thirty years. The bills came due each month, and the painting did not pay them. The bills no longer come due. The painting still does not pay them. The painting is what is left.\\\"",
+  "de": "Da es nichts mehr zu verdienen und nirgendwo hinzugehen gab, griff sie zum ersten Mal seit dreißig Jahren wieder zum Pinsel.\\n\\nIhre Tochter besuchte sie an jenem Wochenende und starrte auf das Gemälde auf der Staffelei.\\n\\n\\\"Mutter. Ich wusste nicht, dass du malst.\\\"\\n\\n\\\"Das tat ich auch nicht, dreißig Jahre lang. Die Rechnungen wurden jeden Monat fällig, und das Malen bezahlte sie nicht. Die Rechnungen werden nicht mehr fällig. Das Malen bezahlt sie immer noch nicht. Das Malen ist, was übrig bleibt.\\\""
+ },
+ "post_scarcity_events.5.t": {
+  "en": "Art Renaissance",
+  "de": "Die Kunst-Renaissance"
+ },
+ "religious_revival_events.1.a": {
+  "en": "Embrace the religious vote.",
+  "de": "Die religiöse Wählerschaft umwerben."
+ },
+ "religious_revival_events.1.b": {
+  "en": "A measured engagement with faith leaders.",
+  "de": "Ein maßvoller Dialog mit religiösen Führern."
+ },
+ "religious_revival_events.1.c": {
+  "en": "Keep politics and religion separate.",
+  "de": "Politik und Religion getrennt halten."
+ },
+ "religious_revival_events.1.d": {
+  "en": "A coalition of religious leaders has begun organizing politically through broadcast media. Charismatic preachers are rallying the faithful, demanding that government policy reflect their moral vision. The [SCOPE.gsInterestGroup('devout_ig').GetName] see an unprecedented opportunity to translate spiritual authority into political power.",
+  "de": "Eine Koalition religiöser Führer hat begonnen, sich über Rundfunk und Fernsehen politisch zu organisieren. Charismatische Prediger sammeln die Gläubigen und fordern, dass die Regierungspolitik ihre moralische Vision widerspiegelt. Die [SCOPE.gsInterestGroup('devout_ig').GetName] sehen eine beispiellose Gelegenheit, geistliche Autorität in politische Macht zu verwandeln."
+ },
+ "religious_revival_events.1.d_dharmic": {
+  "en": "Swamis and gurus have taken to the airwaves, channeling the energy of Hindu revivalism into a mass [concept_political_movement]. Rallies blend religious devotion with national pride, and millions tune in to hear calls for government aligned with dharmic values. The [SCOPE.gsInterestGroup('devout_ig').GetName] see a once-in-a-generation chance to reshape national politics.",
+  "de": "Swamis und Gurus sind auf Sendung gegangen und lenken die Energie der hinduistischen Erweckungsbewegung in eine massenhafte [concept_political_movement]. Auf Kundgebungen vermischen sich religiöse Hingabe und Nationalstolz, und Millionen schalten ein, um Forderungen nach einer an dharmischen Werten ausgerichteten Regierung zu hören. Die [SCOPE.gsInterestGroup('devout_ig').GetName] sehen eine einmalige Gelegenheit, die nationale Politik neu zu gestalten."
+ },
+ "religious_revival_events.1.d_islamic": {
+  "en": "A coalition of Islamic scholars and preachers has discovered the power of broadcast media, using radio and television to reach millions of households. Their message blends Quranic authority with political demands, calling the faithful to organize and hold their government accountable to Islamic values. The [SCOPE.gsInterestGroup('devout_ig').GetName] see an unprecedented opportunity.",
+  "de": "Eine Koalition islamischer Gelehrter und Prediger hat die Macht der Rundfunkmedien entdeckt und erreicht über Radio und Fernsehen Millionen Haushalte. Ihre Botschaft verbindet die Autorität des Korans mit politischen Forderungen und ruft die Gläubigen dazu auf, sich zu organisieren und ihre Regierung an islamischen Werten zu messen. Die [SCOPE.gsInterestGroup('devout_ig').GetName] sehen eine beispiellose Gelegenheit."
+ },
+ "religious_revival_events.1.f": {
+  "en": "\\\"They told us to stay out of politics. But politics never stayed out of the house of worship.\\\"\\n\\n\\\"Every household with a television is a congregation waiting to be called.\\\"",
+  "de": "\\\"Man sagte uns, wir sollten uns aus der Politik heraushalten. Doch die Politik hielt sich nie aus dem Gotteshaus heraus.\\\"\\n\\n\\\"Jeder Haushalt mit einem Fernseher ist eine Gemeinde, die nur darauf wartet, gerufen zu werden.\\\""
+ },
+ "religious_revival_events.1.f_dharmic": {
+  "en": "\\\"For decades they told us that faith was a private matter. Now the private has become the political.\\\"\\n\\n\\\"Every ashram, every temple, every home where the Gita is read — all of them are now voting blocs.\\\"",
+  "de": "\\\"Jahrzehntelang sagte man uns, der Glaube sei Privatsache. Jetzt ist das Private politisch geworden.\\\"\\n\\n\\\"Jeder Ashram, jeder Tempel, jedes Haus, in dem die Gita gelesen wird — sie alle sind jetzt Wählerblöcke.\\\""
+ },
+ "religious_revival_events.1.f_islamic": {
+  "en": "\\\"They told us the mosque was for prayer, not politics. But when the ummah suffers, silence is not piety — it is complicity.\\\"\\n\\n\\\"Every household with a radio is a congregation waiting for the call.\\\"",
+  "de": "\\\"Man sagte uns, die Moschee sei für das Gebet da, nicht für die Politik. Doch wenn die Umma leidet, ist Schweigen keine Frömmigkeit — es ist Mittäterschaft.\\\"\\n\\n\\\"Jeder Haushalt mit einem Radio ist eine Gemeinde, die auf den Ruf wartet.\\\""
+ },
+ "religious_revival_events.1.t": {
+  "en": "The Moral Majority",
+  "de": "Bewegung der moralischen Mehrheit"
+ },
+ "religious_revival_events.2.a": {
+  "en": "Give them the airwaves.",
+  "de": "Ihnen die Sendezeit überlassen."
+ },
+ "religious_revival_events.2.b": {
+  "en": "Regulate religious broadcasting.",
+  "de": "Religiöse Sendungen regulieren."
+ },
+ "religious_revival_events.2.c": {
+  "en": "Tax these religious institutions like businesses.",
+  "de": "Diese religiösen Einrichtungen wie Unternehmen besteuern."
+ },
+ "religious_revival_events.2.d": {
+  "en": "A new breed of religious leader has emerged, wielding the tools of popular culture to build congregations of staggering size. Megachurches offer spectacle, community, and purpose — their pastors command audiences that dwarf any political party. The prosperity gospel promises that faith and fortune walk hand in hand.",
+  "de": "Eine neue Generation religiöser Führer ist aufgetreten, die sich der Mittel der Populärkultur bedient, um Gemeinden von gewaltiger Größe aufzubauen. Megakirchen bieten Spektakel, Gemeinschaft und Sinn — ihre Pastoren gebieten über Zuhörerschaften, die jede politische Partei in den Schatten stellen. Das Wohlstandsevangelium verspricht, dass Glaube und Reichtum Hand in Hand gehen."
+ },
+ "religious_revival_events.2.d_dharmic": {
+  "en": "A new wave of charismatic gurus has emerged, blending ancient wisdom with modern spectacle. Massive ashrams draw tens of thousands, their leaders commanding devotion that rivals any political figure. Television broadcasts carry their darshan to every corner of the nation, and the money flows in — for temples, hospitals, and the gurus themselves.",
+  "de": "Eine neue Welle charismatischer Gurus ist entstanden, die uralte Weisheit mit modernem Spektakel verbindet. Gewaltige Ashrams ziehen Zehntausende an, ihre Anführer gebieten über eine Hingabe, die jeder politischen Figur ebenbürtig ist. Fernsehübertragungen bringen ihr Darshan in jeden Winkel der Nation, und das Geld fließt — für Tempel, Krankenhäuser und die Gurus selbst."
+ },
+ "religious_revival_events.2.d_islamic": {
+  "en": "A new generation of Islamic televangelists has emerged, blending scholarly authority with showmanship. Satellite channels broadcast popular preachers into millions of homes, their charismatic sermons drawing massive followings. These modern da'wa movements build communities that rival political parties in size and devotion.",
+  "de": "Eine neue Generation islamischer Fernsehprediger ist aufgetreten, die wissenschaftliche Autorität mit Showtalent verbindet. Satellitensender übertragen populäre Prediger in Millionen Haushalte, deren charismatische Predigten gewaltige Anhängerschaften anziehen. Diese modernen Da'wa-Bewegungen bauen Gemeinschaften auf, die politischen Parteien an Größe und Hingabe ebenbürtig sind."
+ },
+ "religious_revival_events.2.f": {
+  "en": "\\\"Sunday morning used to be a quiet affair. Now there are lights, cameras, a band, and ten thousand souls swaying in unison.\\\"\\n\\n\\\"Critics call it a circus. The faithful call it a miracle.\\\"",
+  "de": "\\\"Der Sonntagmorgen war früher eine ruhige Angelegenheit. Jetzt gibt es Scheinwerfer, Kameras, eine Band und zehntausend Seelen, die sich im Gleichklang wiegen.\\\"\\n\\n\\\"Kritiker nennen es einen Zirkus. Die Gläubigen nennen es ein Wunder.\\\""
+ },
+ "religious_revival_events.2.f_dharmic": {
+  "en": "\\\"My grandfather sat in meditation. I sit in an arena with fifty thousand others, watching the guru on a screen the size of a building.\\\"\\n\\n\\\"Critics call it a personality cult. The devotees call it a darshan for the modern age.\\\"",
+  "de": "\\\"Mein Großvater saß in der Meditation. Ich sitze in einer Arena mit fünfzigtausend anderen und sehe den Guru auf einer Leinwand so groß wie ein Gebäude.\\\"\\n\\n\\\"Kritiker nennen es einen Personenkult. Die Anhänger nennen es ein Darshan für das moderne Zeitalter.\\\""
+ },
+ "religious_revival_events.2.f_islamic": {
+  "en": "\\\"My grandfather listened to the khutba in a mosque of fifty men. I watch a preacher who speaks to fifty million.\\\"\\n\\n\\\"The scholars complain about entertainment. The people complain that the scholars never made them feel anything.\\\"",
+  "de": "\\\"Mein Großvater hörte die Khutba in einer Moschee mit fünfzig Männern. Ich sehe einem Prediger zu, der zu fünfzig Millionen spricht.\\\"\\n\\n\\\"Die Gelehrten beklagen sich über Unterhaltung. Die Menschen beklagen sich, dass die Gelehrten in ihnen nie etwas ausgelöst haben.\\\""
+ },
+ "religious_revival_events.2.t": {
+  "en": "The Electronic Pulpit",
+  "de": "Die elektronische Kanzel"
+ },
+ "religious_revival_events.2.t_islamic": {
+  "en": "The Satellite Minbar",
+  "de": "Der Satelliten-Minbar"
+ },
+ "religious_revival_events.3.a": {
+  "en": "The faithful speak for the oppressed.",
+  "de": "Die Gläubigen sprechen für die Unterdrückten."
+ },
+ "religious_revival_events.3.b": {
+  "en": "Channel this energy constructively.",
+  "de": "Diese Energie konstruktiv lenken."
+ },
+ "religious_revival_events.3.c": {
+  "en": "Religion should stay out of politics.",
+  "de": "Religion sollte sich aus der Politik heraushalten."
+ },
+ "religious_revival_events.3.d": {
+  "en": "A movement has emerged among religious leaders who argue that the faithful have a duty to champion the poor and oppressed. Drawing on scripture and social theory alike, they are organizing communities into a powerful force for social change. The [SCOPE.gsInterestGroup('devout_ig').GetName] are galvanized, but the establishment views the movement with alarm.",
+  "de": "Unter religiösen Führern ist eine Bewegung entstanden, die behauptet, die Gläubigen hätten die Pflicht, sich für die Armen und Unterdrückten einzusetzen. Gestützt auf die Heilige Schrift ebenso wie auf Gesellschaftstheorie organisieren sie Gemeinschaften zu einer mächtigen Kraft für sozialen Wandel. Die [SCOPE.gsInterestGroup('devout_ig').GetName] sind elektrisiert, doch das Establishment betrachtet die Bewegung mit Sorge."
+ },
+ "religious_revival_events.3.d_atheism": {
+  "en": "Despite the state's official atheism, underground religious communities have become a focal point for social justice organizing. Unable to worship openly, the faithful channel their energy into mutual aid networks and quiet resistance against inequality. The very repression meant to silence them has forged an unbreakable bond between faith and the cause of the oppressed.",
+  "de": "Trotz des offiziellen Atheismus des Staates sind untergrundreligiöse Gemeinschaften zu einem Sammelpunkt für die Organisation sozialer Gerechtigkeit geworden. Da sie nicht offen ihren Glauben ausüben können, lenken die Gläubigen ihre Energie in Netzwerke gegenseitiger Hilfe und stillen Widerstand gegen Ungleichheit. Ausgerechnet die Unterdrückung, die sie zum Schweigen bringen sollte, hat ein unzerbrechliches Band zwischen dem Glauben und der Sache der Unterdrückten geschmiedet."
+ },
+ "religious_revival_events.3.d_dharmic": {
+  "en": "A movement of socially engaged monks, swamis, and lay activists is challenging the caste hierarchies that have long defined the faithful. Drawing on the radical egalitarianism found in devotional traditions and the Dalit theology of liberation, they argue that true dharma demands justice for the lowest castes. The [SCOPE.gsInterestGroup('devout_ig').GetName] are galvanized by their message.",
+  "de": "Eine Bewegung sozial engagierter Mönche, Swamis und Laienaktivisten stellt die Kastenhierarchien infrage, die die Gläubigen seit langem prägen. Gestützt auf den radikalen Egalitarismus der Bhakti-Traditionen und die Befreiungstheologie der Dalits argumentieren sie, dass wahres Dharma Gerechtigkeit für die niedrigsten Kasten verlangt. Die [SCOPE.gsInterestGroup('devout_ig').GetName] sind von ihrer Botschaft elektrisiert."
+ },
+ "religious_revival_events.3.d_islamic": {
+  "en": "A movement of progressive Islamic scholars and activists is arguing that the Quran's emphasis on justice, zakat, and the rights of the poor demands political action. Drawing on [Concept('concept_power_bloc_principle', 'principles')] of Islamic economics and social welfare, they organize the faithful into a powerful force for the dispossessed. The [SCOPE.gsInterestGroup('devout_ig').GetName] are energized, but the wealthy grow nervous.",
+  "de": "Eine Bewegung progressiver islamischer Gelehrter und Aktivisten argumentiert, dass die Betonung des Korans auf Gerechtigkeit, Zakat und die Rechte der Armen politisches Handeln erfordert. Gestützt auf [Concept('concept_power_bloc_principle', 'Prinzipien')] der islamischen Wirtschafts- und Sozialordnung organisieren sie die Gläubigen zu einer mächtigen Kraft für die Entrechteten. Die [SCOPE.gsInterestGroup('devout_ig').GetName] sind elektrisiert, doch die Wohlhabenden werden nervös."
+ },
+ "religious_revival_events.3.f": {
+  "en": "\\\"When I gave food to the poor, they called me a saint. When I asked why the poor have no food, they called me a communist.\\\"\\n\\n\\\"The text is clear. The question is whether we have the courage to live it.\\\"",
+  "de": "\\\"Als ich den Armen Essen gab, nannten sie mich einen Heiligen. Als ich fragte, warum die Armen kein Essen haben, nannten sie mich einen Kommunisten.\\\"\\n\\n\\\"Der Text ist eindeutig. Die Frage ist, ob wir den Mut haben, danach zu leben.\\\""
+ },
+ "religious_revival_events.3.f_atheism": {
+  "en": "\\\"They banned our books, shuttered our temples, and called us relics of the past. But they could not ban the hunger in a child's belly or the injustice in a worker's life.\\\"\\n\\n\\\"We meet in basements now. And the prayers have become plans.\\\"",
+  "de": "\\\"Sie verboten unsere Bücher, schlossen unsere Tempel und nannten uns Relikte der Vergangenheit. Doch sie konnten den Hunger im Bauch eines Kindes nicht verbieten, noch die Ungerechtigkeit im Leben eines Arbeiters.\\\"\\n\\n\\\"Wir treffen uns jetzt in Kellern. Und aus den Gebeten sind Pläne geworden.\\\""
+ },
+ "religious_revival_events.3.f_dharmic": {
+  "en": "\\\"The Vedas say that in the eyes of the divine there is no high and no low. We have forgotten this for too long.\\\"\\n\\n\\\"When Ambedkar said that social justice was dharma, they dismissed him. Now millions stand behind his words.\\\"",
+  "de": "\\\"Die Veden sagen, dass es in den Augen des Göttlichen kein Hoch und kein Niedrig gibt. Wir haben das viel zu lange vergessen.\\\"\\n\\n\\\"Als Ambedkar sagte, soziale Gerechtigkeit sei Dharma, tat man ihn ab. Jetzt stehen Millionen hinter seinen Worten.\\\""
+ },
+ "religious_revival_events.3.f_islamic": {
+  "en": "\\\"The Prophet, peace be upon him, said: 'He is not a believer whose stomach is filled while the neighbor beside him goes hungry.'\\\"\\n\\n\\\"They call us radicals. We call ourselves Muslims who have read the Book.\\\"",
+  "de": "\\\"Der Prophet, Friede sei mit ihm, sagte: 'Wer satt schläft, während sein Nachbar hungert, ist kein Gläubiger.'\\\"\\n\\n\\\"Sie nennen uns Radikale. Wir nennen uns Muslime, die das Buch gelesen haben.\\\""
+ },
+ "religious_revival_events.3.t": {
+  "en": "The Preferential Option",
+  "de": "Die vorrangige Option"
+ },
+ "religious_revival_events.3.t_atheism": {
+  "en": "Faith in the Underground",
+  "de": "Glaube im Untergrund"
+ },
+ "religious_revival_events.3.t_dharmic": {
+  "en": "Dharma and Justice",
+  "de": "Dharma und Gerechtigkeit"
+ },
+ "religious_revival_events.3.t_islamic": {
+  "en": "Justice of the Faithful",
+  "de": "Gerechtigkeit der Gläubigen"
+ },
+ "religious_revival_events.4.a": {
+  "en": "Our nation's soul is bound to its faith.",
+  "de": "Die Seele unserer Nation ist an ihren Glauben gebunden."
+ },
+ "religious_revival_events.4.b": {
+  "en": "Civic nationalism, beyond creed.",
+  "de": "Bürgerlicher Nationalismus, jenseits des Glaubensbekenntnisses."
+ },
+ "religious_revival_events.4.c": {
+  "en": "We are a secular republic.",
+  "de": "Wir sind eine säkulare Republik."
+ },
+ "religious_revival_events.4.d": {
+  "en": "As the forces of globalization erode traditional identities, a powerful movement is taking shape that fuses national identity with religious identity. The [SCOPE.gsInterestGroup('devout_ig').GetName] claim that the soul of the nation is inseparable from its faith and demand that the state reflect this truth in law and policy.",
+  "de": "Während die Kräfte der Globalisierung traditionelle Identitäten aushöhlen, formiert sich eine mächtige Bewegung, die nationale und religiöse Identität miteinander verschmilzt. Die [SCOPE.gsInterestGroup('devout_ig').GetName] behaupten, die Seele der Nation sei untrennbar mit ihrem Glauben verbunden, und fordern, dass der Staat diese Wahrheit in Recht und Politik widerspiegelt."
+ },
+ "religious_revival_events.4.d_dharmic": {
+  "en": "As globalization erodes traditional identities, a powerful Hindutva movement is fusing Hindu identity with national identity. Its leaders claim that the nation's civilization is inseparable from its dharmic heritage and demand that state policy reflect Hindu values. Foreign religions are cast as alien intrusions. The [SCOPE.gsInterestGroup('devout_ig').GetName] march behind saffron banners.",
+  "de": "Während die Globalisierung traditionelle Identitäten aushöhlt, verschmilzt eine mächtige Hindutva-Bewegung hinduistische und nationale Identität. Ihre Anführer behaupten, die Zivilisation der Nation sei untrennbar mit ihrem dharmischen Erbe verbunden, und fordern, dass die Staatspolitik hinduistische Werte widerspiegelt. Fremde Religionen werden als fremde Eindringlinge dargestellt. Die [SCOPE.gsInterestGroup('devout_ig').GetName] marschieren unter safranfarbenen Bannern."
+ },
+ "religious_revival_events.4.d_islamic": {
+  "en": "As globalization threatens to dissolve the bonds of the ummah, a powerful Islamist movement argues that the nation must be grounded in Sharia. Its leaders proclaim that secular governance is a Western imposition, and that only Islamic law can provide justice and order. The [SCOPE.gsInterestGroup('devout_ig').GetName] demand that the state become an instrument of the faith.",
+  "de": "Während die Globalisierung droht, die Bande der Umma aufzulösen, argumentiert eine mächtige islamistische Bewegung, die Nation müsse auf der Scharia gründen. Ihre Anführer erklären, säkulare Regierungsführung sei eine westliche Aufzwingung und nur das islamische Recht könne Gerechtigkeit und Ordnung gewährleisten. Die [SCOPE.gsInterestGroup('devout_ig').GetName] fordern, dass der Staat zum Werkzeug des Glaubens wird."
+ },
+ "religious_revival_events.4.d_jewish": {
+  "en": "As globalization erodes traditional identities, a powerful religious Zionist movement is fusing Jewish identity with national destiny. Its leaders argue that the state is the fulfillment of divine promise and that territorial maximalism is a sacred duty. The [SCOPE.gsInterestGroup('devout_ig').GetName] demand that religious law shape the character of the nation.",
+  "de": "Während die Globalisierung traditionelle Identitäten aushöhlt, verschmilzt eine mächtige religiös-zionistische Bewegung jüdische Identität mit nationaler Bestimmung. Ihre Anführer argumentieren, der Staat sei die Erfüllung der göttlichen Verheißung und territorialer Maximalismus eine heilige Pflicht. Die [SCOPE.gsInterestGroup('devout_ig').GetName] fordern, dass religiöses Recht den Charakter der Nation prägt."
+ },
+ "religious_revival_events.4.f": {
+  "en": "\\\"You cannot love this country and hate what made it. Our faith is the soil from which the nation grew.\\\"\\n\\n\\\"They want a homeland, not a hotel. A people, not a marketplace.\\\"",
+  "de": "\\\"Man kann dieses Land nicht lieben und zugleich hassen, was es geschaffen hat. Unser Glaube ist der Boden, aus dem die Nation gewachsen ist.\\\"\\n\\n\\\"Sie wollen ein Heimatland, kein Hotel. Ein Volk, keinen Marktplatz.\\\""
+ },
+ "religious_revival_events.4.f_dharmic": {
+  "en": "\\\"This land is not just territory. It is sacred geography — every river, every mountain, every temple is an expression of the divine.\\\"\\n\\n\\\"Those who call our civilization backward have never read a page of it.\\\"",
+  "de": "\\\"Dieses Land ist nicht bloß Territorium. Es ist heilige Geografie — jeder Fluss, jeder Berg, jeder Tempel ist ein Ausdruck des Göttlichen.\\\"\\n\\n\\\"Wer unsere Zivilisation rückständig nennt, hat nie eine einzige Seite von ihr gelesen.\\\""
+ },
+ "religious_revival_events.4.f_islamic": {
+  "en": "\\\"Sovereignty belongs to God alone. The laws of men are shadows; the Sharia is the light.\\\"\\n\\n\\\"They offered us democracy. We asked: whose values does it serve?\\\"",
+  "de": "\\\"Die Souveränität gehört allein Gott. Die Gesetze der Menschen sind Schatten; die Scharia ist das Licht.\\\"\\n\\n\\\"Sie boten uns Demokratie an. Wir fragten: Wessen Werten dient sie?\\\""
+ },
+ "religious_revival_events.4.t": {
+  "en": "One Nation Under God",
+  "de": "Eine Nation unter Gott"
+ },
+ "religious_revival_events.4.t_dharmic": {
+  "en": "One Civilization, One Dharma",
+  "de": "Eine Zivilisation, ein Dharma"
+ },
+ "religious_revival_events.4.t_islamic": {
+  "en": "One Ummah, One Law",
+  "de": "Eine Umma, ein Gesetz"
+ },
+ "religious_revival_events.4.t_jewish": {
+  "en": "The Promised Land",
+  "de": "Das gelobte Land"
+ },
+ "religious_revival_events.5.a": {
+  "en": "Let faith flourish in the digital age.",
+  "de": "Den Glauben im digitalen Zeitalter gedeihen lassen."
+ },
+ "religious_revival_events.5.b": {
+  "en": "Moderate the online message.",
+  "de": "Die Botschaft im Netz moderieren."
+ },
+ "religious_revival_events.5.c": {
+  "en": "Monitor for extremism.",
+  "de": "Auf Extremismus überwachen."
+ },
+ "religious_revival_events.5.d": {
+  "en": "Religious communities have discovered the power of social media, streaming platforms, and online organizing. Sermons go viral, online prayer groups span continents, and a new generation of digital preachers commands millions of followers. The [SCOPE.gsInterestGroup('devout_ig').GetName] are reaching populations that traditional institutions could never touch.",
+  "de": "Religiöse Gemeinschaften haben die Macht sozialer Medien, Streaming-Plattformen und Online-Organisierung entdeckt. Predigten verbreiten sich viral, Online-Gebetsgruppen umspannen Kontinente, und eine neue Generation digitaler Prediger gebietet über Millionen Anhänger. Die [SCOPE.gsInterestGroup('devout_ig').GetName] erreichen Bevölkerungsgruppen, die traditionelle Institutionen niemals hätten erreichen können."
+ },
+ "religious_revival_events.5.d_dharmic": {
+  "en": "Hindu spiritual leaders have mastered the art of digital outreach. WhatsApp prayer groups, YouTube satsangs, and viral clips of charismatic gurus have created a decentralized spiritual revolution. Devotional content is now the most shared category on social media, and the [SCOPE.gsInterestGroup('devout_ig').GetName] are building vast networks of followers entirely online.",
+  "de": "Hinduistische spirituelle Führer haben die Kunst der digitalen Ansprache gemeistert. WhatsApp-Gebetsgruppen, YouTube-Satsangs und virale Clips charismatischer Gurus haben eine dezentrale spirituelle Revolution ausgelöst. Andachtsinhalte sind mittlerweile die meistgeteilte Kategorie in sozialen Medien, und die [SCOPE.gsInterestGroup('devout_ig').GetName] bauen vollständig online gewaltige Anhängernetzwerke auf."
+ },
+ "religious_revival_events.5.d_islamic": {
+  "en": "A new generation of Islamic scholars and preachers has taken to social media with extraordinary skill. YouTube lectures, Instagram dawah, and TikTok clips of Quran recitation draw millions of followers. Online communities form around charismatic digital muftis, and the [SCOPE.gsInterestGroup('devout_ig').GetName] find that the internet amplifies their message far beyond the mosque.",
+  "de": "Eine neue Generation islamischer Gelehrter und Prediger hat sich mit außergewöhnlichem Geschick sozialer Medien bemächtigt. YouTube-Vorträge, Dawa auf Instagram und TikTok-Clips mit Koranrezitationen ziehen Millionen Anhänger an. Online-Gemeinschaften bilden sich um charismatische digitale Muftis, und die [SCOPE.gsInterestGroup('devout_ig').GetName] stellen fest, dass das Internet ihre Botschaft weit über die Moschee hinaus verstärkt."
+ },
+ "religious_revival_events.5.f": {
+  "en": "The sermon got forty thousand views overnight. The local parish can't fill twenty seats on a Sunday. The bishop is not sure whether this counts as a revival or something else entirely.",
+  "de": "Die Predigt erhielt über Nacht vierzigtausend Aufrufe. Die örtliche Gemeinde bekommt sonntags nicht einmal zwanzig Plätze gefüllt. Der Bischof weiß nicht recht, ob das als Erweckung zählt oder als etwas völlig anderes."
+ },
+ "religious_revival_events.5.f_islamic": {
+  "en": "\\\"The algorithm does not distinguish between the sacred and the profane. It only knows engagement.\\\"\\n\\n\\\"The lecture got forty thousand views overnight. The local masjid cannot fill twenty seats for Fajr.\\\"",
+  "de": "\\\"Der Algorithmus unterscheidet nicht zwischen dem Heiligen und dem Profanen. Er kennt nur Interaktion.\\\"\\n\\n\\\"Der Vortrag erhielt über Nacht vierzigtausend Aufrufe. Die örtliche Masjid bekommt beim Fajr nicht einmal zwanzig Plätze gefüllt.\\\""
+ },
+ "religious_revival_events.5.t": {
+  "en": "The Digital Pulpit",
+  "de": "Die digitale Kanzel"
+ },
+ "religious_revival_events.6.a": {
+  "en": "Stand with tradition.",
+  "de": "Zur Tradition stehen."
+ },
+ "religious_revival_events.6.b": {
+  "en": "Seek theological reform.",
+  "de": "Theologische Reform anstreben."
+ },
+ "religious_revival_events.6.c": {
+  "en": "The march of progress continues.",
+  "de": "Der Marsch des Fortschritts geht weiter."
+ },
+ "religious_revival_events.6.d": {
+  "en": "The rapid pace of social liberalization has provoked a powerful religious backlash. Conservative religious groups are mobilizing with unprecedented ferocity, framing the struggle as nothing less than a battle for the soul of society. The [SCOPE.gsInterestGroup('devout_ig').GetName] demand the government stand with tradition.",
+  "de": "Das rasche Tempo der gesellschaftlichen Liberalisierung hat eine mächtige religiöse Gegenreaktion ausgelöst. Konservative religiöse Gruppen mobilisieren mit beispielloser Vehemenz und stellen den Kampf als nichts Geringeres als einen Kampf um die Seele der Gesellschaft dar. Die [SCOPE.gsInterestGroup('devout_ig').GetName] fordern, dass die Regierung zur Tradition steht."
+ },
+ "religious_revival_events.6.d_dharmic": {
+  "en": "The spread of Western social values has provoked a fierce backlash among Hindu traditionalists. Activists and sadhus frame the struggle as one of civilizational survival — dharma against adharma, tradition against alien corruption. Massive rallies and social media campaigns demand that the government enshrine traditional values. The [SCOPE.gsInterestGroup('devout_ig').GetName] will brook no compromise.",
+  "de": "Die Verbreitung westlicher Gesellschaftswerte hat unter hinduistischen Traditionalisten eine heftige Gegenreaktion ausgelöst. Aktivisten und Sadhus stellen den Kampf als einen ums zivilisatorische Überleben dar — Dharma gegen Adharma, Tradition gegen fremde Verderbnis. Gewaltige Kundgebungen und Kampagnen in sozialen Medien fordern, dass die Regierung traditionelle Werte gesetzlich verankert. Die [SCOPE.gsInterestGroup('devout_ig').GetName] werden keinen Kompromiss dulden."
+ },
+ "religious_revival_events.6.d_islamic": {
+  "en": "The rapid spread of Western social values has provoked a powerful Islamist backlash. Conservative scholars issue fatwas, preachers thunder from the minbar, and grassroots organizations mobilize with ferocious discipline. They frame the struggle as a defense of the family and the divine order against moral decay. The [SCOPE.gsInterestGroup('devout_ig').GetName] will not yield.",
+  "de": "Die rasche Verbreitung westlicher Gesellschaftswerte hat eine mächtige islamistische Gegenreaktion ausgelöst. Konservative Gelehrte erlassen Fatwas, Prediger donnern vom Minbar, und Basisorganisationen mobilisieren mit unerbittlicher Disziplin. Sie stellen den Kampf als Verteidigung der Familie und der göttlichen Ordnung gegen den moralischen Verfall dar. Die [SCOPE.gsInterestGroup('devout_ig').GetName] werden nicht nachgeben."
+ },
+ "religious_revival_events.6.f": {
+  "en": "\\\"They call it progress. We call it the unraveling of everything that matters.\\\"\\n\\n\\\"The family is the bedrock. Remove it, and what remains is only rubble and confusion.\\\"",
+  "de": "\\\"Sie nennen es Fortschritt. Wir nennen es die Auflösung von allem, was zählt.\\\"\\n\\n\\\"Die Familie ist das Fundament. Entfernt man sie, bleiben nur Trümmer und Verwirrung.\\\""
+ },
+ "religious_revival_events.6.f_dharmic": {
+  "en": "\\\"They bring their foreign ideas and call our culture backward. We have endured for five thousand years. Let us see how long their experiment lasts.\\\"\\n\\n\\\"Dharma is not a preference. It is the order that sustains the universe.\\\"",
+  "de": "\\\"Sie bringen ihre fremden Ideen und nennen unsere Kultur rückständig. Wir haben fünftausend Jahre überdauert. Mal sehen, wie lange ihr Experiment hält.\\\"\\n\\n\\\"Dharma ist keine Vorliebe. Es ist die Ordnung, die das Universum trägt.\\\""
+ },
+ "religious_revival_events.6.f_islamic": {
+  "en": "\\\"They call it liberation. We call it fitna — the trial that tears the ummah apart.\\\"\\n\\n\\\"God did not create the family so that committees could redesign it.\\\"",
+  "de": "\\\"Sie nennen es Befreiung. Wir nennen es Fitna — die Prüfung, die die Umma zerreißt.\\\"\\n\\n\\\"Gott hat die Familie nicht geschaffen, damit Ausschüsse sie umgestalten können.\\\""
+ },
+ "religious_revival_events.6.t": {
+  "en": "The Culture War",
+  "de": "Der Kulturkampf"
+ },
+ "religious_revival_events.7.a": {
+  "en": "Fund faith-based institutions.",
+  "de": "Glaubensbasierte Einrichtungen fördern."
+ },
+ "religious_revival_events.7.b": {
+  "en": "Partner with faith organizations.",
+  "de": "Mit religiösen Organisationen zusammenarbeiten."
+ },
+ "religious_revival_events.7.c": {
+  "en": "Expand secular state welfare instead.",
+  "de": "Stattdessen die säkulare staatliche Fürsorge ausbauen."
+ },
+ "religious_revival_events.7.d": {
+  "en": "Religious organizations across the country are expanding their welfare programs at a remarkable rate. Soup kitchens, hospitals, schools, and shelters run by the faithful are filling gaps that the state cannot or will not address. The [SCOPE.gsInterestGroup('devout_ig').GetName] present this as proof of their indispensable role in society.",
+  "de": "Religiöse Organisationen im ganzen Land weiten ihre Fürsorgeprogramme in bemerkenswertem Tempo aus. Suppenküchen, Krankenhäuser, Schulen und Unterkünfte, die von den Gläubigen betrieben werden, füllen Lücken, die der Staat nicht schließen kann oder will. Die [SCOPE.gsInterestGroup('devout_ig').GetName] präsentieren dies als Beweis ihrer unverzichtbaren Rolle in der Gesellschaft."
+ },
+ "religious_revival_events.7.d_atheism": {
+  "en": "Despite official state atheism, underground religious communities have quietly built an extensive welfare network. Church basements, hidden temple kitchens, and informal faith groups provide food, medicine, and education to those the state has failed. The authorities face an awkward truth: suppress these networks and the poor suffer; tolerate them and risk a [concept_religious_revival].",
+  "de": "Trotz des offiziellen staatlichen Atheismus haben untergrundreligiöse Gemeinschaften still und leise ein umfangreiches Fürsorgenetzwerk aufgebaut. Kirchenkeller, verborgene Tempelküchen und informelle Glaubensgruppen versorgen jene mit Essen, Medizin und Bildung, die der Staat im Stich gelassen hat. Die Behörden stehen vor einer unbequemen Wahrheit: Unterdrücken sie diese Netzwerke, leiden die Armen; dulden sie sie, riskieren sie eine [concept_religious_revival]."
+ },
+ "religious_revival_events.7.d_dharmic": {
+  "en": "Hindu religious organizations are scaling their charitable operations to an unprecedented degree. Massive temple-run hospitals, free meal programs feeding hundreds of thousands daily, and ashram-based schools have made the faithful indispensable to social welfare. The [SCOPE.gsInterestGroup('devout_ig').GetName] argue that seva — selfless service — is what holds the nation together.",
+  "de": "Hinduistische religiöse Organisationen weiten ihre karitativen Tätigkeiten in bisher unerreichtem Ausmaß aus. Gewaltige, von Tempeln betriebene Krankenhäuser, kostenlose Essensprogramme, die täglich Hunderttausende versorgen, und Ashram-Schulen haben die Gläubigen für die soziale Fürsorge unverzichtbar gemacht. Die [SCOPE.gsInterestGroup('devout_ig').GetName] argumentieren, Seva — selbstloser Dienst — halte die Nation zusammen."
+ },
+ "religious_revival_events.7.d_islamic": {
+  "en": "Islamic charitable organizations — powered by the obligatory zakat and voluntary sadaqah of the faithful — are building a vast welfare [concept_infrastructure]. Hospitals, orphanages, schools, and food banks run by religious foundations now rival state services in scale and efficiency. The [SCOPE.gsInterestGroup('devout_ig').GetName] argue that Islamic charity is not just generosity but a divine commandment.",
+  "de": "Islamische Wohltätigkeitsorganisationen — getragen von der verpflichtenden Zakat und der freiwilligen Sadaqah der Gläubigen — bauen eine gewaltige [concept_infrastructure] der Fürsorge auf. Krankenhäuser, Waisenhäuser, Schulen und Tafeln, die von religiösen Stiftungen betrieben werden, sind staatlichen Diensten an Umfang und Effizienz inzwischen ebenbürtig. Die [SCOPE.gsInterestGroup('devout_ig').GetName] argumentieren, islamische Wohltätigkeit sei nicht bloß Großzügigkeit, sondern ein göttliches Gebot."
+ },
+ "religious_revival_events.7.f": {
+  "en": "\\\"The bureaucrats file papers while people starve. The faithful simply cook.\\\"\\n\\n\\\"Every meal served, every wound dressed, every child taught — these are the real sermons.\\\"",
+  "de": "\\\"Die Bürokraten stellen Anträge, während die Menschen verhungern. Die Gläubigen kochen einfach.\\\"\\n\\n\\\"Jede servierte Mahlzeit, jede verbundene Wunde, jedes unterrichtete Kind — das sind die wahren Predigten.\\\""
+ },
+ "religious_revival_events.7.f_atheism": {
+  "en": "\\\"They banned us from the public square. So we built the public square underground, one bowl of soup at a time.\\\"\\n\\n\\\"The party feeds the ideology. The faithful feed the people.\\\"",
+  "de": "\\\"Sie verbannten uns vom öffentlichen Platz. Also bauten wir den öffentlichen Platz im Untergrund, eine Schüssel Suppe nach der anderen.\\\"\\n\\n\\\"Die Partei nährt die Ideologie. Die Gläubigen nähren die Menschen.\\\""
+ },
+ "religious_revival_events.7.f_islamic": {
+  "en": "\\\"Zakat is not charity. It is a debt the wealthy owe to God, collected through the hands of the poor.\\\"\\n\\n\\\"The state counts its statistics. The faithful count the mouths they have fed.\\\"",
+  "de": "\\\"Zakat ist keine Wohltätigkeit. Es ist eine Schuld, die die Reichen Gott schulden und die durch die Hände der Armen eingesammelt wird.\\\"\\n\\n\\\"Der Staat zählt seine Statistiken. Die Gläubigen zählen die Münder, die sie gefüttert haben.\\\""
+ },
+ "religious_revival_events.7.t": {
+  "en": "The Faithful Hand",
+  "de": "Die gläubige Hand"
+ },
+ "repeatable_events.10.a": {
+  "en": "Hold an open debate",
+  "de": "Eine offene Debatte abhalten"
+ },
+ "repeatable_events.10.b": {
+  "en": "Stage-manage the broadcast",
+  "de": "Die Übertragung inszenieren"
+ },
+ "repeatable_events.10.c": {
+  "en": "Run microtargeted ads",
+  "de": "Mikrogezielte Werbung schalten"
+ },
+ "repeatable_events.10.d_neural": {
+  "en": "A live neural town hall streams not just words but sentiment. Waves of approval and doubt ripple across the nation in real time, and campaign tacticians wonder where persuasion ends and manipulation begins.",
+  "de": "Eine neurale Bürgerversammlung überträgt live nicht nur Worte, sondern Stimmungen. Wellen der Zustimmung und des Zweifels rollen in Echtzeit durchs Land, und Wahlkampfstrategen fragen sich, wo Überzeugung endet und Manipulation beginnt."
+ },
+ "repeatable_events.10.d_tv": {
+  "en": "With the campaign entering its final weeks, [concept_party_leaders] agree to a nationally broadcast debate. Editors haggle over formats; candidates rehearse answers and smiles. The audience will be vast-and so will the stakes.",
+  "de": "Da der Wahlkampf in seine letzten Wochen geht, einigen sich die [concept_party_leaders] auf eine landesweit übertragene Debatte. Redakteure feilschen um das Format; Kandidaten proben Antworten und Lächeln. Das Publikum wird gewaltig sein — und ebenso viel steht auf dem Spiel."
+ },
+ "repeatable_events.10.d_vr": {
+  "en": "Mixed-reality auditoriums stitch together living rooms and town squares into a single stage. The spectacle promises unmatched access, but filters, avatars, and deepfakes make voters question what they actually saw.",
+  "de": "Mixed-Reality-Auditorien verweben Wohnzimmer und Marktplätze zu einer einzigen Bühne. Das Spektakel verspricht beispiellosen Zugang, doch Filter, Avatare und Deepfakes lassen die Wähler daran zweifeln, was sie tatsächlich gesehen haben."
+ },
+ "repeatable_events.10.f": {
+  "en": "The candidate studied herself in the dressing-room mirror. 'How do I look?'\\n\\n'Confident,' her advisor said. 'Approachable. Electable.'\\n\\n'And honest?'\\n\\nA pause. 'Let's not overreach. Just remember: answer the question you wish they'd asked, not the one they did. Smile when the other fellow talks. Never look at the clock.'\\n\\nShe straightened her collar. 'What if they ask about the tariff numbers?'\\n\\n'Nobody remembers numbers. They remember how you made them feel.'",
+  "de": "Die Kandidatin betrachtete sich im Garderobenspiegel. 'Wie sehe ich aus?'\\n\\n'Selbstbewusst', sagte ihr Berater. 'Zugänglich. Wählbar.'\\n\\n'Und ehrlich?'\\n\\nEine Pause. 'Übertreiben wir es nicht. Denken Sie nur daran: Beantworten Sie die Frage, die Sie sich gewünscht hätten, nicht die, die gestellt wurde. Lächeln Sie, wenn der andere spricht. Schauen Sie nie auf die Uhr.'\\n\\nSie richtete ihren Kragen. 'Und wenn sie nach den Zollzahlen fragen?'\\n\\n'Niemand erinnert sich an Zahlen. Man erinnert sich daran, wie man sich dabei gefühlt hat.'"
+ },
+ "repeatable_events.10.t": {
+  "en": "The Debate of the Century",
+  "de": "Die Debatte des Jahrhunderts"
+ },
+ "repeatable_events.100.a": {
+  "en": "Fast-track new capacity",
+  "de": "Neue Kapazitäten im Eilverfahren schaffen"
+ },
+ "repeatable_events.100.b": {
+  "en": "Mandate safety audits",
+  "de": "Sicherheitsprüfungen vorschreiben"
+ },
+ "repeatable_events.100.c": {
+  "en": "Prioritize strategic workloads",
+  "de": "Strategische Arbeitslasten priorisieren"
+ },
+ "repeatable_events.100.d_ai": {
+  "en": "Forecasting engines, design suites, and automated logistics all want another rack online yesterday. Power, cooling, and talent are starting to pinch. We can build faster, inspect harder, or simply decide who gets priority.",
+  "de": "Prognose-Engines, Design-Suiten und automatisierte Logistik wollen alle am liebsten schon gestern ein weiteres Rack online haben. Strom, Kühlung und Fachkräfte werden knapp. Wir können schneller bauen, strenger prüfen oder einfach entscheiden, wer Vorrang hat."
+ },
+ "repeatable_events.100.d_quantum": {
+  "en": "Quantum cores have not ended the hunger for compute; they have only taught it new appetites. Ministries, firms, and laboratories queue for time on machines that are never idle enough.",
+  "de": "Quantenkerne haben den Hunger nach Rechenleistung nicht gestillt; sie haben ihm nur neue Gelüste beigebracht. Ministerien, Firmen und Labore stehen Schlange für Zeit an Maschinen, die nie genug Leerlauf haben."
+ },
+ "repeatable_events.100.f": {
+  "en": "The data center hummed like a cathedral organ. Rows of machines blinked in patient sequence, generating heat enough to warm a small town - which, in fact, they did.\\n\\n'We're at ninety-six percent capacity,' the facility manager said. 'The defense ministry wants twenty percent more. The weather service wants fifteen. Research wants thirty.'\\n\\n'That's sixty-five percent we don't have.'\\n\\n'Correct. And every one of them says their need is the most critical.'\\n\\nShe smiled thinly. 'Welcome to the future. It runs on the same thing as the past: not enough.'",
+  "de": "Das Rechenzentrum summte wie eine Kathedralenorgel. Reihen von Maschinen blinkten in geduldiger Folge und erzeugten genug Wärme, um eine Kleinstadt zu heizen — was sie tatsächlich auch taten.\\n\\n'Wir sind bei sechsundneunzig Prozent Auslastung', sagte die Anlagenleiterin. 'Das Verteidigungsministerium will zwanzig Prozent mehr. Der Wetterdienst will fünfzehn. Die Forschung will dreißig.'\\n\\n'Das sind fünfundsechzig Prozent, die wir nicht haben.'\\n\\n'Richtig. Und jeder von ihnen sagt, sein Bedarf sei der dringendste.'\\n\\nSie lächelte dünn. 'Willkommen in der Zukunft. Sie läuft auf demselben Treibstoff wie die Vergangenheit: zu wenig.'"
+ },
+ "repeatable_events.100.t": {
+  "en": "Compute Cluster Crunch",
+  "de": "Engpass im Rechencluster"
+ },
+ "repeatable_events.20.a": {
+  "en": "Subsidize emergency freight",
+  "de": "Notfracht subventionieren"
+ },
+ "repeatable_events.20.b": {
+  "en": "Prioritize key inputs",
+  "de": "Schlüsselgüter priorisieren"
+ },
+ "repeatable_events.20.c": {
+  "en": "Fast-track port upgrades",
+  "de": "Hafenausbau im Eilverfahren vorantreiben"
+ },
+ "repeatable_events.20.d": {
+  "en": "A tangle of port closures, container shortages, and bad luck has jammed critical imports. Producers plead for inputs; retailers for stock; the public for patience. We can pay to push cargo through, starve some sectors to feed others, or pour concrete fast.",
+  "de": "Ein Wirrwarr aus Hafenschließungen, Containermangel und Pech hat kritische Importe blockiert. Hersteller flehen um Vorprodukte, Einzelhändler um Warenbestände, die Öffentlichkeit um Geduld. Wir können dafür bezahlen, die Fracht durchzuschleusen, manche Sektoren aushungern, um andere zu versorgen, oder schnell Beton gießen."
+ },
+ "repeatable_events.20.dd": {
+  "en": "Activate ministry logistics coordination",
+  "de": "Die Logistikkoordination des Ministeriums aktivieren"
+ },
+ "repeatable_events.20.f": {
+  "en": "'Where is my steel?' the construction foreman asked, for the third time that week.\\n\\nThe shipping clerk pointed at a map covered in red pins. 'Your steel is behind forty thousand containers of consumer electronics that are behind a broken crane that is behind a labor dispute that is behind a trade policy nobody remembers voting for.'\\n\\n'So when do I get it?'\\n\\n'When the world sorts itself out.' The clerk shrugged. 'I would not hold your breath.'",
+  "de": "'Wo ist mein Stahl?', fragte der Baustellenleiter zum dritten Mal in dieser Woche.\\n\\nDer Verschiffungssachbearbeiter zeigte auf eine mit roten Stecknadeln übersäte Karte. 'Ihr Stahl steckt hinter vierzigtausend Containern mit Unterhaltungselektronik, die hinter einem kaputten Kran stecken, der hinter einem Arbeitskonflikt steckt, der hinter einer Handelspolitik steckt, für die sich niemand mehr erinnert, gestimmt zu haben.'\\n\\n'Und wann bekomme ich ihn?'\\n\\n'Wenn sich die Welt von selbst sortiert.' Der Sachbearbeiter zuckte mit den Schultern. 'Ich würde nicht die Luft anhalten.'"
+ },
+ "repeatable_events.20.t": {
+  "en": "Supply Chain Snarl",
+  "de": "Lieferkettenchaos"
+ },
+ "repeatable_events.30.a": {
+  "en": "Lay off workers and ramp output",
+  "de": "Arbeiter entlassen und die Produktion hochfahren"
+ },
+ "repeatable_events.30.b": {
+  "en": "Retrain and redeploy",
+  "de": "Umschulen und neu einsetzen"
+ },
+ "repeatable_events.30.c": {
+  "en": "Adopt worker co-pilots",
+  "de": "Digitale Co-Piloten für Arbeiter einführen"
+ },
+ "repeatable_events.30.d_ai": {
+  "en": "A new scheduling system eats overtime, errors, and egos. Managers eye the balance sheet; workers eye the exit. We can chase the gains, soften the blow, or try a different bargain entirely.",
+  "de": "Ein neues Planungssystem frisst Überstunden, Fehler und Egos. Manager schielen auf die Bilanz; Arbeiter schielen auf den Ausgang. Wir können den Gewinnen nachjagen, den Schlag abfedern oder einen ganz anderen Handel versuchen."
+ },
+ "repeatable_events.30.d_robotics": {
+  "en": "Machines master the night shift. Output surges, but the rumble on the shop floor is not just from motors. Layoffs promise cheaper goods and dearer politics.",
+  "de": "Maschinen beherrschen die Nachtschicht. Die Produktion schnellt in die Höhe, doch das Grollen in der Werkshalle kommt nicht nur von Motoren. Entlassungen versprechen billigere Waren und teurere Politik."
+ },
+ "repeatable_events.30.f": {
+  "en": "The machinist watched the new arm swing through its arc - faster than any human hand, steadier, tireless.\\n\\n'Beautiful, isn't it?' the engineer said.\\n\\n'It's doing my job.'\\n\\n'It's doing the dangerous part of your job. You'll supervise.'\\n\\nThe machinist folded his arms. 'Supervise. That's what they told the weavers when the power loom arrived. Supervise until the day you're not needed to supervise anymore.'\\n\\nThe arm swung again. It did not care about the conversation.",
+  "de": "Der Maschinist beobachtete, wie der neue Arm seine Bahn zog — schneller als jede menschliche Hand, ruhiger, unermüdlich.\\n\\n'Schön, nicht wahr?', sagte der Ingenieur.\\n\\n'Er macht meinen Job.'\\n\\n'Er übernimmt den gefährlichen Teil Ihres Jobs. Sie werden beaufsichtigen.'\\n\\nDer Maschinist verschränkte die Arme. 'Beaufsichtigen. Das sagte man auch den Webern, als der mechanische Webstuhl kam. Beaufsichtigen, bis man Sie eines Tages nicht einmal mehr zum Beaufsichtigen braucht.'\\n\\nDer Arm schwang erneut. Er kümmerte sich nicht um das Gespräch."
+ },
+ "repeatable_events.30.t": {
+  "en": "Automation Shock",
+  "de": "Automatisierungsschock"
+ },
+ "repeatable_events.40.a": {
+  "en": "Ignore it",
+  "de": "Ignorieren"
+ },
+ "repeatable_events.40.b": {
+  "en": "Brief the public",
+  "de": "Die Öffentlichkeit informieren"
+ },
+ "repeatable_events.40.c": {
+  "en": "Enforce platform moderation",
+  "de": "Plattformmoderation durchsetzen"
+ },
+ "repeatable_events.40.d": {
+  "en": "Deploy state media control",
+  "de": "Staatliche Medienkontrolle einsetzen"
+ },
+ "repeatable_events.40.d_mass": {
+  "en": "Headlines thunder, panels chatter, and petitions circulate. Moralists call for bans; reformers for nuance; advertisers for a bigger buy. It will blow over-until it doesn’t.",
+  "de": "Schlagzeilen donnern, Diskussionsrunden schwatzen, und Petitionen kursieren. Moralisten fordern Verbote; Reformer fordern Differenzierung; Werbetreibende fordern einen größeren Werbeetat. Es wird sich schon legen — bis es das eines Tages nicht mehr tut."
+ },
+ "repeatable_events.40.d_neural": {
+  "en": "Sentiment storms sweep across neural channels like weather fronts. A rumor with the right shape outruns any correction. There is calm to be found, but not by accident.",
+  "de": "Stimmungsstürme fegen wie Wetterfronten über die neuralen Kanäle. Ein Gerücht mit der richtigen Form überholt jede Richtigstellung. Ruhe ist zu finden, aber nicht durch Zufall."
+ },
+ "repeatable_events.40.d_social": {
+  "en": "A meme becomes a movement before dawn. Boycotts bloom, counter-boycotts answer, and every feed is a frontline. We can ride it out, speak plainly, or referee the brawl.",
+  "de": "Ein Meme wird noch vor Sonnenaufgang zu einer Bewegung. Boykotte blühen auf, Gegenboykotte antworten, und jeder Feed ist eine Frontlinie. Wir können es aussitzen, klar sprechen oder die Rauferei schlichten."
+ },
+ "repeatable_events.40.f": {
+  "en": "The press secretary dropped the morning clippings on the minister's desk. Every headline screamed.\\n\\n'It's everywhere,' she said. 'The opposition is calling for a statement by noon.'\\n\\n'It'll blow over.'\\n\\n'It might. Or it might be the thing that doesn't. You won't know until it's too late.' She tapped the top headline. 'The public doesn't want an explanation. They want someone to look like they're in charge.'\\n\\n'And if I say the wrong thing?'\\n\\n'Then tomorrow's headlines will be about you.'",
+  "de": "Die Pressesprecherin ließ die Morgenausschnitte auf den Schreibtisch des Ministers fallen. Jede Schlagzeile schrie.\\n\\n'Es ist überall', sagte sie. 'Die Opposition fordert bis Mittag eine Stellungnahme.'\\n\\n'Es wird sich legen.'\\n\\n'Vielleicht. Oder es ist die eine Sache, die sich nicht legt. Sie werden es erst wissen, wenn es zu spät ist.' Sie tippte auf die oberste Schlagzeile. 'Die Öffentlichkeit will keine Erklärung. Sie will jemanden sehen, der aussieht, als hätte er die Lage im Griff.'\\n\\n'Und wenn ich das Falsche sage?'\\n\\n'Dann handeln die Schlagzeilen von morgen von Ihnen.'"
+ },
+ "repeatable_events.40.t": {
+  "en": "Media Panic of the Week",
+  "de": "Die Medienpanik der Woche"
+ },
+ "repeatable_events.50.a": {
+  "en": "Settle quietly and patch systems",
+  "de": "Still beilegen und Systeme flicken"
+ },
+ "repeatable_events.50.b": {
+  "en": "Launch public forensics",
+  "de": "Öffentliche forensische Untersuchung einleiten"
+ },
+ "repeatable_events.50.c": {
+  "en": "Impose emergency security standards",
+  "de": "Sicherheitsstandards im Eilverfahren durchsetzen"
+ },
+ "repeatable_events.50.d": {
+  "en": "Deploy intelligence-assisted forensics",
+  "de": "Geheimdienstgestützte Forensik einsetzen"
+ },
+ "repeatable_events.50.d_cyber": {
+  "en": "Intruders slipped past old defenses and wrote their demands in our ledgers. We can settle and patch, name and shame, or drag the whole sector up to a higher standard-ready or not.",
+  "de": "Eindringlinge schlüpften an veralteten Abwehrsystemen vorbei und schrieben ihre Forderungen in unsere Bücher. Wir können beilegen und flicken, anprangern, oder den ganzen Sektor auf ein höheres Niveau zwingen — bereit oder nicht."
+ },
+ "repeatable_events.50.d_quantum": {
+  "en": "Old ciphers crack under new math. Banks blink, ministries stall, and citizens wonder whether numbers still mean what they did yesterday.",
+  "de": "Alte Chiffren brechen unter der neuen Mathematik zusammen. Banken zögern, Ministerien stocken, und die Bürger fragen sich, ob Zahlen noch das bedeuten, was sie gestern bedeuteten."
+ },
+ "repeatable_events.50.f": {
+  "en": "The systems administrator stared at lines of code scrolling across her terminal at three in the morning. The coffee had gone cold an hour ago.\\n\\n'They were inside for six weeks,' she told the director. 'Maybe longer.'\\n\\n'What did they take?'\\n\\n'Everything they could read. Which, given our permissions structure, was almost everything.'\\n\\n'Can we fix it?'\\n\\n'We can rebuild. But the data is already out there. You can't un-ring a bell.'",
+  "de": "Die Systemadministratorin starrte um drei Uhr morgens auf Codezeilen, die über ihr Terminal liefen. Der Kaffee war schon seit einer Stunde kalt.\\n\\n'Sie waren sechs Wochen drin', sagte sie dem Direktor. 'Vielleicht länger.'\\n\\n'Was haben sie mitgenommen?'\\n\\n'Alles, was sie lesen konnten. Und angesichts unserer Berechtigungsstruktur war das fast alles.'\\n\\n'Können wir das beheben?'\\n\\n'Wir können neu aufbauen. Aber die Daten sind schon draußen. Eine geläutete Glocke kann man nicht mehr zum Schweigen bringen.'"
+ },
+ "repeatable_events.50.t": {
+  "en": "Network Compromised",
+  "de": "Netzwerk kompromittiert"
+ },
+ "repeatable_events.60.a": {
+  "en": "Auction fresh bandwidth",
+  "de": "Neue Bandbreite versteigern"
+ },
+ "repeatable_events.60.b": {
+  "en": "Reserve a public service grid",
+  "de": "Ein Netz für öffentliche Dienste reservieren"
+ },
+ "repeatable_events.60.c": {
+  "en": "Lease foreign relay capacity",
+  "de": "Ausländische Relaiskapazitäten anmieten"
+ },
+ "repeatable_events.60.d_quantum": {
+  "en": "Quantum relays promise clarity, but their rollout has turned every old allocation fight into a jurisdictional knife-fight. Bandwidth is power, and everyone knows it.",
+  "de": "Quantenrelais versprechen Klarheit, doch ihre Einführung hat jeden alten Verteilungsstreit in einen Kompetenzkrieg verwandelt. Bandbreite ist Macht, und das weiß jeder."
+ },
+ "repeatable_events.60.d_sat": {
+  "en": "Relay traffic, emergency services, and civilian networks are all crowding the same invisible lanes. Lobbyists demand auctions, planners demand order, and foreign carriers smell opportunity.",
+  "de": "Relaisverkehr, Rettungsdienste und zivile Netze drängen sich alle auf denselben unsichtbaren Bahnen. Lobbyisten fordern Auktionen, Planer fordern Ordnung, und ausländische Betreiber wittern eine Gelegenheit."
+ },
+ "repeatable_events.60.f": {
+  "en": "'We need the band,' the emergency services chief said.\\n\\n'We need the band,' the telecommunications executive said.\\n\\n'We need the band,' the military attaché said.\\n\\nThe spectrum regulator looked at the three of them and then at the allocation chart, which had more colors than a cathedral window and not a single gap.\\n\\n'Gentlemen,' she said, 'you cannot all have the same invisible thing. Someone is going to be unhappy. My job is to decide who.'",
+  "de": "'Wir brauchen das Band', sagte der Chef der Rettungsdienste.\\n\\n'Wir brauchen das Band', sagte der Telekommunikationsvorstand.\\n\\n'Wir brauchen das Band', sagte der Militärattaché.\\n\\nDie Frequenzregulatorin sah die drei an und dann auf die Zuteilungstabelle, die mehr Farben hatte als ein Kathedralenfenster und keine einzige Lücke.\\n\\n'Meine Herren', sagte sie, 'Sie können nicht alle dasselbe unsichtbare Ding haben. Jemand wird unzufrieden sein. Meine Aufgabe ist es zu entscheiden, wer.'"
+ },
+ "repeatable_events.60.t": {
+  "en": "Spectrum Crunch",
+  "de": "Frequenzknappheit"
+ },
+ "repeatable_events.70.a": {
+  "en": "Perform debris-avoidance maneuvers",
+  "de": "Ausweichmanöver gegen Trümmer durchführen"
+ },
+ "repeatable_events.70.b": {
+  "en": "Conduct a laser sweep",
+  "de": "Einen Laser-Scan durchführen"
+ },
+ "repeatable_events.70.c": {
+  "en": "Press on and accept risk",
+  "de": "Weitermachen und das Risiko akzeptieren"
+ },
+ "repeatable_events.70.d": {
+  "en": "Telemetry flags a chain of near-misses. Operators request maneuver windows; the military warns that standing down risks coverage. Clearing the lanes will cost, but pressing on may cost more.",
+  "de": "Die Telemetrie meldet eine Reihe von Beinahe-Kollisionen. Die Betreiber verlangen Manöverfenster; das Militär warnt, ein Stillstand gefährde die Abdeckung. Die Bahnen freizumachen wird etwas kosten, doch Weitermachen könnte mehr kosten."
+ },
+ "repeatable_events.70.f": {
+  "en": "The tracking officer circled three objects on the display. 'These will pass within two hundred meters of our relay platform in forty-seven hours.'\\n\\n'Can we move?'\\n\\n'We can. It costs fuel we budgeted for next quarter, and we lose coverage over the eastern seaboard for six hours.'\\n\\n'And if we don't move?'\\n\\n'Then we trust that a bolt traveling at eight kilometers per second misses a solar panel the size of a tennis court.' She set down her pen. 'I would move.'",
+  "de": "Der Bahnverfolgungsoffizier kreiste drei Objekte auf dem Display ein. 'Diese werden in siebenundvierzig Stunden in zweihundert Metern Entfernung an unserer Relaisplattform vorbeifliegen.'\\n\\n'Können wir ausweichen?'\\n\\n'Das können wir. Es kostet Treibstoff, den wir fürs nächste Quartal eingeplant hatten, und wir verlieren sechs Stunden lang die Abdeckung über der Ostküste.'\\n\\n'Und wenn wir nicht ausweichen?'\\n\\n'Dann vertrauen wir darauf, dass ein mit acht Kilometern pro Sekunde fliegendes Geschoss ein Solarpanel von der Größe eines Tennisplatzes verfehlt.' Sie legte ihren Stift ab. 'Ich würde ausweichen.'"
+ },
+ "repeatable_events.70.t": {
+  "en": "Orbital Conjunction Alert",
+  "de": "Warnung vor Bahnannäherung"
+ },
+ "repeatable_events.80.a": {
+  "en": "Draw from reserves",
+  "de": "Aus den Reserven schöpfen"
+ },
+ "repeatable_events.80.b": {
+  "en": "Order rolling blackouts",
+  "de": "Rollierende Stromabschaltungen anordnen"
+ },
+ "repeatable_events.80.c": {
+  "en": "Import power from neighbours",
+  "de": "Strom von Nachbarn importieren"
+ },
+ "repeatable_events.80.d": {
+  "en": "Micrometeors, maintenance, and misfortune have dimmed orbital arrays. Demand does not dim with them. We can burn reserves, black out blocks, or buy from neighbours at a premium.",
+  "de": "Mikrometeoriten, Wartungsarbeiten und Pech haben die Orbitalanlagen gedimmt. Die Nachfrage dimmt nicht mit. Wir können Reserven verbrennen, Viertel abschalten oder bei den Nachbarn zu einem Aufpreis einkaufen."
+ },
+ "repeatable_events.80.f": {
+  "en": "The grid operator watched the output gauge drop and reached for the telephone.\\n\\n'Array seven is offline,' she reported. 'Micrometeorite damage to the collector surface. Repair window: three weeks.'\\n\\n'Three weeks? We promised the manufacturing district uninterrupted supply.'\\n\\n'Yes. And the universe promised nothing.' She pulled up the reserve figures. 'We have four days of buffer. After that, someone goes dark. Your call who.'",
+  "de": "Die Netzbetreiberin sah, wie die Leistungsanzeige sank, und griff zum Telefon.\\n\\n'Anlage sieben ist offline', meldete sie. 'Mikrometeoriteneinschlag auf der Kollektorfläche. Reparaturfenster: drei Wochen.'\\n\\n'Drei Wochen? Wir haben dem Industrieviertel eine unterbrechungsfreie Versorgung versprochen.'\\n\\n'Ja. Und das Universum hat nichts versprochen.' Sie rief die Reservezahlen auf. 'Wir haben vier Tage Puffer. Danach geht jemandem das Licht aus. Ihre Entscheidung, wem.'"
+ },
+ "repeatable_events.80.t": {
+  "en": "Space Power Curtailment",
+  "de": "Drosselung der Weltraumenergie"
+ },
+ "repeatable_events.90.a": {
+  "en": "Subsidize priority output",
+  "de": "Vorrangige Produktion subventionieren"
+ },
+ "repeatable_events.90.b": {
+  "en": "Open a patent pool",
+  "de": "Einen Patentpool öffnen"
+ },
+ "repeatable_events.90.c": {
+  "en": "Ration premium allotments",
+  "de": "Premiumkontingente rationieren"
+ },
+ "repeatable_events.90.d_orbital": {
+  "en": "Orbital manufacturing has made miracles routine and shortages catastrophic. A delay in specialized feedstock now ripples from clean rooms to launch windows.",
+  "de": "Die Orbitalfertigung hat Wunder zur Routine und Engpässe zur Katastrophe gemacht. Eine Verzögerung bei speziellen Rohstoffen wirkt sich mittlerweile von den Reinräumen bis zu den Startfenstern aus."
+ },
+ "repeatable_events.90.d_quantum": {
+  "en": "Labs and fabs are all asking for the same rare substrates, and the supply chain cannot stretch that far without snapping. Production planners want subsidies; researchers want openness; everyone else wants first claim.",
+  "de": "Labore und Fabriken verlangen alle nach denselben seltenen Substraten, und die Lieferkette kann sich nicht so weit dehnen, ohne zu reißen. Produktionsplaner wollen Subventionen; Forscher wollen Offenheit; alle anderen wollen den ersten Anspruch."
+ },
+ "repeatable_events.90.f": {
+  "en": "The procurement officer spread his hands. 'There are three suppliers on the planet. One is in a country that hates us, one is six months behind on deliveries, and one just doubled their price.'\\n\\n'Can we substitute?'\\n\\n'If you'd like your quantum processors to work slightly less well than an abacus, certainly.'\\n\\nThe minister pinched the bridge of his nose. 'How did we build an entire industry on a mineral we can't reliably obtain?'\\n\\n'The same way we always do, sir. Optimistically.'",
+  "de": "Der Beschaffungsleiter breitete die Hände aus. 'Es gibt drei Lieferanten auf dem Planeten. Einer sitzt in einem Land, das uns hasst, einer hängt sechs Monate bei den Lieferungen hinterher, und einer hat gerade seinen Preis verdoppelt.'\\n\\n'Können wir ersetzen?'\\n\\n'Wenn Sie möchten, dass Ihre Quantenprozessoren etwas schlechter arbeiten als ein Abakus, sicherlich.'\\n\\nDer Minister drückte sich die Nasenwurzel. 'Wie haben wir eine ganze Industrie auf einem Mineral aufgebaut, das wir nicht zuverlässig beschaffen können?'\\n\\n'Genau wie immer, Herr Minister. Optimistisch.'"
+ },
+ "repeatable_events.90.t": {
+  "en": "Quantum Materials Bottleneck",
+  "de": "Engpass bei Quantenmaterialien"
+ },
+ "resettlement.1.a": {
+  "en": "Open the land at once.",
+  "de": "Das Land sofort öffnen."
+ },
+ "resettlement.1.b": {
+  "en": "Survey it first.",
+  "de": "Es zuerst vermessen."
+ },
+ "resettlement.1.d": {
+  "en": "Word that the government is giving land away in [SCOPE.sState('rs_event_state').GetName] has spread faster than our surveyors can work. Crowds of would-be settlers are camped at the boundary markers, waiting for the signal to stake their claims.",
+  "de": "Die Nachricht, dass die Regierung in [SCOPE.sState('rs_event_state').GetName] Land verschenkt, hat sich schneller verbreitet, als unsere Vermesser arbeiten können. Scharen von Möchtegern-Siedlern lagern an den Grenzmarkierungen und warten auf das Zeichen, ihre Ansprüche abzustecken."
+ },
+ "resettlement.1.f": {
+  "en": "In 1889 fifty thousand people raced into the Unassigned Lands of Oklahoma at the sound of a gun. Some had slipped across the line the night before.",
+  "de": "1889 stürmten fünfzigtausend Menschen beim Knall einer Pistole in die unzugeteilten Gebiete Oklahomas. Manche hatten sich schon in der Nacht zuvor über die Linie geschlichen."
+ },
+ "resettlement.1.t": {
+  "en": "Land Rush in [SCOPE.sState('rs_event_state').GetName]",
+  "de": "Landrausch in [SCOPE.sState('rs_event_state').GetName]"
+ },
+ "resettlement.2.a": {
+  "en": "Send in the inspectors.",
+  "de": "Die Inspektoren schicken."
+ },
+ "resettlement.2.b": {
+  "en": "The market will sort it out.",
+  "de": "Der Markt wird das schon regeln."
+ },
+ "resettlement.2.d": {
+  "en": "Agents of land companies are filing claims in [SCOPE.sState('rs_event_state').GetName] in the names of settlers who do not exist, and reselling the best plots at a profit. Genuine settlers arrive to find the land already taken.",
+  "de": "Agenten von Landgesellschaften melden in [SCOPE.sState('rs_event_state').GetName] Ansprüche im Namen von Siedlern an, die es gar nicht gibt, und verkaufen die besten Parzellen gewinnbringend weiter. Echte Siedler kommen an und finden das Land bereits vergeben vor."
+ },
+ "resettlement.2.f": {
+  "en": "Much of the land given away under the Homestead Act ended up with speculators, cattle companies and railroads rather than the families it was meant for.",
+  "de": "Ein Großteil des unter dem Homestead Act verschenkten Landes landete bei Spekulanten, Viehgesellschaften und Eisenbahnen statt bei den Familien, für die es gedacht war."
+ },
+ "resettlement.2.t": {
+  "en": "The Speculators",
+  "de": "Die Spekulanten"
+ },
+ "resettlement.20.a": {
+  "en": "We accept the cost.",
+  "de": "Wir nehmen die Kosten in Kauf."
+ },
+ "resettlement.20.b": {
+  "en": "End the coercive programs.",
+  "de": "Die Zwangsprogramme beenden."
+ },
+ "resettlement.20.d": {
+  "en": "We are a party to the Universal Declaration of Human Rights, and we have begun a coercive resettlement program. Our treaty partners will hold it against us: we suffer #N Violating the Declaration#!, which grows with the number of people the program moves and fades over the following years once it stops.",
+  "de": "Wir sind Vertragspartei der Allgemeinen Erklärung der Menschenrechte, und wir haben ein Zwangsumsiedlungsprogramm begonnen. Unsere Vertragspartner werden es uns ankreiden: Wir erleiden #N Verstoß gegen die Erklärung#!, der mit der Anzahl der durch das Programm umgesiedelten Menschen wächst und in den folgenden Jahren nach dessen Ende verblasst."
+ },
+ "resettlement.20.f": {
+  "en": "The Declaration of 1948 promised everyone the right to freedom of movement and residence within the borders of their own state.",
+  "de": "Die Erklärung von 1948 versprach jedem das Recht auf Freizügigkeit und freie Wohnsitzwahl innerhalb der Grenzen des eigenen Staates."
+ },
+ "resettlement.20.t": {
+  "en": "The Declaration and Our Settlements",
+  "de": "Die Erklärung und unsere Siedlungen"
+ },
+ "resettlement.3.a": {
+  "en": "Send relief.",
+  "de": "Hilfe schicken."
+ },
+ "resettlement.3.b": {
+  "en": "They will have to endure.",
+  "de": "Sie werden durchhalten müssen."
+ },
+ "resettlement.3.d": {
+  "en": "The first winter has caught the settlers of [SCOPE.sState('rs_event_state').GetName] in sod houses and dugouts. Fuel is short, the roads are closed and the new arrivals are falling sick.",
+  "de": "Der erste Winter hat die Siedler von [SCOPE.sState('rs_event_state').GetName] in Grassodenhäusern und Erdhütten überrascht. Brennstoff ist knapp, die Straßen sind gesperrt, und die Neuankömmlinge erkranken."
+ },
+ "resettlement.3.f": {
+  "en": "Settlers on the northern plains measured their first years by the winters they survived.",
+  "de": "Siedler in den nördlichen Ebenen maßen ihre ersten Jahre an den Wintern, die sie überlebten."
+ },
+ "resettlement.3.t": {
+  "en": "A Hard Winter on the Frontier",
+  "de": "Ein harter Winter an der Grenze"
+ },
+ "resettlement.4.a": {
+  "en": "Fund a conservation program.",
+  "de": "Ein Bodenschutzprogramm fördern."
+ },
+ "resettlement.4.b": {
+  "en": "Keep plowing.",
+  "de": "Weiter pflügen."
+ },
+ "resettlement.4.d": {
+  "en": "Years of plowing have stripped the grass that held the soil of [SCOPE.sState('rs_event_state').GetName]. Now the wind is taking the topsoil with it, in black clouds that bury fences and machinery.",
+  "de": "Jahre des Pflügens haben das Gras entfernt, das den Boden von [SCOPE.sState('rs_event_state').GetName] hielt. Jetzt trägt der Wind den Mutterboden mit sich fort, in schwarzen Wolken, die Zäune und Maschinen begraben."
+ },
+ "resettlement.4.f": {
+  "en": "The Dust Bowl of the 1930s drove hundreds of thousands off the Great Plains, and erosion ruined millions of hectares of the Virgin Lands in the early 1960s.",
+  "de": "Die Dust Bowl der 1930er-Jahre trieb Hunderttausende von den Great Plains, und Erosion zerstörte in den frühen 1960er-Jahren Millionen Hektar der Neulandgebiete."
+ },
+ "resettlement.4.t": {
+  "en": "Dust Storms over [SCOPE.sState('rs_event_state').GetName]",
+  "de": "Staubstürme über [SCOPE.sState('rs_event_state').GetName]"
+ },
+ "resettlement.5.a": {
+  "en": "End the coercive programs.",
+  "de": "Die Zwangsprogramme beenden."
+ },
+ "resettlement.5.b": {
+  "en": "These accounts are exaggerated.",
+  "de": "Diese Berichte sind übertrieben."
+ },
+ "resettlement.5.d": {
+  "en": "A campaign against our coercive resettlement has caught the public's attention. Writers and reformers have published accounts of conditions in the settlements of [SCOPE.sState('rs_event_state').GetName], and they are demanding that the program end.",
+  "de": "Eine Kampagne gegen unsere Zwangsumsiedlung hat die Aufmerksamkeit der Öffentlichkeit erregt. Schriftsteller und Reformer haben Berichte über die Zustände in den Siedlungen von [SCOPE.sState('rs_event_state').GetName] veröffentlicht und fordern ein Ende des Programms."
+ },
+ "resettlement.5.f": {
+  "en": "Chekhov's account of the penal colony on Sakhalin, Albert Londres's reports from French Guiana and Australia's Anti-Transportation League all turned public opinion against penal colonies.",
+  "de": "Tschechows Bericht über die Strafkolonie auf Sachalin, Albert Londres' Reportagen aus Französisch-Guayana und die australische Anti-Transportation League wandten die öffentliche Meinung allesamt gegen Strafkolonien."
+ },
+ "resettlement.5.t": {
+  "en": "The Reform Campaign",
+  "de": "Die Reformkampagne"
+ },
+ "resettlement.6.a": {
+  "en": "Send grain and tools.",
+  "de": "Getreide und Werkzeug schicken."
+ },
+ "resettlement.6.b": {
+  "en": "Let the settlements fend for themselves.",
+  "de": "Die Siedlungen sich selbst überlassen."
+ },
+ "resettlement.6.d": {
+  "en": "The deportees sent to [SCOPE.sState('rs_event_state').GetName] were set down without tools or seed. Now the settlements are starving.",
+  "de": "Die nach [SCOPE.sState('rs_event_state').GetName] deportierten Menschen wurden ohne Werkzeug oder Saatgut ausgesetzt. Jetzt hungern die Siedlungen."
+ },
+ "resettlement.6.f": {
+  "en": "In 1933 several thousand deportees were left on the island of Nazino in the Ob River without food or shelter. Within weeks most of them were dead.",
+  "de": "1933 wurden mehrere tausend Deportierte auf der Insel Nazino im Ob (Fluss) ohne Nahrung oder Unterkunft zurückgelassen. Innerhalb weniger Wochen war der Großteil von ihnen tot."
+ },
+ "resettlement.6.t": {
+  "en": "Famine in the Settlements",
+  "de": "Hungersnot in den Siedlungen"
+ },
+ "resettlement.7.a": {
+  "en": "Let them go home, and end the program here.",
+  "de": "Sie nach Hause lassen und das Programm hier beenden."
+ },
+ "resettlement.7.b": {
+  "en": "The program continues.",
+  "de": "Das Programm wird fortgesetzt."
+ },
+ "resettlement.7.d": {
+  "en": "Thousands of the people we resettled in [SCOPE.sState('rs_event_state').GetName] have signed a petition asking to go home to [SCOPE.sState('rs_return_state').GetName]. Some are refusing to work, and some have already left without permission.",
+  "de": "Tausende der Menschen, die wir nach [SCOPE.sState('rs_event_state').GetName] umgesiedelt haben, haben eine Petition unterschrieben, in der sie um die Rückkehr nach [SCOPE.sState('rs_return_state').GetName] bitten. Manche verweigern die Arbeit, und manche sind bereits ohne Erlaubnis abgereist."
+ },
+ "resettlement.7.f": {
+  "en": "The Soviet special settlers were released from 1954 onward. In 1978 and 1979 strikes by sent-down youth in Yunnan led China to end the Down to the Countryside movement.",
+  "de": "Die sowjetischen Sondersiedler wurden ab 1954 freigelassen. 1978 und 1979 führten Streiks der aufs Land geschickten Jugend in Yunnan dazu, dass China die Landverschickungsbewegung beendete."
+ },
+ "resettlement.7.t": {
+  "en": "A Petition to Return",
+  "de": "Eine Petition zur Rückkehr"
+ },
+ "resettlement.8.a": {
+  "en": "Negotiate reserves for them.",
+  "de": "Reservate für sie aushandeln."
+ },
+ "resettlement.8.b": {
+  "en": "Back the settlers' claims.",
+  "de": "Die Ansprüche der Siedler unterstützen."
+ },
+ "resettlement.8.d": {
+  "en": "The settlers arriving in [SCOPE.sState('rs_event_state').GetName] are fencing land that others have farmed, hunted and grazed for generations. The people who were here first are appealing to the government.",
+  "de": "Die Siedler, die in [SCOPE.sState('rs_event_state').GetName] eintreffen, zäunen Land ein, das andere seit Generationen bewirtschaftet, bejagt und beweidet haben. Die Menschen, die zuerst hier waren, wenden sich an die Regierung."
+ },
+ "resettlement.8.f": {
+  "en": "Treaties, reserves and broken promises followed the settlement of almost every frontier.",
+  "de": "Verträge, Reservate und gebrochene Versprechen begleiteten die Besiedlung fast jeder Grenzregion."
+ },
+ "resettlement.8.t": {
+  "en": "Land Disputes in [SCOPE.sState('rs_event_state').GetName]",
+  "de": "Landstreitigkeiten in [SCOPE.sState('rs_event_state').GetName]"
+ },
+ "resettlement.9.a": {
+  "en": "A new chapter.",
+  "de": "Ein neues Kapitel."
+ },
+ "resettlement.9.d": {
+  "en": "[SCOPE.sState('rs_closed_state').GetName] is a frontier no longer. Its farms and towns are as settled as the rest of the country, and the Settlement Authority there has been wound up. If we want more settlers, we will have to find another frontier.",
+  "de": "[SCOPE.sState('rs_closed_state').GetName] ist keine Grenzregion mehr. Ihre Höfe und Städte sind so besiedelt wie der Rest des Landes, und die dortige Siedlungsbehörde wurde aufgelöst. Wenn wir weitere Siedler wollen, müssen wir eine andere Grenzregion finden."
+ },
+ "resettlement.9.f": {
+  "en": "In 1890 the Superintendent of the Census reported that the United States no longer had a frontier line. Three years later Frederick Jackson Turner argued that its closing ended the first period of American history.",
+  "de": "1890 berichtete der Superintendent of the Census, dass die Vereinigten Staaten keine Grenzlinie mehr hätten. Drei Jahre später argumentierte Frederick Jackson Turner, dass deren Schließung die erste Periode der amerikanischen Geschichte beendet habe."
+ },
+ "resettlement.9.t": {
+  "en": "The Frontier Is Closed",
+  "de": "Die Grenze ist geschlossen"
+ },
+ "social_tensions_events.1.a": {
+  "en": "Launch a security crackdown",
+  "de": "Eine harte Sicherheitsoffensive starten"
+ },
+ "social_tensions_events.1.b": {
+  "en": "Rally national resilience",
+  "de": "Die nationale Widerstandskraft mobilisieren"
+ },
+ "social_tensions_events.1.c": {
+  "en": "Expand the surveillance net",
+  "de": "Das Überwachungsnetz ausweiten"
+ },
+ "social_tensions_events.1.d": {
+  "en": "Intelligence-led preemption",
+  "de": "Geheimdienstgeleitete Präventivmaßnahmen"
+ },
+ "social_tensions_events.1.d_base": {
+  "en": "An explosion rips through a crowded market district, leaving rubble and screaming in its wake. The attackers are quickly identified as [Concept('concept_radical', 'radicals')] with a poisonous ideology and access to modern explosives. Citizens demand action, but what kind?",
+  "de": "Eine Explosion reißt durch ein belebtes Marktviertel und hinterlässt Trümmer und Schreie. Die Angreifer werden rasch als [Concept('concept_radical', 'Radikale')] mit einer vergifteten Ideologie und Zugang zu modernen Sprengstoffen identifiziert. Die Bürger fordern Handeln, doch welcher Art?"
+ },
+ "social_tensions_events.1.d_cyber": {
+  "en": "The attack combines physical violence with a devastating cyberattack on emergency services. As first responders struggle with jammed communications, the death toll climbs. The perpetrators broadcast their manifesto through hijacked networks.",
+  "de": "Der Angriff verbindet physische Gewalt mit einem verheerenden Cyberangriff auf die Rettungsdienste. Während die Einsatzkräfte mit gestörter Kommunikation kämpfen, steigt die Zahl der Todesopfer. Die Täter verbreiten ihr Manifest über gekaperte Netzwerke."
+ },
+ "social_tensions_events.1.d_modern": {
+  "en": "A coordinated bombing attack targets public transportation during rush hour. Footage spreads within minutes, sowing panic far beyond the blast radius. Intelligence agencies scramble to trace the network before the next cell acts.",
+  "de": "Ein koordinierter Bombenanschlag trifft während der Hauptverkehrszeit den öffentlichen Nahverkehr. Aufnahmen verbreiten sich binnen Minuten und säen Panik weit über den Explosionsradius hinaus. Die Geheimdienste versuchen fieberhaft, das Netzwerk aufzuspüren, bevor die nächste Zelle zuschlägt."
+ },
+ "social_tensions_events.1.f": {
+  "en": "The café owner swept glass from the counter with slow, mechanical strokes. Three hours ago, the windows had been intact. Three hours ago, the street had been full of people going about their lives.\\n\\n'Did you see who did it?' the constable asked, notebook in hand.\\n\\n'I saw a crowd,' the café owner said. 'By the time the first brick came through, I was under the counter.'\\n\\nThe constable wrote something down. It would not lead to an arrest.",
+  "de": "Der Caféinhaber fegte mit langsamen, mechanischen Bewegungen Glasscherben von der Theke. Vor drei Stunden waren die Fenster noch intakt gewesen. Vor drei Stunden war die Straße noch voller Menschen gewesen, die ihrem Alltag nachgingen.\\n\\n'Haben Sie gesehen, wer es getan hat?', fragte der Polizist, Notizbuch in der Hand.\\n\\n'Ich habe eine Menschenmenge gesehen', sagte der Caféinhaber. 'Als der erste Ziegelstein hereinflog, war ich schon unter der Theke.'\\n\\nDer Polizist notierte etwas. Es würde zu keiner Festnahme führen."
+ },
+ "social_tensions_events.1.t": {
+  "en": "Terror Strikes the [concept_homeland]",
+  "de": "Terror trifft das [concept_homeland]"
+ },
+ "social_tensions_events.10.a": {
+  "en": "Let the money flow",
+  "de": "Das Geld fließen lassen"
+ },
+ "social_tensions_events.10.b": {
+  "en": "Launch a grassroots counter-campaign",
+  "de": "Eine Basis-Gegenkampagne starten"
+ },
+ "social_tensions_events.10.d": {
+  "en": "With no effective limits on campaign donations, wealthy industrialists are pouring unprecedented sums into the election. Slick advertisements dominate every medium, and candidates without deep-pocketed backers find themselves drowned out. The election may be free, but it is hardly fair.",
+  "de": "Da wirksame Grenzen für Wahlkampfspenden fehlen, pumpen wohlhabende Industrielle beispiellose Summen in die Wahl. Geschliffene Werbung beherrscht jedes Medium, und Kandidaten ohne finanzkräftige Unterstützer werden übertönt. Die Wahl mag frei sein, doch fair ist sie kaum."
+ },
+ "social_tensions_events.10.f": {
+  "en": "The independent candidate sat in his modest campaign office, surrounded by hand-painted signs and volunteer lists. Across the street, his opponent's headquarters occupied three floors, staffed by professionals.\\n\\n'They've bought every advertising space in the district,' his campaign manager said. 'We can't compete.'\\n\\n'We have the better argument.'\\n\\n'Yes. And they have the better printer.' She closed her notebook. 'Arguments don't win elections. Visibility does. And visibility costs money we don't have.'",
+  "de": "Der unabhängige Kandidat saß in seinem bescheidenen Wahlkampfbüro, umgeben von handgemalten Schildern und Freiwilligenlisten. Auf der anderen Straßenseite belegte das Hauptquartier seines Gegners drei Stockwerke, besetzt mit Fachleuten.\\n\\n'Sie haben jeden Werbeplatz im Wahlkreis aufgekauft', sagte sein Wahlkampfleiter. 'Wir können nicht mithalten.'\\n\\n'Wir haben das bessere Argument.'\\n\\n'Ja. Und sie haben die bessere Druckerei.' Sie klappte ihr Notizbuch zu. 'Argumente gewinnen keine Wahlen. Sichtbarkeit tut das. Und Sichtbarkeit kostet Geld, das wir nicht haben.'"
+ },
+ "social_tensions_events.10.t": {
+  "en": "Big Money Floods the Election",
+  "de": "Das große Geld flutet die Wahl"
+ },
+ "social_tensions_events.11.a": {
+  "en": "Welcome the newcomers",
+  "de": "Die Neuankömmlinge willkommen heißen"
+ },
+ "social_tensions_events.11.b": {
+  "en": "Restrict the flow",
+  "de": "Den Zustrom einschränken"
+ },
+ "social_tensions_events.11.c": {
+  "en": "Fund integration programs",
+  "de": "Integrationsprogramme fördern"
+ },
+ "social_tensions_events.11.d_base": {
+  "en": "A surge of newcomers from distant lands has strained public services in our cities. Schools overflow, hospitals queue endlessly, and established residents complain that their neighborhoods are unrecognizable. The immigrants themselves face suspicion and hostility even as they seek a better life.",
+  "de": "Ein Zustrom von Neuankömmlingen aus fernen Ländern hat die öffentlichen Dienste unserer Städte überlastet. Schulen sind überfüllt, vor den Krankenhäusern bilden sich endlose Schlangen, und alteingesessene Bewohner beklagen, dass ihre Viertel nicht wiederzuerkennen sind. Die Einwanderer selbst stoßen auf Misstrauen und Feindseligkeit, während sie ein besseres Leben suchen."
+ },
+ "social_tensions_events.11.d_modern": {
+  "en": "Global economic disruption has sent waves of migrants toward our borders. Social media amplifies both heartbreaking stories of refugees and alarmist narratives about cultural invasion. The reality, as always, is more complicated than either side admits.",
+  "de": "Globale wirtschaftliche Verwerfungen haben Wellen von Migranten zu unseren Grenzen geschickt. Soziale Medien verstärken sowohl herzzerreißende Geschichten von Flüchtlingen als auch alarmistische Erzählungen von kultureller Invasion. Die Wirklichkeit ist, wie immer, komplizierter, als beide Seiten zugeben."
+ },
+ "social_tensions_events.11.f": {
+  "en": "The teacher looked at the thirty-eight children in her classroom. Last year there had been twenty-two. Six of the new ones spoke no words of the local language at all.\\n\\n'We need another teacher,' she told the headmaster.\\n\\n'We need another classroom.'\\n\\n'We need another school.'\\n\\nHe spread his hands. 'Write to the ministry. Tell them we're bursting at the seams.'\\n\\n'I did. Last month. They sent me a pamphlet about cultural enrichment.'",
+  "de": "Die Lehrerin betrachtete die achtunddreißig Kinder in ihrem Klassenzimmer. Letztes Jahr waren es zweiundzwanzig gewesen. Sechs der Neuen sprachen kein einziges Wort der Landessprache.\\n\\n'Wir brauchen eine weitere Lehrkraft', sagte sie dem Schulleiter.\\n\\n'Wir brauchen ein weiteres Klassenzimmer.'\\n\\n'Wir brauchen eine weitere Schule.'\\n\\nEr breitete die Hände aus. 'Schreiben Sie an das Ministerium. Sagen Sie ihnen, wir platzen aus allen Nähten.'\\n\\n'Das habe ich getan. Letzten Monat. Sie schickten mir eine Broschüre über kulturelle Bereicherung.'"
+ },
+ "social_tensions_events.11.t": {
+  "en": "Immigration Wave",
+  "de": "Einwanderungswelle"
+ },
+ "social_tensions_events.12.a": {
+  "en": "Appease the nativists",
+  "de": "Die Nativisten besänftigen"
+ },
+ "social_tensions_events.12.b": {
+  "en": "Counter with pro-diversity messaging",
+  "de": "Mit Botschaften für Vielfalt entgegenwirken"
+ },
+ "social_tensions_events.12.c": {
+  "en": "Host a national dialogue on identity",
+  "de": "Einen landesweiten Dialog über Identität veranstalten"
+ },
+ "social_tensions_events.12.d_base": {
+  "en": "A nativist movement is gaining alarming momentum. Rallies draw thousands who blame immigrants for unemployment, crime, and cultural decline. Pamphlets and speeches invoke the purity of the national character, and isolated incidents of violence against foreigners are becoming disturbingly common.",
+  "de": "Eine nativistische Bewegung gewinnt alarmierend an Schwung. Kundgebungen ziehen Tausende an, die Einwanderer für Arbeitslosigkeit, Kriminalität und kulturellen Verfall verantwortlich machen. Flugschriften und Reden beschwören die Reinheit des nationalen Charakters, und vereinzelte Gewaltvorfälle gegen Ausländer häufen sich beunruhigend."
+ },
+ "social_tensions_events.12.d_social_media": {
+  "en": "Viral videos and memes have supercharged a nativist movement that blames immigrants for every social ill. Online radicalization pipelines funnel anxious citizens toward extremist rallies. Hate crimes are spiking, and community leaders from discriminated groups fear for their safety.",
+  "de": "Virale Videos und Memes haben einer nativistischen Bewegung, die Einwanderer für jedes gesellschaftliche Übel verantwortlich macht, zusätzlichen Schwung verliehen. Online-Radikalisierungspfade lenken verunsicherte Bürger zu extremistischen Kundgebungen. Hassverbrechen nehmen sprunghaft zu, und Gemeindevorsteher diskriminierter Gruppen fürchten um ihre Sicherheit."
+ },
+ "social_tensions_events.12.f": {
+  "en": "The factory foreman had worked the same shift for twenty years. Now the factory was closed, and he stood at the back of a rally, listening to a man on a stage explain exactly who was to blame.\\n\\n'It's not the foreigners,' his wife said, pulling at his sleeve. 'The owner moved the machines overseas. You know that.'\\n\\n'I know that,' he said. But he didn't leave the rally.",
+  "de": "Der Vorarbeiter hatte zwanzig Jahre lang dieselbe Schicht gearbeitet. Jetzt war die Fabrik geschlossen, und er stand am Rande einer Kundgebung und hörte zu, wie ein Mann auf der Bühne genau erklärte, wer schuld war.\\n\\n'Es sind nicht die Ausländer', sagte seine Frau und zog an seinem Ärmel. 'Der Besitzer hat die Maschinen ins Ausland verlagert. Das weißt du.'\\n\\n'Das weiß ich', sagte er. Doch er verließ die Kundgebung nicht."
+ },
+ "social_tensions_events.12.t": {
+  "en": "Anti-Immigrant Backlash",
+  "de": "Gegenreaktion gegen Einwanderer"
+ },
+ "social_tensions_events.13.a": {
+  "en": "Embrace the revival",
+  "de": "Die Erweckung annehmen"
+ },
+ "social_tensions_events.13.b": {
+  "en": "Maintain secular governance",
+  "de": "An säkularer Regierungsführung festhalten"
+ },
+ "social_tensions_events.13.c": {
+  "en": "Channel it into charitable works",
+  "de": "In wohltätige Arbeit lenken"
+ },
+ "social_tensions_events.13.d_base": {
+  "en": "A charismatic preacher has ignited a spiritual awakening that is spreading like wildfire. Tent meetings draw enormous crowds, new congregations spring up in every city, and long-empty churches are full again. The faithful speak of a great renewal; secularists see a troubling regression.",
+  "de": "Ein charismatischer Prediger hat eine geistliche Erweckung entzündet, die sich wie ein Lauffeuer ausbreitet. Zeltversammlungen ziehen gewaltige Menschenmengen an, in jeder Stadt entstehen neue Gemeinden, und lange leere Kirchen sind wieder voll. Die Gläubigen sprechen von einer großen Erneuerung; Säkulare sehen einen beunruhigenden Rückschritt."
+ },
+ "social_tensions_events.13.d_social": {
+  "en": "A new wave of religious content creators has made faith go viral. Slickly produced devotional videos, online prayer groups, and algorithmically promoted spiritual content have created a digital revival that cuts across class and geography. The devout IG sees a renaissance.",
+  "de": "Eine neue Welle religiöser Content-Ersteller hat den Glauben viral gemacht. Aufwendig produzierte Andachtsvideos, Online-Gebetsgruppen und algorithmisch beworbene spirituelle Inhalte haben eine digitale Erweckung ausgelöst, die Klassen- und geografische Grenzen überschreitet. Die fromme Interessengruppe sieht darin eine Renaissance."
+ },
+ "social_tensions_events.13.d_tv": {
+  "en": "A telegenic preacher has become a national sensation, filling stadiums and dominating the airwaves. Millions tune in to watch fiery sermons that blend traditional faith with modern anxieties. The devout see a prophet; critics see a demagogue.",
+  "de": "Ein telegener Prediger ist zu einer landesweiten Sensation geworden, füllt Stadien und beherrscht die Sendezeit. Millionen schalten ein, um feurige Predigten zu verfolgen, die traditionellen Glauben mit modernen Ängsten verbinden. Die Gläubigen sehen einen Propheten; Kritiker sehen einen Demagogen."
+ },
+ "social_tensions_events.13.f": {
+  "en": "The pews had been empty for years. Cobwebs on the hymnal rack, dust on the collection plate. Then the preacher arrived, and suddenly there were not enough seats.\\n\\n'What does he say that's so special?' the secular journalist asked a woman waiting in line.\\n\\nShe thought about it. 'He says we matter. That suffering isn't random. That there's a reason for all of this.'\\n\\n'And you believe him?'\\n\\n'I believe I need to believe something. Don't you?'",
+  "de": "Die Kirchenbänke waren jahrelang leer gewesen. Spinnweben am Gesangbuchregal, Staub auf dem Kollektenteller. Dann kam der Prediger, und plötzlich gab es nicht genug Sitzplätze.\\n\\n'Was sagt er, das so besonders ist?', fragte der säkulare Journalist eine Frau, die in der Schlange wartete.\\n\\nSie dachte darüber nach. 'Er sagt, wir zählen. Dass Leid nicht zufällig ist. Dass es für all das einen Grund gibt.'\\n\\n'Und Sie glauben ihm?'\\n\\n'Ich glaube, ich muss an etwas glauben. Sie nicht?'"
+ },
+ "social_tensions_events.13.t": {
+  "en": "[concept_religious_revival] Sweeps the Nation",
+  "de": "[concept_religious_revival] erfasst die Nation"
+ },
+ "social_tensions_events.14.a": {
+  "en": "Side with tradition",
+  "de": "Sich auf die Seite der Tradition stellen"
+ },
+ "social_tensions_events.14.b": {
+  "en": "Prioritize modernization",
+  "de": "Modernisierung priorisieren"
+ },
+ "social_tensions_events.14.c": {
+  "en": "Seek a theological compromise",
+  "de": "Einen theologischen Kompromiss suchen"
+ },
+ "social_tensions_events.14.d": {
+  "en": "Religious leaders have declared open opposition to recent social reforms, calling them an affront to sacred tradition. Congregations are urged to resist, politicians who supported the reforms are denounced from the pulpit, and the devout organize politically with renewed vigor. The clash between faith and progress threatens to dominate national discourse.",
+  "de": "Religiöse Führer haben sich offen gegen die jüngsten Gesellschaftsreformen ausgesprochen und sie als Angriff auf die heilige Tradition bezeichnet. Gemeinden werden zum Widerstand aufgerufen, Politiker, die die Reformen unterstützten, werden von der Kanzel herab angeprangert, und die Gläubigen organisieren sich mit neuer Kraft politisch. Der Zusammenstoß zwischen Glauben und Fortschritt droht den nationalen Diskurs zu beherrschen."
+ },
+ "social_tensions_events.14.f": {
+  "en": "'With respect, Father, the bill has already passed,' the young politician said.\\n\\nThe clergyman set down his teacup with the deliberate care of a man accustomed to being listened to. 'Laws may be written by parliaments, but they are judged by a higher authority. My congregation did not elect you to legislate against the word of God.'\\n\\n'Your congregation is not my only constituency.'\\n\\n'No. But on Sunday mornings, it is your largest one.'",
+  "de": "'Bei allem Respekt, Vater, das Gesetz ist bereits verabschiedet', sagte der junge Politiker.\\n\\nDer Geistliche stellte seine Teetasse mit der bedächtigen Sorgfalt eines Mannes ab, der es gewohnt ist, angehört zu werden. 'Gesetze mögen von Parlamenten geschrieben werden, doch gerichtet werden sie von einer höheren Instanz. Meine Gemeinde hat Sie nicht gewählt, damit Sie gegen das Wort Gottes Gesetze erlassen.'\\n\\n'Ihre Gemeinde ist nicht meine einzige Wählerschaft.'\\n\\n'Nein. Aber am Sonntagmorgen ist sie Ihre größte.'"
+ },
+ "social_tensions_events.14.t": {
+  "en": "Faith Against Modernity",
+  "de": "Glaube gegen Moderne"
+ },
+ "social_tensions_events.15.a": {
+  "en": "Embrace free trade",
+  "de": "Freihandel annehmen"
+ },
+ "social_tensions_events.15.b": {
+  "en": "Impose protective tariffs",
+  "de": "Schutzzölle einführen"
+ },
+ "social_tensions_events.15.c": {
+  "en": "Fund worker retraining programs",
+  "de": "Umschulungsprogramme für Arbeiter fördern"
+ },
+ "social_tensions_events.15.d_base": {
+  "en": "Cheap imports are flooding domestic markets, undercutting local producers who cannot compete with foreign labor costs. Factories close, workers are laid off, and once-prosperous towns decay. Trade unions demand protection; industrialists praise efficiency. The displaced workers care about neither theory.",
+  "de": "Billige Importe überschwemmen die heimischen Märkte und unterbieten einheimische Produzenten, die mit ausländischen Lohnkosten nicht mithalten können. Fabriken schließen, Arbeiter werden entlassen, und einst wohlhabende Städte verfallen. Gewerkschaften fordern Schutz; Industrielle preisen die Effizienz. Den verdrängten Arbeitern ist keine der beiden Theorien wichtig."
+ },
+ "social_tensions_events.15.d_internet": {
+  "en": "The global marketplace is now frictionless, goods, services, and capital flow across borders at the speed of light. But the communities left behind by this transformation are anything but fluid. Hollowed-out industrial regions breed resentment, and populist politicians offer simple answers to complex problems.",
+  "de": "Der globale Marktplatz ist inzwischen reibungslos, Güter, Dienstleistungen und Kapital fließen mit Lichtgeschwindigkeit über Grenzen hinweg. Doch die von diesem Wandel zurückgelassenen Gemeinschaften sind alles andere als fließend. Ausgehöhlte Industrieregionen brüten Groll aus, und populistische Politiker bieten einfache Antworten auf komplexe Probleme."
+ },
+ "social_tensions_events.15.f": {
+  "en": "The weaver held up a bolt of cloth - tight, even, beautiful. 'I made this,' he said. 'My father made cloth like this. His father before him.'\\n\\nThe merchant examined it and shook his head. 'I can get the same quality from abroad at a quarter of the price.'\\n\\n'It is not the same quality.'\\n\\n'The customer thinks it is. And the customer has a budget.'\\n\\nThe weaver rolled up the cloth slowly. He had heard this conversation before. Each time, there was less to say.",
+  "de": "Der Weber hielt eine Stoffbahn hoch — dicht, gleichmäßig, schön. 'Das habe ich gemacht', sagte er. 'Mein Vater machte solchen Stoff. Sein Vater vor ihm.'\\n\\nDer Händler prüfte sie und schüttelte den Kopf. 'Ich bekomme dieselbe Qualität aus dem Ausland zu einem Viertel des Preises.'\\n\\n'Das ist nicht dieselbe Qualität.'\\n\\n'Der Kunde denkt, dass es das ist. Und der Kunde hat ein Budget.'\\n\\nDer Weber rollte den Stoff langsam wieder auf. Er hatte dieses Gespräch schon einmal gehört. Jedes Mal gab es weniger zu sagen."
+ },
+ "social_tensions_events.15.t": {
+  "en": "Globalization Backlash",
+  "de": "Gegenreaktion auf die Globalisierung"
+ },
+ "social_tensions_events.16.a": {
+  "en": "Embrace cultural exchange",
+  "de": "Kulturellen Austausch begrüßen"
+ },
+ "social_tensions_events.16.b": {
+  "en": "Protect local culture",
+  "de": "Die einheimische Kultur schützen"
+ },
+ "social_tensions_events.16.c": {
+  "en": "Foster a cultural synthesis",
+  "de": "Eine kulturelle Synthese fördern"
+ },
+ "social_tensions_events.16.d_base": {
+  "en": "Global commerce brings not just goods but culture. Foreign music, fashion, food, and values pour through every open market. Traditional artisans lose their livelihoods, local languages fade, and the young adopt foreign customs. A growing movement demands that the nation protect its cultural heritage before it is swallowed whole.",
+  "de": "Der globale Handel bringt nicht nur Güter, sondern auch Kultur. Fremde Musik, Mode, Küche und Werte strömen durch jeden offenen Markt. Traditionelle Handwerker verlieren ihre Existenzgrundlage, einheimische Sprachen schwinden, und die Jugend übernimmt fremde Sitten. Eine wachsende Bewegung fordert, dass die Nation ihr kulturelles Erbe schützt, bevor es gänzlich verschlungen wird."
+ },
+ "social_tensions_events.16.d_streaming": {
+  "en": "Streaming platforms have turned culture into a global commodity. The same shows, music, and influencers dominate screens from one end of the earth to the other. Local artists and traditions struggle to compete with algorithmically optimized content. The devout and rural communities are especially alarmed.",
+  "de": "Streaming-Plattformen haben Kultur in eine globale Handelsware verwandelt. Dieselben Sendungen, Musikstücke und Influencer beherrschen die Bildschirme von einem Ende der Erde zum anderen. Einheimische Künstler und Traditionen kämpfen darum, mit algorithmisch optimierten Inhalten mitzuhalten. Die Gläubigen und ländliche Gemeinschaften sind besonders beunruhigt."
+ },
+ "social_tensions_events.16.f": {
+  "en": "The grandmother tried to teach the old folk song to her granddaughter, but the girl kept losing interest.\\n\\n'It's boring,' she said. 'Nobody listens to this anymore.'\\n\\n'Your mother listened to this. I sang it to her every night.'\\n\\nThe girl shrugged and put her earpieces back in. The grandmother hummed the melody to herself while she cleared the dishes.",
+  "de": "Die Großmutter versuchte, ihrer Enkelin das alte Volkslied beizubringen, doch das Mädchen verlor immer wieder das Interesse.\\n\\n'Das ist langweilig', sagte sie. 'Das hört sich heute niemand mehr an.'\\n\\n'Deine Mutter hat sich das angehört. Ich habe es ihr jeden Abend vorgesungen.'\\n\\nDas Mädchen zuckte mit den Schultern und setzte die Ohrstöpsel wieder ein. Die Großmutter summte die Melodie vor sich hin, während sie das Geschirr abräumte."
+ },
+ "social_tensions_events.16.t": {
+  "en": "Cultural Homogenization Fears",
+  "de": "Ängste vor kultureller Vereinheitlichung"
+ },
+ "social_tensions_events.17.a": {
+  "en": "Fund them.",
+  "de": "Sie finanzieren."
+ },
+ "social_tensions_events.17.b": {
+  "en": "We will not bankroll terror.",
+  "de": "Wir werden keinen Terror finanzieren."
+ },
+ "social_tensions_events.17.d": {
+  "en": "Militant exiles from [SCOPE.sCountry('terror_cell_target').GetName] have come to our intelligence service with a proposal: money and training, in exchange for a campaign of violence against the government that drove them out. It would keep a rival bleeding and off balance. If their cell is uncovered, every document in it will lead back to us.",
+  "de": "Militante Exilanten aus [SCOPE.sCountry('terror_cell_target').GetAltName('DAT')] sind mit einem Vorschlag an unseren Geheimdienst herangetreten: Geld und Ausbildung im Austausch für eine Gewaltkampagne gegen die Regierung, die sie vertrieben hat. Das würde einen Rivalen bluten lassen und aus dem Gleichgewicht bringen. Wird ihre Zelle aufgedeckt, führt jedes Dokument darin zu uns zurück."
+ },
+ "social_tensions_events.17.f": {
+  "en": "The man across the table speaks our language badly and his own with great passion.\\n\\n\\\"We ask only for what they took from us. Weapons. Money. A safe house or two.\\\"\\n\\nThe case officer writes nothing down. \\\"And if your people are caught?\\\"\\n\\n\\\"Then they will say what patriots say. Nothing.\\\"\\n\\nNo one in the room believes that.",
+  "de": "Der Mann am anderen Ende des Tisches spricht unsere Sprache schlecht und seine eigene mit großer Leidenschaft.\\n\\n\\\"Wir bitten nur um das, was sie uns genommen haben. Waffen. Geld. Ein sicheres Haus oder zwei.\\\"\\n\\nDer Fallführer schreibt nichts auf. \\\"Und wenn Ihre Leute gefasst werden?\\\"\\n\\n\\\"Dann werden sie sagen, was Patrioten sagen. Nichts.\\\"\\n\\nNiemand im Raum glaubt das."
+ },
+ "social_tensions_events.17.t": {
+  "en": "Friends in Exile",
+  "de": "Freunde im Exil"
+ },
+ "social_tensions_events.18.a": {
+  "en": "Burn the files.",
+  "de": "Die Akten verbrennen."
+ },
+ "social_tensions_events.18.d_blamed": {
+  "en": "[SCOPE.sCountry('terror_cell_target').GetName] has rolled up the militant cell and made the evidence public: money, training and documents that lead straight back to us. Its government has named us as the cell's sponsor and is imposing sanctions.",
+  "de": "[SCOPE.sCountry('terror_cell_target').GetAltName('NOM')] hat die militante Zelle zerschlagen und die Beweise öffentlich gemacht: Geld, Ausbildung und Dokumente, die direkt zu uns zurückführen. Ihre Regierung hat uns als Geldgeber der Zelle benannt und verhängt Sanktionen."
+ },
+ "social_tensions_events.18.d_defense": {
+  "en": "[SCOPE.sCountry('terror_cell_target').GetName] has rolled up the militant cell. Its government has said nothing in public about who paid for it, and is hardening its own defenses instead.",
+  "de": "[SCOPE.sCountry('terror_cell_target').GetAltName('NOM')] hat die militante Zelle zerschlagen. Ihre Regierung hat öffentlich nichts dazu gesagt, wer dafür bezahlt hat, und härtet stattdessen ihre eigenen Verteidigungsanlagen ab."
+ },
+ "social_tensions_events.18.d_quiet": {
+  "en": "[SCOPE.sCountry('terror_cell_target').GetName] has rolled up the militant cell and traced it back to us, but has chosen not to go public. Instead its intelligence service has proposed quiet cooperation - a warning delivered with a handshake.",
+  "de": "[SCOPE.sCountry('terror_cell_target').GetAltName('NOM')] hat die militante Zelle zerschlagen und bis zu uns zurückverfolgt, hat sich jedoch entschieden, nicht an die Öffentlichkeit zu gehen. Stattdessen hat ihr Geheimdienst eine stille Zusammenarbeit vorgeschlagen — eine Warnung, überbracht mit einem Handschlag."
+ },
+ "social_tensions_events.18.f": {
+  "en": "The case officer reads the wire twice before he hands it over.\\n\\n\\\"The safe house in the old quarter. All of them.\\\"\\n\\n\\\"Will they talk?\\\"\\n\\n\\\"They already have,\\\" he says. \\\"The question is only who they told.\\\"",
+  "de": "Der Fallführer liest die Depesche zweimal, bevor er sie weiterreicht.\\n\\n\\\"Das sichere Haus im alten Viertel. Alle davon.\\\"\\n\\n\\\"Werden sie reden?\\\"\\n\\n\\\"Das haben sie bereits\\\", sagt er. \\\"Die Frage ist nur, wem sie es erzählt haben.\\\""
+ },
+ "social_tensions_events.18.t": {
+  "en": "The Cell Is Blown",
+  "de": "Die Zelle ist aufgeflogen"
+ },
+ "social_tensions_events.2.a": {
+  "en": "Blame and sanction them",
+  "de": "Sie beschuldigen und sanktionieren"
+ },
+ "social_tensions_events.2.b": {
+  "en": "Pursue quiet intelligence cooperation",
+  "de": "Stille geheimdienstliche Zusammenarbeit anstreben"
+ },
+ "social_tensions_events.2.c": {
+  "en": "Focus on domestic defense",
+  "de": "Sich auf die Verteidigung im Inland konzentrieren"
+ },
+ "social_tensions_events.2.d": {
+  "en": "Intelligence operatives have dismantled a cell with clear ties to a hostile foreign power. Documents and communications link the plotters to agents of [SCOPE.sCountry('terror_linked_country').GetName]. The question now is whether to respond with a diplomatic hammer or a quiet scalpel.",
+  "de": "Geheimdienstagenten haben eine Zelle mit eindeutigen Verbindungen zu einer feindlich gesinnten fremden Macht zerschlagen. Dokumente und Kommunikation verknüpfen die Verschwörer mit Agenten [SCOPE.sCountry('terror_linked_country').GetAltName('GEN')]. Die Frage ist nun, ob mit dem diplomatischen Hammer oder dem stillen Skalpell geantwortet werden soll."
+ },
+ "social_tensions_events.2.f": {
+  "en": "'The intercepts are unambiguous,' the intelligence chief said, placing the folder on the table. 'Training, funding, operational planning - all traced back to the same source.'\\n\\n'And if we go public with this?'\\n\\n'Then we burn our sources and lose the ability to intercept the next plot.'\\n\\nThe minister stared at the folder as though it might bite him. 'And if we stay quiet?'\\n\\n'Then we know about the next plot. We just might not be able to stop it.'",
+  "de": "'Die Abhörprotokolle sind eindeutig', sagte der Geheimdienstchef und legte die Akte auf den Tisch. 'Ausbildung, Finanzierung, operative Planung — alles führt zur selben Quelle zurück.'\\n\\n'Und wenn wir damit an die Öffentlichkeit gehen?'\\n\\n'Dann verbrennen wir unsere Quellen und verlieren die Fähigkeit, den nächsten Anschlag abzufangen.'\\n\\nDer Minister starrte die Akte an, als könnte sie ihn beißen. 'Und wenn wir still bleiben?'\\n\\n'Dann wissen wir vom nächsten Anschlag. Wir können ihn nur vielleicht nicht verhindern.'"
+ },
+ "social_tensions_events.2.t": {
+  "en": "Foreign-Linked Terror Cell Uncovered",
+  "de": "Terrorzelle mit Auslandsverbindung aufgedeckt"
+ },
+ "social_tensions_events.3.a": {
+  "en": "Accept their input",
+  "de": "Ihren Beitrag akzeptieren"
+ },
+ "social_tensions_events.3.b": {
+  "en": "Restrict lobbyist access",
+  "de": "Den Zugang für Lobbyisten einschränken"
+ },
+ "social_tensions_events.3.c": {
+  "en": "Let journalists expose it all",
+  "de": "Journalisten alles aufdecken lassen"
+ },
+ "social_tensions_events.3.d_base": {
+  "en": "A leaked memorandum reveals the extent to which corporate interests have penetrated the legislative process. Industry representatives practically draft regulations themselves, while elected officials collect generous 'consulting fees.' The public is outraged, or at least, the part of the public that reads the financial pages.",
+  "de": "Ein durchgesickertes Memorandum enthüllt, in welchem Ausmaß Unternehmensinteressen den Gesetzgebungsprozess durchdrungen haben. Branchenvertreter entwerfen die Vorschriften praktisch selbst, während gewählte Amtsträger großzügige „Beraterhonorare“ einstreichen. Die Öffentlichkeit ist empört, zumindest der Teil, der die Wirtschaftsseiten liest."
+ },
+ "social_tensions_events.3.d_digital": {
+  "en": "A data breach exposes a vast lobbying operation: algorithmic targeting of legislators, shell companies funneling donations, and a revolving door between corporate boards and regulatory agencies. The hashtag trends for days, but turning outrage into policy is another matter entirely.",
+  "de": "Ein Datenleck legt eine gewaltige Lobbyoperation offen: algorithmisch gesteuertes Anvisieren von Abgeordneten, Briefkastenfirmen, die Spenden durchschleusen, und eine Drehtür zwischen Unternehmensvorständen und Aufsichtsbehörden. Der Hashtag ist tagelang im Trend, doch Empörung in Politik umzumünzen ist eine ganz andere Sache."
+ },
+ "social_tensions_events.3.f": {
+  "en": "The lobbyist arrived at the legislator's office with a briefcase and a smile. 'We've taken the liberty of drafting some suggested [Concept('concept_amendment', 'amendments')],' he said, placing a document on the desk. 'Naturally, we defer to your judgment.'\\n\\nThe legislator glanced at the text. It was, in every material particular, a law written by and for the corporation.\\n\\n'And the donation to my re-election fund?'\\n\\n'Entirely unrelated,' the lobbyist said, his smile widening. 'Merely an expression of civic enthusiasm.'",
+  "de": "Der Lobbyist kam mit einer Aktentasche und einem Lächeln im Büro des Abgeordneten an. 'Wir haben uns erlaubt, einige vorgeschlagene [Concept('concept_amendment', 'Änderungsanträge')] zu entwerfen', sagte er und legte ein Dokument auf den Schreibtisch. 'Natürlich überlassen wir die Entscheidung ganz Ihrem Urteil.'\\n\\nDer Abgeordnete warf einen Blick auf den Text. Es war, in jedem wesentlichen Punkt, ein Gesetz, geschrieben von und für den Konzern.\\n\\n'Und die Spende für meinen Wiederwahlfonds?'\\n\\n'Völlig unabhängig davon', sagte der Lobbyist, sein Lächeln breiter werdend. 'Lediglich ein Ausdruck bürgerlichen Engagements.'"
+ },
+ "social_tensions_events.3.t": {
+  "en": "Corporate Lobbyists in the Legislature",
+  "de": "Konzernlobbyisten im Parlament"
+ },
+ "social_tensions_events.4.a": {
+  "en": "Tolerate the monopoly",
+  "de": "Das Monopol dulden"
+ },
+ "social_tensions_events.4.b": {
+  "en": "Break up the trust",
+  "de": "Den Trust zerschlagen"
+ },
+ "social_tensions_events.4.c": {
+  "en": "Nationalize the industry",
+  "de": "Die Industrie verstaatlichen"
+ },
+ "social_tensions_events.4.d": {
+  "en": "A single corporate conglomerate has achieved near-total dominance over a vital industry. Competitors have been bought out or driven under. Prices creep upward while quality stagnates. Workers have nowhere else to go. Under our current freedom of contract laws, this is perfectly legal, but is it wise?",
+  "de": "Ein einzelner Konzern hat sich eine nahezu vollständige Vorherrschaft über eine lebenswichtige Industrie gesichert. Konkurrenten wurden aufgekauft oder in den Ruin getrieben. Die Preise steigen schleichend, während die Qualität stagniert. Arbeiter haben keine andere Wahl. Nach unseren derzeitigen Vertragsfreiheitsgesetzen ist das völlig legal, doch ist es klug?"
+ },
+ "social_tensions_events.4.f": {
+  "en": "'We've received seventeen complaints this quarter,' the regulator said, leafing through a stack of letters. 'Price-fixing, predatory contracts, supplier intimidation.'\\n\\n'And?'\\n\\n'And they employ forty thousand people in three states. If we move against them, those workers suffer first.'\\n\\nThe minister drummed his fingers on the desk. 'So we let them do as they please?'\\n\\n'I didn't say that. I said whatever we do will hurt someone who doesn't deserve it. The question is who.'",
+  "de": "'Wir haben dieses Quartal siebzehn Beschwerden erhalten', sagte der Regulierer und blätterte durch einen Stapel Briefe. 'Preisabsprachen, räuberische Verträge, Einschüchterung von Lieferanten.'\\n\\n'Und?'\\n\\n'Und sie beschäftigen vierzigtausend Menschen in drei Bundesstaaten. Wenn wir gegen sie vorgehen, leiden diese Arbeiter zuerst.'\\n\\nDer Minister trommelte mit den Fingern auf den Schreibtisch. 'Wir lassen sie also gewähren?'\\n\\n'Das habe ich nicht gesagt. Ich habe gesagt, was immer wir tun, wird jemandem schaden, der es nicht verdient. Die Frage ist nur, wem.'"
+ },
+ "social_tensions_events.4.t": {
+  "en": "The Trust Problem",
+  "de": "Das Trust-Problem"
+ },
+ "social_tensions_events.5.a": {
+  "en": "Defend law enforcement",
+  "de": "Die Polizei verteidigen"
+ },
+ "social_tensions_events.5.b": {
+  "en": "Reform policing practices",
+  "de": "Die Polizeipraxis reformieren"
+ },
+ "social_tensions_events.5.c": {
+  "en": "Establish civilian oversight",
+  "de": "Zivile Aufsicht einrichten"
+ },
+ "social_tensions_events.5.d_base": {
+  "en": "A member of a discriminated community has died at the hands of the police under deeply troubling circumstances. Witnesses describe excessive force against an unarmed individual. Anger builds in the affected neighborhoods as community leaders demand accountability.",
+  "de": "Ein Mitglied einer diskriminierten Gemeinschaft ist unter zutiefst beunruhigenden Umständen durch die Polizei ums Leben gekommen. Zeugen schildern übermäßige Gewaltanwendung gegen eine unbewaffnete Person. In den betroffenen Vierteln wächst der Zorn, während Gemeindevorsteher Rechenschaft fordern."
+ },
+ "social_tensions_events.5.d_camera": {
+  "en": "A bystander's phone captures every second of a police officer killing an unarmed member of a discriminated community. The video goes viral within hours. Millions watch a person die in real time. The streets fill with protestors chanting the victim's name. The world is watching.",
+  "de": "Das Telefon eines Passanten hält jede Sekunde fest, wie ein Polizist ein unbewaffnetes Mitglied einer diskriminierten Gemeinschaft tötet. Das Video verbreitet sich binnen Stunden viral. Millionen sehen mit, wie ein Mensch in Echtzeit stirbt. Die Straßen füllen sich mit Demonstranten, die den Namen des Opfers rufen. Die Welt schaut zu."
+ },
+ "social_tensions_events.5.d_tv": {
+  "en": "Television cameras capture the aftermath of a police killing that has shocked the nation. A member of a discriminated community lies dead, and the grainy footage tells a damning story. Commentators debate; protestors gather; the government must respond.",
+  "de": "Fernsehkameras fangen die Folgen einer Polizeitötung ein, die die Nation erschüttert hat. Ein Mitglied einer diskriminierten Gemeinschaft liegt tot, und die körnigen Aufnahmen erzählen eine vernichtende Geschichte. Kommentatoren streiten, Demonstranten versammeln sich, die Regierung muss reagieren."
+ },
+ "social_tensions_events.5.f": {
+  "en": "The mother stood in the police station lobby, very still, very composed, holding a photograph.\\n\\n'He was walking home,' she said to no one in particular. 'From his job. That he went to every day.'\\n\\nThe desk sergeant looked at his hands. 'Ma'am, there's a procedure -'\\n\\n'Yes. There is always a procedure. The procedure is: my son is dead, and the man who killed him is on paid leave. That is the procedure.'",
+  "de": "Die Mutter stand im Foyer der Polizeiwache, sehr still, sehr gefasst, ein Foto in der Hand.\\n\\n'Er war auf dem Heimweg', sagte sie zu niemand Bestimmtem. 'Von seiner Arbeit. Der er jeden Tag nachging.'\\n\\nDer diensthabende Wachtmeister blickte auf seine Hände. 'Ma'am, es gibt ein Verfahren —'\\n\\n'Ja. Es gibt immer ein Verfahren. Das Verfahren ist: Mein Sohn ist tot, und der Mann, der ihn getötet hat, ist in bezahltem Urlaub. Das ist das Verfahren.'"
+ },
+ "social_tensions_events.5.t": {
+  "en": "Police Brutality Sparks Outrage",
+  "de": "Polizeigewalt löst Empörung aus"
+ },
+ "social_tensions_events.6.a": {
+  "en": "Impose a curfew and restore order",
+  "de": "Eine Ausgangssperre verhängen und die Ordnung wiederherstellen"
+ },
+ "social_tensions_events.6.b": {
+  "en": "Make concessions to their demands",
+  "de": "Zugeständnisse an ihre Forderungen machen"
+ },
+ "social_tensions_events.6.c": {
+  "en": "Commission an inquiry into root causes",
+  "de": "Eine Untersuchung der Grundursachen in Auftrag geben"
+ },
+ "social_tensions_events.6.d_base": {
+  "en": "Years of pent-up frustration over [concept_discrimination], poverty, and heavy-handed policing have finally boiled over. Neighborhoods burn as rioters clash with police. Businesses are looted, property destroyed, and lives lost. The underlying grievances are real, but so is the damage.",
+  "de": "Jahrelang aufgestaute Frustration über [concept_discrimination], Armut und rücksichtsloses Polizeivorgehen ist endlich übergekocht. Ganze Viertel brennen, während Randalierer mit der Polizei zusammenstoßen. Geschäfte werden geplündert, Eigentum zerstört, Menschen kommen ums Leben. Die zugrunde liegenden Missstände sind real, doch der Schaden ist es ebenso."
+ },
+ "social_tensions_events.6.d_modern": {
+  "en": "Livestreamed footage of running street battles fills every screen. What began as a peaceful protest has spiraled into full-scale urban unrest, organized in real time through social media. Fires illuminate the night sky as the city tears itself apart.",
+  "de": "Live übertragene Aufnahmen von anhaltenden Straßenschlachten füllen jeden Bildschirm. Was als friedlicher Protest begann, ist zu flächendeckenden Unruhen in der Stadt eskaliert, organisiert in Echtzeit über soziale Medien. Feuer erhellen den Nachthimmel, während sich die Stadt selbst zerreißt."
+ },
+ "social_tensions_events.6.f": {
+  "en": "The shopkeeper watched the smoke rise from three streets over and began boarding up his windows. His neighbor helped without being asked.\\n\\n'This is our neighborhood,' the shopkeeper said. 'Why burn it down?'\\n\\n'Because nobody listens when they don't.' The neighbor hammered another nail. 'Twenty years of petitions. Twenty years of committees. Nothing. One night of fires and suddenly every politician in the country knows our name.'\\n\\nGlass shattered somewhere nearby. Neither man flinched anymore.",
+  "de": "Der Ladenbesitzer sah den Rauch drei Straßen weiter aufsteigen und begann, seine Fenster mit Brettern zu vernageln. Sein Nachbar half ihm, ohne gefragt zu werden.\\n\\n'Das ist unser Viertel', sagte der Ladenbesitzer. 'Warum es niederbrennen?'\\n\\n'Weil niemand zuhört, wenn man es nicht tut.' Der Nachbar schlug einen weiteren Nagel ein. 'Zwanzig Jahre Petitionen. Zwanzig Jahre Ausschüsse. Nichts. Eine Nacht der Feuer, und plötzlich kennt jeder Politiker im Land unseren Namen.'\\n\\nIrgendwo in der Nähe zersplitterte Glas. Keiner der beiden zuckte mehr zusammen."
+ },
+ "social_tensions_events.6.t": {
+  "en": "Urban Riots",
+  "de": "Stadtunruhen"
+ },
+ "social_tensions_events.7.a": {
+  "en": "Suppress the reports",
+  "de": "Die Berichte unterdrücken"
+ },
+ "social_tensions_events.7.b": {
+  "en": "Prosecute those responsible",
+  "de": "Die Verantwortlichen strafrechtlich verfolgen"
+ },
+ "social_tensions_events.7.c": {
+  "en": "Overhaul military doctrine",
+  "de": "Die Militärdoktrin überarbeiten"
+ },
+ "social_tensions_events.7.d_base": {
+  "en": "Reports are filtering back from the front of a massacre committed by our own troops. Soldiers appear to have killed unarmed civilians, men, women, and children, in a village that posed no military threat. Officers are either complicit or negligent. The survivors' accounts are harrowing.",
+  "de": "Von der Front sickern Berichte über ein Massaker durch, das von unseren eigenen Truppen verübt wurde. Soldaten sollen unbewaffnete Zivilisten — Männer, Frauen und Kinder — in einem Dorf getötet haben, das keine militärische Bedrohung darstellte. Offiziere sind entweder mitschuldig oder nachlässig. Die Aussagen der Überlebenden sind erschütternd."
+ },
+ "social_tensions_events.7.d_media": {
+  "en": "A war correspondent has filed a devastating report, complete with photographs, documenting a massacre committed by our forces. Unarmed civilians, including women and children, were systematically killed. The images are broadcast nationwide. There is no ambiguity, no fog of war to hide behind.",
+  "de": "Ein Kriegsberichterstatter hat einen verheerenden Bericht samt Fotografien eingereicht, der ein von unseren Truppen verübtes Massaker dokumentiert. Unbewaffnete Zivilisten, darunter Frauen und Kinder, wurden systematisch getötet. Die Bilder werden landesweit ausgestrahlt. Es gibt keine Zweideutigkeit, keinen Kriegsnebel, hinter dem man sich verstecken könnte."
+ },
+ "social_tensions_events.7.f": {
+  "en": "The lieutenant's hands were steady as he gave his testimony. He described the village, the orders, the screaming, in the same flat tone one might use to describe the weather.\\n\\n'And then?' the investigator asked.\\n\\n'And then it was quiet.'\\n\\n'Were you ordered to -'\\n\\n'I was ordered to secure the area. I was not ordered to do what was done. But I did not stop it either.' He paused. 'Nobody stopped it. That is the part I cannot explain.'",
+  "de": "Die Hände des Leutnants waren ruhig, während er seine Aussage machte. Er beschrieb das Dorf, die Befehle, die Schreie, im selben nüchternen Ton, den man für eine Wetterbeschreibung verwenden würde.\\n\\n'Und dann?', fragte der Ermittler.\\n\\n'Und dann war es still.'\\n\\n'Wurden Sie befohlen, —'\\n\\n'Mir wurde befohlen, das Gebiet zu sichern. Mir wurde nicht befohlen, zu tun, was getan wurde. Aber ich habe es auch nicht verhindert.' Er hielt inne. 'Niemand hat es verhindert. Das ist der Teil, den ich nicht erklären kann.'"
+ },
+ "social_tensions_events.7.t": {
+  "en": "Wartime Atrocity Uncovered",
+  "de": "Kriegsgräuel aufgedeckt"
+ },
+ "social_tensions_events.8.a": {
+  "en": "Use it as propaganda",
+  "de": "Als Propaganda nutzen"
+ },
+ "social_tensions_events.8.b": {
+  "en": "Demand that the perpetrators face justice",
+  "de": "Fordern, dass die Täter vor Gericht gestellt werden"
+ },
+ "social_tensions_events.8.d": {
+  "en": "Horrifying reports emerge of enemy forces committing atrocities against our captured soldiers and civilians in occupied territories. The accounts speak of summary executions, torture, and deliberate targeting of non-combatants. Public fury is white-hot.",
+  "de": "Entsetzliche Berichte tauchen auf, wonach feindliche Truppen Gräueltaten an unseren gefangenen Soldaten und an Zivilisten in besetzten Gebieten begehen. Die Berichte sprechen von standrechtlichen Hinrichtungen, Folter und gezielten Angriffen auf Nichtkombattanten. Die öffentliche Wut ist glühend heiß."
+ },
+ "social_tensions_events.8.f": {
+  "en": "The returning prisoner sat in the debriefing room and stared at the table. When he finally spoke, it was barely above a whisper.\\n\\n'They lined us up in the yard every morning. To count us, they said. But some mornings the count was shorter than the night before, and nobody explained why.'\\n\\nThe officer recording the testimony stopped writing. 'Can you describe -'\\n\\n'No,' the prisoner said. 'I cannot. And you would not want me to.'",
+  "de": "Der heimgekehrte Gefangene saß im Vernehmungsraum und starrte auf den Tisch. Als er endlich sprach, war es kaum mehr als ein Flüstern.\\n\\n'Sie stellten uns jeden Morgen im Hof auf. Um uns zu zählen, sagten sie. Doch an manchen Morgen war die Zahl niedriger als am Abend zuvor, und niemand erklärte, warum.'\\n\\nDer Offizier, der die Aussage protokollierte, hörte auf zu schreiben. 'Können Sie beschreiben —'\\n\\n'Nein', sagte der Gefangene. 'Das kann ich nicht. Und Sie würden es auch nicht wollen.'"
+ },
+ "social_tensions_events.8.t": {
+  "en": "Enemy Atrocities Against Our People",
+  "de": "Feindliche Gräueltaten an unserem Volk"
+ },
+ "social_tensions_events.9.a": {
+  "en": "Ignore it",
+  "de": "Ignorieren"
+ },
+ "social_tensions_events.9.b": {
+  "en": "Launch an investigation",
+  "de": "Eine Untersuchung einleiten"
+ },
+ "social_tensions_events.9.c": {
+  "en": "Push for campaign finance reform",
+  "de": "Auf eine Reform der Wahlkampffinanzierung drängen"
+ },
+ "social_tensions_events.9.d_base": {
+  "en": "An explosive investigation reveals massive unreported donations flowing to the ruling party from industrial [Concept('concept_magnate', 'magnates')]. Secret bank accounts, shell companies, and quid pro quo arrangements paint a picture of a political class thoroughly bought and paid for.",
+  "de": "Eine brisante Untersuchung enthüllt massive, nicht gemeldete Spenden, die von industriellen [Concept('concept_magnate', 'Magnaten')] an die Regierungspartei fließen. Geheime Bankkonten, Briefkastenfirmen und Gefälligkeitsvereinbarungen zeichnen das Bild einer politischen Klasse, die durch und durch gekauft ist."
+ },
+ "social_tensions_events.9.d_digital": {
+  "en": "A whistleblower releases a trove of digital records showing that dark money has saturated the election. Cryptocurrency transfers, anonymous PACs, and algorithmically targeted disinformation campaigns have turned democracy into an auction house.",
+  "de": "Ein Whistleblower veröffentlicht eine Fülle digitaler Aufzeichnungen, die zeigen, dass dunkles Geld die Wahl durchdrungen hat. Kryptowährungstransfers, anonyme PACs und algorithmisch zielgerichtete Desinformationskampagnen haben die Demokratie in ein Auktionshaus verwandelt."
+ },
+ "social_tensions_events.9.f": {
+  "en": "The journalist spread the bank records across the editor's desk like a winning hand of cards. 'Shell companies in four countries. Every one traces back to the same three industrialists.'\\n\\n'And the party treasurer?'\\n\\n'Claims he never saw the money.' She tapped a highlighted line. 'Despite signing for it. Twice.'\\n\\nThe editor stared at the documents for a long time. 'If we publish this, they'll come for us.'\\n\\n'If we don't, what exactly are we for?'",
+  "de": "Die Journalistin breitete die Bankunterlagen auf dem Schreibtisch des Redakteurs aus wie ein gewinnendes Kartenblatt. 'Briefkastenfirmen in vier Ländern. Jede einzelne führt zu denselben drei Industriellen zurück.'\\n\\n'Und der Parteischatzmeister?'\\n\\n'Behauptet, er habe das Geld nie gesehen.' Sie tippte auf eine markierte Zeile. 'Obwohl er dafür unterschrieben hat. Zweimal.'\\n\\nDer Redakteur starrte lange auf die Dokumente. 'Wenn wir das veröffentlichen, kommen sie hinter uns her.'\\n\\n'Wenn wir es nicht tun, wofür genau sind wir dann noch da?'"
+ },
+ "social_tensions_events.9.t": {
+  "en": "Campaign Finance Scandal",
+  "de": "Skandal um die Wahlkampffinanzierung"
  }
 }
