@@ -38,7 +38,7 @@ institution_ministry_of_foreign_affairs = {
 }
 
 institution_national_bank = {
-	icon = "gfx/interface/icons/institution_icons/schools.dds"
+	icon = "gfx/interface/icons/institution_icons/institution_national_bank.dds"
 	background_texture = "gfx/interface/illustrations/institutions/schools.dds"
 	modifier = {
 		# -0.15pp of structural premium a level. It was -0.3, hand-judged in

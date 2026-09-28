@@ -259,7 +259,7 @@ decree_natalism_initiative = {
 }
 
 decree_tax_breaks = {
-	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
+	texture = "gfx/interface/icons/decree/decree_tax_breaks.dds"
 	modifier = {
 		state_tax_collection_mult = -0.5
 		state_radicals_from_political_movements_mult = -0.5
@@ -279,7 +279,7 @@ decree_tax_breaks = {
 }
 
 decree_trade_reform = {
-	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
+	texture = "gfx/interface/icons/decree/decree_trade_reform.dds"
 	modifier = {
 		state_trade_advantage_mult = 0.25
 		state_trade_capacity_mult = 0.25

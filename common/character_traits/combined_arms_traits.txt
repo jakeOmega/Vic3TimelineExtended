@@ -6,7 +6,7 @@
 
 trait_combined_arms_infantry_screen = {
 	type = condition
-	texture = "gfx/interface/icons/character_trait_icons/defense_in_depth_specialist.dds"
+	texture = "gfx/interface/icons/character_trait_icons/trait_combined_arms_infantry_screen.dds"
 
 	character_modifier = {
 	}
@@ -37,7 +37,7 @@ trait_combined_arms_infantry_screen = {
 
 trait_combined_arms_fire_support = {
 	type = condition
-	texture = "gfx/interface/icons/character_trait_icons/expert_offensive_planner.dds"
+	texture = "gfx/interface/icons/character_trait_icons/trait_combined_arms_fire_support.dds"
 
 	character_modifier = {
 	}
@@ -68,7 +68,7 @@ trait_combined_arms_fire_support = {
 
 trait_combined_arms_recon = {
 	type = condition
-	texture = "gfx/interface/icons/character_trait_icons/surveyor.dds"
+	texture = "gfx/interface/icons/character_trait_icons/trait_combined_arms_recon.dds"
 
 	character_modifier = {
 	}
@@ -99,7 +99,7 @@ trait_combined_arms_recon = {
 
 trait_combined_arms_armor = {
 	type = condition
-	texture = "gfx/interface/icons/character_trait_icons/trench_rat.dds"
+	texture = "gfx/interface/icons/character_trait_icons/trait_combined_arms_armor.dds"
 
 	character_modifier = {
 	}
@@ -132,7 +132,7 @@ trait_combined_arms_armor = {
 
 trait_combined_arms_air_superiority = {
 	type = condition
-	texture = "gfx/interface/icons/character_trait_icons/innovative.dds"
+	texture = "gfx/interface/icons/character_trait_icons/trait_combined_arms_air_superiority.dds"
 
 	character_modifier = {
 	}

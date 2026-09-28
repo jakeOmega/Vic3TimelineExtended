@@ -24,7 +24,7 @@
 		always = yes
 	}
 
-	icon = "gfx/interface/icons/central_identity_pillars_icons/ideological_union.dds"
+	icon = "gfx/interface/icons/central_identity_pillars_icons/identity_diplomatic.dds"
 	background = "gfx/interface/power_blocs/backgrounds/pb_background_generic.dds"
 
 	visible = {

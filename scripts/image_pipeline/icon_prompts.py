@@ -181,7 +181,7 @@ CATEGORIES = {
     # blue (125,147,158). Pictogram colours fitted to vanilla's condition cards.
     "character_trait": dict(
         folder="character_trait_icons", size=320, card_size=(240, 320), frame=(184, 129, 128),
-        mode="card", fill=(0.7, 0.6), entity_dir="common/character_traits", field="texture",
+        mode="card", fill=(0.8, 0.72), entity_dir="common/character_traits", field="texture",
         color=(99, 101, 101), color_bottom=(65, 45, 43), style=SILHOUETTE),
     # Harvest conditions (150 px, HarvestConditionType.GetIcon): a painted
     # scene inside a round copper rim, which `framed` lifts from vanilla like
@@ -627,9 +627,9 @@ ICONS: dict[str, dict[str, dict]] = {
         "decree_cultural_integration": {"subject": "two hands clasped in a firm handshake, one in a brown wool sleeve and one in a blue linen sleeve", "seed": 1},
         "decree_natalism_initiative": {"subject": "a wooden baby cradle with a soft blue blanket", "seed": 0},
         # "a stack of gold coins" drew $ signs on every coin.
-        "decree_tax_breaks": {"subject": "a stack of plain gold coins each stamped with a small star, beside a big mint-green arrow pointing down", "seed": None},
+        "decree_tax_breaks": {"subject": "a stack of plain gold coins each stamped with a small star, beside a big mint-green arrow pointing down", "seed": 0},
         # A customs gate came with numbered plates on its posts.
-        "decree_trade_reform": {"subject": "a red and white striped boom barrier arm raised up on a squat post, a wooden cargo crate on the ground beside it", "seed": None},
+        "decree_trade_reform": {"subject": "a red and white striped boom barrier arm raised up on a squat post, a wooden cargo crate on the ground beside it", "seed": 0},
         "decree_antiterrorism_campaign": {"subject": "a black riot shield and a police baton crossed", "seed": 1},
         # s1 is retouched: FLUX drew a second lens ring over the first.
         "decree_promote_tourism": {"subject": "a straw sun hat and a vintage brown leather camera", "seed": 1},
@@ -652,7 +652,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "institution_ministry_of_commerce": {"subject": "a bulging leather money pouch beside a stack of coins", "seed": 1},
         "institution_ministry_of_foreign_affairs": {"subject": "a rolled treaty scroll tied with a ribbon and a wax seal, a quill pen beside it", "seed": 0},
         # "a classical bank building" wrote BANK on its pediment.
-        "institution_national_bank": {"subject": "a stack of gold bars on the steps of a classical building front with tall columns and a plain blank triangular pediment", "seed": None},
+        "institution_national_bank": {"subject": "a stack of gold bars on the steps of a classical building front with tall columns and a plain blank triangular pediment", "seed": 0},
         "institution_ministry_of_culture": {"subject": "a laurel-crowned marble bust beside a painter's palette with brushes", "seed": 1},
         "institution_ministry_of_labor": {"subject": "a worker's flat cap resting on an anvil with a hammer", "seed": 1},
         "institution_ministry_of_the_environment": {"subject": "a young oak sapling growing from a mound of earth, a watering can beside it", "seed": 0},
@@ -677,7 +677,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "ig_trait_custom_religion_theocratic_loyal": {"subject": "a judge's gavel resting on an open book", "seed": 1},
     },
     "ig_trait_happy": {
-        "ig_trait_custom_religion_market_liberal_happy": {"subject": "two praying hands pressed together around a single plain coin stamped with a star", "seed": None},
+        "ig_trait_custom_religion_market_liberal_happy": {"subject": "two praying hands pressed together around a single plain coin stamped with a star", "seed": 0},
         "ig_trait_custom_religion_social_democrat_happy": {"subject": "a ladle over a steaming soup pot", "seed": 1},
         "ig_trait_custom_religion_totalitarian_happy": {"subject": "a grid of identical small human figures in neat rows", "seed": 0},
         "ig_trait_custom_religion_imperial_cult_happy": {"subject": "a radiant crown with bold rays behind it", "seed": 0},
@@ -685,7 +685,7 @@ ICONS: dict[str, dict[str, dict]] = {
     },
     "ig_trait_unhappy": {
         "ig_trait_custom_religion_market_liberal_unhappy": {"subject": "a fat bulging money sack spilling coins", "seed": 1},
-        "ig_trait_custom_religion_social_democrat_unhappy": {"subject": "a lopsided balance scale, its left pan sunk low and heaped with coins, its right pan raised high and empty", "seed": None},
+        "ig_trait_custom_religion_social_democrat_unhappy": {"subject": "a lopsided balance scale, its left pan sunk low and heaped with coins, its right pan raised high and empty", "seed": 0},
         "ig_trait_custom_religion_totalitarian_unhappy": {"subject": "a heavy military boot stamping down on a quill pen", "seed": 1},
         "ig_trait_custom_religion_imperial_cult_unhappy": {"subject": "a sword crossed over a sceptre behind a round shield", "seed": 1},
         "ig_trait_custom_religion_theocratic_unhappy": {"subject": "a flaming torch crossed with a pitchfork", "seed": 1},
@@ -693,22 +693,23 @@ ICONS: dict[str, dict[str, dict]] = {
     # The combined-arms general traits (type = condition, so the condition
     # card) on vanilla skill and personality icons.
     "character_trait": {
-        "trait_combined_arms_infantry_screen": {"subject": "a line of three infantry soldiers kneeling with rifles raised, side view", "seed": None},
-        "trait_combined_arms_fire_support": {"subject": "a field artillery howitzer firing, a bold burst of flame at its muzzle", "seed": None},
-        "trait_combined_arms_recon": {"subject": "a mounted scout on horseback raising binoculars to his eyes", "seed": None},
-        "trait_combined_arms_armor": {"subject": "a battle tank charging forward, side view", "seed": None},
-        "trait_combined_arms_air_superiority": {"subject": "a fighter plane diving steeply", "seed": None},
-        "trait_combined_arms_full_spectrum": {"subject": "a tank, a fighter plane and an infantry soldier grouped together as one emblem", "seed": None},
+        "trait_combined_arms_infantry_screen": {"subject": "a line of three infantry soldiers kneeling with rifles raised, side view", "seed": 1},
+        "trait_combined_arms_fire_support": {"subject": "a field artillery howitzer firing, a bold burst of flame at its muzzle", "seed": 0},
+        "trait_combined_arms_recon": {"subject": "a mounted scout on horseback raising binoculars to his eyes", "seed": 0},
+        "trait_combined_arms_armor": {"subject": "a battle tank charging forward, side view", "seed": 1},
+        "trait_combined_arms_air_superiority": {"subject": "a fighter plane diving steeply", "seed": 1},
+        "trait_combined_arms_full_spectrum": {"subject": "a fighter plane flying low over a tank, an infantry soldier standing beside the tank, all overlapping as one compact group", "seed": None},
     },
     # The mod's financial "harvest conditions", on law icons.
     "harvest_condition": {
-        "financial_panic": {"subject": "a crowd of small figures rushing at the shut doors of a columned bank under a dark stormy sky", "seed": None},
-        "market_downturn": {"subject": "a row of shuttered shop fronts on an empty grey street at dusk, dry leaves blowing past", "seed": None},
-        "bull_market": {"subject": "a charging bull in front of a bright golden sunrise", "seed": None},
+        # market_downturn and bull_market s0 are retouched: painters' signatures along the bottom.
+        "financial_panic": {"subject": "a crowd of small figures rushing at the shut doors of a columned bank under a dark stormy sky", "seed": 0},
+        "market_downturn": {"subject": "a row of shuttered shop fronts on an empty grey street at dusk, dry leaves blowing past", "seed": 0},
+        "bull_market": {"subject": "a charging bull in front of a bright golden sunrise", "seed": 0},
     },
     # Diplomatic Framework, on the Ideological Union's lectern.
     "power_bloc_identity": {
-        "identity_diplomatic": {"subject": "a rolled treaty parchment with a red wax seal, a gilded olive branch laid across it", "seed": None},
+        "identity_diplomatic": {"subject": "a rolled treaty parchment with a red wax seal, a gilded olive branch laid across it", "seed": 0},
     },
     "leader_ideology": {
         "ideology_multicultural": {"subject": "three hands clasping each other's wrists to form a triangle", "seed": 0},

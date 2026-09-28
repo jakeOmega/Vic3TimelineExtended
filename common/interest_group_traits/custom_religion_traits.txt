@@ -35,7 +35,7 @@ ig_trait_custom_religion_market_liberal_loyal = {
 }
 
 ig_trait_custom_religion_market_liberal_happy = {
-	icon = "gfx/interface/icons/ig_trait_icons/treasury_bonds.dds"
+	icon = "gfx/interface/icons/ig_trait_icons/ig_trait_custom_religion_market_liberal_happy.dds"
 	min_approval = happy
 
 	modifier = {
@@ -72,7 +72,7 @@ ig_trait_custom_religion_social_democrat_happy = {
 }
 
 ig_trait_custom_religion_social_democrat_unhappy = {
-	icon = "gfx/interface/icons/ig_trait_icons/solidarity.dds"
+	icon = "gfx/interface/icons/ig_trait_icons/ig_trait_custom_religion_social_democrat_unhappy.dds"
 	max_approval = unhappy
 
 	modifier = {
