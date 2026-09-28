@@ -188,10 +188,19 @@ the same goods underneath, so base-game buildings still make and use them.
 Chemicals is the base game's fertilizer. Farms and plantations still take it,
 and dozens of modern industrial production methods now take it too. Bulk
 Transportation is explained in [Bulk Transportation and
-freight](03-economy.md#bulk-transportation-and-freight). Four buildings are
+freight](03-economy.md#bulk-transportation-and-freight). Three buildings are
 renamed to match: Fertilizer Plants are Chemical Plants, Electrics Industries
-are Wired Telecommunications Industries, Synthetics Plants are Synthetic Dyes
-Industries, and the Arts Academy is Creative Industries.
+are Wired Telecommunications Industries, and Synthetics Plants are Synthetic
+Dyes Industries.
+
+The Arts Academy changes its name as your technology advances. It is Art
+Academies at the start, Entertainment Industry once you research Mass Media,
+Creative Industries with Digital Entertainment, and Experience Industry with
+Brain-Computer Interfaces. Each of these technologies unlocks the production
+method the new name describes: Sound Film, Digital Streaming and
+Neurostimulation. The name follows your own research, so every country's
+academies show the name your technology has reached, whatever their owners
+have researched.
 
 ## New buildings and production methods
 
@@ -424,7 +433,7 @@ and cultural pull above; the ceremony asks again at its next level.
 | Grand Shrine | No State Atheism | Devout | +5% Devout attraction | +10% conversion |
 | To the Nation | | Petty Bourgeoisie | | +10% loyalists from movements |
 | War Memorial | | Armed Forces | 3% less war support lost to casualties | +5% conscription rate |
-| Grand Opera House | Romanticism | Intelligentsia | +5% Intelligentsia attraction | +10% Creative Industries throughput |
+| Grand Opera House | Romanticism | Intelligentsia | +5% Intelligentsia attraction | +10% Art Academies throughput |
 | Botanical Gardens | Romanticism | Rural Folk | | 5,000 less pollution |
 | Grand Observatory | Empiricism | Intelligentsia | +3 innovation cap | Faster literacy growth |
 | Great Exhibition Hall | Marketing Research, no Industry Banned | Industrialists | +5% Industrialists attraction | +10% migration pull |
