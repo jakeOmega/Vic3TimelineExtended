@@ -620,8 +620,8 @@ ICONS: dict[str, dict[str, dict]] = {
     # ones here borrow it.
     "decree": {
         "decree_war_propaganda": {"subject": "a large brass megaphone with a red cloth streamer tied to its handle", "seed": 1},
-        "decree_political_patronage": {"subject": "a gilded key on a red ribbon passed from one hand to another", "seed": 1},
-        "decree_bureaucracy_reform": {"subject": "a tall stack of manila folders tied with red tape, a pair of steel scissors beside it", "seed": 1},
+        "decree_political_patronage": {"subject": "a gilded key on a red ribbon passed from one hand to another", "seed": 0},
+        "decree_bureaucracy_reform": {"subject": "a tall stack of manila folders tied with red tape, a pair of steel scissors beside it", "seed": 0},
         "decree_cultural_emigration_initiative": {"subject": "a battered brown leather suitcase with a big mint-green arrow pointing away to the right", "seed": 1},
         "decree_pollution_control": {"subject": "a squat brick factory chimney capped with a big mint-green air filter, a green leaf beside it", "seed": 0},
         "decree_cultural_integration": {"subject": "two hands clasped in a firm handshake, one in a brown wool sleeve and one in a blue linen sleeve", "seed": 1},
@@ -642,7 +642,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_penal_labor_camps": {"subject": "a heavy iron ball and chain lying beside a pickaxe", "seed": 0},
         "law_private_military_contractors": {"subject": "an empty modern combat helmet sitting on a tall stack of gold coins", "seed": 0},
         "law_littoral_defense": {"subject": "a squat round stone coastal gun tower on a rocky shore, a small fast patrol boat beside it", "seed": 1},
-        "law_auxiliary_fleet": {"subject": "a big sealift cargo ship with army trucks and crates lashed on its deck", "seed": 0},
+        # s1 is retouched: hull number, bow emblems and truck lettering painted out.
+        "law_auxiliary_fleet": {"subject": "a big sealift cargo ship with army trucks and crates lashed on its deck", "seed": 1},
     },
     # Mod-added institutions, all on one of vanilla's seven icons.
     "institution": {
