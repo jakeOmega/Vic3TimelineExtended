@@ -181,7 +181,7 @@ building_wonder_hoover_dam = {
 
 building_wonder_pentagon = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/building_government_administration.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_pentagon.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
