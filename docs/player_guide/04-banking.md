@@ -361,7 +361,8 @@ Under Command Economy the cycle measures planning strain, and the dashboard
 offers eight planning tools plus two transfers. Under Cooperative Ownership it
 measures the balance between what worker-owners pay themselves and what they
 reinvest, and there are eight council tools. Changing economic system switches
-the old system's tools off.
+the old system's tools off. An open Emergency Liquidity Program still refunds 1%
+of GDP when that closes it.
 
 | Economy | Category | Tools (points) |
 |---|---|---|
