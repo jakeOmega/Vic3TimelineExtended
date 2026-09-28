@@ -535,7 +535,17 @@ def card_template(folder: str, size: tuple[int, int], frame: tuple[int, int, int
     fill = np.stack([gaussian_filter(total[..., c], sigma) / np.maximum(den, 1e-6) for c in range(3)], axis=-1)
     yy, xx = np.mgrid[0:h, 0:w]
     r = np.hypot((xx - w / 2) / (w * 0.38), (yy - h * 0.5) / (h * 0.445))
-    weight = np.clip((1.05 - r) * 5, 0, 1)[..., None]
+    weight = np.clip((1.05 - r) * 5, 0, 1)
+    # A small dark blob left inside the frame, where pictograms crowd a corner
+    # on most cards (the green card's bottom right), takes the fill too.
+    from scipy.ndimage import label
+    inside = np.zeros((h, w), bool)
+    inside[round(h * 0.08):round(h * 0.92), round(w * 0.1):round(w * 0.9)] = True
+    blobs, n = label(((card[..., :3] @ LUMA) < 90) & inside & (weight < 1))
+    sizes = np.bincount(blobs.ravel())
+    small = np.isin(blobs, [i for i in range(1, n + 1) if sizes[i] < w * h / 300])
+    weight = np.maximum(weight, gaussian_filter(small.astype(np.float32), 1.5) * 3)
+    weight = np.clip(weight, 0, 1)[..., None]
     card[..., :3] = card[..., :3] * (1 - weight) + fill * weight
     return card
 
