@@ -1,4 +1,816 @@
 {
+ "agricultural_diffusion_events.1.a": {
+  "en": "Our agriculture will adapt.",
+  "de": "Unsere Landwirtschaft wird sich anpassen."
+ },
+ "agricultural_diffusion_events.1.a_first": {
+  "en": "A new era of agriculture begins.",
+  "de": "Ein neues Zeitalter der Landwirtschaft beginnt."
+ },
+ "agricultural_diffusion_events.1.d": {
+  "en": "Reports reach us that [GetGlobalVariable('first_nitrogen_fixation_country').GetCountry.GetName] has industrialized the synthesis of ammonia from atmospheric nitrogen. The technical details have been widely published; engineering firms in the major industrial nations are already licensing the process. Within a few years, ammonia plants and the synthetic fertilizers they produce will be available to any country with the capital to build them.",
+  "de": "Berichte erreichen uns, dass [GetGlobalVariable('first_nitrogen_fixation_country').GetCountry.GetAltName('NOM')] die Synthese von Ammoniak aus Luftstickstoff industrialisiert hat. Die technischen Details wurden umfassend veröffentlicht; Ingenieurfirmen in den großen Industrienationen lizenzieren das Verfahren bereits. Innerhalb weniger Jahre werden Ammoniakwerke und die synthetischen Düngemittel, die sie herstellen, jedem Land zur Verfügung stehen, das über das nötige Kapital verfügt, um sie zu bauen."
+ },
+ "agricultural_diffusion_events.1.d_first": {
+  "en": "Our chemists have demonstrated industrial synthesis of ammonia from atmospheric nitrogen and hydrogen. For all of human history, fertilizer has come from animal manure, decomposed organic matter, or finite deposits of guano and saltpeter. No longer. We can now manufacture nitrogen fertilizer in unlimited quantity, from air and natural gas, in any chemical plant we choose to build.",
+  "de": "Unsere Chemiker haben die industrielle Synthese von Ammoniak aus Luftstickstoff und Wasserstoff demonstriert. Seit Anbeginn der Menschheitsgeschichte stammte Dünger aus Tiermist, verrottetem organischem Material oder endlichen Vorkommen von Guano und Salpeter. Nicht mehr. Wir können jetzt Stickstoffdünger in unbegrenzter Menge herstellen, aus Luft und Erdgas, in jedem Chemiewerk, das wir zu bauen beschließen."
+ },
+ "agricultural_diffusion_events.1.f": {
+  "en": "Even without inventing the process ourselves, our farms will benefit. Synthetic fertilizer is now a commodity on the world market, and our agronomists will not be denied access to it.",
+  "de": "Auch ohne das Verfahren selbst erfunden zu haben, werden unsere Höfe davon profitieren. Synthetischer Dünger ist nun eine Handelsware auf dem Weltmarkt, und unseren Agronomen wird der Zugang dazu nicht verwehrt bleiben."
+ },
+ "agricultural_diffusion_events.1.f_first": {
+  "en": "The bottleneck on agricultural productivity that has bounded every civilization in history has been broken. The age of nitrate diplomacy — of fighting over Peruvian guano cliffs and Chilean saltpeter mines — is ending. Every nation that masters this process can feed a population that no agrarian society could have imagined.",
+  "de": "Der Engpass in der landwirtschaftlichen Produktivität, der jede Zivilisation der Geschichte begrenzt hat, ist überwunden. Das Zeitalter der Nitratdiplomatie – des Kampfes um peruanische Guanoklippen und chilenische Salpeterminen – geht zu Ende. Jede Nation, die dieses Verfahren beherrscht, kann eine Bevölkerung ernähren, die sich keine Agrargesellschaft je hätte vorstellen können."
+ },
+ "agricultural_diffusion_events.1.t": {
+  "en": "Nitrogen Fixation Goes Global",
+  "de": "Die Stickstofffixierung erobert die Welt"
+ },
+ "agricultural_diffusion_events.1.t_first": {
+  "en": "We Fix Nitrogen from the Air",
+  "de": "Wir binden Stickstoff aus der Luft"
+ },
+ "agricultural_diffusion_events.2.a": {
+  "en": "Adopt the new inputs.",
+  "de": "Die neuen Betriebsmittel einführen."
+ },
+ "agricultural_diffusion_events.2.a_first": {
+  "en": "We will industrialize the soil.",
+  "de": "Wir werden den Boden industrialisieren."
+ },
+ "agricultural_diffusion_events.2.d": {
+  "en": "Industrial chemists in [GetGlobalVariable('first_modern_chemical_processes_country').GetCountry.GetName] have demonstrated the next generation of synthetic fertilizers: ammonium nitrate, urea, and superphosphate compounds produced through catalytic petrochemistry. The techniques are spreading through international engineering firms and trade fairs.",
+  "de": "Industriechemiker in [GetGlobalVariable('first_modern_chemical_processes_country').GetCountry.GetAltName('IN')] haben die nächste Generation synthetischer Düngemittel vorgestellt: Ammoniumnitrat, Harnstoff und Superphosphatverbindungen, hergestellt durch katalytische Petrochemie. Die Verfahren verbreiten sich über internationale Ingenieurfirmen und Handelsmessen."
+ },
+ "agricultural_diffusion_events.2.d_first": {
+  "en": "Our chemical industry has mastered catalytic synthesis at industrial scale: ammonium nitrate, urea, concentrated phosphates, granulated mixed fertilizers — all produced more cheaply and in greater volume than the previous generation thought possible. The same processes yield pesticides, herbicides, and the additives that preserve and fortify processed food.",
+  "de": "Unsere chemische Industrie beherrscht nun die katalytische Synthese im industriellen Maßstab: Ammoniumnitrat, Harnstoff, konzentrierte Phosphate, granulierte Mischdünger – alle billiger und in größerer Menge hergestellt, als die vorige Generation für möglich hielt. Dieselben Verfahren liefern Pestizide, Herbizide und die Zusatzstoffe, die verarbeitete Lebensmittel haltbar machen und anreichern."
+ },
+ "agricultural_diffusion_events.2.f": {
+  "en": "Cheaper inputs, higher yields. Our farmers will feel the difference within a single growing season.",
+  "de": "Billigere Betriebsmittel, höhere Erträge. Unsere Bauern werden den Unterschied innerhalb einer einzigen Anbausaison spüren."
+ },
+ "agricultural_diffusion_events.2.f_first": {
+  "en": "A handful of large chemical works can now supply the fertilizer requirements of entire nations. The cost of agricultural inputs collapses; the yield ceiling of every crop rises with it.",
+  "de": "Eine Handvoll großer Chemiewerke kann nun den Düngerbedarf ganzer Nationen decken. Die Kosten landwirtschaftlicher Betriebsmittel brechen ein; die Ertragsgrenze jeder Kulturpflanze steigt mit ihnen."
+ },
+ "agricultural_diffusion_events.2.t": {
+  "en": "Petrochemical Fertilizers Reach the World Market",
+  "de": "Petrochemische Düngemittel erreichen den Weltmarkt"
+ },
+ "agricultural_diffusion_events.2.t_first": {
+  "en": "Petrochemicals Transform Agriculture",
+  "de": "Petrochemikalien verändern die Landwirtschaft"
+ },
+ "agricultural_diffusion_events.3.a": {
+  "en": "Distribute the seed.",
+  "de": "Das Saatgut verteilen."
+ },
+ "agricultural_diffusion_events.3.a_first": {
+  "en": "Feed the world.",
+  "de": "Die Welt ernähren."
+ },
+ "agricultural_diffusion_events.3.d": {
+  "en": "Plant breeders working under the sponsorship of [GetGlobalVariable('first_green_revolution_country').GetCountry.GetName] and a constellation of international research institutes have developed high-yielding semi-dwarf cultivars of the staple cereals. Demonstration plots, extension agents, and shipments of foundation seed are arriving in our country. Our own agronomists, in cooperation with their visiting counterparts, are establishing trials.",
+  "de": "Pflanzenzüchter, die unter der Förderung von [GetGlobalVariable('first_green_revolution_country').GetCountry.GetAltName('VON')] und einer Vielzahl internationaler Forschungsinstitute arbeiten, haben ertragsstarke halbzwergwüchsige Sorten der wichtigsten Getreidearten entwickelt. Demonstrationsfelder, Beratungskräfte und Lieferungen von Basissaatgut treffen in unserem Land ein. Unsere eigenen Agronomen richten in Zusammenarbeit mit ihren zu Besuch weilenden Kollegen Versuchsfelder ein."
+ },
+ "agricultural_diffusion_events.3.d_first": {
+  "en": "Plant breeders working in our agricultural research institutes have produced semi-dwarf cultivars — strains of wheat, rice, and maize whose shorter stalks can carry vastly heavier grain heads without lodging. Combined with synthetic fertilizer, controlled irrigation, and integrated pest management, the new varieties promise to double or triple yields per hectare. Field trials are already exceeding our most optimistic projections.",
+  "de": "Pflanzenzüchter in unseren landwirtschaftlichen Forschungsinstituten haben halbzwergwüchsige Sorten hervorgebracht – Weizen-, Reis- und Maissorten, deren kürzere Halme weit schwerere Ährenköpfe tragen können, ohne zu lagern. In Verbindung mit synthetischem Dünger, kontrollierter Bewässerung und integriertem Schädlingsmanagement versprechen die neuen Sorten, die Erträge pro Hektar zu verdoppeln oder zu verdreifachen. Feldversuche übertreffen bereits unsere optimistischsten Prognosen."
+ },
+ "agricultural_diffusion_events.3.f": {
+  "en": "The new varieties demand fertilizer, water, and disciplined management — but where those conditions can be met, the yields are transformative. Our peasantry will feed a population none of our forebears could have sustained.",
+  "de": "Die neuen Sorten verlangen Dünger, Wasser und diszipliniertes Management – doch wo diese Bedingungen erfüllt werden können, sind die Erträge bahnbrechend. Unsere Bauernschaft wird eine Bevölkerung ernähren, die keiner unserer Vorfahren hätte versorgen können."
+ },
+ "agricultural_diffusion_events.3.f_first": {
+  "en": "This is not an incremental improvement; this is a discontinuity. International research foundations and our own diplomatic services will carry these seeds, and the integrated management package they require, to every nation willing to receive them. Within a generation, the spectre of mass agrarian famine may be banished from the human condition.",
+  "de": "Dies ist keine schrittweise Verbesserung; dies ist ein Bruch mit der Vergangenheit. Internationale Forschungsstiftungen und unser eigener diplomatischer Dienst werden dieses Saatgut, samt dem dazugehörigen integrierten Bewirtschaftungspaket, in jede Nation tragen, die bereit ist, es anzunehmen. Innerhalb einer Generation könnte das Gespenst der großen Agrarhungersnot aus der menschlichen Existenz verbannt werden."
+ },
+ "agricultural_diffusion_events.3.t": {
+  "en": "The Green Revolution Reaches Us",
+  "de": "Die Grüne Revolution erreicht uns"
+ },
+ "agricultural_diffusion_events.3.t_first": {
+  "en": "We Launch the Green Revolution",
+  "de": "Wir läuten die Grüne Revolution ein"
+ },
+ "agricultural_diffusion_events.4.a": {
+  "en": "Permit and regulate the new seed.",
+  "de": "Das neue Saatgut zulassen und regulieren."
+ },
+ "agricultural_diffusion_events.4.a_first": {
+  "en": "License the technology globally.",
+  "de": "Die Technologie weltweit lizenzieren."
+ },
+ "agricultural_diffusion_events.4.d": {
+  "en": "Commercial transgenic cultivars developed by seed companies in [GetGlobalVariable('first_gene_splicing_country').GetCountry.GetName] are entering the international seed trade. Bt cotton, herbicide-tolerant soybean and maize, and pest-resistant vegetable lines are licensed in dozens of countries despite continuing public controversy.",
+  "de": "Kommerzielle transgene Sorten, entwickelt von Saatgutunternehmen in [GetGlobalVariable('first_gene_splicing_country').GetCountry.GetAltName('IN')], treten in den internationalen Saatguthandel ein. Bt-Baumwolle, herbizidtolerante Soja- und Maissorten sowie schädlingsresistente Gemüselinien sind trotz anhaltender öffentlicher Kontroversen in Dutzenden Ländern zugelassen."
+ },
+ "agricultural_diffusion_events.4.d_first": {
+  "en": "Our molecular biologists have produced commercial cultivars whose genomes incorporate genes from unrelated species: cotton expressing a bacterial insecticidal toxin, soy and maize tolerant of broad-spectrum herbicides, varieties resistant to specific viral and fungal pathogens. Field trials are complete; the first commercial planting is underway.",
+  "de": "Unsere Molekularbiologen haben kommerzielle Sorten hervorgebracht, deren Genome Gene artfremder Spezies enthalten: Baumwolle, die ein bakterielles Insektengift bildet, Soja und Mais, die gegen Breitbandherbizide tolerant sind, sowie Sorten, die gegen bestimmte virale und pilzliche Krankheitserreger resistent sind. Die Feldversuche sind abgeschlossen; die erste kommerzielle Aussaat läuft bereits."
+ },
+ "agricultural_diffusion_events.4.f": {
+  "en": "Our farmers, like those everywhere, will weigh the seed price and royalty terms against the gains in yield and labour. Most will adopt.",
+  "de": "Unsere Bauern werden, wie überall, den Saatgutpreis und die Lizenzbedingungen gegen die Gewinne bei Ertrag und Arbeitsaufwand abwägen. Die meisten werden sich dafür entscheiden."
+ },
+ "agricultural_diffusion_events.4.f_first": {
+  "en": "The technique opens an entire new class of crop improvements: traits no conventional breeder could have introduced are now available in a handful of seasons. Royalties and licensing arrangements will follow the seed wherever it is planted.",
+  "de": "Das Verfahren eröffnet eine ganz neue Klasse von Pflanzenverbesserungen: Eigenschaften, die kein konventioneller Züchter hätte einführen können, sind nun innerhalb weniger Anbausaisons verfügbar. Lizenzgebühren und Vertragsbedingungen werden dem Saatgut folgen, wohin auch immer es gepflanzt wird."
+ },
+ "agricultural_diffusion_events.4.t": {
+  "en": "Transgenic Seed Lines Become Available",
+  "de": "Transgene Saatgutlinien werden verfügbar"
+ },
+ "agricultural_diffusion_events.4.t_first": {
+  "en": "We Engineer the First Transgenic Crops",
+  "de": "Wir erschaffen die ersten transgenen Nutzpflanzen"
+ },
+ "agricultural_diffusion_events.5.a": {
+  "en": "Adopt the new varieties.",
+  "de": "Die neuen Sorten übernehmen."
+ },
+ "agricultural_diffusion_events.5.a_first": {
+  "en": "Designed crops, designed nutrition.",
+  "de": "Maßgeschneiderte Nutzpflanzen, maßgeschneiderte Ernährung."
+ },
+ "agricultural_diffusion_events.5.d": {
+  "en": "Plant scientists working under the sponsorship of [GetGlobalVariable('first_biotechnology_country').GetCountry.GetName] have produced a new generation of crop varieties: micronutrient-enriched staples, salt- and drought-tolerant cultivars, and disease-resistant lines developed through marker-assisted breeding and targeted genetic modification. Humanitarian foundations and commercial seed companies are deploying them internationally.",
+  "de": "Pflanzenforscher, die unter der Förderung von [GetGlobalVariable('first_biotechnology_country').GetCountry.GetAltName('VON')] arbeiten, haben eine neue Generation von Nutzpflanzensorten hervorgebracht: mit Mikronährstoffen angereicherte Grundnahrungsmittel, salz- und trockenheitstolerante Sorten sowie krankheitsresistente Linien, entwickelt durch markergestützte Züchtung und gezielte genetische Veränderung. Humanitäre Stiftungen und kommerzielle Saatgutunternehmen setzen sie weltweit ein."
+ },
+ "agricultural_diffusion_events.5.d_first": {
+  "en": "Our research institutes have integrated molecular marker techniques, genomic selection, and targeted gene editing into a coherent crop improvement programme. Beta-carotene-enriched rice, salt-tolerant cereals, drought-tolerant maize, and micronutrient-fortified staple foods are emerging from the pipeline at unprecedented speed.",
+  "de": "Unsere Forschungsinstitute haben molekulare Markertechniken, genomische Selektion und gezielte Genbearbeitung zu einem kohärenten Programm zur Pflanzenverbesserung zusammengeführt. Mit Betacarotin angereicherter Reis, salztolerante Getreidearten, trockenheitstoleranter Mais und mit Mikronährstoffen angereicherte Grundnahrungsmittel entstehen in beispiellosem Tempo."
+ },
+ "agricultural_diffusion_events.5.f": {
+  "en": "Even where the political debate over the technology continues, the cultivars are spreading. Our farms will plant what feeds our people.",
+  "de": "Selbst wo die politische Debatte über die Technologie andauert, verbreiten sich die Sorten. Unsere Höfe werden anpflanzen, was unser Volk ernährt."
+ },
+ "agricultural_diffusion_events.5.f_first": {
+  "en": "We can now design crops for specific environments and specific nutritional deficiencies, rather than waiting for them to emerge from decades of conventional breeding.",
+  "de": "Wir können jetzt Nutzpflanzen für bestimmte Umgebungen und bestimmte Nährstoffmängel entwerfen, anstatt jahrzehntelang auf ihre Entstehung durch konventionelle Züchtung zu warten."
+ },
+ "agricultural_diffusion_events.5.t": {
+  "en": "Biotech Cultivars Cross Borders",
+  "de": "Biotech-Sorten überschreiten Grenzen"
+ },
+ "agricultural_diffusion_events.5.t_first": {
+  "en": "We Master Agricultural Biotechnology",
+  "de": "Wir beherrschen die landwirtschaftliche Biotechnologie"
+ },
+ "augmentation_events.1.a": {
+  "en": "Subsidize augmentation for all",
+  "de": "Augmentierung für alle subventionieren"
+ },
+ "augmentation_events.1.b": {
+  "en": "Let the market decide",
+  "de": "Den Markt entscheiden lassen"
+ },
+ "augmentation_events.1.c": {
+  "en": "Ban non-medical augmentation",
+  "de": "Nicht-medizinische Augmentierung verbieten"
+ },
+ "augmentation_events.1.d": {
+  "en": "A growing chasm separates the augmented and the natural. Wealthy citizens enhance themselves with cybernetic implants and genetic modifications, while the poor are left behind. Social tensions are rising.",
+  "de": "Eine wachsende Kluft trennt die Augmentierten von den Unveränderten. Wohlhabende Bürger verbessern sich mit kybernetischen Implantaten und genetischen Veränderungen, während die Armen zurückbleiben. Die sozialen Spannungen wachsen."
+ },
+ "augmentation_events.1.d_unlicensed": {
+  "en": "No augmentation has been licensed here yet, but that has not stopped those who can pay. Wealthy citizens return from clinics abroad with cybernetic implants and genetic modifications, while the poor are left behind. A growing chasm separates the augmented and the natural, and social tensions are rising.",
+  "de": "Hier ist bislang keine Augmentierung zugelassen, doch das hat jene nicht aufgehalten, die bezahlen können. Wohlhabende Bürger kehren aus Kliniken im Ausland mit kybernetischen Implantaten und genetischen Veränderungen zurück, während die Armen zurückbleiben. Eine wachsende Kluft trennt die Augmentierten von den Unveränderten, und die sozialen Spannungen wachsen."
+ },
+ "augmentation_events.1.f": {
+  "en": "A man lifted a motorcar with one arm while his neighbour watched from across the street, unaugmented, wondering how long before his own job required the same.",
+  "de": "Ein Mann hob mit einem Arm ein Automobil an, während sein Nachbar von der anderen Straßenseite zusah, unaugmentiert, und sich fragte, wie lange es noch dauern würde, bis sein eigener Job dasselbe verlangte."
+ },
+ "augmentation_events.1.t": {
+  "en": "The Augmentation Divide",
+  "de": "Die Augmentierungskluft"
+ },
+ "augmentation_events.100.a": {
+  "en": "No exceptions: the law is the law",
+  "de": "Keine Ausnahmen: Das Gesetz ist das Gesetz"
+ },
+ "augmentation_events.100.b": {
+  "en": "Exempt those already augmented",
+  "de": "Bereits Augmentierte ausnehmen"
+ },
+ "augmentation_events.100.desc": {
+  "en": "The augmentation debate is over. [ROOT.GetCountry.GetName] has enshrined human purity in law: the unaltered human body is now a principle of state, not merely a matter of regulation. What the law has not settled is the fate of those who are augmented already - accident victims and veterans fitted with implants, citizens enhanced in foreign clinics, the customers of the back-street ones - or of a scientific community already eyeing laboratories abroad. Enforce the law to the letter and the innovators leave; carve out an exemption and the augmented become a class apart, fixed in law.",
+  "de": "Die Debatte um die Augmentierung ist vorbei. [ROOT.GetCountry.GetAltName('NOM')|U] hat die menschliche Reinheit gesetzlich verankert: Der unveränderte menschliche Körper ist nun ein Staatsprinzip, nicht bloß eine Frage der Regulierung. Ungeklärt ist durch das Gesetz das Schicksal jener, die bereits augmentiert sind – Unfallopfer und Veteranen mit Implantaten, Bürger, die in ausländischen Kliniken verbessert wurden, die Kunden der Hinterhofkliniken – sowie einer wissenschaftlichen Gemeinschaft, die bereits nach Laboren im Ausland schielt. Wird das Gesetz buchstabengetreu durchgesetzt, wandern die Innovatoren ab; wird eine Ausnahme geschaffen, werden die Augmentierten zu einer gesetzlich festgeschriebenen eigenen Klasse."
+ },
+ "augmentation_events.100.f": {
+  "en": "The registrar looked at the form, then at the man's left hand.\\n\\n\\\"Date of installation?\\\"\\n\\n\\\"Four years ago. Before the law.\\\"\\n\\n\\\"And you wish to keep it.\\\"\\n\\n\\\"It is my hand. The old one went into a press at the mill. What would you have me do, go back to having none?\\\"\\n\\nThe registrar did not answer. She stamped the form, and then, after a moment, she stamped it again, harder, as if the second stamp might settle a question the first had not.",
+  "de": "Die Sachbearbeiterin sah auf das Formular, dann auf die linke Hand des Mannes.\\n\\n„Datum des Einbaus?“\\n\\n„Vor vier Jahren. Vor dem Gesetz.“\\n\\n„Und Sie möchten sie behalten.“\\n\\n„Es ist meine Hand. Die alte geriet in eine Presse in der Mühle. Was soll ich tun, wieder keine haben?“\\n\\nDie Sachbearbeiterin antwortete nicht. Sie stempelte das Formular, und dann, nach einem Moment, stempelte sie es noch einmal, fester, als könnte der zweite Stempel eine Frage klären, die der erste nicht geklärt hatte."
+ },
+ "augmentation_events.100.t": {
+  "en": "The Purity Laws",
+  "de": "Die Reinheitsgesetze"
+ },
+ "augmentation_events.2.a": {
+  "en": "Crack down on the black market",
+  "de": "Gegen den Schwarzmarkt durchgreifen"
+ },
+ "augmentation_events.2.b": {
+  "en": "Regulate and legalize",
+  "de": "Regulieren und legalisieren"
+ },
+ "augmentation_events.2.c": {
+  "en": "It's their own fault",
+  "de": "Sie sind selbst schuld"
+ },
+ "augmentation_events.2.d": {
+  "en": "A spate of deaths from faulty black market implants has shocked the nation. Underground clinics offer dangerous augmentations to those who cannot afford regulated procedures. Something must be done.",
+  "de": "Eine Welle von Todesfällen durch fehlerhafte Schwarzmarktimplantate hat die Nation erschüttert. Untergrundkliniken bieten gefährliche Augmentierungen für jene an, die sich regulierte Eingriffe nicht leisten können. Es muss etwas geschehen."
+ },
+ "augmentation_events.2.d_unlicensed": {
+  "en": "A spate of deaths from faulty black market implants has shocked the nation. With no augmentation licensed at home, underground clinics sell dangerous procedures to anyone who cannot travel abroad for a safe one. Something must be done.",
+  "de": "Eine Welle von Todesfällen durch fehlerhafte Schwarzmarktimplantate hat die Nation erschüttert. Da im eigenen Land keine Augmentierung zugelassen ist, verkaufen Untergrundkliniken gefährliche Eingriffe an alle, die nicht ins Ausland reisen können, um einen sicheren zu erhalten. Es muss etwas geschehen."
+ },
+ "augmentation_events.2.f": {
+  "en": "\\\"Three this week,\\\" the coroner said. \\\"All young. All poor. All fitted with implants that should never have been sold.\\\"\\n\\n\\\"Same supplier?\\\"\\n\\n\\\"Likely. The wiring on two of them was identical. Cheap solder. Off-the-shelf actuators. Done in a back room by someone who watched a video.\\\"\\n\\n\\\"Are we any closer to the back room?\\\"\\n\\n\\\"We are closer to a hundred back rooms. The one supplier has multiplied. Cheaper, easier to hide.\\\"",
+  "de": "„Drei diese Woche“, sagte der Gerichtsmediziner. „Alle jung. Alle arm. Alle mit Implantaten versehen, die nie hätten verkauft werden dürfen.“\\n\\n„Derselbe Lieferant?“\\n\\n„Wahrscheinlich. Die Verkabelung bei zweien war identisch. Billiges Lötzinn. Aktuatoren von der Stange. Gemacht in einem Hinterzimmer von jemandem, der sich ein Video angesehen hat.“\\n\\n„Sind wir dem Hinterzimmer näher gekommen?“\\n\\n„Wir sind hundert Hinterzimmern näher gekommen. Der eine Lieferant hat sich vervielfacht. Billiger, leichter zu verstecken.“"
+ },
+ "augmentation_events.2.t": {
+  "en": "Black Market Implants",
+  "de": "Schwarzmarktimplantate"
+ },
+ "augmentation_events.200.a": {
+  "en": "The future is already here.",
+  "de": "Die Zukunft ist bereits da."
+ },
+ "augmentation_events.200.d": {
+  "en": "Human augmentation technology has been fully integrated into [ROOT.GetCountry.GetAdjective] society. Once controversial, enhanced capabilities are now widely accepted as the next step in human development.",
+  "de": "Die Technologie der menschlichen Augmentierung ist vollständig in die [ROOT.GetCountry.GetAdjective|l]e Gesellschaft integriert. Einst umstritten, werden erweiterte Fähigkeiten heute weithin als nächster Schritt der menschlichen Entwicklung akzeptiert."
+ },
+ "augmentation_events.200.f": {
+  "en": "\\\"We did not cease to be human,\\\" the philosopher said. \\\"We became more.\\\"\\n\\n\\\"More what?\\\"\\n\\n\\\"More of what we always were. Stronger. Quicker. Longer-lived. The question of whether we are still human is the wrong question. The question is whether we are still the same humans, and the answer is no. We are different humans now. And that is what every generation has always become.\\\"",
+  "de": "„Wir hörten nicht auf, Menschen zu sein“, sagte der Philosoph. „Wir wurden mehr.“\\n\\n„Mehr was?“\\n\\n„Mehr von dem, was wir immer waren. Stärker. Schneller. Langlebiger. Die Frage, ob wir noch Menschen sind, ist die falsche Frage. Die Frage ist, ob wir noch dieselben Menschen sind, und die Antwort lautet: nein. Wir sind jetzt andere Menschen. Und das ist es, was jede Generation immer geworden ist.“"
+ },
+ "augmentation_events.200.t": {
+  "en": "The Augmented Society",
+  "de": "Die augmentierte Gesellschaft"
+ },
+ "augmentation_events.3.a": {
+  "en": "Protect unaugmented workers",
+  "de": "Nicht augmentierte Arbeiter schützen"
+ },
+ "augmentation_events.3.b": {
+  "en": "Let the market decide",
+  "de": "Den Markt entscheiden lassen"
+ },
+ "augmentation_events.3.c": {
+  "en": "Mandate augmentation for competitive industries",
+  "de": "Augmentierung für wettbewerbsfähige Branchen vorschreiben"
+ },
+ "augmentation_events.3.d": {
+  "en": "Employers are quietly replacing unaugmented workers with enhanced employees who can work faster, think sharper, and never tire. Unions are furious, warning of a new underclass of 'naturals' locked out of the economy.",
+  "de": "Arbeitgeber ersetzen stillschweigend nicht augmentierte Arbeiter durch verbesserte Angestellte, die schneller arbeiten, klarer denken und nie ermüden. Die Gewerkschaften sind aufgebracht und warnen vor einer neuen Unterschicht von ‚Natürlichen‘, die von der Wirtschaft ausgeschlossen werden."
+ },
+ "augmentation_events.3.f": {
+  "en": "\\\"The hiring notice read 'enhanced reflexes preferred.'\\\"\\n\\n\\\"And the unaugmented applicants?\\\"\\n\\n\\\"Forty-three of them. None made it past the first screening. The hiring manager did not even bother with the interview slots — the screening rejected them automatically. He told me later that the company's reflex-test cutoff happens to match exactly the threshold no natural human can clear.\\\"",
+  "de": "„In der Stellenanzeige stand: ‚Verbesserte Reflexe bevorzugt.‘“\\n\\n„Und die nicht augmentierten Bewerber?“\\n\\n„Dreiundvierzig davon. Keiner kam über die erste Vorauswahl hinaus. Der Personalchef hat sich nicht einmal die Mühe gemacht, Vorstellungstermine zu vergeben – die Vorauswahl lehnte sie automatisch ab. Er erzählte mir später, dass der Reflextest-Grenzwert des Unternehmens genau der Schwelle entspricht, die kein natürlicher Mensch überwinden kann.“"
+ },
+ "augmentation_events.3.t": {
+  "en": "Workplace Discrimination",
+  "de": "Diskriminierung am Arbeitsplatz"
+ },
+ "augmentation_events.4.a": {
+  "en": "Dismiss religious concerns",
+  "de": "Religiöse Bedenken zurückweisen"
+ },
+ "augmentation_events.4.b": {
+  "en": "Establish an ethics board with religious input",
+  "de": "Einen Ethikrat mit religiöser Beteiligung einrichten"
+ },
+ "augmentation_events.4.c": {
+  "en": "Side with the devout",
+  "de": "Sich auf die Seite der Frommen stellen"
+ },
+ "augmentation_events.4.d": {
+  "en": "The [SCOPE.gsInterestGroup('devout_ig').GetName] have declared human augmentation an affront to divine creation. Religious leaders thunder that humanity is \\\"playing God\\\" and demand restrictions on all enhancement technologies.",
+  "de": "Die [SCOPE.gsInterestGroup('devout_ig').GetName] haben die menschliche Augmentierung zu einer Beleidigung der göttlichen Schöpfung erklärt. Religiöse Führer wettern, die Menschheit „spiele Gott“, und fordern Beschränkungen für sämtliche Verbesserungstechnologien."
+ },
+ "augmentation_events.4.f": {
+  "en": "The archbishop held up a photograph of a chrome-plated hand and asked his congregation a question.\\n\\n\\\"Is this still a child of God?\\\"\\n\\nThe pews were silent for a long moment. A man in the back stood up. He held out his own hand. The hand was chrome-plated, with cables running into the cuff of his shirt.\\n\\n\\\"Father,\\\" he said, \\\"I came here today to ask you the same question.\\\"",
+  "de": "Der Erzbischof hielt eine Fotografie einer verchromten Hand hoch und stellte seiner Gemeinde eine Frage.\\n\\n„Ist dies noch ein Kind Gottes?“\\n\\nDie Kirchenbänke schwiegen einen langen Moment. Ein Mann in der letzten Reihe erhob sich. Er streckte seine eigene Hand aus. Die Hand war verchromt, mit Kabeln, die in die Manschette seines Hemdes liefen.\\n\\n„Vater“, sagte er, „ich bin heute hierhergekommen, um Ihnen dieselbe Frage zu stellen.“"
+ },
+ "augmentation_events.4.t": {
+  "en": "Religious Condemnation",
+  "de": "Religiöse Verurteilung"
+ },
+ "augmentation_events.5.a": {
+  "en": "Augment the police force to match",
+  "de": "Die Polizei entsprechend augmentieren"
+ },
+ "augmentation_events.5.b": {
+  "en": "Implement implant kill-switches",
+  "de": "Implantat-Notschalter einführen"
+ },
+ "augmentation_events.5.c": {
+  "en": "Use as justification to ban augmentation",
+  "de": "Als Rechtfertigung nutzen, Augmentierung zu verbieten"
+ },
+ "augmentation_events.5.d": {
+  "en": "A wave of crimes committed by augmented individuals has overwhelmed law enforcement. Enhanced strength, built-in hacking tools, and sensory augmentations have given criminals capabilities that traditional policing cannot match.",
+  "de": "Eine Welle von Verbrechen, begangen von augmentierten Personen, hat die Strafverfolgung überfordert. Verstärkte Kraft, eingebaute Hacking-Werkzeuge und sensorische Augmentierungen haben Kriminellen Fähigkeiten verliehen, denen traditionelle Polizeiarbeit nicht gewachsen ist."
+ },
+ "augmentation_events.5.f": {
+  "en": "The suspect vaulted a three-metre wall without breaking stride. His legs had been replaced six months ago. The officers pursuing him had not.\\n\\n\\\"How many of these now?\\\" the inspector asked at the morning briefing.\\n\\n\\\"This is the seventh suspect this month we have lost over a wall.\\\"\\n\\n\\\"And the budget for augmentation?\\\"\\n\\n\\\"The budget has been pending for two years. The criminals do not wait for the budget.\\\"",
+  "de": "Der Verdächtige sprang über eine drei Meter hohe Mauer, ohne seinen Schritt zu verlangsamen. Seine Beine waren vor sechs Monaten ersetzt worden. Die ihn verfolgenden Beamten hatten das nicht.\\n\\n„Wie viele sind das jetzt?“, fragte der Inspektor bei der morgendlichen Lagebesprechung.\\n\\n„Das ist der siebte Verdächtige diesen Monat, den wir über eine Mauer verloren haben.“\\n\\n„Und das Budget für Augmentierung?“\\n\\n„Das Budget liegt seit zwei Jahren auf Eis. Die Verbrecher warten nicht auf das Budget.“"
+ },
+ "augmentation_events.5.t": {
+  "en": "Augmented Crime Wave",
+  "de": "Augmentierte Verbrechenswelle"
+ },
+ "banking_cycle_events.1.a": {
+  "en": "Let the market ride!",
+  "de": "Den Markt laufen lassen!"
+ },
+ "banking_cycle_events.1.b": {
+  "en": "Issue a regulatory warning",
+  "de": "Eine aufsichtsrechtliche Warnung aussprechen"
+ },
+ "banking_cycle_events.1.c": {
+  "en": "Impose emergency lending restrictions",
+  "de": "Kreditbeschränkungen im Notfall verhängen"
+ },
+ "banking_cycle_events.1.d": {
+  "en": "Reports are flooding in from every trading floor and financial institution: a wave of speculative fervor has gripped the markets. New ventures are attracting staggering sums, share prices climb daily, and fortunes are being made - at least on paper. Our central bankers are divided on whether this exuberance reflects genuine economic strength or a dangerous delusion.",
+  "de": "Berichte strömen von jedem Handelsparkett und jedem Finanzinstitut herein: Eine Welle spekulativen Fiebers hat die Märkte erfasst. Neue Unternehmungen ziehen schwindelerregende Summen an, die Aktienkurse steigen täglich, und Vermögen werden gemacht – zumindest auf dem Papier. Unsere Zentralbanker sind sich uneinig, ob dieser Überschwang echte wirtschaftliche Stärke widerspiegelt oder eine gefährliche Täuschung ist."
+ },
+ "banking_cycle_events.1.f": {
+  "en": "\\\"I put in five hundred on Monday. By Thursday it was twelve hundred. I've never seen anything like it.\\\"\\n\\n\\\"You haven't seen anything yet, friend. My broker says this is just the beginning.\\\"\\n\\n\\\"That's what they said about the last one, too.\\\"",
+  "de": "„Ich habe am Montag fünfhundert investiert. Am Donnerstag waren es zwölfhundert. So etwas habe ich noch nie gesehen.“\\n\\n„Du hast noch gar nichts gesehen, mein Freund. Mein Makler sagt, das ist erst der Anfang.“\\n\\n„Das hat man beim letzten Mal auch gesagt.“"
+ },
+ "banking_cycle_events.1.t": {
+  "en": "Speculative Mania",
+  "de": "Spekulationswahn"
+ },
+ "banking_cycle_events.10.a": {
+  "en": "Announce austerity measures",
+  "de": "Sparmaßnahmen ankündigen"
+ },
+ "banking_cycle_events.10.b": {
+  "en": "Reassure markets with central bank intervention",
+  "de": "Die Märkte mit einer Intervention der Zentralbank beruhigen"
+ },
+ "banking_cycle_events.10.c": {
+  "en": "Threaten a partial default",
+  "de": "Mit einem teilweisen Zahlungsausfall drohen"
+ },
+ "banking_cycle_events.10.c.tt": {
+  "en": "No payment is actually missed, and the debt stands in full. The markets price the threat instead: speculation drains out of the banks, bondholders turn on the government, and lenders charge more for years.",
+  "de": "Tatsächlich wird keine Zahlung versäumt, und die Schulden bleiben in voller Höhe bestehen. Stattdessen preisen die Märkte die Drohung ein: Spekulationskapital fließt aus den Banken ab, Anleihegläubiger wenden sich gegen die Regierung, und Kreditgeber verlangen über Jahre hinweg höhere Zinsen."
+ },
+ "banking_cycle_events.10.d": {
+  "en": "The bond market has turned hostile. Yields on government debt are climbing sharply as investors demand ever-higher premiums to hold our [Concept('concept_obligation', 'obligations')]. Rumors of imminent default are spreading, and the cost of servicing the national debt is consuming an alarming share of revenue. Without decisive action, the country risks losing access to credit markets entirely.",
+  "de": "Der Anleihemarkt ist uns feindlich gesinnt. Die Renditen auf Staatsschulden steigen stark an, da Investoren immer höhere Aufschläge verlangen, um unsere [Concept('concept_obligation', 'Verpflichtungen')] zu halten. Gerüchte über einen bevorstehenden Zahlungsausfall verbreiten sich, und die Kosten für den Schuldendienst verschlingen einen alarmierenden Anteil der Staatseinnahmen. Ohne entschlossenes Handeln riskiert das Land, den Zugang zu den Kreditmärkten vollständig zu verlieren."
+ },
+ "banking_cycle_events.10.f": {
+  "en": "\\\"The Treasury Secretary looked pale when he presented the figures. 'At current rates,' he said, 'we will be spending more on interest than on the army within eighteen months.'\\\"\\n\\n\\\"And if we can't borrow?\\\"\\n\\n\\\"Then we can't govern.\\\"",
+  "de": "„Der Finanzminister sah blass aus, als er die Zahlen vorlegte. ‚Beim aktuellen Zinssatz‘, sagte er, ‚werden wir innerhalb von achtzehn Monaten mehr für Zinsen ausgeben als für das Militär.‘“\\n\\n„Und wenn wir uns kein Geld mehr leihen können?“\\n\\n„Dann können wir nicht mehr regieren.“"
+ },
+ "banking_cycle_events.10.t": {
+  "en": "Sovereign Debt Scare",
+  "de": "Staatsschuldenpanik"
+ },
+ "banking_cycle_events.101.a": {
+  "en": "Maintain the Directive",
+  "de": "Die Direktive beibehalten"
+ },
+ "banking_cycle_events.101.b": {
+  "en": "Issue a Corrective Addendum",
+  "de": "Einen Korrekturnachtrag erlassen"
+ },
+ "banking_cycle_events.101.c": {
+  "en": "Suspend and Enforce Production Ceilings",
+  "de": "Aussetzen und Produktionsobergrenzen durchsetzen"
+ },
+ "banking_cycle_events.101.d": {
+  "en": "Central planning authorities have issued a surge of new production directives that exceed the logistical capacity of the transport network. Coal shipments are arriving at the wrong depots, machine-tool allocations cross in transit, and three separate ministries have ordered the same factory to simultaneously serve different sectors. The pressure manifests not as panic in the markets but as invisible friction building deep within the supply chain.",
+  "de": "Die zentralen Planungsbehörden haben eine Flut neuer Produktionsdirektiven erlassen, die die logistische Kapazität des Transportnetzes übersteigen. Kohlelieferungen treffen an den falschen Depots ein, Zuteilungen von Werkzeugmaschinen kreuzen sich unterwegs, und drei verschiedene Ministerien haben derselben Fabrik befohlen, gleichzeitig unterschiedliche Sektoren zu beliefern. Der Druck äußert sich nicht als Panik an den Märkten, sondern als unsichtbare Reibung, die sich tief in der Lieferkette aufbaut."
+ },
+ "banking_cycle_events.101.f": {
+  "en": "\\\"The trains have three different manifests and none of them have the same cargo.\\\"\\n\\n\\\"Then they must have been written by three different bureaus.\\\"\\n\\n\\\"Three. And each is willing to swear under oath that theirs is the correct one.\\\"\\n\\n\\\"What did the cargo actually contain?\\\"\\n\\n\\\"Cement. Bound for a factory that was demolished in nineteen-thirty-eight.\\\"",
+  "de": "„Die Züge haben drei verschiedene Frachtlisten, und keine davon stimmt mit der Ladung überein.“\\n\\n„Dann müssen sie von drei verschiedenen Ämtern verfasst worden sein.“\\n\\n„Drei. Und jedes ist bereit, unter Eid zu schwören, dass ihre die richtige ist.“\\n\\n„Was enthielt die Ladung tatsächlich?“\\n\\n„Zement. Bestimmt für eine Fabrik, die neunzehnhundertachtunddreißig abgerissen wurde.“"
+ },
+ "banking_cycle_events.101.t": {
+  "en": "Overextended Production Directive",
+  "de": "Überdehnte Produktionsdirektive"
+ },
+ "banking_cycle_events.104.a": {
+  "en": "Full Emergency Reorganisation",
+  "de": "Vollständige Notfallreorganisation"
+ },
+ "banking_cycle_events.104.b": {
+  "en": "Emergency Stockpile Release",
+  "de": "Notfallfreigabe der Lagerbestände"
+ },
+ "banking_cycle_events.104.c": {
+  "en": "Priority Sector Triage",
+  "de": "Triage der vorrangigen Sektoren"
+ },
+ "banking_cycle_events.104.d": {
+  "en": "A key industrial hub — a coal depot, a rail switching yard, a tool-making facility — has failed, and its absence is rippling outward through the entire planned network. Factories in three sectors have idled their lines awaiting inputs that will not arrive. This is not a crisis of confidence but of logistics: the plan's interdependencies have produced a cascade that no single ministry can contain alone.",
+  "de": "Ein zentraler Industrieknotenpunkt – ein Kohledepot, ein Rangierbahnhof, ein Werkzeugbaubetrieb – ist ausgefallen, und sein Fehlen breitet sich durch das gesamte Plannetzwerk aus. Fabriken in drei Sektoren haben ihre Fertigungslinien stillgelegt und warten auf Vorprodukte, die nicht eintreffen werden. Dies ist keine Vertrauenskrise, sondern eine Logistikkrise: Die Verflechtungen des Plans haben eine Kaskade ausgelöst, die kein einzelnes Ministerium allein eindämmen kann."
+ },
+ "banking_cycle_events.104.f": {
+  "en": "\\\"The coal depot outside the city is empty. The locomotives sit idle.\\\"\\n\\n\\\"Then find another depot. There are eight. Why are they all empty?\\\"\\n\\n\\\"Because the foreman of the second was promised coal by the foreman of the third, who was waiting for the seventh, which was supposed to be filled by the first.\\\"\\n\\n\\\"And the first?\\\"\\n\\n\\\"Empty since Wednesday.\\\"",
+  "de": "„Das Kohledepot vor der Stadt ist leer. Die Lokomotiven stehen still.“\\n\\n„Dann findet ein anderes Depot. Es gibt acht. Warum sind sie alle leer?“\\n\\n„Weil dem Vorarbeiter des zweiten Kohle vom Vorarbeiter des dritten versprochen wurde, der auf das siebte wartete, das vom ersten befüllt werden sollte.“\\n\\n„Und das erste?“\\n\\n„Leer seit Mittwoch.“"
+ },
+ "banking_cycle_events.104.t": {
+  "en": "Critical Input Cascade Failure",
+  "de": "Kaskadenausfall kritischer Vorprodukte"
+ },
+ "banking_cycle_events.106.a": {
+  "en": "Issue Emergency Agricultural Production Credit",
+  "de": "Landwirtschaftlichen Notfallkredit gewähren"
+ },
+ "banking_cycle_events.106.b": {
+  "en": "Accept the Shortfall and Adjust Quotas",
+  "de": "Den Fehlbetrag hinnehmen und Quoten anpassen"
+ },
+ "banking_cycle_events.106.c": {
+  "en": "Import Grain and Reallocate Resources",
+  "de": "Getreide importieren und Ressourcen umverteilen"
+ },
+ "banking_cycle_events.106.d": {
+  "en": "Harvest returns are falling well below plan quotas for the season. The problem is not crop failure but logistics: transport allocation orders were misfiled, regional distribution plans were miscoordinated, and urban granaries show surpluses while rural depots run empty. Planners now face the question of whether to extend emergency production credit, accept the shortfall, or source abroad to cover the gap.",
+  "de": "Die Ernteerträge bleiben für diese Saison deutlich unter den Planquoten. Das Problem ist kein Ernteausfall, sondern die Logistik: Transportzuteilungen wurden falsch abgelegt, regionale Verteilungspläne wurden schlecht koordiniert, und während städtische Kornspeicher Überschüsse zeigen, laufen ländliche Depots leer. Die Planer stehen nun vor der Frage, ob sie einen Notfallproduktionskredit gewähren, den Fehlbetrag hinnehmen oder das Defizit durch Importe aus dem Ausland decken sollen."
+ },
+ "banking_cycle_events.106.f": {
+  "en": "\\\"The wagons are returning with straw and not grain.\\\"\\n\\n\\\"Who sent the wrong manifest?\\\"\\n\\n\\\"Nobody. The granary requisition was filed by the central allocator. The wagon allocation was filed by the regional dispatcher. Neither of them mentioned the harvest schedule, because nobody asked them to.\\\"\\n\\n\\\"Then we will starve through paperwork.\\\"",
+  "de": "„Die Waggons kommen mit Stroh zurück, nicht mit Getreide.“\\n\\n„Wer hat die falsche Frachtliste geschickt?“\\n\\n„Niemand. Die Kornspeicheranforderung wurde vom zentralen Zuteiler eingereicht. Die Waggonzuteilung wurde vom regionalen Disponenten eingereicht. Keiner von beiden erwähnte den Ernteplan, weil niemand sie danach gefragt hat.“\\n\\n„Dann werden wir an Papierkram verhungern.“"
+ },
+ "banking_cycle_events.106.t": {
+  "en": "Agricultural Quota Shortfall",
+  "de": "Fehlbetrag der landwirtschaftlichen Quote"
+ },
+ "banking_cycle_events.11.a": {
+  "en": "Let the sector self-correct",
+  "de": "Den Sektor sich selbst korrigieren lassen"
+ },
+ "banking_cycle_events.11.b": {
+  "en": "Force insurers to increase reserves",
+  "de": "Versicherer zur Erhöhung der Rücklagen zwingen"
+ },
+ "banking_cycle_events.11.c": {
+  "en": "Government backstop for critical policies",
+  "de": "Staatliche Absicherung für kritische Policen"
+ },
+ "banking_cycle_events.11.d": {
+  "en": "Several major insurance companies have overextended their guarantees, writing policies against risks they cannot possibly cover if called upon simultaneously. A single large disaster - a factory fire, a shipping loss, a crop failure - could trigger a cascade of claims that would bankrupt the insurers and leave thousands of policyholders unprotected.",
+  "de": "Mehrere große Versicherungsgesellschaften haben ihre Garantien überdehnt und Policen gegen Risiken ausgestellt, die sie unmöglich decken könnten, würden sie gleichzeitig in Anspruch genommen. Eine einzige große Katastrophe – ein Fabrikbrand, ein Schiffsverlust, ein Ernteausfall – könnte eine Kaskade von Forderungen auslösen, die die Versicherer in den Bankrott treiben und Tausende Versicherungsnehmer ungeschützt zurücklassen würde."
+ },
+ "banking_cycle_events.11.f": {
+  "en": "\\\"The insurance men assured me my factory was fully covered.\\\"\\n\\n\\\"And is it?\\\"\\n\\n\\\"On paper. But the company that wrote the policy has been writing similar ones for half the factories in the district. If mine burns down, they'll pay. If two burn down, they'll struggle. If three burn down, they simply won't exist.\\\"",
+  "de": "„Die Versicherungsleute haben mir versichert, meine Fabrik sei vollständig abgedeckt.“\\n\\n„Und ist sie das?“\\n\\n„Auf dem Papier. Aber die Gesellschaft, die die Police ausgestellt hat, hat ähnliche Policen für die Hälfte der Fabriken im Bezirk ausgestellt. Brennt meine ab, zahlen sie. Brennen zwei ab, geraten sie in Schwierigkeiten. Brennen drei ab, gibt es sie schlicht nicht mehr.“"
+ },
+ "banking_cycle_events.11.t": {
+  "en": "Insurance Sector Wobble",
+  "de": "Erschütterung im Versicherungssektor"
+ },
+ "banking_cycle_events.110.a": {
+  "en": "Impose Austerity on Lower-Priority Sectors",
+  "de": "Sparmaßnahmen für nachrangige Sektoren verhängen"
+ },
+ "banking_cycle_events.110.b": {
+  "en": "Seek Emergency External Financing",
+  "de": "Externe Notfallfinanzierung suchen"
+ },
+ "banking_cycle_events.110.c": {
+  "en": "Formally Cancel Some Plan Commitments",
+  "de": "Einige Planverpflichtungen offiziell aufheben"
+ },
+ "banking_cycle_events.110.d": {
+  "en": "The national planning reserve — maintained to service procurement commitments and smooth supply disruptions — is running dangerously low. The cause is not speculation or bond-market panic, but an accumulation of logistics shortfalls, underperforming export sectors, and overcommitted five-year targets. Unless addressed, essential procurement guarantees will begin to lapse and critical suppliers will stop accepting plan-backed orders.",
+  "de": "Die nationale Planreserve – vorgehalten, um Beschaffungsverpflichtungen zu bedienen und Versorgungsstörungen abzufedern – geht gefährlich zur Neige. Die Ursache ist keine Spekulation oder Panik am Anleihemarkt, sondern eine Anhäufung logistischer Engpässe, unterdurchschnittlich leistender Exportsektoren und überzogener Fünfjahresziele. Wird nicht gegengesteuert, werden wesentliche Beschaffungsgarantien zu erlöschen beginnen, und kritische Zulieferer werden aufhören, durch den Plan gedeckte Bestellungen anzunehmen."
+ },
+ "banking_cycle_events.110.f": {
+  "en": "\\\"Our five-year plan assumed steady grain shipments and an export surplus. Without them, the Treasury's ledger looks very different.\\\"\\n\\n\\\"Then someone must revise the plan.\\\"\\n\\n\\\"Someone has been revising the plan for eighteen months. Each revision is a small concession. Together they are an entirely different document.\\\"\\n\\n\\\"And nobody has noticed?\\\"\\n\\n\\\"Nobody has been willing to add them up.\\\"",
+  "de": "„Unser Fünfjahresplan ging von stetigen Getreidelieferungen und einem Exportüberschuss aus. Ohne sie sieht das Rechnungsbuch der Staatskasse ganz anders aus.“\\n\\n„Dann muss jemand den Plan überarbeiten.“\\n\\n„Jemand überarbeitet den Plan schon seit achtzehn Monaten. Jede Überarbeitung ist ein kleines Zugeständnis. Zusammengenommen sind sie ein völlig anderes Dokument.“\\n\\n„Und niemandem ist das aufgefallen?“\\n\\n„Niemand war bereit, sie zusammenzuzählen.“"
+ },
+ "banking_cycle_events.110.t": {
+  "en": "Plan Reserve Fund Depletion",
+  "de": "Erschöpfung der Planreserve"
+ },
+ "banking_cycle_events.115.a": {
+  "en": "Defend Hard Currency Allocations",
+  "de": "Devisenzuteilungen verteidigen"
+ },
+ "banking_cycle_events.115.b": {
+  "en": "Impose Strict Import Licensing",
+  "de": "Strenge Importlizenzierung einführen"
+ },
+ "banking_cycle_events.115.c": {
+  "en": "Permit Production Disruption and Rebalance",
+  "de": "Produktionsstörungen zulassen und neu ausbalancieren"
+ },
+ "banking_cycle_events.115.d": {
+  "en": "The national allocation of foreign exchange has been exhausted months ahead of schedule. Industries that depend on imported components — machine tools, chemical feedstocks, precision instruments — are facing imminent supply collapse. The central planning authority must decide how to allocate the remaining reserves: defend current production at the cost of future flexibility, restrict imports to critical sectors only, or accept that some production targets simply cannot be met this cycle.",
+  "de": "Die nationale Devisenzuteilung ist Monate früher als geplant erschöpft. Branchen, die von importierten Komponenten abhängen – Werkzeugmaschinen, chemische Grundstoffe, Präzisionsinstrumente – stehen vor einem drohenden Versorgungskollaps. Die zentrale Planungsbehörde muss entscheiden, wie die verbleibenden Reserven zugeteilt werden: die laufende Produktion auf Kosten künftiger Flexibilität verteidigen, Importe auf kritische Sektoren beschränken, oder hinnehmen, dass manche Produktionsziele in diesem Zyklus schlicht nicht erreicht werden können."
+ },
+ "banking_cycle_events.115.f": {
+  "en": "\\\"We have no foreign currency left to import coal. Without coal, the turbines stop.\\\"\\n\\n\\\"Then the turbines stop.\\\"\\n\\n\\\"And the factories that draw their power from those turbines stop. And the rail lines that move the output of those factories stop. And the export earnings that buy the next month's coal stop.\\\"\\n\\n\\\"Then the turbines stop sooner.\\\"",
+  "de": "„Wir haben keine Devisen mehr, um Kohle zu importieren. Ohne Kohle stehen die Turbinen still.“\\n\\n„Dann stehen die Turbinen still.“\\n\\n„Und die Fabriken, die ihren Strom von diesen Turbinen beziehen, stehen still. Und die Eisenbahnlinien, die die Erzeugnisse dieser Fabriken transportieren, stehen still. Und die Exporteinnahmen, die die Kohle des nächsten Monats bezahlen, bleiben aus.“\\n\\n„Dann stehen die Turbinen eben früher still.“"
+ },
+ "banking_cycle_events.115.t": {
+  "en": "Foreign Exchange Allocation Collapse",
+  "de": "Zusammenbruch der Devisenzuteilung"
+ },
+ "banking_cycle_events.116.a": {
+  "en": "Back the Planning Bureau Technocrats",
+  "de": "Die Technokraten des Planungsbüros unterstützen"
+ },
+ "banking_cycle_events.116.b": {
+  "en": "Side with the Secretariat",
+  "de": "Sich auf die Seite des Sekretariats stellen"
+ },
+ "banking_cycle_events.116.c": {
+  "en": "Form a Joint Bureau-Secretariat Review Committee",
+  "de": "Einen gemeinsamen Prüfausschuss von Büro und Sekretariat bilden"
+ },
+ "banking_cycle_events.116.d": {
+  "en": "A public dispute has broken out between senior planning-bureau economists and the secretariat over the direction of monetary and financial allocations. The technocrats argue that current plan parameters must be respected to maintain credibility with foreign trading partners and domestic industrial coordinators; the secretariat argues that political priorities — employment targets, popular consumption — must take precedence over bureaucratic rigidity. The resolution will define how planning decisions are made for the next several years.",
+  "de": "Zwischen führenden Ökonomen des Planungsbüros und dem Sekretariat ist ein öffentlicher Streit über die Ausrichtung der geld- und finanzpolitischen Zuteilungen ausgebrochen. Die Technokraten argumentieren, die aktuellen Planvorgaben müssten eingehalten werden, um die Glaubwürdigkeit bei ausländischen Handelspartnern und heimischen Industriekoordinatoren zu wahren; das Sekretariat argumentiert, politische Prioritäten – Beschäftigungsziele, Massenkonsum – müssten Vorrang vor bürokratischer Starrheit haben. Die Lösung wird bestimmen, wie Planungsentscheidungen in den nächsten Jahren getroffen werden."
+ },
+ "banking_cycle_events.116.f": {
+  "en": "\\\"Should the monetary office bow to ministers or stick to its technical remit?\\\"\\n\\n\\\"The answer defines how the plan is run.\\\"\\n\\n\\\"The technocrats have credibility with our trading partners. The secretariat has authority with our workers.\\\"\\n\\n\\\"Then we must lose one to keep the other.\\\"\\n\\n\\\"Or we find a way to convince the workers that credibility with foreign partners is what feeds them next winter. That is the harder fight.\\\"",
+  "de": "„Soll sich das Währungsamt den Ministern beugen oder bei seinem technischen Auftrag bleiben?“\\n\\n„Die Antwort bestimmt, wie der Plan geführt wird.“\\n\\n„Die Technokraten genießen Glaubwürdigkeit bei unseren Handelspartnern. Das Sekretariat besitzt Autorität bei unseren Arbeitern.“\\n\\n„Dann müssen wir das eine verlieren, um das andere zu behalten.“\\n\\n„Oder wir finden einen Weg, die Arbeiter davon zu überzeugen, dass Glaubwürdigkeit bei ausländischen Partnern es ist, was sie im nächsten Winter ernährt. Das ist der schwerere Kampf.“"
+ },
+ "banking_cycle_events.116.t": {
+  "en": "The Bureau and the Secretariat",
+  "de": "Das Büro und das Sekretariat"
+ },
+ "banking_cycle_events.117.a": {
+  "en": "Tolerate the Informal Economy",
+  "de": "Die informelle Wirtschaft dulden"
+ },
+ "banking_cycle_events.117.b": {
+  "en": "Formalise and Regulate It",
+  "de": "Formalisieren und regulieren"
+ },
+ "banking_cycle_events.117.c": {
+  "en": "Suppress the Informal Economy",
+  "de": "Die informelle Wirtschaft unterdrücken"
+ },
+ "banking_cycle_events.117.d": {
+  "en": "An informal economy of artisan workshops, private household production, and semi-legal exchange networks has been flourishing alongside the official plan. These informal exchange networks fill supply gaps the plan cannot reach — consumer goods, small repairs, personal services — but they also divert labor and materials from official targets. Planning authorities are divided between tolerating them as a useful safety valve, formalising and taxing them, or cracking down in the name of plan discipline.",
+  "de": "Neben dem offiziellen Plan blüht eine informelle Wirtschaft aus Handwerksbetrieben, privater Haushaltsproduktion und halblegalen Tauschnetzwerken. Diese informellen Tauschnetzwerke schließen Versorgungslücken, die der Plan nicht erreicht – Konsumgüter, kleine Reparaturen, persönliche Dienstleistungen –, lenken aber auch Arbeitskraft und Material von den offiziellen Zielen ab. Die Planungsbehörden sind sich uneinig, ob sie diese als nützliches Sicherheitsventil dulden, sie formalisieren und besteuern oder im Namen der Plandisziplin dagegen vorgehen sollen."
+ },
+ "banking_cycle_events.117.f": {
+  "en": "\\\"They've authorised more vouchers for home goods. The factory can't keep up with spares.\\\"\\n\\n\\\"The unofficial markets fill the gap. Why does that bother you?\\\"\\n\\n\\\"Because the spares the unofficial markets sell are stolen from the factory. The voucher orders the spares we can't produce because our parts are walking out the back door.\\\"\\n\\n\\\"Then the cure is making more spares, not closing the markets.\\\"\\n\\n\\\"That is also possible. Yes.\\\"",
+  "de": "„Sie haben mehr Gutscheine für Haushaltswaren genehmigt. Die Fabrik kommt mit den Ersatzteilen nicht hinterher.“\\n\\n„Die inoffiziellen Märkte schließen die Lücke. Warum stört Sie das?“\\n\\n„Weil die Ersatzteile, die die inoffiziellen Märkte verkaufen, aus der Fabrik gestohlen sind. Der Gutschein bestellt die Ersatzteile, die wir nicht herstellen können, weil unsere Teile zur Hintertür hinausspazieren.“\\n\\n„Dann besteht die Lösung darin, mehr Ersatzteile herzustellen, nicht darin, die Märkte zu schließen.“\\n\\n„Das ist auch möglich. Ja.“"
+ },
+ "banking_cycle_events.117.t": {
+  "en": "Unofficial Artisan Market Emergence",
+  "de": "Entstehung inoffizieller Handwerksmärkte"
+ },
+ "banking_cycle_events.120.a": {
+  "en": "Expose and Prosecute the Entire Network",
+  "de": "Das gesamte Netzwerk aufdecken und strafrechtlich verfolgen"
+ },
+ "banking_cycle_events.120.b": {
+  "en": "Tacitly Accept the Allocation Gaps",
+  "de": "Die Zuteilungslücken stillschweigend hinnehmen"
+ },
+ "banking_cycle_events.120.c": {
+  "en": "Quietly Regularise Through New Regulations",
+  "de": "Still und leise durch neue Vorschriften legalisieren"
+ },
+ "banking_cycle_events.120.d": {
+  "en": "Internal security has uncovered an extensive parallel network of informal allocation intermediaries: factory managers, transport officials, and procurement clerks who have been quietly rerouting plan-allocated resources through unofficial channels. Those involved describe it as filling the gaps the plan leaves behind. Critics see it as systematic corruption that undermines the integrity of central planning and creates hidden systemic risks that appear in no official ledger.",
+  "de": "Der Inlandssicherheitsdienst hat ein ausgedehntes Parallelnetzwerk informeller Zuteilungsvermittler aufgedeckt: Fabrikleiter, Transportbeamte und Beschaffungssachbearbeiter, die planzugeteilte Ressourcen still und leise über inoffizielle Kanäle umgeleitet haben. Die Beteiligten beschreiben es als das Schließen der Lücken, die der Plan hinterlässt. Kritiker sehen darin systematische Korruption, die die Integrität der Zentralplanung untergräbt und verborgene systemische Risiken schafft, die in keinem offiziellen Rechnungsbuch auftauchen."
+ },
+ "banking_cycle_events.120.f": {
+  "en": "\\\"They call it 'the parallel supply line.' But it is the plan itself that failed to reach these depots.\\\"\\n\\n\\\"Accountability begins with an audit. Start there.\\\"\\n\\n\\\"And after the audit?\\\"\\n\\n\\\"After the audit, we will discover that the parallel supply line is moving more material than the official one, and was the only reason this region's factories met quota at all.\\\"\\n\\n\\\"Then we audit quietly.\\\"",
+  "de": "„Sie nennen es ‚die parallele Versorgungslinie‘. Aber es ist der Plan selbst, der diese Depots nicht erreicht hat.“\\n\\n„Verantwortlichkeit beginnt mit einer Prüfung. Fangen wir dort an.“\\n\\n„Und nach der Prüfung?“\\n\\n„Nach der Prüfung werden wir feststellen, dass die parallele Versorgungslinie mehr Material bewegt als die offizielle, und dass sie der einzige Grund war, warum die Fabriken dieser Region überhaupt die Quote erfüllt haben.“\\n\\n„Dann prüfen wir leise.“"
+ },
+ "banking_cycle_events.120.t": {
+  "en": "Parallel Allocation Network Uncovered",
+  "de": "Paralleles Zuteilungsnetzwerk aufgedeckt"
+ },
+ "banking_cycle_events.13.a": {
+  "en": "The market will sort it out",
+  "de": "Der Markt wird das schon regeln"
+ },
+ "banking_cycle_events.13.b": {
+  "en": "Redirect credit toward consumption sectors",
+  "de": "Kredite in Richtung Konsumsektoren umlenken"
+ },
+ "banking_cycle_events.13.c": {
+  "en": "Order a halt to new factory loans",
+  "de": "Neue Fabrikkredite stoppen lassen"
+ },
+ "banking_cycle_events.13.d": {
+  "en": "The industrial sector has been building capacity far beyond what current demand can absorb. Warehouses overflow with unsold goods, new factories sit idle weeks after opening, and companies that expanded aggressively on borrowed money are now struggling to service their debts. The overinvestment threatens to turn a boom into a bust if credit suddenly tightens.",
+  "de": "Der Industriesektor hat Kapazitäten weit über das hinaus aufgebaut, was die aktuelle Nachfrage aufnehmen kann. Lagerhäuser quellen über von unverkaufter Ware, neue Fabriken stehen Wochen nach ihrer Eröffnung still, und Unternehmen, die aggressiv auf Pump expandiert haben, tun sich nun schwer, ihre Schulden zu bedienen. Die Überinvestition droht einen Boom in einen Absturz zu verwandeln, sollte sich die Kreditvergabe plötzlich verschärfen."
+ },
+ "banking_cycle_events.13.f": {
+  "en": "\\\"We built the largest cotton mill in the country. It was going to make us rich.\\\"\\n\\n\\\"And?\\\"\\n\\n\\\"And we can't sell a single bale. There are four other mills just like it, all built in the same year, all competing for the same customers, all losing money.\\\"",
+  "de": "„Wir haben die größte Baumwollspinnerei des Landes gebaut. Sie sollte uns reich machen.“\\n\\n„Und?“\\n\\n„Und wir können nicht einen einzigen Ballen verkaufen. Es gibt vier weitere Spinnereien genau wie diese, alle im selben Jahr gebaut, alle im Wettbewerb um dieselben Kunden, alle mit Verlust.“"
+ },
+ "banking_cycle_events.13.t": {
+  "en": "Industrial Overinvestment",
+  "de": "Industrielle Überinvestition"
+ },
+ "banking_cycle_events.14.a": {
+  "en": "Easy credit for homeowners!",
+  "de": "Leichte Kredite für Hausbesitzer!"
+ },
+ "banking_cycle_events.14.b": {
+  "en": "Impose lending standards",
+  "de": "Kreditvergabestandards einführen"
+ },
+ "banking_cycle_events.14.c": {
+  "en": "Cap mortgage lending entirely",
+  "de": "Hypothekenkredite vollständig deckeln"
+ },
+ "banking_cycle_events.14.d": {
+  "en": "Property prices are soaring as banks compete to offer ever-more generous mortgage terms. Families that could never before afford property are now borrowing aggressively, convinced that prices will only go up. The construction sector is booming, but the mountain of mortgage debt is growing faster than the incomes that must service it.",
+  "de": "Die Immobilienpreise schießen in die Höhe, während die Banken im Wettbewerb um immer großzügigere Hypothekenbedingungen stehen. Familien, die sich früher niemals Eigentum hätten leisten können, verschulden sich nun aggressiv, überzeugt, dass die Preise nur steigen können. Der Bausektor boomt, doch der Berg an Hypothekenschulden wächst schneller als die Einkommen, die ihn bedienen müssen."
+ },
+ "banking_cycle_events.14.f": {
+  "en": "\\\"My neighbor bought his house for two thousand. That was three years ago. It's worth six thousand now.\\\"\\n\\n\\\"How do you know it's worth six thousand?\\\"\\n\\n\\\"Because that's what the bank will lend against it.\\\"\\n\\n\\\"And how does the bank know?\\\"\\n\\n\\\"Because that's what my neighbor's house is worth.\\\"",
+  "de": "„Mein Nachbar hat sein Haus für zweitausend gekauft. Das war vor drei Jahren. Heute ist es sechstausend wert.“\\n\\n„Woher weißt du, dass es sechstausend wert ist?“\\n\\n„Weil die Bank so viel dagegen verleiht.“\\n\\n„Und woher weiß die Bank das?“\\n\\n„Weil das der Wert des Hauses meines Nachbarn ist.“"
+ },
+ "banking_cycle_events.14.t": {
+  "en": "Housing Price Spiral",
+  "de": "Immobilienpreisspirale"
+ },
+ "banking_cycle_events.15.a": {
+  "en": "Burn reserves to defend the currency",
+  "de": "Reserven verbrennen, um die Währung zu verteidigen"
+ },
+ "banking_cycle_events.15.b": {
+  "en": "Impose emergency capital controls",
+  "de": "Kapitalverkehrskontrollen im Notfall verhängen"
+ },
+ "banking_cycle_events.15.c": {
+  "en": "Let the currency float",
+  "de": "Die Währung freigeben"
+ },
+ "banking_cycle_events.15.d": {
+  "en": "The foreign exchange markets have turned against us. Speculators are selling our currency in massive volumes, betting that the central bank cannot sustain the current rate. Reserves are draining rapidly as the bank intervenes to support the currency, but each intervention only seems to embolden the attackers.",
+  "de": "Die Devisenmärkte haben sich gegen uns gewandt. Spekulanten verkaufen unsere Währung in gewaltigen Mengen und wetten darauf, dass die Zentralbank den aktuellen Kurs nicht halten kann. Die Reserven schwinden rasant, während die Bank interveniert, um die Währung zu stützen, doch jede Intervention scheint die Angreifer nur zu ermutigen."
+ },
+ "banking_cycle_events.15.f": {
+  "en": "\\\"We sold two hundred million in reserves yesterday. The currency dropped anyway.\\\"\\n\\n\\\"How much do we have left?\\\"\\n\\n\\\"At this rate? About three weeks' worth.\\\"",
+  "de": "„Wir haben gestern zweihundert Millionen an Reserven verkauft. Die Währung ist trotzdem gefallen.“\\n\\n„Wie viel haben wir noch übrig?“\\n\\n„Bei diesem Tempo? Etwa drei Wochen.“"
+ },
+ "banking_cycle_events.15.t": {
+  "en": "Currency Crisis",
+  "de": "Währungskrise"
+ },
+ "banking_cycle_events.151.a": {
+  "en": "Permit the Advance Distributions",
+  "de": "Die Vorabausschüttungen zulassen"
+ },
+ "banking_cycle_events.151.b": {
+  "en": "Issue Advisory Guidance",
+  "de": "Beratende Leitlinien herausgeben"
+ },
+ "banking_cycle_events.151.c": {
+  "en": "Mandate Surplus Reserves Before Distributions",
+  "de": "Überschussrücklagen vor Ausschüttungen vorschreiben"
+ },
+ "banking_cycle_events.151.d": {
+  "en": "Collective enterprises are reporting an unusual surge of early dividend votes ahead of the quarterly settlement. Worker-owners are confident in near-term returns and have voted themselves generous payouts, but the treasury bookkeepers warn that maintenance reserves and reinvestment funds are being drawn down faster than income can replenish them. Town centres are booming; cooperative machinery is quietly going unserviced.",
+  "de": "Kollektivbetriebe melden eine ungewöhnliche Häufung vorzeitiger Dividendenabstimmungen vor dem vierteljährlichen Abschluss. Die arbeitenden Eigentümer sind zuversichtlich, was kurzfristige Erträge angeht, und haben sich großzügige Ausschüttungen bewilligt, doch die Buchhalter der Kassen warnen, dass Instandhaltungsrücklagen und Reinvestitionsfonds schneller aufgezehrt werden, als die Einnahmen sie wieder auffüllen können. Die Stadtzentren boomen; die genossenschaftlichen Maschinen bleiben im Stillen ungewartet."
+ },
+ "banking_cycle_events.151.f": {
+  "en": "\\\"We've voted generous dividends — the members deserve it.\\\"\\n\\n\\\"And who will mend the machinery next year?\\\"\\n\\n\\\"The cooperative will. As it always has. As it always will.\\\"\\n\\n\\\"With which reserves? The dividend vote drew them down by sixty percent.\\\"\\n\\n\\\"With next year's surplus, then. We are confident.\\\"\\n\\n\\\"Confidence does not lubricate bearings.\\\"",
+  "de": "„Wir haben großzügige Dividenden beschlossen – die Mitglieder haben es verdient.“\\n\\n„Und wer repariert nächstes Jahr die Maschinen?“\\n\\n„Die Genossenschaft wird es tun. Wie sie es immer getan hat. Wie sie es immer tun wird.“\\n\\n„Mit welchen Rücklagen? Die Dividendenabstimmung hat sie um sechzig Prozent verringert.“\\n\\n„Dann eben mit dem Überschuss des nächsten Jahres. Wir sind zuversichtlich.“\\n\\n„Zuversicht schmiert keine Lager.“"
+ },
+ "banking_cycle_events.151.t": {
+  "en": "Dividend Anticipation Wave",
+  "de": "Welle vorgezogener Dividenden"
+ },
+ "banking_cycle_events.154.a": {
+  "en": "Let the Insolvent Cooperatives Liquidate",
+  "de": "Die insolventen Genossenschaften liquidieren lassen"
+ },
+ "banking_cycle_events.154.b": {
+  "en": "Activate the Federation Emergency Relief Fund",
+  "de": "Den Notsozialhilfefonds der Föderation aktivieren"
+ },
+ "banking_cycle_events.154.c": {
+  "en": "Facilitate Forced Cooperative Mergers",
+  "de": "Zwangsfusionen von Genossenschaften erleichtern"
+ },
+ "banking_cycle_events.154.d": {
+  "en": "A simultaneous wave of aggressive dividend payouts and reduced working hours has drained operating cash from cooperatives across the network. Shops are pausing production while reconciling payroll with supplier invoices; smaller collectives cannot meet maintenance schedules. Unlike a bank run, there is no single point of failure: the crisis is distributed, social, and deeply intertwined with member expectations.",
+  "de": "Eine gleichzeitige Welle aggressiver Dividendenausschüttungen und verkürzter Arbeitszeiten hat den Genossenschaften im gesamten Netzwerk die Betriebsmittel entzogen. Betriebe legen die Produktion still, während sie Löhne mit Lieferantenrechnungen abgleichen; kleinere Kollektive können ihre Wartungspläne nicht einhalten. Anders als bei einem Bankensturm gibt es keinen einzelnen Auslöser: Die Krise ist verteilt, sozial bedingt und eng mit den Erwartungen der Mitglieder verwoben."
+ },
+ "banking_cycle_events.154.f": {
+  "en": "\\\"Our members demanded a payout and we gave it. We did the right thing.\\\"\\n\\n\\\"Until the lathe breaks and there's no funds to fix it.\\\"\\n\\n\\\"The lathe will not break this quarter.\\\"\\n\\n\\\"It broke last quarter. We borrowed against next quarter's earnings to repair it. Now we have borrowed against next year's, and the lathe is still operating on a piece of wire someone wrapped around the spindle in January.\\\"\\n\\n\\\"Then we need a payout vote that admits this.\\\"",
+  "de": "„Unsere Mitglieder haben eine Ausschüttung verlangt, und wir haben sie gewährt. Wir haben das Richtige getan.“\\n\\n„Bis die Drehbank kaputtgeht und kein Geld da ist, um sie zu reparieren.“\\n\\n„Die Drehbank wird dieses Quartal nicht kaputtgehen.“\\n\\n„Sie ist letztes Quartal kaputtgegangen. Wir haben gegen die Einnahmen des nächsten Quartals geliehen, um sie zu reparieren. Jetzt haben wir gegen die des nächsten Jahres geliehen, und die Drehbank läuft immer noch mit einem Stück Draht, das jemand im Januar um die Spindel gewickelt hat.“\\n\\n„Dann brauchen wir eine Abstimmung über die Ausschüttung, die das zugibt.“"
+ },
+ "banking_cycle_events.154.t": {
+  "en": "Cooperative Insolvency Wave",
+  "de": "Welle genossenschaftlicher Insolvenzen"
+ },
+ "banking_cycle_events.156.a": {
+  "en": "Activate Cooperative Mutual Aid",
+  "de": "Genossenschaftliche Gegenseitige Hilfe aktivieren"
+ },
+ "banking_cycle_events.156.b": {
+  "en": "Accept the Shortfall and Adjust Assessments",
+  "de": "Den Fehlbetrag hinnehmen und Umlagen anpassen"
+ },
+ "banking_cycle_events.156.c": {
+  "en": "Import to Cover the Gap",
+  "de": "Importieren, um die Lücke zu schließen"
+ },
+ "banking_cycle_events.156.d": {
+  "en": "Several agricultural cooperatives have reported that generous dividend policies and shortened working periods have left them with insufficient funds to sustain harvest operations. Storage and maintenance were cut to meet payout expectations; now that the shortfall is visible, the cooperative network debates whether to redirect mutual-aid reserves, accept the shortfall gracefully, or import supplies and charge costs back to the affected members.",
+  "de": "Mehrere landwirtschaftliche Genossenschaften melden, dass großzügige Dividendenpolitik und verkürzte Arbeitszeiten ihnen zu wenig Mittel gelassen haben, um den Erntebetrieb aufrechtzuerhalten. Lagerung und Instandhaltung wurden gekürzt, um den Ausschüttungserwartungen zu genügen; nun, da der Fehlbetrag sichtbar ist, debattiert das Genossenschaftsnetzwerk, ob es Rücklagen der Gegenseitigen Hilfe umleiten, den Fehlbetrag würdevoll hinnehmen oder Vorräte importieren und die Kosten den betroffenen Mitgliedern in Rechnung stellen soll."
+ },
+ "banking_cycle_events.156.f": {
+  "en": "\\\"We shared our harvest out to keep everyone fed. Now we have nothing for the winter repairs.\\\"\\n\\n\\\"Then we will stand together. But who will mend the plow?\\\"\\n\\n\\\"The plow will be mended when the snow lifts. The barn will be patched when the wood arrives. Until then, the cooperative will eat, the cooperative will repair what it can, and the cooperative will write to the federation for the rest.\\\"\\n\\n\\\"And if the federation cannot help?\\\"\\n\\n\\\"Then the cooperative will discover what solidarity means at its limit.\\\"",
+  "de": "„Wir haben unsere Ernte geteilt, damit alle zu essen haben. Jetzt haben wir nichts für die Winterreparaturen.“\\n\\n„Dann werden wir zusammenstehen. Aber wer repariert den Pflug?“\\n\\n„Der Pflug wird repariert, wenn der Schnee schmilzt. Die Scheune wird geflickt, wenn das Holz eintrifft. Bis dahin wird die Genossenschaft essen, die Genossenschaft wird reparieren, was sie kann, und die Genossenschaft wird der Föderation wegen des Restes schreiben.“\\n\\n„Und wenn die Föderation nicht helfen kann?“\\n\\n„Dann wird die Genossenschaft entdecken, was Solidarität an ihrer Grenze bedeutet.“"
+ },
+ "banking_cycle_events.156.t": {
+  "en": "Rural Cooperative Harvest Shortfall",
+  "de": "Erntefehlbetrag ländlicher Genossenschaften"
+ },
+ "banking_cycle_events.16.a": {
+  "en": "Affirm central bank independence",
+  "de": "Die Unabhängigkeit der Zentralbank bekräftigen"
+ },
+ "banking_cycle_events.16.b": {
+  "en": "Override the central bank",
+  "de": "Die Zentralbank überstimmen"
+ },
+ "banking_cycle_events.16.b.mandate_tt": {
+  "en": "The central bank is put on the #v $banking_dash_mon_mandate_growth$#! mandate: it runs about a point looser and reacts only half as hard to the cycle, and it ignores inflation until it passes about four percent. It takes effect at the next monthly update, and you can change the mandate again from the banking dashboard.",
+  "de": "Die Zentralbank wird auf das #v $banking_dash_mon_mandate_growth$#!-Mandat gesetzt: Sie fährt einen Kurs, der etwa einen Punkt lockerer ist, reagiert nur halb so stark auf den Konjunkturzyklus und ignoriert die Inflation, bis sie etwa vier Prozent übersteigt. Dies tritt bei der nächsten monatlichen Aktualisierung in Kraft, und Sie können das Mandat jederzeit erneut über das Bankenpanel ändern."
+ },
+ "banking_cycle_events.16.c": {
+  "en": "Restructure the central bank mandate",
+  "de": "Das Mandat der Zentralbank umstrukturieren"
+ },
+ "banking_cycle_events.16.d": {
+  "en": "Politicians are demanding that the central bank lower interest rates to stimulate growth, regardless of the inflation risk. The central bank governor has pushed back, insisting that monetary policy must remain independent of political pressure. The dispute has become public, and markets are watching closely to see who blinks first.",
+  "de": "Politiker fordern, dass die Zentralbank die Zinsen senkt, um das Wachstum anzukurbeln, ungeachtet des Inflationsrisikos. Der Präsident der Zentralbank hat sich dem widersetzt und darauf bestanden, dass die Geldpolitik unabhängig von politischem Druck bleiben muss. Der Streit ist öffentlich geworden, und die Märkte beobachten gespannt, wer zuerst nachgibt."
+ },
+ "banking_cycle_events.16.f": {
+  "en": "\\\"The governor says he answers to the economy, not to Parliament.\\\"\\n\\n\\\"Parliament creates the laws that create the governor.\\\"\\n\\n\\\"And the governor controls the money that funds Parliament's promises. It's a stalemate.\\\"",
+  "de": "„Der Präsident sagt, er sei der Wirtschaft Rechenschaft schuldig, nicht dem Parlament.“\\n\\n„Das Parlament schafft die Gesetze, die den Präsidenten schaffen.“\\n\\n„Und der Präsident kontrolliert das Geld, das die Versprechen des Parlaments finanziert. Es ist eine Pattsituation.“"
+ },
+ "banking_cycle_events.16.t": {
+  "en": "Central Bank Independence Debate",
+  "de": "Debatte um die Unabhängigkeit der Zentralbank"
+ },
+ "banking_cycle_events.160.a": {
+  "en": "Impose an Emergency Dividend Levy",
+  "de": "Eine Notfall-Dividendenabgabe verhängen"
+ },
+ "banking_cycle_events.160.b": {
+  "en": "Seek New Cooperative Credit",
+  "de": "Neuen genossenschaftlichen Kredit suchen"
+ },
+ "banking_cycle_events.160.c": {
+  "en": "Dissolve Some Inter-Cooperative Agreements",
+  "de": "Einige zwischengenossenschaftliche Abkommen auflösen"
+ },
+ "banking_cycle_events.160.d": {
+  "en": "The federation's shared capital reserve — used to service inter-cooperative agreements, mutual guarantees, and [concept_infrastructure] bonds — has been significantly depleted. Member cooperatives have continued to draw on it through dividend-linked [Concept('concept_obligation', 'obligations')] while contributing less than projected. The council must now choose between austerity, new credit, or a partial default on some commitments, each with different consequences for trust between federation members.",
+  "de": "Die gemeinsame Kapitalreserve der Föderation – verwendet, um zwischengenossenschaftliche Abkommen, gegenseitige Garantien und Anleihen für [concept_infrastructure] zu bedienen – ist erheblich geschrumpft. Mitgliedsgenossenschaften haben weiterhin über dividendengebundene [Concept('concept_obligation', 'Verpflichtungen')] darauf zugegriffen, während sie weniger beitrugen als geplant. Der Rat muss nun zwischen Sparmaßnahmen, neuem Kredit oder einem teilweisen Zahlungsausfall bei einigen Verpflichtungen wählen, jede Option mit unterschiedlichen Folgen für das Vertrauen zwischen den Föderationsmitgliedern."
+ },
+ "banking_cycle_events.160.f": {
+  "en": "\\\"Council treasuries are strained; members demand payouts while infrastructure needs repair.\\\"\\n\\n\\\"The ledger won't balance itself — someone must vote for sacrifice.\\\"\\n\\n\\\"And the cooperatives that vote for sacrifice will see their members defect to the cooperatives that didn't.\\\"\\n\\n\\\"Then we ask all of them to sacrifice at once. The whole federation, in one resolution.\\\"\\n\\n\\\"They will vote it down.\\\"\\n\\n\\\"They will. And then we will explain why we are defaulting on the inter-cooperative agreements they were defending.\\\"",
+  "de": "„Die Kassen des Rates sind angespannt; die Mitglieder verlangen Ausschüttungen, während die Infrastruktur Reparaturen braucht.“\\n\\n„Das Rechnungsbuch gleicht sich nicht von selbst aus – jemand muss für ein Opfer stimmen.“\\n\\n„Und die Genossenschaften, die für ein Opfer stimmen, werden erleben, wie ihre Mitglieder zu den Genossenschaften abwandern, die es nicht getan haben.“\\n\\n„Dann bitten wir alle gleichzeitig um ein Opfer. Die gesamte Föderation, in einer einzigen Resolution.“\\n\\n„Sie werden dagegen stimmen.“\\n\\n„Das werden sie. Und dann werden wir erklären müssen, warum wir bei den zwischengenossenschaftlichen Abkommen, die sie verteidigt haben, in Zahlungsverzug geraten.“"
+ },
+ "banking_cycle_events.160.t": {
+  "en": "Federation Capital Reserve Crisis",
+  "de": "Krise der Kapitalreserve der Föderation"
+ },
+ "banking_cycle_events.165.a": {
+  "en": "Deploy Federation Currency Reserves",
+  "de": "Währungsreserven der Föderation einsetzen"
+ },
+ "banking_cycle_events.165.b": {
+  "en": "Mandate Cooperative Import Substitution",
+  "de": "Genossenschaftliche Importsubstitution vorschreiben"
+ },
+ "banking_cycle_events.165.c": {
+  "en": "Accept the Structural Adjustment",
+  "de": "Die Strukturanpassung hinnehmen"
+ },
+ "banking_cycle_events.165.d": {
+  "en": "The currency's depreciation is feeding directly into the cost base of cooperatives that depend on imported inputs: textile dyes, machine spares, chemical additives. Federation pricing coordination has struggled to absorb the shock, and member cooperatives are reporting that production runs are becoming uneconomical. The council faces a choice between deploying reserves, pivoting to domestic sourcing, or accepting the full force of adjustment.",
+  "de": "Die Abwertung der Währung schlägt sich direkt in der Kostenbasis der Genossenschaften nieder, die von importierten Vorprodukten abhängen: Textilfarbstoffe, Maschinenersatzteile, chemische Zusatzstoffe. Die Preiskoordination der Föderation hat Mühe, den Schock aufzufangen, und Mitgliedsgenossenschaften melden, dass Produktionsläufe unwirtschaftlich werden. Der Rat steht vor der Wahl, Reserven einzusetzen, auf einheimische Bezugsquellen umzustellen oder die volle Wucht der Anpassung hinzunehmen."
+ },
+ "banking_cycle_events.165.f": {
+  "en": "\\\"If the exchange rate keeps moving like this, the cooperative can't buy the parts to fix the looms.\\\"\\n\\n\\\"Then we build our own parts, or we stop.\\\"\\n\\n\\\"We don't know how to build the dye injectors. The patents are German, the tooling is German, the chemists are German.\\\"\\n\\n\\\"Then we learn. The federation has six other textile cooperatives. Among the seven of us, we have one chemist who used to work for the Bavarian dye trust.\\\"\\n\\n\\\"That is not enough.\\\"\\n\\n\\\"That is a beginning.\\\"",
+  "de": "„Wenn sich der Wechselkurs weiter so entwickelt, kann die Genossenschaft die Teile zur Reparatur der Webstühle nicht kaufen.“\\n\\n„Dann bauen wir unsere eigenen Teile, oder wir hören auf.“\\n\\n„Wir wissen nicht, wie man die Farbstoffinjektoren baut. Die Patente sind deutsch, das Werkzeug ist deutsch, die Chemiker sind deutsch.“\\n\\n„Dann lernen wir es. Die Föderation hat sechs weitere Textilgenossenschaften. Unter uns sieben haben wir einen Chemiker, der früher für den bayerischen Farbstofftrust gearbeitet hat.“\\n\\n„Das ist nicht genug.“\\n\\n„Das ist ein Anfang.“"
+ },
+ "banking_cycle_events.165.t": {
+  "en": "Import Cost Spiral",
+  "de": "Importkostenspirale"
+ },
  "movement_events_te.1.a": {
   "en": "Let them march in peace",
   "de": "Lasst sie in Frieden marschieren"

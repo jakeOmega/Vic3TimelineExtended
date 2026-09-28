@@ -99,7 +99,7 @@ The chunk header lists up to three glossaries. Follow them exactly:
 
 - **REFERENCED KEYS** show what a link or `$reference$` in this chunk inserts, in the nominative. Use them to get genders and cases right around the insert.
 - **MOD TERMS** are the mod's own names, already translated. Use the German given, inflected as the sentence needs.
-- **VANILLA TERMS** are the official German game terms. Where an English word or phrase matches one of these, use the official German, not your own synonym. Players know these words from the rest of the game.
+- **VANILLA TERMS** are the official German game terms. Where the English refers to that game thing, use the official German, not your own synonym: players know these words from the rest of the game. A matching phrase inside a different name is not a reference. The "Federation Emergency Relief Fund" is a fund, not the Emergency Relief law, so translate it on its own terms.
 
 For a term in none of the lists, choose German that fits the official game's register, and list it in your report.
 
