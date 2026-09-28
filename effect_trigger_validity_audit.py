@@ -23,7 +23,8 @@ Approach (strict-then-permissive, per the catalog-audit playbook):
   (`scripted_buttons`, `journal_entries`, `diplomatic_actions`, `decisions`,
   `character_interactions`, `scripted_progress_bars`, `treaty_articles`,
   `political_movements`, `diplomatic_plays`, `power_bloc_principles`, `laws`,
-  `script_values`) — and flags any lowercase LHS keyword not in the catalog and
+  `script_values`, and since #305 `scripted_guis` and
+  `customizable_localization`) — and flags any lowercase LHS keyword not in the catalog and
   not a mod-defined callable name. Uppercase tokens (scripted-effect `$PARAM$`
   call args) and `var:`-style refs are never LHS-matched, so they don't
   false-flag. Names at brace depth 0 are entity *definitions*, not calls, so
@@ -175,6 +176,8 @@ SCAN_ROOTS: tuple[ScanRoot, ...] = (
             "will_propose_even_if_not_accepted", "accept_break_score",
             "propose_break_score", "use_favor_chance", "owe_favor_chance",
             "evaluation_chance",
+            # Vanilla 03_violate_sovereignty.txt / 28_invite_to_power_bloc.txt (#305).
+            "can_use_obligations", "decline_effect",
         }),
         skip_blocks=_STATIC_MODIFIER_BLOCKS,
     ),
@@ -191,6 +194,7 @@ SCAN_ROOTS: tuple[ScanRoot, ...] = (
         extra_valid=_ENTITY_GATES | frozenset({
             "start_value", "min_value", "max_value", "monthly_progress",
             "default_green", "default_bad", "double_sided_gold",
+            "second_desc",  # vanilla 00_great_game_progress_bars.txt
         }),
     ),
     ScanRoot(
@@ -228,6 +232,7 @@ SCAN_ROOTS: tuple[ScanRoot, ...] = (
             "blocked_by_diplomatic_status", "selectable_in_lens",
             "add_infamy_for_starting_initiator_wargoals",
             "on_weekly_pulse", "on_war_begins",
+            "ai_acceptance_max",  # vanilla 00_diplomatic_plays.txt (#305)
         }),
         skip_blocks=_STATIC_MODIFIER_BLOCKS,
     ),
@@ -248,6 +253,28 @@ SCAN_ROOTS: tuple[ScanRoot, ...] = (
         skip_blocks=_STATIC_MODIFIER_BLOCKS,
     ),
     ScanRoot(os.path.join("common", "script_values")),
+    # --- #305: scripted GUIs and custom loc carry effects and triggers too ---
+    # Scripted-GUI schema: vanilla game/common/scripted_guis/scripted_guis.md.
+    # No _ENTITY_GATES: an SGUI reads is_shown / is_valid, and a `possible` or
+    # `visible` there would be ignored by the engine, so it should flag.
+    ScanRoot(
+        os.path.join("common", "scripted_guis"),
+        extra_valid=frozenset({
+            "scope", "saved_scopes", "is_shown", "is_valid", "ai_is_valid",
+            "ai_chance", "ai_frequency", "effect", "notification_key",
+            "confirm_title", "confirm_text",
+        }),
+    ),
+    # Custom-loc schema, as vanilla game/common/customizable_localization/ uses
+    # it (no .md ships for it): `text = { trigger = { … } localization_key = k
+    # fallback = yes }` entries, and `parent` + `suffix` for a template child.
+    ScanRoot(
+        os.path.join("common", "customizable_localization"),
+        extra_valid=frozenset({
+            "type", "text", "trigger", "localization_key", "random_valid",
+            "log_loc_errors", "parent", "suffix", "fallback",
+        }),
+    ),
 )
 
 _CATALOG_REL = os.path.join("docs", "engine", "effect_trigger_valid_keys.txt")

@@ -9,12 +9,18 @@ render — `Could not find data system function 'concept_X'`,
 `Data error in loc string '<key>'`. UI panels that show the offending loc
 spam debug.log at hundreds of lines per second and stall the game.
 
+`Concept()`'s first argument is checked whatever its name (#438): every
+registered concept starts with `concept_`, but `gen_un_button_descs.py`
+shipped `[Concept('<modifier_name>', ...)]` for 13 keys, and only the two whose
+expansion carried a `[` logged anything (#437). The plain `[X]` form stays
+limited to `concept_` names, since any other bracketed word is a data function.
+
 The engine emits no parse-time warning. `loc_coverage_audit` checks whether
 mod-introduced entities have their conventional loc keys, but doesn't scan
 loc *values* for unregistered concept hyperlinks. This audit closes that gap.
 
 Coverage: every `*.yml` under `<mod_path>/localization/` (recursive). Each
-`[concept_X]` and `[Concept('concept_X', ...)]` reference is checked against
+`[concept_X]` and `[Concept('X', ...)]` reference is checked against
 the union of vanilla + mod concepts loaded into
 `mod_state.mod_parsers['Game Concepts']`. Vanilla loc isn't scanned (we only
 care about mod-side bugs).
@@ -56,8 +62,10 @@ _REVIEWED_RE = re.compile(
 _PATTERN_PLAIN = re.compile(r"\[(concept_[A-Za-z0-9_]+)\]")
 # Custom-display form: `[Concept('concept_foo', '$display$')]`. Both single
 # and double quotes are accepted; whitespace around the quote is tolerated.
+# Any first argument is captured, not only `concept_*` ones (#438). A
+# `$PARAM$`-built name can't match, so it is never flagged.
 _PATTERN_CONCEPT_FN = re.compile(
-    r"Concept\(\s*['\"](concept_[A-Za-z0-9_]+)['\"]"
+    r"Concept\(\s*['\"]([A-Za-z0-9_]+)['\"]"
 )
 
 
@@ -176,7 +184,7 @@ def render_report(result: AuditResult) -> str:
         "`POST /reload` of the mod state server. Do not hand-edit.",
         "",
         "Flagged: a localization value contains `[concept_X]` or",
-        "`[Concept('concept_X', ...)]` but `concept_X` is not registered in",
+        "`[Concept('X', ...)]` whose concept name is not registered in",
         "`common/game_concepts/` (vanilla or mod). The engine then treats the",
         "bracket as a data-system function call, fails to resolve it, and",
         "logs three error lines per render — flooding `debug.log` at hundreds",
@@ -185,6 +193,8 @@ def render_report(result: AuditResult) -> str:
         "Fix: add `concept_X = {}` to `common/game_concepts/extra_concepts.txt`",
         "(plus the matching `concept_X:0 \"Display Name\"` and",
         "`concept_X_desc:0 \"Tooltip\"` localization keys if they don't exist).",
+        "When `X` is not meant to be a concept at all (a modifier or other",
+        "entity name), drop the `Concept()` wrapper and keep the display text.",
         "",
         "Suppress an intentional unregistered reference with a trailing",
         "comment on the loc line:",

@@ -361,7 +361,8 @@ Under Command Economy the cycle measures planning strain, and the dashboard
 offers eight planning tools plus two transfers. Under Cooperative Ownership it
 measures the balance between what worker-owners pay themselves and what they
 reinvest, and there are eight council tools. Changing economic system switches
-the old system's tools off.
+the old system's tools off. An open Emergency Liquidity Program still refunds 1%
+of GDP when that closes it.
 
 | Economy | Category | Tools (points) |
 |---|---|---|
@@ -379,8 +380,9 @@ the old system's tools off.
 The History section charts the last 1, 5 or 20 years month by month: the cycle's
 three readings, the policy rate and the rate paid on debt, plus inflation and
 the exchange-rate index under the full Banking System. Markers flag policy
-changes and crashes, including imported ones. History is kept for the player and
-for major powers and above.
+changes, including tools a change of economic system switches off, and crashes,
+including imported ones. History is kept for the player and for major powers and
+above.
 
 ## Financial regulation laws
 

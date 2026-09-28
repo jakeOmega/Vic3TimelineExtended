@@ -79,7 +79,7 @@ for k in effects triggers event_targets; do echo "== $k"; comm -3 <(hdr OLD/docs
 echo "== modifiers"; comm -3 <(grep -oE '^[A-Za-z0-9_]+:$' OLD/docs/modifiers.log | sort -u) <(grep -oE '^[A-Za-z0-9_]+:$' NEW/docs/modifiers.log | sort -u)
 ```
 
-Then grep **all** of `common/ events/ gui/ localization/` for every removed name — `effect_trigger_validity_audit` covers the 16 directories in its `SCAN_ROOTS` (events, the scripted helpers, on-actions, and the script-bearing `common/` entity dirs: laws, journal entries, diplomatic actions/plays, treaty articles, decisions, scripted buttons/progress bars, political movements, power-bloc principles, character interactions, script values), but `gui/`, `localization/` and any `common/` dir outside that list are still only reachable by grep. Everything inside `SCAN_ROOTS` flags on the next `POST /reload` instead (1.14's `has_war_exhaustion` in `nuke.txt` is the case that motivated #295). After re-bootstrapping the catalog (§ 4), `git diff docs/engine/effect_trigger_valid_keys.txt | grep '^-'` also lists removed *vanilla script values* — grep the mod for those too. GUI 3-way merges, `REPLACE:` re-bases and loc-drift checks still need the vanilla clone (§ 5).
+Then grep **all** of `common/ events/ gui/ localization/` for every removed name — `effect_trigger_validity_audit` covers the 18 directories in its `SCAN_ROOTS` (events, the scripted helpers, on-actions, and the script-bearing `common/` entity dirs: laws, journal entries, diplomatic actions/plays, treaty articles, decisions, scripted buttons/progress bars/GUIs, customizable localization, political movements, power-bloc principles, character interactions, script values), but `gui/`, `localization/` and any `common/` dir outside that list are still only reachable by grep. Everything inside `SCAN_ROOTS` flags on the next `POST /reload` instead (1.14's `has_war_exhaustion` in `nuke.txt` is the case that motivated #295). After re-bootstrapping the catalog (§ 4), `git diff docs/engine/effect_trigger_valid_keys.txt | grep '^-'` also lists removed *vanilla script values* — grep the mod for those too. GUI 3-way merges, `REPLACE:` re-bases and loc-drift checks still need the vanilla clone (§ 5).
 
 The shell helpers in `<vic3_modding_digests_path>/script/` (`diff-modifiers.sh`, `diff-documentation.sh`) are the same ones the upstream uses to generate the digests — handy when running against a vanilla version not yet covered.
 
@@ -198,6 +198,10 @@ Walk the validator's reported unknowns. For each:
 - **Map state removed/renamed**: handled in step 4 via `deposits_config.json` for resources, plus targeted edits for any tourism / wonder / company / event references using `s:STATE_*`.
 
 After each batch of edits: `curl -X POST http://localhost:8950/reload?engine_only=true` then `curl http://localhost:8950/validate/engine-coverage` to verify removed-modifier count drops.
+
+## 6a. Retire old-save repairs
+
+Code that repairs saves from an older mod version carries a marker, `# OLD-SAVE REPAIR (#N): remove after YYYY-MM-DD or at vanilla X.Y, whichever comes first.`, mostly in `common/on_actions/te_old_save_repairs.txt`. Once `vanilla_parsed/` is rebuilt for version X.Y, `test_old_save_repairs.py` fails, naming each one. Delete the repair's block, and the file once it is empty. The old-save cleanup tracked in `docs/audits/open_issues.md` (L24, L25) is the same kind of code without a marker: check whether it can go too.
 
 ## 6b. Vanilla constants the mod mirrors (silent-drift check)
 

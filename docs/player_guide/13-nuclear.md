@@ -23,14 +23,14 @@ opens with the nuclear taboo's score and band.
 
 | Panel | Shown when | What it holds |
 |---|---|---|
-| The Programme | You have a program | Funding, production rate, time to the next warhead, warheads held |
+| The Programme | You have a program | Funding, production rate, time to the next warhead, warheads held, the year of your first device and whether it was the world's first |
 | Progress bar | Always | Progress toward the next warhead |
 | Nuclear Posture | You hold warheads | Doctrine, readiness, launch authority, forces, upkeep, incident exposure, interest-group opinions; in the Forces section, your arsenal ceiling and dismantling |
 | Nuclear Crisis and Reputation | In a crisis, or once you have a record | The crisis and your moves in it; credibility and pledges |
 | The Nuclear Taboo | From the world's first warhead | The taboo's score and band, where it is heading and why, what nuclear acts cost now, your arsenal's burden, and its history |
 | Delivery and Defence, Nuclear Powers | Always | Strike and interception ratings; the ten largest arsenals as the world estimates them |
 
-<!-- screenshot: the Nuclear Weapons journal entry for an armed great power, program panel, progress bar and Nuclear Posture panel in view -->
+![The Nuclear Weapons journal entry of a country holding 32 warheads: The Programme panel (funding at step 0, so no new warhead is coming), the progress bar and the Nuclear Posture panel.](images/nuclear_posture_and_programme.png)
 
 An armed power that loses its rank stops building but keeps its warheads, its
 posture, its upkeep and its accidents.
@@ -603,7 +603,7 @@ Below the rows, a line says whether a nuclear weapon has been used in war and,
 if so, when the last one fell; The Taboo Over Time holds two charts, the score
 and its target, month by month.
 
-<!-- screenshot: the Nuclear Taboo panel with the Heading toward breakdown tooltip open -->
+![The Nuclear Taboo panel after a nuclear weapon has been used in war. The taboo is Normalised at 29 and steady, and below 40 the arsenal carries no burden.](images/nuclear_taboo.png)
 
 The band sets the words of the status line and marks where the taboo's effects
 start.
@@ -708,7 +708,7 @@ releases the program at once, unless a treaty's ceiling still holds you.
 
 Dismantle the Arsenal needs warheads, peace, no nuclear crisis and no civil
 war. It takes 12 months, one more for every 10 warheads above 20, and at most
-36. The warheads go over that time, the last month taking whatever is left.
+36. The warheads go at an even pace over that time.
 Until it ends, your readiness is ordered down to Recessed and can't be raised,
 and the program is held. Recessed forces can't launch, so once there you can't
 answer a strike. A war doesn't stop the dismantling; a civil war of your own

@@ -605,6 +605,7 @@ un_chamber_history_sgui = {
 				variable = un_resolution_history
 				order_by = un_res_recency_order
 				max = 100
+				check_range_bounds = no
 				un_chamber_history_entry = yes
 			}
 		}

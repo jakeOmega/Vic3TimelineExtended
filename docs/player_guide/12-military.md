@@ -37,7 +37,7 @@ The bar is low: a formation of 19 infantry and one artillery earns Infantry
 Screen and Fire Support. A formation of a single group earns nothing however
 large it is, and a formation without a general earns nothing at all.
 
-<!-- screenshot: a general's tooltip showing three Combined Arms traits, with the formation's mixed battalions in view -->
+![A general's traits with all six Combined Arms traits. The formation fields all five groups, so the general has Full Spectrum Dominance as well as one trait for each group.](images/combined_arms_full_spectrum.png)
 
 ## New combat units
 

@@ -108,7 +108,7 @@ but with empty ledgers, no champions and no programs its target sits well below
 that, so expect authority to fall in its first years unless great powers
 champion it and run programs.
 
-<!-- screenshot: the Why UN Authority Is Moving widget, with the pillar table, the tier and charter lines and the recent ledger entries -->
+![The Why UN Authority Is Moving widget. Authority is 58.7 and falling toward a target of 51.0, the sum of the pillars; below come the tier and the charter, the champions and underminers, and the newest ledger entries.](images/un_authority_moving.png)
 
 ### UN authority tiers
 
@@ -424,6 +424,8 @@ standing and +10 relations with you; a broken one costs it 4 standing and 20
 relations and cancels your obligation. A permanent member that pledged against
 and then vetoes has kept its word.
 
+![The chamber's Delegations section. Each row shows a member's band as the Assembly estimates it and any campaign on it (Batonga is lobbying South Africa to vote for the resolution), with buttons to start a campaign or ask for a pledge.](images/UN_lobbying.png)
+
 ## UN conventions and agencies
 
 A convention is a standing regime. When it carries it founds its agency (the
@@ -520,7 +522,7 @@ peacekeeping program. Bring Our Contingent Home costs 2 standing and 10
 relations with the host, and a peacekeeping or Stabilisation mission left empty
 fails.
 
-<!-- screenshot: a state panel showing the UN Mission tile for a peacekeeping mission, with its strength and progress -->
+![The UN Mission tile on a state panel: an aid mission three months in, working at ×1.31 strength, with no progress yet.](images/UN_mission.png)
 
 ## UN programs and great-power stances
 

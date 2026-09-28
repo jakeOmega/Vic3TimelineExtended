@@ -151,7 +151,51 @@ class RosterTests(unittest.TestCase):
         block = _top_level_block(_text(CLEANUP), "remove_banking_market_modifiers_effect = {")
         for tool in _tools():
             with self.subTest(tool=tool):
-                self.assertIn("remove_modifier = %s\n" % _modifier(tool), block)
+                self.assertRegex(
+                    block,
+                    r"banking_strip_tool = \{ MODIFIER = %s\s+MARK = off_%s \}"
+                    % (re.escape(_modifier(tool)), re.escape(tool)),
+                )
+
+    def test_law_strip_refunds_emergency_liquidity(self):
+        # The program's money is lent to the banks, so a law that closes it
+        # pays the manual Disable's refund too. The refund is paid from
+        # on_law_activated, where ROOT is the law, so the value must read the
+        # country in scope, not root.
+        block = _top_level_block(_text(CLEANUP), "remove_banking_market_modifiers_effect = {")
+        refund_at = block.index("add_treasury = emergency_liquidity_program_deactivation_refund")
+        strip_at = block.index("MODIFIER = banking_emergency_liquidity_program ")
+        self.assertLess(refund_at, strip_at)
+        # Once per opening: one law change can run the bundle more than once
+        # (nested on_law_activated), and has_modifier may not see the strip.
+        guard = block[block.rfind("limit", 0, refund_at):refund_at]
+        self.assertIn("NOT = { has_variable = banking_eliq_strip_refunded }", guard)
+        self.assertIn("set_variable = banking_eliq_strip_refunded", block)
+        opening = _top_level_block(_text(EFFECTS), "banking_effect_cb_emergency_liquidity_program = {")
+        self.assertIn("remove_variable = banking_eliq_strip_refunded", opening)
+        manual = _top_level_block(_text(EFFECTS), "banking_effect_cb_disable_emergency_liquidity_program = {")
+        self.assertIn("add_treasury = emergency_liquidity_program_deactivation_refund", manual)
+        value = _top_level_block(
+            _text(ROOT / "common/script_values/extra_script_values.txt"),
+            "emergency_liquidity_program_deactivation_refund = {")
+        self.assertNotIn("root.", value)
+
+    def test_law_strip_marks_each_tool_as_its_manual_disable_does(self):
+        # A tool a law switches off (planning, cooperative or market) posts
+        # the same off_* history marker as its manual Disable, so the chart
+        # shows it ending (te_banking_economy_law_cleanup, #337 follow-up).
+        manual = {}
+        for m in re.finditer(r"(?ms)^banking_effect_\w+_disable_\w+ = \{\n(.*?)^\}", _text(EFFECTS)):
+            mark = re.search(r"MARK = (off_\w+) \}", m.group(1))
+            removed = re.search(r"remove_modifier = (\w+) \}", m.group(1))
+            if mark and removed:
+                manual[removed.group(1)] = mark.group(1)
+        pairs = re.findall(
+            r"banking_strip_tool = \{ MODIFIER = (\w+)\s+MARK = (\w+) \}", _text(CLEANUP))
+        self.assertTrue(pairs)
+        for modifier, mark in pairs:
+            with self.subTest(modifier=modifier):
+                self.assertEqual(manual.get(modifier), mark)
 
     def test_each_active_trigger_is_in_the_active_policy_list(self):
         block = _top_level_block(_text(DASH_SGUIS), "banking_dash_any_policy_active = {")

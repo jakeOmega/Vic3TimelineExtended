@@ -179,7 +179,7 @@
  country_legislative_override_capacity_add_desc:0 "How easily this regime can bypass the normal legislative process. At 2 or more, the regime can decisively push laws through despite [Concept('concept_interest_group','Interest Group')] opposition; at 4 or more, it can force them through outright. Each point also trims the [concept_authority] cost — modestly below +5 (about -3% at +2, -9% at +4) and steeply beyond it (about -20% at +5, -50% at +8, -75% at +16). Forcing a law temporarily depletes capacity, recovering over about five years, so capacity above a threshold acts as a buffer that lets the regime act again sooner and at higher tiers. Authoritarian governance, suppressive policies, centralized state structures, surveillance technology, state institutions (policing, thought control, propaganda), and certain power bloc principles raise capacity; democratic suffrage, decentralization, feudal arrangements, and protected liberties lower it."
  country_leverage_threshold_change_add:0 "[concept_power_bloc_leverage] Threshold Change"
  country_leverage_threshold_change_add_desc:0 "A change in the [concept_power_bloc_leverage] threshold for a [concept_power_bloc_leader] to invite a country to their [concept_power_bloc]."
- country_nuclear_program_progress_mult:0 "[concept_nuclear_program] Progress Multiplier"
+ country_nuclear_program_progress_mult:0 "[concept_nuclear_program] Progress"
  country_nuclear_program_progress_mult_desc:0 "Multiplies the rate at which this country's [concept_nuclear_program] progress accrues. Values greater than 0 speed progress; negative values slow it."
  country_nuclear_weapon_attack_success_add:0 "[concept_nuclear_strike] Success Chance"
  country_nuclear_weapon_attack_success_add_desc:0 "The chance that our [concept_nuclear_stockpile] will successfully deliver a [concept_nuclear_strike] on their target."
@@ -1245,18 +1245,3 @@
  unit_combat_unit_type_stealth_aircraft_defense_mult_desc:0 "A percentage bonus or penalty to the defense capability of Stealth Aircraft combat units"
  unit_combat_unit_type_stealth_aircraft_offense_mult:0 "[GetCombatUnitType('combat_unit_type_stealth_aircraft').GetName] [concept_offense]"
  unit_combat_unit_type_stealth_aircraft_offense_mult_desc:0 "A percentage bonus or penalty to the offense capability of Stealth Aircraft combat units"
-
- banking_restrict_inflows:0 "Restrict Speculative Inflows"
- banking_restrict_inflows_desc:0 "$CB_RESTRICT_INFLOWS_DESC$"
-
- banking_sterilize_inflows:0 "Sterilize Capital Inflows"
- banking_sterilize_inflows_desc:0 "$CB_STERILIZE_INFLOWS_DESC$"
-
- banking_foreign_borrowing_limits:0 "Limit Foreign-Currency Borrowing"
- banking_foreign_borrowing_limits_desc:0 "$CB_FOREIGN_BORROWING_LIMITS_DESC$"
-
- banking_fx_surrender:0 "Foreign Exchange Surrender Requirement"
- banking_fx_surrender_desc:0 "$CB_FX_SURRENDER_DESC$"
-
- banking_emergency_import_financing:0 "Emergency Import Financing"
- banking_emergency_import_financing_desc:0 "$CB_EMERGENCY_IMPORT_FINANCING_DESC$"

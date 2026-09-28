@@ -6,13 +6,10 @@ Flag kinds: **unresolved-helper-call** is an unknown name in call form (`x = yes
 
 - Catalog size: **7145**
 - Flags (unreviewed): **0**
-- Flags (REVIEWED-suppressed): **4**
+- Flags (REVIEWED-suppressed): **1**
 
 No unreviewed effect/trigger name issues. ✅
 
 ## REVIEWED-suppressed
 
-- `ai_acceptance_max` (unknown-name) — common/diplomatic_plays/te_un_mandate_play.txt (REVIEWED 2026-09-18: diplomatic-play field, not an effect/trigger — vanilla dp_return_state uses it (game/common/diplomatic_plays/00_diplomatic_plays.txt:146). effect_trigger_validity_audit has no schema for this entity type.)
-- `second_desc` (unknown-name) — common/scripted_progress_bars/extra_progress_bars.txt (REVIEWED 2026-09-20: scripted-progress-bar field, not an effect/trigger — vanilla 00_great_game_progress_bars.txt:4 uses it; the audit has no schema for this entity type)
-- `can_use_obligations` (unresolved-helper-call) — common/diplomatic_actions/un_lobbying.txt (REVIEWED 2026-09-18: diplomatic-action field, not an effect/trigger — vanilla violate_sovereignty uses it (game/common/diplomatic_actions/03_violate_sovereignty.txt:8). effect_trigger_validity_audit has no schema for this entity type.)
-- `decline_effect` (unresolved-helper-call) — common/diplomatic_actions/un_lobbying.txt (REVIEWED 2026-09-18: diplomatic-action field, not an effect/trigger — vanilla violate_sovereignty uses it (game/common/diplomatic_actions/03_violate_sovereignty.txt:66). effect_trigger_validity_audit has no schema for this entity type.)
+- `actor` (unknown-name) — common/scripted_effects/un_lobby_effects.txt (REVIEWED 2026-09-27: `actor` is the trigger's documented key (engine triggers.log: would_accept_diplomatic_action = { actor = <country scope> type = <action type key> }))

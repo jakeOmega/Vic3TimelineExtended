@@ -3,7 +3,9 @@
 # These are policy abstractions, not a second foreign-exchange balance sheet.
 banking_external_inflow_factor = { value = 0.5 }
 banking_external_sterilized_factor = { value = 0.25 }
-banking_external_fx_protection_step = { value = 0.020833 }
+# 0.5 / 24, rounded up so the cap is reached at month 24. Keep literals to
+# five decimals: 0.020833 logged "Badly read script value" at load.
+banking_external_fx_protection_step = { value = 0.02084 }
 banking_external_fx_protection_cap = { value = 0.5 }
 banking_external_sterilization_share = { value = 0.0001 }
 banking_external_surrender_share = { value = 0.0005 }

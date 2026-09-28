@@ -397,6 +397,61 @@ class ModifierGrantScanTests(unittest.TestCase):
         self.assertEqual(len(out), 1)
         self.assertEqual(out[0]["value"], 0.5)
 
+    def test_hyphenated_entity_id(self):
+        # #327: `post-scarcity_economy = {` never opened an entity, so its
+        # grants were silently dropped.
+        out = self._scan(
+            "post-scarcity_economy = {\n\tmodifier = {\n\t\ttarget_mod = 0.2\n\t}\n}\n",
+            entity_type="Technologies")
+        self.assertEqual(len(out), 1)
+        self.assertEqual(out[0]["entity_id"], "post-scarcity_economy")
+        out = self._scan(
+            "INJECT:pan-nationalism = {\n\tmodifier = {\n\t\ttarget_mod = 1\n\t}\n}\n",
+            entity_type="Technologies")
+        self.assertEqual([g["entity_id"] for g in out], ["pan-nationalism"])
+
+    def test_opener_rejects_leading_hyphen(self):
+        self.assertIsNone(mss._GRANT_OPENER_RE.match("\t-1 = {"))
+        self.assertIsNone(mss._GRANT_OPENER_RE.match("\tvalue = -1"))
+        self.assertIsNone(mss._GRANT_OPENER_RE.match("\tx >= {"))
+        self.assertEqual(
+            mss._GRANT_OPENER_RE.match("lab-grown_food = {").group(1), "lab-grown_food")
+
+
+class ExtractModifierFieldsTests(unittest.TestCase):
+    """#336 — /modifier-search's field walker keeps registered booleans."""
+
+    # Parsed shape: every value is an (operator, value) tuple.
+    RAW = ("=", {
+        "modifier": ("=", {
+            "country_minting_mult": ("=", "0.1"),
+            "country_can_create_unbacked_money_bool": ("=", "yes"),
+            "country_banking_lock_asset_relief_bool": ("=", "no"),
+        }),
+        "is_shown_when_inactive": ("=", "yes"),
+        "possible": ("=", {"is_at_war": ("=", "yes")}),
+    })
+    REGISTERED = {
+        "country_minting_mult",
+        "country_can_create_unbacked_money_bool",
+        "country_banking_lock_asset_relief_bool",
+    }
+
+    def test_registered_boolean_kept_as_string(self):
+        out = mss._extract_modifier_fields(self.RAW, bool_keys=self.REGISTERED)
+        self.assertEqual(out["country_can_create_unbacked_money_bool"], "yes")
+        self.assertEqual(out["country_banking_lock_asset_relief_bool"], "no")
+        self.assertEqual(out["country_minting_mult"], 0.1)
+
+    def test_unregistered_yes_flags_dropped(self):
+        out = mss._extract_modifier_fields(self.RAW, bool_keys=self.REGISTERED)
+        self.assertNotIn("is_shown_when_inactive", out)
+        self.assertNotIn("is_at_war", out)
+
+    def test_without_registry_only_numerics(self):
+        out = mss._extract_modifier_fields(self.RAW)
+        self.assertEqual(out, {"country_minting_mult": 0.1})
+
 
 class ModifierGrantLookupTests(unittest.TestCase):
     """Live import-level test against the real mod tree (no server needed)."""
@@ -1317,6 +1372,30 @@ class ErrorBodyStatusTests(unittest.TestCase):
                 mss.ModStateHandler._logs(self.handler, ["debug", "diff"], {})
         self.assertEqual(ctx.exception.status, 404)
         self.assertIn("to diff against", ctx.exception.payload["error"])
+
+    def test_logs_debug_log_param_hides_and_isolates_trace_output(self):
+        fd, path = tempfile.mkstemp(suffix=".log")
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            f.write(
+                "[20:00:01][jomini_effect_impl.cpp:454]: common/scripted_effects/x.txt:5: TE_X: probe line\n"
+                "[20:00:01][jomini_effect_impl.cpp:2501]: State X (x1)\n"
+                "Root: Country Y (2)\n"
+                "[20:00:02][jomini_scriptvalue.cpp:1659]: Value of wrong type in 'common/scripted_effects/x.txt:9'. Got value of type 'none'\n"
+            )
+        info = types.SimpleNamespace(family="debug", generation=0, path=path,
+                                     to_dict=lambda: {"family": "debug"})
+        base = {"mod_only": ["false"], "dedupe": ["false"]}
+        try:
+            with mock.patch("game_log_reader.list_logs", return_value=[info]):
+                shown = mss.ModStateHandler._logs(self.handler, ["debug"], dict(base))
+                hidden = mss.ModStateHandler._logs(self.handler, ["debug"], {**base, "debug_log": ["hide"]})
+                only = mss.ModStateHandler._logs(self.handler, ["debug"], {**base, "debug_log": ["only"]})
+        finally:
+            os.remove(path)
+        self.assertEqual(shown["total"], 3)
+        self.assertEqual([e["source"] for e in hidden["entries"]], ["jomini_scriptvalue.cpp:1659"])
+        self.assertEqual({e["category"] for e in only["entries"]}, {"debug_log"})
+        self.assertEqual(only["total"], 2)
 
     def test_loc_keys_usage_is_400_and_unknown_type_is_404(self):
         with mock.patch.object(mss, "ms", _StubModState()):

@@ -16,8 +16,8 @@ Mod-added entities (key not in vanilla) whose icon path resolves only to a vanil
 |---|---|---|
 | Technologies | 170 | 135 on `invention_icons/mass_communication.dds` |
 | Buildings | 300 | 205 distinct files; 50 on `skyscraper.dds`, 12 on `building_government_administration.dds`. Some reuse may be deliberate, see the allowlist below |
-| Power bloc principles | 42 groups | 124 tiers; vanilla uses one icon per group, not per tier |
-| Ideologies | 33 | 21 files |
+| Power bloc principles | 15 groups | 75 tiers on 5 vanilla icons, 8 groups on `food_standardization`. The first count, 42, included 22 vanilla groups that gained tiers 4–5 and the 5 `sacred_civics_N_mod` variants; those share their group's icon as vanilla does. Their tier frames were the real gap: `gen_principle_tier_frames.py` added frames IV and V |
+| Ideologies | ~9 | 33 borrow, but 24 are `ideology_custom_religion_*` variants on their base ideology's icon, as vanilla's variants are (`papal_paternalistic` → `paternalistic.dds`). Two looks: IG ideologies gold on a crimson disc, leader ideologies silver on teal (`ideology_leader/`) |
 | Treaty articles | 30 | 18 on `offer_embassy.dds` |
 | Mobilization options | 27 | 14 on `machinegunners.dds` |
 | IG traits | 18 | |
@@ -32,7 +32,7 @@ Mod-added entities (key not in vanilla) whose icon path resolves only to a vanil
 
 None of the files holding a placeholder reference are generator-owned, so rewriting the references is a plain text edit. One caveat: `common/buildings/company_buildings.txt` (45 building icon references) was bootstrapped by `gen_vanilla_company_buildings.py`. It is hand-editable now, but re-running that generator would put the old icons back.
 
-**Totals.** The table sums to 665 icons, or 683 with the 18 law icons. The building row will shrink once its allowlist entries are triaged. A recount on 2026-09-27 matched apart from content added since (31 treaty articles, 316 buildings).
+**Totals.** The table first summed to 665 icons, or 683 with the 18 law icons. A later recount of principles (42 → 15) and ideologies (33 → ~9) takes about 51 off. The building row will shrink once its allowlist entries are triaged. A recount on 2026-09-27 matched apart from content added since (31 treaty articles, 316 buildings).
 
 ## Vanilla icon formats
 

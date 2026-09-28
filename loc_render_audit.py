@@ -33,6 +33,27 @@ argument is a plain string literal and substituted text is not escaped, so a
 
 Both fixed 2026-09-25 (20 instances); both are mod-clean regression guards.
 
+**Article-instance scope in a treaty article's type text**
+(`article_desc_scope`) — `[SOURCE_COUNTRY…]`, `[TARGET_COUNTRY…]`,
+`[FIRST_COUNTRY…]`, `[SECOND_COUNTRY…]`, `[ROOT…]` or `[SCOPE…]` heading a
+data chain in `<article>_desc` or `<article>_effects_desc`. Those scopes are
+bound only when an article instance exists, which is the case for
+`<article>_article_short_desc`, the one place they belong. `_desc` renders
+through `ArticleType.GetDesc` and `_effects_desc` in offered-treaty and
+designer previews. Neither has an instance behind it, so the promote returns
+nullptr: the text shows blank, and debug.log logs
+`Promote 'SOURCE_COUNTRY' returned nullptr` with no script path. The
+`enforce_emissions_reduction_effects_desc` bullet reading
+`[SOURCE_COUNTRY.MakeScope.ScriptValue(…)]` logged 88 such lines in one session
+(fixed 2026-09-27). None of vanilla's 68 `_desc` / `_effects_desc` values
+contains any data expression other than a concept link, so the rule is
+absolute. Articles are the top-level keys of the mod's
+`common/treaty_articles/*.txt`, with any `INJECT:` / `REPLACE:` prefix removed.
+The committed `vanilla_parsed/` snapshot adds vanilla's article names when it
+is present, which covers a mod override of a vanilla article's loc. Known
+limit: a `$key$` reference is not expanded, so scoped text that arrives
+through one is missed.
+
 `localization_accessor_audit` catches `[Scope.GetX]` accessor chains and
 `concept_reference_audit` catches `[concept_x]` hyperlinks — neither flags
 bracket formatting tags or nesting. This audit closes that gap. The two bracket
@@ -52,6 +73,7 @@ engine ignores anything after the closing quote:
 
     my_loc_key:0 "... [b]bold[/b] ..." # REVIEWED 2026-05-21: rationale
 """
+import json
 import os
 import re
 from dataclasses import dataclass, field
@@ -60,7 +82,7 @@ from dataclasses import dataclass, field
 @dataclass
 class RenderFlag:
     loc_key: str
-    issue: str  # "bracket_tag" | "nested_brackets" | "quoted_arg_expansion" | "quoted_name_apostrophe"
+    issue: str  # "bracket_tag" | "nested_brackets" | "quoted_arg_expansion" | "quoted_name_apostrophe" | "article_desc_scope"
     detail: str
     file: str
     line: int
@@ -231,6 +253,90 @@ def _quoted_name_keys(mod_path: str) -> set[str]:
     return names
 
 
+# A treaty article's top-level key, optionally behind a merge directive
+# (`INJECT:foo = {` extends vanilla's `foo`).
+_ARTICLE_ENTITY_RE = re.compile(
+    r"^(?:[A-Z_]+:)?([A-Za-z_][A-Za-z0-9_]*)\s*=\s*\{", re.MULTILINE
+)
+_VANILLA_ARTICLES_JSON = os.path.join("vanilla_parsed", "common", "treaty_articles.json")
+# Scopes bound only when an article instance exists. SOURCE/TARGET are a
+# directed article's sides, FIRST/SECOND a mutual article's; ROOT and SCOPE
+# read the render context, which a type preview may not supply. Vanilla uses
+# none of them in type text.
+_ARTICLE_SCOPE_RE = re.compile(
+    r"(?<![\w.])(SOURCE_COUNTRY|TARGET_COUNTRY|FIRST_COUNTRY|SECOND_COUNTRY|ROOT|SCOPE)\b"
+)
+_QUOTED_LITERAL_RE = re.compile(r"'[^']*'")
+# Longest suffix first: `foo_effects_desc` belongs to article `foo`, and only
+# falls back to being `foo_effects`'s `_desc` when `foo` is not an article.
+_ARTICLE_TYPE_TEXT_SUFFIXES = ("_effects_desc", "_desc")
+
+
+def _treaty_article_keys(mod_path: str) -> set[str]:
+    """Names of every treaty article the mod defines or extends, plus
+    vanilla's from the committed `vanilla_parsed/` snapshot when present
+    (CI has it; a temp-dir test tree does not, and needs no game install)."""
+    names: set[str] = set()
+    abs_dir = os.path.join(mod_path, "common", "treaty_articles")
+    if os.path.isdir(abs_dir):
+        for fname in sorted(os.listdir(abs_dir)):
+            if not fname.endswith(".txt"):
+                continue
+            try:
+                with open(os.path.join(abs_dir, fname), encoding="utf-8-sig",
+                          errors="replace") as fh:
+                    names.update(_ARTICLE_ENTITY_RE.findall(fh.read()))
+            except OSError:
+                pass
+    try:
+        with open(os.path.join(mod_path, _VANILLA_ARTICLES_JSON), encoding="utf-8") as fh:
+            names.update(json.load(fh))
+    except (OSError, ValueError):
+        pass
+    return names
+
+
+def article_type_text_key(loc_key: str, articles: set[str]) -> tuple[str, str] | None:
+    """Return (article, suffix) when `loc_key` is `<article>_desc` or
+    `<article>_effects_desc` for a known article, else None. The article name
+    must match exactly, so `<article>_article_short_desc` and
+    `<article>_crisis_desc` are not type text."""
+    for suffix in _ARTICLE_TYPE_TEXT_SUFFIXES:
+        if loc_key.endswith(suffix):
+            article = loc_key[: -len(suffix)]
+            if article in articles:
+                return article, suffix
+    return None
+
+
+def check_article_scope(value: str, article: str, suffix: str) -> list[tuple[str, str]]:
+    """Flag a data chain in a treaty article's `_desc` / `_effects_desc` that
+    starts from a scope only an article instance binds. Such text renders
+    with no instance behind it, so the scope promotes to nullptr and renders
+    blank. The one valid home is `<article>_article_short_desc`.
+
+    Each `[...]` expression is scanned, not just its head, because
+    `[SelectLocalization(SOURCE_COUNTRY.IsX, 'a', 'b')]` fails the same way.
+    Single-quoted literals are skipped."""
+    if "[" not in value:
+        return []
+    found: list[str] = []
+    for expr in _DATA_EXPR_RE.findall(value):
+        for scope in _ARTICLE_SCOPE_RE.findall(_QUOTED_LITERAL_RE.sub("''", expr)):
+            if scope not in found:
+                found.append(scope)
+    if not found:
+        return []
+    return [(
+        "article_desc_scope",
+        f"{', '.join(f'`[{s}…]`' for s in found)} in `{article}{suffix}`, which "
+        "renders with no article instance behind it (article-type tooltip, "
+        "offered-treaty and designer previews), so the scope promotes to "
+        "nullptr and shows blank. Keep this text scope-free; scoped text "
+        f"belongs in `{article}_article_short_desc`",
+    )]
+
+
 def _parse_reviewed(comment: str | None) -> dict | None:
     if not comment:
         return None
@@ -322,12 +428,16 @@ def audit(ms=None, mod_path: str | None = None) -> AuditResult:
 
     loc_values = {key: value for key, value, _t, _f, _l in entries}
     quoted_names = _quoted_name_keys(mod_path)
+    articles = _treaty_article_keys(mod_path)
 
     flags: list[RenderFlag] = []
     for loc_key, value, trailing, rel_p, line in entries:
         issues = check_value(value) + check_quoted_expansion(value, loc_values)
         if loc_key in quoted_names:
             issues += check_quoted_name(value, loc_values)
+        article_text = article_type_text_key(loc_key, articles)
+        if article_text:
+            issues += check_article_scope(value, *article_text)
         if not issues:
             continue
         exemption = _parse_reviewed(trailing)
@@ -353,6 +463,7 @@ _ISSUE_LABEL = {
     "nested_brackets": "Nested [...] inside [...]",
     "quoted_arg_expansion": "`$key$` expanding [ or ' into a quoted argument",
     "quoted_name_apostrophe": "Straight apostrophe in a modifier name",
+    "article_desc_scope": "Article-instance scope in a treaty article's `_desc` / `_effects_desc`",
 }
 
 
@@ -383,6 +494,12 @@ def render_report(result: AuditResult) -> str:
         "name (the engine pastes it into `GetRawTextTooltipTag('…')` for the",
         "add/remove-modifier tooltip). Fix: move the reference out of the",
         "argument; write `’` (U+2019) in the name.",
+        "",
+        "Also flagged: `[SOURCE_COUNTRY…]`, `[TARGET_COUNTRY…]`, `[FIRST_COUNTRY…]`,",
+        "`[SECOND_COUNTRY…]`, `[ROOT…]` or `[SCOPE…]` in a treaty article's `_desc`",
+        "or `_effects_desc`. That text renders with no article instance behind it,",
+        "so the scope promotes to nullptr and shows blank. Fix: keep it scope-free",
+        "and move scoped text into `<article>_article_short_desc`.",
         "",
         "Suppress an intentional flag with a trailing comment on the loc line:",
         "`my_loc_key:0 \"…\" # REVIEWED YYYY-MM-DD: rationale`",

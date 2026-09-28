@@ -71,6 +71,10 @@ SOURCE_CATEGORY_PREFIX: dict[str, str] = {
     "pdx_persistent_reader.cpp:268": "script_parse_error",
     "jomini_trigger.cpp:721": "inconsistent_trigger_scope",
     "jomini_effect.cpp:752": "inconsistent_effect_scope",
+    # The parse-time validator: `Variable 'X'` / `Event target 'X'` is used
+    # but is never set. Without this it fell through to the file rule below
+    # and read as a scope error.
+    "jomini_effect.cpp:1139": "used_but_never_set",
     "virtualfilesystem.cpp:569": "missing_file",
     "guitexturehandler.h:155": "missing_texture_for_entity",
     "gfx_dds_loader.cpp:442": "dds_dimensions",
@@ -91,6 +95,11 @@ SOURCE_CATEGORY_FILE: dict[str, str] = {
     "guitexturehandler.h": "missing_texture_for_entity",
     "gfx_dds_loader.cpp": "dds_dimensions",
     "ai_strategy.cpp": "ai",
+    # Every line of this file is script's own `debug_log` output (`:454`,
+    # `:453` before 1.14) or the scope dump `debug_log_scopes = yes` appends
+    # (`:2501`): what a probe or a system's trace printed, not an engine error.
+    # Checked against every retained log generation, 2026-09-27.
+    "jomini_effect_impl.cpp": "debug_log",
     "localization_database.cpp": "localization",
 }
 
@@ -298,6 +307,21 @@ def _classify(source: str, message: str) -> str:
 # ---------------------------------------------------------------------------
 def filter_mod_only(entries: list[LogEntry]) -> list[LogEntry]:
     return [e for e in entries if e.files]
+
+
+def filter_debug_log(entries: list[LogEntry], mode: str) -> list[LogEntry]:
+    """Apply a `debug_log=show|hide|only` mode to entries.
+
+    `hide` drops script `debug_log` output (category `debug_log`), `only` keeps
+    nothing else, `show` (and any other value) leaves the list alone. Triage
+    hides it: the mod's trace and probe lines (`TE_*:`) would otherwise
+    outnumber the errors. Read them with `only`.
+    """
+    if mode == "hide":
+        return [e for e in entries if e.category != "debug_log"]
+    if mode == "only":
+        return [e for e in entries if e.category == "debug_log"]
+    return entries
 
 
 def filter_external_mods(entries: list[LogEntry]) -> list[LogEntry]:

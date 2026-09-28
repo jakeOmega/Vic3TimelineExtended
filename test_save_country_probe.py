@@ -6,7 +6,9 @@ simply stops resolving and the country reads as having no variables, which looks
 like an answer. These tests pin the layout by building a synthetic `.v3` byte by
 byte and asserting the values come back out, and pin the one piece of judgement
 the tool makes — recognising a civil war that has ended, whichever side won, and
-reporting what the survivor did with the loser's variables.
+reporting what the survivor did with the loser's variables. Laws add a second
+failure mode that looks like an answer: a law put in the wrong group, which the
+depth-aware law-file reader exists to prevent, hides or invents a conflict.
 
 Run: .venv/bin/python test_save_country_probe.py
 """
@@ -97,6 +99,30 @@ def record(rid, type_name, owner, active=None, modifiers=()):
     if modifiers:
         out += modifier_block(modifiers)
     return out + CLOSE
+
+
+def law(rid, name, owner, active=False, since=None, replaced=None, enacting=None, mark=False):
+    """One country-law record. An inactive law is saved with no active key at all."""
+    out = U32 + struct.pack('<I', rid) + EQ + OPEN + tok(scp.KEY_LAW_TYPE) + EQ + string(name)
+    out += tok(scp.KEY_OWNER) + EQ + U32 + struct.pack('<I', owner)
+    if active:
+        out += tok(scp.KEY_ACTIVE) + EQ + BOOL + b'\x01'
+    if mark:  # 0x5fac, undecoded; must not upset the walk
+        out += tok(0x5FAC) + EQ + BOOL + b'\x01'
+    if since is not None:
+        out += tok(scp.KEY_LAW_SINCE) + EQ + I32 + struct.pack('<i', since)
+    if replaced:
+        out += tok(scp.KEY_LAW_REPLACED) + EQ + string(replaced)
+    if enacting is not None:
+        out += tok(scp.KEY_LAW_ENACTING) + EQ + I32 + struct.pack('<i', enacting)
+    return out + CLOSE
+
+
+def law_db(*records):
+    """The law database; a free slot (`<id> = 0x0165`) sits among the records, as in real saves."""
+    free = U32 + struct.pack('<I', 999) + EQ + tok(0x0165)
+    body = records[0] + free + b''.join(records[1:]) if records else free
+    return tok(scp.KEY_LAW_DB) + EQ + OPEN + tok(scp.KEY_DATABASE) + EQ + OPEN + body + CLOSE + CLOSE
 
 
 def hours(year, month, day):
@@ -225,6 +251,209 @@ class FilterTests(unittest.TestCase):
         self.assertEqual(set(both), {ORIGINAL, SPAIN})
 
 
+GOV, CRIME = 'lawgroup_governance_principles', 'lawgroup_criminal_justice'
+GROUPS = {
+    'law_monarchy': GOV,
+    'law_presidential_republic': GOV,
+    'law_punishment_focused_criminal_justice': CRIME,
+    'law_penal_labor_camps': CRIME,
+    'law_restorative_justice': CRIME,
+}
+
+
+class LawDecodingTests(unittest.TestCase):
+    """Law records: active is the presence of 0x2ab2, groups come from the law files, not the save."""
+
+    def setUp(self):
+        self.path = write_save(
+            [country(ORIGINAL, 'GER', flags=[HOLDER]), country(SPAIN, 'SPA', flags=[HOLDER])],
+            records=[law_db(
+                law(1, 'law_presidential_republic', ORIGINAL, active=True, since=hours(1882, 9, 4),
+                    replaced='law_monarchy', mark=True),
+                law(2, 'law_monarchy', ORIGINAL, since=hours(1836, 1, 1)),
+                law(3, 'law_punishment_focused_criminal_justice', ORIGINAL, active=True, since=hours(1836, 1, 1)),
+                law(4, 'law_penal_labor_camps', ORIGINAL),
+                law(5, 'law_restorative_justice', ORIGINAL, enacting=hours(2003, 10, 1)),
+                law(6, 'law_mystery_a', ORIGINAL, active=True),
+                law(7, 'law_monarchy', SPAIN, active=True, since=hours(1836, 1, 1)),
+                law(8, 'law_punishment_focused_criminal_justice', SPAIN, active=True, since=hours(1836, 1, 1)),
+                law(9, 'law_penal_labor_camps', SPAIN, active=True, since=hours(2020, 2, 1)),
+                law(10, 'law_mystery_a', SPAIN, active=True),
+                law(11, 'law_mystery_b', SPAIN, active=True),
+            )],
+        )
+
+    def save(self, **filters):
+        return scp.Save(self.path, scp.Filters(**filters), GROUPS)
+
+    def test_records_decode_by_key(self):
+        recs, warning = scp.law_records(scp.read_gamestate(self.path))
+        self.assertIsNone(warning, 'every law-type key in the gamestate is inside the database')
+        self.assertEqual(len(recs), 11, 'the free slot is skipped')
+        by = {(r['country'], r['law']): r for r in recs}
+        self.assertEqual(by[ORIGINAL, 'law_presidential_republic'], {
+            'law': 'law_presidential_republic', 'country': ORIGINAL, 'active': True,
+            'since': hours(1882, 9, 4), 'replaced': 'law_monarchy', 'enacting': None,
+        })
+        monarchy = by[ORIGINAL, 'law_monarchy']
+        self.assertFalse(monarchy['active'], 'no 0x2ab2 means inactive')
+        self.assertEqual(monarchy['since'], hours(1836, 1, 1), 'an inactive law keeps its date')
+        self.assertIsNone(by[ORIGINAL, 'law_penal_labor_camps']['since'])
+        self.assertEqual(by[ORIGINAL, 'law_restorative_justice']['enacting'], hours(2003, 10, 1))
+
+    def test_record_holds_only_active_laws_sorted_by_group(self):
+        rec = self.save(tags=['GER']).select()[ORIGINAL]
+        self.assertEqual([(x['group'], x['law']) for x in rec['laws']], [
+            (CRIME, 'law_punishment_focused_criminal_justice'),
+            (GOV, 'law_presidential_republic'),
+            (None, 'law_mystery_a'),
+        ])
+        self.assertEqual(rec['enacting'], ('law_restorative_justice', hours(2003, 10, 1)))
+
+    def test_law_filter_matches_name_or_group(self):
+        recs = self.save(law='^law_penal_labor_camps$').select()
+        self.assertEqual(list(recs), [SPAIN], 'GER holds the law only inactive')
+        self.assertEqual([x['law'] for x in recs[SPAIN]['laws']], ['law_penal_labor_camps'])
+        recs = self.save(law='^lawgroup_criminal_justice$').select()
+        self.assertEqual(set(recs), {ORIGINAL, SPAIN})
+        self.assertEqual([x['law'] for x in recs[SPAIN]['laws']],
+                         ['law_penal_labor_camps', 'law_punishment_focused_criminal_justice'])
+
+    def test_laws_flag_prints_only_laws_and_marks_a_clash(self):
+        out = io.StringIO()
+        with redirect_stdout(out):
+            scp.report(self.path, scp.Filters(tags=['SPA'], laws=True), GROUPS)
+        text = out.getvalue()
+        self.assertIn('laws, active (5):', text)
+        self.assertIn(f'{CRIME}: law_penal_labor_camps (since 2020.2.1); '
+                      'law_punishment_focused_criminal_justice (since 1836.1.1)  <- 2 ACTIVE IN ONE GROUP', text)
+        self.assertIn('?: law_mystery_a; law_mystery_b\n', text, 'unknown-group laws are listed, never marked')
+        self.assertNotIn('variables', text)
+
+    def test_conflicts(self):
+        save = self.save()
+        found = scp.law_conflicts(save.active_laws, GROUPS)
+        self.assertEqual(list(found), [SPAIN], 'two laws with no known group are not a conflict')
+        self.assertEqual([r['law'] for r in found[SPAIN][CRIME]],
+                         ['law_penal_labor_camps', 'law_punishment_focused_criminal_justice'])
+
+    def test_conflict_report(self):
+        out = io.StringIO()
+        with redirect_stdout(out):
+            count = scp.conflict_report(self.path, scp.Filters(), GROUPS)
+        text = out.getvalue()
+        self.assertEqual(count, 1)
+        self.assertIn('2 countries with active laws (8 laws), 1 with two or more active in one group', text)
+        self.assertIn(f'SPA id={SPAIN}: {CRIME}: law_penal_labor_camps (since 2020.2.1); '
+                      'law_punishment_focused_criminal_justice (since 1836.1.1)', text)
+        self.assertIn(f'by group: {CRIME} 1', text)
+        self.assertIn('by law set: law_penal_labor_camps + law_punishment_focused_criminal_justice 1', text)
+        self.assertIn('by the date the newer law became active: 2020.2.1 1', text)
+        self.assertIn('not checked, no known group (2): law_mystery_a, law_mystery_b', text)
+        with redirect_stdout(io.StringIO()):
+            self.assertEqual(scp.conflict_report(self.path, scp.Filters(tags=['GER']), GROUPS), 0)
+
+    def test_diff_reports_laws_turning_on_and_off(self):
+        after = write_save(
+            [country(ORIGINAL, 'GER', flags=[HOLDER]), country(SPAIN, 'SPA', flags=[HOLDER])],
+            records=[law_db(
+                law(1, 'law_presidential_republic', ORIGINAL, active=True, since=hours(1882, 9, 4),
+                    replaced='law_monarchy'),
+                law(3, 'law_punishment_focused_criminal_justice', ORIGINAL, active=True, since=hours(1836, 1, 1)),
+                law(4, 'law_penal_labor_camps', ORIGINAL, active=True, since=hours(2003, 11, 2)),
+                law(6, 'law_mystery_a', ORIGINAL),
+            )],
+        )
+        out = io.StringIO()
+        with redirect_stdout(out):
+            scp.diff(self.path, after, scp.Filters(tags=['GER']), GROUPS)
+        text = out.getvalue()
+        self.assertIn(f'+law law_penal_labor_camps (since 2003.11.2) [{CRIME}]', text)
+        self.assertIn('-law law_mystery_a [?]', text)
+        self.assertNotIn('law_presidential_republic', text, 'an unchanged law is not a change')
+
+    def test_no_law_database_is_a_warning_not_an_empty_answer(self):
+        path = write_save([country(ORIGINAL, 'GER')])
+        save = scp.Save(path, scp.Filters(), GROUPS)
+        self.assertEqual(save.active_laws, {})
+        self.assertIn('no law database', save.law_warning)
+
+    def test_a_law_record_outside_the_database_is_a_warning(self):
+        stray = tok(scp.KEY_LAW_TYPE) + EQ + string('law_monarchy')
+        path = write_save([country(ORIGINAL, 'GER')], records=[law_db(law(1, 'law_monarchy', ORIGINAL)), stray])
+        self.assertIn('2 law-type keys in the gamestate but 1 law records decoded',
+                      scp.law_records(scp.read_gamestate(path))[1])
+
+
+class LawGroupTests(unittest.TestCase):
+    """Law -> group from the law files: only `group` at the law block's own depth counts."""
+
+    TEXT = '''﻿# law_commented = { group = lawgroup_comment    a stray { in a comment
+law_a = {
+\tgroup = lawgroup_a
+\tcan_enact = {
+\t\tgroup = lawgroup_nested   # nested: must not win
+\t}
+\thas_ruling_interest_group = ig_industrialists
+}
+law_b = {
+\tmodifier = { x = 1 }
+\tpossible = { OR = { group = lawgroup_deep } }
+\tinterest_group = lawgroup_wrong
+}
+INJECT:law_c = {
+\tgroup = lawgroup_c
+}
+REPLACE:law_d = { group = "lawgroup_d" }
+TRY_INJECT:law_e={group=lawgroup_e}
+'''
+
+    def test_depth_and_whole_token(self):
+        self.assertEqual(scp.law_groups_from_text(self.TEXT), {
+            'law_a': 'lawgroup_a',
+            'law_c': 'lawgroup_c',
+            'law_d': 'lawgroup_d',
+            'law_e': 'lawgroup_e',
+        })
+
+    def write(self, folder, name, text):
+        folder.mkdir(parents=True, exist_ok=True)
+        (folder / name).write_text(text, encoding='utf-8-sig')
+
+    def test_mod_layers_over_vanilla(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            vanilla, mod = Path(tmp) / 'vanilla', Path(tmp) / 'mod'
+            self.write(vanilla, '00_a.txt', 'law_x = { group = g_x }\nlaw_y = { group = g_y_old }\n')
+            self.write(vanilla, '00_b.txt', 'law_z = { group = g_z }\n')
+            self.write(mod, '00_b.txt', 'law_w = { group = g_w }\n')  # replaces vanilla's 00_b.txt
+            self.write(mod, 'extra.txt', 'INJECT:law_x = { modifier = { a = 1 } }\nINJECT:law_y = { group = g_y_new }\n')
+            self.assertEqual(scp.law_groups(vanilla, None, mod),
+                             {'law_x': 'g_x', 'law_y': 'g_y_new', 'law_w': 'g_w'})
+
+    def test_snapshot_stands_in_for_a_missing_install(self):
+        import json
+        with tempfile.TemporaryDirectory() as tmp:
+            snapshot, mod = Path(tmp) / 'laws.json', Path(tmp) / 'mod'
+            snapshot.write_text(json.dumps({
+                'law_x': ['=', {'group': ['=', 'g_x'], 'icon': ['=', '"x.dds"']}],
+                'law_q': ['=', {'icon': ['=', '"q.dds"']}],
+            }), encoding='utf-8')
+            self.write(mod, 'm.txt', 'law_m = { group = g_m }\n')
+            self.assertEqual(scp.law_groups(Path(tmp) / 'no_install', snapshot, mod), {'law_x': 'g_x', 'law_m': 'g_m'})
+            self.assertEqual(scp.law_groups(None, None, mod), {'law_m': 'g_m'}, 'nothing but the mod: no error')
+
+    def test_this_checkout(self):
+        """A naive scan gave the mod's group-less INJECT:law_elected_bureaucrats the next block's group."""
+        repo = Path(__file__).resolve().parent
+        snapshot = repo / 'vanilla_parsed' / 'common' / 'laws.json'
+        if not snapshot.exists():
+            self.skipTest('no vanilla_parsed snapshot')
+        groups = scp.law_groups(None, snapshot, repo / 'common' / 'laws')
+        self.assertEqual(groups['law_elected_bureaucrats'], 'lawgroup_bureaucracy')
+        self.assertEqual(groups['law_penal_labor_camps'], 'lawgroup_criminal_justice')
+        self.assertEqual(groups['law_punishment_focused_criminal_justice'], 'lawgroup_criminal_justice')
+
+
 class CivilWarTests(unittest.TestCase):
     """The MERGE report, and recognising an ended civil war whichever side won."""
 
@@ -248,6 +477,30 @@ class CivilWarTests(unittest.TestCase):
         self.assertIn('inherited (the loser\'s only, now on the survivor): 1', text)
         self.assertIn('survivor kept its own 1, took the loser\'s 0', text)
         self.assertIn('the loser\'s own modifiers: 1, also on the survivor now: 0', text)
+
+    def test_merge_counts_the_losers_laws(self):
+        before = write_save(
+            [country(ORIGINAL, 'GER', flags=[HOLDER]), country(REBEL, 'GER', flags=[REVOLT])],
+            records=[law_db(
+                law(1, 'law_monarchy', ORIGINAL, active=True),
+                law(2, 'law_penal_labor_camps', ORIGINAL, active=True),
+                law(3, 'law_presidential_republic', REBEL, active=True),
+            )],
+        )
+        after = write_save(
+            [country(ORIGINAL, 'GER'), country(REBEL, 'GER', flags=[HOLDER])],
+            records=[law_db(
+                law(3, 'law_presidential_republic', REBEL, active=True),
+                law(4, 'law_penal_labor_camps', REBEL, active=True),
+            )],
+        )
+        out = io.StringIO()
+        with redirect_stdout(out):
+            scp.diff(before, after, scp.Filters(tags=['GER']), GROUPS)
+        text = out.getvalue()
+        self.assertIn(f'MERGE: loser id {ORIGINAL} -> survivor id {REBEL}', text)
+        self.assertIn("the loser's own active laws: 2, also active on the survivor now: 1 ['law_penal_labor_camps']",
+                      text)
 
     def test_loyalists_won(self):
         a = {ORIGINAL: {'flags': {HOLDER: 1}}, REBEL: {'flags': {REVOLT: 1}}}

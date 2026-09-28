@@ -1,7 +1,10 @@
 ﻿# ============================================================================
-# LAW ENACTMENT PASS: banking cycle modifier cleanup
-# When an economy-type law changes, remove modifiers that belonged to the old
-# economy type so stale planning/council/CB-tool modifiers don't linger.
+# LAW ENACTMENT PASS: banking and monetary cleanup
+# When a law change takes a banking or monetary control away, switch it off
+# the moment the law lands. The economy-type modifier cleanup (planning,
+# cooperative, market CB tools) is not here: it runs from on_law_activated
+# (te_banking_economy_law_cleanup, below), where has_law already reads the
+# new law.
 # Root = country that enacted the law. Scope is country.
 # ============================================================================
 on_law_enactment_pass = {
@@ -36,26 +39,6 @@ te_banking_law_change_cleanup = {
 		# Only run if the banking cycle JE is active
 		if = {
 			limit = { has_journal_entry = je_banking_cycle }
-			# Switched AWAY from command economy → remove all planning_* modifiers
-			if = {
-				limit = { NOT = { has_law = law_type:law_command_economy } }
-				remove_banking_planning_modifiers_effect = yes
-			}
-			# Switched AWAY from cooperative ownership → remove all cooperative_* modifiers
-			if = {
-				limit = { NOT = { has_law = law_type:law_cooperative_ownership } }
-				remove_banking_cooperative_modifiers_effect = yes
-			}
-			# Switched TO command economy or cooperative → remove all market CB-tool modifiers
-			if = {
-				limit = {
-					OR = {
-						has_law = law_type:law_command_economy
-						has_law = law_type:law_cooperative_ownership
-					}
-				}
-				remove_banking_market_modifiers_effect = yes
-			}
 			# Left fiat or digital currency with open-market operations still running.
 			# OMO is fiat/digital only (monetary_policy_design.md §5.1 and the §0.1
 			# ruling of 2026-09-20), enforced in banking_possible_cb_open_market_ops,
@@ -83,21 +66,18 @@ te_banking_law_change_cleanup = {
 			# also records the off_cb_open_market_ops history marker, so an automatic
 			# switch-off draws on the chart exactly like a manual one.
 			#
-			# else_if on purpose: a country ALREADY IN a command or cooperative economy
-			# (the branch above reads the old law, per the timing note, so that is the
-			# case it catches) has just had banking_open_market_ops stripped there, and
-			# that removal is not visible inside this same effect block — the
-			# has_modifier read behind banking_tool_omo_active would still say yes and
-			# post a second, spurious marker. A country *entering* one of those
-			# economies falls through to here instead, which is also right: if it has a
-			# legacy OMO and no unbacked-money regime, switching it off is the whole
-			# point of this branch.
+			# A country entering a command or cooperative economy loses every market
+			# CB tool, OMO included, in te_banking_economy_law_cleanup. That runs
+			# later, from on_law_activated, and marks only a tool still on, so an
+			# OMO this branch already switched off is not marked again. (Were the
+			# removal somehow not yet visible there, the chart would get the same
+			# marker flag twice in one month, which draws the same.)
 			#
 			# te_mon_full_system: the regime rule this branch enforces is the monetary
 			# layer's, and banking_possible_cb_open_market_ops drops it under the
 			# simplified game rule. Switching the tool off here anyway would take it
 			# away from a country the `possible` gate still lets click it.
-			else_if = {
+			if = {
 				limit = {
 					te_mon_full_system = yes
 					banking_tool_omo_active = yes
@@ -544,6 +524,49 @@ on_law_activated = {
 		language_reform_law_on_action
 		radical_law_backlash_on_action
 		banking_law_cascade_on_law_activated
+		te_banking_economy_law_cleanup
+	}
+}
+
+# When the economic-system law changes, remove the banking tools that belonged
+# to the old economy type, so stale planning/cooperative/market CB-tool
+# modifiers don't linger. ROOT = law scope; owner = country.
+#
+# on_law_activated, not on_law_enactment_pass: at the pass the country still
+# holds the OLD law (vanilla 00_code_on_actions.txt, the note on the hook), so
+# has_law tests here acted one law change late (#337) — OMO survived entering
+# a command economy until the next enactment. Here the new law is in force,
+# and a law set directly by script (activate_law) is caught too. Each tool
+# still on is switched off with its history-chart marker (banking_strip_tool,
+# extra_effects.txt), so the chart shows it ending. It runs on every
+# activation, and a tool already off is skipped, so nothing is marked then.
+te_banking_economy_law_cleanup = {
+	effect = {
+		owner = {
+			if = {
+				limit = { has_journal_entry = je_banking_cycle }
+				# Not (or no longer) a command economy → remove all planning_* modifiers
+				if = {
+					limit = { NOT = { has_law = law_type:law_command_economy } }
+					remove_banking_planning_modifiers_effect = yes
+				}
+				# Not (or no longer) cooperative ownership → remove all cooperative_* modifiers
+				if = {
+					limit = { NOT = { has_law = law_type:law_cooperative_ownership } }
+					remove_banking_cooperative_modifiers_effect = yes
+				}
+				# Command economy or cooperative → remove all market CB-tool modifiers
+				if = {
+					limit = {
+						OR = {
+							has_law = law_type:law_command_economy
+							has_law = law_type:law_cooperative_ownership
+						}
+					}
+					remove_banking_market_modifiers_effect = yes
+				}
+			}
+		}
 	}
 }
 

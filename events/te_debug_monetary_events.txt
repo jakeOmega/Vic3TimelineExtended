@@ -497,21 +497,20 @@ te_debug_monetary.5 = { # REVIEWED 2026-09-20: console-only test event (`event t
 	#
 	#   * on_law_enactment_pass does NOT fire, so te_banking_law_change_cleanup
 	#     (common/on_actions/extra_on_actions.txt) never runs: its dollarisation
-	#     exit, its monetisation eligibility sweep and
-	#     remove_banking_planning_modifiers_effect are all skipped. The
+	#     exit and its monetisation eligibility sweep are skipped. The
 	#     dollarisation flag is therefore cleared below by hand, and cleared
 	#     WITHOUT te_mon_effect_new_currency — a pin is a cheat, not a currency
 	#     reform, and the ten-year premium would poison the very rate this
 	#     harness exists to read. Nothing else in the mod may take that
-	#     shortcut. An ex-command country also keeps its planning_* journal-entry
-	#     modifiers until it next really enacts an economic-system law; nothing
-	#     in the rate stack reads them, but the banking cycle this harness takes
-	#     its phase and bubble terms from does.
-	#   * on_law_activated DOES fire, and the mod hooks it with five effects
-	#     (extra_on_actions.txt): fix_incompatible_laws_from_law_scope,
-	#     te_fix_inconsistent_laws_from_law_scope, language_reform_law_on_action,
-	#     radical_law_backlash_on_action and banking_law_cascade_on_law_activated.
-	#     The second of those is the one that matters here.
+	#     shortcut.
+	#   * on_law_activated DOES fire, and the mod hooks it with every effect in
+	#     extra_on_actions.txt's on_law_activated list (plus
+	#     gm_law_activated_on_action in monument_events_on_actions.txt). Among
+	#     them, te_banking_economy_law_cleanup clears the planning_* /
+	#     cooperative_* / market-tool modifiers the new economic law rules out
+	#     (#337), so a pin that leaves a command economy loses its planning
+	#     tools at once. te_fix_inconsistent_laws_from_law_scope is the one
+	#     that matters most here.
 	#
 	# THE CONSISTENCY SWEEP RUNS AFTER EVERY activate_law AND WILL UNDO A
 	# CARELESS PIN. te_fix_inconsistent_laws walks every law group

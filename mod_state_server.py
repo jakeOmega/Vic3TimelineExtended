@@ -892,7 +892,10 @@ _SCALING_WRAPPERS: frozenset[str] = frozenset({
     "workforce_scaled", "level_scaled", "unscaled", "timed_modifier",
 })
 
-_GRANT_OPENER_RE = re.compile(r"^\s*(?:INJECT:|REPLACE:)?([A-Za-z_][\w]*)\s*=\s*\{")
+# Entity ids may contain `-` (`post-scarcity_economy`, `law_post-scarcity`,
+# `e-commerce`, #327); the first character stays a letter/underscore so a
+# `-1 = {` or `value = -1` line can never open an entity.
+_GRANT_OPENER_RE = re.compile(r"^\s*(?:INJECT:|REPLACE:)?([A-Za-z_][\w-]*)\s*=\s*\{")
 _GRANT_LINE_RE = re.compile(
     r"^\s*([a-z_][a-z0-9_]*)\s*=\s*(-?\d+(?:\.\d+)?|yes|no)\s*$"
 )
@@ -3502,8 +3505,14 @@ def _vocabulary_index() -> dict[str, list[str]]:
     return out
 
 
-def _extract_modifier_fields(obj, prefix=""):
-    """Walk parsed data and collect field names that look like modifiers (contain _ + end with _add/_mult etc)."""
+def _extract_modifier_fields(obj, prefix="", bool_keys=None):
+    """Walk parsed data and collect field names that look like modifiers (contain _ + end with _add/_mult etc).
+
+    Numeric values are kept as floats. A `yes`/`no` value is kept (as the
+    string) only when its key is in `bool_keys`, the registered modifier types:
+    boolean modifiers are granted as `country_x_bool = yes`, and restricting
+    them to registered names keeps the ~15k trigger/flag lines like
+    `is_at_war = yes` or `default_option = yes` out (#336)."""
     found = {}
     if isinstance(obj, dict):
         for k, v in obj.items():
@@ -3516,12 +3525,14 @@ def _extract_modifier_fields(obj, prefix=""):
                         fv = float(val)
                         found[k] = fv
                     except (ValueError, TypeError):
-                        pass
+                        if (bool_keys and isinstance(val, str)
+                                and val.lower() in ("yes", "no") and k in bool_keys):
+                            found[k] = val.lower()
             if isinstance(v, (dict, tuple, list)):
-                found.update(_extract_modifier_fields(v, prefix))
+                found.update(_extract_modifier_fields(v, prefix, bool_keys))
     elif isinstance(obj, (tuple, list)):
         for item in obj:
-            found.update(_extract_modifier_fields(item, prefix))
+            found.update(_extract_modifier_fields(item, prefix, bool_keys))
     return found
 
 
@@ -5110,7 +5121,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/modifier-search?q=<name>", "desc": "Validate / discover modifier keys against the engine catalog."},
                 {"path": "/modifier-grants/<name>?scope=both", "desc": "Reverse lookup: every law/tech/principle/amendment/decree/building/static-modifier that GRANTS modifier <name>, with file:line + value."},
                 {"path": "/modifier-patterns/<sub?>", "desc": "Modifier pattern catalog and discovered families."},
-                {"path": "/engine-docs/<section>/<key?>", "desc": "Engine reference (effects/triggers/modifiers/event-targets/on-actions/custom-localization)."},
+                {"path": "/engine-docs/<type>/<name?>", "desc": "Engine reference (effects/triggers/modifiers/event-targets/on-actions/custom-localization). With <name>: that one entry, or 404 with did_you_mean. Listing: ?q=&scope=&mask=&origin=&group=, capped at ?limit= (default 500); check `truncated` (`count` is the filtered total, `returned` the entries sent). Also /engine-docs/origin/<name> (every type), /engine-docs/usage/<name> (vanilla call sites), /engine-docs/loc-functions/<name?>."},
                 {"path": "/dev-docs/<section?>", "desc": "Vanilla developer-reference markdown docs."},
                 {"path": "/technology-effects/<tech>", "desc": "Aggregate of all effects applied by a tech."},
                 {"path": "/event-magnitude-audit", "desc": "Hardcoded fast-scaling event-value audit."},
@@ -5151,6 +5162,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 "status": "degraded",
                 "ready": False,
                 "pid": os.getpid(),
+                "mod_path": mod_path,
                 "reason": (
                     f"Vanilla data not loaded — {base_game_path}/game/common "
                     "is missing or empty and no usable vanilla_parsed/ "
@@ -5275,6 +5287,10 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "status": "running",
             "ready": True,
             "pid": os.getpid(),
+            # The checkout this server parses and regenerates. Lets a client
+            # in another checkout (a worktree) tell it is not its own server:
+            # test_reload_post_load only fires POST /reload on a match (#306).
+            "mod_path": mod_path,
             "uptime_seconds": round(uptime, 1),
             "startup_seconds": round(startup_elapsed, 1),
             "entity_types": list(ms.mod_parsers.keys()),
@@ -5479,9 +5495,15 @@ class ModStateHandler(BaseHTTPRequestHandler):
             Use `?vanilla_bugs=hide&mod_noise=hide` for a fully-clean triage
             view, or `?mod_only=unknown` to surface uncategorized engine
             entries that the canonical filters hide.
+        GET /logs/<family>?debug_log=show|hide|only
+            — keep (default) / drop / keep-only script `debug_log` output
+              (category `debug_log`: every `jomini_effect_impl.cpp` line,
+              including the `debug_log_scopes` dump). Triage hides it; read
+              probe and trace lines with `?debug_log=only&q=TE_`.
         """
         from game_log_reader import (
             list_logs, parse_log, filter_mod_only, filter_external_mods, filter_entries,
+            filter_debug_log,
             dedupe, summarize, diff_against_backup, cluster_sessions,
             load_vanilla_bug_registry, load_mod_noise_registry, tag_vanilla_bugs,
         )
@@ -5603,6 +5625,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
             include_external = (params.get("include_external") or [default_external])[0].lower() == "true"
             vanilla_bugs_mode = (params.get("vanilla_bugs") or ["show"])[0].lower()
             mod_noise_mode = (params.get("mod_noise") or ["show"])[0].lower()
+            debug_log_mode = (params.get("debug_log") or ["show"])[0].lower()
             current_entries = parse_log(match.path)
             against_entries = parse_log(against_match.path)
             # Tag noise first so the mod_only=unknown filter can examine
@@ -5615,6 +5638,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
             if not include_external:
                 current_entries = filter_external_mods(current_entries)
                 against_entries = filter_external_mods(against_entries)
+            current_entries = filter_debug_log(current_entries, debug_log_mode)
+            against_entries = filter_debug_log(against_entries, debug_log_mode)
             return {
                 "current": match.to_dict(),
                 "against": against_match.to_dict(),
@@ -5645,6 +5670,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         include_external = (params.get("include_external") or [default_external])[0].lower() == "true"
         if not include_external:
             entries = filter_external_mods(entries)
+        entries = filter_debug_log(entries, (params.get("debug_log") or ["show"])[0].lower())
         entries = filter_entries(
             entries,
             q=(params.get("q") or [None])[0],
@@ -6602,12 +6628,15 @@ class ModStateHandler(BaseHTTPRequestHandler):
 
         results = []
         seen = set()
+        # Registered modifier types (mod + vanilla), so boolean grants
+        # (`country_x_bool = yes`) are indexed too (#336).
+        modifier_types = set((ms.get_data("Modifier Types") or {}).keys())
         for etype in ms.mod_parsers:
             data = ms.get_data(etype)
             if not data:
                 continue
             for eid, raw in data.items():
-                modifiers = _extract_modifier_fields(raw)
+                modifiers = _extract_modifier_fields(raw, bool_keys=modifier_types)
                 matching = {k: v for k, v in modifiers.items() if query in k.lower()}
                 if matching:
                     results.append({
@@ -7819,7 +7848,15 @@ class ModStateHandler(BaseHTTPRequestHandler):
     # ---- engine docs ------------------------------------------------------
     def _engine_docs(self, parts, params):
         """GET /engine-docs                      - list available doc types
-        GET /engine-docs/<type>               - list all entries of a type
+        GET /engine-docs/<type>               - list entries of a type, capped
+                                                at ?limit=N (default 500);
+                                                `count` is the filtered total,
+                                                `returned` / `truncated` say
+                                                whether `entries` holds all of it
+        GET /engine-docs/<type>/<name>        - the entry named <name> in that
+                                                type (full entry), or 404 with
+                                                `did_you_mean` and the other
+                                                types that define <name>
         GET /engine-docs/<type>?q=<search>    - search entries
         GET /engine-docs/<type>?scope=<scope> - filter by scope
         GET /engine-docs/<type>?mask=<mask>   - filter by mask (modifiers only)
@@ -7996,6 +8033,31 @@ class ModStateHandler(BaseHTTPRequestHandler):
             raise NotFound(f"Unknown engine doc type: {doc_type}. Available: {list(engine_docs.keys())}")
 
         entries = engine_docs[doc_type]
+
+        # /engine-docs/<type>/<name> — one entry of that type. Used to fall
+        # through to the unfiltered listing, silently dropping <name> (#326).
+        if len(parts) > 2:
+            raise BadRequest(
+                f"Usage: /engine-docs/{doc_type}/<name> (one name segment)."
+            )
+        if len(parts) == 2:
+            name = parts[1]
+            matches = [e for e in entries if e.get("name") == name]
+            if not matches:
+                raise NotFound(
+                    f"{doc_type}/{name}",
+                    did_you_mean=difflib.get_close_matches(
+                        name, [e.get("name", "") for e in entries], n=5, cutoff=0.6
+                    ),
+                    defined_in_types=[
+                        t for t, es in engine_docs.items()
+                        if t != doc_type and any(e.get("name") == name for e in es)
+                    ],
+                    hint="GET /engine-docs/origin/<name> searches every doc type; "
+                         "/engine-docs/usage/<name> finds vanilla call sites.",
+                )
+            # A list: event-targets repeats some names (one entry per scope form).
+            return {"type": doc_type, "name": name, "found": True, "matches": matches}
         query = params.get("q", [""])[0].lower()
         scope_filter = params.get("scope", [""])[0].lower()
         mask_filter = params.get("mask", [""])[0].lower()
@@ -8038,12 +8100,18 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 "grouped_patterns": grouped,
                 "ungrouped_count": len(ungrouped),
                 "ungrouped": ungrouped[:limit],
+                "truncated": len(ungrouped) > limit,
             }
 
+        # `count` is the filtered total; `entries` is capped at `limit`, so a
+        # client scanning it must check `truncated` (#326).
+        page = filtered[:limit]
         return {
             "type": doc_type,
             "count": len(filtered),
-            "entries": filtered[:limit],
+            "returned": len(page),
+            "truncated": len(page) < len(filtered),
+            "entries": page,
         }
 
     # ---- developer reference docs -----------------------------------------

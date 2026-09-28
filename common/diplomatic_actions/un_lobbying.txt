@@ -66,7 +66,7 @@ un_secure_commitment_action = {
 	# through" is switched OFF. This deal is the mirror of that — WE take on the
 	# obligation — and letting both run at once would let an asker cash in one
 	# favour to buy another, which is not a trade anybody could read.
-	can_use_obligations = no # REVIEWED 2026-09-18: diplomatic-action field, not an effect/trigger — vanilla violate_sovereignty uses it (game/common/diplomatic_actions/03_violate_sovereignty.txt:8). effect_trigger_validity_audit has no schema for this entity type.
+	can_use_obligations = no
 
 	# Asker-side only: evaluated once for us, not per target, so it is the
 	# right place for the structural gates. Any member may ask (spec §4).
@@ -143,7 +143,7 @@ un_secure_commitment_action = {
 		un_lobby_accept_commitment = { LIST = yes DIR = 1 }
 	}
 
-	decline_effect = { # REVIEWED 2026-09-18: diplomatic-action field, not an effect/trigger — vanilla violate_sovereignty uses it (game/common/diplomatic_actions/03_violate_sovereignty.txt:66). effect_trigger_validity_audit has no schema for this entity type.
+	decline_effect = {
 		# The ask is still booked: one ask per asker per member per
 		# resolution, and a refusal is an answer.
 		un_lobby_record_attempt = yes
@@ -349,7 +349,7 @@ un_secure_commitment_against_action = {
 	is_hostile = no
 	should_notify_third_parties = no
 
-	can_use_obligations = no # REVIEWED 2026-09-27: diplomatic-action field, not an effect/trigger — vanilla violate_sovereignty uses it (game/common/diplomatic_actions/03_violate_sovereignty.txt:8). effect_trigger_validity_audit has no schema for this entity type.
+	can_use_obligations = no
 
 	selectable = {
 		has_game_rule = united_nations_enabled
@@ -420,7 +420,7 @@ un_secure_commitment_against_action = {
 		un_lobby_accept_commitment = { LIST = no DIR = -1 }
 	}
 
-	decline_effect = { # REVIEWED 2026-09-27: diplomatic-action field, not an effect/trigger — vanilla violate_sovereignty uses it (game/common/diplomatic_actions/03_violate_sovereignty.txt:66). effect_trigger_validity_audit has no schema for this entity type.
+	decline_effect = {
 		un_lobby_record_attempt = yes
 	}
 
