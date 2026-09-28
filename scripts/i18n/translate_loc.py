@@ -675,6 +675,47 @@ def cmd_merge(args) -> int:
     return 1 if totals["rejected"] else 0
 
 
+AGENT_PROMPT = """You are translating one chunk of a Victoria 3 mod's localization from English into {language_title}.
+
+Files (absolute paths):
+- Instructions, read in full first: {brief}
+- Your chunk: {chunk} (a glossary header, then {lines} lines to translate{content})
+- Write output to: {out}/ as {cid}.01.txt, {cid}.02.txt, … with at most {part} lines each.
+
+Rules that override anything else:
+- Write only inside the output folder. Don't edit, create or delete any other file, and don't run git or any script outside the output folder.
+- Every output line has the form ` key:0 "translated value"`, with the same key as the input. No other text, no comments.
+- Keep the markup exactly as BRIEF.md says; a script rejects any line whose markup differs.
+- Work efficiently. Read the brief and the chunk once (the Read tool returns 2,000 lines at a time), then translate and write one part file at a time, keeping your reasoning before each write short: a single response over 64,000 output tokens fails the whole run. Do at most one quick check of your own output at the end. A merge script re-checks every line, so there's no need for repeated verification passes.
+
+When done, reply with a short report (under 200 words): how many lines you wrote, any terms you coined that the glossary didn't cover (English → {language_title}), and any lines you were unsure about."""
+
+
+def cmd_prompt(args) -> int:
+    """Print the standard agent prompt for each chunk id given."""
+    committed, work = language_dirs(args.language)
+    with open(os.path.join(work, "manifest.json"), encoding="utf-8") as fh:
+        manifest = json.load(fh)
+    for cid in args.chunks:
+        info = manifest[cid]
+        words_per_line = info["words"] / max(1, len(info["keys"]))
+        events = any("." in k for k in info["keys"])
+        # Long event prose fills a response fast; short labels don't.
+        part = 100 if events or words_per_line > 15 else 200
+        print(AGENT_PROMPT.format(
+            language_title=args.language.replace("_", " ").title(),
+            brief=os.path.join(committed, "BRIEF.md"),
+            chunk=os.path.join(work, "chunks", cid + ".txt"),
+            lines=len(info["keys"]) + 7 * len(info.get("country_names", [])),
+            content=", mostly event text" if events else "",
+            out=os.path.join(work, "out"),
+            cid=cid,
+            part=part,
+        ))
+        print()
+    return 0
+
+
 def cmd_status(args) -> int:
     entries = load_english()
     state = classify(entries, load_tm(args.language))
@@ -700,8 +741,11 @@ def main(argv: list[str] | None = None) -> int:
     m = sub.add_parser("merge")
     m.add_argument("chunks", nargs="*")
     sub.add_parser("status")
+    pr = sub.add_parser("prompt", help="print the standard agent prompt for chunks")
+    pr.add_argument("chunks", nargs="+")
     args = parser.parse_args(argv)
-    return {"prepare": cmd_prepare, "merge": cmd_merge, "status": cmd_status}[args.command](args)
+    return {"prepare": cmd_prepare, "merge": cmd_merge, "status": cmd_status,
+            "prompt": cmd_prompt}[args.command](args)
 
 
 if __name__ == "__main__":
