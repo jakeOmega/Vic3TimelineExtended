@@ -9574,5 +9574,1525 @@
  "social_tensions_events.9.t": {
   "en": "Campaign Finance Scandal",
   "de": "Skandal um die Wahlkampffinanzierung"
+ },
+ "space_race_events.14.a": {
+  "en": "Emergency seal and full structural review.",
+  "de": "Notabdichtung und vollständige Strukturprüfung."
+ },
+ "space_race_events.14.b": {
+  "en": "Evacuate to backup shelter and redesign.",
+  "de": "In den Reserve-Schutzraum evakuieren und neu konstruieren."
+ },
+ "space_race_events.14.c": {
+  "en": "Patch it and continue: the crew is willing.",
+  "de": "Notdürftig reparieren und weitermachen: Die Besatzung ist bereit."
+ },
+ "space_race_events.14.d": {
+  "en": "Alarms tore through the habitat module at 0347 local time. A microcrack in the hull — missed by inspection, aggravated by thermal cycling — had become a breach. Atmospheric pressure dropped thirty percent before emergency systems engaged. The crew sealed the affected section, but the damage to both equipment and morale is immense.",
+  "de": "Um 03:47 Ortszeit rissen Alarme durch das Habitatmodul. Ein Mikroriss im Rumpf — von der Inspektion übersehen, durch thermische Wechselbeanspruchung verschlimmert — hatte sich zu einem Leck ausgeweitet. Der Luftdruck fiel um dreißig Prozent, bevor die Notfallsysteme ansprangen. Die Besatzung dichtete den betroffenen Abschnitt ab, doch der Schaden an Ausrüstung und Moral ist immens."
+ },
+ "space_race_events.14.t": {
+  "en": "Breach in the Night",
+  "de": "Leck in der Nacht"
+ },
+ "space_race_events.15.a": {
+  "en": "Abort the landing: bring them home safe.",
+  "de": "Landung abbrechen: sie sicher nach Hause bringen."
+ },
+ "space_race_events.15.b": {
+  "en": "Let the pilot take manual control.",
+  "de": "Dem Piloten die manuelle Kontrolle überlassen."
+ },
+ "space_race_events.15.c": {
+  "en": "Recalibrate under tighter safety margins.",
+  "de": "Mit engeren Sicherheitsmargen neu kalibrieren."
+ },
+ "space_race_events.15.d": {
+  "en": "Twelve minutes from the surface, the guidance computer began issuing contradictory commands. The descent trajectory, calculated to thread the needle between crater walls, was suddenly unreliable. The crew stared at instruments that told them they were simultaneously too high and too low. In mission control, a terrible decision waited.",
+  "de": "Zwölf Minuten vor der Landung begann der Leitrechner widersprüchliche Befehle auszugeben. Die Abstiegsbahn, berechnet, um sich haarscharf zwischen den Kraterwänden hindurchzufädeln, war plötzlich unzuverlässig. Die Besatzung starrte auf Instrumente, die ihnen zugleich zu hoch und zu niedrig anzeigten. In der Missionskontrolle wartete eine furchtbare Entscheidung."
+ },
+ "space_race_events.15.t": {
+  "en": "The Computer Says No",
+  "de": "Der Computer sagt Nein"
+ },
+ "space_race_events.16.a": {
+  "en": "Activate emergency separation bolts.",
+  "de": "Not-Trennbolzen aktivieren."
+ },
+ "space_race_events.16.b": {
+  "en": "Ground the fleet and redesign the interstage.",
+  "de": "Flotte am Boden lassen und die Zwischenstufe neu konstruieren."
+ },
+ "space_race_events.16.c": {
+  "en": "Classify it as an anomaly: fly again.",
+  "de": "Als Anomalie einstufen: erneut starten."
+ },
+ "space_race_events.16.d": {
+  "en": "The first stage performed flawlessly. Then came the moment of separation — and the explosive bolts failed to fire. The second stage ignited with the first still attached, creating a violent tumbling motion that overwhelmed attitude control. The vehicle broke apart seconds later, scattering debris across a hundred-mile corridor downrange.",
+  "de": "Die erste Stufe arbeitete tadellos. Dann kam der Moment der Trennung — und die Sprengbolzen zündeten nicht. Die zweite Stufe entzündete sich, während die erste noch angekoppelt war, was eine heftige Taumelbewegung auslöste, die die Lagekontrolle überforderte. Sekunden später zerbrach das Fahrzeug und verstreute Trümmer über einen hundert Meilen langen Korridor entlang der Flugbahn."
+ },
+ "space_race_events.16.t": {
+  "en": "The Bolts That Didn't Fire",
+  "de": "Die Bolzen, die nicht zündeten"
+ },
+ "space_race_events.17.a": {
+  "en": "Evacuate the crew member immediately.",
+  "de": "Das Besatzungsmitglied sofort evakuieren."
+ },
+ "space_race_events.17.b": {
+  "en": "Treat in place with telemedicine support.",
+  "de": "Vor Ort mit telemedizinischer Unterstützung behandeln."
+ },
+ "space_race_events.17.c": {
+  "en": "Use this crisis to advance space medicine.",
+  "de": "Diese Krise nutzen, um die Raumfahrtmedizin voranzubringen."
+ },
+ "space_race_events.17.d": {
+  "en": "The mission surgeon's report was blunt: acute cardiac arrhythmia, likely triggered by prolonged microgravity adaptation. The affected crew member is stable but in no condition to continue operations. With the nearest hospital a world away, every minute of delay in treatment is a risk calculation that no protocol fully covers.",
+  "de": "Der Bericht des Missionsarztes war unverblümt: akute Herzrhythmusstörung, wahrscheinlich ausgelöst durch die langwierige Anpassung an die Mikrogravitation. Das betroffene Besatzungsmitglied ist stabil, aber nicht in der Verfassung, den Dienst fortzusetzen. Da das nächste Krankenhaus eine Welt entfernt liegt, ist jede Minute Verzögerung bei der Behandlung eine Risikoabwägung, die kein Protokoll vollständig abdeckt."
+ },
+ "space_race_events.17.t": {
+  "en": "Heart of the Mission",
+  "de": "Herz der Mission"
+ },
+ "space_race_events.18.a": {
+  "en": "Launch a public inquiry and restore trust.",
+  "de": "Eine öffentliche Untersuchung einleiten und Vertrauen wiederherstellen."
+ },
+ "space_race_events.18.b": {
+  "en": "Restructure management quietly.",
+  "de": "Die Leitung still umstrukturieren."
+ },
+ "space_race_events.18.c": {
+  "en": "Blame foreign interference and press on.",
+  "de": "Ausländische Einmischung verantwortlich machen und weitermachen."
+ },
+ "space_race_events.18.d": {
+  "en": "Investigative journalists have uncovered evidence of systematic cost overruns, falsified safety certifications, and a culture of schedule pressure that silenced engineers who raised concerns. The revelations threaten to erode public confidence in the entire space program just as it reaches a critical phase.",
+  "de": "Investigativjournalisten haben Beweise für systematische Kostenüberschreitungen, gefälschte Sicherheitszertifikate und eine Kultur des Terminplandrucks aufgedeckt, die Ingenieure mit Bedenken zum Schweigen brachte. Die Enthüllungen drohen das öffentliche Vertrauen in das gesamte Raumfahrtprogramm zu untergraben, gerade jetzt, da es eine kritische Phase erreicht."
+ },
+ "space_race_events.18.t": {
+  "en": "The Paper Trail",
+  "de": "Die Aktenspur"
+ },
+ "space_race_events.19.a": {
+  "en": "Full security sweep of all systems.",
+  "de": "Vollständige Sicherheitsüberprüfung aller Systeme."
+ },
+ "space_race_events.19.b": {
+  "en": "Launch a counterintelligence investigation.",
+  "de": "Eine Spionageabwehr-Untersuchung einleiten."
+ },
+ "space_race_events.19.c": {
+  "en": "Harden our systems and press on.",
+  "de": "Unsere Systeme absichern und weitermachen."
+ },
+ "space_race_events.19.d": {
+  "en": "Anomalous tool marks on a critical fuel line. An access log showing unauthorized entries at 3 AM. A suspiciously precise failure that destroyed exactly the component most difficult to replace. Intelligence officials suspect deliberate sabotage: perhaps from a rival power that cannot afford to see us succeed.",
+  "de": "Ungewöhnliche Werkzeugspuren an einer kritischen Treibstoffleitung. Ein Zugangsprotokoll mit unbefugten Zutritten um drei Uhr morgens. Ein verdächtig präziser Ausfall, der ausgerechnet die am schwersten zu ersetzende Komponente zerstörte. Geheimdienstvertreter vermuten vorsätzliche Sabotage: vielleicht durch eine rivalisierende Macht, die sich unseren Erfolg nicht leisten kann."
+ },
+ "space_race_events.19.t": {
+  "en": "Shadows on the Launchpad",
+  "de": "Schatten auf der Startrampe"
+ },
+ "space_race_events.2.a": {
+  "en": "Our civilian hero returns to a hero's welcome.",
+  "de": "Unser ziviler Held kehrt zu einem Heldenempfang zurück."
+ },
+ "space_race_events.2.b": {
+  "en": "The pilot's military discipline proved invaluable.",
+  "de": "Die militärische Disziplin des Piloten erwies sich als unschätzbar."
+ },
+ "space_race_events.2.c": {
+  "en": "The data our scientist gathered in orbit is extraordinary.",
+  "de": "Die Daten, die unser Wissenschaftler im Orbit gesammelt hat, sind außergewöhnlich."
+ },
+ "space_race_events.2.d": {
+  "en": "A [ROOT.GetCountry.GetAdjectiveNoFormatting] astronaut has completed a full orbit of the Earth and returned safely. The achievement electrifies the nation and sends shockwaves through rival capitals. From this day forward, no corner of the globe is beyond our reach.",
+  "de": "Ein [ROOT.GetCountry.GetAdjectiveNoFormatting]er Astronaut hat die Erde vollständig umrundet und ist sicher zurückgekehrt. Die Leistung elektrisiert die Nation und schickt Schockwellen durch die Hauptstädte rivalisierender Mächte. Von diesem Tag an ist kein Winkel der Erde mehr außerhalb unserer Reichweite."
+ },
+ "space_race_events.2.e": {
+  "en": "History will remember this day!",
+  "de": "Die Geschichte wird sich an diesen Tag erinnern!"
+ },
+ "space_race_events.2.f": {
+  "en": "\\\"I saw continents slide beneath me like countries on a schoolroom globe. Borders meant nothing up there. Just Earth, spinning in the void.",
+  "de": "„Ich sah Kontinente unter mir vorbeigleiten wie Länder auf einem Schulglobus. Grenzen bedeuteten dort oben nichts. Nur die Erde, die sich im Leeren dreht."
+ },
+ "space_race_events.2.t": {
+  "en": "Around the World",
+  "de": "Um die Welt"
+ },
+ "space_race_events.20.a": {
+  "en": "We must not fall behind.",
+  "de": "Wir dürfen nicht zurückfallen."
+ },
+ "space_race_events.20.b": {
+  "en": "Congratulate them — and learn from their success.",
+  "de": "Ihnen gratulieren — und aus ihrem Erfolg lernen."
+ },
+ "space_race_events.20.d_context_already": {
+  "en": " We have already achieved this milestone ourselves, but their success demonstrates the growing reach of humanity's space programs.",
+  "de": " Wir haben diesen Meilenstein bereits selbst erreicht, doch ihr Erfolg zeigt die wachsende Reichweite der Raumfahrtprogramme der Menschheit."
+ },
+ "space_race_events.20.d_context_first": {
+  "en": " No nation has done this before. Their flag flies in a place no one has yet reached, and the news dominates headlines across the globe.",
+  "de": " Keine Nation hat dies zuvor geschafft. Ihre Flagge weht an einem Ort, den noch niemand erreicht hat, und die Nachricht beherrscht die Schlagzeilen rund um den Globus."
+ },
+ "space_race_events.20.d_context_normal": {
+  "en": " While we have yet to achieve this ourselves, the accomplishment demonstrates their growing capabilities and ambitions beyond our atmosphere.",
+  "de": " Auch wenn wir dies selbst noch nicht erreicht haben, zeigt diese Leistung ihre wachsenden Fähigkeiten und Ambitionen jenseits unserer Atmosphäre."
+ },
+ "space_race_events.20.d_interstellar": {
+  "en": "[SCOPE.sCountry('sr_achiever').GetName] has launched a probe toward another star system, the most ambitious unmanned mission in the history of spaceflight.",
+  "de": "[SCOPE.sCountry('sr_achiever').GetAltName('NOM')|U] hat eine Sonde zu einem anderen Sternsystem gestartet, die ehrgeizigste unbemannte Mission in der Geschichte der Raumfahrt."
+ },
+ "space_race_events.20.d_mars_landing": {
+  "en": "[SCOPE.sCountry('sr_achiever').GetName] has successfully landed astronauts on the surface of Mars, crossing a threshold that once seemed the province of science fiction.",
+  "de": "[SCOPE.sCountry('sr_achiever').GetAltName('NOM')|U] hat erfolgreich Astronauten auf der Oberfläche des Mars landen lassen und damit eine Schwelle überschritten, die einst als Domäne der Science-Fiction galt."
+ },
+ "space_race_events.20.d_moon_base": {
+  "en": "[SCOPE.sCountry('sr_achiever').GetName] has established a permanent base on the Moon, transforming our nearest celestial neighbor into a sustained outpost of human civilization.",
+  "de": "[SCOPE.sCountry('sr_achiever').GetAltName('NOM')|U] hat eine dauerhafte Basis auf dem Mond errichtet und damit unseren nächsten Nachbarn im All in einen dauerhaften Außenposten der menschlichen Zivilisation verwandelt."
+ },
+ "space_race_events.20.d_moon_landing": {
+  "en": "[SCOPE.sCountry('sr_achiever').GetName] has landed astronauts on the surface of the Moon, an achievement that will echo through the ages.",
+  "de": "[SCOPE.sCountry('sr_achiever').GetAltName('NOM')|U] hat Astronauten auf der Mondoberfläche landen lassen, eine Leistung, die durch die Zeitalter widerhallen wird."
+ },
+ "space_race_events.20.d_orbital": {
+  "en": "[SCOPE.sCountry('sr_achiever').GetName] has placed astronauts into stable orbit around the Earth, proving their capacity for sustained spaceflight.",
+  "de": "[SCOPE.sCountry('sr_achiever').GetAltName('NOM')|U] hat Astronauten in eine stabile Erdumlaufbahn gebracht und damit die Fähigkeit zu dauerhafter Raumfahrt bewiesen."
+ },
+ "space_race_events.20.d_probe": {
+  "en": "[SCOPE.sCountry('sr_achiever').GetName] has sent a probe beyond the inner solar system, venturing into the vast outer reaches of our celestial neighborhood.",
+  "de": "[SCOPE.sCountry('sr_achiever').GetAltName('NOM')|U] hat eine Sonde über das innere Sonnensystem hinausgeschickt und wagt sich in die weiten äußeren Regionen unserer kosmischen Nachbarschaft vor."
+ },
+ "space_race_events.20.d_suborbital": {
+  "en": "[SCOPE.sCountry('sr_achiever').GetName] has successfully launched a crewed suborbital flight, marking their entry into the age of space exploration.",
+  "de": "[SCOPE.sCountry('sr_achiever').GetAltName('NOM')|U] hat erfolgreich einen bemannten suborbitalen Flug gestartet und damit den Eintritt in das Zeitalter der Raumfahrt markiert."
+ },
+ "space_race_events.20.t": {
+  "en": "Eclipsed",
+  "de": "Überschattet"
+ },
+ "space_race_events.20.t_already": {
+  "en": "A Fellow Pioneer",
+  "de": "Ein weiterer Pionier"
+ },
+ "space_race_events.21.a": {
+  "en": "Wait for the proper parts to arrive.",
+  "de": "Auf die richtigen Teile warten."
+ },
+ "space_race_events.21.b": {
+  "en": "Source from an alternative supplier.",
+  "de": "Von einem alternativen Lieferanten beziehen."
+ },
+ "space_race_events.21.c": {
+  "en": "Develop domestic manufacturing capability.",
+  "de": "Inländische Fertigungskapazitäten aufbauen."
+ },
+ "space_race_events.21.d": {
+  "en": "A critical shipment of precision-machined components has been delayed indefinitely. The supplier cites raw material shortages and unexpected demand, but the result is the same: our integration schedule just slipped by weeks. Without these parts, the vehicle sits incomplete on the assembly floor.",
+  "de": "Eine kritische Lieferung präzisionsgefertigter Bauteile ist auf unbestimmte Zeit verzögert. Der Lieferant nennt Rohstoffknappheit und unerwartete Nachfrage als Gründe, doch das Ergebnis bleibt dasselbe: Unser Integrationszeitplan hat sich um Wochen verschoben. Ohne diese Teile steht das Fahrzeug unvollständig in der Montagehalle."
+ },
+ "space_race_events.21.t": {
+  "en": "The Missing Parts",
+  "de": "Die fehlenden Teile"
+ },
+ "space_race_events.22.a": {
+  "en": "Wait for the next launch window.",
+  "de": "Auf das nächste Startfenster warten."
+ },
+ "space_race_events.22.b": {
+  "en": "Attempt to launch in marginal conditions.",
+  "de": "Den Start unter grenzwertigen Bedingungen wagen."
+ },
+ "space_race_events.22.d": {
+  "en": "A massive storm system has settled over the launch site with no sign of departure. Upper-level wind shear readings exceed every safety margin in the book. The vehicle stands ready on the pad, fully fueled and flight-capable: waiting for weather that refuses to cooperate. Each day of delay costs money and, more critically, narrows the orbital mechanics window.",
+  "de": "Ein gewaltiges Sturmsystem hat sich über dem Startgelände festgesetzt, ohne ein Anzeichen von Abzug. Die Windscherwerte in großer Höhe übersteigen jede vorgesehene Sicherheitsmarge. Das Fahrzeug steht startbereit auf der Rampe, voll betankt und flugfähig: und wartet auf ein Wetter, das sich weigert mitzuspielen. Jeder Tag Verzögerung kostet Geld und verengt, was noch wichtiger ist, das Zeitfenster der Bahnmechanik."
+ },
+ "space_race_events.22.t": {
+  "en": "Grounded by the Sky",
+  "de": "Vom Himmel festgehalten"
+ },
+ "space_race_events.23.a": {
+  "en": "Full code audit of all flight systems.",
+  "de": "Vollständige Code-Überprüfung aller Flugsysteme."
+ },
+ "space_race_events.23.b": {
+  "en": "Patch the specific bug and continue testing.",
+  "de": "Den konkreten Fehler beheben und die Tests fortsetzen."
+ },
+ "space_race_events.23.c": {
+  "en": "Rewrite the flight software from scratch.",
+  "de": "Die Flugsoftware von Grund auf neu schreiben."
+ },
+ "space_race_events.23.d": {
+  "en": "A simulation run caught it: a floating-point rounding error in the attitude control subroutine. In normal operations it would accumulate unnoticed over hours, but during a critical burn sequence it would compound into a navigation error of several degrees: enough to miss a planetary target entirely or, worse, point the main engine in the wrong direction.",
+  "de": "Ein Simulationslauf hat ihn entdeckt: ein Rundungsfehler bei Gleitkommazahlen in der Subroutine der Lageregelung. Im Normalbetrieb würde er sich über Stunden unbemerkt aufsummieren, doch während einer kritischen Zündsequenz würde er sich zu einem Navigationsfehler von mehreren Grad auswachsen: genug, um ein planetares Ziel komplett zu verfehlen oder, schlimmer noch, das Haupttriebwerk in die falsche Richtung zu weisen."
+ },
+ "space_race_events.23.t": {
+  "en": "Two Characters",
+  "de": "Zwei Zeichen"
+ },
+ "space_race_events.24.a": {
+  "en": "Defend the program before the committee.",
+  "de": "Das Programm vor dem Ausschuss verteidigen."
+ },
+ "space_race_events.24.b": {
+  "en": "Push through cost-cutting measures.",
+  "de": "Sparmaßnahmen durchsetzen."
+ },
+ "space_race_events.24.c": {
+  "en": "Appeal directly to the public.",
+  "de": "Sich direkt an die Öffentlichkeit wenden."
+ },
+ "space_race_events.24.d": {
+  "en": "The Budget Committee has summoned the program director for testimony. With domestic priorities competing for funds and no tangible return yet visible to the average voter, influential legislators are questioning whether the nation can justify the expense. The program's future hangs on a hearing room presentation.",
+  "de": "Der Haushaltsausschuss hat den Programmdirektor zur Aussage vorgeladen. Da innenpolitische Prioritäten um Mittel konkurrieren und für den durchschnittlichen Wähler noch kein greifbarer Nutzen erkennbar ist, stellen einflussreiche Abgeordnete infrage, ob die Nation die Ausgaben rechtfertigen kann. Die Zukunft des Programms hängt an einer Präsentation im Anhörungssaal."
+ },
+ "space_race_events.24.t": {
+  "en": "The Price of the Stars",
+  "de": "Der Preis der Sterne"
+ },
+ "space_race_events.25.a": {
+  "en": "Return the defective parts and demand replacements.",
+  "de": "Die fehlerhaften Teile zurücksenden und Ersatz verlangen."
+ },
+ "space_race_events.25.b": {
+  "en": "Bring manufacturing in-house.",
+  "de": "Die Fertigung ins eigene Haus holen."
+ },
+ "space_race_events.25.d": {
+  "en": "Quality inspection has flagged an entire batch of turbopump impellers: the tolerances are outside specification by microns, but in a system operating at thousands of RPM and extreme temperatures, microns matter. Every unit in the last three months of production must be pulled and re-inspected. Some are already installed in vehicles being prepared for launch.",
+  "de": "Die Qualitätskontrolle hat eine ganze Charge von Turbopumpen-Laufrädern beanstandet: Die Toleranzen liegen um Mikrometer außerhalb der Spezifikation, doch in einem System, das bei Tausenden Umdrehungen pro Minute und extremen Temperaturen läuft, zählen Mikrometer. Jedes Bauteil aus den letzten drei Produktionsmonaten muss ausgebaut und erneut geprüft werden. Einige sind bereits in Fahrzeuge eingebaut, die für den Start vorbereitet werden."
+ },
+ "space_race_events.25.t": {
+  "en": "Microns of Failure",
+  "de": "Mikrometer des Versagens"
+ },
+ "space_race_events.26.a": {
+  "en": "Absorb the disruption: space transcends politics.",
+  "de": "Die Störung hinnehmen: Der Weltraum steht über der Politik."
+ },
+ "space_race_events.26.b": {
+  "en": "Rally national pride around the program.",
+  "de": "Nationalen Stolz um das Programm mobilisieren."
+ },
+ "space_race_events.26.c": {
+  "en": "Offer the space program as a diplomatic tool.",
+  "de": "Das Raumfahrtprogramm als diplomatisches Instrument anbieten."
+ },
+ "space_race_events.26.d": {
+  "en": "Relations with [SCOPE.sCountry('sr_estranged_space_power').GetName] have soured, and our space program is paying for it. Components sourced from [SCOPE.sCountry('sr_estranged_space_power').GetAdjectiveNoFormatting] suppliers are stuck in customs. Tracking support from their ground stations is now politically sensitive. Technical exchange agreements signed in better times are being quietly frozen by nervous diplomats.",
+  "de": "Die Beziehungen zu [SCOPE.sCountry('sr_estranged_space_power').GetAltName('DAT')] haben sich verschlechtert, und unser Raumfahrtprogramm zahlt den Preis dafür. Bauteile von [SCOPE.sCountry('sr_estranged_space_power').GetAdjectiveNoFormatting]en Lieferanten hängen im Zoll fest. Die Trackingunterstützung durch ihre Bodenstationen ist inzwischen politisch heikel. Technische Austauschabkommen aus besseren Zeiten werden von nervösen Diplomaten still auf Eis gelegt."
+ },
+ "space_race_events.26.t": {
+  "en": "When Politics Reaches Orbit",
+  "de": "Wenn die Politik den Orbit erreicht"
+ },
+ "space_race_events.3.a": {
+  "en": "The crater's secrets are ours to unlock.",
+  "de": "Die Geheimnisse des Kraters sind unsere, sie zu lüften."
+ },
+ "space_race_events.3.b": {
+  "en": "A solid foundation for the future.",
+  "de": "Ein solides Fundament für die Zukunft."
+ },
+ "space_race_events.3.c": {
+  "en": "One small step, one giant leap.",
+  "de": "Ein kleiner Schritt, ein großer Sprung."
+ },
+ "space_race_events.3.d": {
+  "en": "Billions watch as the lander touches down on the lunar surface. The first human feet press into regolith that has lain undisturbed since the formation of the solar system. A flag is planted, instruments are deployed, and for a brief shining moment the divisions of Earth seem impossibly petty.",
+  "de": "Milliarden sehen zu, wie die Landefähre auf der Mondoberfläche aufsetzt. Die ersten menschlichen Füße drücken sich in Regolith, der seit der Entstehung des Sonnensystems unberührt geblieben ist. Eine Flagge wird gehisst, Instrumente werden aufgestellt, und für einen kurzen, strahlenden Moment erscheinen die Zwistigkeiten der Erde unfassbar kleinlich."
+ },
+ "space_race_events.3.d_later": {
+  "en": "Billions watch as the lander touches down on the lunar surface. Others walked here before us, but these are the first [ROOT.GetCountry.GetAdjectiveNoFormatting] footprints in the regolith, and [ROOT.GetCountry.GetName] now joins the nations that have set foot on another world. A flag is planted, instruments are deployed, and for a brief shining moment the divisions of Earth seem impossibly petty.",
+  "de": "Milliarden sehen zu, wie die Landefähre auf der Mondoberfläche aufsetzt. Andere sind schon vor uns hier gelandet, doch dies sind die ersten [ROOT.GetCountry.GetAdjectiveNoFormatting]en Fußabdrücke im Regolith, und [ROOT.GetCountry.GetAltName('NOM')] reiht sich nun in die Nationen ein, die einen Fuß auf eine andere Welt gesetzt haben. Eine Flagge wird gehisst, Instrumente werden aufgestellt, und für einen kurzen, strahlenden Moment erscheinen die Zwistigkeiten der Erde unfassbar kleinlich."
+ },
+ "space_race_events.3.e": {
+  "en": "The Sea of Tranquility will echo with our footsteps.",
+  "de": "Das Meer der Ruhe wird von unseren Schritten widerhallen."
+ },
+ "space_race_events.3.g": {
+  "en": "The far side beckons: true pioneers face the unknown.",
+  "de": "Die Rückseite ruft: wahre Pioniere stellen sich dem Unbekannten."
+ },
+ "space_race_events.3.t": {
+  "en": "The Eagle Has Landed",
+  "de": "Der Adler ist gelandet"
+ },
+ "space_race_events.30.a": {
+  "en": "Excellent data. Press forward.",
+  "de": "Ausgezeichnete Daten. Weitermachen."
+ },
+ "space_race_events.30.b": {
+  "en": "Let the world see what we have accomplished.",
+  "de": "Die Welt sehen lassen, was wir erreicht haben."
+ },
+ "space_race_events.30.d": {
+  "en": "A test vehicle has successfully reached the edge of space and returned intact. The telemetry data exceeds expectations: the heat shield performed flawlessly and the guidance systems achieved remarkable precision.",
+  "de": "Ein Testfahrzeug hat erfolgreich den Rand des Weltraums erreicht und ist unbeschädigt zurückgekehrt. Die Telemetriedaten übertreffen die Erwartungen: Der Hitzeschild funktionierte tadellos, und die Leitsysteme erreichten eine bemerkenswerte Präzision."
+ },
+ "space_race_events.30.t": {
+  "en": "Promising Trajectory",
+  "de": "Vielversprechende Flugbahn"
+ },
+ "space_race_events.31.a": {
+  "en": "Invest in orbital debris management.",
+  "de": "In die Verwaltung von Weltraumschrott investieren."
+ },
+ "space_race_events.31.b": {
+  "en": "The debris can wait: we cannot.",
+  "de": "Der Schrott kann warten: wir nicht."
+ },
+ "space_race_events.31.c": {
+  "en": "Propose an international framework.",
+  "de": "Einen internationalen Rahmen vorschlagen."
+ },
+ "space_race_events.31.d": {
+  "en": "As our orbital program accelerates, so does the cloud of spent rocket stages, dead satellites, and assorted debris accumulating in low Earth orbit. Scientists warn that an uncontrolled cascade could render entire orbital bands unusable.",
+  "de": "Während sich unser Orbitalprogramm beschleunigt, wächst auch die Wolke aus ausgebrannten Raketenstufen, toten Satelliten und sonstigem Schrott, die sich im niedrigen Erdorbit ansammelt. Wissenschaftler warnen, dass eine unkontrollierte Kettenreaktion ganze Orbitalbänder unbrauchbar machen könnte."
+ },
+ "space_race_events.31.t": {
+  "en": "The Kessler Threshold",
+  "de": "Die Kessler-Schwelle"
+ },
+ "space_race_events.32.a": {
+  "en": "Military pilots have the right stuff.",
+  "de": "Militärpiloten haben das gewisse Etwas."
+ },
+ "space_race_events.32.b": {
+  "en": "Open it to civilians: inspire the nation.",
+  "de": "Es für Zivilisten öffnen: die Nation begeistern."
+ },
+ "space_race_events.32.c": {
+  "en": "An international crew speaks louder than flags.",
+  "de": "Eine internationale Besatzung spricht lauter als Flaggen."
+ },
+ "space_race_events.32.d": {
+  "en": "Applications for the astronaut program have flooded in: thousands of hopefuls from every walk of life. The selection committee must decide the character of the crew that will represent [ROOT.GetCountry.GetName] on the Moon.",
+  "de": "Bewerbungen für das Astronautenprogramm sind in Scharen eingegangen: Tausende Hoffnungsvolle aus allen Lebensbereichen. Das Auswahlkomitee muss über den Charakter der Besatzung entscheiden, die [ROOT.GetCountry.GetAltName('AKK')] auf dem Mond vertreten wird."
+ },
+ "space_race_events.32.t": {
+  "en": "Who Goes to the Moon?",
+  "de": "Wer fliegt zum Mond?"
+ },
+ "space_race_events.33.a": {
+  "en": "Redirect to the water-rich site immediately.",
+  "de": "Sofort zum wasserreichen Standort umleiten."
+ },
+ "space_race_events.33.b": {
+  "en": "Stick to the original plan.",
+  "de": "Beim ursprünglichen Plan bleiben."
+ },
+ "space_race_events.33.d": {
+  "en": "Orbital surveys of Mars have revealed spectroscopic signatures consistent with subsurface water ice in a region near the planned landing zone. If confirmed, this discovery could dramatically simplify in-situ resource utilization for a permanent base.",
+  "de": "Orbitale Vermessungen des Mars haben spektroskopische Signaturen offenbart, die auf unterirdisches Wassereis in einer Region nahe der geplanten Landezone hindeuten. Sollte sich das bestätigen, könnte diese Entdeckung die Nutzung lokaler Ressourcen für eine dauerhafte Basis erheblich vereinfachen."
+ },
+ "space_race_events.33.t": {
+  "en": "Water on Mars",
+  "de": "Wasser auf dem Mars"
+ },
+ "space_race_events.34.a": {
+  "en": "Maximize the payload: we may not get another chance.",
+  "de": "Die Nutzlast maximieren: wir bekommen vielleicht keine zweite Chance."
+ },
+ "space_race_events.34.b": {
+  "en": "Strip to essentials: speed is everything.",
+  "de": "Auf das Wesentliche reduzieren: Geschwindigkeit ist alles."
+ },
+ "space_race_events.34.c": {
+  "en": "International consortium: shared instruments.",
+  "de": "Internationales Konsortium: gemeinsame Instrumente."
+ },
+ "space_race_events.34.d": {
+  "en": "Our interstellar probe design has reached a critical decision point. The mass budget is finite, and every kilogram trades against delta-v. Our scientists are divided — some want to maximize the instrument suite — cameras, spectrometers, magnetometers, a radar sounder: arguing that we may never send another. Others insist on stripping down to essentials to shave years off the transit time. A third faction proposes opening the instrument slots to international partners.",
+  "de": "Der Entwurf unserer interstellaren Sonde hat einen kritischen Entscheidungspunkt erreicht. Das Massenbudget ist begrenzt, und jedes Kilogramm geht zulasten des Delta-v. Unsere Wissenschaftler sind sich uneins — manche wollen die Instrumentenausstattung maximieren — Kameras, Spektrometer, Magnetometer, ein Radarlot: mit dem Argument, wir könnten nie wieder eine solche Sonde entsenden. Andere bestehen darauf, sich auf das Wesentliche zu beschränken, um Jahre von der Flugzeit abzuschneiden. Eine dritte Fraktion schlägt vor, die Instrumentenplätze internationalen Partnern zu öffnen."
+ },
+ "space_race_events.34.t": {
+  "en": "The Instrument Debate",
+  "de": "Die Instrumentendebatte"
+ },
+ "space_race_events.35.a": {
+  "en": "National supply chain: full control.",
+  "de": "Nationale Lieferkette: volle Kontrolle."
+ },
+ "space_race_events.35.b": {
+  "en": "Multi-national logistics: shared costs.",
+  "de": "Multinationale Logistik: geteilte Kosten."
+ },
+ "space_race_events.35.c": {
+  "en": "Let private enterprise lead: faster turnaround.",
+  "de": "Der Privatwirtschaft die Führung überlassen: schnellere Umschlagzeiten."
+ },
+ "space_race_events.35.d": {
+  "en": "As our colonization program expands, the logistics have become a system unto themselves. Launch windows, orbital mechanics, delta-v budgets, radiation exposure limits for perishable cargo: our planners must coordinate across dozens of variables to keep the settlements supplied. A debate has emerged about how to structure the interplanetary supply chain.",
+  "de": "Während sich unser Kolonisierungsprogramm ausweitet, ist die Logistik zu einem System für sich geworden. Startfenster, Bahnmechanik, Delta-v-Budgets, Strahlungsgrenzwerte für verderbliche Fracht: Unsere Planer müssen Dutzende Variablen koordinieren, um die Siedlungen versorgt zu halten. Eine Debatte darüber, wie die interplanetare Lieferkette zu strukturieren sei, ist entbrannt."
+ },
+ "space_race_events.35.t": {
+  "en": "Supply Chain to the Stars",
+  "de": "Lieferkette zu den Sternen"
+ },
+ "space_race_events.36.a": {
+  "en": "Begin extraction operations.",
+  "de": "Mit dem Abbau beginnen."
+ },
+ "space_race_events.36.b": {
+  "en": "Study the deposits thoroughly first.",
+  "de": "Die Vorkommen zunächst gründlich untersuchen."
+ },
+ "space_race_events.36.c": {
+  "en": "License extraction to private industry.",
+  "de": "Den Abbau an die Privatwirtschaft lizenzieren."
+ },
+ "space_race_events.36.d": {
+  "en": "Geological surveys of the lunar base's surrounding terrain have uncovered deposits of Helium-3 far richer than predicted. This isotope, precious fuel for fusion reactors, could transform the Moon from a scientific outpost into an economic engine.",
+  "de": "Geologische Untersuchungen des Geländes rund um die Mondbasis haben Helium-3-Vorkommen zutage gefördert, die weit ergiebiger sind als vorhergesagt. Dieses Isotop, ein kostbarer Brennstoff für Fusionsreaktoren, könnte den Mond von einem wissenschaftlichen Außenposten in einen wirtschaftlichen Motor verwandeln."
+ },
+ "space_race_events.36.t": {
+  "en": "Lunar Helium-3",
+  "de": "Mond-Helium-3"
+ },
+ "space_race_events.37.a": {
+  "en": "Show the world what lies beyond.",
+  "de": "Der Welt zeigen, was dahinter liegt."
+ },
+ "space_race_events.37.b": {
+  "en": "Analyze the data before releasing it.",
+  "de": "Die Daten analysieren, bevor sie veröffentlicht werden."
+ },
+ "space_race_events.37.d": {
+  "en": "Our deep space probe has transmitted the first high-resolution images of the outer solar system back to Earth. The photographs reveal stunning detail: the swirling bands of gas giants, the cracked ice of distant moons, rings lit by a Sun that is little more than a bright star.",
+  "de": "Unsere Tiefraumsonde hat die ersten hochauflösenden Bilder des äußeren Sonnensystems zur Erde übertragen. Die Aufnahmen zeigen atemberaubende Details: die wirbelnden Bänder der Gasriesen, das rissige Eis ferner Monde, Ringe, beleuchtet von einer Sonne, die kaum mehr ist als ein heller Stern."
+ },
+ "space_race_events.37.t": {
+  "en": "Pale Blue Dot",
+  "de": "Blassblauer Punkt"
+ },
+ "space_race_events.4.a": {
+  "en": "Venus holds the key to understanding our own world.",
+  "de": "Die Venus birgt den Schlüssel zum Verständnis unserer eigenen Welt."
+ },
+ "space_race_events.4.b": {
+  "en": "Mars is our future: every measurement matters.",
+  "de": "Der Mars ist unsere Zukunft: jede Messung zählt."
+ },
+ "space_race_events.4.c": {
+  "en": "The asteroid belt is an untapped treasure.",
+  "de": "Der Asteroidengürtel ist ein ungehobener Schatz."
+ },
+ "space_race_events.4.d": {
+  "en": "After years of patient waiting, our probe has transmitted its final survey package. The measurements and imagery from its chosen target will occupy scientists for decades, vindicating a mission that once looked like pure speculation.",
+  "de": "Nach Jahren geduldigen Wartens hat unsere Sonde ihr letztes Datenpaket übertragen. Die Messungen und Aufnahmen ihres gewählten Ziels werden Wissenschaftler jahrzehntelang beschäftigen und rechtfertigen eine Mission, die einst wie reine Spekulation wirkte."
+ },
+ "space_race_events.4.e": {
+  "en": "Share our discoveries freely with the scientific world.",
+  "de": "Unsere Entdeckungen frei mit der wissenschaftlichen Welt teilen."
+ },
+ "space_race_events.4.t": {
+  "en": "Voices from the Void",
+  "de": "Stimmen aus der Leere"
+ },
+ "space_race_events.40.a": {
+  "en": "Active magnetic shielding: deflect the particles.",
+  "de": "Aktive Magnetabschirmung: die Teilchen ablenken."
+ },
+ "space_race_events.40.b": {
+  "en": "Water-wall passive shielding: proven physics.",
+  "de": "Passive Wasserwand-Abschirmung: bewährte Physik."
+ },
+ "space_race_events.40.c": {
+  "en": "Accept higher dose limits and fly lighter.",
+  "de": "Höhere Dosisgrenzwerte akzeptieren und leichter fliegen."
+ },
+ "space_race_events.40.d": {
+  "en": "Dosimetry data from test flights reveals that radiation exposure beyond the magnetosphere exceeds initial models. The Van Allen belts and galactic cosmic rays present a serious obstacle to long-duration crewed missions. Engineers must decide how to shield the crew without exceeding the mass budget.",
+  "de": "Dosimetriedaten aus Testflügen zeigen, dass die Strahlenbelastung jenseits der Magnetosphäre die ursprünglichen Modelle übersteigt. Die Van-Allen-Gürtel und die galaktische kosmische Strahlung stellen ein ernstes Hindernis für bemannte Langzeitmissionen dar. Die Ingenieure müssen entscheiden, wie die Besatzung geschützt werden kann, ohne das Massenbudget zu überschreiten."
+ },
+ "space_race_events.40.t": {
+  "en": "The Invisible Storm",
+  "de": "Der unsichtbare Sturm"
+ },
+ "space_race_events.41.a": {
+  "en": "Invest in electromagnetic launch assist.",
+  "de": "In elektromagnetische Startunterstützung investieren."
+ },
+ "space_race_events.41.b": {
+  "en": "Leverage existing infrastructure.",
+  "de": "Vorhandene Infrastruktur nutzen."
+ },
+ "space_race_events.41.c": {
+  "en": "Conventional chemical rockets: reliable, expensive.",
+  "de": "Konventionelle Chemieraketen: zuverlässig, teuer."
+ },
+ "space_race_events.41.d": {
+  "en": "Cost analysis of the current mission profile is sobering. Every kilogram delivered to the lunar or Martian surface costs orders of magnitude more than its Earth-side equivalent. The program's economics depend entirely on reducing the cost per kilogram to orbit.",
+  "de": "Die Kostenanalyse des aktuellen Missionsprofils ist ernüchternd. Jedes Kilogramm, das zur Mond- oder Marsoberfläche geliefert wird, kostet um Größenordnungen mehr als sein irdisches Äquivalent. Die Wirtschaftlichkeit des Programms hängt vollständig davon ab, die Kosten pro Kilogramm in den Orbit zu senken."
+ },
+ "space_race_events.41.t": {
+  "en": "The Tyranny of the Rocket Equation",
+  "de": "Die Tyrannei der Raketengleichung"
+ },
+ "space_race_events.42.a": {
+  "en": "Develop autonomous AI decision-support systems.",
+  "de": "Autonome KI-Entscheidungshilfesysteme entwickeln."
+ },
+ "space_race_events.42.b": {
+  "en": "Build a laser relay network to reduce latency.",
+  "de": "Ein Laser-Relaisnetzwerk aufbauen, um die Latenz zu verringern."
+ },
+ "space_race_events.42.c": {
+  "en": "Train the crew for complete independence.",
+  "de": "Die Besatzung auf vollständige Eigenständigkeit trainieren."
+ },
+ "space_race_events.42.d": {
+  "en": "At opposition, the signal delay between Earth and Mars ranges from four to twenty-four minutes each way. Any crisis on the Martian surface must be resolved by the crew before Mission Control even learns about it. The implications for spacecraft autonomy and crew training are profound.",
+  "de": "Bei Opposition reicht die Signalverzögerung zwischen Erde und Mars von vier bis vierundzwanzig Minuten pro Richtung. Jede Krise auf der Marsoberfläche muss von der Besatzung gelöst werden, bevor die Missionskontrolle überhaupt davon erfährt. Die Auswirkungen auf die Autonomie der Raumfahrzeuge und das Training der Besatzung sind gravierend."
+ },
+ "space_race_events.42.t": {
+  "en": "Twenty Minutes of Silence",
+  "de": "Zwanzig Minuten Stille"
+ },
+ "space_race_events.43.a": {
+  "en": "Full bioregenerative system: living machinery.",
+  "de": "Vollständig bioregeneratives System: lebende Maschinerie."
+ },
+ "space_race_events.43.b": {
+  "en": "Hybrid chemical-biological: engineered redundancy.",
+  "de": "Hybrid aus Chemie und Biologie: konstruierte Redundanz."
+ },
+ "space_race_events.43.c": {
+  "en": "Import consumables from Earth: simple but fragile.",
+  "de": "Verbrauchsgüter von der Erde importieren: einfach, aber anfällig."
+ },
+ "space_race_events.43.d": {
+  "en": "Long-duration habitation requires a life-support system that recycles nearly everything — air, water, and waste — with minimal resupply from Earth. Current recycling rates hover around 90%, but sustained habitation demands 98% or better. The engineering challenge is as much biological as mechanical.",
+  "de": "Langzeitbewohnung erfordert ein Lebenserhaltungssystem, das nahezu alles recycelt — Luft, Wasser und Abfall — mit minimaler Nachschubversorgung von der Erde. Die aktuellen Recyclingquoten liegen bei etwa 90 %, doch dauerhafte Bewohnung erfordert 98 % oder besser. Die technische Herausforderung ist ebenso biologischer wie mechanischer Natur."
+ },
+ "space_race_events.43.t": {
+  "en": "The Loop Must Close",
+  "de": "Der Kreislauf muss sich schließen"
+ },
+ "space_race_events.44.a": {
+  "en": "Emergency shelter protocols: protect the crew.",
+  "de": "Notfall-Schutzprotokolle: die Besatzung schützen."
+ },
+ "space_race_events.44.b": {
+  "en": "Our shielding should hold. Continue operations.",
+  "de": "Unsere Abschirmung sollte halten. Betrieb fortsetzen."
+ },
+ "space_race_events.44.d": {
+  "en": "Solar monitoring stations detect a massive coronal ejection directed toward the inner solar system. Within hours, a wave of charged particles will sweep across the path of our current mission assets. Crew and sensitive electronics are at risk.",
+  "de": "Sonnenüberwachungsstationen registrieren einen massiven koronalen Massenauswurf, der auf das innere Sonnensystem gerichtet ist. Innerhalb weniger Stunden wird eine Welle geladener Teilchen den Pfad unserer aktuellen Missionsressourcen überstreichen. Besatzung und empfindliche Elektronik sind gefährdet."
+ },
+ "space_race_events.44.t": {
+  "en": "Coronal Mass Ejection Warning",
+  "de": "Warnung vor koronalem Massenauswurf"
+ },
+ "space_race_events.45.a": {
+  "en": "Direct Jupiter slingshot: fastest path outward.",
+  "de": "Direkter Jupiter-Swing-by: schnellster Weg nach außen."
+ },
+ "space_race_events.45.b": {
+  "en": "Venus-Earth-Jupiter triple assist: more data, longer flight.",
+  "de": "Dreifaches Swing-by über Venus, Erde und Jupiter: mehr Daten, längerer Flug."
+ },
+ "space_race_events.45.c": {
+  "en": "Ion drive on a direct trajectory: no gravity tricks.",
+  "de": "Ionenantrieb auf direktem Kurs: keine Schwerkrafttricks."
+ },
+ "space_race_events.45.d": {
+  "en": "The navigation team presents three trajectory options for the outer system probe. Each uses different combinations of planetary gravity assists to reach the target. The choice of trajectory determines not only travel time but which planets the probe will photograph along the way.",
+  "de": "Das Navigationsteam präsentiert drei Flugbahnoptionen für die Sonde ins äußere System. Jede nutzt unterschiedliche Kombinationen planetarer Schwerkraftunterstützung, um das Ziel zu erreichen. Die Wahl der Flugbahn bestimmt nicht nur die Reisezeit, sondern auch, welche Planeten die Sonde unterwegs fotografieren wird."
+ },
+ "space_race_events.45.t": {
+  "en": "Slingshot Trajectories",
+  "de": "Swing-by-Flugbahnen"
+ },
+ "space_race_events.46.a": {
+  "en": "Focus on oxygen and water extraction: proven chemistry.",
+  "de": "Auf Sauerstoff- und Wassergewinnung konzentrieren: bewährte Chemie."
+ },
+ "space_race_events.46.b": {
+  "en": "Attempt metal smelting from local ores: ambitious but transformative.",
+  "de": "Metallverhüttung aus lokalen Erzen versuchen: ehrgeizig, aber wegweisend."
+ },
+ "space_race_events.46.d": {
+  "en": "The first in-situ resource utilization tests have been completed. Automated processors have successfully extracted oxygen from regolith samples, demonstrating that future missions need not carry all their consumables from Earth. The question now is how far to push the technology.",
+  "de": "Die ersten Tests zur Nutzung lokaler Ressourcen sind abgeschlossen. Automatisierte Prozessoren haben erfolgreich Sauerstoff aus Regolithproben gewonnen und damit gezeigt, dass künftige Missionen nicht mehr alle Verbrauchsgüter von der Erde mitführen müssen. Die Frage ist nun, wie weit die Technologie vorangetrieben werden soll."
+ },
+ "space_race_events.46.t": {
+  "en": "Living Off the Land",
+  "de": "Vom Land leben"
+ },
+ "space_race_events.47.a": {
+  "en": "Repair and resume: standard operating procedure.",
+  "de": "Reparieren und fortsetzen: Standardverfahren."
+ },
+ "space_race_events.47.b": {
+  "en": "Redesign with enhanced Whipple shielding.",
+  "de": "Mit verstärkter Whipple-Abschirmung neu konstruieren."
+ },
+ "space_race_events.47.d": {
+  "en": "A micrometeorite — no larger than a grain of sand, but traveling at 20 kilometers per second — has struck one of our orbital assets. The impact punctured the outer hull and damaged a secondary system. Standard Whipple shielding absorbed most of the kinetic energy, but the incident underscores the constant hazard of operating in the debris environment.",
+  "de": "Ein Mikrometeorit — nicht größer als ein Sandkorn, aber mit 20 Kilometern pro Sekunde unterwegs — hat eines unserer Orbitalgüter getroffen. Der Einschlag durchschlug den äußeren Rumpf und beschädigte ein Nebensystem. Die Standard-Whipple-Abschirmung absorbierte den größten Teil der kinetischen Energie, doch der Vorfall unterstreicht die ständige Gefahr des Betriebs in einer von Trümmern durchsetzten Umgebung."
+ },
+ "space_race_events.47.t": {
+  "en": "Impact at Orbital Velocity",
+  "de": "Einschlag mit Orbitalgeschwindigkeit"
+ },
+ "space_race_events.48.a": {
+  "en": "Mandatory psychological screening and crew rotation.",
+  "de": "Verpflichtende psychologische Untersuchungen und Besatzungsrotation."
+ },
+ "space_race_events.48.b": {
+  "en": "VR communication suites: bring Earth to them.",
+  "de": "VR-Kommunikationssysteme: die Erde zu ihnen bringen."
+ },
+ "space_race_events.48.c": {
+  "en": "Select for psychological resilience above all else.",
+  "de": "Vor allem auf psychische Widerstandsfähigkeit auswählen."
+ },
+ "space_race_events.48.t": {
+  "en": "The Long Dark",
+  "de": "Die lange Dunkelheit"
+ },
+ "space_race_events.49.a": {
+  "en": "Build the depot: a permanent orbital gas station.",
+  "de": "Das Depot bauen: eine dauerhafte Tankstelle im Orbit."
+ },
+ "space_race_events.49.b": {
+  "en": "Research in-orbit propellant manufacturing instead.",
+  "de": "Stattdessen die Treibstoffherstellung im Orbit erforschen."
+ },
+ "space_race_events.49.d": {
+  "en": "Engineers propose constructing an orbital propellant depot: a refueling station in low Earth orbit where spacecraft can top off their tanks before departing for deep space. The concept would revolutionize mission architecture by decoupling launch mass from mission delta-v requirements.",
+  "de": "Ingenieure schlagen den Bau eines orbitalen Treibstoffdepots vor: eine Tankstelle im niedrigen Erdorbit, an der Raumfahrzeuge ihre Tanks auffüllen können, bevor sie zum Tiefraum aufbrechen. Das Konzept würde die Missionsarchitektur revolutionieren, indem es die Startmasse von den Delta-v-Anforderungen der Mission entkoppelt."
+ },
+ "space_race_events.49.t": {
+  "en": "Fuel in the Void",
+  "de": "Treibstoff in der Leere"
+ },
+ "space_race_events.5.a": {
+  "en": "Target Shackleton Crater: fortune favors the bold.",
+  "de": "Shackleton-Krater als Ziel: dem Kühnen gehört die Welt."
+ },
+ "space_race_events.5.b": {
+  "en": "The Equatorial Plain is the sensible choice.",
+  "de": "Die Äquatorialebene ist die vernünftige Wahl."
+ },
+ "space_race_events.5.c": {
+  "en": "The Sea of Tranquility: an iconic destination.",
+  "de": "Das Meer der Ruhe: ein legendäres Ziel."
+ },
+ "space_race_events.5.d": {
+  "en": "The lunar landing site selection committee has narrowed the options to four candidates. Shackleton Crater near the south pole offers access to permanently shadowed regions that may contain water ice: scientifically invaluable but extremely hazardous. The Equatorial Plain offers well-mapped terrain and reliable conditions. The Sea of Tranquility, first mapped by early telescopes, offers a flat expanse ideal for a symbolically powerful landing. And the far side of the Moon, radio-shielded from Earth, is perfect for deep-space observation but demands autonomous navigation.",
+  "de": "Das Auswahlkomitee für die Mondlandestelle hat die Optionen auf vier Kandidaten eingegrenzt. Der Shackleton-Krater nahe dem Südpol bietet Zugang zu dauerhaft verschatteten Regionen, die Wassereis enthalten könnten: wissenschaftlich unschätzbar, aber äußerst gefährlich. Die Äquatorialebene bietet gut kartiertes Gelände und verlässliche Bedingungen. Das Meer der Ruhe, erstmals von frühen Teleskopen kartiert, bietet eine flache Ebene, ideal für eine symbolträchtige Landung. Und die erdabgewandte Seite des Mondes, abgeschirmt vor irdischen Funksignalen, ist perfekt für Tiefraumbeobachtungen, erfordert aber autonome Navigation."
+ },
+ "space_race_events.5.e": {
+  "en": "The far side of the Moon: where no radio from Earth can reach.",
+  "de": "Die erdabgewandte Seite des Mondes: wo kein Funksignal von der Erde hinreicht."
+ },
+ "space_race_events.5.t": {
+  "en": "Where the Eagle Shall Land",
+  "de": "Wo der Adler landen soll"
+ },
+ "space_race_events.50.a": {
+  "en": "Public-private partnership: combine our strengths.",
+  "de": "Öffentlich-private Partnerschaft: unsere Stärken bündeln."
+ },
+ "space_race_events.50.b": {
+  "en": "Let the company take the lead.",
+  "de": "Dem Unternehmen die Führung überlassen."
+ },
+ "space_race_events.50.c": {
+  "en": "Keep the program fully state-run.",
+  "de": "Das Programm vollständig staatlich betreiben."
+ },
+ "space_race_events.50.d": {
+  "en": "Our nation's leading private space company has achieved a significant technical breakthrough in reusable launch systems. Their cost-per-kilogram to orbit is now a fraction of what the government program achieves. The question of how to integrate private capabilities with national space objectives has become urgent.",
+  "de": "Das führende private Raumfahrtunternehmen unserer Nation hat einen bedeutenden technischen Durchbruch bei wiederverwendbaren Startsystemen erzielt. Seine Kosten pro Kilogramm in den Orbit betragen nun nur einen Bruchteil dessen, was das staatliche Programm erreicht. Die Frage, wie private Fähigkeiten mit den nationalen Raumfahrtzielen zu verbinden sind, ist dringlich geworden."
+ },
+ "space_race_events.50.t": {
+  "en": "The Private Sector Steps Up",
+  "de": "Die Privatwirtschaft übernimmt"
+ },
+ "space_race_events.51.a": {
+  "en": "Develop space [concept_tourism_system]: the revenue will fund science.",
+  "de": "Den [concept_tourism_system] im Weltraum entwickeln: die Einnahmen finanzieren die Wissenschaft."
+ },
+ "space_race_events.51.b": {
+  "en": "Space is for science, not entertainment.",
+  "de": "Der Weltraum ist für die Wissenschaft da, nicht für Unterhaltung."
+ },
+ "space_race_events.51.c": {
+  "en": "Regulated [concept_tourism_system]: limited and carefully managed.",
+  "de": "Regulierter [concept_tourism_system]: begrenzt und sorgfältig gesteuert."
+ },
+ "space_race_events.51.d": {
+  "en": "With orbital capability now proven, entrepreneurs propose offering suborbital and orbital flights to wealthy civilians. The revenue could partially offset program costs, but critics argue that turning humanity's greatest achievement into a luxury experience cheapens the endeavor.",
+  "de": "Nachdem die Orbitalfähigkeit nun bewiesen ist, schlagen Unternehmer vor, wohlhabenden Zivilisten suborbitale und orbitale Flüge anzubieten. Die Einnahmen könnten die Programmkosten teilweise ausgleichen, doch Kritiker argumentieren, dass die größte Errungenschaft der Menschheit in ein Luxuserlebnis zu verwandeln das Unterfangen entwertet."
+ },
+ "space_race_events.51.t": {
+  "en": "Tickets to the Stars",
+  "de": "Tickets zu den Sternen"
+ },
+ "space_race_events.52.a": {
+  "en": "Propose the joint station to our fellow members.",
+  "de": "Die gemeinsame Station unseren Mitgliedstaaten vorschlagen."
+ },
+ "space_race_events.52.b": {
+  "en": "Build our own station: we share with no one.",
+  "de": "Unsere eigene Station bauen: wir teilen mit niemandem."
+ },
+ "space_race_events.52.d": {
+  "en": "Our space agency has drawn up a proposal for a jointly operated orbital station, to be built with [SCOPE.sCountry('sr_station_partner').GetName] and open to any other member of the United Nations that reaches orbit: a permanent laboratory in space, crewed continuously and funded cooperatively. The scientific benefits are substantial, but sharing a platform with rivals means sharing technology, procedures, and perhaps secrets.",
+  "de": "Unsere Raumfahrtbehörde hat einen Vorschlag für eine gemeinsam betriebene Orbitalstation ausgearbeitet, die zusammen mit [SCOPE.sCountry('sr_station_partner').GetAltName('DAT')] gebaut und jedem anderen Mitglied der Vereinten Nationen offenstehen soll, das den Orbit erreicht: ein dauerhaftes Labor im Weltraum, durchgehend besetzt und gemeinschaftlich finanziert. Der wissenschaftliche Nutzen ist erheblich, doch eine Plattform mit Rivalen zu teilen bedeutet, Technologie, Verfahren und vielleicht Geheimnisse zu teilen."
+ },
+ "space_race_events.52.t": {
+  "en": "A Station for All Nations",
+  "de": "Eine Station für alle Nationen"
+ },
+ "space_race_events.53.a": {
+  "en": "Fully integrate off-world industry with the program.",
+  "de": "Die außerirdische Industrie vollständig in das Programm integrieren."
+ },
+ "space_race_events.53.b": {
+  "en": "Keep mining and exploration as separate programs.",
+  "de": "Bergbau und Erkundung als getrennte Programme belassen."
+ },
+ "space_race_events.53.d": {
+  "en": "Our extraplanetary mining operations have matured to the point where they can supply raw materials to the space program directly. Integrating the industrial base with the exploration program would create efficiencies: asteroid-derived metals for spacecraft construction, lunar regolith for radiation shielding, and orbital fuel synthesis from captured volatiles.",
+  "de": "Unsere außerplanetaren Bergbaubetriebe haben einen Reifegrad erreicht, an dem sie das Raumfahrtprogramm direkt mit Rohstoffen versorgen können. Die Integration der industriellen Basis mit dem Erkundungsprogramm würde Effizienzgewinne schaffen: Metalle aus Asteroiden für den Bau von Raumfahrzeugen, Mondregolith für den Strahlenschutz und die Treibstoffsynthese im Orbit aus eingefangenen flüchtigen Stoffen."
+ },
+ "space_race_events.53.t": {
+  "en": "Off-World Industry Meets the Space Program",
+  "de": "Außerirdische Industrie trifft auf das Raumfahrtprogramm"
+ },
+ "space_race_events.54.a": {
+  "en": "Ablative heat shield: proven, expendable.",
+  "de": "Ablativer Hitzeschild: bewährt, verbrauchbar."
+ },
+ "space_race_events.54.b": {
+  "en": "Ceramic tile system: reusable, complex.",
+  "de": "Keramikkachel-System: wiederverwendbar, komplex."
+ },
+ "space_race_events.54.c": {
+  "en": "Experimental transpiration cooling: bleeding edge.",
+  "de": "Experimentelle Transpirationskühlung: hochmodern."
+ },
+ "space_race_events.54.d": {
+  "en": "The thermal protection system for the crew capsule must survive temperatures exceeding 1,600 degrees Celsius during atmospheric re-entry. The engineering team is divided between three approaches, each with different mass, cost, and reliability characteristics.",
+  "de": "Das Hitzeschutzsystem der Besatzungskapsel muss beim Wiedereintritt in die Atmosphäre Temperaturen von über 1.600 Grad Celsius überstehen. Das Ingenieurteam ist zwischen drei Ansätzen gespalten, die sich jeweils in Masse, Kosten und Zuverlässigkeit unterscheiden."
+ },
+ "space_race_events.54.t": {
+  "en": "Re-entry Equations",
+  "de": "Gleichungen des Wiedereintritts"
+ },
+ "space_race_events.55.a": {
+  "en": "Route all cargo through the elevator.",
+  "de": "Die gesamte Fracht über den Aufzug leiten."
+ },
+ "space_race_events.55.b": {
+  "en": "Elevator for bulk, rockets for the time-sensitive.",
+  "de": "Aufzug für Massengut, Raketen für Eiliges."
+ },
+ "space_race_events.55.d": {
+  "en": "Our operational space elevator reduces the cost of reaching orbit by two orders of magnitude compared to chemical rockets. The program logistics team proposes routing all non-time-critical cargo through the elevator, reserving rocket launches for crew transfers and urgent payloads.",
+  "de": "Unser betriebsbereiter Weltraumaufzug senkt die Kosten für das Erreichen des Orbits im Vergleich zu Chemieraketen um zwei Größenordnungen. Das Logistikteam des Programms schlägt vor, alle zeitlich unkritische Fracht über den Aufzug zu leiten und Raketenstarts für Besatzungstransfers und dringende Nutzlasten zu reservieren."
+ },
+ "space_race_events.55.t": {
+  "en": "The Elevator Advantage",
+  "de": "Der Aufzugsvorteil"
+ },
+ "space_race_events.6.a": {
+  "en": "This base will be a temple of science.",
+  "de": "Diese Basis wird ein Tempel der Wissenschaft sein."
+ },
+ "space_race_events.6.b": {
+  "en": "The Moon's resources will fuel our industries.",
+  "de": "Die Ressourcen des Mondes werden unsere Industrien antreiben."
+ },
+ "space_race_events.6.c": {
+  "en": "Establish a military garrison: the ultimate high ground.",
+  "de": "Eine militärische Garnison errichten: die ultimative Höhenüberlegenheit."
+ },
+ "space_race_events.6.d": {
+  "en": "The first permanent habitat module has been pressurized and declared operational. A crew of specialists will maintain a continuous human presence on the Moon: the first time our species has truly lived beyond the Earth. Supply missions become routine. Living on the Moon becomes a job.",
+  "de": "Das erste dauerhafte Habitatmodul wurde unter Druck gesetzt und für einsatzbereit erklärt. Eine Besatzung von Spezialisten wird eine ununterbrochene menschliche Präsenz auf dem Mond aufrechterhalten: das erste Mal, dass unsere Spezies wirklich jenseits der Erde lebt. Versorgungsmissionen werden zur Routine. Das Leben auf dem Mond wird zum Beruf."
+ },
+ "space_race_events.6.d_later": {
+  "en": "Our first permanent habitat module has been pressurized and declared operational. Others built on the Moon before us, but a [ROOT.GetCountry.GetAdjectiveNoFormatting] crew of specialists will now maintain a continuous presence there, and [ROOT.GetCountry.GetName] joins the nations whose people live beyond the Earth. Supply missions become routine. Living on the Moon becomes a job.",
+  "de": "Unser erstes dauerhaftes Habitatmodul wurde unter Druck gesetzt und für einsatzbereit erklärt. Andere haben vor uns auf dem Mond gebaut, doch nun wird eine [ROOT.GetCountry.GetAdjectiveNoFormatting]e Besatzung von Spezialisten dort eine ununterbrochene Präsenz aufrechterhalten, und [ROOT.GetCountry.GetAltName('NOM')] reiht sich in die Nationen ein, deren Menschen jenseits der Erde leben. Versorgungsmissionen werden zur Routine. Das Leben auf dem Mond wird zum Beruf."
+ },
+ "space_race_events.6.e": {
+  "en": "A balanced approach: let the base grow organically.",
+  "de": "Ein ausgewogener Ansatz: die Basis organisch wachsen lassen."
+ },
+ "space_race_events.6.t": {
+  "en": "Foothold on Another World",
+  "de": "Fuß gefasst auf einer anderen Welt"
+ },
+ "space_race_events.60.a": {
+  "en": "Share the data freely with all nations.",
+  "de": "Die Daten frei mit allen Nationen teilen."
+ },
+ "space_race_events.60.b": {
+  "en": "Classify key findings: strategic advantage.",
+  "de": "Zentrale Erkenntnisse einstufen: strategischer Vorteil."
+ },
+ "space_race_events.60.c": {
+  "en": "Sell data access to recoup the investment.",
+  "de": "Datenzugang verkaufen, um die Investition wieder hereinzuholen."
+ },
+ "space_race_events.60.d.1": {
+  "en": "\\n\\nThe target world is confirmed as an airless, scorched rock. Proxima Centauri's intense flares have scoured the surface of all volatiles, leaving nothing but bare stone baked by radiation. Scientifically valuable—but desolate.",
+  "de": "\\n\\nDie Zielwelt wird als luftloser, verbrannter Felsbrocken bestätigt. Die intensiven Eruptionen von Proxima Centauri haben die Oberfläche von allen flüchtigen Stoffen befreit und nur nackten, von Strahlung gebackenen Stein zurückgelassen. Wissenschaftlich wertvoll — aber trostlos."
+ },
+ "space_race_events.60.d.10": {
+  "en": "\\n\\nInfrared imaging reveals continent-sized tectonic plates surging across a hyper-active mantle on a world three times Earth's mass. Volcanic activity on a scale that dwarfs anything in our solar system—mountains the height of Olympus Mons, rebuilt every few million years.",
+  "de": "\\n\\nInfrarotaufnahmen zeigen kontinentgroße tektonische Platten, die über einen hyperaktiven Mantel auf einer Welt mit dreifacher Erdmasse treiben. Vulkanische Aktivität in einem Ausmaß, das alles in unserem Sonnensystem in den Schatten stellt — Berge von der Höhe des Olympus Mons, alle paar Millionen Jahre neu aufgebaut."
+ },
+ "space_race_events.60.d.11": {
+  "en": "\\n\\nAgainst all predictions, a rocky world orbiting a tempestuous red dwarf has generated a magnetic field twice the strength of Earth's, shielding a thin but persistent atmosphere from stellar bombardment. The dynamo mechanism is unlike anything in our models.",
+  "de": "\\n\\nEntgegen allen Vorhersagen hat eine Gesteinswelt, die einen stürmischen Roten Zwerg umkreist, ein Magnetfeld von doppelter Stärke des irdischen erzeugt, das eine dünne, aber beständige Atmosphäre vor dem Sternenbeschuss schützt. Der Dynamo-Mechanismus gleicht nichts in unseren Modellen."
+ },
+ "space_race_events.60.d.12": {
+  "en": "\\n\\nSpectroscopy confirms a planet-wide ocean over one hundred kilometers deep, with exotic high-pressure ice forming the seafloor. No land, no continents—just a single, world-spanning sea beneath a sky of water vapor.",
+  "de": "\\n\\nSpektroskopie bestätigt einen planetenweiten Ozean von über hundert Kilometern Tiefe, dessen Meeresboden aus exotischem Hochdruckeis besteht. Kein Land, keine Kontinente — nur ein einziges, weltumspannendes Meer unter einem Himmel aus Wasserdampf."
+ },
+ "space_race_events.60.d.13": {
+  "en": "\\n\\nAn icy moon orbiting a gas giant in the Epsilon Eridani system is venting massive geysers of water and ammonia into space. The plumes suggest a subsurface ocean heated by tidal forces—a potential cradle for chemistry far more complex than we anticipated.",
+  "de": "\\n\\nEin eisiger Mond, der einen Gasriesen im System Epsilon Eridani umkreist, stößt gewaltige Geysire aus Wasser und Ammoniak ins All aus. Die Fontänen deuten auf einen unterirdischen Ozean hin, der durch Gezeitenkräfte erwärmt wird — eine mögliche Wiege für weit komplexere Chemie, als wir erwartet hatten."
+ },
+ "space_race_events.60.d.14": {
+  "en": "\\n\\nA Titan-analog world with thick nitrogen-methane skies and liquid hydrocarbon lakes that mirror the dim red light of its parent star. The organic chemistry within is rich and complex, poised on the cusp of something more.",
+  "de": "\\n\\nEine dem Titan ähnelnde Welt mit dichten Stickstoff-Methan-Himmeln und Seen aus flüssigen Kohlenwasserstoffen, die das schwache rote Licht ihres Muttersterns spiegeln. Die organische Chemie darin ist reichhaltig und komplex, am Rande zu etwas Größerem."
+ },
+ "space_race_events.60.d.15": {
+  "en": "\\n\\nA planet squarely within its star's habitable zone, yet baked to 450°C under a choking blanket of carbon dioxide. A runaway greenhouse effect, confirmed beyond doubt. The atmospheric data carries sobering implications for our own planet's trajectory.",
+  "de": "\\n\\nEin Planet mitten in der habitablen Zone seines Sterns, doch unter einer erstickenden Kohlendioxiddecke auf 450 °C erhitzt. Ein außer Kontrolle geratener Treibhauseffekt, zweifelsfrei bestätigt. Die atmosphärischen Daten tragen ernüchternde Implikationen für die Entwicklung unseres eigenen Planeten in sich."
+ },
+ "space_race_events.60.d.16": {
+  "en": "\\n\\nSpectroscopy detects oxygen, nitrogen, and methane in concentrations that defy thermodynamic equilibrium. No known geological process can sustain this ratio. The only explanation consistent with the data: biological replenishment. #bold Life—confirmed, at another star.#!",
+  "de": "\\n\\nSpektroskopie weist Sauerstoff, Stickstoff und Methan in Konzentrationen nach, die dem thermodynamischen Gleichgewicht widersprechen. Kein bekannter geologischer Prozess kann dieses Verhältnis aufrechterhalten. Die einzige mit den Daten vereinbare Erklärung: biologische Erneuerung. #bold Leben — bestätigt, an einem anderen Stern.#!"
+ },
+ "space_race_events.60.d.18": {
+  "en": "\\n\\nNight-side imaging reveals a luminous ring around the terminator of a tidally locked world—a band of #bold biological light#! where organisms have evolved to exploit the perpetual twilight. The bioluminescent glow extends for thousands of kilometers.",
+  "de": "\\n\\nAufnahmen der Nachtseite zeigen einen leuchtenden Ring um den Terminator einer gebundenen Welt — ein Band aus #bold biologischem Licht#!, wo sich Organismen entwickelt haben, um das ewige Zwielicht zu nutzen. Das biolumineszente Leuchten erstreckt sich über Tausende Kilometer."
+ },
+ "space_race_events.60.d.19": {
+  "en": "\\n\\nSpectroscopy of a gas giant's upper atmosphere detects complex organic polymers in ratios that defy abiotic chemistry. Something is alive in those clouds—drifting, metabolizing, reproducing in an atmosphere of hydrogen and helium.",
+  "de": "\\n\\nSpektroskopie der oberen Atmosphäre eines Gasriesen weist komplexe organische Polymere in Verhältnissen nach, die der abiotischen Chemie widersprechen. Etwas lebt in diesen Wolken — treibend, Stoffwechsel betreibend, sich fortpflanzend in einer Atmosphäre aus Wasserstoff und Helium."
+ },
+ "space_race_events.60.d.2": {
+  "en": "\\n\\nA tidally locked super-Earth orbiting Barnard's Star: one hemisphere in perpetual blinding daylight, the other in eternal darkness. At the terminator, a permanent mountain-sized cyclone rages—the largest storm ever observed on a rocky world.",
+  "de": "\\n\\nEine gebundene Super-Erde, die den Barnards Stern umkreist: eine Hemisphäre in ewigem, blendendem Tageslicht, die andere in ewiger Dunkelheit. Am Terminator wütet ein dauerhafter, gebirgsgroßer Wirbelsturm — der größte je auf einer Gesteinswelt beobachtete Sturm."
+ },
+ "space_race_events.60.d.20": {
+  "en": "\\n\\nA world whose continents blaze violet in the probe's cameras. Purple sulfur-metabolizing organisms blanket the land surface, as they once dominated early Earth for a billion years. An alien biosphere in its infancy—or perhaps merely a different evolutionary path.",
+  "de": "\\n\\nEine Welt, deren Kontinente in den Kameras der Sonde violett erstrahlen. Purpurfarbene, schwefelverstoffwechselnde Organismen bedecken die Landoberfläche, so wie sie einst eine Milliarde Jahre lang die frühe Erde beherrschten. Eine außerirdische Biosphäre in ihren Anfängen — oder vielleicht einfach ein anderer evolutionärer Weg."
+ },
+ "space_race_events.60.d.21": {
+  "en": "\\n\\nNear volcanic vents, the probe images strange geometric mineral formations that pulse with thermal gradients inconsistent with inert geology. If the data is correct—and the scientists reviewing it are cautious—this may represent non-carbon biochemistry. #bold Life, but not as we know it.#!",
+  "de": "\\n\\nNahe vulkanischer Schlote fotografiert die Sonde seltsame, geometrische Mineralformationen, die mit thermischen Gradienten pulsieren, die mit unbelebter Geologie nicht vereinbar sind. Sollten die Daten stimmen — und die auswertenden Wissenschaftler sind vorsichtig —, könnte dies nicht-kohlenstoffbasierte Biochemie darstellen. #bold Leben, aber nicht, wie wir es kennen.#!"
+ },
+ "space_race_events.60.d.22": {
+  "en": "\\n\\nA frigid world in the Barnard's Star system hosts a thriving biosphere where liquid methane serves the role of water. Complex organics cycle through a methane-based ecology—organisms breathing, growing, and reproducing at temperatures that would freeze Earth life solid.",
+  "de": "\\n\\nEine eisige Welt im System des Barnards Stern beherbergt eine blühende Biosphäre, in der flüssiges Methan die Rolle des Wassers übernimmt. Komplexe organische Stoffe durchlaufen einen methanbasierten Kreislauf — Organismen atmen, wachsen und pflanzen sich bei Temperaturen fort, die irdisches Leben zu Eis erstarren ließen."
+ },
+ "space_race_events.60.d.23": {
+  "en": "\\n\\nLIDAR mapping reveals vast, mountainous structures beneath a shallow alien sea—enormous biological calcium-carbonate formations built by living organisms over geological time. An alien reef system stretching across continents, dwarfing Earth's Great Barrier Reef.",
+  "de": "\\n\\nLIDAR-Kartierung enthüllt gewaltige, gebirgsartige Strukturen unter einem flachen außerirdischen Meer — riesige biologische Kalziumkarbonat-Formationen, über geologische Zeiträume von lebenden Organismen erbaut. Ein außerirdisches Riffsystem, das sich über Kontinente erstreckt und das Große Barriereriff der Erde in den Schatten stellt."
+ },
+ "space_race_events.60.d.24": {
+  "en": "\\n\\nImaging reveals a humid, overcast world where all visible land is covered by a single interconnected mat of non-photosynthetic life. No distinct organisms, no separate species—just one planetary-scale network, an alien mycelium that wraps the globe.",
+  "de": "\\n\\nAufnahmen zeigen eine feuchte, bewölkte Welt, deren gesamtes sichtbares Land von einer einzigen zusammenhängenden Matte nicht-photosynthetischen Lebens bedeckt ist. Keine unterscheidbaren Organismen, keine getrennten Arten — nur ein einziges, planetenumspannendes Netzwerk, ein außerirdisches Myzel, das den Globus umhüllt."
+ },
+ "space_race_events.60.d.25": {
+  "en": "\\n\\nA rocky planet is surrounded by an unnaturally dense cloud of orbital debris—thousands of #bold artificial objects#! in decaying orbits. A civilization was here. It choked its own sky with satellites and wreckage. Whether anything survives beneath that shroud is unknown.",
+  "de": "\\n\\nEin felsiger Planet ist von einer unnatürlich dichten Wolke aus Orbitalschrott umgeben — Tausende #bold künstlicher Objekte#! auf zerfallenden Bahnen. Hier war einst eine Zivilisation. Sie hat ihren eigenen Himmel mit Satelliten und Wrackteilen verstopft. Ob unter diesem Schleier noch etwas überlebt, ist unbekannt."
+ },
+ "space_race_events.60.d.26": {
+  "en": "\\n\\nHigh concentrations of chlorofluorocarbons and sulfur hexafluoride detected in the planet's atmosphere—gases that do not occur in nature. #bold Industrial civilization: confirmed.#! The atmospheric signature is estimated to be decades to centuries old.",
+  "de": "\\n\\nHohe Konzentrationen von Fluorchlorkohlenwasserstoffen und Schwefelhexafluorid in der Atmosphäre des Planeten nachgewiesen — Gase, die in der Natur nicht vorkommen. #bold Industrielle Zivilisation: bestätigt.#! Die atmosphärische Signatur wird auf ein Alter von Jahrzehnten bis Jahrhunderten geschätzt."
+ },
+ "space_race_events.60.d.27": {
+  "en": "\\n\\nA world that ticks every criterion for habitability—temperate, oceanic, oxygen-rich—but with radiation levels orders of magnitude above natural background. Isotope ratios are consistent with fission products. #bold A civilization destroyed itself#!, and the scars still glow.",
+  "de": "\\n\\nEine Welt, die jedes Kriterium für Bewohnbarkeit erfüllt — gemäßigt, ozeanisch, sauerstoffreich —, doch mit Strahlungswerten, die um Größenordnungen über dem natürlichen Hintergrund liegen. Die Isotopenverhältnisse stimmen mit Spaltprodukten überein. #bold Eine Zivilisation hat sich selbst zerstört#!, und die Narben glühen noch immer."
+ },
+ "space_race_events.60.d.28": {
+  "en": "\\n\\nThe probe's onboard antennae detect faint, repeating, modulated radio-frequency emissions from a nearby system. Not natural. The signal structure suggests carrier waves—the electromagnetic leakage of an #bold industrial civilization#!, broadcasting unwittingly across the light-years.",
+  "de": "\\n\\nDie Bordantennen der Sonde erfassen schwache, sich wiederholende, modulierte Funkfrequenz-Emissionen aus einem nahen System. Nicht natürlich. Die Signalstruktur deutet auf Trägerwellen hin — die elektromagnetische Streustrahlung einer #bold industriellen Zivilisation#!, die unwissentlich über Lichtjahre hinweg sendet."
+ },
+ "space_race_events.60.d.29": {
+  "en": "\\n\\nHigh-resolution night-side imagery reveals geometric patterns of #bold artificial light#! covering the planet's dark hemisphere: cities, highways, coastlines traced in the unmistakable signature of electrical illumination. Intelligent life. A civilization. It exists, now, at this very moment.",
+  "de": "\\n\\nHochauflösende Aufnahmen der Nachtseite zeigen geometrische Muster aus #bold künstlichem Licht#!, die die dunkle Hemisphäre des Planeten bedecken: Städte, Autobahnen, Küstenlinien, nachgezeichnet in der unverwechselbaren Signatur elektrischer Beleuchtung. Intelligentes Leben. Eine Zivilisation. Sie existiert, jetzt, in genau diesem Moment."
+ },
+ "space_race_events.60.d.3": {
+  "en": "\\n\\nSpectral analysis reveals a world unlike anything in our solar system: a surface dominated by graphite plains and silicate-diamond conglomerates, orbiting a carbon-rich star. The geological data alone will keep mineralogists busy for decades.",
+  "de": "\\n\\nSpektralanalyse enthüllt eine Welt, wie es keine in unserem Sonnensystem gibt: eine Oberfläche, beherrscht von Graphitebenen und Silikat-Diamant-Konglomeraten, die einen kohlenstoffreichen Stern umkreist. Allein die geologischen Daten werden Mineralogen jahrzehntelang beschäftigen."
+ },
+ "space_race_events.60.d.30": {
+  "en": "\\n\\nAt a stable Lagrange point in the target system, the probe detects a small, inert, non-natural object. Spectral analysis confirms #bold manufactured alloys#!. Something—someone—placed a marker here, millions of years ago. We are not the first to send probes between the stars.",
+  "de": "\\n\\nAn einem stabilen Lagrange-Punkt im Zielsystem erfasst die Sonde ein kleines, inertes, nicht natürliches Objekt. Die Spektralanalyse bestätigt #bold gefertigte Legierungen#!. Etwas — jemand — hat hier vor Millionen von Jahren einen Marker platziert. Wir sind nicht die Ersten, die Sonden zwischen den Sternen entsenden."
+ },
+ "space_race_events.60.d.4": {
+  "en": "\\n\\nThe probe's gravimetric readings reveal a world of extraordinary density—nearly ninety percent iron-nickel by mass. Likely the exposed core of a planet that lost its mantle in a primordial collision. A world of iron under an alien sun.",
+  "de": "\\n\\nDie gravimetrischen Messwerte der Sonde offenbaren eine Welt von außergewöhnlicher Dichte — fast neunzig Prozent Eisen-Nickel nach Masse. Vermutlich der freigelegte Kern eines Planeten, der seinen Mantel bei einer urzeitlichen Kollision verlor. Eine Welt aus Eisen unter einer fremden Sonne."
+ },
+ "space_race_events.60.d.5": {
+  "en": "\\n\\nNo terrestrial planets found in the target habitable zone. Instead, the probe's precision tracking yields a three-dimensional gravity map of the system's asteroid belts, revealing resonance patterns that reshape our understanding of planetary formation.",
+  "de": "\\n\\nKeine terrestrischen Planeten in der habitablen Zone des Ziels gefunden. Stattdessen liefert die Präzisionsverfolgung der Sonde eine dreidimensionale Schwerkraftkarte der Asteroidengürtel des Systems und offenbart Resonanzmuster, die unser Verständnis der Planetenbildung neu gestalten."
+ },
+ "space_race_events.60.d.6": {
+  "en": "\\n\\nBeyond the habitable zone, a world blanketed in exotic ices—nitrogen and carbon monoxide—with a tenuous atmosphere that freezes onto the surface during its long winter. A laboratory for cryogenic chemistry on a planetary scale.",
+  "de": "\\n\\nJenseits der habitablen Zone eine Welt, bedeckt von exotischen Eisarten — Stickstoff und Kohlenmonoxid —, mit einer dünnen Atmosphäre, die während ihres langen Winters auf der Oberfläche gefriert. Ein Labor für Tieftemperaturchemie im planetaren Maßstab."
+ },
+ "space_race_events.60.d.7": {
+  "en": "\\n\\nA high-resolution flyby of Sirius B reveals a graveyard of pulverized planets and cooling dust rings orbiting the dead star. A vision of what awaits our own solar system, billions of years hence.",
+  "de": "\\n\\nEin hochauflösender Vorbeiflug an Sirius B offenbart einen Friedhof aus zermahlenen Planeten und abkühlenden Staubringen, die den toten Stern umkreisen. Eine Vision dessen, was unser eigenes Sonnensystem in Milliarden Jahren erwartet."
+ },
+ "space_race_events.60.d.8": {
+  "en": "\\n\\nThe probe captures direct observation of a superflare striking a planet's magnetosphere—the most violent stellar weather event ever recorded at close range. The data is invaluable for designing radiation shielding for future interstellar missions.",
+  "de": "\\n\\nDie Sonde erfasst die direkte Beobachtung eines Superflares, der die Magnetosphäre eines Planeten trifft — das heftigste stellare Wetterereignis, das je aus der Nähe aufgezeichnet wurde. Die Daten sind unschätzbar für die Konstruktion des Strahlenschutzes künftiger interstellarer Missionen."
+ },
+ "space_race_events.60.d.9": {
+  "en": "\\n\\nA rocky planet adorned with a spectacular ring system, composed of the debris of a recently destroyed moon. Backlit by its parent star, the rings shimmer with impossible beauty in the probe's optical sensors.",
+  "de": "\\n\\nEin felsiger Planet, geschmückt mit einem spektakulären Ringsystem aus den Trümmern eines kürzlich zerstörten Mondes. Von seinem Mutterstern hintergrundbeleuchtet, schimmern die Ringe in den optischen Sensoren der Sonde in unfassbarer Schönheit."
+ },
+ "space_race_events.60.d.intro": {
+  "en": "After years of silence, our deep-space receivers have detected the carrier signal from our interstellar probe. As the data streams in and the first images are processed, the scientific community holds its collective breath.",
+  "de": "Nach Jahren der Stille haben unsere Tiefraumempfänger das Trägersignal unserer interstellaren Sonde aufgefangen. Während die Daten einströmen und die ersten Bilder verarbeitet werden, hält die wissenschaftliche Gemeinschaft gemeinsam den Atem an."
+ },
+ "space_race_events.60.d.intro_confirms": {
+  "en": "After years of silence, our deep-space receivers have detected the carrier signal from our interstellar probe. As the data streams in, the astronomers recognize the world in the first images: [SCOPE.sCountry('sr_probe_first_finder').GetName]'s probe reported it before ours. Our own instruments now confirm the finding, and add to it.",
+  "de": "Nach Jahren der Stille haben unsere Tiefraumempfänger das Trägersignal unserer interstellaren Sonde aufgefangen. Während die Daten einströmen, erkennen die Astronomen die Welt auf den ersten Bildern: Die Sonde [SCOPE.sCountry('sr_probe_first_finder').GetAltName('GEN')] hat sie vor unserer gemeldet. Unsere eigenen Instrumente bestätigen den Fund nun und erweitern ihn."
+ },
+ "space_race_events.60.d.intro_repeat": {
+  "en": "After years of silence, our deep-space receivers have detected the carrier signal from our interstellar probe. As the data streams in, the astronomers recognize the world in the first images: another nation's probe reported it before ours. Our own instruments now confirm the finding, and add to it.",
+  "de": "Nach Jahren der Stille haben unsere Tiefraumempfänger das Trägersignal unserer interstellaren Sonde aufgefangen. Während die Daten einströmen, erkennen die Astronomen die Welt auf den ersten Bildern: Die Sonde einer anderen Nation hat sie vor unserer gemeldet. Unsere eigenen Instrumente bestätigen den Fund nun und erweitern ihn."
+ },
+ "space_race_events.60.d.outro": {
+  "en": "\\n\\nHow shall [ROOT.GetCountry.GetName] handle this unprecedented data?",
+  "de": "\\n\\nWie soll [ROOT.GetCountry.GetAltName('NOM')] mit diesen beispiellosen Daten umgehen?"
+ },
+ "space_race_events.60.d.outro_repeat": {
+  "en": "\\n\\nHow shall [ROOT.GetCountry.GetName] handle data that confirms, and extends, an earlier discovery?",
+  "de": "\\n\\nWie soll [ROOT.GetCountry.GetAltName('NOM')] mit Daten umgehen, die eine frühere Entdeckung bestätigen und erweitern?"
+ },
+ "space_race_events.60.f.cat2": {
+  "en": "The universe is stranger than we imagined. And far more beautiful.",
+  "de": "Das Universum ist seltsamer, als wir uns vorgestellt hatten. Und weit schöner."
+ },
+ "space_race_events.60.f.cat3": {
+  "en": "We asked the oldest question. The answer was waiting, light-years away.",
+  "de": "Wir stellten die älteste Frage. Die Antwort wartete, Lichtjahre entfernt."
+ },
+ "space_race_events.60.f.cat4": {
+  "en": "In the time it took the data to reach us, nothing changed on that distant world. They were there before. They are there still.",
+  "de": "In der Zeit, die die Daten brauchten, um uns zu erreichen, hat sich auf dieser fernen Welt nichts verändert. Sie waren schon vorher dort. Sie sind es noch immer."
+ },
+ "space_race_events.601.t": {
+  "en": "A Scorched World",
+  "de": "Eine verbrannte Welt"
+ },
+ "space_race_events.602.t": {
+  "en": "The Eternal Storm",
+  "de": "Der ewige Sturm"
+ },
+ "space_race_events.603.t": {
+  "en": "World of Diamonds",
+  "de": "Welt der Diamanten"
+ },
+ "space_race_events.604.t": {
+  "en": "Heart of Iron",
+  "de": "Herz aus Eisen"
+ },
+ "space_race_events.605.t": {
+  "en": "Echoes in the Void",
+  "de": "Echos in der Leere"
+ },
+ "space_race_events.606.t": {
+  "en": "The Frozen Laboratory",
+  "de": "Das gefrorene Labor"
+ },
+ "space_race_events.607.t": {
+  "en": "Graveyard of Worlds",
+  "de": "Friedhof der Welten"
+ },
+ "space_race_events.608.t": {
+  "en": "The Stellar Fury",
+  "de": "Der stellare Zorn"
+ },
+ "space_race_events.609.t": {
+  "en": "Rings of Ruin",
+  "de": "Ringe des Verderbens"
+ },
+ "space_race_events.610.t": {
+  "en": "The Living Crust",
+  "de": "Die lebende Kruste"
+ },
+ "space_race_events.611.t": {
+  "en": "The Invisible Shield",
+  "de": "Der unsichtbare Schild"
+ },
+ "space_race_events.612.t": {
+  "en": "The Endless Sea",
+  "de": "Das endlose Meer"
+ },
+ "space_race_events.613.t": {
+  "en": "Fountains of Ice",
+  "de": "Fontänen aus Eis"
+ },
+ "space_race_events.614.t": {
+  "en": "Shores of Methane",
+  "de": "Ufer aus Methan"
+ },
+ "space_race_events.615.t": {
+  "en": "A World on Fire",
+  "de": "Eine Welt in Flammen"
+ },
+ "space_race_events.616.t": {
+  "en": "The Breath of Life",
+  "de": "Der Atem des Lebens"
+ },
+ "space_race_events.617.t": {
+  "en": "The Red Edge",
+  "de": "Die Rotkante"
+ },
+ "space_race_events.618.t": {
+  "en": "The Twilight Glow",
+  "de": "Das Zwielichtleuchten"
+ },
+ "space_race_events.619.t": {
+  "en": "Life Among the Clouds",
+  "de": "Leben in den Wolken"
+ },
+ "space_race_events.620.t": {
+  "en": "The Purple World",
+  "de": "Die purpurne Welt"
+ },
+ "space_race_events.621.t": {
+  "en": "Life, But Not as We Know It",
+  "de": "Leben, aber nicht, wie wir es kennen"
+ },
+ "space_race_events.622.t": {
+  "en": "The Frozen Garden",
+  "de": "Der gefrorene Garten"
+ },
+ "space_race_events.623.t": {
+  "en": "Cathedrals of Coral",
+  "de": "Kathedralen aus Korallen"
+ },
+ "space_race_events.624.t": {
+  "en": "One Mind, One World",
+  "de": "Ein Geist, eine Welt"
+ },
+ "space_race_events.625.t": {
+  "en": "Echoes of a Dead Civilization",
+  "de": "Echos einer toten Zivilisation"
+ },
+ "space_race_events.626.t": {
+  "en": "The Smoking Gun",
+  "de": "Der rauchende Colt"
+ },
+ "space_race_events.627.t": {
+  "en": "The Great Silence, Explained",
+  "de": "Das große Schweigen, erklärt"
+ },
+ "space_race_events.628.t": {
+  "en": "A Voice in the Dark",
+  "de": "Eine Stimme im Dunkeln"
+ },
+ "space_race_events.629.t": {
+  "en": "The City of Stars",
+  "de": "Die Stadt der Sterne"
+ },
+ "space_race_events.630.t": {
+  "en": "Someone Else Was Here First",
+  "de": "Jemand anderes war zuerst hier"
+ },
+ "space_race_events.7.a": {
+  "en": "Land directly: plant our flag on Mars now.",
+  "de": "Direkt landen: jetzt unsere Flagge auf dem Mars hissen."
+ },
+ "space_race_events.7.b": {
+  "en": "Establish orbital [concept_infrastructure] first.",
+  "de": "Zuerst orbitale [concept_infrastructure] aufbauen."
+ },
+ "space_race_events.7.c": {
+  "en": "Send robots ahead to prepare the way.",
+  "de": "Roboter vorausschicken, um den Weg zu bereiten."
+ },
+ "space_race_events.7.d": {
+  "en": "After months of transit through the void, the lander descends through Mars' thin atmosphere and sets down in a cloud of rust-colored dust. The crew reports nominal conditions. For the first time, human beings stand on the surface of another planet.",
+  "de": "Nach Monaten der Durchquerung der Leere sinkt die Landefähre durch die dünne Marsatmosphäre und setzt in einer Wolke aus rostfarbenem Staub auf. Die Besatzung meldet Normalbedingungen. Zum ersten Mal stehen Menschen auf der Oberfläche eines anderen Planeten."
+ },
+ "space_race_events.7.d_later": {
+  "en": "After months of transit through the void, the lander descends through Mars' thin atmosphere and sets down in a cloud of rust-colored dust. The crew reports nominal conditions. We were not the first to make this journey, but [ROOT.GetCountry.GetName] now joins the nations whose people have stood on another planet.",
+  "de": "Nach Monaten der Durchquerung der Leere sinkt die Landefähre durch die dünne Marsatmosphäre und setzt in einer Wolke aus rostfarbenem Staub auf. Die Besatzung meldet Normalbedingungen. Wir waren nicht die Ersten, die diese Reise unternahmen, doch [ROOT.GetCountry.GetAltName('NOM')] reiht sich nun in die Nationen ein, deren Menschen auf einem anderen Planeten gestanden haben."
+ },
+ "space_race_events.7.e": {
+  "en": "A standard mission profile: follow the science.",
+  "de": "Ein Standard-Missionsprofil: der Wissenschaft folgen."
+ },
+ "space_race_events.7.t": {
+  "en": "Red Soil, New World",
+  "de": "Roter Boden, Neue Welt"
+ },
+ "space_race_events.70.a": {
+  "en": "Rebuild the pad: full safety overhaul before resuming.",
+  "de": "Die Startrampe wiederaufbauen: vollständige Sicherheitsüberholung vor der Wiederaufnahme."
+ },
+ "space_race_events.70.b": {
+  "en": "Rush repairs: we can't afford to fall behind.",
+  "de": "Reparaturen beschleunigen: wir können es uns nicht leisten, zurückzufallen."
+ },
+ "space_race_events.70.d": {
+  "en": "A catastrophic explosion has torn through the primary launch complex. The detonation occurred during a routine fueling procedure, sending a column of fire hundreds of meters into the sky. Emergency crews found the pad reduced to twisted wreckage, and the surrounding support structures sustained severe damage. Hundreds of engineers and technicians working in the blast radius did not survive.",
+  "de": "Eine katastrophale Explosion hat den primären Startkomplex zerrissen. Die Detonation ereignete sich während eines routinemäßigen Betankungsvorgangs und schickte eine Feuersäule Hunderte Meter in den Himmel. Rettungskräfte fanden die Startrampe zu verbogenem Schrott reduziert vor, und die umliegenden Trägerstrukturen erlitten schwere Schäden. Hunderte Ingenieure und Techniker, die im Explosionsradius arbeiteten, überlebten nicht."
+ },
+ "space_race_events.70.t": {
+  "en": "Inferno at the Launch Complex",
+  "de": "Inferno am Startkomplex"
+ },
+ "space_race_events.71.a": {
+  "en": "Ground all capsules: redesign the pressure system.",
+  "de": "Alle Kapseln am Boden lassen: das Drucksystem neu konstruieren."
+ },
+ "space_race_events.71.b": {
+  "en": "Implement the fix and resume testing.",
+  "de": "Die Korrektur umsetzen und die Tests fortsetzen."
+ },
+ "space_race_events.71.d": {
+  "en": "During a routine pressure integrity test of the crew capsule, the primary seal failed without warning. The capsule depressurized in seconds. The test crew — experienced engineers performing a standard checkout procedure — had no time to reach emergency equipment. An entire team of our brightest minds, lost in an instant to a failed gasket.",
+  "de": "Während eines routinemäßigen Drucktests der Besatzungskapsel versagte die primäre Dichtung ohne Vorwarnung. Die Kapsel verlor innerhalb von Sekunden ihren Druck. Die Testbesatzung — erfahrene Ingenieure bei einem Standard-Checkout — hatte keine Zeit, die Notfallausrüstung zu erreichen. Ein ganzes Team unserer klügsten Köpfe, in einem Augenblick durch eine versagende Dichtung verloren."
+ },
+ "space_race_events.71.t": {
+  "en": "Silent Capsule",
+  "de": "Stille Kapsel"
+ },
+ "space_race_events.72.a": {
+  "en": "Replace the equipment and improve fire suppression.",
+  "de": "Die Ausrüstung ersetzen und die Brandbekämpfung verbessern."
+ },
+ "space_race_events.72.b": {
+  "en": "Use insurance payout to invest in better safety systems.",
+  "de": "Die Versicherungssumme in bessere Sicherheitssysteme investieren."
+ },
+ "space_race_events.72.d": {
+  "en": "A fire broke out in the main integration facility during the night shift. Quick-thinking technicians activated fire suppression systems before the blaze could reach the fuel storage, but the damage to sensitive equipment and clean-room environments is extensive. No casualties, but the repair timeline will slow the program.",
+  "de": "In der Hauptintegrationshalle brach während der Nachtschicht ein Feuer aus. Geistesgegenwärtige Techniker aktivierten die Brandbekämpfungssysteme, bevor das Feuer das Treibstofflager erreichen konnte, doch der Schaden an empfindlicher Ausrüstung und Reinraumumgebungen ist erheblich. Keine Opfer, aber der Reparaturzeitplan wird das Programm verlangsamen."
+ },
+ "space_race_events.72.t": {
+  "en": "Fire in the Assembly Building",
+  "de": "Feuer im Montagegebäude"
+ },
+ "space_race_events.73.a": {
+  "en": "Launch a public inquiry: restore trust through transparency.",
+  "de": "Eine öffentliche Untersuchung einleiten: Vertrauen durch Transparenz wiederherstellen."
+ },
+ "space_race_events.73.b": {
+  "en": "Suppress the story: national security demands secrecy.",
+  "de": "Die Geschichte unterdrücken: die nationale Sicherheit erfordert Geheimhaltung."
+ },
+ "space_race_events.73.c": {
+  "en": "Restructure the program: bring in new leadership.",
+  "de": "Das Programm umstrukturieren: neue Führung einsetzen."
+ },
+ "space_race_events.73.d": {
+  "en": "An investigative journalist has published a devastating exposé of cost overruns and financial mismanagement within the space program. Contracts awarded to connected firms at inflated prices, expense accounts that defy belief, and schedule milestones fabricated to justify continued funding. Public trust in the program has been severely damaged.",
+  "de": "Ein Investigativjournalist hat eine vernichtende Enthüllung über Kostenüberschreitungen und finanzielle Misswirtschaft im Raumfahrtprogramm veröffentlicht. Aufträge, die zu überhöhten Preisen an gut vernetzte Firmen vergeben wurden, Spesenkonten, die jeden Glauben übersteigen, und Terminmeilensteine, die erfunden wurden, um die weitere Finanzierung zu rechtfertigen. Das öffentliche Vertrauen in das Programm hat schweren Schaden genommen."
+ },
+ "space_race_events.73.t": {
+  "en": "Stars and Scandals",
+  "de": "Sterne und Skandale"
+ },
+ "space_race_events.74.a": {
+  "en": "Apply the breakthrough to the current program.",
+  "de": "Den Durchbruch auf das laufende Programm anwenden."
+ },
+ "space_race_events.74.b": {
+  "en": "Patent and commercialize the technology.",
+  "de": "Die Technologie patentieren und vermarkten."
+ },
+ "space_race_events.74.d": {
+  "en": "A team of engineers working on a perplexing propulsion problem has achieved a fundamental breakthrough. Their novel approach to thrust vectoring and fuel efficiency dramatically exceeds theoretical predictions. If validated, this innovation could revolutionize the program's capabilities and accelerate the current mission timeline.",
+  "de": "Ein Ingenieursteam, das an einem verzwickten Antriebsproblem arbeitete, hat einen fundamentalen Durchbruch erzielt. Ihr neuartiger Ansatz für Schubvektorsteuerung und Treibstoffeffizienz übertrifft die theoretischen Vorhersagen drastisch. Sollte sie sich bestätigen, könnte diese Innovation die Fähigkeiten des Programms revolutionieren und den aktuellen Missionszeitplan beschleunigen."
+ },
+ "space_race_events.74.t": {
+  "en": "An Unexpected Breakthrough",
+  "de": "Ein unerwarteter Durchbruch"
+ },
+ "space_race_events.75.a": {
+  "en": "Wait for the original suppliers: quality matters.",
+  "de": "Auf die ursprünglichen Lieferanten warten: Qualität zählt."
+ },
+ "space_race_events.75.b": {
+  "en": "Source alternative suppliers: accept trade-offs.",
+  "de": "Alternative Lieferanten beziehen: Kompromisse akzeptieren."
+ },
+ "space_race_events.75.c": {
+  "en": "Develop domestic production capacity.",
+  "de": "Inländische Produktionskapazitäten aufbauen."
+ },
+ "space_race_events.75.d": {
+  "en": "Critical precision components — guidance gyroscopes, radiation-hardened electronics, and specialty alloys — have failed to arrive on schedule. The suppliers report production delays caused by competing defense contracts and raw material shortages. Without these components, major integration milestones cannot proceed.",
+  "de": "Kritische Präzisionsbauteile — Kreiselkompasse für die Lenkung, strahlungsgehärtete Elektronik und Speziallegierungen — sind nicht wie geplant eingetroffen. Die Lieferanten berichten von Produktionsverzögerungen durch konkurrierende Rüstungsaufträge und Rohstoffknappheit. Ohne diese Bauteile können wichtige Integrationsmeilensteine nicht fortgesetzt werden."
+ },
+ "space_race_events.75.t": {
+  "en": "The Parts That Didn't Come",
+  "de": "Die Teile, die nicht kamen"
+ },
+ "space_race_events.76.a": {
+  "en": "The program has served its purpose.",
+  "de": "Das Programm hat seinen Zweck erfüllt."
+ },
+ "space_race_events.76.a_lost": {
+  "en": "We will build again.",
+  "de": "Wir werden wieder aufbauen."
+ },
+ "space_race_events.76.d": {
+  "en": "Our launch complex has been refitted to a mission profile that can no longer carry some of the programs it was built for, and [ROOT.GetCountry.GetAdjective] ambitions at that scale have been shelved. The scientists and engineers who dedicated themselves to those missions now seek new assignments, and the [concept_infrastructure] built for them sits idle.",
+  "de": "Unser Startkomplex wurde auf ein Missionsprofil umgerüstet, das einige der Programme, für die er gebaut wurde, nicht mehr tragen kann, und [ROOT.GetCountry.GetAdjective|l]e Ambitionen in diesem Maßstab wurden auf Eis gelegt. Die Wissenschaftler und Ingenieure, die sich diesen Missionen gewidmet hatten, suchen nun nach neuen Aufgaben, und die für sie gebaute [concept_infrastructure] liegt brach."
+ },
+ "space_race_events.76.d_lost": {
+  "en": "We no longer hold a working launch complex, and the programs it was carrying cannot continue without one. Their progress is lost. The scientists and engineers who built them are dispersing to other work, and whatever [concept_infrastructure] remains in our hands sits idle until we can launch again.",
+  "de": "Wir verfügen nicht mehr über einen funktionsfähigen Startkomplex, und die Programme, die er trug, können ohne einen solchen nicht fortgesetzt werden. Ihr Fortschritt ist verloren. Die Wissenschaftler und Ingenieure, die sie aufgebaut haben, zerstreuen sich auf andere Arbeit, und was auch immer an [concept_infrastructure] in unseren Händen verbleibt, liegt brach, bis wir wieder starten können."
+ },
+ "space_race_events.76.t": {
+  "en": "Program Discontinued",
+  "de": "Programm eingestellt"
+ },
+ "space_race_events.76.t_lost": {
+  "en": "The Silent Gantry",
+  "de": "Der stille Startturm"
+ },
+ "space_race_events.8.a": {
+  "en": "Fusion torch drive: proven and reliable.",
+  "de": "Fusionsfackel-Antrieb: bewährt und zuverlässig."
+ },
+ "space_race_events.8.b": {
+  "en": "Antimatter-catalyzed engine: faster, experimental.",
+  "de": "Antimaterie-katalysiertes Triebwerk: schneller, experimentell."
+ },
+ "space_race_events.8.c": {
+  "en": "International probe: share costs and data.",
+  "de": "Internationale Sonde: Kosten und Daten teilen."
+ },
+ "space_race_events.8.d": {
+  "en": "Our probe stands ready on the launch pad: a testament to decades of propulsion research. Aimed at the nearest stars, light-years away, it will be the first human artifact to cross interstellar space. Even at a significant fraction of light speed, the journey will take years. Then the data must travel back at the speed of light. We will not hear from this probe for over a decade.\\n\\nHow shall we configure the drive system?",
+  "de": "Unsere Sonde steht startbereit auf der Rampe: ein Zeugnis jahrzehntelanger Antriebsforschung. Ausgerichtet auf die nächsten Sterne, Lichtjahre entfernt, wird sie das erste menschliche Artefakt sein, das den interstellaren Raum durchquert. Selbst bei einem erheblichen Bruchteil der Lichtgeschwindigkeit wird die Reise Jahre dauern. Dann müssen die Daten mit Lichtgeschwindigkeit zurückreisen. Wir werden über ein Jahrzehnt lang nichts von dieser Sonde hören.\\n\\nWie sollen wir das Antriebssystem konfigurieren?"
+ },
+ "space_race_events.8.d_later": {
+  "en": "Our probe stands ready on the launch pad: a testament to decades of propulsion research. Aimed at the nearest stars, light-years away, it will follow the probes other nations have already sent beyond the Sun. Even at a significant fraction of light speed, the journey will take years. Then the data must travel back at the speed of light. We will not hear from this probe for over a decade.\\n\\nHow shall we configure the drive system?",
+  "de": "Unsere Sonde steht startbereit auf der Rampe: ein Zeugnis jahrzehntelanger Antriebsforschung. Ausgerichtet auf die nächsten Sterne, Lichtjahre entfernt, wird sie den Sonden folgen, die andere Nationen bereits über die Sonne hinaus entsandt haben. Selbst bei einem erheblichen Bruchteil der Lichtgeschwindigkeit wird die Reise Jahre dauern. Dann müssen die Daten mit Lichtgeschwindigkeit zurückreisen. Wir werden über ein Jahrzehnt lang nichts von dieser Sonde hören.\\n\\nWie sollen wir das Antriebssystem konfigurieren?"
+ },
+ "space_race_events.8.t": {
+  "en": "The Longest Voyage",
+  "de": "Die längste Reise"
+ },
+ "space_race_events.80.a": {
+  "en": "Send a civilian: space belongs to all humanity.",
+  "de": "Einen Zivilisten schicken: der Weltraum gehört der ganzen Menschheit."
+ },
+ "space_race_events.80.b": {
+  "en": "A military pilot: discipline and precision above all.",
+  "de": "Ein Militärpilot: Disziplin und Präzision über alles."
+ },
+ "space_race_events.80.c": {
+  "en": "A scientist: turn the flight into a research mission.",
+  "de": "Eine Wissenschaftlerin: den Flug in eine Forschungsmission verwandeln."
+ },
+ "space_race_events.80.d": {
+  "en": "As our orbital program nears readiness, a fundamental question must be answered: who will we send into space? A civilian volunteer would demonstrate that space belongs to all humanity. A military test pilot brings discipline and familiarity with high-performance vehicles. Or we could send a scientist, turning the flight into a research mission from the very first orbit.",
+  "de": "Während sich unser Orbitalprogramm der Einsatzbereitschaft nähert, muss eine grundlegende Frage beantwortet werden: Wen schicken wir ins All? Ein ziviler Freiwilliger würde zeigen, dass der Weltraum der ganzen Menschheit gehört. Ein militärischer Testpilot bringt Disziplin und Vertrautheit mit Hochleistungsfahrzeugen mit. Oder wir schicken eine Wissenschaftlerin und verwandeln den Flug schon ab dem ersten Orbit in eine Forschungsmission."
+ },
+ "space_race_events.80.t": {
+  "en": "Who Flies First?",
+  "de": "Wer fliegt zuerst?"
+ },
+ "space_race_events.81.a": {
+  "en": "Venus: unlock the secrets of atmospheric science.",
+  "de": "Venus: die Geheimnisse der Atmosphärenwissenschaft entschlüsseln."
+ },
+ "space_race_events.81.b": {
+  "en": "Mars: search for evidence of life.",
+  "de": "Mars: nach Hinweisen auf Leben suchen."
+ },
+ "space_race_events.81.c": {
+  "en": "The asteroid belt: chart future industrial corridors.",
+  "de": "Der Asteroidengürtel: künftige Industriekorridore kartieren."
+ },
+ "space_race_events.81.d": {
+  "en": "Our probe is ready for its journey beyond Earth orbit. Three targets have been proposed. Venus, shrouded in clouds, could reveal whether a runaway greenhouse effect awaits our own world. Mars, with its ancient riverbeds and polar ice, is the most likely candidate for past life. The asteroid belt offers navigational and prospecting data that could accelerate future off-world industry.",
+  "de": "Unsere Sonde ist bereit für ihre Reise jenseits des Erdorbits. Drei Ziele wurden vorgeschlagen. Die Venus, in Wolken gehüllt, könnte offenbaren, ob unserer eigenen Welt ein außer Kontrolle geratener Treibhauseffekt bevorsteht. Der Mars, mit seinen uralten Flussbetten und Polkappen aus Eis, ist der wahrscheinlichste Kandidat für früheres Leben. Der Asteroidengürtel bietet Navigations- und Erkundungsdaten, die eine künftige außerirdische Industrie beschleunigen könnten."
+ },
+ "space_race_events.81.t": {
+  "en": "Where Shall We Send the Probe?",
+  "de": "Wohin sollen wir die Sonde schicken?"
+ },
+ "space_race_events.82.a": {
+  "en": "A scientific outpost: knowledge is the ultimate resource.",
+  "de": "Ein wissenschaftlicher Außenposten: Wissen ist die ultimative Ressource."
+ },
+ "space_race_events.82.b": {
+  "en": "An industrial facility: the Moon's wealth will fuel our growth.",
+  "de": "Eine Industrieanlage: der Reichtum des Mondes wird unser Wachstum antreiben."
+ },
+ "space_race_events.82.c": {
+  "en": "A military installation: the ultimate high ground.",
+  "de": "Eine militärische Anlage: die ultimative Höhenüberlegenheit."
+ },
+ "space_race_events.82.d": {
+  "en": "With a permanent lunar presence becoming reality, we must decide the base's primary mission. A scientific outpost would advance pure research and attract international collaboration. An industrial facility could begin extracting helium-3 and rare minerals. A military installation would provide unmatched strategic observation capabilities and serve as a staging point for force projection.",
+  "de": "Da eine dauerhafte Präsenz auf dem Mond Wirklichkeit wird, müssen wir über die Hauptaufgabe der Basis entscheiden. Ein wissenschaftlicher Außenposten würde die Grundlagenforschung vorantreiben und internationale Zusammenarbeit anziehen. Eine Industrieanlage könnte mit der Förderung von Helium-3 und seltenen Mineralien beginnen. Eine militärische Anlage würde unübertroffene strategische Beobachtungsfähigkeiten bieten und als Aufmarschpunkt für die Projektion von Macht dienen."
+ },
+ "space_race_events.82.t": {
+  "en": "The Purpose of the Base",
+  "de": "Der Zweck der Basis"
+ },
+ "space_race_events.83.a": {
+  "en": "Direct landing: plant our flag on Mars now.",
+  "de": "Direkte Landung: jetzt unsere Flagge auf dem Mars hissen."
+ },
+ "space_race_events.83.b": {
+  "en": "Orbital-first: build [concept_infrastructure] before we descend.",
+  "de": "Zuerst der Orbit: [concept_infrastructure] aufbauen, bevor wir landen."
+ },
+ "space_race_events.83.c": {
+  "en": "Robotic precursors: prepare the way for human arrival.",
+  "de": "Robotische Vorboten: den Weg für die Ankunft der Menschen bereiten."
+ },
+ "space_race_events.83.d": {
+  "en": "The Mars mission architecture must be decided. A direct landing puts boots on the surface fastest but carries enormous risk. An orbital-first approach establishes a station in Mars orbit before attempting a landing, building experience methodically. Sending robotic precursors to prepare a landing site and cache supplies is safest but slowest, and may allow rivals to land first.",
+  "de": "Die Missionsarchitektur für den Mars muss entschieden werden. Eine direkte Landung bringt am schnellsten Stiefel auf die Oberfläche, birgt aber enormes Risiko. Ein Ansatz mit Orbit zuerst errichtet eine Station im Marsorbit, bevor eine Landung versucht wird, und baut methodisch Erfahrung auf. Robotische Vorboten zu schicken, um eine Landestelle vorzubereiten und Vorräte anzulegen, ist am sichersten, aber am langsamsten, und könnte Rivalen erlauben, zuerst zu landen."
+ },
+ "space_race_events.83.t": {
+  "en": "The Mars Strategy",
+  "de": "Die Mars-Strategie"
+ },
+ "surveillance_events.1.a": {
+  "en": "Protect the whistleblower",
+  "de": "Den Whistleblower schützen"
+ },
+ "surveillance_events.1.b": {
+  "en": "Prosecute the traitor",
+  "de": "Den Verräter strafrechtlich verfolgen"
+ },
+ "surveillance_events.1.c": {
+  "en": "Suppress the story",
+  "de": "Die Geschichte unterdrücken"
+ },
+ "surveillance_events.1.d": {
+  "en": "A government insider has leaked classified documents revealing the extent of state surveillance on ordinary citizens. The revelations have sparked outrage among civil liberties advocates and a fierce debate about security versus privacy.",
+  "de": "Ein Regierungsinsider hat geheime Dokumente durchsickern lassen, die das Ausmaß der staatlichen Überwachung gewöhnlicher Bürger offenlegen. Die Enthüllungen haben unter Bürgerrechtlern Empörung ausgelöst und eine erbitterte Debatte über Sicherheit gegen Privatsphäre entfacht."
+ },
+ "surveillance_events.1.d_rogue": {
+  "en": "A government insider has leaked classified documents revealing a surveillance programme that the security services kept running in open defiance of our data privacy law. Officials sworn to uphold that law quietly went on collecting everything it forbade them to collect. The revelations have sparked outrage among civil liberties advocates and a fierce debate about who, exactly, governs the watchers.",
+  "de": "Ein Regierungsinsider hat geheime Dokumente durchsickern lassen, die ein Überwachungsprogramm offenlegen, das die Sicherheitsdienste in offenem Trotz gegen unser Datenschutzgesetz weiterlaufen ließen. Beamte, die geschworen hatten, dieses Gesetz zu wahren, sammelten still weiter alles, was es ihnen zu sammeln verbot. Die Enthüllungen haben unter Bürgerrechtlern Empörung ausgelöst und eine erbitterte Debatte darüber entfacht, wer eigentlich die Wächter beaufsichtigt."
+ },
+ "surveillance_events.1.t": {
+  "en": "The Whistleblower",
+  "de": "Der Whistleblower"
+ },
+ "surveillance_events.100.a": {
+  "en": "Security is the highest good",
+  "de": "Sicherheit ist das höchste Gut"
+ },
+ "surveillance_events.100.b": {
+  "en": "Some rights are worth remembering",
+  "de": "Manche Rechte sind es wert, sich an sie zu erinnern"
+ },
+ "surveillance_events.100.d": {
+  "en": "The surveillance apparatus has won. With intrusive monitoring and an intelligence ministry in full operation, the state sees all and knows all. Digital rights are a forgotten dream.",
+  "de": "Der Überwachungsapparat hat gesiegt. Mit invasiver Überwachung und einem voll funktionsfähigen Geheimdienstministerium sieht der Staat alles und weiß alles. Digitale Rechte sind ein vergessener Traum."
+ },
+ "surveillance_events.100.t": {
+  "en": "The Security State",
+  "de": "Der Sicherheitsstaat"
+ },
+ "surveillance_events.2.a": {
+  "en": "Strengthen data protections",
+  "de": "Den Datenschutz stärken"
+ },
+ "surveillance_events.2.b": {
+  "en": "We need more surveillance to prevent this",
+  "de": "Wir brauchen mehr Überwachung, um das zu verhindern"
+ },
+ "surveillance_events.2.c": {
+  "en": "Downplay the breach",
+  "de": "Den Vorfall herunterspielen"
+ },
+ "surveillance_events.2.d": {
+  "en": "A massive data breach has exposed the personal information of millions of citizens. Private correspondence, financial records, and intimate details are now public. The government faces a reckoning.",
+  "de": "Ein massives Datenleck hat die persönlichen Daten von Millionen Bürgern offengelegt. Private Korrespondenz, Finanzunterlagen und intime Details sind nun öffentlich. Die Regierung steht vor einer Abrechnung."
+ },
+ "surveillance_events.2.t": {
+  "en": "The Data Breach",
+  "de": "Das Datenleck"
+ },
+ "surveillance_events.200.a": {
+  "en": "Privacy is a right, not a privilege.",
+  "de": "Privatsphäre ist ein Recht, kein Privileg."
+ },
+ "surveillance_events.200.d": {
+  "en": "The digital rights movement in [ROOT.GetCountry.GetName] has succeeded. Comprehensive privacy protections are now law, ensuring citizens' digital lives remain their own.",
+  "de": "Die Bewegung für digitale Rechte [ROOT.GetCountry.GetAltName('IN')] hat sich durchgesetzt. Umfassender Datenschutz ist nun Gesetz und stellt sicher, dass das digitale Leben der Bürger ihr Eigen bleibt."
+ },
+ "surveillance_events.200.t": {
+  "en": "Digital Freedom Secured",
+  "de": "Digitale Freiheit gesichert"
+ },
+ "surveillance_events.3.a": {
+  "en": "Hire the hackers",
+  "de": "Die Hacker anheuern"
+ },
+ "surveillance_events.3.b": {
+  "en": "Hunt them down",
+  "de": "Sie jagen"
+ },
+ "surveillance_events.3.c": {
+  "en": "Justify massive surveillance expansion",
+  "de": "Eine massive Ausweitung der Überwachung rechtfertigen"
+ },
+ "surveillance_events.3.d": {
+  "en": "A sophisticated hacker collective has breached government systems, leaking classified data to the public. The leaked documents reveal the extent of domestic surveillance programs. The hackers claim to be freedom fighters; the state calls them criminals.",
+  "de": "Ein hochentwickeltes Hackerkollektiv ist in Regierungssysteme eingedrungen und hat geheime Daten an die Öffentlichkeit durchsickern lassen. Die durchgesickerten Dokumente offenbaren das Ausmaß der inländischen Überwachungsprogramme. Die Hacker bezeichnen sich als Freiheitskämpfer; der Staat nennt sie Kriminelle."
+ },
+ "surveillance_events.3.d_rogue": {
+  "en": "A sophisticated hacker collective has breached government systems, leaking classified data to the public. Among the leaks is proof of a domestic surveillance programme that the security services kept running in defiance of our data privacy law. The hackers claim to be freedom fighters; the state calls them criminals.",
+  "de": "Ein hochentwickeltes Hackerkollektiv ist in Regierungssysteme eingedrungen und hat geheime Daten an die Öffentlichkeit durchsickern lassen. Unter den durchgesickerten Daten befindet sich der Beweis für ein inländisches Überwachungsprogramm, das die Sicherheitsdienste entgegen unserem Datenschutzgesetz weiterlaufen ließen. Die Hacker bezeichnen sich als Freiheitskämpfer; der Staat nennt sie Kriminelle."
+ },
+ "surveillance_events.3.f": {
+  "en": "The hackers published everything: surveillance logs, internal memos, the personal browsing history of three senior officials. The public reaction was divided between outrage at the surveillance and amusement at the browsing history.",
+  "de": "Die Hacker veröffentlichten alles: Überwachungsprotokolle, interne Memos, den persönlichen Browserverlauf dreier hochrangiger Beamter. Die öffentliche Reaktion war geteilt zwischen Empörung über die Überwachung und Belustigung über den Browserverlauf."
+ },
+ "surveillance_events.3.t": {
+  "en": "Hacker Collective Attack",
+  "de": "Angriff des Hackerkollektivs"
+ },
+ "surveillance_events.4.a": {
+  "en": "Deploy predictive policing",
+  "de": "Vorausschauende Polizeiarbeit einführen"
+ },
+ "surveillance_events.4.b": {
+  "en": "Intelligence use only",
+  "de": "Nur für den Geheimdienstgebrauch"
+ },
+ "surveillance_events.4.c": {
+  "en": "Ban AI policing systems",
+  "de": "KI-Polizeisysteme verbieten"
+ },
+ "surveillance_events.4.d": {
+  "en": "AI-powered systems can now predict crimes before they happen, identifying potential offenders through behavioral analysis. Law enforcement is eager to deploy the technology, but civil liberties groups warn of a dystopian future where citizens are punished for crimes they have not yet committed.",
+  "de": "KI-gestützte Systeme können nun Verbrechen vorhersagen, bevor sie geschehen, und potenzielle Täter durch Verhaltensanalyse identifizieren. Die Strafverfolgungsbehörden drängen darauf, die Technologie einzusetzen, doch Bürgerrechtsgruppen warnen vor einer dystopischen Zukunft, in der Bürger für Verbrechen bestraft werden, die sie noch nicht begangen haben."
+ },
+ "surveillance_events.4.t": {
+  "en": "Predictive Policing",
+  "de": "Vorausschauende Polizeiarbeit"
  }
 }
