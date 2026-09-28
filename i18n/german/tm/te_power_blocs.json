@@ -1,0 +1,58 @@
+{
+ "principle_group_artistic_expression": {
+  "en": "Artistic Expression",
+  "de": "Künstlerischer Ausdruck"
+ },
+ "principle_group_cultural_plurality": {
+  "en": "Cultural Plurality",
+  "de": "Kulturelle Vielfalt"
+ },
+ "principle_group_cultural_unity": {
+  "en": "Cultural Unity",
+  "de": "Kulturelle Einheit"
+ },
+ "principle_group_education": {
+  "en": "Education",
+  "de": "Bildung"
+ },
+ "principle_group_engineering_and_logistics": {
+  "en": "Engineering and Logistics",
+  "de": "Ingenieurwesen und Logistik"
+ },
+ "principle_group_environmental_sustainability": {
+  "en": "Environmental Sustainability",
+  "de": "Umweltverträglichkeit"
+ },
+ "principle_group_global_security": {
+  "en": "Global Security",
+  "de": "Globale Sicherheit"
+ },
+ "principle_group_healthcare": {
+  "en": "Healthcare",
+  "de": "Gesundheitswesen"
+ },
+ "principle_group_military_training": {
+  "en": "Military Training",
+  "de": "Militärausbildung"
+ },
+ "principle_group_monetary_union": {
+  "en": "Monetary Union",
+  "de": "Währungsunion"
+ },
+ "principle_group_multilateral_institutions": {
+  "en": "Multilateral Institutions",
+  "de": "Multilaterale Institutionen"
+ },
+ "principle_group_rural": {
+  "en": "Rural Development",
+  "de": "Ländliche Entwicklung"
+ },
+ "principle_group_urban_planning": {
+  "en": "Urban Planning",
+  "de": "Stadtplanung"
+ },
+ "principle_group_welfare": {
+  "en": "Welfare",
+  "de": "Wohlfahrt"
+ }
+}

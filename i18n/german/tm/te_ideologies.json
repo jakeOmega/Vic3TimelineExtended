@@ -1,0 +1,134 @@
+{
+ "ideology_anti_colonialist": {
+  "en": "Anti-Colonialist",
+  "de": "Antikolonialistisch"
+ },
+ "ideology_anti_colonialist_leader": {
+  "en": "Anti-Colonialist",
+  "de": "Antikolonialistisch"
+ },
+ "ideology_corporate": {
+  "en": "Corpocrat",
+  "de": "Korpokrat"
+ },
+ "ideology_custom_religion_aristocratic_governance": {
+  "en": "Aristocracy",
+  "de": "Aristokratie"
+ },
+ "ideology_custom_religion_corporate_governance": {
+  "en": "Corporate Rule",
+  "de": "Konzernherrschaft"
+ },
+ "ideology_custom_religion_exploitative_outlook": {
+  "en": "Exploitation",
+  "de": "Ausbeutung"
+ },
+ "ideology_custom_religion_free_market_economy": {
+  "en": "Divine Wealth",
+  "de": "Göttlicher Reichtum"
+ },
+ "ideology_custom_religion_imperial_cult_economy": {
+  "en": "Enlightened Imperial Economy",
+  "de": "Aufgeklärte Kaiserliche Wirtschaft"
+ },
+ "ideology_custom_religion_imperial_cult_governance": {
+  "en": "Imperial Cult",
+  "de": "Kaiserkult"
+ },
+ "ideology_custom_religion_imperial_cult_society": {
+  "en": "Imperial Society",
+  "de": "Kaiserliche Gesellschaft"
+ },
+ "ideology_custom_religion_imperialist_outlook": {
+  "en": "Imperialism",
+  "de": "Imperialismus"
+ },
+ "ideology_custom_religion_inclusive_society": {
+  "en": "Inclusive Society",
+  "de": "Inklusive Gesellschaft"
+ },
+ "ideology_custom_religion_isolationist_outlook": {
+  "en": "Isolationism",
+  "de": "Isolationismus"
+ },
+ "ideology_custom_religion_meritocratic_society": {
+  "en": "Meritocracy",
+  "de": "Meritokratie"
+ },
+ "ideology_custom_religion_militarist_outlook": {
+  "en": "Militarism",
+  "de": "Militarismus"
+ },
+ "ideology_custom_religion_pacifist_outlook": {
+  "en": "Pacifism",
+  "de": "Pazifismus"
+ },
+ "ideology_custom_religion_republican_governance": {
+  "en": "Republicanism",
+  "de": "Republikanismus"
+ },
+ "ideology_custom_religion_social_democratic_economy": {
+  "en": "Social Welfare",
+  "de": "Soziale Wohlfahrt"
+ },
+ "ideology_custom_religion_socialist_economy": {
+  "en": "Divine Command Economy",
+  "de": "Göttliche Planwirtschaft"
+ },
+ "ideology_custom_religion_technocratic_governance": {
+  "en": "Technocracy",
+  "de": "Technokratie"
+ },
+ "ideology_custom_religion_theocratic_economy": {
+  "en": "Theocratic Economy",
+  "de": "Theokratische Wirtschaft"
+ },
+ "ideology_custom_religion_theocratic_governance": {
+  "en": "Theocracy",
+  "de": "Theokratie"
+ },
+ "ideology_custom_religion_theocratic_outlook": {
+  "en": "Theocratic Expansion",
+  "de": "Theokratische Expansion"
+ },
+ "ideology_custom_religion_theocratic_society": {
+  "en": "Theocratic Society",
+  "de": "Theokratische Gesellschaft"
+ },
+ "ideology_custom_religion_totalitarian_society": {
+  "en": "Totalitarianism",
+  "de": "Totalitarismus"
+ },
+ "ideology_custom_religion_traditionalist_economy": {
+  "en": "Traditionalism",
+  "de": "Traditionalismus"
+ },
+ "ideology_custom_religion_traditionalist_society": {
+  "en": "Social Orthodoxy",
+  "de": "Soziale Orthodoxie"
+ },
+ "ideology_environmentalists": {
+  "en": "Environmentalist",
+  "de": "Umweltschützer"
+ },
+ "ideology_islamic_inheritance": {
+  "en": "Islamic Inheritance",
+  "de": "Islamisches Erbrecht"
+ },
+ "ideology_multicultural": {
+  "en": "Multiculturalist",
+  "de": "Multikulturalist"
+ },
+ "ideology_multicultural_ig": {
+  "en": "Multiculturalist",
+  "de": "Multikulturalist"
+ },
+ "ideology_multicultural_inclusive": {
+  "en": "Inclusive Multiculturalist",
+  "de": "Inklusiver Multikulturalist"
+ },
+ "ideology_optimist_transhumanist": {
+  "en": "Optimist Transhumanist",
+  "de": "Optimistischer Transhumanist"
+ }
+}

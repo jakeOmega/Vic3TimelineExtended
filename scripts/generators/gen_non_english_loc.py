@@ -12,7 +12,11 @@ English loc file, one copy per language that the engine loads in its place:
         -> <out>/german/replace/x_l_german.yml
 
 A copy is byte-identical to its English source apart from the header line and
-the file name, so the UTF-8 BOM and every comment carry over. `replace/` is
+the file name, so the UTF-8 BOM and every comment carry over. A language with a
+translation memory (`i18n/<language>/tm/`, from scripts/i18n/translate_loc.py)
+also gets each translated value swapped in, line by line, with the declined
+country-name forms added after their base key; untranslated keys, and keys
+whose English changed too much since translation, stay English. `replace/` is
 copied too: its keys are vanilla keys the mod redefines (renamed goods, the
 redesigned citizenship laws), and the mod's English text is right where the
 vanilla translation would describe the unmodded game.
@@ -58,6 +62,9 @@ LANGUAGES = (
     "turkish",
 )
 
+# The translation-memory field holding each language's text.
+TM_FIELDS = {"german": "de"}
+
 SOURCE_SUFFIX = "_l_english.yml"
 SOURCE_HEADER = "l_english:"
 
@@ -85,15 +92,17 @@ def output_relpath(english_relpath: str, language: str) -> str:
     return os.path.join(language, f"{stem}_l_{language}.yml")
 
 
-def render(english: bytes, language: str, name: str = "<source>") -> bytes:
+def render(english: bytes, language: str, name: str = "<source>", overlay=None) -> bytes:
     """Return `english` with its `l_english:` header line renamed to `l_<language>:`.
 
-    The header is the first line that is neither blank nor a comment; everything
-    else, the BOM included, is returned unchanged."""
+    The header is the first line that is neither blank nor a comment. Without an
+    overlay everything else, the BOM included, is returned unchanged; with one,
+    each value the overlay translates is replaced in place (key, version number
+    and trailing comment kept) and its extra lines follow it."""
     text = english.decode("utf-8")
     lines = text.splitlines(keepends=True)
     for index, line in enumerate(lines):
-        stripped = line.strip().lstrip("﻿")
+        stripped = line.strip().lstrip("\ufeff")
         if not stripped or stripped.startswith("#"):
             continue
         if stripped != SOURCE_HEADER:
@@ -101,8 +110,45 @@ def render(english: bytes, language: str, name: str = "<source>") -> bytes:
                 f"{name}: first non-blank line is {stripped!r}, expected {SOURCE_HEADER!r}"
             )
         lines[index] = line.replace(SOURCE_HEADER, f"l_{language}:", 1)
+        if overlay is not None:
+            lines[index + 1:] = _translate_lines(lines[index + 1:], overlay)
         return "".join(lines).encode("utf-8")
     raise LocSourceError(f"{name}: no {SOURCE_HEADER!r} header")
+
+
+def _translate_lines(lines: list[str], overlay) -> list[str]:
+    from mod_state import split_loc_line
+
+    out = []
+    for line in lines:
+        parsed = split_loc_line(line)
+        if parsed is None:
+            out.append(line)
+            continue
+        key, en, _trailing = parsed
+        start = line.index('"', line.index(":"))
+        end = start + 1 + len(en)
+        value = overlay.value(key, en)
+        out.append(line[: start + 1] + value + line[end:] if value != en else line)
+        newline = "\r\n" if line.endswith("\r\n") else "\n"
+        for extra_key, extra_value in overlay.extra_lines(key, en):
+            out.append(f' {extra_key}:0 "{extra_value}"{newline}')
+    return out
+
+
+def load_overlays(languages: tuple[str, ...] = LANGUAGES) -> dict:
+    """{language: Overlay} for every language with a translation memory."""
+    for path in (REPO_ROOT, os.path.join(REPO_ROOT, "scripts", "i18n")):
+        if path not in sys.path:
+            sys.path.insert(0, path)
+    from translate_loc import load_overlay
+
+    overlays = {}
+    for language in languages:
+        overlay = load_overlay(language, TM_FIELDS.get(language, language))
+        if overlay is not None:
+            overlays[language] = overlay
+    return overlays
 
 
 def iter_english_files(english_dir: str) -> list[str]:
@@ -120,6 +166,7 @@ def build(
     english_dir: str = ENGLISH_DIR,
     out_dir: str = DEFAULT_OUT,
     languages: tuple[str, ...] = LANGUAGES,
+    overlays: dict | None = None,
 ) -> BuildResult:
     """Write every language's copies into `out_dir`; prune stale ones.
 
@@ -134,7 +181,8 @@ def build(
         with open(os.path.join(english_dir, rel), "rb") as fh:
             english = fh.read()
         for language in languages:
-            planned[output_relpath(rel, language)] = render(english, language, rel)
+            overlay = (overlays or {}).get(language)
+            planned[output_relpath(rel, language)] = render(english, language, rel, overlay)
 
     result = BuildResult()
     for rel, content in sorted(planned.items()):
@@ -178,8 +226,9 @@ def main(argv: list[str] | None = None) -> int:
         print("\n".join(LANGUAGES))
         return 0
 
+    overlays = load_overlays()
     try:
-        result = build(out_dir=args.out)
+        result = build(out_dir=args.out, overlays=overlays)
     except LocSourceError as exc:
         print(f"gen_non_english_loc: {exc}", file=sys.stderr)
         return 1
@@ -190,6 +239,13 @@ def main(argv: list[str] | None = None) -> int:
             f"{len(result.removed)} removed, {result.unchanged} unchanged "
             f"({len(LANGUAGES)} languages) -> {os.path.relpath(args.out, REPO_ROOT)}"
         )
+        for language, overlay in sorted(overlays.items()):
+            c = overlay.counts
+            print(
+                f"  {language}: {c['translated']} translated, {c['stale_kept']} changed slightly "
+                f"(old translation kept), {c['stale_english']} changed (English until "
+                f"retranslated), {c['english']} not yet translated"
+            )
     return 0
 
 

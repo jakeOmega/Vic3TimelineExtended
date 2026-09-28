@@ -1,0 +1,42 @@
+{
+ "movement_anti_war": {
+  "en": "Anti-War Movement",
+  "de": "Antikriegsbewegung"
+ },
+ "movement_civil_rights": {
+  "en": "Civil Rights Movement",
+  "de": "Bürgerrechtsbewegung"
+ },
+ "movement_crushed_assimilation_drive_modifier": {
+  "en": "Assimilation Drive",
+  "de": "Assimilierungskampagne"
+ },
+ "movement_crushed_expulsion_modifier": {
+  "en": "Minority Expulsion Program",
+  "de": "Vertreibungsprogramm für Minderheiten"
+ },
+ "movement_crushed_order_restored_modifier": {
+  "en": "Order Restored",
+  "de": "Ordnung wiederhergestellt"
+ },
+ "movement_crushed_political_suppression_modifier": {
+  "en": "Political Suppression of Minorities",
+  "de": "Politische Unterdrückung von Minderheiten"
+ },
+ "movement_crushed_segregation_enforced_modifier": {
+  "en": "Segregation Enforced",
+  "de": "Segregation durchgesetzt"
+ },
+ "movement_environmental": {
+  "en": "Environmental Movement",
+  "de": "Umweltbewegung"
+ },
+ "movement_environmental_name": {
+  "en": "Environmental Movement",
+  "de": "Umweltbewegung"
+ },
+ "movement_transhumanist": {
+  "en": "Transhumanist Movement",
+  "de": "Transhumanistische Bewegung"
+ }
+}

@@ -1,0 +1,206 @@
+{
+ "bg_megastructure_capped_private": {
+  "en": "Private Megastructure Facility",
+  "de": "Private Megastruktur-Anlage"
+ },
+ "concept_asset_relief_program": {
+  "en": "Asset Relief Program",
+  "de": "Vermögensentlastungsprogramm"
+ },
+ "concept_ch_art_diminishing_returns": {
+  "en": "Diminishing Returns",
+  "de": "Abnehmender Grenzertrag"
+ },
+ "concept_ch_art_production": {
+  "en": "Art Production",
+  "de": "Kunstproduktion"
+ },
+ "concept_ch_modifier_bonus": {
+  "en": "Modifier Bonus",
+  "de": "Modifikator-Bonus"
+ },
+ "concept_ch_tech_leadership": {
+  "en": "Tech Leadership",
+  "de": "Technologieführerschaft"
+ },
+ "concept_civil_rights_movement": {
+  "en": "Civil Rights Movement",
+  "de": "Bürgerrechtsbewegung"
+ },
+ "concept_construction_cost_scaling": {
+  "en": "Construction Cost Scaling",
+  "de": "Skalierung der Baukosten"
+ },
+ "concept_covert_warfare_system": {
+  "en": "Covert Warfare",
+  "de": "Verdeckte Kriegsführung"
+ },
+ "concept_cultural_hegemony_system": {
+  "en": "Cultural Hegemony",
+  "de": "Kulturelle Hegemonie"
+ },
+ "concept_cultural_pull_components": {
+  "en": "[concept_cultural_pull] Components",
+  "de": "Bestandteile der [concept_cultural_pull]"
+ },
+ "concept_cultural_pull_raw_score": {
+  "en": "Raw Score",
+  "de": "Rohwert"
+ },
+ "concept_cultural_pull_share": {
+  "en": "Cultural Share",
+  "de": "Kultureller Anteil"
+ },
+ "concept_custom_treaty_articles": {
+  "en": "Custom Treaty Articles",
+  "de": "Benutzerdefinierte Vertragsartikel"
+ },
+ "concept_digital_rights_system": {
+  "en": "Digital Rights",
+  "de": "Digitale Rechte"
+ },
+ "concept_export_credit_facility": {
+  "en": "Export Credit Facility",
+  "de": "Exportkreditfazilität"
+ },
+ "concept_foreign_cultural_benchmark": {
+  "en": "Foreign Cultural Benchmark",
+  "de": "Ausländischer Kultur-Vergleichswert"
+ },
+ "concept_fx_swap_lines": {
+  "en": "Swap Lines",
+  "de": "Swap-Linien"
+ },
+ "concept_global_warming_system": {
+  "en": "Global Warming",
+  "de": "Globale Erwärmung"
+ },
+ "concept_greenhouse_gas_emissions": {
+  "en": "Greenhouse Gas Emissions",
+  "de": "Treibhausgasemissionen"
+ },
+ "concept_heir_education_system": {
+  "en": "Heir Education",
+  "de": "Erbenerziehung"
+ },
+ "concept_human_augmentation_system": {
+  "en": "Human Augmentation",
+  "de": "Menschliche Augmentierung"
+ },
+ "concept_legislative_override_capacity": {
+  "en": "Legislative Override Capacity",
+  "de": "Legislative Durchsetzungskapazität"
+ },
+ "concept_lgbtq_rights_movement": {
+  "en": "LGBTQ+",
+  "de": "LGBTQ+"
+ },
+ "concept_mental_health_crisis": {
+  "en": "Mental Health Crisis",
+  "de": "Krise der psychischen Gesundheit"
+ },
+ "concept_open_market_operations": {
+  "en": "Open Market Operations",
+  "de": "Offenmarktgeschäfte"
+ },
+ "concept_post_scarcity_system": {
+  "en": "Post-Scarcity",
+  "de": "Postknappheit"
+ },
+ "concept_rules_of_war_system": {
+  "en": "Rules of War",
+  "de": "Kriegsregeln"
+ },
+ "concept_solar_collector_array": {
+  "en": "Solar Collector",
+  "de": "Sonnenkollektor"
+ },
+ "concept_st_res_active_rate": {
+  "en": "Active",
+  "de": "Aktiv"
+ },
+ "concept_st_res_rate_setting": {
+  "en": "Rate Setting",
+  "de": "Ratenfestlegung"
+ },
+ "concept_state_collapse_system": {
+  "en": "State Collapse",
+  "de": "Staatskollaps"
+ },
+ "concept_te_construction_market": {
+  "en": "Construction Market",
+  "de": "Baumarkt"
+ },
+ "concept_tourism_base_appeal": {
+  "en": "Base Appeal",
+  "de": "Grundattraktivität"
+ },
+ "concept_un_general_assembly": {
+  "en": "General Assembly",
+  "de": "Generalversammlung"
+ },
+ "concept_un_permanent_member": {
+  "en": "Permanent Member",
+  "de": "Ständiges Mitglied"
+ },
+ "concept_un_resolution_binding": {
+  "en": "Binding Resolution",
+  "de": "Verbindliche Resolution"
+ },
+ "concept_un_resolution_recommendatory": {
+  "en": "Recommendatory Resolution",
+  "de": "Empfehlende Resolution"
+ },
+ "concept_un_security_council": {
+  "en": "Security Council",
+  "de": "Sicherheitsrat"
+ },
+ "concept_un_specialized_agencies": {
+  "en": "UN Specialized Agencies",
+  "de": "UN-Sonderorganisationen"
+ },
+ "concept_un_suspended_representation": {
+  "en": "Suspended Representation",
+  "de": "Ausgesetzte Vertretung"
+ },
+ "concept_united_nations_system": {
+  "en": "United Nations",
+  "de": "Vereinte Nationen"
+ },
+ "concept_world_war_system": {
+  "en": "World War",
+  "de": "Weltkrieg"
+ },
+ "ig_approval_negative_modifier": {
+  "en": "Disapproves of Policy",
+  "de": "Missbilligt die Politik"
+ },
+ "ig_approval_positive_modifier": {
+  "en": "Approves of Policy",
+  "de": "Billigt die Politik"
+ },
+ "ig_approval_very_negative_modifier": {
+  "en": "Strongly Disapproves of Policy",
+  "de": "Missbilligt die Politik stark"
+ },
+ "principle_monetary_union_1": {
+  "en": "Monetary Cooperation",
+  "de": "Geldpolitische Zusammenarbeit"
+ },
+ "principle_monetary_union_2": {
+  "en": "Common Currency",
+  "de": "Gemeinsame Währung"
+ },
+ "principle_monetary_union_3": {
+  "en": "Fiscal Backstop",
+  "de": "Fiskalischer Rückhalt"
+ },
+ "principle_monetary_union_4": {
+  "en": "Banking Union",
+  "de": "Bankenunion"
+ },
+ "principle_monetary_union_5": {
+  "en": "Reserve Currency",
+  "de": "Reservewährung"
+ }
+}

@@ -16,6 +16,7 @@ from contextlib import redirect_stdout
 _HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(_HERE, "scripts", "generators"))
 sys.path.insert(0, os.path.join(_HERE, "scripts", "analysis"))
+sys.path.insert(0, os.path.join(_HERE, "scripts", "i18n"))
 
 import gen_non_english_loc as gen  # noqa: E402
 from check_localization_files import check_file  # noqa: E402
@@ -135,6 +136,54 @@ class BuildTests(unittest.TestCase):
         self.assertFalse(os.path.exists(self.out))
 
 
+class OverlayTests(unittest.TestCase):
+    """A language with a translation memory ships its translations in place."""
+
+    SOURCE = BOM + (
+        'l_english:\n'
+        ' AFU:0 "African Union" # kept comment\n'
+        ' law_x:1 "Raises the price of grain by 10% for two years."\n'
+        ' law_y:0 "Lowers wages by 5%."\n'
+        ' law_z:0 "Brand new text"\n'
+    )
+
+    def _overlay(self):
+        import translate_loc
+
+        tm = {
+            "AFU": {"en": "African Union", "de": "Afrikanische Union"},
+            "AFU_NOM": {"en": "African Union", "de": "die Afrikanische Union", "base": "AFU"},
+            "AFU_DAT": {"en": "African Union", "de": "der Afrikanischen Union", "base": "AFU"},
+            # English since tweaked: old German kept.
+            "law_x": {"en": "Raises the price of grain by 10% for the next two years.", "de": "Erhöht …"},
+            # English number changed: English ships until retranslated.
+            "law_y": {"en": "Lowers wages by 3%.", "de": "Senkt die Löhne um 3 %."},
+        }
+        return translate_loc.Overlay(tm, "de")
+
+    def test_values_swapped_in_place_and_forms_follow_their_key(self):
+        overlay = self._overlay()
+        out = gen.render(self.SOURCE.encode("utf-8"), "german", overlay=overlay).decode("utf-8")
+        self.assertEqual(out, BOM + (
+            'l_german:\n'
+            ' AFU:0 "Afrikanische Union" # kept comment\n'
+            ' AFU_NOM:0 "die Afrikanische Union"\n'
+            ' AFU_DAT:0 "der Afrikanischen Union"\n'
+            ' law_x:1 "Erhöht …"\n'
+            ' law_y:0 "Lowers wages by 5%."\n'
+            ' law_z:0 "Brand new text"\n'
+        ))
+        self.assertEqual(overlay.counts["translated"], 1)
+        self.assertEqual(overlay.counts["stale_kept"], 1)
+        self.assertEqual(overlay.counts["stale_english"], 1)
+        self.assertEqual(overlay.counts["english"], 1)
+
+    def test_forms_dropped_when_the_base_name_changed(self):
+        source = BOM + 'l_english:\n AFU:0 "Pan-African Union"\n'
+        out = gen.render(source.encode("utf-8"), "german", overlay=self._overlay()).decode("utf-8")
+        self.assertEqual(out, BOM + 'l_german:\n AFU:0 "Pan-African Union"\n')
+
+
 class CliTests(unittest.TestCase):
     def test_list_languages(self):
         buf = io.StringIO()
@@ -150,7 +199,7 @@ class RepoTreeTests(unittest.TestCase):
         """Every staged copy of the real English tree must pass the checks CI
         runs on English: BOM, a header matching the file name, no duplicates."""
         with tempfile.TemporaryDirectory() as out:
-            result = gen.build(out_dir=out)
+            result = gen.build(out_dir=out, overlays=gen.load_overlays())
             english = gen.iter_english_files(gen.ENGLISH_DIR)
             self.assertEqual(len(result.written), len(english) * len(gen.LANGUAGES))
             problems = []

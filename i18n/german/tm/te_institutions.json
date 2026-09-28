@@ -1,0 +1,70 @@
+{
+ "institution_migration_controls": {
+  "en": "Migration Controls",
+  "de": "Migrationskontrollen"
+ },
+ "institution_ministry_of_commerce": {
+  "en": "Ministry of Commerce",
+  "de": "Handelsministerium"
+ },
+ "institution_ministry_of_consumer_protection": {
+  "en": "Ministry of Consumer Protection",
+  "de": "Verbraucherschutzministerium"
+ },
+ "institution_ministry_of_culture": {
+  "en": "Ministry of Culture",
+  "de": "Kulturministerium"
+ },
+ "institution_ministry_of_foreign_affairs": {
+  "en": "Ministry of Foreign Affairs",
+  "de": "Außenministerium"
+ },
+ "institution_ministry_of_intelligence_and_security": {
+  "en": "Ministry of Intelligence and Security",
+  "de": "Geheimdienst- und Sicherheitsministerium"
+ },
+ "institution_ministry_of_international_aid": {
+  "en": "Ministry of International Aid",
+  "de": "Ministerium für Internationale Hilfe"
+ },
+ "institution_ministry_of_labor": {
+  "en": "Ministry of Labor",
+  "de": "Arbeitsministerium"
+ },
+ "institution_ministry_of_propaganda": {
+  "en": "Ministry of Propaganda",
+  "de": "Propagandaministerium"
+ },
+ "institution_ministry_of_refugee_affairs": {
+  "en": "Ministry of Refugee Affairs",
+  "de": "Flüchtlingsministerium"
+ },
+ "institution_ministry_of_religion": {
+  "en": "Ministry of Religion",
+  "de": "Religionsministerium"
+ },
+ "institution_ministry_of_science": {
+  "en": "Ministry of Science",
+  "de": "Wissenschaftsministerium"
+ },
+ "institution_ministry_of_the_environment": {
+  "en": "Ministry of the Environment",
+  "de": "Umweltministerium"
+ },
+ "institution_ministry_of_thought_control": {
+  "en": "Ministry of Thought Control",
+  "de": "Gedankenkontrollministerium"
+ },
+ "institution_ministry_of_urban_planning": {
+  "en": "Ministry of Urban Planning",
+  "de": "Stadtplanungsministerium"
+ },
+ "institution_ministry_of_war": {
+  "en": "Ministry of War",
+  "de": "Kriegsministerium"
+ },
+ "institution_national_bank": {
+  "en": "National Bank",
+  "de": "Nationalbank"
+ }
+}

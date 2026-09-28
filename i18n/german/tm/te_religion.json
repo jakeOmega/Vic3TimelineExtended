@@ -1,0 +1,82 @@
+{
+ "concept_custom_religion": {
+  "en": "Custom Religion",
+  "de": "Benutzerdefinierte Religion"
+ },
+ "concept_decline_of_religion": {
+  "en": "Decline of Religion",
+  "de": "Niedergang der Religion"
+ },
+ "ig_trait_custom_religion_imperial_cult_happy": {
+  "en": "Imperial Glory",
+  "de": "Kaiserlicher Ruhm"
+ },
+ "ig_trait_custom_religion_imperial_cult_loyal": {
+  "en": "Loyalty to the Empire",
+  "de": "Loyalität zum Reich"
+ },
+ "ig_trait_custom_religion_imperial_cult_unhappy": {
+  "en": "Militarism and Conquest",
+  "de": "Militarismus und Eroberung"
+ },
+ "ig_trait_custom_religion_market_liberal_happy": {
+  "en": "Prosperity Doctrine",
+  "de": "Wohlstandslehre"
+ },
+ "ig_trait_custom_religion_market_liberal_loyal": {
+  "en": "Investing for the Afterlife",
+  "de": "Investieren fürs Jenseits"
+ },
+ "ig_trait_custom_religion_market_liberal_unhappy": {
+  "en": "Opulence and Greed",
+  "de": "Opulenz und Gier"
+ },
+ "ig_trait_custom_religion_social_democrat_happy": {
+  "en": "Secular Service",
+  "de": "Weltlicher Dienst"
+ },
+ "ig_trait_custom_religion_social_democrat_loyal": {
+  "en": "Social Harmony",
+  "de": "Soziale Harmonie"
+ },
+ "ig_trait_custom_religion_social_democrat_unhappy": {
+  "en": "Inequality and Injustice",
+  "de": "Ungleichheit und Ungerechtigkeit"
+ },
+ "ig_trait_custom_religion_theocratic_happy": {
+  "en": "Ecumenism",
+  "de": "Ökumene"
+ },
+ "ig_trait_custom_religion_theocratic_loyal": {
+  "en": "Divine Law",
+  "de": "Göttliches Gesetz"
+ },
+ "ig_trait_custom_religion_theocratic_unhappy": {
+  "en": "Religious Persecution",
+  "de": "Religiöse Verfolgung"
+ },
+ "ig_trait_custom_religion_totalitarian_happy": {
+  "en": "Unity and Conformity",
+  "de": "Einheit und Konformität"
+ },
+ "ig_trait_custom_religion_totalitarian_loyal": {
+  "en": "Order and Obedience",
+  "de": "Ordnung und Gehorsam"
+ },
+ "ig_trait_custom_religion_totalitarian_unhappy": {
+  "en": "Repression of Dissent",
+  "de": "Unterdrückung Andersdenkender"
+ },
+ "ig_trait_custom_religion_traditionalist_happy": {
+  "en": "Divine Right",
+  "de": "Gottesgnadentum"
+ },
+ "ig_trait_custom_religion_traditionalist_loyal": {
+  "en": "Encourage Natalism",
+  "de": "Geburtenförderung"
+ },
+ "ig_trait_custom_religion_traditionalist_unhappy": {
+  "en": "Obscurantism",
+  "de": "Obskurantismus"
+ }
+}

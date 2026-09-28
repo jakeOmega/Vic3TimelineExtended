@@ -1,0 +1,218 @@
+{
+ "building_art_academy": {
+  "en": "Creative Industries",
+  "de": "Kreativindustrie"
+ },
+ "building_chemical_plant": {
+  "en": "Chemical Plants",
+  "de": "Chemiewerke"
+ },
+ "building_electrics_industry": {
+  "en": "Wired Telecommunications Industries",
+  "de": "Kabelgebundene Telekommunikationsindustrie"
+ },
+ "building_synthetics_plant": {
+  "en": "Synthetic Dyes Industries",
+  "de": "Industrie für synthetische Färbemittel"
+ },
+ "coal": {
+  "en": "Energy and Carbon Minerals",
+  "de": "Energie- und Kohlenstoffmineralien"
+ },
+ "company_basic_electrics": {
+  "en": "Telecommunications",
+  "de": "Telekommunikation"
+ },
+ "company_basic_electrics_dynamic_name_tag_plural": {
+  "en": "Telecommunications",
+  "de": "Telekommunikation"
+ },
+ "company_basic_electrics_dynamic_name_tag_singular": {
+  "en": "Telecommunication",
+  "de": "Telekommunikation"
+ },
+ "concept_harvest_condition": {
+  "en": "Local Condition",
+  "de": "Lokale Bedingung"
+ },
+ "concept_harvest_condition_intensity": {
+  "en": "Intensity",
+  "de": "Intensität"
+ },
+ "concept_harvest_conditions": {
+  "en": "Local Conditions",
+  "de": "Lokale Bedingungen"
+ },
+ "country_institution_cost_institution_home_affairs_mult": {
+  "en": "@bur![Nbsp][concept_bureaucracy] Cost of [GetInstitutionType('institution_home_affairs').GetName]",
+  "de": "@bur![Nbsp][concept_bureaucracy]-Kosten für [GetInstitutionType('institution_home_affairs').GetName]"
+ },
+ "cultural_erasure": {
+  "en": "Latent Hostility",
+  "de": "Latente Feindseligkeit"
+ },
+ "fertilizer": {
+  "en": "Chemicals",
+  "de": "Chemikalien"
+ },
+ "fine_art": {
+  "en": "Art and Entertainment",
+  "de": "Kunst und Unterhaltung"
+ },
+ "glass": {
+  "en": "Glass and Plastics",
+  "de": "Glas und Kunststoffe"
+ },
+ "goods_input_fertilizer_add": {
+  "en": "@fertilizer! Chemicals Input",
+  "de": "@fertilizer! Chemikalieneinsatz"
+ },
+ "goods_output_fertilizer_add": {
+  "en": "@fertilizer! Chemicals Output",
+  "de": "@fertilizer! Chemikalienausstoß"
+ },
+ "goods_output_fertilizer_mult": {
+  "en": "Building @fertilizer! Chemicals output",
+  "de": "Gebäude-Ausstoß an @fertilizer! Chemikalien"
+ },
+ "goods_output_radios_mult": {
+  "en": "Building @radios! Wireless Telecommunication Gear output",
+  "de": "Gebäude-Ausstoß an @radios! drahtlosen Telekommunikationsgeräten"
+ },
+ "institution_health_system": {
+  "en": "Ministry of Health",
+  "de": "Gesundheitsministerium"
+ },
+ "institution_police": {
+  "en": "Ministry of Public Safety",
+  "de": "Ministerium für öffentliche Sicherheit"
+ },
+ "institution_schools": {
+  "en": "Ministry of Education",
+  "de": "Bildungsministerium"
+ },
+ "iron": {
+  "en": "Structural Metals",
+  "de": "Strukturmetalle"
+ },
+ "law_cultural_exclusion": {
+  "en": "Assimilatory Citizenship",
+  "de": "Assimilatorische Bürgerschaft"
+ },
+ "law_ethnostate": {
+  "en": "Ancestral Citizenship",
+  "de": "Angestammte Bürgerschaft"
+ },
+ "law_multicultural": {
+  "en": "Universal Citizenship",
+  "de": "Universelle Bürgerschaft"
+ },
+ "law_national_supremacy": {
+  "en": "Cultural Citizenship",
+  "de": "Kulturelle Bürgerschaft"
+ },
+ "law_racial_segregation": {
+  "en": "Racialized Citizenship",
+  "de": "Rassifizierte Bürgerschaft"
+ },
+ "law_subjecthood": {
+  "en": "Sovereign Subjecthood",
+  "de": "Souveräne Klientelschaft"
+ },
+ "lead": {
+  "en": "Conductive and Base Metals",
+  "de": "Leit- und Basismetalle"
+ },
+ "merchant_marine": {
+  "en": "Bulk Transportation",
+  "de": "Massengutverkehr"
+ },
+ "no_veterancy": {
+  "en": "Recruit",
+  "de": "Rekrut"
+ },
+ "opium": {
+  "en": "Drugs",
+  "de": "Drogen"
+ },
+ "pm_artificial_fertilizers": {
+  "en": "Basic Chemical Production",
+  "de": "Einfache Chemieproduktion"
+ },
+ "pm_film_art": {
+  "en": "Moving Pictures",
+  "de": "Laufbilder"
+ },
+ "pm_improved_fertilizer": {
+  "en": "Refined Chemical Processes",
+  "de": "Verfeinerte chemische Verfahren"
+ },
+ "pm_nitrogen_fixation": {
+  "en": "Synthetic Nitrogen Production",
+  "de": "Synthetische Stickstoffproduktion"
+ },
+ "pm_no_maintenance": {
+  "en": "No Maintenance",
+  "de": "Kein Unterhalt"
+ },
+ "pm_photographic_art": {
+  "en": "Photography",
+  "de": "Fotografie"
+ },
+ "pmg_fertilizer_production": {
+  "en": "Chemicals Production",
+  "de": "Chemikalienproduktion"
+ },
+ "prestige_good_brunn_type_engines": {
+  "en": "High-Performance Engines",
+  "de": "Hochleistungsmotoren"
+ },
+ "prestige_good_generic_fertilizer": {
+  "en": "Specialty Reagents",
+  "de": "Spezialreagenzien"
+ },
+ "prestige_good_generic_opium": {
+  "en": "Potent Formulations",
+  "de": "Hochwirksame Präparate"
+ },
+ "radios": {
+  "en": "Wireless Telecommunication Gear",
+  "de": "Drahtlose Telekommunikationsgeräte"
+ },
+ "second_rate_citizen": {
+  "en": "Provisional Acceptance",
+  "de": "Vorläufige Akzeptanz"
+ },
+ "sulfur": {
+  "en": "Chemical and Industrial Minerals",
+  "de": "Chemie- und Industriemineralien"
+ },
+ "telephones": {
+  "en": "Wired Telecommunication Gear",
+  "de": "Kabelgebundene Telekommunikationsgeräte"
+ },
+ "transportation": {
+  "en": "Personal Transportation",
+  "de": "Individualverkehr"
+ },
+ "veterancy0": {
+  "en": "Green",
+  "de": "Unerfahren"
+ },
+ "veterancy1": {
+  "en": "Regular",
+  "de": "Regulär"
+ },
+ "veterancy2": {
+  "en": "Disciplined",
+  "de": "Diszipliniert"
+ },
+ "veterancy3": {
+  "en": "Hardened",
+  "de": "Kampferprobt"
+ },
+ "veterancy4": {
+  "en": "Seasoned",
+  "de": "Veteran"
+ }
+}
