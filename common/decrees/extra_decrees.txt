@@ -1,5 +1,5 @@
 ﻿decree_war_propaganda = {
-	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
+	texture = "gfx/interface/icons/decree/decree_war_propaganda.dds"
 	modifier = {
 		state_war_support_monthly_add = 5 # 1.14: halved with the 0-100 war support rescale
 		# No country_* keys here: a decree's modifier sits on its state, and
@@ -18,7 +18,7 @@
 }
 
 decree_political_patronage = {
-	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
+	texture = "gfx/interface/icons/decree/decree_political_patronage.dds"
 	modifier = {
 		state_pop_pol_str_mult = 1.0
 	}
@@ -33,7 +33,7 @@ decree_political_patronage = {
 }
 
 decree_bureaucracy_reform = {
-	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
+	texture = "gfx/interface/icons/decree/decree_bureaucracy_reform.dds"
 	modifier = {
 		building_government_administration_throughput_add = 0.25
 	}
@@ -99,7 +99,7 @@ decree_bureaucracy_reform = {
 }
 
 decree_greenest_grass_campaign = {
-	texture = "gfx/interface/icons/decree/decree_greener_grass_campaign.dds"
+	texture = "gfx/interface/icons/decree/decree_greenest_grass_campaign.dds"
 	modifier = {
 		state_migration_pull_add = 40
 		state_migration_pull_mult = 0.35
@@ -163,7 +163,7 @@ decree_greenest_grass_campaign = {
 }
 
 decree_cultural_emigration_initiative = {
-	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
+	texture = "gfx/interface/icons/decree/decree_cultural_emigration_initiative.dds"
 	modifier = {
 		state_violence_against_minorities_bool = yes
 	}
@@ -190,7 +190,7 @@ decree_cultural_emigration_initiative = {
 }
 
 decree_pollution_control = {
-	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
+	texture = "gfx/interface/icons/decree/decree_pollution_control.dds"
 	modifier = {
 		state_pollution_generation_mult = -0.5
 	}
@@ -214,7 +214,7 @@ decree_pollution_control = {
 }
 
 decree_cultural_integration = {
-	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
+	texture = "gfx/interface/icons/decree/decree_cultural_integration.dds"
 	modifier = {
 		state_yearly_cultural_acceptance_add = 5
 	}
@@ -242,7 +242,7 @@ decree_cultural_integration = {
 }
 
 decree_natalism_initiative = {
-	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
+	texture = "gfx/interface/icons/decree/decree_natalism_initiative.dds"
 	modifier = {
 		state_birth_rate_mult = 0.5
 	}
@@ -331,7 +331,7 @@ decree_trade_reform = {
 }
 
 decree_antiterrorism_campaign = {
-	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
+	texture = "gfx/interface/icons/decree/decree_antiterrorism_campaign.dds"
 	modifier = {
 		state_radicals_from_political_movements_mult = -0.5
 		state_turmoil_effects_mult = -0.1
@@ -349,7 +349,7 @@ decree_antiterrorism_campaign = {
 }
 
 decree_promote_tourism = {
-	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
+	texture = "gfx/interface/icons/decree/decree_promote_tourism.dds"
 	modifier = {
 		building_tourism_industry_throughput_add = 0.5
 	}
@@ -362,7 +362,7 @@ decree_promote_tourism = {
 }
 
 decree_encourage_emigration = {
-	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
+	texture = "gfx/interface/icons/decree/decree_encourage_emigration.dds"
 	modifier = {
 		state_migration_pull_mult = -0.5
 	}
@@ -379,7 +379,7 @@ decree_encourage_emigration = {
 }
 
 decree_subsidize_immigration = {
-	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
+	texture = "gfx/interface/icons/decree/decree_subsidize_immigration.dds"
 	modifier = {
 		state_migration_pull_mult = 0.5
 		state_welfare_payments_add = 1
@@ -402,7 +402,7 @@ decree_subsidize_immigration = {
 # where settlers come from, never who is eligible. Valid only while the owner
 # runs a Settlement Authority, so it is never bought for nothing.
 decree_resettlement_recruitment_drive = {
-	texture = "gfx/interface/icons/decree/decree_promote_social_mobility.dds"
+	texture = "gfx/interface/icons/decree/decree_resettlement_recruitment_drive.dds"
 	modifier = {
 		state_migration_pull_mult = -0.1
 	}

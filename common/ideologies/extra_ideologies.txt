@@ -461,7 +461,7 @@ ideology_anti_colonialist_leader = {
 }
 
 ideology_optimist_transhumanist = {
-	icon = "gfx/interface/icons/ideology_icons/meritocratic.dds"
+	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_optimist_transhumanist.dds"
 
 	character_ideology = yes
 

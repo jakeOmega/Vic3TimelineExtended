@@ -309,6 +309,10 @@ def compose_medallion(raw: Image.Image, spec: dict, tmpl, target, obj: Image.Ima
     band = (r > ring_in - 12) & (r < ring_in - 6) & (alpha > 200)
     edge_col = np.median(med[..., :3][band], axis=0)
     centre_col = np.clip(edge_col * spec.get("centre_lift", 2.1), 0, 255)
+    # A folder whose objects crowd the band lightens the median there (decrees
+    # came out grey-green); such a category names vanilla's disc colours.
+    if "disc" in spec:
+        centre_col, edge_col = (np.array(c, dtype=np.float32) for c in spec["disc"])
     t = np.clip(r / ring_in, 0, 1)[..., None]
     bg = centre_col * (1 - t) + edge_col * t
     base = np.dstack([bg, alpha]).astype(np.uint8)

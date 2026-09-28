@@ -173,7 +173,9 @@ CATEGORIES = {
         color=(99, 101, 101), color_bottom=(65, 45, 43), style=SILHOUETTE),
     # Read only from `texture =` (Decree.GetTexture, DecreeType.GetTexture).
     "decree": dict(
-        folder="decree", size=158, mode="medallion", fill=0.78, centre_lift=2.1,
+        folder="decree", size=158, mode="medallion", fill=0.78,
+        # Vanilla's disc, measured on its bare pixels: centre, then edge.
+        disc=((28, 42, 42), (25, 44, 50)),
         entity_dir="common/decrees", field="texture",
         grade_folder="invention_icons",
         style="{subject}, one chunky compact object, bright warm lighting, " + PAINTED),
@@ -590,28 +592,30 @@ ICONS: dict[str, dict[str, dict]] = {
     # Vanilla's encourage_* decrees share a mint-green arrow; the migration
     # ones here borrow it.
     "decree": {
-        "decree_war_propaganda": {"subject": "a large brass megaphone with a red cloth streamer tied to its handle", "seed": None},
-        "decree_political_patronage": {"subject": "a gilded key on a red ribbon passed from one hand to another", "seed": None},
-        "decree_bureaucracy_reform": {"subject": "a tall stack of manila folders tied with red tape, a pair of steel scissors beside it", "seed": None},
-        "decree_cultural_emigration_initiative": {"subject": "a battered brown leather suitcase with a big mint-green arrow pointing away to the right", "seed": None},
-        "decree_pollution_control": {"subject": "a squat brick factory chimney capped with a big mint-green air filter, a green leaf beside it", "seed": None},
-        "decree_cultural_integration": {"subject": "two hands clasped in a firm handshake, one in a brown wool sleeve and one in a blue linen sleeve", "seed": None},
-        "decree_natalism_initiative": {"subject": "a wooden baby cradle with a soft blue blanket", "seed": None},
-        "decree_tax_breaks": {"subject": "a stack of gold coins beside a big mint-green arrow pointing down", "seed": None},
-        "decree_trade_reform": {"subject": "a red and white striped customs barrier raised open, a wooden cargo crate passing under it", "seed": None},
-        "decree_antiterrorism_campaign": {"subject": "a black riot shield and a police baton crossed", "seed": None},
-        "decree_promote_tourism": {"subject": "a straw sun hat and a vintage brown leather camera", "seed": None},
-        "decree_encourage_emigration": {"subject": "a small ocean liner with a big mint-green arrow pointing away to the right", "seed": None},
-        "decree_subsidize_immigration": {"subject": "a battered brown leather suitcase standing on a stack of gold coins", "seed": None},
-        "decree_greenest_grass_campaign": {"subject": "a covered wagon drawn by two horses on a patch of vivid green grass, a big mint-green arrow pointing up behind it", "seed": None},
-        "decree_resettlement_recruitment_drive": {"subject": "a small new timber house with a big mint-green arrow pointing into its open door", "seed": None},
+        "decree_war_propaganda": {"subject": "a large brass megaphone with a red cloth streamer tied to its handle", "seed": 1},
+        "decree_political_patronage": {"subject": "a gilded key on a red ribbon passed from one hand to another", "seed": 1},
+        "decree_bureaucracy_reform": {"subject": "a tall stack of manila folders tied with red tape, a pair of steel scissors beside it", "seed": 1},
+        "decree_cultural_emigration_initiative": {"subject": "a battered brown leather suitcase with a big mint-green arrow pointing away to the right", "seed": 1},
+        "decree_pollution_control": {"subject": "a squat brick factory chimney capped with a big mint-green air filter, a green leaf beside it", "seed": 0},
+        "decree_cultural_integration": {"subject": "two hands clasped in a firm handshake, one in a brown wool sleeve and one in a blue linen sleeve", "seed": 1},
+        "decree_natalism_initiative": {"subject": "a wooden baby cradle with a soft blue blanket", "seed": 0},
+        # "a stack of gold coins" drew $ signs on every coin.
+        "decree_tax_breaks": {"subject": "a stack of plain gold coins each stamped with a small star, beside a big mint-green arrow pointing down", "seed": None},
+        # A customs gate came with numbered plates on its posts.
+        "decree_trade_reform": {"subject": "a red and white striped boom barrier arm raised up on a squat post, a wooden cargo crate on the ground beside it", "seed": None},
+        "decree_antiterrorism_campaign": {"subject": "a black riot shield and a police baton crossed", "seed": 1},
+        "decree_promote_tourism": {"subject": "a straw sun hat and a vintage brown leather camera", "seed": 1},
+        "decree_encourage_emigration": {"subject": "a small ocean liner with a big mint-green arrow pointing away to the right", "seed": 0},
+        "decree_subsidize_immigration": {"subject": "a battered brown leather suitcase standing on a stack of gold coins", "seed": 0},
+        "decree_greenest_grass_campaign": {"subject": "a covered wagon drawn by two horses on a patch of vivid green grass, a big mint-green arrow pointing up behind it", "seed": 1},
+        "decree_resettlement_recruitment_drive": {"subject": "a small new timber house with a big mint-green arrow pointing into its open door", "seed": 0},
     },
     # The four mod-added laws still on another law's icon.
     "law": {
-        "law_penal_labor_camps": {"subject": "a heavy iron ball and chain lying beside a pickaxe", "seed": None},
-        "law_private_military_contractors": {"subject": "an empty modern combat helmet sitting on a tall stack of gold coins", "seed": None},
-        "law_littoral_defense": {"subject": "a squat round stone coastal gun tower on a rocky shore, a small fast patrol boat beside it", "seed": None},
-        "law_auxiliary_fleet": {"subject": "a big sealift cargo ship with army trucks and crates lashed on its deck", "seed": None},
+        "law_penal_labor_camps": {"subject": "a heavy iron ball and chain lying beside a pickaxe", "seed": 0},
+        "law_private_military_contractors": {"subject": "an empty modern combat helmet sitting on a tall stack of gold coins", "seed": 0},
+        "law_littoral_defense": {"subject": "a squat round stone coastal gun tower on a rocky shore, a small fast patrol boat beside it", "seed": 1},
+        "law_auxiliary_fleet": {"subject": "a big sealift cargo ship with army trucks and crates lashed on its deck", "seed": 0},
     },
     # Mod-added institutions, all on one of vanilla's seven icons.
     "institution": {
@@ -671,7 +675,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "ideology_anti_colonialist_leader": {"subject": "a raised clenched fist in front of a globe with its continents", "seed": 1},
         "ideology_multicultural_inclusive": {"subject": "three hands clasping each other's wrists to form a triangle around a heart", "seed": 1},
         "ideology_environmentalists": {"subject": "a broad oak tree with a round leafy crown and spreading roots", "seed": 0},
-        "ideology_optimist_transhumanist": {"subject": "a DNA double helix rising in front of a half sun with bold rays", "seed": None},
+        "ideology_optimist_transhumanist": {"subject": "a DNA double helix rising in front of a half sun with bold rays", "seed": 1},
         "ideology_corporate": {"subject": "a leather briefcase in front of a tall skyscraper", "seed": 1},
     },
 }
