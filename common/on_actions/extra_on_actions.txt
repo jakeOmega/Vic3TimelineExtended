@@ -68,8 +68,10 @@ te_banking_law_change_cleanup = {
 			#
 			# A country entering a command or cooperative economy loses every market
 			# CB tool, OMO included, in te_banking_economy_law_cleanup. That runs
-			# later, from on_law_activated, and records no marker, so a switch-off
-			# here is never counted twice.
+			# later, from on_law_activated, and marks only a tool still on, so an
+			# OMO this branch already switched off is not marked again. (Were the
+			# removal somehow not yet visible there, the chart would get the same
+			# marker flag twice in one month, which draws the same.)
 			#
 			# te_mon_full_system: the regime rule this branch enforces is the monetary
 			# layer's, and banking_possible_cb_open_market_ops drops it under the
@@ -534,9 +536,10 @@ on_law_activated = {
 # holds the OLD law (vanilla 00_code_on_actions.txt, the note on the hook), so
 # has_law tests here acted one law change late (#337) — OMO survived entering
 # a command economy until the next enactment. Here the new law is in force,
-# and a law set directly by script (activate_law) is caught too. It runs on
-# every activation, which the removals shrug off: remove_modifier on a
-# modifier the entry doesn't have does nothing.
+# and a law set directly by script (activate_law) is caught too. Each tool
+# still on is switched off with its history-chart marker (banking_strip_tool,
+# extra_effects.txt), so the chart shows it ending. It runs on every
+# activation, and a tool already off is skipped, so nothing is marked then.
 te_banking_economy_law_cleanup = {
 	effect = {
 		owner = {

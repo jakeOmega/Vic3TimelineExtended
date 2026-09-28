@@ -379,8 +379,9 @@ the old system's tools off.
 The History section charts the last 1, 5 or 20 years month by month: the cycle's
 three readings, the policy rate and the rate paid on debt, plus inflation and
 the exchange-rate index under the full Banking System. Markers flag policy
-changes and crashes, including imported ones. History is kept for the player and
-for major powers and above.
+changes, including tools a change of economic system switches off, and crashes,
+including imported ones. History is kept for the player and for major powers and
+above.
 
 ## Financial regulation laws
 

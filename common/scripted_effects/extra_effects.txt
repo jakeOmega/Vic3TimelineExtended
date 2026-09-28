@@ -351,60 +351,69 @@ update_countrys_bloc_principles_plurality = { update_countrys_bloc_principle_bas
 # (extra_on_actions.txt, on_law_activated) stays scannable.
 # Country scope; the JE must be active (caller checks).
 
-remove_banking_planning_modifiers_effect = {
-	je:je_banking_cycle = {
-		remove_modifier = planning_plan_revision
-		remove_modifier = planning_emergency_allocation
-		remove_modifier = planning_target_reduction
-		remove_modifier = planning_strategic_stockpile
-		remove_modifier = planning_distribution_upgrade
-		remove_modifier = planning_admin_campaign
-		remove_modifier = planning_coordination_protocol
-		remove_modifier = planning_consolidation_order
+# Switch one tool off because a law took it away: its history-chart marker,
+# as the manual Disable posts, so the chart shows the tool ending, but none of
+# the manual Disable's radicals, loyalists or refunds, since nobody chose this
+# (the directed-credit cap in banking_directed_credit_enforce_cap does the
+# same). The marker is written only while the tool is on, so the cleanup's
+# run on every law activation posts nothing for tools already off.
+# Parameters: $MODIFIER$ = the tool's JE modifier, $MARK$ = its off_ marker
+banking_strip_tool = {
+	if = {
+		limit = { je:je_banking_cycle = { has_modifier = $MODIFIER$ } }
+		te_history_record_banking_marker = { MARK = $MARK$ }
+		je:je_banking_cycle = { remove_modifier = $MODIFIER$ }
 	}
+}
+
+remove_banking_planning_modifiers_effect = {
+	banking_strip_tool = { MODIFIER = planning_plan_revision          MARK = off_ce_plan_revision }
+	banking_strip_tool = { MODIFIER = planning_emergency_allocation   MARK = off_ce_emergency_allocation }
+	banking_strip_tool = { MODIFIER = planning_target_reduction       MARK = off_ce_target_reduction }
+	banking_strip_tool = { MODIFIER = planning_strategic_stockpile    MARK = off_ce_strategic_stockpile }
+	banking_strip_tool = { MODIFIER = planning_distribution_upgrade   MARK = off_ce_distribution_upgrade }
+	banking_strip_tool = { MODIFIER = planning_admin_campaign         MARK = off_ce_admin_campaign }
+	banking_strip_tool = { MODIFIER = planning_coordination_protocol  MARK = off_ce_coordination_protocol }
+	banking_strip_tool = { MODIFIER = planning_consolidation_order    MARK = off_ce_consolidation_order }
 }
 
 remove_banking_cooperative_modifiers_effect = {
-	je:je_banking_cycle = {
-		remove_modifier = cooperative_dividend_restraint
-		remove_modifier = cooperative_mutual_aid
-		remove_modifier = cooperative_capital_plan
-		remove_modifier = cooperative_solidarity_campaign
-		remove_modifier = cooperative_credit_expansion
-		remove_modifier = cooperative_consumption_ceiling
-		remove_modifier = cooperative_council_directive
-		remove_modifier = cooperative_worker_buyout
-	}
+	banking_strip_tool = { MODIFIER = cooperative_dividend_restraint   MARK = off_cw_dividend_restraint }
+	banking_strip_tool = { MODIFIER = cooperative_mutual_aid           MARK = off_cw_mutual_aid_fund }
+	banking_strip_tool = { MODIFIER = cooperative_capital_plan         MARK = off_cw_capital_plan }
+	banking_strip_tool = { MODIFIER = cooperative_solidarity_campaign  MARK = off_cw_solidarity_campaign }
+	banking_strip_tool = { MODIFIER = cooperative_credit_expansion     MARK = off_cw_credit_expansion }
+	banking_strip_tool = { MODIFIER = cooperative_consumption_ceiling  MARK = off_cw_consumption_ceiling }
+	banking_strip_tool = { MODIFIER = cooperative_council_directive    MARK = off_cw_council_directive }
+	banking_strip_tool = { MODIFIER = cooperative_worker_buyout        MARK = off_cw_worker_buyout }
 }
 
+# banking_policy_rate_hike is no longer a market tool (monetary_policy_design.md
+# §18). A save that still holds it is cleaned up by the one-shot in
+# je_banking.txt's monthly pulse, which does not depend on a law change.
 remove_banking_market_modifiers_effect = {
-	je:je_banking_cycle = {
-		# banking_policy_rate_hike is no longer a market tool (monetary_policy_design.md
-		# §18). A save that still holds it is cleaned up by the one-shot in
-		# je_banking.txt's monthly pulse, which does not depend on a law change.
-		remove_modifier = banking_open_market_ops
-		remove_modifier = banking_countercyclical_capital_buffer
-		remove_modifier = banking_expand_deposit_guarantee
-		remove_modifier = banking_directed_credit_infrastructure
-		remove_modifier = banking_emergency_liquidity_program
-		remove_modifier = banking_moral_suasion
-		remove_modifier = banking_raise_margin_requirements
-		remove_modifier = banking_restrict_inflows
-		remove_modifier = banking_sterilize_inflows
-		remove_modifier = banking_foreign_borrowing_limits
-		remove_modifier = banking_fx_surrender
-		remove_modifier = banking_emergency_import_financing
-		remove_modifier = banking_capital_controls_out
-		remove_modifier = banking_export_credit_facility
-		remove_modifier = banking_asset_relief_program
-		remove_modifier = banking_directed_credit_heavy_industry
-		remove_modifier = banking_directed_credit_agriculture
-		remove_modifier = banking_directed_credit_armaments
-		remove_modifier = banking_directed_credit_electrification
-		remove_modifier = banking_reserve_requirements
-		remove_modifier = banking_bank_holiday
-		remove_modifier = banking_bail_in_regime
-	}
+	banking_strip_tool = { MODIFIER = banking_open_market_ops                  MARK = off_cb_open_market_ops }
+	banking_strip_tool = { MODIFIER = banking_countercyclical_capital_buffer   MARK = off_cb_countercyclical_buffer }
+	banking_strip_tool = { MODIFIER = banking_expand_deposit_guarantee         MARK = off_cb_expand_deposit_guarantee }
+	banking_strip_tool = { MODIFIER = banking_directed_credit_infrastructure   MARK = off_cb_directed_credit_infrastructure }
+	banking_strip_tool = { MODIFIER = banking_emergency_liquidity_program      MARK = off_cb_emergency_liquidity_program }
+	banking_strip_tool = { MODIFIER = banking_moral_suasion                    MARK = off_cb_moral_suasion }
+	banking_strip_tool = { MODIFIER = banking_raise_margin_requirements        MARK = off_cb_raise_margin_requirements }
+	banking_strip_tool = { MODIFIER = banking_restrict_inflows                 MARK = off_cb_restrict_inflows }
+	banking_strip_tool = { MODIFIER = banking_sterilize_inflows                MARK = off_cb_sterilize_inflows }
+	banking_strip_tool = { MODIFIER = banking_foreign_borrowing_limits         MARK = off_cb_foreign_borrowing_limits }
+	banking_strip_tool = { MODIFIER = banking_fx_surrender                     MARK = off_cb_fx_surrender }
+	banking_strip_tool = { MODIFIER = banking_emergency_import_financing       MARK = off_cb_emergency_import_financing }
+	banking_strip_tool = { MODIFIER = banking_capital_controls_out             MARK = off_cb_capital_controls_outflow }
+	banking_strip_tool = { MODIFIER = banking_export_credit_facility           MARK = off_cb_export_credit_facility }
+	banking_strip_tool = { MODIFIER = banking_asset_relief_program             MARK = off_cb_asset_relief_program }
+	banking_strip_tool = { MODIFIER = banking_directed_credit_heavy_industry   MARK = off_cb_directed_credit_heavy_industry }
+	banking_strip_tool = { MODIFIER = banking_directed_credit_agriculture      MARK = off_cb_directed_credit_agriculture }
+	banking_strip_tool = { MODIFIER = banking_directed_credit_armaments        MARK = off_cb_directed_credit_armaments }
+	banking_strip_tool = { MODIFIER = banking_directed_credit_electrification  MARK = off_cb_directed_credit_electrification }
+	banking_strip_tool = { MODIFIER = banking_reserve_requirements             MARK = off_cb_reserve_requirements }
+	banking_strip_tool = { MODIFIER = banking_bank_holiday                     MARK = off_cb_bank_holiday }
+	banking_strip_tool = { MODIFIER = banking_bail_in_regime                   MARK = off_cb_bail_in_regime }
 }
 
 nuclear_industrial_strike = {
