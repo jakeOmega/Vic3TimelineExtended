@@ -163,6 +163,14 @@ CATEGORIES = {
            ("loyal", (251, 249, 140), (119, 94, 73), (140, 102, 73)),
            ("happy", (145, 173, 121), (122, 151, 122), (68, 89, 65)),
            ("unhappy", (190, 124, 100), (90, 82, 84), (152, 116, 96)))},
+    # Character traits (240x320, CharacterTrait.GetTexture) use the same card
+    # layout; the frame colour is the trait's type: condition pink (184,129,128
+    # where card_template samples it), skill grey (151,149,139), personality
+    # blue (125,147,158). Pictogram colours fitted to vanilla's condition cards.
+    "character_trait": dict(
+        folder="character_trait_icons", size=320, card_size=(240, 320), frame=(184, 129, 128),
+        mode="card", fill=(0.7, 0.6), entity_dir="common/character_traits", field="texture",
+        color=(99, 101, 101), color_bottom=(65, 45, 43), style=SILHOUETTE),
     # Read only from `texture =` (Decree.GetTexture, DecreeType.GetTexture).
     "decree": dict(
         folder="decree", size=158, mode="medallion", fill=0.78, centre_lift=2.1,
@@ -647,6 +655,16 @@ ICONS: dict[str, dict[str, dict]] = {
         "ig_trait_custom_religion_totalitarian_unhappy": {"subject": "a heavy military boot stamping down on a quill pen", "seed": None},
         "ig_trait_custom_religion_imperial_cult_unhappy": {"subject": "a sword crossed over a sceptre behind a round shield", "seed": None},
         "ig_trait_custom_religion_theocratic_unhappy": {"subject": "a flaming torch crossed with a pitchfork", "seed": None},
+    },
+    # The combined-arms general traits (type = condition, so the condition
+    # card) on vanilla skill and personality icons.
+    "character_trait": {
+        "trait_combined_arms_infantry_screen": {"subject": "a line of three infantry soldiers kneeling with rifles raised, side view", "seed": None},
+        "trait_combined_arms_fire_support": {"subject": "a field artillery howitzer firing, a bold burst of flame at its muzzle", "seed": None},
+        "trait_combined_arms_recon": {"subject": "a mounted scout on horseback raising binoculars to his eyes", "seed": None},
+        "trait_combined_arms_armor": {"subject": "a battle tank charging forward, side view", "seed": None},
+        "trait_combined_arms_air_superiority": {"subject": "a fighter plane diving steeply", "seed": None},
+        "trait_combined_arms_full_spectrum": {"subject": "a tank, a fighter plane and an infantry soldier grouped together as one emblem", "seed": None},
     },
     "leader_ideology": {
         "ideology_multicultural": {"subject": "three hands clasping each other's wrists to form a triangle", "seed": 1},
