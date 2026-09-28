@@ -146,7 +146,7 @@ mrna_therapeutics = {
 reusable_rocketry = {
 	# Reusable Rockets PM for Launch Facilities
 	era = era_10
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/reusable_rocketry.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -314,7 +314,7 @@ decline_of_organized_religion = {
 
 telemedicine = {
 	era = era_10
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/telemedicine.dds"
 	category = society
 
 	unlocking_technologies = {
@@ -336,7 +336,7 @@ telemedicine = {
 universal_basic_income = {
 	# Universal Basic Income law
 	era = era_10
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/universal_basic_income.dds"
 	category = society
 
 	unlocking_technologies = {

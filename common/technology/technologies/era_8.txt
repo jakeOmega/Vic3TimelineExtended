@@ -243,7 +243,7 @@ stealth_technology = {
 
 environmental_movement = {
 	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/environmental_movement.dds"
 	category = society
 
 	modifier = {
