@@ -207,7 +207,7 @@ the Spaceport method's technology.
 | Telephone Industries, the base game's Electrics Industries | Wired Telecommunications Industries (Modern Skyscrapers) | Wired Telecommunications Industries |
 | Radio Industries | Wireless Telecommunications Industries (Satellite Communications) | Wireless Telecommunications Industries |
 | Aircraft Industry | Aerospace Industry (Guided Missiles) | Aerospace Industry |
-| Glassworks | Glass and Plastics Industries (Plastic Mass Production) | Glassworks |
+| Glassworks | Glass and Plastics Industries (Plastics) | Glassworks |
 | Consumer Appliance Industries | Consumer Electronics Industries (Personal Computers) | Consumer Appliance Industries |
 | Resorts and Hotels | Tourism Industry (Television Broadcasting) | Tourism Industry |
 | Airport | Skyport (Muon-Catalyzed Fusion Reactors) | Airport |

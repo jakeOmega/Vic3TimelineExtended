@@ -138,8 +138,8 @@ te_building_electrics_industry_appliances_name = {
 	}
 }
 
-# Glassworks: Injection Molding (Plastic Mass Production). The good is already
-# Glass and Plastics.
+# Glassworks: Houseware Plastics (Plastics, era 4), its first plastics method.
+# The good is already Glass and Plastics.
 te_building_glassworks_name = {
 	type = country
 	random_valid = no
@@ -149,7 +149,7 @@ te_building_glassworks_name = {
 		localization_key = building_glassworks_name_glassworks
 	}
 	text = {
-		trigger = { has_technology_researched = plastic_mass_production }
+		trigger = { has_technology_researched = plastics }
 		localization_key = building_glassworks_name_plastics
 	}
 	text = {
