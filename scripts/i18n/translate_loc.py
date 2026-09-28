@@ -427,7 +427,12 @@ class VanillaTerms:
             # button label ("At"), a short form ("Capital" = Hauptsitz), or a
             # concept in another sense ("Order" = military Befehl). Concepts a
             # chunk actually links are listed under REFERENCED KEYS instead.
-            if " " not in en:
+            # Law, interest-group, institution and ideology names are the
+            # exception: distinctive single words ("Serfdom", "Intelligentsia").
+            if " " not in en and not (
+                key.startswith(("law_", "lawgroup_", "ig_", "institution_", "ideology_"))
+                and re.fullmatch(r"[a-z_]+", key) and not key.endswith(("_short", "_name"))
+            ):
                 continue
             weight = 5 if key.startswith("concept_") else 1
             by_term[en][tr] += weight
