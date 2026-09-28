@@ -182,7 +182,16 @@ Every category below is read only from its entity's icon field; the engine has n
 
 **`tinted`: one metal, from vanilla.** Vanilla law and institution icons are painted objects in a single tan-bronze palette. `tone_ramp()` reads the folder's luminance distribution and its median colour at each luminance. `compose_tinted()` cuts the render out, matches its luminance to that distribution percentile for percentile, and maps each pixel through the ramp. Shading and brush strokes survive while every hue goes. Institutions take the ramp from `law_icons`, because `institution_icons` also holds the dark disc the GUI draws them over.
 
-**`card`: a blank card lifted from vanilla.** IG traits (124×162) and character traits (240×320) are cards whose frame colour carries meaning: the approval slot (gold loyal, green happy, rust unhappy) or the trait type (pink condition, grey skill, blue personality). `card_template()` takes the median over the folder's cards with that frame colour. In the middle it uses only the cards where a pixel is bare, meaning not within three pixels of dark, since pictograms have light highlights and edges. Pixels bare in too few cards take the nearest bare pixel's colour, which must not be a dark vine. What remains of the old pictograms shows as faint ghosts, so an ellipse over the middle fades into a blurred copy. The corner ornaments stay sharp. A pixel counts as the card's own ornament only in the top and bottom bands, and only where it is dark on at least 90% of cards, because the middle is dark on most cards too. Frame colours are sampled 3 px inside the card's left edge at mid-height.
+**`card`: a blank card lifted from vanilla.** IG traits (124×162) and character traits (240×320) are cards whose frame colour carries meaning: the approval slot (gold loyal, green happy, rust unhappy) or the trait type (pink condition, grey skill, blue personality). Frame colours are sampled 3 px inside the card's left edge at mid-height. `card_template()` works from the folder's cards with that frame colour. On each card a pixel is bare unless it lies within 3 px of dark (pictograms have light highlights and edges), except the card's own vines: pixels in the top or bottom band that are dark on at least 90% of cards.
+- Outside a central ellipse, a pixel is the median over the cards on which it is bare, which keeps the frame, corner ornaments and edge shadow.
+- Inside it, the Gaussian-weighted average of every bare observation on every card (normalized convolution): a smooth gradient in the card's colours, like vanilla's middles, which the new pictogram mostly covers.
+
+Three earlier versions failed:
+- A median over bare cards in the middle kept ghosts of the pictograms, plus fragments along the bottom that read as text.
+- Biharmonic inpainting of the cleanest card overshot into white, blue and black blobs.
+- Filling from the plain median pulled the pictograms' dark in.
+
+The pictogram's `fill` is (width, height) of the card. Vanilla's span about 0.8 × 0.7; the first try at 0.7 × 0.6 looked small.
 
 **What FLUX added unasked** (see also the registry docstring):
 - A subject naming a device wrote its name: "radio jammer" drew JAMMER.
@@ -190,6 +199,12 @@ Every category below is read only from its entity's icon field; the engine has n
 - Gold coins came with $ signs, and a customs gate's posts with numbered plates.
 - A laser turret read as a camera or a searchlight until it fired a beam at a target.
 - A landing craft read as a ferry, a flight simulator as a lunar lander, a parachute as vanilla's hot-air balloon, and a night-vision helmet seen from the front as a face.
+
+**Retouching, second batch.** Three small tools live in `~/flux_runs/tools/`. Each keeps the untouched raw in `~/flux_runs/originals/`, and after a retouch the DDS is deleted and written again.
+- **`fill_white_holes.py`.** FLUX sometimes draws a silhouette part as white inside a black outline (an envelope, a toaster, a capsule window, a tank's front plate), and the emboss cuts it out. The tool fills each enclosed white region after shrinking it by `--groove` px, so the part turns solid and keeps an engraved line where its outline was. `--min-area` spares wheel rings and slots. `--close` bridges small outline gaps. A region open to the background on a whole side is not enclosed: fill that polygon by hand.
+- **`inpaint_boxes.py`.** Paints out hull numbers, emblems, truck lettering and painters' signatures, filling each box biharmonically from a margin. Keep the margin off neighbouring surfaces, or white background or dark trim bleeds in.
+- **Mirroring.** Promote Tourism's camera had a second lens ring drawn over the first. Where the ring crossed the lens, the lens's own mirror image about its centre restored it; elsewhere, the leather was mirrored from the other side of the symmetric camera body. Soft-edged masks hide the seams, and the mask must cover the old ring's rim or a ghost of it shows.
+- **Stray specks in a silhouette.** Dark connected parts under 1% of the largest one can be whitened in the raw (Fire Support).
 
 **Pairs share a symbol.** An ideology held by both an IG and a leader (Multiculturalist, Anti-Colonialist) uses one subject in both categories. The same prompt and seed render the same picture, so the two looks match.
 
