@@ -4,6 +4,7 @@
  "Bail-in": "Bail-in",
  "Banking Cycle": "Bankenzyklus",
  "Brain Drain": "Braindrain",
+ "Cartographic Survey": "Kartografische Vermessung",
  "Charter Reform": "Chartareform",
  "Collegial Administration": "Kollegiale Verwaltung",
  "Communications Disruption": "Kommunikationsstörung",
@@ -18,6 +19,7 @@
  "Election Interference": "Wahleinmischung",
  "Financial Subversion": "Finanzielle Subversion",
  "Five-Year Plan": "Fünfjahresplan",
+ "Free Market Construction": "Freie Marktbauwirtschaft",
  "GDP": "BIP",
  "General Assembly": "Generalversammlung",
  "Grandeur": "Grandezza",
@@ -35,11 +37,13 @@
  "Nuclear Programme": "Nuklearprogramm",
  "Nuclear Taboo": "Nukleares Tabu",
  "Nuclear Weapons": "Nuklearwaffen",
+ "Overinvestment": "Überinvestition",
  "Peg Confidence": "Bindungsvertrauen",
  "Population Pressure": "Bevölkerungsdruck",
  "Post-Scarcity": "Postknappheit",
  "Rustication": "Landverbannung",
  "Secure Loose Material": "Loses Nuklearmaterial sichern",
+ "Security Crackdown": "Hartes Durchgreifen",
  "Settlement Authority": "Siedlungsbehörde",
  "Space Race": "Wettlauf ins All",
  "Special Settlements": "Sondersiedlungen",
@@ -49,5 +53,7 @@
  "UN Levy": "UN-Abgabe",
  "Universal Declaration of Human Rights": "Allgemeine Erklärung der Menschenrechte",
  "Utility Fog": "Utility-Fog",
- "Veto Restraint": "Vetoeinschränkung"
+ "Veto Restraint": "Vetoeinschränkung",
+ "lingua franca": "Verkehrssprache",
+ "national champion": "nationaler Vorzeigekonzern"
 }

@@ -811,6 +811,78 @@
   "en": "Import Cost Spiral",
   "de": "Importkostenspirale"
  },
+ "banking_cycle_events.166.a": {
+  "en": "Uphold the Traditionalist Platform",
+  "de": "Die traditionalistische Plattform wahren"
+ },
+ "banking_cycle_events.166.b": {
+  "en": "Allow the Reformers to Succeed",
+  "de": "Den Reformern zum Erfolg verhelfen"
+ },
+ "banking_cycle_events.166.c": {
+  "en": "Form a Mixed-Mandate Council",
+  "de": "Einen Rat mit gemischtem Mandat bilden"
+ },
+ "banking_cycle_events.166.d": {
+  "en": "A contested election within the Federation Council has produced two rival factions with sharply different visions. One faction — rooted in the older cooperative tradition — argues that financial discipline, democratic accountability, and transparent bookkeeping must govern the federation's financial decisions. A younger reformist faction argues for pragmatic flexibility: professional management, efficiency gains, and less procedural constraint. The outcome will shape how the cooperative federation governs its shared capital for a generation.",
+  "de": "Eine umstrittene Wahl im Föderationsrat hat zwei rivalisierende Fraktionen mit deutlich unterschiedlichen Visionen hervorgebracht. Eine Fraktion — verwurzelt in der älteren genossenschaftlichen Tradition — argumentiert, dass Haushaltsdisziplin, demokratische Rechenschaftspflicht und transparente Buchführung die Finanzentscheidungen der Föderation bestimmen müssen. Eine jüngere reformorientierte Fraktion plädiert für pragmatische Flexibilität: professionelles Management, Effizienzgewinne und weniger verfahrenstechnische Einschränkungen. Das Ergebnis wird prägen, wie die genossenschaftliche Föderation ihr gemeinsames Kapital eine Generation lang verwaltet."
+ },
+ "banking_cycle_events.166.f": {
+  "en": "\\\"Shall the councils decide or the technocrats? Both claim to care for workers' interests.\\\"\\n\\n\\\"Then let the members vote on which kind of workers' interest they prefer.\\\"\\n\\n\\\"The members will vote for whichever side promises them larger dividends sooner.\\\"\\n\\n\\\"Then we will have answered the question — and we will not like the answer.\\\"",
+  "de": "„Sollen die Räte entscheiden oder die Technokraten? Beide behaupten, sich um die Interessen der Arbeiter zu sorgen.“\\n\\n„Dann sollen die Mitglieder abstimmen, welche Art von Arbeiterinteresse sie bevorzugen.“\\n\\n„Die Mitglieder werden für die Seite stimmen, die ihnen schneller größere Dividenden verspricht.“\\n\\n„Dann werden wir die Frage beantwortet haben — und die Antwort wird uns nicht gefallen.“"
+ },
+ "banking_cycle_events.166.t": {
+  "en": "Federation Council Election Dispute",
+  "de": "Wahlstreit im Föderationsrat"
+ },
+ "banking_cycle_events.167.a": {
+  "en": "Permit the Loan Expansion",
+  "de": "Die Kreditausweitung zulassen"
+ },
+ "banking_cycle_events.167.b": {
+  "en": "Introduce Per-Member Borrowing Caps",
+  "de": "Kreditobergrenzen pro Mitglied einführen"
+ },
+ "banking_cycle_events.167.c": {
+  "en": "Restrict All Lending Against [concept_dividends]",
+  "de": "Alle Kredite gegen [concept_dividends] einschränken"
+ },
+ "banking_cycle_events.167.d": {
+  "en": "Member-owned credit unions are reporting an unprecedented surge in personal loan applications from cooperative members: primarily for household goods and small improvements. The loans are sound individually, but collectively they are depleting the shared credit pool and reducing the reserves available for capital reinvestment. Some council members argue that financial autonomy is a core cooperative value; others warn that individual borrowing fever is quietly hollowing out collective capacity.",
+  "de": "Genossenschaftseigene Kreditgenossenschaften melden einen beispiellosen Anstieg der Anträge auf Privatkredite von Genossenschaftsmitgliedern: vor allem für Haushaltswaren und kleinere Verbesserungen. Die Kredite sind einzeln betrachtet solide, doch zusammengenommen erschöpfen sie den gemeinsamen Kreditpool und verringern die für Reinvestitionen verfügbaren Reserven. Manche Ratsmitglieder argumentieren, finanzielle Selbstbestimmung sei ein Kernwert der Genossenschaft; andere warnen, dass das individuelle Kreditfieber die kollektive Leistungsfähigkeit im Stillen aushöhlt."
+ },
+ "banking_cycle_events.167.f": {
+  "en": "\\\"Members voted for easier borrowing. It's popular today.\\\"\\n\\n\\\"Ask them again when the credit union runs dry.\\\"\\n\\n\\\"They will not be asked then. They will be told.\\\"\\n\\n\\\"And how will they take it?\\\"\\n\\n\\\"Badly. They voted for a thing the council approved. They expect the council to deliver it. The council's job, in their view, is to make the loans happen, not to refuse them.\\\"\\n\\n\\\"Then we will be remembered as the council that refused. And the next council will preside over the default.\\\"",
+  "de": "„Die Mitglieder haben für leichtere Kredite gestimmt. Das ist heute populär.“\\n\\n„Fragt sie noch einmal, wenn die Kreditgenossenschaft trockenfällt.“\\n\\n„Dann wird man sie nicht mehr fragen. Man wird es ihnen sagen.“\\n\\n„Und wie werden sie das aufnehmen?“\\n\\n„Schlecht. Sie haben für etwas gestimmt, das der Rat gebilligt hat. Sie erwarten, dass der Rat es liefert. Die Aufgabe des Rates ist es in ihren Augen, die Kredite zu ermöglichen, nicht sie zu verweigern.“\\n\\n„Dann wird man uns als den Rat in Erinnerung behalten, der verweigert hat. Und der nächste Rat wird den Zahlungsausfall verwalten.“"
+ },
+ "banking_cycle_events.167.t": {
+  "en": "Cooperative Member Loan Fever",
+  "de": "Kreditfieber unter den Genossenschaftsmitgliedern"
+ },
+ "banking_cycle_events.17.a": {
+  "en": "Let the good times roll!",
+  "de": "Lasst die guten Zeiten rollen!"
+ },
+ "banking_cycle_events.17.b": {
+  "en": "Introduce borrowing limits",
+  "de": "Kreditgrenzen einführen"
+ },
+ "banking_cycle_events.17.c": {
+  "en": "Ban consumer lending",
+  "de": "Verbraucherkredite verbieten"
+ },
+ "banking_cycle_events.17.d": {
+  "en": "Consumer lending has exploded as households borrow aggressively for purchases that would have been unimaginable a generation ago. Department stores offer installment plans, banks push personal loans, and credit is flowing freely to anyone with a pulse and a signature. The spending is fueling economic growth, but household debt levels are reaching unprecedented heights.",
+  "de": "Der Verbraucherkredit ist explodiert, da Haushalte aggressiv für Anschaffungen Kredite aufnehmen, die vor einer Generation noch unvorstellbar gewesen wären. Kaufhäuser bieten Ratenzahlungspläne an, Banken drängen Privatkredite auf, und Kredit fließt frei an jeden mit Puls und Unterschrift. Die Ausgaben befeuern das Wirtschaftswachstum, doch die Verschuldung der Haushalte erreicht beispiellose Höhen."
+ },
+ "banking_cycle_events.17.f": {
+  "en": "\\\"Buy now, pay later! Every household deserves a motorcar, a wireless set, and a modern kitchen!\\\"\\n\\n\\\"And how will they pay for it all?\\\"\\n\\n\\\"Later, obviously. That's the entire point.\\\"",
+  "de": "„Jetzt kaufen, später zahlen! Jeder Haushalt verdient ein Automobil, ein Radiogerät und eine moderne Küche!“\\n\\n„Und wie sollen sie das alles bezahlen?“\\n\\n„Später natürlich. Das ist der ganze Sinn der Sache.“"
+ },
+ "banking_cycle_events.17.t": {
+  "en": "Consumer Credit Boom",
+  "de": "Boom des Verbraucherkredits"
+ },
  "banking_cycle_events.170.a": {
   "en": "Full Transparency Investigation",
   "de": "Untersuchung mit voller Transparenz"

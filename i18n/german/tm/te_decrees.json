@@ -3,60 +3,128 @@
   "en": "Anti-Terrorism Campaign",
   "de": "Antiterror-Kampagne"
  },
+ "decree_antiterrorism_campaign_desc": {
+  "en": "Anti-Terrorism Campaign allows the government to increase security measures and reduce the risk of terrorist attacks.",
+  "de": "Die Antiterror-Kampagne erlaubt es der Regierung, Sicherheitsmaßnahmen zu verstärken und das Risiko terroristischer Anschläge zu verringern."
+ },
  "decree_bureaucracy_reform": {
   "en": "Bureaucratic Reform",
   "de": "Bürokratiereform"
+ },
+ "decree_bureaucracy_reform_desc": {
+  "en": "Bureaucratic Reform allows the government to streamline the [concept_bureaucracy] and reduce corruption.",
+  "de": "Die Bürokratiereform erlaubt es der Regierung, die [concept_bureaucracy] zu straffen und Korruption zu verringern."
  },
  "decree_cultural_emigration_initiative": {
   "en": "Cultural Emigration Initiative",
   "de": "Initiative für kulturelle Auswanderung"
  },
+ "decree_cultural_emigration_initiative_desc": {
+  "en": "Cultural Emigration Initiative allows the government to encourage citizens to emigrate to other countries.",
+  "de": "Die Initiative für kulturelle Auswanderung erlaubt es der Regierung, Bürger zur Auswanderung in andere Länder zu ermutigen."
+ },
  "decree_cultural_integration": {
   "en": "Cultural Integration",
   "de": "Kulturelle Integration"
+ },
+ "decree_cultural_integration_desc": {
+  "en": "Cultural Integration speeds up the process of integrating cultures, increasing cultural acceptance.",
+  "de": "Die Kulturelle Integration beschleunigt den Prozess der Kulturintegration und erhöht die kulturelle Akzeptanz."
  },
  "decree_encourage_emigration": {
   "en": "Encourage Emigration",
   "de": "Auswanderung fördern"
  },
+ "decree_encourage_emigration_desc": {
+  "en": "Promote emigration to reduce population pressure through media campaigns and incentives.",
+  "de": "Fördert die Auswanderung durch Medienkampagnen und Anreize, um den Bevölkerungsdruck zu verringern."
+ },
  "decree_greenest_grass_campaign": {
   "en": "Greenest Grass Campaign",
   "de": "„Das Gras ist immer grüner“-Kampagne"
+ },
+ "decree_greenest_grass_campaign_desc": {
+  "en": "A highly effective campaign to encourage migration to a region.",
+  "de": "Eine hochwirksame Kampagne zur Förderung der Migration in eine Region."
+ },
+ "decree_migration_invalid_tooltip": {
+  "en": "In a [concept_power_bloc] allowing forced migration.",
+  "de": "In einem [concept_power_bloc], der Zwangsmigration erlaubt."
  },
  "decree_natalism_initiative": {
   "en": "Natalism Initiative",
   "de": "Geburtenförderungsinitiative"
  },
+ "decree_natalism_initiative_desc": {
+  "en": "Natalism Initiative allows the government to encourage citizens to have more children.",
+  "de": "Die Geburtenförderungsinitiative erlaubt es der Regierung, Bürger zu mehr Kindern zu ermutigen."
+ },
  "decree_political_patronage": {
   "en": "Political Patronage",
   "de": "Politisches Patronat"
+ },
+ "decree_political_patronage_desc": {
+  "en": "Political Patronage allows the government to appoint political allies to key positions in the government.",
+  "de": "Das Politische Patronat erlaubt es der Regierung, politische Verbündete in Schlüsselpositionen der Regierung zu berufen."
  },
  "decree_pollution_control": {
   "en": "Pollution Control",
   "de": "Verschmutzungskontrolle"
  },
+ "decree_pollution_control_desc": {
+  "en": "[concept_pollution_system] Control reduces pollution generation in a state.",
+  "de": "Die [concept_pollution_system]skontrolle verringert die Verschmutzungserzeugung in einem Staat."
+ },
  "decree_promote_tourism": {
   "en": "Promote Tourism",
   "de": "Tourismus fördern"
+ },
+ "decree_promote_tourism_desc": {
+  "en": "Through advertising and investment in [concept_infrastructure], we can increase the number of tourists visiting our [concept_state].",
+  "de": "Durch Werbung und Investitionen in [concept_infrastructure] können wir die Zahl der Touristen erhöhen, die unseren [concept_state] besuchen."
  },
  "decree_resettlement_recruitment_drive": {
   "en": "Resettlement Recruitment Drive",
   "de": "Anwerbungskampagne für Umsiedlung"
  },
+ "decree_resettlement_recruitment_drive_desc": {
+  "en": "Recruiters for our Settlement Authorities concentrate here. Every Settlement Authority recruits from this state before any other, and may take twice as many of its eligible people each month.",
+  "de": "Anwerber für unsere Siedlungsbehörden konzentrieren sich hier. Jede Siedlungsbehörde wirbt bevorzugt in diesem Staat, bevor sie es anderswo tut, und darf jeden Monat doppelt so viele seiner infrage kommenden Bewohner aufnehmen."
+ },
+ "decree_resettlement_recruitment_drive_needs_authority_tt": {
+  "en": "We run at least one Settlement Authority",
+  "de": "Wir betreiben mindestens eine Siedlungsbehörde"
+ },
  "decree_subsidize_immigration": {
   "en": "Subsidize Immigration",
   "de": "Einwanderung subventionieren"
+ },
+ "decree_subsidize_immigration_desc": {
+  "en": "Subsidize Immigration provides financial assistance to immigrants, encouraging them to settle in our [concept_state].",
+  "de": "Einwanderung subventionieren gewährt Einwanderern finanzielle Unterstützung und ermutigt sie, sich in unserem [concept_state] niederzulassen."
  },
  "decree_tax_breaks": {
   "en": "Tax Breaks",
   "de": "Steuererleichterungen"
  },
+ "decree_tax_breaks_desc": {
+  "en": "Tax Breaks allows the government to reduce taxes locally, increasing approval.",
+  "de": "Steuererleichterungen erlauben es der Regierung, Steuern lokal zu senken, was die Zustimmung erhöht."
+ },
  "decree_trade_reform": {
   "en": "Trade Reform",
   "de": "Handelsreform"
  },
+ "decree_trade_reform_desc": {
+  "en": "Trade Reform allows the government to reduce [concept_tariffs] and increase trade with other countries.",
+  "de": "Die Handelsreform erlaubt es der Regierung, [concept_tariffs] zu senken und den Handel mit anderen Ländern zu steigern."
+ },
  "decree_war_propaganda": {
   "en": "War Propaganda",
   "de": "Kriegspropaganda"
+ },
+ "decree_war_propaganda_desc": {
+  "en": "War Propaganda allows the government to increase [concept_war_support].",
+  "de": "Die Kriegspropaganda erlaubt es der Regierung, den [concept_war_support] zu steigern."
  }
 }

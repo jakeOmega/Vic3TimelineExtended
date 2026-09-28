@@ -8806,5 +8806,2165 @@
  "sr_far_side_desc": {
   "en": "Landing on the far side of the Moon opened new frontiers in deep-space observation and research.",
   "de": "Die Landung auf der erdabgewandten Seite des Mondes eröffnete neue Grenzen in der Tiefraumbeobachtung und -forschung."
+ },
+ "sr_first_interstellar_probe_desc": {
+  "en": "Our nation was the first to launch a probe beyond the solar system. An achievement that will echo through the ages.",
+  "de": "Unsere Nation war die erste, die eine Sonde über das Sonnensystem hinaus schickte – eine Leistung, die durch die Zeitalter hallen wird."
+ },
+ "sr_first_mars_landing_desc": {
+  "en": "We were the first nation to set foot on Mars: an achievement that will echo through the ages.",
+  "de": "Wir waren die erste Nation, die den Mars betrat: eine Leistung, die durch die Zeitalter hallen wird."
+ },
+ "sr_first_moon_base_desc": {
+  "en": "We established the first permanent human settlement beyond Earth.",
+  "de": "Wir errichteten die erste dauerhafte menschliche Siedlung jenseits der Erde."
+ },
+ "sr_first_moon_landing_desc": {
+  "en": "Our flag was the first to fly on the lunar surface: an epochal achievement in human history.",
+  "de": "Unsere Flagge war die erste, die auf der Mondoberfläche wehte: eine epochale Leistung in der Geschichte der Menschheit."
+ },
+ "sr_first_orbital": {
+  "en": "First in Orbit",
+  "de": "Erste im Orbit"
+ },
+ "sr_first_orbital_desc": {
+  "en": "We were the first to achieve orbital flight, demonstrating unmatched aerospace capability.",
+  "de": "Wir erreichten als Erste den Orbitalflug und bewiesen damit unübertroffene Luft- und Raumfahrtfähigkeiten."
+ },
+ "sr_first_probe": {
+  "en": "Pioneers of the Deep",
+  "de": "Pioniere der Tiefe"
+ },
+ "sr_first_probe_desc": {
+  "en": "Our probe was the first human-made object to explore the outer solar system.",
+  "de": "Unsere Sonde war das erste von Menschenhand geschaffene Objekt, das das äußere Sonnensystem erkundete."
+ },
+ "sr_first_suborbital": {
+  "en": "First to the Edge of Space",
+  "de": "Erste am Rand des Weltraums"
+ },
+ "sr_first_suborbital_desc": {
+  "en": "We were the first nation to send a human to the edge of space and return them safely.",
+  "de": "Wir waren die erste Nation, die einen Menschen an den Rand des Weltraums schickte und sicher zurückbrachte."
+ },
+ "sr_funding_progress": {
+  "en": "Funding Progress Bonus",
+  "de": "Finanzierungsbonus"
+ },
+ "sr_funding_progress_desc": {
+  "en": "Additional progress and [concept_throughput] from [concept_space_race] funding investment. Each funding level contributes +0.5 monthly progress and #P +25%#! [GetBuildingType('building_space_program').GetName] throughput per active milestone.",
+  "de": "Zusätzlicher Fortschritt und [concept_throughput] durch Finanzierungsinvestitionen in den [concept_space_race]. Jede Finanzierungsstufe bringt +0,5 monatlichen Fortschritt und #P +25%#! [GetBuildingType('building_space_program').GetName]-Durchsatz pro aktivem Meilenstein."
+ },
+ "sr_improved_safety_protocols_desc": {
+  "en": "Enhanced fire suppression and emergency procedures reduce the risk of future incidents.",
+  "de": "Verbesserte Brandbekämpfung und Notfallverfahren senken das Risiko künftiger Zwischenfälle."
+ },
+ "sr_interstellar_probe": {
+  "en": "Interstellar Probe Launched",
+  "de": "Interstellare Sonde gestartet"
+ },
+ "sr_interstellar_probe_desc": {
+  "en": "We have launched a probe to another star system: a monumental technological achievement.",
+  "de": "Wir haben eine Sonde zu einem anderen Sternensystem gestartet: eine monumentale technologische Leistung."
+ },
+ "sr_iss_cooperation": {
+  "en": "International Space Station Partnership",
+  "de": "Partnerschaft an der Internationalen Raumstation"
+ },
+ "sr_iss_cooperation_desc": {
+  "en": "Joint operation of an orbital research station with other spacefaring nations yields shared scientific benefits.",
+  "de": "Der gemeinsame Betrieb einer orbitalen Forschungsstation mit anderen raumfahrenden Nationen bringt gemeinsamen wissenschaftlichen Nutzen."
+ },
+ "sr_iss_independence": {
+  "en": "National Space Station",
+  "de": "Nationale Raumstation"
+ },
+ "sr_iss_independence_desc": {
+  "en": "A sovereign orbital station serves as a platform for national scientific and strategic interests.",
+  "de": "Eine souveräne Orbitalstation dient als Plattform für nationale wissenschaftliche und strategische Interessen."
+ },
+ "sr_launch_pad_damage_desc": {
+  "en": "The launch complex has sustained severe damage from an explosion and requires extensive repairs.",
+  "de": "Der Startkomplex hat durch eine Explosion schwere Schäden erlitten und benötigt umfangreiche Reparaturen."
+ },
+ "sr_mars_direct_landing_desc": {
+  "en": "Our direct landing approach planted our flag on Mars with maximum symbolic impact.",
+  "de": "Unser Direktlandeansatz pflanzte unsere Flagge mit maximaler symbolischer Wirkung auf den Mars."
+ },
+ "sr_mars_landing": {
+  "en": "Mars Landing Achieved",
+  "de": "Marslandung erreicht"
+ },
+ "sr_mars_landing_desc": {
+  "en": "Our astronauts have set foot on Mars: humanity's reach now extends to another planet.",
+  "de": "Unsere Astronauten haben den Mars betreten: Die Reichweite der Menschheit erstreckt sich nun auf einen weiteren Planeten."
+ },
+ "sr_mars_orbital_first_desc": {
+  "en": "Our methodical orbital-first strategy yielded invaluable Mars orbit experience.",
+  "de": "Unsere methodische Orbit-zuerst-Strategie lieferte unschätzbare Erfahrung im Marsorbit."
+ },
+ "sr_mars_resource_extraction_desc": {
+  "en": "Resource extraction surveys on Mars have identified promising deposits, accelerating our research capabilities.",
+  "de": "Rohstoffuntersuchungen auf dem Mars haben vielversprechende Lagerstätten identifiziert und beschleunigen unsere Forschungskapazitäten."
+ },
+ "sr_mars_robotic_precursor_desc": {
+  "en": "Robotic precursors prepared the Martian surface before human arrival, advancing mining and innovation.",
+  "de": "Robotische Vorboten bereiteten die Marsoberfläche vor der Ankunft von Menschen vor und fördern Bergbau und Innovation."
+ },
+ "sr_mission_failure": {
+  "en": "Space Mission Failure",
+  "de": "Fehlgeschlagene Weltraummission"
+ },
+ "sr_mission_failure_catastrophic_desc": {
+  "en": "A devastating mission failure has set our space program back dramatically. Public confidence has been shaken.",
+  "de": "Ein verheerender Missionsfehlschlag hat unser Raumfahrtprogramm dramatisch zurückgeworfen. Das Vertrauen der Öffentlichkeit ist erschüttert."
+ },
+ "sr_mission_failure_desc": {
+  "en": "A space mission failure has set back progress and damaged public confidence in the program.",
+  "de": "Ein fehlgeschlagener Weltraumeinsatz hat den Fortschritt zurückgeworfen und das Vertrauen der Öffentlichkeit in das Programm beschädigt."
+ },
+ "sr_moon_base": {
+  "en": "Lunar Base Established",
+  "de": "Mondbasis errichtet"
+ },
+ "sr_moon_base_desc": {
+  "en": "A permanent human presence on the Moon strengthens our position in the [concept_space_race].",
+  "de": "Eine dauerhafte menschliche Präsenz auf dem Mond stärkt unsere Position im [concept_space_race]."
+ },
+ "sr_moon_base_industrial_desc": {
+  "en": "Our lunar base focuses on mining and materials processing, boosting industrial output.",
+  "de": "Unsere Mondbasis konzentriert sich auf Bergbau und Materialverarbeitung und steigert die industrielle Produktion."
+ },
+ "sr_moon_base_military_desc": {
+  "en": "Our lunar base provides strategic military observation and force projection capabilities.",
+  "de": "Unsere Mondbasis bietet strategische militärische Beobachtung und Machtprojektion."
+ },
+ "sr_moon_base_scientific_desc": {
+  "en": "Our lunar base is dedicated to pure research, driving technological breakthroughs.",
+  "de": "Unsere Mondbasis widmet sich der reinen Forschung und treibt technologische Durchbrüche voran."
+ },
+ "sr_moon_landing": {
+  "en": "Moon Landing Achieved",
+  "de": "Mondlandung erreicht"
+ },
+ "sr_moon_landing_desc": {
+  "en": "Our astronauts have walked on the Moon.",
+  "de": "Unsere Astronauten haben den Mond betreten."
+ },
+ "sr_orbital": {
+  "en": "Orbital Flight Achieved",
+  "de": "Orbitalflug erreicht"
+ },
+ "sr_orbital_civilian_astronaut_desc": {
+  "en": "Our first astronaut was a civilian volunteer, inspiring the public and boosting cultural influence.",
+  "de": "Unser erster Astronaut war ein ziviler Freiwilliger, der die Öffentlichkeit inspirierte und den kulturellen Einfluss steigerte."
+ },
+ "sr_orbital_desc": {
+  "en": "We have achieved orbital flight, marking a major step in our space program.",
+  "de": "Wir haben den Orbitalflug erreicht – ein bedeutender Schritt in unserem Raumfahrtprogramm."
+ },
+ "sr_orbital_military_pilot_desc": {
+  "en": "Our first astronaut was a military test pilot, advancing military technology and influence.",
+  "de": "Unser erster Astronaut war ein militärischer Testpilot und fördert militärische Technologie und Einfluss."
+ },
+ "sr_orbital_scientist": {
+  "en": "Scientist-Astronaut Pioneer",
+  "de": "Pionier der Wissenschaftsastronauten"
+ },
+ "sr_orbital_scientist_desc": {
+  "en": "Our first astronaut was a scientist, accelerating research breakthroughs from orbit.",
+  "de": "Unser erster Astronaut war ein Wissenschaftler und beschleunigt Forschungsdurchbrüche aus dem Orbit."
+ },
+ "sr_probe": {
+  "en": "Deep-Space Probe Completed",
+  "de": "Tiefraumsonde fertiggestellt"
+ },
+ "sr_probe_astro_wonders_data_desc": {
+  "en": "Our probe discovered extraordinary astrophysical phenomena that rewrite our understanding of planetary science and stellar physics.",
+  "de": "Unsere Sonde entdeckte außergewöhnliche astrophysikalische Phänomene, die unser Verständnis von Planetenkunde und Sternenphysik neu schreiben."
+ },
+ "sr_probe_biological_data_desc": {
+  "en": "Our probe has confirmed the existence of extraterrestrial life. The biological data represents the most significant scientific discovery in human history.",
+  "de": "Unsere Sonde hat die Existenz außerirdischen Lebens bestätigt. Die biologischen Daten stellen die bedeutendste wissenschaftliche Entdeckung der Menschheitsgeschichte dar."
+ },
+ "sr_probe_dead_worlds_data_desc": {
+  "en": "Our probe returned data on barren, lifeless worlds. Scientifically valuable, the data provides insight into planetary formation and stellar evolution.",
+  "de": "Unsere Sonde übermittelte Daten über öde, lebenslose Welten. Wissenschaftlich wertvoll, gewähren die Daten Einblick in Planetenentstehung und Sternentwicklung."
+ },
+ "sr_probe_desc": {
+  "en": "Our probe has returned a full survey package from its chosen deep-space target.",
+  "de": "Unsere Sonde hat ein vollständiges Vermessungspaket von ihrem gewählten Tiefraumziel übermittelt."
+ },
+ "sr_probe_intelligence_data_desc": {
+  "en": "Our probe has detected unmistakable signs of intelligent, technological civilization beyond our solar system. Humanity is not alone in the universe.",
+  "de": "Unsere Sonde hat eindeutige Anzeichen einer intelligenten, technologischen Zivilisation jenseits unseres Sonnensystems entdeckt. Die Menschheit ist nicht allein im Universum."
+ },
+ "sr_probe_target_asteroid_desc": {
+  "en": "Our probe charted the asteroid belt, yielding navigational and materials data that accelerates future space expansion.",
+  "de": "Unsere Sonde kartierte den Asteroidengürtel und lieferte Navigations- und Materialdaten, die künftige Weltraumexpansion beschleunigen."
+ },
+ "sr_probe_target_mars_desc": {
+  "en": "Our probe surveyed Mars, generating data that accelerates future Mars missions.",
+  "de": "Unsere Sonde vermaß den Mars und erzeugte Daten, die künftige Marsmissionen beschleunigen."
+ },
+ "sr_probe_target_venus_desc": {
+  "en": "Our probe studied Venus's atmosphere, yielding invaluable atmospheric science data.",
+  "de": "Unsere Sonde untersuchte die Atmosphäre der Venus und lieferte unschätzbare atmosphärenwissenschaftliche Daten."
+ },
+ "sr_profile_none": {
+  "en": "The programme is between stages.",
+  "de": "Das Programm befindet sich zwischen zwei Phasen."
+ },
+ "sr_rivals_intro": {
+  "en": "Programmes of their own are under way in:",
+  "de": "Eigene Programme laufen derzeit in:"
+ },
+ "sr_rivals_none": {
+  "en": "No other power is working on this milestone at the moment.",
+  "de": "Derzeit arbeitet keine andere Macht an diesem Meilenstein."
+ },
+ "sr_safe_approach": {
+  "en": "Cautious Space Program",
+  "de": "Vorsichtiges Raumfahrtprogramm"
+ },
+ "sr_safe_approach_desc": {
+  "en": "A methodical, step-by-step approach to space exploration. Progress is steady, and risk is minimized.",
+  "de": "Ein methodischer, schrittweiser Ansatz zur Weltraumerkundung. Der Fortschritt ist stetig, das Risiko minimiert."
+ },
+ "sr_sea_of_tranquility_desc": {
+  "en": "Landing in the Sea of Tranquility captured the world's imagination with its iconic symbolism.",
+  "de": "Die Landung im Meer der Ruhe beflügelte mit ihrer ikonischen Symbolkraft die Fantasie der Welt."
+ },
+ "sr_shackleton_crater": {
+  "en": "Shackleton Crater Scientific Windfall",
+  "de": "Wissenschaftlicher Glücksfall im Shackleton-Krater"
+ },
+ "sr_shackleton_crater_desc": {
+  "en": "The hazardous landing in Shackleton Crater has yielded extraordinary scientific discoveries, including evidence of water ice.",
+  "de": "Die gefährliche Landung im Shackleton-Krater hat außergewöhnliche wissenschaftliche Entdeckungen hervorgebracht, darunter Belege für Wassereis."
+ },
+ "sr_solar_system_trade_desc": {
+  "en": "Trade between Earth and off-world colonies provides substantial economic and strategic benefits.",
+  "de": "Der Handel zwischen der Erde und außerirdischen Kolonien bringt erhebliche wirtschaftliche und strategische Vorteile."
+ },
+ "sr_space_program_cost_desc": {
+  "en": "Resources allocated to active space program milestones reduce weekly innovation.",
+  "de": "Für aktive Meilensteine des Raumfahrtprogramms gebundene Ressourcen verringern die wöchentliche Innovation."
+ },
+ "sr_space_program_funding_desc": {
+  "en": "Resources allocated to the national space program reduce weekly innovation.",
+  "de": "Für das nationale Raumfahrtprogramm gebundene Ressourcen verringern die wöchentliche Innovation."
+ },
+ "sr_space_tourism_boost_desc": {
+  "en": "Wealthy tourists pay handsomely for the privilege of experiencing spaceflight, offsetting program costs.",
+  "de": "Wohlhabende Touristen zahlen stattliche Summen für das Privileg eines Weltraumflugs und gleichen damit die Programmkosten aus."
+ },
+ "sr_space_tourism_rejected_desc": {
+  "en": "The space program is dedicated exclusively to scientific and [Concept('concept_strategic_objective', 'strategic objectives')].",
+  "de": "Das Raumfahrtprogramm dient ausschließlich wissenschaftlichen und [Concept('concept_strategic_objective', 'strategischen Zielen')]."
+ },
+ "sr_suborbital": {
+  "en": "Suborbital Flight Achieved",
+  "de": "Suborbitalflug erreicht"
+ },
+ "sr_suborbital_desc": {
+  "en": "We have reached the edge of space: a stepping stone to greater things.",
+  "de": "Wir haben den Rand des Weltraums erreicht: ein Sprungbrett zu Größerem."
+ },
+ "sr_suborbital_momentum": {
+  "en": "Suborbital Momentum",
+  "de": "Suborbitaler Schwung"
+ },
+ "sr_suborbital_momentum_desc": {
+  "en": "The success of our suborbital flight is being channelled into the next milestone.",
+  "de": "Der Erfolg unseres Suborbitalflugs wird in den nächsten Meilenstein investiert."
+ },
+ "sr_supply_chain_disruption_desc": {
+  "en": "Critical precision components are delayed, preventing major integration milestones from proceeding.",
+  "de": "Kritische Präzisionsbauteile verzögern sich und verhindern das Fortschreiten wichtiger Integrationsmeilensteine."
+ },
+ "sr_temporary_safety_review_desc": {
+  "en": "Engineering teams are operating under tighter review procedures and larger safety margins after a recent failure. Progress slows for a time, but the odds of another mishap are reduced.",
+  "de": "Nach einem jüngsten Fehlschlag arbeiten die Ingenieurteams mit strengeren Prüfverfahren und größeren Sicherheitsmargen. Der Fortschritt verlangsamt sich vorübergehend, doch die Wahrscheinlichkeit eines weiteren Zwischenfalls sinkt."
+ },
+ "st_res_aeroplanes_store_flow_desc": {
+  "en": "This hub is purchasing aeroplanes for the strategic reserve.",
+  "de": "Dieser Hub kauft Flugzeuge für die strategische Reserve."
+ },
+ "st_res_aeroplanes_withdraw_flow_desc": {
+  "en": "This hub is releasing aeroplanes from the strategic reserve.",
+  "de": "Dieser Hub gibt Flugzeuge aus der strategischen Reserve frei."
+ },
+ "st_res_ammunition_store_flow_desc": {
+  "en": "This hub is purchasing ammunition for the strategic reserve.",
+  "de": "Dieser Hub kauft Munition für die strategische Reserve."
+ },
+ "st_res_ammunition_withdraw_flow_desc": {
+  "en": "This hub is releasing ammunition from the strategic reserve.",
+  "de": "Dieser Hub gibt Munition aus der strategischen Reserve frei."
+ },
+ "st_res_artillery_store_flow_desc": {
+  "en": "This hub is purchasing artillery for the strategic reserve.",
+  "de": "Dieser Hub kauft Artillerie für die strategische Reserve."
+ },
+ "st_res_artillery_withdraw_flow_desc": {
+  "en": "This hub is releasing artillery from the strategic reserve.",
+  "de": "Dieser Hub gibt Artillerie aus der strategischen Reserve frei."
+ },
+ "st_res_cycle_step_size_button_desc": {
+  "en": "Change the reserve rate adjustment step. Current step: [ROOT.GetCountry.MakeScope.ScriptValue('st_res_adjust_step_value')|0]. Cycles 1 -> 10 -> 100 -> 1000 -> 10000 -> 1.",
+  "de": "Ändert die Schrittweite für die Anpassung der Reservequote. Aktuelle Schrittweite: [ROOT.GetCountry.MakeScope.ScriptValue('st_res_adjust_step_value')|0]. Wechselt zyklisch 1 -> 10 -> 100 -> 1000 -> 10000 -> 1."
+ },
+ "st_res_fertilizer_store_flow_desc": {
+  "en": "This hub is purchasing chemicals for the strategic reserve.",
+  "de": "Dieser Hub kauft Chemikalien für die strategische Reserve."
+ },
+ "st_res_fertilizer_withdraw_flow_desc": {
+  "en": "This hub is releasing chemicals from the strategic reserve.",
+  "de": "Dieser Hub gibt Chemikalien aus der strategischen Reserve frei."
+ },
+ "st_res_grain_store_flow_desc": {
+  "en": "This hub is purchasing grain for the strategic reserve.",
+  "de": "Dieser Hub kauft Getreide für die strategische Reserve."
+ },
+ "st_res_grain_withdraw_flow_desc": {
+  "en": "This hub is releasing grain from the strategic reserve.",
+  "de": "Dieser Hub gibt Getreide aus der strategischen Reserve frei."
+ },
+ "st_res_oil_store_flow_desc": {
+  "en": "This hub is purchasing oil for the strategic reserve.",
+  "de": "Dieser Hub kauft Öl für die strategische Reserve."
+ },
+ "st_res_oil_withdraw_flow_desc": {
+  "en": "This hub is releasing oil from the strategic reserve.",
+  "de": "Dieser Hub gibt Öl aus der strategischen Reserve frei."
+ },
+ "st_res_reset_rates_button_desc": {
+  "en": "Reset all reserve rate settings to 0/week, switch every good back to the Manual policy, and refresh hub flow modifiers.",
+  "de": "Setzt alle Einstellungen der Reservequote auf 0/Woche zurück, stellt jede Ware wieder auf die manuelle Regelung um und aktualisiert die Hub-Durchsatzmodifikatoren."
+ },
+ "st_res_small_arms_store_flow_desc": {
+  "en": "This hub is purchasing small arms for the strategic reserve.",
+  "de": "Dieser Hub kauft Handfeuerwaffen für die strategische Reserve."
+ },
+ "st_res_small_arms_withdraw_flow_desc": {
+  "en": "This hub is releasing small arms from the strategic reserve.",
+  "de": "Dieser Hub gibt Handfeuerwaffen aus der strategischen Reserve frei."
+ },
+ "st_res_tanks_store_flow_desc": {
+  "en": "This hub is purchasing tanks for the strategic reserve.",
+  "de": "Dieser Hub kauft Panzer für die strategische Reserve."
+ },
+ "st_res_tanks_withdraw_flow_desc": {
+  "en": "This hub is releasing tanks from the strategic reserve.",
+  "de": "Dieser Hub gibt Panzer aus der strategischen Reserve frei."
+ },
+ "state_violence_against_minorities_bool_desc": {
+  "en": "The state engages in violence against minority groups, leading to occasional deaths and injuries.",
+  "de": "Der Staat übt Gewalt gegen Minderheiten aus, was gelegentlich zu Toten und Verletzten führt."
+ },
+ "statepower_autonomy_debate_advance_desc": {
+  "en": "A strong positive boost to law enactment progress from a recent event.",
+  "de": "Ein starker positiver Schub für den Fortschritt bei der Gesetzeseinführung durch ein jüngstes Ereignis."
+ },
+ "statepower_autonomy_debate_cautious_desc": {
+  "en": "A smaller positive boost to law enactment progress from a recent event.",
+  "de": "Ein kleinerer positiver Schub für den Fortschritt bei der Gesetzeseinführung durch ein jüngstes Ereignis."
+ },
+ "statepower_centralized": {
+  "en": "State Power: Centralized Administration",
+  "de": "Staatsmacht: Zentralisierte Verwaltung"
+ },
+ "statepower_federal_protections": {
+  "en": "State Power: Federal Protections",
+  "de": "Staatsmacht: Föderale Schutzrechte"
+ },
+ "ste_ai_alignment_dismissed_desc": {
+  "en": "The alignment incident has been dismissed as a management failure. AI development continues unrestricted.",
+  "de": "Der Zwischenfall in der KI-Ausrichtung wurde als Missmanagement abgetan. Die KI-Entwicklung läuft uneingeschränkt weiter."
+ },
+ "ste_ai_alignment_research_desc": {
+  "en": "Government grants are funding academic research into AI objective alignment and safety verification.",
+  "de": "Staatliche Zuschüsse finanzieren akademische Forschung zur Zielausrichtung von KI und zur Sicherheitsüberprüfung."
+ },
+ "ste_ai_safety_protocols_desc": {
+  "en": "Mandatory safety audits are required before AI systems can be deployed in critical public roles.",
+  "de": "Verpflichtende Sicherheitsprüfungen sind vorgeschrieben, bevor KI-Systeme in kritischen öffentlichen Aufgaben eingesetzt werden dürfen."
+ },
+ "ste_algo_gov_adopt_desc": {
+  "en": "AI systems are managing routine governance tasks with remarkable efficiency.",
+  "de": "KI-Systeme übernehmen Routineaufgaben der Verwaltung mit bemerkenswerter Effizienz."
+ },
+ "ste_algo_gov_reject_desc": {
+  "en": "The proposal to hand governance to AI was rejected in favor of human control.",
+  "de": "Der Vorschlag, die Verwaltung an KI zu übergeben, wurde zugunsten menschlicher Kontrolle abgelehnt."
+ },
+ "ste_antiglobal_concession": {
+  "en": "Labor Standard Concessions",
+  "de": "Zugeständnisse bei Arbeitsstandards"
+ },
+ "ste_antiglobal_concession_desc": {
+  "en": "The government made concessions on labor standards to calm anti-globalization protesters.",
+  "de": "Die Regierung machte Zugeständnisse bei den Arbeitsstandards, um globalisierungskritische Demonstranten zu beruhigen."
+ },
+ "ste_antiglobal_crackdown": {
+  "en": "Protest Crackdown",
+  "de": "Protestunterdrückung"
+ },
+ "ste_antiglobal_crackdown_desc": {
+  "en": "Anti-globalization protests were suppressed with force.",
+  "de": "Globalisierungskritische Proteste wurden mit Gewalt niedergeschlagen."
+ },
+ "ste_antinuclear_concede": {
+  "en": "Nuclear Phase-Out Promised",
+  "de": "Atomausstieg versprochen"
+ },
+ "ste_antinuclear_concede_desc": {
+  "en": "The government has promised to phase out nuclear power, at the cost of energy supply.",
+  "de": "Die Regierung hat den Ausstieg aus der Kernenergie versprochen – auf Kosten der Energieversorgung."
+ },
+ "ste_antinuclear_defend": {
+  "en": "Nuclear Power Defended",
+  "de": "Kernenergie verteidigt"
+ },
+ "ste_antinuclear_defend_desc": {
+  "en": "The government has defended nuclear power as essential for the future.",
+  "de": "Die Regierung hat die Kernenergie als unverzichtbar für die Zukunft verteidigt."
+ },
+ "ste_augmented_sports_embrace_desc": {
+  "en": "Augmented athletes compete alongside naturals, pushing the boundaries of achievement.",
+  "de": "Erweiterte Athleten treten gemeinsam mit unveränderten Sportlern an und verschieben die Grenzen des Leistbaren."
+ },
+ "ste_augmented_sports_separate_desc": {
+  "en": "Separate sporting leagues for augmented athletes maintain fairness.",
+  "de": "Getrennte Sportligen für erweiterte Athleten wahren die Fairness."
+ },
+ "ste_av_blocked": {
+  "en": "Autonomous Vehicles Blocked",
+  "de": "Autonome Fahrzeuge blockiert"
+ },
+ "ste_av_blocked_desc": {
+  "en": "Autonomous vehicles have been blocked to protect transportation workers.",
+  "de": "Autonome Fahrzeuge wurden blockiert, um die Beschäftigten im Transportwesen zu schützen."
+ },
+ "ste_av_cautious_rollout_desc": {
+  "en": "Autonomous vehicles are being deployed in phases with careful oversight.",
+  "de": "Autonome Fahrzeuge werden in Phasen und unter sorgfältiger Aufsicht eingeführt."
+ },
+ "ste_av_crash_continue_desc": {
+  "en": "Despite a fatal crash, autonomous vehicle deployment continues based on statistical safety.",
+  "de": "Trotz eines tödlichen Unfalls wird der Einsatz autonomer Fahrzeuge auf Grundlage statistischer Sicherheit fortgesetzt."
+ },
+ "ste_av_crash_investigation_desc": {
+  "en": "A comprehensive ministry investigation into the autonomous vehicle crash has led to new safety standards, temporarily slowing the motor industry but restoring public trust.",
+  "de": "Eine umfassende Ministeriumsuntersuchung des Unfalls mit einem autonomen Fahrzeug hat zu neuen Sicherheitsstandards geführt, die die Automobilindustrie vorübergehend bremsen, aber das Vertrauen der Öffentlichkeit wiederherstellen."
+ },
+ "ste_av_crash_pause_desc": {
+  "en": "Autonomous vehicle deployment has been paused for a safety review.",
+  "de": "Der Einsatz autonomer Fahrzeuge wurde für eine Sicherheitsüberprüfung ausgesetzt."
+ },
+ "ste_av_full_adoption_desc": {
+  "en": "Autonomous vehicles are being deployed at full scale, transforming transportation.",
+  "de": "Autonome Fahrzeuge werden flächendeckend eingesetzt und verändern das Transportwesen grundlegend."
+ },
+ "ste_bci_banned": {
+  "en": "Neural Interfaces Banned",
+  "de": "Neuroschnittstellen verboten"
+ },
+ "ste_bci_banned_desc": {
+  "en": "Brain-computer interfaces have been outlawed to preserve human purity.",
+  "de": "Gehirn-Computer-Schnittstellen wurden verboten, um die Reinheit des Menschen zu bewahren."
+ },
+ "ste_bci_consumer_rollout_desc": {
+  "en": "Consumer brain-computer interfaces are driving a wave of innovation.",
+  "de": "Gehirn-Computer-Schnittstellen für Verbraucher treiben eine Innovationswelle an."
+ },
+ "ste_bci_regulated_access_desc": {
+  "en": "Neural interfaces are restricted to medical applications, ensuring safety.",
+  "de": "Neuroschnittstellen sind auf medizinische Anwendungen beschränkt, was die Sicherheit gewährleistet."
+ },
+ "ste_campus_activism_contain_desc": {
+  "en": "Student protests were contained, restoring order but stifling academic discourse.",
+  "de": "Studentenproteste wurden eingedämmt, was die Ordnung wiederherstellte, aber den akademischen Diskurs erstickte."
+ },
+ "ste_campus_activism_support_desc": {
+  "en": "The government embraces student activism, fueling innovation and academic energy.",
+  "de": "Die Regierung unterstützt studentischen Aktivismus und befeuert damit Innovation und akademischen Tatendrang."
+ },
+ "ste_civil_unions": {
+  "en": "Civil Partnership Framework",
+  "de": "Rahmen für eingetragene Partnerschaften"
+ },
+ "ste_civil_unions_desc": {
+  "en": "A legal framework for civil partnerships offers same-sex couples many of the rights of marriage without the traditional title.",
+  "de": "Ein rechtlicher Rahmen für eingetragene Partnerschaften bietet gleichgeschlechtlichen Paaren viele Rechte der Ehe, ohne den traditionellen Titel."
+ },
+ "ste_deepfake_authenticate": {
+  "en": "Digital Authentication",
+  "de": "Digitale Authentifizierung"
+ },
+ "ste_deepfake_authenticate_desc": {
+  "en": "New authentication technology helps verify the authenticity of digital media.",
+  "de": "Neue Authentifizierungstechnologie hilft, die Echtheit digitaler Medien zu überprüfen."
+ },
+ "ste_deepfake_ignore": {
+  "en": "Deepfakes Unchecked",
+  "de": "Deepfakes ungebremst"
+ },
+ "ste_deepfake_ignore_desc": {
+  "en": "No action was taken against deepfakes, eroding public trust in media.",
+  "de": "Es wurden keine Maßnahmen gegen Deepfakes ergriffen, was das Vertrauen der Öffentlichkeit in die Medien untergräbt."
+ },
+ "ste_deepfake_regulate": {
+  "en": "Deepfakes Criminalized",
+  "de": "Deepfakes unter Strafe gestellt"
+ },
+ "ste_deepfake_regulate_desc": {
+  "en": "Legislation criminalizing AI-generated forgeries has been passed.",
+  "de": "Ein Gesetz, das KI-generierte Fälschungen unter Strafe stellt, wurde verabschiedet."
+ },
+ "ste_designer_baby_ban_desc": {
+  "en": "Gene editing of human embryos has been outlawed.",
+  "de": "Die Genbearbeitung menschlicher Embryonen wurde verboten."
+ },
+ "ste_designer_baby_corporate_desc": {
+  "en": "Licensed corporations are offering designer baby services as a premium product. The profit motive drives rapid innovation in genetic modification, but access is limited to those who can afford it.",
+  "de": "Lizenzierte Unternehmen bieten Designerbaby-Dienste als Premiumprodukt an. Das Gewinnstreben treibt rasche Innovation in der genetischen Veränderung voran, doch der Zugang bleibt jenen vorbehalten, die es sich leisten können."
+ },
+ "ste_designer_baby_medical_desc": {
+  "en": "Gene editing is permitted for medical applications, advancing treatment of genetic diseases.",
+  "de": "Genbearbeitung ist für medizinische Anwendungen erlaubt und fördert die Behandlung genetischer Krankheiten."
+ },
+ "ste_designer_baby_open_source_desc": {
+  "en": "Human genetic modification research has been placed in the public domain. Scientists worldwide collaborate freely, accelerating breakthroughs and ensuring equal access to genetic improvements.",
+  "de": "Die Forschung zur genetischen Veränderung des Menschen wurde der Öffentlichkeit zugänglich gemacht. Wissenschaftler weltweit arbeiten frei zusammen, was Durchbrüche beschleunigt und gleichen Zugang zu genetischen Verbesserungen sichert."
+ },
+ "ste_designer_baby_state_eugenics_desc": {
+  "en": "The state has assumed control of human genetic modification, directing enhancements to serve national goals. Mortality declines as genetic diseases are eliminated by mandate, but the program's authoritarian nature unsettles many.",
+  "de": "Der Staat hat die Kontrolle über die genetische Veränderung des Menschen übernommen und lenkt Verbesserungen zur Erfüllung nationaler Ziele. Die Sterblichkeit sinkt, da genetische Krankheiten per Erlass ausgemerzt werden, doch der autoritäre Charakter des Programms beunruhigt viele."
+ },
+ "ste_designer_baby_unrestricted_desc": {
+  "en": "No restrictions on human genetic modification are driving rapid but controversial advances.",
+  "de": "Fehlende Beschränkungen der genetischen Veränderung des Menschen treiben rasche, aber umstrittene Fortschritte voran."
+ },
+ "ste_divorce_reform": {
+  "en": "Liberalized Divorce",
+  "de": "Liberalisiertes Scheidungsrecht"
+ },
+ "ste_divorce_reform_desc": {
+  "en": "Relaxed divorce laws give citizens more personal freedom.",
+  "de": "Gelockerte Scheidungsgesetze geben den Bürgern mehr persönliche Freiheit."
+ },
+ "ste_divorce_tradition": {
+  "en": "Strict Marriage Laws",
+  "de": "Strenges Eherecht"
+ },
+ "ste_divorce_tradition_desc": {
+  "en": "The government maintains strict marriage laws, reinforcing traditional family structures.",
+  "de": "Die Regierung hält an einem strengen Eherecht fest und stärkt damit traditionelle Familienstrukturen."
+ },
+ "ste_election_interference_counter_desc": {
+  "en": "The government is actively countering foreign election interference.",
+  "de": "Die Regierung wirkt aktiv ausländischer Wahleinmischung entgegen."
+ },
+ "ste_election_interference_cyber_defense_desc": {
+  "en": "Intelligence services have deployed cyber defense capabilities to protect the electoral process from foreign interference, strengthening democratic institutions.",
+  "de": "Die Geheimdienste haben Cyberabwehrfähigkeiten eingesetzt, um den Wahlprozess vor ausländischer Einmischung zu schützen, und stärken damit die demokratischen Institutionen."
+ },
+ "ste_election_interference_ignored_desc": {
+  "en": "Reports of foreign election interference were dismissed, eroding public trust.",
+  "de": "Berichte über ausländische Wahleinmischung wurden abgetan, was das Vertrauen der Öffentlichkeit untergräbt."
+ },
+ "ste_equal_pay_reform_desc": {
+  "en": "Equal pay laws are improving worker satisfaction, though employers bear higher costs.",
+  "de": "Gesetze zur Entgeltgleichheit verbessern die Zufriedenheit der Beschäftigten, auch wenn Arbeitgeber höhere Kosten tragen."
+ },
+ "ste_equal_pay_rejected_desc": {
+  "en": "The government declined to address pay inequality, eroding public trust.",
+  "de": "Die Regierung verzichtete darauf, die Lohnungleichheit anzugehen, was das Vertrauen der Öffentlichkeit untergräbt."
+ },
+ "ste_gaming_industry_boom_desc": {
+  "en": "The interactive entertainment industry is booming, driving software and creative growth.",
+  "de": "Die Branche der interaktiven Unterhaltung boomt und treibt Wachstum in Software und Kreativwirtschaft voran."
+ },
+ "ste_gaming_industry_regulated_desc": {
+  "en": "Government regulation of gaming content reassures parents but constrains the industry.",
+  "de": "Die staatliche Regulierung von Spieleinhalten beruhigt Eltern, schränkt aber die Branche ein."
+ },
+ "ste_hivemind_integrate": {
+  "en": "Hive-Mind Integrated",
+  "de": "Schwarmbewusstsein integriert"
+ },
+ "ste_hivemind_integrate_desc": {
+  "en": "Collective intelligence is being integrated into governance processes.",
+  "de": "Kollektive Intelligenz wird in die Verwaltungsprozesse integriert."
+ },
+ "ste_hivemind_suppress": {
+  "en": "Hive-Mind Suppressed",
+  "de": "Schwarmbewusstsein unterdrückt"
+ },
+ "ste_hivemind_suppress_desc": {
+  "en": "The telepathic commune has been forcibly disbanded.",
+  "de": "Die telepathische Kommune wurde gewaltsam aufgelöst."
+ },
+ "ste_hivemind_tolerate": {
+  "en": "Hive-Mind Tolerated",
+  "de": "Schwarmbewusstsein toleriert"
+ },
+ "ste_hivemind_tolerate_desc": {
+  "en": "The telepathic commune is tolerated as an intriguing social experiment.",
+  "de": "Die telepathische Kommune wird als faszinierendes soziales Experiment toleriert."
+ },
+ "ste_marriage_equality": {
+  "en": "Marriage Equality",
+  "de": "Ehe für alle"
+ },
+ "ste_marriage_equality_desc": {
+  "en": "The legalization of same-sex marriage has strengthened civic loyalty.",
+  "de": "Die Legalisierung der gleichgeschlechtlichen Ehe hat die Bürgerloyalität gestärkt."
+ },
+ "ste_marriage_traditional": {
+  "en": "Traditional Marriage Defended",
+  "de": "Traditionelle Ehe verteidigt"
+ },
+ "ste_marriage_traditional_desc": {
+  "en": "The traditional definition of marriage has been preserved.",
+  "de": "Die traditionelle Definition der Ehe wurde bewahrt."
+ },
+ "ste_mass_surveillance": {
+  "en": "Mass Surveillance",
+  "de": "Massenüberwachung"
+ },
+ "ste_mass_surveillance_desc": {
+  "en": "Sweeping surveillance powers monitor the citizenry in the name of security.",
+  "de": "Weitreichende Überwachungsbefugnisse behalten die Bürger im Namen der Sicherheit im Blick."
+ },
+ "ste_meltdown_contain": {
+  "en": "Nuclear Meltdown - Containment",
+  "de": "Kernschmelze – Eindämmung"
+ },
+ "ste_meltdown_contain_desc": {
+  "en": "Workers were sent into lethal radiation to contain the meltdown.",
+  "de": "Arbeiter wurden in tödliche Strahlung geschickt, um die Kernschmelze einzudämmen."
+ },
+ "ste_meltdown_evacuate": {
+  "en": "Nuclear Meltdown - Evacuation",
+  "de": "Kernschmelze – Evakuierung"
+ },
+ "ste_meltdown_evacuate_desc": {
+  "en": "A catastrophic nuclear meltdown has forced mass evacuation and devastated power supply.",
+  "de": "Eine katastrophale Kernschmelze hat eine Massenevakuierung erzwungen und die Energieversorgung verwüstet."
+ },
+ "ste_meltdown_institutional_response_desc": {
+  "en": "Government institutions have mobilized an emergency response to the nuclear meltdown, containing damage but at significant cost to the treasury and public confidence.",
+  "de": "Staatliche Institutionen haben eine Notfallreaktion auf die Kernschmelze mobilisiert, die den Schaden eindämmt, jedoch die Staatskasse und das öffentliche Vertrauen erheblich belastet."
+ },
+ "ste_misinfo_free_speech_desc": {
+  "en": "Free speech protections remain paramount, even in the age of viral misinformation.",
+  "de": "Der Schutz der Meinungsfreiheit bleibt oberste Priorität, selbst im Zeitalter viraler Falschinformationen."
+ },
+ "ste_misinfo_literacy": {
+  "en": "Media Literacy Programs",
+  "de": "Medienkompetenz-Programme"
+ },
+ "ste_misinfo_literacy_desc": {
+  "en": "Government-funded media [concept_literacy] programs help citizens navigate the information landscape.",
+  "de": "Staatlich finanzierte Programme zur Medien-[concept_literacy] helfen den Bürgern, sich in der Informationslandschaft zurechtzufinden."
+ },
+ "ste_misinfo_regulate": {
+  "en": "Platform Regulation",
+  "de": "Plattformregulierung"
+ },
+ "ste_misinfo_regulate_desc": {
+  "en": "Social media platforms face new regulations to combat misinformation.",
+  "de": "Soziale Netzwerke unterliegen neuen Regelungen zur Bekämpfung von Falschinformationen."
+ },
+ "ste_outsourcing_embrace": {
+  "en": "Outsourcing Embraced",
+  "de": "Outsourcing begrüßt"
+ },
+ "ste_outsourcing_embrace_desc": {
+  "en": "Free movement of capital and production is boosting trade but unsettling workers.",
+  "de": "Der freie Verkehr von Kapital und Produktion fördert den Handel, verunsichert aber die Beschäftigten."
+ },
+ "ste_outsourcing_protect": {
+  "en": "Protectionist Policies",
+  "de": "Protektionistische Politik"
+ },
+ "ste_outsourcing_protect_desc": {
+  "en": "Tariffs protect domestic jobs at the cost of reduced [concept_trade_capacity].",
+  "de": "Zölle schützen heimische Arbeitsplätze auf Kosten einer verringerten [concept_trade_capacity]."
+ },
+ "ste_pill_available": {
+  "en": "Contraceptives Available",
+  "de": "Verhütungsmittel verfügbar"
+ },
+ "ste_pill_available_desc": {
+  "en": "Widespread access to contraceptives is transforming family planning and women's participation in society.",
+  "de": "Der breite Zugang zu Verhütungsmitteln verändert die Familienplanung und die gesellschaftliche Teilhabe von Frauen."
+ },
+ "ste_pill_restricted": {
+  "en": "Contraceptives Restricted",
+  "de": "Verhütungsmittel eingeschränkt"
+ },
+ "ste_pill_restricted_desc": {
+  "en": "Contraceptive access is limited, satisfying religious conservatives but constraining social progress.",
+  "de": "Der Zugang zu Verhütungsmitteln ist eingeschränkt, was religiöse Konservative zufriedenstellt, aber den sozialen Fortschritt bremst."
+ },
+ "ste_pill_subsidized": {
+  "en": "Subsidized Contraceptives",
+  "de": "Subventionierte Verhütungsmittel"
+ },
+ "ste_pill_subsidized_desc": {
+  "en": "The government is funding contraceptive distribution, at some fiscal cost.",
+  "de": "Die Regierung finanziert die Verteilung von Verhütungsmitteln – zu gewissen fiskalischen Kosten."
+ },
+ "ste_pride_celebrated": {
+  "en": "Pride Celebrated",
+  "de": "Pride gefeiert"
+ },
+ "ste_pride_celebrated_desc": {
+  "en": "Government support for LGBTQ+ rights is boosting social [concept_power_bloc_cohesion] and attracting talent.",
+  "de": "Die staatliche Unterstützung von LGBTQ+-Rechten stärkt den sozialen [concept_power_bloc_cohesion] und zieht Talente an."
+ },
+ "ste_pride_suppressed": {
+  "en": "Pride Suppressed",
+  "de": "Pride unterdrückt"
+ },
+ "ste_pride_suppressed_desc": {
+  "en": "The crackdown on LGBTQ+ demonstrations is generating anger and resentment.",
+  "de": "Das harte Vorgehen gegen LGBTQ+-Demonstrationen erzeugt Wut und Groll."
+ },
+ "ste_privacy_preserved": {
+  "en": "Privacy Protected",
+  "de": "Privatsphäre geschützt"
+ },
+ "ste_privacy_preserved_desc": {
+  "en": "Civil liberties were protected even in the face of security threats.",
+  "de": "Die Bürgerrechte wurden selbst angesichts von Sicherheitsbedrohungen geschützt."
+ },
+ "ste_reactor_leak_audit_desc": {
+  "en": "A thorough safety audit of nuclear facilities has identified and corrected potential hazards before they could cause harm, boosting electricity output and public confidence.",
+  "de": "Eine gründliche Sicherheitsprüfung der Kernkraftanlagen hat mögliche Gefahren erkannt und behoben, bevor sie Schaden anrichten konnten, und steigert damit die Stromproduktion und das öffentliche Vertrauen."
+ },
+ "ste_reactor_leak_contained_desc": {
+  "en": "A nuclear reactor leak was handled transparently, maintaining public trust.",
+  "de": "Ein Leck an einem Kernreaktor wurde transparent behandelt, wodurch das Vertrauen der Öffentlichkeit erhalten blieb."
+ },
+ "ste_reactor_leak_coverup_desc": {
+  "en": "The government minimized reports of a nuclear leak, undermining public trust.",
+  "de": "Die Regierung spielte Berichte über ein Atomleck herunter und untergrub damit das Vertrauen der Öffentlichkeit."
+ },
+ "ste_reactor_leak_shutdown_desc": {
+  "en": "All nuclear reactors were shut down as a precaution, reducing power output.",
+  "de": "Alle Kernreaktoren wurden vorsorglich abgeschaltet, was die Stromproduktion verringert."
+ },
+ "ste_sexual_revolution_backlash_desc": {
+  "en": "The government has launched a campaign to reinforce traditional values.",
+  "de": "Die Regierung hat eine Kampagne zur Stärkung traditioneller Werte gestartet."
+ },
+ "ste_sexual_revolution_embraced_desc": {
+  "en": "Traditional social norms are being swept aside in favor of personal freedom and experimentation.",
+  "de": "Traditionelle gesellschaftliche Normen werden zugunsten persönlicher Freiheit und Experimentierfreude beiseitegefegt."
+ },
+ "ste_space_colony_international_desc": {
+  "en": "A cooperative settlement beyond Earth strengthens international bonds.",
+  "de": "Eine gemeinschaftlich betriebene Siedlung jenseits der Erde stärkt die internationalen Bindungen."
+ },
+ "ste_space_colony_national_desc": {
+  "en": "Our nation's flag flies on another world, a source of immense [concept_prestige].",
+  "de": "Die Flagge unserer Nation weht auf einer anderen Welt – eine Quelle immensen [concept_prestige]."
+ },
+ "ste_space_gov_autonomy_desc": {
+  "en": "Space colonies have been granted self-governance.",
+  "de": "Den Weltraumkolonien wurde Selbstverwaltung gewährt."
+ },
+ "ste_space_gov_direct_desc": {
+  "en": "Space colonies remain under direct administration from Earth.",
+  "de": "Die Weltraumkolonien bleiben unter direkter Verwaltung von der Erde aus."
+ },
+ "ste_synthetic_crops_adopt_desc": {
+  "en": "Laboratory-grown food is revolutionizing agriculture and the food industry.",
+  "de": "Im Labor gezüchtete Nahrungsmittel revolutionieren die Landwirtschaft und die Lebensmittelindustrie."
+ },
+ "ste_synthetic_crops_ban_desc": {
+  "en": "Synthetic food production has been banned to protect traditional farming.",
+  "de": "Die Produktion synthetischer Nahrungsmittel wurde verboten, um die traditionelle Landwirtschaft zu schützen."
+ },
+ "ste_terror_intelligence_reform_desc": {
+  "en": "A reformed intelligence service works smarter, not harder.",
+  "de": "Ein reformierter Geheimdienst arbeitet klüger, nicht härter."
+ },
+ "ste_terror_security_state_desc": {
+  "en": "The security apparatus has been massively expanded in response to terrorism.",
+  "de": "Der Sicherheitsapparat wurde als Reaktion auf den Terrorismus massiv ausgebaut."
+ },
+ "ste_terror_unity_resilience_desc": {
+  "en": "The nation united in the face of terror, strengthening social bonds.",
+  "de": "Die Nation hat sich angesichts des Terrors vereint und die gesellschaftlichen Bindungen gestärkt."
+ },
+ "ste_women_workforce": {
+  "en": "Women’s Integration",
+  "de": "Integration der Frauen"
+ },
+ "ste_women_workforce_blocked_desc": {
+  "en": "The government maintains traditional gender roles, sacrificing some innovation for social stability.",
+  "de": "Die Regierung hält an traditionellen Geschlechterrollen fest und opfert etwas Innovation für soziale Stabilität."
+ },
+ "ste_women_workforce_desc": {
+  "en": "Women are entering the [concept_workforce] in unprecedented numbers, boosting innovation and productivity.",
+  "de": "Frauen treten in beispielloser Zahl in die [concept_workforce] ein und steigern damit Innovation und Produktivität."
+ },
+ "summit_attendee_modifier": {
+  "en": "Summit Attendee",
+  "de": "Gipfelteilnehmer"
+ },
+ "summit_attendee_modifier_desc": {
+  "en": "Our delegation is attending an international summit, networking with world leaders and advancing our interests.",
+  "de": "Unsere Delegation nimmt an einem internationalen Gipfeltreffen teil, knüpft Kontakte zu Staats- und Regierungschefs und vertritt unsere Interessen."
+ },
+ "summit_boycott_modifier": {
+  "en": "Summit Boycotted",
+  "de": "Gipfel boykottiert"
+ },
+ "summit_boycott_modifier_desc": {
+  "en": "Our boycott of the international summit has damaged our diplomatic reputation but preserved our domestic authority.",
+  "de": "Unser Boykott des internationalen Gipfeltreffens hat unserem diplomatischen Ansehen geschadet, aber unsere innenpolitische Autorität bewahrt."
+ },
+ "summit_host_modifier": {
+  "en": "International Summit Host",
+  "de": "Gastgeber des internationalen Gipfels"
+ },
+ "summit_host_modifier_desc": {
+  "en": "Our nation is hosting an international summit, showcasing our diplomatic leadership and gaining [concept_prestige] on the world stage.",
+  "de": "Unsere Nation ist Gastgeberin eines internationalen Gipfeltreffens, stellt damit unsere diplomatische Führungsrolle heraus und gewinnt [concept_prestige] auf der Weltbühne."
+ },
+ "superpower_aligned_modifier": {
+  "en": "Superpower Aligned",
+  "de": "An Supermacht angelehnt"
+ },
+ "superpower_aligned_modifier_desc": {
+  "en": "Alignment with a superpower provides economic and military support, but at the cost of diplomatic independence.",
+  "de": "Die Anlehnung an eine Supermacht bringt wirtschaftliche und militärische Unterstützung, jedoch auf Kosten der diplomatischen Unabhängigkeit."
+ },
+ "surveillance_expanded_modifier": {
+  "en": "Surveillance Expanded",
+  "de": "Überwachung ausgeweitet"
+ },
+ "surveillance_expanded_modifier_desc": {
+  "en": "The surveillance apparatus has been expanded in response to security threats.",
+  "de": "Der Überwachungsapparat wurde als Reaktion auf Sicherheitsbedrohungen ausgeweitet."
+ },
+ "surveillance_massive_expansion_modifier_desc": {
+  "en": "A dramatic expansion of surveillance powers following cyberattacks has increased state authority at great civil liberty cost.",
+  "de": "Eine drastische Ausweitung der Überwachungsbefugnisse nach Cyberangriffen hat die staatliche Autorität auf hohe Kosten für die bürgerlichen Freiheiten gesteigert."
+ },
+ "swap_line": {
+  "en": "Swap Line",
+  "de": "Swap-Linie"
+ },
+ "swap_line_article_short_desc": {
+  "en": "[SOURCE_COUNTRY.GetNameNoFormatting]'s central bank backs [TARGET_COUNTRY.GetNameNoFormatting]'s: cheaper borrowing for [TARGET_COUNTRY.GetNameNoFormatting], a share of the risk for [SOURCE_COUNTRY.GetNameNoFormatting]",
+  "de": "Die Zentralbank [SOURCE_COUNTRY.GetAltNameNoFormatting('GEN')] steht hinter der Zentralbank [TARGET_COUNTRY.GetAltNameNoFormatting('GEN')]: günstigere Kredite für [TARGET_COUNTRY.GetAltNameNoFormatting('AKK')], ein Anteil am Risiko für [SOURCE_COUNTRY.GetAltNameNoFormatting('AKK')]"
+ },
+ "swap_line_desc": {
+  "en": "One central bank stands ready to lend its reserves to another's. The recipient borrows more cheaply and its currency is steadier; the provider carries part of the risk.",
+  "de": "Eine Zentralbank steht bereit, einer anderen ihre Reserven zu leihen. Der Empfänger leiht sich günstiger, und seine Währung wird stabiler; der Geber trägt einen Teil des Risikos."
+ },
+ "swap_line_effects_desc": {
+  "en": "#b Recipient:#!\\n• #G −1 percentage point#! of risk premium and #G +2#! Peg Confidence each month under a gold standard or currency peg. In a panic, borrowed gold drains at normal speed instead of double.\\n• During a financial crisis, borrows #v 0.1% of its GDP per month#! from the provider, up to an outstanding balance of #v 2% of GDP#!. War alone does not trigger borrowing.\\n• Repays #v 0.1% of GDP per month#! after the crisis, interest-free. #R Any balance is repaid in full when the line ends.#!\\n#b Provider:#! funds these loans; its risk premium rises by #v 1 percentage point × recipient GDP ÷ provider GDP#!.\\n#b Ends if:#! the provider loses its national bank, or either country declares war on or expels the other’s diplomats.",
+  "de": "#b Empfänger:#!\\n• #G −1 Prozentpunkt#! Risikoaufschlag und #G +2#! Bindungsvertrauen pro Monat unter einem Goldstandard oder einer Währungsbindung. In einer Panik fließt geliehenes Gold mit normaler statt doppelter Geschwindigkeit ab.\\n• Während einer Finanzkrise leiht er sich #v 0,1% seines BIP pro Monat#! vom Geber, bis zu einem ausstehenden Saldo von #v 2% des BIP#!. Krieg allein löst keine Kreditaufnahme aus.\\n• Zahlt nach der Krise #v 0,1% des BIP pro Monat#! zinsfrei zurück. #R Ein verbleibender Saldo wird bei Beendigung der Linie vollständig zurückgezahlt.#!\\n#b Geber:#! finanziert diese Kredite; sein Risikoaufschlag steigt um #v 1 Prozentpunkt × BIP des Empfängers ÷ BIP des Gebers#!.\\n#b Endet, wenn:#! der Geber seine Nationalbank verliert oder eines der beiden Länder dem anderen den Krieg erklärt oder dessen Diplomaten ausweist."
+ },
+ "tactical_nuke_aftermath": {
+  "en": "Tactical [concept_nuclear_strike] Aftermath",
+  "de": "Nachwirkungen eines taktischen [concept_nuclear_strike]"
+ },
+ "tactical_nuke_aftermath_desc": {
+  "en": "The aftermath of a tactical [concept_nuclear_strike].",
+  "de": "Die Nachwirkungen eines taktischen [concept_nuclear_strike]."
+ },
+ "te_authority_boost": {
+  "en": "Cabinet Authority Asserted",
+  "de": "Kabinettsautorität durchgesetzt"
+ },
+ "te_authority_drain": {
+  "en": "Cabinet Authority Eroded",
+  "de": "Kabinettsautorität geschwunden"
+ },
+ "te_construction_market_capacity_modifier_desc": {
+  "en": "Applies the effects of this construction-focused modifier.",
+  "de": "Wendet die Effekte dieses baubezogenen Modifikators an."
+ },
+ "te_construction_market_private_share_modifier_desc": {
+  "en": "Adjusts the share of construction handled by the private sector versus public investment.",
+  "de": "Passt den Anteil des Baus an, der vom privaten Sektor im Vergleich zu öffentlichen Investitionen übernommen wird."
+ },
+ "te_construction_market_site_desc": {
+  "en": "With the Free Market Construction game rule on, Construction Sites appear on their own wherever construction is under way and turn purchased [concept_construction] into construction points; nobody builds them. With the rule off, this is your construction sector: the government builds, expands and downsizes it, and each level provides construction points according to its production method.",
+  "de": "Ist die Spielregel Freie Marktbauwirtschaft aktiv, entstehen Baustellen von selbst überall dort, wo gebaut wird, und wandeln gekauften [concept_construction] in Baupunkte um; niemand errichtet sie. Ist die Regel deaktiviert, ist dies Ihr Bausektor: Die Regierung errichtet, erweitert und verkleinert ihn, und jede Stufe liefert je nach Produktionsmethode Baupunkte."
+ },
+ "te_direct_construction_base_modifier_desc": {
+  "en": "With the Free Market Construction game rule off, every country gets this construction on top of what its Construction Sites provide, so a country without any can still build them.",
+  "de": "Ist die Spielregel Freie Marktbauwirtschaft deaktiviert, erhält jedes Land diesen Bauwert zusätzlich zu dem, was seine Baustellen liefern, sodass auch ein Land ohne eigene noch bauen kann."
+ },
+ "te_ea_bailout_appeal_desc": {
+  "en": "We asked another government to rescue our banks, and the world watched us ask.",
+  "de": "Wir baten eine andere Regierung, unsere Banken zu retten, und die Welt sah uns dabei zu."
+ },
+ "te_ea_ir_agent_in_place_modifier_desc": {
+  "en": "An agent inside a rival's defence ministry is passing its weapons designs to our engineers.",
+  "de": "Ein Agent im Verteidigungsministerium eines Rivalen gibt dessen Waffenkonstruktionen an unsere Ingenieure weiter."
+ },
+ "te_ea_ir_election_meddling_modifier_desc": {
+  "en": "Diplomatic capital is going into a disinformation campaign in a rival's election.",
+  "de": "Diplomatisches Kapital fließt in eine Desinformationskampagne bei der Wahl eines Rivalen."
+ },
+ "te_ea_ir_military_buildup_modifier_desc": {
+  "en": "We are expanding our armed forces to outmatch a rival power, and paying for every division of it.",
+  "de": "Wir bauen unsere Streitkräfte aus, um einer rivalisierenden Macht überlegen zu sein, und bezahlen für jede einzelne Division."
+ },
+ "te_ea_ir_propaganda_offensive_modifier_desc": {
+  "en": "Our broadcasters and friendly foreign papers are running a coordinated campaign against a rival power's institutions.",
+  "de": "Unsere Sender und uns wohlgesinnte ausländische Zeitungen führen eine koordinierte Kampagne gegen die Institutionen einer rivalisierenden Macht."
+ },
+ "te_hist_since": {
+  "en": "#lore History available since [JournalEntry.GetCountry.MakeScope.ScriptValue('te_history_since_year')|0].[JournalEntry.GetCountry.MakeScope.ScriptValue('te_history_since_month')|0].#!",
+  "de": "#lore Geschichte verfügbar seit [JournalEntry.GetCountry.MakeScope.ScriptValue('te_history_since_year')|0].[JournalEntry.GetCountry.MakeScope.ScriptValue('te_history_since_month')|0].#!"
+ },
+ "te_legitimacy_boost": {
+  "en": "Popular Mandate Reinforced",
+  "de": "Volksmandat gestärkt"
+ },
+ "te_legitimacy_drain": {
+  "en": "Public Confidence Shaken",
+  "de": "Öffentliches Vertrauen erschüttert"
+ },
+ "te_map_mode_overlay_desc": {
+  "en": "Migration-attraction map-mode overlay. The displayed [concept_migration_pull] is being overridden to color the world map by the metric you chose in the Cartographic Survey.",
+  "de": "Kartenmodus-Overlay für Migrationsanziehung. Die angezeigte [concept_migration_pull] wird überschrieben, um die Weltkarte nach der in der Kartografischen Vermessung gewählten Kennzahl einzufärben."
+ },
+ "te_open_map_mode_survey_desc": {
+  "en": "Hijack the [concept_migration_pull] map mode to color the world map by an arbitrary metric.\\n\\n#b The game must be paused.#! Pick a metric, then switch to the #b Migration Attraction#! map mode to view it. Re-open this decision to pick #b Clear#! before switching to another metric. The overlay self-cleans within 5 in-game days of unpausing.",
+  "de": "Kapert den Kartenmodus [concept_migration_pull], um die Weltkarte nach einer beliebigen Kennzahl einzufärben.\\n\\n#b Das Spiel muss pausiert sein.#! Wählen Sie eine Kennzahl und wechseln Sie dann in den Kartenmodus #b Migrationsanziehung#!, um sie anzuzeigen. Öffnen Sie diese Entscheidung erneut, um #b Löschen#! zu wählen, bevor Sie zu einer anderen Kennzahl wechseln. Das Overlay setzt sich innerhalb von 5 Spieltagen nach dem Fortsetzen von selbst zurück."
+ },
+ "tech_metals": {
+  "en": "Tech-Critical Metals",
+  "de": "Technologiekritische Metalle"
+ },
+ "telecommunications": {
+  "en": "Telecommunications",
+  "de": "Telekommunikation"
+ },
+ "terror_crackdown_modifier": {
+  "en": "Security Crackdown",
+  "de": "Hartes Durchgreifen"
+ },
+ "terror_crackdown_modifier_desc": {
+  "en": "In response to a devastating attack, the government has expanded police powers and tightened security across the nation.",
+  "de": "Als Reaktion auf einen verheerenden Anschlag hat die Regierung die Polizeibefugnisse ausgeweitet und die Sicherheitsmaßnahmen landesweit verschärft."
+ },
+ "terror_preempted_modifier": {
+  "en": "Terrorist Plot Preempted",
+  "de": "Terroranschlag vereitelt"
+ },
+ "terror_preempted_modifier_desc": {
+  "en": "Intelligence services have successfully preempted a terrorist plot before it could be carried out, earning national [concept_prestige] and strengthening governmental authority.",
+  "de": "Die Geheimdienste haben einen Terroranschlag erfolgreich vereitelt, bevor er ausgeführt werden konnte, was nationales [concept_prestige] einbringt und die Autorität der Regierung stärkt."
+ },
+ "terror_resilience_modifier": {
+  "en": "National Resilience",
+  "de": "Nationale Widerstandskraft"
+ },
+ "terror_resilience_modifier_desc": {
+  "en": "The nation has rallied together in defiance after a terrorist attack, strengthening social [concept_power_bloc_cohesion].",
+  "de": "Die Nation hat sich nach einem Terroranschlag trotzig zusammengeschlossen und den sozialen [concept_power_bloc_cohesion] gestärkt."
+ },
+ "terror_surveillance_modifier": {
+  "en": "Expanded Surveillance",
+  "de": "Ausgeweitete Überwachung"
+ },
+ "terror_surveillance_modifier_desc": {
+  "en": "A comprehensive surveillance program has been enacted to prevent future attacks, at the cost of civil liberties.",
+  "de": "Ein umfassendes Überwachungsprogramm wurde eingeführt, um künftige Anschläge zu verhindern – auf Kosten der bürgerlichen Freiheiten."
+ },
+ "too_much_private_construction_desc": {
+  "en": "Appears when investors have more than 500 levels of [concept_private_construction] queued and the [concept_investment_pool] takes in more than it spends. Each project may then absorb more construction a week, so the pool's income gets spent, at the cost of construction efficiency. Checked every year: it ends once 500 projects at normal speed could spend the pool's income, or the private queue is empty, unless Overinvestment is in force.",
+  "de": "Erscheint, wenn Investoren mehr als 500 Stufen [concept_private_construction] in der Warteschlange haben und der [concept_investment_pool] mehr einnimmt, als er ausgibt. Jedes Projekt kann dann pro Woche mehr Bau aufnehmen, sodass das Einkommen des Fonds ausgegeben wird – auf Kosten der Baueffizienz. Wird jährlich geprüft: Der Effekt endet, sobald 500 Projekte bei normaler Geschwindigkeit das Einkommen des Fonds ausgeben könnten, oder sobald die private Warteschlange leer ist, sofern nicht Überinvestition gilt."
+ },
+ "tourism": {
+  "en": "Tourism",
+  "de": "Tourismus"
+ },
+ "tourism_output": {
+  "en": "Tourism Output",
+  "de": "Tourismusertrag"
+ },
+ "tourism_throughput": {
+  "en": "Tourism Throughput",
+  "de": "Tourismusdurchsatz"
+ },
+ "trade_embargo_imposed_modifier_desc": {
+  "en": "We have imposed trade restrictions against a rival power, exerting economic pressure but at some cost to our own commerce.",
+  "de": "Wir haben Handelsbeschränkungen gegen eine rivalisierende Macht verhängt, was wirtschaftlichen Druck ausübt, aber unseren eigenen Handel etwas kostet."
+ },
+ "trade_embargo_suffered_modifier_desc": {
+  "en": "A rival power has imposed trade restrictions against us, disrupting our commerce.",
+  "de": "Eine rivalisierende Macht hat Handelsbeschränkungen gegen uns verhängt und stört damit unseren Handel."
+ },
+ "training": {
+  "en": "Training",
+  "de": "Ausbildung"
+ },
+ "trait_combined_arms_air_superiority_desc": {
+  "en": "Aircraft provide close air support, battlefield interdiction, and real-time intelligence, dramatically increasing the lethality of ground forces.",
+  "de": "Flugzeuge bieten Nahunterstützung aus der Luft, Angriffe auf feindliche Nachschublinien und Aufklärung in Echtzeit, was die Schlagkraft der Bodentruppen drastisch erhöht."
+ },
+ "trait_combined_arms_armor_desc": {
+  "en": "Armored units form a resilient spearhead for combined operations, breaking through enemy lines while shielding lighter units.",
+  "de": "Gepanzerte Einheiten bilden eine widerstandsfähige Speerspitze für kombinierte Operationen, durchbrechen feindliche Linien und schirmen dabei leichtere Einheiten ab."
+ },
+ "trait_combined_arms_fire_support_desc": {
+  "en": "Artillery provides suppressive fire and preparatory bombardment, softening enemy positions for other combat arms to exploit.",
+  "de": "Artillerie liefert Sperrfeuer und vorbereitendes Bombardement, das feindliche Stellungen aufweicht, damit andere Waffengattungen sie ausnutzen können."
+ },
+ "trait_combined_arms_full_spectrum_desc": {
+  "en": "Complete integration of infantry, artillery, cavalry, armor, and air power enables synchronized multi-domain operations that overwhelm any opposition.",
+  "de": "Die vollständige Integration von Infanterie, Artillerie, Kavallerie, Panzertruppen und Luftstreitkräften ermöglicht synchronisierte Operationen über mehrere Domänen hinweg, die jeden Widerstand überwältigen."
+ },
+ "trait_combined_arms_infantry_screen_desc": {
+  "en": "Infantry units provide protective screening for other combat arms, absorbing enemy attacks and securing flanks across the formation.",
+  "de": "Infanterieeinheiten bieten Schutz für andere Waffengattungen, fangen feindliche Angriffe ab und sichern die Flanken der gesamten Formation."
+ },
+ "trait_combined_arms_recon_desc": {
+  "en": "Cavalry and reconnaissance units scout ahead of the main force, finding openings that let the general press one more offensive battle at a time.",
+  "de": "Kavallerie- und Aufklärungseinheiten spähen der Hauptstreitmacht voraus und finden Lücken, die es dem General erlauben, eine Offensivschlacht nach der anderen zu führen."
+ },
+ "trait_jadc2_desc": {
+  "en": "This commander has mastered Joint All-Domain Command and Control, dramatically increasing command capacity.",
+  "de": "Dieser Befehlshaber beherrscht das Joint All-Domain Command and Control und steigert damit die Kommandokapazität drastisch."
+ },
+ "trait_military_grade_cybersecurity_desc": {
+  "en": "This commander is trained in military-grade cybersecurity operations, significantly increasing command capacity.",
+  "de": "Dieser Befehlshaber ist in Cybersicherheitsoperationen auf militärischem Niveau geschult, was die Kommandokapazität erheblich steigert."
+ },
+ "trait_predictive_logistics": {
+  "en": "Predictive Logistics",
+  "de": "Vorausschauende Logistik"
+ },
+ "trait_predictive_logistics_desc": {
+  "en": "This commander uses predictive logistics systems to enhance supply chain management and increase command capacity.",
+  "de": "Dieser Befehlshaber nutzt Systeme der vorausschauenden Logistik, um die Versorgungskette zu verbessern und die Kommandokapazität zu steigern."
+ },
+ "trait_swarm_technology": {
+  "en": "Swarm Technology Commander",
+  "de": "Befehlshaber der Schwarmtechnologie"
+ },
+ "trait_swarm_technology_desc": {
+  "en": "This commander has mastered autonomous swarm technology, vastly expanding effective command capacity.",
+  "de": "Dieser Befehlshaber beherrscht autonome Schwarmtechnologie und erweitert damit die effektive Kommandokapazität erheblich."
+ },
+ "tropical_disease_public_health_modifier_desc": {
+  "en": "A coordinated public health response has mobilized medical resources against climate-driven disease outbreaks, containing mortality while straining the [concept_sol].",
+  "de": "Eine koordinierte Reaktion des Gesundheitswesens hat medizinische Ressourcen gegen klimabedingte Krankheitsausbrüche mobilisiert, wodurch die Sterblichkeit eingedämmt, aber der [concept_sol] belastet wird."
+ },
+ "tropical_disease_research_modifier_desc": {
+  "en": "Medical researchers are studying climate-driven diseases, boosting technological advancement but at the cost of resources and ongoing mortality.",
+  "de": "Medizinische Forscher untersuchen klimabedingte Krankheiten, was den technologischen Fortschritt fördert, jedoch auf Kosten von Ressourcen und anhaltender Sterblichkeit."
+ },
+ "tropical_disease_spread_modifier_desc": {
+  "en": "Tropical diseases are spreading into new regions as rising temperatures create habitats for disease-carrying insects. Mortality is rising and the population is suffering.",
+  "de": "Tropenkrankheiten breiten sich in neue Regionen aus, da steigende Temperaturen Lebensräume für krankheitsübertragende Insekten schaffen. Die Sterblichkeit steigt, und die Bevölkerung leidet."
+ },
+ "ubi_expansion_modifier": {
+  "en": "UBI Expansion",
+  "de": "UBI-Ausweitung"
+ },
+ "ubi_expansion_modifier_desc": {
+  "en": "UBI expansion reduces social tension but costs the treasury.",
+  "de": "Die Ausweitung des UBI verringert soziale Spannungen, kostet aber die Staatskasse."
+ },
+ "un_aid_received_modifier_desc": {
+  "en": "International humanitarian aid is flowing into the country, improving living conditions and reducing mortality.",
+  "de": "Internationale humanitäre Hilfe fließt in das Land und verbessert die Lebensbedingungen, während die Sterblichkeit sinkt."
+ },
+ "un_appeal_withheld_modifier_desc": {
+  "en": "This country was wronged and left the matter to others at the United Nations.",
+  "de": "Diesem Land wurde Unrecht getan, doch es überließ die Angelegenheit anderen bei den Vereinten Nationen."
+ },
+ "un_arms_control_participant_modifier_desc": {
+  "en": "This country participates in UN arms control agreements, reducing military [concept_devastation] and costs. The peace-loving framing has teeth: aggressive acts taken while a signatory generate more [concept_infamy] than they otherwise would.",
+  "de": "Dieses Land nimmt an UN-Rüstungskontrollabkommen teil, was militärische [concept_devastation] und Kosten verringert. Die friedliebende Haltung hat Konsequenzen: Aggressive Handlungen während der Mitgliedschaft erzeugen mehr [concept_infamy], als sie es sonst täten."
+ },
+ "un_authority_bar_desc": {
+  "en": "UN Authority (0–100): moving toward the target shown below",
+  "de": "UN-Autorität (0–100): bewegt sich auf das unten gezeigte Ziel zu"
+ },
+ "un_authority_crisis_modifier_desc": {
+  "en": "The United Nations is in crisis, and incremental reforms are underway.",
+  "de": "Die Vereinten Nationen befinden sich in einer Krise, und schrittweise Reformen sind im Gange."
+ },
+ "un_authority_progress_desc": {
+  "en": "[concept_un_authority] represents the [concept_legitimacy] and enforcement power of the United Nations. Higher authority means resolutions carry more weight and members gain greater benefits.",
+  "de": "Die [concept_un_authority] steht für die [concept_legitimacy] und Durchsetzungskraft der Vereinten Nationen. Höhere Autorität bedeutet, dass Resolutionen mehr Gewicht haben und Mitglieder größere Vorteile erhalten."
+ },
+ "un_authority_restored_modifier_desc": {
+  "en": "This country has successfully rallied support to restore the United Nations' authority and [concept_legitimacy].",
+  "de": "Dieses Land hat erfolgreich Unterstützung mobilisiert, um die Autorität und [concept_legitimacy] der Vereinten Nationen wiederherzustellen."
+ },
+ "un_bloc_vacuum_modifier_desc": {
+  "en": "The United Nations is moribund or gone. Power blocs fill the vacuum it leaves: their members cling closer and their leaders' word carries further.",
+  "de": "Die Vereinten Nationen liegen im Sterben oder existieren nicht mehr. Machtblöcke füllen das entstandene Vakuum: Ihre Mitglieder rücken enger zusammen, und das Wort ihrer Anführer trägt weiter."
+ },
+ "un_champion_order_cost_desc": {
+  "en": "Actively championing the United Nations international order. Ongoing cost to authority and influence generation.",
+  "de": "Setzt sich aktiv für die internationale Ordnung der Vereinten Nationen ein. Laufende Kosten bei Autorität und Einflussgewinn."
+ },
+ "un_climate_binding_modifier_desc": {
+  "en": "This country has accepted binding emissions targets under the UN Climate Resolution, gaining diplomatic [concept_prestige] at an economic cost.",
+  "de": "Dieses Land hat verbindliche Emissionsziele im Rahmen der UN-Klimaresolution akzeptiert und gewinnt dafür diplomatisches [concept_prestige] zu wirtschaftlichen Kosten."
+ },
+ "un_climate_refusal_modifier_desc": {
+  "en": "This country has refused to accept binding climate targets, prioritizing economic growth over environmental commitments.",
+  "de": "Dieses Land hat sich geweigert, verbindliche Klimaziele zu akzeptieren, und stellt Wirtschaftswachstum über Umweltverpflichtungen."
+ },
+ "un_coexistence_modifier": {
+  "en": "Peaceful Coexistence Advocate",
+  "de": "Befürworter friedlicher Koexistenz"
+ },
+ "un_coexistence_modifier_desc": {
+  "en": "This country has called for peaceful coexistence between rival ideological blocs at the United Nations.",
+  "de": "Dieses Land hat bei den Vereinten Nationen zu friedlicher Koexistenz zwischen rivalisierenden ideologischen Blöcken aufgerufen."
+ },
+ "un_colonial_defender_modifier_desc": {
+  "en": "This country is defending colonial development programs at the UN, strengthening domestic authority but losing international reputation.",
+  "de": "Dieses Land verteidigt koloniale Entwicklungsprogramme bei der UN, was die innenpolitische Autorität stärkt, aber internationales Ansehen kostet."
+ },
+ "un_condemnation_leader_modifier_desc": {
+  "en": "This country led a condemnation resolution at the UN General Assembly, enhancing its diplomatic reputation. Having claimed the moral high ground, its own aggressive acts are read more harshly — [concept_infamy] generation rises.",
+  "de": "Dieses Land hat eine Verurteilungsresolution in der UN-Generalversammlung angeführt und damit sein diplomatisches Ansehen gesteigert. Da es die moralische Überlegenheit für sich beansprucht hat, werden eigene aggressive Handlungen strenger bewertet — die Erzeugung von [concept_infamy] steigt."
+ },
+ "un_condemned_isolation_modifier_desc": {
+  "en": "A strong United Nations has condemned this country. Other countries are less willing to sign treaties with it or to back it in a diplomatic play.",
+  "de": "Starke Vereinte Nationen haben dieses Land verurteilt. Andere Länder sind weniger bereit, Verträge mit ihm zu schließen oder es bei einem diplomatischen Manöver zu unterstützen."
+ },
+ "un_condemned_modifier": {
+  "en": "Condemned by UN General Assembly",
+  "de": "Von der UN-Generalversammlung verurteilt"
+ },
+ "un_condemned_modifier_desc": {
+  "en": "This country has been formally condemned by the UN General Assembly, severely damaging its international reputation and diplomatic standing.",
+  "de": "Dieses Land wurde von der UN-Generalversammlung förmlich verurteilt, was seinem internationalen Ansehen und diplomatischen Stand schwer schadet."
+ },
+ "un_condemned_restraint_modifier_desc": {
+  "en": "A supranational United Nations has condemned this country. Its diplomatic plays are hemmed in, and every act of aggression costs it more.",
+  "de": "Supranationale Vereinte Nationen haben dieses Land verurteilt. Seine diplomatischen Manöver sind eingeschränkt, und jede aggressive Handlung kostet es mehr."
+ },
+ "un_conference_opposed_modifier_desc": {
+  "en": "This country wrecked the founding conference of a new United Nations. The world remembers.",
+  "de": "Dieses Land hat die Gründungskonferenz einer neuen Organisation der Vereinten Nationen zum Scheitern gebracht. Die Welt erinnert sich."
+ },
+ "un_court_compliance_modifier_desc": {
+  "en": "This country has accepted an International Court of Justice ruling, boosting its standing in the international legal order. Having acknowledged the court's authority, any subsequent aggression is judged more sharply — [concept_infamy] generation rises.",
+  "de": "Dieses Land hat ein Urteil des Internationalen Gerichtshofs akzeptiert und damit sein Ansehen in der internationalen Rechtsordnung gestärkt. Da es die Autorität des Gerichts anerkannt hat, wird jede weitere Aggression schärfer bewertet — die Erzeugung von [concept_infamy] steigt."
+ },
+ "un_court_contested_modifier_desc": {
+  "en": "This country is contesting the jurisdiction of the International Court of Justice.",
+  "de": "Dieses Land bestreitet die Zuständigkeit des Internationalen Gerichtshofs."
+ },
+ "un_court_defiance_modifier_desc": {
+  "en": "This country has openly defied an international court — a World Court ruling or an International Criminal Court indictment — severely damaging its international reputation.",
+  "de": "Dieses Land hat sich offen über ein internationales Gericht hinweggesetzt — ein Urteil des Weltgerichtshofs oder eine Anklage des Internationalen Strafgerichtshofs —, was seinem internationalen Ansehen schwer schadet."
+ },
+ "un_crisis_abandon_modifier_desc": {
+  "en": "This country walked away from the United Nations in its crisis, and spends its influence elsewhere.",
+  "de": "Dieses Land hat sich in ihrer Krise von den Vereinten Nationen abgewandt und setzt seinen Einfluss anderswo ein."
+ },
+ "un_crisis_rescue_cost_desc": {
+  "en": "This country spent its diplomatic capital standing by the United Nations in its crisis.",
+  "de": "Dieses Land hat sein diplomatisches Kapital eingesetzt, um in ihrer Krise zu den Vereinten Nationen zu stehen."
+ },
+ "un_decolonization_champion_modifier_desc": {
+  "en": "This country is leading the charge for [concept_decolonization_system] at the United Nations, gaining [concept_prestige] among newly independent nations. Championing self-determination cuts both ways: its own conquests are read as hypocrisy and generate more [concept_infamy].",
+  "de": "Dieses Land führt bei den Vereinten Nationen den Vorstoß für [concept_decolonization_system] an und gewinnt dafür [concept_prestige] unter neu unabhängigen Staaten. Der Einsatz für Selbstbestimmung ist ein zweischneidiges Schwert: Eigene Eroberungen gelten als Heuchelei und erzeugen mehr [concept_infamy]."
+ },
+ "un_development_contributor_cost_desc": {
+  "en": "Ongoing financial costs of contributing to UN international development programs.",
+  "de": "Laufende finanzielle Kosten für Beiträge zu internationalen UN-Entwicklungsprogrammen."
+ },
+ "un_development_contributor_modifier_desc": {
+  "en": "This country contributes to UN development programs, boosting diplomatic reputation and [concept_prestige] at a bureaucratic cost.",
+  "de": "Dieses Land trägt zu UN-Entwicklungsprogrammen bei und steigert damit sein diplomatisches Ansehen und [concept_prestige] zu bürokratischen Kosten."
+ },
+ "un_dissolution_vacuum_modifier_desc": {
+  "en": "The United Nations has dissolved. In the scramble that follows, the blocs are the only order left.",
+  "de": "Die Vereinten Nationen haben sich aufgelöst. Im folgenden Gerangel sind die Blöcke die einzige verbliebene Ordnung."
+ },
+ "un_dues_modifier": {
+  "en": "UN Dues",
+  "de": "UN-Beiträge"
+ },
+ "un_dues_modifier_desc": {
+  "en": "This country's assessed contribution to the United Nations: a share of its GDP set by the UN's tier.",
+  "de": "Der festgesetzte Beitrag dieses Landes zu den Vereinten Nationen: ein Anteil seines BIP, der von der UN-Stufe bestimmt wird."
+ },
+ "un_expelled_cooldown": {
+  "en": "Expelled from the UN",
+  "de": "Aus der UN ausgeschlossen"
+ },
+ "un_expelled_cooldown_desc": {
+  "en": "This country has been expelled from the United Nations and cannot rejoin for some time.",
+  "de": "Dieses Land wurde aus den Vereinten Nationen ausgeschlossen und kann für einige Zeit nicht wieder beitreten."
+ },
+ "un_founding_cost_modifier_desc": {
+  "en": "The costs of establishing the United Nations - organizing the charter conference, building institutional [concept_infrastructure], and staffing the new organization.",
+  "de": "Die Kosten für die Gründung der Vereinten Nationen – die Organisation der Gründungskonferenz, der Aufbau institutioneller [concept_infrastructure] und die Besetzung der neuen Organisation mit Personal."
+ },
+ "un_founding_member_modifier_desc": {
+  "en": "As a founding member of the United Nations, this country enjoys enhanced [concept_prestige] and diplomatic influence.",
+  "de": "Als Gründungsmitglied der Vereinten Nationen genießt dieses Land gesteigertes [concept_prestige] und diplomatischen Einfluss."
+ },
+ "un_ga_resolution_modifier_desc": {
+  "en": "This country recently participated in a UN General Assembly resolution.",
+  "de": "Dieses Land hat sich kürzlich an einer Resolution der UN-Generalversammlung beteiligt."
+ },
+ "un_headquarters_modifier": {
+  "en": "UN Headquarters Host",
+  "de": "Gastgeber des UN-Hauptsitzes"
+ },
+ "un_headquarters_modifier_desc": {
+  "en": "This country hosts the United Nations Headquarters, serving as the center of international diplomacy and gaining significant [concept_prestige] and influence.",
+  "de": "Dieses Land beherbergt den Hauptsitz der Vereinten Nationen, dient als Zentrum der internationalen Diplomatie und gewinnt erhebliches [concept_prestige] und Einfluss."
+ },
+ "un_heritage_program_modifier_desc": {
+  "en": "This country is fully participating in the UNESCO world heritage preservation program.",
+  "de": "Dieses Land beteiligt sich uneingeschränkt am UNESCO-Programm zum Erhalt des Weltkulturerbes."
+ },
+ "un_heritage_refusal_modifier_desc": {
+  "en": "This country refused to table a convention protecting the world's cultural and natural heritage, calling culture a domestic matter.",
+  "de": "Dieses Land hat sich geweigert, ein Abkommen zum Schutz des Kultur- und Naturerbes der Welt vorzulegen, und Kultur zur inneren Angelegenheit erklärt."
+ },
+ "un_heritage_token_modifier_desc": {
+  "en": "This country has made a modest contribution to UNESCO heritage preservation.",
+  "de": "Dieses Land hat einen bescheidenen Beitrag zum Erhalt des UNESCO-Erbes geleistet."
+ },
+ "un_high_authority_infamy_modifier_desc": {
+  "en": "The UN's authority means that aggressive acts carry greater international consequences. [concept_infamy] generation is increased.",
+  "de": "Die Autorität der UN sorgt dafür, dass aggressive Handlungen größere internationale Folgen haben. Die Erzeugung von [concept_infamy] ist erhöht."
+ },
+ "un_human_rights_champion_modifier_desc": {
+  "en": "This country is actively championing human rights at the United Nations.",
+  "de": "Dieses Land setzt sich bei den Vereinten Nationen aktiv für die Menschenrechte ein."
+ },
+ "un_human_rights_declaration_modifier_desc": {
+  "en": "Having ratified the Universal Declaration of Human Rights, this country gains [concept_prestige] and institutional reform momentum. Running a coercive resettlement program brings #N Violating the Declaration#!.",
+  "de": "Nachdem es die Allgemeine Erklärung der Menschenrechte ratifiziert hat, gewinnt dieses Land [concept_prestige] und institutionellen Reformschwung. Ein Zwangsumsiedlungsprogramm bringt #N Verstoß gegen die Erklärung#!."
+ },
+ "un_human_rights_refusal_modifier_desc": {
+  "en": "This country has refused to sign the Universal Declaration of Human Rights, strengthening domestic authority but damaging its international image.",
+  "de": "Dieses Land hat sich geweigert, die Allgemeine Erklärung der Menschenrechte zu unterzeichnen, was die innenpolitische Autorität stärkt, aber seinem internationalen Ansehen schadet."
+ },
+ "un_human_rights_reservations_modifier_desc": {
+  "en": "This country has signed the Universal Declaration of Human Rights with reservations on certain provisions.",
+  "de": "Dieses Land hat die Allgemeine Erklärung der Menschenrechte mit Vorbehalten zu bestimmten Bestimmungen unterzeichnet."
+ },
+ "un_humanitarian_aid_cost_desc": {
+  "en": "Ongoing financial costs of providing humanitarian assistance through the UN.",
+  "de": "Laufende finanzielle Kosten für humanitäre Hilfe über die UN."
+ },
+ "un_humanitarian_aid_modifier_desc": {
+  "en": "This country has mounted a major humanitarian relief effort through the United Nations.",
+  "de": "Dieses Land hat über die Vereinten Nationen eine groß angelegte humanitäre Hilfsaktion gestartet."
+ },
+ "un_humanitarian_aid_received_modifier_desc": {
+  "en": "A foreign power has provided major humanitarian aid through the United Nations, improving [concept_food_security] and reducing mortality.",
+  "de": "Eine fremde Macht hat über die Vereinten Nationen umfangreiche humanitäre Hilfe geleistet, was die [concept_food_security] verbessert und die Sterblichkeit senkt."
+ },
+ "un_humanitarian_token_cost_desc": {
+  "en": "The cost of this country's token contribution to a UN aid appeal.",
+  "de": "Die Kosten für den symbolischen Beitrag dieses Landes zu einem UN-Hilfsappell."
+ },
+ "un_humanitarian_token_modifier_desc": {
+  "en": "This country has made a modest contribution to UN humanitarian relief.",
+  "de": "Dieses Land hat einen bescheidenen Beitrag zur humanitären Hilfe der UN geleistet."
+ },
+ "un_humanitarian_token_received_modifier_desc": {
+  "en": "A foreign power has provided a modest contribution to humanitarian relief.",
+  "de": "Eine fremde Macht hat einen bescheidenen Beitrag zur humanitären Hilfe geleistet."
+ },
+ "un_icc_member_modifier_desc": {
+  "en": "This country has ratified the Rome Statute and is a member of the International Criminal Court. Military accountability reduces aggression but increases war weariness.",
+  "de": "Dieses Land hat das Römische Statut ratifiziert und ist Mitglied des Internationalen Strafgerichtshofs. Militärische Rechenschaftspflicht verringert Aggression, erhöht aber die Kriegsmüdigkeit."
+ },
+ "un_icc_refusal_modifier_desc": {
+  "en": "This country rejected the Rome Statute establishing the International Criminal Court, drawing international censure.",
+  "de": "Dieses Land hat das Römische Statut zur Gründung des Internationalen Strafgerichtshofs abgelehnt und sich damit internationale Kritik zugezogen."
+ },
+ "un_ideological_champion_modifier_desc": {
+  "en": "This country has championed its political system at the United Nations, rallying allies and challenging rivals.",
+  "de": "Dieses Land hat sich bei den Vereinten Nationen für sein politisches System starkgemacht, Verbündete gesammelt und Rivalen herausgefordert."
+ },
+ "un_law_of_sea_modifier_desc": {
+  "en": "This country has ratified the Convention on the Law of the Sea, gaining maritime trade protections and international [concept_prestige] through cooperation.",
+  "de": "Dieses Land hat das Seerechtsübereinkommen ratifiziert und gewinnt dadurch Schutz für den Seehandel sowie internationales [concept_prestige] durch Kooperation."
+ },
+ "un_law_of_sea_refusal_modifier_desc": {
+  "en": "This country rejected the Convention on the Law of the Sea, attracting international criticism and increased tensions over maritime disputes.",
+  "de": "Dieses Land hat das Seerechtsübereinkommen abgelehnt und sich damit internationale Kritik sowie verstärkte Spannungen bei Seestreitigkeiten zugezogen."
+ },
+ "un_law_of_sea_reservations_modifier_desc": {
+  "en": "This country signed the Convention on the Law of the Sea with reservations on sovereignty, gaining partial benefits.",
+  "de": "Dieses Land hat das Seerechtsübereinkommen mit Vorbehalten zur Souveränität unterzeichnet und erhält dadurch teilweise Vorteile."
+ },
+ "un_loan_conditions_modifier_desc": {
+  "en": "The conditions attached to this country's emergency loan from the United Nations, dictated by its creditors.",
+  "de": "Die Auflagen, die an den Nothilfekredit dieses Landes von den Vereinten Nationen geknüpft sind und von seinen Gläubigern diktiert werden."
+ },
+ "un_loan_repayment_modifier_desc": {
+  "en": "This country is repaying an emergency loan from the United Nations: the loan and a tenth more, over five years.",
+  "de": "Dieses Land tilgt einen Nothilfekredit der Vereinten Nationen: den Kredit und ein Zehntel mehr, über fünf Jahre verteilt."
+ },
+ "un_lobby_against_action_action_notification_break_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] has stopped lobbying us on the resolution before the [concept_un_general_assembly].",
+  "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat aufgehört, bei uns zur Resolution vor der [concept_un_general_assembly] zu lobbyieren."
+ },
+ "un_lobby_against_action_action_notification_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] is lobbying us to vote against the resolution before the [concept_un_general_assembly].",
+  "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] versucht, uns dazu zu bewegen, gegen die Resolution vor der [concept_un_general_assembly] zu stimmen."
+ },
+ "un_lobby_against_action_desc": {
+  "en": "Send our delegation to press an AI member of the [concept_un_general_assembly] to vote against the resolution in session. Each full month the campaign runs moves the member's lean 3 points against, up to 15; campaigns on the same side stack to 20, and campaigns on opposite sides cancel out. It uses [concept_influence] while it runs, and ends when the member votes, when the resolution closes, or when we stop it, which also drops what it had gained.",
+  "de": "Schickt unsere Delegation, um ein KI-Mitglied der [concept_un_general_assembly] zu bedrängen, gegen die laufende Resolution zu stimmen. Jeder volle Monat der Kampagne verschiebt die Neigung des Mitglieds um 3 Punkte dagegen, bis zu 15; Kampagnen auf derselben Seite stapeln sich bis 20, und Kampagnen auf entgegengesetzten Seiten heben sich auf. Sie verbraucht [concept_influence], solange sie läuft, und endet, wenn das Mitglied abstimmt, wenn die Resolution schließt oder wenn wir sie beenden, wodurch auch der erzielte Effekt verlorengeht."
+ },
+ "un_lobby_for_action_action_notification_break_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] has stopped lobbying us on the resolution before the [concept_un_general_assembly].",
+  "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat aufgehört, bei uns zur Resolution vor der [concept_un_general_assembly] zu lobbyieren."
+ },
+ "un_lobby_for_action_action_notification_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] is lobbying us to vote in favour of the resolution before the [concept_un_general_assembly].",
+  "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] versucht, uns dazu zu bewegen, für die Resolution vor der [concept_un_general_assembly] zu stimmen."
+ },
+ "un_lobby_for_action_desc": {
+  "en": "Send our delegation to press an AI member of the [concept_un_general_assembly] to vote in favour of the resolution in session. Each full month the campaign runs moves the member's lean 3 points in favour, up to 15; campaigns on the same side stack to 20, and campaigns on opposite sides cancel out. It uses [concept_influence] while it runs, and ends when the member votes, when the resolution closes, or when we stop it, which also drops what it had gained.",
+  "de": "Schickt unsere Delegation, um ein KI-Mitglied der [concept_un_general_assembly] zu bedrängen, für die laufende Resolution zu stimmen. Jeder volle Monat der Kampagne verschiebt die Neigung des Mitglieds um 3 Punkte dafür, bis zu 15; Kampagnen auf derselben Seite stapeln sich bis 20, und Kampagnen auf entgegengesetzten Seiten heben sich auf. Sie verbraucht [concept_influence], solange sie läuft, und endet, wenn das Mitglied abstimmt, wenn die Resolution schließt oder wenn wir sie beenden, wodurch auch der erzielte Effekt verlorengeht."
+ },
+ "un_mandate_war_support_modifier_desc": {
+  "en": "This country holds a military mandate from a strong United Nations. A war the world has authorized keeps the nation behind it through losses and defeats.",
+  "de": "Dieses Land besitzt ein militärisches Mandat von starken Vereinten Nationen. Ein von der Welt autorisierter Krieg hält die Nation auch durch Verluste und Niederlagen hinter sich."
+ },
+ "un_member_modifier": {
+  "en": "UN Member State",
+  "de": "UN-Mitgliedstaat"
+ },
+ "un_member_modifier_desc": {
+  "en": "This country is a member of the United Nations. What membership brings is listed under UN Membership Privileges: a member whose representation is suspended draws them only while its overlord carries its seat.",
+  "de": "Dieses Land ist Mitglied der Vereinten Nationen. Was die Mitgliedschaft bringt, ist unter UN-Mitgliedschaftsprivilegien aufgeführt: Ein Mitglied, dessen Vertretung ausgesetzt ist, erhält sie nur, solange sein Oberherr seinen Sitz wahrnimmt."
+ },
+ "un_member_privileges_modifier_desc": {
+  "en": "What a seat in the United Nations brings. Drawn by every represented member, and by a member whose representation is suspended ([concept_un_suspended_representation]) while its overlord sits in the Assembly and pays its [concept_un_dues].",
+  "de": "Was ein Sitz bei den Vereinten Nationen bringt. Erhalten von jedem vertretenen Mitglied sowie von einem Mitglied, dessen Vertretung ausgesetzt ist ([concept_un_suspended_representation]), solange sein Oberherr in der Versammlung sitzt und seine [concept_un_dues] zahlt."
+ },
+ "un_membership_benefits_modifier_desc": {
+  "en": "Scaled benefits from UN membership. Higher [concept_un_authority] means greater rewards for cooperation.",
+  "de": "Gestaffelte Vorteile aus der UN-Mitgliedschaft. Höhere [concept_un_authority] bedeutet größere Belohnungen für Kooperation."
+ },
+ "un_mission_aid_state_modifier_desc": {
+  "en": "A UN humanitarian aid mission is working in this state. Its strength follows the UN's enforcement, its budget and its donors.",
+  "de": "Eine humanitäre Hilfsmission der UN ist in diesem Staat tätig. Ihre Stärke richtet sich nach der Durchsetzungskraft der UN, ihrem Budget und ihren Geldgebern."
+ },
+ "un_mission_peacekeeping_state_modifier_desc": {
+  "en": "A UN peacekeeping mission is deployed in this state. Its strength follows the UN's enforcement, its budget and its contributors.",
+  "de": "Eine UN-Friedenssicherungsmission ist in diesem Staat stationiert. Ihre Stärke richtet sich nach der Durchsetzungskraft der UN, ihrem Budget und ihren Truppenstellern."
+ },
+ "un_mission_service_cost_desc": {
+  "en": "The cost of the contingents this country has sent to UN missions of its own accord: a quarter of a percent of its GDP a year for each mission it pays to serve in.",
+  "de": "Die Kosten für die Kontingente, die dieses Land aus eigenem Antrieb zu UN-Missionen entsandt hat: ein Viertelprozent seines BIP pro Jahr für jede Mission, an der es sich beteiligt."
+ },
+ "un_mission_stabilisation_state_modifier_desc": {
+  "en": "A UN stabilisation mission is working in this state to end the collapse. Its strength follows the UN's enforcement, its budget and its contributors.",
+  "de": "Eine UN-Stabilisierungsmission ist in diesem Staat im Einsatz, um den Zusammenbruch zu beenden. Ihre Stärke richtet sich nach der Durchsetzungskraft der UN, ihrem Budget und ihren Truppenstellern."
+ },
+ "un_nonmember_pariah_modifier_desc": {
+  "en": "As the UN's authority grows, nations outside the international order face diplomatic isolation, reduced [concept_prestige], and diminished influence.",
+  "de": "Mit wachsender Autorität der UN sehen sich Nationen außerhalb der internationalen Ordnung diplomatischer Isolation, verringertem [concept_prestige] und schwindendem Einfluss gegenüber."
+ },
+ "un_nonmember_pariah_strong_modifier_desc": {
+  "en": "The United Nations is strong, and this country stands outside it: members trade with it less willingly and give it less leverage.",
+  "de": "Die Vereinten Nationen sind stark, und dieses Land steht außerhalb: Mitglieder handeln weniger bereitwillig mit ihm und räumen ihm weniger Einfluss ein."
+ },
+ "un_nonproliferation_modifier": {
+  "en": "Non-Proliferation Treaty Signatory",
+  "de": "Unterzeichner des Nichtverbreitungsvertrags"
+ },
+ "un_nonproliferation_modifier_desc": {
+  "en": "This country has signed the Nuclear Non-Proliferation Treaty, gaining diplomatic [concept_prestige] and supporting arms control. The peace-loving framing has teeth: aggressive acts taken while a signatory are read against the spirit of the treaty and generate more [concept_infamy].",
+  "de": "Dieses Land hat den Nuklearen Nichtverbreitungsvertrag unterzeichnet, gewinnt dadurch diplomatisches [concept_prestige] und unterstützt die Rüstungskontrolle. Die friedliebende Haltung hat Konsequenzen: Aggressive Handlungen während der Unterzeichnerschaft werden als Verstoß gegen den Geist des Vertrags gewertet und erzeugen mehr [concept_infamy]."
+ },
+ "un_nonproliferation_refusal_modifier_desc": {
+  "en": "This country has refused to sign the Nuclear Non-Proliferation Treaty, prioritizing its nuclear deterrent over diplomatic acceptance.",
+  "de": "Dieses Land hat sich geweigert, den Nuklearen Nichtverbreitungsvertrag zu unterzeichnen, und stellt seine nukleare Abschreckung über diplomatische Anerkennung."
+ },
+ "un_npt_disarmament_modifier_desc": {
+  "en": "Under the Non-Proliferation Treaty enforced by the IAEA, this country faces international pressure to abandon its nuclear ambitions.",
+  "de": "Unter dem von der IAEO durchgesetzten Nichtverbreitungsvertrag steht dieses Land unter internationalem Druck, seine nuklearen Ambitionen aufzugeben."
+ },
+ "un_observer_mission_cost_desc": {
+  "en": "The cost of this country's observers on a UN peacekeeping appeal.",
+  "de": "Die Kosten für die Beobachter dieses Landes bei einem Aufruf zur UN-Friedenssicherung."
+ },
+ "un_observer_mission_modifier_desc": {
+  "en": "This country has sent observers to a conflict zone under UN auspices.",
+  "de": "Dieses Land hat unter der Schirmherrschaft der UN Beobachter in eine Konfliktzone entsandt."
+ },
+ "un_observer_status_modifier_desc": {
+  "en": "This country holds observer status at the United Nations - present but not fully committed.",
+  "de": "Dieses Land hat Beobachterstatus bei den Vereinten Nationen – anwesend, aber nicht vollständig gebunden."
+ },
+ "un_pandemic_cooperation_modifier_desc": {
+  "en": "This country is leading the international response to a global pandemic through the World Health Organization.",
+  "de": "Dieses Land führt über die Weltgesundheitsorganisation die internationale Reaktion auf eine globale Pandemie an."
+ },
+ "un_pandemic_isolationist_modifier_desc": {
+  "en": "This country has prioritized its own pandemic response over international cooperation.",
+  "de": "Dieses Land hat seine eigene Pandemiebekämpfung über internationale Zusammenarbeit gestellt."
+ },
+ "un_peacekeeping_contributor_cost_desc": {
+  "en": "Ongoing financial costs of contributing military forces to [concept_un_peacekeeping] operations abroad.",
+  "de": "Laufende finanzielle Kosten für die Entsendung von Streitkräften zu [concept_un_peacekeeping]-Einsätzen im Ausland."
+ },
+ "un_peacekeeping_contributor_modifier_desc": {
+  "en": "This country contributes troops and resources to [concept_un_peacekeeping] operations, boosting diplomatic reputation at a military cost.",
+  "de": "Dieses Land stellt Truppen und Ressourcen für [concept_un_peacekeeping]-Einsätze bereit und steigert damit sein diplomatisches Ansehen zu militärischen Kosten."
+ },
+ "un_peacekeeping_cooldown": {
+  "en": "Peacekeeping Commitment Active",
+  "de": "Friedenssicherungseinsatz aktiv"
+ },
+ "un_peacekeeping_cooldown_desc": {
+  "en": "A peacekeeping commitment is already in effect.",
+  "de": "Ein Friedenssicherungseinsatz ist bereits im Gange."
+ },
+ "un_peacekeeping_deployed_modifier_desc": {
+  "en": "A full peacekeeping contingent has been deployed under our flag, significantly boosting our international standing.",
+  "de": "Ein vollständiges Friedenssicherungskontingent wurde unter unserer Flagge entsandt, was unser internationales Ansehen erheblich steigert."
+ },
+ "un_peacekeeping_received_modifier_desc": {
+  "en": "International peacekeeping forces are deployed in our territory, reducing [concept_turmoil] and helping restore order.",
+  "de": "Internationale Friedenssicherungstruppen sind in unserem Territorium stationiert, verringern den [concept_turmoil] und helfen, die Ordnung wiederherzustellen."
+ },
+ "un_peacekeeping_resented_modifier_desc": {
+  "en": "Foreign peacekeeping forces are viewed as an imposition on national sovereignty, rallying domestic authority but damaging diplomatic standing.",
+  "de": "Ausländische Friedenssicherungstruppen werden als Eingriff in die nationale Souveränität empfunden, was die innenpolitische Autorität stärkt, aber dem diplomatischen Ansehen schadet."
+ },
+ "un_peacekeeping_welcomed_modifier_desc": {
+  "en": "[concept_un_peacekeeping] forces have been welcomed, reducing [concept_devastation] but at the cost of national [concept_prestige].",
+  "de": "[concept_un_peacekeeping]-Truppen wurden willkommen geheißen, was die [concept_devastation] verringert, jedoch auf Kosten des nationalen [concept_prestige]."
+ },
+ "un_physical_protection_modifier_desc": {
+  "en": "This country is party to the Convention on the Physical Protection of Nuclear Material. It guards and counts its warheads to a common standard: half as many go missing whenever they change hands, and each month there is a chance to find one of its own that already has.",
+  "de": "Dieses Land ist Vertragspartei des Übereinkommens über den physischen Schutz von Kernmaterial. Es bewacht und zählt seine Sprengköpfe nach einem gemeinsamen Standard: Nur halb so viele gehen bei jedem Besitzerwechsel verloren, und jeden Monat besteht eine Chance, einen bereits verlorenen eigenen Sprengkopf wiederzufinden."
+ },
+ "un_physical_protection_refusal_modifier_desc": {
+  "en": "This country refused to table the Convention on the Physical Protection of Nuclear Material, and the world has noticed.",
+  "de": "Dieses Land hat sich geweigert, das Übereinkommen über den physischen Schutz von Kernmaterial vorzulegen, und die Welt hat es bemerkt."
+ },
+ "un_reform_champion_modifier_desc": {
+  "en": "This country is championing UN reform, pushing for a more representative and effective institution.",
+  "de": "Dieses Land setzt sich für eine UN-Reform ein und drängt auf eine repräsentativere und wirksamere Institution."
+ },
+ "un_reform_compromise_modifier_desc": {
+  "en": "This country has proposed a compromise on UN reform, balancing institutional effectiveness with political reality.",
+  "de": "Dieses Land hat einen Kompromiss zur UN-Reform vorgeschlagen, der institutionelle Wirksamkeit mit der politischen Realität in Einklang bringt."
+ },
+ "un_reform_opponent_modifier_desc": {
+  "en": "This country is blocking UN reform, defending the existing power structure.",
+  "de": "Dieses Land blockiert die UN-Reform und verteidigt die bestehende Machtstruktur."
+ },
+ "un_refugee_closed_modifier_desc": {
+  "en": "This country has closed its borders during an international refugee crisis, reducing migration and diplomatic reputation.",
+  "de": "Dieses Land hat während einer internationalen Flüchtlingskrise seine Grenzen geschlossen, was Migration und diplomatisches Ansehen verringert."
+ },
+ "un_refugee_program_modifier_desc": {
+  "en": "This country has launched a major refugee resettlement program under UN coordination, gaining [concept_prestige] and migration pull.",
+  "de": "Dieses Land hat unter Koordination der UN ein großes Programm zur Wiederansiedlung von Flüchtlingen gestartet und gewinnt dadurch [concept_prestige] und Migrationsanziehung."
+ },
+ "un_refugee_source_brain_drain_modifier_desc": {
+  "en": "The departure of thousands of citizens has created a brain drain, reducing living standards and migration pull.",
+  "de": "Der Weggang Tausender Bürger hat eine Abwanderung von Fachkräften verursacht, was den Lebensstandard und die Migrationsanziehung verringert."
+ },
+ "un_refugee_source_relief_modifier_desc": {
+  "en": "International resettlement programs have eased the burden of displacement, modestly improving living standards.",
+  "de": "Internationale Wiederansiedlungsprogramme haben die Last der Vertreibung gemindert und den Lebensstandard leicht verbessert."
+ },
+ "un_refused_aid_penalty_modifier_desc": {
+  "en": "This nation's refusal to contribute humanitarian aid has damaged its international standing and credibility.",
+  "de": "Die Weigerung dieser Nation, humanitäre Hilfe zu leisten, hat ihrem internationalen Ansehen und ihrer Glaubwürdigkeit geschadet."
+ },
+ "un_regime_climate_adaptation_modifier_desc": {
+  "en": "This country emits little and suffers what others emit. The UN climate accord pays for its adaptation: a fifth of the harm of each degree of warming, scaled by UN enforcement.",
+  "de": "Dieses Land stößt wenig aus und leidet unter dem, was andere ausstoßen. Das UN-Klimaabkommen bezahlt seine Anpassung: ein Fünftel des Schadens jedes Grads Erwärmung, skaliert nach der Durchsetzungskraft der UN."
+ },
+ "un_regime_climate_emitter_modifier_desc": {
+  "en": "This country leads a market that puts out a large share of the world's greenhouse gases. The UN climate accord binds it to cut them, and its heavy industry pays for the cut. Scaled by UN enforcement.",
+  "de": "Dieses Land führt einen Markt an, der einen großen Anteil der weltweiten Treibhausgase ausstößt. Das UN-Klimaabkommen verpflichtet es zur Reduzierung, und seine Schwerindustrie bezahlt dafür. Skaliert nach der Durchsetzungskraft der UN."
+ },
+ "un_regime_colonial_pressure_modifier_desc": {
+  "en": "The UN's declaration on decolonisation makes holding a colonial empire harder. Scaled by UN enforcement.",
+  "de": "Die Erklärung der UN zur Dekolonisierung erschwert das Halten eines Kolonialreichs. Skaliert nach der Durchsetzungskraft der UN."
+ },
+ "un_regime_colony_liberty_modifier_desc": {
+  "en": "This colony's overlord sits in a United Nations that has declared for decolonisation, and its people take the declaration at its word. Scaled by UN enforcement.",
+  "de": "Der Oberherr dieser Kolonie sitzt in Vereinten Nationen, die sich für Dekolonisierung ausgesprochen haben, und die Bevölkerung nimmt die Erklärung beim Wort. Skaliert nach der Durchsetzungskraft der UN."
+ },
+ "un_regime_heritage_site_modifier_desc": {
+  "en": "This country holds a wonder of the world under UNESCO's protection: more visitors and cultural pull, and slower building around what is protected. Scaled by UN enforcement.",
+  "de": "Dieses Land besitzt ein Weltwunder unter dem Schutz der UNESCO: mehr Besucher und kulturelle Anziehungskraft, aber langsameres Bauen rund um das Geschützte. Skaliert nach der Durchsetzungskraft der UN."
+ },
+ "un_regime_naval_curb_modifier_desc": {
+  "en": "This great power's fleets are held to the Convention on the Law of the Sea, and it earns less prestige from projecting naval power. Scaled by UN enforcement.",
+  "de": "Die Flotten dieser Großmacht sind an das Seerechtsübereinkommen gebunden, und sie erzielt weniger Prestige durch die Machtprojektion zur See. Skaliert nach der Durchsetzungskraft der UN."
+ },
+ "un_regime_npt_guarantee_modifier_desc": {
+  "en": "This country has no nuclear weapons. The Non-Proliferation Treaty's security guarantee makes a nuclear strike on it harder to carry through. Scaled by UN enforcement.",
+  "de": "Dieses Land besitzt keine Kernwaffen. Die Sicherheitsgarantie des Nichtverbreitungsvertrags erschwert einen Nuklearschlag gegen es. Skaliert nach der Durchsetzungskraft der UN."
+ },
+ "un_regime_npt_inspection_modifier_desc": {
+  "en": "This country is running a nuclear programme without the bomb. The Non-Proliferation Treaty's inspectors slow it. Scaled by UN enforcement.",
+  "de": "Dieses Land betreibt ein Nuklearprogramm ohne die Bombe. Die Inspektoren des Nichtverbreitungsvertrags bremsen es. Skaliert nach der Durchsetzungskraft der UN."
+ },
+ "un_regime_refugee_host_modifier_desc": {
+  "en": "As one of the richest countries, this country is where refugees under the UN convention come, and it bears the strain. Scaled by UN enforcement.",
+  "de": "Als eines der reichsten Länder ist dieses Land das Ziel von Flüchtlingen im Rahmen des UN-Übereinkommens und trägt die Last. Skaliert nach der Durchsetzungskraft der UN."
+ },
+ "un_regime_refugee_source_modifier_desc": {
+  "en": "As one of the poorer countries, this country is relieved by the UN refugee convention. Scaled by UN enforcement.",
+  "de": "Als eines der ärmeren Länder wird dieses Land durch das UN-Flüchtlingsübereinkommen entlastet. Skaliert nach der Durchsetzungskraft der UN."
+ },
+ "un_regime_rights_violator_modifier_desc": {
+  "en": "This country's laws — an ethnostate, outlawed dissent, penal labor camps or slavery — are in breach of the Universal Declaration of Human Rights, and the government answers for it at home and abroad. Scaled by UN enforcement.",
+  "de": "Die Gesetze dieses Landes — ein Ethnostaat, verbotener Widerspruch, Straflagerarbeit oder Sklaverei — verstoßen gegen die Allgemeine Erklärung der Menschenrechte, und die Regierung muss sich dafür im In- und Ausland verantworten. Skaliert nach der Durchsetzungskraft der UN."
+ },
+ "un_regime_shared_intelligence_modifier_desc": {
+  "en": "A strong United Nations shares intelligence among its members, making every kind of covert operation against them harder.",
+  "de": "Starke Vereinte Nationen teilen Geheimdienstinformationen unter ihren Mitgliedern, was jede Art verdeckter Operation gegen sie erschwert."
+ },
+ "un_regime_space_laggard_modifier_desc": {
+  "en": "This country is far behind in the space race, and the Outer Space Treaty shares the leaders' progress with it. Scaled by UN enforcement.",
+  "de": "Dieses Land liegt im Wettlauf ins All weit zurück, und der Weltraumvertrag teilt ihm den Fortschritt der Führenden mit. Skaliert nach der Durchsetzungskraft der UN."
+ },
+ "un_regime_space_leader_modifier_desc": {
+  "en": "This country leads the space race, and the Outer Space Treaty obliges it to share what it learns. Scaled by UN enforcement.",
+  "de": "Dieses Land führt den Wettlauf ins All an, und der Weltraumvertrag verpflichtet es, seine Erkenntnisse zu teilen. Skaliert nach der Durchsetzungskraft der UN."
+ },
+ "un_regime_space_weapon_modifier_desc": {
+  "en": "This country keeps an orbital battlestation, which the Outer Space Treaty bars. Scaled by UN enforcement.",
+  "de": "Dieses Land unterhält eine Orbitalkampfstation, die der Weltraumvertrag untersagt. Skaliert nach der Durchsetzungskraft der UN."
+ },
+ "un_rejectionist_modifier": {
+  "en": "UN Rejectionist",
+  "de": "UN-Ablehner"
+ },
+ "un_rejectionist_modifier_desc": {
+  "en": "This country has rejected the United Nations, strengthening domestic authority but damaging international standing.",
+  "de": "Dieses Land hat die Vereinten Nationen abgelehnt, was die innenpolitische Autorität stärkt, aber dem internationalen Ansehen schadet."
+ },
+ "un_request_cooldown": {
+  "en": "UN Request Cooldown",
+  "de": "UN-Antrag: Abklingzeit"
+ },
+ "un_request_cooldown_desc": {
+  "en": "A recent request to the General Assembly is still being processed. Further requests must wait.",
+  "de": "Ein kürzlicher Antrag an die Generalversammlung wird noch bearbeitet. Weitere Anträge müssen warten."
+ },
+ "un_sanctions_busting_modifier_desc": {
+  "en": "This country is quietly circumventing [concept_un_sanctions] for commercial advantage, at the cost of diplomatic reputation.",
+  "de": "Dieses Land umgeht still und leise [concept_un_sanctions] zum eigenen wirtschaftlichen Vorteil – auf Kosten des diplomatischen Ansehens."
+ },
+ "un_sanctions_cooldown": {
+  "en": "Recent Sanctions Action",
+  "de": "Jüngste Sanktionsmaßnahme"
+ },
+ "un_sanctions_cooldown_desc": {
+  "en": "A sanctions action was recently taken.",
+  "de": "Kürzlich wurde eine Sanktionsmaßnahme ergriffen."
+ },
+ "un_sanctions_enforcement_modifier_desc": {
+  "en": "Strictly enforcing [concept_un_sanctions], this country takes a small trade hit but gains significant diplomatic credibility.",
+  "de": "Durch die strikte Durchsetzung von [concept_un_sanctions] nimmt dieses Land einen kleinen Handelsverlust in Kauf, gewinnt aber erhebliche diplomatische Glaubwürdigkeit."
+ },
+ "un_sanctions_enforcer_modifier_desc": {
+  "en": "This country is enforcing [concept_un_sanctions] against a target state.",
+  "de": "Dieses Land setzt [concept_un_sanctions] gegen einen Zielstaat durch."
+ },
+ "un_sanctions_partial_modifier_desc": {
+  "en": "This country is partially complying with [concept_un_sanctions] - enough to avoid condemnation, but not enough to impress.",
+  "de": "Dieses Land hält sich teilweise an [concept_un_sanctions] – genug, um einer Verurteilung zu entgehen, aber nicht genug, um zu beeindrucken."
+ },
+ "un_sanctions_target_modifier_desc": {
+  "en": "This country is under [concept_un_sanctions], suffering severe trade and diplomatic penalties.",
+  "de": "Dieses Land steht unter [concept_un_sanctions] und erleidet schwere Handels- und diplomatische Nachteile."
+ },
+ "un_sanctions_voluntary_target_modifier_desc": {
+  "en": "A sanctions resolution against this country passed the General Assembly but was vetoed in the Security Council. Members apply voluntary measures only: milder trade and diplomatic penalties that fade over time.",
+  "de": "Eine Sanktionsresolution gegen dieses Land wurde von der Generalversammlung verabschiedet, jedoch im Sicherheitsrat mit einem Veto belegt. Die Mitglieder wenden nur freiwillige Maßnahmen an: mildere Handels- und diplomatische Nachteile, die mit der Zeit nachlassen."
+ },
+ "un_secure_commitment_action_desc": {
+  "en": "Ask another member of the [concept_un_general_assembly] to undertake to vote in favour of the resolution in session, in exchange for an [concept_obligation] we take on toward them. Any member may ask, until the other member has voted, and only once per member per resolution. A member pledges its vote once per resolution, and a country can collect two pledges per resolution. A pledge moves the member's lean by 100. An undertaking is not a vote: the chamber records it separately, and the member remains free to break its word at the cost of its standing in the organisation, our [concept_relations], and the [concept_obligation] itself.",
+  "de": "Bittet ein anderes Mitglied der [concept_un_general_assembly], sich zu verpflichten, für die laufende Resolution zu stimmen, im Austausch für eine [concept_obligation], die wir ihm gegenüber eingehen. Jedes Mitglied kann gefragt werden, bis das andere Mitglied abgestimmt hat, und nur einmal pro Mitglied und Resolution. Ein Mitglied verspricht seine Stimme einmal pro Resolution, und ein Land kann zwei Zusagen pro Resolution einsammeln. Eine Zusage verschiebt die Neigung des Mitglieds um 100. Eine Verpflichtung ist keine Stimme: Die Kammer verzeichnet sie gesondert, und das Mitglied bleibt frei, sein Wort zu brechen – auf Kosten seines Ansehens in der Organisation, unserer [concept_relations] und der [concept_obligation] selbst."
+ },
+ "un_secure_commitment_against_action_desc": {
+  "en": "Ask another member of the [concept_un_general_assembly] to undertake to vote against the resolution in session, in exchange for an [concept_obligation] we take on toward them. Any member may ask, until the other member has voted, and only once per member per resolution. A member pledges its vote once per resolution, and a country can collect two pledges per resolution. A pledge moves the member's lean by 100 against, but never decides a [concept_un_veto]: a permanent member that would have vetoed still does, and one that would not have still does not. An undertaking is not a vote: the member remains free to break its word at the cost of its standing in the organisation, our [concept_relations], and the [concept_obligation] itself.",
+  "de": "Bittet ein anderes Mitglied der [concept_un_general_assembly], sich zu verpflichten, gegen die laufende Resolution zu stimmen, im Austausch für eine [concept_obligation], die wir ihm gegenüber eingehen. Jedes Mitglied kann gefragt werden, bis das andere Mitglied abgestimmt hat, und nur einmal pro Mitglied und Resolution. Ein Mitglied verspricht seine Stimme einmal pro Resolution, und ein Land kann zwei Zusagen pro Resolution einsammeln. Eine Zusage verschiebt die Neigung des Mitglieds um 100 dagegen, entscheidet aber nie über ein [concept_un_veto]: Ein ständiges Mitglied, das ein Veto eingelegt hätte, tut dies weiterhin, und eines, das es nicht getan hätte, weiterhin nicht. Eine Verpflichtung ist keine Stimme: Das Mitglied bleibt frei, sein Wort zu brechen – auf Kosten seines Ansehens in der Organisation, unserer [concept_relations] und der [concept_obligation] selbst."
+ },
+ "un_security_council_modifier_desc": {
+  "en": "This country holds a permanent seat on the UN Security Council, the body responsible for maintaining international peace and security. Grants enhanced diplomatic leverage and authority.",
+  "de": "Dieses Land hält einen ständigen Sitz im UN-Sicherheitsrat, dem für die Wahrung des internationalen Friedens und der Sicherheit zuständigen Gremium. Gewährt gesteigerten diplomatischen Einfluss und Autorität."
+ },
+ "un_self_corrected_modifier_desc": {
+  "en": "This country accepted a UN resolution targeting itself before the General Assembly. International observers read the public capitulation as cynical: [concept_prestige] falters, scrutiny intensifies, and the regime visibly loses face at home.",
+  "de": "Dieses Land hat eine gegen sich selbst gerichtete UN-Resolution vor der Generalversammlung akzeptiert. Internationale Beobachter deuten die öffentliche Kapitulation als zynisch: Das [concept_prestige] schwächelt, die Beobachtung verschärft sich, und das Regime verliert sichtbar im Inland an Gesicht."
+ },
+ "un_sovereignty_concession_modifier_desc": {
+  "en": "The concessions the government made to keep the nationalists from pulling the country out of the United Nations.",
+  "de": "Die Zugeständnisse, die die Regierung machte, um zu verhindern, dass die Nationalisten das Land aus den Vereinten Nationen herausziehen."
+ },
+ "un_sovereignty_resentment_ig_modifier_desc": {
+  "en": "This interest group resents the reach of a strong United Nations over the nation's sovereignty.",
+  "de": "Diese Interessengruppe empfindet den Einfluss starker Vereinter Nationen auf die Souveränität der Nation als Übergriff."
+ },
+ "un_sovereignty_welcome_ig_modifier_desc": {
+  "en": "This interest group welcomes a strong United Nations.",
+  "de": "Diese Interessengruppe begrüßt starke Vereinte Nationen."
+ },
+ "un_space_independent_modifier_desc": {
+  "en": "This country has rejected international space cooperation in favor of an independent program, prioritizing national [concept_prestige] and military applications.",
+  "de": "Dieses Land hat internationale Weltraumkooperation zugunsten eines eigenständigen Programms abgelehnt und stellt nationales [concept_prestige] sowie militärische Anwendungen in den Vordergrund."
+ },
+ "un_space_partnership_modifier_desc": {
+  "en": "This country is participating fully in the UN international space cooperation program, accelerating research and boosting [concept_prestige].",
+  "de": "Dieses Land beteiligt sich uneingeschränkt am internationalen UN-Programm zur Weltraumkooperation, was die Forschung beschleunigt und [concept_prestige] steigert."
+ },
+ "un_standing_disgraced_modifier_desc": {
+  "en": "This country's record at the United Nations is in ruins: commitments broken, decisions defied. Other governments discount what it says, and the world is slow to forget what it has done.",
+  "de": "Die Bilanz dieses Landes bei den Vereinten Nationen liegt in Trümmern: gebrochene Zusagen, missachtete Beschlüsse. Andere Regierungen schenken seinen Worten wenig Glauben, und die Welt vergisst nur langsam, was es getan hat."
+ },
+ "un_standing_exemplary_modifier_desc": {
+  "en": "Years of delivered commitments have made this country one of the organisation's most trusted members. Its word carries weight at the negotiating table, old scandals fade faster, and its approaches are better received.",
+  "de": "Jahre eingehaltener Zusagen haben dieses Land zu einem der vertrauenswürdigsten Mitglieder der Organisation gemacht. Sein Wort hat Gewicht am Verhandlungstisch, alte Skandale verblassen schneller, und seine Vorstöße werden besser aufgenommen."
+ },
+ "un_standing_poor_modifier_desc": {
+  "en": "This country's record at the United Nations is a poor one, and its diplomats are heard with a little less patience than they would like.",
+  "de": "Die Bilanz dieses Landes bei den Vereinten Nationen ist schwach, und seine Diplomaten werden mit etwas weniger Geduld angehört, als ihnen lieb wäre."
+ },
+ "un_standing_respected_modifier_desc": {
+  "en": "This country has kept the commitments it made at the United Nations, and is treated as a serious partner for it. Its diplomatic word carries further and its reputation recovers a little faster.",
+  "de": "Dieses Land hat die Zusagen eingehalten, die es bei den Vereinten Nationen gemacht hat, und wird dafür als ernstzunehmender Partner behandelt. Sein diplomatisches Wort trägt weiter, und sein Ansehen erholt sich etwas schneller."
+ },
+ "un_tariff_retaliation_modifier_desc": {
+  "en": "A rival nation has imposed unilateral tariffs, hurting our trade competitiveness and diplomatic reputation.",
+  "de": "Eine rivalisierende Nation hat einseitige Zölle verhängt, was unsere Handelswettbewerbsfähigkeit und unser diplomatisches Ansehen schädigt."
+ },
+ "un_trade_arbitration_modifier_desc": {
+  "en": "This country has accepted international arbitration in a trade dispute, demonstrating commitment to the rules-based order.",
+  "de": "Dieses Land hat internationale Schiedsverfahren in einem Handelsstreit akzeptiert und damit sein Bekenntnis zur regelbasierten Ordnung unter Beweis gestellt."
+ },
+ "un_trade_deal_bilateral_modifier_desc": {
+  "en": "A bilateral trade agreement has improved trade competitiveness and diplomatic standing.",
+  "de": "Ein bilaterales Handelsabkommen hat die Handelswettbewerbsfähigkeit und das diplomatische Ansehen verbessert."
+ },
+ "un_undermine_order_cost_desc": {
+  "en": "Actively undermining the United Nations international order. Ongoing cost to authority and influence generation.",
+  "de": "Untergräbt aktiv die internationale Ordnung der Vereinten Nationen. Laufende Kosten bei Autorität und Einflussgewinn."
+ },
+ "un_unilateral_tariffs_modifier_desc": {
+  "en": "This country has imposed unilateral tariffs in defiance of international arbitration, boosting domestic industry at the cost of diplomatic reputation.",
+  "de": "Dieses Land hat trotz internationaler Schiedsverfahren einseitige Zölle verhängt und stärkt damit die heimische Industrie auf Kosten des diplomatischen Ansehens."
+ },
+ "un_veto_abolition_modifier_desc": {
+  "en": "This country has proposed abolishing the Security Council [concept_un_veto], pushing for democratic reform of the United Nations.",
+  "de": "Dieses Land hat die Abschaffung des [concept_un_veto] im Sicherheitsrat vorgeschlagen und drängt auf eine demokratische Reform der Vereinten Nationen."
+ },
+ "un_veto_crisis_modifier_desc": {
+  "en": "This country publicly denounced a [concept_great_power]'s [concept_un_veto] at the Security Council, gaining diplomatic standing at the cost of institutional authority.",
+  "de": "Dieses Land hat das [concept_un_veto] einer [concept_great_power] im Sicherheitsrat öffentlich angeprangert und gewinnt dadurch diplomatisches Ansehen auf Kosten der institutionellen Autorität."
+ },
+ "un_vote_failure_penalty_desc": {
+  "en": "Failed to pass a UN resolution. Our diplomatic standing has suffered.",
+  "de": "Eine UN-Resolution konnte nicht verabschiedet werden. Unser diplomatisches Ansehen hat gelitten."
+ },
+ "un_vote_success_reward_desc": {
+  "en": "Successfully led a UN resolution to passage. Our diplomatic standing is enhanced.",
+  "de": "Eine UN-Resolution wurde erfolgreich zur Verabschiedung geführt. Unser diplomatisches Ansehen ist gestiegen."
+ },
+ "un_walkout_condemn_modifier_desc": {
+  "en": "This country condemned a bloc walkout at the General Assembly and rallied the remaining members.",
+  "de": "Dieses Land hat einen Blockauszug bei der Generalversammlung verurteilt und die verbliebenen Mitglieder um sich geschart."
+ },
+ "un_walkout_join_modifier_desc": {
+  "en": "This country joined a bloc walkout at the General Assembly, rejecting the institution's authority.",
+  "de": "Dieses Land hat sich einem Blockauszug bei der Generalversammlung angeschlossen und damit die Autorität der Institution zurückgewiesen."
+ },
+ "un_walkout_mediator_modifier_desc": {
+  "en": "This country attempted to mediate after a dramatic walkout at the General Assembly.",
+  "de": "Dieses Land hat nach einem dramatischen Auszug bei der Generalversammlung versucht zu vermitteln."
+ },
+ "un_withdrawal_penalty_modifier_desc": {
+  "en": "Having withdrawn from the United Nations, this country faces a temporary reduction in diplomatic reputation and [concept_prestige].",
+  "de": "Nach seinem Austritt aus den Vereinten Nationen erleidet dieses Land eine vorübergehende Verringerung seines diplomatischen Ansehens und [concept_prestige]."
+ },
+ "united_nations": {
+  "en": "United Nations",
+  "de": "Vereinte Nationen"
+ },
+ "use_one_nuke_desc": {
+  "en": "Use one nuclear weapon from our stockpile.",
+  "de": "Setzt eine Kernwaffe aus unserem Bestand ein."
+ },
+ "veteran_advisory_modifier": {
+  "en": "Veteran Advisory Board",
+  "de": "Veteranenbeirat"
+ },
+ "veteran_advisory_modifier_desc": {
+  "en": "Experienced veterans advising on military policy have improved our military research capabilities.",
+  "de": "Erfahrene Veteranen, die die Militärpolitik beraten, haben unsere militärischen Forschungskapazitäten verbessert."
+ },
+ "veteran_mental_health_modifier_desc": {
+  "en": "Dedicated mental health services for veterans have reduced social disruption from returning soldiers.",
+  "de": "Eigens für Veteranen eingerichtete psychologische Dienste haben die gesellschaftlichen Verwerfungen durch heimkehrende Soldaten verringert."
+ },
+ "veterans_peace_testimony_modifier_desc": {
+  "en": "The respected voices of war veterans speaking for peace have boosted our national [concept_prestige] and calmed the anti-war movement.",
+  "de": "Die geachteten Stimmen von Kriegsveteranen, die sich für den Frieden aussprechen, haben unser nationales [concept_prestige] gesteigert und die Antikriegsbewegung besänftigt."
+ },
+ "veterans_testimony_movement_calming_desc": {
+  "en": "The powerful testimonies of decorated veterans speaking against the war have given the anti-war movement greater [concept_legitimacy] and reduced its radicalism.",
+  "de": "Die eindringlichen Zeugnisse dekorierter Veteranen, die sich gegen den Krieg aussprechen, haben der Antikriegsbewegung größere [concept_legitimacy] verliehen und ihren Radikalismus verringert."
+ },
+ "voluntary_union": {
+  "en": "Voluntary Union",
+  "de": "Freiwillige Union"
+ },
+ "voluntary_union_action_notification_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] has voluntarily merged with [TARGET_COUNTRY.GetName].",
+  "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat sich freiwillig mit [TARGET_COUNTRY.GetAltName('DAT')] zusammengeschlossen."
+ },
+ "voluntary_union_decentralized": {
+  "en": "Integrate Decentralized Power",
+  "de": "Dezentrale Macht integrieren"
+ },
+ "voluntary_union_decentralized_action_notification_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] has peacefully integrated the decentralized power of [TARGET_COUNTRY.GetName].",
+  "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat die dezentrale Macht von [TARGET_COUNTRY.GetAltName('DAT')] friedlich integriert."
+ },
+ "voluntary_union_decentralized_action_notification_third_party_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] has peacefully integrated the decentralized power of [TARGET_COUNTRY.GetName].",
+  "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat die dezentrale Macht von [TARGET_COUNTRY.GetAltName('DAT')] friedlich integriert."
+ },
+ "voluntary_union_decentralized_desc": {
+  "en": "Peacefully integrate a neighboring decentralized power into our country. A decentralized society has no central government to negotiate with, so no consent is sought — its lands are simply absorbed. Restricted to powers sharing one of your primary cultures until Globalization is researched, after which any decentralized power may be integrated.",
+  "de": "Integriert eine benachbarte dezentrale Macht friedlich in unser Land. Eine dezentrale Gesellschaft hat keine Zentralregierung, mit der verhandelt werden könnte, daher wird keine Zustimmung eingeholt — ihre Gebiete werden einfach eingegliedert. Beschränkt auf Mächte, die eine unserer primären Kulturen teilen, bis Globalisierung erforscht ist; danach kann jede dezentrale Macht integriert werden."
+ },
+ "voluntary_union_desc": {
+  "en": "Propose a peaceful merger with a smaller same-culture power. If accepted, the target country becomes part of ours without war.",
+  "de": "Schlägt einen friedlichen Zusammenschluss mit einer kleineren Macht gleicher Kultur vor. Wird er angenommen, wird das Zielland ohne Krieg Teil unseres Landes."
+ },
+ "war_crime_coverup_modifier_desc": {
+  "en": "The government has attempted to suppress reports of war crimes committed by its forces.",
+  "de": "Die Regierung hat versucht, Berichte über von ihren Streitkräften begangene Kriegsverbrechen zu unterdrücken."
+ },
+ "war_crime_reform_modifier_desc": {
+  "en": "A comprehensive overhaul of military doctrine emphasizes rules of engagement and protection of civilians.",
+  "de": "Eine umfassende Überarbeitung der Militärdoktrin betont Einsatzregeln und den Schutz von Zivilisten."
+ },
+ "war_crime_scandal_modifier_desc": {
+  "en": "A failed cover-up has made a war crimes scandal far worse, devastating national [concept_prestige] and government credibility.",
+  "de": "Ein gescheiterter Vertuschungsversuch hat einen Kriegsverbrecherskandal erheblich verschlimmert und das nationale [concept_prestige] sowie die Glaubwürdigkeit der Regierung schwer beschädigt."
+ },
+ "war_crime_tribunal_modifier_desc": {
+  "en": "Those responsible for wartime atrocities are being prosecuted, restoring some faith in military justice.",
+  "de": "Die Verantwortlichen für Kriegsgräuel werden strafrechtlich verfolgt, was das Vertrauen in die Militärjustiz teilweise wiederherstellt."
+ },
+ "war_on_drugs_modifier_desc": {
+  "en": "A punitive approach to drug addiction has increased incarceration but failed to address root causes.",
+  "de": "Ein strafender Umgang mit Drogenabhängigkeit hat die Inhaftierungsrate erhöht, ohne die eigentlichen Ursachen anzugehen."
+ },
+ "war_profit_tax_modifier_desc": {
+  "en": "A tax on excess war profits channels military-industrial wealth back to the state treasury.",
+  "de": "Eine Steuer auf übermäßige Kriegsgewinne lenkt militärisch-industriellen Reichtum zurück in die Staatskasse."
+ },
+ "war_profiteering_investigation_modifier_desc": {
+  "en": "The investigation into war profiteers has improved public trust but diverted bureaucratic resources.",
+  "de": "Die Untersuchung von Kriegsgewinnlern hat das Vertrauen der Öffentlichkeit gestärkt, aber bürokratische Ressourcen gebunden."
+ },
+ "water_crisis_infrastructure_modifier_desc": {
+  "en": "The government is investing in desalination plants and water distribution [concept_infrastructure] to address the growing water shortage.",
+  "de": "Die Regierung investiert in Entsalzungsanlagen und die [concept_infrastructure] der Wasserverteilung, um der wachsenden Wasserknappheit zu begegnen."
+ },
+ "water_crisis_ministry_modifier_desc": {
+  "en": "The environment ministry has deployed water management programs including rationing coordination and emergency desalination, stabilizing water supplies.",
+  "de": "Das Umweltministerium hat Wasserbewirtschaftungsprogramme eingeführt, darunter die Koordination von Rationierungen und Notentsalzung, und stabilisiert damit die Wasserversorgung."
+ },
+ "water_crisis_rationing_modifier_desc": {
+  "en": "Strict water rationing measures are in place across the nation, severely impacting quality of life and agricultural production.",
+  "de": "Strenge Wasserrationierungsmaßnahmen gelten landesweit und beeinträchtigen die Lebensqualität und die landwirtschaftliche Produktion erheblich."
+ },
+ "we_am_annihilation_military_desc": {
+  "en": "Antimatter-powered weapons systems are being integrated into the national arsenal.",
+  "de": "Antimateriebetriebene Waffensysteme werden in das nationale Arsenal integriert."
+ },
+ "we_am_annihilation_propulsion_desc": {
+  "en": "Antimatter-powered engines are revolutionizing military mobility and logistics.",
+  "de": "Antimateriebetriebene Triebwerke revolutionieren die militärische Mobilität und Logistik."
+ },
+ "we_am_breach_press_ahead_desc": {
+  "en": "The antimatter program continues at full speed despite the containment breach, accepting elevated risk.",
+  "de": "Das Antimaterieprogramm läuft trotz des Sicherheitslecks mit voller Kraft weiter und nimmt dabei ein erhöhtes Risiko in Kauf."
+ },
+ "we_am_breach_rebuild_desc": {
+  "en": "The facility is being rebuilt with improved safety protocols after the containment breach.",
+  "de": "Die Anlage wird nach dem Sicherheitsleck mit verbesserten Sicherheitsprotokollen wiederaufgebaut."
+ },
+ "we_am_breakthrough_military_desc": {
+  "en": "Antimatter research is being fast-tracked for immediate military applications.",
+  "de": "Die Antimaterieforschung wird für unmittelbare militärische Anwendungen beschleunigt vorangetrieben."
+ },
+ "we_am_breakthrough_research_desc": {
+  "en": "Stable antimatter containment has energized the scientific community and accelerated research across all fields.",
+  "de": "Die stabile Eindämmung von Antimaterie hat die Wissenschaftsgemeinde beflügelt und die Forschung in allen Bereichen beschleunigt."
+ },
+ "we_am_incident_suppress_desc": {
+  "en": "Details of the antimatter accident have been suppressed, concentrating authority but damaging international reputation.",
+  "de": "Details des Antimaterieunfalls wurden unterdrückt, was die Autorität konzentriert, aber dem internationalen Ansehen schadet."
+ },
+ "we_am_incident_transparent_desc": {
+  "en": "Full transparency after the antimatter accident has earned [concept_legitimacy] at the cost of national [concept_prestige].",
+  "de": "Vollständige Transparenz nach dem Antimaterieunfall hat [concept_legitimacy] eingebracht – auf Kosten des nationalen [concept_prestige]."
+ },
+ "we_am_propulsion_civilian_desc": {
+  "en": "Antimatter propulsion is transforming civilian commerce and heavy industry logistics.",
+  "de": "Antimaterieantrieb verändert den zivilen Handel und die Logistik der Schwerindustrie grundlegend."
+ },
+ "we_am_propulsion_military_desc": {
+  "en": "Antimatter propulsion has eliminated distance as a strategic constraint for military formations.",
+  "de": "Antimaterieantrieb hat Entfernung als strategische Einschränkung für militärische Verbände beseitigt."
+ },
+ "we_ob_arms_race_maintain_desc": {
+  "en": "The escalating orbital arms race demands increased military spending to maintain superiority.",
+  "de": "Das eskalierende Wettrüsten im Orbit erfordert höhere Militärausgaben, um die Überlegenheit zu wahren."
+ },
+ "we_ob_arms_race_treaty_desc": {
+  "en": "A proposed arms limitation treaty de-escalates orbital tensions and earns international goodwill.",
+  "de": "Ein vorgeschlagener Rüstungsbegrenzungsvertrag entschärft die Spannungen im Orbit und bringt internationales Wohlwollen ein."
+ },
+ "we_ob_deterrence_negotiate_desc": {
+  "en": "The battlestation's military superiority enables advantageous diplomatic agreements.",
+  "de": "Die militärische Überlegenheit der Kampfstation ermöglicht vorteilhafte diplomatische Vereinbarungen."
+ },
+ "we_ob_deterrence_strength_desc": {
+  "en": "The orbital battlestation's presence deters all conventional military challenges.",
+  "de": "Die Präsenz der Orbitalkampfstation schreckt alle konventionellen militärischen Herausforderungen ab."
+ },
+ "we_ob_highground_accelerate_desc": {
+  "en": "The orbital battlestation program has been accelerated in response to international alarm.",
+  "de": "Das Programm zur Orbitalkampfstation wurde als Reaktion auf internationale Besorgnis beschleunigt."
+ },
+ "we_ob_highground_assure_desc": {
+  "en": "The government has reassured the international community about the defensive nature of the battlestation.",
+  "de": "Die Regierung hat der internationalen Gemeinschaft den defensiven Charakter der Kampfstation versichert."
+ },
+ "we_ob_shield": {
+  "en": "Shield of Civilization",
+  "de": "Schild der Zivilisation"
+ },
+ "we_ob_shield_desc": {
+  "en": "The orbital battlestation deflected an asteroid that would have devastated a populated region.",
+  "de": "Die Orbitalkampfstation hat einen Asteroiden abgelenkt, der eine bevölkerte Region verwüstet hätte."
+ },
+ "we_ob_strike_defensive_desc": {
+  "en": "The battlestation maintains a defensive posture, its mere capability serving as deterrent.",
+  "de": "Die Kampfstation hält eine defensive Haltung ein; ihre bloße Fähigkeit dient als Abschreckung."
+ },
+ "we_ob_strike_project_desc": {
+  "en": "Orbital kinetic weapons provide devastating global strike capability.",
+  "de": "Kinetische Orbitalwaffen bieten eine verheerende globale Schlagkraft."
+ },
+ "we_ob_surveillance_dominance_desc": {
+  "en": "The orbital battlestation's sensor suite provides total awareness of all military movements on Earth.",
+  "de": "Die Sensorik der Orbitalkampfstation liefert vollständige Aufklärung über alle militärischen Bewegungen auf der Erde."
+ },
+ "we_ob_surveillance_share_desc": {
+  "en": "Selective sharing of orbital intelligence strengthens alliances and diplomatic relationships.",
+  "de": "Die gezielte Weitergabe von Orbitalaufklärung stärkt Bündnisse und diplomatische Beziehungen."
+ },
+ "we_ob_weapons_test_classify_desc": {
+  "en": "The weapons test accident has been classified, concentrating authority at the cost of public trust.",
+  "de": "Der Unfall beim Waffentest wurde als geheim eingestuft, was die Autorität konzentriert, aber dem öffentlichen Vertrauen schadet."
+ },
+ "we_ob_weapons_test_relief_desc": {
+  "en": "A massive relief effort following the weapons test accident has cost [concept_prestige] but demonstrated responsibility.",
+  "de": "Eine massive Hilfsaktion nach dem Unfall beim Waffentest hat [concept_prestige] gekostet, aber Verantwortungsbewusstsein bewiesen."
+ },
+ "we_sc_beam_compensate_desc": {
+  "en": "The government has compensated those affected by the beam misalignment and implemented new safeguards.",
+  "de": "Die Regierung hat die von der Strahlfehlausrichtung Betroffenen entschädigt und neue Schutzmaßnahmen eingeführt."
+ },
+ "we_sc_beam_minimize_desc": {
+  "en": "The government's attempt to downplay the beam misalignment has damaged public trust.",
+  "de": "Der Versuch der Regierung, die Strahlfehlausrichtung herunterzuspielen, hat dem öffentlichen Vertrauen geschadet."
+ },
+ "we_sc_first_light_focus_desc": {
+  "en": "The first successful power transmission drives intensified research into orbital energy systems.",
+  "de": "Die erste erfolgreiche Energieübertragung treibt die intensivierte Forschung an Orbitalenergiesystemen voran."
+ },
+ "we_sc_first_light_pride_desc": {
+  "en": "The successful activation of the first orbital solar collector is a source of immense national pride.",
+  "de": "Die erfolgreiche Inbetriebnahme des ersten Orbital-Sonnenkollektors ist eine Quelle immensen Nationalstolzes."
+ },
+ "we_sc_monopoly_assert_desc": {
+  "en": "The nation has rejected international demands for shared control of its orbital energy [concept_infrastructure].",
+  "de": "Die Nation hat internationale Forderungen nach gemeinsamer Kontrolle ihrer orbitalen Energie-[concept_infrastructure] zurückgewiesen."
+ },
+ "we_sc_monopoly_share_desc": {
+  "en": "Technology licensing agreements give the nation influence while sharing orbital energy capabilities.",
+  "de": "Technologielizenzabkommen verschaffen der Nation Einfluss, während sie orbitale Energiefähigkeiten teilt."
+ },
+ "we_sc_postscarcity_research_desc": {
+  "en": "Unlimited clean energy is being channeled directly into research facilities across the nation.",
+  "de": "Unbegrenzte saubere Energie wird landesweit direkt in Forschungseinrichtungen geleitet."
+ },
+ "we_sc_postscarcity_subsidize_desc": {
+  "en": "The government subsidizes energy costs for all citizens, leveraging the orbital collector's output.",
+  "de": "Die Regierung subventioniert die Energiekosten für alle Bürger und nutzt dabei die Leistung des Orbitalkollektors."
+ },
+ "we_sc_storm_rideout_desc": {
+  "en": "The orbital collectors survived the solar storm intact, vindicating the decision to keep them online.",
+  "de": "Die Orbitalkollektoren haben den Sonnensturm unbeschadet überstanden und rechtfertigen damit die Entscheidung, sie in Betrieb zu lassen."
+ },
+ "we_sc_storm_shutdown_desc": {
+  "en": "The orbital solar collectors have been temporarily shut down to protect them from a coronal mass ejection.",
+  "de": "Die orbitalen Sonnenkollektoren wurden vorübergehend abgeschaltet, um sie vor einem koronalen Massenauswurf zu schützen."
+ },
+ "we_sc_surplus_export_desc": {
+  "en": "Surplus orbital energy is being exported through trade networks, boosting commerce.",
+  "de": "Überschüssige Orbitalenergie wird über Handelsnetzwerke exportiert und kurbelt damit den Handel an."
+ },
+ "we_sc_surplus_invest_desc": {
+  "en": "Cheap orbital energy is powering a surge in industrial output across the nation.",
+  "de": "Günstige Orbitalenergie treibt einen landesweiten Anstieg der industriellen Produktion an."
+ },
+ "we_se_astronaut_education_desc": {
+  "en": "Government-funded space education programs are producing a new generation of researchers and innovators.",
+  "de": "Staatlich finanzierte Weltraumbildungsprogramme bringen eine neue Generation von Forschern und Innovatoren hervor."
+ },
+ "we_se_astronaut_industry_desc": {
+  "en": "A generation raised with orbital access is revolutionizing construction and engineering.",
+  "de": "Eine mit Orbitalzugang aufgewachsene Generation revolutioniert Bauwesen und Ingenieurwissenschaft."
+ },
+ "we_se_debris_clearance_desc": {
+  "en": "An expensive but successful debris clearance operation has secured orbital trade lanes.",
+  "de": "Eine teure, aber erfolgreiche Aufräumaktion für Weltraumschrott hat die orbitalen Handelsrouten gesichert."
+ },
+ "we_se_debris_defense_desc": {
+  "en": "Automated defense systems protect the elevator cable from orbital debris.",
+  "de": "Automatisierte Abwehrsysteme schützen das Aufzugskabel vor Weltraumschrott."
+ },
+ "we_se_gateway_open_desc": {
+  "en": "The space elevator is open to international access, attracting talent and investment from across the world.",
+  "de": "Der Weltraumaufzug steht internationalem Zugang offen und zieht Talente und Investitionen aus aller Welt an."
+ },
+ "we_se_gateway_restricted_desc": {
+  "en": "The space elevator operates under strict national control, enhancing sovereignty over orbital [concept_infrastructure].",
+  "de": "Der Weltraumaufzug arbeitet unter strenger nationaler Kontrolle und stärkt damit die Souveränität über die orbitale [concept_infrastructure]."
+ },
+ "we_se_milestone_celebrate_desc": {
+  "en": "The nation celebrates a major milestone in space elevator construction, drawing global attention.",
+  "de": "Die Nation feiert einen wichtigen Meilenstein beim Bau des Weltraumaufzugs und zieht damit globale Aufmerksamkeit auf sich."
+ },
+ "we_se_milestone_focus_desc": {
+  "en": "All attention is focused on completing the space elevator as quickly as possible.",
+  "de": "Alle Aufmerksamkeit richtet sich darauf, den Weltraumaufzug so schnell wie möglich fertigzustellen."
+ },
+ "we_se_shared_access_desc": {
+  "en": "A cooperative governance framework for orbital [concept_infrastructure] enhances international cooperation.",
+  "de": "Ein gemeinschaftlicher Verwaltungsrahmen für orbitale [concept_infrastructure] stärkt die internationale Zusammenarbeit."
+ },
+ "we_se_sovereignty": {
+  "en": "Orbital Sovereignty Asserted",
+  "de": "Orbitale Souveränität durchgesetzt"
+ },
+ "we_se_sovereignty_desc": {
+  "en": "The nation has asserted sovereign control over its orbital [concept_infrastructure] against international pressure.",
+  "de": "Die Nation hat trotz internationalen Drucks die souveräne Kontrolle über ihre orbitale [concept_infrastructure] durchgesetzt."
+ },
+ "we_se_structural_halt_desc": {
+  "en": "Space elevator construction has been paused while engineers investigate structural anomalies.",
+  "de": "Der Bau des Weltraumaufzugs wurde ausgesetzt, während Ingenieure strukturelle Anomalien untersuchen."
+ },
+ "we_se_structural_reinforce_desc": {
+  "en": "Resources are being diverted to reinforce the space elevator tether against oscillation.",
+  "de": "Ressourcen werden umgeleitet, um das Seil des Weltraumaufzugs gegen Schwingungen zu verstärken."
+ },
+ "we_se_trade_auction_desc": {
+  "en": "Auctioned orbital launch slots are generating unprecedented trade volumes.",
+  "de": "Versteigerte orbitale Startfenster erzeugen beispiellose Handelsvolumina."
+ },
+ "we_se_trade_national_desc": {
+  "en": "Domestic industries receive priority access to orbital launch capacity.",
+  "de": "Heimische Industrien erhalten bevorzugten Zugang zu orbitalen Startkapazitäten."
+ },
+ "welfare_automation_fears_advance_desc": {
+  "en": "A strong positive boost to law enactment progress from a recent event.",
+  "de": "Ein starker positiver Schub für den Fortschritt bei der Gesetzeseinführung durch ein jüngstes Ereignis."
+ },
+ "welfare_automation_fears_cautious_desc": {
+  "en": "A smaller positive boost to law enactment progress from a recent event.",
+  "de": "Ein kleinerer positiver Schub für den Fortschritt bei der Gesetzeseinführung durch ein jüngstes Ereignis."
+ },
+ "welfare_investment_chill": {
+  "en": "Investor Caution",
+  "de": "Investorenvorsicht"
+ },
+ "welfare_retraining_first": {
+  "en": "Welfare: Retraining First",
+  "de": "Sozialstaat: Umschulung zuerst"
+ },
+ "welfare_ubi_first": {
+  "en": "Welfare: UBI Safety Net First",
+  "de": "Sozialstaat: UBI-Sicherheitsnetz zuerst"
+ },
+ "whistleblower_prosecuted_modifier": {
+  "en": "Whistleblower Prosecuted",
+  "de": "Whistleblower strafrechtlich verfolgt"
+ },
+ "whistleblower_prosecuted_modifier_desc": {
+  "en": "The prosecution of the whistleblower sends a chilling message but strengthens state authority.",
+  "de": "Die Strafverfolgung des Whistleblowers sendet eine abschreckende Botschaft, stärkt jedoch die staatliche Autorität."
+ },
+ "whistleblower_reform_modifier": {
+  "en": "Whistleblower Reforms",
+  "de": "Whistleblower-Reformen"
+ },
+ "whistleblower_reform_modifier_desc": {
+  "en": "Whistleblower protections have been enacted, reducing state authority but earning [concept_prestige].",
+  "de": "Whistleblower-Schutzmaßnahmen wurden erlassen, was die staatliche Autorität verringert, aber [concept_prestige] einbringt."
+ },
+ "women_combat_roles_modifier_desc": {
+  "en": "Opening combat roles to women has expanded our military manpower pool and boosted morale among progressive citizens.",
+  "de": "Die Öffnung von Kampfrollen für Frauen hat unseren militärischen Personalpool erweitert und die Moral unter fortschrittlichen Bürgern gestärkt."
+ },
+ "workforce_retraining_modifier": {
+  "en": "Workforce Retraining",
+  "de": "Umschulung der Beschäftigten"
+ },
+ "workforce_retraining_modifier_desc": {
+  "en": "[concept_workforce] retraining programs help workers adapt to automation.",
+  "de": "Umschulungsprogramme für die [concept_workforce] helfen Beschäftigten, sich an die Automatisierung anzupassen."
+ },
+ "ww_appeasement_modifier": {
+  "en": "Policy of Appeasement",
+  "de": "Beschwichtigungspolitik"
+ },
+ "ww_appeasement_modifier_desc": {
+  "en": "We are pursuing diplomatic accommodation with hostile powers, hoping to preserve peace through concessions.",
+  "de": "Wir verfolgen diplomatisches Entgegenkommen gegenüber feindlichen Mächten in der Hoffnung, den Frieden durch Zugeständnisse zu bewahren."
+ },
+ "ww_arsenal_of_democracy_modifier_desc": {
+  "en": "As a late-entering democratic power, our industrial might fuels the war effort of the entire alliance.",
+  "de": "Als spät eintretende demokratische Macht befeuert unsere industrielle Stärke die Kriegsanstrengung des gesamten Bündnisses."
+ },
+ "ww_defeated_modifier": {
+  "en": "Defeated Power",
+  "de": "Besiegte Macht"
+ },
+ "ww_defeated_modifier_desc": {
+  "en": "Our nation lies defeated in the great war. Our military is broken, our [concept_prestige] shattered.",
+  "de": "Unsere Nation liegt im großen Krieg besiegt darnieder. Unser Militär ist gebrochen, unser [concept_prestige] zerschmettert."
+ },
+ "ww_devastation_modifier": {
+  "en": "War Devastation",
+  "de": "Kriegsverwüstung"
+ },
+ "ww_devastation_modifier_desc": {
+  "en": "This state has been ravaged by the world war. [concept_infrastructure] lies in ruins and the population suffers.",
+  "de": "Dieser Staat wurde vom Weltkrieg verwüstet. Die [concept_infrastructure] liegt in Trümmern, und die Bevölkerung leidet."
+ },
+ "ww_fresh_forces_modifier_desc": {
+  "en": "Our troops enter the war rested and well-supplied, giving us a significant temporary advantage over the exhausted belligerents.",
+  "de": "Unsere Truppen ziehen ausgeruht und gut versorgt in den Krieg, was uns einen erheblichen vorübergehenden Vorteil gegenüber den erschöpften Kriegsparteien verschafft."
+ },
+ "ww_ground_offensive_modifier_desc": {
+  "en": "All available forces have been committed to a decisive ground offensive, boosting combat effectiveness at a heavy cost to the home front.",
+  "de": "Alle verfügbaren Kräfte wurden für eine entscheidende Bodenoffensive eingesetzt, was die Kampfkraft steigert – zu einem hohen Preis für die Heimatfront."
+ },
+ "ww_home_front_strain_modifier_desc": {
+  "en": "The prolonged war is taking a terrible toll on the civilian population. Unrest grows.",
+  "de": "Der langwierige Krieg fordert einen schrecklichen Tribut von der Zivilbevölkerung. Die Unruhe wächst."
+ },
+ "ww_late_entry_cooldown_desc": {
+  "en": "We have recently made a decision regarding intervention in the world war.",
+  "de": "Wir haben kürzlich eine Entscheidung zum Eingreifen in den Weltkrieg getroffen."
+ },
+ "ww_lend_lease_modifier_desc": {
+  "en": "We are supplying military equipment and resources to allied belligerents without committing our own forces.",
+  "de": "Wir beliefern verbündete Kriegsparteien mit militärischer Ausrüstung und Ressourcen, ohne eigene Truppen einzusetzen."
+ },
+ "ww_liberation_hero_modifier_desc": {
+  "en": "Our nation is celebrated as a champion of freedom and justice in the aftermath of the great war.",
+  "de": "Unsere Nation wird nach dem großen Krieg als Vorkämpferin für Freiheit und Gerechtigkeit gefeiert."
+ },
+ "ww_occupation_duties_modifier_desc": {
+  "en": "Maintaining order in occupied territories demands significant military resources and administrative effort.",
+  "de": "Die Aufrechterhaltung der Ordnung in besetzten Gebieten erfordert erhebliche militärische Ressourcen und Verwaltungsaufwand."
+ },
+ "ww_prolonged_war_exhaustion_modifier_desc": {
+  "en": "Years of total war have pushed our nation to the breaking point. Casualties mount, the economy groans, and revolution threatens.",
+  "de": "Jahre des totalen Krieges haben unsere Nation an den Rand des Zusammenbruchs gebracht. Die Verluste häufen sich, die Wirtschaft ächzt, und Revolution droht."
+ },
+ "ww_rearmament_modifier": {
+  "en": "Rearmament Program",
+  "de": "Aufrüstungsprogramm"
+ },
+ "ww_rearmament_modifier_desc": {
+  "en": "A major military buildup is underway in response to the ideological threat posed by rival [Concept('concept_great_power', 'great powers')].",
+  "de": "Ein umfangreicher militärischer Aufbau ist im Gange als Reaktion auf die ideologische Bedrohung durch rivalisierende [Concept('concept_great_power', 'Großmächte')]."
+ },
+ "ww_reconstruction_modifier": {
+  "en": "Post-War Reconstruction",
+  "de": "Wiederaufbau nach dem Krieg"
+ },
+ "ww_reconstruction_modifier_desc": {
+  "en": "A massive reconstruction effort is underway, rebuilding what was destroyed in the great war.",
+  "de": "Eine gewaltige Wiederaufbauanstrengung ist im Gange, um das im großen Krieg Zerstörte wiederherzustellen."
+ },
+ "ww_regime_change_modifier_desc": {
+  "en": "The victorious powers have imposed a new political system. The transition is turbulent.",
+  "de": "Die siegreichen Mächte haben ein neues politisches System auferlegt. Der Übergang verläuft turbulent."
+ },
+ "ww_rising_tensions_modifier_desc": {
+  "en": "Ideological rivalries between the [Concept('concept_great_power', 'great powers')] are intensifying. Arms races and diplomatic crises are becoming more frequent.",
+  "de": "Ideologische Rivalitäten zwischen den [Concept('concept_great_power', 'Großmächten')] verschärfen sich. Wettrüsten und diplomatische Krisen häufen sich."
+ },
+ "ww_total_war_economy_modifier_desc": {
+  "en": "The entire national economy has been redirected toward the war effort. Military production soars, but civilian life suffers enormously.",
+  "de": "Die gesamte Volkswirtschaft wurde auf die Kriegsanstrengung ausgerichtet. Die Rüstungsproduktion schießt in die Höhe, doch das zivile Leben leidet enorm."
+ },
+ "ww_victors_peace_modifier_desc": {
+  "en": "We have emerged victorious from the greatest conflict in human history. Our [concept_prestige] and influence are at their zenith.",
+  "de": "Wir sind siegreich aus dem größten Konflikt der Menschheitsgeschichte hervorgegangen. Unser [concept_prestige] und Einfluss stehen auf ihrem Höhepunkt."
+ },
+ "ww_war_crimes_exposed_modifier_desc": {
+  "en": "Evidence of terrible atrocities committed during the war has come to light, damaging our international reputation.",
+  "de": "Beweise für schreckliche während des Krieges begangene Gräueltaten sind ans Licht gekommen und schaden unserem internationalen Ansehen."
+ },
+ "ww_war_propaganda_modifier_desc": {
+  "en": "The government has mobilized the press and media to maintain public support for the war effort.",
+  "de": "Die Regierung hat Presse und Medien mobilisiert, um die öffentliche Unterstützung für die Kriegsanstrengung aufrechtzuerhalten."
+ },
+ "ww_wartime_rationing_modifier_desc": {
+  "en": "Strict rationing has been imposed to ensure the military has the supplies it needs. Civilian consumption suffers.",
+  "de": "Strenge Rationierung wurde verhängt, um sicherzustellen, dass das Militär die benötigten Vorräte erhält. Der zivile Konsum leidet."
+ },
+ "youth_mental_health_funding_modifier_desc": {
+  "en": "Youth mental health services reduce mortality among young people.",
+  "de": "Psychosoziale Dienste für Jugendliche verringern die Sterblichkeit unter jungen Menschen."
  }
 }

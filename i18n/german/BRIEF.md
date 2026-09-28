@@ -74,7 +74,7 @@ EN  Indian rebels will declare [concept_war] on the [ROOT.GetCountry.GetName]
 DE  Indische Rebellen werden [ROOT.GetCountry.GetAltName('DAT')] den [concept_war] erklären
 ```
 
-Use `GetAltName` only on scopes that are certainly countries: names like `COUNTRY`, `TARGET_COUNTRY`, `.GetCountry`, `.GetOwner`, `sCountry(…)`, `sC(…)`, `GetPlayer`. States, characters, interest groups, buildings and everything else keep `GetName`. If you can't tell, keep `GetName` and phrase the sentence so the bare name fits.
+Use `GetAltName` only on scopes that are certainly countries: names like `COUNTRY`, `TARGET_COUNTRY`, `INITIATOR_COUNTRY`, any accessor ending in `Country` (`.GetCountry`, `.GetFirstCountry`, `.GetSecondCountry`), `.GetOwner`, `.GetOverlord`, `sCountry(…)`, `sC(…)`, `GetPlayer`. States, characters, interest groups, buildings and everything else keep `GetName`. If you can't tell, keep `GetName` and phrase the sentence so the bare name fits.
 
 `GetAdjective` gives an uninflected stem. The official German writes `[X.GetAdjective|l]en` or `…e` to decline it. Do the same.
 
