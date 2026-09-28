@@ -4751,7 +4751,7 @@
 #
  te_debug_monuments.1.a:0 "Raise a level-20 monument in the capital and hold its ceremony"
  te_debug_monuments.1.b:0 "Run this month's monument pass now"
- te_debug_monuments.1.c:0 "Contest our tallest regime, ruler or faith monument"
+ te_debug_monuments.1.c:0 "Contest our tallest regime, ruler or faith monument and open its notice"
  te_debug_monuments.1.d:0 "Vanity backlash at the capital's monument"
  te_debug_monuments.1.desc:0 "Grand Monument test tools. Each writes TE_MONUMENTS: lines to debug.log."
  te_debug_monuments.1.e:0 "Print every monument total to debug.log"

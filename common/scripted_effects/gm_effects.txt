@@ -79,6 +79,7 @@ gm_state_record_honoree = {
 			}
 		}
 		set_variable = { name = gm_honoree_ig value = owner.var:gm_tmp_ig_flag }
+		owner = { remove_variable = gm_tmp_ig_flag }
 	}
 }
 
@@ -927,6 +928,11 @@ gm_state_tear_down = {
 # building goes and a new one is built (nuclear_strike_halve_building's path).
 gm_state_rededicate = {
 	set_variable = { name = gm_grandeur value = gm_state_grandeur }
+	# Minor 3: guard the rebuild's own on_building_built (monument_events.1)
+	# against vanity backlash for a level it did not earn — the Rededicate
+	# tooltip never mentions that risk. A short flag, not a container, so
+	# container_timed_variable_audit does not apply.
+	set_variable = { name = gm_rebuilding days = 1 }
 	set_variable = { name = gm_rebuild_cost value = gm_state_rededicate_cost }
 	owner = {
 		add_treasury = {

@@ -351,10 +351,17 @@ gm_display_culture = {
 	max = 5
 }
 
+# 0 once gm_display_culture (above) is already at its max = 5 cap (gm_step_culture
+# is 1, so that is var:gm_s_culture >= 5): past the cap, a further step buys no more
+# cultural pull, so the JE's culture line drops its "next step at" clause when this
+# is 0 (deferred item, 2026-09-27).
 gm_display_n_culture = {
 	value = 0
 	if = {
-		limit = { has_variable = gm_n_culture }
+		limit = {
+			has_variable = gm_n_culture
+			var:gm_s_culture < 5
+		}
 		value = var:gm_n_culture
 	}
 }

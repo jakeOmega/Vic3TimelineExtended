@@ -295,6 +295,15 @@ class CurveTests(unittest.TestCase):
             self.assertTrue(body.startswith(f"value = {ends[-1]} "), f)
             for end in ends[:-1]:
                 self.assertIn(f"if = {{ limit = {{ var:gm_curve_in < {end} }} value = {end} }}", body)
+            # Each `if` (not else_if) overwrites the last: the override semantics
+            # depend on the thresholds appearing in strictly descending order in
+            # the file, so a looser match written later cannot clobber a tighter
+            # one written earlier (deferred item, 2026-09-27).
+            descending = sorted(ends[:-1], reverse=True)
+            positions = [body.find(f"var:gm_curve_in < {end} }} value = {end}") for end in descending]
+            self.assertNotIn(-1, positions, f)
+            self.assertEqual(positions, sorted(positions),
+                              f"f={f}: thresholds must appear in strictly descending order")
 
 
 class ModifierTests(unittest.TestCase):
@@ -521,6 +530,10 @@ class RecordTests(unittest.TestCase):
         self.assertIn("set_variable = { name = gm_honoree value = scope:gm_tmp_ruler }", honoree)
         self.assertIn("gm_ig_to_flag_on_owner = { VAR = gm_tmp_ig_flag }", honoree)
         self.assertIn("set_variable = { name = gm_honoree_ig value = owner.var:gm_tmp_ig_flag }", honoree)
+        # Minor 8: gm_tmp_ig_flag is the only temp variable this file leaves on
+        # the owner; every other gm_tmp_* is a saved scope, not a variable.
+        self.assertIn("set_variable = { name = gm_honoree_ig value = owner.var:gm_tmp_ig_flag } "
+                      "owner = { remove_variable = gm_tmp_ig_flag }", honoree)
         faith = squash(block(self.e, "gm_state_record_faith"))
         self.assertIn("religion = { save_scope_as = gm_tmp_faith_scope }", faith)
         self.assertIn("set_variable = { name = gm_faith value = scope:gm_tmp_faith_scope }", faith)
@@ -891,10 +904,16 @@ class ContestTests(unittest.TestCase):
         self.assertIn("gm_state_preserve = yes", notice)
         self.assertIn("trigger_event = { id = monument_events.17 }", notice)
         self.assertIn("hidden_effect = { gm_country_refresh = yes }", notice)
+        # Minor 2: a state ceded while the notice is open must not act for a
+        # country that no longer owns it. Every every_in_list limit in .16
+        # checks owner = root (the notice's country), and every gate appears
+        # right beside its own gm_state_is_contested check.
+        self.assertEqual(notice.count("gm_state_is_contested = yes owner = root"), 3)
         one = squash(raw_block_at(text, r"(?m)^monument_events\.17\s*=\s*\{"))
         self.assertIn("type = state_event", one)
+        self.assertIn("owner = { save_scope_as = monument_owner }", one)
         for choice in ("tear_down", "rededicate", "preserve"):
-            self.assertIn(f"gm_state_choose_{choice} = yes", one)
+            self.assertIn(f"limit = {{ owner = scope:monument_owner }} gm_state_choose_{choice} = yes", one)
         L = loc()
         for key in ("t", "d", "f", "a", "b", "c", "a.tt", "b.tt", "c.tt"):
             self.assertIn(f"monument_events.16.{key}", L)
@@ -1122,10 +1141,19 @@ class VanityTests(unittest.TestCase):
     def test_level_finished_hook(self):
         ev = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.1\s*=\s*\{")))
         self.assertIn("type = building_event hidden = yes", ev)
-        self.assertIn("owner = { gm_country_hard_times = yes } } gm_state_vanity_backlash = yes", ev)
+        # Minor 3: a Rededicate rebuild's own on_building_built must not
+        # backlash on a level it did not earn (gm_state_rededicate sets
+        # gm_rebuilding for one day around the rebuild).
+        self.assertIn("owner = { gm_country_hard_times = yes } NOT = { has_variable = gm_rebuilding } } "
+                      "gm_state_vanity_backlash = yes", ev)
         self.assertIn("gm_state_is_dedicated = no } gm_state_start_ceremony = yes", ev)
         self.assertIn("owner = { trigger_event = { id = monument_events.20 } }", ev)
         self.assertNotIn("add_modifier", ev, "ROOT is the building here: no multiplier modifiers")
+
+    def test_rededicate_guards_against_its_own_backlash(self):
+        rededicate = squash(block(read(EFFECTS), "gm_state_rededicate"))
+        self.assertIn("set_variable = { name = gm_rebuilding days = 1 }", rededicate)
+        self.assertLess(rededicate.find("gm_rebuilding"), rededicate.find("remove_building = building_grand_monument"))
 
     def test_backlash(self):
         body = squash(block(read(EFFECTS), "gm_state_vanity_backlash"))
@@ -1209,6 +1237,21 @@ class LocFixTests(unittest.TestCase):
         self.assertIn("Grand Monuments:", L["je_grand_monuments_status"])
         self.assertIn("Grand Monuments:", L["je_grand_monuments_status_contested"])
 
+    def test_culture_line_hides_next_step_at_cap(self):
+        # Deferred item (2026-09-27): gm_display_culture caps at +5, but the
+        # F=10 curve keeps advancing past it, so "next step at" would keep
+        # showing after there is no more benefit to reach. gm_display_n_culture
+        # returns 0 at the cap and the loc line drops the clause when it does,
+        # the same "hide via SelectLocalization + EqualTo_CFixedPoint" shape
+        # TE_HOMELAND_REMOVAL_THRESHOLD_TT uses for its own _ZERO clause.
+        v = squash(block(read(VALUES), "gm_display_n_culture"))
+        self.assertIn("has_variable = gm_n_culture var:gm_s_culture < 5", v)
+        L = loc()
+        self.assertIn("SelectLocalization(EqualTo_CFixedPoint("
+                      "JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_culture'), "
+                      "'(CFixedPoint)0'), '', 'gm_je_line_culture_next')", L["gm_je_line_culture"])
+        self.assertIn("next step at", L["gm_je_line_culture_next"])
+
 
 # ---- Task 10: flavour events ---------------------------------------------------------
 
@@ -1271,6 +1314,14 @@ class DebugTests(unittest.TestCase):
         for s in ("gm_state_start_ceremony = yes", "gm_country_monthly = yes", "gm_state_contest = yes",
                   "gm_state_vanity_backlash = yes", "gm_debug_log = yes"):
             self.assertIn(s, body)
+        # Option c (Minor 1): gm_country_refresh would re-run gm_check_contests
+        # and immediately lift the just-forced contest, since the monument
+        # still fits. gm_notify_new_contests fires monument_events.16 (or
+        # clears gm_new_contest for the AI) without re-deriving contests, so
+        # the forced contest sticks.
+        self.assertIn("gm_state_contest = yes } gm_notify_new_contests = yes", body)
+        self.assertEqual(body.count("gm_country_refresh = yes"), 1,
+                          "only option d (vanity backlash) should still refresh")
         L = loc()
         for k in ("t", "desc", "flavor", "a", "b", "c", "d", "e"):
             self.assertIn(f"te_debug_monuments.1.{k}", L)

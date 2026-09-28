@@ -33,9 +33,15 @@ monument_events.1 = {
 			state = {
 				if = {
 					limit = { gm_system_enabled = yes }
+					# Minor 3: skip backlash for a Rededicate rebuild's own
+					# on_building_built (gm_state_rededicate sets gm_rebuilding
+					# for one day around the rebuild); the tooltip never
+					# mentions this cost, and rededicating is plausible right
+					# in the hard times that would otherwise trigger it.
 					if = {
 						limit = {
 							owner = { gm_country_hard_times = yes }
+							NOT = { has_variable = gm_rebuilding }
 						}
 						gm_state_vanity_backlash = yes
 					}
@@ -847,14 +853,19 @@ monument_events.16 = {
 		}
 	}
 
-	# Tear them all down.
+	# Tear them all down. owner = root (Minor 2): a state ceded while the
+	# notice is open must not be torn down, or written to the new owner's
+	# ledgers, by the country that no longer holds it.
 	option = {
 		name = monument_events.16.a
 		custom_tooltip = {
 			text = monument_events.16.a.tt
 			every_in_list = {
 				variable = gm_notice_states
-				limit = { gm_state_is_contested = yes }
+				limit = {
+					gm_state_is_contested = yes
+					owner = root
+				}
 				gm_state_tear_down = yes
 			}
 		}
@@ -862,14 +873,17 @@ monument_events.16 = {
 		ai_chance = { base = 0 }
 	}
 
-	# Keep them all as heritage.
+	# Keep them all as heritage. owner = root (Minor 2): see option a.
 	option = {
 		name = monument_events.16.b
 		custom_tooltip = {
 			text = monument_events.16.b.tt
 			every_in_list = {
 				variable = gm_notice_states
-				limit = { gm_state_is_contested = yes }
+				limit = {
+					gm_state_is_contested = yes
+					owner = root
+				}
 				gm_state_preserve = yes
 			}
 		}
@@ -877,7 +891,8 @@ monument_events.16 = {
 		ai_chance = { base = 0 }
 	}
 
-	# Decide on each in turn: one decision per monument.
+	# Decide on each in turn: one decision per monument. owner = root
+	# (Minor 2): don't queue .17 for a state this country no longer owns.
 	option = {
 		name = monument_events.16.c
 		default_option = yes
@@ -885,7 +900,10 @@ monument_events.16 = {
 			text = monument_events.16.c.tt
 			every_in_list = {
 				variable = gm_notice_states
-				limit = { gm_state_is_contested = yes }
+				limit = {
+					gm_state_is_contested = yes
+					owner = root
+				}
 				trigger_event = { id = monument_events.17 }
 			}
 		}
@@ -918,31 +936,44 @@ monument_events.17 = {
 		gm_state_is_contested = yes
 	}
 
+	# Minor 2: the state can change hands while this event's duration (3
+	# months) is running. Save the owner that opened it so each option can
+	# check the state is still that country's before writing its ledgers.
 	immediate = {
 		save_scope_as = monument_state
+		owner = { save_scope_as = monument_owner }
 	}
 
 	option = {
 		name = monument_events.17.a
-		gm_state_choose_tear_down = yes
-		hidden_effect = {
-			owner = { trigger_event = { id = monument_events.20 } }
+		if = {
+			limit = { owner = scope:monument_owner }
+			gm_state_choose_tear_down = yes
+			hidden_effect = {
+				owner = { trigger_event = { id = monument_events.20 } }
+			}
 		}
 	}
 
 	option = {
 		name = monument_events.17.b
-		gm_state_choose_rededicate = yes
-		hidden_effect = {
-			owner = { trigger_event = { id = monument_events.20 } }
+		if = {
+			limit = { owner = scope:monument_owner }
+			gm_state_choose_rededicate = yes
+			hidden_effect = {
+				owner = { trigger_event = { id = monument_events.20 } }
+			}
 		}
 	}
 
 	option = {
 		name = monument_events.17.c
-		gm_state_choose_preserve = yes
-		hidden_effect = {
-			owner = { trigger_event = { id = monument_events.20 } }
+		if = {
+			limit = { owner = scope:monument_owner }
+			gm_state_choose_preserve = yes
+			hidden_effect = {
+				owner = { trigger_event = { id = monument_events.20 } }
+			}
 		}
 	}
 

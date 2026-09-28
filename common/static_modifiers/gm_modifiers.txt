@@ -49,7 +49,7 @@ gm_national_industrial = {
 
 # Tear Down's reward (§4.3), from the decaying teardown ledger through the curve.
 gm_national_teardown = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
 	country_legitimacy_base_add = 3
 }
 

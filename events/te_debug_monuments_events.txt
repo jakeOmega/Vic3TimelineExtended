@@ -40,7 +40,12 @@ te_debug_monuments.1 = { # REVIEWED 2026-09-27: console-only test event (`event 
 		gm_country_monthly = yes
 	}
 
-	# Contest our tallest regime, ruler or faith monument now, as if it had fallen.
+	# Contest our tallest regime, ruler or faith monument now, as if it had
+	# fallen, and open its notice. gm_country_refresh would run gm_check_contests
+	# again immediately, see the just-forced contest still fitting, and lift it
+	# right back (Minor 1) — gm_notify_new_contests only fires monument_events.16
+	# (or, for the AI, clears gm_new_contest) without re-deriving contests, so
+	# the forced contest sticks until the player decides it.
 	option = {
 		name = te_debug_monuments.1.c
 		ordered_scope_state = {
@@ -54,7 +59,7 @@ te_debug_monuments.1 = { # REVIEWED 2026-09-27: console-only test event (`event 
 			check_range_bounds = no
 			gm_state_contest = yes
 		}
-		gm_country_refresh = yes
+		gm_notify_new_contests = yes
 	}
 
 	# Vanity backlash in the capital's monument, as if a level had finished in hard times.
