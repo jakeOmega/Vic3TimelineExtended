@@ -1601,7 +1601,7 @@
  },
  "je_space_race_probe_first_outcome_tt": {
   "en": "Returning the first interplanetary data is a generational scientific [concept_coup]. Our research culture surges and our [concept_prestige] carries the discovery.",
-  "de": "Die ersten interplanetaren Daten zurückzusenden, ist ein wissenschaftlicher [concept_coup] von historischem Rang. Unsere Forschungskultur macht einen großen Sprung, und unser [concept_prestige] trägt die Entdeckung."
+  "de": "Die ersten interplanetaren Daten zurückzusenden, ist ein wissenschaftlicher [Concept('concept_coup','Coup')] von historischem Rang. Unsere Forschungskultur macht einen großen Sprung, und unser [concept_prestige] trägt die Entdeckung."
  },
  "je_space_race_probe_on_completion_header": {
   "en": "Our probe sends back data from another world",
@@ -1721,7 +1721,7 @@
  },
  "je_space_race_suborbital_first_outcome_tt": {
   "en": "Our nation will be remembered as the first to touch space — a generational propaganda [concept_coup], fast-tracked innovation, and a magnetic pull on the world's imagination.",
-  "de": "Unsere Nation wird als die Erste in Erinnerung bleiben, die den Weltraum berührt hat — ein propagandistischer [concept_coup] von historischem Rang, beschleunigte Innovation und eine magnetische Anziehungskraft auf die Vorstellungskraft der Welt."
+  "de": "Unsere Nation wird als die Erste in Erinnerung bleiben, die den Weltraum berührt hat — ein propagandistischer [Concept('concept_coup','Coup')] von historischem Rang, beschleunigte Innovation und eine magnetische Anziehungskraft auf die Vorstellungskraft der Welt."
  },
  "je_space_race_suborbital_on_completion_header": {
   "en": "We have flown to the edge of space",
