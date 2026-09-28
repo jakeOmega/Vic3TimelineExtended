@@ -611,7 +611,7 @@ ICONS: dict[str, dict[str, dict]] = {
     # do; the same subject and seed render the same symbol in both looks.
     "ideology": {
         "ideology_multicultural_ig": {"subject": "three hands clasping each other's wrists to form a triangle", "seed": 0},
-        "ideology_anti_colonialist": {"subject": "a raised clenched fist in front of a globe with its continents, a thick white outline all around the fist separating it from the globe", "seed": None},
+        "ideology_anti_colonialist": {"subject": "a raised clenched fist in front of a globe with its continents, a thick white outline all around the fist separating it from the globe", "seed": 1},
         "ideology_islamic_inheritance": {"subject": "an open book resting on an X-shaped folding wooden book stand, a small crescent moon above it", "seed": 1},
     },
     # Mod-added decrees: 13 on road_maintenance, greenest grass on vanilla's
@@ -713,7 +713,7 @@ ICONS: dict[str, dict[str, dict]] = {
     },
     "leader_ideology": {
         "ideology_multicultural": {"subject": "three hands clasping each other's wrists to form a triangle", "seed": 0},
-        "ideology_anti_colonialist_leader": {"subject": "a raised clenched fist in front of a globe with its continents, a thick white outline all around the fist separating it from the globe", "seed": None},
+        "ideology_anti_colonialist_leader": {"subject": "a raised clenched fist in front of a globe with its continents, a thick white outline all around the fist separating it from the globe", "seed": 1},
         "ideology_multicultural_inclusive": {"subject": "three hands clasping each other's wrists to form a triangle around a heart", "seed": 0},
         "ideology_environmentalists": {"subject": "a broad oak tree with a round leafy crown and spreading roots", "seed": 0},
         "ideology_optimist_transhumanist": {"subject": "a DNA double helix rising in front of a half sun with bold rays", "seed": 1},
