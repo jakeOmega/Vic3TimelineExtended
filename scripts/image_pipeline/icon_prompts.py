@@ -586,11 +586,11 @@ ICONS: dict[str, dict[str, dict]] = {
         "mobilization_option_space_recon": {"subject": "a reconnaissance satellite: a boxy body with a big round camera lens and two wide rectangular solar panel wings", "seed": 1},
         "mobilization_option_molecular_scanners": {"subject": "a big magnifying glass held over a molecule model of five linked balls", "seed": 0},
         # special weapons
-        "mobilization_option_radar": {"subject": "a big dish-shaped radar antenna tilted upward on a thick pedestal mount", "seed": 0},
+        "mobilization_option_radar": {"subject": "a big dish-shaped radar antenna tilted upward on a thick pedestal mount", "seed": 1},
         "mobilization_option_night_vision_gear": {"subject": "an empty combat helmet with night vision goggles of two thick tube lenses mounted on its front", "seed": 1},
         "mobilization_option_missile_defense_system": {"subject": "a truck-mounted launcher with four thick box-shaped missile canisters raised at a steep angle, one missile leaving on a short thick flame", "seed": 1},
         "mobilization_option_directed_energy_defenses": {"subject": "a squat turret on a thick pedestal firing one long thick straight beam diagonally up to the top right corner, where a small missile bursts into a star-shaped flash", "seed": 1},
-        "mobilization_option_cyberwarfare_team": {"subject": "an open laptop computer with a big skull and crossbones on its screen", "seed": 0},
+        "mobilization_option_cyberwarfare_team": {"subject": "an open laptop computer with a big skull and crossbones on its screen", "seed": 1},
         "mobilization_option_electronic_warfare": {"subject": "a military backpack radio set with a thick antenna, a big bold lightning bolt striking diagonally across its front", "seed": 0},
         "mobilization_option_exoskeleton_suits": {"subject": "a soldier striding in a bulky powered exoskeleton suit with thick mechanical leg and arm braces, side view", "seed": 1},
         # medic support
@@ -610,7 +610,7 @@ ICONS: dict[str, dict[str, dict]] = {
     # An ideology an IG and a leader both hold shares its subject, as vanilla's
     # do; the same subject and seed render the same symbol in both looks.
     "ideology": {
-        "ideology_multicultural_ig": {"subject": "three hands clasping each other's wrists to form a triangle", "seed": 1},
+        "ideology_multicultural_ig": {"subject": "three hands clasping each other's wrists to form a triangle", "seed": 0},
         "ideology_anti_colonialist": {"subject": "a raised clenched fist in front of a globe with its continents", "seed": 1},
         "ideology_islamic_inheritance": {"subject": "an open book resting on an X-shaped folding wooden book stand, a small crescent moon above it", "seed": 1},
     },
@@ -709,9 +709,9 @@ ICONS: dict[str, dict[str, dict]] = {
         "identity_diplomatic": {"subject": "a rolled treaty parchment with a red wax seal, a gilded olive branch laid across it", "seed": None},
     },
     "leader_ideology": {
-        "ideology_multicultural": {"subject": "three hands clasping each other's wrists to form a triangle", "seed": 1},
+        "ideology_multicultural": {"subject": "three hands clasping each other's wrists to form a triangle", "seed": 0},
         "ideology_anti_colonialist_leader": {"subject": "a raised clenched fist in front of a globe with its continents", "seed": 1},
-        "ideology_multicultural_inclusive": {"subject": "three hands clasping each other's wrists to form a triangle around a heart", "seed": 1},
+        "ideology_multicultural_inclusive": {"subject": "three hands clasping each other's wrists to form a triangle around a heart", "seed": 0},
         "ideology_environmentalists": {"subject": "a broad oak tree with a round leafy crown and spreading roots", "seed": 0},
         "ideology_optimist_transhumanist": {"subject": "a DNA double helix rising in front of a half sun with bold rays", "seed": 1},
         "ideology_corporate": {"subject": "a leather briefcase in front of a tall skyscraper", "seed": 1},
