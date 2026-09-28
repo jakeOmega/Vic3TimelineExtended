@@ -20,7 +20,7 @@
   "de": "Forscher, Ärzte, Anwälte und andere gebildete Fachleute, insbesondere jene, die an akademischen Institutionen studieren und lehren. Politisch stehen sie an der Spitze der Intelligenzija."
  },
  "building_art_academy": {
-  "en": "Creative Industries",
+  "en": "Creative Industry",
   "de": "Kreativindustrie"
  },
  "building_chemical_plant": {
@@ -91,37 +91,197 @@
   "en": "Glass and Plastics",
   "de": "Glas und Kunststoffe"
  },
+ "goods_input_coal_add": {
+  "en": "@coal! $coal$ input",
+  "de": "@coal! $coal$-Einsatz"
+ },
+ "goods_input_coal_add_desc": {
+  "en": "The amount of @coal! $coal$ consumed by buildings",
+  "de": "Wie viel @coal! $coal$ von Gebäuden verbraucht wird"
+ },
  "goods_input_fertilizer_add": {
-  "en": "@fertilizer! Chemicals Input",
-  "de": "@fertilizer! Chemikalieneinsatz"
+  "en": "@fertilizer! $fertilizer$ Input",
+  "de": "@fertilizer! $fertilizer$-Einsatz"
  },
  "goods_input_fertilizer_add_desc": {
-  "en": "The amount of @fertilizer! Chemicals consumed by buildings",
-  "de": "Die Menge an @fertilizer! Chemikalien, die von Gebäuden verbraucht wird"
+  "en": "The amount of @fertilizer! $fertilizer$ consumed by buildings",
+  "de": "Wie viel @fertilizer! $fertilizer$ von Gebäuden verbraucht wird"
+ },
+ "goods_input_glass_add": {
+  "en": "@glass! $glass$ input",
+  "de": "@glass! $glass$-Einsatz"
+ },
+ "goods_input_glass_add_desc": {
+  "en": "The amount of @glass! $glass$ consumed by buildings",
+  "de": "Wie viel @glass! $glass$ von Gebäuden verbraucht wird"
+ },
+ "goods_input_iron_add": {
+  "en": "@iron! $iron$ input",
+  "de": "@iron! $iron$-Einsatz"
+ },
+ "goods_input_iron_add_desc": {
+  "en": "The amount of @iron! $iron$ consumed by buildings",
+  "de": "Wie viel @iron! $iron$ von Gebäuden verbraucht wird"
+ },
+ "goods_input_lead_add": {
+  "en": "@lead! $lead$ input",
+  "de": "@lead! $lead$-Einsatz"
+ },
+ "goods_input_lead_add_desc": {
+  "en": "The amount of @lead! $lead$ consumed by buildings",
+  "de": "Wie viel @lead! $lead$ von Gebäuden verbraucht wird"
+ },
+ "goods_input_opium_add": {
+  "en": "@opium! $opium$ input",
+  "de": "@opium! $opium$-Einsatz"
+ },
+ "goods_input_opium_add_desc": {
+  "en": "The amount of @opium! $opium$ consumed by buildings",
+  "de": "Wie viel @opium! $opium$ von Gebäuden verbraucht wird"
+ },
+ "goods_input_radios_add": {
+  "en": "@radios! $radios$ input",
+  "de": "@radios! $radios$-Einsatz"
+ },
+ "goods_input_radios_add_desc": {
+  "en": "The amount of @radios! $radios$ consumed by buildings",
+  "de": "Wie viel @radios! $radios$ von Gebäuden verbraucht wird"
+ },
+ "goods_input_radios_mult": {
+  "en": "@radios![Nbsp]$radios$ input",
+  "de": "@radios![Nbsp]$radios$-Einsatz"
+ },
+ "goods_input_radios_mult_desc": {
+  "en": "The amount of @radios![Nbsp]$radios$ consumed by buildings",
+  "de": "Wie viel @radios![Nbsp]$radios$ von Gebäuden verbraucht wird"
+ },
+ "goods_input_sulfur_add": {
+  "en": "@sulfur! $sulfur$ input",
+  "de": "@sulfur! $sulfur$-Einsatz"
+ },
+ "goods_input_sulfur_add_desc": {
+  "en": "The amount of @sulfur! $sulfur$ consumed by buildings",
+  "de": "Wie viel @sulfur! $sulfur$ von Gebäuden verbraucht wird"
+ },
+ "goods_input_telephones_add": {
+  "en": "@telephones! $telephones$ input",
+  "de": "@telephones! $telephones$-Einsatz"
+ },
+ "goods_input_telephones_add_desc": {
+  "en": "The amount of @telephones! $telephones$ consumed by buildings",
+  "de": "Wie viel @telephones! $telephones$ von Gebäuden verbraucht wird"
+ },
+ "goods_input_transportation_add": {
+  "en": "@transportation! $transportation$ input",
+  "de": "@transportation! $transportation$-Einsatz"
+ },
+ "goods_input_transportation_add_desc": {
+  "en": "The amount of @transportation! $transportation$ consumed by buildings",
+  "de": "Wie viel @transportation! $transportation$ von Gebäuden verbraucht wird"
+ },
+ "goods_output_coal_add": {
+  "en": "@coal! $coal$ output",
+  "de": "@coal! $coal$-Ausstoß"
+ },
+ "goods_output_coal_add_desc": {
+  "en": "The amount of @coal! $coal$ produced by buildings",
+  "de": "Wie viel @coal! $coal$ von Gebäuden produziert wird"
  },
  "goods_output_fertilizer_add": {
-  "en": "@fertilizer! Chemicals Output",
-  "de": "@fertilizer! Chemikalienausstoß"
+  "en": "@fertilizer! $fertilizer$ Output",
+  "de": "@fertilizer! $fertilizer$-Ausstoß"
  },
  "goods_output_fertilizer_add_desc": {
-  "en": "The amount of @fertilizer! Chemicals produced by buildings",
-  "de": "Die Menge an @fertilizer! Chemikalien, die von Gebäuden produziert wird"
+  "en": "The amount of @fertilizer! $fertilizer$ produced by buildings",
+  "de": "Wie viel @fertilizer! $fertilizer$ von Gebäuden produziert wird"
  },
  "goods_output_fertilizer_mult": {
-  "en": "Building @fertilizer! Chemicals output",
-  "de": "Gebäude-Ausstoß an @fertilizer! Chemikalien"
+  "en": "Building @fertilizer! $fertilizer$ output",
+  "de": "Gebäude-Ausstoß: @fertilizer! $fertilizer$"
  },
  "goods_output_fertilizer_mult_desc": {
-  "en": "A bonus or penalty to the amount of @fertilizer! Chemicals produced by buildings",
-  "de": "Ein Bonus oder Malus auf die Menge an @fertilizer! Chemikalien, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @fertilizer! $fertilizer$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @fertilizer! $fertilizer$ von Gebäuden produziert wird"
+ },
+ "goods_output_fine_art_add": {
+  "en": "@fine_art! $fine_art$ output",
+  "de": "@fine_art! $fine_art$-Ausstoß"
+ },
+ "goods_output_fine_art_add_desc": {
+  "en": "The amount of @fine_art! $fine_art$ produced by buildings",
+  "de": "Wie viel @fine_art! $fine_art$ von Gebäuden produziert wird"
+ },
+ "goods_output_glass_add": {
+  "en": "@glass! $glass$ output",
+  "de": "@glass! $glass$-Ausstoß"
+ },
+ "goods_output_glass_add_desc": {
+  "en": "The amount of @glass! $glass$ produced by buildings",
+  "de": "Wie viel @glass! $glass$ von Gebäuden produziert wird"
+ },
+ "goods_output_iron_add": {
+  "en": "@iron! $iron$ output",
+  "de": "@iron! $iron$-Ausstoß"
+ },
+ "goods_output_iron_add_desc": {
+  "en": "The amount of @iron! $iron$ produced by buildings",
+  "de": "Wie viel @iron! $iron$ von Gebäuden produziert wird"
+ },
+ "goods_output_lead_add": {
+  "en": "@lead! $lead$ output",
+  "de": "@lead! $lead$-Ausstoß"
+ },
+ "goods_output_lead_add_desc": {
+  "en": "The amount of @lead! $lead$ produced by buildings",
+  "de": "Wie viel @lead! $lead$ von Gebäuden produziert wird"
+ },
+ "goods_output_opium_add": {
+  "en": "@opium! $opium$ output",
+  "de": "@opium! $opium$-Ausstoß"
+ },
+ "goods_output_opium_add_desc": {
+  "en": "The amount of @opium! $opium$ produced by buildings",
+  "de": "Wie viel @opium! $opium$ von Gebäuden produziert wird"
+ },
+ "goods_output_radios_add": {
+  "en": "@radios! $radios$ output",
+  "de": "@radios! $radios$-Ausstoß"
+ },
+ "goods_output_radios_add_desc": {
+  "en": "The amount of @radios! $radios$ produced by buildings",
+  "de": "Wie viel @radios! $radios$ von Gebäuden produziert wird"
  },
  "goods_output_radios_mult": {
-  "en": "Building @radios! Wireless Telecommunication Gear output",
-  "de": "Gebäude-Ausstoß an @radios! drahtlosen Telekommunikationsgeräten"
+  "en": "Building @radios! $radios$ output",
+  "de": "Gebäude-Ausstoß: @radios! $radios$"
  },
  "goods_output_radios_mult_desc": {
-  "en": "A bonus or penalty to the amount of @radios! Wireless Telecommunication Gear produced by buildings",
-  "de": "Ein Bonus oder Malus auf die Menge an @radios! Drahtlosen Telekommunikationsgeräten, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @radios! $radios$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @radios! $radios$ von Gebäuden produziert wird"
+ },
+ "goods_output_sulfur_add": {
+  "en": "@sulfur! $sulfur$ output",
+  "de": "@sulfur! $sulfur$-Ausstoß"
+ },
+ "goods_output_sulfur_add_desc": {
+  "en": "The amount of @sulfur! $sulfur$ produced by buildings",
+  "de": "Wie viel @sulfur! $sulfur$ von Gebäuden produziert wird"
+ },
+ "goods_output_telephones_add": {
+  "en": "@telephones! $telephones$ output",
+  "de": "@telephones! $telephones$-Ausstoß"
+ },
+ "goods_output_telephones_add_desc": {
+  "en": "The amount of @telephones! $telephones$ produced by buildings",
+  "de": "Wie viel @telephones! $telephones$ von Gebäuden produziert wird"
+ },
+ "goods_output_transportation_add": {
+  "en": "@transportation! $transportation$ output",
+  "de": "@transportation! $transportation$-Ausstoß"
+ },
+ "goods_output_transportation_add_desc": {
+  "en": "The amount of @transportation! $transportation$ produced by buildings",
+  "de": "Wie viel @transportation! $transportation$ von Gebäuden produziert wird"
  },
  "institution_health_system": {
   "en": "Ministry of Health",
@@ -262,6 +422,14 @@
  "second_rate_citizen": {
   "en": "Provisional Acceptance",
   "de": "Vorläufige Akzeptanz"
+ },
+ "stockpile_navy_requirement_coal_add": {
+  "en": "Navy @coal! $coal$ Consumption",
+  "de": "Marineverbrauch: @coal! $coal$"
+ },
+ "stockpile_navy_requirement_coal_add_desc": {
+  "en": "Increases how much @coal! $coal$ the navy consumes",
+  "de": "Erhöht, wie viel @coal! $coal$ die Marine verbraucht"
  },
  "sulfur": {
   "en": "Chemical and Industrial Minerals",

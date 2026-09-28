@@ -884,128 +884,128 @@
   "de": "Multiplikative Anpassung des Fehlschlagsrisikos beim [concept_space_race]. Der sichere Ansatz bei aktiven Meilensteinen verringert das Fehlschlagsrisiko auf Kosten eines langsameren Fortschritts."
  },
  "country_st_res_aeroplanes_capacity_add": {
-  "en": "Aeroplanes Reserve Capacity",
-  "de": "Reservekapazität: Flugzeuge"
+  "en": "$aeroplanes$ Reserve Capacity",
+  "de": "Reservekapazität: $aeroplanes$"
  },
  "country_st_res_aeroplanes_capacity_add_desc": {
   "en": "Maximum aeroplanes that can be held in the national strategic reserve.",
   "de": "Maximale Anzahl an Flugzeugen, die in der nationalen strategischen Reserve gelagert werden können."
  },
  "country_st_res_aeroplanes_decay_add": {
-  "en": "Aeroplanes Reserve Decay",
-  "de": "Reserveschwund: Flugzeuge"
+  "en": "$aeroplanes$ Reserve Decay",
+  "de": "Reserveschwund: $aeroplanes$"
  },
  "country_st_res_aeroplanes_decay_add_desc": {
   "en": "Fraction of the aeroplane stockpile lost to airframe fatigue and obsolescence per year.",
   "de": "Anteil des Flugzeugbestands, der jährlich durch Materialermüdung und Veralterung verloren geht."
  },
  "country_st_res_ammunition_capacity_add": {
-  "en": "Ammunition Reserve Capacity",
-  "de": "Reservekapazität: Munition"
+  "en": "$ammunition$ Reserve Capacity",
+  "de": "Reservekapazität: $ammunition$"
  },
  "country_st_res_ammunition_capacity_add_desc": {
   "en": "Maximum ammunition that can be held in the national strategic reserve.",
   "de": "Maximale Menge an Munition, die in der nationalen strategischen Reserve gelagert werden kann."
  },
  "country_st_res_ammunition_decay_add": {
-  "en": "Ammunition Reserve Decay",
-  "de": "Reserveschwund: Munition"
+  "en": "$ammunition$ Reserve Decay",
+  "de": "Reserveschwund: $ammunition$"
  },
  "country_st_res_ammunition_decay_add_desc": {
   "en": "Fraction of the ammunition stockpile lost to degradation per year.",
   "de": "Anteil des Munitionsbestands, der jährlich durch Materialabbau verloren geht."
  },
  "country_st_res_artillery_capacity_add": {
-  "en": "Artillery Reserve Capacity",
-  "de": "Reservekapazität: Artillerie"
+  "en": "$artillery$ Reserve Capacity",
+  "de": "Reservekapazität: $artillery$"
  },
  "country_st_res_artillery_capacity_add_desc": {
   "en": "Maximum artillery pieces that can be held in the national strategic reserve.",
   "de": "Maximale Anzahl an Artilleriegeschützen, die in der nationalen strategischen Reserve gelagert werden können."
  },
  "country_st_res_artillery_decay_add": {
-  "en": "Artillery Reserve Decay",
-  "de": "Reserveschwund: Artillerie"
+  "en": "$artillery$ Reserve Decay",
+  "de": "Reserveschwund: $artillery$"
  },
  "country_st_res_artillery_decay_add_desc": {
   "en": "Fraction of the artillery stockpile lost to wear and obsolescence per year.",
   "de": "Anteil des Artilleriebestands, der jährlich durch Verschleiß und Veralterung verloren geht."
  },
  "country_st_res_fertilizer_capacity_add": {
-  "en": "Chemicals Reserve Capacity",
-  "de": "Reservekapazität: Chemikalien"
+  "en": "$fertilizer$ Reserve Capacity",
+  "de": "Reservekapazität: $fertilizer$"
  },
  "country_st_res_fertilizer_capacity_add_desc": {
   "en": "Maximum chemicals that can be held in the national strategic reserve.",
   "de": "Maximale Menge an Chemikalien, die in der nationalen strategischen Reserve gelagert werden kann."
  },
  "country_st_res_fertilizer_decay_add": {
-  "en": "Chemicals Reserve Decay",
-  "de": "Reserveschwund: Chemikalien"
+  "en": "$fertilizer$ Reserve Decay",
+  "de": "Reserveschwund: $fertilizer$"
  },
  "country_st_res_fertilizer_decay_add_desc": {
   "en": "Fraction of the chemicals stockpile lost to caking, moisture absorption and container corrosion per year.",
   "de": "Anteil des Chemikalienbestands, der jährlich durch Verklumpen, Feuchtigkeitsaufnahme und Behälterkorrosion verloren geht."
  },
  "country_st_res_grain_capacity_add": {
-  "en": "Grain Reserve Capacity",
-  "de": "Reservekapazität: Getreide"
+  "en": "$grain$ Reserve Capacity",
+  "de": "Reservekapazität: $grain$"
  },
  "country_st_res_grain_capacity_add_desc": {
   "en": "Maximum grain that can be held in the national strategic reserve.",
   "de": "Maximale Menge an Getreide, die in der nationalen strategischen Reserve gelagert werden kann."
  },
  "country_st_res_grain_decay_add": {
-  "en": "Grain Reserve Decay",
-  "de": "Reserveschwund: Getreide"
+  "en": "$grain$ Reserve Decay",
+  "de": "Reserveschwund: $grain$"
  },
  "country_st_res_grain_decay_add_desc": {
   "en": "Fraction of the grain stockpile lost to spoilage per year.",
   "de": "Anteil des Getreidebestands, der jährlich durch Verderb verloren geht."
  },
  "country_st_res_oil_capacity_add": {
-  "en": "Oil Reserve Capacity",
-  "de": "Reservekapazität: Öl"
+  "en": "$oil$ Reserve Capacity",
+  "de": "Reservekapazität: $oil$"
  },
  "country_st_res_oil_capacity_add_desc": {
   "en": "Maximum oil that can be held in the national strategic reserve.",
   "de": "Maximale Menge an Öl, die in der nationalen strategischen Reserve gelagert werden kann."
  },
  "country_st_res_oil_decay_add": {
-  "en": "Oil Reserve Decay",
-  "de": "Reserveschwund: Öl"
+  "en": "$oil$ Reserve Decay",
+  "de": "Reserveschwund: $oil$"
  },
  "country_st_res_oil_decay_add_desc": {
   "en": "Fraction of the oil stockpile lost to evaporation and sludge per year.",
   "de": "Anteil des Ölbestands, der jährlich durch Verdunstung und Schlammbildung verloren geht."
  },
  "country_st_res_small_arms_capacity_add": {
-  "en": "Small Arms Reserve Capacity",
-  "de": "Reservekapazität: Handfeuerwaffen"
+  "en": "$small_arms$ Reserve Capacity",
+  "de": "Reservekapazität: $small_arms$"
  },
  "country_st_res_small_arms_capacity_add_desc": {
   "en": "Maximum small arms that can be held in the national strategic reserve.",
   "de": "Maximale Menge an Handfeuerwaffen, die in der nationalen strategischen Reserve gelagert werden kann."
  },
  "country_st_res_small_arms_decay_add": {
-  "en": "Small Arms Reserve Decay",
-  "de": "Reserveschwund: Handfeuerwaffen"
+  "en": "$small_arms$ Reserve Decay",
+  "de": "Reserveschwund: $small_arms$"
  },
  "country_st_res_small_arms_decay_add_desc": {
   "en": "Fraction of the small arms stockpile lost to corrosion and obsolescence per year.",
   "de": "Anteil des Handfeuerwaffenbestands, der jährlich durch Korrosion und Veralterung verloren geht."
  },
  "country_st_res_tanks_capacity_add": {
-  "en": "Tanks Reserve Capacity",
-  "de": "Reservekapazität: Panzer"
+  "en": "$tanks$ Reserve Capacity",
+  "de": "Reservekapazität: $tanks$"
  },
  "country_st_res_tanks_capacity_add_desc": {
   "en": "Maximum tanks that can be held in the national strategic reserve.",
   "de": "Maximale Anzahl an Panzern, die in der nationalen strategischen Reserve gelagert werden kann."
  },
  "country_st_res_tanks_decay_add": {
-  "en": "Tanks Reserve Decay",
-  "de": "Reserveschwund: Panzer"
+  "en": "$tanks$ Reserve Decay",
+  "de": "Reserveschwund: $tanks$"
  },
  "country_st_res_tanks_decay_add_desc": {
   "en": "Fraction of the tank stockpile lost to mechanical degradation and obsolescence per year.",
@@ -1100,36 +1100,36 @@
   "de": "Eine prozentuale Änderung des [concept_investment_pool]s jede Woche."
  },
  "goods_input_advanced_materials_add": {
-  "en": "@advanced_materials! Advanced Materials Input",
-  "de": "@advanced_materials! Hochleistungswerkstoffeinsatz"
+  "en": "@advanced_materials! $advanced_materials$ Input",
+  "de": "@advanced_materials! $advanced_materials$-Einsatz"
  },
  "goods_input_advanced_materials_add_desc": {
-  "en": "The amount of @advanced_materials! Advanced Materials consumed by buildings",
-  "de": "Die Menge an @advanced_materials! Hochleistungswerkstoffen, die von Gebäuden verbraucht wird"
+  "en": "The amount of @advanced_materials! $advanced_materials$ consumed by buildings",
+  "de": "Wie viel @advanced_materials! $advanced_materials$ von Gebäuden verbraucht wird"
  },
  "goods_input_aeroplanes_mult": {
-  "en": "@aeroplanes! Aeroplanes Input",
-  "de": "@aeroplanes! Flugzeugeinsatz"
+  "en": "@aeroplanes! $aeroplanes$ Input",
+  "de": "@aeroplanes! $aeroplanes$-Einsatz"
  },
  "goods_input_aeroplanes_mult_desc": {
-  "en": "The amount of @aeroplanes! Aeroplanes consumed by buildings",
-  "de": "Die Menge an @aeroplanes! Flugzeugen, die von Gebäuden verbraucht wird"
+  "en": "The amount of @aeroplanes! $aeroplanes$ consumed by buildings",
+  "de": "Wie viel @aeroplanes! $aeroplanes$ von Gebäuden verbraucht wird"
  },
  "goods_input_coal_mult": {
-  "en": "@coal! Coal Input",
-  "de": "@coal! Kohleeinsatz"
+  "en": "@coal! $coal$ Input",
+  "de": "@coal! $coal$-Einsatz"
  },
  "goods_input_coal_mult_desc": {
-  "en": "The amount of @coal! Coal consumed by buildings",
-  "de": "Die Menge an @coal! Kohle, die von Gebäuden verbraucht wird"
+  "en": "The amount of @coal! $coal$ consumed by buildings",
+  "de": "Wie viel @coal! $coal$ von Gebäuden verbraucht wird"
  },
  "goods_input_coffee_add": {
-  "en": "@coffee! Coffee Input",
-  "de": "@coffee! Kaffee-Einsatz"
+  "en": "@coffee! $coffee$ Input",
+  "de": "@coffee! $coffee$-Einsatz"
  },
  "goods_input_coffee_add_desc": {
-  "en": "The amount of @coffee! Coffee consumed by buildings",
-  "de": "Die Menge an @coffee! Kaffee, die von Gebäuden verbraucht wird"
+  "en": "The amount of @coffee! $coffee$ consumed by buildings",
+  "de": "Wie viel @coffee! $coffee$ von Gebäuden verbraucht wird"
  },
  "goods_input_construction_add": {
   "en": "@construction! [concept_budget_construction_goods] Input",
@@ -1148,116 +1148,116 @@
   "de": "Die Menge an @construction! [concept_budget_construction_goods], die von Gebäuden verbraucht wird"
  },
  "goods_input_consumer_appliances_add": {
-  "en": "@consumer_appliances! Consumer Appliances Input",
-  "de": "@consumer_appliances! Haushaltsgeräteeinsatz"
+  "en": "@consumer_appliances! $consumer_appliances$ Input",
+  "de": "@consumer_appliances! $consumer_appliances$-Einsatz"
  },
  "goods_input_consumer_appliances_add_desc": {
-  "en": "The amount of @consumer_appliances! Consumer Appliances consumed by buildings",
-  "de": "Die Menge an @consumer_appliances! Haushaltsgeräten, die von Gebäuden verbraucht wird"
+  "en": "The amount of @consumer_appliances! $consumer_appliances$ consumed by buildings",
+  "de": "Wie viel @consumer_appliances! $consumer_appliances$ von Gebäuden verbraucht wird"
  },
  "goods_input_digital_access_add": {
-  "en": "@digital_access! Digital Access Input",
-  "de": "@digital_access! Digitalzugangseinsatz"
+  "en": "@digital_access! $digital_access$ Input",
+  "de": "@digital_access! $digital_access$-Einsatz"
  },
  "goods_input_digital_access_add_desc": {
-  "en": "The amount of @digital_access! Digital Access consumed by buildings",
-  "de": "Die Menge an @digital_access! Digitalzugang, die von Gebäuden verbraucht wird"
+  "en": "The amount of @digital_access! $digital_access$ consumed by buildings",
+  "de": "Wie viel @digital_access! $digital_access$ von Gebäuden verbraucht wird"
  },
  "goods_input_digital_assets_add": {
-  "en": "@digital_assets! Software Input",
-  "de": "@digital_assets! Softwareeinsatz"
+  "en": "@digital_assets! $digital_assets$ Input",
+  "de": "@digital_assets! $digital_assets$-Einsatz"
  },
  "goods_input_digital_assets_add_desc": {
-  "en": "The amount of @digital_assets! Software consumed by buildings",
-  "de": "Die Menge an @digital_assets! Software, die von Gebäuden verbraucht wird"
+  "en": "The amount of @digital_assets! $digital_assets$ consumed by buildings",
+  "de": "Wie viel @digital_assets! $digital_assets$ von Gebäuden verbraucht wird"
  },
  "goods_input_electricity_mult": {
-  "en": "@electricity! Electricity Input",
-  "de": "@electricity! Stromeinsatz"
+  "en": "@electricity! $electricity$ Input",
+  "de": "@electricity! $electricity$-Einsatz"
  },
  "goods_input_electricity_mult_desc": {
-  "en": "The amount of @electricity! Electricity consumed by buildings",
-  "de": "Die Menge an @electricity! Strom, die von Gebäuden verbraucht wird"
+  "en": "The amount of @electricity! $electricity$ consumed by buildings",
+  "de": "Wie viel @electricity! $electricity$ von Gebäuden verbraucht wird"
  },
  "goods_input_electronic_components_add": {
-  "en": "@electronic_components! Electronic Components Input",
-  "de": "@electronic_components! Elektronikbauteileeinsatz"
+  "en": "@electronic_components! $electronic_components$ Input",
+  "de": "@electronic_components! $electronic_components$-Einsatz"
  },
  "goods_input_electronic_components_add_desc": {
-  "en": "The amount of @electronic_components! Electronic Components consumed by buildings",
-  "de": "Die Menge an @electronic_components! Elektronikbauteilen, die von Gebäuden verbraucht wird"
+  "en": "The amount of @electronic_components! $electronic_components$ consumed by buildings",
+  "de": "Wie viel @electronic_components! $electronic_components$ von Gebäuden verbraucht wird"
  },
  "goods_input_fertilizer_mult": {
-  "en": "@fertilizer! Chemicals Input",
-  "de": "@fertilizer! Chemikalieneinsatz"
+  "en": "@fertilizer! $fertilizer$ Input",
+  "de": "@fertilizer! $fertilizer$-Einsatz"
  },
  "goods_input_fertilizer_mult_desc": {
-  "en": "The amount of @fertilizer! Chemicals consumed by buildings",
-  "de": "Die Menge an @fertilizer! Chemikalien, die von Gebäuden verbraucht wird"
+  "en": "The amount of @fertilizer! $fertilizer$ consumed by buildings",
+  "de": "Wie viel @fertilizer! $fertilizer$ von Gebäuden verbraucht wird"
  },
  "goods_input_fine_art_add": {
-  "en": "@fine_art! Fine Art Input",
-  "de": "@fine_art! Einsatz an Kunst und Unterhaltung"
+  "en": "@fine_art! $fine_art$ Input",
+  "de": "@fine_art! $fine_art$-Einsatz"
  },
  "goods_input_fine_art_add_desc": {
-  "en": "The amount of @fine_art! Fine Art consumed by buildings",
-  "de": "Die Menge an @fine_art! Kunst und Unterhaltung, die von Gebäuden verbraucht wird"
+  "en": "The amount of @fine_art! $fine_art$ consumed by buildings",
+  "de": "Wie viel @fine_art! $fine_art$ von Gebäuden verbraucht wird"
  },
  "goods_input_gold_add": {
-  "en": "@gold! Gold Input",
-  "de": "@gold! Goldeinsatz"
+  "en": "@gold! $gold$ Input",
+  "de": "@gold! $gold$-Einsatz"
  },
  "goods_input_gold_add_desc": {
-  "en": "The amount of @gold! Gold consumed by buildings",
-  "de": "Die Menge an @gold! Gold, die von Gebäuden verbraucht wird"
+  "en": "The amount of @gold! $gold$ consumed by buildings",
+  "de": "Wie viel @gold! $gold$ von Gebäuden verbraucht wird"
  },
  "goods_input_grain_mult": {
-  "en": "@grain! Grain Input",
-  "de": "@grain! Getreideeinsatz"
+  "en": "@grain! $grain$ Input",
+  "de": "@grain! $grain$-Einsatz"
  },
  "goods_input_grain_mult_desc": {
-  "en": "The amount of @grain! Grain consumed by buildings",
-  "de": "Die Menge an @grain! Getreide, die von Gebäuden verbraucht wird"
+  "en": "The amount of @grain! $grain$ consumed by buildings",
+  "de": "Wie viel @grain! $grain$ von Gebäuden verbraucht wird"
  },
  "goods_input_launch_capacity_add": {
-  "en": "@launch_capacity! Launch Capacity Input",
-  "de": "@launch_capacity! Startkapazitätseinsatz"
+  "en": "@launch_capacity! $launch_capacity$ Input",
+  "de": "@launch_capacity! $launch_capacity$-Einsatz"
  },
  "goods_input_launch_capacity_add_desc": {
-  "en": "The amount of @launch_capacity! Launch Capacity consumed by buildings",
-  "de": "Die Menge an @launch_capacity! Startkapazität, die von Gebäuden verbraucht wird"
+  "en": "The amount of @launch_capacity! $launch_capacity$ consumed by buildings",
+  "de": "Wie viel @launch_capacity! $launch_capacity$ von Gebäuden verbraucht wird"
  },
  "goods_input_luxury_clothes_add": {
-  "en": "@luxury_clothes! Luxury Clothes Input",
-  "de": "@luxury_clothes! Luxuskleidungseinsatz"
+  "en": "@luxury_clothes! $luxury_clothes$ Input",
+  "de": "@luxury_clothes! $luxury_clothes$-Einsatz"
  },
  "goods_input_luxury_clothes_add_desc": {
-  "en": "The amount of @luxury_clothes! Luxury Clothes consumed by buildings",
-  "de": "Die Menge an @luxury_clothes! Luxuskleidung, die von Gebäuden verbraucht wird"
+  "en": "The amount of @luxury_clothes! $luxury_clothes$ consumed by buildings",
+  "de": "Wie viel @luxury_clothes! $luxury_clothes$ von Gebäuden verbraucht wird"
  },
  "goods_input_magnetic_drive_ships_add": {
-  "en": "@magnetic_drive_ships! Magnetic Drive Ships Input",
-  "de": "@magnetic_drive_ships! Magnetantriebsschiffeinsatz"
+  "en": "@magnetic_drive_ships! $magnetic_drive_ships$ Input",
+  "de": "@magnetic_drive_ships! $magnetic_drive_ships$-Einsatz"
  },
  "goods_input_magnetic_drive_ships_add_desc": {
-  "en": "The amount of @magnetic_drive_ships! Magnetic Drive Ships consumed by buildings",
-  "de": "Die Menge an @magnetic_drive_ships! Magnetantriebsschiffen, die von Gebäuden verbraucht wird"
+  "en": "The amount of @magnetic_drive_ships! $magnetic_drive_ships$ consumed by buildings",
+  "de": "Wie viel @magnetic_drive_ships! $magnetic_drive_ships$ von Gebäuden verbraucht wird"
  },
  "goods_input_merchant_marine_mult": {
-  "en": "@merchant_marine! Bulk Transportation Input",
-  "de": "@merchant_marine! Massengutverkehrseinsatz"
+  "en": "@merchant_marine! $merchant_marine$ Input",
+  "de": "@merchant_marine! $merchant_marine$-Einsatz"
  },
  "goods_input_merchant_marine_mult_desc": {
-  "en": "The amount of @merchant_marine! Bulk Transportation consumed by buildings",
-  "de": "Die Menge an @merchant_marine! Massengutverkehr, die von Gebäuden verbraucht wird"
+  "en": "The amount of @merchant_marine! $merchant_marine$ consumed by buildings",
+  "de": "Wie viel @merchant_marine! $merchant_marine$ von Gebäuden verbraucht wird"
  },
  "goods_input_motor_ships_add": {
-  "en": "@motor_ships! Motor Ships Input",
-  "de": "@motor_ships! Motorschiffseinsatz"
+  "en": "@motor_ships! $motor_ships$ Input",
+  "de": "@motor_ships! $motor_ships$-Einsatz"
  },
  "goods_input_motor_ships_add_desc": {
-  "en": "The amount of @motor_ships! Motor Ships consumed by buildings",
-  "de": "Die Menge an @motor_ships! Motorschiffen, die von Gebäuden verbraucht wird"
+  "en": "The amount of @motor_ships! $motor_ships$ consumed by buildings",
+  "de": "Wie viel @motor_ships! $motor_ships$ von Gebäuden verbraucht wird"
  },
  "goods_input_robotics_add": {
   "en": "@robotics! Robotics Input",
@@ -1268,20 +1268,20 @@
   "de": "Die Menge an @robotics! Robotik, die von Gebäuden verbraucht wird"
  },
  "goods_input_services_add": {
-  "en": "@services! Services Input",
-  "de": "@services! Dienstleistungseinsatz"
+  "en": "@services! $services$ Input",
+  "de": "@services! $services$-Einsatz"
  },
  "goods_input_services_add_desc": {
-  "en": "The amount of @services! Services consumed by buildings",
-  "de": "Die Menge an @services! Dienstleistungen, die von Gebäuden verbraucht wird"
+  "en": "The amount of @services! $services$ consumed by buildings",
+  "de": "Wie viel @services! $services$ von Gebäuden verbraucht wird"
  },
  "goods_input_tea_add": {
-  "en": "@tea! Tea Input",
-  "de": "@tea! Tee-Einsatz"
+  "en": "@tea! $tea$ Input",
+  "de": "@tea! $tea$-Einsatz"
  },
  "goods_input_tea_add_desc": {
-  "en": "The amount of @tea! Tea consumed by buildings",
-  "de": "Die Menge an @tea! Tee, die von Gebäuden verbraucht wird"
+  "en": "The amount of @tea! $tea$ consumed by buildings",
+  "de": "Wie viel @tea! $tea$ von Gebäuden verbraucht wird"
  },
  "goods_input_tech_metals_add": {
   "en": "@tech_metals! Tech Metals Input",
@@ -1292,52 +1292,52 @@
   "de": "Die Menge an @tech_metals! Technologiemetallen, die von Gebäuden verbraucht wird"
  },
  "goods_input_wood_mult": {
-  "en": "@wood! Wood Input",
-  "de": "@wood! Holzeinsatz"
+  "en": "@wood! $wood$ Input",
+  "de": "@wood! $wood$-Einsatz"
  },
  "goods_input_wood_mult_desc": {
-  "en": "The amount of @wood! Wood consumed by buildings",
-  "de": "Die Menge an @wood! Holz, die von Gebäuden verbraucht wird"
+  "en": "The amount of @wood! $wood$ consumed by buildings",
+  "de": "Wie viel @wood! $wood$ von Gebäuden verbraucht wird"
  },
  "goods_output_advanced_materials_add": {
-  "en": "@advanced_materials! Advanced Materials Output",
-  "de": "@advanced_materials! Hochleistungswerkstoffausstoß"
+  "en": "@advanced_materials! $advanced_materials$ Output",
+  "de": "@advanced_materials! $advanced_materials$-Ausstoß"
  },
  "goods_output_advanced_materials_add_desc": {
-  "en": "The amount of @advanced_materials! Advanced Materials produced by buildings",
-  "de": "Die Menge an @advanced_materials! Hochleistungswerkstoffen, die von Gebäuden produziert wird"
+  "en": "The amount of @advanced_materials! $advanced_materials$ produced by buildings",
+  "de": "Wie viel @advanced_materials! $advanced_materials$ von Gebäuden produziert wird"
  },
  "goods_output_advanced_materials_mult": {
-  "en": "Building @advanced_materials! Advanced Materials output",
-  "de": "@advanced_materials! Hochleistungswerkstoffausstoß"
+  "en": "Building @advanced_materials! $advanced_materials$ output",
+  "de": "Gebäude-Ausstoß: @advanced_materials! $advanced_materials$"
  },
  "goods_output_advanced_materials_mult_desc": {
-  "en": "The amount of @advanced_materials! Advanced Materials produced by buildings",
-  "de": "Die Menge an @advanced_materials! Hochleistungswerkstoffen, die von Gebäuden produziert wird"
+  "en": "The amount of @advanced_materials! $advanced_materials$ produced by buildings",
+  "de": "Wie viel @advanced_materials! $advanced_materials$ von Gebäuden produziert wird"
  },
  "goods_output_clothes_mult": {
-  "en": "Building @clothes! Clothes output",
-  "de": "@clothes! Kleidungsausstoß"
+  "en": "Building @clothes! $clothes$ output",
+  "de": "Gebäude-Ausstoß: @clothes! $clothes$"
  },
  "goods_output_clothes_mult_desc": {
-  "en": "A bonus or penalty to the amount of @clothes! Clothes produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @clothes! Kleidung, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @clothes! $clothes$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @clothes! $clothes$ von Gebäuden produziert wird"
  },
  "goods_output_coal_mult": {
-  "en": "Building @coal! Coal output",
-  "de": "@coal! Kohleausstoß"
+  "en": "Building @coal! $coal$ output",
+  "de": "Gebäude-Ausstoß: @coal! $coal$"
  },
  "goods_output_coal_mult_desc": {
-  "en": "A bonus or penalty to the amount of @coal! Coal produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @coal! Kohle, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @coal! $coal$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @coal! $coal$ von Gebäuden produziert wird"
  },
  "goods_output_coffee_mult": {
-  "en": "Building @coffee! Coffee output",
-  "de": "@coffee! Kaffeeausstoß"
+  "en": "Building @coffee! $coffee$ output",
+  "de": "Gebäude-Ausstoß: @coffee! $coffee$"
  },
  "goods_output_coffee_mult_desc": {
-  "en": "A bonus or penalty to the amount of @coffee! Coffee produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @coffee! Kaffee, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @coffee! $coffee$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @coffee! $coffee$ von Gebäuden produziert wird"
  },
  "goods_output_construction_add": {
   "en": "@construction! [concept_budget_construction_goods] Output",
@@ -1356,260 +1356,260 @@
   "de": "Erhöht oder verringert die Menge an @construction! Bauwaren, die von Gebäuden produziert wird"
  },
  "goods_output_consumer_appliances_add": {
-  "en": "@consumer_appliances! Consumer Appliances Output",
-  "de": "@consumer_appliances! Haushaltsgeräteausstoß"
+  "en": "@consumer_appliances! $consumer_appliances$ Output",
+  "de": "@consumer_appliances! $consumer_appliances$-Ausstoß"
  },
  "goods_output_consumer_appliances_add_desc": {
-  "en": "The amount of @consumer_appliances! Consumer Appliances produced by buildings",
-  "de": "Die Menge an @consumer_appliances! Haushaltsgeräten, die von Gebäuden produziert wird"
+  "en": "The amount of @consumer_appliances! $consumer_appliances$ produced by buildings",
+  "de": "Wie viel @consumer_appliances! $consumer_appliances$ von Gebäuden produziert wird"
  },
  "goods_output_consumer_appliances_mult": {
-  "en": "Building @consumer_appliances! Consumer Appliances output",
-  "de": "@consumer_appliances! Haushaltsgeräteausstoß"
+  "en": "Building @consumer_appliances! $consumer_appliances$ output",
+  "de": "Gebäude-Ausstoß: @consumer_appliances! $consumer_appliances$"
  },
  "goods_output_consumer_appliances_mult_desc": {
-  "en": "A bonus or penalty to the amount of @consumer_appliances! Consumer Appliances produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @consumer_appliances! Haushaltsgeräte, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @consumer_appliances! $consumer_appliances$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @consumer_appliances! $consumer_appliances$ von Gebäuden produziert wird"
  },
  "goods_output_digital_access_add": {
-  "en": "@digital_access! Digital Access Output",
-  "de": "@digital_access! Digitalzugangsausstoß"
+  "en": "@digital_access! $digital_access$ Output",
+  "de": "@digital_access! $digital_access$-Ausstoß"
  },
  "goods_output_digital_access_add_desc": {
-  "en": "The amount of @digital_access! Digital Access produced by buildings",
-  "de": "Die Menge an @digital_access! Digitalzugang, die von Gebäuden produziert wird"
+  "en": "The amount of @digital_access! $digital_access$ produced by buildings",
+  "de": "Wie viel @digital_access! $digital_access$ von Gebäuden produziert wird"
  },
  "goods_output_digital_access_mult": {
-  "en": "Building @digital_access! Digital Access output",
-  "de": "@digital_access! Digitalzugangsausstoß"
+  "en": "Building @digital_access! $digital_access$ output",
+  "de": "Gebäude-Ausstoß: @digital_access! $digital_access$"
  },
  "goods_output_digital_access_mult_desc": {
-  "en": "A bonus or penalty to the amount of @digital_access! Digital Access produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @digital_access! Digitalzugang, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @digital_access! $digital_access$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @digital_access! $digital_access$ von Gebäuden produziert wird"
  },
  "goods_output_digital_assets_add": {
-  "en": "@digital_assets! Software Output",
-  "de": "@digital_assets! Softwareausstoß"
+  "en": "@digital_assets! $digital_assets$ Output",
+  "de": "@digital_assets! $digital_assets$-Ausstoß"
  },
  "goods_output_digital_assets_add_desc": {
-  "en": "The amount of @digital_assets! Software produced by buildings",
-  "de": "Die Menge an @digital_assets! Software, die von Gebäuden produziert wird"
+  "en": "The amount of @digital_assets! $digital_assets$ produced by buildings",
+  "de": "Wie viel @digital_assets! $digital_assets$ von Gebäuden produziert wird"
  },
  "goods_output_digital_assets_mult": {
-  "en": "Building @digital_assets! Software output",
-  "de": "@digital_assets! Softwareausstoß"
+  "en": "Building @digital_assets! $digital_assets$ output",
+  "de": "Gebäude-Ausstoß: @digital_assets! $digital_assets$"
  },
  "goods_output_digital_assets_mult_desc": {
-  "en": "A bonus or penalty to the amount of @digital_assets! Software produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @digital_assets! Software, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @digital_assets! $digital_assets$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @digital_assets! $digital_assets$ von Gebäuden produziert wird"
  },
  "goods_output_dye_mult": {
-  "en": "Building @dye! Dye output",
-  "de": "@dye! Farbstoffausstoß"
+  "en": "Building @dye! $dye$ output",
+  "de": "Gebäude-Ausstoß: @dye! $dye$"
  },
  "goods_output_dye_mult_desc": {
-  "en": "A bonus or penalty to the amount of @dye! Dye produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @dye! Farbstoff, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @dye! $dye$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @dye! $dye$ von Gebäuden produziert wird"
  },
  "goods_output_electronic_components_add": {
-  "en": "@electronic_components! Electronic Components Output",
-  "de": "@electronic_components! Elektronikbauteileausstoß"
+  "en": "@electronic_components! $electronic_components$ Output",
+  "de": "@electronic_components! $electronic_components$-Ausstoß"
  },
  "goods_output_electronic_components_add_desc": {
-  "en": "The amount of @electronic_components! Electronic Components produced by buildings",
-  "de": "Die Menge an @electronic_components! Elektronikbauteilen, die von Gebäuden produziert wird"
+  "en": "The amount of @electronic_components! $electronic_components$ produced by buildings",
+  "de": "Wie viel @electronic_components! $electronic_components$ von Gebäuden produziert wird"
  },
  "goods_output_electronic_components_mult": {
-  "en": "Building @electronic_components! Electronic Components output",
-  "de": "@electronic_components! Elektronikbauteileausstoß"
+  "en": "Building @electronic_components! $electronic_components$ output",
+  "de": "Gebäude-Ausstoß: @electronic_components! $electronic_components$"
  },
  "goods_output_electronic_components_mult_desc": {
-  "en": "The amount of @electronic_components! Electronic Components produced by buildings",
-  "de": "Die Menge an @electronic_components! Elektronikbauteilen, die von Gebäuden produziert wird"
+  "en": "The amount of @electronic_components! $electronic_components$ produced by buildings",
+  "de": "Wie viel @electronic_components! $electronic_components$ von Gebäuden produziert wird"
  },
  "goods_output_explosives_mult": {
-  "en": "Building @explosives! Explosives output",
-  "de": "@explosives! Sprengstoffausstoß"
+  "en": "Building @explosives! $explosives$ output",
+  "de": "Gebäude-Ausstoß: @explosives! $explosives$"
  },
  "goods_output_explosives_mult_desc": {
-  "en": "A bonus or penalty to the amount of @explosives! Explosives produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @explosives! Sprengstoff, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @explosives! $explosives$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @explosives! $explosives$ von Gebäuden produziert wird"
  },
  "goods_output_fine_art_mult": {
-  "en": "Building @fine_art! Fine Art output",
-  "de": "@fine_art! Ausstoß an Kunst und Unterhaltung"
+  "en": "Building @fine_art! $fine_art$ output",
+  "de": "Gebäude-Ausstoß: @fine_art! $fine_art$"
  },
  "goods_output_fine_art_mult_desc": {
-  "en": "A bonus or penalty to the amount of @fine_art! Fine Art produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @fine_art! Kunst und Unterhaltung, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @fine_art! $fine_art$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @fine_art! $fine_art$ von Gebäuden produziert wird"
  },
  "goods_output_fish_mult": {
-  "en": "Building @fish! Fish output",
-  "de": "@fish! Fischausstoß"
+  "en": "Building @fish! $fish$ output",
+  "de": "Gebäude-Ausstoß: @fish! $fish$"
  },
  "goods_output_fish_mult_desc": {
-  "en": "A bonus or penalty to the amount of @fish! Fish produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @fish! Fisch, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @fish! $fish$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @fish! $fish$ von Gebäuden produziert wird"
  },
  "goods_output_furniture_mult": {
-  "en": "Building @furniture! Furniture output",
-  "de": "@furniture! Möbelausstoß"
+  "en": "Building @furniture! $furniture$ output",
+  "de": "Gebäude-Ausstoß: @furniture! $furniture$"
  },
  "goods_output_furniture_mult_desc": {
-  "en": "A bonus or penalty to the amount of @furniture! Furniture produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @furniture! Möbel, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @furniture! $furniture$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @furniture! $furniture$ von Gebäuden produziert wird"
  },
  "goods_output_glass_mult": {
-  "en": "Building @glass! Glass output",
-  "de": "@glass! Glasausstoß"
+  "en": "Building @glass! $glass$ output",
+  "de": "Gebäude-Ausstoß: @glass! $glass$"
  },
  "goods_output_glass_mult_desc": {
-  "en": "A bonus or penalty to the amount of @glass! Glass produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @glass! Glas, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @glass! $glass$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @glass! $glass$ von Gebäuden produziert wird"
  },
  "goods_output_gold_mult": {
-  "en": "Building @gold! Gold output",
-  "de": "@gold! Goldausstoß"
+  "en": "Building @gold! $gold$ output",
+  "de": "Gebäude-Ausstoß: @gold! $gold$"
  },
  "goods_output_gold_mult_desc": {
-  "en": "A bonus or penalty to the amount of @gold! Gold produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @gold! Gold, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @gold! $gold$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @gold! $gold$ von Gebäuden produziert wird"
  },
  "goods_output_grain_mult": {
-  "en": "Building @grain! Grain output",
-  "de": "@grain! Getreideausstoß"
+  "en": "Building @grain! $grain$ output",
+  "de": "Gebäude-Ausstoß: @grain! $grain$"
  },
  "goods_output_grain_mult_desc": {
-  "en": "A bonus or penalty to the amount of @grain! Grain produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @grain! Getreide, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @grain! $grain$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @grain! $grain$ von Gebäuden produziert wird"
  },
  "goods_output_groceries_mult": {
-  "en": "Building @groceries! Groceries output",
-  "de": "@groceries! Lebensmittelausstoß"
+  "en": "Building @groceries! $groceries$ output",
+  "de": "Gebäude-Ausstoß: @groceries! $groceries$"
  },
  "goods_output_groceries_mult_desc": {
-  "en": "A bonus or penalty to the amount of @groceries! Groceries produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @groceries! Lebensmittel, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @groceries! $groceries$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @groceries! $groceries$ von Gebäuden produziert wird"
  },
  "goods_output_iron_mult": {
-  "en": "Building @iron! Iron output",
-  "de": "@iron! Eisenausstoß"
+  "en": "Building @iron! $iron$ output",
+  "de": "Gebäude-Ausstoß: @iron! $iron$"
  },
  "goods_output_iron_mult_desc": {
-  "en": "A bonus or penalty to the amount of @iron! Iron produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @iron! Eisen, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @iron! $iron$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @iron! $iron$ von Gebäuden produziert wird"
  },
  "goods_output_launch_capacity_add": {
-  "en": "@launch_capacity! Launch Capacity Output",
-  "de": "@launch_capacity! Startkapazitätsausstoß"
+  "en": "@launch_capacity! $launch_capacity$ Output",
+  "de": "@launch_capacity! $launch_capacity$-Ausstoß"
  },
  "goods_output_launch_capacity_add_desc": {
-  "en": "The amount of @launch_capacity! Launch Capacity produced by buildings",
-  "de": "Die Menge an @launch_capacity! Startkapazität, die von Gebäuden produziert wird"
+  "en": "The amount of @launch_capacity! $launch_capacity$ produced by buildings",
+  "de": "Wie viel @launch_capacity! $launch_capacity$ von Gebäuden produziert wird"
  },
  "goods_output_launch_capacity_mult": {
-  "en": "Building @launch_capacity! Launch Capacity output",
-  "de": "@launch_capacity! Startkapazitätsausstoß"
+  "en": "Building @launch_capacity! $launch_capacity$ output",
+  "de": "Gebäude-Ausstoß: @launch_capacity! $launch_capacity$"
  },
  "goods_output_launch_capacity_mult_desc": {
-  "en": "A bonus or penalty to the amount of @launch_capacity! Launch Capacity produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @launch_capacity! Startkapazität, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @launch_capacity! $launch_capacity$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @launch_capacity! $launch_capacity$ von Gebäuden produziert wird"
  },
  "goods_output_lead_mult": {
-  "en": "Building @lead! Lead output",
-  "de": "@lead! Bleiausstoß"
+  "en": "Building @lead! $lead$ output",
+  "de": "Gebäude-Ausstoß: @lead! $lead$"
  },
  "goods_output_lead_mult_desc": {
-  "en": "A bonus or penalty to the amount of @lead! Lead produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @lead! Blei, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @lead! $lead$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @lead! $lead$ von Gebäuden produziert wird"
  },
  "goods_output_luxury_clothes_mult": {
-  "en": "Building @luxury_clothes! Luxury Clothes output",
-  "de": "@luxury_clothes! Luxuskleidungsausstoß"
+  "en": "Building @luxury_clothes! $luxury_clothes$ output",
+  "de": "Gebäude-Ausstoß: @luxury_clothes! $luxury_clothes$"
  },
  "goods_output_luxury_clothes_mult_desc": {
-  "en": "A bonus or penalty to the amount of @luxury_clothes! Luxury Clothes produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @luxury_clothes! Luxuskleidung, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @luxury_clothes! $luxury_clothes$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @luxury_clothes! $luxury_clothes$ von Gebäuden produziert wird"
  },
  "goods_output_luxury_furniture_mult": {
-  "en": "Building @luxury_furniture! Luxury Furniture output",
-  "de": "@luxury_furniture! Luxusmöbelausstoß"
+  "en": "Building @luxury_furniture! $luxury_furniture$ output",
+  "de": "Gebäude-Ausstoß: @luxury_furniture! $luxury_furniture$"
  },
  "goods_output_luxury_furniture_mult_desc": {
-  "en": "A bonus or penalty to the amount of @luxury_furniture! Luxury Furniture produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @luxury_furniture! Luxusmöbel, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @luxury_furniture! $luxury_furniture$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @luxury_furniture! $luxury_furniture$ von Gebäuden produziert wird"
  },
  "goods_output_magnetic_drive_ships_add": {
-  "en": "@magnetic_drive_ships! Magnetic Drive Ships Output",
-  "de": "@magnetic_drive_ships! Magnetantriebsschiffausstoß"
+  "en": "@magnetic_drive_ships! $magnetic_drive_ships$ Output",
+  "de": "@magnetic_drive_ships! $magnetic_drive_ships$-Ausstoß"
  },
  "goods_output_magnetic_drive_ships_add_desc": {
-  "en": "The amount of @magnetic_drive_ships! Magnetic Drive Ships produced by buildings",
-  "de": "Die Menge an @magnetic_drive_ships! Magnetantriebsschiffen, die von Gebäuden produziert wird"
+  "en": "The amount of @magnetic_drive_ships! $magnetic_drive_ships$ produced by buildings",
+  "de": "Wie viel @magnetic_drive_ships! $magnetic_drive_ships$ von Gebäuden produziert wird"
  },
  "goods_output_magnetic_drive_ships_mult": {
-  "en": "Building @magnetic_drive_ships! Magnetic Drive Ships output",
-  "de": "@magnetic_drive_ships! Magnetantriebsschiffausstoß"
+  "en": "Building @magnetic_drive_ships! $magnetic_drive_ships$ output",
+  "de": "Gebäude-Ausstoß: @magnetic_drive_ships! $magnetic_drive_ships$"
  },
  "goods_output_magnetic_drive_ships_mult_desc": {
-  "en": "A bonus or penalty to the amount of @magnetic_drive_ships! Magnetic Drive Ships produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @magnetic_drive_ships! Magnetantriebsschiffe, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @magnetic_drive_ships! $magnetic_drive_ships$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @magnetic_drive_ships! $magnetic_drive_ships$ von Gebäuden produziert wird"
  },
  "goods_output_meat_mult": {
-  "en": "Building @meat! Meat output",
-  "de": "@meat! Fleischausstoß"
+  "en": "Building @meat! $meat$ output",
+  "de": "Gebäude-Ausstoß: @meat! $meat$"
  },
  "goods_output_meat_mult_desc": {
-  "en": "A bonus or penalty to the amount of @meat! Meat produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @meat! Fleisch, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @meat! $meat$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @meat! $meat$ von Gebäuden produziert wird"
  },
  "goods_output_merchant_marine_mult": {
-  "en": "@merchant_marine! Bulk Transportation Output",
-  "de": "@merchant_marine! Massengutverkehrsausstoß"
+  "en": "@merchant_marine! $merchant_marine$ Output",
+  "de": "@merchant_marine! $merchant_marine$-Ausstoß"
  },
  "goods_output_merchant_marine_mult_desc": {
-  "en": "The amount of @merchant_marine! Bulk Transportation produced by buildings",
-  "de": "Die Menge an @merchant_marine! Massengutverkehr, die von Gebäuden produziert wird"
+  "en": "The amount of @merchant_marine! $merchant_marine$ produced by buildings",
+  "de": "Wie viel @merchant_marine! $merchant_marine$ von Gebäuden produziert wird"
  },
  "goods_output_motor_ships_add": {
-  "en": "@motor_ships! Motor Ships Output",
-  "de": "@motor_ships! Motorschiffsausstoß"
+  "en": "@motor_ships! $motor_ships$ Output",
+  "de": "@motor_ships! $motor_ships$-Ausstoß"
  },
  "goods_output_motor_ships_add_desc": {
-  "en": "The amount of @motor_ships! Motor Ships produced by buildings",
-  "de": "Die Menge an @motor_ships! Motorschiffen, die von Gebäuden produziert wird"
+  "en": "The amount of @motor_ships! $motor_ships$ produced by buildings",
+  "de": "Wie viel @motor_ships! $motor_ships$ von Gebäuden produziert wird"
  },
  "goods_output_motor_ships_mult": {
-  "en": "Building @motor_ships! Motor Ships output",
-  "de": "@motor_ships! Motorschiffsausstoß"
+  "en": "Building @motor_ships! $motor_ships$ output",
+  "de": "Gebäude-Ausstoß: @motor_ships! $motor_ships$"
  },
  "goods_output_motor_ships_mult_desc": {
-  "en": "A bonus or penalty to the amount of @motor_ships! Motor Ships produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @motor_ships! Motorschiffe, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @motor_ships! $motor_ships$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @motor_ships! $motor_ships$ von Gebäuden produziert wird"
  },
  "goods_output_opium_mult": {
-  "en": "Building @opium! Opium output",
-  "de": "@opium! Opiumausstoß"
+  "en": "Building @opium! $opium$ output",
+  "de": "Gebäude-Ausstoß: @opium! $opium$"
  },
  "goods_output_opium_mult_desc": {
-  "en": "A bonus or penalty to the amount of @opium! Opium produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @opium! Opium, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @opium! $opium$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @opium! $opium$ von Gebäuden produziert wird"
  },
  "goods_output_paper_mult": {
-  "en": "Building @paper! Paper output",
-  "de": "@paper! Papierausstoß"
+  "en": "Building @paper! $paper$ output",
+  "de": "Gebäude-Ausstoß: @paper! $paper$"
  },
  "goods_output_paper_mult_desc": {
-  "en": "A bonus or penalty to the amount of @paper! Paper produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @paper! Papier, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @paper! $paper$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @paper! $paper$ von Gebäuden produziert wird"
  },
  "goods_output_porcelain_mult": {
-  "en": "Building @porcelain! Porcelain output",
-  "de": "@porcelain! Porzellanausstoß"
+  "en": "Building @porcelain! $porcelain$ output",
+  "de": "Gebäude-Ausstoß: @porcelain! $porcelain$"
  },
  "goods_output_porcelain_mult_desc": {
-  "en": "A bonus or penalty to the amount of @porcelain! Porcelain produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @porcelain! Porzellan, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @porcelain! $porcelain$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @porcelain! $porcelain$ von Gebäuden produziert wird"
  },
  "goods_output_robotics_add": {
   "en": "@robotics! Robotics Output",
@@ -1628,76 +1628,76 @@
   "de": "Die Menge an @robotics! Robotik, die von Gebäuden produziert wird"
  },
  "goods_output_rubber_mult": {
-  "en": "Building @rubber! Rubber output",
-  "de": "@rubber! Kautschukausstoß"
+  "en": "Building @rubber! $rubber$ output",
+  "de": "Gebäude-Ausstoß: @rubber! $rubber$"
  },
  "goods_output_rubber_mult_desc": {
-  "en": "A bonus or penalty to the amount of @rubber! Rubber produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @rubber! Kautschuk, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @rubber! $rubber$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @rubber! $rubber$ von Gebäuden produziert wird"
  },
  "goods_output_services_mult": {
-  "en": "Building @services! Services output",
-  "de": "@services! Dienstleistungsausstoß"
+  "en": "Building @services! $services$ output",
+  "de": "Gebäude-Ausstoß: @services! $services$"
  },
  "goods_output_services_mult_desc": {
-  "en": "A bonus or penalty to the amount of @services! Services produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @services! Dienstleistungen, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @services! $services$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @services! $services$ von Gebäuden produziert wird"
  },
  "goods_output_steel_mult": {
-  "en": "Building @steel! Steel output",
-  "de": "@steel! Stahlausstoß"
+  "en": "Building @steel! $steel$ output",
+  "de": "Gebäude-Ausstoß: @steel! $steel$"
  },
  "goods_output_steel_mult_desc": {
-  "en": "A bonus or penalty to the amount of @steel! Steel produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @steel! Stahl, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @steel! $steel$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @steel! $steel$ von Gebäuden produziert wird"
  },
  "goods_output_sulfur_mult": {
-  "en": "Building @sulfur! Sulfur output",
-  "de": "@sulfur! Schwefelausstoß"
+  "en": "Building @sulfur! $sulfur$ output",
+  "de": "Gebäude-Ausstoß: @sulfur! $sulfur$"
  },
  "goods_output_sulfur_mult_desc": {
-  "en": "A bonus or penalty to the amount of @sulfur! Sulfur produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @sulfur! Schwefel, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @sulfur! $sulfur$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @sulfur! $sulfur$ von Gebäuden produziert wird"
  },
  "goods_output_tea_mult": {
-  "en": "Building @tea! Tea output",
-  "de": "@tea! Teeausstoß"
+  "en": "Building @tea! $tea$ output",
+  "de": "Gebäude-Ausstoß: @tea! $tea$"
  },
  "goods_output_tea_mult_desc": {
-  "en": "A bonus or penalty to the amount of @tea! Tea produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @tea! Tee, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @tea! $tea$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @tea! $tea$ von Gebäuden produziert wird"
  },
  "goods_output_tech_metals_add": {
-  "en": "@tech_metals! Tech-Critical Metals Output",
-  "de": "@tech_metals! Technologiemetallausstoß"
+  "en": "@tech_metals! $tech_metals$ Output",
+  "de": "@tech_metals! $tech_metals$-Ausstoß"
  },
  "goods_output_tech_metals_add_desc": {
-  "en": "The amount of @tech_metals! Tech-Critical Metals produced by buildings",
-  "de": "Die Menge an @tech_metals! Technologiemetallen, die von Gebäuden produziert wird"
+  "en": "The amount of @tech_metals! $tech_metals$ produced by buildings",
+  "de": "Wie viel @tech_metals! $tech_metals$ von Gebäuden produziert wird"
  },
  "goods_output_tech_metals_mult": {
-  "en": "Building @tech_metals! Tech-Critical Metals output",
-  "de": "@tech_metals! Technologiemetallausstoß"
+  "en": "Building @tech_metals! $tech_metals$ output",
+  "de": "Gebäude-Ausstoß: @tech_metals! $tech_metals$"
  },
  "goods_output_tech_metals_mult_desc": {
-  "en": "The amount of @tech_metals! Tech-Critical Metals produced by buildings",
-  "de": "Die Menge an @tech_metals! Technologiemetallen, die von Gebäuden produziert wird"
+  "en": "The amount of @tech_metals! $tech_metals$ produced by buildings",
+  "de": "Wie viel @tech_metals! $tech_metals$ von Gebäuden produziert wird"
  },
  "goods_output_telephones_mult": {
-  "en": "Building @telephones! Telephones output",
-  "de": "@telephones! Telefonausstoß"
+  "en": "Building @telephones! $telephones$ output",
+  "de": "Gebäude-Ausstoß: @telephones! $telephones$"
  },
  "goods_output_telephones_mult_desc": {
-  "en": "A bonus or penalty to the amount of @telephones! Telephones produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @telephones! Telefone, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @telephones! $telephones$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @telephones! $telephones$ von Gebäuden produziert wird"
  },
  "goods_output_tobacco_mult": {
-  "en": "Building @tobacco! Tobacco output",
-  "de": "@tobacco! Tabakausstoß"
+  "en": "Building @tobacco! $tobacco$ output",
+  "de": "Gebäude-Ausstoß: @tobacco! $tobacco$"
  },
  "goods_output_tobacco_mult_desc": {
-  "en": "A bonus or penalty to the amount of @tobacco! Tobacco produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @tobacco! Tabak, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @tobacco! $tobacco$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @tobacco! $tobacco$ von Gebäuden produziert wird"
  },
  "goods_output_tourism_add_desc": {
   "en": "The amount of @tourism! [concept_tourism_system] produced by buildings",
@@ -1712,20 +1712,20 @@
   "de": "Erhöht oder verringert die Menge an @tourism! [concept_tourism_system], die von Gebäuden produziert wird"
  },
  "goods_output_transportation_mult": {
-  "en": "Building @transportation! Transportation output",
-  "de": "@transportation! Transportausstoß"
+  "en": "Building @transportation! $transportation$ output",
+  "de": "Gebäude-Ausstoß: @transportation! $transportation$"
  },
  "goods_output_transportation_mult_desc": {
-  "en": "A bonus or penalty to the amount of @transportation! Transportation produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @transportation! Transport, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @transportation! $transportation$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @transportation! $transportation$ von Gebäuden produziert wird"
  },
  "goods_output_wood_mult": {
-  "en": "Building @wood! Wood output",
-  "de": "@wood! Holzausstoß"
+  "en": "Building @wood! $wood$ output",
+  "de": "Gebäude-Ausstoß: @wood! $wood$"
  },
  "goods_output_wood_mult_desc": {
-  "en": "A bonus or penalty to the amount of @wood! Wood produced by buildings",
-  "de": "Erhöht oder verringert die Menge an @wood! Holz, die von Gebäuden produziert wird"
+  "en": "A bonus or penalty to the amount of @wood! $wood$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @wood! $wood$ von Gebäuden produziert wird"
  },
  "goods_trade_advantage_digital_assets_mult": {
   "en": "[concept_trade_advantage] for [GetGoods('digital_assets').GetName]",

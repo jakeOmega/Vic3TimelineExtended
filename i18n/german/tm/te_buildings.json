@@ -2236,8 +2236,8 @@
   "de": "[concept_throughput] – [concept_tourism_system]-Industrie"
  },
  "building_tourism_industry_throughput_add_desc": {
-  "en": "A multiplier affecting the efficiency of [concept_tourism_system] Industries in this state, influenced by ports, transit, art, parks, and monuments.",
-  "de": "Ein Multiplikator, der die Effizienz der [concept_tourism_system]-Industrien in diesem Staat beeinflusst, abhängig von Häfen, Nahverkehr, Kunst, Parks und Denkmälern."
+  "en": "A multiplier affecting the efficiency of $building_tourism_industry$ in this state, influenced by ports, transit, art, parks, and monuments.",
+  "de": "Ein Multiplikator, der die Effizienz der $building_tourism_industry$ in diesem Staat beeinflusst, abhängig von Häfen, Verkehrsanbindung, Kunst, Parks und Denkmälern."
  },
  "building_toyota_kaikan_plant": {
   "en": "Toyota Kaikan Museum & Plant",
