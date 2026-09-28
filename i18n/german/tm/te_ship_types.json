@@ -1,0 +1,154 @@
+{
+ "ship_type_amphibious_assault_ship": {
+  "en": "Amphibious Assault Ship",
+  "de": "Amphibisches Angriffsschiff"
+ },
+ "ship_type_amphibious_assault_ship_desc": {
+  "en": "A modern landing helicopter assault platform that can deploy a [concept_battalion] of marines onto a hostile coast in a single wave. Replaces wartime troop transports.",
+  "de": "Eine moderne Hubschrauberlandungsplattform, die ein [concept_battalion] Marineinfanteristen in einer einzigen Welle an einer feindlichen Küste absetzen kann. Ersetzt die Truppentransporter des Krieges."
+ },
+ "ship_type_antimatter_battleship": {
+  "en": "Antimatter Battleship",
+  "de": "Antimaterie-Schlachtschiff"
+ },
+ "ship_type_antimatter_battleship_desc": {
+  "en": "A fusion-driven capital ship armed with antimatter-tipped mass-driver projectiles. The terminal expression of surface naval firepower.",
+  "de": "Ein fusionsgetriebenes Großkampfschiff, bewaffnet mit Massebeschleuniger-Geschossen mit Antimaterie-Spitze. Der Endpunkt der Feuerkraft von Überwasserstreitkräften."
+ },
+ "ship_type_arsenal_ship": {
+  "en": "Arsenal Ship",
+  "de": "Arsenalschiff"
+ },
+ "ship_type_arsenal_ship_desc": {
+  "en": "A capital-class missile platform packing hundreds of vertical-launch cells. Slow and lightly defended, but unmatched in sustained firepower.",
+  "de": "Eine Raketenplattform der Großkampfschiffklasse mit Hunderten vertikaler Startzellen. Langsam und schwach verteidigt, aber unerreicht in anhaltender Feuerkraft."
+ },
+ "ship_type_asw_destroyer": {
+  "en": "ASW Destroyer",
+  "de": "U-Jagd-Zerstörer"
+ },
+ "ship_type_asw_destroyer_desc": {
+  "en": "An anti-submarine specialist destroyer equipped with sonar arrays and depth charges. Outclasses earlier destroyers against subsurface threats.",
+  "de": "Ein auf U-Jagd spezialisierter Zerstörer, ausgestattet mit Sonar-Arrays und Wasserbomben. Früheren Zerstörern gegen Bedrohungen unter Wasser weit überlegen."
+ },
+ "ship_type_autonomous_swarm_submarine": {
+  "en": "Autonomous Swarm Submarine",
+  "de": "Autonomes Schwarm-U-Boot"
+ },
+ "ship_type_autonomous_swarm_submarine_desc": {
+  "en": "An unmanned wolfpack of cooperating attack drones, coordinated by onboard AI. Devastating against capitals; vulnerable to dedicated point-defense escorts.",
+  "de": "Ein unbemanntes Wolfsrudel kooperierender Angriffsdrohnen, koordiniert von einer Bord-KI. Verheerend gegen Großkampfschiffe, aber verwundbar gegenüber spezialisierten Nahbereichsverteidigungseskorten."
+ },
+ "ship_type_expeditionary_fast_transport": {
+  "en": "Expeditionary Fast Transport",
+  "de": "Expeditions-Schnelltransporter"
+ },
+ "ship_type_expeditionary_fast_transport_desc": {
+  "en": "A high-speed catamaran troop transport that keeps pace with carrier strike groups. Trades capacity for speed — the inverse doctrine of the Expeditionary Sea Base.",
+  "de": "Ein schneller Katamaran-Truppentransporter, der mit Trägerkampfgruppen mithält. Tauscht Kapazität gegen Geschwindigkeit – die umgekehrte Doktrin der Expeditions-Seebasis."
+ },
+ "ship_type_expeditionary_sea_base": {
+  "en": "Expeditionary Sea Base",
+  "de": "Expeditions-Seebasis"
+ },
+ "ship_type_expeditionary_sea_base_desc": {
+  "en": "A floating staging platform that supports rapid forward deployment of marines and supplies far from any friendly port.",
+  "de": "Eine schwimmende Bereitstellungsplattform, die den schnellen Vorwärtseinsatz von Marineinfanteristen und Nachschub fernab jedes befreundeten Hafens unterstützt."
+ },
+ "ship_type_fleet_carrier": {
+  "en": "Fleet Carrier",
+  "de": "Flottenträger"
+ },
+ "ship_type_fleet_carrier_desc": {
+  "en": "A heavy fleet carrier purpose-built around carrier aviation doctrine. Projects air power across a task force at long range while [concept_screening] capital ships from torpedo strikes.",
+  "de": "Ein schwerer Flottenträger, konzipiert für die Doktrin der Trägerluftfahrt. Projiziert Luftmacht über einen Verband auf große Entfernung und übernimmt gleichzeitig das [concept_screening] von Großkampfschiffen gegen Torpedoangriffe."
+ },
+ "ship_type_guided_missile_ship": {
+  "en": "Guided Missile Ship",
+  "de": "Lenkraketenschiff"
+ },
+ "ship_type_guided_missile_ship_desc": {
+  "en": "A destroyer-class warship armed with guided anti-ship missiles. Trades close-in armament for stand-off precision strike capability.",
+  "de": "Ein Kriegsschiff der Zerstörerklasse, bewaffnet mit gelenkten Anti-Schiffs-Raketen. Tauscht Nahbereichsbewaffnung gegen präzise Stand-off-Schlagkraft."
+ },
+ "ship_type_hypersonic_missile_platform": {
+  "en": "Hypersonic Missile Platform",
+  "de": "Hyperschallraketenplattform"
+ },
+ "ship_type_hypersonic_missile_platform_desc": {
+  "en": "A capital warship optimized as a launch platform for hypersonic anti-ship missiles, capable of striking targets thousands of kilometers away in minutes.",
+  "de": "Ein Großkampfschiff, optimiert als Startplattform für hyperschallschnelle Anti-Schiffs-Raketen, das Ziele in Tausenden Kilometern Entfernung binnen Minuten treffen kann."
+ },
+ "ship_type_marine_assault_ship": {
+  "en": "Marine Assault Ship",
+  "de": "Marineinfanterie-Angriffsschiff"
+ },
+ "ship_type_marine_assault_ship_desc": {
+  "en": "A Cold War-era helicopter-capable amphibious assault ship. Replaces wartime LHAs as the standard troop transport once precision-guided munitions doctrine matures.",
+  "de": "Ein amphibisches Angriffsschiff mit Hubschrauberfähigkeit aus der Zeit des Kalten Krieges. Ersetzt die LHAs des Krieges als Standard-Truppentransporter, sobald sich die Doktrin präzisionsgelenkter Munition durchsetzt."
+ },
+ "ship_type_networked_air_defense_cruiser": {
+  "en": "Networked Air Defense Cruiser",
+  "de": "Vernetzter Luftverteidigungskreuzer"
+ },
+ "ship_type_networked_air_defense_cruiser_desc": {
+  "en": "An anti-air and anti-missile escort that pools tracking data with allied ships and aircraft. Excels at swatting incoming guided weapons before they reach the fleet.",
+  "de": "Ein Flugabwehr- und Raketenabwehreskorte, der Ortungsdaten mit verbündeten Schiffen und Flugzeugen bündelt. Hervorragend darin, ankommende Lenkwaffen abzufangen, bevor sie die Flotte erreichen."
+ },
+ "ship_type_nuclear_submarine": {
+  "en": "Nuclear Submarine",
+  "de": "Atom-U-Boot"
+ },
+ "ship_type_nuclear_submarine_desc": {
+  "en": "A nuclear-powered attack submarine capable of patrolling the deep ocean for months without surfacing. Devastating against capital ships.",
+  "de": "Ein atomgetriebenes Jagd-U-Boot, das monatelang ohne Auftauchen die Tiefsee patrouillieren kann. Verheerend gegen Großkampfschiffe."
+ },
+ "ship_type_nuclear_supercarrier": {
+  "en": "Nuclear Supercarrier",
+  "de": "Atom-Superträger"
+ },
+ "ship_type_nuclear_supercarrier_desc": {
+  "en": "A massive nuclear-powered fleet carrier with virtually unlimited endurance, projecting overwhelming air power across the world's oceans.",
+  "de": "Ein gewaltiger atomgetriebener Flottenträger mit praktisch unbegrenzter Ausdauer, der überwältigende Luftmacht über die Weltmeere projiziert."
+ },
+ "ship_type_orbital_support_amphibious_mothership": {
+  "en": "Orbital Support Mothership",
+  "de": "Orbitales Unterstützungs-Mutterschiff"
+ },
+ "ship_type_orbital_support_amphibious_mothership_desc": {
+  "en": "A sea-based mothership that calls in orbital drop pods for marine deployment. Carries a brigade of marines and weeks of independent supply.",
+  "de": "Ein seegestütztes Mutterschiff, das orbitale Abwurfkapseln zum Einsatz von Marineinfanteristen anfordert. Trägt eine Brigade Marineinfanteristen und wochenlangen eigenständigen Nachschub."
+ },
+ "ship_type_pulsed_laser_escort": {
+  "en": "Pulsed Laser Escort",
+  "de": "Gepulster Laser-Eskorteur"
+ },
+ "ship_type_pulsed_laser_escort_desc": {
+  "en": "A cruiser equipped with directed-energy weapons. Pinpoint accuracy makes it devastating against missiles, aircraft, and small craft.",
+  "de": "Ein Kreuzer, ausgestattet mit Waffen gerichteter Energie. Punktgenaue Treffsicherheit macht ihn verheerend gegen Raketen, Flugzeuge und kleine Boote."
+ },
+ "ship_type_stealth_attack_submarine": {
+  "en": "Stealth Attack Submarine",
+  "de": "Tarnkappen-Jagd-U-Boot"
+ },
+ "ship_type_stealth_attack_submarine_desc": {
+  "en": "An air-independent-propulsion boat with a near-silent acoustic signature. Carries a heavy torpedo and cruise-missile payload designed to gut capital ships.",
+  "de": "Ein U-Boot mit außenluftunabhängigem Antrieb und nahezu lautloser akustischer Signatur. Trägt eine schwere Torpedo- und Marschflugkörperbewaffnung, ausgelegt, um Großkampfschiffe aufzuschlitzen."
+ },
+ "ship_type_stealth_battlecruiser": {
+  "en": "Stealth Battlecruiser",
+  "de": "Tarnkappen-Schlachtkreuzer"
+ },
+ "ship_type_stealth_battlecruiser_desc": {
+  "en": "A network-linked capital ship with a radar-absorbent hull. Coordinates with offboard sensors to engage at extreme range while remaining hard to detect.",
+  "de": "Ein vernetztes Großkampfschiff mit radarabsorbierendem Rumpf. Koordiniert sich mit externen Sensoren, um auf extreme Entfernung zu kämpfen und dabei schwer zu orten zu bleiben."
+ },
+ "ship_type_swarm_coordination_vessel": {
+  "en": "Swarm Coordination Vessel",
+  "de": "Schwarmkoordinationsschiff"
+ },
+ "ship_type_swarm_coordination_vessel_desc": {
+  "en": "Cruiser-sized command ship that coordinates large drone swarms, multiplying the effective firepower of every other ship in its fleet.",
+  "de": "Ein Kommandoschiff in Kreuzergröße, das große Drohnenschwärme koordiniert und die effektive Feuerkraft jedes anderen Schiffs seiner Flotte vervielfacht."
+ }
+}

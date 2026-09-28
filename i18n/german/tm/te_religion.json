@@ -7,76 +7,220 @@
   "en": "Decline of Religion",
   "de": "Niedergang der Religion"
  },
+ "custom_religion_name_n": {
+  "en": "Martyrs of the Pure Light",
+  "de": "Märtyrer des Reinen Lichts"
+ },
+ "custom_religion_name_o": {
+  "en": "The Eternal Flow",
+  "de": "Der Ewige Fluss"
+ },
+ "custom_religion_name_p": {
+  "en": "Dominion of the Infinite Flame",
+  "de": "Herrschaft der Unendlichen Flamme"
+ },
+ "custom_religion_name_q": {
+  "en": "The Sacred Coil",
+  "de": "Die Heilige Spirale"
+ },
+ "custom_religion_name_r": {
+  "en": "Church of the Sacred Machine",
+  "de": "Kirche der Heiligen Maschine"
+ },
+ "custom_religion_name_s": {
+  "en": "Union of the Blessed",
+  "de": "Bund der Gesegneten"
+ },
+ "custom_religion_name_t": {
+  "en": "Brotherhood of the Soul",
+  "de": "Bruderschaft der Seele"
+ },
  "ig_trait_custom_religion_imperial_cult_happy": {
   "en": "Imperial Glory",
   "de": "Kaiserlicher Ruhm"
+ },
+ "ig_trait_custom_religion_imperial_cult_happy_desc": {
+  "en": "Our religious authorities have declared that the empire is divinely ordained and that its ruler is a divine figure, encouraging the faithful to work for the glory and prosperity of the realm.",
+  "de": "Unsere religiösen Autoritäten haben erklärt, dass das Reich göttlich bestimmt und sein Herrscher eine göttliche Gestalt sei, und ermutigen die Gläubigen, für den Ruhm und Wohlstand des Reiches zu wirken."
  },
  "ig_trait_custom_religion_imperial_cult_loyal": {
   "en": "Loyalty to the Empire",
   "de": "Loyalität zum Reich"
  },
+ "ig_trait_custom_religion_imperial_cult_loyal_desc": {
+  "en": "Our religious authorities have called for the faithful to pledge their loyalty to the empire and its ruler, believing that obedience and devotion to the state are essential for the prosperity and security of the realm.",
+  "de": "Unsere religiösen Autoritäten haben die Gläubigen aufgerufen, dem Reich und seinem Herrscher die Treue zu schwören, denn Gehorsam und Hingabe an den Staat seien für Wohlstand und Sicherheit des Reiches unerlässlich."
+ },
  "ig_trait_custom_religion_imperial_cult_unhappy": {
   "en": "Militarism and Conquest",
   "de": "Militarismus und Eroberung"
+ },
+ "ig_trait_custom_religion_imperial_cult_unhappy_desc": {
+  "en": "Our subjects have come to view this religion as a mere arm of the state, hampering conversion efforts.",
+  "de": "Unsere Untertanen betrachten diese Religion mittlerweile als bloßes Werkzeug des Staates, was die Bekehrungsbemühungen behindert."
  },
  "ig_trait_custom_religion_market_liberal_happy": {
   "en": "Prosperity Doctrine",
   "de": "Wohlstandslehre"
  },
+ "ig_trait_custom_religion_market_liberal_happy_desc": {
+  "en": "Our religious authorities have declared that wealth and prosperity are signs of divine favor, encouraging the faithful to see a rise in their material fortunes as a blessing from the divine.",
+  "de": "Unsere religiösen Autoritäten haben erklärt, dass Reichtum und Wohlstand Zeichen göttlicher Gunst seien, und ermutigen die Gläubigen, einen Zuwachs ihres materiellen Vermögens als göttlichen Segen zu betrachten."
+ },
  "ig_trait_custom_religion_market_liberal_loyal": {
   "en": "Investing for the Afterlife",
   "de": "Investieren fürs Jenseits"
+ },
+ "ig_trait_custom_religion_market_liberal_loyal_desc": {
+  "en": "Our religious authorities have called for the faithful to invest in the future, believing that wealth and prosperity in this life will be rewarded in the afterlife.",
+  "de": "Unsere religiösen Autoritäten haben die Gläubigen aufgerufen, in die Zukunft zu investieren, denn Reichtum und Wohlstand in diesem Leben würden im Jenseits belohnt."
  },
  "ig_trait_custom_religion_market_liberal_unhappy": {
   "en": "Opulence and Greed",
   "de": "Opulenz und Gier"
  },
+ "ig_trait_custom_religion_market_liberal_unhappy_desc": {
+  "en": "Our religious authorities have called for the faithful to pursue wealth and material gain at all costs, and many are seeing their current situation as insufficiently opulent.",
+  "de": "Unsere religiösen Autoritäten haben die Gläubigen aufgerufen, Reichtum und materiellen Gewinn um jeden Preis zu verfolgen, und viele empfinden ihre gegenwärtige Lage als unzureichend prächtig."
+ },
  "ig_trait_custom_religion_social_democrat_happy": {
   "en": "Secular Service",
   "de": "Weltlicher Dienst"
+ },
+ "ig_trait_custom_religion_social_democrat_happy_desc": {
+  "en": "Our religious authorities have declared that service to the community and the common good is a sacred duty, encouraging the faithful to find fulfillment in helping others.",
+  "de": "Unsere religiösen Autoritäten haben erklärt, dass der Dienst an der Gemeinschaft und dem Gemeinwohl eine heilige Pflicht sei, und ermutigen die Gläubigen, Erfüllung darin zu finden, anderen zu helfen."
  },
  "ig_trait_custom_religion_social_democrat_loyal": {
   "en": "Social Harmony",
   "de": "Soziale Harmonie"
  },
+ "ig_trait_custom_religion_social_democrat_loyal_desc": {
+  "en": "Our religious authorities have called for the faithful to work together for the common good, believing that social harmony and cooperation are essential for a just and equitable society.",
+  "de": "Unsere religiösen Autoritäten haben die Gläubigen aufgerufen, gemeinsam für das Gemeinwohl zu wirken, denn soziale Harmonie und Zusammenarbeit seien für eine gerechte und faire Gesellschaft unerlässlich."
+ },
  "ig_trait_custom_religion_social_democrat_unhappy": {
   "en": "Inequality and Injustice",
   "de": "Ungleichheit und Ungerechtigkeit"
+ },
+ "ig_trait_custom_religion_social_democrat_unhappy_desc": {
+  "en": "Our religious authorities have called for the faithful to address social inequality and injustice, believing that these issues are a violation of divine [Concept('concept_power_bloc_principle', 'principles')] and a threat to social harmony.",
+  "de": "Unsere religiösen Autoritäten haben die Gläubigen aufgerufen, soziale Ungleichheit und Ungerechtigkeit anzugehen, denn diese Missstände verletzten göttliche [Concept('concept_power_bloc_principle', 'Prinzipien')] und bedrohten die soziale Harmonie."
  },
  "ig_trait_custom_religion_theocratic_happy": {
   "en": "Ecumenism",
   "de": "Ökumene"
  },
+ "ig_trait_custom_religion_theocratic_happy_desc": {
+  "en": "Our religious authorities are working on behalf of the state to assist our diplomatic efforts.",
+  "de": "Unsere religiösen Autoritäten wirken im Namen des Staates mit, um unsere diplomatischen Bemühungen zu unterstützen."
+ },
  "ig_trait_custom_religion_theocratic_loyal": {
   "en": "Divine Law",
   "de": "Göttliches Gesetz"
+ },
+ "ig_trait_custom_religion_theocratic_loyal_desc": {
+  "en": "The favor of our religious authorities has allowed the state to cooperate with the church in converting the populace.",
+  "de": "Die Gunst unserer religiösen Autoritäten hat es dem Staat ermöglicht, mit der Kirche bei der Bekehrung der Bevölkerung zusammenzuarbeiten."
  },
  "ig_trait_custom_religion_theocratic_unhappy": {
   "en": "Religious Persecution",
   "de": "Religiöse Verfolgung"
  },
+ "ig_trait_custom_religion_theocratic_unhappy_desc": {
+  "en": "Our religious authorities have called for the suppression of other faiths. Unfortunately, the faithful have taken this to mean that they should be hostile to other cultures.",
+  "de": "Unsere religiösen Autoritäten haben zur Unterdrückung anderer Glaubensrichtungen aufgerufen. Leider haben die Gläubigen dies dahingehend verstanden, dass sie anderen Kulturen feindselig gegenübertreten sollten."
+ },
  "ig_trait_custom_religion_totalitarian_happy": {
   "en": "Unity and Conformity",
   "de": "Einheit und Konformität"
+ },
+ "ig_trait_custom_religion_totalitarian_happy_desc": {
+  "en": "Our religious authorities have declared that violent opposition to the state and its leaders is a sin, encouraging the faithful to embrace unity and conformity for the greater good.",
+  "de": "Unsere religiösen Autoritäten haben erklärt, dass gewaltsamer Widerstand gegen den Staat und seine Führer eine Sünde sei, und ermutigen die Gläubigen, Einheit und Konformität zum höheren Wohl anzunehmen."
  },
  "ig_trait_custom_religion_totalitarian_loyal": {
   "en": "Order and Obedience",
   "de": "Ordnung und Gehorsam"
  },
+ "ig_trait_custom_religion_totalitarian_loyal_desc": {
+  "en": "Our religious authorities have called for the faithful to obey the state and its leaders without question, believing that order and obedience are essential for the maintenance of social stability and the preservation of divine authority.",
+  "de": "Unsere religiösen Autoritäten haben die Gläubigen aufgerufen, dem Staat und seinen Führern ohne Widerspruch zu gehorchen, denn Ordnung und Gehorsam seien für die Wahrung der sozialen Stabilität und den Erhalt der göttlichen Autorität unerlässlich."
+ },
  "ig_trait_custom_religion_totalitarian_unhappy": {
   "en": "Repression of Dissent",
   "de": "Unterdrückung Andersdenkender"
+ },
+ "ig_trait_custom_religion_totalitarian_unhappy_desc": {
+  "en": "Our religious authorities have called for the suppression of dissent and nonconformity, leading to repression and violence against minority groups and those who oppose the state.",
+  "de": "Unsere religiösen Autoritäten haben zur Unterdrückung von Widerspruch und Nonkonformität aufgerufen, was zu Repression und Gewalt gegen Minderheiten und Staatsgegner führt."
  },
  "ig_trait_custom_religion_traditionalist_happy": {
   "en": "Divine Right",
   "de": "Gottesgnadentum"
  },
+ "ig_trait_custom_religion_traditionalist_happy_desc": {
+  "en": "Our religious authorities have declared that our society is divinely ordained and that our people are blessed by the divine.",
+  "de": "Unsere religiösen Autoritäten haben erklärt, dass unsere Gesellschaft göttlich bestimmt und unser Volk vom Göttlichen gesegnet sei."
+ },
  "ig_trait_custom_religion_traditionalist_loyal": {
   "en": "Encourage Natalism",
   "de": "Geburtenförderung"
  },
+ "ig_trait_custom_religion_traditionalist_loyal_desc": {
+  "en": "Our religious authorities have called for an increase in the birth rate among our faithful, believing that a larger population will strengthen our society and ensure the continuity of our traditions.",
+  "de": "Unsere religiösen Autoritäten haben zu einer höheren Geburtenrate unter den Gläubigen aufgerufen, denn eine größere Bevölkerung werde unsere Gesellschaft stärken und den Fortbestand unserer Traditionen sichern."
+ },
  "ig_trait_custom_religion_traditionalist_unhappy": {
   "en": "Obscurantism",
   "de": "Obskurantismus"
+ },
+ "ig_trait_custom_religion_traditionalist_unhappy_desc": {
+  "en": "Our religious authorities have called for the suppression of knowledge and the restriction of information, believing that ignorance is a virtue and that enlightenment leads to heresy.",
+  "de": "Unsere religiösen Autoritäten haben zur Unterdrückung von Wissen und zur Einschränkung von Informationen aufgerufen, denn Unwissenheit sei eine Tugend und Aufklärung führe zu Ketzerei."
+ },
+ "ministry_religion_established_faith": {
+  "en": "Religion Ministry: Established Faith Privileges",
+  "de": "Religionsministerium: Privilegien der Staatsreligion"
+ },
+ "ministry_religion_pluralist": {
+  "en": "Religion Ministry: Pluralist Framework",
+  "de": "Religionsministerium: Pluralistischer Rahmen"
+ },
+ "ministry_religion_pulpit_advance": {
+  "en": "Religion Ministry: Pulpit Advance",
+  "de": "Religionsministerium: Kanzelvorstoß"
+ },
+ "ministry_religion_pulpit_advance_desc": {
+  "en": "A strong positive boost to ministry law enactment progress from a recent event.",
+  "de": "Ein starker positiver Schub für den Fortschritt der Gesetzeserlassung des Ministeriums durch ein jüngstes Ereignis."
+ },
+ "ministry_religion_pulpit_cautious": {
+  "en": "Religion Ministry: Pulpit Cautious Advance",
+  "de": "Religionsministerium: Vorsichtiger Kanzelvorstoß"
+ },
+ "ministry_religion_pulpit_cautious_desc": {
+  "en": "A smaller positive boost to ministry law enactment progress from a recent event.",
+  "de": "Ein kleinerer positiver Schub für den Fortschritt der Gesetzeserlassung des Ministeriums durch ein jüngstes Ereignis."
+ },
+ "ministry_religion_pulpit_stall": {
+  "en": "Religion Ministry: Pulpit Stall",
+  "de": "Religionsministerium: Kanzelstillstand"
+ },
+ "new_religions_regulated_modifier": {
+  "en": "New Religions Regulated",
+  "de": "Neue Religionen reguliert"
+ },
+ "new_religions_regulated_modifier_desc": {
+  "en": "Regulation of new [Concept('concept_religious_movement', 'religious movements')] provides order but limits spiritual freedom.",
+  "de": "Die Regulierung neuer [Concept('concept_religious_movement', 'Religionsbewegungen')] sorgt für Ordnung, schränkt aber die geistige Freiheit ein."
+ },
+ "state_war_support_monthly_add_religion": {
+  "en": "Fervor Monthly Add",
+  "de": "Inbrunst: Monatlicher Zuwachs"
+ },
+ "state_war_support_monthly_add_religion_desc": {
+  "en": "[concept_war_support] added monthly, multiplied by the [concept_clout] of the [GetInterestGroupVariant('ig_devout',GetPlayer).GetNameWithCountryVariant]. Each [Concept('concept_state','$concept_state$')] adds its share by population. Displayed in event tooltips as 'From Events'.",
+  "de": "[concept_war_support]-Zuwachs pro Monat, multipliziert mit dem [concept_clout] der [GetInterestGroupVariant('ig_devout',GetPlayer).GetNameWithCountryVariant]. Jeder [Concept('concept_state','$concept_state$')] trägt seinen Anteil nach Bevölkerung bei. Wird in Ereignis-Tooltips als „Durch Ereignisse“ angezeigt."
  }
 }
