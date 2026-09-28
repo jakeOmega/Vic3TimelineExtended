@@ -693,7 +693,7 @@
  },
  "banking_cycle_events.154.b": {
   "en": "Activate the Federation Emergency Relief Fund",
-  "de": "Den Notsozialhilfefonds der Föderation aktivieren"
+  "de": "Den Nothilfefonds der Föderation aktivieren"
  },
  "banking_cycle_events.154.c": {
   "en": "Facilitate Forced Cooperative Mergers",
@@ -713,7 +713,7 @@
  },
  "banking_cycle_events.156.a": {
   "en": "Activate Cooperative Mutual Aid",
-  "de": "Genossenschaftliche Gegenseitige Hilfe aktivieren"
+  "de": "Genossenschaftliche gegenseitige Hilfe aktivieren"
  },
  "banking_cycle_events.156.b": {
   "en": "Accept the Shortfall and Adjust Assessments",
