@@ -21,8 +21,12 @@ defaults (September 2026, ~350 icons):
 - Unnamed colours drift to real-world defaults: "paper banknotes" drew US
   dollars. No screens with text, no currency, flags or faces.
 - Words that imply writing get written: "voting card" drew VOTE, "holy book"
-  HOLY, "payment-plan tag" Payment, a share certificate its title. Name the
-  object, not its purpose ("a small green wooden block").
+  HOLY, "payment-plan tag" Payment, a share certificate its title, "radio
+  jammer" JAMMER. Name the object, not its purpose ("a small green wooden
+  block").
+- Gold coins come with $ signs ("plain gold coins each stamped with a small
+  star"), a camera with a brand name, a customs gate's posts with numbered
+  plates. Zoom the raw render of any pick with coins, devices or signage.
 - Vehicles and aircraft come with insignia: a red star, a US Army star,
   roundels, red crosses on a bomber. Choose an unmarked candidate; saying "no
   markings" does not stop them.
@@ -49,6 +53,14 @@ defaults (September 2026, ~350 icons):
   those out, and ask for ", loosely hand-painted with visible brush
   strokes" in the subject rather than editing the category style, which
   would change every approved prompt.
+- In the embossed layouts (mobilization options, ideologies, trait cards) the
+  bevel turns thin parts into dark hairlines: a beam, an antenna, radio
+  waves, fronds. Ask for thick shapes. A wide object seen side-on fits the
+  icon's width and comes out thin; an angled view fills more of it.
+- Some objects read as something else at icon size: a laser turret as a
+  camera (make it fire at a target), a landing craft as a ferry, a flight
+  simulator pod as a lunar lander, a parachute as a hot-air balloon, a
+  helmet seen from the front as a face.
 When both candidates miss, change the subject. When the idea is right and the
 renders are weak, `generate_icons.py --seeds 4` adds two more candidates and
 keeps the first two.
