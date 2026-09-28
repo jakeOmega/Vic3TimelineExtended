@@ -1,13 +1,18 @@
 """Integration tests for the mod_state_server post-load batch.
 
-The HTTP tests require the server running on http://127.0.0.1:8950: each
-snapshots the log's per-generator `[post-load]` line count, hits a /reload
-endpoint, then asserts the expected number of new lines appeared. The #242
-tests below it are pure-Python and always run.
+The HTTP tests require the server running on http://127.0.0.1:8950 **from
+this checkout**: each snapshots the log's per-generator `[post-load]` line
+count, hits a /reload endpoint, then asserts the expected number of new lines
+appeared. They skip unless the server's /status reports this checkout's
+`mod_path`, so running the suite from a worktree never makes the main
+checkout's server regenerate its files (#306). The #242 tests below it are
+pure-Python and always run.
 
 Run: .venv/bin/python -m unittest test_reload_post_load
 """
 
+import json
+import os
 import re
 import time
 import unittest
@@ -29,12 +34,34 @@ _PER_GENERATOR_LINE = re.compile(
 )
 
 
-def _server_running() -> bool:
+def _fetch_status():
+    """The server's /status body, or None when it is down or not ready."""
     try:
-        with urllib.request.urlopen(f"{SERVER}/status", timeout=2) as r:
-            return r.status == 200
-    except (urllib.error.URLError, OSError):
-        return False
+        with urllib.request.urlopen(f"{SERVER}/status", timeout=5) as r:
+            return json.loads(r.read())
+    except (urllib.error.URLError, OSError, ValueError):
+        return None
+
+
+def _live_reload_skip_reason(status, own_mod_path):
+    """Why the live /reload tests must not run, or None when they may.
+
+    They may only when the server positively reports this checkout as its
+    `mod_path`: a POST /reload makes the server regenerate *its own* checkout,
+    and the line counts come from this checkout's log (#306)."""
+    if status is None:
+        return f"mod_state_server not running (or not ready) on {SERVER}"
+    server_mod_path = status.get("mod_path") if isinstance(status, dict) else None
+    if not server_mod_path:
+        return ("mod_state_server's /status has no mod_path (older server); "
+                "restart it to enable the live /reload tests")
+    if os.path.realpath(server_mod_path) != os.path.realpath(own_mod_path):
+        return (f"mod_state_server serves {server_mod_path}, not this checkout "
+                f"({own_mod_path}); a POST /reload would regenerate that tree")
+    return None
+
+
+_LIVE_SKIP_REASON = _live_reload_skip_reason(_fetch_status(), mod_path)
 
 
 def _count_post_load_lines() -> int:
@@ -54,7 +81,7 @@ def _post_reload(query: str = "") -> None:
         assert r.status == 200, f"reload returned {r.status}"
 
 
-@unittest.skipUnless(_server_running(), "mod_state_server not running on :8950")
+@unittest.skipIf(_LIVE_SKIP_REASON, _LIVE_SKIP_REASON or "")
 class ReloadPostLoadTest(unittest.TestCase):
     def test_full_reload_runs_every_generator(self):
         before = _count_post_load_lines()
@@ -96,7 +123,6 @@ if __name__ == "__main__":
 # stub ModState, so they run without the game or a live server.
 # ---------------------------------------------------------------------------
 import logging
-import os
 import sys
 import tempfile
 import types
@@ -354,6 +380,37 @@ class EngineOnlyReloadWarningTests(_QuietServerLogMixin):
             self.assertEqual(mss._reload_engine_only(), [])
 
 
+class LiveReloadGateTests(unittest.TestCase):
+    """#306 — the live /reload tests run only against this checkout's server."""
+
+    def test_no_server_skips(self):
+        self.assertIn("not running", _live_reload_skip_reason(None, "/a"))
+
+    def test_status_without_mod_path_skips(self):
+        reason = _live_reload_skip_reason({"status": "running"}, "/a")
+        self.assertIn("no mod_path", reason)
+
+    def test_other_checkout_skips(self):
+        with tempfile.TemporaryDirectory() as main, \
+                tempfile.TemporaryDirectory() as worktree:
+            reason = _live_reload_skip_reason({"mod_path": main}, worktree)
+        self.assertIn(main, reason)
+        self.assertIn(worktree, reason)
+
+    def test_same_checkout_runs(self):
+        with tempfile.TemporaryDirectory() as root:
+            self.assertIsNone(_live_reload_skip_reason({"mod_path": root}, root))
+
+    def test_same_checkout_through_symlink_runs(self):
+        with tempfile.TemporaryDirectory() as root, \
+                tempfile.TemporaryDirectory() as links:
+            link = os.path.join(links, "checkout")
+            os.symlink(root, link)
+            self.assertIsNone(_live_reload_skip_reason({"mod_path": root}, link))
+            self.assertIsNone(
+                _live_reload_skip_reason({"mod_path": link + os.sep}, root))
+
+
 class ParseFailureTests(_QuietServerLogMixin):
     """#242 §3 — parse failures are collected on ModState and shown in /status."""
 
@@ -395,3 +452,12 @@ class ParseFailureTests(_QuietServerLogMixin):
             status = mss.ModStateHandler._status(None)
         self.assertEqual(status["parse_failure_count"], 1)
         self.assertTrue(status["parse_failures"][0]["error"].startswith("UnicodeDecodeError:"))
+
+    def test_status_exposes_mod_path(self):
+        # #306: the live /reload tests compare this against their own mod_path.
+        state, _ = self._mod_state_with_broken_file()
+        with mock.patch.object(mss, "_vanilla_data_loaded", return_value=True), \
+                mock.patch.object(mss, "ms", state):
+            status = mss.ModStateHandler._status(None)
+        self.assertEqual(status["mod_path"], mss.mod_path)
+        self.assertIsNone(_live_reload_skip_reason(status, mod_path))

@@ -440,7 +440,7 @@ This blocks a page in the user's browser from driving the server (CSRF / DNS reb
 
 | Endpoint | Method | Description |
 |---|---|---|
-| `/status` | GET | Server status, loaded entity types, loc key count, `parse_failure_count` + `parse_failures` (files ModState skipped because they failed to parse — `{file, error, source}`, capped at 20; non-zero means those entities are missing from every endpoint), `last_reload` (previous reload's flags + `warnings`, and — when that reload's regenerators rewrote anything — `generators_wrote_files` + `reparsed_after_generators`) |
+| `/status` | GET | Server status, `mod_path` (the checkout this server parses and regenerates; `test_reload_post_load` fires its live `POST /reload` tests only when it matches its own, #306), loaded entity types, loc key count, `parse_failure_count` + `parse_failures` (files ModState skipped because they failed to parse — `{file, error, source}`, capped at 20; non-zero means those entities are missing from every endpoint), `last_reload` (previous reload's flags + `warnings`, and — when that reload's regenerators rewrote anything — `generators_wrote_files` + `reparsed_after_generators`) |
 | `/entity-types` | GET | List of entity type names |
 | `/help` | GET | Self-describing index of the server's GET and POST endpoints, emitted from the handler itself. Use it as the live cross-check when this table looks stale. |
 | `/keys/<EntityType>` | GET | All entity IDs + localized names for a type |

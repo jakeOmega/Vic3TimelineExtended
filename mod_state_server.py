@@ -5162,6 +5162,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 "status": "degraded",
                 "ready": False,
                 "pid": os.getpid(),
+                "mod_path": mod_path,
                 "reason": (
                     f"Vanilla data not loaded — {base_game_path}/game/common "
                     "is missing or empty and no usable vanilla_parsed/ "
@@ -5286,6 +5287,10 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "status": "running",
             "ready": True,
             "pid": os.getpid(),
+            # The checkout this server parses and regenerates. Lets a client
+            # in another checkout (a worktree) tell it is not its own server:
+            # test_reload_post_load only fires POST /reload on a match (#306).
+            "mod_path": mod_path,
             "uptime_seconds": round(uptime, 1),
             "startup_seconds": round(startup_elapsed, 1),
             "entity_types": list(ms.mod_parsers.keys()),
