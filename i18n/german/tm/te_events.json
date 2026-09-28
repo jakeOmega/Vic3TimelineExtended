@@ -5807,6 +5807,1798 @@
   "en": "Strict Humanitarian Code or Realpolitik Exemptions?",
   "de": "Strenges humanitäres Regelwerk oder realpolitische Ausnahmen?"
  },
+ "extra_law_events.71.a": {
+  "en": "Mandate civilian oversight",
+  "de": "Zivile Aufsicht vorschreiben"
+ },
+ "extra_law_events.71.b": {
+  "en": "Allow military self-regulation",
+  "de": "Militärische Selbstregulierung zulassen"
+ },
+ "extra_law_events.71.d": {
+  "en": "The bill [SCOPE.sLaw('current_law_scope').GetName] needs a compliance regime. Reformers want civilian oversight panels; the military wants self-regulation with internal courts. The mechanism shapes the law's whole tone.",
+  "de": "Das Gesetz [SCOPE.sLaw('current_law_scope').GetName] braucht ein Kontrollregime. Reformer wollen zivile Aufsichtsgremien; das Militär will Selbstregulierung mit eigenen Gerichten. Der Mechanismus prägt den ganzen Charakter des Gesetzes."
+ },
+ "extra_law_events.71.f": {
+  "en": "\\\"Tell us who watches us and we will tell you what kind of law it really is.\\\"\\n\\n\\\"And what does that tell you?\\\"\\n\\n\\\"Whether the law was written by the people who will have to live under it, or by the people who will live above it. The two groups never produce the same draft.\\\"",
+  "de": "\\\"Sag mir, wer dich überwacht, und ich sage dir, was für ein Gesetz das wirklich ist.\\\"\\n\\n\\\"Und was sagt es dir?\\\"\\n\\n\\\"Ob das Gesetz von denen geschrieben wurde, die darunter leben müssen, oder von denen, die darüber leben werden. Die beiden Gruppen verfassen nie denselben Entwurf.\\\""
+ },
+ "extra_law_events.71.t": {
+  "en": "Civilian Oversight or Military Self-Regulation?",
+  "de": "Zivile Aufsicht oder militärische Selbstregulierung?"
+ },
+ "extra_law_events.72.a": {
+  "en": "Center on rehabilitation",
+  "de": "Auf Resozialisierung setzen"
+ },
+ "extra_law_events.72.b": {
+  "en": "Center on retribution",
+  "de": "Auf Vergeltung setzen"
+ },
+ "extra_law_events.72.d": {
+  "en": "The criminal-justice bill [SCOPE.sLaw('current_law_scope').GetName] needs a guiding philosophy. Reformers want rehabilitation as the core principle; conservatives want retribution and deterrence to lead. Both philosophies cannot anchor the same statute.",
+  "de": "Das Strafrechtsgesetz [SCOPE.sLaw('current_law_scope').GetName] braucht eine Leitphilosophie. Reformer wollen Resozialisierung als Kernprinzip; Konservative wollen Vergeltung und Abschreckung an erster Stelle. Beide Philosophien können nicht dasselbe Gesetz tragen."
+ },
+ "extra_law_events.72.f": {
+  "en": "\\\"We can fix the criminal, or we can punish him. The state has the resources to commit to one of these. It does not have the resources to do both half-heartedly.\\\"\\n\\n\\\"The bill funds both.\\\"\\n\\n\\\"The bill funds both for two years. Then the rehabilitation budget will be cut, because punishment makes better campaign material than therapy. We have seen this before.\\\"",
+  "de": "\\\"Wir können den Verbrecher bessern, oder wir können ihn bestrafen. Der Staat hat die Mittel, sich für eines von beidem zu entscheiden. Er hat nicht die Mittel, beides halbherzig zu tun.\\\"\\n\\n\\\"Das Gesetz finanziert beides.\\\"\\n\\n\\\"Das Gesetz finanziert beides für zwei Jahre. Dann wird das Budget für die Resozialisierung gekürzt, weil Strafe sich im Wahlkampf besser macht als Therapie. Das haben wir schon erlebt.\\\""
+ },
+ "extra_law_events.72.t": {
+  "en": "Rehabilitation or Retribution?",
+  "de": "Resozialisierung oder Vergeltung?"
+ },
+ "extra_law_events.73.a": {
+  "en": "Accommodate the pluralists",
+  "de": "Den Pluralisten entgegenkommen"
+ },
+ "extra_law_events.73.b": {
+  "en": "Push for assimilation",
+  "de": "Auf Assimilation drängen"
+ },
+ "extra_law_events.73.d": {
+  "en": "Language policy under [SCOPE.sLaw('current_law_scope').GetName] reaches its turning point. Cultural societies want a pluralist accommodation; traditionalists want an assimilationist push. The country picks a long-term direction.",
+  "de": "Die Sprachpolitik unter [SCOPE.sLaw('current_law_scope').GetName] erreicht ihren Wendepunkt. Kulturvereine wollen pluralistisches Entgegenkommen; Traditionalisten wollen einen Assimilationskurs. Das Land wählt eine langfristige Richtung."
+ },
+ "extra_law_events.73.f": {
+  "en": "\\\"A nation is held together by what its people say to each other. The law will determine whether that conversation has one tongue or many.\\\"\\n\\n\\\"And if the conversation has many?\\\"\\n\\n\\\"Then the nation has many sub-conversations, each strong, each distinct, each occasionally talking past the others. That is one kind of strength. The other is to have one conversation, lesser in variety but easier to govern. Both are real choices.\\\"",
+  "de": "\\\"Eine Nation wird durch das zusammengehalten, was ihre Menschen einander sagen. Das Gesetz wird bestimmen, ob dieses Gespräch eine Sprache hat oder viele.\\\"\\n\\n\\\"Und wenn es viele sind?\\\"\\n\\n\\\"Dann hat die Nation viele Nebengespräche, jedes für sich stark, jedes eigenständig, jedes gelegentlich aneinander vorbeiredend. Das ist eine Art von Stärke. Die andere ist ein einziges Gespräch, ärmer an Vielfalt, aber leichter zu regieren. Beides sind echte Optionen.\\\""
+ },
+ "extra_law_events.73.t": {
+  "en": "Pluralist or Assimilationist?",
+  "de": "Pluralistisch oder assimilationistisch?"
+ },
+ "extra_law_events.74.a": {
+  "en": "Impose hard donation caps",
+  "de": "Strenge Spendenobergrenzen einführen"
+ },
+ "extra_law_events.74.b": {
+  "en": "Mandate voluntary disclosure",
+  "de": "Freiwillige Offenlegung vorschreiben"
+ },
+ "extra_law_events.74.d": {
+  "en": "The election-finance bill [SCOPE.sLaw('current_law_scope').GetName] reaches its enforcement question. Reformers want hard donation caps; industry wants voluntary disclosure with matching public funds. Both cannot anchor the law.",
+  "de": "Das Wahlkampffinanzierungsgesetz [SCOPE.sLaw('current_law_scope').GetName] erreicht die Frage der Durchsetzung. Reformer wollen strenge Spendenobergrenzen; die Wirtschaft will freiwillige Offenlegung mit staatlicher Kofinanzierung. Beides kann nicht Grundlage des Gesetzes sein."
+ },
+ "extra_law_events.74.f": {
+  "en": "\\\"Limit me and I will find a way around your limit. Make me disclose, and at least the public will know what I did.\\\"\\n\\n\\\"And if the public does not care?\\\"\\n\\n\\\"Then the public deserves the politics it gets. The disclosure regime is for the public's sake, not mine. I would have preferred no rule at all.\\\"",
+  "de": "\\\"Begrenze mich, und ich finde einen Weg um deine Grenze herum. Lass mich offenlegen, und wenigstens weiß die Öffentlichkeit, was ich getan habe.\\\"\\n\\n\\\"Und wenn es der Öffentlichkeit egal ist?\\\"\\n\\n\\\"Dann verdient die Öffentlichkeit die Politik, die sie bekommt. Die Offenlegungspflicht ist um der Öffentlichkeit willen, nicht um meinetwillen. Am liebsten hätte ich gar keine Regel gehabt.\\\""
+ },
+ "extra_law_events.74.t": {
+  "en": "Hard Caps or Voluntary Disclosure?",
+  "de": "Strenge Obergrenzen oder freiwillige Offenlegung?"
+ },
+ "extra_law_events.75.a": {
+  "en": "Write in federal protections",
+  "de": "Föderale Schutzrechte verankern"
+ },
+ "extra_law_events.75.b": {
+  "en": "Centralize the administration",
+  "de": "Die Verwaltung zentralisieren"
+ },
+ "extra_law_events.75.d": {
+  "en": "The state-power bill [SCOPE.sLaw('current_law_scope').GetName] faces the moment of truth. Regional powers want federal protections written into the bill; centralizers want a unified administration. Each side will read the other's victory as a defeat.",
+  "de": "Das Staatsgewaltgesetz [SCOPE.sLaw('current_law_scope').GetName] steht vor der Entscheidung. Regionalmächte wollen föderale Schutzrechte im Gesetz verankert sehen; Zentralisten wollen eine einheitliche Verwaltung. Jede Seite wird den Sieg der anderen als Niederlage lesen."
+ },
+ "extra_law_events.75.f": {
+  "en": "\\\"The provinces have memory. The capital has ambition. The law must decide which to honor — there is no compromise that both will recognize.\\\"\\n\\n\\\"There is always a compromise.\\\"\\n\\n\\\"There is always a compromise written on the page. There is rarely a compromise that survives implementation. The capital will implement. The provinces will remember. The compromise will be neither.\\\"",
+  "de": "\\\"Die Provinzen haben ein Gedächtnis. Die Hauptstadt hat Ehrgeiz. Das Gesetz muss entscheiden, wen es ehrt — einen Kompromiss, den beide anerkennen, gibt es nicht.\\\"\\n\\n\\\"Es gibt immer einen Kompromiss.\\\"\\n\\n\\\"Es gibt immer einen Kompromiss auf dem Papier. Es gibt selten einen Kompromiss, der die Umsetzung überlebt. Die Hauptstadt wird umsetzen. Die Provinzen werden sich erinnern. Der Kompromiss wird keines von beidem sein.\\\""
+ },
+ "extra_law_events.75.t": {
+  "en": "Federal Protections or Centralized?",
+  "de": "Föderale Schutzrechte oder Zentralisierung?"
+ },
+ "extra_law_events.76.a": {
+  "en": "Begin with 'yes, except'",
+  "de": "Mit „ja, außer“ beginnen"
+ },
+ "extra_law_events.76.b": {
+  "en": "Begin with 'no, unless'",
+  "de": "Mit „nein, es sei denn“ beginnen"
+ },
+ "extra_law_events.76.d": {
+  "en": "The augmentation bill [SCOPE.sLaw('current_law_scope').GetName] reaches its ethics framework. Scientists want a permissive regime with oversight; religious authorities want a restrictive regime with research exceptions. The default tilt matters.",
+  "de": "Das Augmentierungsgesetz [SCOPE.sLaw('current_law_scope').GetName] erreicht seinen ethischen Rahmen. Wissenschaftler wollen ein freizügiges Regime mit Aufsicht; religiöse Autoritäten wollen ein restriktives Regime mit Forschungsausnahmen. Die Grundausrichtung ist entscheidend."
+ },
+ "extra_law_events.76.f": {
+  "en": "\\\"Begin with 'yes, except' and you will end up with a society that says yes. Begin with 'no, unless' and you will end up with a society that says no. The first word in the law is the whole law.\\\"\\n\\n\\\"And the exceptions?\\\"\\n\\n\\\"The exceptions narrow over time when the default is permissive. They widen over time when the default is restrictive. The law's centre of gravity is wherever the law's first word puts it. Choose the first word with care.\\\"",
+  "de": "\\\"Beginne mit „ja, außer“, und du endest bei einer Gesellschaft, die Ja sagt. Beginne mit „nein, es sei denn“, und du endest bei einer Gesellschaft, die Nein sagt. Das erste Wort im Gesetz ist das ganze Gesetz.\\\"\\n\\n\\\"Und die Ausnahmen?\\\"\\n\\n\\\"Die Ausnahmen schrumpfen mit der Zeit, wenn die Grundhaltung freizügig ist. Sie wachsen mit der Zeit, wenn die Grundhaltung restriktiv ist. Der Schwerpunkt des Gesetzes liegt dort, wohin ihn das erste Wort setzt. Wähle das erste Wort mit Bedacht.\\\""
+ },
+ "extra_law_events.76.t": {
+  "en": "Permissive or Restrictive Ethics?",
+  "de": "Freizügige oder restriktive Ethik?"
+ },
+ "extra_law_events.77.a": {
+  "en": "Enshrine equal split",
+  "de": "Gleiche Aufteilung verankern"
+ },
+ "extra_law_events.77.b": {
+  "en": "Preserve primogeniture",
+  "de": "Das Erstgeburtsrecht bewahren"
+ },
+ "extra_law_events.77.d": {
+  "en": "The inheritance bill [SCOPE.sLaw('current_law_scope').GetName] reaches the bedrock question. New-money families want equal split among heirs; old-money families want primogeniture preserved. The principle is not arithmetic — it is whose families survive.",
+  "de": "Das Erbrechtsgesetz [SCOPE.sLaw('current_law_scope').GetName] erreicht die Grundsatzfrage. Familien des neuen Geldes wollen gleiche Aufteilung unter den Erben; alteingesessene Familien wollen das Erstgeburtsrecht bewahren. Das Prinzip ist keine Arithmetik — es geht darum, welche Familien überleben."
+ },
+ "extra_law_events.77.f": {
+  "en": "\\\"Equal inheritance dissolves the great houses in three generations. Primogeniture preserves them for ten. The state will choose which timeline it lives in.\\\"\\n\\n\\\"And the cadet sons?\\\"\\n\\n\\\"Will become lawyers, soldiers, merchants. They will build the next generation's wealth in places the old houses do not reach. Whether this is progress or loss depends on which side of the great house you are sitting on.\\\"",
+  "de": "\\\"Gleiches Erbe löst die großen Häuser binnen drei Generationen auf. Das Erstgeburtsrecht bewahrt sie für zehn. Der Staat wird wählen, in welcher Zeitlinie er lebt.\\\"\\n\\n\\\"Und die nachgeborenen Söhne?\\\"\\n\\n\\\"Werden Anwälte, Soldaten, Kaufleute. Sie werden den Wohlstand der nächsten Generation an Orten aufbauen, die die alten Häuser nicht erreichen. Ob das Fortschritt oder Verlust ist, hängt davon ab, auf welcher Seite des großen Hauses man sitzt.\\\""
+ },
+ "extra_law_events.77.t": {
+  "en": "Equal Split or Primogeniture?",
+  "de": "Gleiche Aufteilung oder Erstgeburtsrecht?"
+ },
+ "extra_law_events.78.a": {
+  "en": "Lead with marriage rights",
+  "de": "Mit Eherechten beginnen"
+ },
+ "extra_law_events.78.b": {
+  "en": "Lead with employment protections",
+  "de": "Mit Arbeitsschutz beginnen"
+ },
+ "extra_law_events.78.d": {
+  "en": "The LGBTQ bill [SCOPE.sLaw('current_law_scope').GetName] reaches its prioritization moment. Advocates split: marriage rights as the symbol, or employment protections as the substance? The bill can lead with one.",
+  "de": "Das LGBTQ-Gesetz [SCOPE.sLaw('current_law_scope').GetName] erreicht seinen Priorisierungsmoment. Die Befürworter sind gespalten: Eherechte als Symbol oder Arbeitsschutz als Substanz? Das Gesetz kann nur mit einem von beiden beginnen."
+ },
+ "extra_law_events.78.f": {
+  "en": "\\\"The wedding ring or the paycheck. Both matter, but the law must lead with one. Which one you lead with tells the country what kind of equality you mean.\\\"\\n\\n\\\"And what kind do we mean?\\\"\\n\\n\\\"If you ask the country, the country will answer in pieces. The lawyer will say marriage; the worker will say wages. Both will be telling you what their own lives need first. The law tells us what the state thinks is most worth fighting for.\\\"",
+  "de": "\\\"Der Ehering oder die Lohntüte. Beides zählt, aber das Gesetz muss mit einem beginnen. Womit man beginnt, sagt dem Land, welche Art von Gleichheit man meint.\\\"\\n\\n\\\"Und welche meinen wir?\\\"\\n\\n\\\"Fragt man das Land, wird das Land in Bruchstücken antworten. Der Jurist wird Ehe sagen; der Arbeiter wird Lohn sagen. Beide werden dir sagen, was ihr eigenes Leben zuerst braucht. Das Gesetz sagt uns, wofür der Staat am meisten zu kämpfen bereit ist.\\\""
+ },
+ "extra_law_events.78.t": {
+  "en": "Marriage Rights or Employment Rights First?",
+  "de": "Eherechte oder Arbeitsrechte zuerst?"
+ },
+ "extra_law_events.79.a": {
+  "en": "Subsidize more babies",
+  "de": "Mehr Kinder subventionieren"
+ },
+ "extra_law_events.79.b": {
+  "en": "Subsidize family planning",
+  "de": "Familienplanung subventionieren"
+ },
+ "extra_law_events.79.d": {
+  "en": "The family-policy bill [SCOPE.sLaw('current_law_scope').GetName] needs a primary direction. Traditionalists want pro-natalist incentives; reformers want comprehensive family planning. The bill's core philosophy will be read for decades.",
+  "de": "Das Familienpolitikgesetz [SCOPE.sLaw('current_law_scope').GetName] braucht eine Grundrichtung. Traditionalisten wollen geburtenfördernde Anreize; Reformer wollen umfassende Familienplanung. Die Kernphilosophie des Gesetzes wird man noch Jahrzehnte später lesen."
+ },
+ "extra_law_events.79.f": {
+  "en": "\\\"You can subsidize more babies, or you can subsidize choice about babies. The treasury can afford one of these as a flagship. Pick which.\\\"\\n\\n\\\"Both are necessary.\\\"\\n\\n\\\"Both are necessary. Neither will get full funding. The flagship one will be defended in every speech; the other will be defended only by the people who use it. The flagship one wins.\\\"",
+  "de": "\\\"Man kann mehr Kinder subventionieren, oder man kann die Wahlfreiheit bei Kindern subventionieren. Die Staatskasse kann sich eines davon als Vorzeigeprojekt leisten. Wähle, welches.\\\"\\n\\n\\\"Beides ist notwendig.\\\"\\n\\n\\\"Beides ist notwendig. Keines wird voll finanziert werden. Das Vorzeigeprojekt wird in jeder Rede verteidigt; das andere wird nur von denen verteidigt, die es nutzen. Das Vorzeigeprojekt gewinnt.\\\""
+ },
+ "extra_law_events.79.t": {
+  "en": "Pro-Natalist or Family Planning?",
+  "de": "Geburtenförderung oder Familienplanung?"
+ },
+ "extra_law_events.8.a": {
+  "en": "The monopolists have had their day - break the trusts!",
+  "de": "Die Monopolisten hatten ihre Zeit - die Trusts zerschlagen!"
+ },
+ "extra_law_events.8.b": {
+  "en": "Negotiate a compromise with industry.",
+  "de": "Einen Kompromiss mit der Industrie aushandeln."
+ },
+ "extra_law_events.8.d": {
+  "en": "Public anger has been building against the great industrial combines. Pamphlets circulate depicting the [SCOPE.gsInterestGroup('industrialists_ig').GetName] as bloated spiders sitting at the center of a web of monopoly, choking fair competition and gouging the common consumer.",
+  "de": "Öffentlicher Zorn baut sich gegen die großen Industriekonzerne auf. Flugblätter zeigen [SCOPE.gsInterestGroup('industrialists_ig').GetName] als aufgedunsene Spinnen im Zentrum eines Monopolnetzes, die den fairen Wettbewerb erwürgen und den einfachen Verbraucher ausbeuten."
+ },
+ "extra_law_events.8.f": {
+  "en": "\\\"The great trusts have turned the marketplace into a private fiefdom. Where once a hundred firms competed, now one baron sits upon a throne of steel and oil, and dares to call his extortion 'efficiency.'\\\"",
+  "de": "\\\"Die großen Trusts haben den Markt in ein privates Lehnsgut verwandelt. Wo einst hundert Firmen konkurrierten, sitzt nun ein einzelner Baron auf einem Thron aus Stahl und Öl und wagt es, seine Erpressung „Effizienz“ zu nennen.\\\""
+ },
+ "extra_law_events.8.t": {
+  "en": "The Robber Barons",
+  "de": "Die Raubritter"
+ },
+ "extra_law_events.80.a": {
+  "en": "Disclosure is the default",
+  "de": "Offenlegung als Regelfall"
+ },
+ "extra_law_events.80.b": {
+  "en": "Stability comes first",
+  "de": "Stabilität zuerst"
+ },
+ "extra_law_events.80.d": {
+  "en": "The right-to-information bill [SCOPE.sLaw('current_law_scope').GetName] reaches its presumption question. Transparency advocates want disclosure as the default; the security establishment wants stability-protective exemptions written in. The presumption matters.",
+  "de": "Das Informationsfreiheitsgesetz [SCOPE.sLaw('current_law_scope').GetName] erreicht die Frage der Grundannahme. Transparenzbefürworter wollen Offenlegung als Regelfall; das Sicherheitsestablishment will stabilitätswahrende Ausnahmen verankern. Die Grundannahme ist entscheidend."
+ },
+ "extra_law_events.80.f": {
+  "en": "\\\"Begin with disclosure and you build a state that explains itself. Begin with exemptions and you build a state that need not. The architecture is the policy.\\\"\\n\\n\\\"And we explain ourselves now.\\\"\\n\\n\\\"You explain when asked. The bill decides whether the default is asking or being told. The difference is small in any one case. Over a decade, the difference is the whole posture of the state.\\\"",
+  "de": "\\\"Beginne mit Offenlegung, und du baust einen Staat, der sich erklärt. Beginne mit Ausnahmen, und du baust einen Staat, der das nicht muss. Die Struktur ist die Politik.\\\"\\n\\n\\\"Und wir erklären uns doch schon jetzt.\\\"\\n\\n\\\"Ihr erklärt euch, wenn man fragt. Das Gesetz entscheidet, ob der Regelfall das Fragen ist oder das Mitgeteiltwerden. Der Unterschied ist im Einzelfall klein. Über ein Jahrzehnt ist der Unterschied die ganze Haltung des Staates.\\\""
+ },
+ "extra_law_events.80.t": {
+  "en": "Transparency or Stability First?",
+  "de": "Transparenz oder Stabilität zuerst?"
+ },
+ "extra_law_events.81.a": {
+  "en": "Affirmative-action measures",
+  "de": "Affirmative Maßnahmen"
+ },
+ "extra_law_events.81.b": {
+  "en": "Equal-treatment guarantees",
+  "de": "Gleichbehandlungsgarantien"
+ },
+ "extra_law_events.81.d": {
+  "en": "The minority-rights bill [SCOPE.sLaw('current_law_scope').GetName] reaches the framework question. Reformers want affirmative-action measures; centrists want equal-treatment guarantees. The choice of principle shapes a generation.",
+  "de": "Das Minderheitenrechtsgesetz [SCOPE.sLaw('current_law_scope').GetName] erreicht die Grundsatzfrage. Reformer wollen Affirmative Maßnahmen; Zentristen wollen Gleichbehandlungsgarantien. Die Wahl des Prinzips prägt eine Generation."
+ },
+ "extra_law_events.81.f": {
+  "en": "\\\"Treat people equally and the old inequalities persist. Treat them differently to fix the old inequalities and you create new ones. Pick your error.\\\"\\n\\n\\\"There is no error-free path.\\\"\\n\\n\\\"There is no error-free path, and the people who tell you there is are selling you the other party's bill. Decide which mistakes you can defend in twenty years, and write the law accordingly.\\\"",
+  "de": "\\\"Behandle die Menschen gleich, und die alten Ungleichheiten bleiben bestehen. Behandle sie unterschiedlich, um die alten Ungleichheiten zu beheben, und du schaffst neue. Wähle deinen Fehler.\\\"\\n\\n\\\"Es gibt keinen fehlerfreien Weg.\\\"\\n\\n\\\"Es gibt keinen fehlerfreien Weg, und wer dir das Gegenteil erzählt, verkauft dir das Programm der anderen Partei. Entscheide, welche Fehler du in zwanzig Jahren verteidigen kannst, und schreibe das Gesetz entsprechend.\\\""
+ },
+ "extra_law_events.81.t": {
+  "en": "Affirmative Action or Equal Treatment?",
+  "de": "Affirmative Maßnahmen oder Gleichbehandlung?"
+ },
+ "extra_law_events.82.a": {
+  "en": "Retraining programs first",
+  "de": "Umschulungsprogramme zuerst"
+ },
+ "extra_law_events.82.b": {
+  "en": "UBI safety net first",
+  "de": "Grundeinkommen als Sicherheitsnetz zuerst"
+ },
+ "extra_law_events.82.d": {
+  "en": "The welfare bill [SCOPE.sLaw('current_law_scope').GetName] reaches its philosophical fork. Reformers want retraining programs first; advocates want UBI as the safety net. Industry warns of the cost either way; the choice is which constituency the bill is for.",
+  "de": "Das Sozialgesetz [SCOPE.sLaw('current_law_scope').GetName] erreicht seine philosophische Weggabelung. Reformer wollen zuerst Umschulungsprogramme; Befürworter wollen ein bedingungsloses Grundeinkommen als Sicherheitsnetz. Die Industrie warnt vor den Kosten so oder so; die Wahl bestimmt, für welche Klientel das Gesetz gemacht ist."
+ },
+ "extra_law_events.82.f": {
+  "en": "\\\"Teach a man to fish, the proverb says. Give a man a fish, the modern reformer answers. Either way, someone pays for the boat. The state must decide which message it wants to send.\\\"\\n\\n\\\"Can we send both?\\\"\\n\\n\\\"You can send both. The message is whichever one gets the larger budget line. The country will read the budget line, not the speech.\\\"",
+  "de": "\\\"Lehre einen Mann das Fischen, sagt das Sprichwort. Gib einem Mann einen Fisch, antwortet der moderne Reformer. So oder so zahlt am Ende jemand für das Boot. Der Staat muss entscheiden, welche Botschaft er senden will.\\\"\\n\\n\\\"Können wir nicht beides senden?\\\"\\n\\n\\\"Man kann beides senden. Die Botschaft ist die, die den größeren Budgetposten bekommt. Das Land wird den Budgetposten lesen, nicht die Rede.\\\""
+ },
+ "extra_law_events.82.t": {
+  "en": "Retraining or UBI?",
+  "de": "Umschulung oder Grundeinkommen?"
+ },
+ "extra_law_events.83.a": {
+  "en": "Algorithm leads, humans override",
+  "de": "Algorithmus führt, Mensch kann eingreifen"
+ },
+ "extra_law_events.83.b": {
+  "en": "Humans lead, algorithms support",
+  "de": "Mensch führt, Algorithmus unterstützt"
+ },
+ "extra_law_events.83.d": {
+  "en": "The algorithmic-governance bill [SCOPE.sLaw('current_law_scope').GetName] reaches its operational question. Technocrats want the algorithm to lead with human override available; humanists want human oversight throughout with algorithmic support. The default matters.",
+  "de": "Das Gesetz zur algorithmischen Steuerung [SCOPE.sLaw('current_law_scope').GetName] erreicht die operative Frage. Technokraten wollen, dass der Algorithmus führt und der Mensch eingreifen kann; Humanisten wollen durchgehende menschliche Aufsicht mit algorithmischer Unterstützung. Die Grundeinstellung ist entscheidend."
+ },
+ "extra_law_events.83.f": {
+  "en": "\\\"When the algorithm says one thing and the human says another, which one wins by default? That answer is the entire law.\\\"\\n\\n\\\"The human can always override.\\\"\\n\\n\\\"The human can always override on paper. In practice, the override carries a paperwork burden, a review meeting, and a recorded justification. The default wins. It always does.\\\"",
+  "de": "\\\"Wenn der Algorithmus das eine sagt und der Mensch das andere, wer gewinnt dann im Regelfall? Diese Antwort ist das ganze Gesetz.\\\"\\n\\n\\\"Der Mensch kann jederzeit eingreifen.\\\"\\n\\n\\\"Der Mensch kann auf dem Papier jederzeit eingreifen. In der Praxis bedeutet der Eingriff Papierkram, eine Prüfungssitzung und eine dokumentierte Begründung. Der Regelfall gewinnt. Das tut er immer.\\\""
+ },
+ "extra_law_events.83.t": {
+  "en": "Tech First or Human Oversight First?",
+  "de": "Technik zuerst oder menschliche Aufsicht zuerst?"
+ },
+ "extra_law_events.84.a": {
+  "en": "Direct citizen voting",
+  "de": "Direkte Bürgerabstimmung"
+ },
+ "extra_law_events.84.b": {
+  "en": "Deliberative chambers by sortition",
+  "de": "Beratende Losgremien"
+ },
+ "extra_law_events.84.d": {
+  "en": "The [SCOPE.sLaw('current_law_scope').GetName] bill reaches its instrument question: how will the voters govern? Populists want direct citizen voting on legislation; reformers want sortition-based deliberative chambers. The design choice defines what 'democracy' will mean here.",
+  "de": "Das Gesetz [SCOPE.sLaw('current_law_scope').GetName] erreicht die Frage des Instruments: Wie sollen die Bürger regieren? Populisten wollen direkte Bürgerabstimmungen über Gesetze; Reformer wollen beratende Gremien nach dem Losprinzip. Die Gestaltungsentscheidung bestimmt, was „Demokratie“ hier bedeuten wird."
+ },
+ "extra_law_events.84.f": {
+  "en": "\\\"A vote of all the people takes a day. A deliberation by a hundred chosen by lot takes a week and produces a better answer. The state must decide which it values more.\\\"\\n\\n\\\"Better by whose standard?\\\"\\n\\n\\\"By every standard except the speed of the answer. Which is, of course, the standard that wins most arguments in politics. Hence the difficulty of getting the deliberative model adopted.\\\"",
+  "de": "\\\"Eine Abstimmung des ganzen Volkes dauert einen Tag. Eine Beratung von hundert Ausgelosten dauert eine Woche und liefert eine bessere Antwort. Der Staat muss entscheiden, was ihm wichtiger ist.\\\"\\n\\n\\\"Besser nach wessen Maßstab?\\\"\\n\\n\\\"Nach jedem Maßstab außer der Geschwindigkeit der Antwort. Was natürlich der Maßstab ist, der die meisten politischen Debatten gewinnt. Daher die Schwierigkeit, das beratende Modell durchzusetzen.\\\""
+ },
+ "extra_law_events.84.t": {
+  "en": "Direct Voting or Deliberative Chambers?",
+  "de": "Direkte Abstimmung oder beratende Gremien?"
+ },
+ "extra_law_events.85.a": {
+  "en": "Make the exemption permanent.",
+  "de": "Die Ausnahme dauerhaft machen."
+ },
+ "extra_law_events.85.b": {
+  "en": "The transition is over. Let it lapse.",
+  "de": "Der Übergang ist vorbei. Sie auslaufen lassen."
+ },
+ "extra_law_events.85.d": {
+  "en": "Ten years ago, the [SCOPE.gsInterestGroup('industrialists_ig').GetName] secured a temporary exemption from [SCOPE.sLaw('sunset_law').GetName] for the nation's largest enterprise, on the understanding that a decade would be time enough to adjust. That decade is now over and the exemption has lapsed. The industrialists insist the 'national champion' is as vital as ever and press for the clause to be written permanently into law; small proprietors and reformers reply that a transition which never ends is no transition at all.",
+  "de": "Vor zehn Jahren sicherte sich [SCOPE.gsInterestGroup('industrialists_ig').GetName] eine befristete Ausnahme von [SCOPE.sLaw('sunset_law').GetName] für das größte Unternehmen der Nation, unter der Bedingung, dass ein Jahrzehnt Zeit genug für die Anpassung sein würde. Dieses Jahrzehnt ist nun vorbei, und die Ausnahme ist ausgelaufen. Die Industriellen bestehen darauf, dass der „nationale Vorzeigekonzern“ so wichtig ist wie eh und je, und drängen darauf, die Klausel dauerhaft ins Gesetz zu schreiben; Kleinunternehmer und Reformer erwidern, ein Übergang, der nie endet, sei überhaupt kein Übergang."
+ },
+ "extra_law_events.85.f": {
+  "en": "\\\"Ten years,\\\" the reformer said, sliding the old agreement across the table. \\\"Your own signature. 'Time enough to adjust.'\\\"\\n\\n\\\"Circumstances change,\\\" the industrialist replied. \\\"The foreign competition has only grown.\\\"\\n\\n\\\"So has your company.\\\"\\n\\n\\\"Precisely my point.\\\"",
+  "de": "\\\"Zehn Jahre\\\", sagte der Reformer und schob die alte Vereinbarung über den Tisch. \\\"Ihre eigene Unterschrift. „Zeit genug für die Anpassung.“\\\"\\n\\n\\\"Die Umstände ändern sich\\\", erwiderte der Industrielle. \\\"Die ausländische Konkurrenz ist nur noch gewachsen.\\\"\\n\\n\\\"Genau wie Ihr Unternehmen.\\\"\\n\\n\\\"Genau mein Punkt.\\\""
+ },
+ "extra_law_events.85.t": {
+  "en": "The Champion's Decade Ends",
+  "de": "Das Jahrzehnt des Vorzeigekonzerns endet"
+ },
+ "extra_law_events.86.a": {
+  "en": "Make the exemption permanent.",
+  "de": "Die Ausnahme dauerhaft machen."
+ },
+ "extra_law_events.86.b": {
+  "en": "The grace period is over. Let it lapse.",
+  "de": "Die Übergangsfrist ist vorbei. Sie auslaufen lassen."
+ },
+ "extra_law_events.86.d": {
+  "en": "When [SCOPE.sLaw('sunset_law').GetName] was enacted, businesses were granted a temporary exemption from its data provisions so they could bring their practices into compliance. That grace period has now expired and the exemption has lapsed. The [SCOPE.gsInterestGroup('industrialists_ig').GetName] argue that compliance has proven far costlier than anyone anticipated and ask that the exemption be made permanent; privacy advocates counter that three years was already generous, and that every extension is another year in which citizens' records are traded like any other commodity.",
+  "de": "Als [SCOPE.sLaw('sunset_law').GetName] erlassen wurde, erhielten Unternehmen eine befristete Ausnahme von seinen Datenschutzbestimmungen, damit sie ihre Praktiken anpassen konnten. Diese Übergangsfrist ist nun abgelaufen, und die Ausnahme ist ausgelaufen. [SCOPE.gsInterestGroup('industrialists_ig').GetName] argumentieren, die Einhaltung habe sich als weit teurer erwiesen als erwartet, und fordern, die Ausnahme dauerhaft zu machen; Datenschützer entgegnen, drei Jahre seien schon großzügig gewesen, und jede Verlängerung sei ein weiteres Jahr, in dem die Daten der Bürger wie jede andere Ware gehandelt würden."
+ },
+ "extra_law_events.86.f": {
+  "en": "\\\"We asked for time to comply,\\\" the company's counsel said. \\\"Not for a deadline.\\\"\\n\\n\\\"You asked for three years. You were given three years.\\\"\\n\\n\\\"And in those three years we discovered how much of our business depends on the very records the law forbids us to keep.\\\"\\n\\n\\\"Then you have discovered,\\\" the commissioner said, \\\"exactly what the law was written to change.\\\"",
+  "de": "\\\"Wir baten um Zeit zur Einhaltung\\\", sagte der Firmenanwalt. \\\"Nicht um eine Frist.\\\"\\n\\n\\\"Sie baten um drei Jahre. Sie bekamen drei Jahre.\\\"\\n\\n\\\"Und in diesen drei Jahren haben wir entdeckt, wie sehr unser Geschäft von genau den Daten abhängt, die das Gesetz uns zu speichern verbietet.\\\"\\n\\n\\\"Dann haben Sie entdeckt\\\", sagte der Kommissar, \\\"genau das, was das Gesetz ändern sollte.\\\""
+ },
+ "extra_law_events.86.t": {
+  "en": "The Grace Period Closes",
+  "de": "Die Übergangsfrist endet"
+ },
+ "extra_law_events.9.a": {
+  "en": "The reform is long overdue - pass it now!",
+  "de": "Die Reform ist längst überfällig - jetzt verabschieden!"
+ },
+ "extra_law_events.9.b": {
+  "en": "Build an academic consensus with the intelligentsia.",
+  "de": "Einen akademischen Konsens mit der Intelligenzija aufbauen."
+ },
+ "extra_law_events.9.d": {
+  "en": "Our proposed changes to intellectual property law have split the [SCOPE.gsInterestGroup('intelligentsia_ig').GetName]. Some argue passionately that ideas are the common heritage of mankind, while others insist that without the protection of patents, the wellspring of invention will dry up.",
+  "de": "Unsere vorgeschlagenen Änderungen am Recht des geistigen Eigentums haben [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] gespalten. Manche argumentieren leidenschaftlich, Ideen seien das gemeinsame Erbe der Menschheit, während andere darauf bestehen, dass ohne den Schutz von Patenten die Quelle der Erfindungskraft versiegen wird."
+ },
+ "extra_law_events.9.f": {
+  "en": "\\\"If I plant an apple tree, the apples are mine. But if I sing a song, does it not belong to everyone who hears it? The question of who owns an idea is, I suspect, the question that will define this century.\\\"",
+  "de": "\\\"Wenn ich einen Apfelbaum pflanze, gehören mir die Äpfel. Aber wenn ich ein Lied singe, gehört es dann nicht jedem, der es hört? Die Frage, wem eine Idee gehört, wird, so vermute ich, die Frage sein, die dieses Jahrhundert bestimmt.\\\""
+ },
+ "extra_law_events.9.t": {
+  "en": "The Pirate's Dilemma",
+  "de": "Das Dilemma des Piraten"
+ },
+ "formation_te.1.a": {
+  "en": "Our claims extend to all of the subcontinent.",
+  "de": "Unsere Ansprüche erstrecken sich auf den gesamten Subkontinent."
+ },
+ "formation_te.1.d": {
+  "en": "From the Khyber to Cape Comorin, the dream of a single Indian nation has long outrun its reach. Today that dream takes the shape of a state. The heartland is one — Delhi and Bombay, Bengal and the Deccan answer to a single flag. Yet the work of unity is unfinished: the Muslim-majority west and east, the Himalayan kingdoms, and the island of Ceylon all lie beyond our borders, and many within them are kin who look to us still.",
+  "de": "Vom Khyberpass bis Kap Komorin hat der Traum einer einzigen indischen Nation seine Reichweite längst überschritten. Heute nimmt dieser Traum die Gestalt eines Staates an. Das Kernland ist geeint — Delhi und Bombay, Bengalen und der Dekkan folgen einer einzigen Flagge. Doch das Werk der Einheit ist unvollendet: der muslimisch geprägte Westen und Osten, die Königreiche des Himalaya und die Insel Ceylon liegen noch jenseits unserer Grenzen, und viele dort sind noch immer Verwandte, die zu uns aufblicken."
+ },
+ "formation_te.1.f": {
+  "en": "Long years in bondage ended in a moment which history seldom offers.",
+  "de": "Lange Jahre der Knechtschaft endeten in einem Augenblick, wie ihn die Geschichte selten bietet."
+ },
+ "formation_te.1.t": {
+  "en": "The Republic of Bharat",
+  "de": "Die Republik Bharat"
+ },
+ "formation_te.10.a": {
+  "en": "Launch a police action and annex [scope:polo_target_country.GetName].",
+  "de": "Eine Polizeiaktion starten und [scope:polo_target_country.GetName] annektieren."
+ },
+ "formation_te.10.b": {
+  "en": "Pressure [scope:polo_target_country.GetName] into accession.",
+  "de": "[scope:polo_target_country.GetName] zum Beitritt drängen."
+ },
+ "formation_te.10.c": {
+  "en": "Respect their sovereignty — for now.",
+  "de": "Ihre Souveränität achten — vorerst."
+ },
+ "formation_te.10.d": {
+  "en": "[scope:polo_target_country.GetName] sits encircled by our territory, a princely holdout whose ruler refuses to accede to the Union. Its court pleads sovereignty and dreams of independence, but a foreign-aligned state lodged in our heartland is a dagger we cannot ignore. The Cabinet is divided on how firmly to press the matter.",
+  "de": "[scope:polo_target_country.GetName] liegt eingeschlossen von unserem Territorium, ein fürstlicher Rückzugsort, dessen Herrscher sich weigert, der Union beizutreten. Sein Hof beruft sich auf Souveränität und träumt von Unabhängigkeit, doch ein fremdgeneigter Staat mitten in unserem Kernland ist ein Dolch, den wir nicht ignorieren können. Das Kabinett ist uneins, wie entschieden man vorgehen soll."
+ },
+ "formation_te.10.f": {
+  "en": "Geography has already decided this question; only the manner of its answer remains.",
+  "de": "Die Geographie hat diese Frage bereits entschieden; nur die Art der Antwort steht noch aus."
+ },
+ "formation_te.10.t": {
+  "en": "An Island of Resistance",
+  "de": "Eine Insel des Widerstands"
+ },
+ "formation_te.2.a": {
+  "en": "The archipelago is not yet whole.",
+  "de": "Der Archipel ist noch nicht vollständig."
+ },
+ "formation_te.2.d": {
+  "en": "Across thirteen thousand islands, a single people now calls itself one nation. Java and Sumatra, Borneo and the Celebes, the Moluccas and Papua are bound together at last. But the archipelago does not end at our frontier: the Malay peninsula, the northern shore of Borneo, and the eastern half of New Guinea share our seas and our blood, and remain to be gathered in.",
+  "de": "Über dreizehntausend Inseln hinweg nennt sich ein einziges Volk nun eine Nation. Java und Sumatra, Borneo und Celebes, die Molukken und Papua sind endlich vereint. Doch der Archipel endet nicht an unserer Grenze: die Malaiische Halbinsel, die Nordküste Borneos und die östliche Hälfte Neuguineas teilen unsere Meere und unser Blut und warten noch darauf, eingegliedert zu werden."
+ },
+ "formation_te.2.f": {
+  "en": "From Sabang to Merauke, one homeland, one tongue, one people.",
+  "de": "Von Sabang bis Merauke: eine Heimat, eine Sprache, ein Volk."
+ },
+ "formation_te.2.t": {
+  "en": "Merdeka — The Free Archipelago",
+  "de": "Merdeka — Der freie Archipel"
+ },
+ "heir_education_events.1.a": {
+  "en": "Encourage them to excel!",
+  "de": "Sie zu Höchstleistungen ermutigen!"
+ },
+ "heir_education_events.1.b": {
+  "en": "We should broaden the curriculum.",
+  "de": "Wir sollten den Lehrplan erweitern."
+ },
+ "heir_education_events.1.d": {
+  "en": "The tutors report that the [concept_heir] has shown remarkable aptitude in their studies, grasping complex material with surprising ease. The court is quietly impressed.",
+  "de": "Die Lehrer berichten, dass der [concept_heir] bemerkenswerte Begabung im Studium zeigt und komplexe Stoffe mit überraschender Leichtigkeit erfasst. Der Hof ist im Stillen beeindruckt."
+ },
+ "heir_education_events.1.f": {
+  "en": "\\\"The young one asked a question today that I myself could not answer. I had to consult three volumes before I found it.\\\"\\n\\n\\\"And?\\\"\\n\\n\\\"And it was a question about the limits of royal authority. The volumes were not encouraging. I will need to revise the curriculum before the next lesson.\\\"\\n\\n\\\"You are training a sovereign, not a scholar.\\\"\\n\\n\\\"I had thought so. The young one is making it harder to tell the difference.\\\"",
+  "de": "\\\"Der Kleine hat mir heute eine Frage gestellt, die ich selbst nicht beantworten konnte. Ich musste drei Bände zurate ziehen, bevor ich die Antwort fand.\\\"\\n\\n\\\"Und?\\\"\\n\\n\\\"Und es war eine Frage nach den Grenzen der königlichen Macht. Die Bände machten wenig Mut. Ich werde den Lehrplan vor der nächsten Stunde überarbeiten müssen.\\\"\\n\\n\\\"Ihr bildet einen Herrscher aus, keinen Gelehrten.\\\"\\n\\n\\\"Das dachte ich auch. Der Kleine macht es mir immer schwerer, den Unterschied zu erkennen.\\\""
+ },
+ "heir_education_events.1.t": {
+  "en": "A Promising Pupil",
+  "de": "Ein vielversprechender Schüler"
+ },
+ "heir_education_events.2.a": {
+  "en": "Discipline builds character.",
+  "de": "Disziplin formt den Charakter."
+ },
+ "heir_education_events.2.b": {
+  "en": "Perhaps a lighter touch.",
+  "de": "Vielleicht etwas mehr Nachsicht."
+ },
+ "heir_education_events.2.c": {
+  "en": "Let the child find their own path.",
+  "de": "Das Kind seinen eigenen Weg finden lassen."
+ },
+ "heir_education_events.2.d": {
+  "en": "The [concept_heir] has grown restless and resistant to instruction, questioning the purpose of their studies and testing the patience of every tutor in the palace.",
+  "de": "Der [concept_heir] ist unruhig und lernunwillig geworden, stellt den Sinn des Unterrichts infrage und stellt die Geduld jedes Lehrers im Palast auf die Probe."
+ },
+ "heir_education_events.2.f": {
+  "en": "\\\"I will not learn another dead language! What use is Attic Greek to a modern sovereign?\\\"\\n\\n\\\"Your grandfather knew six.\\\"\\n\\n\\\"My grandfather lost two wars and the third only just. Perhaps the six languages were not the source of his strength.\\\"\\n\\nThe tutor wrote down the response, sighed, and rewrote it before showing it to the regent. The original phrasing, he judged, would have ended his employment.\\\"",
+  "de": "\\\"Ich werde keine weitere tote Sprache lernen! Was nützt einem modernen Herrscher schon Attisches Griechisch?\\\"\\n\\n\\\"Euer Großvater beherrschte sechs.\\\"\\n\\n\\\"Mein Großvater verlor zwei Kriege und den dritten nur knapp nicht. Vielleicht waren die sechs Sprachen nicht die Quelle seiner Stärke.\\\"\\n\\nDer Lehrer notierte die Antwort, seufzte und schrieb sie um, bevor er sie dem Regenten zeigte. Die ursprüngliche Formulierung, urteilte er, hätte seine Anstellung beendet.\\\""
+ },
+ "heir_education_events.2.t": {
+  "en": "A Difficult Student",
+  "de": "Ein schwieriger Schüler"
+ },
+ "heir_education_events.200.a": {
+  "en": "We shall see what kind of ruler they become.",
+  "de": "Wir werden sehen, was für ein Herrscher daraus wird."
+ },
+ "heir_education_events.200.d": {
+  "en": "The education of [ROOT.GetCountry.GetName]'s [concept_heir] is complete. Years of tutoring, study, and carefully managed experiences have shaped the young royal into a future monarch — for better or worse.",
+  "de": "Die Erziehung des [Concept('concept_heir', 'Erben')] [ROOT.GetCountry.GetAltName('GEN')] ist abgeschlossen. Jahre des Unterrichts, des Studiums und sorgfältig gelenkter Erfahrungen haben aus dem jungen Königskind einen künftigen Monarchen geformt — zum Guten wie zum Schlechten."
+ },
+ "heir_education_events.200.f": {
+  "en": "\\\"The crown awaits one who may prove worthy of it,\\\" the old tutor said, more to himself than to the regent.\\n\\n\\\"And will the new one?\\\"\\n\\n\\\"That is the question every generation asks of the next. The answer is rarely the one we hoped for. Sometimes it is better. The young one is better in some ways. Worse in others. The total will be a sovereign, which is more than we deserve and less than we asked for.\\\"",
+  "de": "\\\"Die Krone wartet auf jemanden, der ihrer vielleicht würdig sein wird\\\", sagte der alte Lehrer, mehr zu sich selbst als zum Regenten.\\n\\n\\\"Und wird der Neue es sein?\\\"\\n\\n\\\"Das ist die Frage, die jede Generation der nächsten stellt. Die Antwort ist selten die erhoffte. Manchmal ist sie besser. Der Kleine ist in mancher Hinsicht besser. In anderer schlechter. In der Summe wird es ein Herrscher sein, was mehr ist, als wir verdienen, und weniger, als wir erbeten haben.\\\""
+ },
+ "heir_education_events.200.t": {
+  "en": "A Prince's Education",
+  "de": "Die Erziehung eines Prinzen"
+ },
+ "heir_education_events.3.a": {
+  "en": "Send them abroad: broaden their horizons.",
+  "de": "Sie ins Ausland schicken: den Horizont erweitern."
+ },
+ "heir_education_events.3.b": {
+  "en": "The [concept_heir] should remain here.",
+  "de": "Der [concept_heir] sollte hierbleiben."
+ },
+ "heir_education_events.3.d": {
+  "en": "Our allies have extended an invitation for the [concept_heir] to spend time abroad, studying at their finest institutions. The experience would be invaluable for diplomatic training, though some worry about foreign influence on the young sovereign.",
+  "de": "Unsere Verbündeten haben eine Einladung ausgesprochen, dass der [concept_heir] einige Zeit im Ausland verbringt und an ihren besten Institutionen studiert. Die Erfahrung wäre für die diplomatische Ausbildung von unschätzbarem Wert, auch wenn manche den ausländischen Einfluss auf den jungen Herrscher fürchten."
+ },
+ "heir_education_events.3.f": {
+  "en": "\\\"To understand the world, one must first leave home.\\\"\\n\\n\\\"And to rule it, one must eventually come back.\\\"\\n\\n\\\"And in the meantime?\\\"\\n\\n\\\"In the meantime, the heir learns three languages, six histories, and the manners of every court in Europe. None of it will be of use here. All of it will shape how the heir thinks about here when they return. That is the value of leaving — not the knowledge brought back, but the change in the eye that returns.\\\"",
+  "de": "\\\"Um die Welt zu verstehen, muss man zuerst die Heimat verlassen.\\\"\\n\\n\\\"Und um sie zu regieren, muss man irgendwann zurückkehren.\\\"\\n\\n\\\"Und in der Zwischenzeit?\\\"\\n\\n\\\"In der Zwischenzeit lernt der Erbe drei Sprachen, sechs Geschichten und die Umgangsformen jedes Hofes Europas. Nichts davon wird hier von Nutzen sein. Aber all das wird prägen, wie der Erbe über dieses Land denkt, wenn er zurückkehrt. Das ist der Wert des Fortgehens — nicht das mitgebrachte Wissen, sondern der veränderte Blick, der zurückkehrt.\\\""
+ },
+ "heir_education_events.3.t": {
+  "en": "Foreign Correspondence",
+  "de": "Auslandskorrespondenz"
+ },
+ "international_relations_events.1.a": {
+  "en": "Steel must answer steel.",
+  "de": "Stahl muss auf Stahl antworten."
+ },
+ "international_relations_events.1.b": {
+  "en": "Send the diplomats.",
+  "de": "Die Diplomaten schicken."
+ },
+ "international_relations_events.1.c": {
+  "en": "Let them waste their treasury.",
+  "de": "Sie sollen ihre Staatskasse verschwenden."
+ },
+ "international_relations_events.1.d": {
+  "en": "[SCOPE.sCountry('arms_race_rival').GetName] has embarked on a massive military expansion. Our intelligence services confirm new weapons programs and troop deployments along strategic corridors. The General Staff demands a proportional response.",
+  "de": "[SCOPE.sCountry('arms_race_rival').GetAltName('NOM')|U] hat eine massive militärische Aufrüstung begonnen. Unsere Nachrichtendienste bestätigen neue Waffenprogramme und Truppenverlegungen entlang strategischer Korridore. Die Generalstäbe fordern eine verhältnismäßige Reaktion."
+ },
+ "international_relations_events.1.f": {
+  "en": "\\\"They are building three new divisions a month,\\\" the intelligence chief says, sliding the folder across the desk. \\\"Tanks, aircraft, long-range artillery - all pointed squarely at our borders.\\\"\\n\\nThe defense minister drums his fingers on the table. \\\"And what do our diplomats propose? A sternly worded letter?\\\"\\n\\n\\\"A summit, actually.\\\"\\n\\n\\\"God help us.\\\"",
+  "de": "\\\"Sie stellen drei neue Divisionen im Monat auf\\\", sagt der Geheimdienstchef und schiebt die Akte über den Schreibtisch. \\\"Panzer, Flugzeuge, Fernartillerie - alles direkt auf unsere Grenzen gerichtet.\\\"\\n\\nDer Verteidigungsminister trommelt mit den Fingern auf dem Tisch. \\\"Und was schlagen unsere Diplomaten vor? Einen scharf formulierten Brief?\\\"\\n\\n\\\"Einen Gipfel, tatsächlich.\\\"\\n\\n\\\"Gott steh uns bei.\\\""
+ },
+ "international_relations_events.1.t": {
+  "en": "The Gathering Storm",
+  "de": "Der aufziehende Sturm"
+ },
+ "international_relations_events.101.a": {
+  "en": "They will answer for this.",
+  "de": "Dafür werden sie büßen."
+ },
+ "international_relations_events.101.d": {
+  "en": "[SCOPE.sCountry('proxy_instigator').GetName] has been covertly funding opposition movements within our sphere of influence. The destabilization of our allied governments threatens the security of our entire strategic position.",
+  "de": "[SCOPE.sCountry('proxy_instigator').GetAltName('NOM')|U] finanziert heimlich Oppositionsbewegungen innerhalb unserer Einflusssphäre. Die Destabilisierung unserer verbündeten Regierungen bedroht die Sicherheit unserer gesamten strategischen Position."
+ },
+ "international_relations_events.101.f": {
+  "en": "\\\"The evidence is circumstantial,\\\" the ambassador says carefully, \\\"but the pattern is unmistakable. The money, the training, the weapons - they all trace back to the same source.\\\"\\n\\nHe lays the intercepted communiqués on the desk. The room falls silent.",
+  "de": "\\\"Die Beweise sind indirekt\\\", sagt der Botschafter vorsichtig, \\\"aber das Muster ist unverkennbar. Das Geld, die Ausbildung, die Waffen - alles führt zur selben Quelle zurück.\\\"\\n\\nEr legt die abgefangenen Depeschen auf den Tisch. Im Raum wird es still."
+ },
+ "international_relations_events.101.t": {
+  "en": "Foreign Meddling",
+  "de": "Fremde Einmischung"
+ },
+ "international_relations_events.102.a": {
+  "en": "We shall endure.",
+  "de": "Wir werden standhalten."
+ },
+ "international_relations_events.102.d": {
+  "en": "[SCOPE.sCountry('embargo_instigator').GetName] has imposed sweeping trade restrictions against our economy. Our merchants report disrupted supply chains and cancelled contracts across multiple sectors.",
+  "de": "[SCOPE.sCountry('embargo_instigator').GetAltName('NOM')|U] hat umfassende Handelsbeschränkungen gegen unsere Wirtschaft verhängt. Unsere Kaufleute berichten von gestörten Lieferketten und stornierten Verträgen in zahlreichen Branchen."
+ },
+ "international_relations_events.102.f": {
+  "en": "The harbormasters report ships turned away at port. The exchange halls buzz with panic as commodity prices swing wildly. In the warehouses, goods pile up with nowhere to go.\\n\\n\\\"How long can we sustain this?\\\" the trade minister asks.\\n\\nNo one answers.",
+  "de": "Die Hafenmeister melden Schiffe, die abgewiesen werden. In den Börsensälen herrscht Panik, während die Rohstoffpreise wild schwanken. In den Lagerhäusern stapeln sich die Waren ohne Ziel.\\n\\n\\\"Wie lange können wir das durchhalten?\\\", fragt der Handelsminister.\\n\\nNiemand antwortet."
+ },
+ "international_relations_events.102.t": {
+  "en": "Markets Closed",
+  "de": "Märkte geschlossen"
+ },
+ "international_relations_events.103.a": {
+  "en": "A regrettable setback.",
+  "de": "Ein bedauerlicher Rückschlag."
+ },
+ "international_relations_events.103.d": {
+  "en": "One of our intelligence operatives working within [SCOPE.sCountry('espionage_catcher').GetName] has been apprehended. The diplomatic fallout threatens to expose the full extent of our intelligence network in the region.",
+  "de": "Einer unserer Geheimdienstagenten, der [SCOPE.sCountry('espionage_catcher').GetAltName('IN')] tätig war, wurde festgenommen. Der diplomatische Nachhall droht, das gesamte Ausmaß unseres Agentennetzes in der Region offenzulegen."
+ },
+ "international_relations_events.103.f": {
+  "en": "\\\"We've lost contact with Nightingale,\\\" the handler says flatly. \\\"They are making a show of it - press conferences, leaked photographs, the works.\\\"\\n\\nHe stubs out his cigarette. \\\"Our entire network in the region is compromised.\\\"",
+  "de": "\\\"Wir haben den Kontakt zu Nightingale verloren\\\", sagt der Verbindungsoffizier nüchtern. \\\"Sie machen ein Schauspiel daraus - Pressekonferenzen, durchgesickerte Fotos, das volle Programm.\\\"\\n\\nEr drückt die Zigarette aus. \\\"Unser gesamtes Netzwerk in der Region ist kompromittiert.\\\""
+ },
+ "international_relations_events.103.t": {
+  "en": "The Burned Agent",
+  "de": "Der enttarnte Agent"
+ },
+ "international_relations_events.104.a": {
+  "en": "God help us all.",
+  "de": "Gott stehe uns allen bei."
+ },
+ "international_relations_events.104.a_tension": {
+  "en": "Keep the shelters stocked.",
+  "de": "Die Schutzräume bestücken."
+ },
+ "international_relations_events.104.b_relief": {
+  "en": "Maintain readiness, but breathe.",
+  "de": "Bereitschaft wahren, aber durchatmen."
+ },
+ "international_relations_events.104.c_terror": {
+  "en": "Pray the warning is false.",
+  "de": "Beten, dass die Warnung falsch ist."
+ },
+ "international_relations_events.104.d": {
+  "en": "The nuclear standoff with [SCOPE.sCountry('nuclear_opponent').GetName] has brought the world to the edge of annihilation. Our cities lie within range of their warheads. Our people demand answers.",
+  "de": "Der atomare Konflikt mit [SCOPE.sCountry('nuclear_opponent').GetAltName('DAT')] hat die Welt an den Rand der Vernichtung gebracht. Unsere Städte liegen in Reichweite ihrer Sprengköpfe. Unser Volk verlangt Antworten."
+ },
+ "international_relations_events.104.d_relief": {
+  "en": "Back-channel contacts indicate that [SCOPE.sCountry('nuclear_opponent').GetName] is trying to cool the crisis. The arsenals remain armed, but the possibility of a negotiated step back has steadied nerves across the country.",
+  "de": "Inoffizielle Kontakte deuten darauf hin, dass [SCOPE.sCountry('nuclear_opponent').GetAltName('NOM')] versucht, die Krise abzukühlen. Die Arsenale bleiben einsatzbereit, doch die Aussicht auf einen ausgehandelten Rückzug hat die Nerven im ganzen Land beruhigt."
+ },
+ "international_relations_events.104.d_tension": {
+  "en": "[SCOPE.sCountry('nuclear_opponent').GetName] has refused to step back from the brink. Their public defiance has left our population fearful, and every rumor now sounds like a warning siren.",
+  "de": "[SCOPE.sCountry('nuclear_opponent').GetAltName('NOM')|U] hat sich geweigert, vom Abgrund zurückzutreten. Ihr offener Trotz hat unsere Bevölkerung verängstigt, und jedes Gerücht klingt inzwischen wie eine Alarmsirene."
+ },
+ "international_relations_events.104.d_terror": {
+  "en": "[SCOPE.sCountry('nuclear_opponent').GetName] has answered the dispute with a massive show of military force. Civil defense offices are overwhelmed, markets are panicking, and ordinary people are preparing for the possibility that the next warning may be the last.",
+  "de": "[SCOPE.sCountry('nuclear_opponent').GetAltName('NOM')|U] hat auf den Konflikt mit einer massiven Machtdemonstration geantwortet. Die Zivilschutzbehörden sind überfordert, an den Märkten herrscht Panik, und einfache Menschen bereiten sich auf die Möglichkeit vor, dass die nächste Warnung die letzte sein könnte."
+ },
+ "international_relations_events.104.f": {
+  "en": "The civil defense sirens are tested at noon. Children practise hiding under their desks. In the markets, canned goods sell out within hours.\\n\\nEveryone pretends this is normal. No one believes it.",
+  "de": "Die Sirenen des Zivilschutzes werden mittags getestet. Kinder üben, sich unter ihren Schulbänken zu verstecken. In den Märkten sind Konserven binnen Stunden ausverkauft.\\n\\nAlle tun so, als sei das normal. Niemand glaubt es."
+ },
+ "international_relations_events.104.f_relief": {
+  "en": "\\\"The line is open again,\\\" the aide whispers, one hand still pressed to the receiver. \\\"Not friendly. Not warm. But open.\\\"\\n\\nNo one in the room relaxes. Still, for the first time in days, several people exhale.",
+  "de": "\\\"Die Leitung ist wieder offen\\\", flüstert der Adjutant, eine Hand noch auf dem Hörer. \\\"Nicht freundlich. Nicht warm. Aber offen.\\\"\\n\\nNiemand im Raum entspannt sich. Doch zum ersten Mal seit Tagen atmen mehrere Menschen aus."
+ },
+ "international_relations_events.104.f_tension": {
+  "en": "\\\"They are calling it resolve,\\\" the foreign minister says, staring at the latest broadcast. \\\"The public has another word for it.\\\"\\n\\nIn the streets, queues form outside pharmacies and grocers. No one wants to say why.",
+  "de": "\\\"Sie nennen es Entschlossenheit\\\", sagt der Außenminister und starrt auf die neueste Sendung. \\\"Die Öffentlichkeit hat ein anderes Wort dafür.\\\"\\n\\nIn den Straßen bilden sich Schlangen vor Apotheken und Lebensmittelläden. Niemand sagt, warum."
+ },
+ "international_relations_events.104.f_terror": {
+  "en": "Rail stations clog with families heading anywhere that feels farther from the likely targets. Priests, preachers, and party officials all claim certainty. None of them sound convincing.\\n\\nThe radios stay on through the night.",
+  "de": "Bahnhöfe verstopfen mit Familien, die irgendwohin wollen, das sich weiter von den wahrscheinlichen Zielen anfühlt. Priester, Prediger und Parteifunktionäre beteuern alle Gewissheit. Keiner von ihnen klingt überzeugend.\\n\\nDie Radios bleiben die ganze Nacht an."
+ },
+ "international_relations_events.104.t": {
+  "en": "On the Brink",
+  "de": "Am Abgrund"
+ },
+ "international_relations_events.105.a": {
+  "en": "Then we must answer in steel.",
+  "de": "Dann müssen wir mit Stahl antworten."
+ },
+ "international_relations_events.105.d": {
+  "en": "[SCOPE.sCountry('arms_race_instigator').GetName] has answered our military expansion with a matching buildup of its own. The rivalry is hardening into a contest of budgets, factories, and nerves.",
+  "de": "[SCOPE.sCountry('arms_race_instigator').GetAltName('NOM')|U] hat auf unsere militärische Aufrüstung mit einer eigenen Gegenrüstung reagiert. Die Rivalität verhärtet sich zu einem Wettstreit um Budgets, Fabriken und Nerven."
+ },
+ "international_relations_events.105.f": {
+  "en": "\\\"They are building because we are building,\\\" the defense secretary mutters, scanning the latest procurement figures. \\\"At this rate, both of us will be bankrupt before either of us is secure.\\\"",
+  "de": "\\\"Sie rüsten, weil wir rüsten\\\", murmelt der Verteidigungsminister und überfliegt die neuesten Beschaffungszahlen. \\\"Bei diesem Tempo sind wir beide bankrott, bevor auch nur einer von uns sicher ist.\\\""
+ },
+ "international_relations_events.105.t": {
+  "en": "The Rival Rearms",
+  "de": "Der Rivale rüstet auf"
+ },
+ "international_relations_events.106.a": {
+  "en": "Then we must steady the line.",
+  "de": "Dann müssen wir standhaft bleiben."
+ },
+ "international_relations_events.106.d": {
+  "en": "[SCOPE.sCountry('propaganda_instigator').GetName] has answered our information campaign with a counter-offensive of its own. Newspapers abroad are turning against us, and our credibility is beginning to fray at the edges.",
+  "de": "[SCOPE.sCountry('propaganda_instigator').GetAltName('NOM')|U] hat auf unsere Informationskampagne mit einer eigenen Gegenoffensive geantwortet. Zeitungen im Ausland wenden sich gegen uns, und unsere Glaubwürdigkeit beginnt an den Rändern zu bröckeln."
+ },
+ "international_relations_events.106.f": {
+  "en": "The editor laid the foreign papers out in a neat row across the desk. Every headline was familiar in its hostility, and every phrase sounded suspiciously coordinated.\\n\\n\\\"They are not merely rebutting us,\\\" he said. \\\"They are rewriting the story.\\\"",
+  "de": "Der Redakteur legte die ausländischen Zeitungen in einer ordentlichen Reihe auf dem Schreibtisch aus. Jede Schlagzeile war in ihrer Feindseligkeit vertraut, und jede Formulierung klang verdächtig abgestimmt.\\n\\n\\\"Sie widerlegen uns nicht nur\\\", sagte er. \\\"Sie schreiben die Geschichte um.\\\""
+ },
+ "international_relations_events.106.t": {
+  "en": "The Narrative Turns",
+  "de": "Die Erzählung kippt"
+ },
+ "international_relations_events.107.a": {
+  "en": "Seal the breach and carry on.",
+  "de": "Die Lücke schließen und weitermachen."
+ },
+ "international_relations_events.107.d": {
+  "en": "One of our intelligence operatives has been quietly returned through an unofficial exchange with [SCOPE.sCountry('espionage_catcher').GetName]. The absence of public scandal is welcome, but our network in the region has plainly been compromised.",
+  "de": "Einer unserer Geheimdienstagenten wurde still und leise im Rahmen eines inoffiziellen Austauschs mit [SCOPE.sCountry('espionage_catcher').GetAltName('DAT')] zurückgebracht. Das Ausbleiben eines öffentlichen Skandals ist willkommen, doch unser Netzwerk in der Region ist eindeutig kompromittiert."
+ },
+ "international_relations_events.107.f": {
+  "en": "\\\"No press conference. No trial. No headlines,\\\" the handler says, guiding the exhausted operative into a waiting car. \\\"That is the good news.\\\"\\n\\n\\\"And the bad news?\\\"\\n\\n\\\"If they were willing to return the agent quietly, they already learned everything they needed.\\\"",
+  "de": "\\\"Keine Pressekonferenz. Kein Prozess. Keine Schlagzeilen\\\", sagt der Verbindungsoffizier und geleitet den erschöpften Agenten zu einem wartenden Wagen. \\\"Das ist die gute Nachricht.\\\"\\n\\n\\\"Und die schlechte?\\\"\\n\\n\\\"Wenn sie bereit waren, den Agenten still zurückzugeben, haben sie bereits alles erfahren, was sie brauchten.\\\""
+ },
+ "international_relations_events.107.t": {
+  "en": "The Quiet Exchange",
+  "de": "Der stille Austausch"
+ },
+ "international_relations_events.2.a": {
+  "en": "Fund the operation.",
+  "de": "Die Operation finanzieren."
+ },
+ "international_relations_events.2.b": {
+  "en": "We shall not meddle in their affairs.",
+  "de": "Wir mischen uns nicht in ihre Angelegenheiten ein."
+ },
+ "international_relations_events.2.d": {
+  "en": "Opposition movements within [SCOPE.sCountry('proxy_rival').GetName]'s sphere of influence are ripe for exploitation, the intelligence service reports. Covert funding could destabilize their hold on the region - but such operations carry immense risk if discovered.",
+  "de": "Oppositionsbewegungen innerhalb der Einflusssphäre [SCOPE.sCountry('proxy_rival').GetAltName('GEN')] seien reif für Einflussnahme, meldet der Geheimdienst. Verdeckte Finanzierung könnte ihren Griff auf die Region destabilisieren — doch solche Operationen bergen im Falle einer Aufdeckung immenses Risiko."
+ },
+ "international_relations_events.2.f": {
+  "en": "\\\"The plan is drawn up and the contacts are waiting. All we need is your authorization and the funds.\\\"\\n\\nThe briefing officer pauses.\\n\\n\\\"Of course, if it goes wrong, we will deny everything. And if it goes very wrong - well, they will deny us.\\\"",
+  "de": "\\\"Der Plan steht, und die Kontakte warten. Wir brauchen nur Ihre Genehmigung und die Mittel.\\\"\\n\\nDer Einsatzleiter hält inne.\\n\\n\\\"Geht es natürlich schief, werden wir alles abstreiten. Und geht es sehr schief - nun, dann werden sie uns abstreiten.\\\""
+ },
+ "international_relations_events.2.t": {
+  "en": "The Shadow War",
+  "de": "Der Schattenkrieg"
+ },
+ "international_relations_events.201.a": {
+  "en": "Build the divisions.",
+  "de": "Die Divisionen aufstellen."
+ },
+ "international_relations_events.201.b": {
+  "en": "Shelve the plans.",
+  "de": "Die Pläne auf Eis legen."
+ },
+ "international_relations_events.201.d": {
+  "en": "The General Staff has laid a plan before the cabinet: a sweeping expansion of the armed forces, sized to outmatch [SCOPE.sCountry('arms_race_instigator').GetName]. New divisions, new aircraft, new long-range artillery - and a bill the treasury will feel for years. A buildup on this scale cannot be hidden. The rival will see it, and will have to decide how to answer.",
+  "de": "Die Generalstäbe haben dem Kabinett einen Plan vorgelegt: eine umfassende Erweiterung der Streitkräfte, bemessen, um [SCOPE.sCountry('arms_race_instigator').GetAltName('AKK')] zu übertreffen. Neue Divisionen, neue Flugzeuge, neue Fernartillerie — und eine Rechnung, die die Staatskasse noch jahrelang spüren wird. Eine Aufrüstung in diesem Ausmaß lässt sich nicht verbergen. Der Rivale wird sie bemerken und entscheiden müssen, wie er antwortet."
+ },
+ "international_relations_events.201.f": {
+  "en": "The chief of staff unrolls the procurement tables across the cabinet table and weighs the corners down with ashtrays.\\n\\n\\\"If we start now, we hold the advantage for a decade.\\\"\\n\\n\\\"And if they match us?\\\"\\n\\n\\\"Then we will have spent a great deal of money to stand exactly where we stand today,\\\" the finance minister says. \\\"But at least we will be standing there armed.\\\"",
+  "de": "Der Generalstabschef rollt die Beschaffungstabellen über den Kabinettstisch aus und beschwert die Ecken mit Aschenbechern.\\n\\n\\\"Fangen wir jetzt an, halten wir den Vorsprung ein Jahrzehnt.\\\"\\n\\n\\\"Und wenn sie gleichziehen?\\\"\\n\\n\\\"Dann werden wir eine Menge Geld ausgegeben haben, um genau dort zu stehen, wo wir heute stehen\\\", sagt der Finanzminister. \\\"Aber immerhin werden wir bewaffnet dort stehen.\\\""
+ },
+ "international_relations_events.201.t": {
+  "en": "Plans on the Table",
+  "de": "Pläne auf dem Tisch"
+ },
+ "international_relations_events.202.a": {
+  "en": "Take the fight to their airwaves.",
+  "de": "Den Kampf in ihren Äther tragen."
+ },
+ "international_relations_events.202.b": {
+  "en": "We have better uses for our broadcasters.",
+  "de": "Unsere Sender haben Besseres zu tun."
+ },
+ "international_relations_events.202.d": {
+  "en": "The information ministry proposes a sustained propaganda offensive against [SCOPE.sCountry('propaganda_instigator').GetName]: radio broadcasts beamed across the border, pamphlets, and sympathetic journalists abroad, all aimed at the credibility of its institutions. The campaign would raise our standing in the world's press - but a rival under attack in its own newspapers will be tempted to strike back in ours.",
+  "de": "Das Informationsministerium schlägt eine anhaltende Propagandaoffensive gegen [SCOPE.sCountry('propaganda_instigator').GetAltName('AKK')] vor: Radiosendungen über die Grenze hinweg, Flugblätter und wohlgesinnte Journalisten im Ausland, allesamt auf die Glaubwürdigkeit seiner Institutionen gerichtet. Die Kampagne würde unser Ansehen in der Weltpresse heben — doch ein Rivale, der in seinen eigenen Zeitungen angegriffen wird, wird versucht sein, in den unseren zurückzuschlagen."
+ },
+ "international_relations_events.202.f": {
+  "en": "\\\"We have the transmitters. We have the writers. We have three editors in their capital who owe us favours.\\\"\\n\\nThe minister turns a page of the draft broadcast schedule. \\\"And when they answer in kind?\\\"\\n\\n\\\"Then, Minister, we will have started a conversation.\\\"",
+  "de": "\\\"Wir haben die Sender. Wir haben die Schreiber. Wir haben drei Redakteure in ihrer Hauptstadt, die uns etwas schulden.\\\"\\n\\nDer Minister blättert eine Seite des Sendeplans um. \\\"Und wenn sie in gleicher Münze antworten?\\\"\\n\\n\\\"Dann, Herr Minister, haben wir ein Gespräch begonnen.\\\""
+ },
+ "international_relations_events.202.t": {
+  "en": "The War of Words",
+  "de": "Der Krieg der Worte"
+ },
+ "international_relations_events.203.a": {
+  "en": "Plant him.",
+  "de": "Ihn einschleusen."
+ },
+ "international_relations_events.203.b": {
+  "en": "The risk is too great.",
+  "de": "Das Risiko ist zu groß."
+ },
+ "international_relations_events.203.d": {
+  "en": "The intelligence service has found a candidate inside [SCOPE.sCountry('espionage_catcher').GetName]'s defence ministry: a clerk with debts, access to the weapons bureau, and no love for his employers. Recruited, he could pass their designs to our engineers for years. If their counterintelligence finds him, the arrest will be front-page news in their capital - and the trail will lead straight back to us.",
+  "de": "Der Geheimdienst hat einen Kandidaten im Verteidigungsministerium [SCOPE.sCountry('espionage_catcher').GetAltName('GEN')] gefunden: einen verschuldeten Angestellten mit Zugang zum Waffenbüro, der seinen Arbeitgebern wenig zugetan ist. Angeworben, könnte er ihre Konstruktionspläne jahrelang an unsere Ingenieure weitergeben. Findet ihre Spionageabwehr ihn, wird die Verhaftung in ihrer Hauptstadt Schlagzeilen machen — und die Spur wird direkt zu uns zurückführen."
+ },
+ "international_relations_events.203.f": {
+  "en": "The photograph shows an unremarkable man in an unremarkable coat, waiting for a tram.\\n\\n\\\"He has been passed over for promotion three times,\\\" the case officer says. \\\"His wife has expensive tastes. He hates his minister.\\\"\\n\\n\\\"And if he is a plant of theirs?\\\"\\n\\n\\\"Then we will find out very quickly, and very publicly.\\\"",
+  "de": "Die Fotografie zeigt einen unauffälligen Mann in einem unauffälligen Mantel, der auf eine Straßenbahn wartet.\\n\\n\\\"Er wurde dreimal bei einer Beförderung übergangen\\\", sagt der Fallführer. \\\"Seine Frau hat teuren Geschmack. Er hasst seinen Minister.\\\"\\n\\n\\\"Und wenn er ein Agent von ihnen ist?\\\"\\n\\n\\\"Dann werden wir das sehr schnell erfahren - und sehr öffentlich.\\\""
+ },
+ "international_relations_events.203.t": {
+  "en": "An Agent in Place",
+  "de": "Ein Agent vor Ort"
+ },
+ "international_relations_events.3.a": {
+  "en": "We shall host it ourselves.",
+  "de": "Wir werden ihn selbst ausrichten."
+ },
+ "international_relations_events.3.b": {
+  "en": "We shall attend - on our terms.",
+  "de": "Wir werden teilnehmen - zu unseren Bedingungen."
+ },
+ "international_relations_events.3.c": {
+  "en": "We have nothing to discuss with them.",
+  "de": "Wir haben ihnen nichts zu sagen."
+ },
+ "international_relations_events.3.d": {
+  "en": "An international summit of the [Concept('concept_great_power', 'great powers')] has been proposed to address the mounting tensions of the age. [ROOT.GetCountry.GetName] has been invited to play a leading role in its organization.",
+  "de": "Ein internationaler Gipfel der [Concept('concept_great_power', 'Großmächte')] wurde vorgeschlagen, um die wachsenden Spannungen der Zeit anzugehen. [ROOT.GetCountry.GetAltName('NOM')|U] wurde eingeladen, bei seiner Organisation eine führende Rolle zu spielen."
+ },
+ "international_relations_events.3.f": {
+  "en": "\\\"The arrangements are elaborate. Each delegation has specific requirements - seating protocols, translation services, dietary restrictions, intelligence concerns...\\\"\\n\\n\\\"And the agenda?\\\"\\n\\n\\\"That, Minister, is the one thing no one can agree upon.\\\"",
+  "de": "\\\"Die Vorbereitungen sind aufwendig. Jede Delegation hat besondere Wünsche - Sitzordnung, Übersetzungsdienste, Ernährungsvorschriften, Sicherheitsbedenken...\\\"\\n\\n\\\"Und die Tagesordnung?\\\"\\n\\n\\\"Das, Herr Minister, ist das Einzige, worauf sich niemand einigen kann.\\\""
+ },
+ "international_relations_events.3.t": {
+  "en": "International Summit",
+  "de": "Internationaler Gipfel"
+ },
+ "international_relations_events.4.a": {
+  "en": "Fight fire with fire.",
+  "de": "Gleiches mit Gleichem vergelten."
+ },
+ "international_relations_events.4.b": {
+  "en": "Words cannot harm us.",
+  "de": "Worte können uns nicht schaden."
+ },
+ "international_relations_events.4.d": {
+  "en": "[SCOPE.sCountry('propaganda_rival').GetName] has launched a sustained campaign of disinformation targeting [ROOT.GetCountry.GetAdjectiveNoFormatting] institutions through radio broadcasts, pamphlets, and sympathetic journalists abroad.",
+  "de": "[SCOPE.sCountry('propaganda_rival').GetAltName('NOM')|U] hat eine anhaltende Desinformationskampagne gestartet, die über Radiosendungen, Flugblätter und wohlgesinnte Journalisten im Ausland auf [ROOT.GetCountry.GetAdjectiveNoFormatting|l]e Institutionen zielt."
+ },
+ "international_relations_events.4.f": {
+  "en": "\\\"Have you read what they are printing about us? That we oppress our workers, starve our children, plot against the peace of the world?\\\"\\n\\n\\\"Lies, of course.\\\"\\n\\n\\\"Of course. But a lie repeated often enough becomes difficult to distinguish from the truth - especially when it is printed on good paper.\\\"",
+  "de": "\\\"Habt ihr gelesen, was sie über uns drucken? Dass wir unsere Arbeiter unterdrücken, unsere Kinder hungern lassen, gegen den Frieden der Welt intrigieren?\\\"\\n\\n\\\"Lügen, natürlich.\\\"\\n\\n\\\"Natürlich. Aber eine oft genug wiederholte Lüge wird schwer von der Wahrheit zu unterscheiden - besonders, wenn sie auf gutem Papier gedruckt ist.\\\""
+ },
+ "international_relations_events.4.t": {
+  "en": "Hearts and Minds",
+  "de": "Herzen und Köpfe"
+ },
+ "international_relations_events.5.a": {
+  "en": "Shut them out.",
+  "de": "Sie aussperren."
+ },
+ "international_relations_events.5.b": {
+  "en": "Trade is preferable to tantrums.",
+  "de": "Handel ist besser als Wutausbrüche."
+ },
+ "international_relations_events.5.d": {
+  "en": "The trade relationship with [SCOPE.sCountry('embargo_rival').GetName] has deteriorated beyond quiet diplomacy. Our industrialists warn that restrictions will hurt our own markets, but strategic advisors insist that economic pressure remains our most effective lever.",
+  "de": "Die Handelsbeziehung mit [SCOPE.sCountry('embargo_rival').GetAltName('DAT')] hat sich jenseits stiller Diplomatie verschlechtert. Unsere Industriellen warnen, dass Beschränkungen unseren eigenen Märkten schaden werden, doch strategische Berater beharren darauf, dass wirtschaftlicher Druck unser wirksamstes Mittel bleibt."
+ },
+ "international_relations_events.5.f": {
+  "en": "\\\"Our merchants will howl,\\\" the trade minister warns. \\\"Half the shipping firms in the capital depend on that route.\\\"\\n\\n\\\"Let them howl. Better to lose cargo than lose the peace.\\\"\\n\\n\\\"You assume those are the only two options.\\\"",
+  "de": "\\\"Unsere Kaufleute werden aufschreien\\\", warnt der Handelsminister. \\\"Die Hälfte der Reedereien in der Hauptstadt hängt von dieser Route ab.\\\"\\n\\n\\\"Sollen sie aufschreien. Lieber Ladung verlieren als den Frieden.\\\"\\n\\n\\\"Ihr geht davon aus, dass das die einzigen zwei Möglichkeiten sind.\\\""
+ },
+ "international_relations_events.5.t": {
+  "en": "The Iron Purse",
+  "de": "Der eiserne Geldbeutel"
+ },
+ "international_relations_events.6.a": {
+  "en": "Expel their diplomats!",
+  "de": "Ihre Diplomaten ausweisen!"
+ },
+ "international_relations_events.6.b": {
+  "en": "Arrange a quiet exchange.",
+  "de": "Einen stillen Austausch arrangieren."
+ },
+ "international_relations_events.6.c": {
+  "en": "Put the wretch on trial for the world to see.",
+  "de": "Den Schuft öffentlich vor Gericht stellen."
+ },
+ "international_relations_events.6.d": {
+  "en": "A foreign operative in the employ of [SCOPE.sCountry('espionage_rival').GetName] has been apprehended while gathering sensitive military intelligence on our soil. The arrest has already leaked to the press.",
+  "de": "Ein ausländischer Agent im Dienst [SCOPE.sCountry('espionage_rival').GetAltName('GEN')] wurde festgenommen, während er sensible militärische Informationen auf unserem Boden sammelte. Die Verhaftung ist bereits an die Presse durchgesickert."
+ },
+ "international_relations_events.6.f": {
+  "en": "The man sits in the interrogation room with perfect composure, as though this were merely an inconvenient appointment. He gives his name - certainly false - and says nothing more.\\n\\nOutside, the press is already howling for blood.",
+  "de": "Der Mann sitzt mit vollkommener Fassung im Verhörraum, als handle es sich lediglich um einen unbequemen Termin. Er nennt seinen Namen - gewiss falsch - und sagt sonst nichts.\\n\\nDraußen fordert die Presse bereits lautstark Vergeltung."
+ },
+ "international_relations_events.6.t": {
+  "en": "The Spy Who Was Caught",
+  "de": "Der Spion, der gefasst wurde"
+ },
+ "international_relations_events.7.a": {
+  "en": "To the stars - and beyond!",
+  "de": "Zu den Sternen - und darüber hinaus!"
+ },
+ "international_relations_events.7.b": {
+  "en": "Our people need bread, not rockets.",
+  "de": "Unser Volk braucht Brot, keine Raketen."
+ },
+ "international_relations_events.7.d": {
+  "en": "Our space program has achieved a historic milestone, placing [ROOT.GetCountry.GetAdjectiveNoFormatting] technology at the vanguard of human exploration. The nation is electrified by the accomplishment.",
+  "de": "Unser Raumfahrtprogramm hat einen historischen Meilenstein erreicht und [ROOT.GetCountry.GetAdjectiveNoFormatting|l]e Technologie an die Spitze der menschlichen Erkundung gebracht. Die Nation ist elektrisiert von dieser Leistung."
+ },
+ "international_relations_events.7.f": {
+  "en": "The footage plays on every screen in the capital: a small metal capsule hurtling through the void, trailing a plume of fire, carrying with it the collected hopes and ambitions of an entire nation.\\n\\nIn the streets, strangers embrace. In the academies, champagne flows. In the foreign ministries of rival powers, there is only silence.",
+  "de": "Die Aufnahmen laufen auf jedem Bildschirm der Hauptstadt: eine kleine Metallkapsel rast durch die Leere, eine Feuerfahne im Schlepptau, und trägt die gesammelten Hoffnungen und Ambitionen einer ganzen Nation mit sich.\\n\\nAuf den Straßen umarmen sich Fremde. In den Akademien fließt Champagner. In den Außenministerien rivalisierender Mächte herrscht nur Schweigen."
+ },
+ "international_relations_events.7.t": {
+  "en": "The Heavens Beckon",
+  "de": "Der Himmel ruft"
+ },
+ "international_relations_events.8.a": {
+  "en": "We shall not blink.",
+  "de": "Wir werden nicht mit der Wimper zucken."
+ },
+ "international_relations_events.8.b": {
+  "en": "Open the back channels.",
+  "de": "Die Hinterkanäle öffnen."
+ },
+ "international_relations_events.8.c": {
+  "en": "Sound the alarm.",
+  "de": "Alarm schlagen."
+ },
+ "international_relations_events.8.d": {
+  "en": "In the diplomatic confrontation now under way, [SCOPE.sCountry('nuclear_rival').GetName] stands on the other side from us - and like us, it holds nuclear weapons. Every step in the dispute is now weighed against the unthinkable, and military commanders on both sides are waiting to learn how hard their governments mean to push.",
+  "de": "In der diplomatischen Konfrontation, die nun im Gange ist, steht [SCOPE.sCountry('nuclear_rival').GetAltName('NOM')] uns gegenüber - und wie wir verfügt es über Kernwaffen. Jeder Schritt in diesem Streit wird nun gegen das Undenkbare abgewogen, und die Militärführungen beider Seiten warten darauf zu erfahren, wie weit ihre Regierungen zu gehen bereit sind."
+ },
+ "international_relations_events.8.f": {
+  "en": "The telephone rings at three in the morning. The aide's voice is strained.\\n\\n\\\"Sir, their foreign minister has said it again on the radio. They will not back down.\\\"\\n\\nA long pause.\\n\\n\\\"And our commanders?\\\"\\n\\n\\\"Waiting to hear what we say next, sir. So is the rest of the world.\\\"",
+  "de": "Das Telefon klingelt um drei Uhr morgens. Die Stimme des Adjutanten ist angespannt.\\n\\n\\\"Sir, ihr Außenminister hat es im Radio erneut gesagt. Sie werden nicht nachgeben.\\\"\\n\\nEine lange Pause.\\n\\n\\\"Und unsere Kommandeure?\\\"\\n\\n\\\"Sie warten darauf zu hören, was wir als Nächstes sagen, Sir. Ebenso die restliche Welt.\\\""
+ },
+ "international_relations_events.8.t": {
+  "en": "Nuclear Brinkmanship",
+  "de": "Nukleare Kraftprobe"
+ },
+ "irredentism.1.a": {
+  "en": "Stoke the irredentist movement",
+  "de": "Die irredentistische Bewegung anheizen"
+ },
+ "irredentism.1.b": {
+  "en": "Fund cultural ties — schools, presses, libraries",
+  "de": "Kulturelle Bindungen fördern — Schulen, Druckereien, Bibliotheken"
+ },
+ "irredentism.1.b.tt": {
+  "en": "Builds a cultural bond that makes [SCOPE.sCountry('target_country').GetName] more willing to accept a future voluntary union",
+  "de": "Schafft eine kulturelle Bindung, die [SCOPE.sCountry('target_country').GetAltName('AKK')] eher bereit macht, eine künftige freiwillige Union zu akzeptieren"
+ },
+ "irredentism.1.bide": {
+  "en": "Bide our time — the moment is not yet ripe",
+  "de": "Abwarten — der Moment ist noch nicht reif"
+ },
+ "irredentism.1.c": {
+  "en": "Demand the return of [SCOPE.sState('irr_demanded_state').GetName]",
+  "de": "Die Rückgabe von [SCOPE.sState('irr_demanded_state').GetName] fordern"
+ },
+ "irredentism.1.c.tt": {
+  "en": "[SCOPE.sCountry('target_country').GetName] will be asked to return [SCOPE.sState('irr_demanded_state').GetName]. If they refuse, we will open a diplomatic play to take it by force",
+  "de": "[SCOPE.sCountry('target_country').GetAltName('NOM')|U] wird aufgefordert, [SCOPE.sState('irr_demanded_state').GetName] zurückzugeben. Weigert es sich, eröffnen wir ein diplomatisches Spiel, um es mit Gewalt zu nehmen"
+ },
+ "irredentism.1.d": {
+  "en": "[SCOPE.sCulture('irr_shared_culture').GetName] communities in [SCOPE.sCountry('target_country').GetName] are agitating for closer ties with the [concept_homeland] — some openly, some in whispers. Our diaspora press carries their letters, and our parliament debates whether to answer.",
+  "de": "[SCOPE.sCulture('irr_shared_culture').GetName]-Gemeinschaften in [SCOPE.sCountry('target_country').GetAltName('IN')] drängen auf engere Bindungen zum [concept_homeland] — manche offen, manche im Flüsterton. Unsere Exilpresse veröffentlicht ihre Briefe, und unser Parlament debattiert, ob wir antworten sollen."
+ },
+ "irredentism.1.f": {
+  "en": "\\\"They are our blood. They live under another flag, but they are our blood.\\\"\\n\\n\\\"And what do they want from us?\\\"\\n\\n\\\"They want what every diaspora wants. To be remembered. To be claimed. To know that the homeland has not forgotten them — and to know what we would do if their flag changed.\\\"",
+  "de": "\\\"Sie sind unser Blut. Sie leben unter einer anderen Flagge, aber sie sind unser Blut.\\\"\\n\\n\\\"Und was wollen sie von uns?\\\"\\n\\n\\\"Sie wollen, was jede Diaspora will. Erinnert zu werden. Beansprucht zu werden. Zu wissen, dass die Heimat sie nicht vergessen hat — und zu wissen, was wir täten, wenn sich ihre Flagge änderte.\\\""
+ },
+ "irredentism.1.t": {
+  "en": "The Diaspora Calls",
+  "de": "Der Ruf der Diaspora"
+ },
+ "irredentism.10.a": {
+  "en": "The way is open",
+  "de": "Der Weg ist frei"
+ },
+ "irredentism.10.a.tt": {
+  "en": "For #v 5 years#!, our [concept_power_bloc] will not stand in the way of a war to reunify [SCOPE.sCountry('target_country').GetName] with us. Every other requirement of the reunification [concept_war_goal] still applies, above all enough [Concept('concept_claim', 'claims')] on their [concept_homeland] states and a government that champions the cause",
+  "de": "Für #v 5 years#! wird sich unser [concept_power_bloc] keinem Krieg in den Weg stellen, der [SCOPE.sCountry('target_country').GetAltName('AKK')] mit uns wiedervereinigt. Jede andere Voraussetzung für das Wiedervereinigungs-[concept_war_goal] gilt weiterhin, vor allem genug [Concept('concept_claim', 'Ansprüche')] auf ihre [concept_homeland]-Staaten und eine Regierung, die sich für die Sache einsetzt"
+ },
+ "irredentism.10.d": {
+  "en": "[SCOPE.sCountry('irr_bloc_leader').GetName] has blessed our claim against [SCOPE.sCountry('target_country').GetName]. For the next five years our [Concept('concept_power_bloc_leader', 'bloc leader')] will not stand in the way of a war to bring our people home. Whether we fight it, and when, is now our decision alone.",
+  "de": "[SCOPE.sCountry('irr_bloc_leader').GetAltName('NOM')|U] hat unseren Anspruch gegen [SCOPE.sCountry('target_country').GetAltName('AKK')] gutgeheißen. Für die nächsten fünf Jahre wird sich unser [Concept('concept_power_bloc_leader', 'Blockanführer')] einem Krieg, der unser Volk heimholt, nicht in den Weg stellen. Ob wir ihn führen, und wann, liegt jetzt allein bei uns."
+ },
+ "irredentism.10.f": {
+  "en": "\\\"The embassy's reply came this morning. They will not stand in our way.\\\"\\n\\n\\\"Will they stand beside us?\\\"\\n\\n\\\"They did not say. A blessing is not an alliance. It is a promise to look away — which, from a patron, is worth a great deal and costs them nothing.\\\"",
+  "de": "\\\"Die Antwort der Botschaft kam heute Morgen. Sie werden uns nicht im Weg stehen.\\\"\\n\\n\\\"Werden sie an unserer Seite stehen?\\\"\\n\\n\\\"Das haben sie nicht gesagt. Ein Segen ist kein Bündnis. Es ist ein Versprechen wegzusehen — was von einem Schutzherrn viel wert ist und ihn nichts kostet.\\\""
+ },
+ "irredentism.10.t": {
+  "en": "[SCOPE.sCountry('irr_bloc_leader').GetName] Blesses Our Claim",
+  "de": "[SCOPE.sCountry('irr_bloc_leader').GetAltName('NOM')|U] heißt unseren Anspruch gut"
+ },
+ "irredentism.11.a": {
+  "en": "We will wait",
+  "de": "Wir werden warten"
+ },
+ "irredentism.11.a.tt": {
+  "en": "Our [Concept('concept_power_bloc_leader', 'bloc leader')] will not bless a war against [SCOPE.sCountry('target_country').GetName]. Our [concept_relations] with it fall by #N 10#!; for #v 5 years#! we cannot ask again, and the refusal stirs up radicals at home.",
+  "de": "Unser [Concept('concept_power_bloc_leader', 'Blockanführer')] wird keinen Krieg gegen [SCOPE.sCountry('target_country').GetAltName('AKK')] gutheißen. Unsere [concept_relations] zu ihm sinken um #N 10#!; für #v 5 years#! können wir nicht erneut fragen, und die Ablehnung schürt Radikale im eigenen Land."
+ },
+ "irredentism.11.d": {
+  "en": "[SCOPE.sCountry('irr_bloc_leader').GetName] has refused to bless our claim against [SCOPE.sCountry('target_country').GetName]. Our [Concept('concept_power_bloc_leader', 'bloc leader')] says the timing is wrong; our nationalists say a patron that will not stand by its own people's cause is no patron at all.",
+  "de": "[SCOPE.sCountry('irr_bloc_leader').GetAltName('NOM')|U] hat sich geweigert, unseren Anspruch gegen [SCOPE.sCountry('target_country').GetAltName('AKK')] gutzuheißen. Unser [Concept('concept_power_bloc_leader', 'Blockanführer')] sagt, der Zeitpunkt sei falsch; unsere Nationalisten sagen, ein Schutzherr, der nicht zur Sache seines eigenen Volkes steht, sei überhaupt kein Schutzherr."
+ },
+ "irredentism.11.f": {
+  "en": "\\\"They thanked us for our patience.\\\"\\n\\n\\\"We have been patient for forty years.\\\"",
+  "de": "\\\"Sie dankten uns für unsere Geduld.\\\"\\n\\n\\\"Wir sind seit vierzig Jahren geduldig.\\\""
+ },
+ "irredentism.11.t": {
+  "en": "[SCOPE.sCountry('irr_bloc_leader').GetName] Withholds Its Blessing",
+  "de": "[SCOPE.sCountry('irr_bloc_leader').GetAltName('NOM')|U] verweigert seinen Segen"
+ },
+ "irredentism.2.a": {
+  "en": "Refuse — they will have to take it by force",
+  "de": "Ablehnen — sie werden es sich mit Gewalt holen müssen"
+ },
+ "irredentism.2.a.tt": {
+  "en": "[SCOPE.sCountry('irr_unifier').GetName] will open a diplomatic play to seize [SCOPE.sState('irr_demanded_state').GetName] by force",
+  "de": "[SCOPE.sCountry('irr_unifier').GetAltName('NOM')|U] wird ein diplomatisches Spiel eröffnen, um [SCOPE.sState('irr_demanded_state').GetName] mit Gewalt zu nehmen"
+ },
+ "irredentism.2.b": {
+  "en": "Cede [SCOPE.sState('irr_demanded_state').GetName] peacefully",
+  "de": "[SCOPE.sState('irr_demanded_state').GetName] friedlich abtreten"
+ },
+ "irredentism.2.d": {
+  "en": "[SCOPE.sCountry('irr_unifier').GetName] — a nation of our own people — has delivered a formal demand for the return of [SCOPE.sState('irr_demanded_state').GetName], citing kinship and historical right. We can yield the state peacefully, or refuse and brace for the diplomatic confrontation that is sure to follow. The press is outraged; the Foreign Ministry is meeting in continuous session.",
+  "de": "[SCOPE.sCountry('irr_unifier').GetAltName('NOM')|U] — eine Nation unseres eigenen Volkes — hat eine förmliche Forderung nach der Rückgabe von [SCOPE.sState('irr_demanded_state').GetName] gestellt und beruft sich auf Verwandtschaft und historisches Recht. Wir können den Staat friedlich abtreten oder ablehnen und uns auf die diplomatische Konfrontation gefasst machen, die sicher folgen wird. Die Presse ist empört; das Außenministerium tagt ohne Unterbrechung."
+ },
+ "irredentism.2.f": {
+  "en": "\\\"They want the state. They want all of it. They cite a treaty signed in seventeen-twenty-eight and a census taken under the second emperor.\\\"\\n\\n\\\"And the people of the state?\\\"\\n\\n\\\"Have not been asked. Both sides are speaking on their behalf. Neither side has noticed.\\\"",
+  "de": "\\\"Sie wollen den Staat. Sie wollen ihn ganz. Sie berufen sich auf einen Vertrag von siebzehnhundertachtundzwanzig und eine Volkszählung unter dem zweiten Kaiser.\\\"\\n\\n\\\"Und die Bevölkerung des Staates?\\\"\\n\\n\\\"Wurde nicht gefragt. Beide Seiten sprechen in ihrem Namen. Keinem von beiden ist das aufgefallen.\\\""
+ },
+ "irredentism.2.t": {
+  "en": "[SCOPE.sCountry('irr_unifier').GetName] Demands [SCOPE.sState('irr_demanded_state').GetName]",
+  "de": "[SCOPE.sCountry('irr_unifier').GetAltName('NOM')|U] fordert [SCOPE.sState('irr_demanded_state').GetName]"
+ },
+ "irredentism.3.a": {
+  "en": "Propose voluntary union to [SCOPE.sCountry('target_country').GetName]",
+  "de": "[SCOPE.sCountry('target_country').GetAltName('DAT')] eine freiwillige Union vorschlagen"
+ },
+ "irredentism.3.b": {
+  "en": "Withdraw the offer for now — bank the goodwill",
+  "de": "Das Angebot vorerst zurückziehen — das Wohlwollen bewahren"
+ },
+ "irredentism.3.d": {
+  "en": "Relations with [SCOPE.sCountry('target_country').GetName] are warm enough that voices on both sides have begun to whisper of voluntary union. They share our culture; their lands hold pieces of our heartland. The moment, if it exists, is fragile.",
+  "de": "Die Beziehungen mit [SCOPE.sCountry('target_country').GetAltName('DAT')] sind warm genug, dass Stimmen auf beiden Seiten begonnen haben, von einer freiwilligen Union zu flüstern. Sie teilen unsere Kultur; ihr Land birgt Teile unseres Kernlands. Der Moment, sofern es ihn gibt, ist zerbrechlich."
+ },
+ "irredentism.3.f": {
+  "en": "\\\"They have proposed a union. Freely entered, equal partners, shared parliament.\\\"\\n\\n\\\"And the smaller print?\\\"\\n\\n\\\"They are the larger nation. The shared parliament will be majority theirs. Equal partners is a phrase that survives the signing ceremony and rarely the first decade.\\\"",
+  "de": "\\\"Sie haben eine Union vorgeschlagen. Freiwillig eingegangen, gleichberechtigte Partner, gemeinsames Parlament.\\\"\\n\\n\\\"Und das Kleingedruckte?\\\"\\n\\n\\\"Sie sind die größere Nation. Im gemeinsamen Parlament werden sie die Mehrheit stellen. „Gleichberechtigte Partner“ ist eine Formulierung, die die Unterzeichnungsfeier übersteht und selten das erste Jahrzehnt.\\\""
+ },
+ "irredentism.3.t": {
+  "en": "An Opportunity for Union",
+  "de": "Eine Gelegenheit zur Union"
+ },
+ "irredentism.4.a": {
+  "en": "We are open to it — let the talks proceed",
+  "de": "Wir sind offen dafür — die Gespräche sollen weitergehen"
+ },
+ "irredentism.4.b": {
+  "en": "We will remain a free nation",
+  "de": "Wir bleiben eine freie Nation"
+ },
+ "irredentism.4.d": {
+  "en": "A formal proposal has arrived from [SCOPE.sCountry('irr_unifier').GetName]. Our same-culture neighbor offers a voluntary union, dissolving us into them as a willing partner. The prosperity would be real and immediate; the name on the flag would not be ours.",
+  "de": "Ein förmlicher Vorschlag ist [SCOPE.sCountry('irr_unifier').GetAltName('VON')] eingetroffen. Unser kulturverwandter Nachbar bietet eine freiwillige Union an, die uns als willigen Partner in ihm aufgehen lässt. Der Wohlstand wäre real und unmittelbar; der Name auf der Flagge wäre nicht unserer."
+ },
+ "irredentism.4.f": {
+  "en": "\\\"The formal offer arrived this morning. They are offering union — full citizenship, shared institutions, no border.\\\"\\n\\n\\\"And we are to dissolve ourselves into them?\\\"\\n\\n\\\"That is what union means in the smaller country. The benefits will be real. The flag will be theirs. The question is what is more precious — the prosperity that follows the union, or the name that does not.\\\"",
+  "de": "\\\"Das förmliche Angebot kam heute Morgen. Sie bieten eine Union an — volles Bürgerrecht, gemeinsame Institutionen, keine Grenze.\\\"\\n\\n\\\"Und wir sollen uns in ihnen auflösen?\\\"\\n\\n\\\"Das bedeutet Union für das kleinere Land. Der Nutzen wird real sein. Die Flagge wird ihre sein. Die Frage ist, was kostbarer ist — der Wohlstand, der der Union folgt, oder der Name, der es nicht tut.\\\""
+ },
+ "irredentism.4.t": {
+  "en": "[SCOPE.sCountry('irr_unifier').GetName] Asks Us to Join",
+  "de": "[SCOPE.sCountry('irr_unifier').GetAltName('NOM')|U] bittet uns beizutreten"
+ },
+ "irredentism.6.a": {
+  "en": "We take note",
+  "de": "Wir nehmen Kenntnis davon"
+ },
+ "irredentism.6.d.peaceful": {
+  "en": "Word reaches us that [SCOPE.sCountry('irr_unifier').GetName] and [SCOPE.sCountry('irr_annexed_country').GetName] have entered into voluntary union — same culture, same flag, no war. Statesmen on both sides cite kinship as the binding cause. The union takes effect immediately.",
+  "de": "Uns erreicht die Nachricht, dass [SCOPE.sCountry('irr_unifier').GetAltName('NOM')] und [SCOPE.sCountry('irr_annexed_country').GetAltName('NOM')] eine freiwillige Union eingegangen sind — gleiche Kultur, gleiche Flagge, kein Krieg. Staatsmänner auf beiden Seiten berufen sich auf Verwandtschaft als einigendes Motiv. Die Union tritt sofort in Kraft."
+ },
+ "irredentism.6.d.warlike": {
+  "en": "[SCOPE.sCountry('irr_unifier').GetName] has annexed [SCOPE.sCountry('irr_annexed_country').GetName] by force, citing same-culture reunification. The world watches; we have interests in the region and a position to take.",
+  "de": "[SCOPE.sCountry('irr_unifier').GetAltName('NOM')|U] hat [SCOPE.sCountry('irr_annexed_country').GetAltName('AKK')] gewaltsam annektiert und beruft sich auf die Wiedervereinigung eines gemeinsamen Volkes. Die Welt schaut zu; wir haben Interessen in der Region und müssen Stellung beziehen."
+ },
+ "irredentism.6.f": {
+  "en": "\\\"Two nations became one this morning. Peacefully, in one telling; by force, in another.\\\"\\n\\n\\\"Which is the true version?\\\"\\n\\n\\\"The treaty was signed. The treaty was also signed at gunpoint. Both can be true. The map will record only the result. The remembrance is what the families pass to their grandchildren — and the grandchildren will not agree on what to remember.\\\"",
+  "de": "\\\"Zwei Nationen wurden heute Morgen eine. Friedlich, in der einen Version; mit Gewalt, in der anderen.\\\"\\n\\n\\\"Welche ist die wahre Version?\\\"\\n\\n\\\"Der Vertrag wurde unterzeichnet. Der Vertrag wurde auch mit vorgehaltener Waffe unterzeichnet. Beides kann wahr sein. Die Karte wird nur das Ergebnis festhalten. Die Erinnerung ist das, was die Familien ihren Enkeln weitergeben — und die Enkel werden sich nicht einig sein, woran sie sich erinnern sollen.\\\""
+ },
+ "irredentism.6.t": {
+  "en": "[SCOPE.sCountry('irr_annexed_country').GetName] Absorbed by [SCOPE.sCountry('irr_unifier').GetName]",
+  "de": "[SCOPE.sCountry('irr_annexed_country').GetAltName('NOM')|U] [SCOPE.sCountry('irr_unifier').GetAltName('VON')] einverleibt"
+ },
+ "irredentism.7.a": {
+  "en": "Endorse — they are our kin in spirit",
+  "de": "Befürworten — sie sind uns geistesverwandt"
+ },
+ "irredentism.7.b": {
+  "en": "Withhold our blessing — the timing is wrong",
+  "de": "Unseren Segen verweigern — der Zeitpunkt ist falsch"
+ },
+ "irredentism.7.d": {
+  "en": "Our bloc client [SCOPE.sCountry('irr_requester').GetName] requests our blessing to wage a war of reunification against [SCOPE.sCountry('target_country').GetName]. The decision is ours; refusing risks straining the bloc.",
+  "de": "Unser Blockklient [SCOPE.sCountry('irr_requester').GetAltName('NOM')] bittet um unseren Segen für einen Wiedervereinigungskrieg gegen [SCOPE.sCountry('target_country').GetAltName('AKK')]. Die Entscheidung liegt bei uns; eine Ablehnung riskiert, den Block zu belasten."
+ },
+ "irredentism.7.f": {
+  "en": "\\\"They want our blessing for a war of reunification.\\\"\\n\\n\\\"And if we refuse?\\\"\\n\\n\\\"The bloc fractures. They believed our solidarity meant approval as well as protection. We are about to teach them the difference. The lesson will be expensive.\\\"",
+  "de": "\\\"Sie wollen unseren Segen für einen Wiedervereinigungskrieg.\\\"\\n\\n\\\"Und wenn wir ablehnen?\\\"\\n\\n\\\"Der Block zerbricht. Sie glaubten, unsere Solidarität bedeute Zustimmung ebenso wie Schutz. Wir sind dabei, ihnen den Unterschied beizubringen. Die Lektion wird teuer.\\\""
+ },
+ "irredentism.7.t": {
+  "en": "[SCOPE.sCountry('irr_requester').GetName] Asks Us to Bless a War",
+  "de": "[SCOPE.sCountry('irr_requester').GetAltName('NOM')|U] bittet uns, einen Krieg zu segnen"
+ },
+ "irredentism.8.a": {
+  "en": "Bless the union — it strengthens the cause",
+  "de": "Die Union segnen — sie stärkt die Sache"
+ },
+ "irredentism.8.b": {
+  "en": "Forbid it — they are too valuable to lose",
+  "de": "Sie verbieten — sie sind zu wertvoll, um sie zu verlieren"
+ },
+ "irredentism.8.d": {
+  "en": "Our [Concept('concept_power_bloc_member', 'bloc member')] [SCOPE.sCountry('irr_proposed_target').GetName] has received a proposal of voluntary union from [SCOPE.sCountry('irr_unifier').GetName]. We may bless the merger or forbid it.",
+  "de": "Unser [Concept('concept_power_bloc_member', 'Blockmitglied')] [SCOPE.sCountry('irr_proposed_target').GetAltName('NOM')] hat [SCOPE.sCountry('irr_unifier').GetAltName('VON')] einen Vorschlag zur freiwilligen Union erhalten. Wir können den Zusammenschluss segnen oder untersagen."
+ },
+ "irredentism.8.f": {
+  "en": "\\\"The bloc member has been offered union. They are considering it.\\\"\\n\\n\\\"And we can bless or forbid?\\\"\\n\\n\\\"We can. The blessing strengthens the cause but loses a useful client. The forbid keeps the client and strains the cause. Both decisions are bets on the shape of the next decade. Neither bet is safe.\\\"",
+  "de": "\\\"Dem Blockmitglied wurde eine Union angeboten. Sie erwägen es.\\\"\\n\\n\\\"Und wir können segnen oder untersagen?\\\"\\n\\n\\\"Das können wir. Der Segen stärkt die Sache, kostet aber einen nützlichen Klienten. Das Verbot behält den Klienten, belastet aber die Sache. Beide Entscheidungen sind Wetten auf die Gestalt des nächsten Jahrzehnts. Keine der Wetten ist sicher.\\\""
+ },
+ "irredentism.8.t": {
+  "en": "[SCOPE.sCountry('irr_proposed_target').GetName] Considers Voluntary Union",
+  "de": "[SCOPE.sCountry('irr_proposed_target').GetAltName('NOM')|U] erwägt freiwillige Union"
+ },
+ "irredentism.9.a": {
+  "en": "We take note",
+  "de": "Wir nehmen Kenntnis davon"
+ },
+ "irredentism.9.d": {
+  "en": "[SCOPE.sCountry('irr_dc_annexer').GetName] has peacefully integrated the decentralized power of [SCOPE.sCountry('irr_dc_target').GetName]. We hold interests in the region and a position to consider.",
+  "de": "[SCOPE.sCountry('irr_dc_annexer').GetAltName('NOM')|U] hat die dezentrale Macht [SCOPE.sCountry('irr_dc_target').GetAltName('GEN')] friedlich integriert. Wir haben Interessen in der Region und müssen eine Position beziehen."
+ },
+ "irredentism.9.f": {
+  "en": "\\\"The maps gained another color this morning, and the people another capital to petition.\\\"",
+  "de": "\\\"Die Karten gewannen heute Morgen eine weitere Farbe, und die Menschen eine weitere Hauptstadt, an die sie sich wenden können.\\\""
+ },
+ "irredentism.9.t": {
+  "en": "[SCOPE.sCountry('irr_dc_target').GetName] Integrated by [SCOPE.sCountry('irr_dc_annexer').GetName]",
+  "de": "[SCOPE.sCountry('irr_dc_target').GetAltName('NOM')|U] [SCOPE.sCountry('irr_dc_annexer').GetAltName('VON')] integriert"
+ },
+ "mental_health_events.1.a": {
+  "en": "Mandate mental health leave",
+  "de": "Auszeiten für psychische Gesundheit vorschreiben"
+ },
+ "mental_health_events.1.b": {
+  "en": "Encourage resilience programs",
+  "de": "Resilienzprogramme fördern"
+ },
+ "mental_health_events.1.c": {
+  "en": "It's not our problem",
+  "de": "Das ist nicht unser Problem"
+ },
+ "mental_health_events.1.d": {
+  "en": "Reports of widespread workplace burnout have reached alarming levels. Productivity is declining as workers collapse under the pressure of modern life. Medical professionals warn of a systemic crisis.",
+  "de": "Berichte über weitverbreitetes Burnout am Arbeitsplatz haben alarmierende Ausmaße erreicht. Die Produktivität sinkt, da Arbeiter unter dem Druck des modernen Lebens zusammenbrechen. Mediziner warnen vor einer systemischen Krise."
+ },
+ "mental_health_events.1.f": {
+  "en": "\\\"How many hours?\\\" the doctor asked.\\n\\n\\\"Sixty a week. Sometimes seventy.\\\"\\n\\nShe did not mention the weekends. The doctor wrote down sixty and added a note that the patient was understating, because everyone understated.\\n\\n\\\"What are you here for?\\\" he asked her.\\n\\n\\\"I can't remember,\\\" she said. \\\"I'm too tired to remember.\\\"",
+  "de": "\\\"Wie viele Stunden?\\\", fragte der Arzt.\\n\\n\\\"Sechzig die Woche. Manchmal siebzig.\\\"\\n\\nSie erwähnte die Wochenenden nicht. Der Arzt notierte sechzig und fügte eine Anmerkung hinzu, dass die Patientin untertreibe, denn das taten alle.\\n\\n\\\"Weswegen sind Sie hier?\\\", fragte er sie.\\n\\n\\\"Ich kann mich nicht erinnern\\\", sagte sie. \\\"Ich bin zu müde, um mich zu erinnern.\\\""
+ },
+ "mental_health_events.1.t": {
+  "en": "The Burnout Epidemic",
+  "de": "Die Burnout-Epidemie"
+ },
+ "mental_health_events.100.a": {
+  "en": "The system works fine",
+  "de": "Das System funktioniert gut"
+ },
+ "mental_health_events.100.b": {
+  "en": "Personal responsibility",
+  "de": "Eigenverantwortung"
+ },
+ "mental_health_events.100.desc": {
+  "en": "The government has failed to address the growing mental health crisis. With punitive justice still the norm and no comprehensive support systems in place, the suffering continues unabated.",
+  "de": "Die Regierung hat es versäumt, die wachsende Krise der psychischen Gesundheit anzugehen. Da eine strafende Justiz weiterhin die Norm ist und keine umfassenden Unterstützungssysteme bestehen, hält das Leid unvermindert an."
+ },
+ "mental_health_events.100.f": {
+  "en": "The funding request was denied for the third consecutive year. The waiting list grew longer.\\n\\nThe minister gave the same speech he had given the last two years. The journalists who had covered both previous speeches did not bother to take notes. The waiting list, as it had been the year before and the year before that, was forty-three names in one school district and counting.\\n\\n\\\"What do we tell the families?\\\" someone asked.\\n\\nThe minister did not answer. He had not been asked, in the end.",
+  "de": "Der Förderantrag wurde das dritte Jahr in Folge abgelehnt. Die Warteliste wurde länger.\\n\\nDer Minister hielt dieselbe Rede, die er in den letzten zwei Jahren gehalten hatte. Die Journalisten, die beide vorherigen Reden begleitet hatten, machten sich nicht die Mühe, Notizen zu machen. Die Warteliste umfasste, wie schon im Vorjahr und im Jahr davor, dreiundvierzig Namen allein in einem Schulbezirk - Tendenz steigend.\\n\\n\\\"Was sagen wir den Familien?\\\", fragte jemand.\\n\\nDer Minister antwortete nicht. Letztlich war er gar nicht gefragt worden."
+ },
+ "mental_health_events.100.t": {
+  "en": "A Crisis Ignored",
+  "de": "Eine ignorierte Krise"
+ },
+ "mental_health_events.2.a": {
+  "en": "Fund youth services",
+  "de": "Jugenddienste finanzieren"
+ },
+ "mental_health_events.2.b": {
+  "en": "Regulate social media",
+  "de": "Soziale Medien regulieren"
+ },
+ "mental_health_events.2.c": {
+  "en": "Blame the parents",
+  "de": "Den Eltern die Schuld geben"
+ },
+ "mental_health_events.2.d": {
+  "en": "Youth suicide and self-harm rates have reached unprecedented levels. Experts point to social media, academic pressure, and social isolation as contributing factors. Parents demand government intervention.",
+  "de": "Die Raten von Suizid und Selbstverletzung unter Jugendlichen haben beispiellose Ausmaße erreicht. Experten nennen soziale Medien, schulischen Leistungsdruck und soziale Isolation als Mitursachen. Eltern fordern staatliches Eingreifen."
+ },
+ "mental_health_events.2.f": {
+  "en": "The school counsellor's waiting list had forty-three names on it. She was the only counsellor in the district. The girl who came in on Tuesday had been on the list for six weeks.\\n\\n\\\"It's about my friend,\\\" the girl said, by way of opening. \\\"I'm worried.\\\"\\n\\nThe counsellor wrote this down. She wrote down friend in quotation marks. She had learned, six weeks at a time, that the friend in such conversations was almost never the friend.",
+  "de": "Auf der Warteliste der Schulberaterin standen dreiundvierzig Namen. Sie war die einzige Beraterin im Bezirk. Das Mädchen, das am Dienstag kam, stand seit sechs Wochen auf der Liste.\\n\\n\\\"Es geht um meine Freundin\\\", sagte das Mädchen zur Einleitung. \\\"Ich mache mir Sorgen.\\\"\\n\\nDie Beraterin notierte das. Sie schrieb Freundin in Anführungszeichen. Sie hatte, sechs Wochen um sechs Wochen, gelernt, dass die Freundin in solchen Gesprächen fast nie die Freundin war."
+ },
+ "mental_health_events.2.t": {
+  "en": "Youth Mental Health Crisis",
+  "de": "Krise der psychischen Gesundheit Jugendlicher"
+ },
+ "mental_health_events.200.a": {
+  "en": "Investing in minds pays [concept_dividends].",
+  "de": "Investitionen in die Psyche zahlen [concept_dividends]."
+ },
+ "mental_health_events.200.d": {
+  "en": "[ROOT.GetCountry.GetName] has built a comprehensive mental health [concept_infrastructure]. Stigma has been reduced, care is accessible, and the nation's psychological well-being has seen marked improvement.",
+  "de": "[ROOT.GetCountry.GetAltName('NOM')|U] hat eine umfassende [concept_infrastructure] für psychische Gesundheit aufgebaut. Die Stigmatisierung wurde verringert, Versorgung ist zugänglich, und das psychische Wohlergehen der Nation hat sich deutlich verbessert."
+ },
+ "mental_health_events.200.f": {
+  "en": "\\\"It is no measure of health,\\\" the old psychiatrist said, \\\"to be well-adjusted to a profoundly sick society.\\\"\\n\\nHe had been saying this for fifty years, and the profession had treated it as a quiet dissent. He said it at this year's conference and it earned a standing ovation.\\n\\n\\\"The society is not yet healthy. But it is no longer profoundly sick. In our field, that is what counts as progress.\\\"",
+  "de": "\\\"Es ist kein Maß für Gesundheit\\\", sagte der alte Psychiater, \\\"sich an eine zutiefst kranke Gesellschaft anzupassen.\\\"\\n\\nEr sagte das seit fünfzig Jahren, und die Fachwelt hatte es als stillen Widerspruch behandelt. Dieses Jahr sagte er es auf der Konferenz, und es erntete stehende Ovationen.\\n\\n\\\"Die Gesellschaft ist noch nicht gesund. Aber sie ist nicht mehr zutiefst krank. In unserem Fach zählt das als Fortschritt.\\\""
+ },
+ "mental_health_events.200.t": {
+  "en": "A Healthier Nation",
+  "de": "Eine gesündere Nation"
+ },
+ "mental_health_events.3.a": {
+  "en": "Treat addiction as a public health issue",
+  "de": "Sucht als Frage der öffentlichen Gesundheit behandeln"
+ },
+ "mental_health_events.3.b": {
+  "en": "War on drugs",
+  "de": "Krieg gegen Drogen"
+ },
+ "mental_health_events.3.c": {
+  "en": "It's a personal choice",
+  "de": "Es ist eine persönliche Entscheidung"
+ },
+ "mental_health_events.3.d": {
+  "en": "A devastating addiction crisis is sweeping the nation. Whether it's synthetic opioids, digital addiction, or new designer drugs, millions are falling into dependency. Hospitals are overwhelmed, families are shattered, and productive capacity is declining.",
+  "de": "Eine verheerende Suchtkrise erfasst die Nation. Ob synthetische Opioide, digitale Sucht oder neue Designerdrogen - Millionen geraten in Abhängigkeit. Krankenhäuser sind überlastet, Familien zerbrechen, und die Produktivkraft sinkt."
+ },
+ "mental_health_events.3.f": {
+  "en": "The clinic's waiting room held a factory worker, a banker's wife, and a sixteen-year-old student. None of them looked at each other.\\n\\nThe nurse called the names in turn. Each of them rose, glanced at the others as if seeing them for the first time, and walked through to the back. Each of them was the only person in the room they recognized as themselves. Each of them was wrong. They had more in common than any of them was prepared to admit.",
+  "de": "Im Wartezimmer der Klinik saßen ein Fabrikarbeiter, die Frau eines Bankiers und eine sechzehnjährige Schülerin. Keiner von ihnen sah die anderen an.\\n\\nDie Schwester rief die Namen der Reihe nach auf. Jeder von ihnen erhob sich, warf den anderen einen Blick zu, als sähe er sie zum ersten Mal, und ging nach hinten durch. Jeder von ihnen war die einzige Person im Raum, die er als sich selbst erkannte. Jeder von ihnen irrte sich. Sie hatten mehr gemeinsam, als einer von ihnen zuzugeben bereit war."
+ },
+ "mental_health_events.3.t": {
+  "en": "The Addiction Crisis",
+  "de": "Die Suchtkrise"
+ },
+ "mental_health_events.4.a": {
+  "en": "Fund veteran mental health programs",
+  "de": "Programme für die psychische Gesundheit von Veteranen finanzieren"
+ },
+ "mental_health_events.4.b": {
+  "en": "The military handles its own",
+  "de": "Das Militär regelt das selbst"
+ },
+ "mental_health_events.4.c": {
+  "en": "Deny the problem exists",
+  "de": "Das Problem leugnen"
+ },
+ "mental_health_events.4.d": {
+  "en": "Soldiers returning from recent conflicts are struggling with severe PTSD, overwhelming existing mental health services. The images of traumatized veterans on the streets are becoming impossible to ignore.",
+  "de": "Soldaten, die aus jüngsten Konflikten zurückkehren, kämpfen mit schwerer posttraumatischer Belastungsstörung und überlasten die bestehenden Versorgungsangebote für psychische Gesundheit. Die Bilder traumatisierter Veteranen auf den Straßen lassen sich nicht länger ignorieren."
+ },
+ "mental_health_events.4.f": {
+  "en": "The veteran's wife said he hadn't slept through the night since he came home. That was three years ago.\\n\\n\\\"What does he do, when he can't sleep?\\\" the doctor asked.\\n\\n\\\"He goes to the garage. He cleans tools that were already clean. He counts the bolts in his toolbox. Once I found him with a flashlight, walking the perimeter of the house.\\\"\\n\\n\\\"And in the morning?\\\"\\n\\n\\\"In the morning he says nothing, and goes to work.\\\"",
+  "de": "Die Frau des Veteranen sagte, er habe seit seiner Rückkehr keine Nacht mehr durchgeschlafen. Das war vor drei Jahren.\\n\\n\\\"Was macht er, wenn er nicht schlafen kann?\\\", fragte der Arzt.\\n\\n\\\"Er geht in die Garage. Er putzt Werkzeug, das schon sauber ist. Er zählt die Schrauben in seinem Kasten. Einmal fand ich ihn mit einer Taschenlampe, wie er ums Haus lief.\\\"\\n\\n\\\"Und morgens?\\\"\\n\\n\\\"Morgens sagt er nichts und geht zur Arbeit.\\\""
+ },
+ "mental_health_events.4.t": {
+  "en": "Veteran PTSD Wave",
+  "de": "Die PTBS-Welle unter Veteranen"
+ },
+ "mental_health_events.5.a": {
+  "en": "Reform to community-based care",
+  "de": "Auf gemeindenahe Versorgung umstellen"
+ },
+ "mental_health_events.5.b": {
+  "en": "Increase oversight and funding",
+  "de": "Aufsicht und Finanzierung erhöhen"
+ },
+ "mental_health_events.5.c": {
+  "en": "Suppress the story",
+  "de": "Die Geschichte unterdrücken"
+ },
+ "mental_health_events.5.d": {
+  "en": "Investigative journalists have exposed horrific conditions in state mental health institutions: patients restrained for days, unsanitary conditions, and widespread abuse. The public is outraged and demanding reform.",
+  "de": "Investigativjournalisten haben grauenhafte Zustände in staatlichen psychiatrischen Einrichtungen aufgedeckt: tagelang fixierte Patienten, unhygienische Zustände und weitverbreiteter Missbrauch. Die Öffentlichkeit ist empört und fordert Reformen."
+ },
+ "mental_health_events.5.f": {
+  "en": "The photographs showed restraint marks on the patients' wrists. The facility director said conditions were \\\"in line with standard practice.\\\"\\n\\n\\\"Whose standard?\\\" the journalist asked.\\n\\n\\\"The standard of any such facility.\\\"\\n\\n\\\"Show me another facility.\\\"\\n\\nThe director did not, and the photographs ran in the morning edition under the headline the editor had drafted before the interview began.",
+  "de": "Die Fotografien zeigten Fesselspuren an den Handgelenken der Patienten. Der Leiter der Einrichtung sagte, die Zustände entsprächen \\\"der üblichen Praxis\\\".\\n\\n\\\"Wessen üblicher Praxis?\\\", fragte der Journalist.\\n\\n\\\"Der üblichen Praxis jeder solchen Einrichtung.\\\"\\n\\n\\\"Zeigen Sie mir eine andere Einrichtung.\\\"\\n\\nDas tat der Leiter nicht, und die Fotografien erschienen in der Morgenausgabe unter der Schlagzeile, die der Redakteur schon vor dem Interview entworfen hatte."
+ },
+ "mental_health_events.5.t": {
+  "en": "Institutional Care Scandal",
+  "de": "Skandal um die Anstaltspflege"
+ },
+ "ministry_law_events.1.a": {
+  "en": "Recruit aggressively - fill every desk.",
+  "de": "Aggressiv rekrutieren - jeden Schreibtisch besetzen."
+ },
+ "ministry_law_events.1.b": {
+  "en": "Staff it gradually to ensure quality.",
+  "de": "Schrittweise besetzen, um die Qualität zu sichern."
+ },
+ "ministry_law_events.1.d": {
+  "en": "The government has begun the enormous task of standing up [SCOPE.sLaw('current_law_scope').GetName]. Advertisements for clerks, administrators, and departmental heads have been posted across every public notice board, and a flood of applications - some qualified, many spectacularly not - has poured in.",
+  "de": "Die Regierung hat die gewaltige Aufgabe begonnen, [SCOPE.sLaw('current_law_scope').GetName] aufzubauen. Stellenanzeigen für Sachbearbeiter, Verwaltungsbeamte und Abteilungsleiter hängen an jedem öffentlichen Anschlagbrett, und eine Flut von Bewerbungen - manche qualifiziert, viele auf spektakuläre Weise nicht - ist eingegangen."
+ },
+ "ministry_law_events.1.f": {
+  "en": "The new ministry shall require, at minimum, fourteen senior administrators, forty-two departmental heads, two hundred and seven clerks, and - if the budget permits - a reliable doorman. I trust these positions will be filled strictly on merit, which is to say, by the cousins of those already appointed.",
+  "de": "Das neue Ministerium wird mindestens vierzehn leitende Verwaltungsbeamte, zweiundvierzig Abteilungsleiter, zweihundertsieben Sachbearbeiter und - sofern es das Budget zulässt - einen zuverlässigen Pförtner benötigen. Ich vertraue darauf, dass diese Stellen streng nach Verdienst besetzt werden, das heißt, von den Cousins derer, die bereits ernannt wurden."
+ },
+ "ministry_law_events.1.t": {
+  "en": "Staffing the New Ministry",
+  "de": "Die Besetzung des neuen Ministeriums"
+ },
+ "ministry_law_events.10.a": {
+  "en": "The environment cannot wait - industry must adapt!",
+  "de": "Die Umwelt kann nicht warten - die Industrie muss sich anpassen!"
+ },
+ "ministry_law_events.10.b": {
+  "en": "Offer industry a seat at the table.",
+  "de": "Der Industrie einen Platz am Tisch anbieten."
+ },
+ "ministry_law_events.10.d": {
+  "en": "The [SCOPE.gsInterestGroup('industrialists_ig').GetName] have mounted a vigorous campaign against [SCOPE.sLaw('current_law_scope').GetName], arguing that environmental regulation will cripple the nation's industry and cost thousands of jobs. Meanwhile, reports of poisoned rivers and blackened skies have galvanized public support.",
+  "de": "[SCOPE.gsInterestGroup('industrialists_ig').GetName] haben eine energische Kampagne gegen [SCOPE.sLaw('current_law_scope').GetName] gestartet und argumentieren, Umweltauflagen würden die Industrie der Nation lähmen und Tausende Arbeitsplätze kosten. Unterdessen haben Berichte über vergiftete Flüsse und geschwärzte Himmel die öffentliche Unterstützung angefacht."
+ },
+ "ministry_law_events.10.f": {
+  "en": "The factory owner pointed at his smokestacks and said they employed four hundred men. The fisherman downstream pointed at his empty nets and said the river had been dead for two years. The committee heard both testimonies and adjourned without a ruling.",
+  "de": "Der Fabrikbesitzer zeigte auf seine Schornsteine und sagte, sie beschäftigten vierhundert Männer. Der Fischer flussabwärts zeigte auf seine leeren Netze und sagte, der Fluss sei seit zwei Jahren tot. Der Ausschuss hörte sich beide Aussagen an und vertagte sich ohne Entscheidung."
+ },
+ "ministry_law_events.10.t": {
+  "en": "The Smokestack Question",
+  "de": "Die Schornstein-Frage"
+ },
+ "ministry_law_events.11.a": {
+  "en": "Security demands these tools - push forward.",
+  "de": "Die Sicherheit verlangt diese Mittel - vorantreiben."
+ },
+ "ministry_law_events.11.b": {
+  "en": "Build in strict oversight to reassure the public.",
+  "de": "Strenge Aufsicht einbauen, um die Öffentlichkeit zu beruhigen."
+ },
+ "ministry_law_events.11.d": {
+  "en": "Leaked documents have revealed the extraordinary capabilities that [SCOPE.sLaw('current_law_scope').GetName] would grant to the state - surveillance networks, informant systems, and the power to operate beyond ordinary legal oversight. The public is uneasy, though some argue such tools are the price of security.",
+  "de": "Durchgesickerte Dokumente haben die außerordentlichen Befugnisse enthüllt, die [SCOPE.sLaw('current_law_scope').GetName] dem Staat verleihen würde - Überwachungsnetzwerke, Informantensysteme und die Macht, außerhalb der üblichen rechtlichen Aufsicht zu handeln. Die Öffentlichkeit ist beunruhigt, auch wenn manche argumentieren, solche Mittel seien der Preis der Sicherheit."
+ },
+ "ministry_law_events.11.f": {
+  "en": "The leaked memorandum was clinical in its language: 'Full spectrum monitoring of communications, including private correspondence, shall be considered a standard operational capability.' The journalist who published it has since found it prudent to relocate abroad.",
+  "de": "Das durchgesickerte Memorandum war nüchtern in seiner Sprache: „Die umfassende Überwachung der Kommunikation, einschließlich privater Korrespondenz, gilt als standardmäßige operative Fähigkeit.“ Der Journalist, der es veröffentlichte, hielt es seither für ratsam, ins Ausland zu übersiedeln."
+ },
+ "ministry_law_events.11.t": {
+  "en": "The Shadow Files",
+  "de": "Die Schattenakten"
+ },
+ "ministry_law_events.12.a": {
+  "en": "A civilized nation does not turn away the desperate.",
+  "de": "Eine zivilisierte Nation weist Verzweifelte nicht ab."
+ },
+ "ministry_law_events.12.b": {
+  "en": "Frame it as an orderly process to ease domestic fears.",
+  "de": "Es als geordnetes Verfahren darstellen, um innenpolitische Ängste zu lindern."
+ },
+ "ministry_law_events.12.d": {
+  "en": "A ship carrying hundreds of displaced persons has arrived in our harbor, their [concept_homeland] torn apart by war and famine. The sight of desperate families huddled on the docks has given urgency to the debate over [SCOPE.sLaw('current_law_scope').GetName].",
+  "de": "Ein Schiff mit Hunderten Vertriebenen an Bord ist in unserem Hafen eingetroffen, ihr [concept_homeland] von Krieg und Hungersnot zerrissen. Der Anblick verzweifelter Familien, die sich an den Docks drängen, hat der Debatte über [SCOPE.sLaw('current_law_scope').GetName] neue Dringlichkeit verliehen."
+ },
+ "ministry_law_events.12.f": {
+  "en": "The woman held her infant up to the customs officer and said, in halting words he could barely understand, 'Please. This is all I have left.' Behind her, the queue stretched to the end of the pier.",
+  "de": "Die Frau hielt dem Zollbeamten ihren Säugling entgegen und sagte in stockenden Worten, die er kaum verstehen konnte: „Bitte. Das ist alles, was mir geblieben ist.“ Hinter ihr reichte die Schlange bis zum Ende der Pier."
+ },
+ "ministry_law_events.12.t": {
+  "en": "The Refugee Ship",
+  "de": "Das Flüchtlingsschiff"
+ },
+ "ministry_law_events.13.a": {
+  "en": "The truth must be guided for the good of the people.",
+  "de": "Die Wahrheit muss zum Wohl des Volkes gelenkt werden."
+ },
+ "ministry_law_events.13.b": {
+  "en": "Rebrand it as public information to calm the press.",
+  "de": "Es als öffentliche Information neu positionieren, um die Presse zu beruhigen."
+ },
+ "ministry_law_events.13.d": {
+  "en": "The proposal to establish [SCOPE.sLaw('current_law_scope').GetName] has sent a chill through the nation's newspaper offices and printing houses. Members of the [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] fear that a ministry devoted to controlling information will transform the free press into a megaphone for the state.",
+  "de": "Der Vorschlag zur Einrichtung von [SCOPE.sLaw('current_law_scope').GetName] hat für Beklemmung in den Redaktionen und Druckereien der Nation gesorgt. Mitglieder der [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] befürchten, ein Ministerium zur Kontrolle von Informationen werde die freie Presse in ein Megafon des Staates verwandeln."
+ },
+ "ministry_law_events.13.f": {
+  "en": "The editor-in-chief received the proposed regulations and read them twice. Then he looked at his staff and said, 'Gentlemen, we have two choices: we can print what they tell us to print, or we can start looking for honest work.'",
+  "de": "Der Chefredakteur erhielt die vorgeschlagenen Bestimmungen und las sie zweimal. Dann sah er seine Mitarbeiter an und sagte: „Meine Herren, wir haben zwei Möglichkeiten: Wir drucken, was man uns zu drucken befiehlt, oder wir suchen uns eine ehrliche Arbeit.“"
+ },
+ "ministry_law_events.13.t": {
+  "en": "The Loudspeaker State",
+  "de": "Der Lautsprecherstaat"
+ },
+ "ministry_law_events.14.a": {
+  "en": "Science needs state coordination - push forward!",
+  "de": "Die Wissenschaft braucht staatliche Koordination - vorantreiben!"
+ },
+ "ministry_law_events.14.b": {
+  "en": "Let the universities lead the design process.",
+  "de": "Die Universitäten die Gestaltung anführen lassen."
+ },
+ "ministry_law_events.14.d": {
+  "en": "A breakthrough at a university laboratory has reignited the debate over [SCOPE.sLaw('current_law_scope').GetName]. Members of the [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] argue that only coordinated state investment can turn such discoveries into practical advances, while skeptics warn that bureaucrats make poor scientists.",
+  "de": "Ein Durchbruch in einem Universitätslabor hat die Debatte über [SCOPE.sLaw('current_law_scope').GetName] neu entfacht. Mitglieder der [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] argumentieren, nur koordinierte staatliche Investitionen könnten solche Entdeckungen in praktischen Fortschritt verwandeln, während Skeptiker warnen, Bürokraten seien schlechte Wissenschaftler."
+ },
+ "ministry_law_events.14.f": {
+  "en": "The professor presented his findings with quiet pride. The parliamentarian beside me leaned over and whispered, 'Very impressive. Now, can it win a war?' I fear that is precisely the question the Ministry will be created to answer.",
+  "de": "Der Professor präsentierte seine Erkenntnisse mit stillem Stolz. Der Abgeordnete neben mir beugte sich herüber und flüsterte: „Sehr beeindruckend. Aber kann es einen Krieg gewinnen?“ Ich fürchte, genau das ist die Frage, zu deren Beantwortung das Ministerium geschaffen werden wird."
+ },
+ "ministry_law_events.14.t": {
+  "en": "The Laboratory of the State",
+  "de": "Das Laboratorium des Staates"
+ },
+ "ministry_law_events.15.a": {
+  "en": "Dissent must be monitored for the nation's safety.",
+  "de": "Abweichende Meinungen müssen zur Sicherheit der Nation überwacht werden."
+ },
+ "ministry_law_events.15.b": {
+  "en": "Start with modest powers to avoid a backlash.",
+  "de": "Mit bescheidenen Befugnissen beginnen, um Gegenreaktionen zu vermeiden."
+ },
+ "ministry_law_events.15.d": {
+  "en": "Reports of underground resistance networks have given fresh ammunition to supporters of [SCOPE.sLaw('current_law_scope').GetName]. Pamphlets circulate in secret, suspicious meetings are held in cellars, and the authorities fear that dissent is spreading faster than it can be monitored.",
+  "de": "Berichte über untergründige Widerstandsnetzwerke haben den Befürwortern von [SCOPE.sLaw('current_law_scope').GetName] neue Munition geliefert. Flugblätter zirkulieren heimlich, verdächtige Treffen finden in Kellern statt, und die Behörden fürchten, dass sich abweichende Meinungen schneller verbreiten, als sie überwacht werden können."
+ },
+ "ministry_law_events.15.f": {
+  "en": "The informant's report was terse: 'They meet every Thursday in the back room of the printer's shop. They read forbidden texts and discuss ideas that would make your blood run cold.' When asked what these ideas were, he admitted he hadn't actually attended a meeting, but had heard about them from another informant.",
+  "de": "Der Bericht des Informanten war knapp: „Sie treffen sich jeden Donnerstag im Hinterzimmer der Druckerei. Sie lesen verbotene Texte und erörtern Ideen, bei denen Ihnen das Blut in den Adern gefrieren würde.“ Auf die Frage, um welche Ideen es sich handle, gab er zu, er habe eigentlich nie an einem Treffen teilgenommen, sondern nur von einem anderen Informanten davon gehört."
+ },
+ "ministry_law_events.15.t": {
+  "en": "The Watchers",
+  "de": "Die Beobachter"
+ },
+ "ministry_law_events.16.a": {
+  "en": "Consumers deserve protection - act now!",
+  "de": "Verbraucher verdienen Schutz - jetzt handeln!"
+ },
+ "ministry_law_events.16.b": {
+  "en": "Let industry self-regulate within the new framework.",
+  "de": "Die Industrie sich innerhalb des neuen Rahmens selbst regulieren lassen."
+ },
+ "ministry_law_events.16.d": {
+  "en": "A scandal has erupted after dozens of citizens fell ill from a contaminated product sold by a prominent manufacturer. The [SCOPE.gsInterestGroup('industrialists_ig').GetName] protest that it was an isolated incident, but investigators found that the company had been cutting costs at the expense of safety for years.",
+  "de": "Ein Skandal ist ausgebrochen, nachdem Dutzende Bürger durch ein verunreinigtes Produkt eines bekannten Herstellers erkrankt sind. [SCOPE.gsInterestGroup('industrialists_ig').GetName] beteuern, es handle sich um einen Einzelfall, doch Ermittler stellten fest, dass das Unternehmen seit Jahren auf Kosten der Sicherheit gespart hatte."
+ },
+ "ministry_law_events.16.f": {
+  "en": "The label promised 'Pure and Wholesome.' The chemist's analysis found sawdust, chalk, and a substance he diplomatically described as 'of uncertain animal origin.' When confronted, the manufacturer protested that his competitors used far worse.",
+  "de": "Das Etikett versprach „rein und bekömmlich“. Die Analyse des Chemikers fand Sägemehl, Kreide und eine Substanz, die er diplomatisch als „von ungewisser tierischer Herkunft“ beschrieb. Zur Rede gestellt, beteuerte der Hersteller, seine Konkurrenten verwendeten weit Schlimmeres."
+ },
+ "ministry_law_events.16.t": {
+  "en": "The Tainted Product",
+  "de": "Das verunreinigte Produkt"
+ },
+ "ministry_law_events.17.a": {
+  "en": "Cities need plans, not chaos - establish the ministry!",
+  "de": "Städte brauchen Pläne, kein Chaos - das Ministerium einrichten!"
+ },
+ "ministry_law_events.17.b": {
+  "en": "Consult with developers to smooth the transition.",
+  "de": "Mit Bauträgern beraten, um den Übergang zu erleichtern."
+ },
+ "ministry_law_events.17.d": {
+  "en": "The nation's cities are growing at a pace that alarms even their most enthusiastic boosters. Tenements spring up overnight, sewage systems overflow, and the air grows thick with soot. The case for [SCOPE.sLaw('current_law_scope').GetName] has never been more urgent - or more controversial.",
+  "de": "Die Städte der Nation wachsen in einem Tempo, das selbst ihre größten Befürworter beunruhigt. Mietskasernen schießen über Nacht aus dem Boden, Abwassersysteme laufen über, und die Luft wird dick von Ruß. Das Argument für [SCOPE.sLaw('current_law_scope').GetName] war nie dringlicher - oder umstrittener."
+ },
+ "ministry_law_events.17.f": {
+  "en": "I walked through the new district this morning. In the space where a meadow stood last year, there are now fourteen tenement blocks, a factory, and precisely zero public parks. The developer assured me that a park was planned, but it kept being replaced by more profitable buildings.",
+  "de": "Ich ging heute Morgen durch den neuen Stadtteil. Wo im letzten Jahr noch eine Wiese lag, stehen nun vierzehn Mietskasernen, eine Fabrik und genau null öffentliche Parks. Der Bauträger versicherte mir, ein Park sei geplant, doch er wurde immer wieder durch profitablere Gebäude ersetzt."
+ },
+ "ministry_law_events.17.t": {
+  "en": "The City Rises",
+  "de": "Die Stadt erhebt sich"
+ },
+ "ministry_law_events.18.a": {
+  "en": "Faith and governance shall strengthen each other.",
+  "de": "Glaube und Staatsführung sollen einander stärken."
+ },
+ "ministry_law_events.18.b": {
+  "en": "Promise clerical autonomy within the ministry.",
+  "de": "Kirchliche Selbstständigkeit innerhalb des Ministeriums zusichern."
+ },
+ "ministry_law_events.18.d": {
+  "en": "The proposal for [SCOPE.sLaw('current_law_scope').GetName] has provoked a fierce reaction from the [SCOPE.gsInterestGroup('devout_ig').GetName]. Some clerics welcome state support as a means to spread the faith, while others fear that government involvement will turn the church into an instrument of political control.",
+  "de": "Der Vorschlag für [SCOPE.sLaw('current_law_scope').GetName] hat eine heftige Reaktion bei [SCOPE.gsInterestGroup('devout_ig').GetName] ausgelöst. Manche Geistliche begrüßen staatliche Unterstützung als Mittel zur Verbreitung des Glaubens, während andere befürchten, staatliche Einmischung werde die Kirche zu einem Instrument politischer Kontrolle machen."
+ },
+ "ministry_law_events.18.f": {
+  "en": "The bishop's letter was measured: 'The church has survived empires, revolutions, and heresies without the assistance of a government ministry. We are not entirely certain we require one now. That said, if such a ministry were to include a generous building fund for cathedrals, we would be willing to hear the proposal in greater detail.'",
+  "de": "Der Brief des Bischofs war maßvoll: „Die Kirche hat Reiche, Revolutionen und Häresien überlebt, ohne die Hilfe eines Regierungsministeriums. Wir sind nicht ganz sicher, ob wir nun eines brauchen. Allerdings, sollte ein solches Ministerium einen großzügigen Baufonds für Kathedralen vorsehen, wären wir bereit, den Vorschlag genauer anzuhören.“"
+ },
+ "ministry_law_events.18.t": {
+  "en": "The Pulpit and the State",
+  "de": "Kanzel und Staat"
+ },
+ "ministry_law_events.19.a": {
+  "en": "A great nation has [Concept('concept_obligation', 'obligations')] to the world.",
+  "de": "Eine große Nation hat [Concept('concept_obligation', 'Verpflichtungen')] gegenüber der Welt."
+ },
+ "ministry_law_events.19.b": {
+  "en": "Frame it as strategic investment to win domestic support.",
+  "de": "Es als strategische Investition darstellen, um innenpolitische Unterstützung zu gewinnen."
+ },
+ "ministry_law_events.19.d": {
+  "en": "Reports of a devastating famine in a foreign land have filled the newspapers with harrowing images. Humanitarian organizations are pleading for the government to act, and supporters of [SCOPE.sLaw('current_law_scope').GetName] argue that a dedicated ministry is the only way to respond effectively to such crises.",
+  "de": "Berichte über eine verheerende Hungersnot in einem fremden Land haben die Zeitungen mit erschütternden Bildern gefüllt. Humanitäre Organisationen flehen die Regierung an zu handeln, und die Befürworter von [SCOPE.sLaw('current_law_scope').GetName] argumentieren, ein eigenes Ministerium sei der einzige Weg, um auf solche Krisen wirksam zu reagieren."
+ },
+ "ministry_law_events.19.f": {
+  "en": "The photograph showed a child with ribs like a birdcage, staring at the camera with enormous, uncomprehending eyes. It appeared on the front page of every major newspaper, and by noon the Prime Minister's office had received ten thousand letters demanding action.",
+  "de": "Die Fotografie zeigte ein Kind mit Rippen wie ein Vogelkäfig, das mit großen, verständnislosen Augen in die Kamera starrte. Sie erschien auf der Titelseite jeder großen Zeitung, und bis Mittag hatte das Büro des Premierministers zehntausend Briefe erhalten, die zum Handeln aufriefen."
+ },
+ "ministry_law_events.19.t": {
+  "en": "The Distant Crisis",
+  "de": "Die ferne Krise"
+ },
+ "ministry_law_events.2.a": {
+  "en": "Allocate the full budget - half measures produce half results.",
+  "de": "Das volle Budget bewilligen - halbe Maßnahmen bringen halbe Ergebnisse."
+ },
+ "ministry_law_events.2.b": {
+  "en": "Promise a lean operation to win the skeptics over.",
+  "de": "Einen schlanken Betrieb versprechen, um die Skeptiker zu überzeugen."
+ },
+ "ministry_law_events.2.d": {
+  "en": "Parliament has erupted into heated argument over the proposed funding for [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] insist the money would be better spent elsewhere, while proponents argue that the new ministry cannot function without proper resources.",
+  "de": "Im Parlament ist ein hitziger Streit über die vorgeschlagene Finanzierung von [SCOPE.sLaw('current_law_scope').GetName] entbrannt. [SCOPE.gsInterestGroup('opposing_ig').GetName] beharren darauf, das Geld sei anderswo besser angelegt, während die Befürworter argumentieren, das neue Ministerium könne ohne angemessene Mittel nicht funktionieren."
+ },
+ "ministry_law_events.2.f": {
+  "en": "The honorable member claims this ministry will cost a mere trifle. Allow me to remind him that the last 'trifle' we approved has consumed an entire wing of the treasury and shows no sign of producing anything more useful than memoranda addressed to other memoranda.",
+  "de": "Der ehrenwerte Abgeordnete behauptet, dieses Ministerium werde nur eine Kleinigkeit kosten. Gestatten Sie mir, ihn daran zu erinnern, dass die letzte „Kleinigkeit“, die wir bewilligten, einen ganzen Flügel der Staatskasse verschlungen hat und keinerlei Anzeichen zeigt, etwas Nützlicheres hervorzubringen als Memoranden, die an andere Memoranden gerichtet sind."
+ },
+ "ministry_law_events.2.t": {
+  "en": "The Budget Debate",
+  "de": "Die Haushaltsdebatte"
+ },
+ "ministry_law_events.20.a": {
+  "en": "Pause to overhaul the hiring process",
+  "de": "Innehalten, um das Einstellungsverfahren zu überarbeiten"
+ },
+ "ministry_law_events.20.b": {
+  "en": "Defend the appointments and press through",
+  "de": "Die Ernennungen verteidigen und durchziehen"
+ },
+ "ministry_law_events.20.d": {
+  "en": "A series of high-profile scandals has surfaced from the recruitment campaign for [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] thunder that the new ministry is being filled by patronage hacks, not professionals.",
+  "de": "Eine Reihe aufsehenerregender Skandale ist aus der Rekrutierungskampagne für [SCOPE.sLaw('current_law_scope').GetName] ans Licht gekommen. [SCOPE.gsInterestGroup('opposing_ig').GetName] wettern, das neue Ministerium werde mit Günstlingen statt mit Fachleuten besetzt."
+ },
+ "ministry_law_events.20.f": {
+  "en": "\\\"We were promised a ministry of experts. What we got was a ministry of cousins. The country deserves better, and so does the institution.\\\"\\n\\n\\\"Names?\\\"\\n\\n\\\"The deputy director is the minister's brother-in-law. The procurement chief is the minister's college roommate. The press secretary is the minister's wife's cousin. We could go on. The list is twelve pages.\\\"",
+  "de": "\\\"Man versprach uns ein Ministerium der Experten. Was wir bekamen, ist ein Ministerium der Cousins. Das Land verdient Besseres, und die Institution auch.\\\"\\n\\n\\\"Namen?\\\"\\n\\n\\\"Der stellvertretende Direktor ist der Schwager des Ministers. Der Beschaffungschef war der Studienkollege des Ministers. Die Pressesprecherin ist die Cousine der Ministergattin. Wir könnten so weitermachen. Die Liste hat zwölf Seiten.\\\""
+ },
+ "ministry_law_events.20.t": {
+  "en": "Underqualified Hires Exposed",
+  "de": "Unterqualifizierte Neueinstellungen aufgedeckt"
+ },
+ "ministry_law_events.21.a": {
+  "en": "Withdraw to revise the budget",
+  "de": "Zurückziehen, um das Budget zu überarbeiten"
+ },
+ "ministry_law_events.21.b": {
+  "en": "Press through despite fiscal warnings",
+  "de": "Trotz fiskalischer Warnungen durchziehen"
+ },
+ "ministry_law_events.21.d": {
+  "en": "The Ministry of Finance has issued a formal memorandum opposing the budgetary commitments for [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] echo the warning in increasingly strident terms.",
+  "de": "Das Finanzministerium hat ein förmliches Memorandum gegen die Haushaltsverpflichtungen für [SCOPE.sLaw('current_law_scope').GetName] herausgegeben. [SCOPE.gsInterestGroup('opposing_ig').GetName] wiederholen die Warnung in zunehmend schärferem Ton."
+ },
+ "ministry_law_events.21.f": {
+  "en": "\\\"Every coin allocated here is a coin taken from elsewhere. The minister has not done the arithmetic. We have, and the answer alarms us.\\\"\\n\\n\\\"What did the arithmetic show?\\\"\\n\\n\\\"A first-year cost the bill claims will be modest, and a five-year cost the bill prefers not to mention. The five-year cost is what bankrupts ministries — and us along with them.\\\"",
+  "de": "\\\"Jede Münze, die hier zugewiesen wird, ist eine Münze, die anderswo fehlt. Der Minister hat nicht nachgerechnet. Wir schon, und das Ergebnis beunruhigt uns.\\\"\\n\\n\\\"Was ergab die Rechnung?\\\"\\n\\n\\\"Kosten im ersten Jahr, die der Gesetzentwurf als bescheiden bezeichnet, und Kosten über fünf Jahre, die der Gesetzentwurf lieber verschweigt. Die Fünfjahreskosten sind es, die Ministerien in den Ruin treiben — und uns mit ihnen.\\\""
+ },
+ "ministry_law_events.21.t": {
+  "en": "Treasury Pushes Back",
+  "de": "Die Staatskasse wehrt sich"
+ },
+ "ministry_law_events.22.a": {
+  "en": "Pause to settle the turf war first",
+  "de": "Innehalten, um zunächst den Zuständigkeitsstreit zu klären"
+ },
+ "ministry_law_events.22.b": {
+  "en": "Press through and crush internal resistance",
+  "de": "Durchziehen und den internen Widerstand brechen"
+ },
+ "ministry_law_events.22.d": {
+  "en": "Rival departments are quietly obstructing the establishment of [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] make sport of the resulting confusion in the press.",
+  "de": "Rivalisierende Behörden behindern still die Einrichtung von [SCOPE.sLaw('current_law_scope').GetName]. [SCOPE.gsInterestGroup('opposing_ig').GetName] machen sich in der Presse über die entstandene Verwirrung lustig."
+ },
+ "ministry_law_events.22.f": {
+  "en": "\\\"You cannot create a new river by digging in the desert. You must redirect existing water — and that means quarrelling with everyone whose field went dry.\\\"\\n\\n\\\"And the quarrels are quiet so far.\\\"\\n\\n\\\"The quarrels are private so far. Loud and private are different things. Wait until the budget moves and see how private they remain.\\\"",
+  "de": "\\\"Man schafft keinen neuen Fluss, indem man in der Wüste gräbt. Man muss vorhandenes Wasser umleiten — und das bedeutet Streit mit jedem, dessen Feld dadurch vertrocknet.\\\"\\n\\n\\\"Und die Streitigkeiten sind bisher still.\\\"\\n\\n\\\"Die Streitigkeiten sind bisher privat. Laut und privat sind zwei verschiedene Dinge. Warten Sie, bis das Budget sich bewegt, und sehen Sie, wie privat sie dann noch bleiben.\\\""
+ },
+ "ministry_law_events.22.t": {
+  "en": "Bureaucratic Sabotage",
+  "de": "Bürokratische Sabotage"
+ },
+ "ministry_law_events.23.a": {
+  "en": "Pause and negotiate a graceful exit",
+  "de": "Innehalten und einen geordneten Rückzug aushandeln"
+ },
+ "ministry_law_events.23.b": {
+  "en": "Press through - the bureau goes down fighting",
+  "de": "Durchziehen - die Behörde geht kämpfend unter"
+ },
+ "ministry_law_events.23.d": {
+  "en": "Career officials slated for redundancy under [SCOPE.sLaw('current_law_scope').GetName] have mounted an unexpectedly effective rearguard action. The [SCOPE.gsInterestGroup('opposing_ig').GetName] take up their cause in public.",
+  "de": "Berufsbeamte, deren Stellen im Rahmen von [SCOPE.sLaw('current_law_scope').GetName] wegfallen sollen, haben einen überraschend wirksamen Rückzugskampf begonnen. [SCOPE.gsInterestGroup('opposing_ig').GetName] setzen sich öffentlich für ihre Sache ein."
+ },
+ "ministry_law_events.23.f": {
+  "en": "\\\"We have served three governments and weathered two reorganizations. We will weather this one too — or we will make the cost of dissolving us memorable.\\\"\\n\\n\\\"What does 'memorable' mean here?\\\"\\n\\n\\\"It means the files that the new ministry will need to do its job. We do not threaten to misplace them. We merely note that the indexing system is something we devised, and not all of us are eager to explain it to our replacements.\\\"",
+  "de": "\\\"Wir haben drei Regierungen gedient und zwei Umstrukturierungen überstanden. Wir werden auch diese überstehen — oder wir sorgen dafür, dass man sich an die Kosten unserer Auflösung erinnert.\\\"\\n\\n\\\"Was bedeutet „erinnert“ hier?\\\"\\n\\n\\\"Es geht um die Akten, die das neue Ministerium für seine Arbeit brauchen wird. Wir drohen nicht damit, sie zu verlegen. Wir merken nur an, dass das Ablagesystem unsere eigene Erfindung ist, und nicht jeder von uns ist erpicht darauf, es unseren Nachfolgern zu erklären.\\\""
+ },
+ "ministry_law_events.23.t": {
+  "en": "Final Stand of the Bureau",
+  "de": "Der letzte Widerstand der Behörde"
+ },
+ "ministry_law_events.24.a": {
+  "en": "Defer until the military's concerns are addressed",
+  "de": "Aufschieben, bis die Bedenken des Militärs ausgeräumt sind"
+ },
+ "ministry_law_events.24.b": {
+  "en": "Press through over the brass's objections",
+  "de": "Gegen die Einwände der Generalität durchziehen"
+ },
+ "ministry_law_events.24.d": {
+  "en": "Senior officers have made it quietly known that [SCOPE.sLaw('current_law_scope').GetName] will not receive their full cooperation. The [SCOPE.gsInterestGroup('opposing_ig').GetName] speak of constitutional concerns.",
+  "de": "Hochrangige Offiziere haben still zu verstehen gegeben, dass [SCOPE.sLaw('current_law_scope').GetName] nicht ihre volle Zusammenarbeit erhalten wird. [SCOPE.gsInterestGroup('opposing_ig').GetName] sprechen von verfassungsrechtlichen Bedenken."
+ },
+ "ministry_law_events.24.f": {
+  "en": "\\\"We will obey the law. We will not pretend to like it, and we will not promise to make it work. Those are different things, sir.\\\"\\n\\n\\\"And if it does not work?\\\"\\n\\n\\\"Then someone will say we should have warned them. We are warning them now, in writing, on the record. The decision is still parliament's. We are merely defending our future reputations.\\\"",
+  "de": "\\\"Wir werden dem Gesetz gehorchen. Wir werden nicht so tun, als gefiele es uns, und wir werden nicht versprechen, es zum Erfolg zu führen. Das sind zwei verschiedene Dinge, Sir.\\\"\\n\\n\\\"Und wenn es nicht funktioniert?\\\"\\n\\n\\\"Dann wird jemand sagen, wir hätten warnen sollen. Wir warnen jetzt, schriftlich, für die Akten. Die Entscheidung liegt weiterhin beim Parlament. Wir verteidigen lediglich unseren künftigen Ruf.\\\""
+ },
+ "ministry_law_events.24.t": {
+  "en": "The General Staff Withholds Cooperation",
+  "de": "Die Generalstäbe verweigern die Zusammenarbeit"
+ },
+ "ministry_law_events.25.a": {
+  "en": "Pause the bill to reassure foreign observers",
+  "de": "Den Gesetzentwurf pausieren, um ausländische Beobachter zu beruhigen"
+ },
+ "ministry_law_events.25.b": {
+  "en": "Press through - foreign opinion will adjust",
+  "de": "Durchziehen - die ausländische Meinung wird sich anpassen"
+ },
+ "ministry_law_events.25.d": {
+  "en": "Ambassadors have begun making pointed inquiries about [SCOPE.sLaw('current_law_scope').GetName] and what it may signal. The [SCOPE.gsInterestGroup('opposing_ig').GetName] warn that the bill is generating exactly the wrong kind of attention abroad.",
+  "de": "Botschafter haben begonnen, gezielte Anfragen zu [SCOPE.sLaw('current_law_scope').GetName] und seiner möglichen Bedeutung zu stellen. [SCOPE.gsInterestGroup('opposing_ig').GetName] warnen, der Gesetzentwurf errege im Ausland genau die falsche Art von Aufmerksamkeit."
+ },
+ "ministry_law_events.25.f": {
+  "en": "\\\"A nation's foreign policy is read by its rivals as a book of intentions. The current chapter, regrettably, is being read in capitals that have long memories.\\\"\\n\\n\\\"And what does the chapter say?\\\"\\n\\n\\\"It says we are reorganizing our state to project something. They cannot quite decide what. While they decide, their navies move closer to ours, and their ambassadors return our calls more slowly.\\\"",
+  "de": "\\\"Die Außenpolitik einer Nation wird von ihren Rivalen wie ein Buch der Absichten gelesen. Das aktuelle Kapitel wird, leider, in Hauptstädten gelesen, die ein langes Gedächtnis haben.\\\"\\n\\n\\\"Und was besagt das Kapitel?\\\"\\n\\n\\\"Es besagt, dass wir unseren Staat umstrukturieren, um etwas zu demonstrieren. Sie können sich nicht recht entscheiden, was. Während sie sich entscheiden, rücken ihre Flotten näher an unsere heran, und ihre Botschafter erwidern unsere Anrufe langsamer.\\\""
+ },
+ "ministry_law_events.25.t": {
+  "en": "Foreign Capitals Take Note",
+  "de": "Fremde Hauptstädte werden aufmerksam"
+ },
+ "ministry_law_events.26.a": {
+  "en": "Defer to mercantile concerns",
+  "de": "Den Belangen der Kaufmannschaft nachgeben"
+ },
+ "ministry_law_events.26.b": {
+  "en": "Press through despite merchant opposition",
+  "de": "Trotz des Widerstands der Kaufleute durchziehen"
+ },
+ "ministry_law_events.26.d": {
+  "en": "A coalition of trading houses has hired some of the country's sharpest counsel to argue against [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] make their case in every chamber that will listen.",
+  "de": "Ein Bündnis von Handelshäusern hat einige der schärfsten Rechtsberater des Landes engagiert, um gegen [SCOPE.sLaw('current_law_scope').GetName] zu argumentieren. [SCOPE.gsInterestGroup('opposing_ig').GetName] tragen ihre Sache in jeder Kammer vor, die zuhört."
+ },
+ "ministry_law_events.26.f": {
+  "en": "\\\"A ministry that meddles in trade is a ministry that learns the value of meddling by costing the country its export markets. We have seen this play before — and it always ends the same way.\\\"\\n\\n\\\"You sound certain.\\\"\\n\\n\\\"I sound experienced. The same speech has been delivered to four previous ministries by four previous lobbies, and each time the ministry won and the markets shrank. We are not yet too tired to give the speech once more.\\\"",
+  "de": "\\\"Ein Ministerium, das sich in den Handel einmischt, ist ein Ministerium, das den Wert der Einmischung dadurch lernt, dass es das Land seine Exportmärkte kostet. Wir haben dieses Stück schon gesehen — und es endet immer gleich.\\\"\\n\\n\\\"Sie klingen sehr sicher.\\\"\\n\\n\\\"Ich klinge erfahren. Dieselbe Rede wurde vier früheren Ministerien von vier früheren Lobbys gehalten, und jedes Mal gewann das Ministerium und die Märkte schrumpften. Wir sind noch nicht zu müde, die Rede noch einmal zu halten.\\\""
+ },
+ "ministry_law_events.26.t": {
+  "en": "Merchants Lobby Against",
+  "de": "Kaufleute lobbyieren dagegen"
+ },
+ "ministry_law_events.27.a": {
+  "en": "Withdraw - the artists' point has weight",
+  "de": "Zurückziehen - der Einwand der Künstler hat Gewicht"
+ },
+ "ministry_law_events.27.b": {
+  "en": "Press through - patronage need not mean control",
+  "de": "Durchziehen - Förderung muss nicht Kontrolle bedeuten"
+ },
+ "ministry_law_events.27.d": {
+  "en": "A manifesto signed by leading artists and writers has circulated in opposition to [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] frame the bill as creeping censorship.",
+  "de": "Ein von führenden Künstlern und Schriftstellern unterzeichnetes Manifest gegen [SCOPE.sLaw('current_law_scope').GetName] ist in Umlauf. [SCOPE.gsInterestGroup('opposing_ig').GetName] stellen den Gesetzentwurf als schleichende Zensur dar."
+ },
+ "ministry_law_events.27.f": {
+  "en": "\\\"The painter who eats from the state's hand soon paints what the state asks for. We did not become artists to become courtiers.\\\"\\n\\n\\\"And the painter who eats from no hand at all?\\\"\\n\\n\\\"Eats less. We accept it. We knew the terms when we chose the brush. We did not choose the salary, and we will not be told what colour to use because the salary now exists.\\\"",
+  "de": "\\\"Der Maler, der aus der Hand des Staates isst, malt bald, was der Staat verlangt. Wir wurden nicht Künstler, um Höflinge zu werden.\\\"\\n\\n\\\"Und der Maler, der aus gar keiner Hand isst?\\\"\\n\\n\\\"Isst weniger. Das nehmen wir hin. Wir kannten die Bedingungen, als wir den Pinsel wählten. Wir haben nicht das Gehalt gewählt, und wir lassen uns nicht vorschreiben, welche Farbe wir zu benutzen haben, nur weil es das Gehalt nun gibt.\\\""
+ },
+ "ministry_law_events.27.t": {
+  "en": "Artists Decry State Patronage",
+  "de": "Künstler prangern staatliche Förderung an"
+ },
+ "ministry_law_events.28.a": {
+  "en": "Pause the bill until tempers cool",
+  "de": "Den Gesetzentwurf pausieren, bis sich die Gemüter beruhigen"
+ },
+ "ministry_law_events.28.b": {
+  "en": "Press through - the strike is a bargaining tactic",
+  "de": "Durchziehen - der Streik ist nur eine Verhandlungstaktik"
+ },
+ "ministry_law_events.28.d": {
+  "en": "Coordinated industrial action has erupted over the labor provisions of [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] are organizing a wider walkout if the bill proceeds.",
+  "de": "Koordinierte Arbeitskampfmaßnahmen sind wegen der Arbeitsbestimmungen von [SCOPE.sLaw('current_law_scope').GetName] ausgebrochen. [SCOPE.gsInterestGroup('opposing_ig').GetName] organisieren einen umfassenderen Ausstand, falls der Gesetzentwurf vorangetrieben wird."
+ },
+ "ministry_law_events.28.f": {
+  "en": "\\\"You wanted a labor ministry. Here is labor's reply — we do not consent to being administered. Govern us, and we will withhold what we alone can give.\\\"\\n\\n\\\"And what is it that you alone can give?\\\"\\n\\n\\\"Our hands. The factories are not industrial machines. They are arrangements between owners and us. The arrangement requires our cooperation. Cooperation has a price, and the price is consultation before legislation.\\\"",
+  "de": "\\\"Ihr wolltet ein Arbeitsministerium. Hier ist die Antwort der Arbeiterschaft — wir stimmen nicht zu, verwaltet zu werden. Regiert uns, und wir verweigern, was nur wir geben können.\\\"\\n\\n\\\"Und was ist es, das nur ihr geben könnt?\\\"\\n\\n\\\"Unsere Hände. Die Fabriken sind keine Industriemaschinen. Sie sind Vereinbarungen zwischen den Eigentümern und uns. Die Vereinbarung erfordert unsere Mitarbeit. Mitarbeit hat einen Preis, und der Preis ist Konsultation vor der Gesetzgebung.\\\""
+ },
+ "ministry_law_events.28.t": {
+  "en": "Strikes Threaten the Ministry",
+  "de": "Streiks bedrohen das Ministerium"
+ },
+ "ministry_law_events.29.a": {
+  "en": "Withdraw to address industrial concerns",
+  "de": "Zurückziehen, um die Bedenken der Industrie zu berücksichtigen"
+ },
+ "ministry_law_events.29.b": {
+  "en": "Press through - the smokestacks have had their way too long",
+  "de": "Durchziehen - die Schornsteine haben zu lange ihren Willen bekommen"
+ },
+ "ministry_law_events.29.d": {
+  "en": "Industrialists have launched a coordinated public-affairs campaign against [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] warn that the proposed regulations will drive plants overseas.",
+  "de": "Industrielle haben eine koordinierte Öffentlichkeitskampagne gegen [SCOPE.sLaw('current_law_scope').GetName] gestartet. [SCOPE.gsInterestGroup('opposing_ig').GetName] warnen, die vorgeschlagenen Vorschriften würden Fabriken ins Ausland treiben."
+ },
+ "ministry_law_events.29.f": {
+  "en": "\\\"The smoke from our furnaces is the smell of prosperity. Regulate it away and you will not regulate the smell — only the prosperity.\\\"\\n\\n\\\"And the children with breathing problems?\\\"\\n\\n\\\"Will work in the factories when they are old enough. Their parents would prefer a paycheck and a cough to no paycheck and clean air. We have asked them. The vote was not close.\\\"",
+  "de": "\\\"Der Rauch unserer Öfen ist der Geruch des Wohlstands. Reguliert ihn weg, und ihr reguliert nicht den Geruch — nur den Wohlstand.\\\"\\n\\n\\\"Und die Kinder mit Atemproblemen?\\\"\\n\\n\\\"Werden in den Fabriken arbeiten, wenn sie alt genug sind. Ihre Eltern würden einen Lohn und einen Husten einem fehlenden Lohn und sauberer Luft vorziehen. Wir haben sie gefragt. Die Abstimmung war nicht knapp.\\\""
+ },
+ "ministry_law_events.29.t": {
+  "en": "Industry's Counter-Attack",
+  "de": "Der Gegenschlag der Industrie"
+ },
+ "ministry_law_events.3.a": {
+  "en": "Assert the new ministry's jurisdiction - clarity is essential.",
+  "de": "Die Zuständigkeit des neuen Ministeriums durchsetzen - Klarheit ist entscheidend."
+ },
+ "ministry_law_events.3.b": {
+  "en": "Allow a transitional period to ease the change.",
+  "de": "Eine Übergangszeit gewähren, um den Wandel zu erleichtern."
+ },
+ "ministry_law_events.3.d": {
+  "en": "The creation of [SCOPE.sLaw('current_law_scope').GetName] has provoked a turf war among existing government departments. Senior officials who have managed these matters for years are reluctant to cede authority to a new ministry and its untested staff.",
+  "de": "Die Schaffung von [SCOPE.sLaw('current_law_scope').GetName] hat einen Zuständigkeitsstreit unter den bestehenden Regierungsbehörden ausgelöst. Hochrangige Beamte, die diese Angelegenheiten seit Jahren verwalten, zögern, die Zuständigkeit an ein neues Ministerium und sein unerprobtes Personal abzugeben."
+ },
+ "ministry_law_events.3.f": {
+  "en": "The permanent secretary looked as though I had asked him to hand over his firstborn child. 'You cannot simply take the Trade Division,' he said, clutching his files to his chest. 'I have been nurturing this department since before you were in Parliament.'",
+  "de": "Der Ministerialdirektor sah aus, als hätte ich ihn gebeten, mir sein erstgeborenes Kind zu übergeben. „Man kann nicht einfach die Handelsabteilung übernehmen“, sagte er und drückte seine Akten an die Brust. „Ich pflege diese Abteilung schon, seit Sie noch nicht im Parlament saßen.“"
+ },
+ "ministry_law_events.3.t": {
+  "en": "Bureaucratic Turf Wars",
+  "de": "Bürokratische Zuständigkeitskämpfe"
+ },
+ "ministry_law_events.30.a": {
+  "en": "Pause and renegotiate with the agencies",
+  "de": "Innehalten und mit den Behörden neu verhandeln"
+ },
+ "ministry_law_events.30.b": {
+  "en": "Press through despite the shadow bureau's opposition",
+  "de": "Trotz des Widerstands der Schattenbehörde durchziehen"
+ },
+ "ministry_law_events.30.d": {
+  "en": "Existing security services have made it discreetly known that [SCOPE.sLaw('current_law_scope').GetName] is unwelcome. The [SCOPE.gsInterestGroup('opposing_ig').GetName] speak in dark hints about operational consequences.",
+  "de": "Bestehende Sicherheitsdienste haben diskret zu verstehen gegeben, dass [SCOPE.sLaw('current_law_scope').GetName] unerwünscht ist. [SCOPE.gsInterestGroup('opposing_ig').GetName] sprechen in düsteren Andeutungen von operativen Konsequenzen."
+ },
+ "ministry_law_events.30.f": {
+  "en": "\\\"The shadows do not consent to be moved. You may legislate the chairs in the room, but the men who sit in them outlast every minister.\\\"\\n\\n\\\"And the minister will outlast the next election?\\\"\\n\\n\\\"The minister might. We will outlast the next four. The arithmetic is on our side. Patience is the bureau's only weapon, and the only one it has ever needed.\\\"",
+  "de": "\\\"Die Schatten stimmen nicht zu, verschoben zu werden. Man kann die Stühle im Raum per Gesetz bestimmen, aber die Männer, die darin sitzen, überdauern jeden Minister.\\\"\\n\\n\\\"Und wird der Minister die nächste Wahl überdauern?\\\"\\n\\n\\\"Der Minister vielleicht. Wir werden die nächsten vier überdauern. Die Arithmetik ist auf unserer Seite. Geduld ist die einzige Waffe der Behörde — und die einzige, die sie je gebraucht hat.\\\""
+ },
+ "ministry_law_events.30.t": {
+  "en": "The Shadow Bureau Pushes Back",
+  "de": "Die Schattenbehörde wehrt sich"
+ },
+ "ministry_law_events.31.a": {
+  "en": "Pause to handle the immediate crisis first",
+  "de": "Innehalten, um zunächst die akute Krise zu bewältigen"
+ },
+ "ministry_law_events.31.b": {
+  "en": "Press through - the crisis is exactly why we need the ministry",
+  "de": "Durchziehen - die Krise ist genau der Grund, warum wir das Ministerium brauchen"
+ },
+ "ministry_law_events.31.d": {
+  "en": "Just as [SCOPE.sLaw('current_law_scope').GetName] approaches passage, a fresh wave of refugees has overwhelmed border stations. The [SCOPE.gsInterestGroup('opposing_ig').GetName] argue the moment is the worst possible for institutional changes.",
+  "de": "Gerade als [SCOPE.sLaw('current_law_scope').GetName] kurz vor der Verabschiedung steht, hat eine neue Flüchtlingswelle die Grenzstationen überwältigt. [SCOPE.gsInterestGroup('opposing_ig').GetName] argumentieren, der Moment sei denkbar ungünstig für institutionelle Veränderungen."
+ },
+ "ministry_law_events.31.f": {
+  "en": "\\\"You build the ship while the storm is breaking. Either you finish in time, or you watch what you have built so far wash away.\\\"\\n\\n\\\"And if we pause?\\\"\\n\\n\\\"If we pause, we watch the storm without the ship at all. The choice is between a half-built ship and no ship. Neither is good. One is worse.\\\"",
+  "de": "\\\"Man baut das Schiff, während der Sturm losbricht. Entweder man wird rechtzeitig fertig, oder man sieht zu, wie das bisher Gebaute fortgespült wird.\\\"\\n\\n\\\"Und wenn wir innehalten?\\\"\\n\\n\\\"Wenn wir innehalten, erleben wir den Sturm ganz ohne Schiff. Die Wahl steht zwischen einem halbfertigen Schiff und gar keinem Schiff. Keines ist gut. Eines ist schlechter.\\\""
+ },
+ "ministry_law_events.31.t": {
+  "en": "The Crisis Worsens",
+  "de": "Die Krise verschärft sich"
+ },
+ "ministry_law_events.32.a": {
+  "en": "Withdraw and rework the bill",
+  "de": "Zurückziehen und den Gesetzentwurf überarbeiten"
+ },
+ "ministry_law_events.32.b": {
+  "en": "Press through despite the press's noise",
+  "de": "Trotz des Lärms der Presse durchziehen"
+ },
+ "ministry_law_events.32.d": {
+  "en": "Independent newspapers have closed ranks against [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] frame the bill as the first step toward state-controlled media.",
+  "de": "Unabhängige Zeitungen haben gegen [SCOPE.sLaw('current_law_scope').GetName] geschlossene Reihen gebildet. [SCOPE.gsInterestGroup('opposing_ig').GetName] stellen den Gesetzentwurf als ersten Schritt zu staatlich kontrollierten Medien dar."
+ },
+ "ministry_law_events.32.f": {
+  "en": "\\\"When the state opens an office of public information, it is to spread information about itself. Where this leads, history has already written.\\\"\\n\\n\\\"And history has examples to the contrary.\\\"\\n\\n\\\"History has exceptions. The rule is what the office becomes in its third minister, not its first. The first minister always promises restraint. The third minister always discovers the rules can be rewritten.\\\"",
+  "de": "\\\"Wenn der Staat ein Amt für öffentliche Information eröffnet, dann, um Informationen über sich selbst zu verbreiten. Wohin das führt, hat die Geschichte bereits geschrieben.\\\"\\n\\n\\\"Und die Geschichte kennt Gegenbeispiele.\\\"\\n\\n\\\"Die Geschichte kennt Ausnahmen. Die Regel ist, was aus dem Amt unter seinem dritten Minister wird, nicht unter seinem ersten. Der erste Minister verspricht immer Zurückhaltung. Der dritte Minister entdeckt immer, dass sich die Regeln neu schreiben lassen.\\\""
+ },
+ "ministry_law_events.32.t": {
+  "en": "The Press Rebels",
+  "de": "Die Presse rebelliert"
+ },
+ "ministry_law_events.33.a": {
+  "en": "Pause to address the academy's concerns",
+  "de": "Innehalten, um die Bedenken der Akademie zu berücksichtigen"
+ },
+ "ministry_law_events.33.b": {
+  "en": "Press through despite the scientists' walkout",
+  "de": "Trotz des Auszugs der Wissenschaftler durchziehen"
+ },
+ "ministry_law_events.33.d": {
+  "en": "Leading scientists have walked out of consultation meetings on [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] warn that the bill will politicize research funding.",
+  "de": "Führende Wissenschaftler haben die Beratungssitzungen zu [SCOPE.sLaw('current_law_scope').GetName] verlassen. [SCOPE.gsInterestGroup('opposing_ig').GetName] warnen, der Gesetzentwurf werde die Forschungsförderung politisieren."
+ },
+ "ministry_law_events.33.f": {
+  "en": "\\\"Science is a slow conversation between honest people. Insert a politician into that conversation and you will get neither science nor honest people.\\\"\\n\\n\\\"The bill includes a research council to insulate the science from the politics.\\\"\\n\\n\\\"The research council is appointed by the minister. The minister is appointed by the party. The party is appointed by the voters. The voters do not vote on physics. They vote on prices. Eventually the physics learns to speak of prices.\\\"",
+  "de": "\\\"Wissenschaft ist ein langsames Gespräch zwischen ehrlichen Menschen. Setzt einen Politiker in dieses Gespräch, und man bekommt weder Wissenschaft noch ehrliche Menschen.\\\"\\n\\n\\\"Der Gesetzentwurf sieht einen Forschungsrat vor, um die Wissenschaft von der Politik abzuschirmen.\\\"\\n\\n\\\"Der Forschungsrat wird vom Minister ernannt. Der Minister wird von der Partei ernannt. Die Partei wird von den Wählern bestimmt. Die Wähler stimmen nicht über Physik ab. Sie stimmen über Preise ab. Irgendwann lernt die Physik, von Preisen zu sprechen.\\\""
+ },
+ "ministry_law_events.33.t": {
+  "en": "Academics Walk Out",
+  "de": "Akademiker verlassen den Saal"
+ },
  "movement_events_te.1.a": {
   "en": "Let them march in peace",
   "de": "Lasst sie in Frieden marschieren"
