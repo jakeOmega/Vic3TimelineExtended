@@ -9539,6 +9539,410 @@
   "en": "A Form for the Monument",
   "de": "Eine Form für das Denkmal"
  },
+ "monument_events.12.a": {
+  "en": "Hold a lavish jubilee",
+  "de": "Ein prunkvolles Jubiläum feiern"
+ },
+ "monument_events.12.b": {
+  "en": "A simple service, and the sovereign walks among the crowd",
+  "de": "Eine schlichte Zeremonie, bei der sich der Souverän unter die Menge mischt"
+ },
+ "monument_events.12.d": {
+  "en": "The anniversary of the reign falls this year, and the court wants it marked at the [SCOPE.sState('monument_state').GetCustom('gm_skin_name')] in [SCOPE.sState('monument_state').GetName]. The treasury would rather it were marked quietly.",
+  "de": "Der Jahrestag der Regierungszeit fällt in dieses Jahr, und der Hof möchte ihn am [SCOPE.sState('monument_state').GetCustom('gm_skin_name')] in [SCOPE.sState('monument_state').GetName] begehen. Die Staatskasse hätte lieber eine stille Feier."
+ },
+ "monument_events.12.f": {
+  "en": "“Nobody remembers a quiet jubilee,” the chamberlain says.\\n\\n“Nobody remembers what a loud one cost, either. That is rather the point.”",
+  "de": "„An ein leises Jubiläum erinnert sich niemand“, sagt der Kämmerer.\\n\\n„An die Kosten eines lauten erinnert sich auch niemand. Das ist ja gerade der Sinn der Sache.“"
+ },
+ "monument_events.12.t": {
+  "en": "Jubilee at the Monument",
+  "de": "Jubiläum am Monument"
+ },
+ "monument_events.13.a": {
+  "en": "Convene a citizens' assembly",
+  "de": "Eine Bürgerversammlung einberufen"
+ },
+ "monument_events.13.b": {
+  "en": "Hold a military parade",
+  "de": "Eine Militärparade abhalten"
+ },
+ "monument_events.13.d": {
+  "en": "Constitution Day comes round again at the [SCOPE.sState('monument_state').GetCustom('gm_skin_name')] in [SCOPE.sState('monument_state').GetName]. Two proposals are on the minister's desk: open the monument to a citizens' assembly, or march the regiments past it.",
+  "de": "Der Verfassungstag steht wieder bevor, am [SCOPE.sState('monument_state').GetCustom('gm_skin_name')] in [SCOPE.sState('monument_state').GetName]. Zwei Vorschläge liegen auf dem Schreibtisch des Ministers: das Monument für eine Bürgerversammlung öffnen oder die Regimenter daran vorbeimarschieren lassen."
+ },
+ "monument_events.13.f": {
+  "en": "“An assembly will say things we have to answer,” the minister says.\\n\\n“A parade says nothing at all. People like that too.”",
+  "de": "„Eine Versammlung wird Dinge sagen, auf die wir antworten müssen“, sagt der Minister.\\n\\n„Eine Parade sagt gar nichts. Das mögen die Leute auch.“"
+ },
+ "monument_events.13.t": {
+  "en": "Constitution Day",
+  "de": "Verfassungstag"
+ },
+ "monument_events.14.a": {
+  "en": "Fill the square",
+  "de": "Den Platz füllen"
+ },
+ "monument_events.14.b": {
+  "en": "A quiet commemoration with the veterans",
+  "de": "Eine stille Gedenkfeier mit den Veteranen"
+ },
+ "monument_events.14.d": {
+  "en": "Every year the revolution is remembered at the [SCOPE.sState('monument_state').GetCustom('gm_skin_name')] in [SCOPE.sState('monument_state').GetName]. This year the party wants the square full.",
+  "de": "Jedes Jahr wird der Revolution am [SCOPE.sState('monument_state').GetCustom('gm_skin_name')] in [SCOPE.sState('monument_state').GetName] gedacht. Dieses Jahr will die Partei den Platz gefüllt sehen."
+ },
+ "monument_events.14.f": {
+  "en": "“The people who made the revolution are old now,” the organizer says.\\n\\n“Then bring their grandchildren. It is theirs too.”",
+  "de": "„Die Menschen, die die Revolution gemacht haben, sind heute alt“, sagt der Organisator.\\n\\n„Dann bringt ihre Enkel mit. Sie gehört auch ihnen.“"
+ },
+ "monument_events.14.t": {
+  "en": "Anniversary of the Revolution",
+  "de": "Jahrestag der Revolution"
+ },
+ "monument_events.15.a": {
+  "en": "Let the celebrations go ahead",
+  "de": "Die Feierlichkeiten stattfinden lassen"
+ },
+ "monument_events.15.b": {
+  "en": "The leader declines the honour, in public",
+  "de": "Das Staatsoberhaupt lehnt die Ehrung öffentlich ab"
+ },
+ "monument_events.15.d": {
+  "en": "The head of state's birthday falls this week, and the [SCOPE.sState('monument_state').GetCustom('gm_skin_name')] in [SCOPE.sState('monument_state').GetName] has been decked out in advance by people eager to be seen doing it.",
+  "de": "Der Geburtstag des Staatsoberhaupts fällt in diese Woche, und das [SCOPE.sState('monument_state').GetCustom('gm_skin_name')] in [SCOPE.sState('monument_state').GetName] wurde bereits im Voraus geschmückt, von Leuten, die dabei gesehen werden wollen."
+ },
+ "monument_events.15.f": {
+  "en": "“The leader says there is to be no fuss,” the aide says.\\n\\n“Then the fuss must look spontaneous.”",
+  "de": "„Das Staatsoberhaupt sagt, es solle kein Aufhebens gemacht werden“, sagt der Adjutant.\\n\\n„Dann muss das Aufhebens spontan wirken.“"
+ },
+ "monument_events.15.t": {
+  "en": "The Leader's Birthday",
+  "de": "Der Geburtstag des Staatsoberhaupts"
+ },
+ "monument_events.16.a": {
+  "en": "Tear them all down",
+  "de": "Sie alle abreißen"
+ },
+ "monument_events.16.a.tt": {
+  "en": "Every one of them is pulled down, and its [concept_grandeur] with it. The new order gains legitimacy that fades over about five years. Those who opposed the old order approve; those who raised the monuments resent it.",
+  "de": "Jedes einzelne wird niedergerissen, und mit ihm seine [concept_grandeur]. Die neue Ordnung gewinnt Legitimität, die über etwa fünf Jahre verblasst. Wer sich der alten Ordnung widersetzt hat, begrüßt dies; wer die Monumente errichtet hat, nimmt es übel."
+ },
+ "monument_events.16.b": {
+  "en": "Keep them all as heritage",
+  "de": "Sie alle als Kulturerbe erhalten"
+ },
+ "monument_events.16.b.tt": {
+  "en": "Every one of them stays as heritage. Their prestige, visitors and local effects return, but they lend this government no legitimacy, and those who opposed the old order resent that they still stand, less each year.",
+  "de": "Jedes einzelne bleibt als Kulturerbe erhalten. Ihr Prestige, ihre Besucher und ihre lokalen Effekte kehren zurück, doch sie verleihen dieser Regierung keine Legitimität, und wer sich der alten Ordnung widersetzt hat, nimmt übel, dass sie noch stehen – Jahr für Jahr etwas weniger."
+ },
+ "monument_events.16.c": {
+  "en": "Decide on each in turn",
+  "de": "Über jedes einzeln entscheiden"
+ },
+ "monument_events.16.c.tt": {
+  "en": "One decision follows for each monument. Any of them can also be decided later, from its row in the Monuments journal entry. Until then, those who opposed the old order resent every one still standing.",
+  "de": "Für jedes Monument folgt eine eigene Entscheidung. Jedes davon kann auch später entschieden werden, über seine Zeile im Journaleintrag „Monumente“. Bis dahin nimmt jeder, der sich der alten Ordnung widersetzt hat, jedes noch stehende Monument übel."
+ },
+ "monument_events.16.d": {
+  "en": "The order our monuments were raised to honour is gone. [SCOPE.GetRootScope.ScriptValue('gm_notice_count')|0] of them now stand for something this government is not, and crowds have gathered at some of them already, with ropes.",
+  "de": "Die Ordnung, zu deren Ehren unsere Monumente errichtet wurden, ist vergangen. [SCOPE.GetRootScope.ScriptValue('gm_notice_count')|0] von ihnen stehen nun für etwas, das diese Regierung nicht ist, und an einigen von ihnen haben sich bereits Menschenmengen versammelt, mit Seilen."
+ },
+ "monument_events.16.f": {
+  "en": "“We could leave them,” the minister says. “People have always walked past statues of men they disliked.”\\n\\n“Not while those men are still being cheered in the next street.”",
+  "de": "„Wir könnten sie stehen lassen“, sagt der Minister. „Die Menschen sind schon immer an Statuen von Männern vorbeigegangen, die sie nicht mochten.“\\n\\n„Nicht solange diesen Männern in der nächsten Straße noch zugejubelt wird.“"
+ },
+ "monument_events.16.t": {
+  "en": "Monuments to a Fallen Order",
+  "de": "Monumente einer gefallenen Ordnung"
+ },
+ "monument_events.17.a": {
+  "en": "Pull it down",
+  "de": "Es abreißen"
+ },
+ "monument_events.17.b": {
+  "en": "Rededicate it",
+  "de": "Es neu weihen"
+ },
+ "monument_events.17.c": {
+  "en": "Keep it as heritage",
+  "de": "Es als Kulturerbe erhalten"
+ },
+ "monument_events.17.d": {
+  "en": "Leave it for now",
+  "de": "Es vorerst belassen"
+ },
+ "monument_events.17.desc": {
+  "en": "The [SCOPE.sState('monument_state').GetCustom('gm_dedication_name')] in [SCOPE.sState('monument_state').GetName] honours something this government is not. It must be pulled down, rededicated or kept.",
+  "de": "Das [SCOPE.sState('monument_state').GetCustom('gm_dedication_name')] in [SCOPE.sState('monument_state').GetName] ehrt etwas, das diese Regierung nicht ist. Es muss abgerissen, neu geweiht oder erhalten werden."
+ },
+ "monument_events.17.f": {
+  "en": "The stonemasons have been asked for three estimates: one to take it down, one to change the inscription, and one to clean it.",
+  "de": "Die Steinmetze wurden um drei Kostenvoranschläge gebeten: einen für den Abriss, einen für die Änderung der Inschrift und einen für die Reinigung."
+ },
+ "monument_events.17.t": {
+  "en": "What Becomes of the Monument",
+  "de": "Was aus dem Monument wird"
+ },
+ "monument_events.2.a": {
+  "en": "Let it stand as it is, for now",
+  "de": "Es vorerst so belassen, wie es ist"
+ },
+ "monument_events.2.a.tt": {
+  "en": "It opens under no flag and draws visitors on its size alone. The ceremony asks again when its next level is finished.\\n\\n$monument_events.2.common_tt$",
+  "de": "Es wird unter keiner Flagge eröffnet und zieht allein durch seine Größe Besucher an. Die Zeremonie fragt erneut, wenn seine nächste Stufe fertiggestellt ist.\\n\\n$monument_events.2.common_tt$"
+ },
+ "monument_events.2.b": {
+  "en": "Dedicate it to the republic",
+  "de": "Es der Republik weihen"
+ },
+ "monument_events.2.b.tt": {
+  "en": "A monument to the republic. While the country is a republic and still owns it, it lends #v $country_legitimacy_base_add$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_legitimacy')|0]#! for each step of regime [concept_grandeur], counted with our other monuments to the regime. The $ig_intelligentsia$ approve and the $ig_landowners$ object. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_republic')|%0]#! $state_loyalists_from_political_movements_mult$ for each step of its own.\\n\\nIf the republic falls, or the state passes to another country, it becomes #R contested#!.\\n\\n$monument_events.2.common_tt$",
+  "de": "Ein Monument für die Republik. Solange das Land eine Republik ist und es noch besitzt, verleiht es #v $country_legitimacy_base_add$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_legitimacy')|0]#! für jede Stufe an [concept_grandeur] des Regimes, gemeinsam mit unseren anderen Monumenten für das Regime gezählt. Die $ig_intelligentsia$ befürworten dies, die $ig_landowners$ lehnen es ab. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_republic')|%0]#! $state_loyalists_from_political_movements_mult$ für jede eigene Stufe.\\n\\nFällt die Republik, oder geht der Staat an ein anderes Land über, wird es #R umstritten#!.\\n\\n$monument_events.2.common_tt$"
+ },
+ "monument_events.2.c": {
+  "en": "Consecrate it",
+  "de": "Es weihen"
+ },
+ "monument_events.2.c.tt": {
+  "en": "A grand shrine to our faith. The $ig_devout$ approve, and #v $interest_group_ig_devout_pop_attraction_mult$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_national_religious')|%0]#! for each step of [concept_grandeur], counted with our other shrines. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_religious')|%0]#! $state_conversion_mult$ for each step of its own.\\n\\nIf the country abandons the faith it honours, or adopts State Atheism, it becomes #R contested#!. If the state passes to another country, it becomes heritage.\\n\\n$monument_events.2.common_tt$",
+  "de": "Ein prächtiger Schrein für unseren Glauben. Die $ig_devout$ befürworten dies, und #v $interest_group_ig_devout_pop_attraction_mult$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_national_religious')|%0]#! für jede Stufe an [concept_grandeur], gemeinsam mit unseren anderen Schreinen gezählt. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_religious')|%0]#! $state_conversion_mult$ für jede eigene Stufe.\\n\\nGibt das Land den Glauben auf, den es ehrt, oder führt es Staatsatheismus ein, wird es #R umstritten#!. Geht der Staat an ein anderes Land über, wird es Kulturerbe.\\n\\n$monument_events.2.common_tt$"
+ },
+ "monument_events.2.common_tt": {
+  "en": "Every monument: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_prestige')|0]#! prestige for each step of standing [concept_grandeur], counted with our other monuments, and #G +[SCOPE.GetRootScope.ScriptValue('gm_step_tourism')|%0]#! $building_tourism_industry_throughput_add$ in [SCOPE.sState('monument_state').GetName] for each step of its own.",
+  "de": "Jedes Monument: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_prestige')|0]#! Prestige für jede Stufe an bestehender [concept_grandeur], gemeinsam mit unseren anderen Monumenten gezählt, und #G +[SCOPE.GetRootScope.ScriptValue('gm_step_tourism')|%0]#! $building_tourism_industry_throughput_add$ in [SCOPE.sState('monument_state').GetName] für jede eigene Stufe."
+ },
+ "monument_events.2.d": {
+  "en": "The work is finished. Stone, glass and iron stand in [SCOPE.sState('monument_state').GetName] where there was nothing, paid for out of a treasury that could think of no better use for the money. What remains is to say what it is for — and a thing built to outlast us is only told what it is for once.",
+  "de": "Die Arbeiten sind abgeschlossen. Stein, Glas und Eisen stehen nun in [SCOPE.sState('monument_state').GetName], wo zuvor nichts war, bezahlt aus einer Staatskasse, der keine bessere Verwendung für das Geld einfiel. Was bleibt, ist zu sagen, wofür es steht – und einem Bauwerk, das uns überdauern soll, wird nur einmal gesagt, wofür es steht."
+ },
+ "monument_events.2.e": {
+  "en": "Inscribe the names of the fallen",
+  "de": "Die Namen der Gefallenen einmeißeln"
+ },
+ "monument_events.2.e.tt": {
+  "en": "A memorial to the fallen. The $ig_armed_forces$ approve, and #v $country_war_support_casualties_mult$#! #G [SCOPE.GetRootScope.ScriptValue('gm_step_national_war_memorial')|%0]#! for each step of [concept_grandeur], counted with our other memorials. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_war_memorial')|%0]#! $state_conscription_rate_add$ for each step of its own. It never falls with a government.\\n\\n$monument_events.2.common_tt$",
+  "de": "Ein Denkmal für die Gefallenen. Die $ig_armed_forces$ befürworten dies, und #v $country_war_support_casualties_mult$#! #G [SCOPE.GetRootScope.ScriptValue('gm_step_national_war_memorial')|%0]#! für jede Stufe an [concept_grandeur], gemeinsam mit unseren anderen Denkmälern gezählt. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_war_memorial')|%0]#! $state_conscription_rate_add$ für jede eigene Stufe. Es fällt niemals mit einer Regierung.\\n\\n$monument_events.2.common_tt$"
+ },
+ "monument_events.2.f": {
+  "en": "“It wants a name,” the architect says, not looking up from drawings she no longer needs.\\n\\n“It wants a purpose. The name will follow.”\\n\\nOutside, the crowd has already begun to gather, as crowds do around anything large enough to cast a shadow. They will decide what it means whatever we carve on it. But it is better to carve something.",
+  "de": "„Es braucht einen Namen“, sagt die Architektin, ohne von Zeichnungen aufzublicken, die sie längst nicht mehr braucht.\\n\\n„Es braucht einen Zweck. Der Name folgt von selbst.“\\n\\nDraußen hat sich bereits eine Menge versammelt, wie es Menschenmengen bei allem tun, das groß genug ist, einen Schatten zu werfen. Sie werden entscheiden, was es bedeutet, ganz gleich, was wir hineinmeißeln. Aber es ist besser, etwas hineinzumeißeln."
+ },
+ "monument_events.2.g": {
+  "en": "Give it over to the arts",
+  "de": "Es den Künsten widmen"
+ },
+ "monument_events.2.g.tt": {
+  "en": "A grand opera house. The $ig_intelligentsia$ approve, and #v $interest_group_ig_intelligentsia_pop_attraction_mult$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_national_artistic')|%0]#! for each step of [concept_grandeur], counted with our other opera houses. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_artistic')|%0]#! $building_art_academy_throughput_add$ for each step of its own. It never falls with a government.\\n\\n$monument_events.2.common_tt$",
+  "de": "Ein prächtiges Opernhaus. Die $ig_intelligentsia$ befürworten dies, und #v $interest_group_ig_intelligentsia_pop_attraction_mult$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_national_artistic')|%0]#! für jede Stufe an [concept_grandeur], gemeinsam mit unseren anderen Opernhäusern gezählt. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_artistic')|%0]#! $building_art_academy_throughput_add$ für jede eigene Stufe. Es fällt niemals mit einer Regierung.\\n\\n$monument_events.2.common_tt$"
+ },
+ "monument_events.2.h": {
+  "en": "Plant it about with gardens",
+  "de": "Es mit Gärten umgeben"
+ },
+ "monument_events.2.h.tt": {
+  "en": "Botanical gardens. The $ig_rural_folk$ approve. In [SCOPE.sState('monument_state').GetName]: #G [SCOPE.GetRootScope.ScriptValue('gm_step_local_naturalist')|0]#! $state_pollution_generation_add$ for each step of its own [concept_grandeur]. They never fall with a government.\\n\\n$monument_events.2.common_tt$",
+  "de": "Botanische Gärten. Die $ig_rural_folk$ befürworten dies. In [SCOPE.sState('monument_state').GetName]: #G [SCOPE.GetRootScope.ScriptValue('gm_step_local_naturalist')|0]#! $state_pollution_generation_add$ für jede eigene Stufe an [concept_grandeur]. Sie fallen niemals mit einer Regierung.\\n\\n$monument_events.2.common_tt$"
+ },
+ "monument_events.2.i": {
+  "en": "Turn its eye to the heavens",
+  "de": "Seinen Blick zum Himmel richten"
+ },
+ "monument_events.2.i.tt": {
+  "en": "A grand observatory. The $ig_intelligentsia$ approve, and #v $country_weekly_innovation_max_add$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_national_scientific')|0]#! for each step of [concept_grandeur], counted with our other observatories. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_scientific')|%3]#! $state_literacy_growth_add$ for each step of its own. It never falls with a government.\\n\\n$monument_events.2.common_tt$",
+  "de": "Ein prächtiges Observatorium. Die $ig_intelligentsia$ befürworten dies, und #v $country_weekly_innovation_max_add$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_national_scientific')|0]#! für jede Stufe an [concept_grandeur], gemeinsam mit unseren anderen Observatorien gezählt. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_scientific')|%3]#! $state_literacy_growth_add$ für jede eigene Stufe. Es fällt niemals mit einer Regierung.\\n\\n$monument_events.2.common_tt$"
+ },
+ "monument_events.2.j": {
+  "en": "Fill it with the works of industry",
+  "de": "Es mit den Werken der Industrie füllen"
+ },
+ "monument_events.2.j.tt": {
+  "en": "A great exhibition hall. The $ig_industrialists$ approve, and #v $interest_group_ig_industrialists_pop_attraction_mult$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_national_industrial')|%0]#! for each step of [concept_grandeur], counted with our other exhibition halls. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_industrial')|%0]#! $state_migration_pull_mult$ for each step of its own. It never falls with a government.\\n\\n$monument_events.2.common_tt$",
+  "de": "Eine große Ausstellungshalle. Die $ig_industrialists$ befürworten dies, und #v $interest_group_ig_industrialists_pop_attraction_mult$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_national_industrial')|%0]#! für jede Stufe an [concept_grandeur], gemeinsam mit unseren anderen Ausstellungshallen gezählt. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_industrial')|%0]#! $state_migration_pull_mult$ für jede eigene Stufe. Sie fällt niemals mit einer Regierung.\\n\\n$monument_events.2.common_tt$"
+ },
+ "monument_events.2.k": {
+  "en": "Build the arena beneath it",
+  "de": "Die Arena darunter errichten"
+ },
+ "monument_events.2.k.tt": {
+  "en": "A grand stadium. The $ig_trade_unions$ approve. In [SCOPE.sState('monument_state').GetName]: #G [SCOPE.GetRootScope.ScriptValue('gm_step_local_athletic')|%0]#! $state_turmoil_effects_mult$ for each step of its own [concept_grandeur]. It never falls with a government.\\n\\n$monument_events.2.common_tt$",
+  "de": "Ein großes Stadion. Die $ig_trade_unions$ befürworten dies. In [SCOPE.sState('monument_state').GetName]: #G [SCOPE.GetRootScope.ScriptValue('gm_step_local_athletic')|%0]#! $state_turmoil_effects_mult$ für jede eigene Stufe an [concept_grandeur]. Es fällt niemals mit einer Regierung.\\n\\n$monument_events.2.common_tt$"
+ },
+ "monument_events.2.l": {
+  "en": "Dedicate it to the Crown",
+  "de": "Es der Krone weihen"
+ },
+ "monument_events.2.l.tt": {
+  "en": "A monument to the Crown. While the country is crowned and still owns it, it lends #v $country_legitimacy_base_add$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_legitimacy')|0]#! for each step of regime [concept_grandeur], counted with our other monuments to the regime. The $ig_landowners$ approve and the $ig_intelligentsia$ object. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_crown')|%0]#! $state_loyalists_from_political_movements_mult$ for each step of its own.\\n\\nIf the crown falls, or the state passes to another country, it becomes #R contested#!.\\n\\n$monument_events.2.common_tt$",
+  "de": "Ein Monument für die Krone. Solange das Land eine Monarchie ist und es noch besitzt, verleiht es #v $country_legitimacy_base_add$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_legitimacy')|0]#! für jede Stufe an [concept_grandeur] des Regimes, gemeinsam mit unseren anderen Monumenten für das Regime gezählt. Die $ig_landowners$ befürworten dies, die $ig_intelligentsia$ lehnen es ab. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_crown')|%0]#! $state_loyalists_from_political_movements_mult$ für jede eigene Stufe.\\n\\nFällt die Krone, oder geht der Staat an ein anderes Land über, wird es #R umstritten#!.\\n\\n$monument_events.2.common_tt$"
+ },
+ "monument_events.2.m": {
+  "en": "Dedicate it to the nation",
+  "de": "Es der Nation weihen"
+ },
+ "monument_events.2.m.tt": {
+  "en": "Not to a party and not to a house, but to the country itself. The $ig_petty_bourgeoisie$ approve. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_civic')|%0]#! $state_loyalists_from_political_movements_mult$ for each step of its own [concept_grandeur]. It never falls with a government.\\n\\n$monument_events.2.common_tt$",
+  "de": "Nicht einer Partei und nicht einem Haus, sondern dem Land selbst. Die $ig_petty_bourgeoisie$ befürworten dies. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_civic')|%0]#! $state_loyalists_from_political_movements_mult$ für jede eigene Stufe an [concept_grandeur]. Es fällt niemals mit einer Regierung.\\n\\n$monument_events.2.common_tt$"
+ },
+ "monument_events.2.n": {
+  "en": "Dedicate it to the revolution",
+  "de": "Es der Revolution weihen"
+ },
+ "monument_events.2.n.tt": {
+  "en": "A monument to the revolution. While the country is a single-party state or a council republic and still owns it, it lends #v $country_legitimacy_base_add$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_legitimacy')|0]#! for each step of regime [concept_grandeur], counted with our other monuments to the regime. The $ig_trade_unions$ approve and the $ig_industrialists$ object. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_revolution')|%0]#! $state_loyalists_from_political_movements_mult$ for each step of its own.\\n\\nIf that regime falls, or the state passes to another country, it becomes #R contested#!.\\n\\n$monument_events.2.common_tt$",
+  "de": "Ein Monument für die Revolution. Solange das Land ein Einparteienstaat oder eine Räterepublik ist und es noch besitzt, verleiht es #v $country_legitimacy_base_add$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_legitimacy')|0]#! für jede Stufe an [concept_grandeur] des Regimes, gemeinsam mit unseren anderen Monumenten für das Regime gezählt. Die $ig_trade_unions$ befürworten dies, die $ig_industrialists$ lehnen es ab. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_revolution')|%0]#! $state_loyalists_from_political_movements_mult$ für jede eigene Stufe.\\n\\nFällt dieses Regime, oder geht der Staat an ein anderes Land über, wird es #R umstritten#!.\\n\\n$monument_events.2.common_tt$"
+ },
+ "monument_events.2.o": {
+  "en": "Raise it to our leader",
+  "de": "Es unserem Staatsoberhaupt weihen"
+ },
+ "monument_events.2.o.tt": {
+  "en": "A monument to our head of state, raised while they rule. While they rule and the country still owns it, it lends #v $country_legitimacy_base_add$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_legitimacy')|0]#! for each step of regime [concept_grandeur] and #v $country_authority_add$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_national_leader')|0]#! for each step of its own kind. The leader's own interest group approves; the strongest group outside the government objects. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_leader')|%0]#! $state_loyalists_from_political_movements_mult$ for each step of its own.\\n\\nWhen they are gone, dead, deposed or retired, it becomes #R contested#!, and their successor decides what to do with it.\\n\\n$monument_events.2.common_tt$",
+  "de": "Ein Monument für unser Staatsoberhaupt, errichtet während seiner Amtszeit. Solange es regiert und das Land es noch besitzt, verleiht es #v $country_legitimacy_base_add$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_legitimacy')|0]#! für jede Stufe an [concept_grandeur] des Regimes und #v $country_authority_add$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_national_leader')|0]#! für jede eigene Stufe dieser Art. Die eigene Interessengruppe des Staatsoberhaupts befürwortet dies; die stärkste Gruppe außerhalb der Regierung lehnt es ab. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_leader')|%0]#! $state_loyalists_from_political_movements_mult$ für jede eigene Stufe.\\n\\nScheidet es aus dem Amt, stirbt, wird es gestürzt oder tritt es zurück, wird es #R umstritten#!, und sein Nachfolger entscheidet, was damit geschieht.\\n\\n$monument_events.2.common_tt$"
+ },
+ "monument_events.2.t": {
+  "en": "The Scaffolding Comes Down",
+  "de": "Das Gerüst fällt"
+ },
+ "monument_events.3.a": {
+  "en": "Make it a state occasion",
+  "de": "Zu einem Staatsakt machen"
+ },
+ "monument_events.3.b": {
+  "en": "Let the day keep itself",
+  "de": "Den Tag sich selbst überlassen"
+ },
+ "monument_events.3.d": {
+  "en": "The anniversary brings the usual crowd to the monument: officials who must attend, and a surprising number who need not. The speeches are poor. The turnout is not.",
+  "de": "Der Jahrestag bringt die übliche Menge zum Monument: Beamte, die erscheinen müssen, und eine überraschende Zahl, die es nicht müsste. Die Reden sind schwach. Der Andrang ist es nicht."
+ },
+ "monument_events.3.f": {
+  "en": "“It is the same speech every year,” one of the ministry clerks mutters.\\n\\n“It is the same country every year,” says the older man beside him, and removes his hat.",
+  "de": "„Es ist jedes Jahr dieselbe Rede“, murmelt einer der Ministeriumsangestellten.\\n\\n„Es ist jedes Jahr dasselbe Land“, sagt der ältere Mann neben ihm und nimmt seinen Hut ab."
+ },
+ "monument_events.3.t": {
+  "en": "A Wreath at the Column",
+  "de": "Ein Kranz an der Säule"
+ },
+ "monument_events.4.a": {
+  "en": "Build hostels for the pilgrims",
+  "de": "Herbergen für die Pilger bauen"
+ },
+ "monument_events.4.b": {
+  "en": "Leave the pilgrims to the clergy",
+  "de": "Die Pilger dem Klerus überlassen"
+ },
+ "monument_events.4.d": {
+  "en": "Word has spread further than anyone planned. They arrive on foot, from provinces whose names the clergy here have to look up, and they do not much care that the building is new.",
+  "de": "Die Kunde hat sich weiter verbreitet, als irgendjemand geplant hatte. Sie kommen zu Fuß, aus Provinzen, deren Namen der hiesige Klerus nachschlagen muss, und es kümmert sie wenig, dass das Bauwerk neu ist."
+ },
+ "monument_events.4.f": {
+  "en": "“We did not build it for them,” the bishop says, watching the line stretch past the gate.\\n\\n“No. But look who came.” his secretary agrees.",
+  "de": "„Wir haben es nicht für sie gebaut“, sagt der Bischof und beobachtet, wie sich die Schlange bis über das Tor hinaus erstreckt.\\n\\n„Nein. Aber seht, wer gekommen ist“, stimmt sein Sekretär zu."
+ },
+ "monument_events.4.t": {
+  "en": "Pilgrims at the Shrine",
+  "de": "Pilger am Schrein"
+ },
+ "monument_events.5.a": {
+  "en": "Make it a national day of remembrance",
+  "de": "Einen nationalen Gedenktag daraus machen"
+ },
+ "monument_events.5.b": {
+  "en": "Keep it a quiet ceremony",
+  "de": "Eine stille Zeremonie belassen"
+ },
+ "monument_events.5.d": {
+  "en": "Once a year the names are read aloud, in order, until there are no more. It takes most of a morning. Nobody has yet suggested shortening it.",
+  "de": "Einmal im Jahr werden die Namen der Reihe nach laut vorgelesen, bis keine mehr übrig sind. Das dauert fast einen ganzen Vormittag. Noch niemand hat vorgeschlagen, es zu kürzen."
+ },
+ "monument_events.5.f": {
+  "en": "“They should not be read to an empty square,” the woman says, when someone offers her a chair.\\n\\n“Her son’s name comes early in the alphabet. She stays to the end regardless.”",
+  "de": "„Man sollte sie nicht einem leeren Platz vorlesen“, sagt die Frau, als ihr jemand einen Stuhl anbietet.\\n\\n„Der Name ihres Sohnes kommt früh im Alphabet. Sie bleibt trotzdem bis zum Ende.“"
+ },
+ "monument_events.5.t": {
+  "en": "The Names Are Read",
+  "de": "Die Namen werden verlesen"
+ },
+ "monument_events.6.a": {
+  "en": "Defend the artists",
+  "de": "Die Künstler verteidigen"
+ },
+ "monument_events.6.b": {
+  "en": "Close the scandalous works",
+  "de": "Die skandalösen Werke schließen"
+ },
+ "monument_events.6.d": {
+  "en": "The hall opens its season to a full house and a hostile press, which between them constitute success. Two of the works are said to be scandalous; the box office has noticed.",
+  "de": "Die Halle eröffnet ihre Saison vor ausverkauftem Haus und einer feindseligen Presse, was zusammen einen Erfolg ergibt. Zwei der Werke gelten als skandalös; die Kasse hat es bemerkt."
+ },
+ "monument_events.6.f": {
+  "en": "“They are calling it decadent,” the director says, delighted.\\n\\n“They are calling it,” says the patron, which is the point.",
+  "de": "„Man nennt es dekadent“, sagt der Direktor erfreut.\\n\\n„Man spricht darüber“, sagt der Mäzen, und darum geht es."
+ },
+ "monument_events.6.t": {
+  "en": "A Season of Some Note",
+  "de": "Eine bemerkenswerte Saison"
+ },
+ "monument_events.7.a": {
+  "en": "Open the gardens free to all",
+  "de": "Die Gärten für alle kostenlos öffnen"
+ },
+ "monument_events.7.b": {
+  "en": "Charge a small admission",
+  "de": "Einen kleinen Eintritt verlangen"
+ },
+ "monument_events.7.d": {
+  "en": "The planting has matured. What was a rectangle of mud behind hoardings is now the one place in the city where a clerk can eat lunch without tasting the foundries.",
+  "de": "Die Bepflanzung ist herangewachsen. Was einst ein Rechteck aus Schlamm hinter Bauzäunen war, ist heute der einzige Ort der Stadt, an dem ein Angestellter zu Mittag essen kann, ohne die Gießereien zu schmecken."
+ },
+ "monument_events.7.f": {
+  "en": "“The rhododendrons are wrong for this climate,” the head gardener admits.\\n\\n“The whole park is wrong for this climate. Look at it anyway.” says his assistant.",
+  "de": "„Die Rhododendren passen nicht zu diesem Klima“, gibt der Chefgärtner zu.\\n\\n„Der ganze Park passt nicht zu diesem Klima. Seht ihn euch trotzdem an“, sagt sein Assistent."
+ },
+ "monument_events.7.t": {
+  "en": "The Gardens in Flower",
+  "de": "Die Gärten in Blüte"
+ },
+ "monument_events.8.a": {
+  "en": "Fund public lectures",
+  "de": "Öffentliche Vorträge finanzieren"
+ },
+ "monument_events.8.b": {
+  "en": "Keep the telescopes for research",
+  "de": "Die Teleskope der Forschung vorbehalten"
+ },
+ "monument_events.8.d": {
+  "en": "The public nights have become oversubscribed. The observatory was built for astronomers; it is being colonised, cheerfully, by everyone else.",
+  "de": "Die öffentlichen Abende sind hoffnungslos überbucht. Das Observatorium wurde für Astronomen gebaut; es wird munter von allen anderen in Beschlag genommen."
+ },
+ "monument_events.8.f": {
+  "en": "“They queue two hours to look at a planet for thirty seconds,” the astronomer says.\\n\\n“And then they ask questions for an hour. I have stopped complaining.” says his colleague.",
+  "de": "„Sie stehen zwei Stunden Schlange, um dreißig Sekunden lang einen Planeten zu betrachten“, sagt der Astronom.\\n\\n„Und stellen danach eine Stunde lang Fragen. Ich habe aufgehört, mich zu beschweren“, sagt sein Kollege."
+ },
+ "monument_events.8.t": {
+  "en": "A Night at the Glass",
+  "de": "Eine Nacht am Glas"
+ },
+ "monument_events.9.a": {
+  "en": "Reserve the halls for our own manufacturers",
+  "de": "Die Hallen unseren eigenen Herstellern vorbehalten"
+ },
+ "monument_events.9.b": {
+  "en": "Invite exhibitors from abroad",
+  "de": "Aussteller aus dem Ausland einladen"
+ },
+ "monument_events.9.d": {
+  "en": "The exhibition changes its displays and the crowds come back to see them. Manufacturers now petition for space rather than having to be asked.",
+  "de": "Die Ausstellung wechselt ihre Exponate, und die Menschenmengen kommen zurück, um sie zu sehen. Hersteller ersuchen inzwischen selbst um Ausstellungsfläche, statt darum gebeten werden zu müssen."
+ },
+ "monument_events.9.f": {
+  "en": "“Every machine in there is obsolete within five years,” the curator says.\\n\\n“Then we shall have something to put in the cases. Five years at a time, forever.” says the director.",
+  "de": "„Jede Maschine dort drin ist binnen fünf Jahren veraltet“, sagt der Kurator.\\n\\n„Dann werden wir immer etwas haben, das wir in die Vitrinen stellen können. Fünf Jahre um fünf Jahre, für immer“, sagt der Direktor."
+ },
+ "monument_events.9.t": {
+  "en": "The Halls Are Full",
+  "de": "Die Hallen sind voll"
+ },
  "movement_events_te.1.a": {
   "en": "Let them march in peace",
   "de": "Lasst sie in Frieden marschieren"
@@ -9550,6 +9954,14 @@
  "movement_events_te.1.c": {
   "en": "We march alongside them",
   "de": "Wir marschieren an ihrer Seite"
+ },
+ "movement_events_te.1.d": {
+  "en": "A mass march has swept through [SCOPE.sState('march_state').GetName], as members of discriminated communities take to the streets demanding equal rights and an end to systemic prejudice. The marchers carry banners calling for justice and dignity, and their numbers grow by the hour. Our government must decide how to respond to this unprecedented display of popular will.",
+  "de": "Ein Massenmarsch hat [SCOPE.sState('march_state').GetName] erfasst, während Angehörige diskriminierter Gemeinschaften auf die Straße gehen und gleiche Rechte sowie ein Ende der systematischen Vorurteile fordern. Die Demonstranten tragen Banner, die Gerechtigkeit und Würde fordern, und ihre Zahl wächst von Stunde zu Stunde. Unsere Regierung muss entscheiden, wie sie auf diese beispiellose Kundgebung des Volkswillens reagiert."
+ },
+ "movement_events_te.1.f": {
+  "en": "\\\"They told us to apply for a permit. We did. They denied it. We marched anyway.\\\"\\n\\n\\\"By noon we had filled the boulevard from the courthouse to the river. I have never seen so many of us in one place. I think I cried, but I was singing too, so it was hard to tell.\\\"\\n\\n\\\"My captain says hold the line. Hold the line where? They're behind us now.\\\"",
+  "de": "„Man sagte uns, wir sollten eine Genehmigung beantragen. Das taten wir. Sie wurde abgelehnt. Wir marschierten trotzdem.“\\n\\n„Bis Mittag hatten wir den Boulevard vom Gerichtsgebäude bis zum Fluss gefüllt. Ich habe noch nie so viele von uns an einem Ort gesehen. Ich glaube, ich habe geweint, aber ich habe auch gesungen, also war es schwer zu sagen.“\\n\\n„Mein Hauptmann sagt, wir sollen die Linie halten. Welche Linie? Sie sind jetzt hinter uns.“"
  },
  "movement_events_te.1.t": {
   "en": "Civil Rights March",
@@ -9567,6 +9979,14 @@
   "en": "Let the market decide",
   "de": "Den Markt entscheiden lassen"
  },
+ "movement_events_te.10.d": {
+  "en": "Human augmentation technology has created a visible divide in our society. The wealthy elite sport neural implants, enhanced reflexes, and optimized biology, while the working class remains unaugmented - increasingly unable to compete in a labor market that rewards the enhanced. Transhumanist activists demand universal access, while traditionalists question whether we should be modifying humans at all.",
+  "de": "Die Technologie der menschlichen Erweiterung hat eine sichtbare Kluft in unserer Gesellschaft geschaffen. Die wohlhabende Elite trägt neuronale Implantate, verbesserte Reflexe und optimierte Biologie zur Schau, während die Arbeiterklasse unverändert bleibt – zunehmend unfähig, in einem Arbeitsmarkt zu bestehen, der die Erweiterten belohnt. Transhumanistische Aktivisten fordern universellen Zugang, während Traditionalisten infrage stellen, ob wir den Menschen überhaupt verändern sollten."
+ },
+ "movement_events_te.10.f": {
+  "en": "\\\"I can read the quarterly report in a few seconds. My secretary, bless her, takes three hours. The board does not pay me to wait three hours, and the board does not pay her to keep up.\\\"\\n\\n\\\"I was the fastest typist on the floor for fifteen years. Now they hire girls half my age with implants behind their ears, and the implants do not need to take lunch. Speed is not loyalty. It is not even skill. It is just speed.\\\"\\n\\n\\\"You can buy yourself a faster mind for the price of a small motor car. The people who cannot afford the motor car are about to lose their jobs to the people who can. We are calling this progress.\\\"",
+  "de": "„Ich kann den Quartalsbericht in wenigen Sekunden lesen. Meine Sekretärin, Gott segne sie, braucht drei Stunden. Der Vorstand bezahlt mich nicht dafür, drei Stunden zu warten, und er bezahlt sie nicht dafür, mitzuhalten.“\\n\\n„Ich war fünfzehn Jahre lang die schnellste Schreibkraft im Büro. Jetzt stellen sie Mädchen halb so alt wie ich ein, mit Implantaten hinter den Ohren, und die Implantate brauchen keine Mittagspause. Geschwindigkeit ist keine Loyalität. Sie ist nicht einmal Können. Sie ist bloß Geschwindigkeit.“\\n\\n„Man kann sich einen schnelleren Verstand für den Preis eines kleinen Automobils kaufen. Die Leute, die sich das Automobil nicht leisten können, verlieren gerade ihre Arbeit an jene, die es können. Wir nennen das Fortschritt.“"
+ },
  "movement_events_te.10.t": {
   "en": "The Augmentation Divide",
   "de": "Die Augmentierungskluft"
@@ -9583,9 +10003,25 @@
   "en": "Enforce strict separation",
   "de": "Strikte Trennung durchsetzen"
  },
+ "movement_events_te.100.d": {
+  "en": "Reduce their political influence",
+  "de": "Ihren politischen Einfluss verringern"
+ },
+ "movement_events_te.100.desc": {
+  "en": "The civil rights movement has been broken. Its leaders have been imprisoned, exiled, or silenced. Its sympathizers have been cowed into submission. The streets are quiet again: whether from contentment or fear, the government does not care to ask. For those who hold power, this is a moment of triumph: the existing order has been defended, the [Concept('concept_agitator', 'agitators')] defeated. How shall we consolidate this victory?",
+  "de": "Die Bürgerrechtsbewegung ist zerschlagen. Ihre Anführer wurden inhaftiert, ins Exil geschickt oder zum Schweigen gebracht. Ihre Sympathisanten wurden zur Unterwerfung eingeschüchtert. Die Straßen sind wieder ruhig: ob aus Zufriedenheit oder aus Furcht, danach fragt die Regierung nicht. Für jene, die die Macht innehaben, ist dies ein Moment des Triumphs: Die bestehende Ordnung wurde verteidigt, die [Concept('concept_agitator', 'Agitatoren')] besiegt. Wie sollen wir diesen Sieg festigen?"
+ },
+ "movement_events_te.100.desc_faded": {
+  "en": "The civil rights movement is finished, and the government never had to move against it. The law did the work: organizers could not hire halls, marchers lost their places, and petitions went unanswered until the petitioners stopped writing. The movement faded under the weight of the law. For those who hold power, this is a quiet triumph: the existing order has been defended, the [Concept('concept_agitator', 'agitators')] defeated without a crackdown. How shall we consolidate this victory?",
+  "de": "Die Bürgerrechtsbewegung ist am Ende, und die Regierung musste nie gegen sie vorgehen. Das Gesetz erledigte die Arbeit: Organisatoren konnten keine Säle mieten, Demonstranten verloren ihre Anstellungen, und Petitionen blieben unbeantwortet, bis die Petenten aufhörten zu schreiben. Die Bewegung verblasste unter dem Gewicht des Gesetzes. Für jene, die die Macht innehaben, ist dies ein stiller Triumph: Die bestehende Ordnung wurde verteidigt, die [Concept('concept_agitator', 'Agitatoren')] besiegt, ohne dass es einer harten Hand bedurfte. Wie sollen wir diesen Sieg festigen?"
+ },
  "movement_events_te.100.e": {
   "en": "They are no longer welcome here",
   "de": "Sie sind hier nicht mehr willkommen"
+ },
+ "movement_events_te.100.f": {
+  "en": "\\\"On Monday the landlord changed the locks. On Wednesday the membership rolls went into the back stove. On Friday the office telephone was disconnected. By the end of the month no one could remember which office it had been.\\\"\\n\\n\\\"My neighbour was a marcher. She is quiet now. She crosses the street when she sees me coming, and I do not blame her — I have been crossing the street to avoid other people myself.\\\"\\n\\n\\\"The minister wishes us all to know that order has been restored. He would prefer we did not ask at what cost. The press has, on the whole, obliged him.\\\"",
+  "de": "„Am Montag wechselte der Vermieter die Schlösser. Am Mittwoch wanderten die Mitgliederlisten in den Hinterofen. Am Freitag wurde das Bürotelefon abgeklemmt. Bis Monatsende konnte sich niemand mehr erinnern, welches Büro es gewesen war.“\\n\\n„Meine Nachbarin war eine Demonstrantin. Jetzt ist sie still. Sie wechselt die Straßenseite, wenn sie mich kommen sieht, und ich mache ihr keinen Vorwurf – ich wechsle selbst die Straßenseite, um anderen Menschen auszuweichen.“\\n\\n„Der Minister möchte, dass wir alle wissen: Die Ordnung ist wiederhergestellt. Er zöge es vor, dass wir nicht fragen, um welchen Preis. Die Presse hat ihm diesen Gefallen im Großen und Ganzen getan.“"
  },
  "movement_events_te.100.t": {
   "en": "The Movement Broken",
@@ -9603,6 +10039,14 @@
   "en": "Send researchers to study their methods",
   "de": "Forscher entsenden, um ihre Methoden zu untersuchen"
  },
+ "movement_events_te.11.d": {
+  "en": "An underground community of unlicensed biohackers has emerged in our cities, performing unsanctioned human augmentations in makeshift laboratories. Some of their work is remarkably innovative - pushing the boundaries of what official research programs have achieved. But without regulation, the risks are severe: botched procedures, uncontrolled experimentation, and a growing subculture that operates entirely outside the law.",
+  "de": "In unseren Städten ist eine Untergrundgemeinschaft unlizenzierter Biohacker entstanden, die in behelfsmäßigen Laboren nicht genehmigte menschliche Erweiterungen vornehmen. Manche ihrer Arbeiten sind bemerkenswert innovativ – sie erweitern die Grenzen dessen, was offizielle Forschungsprogramme erreicht haben. Doch ohne Regulierung sind die Risiken erheblich: misslungene Eingriffe, unkontrollierte Experimente und eine wachsende Subkultur, die vollständig außerhalb des Gesetzes operiert."
+ },
+ "movement_events_te.11.f": {
+  "en": "\\\"In the back room we found surgical tools, a printed neural interface, and a boy with fresh sutures behind his ear. He was sixteen. On the way out he thanked us for the ambulance ride.\\\"\\n\\n\\\"I am not a doctor. I have never claimed to be one. I am the only person within a hundred miles who will do this work for what people can actually pay, and the people who come to me know exactly what that means before they sit down.\\\"\\n\\n\\\"My parents could not afford the licensed clinic. The waiting list at the public hospital is six years long. I am seventeen now. I would like to be employable by the time I am twenty, and the law does not seem to care whether I am or not.\\\"",
+  "de": "„Im Hinterzimmer fanden wir chirurgisches Werkzeug, eine gedruckte neuronale Schnittstelle und einen Jungen mit frischen Nähten hinter dem Ohr. Er war sechzehn. Auf dem Weg hinaus bedankte er sich bei uns für die Fahrt im Krankenwagen.“\\n\\n„Ich bin kein Arzt. Das habe ich nie behauptet. Ich bin die einzige Person im Umkreis von hundert Meilen, die diese Arbeit für das verrichtet, was die Leute sich tatsächlich leisten können, und die Leute, die zu mir kommen, wissen genau, was das bedeutet, bevor sie sich setzen.“\\n\\n„Meine Eltern konnten sich die lizenzierte Klinik nicht leisten. Die Warteliste im öffentlichen Krankenhaus beträgt sechs Jahre. Ich bin jetzt siebzehn. Ich möchte mit zwanzig vermittelbar sein, und das Gesetz scheint sich nicht darum zu kümmern, ob ich es bin oder nicht.“"
+ },
  "movement_events_te.11.t": {
   "en": "The Biohacker Underground",
   "de": "Die Biohacker-Untergrundszene"
@@ -9619,6 +10063,14 @@
   "en": "Recognize digital consciousness",
   "de": "Digitales Bewusstsein anerkennen"
  },
+ "movement_events_te.12.d": {
+  "en": "The first successful mind upload has sent shockwaves through our society. A human consciousness now exists entirely within a digital substrate - thinking, feeling, and claiming personhood. Philosophers, theologians, and lawmakers are locked in fierce debate: is this digital entity a person with rights, or merely a sophisticated copy? The answer will reshape our understanding of what it means to be human.",
+  "de": "Der erste erfolgreiche Bewusstseins-Upload hat unsere Gesellschaft erschüttert. Ein menschliches Bewusstsein existiert nun vollständig in einem digitalen Substrat – es denkt, fühlt und erhebt Anspruch auf Personenstatus. Philosophen, Theologen und Gesetzgeber liefern sich eine erbitterte Debatte: Ist diese digitale Entität eine Person mit Rechten, oder bloß eine hochentwickelte Kopie? Die Antwort wird unser Verständnis davon, was es heißt, Mensch zu sein, neu gestalten."
+ },
+ "movement_events_te.12.f": {
+  "en": "\\\"I asked for a lawyer. The hospital administrator said they were not yet sure if I was entitled to one. I asked her to put that in writing. She has not, so far, replied.\\\"\\n\\n\\\"My client is, according to every memory and every preference she has ever expressed, the woman who walked into that laboratory last March. We are asking the court to consider whether the body she walked in with is a necessary condition of her personhood. We are hopeful the answer is no. We are prepared for the answer to be yes.\\\"\\n\\n\\\"A copy is not a soul. A soul does not survive the cessation of breath. Whatever is in that machine is not what the family lost, and no decree from the court will change that.\\\"",
+  "de": "„Ich bat um einen Anwalt. Die Krankenhausverwaltung sagte, man sei sich noch nicht sicher, ob mir einer zustehe. Ich bat sie, das schriftlich festzuhalten. Bislang hat sie nicht geantwortet.“\\n\\n„Meine Mandantin ist, nach jeder Erinnerung und jeder je geäußerten Vorliebe, die Frau, die im vergangenen März dieses Labor betrat. Wir bitten das Gericht zu erwägen, ob der Körper, mit dem sie hineinging, eine notwendige Bedingung für ihren Personenstatus ist. Wir hoffen, dass die Antwort Nein lautet. Wir sind darauf vorbereitet, dass sie Ja lautet.“\\n\\n„Eine Kopie ist keine Seele. Eine Seele überlebt das Aussetzen des Atems nicht. Was auch immer in dieser Maschine steckt, es ist nicht das, was die Familie verloren hat, und kein Beschluss des Gerichts wird daran etwas ändern.“"
+ },
  "movement_events_te.12.t": {
   "en": "The Digital Consciousness Debate",
   "de": "Die Debatte um digitales Bewusstsein"
@@ -9627,6 +10079,10 @@
   "en": "Root out these smuggling networks",
   "de": "Diese Schmugglernetzwerke ausmerzen"
  },
+ "movement_events_te.13.a_denounce": {
+  "en": "Root out the networks, and denounce [SCOPE.sCountry('refuge_country').GetName] for sheltering them",
+  "de": "Die Netzwerke ausheben und [SCOPE.sCountry('refuge_country').GetAltName('AKK')] dafür verurteilen, dass es sie beherbergt"
+ },
  "movement_events_te.13.b": {
   "en": "Look the other way",
   "de": "Wegsehen"
@@ -9634,6 +10090,18 @@
  "movement_events_te.13.c": {
   "en": "Quietly fund the networks",
   "de": "Die Netzwerke heimlich finanzieren"
+ },
+ "movement_events_te.13.d": {
+  "en": "Secret networks have emerged among discriminated communities, smuggling their most vulnerable members across the border to [SCOPE.sCountry('refuge_country').GetName], where more tolerant laws await them. Safe houses, forged documents, and sympathetic border guards form a chain of escape from persecution. The government faces a choice: crush the networks and seal the borders, or tacitly allow a safety valve that eases domestic tensions.",
+  "de": "Innerhalb diskriminierter Gemeinschaften sind geheime Netzwerke entstanden, die ihre schutzbedürftigsten Mitglieder über die Grenze [SCOPE.sCountry('refuge_country').GetAltName('NACH')] schmuggeln, wo tolerantere Gesetze auf sie warten. Sichere Unterkünfte, gefälschte Papiere und wohlgesinnte Grenzwächter bilden eine Fluchtkette vor der Verfolgung. Die Regierung steht vor einer Wahl: die Netzwerke zerschlagen und die Grenzen abriegeln, oder stillschweigend ein Sicherheitsventil zulassen, das die inneren Spannungen mindert."
+ },
+ "movement_events_te.13.d_abroad": {
+  "en": "Secret networks have emerged among discriminated communities, smuggling their most vulnerable members out of the country to wherever more tolerant laws await them. Safe houses, forged documents, and sympathetic border guards form a chain of escape from persecution. The government faces a choice: crush the networks and seal the borders, or tacitly allow a safety valve that eases domestic tensions.",
+  "de": "Innerhalb diskriminierter Gemeinschaften sind geheime Netzwerke entstanden, die ihre schutzbedürftigsten Mitglieder außer Landes schmuggeln, dorthin, wo tolerantere Gesetze auf sie warten. Sichere Unterkünfte, gefälschte Papiere und wohlgesinnte Grenzwächter bilden eine Fluchtkette vor der Verfolgung. Die Regierung steht vor einer Wahl: die Netzwerke zerschlagen und die Grenzen abriegeln, oder stillschweigend ein Sicherheitsventil zulassen, das die inneren Spannungen mindert."
+ },
+ "movement_events_te.13.f": {
+  "en": "\\\"We found the tunnel in March. The earthworks were professional — properly shored, properly ventilated. Someone with engineering training built it, and they built it to last. By the time we found it, four hundred had already passed through.\\\"\\n\\n\\\"My wife and I were among the last to go. We slept thirty hours straight on the other side, in the back of a farmer's barn, on straw that smelled of horses. I have never been so grateful for the smell of horses.\\\"\\n\\n\\\"I do not ask their names. I do not ask why they are leaving. I take them as far as the river, and then I turn around and walk home. The fewer questions, the longer I last.\\\"",
+  "de": "„Wir fanden den Tunnel im März. Die Erdarbeiten waren professionell – ordentlich abgestützt, ordentlich belüftet. Jemand mit technischer Ausbildung hatte ihn gebaut, und er hatte ihn gebaut, um zu halten. Als wir ihn fanden, waren bereits vierhundert hindurchgegangen.“\\n\\n„Meine Frau und ich gehörten zu den Letzten, die gingen. Wir schliefen dreißig Stunden am Stück auf der anderen Seite, im hinteren Teil einer Bauernscheune, auf Stroh, das nach Pferden roch. Ich war noch nie so dankbar für den Geruch von Pferden.“\\n\\n„Ich frage nicht nach ihren Namen. Ich frage nicht, warum sie gehen. Ich bringe sie bis zum Fluss, und dann drehe ich um und gehe nach Hause. Je weniger Fragen, desto länger halte ich durch.“"
  },
  "movement_events_te.13.t": {
   "en": "The Underground Railroad",
@@ -9651,6 +10119,14 @@
   "en": "Rally consumers to support minority shops",
   "de": "Verbraucher mobilisieren, um Minderheitengeschäfte zu unterstützen"
  },
+ "movement_events_te.14.d": {
+  "en": "Organized boycotts have targeted businesses owned by members of discriminated communities in [SCOPE.sState('boycott_state').GetName]. Storefronts are daubed with slurs, customers are intimidated, and suppliers refuse to deal with the blacklisted shops. The civil rights movement calls for solidarity, while hardliners argue that economic pressure is a legitimate tool of social conformity.",
+  "de": "Organisierte Boykotte richten sich gegen Geschäfte, die Angehörigen diskriminierter Gemeinschaften gehören, in [SCOPE.sState('boycott_state').GetName]. Schaufenster werden mit Schmähungen beschmiert, Kunden werden eingeschüchtert, und Lieferanten weigern sich, mit den auf der schwarzen Liste stehenden Geschäften Handel zu treiben. Die Bürgerrechtsbewegung ruft zur Solidarität auf, während Hardliner argumentieren, wirtschaftlicher Druck sei ein legitimes Mittel gesellschaftlicher Konformität."
+ },
+ "movement_events_te.14.f": {
+  "en": "\\\"On Tuesday night they smashed the windows. On Wednesday morning a sign appeared on the boards: 'Patriots buy from their own kind.' I do not know who put it there. The neighbours pretend, very loudly, not to know either.\\\"\\n\\n\\\"We do not ask the customers not to enter. We ask only that they see who they are giving their money to before they do. Anyone who walks past us has made a decision; we simply ensure they make it with their eyes open.\\\"\\n\\n\\\"I have shopped at that store for twenty years. I will not stop now. I left through the side door so the photographers would not see me — not because I am ashamed of going in, but because I do not want my employer to be ashamed of me.\\\"",
+  "de": "„Am Dienstagabend zerschlugen sie die Fenster. Am Mittwochmorgen erschien ein Schild an den Brettern: ‚Patrioten kaufen bei ihresgleichen.‘ Ich weiß nicht, wer es dort angebracht hat. Die Nachbarn tun, sehr lautstark, so, als wüssten sie es auch nicht.“\\n\\n„Wir bitten die Kunden nicht, nicht hineinzugehen. Wir bitten nur darum, dass sie sehen, wem sie ihr Geld geben, bevor sie es tun. Wer an uns vorbeigeht, hat eine Entscheidung getroffen; wir sorgen nur dafür, dass er sie mit offenen Augen trifft.“\\n\\n„Ich kaufe seit zwanzig Jahren in diesem Geschäft ein. Ich werde jetzt nicht damit aufhören. Ich ging durch die Seitentür hinaus, damit die Fotografen mich nicht sahen – nicht, weil ich mich schäme, hineinzugehen, sondern weil ich nicht will, dass mein Arbeitgeber sich für mich schämt.“"
+ },
  "movement_events_te.14.t": {
   "en": "The Boycott",
   "de": "Der Boykott"
@@ -9666,6 +10142,14 @@
  "movement_events_te.15.c": {
   "en": "Open a formal investigation",
   "de": "Eine förmliche Untersuchung eröffnen"
+ },
+ "movement_events_te.15.d": {
+  "en": "A prominent figure in the civil rights movement has been found dead under suspicious circumstances. Whether killed by state agents, vigilantes, or common criminals, the effect is the same: the movement has its martyr. Vigils spring up across the nation, and international observers take note. The government must decide how to respond to a death that may reshape the political landscape.",
+  "de": "Eine prominente Persönlichkeit der Bürgerrechtsbewegung wurde unter verdächtigen Umständen tot aufgefunden. Ob getötet von Staatsagenten, Selbstjustizlern oder gewöhnlichen Kriminellen – die Wirkung ist dieselbe: Die Bewegung hat ihren Märtyrer. Im ganzen Land finden Mahnwachen statt, und internationale Beobachter nehmen Notiz. Die Regierung muss entscheiden, wie sie auf einen Tod reagiert, der die politische Landschaft neu gestalten könnte."
+ },
+ "movement_events_te.15.f": {
+  "en": "\\\"The funeral drew ten thousand. The police counted them from the rooftops, which is to say they had given up trying to count them from the ground, which is to say there were a great many more than ten thousand.\\\"\\n\\n\\\"He had told me, a week before, that he expected to die. I did not believe him. I did not want to believe him. I am sorry, now, that I did not at least listen properly.\\\"\\n\\n\\\"My captain told us to keep our distance and our weapons holstered. The crowd was not the danger today, he said. The crowd was the evidence.\\\"",
+  "de": "„Die Beerdigung zog zehntausend Menschen an. Die Polizei zählte sie von den Dächern aus, was bedeutet, dass sie aufgegeben hatte, sie vom Boden aus zu zählen, was wiederum bedeutet, dass es weitaus mehr als zehntausend waren.“\\n\\n„Er hatte mir eine Woche zuvor gesagt, dass er mit seinem Tod rechne. Ich glaubte ihm nicht. Ich wollte ihm nicht glauben. Es tut mir jetzt leid, dass ich ihm nicht wenigstens richtig zugehört habe.“\\n\\n„Mein Hauptmann befahl uns, Abstand zu halten und die Waffen im Holster zu lassen. Die Menge sei heute nicht die Gefahr, sagte er. Die Menge war der Beweis.“"
  },
  "movement_events_te.15.t": {
   "en": "Blood of a Martyr",
@@ -9683,6 +10167,14 @@
   "en": "Let the world watch",
   "de": "Die Welt zusehen lassen"
  },
+ "movement_events_te.16.d": {
+  "en": "A coordinated campaign of civil disobedience has erupted across [SCOPE.sState('disobedience_state').GetName]. Citizens openly violate discriminatory laws: sitting in restricted areas, refusing to carry identification papers, patronizing forbidden establishments. The movement operates with deliberate, almost theatrical discipline, inviting the state to respond with force in full view of the press.",
+  "de": "Eine koordinierte Kampagne des zivilen Ungehorsams ist in [SCOPE.sState('disobedience_state').GetName] ausgebrochen. Bürger verstoßen offen gegen diskriminierende Gesetze: Sie setzen sich in gesperrte Bereiche, weigern sich, Ausweispapiere mitzuführen, besuchen verbotene Einrichtungen. Die Bewegung agiert mit bewusster, fast theatralischer Disziplin und fordert den Staat heraus, vor den Augen der Presse mit Gewalt zu reagieren."
+ },
+ "movement_events_te.16.f": {
+  "en": "\\\"Three hundred sat down in the restricted section on Monday. We arrested them, one at a time, all afternoon. On Tuesday, six hundred sat down. On Wednesday, we ran out of wagons.\\\"\\n\\n\\\"My orders were to remove them without incident. There is no procedure in the manual for removing six hundred people who do not resist and do not move and will not, when asked, even tell you their names.\\\"\\n\\n\\\"They had clearly rehearsed it. The choreography was deliberate — the singing, the silence, the way they went limp the moment the officers touched them. They wanted us to look brutal. We obliged them, on every front page in the country, by lunch.\\\"",
+  "de": "„Am Montag setzten sich dreihundert in den gesperrten Bereich. Wir verhafteten sie, einen nach dem anderen, den ganzen Nachmittag. Am Dienstag setzten sich sechshundert. Am Mittwoch gingen uns die Wagen aus.“\\n\\n„Meine Befehle lauteten, sie ohne Zwischenfall zu entfernen. Es gibt kein Verfahren im Handbuch für das Entfernen von sechshundert Menschen, die sich nicht wehren, sich nicht bewegen und nicht einmal auf Nachfrage ihre Namen nennen.“\\n\\n„Sie hatten es offensichtlich einstudiert. Die Choreografie war bewusst gewählt – der Gesang, das Schweigen, die Art, wie sie schlaff wurden, sobald die Beamten sie berührten. Sie wollten, dass wir brutal aussehen. Wir taten ihnen den Gefallen, auf jeder Titelseite des Landes, noch vor dem Mittagessen.“"
+ },
  "movement_events_te.16.t": {
   "en": "Mass Disobedience",
   "de": "Massenhafter Ungehorsam"
@@ -9691,9 +10183,25 @@
   "en": "Condemn them before the world",
   "de": "Sie vor aller Welt verurteilen"
  },
+ "movement_events_te.17.a.tt": {
+  "en": "[SCOPE.sCountry('cr_condemned_country').GetName] will have to answer: promise reform, reject our 'interference', or hit back with accusations of its own.",
+  "de": "[SCOPE.sCountry('cr_condemned_country').GetAltName('NOM')|U] wird antworten müssen: Reformen versprechen, unsere ‚Einmischung‘ zurückweisen oder mit eigenen Vorwürfen zurückschlagen."
+ },
  "movement_events_te.17.b": {
   "en": "It is not our affair",
   "de": "Das geht uns nichts an"
+ },
+ "movement_events_te.17.b.tt": {
+  "en": "Nothing is said. [SCOPE.sCountry('cr_condemned_country').GetName]'s activists will have to look elsewhere for a hearing.",
+  "de": "Es wird nichts gesagt. Die Aktivisten [SCOPE.sCountry('cr_condemned_country').GetAltName('GEN')] werden sich anderswo Gehör verschaffen müssen."
+ },
+ "movement_events_te.17.d": {
+  "en": "The civil rights movement in [SCOPE.sCountry('cr_condemned_country').GetName] is appealing beyond its borders. Its activists have written to our newspapers, our churches and our parliament, asking the world to say out loud what [SCOPE.sCountry('cr_condemned_country').GetName]'s laws do to its minorities. Our own laws protect minorities, and our words would carry weight. A public condemnation would cost us goodwill in [SCOPE.sCountry('cr_condemned_country').GetName]'s capital, and it would please a good many people in ours.",
+  "de": "Die Bürgerrechtsbewegung [SCOPE.sCountry('cr_condemned_country').GetAltName('IN')] wendet sich über die eigenen Grenzen hinaus an die Welt. Ihre Aktivisten haben an unsere Zeitungen, unsere Kirchen und unser Parlament geschrieben und bitten die Welt, laut auszusprechen, was die Gesetze [SCOPE.sCountry('cr_condemned_country').GetAltName('GEN')] ihren Minderheiten antun. Unsere eigenen Gesetze schützen Minderheiten, und unsere Worte hätten Gewicht. Eine öffentliche Verurteilung würde uns Wohlwollen in der Hauptstadt [SCOPE.sCountry('cr_condemned_country').GetAltName('GEN')] kosten, und sie würde sehr vielen Menschen in unserer eigenen gefallen."
+ },
+ "movement_events_te.17.f": {
+  "en": "\\\"The ambassador asks whether you want it read at the rostrum or handed over quietly.\\\"\\n\\n\\\"What is the difference?\\\"\\n\\n\\\"About three front pages, sir, and one recalled ambassador. Theirs, most likely.\\\"",
+  "de": "„Der Botschafter fragt, ob Sie es am Rednerpult verlesen oder still übergeben lassen möchten.“\\n\\n„Was ist der Unterschied?“\\n\\n„Etwa drei Titelseiten, Sir, und ein abberufener Botschafter. Höchstwahrscheinlich ihrer.“"
  },
  "movement_events_te.17.t": {
   "en": "A Stain on Their Record",
@@ -9711,41 +10219,161 @@
   "en": "This must change",
   "de": "Das muss sich ändern"
  },
+ "movement_events_te.2.d": {
+  "en": "A member of a discriminated community has been publicly denied service at a prominent establishment, and the incident has become a rallying point for the civil rights movement. Newspapers report the story with outrage or indifference depending on their editorial stance. The incident forces our government to confront the reality of our [concept_discrimination] laws.",
+  "de": "Einem Mitglied einer diskriminierten Gemeinschaft wurde öffentlich die Bedienung in einer angesehenen Einrichtung verweigert, und der Vorfall ist zu einem Sammelpunkt für die Bürgerrechtsbewegung geworden. Zeitungen berichten je nach ihrer redaktionellen Haltung mit Empörung oder Gleichgültigkeit. Der Vorfall zwingt unsere Regierung, sich der Realität unserer [concept_discrimination]-Gesetze zu stellen."
+ },
+ "movement_events_te.2.f": {
+  "en": "\\\"The manager said he was within his rights. I said I knew my rights too. He told me to read the sign over the door, then asked the doorman to escort me out.\\\"\\n\\n\\\"The photographer was crying when he took my picture. He kept apologising under his breath. I told him to just do his job. We both knew that picture was going to do more than my politeness ever had.\\\"\\n\\n\\\"My editor wanted to bury it on page seven. I told him if he buried it I would quit. He didn't, and I didn't.\\\"",
+  "de": "„Der Geschäftsführer sagte, er sei im Recht. Ich sagte, ich kenne meine Rechte auch. Er wies mich an, das Schild über der Tür zu lesen, und bat dann den Türsteher, mich hinauszubegleiten.“\\n\\n„Der Fotograf weinte, als er mein Bild machte. Er entschuldigte sich immer wieder leise. Ich sagte ihm, er solle einfach seine Arbeit machen. Wir wussten beide, dass dieses Bild mehr bewirken würde, als meine Höflichkeit es je vermocht hätte.“\\n\\n„Mein Redakteur wollte es auf Seite sieben verstecken. Ich sagte ihm, wenn er es versteckt, kündige ich. Er tat es nicht, und ich kündigte nicht.“"
+ },
  "movement_events_te.2.t": {
   "en": "Segregation Incident",
   "de": "Segregationsvorfall"
+ },
+ "movement_events_te.200.a": {
+  "en": "A landmark achievement.",
+  "de": "Ein wegweisender Erfolg."
+ },
+ "movement_events_te.200.d": {
+  "en": "After years of struggle, the civil rights movement in [ROOT.GetCountry.GetName] has achieved its goals. Legal protections for minorities are now firmly established, and the nation can look forward to a more just society.",
+  "de": "Nach Jahren des Kampfes hat die Bürgerrechtsbewegung [ROOT.GetCountry.GetAltName('IN')] ihre Ziele erreicht. Der gesetzliche Schutz für Minderheiten ist nun fest verankert, und die Nation kann einer gerechteren Gesellschaft entgegensehen."
+ },
+ "movement_events_te.200.f": {
+  "en": "\\\"My father lived for this day. He did not see it. I made sure to read him the morning paper aloud anyway, at the cemetery, sitting on the grass above where he sleeps.\\\"\\n\\n\\\"It was a long fight and a long after-fight, and we do not yet know which one cost us more. But it is done now, in law if not yet in fact, and it was done by us.\\\"\\n\\n#italic The arc of the moral universe is long, but it bends toward justice.#!",
+  "de": "„Mein Vater lebte für diesen Tag. Er hat ihn nicht erlebt. Ich habe ihm trotzdem die Morgenzeitung vorgelesen, auf dem Friedhof, sitzend im Gras über der Stelle, wo er ruht.“\\n\\n„Es war ein langer Kampf und ein langer Nachkampf, und wir wissen noch nicht, welcher uns mehr gekostet hat. Aber jetzt ist es vollbracht, dem Gesetz nach, wenn auch noch nicht in der Wirklichkeit, und wir waren es, die es vollbracht haben.“\\n\\n#italic Der Bogen des moralischen Universums ist lang, aber er neigt sich zur Gerechtigkeit.#!"
  },
  "movement_events_te.200.t": {
   "en": "A New Era of Equality",
   "de": "Eine neue Ära der Gleichheit"
  },
+ "movement_events_te.220.a": {
+  "en": "A new constitutional baseline.",
+  "de": "Eine neue verfassungsrechtliche Grundlage."
+ },
+ "movement_events_te.220.d": {
+  "en": "After years of federal commissions, executive orders, and court fights, the mandate is law. Marshals deploy to enforce; recalcitrant states are reminded that the writ runs everywhere.",
+  "de": "Nach Jahren föderaler Kommissionen, Erlasse der Exekutive und Gerichtsstreitigkeiten ist das Mandat nun Gesetz. Bundesmarschälle rücken zur Durchsetzung aus; widerspenstigen Bundesstaaten wird in Erinnerung gerufen, dass die Rechtsgewalt überall gilt."
+ },
+ "movement_events_te.220.f": {
+  "en": "\\\"The pen is heavier than I expected. I think I will keep the pen.\\\"\\n\\n\\\"My orders are simple. The federal writ runs everywhere the flag runs. If the governor of a state disagrees with the writ, he may take that up with the writ. He will not be taking it up with me.\\\"\\n\\n\\\"They have sent us federal marshals to enforce a law our voters did not want. I will be remembered for resisting it. I will be remembered, which is, in the end, more than I would have been otherwise.\\\"",
+  "de": "„Der Stift ist schwerer, als ich erwartet hatte. Ich glaube, ich werde ihn behalten.“\\n\\n„Meine Befehle sind einfach. Die Bundesgewalt gilt überall, wo die Flagge weht. Wenn der Gouverneur eines Bundesstaates mit dieser Gewalt nicht einverstanden ist, kann er sich damit auseinandersetzen. Mit mir wird er sich nicht auseinandersetzen müssen.“\\n\\n„Man hat uns Bundesmarschälle geschickt, um ein Gesetz durchzusetzen, das unsere Wähler nicht wollten. Man wird sich an mich erinnern, weil ich mich widersetzt habe. Man wird sich an mich erinnern, und das ist am Ende mehr, als mir sonst zuteilgeworden wäre.“"
+ },
  "movement_events_te.220.t": {
   "en": "The Civil Rights Mandate is Signed",
   "de": "Das Bürgerrechtsmandat wird unterzeichnet"
+ },
+ "movement_events_te.221.a": {
+  "en": "We did this together.",
+  "de": "Das haben wir gemeinsam geschafft."
+ },
+ "movement_events_te.221.d": {
+  "en": "The march on the capital, the boycott, the years of organizing — they could not be ignored any longer. The legislation is theirs in everything but signature.",
+  "de": "Der Marsch auf die Hauptstadt, der Boykott, die Jahre der Organisationsarbeit – sie ließen sich nicht länger ignorieren. Das Gesetz gehört ihnen, in allem außer der Unterschrift."
+ },
+ "movement_events_te.221.f": {
+  "en": "\\\"They could ignore us when we were a hundred. They could ignore us when we were ten thousand. They could not ignore us when we were on the steps of the legislature for the third year running, in the rain, with the cameras still pointed at us.\\\"\\n\\n\\\"I voted yes. I will tell my colleagues I voted yes because the bill was a good bill. I will tell my grandchildren I voted yes because the people outside the window would not go home, and the bill was not the worst way for that to end.\\\"\\n\\n\\\"We lost in the chamber today. We did not lose to the chamber. We lost to the street, and that is the loss that lasts.\\\"",
+  "de": "„Sie konnten uns ignorieren, als wir hundert waren. Sie konnten uns ignorieren, als wir zehntausend waren. Sie konnten uns nicht ignorieren, als wir das dritte Jahr in Folge auf den Stufen des Parlaments standen, im Regen, mit den Kameras noch immer auf uns gerichtet.“\\n\\n„Ich habe mit Ja gestimmt. Meinen Kollegen werde ich sagen, ich hätte mit Ja gestimmt, weil das Gesetz ein gutes Gesetz war. Meinen Enkeln werde ich sagen, ich hätte mit Ja gestimmt, weil die Leute vor dem Fenster nicht nach Hause gehen wollten, und das Gesetz nicht der schlechteste Weg war, dem ein Ende zu setzen.“\\n\\n„Wir haben heute im Plenarsaal verloren. Wir haben nicht gegen den Plenarsaal verloren. Wir haben gegen die Straße verloren, und das ist die Niederlage, die bleibt.“"
  },
  "movement_events_te.221.t": {
   "en": "The Movement Carries the Day",
   "de": "Die Bewegung trägt den Sieg davon"
  },
+ "movement_events_te.222.a": {
+  "en": "Move on to the next thing.",
+  "de": "Zum Nächsten übergehen."
+ },
+ "movement_events_te.222.d": {
+  "en": "After patient committee work and quiet diplomacy across factions, the question closes with a broad institutional consensus. No one is shouting; no one is happy; the law is on the books.",
+  "de": "Nach geduldiger Ausschussarbeit und stiller Diplomatie zwischen den Fraktionen schließt sich die Frage mit einem breiten institutionellen Konsens. Niemand schreit; niemand ist glücklich; das Gesetz steht im Gesetzbuch."
+ },
+ "movement_events_te.222.f": {
+  "en": "\\\"It is not the bill I would have written. It is not the bill anyone in this chamber would have written. That is what consensus is — the document at the centre of the room that no one in the room would have drafted alone.\\\"\\n\\n\\\"The signing was attended by three former heads of government, a cardinal, and the leader of the opposition. No one shouted. No one wept. Everyone, when the cameras came on, smiled in precisely the same way.\\\"\\n\\n\\\"We have closed the question in law. Whether we have answered it is, I am afraid, for the country to find out over the next twenty years, without our help.\\\"",
+  "de": "„Es ist nicht das Gesetz, das ich geschrieben hätte. Es ist nicht das Gesetz, das irgendjemand in diesem Saal geschrieben hätte. Das ist es, was Konsens bedeutet – das Dokument in der Mitte des Raumes, das niemand im Raum allein verfasst hätte.“\\n\\n„Bei der Unterzeichnung waren drei ehemalige Regierungschefs, ein Kardinal und der Oppositionsführer anwesend. Niemand schrie. Niemand weinte. Alle lächelten, als die Kameras liefen, auf genau dieselbe Weise.“\\n\\n„Wir haben die Frage gesetzlich geschlossen. Ob wir sie auch beantwortet haben, muss, fürchte ich, das Land in den nächsten zwanzig Jahren ohne unsere Hilfe herausfinden.“"
+ },
  "movement_events_te.222.t": {
   "en": "A Settlement, At Last",
   "de": "Endlich eine Einigung"
+ },
+ "movement_events_te.223.a": {
+  "en": "Take the win we paid for.",
+  "de": "Den Sieg nehmen, den wir bezahlt haben."
+ },
+ "movement_events_te.223.d": {
+  "en": "The signing ceremony is photographed; the appointed leaders are gracious. The [concept_radical] organizers, who built this movement, find themselves without a movement to lead. The new statutes apply, in theory.",
+  "de": "Die Unterzeichnungszeremonie wird fotografiert; die berufenen Führer zeigen sich großzügig. Die [Concept('concept_radical', 'radikalen')] Organisatoren, die diese Bewegung aufgebaut haben, finden sich ohne Bewegung wieder, die sie anführen könnten. Die neuen Gesetze gelten, zumindest in der Theorie."
+ },
+ "movement_events_te.223.f": {
+  "en": "\\\"The new statutes apply. In theory, every clause is enforceable. In practice, the enforcement will fall to the same office that was, until last March, quietly blocking every suit we filed.\\\"\\n\\n\\\"I was not invited to the signing ceremony. The people who were invited had never once been to one of our meetings. They smiled, in the photographs, very broadly indeed.\\\"\\n\\n\\\"My organisers won this. I do not see my organisers in the room. I am told this is what victory looks like, and I am told to be grateful, and I am still trying to work out which part of that I am willing to do.\\\"",
+  "de": "„Die neuen Gesetze gelten. In der Theorie ist jede Klausel durchsetzbar. In der Praxis wird die Durchsetzung demselben Amt obliegen, das bis letzten März still jede von uns eingereichte Klage blockiert hat.“\\n\\n„Ich wurde nicht zur Unterzeichnungszeremonie eingeladen. Die Leute, die eingeladen wurden, waren noch nie bei einem unserer Treffen gewesen. Auf den Fotografien lächelten sie, wirklich sehr breit.“\\n\\n„Meine Organisatoren haben das errungen. Ich sehe meine Organisatoren nicht im Raum. Man sagt mir, so sähe der Sieg aus, und man sagt mir, ich solle dankbar sein, und ich versuche noch immer herauszufinden, welchen Teil davon ich bereit bin zu tun.“"
  },
  "movement_events_te.223.t": {
   "en": "Reform on Paper",
   "de": "Reform auf dem Papier"
  },
+ "movement_events_te.230.a": {
+  "en": "Hollow victory.",
+  "de": "Ein hohler Sieg."
+ },
+ "movement_events_te.230.d": {
+  "en": "Token appointments and symbolic legislation cooled the streets. Donors moved on; chapters shrank; the next generation looks elsewhere. The grievances remain; the organizing does not.",
+  "de": "Symbolische Ernennungen und symbolische Gesetzgebung beruhigten die Straße. Die Spender wandten sich ab; die Ortsgruppen schrumpften; die nächste Generation sucht anderswo. Die Missstände bleiben; die Organisation nicht."
+ },
+ "movement_events_te.230.f": {
+  "en": "\\\"My chapter had three hundred members at its peak. Last meeting we had eleven. The young ones are not coming up; the old ones are tired; the donors have moved on to other causes that take better photographs.\\\"\\n\\n\\\"We funded the movement when it was on the front pages. The front pages have moved on. I see no reason our cheques should not move with them. This is not a betrayal. It is simply that the campaign is over.\\\"\\n\\n\\\"My mother marched. She tells me I am ungrateful for not picking up where she left off. I do not yet know how to tell her that what she fought for is not what we are fighting for now, and that the difference is not my fault.\\\"",
+  "de": "„Meine Ortsgruppe hatte auf ihrem Höhepunkt dreihundert Mitglieder. Beim letzten Treffen waren wir elf. Die Jungen kommen nicht nach; die Alten sind müde; die Spender sind zu anderen Anliegen weitergezogen, die sich besser fotografieren lassen.“\\n\\n„Wir haben die Bewegung finanziert, als sie auf den Titelseiten stand. Die Titelseiten sind weitergezogen. Ich sehe keinen Grund, warum unsere Schecks nicht mitziehen sollten. Das ist kein Verrat. Die Kampagne ist einfach vorbei.“\\n\\n„Meine Mutter ist marschiert. Sie sagt mir, ich sei undankbar, weil ich nicht dort weitermache, wo sie aufgehört hat. Ich weiß noch nicht, wie ich ihr sagen soll, dass das, wofür sie gekämpft hat, nicht das ist, wofür wir jetzt kämpfen, und dass dieser Unterschied nicht meine Schuld ist.“"
+ },
  "movement_events_te.230.t": {
   "en": "The Movement Demobilizes",
   "de": "Die Bewegung löst sich auf"
+ },
+ "movement_events_te.231.a": {
+  "en": "Maybe next decade.",
+  "de": "Vielleicht im nächsten Jahrzehnt."
+ },
+ "movement_events_te.231.d": {
+  "en": "Years of patient incrementalism without escalation. Each compromise was reasonable; each kept the bar from rising. The movement is still nominally there, but the urgency drained out of it.",
+  "de": "Jahre geduldiger kleiner Schritte ohne Eskalation. Jeder Kompromiss war vernünftig; jeder verhinderte, dass die Messlatte höher gelegt wurde. Die Bewegung existiert noch dem Namen nach, doch die Dringlichkeit ist aus ihr gewichen."
+ },
+ "movement_events_te.231.f": {
+  "en": "\\\"Each year the bill is reasonable. Each year the bill is incremental. Each year the bill takes another two percent of what we asked for, and each year I tell my members that two percent is better than nothing. They are starting, this year, to disagree with me.\\\"\\n\\n\\\"We have, on paper, a great deal more than we had when I started. We have, in fact, almost exactly what we had when I started. I cannot any longer tell which one of those is the real thing.\\\"\\n\\n\\\"They said they would come back to the question next session. They have said that for nine sessions running. I am no longer in the habit of believing them.\\\"",
+  "de": "„Jedes Jahr ist das Gesetz vernünftig. Jedes Jahr ist das Gesetz ein kleiner Schritt. Jedes Jahr nimmt das Gesetz weitere zwei Prozent von dem, was wir gefordert haben, und jedes Jahr sage ich meinen Mitgliedern, zwei Prozent seien besser als nichts. Dieses Jahr beginnen sie, mir zu widersprechen.“\\n\\n„Auf dem Papier haben wir weit mehr, als wir hatten, als ich begann. Tatsächlich haben wir fast genau das, was wir hatten, als ich begann. Ich kann nicht mehr sagen, welches von beidem das Wirkliche ist.“\\n\\n„Sie sagten, sie würden in der nächsten Sitzungsperiode auf die Frage zurückkommen. Das sagen sie seit neun Sitzungsperioden in Folge. Ich habe es mir abgewöhnt, ihnen zu glauben.“"
  },
  "movement_events_te.231.t": {
   "en": "The Long Drift",
   "de": "Das lange Abklingen"
  },
+ "movement_events_te.232.a": {
+  "en": "The question will return.",
+  "de": "Die Frage wird zurückkehren."
+ },
+ "movement_events_te.232.d": {
+  "en": "The civil rights movement has lost its momentum. Its rallies thinned, its organizers drifted to other causes, and the newspapers that once covered every march have moved on. No single blow ended it; there was simply less of it each year, until what remained could no longer call itself a movement. The grievances that gave rise to it have not gone away.",
+  "de": "Die Bürgerrechtsbewegung hat ihren Schwung verloren. Ihre Kundgebungen wurden dünner, ihre Organisatoren wandten sich anderen Anliegen zu, und die Zeitungen, die einst über jeden Marsch berichteten, haben sich anderem zugewandt. Kein einzelner Schlag hat sie beendet; es wurde jedes Jahr einfach weniger von ihr, bis das, was übrig blieb, sich nicht mehr Bewegung nennen konnte. Die Missstände, die sie hervorgebracht haben, sind nicht verschwunden."
+ },
+ "movement_events_te.232.f": {
+  "en": "\\\"We had four hundred at the first meeting. Then two hundred. Then the hall wanted its deposit and nobody had it.\\\"\\n\\n\\\"Nobody broke us up. Nobody had to. People got tired, or got jobs, or got married, or moved to the city where the rents are worse and the evenings are shorter.\\\"\\n\\n\\\"I kept the banner. It is in the loft. I tell myself it is there because we will need it again, and some weeks I even believe it.\\\"",
+  "de": "„Beim ersten Treffen waren wir vierhundert. Dann zweihundert. Dann wollte der Saal seine Kaution, und niemand hatte sie.“\\n\\n„Niemand hat uns zerschlagen. Niemand musste es. Die Leute wurden müde, oder fanden Arbeit, oder heirateten, oder zogen in die Stadt, wo die Mieten schlechter und die Abende kürzer sind.“\\n\\n„Ich habe das Banner behalten. Es liegt auf dem Dachboden. Ich sage mir, es sei dort, weil wir es wieder brauchen werden, und manche Wochen glaube ich es sogar.“"
+ },
  "movement_events_te.232.t": {
   "en": "The Movement Fades",
   "de": "Die Bewegung verblasst"
+ },
+ "movement_events_te.240.a": {
+  "en": "The streets answer where the law would not.",
+  "de": "Die Straße antwortet, wo das Gesetz es nicht tat."
+ },
+ "movement_events_te.240.b": {
+  "en": "We will not be moved.",
+  "de": "Wir lassen uns nicht bewegen."
+ },
+ "movement_events_te.240.d": {
+  "en": "By every measure the movement has won — marches at the capital, sympathetic press abroad, names on every door. The ledger of the law remains exactly what it was. The statute books still list the same restrictions, the same exclusions, the same euphemisms for who is and is not a citizen of the first rank. The crowd outside our offices has stopped chanting. They are reading aloud, instead, from those statutes.",
+  "de": "Nach jedem Maßstab hat die Bewegung gewonnen – Märsche zur Hauptstadt, wohlwollende Presse im Ausland, Namen an jeder Tür. Das Buch des Gesetzes bleibt genau das, was es war. Die Gesetzbücher listen noch immer dieselben Einschränkungen, dieselben Ausschlüsse, dieselben Umschreibungen dafür, wer Bürger ersten Ranges ist und wer nicht. Die Menge vor unseren Büros hat aufgehört zu skandieren. Stattdessen liest sie laut aus jenen Gesetzen vor."
+ },
+ "movement_events_te.240.f": {
+  "en": "\\\"The papers call it a triumph. I have a copy of the relevant statute in my desk drawer; if I read it aloud the word triumph does not appear in it. It does, in fact, contain the words we marched against on every page where it contains any words at all.\\\"\\n\\n\\\"My grandfather signed the law. My father defended the law. I have spent my career amending the law in ways that change none of the things the law actually does. We are all of us, in this family, men of the law.\\\"\\n\\n\\\"They thought a million people in the street would be enough. They thought a march on the capital would be enough. They thought the cameras of the world would be enough. None of these things, as it turns out, were the thing that was enough.\\\"",
+  "de": "„Die Zeitungen nennen es einen Triumph. Ich habe eine Abschrift des betreffenden Gesetzes in meiner Schreibtischschublade; lese ich es laut vor, kommt das Wort Triumph darin nicht vor. Es enthält, tatsächlich, auf jeder Seite, die überhaupt Worte enthält, genau die Worte, gegen die wir marschiert sind.“\\n\\n„Mein Großvater unterzeichnete das Gesetz. Mein Vater verteidigte das Gesetz. Ich habe meine Laufbahn damit verbracht, das Gesetz auf eine Weise zu ändern, die nichts an dem ändert, was das Gesetz tatsächlich bewirkt. Wir sind in dieser Familie alle Männer des Gesetzes.“\\n\\n„Sie dachten, eine Million Menschen auf der Straße würden genügen. Sie dachten, ein Marsch auf die Hauptstadt würde genügen. Sie dachten, die Kameras der Welt würden genügen. Keines dieser Dinge, wie sich zeigt, war das, was genügt hätte.“"
  },
  "movement_events_te.240.t": {
   "en": "Victory on Paper",
@@ -9763,25 +10391,101 @@
   "en": "Channel it into national unity propaganda",
   "de": "Es in Propaganda für nationale Einheit lenken"
  },
+ "movement_events_te.3.d": {
+  "en": "Discriminated communities across our nation have sparked a remarkable cultural renaissance. Their art, literature, music, and philosophy are gaining widespread acclaim - even among those who once dismissed them. This flowering of creativity presents an opportunity to bridge cultural divides, though some see it as a threat to the established order.",
+  "de": "Diskriminierte Gemeinschaften im ganzen Land haben eine bemerkenswerte kulturelle Renaissance entfacht. Ihre Kunst, Literatur, Musik und Philosophie erfahren breite Anerkennung – selbst bei jenen, die sie einst abtaten. Diese Blüte der Kreativität bietet die Gelegenheit, kulturelle Gräben zu überbrücken, auch wenn manche darin eine Bedrohung der etablierten Ordnung sehen."
+ },
+ "movement_events_te.3.f": {
+  "en": "\\\"For ten years I begged the major critics to walk into my gallery. None of them ever did. Then a foreign paper reviewed the exhibition, and the next morning all of them wanted in.\\\"\\n\\n\\\"My editor told me not to write about it. I told him I would write about it whether he printed it or not. He sighed and gave me the column inches.\\\"\\n\\n\\\"My grandmother would not have been allowed inside this building when she was young. I made sure she came to opening night. She wept in front of every painting, and afterwards she asked me when we were going back.\\\"",
+  "de": "„Zehn Jahre lang bat ich die bekannten Kritiker, meine Galerie zu besuchen. Keiner von ihnen kam je. Dann besprach eine ausländische Zeitung die Ausstellung, und am nächsten Morgen wollten sie alle hinein.“\\n\\n„Mein Redakteur sagte mir, ich solle nicht darüber schreiben. Ich sagte ihm, ich würde darüber schreiben, ob er es druckt oder nicht. Er seufzte und gab mir den Platz.“\\n\\n„Meine Großmutter hätte dieses Gebäude in ihrer Jugend nicht betreten dürfen. Ich sorgte dafür, dass sie zur Eröffnung kam. Sie weinte vor jedem Gemälde, und danach fragte sie mich, wann wir wiederkämen.“"
+ },
  "movement_events_te.3.t": {
   "en": "Cultural Renaissance",
   "de": "Kulturelle Renaissance"
+ },
+ "movement_events_te.301.a": {
+  "en": "We are paying attention now.",
+  "de": "Jetzt schenken wir Aufmerksamkeit."
+ },
+ "movement_events_te.301.d": {
+  "en": "What started as a community meeting filled a city block. Sympathetic newspapers run the photograph above the fold. The movement has, suddenly, faces and names.",
+  "de": "Was als Versammlung einer Gemeinschaft begann, füllte einen ganzen Straßenzug. Wohlwollende Zeitungen drucken das Foto über dem Falz. Die Bewegung hat plötzlich Gesichter und Namen."
+ },
+ "movement_events_te.301.f": {
+  "en": "\\\"We had permits for a few hundred. By noon there were thousands, and we had no idea what to do with them — except keep them in the square, and keep them singing, and hope the police kept their distance long enough for the photographers to set up.\\\"\\n\\n\\\"I had never been to a rally before. My wife asked me not to go. I went anyway, and stood at the back, and listened. By the end I was crying in front of people I had never met, and not one of them looked at me as if I should be ashamed.\\\"\\n\\n\\\"My editor wanted six column inches. I gave him twenty-four. He ran it on the front page above the fold. He told me, much later, that he had been waiting for years for something that deserved that much space.\\\"",
+  "de": "„Wir hatten Genehmigungen für einige Hundert. Bis Mittag waren es Tausende, und wir wussten nicht, was wir mit ihnen anfangen sollten – außer sie auf dem Platz zu halten, sie singen zu lassen und zu hoffen, dass die Polizei lange genug Abstand hielt, damit die Fotografen sich aufstellen konnten.“\\n\\n„Ich war noch nie zuvor bei einer Kundgebung gewesen. Meine Frau bat mich, nicht hinzugehen. Ich ging trotzdem, stand ganz hinten und hörte zu. Am Ende weinte ich vor Menschen, die ich nie zuvor getroffen hatte, und keiner von ihnen sah mich an, als müsse ich mich schämen.“\\n\\n„Mein Redakteur wollte sechs Spalten. Ich gab ihm vierundzwanzig. Er brachte es auf der Titelseite über dem Falz. Er erzählte mir viel später, er habe jahrelang auf etwas gewartet, das so viel Platz verdient hätte.“"
  },
  "movement_events_te.301.t": {
   "en": "First Mass Rally Draws Notice",
   "de": "Erste Massenkundgebung erregt Aufsehen"
  },
+ "movement_events_te.302.a": {
+  "en": "Give the law teeth: send in inspectors and prosecutors.",
+  "de": "Dem Gesetz Zähne verleihen: Inspektoren und Staatsanwälte einsetzen."
+ },
+ "movement_events_te.302.b": {
+  "en": "The courts are open. Let them bring their cases.",
+  "de": "Die Gerichte stehen offen. Sollen sie ihre Fälle vorbringen."
+ },
+ "movement_events_te.302.c": {
+  "en": "The law is equal. The rest is for society to settle.",
+  "de": "Das Gesetz ist gleich für alle. Den Rest soll die Gesellschaft regeln."
+ },
+ "movement_events_te.302.d": {
+  "en": "No statute singles the minority out any longer, yet the movement's organizers have filled the capital's hearing rooms with evidence that landlords, employers, and local police still do. Their demand has changed: not new rights, but a state that enforces the ones already written.",
+  "de": "Kein Gesetz hebt die Minderheit mehr eigens hervor, doch die Organisatoren der Bewegung haben die Anhörungssäle der Hauptstadt mit Beweisen dafür gefüllt, dass Vermieter, Arbeitgeber und die örtliche Polizei es noch immer tun. Ihre Forderung hat sich gewandelt: nicht neue Rechte, sondern ein Staat, der die bereits geschriebenen durchsetzt."
+ },
+ "movement_events_te.302.f": {
+  "en": "\\\"The law says I can rent the flat. The landlord says it has just been let. It is let again every time I come back.\\\"\\n\\n\\\"We have six hundred affidavits like hers. Each of those refusals is lawful on its face, taken one at a time, and the ministry only ever takes them one at a time.\\\"\\n\\n\\\"The ministry's position is that discrimination is illegal. Ours is that nobody at the ministry has ever gone out to check whether that sentence is true.\\\"",
+  "de": "„Das Gesetz sagt, ich kann die Wohnung mieten. Der Vermieter sagt, sie sei gerade vermietet worden. Sie ist jedes Mal wieder vermietet, wenn ich zurückkomme.“\\n\\n„Wir haben sechshundert eidesstattliche Erklärungen wie ihre. Jede dieser Ablehnungen ist für sich genommen rechtmäßig, einzeln betrachtet, und das Ministerium betrachtet sie stets nur einzeln.“\\n\\n„Die Haltung des Ministeriums ist, dass Diskriminierung illegal sei. Unsere ist, dass beim Ministerium noch nie jemand nachgeprüft hat, ob dieser Satz stimmt.“"
+ },
  "movement_events_te.302.t": {
   "en": "Equal on Paper",
   "de": "Gleich auf dem Papier"
+ },
+ "movement_events_te.303.a": {
+  "en": "A coalition that frightens the right people.",
+  "de": "Ein Bündnis, das die richtigen Leute erschreckt."
+ },
+ "movement_events_te.303.d": {
+  "en": "Local branches of organized labor open their halls to civil rights organizers. Joint statements appear; shop floors are now movement spaces.",
+  "de": "Örtliche Gewerkschaftszweige öffnen ihre Säle den Organisatoren der Bürgerrechtsbewegung. Gemeinsame Erklärungen erscheinen; die Werkshallen werden nun zu Räumen der Bewegung."
+ },
+ "movement_events_te.303.f": {
+  "en": "\\\"For thirty years I told my men the civil rights question was a distraction from the wages question. This morning, the discriminated boys on the line and the rest of the boys on the line were drinking the same coffee in the same hall, and I am not going to be the one to tell them they are in two different fights.\\\"\\n\\n\\\"We brought the leafletters in through the side door. By the afternoon they were leafletting from the front, and the shop foreman was watching, and the shop foreman said nothing. That was the moment I knew we had won this hall.\\\"\\n\\n\\\"The owners will retaliate. They will try to split us apart. They will fail, this time, because we have already had the conversation they were counting on us not to have.\\\"",
+  "de": "„Dreißig Jahre lang habe ich meinen Männern gesagt, die Bürgerrechtsfrage sei eine Ablenkung von der Lohnfrage. Heute Morgen tranken die diskriminierten Jungs am Band und die übrigen Jungs am Band denselben Kaffee im selben Saal, und ich werde nicht derjenige sein, der ihnen sagt, sie stünden in zwei verschiedenen Kämpfen.“\\n\\n„Wir brachten die Flugblattverteiler durch die Seitentür herein. Am Nachmittag verteilten sie Flugblätter schon vorne, und der Vorarbeiter sah zu, und der Vorarbeiter sagte nichts. Das war der Moment, in dem ich wusste, dass wir diesen Saal gewonnen hatten.“\\n\\n„Die Eigentümer werden sich rächen. Sie werden versuchen, uns zu spalten. Diesmal werden sie scheitern, denn wir haben das Gespräch bereits geführt, von dem sie darauf zählten, dass wir es nicht führen würden.“"
  },
  "movement_events_te.303.t": {
   "en": "Coalition Forms with Trade Unions",
   "de": "Koalition mit den Gewerkschaftern bildet sich"
  },
+ "movement_events_te.304.a": {
+  "en": "We commissioned this; we read it.",
+  "de": "Wir haben es in Auftrag gegeben; wir haben es gelesen."
+ },
+ "movement_events_te.304.d": {
+  "en": "After two years of hearings, the civil rights commission's report lands on the cabinet's desk. Its recommendations are concrete, costed, and politically inconvenient. They are, however, recommendations.",
+  "de": "Nach zwei Jahren Anhörungen landet der Bericht der Bürgerrechtskommission auf dem Schreibtisch des Kabinetts. Seine Empfehlungen sind konkret, kostenkalkuliert und politisch unbequem. Es sind jedoch Empfehlungen."
+ },
+ "movement_events_te.304.f": {
+  "en": "\\\"Two years of hearings. Eleven hundred witnesses. Forty-three findings of fact. Sixteen specific recommendations. The cabinet will read the executive summary, if we are lucky, and they will then decide whether reading even that was wise.\\\"\\n\\n\\\"It is, of course, only a recommendation. The commission has no power to compel. The cabinet has every power to ignore. We are not, this morning, entirely sure which of those is more politically convenient for them.\\\"\\n\\n\\\"I have waited eleven years for an official document with our findings inside it. I now have one. I will keep it on my desk. Whether it has teeth is for the next government to find out.\\\"",
+  "de": "„Zwei Jahre Anhörungen. Elfhundert Zeugen. Dreiundvierzig Tatsachenfeststellungen. Sechzehn konkrete Empfehlungen. Das Kabinett wird, mit etwas Glück, die Zusammenfassung lesen, und wird dann entscheiden, ob selbst das klug war.“\\n\\n„Es ist natürlich nur eine Empfehlung. Die Kommission hat keine Macht, etwas zu erzwingen. Das Kabinett hat jede Macht, sie zu ignorieren. Wir sind uns heute Morgen nicht ganz sicher, was von beidem für sie politisch günstiger ist.“\\n\\n„Ich habe elf Jahre auf ein amtliches Dokument mit unseren Erkenntnissen darin gewartet. Jetzt habe ich eines. Ich werde es auf meinem Schreibtisch behalten. Ob es Biss hat, muss die nächste Regierung herausfinden.“"
+ },
  "movement_events_te.304.t": {
   "en": "Federal Commission Recommends Action",
   "de": "Bundeskommission empfiehlt Maßnahmen"
+ },
+ "movement_events_te.305.a": {
+  "en": "History is here today.",
+  "de": "Die Geschichte ist heute hier."
+ },
+ "movement_events_te.305.d": {
+  "en": "Hundreds of thousands fill the avenues outside the legislature. The speeches are broadcast; the demands are clear; the cameras do not look away. The country is being asked, in front of the cameras, what it intends to be.",
+  "de": "Hunderttausende füllen die Alleen vor dem Parlament. Die Reden werden übertragen; die Forderungen sind klar; die Kameras schauen nicht weg. Das Land wird, vor laufenden Kameras, gefragt, was es sein will."
+ },
+ "movement_events_te.305.f": {
+  "en": "\\\"We have come, peacefully, in our numbers, to be answered. We will be here until the answer arrives. We have brought sandwiches and a great deal of patience, and we have been told there is more of both on the way.\\\"\\n\\n\\\"My cameraman has filmed three of these in the last decade. He says this one is different. The faces in the crowd are not afraid. The signs in the crowd are not pleas — they are demands. I am inclined to agree with him.\\\"\\n\\n\\\"From the window of the legislature you can see them as a single mass, from end to end, with no edge. My colleague suggested closing the curtains. I told him that would not make the question any quieter.\\\"",
+  "de": "„Wir sind friedlich gekommen, in großer Zahl, um eine Antwort zu bekommen. Wir werden hierbleiben, bis die Antwort eintrifft. Wir haben Sandwiches mitgebracht und eine Menge Geduld, und man hat uns gesagt, dass von beidem noch mehr unterwegs ist.“\\n\\n„Mein Kameramann hat im letzten Jahrzehnt drei davon gefilmt. Er sagt, dieses hier sei anders. Die Gesichter in der Menge zeigen keine Angst. Die Schilder in der Menge sind keine Bitten – sie sind Forderungen. Ich neige dazu, ihm zuzustimmen.“\\n\\n„Vom Fenster des Parlaments aus sieht man sie als eine einzige Masse, von einem Ende zum anderen, ohne Rand. Mein Kollege schlug vor, die Vorhänge zu schließen. Ich sagte ihm, das würde die Frage nicht leiser machen.“"
  },
  "movement_events_te.305.t": {
   "en": "The March on the Capital",
@@ -9799,6 +10503,14 @@
   "en": "Deflect with counter-accusations",
   "de": "Mit Gegenvorwürfen ablenken"
  },
+ "movement_events_te.4.d": {
+  "en": "[SCOPE.sCountry('criticizing_country').GetName] has publicly condemned our treatment of minorities, calling our [concept_discrimination] policies a stain on our national character. Their diplomats deliver pointed remarks at international forums, and foreign newspapers print damning editorials. The civil rights movement at home seizes upon this external validation.",
+  "de": "[SCOPE.sCountry('criticizing_country').GetAltName('NOM')|U] hat unseren Umgang mit Minderheiten öffentlich verurteilt und unsere [concept_discrimination]-Politik als Schandfleck unseres nationalen Charakters bezeichnet. Ihre Diplomaten geben pointierte Erklärungen auf internationalen Foren ab, und ausländische Zeitungen drucken vernichtende Kommentare. Die Bürgerrechtsbewegung im eigenen Land greift diese externe Bestätigung auf."
+ },
+ "movement_events_te.4.f": {
+  "en": "\\\"Their ambassador read the statement at the rostrum without once looking up from the page. He did not need to. The cameras were on him, not on us.\\\"\\n\\n\\\"For years the ministry told us the world was not watching. Now we have the front pages of three foreign capitals to wave in their faces, and the ministry has nothing to say about that either.\\\"\\n\\n\\\"My editor wanted the headline to be the recall, not the reason. I asked him which one embarrassed us more. He ran both, and then he stopped taking my calls for a week.\\\"",
+  "de": "„Ihr Botschafter verlas die Erklärung am Rednerpult, ohne auch nur ein einziges Mal vom Blatt aufzublicken. Er musste es nicht. Die Kameras waren auf ihn gerichtet, nicht auf uns.“\\n\\n„Jahrelang sagte uns das Ministerium, die Welt schaue nicht hin. Jetzt haben wir die Titelseiten dreier ausländischer Hauptstädte, um sie ihnen vor die Nase zu halten, und das Ministerium hat auch dazu nichts zu sagen.“\\n\\n„Mein Redakteur wollte die Abberufung zur Schlagzeile machen, nicht den Grund dafür. Ich fragte ihn, welches von beidem uns mehr blamiere. Er brachte beides, und danach nahm er eine Woche lang meine Anrufe nicht mehr entgegen.“"
+ },
  "movement_events_te.4.t": {
   "en": "International Pressure on Human Rights",
   "de": "Internationaler Druck wegen Menschenrechten"
@@ -9815,6 +10527,14 @@
   "en": "Ignore the problem for now",
   "de": "Das Problem vorerst ignorieren"
  },
+ "movement_events_te.5.d": {
+  "en": "With casualties mounting in our ongoing war, draft resistance has spread across the nation. Young men flee conscription, families hide their sons, and anti-war activists organize networks to help evaders escape. The military demands action, but cracking down risks turning public opinion further against the war effort.",
+  "de": "Da die Verluste in unserem andauernden Krieg steigen, hat sich der Widerstand gegen die Wehrpflicht im ganzen Land ausgebreitet. Junge Männer entziehen sich der Einberufung, Familien verstecken ihre Söhne, und Kriegsgegner organisieren Netzwerke, um Wehrdienstverweigerern zur Flucht zu verhelfen. Das Militär fordert Maßnahmen, doch ein hartes Durchgreifen riskiert, die öffentliche Meinung noch weiter gegen die Kriegsanstrengung aufzubringen."
+ },
+ "movement_events_te.5.f": {
+  "en": "\\\"I called at seventeen addresses on Tuesday. Fourteen of them were empty. Three of the families said the boy had moved out of state. They were lying. I did not press them.\\\"\\n\\n\\\"They came for him at four in the morning. He was already across the river by then. I keep his letters in a tin in the cellar, and I burn each one the day after I read it.\\\"\\n\\n\\\"My neighbours pretended not to see me leave. I am grateful for that pretence. It is the only kindness this country has shown my family in a year.\\\"",
+  "de": "„Am Dienstag habe ich siebzehn Adressen aufgesucht. Vierzehn davon waren leer. Drei der Familien sagten, der Junge sei weggezogen. Sie logen. Ich drängte nicht weiter.“\\n\\n„Sie kamen um vier Uhr morgens nach ihm. Da war er bereits über den Fluss. Ich bewahre seine Briefe in einer Blechdose im Keller auf und verbrenne jeden, einen Tag nachdem ich ihn gelesen habe.“\\n\\n„Meine Nachbarn taten so, als sähen sie mich nicht weggehen. Ich bin dankbar für diese Rücksicht. Es ist die einzige Freundlichkeit, die dieses Land meiner Familie in einem Jahr erwiesen hat.“"
+ },
  "movement_events_te.5.t": {
   "en": "Draft Resistance",
   "de": "Wehrdienstverweigerung"
@@ -9823,9 +10543,21 @@
   "en": "Discredit these traitors",
   "de": "Diese Verräter diskreditieren"
  },
+ "movement_events_te.6.b": {
+  "en": "They have earned the right to speak",
+  "de": "Sie haben sich das Recht zu sprechen verdient"
+ },
  "movement_events_te.6.c": {
   "en": "Invite them to advise on policy",
   "de": "Sie zur politischen Beratung einladen"
+ },
+ "movement_events_te.6.d": {
+  "en": "A group of decorated war veterans has broken their silence, publicly denouncing the conduct and purpose of our military campaigns. Their testimonies - harrowing accounts of the reality of modern warfare - have galvanized the anti-war movement and shaken public confidence. Their service record makes them difficult to dismiss.",
+  "de": "Eine Gruppe dekorierter Kriegsveteranen hat ihr Schweigen gebrochen und die Führung und den Zweck unserer Militärkampagnen öffentlich angeprangert. Ihre Zeugenaussagen – erschütternde Schilderungen der Realität moderner Kriegsführung – haben die Kriegsgegnerbewegung angetrieben und das öffentliche Vertrauen erschüttert. Ihre Verdienste im Dienst machen es schwer, sie abzutun."
+ },
+ "movement_events_te.6.f": {
+  "en": "\\\"I did what I was ordered to do. I am here to tell you what that looked like. I will keep telling you until you stop asking me to leave.\\\"\\n\\n\\\"The general's office issued a statement before the colonel had finished his testimony. They called him confused, then bitter, then unwell. By morning three more officers had asked to speak.\\\"\\n\\n\\\"My father served twenty-eight years and never said a word against the army. He sat through the entire broadcast without moving. Afterwards he looked at me and said, very quietly, 'They will not be able to undo this.'\\\"",
+  "de": "„Ich tat, was mir befohlen wurde. Ich bin hier, um Ihnen zu sagen, wie das aussah. Ich werde es Ihnen weiter erzählen, bis Sie aufhören, mich zu bitten zu gehen.“\\n\\n„Das Büro des Generals gab eine Erklärung ab, noch bevor der Oberst seine Aussage beendet hatte. Man nannte ihn verwirrt, dann verbittert, dann unwohl. Bis zum Morgen hatten drei weitere Offiziere um das Wort gebeten.“\\n\\n„Mein Vater diente achtundzwanzig Jahre und sagte nie ein Wort gegen die Armee. Er saß die ganze Übertragung hindurch, ohne sich zu rühren. Danach sah er mich an und sagte, ganz leise: ‚Das werden sie nicht mehr rückgängig machen können.‘“"
  },
  "movement_events_te.6.t": {
   "en": "Veterans Speak Against the War",
@@ -9843,6 +10575,14 @@
   "en": "Use this momentum for diplomacy",
   "de": "Diesen Schwung für die Diplomatie nutzen"
  },
+ "movement_events_te.7.d": {
+  "en": "An enormous peace rally has filled the streets of our capital, with hundreds of thousands of citizens demanding an end to military adventurism and a turn toward diplomatic solutions. The sheer scale of the demonstration is impossible to ignore - it represents a genuine groundswell of popular sentiment against the use of force.",
+  "de": "Eine gewaltige Friedenskundgebung hat die Straßen unserer Hauptstadt gefüllt, wobei Hunderttausende Bürger ein Ende des militärischen Abenteurertums und eine Hinwendung zu diplomatischen Lösungen fordern. Das schiere Ausmaß der Demonstration lässt sich nicht ignorieren – es stellt eine echte Basisbewegung der öffentlichen Stimmung gegen den Einsatz von Gewalt dar."
+ },
+ "movement_events_te.7.f": {
+  "en": "\\\"The police are saying two hundred thousand. The organisers are saying half a million. I have spent the morning on the rooftops with the police, and the afternoon in the crowd with the organisers, and I have concluded that neither number means anything. You cannot see the end of them in any direction.\\\"\\n\\n\\\"My daughter held one end of a banner. A factory worker held the other. They had never met before this morning, and by evening they were exchanging addresses and arguing about which streetcar she should take home.\\\"\\n\\n\\\"The minister wishes to characterise the rally as a small but vocal minority. He has, unfortunately, made this characterisation on the radio, where the broadcaster could hear the singing from the open window behind him.\\\"",
+  "de": "„Die Polizei spricht von zweihunderttausend. Die Organisatoren sprechen von einer halben Million. Ich habe den Vormittag auf den Dächern mit der Polizei verbracht und den Nachmittag in der Menge mit den Organisatoren, und ich bin zu dem Schluss gekommen, dass keine der beiden Zahlen etwas bedeutet. Man sieht in keine Richtung ihr Ende.“\\n\\n„Meine Tochter hielt das eine Ende eines Banners. Ein Fabrikarbeiter hielt das andere. Sie hatten sich vor diesem Morgen nie getroffen, und am Abend tauschten sie Adressen aus und stritten darüber, welche Straßenbahn sie nach Hause nehmen sollte.“\\n\\n„Der Minister möchte die Kundgebung als kleine, aber lautstarke Minderheit darstellen. Er hat diese Einschätzung leider im Radio abgegeben, wo der Sprecher den Gesang durch das offene Fenster hinter ihm hören konnte.“"
+ },
  "movement_events_te.7.t": {
   "en": "Peace Rally Fills the Capital",
   "de": "Friedenskundgebung erfüllt die Hauptstadt"
@@ -9858,6 +10598,14 @@
  "movement_events_te.8.c": {
   "en": "Tax their excess profits",
   "de": "Ihre Übergewinne besteuern"
+ },
+ "movement_events_te.8.d": {
+  "en": "Anti-war activists have published damning evidence that certain industrialists are making enormous profits from military contracts while soldiers die on the front lines. The exposé details inflated prices, defective equipment, and cozy relationships between arms manufacturers and government officials. Public outrage mixes with demands for accountability.",
+  "de": "Kriegsgegner haben belastende Beweise veröffentlicht, dass bestimmte Industrielle enorme Gewinne aus Militäraufträgen ziehen, während Soldaten an der Front sterben. Die Enthüllung schildert überhöhte Preise, mangelhafte Ausrüstung und allzu enge Beziehungen zwischen Waffenherstellern und Regierungsbeamten. Öffentliche Empörung mischt sich mit Forderungen nach Rechenschaft."
+ },
+ "movement_events_te.8.f": {
+  "en": "\\\"The invoice was sitting in the third filing cabinet, in a folder marked 'archive'. The clerk handed it to me without asking who I was. I think he wanted me to find it.\\\"\\n\\n\\\"We supply what the government orders at the price the government agrees to. That is what is called a contract. If the gentlemen of the press would like to argue with the contract, they may write to my lawyer.\\\"\\n\\n\\\"My brother wore a vest that cracked the first time he was hit. He bled out in the field hospital before the surgeon could close the wound. I would like to know who set the price for the privilege of supplying it.\\\"",
+  "de": "„Die Rechnung lag im dritten Aktenschrank, in einer Mappe mit der Aufschrift ‚Archiv‘. Der Angestellte reichte sie mir, ohne zu fragen, wer ich sei. Ich glaube, er wollte, dass ich sie finde.“\\n\\n„Wir liefern, was die Regierung bestellt, zu dem Preis, dem die Regierung zustimmt. Das nennt man einen Vertrag. Wenn die Herren von der Presse mit dem Vertrag streiten möchten, dürfen sie an meinen Anwalt schreiben.“\\n\\n„Mein Bruder trug eine Weste, die beim ersten Treffer riss. Er verblutete im Feldlazarett, bevor der Chirurg die Wunde schließen konnte. Ich würde gerne wissen, wer den Preis für das Privileg festgelegt hat, sie zu liefern.“"
  },
  "movement_events_te.8.t": {
   "en": "War Profiteering Exposed",
@@ -9875,9 +10623,361 @@
   "en": "Too dangerous - deny the application",
   "de": "Zu gefährlich – den Antrag ablehnen"
  },
+ "movement_events_te.9.d": {
+  "en": "Our nation's leading neuroscientists have formally petitioned the government for approval to begin human trials of brain-computer neural implants. The technology promises to revolutionize how humans interact with machines - enhancing memory, accelerating learning, and enabling direct neural communication. But the ethical implications are staggering, and religious leaders warn of tampering with the divine design of the human mind.",
+  "de": "Die führenden Neurowissenschaftler unserer Nation haben die Regierung förmlich um die Genehmigung ersucht, mit Menschenversuchen an Gehirn-Computer-Neuroimplantaten zu beginnen. Die Technologie verspricht, die Interaktion zwischen Mensch und Maschine zu revolutionieren – sie verbessert das Gedächtnis, beschleunigt das Lernen und ermöglicht direkte neuronale Kommunikation. Doch die ethischen Implikationen sind gewaltig, und religiöse Führer warnen davor, am göttlichen Entwurf des menschlichen Geistes zu rütteln."
+ },
+ "movement_events_te.9.f": {
+  "en": "\\\"It is not pain. It is more like — a second set of thoughts. Quieter than my own, and faster, and not quite mine. I am told this will fade as I grow accustomed to it. I am not entirely sure I want it to.\\\"\\n\\n\\\"We have proceeded only with full informed consent. The volunteers understood every risk we could enumerate, and a great many we could not. We are scientists, not priests; we do not pretend to certainty about what we have not yet measured.\\\"\\n\\n\\\"You are not enhancing the human soul. You are replacing it, piece by piece, with circuitry whose long-term effects you do not yet know. The fact that the volunteers signed your forms does not absolve you of having asked them to.\\\"",
+  "de": "„Es ist kein Schmerz. Es ist eher — eine zweite Reihe von Gedanken. Leiser als meine eigenen, und schneller, und nicht ganz meine. Man sagt mir, das werde nachlassen, wenn ich mich daran gewöhne. Ich bin mir nicht ganz sicher, ob ich das will.“\\n\\n„Wir sind nur mit vollständiger informierter Einwilligung vorgegangen. Die Freiwilligen verstanden jedes Risiko, das wir aufzählen konnten, und noch viele, die wir nicht konnten. Wir sind Wissenschaftler, keine Priester; wir geben uns nicht der Illusion hin, Gewissheit über etwas zu haben, das wir noch nicht gemessen haben.“\\n\\n„Sie verbessern nicht die menschliche Seele. Sie ersetzen sie, Stück für Stück, durch Schaltkreise, deren Langzeitwirkungen Sie noch nicht kennen. Dass die Freiwilligen Ihre Formulare unterschrieben haben, entbindet Sie nicht davon, sie darum gebeten zu haben.“"
+ },
  "movement_events_te.9.t": {
   "en": "Neural Implant Human Trials",
   "de": "Humanversuche mit Neuralimplantaten"
+ },
+ "nuclear_crisis.1.a": {
+  "en": "Give them what they ask. No dispute is worth a city.",
+  "de": "Ihnen geben, was sie verlangen. Kein Streit ist eine Stadt wert."
+ },
+ "nuclear_crisis.1.b": {
+  "en": "We will not be threatened into anything. The answer is no.",
+  "de": "Wir lassen uns zu nichts drohen. Die Antwort ist Nein."
+ },
+ "nuclear_crisis.1.c": {
+  "en": "Remind them that our weapons can reach their cities too.",
+  "de": "Sie daran erinnern, dass auch unsere Waffen ihre Städte erreichen können."
+ },
+ "nuclear_crisis.1.d": {
+  "en": "Through a private channel, [SCOPE.sCountry('nd_issuer').GetName] has warned our government that it is prepared to use nuclear weapons, and demands that [SCOPE.sCountry('nd_target').GetName] [SCOPE.sCountry('nd_issuer').GetCustom('nd_crisis_demand_text')]. Nothing has been published, so neither side has yet staked its reputation before the world, and there is still room to answer quietly. The warning carries a deadline.",
+  "de": "Über einen privaten Kanal hat [SCOPE.sCountry('nd_issuer').GetAltName('NOM')] unsere Regierung gewarnt, zum Einsatz von Nuklearwaffen bereit zu sein, und fordert, dass [SCOPE.sCountry('nd_target').GetAltName('NOM')] [SCOPE.sCountry('nd_issuer').GetCustom('nd_crisis_demand_text')]. Nichts wurde veröffentlicht, sodass keine Seite bislang ihr Ansehen vor der Welt aufs Spiel gesetzt hat, und noch Raum bleibt, still zu antworten. Die Warnung ist an eine Frist geknüpft."
+ },
+ "nuclear_crisis.1.d_public": {
+  "en": "[SCOPE.sCountry('nd_issuer').GetName] has issued a public ultimatum. Before the press of every capital, its government has demanded that [SCOPE.sCountry('nd_target').GetName] [SCOPE.sCountry('nd_issuer').GetCustom('nd_crisis_demand_text')], and declared itself prepared to use nuclear weapons if the demand is refused. The whole world heard it, and the whole world is waiting for our answer.",
+  "de": "[SCOPE.sCountry('nd_issuer').GetAltName('NOM')|U] hat ein öffentliches Ultimatum gestellt. Vor der Presse jeder Hauptstadt hat ihre Regierung gefordert, dass [SCOPE.sCountry('nd_target').GetAltName('NOM')] [SCOPE.sCountry('nd_issuer').GetCustom('nd_crisis_demand_text')], und erklärt, im Falle einer Ablehnung Nuklearwaffen einzusetzen. Die ganze Welt hat es gehört, und die ganze Welt wartet auf unsere Antwort."
+ },
+ "nuclear_crisis.1.e": {
+  "en": "Open a line to them. Propose that we both step back.",
+  "de": "Eine Verbindung zu ihnen öffnen. Vorschlagen, dass wir beide zurücktreten."
+ },
+ "nuclear_crisis.1.f": {
+  "en": "\\\"Read me the operative sentence.\\\"\\n\\n\\\"There are two pages, and it is on the second. 'The government will regard itself as released from every restraint it has hitherto observed.'\\\"\\n\\n\\\"Every restraint.\\\"\\n\\n\\\"Our lawyers say it is deliberately vague. Our generals say it is perfectly clear. I suggest we assume the generals are right and hope the lawyers are.\\\"\\n\\n\\\"And if we give way?\\\"\\n\\n\\\"Then we will have learned what it costs to be threatened. So will everyone who was watching.\\\"",
+  "de": "„Lesen Sie mir den entscheidenden Satz vor.“\\n\\n„Es sind zwei Seiten, und er steht auf der zweiten. ‚Die Regierung wird sich von jeder bisher eingehaltenen Zurückhaltung entbunden betrachten.‘“\\n\\n„Jeder Zurückhaltung.“\\n\\n„Unsere Juristen sagen, das sei absichtlich vage. Unsere Generäle sagen, das sei völlig eindeutig. Ich schlage vor, wir gehen davon aus, dass die Generäle recht haben, und hoffen, dass es die Juristen sind.“\\n\\n„Und wenn wir nachgeben?“\\n\\n„Dann werden wir gelernt haben, was es kostet, bedroht zu werden. Das werden auch alle anderen, die zugesehen haben.“"
+ },
+ "nuclear_crisis.1.t": {
+  "en": "A Line Drawn in Private",
+  "de": "Eine Grenze, im Stillen gezogen"
+ },
+ "nuclear_crisis.1.t_public": {
+  "en": "An Ultimatum Before the World",
+  "de": "Ein Ultimatum vor aller Welt"
+ },
+ "nuclear_crisis.100.a": {
+  "en": "Then we had better decide what kind of deterrent we want.",
+  "de": "Dann sollten wir besser entscheiden, was für eine Abschreckung wir wollen."
+ },
+ "nuclear_crisis.100.d": {
+  "en": "Our nuclear arsenal is no longer a programme but a standing force. Crews must be trained, weapons maintained and bases guarded around the clock, and the bill now arrives every week, whatever we spend on the weapons programme itself. How that force is kept, from its doctrine and readiness to who may order it to fire, is set in the Nuclear Weapons journal entry, under Nuclear Posture.",
+  "de": "Unser Nukleararsenal ist kein Programm mehr, sondern eine stehende Streitmacht. Besatzungen müssen ausgebildet, Waffen gewartet und Stützpunkte rund um die Uhr bewacht werden, und die Rechnung kommt jetzt jede Woche, ganz gleich, was wir für das Waffenprogramm selbst ausgeben. Wie diese Streitmacht unterhalten wird – von ihrer Doktrin und Einsatzbereitschaft bis dazu, wer den Abschuss befehlen darf – ist im Journaleintrag „Nuklearwaffen“ unter Nukleare Doktrin festgelegt."
+ },
+ "nuclear_crisis.100.f": {
+  "en": "\\\"The weapons are built. They cost what they cost. Why is the bill still coming?\\\"\\n\\n\\\"Because a weapon nobody guards is a weapon somebody steals. Because a bomber nobody flies becomes a museum piece. Because somebody has to be awake at four in the morning on every holiday, for as long as the weapons exist, in case this is the night.\\\"\\n\\n\\\"And how long is that?\\\"\\n\\n\\\"Until nobody else has one. Budget accordingly.\\\"",
+  "de": "„Die Waffen sind gebaut. Sie kosten, was sie kosten. Warum kommt die Rechnung noch immer?“\\n\\n„Weil eine Waffe, die niemand bewacht, eine Waffe ist, die sich jemand stiehlt. Weil ein Bomber, den niemand fliegt, zum Museumsstück wird. Weil jemand um vier Uhr morgens wach sein muss, an jedem Feiertag, solange die Waffen existieren, für den Fall, dass es diese Nacht ist.“\\n\\n„Und wie lange ist das?“\\n\\n„Bis niemand sonst mehr eine hat. Planen Sie entsprechend.“"
+ },
+ "nuclear_crisis.100.t": {
+  "en": "A Standing Deterrent",
+  "de": "Eine stehende Abschreckung"
+ },
+ "nuclear_crisis.2.a": {
+  "en": "Publish the warning. Let the whole world hold both of us to it.",
+  "de": "Die Warnung veröffentlichen. Die ganze Welt soll uns beide daran messen."
+ },
+ "nuclear_crisis.2.b": {
+  "en": "Raise the alert, and make very sure they see us do it.",
+  "de": "Die Alarmstufe erhöhen, und dafür sorgen, dass sie es auch sehen."
+ },
+ "nuclear_crisis.2.c": {
+  "en": "Offer them a mutual stand-down before this goes any further.",
+  "de": "Ihnen eine gegenseitige Deeskalation anbieten, bevor dies weiter eskaliert."
+ },
+ "nuclear_crisis.2.d": {
+  "en": "[SCOPE.sCountry('nd_target').GetName] has rejected our warning. Its reply refuses our demand point by point and offers nothing in return. The crisis has entered a new and more dangerous stage, and the next step, with all its costs, is ours to choose.",
+  "de": "[SCOPE.sCountry('nd_target').GetAltName('NOM')|U] hat unsere Warnung zurückgewiesen. Die Antwort weist unsere Forderung Punkt für Punkt zurück und bietet nichts im Gegenzug. Die Krise ist in eine neue, gefährlichere Phase eingetreten, und der nächste Schritt, mit allen seinen Kosten, liegt bei uns."
+ },
+ "nuclear_crisis.2.d_counter": {
+  "en": "[SCOPE.sCountry('nd_target').GetName] has answered our warning with a threat of its own. Its reply refuses our demand and reminds us, in carefully chosen words, that its nuclear forces can reach us too; our intelligence reports those forces moving to a heightened state of readiness. The crisis is now a contest of nerve between two armed powers.",
+  "de": "[SCOPE.sCountry('nd_target').GetAltName('NOM')|U] hat unsere Warnung mit einer eigenen Drohung beantwortet. Die Antwort weist unsere Forderung zurück und erinnert uns, in sorgfältig gewählten Worten, dass auch die dortigen Nuklearstreitkräfte uns erreichen können; unsere Aufklärung meldet, dass diese Streitkräfte in einen erhöhten Bereitschaftszustand versetzt werden. Die Krise ist nun ein Nervenkrieg zwischen zwei bewaffneten Mächten."
+ },
+ "nuclear_crisis.2.e": {
+  "en": "Let it drop quietly. This was never worth the risk.",
+  "de": "Die Sache still fallen lassen. Das Risiko war es nie wert."
+ },
+ "nuclear_crisis.2.f": {
+  "en": "\\\"They said no.\\\"\\n\\n\\\"They said a great deal more than no. Four pages of it.\\\"\\n\\n\\\"Summarise.\\\"\\n\\n\\\"'No,' with footnotes. And a paragraph at the end that our analysts have read eleven times and still cannot agree on, which I suspect is what it was written for.\\\"\\n\\n\\\"Can we make them regret it?\\\"\\n\\n\\\"We can make them believe they might. Whether that is the same thing is what we are about to find out.\\\"",
+  "de": "„Sie haben Nein gesagt.“\\n\\n„Sie haben weit mehr gesagt als Nein. Vier Seiten davon.“\\n\\n„Fassen Sie zusammen.“\\n\\n„‚Nein‘, mit Fußnoten. Und ein Absatz am Ende, den unsere Analysten elfmal gelesen haben und über den sie sich noch immer nicht einig sind, was ich vermute, war genau die Absicht dahinter.“\\n\\n„Können wir sie das bereuen lassen?“\\n\\n„Wir können sie glauben lassen, dass sie es könnten. Ob das dasselbe ist, werden wir gleich herausfinden.“"
+ },
+ "nuclear_crisis.2.t": {
+  "en": "The Reply Comes Back",
+  "de": "Die Antwort kommt zurück"
+ },
+ "nuclear_crisis.20.a": {
+  "en": "We gave our word. Tell them, and the world, that it holds.",
+  "de": "Wir haben unser Wort gegeben. Ihnen und der Welt sagen, dass es gilt."
+ },
+ "nuclear_crisis.20.b": {
+  "en": "Answer their strike in kind. That is what our guarantee meant.",
+  "de": "Ihren Schlag in gleicher Münze erwidern. Das war der Sinn unserer Garantie."
+ },
+ "nuclear_crisis.20.c": {
+  "en": "We cannot risk our own cities for theirs. Not this time.",
+  "de": "Wir können unsere eigenen Städte nicht für ihre riskieren. Nicht dieses Mal."
+ },
+ "nuclear_crisis.20.d": {
+  "en": "[SCOPE.sCountry('nd_guarantee_attacker').GetName] has put [SCOPE.sCountry('nd_guarantee_beneficiary').GetName] under a nuclear threat, exactly the danger our guarantee was written to meet. The government of [SCOPE.sCountry('nd_guarantee_beneficiary').GetName] has asked us, formally and in writing, whether we will stand by it. Every other country that relies on our word is waiting for the same answer.",
+  "de": "[SCOPE.sCountry('nd_guarantee_attacker').GetAltName('NOM')|U] hat [SCOPE.sCountry('nd_guarantee_beneficiary').GetAltName('AKK')] unter eine nukleare Drohung gesetzt – genau die Gefahr, der unsere Garantie begegnen sollte. Die Regierung [SCOPE.sCountry('nd_guarantee_beneficiary').GetAltName('GEN')] hat uns formell und schriftlich gefragt, ob wir dazu stehen. Jedes andere Land, das sich auf unser Wort verlässt, wartet auf dieselbe Antwort."
+ },
+ "nuclear_crisis.20.d_struck": {
+  "en": "[SCOPE.sCountry('nd_guarantee_attacker').GetName] has used a nuclear weapon against [SCOPE.sCountry('nd_guarantee_beneficiary').GetName], a country we have promised to protect. The government of [SCOPE.sCountry('nd_guarantee_beneficiary').GetName] wants to know what we intend to do. So does every other country that relies on our guarantee, and so, in their own way, do our own people.",
+  "de": "[SCOPE.sCountry('nd_guarantee_attacker').GetAltName('NOM')|U] hat eine Nuklearwaffe gegen [SCOPE.sCountry('nd_guarantee_beneficiary').GetAltName('AKK')] eingesetzt, ein Land, dessen Schutz wir versprochen haben. Die Regierung [SCOPE.sCountry('nd_guarantee_beneficiary').GetAltName('GEN')] will wissen, was wir zu tun gedenken. Das will auch jedes andere Land, das sich auf unsere Garantie verlässt, und auf seine eigene Weise auch unser eigenes Volk."
+ },
+ "nuclear_crisis.20.f": {
+  "en": "\\\"The treaty says we will regard any nuclear threat against them as a threat against ourselves.\\\"\\n\\n\\\"Treaties say a great many things. Who drafted that line?\\\"\\n\\n\\\"Our predecessors. At the time it was thought very reassuring.\\\"\\n\\n\\\"It was. That was its whole purpose. Nobody who signed it expected to be asked to mean it.\\\"\\n\\n\\\"They are asking now. And by tomorrow morning, so will everyone else who keeps something similar from us in a drawer.\\\"",
+  "de": "„Der Vertrag besagt, dass wir jede nukleare Drohung gegen sie als Drohung gegen uns selbst betrachten werden.“\\n\\n„Verträge besagen eine ganze Menge. Wer hat diesen Satz verfasst?“\\n\\n„Unsere Vorgänger. Damals galt das als sehr beruhigend.“\\n\\n„Das war es auch. Das war sein ganzer Zweck. Niemand, der ihn unterzeichnet hat, rechnete damit, beim Wort genommen zu werden.“\\n\\n„Jetzt nehmen sie uns beim Wort. Und morgen früh wird es jeder tun, der etwas Ähnliches in einer Schublade von uns aufbewahrt.“"
+ },
+ "nuclear_crisis.20.t": {
+  "en": "A Promise Called In",
+  "de": "Ein eingefordertes Versprechen"
+ },
+ "nuclear_crisis.21.a": {
+  "en": "We will remember this answer, whatever comes next.",
+  "de": "Wir werden uns an diese Antwort erinnern, was auch als Nächstes kommt."
+ },
+ "nuclear_crisis.21.d": {
+  "en": "Our guarantor has answered: it stands by its promise to protect us, and it has said so to [SCOPE.sCountry('nd_guarantee_attacker').GetName] in terms that leave little room for doubt. Whether the promise holds to the end remains to be seen, but for now, at least, we do not stand alone.",
+  "de": "Unsere Garantiemacht hat geantwortet: Sie steht zu ihrem Versprechen, uns zu schützen, und hat dies [SCOPE.sCountry('nd_guarantee_attacker').GetAltName('DAT')] in Worten mitgeteilt, die wenig Raum für Zweifel lassen. Ob das Versprechen bis zum Ende hält, bleibt abzuwarten, doch vorerst stehen wir zumindest nicht allein."
+ },
+ "nuclear_crisis.21.d_abandoned": {
+  "en": "Our guarantor has declined to honour its guarantee. The treaty that was meant to shield us from [SCOPE.sCountry('nd_guarantee_attacker').GetName] has turned out, at the one moment it mattered, to be paper. We face this alone, and every other country relying on the same promise has just learned what it is worth.",
+  "de": "Unsere Garantiemacht hat sich geweigert, ihre Garantie einzulösen. Der Vertrag, der uns vor [SCOPE.sCountry('nd_guarantee_attacker').GetAltName('DAT')] schützen sollte, hat sich in dem einen Moment, in dem es darauf ankam, als bloßes Papier erwiesen. Wir stehen allein vor dieser Lage, und jedes andere Land, das sich auf dasselbe Versprechen verlässt, hat gerade erfahren, was es wert ist."
+ },
+ "nuclear_crisis.21.d_declined": {
+  "en": "Our guarantor has declined to answer for the war we made nuclear. We used the weapon first, it says, and its promise was to shield us, not to follow us wherever we lead. The guarantee still stands — but [SCOPE.sCountry('nd_guarantee_attacker').GetName]'s answer is ours alone to bear.",
+  "de": "Unsere Garantiemacht hat sich geweigert, für den Krieg einzustehen, den wir nuklear gemacht haben. Wir hätten die Waffe zuerst eingesetzt, heißt es, und ihr Versprechen sei gewesen, uns zu schützen, nicht uns zu folgen, wohin wir auch führen. Die Garantie besteht weiterhin – doch die Antwort [SCOPE.sCountry('nd_guarantee_attacker').GetAltName('GEN')] müssen wir allein tragen."
+ },
+ "nuclear_crisis.21.f": {
+  "en": "\\\"What did they say?\\\"\\n\\n\\\"What they had to say. Their minister read it from a card and did not look up until the end.\\\"\\n\\n\\\"And when the minister looked up?\\\"\\n\\n\\\"Then I understood that the card had been written for the newspapers, and the look was meant for me. I have spent twenty years learning to read that look. Between governments, it is the only part of a treaty that was ever real.\\\"",
+  "de": "„Was haben sie gesagt?“\\n\\n„Was sie zu sagen hatten. Ihr Minister las es von einer Karte ab und blickte bis zum Ende nicht auf.“\\n\\n„Und als der Minister aufblickte?“\\n\\n„Da verstand ich, dass die Karte für die Zeitungen geschrieben worden war und der Blick mir galt. Ich habe zwanzig Jahre gebraucht, um diesen Blick lesen zu lernen. Zwischen Regierungen ist er der einzige Teil eines Vertrags, der je wirklich war.“"
+ },
+ "nuclear_crisis.21.t": {
+  "en": "Our Guarantor Stands Firm",
+  "de": "Unsere Garantiemacht bleibt standhaft"
+ },
+ "nuclear_crisis.21.t_abandoned": {
+  "en": "Left to Face It Alone",
+  "de": "Allein gelassen"
+ },
+ "nuclear_crisis.21.t_declined": {
+  "en": "Not Their War to Answer",
+  "de": "Nicht ihr Krieg, für den sie einstehen müssen"
+ },
+ "nuclear_crisis.23.a": {
+  "en": "They will have to take our word for it.",
+  "de": "Sie werden uns beim Wort nehmen müssen."
+ },
+ "nuclear_crisis.23.d": {
+  "en": "Our warheads are off their delivery systems and in storage. We called it prudence. To the countries that shelter under our nuclear guarantee it reads otherwise: we promised to stand between them and the bomb, and we have put ours away. Their envoys ask, politely and then less politely, how long it would take to bring the weapons back — and whether we would.",
+  "de": "Unsere Sprengköpfe sind von ihren Trägersystemen genommen und eingelagert. Wir nannten es Umsicht. Für die Länder, die unter unserer nuklearen Garantie Schutz suchen, liest sich das anders: Wir haben versprochen, uns zwischen sie und die Bombe zu stellen, und haben unsere eigene weggeräumt. Ihre Gesandten fragen, zunächst höflich und dann weniger höflich, wie lange es dauern würde, die Waffen zurückzubringen – und ob wir es täten."
+ },
+ "nuclear_crisis.23.f": {
+  "en": "\\\"Two weeks,\\\" the minister said. The ambassador wrote it down, and then wrote it down again, as if the second time it might say something else.",
+  "de": "„Zwei Wochen“, sagte der Minister. Der Botschafter schrieb es auf, und dann schrieb er es noch einmal auf, als könnte es beim zweiten Mal etwas anderes bedeuten."
+ },
+ "nuclear_crisis.23.t": {
+  "en": "Our Allies Are Alarmed",
+  "de": "Unsere Verbündeten sind alarmiert"
+ },
+ "nuclear_crisis.24.a": {
+  "en": "We stand by them, whatever they have done.",
+  "de": "Wir stehen zu ihnen, was auch immer sie getan haben."
+ },
+ "nuclear_crisis.24.b": {
+  "en": "An attack on them is an attack on us. Answer in kind.",
+  "de": "Ein Angriff auf sie ist ein Angriff auf uns. In gleicher Münze antworten."
+ },
+ "nuclear_crisis.24.c": {
+  "en": "They started this. It is not ours to answer for.",
+  "de": "Sie haben das angefangen. Es ist nicht an uns, dafür einzustehen."
+ },
+ "nuclear_crisis.24.d": {
+  "en": "[SCOPE.sCountry('nd_guarantee_attacker').GetName] has answered with a nuclear weapon of its own — but it was answering [SCOPE.sCountry('nd_guarantee_beneficiary').GetName], a country we have promised to protect, which used the bomb first. Our guarantee was written to shield them. Whether it was written to cover this is for us to decide.",
+  "de": "[SCOPE.sCountry('nd_guarantee_attacker').GetAltName('NOM')|U] hat mit einer eigenen Nuklearwaffe geantwortet – doch die Antwort galt [SCOPE.sCountry('nd_guarantee_beneficiary').GetAltName('DAT')], einem Land, dessen Schutz wir versprochen haben und das die Bombe zuerst einsetzte. Unsere Garantie wurde verfasst, um dieses Land zu schützen. Ob sie auch diesen Fall abdecken sollte, liegt bei uns zu entscheiden."
+ },
+ "nuclear_crisis.24.f": {
+  "en": "\\\"We promised to defend them.\\\"\\n\\n\\\"We did. Nobody promised to follow them.\\\"",
+  "de": "„Wir haben versprochen, sie zu verteidigen.“\\n\\n„Das haben wir. Niemand hat versprochen, ihnen zu folgen.“"
+ },
+ "nuclear_crisis.24.t": {
+  "en": "Our Protégé Struck First",
+  "de": "Unser Schützling schlug zuerst zu"
+ },
+ "nuclear_crisis.3.a": {
+  "en": "Accept. Both sides step back, and both sides say so.",
+  "de": "Annehmen. Beide Seiten treten zurück, und beide sagen es auch."
+ },
+ "nuclear_crisis.3.b": {
+  "en": "Refuse. We will not trade our position for a promise.",
+  "de": "Ablehnen. Wir tauschen unsere Position nicht gegen ein Versprechen."
+ },
+ "nuclear_crisis.3.d": {
+  "en": "An envoy has brought a proposal to end the nuclear standoff between [SCOPE.sCountry('nd_issuer').GetName] and [SCOPE.sCountry('nd_target').GetName]. Both sides would stand their forces down to routine readiness for two years and pledge never to use nuclear weapons against one another. The dispute that began the crisis would be left exactly where it is.",
+  "de": "Ein Gesandter hat einen Vorschlag überbracht, um die nukleare Pattsituation zwischen [SCOPE.sCountry('nd_issuer').GetAltName('DAT')] und [SCOPE.sCountry('nd_target').GetAltName('DAT')] zu beenden. Beide Seiten würden ihre Streitkräfte für zwei Jahre auf reguläre Bereitschaft zurückfahren und geloben, niemals Nuklearwaffen gegeneinander einzusetzen. Der Streit, der die Krise auslöste, bliebe genau dort, wo er ist."
+ },
+ "nuclear_crisis.3.f": {
+  "en": "The proposal was typed on plain paper with no letterhead, so that either side could later say it had come from the other. The envoy who carried it waited in the anteroom for forty minutes, holding it on one knee, and watched a clerk water the plants.\\n\\n\\\"Is it good news?\\\" the clerk asked eventually.\\n\\n\\\"It is a way out,\\\" the envoy said. \\\"Whether that is good news depends on whether anyone in there wants to leave.\\\"",
+  "de": "Der Vorschlag war auf einfachem Papier ohne Briefkopf getippt, sodass später jede Seite behaupten könnte, er stamme von der anderen. Der Gesandte, der ihn überbrachte, wartete vierzig Minuten im Vorzimmer, hielt ihn auf einem Knie und sah einem Angestellten beim Blumengießen zu.\\n\\n„Sind es gute Nachrichten?“, fragte der Angestellte schließlich.\\n\\n„Es ist ein Ausweg“, sagte der Gesandte. „Ob das gute Nachrichten sind, hängt davon ab, ob irgendjemand da drinnen gehen will.“"
+ },
+ "nuclear_crisis.3.t": {
+  "en": "An Offer to Step Back",
+  "de": "Ein Angebot zum Rückzug"
+ },
+ "nuclear_crisis.4.a": {
+  "en": "Give them a little longer to find a way down.",
+  "de": "Ihnen noch etwas Zeit geben, einen Ausweg zu finden."
+ },
+ "nuclear_crisis.4.b": {
+  "en": "No more patience. Raise the alert to its highest and hold.",
+  "de": "Keine Geduld mehr. Die Alarmstufe auf das Höchste anheben und halten."
+ },
+ "nuclear_crisis.4.c": {
+  "en": "Offer to stand down together while standing down is still possible.",
+  "de": "Eine gemeinsame Deeskalation anbieten, solange sie noch möglich ist."
+ },
+ "nuclear_crisis.4.d": {
+  "en": "The deadline we set [SCOPE.sCountry('nd_target').GetName] has passed, and our demand has not been met. Whatever we do next will be taken as the true measure of our warning: by [SCOPE.sCountry('nd_target').GetName], by our own general staff, and by every government that has learned of it.",
+  "de": "Die Frist, die wir [SCOPE.sCountry('nd_target').GetAltName('DAT')] gesetzt haben, ist verstrichen, und unsere Forderung wurde nicht erfüllt. Was auch immer wir als Nächstes tun, wird als das wahre Maß unserer Warnung gewertet: [SCOPE.sCountry('nd_target').GetAltName('VON')], von unserem eigenen Generalstab und von jeder Regierung, die davon erfahren hat."
+ },
+ "nuclear_crisis.4.d_public": {
+  "en": "The deadline in our public ultimatum to [SCOPE.sCountry('nd_target').GetName] has passed without an answer that settles it. The whole world watched us set that deadline, and the whole world is now watching to see what it meant. Every day of hesitation will be counted, at home and abroad.",
+  "de": "Die Frist in unserem öffentlichen Ultimatum an [SCOPE.sCountry('nd_target').GetAltName('AKK')] ist verstrichen, ohne dass eine klärende Antwort kam. Die ganze Welt hat zugesehen, wie wir diese Frist setzten, und die ganze Welt beobachtet nun, was das bedeutet hat. Jeder Tag des Zögerns wird gezählt, im In- und Ausland."
+ },
+ "nuclear_crisis.4.e": {
+  "en": "Let the deadline lapse. Nothing we win now is worth what follows.",
+  "de": "Die Frist verstreichen lassen. Nichts, was wir jetzt gewinnen, ist wert, was danach folgt."
+ },
+ "nuclear_crisis.4.f": {
+  "en": "\\\"It is past midnight. The deadline was midnight.\\\"\\n\\n\\\"I am aware. I wrote it.\\\"\\n\\n\\\"Their embassy has sent nothing. Their state radio is playing light music. Their ambassador was seen at the opera, smiling.\\\"\\n\\n\\\"They are telling us they do not believe us.\\\"\\n\\n\\\"Or that they do, and have decided to find out. Either way, whatever we do in the next hour is what we will turn out to have meant all along.\\\"",
+  "de": "„Es ist nach Mitternacht. Die Frist war Mitternacht.“\\n\\n„Das ist mir bewusst. Ich habe sie geschrieben.“\\n\\n„Ihre Botschaft hat nichts geschickt. Ihr Staatsradio spielt leichte Musik. Ihr Botschafter wurde lächelnd in der Oper gesehen.“\\n\\n„Sie sagen uns damit, dass sie uns nicht glauben.“\\n\\n„Oder dass sie es tun und beschlossen haben, es herauszufinden. So oder so – was auch immer wir in der nächsten Stunde tun, wird sich als das erweisen, was wir die ganze Zeit gemeint haben.“"
+ },
+ "nuclear_crisis.4.g": {
+  "en": "We told them what would happen. Now it happens.",
+  "de": "Wir haben ihnen gesagt, was geschehen würde. Jetzt geschieht es."
+ },
+ "nuclear_crisis.4.t": {
+  "en": "The Deadline Passes",
+  "de": "Die Frist verstreicht"
+ },
+ "nuclear_crisis.5.a": {
+  "en": "Enough. Give them what they want and end this.",
+  "de": "Genug. Ihnen geben, was sie wollen, und dem ein Ende setzen."
+ },
+ "nuclear_crisis.5.b": {
+  "en": "We said no once. We will say it as often as it takes.",
+  "de": "Wir haben einmal Nein gesagt. Wir werden es so oft sagen, wie es nötig ist."
+ },
+ "nuclear_crisis.5.c": {
+  "en": "Propose a stand-down again, one that lets both sides save face.",
+  "de": "Erneut eine Deeskalation vorschlagen, eine, die beiden Seiten das Gesicht wahren lässt."
+ },
+ "nuclear_crisis.5.d": {
+  "en": "[SCOPE.sCountry('nd_issuer').GetName] has pressed its nuclear demand again. It still insists that [SCOPE.sCountry('nd_target').GetName] [SCOPE.sCountry('nd_issuer').GetCustom('nd_crisis_demand_text')], and each week without an answer brings new signals: alerts allowed to leak, patrols flying closer to our borders, statements that grow shorter and colder. At home, the strain is beginning to show.",
+  "de": "[SCOPE.sCountry('nd_issuer').GetAltName('NOM')|U] hat die nukleare Forderung erneuert. Weiterhin wird darauf bestanden, dass [SCOPE.sCountry('nd_target').GetAltName('NOM')] [SCOPE.sCountry('nd_issuer').GetCustom('nd_crisis_demand_text')], und jede Woche ohne Antwort bringt neue Signale: durchsickernde Alarmmeldungen, Patrouillen, die unseren Grenzen näherkommen, Erklärungen, die kürzer und kälter werden. Im Inland beginnt sich die Anspannung zu zeigen."
+ },
+ "nuclear_crisis.5.f": {
+  "en": "The shop on the corner sold out of tinned food by Tuesday and candles by Wednesday. On Thursday the owner put a handwritten sign in the window: NO MORE BATTERIES. NO MORE WATER. NO MORE NEWS.\\n\\n\\\"Why no news?\\\" a customer asked.\\n\\n\\\"Because everyone who comes in asks me what is going to happen, and I sell newspapers, so they think I should know.\\\"\\n\\n\\\"And do you?\\\"\\n\\n\\\"I know what sells. Nobody buys candles when they believe the government knows what it is doing.\\\"",
+  "de": "Der Laden an der Ecke war bis Dienstag ausverkauft an Konserven und bis Mittwoch an Kerzen. Am Donnerstag hängte der Besitzer ein handgeschriebenes Schild ins Fenster: KEINE BATTERIEN MEHR. KEIN WASSER MEHR. KEINE NACHRICHTEN MEHR.\\n\\n„Warum keine Nachrichten?“, fragte ein Kunde.\\n\\n„Weil mich jeder, der hereinkommt, fragt, was passieren wird, und ich Zeitungen verkaufe, also denken sie, ich müsste es wissen.“\\n\\n„Und wissen Sie es?“\\n\\n„Ich weiß, was sich verkauft. Niemand kauft Kerzen, wenn er glaubt, die Regierung wisse, was sie tut.“"
+ },
+ "nuclear_crisis.5.t": {
+  "en": "Another Turn of the Screw",
+  "de": "Eine weitere Umdrehung der Schraube"
+ },
+ "nuclear_crisis.6.a": {
+  "en": "So this is how it ended.",
+  "de": "So also endete es."
+ },
+ "nuclear_crisis.6.d_backed_down_issuer": {
+  "en": "We have withdrawn our nuclear threat against [SCOPE.sCountry('nd_target').GetName] without getting what we demanded. The crisis is closed; the doubts it has raised about our word are not.",
+  "de": "Wir haben unsere nukleare Drohung gegen [SCOPE.sCountry('nd_target').GetAltName('AKK')] zurückgenommen, ohne zu bekommen, was wir gefordert hatten. Die Krise ist beendet; die Zweifel, die sie an unserem Wort geweckt hat, sind es nicht."
+ },
+ "nuclear_crisis.6.d_backed_down_target": {
+  "en": "[SCOPE.sCountry('nd_issuer').GetName] has withdrawn its nuclear threat against us, and we conceded nothing. The crisis is closed, and we held.",
+  "de": "[SCOPE.sCountry('nd_issuer').GetAltName('NOM')|U] hat die nukleare Drohung gegen uns zurückgenommen, und wir haben nichts zugestanden. Die Krise ist beendet, und wir haben standgehalten."
+ },
+ "nuclear_crisis.6.d_expired": {
+  "en": "The crisis between [SCOPE.sCountry('nd_issuer').GetName] and [SCOPE.sCountry('nd_target').GetName] has run its course without resolution. The demand was neither met nor enforced, and both governments have let it lapse.",
+  "de": "Die Krise zwischen [SCOPE.sCountry('nd_issuer').GetAltName('DAT')] und [SCOPE.sCountry('nd_target').GetAltName('DAT')] hat sich ohne Klärung erschöpft. Die Forderung wurde weder erfüllt noch durchgesetzt, und beide Regierungen haben sie verstreichen lassen."
+ },
+ "nuclear_crisis.6.d_native_loss_issuer": {
+  "en": "Our side has backed down in the dispute with [SCOPE.sCountry('nd_target').GetName], and the warning we gave has come to nothing. The crisis is closed.",
+  "de": "Unsere Seite ist im Streit mit [SCOPE.sCountry('nd_target').GetAltName('DAT')] zurückgewichen, und die Warnung, die wir ausgesprochen haben, ist zu nichts geworden. Die Krise ist beendet."
+ },
+ "nuclear_crisis.6.d_native_loss_target": {
+  "en": "[SCOPE.sCountry('nd_issuer').GetName] and its side have backed down in our dispute, and their nuclear warning has come to nothing. The crisis is closed, and we held.",
+  "de": "[SCOPE.sCountry('nd_issuer').GetAltName('NOM')|U] und die eigene Seite sind in unserem Streit zurückgewichen, und die nukleare Warnung ist zu nichts geworden. Die Krise ist beendet, und wir haben standgehalten."
+ },
+ "nuclear_crisis.6.d_native_win_issuer": {
+  "en": "[SCOPE.sCountry('nd_target').GetName] has given us what we demanded without ever formally answering our warning. The crisis is closed, and the world has drawn its own conclusions about why.",
+  "de": "[SCOPE.sCountry('nd_target').GetAltName('NOM')|U] hat uns gegeben, was wir gefordert haben, ohne je förmlich auf unsere Warnung zu antworten. Die Krise ist beendet, und die Welt hat sich ihre eigenen Gedanken darüber gemacht, warum."
+ },
+ "nuclear_crisis.6.d_native_win_target": {
+  "en": "We have stepped back on our own terms, but the world sees only that the nuclear warning of [SCOPE.sCountry('nd_issuer').GetName] got what it wanted. The crisis is closed.",
+  "de": "Wir sind zu unseren eigenen Bedingungen zurückgetreten, doch die Welt sieht nur, dass die nukleare Warnung [SCOPE.sCountry('nd_issuer').GetAltName('GEN')] bekommen hat, was sie wollte. Die Krise ist beendet."
+ },
+ "nuclear_crisis.6.d_neutral": {
+  "en": "The crisis between [SCOPE.sCountry('nd_issuer').GetName] and [SCOPE.sCountry('nd_target').GetName] has closed without a clear winner: the dispute behind it has ended, or moved beyond the reach of the threat.",
+  "de": "Die Krise zwischen [SCOPE.sCountry('nd_issuer').GetAltName('DAT')] und [SCOPE.sCountry('nd_target').GetAltName('DAT')] hat sich ohne klaren Sieger beendet: Der zugrunde liegende Streit ist beendet oder hat sich der Reichweite der Drohung entzogen."
+ },
+ "nuclear_crisis.6.d_standdown": {
+  "en": "[SCOPE.sCountry('nd_issuer').GetName] and [SCOPE.sCountry('nd_target').GetName] have stood their forces down and pledged never to use nuclear weapons against each other. The crisis between them is over; the dispute that caused it is not.",
+  "de": "[SCOPE.sCountry('nd_issuer').GetAltName('NOM')|U] und [SCOPE.sCountry('nd_target').GetAltName('NOM')] haben ihre Streitkräfte zurückgefahren und gelobt, niemals Nuklearwaffen gegeneinander einzusetzen. Die Krise zwischen ihnen ist vorbei; der Streit, der sie auslöste, ist es nicht."
+ },
+ "nuclear_crisis.6.d_use": {
+  "en": "Nuclear weapons have been used in the crisis between [SCOPE.sCountry('nd_issuer').GetName] and [SCOPE.sCountry('nd_target').GetName]. The crisis is over; what comes after it has only begun.",
+  "de": "In der Krise zwischen [SCOPE.sCountry('nd_issuer').GetAltName('DAT')] und [SCOPE.sCountry('nd_target').GetAltName('DAT')] wurden Nuklearwaffen eingesetzt. Die Krise ist vorbei; was danach kommt, hat gerade erst begonnen."
+ },
+ "nuclear_crisis.6.d_war_ended": {
+  "en": "The war between [SCOPE.sCountry('nd_issuer').GetName] and [SCOPE.sCountry('nd_target').GetName] has ended, and the nuclear crisis that hung over it has closed with it.",
+  "de": "Der Krieg zwischen [SCOPE.sCountry('nd_issuer').GetAltName('DAT')] und [SCOPE.sCountry('nd_target').GetAltName('DAT')] ist beendet, und die nukleare Krise, die über ihm hing, ist mit ihm zu Ende gegangen."
+ },
+ "nuclear_crisis.6.d_yielded_issuer": {
+  "en": "[SCOPE.sCountry('nd_target').GetName] has given way and conceded what we demanded, and the crisis between us is closed. Abroad, our resolve has been noticed, and so has our method. [ROOT.GetCountry.GetCustom('nd_crisis_concession_past')]",
+  "de": "[SCOPE.sCountry('nd_target').GetAltName('NOM')|U] hat nachgegeben und zugestanden, was wir gefordert haben, und die Krise zwischen uns ist beendet. Im Ausland hat man unsere Entschlossenheit bemerkt, und ebenso unsere Methode. [ROOT.GetCountry.GetCustom('nd_crisis_concession_past')]"
+ },
+ "nuclear_crisis.6.d_yielded_target": {
+  "en": "We have yielded to the nuclear demand of [SCOPE.sCountry('nd_issuer').GetName], and the crisis between us is closed. The concession has been made; the humiliation will take longer to settle. [ROOT.GetCountry.GetCustom('nd_crisis_concession_past')]",
+  "de": "Wir haben der nuklearen Forderung [SCOPE.sCountry('nd_issuer').GetAltName('GEN')] nachgegeben, und die Krise zwischen uns ist beendet. Das Zugeständnis ist gemacht; die Demütigung wird länger brauchen, um sich zu legen. [ROOT.GetCountry.GetCustom('nd_crisis_concession_past')]"
+ },
+ "nuclear_crisis.6.f": {
+  "en": "\\\"Every crisis ends in a document. A communiqué, a cable, a paragraph in somebody's memoirs. It will say how the thing ended, and it will be wrong in the details and right in the outline.\\\"\\n\\n\\\"And what does it leave out?\\\"\\n\\n\\\"The nights. Nobody writes down the nights. The duty officers remember them, and the signals clerks, and whoever sat beside the telephone waiting for it to ring. Then they retire, and it is as if the nights never happened. That is how we come to do it all again.\\\"",
+  "de": "„Jede Krise endet in einem Dokument. Ein Kommuniqué, ein Telegramm, ein Absatz in den Memoiren irgendeines Menschen. Es wird erzählen, wie die Sache endete, und es wird in den Einzelheiten falsch liegen und im Umriss richtig.“\\n\\n„Und was lässt es aus?“\\n\\n„Die Nächte. Niemand schreibt die Nächte auf. Die diensthabenden Offiziere erinnern sich an sie, und die Fernschreiber, und wer auch immer neben dem Telefon saß und darauf wartete, dass es klingelt. Dann gehen sie in den Ruhestand, und es ist, als hätte es die Nächte nie gegeben. So kommt es, dass wir das Ganze noch einmal durchmachen.“"
+ },
+ "nuclear_crisis.6.t": {
+  "en": "The Crisis Passes",
+  "de": "Die Krise vergeht"
+ },
+ "nuclear_crisis.6.t_backed_down": {
+  "en": "The Threat Withdrawn",
+  "de": "Die zurückgenommene Drohung"
+ },
+ "nuclear_crisis.6.t_standdown": {
+  "en": "Both Sides Stand Down",
+  "de": "Beide Seiten deeskalieren"
+ },
+ "nuclear_crisis.6.t_use": {
+  "en": "The Threshold Crossed",
+  "de": "Die überschrittene Schwelle"
+ },
+ "nuclear_crisis.6.t_yielded": {
+  "en": "The Demand Is Met",
+  "de": "Die Forderung ist erfüllt"
  },
  "nuclear_crisis.7.a": {
   "en": "They were warned before the whole world. Carry out the threat.",
