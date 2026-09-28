@@ -169,7 +169,7 @@ CATEGORIES = {
     # per slot to the top and bottom quarters of vanilla's pictograms.
     **{f"ig_trait_{slot}": dict(
         folder="ig_trait_icons", size=162, card_size=(124, 162), frame=frame, mode="card",
-        fill=(0.72, 0.62), entity_dir="common/interest_group_traits", field="icon",
+        fill=(0.82, 0.7), entity_dir="common/interest_group_traits", field="icon",
         color=top, color_bottom=bottom, style=SILHOUETTE)
        for slot, frame, top, bottom in (
            ("loyal", (251, 249, 140), (119, 94, 73), (140, 102, 73)),
@@ -668,25 +668,25 @@ ICONS: dict[str, dict[str, dict]] = {
     # The custom-religion IG traits on another trait's card (all but the
     # traditionalist trio, which is the Devout IG's own set). Slot = category.
     "ig_trait_loyal": {
-        "ig_trait_custom_religion_market_liberal_loyal": {"subject": "a stack of coins with a small seedling sprouting from the top", "seed": None},
-        "ig_trait_custom_religion_social_democrat_loyal": {"subject": "three simple human figures standing arm in arm", "seed": None},
-        "ig_trait_custom_religion_totalitarian_loyal": {"subject": "an armoured gauntlet gripping a shepherd's crook", "seed": None},
-        "ig_trait_custom_religion_imperial_cult_loyal": {"subject": "a crown above a raised open hand taking an oath", "seed": None},
-        "ig_trait_custom_religion_theocratic_loyal": {"subject": "a judge's gavel resting on an open book", "seed": None},
+        "ig_trait_custom_religion_market_liberal_loyal": {"subject": "a stack of coins with a small seedling sprouting from the top", "seed": 0},
+        "ig_trait_custom_religion_social_democrat_loyal": {"subject": "three simple human figures standing arm in arm", "seed": 0},
+        "ig_trait_custom_religion_totalitarian_loyal": {"subject": "an armoured gauntlet gripping a shepherd's crook", "seed": 0},
+        "ig_trait_custom_religion_imperial_cult_loyal": {"subject": "a crown above a raised open hand taking an oath", "seed": 1},
+        "ig_trait_custom_religion_theocratic_loyal": {"subject": "a judge's gavel resting on an open book", "seed": 1},
     },
     "ig_trait_happy": {
-        "ig_trait_custom_religion_market_liberal_happy": {"subject": "two praying hands pressed together around a single coin", "seed": None},
-        "ig_trait_custom_religion_social_democrat_happy": {"subject": "a ladle over a steaming soup pot", "seed": None},
-        "ig_trait_custom_religion_totalitarian_happy": {"subject": "a grid of identical small human figures in neat rows", "seed": None},
-        "ig_trait_custom_religion_imperial_cult_happy": {"subject": "a radiant crown with bold rays behind it", "seed": None},
-        "ig_trait_custom_religion_theocratic_happy": {"subject": "two hands clasped in a handshake over an open book", "seed": None},
+        "ig_trait_custom_religion_market_liberal_happy": {"subject": "two praying hands pressed together around a single plain coin stamped with a star", "seed": None},
+        "ig_trait_custom_religion_social_democrat_happy": {"subject": "a ladle over a steaming soup pot", "seed": 1},
+        "ig_trait_custom_religion_totalitarian_happy": {"subject": "a grid of identical small human figures in neat rows", "seed": 0},
+        "ig_trait_custom_religion_imperial_cult_happy": {"subject": "a radiant crown with bold rays behind it", "seed": 0},
+        "ig_trait_custom_religion_theocratic_happy": {"subject": "two hands clasped in a handshake over an open book", "seed": 0},
     },
     "ig_trait_unhappy": {
-        "ig_trait_custom_religion_market_liberal_unhappy": {"subject": "a fat bulging money sack spilling coins", "seed": None},
-        "ig_trait_custom_religion_social_democrat_unhappy": {"subject": "a balance scale tipped heavily to one side", "seed": None},
-        "ig_trait_custom_religion_totalitarian_unhappy": {"subject": "a heavy military boot stamping down on a quill pen", "seed": None},
-        "ig_trait_custom_religion_imperial_cult_unhappy": {"subject": "a sword crossed over a sceptre behind a round shield", "seed": None},
-        "ig_trait_custom_religion_theocratic_unhappy": {"subject": "a flaming torch crossed with a pitchfork", "seed": None},
+        "ig_trait_custom_religion_market_liberal_unhappy": {"subject": "a fat bulging money sack spilling coins", "seed": 1},
+        "ig_trait_custom_religion_social_democrat_unhappy": {"subject": "a lopsided balance scale, its left pan sunk low and heaped with coins, its right pan raised high and empty", "seed": None},
+        "ig_trait_custom_religion_totalitarian_unhappy": {"subject": "a heavy military boot stamping down on a quill pen", "seed": 1},
+        "ig_trait_custom_religion_imperial_cult_unhappy": {"subject": "a sword crossed over a sceptre behind a round shield", "seed": 1},
+        "ig_trait_custom_religion_theocratic_unhappy": {"subject": "a flaming torch crossed with a pitchfork", "seed": 1},
     },
     # The combined-arms general traits (type = condition, so the condition
     # card) on vanilla skill and personality icons.

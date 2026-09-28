@@ -482,17 +482,24 @@ def compose_tinted(raw: Image.Image, spec: dict, ramp) -> Image.Image:
 def card_template(folder: str, size: tuple[int, int], frame: tuple[int, int, int]) -> np.ndarray:
     """The blank card vanilla's IG traits are drawn on, in one approval slot's frame colour.
 
-    The per-pixel median over the folder's cards whose frame matches `frame`
-    keeps the frame, the ornament and the edge shadow. In the middle, where
-    every card has its dark pictogram, a pixel instead takes the median over
-    only the cards in which it is bare: not within a few pixels of dark, since
-    a pictogram's highlights and edges are light. Pixels bare in too few cards
-    take the nearest bare pixel's colour. What is left of the pictograms still
-    shows as faint ghosts, so an ellipse in the middle, which the new
-    pictogram mostly covers, fades into a blurred copy; the corner ornaments
-    stay sharp.
+    Built from the folder's cards whose frame matches `frame`. A pixel is
+    bare on a card unless it lies within 3 px of dark (a pictogram has light
+    highlights and edges), except the card's own vines: pixels in the top or
+    bottom band that are dark on nearly every card.
+    - Outside a central ellipse, each pixel is the median over the cards on
+      which it is bare (the plain median where it is bare on all of them),
+      which keeps the frame, corner ornaments and edge shadow.
+    - Inside it, the Gaussian-weighted average of every bare observation on
+      every card (normalized convolution), a smooth gradient in the card's own
+      colours like vanilla's middles, which the new pictogram mostly covers.
+    Earlier tries left artefacts: a median over bare cards in the middle kept
+    ghosts of their pictograms and fragments along the bottom that read as
+    text; biharmonic inpainting overshot into white, blue and black blobs;
+    filling from the plain median pulled the pictograms' dark in.
     """
-    from scipy.ndimage import binary_dilation, distance_transform_edt, gaussian_filter
+    import warnings
+
+    from scipy.ndimage import binary_dilation, gaussian_filter
 
     w, h = size
     stack = []
@@ -510,34 +517,26 @@ def card_template(folder: str, size: tuple[int, int], frame: tuple[int, int, int
         raise SystemExit(f"only {len(stack)} cards with frame {frame} in {vanilla_icons_dir() / folder}: "
                          "check VIC3_BASE_GAME")
     arr = np.stack(stack)
-    card = np.median(arr, axis=0)
-    interior = np.zeros((h, w), bool)
-    interior[round(h * 0.09):round(h * 0.9), round(w * 0.13):round(w * 0.87)] = True
     dark = (arr[..., :3] @ LUMA) < 120
-    # Dark on most cards in the top or bottom band: the card's own vines. (The
-    # middle is dark on most cards too, under their pictograms.)
     band = np.zeros((h, w), bool)
     band[:round(h * 0.2)] = band[round(h * 0.75):] = True
     ornament = band & (dark.mean(axis=0) > 0.9)
     bare = ~np.stack([binary_dilation(d & ~ornament, iterations=3) for d in dark])
-    import warnings
+    count = bare.sum(axis=0)
+    card = np.median(arr, axis=0)
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", RuntimeWarning)
         bare_med = np.nanmedian(np.where(bare[..., None], arr, np.nan), axis=0)
-    hole = interior & ~ornament & ((bare.sum(axis=0) < max(2, len(stack) // 3)) | np.isnan(bare_med[..., 0]))
-    keep = interior & ~hole & ~ornament
-    card[keep] = bare_med[keep]
-    if hole.any():
-        # From the nearest bare card pixel, not a dark vine beside the hole.
-        _, (iy, ix) = distance_transform_edt(hole | binary_dilation(ornament, iterations=2),
-                                             return_indices=True)
-        filled = card[iy, ix]
-        soft = np.stack([gaussian_filter(filled[..., c], 3) for c in range(4)], axis=-1)
-        card[hole] = soft[hole]
+    some = (count > 0) & (count < len(stack))
+    card[some] = bare_med[some]
+    sigma = w / 8
+    total = (arr[..., :3] * bare[..., None]).sum(axis=0)
+    den = gaussian_filter(count.astype(np.float32), sigma)
+    fill = np.stack([gaussian_filter(total[..., c], sigma) / np.maximum(den, 1e-6) for c in range(3)], axis=-1)
     yy, xx = np.mgrid[0:h, 0:w]
-    ell = np.clip(3 * (1 - np.hypot((xx - w / 2) / (w * 0.42), (yy - h / 2) / (h * 0.47))), 0, 1)[..., None]
-    blurred = np.stack([gaussian_filter(card[..., c], 5) for c in range(3)], axis=-1)
-    card[..., :3] = card[..., :3] * (1 - ell) + blurred * ell
+    r = np.hypot((xx - w / 2) / (w * 0.38), (yy - h * 0.5) / (h * 0.445))
+    weight = np.clip((1.05 - r) * 5, 0, 1)[..., None]
+    card[..., :3] = card[..., :3] * (1 - weight) + fill * weight
     return card
 
 
