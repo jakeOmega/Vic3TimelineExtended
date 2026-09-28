@@ -12,6 +12,7 @@ from game_log_reader import (
     LogFileInfo,
     list_logs,
     filter_mod_only,
+    filter_debug_log,
     filter_entries,
     dedupe,
     diff_against_backup,
@@ -132,6 +133,25 @@ class ClassificationTests(unittest.TestCase):
                 e = LogEntry("00:00:00", source, "Could not mount ...")
                 self.assertEqual(e.category, "vfs_mount")
 
+    def test_debug_log_output_is_its_own_category(self):
+        # Script debug_log lines (:454 today, :453 before 1.14) and the
+        # debug_log_scopes dump (:2501) are trace output, not errors.
+        for source, message in (
+            ("jomini_effect_impl.cpp:454", "common/scripted_effects/gm_effects.txt:1194: TE_MONUMENTS: 10 monuments"),
+            ("jomini_effect_impl.cpp:453", " file: common/on_actions/00_code_on_actions.txt line: 4785: Fascist Party Created"),
+            ("jomini_effect_impl.cpp:2501", "State Trucial Coast (x505AE0)\nRoot: Country Byzantium (88)"),
+        ):
+            with self.subTest(source=source):
+                self.assertEqual(LogEntry("00:00:00", source, message).category, "debug_log")
+
+    def test_never_set_validator_is_not_a_scope_error(self):
+        e = LogEntry("00:00:00", "jomini_effect.cpp:1139",
+                     "Variable 'sr_active_milestone' is used but is never set.")
+        self.assertEqual(e.category, "used_but_never_set")
+        # Other lines of the file keep the file-level rule.
+        e = LogEntry("00:00:00", "jomini_effect.cpp:760", "Inconsistent effect scopes")
+        self.assertEqual(e.category, "inconsistent_effect_scope")
+
     def test_no_dead_prefix_keys(self):
         # A `"<file>:"` key in the exact-match table is unreachable; whole-file
         # rules belong in SOURCE_CATEGORY_FILE. (#254 §6)
@@ -172,6 +192,16 @@ class FilterTests(unittest.TestCase):
         b = LogEntry("00:00:00", "virtualfilesystem.cpp:569", "Could not find texture")
         result = filter_entries([a, b], category="missing_file")
         self.assertEqual(result, [b])
+
+    def test_filter_debug_log_modes(self):
+        trace = LogEntry("00:00:00", "jomini_effect_impl.cpp:454", "common/scripted_effects/x.txt:1: TE_X: hello")
+        dump = LogEntry("00:00:00", "jomini_effect_impl.cpp:2501", "State X (x1)\nRoot: Country Y (2)")
+        error = LogEntry("00:00:00", "gamedatabase.h:378", "Duplicated key concept_x")
+        entries = [trace, error, dump]
+        self.assertEqual(filter_debug_log(entries, "hide"), [error])
+        self.assertEqual(filter_debug_log(entries, "only"), [trace, dump])
+        self.assertEqual(filter_debug_log(entries, "show"), entries)
+        self.assertEqual(filter_debug_log(entries, "bogus"), entries)
 
     def test_filter_entries_since(self):
         a = LogEntry("00:01:00", "x.cpp:1", "early")

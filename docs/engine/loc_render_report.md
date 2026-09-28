@@ -21,6 +21,12 @@ name (the engine pastes it into `GetRawTextTooltipTag('…')` for the
 add/remove-modifier tooltip). Fix: move the reference out of the
 argument; write `’` (U+2019) in the name.
 
+Also flagged: `[SOURCE_COUNTRY…]`, `[TARGET_COUNTRY…]`, `[FIRST_COUNTRY…]`,
+`[SECOND_COUNTRY…]`, `[ROOT…]` or `[SCOPE…]` in a treaty article's `_desc`
+or `_effects_desc`. That text renders with no article instance behind it,
+so the scope promotes to nullptr and shows blank. Fix: keep it scope-free
+and move scoped text into `<article>_article_short_desc`.
+
 Suppress an intentional flag with a trailing comment on the loc line:
 `my_loc_key:0 "…" # REVIEWED YYYY-MM-DD: rationale`
 
