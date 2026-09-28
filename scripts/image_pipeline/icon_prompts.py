@@ -241,7 +241,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "jadc2": {"subject": "a glowing holographic globe surrounded by small models of a ship, a jet, a tank and a satellite linked by lines of light", "seed": 1},
         "reusable_rocketry": {"subject": "a tall slim grey cylindrical rocket booster with a flat top, standing upright on four thin splayed landing legs, a small flame and smoke at its base", "seed": 0},
         "additive_manufacturing": {"subject": "a desktop 3D printer printing an orange plastic gear layer by layer", "seed": 1},
-        "advanced_structural_engineering": {"subject": "a short thick steel I-beam welded to a black woven carbon-fibre plate, a bright orange glowing weld seam along the joint with a few sparks", "seed": None},
+        "advanced_structural_engineering": {"subject": "a short thick steel I-beam welded to a black woven carbon-fibre plate, a bright orange glowing weld seam along the joint with a few sparks", "seed": 3},
         "electric_vehicles": {"subject": "a sleek dark blue electric car plugged into a green charging post by a thick cable", "seed": 1},
         "generative_ai": {"subject": "a silver robotic hand holding a paintbrush over a small canvas of colourful strokes", "seed": 3},
         "internet_of_things": {"subject": "a round grey smart home hub surrounded by a thermostat, a light bulb and a small sensor linked by glowing lines", "seed": 0},
