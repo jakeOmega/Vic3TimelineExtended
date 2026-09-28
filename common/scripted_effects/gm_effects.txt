@@ -398,6 +398,19 @@ gm_country_refresh = {
 		}
 		set_variable = gm_active
 	}
+	# JE Auto-Activation Requires BOTH (scripting_best_practices.md): the JE's
+	# is_shown_when_inactive auto-activates it for new saves, but a new
+	# auto-activating JE does not reach a save started before it existed
+	# (same doc, following paragraph). Add it explicitly here so saves that
+	# predate this entry, and any save where it lapsed, pick it back up.
+	if = {
+		limit = {
+			gm_system_enabled = yes
+			NOT = { has_journal_entry = je_grand_monuments }
+			any_scope_state = { has_building = building_grand_monument }
+		}
+		add_journal_entry = { type = je_grand_monuments }
+	}
 	clear_variable_list = gm_states
 	every_scope_state = {
 		limit = { has_building = building_grand_monument }

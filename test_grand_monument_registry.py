@@ -664,7 +664,8 @@ class NationalTests(unittest.TestCase):
 
     def test_refresh_order(self):
         body = squash(block(self.e, "gm_country_refresh"))
-        order = ["gm_init_ledgers = yes", "clear_variable_list = gm_states",
+        order = ["gm_init_ledgers = yes", "add_journal_entry = { type = je_grand_monuments }",
+                 "clear_variable_list = gm_states",
                  "set_variable = { name = gm_grandeur value = gm_state_grandeur }",
                  "gm_state_first_sight = yes", "add_to_variable_list = { name = gm_states target = prev }",
                  "gm_set_opposition_ig = yes", "gm_check_contests = yes", "gm_compute_totals = yes",
@@ -693,11 +694,18 @@ class NationalTests(unittest.TestCase):
     def test_je_lifecycle(self):
         je = read(JE)
         self.assertIn("any_scope_state = { has_building = building_grand_monument }", squash(block(je, "possible")))
+        shown = squash(block(je, "is_shown_when_inactive"))
+        self.assertIn("gm_system_enabled = yes", shown)
+        self.assertIn("any_scope_state = { has_building = building_grand_monument }", shown)
         invalid = squash(block(je, "invalid"))
         self.assertIn("gm_system_enabled = no", invalid)
         self.assertIn("gm_ledgers_idle = yes", invalid)
         self.assertIn("NOT = { any_scope_state = { has_variable = gm_seen } }", invalid)
         self.assertIsNone(block(je, "immediate"), "nothing a revolution's winner would lose")
+        # Old saves that predate this JE never get it from is_shown_when_inactive
+        # alone (scripting_best_practices.md § "JE Auto-Activation Requires
+        # BOTH"), so gm_country_refresh must add it explicitly too.
+        self.assertIn("add_journal_entry = { type = je_grand_monuments }", squash(read(EFFECTS)))
         for key in ("je_grand_monuments", "je_grand_monuments_reason", "je_grand_monuments_status",
                     "je_grand_monuments_status_contested"):
             self.assertIn(key, loc())
