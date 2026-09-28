@@ -354,6 +354,45 @@ def check_translation(en: str, translated: str) -> tuple[list[str], list[str]]:
 
 
 # --------------------------------------------------------------------------
+# Number format
+
+# Languages that write 2,5 and 1.000 where English writes 2.5 and 1,000.
+DECIMAL_COMMA = {"german", "french", "spanish", "braz_por", "polish", "russian", "turkish"}
+_MARKUP = re.compile(r"\[[^\[\]]*\]|\$[^$]*\$|#[a-zA-Z_]+(?::\S*)?|@\w+!")
+_EN_DECIMAL = re.compile(r"(?<![\w.,])\d+\.\d+(?![.,]?\d)")
+_EN_THOUSANDS = re.compile(r"(?<![\w.,])\d{1,3}(?:,\d{3})+(?![.,]?\d)")
+
+
+def _prose_segments(value: str) -> list[tuple[bool, str]]:
+    """Split a value into (is_prose, text) runs; markup runs are left alone."""
+    out, pos = [], 0
+    for match in _MARKUP.finditer(value):
+        out.append((True, value[pos:match.start()]))
+        out.append((False, match.group(0)))
+        pos = match.end()
+    out.append((True, value[pos:]))
+    return out
+
+
+def localize_numbers(en: str, translated: str, language: str) -> str:
+    """Rewrite the English-format numbers of `en` that the translation kept
+    verbatim in its prose (2.5 -> 2,5, 1,000 -> 1.000). Numbers inside markup,
+    and numbers the translator already converted, are left alone."""
+    if language not in DECIMAL_COMMA:
+        return translated
+    prose = " ".join(text for is_prose, text in _prose_segments(en) if is_prose)
+    swaps = {n: n.replace(".", ",") for n in _EN_DECIMAL.findall(prose)}
+    swaps.update({n: n.replace(",", ".") for n in _EN_THOUSANDS.findall(prose)})
+    if not swaps:
+        return translated
+    pattern = re.compile(r"(?<![\w.,])(" + "|".join(map(re.escape, sorted(swaps, key=len, reverse=True))) + r")(?![.,]?\d)")
+    return "".join(
+        pattern.sub(lambda m: swaps[m.group(1)], text) if is_prose else text
+        for is_prose, text in _prose_segments(translated)
+    )
+
+
+# --------------------------------------------------------------------------
 # Vanilla terms
 
 
@@ -618,7 +657,7 @@ def cmd_merge(args) -> int:
                 continue
             if warnings:
                 warns[key] = warnings
-            record = {"en": en, lang_field: value}
+            record = {"en": en, lang_field: localize_numbers(en, value, language)}
             if key != base:
                 record["base"] = base
             tm[key] = record

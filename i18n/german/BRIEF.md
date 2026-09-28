@@ -46,7 +46,8 @@ DE  Erlaubt es, [Concept('concept_decree', '$concept_decrees$')] in [Concept('co
 ```
 
 - Keep **every** concept link: the same concepts, the same number of times. You may switch between `[concept_x]` and `[Concept('concept_x', '…')]` freely, and move links within the sentence.
-- The display text must be the concept's own German term, inflected. The glossary's REFERENCED KEYS section shows the nominative. Don't substitute a synonym.
+- For a plain `[concept_x]` link, the display text you write must be the concept's own German term, inflected; the glossary's REFERENCED KEYS section shows the nominative. Don't substitute a synonym.
+- Where the English already gives its own display text (`[Concept('concept_x', 'construction capacity')]`), translate that text, inflected. The English author chose it on purpose, even when it differs from the concept's name.
 - `|l` lowercases a link's rendered name (`[concept_foreign_investment_rights|l]`), `|U` capitalises it. Use them where German capitalisation needs it.
 
 ## Country names: decline with `GetAltName`
@@ -110,5 +111,5 @@ Proper names stay as they are: companies, people, places, historical buildings, 
 - **Events** speak for the player's government in the first person plural: „Wir müssen …“, „unsere Regierung …“. Option buttons are short statements or exclamations in that voice. Flavour text (`.f`) may be literary; keep its tone.
 - **Tooltips and descriptions** are impersonal and precise: „Erhöht die …“, „Wirkt sich auf … aus“. Address the player directly (Sie) only where the English does, and sparingly.
 - **Names and labels** (modifiers, buildings, laws, buttons, journal entries) stay short. The UI boxes were sized for English, and German runs longer. Prefer a compact noun („Kapitalverkehrskontrollen“) to a paraphrase.
-- Numbers, percentages and dates come from markup. Never write a number the English doesn't have.
+- Numbers, percentages and dates come from markup. Never write a number the English doesn't have. Where the English writes a number in the prose, use German format: 2,5 for 2.5, and 1.000 for 1,000.
 - Keep the English meaning, including hedges and conditions („bis zu“, „höchstens“, „sofern …“). Don't add explanations the English doesn't give.

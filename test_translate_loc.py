@@ -127,6 +127,24 @@ class StalePolicyTests(unittest.TestCase):
         self.assertEqual([e.key for e in state["skip"]], ["markup_only"])
 
 
+class NumberFormatTests(unittest.TestCase):
+    def test_decimal_and_thousands_swapped_in_prose(self):
+        en = "Costs 2.5 times as much, up to 1,000 units."
+        self.assertEqual(t.localize_numbers(en, "Kostet 2.5-mal so viel, bis zu 1,000 Einheiten.", "german"),
+                         "Kostet 2,5-mal so viel, bis zu 1.000 Einheiten.")
+
+    def test_markup_and_already_converted_numbers_untouched(self):
+        en = "Rate #v 0.5#! of [X.GetValue|1.0] and 1,000"
+        de = "Rate #v 0.5#! von [X.GetValue|1.0] und 1.000"
+        self.assertEqual(t.localize_numbers(en, de, "german"), "Rate #v 0,5#! von [X.GetValue|1.0] und 1.000")
+
+    def test_numbers_not_in_the_english_untouched(self):
+        self.assertEqual(t.localize_numbers("Plain text", "Version 2.0", "german"), "Version 2.0")
+
+    def test_english_formats_kept_for_other_languages(self):
+        self.assertEqual(t.localize_numbers("2.5", "2.5", "japanese"), "2.5")
+
+
 class ChunkingTests(unittest.TestCase):
     def test_event_group_is_not_split(self):
         entries = [t.Entry("e_l_english.yml", f"ev.1.{s}", "word " * 10) for s in ("t", "d", "f", "a")]

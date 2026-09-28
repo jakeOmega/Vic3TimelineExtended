@@ -811,6 +811,1634 @@
   "en": "Import Cost Spiral",
   "de": "Importkostenspirale"
  },
+ "cultural_hegemony.19.a": {
+  "en": "Fashions change. Our principles do not.",
+  "de": "Moden ändern sich. Unsere Prinzipien nicht."
+ },
+ "cultural_hegemony.19.b": {
+  "en": "Perhaps [SCOPE.sCountry('ch_new_hegemon').GetName] has something to teach us.",
+  "de": "Vielleicht kann [SCOPE.sCountry('ch_new_hegemon').GetAltName('NOM')] uns etwas lehren."
+ },
+ "cultural_hegemony.19.d": {
+  "en": "[SCOPE.sCountry('ch_new_hegemon').GetName], the world's leading cultural power, no longer governs the way we do. The [ROOT.GetCountry.GetCustom('ch_country_model_text')] model that set the fashion abroad has lost its most admired example, and our critics at home have been quick to say so.",
+  "de": "[SCOPE.sCountry('ch_new_hegemon').GetAltName('NOM')|U], die weltweit führende Kulturmacht, regiert nicht mehr so wie wir. Das [ROOT.GetCountry.GetCustom('ch_country_model_text')]-Modell, das im Ausland den Ton angab, hat sein bewundertstes Beispiel verloren, und unsere Kritiker im Inland haben das schnell bemerkt."
+ },
+ "cultural_hegemony.19.f": {
+  "en": "\\\"A year ago every lecture hall in the capital wanted a speaker on how the great powers govern. I was turning invitations down.\\\"\\n\\n\\\"And now?\\\"\\n\\n\\\"Now they want a speaker on why it failed. Same halls, same students, the same questions turned inside out.\\\"\\n\\n\\\"It hasn't failed. We are still here, doing what we did last year.\\\"\\n\\n\\\"Try telling that to a twenty-year-old with a pamphlet from the new fashion in their pocket.\\\"",
+  "de": "„Vor einem Jahr wollte jeder Hörsaal der Hauptstadt einen Redner darüber, wie die Großmächte regieren. Ich musste Einladungen ablehnen.“\\n\\n„Und jetzt?“\\n\\n„Jetzt wollen sie einen Redner darüber, warum es gescheitert ist. Dieselben Säle, dieselben Studenten, dieselben Fragen von innen nach außen gekehrt.“\\n\\n„Es ist nicht gescheitert. Wir sind noch hier und tun, was wir letztes Jahr getan haben.“\\n\\n„Erzählen Sie das mal einem Zwanzigjährigen mit einem Pamphlet der neuen Mode in der Tasche.“"
+ },
+ "cultural_hegemony.19.t": {
+  "en": "The Standard Falls",
+  "de": "Der Standard fällt"
+ },
+ "cultural_hegemony.2.a": {
+  "en": "Embrace the cosmopolitan tide",
+  "de": "Die kosmopolitische Welle begrüßen"
+ },
+ "cultural_hegemony.2.b": {
+  "en": "Rally behind our own traditions",
+  "de": "Uns hinter unseren eigenen Traditionen versammeln"
+ },
+ "cultural_hegemony.2.c": {
+  "en": "This is not worth our attention",
+  "de": "Das ist keine Beachtung wert"
+ },
+ "cultural_hegemony.2.d": {
+  "en": "Foreign films, music, and literature are increasingly dominating the cultural landscape of [ROOT.GetCountry.GetName]. Traditional values are being displaced by imported ideas, and the younger generation seems more interested in foreign trends than in their own heritage.",
+  "de": "Ausländische Filme, Musik und Literatur dominieren zunehmend die Kulturlandschaft [ROOT.GetCountry.GetAltName('GEN')]. Traditionelle Werte werden durch importierte Ideen verdrängt, und die jüngere Generation scheint sich mehr für ausländische Trends zu interessieren als für ihr eigenes Erbe."
+ },
+ "cultural_hegemony.2.f": {
+  "en": "The children sang along to foreign songs they barely understood, while their grandparents shook their heads and wondered when exactly the world had changed.\\n\\n\\\"It changed the year the radio became affordable,\\\" the village schoolmaster told them. \\\"You did not notice because it changed in the next room, not in this one. Now it has changed in this room too. The grandchildren are still the grandchildren. They simply sing different songs.\\\"",
+  "de": "Die Kinder sangen ausländische Lieder mit, die sie kaum verstanden, während ihre Großeltern den Kopf schüttelten und sich fragten, wann genau sich die Welt verändert hatte.\\n\\n„Sie hat sich in dem Jahr verändert, als das Radio erschwinglich wurde“, erklärte ihnen der Dorfschullehrer. „Ihr habt es nicht bemerkt, weil es sich im Nebenzimmer verändert hat, nicht in diesem. Jetzt hat es sich auch in diesem Zimmer verändert. Die Enkel sind immer noch die Enkel. Sie singen nur andere Lieder.“"
+ },
+ "cultural_hegemony.2.t": {
+  "en": "Foreign Cultural Infiltration",
+  "de": "Fremde kulturelle Unterwanderung"
+ },
+ "cultural_hegemony.20.a": {
+  "en": "Close the border to their ideas, if not to their trade.",
+  "de": "Die Grenze für ihre Ideen schließen, wenn schon nicht für ihren Handel."
+ },
+ "cultural_hegemony.20.b": {
+  "en": "Let it come. A good idea is no threat to a good government.",
+  "de": "Lass es kommen. Eine gute Idee ist für eine gute Regierung keine Bedrohung."
+ },
+ "cultural_hegemony.20.d": {
+  "en": "[SCOPE.sCountry('ch_domino_country').GetName] has remade its government on the [SCOPE.sCountry('ch_domino_country').GetCustom('ch_country_model_text')] model, the model of [SCOPE.sCountry('cultural_hegemon').GetName], the world's leading cultural power. Its newspapers cross our border every morning, and our own reformers are already asking why we cannot do the same.",
+  "de": "[SCOPE.sCountry('ch_domino_country').GetAltName('NOM')|U] hat die Regierung nach dem [SCOPE.sCountry('ch_domino_country').GetCustom('ch_country_model_text')]-Modell umgestaltet, dem Modell [SCOPE.sCountry('cultural_hegemon').GetAltName('GEN')], der weltweit führenden Kulturmacht. Die dortigen Zeitungen überqueren jeden Morgen unsere Grenze, und unsere eigenen Reformer fragen bereits, warum wir das nicht auch tun können."
+ },
+ "cultural_hegemony.20.f": {
+  "en": "\\\"How many this week?\\\"\\n\\n\\\"Four crates of their newspapers, two of pamphlets, and a man with a trunk full of their new constitution, printed small enough to pass for a prayer book.\\\"\\n\\n\\\"Did you seize them?\\\"\\n\\n\\\"The newspapers, yes. Most of the pamphlets. The constitution I read on the night shift. Sergeant, have you read it?\\\"\\n\\n\\\"I have not, and neither have you. Put that in the report.\\\"",
+  "de": "„Wie viele diese Woche?“\\n\\n„Vier Kisten ihrer Zeitungen, zwei mit Pamphleten und ein Mann mit einem Koffer voller ihrer neuen Verfassung, klein genug gedruckt, um als Gebetbuch durchzugehen.“\\n\\n„Habt ihr sie beschlagnahmt?“\\n\\n„Die Zeitungen, ja. Die meisten Pamphlete. Die Verfassung habe ich in der Nachtschicht gelesen. Sergeant, haben Sie sie gelesen?“\\n\\n„Habe ich nicht, und Sie auch nicht. Schreiben Sie das in den Bericht.“"
+ },
+ "cultural_hegemony.20.t": {
+  "en": "Across the Border",
+  "de": "Jenseits der Grenze"
+ },
+ "cultural_hegemony.3.a": {
+  "en": "Leverage our narrative dominance",
+  "de": "Unsere narrative Dominanz nutzen"
+ },
+ "cultural_hegemony.3.b": {
+  "en": "Promote a free and open press",
+  "de": "Eine freie und offene Presse fördern"
+ },
+ "cultural_hegemony.3.d": {
+  "en": "The media apparatus of [ROOT.GetCountry.GetName] has achieved an unprecedented level of global reach. Our newspapers, radio broadcasts, and films shape the opinions of millions beyond our borders, granting us extraordinary influence over international discourse.",
+  "de": "Der Medienapparat [ROOT.GetCountry.GetAltName('GEN')] hat ein beispielloses Maß an globaler Reichweite erreicht. Unsere Zeitungen, Radiosendungen und Filme prägen die Meinungen von Millionen jenseits unserer Grenzen und verschaffen uns außergewöhnlichen Einfluss auf den internationalen Diskurs."
+ },
+ "cultural_hegemony.3.f": {
+  "en": "Every morning, half the world woke up and read what we wanted them to read. That was power—not the kind that came from cannons, but the kind that made cannons unnecessary.",
+  "de": "Jeden Morgen wachte die halbe Welt auf und las, was wir sie lesen lassen wollten. Das war Macht – nicht die Art, die aus Kanonen kommt, sondern die Art, die Kanonen überflüssig macht."
+ },
+ "cultural_hegemony.3.t": {
+  "en": "Media Dominance",
+  "de": "Mediendominanz"
+ },
+ "cultural_hegemony.4.a": {
+  "en": "Channel this nationalist energy",
+  "de": "Diese nationalistische Energie kanalisieren"
+ },
+ "cultural_hegemony.4.b": {
+  "en": "Suppress this dangerous populism",
+  "de": "Diesen gefährlichen Populismus unterdrücken"
+ },
+ "cultural_hegemony.4.d": {
+  "en": "The relentless tide of foreign cultural influence has provoked a fierce backlash among traditional elements of [ROOT.GetCountry.GetAdjectiveNoFormatting] society. Nationalist voices are growing louder, demanding protection of domestic culture and traditions.",
+  "de": "Die unaufhaltsame Welle fremder kultureller Einflüsse hat eine heftige Gegenreaktion unter den traditionellen Kräften der [ROOT.GetCountry.GetAdjectiveNoFormatting|l]en Gesellschaft ausgelöst. Nationalistische Stimmen werden lauter und fordern den Schutz der heimischen Kultur und Traditionen."
+ },
+ "cultural_hegemony.4.f": {
+  "en": "The general spoke of foreign music as though it were an invading army—and to his audience, who had watched their children abandon old songs for new ones, it rather felt like one.",
+  "de": "Der General sprach von ausländischer Musik, als wäre sie eine einfallende Armee – und für sein Publikum, das mit ansehen musste, wie die eigenen Kinder alte Lieder gegen neue eintauschten, fühlte es sich auch beinahe so an."
+ },
+ "cultural_hegemony.4.t": {
+  "en": "Cultural Backlash",
+  "de": "Kultureller Gegenschlag"
+ },
+ "cultural_hegemony.5.a": {
+  "en": "Capitalize on our cultural [concept_prestige]",
+  "de": "Unser kulturelles [concept_prestige] nutzen"
+ },
+ "cultural_hegemony.5.b": {
+  "en": "Reinvest in cultural institutions",
+  "de": "In kulturelle Institutionen reinvestieren"
+ },
+ "cultural_hegemony.5.d": {
+  "en": "[ROOT.GetCountry.GetName]'s growing cultural influence is paying diplomatic [concept_dividends]. Foreign nations are more receptive to our overtures, immigrants are drawn to our shores, and our international [concept_prestige] continues to climb.",
+  "de": "Der wachsende kulturelle Einfluss [ROOT.GetCountry.GetAltName('GEN')] zahlt sich in diplomatischen [concept_dividends] aus. Ausländische Nationen sind unseren Annäherungen gegenüber aufgeschlossener, Einwanderer fühlen sich zu unseren Küsten hingezogen, und unser internationales [concept_prestige] steigt weiter."
+ },
+ "cultural_hegemony.5.f": {
+  "en": "They didn't come for the wages—those were better elsewhere. They came because they'd grown up watching our films, reading our books, and dreaming of a place they already felt they knew.",
+  "de": "Sie kamen nicht wegen der Löhne – die waren anderswo besser. Sie kamen, weil sie damit aufgewachsen waren, unsere Filme zu sehen, unsere Bücher zu lesen und von einem Ort zu träumen, den sie schon zu kennen glaubten."
+ },
+ "cultural_hegemony.5.t": {
+  "en": "Soft Power Dividend",
+  "de": "Soft-Power-Dividende"
+ },
+ "cultural_hegemony.6.a": {
+  "en": "Fund universities to retain talent",
+  "de": "Universitäten finanzieren, um Talente zu halten"
+ },
+ "cultural_hegemony.6.b": {
+  "en": "Accept the inevitable",
+  "de": "Das Unvermeidliche akzeptieren"
+ },
+ "cultural_hegemony.6.d": {
+  "en": "The brightest minds of [ROOT.GetCountry.GetName] are leaving for nations with greater cultural [concept_prestige] and higher standards of living. Universities are losing their best professors, and research institutions are hemorrhaging talent to foreign competitors.",
+  "de": "Die klügsten Köpfe [ROOT.GetCountry.GetAltName('GEN')] wandern in Länder mit größerem kulturellem [concept_prestige] und höherem Lebensstandard ab. Universitäten verlieren ihre besten Professoren, und Forschungseinrichtungen bluten Talente an ausländische Konkurrenten aus."
+ },
+ "cultural_hegemony.6.f": {
+  "en": "The professor's farewell lecture drew a standing ovation. By the end of the month, three of his colleagues had followed him abroad. The department carried on, of course—with fewer people and dimmer prospects.",
+  "de": "Die Abschiedsvorlesung des Professors erhielt stehende Ovationen. Bis Ende des Monats waren ihm drei seiner Kollegen ins Ausland gefolgt. Die Fakultät machte natürlich weiter – nur mit weniger Personal und trüberen Aussichten."
+ },
+ "cultural_hegemony.6.t": {
+  "en": "Brain Drain",
+  "de": "Braindrain"
+ },
+ "cultural_hegemony.7.a": {
+  "en": "Embrace the exchange of ideas",
+  "de": "Den Ideenaustausch begrüßen"
+ },
+ "cultural_hegemony.7.b": {
+  "en": "Crush this subversive foreign propaganda",
+  "de": "Diese subversive ausländische Propaganda zerschlagen"
+ },
+ "cultural_hegemony.7.c": {
+  "en": "Control the narrative through state media",
+  "de": "Die Deutungshoheit über Staatsmedien sichern"
+ },
+ "cultural_hegemony.7.d": {
+  "en": "Invest modestly in our own cultural voice",
+  "de": "Bescheiden in unsere eigene kulturelle Stimme investieren"
+ },
+ "cultural_hegemony.7.desc": {
+  "en": "[SCOPE.sCountry('cultural_hegemon').GetName]'s cultural dominance is reshaping the political landscape of [ROOT.GetCountry.GetName]. Foreign films, literature, and media carry implicit political messages that resonate with certain [Concept('concept_interest_group', 'interest groups')] and fuel [Concept('concept_political_movement', 'political movements')] modeled on the hegemon's governing ideology.",
+  "de": "Die kulturelle Dominanz [SCOPE.sCountry('cultural_hegemon').GetAltName('GEN')] verändert die politische Landschaft [ROOT.GetCountry.GetAltName('GEN')]. Ausländische Filme, Literatur und Medien tragen unterschwellige politische Botschaften, die bei bestimmten [Concept('concept_interest_group', 'Interessengruppen')] Anklang finden und [Concept('concept_political_movement', 'Protestbewegungen')] nach dem Vorbild der Regierungsideologie des Hegemons befeuern."
+ },
+ "cultural_hegemony.7.f": {
+  "en": "The young [Concept('concept_radical', 'radicals')] quoted foreign philosophers in foreign languages, wearing foreign fashions, demanding the same rights they'd seen in foreign films—and the old guard could only watch, wondering when exactly the future had arrived without their permission.",
+  "de": "Die jungen [Concept('concept_radical', 'Radikalen')] zitierten ausländische Philosophen in fremden Sprachen, trugen ausländische Moden und forderten dieselben Rechte, die sie in ausländischen Filmen gesehen hatten – und die alte Garde konnte nur zusehen und sich fragen, wann genau die Zukunft ohne ihre Erlaubnis angekommen war."
+ },
+ "cultural_hegemony.7.t": {
+  "en": "Foreign Ideological Influence",
+  "de": "Fremder ideologischer Einfluss"
+ },
+ "cultural_hegemony.8.a": {
+  "en": "Invest in cultural projection abroad",
+  "de": "In kulturelle Ausstrahlung im Ausland investieren"
+ },
+ "cultural_hegemony.8.b": {
+  "en": "Consolidate our domestic institutions",
+  "de": "Unsere inländischen Institutionen konsolidieren"
+ },
+ "cultural_hegemony.8.d": {
+  "en": "[ROOT.GetCountry.GetName]'s cultural influence has reached a level where it can no longer be ignored. Our art, our media, and our way of life are being discussed, debated, and emulated in foreign capitals. We stand at a crossroads: invest further in our cultural projection, or consolidate our domestic strengths.",
+  "de": "Der kulturelle Einfluss [ROOT.GetCountry.GetAltName('GEN')] hat ein Ausmaß erreicht, das sich nicht mehr ignorieren lässt. Unsere Kunst, unsere Medien und unsere Lebensweise werden in ausländischen Hauptstädten diskutiert, debattiert und nachgeahmt. Wir stehen an einem Scheideweg: weiter in unsere kulturelle Ausstrahlung investieren oder unsere heimischen Stärken konsolidieren."
+ },
+ "cultural_hegemony.8.f": {
+  "en": "\\\"They wore our fashions in Shanghai, hummed our melodies in Kinshasa, and debated our philosophers in Buenos Aires — all without a single soldier crossing a border.\\\"\\n\\n\\\"And what does that buy us?\\\"\\n\\n\\\"Influence. Sympathy. A generation of foreign students who will be foreign ministers in twenty years. We do not get to direct what they do with the influence we sold them. We only get to notice that it was sold cheaply, and that it appreciated faster than any commodity.\\\"",
+  "de": "„Sie trugen unsere Moden in Shanghai, summten unsere Melodien in Kinshasa und debattierten über unsere Philosophen in Buenos Aires – und das, ohne dass ein einziger Soldat eine Grenze überschritten hätte.“\\n\\n„Und was bringt uns das?“\\n\\n„Einfluss. Sympathie. Eine Generation ausländischer Studenten, die in zwanzig Jahren Außenminister sein werden. Wir können nicht bestimmen, was sie mit dem Einfluss anfangen, den wir ihnen verkauft haben. Wir können nur feststellen, dass er billig verkauft wurde und schneller an Wert gewann als jede Ware.“"
+ },
+ "cultural_hegemony.8.t": {
+  "en": "The World is Watching",
+  "de": "Die Welt schaut zu"
+ },
+ "cultural_hegemony.9.a": {
+  "en": "The world looks to us for leadership",
+  "de": "Die Welt erwartet Führung von uns"
+ },
+ "cultural_hegemony.9.d": {
+  "en": "[ROOT.GetCountry.GetName] now stands as the undisputed cultural center of the world. Our language is the language of diplomacy, our media shapes global opinion, and our political model is the one others aspire to emulate. This is a position of immense power — and immense responsibility.",
+  "de": "[ROOT.GetCountry.GetAltName('NOM')|U] ist nun das unangefochtene kulturelle Zentrum der Welt. Unsere Sprache ist die Sprache der Diplomatie, unsere Medien prägen die Weltmeinung, und unser politisches Modell ist jenes, dem andere nachzueifern versuchen. Das ist eine Position immenser Macht – und immenser Verantwortung."
+ },
+ "cultural_hegemony.9.f": {
+  "en": "\\\"When the world needed a word for progress, they borrowed ours.\\\"\\n\\n\\\"And the word came with attached meanings.\\\"\\n\\n\\\"Of course it did. Every loanword does. The meanings travel with the word. The borrowing nation believes it is borrowing the surface; it borrows the assumption underneath. By the time it notices, the assumption is part of its own thinking. This is what cultural hegemony actually is — not what the textbooks describe, but what happens after.\\\"",
+  "de": "„Als die Welt ein Wort für Fortschritt brauchte, lieh sie sich unseres.“\\n\\n„Und das Wort kam mit angehängten Bedeutungen.“\\n\\n„Natürlich tat es das. Jedes Lehnwort tut das. Die Bedeutungen reisen mit dem Wort. Die entleihende Nation glaubt, sie leihe sich die Oberfläche; in Wahrheit leiht sie sich die dahinterliegende Annahme. Bis sie es bemerkt, ist die Annahme längst Teil ihres eigenen Denkens. Das ist es, was kulturelle Hegemonie tatsächlich bedeutet – nicht das, was die Lehrbücher beschreiben, sondern das, was danach geschieht.“"
+ },
+ "cultural_hegemony.9.t": {
+  "en": "The Cultural Hegemon",
+  "de": "Der kulturelle Hegemon"
+ },
+ "decolonization_events.1.a": {
+  "en": "Open negotiations.",
+  "de": "Verhandlungen aufnehmen."
+ },
+ "decolonization_events.1.b": {
+  "en": "Send in the troops.",
+  "de": "Truppen entsenden."
+ },
+ "decolonization_events.1.c": {
+  "en": "Let them go.",
+  "de": "Sie ziehen lassen."
+ },
+ "decolonization_events.1.d": {
+  "en": "An independence movement in [SCOPE.sCountry('restless_subject').GetName] has organized mass demonstrations demanding self-governance. Local leaders are circulating petitions and foreign journalists have begun to take notice.",
+  "de": "Eine Unabhängigkeitsbewegung [SCOPE.sCountry('restless_subject').GetAltName('IN')] hat Massendemonstrationen für die Selbstverwaltung organisiert. Örtliche Anführer verbreiten Petitionen, und ausländische Journalisten werden allmählich darauf aufmerksam."
+ },
+ "decolonization_events.1.d_neo": {
+  "en": "Grant independence on our terms.",
+  "de": "Unabhängigkeit zu unseren Bedingungen gewähren."
+ },
+ "decolonization_events.1.f": {
+  "en": "\\\"We are not asking for independence. We are taking it.\\\"\\n\\nThe pamphlet had been printed overnight on a hand-cranked press somewhere in the back streets. By morning it was plastered across every wall in the capital district.\\n\\n\\\"They say they want to negotiate,\\\" the governor murmured to his adjutant, folding the paper carefully along its creases. \\\"What they mean is that they want us to watch while they negotiate with themselves.\\\"",
+  "de": "„Wir bitten nicht um Unabhängigkeit. Wir nehmen sie uns.“\\n\\nDas Pamphlet war über Nacht auf einer handbetriebenen Presse irgendwo in den Hintergassen gedruckt worden. Bis zum Morgen klebte es an jeder Wand im Hauptstadtviertel.\\n\\n„Sie sagen, sie wollen verhandeln“, murmelte der Gouverneur seinem Adjutanten zu und faltete das Papier sorgfältig entlang seiner Knicke. „Was sie meinen, ist, dass sie wollen, dass wir zusehen, während sie mit sich selbst verhandeln.“"
+ },
+ "decolonization_events.1.t": {
+  "en": "Winds of Change",
+  "de": "Der Wind der Veränderung"
+ },
+ "decolonization_events.10.a": {
+  "en": "They are truly one of us now.",
+  "de": "Sie sind jetzt wahrhaftig einer von uns."
+ },
+ "decolonization_events.10.b": {
+  "en": "Maintain the current arrangement.",
+  "de": "Die derzeitige Regelung beibehalten."
+ },
+ "decolonization_events.10.d": {
+  "en": "The population of [SCOPE.sState('integrating_colony').GetName] has reached such high levels of cultural acceptance that administrators recommend granting full [concept_homeland] status. The territory already functions as a productive part of the nation.",
+  "de": "Die Bevölkerung von [SCOPE.sState('integrating_colony').GetName] hat ein so hohes Maß an kultureller Akzeptanz erreicht, dass die Verwaltung empfiehlt, ihr den vollen [concept_homeland]-Status zu gewähren. Das Gebiet fungiert bereits als produktiver Teil der Nation."
+ },
+ "decolonization_events.10.f": {
+  "en": "\\\"My grandfather fought your grandfather,\\\" the old woman said, pouring tea for the visiting minister. \\\"My mother married one of your soldiers. And my daughter speaks your language better than I do.\\\"\\n\\nShe set down the pot.\\n\\n\\\"So tell me - whose homeland is this now?\\\"",
+  "de": "„Mein Großvater hat gegen Ihren Großvater gekämpft“, sagte die alte Frau und schenkte dem zu Besuch weilenden Minister Tee ein. „Meine Mutter hat einen Ihrer Soldaten geheiratet. Und meine Tochter spricht Ihre Sprache besser als ich.“\\n\\nSie stellte die Kanne ab.\\n\\n„Sagen Sie mir also - wessen Heimatland ist das jetzt?“"
+ },
+ "decolonization_events.10.t": {
+  "en": "Common Bonds",
+  "de": "Gemeinsame Bande"
+ },
+ "decolonization_events.11.a": {
+  "en": "We shall announce reforms.",
+  "de": "Wir werden Reformen ankündigen."
+ },
+ "decolonization_events.11.b": {
+  "en": "Our affairs are our own.",
+  "de": "Unsere Angelegenheiten gehen nur uns etwas an."
+ },
+ "decolonization_events.11.d": {
+  "en": "[SCOPE.sCountry('condemning_power').GetName] has publicly denounced our control over overseas territories at international forums, calling it an affront to self-determination. Their representatives are marshalling support for resolutions condemning our empire.",
+  "de": "[SCOPE.sCountry('condemning_power').GetAltName('NOM')|U] hat unsere Kontrolle über die Überseegebiete in internationalen Foren öffentlich verurteilt und sie als Affront gegen das Selbstbestimmungsrecht bezeichnet. Die Vertreter des Landes werben um Unterstützung für Resolutionen gegen unser Imperium."
+ },
+ "decolonization_events.11.f": {
+  "en": "\\\"The age of empires is over,\\\" the [SCOPE.sCountry('condemning_power').GetAdjectiveNoFormatting] delegate declared, to a round of polite applause from the gallery.\\n\\n\\\"Easy for them to say,\\\" our ambassador muttered, loosening his collar. \\\"They never had an empire worth keeping.\\\"",
+  "de": "„Das Zeitalter der Imperien ist vorbei“, erklärte der [SCOPE.sCountry('condemning_power').GetAdjectiveNoFormatting|l]e Delegierte unter höflichem Applaus von der Galerie.\\n\\n„Leicht gesagt für die“, murmelte unser Botschafter und lockerte seinen Kragen. „Die hatten nie ein Imperium, das sich zu behalten lohnte.“"
+ },
+ "decolonization_events.11.t": {
+  "en": "Judged by New Standards",
+  "de": "Nach neuen Maßstäben beurteilt"
+ },
+ "decolonization_events.12.a": {
+  "en": "Accept their backing.",
+  "de": "Ihre Unterstützung annehmen."
+ },
+ "decolonization_events.12.b": {
+  "en": "We need no patron.",
+  "de": "Wir brauchen keinen Schutzherrn."
+ },
+ "decolonization_events.12.d": {
+  "en": "[SCOPE.sCountry('supporting_power').GetName] has come out publicly in defence of the colonial powers' right to their overseas holdings, and its diplomats make little secret of whose holdings they have in mind. Standing openly beside it would give us a powerful friend against mounting international pressure — and tie our name to theirs.",
+  "de": "[SCOPE.sCountry('supporting_power').GetAltName('NOM')|U] hat sich öffentlich für das Recht der Kolonialmächte auf ihre Überseebesitzungen ausgesprochen, und die dortigen Diplomaten machen kaum ein Geheimnis daraus, wessen Besitzungen sie damit meinen. Sich offen an die Seite des Landes zu stellen, würde uns einen mächtigen Freund gegen den wachsenden internationalen Druck verschaffen – und unseren Namen an den des Landes knüpfen."
+ },
+ "decolonization_events.12.f": {
+  "en": "\\\"'The colonial powers have every right to administer their territories as they see fit,'\\\" the colonial minister read aloud from the transcript of the [SCOPE.sCountry('supporting_power').GetAdjectiveNoFormatting] foreign minister's speech. \\\"'And those who lecture them would do well to look to their own houses.'\\\"\\n\\nHe set the pages down.\\n\\n\\\"They have not said a word of this to us.\\\"\\n\\n\\\"They did not need to, Minister. They said it to everyone else.\\\"",
+  "de": "„‚Die Kolonialmächte haben jedes Recht, ihre Gebiete so zu verwalten, wie sie es für richtig halten‘“, las der Kolonialminister aus dem Wortprotokoll der Rede des [SCOPE.sCountry('supporting_power').GetAdjectiveNoFormatting|l]en Außenministers vor. „‚Und wer ihnen Vorhaltungen macht, sollte lieber vor der eigenen Tür kehren.‘“\\n\\nEr legte die Seiten beiseite.\\n\\n„Sie haben uns davon kein Wort gesagt.“\\n\\n„Das mussten sie auch nicht, Minister. Sie haben es allen anderen gesagt.“"
+ },
+ "decolonization_events.12.t": {
+  "en": "Powerful Friends",
+  "de": "Mächtige Freunde"
+ },
+ "decolonization_events.13.a": {
+  "en": "Negotiate their release.",
+  "de": "Ihre Freilassung aushandeln."
+ },
+ "decolonization_events.13.b": {
+  "en": "Crush the resistance.",
+  "de": "Den Widerstand zerschlagen."
+ },
+ "decolonization_events.13.c": {
+  "en": "Release them, but secure our interests.",
+  "de": "Sie freilassen, aber unsere Interessen sichern."
+ },
+ "decolonization_events.13.d": {
+  "en": "Armed resistance has erupted in [SCOPE.sState('uprising_colony').GetName]. Local fighters are conducting raids against [Concept('concept_government_building', 'government buildings')] and [concept_infrastructure]. Military commanders demand reinforcements, but the cost of suppression mounts by the day.",
+  "de": "In [SCOPE.sState('uprising_colony').GetName] ist bewaffneter Widerstand ausgebrochen. Örtliche Kämpfer verüben Überfälle auf [Concept('concept_government_building', 'Regierungsgebäude')] und [concept_infrastructure]. Militärkommandeure fordern Verstärkung, doch die Kosten der Niederschlagung steigen von Tag zu Tag."
+ },
+ "decolonization_events.13.f": {
+  "en": "The telegram arrived at dawn: GARRISON OVERRUN AT CHECKPOINT FOUR. CASUALTIES UNKNOWN. REQUEST IMMEDIATE REINFORCEMENT.\\n\\nThe war minister stared at it for a long time.\\n\\n\\\"How many more of these,\\\" he said at last, \\\"before we admit that we are fighting a war we cannot win?\\\"",
+  "de": "Das Telegramm traf im Morgengrauen ein: GARNISON AN KONTROLLPUNKT VIER ÜBERRANNT. VERLUSTE UNBEKANNT. FORDERE SOFORTIGE VERSTÄRKUNG AN.\\n\\nDer Kriegsminister starrte lange darauf.\\n\\n„Wie viele davon noch“, sagte er schließlich, „bevor wir zugeben, dass wir einen Krieg führen, den wir nicht gewinnen können?“"
+ },
+ "decolonization_events.13.t": {
+  "en": "Blood in the Colonies",
+  "de": "Blut in den Kolonien"
+ },
+ "decolonization_events.14.a": {
+  "en": "The age of empires is over.",
+  "de": "Das Zeitalter der Imperien ist vorbei."
+ },
+ "decolonization_events.14.b": {
+  "en": "We shall remain above the fray.",
+  "de": "Wir werden uns aus dem Getümmel heraushalten."
+ },
+ "decolonization_events.14.c": {
+  "en": "Stability demands order.",
+  "de": "Stabilität verlangt Ordnung."
+ },
+ "decolonization_events.14.d": {
+  "en": "The question of colonialism dominates debate in international forums. As a [concept_great_power], [ROOT.GetCountry.GetName] must declare a position - whether to condemn the continuation of colonial empires, defend the right of nations to maintain overseas territories, or chart a cautious middle course.",
+  "de": "Die Frage des Kolonialismus beherrscht die Debatten in internationalen Foren. Als [concept_great_power] muss [ROOT.GetCountry.GetAltName('NOM')] eine Haltung festlegen - ob es das Fortbestehen kolonialer Imperien verurteilen, das Recht der Nationen auf den Erhalt von Überseegebieten verteidigen oder einen vorsichtigen Mittelweg einschlagen soll."
+ },
+ "decolonization_events.14.f": {
+  "en": "\\\"Every nation in this chamber has an opinion on colonialism,\\\" the foreign minister observed drily. \\\"Strangely, the opinion always seems to align perfectly with whether they possess colonies or covet them.\\\"\\n\\nLaughter rippled through the delegation.\\n\\n\\\"The question before us is not what is right. It is what is useful.\\\"",
+  "de": "„Jede Nation in diesem Saal hat eine Meinung zum Kolonialismus“, bemerkte der Außenminister trocken. „Seltsamerweise scheint diese Meinung stets genau damit übereinzustimmen, ob man Kolonien besitzt oder sie begehrt.“\\n\\nGelächter ging durch die Delegation.\\n\\n„Die Frage vor uns ist nicht, was richtig ist. Es ist, was nützlich ist.“"
+ },
+ "decolonization_events.14.t": {
+  "en": "The Colonial Question",
+  "de": "Die koloniale Frage"
+ },
+ "decolonization_events.15.a": {
+  "en": "Seize everything. This land and its wealth belong to us.",
+  "de": "Alles beschlagnahmen. Dieses Land und sein Reichtum gehören uns."
+ },
+ "decolonization_events.15.b": {
+  "en": "Nationalize strategic sectors only.",
+  "de": "Nur strategische Sektoren verstaatlichen."
+ },
+ "decolonization_events.15.c": {
+  "en": "Protect foreign property rights.",
+  "de": "Ausländische Eigentumsrechte schützen."
+ },
+ "decolonization_events.15.d_peaceful": {
+  "en": "Independence has been achieved through negotiation rather than blood, but the colonial economic order persists. [SCOPE.sCountry('biggest_foreign_owner').GetName]'s companies still control a significant share of our productive capacity: the mines, the mills, the railways. This is the unfinished business of [concept_decolonization_system]: who shall own the wealth that our land produces?",
+  "de": "Die Unabhängigkeit wurde durch Verhandlungen statt durch Blutvergießen erreicht, doch die koloniale Wirtschaftsordnung besteht fort. Die Unternehmen [SCOPE.sCountry('biggest_foreign_owner').GetAltName('GEN')] beherrschen weiterhin einen erheblichen Teil unserer Produktionskapazität: die Minen, die Fabriken, die Eisenbahnen. Das ist die unerledigte Aufgabe der [concept_decolonization_system]: Wem soll der Reichtum gehören, den unser Land hervorbringt?"
+ },
+ "decolonization_events.15.d_violent": {
+  "en": "The guns have barely fallen silent, and already the question of foreign-owned enterprise dominates cabinet meetings. Factories, mines, and plantations built with [SCOPE.sCountry('biggest_foreign_owner').GetName]'s capital sprawl across our land: the [concept_infrastructure] of empire, still humming under foreign ownership. Our war of liberation has given us sovereignty over our soil, but not yet over our economy.",
+  "de": "Die Waffen sind kaum verstummt, und schon beherrscht die Frage des ausländischen Unternehmensbesitzes die Kabinettssitzungen. Fabriken, Minen und Plantagen, errichtet mit dem Kapital [SCOPE.sCountry('biggest_foreign_owner').GetAltName('GEN')], erstrecken sich über unser Land: die [concept_infrastructure] des Imperiums, noch immer summend unter ausländischem Besitz. Unser Befreiungskrieg hat uns die Souveränität über unseren Boden gebracht, aber noch nicht über unsere Wirtschaft."
+ },
+ "decolonization_events.15.f": {
+  "en": "\\\"We have won our flag,\\\" said the finance minister, spreading the ownership ledgers across the table. \\\"Now we must decide whether to win our economy.\\\"\\n\\nThe room fell silent as the ministers studied the numbers. Foreign hands still gripped the levers of industry.\\n\\n\\\"The world is watching,\\\" someone added. \\\"And so are the investors.\\\"",
+  "de": "„Wir haben unsere Flagge gewonnen“, sagte der Finanzminister und breitete die Eigentumsregister auf dem Tisch aus. „Jetzt müssen wir entscheiden, ob wir auch unsere Wirtschaft gewinnen wollen.“\\n\\nIm Raum wurde es still, während die Minister die Zahlen studierten. Ausländische Hände hielten noch immer die Hebel der Industrie fest.\\n\\n„Die Welt schaut zu“, fügte jemand hinzu. „Und die Investoren auch.“"
+ },
+ "decolonization_events.15.t": {
+  "en": "The Nationalization Question",
+  "de": "Die Verstaatlichungsfrage"
+ },
+ "decolonization_events.16.a": {
+  "en": "These lands are ours by right.",
+  "de": "Diese Länder gehören uns von Rechts wegen."
+ },
+ "decolonization_events.16.b": {
+  "en": "Propose a fraternal federation.",
+  "de": "Eine brüderliche Föderation vorschlagen."
+ },
+ "decolonization_events.16.b_tt": {
+  "en": "If [SCOPE.sCountry('partition_neighbor').GetName] accepts, a five-year truce binds both our nations. It binds them as much as us, so it is theirs to agree to.",
+  "de": "Falls [SCOPE.sCountry('partition_neighbor').GetAltName('NOM')] zustimmt, bindet ein fünfjähriger Waffenstillstand beide unserer Nationen. Er bindet die andere Seite ebenso wie uns, daher liegt die Entscheidung auch bei ihr."
+ },
+ "decolonization_events.16.c": {
+  "en": "Accept the borders as they stand.",
+  "de": "Die Grenzen so akzeptieren, wie sie sind."
+ },
+ "decolonization_events.16.d": {
+  "en": "The colonial boundaries that now define our nation were drawn in foreign capitals by men who never set foot in this land. Our people live on both sides of lines that mean nothing to them. Neighboring [SCOPE.sCountry('partition_neighbor').GetName] shares our blood and our tongue — yet the departing powers divided us with a stroke of the pen.",
+  "de": "Die kolonialen Grenzen, die heute unsere Nation bestimmen, wurden in fremden Hauptstädten von Männern gezogen, die dieses Land nie betreten haben. Unser Volk lebt auf beiden Seiten von Linien, die für sie bedeutungslos sind. Das benachbarte [SCOPE.sCountry('partition_neighbor').GetAltName('NOM')] teilt unser Blut und unsere Sprache – doch die abziehenden Mächte haben uns mit einem Federstrich geteilt."
+ },
+ "decolonization_events.16.f": {
+  "en": "The old woman stood at the border post, looking across at her sister's village.\\n\\n\\\"Before the foreigners came, we walked freely between the valleys. My grandmother's grave is on the other side of this line.\\\"\\n\\nThe customs officer shifted uncomfortably.\\n\\n\\\"It is a different country now, mother.\\\"\\n\\n\\\"It is the same earth.\\\"",
+  "de": "Die alte Frau stand am Grenzposten und blickte hinüber zum Dorf ihrer Schwester.\\n\\n„Bevor die Fremden kamen, gingen wir frei zwischen den Tälern hin und her. Das Grab meiner Großmutter liegt auf der anderen Seite dieser Linie.“\\n\\nDer Zollbeamte rutschte unbehaglich hin und her.\\n\\n„Es ist jetzt ein anderes Land, Mutter.“\\n\\n„Es ist dieselbe Erde.“"
+ },
+ "decolonization_events.16.t": {
+  "en": "The Partition Question",
+  "de": "Die Teilungsfrage"
+ },
+ "decolonization_events.17.a": {
+  "en": "The borders must be redrawn.",
+  "de": "Die Grenzen müssen neu gezogen werden."
+ },
+ "decolonization_events.17.b": {
+  "en": "Let the international community mediate.",
+  "de": "Die internationale Gemeinschaft vermitteln lassen."
+ },
+ "decolonization_events.17.c": {
+  "en": "Build our nation within these boundaries.",
+  "de": "Unsere Nation innerhalb dieser Grenzen aufbauen."
+ },
+ "decolonization_events.17.c_tt": {
+  "en": "If [SCOPE.sCountry('border_rival').GetName] accepts, a five-year truce binds both our nations. It binds them as much as us, so it is theirs to agree to.",
+  "de": "Falls [SCOPE.sCountry('border_rival').GetAltName('NOM')] zustimmt, bindet ein fünfjähriger Waffenstillstand beide unserer Nationen. Er bindet die andere Seite ebenso wie uns, daher liegt die Entscheidung auch bei ihr."
+ },
+ "decolonization_events.17.d": {
+  "en": "The borders inherited from colonial rule cut through communities and traditional territories. Our neighbor [SCOPE.sCountry('border_rival').GetName] — born in the same wave of independence — makes claims that overlap with ours. Both nations cite history. Neither can cite justice.",
+  "de": "Die aus der Kolonialherrschaft geerbten Grenzen durchschneiden Gemeinschaften und angestammte Gebiete. Unser Nachbar [SCOPE.sCountry('border_rival').GetAltName('NOM')] — geboren in derselben Welle der Unabhängigkeit — erhebt Ansprüche, die sich mit unseren überschneiden. Beide Nationen berufen sich auf die Geschichte. Keine kann sich auf Gerechtigkeit berufen."
+ },
+ "decolonization_events.17.f": {
+  "en": "\\\"This river has been our boundary since before your empire, before any empire,\\\" the local chief told the negotiator.\\n\\n\\\"Unfortunately,\\\" the negotiator replied, \\\"the treaty says the boundary runs through the middle of the market square.\\\"\\n\\n\\\"That is because the man who drew the treaty had never seen a market square.\\\"",
+  "de": "„Dieser Fluss ist unsere Grenze, seit es euer Imperium gibt, seit es überhaupt ein Imperium gibt“, sagte der örtliche Häuptling zu dem Unterhändler.\\n\\n„Leider“, erwiderte der Unterhändler, „besagt der Vertrag, dass die Grenze mitten durch den Marktplatz verläuft.“\\n\\n„Das liegt daran, dass der Mann, der den Vertrag entworfen hat, nie einen Marktplatz gesehen hat.“"
+ },
+ "decolonization_events.17.t": {
+  "en": "Whose Country Is This?",
+  "de": "Wessen Land ist das?"
+ },
+ "decolonization_events.18.a": {
+  "en": "The general will restore order.",
+  "de": "Der General wird die Ordnung wiederherstellen."
+ },
+ "decolonization_events.18.b": {
+  "en": "Democracy is the only legitimate path.",
+  "de": "Demokratie ist der einzig legitime Weg."
+ },
+ "decolonization_events.18.c": {
+  "en": "One party. One nation. One future.",
+  "de": "Eine Partei. Eine Nation. Eine Zukunft."
+ },
+ "decolonization_events.18.d": {
+  "en": "The euphoria of independence has given way to the grinding reality of governance. Factional disputes paralyze the new parliament. A charismatic military figure has approached the cabinet with a simple proposition: dissolve the squabbling assembly and let the army impose the discipline the nation needs.",
+  "de": "Die Euphorie der Unabhängigkeit ist der zermürbenden Realität des Regierens gewichen. Fraktionsstreitigkeiten lähmen das neue Parlament. Eine charismatische Militärfigur ist mit einem einfachen Vorschlag an das Kabinett herangetreten: die zerstrittene Versammlung aufzulösen und der Armee die Disziplin durchsetzen zu lassen, die die Nation braucht."
+ },
+ "decolonization_events.18.f": {
+  "en": "\\\"Democracy,\\\" the general said, pouring himself a measured glass of water, \\\"is a luxury for countries that can afford to argue. We cannot.\\\"\\n\\nThe prime minister stared at the tanks parked outside his window.\\n\\n\\\"And when the country can afford it?\\\"\\n\\n\\\"Then the army will return to its barracks. You have my word.\\\"\\n\\nThe prime minister had heard that promise before. In other countries. From other generals. None of them had kept it.",
+  "de": "„Demokratie“, sagte der General und goss sich bedächtig ein Glas Wasser ein, „ist ein Luxus für Länder, die sich Streit leisten können. Wir können das nicht.“\\n\\nDer Premierminister starrte auf die Panzer, die vor seinem Fenster standen.\\n\\n„Und wenn das Land es sich leisten kann?“\\n\\n„Dann kehrt die Armee in ihre Kasernen zurück. Sie haben mein Wort.“\\n\\nDer Premierminister hatte dieses Versprechen schon einmal gehört. In anderen Ländern. Von anderen Generälen. Keiner von ihnen hatte es gehalten."
+ },
+ "decolonization_events.18.t": {
+  "en": "The Strongman's Promise",
+  "de": "Das Versprechen des starken Mannes"
+ },
+ "decolonization_events.19.a": {
+  "en": "Send in the fleet.",
+  "de": "Die Flotte entsenden."
+ },
+ "decolonization_events.19.b": {
+  "en": "Impose economic sanctions.",
+  "de": "Wirtschaftssanktionen verhängen."
+ },
+ "decolonization_events.19.c": {
+  "en": "Accept the new order.",
+  "de": "Die neue Ordnung akzeptieren."
+ },
+ "decolonization_events.19.d": {
+  "en": "[SCOPE.sCountry('nationalizing_country').GetName] — once our possession — has seized foreign-owned assets in a wave of nationalist fervor. Our investments, built over decades, are being expropriated without adequate compensation. Military commanders insist a sharp intervention would restore order. Diplomats warn that the world has changed.",
+  "de": "[SCOPE.sCountry('nationalizing_country').GetAltName('NOM')|U] — einst unser Besitz — hat in einer Welle nationalistischen Eifers ausländisches Eigentum beschlagnahmt. Unsere über Jahrzehnte aufgebauten Investitionen werden ohne angemessene Entschädigung enteignet. Militärkommandeure beharren darauf, dass ein energisches Eingreifen die Ordnung wiederherstellen würde. Diplomaten warnen, dass die Welt sich verändert hat."
+ },
+ "decolonization_events.19.f": {
+  "en": "\\\"The canal is ours,\\\" the telegram read. \\\"We built it. We died building it. And now it is ours.\\\"\\n\\nThe foreign secretary crumpled it and dropped it in the waste basket.\\n\\n\\\"Prepare the contingency plans,\\\" he told the room. \\\"All of them.\\\"\\n\\n\\\"Sir, the Americans have already issued a statement urging restraint.\\\"\\n\\n\\\"The Americans can urge whatever they like. It is our canal.\\\"\\n\\nA silence. Someone coughed.\\n\\n\\\"Is it, sir?\\\"",
+  "de": "„Der Kanal gehört uns“, stand im Telegramm. „Wir haben ihn gebaut. Wir sind beim Bau gestorben. Und jetzt gehört er uns.“\\n\\nDer Außenminister zerknüllte es und warf es in den Papierkorb.\\n\\n„Bereiten Sie die Notfallpläne vor“, sagte er dem Raum. „Alle davon.“\\n\\n„Sir, die Amerikaner haben bereits eine Erklärung abgegeben und zur Zurückhaltung aufgerufen.“\\n\\n„Die Amerikaner können rufen, was sie wollen. Es ist unser Kanal.“\\n\\nStille. Jemand hustete.\\n\\n„Ist er das, Sir?“"
+ },
+ "decolonization_events.19.t": {
+  "en": "The Crisis",
+  "de": "Die Krise"
+ },
+ "decolonization_events.2.a": {
+  "en": "Announce a transition plan.",
+  "de": "Einen Übergangsplan ankündigen."
+ },
+ "decolonization_events.2.b": {
+  "en": "Reject their meddling.",
+  "de": "Ihre Einmischung zurückweisen."
+ },
+ "decolonization_events.2.c": {
+  "en": "Announce reforms with economic provisions.",
+  "de": "Reformen mit wirtschaftlichen Bestimmungen ankündigen."
+ },
+ "decolonization_events.2.d": {
+  "en": "[SCOPE.sCountry('pressuring_power').GetName], which has declared itself against colonial rule, has called upon us to accelerate the dissolution of our colonial holdings, including our overlordship of [SCOPE.sCountry('pressured_subject').GetName]. Its diplomats are pressing the case in every capital that will listen.",
+  "de": "[SCOPE.sCountry('pressuring_power').GetAltName('NOM')|U] hat sich gegen die Kolonialherrschaft ausgesprochen und fordert uns auf, die Auflösung unserer Kolonialbesitzungen zu beschleunigen, einschließlich unserer Oberherrschaft über [SCOPE.sCountry('pressured_subject').GetAltName('AKK')]. Die dortigen Diplomaten machen sich in jeder Hauptstadt stark, die zuhört."
+ },
+ "decolonization_events.2.d_many": {
+  "en": "[SCOPE.sCountry('pressuring_power').GetName] and other [Concept('concept_great_power', 'great powers')] that have declared against colonial rule have called upon us to accelerate the dissolution of our colonial holdings, including our overlordship of [SCOPE.sCountry('pressured_subject').GetName]. Foreign governments are voicing growing disapproval.",
+  "de": "[SCOPE.sCountry('pressuring_power').GetAltName('NOM')|U] und andere [Concept('concept_great_power', 'Großmächte')], die sich gegen die Kolonialherrschaft ausgesprochen haben, haben uns aufgefordert, die Auflösung unserer Kolonialbesitzungen zu beschleunigen, einschließlich unserer Oberherrschaft über [SCOPE.sCountry('pressured_subject').GetAltName('AKK')]. Ausländische Regierungen äußern wachsende Missbilligung."
+ },
+ "decolonization_events.2.f": {
+  "en": "\\\"The resolution passed with an overwhelming majority,\\\" the ambassador reported, adjusting his spectacles. \\\"Twenty-three in favor. We were... not among them.\\\"\\n\\n\\\"And what precisely does this resolution demand?\\\"\\n\\n\\\"A timetable. For the orderly transfer of sovereignty to... well, to everyone we currently govern who would rather govern themselves.\\\"\\n\\nA long silence.\\n\\n\\\"Which is all of them, presumably.\\\"",
+  "de": "„Die Resolution wurde mit überwältigender Mehrheit angenommen“, berichtete der Botschafter und rückte seine Brille zurecht. „Dreiundzwanzig dafür. Wir waren... nicht darunter.“\\n\\n„Und was genau fordert diese Resolution?“\\n\\n„Einen Zeitplan. Für die geordnete Übergabe der Souveränität an... nun, an jeden, den wir derzeit regieren und der lieber sich selbst regieren würde.“\\n\\nEin langes Schweigen.\\n\\n„Das dürfte auf alle zutreffen, nehme ich an.“"
+ },
+ "decolonization_events.2.f_no_un": {
+  "en": "\\\"The [SCOPE.sCountry('pressuring_power').GetAdjectiveNoFormatting] foreign minister gave the speech in full,\\\" the ambassador reported, adjusting his spectacles. \\\"Self-determination. The tide of history. Our name, twice.\\\"\\n\\n\\\"And what precisely does he demand?\\\"\\n\\n\\\"A timetable. For the orderly transfer of sovereignty to... well, to everyone we currently govern who would rather govern themselves.\\\"\\n\\nA long silence.\\n\\n\\\"Which is all of them, presumably.\\\"",
+  "de": "„Der [SCOPE.sCountry('pressuring_power').GetAdjectiveNoFormatting|l]e Außenminister hat die Rede vollständig gehalten“, berichtete der Botschafter und rückte seine Brille zurecht. „Selbstbestimmung. Der Lauf der Geschichte. Unser Name, zweimal.“\\n\\n„Und was genau fordert er?“\\n\\n„Einen Zeitplan. Für die geordnete Übergabe der Souveränität an... nun, an jeden, den wir derzeit regieren und der lieber sich selbst regieren würde.“\\n\\nEin langes Schweigen.\\n\\n„Das dürfte auf alle zutreffen, nehme ich an.“"
+ },
+ "decolonization_events.2.t": {
+  "en": "The World is Watching",
+  "de": "Die Welt schaut zu"
+ },
+ "decolonization_events.20.a": {
+  "en": "This aggression cannot stand.",
+  "de": "Diese Aggression kann nicht hingenommen werden."
+ },
+ "decolonization_events.20.b": {
+  "en": "They are defending legitimate interests.",
+  "de": "Sie verteidigen legitime Interessen."
+ },
+ "decolonization_events.20.c": {
+  "en": "This is not our concern.",
+  "de": "Das geht uns nichts an."
+ },
+ "decolonization_events.20.d": {
+  "en": "[SCOPE.sCountry('intervening_power').GetName] has launched a military intervention against [SCOPE.sCountry('intervention_victim').GetName], a newly independent nation accused of seizing foreign assets. The action has sparked international outrage, and the world's [Concept('concept_great_power', 'great powers')] must now take a position.",
+  "de": "[SCOPE.sCountry('intervening_power').GetAltName('NOM')|U] hat eine militärische Intervention gegen [SCOPE.sCountry('intervention_victim').GetAltName('AKK')] gestartet, eine neu unabhängige Nation, der die Beschlagnahmung ausländischen Eigentums vorgeworfen wird. Die Aktion hat internationale Empörung ausgelöst, und die [Concept('concept_great_power', 'Großmächte')] der Welt müssen nun Stellung beziehen."
+ },
+ "decolonization_events.20.f": {
+  "en": "\\\"Three carriers,\\\" the intelligence officer reported, pinning the latest reconnaissance photo to the board. \\\"They've established a naval blockade and landed marines at the port.\\\"\\n\\nThe president studied the map.\\n\\n\\\"What does the international community say?\\\"\\n\\n\\\"The usual. Grave concern. Deep worry. Strongly worded letters.\\\"\\n\\n\\\"And what do they actually intend to do about it?\\\"\\n\\nThat was the question that would define the decade.",
+  "de": "„Drei Flugzeugträger“, meldete der Geheimdienstoffizier und heftete das neueste Aufklärungsfoto an die Tafel. „Sie haben eine Seeblockade errichtet und Marineinfanteristen im Hafen gelandet.“\\n\\nDer Präsident studierte die Karte.\\n\\n„Was sagt die internationale Gemeinschaft?“\\n\\n„Das Übliche. Tiefe Besorgnis. Große Sorge. Scharf formulierte Schreiben.“\\n\\n„Und was gedenken sie tatsächlich dagegen zu unternehmen?“\\n\\nDas war die Frage, die das Jahrzehnt bestimmen sollte."
+ },
+ "decolonization_events.20.t": {
+  "en": "Gunboats in the Harbor",
+  "de": "Kanonenboote im Hafen"
+ },
+ "decolonization_events.200.a": {
+  "en": "Our empire stands united.",
+  "de": "Unser Imperium steht vereint."
+ },
+ "decolonization_events.200.d": {
+  "en": "Against the tide of history, [ROOT.GetCountry.GetName] has maintained firm control over its colonial possessions. Through integration policies and investment, the empire has solidified its overseas territories into an enduring part of the nation.",
+  "de": "Gegen den Lauf der Geschichte hat [ROOT.GetCountry.GetAltName('NOM')] die feste Kontrolle über die eigenen Kolonialbesitzungen behauptet. Durch Integrationspolitik und Investitionen hat das Imperium seine Überseegebiete zu einem dauerhaften Teil der Nation gefestigt."
+ },
+ "decolonization_events.200.f": {
+  "en": "\\\"The flag will not be lowered,\\\" the minister said into the microphones.\\n\\nThe foreign correspondents took notes. They had been expecting the announcement to go the other way. They had pre-written the obituary of the empire and now had to revise it under deadline.\\n\\n\\\"For how long?\\\" one of them asked.\\n\\n\\\"For as long as it takes. The empire is what we have decided it will be. That decision is made and remade every morning. This morning we made it the same way.\\\"",
+  "de": "„Die Flagge wird nicht eingeholt“, sagte der Minister in die Mikrofone.\\n\\nDie ausländischen Korrespondenten machten sich Notizen. Sie hatten mit der gegenteiligen Ankündigung gerechnet. Sie hatten den Nachruf auf das Imperium bereits im Voraus geschrieben und mussten ihn nun unter Zeitdruck überarbeiten.\\n\\n„Wie lange noch?“, fragte einer von ihnen.\\n\\n„So lange es nötig ist. Das Imperium ist das, was wir entschieden haben, dass es sein wird. Diese Entscheidung wird jeden Morgen neu getroffen. Heute Morgen haben wir sie genauso getroffen.“"
+ },
+ "decolonization_events.200.t": {
+  "en": "The Empire Endures",
+  "de": "Das Imperium besteht fort"
+ },
+ "decolonization_events.201.a": {
+  "en": "We must accept the new reality.",
+  "de": "Wir müssen die neue Realität akzeptieren."
+ },
+ "decolonization_events.201.d": {
+  "en": "The colonial edifice of [ROOT.GetCountry.GetName] has collapsed. Independence movements, international pressure, and administrative exhaustion have combined to force withdrawal from overseas territories. New nations emerge from the ruins of empire.",
+  "de": "Das koloniale Gebäude [ROOT.GetCountry.GetAltName('GEN')] ist eingestürzt. Unabhängigkeitsbewegungen, internationaler Druck und administrative Erschöpfung haben gemeinsam den Rückzug aus den Überseegebieten erzwungen. Neue Nationen entstehen aus den Trümmern des Imperiums."
+ },
+ "decolonization_events.201.f": {
+  "en": "\\\"The sun has set at last,\\\" the deputy minister remarked, looking out the window at no particular sunset.\\n\\n\\\"And in the new colonies?\\\"\\n\\n\\\"They are not the new colonies. They are the new nations. The distinction is the entire point of the last decade. Whether we adapt to the distinction is what the next decade is for. The empire is gone. What remains is the question of what we became after the empire.\\\"",
+  "de": "„Die Sonne ist endlich untergegangen“, bemerkte der stellvertretende Minister und blickte aus dem Fenster auf keinen besonderen Sonnenuntergang.\\n\\n„Und in den neuen Kolonien?“\\n\\n„Das sind nicht die neuen Kolonien. Das sind die neuen Nationen. Genau diese Unterscheidung war der ganze Sinn des letzten Jahrzehnts. Ob wir uns dieser Unterscheidung anpassen, dafür ist das nächste Jahrzehnt da. Das Imperium ist Geschichte. Was bleibt, ist die Frage, was aus uns nach dem Imperium geworden ist.“"
+ },
+ "decolonization_events.201.t": {
+  "en": "The Empire Crumbles",
+  "de": "Das Imperium zerfällt"
+ },
+ "decolonization_events.202.a": {
+  "en": "The Commonwealth endures.",
+  "de": "Das Commonwealth besteht fort."
+ },
+ "decolonization_events.202.d": {
+  "en": "The empire endures, but on terms unimaginable a generation ago. The colonial bond has been rewritten — investment, education, and shared institutions have replaced the old hierarchies. Our former subjects look upon the metropole not as a master but as a [concept_senior_partner]. The flag has not changed; what flies under it has.",
+  "de": "Das Imperium besteht fort, jedoch zu Bedingungen, die vor einer Generation unvorstellbar gewesen wären. Das koloniale Band wurde neu geschrieben — Investitionen, Bildung und gemeinsame Institutionen haben die alten Hierarchien abgelöst. Unsere ehemaligen Untertanen sehen die Metropole nicht mehr als Herrin, sondern als [concept_senior_partner]. Die Flagge hat sich nicht verändert; was unter ihr weht, schon."
+ },
+ "decolonization_events.202.f": {
+  "en": "\\\"They've kept the cricket,\\\" the journalist remarked.\\n\\n\\\"They've kept the railways too,\\\" the minister replied. \\\"And the law courts. And the language. They've kept everything they wanted to keep, and renamed everything they didn't.\\\"\\n\\n\\\"Is that victory, sir?\\\"\\n\\nA long pause. \\\"It's the only kind we were ever going to get.\\\"",
+  "de": "„Sie haben das Cricket behalten“, bemerkte der Journalist.\\n\\n„Sie haben auch die Eisenbahnen behalten“, erwiderte der Minister. „Und die Gerichte. Und die Sprache. Sie haben alles behalten, was sie behalten wollten, und alles umbenannt, was sie nicht wollten.“\\n\\n„Ist das ein Sieg, Sir?“\\n\\nEine lange Pause. „Es ist die einzige Art von Sieg, die wir je bekommen sollten.“"
+ },
+ "decolonization_events.202.t": {
+  "en": "The Commonwealth Path",
+  "de": "Der Commonwealth-Weg"
+ },
+ "decolonization_events.203.a": {
+  "en": "The empire stands. Let them speak.",
+  "de": "Das Imperium steht. Sollen sie reden."
+ },
+ "decolonization_events.203.d": {
+  "en": "The empire stands. Whatever the cost — and the cost has been substantial — every uprising has been crushed, every faction co-opted or jailed, every restless province placed under direct rule. Our colonies are quiet now. Our standing in the world is not.",
+  "de": "Das Imperium steht. Was auch immer es gekostet hat — und die Kosten waren erheblich — jeder Aufstand wurde niedergeschlagen, jede Fraktion vereinnahmt oder inhaftiert, jede unruhige Provinz unter direkte Herrschaft gestellt. Unsere Kolonien sind jetzt ruhig. Unser Ansehen in der Welt ist es nicht."
+ },
+ "decolonization_events.203.f": {
+  "en": "\\\"The Algerians are quiet, the Indochinese are quiet, the Kenyans are quiet,\\\" the Premier observed.\\n\\n\\\"The world is not quiet, sir,\\\" his deputy replied. \\\"In Geneva, in Washington, in the Asian conferences. They speak of us in the same tone they once reserved for the defeated.\\\"\\n\\n\\\"Then let them speak. The empire stands.\\\"\\n\\n\\\"For now, sir.\\\"",
+  "de": "„Die Algerier sind ruhig, die Indochinesen sind ruhig, die Kenianer sind ruhig“, stellte der Premier fest.\\n\\n„Die Welt ist nicht ruhig, Sir“, erwiderte sein Stellvertreter. „In Genf, in Washington, auf den asiatischen Konferenzen. Man spricht von uns in demselben Ton, den man einst für die Besiegten reservierte.“\\n\\n„Dann sollen sie reden. Das Imperium steht.“\\n\\n„Vorerst, Sir.“"
+ },
+ "decolonization_events.203.t": {
+  "en": "The Iron Fist Holds",
+  "de": "Die eiserne Faust hält stand"
+ },
+ "decolonization_events.204.a": {
+  "en": "Sign the accords. The work begins.",
+  "de": "Die Abkommen unterzeichnen. Die Arbeit beginnt."
+ },
+ "decolonization_events.204.d": {
+  "en": "The empire dissolves, but it dissolves on terms. Years of patient investment and gradual integration have produced successor states that look upon the metropole with respect, not hostility. There will be aid, trade, even military cooperation. The end of empire is not the end of the relationship.",
+  "de": "Das Imperium löst sich auf, aber zu eigenen Bedingungen. Jahre geduldiger Investitionen und schrittweiser Integration haben Nachfolgestaaten hervorgebracht, die der Metropole mit Respekt begegnen, nicht mit Feindseligkeit. Es wird Hilfe geben, Handel, sogar militärische Zusammenarbeit. Das Ende des Imperiums ist nicht das Ende der Beziehung."
+ },
+ "decolonization_events.204.f": {
+  "en": "\\\"You will write history, professor,\\\" the new president said, signing the independence treaty. \\\"How will you write this moment?\\\"\\n\\n\\\"Honestly, Mr. President. There were no winners. But there were no losers either, perhaps. That is rare.\\\"\\n\\n\\\"It is more than rare, professor. It is unprecedented.\\\"",
+  "de": "„Sie werden Geschichte schreiben, Professor“, sagte der neue Präsident und unterzeichnete den Unabhängigkeitsvertrag. „Wie werden Sie diesen Moment festhalten?“\\n\\n„Ehrlich, Herr Präsident. Es gab keine Gewinner. Aber vielleicht auch keine Verlierer. Das ist selten.“\\n\\n„Das ist mehr als selten, Professor. Das ist beispiellos.“"
+ },
+ "decolonization_events.204.t": {
+  "en": "Negotiated Withdrawal",
+  "de": "Verhandelter Rückzug"
+ },
+ "decolonization_events.205.a": {
+  "en": "The work of generations is complete.",
+  "de": "Das Werk von Generationen ist vollendet."
+ },
+ "decolonization_events.205.d": {
+  "en": "The empire is gone. Not crumbled, not granted, but absorbed. Generations of patient cultural and administrative integration have made the former colonies into provinces of the metropole, populated by citizens who no longer think of themselves as colonized. The map looks the same; everything underneath has changed.",
+  "de": "Das Imperium ist verschwunden. Nicht zerfallen, nicht verschenkt, sondern aufgegangen. Generationen geduldiger kultureller und administrativer Integration haben aus den ehemaligen Kolonien Provinzen der Metropole gemacht, bevölkert von Bürgern, die sich nicht mehr als Kolonisierte begreifen. Die Karte sieht gleich aus; darunter hat sich alles verändert."
+ },
+ "decolonization_events.205.f": {
+  "en": "\\\"My father was born in the colony,\\\" the deputy explained. \\\"My mother was born in the metropole. I was born in the metropole.\\\"\\n\\n\\\"And your children?\\\"\\n\\n\\\"My children won't know the difference between the two. That is the point, isn't it?\\\"",
+  "de": "„Mein Vater wurde in der Kolonie geboren“, erklärte der Abgeordnete. „Meine Mutter wurde in der Metropole geboren. Ich wurde in der Metropole geboren.“\\n\\n„Und Ihre Kinder?“\\n\\n„Meine Kinder werden den Unterschied zwischen beidem nicht kennen. Das ist doch der Sinn der Sache, oder?“"
+ },
+ "decolonization_events.205.t": {
+  "en": "Quiet Assimilation",
+  "de": "Stille Assimilation"
+ },
+ "decolonization_events.206.a": {
+  "en": "The terms were ours to make.",
+  "de": "Die Bedingungen zu bestimmen, lag bei uns."
+ },
+ "decolonization_events.206.b": {
+  "en": "So ends an era.",
+  "de": "So endet eine Ära."
+ },
+ "decolonization_events.206.d": {
+  "en": "The colonial chapter of [ROOT.GetCountry.GetName]'s history closes — not in collapse, not under international ultimatum, but by decision. No overseas territories remain, and the flags we lowered came down on our own order. Whether history reads this as wisdom or weakness, the timing was ours.",
+  "de": "Das koloniale Kapitel der Geschichte [ROOT.GetCountry.GetAltName('GEN')] schließt sich — nicht durch Zusammenbruch, nicht unter internationalem Ultimatum, sondern durch Entscheidung. Es bleiben keine Überseegebiete mehr, und die Flaggen, die wir einholten, kamen auf unseren eigenen Befehl herunter. Ob die Geschichte dies als Weisheit oder als Schwäche liest — der Zeitpunkt war unsere Wahl."
+ },
+ "decolonization_events.206.d_neutral": {
+  "en": "The colonial chapter of [ROOT.GetCountry.GetName]'s history has closed without ceremony. No overseas territories remain under our rule: what we once held was lost, set free or folded into the nation itself, and no single decision marks the end. Historians will argue over what to call it.",
+  "de": "Das koloniale Kapitel der Geschichte [ROOT.GetCountry.GetAltName('GEN')] hat sich ohne Zeremonie geschlossen. Es stehen keine Überseegebiete mehr unter unserer Herrschaft: Was wir einst besaßen, ging verloren, wurde in die Freiheit entlassen oder in die Nation selbst eingegliedert, und keine einzelne Entscheidung markiert das Ende. Historiker werden darüber streiten, wie man es nennen soll."
+ },
+ "decolonization_events.206.f": {
+  "en": "\\\"We did not wait to be forced,\\\" the minister told the assembled representatives. \\\"That is the only distinction history will remember clearly. Everything else — the terms, the dates, the arguments — those will be debated. But this was ours to choose.\\\"",
+  "de": "„Wir haben nicht gewartet, bis man uns dazu zwang“, sagte der Minister zu den versammelten Vertretern. „Das ist der einzige Unterschied, an den sich die Geschichte klar erinnern wird. Alles andere — die Bedingungen, die Daten, die Argumente — wird man debattieren. Aber dies zu wählen, lag bei uns.“"
+ },
+ "decolonization_events.206.f_neutral": {
+  "en": "\\\"There was no ceremony,\\\" the old colonial secretary said, turning the atlas toward the window. \\\"No band, no flag coming down at dusk. One year the map simply had fewer of our colours on it.\\\"\\n\\nHe closed the book.\\n\\n\\\"Someone will write that we planned it. Someone else will write that we lost it. Neither of them was in this office.\\\"",
+  "de": "„Es gab keine Zeremonie“, sagte der alte Kolonialsekretär und drehte den Atlas zum Fenster. „Keine Kapelle, keine Flagge, die bei Einbruch der Dämmerung eingeholt wurde. In einem Jahr trug die Karte einfach weniger von unseren Farben.“\\n\\nEr schloss das Buch.\\n\\n„Jemand wird schreiben, wir hätten es geplant. Ein anderer wird schreiben, wir hätten es verloren. Keiner von beiden saß in diesem Büro.“"
+ },
+ "decolonization_events.206.t": {
+  "en": "The Last Flag Lowered",
+  "de": "Die letzte Flagge eingeholt"
+ },
+ "decolonization_events.206.t_neutral": {
+  "en": "The Colonial Chapter Closes",
+  "de": "Das koloniale Kapitel schließt sich"
+ },
+ "decolonization_events.21.a": {
+  "en": "We chart our own course.",
+  "de": "Wir bestimmen unseren eigenen Kurs."
+ },
+ "decolonization_events.21.b": {
+  "en": "Stand with [SCOPE.sCountry('anti_colonial_gp').GetName].",
+  "de": "Mit [SCOPE.sCountry('anti_colonial_gp').GetAltName('DAT')] zusammenstehen."
+ },
+ "decolonization_events.21.c": {
+  "en": "Align with [SCOPE.sCountry('pro_colonial_gp').GetName] for economic gain.",
+  "de": "Sich aus wirtschaftlichem Interesse mit [SCOPE.sCountry('pro_colonial_gp').GetAltName('DAT')] verbünden."
+ },
+ "decolonization_events.21.d": {
+  "en": "The [Concept('concept_great_power', 'great powers')] have taken sides on empire, and a young nation cannot stay out of the argument for long. [SCOPE.sCountry('anti_colonial_gp').GetName] stands publicly against colonial rule, and its solidarity would be ours for the asking. [SCOPE.sCountry('pro_colonial_gp').GetName] stands with the old empires, but its markets and capital are what our economy lacks. A growing movement among newly independent nations proposes a third way: non-alignment.",
+  "de": "Die [Concept('concept_great_power', 'Großmächte')] haben im Streit um das Empire Partei ergriffen, und eine junge Nation kann sich diesem Streit nicht lange entziehen. [SCOPE.sCountry('anti_colonial_gp').GetAltName('NOM')|U] steht öffentlich gegen die Kolonialherrschaft, und die Unterstützung des Landes wäre uns auf Anfrage sicher. [SCOPE.sCountry('pro_colonial_gp').GetAltName('NOM')|U] steht an der Seite der alten Imperien, doch die Märkte und das Kapital des Landes sind genau das, was unserer Wirtschaft fehlt. Eine wachsende Bewegung unter den neu unabhängigen Nationen schlägt einen dritten Weg vor: die Blockfreiheit."
+ },
+ "decolonization_events.21.f": {
+  "en": "\\\"They call it a 'sphere of influence',\\\" the foreign minister explained to the cabinet. \\\"What it means in practice is that you smile at one superpower and the other one stops selling you wheat.\\\"\\n\\n\\\"And if we smile at neither?\\\"\\n\\n\\\"Then both of them stop selling you wheat.\\\"\\n\\nThe cabinet considered this for some time. The agriculture minister opened his folder and closed it again.",
+  "de": "„Man nennt es eine ‚Einflusssphäre‘“, erklärte der Außenminister dem Kabinett. „In der Praxis bedeutet das: Man lächelt eine Supermacht an, und die andere hört auf, einem Weizen zu verkaufen.“\\n\\n„Und wenn wir keine von beiden anlächeln?“\\n\\n„Dann hören beide auf, uns Weizen zu verkaufen.“\\n\\nDas Kabinett dachte eine Weile darüber nach. Der Landwirtschaftsminister öffnete seine Mappe und schloss sie wieder."
+ },
+ "decolonization_events.21.t": {
+  "en": "The Non-Aligned Path",
+  "de": "Der blockfreie Weg"
+ },
+ "decolonization_events.3.a": {
+  "en": "Withdraw our forces and recognize independence.",
+  "de": "Unsere Truppen abziehen und die Unabhängigkeit anerkennen."
+ },
+ "decolonization_events.3.b": {
+  "en": "Hold the line.",
+  "de": "Die Stellung halten."
+ },
+ "decolonization_events.3.c": {
+  "en": "Grant independence with conditions.",
+  "de": "Unabhängigkeit unter Bedingungen gewähren."
+ },
+ "decolonization_events.3.d": {
+  "en": "Armed resistance in [SCOPE.sCountry('rebellious_subject').GetName] has erupted into open conflict. Guerrilla fighters strike at our garrisons and the violence exacts a heavy toll on both sides. Our commanders demand reinforcements even as the treasury groans under the weight of continued occupation.",
+  "de": "Der bewaffnete Widerstand [SCOPE.sCountry('rebellious_subject').GetAltName('IN')] ist zu offenem Konflikt eskaliert. Guerillakämpfer greifen unsere Garnisonen an, und die Gewalt fordert auf beiden Seiten einen hohen Tribut. Unsere Kommandeure fordern Verstärkung, während die Staatskasse unter der Last der fortgesetzten Besatzung ächzt."
+ },
+ "decolonization_events.3.f": {
+  "en": "\\\"They ambushed the supply column at dawn,\\\" the colonel reported. \\\"Fourteen dead. The road is impassable.\\\"\\n\\nThe governor stared at the map, at the red pins multiplying like a rash across the interior.\\n\\n\\\"We used to call this banditry,\\\" he said quietly. \\\"When did it become a war?\\\"",
+  "de": "„Sie haben den Nachschubtross im Morgengrauen überfallen“, meldete der Oberst. „Vierzehn Tote. Die Straße ist unpassierbar.“\\n\\nDer Gouverneur starrte auf die Karte, auf die roten Stecknadeln, die sich wie ein Ausschlag über das Landesinnere ausbreiteten.\\n\\n„Früher haben wir das Banditentum genannt“, sagte er leise. „Wann ist daraus ein Krieg geworden?“"
+ },
+ "decolonization_events.3.t": {
+  "en": "The Price of Empire",
+  "de": "Der Preis des Imperiums"
+ },
+ "decolonization_events.300.a": {
+  "en": "The empire is settled.",
+  "de": "Das Imperium ist gefestigt."
+ },
+ "decolonization_events.300.d": {
+  "en": "[ROOT.GetCountry.GetName] has formally federated its empire. After three years of unbroken stability, the assembled deputies of the metropole and the colonies have ratified the act binding them together under a single, indissoluble crown. Where there were disparate possessions there is now one structure. The Iron Fist that held them is now the Iron Hand that joins them; the world's accommodation, however reluctant, is final.\\n\\nThere will still be voices of dissent. They will be answered, as they have been answered, with the means we have always preferred.",
+  "de": "[ROOT.GetCountry.GetAltName('NOM')|U] hat das eigene Imperium formell föderalisiert. Nach drei Jahren ununterbrochener Stabilität haben die versammelten Abgeordneten der Metropole und der Kolonien den Akt ratifiziert, der sie unter einer einzigen, unauflöslichen Krone vereint. Wo einst vereinzelte Besitzungen bestanden, gibt es nun eine einzige Struktur. Die eiserne Faust, die sie zusammenhielt, ist nun die eiserne Hand, die sie verbindet; die Anerkennung der Welt, so widerwillig sie auch sein mag, ist endgültig.\\n\\nEs wird weiterhin Stimmen des Widerspruchs geben. Ihnen wird begegnet, wie ihnen stets begegnet wurde: mit den Mitteln, die wir immer bevorzugt haben."
+ },
+ "decolonization_events.300.f": {
+  "en": "\\\"The empire is now a fact, not a question,\\\" the architect of the act told the parliament.\\n\\n\\\"And the dissenters?\\\"\\n\\n\\\"Will be answered, as they have been answered, with the means we have always preferred. The federation is complete. The constitutional acts are signed. The map will not be redrawn in our lifetimes. The voices of dissent will be answered, but they will not change the map.\\\"",
+  "de": "„Das Imperium ist jetzt eine Tatsache, keine Frage mehr“, sagte der Architekt des Aktes dem Parlament.\\n\\n„Und die Widersacher?“\\n\\n„Ihnen wird begegnet, wie ihnen stets begegnet wurde: mit den Mitteln, die wir immer bevorzugt haben. Die Föderation ist vollendet. Die Verfassungsakte sind unterzeichnet. Die Karte wird zu unseren Lebzeiten nicht neu gezeichnet werden. Den Stimmen des Widerspruchs wird begegnet, aber sie werden die Karte nicht verändern.“"
+ },
+ "decolonization_events.300.t": {
+  "en": "The Imperial Federation Act",
+  "de": "Der Reichsföderationsakt"
+ },
+ "decolonization_events.301.a": {
+  "en": "The compact is signed.",
+  "de": "Der Pakt ist unterzeichnet."
+ },
+ "decolonization_events.301.d": {
+  "en": "[ROOT.GetCountry.GetName] has formally federated its empire under the Civilizing Mission Compact. After three years of demonstrated stability, the elected legislatures of the metropole and the recognized assemblies of the colonies have together ratified a constitutional framework binding them as permanent partners in a single multinational polity.\\n\\nThe colonies are no longer subject possessions; they are constituent territories. Their representatives sit in our parliament. Their [Concept('concept_pop', 'pops')] vote in our elections. Their concerns shape our budgets. The empire endures, but it endures by consent, not coercion. This was always the harder road.",
+  "de": "[ROOT.GetCountry.GetAltName('NOM')|U] hat das eigene Imperium im Rahmen des Pakts der Zivilisierungsmission formell föderalisiert. Nach drei Jahren nachgewiesener Stabilität haben die gewählten Volksvertretungen der Metropole und die anerkannten Versammlungen der Kolonien gemeinsam einen verfassungsrechtlichen Rahmen ratifiziert, der sie als dauerhafte Partner in einem einzigen multinationalen Staatswesen verbindet.\\n\\nDie Kolonien sind keine unterworfenen Besitzungen mehr; sie sind Gliedgebiete. Ihre Vertreter sitzen in unserem Parlament. Ihre [Concept('concept_pop', 'Pops')] stimmen bei unseren Wahlen ab. Ihre Anliegen prägen unsere Haushalte. Das Imperium besteht fort, aber es besteht durch Zustimmung, nicht durch Zwang. Das war schon immer der schwerere Weg."
+ },
+ "decolonization_events.301.f": {
+  "en": "\\\"A federation of consent,\\\" the chief negotiator said, signing the final page of the compact. \\\"A century of patient work.\\\"\\n\\n\\\"And the dissenters?\\\"\\n\\n\\\"Voted in their own legislatures. Lost the vote, in some places narrowly. Conceded. We did not have to make them concede. That is the difference between this federation and every previous one. The harder road was taken. The harder road is finished.\\\"",
+  "de": "„Eine Föderation der Zustimmung“, sagte der Chefunterhändler und unterzeichnete die letzte Seite des Pakts. „Ein Jahrhundert geduldiger Arbeit.“\\n\\n„Und die Widersacher?“\\n\\n„Haben in ihren eigenen Volksvertretungen abgestimmt. Haben die Abstimmung verloren, an manchen Orten knapp. Haben nachgegeben. Wir mussten sie nicht zum Nachgeben zwingen. Das ist der Unterschied zwischen dieser Föderation und jeder vorherigen. Der schwerere Weg wurde eingeschlagen. Der schwerere Weg ist vollendet.“"
+ },
+ "decolonization_events.301.t": {
+  "en": "The Civilizing Mission Compact",
+  "de": "Der Pakt der Zivilisierungsmission"
+ },
+ "decolonization_events.4.a": {
+  "en": "We reclaim what is ours.",
+  "de": "Wir fordern zurück, was uns gehört."
+ },
+ "decolonization_events.4.b": {
+  "en": "We are who we have become.",
+  "de": "Wir sind, was aus uns geworden ist."
+ },
+ "decolonization_events.4.d": {
+  "en": "Voices across our new nation demand a return to indigenous cultural identity, arguing that casting off colonial language and customs would strengthen national unity and heal the wounds of the past.",
+  "de": "Stimmen aus unserer ganzen neuen Nation fordern eine Rückkehr zur einheimischen kulturellen Identität und argumentieren, dass das Ablegen kolonialer Sprache und Bräuche die nationale Einheit stärken und die Wunden der Vergangenheit heilen würde."
+ },
+ "decolonization_events.4.f": {
+  "en": "\\\"What language do you dream in?\\\" the professor asked his students.\\n\\nSilence. Some shifted uncomfortably.\\n\\n\\\"In theirs,\\\" a young woman admitted at last. \\\"I dream in theirs. But my grandmother - she dreams in ours. And when she tells me what she dreamed, I barely understand.\\\"\\n\\nThe professor nodded slowly. \\\"Then that is where we begin.\\\"",
+  "de": "„In welcher Sprache träumt ihr?“, fragte der Professor seine Studenten.\\n\\nStille. Manche rutschten unbehaglich hin und her.\\n\\n„In ihrer“, gab eine junge Frau schließlich zu. „Ich träume in ihrer Sprache. Aber meine Großmutter - sie träumt in unserer. Und wenn sie mir erzählt, was sie geträumt hat, verstehe ich kaum etwas.“\\n\\nDer Professor nickte langsam. „Dann fangen wir genau dort an.“"
+ },
+ "decolonization_events.4.t": {
+  "en": "Whose Language Do We Dream In?",
+  "de": "In wessen Sprache träumen wir?"
+ },
+ "decolonization_events.400.a": {
+  "en": "Release [SCOPE.sState('decolonization_target_state_1').GetName] and its homeland region ([ROOT.GetVariable('decolonization_region_1_count').GetValue] states) as an independent nation.",
+  "de": "[SCOPE.sState('decolonization_target_state_1').GetName] und die dazugehörige Heimatregion ([ROOT.GetVariable('decolonization_region_1_count').GetValue] Staaten) als unabhängige Nation entlassen."
+ },
+ "decolonization_events.400.b": {
+  "en": "Release [SCOPE.sState('decolonization_target_state_2').GetName] and its homeland region ([ROOT.GetVariable('decolonization_region_2_count').GetValue] states) as an independent nation.",
+  "de": "[SCOPE.sState('decolonization_target_state_2').GetName] und die dazugehörige Heimatregion ([ROOT.GetVariable('decolonization_region_2_count').GetValue] Staaten) als unabhängige Nation entlassen."
+ },
+ "decolonization_events.400.c": {
+  "en": "Release [SCOPE.sState('decolonization_target_state_3').GetName] and its homeland region ([ROOT.GetVariable('decolonization_region_3_count').GetValue] states) as an independent nation.",
+  "de": "[SCOPE.sState('decolonization_target_state_3').GetName] und die dazugehörige Heimatregion ([ROOT.GetVariable('decolonization_region_3_count').GetValue] Staaten) als unabhängige Nation entlassen."
+ },
+ "decolonization_events.400.d": {
+  "en": "Reconsider — keep the territories in the empire.",
+  "de": "Überdenken — die Gebiete im Imperium behalten."
+ },
+ "decolonization_events.400.d_fallback": {
+  "en": "Plans for the release of colonial territory rest on the cabinet's table — chiefly the case of [SCOPE.sState('decolonization_target_state_1').GetName]. The decision is ours.",
+  "de": "Pläne zur Freilassung von Kolonialgebiet liegen auf dem Tisch des Kabinetts — allen voran der Fall [SCOPE.sState('decolonization_target_state_1').GetName]. Die Entscheidung liegt bei uns."
+ },
+ "decolonization_events.400.d_release": {
+  "en": "The administration of several overseas territories has become more trouble than it is worth. Our governors have shortlisted the largest candidates — chiefly [SCOPE.sState('decolonization_target_state_1').GetName] — and recommend cutting our losses on one of them rather than waiting for a crisis to force our hand. The territory released will form a new nation comprising every adjacent state where its primary culture is at home.",
+  "de": "Die Verwaltung mehrerer Überseegebiete ist mehr Ärger, als sie wert ist. Unsere Gouverneure haben die größten Kandidaten in die engere Auswahl genommen — allen voran [SCOPE.sState('decolonization_target_state_1').GetName] — und empfehlen, bei einem von ihnen die Verluste zu begrenzen, statt auf eine Krise zu warten, die uns zum Handeln zwingt. Das freigelassene Gebiet wird eine neue Nation bilden, die jeden angrenzenden Staat umfasst, in dem dessen Hauptkultur beheimatet ist."
+ },
+ "decolonization_events.400.d_round_table": {
+  "en": "Delegates have arrived from our most pacified overseas administrations — chiefly those of [SCOPE.sState('decolonization_target_state_1').GetName]. The framework on the table grants independence with our diplomatic blessing to one of them, a quiet handover that preserves face on both sides and binds the new nation to us in friendship. We may invite the chosen colony to the table; the others will continue under our flag for now.",
+  "de": "Delegierte sind aus unseren befriedetsten Überseeverwaltungen eingetroffen — allen voran der von [SCOPE.sState('decolonization_target_state_1').GetName]. Der vorliegende Rahmen gewährt einer von ihnen mit unserem diplomatischen Segen die Unabhängigkeit, eine stille Übergabe, die auf beiden Seiten das Gesicht wahrt und die neue Nation in Freundschaft an uns bindet. Wir können die ausgewählte Kolonie an den Tisch einladen; die anderen bleiben vorerst unter unserer Flagge."
+ },
+ "decolonization_events.400.f": {
+  "en": "\\\"You may sign first, Minister.\\\"\\n\\n\\\"After you. It is your country now.\\\"",
+  "de": "„Sie dürfen zuerst unterschreiben, Minister.“\\n\\n„Nach Ihnen. Es ist jetzt Ihr Land.“"
+ },
+ "decolonization_events.400.t": {
+  "en": "A Colony Departs",
+  "de": "Eine Kolonie geht"
+ },
+ "decolonization_events.401.a": {
+  "en": "Proceed with the orderly withdrawal.",
+  "de": "Mit dem geordneten Rückzug fortfahren."
+ },
+ "decolonization_events.401.b": {
+  "en": "Reconsider — preserve the empire.",
+  "de": "Überdenken — das Imperium bewahren."
+ },
+ "decolonization_events.401.d": {
+  "en": "The cabinet has assembled the full schedule for the dissolution of the empire. All [ROOT.GetVariable('decolonization_planned_count').GetValue] of our overseas territories are slated for release, with [SCOPE.sState('decolonization_target_state').GetName] as the flagship transition. Once signed, there is no rewinding the clock.",
+  "de": "Das Kabinett hat den vollständigen Zeitplan für die Auflösung des Imperiums erstellt. Alle [ROOT.GetVariable('decolonization_planned_count').GetValue] unserer Überseegebiete sind zur Freilassung vorgesehen, mit [SCOPE.sState('decolonization_target_state').GetName] als Vorzeigefall des Übergangs. Einmal unterzeichnet, lässt sich die Uhr nicht mehr zurückdrehen."
+ },
+ "decolonization_events.401.f": {
+  "en": "\\\"How many flags will need to be lowered?\\\"\\n\\n\\\"All of them, Minister. Every last one.\\\"\\n\\nThe minister looked out the window. \\\"Well. At least the carpenters will be busy.\\\"",
+  "de": "„Wie viele Flaggen müssen eingeholt werden?“\\n\\n„Alle, Minister. Jede einzelne.“\\n\\nDer Minister blickte aus dem Fenster. „Nun. Immerhin werden die Zimmerleute beschäftigt sein.“"
+ },
+ "decolonization_events.401.t": {
+  "en": "The Empire Stands Down",
+  "de": "Das Imperium tritt ab"
+ },
+ "decolonization_events.5.a": {
+  "en": "Extend the hand of friendship.",
+  "de": "Die Hand der Freundschaft reichen."
+ },
+ "decolonization_events.5.b": {
+  "en": "That chapter is closed.",
+  "de": "Dieses Kapitel ist abgeschlossen."
+ },
+ "decolonization_events.5.d": {
+  "en": "[SCOPE.sCountry('former_colony').GetName], a nation once under our rule, has proposed closer diplomatic and economic ties. Their leaders envision a partnership of equals, though critics at home question whether such links simply perpetuate old hierarchies by softer means.",
+  "de": "[SCOPE.sCountry('former_colony').GetAltName('NOM')|U], eine Nation, die einst unter unserer Herrschaft stand, hat engere diplomatische und wirtschaftliche Beziehungen vorgeschlagen. Ihre Führung stellt sich eine Partnerschaft unter Gleichen vor, auch wenn Kritiker im Inland bezweifeln, ob solche Verbindungen die alten Hierarchien nicht bloß mit sanfteren Mitteln fortsetzen."
+ },
+ "decolonization_events.5.f": {
+  "en": "\\\"Your Excellency, I represent [SCOPE.sCountry('former_colony').GetName],\\\" the young diplomat began, with studied formality.\\n\\n\\\"Yes, I know who you represent,\\\" the minister replied. \\\"Your grandfather served in my grandfather's regiment. Small world, isn't it?\\\"\\n\\nA pause. Then a careful smile.\\n\\n\\\"Not as small as it was, sir. That is rather the point.\\\"",
+  "de": "„Exzellenz, ich vertrete [SCOPE.sCountry('former_colony').GetAltName('AKK')]“, begann der junge Diplomat mit einstudierter Förmlichkeit.\\n\\n„Ja, ich weiß, wen Sie vertreten“, erwiderte der Minister. „Ihr Großvater diente im Regiment meines Großvaters. Kleine Welt, nicht wahr?“\\n\\nEine Pause. Dann ein vorsichtiges Lächeln.\\n\\n„Nicht mehr so klein wie früher, Sir. Genau darum geht es.“"
+ },
+ "decolonization_events.5.t": {
+  "en": "Old Ties, New Terms",
+  "de": "Alte Bande, neue Bedingungen"
+ },
+ "decolonization_events.50.a": {
+  "en": "Hold the line. The empire pays for itself in the long run.",
+  "de": "Die Stellung halten. Das Imperium rechnet sich langfristig."
+ },
+ "decolonization_events.50.b": {
+  "en": "Cut colonial spending. The treasury must come first.",
+  "de": "Die Kolonialausgaben kürzen. Die Staatskasse muss Vorrang haben."
+ },
+ "decolonization_events.50.d": {
+  "en": "The treasury's monthly briefing has become an exercise in apocalyptic prose. Servicing colonial garrisons, [concept_infrastructure], and administration is consuming a quarter of state revenue. The latest borrowing round was undersubscribed, and the financiers who took it now whisper about a run on the currency.",
+  "de": "Der monatliche Bericht der Staatskasse ist zu einer Übung in apokalyptischer Prosa geworden. Die Versorgung der Kolonialgarnisonen, der [concept_infrastructure] und der Verwaltung verschlingt ein Viertel der Staatseinnahmen. Die letzte Anleiherunde war unterzeichnet, und die Finanziers, die sie gezeichnet haben, flüstern nun von einem Ansturm auf die Währung."
+ },
+ "decolonization_events.50.d_gbr": {
+  "en": "The exchequer's monthly briefing has become an exercise in apocalyptic prose. Servicing colonial garrisons, [concept_infrastructure], and administration is consuming a quarter of state revenue. The latest borrowing round was undersubscribed. The City whispers about a sterling crisis.",
+  "de": "Der monatliche Bericht des Schatzamts ist zu einer Übung in apokalyptischer Prosa geworden. Die Versorgung der Kolonialgarnisonen, der [concept_infrastructure] und der Verwaltung verschlingt ein Viertel der Staatseinnahmen. Die letzte Anleiherunde war unterzeichnet. Die City munkelt von einer Sterlingkrise."
+ },
+ "decolonization_events.50.f": {
+  "en": "\\\"Minister, the simple truth is that we cannot afford this empire.\\\"\\n\\n\\\"We cannot afford NOT to have this empire. Without the colonies, what becomes of our trade balance? Of our currency? Of our standing in the world?\\\"\\n\\nThe finance minister closed his folder. \\\"With them, sir, we may answer those questions in borrowed money. Without them, we may at least answer them in money we still possess.\\\"",
+  "de": "„Minister, die einfache Wahrheit ist, dass wir uns dieses Imperium nicht leisten können.“\\n\\n„Wir können es uns nicht leisten, dieses Imperium NICHT zu haben. Ohne die Kolonien, was wird aus unserer Handelsbilanz? Aus unserer Währung? Aus unserem Ansehen in der Welt?“\\n\\nDer Finanzminister schloss seine Mappe. „Mit ihnen, Sir, können wir diese Fragen mit geliehenem Geld beantworten. Ohne sie können wir sie wenigstens mit Geld beantworten, das wir noch besitzen.“"
+ },
+ "decolonization_events.50.f_gbr": {
+  "en": "\\\"Minister, the simple truth is that we cannot afford this empire.\\\"\\n\\n\\\"We cannot afford NOT to have this empire. Without the colonies, what becomes of our trade balance? Of sterling? Of our standing in the world?\\\"\\n\\nThe Chancellor closed his folder. \\\"With them, sir, we may answer those questions in pounds. Without them, we may at least answer them in pounds we still possess.\\\"",
+  "de": "„Minister, die einfache Wahrheit ist, dass wir uns dieses Imperium nicht leisten können.“\\n\\n„Wir können es uns nicht leisten, dieses Imperium NICHT zu haben. Ohne die Kolonien, was wird aus unserer Handelsbilanz? Aus dem Pfund Sterling? Aus unserem Ansehen in der Welt?“\\n\\nDer Schatzkanzler schloss seine Mappe. „Mit ihnen, Sir, können wir diese Fragen in Pfund beantworten. Ohne sie können wir sie wenigstens in Pfund beantworten, das wir noch besitzen.“"
+ },
+ "decolonization_events.50.t": {
+  "en": "The Treasury Says No",
+  "de": "Die Staatskasse sagt Nein"
+ },
+ "decolonization_events.51.a": {
+  "en": "Tighten conscription. Pacification requires manpower.",
+  "de": "Die Wehrpflicht verschärfen. Die Befriedung braucht Männer."
+ },
+ "decolonization_events.51.b": {
+  "en": "Demobilize colonial garrisons. The home front cannot be sustained.",
+  "de": "Die Kolonialgarnisonen demobilisieren. Die Heimatfront lässt sich nicht länger aufrechterhalten."
+ },
+ "decolonization_events.51.d": {
+  "en": "Casualty notices arrive at homes across the metropole faster than we can print the official forms. Recruiters are met with petitions and protests. Mothers' associations have organized vigils outside the war ministry. The army staff demands more men; the public demands fewer.",
+  "de": "Todesnachrichten erreichen die Haushalte in der gesamten Metropole schneller, als wir die amtlichen Formulare drucken können. Rekrutierungsoffizieren begegnet man mit Petitionen und Protesten. Mütterverbände haben Mahnwachen vor dem Kriegsministerium organisiert. Der Generalstab fordert mehr Männer; die Öffentlichkeit fordert weniger."
+ },
+ "decolonization_events.51.f": {
+  "en": "\\\"How many?\\\" the General asked.\\n\\n\\\"Forty thousand needed for the next rotation, sir.\\\"\\n\\nHe stared at the figure. Forty thousand more men, away from their fields, their factories, their families, for an interior war on a peninsula nobody could find on a map two years ago.\\n\\n\\\"And how many will we get if we open the conscription notices tomorrow?\\\"\\n\\n\\\"Sir, we have not finished counting how many evaded the last batch.\\\"",
+  "de": "„Wie viele?“, fragte der General.\\n\\n„Vierzigtausend werden für die nächste Ablösung benötigt, Sir.“\\n\\nEr starrte auf die Zahl. Vierzigtausend weitere Männer, weg von ihren Feldern, ihren Fabriken, ihren Familien, für einen Krieg im Landesinneren auf einer Halbinsel, die vor zwei Jahren noch niemand auf einer Karte hätte finden können.\\n\\n„Und wie viele bekommen wir, wenn wir morgen die Einberufungsbescheide verschicken?“\\n\\n„Sir, wir sind noch nicht fertig damit, zu zählen, wie viele sich der letzten Runde entzogen haben.“"
+ },
+ "decolonization_events.51.t": {
+  "en": "Conscription Crisis",
+  "de": "Wehrpflichtkrise"
+ },
+ "decolonization_events.52.a": {
+  "en": "Ignore the petition. They will tire of speeches.",
+  "de": "Die Petition ignorieren. Sie werden der Reden müde werden."
+ },
+ "decolonization_events.52.b": {
+  "en": "Convene a public response. The intelligentsia must be answered.",
+  "de": "Eine öffentliche Erwiderung einberufen. Der Intelligenzija muss geantwortet werden."
+ },
+ "decolonization_events.52.d": {
+  "en": "A petition signed by hundreds of academics, journalists, clergy, and former colonial administrators has been published in the morning papers. It calls upon the government to begin the orderly liquidation of empire, citing both moral failure and practical exhaustion. Editorials are appearing across the political spectrum.",
+  "de": "Eine von Hunderten Akademikern, Journalisten, Geistlichen und ehemaligen Kolonialverwaltern unterzeichnete Petition ist in den Morgenzeitungen veröffentlicht worden. Sie fordert die Regierung auf, mit der geordneten Auflösung des Imperiums zu beginnen, und verweist dabei sowohl auf moralisches Versagen als auch auf praktische Erschöpfung. Leitartikel erscheinen im gesamten politischen Spektrum."
+ },
+ "decolonization_events.52.f": {
+  "en": "\\\"Did you read this?\\\" the Prime Minister waved the broadsheet at the Cabinet.\\n\\n\\\"I signed it,\\\" replied the Education Minister, looking at his hands.\\n\\nA silence that lasted, perhaps, half a beat too long.\\n\\n\\\"Well,\\\" the Prime Minister said carefully, \\\"that's awkward.\\\"",
+  "de": "„Haben Sie das gelesen?“ Der Premierminister schwenkte die Zeitung vor dem Kabinett.\\n\\n„Ich habe unterschrieben“, erwiderte der Bildungsminister und blickte auf seine Hände.\\n\\nEine Stille, die vielleicht einen Takt zu lang dauerte.\\n\\n„Nun“, sagte der Premierminister vorsichtig, „das ist unangenehm.“"
+ },
+ "decolonization_events.52.t": {
+  "en": "The Intelligentsia Petition",
+  "de": "Die Petition der Intelligenzija"
+ },
+ "decolonization_events.53.a": {
+  "en": "Open the gates. Let them speak.",
+  "de": "Die Tore öffnen. Sollen sie reden."
+ },
+ "decolonization_events.53.b": {
+  "en": "Send in the riot police.",
+  "de": "Die Bereitschaftspolizei entsenden."
+ },
+ "decolonization_events.53.d": {
+  "en": "The campuses of [ROOT.GetCountry.GetName] are aflame with anti-colonial sentiment. Lecture halls fill not for the syllabus but for the petitions; quad statues are graffitied with the names of executed colonial dissidents; visiting lecturers from former colonies are received like heads of state. The young intelligentsia, denied a seat at the table, has built its own table on the lawn outside the chancellery.",
+  "de": "Die Universitätsgelände [ROOT.GetCountry.GetAltName('GEN')] stehen in Flammen antikolonialer Stimmung. Hörsäle füllen sich nicht für den Lehrplan, sondern für die Petitionen; Statuen auf dem Campus werden mit den Namen hingerichteter Kolonialdissidenten beschmiert; Gastdozenten aus ehemaligen Kolonien werden wie Staatsoberhäupter empfangen. Die junge Intelligenzija, der man keinen Platz am Tisch zugestanden hat, hat sich ihren eigenen Tisch auf dem Rasen vor der Kanzlei gebaut."
+ },
+ "decolonization_events.53.f": {
+  "en": "\\\"They will not be lectured to about decorum,\\\" the dean said.\\n\\n\\\"And the chancellor?\\\"\\n\\n\\\"Has invited the leaders inside. There will be a forum, formal, on the record. The universities have demanded a seat at the table. They have it. The empire's defenders are about to discover what happens when the academy decides it will no longer make the case for them. The forum is the end of the alibi.\\\"",
+  "de": "„Man wird ihnen keine Vorträge über Anstand halten“, sagte der Dekan.\\n\\n„Und der Kanzler?“\\n\\n„Hat die Anführer nach drinnen eingeladen. Es wird ein Forum geben, formell, protokolliert. Die Universitäten haben einen Platz am Tisch gefordert. Sie haben ihn. Die Verteidiger des Imperiums werden gleich erfahren, was geschieht, wenn die Akademie beschließt, ihre Sache nicht mehr zu vertreten. Das Forum ist das Ende des Alibis.“"
+ },
+ "decolonization_events.53.t": {
+  "en": "The Universities Speak",
+  "de": "Die Universitäten erheben ihre Stimme"
+ },
+ "decolonization_events.54.a": {
+  "en": "Pension reform. Generous terms.",
+  "de": "Rentenreform. Großzügige Bedingungen."
+ },
+ "decolonization_events.54.b": {
+  "en": "Disperse them. They will not break us.",
+  "de": "Sie zerstreuen. Sie werden uns nicht brechen."
+ },
+ "decolonization_events.54.d": {
+  "en": "Soldiers home from the colonies have begun organizing. They have seen what they have seen — and what they have done — and they are no longer quiet about it. The petty bourgeoisie, the small-business backbone of the war economy, sides with them: their sons, their employees, their friends. The pension halls are full; the parade grounds are not.",
+  "de": "Aus den Kolonien heimgekehrte Soldaten haben begonnen, sich zu organisieren. Sie haben gesehen, was sie gesehen haben — und was sie getan haben — und sie schweigen nicht länger darüber. Das Kleinbürgertum, das mittelständische Rückgrat der Kriegswirtschaft, stellt sich auf ihre Seite: ihre Söhne, ihre Angestellten, ihre Freunde. Die Rentensäle sind voll; die Exerzierplätze nicht."
+ },
+ "decolonization_events.54.f": {
+  "en": "\\\"I served,\\\" the old veteran said. \\\"I came home. I will not serve again.\\\"\\n\\n\\\"And your sons?\\\"\\n\\n\\\"Will not serve either. I will not permit it. I have lived through enough wars to know which ones we should be fighting, and the next war they propose is not one of them. The pension will pay for both of them through university. The pension is the only thing the empire ever gave me that I will be passing on.\\\"",
+  "de": "„Ich habe gedient“, sagte der alte Veteran. „Ich bin heimgekommen. Ich werde nicht wieder dienen.“\\n\\n„Und Ihre Söhne?“\\n\\n„Werden auch nicht dienen. Das werde ich nicht zulassen. Ich habe genug Kriege erlebt, um zu wissen, welche wir führen sollten, und der nächste Krieg, den man vorschlägt, gehört nicht dazu. Die Rente wird beiden das Studium finanzieren. Die Rente ist das Einzige, was mir das Imperium je gegeben hat, das ich weitergeben werde.“"
+ },
+ "decolonization_events.54.t": {
+  "en": "The Veterans' Protest",
+  "de": "Der Protest der Veteranen"
+ },
+ "decolonization_events.6.a": {
+  "en": "We acknowledge the debt.",
+  "de": "Wir erkennen die Schuld an."
+ },
+ "decolonization_events.6.b": {
+  "en": "The past cannot be repaid.",
+  "de": "Die Vergangenheit lässt sich nicht zurückzahlen."
+ },
+ "decolonization_events.6.d": {
+  "en": "[SCOPE.sCountry('reparations_claimant').GetName] has formally demanded reparations for colonial exploitation and names its price: #b @money![SCOPE.sCountry('reparations_claimant').MakeScope.Var('decol_reparations_claim').GetValue|D]#!, a tenth of our yearly revenue, or a tenth of its [Concept('concept_gdp', 'GDP')] if that is less. Its representatives present detailed accounts of resources extracted and communities displaced during the imperial period, drawing international attention.",
+  "de": "[SCOPE.sCountry('reparations_claimant').GetAltName('NOM')|U] hat förmlich Reparationen für die koloniale Ausbeutung gefordert und nennt den Preis: #b @money![SCOPE.sCountry('reparations_claimant').MakeScope.Var('decol_reparations_claim').GetValue|D]#!, ein Zehntel unserer Jahreseinnahmen oder ein Zehntel des eigenen [Concept('concept_gdp', 'BIP')], je nachdem, was weniger ist. Die Vertreter des Landes legen detaillierte Aufstellungen der während der imperialen Zeit entnommenen Ressourcen und vertriebenen Gemeinschaften vor und ziehen damit internationale Aufmerksamkeit auf sich."
+ },
+ "decolonization_events.6.f": {
+  "en": "\\\"We have prepared a full accounting,\\\" the [SCOPE.sCountry('reparations_claimant').GetAdjectiveNoFormatting] delegate said, laying a thick dossier on the table. \\\"Every ton of ore. Every acre seized. Every laborer conscripted.\\\"\\n\\n\\\"You cannot seriously expect us to-\\\"\\n\\n\\\"We expect you to read it, Minister. Just read it. Then tell us what you think a fair price would be.\\\"",
+  "de": "„Wir haben eine vollständige Abrechnung vorbereitet“, sagte der [SCOPE.sCountry('reparations_claimant').GetAdjectiveNoFormatting|l]e Delegierte und legte ein dickes Dossier auf den Tisch. „Jede Tonne Erz. Jeder Morgen beschlagnahmtes Land. Jeder zwangsverpflichtete Arbeiter.“\\n\\n„Sie können doch nicht ernsthaft von uns erwarten, dass wir-“\\n\\n„Wir erwarten, dass Sie es lesen, Minister. Lesen Sie es einfach. Dann sagen Sie uns, was Sie für einen fairen Preis halten.“"
+ },
+ "decolonization_events.6.t": {
+  "en": "Debts of Empire",
+  "de": "Schulden des Imperiums"
+ },
+ "decolonization_events.60.a": {
+  "en": "Propose closer ties.",
+  "de": "Engere Beziehungen vorschlagen."
+ },
+ "decolonization_events.60.a_tt": {
+  "en": "[SCOPE.sCountry('ties_former_overlord').GetName] will answer our overture within days. A welcome warms relations between us; a refusal cools them.",
+  "de": "[SCOPE.sCountry('ties_former_overlord').GetAltName('NOM')|U] wird unser Angebot innerhalb weniger Tage beantworten. Eine Zusage erwärmt die Beziehungen zwischen uns; eine Ablehnung kühlt sie ab."
+ },
+ "decolonization_events.60.b": {
+  "en": "Not now.",
+  "de": "Nicht jetzt."
+ },
+ "decolonization_events.60.d": {
+  "en": "Years after independence, trade still runs along the old sea lanes to [SCOPE.sCountry('ties_former_overlord').GetName], and so do our students, our debts and our diplomats' habits. Some in the cabinet want to formalise the link: a partnership of equals, on our terms this time. Others warn that a partnership with the old ruler is the empire by softer means.",
+  "de": "Jahre nach der Unabhängigkeit verläuft der Handel noch immer entlang der alten Seewege [SCOPE.sCountry('ties_former_overlord').GetAltName('NACH')], und ebenso unsere Studenten, unsere Schulden und die Gewohnheiten unserer Diplomaten. Manche im Kabinett wollen die Verbindung formalisieren: eine Partnerschaft unter Gleichen, diesmal zu unseren Bedingungen. Andere warnen, dass eine Partnerschaft mit dem alten Herrscher das Imperium mit sanfteren Mitteln sei."
+ },
+ "decolonization_events.60.f": {
+  "en": "\\\"We would be going to them,\\\" the foreign minister said. \\\"Not the other way round. That is the difference.\\\"\\n\\n\\\"Is it?\\\" asked the education minister. \\\"My father went to them too. He called it a scholarship.\\\"",
+  "de": "„Wir wären es, die zu ihnen gehen“, sagte der Außenminister. „Nicht umgekehrt. Das ist der Unterschied.“\\n\\n„Ist das so?“, fragte der Bildungsminister. „Auch mein Vater ist zu ihnen gegangen. Er nannte es ein Stipendium.“"
+ },
+ "decolonization_events.60.t": {
+  "en": "Old Ties, New Terms?",
+  "de": "Alte Bande, neue Bedingungen?"
+ },
+ "decolonization_events.61.a": {
+  "en": "Present the claim.",
+  "de": "Die Forderung vorlegen."
+ },
+ "decolonization_events.61.a_tt": {
+  "en": "We demand #b @money![ROOT.GetVariable('decol_reparations_claim').GetValue|D]#! of [SCOPE.sCountry('reparations_payer').GetName]: a tenth of its yearly revenue, or a tenth of our [Concept('concept_gdp', 'GDP')] if that is less. It will decide within days whether to pay.",
+  "de": "Wir fordern #b @money![ROOT.GetVariable('decol_reparations_claim').GetValue|D]#! [SCOPE.sCountry('reparations_payer').GetAltName('VON')]: ein Zehntel der dortigen Jahreseinnahmen oder ein Zehntel unseres [Concept('concept_gdp', 'BIP')], je nachdem, was weniger ist. Das Land wird innerhalb weniger Tage entscheiden, ob es zahlt."
+ },
+ "decolonization_events.61.b": {
+  "en": "Not now.",
+  "de": "Nicht jetzt."
+ },
+ "decolonization_events.61.d": {
+  "en": "Our historians and lawyers have finished the ledger of the colonial years under [SCOPE.sCountry('reparations_payer').GetName]: the ore shipped out, the land taken, the labour conscripted. The cabinet must decide whether to present it as a formal claim for reparations of #b @money![ROOT.GetVariable('decol_reparations_claim').GetValue|D]#!, or to keep it in the drawer for now.",
+  "de": "Unsere Historiker und Juristen haben das Verzeichnis der Kolonialjahre unter [SCOPE.sCountry('reparations_payer').GetAltName('DAT')] fertiggestellt: das ausgeführte Erz, das genommene Land, die zur Arbeit gezwungenen Menschen. Das Kabinett muss entscheiden, ob es dies als förmliche Reparationsforderung über #b @money![ROOT.GetVariable('decol_reparations_claim').GetValue|D]#! vorlegt oder es vorerst in der Schublade lässt."
+ },
+ "decolonization_events.61.f": {
+  "en": "\\\"They will say it was a hundred years ago,\\\" the justice minister said.\\n\\n\\\"Then we will show them the receipts,\\\" the finance minister replied. \\\"They kept very good receipts.\\\"",
+  "de": "„Sie werden sagen, das sei hundert Jahre her“, sagte der Justizminister.\\n\\n„Dann zeigen wir ihnen die Quittungen“, erwiderte der Finanzminister. „Sie haben sehr gute Quittungen aufbewahrt.“"
+ },
+ "decolonization_events.61.t": {
+  "en": "The Accounting",
+  "de": "Die Abrechnung"
+ },
+ "decolonization_events.62.a": {
+  "en": "Accept the truce.",
+  "de": "Den Waffenstillstand annehmen."
+ },
+ "decolonization_events.62.b": {
+  "en": "Our claims stay open.",
+  "de": "Unsere Ansprüche bleiben bestehen."
+ },
+ "decolonization_events.62.d": {
+  "en": "[SCOPE.sCountry('truce_proposer').GetName], our neighbour and kin across a border the departing powers drew, has proposed a fraternal federation between our young nations, beginning with a five-year pledge that neither will take up arms against the other. Accepting binds us as much as them.",
+  "de": "[SCOPE.sCountry('truce_proposer').GetAltName('NOM')|U], unser Nachbar und Verwandter jenseits einer Grenze, die die abziehenden Mächte gezogen haben, hat eine brüderliche Föderation zwischen unseren jungen Nationen vorgeschlagen, beginnend mit einem fünfjährigen Versprechen, dass keine Seite gegen die andere zu den Waffen greift. Die Annahme bindet uns ebenso wie die andere Seite."
+ },
+ "decolonization_events.62.f": {
+  "en": "\\\"One people, two flags,\\\" the envoy said. \\\"For now.\\\"\\n\\n\\\"And in five years?\\\"\\n\\n\\\"In five years, perhaps one flag. Or two peoples. That is what the five years are for.\\\"",
+  "de": "„Ein Volk, zwei Flaggen“, sagte der Gesandte. „Vorerst.“\\n\\n„Und in fünf Jahren?“\\n\\n„In fünf Jahren vielleicht eine Flagge. Oder zwei Völker. Dafür sind die fünf Jahre da.“"
+ },
+ "decolonization_events.62.t": {
+  "en": "A Fraternal Proposal",
+  "de": "Ein brüderlicher Vorschlag"
+ },
+ "decolonization_events.63.a": {
+  "en": "Accept the border truce.",
+  "de": "Den Grenzwaffenstillstand annehmen."
+ },
+ "decolonization_events.63.b": {
+  "en": "Keep our claims open.",
+  "de": "Unsere Ansprüche offenhalten."
+ },
+ "decolonization_events.63.d": {
+  "en": "[SCOPE.sCountry('truce_proposer').GetName] has formally recognised the border between our nations as the departing powers left it, and offers a five-year truce so that both of us can build within it. Accepting binds us as much as them, and closes, for now, the question of the lands we both claim.",
+  "de": "[SCOPE.sCountry('truce_proposer').GetAltName('NOM')|U] hat die Grenze zwischen unseren Nationen förmlich so anerkannt, wie die abziehenden Mächte sie hinterlassen haben, und bietet einen fünfjährigen Waffenstillstand an, damit wir beide innerhalb dieser Grenze aufbauen können. Die Annahme bindet uns ebenso wie die andere Seite und schließt vorerst die Frage der von uns beiden beanspruchten Länder."
+ },
+ "decolonization_events.63.f": {
+  "en": "The surveyor unrolled the colonial map on the table between the two delegations. Neither side touched it.\\n\\n\\\"It is a bad line,\\\" said one.\\n\\n\\\"It is the only line we have,\\\" said the other. \\\"Let us at least agree not to die over it this decade.\\\"",
+  "de": "Der Landvermesser rollte die koloniale Karte auf dem Tisch zwischen den beiden Delegationen aus. Keine Seite berührte sie.\\n\\n„Es ist eine schlechte Linie“, sagte der eine.\\n\\n„Es ist die einzige Linie, die wir haben“, sagte der andere. „Lasst uns wenigstens vereinbaren, in diesem Jahrzehnt nicht dafür zu sterben.“"
+ },
+ "decolonization_events.63.t": {
+  "en": "The Line on the Map",
+  "de": "Die Linie auf der Karte"
+ },
+ "decolonization_events.7.a": {
+  "en": "Build schools and roads.",
+  "de": "Schulen und Straßen bauen."
+ },
+ "decolonization_events.7.b": {
+  "en": "Open the door to foreign capital.",
+  "de": "Die Tür für ausländisches Kapital öffnen."
+ },
+ "decolonization_events.7.c": {
+  "en": "We shall rely on ourselves.",
+  "de": "Wir werden uns auf uns selbst verlassen."
+ },
+ "decolonization_events.7.d": {
+  "en": "Our young nation faces the monumental task of building [Concept('concept_institution', 'institutions')] and [concept_infrastructure] from the remnants of colonial rule. The choices made now will shape the country for generations.",
+  "de": "Unsere junge Nation steht vor der gewaltigen Aufgabe, aus den Überresten der Kolonialherrschaft [Concept('concept_institution', 'Institutionen')] und [concept_infrastructure] aufzubauen. Die jetzt getroffenen Entscheidungen werden das Land für Generationen prägen."
+ },
+ "decolonization_events.7.f": {
+  "en": "\\\"The colonial administration left us three things,\\\" the new president told the assembly. \\\"A railway that goes to the port and nowhere else. A civil service trained to take orders from abroad. And a treasury that has been empty since before we were born.\\\"\\n\\nShe paused.\\n\\n\\\"Well. It is ours now. All of it. The good and the bad. Let us begin.\\\"",
+  "de": "„Die Kolonialverwaltung hat uns drei Dinge hinterlassen“, sagte die neue Präsidentin zur Versammlung. „Eine Eisenbahn, die zum Hafen führt und sonst nirgendwohin. Einen Beamtenapparat, der darauf trainiert ist, Befehle aus dem Ausland entgegenzunehmen. Und eine Staatskasse, die schon leer war, bevor wir geboren wurden.“\\n\\nSie hielt inne.\\n\\n„Nun. Es gehört jetzt uns. Alles davon. Das Gute und das Schlechte. Fangen wir an.“"
+ },
+ "decolonization_events.7.t": {
+  "en": "Year One",
+  "de": "Jahr eins"
+ },
+ "decolonization_events.8.a": {
+  "en": "The tide cannot be held back.",
+  "de": "Die Flut lässt sich nicht aufhalten."
+ },
+ "decolonization_events.8.b": {
+  "en": "Silence these agitators.",
+  "de": "Diese Aufwiegler zum Schweigen bringen."
+ },
+ "decolonization_events.8.d": {
+  "en": "Anti-colonial intellectuals have gained enormous influence, their ideas reshaping the political landscape and challenging the old imperial consensus. In lecture halls and newspapers, the case against empire has become the cause of a generation.",
+  "de": "Antikoloniale Intellektuelle haben enormen Einfluss gewonnen; ihre Ideen verändern die politische Landschaft und stellen den alten imperialen Konsens infrage. In Hörsälen und Zeitungen ist die Sache gegen das Imperium zur Sache einer ganzen Generation geworden."
+ },
+ "decolonization_events.8.f": {
+  "en": "\\\"Have you read this?\\\" The minister slapped the pamphlet down on the cabinet table. \\\"This professor - this nobody at the university - has single-handedly turned half the students in the capital into revolutionaries.\\\"\\n\\n\\\"He is not a nobody, Minister. He is the most widely-read author in three continents.\\\"\\n\\n\\\"Then arrest him!\\\"\\n\\n\\\"And make him the most widely-read #italic martyr#! in three continents?\\\"",
+  "de": "„Haben Sie das gelesen?“ Der Minister knallte das Pamphlet auf den Kabinettstisch. „Dieser Professor - dieses Niemand an der Universität - hat im Alleingang die halbe Studentenschaft der Hauptstadt zu Revolutionären gemacht.“\\n\\n„Er ist kein Niemand, Minister. Er ist der meistgelesene Autor auf drei Kontinenten.“\\n\\n„Dann verhaften Sie ihn!“\\n\\n„Und machen ihn zum meistgelesenen #italic Märtyrer#! auf drei Kontinenten?“"
+ },
+ "decolonization_events.8.t": {
+  "en": "These Dark Satanic Mills of Empire",
+  "de": "Diese finsteren satanischen Mühlen des Imperiums"
+ },
+ "decolonization_events.9.a": {
+  "en": "Address their grievances.",
+  "de": "Ihre Beschwerden ansprechen."
+ },
+ "decolonization_events.9.b": {
+  "en": "Restore order by force.",
+  "de": "Die Ordnung mit Gewalt wiederherstellen."
+ },
+ "decolonization_events.9.c": {
+  "en": "Let them go.",
+  "de": "Sie ziehen lassen."
+ },
+ "decolonization_events.9.d": {
+  "en": "Tensions are boiling over in [SCOPE.sState('unrest_colony').GetName], where discriminated communities demand greater rights under our direct rule. Our administrators report the situation could deteriorate rapidly without decisive action.",
+  "de": "Die Spannungen kochen über in [SCOPE.sState('unrest_colony').GetName], wo diskriminierte Gemeinschaften unter unserer direkten Herrschaft mehr Rechte fordern. Unsere Verwalter berichten, dass sich die Lage ohne entschlossenes Handeln rasch verschlechtern könnte."
+ },
+ "decolonization_events.9.f": {
+  "en": "\\\"The governor requests additional police,\\\" the clerk reported.\\n\\n\\\"He requested additional police last month.\\\"\\n\\n\\\"Yes, Minister. And the month before that. This time he says if we don't send police, he'll need soldiers. And if we don't send soldiers...\\\" The clerk trailed off.\\n\\n\\\"Then what?\\\"\\n\\n\\\"Then he'd like a ticket home, sir.\\\"",
+  "de": "„Der Gouverneur fordert zusätzliche Polizei an“, meldete der Schreiber.\\n\\n„Er hat letzten Monat auch zusätzliche Polizei angefordert.“\\n\\n„Ja, Minister. Und den Monat davor auch. Diesmal sagt er, wenn wir keine Polizei schicken, brauche er Soldaten. Und wenn wir keine Soldaten schicken...“ Der Schreiber verstummte.\\n\\n„Was dann?“\\n\\n„Dann hätte er gerne ein Ticket nach Hause, Sir.“"
+ },
+ "decolonization_events.9.t": {
+  "en": "Trouble in [SCOPE.sState('unrest_colony').GetName]",
+  "de": "Unruhe in [SCOPE.sState('unrest_colony').GetName]"
+ },
+ "environmentalism_events.1.a": {
+  "en": "A natural fluctuation. Nothing to be done.",
+  "de": "Eine natürliche Schwankung. Da kann man nichts machen."
+ },
+ "environmentalism_events.1.b": {
+  "en": "Commission a formal study at once.",
+  "de": "Sofort eine förmliche Studie in Auftrag geben."
+ },
+ "environmentalism_events.1.d": {
+  "en": "Scientists at [ROOT.GetCountry.GetAdjectiveNoFormatting] universities have published findings indicating a measurable rise in global temperatures. Glaciers are retreating, growing seasons are shifting, and the combustion of coal and petroleum appears to bear responsibility. The world has warmed by #v [SCOPE.GetRootScope.ScriptValue('temperature_anomaly_display')]#! °C above pre-industrial levels.",
+  "de": "Wissenschaftler an [ROOT.GetCountry.GetAdjectiveNoFormatting|l]en Universitäten haben Erkenntnisse veröffentlicht, die auf einen messbaren Anstieg der globalen Temperaturen hindeuten. Gletscher ziehen sich zurück, Vegetationsperioden verschieben sich, und die Verbrennung von Kohle und Erdöl scheint dafür verantwortlich zu sein. Die Welt hat sich um #v [SCOPE.GetRootScope.ScriptValue('temperature_anomaly_display')]#! °C über das vorindustrielle Niveau erwärmt."
+ },
+ "environmentalism_events.1.f": {
+  "en": "\\\"I have taken readings at the observatory every morning for thirty years. The trend is unmistakable.\\\"\\n\\n\\\"And your conclusion, Professor?\\\"\\n\\n\\\"That we are conducting an experiment upon the atmosphere itself, and we have not the faintest idea how it ends.\\\"\\n\\nThe minister folded the report and placed it in the same drawer as the last three.",
+  "de": "„Ich nehme seit dreißig Jahren jeden Morgen Messungen am Observatorium vor. Der Trend ist unverkennbar.“\\n\\n„Und Ihre Schlussfolgerung, Professor?“\\n\\n„Dass wir ein Experiment an der Atmosphäre selbst durchführen und nicht die geringste Ahnung haben, wie es ausgeht.“\\n\\nDer Minister faltete den Bericht zusammen und legte ihn in dieselbe Schublade wie die letzten drei."
+ },
+ "environmentalism_events.1.t": {
+  "en": "The Mercury Rises",
+  "de": "Das Quecksilber steigt"
+ },
+ "environmentalism_events.10.a": {
+  "en": "Ration what remains.",
+  "de": "Was übrig bleibt, rationieren."
+ },
+ "environmentalism_events.10.b": {
+  "en": "Build the [concept_infrastructure] to last.",
+  "de": "Die [concept_infrastructure] für die Dauer bauen."
+ },
+ "environmentalism_events.10.c": {
+  "en": "The ministry shall manage this.",
+  "de": "Das Ministerium soll sich darum kümmern."
+ },
+ "environmentalism_events.10.d": {
+  "en": "Reservoirs across [ROOT.GetCountry.GetName] have dropped to critical levels. Rivers that once powered mills and irrigated farmland are reduced to trickles. Communities are feuding over dwindling supplies, and both agriculture and industry face crippling shortages.",
+  "de": "Die Stauseen [ROOT.GetCountry.GetAltName('IN')] sind auf kritische Werte gesunken. Flüsse, die einst Mühlen antrieben und Ackerland bewässerten, sind zu Rinnsalen geschrumpft. Gemeinden streiten um die schwindenden Vorräte, und sowohl Landwirtschaft als auch Industrie stehen vor lähmenden Engpässen."
+ },
+ "environmentalism_events.10.f": {
+  "en": "\\\"The well is dry.\\\"\\n\\n\\\"Then dig another.\\\"\\n\\n\\\"We dug three already. Each one deeper than the last, each one drawing less than the one before.\\\"\\n\\nThe foreman looked at the cracked earth where the river used to be. Upstream, a factory still ran its pumps day and night, sucking the last moisture from the bedrock. Downstream, a farmer's children carried empty buckets and wore the resigned expression of people who had stopped expecting rain.",
+  "de": "„Der Brunnen ist trocken.“\\n\\n„Dann grabt einen neuen.“\\n\\n„Wir haben schon drei gegraben. Jeder tiefer als der letzte, jeder mit weniger Ertrag als der davor.“\\n\\nDer Vorarbeiter blickte auf die rissige Erde, wo einst der Fluss floss. Flussaufwärts liefen die Pumpen einer Fabrik noch immer Tag und Nacht und saugten die letzte Feuchtigkeit aus dem Gestein. Flussabwärts trugen die Kinder eines Bauern leere Eimer und zeigten den resignierten Ausdruck von Menschen, die aufgehört hatten, auf Regen zu hoffen."
+ },
+ "environmentalism_events.10.t": {
+  "en": "The Wells Run Dry",
+  "de": "Die Brunnen versiegen"
+ },
+ "environmentalism_events.11.a": {
+  "en": "Seize the moment!",
+  "de": "Den Moment nutzen!"
+ },
+ "environmentalism_events.11.b": {
+  "en": "The market shall find its own course.",
+  "de": "Der Markt soll seinen eigenen Kurs finden."
+ },
+ "environmentalism_events.11.d": {
+  "en": "A surge of innovation in renewable energy is sweeping [ROOT.GetCountry.GetName]. Entrepreneurs and engineers are producing breakthroughs in clean power generation and energy storage. Investors are directing capital toward these enterprises with considerable enthusiasm.",
+  "de": "Eine Welle von Innovationen im Bereich erneuerbarer Energien erfasst [ROOT.GetCountry.GetAltName('AKK')]. Unternehmer und Ingenieure erzielen Durchbrüche bei sauberer Energieerzeugung und Energiespeicherung. Investoren lenken mit beträchtlichem Enthusiasmus Kapital in diese Unternehmen."
+ },
+ "environmentalism_events.11.f": {
+  "en": "\\\"We used to pay men to dig black rock and burn it all night. Now we coax power from light itself, and it is almost polite,\\\" the inventor said, wiping solder from his fingers. Investors had laughed until he flipped the switch and a single lamp glowed without smoke.\\n\\nWorkshops filled with humming machines, and young engineers spoke of cities that would run on quiet glass and wind. The future, once a distant promise, had a sound: a steady, hopeful hum.",
+  "de": "„Früher haben wir Männer dafür bezahlt, schwarzen Stein zu graben und ihn die ganze Nacht zu verbrennen. Jetzt entlocken wir dem Licht selbst Strom, und das fast höflich“, sagte der Erfinder und wischte sich Lötzinn von den Fingern. Investoren hatten gelacht, bis er den Schalter umlegte und eine einzelne Lampe rauchlos aufleuchtete.\\n\\nWerkstätten füllten sich mit summenden Maschinen, und junge Ingenieure sprachen von Städten, die von stillem Glas und Wind angetrieben würden. Die Zukunft, einst ein fernes Versprechen, hatte einen Klang: ein stetiges, hoffnungsvolles Summen."
+ },
+ "environmentalism_events.11.t": {
+  "en": "Quiet Power",
+  "de": "Stille Kraft"
+ },
+ "environmentalism_events.12.a": {
+  "en": "The regulations stand.",
+  "de": "Die Vorschriften bleiben bestehen."
+ },
+ "environmentalism_events.12.b": {
+  "en": "Perhaps we have been overzealous...",
+  "de": "Vielleicht waren wir zu eifrig..."
+ },
+ "environmentalism_events.12.d": {
+  "en": "The proprietors of [ROOT.GetCountry.GetName]'s largest coal mines and oil operations have organized a lobbying campaign against emission controls. Their representatives warn that the regulations will destroy employment and cripple output. Behind the scenes, generous inducements are being offered to legislators willing to relax the rules.",
+  "de": "Die Eigentümer der größten Kohlebergwerke und Erdölbetriebe [ROOT.GetCountry.GetAltName('GEN')] haben eine Lobbykampagne gegen die Emissionskontrollen organisiert. Ihre Vertreter warnen, dass die Vorschriften Arbeitsplätze vernichten und die Produktion lähmen würden. Hinter den Kulissen werden Gesetzgebern, die bereit sind, die Regeln zu lockern, großzügige Anreize angeboten."
+ },
+ "environmentalism_events.12.f": {
+  "en": "\\\"You wish me to support the emission bill, Minister?\\\"\\n\\n\\\"I wish you to consider the employment figures for your constituency. Twelve thousand men depend on those mines.\\\"\\n\\n\\\"And their grandchildren will depend on the air.\\\"\\n\\n\\\"Grandchildren do not vote, Minister. Miners do.\\\"\\n\\nThe envelope remained on the desk between them, neither acknowledged nor refused.",
+  "de": "„Sie wünschen, dass ich den Emissionsgesetzentwurf unterstütze, Minister?“\\n\\n„Ich wünsche, dass Sie die Beschäftigungszahlen für Ihren Wahlkreis bedenken. Zwölftausend Männer hängen von diesen Bergwerken ab.“\\n\\n„Und deren Enkel werden von der Luft abhängen.“\\n\\n„Enkel wählen nicht, Minister. Bergleute schon.“\\n\\nDer Umschlag blieb zwischen ihnen auf dem Schreibtisch liegen, weder zur Kenntnis genommen noch zurückgewiesen."
+ },
+ "environmentalism_events.12.t": {
+  "en": "Friends in High Places",
+  "de": "Freunde in hohen Positionen"
+ },
+ "environmentalism_events.13.a": {
+  "en": "We shall set the agenda.",
+  "de": "Wir werden die Agenda bestimmen."
+ },
+ "environmentalism_events.13.b": {
+  "en": "We shall sign the accord.",
+  "de": "Wir werden das Abkommen unterzeichnen."
+ },
+ "environmentalism_events.13.c": {
+  "en": "We shall not be bound by their demands.",
+  "de": "Wir werden uns nicht an ihre Forderungen binden lassen."
+ },
+ "environmentalism_events.13.d": {
+  "en": "The [Concept('concept_great_power', 'great powers')] are gathering to negotiate a coordinated response to rising temperatures. Diplomats recognize that no single nation can address the matter alone. [ROOT.GetCountry.GetName] has been invited to take a prominent role in the proceedings.",
+  "de": "Die [Concept('concept_great_power', 'Großmächte')] versammeln sich, um eine koordinierte Antwort auf die steigenden Temperaturen auszuhandeln. Diplomaten erkennen, dass keine einzelne Nation die Sache allein angehen kann. [ROOT.GetCountry.GetAltName('NOM')|U] wurde eingeladen, eine herausragende Rolle bei den Verhandlungen zu übernehmen."
+ },
+ "environmentalism_events.13.f": {
+  "en": "\\\"Gentlemen, the temperature. The temperature is the only item on today's agenda.\\\"\\n\\nDelegates shifted in upholstered chairs, translators murmured, and the great chandelier above them glittered indifferently. The ambassador from the coal-exporting nation cleared his throat and asked, with studied mildness, whether the science was truly settled. Forty scientists in the gallery winced in unison.\\n\\n\\\"Shall we vote on the temperature?\\\" someone suggested. Nobody laughed.",
+  "de": "„Meine Herren, die Temperatur. Die Temperatur ist der einzige Punkt auf der heutigen Tagesordnung.“\\n\\nDelegierte rutschten auf gepolsterten Stühlen hin und her, Dolmetscher murmelten, und der große Kronleuchter über ihnen funkelte gleichgültig. Der Botschafter der kohleexportierenden Nation räusperte sich und fragte mit einstudierter Milde, ob die Wissenschaft wirklich eindeutig sei. Vierzig Wissenschaftler auf der Galerie zuckten unisono zusammen.\\n\\n„Sollen wir über die Temperatur abstimmen?“, schlug jemand vor. Niemand lachte."
+ },
+ "environmentalism_events.13.t": {
+  "en": "The Congress of Smoke",
+  "de": "Der Kongress des Rauchs"
+ },
+ "environmentalism_events.14.a": {
+  "en": "Seal the borders and pray.",
+  "de": "Die Grenzen abriegeln und beten."
+ },
+ "environmentalism_events.14.b": {
+  "en": "Fund the laboratories.",
+  "de": "Die Laboratorien finanzieren."
+ },
+ "environmentalism_events.14.c": {
+  "en": "Activate public health protocols.",
+  "de": "Die Gesundheitsprotokolle aktivieren."
+ },
+ "environmentalism_events.14.d": {
+  "en": "Tropical diseases previously confined to equatorial regions are appearing in [ROOT.GetCountry.GetName] as warmer conditions create new habitats for disease-carrying insects. Hospitals in formerly temperate districts are reporting cases of malaria, dengue, and other fevers never before seen at these latitudes.",
+  "de": "Tropenkrankheiten, die zuvor auf äquatoriale Regionen beschränkt waren, treten [ROOT.GetCountry.GetAltName('IN')] auf, da die wärmeren Bedingungen neue Lebensräume für krankheitsübertragende Insekten schaffen. Krankenhäuser in einst gemäßigten Bezirken melden Fälle von Malaria, Dengue-Fieber und anderen Fiebererkrankungen, die auf diesen Breitengraden noch nie zuvor aufgetreten sind."
+ },
+ "environmentalism_events.14.f": {
+  "en": "\\\"Doctor, we have seventeen cases of dengue in a city that has never seen a single one.\\\"\\n\\n\\\"The mosquitoes have migrated north. They follow the warmth.\\\"\\n\\n\\\"Can we stop them?\\\"\\n\\n\\\"Can you stop the warmth?\\\"\\n\\nThe ward was full. Nurses moved between iron beds with practiced urgency, and through the open window came the sound of a city that did not yet understand what had arrived.",
+  "de": "„Doktor, wir haben siebzehn Dengue-Fälle in einer Stadt, die noch nie einen einzigen gesehen hat.“\\n\\n„Die Mücken sind nach Norden gewandert. Sie folgen der Wärme.“\\n\\n„Können wir sie aufhalten?“\\n\\n„Können Sie die Wärme aufhalten?“\\n\\nDie Station war voll. Schwestern bewegten sich mit geübter Dringlichkeit zwischen den eisernen Betten, und durch das offene Fenster drang der Klang einer Stadt, die noch nicht begriff, was da angekommen war."
+ },
+ "environmentalism_events.14.t": {
+  "en": "The Fever's March",
+  "de": "Der Marsch des Fiebers"
+ },
+ "environmentalism_events.15.a": {
+  "en": "The professors are right.",
+  "de": "Die Professoren haben recht."
+ },
+ "environmentalism_events.15.b": {
+  "en": "The factory owners are right.",
+  "de": "Die Fabrikbesitzer haben recht."
+ },
+ "environmentalism_events.15.c": {
+  "en": "Surely there is a middle ground.",
+  "de": "Es muss doch einen Mittelweg geben."
+ },
+ "environmentalism_events.15.d": {
+  "en": "An acrimonious political struggle has erupted between [ROOT.GetCountry.GetName]'s academic reformers and the industrial establishment. Scientists demand immediate emission reductions and a transition to clean energy, while factory owners and mining [Concept('concept_magnate', 'magnates')] warn of economic ruin.",
+  "de": "Zwischen den akademischen Reformern [ROOT.GetCountry.GetAltName('GEN')] und dem industriellen Establishment ist ein erbitterter politischer Kampf ausgebrochen. Wissenschaftler fordern sofortige Emissionssenkungen und einen Übergang zu sauberer Energie, während Fabrikbesitzer und Bergbau-[Concept('concept_magnate', 'Magnaten')] vor wirtschaftlichem Ruin warnen."
+ },
+ "environmentalism_events.15.f": {
+  "en": "\\\"You would bankrupt us for the sake of a theory!\\\"\\n\\n\\\"It is not a theory. It is a measurement.\\\"\\n\\n\\\"Measurements can be taken again!\\\"\\n\\n\\\"And they will show the same thing, only worse.\\\"\\n\\nThe assembly erupted. In the galleries, reporters scribbled furiously. A placard reading #italic JOBS NOT DEGREES#! collided with one reading #italic PLANET NOT PROFIT#!, and both fell to the floor in the general confusion.",
+  "de": "„Sie würden uns wegen einer Theorie ruinieren!“\\n\\n„Es ist keine Theorie. Es ist eine Messung.“\\n\\n„Messungen kann man wiederholen!“\\n\\n„Und sie werden dasselbe zeigen, nur schlimmer.“\\n\\nDie Versammlung geriet außer Rand und Band. Auf den Rängen kritzelten Reporter wie wild. Ein Plakat mit der Aufschrift #italic ARBEITSPLÄTZE STATT ABSCHLÜSSE#! stieß mit einem anderen zusammen, auf dem #italic PLANET STATT PROFIT#! stand, und beide fielen im allgemeinen Durcheinander zu Boden."
+ },
+ "environmentalism_events.15.t": {
+  "en": "Green and Gold",
+  "de": "Grün und Gold"
+ },
+ "environmentalism_events.16.a": {
+  "en": "Shore up the coastline.",
+  "de": "Die Küste befestigen."
+ },
+ "environmentalism_events.16.b": {
+  "en": "We must adapt to what cannot be prevented.",
+  "de": "Wir müssen uns an das anpassen, was sich nicht verhindern lässt."
+ },
+ "environmentalism_events.16.d": {
+  "en": "Scientific expeditions confirm that the polar ice is diminishing at an accelerating rate. Sea levels are rising measurably with each passing year, placing [ROOT.GetCountry.GetName]'s coastal territories under threat of permanent inundation. Fishing grounds are disrupted and naval installations face encroachment.",
+  "de": "Wissenschaftliche Expeditionen bestätigen, dass das Polareis in beschleunigtem Tempo schwindet. Der Meeresspiegel steigt mit jedem vergehenden Jahr messbar an und bedroht die Küstengebiete [ROOT.GetCountry.GetAltName('GEN')] mit dauerhafter Überflutung. Fischgründe werden gestört, und Marineanlagen sind von Landverlust bedroht."
+ },
+ "environmentalism_events.16.f": {
+  "en": "\\\"I have been to the ice. What was a cliff face when I first went is now a gentle slope into the sea. Next year it will be open water.\\\"\\n\\n\\\"How much time do we have?\\\"\\n\\nThe explorer considered the question. Behind him, a projected chart showed the same line it had shown last year, and the year before that. Always descending.\\n\\n\\\"Less than we had yesterday.\\\"",
+  "de": "„Ich war dort beim Eis. Was bei meinem ersten Besuch eine Steilwand war, ist jetzt ein sanfter Abhang zum Meer. Nächstes Jahr wird es offenes Wasser sein.“\\n\\n„Wie viel Zeit bleibt uns?“\\n\\nDer Entdecker überlegte. Hinter ihm zeigte eine projizierte Grafik dieselbe Linie wie im letzten Jahr, und im Jahr davor. Immer fallend.\\n\\n„Weniger, als wir gestern hatten.“"
+ },
+ "environmentalism_events.16.t": {
+  "en": "The Great Thaw",
+  "de": "Das große Tauwetter"
+ },
+ "environmentalism_events.17.a": {
+  "en": "Hold the line until recovery is secure.",
+  "de": "Die Stellung halten, bis die Erholung gesichert ist."
+ },
+ "environmentalism_events.17.b": {
+  "en": "Begin winding down emergency controls.",
+  "de": "Mit dem Abbau der Notstandsmaßnahmen beginnen."
+ },
+ "environmentalism_events.17.d": {
+  "en": "For the first time in years, global temperatures have fallen below catastrophic levels. The crisis has not ended, but the immediate spiral has slowed. In [ROOT.GetCountry.GetName], planners are debating whether to preserve emergency mobilization or begin a cautious return to normal administration.",
+  "de": "Zum ersten Mal seit Jahren sind die globalen Temperaturen unter das katastrophale Niveau gefallen. Die Krise ist nicht vorbei, aber die unmittelbare Abwärtsspirale hat sich verlangsamt. [ROOT.GetCountry.GetAltName('IN')|U] debattieren die Planer, ob die Notstandsmobilisierung beibehalten oder eine vorsichtige Rückkehr zur normalen Verwaltung eingeleitet werden soll."
+ },
+ "environmentalism_events.17.f": {
+  "en": "\\\"The numbers are real. We are no longer in freefall.\\\"\\n\\n\\\"So we celebrate?\\\"\\n\\n\\\"No. We breathe, then keep working. The numbers are better, not good. The next ten years are when we discover whether the better-not-good was the bottom of a curve, or a brief plateau before the curve resumed.\\\"",
+  "de": "„Die Zahlen sind real. Wir befinden uns nicht mehr im freien Fall.“\\n\\n„Also feiern wir?“\\n\\n„Nein. Wir atmen durch und arbeiten weiter. Die Zahlen sind besser, nicht gut. Die nächsten zehn Jahre zeigen uns, ob dieses Besser-aber-nicht-gut der Tiefpunkt einer Kurve war oder nur ein kurzes Plateau, bevor die Kurve weiterging.“"
+ },
+ "environmentalism_events.17.t": {
+  "en": "Off the Brink",
+  "de": "Dem Abgrund entronnen"
+ },
+ "environmentalism_events.18.a": {
+  "en": "Lock in the gains.",
+  "de": "Die Erfolge sichern."
+ },
+ "environmentalism_events.18.b": {
+  "en": "Ease restrictions and reopen industry.",
+  "de": "Die Beschränkungen lockern und die Industrie wieder öffnen."
+ },
+ "environmentalism_events.18.d": {
+  "en": "Warming has fallen below the severe threshold. Failures that once seemed unavoidable are becoming manageable, and emergency forecasts are softening. Ministries in [ROOT.GetCountry.GetName] must now choose whether to consolidate long-term mitigation or relax controls to accelerate short-term growth.",
+  "de": "Die Erwärmung ist unter die Schwelle der schweren Krise gefallen. Zusammenbrüche, die einst unvermeidlich schienen, werden beherrschbar, und die Notfallprognosen entspannen sich. Die Ministerien [ROOT.GetCountry.GetAltName('IN')] müssen nun entscheiden, ob sie die langfristige Eindämmung festigen oder die Kontrollen lockern, um kurzfristiges Wachstum zu beschleunigen."
+ },
+ "environmentalism_events.18.f": {
+  "en": "\\\"The worst projections have been pushed back.\\\"\\n\\n\\\"Because we acted - not because the danger vanished.\\\"\\n\\n\\\"And if we stop acting?\\\"\\n\\n\\\"Then the projections return. The danger is what it was. The intervention is what has held it off. Mistaking the intervention for the cure is the most expensive mistake we could make from this point forward.\\\"",
+  "de": "„Die schlimmsten Prognosen haben sich verschoben.“\\n\\n„Weil wir gehandelt haben - nicht, weil die Gefahr verschwunden ist.“\\n\\n„Und wenn wir aufhören zu handeln?“\\n\\n„Dann kehren die Prognosen zurück. Die Gefahr ist, was sie war. Der Eingriff ist es, der sie in Schach gehalten hat. Den Eingriff mit der Heilung zu verwechseln, wäre von jetzt an der teuerste Fehler, den wir machen könnten.“"
+ },
+ "environmentalism_events.18.t": {
+  "en": "The Heat Recedes",
+  "de": "Die Hitze weicht zurück"
+ },
+ "environmentalism_events.19.a": {
+  "en": "Keep investing in resilience.",
+  "de": "Weiter in Widerstandsfähigkeit investieren."
+ },
+ "environmentalism_events.19.b": {
+  "en": "Shift focus to broader economic priorities.",
+  "de": "Den Fokus auf breitere wirtschaftliche Prioritäten verlagern."
+ },
+ "environmentalism_events.19.d": {
+  "en": "Temperatures have now dropped below the one-degree mark. The mood in [ROOT.GetCountry.GetName] is cautiously optimistic: harvest volatility is easing and disaster response costs are stabilizing. Yet policymakers disagree on whether this is the beginning of durable recovery or merely an interlude.",
+  "de": "Die Temperaturen sind nun unter die Ein-Grad-Marke gefallen. Die Stimmung [ROOT.GetCountry.GetAltName('IN')] ist vorsichtig optimistisch: Die Schwankungen bei den Ernten lassen nach, und die Kosten der Katastrophenhilfe stabilisieren sich. Dennoch sind sich die Entscheidungsträger uneinig, ob dies der Beginn einer dauerhaften Erholung ist oder nur eine Verschnaufpause."
+ },
+ "environmentalism_events.19.f": {
+  "en": "\\\"People are calling it a return to normal.\\\"\\n\\n\\\"Normal?\\\" The climatologist shook her head. \\\"The emissions targets held. If they stop holding, the numbers go back up. It's that simple.\\\"\\n\\n\\\"And the politicians who say the crisis is over?\\\"\\n\\n\\\"Will be voted out by the next generation, when the next generation discovers that the crisis was paused, not ended. We are not finished. We are paused.\\\"",
+  "de": "„Die Leute nennen es eine Rückkehr zur Normalität.“\\n\\n„Normalität?“ Die Klimatologin schüttelte den Kopf. „Die Emissionsziele haben gehalten. Wenn sie nicht mehr halten, steigen die Zahlen wieder. So einfach ist das.“\\n\\n„Und die Politiker, die sagen, die Krise sei vorbei?“\\n\\n„Werden von der nächsten Generation abgewählt, wenn diese entdeckt, dass die Krise nur pausiert war, nicht beendet. Wir sind nicht fertig. Wir sind pausiert.“"
+ },
+ "environmentalism_events.19.t": {
+  "en": "A Cooler Decade",
+  "de": "Ein kühleres Jahrzehnt"
+ },
+ "environmentalism_events.2.a": {
+  "en": "It shall pass. Carry on.",
+  "de": "Es wird vorübergehen. Weitermachen."
+ },
+ "environmentalism_events.2.b": {
+  "en": "Address the root cause.",
+  "de": "Die Grundursache angehen."
+ },
+ "environmentalism_events.2.c": {
+  "en": "Protect the people from the heat.",
+  "de": "Die Menschen vor der Hitze schützen."
+ },
+ "environmentalism_events.2.d": {
+  "en": "Record-breaking heatwaves have struck [ROOT.GetCountry.GetName] and much of the world beyond. Crops are failing in the fields, rivers are running dangerously low, and workers are collapsing at their stations. Global temperatures now stand #v [SCOPE.GetRootScope.ScriptValue('temperature_anomaly_display')]#! °C above pre-industrial levels.",
+  "de": "Rekordverdächtige Hitzewellen haben [ROOT.GetCountry.GetAltName('AKK')] und weite Teile der übrigen Welt getroffen. Die Ernten verdorren auf den Feldern, die Flüsse führen gefährlich wenig Wasser, und Arbeiter brechen an ihren Arbeitsplätzen zusammen. Die globalen Temperaturen liegen nun #v [SCOPE.GetRootScope.ScriptValue('temperature_anomaly_display')]#! °C über dem vorindustriellen Niveau."
+ },
+ "environmentalism_events.2.f": {
+  "en": "\\\"Three men went down in the foundry this morning. Heat prostration, the foreman says.\\\"\\n\\n\\\"And the fields?\\\"\\n\\n\\\"The wheat is burning where it stands. I have never seen anything like it, and my father farmed this land before me.\\\"\\n\\nOutside, the air shimmered above the cobblestones. Dogs slept in whatever shadow they could find, and the river - once chest-deep at midsummer - barely covered a man's ankles.",
+  "de": "„Drei Männer sind heute Morgen in der Gießerei zusammengebrochen. Hitzschlag, sagt der Vorarbeiter.“\\n\\n„Und die Felder?“\\n\\n„Der Weizen verbrennt, wo er steht. So etwas habe ich noch nie gesehen, und schon mein Vater hat dieses Land bestellt.“\\n\\nDraußen flimmerte die Luft über dem Kopfsteinpflaster. Hunde schliefen in jedem Schatten, den sie finden konnten, und der Fluss - einst zur Mittsommerzeit brusttief - reichte kaum über die Knöchel."
+ },
+ "environmentalism_events.2.t": {
+  "en": "The Sweltering Season",
+  "de": "Die schwüle Jahreszeit"
+ },
+ "environmentalism_events.20.a": {
+  "en": "Maintain a minimal climate safeguard regime.",
+  "de": "Ein minimales Klimaschutzregime beibehalten."
+ },
+ "environmentalism_events.20.b": {
+  "en": "Retire crisis-era climate controls.",
+  "de": "Die Klimakontrollen aus der Krisenzeit abschaffen."
+ },
+ "environmentalism_events.20.d": {
+  "en": "Global temperatures have fallen below the threshold that first triggered international alarm. In [ROOT.GetCountry.GetName], voices across government claim the climate emergency has passed. Others argue that abandoning core safeguards now would invite another surge.",
+  "de": "Die globalen Temperaturen sind unter die Schwelle gefallen, die einst den internationalen Alarm ausgelöst hat. [ROOT.GetCountry.GetAltName('IN')|U] behaupten Stimmen in der Regierung, der Klimanotstand sei vorüber. Andere argumentieren, dass die Aufgabe der wichtigsten Schutzmaßnahmen jetzt einen erneuten Anstieg heraufbeschwören würde."
+ },
+ "environmentalism_events.20.f": {
+  "en": "\\\"We have earned this respite.\\\"\\n\\n\\\"Respite, yes. Immunity, no.\\\"\\n\\nOutside the ministry, one banner read #italic Mission Accomplished#! while another read #italic Don't Repeat the Experiment#!.\\n\\n\\\"Which sign is right?\\\" the minister asked.\\n\\n\\\"Both. Today both are right. The banners cannot stay up forever, and whichever one comes down first tells us which posture the country chose.\\\"",
+  "de": "„Wir haben uns diese Atempause verdient.“\\n\\n„Atempause, ja. Immunität, nein.“\\n\\nVor dem Ministerium stand auf einem Banner #italic Mission erfüllt#!, während ein anderes #italic Wiederholt das Experiment nicht#! verkündete.\\n\\n„Welches Schild hat recht?“, fragte der Minister.\\n\\n„Beide. Heute haben beide recht. Die Banner können nicht ewig hängen bleiben, und welches zuerst abgenommen wird, verrät uns, welche Haltung das Land gewählt hat.“"
+ },
+ "environmentalism_events.20.t": {
+  "en": "Below the Line",
+  "de": "Unter der Schwelle"
+ },
+ "environmentalism_events.21.a": {
+  "en": "Institutionalize decarbonized growth.",
+  "de": "Dekarbonisiertes Wachstum institutionalisieren."
+ },
+ "environmentalism_events.21.b": {
+  "en": "Declare success and loosen the framework.",
+  "de": "Den Erfolg erklären und den Rahmen lockern."
+ },
+ "environmentalism_events.21.d": {
+  "en": "For the first time since industrial expansion transformed the world economy, measured warming has returned near baseline. [ROOT.GetCountry.GetName] can treat this as proof of a new long-term model - or as permission to scale back and trust that markets alone will preserve the balance.",
+  "de": "Zum ersten Mal, seit die industrielle Expansion die Weltwirtschaft verändert hat, ist die gemessene Erwärmung wieder nahe an das Ausgangsniveau zurückgekehrt. [ROOT.GetCountry.GetAltName('NOM')|U] kann dies als Beweis für ein neues langfristiges Modell werten - oder als Erlaubnis, sich zurückzuziehen und darauf zu vertrauen, dass allein die Märkte das Gleichgewicht bewahren werden."
+ },
+ "environmentalism_events.21.f": {
+  "en": "\\\"We wanted to be remembered as the generation that averted collapse.\\\"\\n\\n\\\"Then keep the system running. The moment you stop, the readings start climbing again.\\\"\\n\\n\\\"And the credit?\\\"\\n\\n\\\"The credit goes to whoever's in office when the readings drop. The blame goes to whoever's in office when they climb. The decarbonized framework is what holds the line either way. Institutionalize it, and the line holds without depending on who is in office.\\\"",
+  "de": "„Wir wollten als die Generation in Erinnerung bleiben, die den Zusammenbruch abgewendet hat.“\\n\\n„Dann haltet das System am Laufen. In dem Moment, in dem ihr aufhört, beginnen die Werte wieder zu steigen.“\\n\\n„Und die Anerkennung?“\\n\\n„Die Anerkennung geht an den, der gerade im Amt ist, wenn die Werte sinken. Die Schuld geht an den, der im Amt ist, wenn sie steigen. Der dekarbonisierte Rahmen ist das, was die Linie in beiden Fällen hält. Institutionalisiert ihn, und die Linie hält, unabhängig davon, wer im Amt ist.“"
+ },
+ "environmentalism_events.21.t": {
+  "en": "Near Baseline",
+  "de": "Nahe dem Ausgangsniveau"
+ },
+ "environmentalism_events.22.a": {
+  "en": "Put the nation on a survival footing.",
+  "de": "Die Nation auf Überlebenskurs bringen."
+ },
+ "environmentalism_events.22.b": {
+  "en": "Close ranks and feed our own.",
+  "de": "Die Reihen schließen und die eigenen Leute ernähren."
+ },
+ "environmentalism_events.22.c": {
+  "en": "Nothing we do now will change it. Carry on.",
+  "de": "Nichts, was wir jetzt tun, wird daran noch etwas ändern. Weitermachen."
+ },
+ "environmentalism_events.22.d": {
+  "en": "Temperatures have risen #v [SCOPE.GetRootScope.ScriptValue('temperature_anomaly_display')]#! °C above pre-industrial levels. At four degrees the climate of living memory is gone. Harvests fail across whole latitudes at once, summer heat kills in cities that were never built for it, and the great ice sheets are past saving on any timescale that matters to the living. [concept_mass_migration] is no longer a crisis at the borders but the condition of the age. In [ROOT.GetCountry.GetName], nobody asks any more how this might be prevented, only what a government is for in a world like this.",
+  "de": "Die Temperaturen sind um #v [SCOPE.GetRootScope.ScriptValue('temperature_anomaly_display')]#! °C über das vorindustrielle Niveau gestiegen. Bei vier Grad ist das Klima der lebenden Erinnerung verschwunden. Ernten schlagen auf ganzen Breitengraden gleichzeitig fehl, sommerliche Hitze tötet in Städten, die nie dafür gebaut wurden, und die großen Eisschilde sind auf keiner für die Lebenden relevanten Zeitskala mehr zu retten. [concept_mass_migration] ist keine Krise mehr an den Grenzen, sondern der Zustand des Zeitalters. [ROOT.GetCountry.GetAltName('IN')|U] fragt niemand mehr, wie man das hätte verhindern können, sondern nur noch, wofür eine Regierung in einer solchen Welt überhaupt gut ist."
+ },
+ "environmentalism_events.22.f": {
+  "en": "\\\"Four degrees. The number sounds so small.\\\"\\n\\n\\\"It is an average. Averages are gentle. Nobody lives in the average.\\\"\\n\\nThe night-shift nurse had stopped opening the windows in June. By August the hospital ran its generators for the cooling wards alone, and the corridors were lined with cots for people who had come in from the heat and could not be sent back out into it.",
+  "de": "„Vier Grad. Die Zahl klingt so klein.“\\n\\n„Es ist ein Durchschnitt. Durchschnittswerte sind mild. Niemand lebt im Durchschnitt.“\\n\\nDie Nachtschwester hatte im Juni aufgehört, die Fenster zu öffnen. Bis August lief der Krankenhausgenerator allein für die Kühlstationen, und die Flure waren gesäumt von Feldbetten für Menschen, die aus der Hitze gekommen waren und nicht wieder in sie hinausgeschickt werden konnten."
+ },
+ "environmentalism_events.22.t": {
+  "en": "Four Degrees",
+  "de": "Vier Grad"
+ },
+ "environmentalism_events.23.a": {
+  "en": "Stay vigilant. The furnace is still lit.",
+  "de": "Wachsam bleiben. Der Ofen brennt noch."
+ },
+ "environmentalism_events.23.b": {
+  "en": "Relax the emergency rules and restart industry.",
+  "de": "Die Notstandsregeln lockern und die Industrie wieder anfahren."
+ },
+ "environmentalism_events.23.d": {
+  "en": "Global temperatures have fallen back below four degrees, to #v [SCOPE.GetRootScope.ScriptValue('temperature_anomaly_display')]#! °C above pre-industrial levels. By any earlier measure this is still a catastrophe: the droughts, floods and failed harvests go on. But the worst has not become permanent, and for the first time in years the ministries of [ROOT.GetCountry.GetName] are being asked something other than how to survive the next summer.",
+  "de": "Die globalen Temperaturen sind wieder unter vier Grad gefallen, auf #v [SCOPE.GetRootScope.ScriptValue('temperature_anomaly_display')]#! °C über dem vorindustriellen Niveau. Nach jedem früheren Maßstab ist dies immer noch eine Katastrophe: Die Dürren, Überschwemmungen und Missernten gehen weiter. Aber das Schlimmste ist nicht zum Dauerzustand geworden, und zum ersten Mal seit Jahren werden die Ministerien [ROOT.GetCountry.GetAltName('GEN')] etwas anderes gefragt als, wie man den nächsten Sommer übersteht."
+ },
+ "environmentalism_events.23.f": {
+  "en": "\\\"Three point nine.\\\"\\n\\n\\\"A tenth of a degree. Is that worth a press conference?\\\"\\n\\n\\\"It is the first tenth that has gone the right way in my working life. Hold the press conference. Then tell them nothing has changed, because nothing has, except that now it can.\\\"",
+  "de": "„Drei Komma neun.“\\n\\n„Ein Zehntelgrad. Ist das eine Pressekonferenz wert?“\\n\\n„Es ist das erste Zehntel, das in meinem Berufsleben in die richtige Richtung gegangen ist. Halten Sie die Pressekonferenz ab. Und sagen Sie ihnen dann, dass sich nichts geändert hat, denn das hat es nicht - außer, dass es jetzt kann.“"
+ },
+ "environmentalism_events.23.t": {
+  "en": "Out of the Furnace",
+  "de": "Aus dem Ofen"
+ },
+ "environmentalism_events.3.a": {
+  "en": "Spare nothing for adaptation.",
+  "de": "Für die Anpassung nichts sparen."
+ },
+ "environmentalism_events.3.b": {
+  "en": "We cannot afford the diversion.",
+  "de": "Wir können uns die Ablenkung nicht leisten."
+ },
+ "environmentalism_events.3.d": {
+  "en": "Catastrophic storms, floods, and droughts have swept the globe in rapid succession. Coastal regions face inundation, agricultural yields have plummeted, and mass displacement is underway. Global temperatures have risen #v [SCOPE.GetRootScope.ScriptValue('temperature_anomaly_display')]#! °C above pre-industrial levels.",
+  "de": "Katastrophale Stürme, Überschwemmungen und Dürren haben in rascher Folge die ganze Welt heimgesucht. Küstenregionen drohen Überflutungen, die landwirtschaftlichen Erträge sind eingebrochen, und Massenvertreibungen sind im Gange. Die globalen Temperaturen sind um #v [SCOPE.GetRootScope.ScriptValue('temperature_anomaly_display')]#! °C über das vorindustrielle Niveau gestiegen."
+ },
+ "environmentalism_events.3.f": {
+  "en": "\\\"We rebuilt the levee after the spring flooding. Twice. The third time, the foreman looked at us and said, 'Why?'\\\"\\n\\n\\\"The sea does not negotiate, and it does not rest. What we build in a year, it takes in a night.\\\"\\n\\nA fishing village that had stood for two centuries was now a line of rooftops protruding from grey water, each one a monument to the assumption that tomorrow would resemble yesterday.",
+  "de": "„Wir haben den Deich nach der Frühjahrsflut wieder aufgebaut. Zweimal. Beim dritten Mal sah uns der Vorarbeiter an und fragte: ‚Warum?‘“\\n\\n„Das Meer verhandelt nicht, und es ruht nicht. Was wir in einem Jahr bauen, nimmt es sich in einer Nacht.“\\n\\nEin Fischerdorf, das zwei Jahrhunderte lang bestanden hatte, war jetzt nur noch eine Reihe von Dächern, die aus dem grauen Wasser ragten, jedes ein Denkmal für die Annahme, dass das Morgen dem Gestern gleichen würde."
+ },
+ "environmentalism_events.3.t": {
+  "en": "When the Levees Break",
+  "de": "Wenn die Deiche brechen"
+ },
+ "environmentalism_events.4.a": {
+  "en": "God help us all.",
+  "de": "Gott stehe uns allen bei."
+ },
+ "environmentalism_events.4.d": {
+  "en": "Temperatures have risen #v [SCOPE.GetRootScope.ScriptValue('temperature_anomaly_display')]#! °C above pre-industrial levels, triggering cascading ecological failures across the globe. Famine, flooding, and [concept_mass_migration] are destabilizing nations everywhere. The scientific community speaks of tipping points already crossed.",
+  "de": "Die Temperaturen sind um #v [SCOPE.GetRootScope.ScriptValue('temperature_anomaly_display')]#! °C über das vorindustrielle Niveau gestiegen und haben weltweit kaskadierende ökologische Zusammenbrüche ausgelöst. Hungersnot, Überschwemmungen und [concept_mass_migration] destabilisieren Nationen überall. Die Wissenschaft spricht von bereits überschrittenen Kipppunkten."
+ },
+ "environmentalism_events.4.f": {
+  "en": "\\\"We knew. That is what I cannot forgive. We knew, and we debated, and we formed committees, and we published reports, and we did nothing of consequence.\\\"\\n\\nThe old professor set down his pen. Outside, the sky had a colour that skies were not supposed to have. The students had stopped attending lectures weeks ago.",
+  "de": "„Wir wussten es. Das ist es, was ich nicht verzeihen kann. Wir wussten es, und wir debattierten, und wir bildeten Ausschüsse, und wir veröffentlichten Berichte, und wir taten nichts von Belang.“\\n\\nDer alte Professor legte seinen Stift ab. Draußen hatte der Himmel eine Farbe, die Himmel nicht haben sollten. Die Studenten waren schon vor Wochen nicht mehr zu den Vorlesungen erschienen."
+ },
+ "environmentalism_events.4.t": {
+  "en": "The Reckoning",
+  "de": "Die Vergeltung"
+ },
+ "environmentalism_events.5.a": {
+  "en": "Spend whatever is necessary.",
+  "de": "Ausgeben, was nötig ist."
+ },
+ "environmentalism_events.5.b": {
+  "en": "They will have to endure.",
+  "de": "Sie werden es aushalten müssen."
+ },
+ "environmentalism_events.5.c": {
+  "en": "Activate the drought response.",
+  "de": "Den Dürre-Notfallplan aktivieren."
+ },
+ "environmentalism_events.5.d": {
+  "en": "Erratic rainfall and prolonged heat have devastated harvests across [ROOT.GetCountry.GetName]. Granaries stand empty, food prices are climbing sharply, and farmers report that the seasons no longer follow their accustomed rhythms.",
+  "de": "Unberechenbare Niederschläge und anhaltende Hitze haben die Ernten [ROOT.GetCountry.GetAltName('IN')] verwüstet. Kornkammern stehen leer, die Lebensmittelpreise steigen stark, und Bauern berichten, dass die Jahreszeiten nicht mehr ihrem gewohnten Rhythmus folgen."
+ },
+ "environmentalism_events.5.f": {
+  "en": "\\\"I planted when my grandfather planted, and his grandfather before him. The rains always came in the third week. Always.\\\"\\n\\n\\\"And this year?\\\"\\n\\n\\\"This year the soil cracked before the seeds could take. I dug down a foot and found dust.\\\"\\n\\nAt the market, a sack of flour cost what a cart of it had cost five years ago. A woman with three children counted coins and bought half a loaf.",
+  "de": "„Ich habe gepflanzt, wenn mein Großvater pflanzte, und schon sein Großvater vor ihm. Der Regen kam immer in der dritten Woche. Immer.“\\n\\n„Und dieses Jahr?“\\n\\n„Dieses Jahr riss der Boden auf, bevor die Saat anwachsen konnte. Ich grub eine Fußtiefe und fand nur Staub.“\\n\\nAuf dem Markt kostete ein Sack Mehl so viel wie vor fünf Jahren eine ganze Wagenladung. Eine Frau mit drei Kindern zählte ihre Münzen und kaufte ein halbes Brot."
+ },
+ "environmentalism_events.5.t": {
+  "en": "The Barren Harvest",
+  "de": "Die karge Ernte"
+ },
+ "environmentalism_events.6.a": {
+  "en": "Open the borders.",
+  "de": "Die Grenzen öffnen."
+ },
+ "environmentalism_events.6.b": {
+  "en": "We cannot shoulder this burden.",
+  "de": "Wir können diese Last nicht tragen."
+ },
+ "environmentalism_events.6.d": {
+  "en": "Rising seas, failed harvests, and drought have displaced hundreds of thousands across the world. Refugees are arriving at [ROOT.GetCountry.GetName]'s borders in growing numbers, fleeing lands rendered uninhabitable by the shifting climate.",
+  "de": "Steigende Meeresspiegel, Missernten und Dürre haben weltweit Hunderttausende vertrieben. Flüchtlinge treffen in wachsender Zahl an den Grenzen [ROOT.GetCountry.GetAltName('GEN')] ein, auf der Flucht vor Ländern, die das sich wandelnde Klima unbewohnbar gemacht hat."
+ },
+ "environmentalism_events.6.f": {
+  "en": "\\\"Where are you from?\\\"\\n\\n\\\"From a place that is now under the sea.\\\"\\n\\nThe border official paused, pen hovering above the form. There was no box for that. Behind the woman, a line of families stretched back to the horizon, each carrying whatever they had managed to save: a cooking pot, a bundle of clothes, a child too tired to cry.",
+  "de": "„Woher kommen Sie?“\\n\\n„Von einem Ort, der jetzt unter dem Meer liegt.“\\n\\nDer Grenzbeamte hielt inne, den Stift über dem Formular schwebend. Dafür gab es kein Kästchen. Hinter der Frau erstreckte sich eine Schlange von Familien bis zum Horizont, jede trug, was sie hatte retten können: einen Kochtopf, ein Bündel Kleider, ein Kind, zu erschöpft zum Weinen."
+ },
+ "environmentalism_events.6.t": {
+  "en": "The Uprooted",
+  "de": "Die Entwurzelten"
+ },
+ "environmentalism_events.7.a": {
+  "en": "Progress demands sacrifice. Press on.",
+  "de": "Der Fortschritt fordert Opfer. Weiter so."
+ },
+ "environmentalism_events.7.b": {
+  "en": "Commission a formal review.",
+  "de": "Eine förmliche Untersuchung in Auftrag geben."
+ },
+ "environmentalism_events.7.d": {
+  "en": "Journalists have exposed the scale of [concept_pollution_system] from [ROOT.GetCountry.GetName]'s coal mines and petroleum operations. Rivers downstream of industrial districts run black, the air in factory towns is thick with particulate, and physicians are documenting long-term respiratory illness among workers and residents alike.",
+  "de": "Journalisten haben das Ausmaß der [concept_pollution_system] durch die Kohlebergwerke und Erdölbetriebe [ROOT.GetCountry.GetAltName('GEN')] aufgedeckt. Flüsse unterhalb von Industriebezirken fließen schwarz, die Luft in Fabrikstädten ist dick von Feinstaub, und Ärzte dokumentieren langfristige Atemwegserkrankungen bei Arbeitern und Anwohnern gleichermaßen."
+ },
+ "environmentalism_events.7.f": {
+  "en": "\\\"My boy coughs all night. The doctor says it is the air.\\\"\\n\\n\\\"Which air? The air from the mine, or the air from the refinery?\\\"\\n\\n\\\"The doctor says it is all the same air, in the end.\\\"\\n\\nAt the river, a chemist from the university held up a sample jar. The water inside was the colour of strong tea. He labelled it carefully and placed it alongside forty others, each darker than the last, each taken one month apart.",
+  "de": "„Mein Junge hustet die ganze Nacht. Der Arzt sagt, es liegt an der Luft.“\\n\\n„Welche Luft? Die Luft von der Mine oder die Luft von der Raffinerie?“\\n\\n„Der Arzt sagt, am Ende ist es überall dieselbe Luft.“\\n\\nAm Fluss hielt ein Chemiker der Universität ein Probenglas hoch. Das Wasser darin hatte die Farbe von starkem Tee. Er beschriftete es sorgfältig und stellte es neben vierzig andere, jedes dunkler als das letzte, jedes im Abstand von einem Monat entnommen."
+ },
+ "environmentalism_events.7.t": {
+  "en": "These Dark Satanic Chimneys",
+  "de": "Diese finsteren satanischen Schornsteine"
+ },
+ "environmentalism_events.8.a": {
+  "en": "A distraction. Dismiss them.",
+  "de": "Eine Ablenkung. Abweisen."
+ },
+ "environmentalism_events.8.b": {
+  "en": "Their cause has merit.",
+  "de": "Ihr Anliegen hat Berechtigung."
+ },
+ "environmentalism_events.8.d": {
+  "en": "A coalition of scientists, reformers, and concerned citizens has coalesced into a visible [concept_political_movement] within [ROOT.GetCountry.GetName]. They cite the steady rise in global temperatures, declining crop yields, and worsening floods as evidence that unchecked industrialization is altering the natural order. They are petitioning for legislative action.",
+  "de": "Eine Koalition aus Wissenschaftlern, Reformern und besorgten Bürgern hat sich [ROOT.GetCountry.GetAltName('IN')] zu einer sichtbaren [concept_political_movement] zusammengeschlossen. Sie führen den stetigen Anstieg der globalen Temperaturen, sinkende Ernteerträge und sich verschlimmernde Überschwemmungen als Beweis dafür an, dass die ungezügelte Industrialisierung die natürliche Ordnung verändert. Sie fordern per Petition gesetzgeberisches Handeln."
+ },
+ "environmentalism_events.8.f": {
+  "en": "\\\"We are not radicals. We are not anarchists. We are people who have read the data and are frightened by what it says.\\\"\\n\\nThe crowd applauded politely. They were well-dressed, most of them - professors, clerks, a few clergymen. One carried a sign that read simply: #italic 1.2 °C#!. A factory owner on the opposite pavement watched them pass and muttered to his companion: \\\"If they want to save the world, they can start by paying for it.\\\"",
+  "de": "„Wir sind keine Radikalen. Wir sind keine Anarchisten. Wir sind Menschen, die die Daten gelesen haben und von dem, was sie besagen, erschrocken sind.“\\n\\nDie Menge applaudierte höflich. Die meisten von ihnen waren gut gekleidet - Professoren, Angestellte, ein paar Geistliche. Einer trug ein Schild mit der schlichten Aufschrift: #italic 1,2 °C#!. Ein Fabrikbesitzer auf der gegenüberliegenden Straßenseite beobachtete sie im Vorübergehen und murmelte seinem Begleiter zu: „Wenn sie die Welt retten wollen, können sie damit anfangen, dafür zu bezahlen.“"
+ },
+ "environmentalism_events.8.t": {
+  "en": "A Greener Shade of Politics",
+  "de": "Eine grünere Schattierung der Politik"
+ },
+ "environmentalism_events.9.a": {
+  "en": "Build the sea walls.",
+  "de": "Die Deiche bauen."
+ },
+ "environmentalism_events.9.b": {
+  "en": "Relocate them inland.",
+  "de": "Sie ins Landesinnere umsiedeln."
+ },
+ "environmentalism_events.9.c": {
+  "en": "Deploy the ministry's engineers.",
+  "de": "Die Ingenieure des Ministeriums entsenden."
+ },
+ "environmentalism_events.9.d": {
+  "en": "Floodwaters have surged through [ROOT.GetCountry.GetName]'s coastal cities and ports. Ships sit stranded at broken docks, warehouses stand submerged, and residents wade through streets that were dry only weeks ago.",
+  "de": "Flutwasser hat sich durch die Küstenstädte und Häfen [ROOT.GetCountry.GetAltName('GEN')] ergossen. Schiffe liegen gestrandet an zerstörten Docks, Lagerhäuser stehen unter Wasser, und Anwohner waten durch Straßen, die noch vor wenigen Wochen trocken waren."
+ },
+ "environmentalism_events.9.f": {
+  "en": "\\\"The harbour master's office is underwater. The harbour master is on the roof.\\\"\\n\\n\\\"How deep?\\\"\\n\\n\\\"Three feet in the high street. Five at the docks. The old fishermen say they've never seen anything like it, but the old fishermen say that every year now.\\\"\\n\\nA child paddled a washtub down what had been the main commercial thoroughfare, past a drowned postbox and a shopkeeper who stood in his doorway with the expression of a man calculating whether insurance covered acts of atmosphere.",
+  "de": "„Das Büro des Hafenmeisters steht unter Wasser. Der Hafenmeister sitzt auf dem Dach.“\\n\\n„Wie tief?“\\n\\n„Drei Fuß in der Hauptstraße. Fünf an den Docks. Die alten Fischer sagen, so etwas hätten sie noch nie gesehen, aber das sagen die alten Fischer inzwischen jedes Jahr.“\\n\\nEin Kind paddelte mit einem Waschzuber die einstige Hauptgeschäftsstraße entlang, vorbei an einem ertrunkenen Briefkasten und einem Ladenbesitzer, der in seiner Tür stand, mit dem Gesichtsausdruck eines Mannes, der überlegte, ob die Versicherung höhere Gewalt in Form von Wetter abdeckte."
+ },
+ "environmentalism_events.9.t": {
+  "en": "The Tide Comes In",
+  "de": "Die Flut kommt"
+ },
+ "extra_law_events.1.a": {
+  "en": "We shall hear their concerns, but the reform proceeds.",
+  "de": "Wir werden ihre Bedenken anhören, aber die Reform geht weiter."
+ },
+ "extra_law_events.1.b": {
+  "en": "Build a broader coalition - hear the bankers out.",
+  "de": "Eine breitere Koalition aufbauen - die Banker anhören."
+ },
+ "extra_law_events.1.d": {
+  "en": "Our proposed financial reforms have drawn the attention of powerful banking interests. The [SCOPE.gsInterestGroup('opposing_ig').GetName] have dispatched a delegation to the halls of government, armed with dire predictions about the consequences of [SCOPE.sLaw('current_law_scope').GetName].",
+  "de": "Unsere vorgeschlagenen Finanzreformen haben die Aufmerksamkeit mächtiger Bankinteressen auf sich gezogen. Die [SCOPE.gsInterestGroup('opposing_ig').GetName] haben eine Delegation in die Regierungshallen entsandt, bewaffnet mit düsteren Prognosen über die Folgen von [SCOPE.sLaw('current_law_scope').GetName]."
+ },
+ "extra_law_events.1.f": {
+  "en": "\\\"You must understand, gentlemen, that if you proceed with this legislation, you will be sawing through the very branch upon which the prosperity of this nation sits. We are not here to threaten - merely to illuminate the consequences of haste.\\\"",
+  "de": "„Sie müssen verstehen, meine Herren, dass Sie, wenn Sie mit dieser Gesetzgebung fortfahren, genau den Ast absägen, auf dem der Wohlstand dieser Nation sitzt. Wir sind nicht hier, um zu drohen - lediglich, um die Folgen der Eile zu beleuchten.“"
+ },
+ "extra_law_events.1.t": {
+  "en": "The Bankers' Lobby",
+  "de": "Die Bankenlobby"
+ },
  "movement_events_te.1.a": {
   "en": "Let them march in peace",
   "de": "Lasst sie in Frieden marschieren"
