@@ -110,7 +110,7 @@ digital_telecommunications = {
 	# Remote Work PM for Urban Centers, Automated Trading PM for Financial Districts/Companies,
 	# Maglev Trains PM for Railways
 	era = era_9
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/digital_telecommunications.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -251,7 +251,7 @@ unmanned_aerial_vehicles = {
 
 military_grade_cybersecurity = {
 	era = era_9
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/military_grade_cybersecurity.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -431,7 +431,7 @@ globalization = {
 social_media = {
 	# Decentalized Digital Media PM for Arts Academy, Intrusive Surveillance System law (alternative requirement)
 	era = era_9
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/social_media.dds"
 	category = society
 
 	unlocking_technologies = {
@@ -510,7 +510,7 @@ knowledge_economy = {
 digital_entertainment = {
 	# Smartphones PM for Consumer Appliance Industries, Digital Streaming PM for Arts Academy
 	era = era_9
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/digital_entertainment.dds"
 	category = society
 
 	modifier = {
@@ -531,7 +531,7 @@ digital_entertainment = {
 
 digital_education = {
 	era = era_9
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/digital_education.dds"
 	category = society
 
 	unlocking_technologies = {
@@ -581,7 +581,7 @@ social_justice_movements = {
 terrorism_and_anti_terrorism = {
 	# Anti-Terrorism Campaign decree
 	era = era_9
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/terrorism_and_anti_terrorism.dds"
 	category = society
 
 	unlocking_technologies = {
