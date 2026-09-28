@@ -165,7 +165,7 @@ directed_energy_weapons = {
 	# Ablative Rockets PM for Launch Facilities, Solar Exploration PM for Space Program,
 	# Pulsed Laser Escort unit, Inertial Fusion Reactors PM for Fusion Plants
 	era = era_11
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/directed_energy_weapons.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -235,7 +235,7 @@ swarm_technology = {
 quantum_communications = {
 	# Quantium Communications PM for Wireless Telecommunications Industries
 	era = era_11
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/quantum_communications.dds"
 	category = military
 
 	unlocking_technologies = {

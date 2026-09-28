@@ -164,7 +164,7 @@ fusion_batteries = {
 	# Fusion Battery Motors PM for Motor Industries, Fusion Battery Vehicles PM for Automotive Industries,
 	# Fusion Battery Appliances PM for Consumer Appliance Industries
 	era = era_12
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/fusion_batteries.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -190,7 +190,7 @@ fusion_batteries = {
 space_elevator = {
 	# Space Elevator Construction Site building
 	era = era_12
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	texture = "gfx/interface/icons/invention_icons/space_elevator.dds"
 	category = military
 
 	unlocking_technologies = {
