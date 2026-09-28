@@ -1,0 +1,2070 @@
+{
+ "pm_twisted_pair_copper_cables": {
+  "en": "Twisted Pair Copper Cables",
+  "de": "Twisted-Pair-Kupferkabel"
+ },
+ "pm_tycho_manufacturing_hq": {
+  "en": "Tycho Orbital Construction",
+  "de": "Tycho-Orbitalbau"
+ },
+ "pm_ultra_deep_well": {
+  "en": "Ultradeep Well",
+  "de": "Ultratiefbohrung"
+ },
+ "pm_un_headquarters": {
+  "en": "Host Nation",
+  "de": "Gastland"
+ },
+ "pm_uniao_fabril_barreiro_plant": {
+  "en": "União Fabril Barreiro Plant",
+  "de": "União-Fabril-Werk Barreiro"
+ },
+ "pm_united_fruit_great_white_fleet_terminal": {
+  "en": "United Fruit Great White Fleet Terminal",
+  "de": "United-Fruit-Terminal der Great White Fleet"
+ },
+ "pm_united_tobacco_moscow_plant": {
+  "en": "United Tobacco Moscow Plant",
+  "de": "United-Tobacco-Werk Moskau"
+ },
+ "pm_universal_studios_hollywood": {
+  "en": "Universal Studios Hollywood",
+  "de": "Universal Studios Hollywood"
+ },
+ "pm_ursus_warsaw_tractor_plant": {
+  "en": "Ursus Warsaw Tractor Plant",
+  "de": "Ursus-Traktorenwerk Warschau"
+ },
+ "pm_vale_carajas_mine": {
+  "en": "Carajás Mine",
+  "de": "Carajás-Mine"
+ },
+ "pm_van_vlissingen_oostenburg_works": {
+  "en": "Van Vlissingen Oostenburg Works",
+  "de": "Van-Vlissingen-Werke Oostenburg"
+ },
+ "pm_ventilation_systems": {
+  "en": "Ventilation Systems",
+  "de": "Belüftungssysteme"
+ },
+ "pm_verizon_building": {
+  "en": "The Verizon Building",
+  "de": "Das Verizon-Gebäude"
+ },
+ "pm_version_control_and_distribution_platforms": {
+  "en": "Version Control and Distribution Platforms",
+  "de": "Versionskontroll- und Distributionsplattformen"
+ },
+ "pm_vhf_and_uhf_transmission": {
+  "en": "VHF and UHF Transmission",
+  "de": "UKW- und UHF-Übertragung"
+ },
+ "pm_video_games": {
+  "en": "Video Games",
+  "de": "Videospiele"
+ },
+ "pm_virtual_reality_headsets": {
+  "en": "Virtual Reality Headsets",
+  "de": "VR-Headsets"
+ },
+ "pm_vodka_monopoly_warehouse": {
+  "en": "Vodka Monopoly Warehouse",
+  "de": "Wodka-Monopol-Lagerhaus"
+ },
+ "pm_volkswagen_autostadt": {
+  "en": "Volkswagen Autostadt",
+  "de": "Volkswagen Autostadt"
+ },
+ "pm_voluntary_daycare": {
+  "en": "Voluntary Daycare",
+  "de": "Freiwillige Kinderbetreuung"
+ },
+ "pm_wadia_bombay_dockyard": {
+  "en": "Wadia Bombay Dockyard",
+  "de": "Wadia-Werft Bombay"
+ },
+ "pm_waste_fiber_recovery": {
+  "en": "Waste Fiber Recovery",
+  "de": "Faserabfall-Rückgewinnung"
+ },
+ "pm_web_one": {
+  "en": "Web 1.0",
+  "de": "Web 1,0"
+ },
+ "pm_west_ural_oil_depot": {
+  "en": "West Ural Oil Depot",
+  "de": "West-Ural-Öldepot"
+ },
+ "pm_white_star_albion_house": {
+  "en": "White Star Albion House",
+  "de": "White Star Albion House"
+ },
+ "pm_witkowitzer_ostrava_ironworks": {
+  "en": "Witkowitzer Ostrava Ironworks",
+  "de": "Witkowitzer Eisenwerke Ostrava"
+ },
+ "pm_wonder_abraj_al_bait": {
+  "en": "Abraj Al-Bait Clock Tower",
+  "de": "Abraj-al-Bait-Uhrturm"
+ },
+ "pm_wonder_aswan_high_dam": {
+  "en": "Aswan High Dam",
+  "de": "Assuan-Hochdamm"
+ },
+ "pm_wonder_azadi_tower": {
+  "en": "Azadi Tower",
+  "de": "Azadi-Turm"
+ },
+ "pm_wonder_basilica_of_our_lady_of_peace": {
+  "en": "Basilica of Our Lady of Peace",
+  "de": "Basilika Unserer Lieben Frau vom Frieden"
+ },
+ "pm_wonder_berlin_tv_tower": {
+  "en": "Berlin TV Tower",
+  "de": "Berliner Fernsehturm"
+ },
+ "pm_wonder_burj_khalifa": {
+  "en": "Burj Khalifa",
+  "de": "Burj Khalifa"
+ },
+ "pm_wonder_channel_tunnel": {
+  "en": "Channel Tunnel",
+  "de": "Kanaltunnel"
+ },
+ "pm_wonder_cn_tower": {
+  "en": "CN Tower",
+  "de": "CN Tower"
+ },
+ "pm_wonder_continental_union_hq": {
+  "en": "Continental Union Headquarters",
+  "de": "Hauptsitz der Kontinentalunion"
+ },
+ "pm_wonder_empire_state_building": {
+  "en": "Empire State Building",
+  "de": "Empire State Building"
+ },
+ "pm_wonder_fast_telescope": {
+  "en": "FAST Telescope",
+  "de": "FAST-Teleskop"
+ },
+ "pm_wonder_gardens_by_the_bay": {
+  "en": "Gardens by the Bay",
+  "de": "Gardens by the Bay"
+ },
+ "pm_wonder_golden_bridge": {
+  "en": "Golden Bridge",
+  "de": "Goldene Brücke"
+ },
+ "pm_wonder_golden_gate_bridge": {
+  "en": "Golden Gate Bridge",
+  "de": "Golden Gate Bridge"
+ },
+ "pm_wonder_hoover_dam": {
+  "en": "Hoover Dam",
+  "de": "Hoover-Damm"
+ },
+ "pm_wonder_international_space_station": {
+  "en": "International Space Station",
+  "de": "Internationale Raumstation"
+ },
+ "pm_wonder_itaipu_dam": {
+  "en": "Itaipu Dam",
+  "de": "Itaipu-Damm"
+ },
+ "pm_wonder_iter": {
+  "en": "ITER Fusion Reactor",
+  "de": "ITER-Fusionsreaktor"
+ },
+ "pm_wonder_kennedy_space_center": {
+  "en": "Kennedy Space Center",
+  "de": "Kennedy Space Center"
+ },
+ "pm_wonder_kenyatta_icc": {
+  "en": "Kenyatta ICC",
+  "de": "Kenyatta ICC"
+ },
+ "pm_wonder_large_hadron_collider": {
+  "en": "Large Hadron Collider",
+  "de": "Large Hadron Collider"
+ },
+ "pm_wonder_ligo": {
+  "en": "LIGO Observatory",
+  "de": "LIGO-Observatorium"
+ },
+ "pm_wonder_lotte_world_tower": {
+  "en": "Lotte World Tower",
+  "de": "Lotte World Tower"
+ },
+ "pm_wonder_lotus_temple": {
+  "en": "Lotus Temple",
+  "de": "Lotus-Tempel"
+ },
+ "pm_wonder_moscow_state_university": {
+  "en": "Moscow State University",
+  "de": "Staatliche Universität Moskau"
+ },
+ "pm_wonder_palais_des_nations": {
+  "en": "Palais des Nations",
+  "de": "Palais des Nations"
+ },
+ "pm_wonder_peace_palace": {
+  "en": "Peace Palace",
+  "de": "Friedenspalast"
+ },
+ "pm_wonder_pentagon": {
+  "en": "The Pentagon",
+  "de": "Das Pentagon"
+ },
+ "pm_wonder_petronas_towers": {
+  "en": "Petronas Towers",
+  "de": "Petronas Towers"
+ },
+ "pm_wonder_shanghai_tower": {
+  "en": "Shanghai Tower",
+  "de": "Shanghai Tower"
+ },
+ "pm_wonder_statue_of_unity": {
+  "en": "Statue of Unity",
+  "de": "Statue of Unity"
+ },
+ "pm_wonder_svalbard_seed_vault": {
+  "en": "Svalbard Global Seed Vault",
+  "de": "Svalbard Globaler Saatguttresor"
+ },
+ "pm_wonder_sydney_opera_house": {
+  "en": "Sydney Opera House",
+  "de": "Opernhaus Sydney"
+ },
+ "pm_wonder_taipei_101": {
+  "en": "Taipei 101",
+  "de": "Taipei 101"
+ },
+ "pm_wonder_three_gorges_dam": {
+  "en": "Three Gorges Dam",
+  "de": "Drei-Schluchten-Talsperre"
+ },
+ "pm_wonder_tokyo_tower": {
+  "en": "Tokyo Tower",
+  "de": "Tokyo Tower"
+ },
+ "pm_wonder_world_trade_center": {
+  "en": "World Trade Center",
+  "de": "World Trade Center"
+ },
+ "pm_worth_rue_de_la_paix_atelier": {
+  "en": "Worth Rue de la Paix Atelier",
+  "de": "Worth-Atelier Rue de la Paix"
+ },
+ "pm_yasuda_atosanupuri_mine": {
+  "en": "Yasuda Atosanupuri Sulfur Mine",
+  "de": "Yasuda-Schwefelmine Atosanupuri"
+ },
+ "pm_ynchausti_manila_trading_house": {
+  "en": "Ynchausti Manila Trading House",
+  "de": "Ynchausti-Handelshaus Manila"
+ },
+ "pm_youth_cadre_programs": {
+  "en": "Youth Cadre Programs",
+  "de": "Jugendkaderprogramme"
+ },
+ "pm_yoyodyne_propulsion_hq": {
+  "en": "Yoyodyne Propulsion Research",
+  "de": "Yoyodyne-Antriebsforschung"
+ },
+ "pm_zastava_kragujevac_arsenal": {
+  "en": "Zastava Kragujevac Arsenal",
+  "de": "Zastava-Arsenal Kragujevac"
+ },
+ "pm_ziegler_natta_catalyzation": {
+  "en": "Ziegler–Natta Catalyzation SBR",
+  "de": "Ziegler-Natta-Katalyse SBR"
+ },
+ "pmg_afghan_nassaji_kabul_mills": {
+  "en": "Afghan Nassaji Kabul Mills",
+  "de": "Afghan-Nassaji-Mühlen Kabul"
+ },
+ "pmg_airbus_lagardere_plant": {
+  "en": "Jean-Luc Lagardère Plant",
+  "de": "Jean-Luc-Lagardère-Werk"
+ },
+ "pmg_aker_oslo_shipyard": {
+  "en": "Aker Oslo Shipyard",
+  "de": "Aker-Werft Oslo"
+ },
+ "pmg_alibaba_cainiao_park": {
+  "en": "Cainiao Logistics Park",
+  "de": "Cainiao-Logistikpark"
+ },
+ "pmg_allatini_thessaloniki_flour_mill": {
+  "en": "Allatini Thessaloniki Flour Mill",
+  "de": "Allatini-Mehlmühle Thessaloniki"
+ },
+ "pmg_alpine_donawitz_steelworks": {
+  "en": "Alpine Donawitz Steelworks",
+  "de": "Alpine-Stahlwerke Donawitz"
+ },
+ "pmg_altos_hornos_baracaldo_furnaces": {
+  "en": "Altos Hornos de Baracaldo Furnaces",
+  "de": "Altos-Hornos-de-Baracaldo-Öfen"
+ },
+ "pmg_amazon_fulfillment_center": {
+  "en": "Automated Fulfillment Center",
+  "de": "Automatisiertes Fulfillment-Zentrum"
+ },
+ "pmg_anglo_persian_abadan_refinery": {
+  "en": "Anglo-Persian Abadan Refinery",
+  "de": "Anglo-Persische Raffinerie Abadan"
+ },
+ "pmg_anglo_sicilian_licata_wharf": {
+  "en": "Anglo-Sicilian Licata Wharf",
+  "de": "Anglo-Sizilianischer Kai Licata"
+ },
+ "pmg_ansaldo_sestri_ponente_works": {
+  "en": "Ansaldo Sestri Ponente Works",
+  "de": "Ansaldo-Werke Sestri Ponente"
+ },
+ "pmg_anzin_colliery": {
+  "en": "Anzin Colliery",
+  "de": "Zeche Anzin"
+ },
+ "pmg_ap_moller_copenhagen_wharf": {
+  "en": "A.P. Møller Copenhagen Wharf",
+  "de": "A.P.-Møller-Kai Copenhagen"
+ },
+ "pmg_apple_park": {
+  "en": "Apple Park",
+  "de": "Apple Park"
+ },
+ "pmg_argentinian_wine_mendoza_bodega": {
+  "en": "Argentine Wine Mendoza Bodega",
+  "de": "Argentinische Weinbodega Mendoza"
+ },
+ "pmg_armstrong_elswick_works": {
+  "en": "Armstrong Elswick Works",
+  "de": "Armstrong-Werke Elswick"
+ },
+ "pmg_asml_veldhoven_campus": {
+  "en": "ASML Veldhoven Campus",
+  "de": "ASML-Campus Veldhoven"
+ },
+ "pmg_assam_company_nazira_tea_estate": {
+  "en": "Assam Company Nazira Tea Estate",
+  "de": "Assam-Company-Teegut Nazira"
+ },
+ "pmg_automation_building_advanced_material_fabricator": {
+  "en": "Automation",
+  "de": "Automatisierung"
+ },
+ "pmg_automation_building_aerospace_industry": {
+  "en": "Automation",
+  "de": "Automatisierung"
+ },
+ "pmg_automation_building_chemical_plant": {
+  "en": "Automation",
+  "de": "Automatisierung"
+ },
+ "pmg_automation_building_electronic_components": {
+  "en": "Automation",
+  "de": "Automatisierung"
+ },
+ "pmg_automation_building_explosives_factory": {
+  "en": "Automation",
+  "de": "Automatisierung"
+ },
+ "pmg_automation_building_network": {
+  "en": "Network Maintenance Automation",
+  "de": "Automatisierte Netzwerkwartung"
+ },
+ "pmg_automation_building_software": {
+  "en": "Automation Building Network",
+  "de": "Automatisierungsgebäude-Netzwerk"
+ },
+ "pmg_axiom_space_hq": {
+  "en": "Axiom Station Operations",
+  "de": "Axiom-Stationsbetrieb"
+ },
+ "pmg_b_grimm_bangkok_warehouse": {
+  "en": "B. Grimm Bangkok Warehouse",
+  "de": "B.-Grimm-Lagerhaus Bangkok"
+ },
+ "pmg_bacardi_santiago_distillery": {
+  "en": "Bacardí Santiago Distillery",
+  "de": "Bacardí-Brennerei Santiago"
+ },
+ "pmg_bae_samlesbury_aerodrome": {
+  "en": "BAE Systems Samlesbury Aerodrome",
+  "de": "BAE-Systems-Flugplatz Samlesbury"
+ },
+ "pmg_base_building_advanced_material_fabricator": {
+  "en": "Advanced Material Fabricator",
+  "de": "Fortschrittliche Materialfabrik"
+ },
+ "pmg_base_building_aerospace_industry": {
+  "en": "Aerospace Industry",
+  "de": "Luft- und Raumfahrtindustrie"
+ },
+ "pmg_base_building_airport": {
+  "en": "Airport",
+  "de": "Flughafen"
+ },
+ "pmg_base_building_antimatter_engine": {
+  "en": "Antimatter Engine",
+  "de": "Antimaterie-Triebwerk"
+ },
+ "pmg_base_building_antimatter_facility": {
+  "en": "Antimatter Containment Facility",
+  "de": "Antimaterie-Eindämmungsanlage"
+ },
+ "pmg_base_building_antimatter_facility_construction_site": {
+  "en": "[concept_antimatter_facility] Construction",
+  "de": "Bau der [concept_antimatter_facility]"
+ },
+ "pmg_base_building_antimatter_warhead_plant": {
+  "en": "Antimatter Warhead Plant",
+  "de": "Antimaterie-Sprengkopfwerk"
+ },
+ "pmg_base_building_consciousness_network": {
+  "en": "Consciousness Network",
+  "de": "Bewusstseinsnetzwerk"
+ },
+ "pmg_base_building_consciousness_network_construction_site": {
+  "en": "Consciousness Network Construction",
+  "de": "Bau des Bewusstseinsnetzwerks"
+ },
+ "pmg_base_building_electronic_components": {
+  "en": "Electronic Components",
+  "de": "Elektronische Bauteile"
+ },
+ "pmg_base_building_fusion_power": {
+  "en": "Fusion Power",
+  "de": "Fusionsenergie"
+ },
+ "pmg_base_building_highway": {
+  "en": "Highway",
+  "de": "Autobahn"
+ },
+ "pmg_base_building_hydro_power": {
+  "en": "Hydro Power",
+  "de": "Wasserkraft"
+ },
+ "pmg_base_building_military_base": {
+  "en": "Military Base",
+  "de": "Militärbasis"
+ },
+ "pmg_base_building_mind_upload_nexus": {
+  "en": "Mind Upload Nexus",
+  "de": "Bewusstseins-Upload-Nexus"
+ },
+ "pmg_base_building_mind_upload_nexus_construction_site": {
+  "en": "Mind Upload Nexus Construction",
+  "de": "Bau des Bewusstseins-Upload-Nexus"
+ },
+ "pmg_base_building_nanofabrication_center": {
+  "en": "Nanofabrication Center",
+  "de": "Nanofabrikationszentrum"
+ },
+ "pmg_base_building_nanofabrication_center_construction_site": {
+  "en": "Nanofabrication Center Construction",
+  "de": "Bau des Nanofabrikationszentrums"
+ },
+ "pmg_base_building_national_park": {
+  "en": "National Park",
+  "de": "Nationalpark"
+ },
+ "pmg_base_building_network": {
+  "en": "Base Building Network",
+  "de": "Basisgebäude-Netzwerk"
+ },
+ "pmg_base_building_nuclear_power": {
+  "en": "Nuclear Power",
+  "de": "Kernkraft"
+ },
+ "pmg_base_building_ocean_mine": {
+  "en": "Deep-Sea Mine",
+  "de": "Tiefseemine"
+ },
+ "pmg_base_building_orbital_battlestation": {
+  "en": "Orbital Battlestation",
+  "de": "Orbitale Kampfstation"
+ },
+ "pmg_base_building_orbital_battlestation_construction_site": {
+  "en": "Orbital Battlestation Construction",
+  "de": "Bau der orbitalen Kampfstation"
+ },
+ "pmg_base_building_renewable_power": {
+  "en": "Renewable Power",
+  "de": "Erneuerbare Energie"
+ },
+ "pmg_base_building_robotics": {
+  "en": "Base Building Robotics",
+  "de": "Basisgebäude-Robotik"
+ },
+ "pmg_base_building_software_industry": {
+  "en": "Software Industry",
+  "de": "Softwareindustrie"
+ },
+ "pmg_base_building_solar_collector": {
+  "en": "Solar Collector",
+  "de": "Solarkollektor"
+ },
+ "pmg_base_building_solar_collector_construction_site": {
+  "en": "Solar Collector Construction",
+  "de": "Bau des Solarkollektors"
+ },
+ "pmg_base_building_solar_receiver": {
+  "en": "Solar Power Receiver",
+  "de": "Solarempfänger"
+ },
+ "pmg_base_building_space_elevator": {
+  "en": "Space Elevator",
+  "de": "Weltraumaufzug"
+ },
+ "pmg_base_building_space_elevator_construction_site": {
+  "en": "Space Elevator Construction Site",
+  "de": "Baustelle: Weltraumaufzug"
+ },
+ "pmg_base_building_space_mine": {
+  "en": "Base Building Space Mine",
+  "de": "Basisgebäude-Weltraummine"
+ },
+ "pmg_base_building_space_program": {
+  "en": "Space Program",
+  "de": "Raumfahrtprogramm"
+ },
+ "pmg_base_te_construction_market_site": {
+  "en": "Construction Site",
+  "de": "Baustelle"
+ },
+ "pmg_basf_ludwigshafen_plant": {
+  "en": "BASF Ludwigshafen Plant",
+  "de": "BASF-Werk Ludwigshafen"
+ },
+ "pmg_basileiades_piraeus_works": {
+  "en": "Basileiades Piraeus Works",
+  "de": "Basileiades-Werke Piräus"
+ },
+ "pmg_bayer_leverkusen_plant": {
+  "en": "Bayer Leverkusen Plant",
+  "de": "Bayer-Werk Leverkusen"
+ },
+ "pmg_bengal_coal_raniganj_mine": {
+  "en": "Bengal Coal Raniganj Mine",
+  "de": "Bengal-Coal-Mine Raniganj"
+ },
+ "pmg_bhp_broken_hill_mine": {
+  "en": "BHP Broken Hill Mine",
+  "de": "BHP-Mine Broken Hill"
+ },
+ "pmg_bhp_mount_whaleback_mine": {
+  "en": "Mount Whaleback Mine",
+  "de": "Mount-Whaleback-Mine"
+ },
+ "pmg_blackberry_rim_campus": {
+  "en": "RIM Campus",
+  "de": "RIM-Campus"
+ },
+ "pmg_boeing_everett_factory": {
+  "en": "Boeing Everett Factory",
+  "de": "Boeing-Werk Everett"
+ },
+ "pmg_bolckow_eston_ironworks": {
+  "en": "Bolckow Eston Ironworks",
+  "de": "Bolckow-Eisenwerke Eston"
+ },
+ "pmg_bombay_burmah_rangoon_timber_depot": {
+  "en": "Bombay Burmah Rangoon Timber Depot",
+  "de": "Bombay-Burmah-Holzdepot Rangoon"
+ },
+ "pmg_bombay_dyeing_spring_mills": {
+  "en": "Bombay Dyeing Spring Mills",
+  "de": "Bombay-Dyeing-Spring-Mühlen"
+ },
+ "pmg_boston_dynamics_ai_institute": {
+  "en": "Boston Dynamics AI Institute",
+  "de": "Boston-Dynamics-KI-Institut"
+ },
+ "pmg_bp_refinery_complex": {
+  "en": "BP Refinery Complex",
+  "de": "BP-Raffineriekomplex"
+ },
+ "pmg_branding_building_furniture_manufactory": {
+  "en": "Branding",
+  "de": "Branding"
+ },
+ "pmg_branding_building_textile_mill": {
+  "en": "Branding",
+  "de": "Branding"
+ },
+ "pmg_bunge_born_buenos_aires_grain_silo": {
+  "en": "Bunge & Born Buenos Aires Grain Silo",
+  "de": "Bunge-&-Born-Getreidesilo Buenos Aires"
+ },
+ "pmg_bytedance_data_fortress": {
+  "en": "TikTok Data Fortress",
+  "de": "TikTok-Datenfestung"
+ },
+ "pmg_calcutta_electric_victoria_house": {
+  "en": "Calcutta Electric Victoria House",
+  "de": "Kalkutta-Electric-Victoria-Haus"
+ },
+ "pmg_caribbean_petroleum_maracaibo_depot": {
+  "en": "Caribbean Petroleum Maracaibo Depot",
+  "de": "Caribbean-Petroleum-Depot Maracaibo"
+ },
+ "pmg_carnegie_homestead_mill": {
+  "en": "Carnegie Homestead Mill",
+  "de": "Carnegie-Homestead-Mühle"
+ },
+ "pmg_catl_gigafactory": {
+  "en": "CATL Gigafactory",
+  "de": "CATL-Gigafactory"
+ },
+ "pmg_ccci_leopoldville_depot": {
+  "en": "CCCI Léopoldville Depot",
+  "de": "CCCI-Depot Léopoldville"
+ },
+ "pmg_cfr_bucharest_railway_works": {
+  "en": "CFR Bucharest Railway Works",
+  "de": "CFR-Eisenbahnwerke Bukarest"
+ },
+ "pmg_cgv_haut_brion_estate": {
+  "en": "CGV Haut-Brion Estate",
+  "de": "CGV-Weingut Haut-Brion"
+ },
+ "pmg_childrens_creche_advanced_nurturing": {
+  "en": "Advanced Nurturing",
+  "de": "Erweiterte Förderung"
+ },
+ "pmg_childrens_creche_philosophy": {
+  "en": "Philosophy",
+  "de": "Philosophie"
+ },
+ "pmg_chr_hansen_copenhagen_laboratory": {
+  "en": "Chr. Hansen Copenhagen Laboratory",
+  "de": "Chr.-Hansen-Labor Copenhagen"
+ },
+ "pmg_coats_ferguslie_mills": {
+  "en": "Coats Ferguslie Mills",
+  "de": "Coats-Mühlen Ferguslie"
+ },
+ "pmg_cochlear_global_hq": {
+  "en": "Cochlear Global Headquarters",
+  "de": "Cochlear-Hauptsitz"
+ },
+ "pmg_cockerill_seraing_works": {
+  "en": "Cockerill Seraing Works",
+  "de": "Cockerill-Werke Seraing"
+ },
+ "pmg_colt_hartford_armory": {
+  "en": "Colt Hartford Armory",
+  "de": "Colt-Waffenfabrik Hartford"
+ },
+ "pmg_consciousness_network_mode": {
+  "en": "Network Mode",
+  "de": "Netzwerkmodus"
+ },
+ "pmg_construction_automation": {
+  "en": "Construction Automation",
+  "de": "Bauautomatisierung"
+ },
+ "pmg_construction_principle": {
+  "en": "Construction [concept_power_bloc_principle_group]",
+  "de": "[concept_power_bloc_principle_group]: Bau"
+ },
+ "pmg_consumer_appliances": {
+  "en": "Consumer Appliances",
+  "de": "Haushaltsgeräte"
+ },
+ "pmg_cordoba_railway_alta_gracia_works": {
+  "en": "Córdoba Railway Alta Gracia Works",
+  "de": "Córdoba-Eisenbahnwerke Alta Gracia"
+ },
+ "pmg_cramp_philadelphia_shipyard": {
+  "en": "Cramp Philadelphia Shipyard",
+  "de": "Cramp-Werft Philadelphia"
+ },
+ "pmg_csfa_sicilian_sulfur_depot": {
+  "en": "CSFA Sicilian Sulfur Depot",
+  "de": "CSFA-Schwefeldepot Sizilien"
+ },
+ "pmg_dassault_merignac_plant": {
+  "en": "Dassault Merignac Plant",
+  "de": "Dassault-Werk Mérignac"
+ },
+ "pmg_de_beers_sorting_office": {
+  "en": "De Beers Sorting Office",
+  "de": "De-Beers-Sortierbüro"
+ },
+ "pmg_depth_oil_rig": {
+  "en": "Well Depth",
+  "de": "Bohrlochtiefe"
+ },
+ "pmg_disney_world": {
+  "en": "Disney World",
+  "de": "Disney World"
+ },
+ "pmg_dmc_mulhouse_mills": {
+  "en": "DMC Mulhouse Mills",
+  "de": "DMC-Mühlen Mulhouse"
+ },
+ "pmg_douro_wine_lodge": {
+  "en": "Douro Wine Lodge",
+  "de": "Douro-Weinlager"
+ },
+ "pmg_dupont_experimental_station": {
+  "en": "DuPont Experimental Station",
+  "de": "DuPont-Versuchsstation"
+ },
+ "pmg_duro_la_felguera_steelworks": {
+  "en": "Duro La Felguera Steelworks",
+  "de": "Duro-La-Felguera-Stahlwerke"
+ },
+ "pmg_eea_dock_sud_power_station": {
+  "en": "EEA Dock Sud Power Station",
+  "de": "EEA-Kraftwerk Dock Sud"
+ },
+ "pmg_effluent_filtration": {
+  "en": "Effluent Filtration",
+  "de": "Abwasserfiltration"
+ },
+ "pmg_egyptian_rail_cairo_central": {
+  "en": "Egyptian Rail Cairo Central",
+  "de": "Ägyptische Eisenbahn Kairo Central"
+ },
+ "pmg_eic_trading_house": {
+  "en": "East India Company Trading House",
+  "de": "Ostindien-Kompanie-Handelshaus"
+ },
+ "pmg_el_aguila_tampico_refinery": {
+  "en": "El Águila Tampico Refinery",
+  "de": "El-Águila-Raffinerie Tampico"
+ },
+ "pmg_electricidad_caracas_power_house": {
+  "en": "Electricidad de Caracas Power House",
+  "de": "Electricidad-de-Caracas-Kraftwerk"
+ },
+ "pmg_elso_budapesti_steam_mill": {
+  "en": "Első Budapesti Steam Mill",
+  "de": "Első-Budapesti-Dampfmühle"
+ },
+ "pmg_emissions_control": {
+  "en": "Emissions Control",
+  "de": "Emissionskontrolle"
+ },
+ "pmg_eni_palazzo": {
+  "en": "Palazzo ENI",
+  "de": "Palazzo ENI"
+ },
+ "pmg_ericsson_telefonplan": {
+  "en": "Ericsson Telefonplan",
+  "de": "Ericsson Telefonplan"
+ },
+ "pmg_erste_brunner_maschinenwerk": {
+  "en": "Erste Brünner Maschinenwerk",
+  "de": "Erste Brünner Maschinenwerk"
+ },
+ "pmg_espana_industrial_sants_mills": {
+  "en": "España Industrial Sants Mills",
+  "de": "España-Industrial-Mühlen Sants"
+ },
+ "pmg_estaleiro_maua_niteroi_dockyard": {
+  "en": "Estaleiro Mauá Niterói Dockyard",
+  "de": "Estaleiro-Mauá-Werft Niterói"
+ },
+ "pmg_estanifera_llallagua_tin_concentrator": {
+  "en": "Estañífera Llallagua Tin Concentrator",
+  "de": "Estañífera-Zinnkonzentrator Llallagua"
+ },
+ "pmg_ethiopian_railway_dire_dawa_depot": {
+  "en": "Ethiopian Railway Dire Dawa Depot",
+  "de": "Ethiopian-Railway-Depot Dire Dawa"
+ },
+ "pmg_explosives_building_tech_metals_mine": {
+  "en": "Explosives",
+  "de": "Sprengstoffe"
+ },
+ "pmg_facility_emission_standards": {
+  "en": "Facility Emission Standards",
+  "de": "Anlagen-Emissionsstandards"
+ },
+ "pmg_famae_santiago_arsenal": {
+  "en": "FAMAE Santiago Arsenal",
+  "de": "FAMAE-Arsenal Santiago"
+ },
+ "pmg_fanuc_forest": {
+  "en": "The FANUC Forest",
+  "de": "Der FANUC-Wald"
+ },
+ "pmg_fcm_la_seyne_shipyard": {
+  "en": "FCM La Seyne Shipyard",
+  "de": "FCM-Werft La Seyne"
+ },
+ "pmg_ferranti_hollinwood_works": {
+  "en": "Ferranti Hollinwood Works",
+  "de": "Ferranti-Werke Hollinwood"
+ },
+ "pmg_ferrari_maranello_factory": {
+  "en": "Ferrari Maranello Factory",
+  "de": "Ferrari-Fabrik Maranello"
+ },
+ "pmg_fiat_lingotto_factory": {
+  "en": "FIAT Lingotto Factory",
+  "de": "FIAT-Fabrik Lingotto"
+ },
+ "pmg_foochow_mawei_dockyard": {
+  "en": "Foochow Mawei Dockyard",
+  "de": "Foochow-Werft Mawei"
+ },
+ "pmg_ford_rouge_plant": {
+  "en": "Ford Rouge Plant",
+  "de": "Ford-Werk Rouge"
+ },
+ "pmg_fortification_type": {
+  "en": "Fortification Type",
+  "de": "Befestigungstyp"
+ },
+ "pmg_franco_belge_raismes_works": {
+  "en": "Franco-Belge Raismes Works",
+  "de": "Franco-Belge-Werke Raismes"
+ },
+ "pmg_fundicao_ipanema_sorocaba_foundry": {
+  "en": "Fundição Ipanema Sorocaba Foundry",
+  "de": "Fundição-Ipanema-Gießerei Sorocaba"
+ },
+ "pmg_fundidora_monterrey_blast_furnace": {
+  "en": "Fundidora Monterrey Blast Furnace",
+  "de": "Fundidora-Hochofen Monterrey"
+ },
+ "pmg_galician_boryslaw_oil_field": {
+  "en": "Galician Borysław Oil Field",
+  "de": "Galizisches Ölfeld Borysław"
+ },
+ "pmg_gavrilovic_petrinja_meatworks": {
+  "en": "Gavrilović Petrinja Meatworks",
+  "de": "Gavrilović-Fleischwerk Petrinja"
+ },
+ "pmg_gazprom_lakhta_center": {
+  "en": "The Lakhta Center",
+  "de": "Das Lakhta Center"
+ },
+ "pmg_ge_schenectady_works": {
+  "en": "GE Schenectady Works",
+  "de": "GE-Werke Schenectady"
+ },
+ "pmg_generic_arsenal": {
+  "en": "Arsenal",
+  "de": "Arsenal"
+ },
+ "pmg_generic_assay_office": {
+  "en": "Assay Office Operations",
+  "de": "Prüfamtbetrieb"
+ },
+ "pmg_generic_chem_works": {
+  "en": "Chemical Works",
+  "de": "Chemiewerk"
+ },
+ "pmg_generic_cold_storage": {
+  "en": "Cold Storage",
+  "de": "Kühllager"
+ },
+ "pmg_generic_colonial_depot": {
+  "en": "Colonial Depot Operations",
+  "de": "Kolonialdepotbetrieb"
+ },
+ "pmg_generic_corporate_university": {
+  "en": "Corporate University",
+  "de": "Unternehmensuniversität"
+ },
+ "pmg_generic_data_fortress": {
+  "en": "National Data Fortress",
+  "de": "Nationale Datenfestung"
+ },
+ "pmg_generic_dry_dock": {
+  "en": "Dry Dock",
+  "de": "Trockendock"
+ },
+ "pmg_generic_dye_fiber_park": {
+  "en": "Research Park Operations",
+  "de": "Forschungsparkbetrieb"
+ },
+ "pmg_generic_electronics_lab": {
+  "en": "Electronics Lab Operations",
+  "de": "Elektroniklaborbetrieb"
+ },
+ "pmg_generic_exhibition_centre": {
+  "en": "National Exhibition Centre",
+  "de": "Nationales Ausstellungszentrum"
+ },
+ "pmg_generic_export_warehouse": {
+  "en": "Export Warehouse Operations",
+  "de": "Exportlagerbetrieb"
+ },
+ "pmg_generic_financial_center": {
+  "en": "International Financial Center",
+  "de": "Internationales Finanzzentrum"
+ },
+ "pmg_generic_fish_market": {
+  "en": "Fish Market",
+  "de": "Fischmarkt"
+ },
+ "pmg_generic_foundry_complex": {
+  "en": "Foundry Complex",
+  "de": "Gießereikomplex"
+ },
+ "pmg_generic_furniture_showroom": {
+  "en": "Furniture Showroom Operations",
+  "de": "Möbelausstellungsraumbetrieb"
+ },
+ "pmg_generic_granary_complex": {
+  "en": "Granary Complex",
+  "de": "Kornspeicherkomplex"
+ },
+ "pmg_generic_hq_skyscraper": {
+  "en": "Corporate Headquarters Skyscraper",
+  "de": "Konzernzentrale-Wolkenkratzer"
+ },
+ "pmg_generic_industrial_city": {
+  "en": "Private Industrial City",
+  "de": "Private Industriestadt"
+ },
+ "pmg_generic_industrial_zone": {
+  "en": "Specialized Industrial Zone",
+  "de": "Spezialisierte Industriezone"
+ },
+ "pmg_generic_logistics_hub": {
+  "en": "National Logistics Hub",
+  "de": "Nationaler Logistikknoten"
+ },
+ "pmg_generic_lumber_yard": {
+  "en": "Lumber Yard Operations",
+  "de": "Holzplatzbetrieb"
+ },
+ "pmg_generic_machine_shop": {
+  "en": "Machine Shop",
+  "de": "Maschinenwerkstatt"
+ },
+ "pmg_generic_materials_lab": {
+  "en": "Advanced Materials Laboratory",
+  "de": "Fortschrittliches Materiallabor"
+ },
+ "pmg_generic_media_hq": {
+  "en": "Global Media Headquarters",
+  "de": "Globaler Medienhauptsitz"
+ },
+ "pmg_generic_mega_factory": {
+  "en": "Mega-Factory Complex",
+  "de": "Megafabrik-Komplex"
+ },
+ "pmg_generic_mineral_refinery": {
+  "en": "Mineral Refinery Operations",
+  "de": "Mineralraffineriebetrieb"
+ },
+ "pmg_generic_monument_to_industry": {
+  "en": "Monument to Industry",
+  "de": "Denkmal der Industrie"
+ },
+ "pmg_generic_motor_works": {
+  "en": "Motor Works",
+  "de": "Motorenwerk"
+ },
+ "pmg_generic_ordnance_depot": {
+  "en": "Ordnance Depot",
+  "de": "Rüstungsdepot"
+ },
+ "pmg_generic_ore_processing": {
+  "en": "Ore Processing Operations",
+  "de": "Erzverarbeitungsbetrieb"
+ },
+ "pmg_generic_paper_mill_complex": {
+  "en": "Paper Mill Complex",
+  "de": "Papiermühlenkomplex"
+ },
+ "pmg_generic_pipeline_terminus": {
+  "en": "Cross-Continental Pipeline Terminus",
+  "de": "Kontinentale Pipeline-Endstation"
+ },
+ "pmg_generic_power_hub": {
+  "en": "High-Efficiency Power Hub",
+  "de": "Hocheffizienter Energieknoten"
+ },
+ "pmg_generic_proving_grounds": {
+  "en": "Strategic Proving Grounds",
+  "de": "Strategisches Testgelände"
+ },
+ "pmg_generic_rail_nexus": {
+  "en": "Intercontinental Rail Nexus",
+  "de": "Interkontinentaler Eisenbahnknoten"
+ },
+ "pmg_generic_rd_complex": {
+  "en": "Central R&D Complex",
+  "de": "Zentraler F&E-Komplex"
+ },
+ "pmg_generic_resource_depository": {
+  "en": "National Resource Depository",
+  "de": "Nationales Ressourcendepot"
+ },
+ "pmg_generic_robotics_institute": {
+  "en": "Automation & Robotics Institute",
+  "de": "Institut für Automation und Robotik"
+ },
+ "pmg_generic_shipping_terminal": {
+  "en": "Global Shipping Terminal",
+  "de": "Globales Frachtterminal"
+ },
+ "pmg_generic_silk_exchange": {
+  "en": "Silk Exchange Operations",
+  "de": "Seidenbörsenbetrieb"
+ },
+ "pmg_generic_spaceport": {
+  "en": "Spaceport",
+  "de": "Weltraumbahnhof"
+ },
+ "pmg_generic_tank_farm": {
+  "en": "Tank Farm",
+  "de": "Tanklager"
+ },
+ "pmg_generic_textile_depot": {
+  "en": "Textile Depot",
+  "de": "Textildepot"
+ },
+ "pmg_generic_vintner_hall": {
+  "en": "Vintner's Hall Operations",
+  "de": "Winzerhallenbetrieb"
+ },
+ "pmg_getzner_bludenz_textile_works": {
+  "en": "Getzner Bludenz Textile Works",
+  "de": "Textilwerke Getzner Bludenz"
+ },
+ "pmg_glassworks_fume_ventilation": {
+  "en": "Fume Ventilation",
+  "de": "Rauchgasabsaugung"
+ },
+ "pmg_googleplex": {
+  "en": "The Googleplex",
+  "de": "Der Googleplex"
+ },
+ "pmg_gotaverken_gothenburg_shipyard": {
+  "en": "Götaverken Gothenburg Shipyard",
+  "de": "Götaverken-Werft Göteborg"
+ },
+ "pmg_gran_azucarera_aranjuez_refinery": {
+  "en": "Gran Azucarera Aranjuez Refinery",
+  "de": "Gran-Azucarera-Raffinerie Aranjuez"
+ },
+ "pmg_great_indian_railway_jamalpur_works": {
+  "en": "Great Indian Railway Jamalpur Works",
+  "de": "Great-Indian-Railway-Werke Jamalpur"
+ },
+ "pmg_guinness_st_james_gate_brewery": {
+  "en": "Guinness St. James's Gate Brewery",
+  "de": "Guinness-Brauerei St. James's Gate"
+ },
+ "pmg_guthrie_singapore_agency": {
+  "en": "Guthrie Singapore Agency House",
+  "de": "Guthrie-Handelshaus Singapur"
+ },
+ "pmg_gwr_swindon_works": {
+  "en": "GWR Swindon Works",
+  "de": "GWR-Werke Swindon"
+ },
+ "pmg_hanka_precision_hq": {
+  "en": "Hanka Cybernetics Division",
+  "de": "Hanka-Kybernetikabteilung"
+ },
+ "pmg_hanseong_jeongi_gwanghwamun_station": {
+  "en": "Hanseong Jeongi Gwanghwamun Station",
+  "de": "Hanseong-Jeongi-Gwanghwamun-Station"
+ },
+ "pmg_hanyang_arsenal_iron_works": {
+  "en": "Hanyang Arsenal Iron Works",
+  "de": "Hanyang-Arsenal-Eisenwerke"
+ },
+ "pmg_hbc_york_factory": {
+  "en": "HBC York Factory",
+  "de": "HBC-York-Fabrik"
+ },
+ "pmg_hispano_suiza_barcelona_factory": {
+  "en": "Hispano-Suiza Barcelona Factory",
+  "de": "Hispano-Suiza-Fabrik Barcelona"
+ },
+ "pmg_hp_labs": {
+  "en": "HP Labs",
+  "de": "HP-Labore"
+ },
+ "pmg_huawei_ox_horn_campus": {
+  "en": "Huawei Ox Horn Campus",
+  "de": "Huawei-Campus Ox Horn"
+ },
+ "pmg_hughes_yuzovka_steelworks": {
+  "en": "Hughes Yuzovka Steelworks",
+  "de": "Hughes-Stahlwerke Yuzovka"
+ },
+ "pmg_hyundai_ulsan_factory": {
+  "en": "Hyundai Ulsan Factory",
+  "de": "Hyundai-Werk Ulsan"
+ },
+ "pmg_ig_farben_buna_werke": {
+  "en": "IG Farben Buna-Werke",
+  "de": "IG Farben Buna-Werke"
+ },
+ "pmg_ikea_almhult_campus": {
+  "en": "IKEA Älmhult Campus",
+  "de": "IKEA-Campus Älmhult"
+ },
+ "pmg_ilva_bagnoli_steelworks": {
+  "en": "ILVA Bagnoli Steelworks",
+  "de": "ILVA-Stahlwerke Bagnoli"
+ },
+ "pmg_imperial_arsenal_golden_horn": {
+  "en": "Imperial Arsenal Golden Horn",
+  "de": "Kaiserliches Arsenal Goldenes Horn"
+ },
+ "pmg_imperial_tobacco_wills_factory": {
+  "en": "Imperial Tobacco Wills' Factory",
+  "de": "Imperial-Tobacco-Wills-Fabrik"
+ },
+ "pmg_industrial_synthesis_scrubbing": {
+  "en": "Industrial Synthesis Scrubbing",
+  "de": "Industrielle Synthesewäsche"
+ },
+ "pmg_infosys_mysore_campus": {
+  "en": "Infosys Mysore Campus",
+  "de": "Infosys-Campus Mysore"
+ },
+ "pmg_ingolstadt_power_station": {
+  "en": "Ingolstadt Power Station",
+  "de": "Kraftwerk Ingolstadt"
+ },
+ "pmg_intel_ronler_acres": {
+  "en": "Intel Ronler Acres Campus",
+  "de": "Intel-Campus Ronler Acres"
+ },
+ "pmg_iranian_state_railway_veresk_station": {
+  "en": "Iranian State Railway Veresk Station",
+  "de": "Iranische Staatseisenbahnen Station Veresk"
+ },
+ "pmg_izhevsk_arms_factory": {
+  "en": "Izhevsk Arms Factory",
+  "de": "Izhevsk-Waffenfabrik"
+ },
+ "pmg_jardine_princeps_house": {
+  "en": "Jardine Princeps House",
+  "de": "Jardine-Princeps-Haus"
+ },
+ "pmg_jiangnan_nanjing_brocade_hall": {
+  "en": "Jiangnan Nanjing Brocade Hall",
+  "de": "Jiangnan-Brokathalle Nanjing"
+ },
+ "pmg_jingdezhen_imperial_kiln": {
+  "en": "Jingdezhen Imperial Kiln",
+  "de": "Kaiserlicher Brennofen Jingdezhen"
+ },
+ "pmg_john_brown_clydebank_yard": {
+  "en": "John Brown Clydebank Yard",
+  "de": "John-Brown-Werft Clydebank"
+ },
+ "pmg_john_holt_lagos_trading_house": {
+  "en": "John Holt Lagos Trading House",
+  "de": "John-Holt-Handelshaus Lagos"
+ },
+ "pmg_jsr_yokkaichi_complex": {
+  "en": "JSR Yokkaichi Complex",
+  "de": "JSR-Komplex Yokkaichi"
+ },
+ "pmg_jsw_vijayanagar_works": {
+  "en": "JSW Vijayanagar Works",
+  "de": "JSW-Werke Vijayanagar"
+ },
+ "pmg_kablin_zarate_paper_mill": {
+  "en": "Kablín Zárate Paper Mill",
+  "de": "Kablín-Zárate-Papierfabrik"
+ },
+ "pmg_kaiping_tangshan_colliery": {
+  "en": "Kaiping Tangshan Colliery",
+  "de": "Kaiping-Zeche Tangshan"
+ },
+ "pmg_kinkozan_kiyomizu_kiln": {
+  "en": "Kinkozan Kiyomizu Kiln",
+  "de": "Kinkozan-Brennofen Kiyomizu"
+ },
+ "pmg_kirgizian_copper_smelter": {
+  "en": "Kirgizian Copper Smelter",
+  "de": "Kirgisische Kupferhütte"
+ },
+ "pmg_klanicko_belgrade_slaughterhouse": {
+  "en": "Klaničko Belgrade Slaughterhouse",
+  "de": "Klaničko-Schlachthof Belgrad"
+ },
+ "pmg_klein_galician_paper_mill": {
+  "en": "Klein Galician Paper Mill",
+  "de": "Klein-Papierfabrik Galizien"
+ },
+ "pmg_kouppas_piraeus_foundry": {
+  "en": "Kouppas Piraeus Foundry",
+  "de": "Kouppas-Gießerei Piräus"
+ },
+ "pmg_krupp_essen_works": {
+  "en": "Krupp Essen Works",
+  "de": "Krupp-Werke Essen"
+ },
+ "pmg_la_rosada_buenos_aires_arsenal": {
+  "en": "La Rosada Buenos Aires Arsenal",
+  "de": "La-Rosada-Arsenal Buenos Aires"
+ },
+ "pmg_lanfang_pontianak_kongsi_house": {
+  "en": "Lanfang Pontianak Kongsi House",
+  "de": "Lanfang-Kongsi-Haus Pontianak"
+ },
+ "pmg_lee_wilson_plantation_depot": {
+  "en": "Lee Wilson Plantation Depot",
+  "de": "Lee-Wilson-Plantagendepot"
+ },
+ "pmg_lilpop_warsaw_metalworks": {
+  "en": "Lilpop Warsaw Metalworks",
+  "de": "Lilpop-Metallwerke Warschau"
+ },
+ "pmg_lkab_kiruna_mine": {
+  "en": "LKAB Kiruna Mine",
+  "de": "LKAB-Mine Kiruna"
+ },
+ "pmg_location_building_advanced_material_fabricator": {
+  "en": "Location",
+  "de": "Standort"
+ },
+ "pmg_lockheed_skunk_works": {
+  "en": "Skunk Works",
+  "de": "Skunk Works"
+ },
+ "pmg_madura_mills_madurai_complex": {
+  "en": "Madura Mills Madurai Complex",
+  "de": "Madura-Mills-Komplex Madurai"
+ },
+ "pmg_maintenance": {
+  "en": "Maintenance",
+  "de": "Wartung"
+ },
+ "pmg_manfred_weiss_csepel_works": {
+  "en": "Manfred Weiss Csepel Works",
+  "de": "Manfred-Weiss-Werke Csepel"
+ },
+ "pmg_mantero_como_silk_mill": {
+  "en": "Mantero Como Silk Mill",
+  "de": "Mantero-Seidenmühle Como"
+ },
+ "pmg_mantetsu_dalian_railway_hub": {
+  "en": "Mantetsu Dalian Railway Hub",
+  "de": "Mantetsu-Eisenbahnknoten Dalian"
+ },
+ "pmg_maple_tottenham_court_showroom": {
+  "en": "Maple Tottenham Court Showroom",
+  "de": "Maple-Ausstellungsraum Tottenham Court"
+ },
+ "pmg_markwald_bangkok_rice_mill": {
+  "en": "Markwald Bangkok Rice Mill",
+  "de": "Markwald-Reismühle Bangkok"
+ },
+ "pmg_massey_harris_toronto_implement_works": {
+  "en": "Massey-Harris Toronto Implement Works",
+  "de": "Massey-Harris-Werke Toronto"
+ },
+ "pmg_mav_budapest_locomotive_works": {
+  "en": "MÁV Budapest Locomotive Works",
+  "de": "MÁV-Lokomotivwerke Budapest"
+ },
+ "pmg_megastructure_consortium_hq": {
+  "en": "Megastructure Operations",
+  "de": "Megastruktur-Betrieb"
+ },
+ "pmg_meissen_porcelain_manufactory": {
+  "en": "Meissen Porcelain Manufactory",
+  "de": "Meissener Porzellanmanufaktur"
+ },
+ "pmg_mfo_oerlikon_works": {
+  "en": "MFO Oerlikon Works",
+  "de": "MFO-Werke Oerlikon"
+ },
+ "pmg_michelin_clermont_ferrand": {
+  "en": "Michelin Clermont-Ferrand Works",
+  "de": "Michelin-Werke Clermont-Ferrand"
+ },
+ "pmg_microsoft_redmond_campus": {
+  "en": "Microsoft Redmond Campus",
+  "de": "Microsoft-Campus Redmond"
+ },
+ "pmg_military_base_missile_defense": {
+  "en": "Missile Defense",
+  "de": "Raketenabwehr"
+ },
+ "pmg_military_base_purpose": {
+  "en": "Base Purpose",
+  "de": "Basiszweck"
+ },
+ "pmg_mining_equipment_building_tech_metals_mine": {
+  "en": "Mining Equipment",
+  "de": "Bergbau-Ausrüstung"
+ },
+ "pmg_misr_mahalla_textile_complex": {
+  "en": "Misr Mahalla Textile Complex",
+  "de": "Misr-Textilkomplex Mahalla"
+ },
+ "pmg_mitsubishi_nagasaki_shipyard": {
+  "en": "Mitsubishi Nagasaki Shipyard",
+  "de": "Mitsubishi-Werft Nagasaki"
+ },
+ "pmg_mitsui_trading_house": {
+  "en": "Mitsui Trading House",
+  "de": "Mitsui-Handelshaus"
+ },
+ "pmg_mokta_el_hadid_beni_saf_mine": {
+  "en": "Mokta el Hadid Beni Saf Mine",
+  "de": "Mokta-el-Hadid-Mine Beni Saf"
+ },
+ "pmg_monument_dedication": {
+  "en": "Dedication",
+  "de": "Widmung"
+ },
+ "pmg_morozov_orekhovo_zuevo_mills": {
+  "en": "Morozov Orekhovo-Zuevo Mills",
+  "de": "Morozov-Mühlen Orechowo-Sujewo"
+ },
+ "pmg_moscow_irrigation_cotton_depot": {
+  "en": "Moscow Irrigation Cotton Depot",
+  "de": "Moskauer Bewässerungs-Baumwolldepot"
+ },
+ "pmg_moser_karlsbad_glass_works": {
+  "en": "Moser Karlsbad Glass Works",
+  "de": "Moser-Glaswerke Karlsbad"
+ },
+ "pmg_mozambique_company_beira_concession": {
+  "en": "Mozambique Company Beira Concession",
+  "de": "Mosambik-Company-Konzession Beira"
+ },
+ "pmg_nam_dinh_textile_plant": {
+  "en": "Nam Định Textile Plant",
+  "de": "Nam-Định-Textilwerk"
+ },
+ "pmg_nederlandse_petroleum_pangkalan_depot": {
+  "en": "Nederlandse Petroleum Pangkalan Depot",
+  "de": "Nederlandse-Petroleum-Depot Pangkalan"
+ },
+ "pmg_netflix_animation_studios": {
+  "en": "Netflix Animation Studios",
+  "de": "Netflix-Animationsstudios"
+ },
+ "pmg_neurovault_hq": {
+  "en": "Neurovault Research",
+  "de": "Neurovault-Forschung"
+ },
+ "pmg_nhm_factorij_batavia": {
+  "en": "NHM Factorij Batavia",
+  "de": "NHM-Factorij Batavia"
+ },
+ "pmg_nintendo_development_center": {
+  "en": "Nintendo Development Center",
+  "de": "Nintendo-Entwicklungszentrum"
+ },
+ "pmg_nioc_masjed_soleyman_field": {
+  "en": "NIOC Masjed Soleyman Field",
+  "de": "NIOC-Feld Masjed Soleyman"
+ },
+ "pmg_nobel_baku_refinery": {
+  "en": "Nobel Baku Refinery",
+  "de": "Nobel-Raffinerie Baku"
+ },
+ "pmg_noda_shoyu_goyogura": {
+  "en": "Noda Shoyu Goyōgura",
+  "de": "Noda Shoyu Goyōgura"
+ },
+ "pmg_nokia_cable_works": {
+  "en": "Nokia Cable Works",
+  "de": "Nokia-Kabelwerke"
+ },
+ "pmg_norsk_hydro_rjukan_plant": {
+  "en": "Norsk Hydro Rjukan Plant",
+  "de": "Norsk-Hydro-Werk Rjukan"
+ },
+ "pmg_nvidia_endeavor_campus": {
+  "en": "Nvidia Endeavor Campus",
+  "de": "Nvidia-Campus Endeavor"
+ },
+ "pmg_ocmc_unsan_gold_mines": {
+  "en": "OCMC Unsan Gold Mines",
+  "de": "OCMC-Goldminen Unsan"
+ },
+ "pmg_ocp_khouribga_mine": {
+  "en": "OCP Khouribga Mine",
+  "de": "OCP-Mine Khouribga"
+ },
+ "pmg_oevg_steyr_arms_works": {
+  "en": "OEWG Steyr Arms Works",
+  "de": "OEWG-Waffenwerke Steyr"
+ },
+ "pmg_ong_lung_sheng_tea_warehouse": {
+  "en": "Ong Lung Sheng Tea Warehouse",
+  "de": "Ong-Lung-Sheng-Teelager"
+ },
+ "pmg_openai_research_lab": {
+  "en": "OpenAI Research Laboratory",
+  "de": "OpenAI-Forschungslabor"
+ },
+ "pmg_opium_ghazipur_factory": {
+  "en": "Opium Ghazipur Factory",
+  "de": "Opium-Fabrik Ghazipur"
+ },
+ "pmg_oracle_cloud_data_center": {
+  "en": "Oracle Cloud Data Center",
+  "de": "Oracle-Cloud-Rechenzentrum"
+ },
+ "pmg_orient_express_sirkeci_terminal": {
+  "en": "Orient Express Sirkeci Terminal",
+  "de": "Orient-Express-Terminal Sirkeci"
+ },
+ "pmg_oriental_dev_kunsan_granary": {
+  "en": "Oriental Development Kunsan Granary",
+  "de": "Oriental-Development-Kornspeicher Kunsan"
+ },
+ "pmg_panama_company_culebra_cut": {
+  "en": "Panama Company Culebra Cut",
+  "de": "Panama-Company-Culebra-Durchstich"
+ },
+ "pmg_paradox_kvarnholmen_studio": {
+  "en": "Paradox Kvarnholmen Studio",
+  "de": "Paradox-Studio Kvarnholmen"
+ },
+ "pmg_pedro_domecq_jerez_bodega": {
+  "en": "Pedro Domecq Jerez Bodega",
+  "de": "Pedro-Domecq-Bodega Jerez"
+ },
+ "pmg_pernambuco_recife_cotton_mill": {
+  "en": "Pernambuco Recife Cotton Mill",
+  "de": "Pernambuco-Baumwollspinnerei Recife"
+ },
+ "pmg_perskhlopok_cotton_combines": {
+  "en": "Perskhlopok Cotton Combines",
+  "de": "Perschlopok-Baumwollkombinate"
+ },
+ "pmg_persshelk_silk_reeling_house": {
+  "en": "Persshëlk Silk Reeling House",
+  "de": "Persshëlk-Seidenhaspelei"
+ },
+ "pmg_peruvian_amazon_iquitos_depot": {
+  "en": "Peruvian Amazon Iquitos Depot",
+  "de": "Peruanisches Amazonas-Depot Iquitos"
+ },
+ "pmg_petrobras_cenpes_center": {
+  "en": "Cenpes Research Center",
+  "de": "Cenpes-Forschungszentrum"
+ },
+ "pmg_pfizer_rd_campus": {
+  "en": "Pfizer Global R&D Campus",
+  "de": "Pfizer Global R&D Campus"
+ },
+ "pmg_philips_eindhoven_natlab": {
+  "en": "Philips Eindhoven NatLab",
+  "de": "Philips-NatLab Eindhoven"
+ },
+ "pmg_pirelli_bicocca_plant": {
+  "en": "Pirelli Bicocca Plant",
+  "de": "Pirelli-Werk Bicocca"
+ },
+ "pmg_portalis_lyon_silk_house": {
+  "en": "Portalis Lyon Silk House",
+  "de": "Portalis-Seidenhaus Lyon"
+ },
+ "pmg_power_automation": {
+  "en": "Power Automation",
+  "de": "Energieautomatisierung"
+ },
+ "pmg_power_bloc_hq": {
+  "en": "[concept_power_bloc] Headquarters",
+  "de": "Hauptsitz des [Concept('concept_power_bloc','Machtblocks')]"
+ },
+ "pmg_precision_environmental_management": {
+  "en": "Precision Environmental Management",
+  "de": "Präzises Umweltmanagement"
+ },
+ "pmg_principle_advanced_research_3": {
+  "en": "Research",
+  "de": "Forschung"
+ },
+ "pmg_principle_artistic_expression": {
+  "en": "Artistic Expression [concept_power_bloc_principle_group]",
+  "de": "[concept_power_bloc_principle_group]: Künstlerischer Ausdruck"
+ },
+ "pmg_principle_education_3": {
+  "en": "Education",
+  "de": "Bildung"
+ },
+ "pmg_principle_engineering_and_logistics": {
+  "en": "Engineering and Logisitics [concept_power_bloc_principle_group]",
+  "de": "[concept_power_bloc_principle_group]: Technik und Logistik"
+ },
+ "pmg_prussian_railway_directorate": {
+  "en": "Prussian Railway Directorate",
+  "de": "Preußische Eisenbahndirektion"
+ },
+ "pmg_putilov_works": {
+  "en": "Putilov Works",
+  "de": "Putilow-Werke"
+ },
+ "pmg_rac_sitka_trading_post": {
+  "en": "RAC Sitka Trading Post",
+  "de": "RAC-Handelsposten Sitka"
+ },
+ "pmg_ralli_odessa_grain_elevator": {
+  "en": "Ralli Odessa Grain Elevator",
+  "de": "Ralli-Getreidespeicher Odessa"
+ },
+ "pmg_ramirez_vila_real_cannery": {
+  "en": "Ramirez Vila Real Cannery",
+  "de": "Ramirez-Konservenfabrik Vila Real"
+ },
+ "pmg_rekal_hq": {
+  "en": "Rekal Memory Services",
+  "de": "Rekal-Gedächtnisdienste"
+ },
+ "pmg_reliance_jamnagar_refinery": {
+  "en": "Jamnagar Refinery",
+  "de": "Raffinerie Jamnagar"
+ },
+ "pmg_renault_billancourt_plant": {
+  "en": "Renault Billancourt Plant",
+  "de": "Renault-Werk Billancourt"
+ },
+ "pmg_resettlement_programme": {
+  "en": "Resettlement Program",
+  "de": "Umsiedlungsprogramm"
+ },
+ "pmg_resettlement_settlement": {
+  "en": "Settlement Plan",
+  "de": "Siedlungsplan"
+ },
+ "pmg_resettlement_transportation": {
+  "en": "Transport",
+  "de": "Transport"
+ },
+ "pmg_rheinmetall_unterluss_proving_ground": {
+  "en": "Rheinmetall Unterlüß Proving Ground",
+  "de": "Rheinmetall-Testgelände Unterlüß"
+ },
+ "pmg_ricordi_galleria_vittorio_emanuele": {
+  "en": "Ricordi Galleria Vittorio Emanuele",
+  "de": "Ricordi Galleria Vittorio Emanuele"
+ },
+ "pmg_roche_tower": {
+  "en": "The Roche Tower",
+  "de": "Der Roche-Turm"
+ },
+ "pmg_rodriguez_arguelles_havana_tobacco_house": {
+  "en": "Rodríguez Argüelles Havana Tobacco House",
+  "de": "Rodríguez-Argüelles-Tabakhaus Havanna"
+ },
+ "pmg_rolls_royce_derby_works": {
+  "en": "Rolls-Royce Derby Works",
+  "de": "Rolls-Royce-Werke Derby"
+ },
+ "pmg_romanian_star_ploiesti_refinery": {
+  "en": "Romanian Star Ploiești Refinery",
+  "de": "Romanian-Star-Raffinerie Ploiești"
+ },
+ "pmg_rosatom_mayak_association": {
+  "en": "Mayak Production Association",
+  "de": "Mayak-Produktionsvereinigung"
+ },
+ "pmg_roscosmos_vostochny_cosmodrome": {
+  "en": "Vostochny Cosmodrome",
+  "de": "Kosmodrom Wostotschny"
+ },
+ "pmg_rossi_sao_leopoldo_arms_factory": {
+  "en": "Rossi São Leopoldo Arms Factory",
+  "de": "Rossi-Waffenfabrik São Leopoldo"
+ },
+ "pmg_saint_etienne_arms_manufactory": {
+  "en": "Saint-Étienne Arms Manufactory",
+  "de": "Saint-Étienne-Waffenmanufaktur"
+ },
+ "pmg_samsung_digital_city": {
+  "en": "Samsung Digital City",
+  "de": "Samsung Digital City"
+ },
+ "pmg_san_miguel_manila_brewery": {
+  "en": "San Miguel Manila Brewery",
+  "de": "San-Miguel-Brauerei Manila"
+ },
+ "pmg_sandford_newcastle_natal_ironworks": {
+  "en": "Sandford Newcastle Natal Ironworks",
+  "de": "Sandford-Eisenwerke Newcastle, Natal"
+ },
+ "pmg_sansinena_avellaneda_frigorifico": {
+  "en": "Sansinena Avellaneda Frigorífico",
+  "de": "Sansinena-Frigorífico Avellaneda"
+ },
+ "pmg_sao_paulo_railway_paranapiacaba_workshop": {
+  "en": "São Paulo Railway Paranapiacaba Workshop",
+  "de": "São-Paulo-Railway-Werkstatt Paranapiacaba"
+ },
+ "pmg_sap_headquarters": {
+  "en": "SAP SE Headquarters",
+  "de": "SAP-SE-Hauptsitz"
+ },
+ "pmg_sassoon_bombay_docks": {
+  "en": "Sassoon Bombay Docks",
+  "de": "Sassoon-Docks Bombay"
+ },
+ "pmg_saudi_aramco_abqaiq_plant": {
+  "en": "Abqaiq Plant",
+  "de": "Abqaiq-Anlage"
+ },
+ "pmg_schichau_elbing_shipyard": {
+  "en": "Schichau Elbing Shipyard",
+  "de": "Schichau-Werft Elbing"
+ },
+ "pmg_schneider_le_creusot": {
+  "en": "Schneider Le Creusot Works",
+  "de": "Schneider-Werke Le Creusot"
+ },
+ "pmg_secn_ferrol_shipyard": {
+  "en": "SECN Ferrol Shipyard",
+  "de": "SECN-Werft Ferrol"
+ },
+ "pmg_sfct_hon_gai_collieries": {
+  "en": "SFCT Hòn Gai Collieries",
+  "de": "SFCT-Zechen Hòn Gai"
+ },
+ "pmg_shell_pernis_refinery": {
+  "en": "Shell Pernis Refinery",
+  "de": "Shell-Raffinerie Pernis"
+ },
+ "pmg_sherkat_shemali_cotton_gin": {
+  "en": "Sherkat-e Shemali Cotton Gin",
+  "de": "Sherkat-e-Schemali-Egreniermaschinen"
+ },
+ "pmg_sherkate_eslamiya_isfahan_mill": {
+  "en": "Sherkat-e Eslamiya Isfahan Mill",
+  "de": "Sherkat-e-Eslamiya-Mühle Isfahan"
+ },
+ "pmg_shipyard_focus": {
+  "en": "Production Focus",
+  "de": "Produktionsschwerpunkt"
+ },
+ "pmg_shopify_fulfillment_hub": {
+  "en": "Shopify Fulfillment Network Hub",
+  "de": "Shopify-Fulfillment-Netzwerkknoten"
+ },
+ "pmg_siam_electric_wat_liab_station": {
+  "en": "Siam Electricity Wat Liab Power Station",
+  "de": "Siam-Electricity-Kraftwerk Wat Liab"
+ },
+ "pmg_sibur_tobolsk_complex": {
+  "en": "Sibur Tobolsk Complex",
+  "de": "Sibur-Komplex Tobolsk"
+ },
+ "pmg_siemens_erlangen_campus": {
+  "en": "Siemens Erlangen Campus",
+  "de": "Siemens-Campus Erlangen"
+ },
+ "pmg_skoda_pilsen_works": {
+  "en": "Škoda Pilsen Works",
+  "de": "Škoda-Werke Pilsen"
+ },
+ "pmg_softbank_vision_fund_hq": {
+  "en": "The Vision Fund Headquarters",
+  "de": "Der Vision-Fund-Hauptsitz"
+ },
+ "pmg_sony_pictures_studios": {
+  "en": "Sony Pictures Studios",
+  "de": "Sony Pictures Studios"
+ },
+ "pmg_spacex_starbase": {
+  "en": "Starbase",
+  "de": "Starbase"
+ },
+ "pmg_st_res_hub": {
+  "en": "Hub Reserve",
+  "de": "Knotenreserve"
+ },
+ "pmg_st_res_hub_desc": {
+  "en": "Hub reserve flow is controlled from the Strategic Reserve [concept_journal_entry].",
+  "de": "Der Reservefluss des Knotens wird über den [concept_journal_entry] der Strategischen Reserve gesteuert."
+ },
+ "pmg_st_res_silo_capacity": {
+  "en": "Silo Storage",
+  "de": "Silolagerung"
+ },
+ "pmg_st_res_silo_capacity_desc": {
+  "en": "Passive storage. Adds capacity for all reserve goods.",
+  "de": "Passive Lagerung. Erhöht die Kapazität für alle Reservegüter."
+ },
+ "pmg_standard_oil_refinery": {
+  "en": "Standard Oil Refinery",
+  "de": "Standard-Oil-Raffinerie"
+ },
+ "pmg_steam_automation_building_tech_metals_mine": {
+  "en": "Automation",
+  "de": "Automatisierung"
+ },
+ "pmg_steel_brothers_syriam_depot": {
+  "en": "Steel Brothers Syriam Depot",
+  "de": "Steel-Brothers-Depot Syriam"
+ },
+ "pmg_stf_fiume_torpedo_works": {
+  "en": "STF Fiume Torpedo Works",
+  "de": "STF-Torpedowerke Fiume"
+ },
+ "pmg_stt_haskoy_shipyard": {
+  "en": "STT Hasköy Shipyard",
+  "de": "STT-Werft Hasköy"
+ },
+ "pmg_sudamericana_valparaiso_pier": {
+  "en": "Sudamericana Valparaíso Pier",
+  "de": "Sudamericana-Pier Valparaíso"
+ },
+ "pmg_suez_company_ismailia_hq": {
+  "en": "Suez Company Ismailia [concept_hq]",
+  "de": "Suez-Company-[concept_hq] Ismailia"
+ },
+ "pmg_sumitomo_besshi_mine": {
+  "en": "Sumitomo Besshi Mine",
+  "de": "Sumitomo-Mine Besshi"
+ },
+ "pmg_sunhwaguk_seoul_tobacco_factory": {
+  "en": "Sunhwaguk Seoul Tobacco Factory",
+  "de": "Sunhwaguk-Tabakfabrik Seoul"
+ },
+ "pmg_synthetic_biomass": {
+  "en": "Synthetic Biomass",
+  "de": "Synthetische Biomasse"
+ },
+ "pmg_synthetic_coal": {
+  "en": "Synthetic Coal",
+  "de": "Synthetische Kohle"
+ },
+ "pmg_synthetic_drinks": {
+  "en": "Synthetic Drinks",
+  "de": "Synthetische Getränke"
+ },
+ "pmg_synthetic_fruit": {
+  "en": "Synthetic Fruit",
+  "de": "Synthetisches Obst"
+ },
+ "pmg_synthetic_meat": {
+  "en": "Synthetic Meat",
+  "de": "Synthetisches Fleisch"
+ },
+ "pmg_synthetic_oil": {
+  "en": "Synthetic Oil",
+  "de": "Synthetisches Öl"
+ },
+ "pmg_synthetic_opium": {
+  "en": "Pharmaceuticals",
+  "de": "Pharmazeutika"
+ },
+ "pmg_synthetic_rubber": {
+  "en": "Synthetic Rubber",
+  "de": "Synthetischer Kautschuk"
+ },
+ "pmg_synthetic_sugar": {
+  "en": "Synthetic Sugar",
+  "de": "Synthetischer Zucker"
+ },
+ "pmg_synthetic_wood": {
+  "en": "Synthetic Wood",
+  "de": "Synthetisches Holz"
+ },
+ "pmg_tailings_wastewater_management": {
+  "en": "Tailings and Wastewater Management",
+  "de": "Abraum- und Abwassermanagement"
+ },
+ "pmg_tashkent_railroad_workshops": {
+  "en": "Tashkent Railroad Workshops",
+  "de": "Taschkent-Eisenbahnwerkstätten"
+ },
+ "pmg_tata_jamshedpur_works": {
+  "en": "Tata Jamshedpur Works",
+  "de": "Tata-Werke Jamshedpur"
+ },
+ "pmg_tencent_seafront_towers": {
+  "en": "Tencent Seafront Towers",
+  "de": "Tencent Seafront Towers"
+ },
+ "pmg_tessier_ashpool_hq": {
+  "en": "Tessier-Ashpool Operations",
+  "de": "Tessier-Ashpool-Betrieb"
+ },
+ "pmg_thonet_bystrice_bentwood_factory": {
+  "en": "Thonet Bystřice Bentwood Factory",
+  "de": "Thonet-Bugholzfabrik Bystřice"
+ },
+ "pmg_thyssen_steelworks": {
+  "en": "Thyssen Steelworks",
+  "de": "Thyssen-Stahlwerke"
+ },
+ "pmg_tobacco_regie_cibali_factory": {
+  "en": "Tobacco Régie Cibali Factory",
+  "de": "Tobacco-Régie-Fabrik Cibali"
+ },
+ "pmg_tokyo_electric_asakusa_station": {
+  "en": "Tokyo Electric Asakusa Power Station",
+  "de": "Tokyo-Electric-Kraftwerk Asakusa"
+ },
+ "pmg_tourism": {
+  "en": "Tourism",
+  "de": "Tourismus"
+ },
+ "pmg_toyota_kaikan_plant": {
+  "en": "Toyota Kaikan Museum & Plant",
+  "de": "Toyota-Kaikan-Museum & Werk"
+ },
+ "pmg_train_automation_building_tech_metals_mine": {
+  "en": "Transportation",
+  "de": "Transport"
+ },
+ "pmg_trubia_cannon_foundry": {
+  "en": "Trubia Cannon Foundry",
+  "de": "Trubia-Kanonengießerei"
+ },
+ "pmg_tsmc_fab_18": {
+  "en": "TSMC Fab 18",
+  "de": "TSMC Fab 18"
+ },
+ "pmg_turkish_petroleum_kirkuk_depot": {
+  "en": "Turkish Petroleum Kirkuk Depot",
+  "de": "Turkish-Petroleum-Depot Kirkuk"
+ },
+ "pmg_tycho_manufacturing_hq": {
+  "en": "Tycho Orbital Construction",
+  "de": "Tycho-Orbitalbau"
+ },
+ "pmg_un_headquarters": {
+  "en": "International Diplomacy",
+  "de": "Internationale Diplomatie"
+ },
+ "pmg_uniao_fabril_barreiro_plant": {
+  "en": "União Fabril Barreiro Plant",
+  "de": "União-Fabril-Werk Barreiro"
+ },
+ "pmg_united_fruit_great_white_fleet_terminal": {
+  "en": "United Fruit Great White Fleet Terminal",
+  "de": "United-Fruit-Terminal der Great White Fleet"
+ },
+ "pmg_united_tobacco_moscow_plant": {
+  "en": "United Tobacco Moscow Plant",
+  "de": "United-Tobacco-Werk Moskau"
+ },
+ "pmg_universal_studios_hollywood": {
+  "en": "Universal Studios Hollywood",
+  "de": "Universal Studios Hollywood"
+ },
+ "pmg_ursus_warsaw_tractor_plant": {
+  "en": "Ursus Warsaw Tractor Plant",
+  "de": "Ursus-Traktorenwerk Warschau"
+ },
+ "pmg_vale_carajas_mine": {
+  "en": "Carajás Mine",
+  "de": "Carajás-Mine"
+ },
+ "pmg_van_vlissingen_oostenburg_works": {
+  "en": "Van Vlissingen Oostenburg Works",
+  "de": "Van-Vlissingen-Werke Oostenburg"
+ },
+ "pmg_verizon_building": {
+  "en": "The Verizon Building",
+  "de": "Das Verizon-Gebäude"
+ },
+ "pmg_vodka_monopoly_warehouse": {
+  "en": "Vodka Monopoly Warehouse",
+  "de": "Wodka-Monopol-Lagerhaus"
+ },
+ "pmg_volkswagen_autostadt": {
+  "en": "Volkswagen Autostadt",
+  "de": "Volkswagen Autostadt"
+ },
+ "pmg_wadia_bombay_dockyard": {
+  "en": "Wadia Bombay Dockyard",
+  "de": "Wadia-Werft Bombay"
+ },
+ "pmg_water_personal_transport": {
+  "en": "Water Personal Transport",
+  "de": "Persönlicher Wassertransport"
+ },
+ "pmg_west_ural_oil_depot": {
+  "en": "West Ural Oil Depot",
+  "de": "West-Ural-Öldepot"
+ },
+ "pmg_white_star_albion_house": {
+  "en": "White Star Albion House",
+  "de": "White Star Albion House"
+ },
+ "pmg_witkowitzer_ostrava_ironworks": {
+  "en": "Witkowitzer Ostrava Ironworks",
+  "de": "Witkowitzer Eisenwerke Ostrava"
+ },
+ "pmg_wonder_abraj_al_bait": {
+  "en": "Abraj Al-Bait Clock Tower",
+  "de": "Abraj-al-Bait-Uhrturm"
+ },
+ "pmg_wonder_aswan_high_dam": {
+  "en": "Aswan High Dam",
+  "de": "Assuan-Hochdamm"
+ },
+ "pmg_wonder_azadi_tower": {
+  "en": "Azadi Tower",
+  "de": "Azadi-Turm"
+ },
+ "pmg_wonder_basilica_of_our_lady_of_peace": {
+  "en": "Basilica of Our Lady of Peace",
+  "de": "Basilika Unserer Lieben Frau vom Frieden"
+ },
+ "pmg_wonder_berlin_tv_tower": {
+  "en": "Berlin TV Tower",
+  "de": "Berliner Fernsehturm"
+ },
+ "pmg_wonder_burj_khalifa": {
+  "en": "Burj Khalifa",
+  "de": "Burj Khalifa"
+ },
+ "pmg_wonder_channel_tunnel": {
+  "en": "Channel Tunnel",
+  "de": "Kanaltunnel"
+ },
+ "pmg_wonder_cn_tower": {
+  "en": "CN Tower",
+  "de": "CN Tower"
+ },
+ "pmg_wonder_continental_union_hq": {
+  "en": "Continental Union Headquarters",
+  "de": "Hauptsitz der Kontinentalunion"
+ },
+ "pmg_wonder_empire_state_building": {
+  "en": "Empire State Building",
+  "de": "Empire State Building"
+ },
+ "pmg_wonder_fast_telescope": {
+  "en": "FAST Telescope",
+  "de": "FAST-Teleskop"
+ },
+ "pmg_wonder_gardens_by_the_bay": {
+  "en": "Gardens by the Bay",
+  "de": "Gardens by the Bay"
+ },
+ "pmg_wonder_golden_bridge": {
+  "en": "Golden Bridge",
+  "de": "Goldene Brücke"
+ },
+ "pmg_wonder_golden_gate_bridge": {
+  "en": "Golden Gate Bridge",
+  "de": "Golden Gate Bridge"
+ },
+ "pmg_wonder_hoover_dam": {
+  "en": "Hoover Dam",
+  "de": "Hoover-Damm"
+ },
+ "pmg_wonder_international_space_station": {
+  "en": "International Space Station",
+  "de": "Internationale Raumstation"
+ },
+ "pmg_wonder_itaipu_dam": {
+  "en": "Itaipu Dam",
+  "de": "Itaipu-Damm"
+ },
+ "pmg_wonder_iter": {
+  "en": "ITER Fusion Reactor",
+  "de": "ITER-Fusionsreaktor"
+ },
+ "pmg_wonder_kennedy_space_center": {
+  "en": "Kennedy Space Center",
+  "de": "Kennedy Space Center"
+ },
+ "pmg_wonder_kenyatta_icc": {
+  "en": "Kenyatta ICC",
+  "de": "Kenyatta ICC"
+ },
+ "pmg_wonder_large_hadron_collider": {
+  "en": "Large Hadron Collider",
+  "de": "Large Hadron Collider"
+ },
+ "pmg_wonder_ligo": {
+  "en": "LIGO Observatory",
+  "de": "LIGO-Observatorium"
+ },
+ "pmg_wonder_lotte_world_tower": {
+  "en": "Lotte World Tower",
+  "de": "Lotte World Tower"
+ },
+ "pmg_wonder_lotus_temple": {
+  "en": "Lotus Temple",
+  "de": "Lotus-Tempel"
+ },
+ "pmg_wonder_moscow_state_university": {
+  "en": "Moscow State University",
+  "de": "Staatliche Universität Moskau"
+ },
+ "pmg_wonder_palais_des_nations": {
+  "en": "Palais des Nations",
+  "de": "Palais des Nations"
+ },
+ "pmg_wonder_peace_palace": {
+  "en": "Peace Palace",
+  "de": "Friedenspalast"
+ },
+ "pmg_wonder_pentagon": {
+  "en": "The Pentagon",
+  "de": "Das Pentagon"
+ },
+ "pmg_wonder_petronas_towers": {
+  "en": "Petronas Towers",
+  "de": "Petronas Towers"
+ },
+ "pmg_wonder_shanghai_tower": {
+  "en": "Shanghai Tower",
+  "de": "Shanghai Tower"
+ },
+ "pmg_wonder_statue_of_unity": {
+  "en": "Statue of Unity",
+  "de": "Statue of Unity"
+ },
+ "pmg_wonder_svalbard_seed_vault": {
+  "en": "Svalbard Global Seed Vault",
+  "de": "Svalbard Globaler Saatguttresor"
+ },
+ "pmg_wonder_sydney_opera_house": {
+  "en": "Sydney Opera House",
+  "de": "Opernhaus Sydney"
+ },
+ "pmg_wonder_taipei_101": {
+  "en": "Taipei 101",
+  "de": "Taipei 101"
+ },
+ "pmg_wonder_three_gorges_dam": {
+  "en": "Three Gorges Dam",
+  "de": "Drei-Schluchten-Talsperre"
+ },
+ "pmg_wonder_tokyo_tower": {
+  "en": "Tokyo Tower",
+  "de": "Tokyo Tower"
+ },
+ "pmg_wonder_world_trade_center": {
+  "en": "World Trade Center",
+  "de": "World Trade Center"
+ },
+ "pmg_worth_rue_de_la_paix_atelier": {
+  "en": "Worth Rue de la Paix Atelier",
+  "de": "Worth-Atelier Rue de la Paix"
+ },
+ "pmg_yasuda_atosanupuri_mine": {
+  "en": "Yasuda Atosanupuri Sulfur Mine",
+  "de": "Yasuda-Schwefelmine Atosanupuri"
+ },
+ "pmg_ynchausti_manila_trading_house": {
+  "en": "Ynchausti Manila Trading House",
+  "de": "Ynchausti-Handelshaus Manila"
+ },
+ "pmg_yoyodyne_propulsion_hq": {
+  "en": "Yoyodyne Propulsion Research",
+  "de": "Yoyodyne-Antriebsforschung"
+ },
+ "pmg_zastava_kragujevac_arsenal": {
+  "en": "Zastava Kragujevac Arsenal",
+  "de": "Zastava-Arsenal Kragujevac"
+ }
+}
