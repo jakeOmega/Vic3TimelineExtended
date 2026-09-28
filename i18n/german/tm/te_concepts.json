@@ -1495,6 +1495,38 @@
   "en": "Applies the effects of the Moral Suasion banking policy.",
   "de": "Wendet die Effekte der Bankenpolitik Moralische Einflussnahme an."
  },
+ "banking_open_market_ops_desc": {
+  "en": "Applies the effects of the Open Market Operations banking policy.",
+  "de": "Wendet die Effekte der Bankpolitik Offenmarktgeschäfte an."
+ },
+ "banking_policy_rate_hike_desc": {
+  "en": "Applies the effects of the Policy Rate Hike banking policy.",
+  "de": "Wendet die Effekte der Bankpolitik Leitzinserhöhung an."
+ },
+ "banking_raise_margin_requirements_desc": {
+  "en": "Speculation on credit has become too common among the [concept_middle_strata]. By requiring higher upfront collateral for loans, we ensure that only stable ventures proceed, protecting the economy.",
+  "de": "Spekulation auf Kredit ist in der [concept_middle_strata] zu weit verbreitet. Durch höhere Anforderungen an die Eigenkapitaldeckung von Krediten stellen wir sicher, dass nur solide Vorhaben verwirklicht werden, und schützen so die Wirtschaft."
+ },
+ "banking_reserve_requirements": {
+  "en": "Raised Reserve Requirements",
+  "de": "Erhöhte Mindestreserveanforderungen"
+ },
+ "banking_reserve_requirements_desc": {
+  "en": "Applies the effects of the Raise Reserve Requirements banking policy.",
+  "de": "Wendet die Effekte der Bankpolitik Erhöhte Mindestreserveanforderungen an."
+ },
+ "banking_restrict_inflows": {
+  "en": "Restrict Speculative Inflows",
+  "de": "Spekulative Kapitalzuflüsse beschränken"
+ },
+ "banking_sterilize_inflows": {
+  "en": "Sterilize Capital Inflows",
+  "de": "Kapitalzuflüsse sterilisieren"
+ },
+ "bantu_union": {
+  "en": "Bantu Union",
+  "de": "Bantu-Union"
+ },
  "bg_biotechnology": {
   "en": "Biotechnology",
   "de": "Biotechnologie"
@@ -1527,277 +1559,1649 @@
   "en": "Resettlement",
   "de": "Umsiedlung"
  },
+ "big_money_election_modifier_desc": {
+  "en": "Wealthy interests dominate the election, boosting business confidence but undermining democratic [concept_legitimacy].",
+  "de": "Wohlhabende Interessengruppen dominieren die Wahl, was das Vertrauen der Wirtschaft stärkt, aber die demokratische [concept_legitimacy] untergräbt."
+ },
+ "biohacker_crackdown_modifier": {
+  "en": "Biohackers Suppressed",
+  "de": "Biohacker unterdrückt"
+ },
+ "biohacker_legalized_modifier": {
+  "en": "Licensed Biohacking",
+  "de": "Lizenziertes Biohacking"
+ },
+ "biohacker_legalized_modifier_desc": {
+  "en": "Formerly underground biohackers now operate under license, contributing to research while requiring regulatory oversight.",
+  "de": "Ehemals im Untergrund tätige Biohacker arbeiten nun lizenziert, tragen zur Forschung bei und erfordern zugleich behördliche Aufsicht."
+ },
+ "biohacker_research_modifier": {
+  "en": "Biohacker Research Program",
+  "de": "Forschungsprogramm für Biohacking"
+ },
+ "biohacker_research_modifier_desc": {
+  "en": "Academic researchers studying underground biohacking techniques have made breakthroughs in human augmentation technology.",
+  "de": "Wissenschaftler, die Untergrund-Biohacking-Techniken erforschen, haben Durchbrüche in der Technologie der menschlichen Augmentierung erzielt."
+ },
+ "border_dispute_active_modifier_desc": {
+  "en": "A territorial dispute with a neighboring nation over colonial-era borders is causing diplomatic tension.",
+  "de": "Ein Grenzstreit mit einem Nachbarland über Grenzen aus der Kolonialzeit sorgt für diplomatische Spannungen."
+ },
+ "border_dispute_resolved_modifier_desc": {
+  "en": "The resolution of a border dispute has brought stability and improved relations with our neighbors.",
+  "de": "Die Beilegung eines Grenzstreits hat Stabilität gebracht und die Beziehungen zu unseren Nachbarn verbessert."
+ },
+ "bubble_inertia_extreme": {
+  "en": "Speculative Euphoria",
+  "de": "Spekulative Euphorie"
+ },
+ "bubble_inertia_extreme_desc": {
+  "en": "Rampant speculation drives a powerful feedback loop — prices rise because prices are rising.",
+  "de": "Ungezügelte Spekulation treibt eine starke Rückkopplungsschleife an — die Preise steigen, weil die Preise steigen."
+ },
+ "bubble_inertia_high": {
+  "en": "Speculative Feedback",
+  "de": "Spekulative Rückkopplung"
+ },
+ "bubble_inertia_high_desc": {
+  "en": "Elevated speculation creates a self-reinforcing cycle of rising prices and investor confidence.",
+  "de": "Erhöhte Spekulation erzeugt einen sich selbst verstärkenden Kreislauf aus steigenden Preisen und Anlegervertrauen."
+ },
+ "bubble_inertia_moderate": {
+  "en": "Speculative Inertia",
+  "de": "Spekulative Trägheit"
+ },
+ "bubble_inertia_moderate_desc": {
+  "en": "Rising asset prices attract further speculation, maintaining market momentum.",
+  "de": "Steigende Vermögenspreise ziehen weitere Spekulation an und halten die Marktdynamik aufrecht."
+ },
+ "bull_market": {
+  "en": "Bull Market",
+  "de": "Bullenmarkt"
+ },
+ "bull_market_desc": {
+  "en": "A period of rising stock prices and investor confidence, often leading to increased economic activity.",
+  "de": "Eine Phase steigender Aktienkurse und wachsenden Anlegervertrauens, die oft zu höherer Wirtschaftsaktivität führt."
+ },
+ "bureaucracy_gain_medium": {
+  "en": "Moderate Bureaucratic Boost",
+  "de": "Mäßiger Bürokratieschub"
+ },
+ "bureaucracy_gain_small": {
+  "en": "Small Bureaucratic Boost",
+  "de": "Kleiner Bürokratieschub"
+ },
+ "bureaucracy_gain_tiny": {
+  "en": "Tiny Bureaucratic Boost",
+  "de": "Winziger Bürokratieschub"
+ },
+ "bureaucracy_loss_medium": {
+  "en": "Moderate Bureaucratic Strain",
+  "de": "Mäßige Bürokratiebelastung"
+ },
+ "bureaucracy_loss_small": {
+  "en": "Small Bureaucratic Strain",
+  "de": "Kleine Bürokratiebelastung"
+ },
+ "bureaucracy_loss_tiny": {
+  "en": "Tiny Bureaucratic Strain",
+  "de": "Winzige Bürokratiebelastung"
+ },
+ "campaign_scandal_ignored_modifier_desc": {
+  "en": "A campaign finance scandal has been ignored by the ruling party, eroding public trust.",
+  "de": "Ein Wahlkampffinanzierungsskandal wurde von der Regierungspartei ignoriert, was das Vertrauen der Öffentlichkeit untergräbt."
+ },
+ "campaign_scandal_investigation_modifier_desc": {
+  "en": "An official investigation into campaign finance irregularities is underway.",
+  "de": "Eine offizielle Untersuchung von Unregelmäßigkeiten bei der Wahlkampffinanzierung läuft."
+ },
+ "campaign_scandal_reform_modifier_desc": {
+  "en": "Public pressure has created momentum for meaningful campaign finance reform.",
+  "de": "Öffentlicher Druck hat Schwung für eine wirksame Reform der Wahlkampffinanzierung erzeugt."
+ },
+ "carbon_tax_modifier": {
+  "en": "Carbon Tax",
+  "de": "CO2-Steuer"
+ },
+ "carbon_tax_modifier_desc": {
+  "en": "A levy on fossil fuel industries that reduces coal and oil output while raising taxes on manufacturing and fossil extraction. Directly reduces the nation's greenhouse gas emissions by 20%.",
+  "de": "Eine Abgabe auf fossile Industrien, die die Kohle- und Ölförderung senkt und zugleich die Steuern auf verarbeitendes Gewerbe und fossile Förderung erhöht. Senkt die Treibhausgasemissionen des Landes direkt um 20%."
+ },
+ "ch_adopted_education": {
+  "en": "Foreign Education Model",
+  "de": "Ausländisches Bildungsmodell"
+ },
+ "ch_adopted_education_desc": {
+  "en": "Adoption of the hegemon's education system is boosting research and [concept_education_access], but foreign ideology seeps through the curricula.",
+  "de": "Die Übernahme des Bildungssystems der Hegemonialmacht steigert die Forschung und den [concept_education_access], doch fremde Ideologie sickert durch die Lehrpläne."
+ },
+ "ch_art_commercialization": {
+  "en": "Art Commercialization",
+  "de": "Kommerzialisierung der Kunst"
+ },
+ "ch_art_commercialization_desc": {
+  "en": "Our cultural treasures are generating commercial revenue, though the commodification of art undermines artistic [concept_prestige].",
+  "de": "Unsere kulturellen Schätze erwirtschaften kommerzielle Einnahmen, doch die Kommerzialisierung der Kunst untergräbt das künstlerische [concept_prestige]."
+ },
+ "ch_brain_drain_remittances_desc": {
+  "en": "The exodus of talent weakens our research capacity, though remittances provide some economic benefit.",
+  "de": "Die Abwanderung von Talenten schwächt unsere Forschungskapazität, auch wenn Rücküberweisungen einen gewissen wirtschaftlichen Nutzen bringen."
+ },
+ "ch_cultural_adaptation": {
+  "en": "Cultural Adaptation",
+  "de": "Kulturelle Anpassung"
+ },
+ "ch_cultural_adaptation_desc": {
+  "en": "Modest investment in domestic cultural institutions provides a small boost to cultural relevance.",
+  "de": "Bescheidene Investitionen in einheimische Kultureinrichtungen bringen einen kleinen Schub für die kulturelle Bedeutung."
+ },
+ "ch_cultural_exchange": {
+  "en": "Cultural Exchange",
+  "de": "Kultureller Austausch"
+ },
+ "ch_cultural_exchange_desc": {
+  "en": "An openness to foreign ideas is stimulating intellectual exchange and accelerating research.",
+  "de": "Eine Offenheit gegenüber fremden Ideen fördert den geistigen Austausch und beschleunigt die Forschung."
+ },
+ "ch_cultural_institutes_program_desc": {
+  "en": "The state is funding museums, academies, and scholarship networks to turn domestic culture into a durable source of international influence, at a significant cost in [concept_authority].",
+  "de": "Der Staat finanziert Museen, Akademien und Stipendiennetzwerke, um die einheimische Kultur in eine dauerhafte Quelle internationalen Einflusses zu verwandeln — zu einem erheblichen Preis an [concept_authority]."
+ },
+ "ch_cultural_investment": {
+  "en": "Cultural Investment",
+  "de": "Kulturinvestition"
+ },
+ "ch_cultural_investment_desc": {
+  "en": "Investment in cultural institutions is boosting our creative output and research capabilities.",
+  "de": "Investitionen in Kultureinrichtungen steigern unsere kreative Produktion und unsere Forschungsfähigkeiten."
+ },
+ "ch_cultural_program_funding_cost_desc": {
+  "en": "State patronage for cultural programs carries a recurring financial cost for each funding level, scaled to the size of the economy.",
+  "de": "Staatliche Förderung von Kulturprogrammen verursacht für jede Förderstufe wiederkehrende Kosten, die sich an der Größe der Wirtschaft bemessen."
+ },
+ "ch_cultural_program_funding_desc": {
+  "en": "The state is directly funding cultural production, creating a flat increase in [concept_cultural_pull] that scales with the chosen funding level.",
+  "de": "Der Staat finanziert die kulturelle Produktion direkt und erzeugt so einen festen Anstieg der [concept_cultural_pull], der sich nach der gewählten Förderstufe richtet."
+ },
+ "ch_cultural_protectionism_program_desc": {
+  "en": "The government is shielding domestic culture from foreign competition, strengthening [concept_cultural_pull] and authority at the cost of openness (fewer migrants) and intellectual exchange (slower society research).",
+  "de": "Die Regierung schirmt die einheimische Kultur vor ausländischer Konkurrenz ab und stärkt so die [concept_cultural_pull] und die Autorität — auf Kosten von Offenheit (weniger Migranten) und geistigem Austausch (langsamere Gesellschaftsforschung)."
+ },
+ "ch_cultural_renaissance": {
+  "en": "Cultural Renaissance",
+  "de": "Kulturelle Renaissance"
+ },
+ "ch_cultural_renaissance_desc": {
+  "en": "A flowering of domestic creativity is boosting our cultural influence and research output.",
+  "de": "Eine Blüte der einheimischen Kreativität steigert unseren kulturellen Einfluss und unsere Forschungsleistung."
+ },
+ "ch_cultural_renaissance_ig_desc": {
+  "en": "The intelligentsia thrives during this period of cultural flourishing.",
+  "de": "Die Intelligenzija blüht in dieser Zeit kultureller Blüte auf."
+ },
+ "ch_cultural_resistance_ig_desc": {
+  "en": "The [concept_interest_group] draws strength from leading the resistance against foreign cultural influence.",
+  "de": "Die [concept_interest_group] schöpft Kraft daraus, den Widerstand gegen fremden kulturellen Einfluss anzuführen."
+ },
+ "ch_domestic_consolidation": {
+  "en": "Domestic Consolidation",
+  "de": "Innere Konsolidierung"
+ },
+ "ch_domestic_consolidation_desc": {
+  "en": "Investment in domestic institutions strengthens the state apparatus, improves bureaucratic efficiency, and boosts education rather than projecting cultural influence abroad.",
+  "de": "Investitionen in einheimische Institutionen stärken den Staatsapparat, verbessern die bürokratische Effizienz und fördern die Bildung, statt kulturellen Einfluss im Ausland zu projizieren."
+ },
+ "ch_domestic_education_defense_desc": {
+  "en": "A renewed commitment to domestic educational traditions strengthens state authority and cultural identity.",
+  "de": "Ein erneuertes Bekenntnis zu einheimischen Bildungstraditionen stärkt die staatliche Autorität und die kulturelle Identität."
+ },
+ "ch_domestic_university_focus_desc": {
+  "en": "Exclusive focus on domestic students strengthens our own education system but misses the opportunity to attract foreign talent.",
+  "de": "Die ausschließliche Konzentration auf einheimische Studierende stärkt unser eigenes Bildungssystem, verpasst aber die Chance, ausländische Talente anzuziehen."
+ },
+ "ch_entertainment_adaptation": {
+  "en": "Cultural Adaptation",
+  "de": "Kulturelle Anpassung"
+ },
+ "ch_entertainment_adaptation_desc": {
+  "en": "A creative blending of foreign and domestic entertainment traditions is producing something uniquely our own.",
+  "de": "Eine kreative Verschmelzung ausländischer und einheimischer Unterhaltungstraditionen bringt etwas ganz Eigenes hervor."
+ },
+ "ch_entertainment_embrace": {
+  "en": "Foreign Entertainment Embrace",
+  "de": "Offenheit für ausländische Unterhaltung"
+ },
+ "ch_entertainment_embrace_desc": {
+  "en": "Foreign entertainment enriches daily life, but traditional cultural authorities view the trend with alarm.",
+  "de": "Ausländische Unterhaltung bereichert den Alltag, doch traditionelle Kulturinstanzen betrachten den Trend mit Sorge."
+ },
+ "ch_entertainment_restriction": {
+  "en": "Entertainment Import Restrictions",
+  "de": "Einfuhrbeschränkungen für Unterhaltung"
+ },
+ "ch_entertainment_restriction_desc": {
+  "en": "Restrictions on foreign entertainment protect domestic cultural production and strengthen state authority.",
+  "de": "Beschränkungen ausländischer Unterhaltung schützen die einheimische Kulturproduktion und stärken die staatliche Autorität."
+ },
+ "ch_foreign_ideas_embrace_ig_desc": {
+  "en": "The [concept_interest_group] draws strength from embracing cosmopolitan foreign influences.",
+  "de": "Die [concept_interest_group] schöpft Kraft daraus, kosmopolitische ausländische Einflüsse zu begrüßen."
+ },
+ "ch_foreign_ideological_influence_ig_desc": {
+  "en": "Foreign cultural influence is boosting the [concept_political_strength] and appeal of this [concept_interest_group].",
+  "de": "Fremder kultureller Einfluss stärkt die [concept_political_strength] und die Attraktivität dieser [concept_interest_group]."
+ },
+ "ch_foreign_influence_crackdown_desc": {
+  "en": "A heavy-handed suppression of foreign cultural influence bolsters state authority but damages cultural relevance and [concept_legitimacy].",
+  "de": "Ein hartes Vorgehen gegen fremden kulturellen Einfluss stärkt die staatliche Autorität, schadet aber der kulturellen Bedeutung und der [concept_legitimacy]."
+ },
+ "ch_global_media_campaign_desc": {
+  "en": "The state is deliberately projecting its films, broadcasts, and press abroad, trading a large amount of authority for faster growth in [concept_prestige] and cultural reach.",
+  "de": "Der Staat verbreitet gezielt seine Filme, Sendungen und Presseerzeugnisse im Ausland und tauscht dafür einen großen Teil seiner Autorität gegen schnelleres Wachstum von [concept_prestige] und kultureller Reichweite ein."
+ },
+ "ch_hegemon_ideological_pressure_desc": {
+  "en": "The cultural hegemon's political ideology is fueling this movement, attracting supporters and radicalizing existing members.",
+  "de": "Die politische Ideologie der Kulturhegemonialmacht befeuert diese Bewegung, zieht Anhänger an und radikalisiert bestehende Mitglieder."
+ },
+ "ch_hegemon_ideological_pressure_weak_desc": {
+  "en": "The cultural hegemon's political ideology is lending modest fuel to this movement.",
+  "de": "Die politische Ideologie der Kulturhegemonialmacht gibt dieser Bewegung bescheidenen Auftrieb."
+ },
+ "ch_hegemon_model_pressure_desc": {
+  "en": "The world's leading cultural power runs the kind of state this movement wants. The more of the world's culture comes from countries sharing that model, the steadier the stream of converts.",
+  "de": "Die weltweit führende Kulturmacht betreibt genau die Art von Staat, die diese Bewegung anstrebt. Je mehr Weltkultur aus Ländern mit diesem Modell stammt, desto stetiger der Zustrom an Überzeugten."
+ },
+ "ch_hegemon_model_pressure_weak_desc": {
+  "en": "The world's leading cultural power runs a state this movement finds close enough to its own ideals, and lends it steady, modest support.",
+  "de": "Die weltweit führende Kulturmacht betreibt einen Staat, den diese Bewegung ihren eigenen Idealen nahe genug findet, und gewährt ihr stetige, bescheidene Unterstützung."
+ },
+ "ch_hegemonic_law_adopted_desc": {
+  "en": "Adopting laws under foreign cultural pressure has weakened the [concept_legitimacy] of the government in the eyes of its own people.",
+  "de": "Die Übernahme von Gesetzen unter fremdem kulturellem Druck hat die [concept_legitimacy] der Regierung in den Augen des eigenen Volkes geschwächt."
+ },
+ "ch_hegemonic_law_resistance_desc": {
+  "en": "The government's refusal to align with the cultural hegemon's political model has provoked unrest and damaged trade relations with countries that follow the prevailing international norms.",
+  "de": "Die Weigerung der Regierung, sich am politischen Modell der Kulturhegemonialmacht auszurichten, hat Unruhen ausgelöst und die Handelsbeziehungen zu Ländern beschädigt, die den vorherrschenden internationalen Normen folgen."
+ },
+ "ch_ideological_cordon": {
+  "en": "Ideological Cordon",
+  "de": "Ideologischer Kordon"
+ },
+ "ch_ideological_cordon_desc": {
+  "en": "Customs officers, censors and police are stretched along the border to keep a neighbour's political example out.",
+  "de": "Zollbeamte, Zensoren und Polizei sind entlang der Grenze postiert, um das politische Vorbild eines Nachbarn fernzuhalten."
+ },
+ "ch_international_university": {
+  "en": "International University Programs",
+  "de": "Internationale Universitätsprogramme"
+ },
+ "ch_international_university_desc": {
+  "en": "International scholarship programs attract the world's brightest minds to our universities, boosting research and migration at significant administrative cost.",
+  "de": "Internationale Stipendienprogramme ziehen die klügsten Köpfe der Welt an unsere Universitäten und steigern Forschung und Migration — zu erheblichen Verwaltungskosten."
+ },
+ "ch_language_academies": {
+  "en": "Language Academies Abroad",
+  "de": "Sprachakademien im Ausland"
+ },
+ "ch_language_academies_desc": {
+  "en": "State-sponsored language academies in foreign capitals formalize our linguistic dominance, extending cultural and diplomatic influence at considerable administrative cost.",
+  "de": "Staatlich geförderte Sprachakademien in ausländischen Hauptstädten festigen unsere sprachliche Vormachtstellung und erweitern unseren kulturellen und diplomatischen Einfluss — zu beträchtlichen Verwaltungskosten."
+ },
+ "ch_media_dominance": {
+  "en": "Media Dominance",
+  "de": "Mediendominanz"
+ },
+ "ch_media_dominance_desc": {
+  "en": "Our media apparatus dominates international discourse, granting exceptional cultural influence and political authority.",
+  "de": "Unser Medienapparat dominiert den internationalen Diskurs und verschafft uns außergewöhnlichen kulturellen Einfluss und politische Autorität."
+ },
+ "ch_media_freedom": {
+  "en": "Media Freedom",
+  "de": "Medienfreiheit"
+ },
+ "ch_media_freedom_desc": {
+  "en": "A free and open press attracts immigrants and enhances our [concept_legitimacy] and cultural [concept_prestige].",
+  "de": "Eine freie und offene Presse zieht Einwanderer an und stärkt unsere [concept_legitimacy] und unser kulturelles [concept_prestige]."
+ },
+ "ch_media_freedom_ig_desc": {
+  "en": "The intelligentsia appreciates the commitment to a free press.",
+  "de": "Die Intelligenzija weiß das Bekenntnis zu einer freien Presse zu schätzen."
+ },
+ "ch_model_anarchist": {
+  "en": "Anarchist",
+  "de": "Anarchistisch"
+ },
+ "ch_model_champion": {
+  "en": "Champion of Our Model",
+  "de": "Vorkämpfer unseres Modells"
+ },
+ "ch_model_champion_desc": {
+  "en": "We fund cultural attachés, translations and friendly newspapers abroad to spread our political model. Every country that trails us feels its pull more strongly while this lasts.",
+  "de": "Wir finanzieren Kulturattachés, Übersetzungen und uns wohlgesinnte Zeitungen im Ausland, um unser politisches Modell zu verbreiten. Jedes Land, das hinter uns zurückliegt, spürt seine Anziehungskraft währenddessen stärker."
+ },
+ "ch_model_communist": {
+  "en": "Communist / Vanguardist",
+  "de": "Kommunistisch / Avantgardistisch"
+ },
+ "ch_model_corporatist": {
+  "en": "Corporatist",
+  "de": "Korporatistisch"
+ },
+ "ch_model_exemplar": {
+  "en": "A Model at Home",
+  "de": "Ein Vorbild im eigenen Land"
+ },
+ "ch_model_exemplar_desc": {
+  "en": "We let our political model speak for itself through the way we govern at home.",
+  "de": "Wir lassen unser politisches Modell durch die Art, wie wir im eigenen Land regieren, für sich selbst sprechen."
+ },
+ "ch_model_fascist": {
+  "en": "Fascist / Ethnonationalist",
+  "de": "Faschistisch / Ethnonationalistisch"
+ },
+ "ch_model_liberal": {
+  "en": "Liberal / Progressive Democratic",
+  "de": "Liberal / Progressiv-demokratisch"
+ },
+ "ch_model_orphaned": {
+  "en": "A Model Without a Champion",
+  "de": "Ein Modell ohne Vorkämpfer"
+ },
+ "ch_model_orphaned_desc": {
+  "en": "The world's leading cultural power no longer runs a state like ours, and our critics at home say our model's time has passed.",
+  "de": "Die weltweit führende Kulturmacht betreibt keinen Staat mehr wie den unseren, und unsere Kritiker im eigenen Land sagen, die Zeit unseres Modells sei vorbei."
+ },
+ "ch_model_other": {
+  "en": "Mixed / Other",
+  "de": "Gemischt / Sonstiges"
+ },
+ "ch_model_reactionary": {
+  "en": "Reactionary / Authoritarian",
+  "de": "Reaktionär / Autoritär"
+ },
+ "ch_model_religious": {
+  "en": "Theocratic / Religious",
+  "de": "Theokratisch / Religiös"
+ },
+ "ch_model_republican": {
+  "en": "Republican",
+  "de": "Republikanisch"
+ },
+ "ch_model_socialist": {
+  "en": "Socialist / Cooperative",
+  "de": "Sozialistisch / Genossenschaftlich"
+ },
+ "ch_model_technocratic": {
+  "en": "Technocratic",
+  "de": "Technokratisch"
+ },
+ "ch_model_unknown": {
+  "en": "#lore not yet established#!",
+  "de": "#lore noch nicht festgelegt#!"
+ },
+ "ch_narrative_control": {
+  "en": "State Narrative Control",
+  "de": "Staatliche Narrativkontrolle"
+ },
+ "ch_narrative_control_desc": {
+  "en": "State censors are controlling the narrative, limiting foreign cultural influence at the cost of some authority and cultural relevance.",
+  "de": "Staatliche Zensoren kontrollieren das Narrativ und begrenzen fremden kulturellen Einfluss — auf Kosten von etwas Autorität und kultureller Bedeutung."
+ },
+ "ch_nationalist_rally_ig_desc": {
+  "en": "The [concept_interest_group] draws strength from a surge of nationalist sentiment against foreign cultural influence.",
+  "de": "Die [concept_interest_group] schöpft Kraft aus einem Aufschwung nationalistischer Stimmung gegen fremden kulturellen Einfluss."
+ },
+ "ch_natural_lingua_franca_desc": {
+  "en": "Our language spreads organically through commerce and scholarship, opening new trade routes without the costs of formal promotion.",
+  "de": "Unsere Sprache verbreitet sich organisch durch Handel und Wissenschaft und eröffnet neue Handelsrouten ohne die Kosten gezielter Förderung."
+ },
+ "ch_non_aligned_stance_desc": {
+  "en": "We have refused to choose between the leading cultural powers, and our people take pride in it.",
+  "de": "Wir haben uns geweigert, uns zwischen den führenden Kulturmächten zu entscheiden, und unser Volk ist stolz darauf."
+ },
+ "ch_selective_education": {
+  "en": "Selective Education Adoption",
+  "de": "Selektive Bildungsübernahme"
+ },
+ "ch_selective_education_desc": {
+  "en": "A pragmatic approach to foreign educational practices — adopting what works while preserving domestic traditions.",
+  "de": "Ein pragmatischer Umgang mit ausländischen Bildungspraktiken — man übernimmt, was funktioniert, und bewahrt zugleich die einheimischen Traditionen."
+ },
+ "ch_soft_power_dividend_desc": {
+  "en": "Our cultural [concept_prestige] is paying [concept_dividends] in international influence and immigration.",
+  "de": "Unser kulturelles [concept_prestige] zahlt [concept_dividends] in Form von internationalem Einfluss und Einwanderung."
+ },
+ "ch_state_propaganda": {
+  "en": "State Propaganda",
+  "de": "Staatspropaganda"
+ },
+ "ch_state_propaganda_desc": {
+  "en": "Cultural output has been redirected toward state messaging, boosting national [concept_prestige] and authority.",
+  "de": "Die kulturelle Produktion wurde auf staatliche Botschaften ausgerichtet, was das nationale [concept_prestige] und die Autorität stärkt."
+ },
+ "ch_state_propaganda_ig_desc": {
+  "en": "The intelligentsia chafes under the restrictions of state-directed cultural policy.",
+  "de": "Die Intelligenzija leidet unter den Beschränkungen der staatlich gelenkten Kulturpolitik."
+ },
+ "ch_talent_retention": {
+  "en": "Talent Retention Program",
+  "de": "Programm zur Bindung von Talenten"
+ },
+ "ch_talent_retention_desc": {
+  "en": "Funding for universities and research institutions helps retain our brightest minds.",
+  "de": "Die Förderung von Universitäten und Forschungseinrichtungen hilft, unsere klügsten Köpfe im Land zu halten."
+ },
+ "ch_tier_hegemon": {
+  "en": "#G CULTURAL HEGEMON#!",
+  "de": "#G KULTURHEGEMON#!"
+ },
+ "ch_tier_major": {
+  "en": "#G Major Cultural Power#!",
+  "de": "#G Bedeutende Kulturmacht#!"
+ },
+ "ch_tier_minor": {
+  "en": "Minor Cultural Influence",
+  "de": "Geringer kultureller Einfluss"
+ },
+ "ch_tier_moderate": {
+  "en": "#Y Moderate Cultural Influence#!",
+  "de": "#Y Mäßiger kultureller Einfluss#!"
+ },
+ "ch_tier_negligible": {
+  "en": "#R Negligible Cultural Influence#!",
+  "de": "#R Vernachlässigbarer kultureller Einfluss#!"
+ },
+ "ch_tier_significant": {
+  "en": "#Y Significant Cultural Presence#!",
+  "de": "#Y Bedeutende kulturelle Präsenz#!"
+ },
+ "ch_touring_exhibition": {
+  "en": "Touring Exhibition",
+  "de": "Wanderausstellung"
+ },
+ "ch_touring_exhibition_desc": {
+  "en": "An internationally touring art exhibition showcases our cultural achievements, boosting [concept_prestige] and cultural influence at the cost of administrative attention.",
+  "de": "Eine international tourende Kunstausstellung präsentiert unsere kulturellen Errungenschaften und steigert [concept_prestige] und kulturellen Einfluss — auf Kosten administrativer Aufmerksamkeit."
+ },
+ "ch_tourism_exploitation": {
+  "en": "Tourism Exploitation",
+  "de": "Tourismusausbeutung"
+ },
+ "ch_tourism_exploitation_desc": {
+  "en": "Aggressive monetization of the tourist trade squeezes more revenue from [concept_tourism_output] but damages our international reputation and cultural appeal.",
+  "de": "Die aggressive Vermarktung des Tourismus presst mehr Einnahmen aus dem [concept_tourism_output], schadet aber unserem internationalen Ansehen und unserer kulturellen Anziehungskraft."
+ },
+ "ch_tourism_infrastructure": {
+  "en": "Tourism Infrastructure",
+  "de": "Tourismusinfrastruktur"
+ },
+ "ch_tourism_infrastructure_desc": {
+  "en": "Investment in [concept_tourism_system] [concept_infrastructure] boosts the tourism industry and enhances cultural appeal, though it ties up significant [concept_authority].",
+  "de": "Investitionen in die [concept_tourism_system]-[concept_infrastructure] fördern die Tourismusbranche und steigern die kulturelle Anziehungskraft, binden jedoch erhebliche [concept_authority]."
+ },
+ "ch_world_exposition": {
+  "en": "International Cultural Outreach",
+  "de": "Internationale Kulturarbeit"
+ },
+ "ch_world_exposition_cost_desc": {
+  "en": "Sustained spending on touring shows, foreign cultural centers, and sponsored translations.",
+  "de": "Dauerhafte Ausgaben für Wanderausstellungen, ausländische Kulturzentren und geförderte Übersetzungen."
+ },
+ "ch_world_exposition_desc": {
+  "en": "Active state-sponsored projection of our culture abroad — touring exhibitions, foreign cultural centers, sponsored translations — drawing international attention, migration, and prestige while it runs.",
+  "de": "Aktive, staatlich geförderte Verbreitung unserer Kultur im Ausland — Wanderausstellungen, ausländische Kulturzentren, geförderte Übersetzungen —, die internationale Aufmerksamkeit, Migration und Prestige anzieht, solange sie läuft."
+ },
+ "cheaty": {
+  "en": "Debug Boost",
+  "de": "Debug-Schub"
+ },
+ "cheaty_desc": {
+  "en": "A powerful temporary modifier used for testing or special scripted effects.",
+  "de": "Ein starker temporärer Modifikator für Tests oder besondere skriptgesteuerte Effekte."
+ },
+ "chinese_union": {
+  "en": "Chinese Union",
+  "de": "Chinesische Union"
+ },
+ "civil_disobedience_concessions_modifier_desc": {
+  "en": "Limited concessions to civil disobedience campaigners have defused immediate tensions.",
+  "de": "Begrenzte Zugeständnisse an die Aktivisten des zivilen Ungehorsams haben die unmittelbaren Spannungen entschärft."
+ },
+ "civil_disobedience_crackdown_modifier_desc": {
+  "en": "Mass arrests of civil disobedience participants have restored immediate authority but at great cost to our reputation.",
+  "de": "Massenverhaftungen von Teilnehmern des zivilen Ungehorsams haben die unmittelbare Autorität wiederhergestellt, jedoch auf Kosten unseres Ansehens."
+ },
+ "civil_disobedience_movement_galvanized_desc": {
+  "en": "The spectacle of peaceful protesters being arrested has galvanized the civil rights movement and attracted international attention.",
+  "de": "Das Bild verhafteter friedlicher Demonstranten hat die Bürgerrechtsbewegung elektrisiert und internationale Aufmerksamkeit erregt."
+ },
+ "civil_rights_government_endorsement_modifier_desc": {
+  "en": "The government's bold endorsement of the civil rights march has energized [Concept('concept_political_movement', 'political movements')] and given voice to those demanding change.",
+  "de": "Die mutige Unterstützung des Bürgerrechtsmarschs durch die Regierung hat [Concept('concept_political_movement', 'Protestbewegungen')] neuen Schwung verliehen und denen eine Stimme gegeben, die Wandel fordern."
+ },
+ "civil_rights_hollow_victory_modifier_desc": {
+  "en": "The movement reached its peak. The law did not move. International observers and our own [GetInterestGroupVariant('ig_intelligentsia', GetPlayer).GetName] noticed.",
+  "de": "Die Bewegung erreichte ihren Höhepunkt. Das Gesetz rührte sich nicht. Internationale Beobachter und unsere eigene [GetInterestGroupVariant('ig_intelligentsia', GetPlayer).GetName] bemerkten es."
+ },
+ "civil_rights_investigation_modifier_desc": {
+  "en": "A formal investigation into the killing of a civil rights figure has earned some goodwill.",
+  "de": "Eine förmliche Untersuchung der Tötung einer Bürgerrechtsikone hat etwas Wohlwollen eingebracht."
+ },
+ "civil_rights_march_calming_desc": {
+  "en": "The government's concessions to marchers have calmed the civil rights movement, reducing the urgency of their demands.",
+  "de": "Die Zugeständnisse der Regierung an die Demonstranten haben die Bürgerrechtsbewegung beruhigt und die Dringlichkeit ihrer Forderungen verringert."
+ },
+ "civil_rights_march_momentum_modifier_desc": {
+  "en": "The peaceful civil rights march has generated positive momentum for reform and raised our nation's profile as a beacon of democracy.",
+  "de": "Der friedliche Bürgerrechtsmarsch hat positive Dynamik für Reformen erzeugt und das Ansehen unserer Nation als Leuchtturm der Demokratie gestärkt."
+ },
+ "civil_rights_martyrdom_modifier_desc": {
+  "en": "The death of a civil rights figure has galvanized the movement and shifted public sympathy toward reform.",
+  "de": "Der Tod einer Bürgerrechtsikone hat die Bewegung elektrisiert und die öffentliche Sympathie in Richtung Reform verschoben."
+ },
+ "civil_rights_phase_active_modifier_desc": {
+  "en": "The movement actively radicalizes oppressed [Concept('concept_pop', 'pops')] while disturbing public order.",
+  "de": "Die Bewegung radikalisiert aktiv unterdrückte [Concept('concept_pop', 'Pops')] und stört dabei die öffentliche Ordnung."
+ },
+ "civil_rights_phase_growing_modifier_desc": {
+  "en": "Marches and chapters spread; modest unrest tracks the movement.",
+  "de": "Märsche und Ortsgruppen breiten sich aus; die Bewegung wird von mäßigen Unruhen begleitet."
+ },
+ "civil_rights_phase_imminent_modifier_desc": {
+  "en": "Reform proposals dominate the legislative agenda; passing rights legislation has become noticeably easier.",
+  "de": "Reformvorschläge dominieren die Gesetzgebungsagenda; die Verabschiedung von Bürgerrechtsgesetzen ist merklich einfacher geworden."
+ },
+ "civil_rights_phase_marginal_modifier_desc": {
+  "en": "The movement is too weak to attract organized [Concept('concept_radical', 'radicals')].",
+  "de": "Die Bewegung ist zu schwach, um organisierte [Concept('concept_radical', 'Radikale')] anzuziehen."
+ },
+ "civil_rights_phase_pressuring_modifier_desc": {
+  "en": "Mass mobilization sharpens unrest; the political class scrambles to position itself.",
+  "de": "Massenmobilisierung verschärft die Unruhen; die politische Klasse ist bemüht, sich zu positionieren."
+ },
+ "civil_rights_support_bar_desc": {
+  "en": "Tracks momentum behind the civil rights movement. At 100, victory legislation passes; at 0, the movement collapses. Drift is shaped by laws, radicalization, and the policy stance you toggle below.",
+  "de": "Verfolgt die Dynamik hinter der Bürgerrechtsbewegung. Bei 100 wird das Siegesgesetz verabschiedet; bei 0 bricht die Bewegung zusammen. Die Entwicklung wird von Gesetzen, Radikalisierung und der unten wählbaren politischen Haltung bestimmt."
+ },
+ "civil_rights_suppression_modifier_desc": {
+  "en": "The suppression of civil rights demonstrators has damaged our reputation and increased social unrest.",
+  "de": "Die Unterdrückung von Bürgerrechtsdemonstranten hat unserem Ansehen geschadet und die sozialen Unruhen verstärkt."
+ },
+ "civil_rights_triumph_coopted_modifier_desc": {
+  "en": "On paper a victory. In practice, the moderates were promoted and the [Concept('concept_radical', 'radicals')] went quiet.",
+  "de": "Auf dem Papier ein Sieg. In der Praxis wurden die Gemäßigten befördert, und die [Concept('concept_radical', 'Radikalen')] verstummten."
+ },
+ "civil_rights_triumph_federal_modifier_desc": {
+  "en": "Federal civil rights legislation, signed at the capital, marks a new constitutional baseline.",
+  "de": "Ein in der Hauptstadt unterzeichnetes Bundesbürgerrechtsgesetz setzt eine neue verfassungsrechtliche Grundlage."
+ },
+ "civil_rights_triumph_gradualist_modifier_desc": {
+  "en": "A negotiated settlement closes the question with broad institutional buy-in.",
+  "de": "Eine ausgehandelte Einigung schließt die Frage mit breiter institutioneller Zustimmung ab."
+ },
+ "civil_rights_triumph_grassroots_modifier_desc": {
+  "en": "Mass mobilization carried the day. The movement remains organized and proud.",
+  "de": "Massenmobilisierung trug den Sieg davon. Die Bewegung bleibt organisiert und stolz."
+ },
+ "civil_rights_triumph_modifier_desc": {
+  "en": "Our nation's embrace of civil rights has earned us [concept_prestige] and goodwill.",
+  "de": "Das Bekenntnis unserer Nation zu den Bürgerrechten hat uns [concept_prestige] und Wohlwollen eingebracht."
+ },
+ "climate_accord_rejection_modifier": {
+  "en": "Climate Accord Rejected",
+  "de": "Klimaabkommen abgelehnt"
+ },
+ "climate_accord_rejection_modifier_desc": {
+  "en": "By rejecting the international climate accord, our fossil fuel industries operate without the constraints accepted by other nations, boosting coal and oil output at the cost of increased emissions.",
+  "de": "Durch die Ablehnung des internationalen Klimaabkommens arbeiten unsere fossilen Industrien ohne die von anderen Nationen akzeptierten Auflagen, was die Kohle- und Ölförderung steigert — auf Kosten höherer Emissionen."
+ },
+ "climate_accord_rejection_no_gw_modifier": {
+  "en": "Climate Accord Rejected",
+  "de": "Klimaabkommen abgelehnt"
+ },
+ "climate_accord_rejection_no_gw_modifier_desc": {
+  "en": "By rejecting the international climate accord, our fossil fuel industries operate without environmental constraints accepted by other nations, boosting coal and oil output at the cost of increased [concept_pollution_system].",
+  "de": "Durch die Ablehnung des internationalen Klimaabkommens arbeiten unsere fossilen Industrien ohne die von anderen Nationen akzeptierten Umweltauflagen, was die Kohle- und Ölförderung steigert — auf Kosten höherer [concept_pollution_system]."
+ },
+ "climate_adaptation_modifier": {
+  "en": "Climate Adaptation Program",
+  "de": "Klimaanpassungsprogramm"
+ },
+ "climate_adaptation_modifier_desc": {
+  "en": "Government spending on climate resilience [concept_infrastructure] - flood defences, heat-resistant crops, cooling centres. Lowers mortality and raises local standards of living, but carries a large political authority cost.",
+  "de": "Staatliche Ausgaben für klimaresiliente [concept_infrastructure] – Hochwasserschutz, hitzebeständige Nutzpflanzen, Kühlzentren. Senkt die Sterblichkeit und hebt den örtlichen Lebensstandard, kostet aber viel politische Autorität."
+ },
+ "climate_awareness_modifier": {
+  "en": "Climate Awareness Initiative",
+  "de": "Initiative für Klimabewusstsein"
+ },
+ "climate_awareness_modifier_desc": {
+  "en": "Scientists and academics have raised awareness of the changing climate. The government is funding preliminary studies into environmental protection, making it easier to establish environmental [Concept('concept_institution', 'institutions')].",
+  "de": "Wissenschaftler und Akademiker haben das Bewusstsein für den Klimawandel geschärft. Die Regierung finanziert Vorstudien zum Umweltschutz, was die Gründung von Umwelt-[Concept('concept_institution', 'Institutionen')] erleichtert."
+ },
+ "climate_carrying_on_modifier": {
+  "en": "Carrying On",
+  "de": "Weiter wie bisher"
+ },
+ "climate_carrying_on_modifier_desc": {
+  "en": "At four degrees of warming we have launched no programme and diverted nothing from industry. The factories keep running while the heat kills and the harvests fail.",
+  "de": "Bei vier Grad Erwärmung haben wir kein Programm gestartet und der Industrie nichts entzogen. Die Fabriken laufen weiter, während die Hitze tötet und die Ernten ausfallen."
+ },
+ "climate_crisis_emergency_modifier": {
+  "en": "Climate Crisis Emergency Response",
+  "de": "Notfallreaktion auf die Klimakrise"
+ },
+ "climate_crisis_emergency_modifier_desc": {
+  "en": "A massive emergency response to the climate crisis, diverting enormous resources to protect the population and rapidly build environmental [Concept('concept_institution', 'institutions')].",
+  "de": "Eine massive Notfallreaktion auf die Klimakrise lenkt enorme Ressourcen um, um die Bevölkerung zu schützen und rasch Umwelt-[Concept('concept_institution', 'Institutionen')] aufzubauen."
+ },
+ "climate_deregulation_modifier": {
+  "en": "Climate Deregulation",
+  "de": "Klimaderegulierung"
+ },
+ "climate_deregulation_modifier_desc": {
+  "en": "With the climate threat receding, we are rolling back environmental regulations. Industry benefits from reduced compliance costs and freed bureaucratic capacity, though emissions are creeping back up.",
+  "de": "Da die Klimabedrohung nachlässt, bauen wir Umweltauflagen ab. Die Industrie profitiert von geringeren Befolgungskosten und frei gewordener bürokratischer Kapazität, während die Emissionen wieder langsam steigen."
+ },
+ "climate_deregulation_no_gw_modifier": {
+  "en": "Climate Deregulation",
+  "de": "Klimaderegulierung"
+ },
+ "climate_deregulation_no_gw_modifier_desc": {
+  "en": "With the environmental threat receding, we are rolling back regulations. Industry benefits from reduced compliance costs and freed bureaucratic capacity, though [concept_pollution_system] is creeping back up.",
+  "de": "Da die Umweltbedrohung nachlässt, bauen wir Auflagen ab. Die Industrie profitiert von geringeren Befolgungskosten und frei gewordener bürokratischer Kapazität, während die [concept_pollution_system] wieder langsam steigt."
+ },
+ "climate_dismissal_boost_modifier": {
+  "en": "Business as Usual",
+  "de": "Business as usual"
+ },
+ "climate_dismissal_boost_modifier_desc": {
+  "en": "By dismissing climate warnings, our industries continue to operate without environmental restrictions. [concept_throughput] is higher, but so are greenhouse gas emissions.",
+  "de": "Indem wir Klimawarnungen ignorieren, arbeiten unsere Industrien weiterhin ohne Umweltauflagen. Der [concept_throughput] ist höher, aber ebenso die Treibhausgasemissionen."
+ },
+ "climate_dismissal_boost_no_gw_modifier": {
+  "en": "Business as Usual",
+  "de": "Business as usual"
+ },
+ "climate_dismissal_boost_no_gw_modifier_desc": {
+  "en": "By dismissing environmental warnings, our industries continue to operate without restrictions. [concept_throughput] is higher, but so is [concept_pollution_system].",
+  "de": "Indem wir Umweltwarnungen ignorieren, arbeiten unsere Industrien weiterhin ohne Auflagen. Der [concept_throughput] ist höher, aber ebenso die [concept_pollution_system]."
+ },
+ "climate_fortress_modifier": {
+  "en": "Fortress Nation",
+  "de": "Festung Nation"
+ },
+ "climate_fortress_modifier_desc": {
+  "en": "At four degrees of warming we keep our harvest at home and our borders shut. Our fields still feed us, but the heat kills, the factories falter, and the rest of the world will remember who closed the door.",
+  "de": "Bei vier Grad Erwärmung behalten wir unsere Ernte im eigenen Land und halten unsere Grenzen geschlossen. Unsere Felder ernähren uns noch, doch die Hitze tötet, die Fabriken stocken, und der Rest der Welt wird sich erinnern, wer die Tür geschlossen hat."
+ },
+ "climate_inaction_savings_modifier": {
+  "en": "Crisis Funds Diverted",
+  "de": "Krisengelder umgeleitet"
+ },
+ "climate_inaction_savings_modifier_desc": {
+  "en": "Rather than spending on costly climate adaptation, we are redirecting those resources to keep government operations running smoothly. The population suffers, but the treasury is better for it.",
+  "de": "Statt in teure Klimaanpassung zu investieren, lenken wir diese Mittel um, damit der Regierungsbetrieb reibungslos weiterläuft. Die Bevölkerung leidet, doch die Staatskasse profitiert davon."
+ },
+ "climate_measures_sunset_modifier": {
+  "en": "Climate Safeguards Lifted",
+  "de": "Klimaschutzmaßnahmen aufgehoben"
+ },
+ "climate_measures_sunset_modifier_desc": {
+  "en": "With temperatures returning to manageable levels, emergency climate regulations have been dismantled. Industry is thriving without environmental compliance costs, though emissions are rising again.",
+  "de": "Da die Temperaturen wieder auf ein beherrschbares Niveau zurückkehren, wurden die Klimanotstandsvorschriften aufgehoben. Die Industrie gedeiht ohne Umweltauflagenkosten, doch die Emissionen steigen wieder."
+ },
+ "climate_measures_sunset_no_gw_modifier": {
+  "en": "Climate Safeguards Lifted",
+  "de": "Klimaschutzmaßnahmen aufgehoben"
+ },
+ "climate_measures_sunset_no_gw_modifier_desc": {
+  "en": "Emergency environmental regulations have been dismantled. Industry is thriving without compliance costs, though [concept_pollution_system] is rising again.",
+  "de": "Die Umweltnotstandsvorschriften wurden aufgehoben. Die Industrie gedeiht ohne Auflagenkosten, doch die [concept_pollution_system] steigt wieder."
+ },
+ "climate_political_turmoil_modifier": {
+  "en": "Climate Political Turmoil",
+  "de": "Politischer Aufruhr um das Klima"
+ },
+ "climate_political_turmoil_modifier_desc": {
+  "en": "The clash between environmental and industrial interests has radicalised [Concept('concept_political_movement', 'political movements')] across the country.",
+  "de": "Der Zusammenstoß zwischen Umwelt- und Industrieinteressen hat [Concept('concept_political_movement', 'Protestbewegungen')] im ganzen Land radikalisiert."
+ },
+ "climate_refugee_rejection_modifier": {
+  "en": "Closed Borders to Climate Refugees",
+  "de": "Geschlossene Grenzen für Klimaflüchtlinge"
+ },
+ "climate_refugee_rejection_modifier_desc": {
+  "en": "The nation has closed its borders to climate refugees, drawing international condemnation but avoiding the strain of [concept_mass_migration].",
+  "de": "Die Nation hat ihre Grenzen für Klimaflüchtlinge geschlossen, was internationale Verurteilung nach sich zieht, aber die Belastung durch [concept_mass_migration] vermeidet."
+ },
+ "climate_refugee_welcome_modifier": {
+  "en": "Climate Refugee Welcome Program",
+  "de": "Aufnahmeprogramm für Klimaflüchtlinge"
+ },
+ "climate_refugee_welcome_modifier_desc": {
+  "en": "The nation has opened its borders to climate refugees, gaining international [concept_prestige] but straining local resources.",
+  "de": "Die Nation hat ihre Grenzen für Klimaflüchtlinge geöffnet und gewinnt internationales [concept_prestige], belastet dabei jedoch die örtlichen Ressourcen."
+ },
+ "climate_summit_leader_modifier": {
+  "en": "Climate Summit Leadership",
+  "de": "Führungsrolle beim Klimagipfel"
+ },
+ "climate_summit_leader_modifier_desc": {
+  "en": "Our nation took the lead at an international climate summit, gaining enormous [concept_prestige] and demonstrating commitment to reducing emissions.",
+  "de": "Unsere Nation übernahm die Führung bei einem internationalen Klimagipfel, gewann dabei enormes [concept_prestige] und bewies ihr Engagement für die Senkung der Emissionen."
+ },
+ "climate_summit_leader_no_gw_modifier": {
+  "en": "Climate Summit Leadership",
+  "de": "Führungsrolle beim Klimagipfel"
+ },
+ "climate_summit_leader_no_gw_modifier_desc": {
+  "en": "Our nation took the lead at an international environmental summit, gaining enormous [concept_prestige] and demonstrating commitment to reducing [concept_pollution_system].",
+  "de": "Unsere Nation übernahm die Führung bei einem internationalen Umweltgipfel, gewann dabei enormes [concept_prestige] und bewies ihr Engagement für die Senkung der [concept_pollution_system]."
+ },
+ "climate_summit_pledge_modifier": {
+  "en": "Climate Summit Signatory",
+  "de": "Unterzeichner des Klimagipfels"
+ },
+ "climate_summit_pledge_modifier_desc": {
+  "en": "Our nation signed an international climate accord, pledging to reduce emissions in solidarity with the global community.",
+  "de": "Unsere Nation unterzeichnete ein internationales Klimaabkommen und verpflichtete sich, die Emissionen in Solidarität mit der Weltgemeinschaft zu senken."
+ },
+ "climate_summit_pledge_no_gw_modifier": {
+  "en": "Climate Summit Signatory",
+  "de": "Unterzeichner des Klimagipfels"
+ },
+ "climate_summit_pledge_no_gw_modifier_desc": {
+  "en": "Our nation signed an international environmental accord, pledging to reduce [concept_pollution_system] in solidarity with the global community.",
+  "de": "Unsere Nation unterzeichnete ein internationales Umweltabkommen und verpflichtete sich, die [concept_pollution_system] in Solidarität mit der Weltgemeinschaft zu senken."
+ },
+ "climate_survival_footing_modifier": {
+  "en": "Survival Footing",
+  "de": "Überlebensmodus"
+ },
+ "climate_survival_footing_modifier_desc": {
+  "en": "At four degrees of warming the state has taken over cooling, water and food distribution, and the administration can do little else. Our people are spared the worst of the heat; our fields and factories are not.",
+  "de": "Bei vier Grad Erwärmung hat der Staat die Verteilung von Kühlung, Wasser und Nahrung übernommen, und die Verwaltung kann kaum noch etwas anderes leisten. Unser Volk bleibt vom Schlimmsten der Hitze verschont; unsere Felder und Fabriken nicht."
+ },
+ "climate_turmoil_movement_radicalism": {
+  "en": "Climate Turmoil (Environmental)",
+  "de": "Klimabedingter Aufruhr (Umwelt)"
+ },
+ "climate_turmoil_movement_radicalism_desc": {
+  "en": "Political [concept_turmoil] over climate change is radicalizing the environmental movement, pushing activists toward more extreme demands.",
+  "de": "Politischer [concept_turmoil] über den Klimawandel radikalisiert die Umweltbewegung und treibt Aktivisten zu extremeren Forderungen."
+ },
+ "climate_victory_dividend_modifier": {
+  "en": "Climate Victory Dividend",
+  "de": "Dividende des Klimasiegs"
+ },
+ "climate_victory_dividend_modifier_desc": {
+  "en": "Having declared victory over climate change, our nation basks in [concept_prestige] and channels former climate spending into economic growth. Some worry this complacency may prove premature.",
+  "de": "Nachdem sie den Sieg über den Klimawandel erklärt hat, sonnt sich unsere Nation in [concept_prestige] und lenkt frühere Klimaausgaben in Wirtschaftswachstum um. Manche befürchten, diese Selbstzufriedenheit könnte verfrüht sein."
+ },
+ "climate_victory_dividend_no_gw_modifier": {
+  "en": "Climate Victory Dividend",
+  "de": "Dividende des Klimasiegs"
+ },
+ "climate_victory_dividend_no_gw_modifier_desc": {
+  "en": "Having declared victory over environmental challenges, our nation basks in [concept_prestige] and channels former environmental spending into economic growth. Some worry this complacency may prove premature.",
+  "de": "Nachdem sie den Sieg über die Umweltherausforderungen erklärt hat, sonnt sich unsere Nation in [concept_prestige] und lenkt frühere Umweltausgaben in Wirtschaftswachstum um. Manche befürchten, diese Selbstzufriedenheit könnte verfrüht sein."
+ },
+ "coastal_flood_defense_modifier_desc": {
+  "en": "Ministry-coordinated engineering projects have constructed flood barriers and drainage systems, reducing port disruption and improving [concept_infrastructure].",
+  "de": "Vom Ministerium koordinierte Bauprojekte haben Hochwasserbarrieren und Entwässerungssysteme errichtet, was Hafenstörungen verringert und die [concept_infrastructure] verbessert."
+ },
+ "coastal_flooding_modifier": {
+  "en": "Coastal Flooding",
+  "de": "Küstenüberflutung"
+ },
+ "coastal_flooding_modifier_desc": {
+  "en": "Rising sea levels have flooded coastal areas, disrupting ports, fishing, and lowering the [concept_sol].",
+  "de": "Der steigende Meeresspiegel hat Küstengebiete überflutet, stört Häfen und Fischerei und senkt den [concept_sol]."
+ },
+ "coastal_relocation_modifier": {
+  "en": "Coastal Population Relocation",
+  "de": "Umsiedlung der Küstenbevölkerung"
+ },
+ "coastal_relocation_modifier_desc": {
+  "en": "We are relocating coastal populations inland to escape rising sea levels. The disruption to daily life is severe, but reduced port dependency and new migration patterns may prove beneficial.",
+  "de": "Wir siedeln die Küstenbevölkerung ins Landesinnere um, um dem steigenden Meeresspiegel zu entgehen. Die Störung des Alltags ist gravierend, doch die geringere Abhängigkeit von Häfen und neue Migrationsmuster könnten sich als nützlich erweisen."
+ },
+ "colonial_assimilation_disruption_modifier_desc": {
+  "en": "Forced cultural conversion stalls the local economy.",
+  "de": "Erzwungene kulturelle Umwandlung bremst die örtliche Wirtschaft."
+ },
+ "colonial_crackdown_modifier": {
+  "en": "Colonial Crackdown",
+  "de": "Koloniales Durchgreifen"
+ },
+ "colonial_crackdown_modifier_desc": {
+  "en": "The government has committed to military suppression of independence movements in our colonies. Garrison forces operate with hardened resolve, but the protracted war drives up the cost of military goods at home and the anti-war intelligentsia is gaining political momentum.",
+  "de": "Die Regierung hat sich zur militärischen Unterdrückung von Unabhängigkeitsbewegungen in unseren Kolonien verpflichtet. Die Garnisonstruppen handeln mit gestählter Entschlossenheit, doch der langgezogene Krieg treibt die Kosten für Militärgüter im Mutterland in die Höhe, und die kriegskritische Intelligenzija gewinnt an politischem Schwung."
+ },
+ "colonial_crumbling_movement_radicalism_desc": {
+  "en": "The disintegration of our colonial empire has emboldened the civil rights movement, whose demands grow ever more urgent.",
+  "de": "Der Zerfall unseres Kolonialreichs hat der Bürgerrechtsbewegung Auftrieb gegeben, deren Forderungen immer dringlicher werden."
+ },
+ "colonial_cultural_assimilation_modifier_desc": {
+  "en": "A government program is promoting cultural [concept_assimilation] of colonial populations, accelerating acceptance growth.",
+  "de": "Ein Regierungsprogramm fördert die kulturelle [concept_assimilation] der kolonialen Bevölkerung und beschleunigt das Wachstum der Akzeptanz."
+ },
+ "colonial_culture_change": {
+  "en": "Colonial Culture Change",
+  "de": "Kolonialer Kulturwandel"
+ },
+ "colonial_culture_change_action_notification_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] has changed the culture and religion of [TARGET_COUNTRY.GetName].",
+  "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat die Kultur und Religion [TARGET_COUNTRY.GetAltName('GEN')] geändert."
+ },
+ "colonial_culture_change_desc": {
+  "en": "Colonial Culture Change is a [concept_diplomatic_action] that allows a country to change the culture and religion of a colonial subject.",
+  "de": "Kolonialer Kulturwandel ist eine [concept_diplomatic_action], die es einem Land erlaubt, die Kultur und Religion eines kolonialen Klientelstaats zu ändern."
+ },
+ "colonial_development_investment_expense_modifier_desc": {
+  "en": "Monthly outlay for the Colonial Development Investment program. Scales with national [concept_gdp]; appears as a line item in the budget.",
+  "de": "Monatliche Ausgabe für das Programm Koloniale Entwicklungsinvestition. Skaliert mit dem nationalen [concept_gdp]; erscheint als Posten im Haushalt."
+ },
+ "colonial_development_investment_modifier_desc": {
+  "en": "The government is investing in [concept_infrastructure] and [Concept('concept_institution', 'institutions')] in colonial territories, draining bureaucratic resources.",
+  "de": "Die Regierung investiert in [concept_infrastructure] und [Concept('concept_institution', 'Institutionen')] in den Kolonialgebieten, was bürokratische Ressourcen erschöpft."
+ },
+ "colonial_empire_collapsed_modifier_desc": {
+  "en": "Our colonial empire has collapsed. The loss of overseas territories has dealt a severe blow to national [concept_prestige] and living standards.",
+  "de": "Unser Kolonialreich ist zusammengebrochen. Der Verlust der Überseegebiete hat dem nationalen [concept_prestige] und dem Lebensstandard einen schweren Schlag versetzt."
+ },
+ "colonial_empire_crumbling_modifier_desc": {
+  "en": "Our colonial empire is on the verge of collapse. Widespread unrest and radical movements threaten to tear our overseas territories away.",
+  "de": "Unser Kolonialreich steht am Rande des Zusammenbruchs. Weitverbreitete Unruhen und radikale Bewegungen drohen, unsere Überseegebiete loszureißen."
+ },
+ "colonial_empire_solidified_modifier_desc": {
+  "en": "Our colonial territories have been fully integrated into the nation. Cultural acceptance is high and the overseas lands are now permanent parts of our country.",
+  "de": "Unsere Kolonialgebiete wurden vollständig in die Nation integriert. Die kulturelle Akzeptanz ist hoch, und die Überseegebiete sind nun dauerhafter Bestandteil unseres Landes."
+ },
+ "colonial_empire_under_pressure_modifier_desc": {
+  "en": "Our colonial empire is crumbling. International pressure and local unrest make every territory costlier to hold.",
+  "de": "Unser Kolonialreich zerfällt. Internationaler Druck und örtliche Unruhen machen das Halten jedes Gebiets teurer."
+ },
+ "colonial_integration_progress_modifier_desc": {
+  "en": "A colonial territory has reached a milestone in integration, with high cultural acceptance among the local population.",
+  "de": "Ein Kolonialgebiet hat einen Meilenstein der Integration erreicht, mit hoher kultureller Akzeptanz in der örtlichen Bevölkerung."
+ },
+ "colonial_military_garrison_modifier_desc": {
+  "en": "Military forces are stationed in colonial territories to maintain order, reducing our available military projection.",
+  "de": "Militärkräfte sind in den Kolonialgebieten stationiert, um die Ordnung aufrechtzuerhalten, was unsere verfügbare militärische Projektionskraft verringert."
+ },
+ "colonial_overreach_tt": {
+  "en": "Imperial overreach (colonies vs. metropole size)",
+  "de": "Imperiale Überdehnung (Kolonien im Verhältnis zur Größe des Mutterlands)"
+ },
+ "colonial_pressure_movement_radicalism_desc": {
+  "en": "Colonial [concept_ch_instability] is radicalizing civil rights advocates, who see the empire's weakness as an opportunity for change.",
+  "de": "Koloniale [concept_ch_instability] radikalisiert Bürgerrechtler, die in der Schwäche des Imperiums eine Chance auf Wandel sehen."
+ },
+ "colonial_reparations_modifier": {
+  "en": "Colonial Reparations Paid",
+  "de": "Koloniale Reparationen gezahlt"
+ },
+ "colonial_reparations_modifier_desc": {
+  "en": "The government is paying reparations to a former colony, acknowledging past wrongs at significant financial cost.",
+  "de": "Die Regierung zahlt Reparationen an eine ehemalige Kolonie und erkennt damit vergangenes Unrecht an — zu erheblichen finanziellen Kosten."
+ },
+ "colonial_stability_bar_desc": {
+  "en": "100: empire integrated. 0: collapse.",
+  "de": "100: Reich integriert. 0: Zusammenbruch."
+ },
+ "colonial_unrest_suppressed_modifier_desc": {
+  "en": "Military force has been used to suppress unrest in a colonial territory, at the cost of our international reputation.",
+  "de": "Militärische Gewalt wurde eingesetzt, um Unruhen in einem Kolonialgebiet zu unterdrücken — auf Kosten unseres internationalen Ansehens."
+ },
+ "colonial_war_exhaustion_modifier_desc": {
+  "en": "We have withdrawn from a costly colonial war. The retreat has damaged our reputation and the credibility of our military projection abroad.",
+  "de": "Wir haben uns aus einem kostspieligen Kolonialkrieg zurückgezogen. Der Rückzug hat unserem Ansehen und der Glaubwürdigkeit unserer militärischen Projektionskraft im Ausland geschadet."
+ },
+ "commonwealth_legacy_modifier": {
+  "en": "Commonwealth Legacy",
+  "de": "Vermächtnis des Commonwealth"
+ },
+ "commonwealth_path_modifier": {
+  "en": "The Commonwealth Path",
+  "de": "Der Weg des Commonwealth"
+ },
  "concept_antimatter_facility": {
   "en": "Antimatter Facility",
   "de": "Antimaterie-Eindämmungsanlage"
+ },
+ "concept_antimatter_facility_desc": {
+  "en": "A high-energy particle physics complex that produces antimatter for civilian and military use. Each level provides 5 sub-building slots for Antimatter Engines (power generation) and Antimatter Warhead Plants (weapons production).",
+  "de": "Ein Hochenergie-Teilchenphysikkomplex, der Antimaterie für zivile und militärische Zwecke erzeugt. Jede Stufe bietet 5 Unterbau-Slots für Antimaterie-Triebwerke (Energieerzeugung) und Antimaterie-Sprengkopfanlagen (Waffenproduktion)."
+ },
+ "concept_asset_relief_program_desc": {
+  "en": "Government purchase of distressed financial assets from private banks during a [concept_banking_crash], intended to restore solvency and confidence. Politically toxic — taxpayers fund what is widely perceived as a bailout of the financial sector.",
+  "de": "Staatlicher Aufkauf notleidender Finanzanlagen von Privatbanken während eines [concept_banking_crash], um Solvenz und Vertrauen wiederherzustellen. Politisch hochbrisant — die Steuerzahler finanzieren, was weithin als Rettung des Finanzsektors wahrgenommen wird."
  },
  "concept_banking_contagion": {
   "en": "Banking Contagion",
   "de": "Bankenansteckung"
  },
+ "concept_banking_contagion_desc": {
+  "en": "When a major economy experiences a [concept_banking_crash], the financial shock can spread to other countries through trade links and capital flows. Countries with larger trade exposure to the crash source are more vulnerable to contagion effects.",
+  "de": "Wenn eine bedeutende Volkswirtschaft einen [concept_banking_crash] erleidet, kann sich der finanzielle Schock über Handelsverflechtungen und Kapitalströme auf andere Länder ausbreiten. Länder mit stärkerer Handelsverflechtung mit dem Ursprungsland der Krise sind anfälliger für Ansteckungseffekte."
+ },
  "concept_banking_crash": {
   "en": "Banking Crash",
   "de": "Bankencrash"
+ },
+ "concept_banking_crash_desc": {
+  "en": "A sudden financial collapse triggered when [concept_bubble_pressure] is high. A crash dramatically reduces the financial cycle value, wipes out bubble pressure, and can trigger [concept_banking_contagion] that spreads to other countries with interlinked economies. The probability of a crash depends on bubble pressure and is scaled by the [concept_banking_crash] Likelihood modifier from [concept_financial_regulation] laws.",
+  "de": "Ein plötzlicher finanzieller Zusammenbruch, ausgelöst durch hohen [concept_bubble_pressure]. Ein Crash senkt den Wert des Finanzzyklus drastisch, löscht den Blasendruck aus und kann eine [concept_banking_contagion] auslösen, die sich auf andere, wirtschaftlich verflochtene Länder ausbreitet. Die Wahrscheinlichkeit eines Crashs hängt vom Blasendruck ab und wird durch den Modifikator „Wahrscheinlichkeit für [concept_banking_crash]“ aus den Gesetzen zur [concept_financial_regulation] skaliert."
  },
  "concept_banking_cycle": {
   "en": "Banking Cycle",
   "de": "Bankenzyklus"
  },
+ "concept_banking_cycle_desc": {
+  "en": "A financial cycle simulation tracking three key variables: [concept_banking_cycle] value (0–100, representing economic phase from bust to boom), [concept_banking_momentum] (rate and direction of change), and [concept_bubble_pressure]. The cycle drives periodic booms, busts, and crashes that affect the entire economy. Market economies experience this as a traditional financial cycle, while command economies see it as administrative strain and coordination pressure, and cooperative economies track it as overextension of worker commitments. [concept_financial_regulation] laws control volatility and crash risk.",
+  "de": "Eine Simulation des Finanzzyklus, die drei Schlüsselvariablen verfolgt: den Wert des [concept_banking_cycle] (0–100, von Flaute bis Boom), die [concept_banking_momentum] (Geschwindigkeit und Richtung der Veränderung) und den [concept_bubble_pressure]. Der Zyklus treibt periodische Booms, Flauten und Crashs an, die die gesamte Wirtschaft betreffen. Marktwirtschaften erleben dies als klassischen Finanzzyklus, während Planwirtschaften es als administrative Belastung und Koordinationsdruck erfahren und genossenschaftliche Wirtschaften es als Überdehnung der Verpflichtungen der Arbeiter verfolgen. Gesetze zur [concept_financial_regulation] steuern Volatilität und Crash-Risiko."
+ },
  "concept_banking_momentum": {
   "en": "Banking Momentum",
   "de": "Bankendynamik"
+ },
+ "concept_banking_momentum_desc": {
+  "en": "The rate and direction of change in the [concept_banking_cycle]. Positive momentum pushes the cycle toward expansion, negative momentum toward contraction. Momentum is influenced by random nudges (scaled by banking volatility modifiers), fiscal policy, and mean-reversion forces that pull the cycle back toward equilibrium. In command economies this reflects coordination speed; in cooperative economies, reinvestment pace.",
+  "de": "Die Geschwindigkeit und Richtung der Veränderung im [concept_banking_cycle]. Positive Dynamik treibt den Zyklus in Richtung Expansion, negative Dynamik in Richtung Kontraktion. Die Dynamik wird durch zufällige Impulse (skaliert durch Volatilitätsmodifikatoren des Bankwesens), Finanzpolitik und Rückkehrkräfte zum Gleichgewicht beeinflusst. In Planwirtschaften spiegelt dies die Koordinationsgeschwindigkeit wider, in genossenschaftlichen Wirtschaften das Reinvestitionstempo."
  },
  "concept_bubble_pressure": {
   "en": "Bubble Pressure",
   "de": "Blasendruck"
  },
+ "concept_bubble_pressure_desc": {
+  "en": "A measure of speculative excess building up in the financial system (0–100). [concept_bubble_pressure] accumulates during boom phases when [concept_banking_momentum] is positive and cycle value is high. When bubble pressure is high, the risk of a [concept_banking_crash] increases dramatically. In command economies, this manifests as administrative strain; in cooperative economies, as overextension of commitments. Bubble pressure decays slowly over time and drops sharply after a crash.",
+  "de": "Ein Maß für spekulative Exzesse, die sich im Finanzsystem aufbauen (0–100). [concept_bubble_pressure] baut sich in Boomphasen auf, wenn die [concept_banking_momentum] positiv und der Zykluswert hoch ist. Bei hohem Blasendruck steigt das Risiko eines [concept_banking_crash] drastisch. In Planwirtschaften äußert sich dies als administrative Belastung, in genossenschaftlichen Wirtschaften als Überdehnung von Verpflichtungen. Der Blasendruck baut sich im Laufe der Zeit langsam ab und sinkt nach einem Crash stark."
+ },
  "concept_capital_controls": {
   "en": "Capital Controls",
   "de": "Kapitalverkehrskontrollen"
+ },
+ "concept_capital_controls_desc": {
+  "en": "Restrictions on cross-border movement of financial capital. A country cannot have a fixed exchange rate, free movement of capital and an interest rate of its own all at once; controls give up the second to keep the other two. While they hold, a gap between the policy rate and the world rate moves the exchange rate, the gold reserve and confidence in a peg only a quarter as much. They signal distress, damage relations with the great powers, and — kept on in peacetime — turn the owners of the trapped capital against the government.",
+  "de": "Beschränkungen des grenzüberschreitenden Kapitalverkehrs. Ein Land kann nicht gleichzeitig einen festen Wechselkurs, freien Kapitalverkehr und eine eigene Zinspolitik haben; Kapitalverkehrskontrollen geben Letzteres auf, um die anderen beiden zu behalten. Solange sie bestehen, wirkt sich eine Lücke zwischen dem Leitzins und dem Weltzins nur zu einem Viertel auf Wechselkurs, Goldreserve und das Vertrauen in eine Bindung aus. Sie signalisieren wirtschaftliche Notlage, schaden den Beziehungen zu den Großmächten und wenden — bleiben sie in Friedenszeiten bestehen — die Besitzer des eingesperrten Kapitals gegen die Regierung."
+ },
+ "concept_ch_art_diminishing_returns_desc": {
+  "en": "Above 33% of global $fine_art$ production, each additional point of share counts for less. 50% global share scores about 43 instead of 50, 75% scores about 48 instead of 75, and even total dominance (100%) caps at 50. This keeps a single runaway producer from automatically winning cultural hegemony, while still rewarding gains in the contested 33–60% range.",
+  "de": "Oberhalb von 33% der weltweiten $fine_art$-Produktion zählt jeder weitere Anteilspunkt weniger. Ein weltweiter Anteil von 50% ergibt etwa 43 statt 50 Punkte, 75% ergeben etwa 48 statt 75, und selbst vollständige Dominanz (100%) ist bei 50 gedeckelt. Das verhindert, dass ein einzelner enteilender Produzent automatisch die kulturelle Hegemonie gewinnt, belohnt aber weiterhin Zuwächse im umkämpften Bereich zwischen 33–60%."
+ },
+ "concept_ch_art_production_desc": {
+  "en": "[concept_cultural_pull] from $fine_art$ goods production. Scored as the minimum of absolute output and global [concept_market_share] percentage — early on you're limited by volume, later by your share of global production. The parenthetical shows (your production / world production). Above 33% global share, the share cap is shaped by [concept_ch_art_diminishing_returns]. Boosted by the $country_cultural_hegemony_art_mult$ modifier. Part of [concept_cultural_pull_components].",
+  "de": "[concept_cultural_pull] aus der Produktion des Guts $fine_art$. Bewertet als Minimum aus absoluter Produktion und weltweitem [concept_market_share] in Prozent — anfangs limitiert das Volumen, später der Anteil an der weltweiten Produktion. Die Klammer zeigt (deine Produktion / Weltproduktion). Oberhalb von 33% weltweitem Anteil wird die Anteilsobergrenze durch [concept_ch_art_diminishing_returns] bestimmt. Wird durch den Modifikator $country_cultural_hegemony_art_mult$ gesteigert. Teil der [concept_cultural_pull_components]."
  },
  "concept_ch_infamy": {
   "en": "Infamy",
   "de": "Verrufenheit"
  },
+ "concept_ch_infamy_desc": {
+  "en": "[concept_cultural_pull] penalty from high [concept_infamy]. Each point of infamy reduces cultural pull by 0.1 (10 infamy = -1.0, 50 infamy = -5.0). Aggressive wars and treaty violations tarnish your nation's cultural image. Always a negative contribution — reduce infamy to remove this penalty. Part of [concept_cultural_pull_components].",
+  "de": "Abzug bei der [concept_cultural_pull] durch hohe [concept_infamy]. Jeder Punkt Verrufenheit senkt die kulturelle Anziehungskraft um 0,1 (10 Verrufenheit = -1,0, 50 Verrufenheit = -5,0). Aggressive Kriege und Vertragsbrüche beschädigen das kulturelle Ansehen deiner Nation. Immer ein negativer Beitrag — senke die Verrufenheit, um diesen Abzug zu beseitigen. Teil der [concept_cultural_pull_components]."
+ },
  "concept_ch_instability": {
   "en": "Instability",
   "de": "Instabilität"
+ },
+ "concept_ch_instability_desc": {
+  "en": "[concept_cultural_pull] penalty from domestic [concept_turmoil] and [concept_civil_war]. Average turmoil (0–100%) is multiplied by -10, so 50% turmoil costs -5.0 points. An active civil war adds an additional -20 penalty. Internal chaos makes your nation a cautionary tale rather than a cultural beacon. Part of [concept_cultural_pull_components].",
+  "de": "Abzug bei der [concept_cultural_pull] durch innenpolitischen [concept_turmoil] und [concept_civil_war]. Der durchschnittliche Aufruhr (0–100%) wird mit -10 multipliziert, sodass 50% Aufruhr -5,0 Punkte kosten. Ein aktiver Bürgerkrieg fügt einen zusätzlichen Abzug von -20 hinzu. Inneres Chaos macht deine Nation eher zum abschreckenden Beispiel als zum kulturellen Leuchtfeuer. Teil der [concept_cultural_pull_components]."
  },
  "concept_ch_megaprojects": {
   "en": "Megaprojects",
   "de": "Großprojekte"
  },
+ "concept_ch_megaprojects_desc": {
+  "en": "[concept_cultural_pull] from advanced megastructures. Each megaproject contributes +3 points. Qualifying [concept_ch_megaprojects] include space elevators, solar collectors, orbital battlestations, mind upload nexuses, antimatter facilities, nanofabrication centers, and consciousness networks. Maximum contribution: 21 points (7 megaprojects × 3). Part of [concept_cultural_pull_components].",
+  "de": "[concept_cultural_pull] durch fortschrittliche Megastrukturen. Jedes Großprojekt trägt +3 Punkte bei. Zu den zählenden [concept_ch_megaprojects] gehören Weltraumaufzüge, Sonnenkollektoren, orbitale Kampfstationen, Bewusstseins-Upload-Nexus, Antimaterie-Eindämmungsanlagen, Nanofabrikationszentren und Bewusstseinsnetzwerke. Maximaler Beitrag: 21 Punkte (7 Großprojekte × 3). Teil der [concept_cultural_pull_components]."
+ },
+ "concept_ch_modifier_bonus_desc": {
+  "en": "$country_cultural_pull_mult$ modifier. Applied after all [concept_cultural_pull_components] are summed. Bonuses from technologies like Mass Media, events, and government policies contribute here. Shown as a percentage increase above base.",
+  "de": "Modifikator $country_cultural_pull_mult$. Wird angewendet, nachdem alle [concept_cultural_pull_components] summiert wurden. Boni aus Technologien wie Massenmedien, Ereignissen und Regierungspolitik fließen hier ein. Wird als prozentualer Zuschlag auf die Basis angezeigt."
+ },
  "concept_ch_modifiers": {
   "en": "Other Modifiers",
   "de": "Weitere Modifikatoren"
+ },
+ "concept_ch_modifiers_desc": {
+  "en": "[concept_cultural_pull] from the $country_cultural_pull_add$ modifier. This is a catch-all for bonuses granted by events, cultural programme funding, [concept_power_bloc] principles, diplomatic treaties such as a cultural exchange, and other game mechanics. Check your country's modifier tooltip to see what is contributing. Part of [concept_cultural_pull_components].",
+  "de": "[concept_cultural_pull] durch den Modifikator $country_cultural_pull_add$. Dies ist eine Sammelkategorie für Boni aus Ereignissen, Kulturprogrammförderung, Prinzipien des [concept_power_bloc], diplomatischen Verträgen wie einem Kulturaustausch und anderen Spielmechaniken. Sieh im Modifikator-Tooltip deines Landes nach, was dazu beiträgt. Teil der [concept_cultural_pull_components]."
  },
  "concept_ch_monuments": {
   "en": "Monuments",
   "de": "Monumente"
  },
+ "concept_ch_monuments_desc": {
+  "en": "[concept_cultural_pull] from wonder buildings. Each monument or wonder in your nation contributes +3 points. Monuments are unique buildings that represent iconic landmarks, architectural achievements, and cultural treasures. Build more monuments to increase your cultural influence. Part of [concept_cultural_pull_components].",
+  "de": "[concept_cultural_pull] durch Wunderbauten. Jedes Monument oder Wunderbauwerk in deiner Nation trägt +3 Punkte bei. Monumente sind einzigartige Gebäude, die ikonische Wahrzeichen, architektonische Meisterleistungen und Kulturschätze darstellen. Errichte weitere Monumente, um deinen kulturellen Einfluss zu steigern. Teil der [concept_cultural_pull_components]."
+ },
  "concept_ch_prestige": {
   "en": "Prestige",
   "de": "Prestige"
+ },
+ "concept_ch_prestige_desc": {
+  "en": "[concept_cultural_pull] from national [concept_prestige]. Uses the same min(absolute, share) formula as [concept_ch_art_production]: your prestige divided by 5, capped at your percentage of world prestige. The parenthetical shows (your prestige / world prestige). High prestige from military victories, diplomatic achievements, and national projects all contribute. Part of [concept_cultural_pull_components].",
+  "de": "[concept_cultural_pull] durch nationales [concept_prestige]. Verwendet dieselbe Minimum(absolut, Anteil)-Formel wie [concept_ch_art_production]: dein Prestige geteilt durch 5, gedeckelt auf deinen Anteil am weltweiten Prestige. Die Klammer zeigt (dein Prestige / Weltprestige). Hohes Prestige aus militärischen Siegen, diplomatischen Erfolgen und nationalen Projekten trägt jeweils bei. Teil der [concept_cultural_pull_components]."
  },
  "concept_ch_sol": {
   "en": "Standard of Living",
   "de": "Lebensstandard"
  },
+ "concept_ch_sol_desc": {
+  "en": "[concept_cultural_pull] from quality of life. Equals your average [concept_sol] minus the population-weighted global average, clamped to the range -5 to +20. Nations with higher living standards than the world average gain cultural influence; those below lose it. The parenthetical shows (your SoL / global average SoL). Part of [concept_cultural_pull_components].",
+  "de": "[concept_cultural_pull] durch Lebensqualität. Entspricht deinem durchschnittlichen [concept_sol] abzüglich des bevölkerungsgewichteten Weltdurchschnitts, begrenzt auf den Bereich -5 bis +20. Nationen mit höherem Lebensstandard als dem Weltdurchschnitt gewinnen kulturellen Einfluss, jene darunter verlieren ihn. Die Klammer zeigt (dein Lebensstandard / weltweiter durchschnittlicher Lebensstandard). Teil der [concept_cultural_pull_components]."
+ },
+ "concept_ch_tech_leadership_desc": {
+  "en": "[concept_cultural_pull] from being first in the world to research technologies. When a country researches a technology that no other country has yet discovered, it earns +2 tech leadership points (capped at 30). These points decay by 10% each year, so sustained technological innovation is needed to maintain this bonus. Part of [concept_cultural_pull_components].",
+  "de": "[concept_cultural_pull] dafür, als Erstes weltweit Technologien zu erforschen. Erforscht ein Land eine Technologie, die noch kein anderes Land entdeckt hat, erhält es +2 Punkte für Technologieführerschaft (gedeckelt bei 30). Diese Punkte verfallen jährlich um 10%, sodass anhaltende technologische Innovation nötig ist, um diesen Bonus zu erhalten. Teil der [concept_cultural_pull_components]."
+ },
+ "concept_civil_rights_movement_desc": {
+  "en": "A movement for equal rights and an end to [concept_discrimination]. Tracked as a [concept_journal_entry] that drives progress on minority rights laws, from Violent Hostility through Ghettoization, Discrimination, Indifference, Protection, to Affirmative Action.",
+  "de": "Eine Bewegung für Gleichberechtigung und ein Ende der [concept_discrimination]. Wird als [concept_journal_entry] verfolgt, der den Fortschritt bei Minderheitenrechtsgesetzen vorantreibt, von Gewalttätige Feindseligkeit über Ghettoisierung, Diskriminierung, Gleichgültigkeit, Schutz bis hin zu Affirmative Maßnahmen."
+ },
  "concept_climate_policy": {
   "en": "Climate Policy",
   "de": "Klimapolitik"
+ },
+ "concept_climate_policy_desc": {
+  "en": "Actions a country can take to address [concept_global_warming_system], adopted and repealed from the Global Warming [concept_journal_entry]'s dashboard. Three are market-wide — a carbon tax, renewable investment and emission standards: the market leader adopts them for every member, and they cut the market's [concept_greenhouse_gas_emissions] directly. The other five are national: fossil fuel divestment, public transit and green building codes trim fuel and power use, while climate adaptation and reforestation soften the damage. Each has economic trade-offs.",
+  "de": "Maßnahmen, die ein Land gegen die [concept_global_warming_system] ergreifen kann, angenommen und aufgehoben über das Dashboard des [concept_journal_entry] Globale Erwärmung. Drei gelten marktweit — eine CO2-Steuer, Investitionen in erneuerbare Energien und Emissionsstandards: Der Marktführer führt sie für alle Mitglieder ein, und sie senken die [concept_greenhouse_gas_emissions] des Marktes direkt. Die übrigen fünf sind national: Der Ausstieg aus fossilen Brennstoffen, öffentlicher Nahverkehr und grüne Bauvorschriften senken den Brennstoff- und Energieverbrauch, während Klimaanpassung und Aufforstung den Schaden abmildern. Jede hat wirtschaftliche Kompromisse."
  },
  "concept_colonial_stability": {
   "en": "Colonial Stability",
   "de": "Koloniale Stabilität"
  },
+ "concept_colonial_stability_desc": {
+  "en": "A measure of how effectively a colonial power maintains control over its colonies (0–100). High stability indicates firm control; low stability risks colonial collapse. Stability is affected by colonial policy choices, global trends toward self-determination, and the relative military and economic power of the colonizer.",
+  "de": "Ein Maß dafür, wie wirksam eine Kolonialmacht die Kontrolle über ihre Kolonien behält (0–100). Hohe Stabilität bedeutet feste Kontrolle; niedrige Stabilität birgt das Risiko eines kolonialen Zusammenbruchs. Die Stabilität wird durch kolonialpolitische Entscheidungen, globale Trends zur Selbstbestimmung und die relative militärische und wirtschaftliche Macht der Kolonialmacht beeinflusst."
+ },
  "concept_combined_arms": {
   "en": "Combined Arms",
   "de": "Verbundene Waffengattungen"
+ },
+ "concept_combined_arms_desc": {
+  "en": "A military doctrine bonus based on [Concept('concept_combat_unit_type', 'unit type')] diversity in formations. Armies that field a mix of infantry, cavalry, artillery, and other unit types receive combat bonuses. Encourages balanced military composition rather than single-type spam.",
+  "de": "Ein Bonus der Militärdoktrin, der auf der Vielfalt der [Concept('concept_combat_unit_type', 'Einheitsarten')] in Formationen beruht. Armeen, die eine Mischung aus Infanterie, Kavallerie, Artillerie und anderen Einheitsarten aufstellen, erhalten Kampfboni. Fördert eine ausgewogene militärische Zusammensetzung statt der Häufung eines einzigen Typs."
+ },
+ "concept_construction_cost_scaling_desc": {
+  "en": "A mechanic where construction costs scale with [Concept('concept_gdp_per_capita', 'GDP per capita')]. Wealthier nations pay more to build, reflecting higher labor costs and land prices. This prevents runaway growth in rich countries and enables catch-up by developing nations.",
+  "de": "Ein Mechanismus, bei dem die Baukosten mit dem [Concept('concept_gdp_per_capita', 'Bruttoinlandsprodukt pro Kopf')] skalieren. Wohlhabendere Nationen zahlen mehr fürs Bauen, was höhere Arbeits- und Grundstückskosten widerspiegelt. Das verhindert unkontrolliertes Wachstum in reichen Ländern und ermöglicht Aufholprozesse in Entwicklungsländern."
  },
  "concept_covert_efficiency": {
   "en": "Efficiency Factor",
   "de": "Effizienzfaktor"
  },
+ "concept_covert_efficiency_desc": {
+  "en": "Your espionage efficiency reduces the chance of [concept_operation_detection]. A higher [concept_covert_efficiency] means your agents are better trained and harder to detect. Efficiency is determined by the country_covert_operation_efficiency_mult modifier, which can be improved through technologies, laws, and institutional investment. The efficiency percentage shown is the reduction applied to the raw detection chance.",
+  "de": "Deine Spionageeffizienz senkt die Wahrscheinlichkeit einer [concept_operation_detection]. Ein höherer [concept_covert_efficiency] bedeutet, dass deine Agenten besser ausgebildet und schwerer zu entdecken sind. Die Effizienz wird durch den Modifikator country_covert_operation_efficiency_mult bestimmt, der durch Technologien, Gesetze und institutionelle Investitionen verbessert werden kann. Der angezeigte Effizienzprozentsatz ist die Reduzierung, die auf die rohe Entdeckungswahrscheinlichkeit angewendet wird."
+ },
  "concept_covert_operations": {
   "en": "Covert Operations",
   "de": "Verdeckte Operationen"
+ },
+ "concept_covert_operations_desc": {
+  "en": "[concept_covert_operations] launched against rival nations via [Concept('concept_diplomatic_action', 'diplomatic actions')]. Fourteen types are available:\\n• #bold Election Interference#! — Reduces target [concept_legitimacy] (target must have an elected legislature)\\n• #bold Financial Subversion#! — Increases target [concept_bubble_pressure], risking a [concept_banking_crash]\\n• #bold Industrial Espionage#! — Boosts your production tech spread and innovation (target must have researched more technologies than you)\\n• #bold Military Espionage#! — Boosts your military tech spread and unit effectiveness\\n• #bold Influence Campaign#! — Reduces target leverage resistance (requires [concept_power_bloc] leadership; target outside your bloc)\\n• #bold Ideological Subversion#! — Boosts movements matching your ideology in target (target must have a political movement)\\n• #bold Destabilization#! — Boosts separatist movements and general radicalism in target (target must have a political movement)\\n• #bold Regime Change#! — Erodes target [concept_legitimacy] and coup resistance, and pushes any coup under way there (requires a [concept_rivalry] and #bold Seasoned#! Tradecraft; not against your own subject)\\n• #bold Nuclear Programme Sabotage#! — Slows the target's nuclear weapons programme (requires a funded programme and #bold Seasoned#! Tradecraft)\\n• #bold Space Programme Espionage#! — Speeds your [concept_space_race] milestones and lowers their risk (target must be ahead of you)\\n• #bold Cultivate Assets#! — No effect on the target; builds your network there faster than any other operation (not against your own subject)\\n• #bold Secure Loose Material#! — No effect on the target; may find and destroy nuclear warheads missing from its arsenal (target must have lost warheads)\\n• #bold [concept_infrastructure] Sabotage#! — Reduces target infrastructure and [concept_throughput] (war, or a [concept_diplomatic_play] against them)\\n• #bold Communications Disruption#! — Reduces target military offense and defense (war, or a [concept_diplomatic_play] against them)\\nOnly the two sabotage operations need a war, or a [concept_diplomatic_play] against the target; the rest run in peace or war. A truce or an Intelligence Sharing Pact with the target blocks every operation. Amicable relations or better block Election Interference, Financial Subversion, Ideological Subversion and both sabotage operations; cordial or better blocks Destabilization. Only Regime Change requires a [concept_rivalry].\\nEach operation occupies a slot and requires funding. Operations risk [concept_operation_detection] each month. Unused slots provide a domestic intelligence bonus.",
+  "de": "[concept_covert_operations] gegen rivalisierende Nationen mittels [Concept('concept_diplomatic_action', 'Diplomatenaktionen')] gestartet. Vierzehn Arten sind verfügbar:\\n• #bold Wahleinmischung#! — Senkt die [concept_legitimacy] des Ziels (das Ziel muss eine gewählte Legislative haben)\\n• #bold Finanzielle Subversion#! — Erhöht den [concept_bubble_pressure] des Ziels und riskiert einen [concept_banking_crash]\\n• #bold Industriespionage#! — Steigert die Verbreitung deiner Produktionstechnologien und deine Innovation (das Ziel muss mehr Technologien erforscht haben als du)\\n• #bold Militärspionage#! — Steigert die Verbreitung deiner Militärtechnologien und die Einheiteneffektivität\\n• #bold Einflusskampagne#! — Senkt den Hebelwiderstand des Ziels (erfordert die Führung eines [concept_power_bloc]; Ziel außerhalb deines Blocks)\\n• #bold Ideologische Subversion#! — Fördert Bewegungen im Ziel, die deiner Ideologie entsprechen (das Ziel muss eine Protestbewegung haben)\\n• #bold Destabilisierung#! — Fördert separatistische Bewegungen und allgemeinen Radikalismus im Ziel (das Ziel muss eine Protestbewegung haben)\\n• #bold Regimewechsel#! — Untergräbt die [concept_legitimacy] und den Putschwiderstand des Ziels und begünstigt jeden dort laufenden Putsch (erfordert eine [concept_rivalry] und #bold Erfahrene#! Tradecraft; nicht gegen den eigenen Klientelstaat)\\n• #bold Sabotage des Nuklearprogramms#! — Verlangsamt das Kernwaffenprogramm des Ziels (erfordert ein finanziertes Programm und #bold Erfahrene#! Tradecraft)\\n• #bold Weltraumprogrammspionage#! — Beschleunigt deine [concept_space_race]-Meilensteine und senkt deren Risiko (das Ziel muss dir voraus sein)\\n• #bold Netzwerk aufbauen#! — Keine Wirkung auf das Ziel; baut dort dein Netzwerk schneller auf als jede andere Operation (nicht gegen den eigenen Klientelstaat)\\n• #bold Loses Nuklearmaterial sichern#! — Keine Wirkung auf das Ziel; kann aus dessen Arsenal fehlende Kernwaffen aufspüren und zerstören (das Ziel muss Sprengköpfe verloren haben)\\n• #bold [concept_infrastructure]-Sabotage#! — Senkt die Infrastruktur und den [concept_throughput] des Ziels (Krieg oder ein [concept_diplomatic_play] gegen das Ziel)\\n• #bold Kommunikationsstörung#! — Senkt Angriffs- und Verteidigungswerte des gegnerischen Militärs (Krieg oder ein [concept_diplomatic_play] gegen das Ziel)\\nNur die beiden Sabotageoperationen erfordern einen Krieg oder ein [concept_diplomatic_play] gegen das Ziel; die übrigen laufen in Krieg wie Frieden. Ein Waffenstillstand oder ein Geheimdienst-Kooperationspakt mit dem Ziel blockiert jede Operation. Freundschaftliche Beziehungen oder besser blockieren Wahleinmischung, Finanzielle Subversion, Ideologische Subversion und beide Sabotageoperationen; herzliche Beziehungen oder besser blockieren Destabilisierung. Nur Regimewechsel erfordert eine [concept_rivalry].\\nJede Operation belegt einen Slot und erfordert Finanzierung. Operationen riskieren monatlich eine [concept_operation_detection]. Ungenutzte Slots gewähren einen Bonus auf die Inlandsaufklärung."
+ },
+ "concept_covert_warfare_system_desc": {
+  "en": "A covert warfare system where nations build [concept_intelligence_capacity] defenses and launch [concept_covert_operations] against rivals. Defense has two layers: general IC (from technologies, [Concept('concept_institution', 'institutions')], [concept_literacy], [Concept('concept_gdp', 'GDP')]) and type-specific defense (Economic, Military, Ideological — from relevant laws). A truce or an Intelligence Sharing Pact with the target blocks every operation; amicable relations or better block five of them, and cordial or better blocks Destabilization. Offensive operations can undermine enemy [concept_legitimacy], destabilize finances, steal technology, weaken [concept_power_bloc] resistance, subvert foreign movements, boost separatists, sabotage [concept_infrastructure], or disrupt military communications. Unused operation slots provide domestic intelligence benefits. The journal entry opens once a country holds more operation slots than every country of its rank gets for free; the first extra slot comes from the Ministry of Intelligence and Security law or the Mainframe Computers technology. Can be toggled via game rules.",
+  "de": "Ein System verdeckter Kriegsführung, in dem Nationen [concept_intelligence_capacity]-Abwehr aufbauen und [concept_covert_operations] gegen Rivalen starten. Die Abwehr hat zwei Schichten: allgemeine Geheimdienstkapazität (aus Technologien, [Concept('concept_institution', 'Institutionen')], [concept_literacy] und [Concept('concept_gdp', 'Bruttoinlandsprodukt')]) sowie typspezifische Abwehr (Wirtschaft, Militär, Ideologie — aus den jeweiligen Gesetzen). Ein Waffenstillstand oder ein Geheimdienst-Kooperationspakt mit dem Ziel blockiert jede Operation; freundschaftliche Beziehungen oder besser blockieren fünf davon, herzliche Beziehungen oder besser blockieren Destabilisierung. Offensive Operationen können die [concept_legitimacy] des Gegners untergraben, dessen Finanzen destabilisieren, Technologie stehlen, den Widerstand eines [concept_power_bloc] schwächen, ausländische Bewegungen unterwandern, Separatisten fördern, die [concept_infrastructure] sabotieren oder die militärische Kommunikation stören. Ungenutzte Operationsslots gewähren Vorteile für die Inlandsaufklärung. Der Journaleintrag öffnet sich, sobald ein Land mehr Operationsslots besitzt, als jedes Land seines Rangs kostenlos erhält; der erste zusätzliche Slot stammt aus dem Gesetz Geheimdienst- und Sicherheitsministerium oder der Technologie Großrechner. Kann über Spielregeln umgeschaltet werden."
+ },
+ "concept_cultural_hegemony_system_desc": {
+  "en": "A soft power system where nations compete for global cultural influence. [concept_cultural_pull] determines each country's share of world cultural output. The dominant cultural power gains [concept_migration_pull]. Events can raise a leading cultural power's research speed and [concept_prestige], and let a country under the hegemon's influence gain research speed by opening up to its culture or adopting its education model. Lagging nations lose [concept_legitimacy] to the [concept_foreign_cultural_benchmark]. The journal entry opens once any country has researched Mass Media and we have Romanticism. Can be toggled via game rules.",
+  "de": "Ein Soft-Power-System, in dem Nationen um globalen kulturellen Einfluss wetteifern. Die [concept_cultural_pull] bestimmt den Anteil jedes Landes an der weltweiten Kulturproduktion. Die dominierende Kulturmacht gewinnt [concept_migration_pull]. Ereignisse können die Forschungsgeschwindigkeit und das [concept_prestige] einer führenden Kulturmacht steigern und einem Land unter dem Einfluss der Hegemonialmacht erlauben, durch Öffnung gegenüber deren Kultur oder Übernahme ihres Bildungsmodells an Forschungsgeschwindigkeit zu gewinnen. Zurückliegende Nationen verlieren [concept_legitimacy] an den [concept_foreign_cultural_benchmark]. Der Journaleintrag öffnet sich, sobald irgendein Land Massenmedien erforscht hat und wir die Romantik erreicht haben. Kann über Spielregeln umgeschaltet werden."
  },
  "concept_cultural_pull": {
   "en": "Cultural Pull",
   "de": "Kulturelle Anziehungskraft"
  },
+ "concept_cultural_pull_components_desc": {
+  "en": "The factors that determine a nation's [concept_cultural_pull]:\\n• [concept_ch_art_production] — Fine art output relative to global production\\n• [concept_ch_prestige] — National [concept_prestige] relative to world total\\n• [concept_ch_sol] — [concept_sol] compared to global average\\n• [concept_ch_tech_leadership] — World-first technology breakthroughs\\n• [concept_ch_monuments] — Wonder buildings and cultural landmarks\\n• [concept_ch_megaprojects] — Advanced megastructures\\n• [concept_ch_modifiers] — Bonuses from events, programme funding, [concept_power_bloc] principles and treaties\\n• [concept_ch_infamy] — Penalty from aggressive foreign policy\\n• [concept_ch_instability] — Penalty from [concept_turmoil] and [concept_civil_war]\\n• [concept_ch_modifier_bonus] — Percentage multiplier from modifiers",
+  "de": "Die Faktoren, die die [concept_cultural_pull] einer Nation bestimmen:\\n• [concept_ch_art_production] — Kunstproduktion im Verhältnis zur weltweiten Produktion\\n• [concept_ch_prestige] — Nationales [concept_prestige] im Verhältnis zum Weltgesamtwert\\n• [concept_ch_sol] — [concept_sol] im Vergleich zum weltweiten Durchschnitt\\n• [concept_ch_tech_leadership] — Weltweit erste technologische Durchbrüche\\n• [concept_ch_monuments] — Wunderbauten und kulturelle Wahrzeichen\\n• [concept_ch_megaprojects] — Fortschrittliche Megastrukturen\\n• [concept_ch_modifiers] — Boni aus Ereignissen, Programmförderung, Prinzipien des [concept_power_bloc] und Verträgen\\n• [concept_ch_infamy] — Abzug durch aggressive Außenpolitik\\n• [concept_ch_instability] — Abzug durch [concept_turmoil] und [concept_civil_war]\\n• [concept_ch_modifier_bonus] — Prozentualer Multiplikator aus Modifikatoren"
+ },
+ "concept_cultural_pull_desc": {
+  "en": "A country's raw cultural influence score, computed from [concept_cultural_pull_components] and then converted to a global share percentage (0–100%). The share determines the strength of the Cultural Hegemony modifier. Technologies, country rank, and events can boost [concept_cultural_pull] through the Cultural Pull modifier.",
+  "de": "Der rohe kulturelle Einflusswert eines Landes, berechnet aus den [concept_cultural_pull_components] und anschließend in einen weltweiten Prozentanteil (0–100%) umgerechnet. Der Anteil bestimmt die Stärke des Modifikators Kulturelle Hegemonie. Technologien, der Landesrang und Ereignisse können die [concept_cultural_pull] über den Modifikator Kulturelle Anziehungskraft steigern."
+ },
+ "concept_cultural_pull_raw_score_desc": {
+  "en": "The sum of all [concept_cultural_pull] components before conversion to a global percentage share. Each country's raw score is divided by the global total to produce its Cultural Share. Raw scores have no inherent meaning on their own — only the relative share matters.",
+  "de": "Die Summe aller Komponenten der [concept_cultural_pull] vor der Umrechnung in einen weltweiten Prozentanteil. Der Rohwert jedes Landes wird durch den Weltgesamtwert geteilt, um seinen Kulturellen Anteil zu ergeben. Rohwerte haben für sich genommen keine inhärente Bedeutung — nur der relative Anteil zählt."
+ },
+ "concept_cultural_pull_share_desc": {
+  "en": "Your nation's percentage of global cultural influence (0–100%). Calculated as your [concept_cultural_pull_raw_score] divided by the sum of all nations' raw scores. A higher share means stronger [concept_cultural_hegemony_system] effects: [concept_migration_pull], [concept_trade_advantage] in $fine_art$, [concept_power_bloc_leverage] generation and diplomatic reputation. Updated monthly; global totals cached yearly.",
+  "de": "Der prozentuale Anteil deiner Nation am weltweiten kulturellen Einfluss (0–100%). Berechnet als dein [concept_cultural_pull_raw_score] geteilt durch die Summe der Rohwerte aller Nationen. Ein höherer Anteil bedeutet stärkere Effekte der [concept_cultural_hegemony_system]: [concept_migration_pull], [concept_trade_advantage] bei $fine_art$, Erzeugung von [concept_power_bloc_leverage] und diplomatisches Ansehen. Wird monatlich aktualisiert; weltweite Gesamtwerte werden jährlich zwischengespeichert."
+ },
  "concept_currency_devaluation": {
   "en": "Currency Devaluation",
   "de": "Währungsabwertung"
+ },
+ "concept_currency_devaluation_desc": {
+  "en": "A fall in what the national currency is worth abroad. Under a floating currency it is not a decision but an outcome — of a policy rate held under the world's, of inflation above the world's, or of lenders fleeing a distressed treasury — and it makes exports cheap, imports dear and prices rise. Under a gold standard it is a choice, offered when a convertibility crisis breaks: re-peg at a lower value, take the trade edge while it lasts, and accept the [concept_infamy] and the great powers' resentment that come with undercutting them.",
+  "de": "Ein Wertverfall der Landeswährung im Ausland. Bei einer freien Währung ist dies keine Entscheidung, sondern eine Folge — eines unter dem Weltniveau gehaltenen Leitzinses, einer über dem Weltniveau liegenden Inflation oder von Gläubigern, die vor einer angeschlagenen Staatskasse fliehen — und sie macht Exporte billig, Importe teuer und die Preise steigen. Unter dem Goldstandard ist sie eine Wahl, die sich bietet, wenn eine Konvertibilitätskrise ausbricht: die Bindung zu einem niedrigeren Wert neu festlegen, den Handelsvorteil nutzen, solange er anhält, und die [concept_infamy] sowie den Groll der Großmächte in Kauf nehmen, den das Unterbieten mit sich bringt."
+ },
+ "concept_custom_treaty_articles_desc": {
+  "en": "Extended timeline adds numerous treaty articles beyond vanilla: money transfers, company seizure/disbanding, minority protection, free port concessions, privatization enforcement, religious missions, demilitarized zones, forced disarmament, cultural exchanges, emissions reduction, influence requests, education/healthcare/security/science aid, nuclear disarmament and program control, intelligence sharing, joint military exercises, UN membership, and population transfers.",
+  "de": "Diese Mod fügt gegenüber dem Basisspiel zahlreiche weitere Vertragsartikel hinzu: Geldtransfers, Unternehmensbeschlagnahmung/-auflösung, Minderheitenschutz, Freihafenkonzessionen, Durchsetzung von Privatisierung, Religionsmissionen, entmilitarisierte Zonen, erzwungene Abrüstung, Kulturaustausch, Emissionsminderung, Einflussanfragen, Bildungs-/Gesundheits-/Sicherheits-/Wissenschaftshilfe, nukleare Abrüstung und Programmkontrolle, Geheimdienstaustausch, gemeinsame Militärübungen, UN-Mitgliedschaft und Bevölkerungstransfers."
  },
  "concept_decolonization_system": {
   "en": "Decolonization",
   "de": "Dekolonisierung"
  },
+ "concept_decolonization_system_desc": {
+  "en": "The process by which colonial empires release or lose their colonial subjects. Tracked by the Colonial Empire [concept_journal_entry] with a [concept_colonial_stability] progress bar (0–100). Three colonial programmes and three decolonization decisions allow colonial powers to manage the transition. [Concept('concept_great_power', 'Great Powers')] can adopt stances for or against colonialism. When stability collapses, colonies may break free in a cascade of independence movements.",
+  "de": "Der Prozess, durch den Kolonialreiche ihre kolonialen Klientelstaaten entlassen oder verlieren. Wird über den [concept_journal_entry] Kolonialreich mit einem Fortschrittsbalken der [concept_colonial_stability] (0–100) verfolgt. Drei Kolonialprogramme und drei Dekolonisierungsentscheidungen erlauben Kolonialmächten, den Übergang zu steuern. [Concept('concept_great_power', 'Großmächte')] können eine Haltung für oder gegen den Kolonialismus einnehmen. Bricht die Stabilität zusammen, können sich Kolonien in einer Kaskade von Unabhängigkeitsbewegungen lösen."
+ },
+ "concept_digital_rights_system_desc": {
+  "en": "The tension between state surveillance and individual privacy in the digital age. Laws range from Intrusive Surveillance (complete state monitoring) through Minimal Privacy Protection and Moderate Data Privacy to Strong Privacy Rights. Internet governance laws interact with this system.",
+  "de": "Die Spannung zwischen staatlicher Überwachung und individueller Privatsphäre im digitalen Zeitalter. Die Gesetze reichen von Invasive Überwachung (vollständige staatliche Kontrolle) über Minimaler Datenschutz und Moderater Datenschutz bis hin zu Starke Datenschutzrechte. Gesetze zur Internetregulierung wirken mit diesem System zusammen."
+ },
  "concept_directed_credit": {
   "en": "Directed Credit",
   "de": "Gelenkte Kreditvergabe"
+ },
+ "concept_directed_credit_desc": {
+  "en": "State-coordinated allocation of credit to priority sectors (typically infrastructure or strategic industries). Provides stimulus during downturns at the cost of distorting market price signals and committing the treasury to long-term projects that are politically risky to wind down.",
+  "de": "Staatlich koordinierte Kreditvergabe an vorrangige Sektoren (typischerweise Infrastruktur oder strategische Industrien). Bietet Konjunkturimpulse in Abschwüngen, verzerrt jedoch die Preissignale des Marktes und bindet die Staatskasse an langfristige Projekte, deren Rückabwicklung politisch riskant ist."
  },
  "concept_environmental_crisis": {
   "en": "Environmental Crisis",
   "de": "Umweltkrise"
  },
+ "concept_environmental_crisis_desc": {
+  "en": "An environmental awareness movement tied to the Ministry of the Environment [concept_institution]. Tracks growing public concern about [concept_pollution_system], resource depletion, and ecological damage. Progress leads to stronger environmental protections and emissions controls.",
+  "de": "Eine Umweltbewusstseinsbewegung, verknüpft mit der [concept_institution] Umweltministerium. Verfolgt die wachsende öffentliche Sorge über [concept_pollution_system], Ressourcenerschöpfung und ökologische Schäden. Fortschritt führt zu stärkerem Umweltschutz und strengeren Emissionskontrollen."
+ },
+ "concept_export_credit_facility_desc": {
+  "en": "Subsidized financing extended to domestic exporters, lowering their cost of capital relative to foreign competitors. Funded by the treasury; effective as industrial policy but visible internationally as a trade-distorting subsidy.",
+  "de": "Subventionierte Finanzierung für einheimische Exporteure, die deren Kapitalkosten gegenüber ausländischen Konkurrenten senkt. Finanziert aus der Staatskasse; wirksam als Industriepolitik, international jedoch als handelsverzerrende Subvention sichtbar."
+ },
  "concept_feminism_movement": {
   "en": "Second-Wave Feminism",
   "de": "Feminismus der zweiten Welle"
+ },
+ "concept_feminism_movement_desc": {
+  "en": "A social movement expanding women's rights beyond suffrage to workplace equality, reproductive rights, and legal protections. Tracked as a [concept_journal_entry] that advances through law changes and social development.",
+  "de": "Eine soziale Bewegung, die Frauenrechte über das Wahlrecht hinaus auf Gleichstellung am Arbeitsplatz, reproduktive Rechte und rechtlichen Schutz ausweitet. Wird als [concept_journal_entry] verfolgt, der durch Gesetzesänderungen und gesellschaftliche Entwicklung voranschreitet."
  },
  "concept_financial_regulation": {
   "en": "Financial Regulation",
   "de": "Finanzregulierung"
  },
+ "concept_financial_regulation_desc": {
+  "en": "Laws governing the banking and financial system. Ranges from Unregulated Banking (high volatility and crash risk but more dynamic growth) through various intermediate forms to Central Bank Independence (lowest crash risk, most stability). Different laws modify [concept_banking_cycle] Volatility and [concept_banking_crash] Likelihood.",
+  "de": "Gesetze, die das Bank- und Finanzsystem regeln. Sie reichen von Unreguliertes Bankwesen (hohe Volatilität und Crash-Risiko, aber dynamischeres Wachstum) über diverse Zwischenformen bis hin zu Unabhängigkeit der Zentralbank (geringstes Crash-Risiko, größte Stabilität). Verschiedene Gesetze verändern die Volatilität des [concept_banking_cycle] und die Wahrscheinlichkeit eines [concept_banking_crash]."
+ },
+ "concept_foreign_cultural_benchmark_desc": {
+  "en": "When a dominant cultural power vastly exceeds your nation's [concept_cultural_pull], your population measures its government against the hegemon's, reducing government [concept_legitimacy]. The larger the gap between the hegemon's [concept_cultural_pull_share] and yours, the stronger the effect (up to -15 legitimacy). Part of the [concept_cultural_hegemony_system].",
+  "de": "Übertrifft eine dominierende Kulturmacht die [concept_cultural_pull] deiner Nation bei Weitem, misst deine Bevölkerung ihre Regierung an der der Hegemonialmacht, was die [concept_legitimacy] der Regierung senkt. Je größer die Lücke zwischen dem [concept_cultural_pull_share] der Hegemonialmacht und deinem eigenen, desto stärker der Effekt (bis zu -15 Legitimität). Teil der [concept_cultural_hegemony_system]."
+ },
  "concept_fortification_level": {
   "en": "Fortification Level",
   "de": "Befestigungsstufe"
+ },
+ "concept_fortification_level_desc": {
+  "en": "A numeric measure of a state's [concept_fortification_system]. Higher levels unlock stronger defensive [Concept('concept_battle_condition', 'battle conditions')] and increase defender bonuses during sieges and battles.",
+  "de": "Ein numerisches Maß für die [concept_fortification_system] eines Staates. Höhere Stufen schalten stärkere defensive [Concept('concept_battle_condition', 'Schlachtbedingungen')] frei und erhöhen die Verteidigerboni bei Belagerungen und Schlachten."
  },
  "concept_fortification_system": {
   "en": "Fortifications",
   "de": "Befestigungsanlagen"
  },
+ "concept_fortification_system_desc": {
+  "en": "A state-level system representing military [concept_fortification_system] and defensive works that modify [Concept('concept_battle_condition', 'battle conditions')] when defenders occupy prepared positions. Fortification [concept_infrastructure] and levels determine available defensive modifiers.",
+  "de": "Ein System auf Staatsebene, das militärische [concept_fortification_system] und Verteidigungsanlagen abbildet, die [Concept('concept_battle_condition', 'Schlachtbedingungen')] verändern, wenn Verteidiger vorbereitete Stellungen besetzen. Die [concept_infrastructure] der Befestigung und ihre Stufe bestimmen die verfügbaren Verteidigungsmodifikatoren."
+ },
  "concept_fortified_bastion": {
   "en": "Fortified Bastion",
   "de": "Befestigte Bastion"
+ },
+ "concept_fortified_bastion_desc": {
+  "en": "A major bastion-level fortification that provides large defensive bonuses to occupying forces.",
+  "de": "Eine große Bastionsbefestigung, die besetzenden Truppen erhebliche Verteidigungsboni verleiht."
  },
  "concept_fortified_position": {
   "en": "Fortified Position",
   "de": "Befestigte Stellung"
  },
+ "concept_fortified_position_desc": {
+  "en": "A defensive [concept_battle_condition] representing prepared and entrenched positions that grant defenders combat advantages.",
+  "de": "Eine defensive [concept_battle_condition], die vorbereitete und befestigte Stellungen darstellt und Verteidigern Kampfvorteile verschafft."
+ },
  "concept_fortified_stronghold": {
   "en": "Fortified Stronghold",
   "de": "Befestigte Festung"
+ },
+ "concept_fortified_stronghold_desc": {
+  "en": "A reinforced defensive position offering significant protection and resistance to attackers.",
+  "de": "Eine verstärkte Verteidigungsstellung, die erheblichen Schutz bietet und Angreifern Widerstand entgegensetzt."
+ },
+ "concept_fx_swap_lines_desc": {
+  "en": "A standing arrangement between central banks: one stands ready to lend its reserves to the other. In this mod it is a [concept_treaty] [concept_article], the $swap_line$ — the recipient's risk premium falls and its peg is steadied, the provider pays a cost scaled to the two economies' sizes, and in a crisis the line is actually drawn.",
+  "de": "Eine ständige Vereinbarung zwischen Zentralbanken: Eine steht bereit, der anderen ihre Reserven zu leihen. In dieser Mod ist dies ein [concept_treaty]-[concept_article], der $swap_line$ — die Risikoprämie des Empfängers sinkt und seine Bindung wird stabilisiert, der Geber zahlt einen an die Größe beider Volkswirtschaften angepassten Preis, und in einer Krise wird die Linie tatsächlich gezogen."
+ },
+ "concept_global_warming_system_desc": {
+  "en": "A persistent system tracking global [concept_greenhouse_gas_emissions] and their effect on the [concept_temperature_anomaly]. As industrialization advances, emissions rise and temperatures increase, triggering threshold events the first time the anomaly reaches 0.5°C, 1°C, 2°C and 3°C, and a matching event if it later falls back below one. Countries can adopt [concept_climate_policy] measures from the dashboard on the Global Warming [concept_journal_entry].",
+  "de": "Ein dauerhaftes System, das die weltweiten [concept_greenhouse_gas_emissions] und ihre Wirkung auf die [concept_temperature_anomaly] verfolgt. Mit fortschreitender Industrialisierung steigen Emissionen und Temperaturen, was beim ersten Erreichen der Anomalie von 0,5°C, 1°C, 2°C und 3°C Schwellenereignisse auslöst, sowie ein passendes Ereignis, falls sie später wieder unter eine Schwelle fällt. Länder können [concept_climate_policy]-Maßnahmen über das Dashboard des [concept_journal_entry] Globale Erwärmung ergreifen."
  },
  "concept_grandeur": {
   "en": "Grandeur",
   "de": "Grandeur"
  },
+ "concept_grandeur_desc": {
+  "en": "A $building_grand_monument$'s grandeur is its level. Everything a monument gives grows with grandeur in steps: the first step takes 5 grandeur, and each further step takes twice as much as the one before (complete at 5, 15, 35, 75, 155 and so on). Inside a step every level counts. Legitimacy and cultural pull take steps of 10 instead. National effects count your monuments' grandeur together; local effects count each monument's own.",
+  "de": "Die Grandezza eines $building_grand_monument$ ist seine Stufe. Alles, was ein Monument gewährt, wächst in Schritten mit der Grandezza: Der erste Schritt benötigt 5 Grandezza, und jeder weitere Schritt benötigt doppelt so viel wie der vorherige (abgeschlossen bei 5, 15, 35, 75, 155 und so weiter). Innerhalb eines Schritts zählt jede Stufe. Legitimität und kulturelle Anziehungskraft nutzen stattdessen Schritte von 10. Nationale Effekte zählen die Grandezza all deiner Monumente zusammen; lokale Effekte zählen die Grandezza jedes Monuments für sich."
+ },
+ "concept_greenhouse_gas_emissions_desc": {
+  "en": "The total output of climate-warming gases from a country's industrial activity. Emissions are driven primarily by coal and oil consumption in buildings. Global cumulative emissions determine the rate of increase in [concept_temperature_anomaly].",
+  "de": "Die Gesamtmenge klimaerwärmender Gase aus der Industrietätigkeit eines Landes. Die Emissionen werden vor allem durch den Kohle- und Ölverbrauch in Gebäuden angetrieben. Die weltweiten kumulierten Emissionen bestimmen die Anstiegsrate der [concept_temperature_anomaly]."
+ },
+ "concept_heir_education_system_desc": {
+  "en": "A monthly-pulse education system for monarchies that shapes the future ruler's capabilities. The [concept_heir]'s tutors are chosen on three tracks, one focus per track at a time: aptitude (administrative, diplomatic, or military), ideology (progressive or conservative), and faction (radical, moderate, or regressive mentors). An intelligence system (1–5) determines learning speed. Education resolves into 5-tier aptitude traits when the heir comes of age. A rebel child mechanic can also trigger, creating unpredictable heirs.",
+  "de": "Ein monatlich pulsierendes Bildungssystem für Monarchien, das die Fähigkeiten des künftigen Herrschers formt. Die Lehrer des [concept_heir] werden auf drei Schienen ausgewählt, jeweils ein Schwerpunkt pro Schiene: Begabung (administrativ, diplomatisch oder militärisch), Ideologie (progressiv oder konservativ) und Fraktion (radikale, gemäßigte oder reaktionäre Mentoren). Ein Intelligenzwert (1–5) bestimmt die Lerngeschwindigkeit. Die Bildung löst sich bei Volljährigkeit des Erben in fünfstufige Begabungseigenschaften auf. Auch eine Mechanik für rebellische Kinder kann auslösen und unberechenbare Erben hervorbringen."
+ },
  "concept_homeland_dynamics": {
   "en": "Homeland Dynamics",
   "de": "Heimatlanddynamik"
+ },
+ "concept_homeland_dynamics_desc": {
+  "en": "Cultures gain and lose [concept_homeland] status through separate monthly progress bars. A primary culture must reach the Creation Threshold to begin establishing a homeland; a non-primary homeland culture must fall below the Removal Threshold to begin losing it. Each change completes at 100%. Progress depends on laws, technologies, [concept_turmoil], and government [concept_legitimacy]. The state panel shows progress and any conditions blocking it.",
+  "de": "Kulturen gewinnen und verlieren den Status [concept_homeland] über getrennte monatliche Fortschrittsbalken. Eine Hauptkultur muss die Entstehungsschwelle erreichen, um ein Heimatland zu etablieren; eine nicht-primäre Heimatlandkultur muss unter die Verlustschwelle fallen, um es zu verlieren. Jede Änderung ist bei 100% abgeschlossen. Der Fortschritt hängt von Gesetzen, Technologien, [concept_turmoil] und der [concept_legitimacy] der Regierung ab. Das Staatspanel zeigt den Fortschritt und alle blockierenden Bedingungen."
+ },
+ "concept_human_augmentation_system_desc": {
+  "en": "A social and technological debate over cybernetic and biological enhancement. Laws range from Human Purity (complete ban) through Medical Only, Regulated Market, and Unrestricted Augmentation to Mandatory Augmentation. Involves biohacking, brain-computer interfaces, and questions of what it means to be human.",
+  "de": "Eine gesellschaftliche und technologische Debatte über kybernetische und biologische Verbesserung. Die Gesetze reichen von Menschliche Reinheit (vollständiges Verbot) über Nur medizinisch und Regulierter Markt bis hin zu Uneingeschränkte Augmentierung und Verpflichtende Augmentierung. Betrifft Biohacking, Gehirn-Computer-Schnittstellen und die Frage, was es bedeutet, Mensch zu sein."
  },
  "concept_impregnable_fortress": {
   "en": "Impregnable Fortress",
   "de": "Uneinnehmbare Festung"
  },
+ "concept_impregnable_fortress_desc": {
+  "en": "The highest tier of fortification, an almost impregnable defensive structure that greatly favors defenders in battle.",
+  "de": "Die höchste Stufe der Befestigung, eine nahezu uneinnehmbare Verteidigungsanlage, die Verteidiger im Kampf stark begünstigt."
+ },
  "concept_intelligence_capacity": {
   "en": "Intelligence Capacity",
   "de": "Geheimdienstkapazität"
+ },
+ "concept_intelligence_capacity_desc": {
+  "en": "A country's general counterintelligence capability, computed from three components: technology and institutional investment, national [concept_literacy] rate (up to 50 at full literacy), and share of world [Concept('concept_gdp', 'GDP')] (one point per percent, capped at 25), then scaled by percentage modifiers. It has no upper limit. Higher [concept_intelligence_capacity] protects against separatism and [Concept('concept_coup', 'coups')]. In the [concept_covert_warfare_system], IC forms the general defense component — augmented by type-specific defenses (Economic, Military, Ideological) from relevant laws to determine the total defense against each operation type.",
+  "de": "Die allgemeine Spionageabwehrfähigkeit eines Landes, berechnet aus drei Komponenten: Investitionen in Technologie und Institutionen, die nationale [concept_literacy]srate (bis zu 50 bei voller Alphabetisierung) und der Anteil am weltweiten [Concept('concept_gdp', 'Bruttoinlandsprodukt')] (ein Punkt pro Prozent, gedeckelt bei 25), anschließend skaliert durch prozentuale Modifikatoren. Sie hat keine Obergrenze. Höhere [concept_intelligence_capacity] schützt vor Separatismus und [Concept('concept_coup', 'Putschen')]. Im Rahmen der [concept_covert_warfare_system] bildet die Geheimdienstkapazität die allgemeine Abwehrkomponente — ergänzt durch typspezifische Abwehr (Wirtschaft, Militär, Ideologie) aus den jeweiligen Gesetzen, um die Gesamtabwehr gegen jede Operationsart zu bestimmen."
  },
  "concept_internal_resettlement": {
   "en": "Internal Resettlement",
   "de": "Interne Umsiedlung"
  },
+ "concept_internal_resettlement_desc": {
+  "en": "Government-run movement of people from one part of the country to another. A Settlement Authority on a thinly populated frontier recruits across the country under one program (from land grants to deportation), moves the number shown in the state's modifiers each month, and closes when the region fills up. Coercive programs cost lives in transit and breach the Universal Declaration of Human Rights for its parties, and Special Settlements and Rustication anger the people left behind. Settlers press on anyone already living on the frontier who is not at least a second-class citizen.",
+  "de": "Staatlich gelenkte Umsiedlung von Menschen von einem Landesteil in einen anderen. Eine Siedlungsbehörde an einer dünn besiedelten Grenze rekrutiert landesweit unter einem Programm (von Landzuteilungen bis zu Deportation), bewegt jeden Monat die in den Modifikatoren des Staates angezeigte Zahl und schließt, sobald die Region gefüllt ist. Zwangsprogramme kosten Menschenleben während des Transports und verletzen für ihre Vertragsparteien die Allgemeine Erklärung der Menschenrechte, und Sondersiedlungen sowie Landverbannung verärgern die Zurückgebliebenen. Siedler bedrängen jeden, der bereits an der Grenze lebt und nicht mindestens Bürger zweiter Klasse ist."
+ },
+ "concept_legislative_override_capacity_desc": {
+  "en": "A measure of how readily a regime can bypass the normal legislative process to push laws through over [Concept('concept_interest_group','Interest Group')] resistance. Granted by certain laws, surveillance technologies, state institutions (policing, thought control, propaganda), and power bloc principles — authoritarian governance, suppressive policies, and centralized state structures raise it; democratic suffrage, decentralization, feudal arrangements, and protected liberties lower it.\\n\\nAt 2 or more, the regime can decisively push laws through despite opposition; at 4 or more, it can force them through outright. Each point also trims the [concept_authority] cost — modestly below +5 (about -3% at +2, -9% at +4) and steeply beyond it (about -20% at +5, -50% at +8, -75% at +16). Forcing a law temporarily depletes capacity, recovering over about five years, so headroom above a threshold lets the regime act again sooner.",
+  "de": "Ein Maß dafür, wie leicht ein Regime den normalen Gesetzgebungsprozess umgehen kann, um Gesetze gegen den Widerstand der [Concept('concept_interest_group','Interessengruppen')] durchzusetzen. Wird durch bestimmte Gesetze, Überwachungstechnologien, staatliche Institutionen (Polizei, Gedankenkontrolle, Propaganda) und Machtblockprinzipien gewährt — autoritäre Herrschaft, repressive Politik und zentralisierte Staatsstrukturen erhöhen sie; demokratisches Wahlrecht, Dezentralisierung, feudale Ordnungen und geschützte Freiheiten senken sie.\\n\\nAb 2 kann das Regime Gesetze trotz Widerstand entschieden durchsetzen; ab 4 kann es sie regelrecht erzwingen. Jeder Punkt senkt zudem die Kosten an [concept_authority] — moderat unterhalb von +5 (etwa -3% bei +2, -9% bei +4) und stark darüber hinaus (etwa -20% bei +5, -50% bei +8, -75% bei +16). Das Erzwingen eines Gesetzes erschöpft die Kapazität vorübergehend und erholt sich über etwa fünf Jahre, sodass Spielraum oberhalb einer Schwelle dem Regime erlaubt, früher wieder zu handeln."
+ },
+ "concept_lgbtq_rights_movement_desc": {
+  "en": "A social movement [concept_journal_entry] tracking the progression of LGBTQ+ rights from Active Persecution through Legal Limbo, Basic Protections, and Comprehensive Rights to Full Equality and Protection. Progress is driven by social attitudes, urbanization, and related law changes.",
+  "de": "Eine soziale Bewegung als [concept_journal_entry], die den Fortschritt der LGBTQ+-Rechte von Aktive Verfolgung über Rechtliches Vakuum, Grundlegender Schutz und Umfassende Rechte bis hin zu Vollständige Gleichheit und Schutz verfolgt. Der Fortschritt wird von gesellschaftlichen Einstellungen, Urbanisierung und damit verbundenen Gesetzesänderungen angetrieben."
+ },
+ "concept_mental_health_crisis_desc": {
+  "en": "Growing awareness of mental health issues in an industrializing and modernizing society. Tied to criminal justice reform, with progression from punishment-focused systems toward rehabilitation and restorative justice approaches.",
+  "de": "Wachsendes Bewusstsein für psychische Gesundheit in einer sich industrialisierenden und modernisierenden Gesellschaft. Verknüpft mit der Reform des Strafrechts, mit einem Wandel von strafzentrierten Systemen hin zu Rehabilitation und Ansätzen der Wiedergutmachungsjustiz."
+ },
  "concept_migration_crowding": {
   "en": "Migration Crowding",
   "de": "Migrationsüberlastung"
+ },
+ "concept_migration_crowding_desc": {
+  "en": "A density-based reduction in migration pull for overpopulated states. Once a state reaches its crowding threshold, the penalty rises gradually with a quadratic ramp, then switches to linear growth at severe density. Larger or better-planned states can sustain more people before this penalty becomes severe.",
+  "de": "Eine dichteabhängige Verringerung der Migrationsanziehung für überbevölkerte Staaten. Sobald ein Staat seine Überfüllungsschwelle erreicht, steigt der Abzug zunächst allmählich mit einer quadratischen Rampe an und wechselt bei starker Dichte zu linearem Wachstum. Größere oder besser geplante Staaten können mehr Menschen tragen, bevor dieser Abzug gravierend wird."
  },
  "concept_ministry_system": {
   "en": "Ministry System",
   "de": "Ministerialsystem"
  },
+ "concept_ministry_system_desc": {
+  "en": "A set of 16 custom [Concept('concept_institution', 'institutions')] representing government ministries: War, Commerce, Foreign Affairs, National Bank, Culture, Labor, Environment, Intelligence and Security, Refugee Affairs, Propaganda, Science, Thought Control, Consumer Protection, Urban Planning, Religion, and International Aid. Each ministry has multiple [Concept('concept_investment_level', 'investment levels')] that provide scaling modifiers. Ministry laws control which ministries are active.",
+  "de": "Eine Gruppe von 16 eigenen [Concept('concept_institution', 'Institutionen')], die Regierungsministerien darstellen: Krieg, Handel, Äußere Angelegenheiten, Nationalbank, Kultur, Arbeit, Umwelt, Geheimdienst und Sicherheit, Flüchtlingsangelegenheiten, Propaganda, Wissenschaft, Gedankenkontrolle, Verbraucherschutz, Stadtplanung, Religion und Internationale Hilfe. Jedes Ministerium hat mehrere [Concept('concept_investment_level', 'Investitionsstufen')], die skalierende Modifikatoren bieten. Ministeriumsgesetze bestimmen, welche Ministerien aktiv sind."
+ },
  "concept_nuclear_program": {
   "en": "Nuclear Program",
   "de": "Nuklearprogramm"
+ },
+ "concept_nuclear_program_desc": {
+  "en": "A country's nuclear weapons development effort, tracked by a [concept_journal_entry] with a progress bar. Research of the Nuclear Weapons technology and continued funding advances the program. A complete [concept_nuclear_program] enables the use of [Concept('concept_diplomatic_action', 'diplomatic actions')] for strategic and tactical [concept_nuclear_strike]s, and is a major factor in [concept_nuclear_stockpile] size and deterrence.",
+  "de": "Das Bestreben eines Landes, Kernwaffen zu entwickeln, verfolgt durch einen [concept_journal_entry] mit Fortschrittsbalken. Die Erforschung der Technologie Nuklearwaffen und fortlaufende Finanzierung treiben das Programm voran. Ein vollständiges [concept_nuclear_program] ermöglicht den Einsatz von [Concept('concept_diplomatic_action', 'Diplomatenaktionen')] für strategische und taktische [Concept('concept_nuclear_strike', 'Nuklearschläge')] und ist ein wesentlicher Faktor für die Größe des [concept_nuclear_stockpile] und die Abschreckung."
  },
  "concept_nuclear_stockpile": {
   "en": "Nuclear Stockpile",
   "de": "Nukleararsenal"
  },
+ "concept_nuclear_stockpile_desc": {
+  "en": "The quantity of nuclear weapons a country possesses. Only its [concept_nuclear_program] builds them: funding advances the programme's progress, and each time the progress bar fills, one warhead is added. A strike spends one, and a disarmament treaty takes them all. A larger stockpile increases deterrence value but may provoke international concern.",
+  "de": "Die Anzahl der Kernwaffen, die ein Land besitzt. Nur sein [concept_nuclear_program] baut sie: Finanzierung treibt den Fortschritt des Programms voran, und jedes Mal, wenn der Fortschrittsbalken sich füllt, kommt ein Sprengkopf hinzu. Ein Schlag verbraucht einen, und ein Abrüstungsvertrag nimmt sie alle. Ein größeres Arsenal erhöht den Abschreckungswert, kann aber internationale Besorgnis hervorrufen."
+ },
  "concept_nuclear_strike": {
   "en": "Nuclear Strike",
   "de": "Nuklearschlag"
+ },
+ "concept_nuclear_strike_desc": {
+  "en": "A devastating attack using nuclear weapons. Success chance is determined by the attacker's nuclear attack modifier (from technologies like Nuclear Weapons, ICBMs, Hypersonic Weapons, and Orbital Weapon Platforms) minus the target's defense modifier (from Military Aviation, Radar, Missile Defense Systems, Directed Energy Defenses, and Orbital Weapon Platforms). The result is clamped between 5% and 100%.",
+  "de": "Ein verheerender Angriff mit Kernwaffen. Die Erfolgschance wird durch den nuklearen Angriffsmodifikator des Angreifers bestimmt (aus Technologien wie Nuklearwaffen, ICBMs, Hyperschallwaffen und Orbitale Waffenplattformen) abzüglich des Verteidigungsmodifikators des Ziels (aus Militärflugzeuge, Radar, Raketenabwehrsysteme, Gerichtete-Energie-Abwehr und Orbitale Waffenplattformen). Das Ergebnis wird auf 5% bis 100% begrenzt."
+ },
+ "concept_open_market_operations_desc": {
+  "en": "A central-bank intervention tool: the bank buys government securities to inject liquidity (expansionary) or sells them to drain liquidity (contractionary). Used to stabilize the [concept_banking_cycle] by countering crash risk in downturns and overheating in booms.",
+  "de": "Ein Interventionsinstrument der Zentralbank: Die Bank kauft Staatsanleihen, um Liquidität zuzuführen (expansiv), oder verkauft sie, um Liquidität abzuschöpfen (kontraktiv). Dient der Stabilisierung des [concept_banking_cycle], indem sie dem Crash-Risiko in Abschwüngen und der Überhitzung in Booms entgegenwirkt."
  },
  "concept_operation_detection": {
   "en": "Operation Detection",
   "de": "Aufdeckung von Operationen"
  },
+ "concept_operation_detection_desc": {
+  "en": "Each month, active [concept_covert_operations] have a chance of being detected by the target. Base detection chance is 10%, reduced by higher funding levels (up to -19% at level 5) and increased by the [concept_target_defenses]. Your [concept_covert_efficiency] further modifies the final chance. Detection burns the operation and alerts the target nation. What that exposure costs in [concept_infamy] and [concept_relations] depends on how hostile the operation was and how long it had been running — each operation's own description says which tier it falls in. The target can then choose to bolster defenses or retaliate.",
+  "de": "Jeden Monat besteht für aktive [concept_covert_operations] die Chance, vom Ziel entdeckt zu werden. Die Grunderkennungschance liegt bei 10%, wird durch höhere Finanzierungsstufen gesenkt (bis zu -19% bei Stufe 5) und durch die [concept_target_defenses] erhöht. Dein [concept_covert_efficiency] verändert die endgültige Chance zusätzlich. Eine Entdeckung verbraucht die Operation und alarmiert die Zielnation. Was diese Enttarnung an [concept_infamy] und [concept_relations] kostet, hängt davon ab, wie feindselig die Operation war und wie lange sie schon lief — die Beschreibung jeder Operation nennt die jeweilige Stufe. Das Ziel kann daraufhin die Abwehr verstärken oder Vergeltung üben."
+ },
  "concept_pollution_system": {
   "en": "Pollution",
   "de": "Verschmutzung"
+ },
+ "concept_pollution_system_desc": {
+  "en": "A state-level system tracking industrial [concept_pollution_system] based on building output. High pollution reduces local quality of life and increases mortality. Pollution can be mitigated through environmental regulations, cleaner [Concept('concept_production_method', 'production methods')], and the Ministry of the Environment [concept_institution].",
+  "de": "Ein System auf Staatsebene, das die industrielle [concept_pollution_system] anhand des Gebäudeausstoßes verfolgt. Hohe Verschmutzung senkt die örtliche Lebensqualität und erhöht die Sterblichkeit. Verschmutzung kann durch Umweltauflagen, sauberere [Concept('concept_production_method', 'Produktionsmethoden')] und die [concept_institution] Umweltministerium gemindert werden."
+ },
+ "concept_post_scarcity_system_desc": {
+  "en": "An economic transition toward a society where material abundance eliminates traditional scarcity. Tracked through journal entries tied to automation, AI, and advanced production technologies. Includes Universal Basic Income as an intermediate step toward full post-scarcity.",
+  "de": "Ein wirtschaftlicher Übergang hin zu einer Gesellschaft, in der materieller Überfluss die traditionelle Knappheit beseitigt. Wird über Journaleinträge verfolgt, die an Automatisierung, KI und fortgeschrittene Produktionstechnologien geknüpft sind. Umfasst das Bedingungslose Grundeinkommen als Zwischenschritt zur vollständigen Post-Knappheit."
  },
  "concept_religious_revival": {
   "en": "Religious Revival",
   "de": "Religiöse Erweckung"
  },
+ "concept_religious_revival_desc": {
+  "en": "Events that counteract the [concept_decline_of_religion] trend. [concept_religious_revival] events fire periodically to represent waves of renewed faith in response to social upheaval, uncertainty, or cultural backlash against secularization. Religion-specific variants provide different narrative flavor. Can be removed by the Secularization Campaign decision.",
+  "de": "Ereignisse, die dem Trend des [concept_decline_of_religion] entgegenwirken. Ereignisse der [concept_religious_revival] lösen periodisch aus, um Wellen erneuerten Glaubens als Reaktion auf gesellschaftliche Umwälzungen, Unsicherheit oder kulturellen Widerstand gegen die Säkularisierung darzustellen. Religionsspezifische Varianten bieten unterschiedliche erzählerische Nuancen. Kann durch die Entscheidung Säkularisierungskampagne entfernt werden."
+ },
+ "concept_religious_trait_desc": {
+  "en": "A classification grouping religions by their shared theological traditions, such as Abrahamic, Dharmic, or Eastern faiths. Countries with the same [concept_religious_trait] have higher diplomatic acceptance despite following different specific religions.",
+  "de": "Eine Klassifikation, die Religionen nach ihren gemeinsamen theologischen Traditionen gruppiert, etwa abrahamitische, dharmische oder östliche Glaubensrichtungen. Länder mit derselben [concept_religious_trait] genießen höhere diplomatische Akzeptanz, auch wenn sie unterschiedlichen Einzelreligionen folgen."
+ },
+ "concept_rules_of_war_system_desc": {
+  "en": "Laws governing the conduct of warfare. Range from Total War (no restrictions) through Traditional Rules of War, War Crimes Forbidden, and Humanitarian Regulations to Limited War (maximum restrictions). Stricter rules reduce wartime atrocities but may limit military options.",
+  "de": "Gesetze, die die Kriegsführung regeln. Sie reichen von Totaler Krieg (keine Beschränkungen) über Traditionelle Kriegsregeln, Kriegsverbrechen verboten und Humanitäre Vorschriften bis hin zu Begrenzter Krieg (maximale Beschränkungen). Strengere Regeln verringern Kriegsgräuel, können aber militärische Optionen einschränken."
+ },
  "concept_sol_expectations": {
   "en": "Adaptive SoL Expectations",
   "de": "Adaptive Lebensstandarderwartungen"
+ },
+ "concept_sol_expectations_desc": {
+  "en": "A system where the population's expected [concept_sol] gradually adapts toward their actual [concept_ch_sol] over roughly two decades. When SoL rises suddenly, expectations lag behind — creating a period of contentment as reality exceeds what people are accustomed to. When SoL drops, expectations remain high for years — causing prolonged dissatisfaction. This adds historical inertia to social stability, making sudden economic shocks more painful and sustained growth more rewarding.",
+  "de": "Ein System, in dem sich der von der Bevölkerung erwartete [concept_sol] über etwa zwei Jahrzehnte hinweg allmählich an ihren tatsächlichen [concept_ch_sol] anpasst. Steigt der Lebensstandard plötzlich, hinken die Erwartungen hinterher — das erzeugt eine Phase der Zufriedenheit, da die Realität das übertrifft, woran die Menschen gewöhnt sind. Sinkt der Lebensstandard, bleiben die Erwartungen jahrelang hoch — das führt zu anhaltender Unzufriedenheit. Dies verleiht der sozialen Stabilität historische Trägheit: plötzliche wirtschaftliche Schocks schmerzen stärker, und anhaltendes Wachstum lohnt sich mehr."
+ },
+ "concept_solar_collector_array_desc": {
+  "en": "An orbital solar power satellite that beams energy to ground receivers. Each fully staffed level of the Solar Collector provides 3 sub-building slots for Solar Receivers, which convert beamed energy into electricity for the state.",
+  "de": "Ein orbitaler Sonnenenergiesatellit, der Energie zu Bodenempfängern strahlt. Jede voll besetzte Stufe des Sonnenkollektors bietet 3 Unterbau-Slots für Solarempfänger, die die eingestrahlte Energie in Strom für den Staat umwandeln."
  },
  "concept_solar_colonization": {
   "en": "Solar Colonization",
   "de": "Besiedlung des Sonnensystems"
  },
+ "concept_solar_colonization_desc": {
+  "en": "The establishment of permanent settlements throughout the solar system. After completing the core [concept_space_race] milestones, countries can pursue 34 colonization targets across 5 stages: near-Earth asteroids and Lagrange points, Mars and lunar settlements, outer planet moons, dwarf planets and distant bodies, and multi-generation colonies.",
+  "de": "Die Errichtung dauerhafter Siedlungen im gesamten Sonnensystem. Nach Abschluss der zentralen Meilensteine des [concept_space_race] können Länder 34 Kolonisierungsziele in 5 Stufen verfolgen: erdnahe Asteroiden und Lagrange-Punkte, Mars- und Mondsiedlungen, Monde äußerer Planeten, Zwergplaneten und ferne Himmelskörper sowie Generationenkolonien."
+ },
  "concept_space_milestone": {
   "en": "Space Milestone",
   "de": "Raumfahrt-Meilenstein"
+ },
+ "concept_space_milestone_desc": {
+  "en": "A major achievement in the [concept_space_race]. There are seven milestones: Suborbital Flight, Orbital Flight, Moon Landing, Deep-Space Probe, Moon Base, Mars Landing, and Interstellar Probe. Once a nation has both the Moon Base and the Mars Landing, Solar System Colonization follows. Each milestone requires specific technologies, earlier milestones, and sufficient space program funding to complete.",
+  "de": "Eine bedeutende Errungenschaft im [concept_space_race]. Es gibt sieben Meilensteine: Suborbitalflug, Orbitalflug, Mondlandung, Tiefraumsonde, Mondbasis, Marslandung und Interstellare Sonde. Sobald eine Nation sowohl die Mondbasis als auch die Marslandung erreicht hat, folgt die Besiedlung des Sonnensystems. Jeder Meilenstein erfordert bestimmte Technologien, frühere Meilensteine und ausreichende Finanzierung des Raumfahrtprogramms, um abgeschlossen zu werden."
  },
  "concept_space_race": {
   "en": "Space Race",
   "de": "Wettlauf ins All"
  },
+ "concept_space_race_desc": {
+  "en": "A competition between nations to achieve [concept_space_milestone]s, from suborbital flight through orbital flight, Moon landing, Moon base, Mars landing, and ultimately interstellar probes. Each milestone can be pursued with a Safe or Ambitious approach — ambitious is faster but risks failure. Being the first country to achieve a milestone grants bonus [concept_prestige] and technology. A fully developed space program also enables [concept_solar_colonization].",
+  "de": "Ein Wettbewerb zwischen Nationen um das Erreichen von [Concept('concept_space_milestone', 'Raumfahrt-Meilensteinen')], von Suborbitalflug über Orbitalflug, Mondlandung, Mondbasis, Marslandung bis hin zu interstellaren Sonden. Jeder Meilenstein kann mit einem sicheren oder einem ehrgeizigen Ansatz verfolgt werden — ehrgeizig ist schneller, riskiert aber Fehlschläge. Das erste Land, das einen Meilenstein erreicht, erhält zusätzliches [concept_prestige] und Technologie. Ein voll entwickeltes Raumfahrtprogramm ermöglicht zudem die [concept_solar_colonization]."
+ },
+ "concept_st_res_active_rate_desc": {
+  "en": "Gross weekly volume the Strategic Reserve Hub is actually trading on the market — equal to [concept_st_res_rate_setting] plus the current weekly decay loss. Storing at +1/week with 0.4 weekly decay means the hub buys 1.4/week so the stockpile nets +1/week after spoilage. With the rate setting at zero but the stockpile non-empty, Active equals the decay rate (the hub buys just enough to maintain the stockpile against losses). Capped by the Hub Flow Cap and scaled by hub [concept_throughput] modifiers.",
+  "de": "Das wöchentliche Bruttovolumen, das der Knoten der Strategischen Reserve tatsächlich auf dem Markt handelt — gleich dem [concept_st_res_rate_setting] zuzüglich des aktuellen wöchentlichen Verfallsverlusts. Wird mit +1/Woche bei 0,4 wöchentlichem Verfall eingelagert, kauft der Knoten 1,4/Woche, sodass der Bestand nach Verderb netto um +1/Woche wächst. Steht die Ratenfestlegung auf null, ist der Bestand aber nicht leer, entspricht Aktiv der Verfallsrate (der Knoten kauft gerade genug, um den Bestand gegen Verluste zu erhalten). Gedeckelt durch die Knoten-Durchflussgrenze und skaliert durch [concept_throughput]-Modifikatoren des Knotens."
+ },
+ "concept_st_res_rate_setting_desc": {
+  "en": "Player-configured signed weekly intake rate for this good in the Strategic Reserve. Positive values store (the hub buys from the market); negative values withdraw (the hub sells onto the market). Adjusted via the +/− buttons in steps controlled by the shared Adjustment Step (1, 10, 100, 1000, or 10000). The setting is preserved across weekly ticks until storage room (or stockpile, on withdraw) runs out, at which point it auto-clamps to the remaining amount and then to zero — the hub will not exceed physical capacity.",
+  "de": "Vom Spieler festgelegte, vorzeichenbehaftete wöchentliche Aufnahmerate für dieses Gut in der Strategischen Reserve. Positive Werte lagern ein (der Knoten kauft vom Markt); negative Werte entnehmen (der Knoten verkauft an den Markt). Wird über die +/−-Schaltflächen in Schritten angepasst, die durch den gemeinsamen Anpassungsschritt gesteuert werden (1, 10, 100, 1000 oder 10000). Die Einstellung bleibt über wöchentliche Ticks hinweg erhalten, bis der Lagerplatz (oder bei Entnahme der Bestand) ausgeht; dann wird sie automatisch auf die verbleibende Menge und danach auf null begrenzt — der Knoten überschreitet nie seine physische Kapazität."
+ },
+ "concept_state_collapse_system_desc": {
+  "en": "A [concept_journal_entry] system tracking countries on the verge of total collapse. When a nation's stability deteriorates past critical thresholds due to revolution, debt, military defeat, or other crises, it may experience cascading state failure leading to fragmentation or [concept_regime_change].",
+  "de": "Ein [concept_journal_entry]-System, das Länder am Rande des völligen Zusammenbruchs verfolgt. Verschlechtert sich die Stabilität einer Nation durch Revolution, Schulden, militärische Niederlage oder andere Krisen über kritische Schwellen hinaus, kann sie ein kaskadierendes Staatsversagen erleiden, das zu Fragmentierung oder [concept_regime_change] führt."
+ },
  "concept_target_defenses": {
   "en": "Target's Defenses",
   "de": "Verteidigung des Ziels"
+ },
+ "concept_target_defenses_desc": {
+  "en": "The target nation's total defense against a given operation type combines their general [concept_intelligence_capacity] plus type-specific defense (Economic, Military, or Ideological). Countries with stronger counterintelligence programs, higher [concept_literacy], larger [Concept('concept_gdp', 'GDP')], and laws targeting the relevant defense category are harder to spy on. Each operation's detection chance is calculated individually based on that specific target's total defense compared to your IC.",
+  "de": "Die Gesamtabwehr der Zielnation gegen eine bestimmte Operationsart setzt sich aus ihrer allgemeinen [concept_intelligence_capacity] und typspezifischer Abwehr (Wirtschaft, Militär oder Ideologie) zusammen. Länder mit stärkeren Spionageabwehrprogrammen, höherer [concept_literacy], größerem [Concept('concept_gdp', 'Bruttoinlandsprodukt')] und Gesetzen, die auf die jeweilige Abwehrkategorie abzielen, sind schwerer auszuspionieren. Die Entdeckungschance jeder Operation wird individuell anhand der Gesamtabwehr dieses spezifischen Ziels im Vergleich zu deiner Geheimdienstkapazität berechnet."
+ },
+ "concept_te_construction_market_desc": {
+  "en": "In Timeline Extended, [concept_construction] is a tradeable good rather than a fixed national pool of points.\\n\\n#b Supply#!: each $building_construction_sector$ buys wood, iron, steel and the like, and sells construction on the [concept_market] like any other factory. Better production methods produce more per level.\\n\\n#b Purchase#!: every week the government buys construction, paid from the [concept_treasury]. In the construction panel you set either how much it buys, and the cost follows the price, or how much it spends, and the quantity follows the price over a few weeks. Private investors buy for their own projects from the [concept_investment_pool]. Each purchase is capped at what its construction queue can use that week.\\n\\n#b Delivery#!: Construction Sites, placed automatically in states with construction under way, turn purchased construction into construction points. The private/government split of those points follows the two purchases; your economic-system [concept_law] no longer sets it.\\n\\n#b Maintenance#!: factories and infrastructure use a little construction as upkeep, and much more while they retool after switching production methods, so a growing economy needs a growing construction sector.\\n\\n#b Price#!: the more construction buyers want compared with what is on sale, the higher its price, and [concept_construction_cost_scaling] makes each point cost more in richer countries. When supply runs short, every buyer still gets all it buys, only at a higher price per point, so the government pays more and the [concept_investment_pool]'s spending buys fewer points.\\n\\nThe Free Market Construction game rule can waive the retooling cost or all maintenance at game setup, or turn all of this off for base-game construction: the Construction Site then becomes your construction sector, built and expanded like any government building.",
+  "de": "In Timeline Extended ist der [concept_construction] eine handelbare Ware statt eines festen nationalen Punktepools.\\n\\n#b Angebot#!: Jeder $building_construction_sector$ kauft Holz, Eisen, Stahl und Ähnliches und verkauft Bau auf dem [concept_market] wie jede andere Fabrik. Bessere Produktionsmethoden erzeugen pro Stufe mehr.\\n\\n#b Einkauf#!: Jede Woche kauft die Regierung Bau, bezahlt aus der [concept_treasury]. Im Baupanel legst du entweder fest, wie viel gekauft wird — dann folgen die Kosten dem Preis —, oder wie viel ausgegeben wird — dann folgt die Menge dem Preis über einige Wochen. Private Investoren kaufen für ihre eigenen Projekte aus dem [concept_investment_pool]. Jeder Einkauf ist auf das begrenzt, was die jeweilige Bauwarteschlange in dieser Woche nutzen kann.\\n\\n#b Lieferung#!: Baustellen, die automatisch in Staaten mit laufendem Bau platziert werden, verwandeln gekauften Bau in Baupunkte. Die Aufteilung dieser Punkte zwischen privat und staatlich folgt den beiden Einkäufen; dein wirtschaftspolitisches [concept_law] legt sie nicht mehr fest.\\n\\n#b Instandhaltung#!: Fabriken und Infrastruktur verbrauchen etwas Bau als Unterhalt, und deutlich mehr, während sie nach einem Wechsel der Produktionsmethode umgerüstet werden, sodass eine wachsende Wirtschaft einen wachsenden Bausektor braucht.\\n\\n#b Preis#!: Je mehr Bau die Käufer im Verhältnis zum Angebot wollen, desto höher sein Preis, und die [concept_construction_cost_scaling] lässt jeden Punkt in reicheren Ländern mehr kosten. Wird das Angebot knapp, erhält jeder Käufer weiterhin alles, was er kauft, nur zu einem höheren Preis pro Punkt, sodass die Regierung mehr zahlt und die Ausgaben des [concept_investment_pool] weniger Punkte kaufen.\\n\\nDie Spielregel Freimarkt-Bauwesen kann die Umrüstkosten oder die gesamte Instandhaltung bei der Spieleinrichtung erlassen, oder all dies für den Bau des Basisspiels abschalten: Die Baustelle wird dann zu deinem Bausektor, gebaut und erweitert wie jedes andere Regierungsgebäude."
  },
  "concept_temperature_anomaly": {
   "en": "Temperature Anomaly",
   "de": "Temperaturanomalie"
  },
+ "concept_temperature_anomaly_desc": {
+  "en": "The current deviation from pre-industrial global average temperature (in °C). Increases over time as [concept_greenhouse_gas_emissions] accumulate. Crossing threshold values (0.5°C, 1°C, 2°C, 3°C) triggers escalating climate events including extreme weather, agricultural disruption, sea level rise, and mass displacement.",
+  "de": "Die aktuelle Abweichung von der vorindustriellen globalen Durchschnittstemperatur (in °C). Steigt mit der Zeit, während sich die [concept_greenhouse_gas_emissions] anhäufen. Das Überschreiten von Schwellenwerten (0,5°C, 1°C, 2°C, 3°C) löst eskalierende Klimaereignisse aus, darunter Extremwetter, Störungen der Landwirtschaft, Meeresspiegelanstieg und Massenvertreibung."
+ },
  "concept_tourism_art": {
   "en": "Art",
   "de": "Kunst"
+ },
+ "concept_tourism_art_desc": {
+  "en": "Fine art production attracts culturally-minded tourists. States with active art industries see a [concept_throughput] bonus from galleries, studios, and cultural events.",
+  "de": "Die Produktion von Kunst zieht kulturinteressierte Touristen an. Staaten mit aktiver Kunstindustrie erhalten einen [concept_throughput]-Bonus durch Galerien, Ateliers und kulturelle Veranstaltungen."
+ },
+ "concept_tourism_base_appeal_desc": {
+  "en": "The inherent attractiveness of a state to tourists, based on its natural features, climate, and geography. This is a fixed baseline that other factors build upon.",
+  "de": "Die inhärente Attraktivität eines Staates für Touristen, basierend auf seinen natürlichen Merkmalen, seinem Klima und seiner Geografie. Dies ist eine feste Ausgangsbasis, auf der andere Faktoren aufbauen."
  },
  "concept_tourism_cities": {
   "en": "Cities",
   "de": "Städte"
  },
+ "concept_tourism_cities_desc": {
+  "en": "Urban centers attract tourists with their cultural offerings, shopping, entertainment, and historical significance. Higher city ranks provide larger [concept_tourism_output] bonuses.",
+  "de": "Städtische Zentren ziehen Touristen mit ihrem kulturellen Angebot, Einkaufsmöglichkeiten, Unterhaltung und historischer Bedeutung an. Höhere Stadtränge bieten größere [concept_tourism_output]-Boni."
+ },
  "concept_tourism_monuments": {
   "en": "Monuments",
   "de": "Monumente"
+ },
+ "concept_tourism_monuments_desc": {
+  "en": "Historical monuments, landmarks, and world wonders are major tourist attractions, significantly boosting [concept_tourism_throughput].",
+  "de": "Historische Monumente, Wahrzeichen und Weltwunder sind bedeutende touristische Attraktionen und steigern den [concept_tourism_throughput] erheblich."
  },
  "concept_tourism_output": {
   "en": "Tourism Output",
   "de": "Tourismusertrag"
  },
+ "concept_tourism_output_desc": {
+  "en": "The total output bonus for the [concept_tourism_system] industry in this state. It starts from the state's base appeal and city rank; airports, some laws, pollution, [concept_turmoil] and other modifiers then raise or lower it. Higher city ranks and more appealing locations produce more tourism revenue.",
+  "de": "Der gesamte Produktionsbonus für die Branche [concept_tourism_system] in diesem Staat. Er beginnt bei der Grundattraktivität und dem Stadtrang des Staates; Flughäfen, einige Gesetze, Verschmutzung, [concept_turmoil] und andere Modifikatoren heben oder senken ihn danach. Höhere Stadtränge und attraktivere Standorte erzeugen mehr Tourismuseinnahmen."
+ },
  "concept_tourism_parks": {
   "en": "Parks",
   "de": "Parks"
+ },
+ "concept_tourism_parks_desc": {
+  "en": "National parks and natural reserves draw eco-tourists and recreation seekers, increasing [concept_tourism_throughput].",
+  "de": "Nationalparks und Naturschutzgebiete ziehen Ökotouristen und Erholungssuchende an und steigern den [concept_tourism_throughput]."
  },
  "concept_tourism_ports": {
   "en": "Ports",
   "de": "Häfen"
  },
+ "concept_tourism_ports_desc": {
+  "en": "Coastal access and port [concept_infrastructure] bring cruise ships and maritime visitors, boosting [concept_tourism_throughput]. States with active ports see increased tourist flow.",
+  "de": "Küstenzugang und Hafen-[concept_infrastructure] bringen Kreuzfahrtschiffe und maritime Besucher und steigern den [concept_tourism_throughput]. Staaten mit aktiven Häfen verzeichnen stärkeren Touristenverkehr."
+ },
  "concept_tourism_system": {
   "en": "Tourism",
   "de": "Tourismus"
+ },
+ "concept_tourism_system_desc": {
+  "en": "A state-level economic system modeling tourist activity based on state features, cultural attractions, and [concept_infrastructure]. [concept_tourism_system] generates revenue and creates demand for services goods. States with notable features, historical sites, or natural beauty attract more tourists.",
+  "de": "Ein wirtschaftliches System auf Staatsebene, das touristische Aktivität anhand von Staatsmerkmalen, kulturellen Attraktionen und [concept_infrastructure] modelliert. [concept_tourism_system] erzeugt Einnahmen und schafft Nachfrage nach Dienstleistungsgütern. Staaten mit bemerkenswerten Merkmalen, historischen Stätten oder natürlicher Schönheit ziehen mehr Touristen an."
  },
  "concept_tourism_throughput": {
   "en": "Tourism Throughput",
   "de": "Tourismusdurchsatz"
  },
+ "concept_tourism_throughput_desc": {
+  "en": "The [concept_throughput] multiplier for the [concept_tourism_system] industry, representing how accessible and attractive the state is to visitors. Improved by ports, land transport, art production, parks, and monuments.",
+  "de": "Der [concept_throughput]-Multiplikator für die Branche [concept_tourism_system], der widerspiegelt, wie zugänglich und attraktiv der Staat für Besucher ist. Verbessert durch Häfen, Landverkehr, Kunstproduktion, Parks und Monumente."
+ },
  "concept_tourism_transit": {
   "en": "Transit",
   "de": "Transit"
+ },
+ "concept_tourism_transit_desc": {
+  "en": "Land transportation [concept_infrastructure] — railways and highways — makes a state more accessible to tourists, increasing [concept_throughput]. Airports raise [concept_tourism_output] instead.",
+  "de": "Landverkehrs-[concept_infrastructure] — Eisenbahnen und Fernstraßen — macht einen Staat für Touristen leichter zugänglich und steigert den [concept_throughput]. Flughäfen erhöhen stattdessen den [concept_tourism_output]."
  },
  "concept_un_authority": {
   "en": "UN Authority",
   "de": "UN-Autorität"
  },
+ "concept_un_authority_desc": {
+  "en": "A 0–100 measure of how seriously the world treats the United Nations. Each month it moves toward a target computed from the world: who is in it, which great powers champion or undermine it, its record of resolutions carried and defied, who funds it, wars between members and nuclear use, and what it has delivered. Every act counts in proportion to the actor's share of world [concept_prestige]. Authority sets the UN's tier and its [concept_un_enforcement]: #R Moribund#! below 20, #Y Contested#! 20–45, #v Established#! 45–70, #G Strong#! 70–85, #B Supranational#! 85+. The [concept_un_charter] caps the target at 70 until it is reformed. Below 10 the UN is in crisis; at 0 it dissolves.",
+  "de": "Ein Maß von 0–100 dafür, wie ernst die Welt die Vereinten Nationen nimmt. Jeden Monat bewegt es sich auf ein Ziel zu, das aus der Welt berechnet wird: wer Mitglied ist, welche Großmächte sie fördern oder untergraben, ihre Bilanz durchgesetzter und missachteter Resolutionen, wer sie finanziert, Kriege zwischen Mitgliedern und Atomwaffeneinsätze, sowie das, was sie geleistet hat. Jede Handlung zählt im Verhältnis zum Anteil des Akteurs am weltweiten [concept_prestige]. Die Autorität bestimmt die Stufe der UN und ihre [concept_un_enforcement]: #R Marode#! unter 20, #Y Umstritten#! 20–45, #v Etabliert#! 45–70, #G Stark#! 70–85, #B Supranational#! 85+. Die [concept_un_charter] deckelt das Ziel bei 70, bis sie reformiert wird. Unter 10 steckt die UN in der Krise; bei 0 löst sie sich auf."
+ },
  "concept_un_charter": {
   "en": "UN Charter",
   "de": "UN-Charta"
+ },
+ "concept_un_charter_desc": {
+  "en": "The founding treaty of the United Nations, which holds the target of [concept_un_authority] under a ceiling: 70 under the founding charter, 85 after Charter Reform I (Standing Mandate Force and Compulsory Jurisdiction), 100 after Charter Reform II (Veto Restraint and the UN Levy). Reform I opens the Strong tier, where sanctions become embargoes. Reform II opens the Supranational tier, where [concept_un_dues] rise to 1% of GDP, and restrains the veto: a resolution a two-thirds supermajority carries is no longer stopped by a [Concept('concept_un_veto','veto')]. A reform may be tabled only once authority has held within 5 points of the ceiling for 24 months running, and not within five years of the last reform vote, carried or not; it needs a two-thirds supermajority of all members and can be [Concept('concept_un_veto','vetoed')] outright by any [concept_un_permanent_member].",
+  "de": "Der Gründungsvertrag der Vereinten Nationen, der das Ziel der [concept_un_authority] unter einer Obergrenze hält: 70 unter der Gründungscharta, 85 nach Chartareform I (Ständige Mandatstruppe und Verpflichtende Gerichtsbarkeit), 100 nach Chartareform II (Vetoeinschränkung und UN-Abgabe). Reform I öffnet die Stufe Stark, in der Sanktionen zu Embargos werden. Reform II öffnet die Stufe Supranational, in der die [concept_un_dues] auf 1% des BIP steigen, und schränkt das Veto ein: Eine Resolution, die eine Zweidrittelmehrheit trägt, wird nicht mehr durch ein [Concept('concept_un_veto','Veto')] gestoppt. Eine Reform darf erst zur Abstimmung gestellt werden, wenn die Autorität 24 Monate lang ununterbrochen innerhalb von 5 Punkten der Obergrenze geblieben ist, und nicht innerhalb von fünf Jahren nach der letzten Reformabstimmung, ob angenommen oder nicht; sie erfordert eine Zweidrittelmehrheit aller Mitglieder und kann von jedem [concept_un_permanent_member] direkt [Concept('concept_un_veto','per Veto blockiert')] werden."
  },
  "concept_un_dues": {
   "en": "UN Dues",
   "de": "UN-Beiträge"
  },
+ "concept_un_dues_desc": {
+  "en": "Every member of the United Nations pays an assessment, a share of its GDP a year set by the UN's tier: nothing when Moribund, 0.1% when Contested, 0.2% when Established, 0.4% when Strong, and 1% when Supranational (the UN Levy). A member may withhold its dues. That saves the money, but it costs international standing, lowers the funding pillar of [concept_un_authority] by the withholders' share of the members' GDP, and puts the member in arrears for every month it withholds while dues are assessed. Dues are billed by the month, so the month a member stops paying is owed at once. After 24 months in arrears it loses its vote in the [concept_un_general_assembly] (Article 19) until it pays everything it owes.",
+  "de": "Jedes Mitglied der Vereinten Nationen zahlt einen Beitrag, einen von der UN-Stufe festgelegten jährlichen Anteil seines BIP: nichts bei Marode, 0,1% bei Umstritten, 0,2% bei Etabliert, 0,4% bei Stark und 1% bei Supranational (die UN-Abgabe). Ein Mitglied kann seinen Beitrag zurückhalten. Das spart Geld, kostet aber internationales Ansehen, senkt die Finanzierungssäule der [concept_un_authority] um den Anteil der Verweigerer am BIP der Mitglieder und bringt das Mitglied für jeden Monat, in dem es zurückhält, während Beiträge erhoben werden, in Zahlungsrückstand. Beiträge werden monatlich in Rechnung gestellt, sodass der Monat, in dem ein Mitglied die Zahlung einstellt, sofort fällig ist. Nach 24 Monaten Zahlungsrückstand verliert es sein Stimmrecht in der [concept_un_general_assembly] (Artikel 19), bis es alle Schulden beglichen hat."
+ },
  "concept_un_enforcement": {
   "en": "UN Enforcement",
   "de": "UN-Durchsetzung"
+ },
+ "concept_un_enforcement_desc": {
+  "en": "How hard the [concept_un_general_assembly]'s decisions bite: the multiplier on every penalty a resolution imposes, and on what enforcing sanctions costs the enforcers. It follows the UN's tier: Moribund ×0 (resolutions are recommendations only), Contested ×0.5, Established ×1, Strong ×1.5, Supranational ×2.5.",
+  "de": "Wie hart die Entscheidungen der [concept_un_general_assembly] durchgreifen: der Multiplikator auf jede von einer Resolution verhängte Strafe und auf das, was die Durchsetzung von Sanktionen die Durchsetzenden kostet. Er richtet sich nach der UN-Stufe: Marode ×0 (Resolutionen sind nur Empfehlungen), Umstritten ×0,5, Etabliert ×1, Stark ×1,5, Supranational ×2,5."
+ },
+ "concept_un_general_assembly_desc": {
+  "en": "The body of all UN members. Every represented member casts one vote on each proposed resolution; a member that lacks diplomatic autonomy keeps its seat, but its representation is suspended ([concept_un_suspended_representation]). Most resolutions pass on a simple majority of the votes cast. Recommendatory resolutions need only the GA. Binding resolutions also require Security Council consent — a [concept_un_veto] from any [concept_un_permanent_member] reduces them to a graduated form.",
+  "de": "Das Gremium aller UN-Mitglieder. Jedes vertretene Mitglied gibt eine Stimme zu jeder vorgeschlagenen Resolution ab; ein Mitglied ohne diplomatische Eigenständigkeit behält seinen Sitz, doch seine Vertretung ist ausgesetzt ([concept_un_suspended_representation]). Die meisten Resolutionen werden mit einfacher Mehrheit der abgegebenen Stimmen angenommen. Empfehlende Resolutionen benötigen nur die GV. Verbindliche Resolutionen erfordern zudem die Zustimmung des Sicherheitsrats — ein [concept_un_veto] eines [concept_un_permanent_member] reduziert sie auf eine abgestufte Form."
  },
  "concept_un_mission": {
   "en": "UN Mission",
   "de": "UN-Mission"
  },
+ "concept_un_mission_desc": {
+  "en": "A United Nations mission works in one state: #bold peacekeeping#! (sent by a peacekeeping request the [concept_un_general_assembly] carries in full), #bold aid#! (sent by a carried aid request, or by a member answering a famine) or #bold stabilisation#! (sent by a power answering a state collapse). Its effect on the state grows with the UN's enforcement, with the share of [concept_un_dues] actually paid, and with the number of members serving in it, up to three. A mission succeeds when its work is done: two years of peace for peacekeeping, a recovered standard of living and no famine for aid, a year past the collapse for stabilisation. Success counts toward the UN's delivery and raises the standing of every member that served. A mission fails, and costs the UN credibility, if its host is attacked after it arrives, if everyone serving in it goes home, or if the host sends a stabilisation mission away. The members serving in a mission find it easier to build intelligence networks in the host.",
+  "de": "Eine Mission der Vereinten Nationen wirkt in einem Staat: #bold Friedenssicherung#! (entsandt durch ein Friedenssicherungsersuchen, das die [concept_un_general_assembly] vollständig trägt), #bold Hilfe#! (entsandt durch ein getragenes Hilfeersuchen oder durch ein Mitglied, das auf eine Hungersnot reagiert) oder #bold Stabilisierung#! (entsandt durch eine Macht, die auf einen Staatszusammenbruch reagiert). Ihre Wirkung auf den Staat wächst mit der Durchsetzungskraft der UN, mit dem Anteil der tatsächlich gezahlten [concept_un_dues] und mit der Zahl der beteiligten Mitglieder, bis zu drei. Eine Mission gelingt, wenn ihre Aufgabe erfüllt ist: zwei Jahre Frieden für Friedenssicherung, ein wiederhergestellter Lebensstandard und keine Hungersnot für Hilfe, ein Jahr nach dem Zusammenbruch für Stabilisierung. Ein Erfolg zählt zur Leistungsbilanz der UN und steigert das Ansehen jedes beteiligten Mitglieds. Eine Mission scheitert und kostet die UN Glaubwürdigkeit, wenn ihr Gastland nach ihrer Ankunft angegriffen wird, wenn alle Beteiligten abziehen oder wenn das Gastland eine Stabilisierungsmission wegschickt. Mitglieder, die in einer Mission dienen, bauen im Gastland leichter Geheimdienstnetzwerke auf."
+ },
  "concept_un_peacekeeping": {
   "en": "UN Peacekeeping",
   "de": "UN-Friedenssicherung"
+ },
+ "concept_un_peacekeeping_desc": {
+  "en": "A member state at war or with damaged states can request UN peacekeepers via a binding resolution. If the GA approves, no [concept_un_permanent_member] vetoes and the UN is at least Established, a full deployment goes out: each member of [concept_major_power] rank or above that cast a ballot and takes part (a yes voter, or a no voter that accepts the decision) pledges as a contributor and pays for it, and the requesting country receives a deployment that scales with contributor [Concept('concept_gdp', 'GDP')]. If vetoed but the GA still passed it by simple majority, or if the UN is below Established, only an observer mission is dispatched — nobody pledges and the benefit is much smaller.",
+  "de": "Ein Mitgliedstaat im Krieg oder mit beschädigten Staaten kann über eine verbindliche Resolution UN-Friedenstruppen anfordern. Stimmt die GV zu, legt kein [concept_un_permanent_member] ein Veto ein und ist die UN mindestens Etabliert, wird eine vollständige Entsendung ausgelöst: Jedes Mitglied ab Rang [concept_major_power], das abgestimmt hat und teilnimmt (ein Ja-Stimmer oder ein Nein-Stimmer, der die Entscheidung akzeptiert), verpflichtet sich als Truppensteller und zahlt dafür, und das ersuchende Land erhält eine Entsendung, die mit dem [Concept('concept_gdp', 'Bruttoinlandsprodukt')] der Truppensteller skaliert. Wird ein Veto eingelegt, die GV hat aber dennoch mit einfacher Mehrheit zugestimmt, oder liegt die UN unter Etabliert, wird nur eine Beobachtermission entsandt — niemand verpflichtet sich, und der Nutzen ist deutlich geringer."
+ },
+ "concept_un_permanent_member_desc": {
+  "en": "A holder of one of the 5 permanent seats on the [concept_un_security_council]. The founding [concept_great_power] takes one at the founding. The others go to the [Concept('concept_great_power', 'Great Power')] members with the most [concept_prestige] that hold none — when the signing period closes, a year after the founding, and whenever a seat falls vacant — never to whoever joined first. Permanent members carry the [concept_prestige] and leverage of the seat — and the [concept_un_veto] over binding resolutions. The seat is lost by leaving the UN, by sustained sub-Great-Power rank for 10+ years, or by a 2/3 supermajority expulsion vote in the General Assembly.",
+  "de": "Ein Inhaber eines der 5 ständigen Sitze im [concept_un_security_council]. Die gründende [concept_great_power] erhält bei der Gründung einen. Die übrigen gehen an die [Concept('concept_great_power', 'Großmacht')]-Mitglieder mit dem meisten [concept_prestige], die noch keinen halten — wenn die Beitrittsfrist endet, ein Jahr nach der Gründung, und immer wenn ein Sitz frei wird — nie an das Land, das zuerst beigetreten ist. Ständige Mitglieder tragen das [concept_prestige] und den Einfluss des Sitzes — sowie das [concept_un_veto] über verbindliche Resolutionen. Der Sitz geht verloren durch Austritt aus der UN, durch anhaltenden Rang unterhalb einer Großmacht über 10 oder mehr Jahre, oder durch eine Ausschlussabstimmung mit Zweidrittelmehrheit in der Generalversammlung."
+ },
+ "concept_un_resolution_binding_desc": {
+  "en": "A resolution that compels action: sanctions, peacekeeping deployments, ICC referrals, formal condemnations, and UN charter reforms. Binding resolutions need [concept_un_security_council] consent — any [concept_un_permanent_member] can [concept_un_veto] them. A vetoed binding resolution that still has GA majority passes only in graduated/weak form (voluntary sanctions, observer mission, symbolic censure, non-binding rebuke). UN charter reform is the one binding type with no graduated fallback — a veto blocks it outright.",
+  "de": "Eine Resolution, die zum Handeln zwingt: Sanktionen, Entsendungen von Friedenstruppen, ICC-Verweisungen, förmliche Verurteilungen und Chartareformen der UN. Verbindliche Resolutionen benötigen die Zustimmung des [concept_un_security_council] — jedes [concept_un_permanent_member] kann gegen sie ein [concept_un_veto] einlegen. Eine mit Veto belegte verbindliche Resolution, die dennoch die Mehrheit der GV hat, tritt nur in abgestufter/schwacher Form in Kraft (freiwillige Sanktionen, Beobachtermission, symbolische Rüge, unverbindlicher Tadel). Die UN-Chartareform ist der einzige verbindliche Typ ohne abgestuften Ersatz — ein Veto blockiert sie vollständig."
+ },
+ "concept_un_resolution_recommendatory_desc": {
+  "en": "A resolution that declares norms, opens a treaty for signature, or coordinates voluntary cooperation: human rights declarations, the NPT, climate accords, heritage and [concept_decolonization_system] resolutions, pandemic and refugee programs, the law of the sea, space partnerships, and humanitarian aid. Recommendatory resolutions pass on simple [concept_un_general_assembly] majority and cannot be vetoed.",
+  "de": "Eine Resolution, die Normen erklärt, einen Vertrag zur Unterzeichnung öffnet oder freiwillige Zusammenarbeit koordiniert: Menschenrechtserklärungen, der NPT, Klimaabkommen, Resolutionen zum Kulturerbe und zur [concept_decolonization_system], Pandemie- und Flüchtlingsprogramme, das Seerecht, Weltraumpartnerschaften und humanitäre Hilfe. Empfehlende Resolutionen werden mit einfacher Mehrheit der [concept_un_general_assembly] angenommen und können nicht durch ein Veto blockiert werden."
  },
  "concept_un_sanctions": {
   "en": "UN Sanctions",
   "de": "UN-Sanktionen"
  },
+ "concept_un_sanctions_desc": {
+  "en": "A binding resolution that imposes coordinated trade and influence penalties on the target. Member states that vote yes apply enforcement modifiers; the target suffers reduced [concept_trade_advantage], [concept_prestige], and influence. If a [concept_un_permanent_member] vetoes but the GA still passes simple majority, the sanctions become voluntary and partial — milder penalties on the target, no enforcer benefits.",
+  "de": "Eine verbindliche Resolution, die dem Ziel koordinierte Handels- und Einflussstrafen auferlegt. Mitgliedstaaten, die mit Ja stimmen, wenden Durchsetzungsmodifikatoren an; das Ziel erleidet verringerten [concept_trade_advantage], [concept_prestige] und Einfluss. Legt ein [concept_un_permanent_member] ein Veto ein, erreicht die GV aber dennoch die einfache Mehrheit, werden die Sanktionen freiwillig und teilweise — mildere Strafen für das Ziel, keine Vorteile für die Durchsetzenden."
+ },
+ "concept_un_security_council_desc": {
+  "en": "The 5-seat inner body of the UN. Permanent members carry the seat for life (with rare exceptions; see [concept_un_permanent_member]) and hold the [concept_un_veto] on [concept_un_resolution_binding]. The Security Council does not meet as a separate vote chamber — instead, permanent members exercise their authority by choosing to veto during the General Assembly's normal voting window.",
+  "de": "Das aus 5 Sitzen bestehende innere Gremium der UN. Ständige Mitglieder behalten den Sitz auf Lebenszeit (mit seltenen Ausnahmen; siehe [concept_un_permanent_member]) und halten das [concept_un_veto] über [concept_un_resolution_binding]. Der Sicherheitsrat tagt nicht als eigene Abstimmungskammer — stattdessen üben ständige Mitglieder ihre Befugnis aus, indem sie sich während des regulären Abstimmungsfensters der Generalversammlung für ein Veto entscheiden."
+ },
+ "concept_un_specialized_agencies_desc": {
+  "en": "Standing organizations of the United Nations. Ten are founded when the General Assembly adopts the matching convention: WHO (pandemic response), UNESCO (heritage protection), UNHRC (human rights monitoring), IAEA (nuclear non-proliferation), UNEP (climate), UNHCR (refugees), UNOOSA (space cooperation), ITLOS (the law of the sea), the ICC (international criminal justice) and the regime for the physical protection of nuclear material. The ICJ (international court) is founded when a country first accepts a World Court ruling against it. Each agency, once founded, provides ongoing benefits to members and unlocks further resolution types.",
+  "de": "Ständige Organisationen der Vereinten Nationen. Zehn werden gegründet, wenn die Generalversammlung die passende Konvention annimmt: die WHO (Pandemiebekämpfung), die UNESCO (Schutz des Kulturerbes), der UNHRC (Überwachung der Menschenrechte), die IAEA (nukleare Nichtverbreitung), das UNEP (Klima), der UNHCR (Flüchtlinge), das UNOOSA (Weltraumkooperation), der ITLOS (das Seerecht), der ICC (internationale Strafjustiz) und das Regime für den physischen Schutz von Nuklearmaterial. Der ICJ (internationaler Gerichtshof) wird gegründet, wenn ein Land erstmals ein Urteil des Weltgerichtshofs gegen sich selbst akzeptiert. Jede Organisation bietet nach ihrer Gründung fortlaufende Vorteile für Mitglieder und schaltet weitere Resolutionsarten frei."
+ },
+ "concept_un_suspended_representation_desc": {
+  "en": "A member of the United Nations that no longer conducts its own foreign policy keeps its membership, but its representation is suspended. Only an independent country, or a dominion, protectorate or tributary, conducts its own. A puppet, vassal, colony, personal union, crown land or chartered company does not, and neither does a decentralized nation. A suspended member casts no vote, tables nothing, holds no permanent seat and does not host the headquarters. It is treated as part of its overlord abroad: while its overlord sits in the [concept_un_general_assembly] and pays its [concept_un_dues], the overlord pays for its seat and it keeps the benefits of membership. Its representation is restored as soon as it conducts its own foreign policy again.",
+  "de": "Ein Mitglied der Vereinten Nationen, das keine eigene Außenpolitik mehr betreibt, behält seine Mitgliedschaft, doch seine Vertretung wird ausgesetzt. Nur ein unabhängiges Land oder ein Dominion, Protektorat oder Tributärstaat betreibt eine eigene Außenpolitik. Ein Marionettenstaat, Vasall, eine Kolonie, Personalunion, Kronkolonie oder Handelsgesellschaft tut dies nicht, ebenso wenig eine dezentralisierte Nation. Ein Mitglied mit ausgesetzter Vertretung gibt keine Stimme ab, bringt nichts zur Abstimmung, hält keinen ständigen Sitz und beherbergt nicht den Hauptsitz. Es wird im Ausland als Teil seiner Obermacht behandelt: Während seine Obermacht in der [concept_un_general_assembly] sitzt und ihre [concept_un_dues] zahlt, bezahlt die Obermacht für seinen Sitz, und es behält die Vorteile der Mitgliedschaft. Seine Vertretung wird wiederhergestellt, sobald es erneut eine eigene Außenpolitik betreibt."
+ },
  "concept_un_veto": {
   "en": "Veto",
   "de": "Veto"
  },
+ "concept_un_veto_desc": {
+  "en": "A power held by [concept_un_permanent_member]s to block [concept_un_resolution_binding]. A vote stays open for a year (AI members cast their ballots in its ninth, tenth or eleventh month), and until it closes a permanent member can choose to [concept_un_veto] instead of voting yes/no. The veto kills the full binding form of the resolution — the GA's simple majority can still push through a graduated/weak form, except for charter reform and a military mandate, which are blocked outright. Once the [concept_un_charter] carries both reforms, a two-thirds supermajority of the members with a vote overrides a veto on any binding resolution except charter reform. Every veto is a debit to the UN's credibility, weighted by the vetoer's weight in world affairs, which lowers [concept_un_authority]'s target; it also cuts the vetoer's influence for a time, applies a temporary diplomatic isolation modifier, and adds [concept_infamy] when used to block punitive resolutions (ICC, condemnation, peacekeeping requests). While the UN is Moribund a veto costs none of this.",
+  "de": "Eine Befugnis der [Concept('concept_un_permanent_member', 'ständigen Mitglieder')], [concept_un_resolution_binding] zu blockieren. Eine Abstimmung bleibt ein Jahr offen (KI-Mitglieder geben ihre Stimme im neunten, zehnten oder elften Monat ab), und bis sie schließt, kann ein ständiges Mitglied sich statt für Ja/Nein für ein [concept_un_veto] entscheiden. Das Veto tötet die volle verbindliche Form der Resolution — die einfache Mehrheit der GV kann dennoch eine abgestufte/schwache Form durchsetzen, außer bei Chartareform und einem militärischen Mandat, die vollständig blockiert werden. Sobald die [concept_un_charter] beide Reformen trägt, hebt eine Zweidrittelmehrheit der stimmberechtigten Mitglieder ein Veto auf jede verbindliche Resolution außer der Chartareform auf. Jedes Veto belastet die Glaubwürdigkeit der UN, gewichtet nach dem weltpolitischen Gewicht des Vetostellers, was das Ziel der [concept_un_authority] senkt; es verringert außerdem für eine Zeit den Einfluss des Vetostellers, verhängt einen zeitweiligen Modifikator für diplomatische Isolation und fügt [concept_infamy] hinzu, wenn es genutzt wird, um strafende Resolutionen zu blockieren (ICC, Verurteilung, Friedenssicherungsersuchen). Solange die UN Marode ist, kostet ein Veto nichts davon."
+ },
+ "concept_united_nations_system_desc": {
+  "en": "An international organization that can form once certain global conditions are met. Countries can join via treaty article. UN membership provides diplomatic bonuses and access to UN voting topics. The UN also enables cross-system bonuses including space partnerships and joint scientific endeavors like the International Space Station.",
+  "de": "Eine internationale Organisation, die sich bilden kann, sobald bestimmte globale Bedingungen erfüllt sind. Länder können über einen Vertragsartikel beitreten. Die UN-Mitgliedschaft bietet diplomatische Boni und Zugang zu UN-Abstimmungsthemen. Die UN ermöglicht zudem systemübergreifende Boni, darunter Weltraumpartnerschaften und gemeinsame wissenschaftliche Unternehmungen wie die Internationale Raumstation."
+ },
  "concept_wonder_building": {
   "en": "Wonder Building",
   "de": "Wunderbauwerk"
+ },
+ "concept_wonder_building_desc": {
+  "en": "A special megastructure built in two phases: first a construction site that accumulates progress, then the completed wonder that provides powerful bonuses. Examples include the Space Elevator, Orbital Solar Collector, Orbital Battlestation, Mind Upload Nexus, and [concept_antimatter_facility]. Each wonder can only be built once per country and requires specific technologies.",
+  "de": "Eine besondere Megastruktur, die in zwei Phasen errichtet wird: zunächst eine Baustelle, die Fortschritt ansammelt, dann das fertige Wunderbauwerk, das mächtige Boni gewährt. Beispiele sind der Weltraumaufzug, der Orbitale Sonnenkollektor, die Orbitale Kampfstation, der Bewusstseins-Upload-Nexus und die [concept_antimatter_facility]. Jedes Wunderbauwerk kann pro Land nur einmal errichtet werden und erfordert bestimmte Technologien."
+ },
+ "concept_world_war_system_desc": {
+  "en": "A [concept_journal_entry] system that activates when a sufficiently large and destructive conflict erupts. World wars bring escalation mechanics, total war economy effects, war propaganda, and dramatic global consequences. Victory or defeat in a world war reshapes the international order.",
+  "de": "Ein [concept_journal_entry]-System, das aktiviert wird, wenn ein hinreichend großer und zerstörerischer Konflikt ausbricht. Weltkriege bringen Eskalationsmechaniken, Effekte der Totalkriegswirtschaft, Kriegspropaganda und dramatische globale Folgen mit sich. Sieg oder Niederlage in einem Weltkrieg formt die internationale Ordnung neu."
+ },
+ "consciousness_network_progress": {
+  "en": "Consciousness Network Progress",
+  "de": "Fortschritt: Bewusstseinsnetzwerk"
+ },
+ "consciousness_network_progress_desc": {
+  "en": "Tracks accumulated progress toward completing the Consciousness Network.",
+  "de": "Verfolgt den angesammelten Fortschritt bei der Fertigstellung des Bewusstseinsnetzwerks."
+ },
+ "construction": {
+  "en": "Construction Services",
+  "de": "Baudienstleistungen"
+ },
+ "construction_cost_scaling": {
+  "en": "Development Cost Scaling",
+  "de": "Skalierung der Entwicklungskosten"
+ },
+ "construction_cost_scaling_desc": {
+  "en": "Higher [Concept('concept_gdp_per_capita', 'GDP per capita')] increases construction costs, reflecting more expensive labor and real estate markets. Provides a natural catchup mechanism for developing nations.",
+  "de": "Höheres [Concept('concept_gdp_per_capita', 'Bruttoinlandsprodukt pro Kopf')] erhöht die Baukosten, was teurere Arbeits- und Immobilienmärkte widerspiegelt. Bietet einen natürlichen Aufholmechanismus für Entwicklungsländer."
  },
  "construction_private_allocation": {
   "en": "[concept_private_construction] Allocation",

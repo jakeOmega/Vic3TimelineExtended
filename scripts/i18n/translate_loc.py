@@ -441,8 +441,20 @@ def referenced_keys(text: str) -> set[str]:
     return keys
 
 
+def load_terms(language: str) -> dict[str, str]:
+    """`i18n/<language>/terms.json`: terms coined during translation runs
+    (English -> translation), fed back into later chunks' glossaries so
+    parallel agents render a recurring term the same way."""
+    path = os.path.join(language_dirs(language)[0], "terms.json")
+    if not os.path.exists(path):
+        return {}
+    with open(path, encoding="utf-8") as fh:
+        return json.load(fh)
+
+
 def chunk_glossary(chunk: list[Entry], tm: dict[str, dict], vanilla: VanillaTerms | None,
-                   glossary_keys: set[str], lang_field: str, cap: int = 160) -> list[str]:
+                   glossary_keys: set[str], lang_field: str, cap: int = 160,
+                   terms: dict[str, str] | None = None) -> list[str]:
     text = "\n".join(e.en for e in chunk)
     in_chunk = {e.key for e in chunk}
     lines = []
@@ -463,6 +475,9 @@ def chunk_glossary(chunk: list[Entry], tm: dict[str, dict], vanilla: VanillaTerm
             continue  # a lone word ("Green", a veterancy level) is too ambiguous
         if record and record["en"] and re.search(r"(?<!\w)" + re.escape(record["en"]) + r"(?!\w)", text):
             mod_terms.append(f"#   {record['en']} => {record[lang_field]}")
+    for en, tr in (terms or {}).items():
+        if re.search(r"(?<!\w)" + re.escape(en) + r"(?!\w)", text):
+            mod_terms.append(f"#   {en} => {tr}")
     if mod_terms:
         lines.append("# MOD TERMS — the mod's names, already fixed; use them wherever the English means that thing:")
         lines.extend(sorted(set(mod_terms), key=len, reverse=True)[:cap])
@@ -570,6 +585,7 @@ def cmd_prepare(args) -> int:
         chunks = chunks[: args.limit]
 
     vanilla = None if args.no_vanilla else VanillaTerms(language)
+    terms = load_terms(language)
     work = language_dirs(language)[1]
     chunk_dir = os.path.join(work, "chunks")
     manifest_path = os.path.join(work, "manifest.json")
@@ -582,7 +598,7 @@ def cmd_prepare(args) -> int:
     for n, chunk in enumerate(chunks, start=start):
         chunk_id = f"{prefix}-{n:03d}"
         glossary = chunk_glossary(chunk, tm, vanilla, glossary_keys, lang_field,
-                                  cap=400 if args.set == "names" else 160)
+                                  cap=400 if args.set == "names" else 160, terms=terms)
         names_here = [e for e in country_names if e in chunk]
         write_chunk(os.path.join(chunk_dir, chunk_id + ".txt"), chunk_id, chunk, glossary, names_here, language)
         manifest[chunk_id] = {
