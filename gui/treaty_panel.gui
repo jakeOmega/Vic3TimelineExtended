@@ -904,10 +904,22 @@ types treaty_panel_types
 
 				### MUTUAL AGREEMENT
 				treaty_textbox = {
-					visible = "[Article.HasKind('mutual')]"
+					visible = "[And(Article.HasKind('mutual'), Not(And(Article.RequiresInput('quantity'), Not(Article.RequiresInput('goods')))))]"
 					text = "[Article.GetShortDesc]"
 					autoresize = yes
 					maximumsize = { 310 60 }
+					align = nobaseline
+					using = elide_fontsize_min
+					multiline = yes
+				}
+
+				### MUTUAL AGREEMENT WITH A QUANTITY (TE)
+				# Narrower, to leave room for quantity_generic_article below.
+				treaty_textbox = {
+					visible = "[And(Article.HasKind('mutual'), And(Article.RequiresInput('quantity'), Not(Article.RequiresInput('goods'))))]"
+					text = "[Article.GetShortDesc]"
+					autoresize = yes
+					maximumsize = { 190 60 }
 					align = nobaseline
 					using = elide_fontsize_min
 					multiline = yes
@@ -926,6 +938,9 @@ types treaty_panel_types
 
 				### MONEY TRANSFER
 				money_transfer_article = {}
+
+				### QUANTITY (GENERIC - NOT MONEY OR GOODS)
+				quantity_generic_article = {}
 
 				### STATE INPUT
 				state_input_article = {}
@@ -1044,6 +1059,47 @@ types treaty_panel_types
 				max_width = 110
 				using = elide_fontsize_min
 				raw_text = "TREATY_SELECTED_ARTICLE_AMOUNT"
+
+				block "text_format" {
+					default_format = "#black"
+				}
+			}
+		}
+	}
+
+	### QUANTITY (GENERIC - NOT MONEY OR GOODS)
+	# Vanilla shows an article's quantity only for money_transfer and
+	# goods_transfer, by type name; this shows it for any other article with a
+	# `quantity` input (nuclear_arms_limitation's warhead ceiling).
+	type quantity_generic_article = widget {
+		visible = "[And(Article.RequiresInput('quantity'), Not(Or(Or(Article.HasType('bankroll'), Article.HasType('money_transfer')), Article.RequiresInput('goods'))))]"
+		size = { 110 30 }
+
+		flowcontainer = {
+			parentanchor = vcenter
+			spacing = 4
+
+			textbox = {
+				parentanchor = vcenter
+				autoresize = yes
+				align = nobaseline
+				max_width = 40
+				using = elide_fontsize_min
+				text = "TE_TREATY_SELECTED_QUANTITY"
+
+				block "text_format" {
+					default_format = "#black"
+				}
+			}
+
+			textbox = {
+				visible = "[Article.HasType('nuclear_arms_limitation')]"
+				parentanchor = vcenter
+				autoresize = yes
+				align = nobaseline
+				max_width = 65
+				using = elide_fontsize_min
+				text = "TE_ARTICLE_QUANTITY_UNIT_WARHEADS"
 
 				block "text_format" {
 					default_format = "#black"
