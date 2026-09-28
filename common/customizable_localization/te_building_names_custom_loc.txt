@@ -2,7 +2,8 @@
 # ERA BUILDING NAMES — customizable localization
 # ============================================================================
 # Buildings whose name fits only part of the timeline. The building's name key
-# (localization/english/replace/timeline_extended_override_l_english.yml) reads
+# (in localization/english/replace/timeline_extended_override_l_english.yml for
+# a base-game building, te_buildings_l_english.yml for a mod building) reads
 #
 #   [SelectLocalization(GetPlayer.IsValid, '<building>_name_player', '<building>_name_<first>')]
 #
@@ -16,15 +17,19 @@
 # first-era name shows.
 #
 # Each block lists the latest era first. The first valid entry wins, and the
-# trigger-less last entry is the name before the first switch.
+# trigger-less last entry is the name before the first switch. Each switch is
+# the technology that unlocks the production method the new name describes, and
+# a name that must also cover buildings still on older methods says so (the Air
+# and Space Port). Base-game names keep the base game's wording and number.
 #
 # To add a building: give it a block here, a <building>_name_player key and one
-# key per name in te_buildings_l_english.yml, and point its name key in the
-# override file at the SelectLocalization line above.
+# key per name in te_buildings_l_english.yml, point its name key at the
+# SelectLocalization line above, and turn any other loc that spells the name out
+# (its throughput modifier, its base production method group) into a
+# $<building>$ splice so it follows along.
 
-# Arts Academy. Each switch is the tech that unlocks the production method
-# giving the new name its meaning: Sound Film (Mass Media), Digital Streaming
-# (Digital Entertainment) and Neurostimulation (Brain-Computer Interfaces).
+# Arts Academy: Sound Film (Mass Media), Digital Streaming (Digital
+# Entertainment), Neurostimulation (Brain-Computer Interfaces).
 te_building_art_academy_name = {
 	type = country
 	random_valid = no
@@ -43,6 +48,116 @@ te_building_art_academy_name = {
 	}
 	text = {
 		trigger = { always = yes }
-		localization_key = building_art_academy_name_academies
+		localization_key = building_art_academy_name_academy
+	}
+}
+
+# Aerospace Industry: Chemical Rockets (Guided Missiles), the building's first
+# space-bound method. "Aerospace" (air plus space) dates from the late 1950s.
+te_building_aerospace_industry_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_technology_researched = guided_missiles }
+		localization_key = building_aerospace_industry_name_aerospace
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = building_aerospace_industry_name_aircraft
+	}
+}
+
+# Electrics Industries (wired telecommunications): Twisted Pair Copper Cables
+# (Modern Skyscrapers). "Telecommunication" became the standard term in 1932.
+te_building_electrics_industry_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_technology_researched = modern_skyscrapers }
+		localization_key = building_electrics_industry_name_telecommunications
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = building_electrics_industry_name_telephone
+	}
+}
+
+# Wireless telecommunications: Satellite Communications.
+te_building_electrics_industry_radio_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_technology_researched = satellite_communications }
+		localization_key = building_electrics_industry_radio_name_wireless
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = building_electrics_industry_radio_name_radio
+	}
+}
+
+# Consumer appliances: Personal Electronics (Personal Computers).
+te_building_electrics_industry_appliances_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_technology_researched = personal_computers }
+		localization_key = building_electrics_industry_appliances_name_electronics
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = building_electrics_industry_appliances_name_appliances
+	}
+}
+
+# Glassworks: Injection Molding (Plastic Mass Production). The good is already
+# Glass and Plastics.
+te_building_glassworks_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_technology_researched = plastic_mass_production }
+		localization_key = building_glassworks_name_plastics
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = building_glassworks_name_glassworks
+	}
+}
+
+# Tourism: Mass Tourism (Television Broadcasting).
+te_building_tourism_industry_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_technology_researched = television_broadcasting }
+		localization_key = building_tourism_industry_name_tourism
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = building_tourism_industry_name_resorts
+	}
+}
+
+# Airport: Spaceport (Muon-Catalyzed Fusion Reactors, key
+# compact_fusion_reactors). The name has to cover airports still on the Airport
+# method too; Midland, Texas renamed its airport "Air and Space Port" in 2014.
+te_building_airport_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_technology_researched = compact_fusion_reactors }
+		localization_key = building_airport_name_spaceport
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = building_airport_name_airport
 	}
 }
