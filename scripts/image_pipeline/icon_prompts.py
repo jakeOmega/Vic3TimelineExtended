@@ -107,8 +107,10 @@ CATEGORIES = {
     "ideology": dict(
         folder="ideology_icons", size=220, mode="emboss_medallion", fill=0.60,
         color=(255, 228, 175), centre_lift=1.25, style=SILHOUETTE),
+    # Read only from `texture =` (MobilizationOption.GetTexture); no second lookup.
     "mobilization_option": dict(
         folder="mobilization_options", size=208, mode="emboss", fill=0.86,
+        entity_dir="common/mobilization_options", field="texture",
         color=(240, 140, 90), style=SILHOUETTE),
     "decree": dict(
         folder="decree", size=158, mode="medallion", fill=0.78, centre_lift=2.1,
@@ -470,6 +472,47 @@ ICONS: dict[str, dict[str, dict]] = {
         "building_phosphate_mine": {"subject": "a wide open-cast mine with pale tan terraces and a long conveyor belt, with a heap of pale grey-tan phosphate rock pellets in the foreground", "seed": 0},
         "building_potash_mine": {"subject": "a mine with a tall headframe beside huge pink salt heaps, with a pile of pink and red potash salt crystals in the foreground", "seed": 0},
         "building_industrial_mineral_salt_mine": {"subject": "shallow salt evaporation pans and white salt heaps with conveyor belts, with a pile of large white salt crystals and grey gypsum chunks in the foreground", "seed": 1},
+    },
+    "mobilization_option": {
+        # Mod-added options on a vanilla icon (14 on machinegunners), by group.
+        # The emboss bevels every edge, so a thin part (a beam, an antenna,
+        # radio waves) comes out as a dark hairline: ask for thick shapes.
+        # supplies: the four logistics tiers share the crate stack, as vanilla's
+        # supply tiers share their tins.
+        "mobilization_option_home_communications": {"subject": "a chunky old telephone handset with a thick coiled cord beside a sealed envelope", "seed": None},
+        "mobilization_option_robotic_assistance": {"subject": "a chunky industrial robot arm with thick jointed segments and a two-fingered gripper claw", "seed": None},
+        "mobilization_option_logistical_support": {"subject": "a stack of three wooden supply crates in front of a steam locomotive, side view", "seed": None},
+        "mobilization_option_extensive_logistical_support": {"subject": "a stack of three wooden supply crates in front of a canvas-covered military cargo truck, side view", "seed": None},
+        "mobilization_option_modern_logistical_support": {"subject": "a big round parachute canopy with thick cords lowering a stack of three wooden supply crates", "seed": None},
+        "mobilization_option_advanced_logistical_support": {"subject": "a stack of three wooden supply crates beside a cone-shaped space capsule with a round hatch", "seed": None},
+        # supplements
+        "mobilization_option_coffee": {"subject": "a coffee cup on a saucer with thick wavy steam rising from it and three coffee beans beside it", "seed": None},
+        "mobilization_option_appliances": {"subject": "an electric kettle and a pop-up toaster side by side", "seed": None},
+        # transport
+        "mobilization_option_air_transport": {"subject": "a big four-engine propeller cargo plane with a high wing, side view", "seed": None},
+        "mobilization_option_space_transport": {"subject": "a tall multi-stage rocket lifting off on a thick billowing exhaust plume", "seed": None},
+        "mobilization_option_entrenchment": {"subject": "a spade stuck upright in a wall of stacked sandbags", "seed": None},
+        # reconnaissance
+        "mobilization_option_space_recon": {"subject": "a reconnaissance satellite: a boxy body with a big round camera lens and two wide rectangular solar panel wings", "seed": None},
+        "mobilization_option_molecular_scanners": {"subject": "a big magnifying glass held over a molecule model of five linked balls", "seed": None},
+        # special weapons
+        "mobilization_option_radar": {"subject": "a big dish-shaped radar antenna tilted upward on a thick pedestal mount", "seed": None},
+        "mobilization_option_night_vision_gear": {"subject": "an empty combat helmet with night vision goggles of two thick tube lenses mounted on its front", "seed": None},
+        "mobilization_option_missile_defense_system": {"subject": "a truck-mounted launcher with four thick box-shaped missile canisters raised at a steep angle, one missile leaving on a short thick flame", "seed": None},
+        "mobilization_option_directed_energy_defenses": {"subject": "a squat laser turret with a big round lens barrel on a thick base, firing a thick straight beam diagonally upward", "seed": None},
+        "mobilization_option_cyberwarfare_team": {"subject": "an open laptop computer with a big skull and crossbones on its screen", "seed": None},
+        "mobilization_option_electronic_warfare": {"subject": "a squat military radio jammer box with a thick stubby antenna, three bold jagged zigzag lines radiating from it", "seed": None},
+        "mobilization_option_exoskeleton_suits": {"subject": "a soldier striding in a bulky powered exoskeleton suit with thick mechanical leg and arm braces, side view", "seed": None},
+        # medic support
+        "mobilization_option_medevac_helicopters": {"subject": "a medical helicopter with a big cross on its side and thick rotor blades, side view", "seed": None},
+        # training. The two enhancement options run on the augmentation laws and
+        # consume robotics and electronics: cybernetic, not chemical.
+        "mobilization_option_voluntary_enhancement": {"subject": "a human arm with a jointed robotic forearm and an open mechanical hand held palm up", "seed": None},
+        "mobilization_option_mandatory_enhancement": {"subject": "a jointed robotic forearm and mechanical hand with a heavy iron shackle and chain locked around its wrist", "seed": None},
+        "mobilization_option_jungle_combat_training": {"subject": "a machete lying across two big tropical palm leaves", "seed": None},
+        "mobilization_option_mountain_combat_training": {"subject": "an ice axe and a thick coil of climbing rope in front of a jagged mountain peak", "seed": None},
+        "mobilization_option_flight_simulators": {"subject": "a rounded flight simulator cockpit capsule with a canopy window, mounted on six thick angled hydraulic piston legs", "seed": None},
+        "mobilization_option_amphibious_warfare": {"subject": "a flat-bottomed landing craft with its front ramp lowered, riding a big curling wave", "seed": None},
     },
 }
 
