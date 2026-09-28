@@ -987,7 +987,7 @@ st_res_apply_preset_aggressive_base = {
 # capacity and GDP. st_res_refresh_preset_magnitudes_effect rewrites every
 # still-marked setting each weekly pulse, before the policies are evaluated,
 # so a preset keeps pace as silos go up and the economy grows. A stepper click
-# on either setting removes its marker (st_res_policy_step_up_base /
+# on either setting removes its marker (st_res_policy_magnitude_step_up_base /
 # _down_base), and from then on the player's number stands. Each setting has
 # its own marker, so setting the budget by hand leaves the flow following, and
 # changing a threshold, the stock band, the price memory or the ramp leaves
@@ -1129,15 +1129,34 @@ st_res_policy_step_down_base = {
 
 # Any stepper click sets a value by hand, so the good's settings are no longer
 # the preset's and its preset marker goes (st_res_<good>_preset, see the
-# preset effects above), re-enabling that preset's button. A click on a
-# magnitude stepper also stops that value following its preset
-# (st_res_preset_follow_magnitudes_base). Only max_flow and budget carry a
-# follow marker; for every other setting there is no follow marker to remove.
+# preset effects above), re-enabling that preset's button.
 st_res_policy_set_by_hand_base = {
 	if = {
 		limit = { has_variable = st_res_$GOOD$_preset }
 		remove_variable = st_res_$GOOD$_preset
 	}
+}
+
+# --------------------------------------------------------------------------
+# st_res_policy_magnitude_step_up_base / _down_base — the steppers for the two
+# magnitude settings, max_flow and budget. Same parameters as the plain
+# steppers. A click also stops that value following its preset
+# (st_res_preset_follow_magnitudes_base) by removing its follow marker,
+# st_res_<good>_auto_<setting>. Only these two settings have one, so only
+# these steppers name it: building the marker's name from every setting made
+# the load-time validator report 48 markers "used but never set" (six
+# settings x eight goods, 2026-09-27 log).
+# --------------------------------------------------------------------------
+st_res_policy_magnitude_step_up_base = {
+	st_res_policy_step_up_base = { GOOD = $GOOD$ SETTING = $SETTING$ STEP = $STEP$ MIN = $MIN$ MAX = $MAX$ }
+	if = {
+		limit = { has_variable = st_res_$GOOD$_auto_$SETTING$ }
+		remove_variable = st_res_$GOOD$_auto_$SETTING$
+	}
+}
+
+st_res_policy_magnitude_step_down_base = {
+	st_res_policy_step_down_base = { GOOD = $GOOD$ SETTING = $SETTING$ STEP = $STEP$ MIN = $MIN$ MAX = $MAX$ }
 	if = {
 		limit = { has_variable = st_res_$GOOD$_auto_$SETTING$ }
 		remove_variable = st_res_$GOOD$_auto_$SETTING$

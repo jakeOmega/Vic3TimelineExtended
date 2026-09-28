@@ -686,6 +686,9 @@ un_docket_take_up_famine = {
 		}
 		order_by = un_docket_share_order
 		max = 3
+		# Fewer than three donors is normal; without this the engine logs
+		# "Given max value was bigger than the list" (2026-09-27 log).
+		check_range_bounds = no
 		trigger_event = { id = un_events.7 days = 1 }
 	}
 }
