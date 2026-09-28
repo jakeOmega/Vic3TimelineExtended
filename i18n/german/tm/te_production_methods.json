@@ -1,4 +1,660 @@
 {
+ "pm_3d_printed_buildings": {
+  "en": "3D Printed Buildings",
+  "de": "3D-gedruckte Gebäude"
+ },
+ "pm_3d_printed_porcelain": {
+  "en": "3D Printed Porcelain",
+  "de": "3D-gedrucktes Porzellan"
+ },
+ "pm_ablative_rockets": {
+  "en": "Ablative Rockets",
+  "de": "Ablative Raketen"
+ },
+ "pm_academic_computing": {
+  "en": "Academic Computing",
+  "de": "Akademische Datenverarbeitung"
+ },
+ "pm_active_protection_systems": {
+  "en": "Active Protection Systems",
+  "de": "Aktive Schutzsysteme"
+ },
+ "pm_advanced_am_fabrication": {
+  "en": "Advanced AM Fabrication",
+  "de": "Fortgeschrittene AM-Fertigung"
+ },
+ "pm_advanced_assembly_lines_building_arms_industry": {
+  "en": "Advanced Assembly",
+  "de": "Fortgeschrittene Montage"
+ },
+ "pm_advanced_assembly_lines_building_furniture_manufactory": {
+  "en": "Advanced Assembly Lines",
+  "de": "Fortgeschrittene Montagebänder"
+ },
+ "pm_advanced_assembly_lines_building_motor_industry": {
+  "en": "Advanced Assembly Lines",
+  "de": "Fortgeschrittene Montagebänder"
+ },
+ "pm_advanced_assembly_lines_building_munition_plant": {
+  "en": "Advanced Assembly Lines",
+  "de": "Fortgeschrittene Montagebänder"
+ },
+ "pm_advanced_assembly_lines_building_tooling_workshop": {
+  "en": "Advanced Assembly Lines",
+  "de": "Fortgeschrittene Montagebänder"
+ },
+ "pm_advanced_company_shipbuilding": {
+  "en": "Advanced Shipbuilding",
+  "de": "Fortgeschrittener Schiffbau"
+ },
+ "pm_advanced_company_shipbuilding_desc": {
+  "en": "The yard adopts magnetic drive shipbuilding methods, producing the most advanced ships afloat. Heavy electrification and electronic-component supply chains are required.",
+  "de": "Die Werft setzt auf Schiffbaumethoden mit Magnetantrieb und produziert die fortschrittlichsten schwimmenden Schiffe. Starke Elektrifizierung und Lieferketten für elektronische Bauteile sind erforderlich."
+ },
+ "pm_advanced_composite_armor": {
+  "en": "Advanced Composite Armor",
+  "de": "Fortgeschrittene Verbundpanzerung"
+ },
+ "pm_advanced_construction": {
+  "en": "Advanced Construction",
+  "de": "Fortgeschrittenes Bauwesen"
+ },
+ "pm_advanced_emissions_control": {
+  "en": "Advanced Emissions Control",
+  "de": "Fortgeschrittene Emissionskontrolle"
+ },
+ "pm_advanced_material_fibers": {
+  "en": "Advanced Material Fibers",
+  "de": "Fortgeschrittene Materialfasern"
+ },
+ "pm_advanced_metamaterials_shipbuilding": {
+  "en": "Advanced Metamaterials Shipbuilding",
+  "de": "Schiffbau mit fortgeschrittenen Metamaterialien"
+ },
+ "pm_advanced_ocean_mine": {
+  "en": "Advanced Deep-Sea Mining",
+  "de": "Fortgeschrittener Tiefseebergbau"
+ },
+ "pm_advanced_process_control": {
+  "en": "Advanced Process Control",
+  "de": "Fortgeschrittene Prozesssteuerung"
+ },
+ "pm_advanced_process_control_explosives_factory": {
+  "en": "Advanced Process Control",
+  "de": "Fortgeschrittene Prozesssteuerung"
+ },
+ "pm_advanced_research_no_effect": {
+  "en": "No Research Mandate",
+  "de": "Kein Forschungsmandat"
+ },
+ "pm_advanced_self_replicating_assemblers": {
+  "en": "Advanced Self-Replicating Assemblers",
+  "de": "Fortgeschrittene selbstreplizierende Assembler"
+ },
+ "pm_advanced_workflow_optimization": {
+  "en": "Advanced Workflow Optimization",
+  "de": "Fortgeschrittene Arbeitsablaufoptimierung"
+ },
+ "pm_aeroplane_production_2": {
+  "en": "Advanced Aeroplane Production",
+  "de": "Fortgeschrittene Flugzeugproduktion"
+ },
+ "pm_aeroplane_production_3": {
+  "en": "Modern Aeroplane Production",
+  "de": "Moderne Flugzeugproduktion"
+ },
+ "pm_afghan_nassaji_kabul_mills": {
+  "en": "Afghan Nassaji Kabul Mills",
+  "de": "Afghan-Nassaji-Mühlen Kabul"
+ },
+ "pm_ai_assisted_research": {
+  "en": "AI Assisted Research",
+  "de": "KI-gestützte Forschung"
+ },
+ "pm_ai_governance": {
+  "en": "AI Governance",
+  "de": "KI-Steuerung"
+ },
+ "pm_ai_managed_building_arms_industry": {
+  "en": "AI-Managed Arms Industry",
+  "de": "KI-gesteuerte Rüstungsindustrie"
+ },
+ "pm_ai_managed_building_furniture_manufactory": {
+  "en": "AI-Managed Furniture Manufactories",
+  "de": "KI-gesteuerte Möbelmanufakturen"
+ },
+ "pm_ai_managed_building_motor_industry": {
+  "en": "AI Managed Factory",
+  "de": "KI-gesteuerte Fabrik"
+ },
+ "pm_ai_managed_building_munition_plant": {
+  "en": "AI-Managed Munition Plants",
+  "de": "KI-gesteuerte Munitionsfabriken"
+ },
+ "pm_ai_managed_building_tooling_workshop": {
+  "en": "AI-Managed Tooling Workshops",
+  "de": "KI-gesteuerte Werkzeugfabriken"
+ },
+ "pm_ai_managed_chemical_plant": {
+  "en": "AI Managed Chemical Plant",
+  "de": "KI-gesteuertes Chemiewerk"
+ },
+ "pm_ai_managed_explosives_factory": {
+  "en": "AI Managed Explosives Factory",
+  "de": "KI-gesteuertes Sprengstoffwerk"
+ },
+ "pm_ai_managed_fab": {
+  "en": "AI Managed Fab",
+  "de": "KI-gesteuerte Fab"
+ },
+ "pm_ai_managed_power_plant": {
+  "en": "AI Managed Power Plant",
+  "de": "KI-gesteuertes Kraftwerk"
+ },
+ "pm_ai_managed_textile_factory": {
+  "en": "AI-Managed Textile Factory",
+  "de": "KI-gesteuerte Textilfabrik"
+ },
+ "pm_ai_mediated_mind_sharing": {
+  "en": "AI-Mediated Mind Sharing",
+  "de": "KI-vermitteltes Bewusstseinsteilen"
+ },
+ "pm_ai_optimized_operations": {
+  "en": "AI-Optimized Operations",
+  "de": "KI-optimierte Abläufe"
+ },
+ "pm_airbus_lagardere_plant": {
+  "en": "Jean-Luc Lagardère Plant",
+  "de": "Jean-Luc-Lagardère-Werk"
+ },
+ "pm_airport": {
+  "en": "Airport",
+  "de": "Flughafen"
+ },
+ "pm_aker_oslo_shipyard": {
+  "en": "Aker Oslo Shipyard",
+  "de": "Aker-Werft Oslo"
+ },
+ "pm_alibaba_cainiao_park": {
+  "en": "Cainiao Logistics Park",
+  "de": "Cainiao-Logistikpark"
+ },
+ "pm_allatini_thessaloniki_flour_mill": {
+  "en": "Allatini Thessaloniki Flour Mill",
+  "de": "Allatini-Mehlmühle Thessaloniki"
+ },
+ "pm_alpine_donawitz_steelworks": {
+  "en": "Alpine Donawitz Steelworks",
+  "de": "Alpine-Stahlwerke Donawitz"
+ },
+ "pm_altos_hornos_baracaldo_furnaces": {
+  "en": "Altos Hornos de Baracaldo Furnaces",
+  "de": "Altos-Hornos-de-Baracaldo-Öfen"
+ },
+ "pm_aluminum_substitution": {
+  "en": "Aluminum Substitution",
+  "de": "Aluminiumsubstitution"
+ },
+ "pm_amazon_fulfillment_center": {
+  "en": "Automated Fulfillment Center",
+  "de": "Automatisiertes Fulfillment-Zentrum"
+ },
+ "pm_ammonium_nitrate_building_coal_mine": {
+  "en": "Ammonium Nitrate",
+  "de": "Ammoniumnitrat"
+ },
+ "pm_ammonium_nitrate_building_gold_mine": {
+  "en": "Ammonium Nitrate",
+  "de": "Ammoniumnitrat"
+ },
+ "pm_ammonium_nitrate_building_iron_mine": {
+  "en": "Ammonium Nitrate",
+  "de": "Ammoniumnitrat"
+ },
+ "pm_ammonium_nitrate_building_lead_mine": {
+  "en": "Ammonium Nitrate",
+  "de": "Ammoniumnitrat"
+ },
+ "pm_ammonium_nitrate_building_sulfur_mine": {
+  "en": "Ammonium Nitrate",
+  "de": "Ammoniumnitrat"
+ },
+ "pm_ammonium_nitrate_building_tech_metals_mine": {
+  "en": "Ammonium Nitrate",
+  "de": "Ammoniumnitrat"
+ },
+ "pm_ammonium_nitrate_explosives": {
+  "en": "Ammonium Nitrate Explosives",
+  "de": "Ammoniumnitrat-Sprengstoff"
+ },
+ "pm_anglo_persian_abadan_refinery": {
+  "en": "Anglo-Persian Abadan Refinery",
+  "de": "Anglo-Persische Raffinerie Abadan"
+ },
+ "pm_anglo_sicilian_licata_wharf": {
+  "en": "Anglo-Sicilian Licata Wharf",
+  "de": "Anglo-Sizilianischer Kai Licata"
+ },
+ "pm_ansaldo_sestri_ponente_works": {
+  "en": "Ansaldo Sestri Ponente Works",
+  "de": "Ansaldo-Werke Sestri Ponente"
+ },
+ "pm_antibiotic_growth_promoters": {
+  "en": "Antibiotic Growth Promoters",
+  "de": "Antibiotische Wachstumsförderer"
+ },
+ "pm_antimatter_engine": {
+  "en": "Antimatter Engine",
+  "de": "Antimaterie-Triebwerk"
+ },
+ "pm_antimatter_facility": {
+  "en": "Antimatter Containment Facility",
+  "de": "Antimaterie-Eindämmungsanlage"
+ },
+ "pm_antimatter_facility_construction_fast": {
+  "en": "[concept_antimatter_facility] Construction (1 year)",
+  "de": "[concept_antimatter_facility]-Bau (1 Jahr)"
+ },
+ "pm_antimatter_facility_construction_medium": {
+  "en": "[concept_antimatter_facility] Construction (2 years)",
+  "de": "[concept_antimatter_facility]-Bau (2 Jahre)"
+ },
+ "pm_antimatter_facility_construction_paused": {
+  "en": "[concept_antimatter_facility] Construction (Paused)",
+  "de": "[concept_antimatter_facility]-Bau (pausiert)"
+ },
+ "pm_antimatter_facility_construction_slow": {
+  "en": "[concept_antimatter_facility] Construction (4 years)",
+  "de": "[concept_antimatter_facility]-Bau (4 Jahre)"
+ },
+ "pm_antimatter_warhead_plant": {
+  "en": "Antimatter Warhead Plant",
+  "de": "Antimaterie-Sprengkopfwerk"
+ },
+ "pm_anzin_colliery": {
+  "en": "Anzin Colliery",
+  "de": "Zeche Anzin"
+ },
+ "pm_ap_moller_copenhagen_wharf": {
+  "en": "A.P. Møller Copenhagen Wharf",
+  "de": "A.P.-Møller-Kai Copenhagen"
+ },
+ "pm_apple_park": {
+  "en": "Apple Park",
+  "de": "Apple Park"
+ },
+ "pm_argentinian_wine_mendoza_bodega": {
+  "en": "Argentine Wine Mendoza Bodega",
+  "de": "Argentinische Weinbodega Mendoza"
+ },
+ "pm_armstrong_elswick_works": {
+  "en": "Armstrong Elswick Works",
+  "de": "Armstrong-Werke Elswick"
+ },
+ "pm_artificial_personalities": {
+  "en": "Artificial Personalities",
+  "de": "Künstliche Persönlichkeiten"
+ },
+ "pm_artistic_expression_no_effect": {
+  "en": "No Effect",
+  "de": "Kein Effekt"
+ },
+ "pm_asml_veldhoven_campus": {
+  "en": "ASML Veldhoven Campus",
+  "de": "ASML-Campus Veldhoven"
+ },
+ "pm_assam_company_nazira_tea_estate": {
+  "en": "Assam Company Nazira Tea Estate",
+  "de": "Assam-Company-Teegut Nazira"
+ },
+ "pm_assisted_postnatal_care": {
+  "en": "Assisted Postnatal Care",
+  "de": "Unterstützte Wochenbettpflege"
+ },
+ "pm_automated_am_fabrication": {
+  "en": "Automated AM Fabrication",
+  "de": "Automatisierte AM-Fertigung"
+ },
+ "pm_automated_assembly_lines": {
+  "en": "Automated Assembly Lines",
+  "de": "Automatisierte Montagebänder"
+ },
+ "pm_automated_chemical_reactors": {
+  "en": "Automated Chemical Reactors",
+  "de": "Automatisierte Chemiereaktoren"
+ },
+ "pm_automated_harvesters_and_planters": {
+  "en": "Automated Harvesters and Planters",
+  "de": "Automatisierte Erntemaschinen und Pflanzmaschinen"
+ },
+ "pm_automated_harvesters_and_planters_building_rice_farm": {
+  "en": "Automated Harvesters and Planters",
+  "de": "Automatisierte Erntemaschinen und Pflanzmaschinen"
+ },
+ "pm_automated_labs": {
+  "en": "Automated Labs",
+  "de": "Automatisierte Labore"
+ },
+ "pm_automated_loading_and_unloading": {
+  "en": "Automated Loading and Unloading",
+  "de": "Automatisiertes Be- und Entladen"
+ },
+ "pm_automated_mechanical_harvesters": {
+  "en": "Automated Mechanical Harvesters",
+  "de": "Automatisierte mechanische Erntemaschinen"
+ },
+ "pm_automated_mechanical_harvesters_building_rice_farm": {
+  "en": "Automated Mechanical Harvesters",
+  "de": "Automatisierte mechanische Erntemaschinen"
+ },
+ "pm_automated_ocean_mine": {
+  "en": "Automated Deep-Sea Mining",
+  "de": "Automatisierter Tiefseebergbau"
+ },
+ "pm_automated_routing_protocols": {
+  "en": "Automated Routing Protocols",
+  "de": "Automatisierte Routing-Protokolle"
+ },
+ "pm_automated_trading": {
+  "en": "Automated Trading",
+  "de": "Automatisierter Handel"
+ },
+ "pm_autonomous_highway": {
+  "en": "Autonomous Highway",
+  "de": "Autonome Autobahn"
+ },
+ "pm_autonomous_networks": {
+  "en": "Autonomous Networks",
+  "de": "Autonome Netzwerke"
+ },
+ "pm_autonomous_trains": {
+  "en": "Autonomous Trains",
+  "de": "Autonome Züge"
+ },
+ "pm_axiom_space_hq": {
+  "en": "Axiom Station Operations",
+  "de": "Axiom-Stationsbetrieb"
+ },
+ "pm_b_grimm_bangkok_warehouse": {
+  "en": "B. Grimm Bangkok Warehouse",
+  "de": "B.-Grimm-Lagerhaus Bangkok"
+ },
+ "pm_bacardi_santiago_distillery": {
+  "en": "Bacardí Santiago Distillery",
+  "de": "Bacardí-Brennerei Santiago"
+ },
+ "pm_bae_samlesbury_aerodrome": {
+  "en": "BAE Systems Samlesbury Aerodrome",
+  "de": "BAE-Systems-Flugplatz Samlesbury"
+ },
+ "pm_base_building_advanced_renewable_power": {
+  "en": "Advanced Renewable Power",
+  "de": "Fortgeschrittene erneuerbare Energie"
+ },
+ "pm_base_building_compact_modular_fusion_power": {
+  "en": "Muon-Catalyzed Fusion Power",
+  "de": "Myonenkatalysierte Fusionsenergie"
+ },
+ "pm_base_building_hydro_power": {
+  "en": "Hydro Power",
+  "de": "Wasserkraft"
+ },
+ "pm_base_building_inertial_fusion_power": {
+  "en": "Inertial Fusion Power",
+  "de": "Trägheitsfusionsenergie"
+ },
+ "pm_base_building_nuclear_power": {
+  "en": "Nuclear Power",
+  "de": "Kernkraft"
+ },
+ "pm_base_building_renewable_power": {
+  "en": "Renewable Power",
+  "de": "Erneuerbare Energie"
+ },
+ "pm_base_building_tokamak_fusion_power": {
+  "en": "Tokamak Fusion Power",
+  "de": "Tokamak-Fusionsenergie"
+ },
+ "pm_basf_ludwigshafen_plant": {
+  "en": "BASF Ludwigshafen Plant",
+  "de": "BASF-Werk Ludwigshafen"
+ },
+ "pm_basic_am_fabrication": {
+  "en": "Basic AM Fabrication",
+  "de": "Einfache AM-Fertigung"
+ },
+ "pm_basic_emissions_control": {
+  "en": "Basic Emissions Control",
+  "de": "Einfache Emissionskontrolle"
+ },
+ "pm_basic_fume_scrubbers": {
+  "en": "Basic Fume Scrubbers",
+  "de": "Einfache Rauchgaswäscher"
+ },
+ "pm_basic_production": {
+  "en": "Basic Production",
+  "de": "Grundproduktion"
+ },
+ "pm_basileiades_piraeus_works": {
+  "en": "Basileiades Piraeus Works",
+  "de": "Basileiades-Werke Piräus"
+ },
+ "pm_bayer_leverkusen_plant": {
+  "en": "Bayer Leverkusen Plant",
+  "de": "Bayer-Werk Leverkusen"
+ },
+ "pm_behavioral_conditioning": {
+  "en": "Behavioral Conditioning",
+  "de": "Verhaltenskonditionierung"
+ },
+ "pm_bengal_coal_raniganj_mine": {
+  "en": "Bengal Coal Raniganj Mine",
+  "de": "Bengal-Coal-Mine Raniganj"
+ },
+ "pm_bespoke_alloys": {
+  "en": "Bespoke Alloys",
+  "de": "Maßgeschneiderte Legierungen"
+ },
+ "pm_bhp_broken_hill_mine": {
+  "en": "BHP Broken Hill Mine",
+  "de": "BHP-Mine Broken Hill"
+ },
+ "pm_bhp_mount_whaleback_mine": {
+  "en": "Mount Whaleback Mine",
+  "de": "Mount-Whaleback-Mine"
+ },
+ "pm_bioelectronic_implants": {
+  "en": "Bioelectronic Implants",
+  "de": "Bioelektronische Implantate"
+ },
+ "pm_bioengineered_rubber": {
+  "en": "Bioengineered Rubber",
+  "de": "Biotechnisch hergestellter Kautschuk"
+ },
+ "pm_bioplastics": {
+  "en": "Bioplastics",
+  "de": "Biokunststoffe"
+ },
+ "pm_biotech_dyes": {
+  "en": "Biotech Dyes",
+  "de": "Biotech-Farbstoffe"
+ },
+ "pm_blackberry_rim_campus": {
+  "en": "RIM Campus",
+  "de": "RIM-Campus"
+ },
+ "pm_blow_molding": {
+  "en": "Blow Molding",
+  "de": "Blasformen"
+ },
+ "pm_boeing_everett_factory": {
+  "en": "Boeing Everett Factory",
+  "de": "Boeing-Fabrik Everett"
+ },
+ "pm_bolckow_eston_ironworks": {
+  "en": "Bolckow Eston Ironworks",
+  "de": "Bolckow-Eston-Eisenwerke"
+ },
+ "pm_bombay_burmah_rangoon_timber_depot": {
+  "en": "Bombay Burmah Rangoon Timber Depot",
+  "de": "Bombay-Burmah-Holzdepot Rangoon"
+ },
+ "pm_bombay_dyeing_spring_mills": {
+  "en": "Bombay Dyeing Spring Mills",
+  "de": "Bombay-Dyeing-Spring-Mühlen"
+ },
+ "pm_boston_dynamics_ai_institute": {
+  "en": "Boston Dynamics AI Institute",
+  "de": "Boston-Dynamics-KI-Institut"
+ },
+ "pm_bp_refinery_complex": {
+  "en": "BP Refinery Complex",
+  "de": "BP-Raffineriekomplex"
+ },
+ "pm_broadcast_television": {
+  "en": "Broadcast Television",
+  "de": "Fernsehrundfunk"
+ },
+ "pm_bullet_trains": {
+  "en": "Bullet Trains",
+  "de": "Hochgeschwindigkeitszüge"
+ },
+ "pm_bunge_born_buenos_aires_grain_silo": {
+  "en": "Bunge & Born Buenos Aires Grain Silo",
+  "de": "Bunge-&-Born-Getreidesilo Buenos Aires"
+ },
+ "pm_bytedance_data_fortress": {
+  "en": "TikTok Data Fortress",
+  "de": "TikTok-Datenfestung"
+ },
+ "pm_calcutta_electric_victoria_house": {
+  "en": "Calcutta Electric Victoria House",
+  "de": "Kalkutta-Electric-Victoria-Haus"
+ },
+ "pm_calendered_and_coated_paper": {
+  "en": "Calendered & Coated Paper",
+  "de": "Kalandriertes und beschichtetes Papier"
+ },
+ "pm_caribbean_petroleum_maracaibo_depot": {
+  "en": "Caribbean Petroleum Maracaibo Depot",
+  "de": "Caribbean-Petroleum-Depot Maracaibo"
+ },
+ "pm_carnegie_homestead_mill": {
+  "en": "Carnegie Homestead Mill",
+  "de": "Carnegie-Homestead-Mühle"
+ },
+ "pm_catalytic_cracking": {
+  "en": "Catalytic Cracking",
+  "de": "Katalytisches Cracken"
+ },
+ "pm_catl_gigafactory": {
+  "en": "CATL Gigafactory",
+  "de": "CATL-Gigafactory"
+ },
+ "pm_ccci_leopoldville_depot": {
+  "en": "CCCI Léopoldville Depot",
+  "de": "CCCI-Depot Léopoldville"
+ },
+ "pm_cellulosic_hydrolysis": {
+  "en": "Cellulosic Hydrolysis",
+  "de": "Cellulose-Hydrolyse"
+ },
+ "pm_centralized_traffic_control": {
+  "en": "Centralized Traffic Control",
+  "de": "Zentralisierte Verkehrssteuerung"
+ },
+ "pm_cfr_bucharest_railway_works": {
+  "en": "CFR Bucharest Railway Works",
+  "de": "CFR-Eisenbahnwerke Bukarest"
+ },
+ "pm_cgv_haut_brion_estate": {
+  "en": "CGV Haut-Brion Estate",
+  "de": "CGV-Weingut Haut-Brion"
+ },
+ "pm_chemical_rockets": {
+  "en": "Chemical Rockets",
+  "de": "Chemische Raketen"
+ },
+ "pm_chr_hansen_copenhagen_laboratory": {
+  "en": "Chr. Hansen Copenhagen Laboratory",
+  "de": "Chr.-Hansen-Labor Copenhagen"
+ },
+ "pm_chromium_substitution": {
+  "en": "Chromium Substitution",
+  "de": "Chromsubstitution"
+ },
+ "pm_civil_highway": {
+  "en": "Civil Highway",
+  "de": "Zivile Autobahn"
+ },
+ "pm_cleanroom_fabs": {
+  "en": "Cleanroom Fabs",
+  "de": "Reinraum-Fabs"
+ },
+ "pm_cloning_vats": {
+  "en": "Cloning Vats",
+  "de": "Klonbottiche"
+ },
+ "pm_closed_loop_synthesis": {
+  "en": "Closed-Loop Synthesis",
+  "de": "Kreislaufsynthese"
+ },
+ "pm_cloud_computing": {
+  "en": "Cloud Computing",
+  "de": "Cloud-Computing"
+ },
+ "pm_coats_ferguslie_mills": {
+  "en": "Coats Ferguslie Mills",
+  "de": "Coats-Ferguslie-Mühlen"
+ },
+ "pm_cochlear_global_hq": {
+  "en": "Cochlear Global Headquarters",
+  "de": "Cochlear-Hauptsitz"
+ },
+ "pm_cockerill_seraing_works": {
+  "en": "Cockerill Seraing Works",
+  "de": "Cockerill-Werke Seraing"
+ },
+ "pm_colt_hartford_armory": {
+  "en": "Colt Hartford Armory",
+  "de": "Colt-Arsenal Hartford"
+ },
+ "pm_communal_child_rearing": {
+  "en": "Communal Child-Rearing",
+  "de": "Gemeinschaftliche Kindererziehung"
+ },
+ "pm_computer_aided_design": {
+  "en": "Computer-Aided Design",
+  "de": "Computerunterstütztes Design"
+ },
+ "pm_concrete_bunkers": {
+  "en": "Concrete Bunkers",
+  "de": "Betonbunker"
+ },
+ "pm_condensing_engine_pump_building_tech_metals_mine": {
+  "en": "Condensing Engine Pump",
+  "de": "Kondensationsmotorpumpe"
+ },
+ "pm_consciousness_network": {
+  "en": "Consciousness Network",
+  "de": "Bewusstseinsnetzwerk"
+ },
+ "pm_consciousness_network_construction_fast": {
+  "en": "Consciousness Network Construction (1 year)",
+  "de": "Bewusstseinsnetzwerk-Bau (1 Jahr)"
+ },
+ "pm_consciousness_network_construction_medium": {
+  "en": "Consciousness Network Construction (2 years)",
+  "de": "Bewusstseinsnetzwerk-Bau (2 Jahre)"
+ },
+ "pm_consciousness_network_construction_paused": {
+  "en": "Consciousness Network Construction (Paused)",
+  "de": "Bewusstseinsnetzwerk-Bau (pausiert)"
+ },
+ "pm_consciousness_network_construction_slow": {
+  "en": "Consciousness Network Construction (4 years)",
+  "de": "Bewusstseinsnetzwerk-Bau (4 Jahre)"
+ },
  "pm_consciousness_network_open": {
   "en": "Open Network",
   "de": "Offenes Netzwerk"
