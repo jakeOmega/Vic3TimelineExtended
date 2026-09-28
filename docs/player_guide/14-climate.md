@@ -204,19 +204,6 @@ lasts, a Settlement Authority on Managed Retreat can move people off your coasts
 ([Resettlement programs](07-states.md#resettlement-programs)). Both lists are in
 [Climate event list](18-appendix-events.md#climate-event-list).
 
-Four Degrees, the 4 °C threshold event, has no good choice. Each option gives a
-modifier made only of harms, fading over ten years. The crossing brings three
-harms: +10% mortality and −2 standard of living, −15% farm throughput, and −5%
-throughput for every building. Each choice spares you one of them and costs
-something of its own; you take the other two in full. All of this comes on top
-of the Climate Warming modifier, which at 4 °C is four times its 1 °C values.
-
-| Choice | Spares you | Costs |
-|---|---|---|
-| Survival Footing | Mortality and standard of living | −20% bureaucracy; radicals, more among the upper strata |
-| Fortress Nation | Farm throughput | −10% prestige, −25% migration pull; large radicals, and more among academics |
-| Carrying On | Building throughput | Very large radicals |
-
 ## State pollution
 
 The mod adds a Generated Pollution modifier that scales how much pollution a

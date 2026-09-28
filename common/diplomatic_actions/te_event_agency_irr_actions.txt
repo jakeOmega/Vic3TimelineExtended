@@ -34,7 +34,7 @@ irr_seek_war_blessing = {
 	should_notify_third_parties = no
 	show_in_lens = no   # avoid auto-lookup of gfx/interface/icons/lens_toolbar_icons/irr_seek_war_blessing.dds
 
-	texture = "gfx/interface/icons/diplomatic_action_icons/take_state.dds"
+	texture = "gfx/interface/icons/diplomatic_action_icons/irr_seek_war_blessing.dds"
 
 	selectable = {
 		irr_war_blessing_member = yes

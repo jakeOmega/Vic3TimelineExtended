@@ -1,4 +1,5 @@
 ﻿nuke_diplo_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/nuke_diplo_action.dds"
 	groups= {
 		general
 	}
@@ -181,6 +182,7 @@
 
 
 tactical_nuke_diplo_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/tactical_nuke_diplo_action.dds"
 	groups= {
 		general
 	}

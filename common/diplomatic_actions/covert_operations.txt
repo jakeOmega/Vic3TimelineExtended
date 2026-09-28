@@ -29,6 +29,7 @@
 # ---- PEACETIME: Election Interference ----
 # Undermine a target's political stability through covert influence campaigns
 covert_election_interference_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/covert_election_interference_action.dds"
 	groups = {
 		general
 	}
@@ -203,6 +204,7 @@ covert_election_interference_action = {
 # ---- PEACETIME: Financial Subversion ----
 # Destabilize a target's economy through market manipulation and currency attacks
 covert_financial_subversion_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/covert_financial_subversion_action.dds"
 	groups = {
 		general
 	}
@@ -357,6 +359,7 @@ covert_financial_subversion_action = {
 # ---- WARTIME: Infrastructure Sabotage ----
 # Disrupt enemy production and logistics through sabotage operations
 covert_infrastructure_sabotage_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/covert_infrastructure_sabotage_action.dds"
 	groups = {
 		general
 	}
@@ -512,6 +515,7 @@ covert_infrastructure_sabotage_action = {
 # ---- WARTIME: Communications Disruption ----
 # Disrupt enemy military command and control systems
 covert_comms_disruption_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/covert_comms_disruption_action.dds"
 	groups = {
 		general
 	}
@@ -666,6 +670,7 @@ covert_comms_disruption_action = {
 # Requires target to have more technologies researched than you.
 # Effect phases through preparatory → establishing → fully operational.
 covert_industrial_espionage_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/covert_industrial_espionage_action.dds"
 	groups = {
 		general
 	}
@@ -814,6 +819,7 @@ covert_industrial_espionage_action = {
 # Gather intelligence on a target's military capabilities and steal secrets
 # Effect phases through preparatory → establishing → fully operational.
 covert_military_espionage_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/covert_military_espionage_action.dds"
 	groups = {
 		general
 	}
@@ -957,6 +963,7 @@ covert_military_espionage_action = {
 # Bribery, blackmail, and covert media campaigns to weaken a nation's
 # resistance to power bloc pressure. Requires being a Power Bloc leader.
 covert_influence_campaign_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/covert_influence_campaign_action.dds"
 	groups = {
 		general
 	}
@@ -1119,6 +1126,7 @@ covert_influence_campaign_action = {
 # Covertly support political movements aligned with YOUR government type
 # in a foreign nation. Does NOT require rivalry.
 covert_ideological_subversion_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/covert_ideological_subversion_action.dds"
 	groups = {
 		general
 	}
@@ -1289,6 +1297,7 @@ covert_ideological_subversion_action = {
 # Covertly fund separatist movements and general unrest in a rival nation.
 # Requires rivalry — the most aggressive peacetime operation.
 covert_destabilization_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/covert_destabilization_action.dds"
 	groups = {
 		general
 	}
@@ -1463,6 +1472,7 @@ covert_destabilization_action = {
 # push any coup already under way. Severe tier. Needs a Seasoned agency to
 # launch; a running operation is never ended by the score falling.
 covert_regime_change_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/covert_regime_change_action.dds"
 	groups = {
 		general
 	}
@@ -1632,6 +1642,7 @@ covert_regime_change_action = {
 # failed centrifuges, missing scientists. Severe tier. Needs a Seasoned agency
 # to launch; lapses when the target's programme stops.
 covert_nuclear_sabotage_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/covert_nuclear_sabotage_action.dds"
 	groups = {
 		general
 	}
@@ -1808,6 +1819,7 @@ covert_nuclear_sabotage_action = {
 # target to have completed a milestone we have not.
 # Effect phases through preparatory → establishing → fully operational.
 covert_space_espionage_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/covert_space_espionage_action.dds"
 	groups = {
 		general
 	}
@@ -1963,6 +1975,7 @@ covert_space_espionage_action = {
 # while it runs. Mild tier; priority fixed at 1; counts towards Tradecraft
 # only at the preparatory rate.
 covert_cultivate_assets_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/covert_cultivate_assets_action.dds"
 	groups = {
 		general
 	}
@@ -2111,6 +2124,7 @@ covert_cultivate_assets_action = {
 # tier: every service looks for loose material. Ends by itself when the
 # target's line has nothing left to find.
 covert_secure_material_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/covert_secure_material_action.dds"
 	groups = {
 		general
 	}

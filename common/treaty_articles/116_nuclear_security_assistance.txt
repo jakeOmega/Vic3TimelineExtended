@@ -19,7 +19,7 @@
 #     (nd_loose_monthly, nuclear_loose_effects.txt).
 # ============================================================================
 nuclear_security_assistance = {
-	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/nuclear_security_assistance.dds"
 	kind = directed
 	maintenance_paid_by = source_country
 	cost = 100

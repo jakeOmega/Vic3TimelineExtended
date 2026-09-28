@@ -1,5 +1,6 @@
 ﻿
 decolonize_diplo_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/decolonize_diplo_action.dds"
 	groups= {
 		general
 	}
@@ -53,6 +54,7 @@ decolonize_diplo_action = {
 }
 
 annex_subject_peaceful = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/annex_subject_peaceful.dds"
 	groups= {
 		overlord
 	}
@@ -129,7 +131,7 @@ colonial_culture_change = {
 	}
 	show_in_lens = no
 
-	texture = "gfx/interface/icons/diplomatic_action_icons/force_state_religion.dds"
+	texture = "gfx/interface/icons/diplomatic_action_icons/change_culture.dds"
 
 	selectable = {
 		always = yes
@@ -241,6 +243,7 @@ colonial_culture_change = {
 }
 
 diplomatic_alignment = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/diplomatic_alignment.dds"
 	groups= {
 		general
 	}
@@ -399,6 +402,7 @@ diplomatic_alignment = {
 }
 
 humanitarian_aid = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/humanitarian_aid.dds"
 	groups= {
 		general
 	}
@@ -671,7 +675,7 @@ force_cultural_acceptance = {
 	}
 	show_in_lens = no
 
-	texture = "gfx/interface/icons/diplomatic_action_icons/force_state_religion.dds"
+	texture = "gfx/interface/icons/diplomatic_action_icons/force_culture.dds"
 
 	# The bool comes from Cultural Unity tier II and up
 	# (extra_power_bloc_principles.txt).
@@ -773,7 +777,7 @@ force_cultural_adoption = {
 	}
 	show_in_lens = no
 
-	texture = "gfx/interface/icons/diplomatic_action_icons/force_state_religion.dds"
+	texture = "gfx/interface/icons/diplomatic_action_icons/force_culture.dds"
 
 	selectable = {
 		is_power_bloc_leader = yes
@@ -903,7 +907,7 @@ voluntary_union = {
 	is_hostile = no
 	show_in_lens = no   # avoid auto-lookup of gfx/interface/icons/lens_toolbar_icons/voluntary_union.dds
 
-	texture = "gfx/interface/icons/diplomatic_action_icons/force_become_subject.dds"
+	texture = "gfx/interface/icons/diplomatic_action_icons/voluntary_union.dds"
 
 	selectable = {
 		# Activator gate intentionally absent -- voluntary union is open to
@@ -1306,7 +1310,7 @@ voluntary_union_decentralized = {
 	is_hostile = no
 	show_in_lens = no
 
-	texture = "gfx/interface/icons/diplomatic_action_icons/force_become_subject.dds"
+	texture = "gfx/interface/icons/diplomatic_action_icons/voluntary_union_decentralized.dds"
 
 	selectable = {
 		# Same activation floor as voluntary_union / the irredentism system.

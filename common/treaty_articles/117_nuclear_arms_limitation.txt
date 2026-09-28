@@ -11,7 +11,7 @@
 # either way: it binds both alike.
 # ============================================================================
 nuclear_arms_limitation = {
-	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/nuclear_arms_limitation.dds"
 	kind = mutual
 	cost = 50
 

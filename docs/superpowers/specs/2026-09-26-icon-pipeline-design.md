@@ -1,6 +1,6 @@
 # Icon pipeline: FLUX-generated UI icons for placeholder entities — design
 
-Status: **prototype** (`scripts/image_pipeline/icon_samples.py`); the production pipeline below is not built yet.
+Status: **production pipeline started with technologies** (`scripts/image_pipeline/generate_icons.py`, registry `icon_prompts.py`, shared code `icon_render.py`, DDS writer `icon_dds.py`). The prototype sample sheet is `icon_samples.py`. Other categories follow the order under Production design.
 
 ## Goal
 
@@ -104,8 +104,49 @@ Each row: current placeholder | three vanilla neighbours ‖ two generated candi
 - **rembg:** `rembg[gpu]` pulls an `onnxruntime-gpu` that wants CUDA 13 libraries and falls back to CPU. Plain `onnxruntime` is enough (~1–2 s per image).
 - **Environment:** the image stack lives in `.venv-img` (gitignored), separate from `.venv`, since `requirements.txt` keeps torch/diffusers commented out.
 
-## Open questions
+## Decisions (owner, 2026-09-27)
 
-- Uncompressed (vanilla parity, ~212 MB) or BC7 where the size allows (~70 MB)?
-- Diplomatic-action plinth: lifted from vanilla, or dropped?
-- Buildings: which of the 300 borrowings are deliberate (a company building reusing its industry's icon) and should stay allowlisted?
+- **DDS format: uncompressed**, vanilla parity (~212 MB for everything). `icon_dds.py` writes it in Python; its header matches vanilla's byte for byte apart from the NVTT tool signature.
+- **Diplomatic-action plinth: lift it from vanilla** like the frames. Drop it if that proves hard.
+- **Buildings: most borrowings are placeholders, but a fair number can share a common icon.** Generate only for the real placeholders, and not all 300 at first. Triage when buildings come up.
+
+## Technology slice (2026-09-27)
+
+The first production category, end to end:
+
+1. `icon_prompts.ICONS["technology"]`: 170 subjects, drafted from each tech's name and description, one physical object each, with material and colour named.
+2. `generate_icons.py --stage render --seeds 2`, then `--stage compose` and `--stage sheet`: review sheets of 20.
+3. Record the chosen seed per tech in the registry (`"keep"` leaves the borrowed vanilla icon in place). 35 techs borrow a vanilla icon other than the newspapers, and some of those may fit.
+4. `--stage write` (DDS to `gfx/interface/icons/invention_icons/<key>.dds`), then `--stage wire` (rewrites the tech's `texture =` line), then an in-game check.
+
+The owner approved all 170 subjects and asked for era 6 first (37 techs) before rendering the rest.
+
+## Diplomatic slice (2026-09-27)
+
+- **Treaty articles** (31: 18 on `offer_embassy`, the rest on law or event icons). They use the prototype's 100² `cutout` style unchanged, with `field = icon` in `common/treaty_articles/`. `wire` drops the `# Placeholder Icon` comment on the lines it rewrites.
+- **Diplomatic actions** (7) have a new `plinth` layout. The slab is lifted from vanilla, per the owner's call. `icon_render.plinth_template()` takes the median over the 16 vanilla icons whose green-topped stone slab sits in the common place. On the top face, where every figure stands, each pixel takes the median over only the icons in which it is still green, which recovers the bare marble and its rim. A pixel must be bare in a quarter of the icons, so a figure's own green parts don't count. The figure is cut out, stood on the top face and given a contact shadow. The prompt no longer asks FLUX for a pedestal.
+- **Reuse** (`"use": <path>`): four actions have a better vanilla icon than the one they borrowed. Withdraw Nuclear Umbrella gets `guarantee_independence_obligation` (the crossed-out guarantee), Colonial Culture Change gets `change_culture`, and the two cultural-force actions get the `force_culture` crest. `wire` points them there, with nothing rendered.
+
+## Review lessons (2026-09-27)
+
+About 250 icons were generated in one session: era 6 techs, all treaty articles and all diplomatic actions. The owner reviewed every batch on annotated sheets and changed about one pick in eight.
+
+- **Roughly one subject in five needed a second render, and a few needed three.** The failures repeat, so the rules for writing subjects are in `icon_prompts.py`'s docstring:
+  - real insignia on vehicles;
+  - words that get written out as text;
+  - white surfaces lost to the cutout;
+  - things FLUX won't break or fold;
+  - gallows-like shapes;
+  - double pedestals.
+- **Two candidates were enough when the subject was right.** When the idea is right but both renders are weak, `--seeds 4` adds two more.
+- **The owner's preferences:**
+  - the clearer silhouette at 100 px over the more detailed one;
+  - context that locates the object (a convoy on water, not on land);
+  - complete sets (a full round table of chairs).
+- **Small flaws on an otherwise good candidate can be retouched instead of rerolled.** A painter's signature on the background, or lettering on a flat surface, is removed in the raw render. Fill each marked pixel by interpolating between the clean pixels on either side of it in the same row, then delete the DDS and run `write` again (a retouch leaves the pick unchanged, so it must be forced); `compose` redoes any render newer than its composed file. The edited raw is in gitignored `generated_images/`, so the committed DDS is the only record. This was done for `laser_technology` ("SK" on the casing) and `satellite_communications` (a signature).
+- **Check how the engine finds a category's icon before wiring it.** Diplomatic actions have two icons: `texture =` for the country menu, and `lens_toolbar_icons/<key>.dds`, loaded by key, for the lens bar. #535 wired only the first, and the lens bar kept its placeholders until the follow-up made `write` keep the lens copy. `scripting_best_practices.md` already documented this. Search it for the category before building the next one: decrees, institutions and principles may have their own second lookups.
+- **Three more tools came out of the session:**
+  - the `"use"` state, for a better vanilla icon;
+  - insertion of a missing icon line, since the covert operations had none;
+  - review sheets at 2× for 100 px categories.
+

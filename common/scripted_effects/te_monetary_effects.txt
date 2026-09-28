@@ -2750,9 +2750,10 @@ te_monetary_apply_interest_modifiers = {
 # UNDER PRESSURE (te_mon_peg_under_pressure: the VAULT under a tenth of its
 # limit — the treasury's health no longer has anything to do with it) the
 # outflow stops and te_peg_confidence moves instead, by
-# te_mon_peg_confidence_move. Out from under it, confidence heals a point a
-# month while the gap is >= 0 and no borrowed gold is waiting to leave, and
-# otherwise holds (ruling Q10).
+# te_mon_peg_confidence_move. Out from under it, confidence heals by
+# te_mon_peg_confidence_heal (+3 / +2 / +1 by the dashboard's band) while the
+# gap is >= 0 and no borrowed gold is waiting to leave, and otherwise holds
+# (ruling Q10).
 #
 # THE FISCAL LINK IS RECAPITALISATION, and it runs one way. The dashboard's
 # button (op 13, te_mon_effect_recapitalise_bank) moves te_mon_bank_recap_amount
@@ -2891,14 +2892,26 @@ te_monetary_update_gold = {
 			# is not visibly losing gold (first playtest: a gap of -3 with a
 			# healthy vault was GAINING a point a month while it drained). With
 			# a negative gap, or borrowed gold still queueing to leave, it holds.
+			#
+			# "Queueing to leave" means hot money at a gap of 0 or under — the
+			# only gap it leaves at (ruling Q7's floor). At a POSITIVE gap it is
+			# staying for the return, and it heals, as the under-pressure +2 in
+			# te_mon_peg_confidence_move already did. It used to be any hot
+			# money at all (revised 2026-09-27), and that froze a peg-defence
+			# bank for good: Q5's round-up and 0.35 hysteresis park it a tenth
+			# or three over the world rate, so its hot money never reaches zero
+			# — and every AI on gold runs peg defence.
 			limit = {
 				var:te_gold_flow_gap >= 0
-				var:te_gold_hot_money <= 0
+				OR = {
+					var:te_gold_flow_gap > 0
+					var:te_gold_hot_money <= 0
+				}
 				# [P4] An overvalued peg counts as under pressure for ruling
-				# Q10: the +1 holds, instead of netting the drain below away.
+				# Q10: the heal holds, instead of netting the drain below away.
 				te_mon_fx_is_overvalued = no
 			}
-			change_variable = { name = te_peg_confidence add = 1 }
+			change_variable = { name = te_peg_confidence add = te_mon_peg_confidence_heal }
 		}
 		# [P4] §15.2, the FIFTH confidence term, beside the rate-gap drain and
 		# adding to it: -1 per 2 points of overvaluation beyond 5, x

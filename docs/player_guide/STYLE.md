@@ -27,6 +27,17 @@ So:
 - Practical advice is welcome when it follows from the mechanics ("Build the
   reserve while prices are low; it drains into the market when war cuts supply").
   Don't invent strategy you can't justify from how the system works.
+- Where players choose among a set of tools or options, say when each is worth
+  it: a table of what you gain and what you pay, a line on when to use it, and
+  how the AI uses it. "Managing foreign capital and import credit" in the banking
+  chapter is the model. Name the benefits a player could miss, such as the
+  leverage a treaty article earns a bloc leader.
+- Describe the mod as it is now. Leave out change history: what an earlier
+  version did, what was retired or renamed, what happens to saved games from
+  before a change, what was "reworked recently". Leave out trivia a player can't
+  act on, such as how many base-game companies there are or which expansion's
+  content is covered. Comparing with the base game is fine; comparing with an
+  older version of the mod is not.
 
 ## Accuracy
 
@@ -94,7 +105,11 @@ render on GitHub. Stick to this subset:
   `[text](04-banking.md#the-policy-rate)` for a section. The build turns these
   into links inside the PDF. The lint checks that targets exist.
 - **Tables** for data that has rows and columns: buttons and what they do, tiers
-  and thresholds, rules and defaults. Not for prose chopped into cells.
+  and thresholds, rules and defaults. Not for prose chopped into cells. A table
+  that only lists content (every wonder with its state, every unit or ship) goes
+  in [Appendix: reference lists](19-appendix-reference-lists.md), with a sentence
+  or two and a link in the chapter. Keep a table in the chapter when it is short
+  or explains a mechanic or a choice.
 - **Lists** for real lists. Write each item as a sentence or a plain phrase. No
   bold lead-ins (`- **Term**: description`); if every item needs a label, it is a
   table.

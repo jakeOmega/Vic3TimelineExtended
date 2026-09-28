@@ -242,6 +242,10 @@ passed:
 | Out of the Furnace, Off the Brink, The Heat Recedes, A Cooler Decade, Below the Line | Warming falls back below 4.0, 3.0, 2.0, 1.0 and 0.5 °C |
 | Near Baseline | Warming falls back below 0.1 °C, after having reached 0.5 °C |
 
+Four Degrees offers no good choice. Each option spares you one of three harms
+(mortality and standard of living, farm throughput, or building throughput) and
+adds a cost of its own, all fading over ten years.
+
 ### Recurring climate event list
 
 Each month every country has a small chance of one recurring event whose
