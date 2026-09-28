@@ -94,6 +94,7 @@ CATEGORIES = {
         style=("{subject}, a compact miniature sculpture, simple chunky silhouette, " + PAINTED)),
     "building": dict(
         folder="building_icons", size=256, mode="framed",
+        entity_dir="common/buildings", field="icon",
         style=("aerial three-quarter view of {subject}, detailed painted illustration "
                "of a miniature diorama, warm golden afternoon light, muted earthy "
                "palette, surrounding landscape, the building fills the center of the image")),
@@ -376,6 +377,89 @@ ICONS: dict[str, dict[str, dict]] = {
         "force_cultural_acceptance": {"use": "gfx/interface/icons/diplomatic_action_icons/force_culture.dds"},  # the culture crest; the borrowed one was religion's
         "force_cultural_adoption": {"use": "gfx/interface/icons/diplomatic_action_icons/force_culture.dds"},  # the culture crest; the borrowed one was religion's
     },
+    "building": {
+        # Mod-added buildings on another building's (or a good's) icon. Company
+        # buildings are left out: flagships carry their company's own logo by
+        # design (docs/vanilla/vanilla_company_buildings_reference.md).
+        # Wonders: the landmark alone, as vanilla draws its monuments.
+        "building_wonder_golden_gate_bridge": {"subject": "the Golden Gate Bridge, its red-orange suspension towers and cables spanning a blue strait between green headlands, a little fog rolling in", "seed": None},
+        "building_wonder_empire_state_building": {"subject": "the Empire State Building, a limestone Art Deco skyscraper with stepped setbacks and a slender mast, towering over Manhattan's city blocks", "seed": None},
+        "building_wonder_sydney_opera_house": {"subject": "the Sydney Opera House, its white shell-shaped roof sails on a harbour point surrounded by blue water", "seed": None},
+        "building_wonder_cn_tower": {"subject": "the CN Tower of Toronto, a very tall slender concrete tower with a round observation pod near its top, on a lakeshore beside city blocks", "seed": None},
+        "building_wonder_hoover_dam": {"subject": "the Hoover Dam, a massive curved concrete arch dam wedged in a narrow desert canyon, a blue reservoir behind it and four intake towers", "seed": None},
+        "building_wonder_pentagon": {"subject": "the Pentagon, a huge five-sided grey concrete building of five concentric rings around a green central courtyard, surrounded by lawns and highways", "seed": None},
+        "building_wonder_aswan_high_dam": {"subject": "the Aswan High Dam, a long rock-and-earth embankment dam across the Nile with a wide blue lake behind it, a tall lotus-shaped concrete monument beside it, yellow desert around", "seed": None},
+        "building_wonder_tokyo_tower": {"subject": "Tokyo Tower, an orange-and-white painted steel lattice tower rising above dense city blocks", "seed": None},
+        "building_wonder_moscow_state_university": {"subject": "the main building of Moscow State University, a tall Stalinist wedding-cake skyscraper with a gilded spire and symmetrical stepped wings, above formal gardens", "seed": None},
+        "building_wonder_berlin_tv_tower": {"subject": "the Berlin TV Tower, a tall concrete needle with a silver sphere near its top and a red-and-white antenna, above a wide city square", "seed": None},
+        "building_wonder_azadi_tower": {"subject": "the Azadi Tower of Tehran, a white marble monument shaped like an inverted Y with a tall arched gateway, in a large oval plaza with fountains", "seed": None},
+        "building_wonder_kenyatta_icc": {"subject": "the Kenyatta International Convention Centre in Nairobi, a round terracotta-red tower topped by a flat helipad disc, beside a cone-roofed amphitheatre hall", "seed": None},
+        "building_wonder_burj_khalifa": {"subject": "the Burj Khalifa, an extremely tall silver-glass needle skyscraper with stepped setbacks, towering over a desert city", "seed": None},
+        "building_wonder_world_trade_center": {"subject": "the twin towers of the World Trade Center, two identical tall square silver skyscrapers side by side at the tip of Manhattan, by the harbour", "seed": None},
+        "building_wonder_lotus_temple": {"subject": "the Lotus Temple in Delhi, a white marble building shaped like a half-open lotus flower of pointed petals, surrounded by nine blue pools and green gardens", "seed": None},
+        "building_wonder_itaipu_dam": {"subject": "the Itaipu Dam, a very long concrete buttress dam with a huge spillway of white rushing water, a wide river and green rainforest", "seed": None},
+        "building_wonder_petronas_towers": {"subject": "the Petronas Twin Towers skyscrapers of Kuala Lumpur joined by their skybridge", "seed": None},
+        "building_wonder_basilica_of_our_lady_of_peace": {"subject": "the Basilica of Our Lady of Peace in Yamoussoukro, a huge church with a great grey-blue dome and curved colonnades embracing a plaza, among palm trees", "seed": None},
+        "building_wonder_three_gorges_dam": {"subject": "the Three Gorges Dam, an enormous straight concrete dam across the Yangtze river between steep green mountain gorges, with a staircase of ship locks beside it", "seed": None},
+        "building_wonder_channel_tunnel": {"subject": "a sleek white high-speed train entering the round concrete portal of the Channel Tunnel at the foot of green hills, the grey sea and white cliffs nearby", "seed": None},
+        "building_wonder_taipei_101": {"subject": "Taipei 101, a blue-green glass skyscraper built of stacked flared segments like a bamboo stalk, above the city with green mountains behind", "seed": None},
+        "building_wonder_lotte_world_tower": {"subject": "the Lotte World Tower in Seoul, a very tall pale tapering glass skyscraper with a slit crown, by a lake in the city", "seed": None},
+        "building_wonder_gardens_by_the_bay": {"subject": "Gardens by the Bay in Singapore, tall tree-shaped steel towers covered in green plants and linked by a skywalk, beside two curved glass conservatory domes on the waterfront", "seed": None},
+        "building_wonder_abraj_al_bait": {"subject": "the Abraj Al-Bait clock tower, a massive pale skyscraper with a huge plain white clock face on each side and a golden crescent spire, rising above a cluster of high-rise hotel towers", "seed": None},
+        "building_wonder_shanghai_tower": {"subject": "the Shanghai Tower, a twisting spiralling glass supertall skyscraper above the Pudong skyline beside a river", "seed": None},
+        "building_wonder_fast_telescope": {"subject": "the FAST radio telescope, a gigantic round dish of silver panels filling a bowl-shaped karst valley among green conical hills, six tall cable towers around its rim", "seed": None},
+        "building_wonder_statue_of_unity": {"subject": "the Statue of Unity, a colossal bronze statue of a standing man in a long shawl on a tall plinth on a river island, a dam and green hills behind", "seed": None},
+        "building_wonder_golden_bridge": {"subject": "the Golden Bridge of Vietnam, a gold-coloured curving footbridge held up by two giant moss-covered stone hands rising out of a green forested mountainside", "seed": None},
+        "building_wonder_large_hadron_collider": {"subject": "the Large Hadron Collider as a cutaway diorama: a huge ring-shaped tunnel carrying a blue accelerator pipe beneath green farmland, a giant cylindrical detector machine in a cavern below a research campus, mountains beyond", "seed": None},
+        "building_wonder_svalbard_seed_vault": {"subject": "the Svalbard Global Seed Vault, a narrow concrete entrance wedge jutting out of a snowy arctic mountainside above a fjord, its front glittering with turquoise light", "seed": None},
+        "building_wonder_ligo": {"subject": "the LIGO gravitational wave observatory, two very long straight concrete tunnel arms meeting at a right angle at a low central building, stretching across flat green plains", "seed": None},
+        "building_wonder_peace_palace": {"subject": "the Peace Palace in The Hague, a neo-Renaissance palace of red brick and pale stone with a tall clock tower and grey slate roofs, in formal gardens", "seed": None},
+        "building_wonder_palais_des_nations": {"subject": "the Palais des Nations in Geneva, a long pale-stone neoclassical palace with colonnaded wings in a green park, Lake Geneva and snowy mountains beyond", "seed": None},
+        # Fictional: a continent-wide union's seat, cross-shaped like the Berlaymont.
+        "building_wonder_continental_union_hq": {"subject": "a modern headquarters of four curved glass wings in a cross shape around a central atrium, beside a round assembly hall with a copper dome, in a landscaped plaza with a long reflecting pool", "seed": None},
+        # System buildings, all on government administration, barracks, urban
+        # center or power plant art. The UN is described, not named: its name
+        # brings the flag row and the emblem.
+        "building_un_headquarters": {"subject": "a tall slim skyscraper slab of green glass beside a low white assembly hall with a shallow dome, on a riverbank with city towers behind", "seed": None},
+        "building_power_bloc_hq": {"subject": "a huge ring-shaped modern headquarters of white concrete and dark glass around a circular garden courtyard, a tall communications mast beside it and a wide plaza in front", "seed": None},
+        "building_grand_monument": {"subject": "a colossal triumphal stone column topped by a gilded winged figure, rising from a paved ceremonial plaza with steps, flowerbeds and a colonnade", "seed": None},
+        "building_resettlement_colony": {"subject": "a small frontier land office with a porch, surrounded by rows of new timber houses and freshly fenced plots going up, piles of lumber and covered wagons, open grassland and forest beyond", "seed": None},
+        "building_strategic_reserve_hub": {"subject": "a large fenced national stockpile depot: rows of long concrete warehouses, a tall grain elevator, round white fuel storage tanks and stacked crates, with a railway siding", "seed": None},
+        "building_strategic_reserve_silo": {"subject": "a remote storage depot of three tall round concrete silos and a grass-covered earth bunker with a steel door, behind a wire fence in open countryside", "seed": None},
+        "building_military_base": {"subject": "a modern military base: rows of low barracks, a parade ground, a concrete bunker, vehicle sheds with plain olive-green trucks and a watchtower, inside a walled perimeter", "seed": None},
+        "building_state_youth_centers": {"subject": "a modern community youth centre, a low building of red brick and glass with a gymnasium roof, beside a running track and a football pitch with small figures playing", "seed": None},
+        "building_solar_receiver": {"subject": "a vast circular field of dark mesh antenna panels in rows on a desert plain around a central control building, a pale beam of light descending from the sky onto its centre", "seed": None},
+        "building_antimatter_facility": {"subject": "a futuristic research complex around a huge ring-shaped particle accelerator, with a round steel and glass containment dome at its centre holding a small glowing violet sphere", "seed": None},
+        "building_antimatter_engine": {"subject": "a colossal futuristic rocket engine on a concrete test stand, its polished steel nozzle glowing violet, with fuel tanks, pipes and a gantry beside it", "seed": None},
+        "te_construction_market_site": {"subject": "a construction site with cranes, scaffolding and stacked building materials", "seed": KEEP},  # a construction camp fits
+        # Industry variants: vanilla's industrial layout, the plant behind and
+        # its product large in the foreground. They were on goods icons.
+        "building_synthetics_plant_silk": {"subject": "a chemical plant with a large bolt of shiny synthetic fabric in the foreground", "seed": KEEP},  # vanilla's synthetics plant fits
+        "building_synthetics_plant_coal": {"subject": "a modern chemical works with tall reactor columns and power lines running in, with a heap of glossy black synthetic coal briquettes in the foreground", "seed": None},
+        "building_synthetics_plant_wood": {"subject": "a factory hall with resin vats and pipes, with a neat stack of glossy dark brown laminated resin panels in the foreground", "seed": None},
+        "building_synthetics_plant_sugar": {"subject": "a clean chemical plant with steel reactor tanks, with a large glass jar of sparkling white sweetener crystals in the foreground", "seed": None},
+        "building_synthetics_plant_meat": {"subject": "a gleaming laboratory factory with rows of steel bioreactor tanks, with a large glass petri dish holding a raw pink cultured steak in the foreground", "seed": None},
+        "building_synthetics_plant_fruit": {"subject": "a glass vertical farm building with stacked shelves of green plants under pink grow lights, with a wooden crate of red apples and oranges in the foreground", "seed": None},
+        "building_synthetics_plant_drinks": {"subject": "a bottling plant with steel mixing tanks and pipes, with a row of plain unlabelled glass bottles of bright amber and ruby liquid in the foreground", "seed": None},
+        "building_synthetics_plant_biomass": {"subject": "a biorefinery with tall steel fermentation towers and tanks beside green fields, with a heap of golden grain in the foreground", "seed": None},
+        "building_electrics_industry_radio": {"subject": "an electronics factory with a tall lattice radio mast and satellite dishes on its roof, with a large black handheld two-way radio with a stubby antenna in the foreground", "seed": None},
+        # Mines, on the five vanilla mine icons: the ore's colour and form tell
+        # them apart, in the same layout.
+        "building_manganese_mine": {"subject": "a mine with a timber headframe and ore sheds on dark rocky ground, with a heap of lumpy black-brown manganese ore nodules in the foreground", "seed": None},
+        "building_chromium_mine": {"subject": "a terraced open-pit mine in grey rock, with a gleaming mirror-bright chrome-plated steel bar resting on dark chromite ore lumps in the foreground", "seed": None},
+        "building_specialty_alloy_metal_mine": {"subject": "a mountainside mine with a steel headframe and ore bins, with a bundle of dull grey tungsten rods and dark metallic ore crystals in the foreground", "seed": None},
+        "building_copper_mine": {"subject": "a huge stepped open-pit copper mine with terraced orange-brown walls and a turquoise pool at the bottom, with a stack of shiny reddish copper ingots in the foreground", "seed": None},
+        "building_bauxite_mine": {"subject": "an open-pit mine cut into deep red earth with trucks on its terraces, with a heap of red-brown bauxite ore pebbles in the foreground", "seed": None},
+        "building_precious_minor_base_metal_mine": {"subject": "a hillside mine entrance with a timber headframe and ore carts, with a stack of silver bars and dull grey tin ingots in the foreground", "seed": None},
+        "building_nickel_cobalt_mine": {"subject": "an open-pit mine with rust-orange earthen walls, with a heap of silvery nickel pellets and deep blue cobalt ore crystals in the foreground", "seed": None},
+        "building_lithium_mine": {"subject": "lithium brine evaporation ponds, rectangles of bright turquoise, green and white on a high desert salt flat with mountains behind, with a heap of fine white lithium powder in the foreground", "seed": None},
+        "building_rare_earth_metals_mine": {"subject": "a large open-pit mine with pale grey terraces and tailings ponds, with a small pile of shiny silvery rare earth metal chunks and glittering purple crystals in the foreground", "seed": None},
+        "building_platinum_group_metals_mine": {"subject": "a deep mine with a tall steel headframe and shaft buildings, with a stack of bright silvery-white platinum bars in the foreground", "seed": None},
+        "building_graphite_mine": {"subject": "an open-pit mine with black glittering walls, with a heap of shiny black graphite flakes in the foreground", "seed": None},
+        "building_phosphate_mine": {"subject": "a wide open-cast mine with pale tan terraces and a long conveyor belt, with a heap of pale grey-tan phosphate rock pellets in the foreground", "seed": None},
+        "building_potash_mine": {"subject": "a mine with a tall headframe beside huge pink salt heaps, with a pile of pink and red potash salt crystals in the foreground", "seed": None},
+        "building_industrial_mineral_salt_mine": {"subject": "shallow salt evaporation pans and white salt heaps with conveyor belts, with a pile of large white salt crystals and grey gypsum chunks in the foreground", "seed": None},
+    },
 }
 
 
@@ -383,7 +467,8 @@ def check(mod_root: str | None = None, on_disk: set[str] | None = None) -> dict:
     """Compare ICONS with the mod's entity files.
 
     Errors:
-      unknown     a key with no plain top-level definition in its entity_dir
+      unknown     a key with no plain or REPLACE_OR_CREATE: top-level definition
+                  in its entity_dir
       bad_entry   an empty subject, a seed that is not None, an int or "keep",
                   or a "use" that is not a gfx/ .dds path
       missing_dds an accepted seed whose DDS is not committed (or on disk)
@@ -409,7 +494,8 @@ def check(mod_root: str | None = None, on_disk: set[str] | None = None) -> dict:
             for fname in files:
                 if fname.endswith(".txt"):
                     with open(os.path.join(dirpath, fname), encoding="utf-8-sig", errors="replace") as fh:
-                        defined |= set(re.findall(r"^([A-Za-z0-9_\-]+)\s*=\s*\{", fh.read(), re.M))
+                        defined |= set(re.findall(r"^(?:REPLACE_OR_CREATE:)?([A-Za-z0-9_\-]+)\s*=\s*\{",
+                                                   fh.read(), re.M))
         states = {"unreviewed": 0, "accepted": 0, "kept": 0, "reused": 0}
         for key, entry in entries.items():
             if key not in defined:
