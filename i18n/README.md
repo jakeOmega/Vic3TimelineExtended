@@ -35,7 +35,7 @@ Translation uses Claude Code subagents (on the subscription, not the API). The s
 5. Read each agent's report. Agents list the terms they coined and the lines they doubted; in the German run they surfaced most of the problems the markup check can't see: a vanilla term applied out of context, an English name kept where the game has an official German one, a guessed game term. Settle each by checking the vanilla loc, add the decision to `terms.json`, and `python3 scripts/i18n/translate_loc.py refresh <ids>` the chunks no agent has started, so they carry it.
 6. At the end, `python3 scripts/i18n/translate_loc.py prepare-fixes` writes a correction chunk from every `check-terms` mismatch, plus lines matching `--note 'REGEX=instruction'` or named by `--key-note 'KEY=instruction'`. One agent rewrites those lines, changing only the flagged term, and they merge like any chunk.
 
-The German run (September 2026): 19,557 keys and 264,000 words in 34 chunks. It took about three hours with eight Sonnet agents in parallel. 0.4% of lines were rejected, and 207 were corrected for consistency.
+The German run (September 2026): 19,590 keys and 264,000 words: a glossary chunk, 35 content chunks and one correction chunk. It took about three hours with eight Sonnet agents in parallel. 0.4% of lines were rejected, and 207 were corrected for consistency.
 
 Runs are resumable: whatever has merged is done, and `prepare` only offers what is still missing or stale. The merge check passes 97% of the base game's own English/German pairs unchanged; what it rejects there is vanilla German that has drifted from its English.
 
