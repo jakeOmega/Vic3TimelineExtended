@@ -71,8 +71,14 @@ KEEP = "keep"
 PAINTED = ("stylized hand-painted video game icon, painterly digital art with visible "
            "brush strokes, soft 3D shading, warm muted palette, blank unmarked surfaces, "
            "three-quarter view from slightly above, centered, isolated on a plain white background")
-SILHOUETTE = ("a solid black silhouette of {subject}, simple flat pictogram stencil, "
-              "bold clean shapes, no outline, on a plain white background")
+# For the embossed categories. A plainer "solid black silhouette ... bold clean
+# shapes" drew outline-only parts (an envelope, a coiled cord) that emboss to
+# hairlines, and let a locomotive run off the canvas, which the emboss then cut
+# square.
+SILHOUETTE = ("a bold solid black silhouette icon of {subject}, simple flat pictogram stencil, "
+              "thick chunky shapes with a few bold white cut-out details, no thin lines, no outlines, "
+              "no hatching, the whole object fully visible and centered with a wide white margin on "
+              "every side, on a plain white background")
 
 # folder/size/mode/fill/style drive rendering and composing. A category that
 # `generate_icons.py` produces also names where its entities live
@@ -104,13 +110,19 @@ CATEGORIES = {
         style=("aerial three-quarter view of {subject}, detailed painted illustration "
                "of a miniature diorama, warm golden afternoon light, muted earthy "
                "palette, surrounding landscape, the building fills the center of the image")),
+    # Ideology icons are read only from `icon =` (Ideology.GetTexture). IG
+    # ideologies are gold on a crimson disc; leader (character) ideologies
+    # silver on teal, in ideology_leader/. Vanilla gives an ideology held by
+    # both an IG and a leader one symbol in both looks (abolitionist's chains).
     "ideology": dict(
         folder="ideology_icons", size=220, mode="emboss_medallion", fill=0.60,
+        entity_dir="common/ideologies", field="icon",
         color=(255, 228, 175), centre_lift=1.25, style=SILHOUETTE),
+    "leader_ideology": dict(
+        folder="ideology_icons/ideology_leader", size=220, mode="emboss_medallion", fill=0.60,
+        entity_dir="common/ideologies", field="icon",
+        color=(225, 230, 235), centre_lift=1.25, style=SILHOUETTE),
     # Read only from `texture =` (MobilizationOption.GetTexture); no second lookup.
-    # The plain SILHOUETTE drew outline-only parts (an envelope, a coiled cord)
-    # that emboss to hairlines, and let a locomotive run off the canvas, which
-    # the emboss then cut square.
     "mobilization_option": dict(
         folder="mobilization_options", size=208, mode="emboss", fill=0.86,
         entity_dir="common/mobilization_options", field="texture",
@@ -118,11 +130,7 @@ CATEGORIES = {
         # vanilla's 19 icons: (181,128,106) pinkish, (148,73,38) orange-brown.
         # Channels above 255 are fine: the emboss multiplies by its lighting
         # (median ~0.6) before clipping.
-        color=(283, 212, 185), color_bottom=(249, 115, 55),
-        style=("a bold solid black silhouette icon of {subject}, simple flat pictogram stencil, "
-               "thick chunky shapes with a few bold white cut-out details, no thin lines, no outlines, "
-               "no hatching, the whole object fully visible and centered with a wide white margin on "
-               "every side, on a plain white background")),
+        color=(283, 212, 185), color_bottom=(249, 115, 55), style=SILHOUETTE),
     "decree": dict(
         folder="decree", size=158, mode="medallion", fill=0.78, centre_lift=2.1,
         grade_folder="invention_icons",
@@ -524,6 +532,24 @@ ICONS: dict[str, dict[str, dict]] = {
         "mobilization_option_mountain_combat_training": {"subject": "an ice axe crossed over a jagged snow-capped mountain peak", "seed": None},
         "mobilization_option_flight_simulators": {"subject": "a rounded flight simulator cockpit capsule with a canopy window, mounted on six thick angled hydraulic piston legs", "seed": None},
         "mobilization_option_amphibious_warfare": {"subject": "a flat-bottomed landing craft with its front ramp lowered, riding a big curling wave", "seed": None},
+    },
+    # Mod-added ideologies on another ideology's (or an IG's) icon. The 24
+    # ideology_custom_religion_* variants keep their base ideology's icon, as
+    # vanilla's variants do (papal_paternalistic on paternalistic).
+    # An ideology an IG and a leader both hold shares its subject, as vanilla's
+    # do; the same subject and seed render the same symbol in both looks.
+    "ideology": {
+        "ideology_multicultural_ig": {"subject": "three hands clasping each other's wrists to form a triangle", "seed": None},
+        "ideology_anti_colonialist": {"subject": "a raised clenched fist in front of a globe with its continents", "seed": None},
+        "ideology_islamic_inheritance": {"subject": "an open book resting on an X-shaped folding wooden book stand, a small crescent moon above it", "seed": None},
+    },
+    "leader_ideology": {
+        "ideology_multicultural": {"subject": "three hands clasping each other's wrists to form a triangle", "seed": None},
+        "ideology_anti_colonialist_leader": {"subject": "a raised clenched fist in front of a globe with its continents", "seed": None},
+        "ideology_multicultural_inclusive": {"subject": "three hands clasping each other's wrists to form a triangle around a heart", "seed": None},
+        "ideology_environmentalists": {"subject": "a broad oak tree with a round leafy crown and spreading roots", "seed": None},
+        "ideology_optimist_transhumanist": {"subject": "a human hand and a jointed robotic hand reaching toward each other, fingertips almost touching", "seed": None},
+        "ideology_corporate": {"subject": "a leather briefcase in front of a tall skyscraper", "seed": None},
     },
 }
 
