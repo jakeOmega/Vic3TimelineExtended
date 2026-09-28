@@ -811,6 +811,1714 @@
   "en": "Import Cost Spiral",
   "de": "Importkostenspirale"
  },
+ "banking_cycle_events.170.a": {
+  "en": "Full Transparency Investigation",
+  "de": "Untersuchung mit voller Transparenz"
+ },
+ "banking_cycle_events.170.b": {
+  "en": "Conduct a Quiet Internal Audit",
+  "de": "Eine stille interne Prüfung durchführen"
+ },
+ "banking_cycle_events.170.c": {
+  "en": "Treat It as an Internal Cooperative Matter",
+  "de": "Als interne Angelegenheit der Genossenschaft behandeln"
+ },
+ "banking_cycle_events.170.d": {
+  "en": "An internal audit of the cooperative federation has uncovered a pattern of off-books lending and shadow dividend extraction: some member cooperatives have been recording income below its true value, distributing undisclosed [concept_dividends] to insider members, and creating informal credit pools that operate entirely outside the federation's coordination framework. The scheme is fragile; any single insolvency could expose the whole network.",
+  "de": "Eine interne Prüfung des Genossenschaftsverbands hat ein Muster aus Kreditvergabe außerhalb der Bücher und verdeckter Dividendenentnahme aufgedeckt: Einige Mitgliedsgenossenschaften haben Einnahmen unter ihrem tatsächlichen Wert verbucht, nicht offengelegte [concept_dividends] an Insider ausgeschüttet und informelle Kreditpools geschaffen, die völlig außerhalb des Koordinationsrahmens des Verbands agieren. Das System ist instabil; schon eine einzige Insolvenz könnte das gesamte Netzwerk offenlegen."
+ },
+ "banking_cycle_events.170.f": {
+  "en": "\\\"They lend each other when the bank won't. It's solidarity until someone can't pay back.\\\"\\n\\n\\\"Then it is not solidarity. It is a shadow bank wearing cooperative clothes.\\\"\\n\\n\\\"And what shall we do about it?\\\"\\n\\n\\\"What we always do about a shadow bank. Bring it into the light, audit it honestly, and pray the light is what it survives.\\\"\\n\\n\\\"And if it doesn't survive?\\\"\\n\\n\\\"Then we learn how much of the cooperative federation was built on the same shadow.\\\"",
+  "de": "„Sie leihen einander, wenn die Bank es nicht tut. Das ist Solidarität – bis jemand nicht zurückzahlen kann.“\\n\\n„Dann ist es keine Solidarität. Es ist eine Schattenbank im Gewand der Genossenschaft.“\\n\\n„Und was sollen wir dagegen tun?“\\n\\n„Das, was wir immer gegen eine Schattenbank tun. Sie ans Licht holen, ehrlich prüfen und hoffen, dass sie das Licht übersteht.“\\n\\n„Und wenn nicht?“\\n\\n„Dann erfahren wir, wie viel vom Genossenschaftsverband auf demselben Schatten errichtet wurde.“"
+ },
+ "banking_cycle_events.170.t": {
+  "en": "Shadow Dividend Extraction Scheme",
+  "de": "Verdeckte Dividendenentnahme"
+ },
+ "banking_cycle_events.18.a": {
+  "en": "Seize the firm and prosecute!",
+  "de": "Die Firma beschlagnahmen und strafrechtlich verfolgen!"
+ },
+ "banking_cycle_events.18.b": {
+  "en": "Arrange a quiet rescue",
+  "de": "Eine stille Rettung einleiten"
+ },
+ "banking_cycle_events.18.c": {
+  "en": "Deny knowledge and hope it blows over",
+  "de": "Kenntnis abstreiten und auf Beruhigung hoffen"
+ },
+ "banking_cycle_events.18.d": {
+  "en": "A major financial house has been caught hiding catastrophic losses in complex derivative instruments that few people understand. The losses are far larger than anyone suspected, and the firm's counterparties - banks, insurers, pension funds - are now exposed to billions in potential claims. If the firm collapses, it could take much of the financial sector with it.",
+  "de": "Ein großes Finanzhaus wurde dabei ertappt, katastrophale Verluste in komplexen Derivaten zu verstecken, die kaum jemand versteht. Die Verluste sind weit größer, als irgendjemand vermutet hatte, und die Vertragspartner der Firma – Banken, Versicherer, Pensionsfonds – sind nun Forderungen in Milliardenhöhe ausgesetzt. Bricht die Firma zusammen, könnte sie einen Großteil des Finanzsektors mit sich reißen."
+ },
+ "banking_cycle_events.18.f": {
+  "en": "\\\"How much did they lose?\\\"\\n\\n\\\"We're not entirely sure. The instruments are so complex that even their own traders don't know the full exposure.\\\"\\n\\n\\\"Give me a number.\\\"\\n\\n\\\"Somewhere between 'very bad' and 'civilization-ending.' Shall I be more precise?\\\"",
+  "de": "„Wie viel haben sie verloren?“\\n\\n„Wir sind uns nicht ganz sicher. Die Instrumente sind so komplex, dass nicht einmal die eigenen Händler das volle Risiko kennen.“\\n\\n„Nennen Sie mir eine Zahl.“\\n\\n„Irgendwo zwischen ‚sehr schlimm‘ und ‚zivilisationsbeendend‘. Soll ich genauer werden?“"
+ },
+ "banking_cycle_events.18.t": {
+  "en": "Derivatives Scandal",
+  "de": "Derivateskandal"
+ },
+ "banking_cycle_events.19.a": {
+  "en": "Establish the fund",
+  "de": "Den Fonds einrichten"
+ },
+ "banking_cycle_events.19.b": {
+  "en": "Invest the surplus directly",
+  "de": "Den Überschuss direkt investieren"
+ },
+ "banking_cycle_events.19.c": {
+  "en": "Return it as tax cuts",
+  "de": "Als Steuersenkungen zurückgeben"
+ },
+ "banking_cycle_events.19.d": {
+  "en": "Economic advisors have proposed creating a sovereign wealth fund - a state-managed investment vehicle that would set aside current surpluses to cushion future downturns and fund long-term development. The idea is sensible in theory, but it requires the government to save money during good times rather than spend it, which is politically difficult.",
+  "de": "Wirtschaftsberater haben vorgeschlagen, einen Staatsfonds einzurichten – ein staatlich verwaltetes Anlagevehikel, das laufende Überschüsse zurücklegt, um künftige Abschwünge abzufedern und langfristige Entwicklung zu finanzieren. Die Idee ist in der Theorie sinnvoll, verlangt aber von der Regierung, in guten Zeiten zu sparen statt auszugeben – politisch ein schwieriges Unterfangen."
+ },
+ "banking_cycle_events.19.f": {
+  "en": "\\\"Save the surplus? In an election year?\\\"\\n\\n\\\"It's the responsible thing to do.\\\"\\n\\n\\\"Responsibility doesn't win elections. Bridges and tax cuts win elections.\\\"\\n\\n\\\"And what wins the election after the next crash?\\\"\\n\\n\\\"...I'll schedule the committee meeting.\\\"",
+  "de": "„Den Überschuss sparen? In einem Wahljahr?“\\n\\n„Es wäre das Verantwortungsvolle.“\\n\\n„Verantwortung gewinnt keine Wahlen. Brücken und Steuersenkungen gewinnen Wahlen.“\\n\\n„Und was gewinnt die Wahl nach dem nächsten Crash?“\\n\\n„… Ich setze die Ausschusssitzung an.“"
+ },
+ "banking_cycle_events.19.t": {
+  "en": "Sovereign Wealth Fund Proposal",
+  "de": "Vorschlag für einen Staatsfonds"
+ },
+ "banking_cycle_events.2.a": {
+  "en": "Welcome the investment!",
+  "de": "Die Investitionen willkommen heißen!"
+ },
+ "banking_cycle_events.2.b": {
+  "en": "Apply modest screening",
+  "de": "Maßvolle Prüfung einführen"
+ },
+ "banking_cycle_events.2.c": {
+  "en": "Restrict foreign capital",
+  "de": "Ausländisches Kapital einschränken"
+ },
+ "banking_cycle_events.2.d": {
+  "en": "Foreign investors have taken notice of our economic vitality and are pouring capital into domestic assets: government bonds, real estate, industrial ventures. The influx is stimulating growth and fueling ambitious new projects, but some advisors worry that we are becoming dangerously dependent on the confidence of foreigners who can withdraw their money as quickly as they committed it.",
+  "de": "Ausländische Investoren sind auf unsere wirtschaftliche Dynamik aufmerksam geworden und lenken Kapital in inländische Vermögenswerte: Staatsanleihen, Immobilien, Industrievorhaben. Der Zustrom kurbelt das Wachstum an und finanziert ehrgeizige neue Projekte, doch manche Berater warnen, wir würden gefährlich abhängig vom Vertrauen der Ausländer, die ihr Geld ebenso schnell abziehen können, wie sie es eingebracht haben."
+ },
+ "banking_cycle_events.2.f": {
+  "en": "\\\"The wharves are busy, the banks are flush, and every broker has a foreign client. It is intoxicating.\\\"\\n\\n\\\"And when they leave?\\\"\\n\\n\\\"Don't spoil the party.\\\"",
+  "de": "„Die Kais sind voller Betrieb, die Banken schwimmen im Geld, und jeder Makler hat einen ausländischen Kunden. Es ist berauschend.“\\n\\n„Und wenn sie gehen?“\\n\\n„Verdirb mir nicht die Feier.“"
+ },
+ "banking_cycle_events.2.t": {
+  "en": "Foreign Capital Inflow",
+  "de": "Zustrom ausländischen Kapitals"
+ },
+ "banking_cycle_events.20.a": {
+  "en": "Bring shadow banks under regulation",
+  "de": "Schattenbanken der Regulierung unterstellen"
+ },
+ "banking_cycle_events.20.b": {
+  "en": "Extend an implicit guarantee",
+  "de": "Eine stillschweigende Garantie gewähren"
+ },
+ "banking_cycle_events.20.c": {
+  "en": "Ignore it",
+  "de": "Ignorieren"
+ },
+ "banking_cycle_events.20.d": {
+  "en": "Investigators have uncovered a vast parallel banking system operating outside all regulatory oversight. Unregistered lenders, off-balance-sheet vehicles, and informal credit networks have grown to rival the regulated sector in size. This shadow banking system has been fueling the boom - but it operates without the safeguards that prevent bank runs, and nobody knows how much risk it carries.",
+  "de": "Ermittler haben ein riesiges paralleles Bankensystem aufgedeckt, das außerhalb jeder Regulierungsaufsicht operiert. Nicht registrierte Kreditgeber, bilanzneutrale Vehikel und informelle Kreditnetzwerke sind inzwischen so groß wie der regulierte Sektor. Dieses Schattenbankensystem hat den Boom befeuert – doch es arbeitet ohne die Sicherungen, die Bankenstürme verhindern, und niemand weiß, wie viel Risiko es trägt."
+ },
+ "banking_cycle_events.20.f": {
+  "en": "\\\"How large is the shadow banking sector?\\\"\\n\\n\\\"We're not sure. By definition, it's the part of the financial system we can't see.\\\"\\n\\n\\\"Then how do you know it exists?\\\"\\n\\n\\\"Because when we add up all the lending we can account for, it falls short of all the borrowing by a truly alarming amount.\\\"",
+  "de": "„Wie groß ist der Schattenbankensektor?“\\n\\n„Wir sind uns nicht sicher. Per Definition ist es der Teil des Finanzsystems, den wir nicht sehen können.“\\n\\n„Woher wissen Sie dann, dass es ihn gibt?“\\n\\n„Weil die Summe aller Kredite, die wir erfassen können, um einen wirklich alarmierenden Betrag hinter der gesamten Kreditaufnahme zurückbleibt.“"
+ },
+ "banking_cycle_events.20.t": {
+  "en": "Shadow Banking Discovery",
+  "de": "Entdeckung des Schattenbankensystems"
+ },
+ "banking_cycle_events.21.a": {
+  "en": "Splendid news!",
+  "de": "Großartige Neuigkeiten!"
+ },
+ "banking_cycle_events.21.b": {
+  "en": "Let us not get carried away",
+  "de": "Wir sollten uns nicht hinreißen lassen"
+ },
+ "banking_cycle_events.21.d": {
+  "en": "One of our most respected merchant banks has reported record profits for the quarter, far exceeding all expectations. The news has spread rapidly through the financial district, lifting confidence across the sector. Other banks are reporting healthy returns as well, and the mood among investors is buoyant.",
+  "de": "Eine unserer angesehensten Handelsbanken hat für das Quartal Rekordgewinne gemeldet, die alle Erwartungen weit übertreffen. Die Nachricht hat sich rasch im Finanzviertel verbreitet und das Vertrauen im gesamten Sektor gestärkt. Auch andere Banken melden gesunde Erträge, und unter den Investoren herrscht gehobene Stimmung."
+ },
+ "banking_cycle_events.21.f": {
+  "en": "\\\"Did you see the Rothschild figures? Extraordinary.\\\"\\n\\n\\\"My own portfolio has never looked healthier. I believe we may be entering a golden age of finance.\\\"\\n\\n\\\"You said that last year.\\\"\\n\\n\\\"And I was right last year too.\\\"",
+  "de": "„Haben Sie die Zahlen von Rothschild gesehen? Außergewöhnlich.“\\n\\n„Mein eigenes Portfolio stand noch nie so gut da. Ich glaube, wir treten in ein goldenes Zeitalter der Finanzwelt ein.“\\n\\n„Das haben Sie letztes Jahr auch schon gesagt.“\\n\\n„Und ich hatte letztes Jahr auch recht.“"
+ },
+ "banking_cycle_events.21.t": {
+  "en": "Merchant Bank Prosperity",
+  "de": "Wohlstand der Handelsbanken"
+ },
+ "banking_cycle_events.22.a": {
+  "en": "The more exchanges, the better!",
+  "de": "Je mehr Börsen, desto besser!"
+ },
+ "banking_cycle_events.22.b": {
+  "en": "Require rigorous oversight first",
+  "de": "Erst strenge Aufsicht verlangen"
+ },
+ "banking_cycle_events.22.d": {
+  "en": "A prosperous provincial city has petitioned to open its own stock exchange, arguing that the capital's bourse is too distant and too exclusive to serve regional investors. Local merchants and manufacturers are enthusiastic, seeing it as a way to raise capital without traveling to the metropolis. The proposal would broaden access to investment but could also fragment oversight.",
+  "de": "Eine wohlhabende Provinzstadt hat um die Erlaubnis ersucht, eine eigene Börse zu eröffnen, und argumentiert, die Börse der Hauptstadt sei zu weit entfernt und zu exklusiv, um regionale Investoren zu bedienen. Örtliche Kaufleute und Fabrikanten sind begeistert und sehen darin eine Möglichkeit, Kapital aufzunehmen, ohne in die Metropole reisen zu müssen. Der Vorschlag würde den Zugang zu Investitionen erweitern, könnte aber auch die Aufsicht zersplittern."
+ },
+ "banking_cycle_events.22.f": {
+  "en": "\\\"Why should all the money flow through one city? We have industry, we have capital, and we have ambition. What we lack is a trading floor.\\\"\\n\\n\\\"And regulation, apparently.\\\"\\n\\n\\\"Details.\\\"",
+  "de": "„Warum sollte alles Geld durch eine einzige Stadt fließen? Wir haben Industrie, wir haben Kapital, und wir haben Ehrgeiz. Was uns fehlt, ist ein Börsenparkett.“\\n\\n„Und offenbar Regulierung.“\\n\\n„Details.“"
+ },
+ "banking_cycle_events.22.t": {
+  "en": "New Provincial Exchange",
+  "de": "Neue Provinzbörse"
+ },
+ "banking_cycle_events.23.a": {
+  "en": "Prosecute to the fullest extent!",
+  "de": "Mit aller Härte strafrechtlich verfolgen!"
+ },
+ "banking_cycle_events.23.b": {
+  "en": "Let this serve as a warning",
+  "de": "Dies soll als Warnung dienen"
+ },
+ "banking_cycle_events.23.d": {
+  "en": "A scandal has erupted in the banking sector. A prominent banker has been caught diverting depositors' funds into personal speculative ventures. The scheme was discovered when a routine audit revealed massive discrepancies between the bank's reported reserves and its actual holdings. Public confidence in the banking system has been shaken.",
+  "de": "Im Bankensektor ist ein Skandal ausgebrochen. Ein prominenter Bankier wurde dabei ertappt, Einlagen der Kunden in persönliche Spekulationsgeschäfte umzuleiten. Das Schema kam ans Licht, als eine Routineprüfung massive Diskrepanzen zwischen den gemeldeten Reserven der Bank und ihrem tatsächlichen Bestand aufdeckte. Das öffentliche Vertrauen in das Bankensystem ist erschüttert."
+ },
+ "banking_cycle_events.23.f": {
+  "en": "\\\"He lived like a prince on other people's savings. Three houses, a stable of racehorses, and a yacht - all purchased with money that was supposed to be sitting safely in the vault.\\\"\\n\\n\\\"And his depositors?\\\"\\n\\n\\\"Ruined, most of them.\\\"",
+  "de": "„Er lebte wie ein Fürst von den Ersparnissen anderer Leute. Drei Häuser, ein Stall voller Rennpferde und eine Jacht – alles gekauft mit Geld, das eigentlich sicher im Tresor liegen sollte.“\\n\\n„Und seine Einleger?“\\n\\n„Die meisten ruiniert.“"
+ },
+ "banking_cycle_events.23.t": {
+  "en": "Banking Scandal",
+  "de": "Bankenskandal"
+ },
+ "banking_cycle_events.24.a": {
+  "en": "Root out the fraud!",
+  "de": "Den Betrug ausmerzen!"
+ },
+ "banking_cycle_events.24.b": {
+  "en": "Quietly contain the damage",
+  "de": "Den Schaden still eindämmen"
+ },
+ "banking_cycle_events.24.c": {
+  "en": "Let the market sort it out",
+  "de": "Den Markt regeln lassen"
+ },
+ "banking_cycle_events.24.d": {
+  "en": "Investigators have discovered a network of fraudulent warehouse receipts circulating through the commodity lending market. Merchants have been borrowing against goods that don't exist - or pledging the same goods to multiple lenders. The extent of the fraud is unclear, but several banks have already frozen their commodity lending operations, and prices on the exchange are volatile.",
+  "de": "Ermittler haben ein Netzwerk gefälschter Lagerscheine aufgedeckt, das im Warenkreditmarkt zirkuliert. Kaufleute haben Kredite gegen Waren aufgenommen, die gar nicht existieren – oder dieselben Waren mehreren Kreditgebern gleichzeitig verpfändet. Das Ausmaß des Betrugs ist unklar, doch mehrere Banken haben ihre Warenkreditgeschäfte bereits eingefroren, und die Preise an der Börse schwanken stark."
+ },
+ "banking_cycle_events.24.f": {
+  "en": "\\\"The warehouse was supposed to contain two thousand bales of cotton. When the inspectors opened the doors, they found three hundred bales and a great deal of empty space.\\\"\\n\\n\\\"And the receipts?\\\"\\n\\n\\\"Still circulating. Still being traded. Still being used as collateral.\\\"",
+  "de": "„Das Lagerhaus sollte zweitausend Ballen Baumwolle enthalten. Als die Inspektoren die Türen öffneten, fanden sie dreihundert Ballen und sehr viel leeren Raum.“\\n\\n„Und die Lagerscheine?“\\n\\n„Sind weiter im Umlauf. Werden weiter gehandelt. Werden weiter als Sicherheit verwendet.“"
+ },
+ "banking_cycle_events.24.t": {
+  "en": "Warehouse Receipts Fraud",
+  "de": "Lagerschein-Betrug"
+ },
+ "banking_cycle_events.25.a": {
+  "en": "A welcome innovation",
+  "de": "Eine willkommene Neuerung"
+ },
+ "banking_cycle_events.25.b": {
+  "en": "Seize on the opportunity",
+  "de": "Die Gelegenheit ergreifen"
+ },
+ "banking_cycle_events.25.d": {
+  "en": "Trading firms have developed a refined system of trade bills that allows goods to be bought and sold on credit with unprecedented ease. These new instruments enable commerce to flow more smoothly between distant cities, reducing the need for physical coin and expanding the volume of trade. Bankers are eager to discount these bills, seeing healthy profits in the growing market.",
+  "de": "Handelsfirmen haben ein ausgefeiltes System von Handelswechseln entwickelt, das den Kauf und Verkauf von Waren auf Kredit mit beispielloser Leichtigkeit ermöglicht. Diese neuen Instrumente lassen den Handel zwischen entfernten Städten reibungsloser fließen, verringern den Bedarf an Hartgeld und weiten das Handelsvolumen aus. Bankiers diskontieren diese Wechsel bereitwillig und sehen im wachsenden Markt gesunde Gewinne."
+ },
+ "banking_cycle_events.25.f": {
+  "en": "\\\"A bill drawn in Liverpool, accepted in London, discounted in Amsterdam, and redeemed in New York. The world grows smaller with every signature.\\\"",
+  "de": "„Ein Wechsel, gezogen in Liverpool, akzeptiert in London, diskontiert in Amsterdam und eingelöst in New York. Die Welt wird mit jeder Unterschrift kleiner.“"
+ },
+ "banking_cycle_events.25.t": {
+  "en": "Trade Bill Innovation",
+  "de": "Neuerung der Handelswechsel"
+ },
+ "banking_cycle_events.26.a": {
+  "en": "A foundation of stability",
+  "de": "Ein Fundament der Stabilität"
+ },
+ "banking_cycle_events.26.b": {
+  "en": "Let them invest more aggressively",
+  "de": "Aggressiver investieren lassen"
+ },
+ "banking_cycle_events.26.d": {
+  "en": "Pension funds established for workers in major industries have grown substantially, accumulating vast pools of long-term capital. Unlike speculative investors who chase quick returns, these funds seek steady, reliable income to meet future [Concept('concept_obligation', 'obligations')]. Their growing presence in the bond and property markets is providing a stabilizing counterweight to short-term speculation.",
+  "de": "Pensionsfonds für Arbeiter in wichtigen Industrien sind erheblich gewachsen und haben gewaltige Pools an langfristigem Kapital angehäuft. Anders als spekulative Investoren, die schnellen Gewinnen hinterherjagen, suchen diese Fonds stetige, verlässliche Erträge, um künftigen [Concept('concept_obligation', 'Verpflichtungen')] nachzukommen. Ihre wachsende Präsenz auf den Anleihe- und Immobilienmärkten bildet ein stabilisierendes Gegengewicht zur kurzfristigen Spekulation."
+ },
+ "banking_cycle_events.26.f": {
+  "en": "\\\"The pension fund trustees are the dullest investors in the market. They buy bonds and hold them. They buy property and hold it. They are magnificently, beautifully boring.\\\"\\n\\n\\\"And magnificently, beautifully solvent.\\\"",
+  "de": "„Die Treuhänder der Pensionsfonds sind die langweiligsten Investoren am Markt. Sie kaufen Anleihen und halten sie. Sie kaufen Immobilien und halten sie. Sie sind großartig, wunderbar langweilig.“\\n\\n„Und großartig, wunderbar solvent.“"
+ },
+ "banking_cycle_events.26.t": {
+  "en": "Pension Fund Growth",
+  "de": "Wachstum der Pensionsfonds"
+ },
+ "banking_cycle_events.27.a": {
+  "en": "Connect every branch!",
+  "de": "Jede Filiale anschließen!"
+ },
+ "banking_cycle_events.27.b": {
+  "en": "Proceed cautiously",
+  "de": "Vorsichtig vorgehen"
+ },
+ "banking_cycle_events.27.d": {
+  "en": "The telegraph has revolutionized interbank communications. Settlement times that once took days or weeks now take hours. Banks can verify balances, confirm transactions, and coordinate lending across vast distances almost instantaneously. The speed has attracted new participants to the financial markets and increased trading volumes dramatically.",
+  "de": "Der Telegraf hat die Kommunikation zwischen Banken revolutioniert. Abwicklungszeiten, die früher Tage oder Wochen dauerten, betragen jetzt nur noch Stunden. Banken können Salden prüfen, Transaktionen bestätigen und Kreditvergaben über gewaltige Entfernungen fast augenblicklich koordinieren. Die Geschwindigkeit hat neue Teilnehmer an die Finanzmärkte gelockt und die Handelsvolumina drastisch erhöht."
+ },
+ "banking_cycle_events.27.f": {
+  "en": "\\\"Before the wire, it took a week to confirm a transfer from Edinburgh to London. Now it takes twenty minutes. The world has changed beyond recognition.\\\"\\n\\n\\\"And mistakes travel just as fast.\\\"\\n\\n\\\"Let us hope there are fewer of them.\\\"",
+  "de": "„Vor dem Draht dauerte es eine Woche, eine Überweisung von Edinburgh nach London zu bestätigen. Jetzt dauert es zwanzig Minuten. Die Welt hat sich bis zur Unkenntlichkeit verändert.“\\n\\n„Und Fehler reisen genauso schnell.“\\n\\n„Hoffen wir, dass es weniger werden.“"
+ },
+ "banking_cycle_events.27.t": {
+  "en": "Modern Settlements",
+  "de": "Moderne Abwicklung"
+ },
+ "banking_cycle_events.28.a": {
+  "en": "Let trust rebuild naturally",
+  "de": "Vertrauen sich von selbst wieder aufbauen lassen"
+ },
+ "banking_cycle_events.28.b": {
+  "en": "Guarantee interbank obligations",
+  "de": "Interbankverpflichtungen garantieren"
+ },
+ "banking_cycle_events.28.c": {
+  "en": "Force banks to resume lending",
+  "de": "Banken zur Wiederaufnahme der Kreditvergabe zwingen"
+ },
+ "banking_cycle_events.28.d": {
+  "en": "The interbank lending market has seized up. Banks that normally lend freely to one another overnight have stopped, each suspecting that its counterparties may be concealing losses. Without interbank lending, the entire financial system risks grinding to a halt - banks cannot meet daily [Concept('concept_obligation', 'obligations')], businesses cannot access working capital, and the economy threatens to seize up like an engine without oil.",
+  "de": "Der Interbankenmarkt ist zum Erliegen gekommen. Banken, die einander sonst frei über Nacht Kredit gewähren, haben damit aufgehört, weil jede vermutet, die anderen könnten Verluste verbergen. Ohne Interbankenkredite droht das gesamte Finanzsystem zum Stillstand zu kommen – Banken können ihren täglichen [Concept('concept_obligation', 'Verpflichtungen')] nicht nachkommen, Unternehmen erhalten kein Betriebskapital, und die Wirtschaft droht wie ein Motor ohne Öl festzufressen."
+ },
+ "banking_cycle_events.28.f": {
+  "en": "\\\"The banks won't lend to each other because they don't trust each other. They don't trust each other because they know what's on their own balance sheets.\\\"",
+  "de": "„Die Banken leihen einander nichts, weil sie einander nicht trauen. Sie trauen einander nicht, weil jede weiß, was in ihrer eigenen Bilanz steht.“"
+ },
+ "banking_cycle_events.28.t": {
+  "en": "Interbank Lending Freeze",
+  "de": "Einfrieren der Interbankenkredite"
+ },
+ "banking_cycle_events.29.a": {
+  "en": "Support the cooperatives",
+  "de": "Die Genossenschaften unterstützen"
+ },
+ "banking_cycle_events.29.b": {
+  "en": "Let them attract private capital too",
+  "de": "Auch privates Kapital anziehen lassen"
+ },
+ "banking_cycle_events.29.d": {
+  "en": "In the countryside, farmers and smallholders have begun pooling their savings into cooperative lending institutions. These modest banks, governed by their own depositors, provide credit for seed and equipment at rates far below what commercial banks charge. The model is spreading rapidly, bringing financial services to communities that have never had access to formal banking.",
+  "de": "Auf dem Land haben Bauern und Kleinbetriebe begonnen, ihre Ersparnisse in genossenschaftlichen Kreditinstituten zu bündeln. Diese bescheidenen Banken, verwaltet von den eigenen Einlegern, gewähren Kredite für Saatgut und Ausrüstung zu Zinssätzen weit unter denen der Geschäftsbanken. Das Modell verbreitet sich rasch und bringt Finanzdienstleistungen in Gemeinden, die nie Zugang zu formellem Bankwesen hatten."
+ },
+ "banking_cycle_events.29.f": {
+  "en": "\\\"We had nothing - no bank would touch us. Now we lend to ourselves, and not a penny has been lost.\\\"\\n\\n\\\"The commercial bankers scoff at the amounts involved.\\\"\\n\\n\\\"Let them scoff. We can feed our families.\\\"",
+  "de": "„Wir hatten nichts – keine Bank wollte etwas mit uns zu tun haben. Jetzt leihen wir uns gegenseitig, und kein einziger Pfennig ist verloren gegangen.“\\n\\n„Die Geschäftsbankiers spotten über die geringen Summen.“\\n\\n„Sollen sie spotten. Wir können unsere Familien ernähren.“"
+ },
+ "banking_cycle_events.29.t": {
+  "en": "Cooperative Banking",
+  "de": "Genossenschaftsbanken"
+ },
+ "banking_cycle_events.3.a": {
+  "en": "Pressure banks to resume lending",
+  "de": "Banken zur Wiederaufnahme der Kreditvergabe drängen"
+ },
+ "banking_cycle_events.3.b": {
+  "en": "Let prudence take its course",
+  "de": "Der Vorsicht ihren Lauf lassen"
+ },
+ "banking_cycle_events.3.d": {
+  "en": "Banks are sitting on mountains of reserves while businesses starve for credit. Lending has ground to a near-halt as financial institutions, scarred by recent uncertainty, refuse to take on risk. Merchants and manufacturers are demanding that the government intervene to restart the flow of capital - but bankers warn that forcing premature lending could plant the seeds of the next crisis.",
+  "de": "Banken sitzen auf Bergen von Reserven, während Unternehmen nach Krediten hungern. Die Kreditvergabe ist fast zum Erliegen gekommen, da Finanzinstitute, gezeichnet von der jüngsten Unsicherheit, sich weigern, Risiken einzugehen. Kaufleute und Fabrikanten fordern ein Eingreifen der Regierung, um den Kapitalfluss wieder in Gang zu bringen – doch Bankiers warnen, eine verfrühte Kreditvergabe könnte den Keim der nächsten Krise legen."
+ },
+ "banking_cycle_events.3.f": {
+  "en": "\\\"There is money everywhere and credit nowhere. The paradox is maddening.\\\"\\n\\n\\\"The banks say they're being prudent.\\\"\\n\\n\\\"Prudent! My workers haven't been paid in a fortnight because I can't get a loan against goods already sitting in my warehouse.\\\"",
+  "de": "„Es gibt Geld überall und Kredit nirgends. Das Paradox ist zum Verrücktwerden.“\\n\\n„Die Banken sagen, sie seien vorsichtig.“\\n\\n„Vorsichtig! Meine Arbeiter sind seit vierzehn Tagen nicht bezahlt worden, weil ich keinen Kredit auf Waren bekomme, die schon in meinem Lager liegen.“"
+ },
+ "banking_cycle_events.3.t": {
+  "en": "Credit Crunch Fears",
+  "de": "Angst vor der Kreditklemme"
+ },
+ "banking_cycle_events.30.a": {
+  "en": "Let profits flow!",
+  "de": "Gewinne fließen lassen!"
+ },
+ "banking_cycle_events.30.b": {
+  "en": "Require hedging and disclosure",
+  "de": "Absicherung und Offenlegung verlangen"
+ },
+ "banking_cycle_events.30.c": {
+  "en": "Restrict cross-border speculation",
+  "de": "Grenzüberschreitende Spekulation einschränken"
+ },
+ "banking_cycle_events.30.d": {
+  "en": "Sophisticated investors have discovered they can borrow cheaply in countries with low interest rates and invest the proceeds in countries offering higher returns. These so-called 'carry trades' are generating enormous profits for those who understand them, but they create hidden linkages between national financial systems. If exchange rates shift suddenly, the unraveling could be catastrophic.",
+  "de": "Versierte Investoren haben entdeckt, dass sie sich in Ländern mit niedrigen Zinsen günstig Geld leihen und die Erlöse in Ländern mit höheren Renditen anlegen können. Diese sogenannten ‚Carry Trades‘ bringen jenen, die sie verstehen, gewaltige Gewinne, schaffen aber verborgene Verbindungen zwischen den nationalen Finanzsystemen. Verschieben sich die Wechselkurse plötzlich, könnte die Auflösung katastrophal ausfallen."
+ },
+ "banking_cycle_events.30.f": {
+  "en": "\\\"Borrow in Tokyo at one percent, invest in Buenos Aires at eight. The profit is almost effortless.\\\"\\n\\n\\\"And when the exchange rate moves?\\\"\\n\\n\\\"It won't.\\\"\\n\\n\\\"How can you be certain?\\\"\\n\\n\\\"Because if it does, we're all finished.\\\"",
+  "de": "„Leihen Sie sich in Tokio zu einem Prozent, investieren Sie in Buenos Aires zu acht. Der Gewinn ist fast mühelos.“\\n\\n„Und wenn sich der Wechselkurs bewegt?“\\n\\n„Das wird er nicht.“\\n\\n„Wie können Sie sich da sicher sein?“\\n\\n„Weil wir sonst alle erledigt sind.“"
+ },
+ "banking_cycle_events.30.t": {
+  "en": "Foreign Debt Arbitrage",
+  "de": "Arbitrage mit Auslandsschulden"
+ },
+ "banking_cycle_events.31.a": {
+  "en": "Declare a bank holiday",
+  "de": "Einen Bankfeiertag ausrufen"
+ },
+ "banking_cycle_events.31.b": {
+  "en": "Keep the banks open",
+  "de": "Die Banken geöffnet halten"
+ },
+ "banking_cycle_events.31.c": {
+  "en": "Limited closure with emergency lending",
+  "de": "Begrenzte Schließung mit Notkrediten"
+ },
+ "banking_cycle_events.31.d": {
+  "en": "With public confidence in the banking system collapsing, advisors are urging the government to declare a 'bank holiday' - a temporary, mandatory closure of all financial institutions. The idea is to stop the panic, allow time for inspection and reorganization, and reopen only those banks that are solvent. It's a drastic measure, but the alternative may be a complete meltdown.",
+  "de": "Da das öffentliche Vertrauen in das Bankensystem zusammenbricht, drängen Berater die Regierung, einen ‚Bankfeiertag‘ auszurufen – eine vorübergehende, verpflichtende Schließung aller Finanzinstitute. Ziel ist es, die Panik zu stoppen, Zeit für Prüfung und Neuordnung zu gewinnen und nur die solventen Banken wieder zu öffnen. Es ist eine drastische Maßnahme, doch die Alternative könnte ein vollständiger Zusammenbruch sein."
+ },
+ "banking_cycle_events.31.f": {
+  "en": "\\\"Close every bank in the country?\\\"\\n\\n\\\"For three days. Perhaps a week.\\\"\\n\\n\\\"The public will riot.\\\"\\n\\n\\\"The public is already rioting. At least this way, when we reopen, they'll have something left to withdraw.\\\"",
+  "de": "„Jede Bank im Land schließen?“\\n\\n„Für drei Tage. Vielleicht eine Woche.“\\n\\n„Die Bevölkerung wird randalieren.“\\n\\n„Die Bevölkerung randaliert bereits. Wenigstens haben sie so, wenn wir wieder öffnen, noch etwas übrig, das sie abheben können.“"
+ },
+ "banking_cycle_events.31.t": {
+  "en": "The Bank Holiday",
+  "de": "Der Bankfeiertag"
+ },
+ "banking_cycle_events.32.a": {
+  "en": "Let the collapse run its course",
+  "de": "Den Zusammenbruch seinen Lauf nehmen lassen"
+ },
+ "banking_cycle_events.32.b": {
+  "en": "Organize an emergency rescue",
+  "de": "Eine Notrettung organisieren"
+ },
+ "banking_cycle_events.32.c": {
+  "en": "Minimize the news",
+  "de": "Die Nachricht kleinhalten"
+ },
+ "banking_cycle_events.32.d": {
+  "en": "One of the largest trust companies in the country has collapsed spectacularly, its assets frozen and its offices shuttered. The company had been investing depositors' funds in increasingly speculative ventures, and when several of those ventures failed simultaneously, the losses overwhelmed the company's reserves. Depositors' savings have evaporated, and other trust companies are now facing runs.",
+  "de": "Eine der größten Treuhandgesellschaften des Landes ist spektakulär zusammengebrochen, ihre Vermögenswerte eingefroren, ihre Büros geschlossen. Die Gesellschaft hatte die Einlagen ihrer Kunden in zunehmend spekulative Unternehmungen investiert, und als mehrere davon gleichzeitig scheiterten, überstiegen die Verluste die Reserven der Gesellschaft. Die Ersparnisse der Einleger sind verdampft, und andere Treuhandgesellschaften sehen sich nun mit Ansturm auf ihre Schalter konfrontiert."
+ },
+ "banking_cycle_events.32.f": {
+  "en": "\\\"The directors were seen leaving through the back entrance, carrying leather cases. The depositors were left at the front, carrying nothing.\\\"",
+  "de": "„Man sah die Direktoren durch den Hintereingang verschwinden, Lederkoffer in der Hand. Die Einleger blieben vorn zurück, mit leeren Händen.“"
+ },
+ "banking_cycle_events.32.t": {
+  "en": "Trust Company Failure",
+  "de": "Zusammenbruch der Treuhandgesellschaft"
+ },
+ "banking_cycle_events.33.a": {
+  "en": "Encourage the market",
+  "de": "Den Markt fördern"
+ },
+ "banking_cycle_events.33.b": {
+  "en": "Maximize growth from this",
+  "de": "Das Wachstum daraus maximieren"
+ },
+ "banking_cycle_events.33.d": {
+  "en": "A market for commercial paper - short-term promissory notes issued by businesses - has developed rapidly, allowing companies to borrow directly from investors without going through banks. The innovation reduces borrowing costs for creditworthy firms and provides investors with a safe, liquid asset. The market is growing quickly, adding a new pillar of stability to the financial system.",
+  "de": "Ein Markt für Commercial Paper – kurzfristige Schuldscheine von Unternehmen – hat sich rasch entwickelt und erlaubt es Firmen, sich direkt bei Investoren zu verschulden, ohne den Umweg über Banken. Die Neuerung senkt die Kreditkosten für kreditwürdige Firmen und bietet Investoren eine sichere, liquide Anlage. Der Markt wächst schnell und fügt dem Finanzsystem eine neue Säule der Stabilität hinzu."
+ },
+ "banking_cycle_events.33.f": {
+  "en": "\\\"Ninety-day notes, backed by the full credit of the issuing firm. Safe as houses, liquid as water, and yielding three percent.\\\"\\n\\n\\\"You make it sound too good to be true.\\\"\\n\\n\\\"That's because you've been listening to bankers, who are furious they're being cut out.\\\"",
+  "de": "„Neunzig-Tage-Schuldscheine, gedeckt durch die volle Bonität der ausgebenden Firma. Sicher wie ein Fels, flüssig wie Wasser, und mit drei Prozent Rendite.“\\n\\n„Sie machen das klingen, als wäre es zu schön, um wahr zu sein.“\\n\\n„Das liegt daran, dass Sie den Bankiers zugehört haben, die wütend sind, weil man sie aussticht.“"
+ },
+ "banking_cycle_events.33.t": {
+  "en": "Commercial Paper Market",
+  "de": "Markt für Commercial Paper"
+ },
+ "banking_cycle_events.34.a": {
+  "en": "Establish a full guarantee",
+  "de": "Eine vollständige Garantie einführen"
+ },
+ "banking_cycle_events.34.b": {
+  "en": "The market disciplines itself",
+  "de": "Der Markt diszipliniert sich selbst"
+ },
+ "banking_cycle_events.34.c": {
+  "en": "A limited guarantee only",
+  "de": "Nur eine begrenzte Garantie"
+ },
+ "banking_cycle_events.34.d": {
+  "en": "After recent banking failures, a coalition of legislators is proposing a formal deposit insurance scheme - a government-backed guarantee that ordinary depositors will not lose their savings if their bank fails. Proponents argue it will prevent bank runs and stabilize the system. Critics warn it will encourage reckless lending by removing the consequences of failure.",
+  "de": "Nach den jüngsten Bankenzusammenbrüchen schlägt eine Koalition von Abgeordneten eine formelle Einlagensicherung vor – eine staatlich abgesicherte Garantie, dass gewöhnliche Einleger ihre Ersparnisse nicht verlieren, sollte ihre Bank scheitern. Befürworter argumentieren, dies verhindere Bankenstürme und stabilisiere das System. Kritiker warnen, es fördere leichtsinnige Kreditvergabe, da die Folgen des Scheiterns wegfielen."
+ },
+ "banking_cycle_events.34.d_calm": {
+  "en": "No bank of note has failed in years, but a coalition of legislators wants to be ready for the day one does. They are proposing a formal deposit insurance scheme - a government-backed guarantee that ordinary depositors will not lose their savings if their bank fails. Proponents argue it will prevent bank runs before they start and stabilize the system. Critics warn it will encourage reckless lending by removing the consequences of failure.",
+  "de": "Seit Jahren ist keine nennenswerte Bank mehr gescheitert, doch eine Koalition von Abgeordneten will für den Tag gerüstet sein, an dem es doch geschieht. Sie schlägt eine formelle Einlagensicherung vor – eine staatlich abgesicherte Garantie, dass gewöhnliche Einleger ihre Ersparnisse nicht verlieren, sollte ihre Bank scheitern. Befürworter argumentieren, dies verhindere Bankenstürme, bevor sie beginnen, und stabilisiere das System. Kritiker warnen, es fördere leichtsinnige Kreditvergabe, da die Folgen des Scheiterns wegfielen."
+ },
+ "banking_cycle_events.34.f": {
+  "en": "\\\"If the government guarantees deposits, why would any depositor ever bother to check whether their bank is sound?\\\"\\n\\n\\\"Because people don't check anyway. They trust the name on the door.\\\"\\n\\n\\\"Exactly. And now we propose to make that misplaced trust official policy.\\\"",
+  "de": "„Wenn der Staat Einlagen garantiert, warum sollte sich dann irgendein Einleger je die Mühe machen zu prüfen, ob seine Bank solide ist?“\\n\\n„Weil die Leute ohnehin nicht prüfen. Sie vertrauen dem Namen an der Tür.“\\n\\n„Eben. Und jetzt schlagen wir vor, dieses fehlgeleitete Vertrauen zur offiziellen Politik zu machen.“"
+ },
+ "banking_cycle_events.34.t": {
+  "en": "Deposit Insurance Debate",
+  "de": "Debatte um die Einlagensicherung"
+ },
+ "banking_cycle_events.35.a": {
+  "en": "A splendid vehicle for enterprise!",
+  "de": "Ein großartiges Vehikel für Unternehmertum!"
+ },
+ "banking_cycle_events.35.b": {
+  "en": "Require proper governance standards",
+  "de": "Ordentliche Führungsstandards verlangen"
+ },
+ "banking_cycle_events.35.d": {
+  "en": "The joint-stock company model is experiencing a boom, with new companies being registered at an unprecedented rate. The ability to pool capital from many small investors to fund large enterprises has unleashed a wave of entrepreneurial energy. Railways, factories, shipping lines, and mining ventures are all benefiting from the flood of investment.",
+  "de": "Das Modell der Aktiengesellschaft erlebt einen Boom, neue Unternehmen werden in beispiellosem Tempo eingetragen. Die Möglichkeit, Kapital vieler Kleinanleger zu bündeln, um große Unternehmungen zu finanzieren, hat eine Welle unternehmerischer Energie entfesselt. Eisenbahnen, Fabriken, Schifffahrtslinien und Bergbauunternehmen profitieren allesamt von der Flut an Investitionen."
+ },
+ "banking_cycle_events.35.f": {
+  "en": "\\\"Every week brings a new prospectus more magnificent than the last. Companies to drain marshes, companies to bridge oceans, companies to mine gold on the moon.\\\"\\n\\n\\\"And some of them might actually succeed.\\\"\\n\\n\\\"One or two, perhaps. The rest will succeed only in separating fools from their money.\\\"",
+  "de": "„Jede Woche bringt einen neuen Prospekt, noch großartiger als der letzte. Gesellschaften zur Trockenlegung von Sümpfen, Gesellschaften zur Überbrückung von Ozeanen, Gesellschaften zum Goldabbau auf dem Mond.“\\n\\n„Und manche könnten tatsächlich Erfolg haben.“\\n\\n„Eine oder zwei vielleicht. Die übrigen werden nur darin erfolgreich sein, Narren von ihrem Geld zu trennen.“"
+ },
+ "banking_cycle_events.35.t": {
+  "en": "Joint-Stock Company Boom",
+  "de": "Boom der Aktiengesellschaften"
+ },
+ "banking_cycle_events.36.a": {
+  "en": "Embrace the disruption!",
+  "de": "Die Disruption annehmen!"
+ },
+ "banking_cycle_events.36.b": {
+  "en": "Regulate the new entrants",
+  "de": "Die neuen Marktteilnehmer regulieren"
+ },
+ "banking_cycle_events.36.c": {
+  "en": "Protect established banks",
+  "de": "Etablierte Banken schützen"
+ },
+ "banking_cycle_events.36.d": {
+  "en": "A wave of technology-driven financial firms is challenging established banks with faster, cheaper, and more accessible services. These new companies use advanced computing and telecommunications to process transactions, assess credit, and move money at a fraction of the cost of traditional banking. Established bankers are alarmed; consumers are delighted.",
+  "de": "Eine Welle technologiegetriebener Finanzfirmen fordert etablierte Banken mit schnelleren, günstigeren und leichter zugänglichen Dienstleistungen heraus. Diese neuen Unternehmen nutzen fortschrittliche Rechentechnik und Telekommunikation, um Transaktionen abzuwickeln, Bonität zu bewerten und Geld zu einem Bruchteil der Kosten des traditionellen Bankwesens zu bewegen. Etablierte Bankiers sind alarmiert; Verbraucher sind begeistert."
+ },
+ "banking_cycle_events.36.f": {
+  "en": "\\\"The banks spent decades building grand marble halls. These newcomers operate from rented office space with a computer and a telephone line. And they're winning.\\\"",
+  "de": "„Die Banken haben Jahrzehnte damit verbracht, prunkvolle Marmorhallen zu errichten. Diese Neulinge arbeiten aus gemieteten Büroräumen mit einem Computer und einer Telefonleitung. Und sie gewinnen.“"
+ },
+ "banking_cycle_events.36.t": {
+  "en": "Financial Technology Disruption",
+  "de": "Finanztechnologische Disruption"
+ },
+ "banking_cycle_events.37.a": {
+  "en": "A brilliant innovation!",
+  "de": "Eine brillante Neuerung!"
+ },
+ "banking_cycle_events.37.b": {
+  "en": "Require careful oversight",
+  "de": "Sorgfältige Aufsicht verlangen"
+ },
+ "banking_cycle_events.37.c": {
+  "en": "This instrument is too dangerous",
+  "de": "Dieses Instrument ist zu gefährlich"
+ },
+ "banking_cycle_events.37.d": {
+  "en": "Banks have begun bundling thousands of individual mortgages into tradeable securities, selling them to investors worldwide. The innovation allows banks to offload risk and free up capital for new lending, fueling a construction boom. But critics warn that banks no longer care whether borrowers can repay, since the risk is immediately passed on to investors who may not understand what they're buying.",
+  "de": "Banken haben begonnen, Tausende einzelne Hypotheken zu handelbaren Wertpapieren zu bündeln und weltweit an Investoren zu verkaufen. Die Neuerung erlaubt es Banken, Risiken abzugeben und Kapital für neue Kreditvergaben freizusetzen, was einen Bauboom befeuert. Kritiker warnen jedoch, dass es den Banken nicht mehr kümmere, ob Kreditnehmer zurückzahlen können, da das Risiko sofort an Investoren weitergereicht wird, die möglicherweise nicht verstehen, was sie kaufen."
+ },
+ "banking_cycle_events.37.f": {
+  "en": "\\\"We originate the loan on Monday, package it on Tuesday, sell it on Wednesday, and by Thursday it's some pension fund's problem.\\\"\\n\\n\\\"And if the borrower defaults?\\\"\\n\\n\\\"That's Thursday's problem. We got paid on Wednesday.\\\"",
+  "de": "„Wir vergeben den Kredit am Montag, bündeln ihn am Dienstag, verkaufen ihn am Mittwoch, und am Donnerstag ist es das Problem irgendeines Pensionsfonds.“\\n\\n„Und wenn der Kreditnehmer ausfällt?“\\n\\n„Das ist ein Problem für Donnerstag. Wir wurden am Mittwoch bezahlt.“"
+ },
+ "banking_cycle_events.37.t": {
+  "en": "Mortgage-Backed Securities",
+  "de": "Hypothekenbesicherte Wertpapiere"
+ },
+ "banking_cycle_events.38.a": {
+  "en": "Support the initiative",
+  "de": "Die Initiative unterstützen"
+ },
+ "banking_cycle_events.38.b": {
+  "en": "Let it develop privately",
+  "de": "Sich privat entwickeln lassen"
+ },
+ "banking_cycle_events.38.d": {
+  "en": "A new initiative is providing tiny loans to entrepreneurs and smallholders who have been shut out of the traditional banking system. The sums are modest - enough to buy a sewing machine, stock a market stall, or purchase seed for a season - but the impact on families and communities has been transformative. Repayment rates are surprisingly high, defying the skeptics who predicted the poor would default.",
+  "de": "Eine neue Initiative vergibt Kleinstkredite an Unternehmer und Kleinbetriebe, die vom traditionellen Bankensystem ausgeschlossen waren. Die Summen sind bescheiden – genug, um eine Nähmaschine zu kaufen, einen Marktstand zu bestücken oder Saatgut für eine Saison zu erwerben –, doch die Wirkung auf Familien und Gemeinden ist tiefgreifend. Die Rückzahlungsquoten sind überraschend hoch und widerlegen die Skeptiker, die vorhergesagt hatten, die Armen würden ausfallen."
+ },
+ "banking_cycle_events.38.f": {
+  "en": "\\\"She borrowed enough to buy three chickens and a rooster. Within two years she had a flock of fifty, two employees, and a cart. The bank that lent her the money made a tidy profit.\\\"\\n\\n\\\"Three chickens.\\\"\\n\\n\\\"Three chickens.\\\"",
+  "de": "„Sie lieh sich genug, um drei Hühner und einen Hahn zu kaufen. Innerhalb von zwei Jahren hatte sie eine Herde von fünfzig Tieren, zwei Angestellte und einen Karren. Die Bank, die ihr das Geld geliehen hatte, machte einen hübschen Gewinn.“\\n\\n„Drei Hühner.“\\n\\n„Drei Hühner.“"
+ },
+ "banking_cycle_events.38.t": {
+  "en": "Microfinance Initiative",
+  "de": "Mikrofinanz-Initiative"
+ },
+ "banking_cycle_events.39.a": {
+  "en": "Print money and buy bonds!",
+  "de": "Geld drucken und Anleihen kaufen!"
+ },
+ "banking_cycle_events.39.b": {
+  "en": "Limited, targeted purchases only",
+  "de": "Nur begrenzte, gezielte Käufe"
+ },
+ "banking_cycle_events.39.c": {
+  "en": "Sound money must not be debased",
+  "de": "Solides Geld darf nicht entwertet werden"
+ },
+ "banking_cycle_events.39.d": {
+  "en": "With interest rates already near zero and the economy still contracting, the central bank's economists have proposed an unconventional measure: creating new money to purchase government bonds in massive quantities. The goal is to drive down long-term borrowing costs and force investors into riskier assets, stimulating spending. The idea is controversial - critics call it 'printing money' and warn of inflation.",
+  "de": "Da die Zinsen bereits nahe null liegen und die Wirtschaft weiter schrumpft, haben die Ökonomen der Zentralbank eine unkonventionelle Maßnahme vorgeschlagen: neues Geld zu schaffen, um Staatsanleihen in gewaltigen Mengen aufzukaufen. Ziel ist es, die langfristigen Kreditkosten zu senken und Investoren in riskantere Anlagen zu drängen, um die Ausgaben anzukurbeln. Die Idee ist umstritten – Kritiker nennen es ‚Geld drucken‘ und warnen vor Inflation."
+ },
+ "banking_cycle_events.39.d_below_zero": {
+  "en": "With the policy rate already cut below zero and the economy still contracting, the central bank's economists have proposed going further: creating new money to purchase government bonds in massive quantities. The goal is to drive down long-term borrowing costs and force investors into riskier assets, stimulating spending. The idea is controversial - critics call it 'printing money' and warn of inflation.",
+  "de": "Da der Leitzins bereits unter null gesenkt wurde und die Wirtschaft weiter schrumpft, haben die Ökonomen der Zentralbank vorgeschlagen, noch weiter zu gehen: neues Geld zu schaffen, um Staatsanleihen in gewaltigen Mengen aufzukaufen. Ziel ist es, die langfristigen Kreditkosten zu senken und Investoren in riskantere Anlagen zu drängen, um die Ausgaben anzukurbeln. Die Idee ist umstritten – Kritiker nennen es ‚Geld drucken‘ und warnen vor Inflation."
+ },
+ "banking_cycle_events.39.d_simplified": {
+  "en": "With the economy still contracting, the government's economists have proposed an unconventional measure: creating new money to purchase government bonds in massive quantities. The goal is to drive down long-term borrowing costs and force investors into riskier assets, stimulating spending. The idea is controversial - critics call it 'printing money' and warn of inflation.",
+  "de": "Da die Wirtschaft weiter schrumpft, haben die Ökonomen der Regierung eine unkonventionelle Maßnahme vorgeschlagen: neues Geld zu schaffen, um Staatsanleihen in gewaltigen Mengen aufzukaufen. Ziel ist es, die langfristigen Kreditkosten zu senken und Investoren in riskantere Anlagen zu drängen, um die Ausgaben anzukurbeln. Die Idee ist umstritten – Kritiker nennen es ‚Geld drucken‘ und warnen vor Inflation."
+ },
+ "banking_cycle_events.39.f": {
+  "en": "\\\"So let me understand. The central bank creates money out of nothing, uses it to buy government debt, and this is supposed to fix the economy?\\\"\\n\\n\\\"In essence, yes.\\\"\\n\\n\\\"And this isn't just... cheating?\\\"\\n\\n\\\"We prefer the term 'unconventional monetary policy.'\\\"",
+  "de": "„Lassen Sie mich das verstehen. Die Zentralbank schafft Geld aus dem Nichts, kauft damit Staatsschulden auf, und das soll die Wirtschaft reparieren?“\\n\\n„Im Kern ja.“\\n\\n„Und das ist nicht einfach … Betrug?“\\n\\n„Wir bevorzugen den Begriff ‚unkonventionelle Geldpolitik‘.“"
+ },
+ "banking_cycle_events.39.t": {
+  "en": "Quantitative Easing Debate",
+  "de": "Debatte um die quantitative Lockerung"
+ },
+ "banking_cycle_events.4.a": {
+  "en": "Let the weak banks fail",
+  "de": "Die schwachen Banken scheitern lassen"
+ },
+ "banking_cycle_events.4.b": {
+  "en": "Government guarantee of all deposits",
+  "de": "Staatliche Garantie für alle Einlagen"
+ },
+ "banking_cycle_events.4.c": {
+  "en": "Selective bailout of key institutions",
+  "de": "Selektive Rettung zentraler Institute"
+ },
+ "banking_cycle_events.4.d": {
+  "en": "Panic has seized the banking sector. Depositors are queuing in the streets, desperate to withdraw their savings before the institutions collapse. Several banks have already shuttered their doors. The government faces an impossible choice: let the system purge itself at enormous cost, or intervene to restore confidence at the risk of rewarding reckless lending.",
+  "de": "Panik hat den Bankensektor ergriffen. Einleger stehen in den Straßen Schlange, verzweifelt bemüht, ihre Ersparnisse abzuheben, bevor die Institute zusammenbrechen. Mehrere Banken haben bereits ihre Türen geschlossen. Die Regierung steht vor einer unmöglichen Wahl: das System sich unter enormen Kosten selbst bereinigen zu lassen oder einzugreifen, um das Vertrauen wiederherzustellen – auf die Gefahr hin, leichtsinnige Kreditvergabe zu belohnen."
+ },
+ "banking_cycle_events.4.f": {
+  "en": "\\\"I saw a woman weeping outside the National Savings Bank this morning. She had her life's earnings in there - thirty years of careful thrift, gone in an afternoon.\\\"\\n\\n\\\"The directors, of course, withdrew their own funds last week.\\\"",
+  "de": "„Ich sah heute Morgen eine Frau vor der Nationalen Sparkasse weinen. Ihre ganzen Lebensersparnisse waren dort – dreißig Jahre sorgsamen Sparens, an einem Nachmittag dahin.“\\n\\n„Die Direktoren haben ihre eigenen Gelder natürlich schon letzte Woche abgehoben.“"
+ },
+ "banking_cycle_events.4.t": {
+  "en": "Bank Run",
+  "de": "Bankensturm"
+ },
+ "banking_cycle_events.40.a": {
+  "en": "Overhaul the rating system!",
+  "de": "Das Ratingsystem grundlegend reformieren!"
+ },
+ "banking_cycle_events.40.b": {
+  "en": "Issue a formal reprimand",
+  "de": "Eine förmliche Rüge aussprechen"
+ },
+ "banking_cycle_events.40.c": {
+  "en": "Ratings are just opinions",
+  "de": "Ratings sind nur Meinungen"
+ },
+ "banking_cycle_events.40.d": {
+  "en": "It has emerged that the credit rating agencies - the firms trusted to assess the safety of financial instruments - have been assigning their highest ratings to securities that are, in fact, nearly worthless. Investors relied on those ratings to make decisions worth billions. Now that the truth is out, trust in the entire system of financial assessment has been shattered.",
+  "de": "Es ist ans Licht gekommen, dass die Ratingagenturen – die Firmen, denen die Bewertung der Sicherheit von Finanzinstrumenten anvertraut ist – ihre höchsten Bewertungen an Wertpapiere vergeben haben, die in Wahrheit nahezu wertlos sind. Investoren verließen sich auf diese Bewertungen für Entscheidungen im Wert von Milliarden. Nun, da die Wahrheit ans Licht gekommen ist, ist das Vertrauen in das gesamte System der Finanzbewertung erschüttert."
+ },
+ "banking_cycle_events.40.f": {
+  "en": "\\\"Triple-A. They rated it triple-A. It was a pile of bad loans wrapped in wishful thinking and sealed with a stamp that said 'safe as government bonds.'\\\"\\n\\n\\\"Perhaps they didn't understand what was inside.\\\"\\n\\n\\\"They were paid not to.\\\"",
+  "de": "„AAA. Sie haben es mit AAA bewertet. Es war ein Haufen fauler Kredite, verpackt in Wunschdenken und versiegelt mit einem Stempel, der ‚sicher wie Staatsanleihen‘ verkündete.“\\n\\n„Vielleicht haben sie nicht verstanden, was darin steckte.“\\n\\n„Sie wurden dafür bezahlt, es nicht zu verstehen.“"
+ },
+ "banking_cycle_events.40.t": {
+  "en": "Credit Rating Failure",
+  "de": "Versagen der Ratingagenturen"
+ },
+ "banking_cycle_events.41.a": {
+  "en": "Offer debt relief programs",
+  "de": "Schuldenerleichterungsprogramme anbieten"
+ },
+ "banking_cycle_events.41.b": {
+  "en": "Education is worth the investment",
+  "de": "Bildung ist die Investition wert"
+ },
+ "banking_cycle_events.41.c": {
+  "en": "Cap tuition lending",
+  "de": "Studienkredite deckeln"
+ },
+ "banking_cycle_events.41.d": {
+  "en": "A generation of university graduates is entering the [concept_workforce] burdened by enormous education debts. The loans that seemed manageable when they were taken on are now consuming a crippling share of young workers' incomes, delaying home purchases, family formation, and savings. Consumer spending among the educated young has stagnated, and defaults on education loans are rising.",
+  "de": "Eine Generation von Hochschulabsolventen reiht sich, belastet mit gewaltigen Bildungsschulden, in die Reihen der [Concept('concept_workforce', 'Beschäftigten')] ein. Die Kredite, die bei ihrer Aufnahme noch tragbar erschienen, verschlingen inzwischen einen lähmenden Anteil des Einkommens junger Arbeitnehmer und verzögern Hauskauf, Familiengründung und Ersparnisse. Der Konsum unter den gebildeten Jungen stagniert, und die Ausfälle bei Bildungskrediten steigen."
+ },
+ "banking_cycle_events.41.f": {
+  "en": "\\\"I have two degrees, a mountain of debt, and a job that pays less than what my father earned with no degree at all. They told us education was the path to prosperity.\\\"\\n\\n\\\"It was. For the banks that lent you the money.\\\"",
+  "de": "„Ich habe zwei Abschlüsse, einen Berg Schulden und einen Job, der weniger zahlt, als mein Vater ohne jeden Abschluss verdiente. Man hat uns gesagt, Bildung sei der Weg zum Wohlstand.“\\n\\n„War sie auch. Für die Banken, die euch das Geld geliehen haben.“"
+ },
+ "banking_cycle_events.41.t": {
+  "en": "Student Loan Burden",
+  "de": "Last der Studienkredite"
+ },
+ "banking_cycle_events.42.a": {
+  "en": "Champion green finance!",
+  "de": "Für grüne Finanzierung eintreten!"
+ },
+ "banking_cycle_events.42.b": {
+  "en": "Let the market lead",
+  "de": "Den Markt führen lassen"
+ },
+ "banking_cycle_events.42.d": {
+  "en": "A coalition of banks and government agencies has proposed issuing bonds specifically earmarked for environmental [concept_infrastructure]: flood defenses, clean water systems, renewable energy installations, and [concept_pollution_system] cleanup. The bonds would offer modest returns but carry government backing, and early interest from institutional investors has been strong. It represents a new way of financing public goods through financial markets.",
+  "de": "Eine Koalition aus Banken und Regierungsstellen hat vorgeschlagen, Anleihen auszugeben, die eigens für ökologische [concept_infrastructure] bestimmt sind: Hochwasserschutz, Trinkwassersysteme, Anlagen für erneuerbare Energien und die Beseitigung von [concept_pollution_system]. Die Anleihen würden bescheidene Renditen bieten, aber staatliche Absicherung genießen, und das frühe Interesse institutioneller Investoren war groß. Sie stellen einen neuen Weg dar, öffentliche Güter über die Finanzmärkte zu finanzieren."
+ },
+ "banking_cycle_events.42.f": {
+  "en": "\\\"Invest in the future of the planet and earn three percent doing it. The prospectus practically writes itself.\\\"\\n\\n\\\"And if the projects fail?\\\"\\n\\n\\\"Then we'll have bigger problems than bond yields.\\\"",
+  "de": "„Investieren Sie in die Zukunft des Planeten und verdienen Sie dabei drei Prozent. Der Prospekt schreibt sich praktisch von selbst.“\\n\\n„Und wenn die Projekte scheitern?“\\n\\n„Dann haben wir größere Probleme als Anleiherenditen.“"
+ },
+ "banking_cycle_events.42.t": {
+  "en": "Green Bond Initiative",
+  "de": "Initiative für grüne Anleihen"
+ },
+ "banking_cycle_events.43.a": {
+  "en": "Innovation needs capital!",
+  "de": "Innovation braucht Kapital!"
+ },
+ "banking_cycle_events.43.b": {
+  "en": "Ensure prudent diversification",
+  "de": "Umsichtige Diversifizierung sicherstellen"
+ },
+ "banking_cycle_events.43.d": {
+  "en": "A new class of venture capital funds is channeling money into innovative but unproven enterprises: new manufacturing processes, experimental technologies, and bold commercial ventures. The returns for successful investments are spectacular, attracting a flood of capital from investors chasing the next big opportunity. Most ventures will fail, but the few that succeed are transforming entire industries.",
+  "de": "Eine neue Klasse von Risikokapitalfonds lenkt Geld in innovative, aber unerprobte Unternehmungen: neue Fertigungsverfahren, experimentelle Technologien und gewagte kommerzielle Vorhaben. Die Renditen erfolgreicher Investitionen sind spektakulär und ziehen eine Flut von Kapital von Investoren an, die der nächsten großen Gelegenheit hinterherjagen. Die meisten Vorhaben werden scheitern, doch die wenigen, die gelingen, verändern ganze Branchen."
+ },
+ "banking_cycle_events.43.f": {
+  "en": "\\\"Nine out of ten will fail. But the tenth will change the world and repay the losses a hundredfold.\\\"\\n\\n\\\"That's what every speculator says.\\\"\\n\\n\\\"Yes, but some of us have spreadsheets.\\\"",
+  "de": "„Neun von zehn werden scheitern. Aber das zehnte wird die Welt verändern und die Verluste hundertfach zurückzahlen.“\\n\\n„Das sagt jeder Spekulant.“\\n\\n„Ja, aber manche von uns haben Tabellenkalkulationen.“"
+ },
+ "banking_cycle_events.43.t": {
+  "en": "Venture Capital Boom",
+  "de": "Risikokapital-Boom"
+ },
+ "banking_cycle_events.44.a": {
+  "en": "Crack down hard!",
+  "de": "Hart durchgreifen!"
+ },
+ "banking_cycle_events.44.b": {
+  "en": "Issue new guidelines",
+  "de": "Neue Richtlinien erlassen"
+ },
+ "banking_cycle_events.44.c": {
+  "en": "The market is self-regulating",
+  "de": "Der Markt reguliert sich selbst"
+ },
+ "banking_cycle_events.44.d": {
+  "en": "An investigation has revealed that certain lending institutions have been systematically targeting vulnerable borrowers - the uneducated, the desperate, and the elderly - with loans designed to be impossible to repay. Hidden fees, deceptive terms, and aggressive collection practices have trapped thousands of families in spiraling debt. The scale of the abuse is staggering.",
+  "de": "Eine Untersuchung hat aufgedeckt, dass bestimmte Kreditinstitute systematisch verwundbare Kreditnehmer ins Visier genommen haben – Ungebildete, Verzweifelte und Ältere – mit Krediten, die von vornherein unmöglich zurückzuzahlen waren. Versteckte Gebühren, irreführende Bedingungen und aggressive Eintreibungspraktiken haben Tausende Familien in eine Schuldenspirale getrieben. Das Ausmaß des Missbrauchs ist erschütternd."
+ },
+ "banking_cycle_events.44.f": {
+  "en": "\\\"The contract was forty pages of small print. She signed because she needed the money for medicine. She didn't know the interest rate was forty percent. She didn't know the fees would double the principal. She didn't know she'd lose her house.\\\"\\n\\n\\\"And the lender?\\\"\\n\\n\\\"The lender knew everything.\\\"",
+  "de": "„Der Vertrag umfasste vierzig Seiten Kleingedrucktes. Sie unterschrieb, weil sie das Geld für Medikamente brauchte. Sie wusste nicht, dass der Zinssatz vierzig Prozent betrug. Sie wusste nicht, dass die Gebühren die Kreditsumme verdoppeln würden. Sie wusste nicht, dass sie ihr Haus verlieren würde.“\\n\\n„Und der Kreditgeber?“\\n\\n„Der Kreditgeber wusste alles.“"
+ },
+ "banking_cycle_events.44.t": {
+  "en": "Predatory Lending Scandal",
+  "de": "Skandal um Wucherkredite"
+ },
+ "banking_cycle_events.45.a": {
+  "en": "Extend a generous rescue package",
+  "de": "Ein großzügiges Rettungspaket gewähren"
+ },
+ "banking_cycle_events.45.b": {
+  "en": "Offer a smaller emergency grant",
+  "de": "Einen kleineren Nothilfezuschuss anbieten"
+ },
+ "banking_cycle_events.45.c": {
+  "en": "They must solve their own problems",
+  "de": "Sie müssen ihre eigenen Probleme lösen"
+ },
+ "banking_cycle_events.45.d": {
+  "en": "[SCOPE.sCountry('bailout_country').GetName], an important trading partner, has approached our government requesting emergency financial assistance. Their banking system is on the verge of collapse, and without external support, the crisis will spread to our own markets through trade disruptions and defaulted debts. The request puts us in a difficult position - refusal risks contagion, but aid comes at a steep cost to our own treasury.",
+  "de": "[SCOPE.sCountry('bailout_country').GetAltName('NOM')|U], ein wichtiger Handelspartner, ist mit der Bitte um finanzielle Nothilfe an unsere Regierung herangetreten. Das dortige Bankensystem steht am Rand des Zusammenbruchs, und ohne externe Unterstützung wird sich die Krise durch Handelsstörungen und ausgefallene Schulden auf unsere eigenen Märkte ausbreiten. Die Bitte bringt uns in eine schwierige Lage – eine Abweisung birgt Ansteckungsgefahr, doch Hilfe kostet unsere eigene Staatskasse teuer."
+ },
+ "banking_cycle_events.45.f": {
+  "en": "\\\"Their ambassador was remarkably calm, considering he was effectively saying 'lend us an enormous sum of money or we'll take your economy down with us.'\\\"\\n\\n\\\"That's diplomacy for you.\\\"\\n\\n\\\"I preferred it when diplomacy involved sending gunboats.\\\"",
+  "de": "„Ihr Botschafter war bemerkenswert gelassen, wenn man bedenkt, dass er im Grunde sagte: ‚Leihen Sie uns eine gewaltige Summe, oder wir reißen Ihre Wirtschaft mit uns in den Abgrund.‘“\\n\\n„So ist das mit der Diplomatie.“\\n\\n„Mir war es lieber, als Diplomatie noch Kanonenboote bedeutete.“"
+ },
+ "banking_cycle_events.45.t": {
+  "en": "International Bailout Request",
+  "de": "Internationales Gesuch um Rettung"
+ },
+ "banking_cycle_events.46.a": {
+  "en": "Let the titans fight it out",
+  "de": "Die Titanen es untereinander ausfechten lassen"
+ },
+ "banking_cycle_events.46.b": {
+  "en": "Summon both sides to negotiate a pooled compromise",
+  "de": "Beide Seiten zu Verhandlungen über einen gemeinsamen Kompromiss laden"
+ },
+ "banking_cycle_events.46.c": {
+  "en": "Suspend trading in the cornered stock",
+  "de": "Den Handel mit der bedrängten Aktie aussetzen"
+ },
+ "banking_cycle_events.46.d": {
+  "en": "Two railway titans are each secretly buying every share of the Northern Pacific Railway they can find, trying to seize outright control. As the share price leaps from 150 to nearly 1,000 in days, short-sellers across the exchange are forced to dump every other holding they own to raise the cash to cover. The rest of [ROOT.GetCountry.GetName]'s market is bleeding.",
+  "de": "Zwei Eisenbahntitanen kaufen heimlich jede Aktie der Northern Pacific Railway auf, die sie finden können, in dem Versuch, die vollständige Kontrolle zu erlangen. Während der Aktienkurs binnen Tagen von 150 auf fast 1.000 springt, sind Leerverkäufer an der gesamten Börse gezwungen, jeden anderen Bestand abzustoßen, um das nötige Bargeld zur Deckung aufzubringen. Der Rest des Marktes [ROOT.GetCountry.GetAltName('GEN')] blutet."
+ },
+ "banking_cycle_events.46.f": {
+  "en": "\\\"Gentlemen, there is only one question in the entire stock exchange this morning — will you please tell me who in the name of creation holds all the Northern Pacific?\\\"\\n\\n— Broker on the trading floor",
+  "de": "„Meine Herren, es gibt heute Morgen an der gesamten Börse nur eine Frage — würden Sie mir bitte sagen, wer um alles in der Welt die gesamte Northern Pacific hält?“\\n\\n— Makler auf dem Börsenparkett"
+ },
+ "banking_cycle_events.46.t": {
+  "en": "The Northern Pacific Corner",
+  "de": "Die Northern-Pacific-Corner"
+ },
+ "banking_cycle_events.47.a": {
+  "en": "Let the failing trust collapse",
+  "de": "Die scheiternde Treuhandgesellschaft zusammenbrechen lassen"
+ },
+ "banking_cycle_events.47.b": {
+  "en": "Organize a private rescue consortium",
+  "de": "Ein privates Rettungskonsortium organisieren"
+ },
+ "banking_cycle_events.47.c": {
+  "en": "Commit public treasury funds to stop the run",
+  "de": "Staatliche Mittel einsetzen, um den Ansturm zu stoppen"
+ },
+ "banking_cycle_events.47.d": {
+  "en": "An unregulated trust company at the heart of [ROOT.GetCountry.GetName]'s financial district has just suspended payments after one of its directors was exposed in a failed copper-market corner. Depositors are queuing around the block. Every other trust in the city is watching to see if the panic will reach them next.",
+  "de": "Eine unregulierte Treuhandgesellschaft im Herzen des Finanzviertels [ROOT.GetCountry.GetAltName('GEN')] hat soeben die Zahlungen eingestellt, nachdem einer ihrer Direktoren in eine gescheiterte Corner am Kupfermarkt verwickelt war. Einleger stehen Schlange um den ganzen Häuserblock. Jede andere Treuhandgesellschaft in der Stadt beobachtet gespannt, ob die Panik als Nächstes sie erreicht."
+ },
+ "banking_cycle_events.47.f": {
+  "en": "\\\"A trust company is a bank that does not call itself a bank, supervised by rules that do not call themselves rules. We are about to discover what, precisely, it is instead.\\\"\\n\\n— Junior clerk at the Treasury",
+  "de": "„Eine Treuhandgesellschaft ist eine Bank, die sich nicht Bank nennt, beaufsichtigt von Regeln, die sich nicht Regeln nennen. Wir sind kurz davor herauszufinden, was sie stattdessen genau ist.“\\n\\n— Junior-Sachbearbeiter im Finanzministerium"
+ },
+ "banking_cycle_events.47.t": {
+  "en": "A Trust Company Fails",
+  "de": "Eine Treuhandgesellschaft scheitert"
+ },
+ "banking_cycle_events.48.a": {
+  "en": "Endorse the new thinking",
+  "de": "Das neue Denken befürworten"
+ },
+ "banking_cycle_events.48.b": {
+  "en": "Decline to comment in either direction",
+  "de": "Sich jeder Stellungnahme enthalten"
+ },
+ "banking_cycle_events.48.c": {
+  "en": "Publish a Treasury warning that arithmetic still applies",
+  "de": "Eine Warnung des Finanzministeriums veröffentlichen, dass Mathematik noch immer gilt"
+ },
+ "banking_cycle_events.48.d": {
+  "en": "[ROOT.GetCountry.GetName]'s most eminent professors of political economy have published a widely-reprinted essay arguing that the old laws of boom and bust are dead — industrial efficiency has made today's valuations rational, not speculative. Share prices, they declare, have reached a #bold permanently high plateau#!. The broadsheets are reprinting the phrase daily.",
+  "de": "Die angesehensten Professoren der politischen Ökonomie [ROOT.GetCountry.GetAltName('GEN')] haben einen vielfach nachgedruckten Aufsatz veröffentlicht, der argumentiert, die alten Gesetze von Aufschwung und Zusammenbruch seien tot — industrielle Effizienz habe die heutigen Bewertungen rational gemacht, nicht spekulativ. Die Aktienkurse, so erklären sie, hätten ein #bold dauerhaft hohes Plateau#! erreicht. Die großen Zeitungen drucken die Formulierung täglich nach."
+ },
+ "banking_cycle_events.48.f": {
+  "en": "\\\"The old rules of economics have been repealed, the way certain physical laws were repealed at the Equator. We live now in an age of enlightened prosperity; mere arithmetic cannot reach us here.\\\"\\n\\n— Professor of political economy, widely syndicated",
+  "de": "„Die alten Regeln der Ökonomie wurden aufgehoben, so wie gewisse physikalische Gesetze am Äquator aufgehoben wurden. Wir leben jetzt in einem Zeitalter aufgeklärten Wohlstands; bloße Mathematik reicht hier nicht mehr heran.“\\n\\n— Professor der politischen Ökonomie, vielfach abgedruckt"
+ },
+ "banking_cycle_events.48.t": {
+  "en": "A Permanently High Plateau",
+  "de": "Ein dauerhaft hohes Plateau"
+ },
+ "banking_cycle_events.5.a": {
+  "en": "Encourage the railway companies!",
+  "de": "Die Eisenbahngesellschaften fördern!"
+ },
+ "banking_cycle_events.5.b": {
+  "en": "Insist on due diligence for bond offerings",
+  "de": "Sorgfaltspflicht bei Anleiheemissionen verlangen"
+ },
+ "banking_cycle_events.5.d": {
+  "en": "Railway shares and bonds are the talk of every exchange. Investors are scrambling to fund new lines, convinced that iron roads will transform the economy. Some schemes are sound; others are little more than prospectuses and dreams. The frenzy is attracting capital from every corner of the country and beyond.",
+  "de": "Eisenbahnaktien und -anleihen sind das Gesprächsthema jeder Börse. Investoren überschlagen sich, um neue Strecken zu finanzieren, überzeugt, dass eiserne Straßen die Wirtschaft verändern werden. Manche Vorhaben sind solide; andere sind kaum mehr als Prospekte und Träume. Der Taumel zieht Kapital aus jedem Winkel des Landes und darüber hinaus an."
+ },
+ "banking_cycle_events.5.f": {
+  "en": "\\\"A railway to every town! A dividend on every share!\\\"\\n\\n\\\"Have you actually seen where the proposed line runs?\\\"\\n\\n\\\"What does that matter? The shares are up forty percent since Tuesday.\\\"",
+  "de": "„Eine Eisenbahn in jede Stadt! Eine Dividende auf jede Aktie!“\\n\\n„Haben Sie eigentlich gesehen, wo die geplante Strecke verläuft?“\\n\\n„Was spielt das für eine Rolle? Die Aktien sind seit Dienstag um vierzig Prozent gestiegen.“"
+ },
+ "banking_cycle_events.5.t": {
+  "en": "Railway Bond Fever",
+  "de": "Eisenbahnanleihen-Fieber"
+ },
+ "banking_cycle_events.50.a": {
+  "en": "Double down: enforce stricter quotas",
+  "de": "Nachlegen: strengere Quoten durchsetzen"
+ },
+ "banking_cycle_events.50.b": {
+  "en": "Quietly revise the targets downward",
+  "de": "Die Ziele still nach unten korrigieren"
+ },
+ "banking_cycle_events.50.c": {
+  "en": "Launch a propaganda campaign to rally workers",
+  "de": "Eine Propagandakampagne starten, um die Arbeiter zu mobilisieren"
+ },
+ "banking_cycle_events.50.d": {
+  "en": "The latest reports from our planning bureaus paint a troubling picture. Production across several key sectors has fallen well short of the targets set by the current economic plan. Factory output quotas are being missed, and the supply chain disruptions are beginning to cascade through the planned economy.",
+  "de": "Die jüngsten Berichte unserer Planungsbehörden zeichnen ein beunruhigendes Bild. Die Produktion in mehreren Schlüsselsektoren liegt deutlich unter den Zielen des aktuellen Wirtschaftsplans. Die Produktionsquoten der Fabriken werden verfehlt, und die Störungen der Lieferketten beginnen sich durch die Planwirtschaft fortzupflanzen."
+ },
+ "banking_cycle_events.50.f": {
+  "en": "\\\"The factory reported a hundred and ten percent of quota. The freight cars at the rail siding tell a different story.\\\"\\n\\n\\\"How different?\\\"\\n\\n\\\"Eighty-seven percent. Maybe less. There is a discrepancy of three thousand tons of steel that nobody can account for.\\\"\\n\\n\\\"And the director?\\\"\\n\\n\\\"Asks why we insist on counting what the plan has already counted for us.\\\"",
+  "de": "„Die Fabrik meldete hundertzehn Prozent des Solls. Die Güterwagen am Gleisanschluss erzählen eine andere Geschichte.“\\n\\n„Wie anders?“\\n\\n„Siebenundachtzig Prozent. Vielleicht weniger. Es gibt eine Differenz von dreitausend Tonnen Stahl, die niemand erklären kann.“\\n\\n„Und der Direktor?“\\n\\n„Fragt, warum wir darauf bestehen, zu zählen, was der Plan uns bereits gezählt hat.“"
+ },
+ "banking_cycle_events.50.t": {
+  "en": "Five-Year Plan Shortfall",
+  "de": "Rückstand beim Fünfjahresplan"
+ },
+ "banking_cycle_events.51.a": {
+  "en": "Launch a purge of corrupt officials",
+  "de": "Eine Säuberung korrupter Beamter einleiten"
+ },
+ "banking_cycle_events.51.b": {
+  "en": "Quietly replace the worst offenders",
+  "de": "Die schlimmsten Täter still ersetzen"
+ },
+ "banking_cycle_events.51.c": {
+  "en": "Turn a blind eye: the reports look good",
+  "de": "Ein Auge zudrücken: die Berichte sehen gut aus"
+ },
+ "banking_cycle_events.51.d": {
+  "en": "An internal audit has revealed that several factory directors have been systematically falsifying their production reports. Output figures were inflated to meet quota targets, while actual production lagged far behind. The discovery calls into question the reliability of our entire planning apparatus.",
+  "de": "Eine interne Prüfung hat aufgedeckt, dass mehrere Fabrikdirektoren systematisch ihre Produktionsberichte gefälscht haben. Produktionszahlen wurden aufgebläht, um die Sollvorgaben zu erfüllen, während die tatsächliche Produktion weit dahinter zurückblieb. Der Fund stellt die Zuverlässigkeit unseres gesamten Planungsapparats infrage."
+ },
+ "banking_cycle_events.51.f": {
+  "en": "\\\"He has been director here for nine years. Every year his factory exceeds its quota by precisely three percent.\\\"\\n\\n\\\"Three percent every year? Through depressions, shortages, equipment failures?\\\"\\n\\n\\\"Three percent. Every year. Without fail.\\\"\\n\\n\\\"Then he is either a genius, a liar, or both.\\\"",
+  "de": "„Er ist hier seit neun Jahren Direktor. Jedes Jahr übertrifft seine Fabrik das Soll um genau drei Prozent.“\\n\\n„Drei Prozent, jedes Jahr? Durch Depressionen, Engpässe, Maschinenausfälle hindurch?“\\n\\n„Drei Prozent. Jedes Jahr. Ohne Ausnahme.“\\n\\n„Dann ist er entweder ein Genie, ein Lügner, oder beides.“"
+ },
+ "banking_cycle_events.51.t": {
+  "en": "Factory Director Corruption",
+  "de": "Korruption des Fabrikdirektors"
+ },
+ "banking_cycle_events.52.a": {
+  "en": "Centralize all distribution through the planning bureau",
+  "de": "Die gesamte Verteilung über die Planungsbehörde zentralisieren"
+ },
+ "banking_cycle_events.52.b": {
+  "en": "Allow limited regional strategic reserves",
+  "de": "Begrenzte regionale strategische Reserven erlauben"
+ },
+ "banking_cycle_events.52.c": {
+  "en": "Send the military to enforce redistribution",
+  "de": "Das Militär zur Durchsetzung der Umverteilung entsenden"
+ },
+ "banking_cycle_events.52.d": {
+  "en": "Regional planning authorities have been stockpiling critical raw materials and intermediate goods well beyond their allocated quotas. This hoarding behavior is disrupting the central allocation system, creating artificial shortages in some sectors while others sit on mountains of surplus they refuse to release.",
+  "de": "Regionale Planungsbehörden haben kritische Rohstoffe und Vorprodukte weit über ihre zugewiesenen Quoten hinaus gehortet. Dieses Hortungsverhalten stört das zentrale Zuteilungssystem und schafft künstliche Engpässe in manchen Sektoren, während andere auf Bergen von Überschuss sitzen, den sie nicht freigeben wollen."
+ },
+ "banking_cycle_events.52.f": {
+  "en": "\\\"The southern oblast is sitting on enough copper wire to electrify three provinces. They claim it is a contingency reserve.\\\"\\n\\n\\\"A contingency against what?\\\"\\n\\n\\\"Against the central allocator failing to deliver. Against another oblast taking their share. Against next year's quota being raised again.\\\"\\n\\n\\\"In other words, against us.\\\"\\n\\n\\\"In other words, against us.\\\"",
+  "de": "„Das südliche Oblast sitzt auf genug Kupferdraht, um drei Provinzen zu elektrifizieren. Man nennt es eine Vorsorgereserve.“\\n\\n„Vorsorge wogegen?“\\n\\n„Dagegen, dass die zentrale Zuteilungsstelle nicht liefert. Dagegen, dass ein anderes Oblast sich ihren Anteil nimmt. Dagegen, dass die Quote nächstes Jahr wieder erhöht wird.“\\n\\n„Mit anderen Worten: gegen uns.“\\n\\n„Mit anderen Worten: gegen uns.“"
+ },
+ "banking_cycle_events.52.t": {
+  "en": "Resource Hoarding Crisis",
+  "de": "Krise der Ressourcenhortung"
+ },
+ "banking_cycle_events.53.a": {
+  "en": "Crack down with security forces",
+  "de": "Mit Sicherheitskräften durchgreifen"
+ },
+ "banking_cycle_events.53.b": {
+  "en": "Tacitly tolerate it as a safety valve",
+  "de": "Stillschweigend als Ventil dulden"
+ },
+ "banking_cycle_events.53.c": {
+  "en": "Legalize limited private trade",
+  "de": "Begrenzten Privathandel legalisieren"
+ },
+ "banking_cycle_events.53.d": {
+  "en": "As state-controlled supply chains struggle to meet demand, an informal economy has begun to flourish in the shadows. Citizens are trading goods outside official channels, and a network of black marketeers is providing what the planned economy cannot. The practice is widespread enough that enforcement has become difficult.",
+  "de": "Während die staatlich kontrollierten Lieferketten mit der Nachfrage kämpfen, blüht im Verborgenen eine informelle Wirtschaft auf. Bürger handeln Waren außerhalb der offiziellen Kanäle, und ein Netzwerk von Schwarzhändlern liefert, was die Planwirtschaft nicht kann. Die Praxis ist so weit verbreitet, dass eine Durchsetzung schwierig geworden ist."
+ },
+ "banking_cycle_events.53.f": {
+  "en": "\\\"The ration coupon entitles me to two kilos of meat per month. My wife buys four from a neighbor who works at the slaughterhouse.\\\"\\n\\n\\\"That neighbor is breaking the law.\\\"\\n\\n\\\"That neighbor is feeding my children. The state passed the law. The neighbor is feeding my children. I know which one I am loyal to today.\\\"",
+  "de": "„Die Lebensmittelkarte berechtigt mich zu zwei Kilo Fleisch im Monat. Meine Frau kauft vier von einem Nachbarn, der im Schlachthaus arbeitet.“\\n\\n„Dieser Nachbar bricht das Gesetz.“\\n\\n„Dieser Nachbar ernährt meine Kinder. Der Staat hat das Gesetz erlassen. Der Nachbar ernährt meine Kinder. Ich weiß, wem meine Treue heute gehört.“"
+ },
+ "banking_cycle_events.53.t": {
+  "en": "Black Market Emergence",
+  "de": "Entstehung des Schwarzmarkts"
+ },
+ "banking_cycle_events.54.a": {
+  "en": "Grand campaign with material incentives",
+  "de": "Große Kampagne mit materiellen Anreizen"
+ },
+ "banking_cycle_events.54.b": {
+  "en": "Ideological campaign emphasizing socialist duty",
+  "de": "Ideologische Kampagne mit Betonung der sozialistischen Pflicht"
+ },
+ "banking_cycle_events.54.c": {
+  "en": "Focus incentives on key strategic industries",
+  "de": "Anreize auf strategisch wichtige Industrien konzentrieren"
+ },
+ "banking_cycle_events.54.d": {
+  "en": "With the economy in a period of relative stability, the state has an opportunity to boost productivity through a nationwide motivation campaign. Various proposals have been put forward: material incentives, ideological appeals, or targeted bonuses for strategic industries.",
+  "de": "Da sich die Wirtschaft in einer Phase relativer Stabilität befindet, hat der Staat die Gelegenheit, die Produktivität durch eine landesweite Motivationskampagne zu steigern. Verschiedene Vorschläge liegen vor: materielle Anreize, ideologische Appelle oder gezielte Prämien für strategische Industrien."
+ },
+ "banking_cycle_events.54.f": {
+  "en": "\\\"The posters say each worker holds the future of the republic in their hands.\\\"\\n\\n\\\"And the canteen still serves the same cabbage soup it has served for nine years.\\\"\\n\\n\\\"You think a bonus would change minds?\\\"\\n\\n\\\"I think a bonus would change shifts. Whether it changes minds is a question for the Party. The shift is what we need by Friday.\\\"",
+  "de": "„Die Plakate sagen, jeder Arbeiter halte die Zukunft der Republik in seinen Händen.“\\n\\n„Und die Kantine serviert noch immer dieselbe Kohlsuppe, die sie seit neun Jahren serviert.“\\n\\n„Glauben Sie, eine Prämie würde die Einstellung ändern?“\\n\\n„Ich glaube, eine Prämie würde die Schicht ändern. Ob sie die Einstellung ändert, ist eine Frage für die Partei. Die Schicht ist es, was wir bis Freitag brauchen.“"
+ },
+ "banking_cycle_events.54.t": {
+  "en": "Worker Motivation Campaign",
+  "de": "Kampagne zur Arbeitermotivation"
+ },
+ "banking_cycle_events.55.a": {
+  "en": "Accept the full aid package",
+  "de": "Das vollständige Hilfspaket annehmen"
+ },
+ "banking_cycle_events.55.b": {
+  "en": "Accept with conditions: no joint committees",
+  "de": "Annehmen mit Bedingungen: keine gemeinsamen Ausschüsse"
+ },
+ "banking_cycle_events.55.c": {
+  "en": "Decline: maintain economic independence",
+  "de": "Ablehnen: wirtschaftliche Unabhängigkeit bewahren"
+ },
+ "banking_cycle_events.55.d": {
+  "en": "[SCOPE.sCountry('fraternal_ally').GetName], a fellow planned economy and an ideological ally, has offered a package of economic cooperation credits to help stabilize our planning cycle. The aid would include technical advisors, preferential trade terms, and direct financial assistance — but it comes with expectations of closer political alignment and joint economic planning committees.",
+  "de": "[SCOPE.sCountry('fraternal_ally').GetAltName('NOM')|U], eine befreundete Planwirtschaft und ideologischer Verbündeter, hat ein Paket wirtschaftlicher Kooperationskredite angeboten, um unseren Planungszyklus zu stabilisieren. Die Hilfe würde technische Berater, bevorzugte Handelsbedingungen und direkte finanzielle Unterstützung umfassen — doch sie kommt mit der Erwartung engerer politischer Ausrichtung und gemeinsamer Wirtschaftsplanungsausschüsse."
+ },
+ "banking_cycle_events.55.f": {
+  "en": "\\\"They are offering us five hundred million in long-term credits, at favorable rates. Their delegation arrives Friday.\\\"\\n\\n\\\"And the conditions?\\\"\\n\\n\\\"Two seats on our planning committee. A revision of our import targets to align with theirs. Quarterly progress reviews.\\\"\\n\\n\\\"That is not aid. That is partnership with the smaller word crossed out.\\\"",
+  "de": "„Sie bieten uns fünfhundert Millionen in langfristigen Krediten, zu günstigen Konditionen. Ihre Delegation trifft Freitag ein.“\\n\\n„Und die Bedingungen?“\\n\\n„Zwei Sitze in unserem Planungsausschuss. Eine Überarbeitung unserer Importziele zur Angleichung an ihre. Vierteljährliche Fortschrittsprüfungen.“\\n\\n„Das ist keine Hilfe. Das ist Partnerschaft, bei der man das kleinere Wort gestrichen hat.“"
+ },
+ "banking_cycle_events.55.t": {
+  "en": "Socialist Fraternal Aid",
+  "de": "Sozialistische Bruderhilfe"
+ },
+ "banking_cycle_events.56.a": {
+  "en": "Launch a full investigation and halt production",
+  "de": "Eine umfassende Untersuchung einleiten und die Produktion stoppen"
+ },
+ "banking_cycle_events.56.b": {
+  "en": "Increase security without public acknowledgment",
+  "de": "Sicherheit erhöhen, ohne es öffentlich zu machen"
+ },
+ "banking_cycle_events.56.c": {
+  "en": "Blame foreign agents and rally patriotic support",
+  "de": "Ausländische Agenten beschuldigen und patriotische Unterstützung mobilisieren"
+ },
+ "banking_cycle_events.56.d": {
+  "en": "Reports are coming in from several major industrial facilities of suspicious equipment failures and unexplained production losses. Whether the cause is deliberate sabotage born of internal dissent or simply aging [concept_infrastructure], the disruptions are significant enough to demand a response.",
+  "de": "Aus mehreren großen Industrieanlagen treffen Berichte über verdächtige Geräteausfälle und unerklärliche Produktionsverluste ein. Ob die Ursache gezielte Sabotage aus innerem Widerstand ist oder schlicht alternde [concept_infrastructure], die Störungen sind bedeutend genug, um eine Reaktion zu erfordern."
+ },
+ "banking_cycle_events.56.d_foreign": {
+  "en": "Reports are coming in from several major industrial facilities of suspicious equipment failures and unexplained production losses. Much of it is internal dissent and aging [concept_infrastructure] — but a foreign sabotage campaign is already hitting our [concept_infrastructure], and some of these failures bear its marks. The disruptions are significant enough to demand a response.",
+  "de": "Aus mehreren großen Industrieanlagen treffen Berichte über verdächtige Geräteausfälle und unerklärliche Produktionsverluste ein. Vieles davon ist innerer Widerstand und alternde [concept_infrastructure] — doch eine ausländische Sabotagekampagne trifft bereits unsere [concept_infrastructure], und manche dieser Ausfälle tragen ihre Handschrift. Die Störungen sind bedeutend genug, um eine Reaktion zu erfordern."
+ },
+ "banking_cycle_events.56.f": {
+  "en": "\\\"Three turbines, two assembly lines, one boiler. All in the same week, all in different factories.\\\"\\n\\n\\\"Sabotage?\\\"\\n\\n\\\"The reports from State Security say so. The reports from the engineers say the equipment was installed in 1923 and was supposed to be replaced in 1948.\\\"\\n\\n\\\"Then we have a saboteur in every factory in the country, and his name is the maintenance budget.\\\"",
+  "de": "„Drei Turbinen, zwei Fließbänder, ein Kessel. Alle in derselben Woche, alle in verschiedenen Fabriken.“\\n\\n„Sabotage?“\\n\\n„Die Berichte der Staatssicherheit sagen das. Die Berichte der Ingenieure sagen, die Anlagen wurden 1923 installiert und hätten 1948 ersetzt werden sollen.“\\n\\n„Dann haben wir einen Saboteur in jeder Fabrik des Landes, und sein Name ist das Instandhaltungsbudget.“"
+ },
+ "banking_cycle_events.56.t": {
+  "en": "Industrial Sabotage Investigation",
+  "de": "Untersuchung der Industriesabotage"
+ },
+ "banking_cycle_events.57.a": {
+  "en": "Full consolidation into state enterprises",
+  "de": "Vollständige Zusammenlegung zu Staatsbetrieben"
+ },
+ "banking_cycle_events.57.b": {
+  "en": "Gradual merger program over several years",
+  "de": "Schrittweises Fusionsprogramm über mehrere Jahre"
+ },
+ "banking_cycle_events.57.c": {
+  "en": "Abandon the consolidation drive",
+  "de": "Die Konsolidierungskampagne aufgeben"
+ },
+ "banking_cycle_events.57.d": {
+  "en": "The state planning commission has proposed a sweeping consolidation program, merging smaller workshops and artisan enterprises into larger, more efficient state-run industrial complexes. Proponents argue this will unlock economies of scale, while critics warn of disruption and lost local expertise.",
+  "de": "Die staatliche Planungskommission hat ein umfassendes Konsolidierungsprogramm vorgeschlagen, das kleinere Werkstätten und Handwerksbetriebe zu größeren, effizienteren staatlichen Industriekomplexen zusammenlegt. Befürworter argumentieren, dies erschließe Größenvorteile, während Kritiker vor Störungen und dem Verlust lokalen Fachwissens warnen."
+ },
+ "banking_cycle_events.57.f": {
+  "en": "\\\"The seventeen workshops on this street produce roughly the same volume as the single state combine across town.\\\"\\n\\n\\\"At lower cost per unit?\\\"\\n\\n\\\"At higher cost per unit. But the seventeen workshops also feed seventeen families of master craftsmen who know things the combine will never learn.\\\"\\n\\n\\\"The combine produces. The craftsmen know. Which do we keep?\\\"",
+  "de": "„Die siebzehn Werkstätten in dieser Straße produzieren etwa so viel wie der eine staatliche Großbetrieb am anderen Ende der Stadt.“\\n\\n„Zu niedrigeren Stückkosten?“\\n\\n„Zu höheren Stückkosten. Aber die siebzehn Werkstätten ernähren auch siebzehn Familien von Meistern, die Dinge wissen, die der Großbetrieb nie lernen wird.“\\n\\n„Der Großbetrieb produziert. Die Meister wissen. Welches behalten wir?“"
+ },
+ "banking_cycle_events.57.t": {
+  "en": "Collectivization Efficiency Drive",
+  "de": "Effizienzoffensive der Kollektivierung"
+ },
+ "banking_cycle_events.58.a": {
+  "en": "Suspend convertibility — float the currency",
+  "de": "Konvertibilität aussetzen — die Währung freigeben"
+ },
+ "banking_cycle_events.58.b": {
+  "en": "Defend the peg whatever it costs",
+  "de": "Die Bindung um jeden Preis verteidigen"
+ },
+ "banking_cycle_events.58.c": {
+  "en": "Convene an international currency conference",
+  "de": "Eine internationale Währungskonferenz einberufen"
+ },
+ "banking_cycle_events.58.d": {
+  "en": "Foreign central banks have spent the week presenting [ROOT.GetCountry.GetAdjective] notes at the treasury and demanding gold in exchange. The vaults are draining faster than anyone thought possible. At current rates, the peg cannot be held through the end of the month. A decision is due before trading opens Monday.",
+  "de": "Ausländische Zentralbanken haben die ganze Woche über [ROOT.GetCountry.GetAdjective|l]e Banknoten beim Finanzministerium vorgelegt und im Austausch Gold gefordert. Die Tresore leeren sich schneller, als irgendjemand für möglich gehalten hätte. Beim aktuellen Tempo lässt sich die Bindung nicht bis Monatsende halten. Eine Entscheidung ist fällig, bevor der Handel am Montag öffnet."
+ },
+ "banking_cycle_events.58.f": {
+  "en": "\\\"We are all Keynesians now, even those of us who spent forty years arguing we were not.\\\"\\n\\n— Governor of the Central Bank",
+  "de": "„Wir sind jetzt alle Keynesianer, selbst diejenigen unter uns, die vierzig Jahre lang das Gegenteil behauptet haben.“\\n\\n— Präsident der Zentralbank"
+ },
+ "banking_cycle_events.58.t": {
+  "en": "The Gold Window Closes",
+  "de": "Das Goldfenster schließt sich"
+ },
+ "banking_cycle_events.59.a": {
+  "en": "Let the firm fail",
+  "de": "Die Firma scheitern lassen"
+ },
+ "banking_cycle_events.59.b": {
+  "en": "Arrange a quiet acquisition before the news breaks",
+  "de": "Eine stille Übernahme einfädeln, bevor die Nachricht durchsickert"
+ },
+ "banking_cycle_events.59.c": {
+  "en": "Mandate public audit rules across the sector",
+  "de": "Verpflichtende Prüfungsregeln für den gesamten Sektor vorschreiben"
+ },
+ "banking_cycle_events.59.d": {
+  "en": "A single trader at one of [ROOT.GetCountry.GetName]'s oldest merchant banks has been hiding catastrophic losses in an unreconciled account for years. The firm's partners have only just discovered the scale. The losses dwarf the bank's entire capital. Every counterparty it trades with is now quietly exposed.",
+  "de": "Ein einzelner Händler bei einer der ältesten Handelsbanken [ROOT.GetCountry.GetAltName('GEN')] hat jahrelang katastrophale Verluste in einem nicht abgestimmten Konto versteckt. Die Teilhaber der Firma haben das Ausmaß erst jetzt entdeckt. Die Verluste übersteigen das gesamte Kapital der Bank bei Weitem. Jeder Vertragspartner, mit dem sie handelt, ist nun still gefährdet."
+ },
+ "banking_cycle_events.59.f": {
+  "en": "\\\"He made the bank's profits every quarter for three years. The auditors were very impressed. None of them asked to see the other ledger.\\\"\\n\\n— Senior partner at the firm",
+  "de": "„Er erwirtschaftete drei Jahre lang jedes Quartal die Gewinne der Bank. Die Prüfer waren sehr beeindruckt. Keiner von ihnen bat darum, das andere Kontobuch zu sehen.“\\n\\n— Leitender Teilhaber der Firma"
+ },
+ "banking_cycle_events.59.t": {
+  "en": "The Rogue Trader",
+  "de": "Der Schurkenhändler"
+ },
+ "banking_cycle_events.6.a": {
+  "en": "Extend emergency rural credit",
+  "de": "Ländlichen Notkredit gewähren"
+ },
+ "banking_cycle_events.6.b": {
+  "en": "Let rural debtors default",
+  "de": "Ländliche Schuldner in den Ausfall gehen lassen"
+ },
+ "banking_cycle_events.6.c": {
+  "en": "Import grain and subsidize",
+  "de": "Getreide importieren und subventionieren"
+ },
+ "banking_cycle_events.6.d": {
+  "en": "A failed harvest has sent shockwaves through the rural credit system. Farmers cannot repay their loans, country banks are under strain, and the knock-on effects are spreading to urban markets. The crisis is both agricultural and financial, and how we respond will determine whether it remains local or becomes systemic.",
+  "de": "Eine missglückte Ernte hat das ländliche Kreditsystem erschüttert. Bauern können ihre Kredite nicht zurückzahlen, Landbanken stehen unter Druck, und die Folgeeffekte breiten sich auf die städtischen Märkte aus. Die Krise ist zugleich landwirtschaftlich und finanziell, und wie wir reagieren, entscheidet, ob sie lokal bleibt oder systemisch wird."
+ },
+ "banking_cycle_events.6.f": {
+  "en": "\\\"The wheat is ruined, the debts are due, and the bank won't extend another season.\\\"\\n\\n\\\"What will you do?\\\"\\n\\n\\\"What can I do? Sell the land at a loss and pray someone in the city will hire me.\\\"",
+  "de": "„Der Weizen ist verdorben, die Schulden sind fällig, und die Bank gewährt keine weitere Saison.“\\n\\n„Was werden Sie tun?“\\n\\n„Was kann ich schon tun? Das Land mit Verlust verkaufen und beten, dass mich jemand in der Stadt anstellt.“"
+ },
+ "banking_cycle_events.6.t": {
+  "en": "Harvest Failure & Credit Squeeze",
+  "de": "Ernteausfall und Kreditklemme"
+ },
+ "banking_cycle_events.60.a": {
+  "en": "Let the majority decide by federation-wide vote",
+  "de": "Die Mehrheit durch eine verbandsweite Abstimmung entscheiden lassen"
+ },
+ "banking_cycle_events.60.b": {
+  "en": "Bring in mediators from the federation council",
+  "de": "Vermittler des Verbandsrats hinzuziehen"
+ },
+ "banking_cycle_events.60.c": {
+  "en": "Allow each cooperative to decide independently",
+  "de": "Jeder Genossenschaft eine eigenständige Entscheidung erlauben"
+ },
+ "banking_cycle_events.60.d": {
+  "en": "A heated disagreement has erupted among the cooperative federations over how to reinvest collective surplus funds. Some cooperatives want to prioritize worker [concept_dividends], while others argue for reinvestment in shared [concept_infrastructure]. The dispute has paralyzed the federation council and no consensus appears imminent.",
+  "de": "Zwischen den Genossenschaftsverbänden ist ein erbitterter Streit darüber entbrannt, wie kollektive Überschüsse reinvestiert werden sollen. Manche Genossenschaften wollen [concept_dividends] für die Arbeiter priorisieren, andere plädieren für die Reinvestition in gemeinsame [concept_infrastructure]. Der Streit hat den Verbandsrat gelähmt, und ein Konsens ist nicht in Sicht."
+ },
+ "banking_cycle_events.60.f": {
+  "en": "\\\"The vote on the surplus failed for the fourth time this month.\\\"\\n\\n\\\"Same split?\\\"\\n\\n\\\"Same split. Eight cooperatives want dividends in October. Eight want to roll the surplus into the new rail spur. The remaining three abstain on principle, because they say the question is wrong.\\\"\\n\\n\\\"Then we will deadlock until the snow falls.\\\"",
+  "de": "„Die Abstimmung über den Überschuss ist diesen Monat zum vierten Mal gescheitert.“\\n\\n„Dieselbe Aufteilung?“\\n\\n„Dieselbe Aufteilung. Acht Genossenschaften wollen Dividenden im Oktober. Acht wollen den Überschuss in die neue Bahnstrecke stecken. Die übrigen drei enthalten sich aus Prinzip, weil sie sagen, die Frage sei falsch gestellt.“\\n\\n„Dann stecken wir fest, bis der Schnee fällt.“"
+ },
+ "banking_cycle_events.60.t": {
+  "en": "Federation Governance Dispute",
+  "de": "Streit um die Verbandsführung"
+ },
+ "banking_cycle_events.61.a": {
+  "en": "Enforce mandatory contributions",
+  "de": "Verpflichtende Beiträge durchsetzen"
+ },
+ "banking_cycle_events.61.b": {
+  "en": "Public accountability: name and shame",
+  "de": "Öffentliche Rechenschaft: Anprangern"
+ },
+ "banking_cycle_events.61.c": {
+  "en": "Accept it as the cost of voluntary cooperation",
+  "de": "Es als Preis freiwilliger Zusammenarbeit hinnehmen"
+ },
+ "banking_cycle_events.61.d": {
+  "en": "Several cooperatives have been benefiting from shared federation [concept_infrastructure] — collective purchasing agreements, mutual insurance funds, and logistics networks — without contributing their fair share to maintenance costs. The arrangement is breeding resentment among the cooperatives that carry the burden.",
+  "de": "Mehrere Genossenschaften profitieren von gemeinsamer Verbands-[concept_infrastructure] — kollektiven Einkaufsvereinbarungen, gegenseitigen Versicherungsfonds und Logistiknetzwerken —, ohne ihren fairen Anteil an den Unterhaltskosten beizutragen. Die Regelung erzeugt Unmut bei den Genossenschaften, die die Last tragen."
+ },
+ "banking_cycle_events.61.f": {
+  "en": "\\\"The Spinners' Collective has not paid into the shared warehouse fund in three years.\\\"\\n\\n\\\"And they use the warehouse?\\\"\\n\\n\\\"They use it more than anyone. They argue that since the federation chose to build it, the federation can pay for it.\\\"\\n\\n\\\"And what do the cooperatives who do pay say?\\\"\\n\\n\\\"They say they are tired of being the federation's conscience.\\\"",
+  "de": "„Das Spinnerkollektiv hat seit drei Jahren nicht in den gemeinsamen Lagerhausfonds eingezahlt.“\\n\\n„Und sie nutzen das Lagerhaus?“\\n\\n„Sie nutzen es mehr als jeder andere. Sie argumentieren, da der Verband entschieden habe, es zu bauen, könne der Verband auch dafür bezahlen.“\\n\\n„Und was sagen die Genossenschaften, die tatsächlich zahlen?“\\n\\n„Sie sagen, sie seien es leid, das Gewissen des Verbands zu sein.“"
+ },
+ "banking_cycle_events.61.t": {
+  "en": "Free Rider Problem",
+  "de": "Trittbrettfahrerproblem"
+ },
+ "banking_cycle_events.62.a": {
+  "en": "Push the investment through with executive authority",
+  "de": "Die Investition mit Vollmacht der Exekutive durchsetzen"
+ },
+ "banking_cycle_events.62.b": {
+  "en": "Call for extended deliberation",
+  "de": "Zu weiteren Beratungen aufrufen"
+ },
+ "banking_cycle_events.62.c": {
+  "en": "Split into smaller, less controversial projects",
+  "de": "In kleinere, weniger umstrittene Projekte aufteilen"
+ },
+ "banking_cycle_events.62.d": {
+  "en": "The cooperative councils have been debating a major capital investment project for months. Every faction has a different priority, every vote ends in stalemate, and the window of opportunity is beginning to close. The democratic process that defines cooperative governance is becoming an obstacle to action.",
+  "de": "Die Genossenschaftsräte debattieren seit Monaten über ein großes Investitionsprojekt. Jede Fraktion hat eine andere Priorität, jede Abstimmung endet in einer Pattsituation, und das Zeitfenster beginnt sich zu schließen. Der demokratische Prozess, der die genossenschaftliche Führung prägt, wird zum Hindernis für Handeln."
+ },
+ "banking_cycle_events.62.f": {
+  "en": "\\\"The investment proposal is on its eleventh draft.\\\"\\n\\n\\\"Eleven?\\\"\\n\\n\\\"Six [Concept('concept_amendment', 'amendments')] from the rail cooperatives. Four from the textile council. One from the regional federation, which everyone has agreed to ignore because it would require rewriting the proposal from scratch.\\\"\\n\\n\\\"And when will the vote happen?\\\"\\n\\n\\\"When the [Concept('concept_amendment', 'amendments')] stop arriving. Which is to say, never.\\\"",
+  "de": "„Der Investitionsvorschlag liegt in der elften Fassung vor.“\\n\\n„Elf?“\\n\\n„Sechs [Concept('concept_amendment', 'Nachträge')] von den Eisenbahngenossenschaften. Vier vom Textilrat. Einer vom Regionalverband, den alle übereingekommen sind zu ignorieren, weil er eine komplette Neufassung des Vorschlags erfordern würde.“\\n\\n„Und wann wird abgestimmt?“\\n\\n„Wenn die [Concept('concept_amendment', 'Nachträge')] aufhören einzutreffen. Das heißt: nie.“"
+ },
+ "banking_cycle_events.62.t": {
+  "en": "Democratic Investment Gridlock",
+  "de": "Demokratische Blockade bei Investitionen"
+ },
+ "banking_cycle_events.63.a": {
+  "en": "Hire professional managers to ease the burden",
+  "de": "Professionelle Manager einstellen, um die Last zu mindern"
+ },
+ "banking_cycle_events.63.b": {
+  "en": "Reduce governance [Concept('concept_obligation', 'obligations')] temporarily",
+  "de": "Die [Concept('concept_obligation', 'Führungsverpflichtungen')] vorübergehend verringern"
+ },
+ "banking_cycle_events.63.c": {
+  "en": "Organize solidarity campaigns",
+  "de": "Solidaritätskampagnen organisieren"
+ },
+ "banking_cycle_events.63.d": {
+  "en": "The dual burden of productive labor and democratic governance is taking its toll on worker-owners across the cooperative sector. Attendance at council meetings is declining, decision quality is suffering, and productivity is falling as exhausted workers struggle to fulfill both roles during an economic downturn.",
+  "de": "Die doppelte Last aus produktiver Arbeit und demokratischer Selbstverwaltung fordert ihren Tribut von den Arbeitereigentümern im gesamten Genossenschaftssektor. Die Teilnahme an Ratssitzungen sinkt, die Qualität der Entscheidungen leidet, und die Produktivität fällt, da erschöpfte Arbeiter sich abmühen, beide Rollen während eines wirtschaftlichen Abschwungs zu erfüllen."
+ },
+ "banking_cycle_events.63.f": {
+  "en": "\\\"Comrade Vasilenko fell asleep in the council meeting last night.\\\"\\n\\n\\\"During a vote?\\\"\\n\\n\\\"During the vote on his own [Concept('concept_amendment', 'amendments')]. He worked the morning shift, ran the cooperative's purchasing review through the afternoon, and made it to the council chamber at seven. The vote was at quarter past midnight.\\\"\\n\\n\\\"And we wonder why the decisions are getting worse.\\\"",
+  "de": "„Genosse Vasilenko ist gestern Abend während der Ratssitzung eingeschlafen.“\\n\\n„Während einer Abstimmung?“\\n\\n„Während der Abstimmung über seine eigenen [Concept('concept_amendment', 'Nachträge')]. Er hat die Frühschicht gearbeitet, den Nachmittag über die Einkaufsprüfung der Genossenschaft geleitet und es um sieben in den Ratssaal geschafft. Die Abstimmung war um Viertel nach Mitternacht.“\\n\\n„Und wir fragen uns, warum die Entscheidungen immer schlechter werden.“"
+ },
+ "banking_cycle_events.63.t": {
+  "en": "Worker-Owner Burnout",
+  "de": "Erschöpfung der Arbeitereigentümer"
+ },
+ "banking_cycle_events.64.a": {
+  "en": "Invest heavily in export expansion",
+  "de": "Stark in den Exportausbau investieren"
+ },
+ "banking_cycle_events.64.b": {
+  "en": "Expand modestly and reinvest locally",
+  "de": "Maßvoll expandieren und lokal reinvestieren"
+ },
+ "banking_cycle_events.64.c": {
+  "en": "Focus on the domestic market",
+  "de": "Sich auf den Binnenmarkt konzentrieren"
+ },
+ "banking_cycle_events.64.d": {
+  "en": "Cooperative-produced goods have gained a reputation for quality and ethical production in international markets. Foreign buyers are placing larger orders, and several trade delegations have expressed interest in establishing permanent import agreements. This is an opportunity to expand — but expansion carries its own risks.",
+  "de": "Genossenschaftlich hergestellte Waren haben sich auf internationalen Märkten einen Ruf für Qualität und ethische Produktion erworben. Ausländische Käufer erteilen größere Aufträge, und mehrere Handelsdelegationen haben Interesse an dauerhaften Importabkommen bekundet. Dies ist eine Gelegenheit zur Expansion — doch Expansion birgt eigene Risiken."
+ },
+ "banking_cycle_events.64.f": {
+  "en": "\\\"The order from the foreign buyer is for ten thousand units. Our entire annual production is twelve thousand.\\\"\\n\\n\\\"Then we expand.\\\"\\n\\n\\\"And if next year they buy from someone cheaper, we are left with a doubled workforce and half the orders. Cooperatives do not lay off members the way capitalists do.\\\"\\n\\n\\\"Then we expand carefully.\\\"",
+  "de": "„Die Bestellung des ausländischen Käufers lautet auf zehntausend Einheiten. Unsere gesamte Jahresproduktion beträgt zwölftausend.“\\n\\n„Dann expandieren wir.“\\n\\n„Und wenn sie nächstes Jahr bei jemand Billigerem kaufen, bleiben wir mit doppelter Belegschaft und halb so vielen Aufträgen zurück. Genossenschaften entlassen ihre Mitglieder nicht so, wie es Kapitalisten tun.“\\n\\n„Dann expandieren wir vorsichtig.“"
+ },
+ "banking_cycle_events.64.t": {
+  "en": "Cooperative Export Success",
+  "de": "Erfolg im Genossenschaftsexport"
+ },
+ "banking_cycle_events.65.a": {
+  "en": "Emergency levy on all cooperatives",
+  "de": "Notabgabe für alle Genossenschaften"
+ },
+ "banking_cycle_events.65.b": {
+  "en": "Seek external credit to shore up the fund",
+  "de": "Externe Kredite suchen, um den Fonds zu stützen"
+ },
+ "banking_cycle_events.65.c": {
+  "en": "Cut benefits and reorganize the fund",
+  "de": "Leistungen kürzen und den Fonds neu ordnen"
+ },
+ "banking_cycle_events.65.d": {
+  "en": "The cooperative mutual insurance fund — the collective safety net that covers members during downturns — is under severe strain. Claims have surged as cooperatives struggle, and the fund's reserves are dangerously low. Without action, the entire mutual support system could collapse.",
+  "de": "Der genossenschaftliche Versicherungsfonds — das kollektive Sicherheitsnetz, das Mitglieder in Abschwüngen absichert — steht unter erheblichem Druck. Die Ansprüche sind sprunghaft gestiegen, da Genossenschaften zu kämpfen haben, und die Reserven des Fonds sind gefährlich niedrig. Ohne Maßnahmen könnte das gesamte gegenseitige Hilfssystem zusammenbrechen."
+ },
+ "banking_cycle_events.65.f": {
+  "en": "\\\"Claims this quarter exceeded contributions by a factor of four.\\\"\\n\\n\\\"How long can the reserves cover that?\\\"\\n\\n\\\"Six months. Eight if we suspend the discretionary payouts. After that, the fund either takes a special levy or it fails.\\\"\\n\\n\\\"And a fund that fails the first time it is truly needed will not be trusted to exist a second time.\\\"",
+  "de": "„Die Ansprüche dieses Quartal übersteigen die Beiträge um das Vierfache.“\\n\\n„Wie lange können die Reserven das abdecken?“\\n\\n„Sechs Monate. Acht, wenn wir die freiwilligen Auszahlungen aussetzen. Danach erhebt der Fonds entweder eine Sonderabgabe, oder er scheitert.“\\n\\n„Und einem Fonds, der beim ersten wirklichen Bedarf versagt, wird man kein zweites Mal vertrauen.“"
+ },
+ "banking_cycle_events.65.t": {
+  "en": "Mutual Insurance Fund Strain",
+  "de": "Belastung des Versicherungsfonds"
+ },
+ "banking_cycle_events.66.a": {
+  "en": "Fund a national innovation commons",
+  "de": "Ein nationales Innovationsgemeingut finanzieren"
+ },
+ "banking_cycle_events.66.b": {
+  "en": "Let cooperatives share knowledge voluntarily",
+  "de": "Genossenschaften freiwillig Wissen teilen lassen"
+ },
+ "banking_cycle_events.66.c": {
+  "en": "Focus on proven technologies only",
+  "de": "Sich nur auf bewährte Technologien konzentrieren"
+ },
+ "banking_cycle_events.66.d": {
+  "en": "A grassroots movement among cooperatives has begun openly sharing industrial innovations, production techniques, and process improvements across the cooperative network. This collaborative approach to innovation is accelerating technological adoption, though some argue it undermines individual cooperatives' competitive advantages.",
+  "de": "Eine Basisbewegung unter den Genossenschaften hat begonnen, industrielle Innovationen, Produktionstechniken und Prozessverbesserungen offen im gesamten Genossenschaftsnetzwerk zu teilen. Dieser kollaborative Ansatz für Innovation beschleunigt die technologische Verbreitung, auch wenn manche argumentieren, er untergrabe die Wettbewerbsvorteile einzelner Genossenschaften."
+ },
+ "banking_cycle_events.66.f": {
+  "en": "\\\"The Bonn collective published their improved loom design in the federation bulletin. Six other cooperatives are already retooling.\\\"\\n\\n\\\"And the Bonn collective?\\\"\\n\\n\\\"Now competes with six factories using their own design. Their orders are down twenty percent.\\\"\\n\\n\\\"Did they expect anything else?\\\"\\n\\n\\\"They said they expected solidarity. They did not specify what solidarity should look like in their order book.\\\"",
+  "de": "„Das Bonner Kollektiv hat seinen verbesserten Webstuhlentwurf im Verbandsbulletin veröffentlicht. Sechs andere Genossenschaften rüsten bereits um.“\\n\\n„Und das Bonner Kollektiv?“\\n\\n„Konkurriert jetzt mit sechs Fabriken, die seinen eigenen Entwurf nutzen. Die Aufträge sind um zwanzig Prozent gesunken.“\\n\\n„Haben sie etwas anderes erwartet?“\\n\\n„Sie sagten, sie hätten Solidarität erwartet. Sie haben nicht spezifiziert, wie Solidarität in ihrem Auftragsbuch aussehen sollte.“"
+ },
+ "banking_cycle_events.66.t": {
+  "en": "Innovation Through Collaboration",
+  "de": "Innovation durch Zusammenarbeit"
+ },
+ "banking_cycle_events.67.a": {
+  "en": "Let the new generation take the lead",
+  "de": "Die neue Generation die Führung übernehmen lassen"
+ },
+ "banking_cycle_events.67.b": {
+  "en": "Establish mentorship programs for smooth transition",
+  "de": "Mentorenprogramme für einen reibungslosen Übergang einrichten"
+ },
+ "banking_cycle_events.67.c": {
+  "en": "Founding members retain advisory oversight",
+  "de": "Gründungsmitglieder behalten beratende Aufsicht"
+ },
+ "banking_cycle_events.67.d": {
+  "en": "The founding generation of worker-owners who built the cooperative economy is reaching retirement age. The younger generation, raised in a cooperative system they didn't create, has different priorities and expectations. The transition is causing friction in governance councils across the country.",
+  "de": "Die Gründergeneration der Arbeitereigentümer, die die Genossenschaftswirtschaft aufgebaut hat, erreicht das Rentenalter. Die jüngere Generation, aufgewachsen in einem genossenschaftlichen System, das sie nicht selbst geschaffen hat, hat andere Prioritäten und Erwartungen. Der Übergang verursacht Reibung in den Führungsräten im ganzen Land."
+ },
+ "banking_cycle_events.67.f": {
+  "en": "\\\"The founding chair is seventy-three. She has chaired every council meeting since 1924.\\\"\\n\\n\\\"And she will not retire?\\\"\\n\\n\\\"She will retire when there is a successor she trusts. She does not trust the young chair who wants to bring in professional accountants. She does not trust the young chair who wants to dissolve the federation entirely. She does not trust the third candidate because the third candidate is her own daughter.\\\"\\n\\n\\\"Then she will chair forever.\\\"",
+  "de": "„Die Gründungsvorsitzende ist dreiundsiebzig. Sie hat jede Ratssitzung seit 1924 geleitet.“\\n\\n„Und sie will nicht zurücktreten?“\\n\\n„Sie wird zurücktreten, wenn es eine Nachfolgerin gibt, der sie vertraut. Sie vertraut der jungen Kandidatin nicht, die professionelle Buchhalter einführen will. Sie vertraut der jungen Kandidatin nicht, die den Verband ganz auflösen will. Sie vertraut der dritten Kandidatin nicht, weil die dritte Kandidatin ihre eigene Tochter ist.“\\n\\n„Dann wird sie für immer den Vorsitz führen.“"
+ },
+ "banking_cycle_events.67.t": {
+  "en": "Generational Leadership Transition",
+  "de": "Generationenwechsel in der Führung"
+ },
+ "banking_cycle_events.68.a": {
+  "en": "Appeal to [SCOPE.sCountry('bailout_donor').GetName] for help",
+  "de": "An [SCOPE.sCountry('bailout_donor').GetAltName('AKK')] um Hilfe appellieren"
+ },
+ "banking_cycle_events.68.a.tt": {
+  "en": "[SCOPE.sCountry('bailout_donor').GetName] will decide whether to send a rescue package, a smaller grant, or nothing at all. A refusal will cost us #b relations#! with it.",
+  "de": "[SCOPE.sCountry('bailout_donor').GetAltName('NOM')|U] entscheidet, ob es ein Rettungspaket, einen kleineren Zuschuss oder gar nichts schickt. Eine Ablehnung schadet dann #b unseren Beziehungen#!."
+ },
+ "banking_cycle_events.68.b": {
+  "en": "We will weather this alone",
+  "de": "Wir werden das allein überstehen"
+ },
+ "banking_cycle_events.68.b.tt": {
+  "en": "No appeal is made. [SCOPE.sCountry('bailout_donor').GetName] never hears of it.",
+  "de": "Es wird kein Appell gestellt. [SCOPE.sCountry('bailout_donor').GetAltName('NOM')|U] erfährt nie davon."
+ },
+ "banking_cycle_events.68.d": {
+  "en": "Our banking system is failing, and the damage is already reaching the markets we trade with. [SCOPE.sCountry('bailout_donor').GetName], one of our important trading partners, has the reserves to steady us and every reason to fear our collapse spilling over into its own economy. We could ask it for emergency assistance. Asking will cost us face, and it may still say no. Not asking means riding out the storm on our own resources.",
+  "de": "Unser Bankensystem versagt, und der Schaden erreicht bereits die Märkte, mit denen wir Handel treiben. [SCOPE.sCountry('bailout_donor').GetAltName('NOM')|U], einer unserer wichtigen Handelspartner, verfügt über die Reserven, um uns zu stützen, und hat jeden Grund, ein Übergreifen unseres Zusammenbruchs auf die eigene Wirtschaft zu fürchten. Wir könnten um Nothilfe bitten. Die Bitte kostet uns Gesicht, und die Antwort könnte dennoch Nein lauten. Verzichten wir darauf, müssen wir den Sturm mit eigenen Mitteln überstehen."
+ },
+ "banking_cycle_events.68.f": {
+  "en": "\\\"The ambassador is ready to go in. He wants to know what to say if they ask what happens if they refuse.\\\"\\n\\n\\\"Tell him the truth. Tell him we go down, and we take a good part of their export trade with us.\\\"\\n\\n\\\"That sounds like a threat.\\\"\\n\\n\\\"It is a forecast. The threat is what makes it true.\\\"",
+  "de": "„Der Botschafter ist bereit, hineinzugehen. Er will wissen, was er sagen soll, falls sie fragen, was geschieht, wenn sie ablehnen.“\\n\\n„Sagen Sie ihm die Wahrheit. Sagen Sie ihm, wir gehen unter, und wir reißen einen guten Teil ihres Exporthandels mit uns.“\\n\\n„Das klingt wie eine Drohung.“\\n\\n„Es ist eine Prognose. Die Drohung ist es, die sie wahr macht.“"
+ },
+ "banking_cycle_events.68.t": {
+  "en": "Appeal for a Rescue?",
+  "de": "Um Rettung bitten?"
+ },
+ "banking_cycle_events.69.a_aid": {
+  "en": "A debt we will remember.",
+  "de": "Eine Schuld, die wir nicht vergessen werden."
+ },
+ "banking_cycle_events.69.a_refused": {
+  "en": "We will remember this too.",
+  "de": "Auch das werden wir nicht vergessen."
+ },
+ "banking_cycle_events.69.d_grant": {
+  "en": "[SCOPE.sCountry('bailout_donor').GetName] has answered our appeal with a smaller emergency grant: @money![ROOT.GetCountry.MakeScope.Var('te_ea_bailout_amount').GetValue|D] for our treasury, and support for our banks for a while. It is less than we asked for. It is a great deal more than nothing.",
+  "de": "[SCOPE.sCountry('bailout_donor').GetAltName('NOM')|U] hat auf unsere Bitte mit einem kleineren Nothilfezuschuss geantwortet: @money![ROOT.GetCountry.MakeScope.Var('te_ea_bailout_amount').GetValue|D] für unsere Staatskasse und Unterstützung für unsere Banken für eine Weile. Das ist weniger, als wir erbeten hatten. Es ist weit mehr als nichts."
+ },
+ "banking_cycle_events.69.d_refused": {
+  "en": "[SCOPE.sCountry('bailout_donor').GetName] has refused our appeal. Its government says our banks are ours to save, and its markets are bracing for our fall rather than trying to prevent it. Our ambassador came home early.",
+  "de": "[SCOPE.sCountry('bailout_donor').GetAltName('NOM')|U] hat unsere Bitte abgelehnt. Die dortige Regierung erklärt, unsere Banken seien unsere eigene Sache zu retten, und die dortigen Märkte wappnen sich für unseren Sturz, statt ihn zu verhindern zu versuchen. Unser Botschafter kam vorzeitig heim."
+ },
+ "banking_cycle_events.69.d_rescue": {
+  "en": "[SCOPE.sCountry('bailout_donor').GetName] has answered our appeal with a full rescue package: @money![ROOT.GetCountry.MakeScope.Var('te_ea_bailout_amount').GetValue|D] for our treasury, and its backing for our banks for years to come. The markets have noticed who stands behind us.",
+  "de": "[SCOPE.sCountry('bailout_donor').GetAltName('NOM')|U] hat auf unsere Bitte mit einem vollständigen Rettungspaket geantwortet: @money![ROOT.GetCountry.MakeScope.Var('te_ea_bailout_amount').GetValue|D] für unsere Staatskasse und Rückendeckung für unsere Banken für Jahre hinaus. Die Märkte haben bemerkt, wer hinter uns steht."
+ },
+ "banking_cycle_events.69.f": {
+  "en": "\\\"How did they take it?\\\"\\n\\n\\\"Their finance minister listened to the whole appeal without interrupting once. Then he asked for the figures again, in writing, and for a glass of water.\\\"\\n\\n\\\"Is that good?\\\"\\n\\n\\\"It is what he does before he says yes, and it is what he does before he says no. I have stopped trying to read him. I read the cables.\\\"",
+  "de": "„Wie haben sie es aufgenommen?“\\n\\n„Ihr Finanzminister hörte sich den ganzen Appell an, ohne ein einziges Mal zu unterbrechen. Dann bat er um die Zahlen noch einmal, schriftlich, und um ein Glas Wasser.“\\n\\n„Ist das gut?“\\n\\n„Das tut er, bevor er Ja sagt, und das tut er, bevor er Nein sagt. Ich habe aufgehört, ihn deuten zu wollen. Ich lese die Depeschen.“"
+ },
+ "banking_cycle_events.69.t_grant": {
+  "en": "A Grant from [SCOPE.sCountry('bailout_donor').GetName]",
+  "de": "Finanzhilfe aus [SCOPE.sCountry('bailout_donor').GetAltName('DAT')]"
+ },
+ "banking_cycle_events.69.t_refused": {
+  "en": "[SCOPE.sCountry('bailout_donor').GetName] Turns Us Away",
+  "de": "Abfuhr aus [SCOPE.sCountry('bailout_donor').GetAltName('DAT')]"
+ },
+ "banking_cycle_events.69.t_rescue": {
+  "en": "[SCOPE.sCountry('bailout_donor').GetName] Comes to Our Rescue",
+  "de": "Rettung durch [SCOPE.sCountry('bailout_donor').GetAltName('AKK')]"
+ },
+ "banking_cycle_events.7.a": {
+  "en": "Endorse the consolidation",
+  "de": "Die Konsolidierung befürworten"
+ },
+ "banking_cycle_events.7.b": {
+  "en": "Require antitrust review",
+  "de": "Kartellrechtliche Prüfung verlangen"
+ },
+ "banking_cycle_events.7.d": {
+  "en": "A wave of mergers and acquisitions is reshaping the banking sector. Smaller institutions are being swallowed by larger ones, creating financial giants with unprecedented reach and influence. Proponents argue this consolidation will produce stronger, more efficient banks. Critics warn that these behemoths are becoming too big to fail - and too powerful to regulate.",
+  "de": "Eine Welle von Fusionen und Übernahmen formt den Bankensektor um. Kleinere Institute werden von größeren geschluckt, wodurch Finanzriesen mit beispielloser Reichweite und Einfluss entstehen. Befürworter argumentieren, diese Konsolidierung werde stärkere, effizientere Banken hervorbringen. Kritiker warnen, diese Kolosse würden zu groß, um zu scheitern — und zu mächtig, um reguliert zu werden."
+ },
+ "banking_cycle_events.7.f": {
+  "en": "\\\"The new mega-banks tower over their competitors, their boardrooms more lavish than some government ministries.\\\"\\n\\n\\\"And if one of them fails?\\\"\\n\\n\\\"Then God help us all.\\\"",
+  "de": "„Die neuen Megabanken überragen ihre Konkurrenten, ihre Vorstandsetagen prunkvoller als manches Regierungsministerium.“\\n\\n„Und wenn eine von ihnen scheitert?“\\n\\n„Dann helfe uns allen Gott.“"
+ },
+ "banking_cycle_events.7.t": {
+  "en": "Bank Consolidation Wave",
+  "de": "Welle der Bankenkonsolidierung"
+ },
+ "banking_cycle_events.8.a": {
+  "en": "A marvel of innovation!",
+  "de": "Ein Wunder der Innovation!"
+ },
+ "banking_cycle_events.8.b": {
+  "en": "Require disclosure and registration",
+  "de": "Offenlegung und Registrierung verlangen"
+ },
+ "banking_cycle_events.8.c": {
+  "en": "Ban this instrument",
+  "de": "Dieses Instrument verbieten"
+ },
+ "banking_cycle_events.8.d": {
+  "en": "Enterprising bankers have devised an ingenious new financial instrument that packages and resells risk in ways never before attempted. Early adopters are reporting extraordinary returns, and demand is spreading like wildfire across the financial sector. The central bank's analysts are struggling to even understand the product, let alone assess whether it poses systemic danger.",
+  "de": "Unternehmungslustige Bankiers haben ein raffiniertes neues Finanzinstrument entwickelt, das Risiko auf nie zuvor versuchte Weise bündelt und weiterverkauft. Frühe Anwender melden außergewöhnliche Renditen, und die Nachfrage verbreitet sich wie ein Lauffeuer im gesamten Finanzsektor. Die Analysten der Zentralbank tun sich schwer, das Produkt überhaupt zu verstehen, geschweige denn zu beurteilen, ob es systemische Gefahr birgt."
+ },
+ "banking_cycle_events.8.f": {
+  "en": "\\\"When asked to explain how the instrument works, one prominent banker reportedly shrugged and said: 'It makes money. What more do you need to know?'\\\"",
+  "de": "„Als man ihn bat zu erklären, wie das Instrument funktioniert, soll ein prominenter Bankier nur die Schultern gezuckt und gesagt haben: ‚Es macht Geld. Was muss man sonst noch wissen?‘“"
+ },
+ "banking_cycle_events.8.t": {
+  "en": "Novel Financial Instrument",
+  "de": "Neuartiges Finanzinstrument"
+ },
+ "banking_cycle_events.9.a": {
+  "en": "Prices reflect fundamentals",
+  "de": "Die Preise spiegeln die Fundamentaldaten wider"
+ },
+ "banking_cycle_events.9.b": {
+  "en": "Commission an investigation",
+  "de": "Eine Untersuchung in Auftrag geben"
+ },
+ "banking_cycle_events.9.c": {
+  "en": "Take no public position",
+  "de": "Keine öffentliche Position beziehen"
+ },
+ "banking_cycle_events.9.d": {
+  "en": "Asset prices have risen substantially, but our central bank's analysts cannot agree on whether these valuations are justified. Some argue the prices reflect genuine improvements in productivity and trade. Others see the telltale signs of a speculative bubble that could burst at any moment. The truth is that nobody really knows - and that uncertainty itself is a source of risk.",
+  "de": "Die Vermögenspreise sind erheblich gestiegen, doch die Analysten unserer Zentralbank sind sich nicht einig, ob diese Bewertungen gerechtfertigt sind. Manche argumentieren, die Preise spiegelten echte Verbesserungen bei Produktivität und Handel wider. Andere sehen die untrüglichen Zeichen einer spekulativen Blase, die jederzeit platzen könnte. Die Wahrheit ist, dass es niemand wirklich weiß — und diese Ungewissheit selbst ist eine Risikoquelle."
+ },
+ "banking_cycle_events.9.f": {
+  "en": "\\\"The governor of the central bank reportedly asked his chief analyst for a simple answer: bubble or no bubble? The reply was a twenty-page memorandum that concluded with 'it depends.'\\\"",
+  "de": "„Der Präsident der Zentralbank soll seinen Chefanalysten um eine einfache Antwort gebeten haben: Blase oder keine Blase? Die Antwort war ein zwanzigseitiges Memorandum, das mit ‚es kommt darauf an‘ endete.“"
+ },
+ "banking_cycle_events.9.t": {
+  "en": "Asset Price Uncertainty",
+  "de": "Unsicherheit bei Vermögenspreisen"
+ },
+ "covert_warfare.1.a": {
+  "en": "Recall our operatives and apologize through back-channels",
+  "de": "Unsere Agenten abziehen und über Hinterkanäle entschuldigen"
+ },
+ "covert_warfare.1.b": {
+  "en": "Deny everything — our people were never there",
+  "de": "Alles abstreiten — unsere Leute waren nie dort"
+ },
+ "covert_warfare.1.d": {
+  "en": "Our intelligence services report a catastrophic security breach. One of our [concept_covert_operations] ([ROOT.GetCountry.GetCustom('covert_burned_type_name')]), [ROOT.GetCountry.GetCustom('covert_burned_phase_name')], has been detected by [SCOPE.sCountry('detected_by_country').GetName]. They will present it to the world as [ROOT.GetCountry.GetCustom('covert_burned_tier_name')]. The operation must be terminated immediately.",
+  "de": "Unsere Nachrichtendienste melden einen katastrophalen Sicherheitsverstoß. Eine unserer [Concept('concept_covert_operations', 'Verdeckten Operationen')] ([ROOT.GetCountry.GetCustom('covert_burned_type_name')]), [ROOT.GetCountry.GetCustom('covert_burned_phase_name')], wurde von [SCOPE.sCountry('detected_by_country').GetAltName('DAT')] entdeckt. Man wird sie der Welt als [ROOT.GetCountry.GetCustom('covert_burned_tier_name')] präsentieren. Die Operation muss unverzüglich beendet werden."
+ },
+ "covert_warfare.1.f": {
+  "en": "The encrypted channel went dark at 03:47. By dawn, every foreign ministry in Europe had the intercepted transmissions on their desk.\\n\\nThe minister was woken at five.\\n\\n\\\"How bad?\\\" he asked.\\n\\n\\\"They have the names. The dates. The recordings. The denials we prepared for last month's operation will not cover the current one.\\\"\\n\\n\\\"Then we prepare new denials.\\\"\\n\\n\\\"The new denials will be plausible to no one. We are choosing the cover story for a different audience now — not the foreign ministries, but our own newspapers.\\\"",
+  "de": "Der verschlüsselte Kanal verstummte um 03:47 Uhr. Bei Tagesanbruch hatte jedes Außenministerium Europas die abgefangenen Übertragungen auf dem Schreibtisch.\\n\\nDer Minister wurde um fünf geweckt.\\n\\n„Wie schlimm?“, fragte er.\\n\\n„Sie haben die Namen. Die Daten. Die Aufzeichnungen. Die Dementis, die wir für die Operation letzten Monat vorbereitet haben, werden für die aktuelle nicht ausreichen.“\\n\\n„Dann bereiten wir neue Dementis vor.“\\n\\n„Die neuen Dementis werden niemanden überzeugen. Wir wählen die Tarngeschichte jetzt für ein anderes Publikum — nicht die Außenministerien, sondern unsere eigenen Zeitungen.“"
+ },
+ "covert_warfare.1.t": {
+  "en": "Operation Compromised",
+  "de": "Operation kompromittiert"
+ },
+ "covert_warfare.2.a": {
+  "en": "Shore up our counterintelligence",
+  "de": "Unsere Spionageabwehr stärken"
+ },
+ "covert_warfare.2.b": {
+  "en": "Retaliate in kind",
+  "de": "Mit gleicher Münze heimzahlen"
+ },
+ "covert_warfare.2.b_needs_service_tt": {
+  "en": "We run an intelligence service of our own: the #bold Covert Warfare#! journal entry is active",
+  "de": "Wir unterhalten einen eigenen Nachrichtendienst: Der Journaleintrag #bold Verdeckte Kriegsführung#! ist aktiv"
+ },
+ "covert_warfare.2.b_tt": {
+  "en": "Our service turns what the exposure gave us — their agents, their couriers, their channels — into a foothold inside [SCOPE.sCountry('iw_exposed_by').GetName]: our network there grows by up to #G [GetPlayer.MakeScope.ScriptValue('covert_net_retaliation_seed')|0]#! strength. [concept_covert_operations] we launch against them start further along and are harder to detect for as long as the network lasts. Left unused, it decays.",
+  "de": "Unser Dienst verwandelt, was die Enttarnung uns gebracht hat — ihre Agenten, ihre Kuriere, ihre Kanäle — in einen Fuß in der Tür [SCOPE.sCountry('iw_exposed_by').GetAltName('GEN')]: Unser Netzwerk dort wächst um bis zu #G [GetPlayer.MakeScope.ScriptValue('covert_net_retaliation_seed')|0]#! Stärke. [concept_covert_operations], die wir gegen sie starten, beginnen weiter fortgeschritten und sind schwerer zu entdecken, solange das Netzwerk hält. Bleibt es ungenutzt, verfällt es."
+ },
+ "covert_warfare.2.c": {
+  "en": "Make the evidence public",
+  "de": "Die Beweise öffentlich machen"
+ },
+ "covert_warfare.2.d": {
+  "en": "Our counterintelligence services have uncovered evidence of a sustained campaign of [concept_covert_operations] against us, run by agents of a foreign power. The operation, $covert_exposed_op_link$, is [ROOT.GetCountry.GetCustom('covert_last_exposed_tier_name')]. We must decide how to respond.",
+  "de": "Unsere Spionageabwehr hat Beweise für eine anhaltende Kampagne von [concept_covert_operations] gegen uns aufgedeckt, durchgeführt von Agenten einer fremden Macht. Die Operation, $covert_exposed_op_link$, ist [ROOT.GetCountry.GetCustom('covert_last_exposed_tier_name')]. Wir müssen entscheiden, wie wir reagieren."
+ },
+ "covert_warfare.2.d_named": {
+  "en": "Our counterintelligence services have uncovered evidence of a sustained campaign of [concept_covert_operations] against us, run by agents of #b [SCOPE.sCountry('iw_exposed_by').GetName]#!. The operation, $covert_exposed_op_link$, is [ROOT.GetCountry.GetCustom('covert_last_exposed_tier_name')]. We must decide how to respond.",
+  "de": "Unsere Spionageabwehr hat Beweise für eine anhaltende Kampagne von [concept_covert_operations] gegen uns aufgedeckt, durchgeführt von Agenten #b [SCOPE.sCountry('iw_exposed_by').GetAltName('GEN')]#!. Die Operation, $covert_exposed_op_link$, ist [ROOT.GetCountry.GetCustom('covert_last_exposed_tier_name')]. Wir müssen entscheiden, wie wir reagieren."
+ },
+ "covert_warfare.2.d_preparatory": {
+  "en": "Our counterintelligence services have caught agents of a foreign power laying the groundwork for [concept_covert_operations] against us. The operation, $covert_exposed_op_link$, would have been [ROOT.GetCountry.GetCustom('covert_last_exposed_tier_name')]; we stopped it before it could do any harm. Its agents are blown and its channels are known to us. We must decide how to respond.",
+  "de": "Unsere Spionageabwehr hat Agenten einer fremden Macht dabei ertappt, den Boden für [concept_covert_operations] gegen uns zu bereiten. Die Operation, $covert_exposed_op_link$, wäre [ROOT.GetCountry.GetCustom('covert_last_exposed_tier_name')] gewesen; wir haben sie gestoppt, bevor sie Schaden anrichten konnte. Ihre Agenten sind enttarnt, und ihre Kanäle sind uns bekannt. Wir müssen entscheiden, wie wir reagieren."
+ },
+ "covert_warfare.2.d_preparatory_named": {
+  "en": "Our counterintelligence services have caught agents of #b [SCOPE.sCountry('iw_exposed_by').GetName]#! laying the groundwork for [concept_covert_operations] against us. The operation, $covert_exposed_op_link$, would have been [ROOT.GetCountry.GetCustom('covert_last_exposed_tier_name')]; we stopped it before it could do any harm. Its agents are blown and its channels are known to us. We must decide how to respond.",
+  "de": "Unsere Spionageabwehr hat Agenten #b [SCOPE.sCountry('iw_exposed_by').GetAltName('GEN')]#! dabei ertappt, den Boden für [concept_covert_operations] gegen uns zu bereiten. Die Operation, $covert_exposed_op_link$, wäre [ROOT.GetCountry.GetCustom('covert_last_exposed_tier_name')] gewesen; wir haben sie gestoppt, bevor sie Schaden anrichten konnte. Ihre Agenten sind enttarnt, und ihre Kanäle sind uns bekannt. Wir müssen entscheiden, wie wir reagieren."
+ },
+ "covert_warfare.2.f": {
+  "en": "\\\"How long has it been running?\\\"\\n\\n\\\"Longer than we would like. The first thread was a payment that passed through three banks and arrived nowhere. The second was a man who knew the name of a clerk he should never have met. After that, the rest came apart in our hands.\\\"\\n\\n\\\"And who is behind it?\\\"\\n\\n\\\"That, we now know. What to do about it is your decision, Minister. Ours was to find it. The decision to respond — or not — is above our pay grade, and for once we are grateful for that.\\\"",
+  "de": "„Wie lange läuft das schon?“\\n\\n„Länger, als uns lieb ist. Die erste Spur war eine Zahlung, die durch drei Banken lief und nirgends ankam. Die zweite war ein Mann, der den Namen eines Beamten kannte, den er nie hätte treffen dürfen. Danach fiel der Rest in unseren Händen auseinander.“\\n\\n„Und wer steckt dahinter?“\\n\\n„Das wissen wir jetzt. Was damit zu tun ist, ist Ihre Entscheidung, Minister. Unsere war es, es zu finden. Die Entscheidung zu reagieren — oder nicht — liegt über unserer Besoldungsstufe, und ausnahmsweise sind wir dafür dankbar.“"
+ },
+ "covert_warfare.2.f_election": {
+  "en": "\\\"The anomalies in the election data were too precise to be accidental, too subtle to be domestic in origin.\\\"\\n\\n\\\"Foreign?\\\"\\n\\n\\\"Foreign. The signature matches three other operations we have catalogued over the last two years. The same patience. The same restraint. The same preference for influence over disruption.\\\"\\n\\n\\\"And the response?\\\"\\n\\n\\\"That is your decision, Minister. Ours was to detect it. The decision to respond — or not — is above our pay grade, and for once we are grateful for that.\\\"",
+  "de": "„Die Auffälligkeiten in den Wahldaten waren zu präzise, um Zufall zu sein, zu subtil, um innenpolitischen Ursprungs zu sein.“\\n\\n„Ausländisch?“\\n\\n„Ausländisch. Die Handschrift stimmt mit drei anderen Operationen überein, die wir in den letzten zwei Jahren katalogisiert haben. Dieselbe Geduld. Dieselbe Zurückhaltung. Dieselbe Vorliebe für Einfluss statt Störung.“\\n\\n„Und die Reaktion?“\\n\\n„Das ist Ihre Entscheidung, Minister. Unsere war es, sie zu entdecken. Die Entscheidung zu reagieren — oder nicht — liegt über unserer Besoldungsstufe, und ausnahmsweise sind wir dafür dankbar.“"
+ },
+ "covert_warfare.2.f_preparatory": {
+  "en": "\\\"They had not done anything yet.\\\"\\n\\n\\\"Then how do we know it was them?\\\"\\n\\n\\\"Because doing nothing takes preparation too. A flat rented under a name that does not exist. A courier who crossed the border four times in a month and never bought a meal. A clerk in the ministry who suddenly paid off his debts.\\\"\\n\\n\\\"And now?\\\"\\n\\n\\\"Now the flat is empty and the clerk is talking. Whatever they were building, they will have to start again — and they know that we know.\\\"",
+  "de": "„Sie hatten noch nichts getan.“\\n\\n„Woher wissen wir dann, dass sie es waren?“\\n\\n„Weil auch Nichtstun Vorbereitung braucht. Eine Wohnung, gemietet unter einem Namen, den es nicht gibt. Ein Kurier, der viermal im Monat die Grenze überquerte und nie eine Mahlzeit kaufte. Ein Beamter im Ministerium, der plötzlich seine Schulden beglich.“\\n\\n„Und jetzt?“\\n\\n„Jetzt ist die Wohnung leer, und der Beamte redet. Was auch immer sie aufgebaut haben, sie müssen von vorn beginnen — und sie wissen, dass wir es wissen.“"
+ },
+ "covert_warfare.2.t": {
+  "en": "Foreign Interference Detected",
+  "de": "Ausländische Einmischung entdeckt"
+ },
+ "cultural_hegemony.1.a": {
+  "en": "Patronize the arts and academia",
+  "de": "Kunst und Wissenschaft fördern"
+ },
+ "cultural_hegemony.1.b": {
+  "en": "Redirect cultural output toward state messaging",
+  "de": "Kulturelle Produktion auf staatliche Botschaften ausrichten"
+ },
+ "cultural_hegemony.1.d": {
+  "en": "[ROOT.GetCountry.GetName]'s cultural influence is growing, and its artists, writers, and filmmakers are producing works that captivate audiences at home and abroad. The nation's creative output is becoming a source of global [concept_prestige].",
+  "de": "Der kulturelle Einfluss [ROOT.GetCountry.GetAltName('GEN')] wächst: Künstler, Schriftsteller und Filmemacher schaffen Werke, die Publikum im In- und Ausland fesseln. Die kreative Produktion der Nation wird zu einer Quelle weltweiten [concept_prestige]."
+ },
+ "cultural_hegemony.1.f": {
+  "en": "#bold The galleries were full again#!—not with the idle rich, but with students and workers, all drawn by the same strange conviction that something important was happening in the studios and concert halls of the capital.",
+  "de": "#bold Die Galerien waren wieder voll#!—nicht mit den müßigen Reichen, sondern mit Studenten und Arbeitern, alle angezogen von derselben seltsamen Überzeugung, dass in den Ateliers und Konzertsälen der Hauptstadt etwas Wichtiges geschah."
+ },
+ "cultural_hegemony.1.t": {
+  "en": "Cultural Renaissance",
+  "de": "Kulturelle Renaissance"
+ },
+ "cultural_hegemony.10.a": {
+  "en": "Send the exhibition on an international tour",
+  "de": "Die Ausstellung auf internationale Tournee schicken"
+ },
+ "cultural_hegemony.10.b": {
+  "en": "Sell the exhibition rights to the highest bidder",
+  "de": "Die Ausstellungsrechte an den Höchstbietenden verkaufen"
+ },
+ "cultural_hegemony.10.d": {
+  "en": "Our artists have produced works that captivate audiences from Paris to Tokyo. The international press lavishes praise upon [ROOT.GetCountry.GetAdjective] galleries and exhibitions. We have the opportunity to send a touring collection abroad, spreading our cultural influence — or we could sell the rights commercially and let the market decide what our art is worth.",
+  "de": "Unsere Künstler haben Werke geschaffen, die Publikum von Paris bis Tokio fesseln. Die internationale Presse überhäuft [ROOT.GetCountry.GetAdjective|l]e Galerien und Ausstellungen mit Lob. Wir haben die Gelegenheit, eine Wanderausstellung ins Ausland zu schicken und so unseren kulturellen Einfluss zu verbreiten — oder wir könnten die Rechte kommerziell verkaufen und den Markt entscheiden lassen, was unsere Kunst wert ist."
+ },
+ "cultural_hegemony.10.f": {
+  "en": "\\\"They came for the brushstrokes and left with a new worldview.\\\"\\n\\n\\\"That was the point of the tour, wasn't it?\\\"\\n\\n\\\"Yes. The unstated point. We sent them paintings. They received an argument. Whether they noticed the argument is the difference between art and propaganda — and the difference, as always, was deniable.\\\"",
+  "de": "„Sie kamen wegen der Pinselstriche und gingen mit einem neuen Weltbild.“\\n\\n„Das war doch der Sinn der Tournee, oder?“\\n\\n„Ja. Der unausgesprochene Sinn. Wir schickten ihnen Gemälde. Sie erhielten ein Argument. Ob sie das Argument bemerkten, ist der Unterschied zwischen Kunst und Propaganda — und der Unterschied war, wie immer, abstreitbar.“"
+ },
+ "cultural_hegemony.10.t": {
+  "en": "International Art Exhibition",
+  "de": "Internationale Kunstausstellung"
+ },
+ "cultural_hegemony.11.a": {
+  "en": "Invest in [concept_tourism_system] [concept_infrastructure] and hospitality",
+  "de": "In [Concept('concept_tourism_system', 'Tourismus')]-[concept_infrastructure] und das Gastgewerbe investieren"
+ },
+ "cultural_hegemony.11.b": {
+  "en": "Squeeze every coin from the tourist trade",
+  "de": "Jeden Groschen aus dem Tourismusgeschäft pressen"
+ },
+ "cultural_hegemony.11.d": {
+  "en": "Word of [ROOT.GetCountry.GetAdjective] culture has spread far and wide, and now foreigners arrive in droves to see our monuments, taste our cuisine, and experience our way of life. This influx of visitors brings opportunity — but also a choice between developing lasting [concept_infrastructure] or simply extracting as much profit as possible while the boom lasts.",
+  "de": "Die Kunde von [ROOT.GetCountry.GetAdjective|l]er Kultur hat sich weit verbreitet, und nun strömen Ausländer in Scharen herbei, um unsere Denkmäler zu sehen, unsere Küche zu kosten und unsere Lebensart zu erleben. Dieser Zustrom an Besuchern bringt Gelegenheit — aber auch die Wahl zwischen dem Aufbau dauerhafter [concept_infrastructure] oder dem schlichten Herauspressen möglichst hohen Gewinns, solange der Boom anhält."
+ },
+ "cultural_hegemony.11.f": {
+  "en": "\\\"The tourists take photographs; we take their money.\\\"\\n\\n\\\"And next year?\\\"\\n\\n\\\"Next year we hope they bring more tourists. Each photograph is an advertisement we did not pay for. The hospitality investment pays for itself in three seasons. The cultural prestige pays for itself across a generation.\\\"",
+  "de": "„Die Touristen machen Fotos; wir nehmen ihr Geld.“\\n\\n„Und nächstes Jahr?“\\n\\n„Nächstes Jahr hoffen wir, dass sie mehr Touristen mitbringen. Jedes Foto ist eine Werbung, für die wir nicht bezahlt haben. Die Investition ins Gastgewerbe amortisiert sich in drei Saisons. Das kulturelle Prestige amortisiert sich über eine ganze Generation.“"
+ },
+ "cultural_hegemony.11.t": {
+  "en": "Tourism Golden Age",
+  "de": "Goldenes Zeitalter des Tourismus"
+ },
+ "cultural_hegemony.12.a": {
+  "en": "Open international scholarship programs",
+  "de": "Internationale Stipendienprogramme öffnen"
+ },
+ "cultural_hegemony.12.b": {
+  "en": "Prioritize domestic students exclusively",
+  "de": "Ausschließlich einheimische Studenten bevorzugen"
+ },
+ "cultural_hegemony.12.d": {
+  "en": "The world's brightest minds seek admission to [ROOT.GetCountry.GetAdjective] universities. Our research institutions set the standard that other nations aspire to match. We can open our doors wider with international scholarships — attracting talent but also bearing the costs — or focus exclusively on our own citizens' education.",
+  "de": "Die klügsten Köpfe der Welt streben an [ROOT.GetCountry.GetAdjective|l]e Universitäten. Unsere Forschungseinrichtungen setzen den Standard, dem andere Nationen nachzueifern versuchen. Wir können unsere Türen mit internationalen Stipendien weiter öffnen — was Talente anzieht, aber auch Kosten verursacht — oder uns ausschließlich auf die Bildung unserer eigenen Bürger konzentrieren."
+ },
+ "cultural_hegemony.12.f": {
+  "en": "\\\"They enrolled as foreigners and graduated as advocates.\\\"\\n\\n\\\"For us, or for themselves?\\\"\\n\\n\\\"For ideas they first encountered here. Which becomes, in the long run, the same thing. The professor who taught them is in their cabinets now. The textbook they argued with is in their schools. Whatever we taught them, they teach again.\\\"",
+  "de": "„Sie schrieben sich als Ausländer ein und schlossen als Fürsprecher ab.“\\n\\n„Für uns, oder für sich selbst?“\\n\\n„Für Ideen, denen sie zuerst hier begegnet sind. Was langfristig auf dasselbe hinausläuft. Der Professor, der sie unterrichtete, sitzt jetzt in ihren Kabinetten. Das Lehrbuch, mit dem sie gerungen haben, steht in ihren Schulen. Was immer wir sie gelehrt haben, lehren sie nun weiter.“"
+ },
+ "cultural_hegemony.12.t": {
+  "en": "World-Class Universities",
+  "de": "Weltklasse-Universitäten"
+ },
+ "cultural_hegemony.13.a": {
+  "en": "Establish language academies in foreign capitals",
+  "de": "Sprachakademien in ausländischen Hauptstädten gründen"
+ },
+ "cultural_hegemony.13.b": {
+  "en": "Let commerce and science carry the language naturally",
+  "de": "Handel und Wissenschaft die Sprache auf natürliche Weise tragen lassen"
+ },
+ "cultural_hegemony.13.d": {
+  "en": "Diplomats negotiate in our tongue. Scientists publish in it. Merchants trade in it. The [ROOT.GetCountry.GetAdjective] language has become one of the world's great languages of diplomacy and science — a lingua franca that opens doors and shapes thought. We can formalize its reach through state-sponsored academies abroad, or let the invisible hand of commerce and scholarship continue its work.",
+  "de": "Diplomaten verhandeln in unserer Sprache. Wissenschaftler veröffentlichen in ihr. Kaufleute handeln in ihr. Die [ROOT.GetCountry.GetAdjective|l]e Sprache ist zu einer der großen Sprachen der Diplomatie und Wissenschaft der Welt geworden — einer Lingua franca, die Türen öffnet und Denken formt. Wir können ihre Reichweite durch staatlich geförderte Akademien im Ausland festigen oder die unsichtbare Hand von Handel und Gelehrsamkeit ihr Werk fortsetzen lassen."
+ },
+ "cultural_hegemony.13.f": {
+  "en": "\\\"When they dream of a better future, they dream in our words.\\\"\\n\\n\\\"And when they dream of revolution?\\\"\\n\\n\\\"The same words. The same syntax. The same metaphors of progress and reaction. We did not intend it. We simply published more, in more places, for longer. The language followed the books, and the dreams followed the language.\\\"",
+  "de": "„Wenn sie von einer besseren Zukunft träumen, träumen sie in unseren Worten.“\\n\\n„Und wenn sie von Revolution träumen?“\\n\\n„Dieselben Worte. Dieselbe Syntax. Dieselben Metaphern von Fortschritt und Reaktion. Wir haben es nicht beabsichtigt. Wir haben einfach mehr veröffentlicht, an mehr Orten, über längere Zeit. Die Sprache folgte den Büchern, und die Träume folgten der Sprache.“"
+ },
+ "cultural_hegemony.13.t": {
+  "en": "Lingua Franca",
+  "de": "Lingua Franca"
+ },
+ "cultural_hegemony.14.a": {
+  "en": "Embrace the entertainment — let the people enjoy it",
+  "de": "Die Unterhaltung annehmen — das Volk soll sie genießen"
+ },
+ "cultural_hegemony.14.b": {
+  "en": "Restrict foreign entertainment imports",
+  "de": "Einfuhr ausländischer Unterhaltung einschränken"
+ },
+ "cultural_hegemony.14.c": {
+  "en": "Adapt the best elements into our own tradition",
+  "de": "Die besten Elemente in die eigene Tradition übernehmen"
+ },
+ "cultural_hegemony.14.d": {
+  "en": "Foreign entertainment has swept through [ROOT.GetCountry.GetName] like a tide. [SCOPE.sCountry('cultural_hegemon').GetAdjective] music fills our dance halls, their plays dominate our theaters, and their novels sit on every bookshelf. The people seem to enjoy it — but our traditionalists warn that our own cultural identity is being eroded from within.",
+  "de": "Ausländische Unterhaltung hat [ROOT.GetCountry.GetAltName('AKK')] wie eine Flutwelle überrollt. [SCOPE.sCountry('cultural_hegemon').GetAdjective|U]e Musik füllt unsere Tanzsäle, ihre Theaterstücke beherrschen unsere Bühnen, und ihre Romane stehen in jedem Bücherregal. Das Volk scheint daran Gefallen zu finden — doch unsere Traditionalisten warnen, unsere eigene kulturelle Identität werde von innen ausgehöhlt."
+ },
+ "cultural_hegemony.14.f": {
+  "en": "\\\"Their melodies are catchy, but the lyrics are not in our language.\\\"\\n\\n\\\"And our children sing them anyway?\\\"\\n\\n\\\"Word for word. They do not know what the lyrics mean. They learn the meaning later, and by the time they learn it, the song is the soundtrack of their summer. Restricting the imports would only make the songs harder to find, not less wanted.\\\"",
+  "de": "„Ihre Melodien sind eingängig, aber der Text ist nicht in unserer Sprache.“\\n\\n„Und unsere Kinder singen ihn trotzdem?“\\n\\n„Wort für Wort. Sie wissen nicht, was der Text bedeutet. Die Bedeutung lernen sie später, und bis dahin ist das Lied der Soundtrack ihres Sommers. Die Einfuhr einzuschränken würde die Lieder nur schwerer auffindbar machen, nicht weniger begehrt.“"
+ },
+ "cultural_hegemony.14.t": {
+  "en": "Foreign Entertainment Wave",
+  "de": "Welle ausländischer Unterhaltung"
+ },
+ "cultural_hegemony.15.a": {
+  "en": "Adopt the foreign education model wholesale",
+  "de": "Das ausländische Bildungsmodell vollständig übernehmen"
+ },
+ "cultural_hegemony.15.b": {
+  "en": "Resist — strengthen our own educational tradition",
+  "de": "Widerstehen — die eigene Bildungstradition stärken"
+ },
+ "cultural_hegemony.15.c": {
+  "en": "Cherry-pick the best practices selectively",
+  "de": "Die besten Praktiken gezielt herauspicken"
+ },
+ "cultural_hegemony.15.d": {
+  "en": "Reformers in [ROOT.GetCountry.GetName] point to [SCOPE.sCountry('cultural_hegemon').GetAdjective] universities as the gold standard. They propose restructuring our entire education system along foreign lines — new curricula, new examination methods, and professors trained abroad. The results could be transformative, but the ideological implications of such wholesale adoption trouble many.",
+  "de": "Reformer [ROOT.GetCountry.GetAltName('IN')] verweisen auf [SCOPE.sCountry('cultural_hegemon').GetAdjective|l]e Universitäten als Goldstandard. Sie schlagen vor, unser gesamtes Bildungssystem nach ausländischem Vorbild umzugestalten — neue Lehrpläne, neue Prüfungsmethoden und im Ausland ausgebildete Professoren. Die Ergebnisse könnten weitreichend sein, doch die ideologischen Folgen einer solchen vollständigen Übernahme beunruhigen viele."
+ },
+ "cultural_hegemony.15.f": {
+  "en": "\\\"We taught their textbooks, and they taught us to think differently.\\\"\\n\\n\\\"And the unintended consequences?\\\"\\n\\n\\\"The graduates think in the structure of the imported curriculum. They argue in its categories. They define the problems it taught them to define. Whether this serves our interest or theirs is a question we have not asked carefully enough.\\\"",
+  "de": "„Wir lehrten ihre Lehrbücher, und sie lehrten uns, anders zu denken.“\\n\\n„Und die unbeabsichtigten Folgen?“\\n\\n„Die Absolventen denken in der Struktur des importierten Lehrplans. Sie argumentieren in seinen Kategorien. Sie definieren die Probleme, die er sie zu definieren gelehrt hat. Ob das unserem Interesse dient oder ihrem, ist eine Frage, die wir nicht sorgfältig genug gestellt haben.“"
+ },
+ "cultural_hegemony.15.t": {
+  "en": "Foreign Education Model",
+  "de": "Ausländisches Bildungsmodell"
+ },
+ "cultural_hegemony.16.a": {
+  "en": "Yield to the prevailing winds of change",
+  "de": "Sich dem vorherrschenden Wind des Wandels beugen"
+ },
+ "cultural_hegemony.16.b": {
+  "en": "Stand firm on our own [Concept('concept_power_bloc_principle', 'principles')]",
+  "de": "Fest zu unseren eigenen [Concept('concept_power_bloc_principle', 'Prinzipien')] stehen"
+ },
+ "cultural_hegemony.16.d": {
+  "en": "The overwhelming cultural dominance of [SCOPE.sCountry('ch_hegemon').GetName] has created intense pressure on [ROOT.GetCountry.GetName] to align its institutions with foreign norms. Across the country, reformers and cosmopolitan elites point to [SCOPE.sCountry('ch_hegemon').GetAdjective] [SCOPE.sLaw('ch_pressure_law').GetName] as that nation's source of strength, demanding that we adopt the same. Traditionalists view this as capitulation to foreign influence.",
+  "de": "Die überwältigende kulturelle Dominanz [SCOPE.sCountry('ch_hegemon').GetAltName('GEN')] hat starken Druck auf [ROOT.GetCountry.GetAltName('AKK')] erzeugt, die eigenen Institutionen an ausländische Normen anzugleichen. Im ganzen Land verweisen Reformer und kosmopolitische Eliten auf [SCOPE.sLaw('ch_pressure_law').GetName] nach [SCOPE.sCountry('ch_hegemon').GetAdjective|l]em Vorbild als Quelle der Stärke jener Nation und fordern, dass wir dasselbe übernehmen. Traditionalisten sehen darin eine Kapitulation vor ausländischem Einfluss."
+ },
+ "cultural_hegemony.16.f": {
+  "en": "\\\"When a great nation speaks, smaller nations must decide whether to echo the words — or find their own voice and bear the consequences.\\\"\\n\\n\\\"And what is the consequence?\\\"\\n\\n\\\"Of echoing? Slow erosion of distinct identity. Of resisting? Steady friction with the great nation. Neither is an emergency. Both add up. The choice is which kind of slow loss the country prefers, and the choice is rarely made consciously.\\\"",
+  "de": "„Wenn eine große Nation spricht, müssen kleinere Nationen entscheiden, ob sie die Worte nachsprechen — oder ihre eigene Stimme finden und die Folgen tragen.“\\n\\n„Und was ist die Folge?“\\n\\n„Beim Nachsprechen? Langsame Erosion der eigenen Identität. Beim Widerstehen? Beständige Reibung mit der großen Nation. Keines von beiden ist ein Notfall. Beides summiert sich. Die Wahl besteht darin, welche Art des langsamen Verlusts das Land bevorzugt, und diese Wahl wird selten bewusst getroffen.“"
+ },
+ "cultural_hegemony.16.t": {
+  "en": "Hegemonic Convergence",
+  "de": "Hegemoniale Konvergenz"
+ },
+ "cultural_hegemony.17.a": {
+  "en": "Let every capital hear how we govern.",
+  "de": "Jede Hauptstadt soll hören, wie wir regieren."
+ },
+ "cultural_hegemony.17.b": {
+  "en": "A model is proved at home, not preached abroad.",
+  "de": "Ein Modell bewährt sich zu Hause, nicht durch Predigten im Ausland."
+ },
+ "cultural_hegemony.17.d": {
+  "en": "Countries producing #v [ROOT.GetCountry.MakeScope.ScriptValue('ch_model_share_display')|0]%#! of the world's culture now run their states on the same [ROOT.GetCountry.GetCustom('ch_country_model_text')] lines as [ROOT.GetCountry.GetName]. Delegations arrive every month to study our ministries, and the foreign ministry has drawn up a plan to fund cultural attachés, translated constitutions and friendly newspapers in every capital that will take them.",
+  "de": "Länder, die #v [ROOT.GetCountry.MakeScope.ScriptValue('ch_model_share_display')|0]%#! der Weltkultur erzeugen, führen ihren Staat inzwischen nach denselben [ROOT.GetCountry.GetCustom('ch_country_model_text')]-Grundsätzen wie [ROOT.GetCountry.GetAltName('NOM')]. Jeden Monat treffen Delegationen ein, um unsere Ministerien zu studieren, und das Außenministerium hat einen Plan ausgearbeitet, um Kulturattachés, übersetzte Verfassungen und freundlich gesinnte Zeitungen in jeder Hauptstadt zu finanzieren, die sie annehmen will."
+ },
+ "cultural_hegemony.17.f": {
+  "en": "\\\"Twelve capitals have asked for copies of the civil code this year. Twelve. Last year it was three.\\\"\\n\\n\\\"And the other powers have noticed. Their papers call it meddling.\\\"\\n\\n\\\"Their papers call everything meddling. Ours used to, back when we were the ones doing the copying.\\\"\\n\\n\\\"So we send the attachés?\\\"\\n\\n\\\"We send the attachés, and a printing press with each of them. If the world wants to learn how we govern, it may as well learn it in our words.\\\"",
+  "de": "„Zwölf Hauptstädte haben dieses Jahr um Abschriften des Zivilgesetzbuchs gebeten. Zwölf. Letztes Jahr waren es drei.“\\n\\n„Und die anderen Mächte haben es bemerkt. Ihre Zeitungen nennen es Einmischung.“\\n\\n„Ihre Zeitungen nennen alles Einmischung. Unsere taten das auch, damals, als wir noch diejenigen waren, die abgeschrieben haben.“\\n\\n„Also schicken wir die Attachés?“\\n\\n„Wir schicken die Attachés, und mit jedem eine Druckerpresse. Wenn die Welt lernen will, wie wir regieren, kann sie es ebenso gut in unseren Worten lernen.“"
+ },
+ "cultural_hegemony.17.t": {
+  "en": "Our Model Abroad",
+  "de": "Unser Modell im Ausland"
+ },
+ "cultural_hegemony.18.a": {
+  "en": "We stand with [SCOPE.sCountry('ch_bloc_a').GetName].",
+  "de": "Wir stehen an der Seite [SCOPE.sCountry('ch_bloc_a').GetAltName('GEN')]."
+ },
+ "cultural_hegemony.18.b": {
+  "en": "The future belongs to [SCOPE.sCountry('ch_bloc_b').GetName].",
+  "de": "Die Zukunft gehört [SCOPE.sCountry('ch_bloc_b').GetAltName('DAT')]."
+ },
+ "cultural_hegemony.18.c": {
+  "en": "We will be nobody's satellite.",
+  "de": "Wir werden niemandes Satellit sein."
+ },
+ "cultural_hegemony.18.d": {
+  "en": "The two leading cultural powers hold up different models of how a state should be run: [SCOPE.sCountry('ch_bloc_a').GetName] the [SCOPE.sCountry('ch_bloc_a').GetCustom('ch_country_model_text')] model, [SCOPE.sCountry('ch_bloc_b').GetName] the [SCOPE.sCountry('ch_bloc_b').GetCustom('ch_country_model_text')] model. Neither has asked anything of [ROOT.GetCountry.GetName]. They do not need to: their films fill our cinemas, their books our lecture halls, their arguments our newspapers, and our own people are already taking sides. Sooner or later the government will have to say which way it leans.",
+  "de": "Die beiden führenden Kulturmächte vertreten unterschiedliche Modelle, wie ein Staat geführt werden sollte: [SCOPE.sCountry('ch_bloc_a').GetAltName('NOM')|U] das Modell [SCOPE.sCountry('ch_bloc_a').GetCustom('ch_country_model_text')], [SCOPE.sCountry('ch_bloc_b').GetAltName('NOM')|U] das Modell [SCOPE.sCountry('ch_bloc_b').GetCustom('ch_country_model_text')]. Keine der beiden hat etwas von [ROOT.GetCountry.GetAltName('DAT')] verlangt. Das müssen sie auch nicht: Ihre Filme füllen unsere Kinos, ihre Bücher unsere Hörsäle, ihre Argumente unsere Zeitungen, und unser eigenes Volk bezieht bereits Stellung. Früher oder später wird die Regierung sagen müssen, wohin sie neigt."
+ },
+ "cultural_hegemony.18.d_champion": {
+  "en": "The two leading cultural powers hold up different models of how a state should be run: [SCOPE.sCountry('ch_bloc_a').GetName] the [SCOPE.sCountry('ch_bloc_a').GetCustom('ch_country_model_text')] model, [SCOPE.sCountry('ch_bloc_b').GetName] the [SCOPE.sCountry('ch_bloc_b').GetCustom('ch_country_model_text')] model. [SCOPE.sCountry('ch_bloc_a').GetName] has made a policy of carrying its model abroad, and its cultural attachés and friendly newspapers have reached [ROOT.GetCountry.GetName] too. [SCOPE.sCountry('ch_bloc_b').GetName] sends nobody; its films and books make its case well enough. Our own people are already taking sides, and sooner or later the government will have to say which way it leans.",
+  "de": "Die beiden führenden Kulturmächte vertreten unterschiedliche Modelle, wie ein Staat geführt werden sollte: [SCOPE.sCountry('ch_bloc_a').GetAltName('NOM')|U] das Modell [SCOPE.sCountry('ch_bloc_a').GetCustom('ch_country_model_text')], [SCOPE.sCountry('ch_bloc_b').GetAltName('NOM')|U] das Modell [SCOPE.sCountry('ch_bloc_b').GetCustom('ch_country_model_text')]. [SCOPE.sCountry('ch_bloc_a').GetAltName('NOM')|U] hat es sich zur Politik gemacht, das eigene Modell ins Ausland zu tragen, und die eigenen Kulturattachés und freundlich gesinnten Zeitungen haben auch [ROOT.GetCountry.GetAltName('AKK')] erreicht. [SCOPE.sCountry('ch_bloc_b').GetAltName('NOM')|U] schickt niemanden; die eigenen Filme und Bücher sprechen für sich. Unser eigenes Volk bezieht bereits Stellung, und früher oder später wird die Regierung sagen müssen, wohin sie neigt."
+ },
+ "cultural_hegemony.18.d_champion_b": {
+  "en": "The two leading cultural powers hold up different models of how a state should be run: [SCOPE.sCountry('ch_bloc_a').GetName] the [SCOPE.sCountry('ch_bloc_a').GetCustom('ch_country_model_text')] model, [SCOPE.sCountry('ch_bloc_b').GetName] the [SCOPE.sCountry('ch_bloc_b').GetCustom('ch_country_model_text')] model. [SCOPE.sCountry('ch_bloc_b').GetName] has made a policy of carrying its model abroad, and its cultural attachés and friendly newspapers have reached [ROOT.GetCountry.GetName] too. [SCOPE.sCountry('ch_bloc_a').GetName] sends nobody; its films and books make its case well enough. Our own people are already taking sides, and sooner or later the government will have to say which way it leans.",
+  "de": "Die beiden führenden Kulturmächte vertreten unterschiedliche Modelle, wie ein Staat geführt werden sollte: [SCOPE.sCountry('ch_bloc_a').GetAltName('NOM')|U] das Modell [SCOPE.sCountry('ch_bloc_a').GetCustom('ch_country_model_text')], [SCOPE.sCountry('ch_bloc_b').GetAltName('NOM')|U] das Modell [SCOPE.sCountry('ch_bloc_b').GetCustom('ch_country_model_text')]. [SCOPE.sCountry('ch_bloc_b').GetAltName('NOM')|U] hat es sich zur Politik gemacht, das eigene Modell ins Ausland zu tragen, und die eigenen Kulturattachés und freundlich gesinnten Zeitungen haben auch [ROOT.GetCountry.GetAltName('AKK')] erreicht. [SCOPE.sCountry('ch_bloc_a').GetAltName('NOM')|U] schickt niemanden; die eigenen Filme und Bücher sprechen für sich. Unser eigenes Volk bezieht bereits Stellung, und früher oder später wird die Regierung sagen müssen, wohin sie neigt."
+ },
+ "cultural_hegemony.18.d_champion_both": {
+  "en": "The two leading cultural powers hold up different models of how a state should be run: [SCOPE.sCountry('ch_bloc_a').GetName] the [SCOPE.sCountry('ch_bloc_a').GetCustom('ch_country_model_text')] model, [SCOPE.sCountry('ch_bloc_b').GetName] the [SCOPE.sCountry('ch_bloc_b').GetCustom('ch_country_model_text')] model. Both have made a policy of carrying their models abroad, and the cultural attachés and friendly newspapers of each have reached [ROOT.GetCountry.GetName] too. Our own people are already taking sides, and sooner or later the government will have to say which way it leans.",
+  "de": "Die beiden führenden Kulturmächte vertreten unterschiedliche Modelle, wie ein Staat geführt werden sollte: [SCOPE.sCountry('ch_bloc_a').GetAltName('NOM')|U] das Modell [SCOPE.sCountry('ch_bloc_a').GetCustom('ch_country_model_text')], [SCOPE.sCountry('ch_bloc_b').GetAltName('NOM')|U] das Modell [SCOPE.sCountry('ch_bloc_b').GetCustom('ch_country_model_text')]. Beide haben es sich zur Politik gemacht, das eigene Modell ins Ausland zu tragen, und die Kulturattachés und freundlich gesinnten Zeitungen jeder der beiden haben auch [ROOT.GetCountry.GetAltName('AKK')] erreicht. Unser eigenes Volk bezieht bereits Stellung, und früher oder später wird die Regierung sagen müssen, wohin sie neigt."
+ },
+ "cultural_hegemony.18.f": {
+  "en": "The editor keeps two wire baskets on the desk now. The one on the left fills with dispatches from [SCOPE.sCountry('ch_bloc_a').GetName]: speeches, exhibitions, the price of wheat, all set in a confident typeface the whole newsroom has learned to recognise. The one on the right fills just as fast from [SCOPE.sCountry('ch_bloc_b').GetName]. Nobody in the building ordered either; the readers did, by buying whichever paper carried more of them. By noon the office boy has stopped asking which basket to empty first. He waits, pencil behind his ear, for the editor to point.",
+  "de": "Der Redakteur hat jetzt zwei Drahtkörbe auf dem Schreibtisch. Der linke füllt sich mit Meldungen aus [SCOPE.sCountry('ch_bloc_a').GetAltName('DAT')]: Reden, Ausstellungen, der Weizenpreis, alles in einer selbstbewussten Schrifttype gesetzt, die die ganze Redaktion inzwischen erkennt. Der rechte füllt sich ebenso schnell aus [SCOPE.sCountry('ch_bloc_b').GetAltName('DAT')]. Niemand im Haus hat einen der beiden bestellt; die Leser haben es getan, indem sie jeweils die Zeitung kauften, die mehr davon brachte. Gegen Mittag hat der Laufbursche aufgehört zu fragen, welchen Korb er zuerst leeren soll. Er wartet, den Bleistift hinterm Ohr, darauf, dass der Redakteur zeigt."
+ },
+ "cultural_hegemony.18.t": {
+  "en": "Between Two Suns",
+  "de": "Zwischen zwei Sonnen"
+ },
  "cultural_hegemony.19.a": {
   "en": "Fashions change. Our principles do not.",
   "de": "Moden ändern sich. Unsere Prinzipien nicht."
