@@ -363,7 +363,7 @@ m.ms = ModState(m.base_game_paths, m.mod_paths, vanilla_data=snap.data)
 m.ms.localization = dict(snap.localization)  # vanilla loc only; without it `name` fields come back as raw keys
 m.ModStateHandler._modifier_search(None, {"q": ["country_banking_lock"]})
 ```
-`/engine-docs` also needs `m._load_engine_docs()`, which rewrites the reference files under `docs/engine/` and creates the gitignored `engine_coverage_report.md` and `error_log_digest.md` there. Run `git checkout -- docs/engine/` afterwards.
+`/engine-docs` also needs `m._load_engine_docs()`, which rewrites the reference files under `docs/engine/` and creates the gitignored `engine_coverage_report.md` and `error_log_digest.md` there. Check `git status --short docs/engine/` before you start, and afterwards restore only the files the load rewrote (`git checkout -- <file>`), so real uncommitted report changes survive.
 
 ### Vanilla data source: `vanilla_parsed/` or the game files
 

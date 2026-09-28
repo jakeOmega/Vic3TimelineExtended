@@ -347,7 +347,8 @@ update_countrys_bloc_principles_plurality = { update_countrys_bloc_principle_bas
 # When a country's economic law flips between market/command/cooperative,
 # the modifiers that the OTHER intervention toolkit posted on
 # je:je_banking_cycle must be cleared. These helpers list each toolkit's
-# modifiers in one place so te_banking_law_change_cleanup stays scannable.
+# modifiers in one place so te_banking_economy_law_cleanup
+# (extra_on_actions.txt, on_law_activated) stays scannable.
 # Country scope; the JE must be active (caller checks).
 
 remove_banking_planning_modifiers_effect = {
