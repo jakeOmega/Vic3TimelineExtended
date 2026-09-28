@@ -8,7 +8,8 @@ import unittest
 
 from organize_loc import (
     categorize_key, find_diplo_action_keys, find_parameterized_keys,
-    find_quoted_loc_args, find_war_goal_keys, organize_all,
+    find_quoted_loc_args, find_treaty_article_keys, find_war_goal_keys,
+    organize_all, treaty_article_families,
 )
 
 
@@ -275,6 +276,45 @@ class FindParameterizedKeysTests(unittest.TestCase):
                 unused = fh.read()
         self.assertNotIn(" my_tt_alpha_subtract:", unused)
         self.assertIn(" other_alpha:", unused)
+
+
+class FindTreatyArticleKeysTests(unittest.TestCase):
+    """#357: a treaty article's engine-built keys are used, and file together."""
+
+    _ARTICLE = (
+        "lender_of_last_resort = {\n\tkind = directed\n"
+        "\tcan_ratify = {\n\t\talways = yes\n\t}\n"
+        "\tarticle_ai_usage = { offer request }\n}\n"
+    )
+
+    def test_engine_built_suite_is_used(self):
+        with tempfile.TemporaryDirectory() as td:
+            _write(td, "common/treaty_articles/a.txt", self._ARTICLE)
+            keys = find_treaty_article_keys(td)
+        for suffix in ("", "_desc", "_effects_desc", "_article_short_desc"):
+            self.assertIn(f"lender_of_last_resort{suffix}", keys)
+        # Only top-level names start a family, not nested blocks.
+        self.assertNotIn("can_ratify_desc", keys)
+        self.assertNotIn("article_ai_usage_desc", keys)
+
+    def test_family_files_with_its_desc(self):
+        # The bare names used to fall to MISCELLANEOUS (four tokens; a digit)
+        # while their _desc keys went to CONCEPTS. Articles whose _desc files
+        # elsewhere (the pact rule) keep their whole family there.
+        with tempfile.TemporaryDirectory() as td:
+            _write(td, "common/treaty_articles/a.txt", (
+                self._ARTICLE + "science_aid_2 = {\n\tkind = directed\n}\n"
+                "intelligence_sharing_pact = {\n\tkind = mutual\n}\n"
+            ))
+            article_of = treaty_article_families(td)
+        for article, cat in (("lender_of_last_resort", "CONCEPTS"),
+                             ("science_aid_2", "CONCEPTS"),
+                             ("intelligence_sharing_pact", "DIPLOMACY")):
+            for suffix in ("", "_desc", "_effects_desc", "_article_short_desc"):
+                with self.subTest(key=article + suffix):
+                    self.assertEqual(
+                        categorize_key(article + suffix, set(), article_of), cat
+                    )
 
 
 class FindWarGoalKeysTests(unittest.TestCase):
