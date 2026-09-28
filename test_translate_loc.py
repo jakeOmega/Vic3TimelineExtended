@@ -134,6 +134,10 @@ class ChunkingTests(unittest.TestCase):
         chunks = t.split_chunks(entries, budget=15)
         self.assertEqual([len(c) for c in chunks], [4, 1])
 
+    def test_key_cap_ends_a_chunk_of_short_labels(self):
+        entries = [t.Entry("a_l_english.yml", f"pm_{i}", "Label") for i in range(10)]
+        self.assertEqual([len(c) for c in t.split_chunks(entries, budget=1000, max_keys=4)], [4, 4, 2])
+
     def test_new_file_starts_a_chunk_once_over_budget(self):
         entries = [t.Entry("a_l_english.yml", "x", "w " * 20), t.Entry("b_l_english.yml", "x_desc", "w " * 5)]
         self.assertEqual(len(t.split_chunks(entries, budget=10)), 2)

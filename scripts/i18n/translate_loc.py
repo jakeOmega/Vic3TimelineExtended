@@ -52,7 +52,11 @@ SKIP_FILES = {"te_unused_l_english.yml"}  # keys no script references
 # them through GetAltName('<FORM>').
 COUNTRY_FORMS = ("NOM", "GEN", "DAT", "AKK", "VON", "IN", "NACH")
 
-DEFAULT_CHUNK_WORDS = 4500
+# Agents carry ~100k tokens of fixed context whatever the chunk, so fewer,
+# larger chunks cost less; the key cap keeps label-heavy files (3-4 words a
+# key) from producing chunks of thousands of lines.
+DEFAULT_CHUNK_WORDS = 9000
+DEFAULT_MAX_KEYS = 700
 
 
 # --------------------------------------------------------------------------
@@ -442,16 +446,16 @@ def _group_stem(key: str) -> str:
     return re.sub(r"_(desc|tooltip|tt|flavor|short|plural|possessive|adj|ADJ|DESC|TOOLTIP)$", "", key)
 
 
-def split_chunks(entries: list[Entry], budget: int) -> list[list[Entry]]:
-    """Consecutive entries up to ~budget words; never split a file mid-group
-    (an event's .t/.d/.f/.a lines, a name and its _desc)."""
+def split_chunks(entries: list[Entry], budget: int, max_keys: int = 10**9) -> list[list[Entry]]:
+    """Consecutive entries up to ~budget words or max_keys keys; never split a
+    file mid-group (an event's .t/.d/.f/.a lines, a name and its _desc)."""
     chunks: list[list[Entry]] = []
     current: list[Entry] = []
     words = 0
     for entry in entries:
         boundary = (
             current
-            and words >= budget
+            and (words >= budget or len(current) >= max_keys)
             and (entry.file != current[-1].file or _group_stem(entry.key) != _group_stem(current[-1].key))
         )
         if boundary:
@@ -522,7 +526,7 @@ def cmd_prepare(args) -> int:
         return 0
 
     budget = 10**9 if args.set == "names" else args.chunk_words
-    chunks = split_chunks(pending, budget)
+    chunks = split_chunks(pending, budget, 10**9 if args.set == "names" else args.max_keys)
     if args.limit:
         chunks = chunks[: args.limit]
 
@@ -651,6 +655,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--files", nargs="*", help="only English files whose name starts with one of these")
     p.add_argument("--limit", type=int, help="write at most this many chunks")
     p.add_argument("--chunk-words", type=int, default=DEFAULT_CHUNK_WORDS)
+    p.add_argument("--max-keys", type=int, default=DEFAULT_MAX_KEYS,
+                   help="also end a chunk at this many keys (label-heavy files)")
     p.add_argument("--no-vanilla", action="store_true", help="skip the vanilla glossary (no game install)")
     m = sub.add_parser("merge")
     m.add_argument("chunks", nargs="*")

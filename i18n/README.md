@@ -28,7 +28,7 @@ A translation stays attached to the English it was made from. When that English 
 Translation uses Claude Code subagents (on the subscription, not the API). The script does everything deterministic around them:
 
 1. `python3 scripts/i18n/translate_loc.py prepare --set names` writes the glossary chunk: the mod's names (concepts, journal entries, laws, buildings, technologies, formable countries). Translate it first, because every other chunk is given these names as fixed terms.
-2. `python3 scripts/i18n/translate_loc.py prepare` writes every other pending key as chunks of about 4,500 words (`--files te_events` to restrict, `--limit N` for the first N chunks). Each chunk file carries its own glossary: the mod terms and official vanilla German terms that occur in it, and what each referenced key inserts.
+2. `python3 scripts/i18n/translate_loc.py prepare` writes every other pending key as chunks of about 9,000 words or 700 keys, whichever comes first (`--files te_events` to restrict, `--limit N` for the first N chunks). Each chunk file carries its own glossary: the mod terms and official vanilla German terms that occur in it, and what each referenced key inserts.
 3. One agent per chunk reads `i18n/<language>/BRIEF.md` and `build/i18n/<language>/chunks/<id>.txt`, and writes `build/i18n/<language>/out/<id>.NN.txt` part files.
 4. `python3 scripts/i18n/translate_loc.py merge` checks every line's markup against the English and adds the lines that pass to the translation memory. Rejects are listed in `build/i18n/<language>/merge_report.json`. They stay pending, so the next `prepare` offers them again.
 
