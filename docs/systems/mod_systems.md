@@ -1256,7 +1256,7 @@ The decolonization system models the decline of colonial empires through a journ
 
 Three layers:
 1. **Gate & Progress Bar:** `je_colonial_empire` activates when a country has colonial states and `decolonization` tech. The `colonial_stability_bar` (0-100, starts at 50) tracks how stable the empire is. At 0 the empire collapses; at 100 it solidifies.
-2. **Player Interaction:** the **Colonial Stability widget** (`gui/journal_entry_widgets/colonial_empire_widget.gui`) is the human surface — conditions, the three programmes, the three decolonization decisions, and two history charts. The 9 scripted buttons behind it carry `is_ai = yes` and are the **AI's** only path in; both surfaces call the same `colonial_empire_possible_*` / `colonial_empire_effect_*` helpers. Full reference: `journal_entry_systems.md` § Colonial Stability Widget.
+2. **Player Interaction:** the **Colonial Stability widget** (`gui/journal_entry_widgets/colonial_empire_widget.gui`) is the human surface, laid out to `docs/guides/gui_style_guide.md`: an overview at the top (band, programmes running, the stability bar with the next band marked, the condemners' share of great-power prestige), then why stability is moving, international pressure, the three programmes, the three decolonization decisions, two history charts and a collapsed How the Colonial Empire Works. The 9 scripted buttons behind it carry `is_ai = yes` and are the **AI's** only path in; both surfaces call the same `colonial_empire_possible_*` / `colonial_empire_effect_*` helpers. Full reference: `journal_entry_systems.md` § Colonial Stability Widget.
 3. **Events:** 21 events fire from `decolonization_events_on_action` (monthly pulse), covering colonial negotiations, crackdowns, releases, GP stance choices, post-independence transitions, and the Suez Crisis model. `decolonization_events.400` / `.401` are the confirmation popups the three decisions open — each previews candidates and offers a "Reconsider" option, so nothing is released by pressing a button.
 
 ### Files
@@ -1270,7 +1270,7 @@ Three layers:
 | `common/scripted_buttons/colonial_empire_buttons.txt` | 9 AI-only JE buttons; `possible` / `effect` delegate to the shared helpers |
 | `common/scripted_effects/decolonization.txt` | `form_decolonized_country`, JE cleanup, the 9 `colonial_empire_effect_*` button actions |
 | `common/scripted_effects/colonial_empire_display_effects.txt` | `colonial_empire_refresh_display` — the single site deriving all widget display state |
-| `common/scripted_guis/colonial_empire_sguis.txt` | 5 handlers backing the widget (2 guards, 1 text renderer, 2 op-coded actions) |
+| `common/scripted_guis/colonial_empire_sguis.txt` | 8 handlers backing the widget (2 guards, 3 programme-state reads, 1 text renderer, 2 op-coded actions) |
 | `common/customizable_localization/colonial_empire_custom_loc.txt` | Band names, status line and phase-modifier line, keyed on `var:colonial_empire_tier` |
 | `common/scripted_effects/te_history_colonial_effects.txt` | `te_history_record_colonial_samples` — the two chart series |
 | `common/scripted_effects/colonial_collapse_effects.txt` | Colonial collapse: tiny, poor AI countries absorbed or decentralized in the decolonization era |

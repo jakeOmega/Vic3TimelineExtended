@@ -224,7 +224,7 @@ All nine carry `is_ai = yes` in `visible`; a human sees the widget instead. They
 Gates live in `common/scripted_triggers/colonial_empire_triggers.txt`, actions in `common/scripted_effects/decolonization.txt`. The three decision actions wrap their body in `hidden_effect` — see Editing rules.
 
 ### Variables
-Written by `colonial_empire_refresh_display` (`common/scripted_effects/colonial_empire_display_effects.txt`) and by nothing else; all eleven cleared in `colonial_empire_je_cleanup_effect`.
+Written by `colonial_empire_refresh_display` (`common/scripted_effects/colonial_empire_display_effects.txt`) and by nothing else; all twelve cleared in `colonial_empire_je_cleanup_effect` (`test_colonial_empire_layout.py` checks the two lists match).
 
 | Variable | Meaning |
 |---|---|
@@ -232,7 +232,8 @@ Written by `colonial_empire_refresh_display` (`common/scripted_effects/colonial_
 | `colonial_empire_next_boundary` | 20 / 40 / 65 / 90 / 100 — the next band's edge |
 | `colonial_empire_bar_bucket` | bar value to the nearest 5, for the history chart |
 | `colonial_empire_d_overreach`, `_d_gp`, `_d_acceptance` | the three drift groups that iterate |
-| `colonial_empire_condemner_share` | condemners' share (0-1) of the prestige of all great powers plus ours; read by `colonial_empire_pressure_sgui` behind a `has_variable` guard |
+| `colonial_empire_condemner_share` | condemners' share (0-1) of the prestige of all great powers plus ours; read by `colonial_empire_pressure_sgui` behind a `has_variable` guard, and by the overview's pie |
+| `colonial_empire_pressure_level` | 0 none, 1 diplomatic isolation, 2 international consensus: which of the bar's two escalation leaves applies (read off the leaves, so the thresholds stay in `colonial_empire_values.txt`); the overview's alert |
 | `colonial_empire_d_total` | projected monthly change, for the signed chart |
 | `colonial_empire_eligible_count`, `_round_table_count` | decolonization candidate counts |
 | `colonial_empire_largest_eligible_state` | largest eligible state (removed when none) |
@@ -243,18 +244,18 @@ Still owned by the JE's own pulse: `colonial_invest_months`, `colonial_garrison_
 
 ### Colonial Stability Widget (journal-entry widget)
 
-**File:** `gui/journal_entry_widgets/colonial_empire_widget.gui` (UTF-8 BOM). Two roots, both mounted from `je_colonial_empire`: `widget_je_colonial_empire` → `custom_widget_container_2`, `widget_je_colonial_empire_history` → `custom_widget_container_3` (directly above the native bar).
+**File:** `gui/journal_entry_widgets/colonial_empire_widget.gui` (UTF-8 BOM), laid out to `docs/guides/gui_style_guide.md`. Every section is a type (`te_ce_sec_*`); `te_ce_status_sections` and `te_ce_reference_sections` set their order, so a system tab can instance the same pieces. Three roots, thin wrappers that repeat the `[JournalEntry.IsActive]` gate, all mounted from `je_colonial_empire`: `widget_je_colonial_empire_overview` → `custom_widget_container_1` (above the status line), `widget_je_colonial_empire_status` → `custom_widget_container_2`, `widget_je_colonial_empire_reference` → `custom_widget_container_3`. The entry also attaches `te_je_bars_on_top_marker` to `custom_widget_container_7`: the overview draws the stability bar, so the journal panel no longer draws it at the bottom. `test_colonial_empire_layout.py` holds the order, the flags and the gates.
 
 **Handlers** (`common/scripted_guis/colonial_empire_sguis.txt`), all `ai_is_valid = { always = no }`:
 
 | Handler | Kind | Role |
 |---|---|---|
-| `colonial_empire_display_ready` | read-only | has `colonial_empire_refresh_display` run yet? One gate for all ten var reads |
+| `colonial_empire_display_ready` | read-only | has `colonial_empire_refresh_display` run yet? One gate for every var read in the panel |
 | `colonial_empire_has_candidates` | read-only | is `colonial_empire_largest_eligible_state` set? |
-| `colonial_empire_active_invest_sgui` | read-only | is Development Investment running? **Decides which half of its row is drawn** |
+| `colonial_empire_active_invest_sgui` | read-only | is Development Investment running? **Decides which half of its row is drawn**, and lights its overview icon |
 | `colonial_empire_active_garrison_sgui` | read-only | is Military Garrison running? Ditto |
 | `colonial_empire_active_assimilation_sgui` | read-only | is Cultural Assimilation running? Ditto |
-| `colonial_empire_pressure_sgui` | read-only text | walks the great powers live and names condemners / supporters with their prestige, under a line giving ours and one giving the condemners' prestige share |
+| `colonial_empire_pressure_sgui` | read-only text | walks the great powers live and names condemners / supporters with their prestige, under "Our prestige: N" and "Condemners' share: N%" (the thresholds on hover). Drawn in International Pressure and, only while hovered, as the overview pie's tooltip |
 | `colonial_empire_policy_sgui` | action, `saved_scopes = { op }` | the three programmes, enable and disable |
 | `colonial_empire_decision_sgui` | action, `saved_scopes = { op }` | the three decolonization decisions |
 
@@ -268,15 +269,28 @@ Eight handlers. All carry `ai_is_valid = { always = no }`; the five read-only on
 **An op code decides what a control does, never whether it is drawn.** `AddScope` is passed to `IsValid`, `Execute` and the tooltips only — the three paths `st_res_scripted_gui.txt` has shipped. Whether a saved scope reaches an `is_shown` block is *unproven* in this mod: Strategic Reserve passes one to `IsShown` but its `is_shown` never reads it, vanilla ships no handler whose `is_shown` reads a saved scope, and the one in-mod case (`un_chamber_vote_sgui`'s veto branch) is fail-open and so would look correct either way. With the button grid hidden from humans, a programme row whose visibility quietly evaluated false would leave no control at all, so each Enable/Disable pair keys off a scope-free `colonial_empire_active_*_sgui` instead — Disable on `IsShown(…)`, Enable on `Not(IsShown(…))`, which is the shape banking's dashboard is play-tested with. `colonial_empire_policy_sgui.is_shown` is therefore unconditional, and `colonial_empire_decision_sgui.is_shown` is `always = yes` (a decision with nothing to release stays visible and disabled), so no control's visibility depends on that path.
 
 **Display-only reads** — the widget derives nothing:
-- Bar value: `[JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)|%0]`, reached through `datamodel = "[JournalEntry.GetScriptedProgressBars]"`.
+- Bar value: `[JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)]` (the overview's bar; `|%0` in its text), reached through `datamodel = "[JournalEntry.GetScriptedProgressBars]"`. The only tooltip inside that datamodel item is the breakdown below, which reads the bar alone (gotcha #24).
 - Bar breakdown: `[ScriptedProgressBar.GetPeriodicProgressBreakdown]` — the **engine's own** per-term rendering, built from the 22 `desc` keys on the bar's `add` lines (21 terms plus the monthly cap). It cannot drift from the mechanic because it *is* the mechanic.
+- Overview: `colonial_empire_disp_{tier,next_boundary_frac,trend,condemner_share,pressure_level}` (`colonial_empire_values.txt`), each reading a snapshot behind a `has_variable` guard: the band icon, the marker at the next band's edge, the trend arrow, the pie, the pressure alert.
 - Six drift groups live: `[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_{base,laws,igs,rank,policies,domestic}')]` — all O(1), and live so a click moves them the next frame.
 - Three drift groups + the total from `var:` (they iterate; the widget runs every frame).
 - Monthly cap: the headline is `colonial_stability_drift_total_display` (capped), and the breakdown's last row is `colonial_stability_drift_cap_display` — capped minus uncapped, 0 inside the cap — so the rows still add up to the headline. Both are O(1) over the live groups and the snapshots.
-- Band names and the phase-modifier line: `[JournalEntry.GetCountry.GetCustom('colonial_empire_{status_custom,tier_name,next_band_name,phase_modifier}')]` (`common/customizable_localization/colonial_empire_custom_loc.txt`), keyed on the tier integer.
+- Band names and the phase modifier (the band icon's tooltip, and "Next band: X at N"): `[JournalEntry.GetCountry.GetCustom('colonial_empire_{status_custom,tier_name,next_band_name,phase_modifier}')]` (`common/customizable_localization/colonial_empire_custom_loc.txt`), keyed on the tier integer.
 - Programme costs / effects: `[GetStaticModifier('x').GetDesc]` plus `colonial_{invest,garrison,assim}_effectiveness_display` and `colonial_{invest,assimilate}_startup_cost_display`.
 
-**Areas:** Colonial Stability (open by default) · International Pressure (**collapsed** by default — its sgui walks `every_country` twice per frame while open) · Colonial Programmes (open) · Decolonization (open) · History (collapsed). Section state is `GetVariableSystem` only; `colonial_empire_stability_closed` / `_programmes_closed` / `_decisions_closed` are *closed* flags, `colonial_empire_pressure_open` / `_history_open` are *open* flags.
+**Areas**, in order:
+
+| Section | Default | Shows |
+|---|---|---|
+| Overview | always shown | the band (icon and name; the status line and the band's modifier on hover), the three programmes lit while running, the stability bar with a marker at the next band's edge, "62% (+0.42/mo)" and a trend arrow (the bar's breakdown on hover), "Next band: X at N", the condemners' share of great-power prestige as a pie (the roster on hover) and an alert while diplomatic isolation or an international consensus applies |
+| Why Stability Is Moving | open | the nine drift groups, the monthly limit and the projected change as a label/value table, each row's contents on hover |
+| International Pressure | **collapsed**, against style rule 1 — its sgui walks `every_country` twice per frame while open | the roster: our prestige, the condemners' share, each condemning and supporting great power |
+| Colonial Programmes | open | the three programmes, each with its Enable or Disable control beside it |
+| Decolonization | open | the candidate counts as a table, then each decision's name (its description on hover) with its button beside it |
+| History | open | the two history charts |
+| How the Colonial Empire Works | collapsed | every explanation, one subheading per topic |
+
+Section state is `GetVariableSystem` only, and each flag says its default: `colonial_empire_stability_closed` / `_programmes_closed` / `_decisions_closed` / `_history_closed` are *closed* flags (open until closed), `colonial_empire_pressure_open` / `_how_open` are *open* flags (collapsed until opened). The overview's placeholder icons are listed in `docs/systems/colonial_empire_gui_icons.md`.
 
 **No arm/confirm flag anywhere.** The three decisions confirm through `decolonization_events.400` / `.401`, which preview up to three candidates and offer a "Reconsider" option. That is real game state: it survives a save, cannot be left half-armed by closing the panel, and lets the player choose *which* territory. A `GetVariableSystem` arm flag would be client-side with no lifetime.
 

@@ -388,6 +388,32 @@ class HowItWorksTest(unittest.TestCase):
             self.assertNotIn(f'"{key}"', self.gui, key)
 
 
+ICONS_DOC = os.path.join(REPO, "docs", "systems", "colonial_empire_gui_icons.md")
+# Textures the overview uses as mechanics (frame, marker, arrows), not as art.
+NOT_PLACEHOLDERS = {"gfx/interface/backgrounds/round_frame_dec.dds",
+                    "gfx/interface/icons/generic_icons/transparent.dds",
+                    "gfx/interface/progressbar/progressbar_marker.dds",
+                    "gfx/interface/icons/generic_icons/trend_up.dds",
+                    "gfx/interface/icons/generic_icons/trend_down.dds",
+                    "gfx/interface/icons/generic_icons/trend_nochange.dds"}
+
+
+class PlaceholderIconsTest(unittest.TestCase):
+    """Style rule 10: every placeholder is listed, so swapping in the art is one
+    path change (docs/systems/colonial_empire_gui_icons.md)."""
+
+    def test_every_placeholder_is_listed(self):
+        gui = _read(GUI)
+        textures = set(re.findall(r'texture = "([^"]+)"', _type_body(gui, "te_ce_overview_panel")))
+        for t in ("te_ce_ov_pie", "te_ce_ov_icon_label", "te_ce_ov_programme"):
+            textures |= set(re.findall(r'texture = "([^"]+)"', _type_body(gui, t)))
+        placeholders = textures - NOT_PLACEHOLDERS
+        self.assertEqual(len(placeholders), 12)   # 5 bands, 2 alerts, 3 programmes, 2 pie layers
+        doc = _read(ICONS_DOC)
+        for t in sorted(placeholders):
+            self.assertIn(f"`{t}`", doc, t)
+
+
 class LocHygieneTest(unittest.TestCase):
     def test_new_concepts_are_defined_and_named(self):
         concepts = _read(CONCEPTS)
