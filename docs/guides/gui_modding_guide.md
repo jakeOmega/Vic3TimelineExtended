@@ -1570,6 +1570,7 @@ Data error in loc string 'te_hist_tt_markers'
     - **What works under it.** Every `JournalEntry.*` expression a JE widget uses, and the widget's loc. That includes `GetScriptedButtons` (drawn with vanilla's `scripted_journal_entry_button` type, `journal_entry.gui:988`), `GetScriptedProgressBars` and `IsActive`.
       The exception is a loc string shown as the `tooltip` of a `datamodel` item. It gets a fresh context without `JournalEntry` (gotcha #24), in a window just as in the journal.
     - **Gate it.** Vanilla shows that block only after a scripted GUI's `is_shown` passes `owner ?= { has_journal_entry = je_meiji_restoration }` (`journal_entry_sguis.txt:110`). Do the same, and put the datacontext on a child of the gated widget.
+    - **Confirmed in game (2026-09-28)** for an active entry: the Budget panel's Banking tab (`gui/budget_panel.gui`) draws the banking entry's three panels this way.
     - **Untested:** what it returns for an entry the player lacks or holds inactive.
 
     `docs/systems/system_panels_feasibility.md` § 3.2 uses this to show the journal widgets in a standalone window.
@@ -1580,6 +1581,11 @@ Data error in loc string 'te_hist_tt_markers'
     - **Compatibility, either way.** CMF redefines 11 types that this mod customizes through its full-file replacements: `journal_entry_panel`, `mobilization_widget`, the production-method and building-details items, and the state-buildings content. With CMF enabled, one side's changes to each are dropped without a log line.
 
     The type list and a test plan are in `docs/systems/system_panels_feasibility.md` § 7.3–7.4 and § 8.
+
+31. **A vanilla panel takes a tab name it does not define.** `gui/budget_panel.gui` adds a fourth Budget tab with `InformationPanel.SelectTab('te_banking')` and gates its content on `IsTabSelected('te_banking')`; it selects and stays selected (confirmed in game 2026-09-28).
+    - **Slots.** Vanilla's `tab_buttons` type (`shared/tab_bars.gui`) has five, and slots four and five are `visible = no` until a `*_button_visibility` / `*_button_visibility_checked` blockoverride says otherwise. Both halves of a slot need the tab test *and* any gate of your own.
+    - **The sidebar cycle skips it.** The sidebar opens Budget with `OpenPanelCycleTabs('budget', 'default|states|assets')` (`information_panel_bar.gui`), so pressing Budget never lands on the new tab, and pressing it on Assets closes the panel as in vanilla. Adding the tab to the cycle means replacing that file.
+    - **Greying a tab.** `tab_button` is a plain `button` that carries `using = disabled_stripes`, so an `enabled = "[…]"` placed in the `*_button_click` blockoverride greys it; its tooltip still shows. The Banking tab does this until the entry activates. Not yet seen in game.
 
 ---
 

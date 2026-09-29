@@ -1,12 +1,14 @@
 ﻿### Banking history charts — the "History" section of je_banking_cycle.
 ###
-### The section is the te_banking_history_panel type, shown in two places:
-### common/journal_entries/je_banking.txt attaches it through the named wrapper
-### at the foot of the file,
-### `widget = { name = "widget_je_banking_history" container = "custom_widget_container_2" }`,
-### directly under Current Conditions; the Budget panel's Banking tab
-### (gui/budget_panel.gui) instances the type under datacontext
-### GetPlayerJournalEntry('je_banking_cycle').
+### The charts are the te_banking_history_charts type, shown in two places,
+### each through its own collapsible shell:
+### - te_banking_history_panel, which common/journal_entries/je_banking.txt
+###   attaches through the named wrapper at the foot of the file,
+###   `widget = { name = "widget_je_banking_history" container = "custom_widget_container_2" }`,
+###   directly under Current Conditions;
+### - te_banking_history_panel_open, which the Budget panel's Banking tab
+###   (gui/budget_panel.gui) instances at its foot, under datacontext
+###   GetPlayerJournalEntry('je_banking_cycle').
 ###
 ### Six charts, one per unit: the cycle value and bubble pressure are 0..100
 ### indices, momentum is a signed monthly delta, and the three monetary series
@@ -19,9 +21,11 @@
 ### common/scripted_effects/te_history_banking_effects.txt; the reusable
 ### chart type lives in te_history_chart.gui.
 ###
-### The section is collapsed by default — the flag is the *open* flag, the
-### inverse of the dashboard's collapsed flags — so a player who does not open
-### it never pays for 1,440 bar slots (six charts x the 240-month store cap).
+### In the journal the section is collapsed by default — the flag is the *open*
+### flag, the inverse of the dashboard's collapsed flags — so a player who does
+### not open it never pays for 1,440 bar slots (six charts x the 240-month store
+### cap). The Budget tab's shell is open by default (owner's call, 2026-09-28):
+### the tab is a page the player chose to open, and the charts sit at its foot.
 ### An out-of-range month costs one `visible` test and nothing below it, so the
 ### 1-year view is as cheap as it ever was; only the 20-year view draws them
 ### all. Nothing here has an effect: the only click targets are the collapse
@@ -170,6 +174,461 @@ types te_banking_history_types
 		}
 	}
 
+	### The charts themselves: the range selector and the six charts. Shown by
+	### the two shells below, which differ only in the flag that opens them.
+	type te_banking_history_charts = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+
+		### Range selector + "history available since"
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = yes
+			parentanchor = hcenter
+			spacing = 4
+			margin = { 4 4 }
+
+			te_history_range_button = {
+				blockoverride "range_text" {
+					text = "te_hist_range_1y"
+				}
+				blockoverride "range_enabled" {
+					enabled = "[Not(GetVariableSystem.HasValue( 'te_hist_range', '1' ))]"
+				}
+				blockoverride "range_onclick" {
+					onclick = "[GetVariableSystem.Set( 'te_hist_range', '1' )]"
+				}
+			}
+			te_history_range_button = {
+				blockoverride "range_text" {
+					text = "te_hist_range_5y"
+				}
+				blockoverride "range_enabled" {
+					enabled = "[Not(GetVariableSystem.HasValue( 'te_hist_range', '5' ))]"
+				}
+				blockoverride "range_onclick" {
+					onclick = "[GetVariableSystem.Set( 'te_hist_range', '5' )]"
+				}
+			}
+			te_history_range_button = {
+				blockoverride "range_text" {
+					text = "te_hist_range_20y"
+				}
+				blockoverride "range_enabled" {
+					enabled = "[Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '5' ) )]"
+				}
+				blockoverride "range_onclick" {
+					onclick = "[GetVariableSystem.Set( 'te_hist_range', '20' )]"
+				}
+			}
+		}
+
+		textbox = {
+			visible = "[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('te_hist') ) )]"
+			parentanchor = hcenter
+			autoresize = yes
+			multiline = yes
+			max_width = 480
+			align = hcenter|nobaseline
+			text = "te_hist_since"
+		}
+
+		### What the two pips on a bar mean. Both halves apply here: the banking
+		### series is the only one that records crash markers.
+		te_history_marker_legend = {
+			visible = "[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('te_hist') ) )]"
+		}
+
+		### ---- Cycle value (0-100 index) --------------------------------
+		te_history_chart = {
+			blockoverride "chart_title" {
+				text = "te_hist_chart_bank_value_title"
+			}
+			blockoverride "chart_legend" {
+				text = "te_hist_chart_bank_value_legend"
+			}
+			blockoverride "bar_tooltip" {
+				tooltip = "te_hist_tt_bank_value"
+			}
+			### The one chart here that does NOT use te_history_bar_unsigned:
+			### its colour is the phase the month's reading falls in, so the
+			### series reads as a run of Stable years broken by a red Panic
+			### without anyone having to check the axis. Type and bands:
+			### te_history_bar_cycle_phase at the top of this file.
+			blockoverride "bar_body" {
+				te_history_bar_cycle_phase = {
+					visible = "[ScriptContainer.HasVariable( 'te_hist_v_bank_value' )]"
+				}
+			}
+		}
+
+		### ---- Momentum (signed monthly delta) --------------------------
+		te_history_chart = {
+			blockoverride "chart_title" {
+				text = "te_hist_chart_bank_momentum_title"
+			}
+			blockoverride "chart_legend" {
+				text = "te_hist_chart_bank_momentum_legend"
+			}
+			blockoverride "zero_axis" {
+				widget = {
+					size = { 100% 2 }
+					parentanchor = vcenter
+					alwaystransparent = yes
+
+					background = {
+						using = dark_area
+						alpha = 0.7
+					}
+				}
+			}
+			blockoverride "bar_tooltip" {
+				tooltip = "te_hist_tt_bank_momentum"
+			}
+			blockoverride "bar_body" {
+				te_history_bar_signed = {
+					visible = "[ScriptContainer.HasVariable( 'te_hist_v_bank_momentum' )]"
+					blockoverride "positive_values" {
+						min = 0
+						max = 6
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_bank_momentum' ) ) )]"
+					}
+					blockoverride "positive_cover_values" {
+						min = 0
+						max = 6
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_momentum' ), '(CFixedPoint)0.5' ) ) )]"
+					}
+					blockoverride "negative_values" {
+						min = -6
+						max = 0
+						value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_bank_momentum' ) ) )]"
+					}
+					blockoverride "negative_cover_values" {
+						min = -6
+						max = 0
+						value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', Add_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_momentum' ), '(CFixedPoint)0.5' ) ) )]"
+					}
+				}
+			}
+		}
+
+		### ---- Bubble pressure (0-100 index) ----------------------------
+		te_history_chart = {
+			blockoverride "chart_title" {
+				text = "te_hist_chart_bank_bubble_title"
+			}
+			blockoverride "chart_legend" {
+				text = "te_hist_chart_bank_bubble_legend"
+			}
+			blockoverride "bar_tooltip" {
+				tooltip = "te_hist_tt_bank_bubble"
+			}
+			blockoverride "bar_body" {
+				te_history_bar_unsigned = {
+					visible = "[ScriptContainer.HasVariable( 'te_hist_v_bank_bubble' )]"
+					blockoverride "values" {
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_bubble' ) ) )]"
+					}
+					blockoverride "cover_values" {
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_bubble' ), '(CFixedPoint)4' ) ) )]"
+					}
+					blockoverride "color" {
+						color = { 0.85 0.55 0.28 1.0 }
+					}
+				}
+			}
+		}
+
+		### ---- Policy rate (percentage points) --------------------------
+		### TWO CHARTS, ONE VISIBLE. The policy rate is never negative unless
+		### the country is on a digital currency, whose floor is -3
+		### (country_policy_rate_floor_add on law_digital_currency,
+		### monetary_policy_design.md §5.1). A signed +/-12 axis therefore
+		### spent half its height on a range almost no campaign ever enters,
+		### and squeezed the 2-6% band an ordinary campaign lives in into a
+		### quarter of the plot.
+		###
+		### So: an unsigned 0..12 chart for everyone, and a -3..12 chart with
+		### a 0% line for a digital currency, picked by banking_mon_is_digital
+		### (common/scripted_guis/te_monetary_sguis.txt). Only one is ever
+		### drawn, the same way the whole section is gated on the collapse
+		### flag so a player who never opens it pays for no bars at all.
+		###
+		### Both are unsigned, so the series keeps ONE colour above and below
+		### the line: a negative rate is an unusual policy, not a bad reading,
+		### and the red/green split te_history_bar_signed brings with it would
+		### say otherwise. A rate above 12% draws a full bar with the exact
+		### figure in the tooltip, as before.
+
+		### Everyone except a digital currency: the axis starts at 0.
+		te_history_chart = {
+			visible = "[Not( GetScriptedGui('banking_mon_is_digital').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+			blockoverride "chart_title" {
+				text = "te_hist_chart_mon_policy_title"
+			}
+			blockoverride "chart_legend" {
+				text = "te_hist_chart_mon_policy_legend"
+			}
+			blockoverride "bar_tooltip" {
+				tooltip = "te_hist_tt_mon_policy"
+			}
+			blockoverride "bar_body" {
+				te_history_bar_unsigned = {
+					visible = "[ScriptContainer.HasVariable( 'te_hist_v_mon_policy' )]"
+					blockoverride "values" {
+						min = 0
+						max = 12
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_mon_policy' ) ) )]"
+					}
+					blockoverride "cover_values" {
+						min = 0
+						max = 12
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_mon_policy' ), '(CFixedPoint)0.5' ) ) )]"
+					}
+					blockoverride "color" {
+						color = { 0.50 0.58 0.80 1.0 }
+					}
+				}
+			}
+		}
+
+		### Digital currency: the axis reaches down to the -3 floor, and the
+		### 0% line is drawn where it actually falls — a fifth of the way up
+		### a 15-point span, i.e. 23px above the bottom of the 96px plot area
+		### (the 84px bar band is centred in it, so its own floor sits 6px up,
+		### plus 0.2 x 84 = 16.8px). EYEBALL THIS IN GAME: it is the one
+		### number here that cannot be checked from the files.
+		te_history_chart = {
+			visible = "[GetScriptedGui('banking_mon_is_digital').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			blockoverride "chart_title" {
+				text = "te_hist_chart_mon_policy_title"
+			}
+			blockoverride "chart_legend" {
+				text = "te_hist_chart_mon_policy_legend_neg"
+			}
+			blockoverride "zero_axis" {
+				widget = {
+					size = { 100% 2 }
+					parentanchor = bottom
+					position = { 0 -23 }
+					alwaystransparent = yes
+
+					background = {
+						using = dark_area
+						alpha = 0.7
+					}
+				}
+			}
+			blockoverride "bar_tooltip" {
+				tooltip = "te_hist_tt_mon_policy"
+			}
+			blockoverride "bar_body" {
+				te_history_bar_unsigned = {
+					visible = "[ScriptContainer.HasVariable( 'te_hist_v_mon_policy' )]"
+					blockoverride "values" {
+						min = -3
+						max = 12
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)-3', ScriptContainer.GetVariableValue( 'te_hist_v_mon_policy' ) ) )]"
+					}
+					blockoverride "cover_values" {
+						min = -3
+						max = 12
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)-3', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_mon_policy' ), '(CFixedPoint)0.5' ) ) )]"
+					}
+					blockoverride "color" {
+						color = { 0.50 0.58 0.80 1.0 }
+					}
+				}
+			}
+		}
+
+		### ---- Rate the government pays (percentage points) --------------
+		### Never negative (the §4 clamp floors it at 0.5), so an unsigned
+		### bar with its floor at 0, the same as the policy-rate chart above.
+		### The axis stops at 20 rather than the variable's 60 ceiling for
+		### the same reason as above: a default campaign sits between 2 and
+		### 12, and a country in a debt spiral draws a full bar with the real
+		### figure in the tooltip.
+		###
+		### NOT TO THE SAME SCALE as the policy-rate chart (0..20 against
+		### 0..12), so the premium is the difference between the two
+		### *tooltips*, not the gap between the two bars. Giving them one
+		### axis would cost the rate chart nearly half its resolution in the
+		### band a normal campaign lives in, which is the problem that
+		### started this.
+		te_history_chart = {
+			blockoverride "chart_title" {
+				text = "te_hist_chart_mon_rate_paid_title"
+			}
+			blockoverride "chart_legend" {
+				text = "te_hist_chart_mon_rate_paid_legend"
+			}
+			blockoverride "bar_tooltip" {
+				tooltip = "te_hist_tt_mon_rate_paid"
+			}
+			blockoverride "bar_body" {
+				te_history_bar_unsigned = {
+					visible = "[ScriptContainer.HasVariable( 'te_hist_v_mon_rate_paid' )]"
+					blockoverride "values" {
+						min = 0
+						max = 20
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_mon_rate_paid' ) ) )]"
+					}
+					blockoverride "cover_values" {
+						min = 0
+						max = 20
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_mon_rate_paid' ), '(CFixedPoint)0.8' ) ) )]"
+					}
+					blockoverride "color" {
+						color = { 0.80 0.66 0.34 1.0 }
+					}
+				}
+			}
+		}
+
+		### ---- Headline inflation (percentage points) -------------------
+		### ONE CHART, NOT A PAIR. The policy rate needed two instances
+		### because only a digital currency can go under zero; every country
+		### can deflate, so the axis reaches below the line for all of them
+		### and the 0% line is drawn where it actually falls — a quarter of
+		### the way up a 16-point span, i.e. 27px above the bottom of the
+		### 96px plot area (the 84px bar band is centred in it, so its own
+		### floor sits 6px up, plus 0.25 x 84 = 21). EYEBALL THIS IN GAME,
+		### exactly like the digital policy-rate chart's 23px.
+		###
+		### WHY -4..12 AND NOT THE VARIABLE'S -10..100. A campaign lives
+		### between about -2 and +10: the comfort band tops out at 3 and the
+		### high band opens at 8, so both edges the player is steering
+		### against sit inside the plot with room above them. Giving the
+		### axis the hyperinflation range would squash every ordinary year
+		### into two pixels to keep space for a state that ends the currency
+		### within a few years of arriving.
+		###
+		### SO THE ENDS CLAMP, and both ends say so. Anything at or above
+		### 12% draws a full bar; anything at or below -4% draws a 1.5px
+		### sliver rather than nothing, on the cycle charts' floor trick, so
+		### a deep deflation is never mistaken for a month with no reading.
+		### Either way the bar's tooltip prints the exact figure, which is
+		### the same bargain the rate-paid chart's 0..20 axis strikes.
+		###
+		### ONE COLOUR ABOVE AND BELOW THE LINE, like the policy-rate pair
+		### and unlike momentum: te_history_bar_signed's green/red split
+		### would read as good-above / bad-below, and deflation is not the
+		### opposite of a problem. It is also the honest axis — a signed bar
+		### splits the plot 50/50 whatever its two ranges are, so a -2%
+		### month would draw taller than a +2% one.
+		### NO INFLATION AND NO EXCHANGE RATE UNDER `banking_system_simplified`, so
+		### the two charts that read them are hidden rather than drawn empty; the
+		### samples are not taken either (te_history_banking_effects.txt).
+		te_history_chart = {
+			visible = "[GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			blockoverride "chart_title" {
+				text = "te_hist_chart_mon_inflation_title"
+			}
+			blockoverride "chart_legend" {
+				text = "te_hist_chart_mon_inflation_legend"
+			}
+			blockoverride "zero_axis" {
+				widget = {
+					size = { 100% 2 }
+					parentanchor = bottom
+					position = { 0 -27 }
+					alwaystransparent = yes
+
+					background = {
+						using = dark_area
+						alpha = 0.7
+					}
+				}
+			}
+			blockoverride "bar_tooltip" {
+				tooltip = "te_hist_tt_mon_inflation"
+			}
+			blockoverride "bar_body" {
+				te_history_bar_unsigned = {
+					visible = "[ScriptContainer.HasVariable( 'te_hist_v_mon_inflation' )]"
+					blockoverride "values" {
+						min = -4
+						max = 12
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)-3.7', ScriptContainer.GetVariableValue( 'te_hist_v_mon_inflation' ) ) )]"
+					}
+					blockoverride "cover_values" {
+						min = -4
+						max = 12
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)-4', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_mon_inflation' ), '(CFixedPoint)0.65' ) ) )]"
+					}
+					blockoverride "color" {
+						color = { 0.80 0.45 0.32 1.0 }
+					}
+				}
+			}
+		}
+
+		### ---- The exchange rate (monetary policy phase 4, §15.5) ----------
+		### te_fx_index, 50..150 with a drawn line at par. The spec's LOOP
+		### DETECTOR for the depreciation spiral (§20 risk 9): weak currency ->
+		### imported inflation -> expectations -> weaker currency shows up here
+		### as a slide that will not level off, years before it reaches the
+		### floor. Exact in the tooltip — the index is displayed exactly on the
+		### dashboard too, since every input to it already is. A metallic
+		### country draws a flat line at par, which is the right picture of a
+		### fixed parity. One colour either side of par, for the inflation
+		### chart's reason: weak is not the opposite of a problem.
+		### NO INFLATION AND NO EXCHANGE RATE UNDER `banking_system_simplified`, so
+		### the two charts that read them are hidden rather than drawn empty; the
+		### samples are not taken either (te_history_banking_effects.txt).
+		te_history_chart = {
+			visible = "[GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			blockoverride "chart_title" {
+				text = "te_hist_chart_mon_fx_title"
+			}
+			blockoverride "chart_legend" {
+				text = "te_hist_chart_mon_fx_legend"
+			}
+			blockoverride "zero_axis" {
+				widget = {
+					size = { 100% 2 }
+					parentanchor = vcenter
+					alwaystransparent = yes
+
+					background = {
+						using = dark_area
+						alpha = 0.7
+					}
+				}
+			}
+			blockoverride "bar_tooltip" {
+				tooltip = "te_hist_tt_mon_fx"
+			}
+			blockoverride "bar_body" {
+				te_history_bar_unsigned = {
+					visible = "[ScriptContainer.HasVariable( 'te_hist_v_mon_fx' )]"
+					blockoverride "values" {
+						min = 50
+						max = 150
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)51.5', ScriptContainer.GetVariableValue( 'te_hist_v_mon_fx' ) ) )]"
+					}
+					blockoverride "cover_values" {
+						min = 50
+						max = 150
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)50', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_mon_fx' ), '(CFixedPoint)4' ) ) )]"
+					}
+					blockoverride "color" {
+						color = { 0.36 0.56 0.78 1.0 }
+					}
+				}
+			}
+		}
+	}
+
+	### The journal entry's section: collapsed by default (te_hist_charts_open is
+	### the OPEN flag), for the cost reason in the header.
 	type te_banking_history_panel = flowcontainer {
 		# je_banking_cycle has is_shown_when_inactive, so the panel can open for a
 		# country whose entry has not activated yet and therefore has none of the
@@ -196,456 +655,42 @@ types te_banking_history_types
 			}
 		}
 
-		flowcontainer = {
-			direction = vertical
-			parentanchor = hcenter
-			ignoreinvisible = yes
-			spacing = 2
+		te_banking_history_charts = {
 			visible = "[GetVariableSystem.Exists('te_hist_charts_open')]"
+		}
+	}
 
-			### Range selector + "history available since"
-			flowcontainer = {
-				direction = horizontal
-				ignoreinvisible = yes
-				parentanchor = hcenter
-				spacing = 4
-				margin = { 4 4 }
+	### The Budget panel's Banking tab's section: open by default. It has a flag
+	### of its own, te_banking_tab_hist_closed (the CLOSED flag), so opening or
+	### closing it in one host leaves the other as it was.
+	type te_banking_history_panel_open = flowcontainer {
+		# je_banking_cycle has is_shown_when_inactive, so the panel can open for a
+		# country whose entry has not activated yet and therefore has none of the
+		# cycle variables. Draw nothing until the journal entry is running.
+		visible = "[JournalEntry.IsActive]"
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
 
-				te_history_range_button = {
-					blockoverride "range_text" {
-						text = "te_hist_range_1y"
-					}
-					blockoverride "range_enabled" {
-						enabled = "[Not(GetVariableSystem.HasValue( 'te_hist_range', '1' ))]"
-					}
-					blockoverride "range_onclick" {
-						onclick = "[GetVariableSystem.Set( 'te_hist_range', '1' )]"
-					}
-				}
-				te_history_range_button = {
-					blockoverride "range_text" {
-						text = "te_hist_range_5y"
-					}
-					blockoverride "range_enabled" {
-						enabled = "[Not(GetVariableSystem.HasValue( 'te_hist_range', '5' ))]"
-					}
-					blockoverride "range_onclick" {
-						onclick = "[GetVariableSystem.Set( 'te_hist_range', '5' )]"
-					}
-				}
-				te_history_range_button = {
-					blockoverride "range_text" {
-						text = "te_hist_range_20y"
-					}
-					blockoverride "range_enabled" {
-						enabled = "[Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '5' ) )]"
-					}
-					blockoverride "range_onclick" {
-						onclick = "[GetVariableSystem.Set( 'te_hist_range', '20' )]"
-					}
-				}
+		banking_dash_category_header = {
+			blockoverride "left_text" {
+				text = "te_hist_section_header"
+				using = elide_fontsize_min
 			}
-
-			textbox = {
-				visible = "[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('te_hist') ) )]"
-				parentanchor = hcenter
-				autoresize = yes
-				multiline = yes
-				max_width = 480
-				align = hcenter|nobaseline
-				text = "te_hist_since"
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_banking_tab_hist_closed')]"
 			}
-
-			### What the two pips on a bar mean. Both halves apply here: the banking
-			### series is the only one that records crash markers.
-			te_history_marker_legend = {
-				visible = "[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('te_hist') ) )]"
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('te_banking_tab_hist_closed')]"
 			}
-
-			### ---- Cycle value (0-100 index) --------------------------------
-			te_history_chart = {
-				blockoverride "chart_title" {
-					text = "te_hist_chart_bank_value_title"
-				}
-				blockoverride "chart_legend" {
-					text = "te_hist_chart_bank_value_legend"
-				}
-				blockoverride "bar_tooltip" {
-					tooltip = "te_hist_tt_bank_value"
-				}
-				### The one chart here that does NOT use te_history_bar_unsigned:
-				### its colour is the phase the month's reading falls in, so the
-				### series reads as a run of Stable years broken by a red Panic
-				### without anyone having to check the axis. Type and bands:
-				### te_history_bar_cycle_phase at the top of this file.
-				blockoverride "bar_body" {
-					te_history_bar_cycle_phase = {
-						visible = "[ScriptContainer.HasVariable( 'te_hist_v_bank_value' )]"
-					}
-				}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('te_banking_tab_hist_closed'))]"
 			}
+		}
 
-			### ---- Momentum (signed monthly delta) --------------------------
-			te_history_chart = {
-				blockoverride "chart_title" {
-					text = "te_hist_chart_bank_momentum_title"
-				}
-				blockoverride "chart_legend" {
-					text = "te_hist_chart_bank_momentum_legend"
-				}
-				blockoverride "zero_axis" {
-					widget = {
-						size = { 100% 2 }
-						parentanchor = vcenter
-						alwaystransparent = yes
-
-						background = {
-							using = dark_area
-							alpha = 0.7
-						}
-					}
-				}
-				blockoverride "bar_tooltip" {
-					tooltip = "te_hist_tt_bank_momentum"
-				}
-				blockoverride "bar_body" {
-					te_history_bar_signed = {
-						visible = "[ScriptContainer.HasVariable( 'te_hist_v_bank_momentum' )]"
-						blockoverride "positive_values" {
-							min = 0
-							max = 6
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_bank_momentum' ) ) )]"
-						}
-						blockoverride "positive_cover_values" {
-							min = 0
-							max = 6
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_momentum' ), '(CFixedPoint)0.5' ) ) )]"
-						}
-						blockoverride "negative_values" {
-							min = -6
-							max = 0
-							value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_bank_momentum' ) ) )]"
-						}
-						blockoverride "negative_cover_values" {
-							min = -6
-							max = 0
-							value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', Add_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_momentum' ), '(CFixedPoint)0.5' ) ) )]"
-						}
-					}
-				}
-			}
-
-			### ---- Bubble pressure (0-100 index) ----------------------------
-			te_history_chart = {
-				blockoverride "chart_title" {
-					text = "te_hist_chart_bank_bubble_title"
-				}
-				blockoverride "chart_legend" {
-					text = "te_hist_chart_bank_bubble_legend"
-				}
-				blockoverride "bar_tooltip" {
-					tooltip = "te_hist_tt_bank_bubble"
-				}
-				blockoverride "bar_body" {
-					te_history_bar_unsigned = {
-						visible = "[ScriptContainer.HasVariable( 'te_hist_v_bank_bubble' )]"
-						blockoverride "values" {
-							min = 0
-							max = 100
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_bubble' ) ) )]"
-						}
-						blockoverride "cover_values" {
-							min = 0
-							max = 100
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_bubble' ), '(CFixedPoint)4' ) ) )]"
-						}
-						blockoverride "color" {
-							color = { 0.85 0.55 0.28 1.0 }
-						}
-					}
-				}
-			}
-
-			### ---- Policy rate (percentage points) --------------------------
-			### TWO CHARTS, ONE VISIBLE. The policy rate is never negative unless
-			### the country is on a digital currency, whose floor is -3
-			### (country_policy_rate_floor_add on law_digital_currency,
-			### monetary_policy_design.md §5.1). A signed +/-12 axis therefore
-			### spent half its height on a range almost no campaign ever enters,
-			### and squeezed the 2-6% band an ordinary campaign lives in into a
-			### quarter of the plot.
-			###
-			### So: an unsigned 0..12 chart for everyone, and a -3..12 chart with
-			### a 0% line for a digital currency, picked by banking_mon_is_digital
-			### (common/scripted_guis/te_monetary_sguis.txt). Only one is ever
-			### drawn, the same way the whole section is gated on the collapse
-			### flag so a player who never opens it pays for no bars at all.
-			###
-			### Both are unsigned, so the series keeps ONE colour above and below
-			### the line: a negative rate is an unusual policy, not a bad reading,
-			### and the red/green split te_history_bar_signed brings with it would
-			### say otherwise. A rate above 12% draws a full bar with the exact
-			### figure in the tooltip, as before.
-
-			### Everyone except a digital currency: the axis starts at 0.
-			te_history_chart = {
-				visible = "[Not( GetScriptedGui('banking_mon_is_digital').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
-				blockoverride "chart_title" {
-					text = "te_hist_chart_mon_policy_title"
-				}
-				blockoverride "chart_legend" {
-					text = "te_hist_chart_mon_policy_legend"
-				}
-				blockoverride "bar_tooltip" {
-					tooltip = "te_hist_tt_mon_policy"
-				}
-				blockoverride "bar_body" {
-					te_history_bar_unsigned = {
-						visible = "[ScriptContainer.HasVariable( 'te_hist_v_mon_policy' )]"
-						blockoverride "values" {
-							min = 0
-							max = 12
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_mon_policy' ) ) )]"
-						}
-						blockoverride "cover_values" {
-							min = 0
-							max = 12
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_mon_policy' ), '(CFixedPoint)0.5' ) ) )]"
-						}
-						blockoverride "color" {
-							color = { 0.50 0.58 0.80 1.0 }
-						}
-					}
-				}
-			}
-
-			### Digital currency: the axis reaches down to the -3 floor, and the
-			### 0% line is drawn where it actually falls — a fifth of the way up
-			### a 15-point span, i.e. 23px above the bottom of the 96px plot area
-			### (the 84px bar band is centred in it, so its own floor sits 6px up,
-			### plus 0.2 x 84 = 16.8px). EYEBALL THIS IN GAME: it is the one
-			### number here that cannot be checked from the files.
-			te_history_chart = {
-				visible = "[GetScriptedGui('banking_mon_is_digital').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				blockoverride "chart_title" {
-					text = "te_hist_chart_mon_policy_title"
-				}
-				blockoverride "chart_legend" {
-					text = "te_hist_chart_mon_policy_legend_neg"
-				}
-				blockoverride "zero_axis" {
-					widget = {
-						size = { 100% 2 }
-						parentanchor = bottom
-						position = { 0 -23 }
-						alwaystransparent = yes
-
-						background = {
-							using = dark_area
-							alpha = 0.7
-						}
-					}
-				}
-				blockoverride "bar_tooltip" {
-					tooltip = "te_hist_tt_mon_policy"
-				}
-				blockoverride "bar_body" {
-					te_history_bar_unsigned = {
-						visible = "[ScriptContainer.HasVariable( 'te_hist_v_mon_policy' )]"
-						blockoverride "values" {
-							min = -3
-							max = 12
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)-3', ScriptContainer.GetVariableValue( 'te_hist_v_mon_policy' ) ) )]"
-						}
-						blockoverride "cover_values" {
-							min = -3
-							max = 12
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)-3', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_mon_policy' ), '(CFixedPoint)0.5' ) ) )]"
-						}
-						blockoverride "color" {
-							color = { 0.50 0.58 0.80 1.0 }
-						}
-					}
-				}
-			}
-
-			### ---- Rate the government pays (percentage points) --------------
-			### Never negative (the §4 clamp floors it at 0.5), so an unsigned
-			### bar with its floor at 0, the same as the policy-rate chart above.
-			### The axis stops at 20 rather than the variable's 60 ceiling for
-			### the same reason as above: a default campaign sits between 2 and
-			### 12, and a country in a debt spiral draws a full bar with the real
-			### figure in the tooltip.
-			###
-			### NOT TO THE SAME SCALE as the policy-rate chart (0..20 against
-			### 0..12), so the premium is the difference between the two
-			### *tooltips*, not the gap between the two bars. Giving them one
-			### axis would cost the rate chart nearly half its resolution in the
-			### band a normal campaign lives in, which is the problem that
-			### started this.
-			te_history_chart = {
-				blockoverride "chart_title" {
-					text = "te_hist_chart_mon_rate_paid_title"
-				}
-				blockoverride "chart_legend" {
-					text = "te_hist_chart_mon_rate_paid_legend"
-				}
-				blockoverride "bar_tooltip" {
-					tooltip = "te_hist_tt_mon_rate_paid"
-				}
-				blockoverride "bar_body" {
-					te_history_bar_unsigned = {
-						visible = "[ScriptContainer.HasVariable( 'te_hist_v_mon_rate_paid' )]"
-						blockoverride "values" {
-							min = 0
-							max = 20
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_mon_rate_paid' ) ) )]"
-						}
-						blockoverride "cover_values" {
-							min = 0
-							max = 20
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_mon_rate_paid' ), '(CFixedPoint)0.8' ) ) )]"
-						}
-						blockoverride "color" {
-							color = { 0.80 0.66 0.34 1.0 }
-						}
-					}
-				}
-			}
-
-			### ---- Headline inflation (percentage points) -------------------
-			### ONE CHART, NOT A PAIR. The policy rate needed two instances
-			### because only a digital currency can go under zero; every country
-			### can deflate, so the axis reaches below the line for all of them
-			### and the 0% line is drawn where it actually falls — a quarter of
-			### the way up a 16-point span, i.e. 27px above the bottom of the
-			### 96px plot area (the 84px bar band is centred in it, so its own
-			### floor sits 6px up, plus 0.25 x 84 = 21). EYEBALL THIS IN GAME,
-			### exactly like the digital policy-rate chart's 23px.
-			###
-			### WHY -4..12 AND NOT THE VARIABLE'S -10..100. A campaign lives
-			### between about -2 and +10: the comfort band tops out at 3 and the
-			### high band opens at 8, so both edges the player is steering
-			### against sit inside the plot with room above them. Giving the
-			### axis the hyperinflation range would squash every ordinary year
-			### into two pixels to keep space for a state that ends the currency
-			### within a few years of arriving.
-			###
-			### SO THE ENDS CLAMP, and both ends say so. Anything at or above
-			### 12% draws a full bar; anything at or below -4% draws a 1.5px
-			### sliver rather than nothing, on the cycle charts' floor trick, so
-			### a deep deflation is never mistaken for a month with no reading.
-			### Either way the bar's tooltip prints the exact figure, which is
-			### the same bargain the rate-paid chart's 0..20 axis strikes.
-			###
-			### ONE COLOUR ABOVE AND BELOW THE LINE, like the policy-rate pair
-			### and unlike momentum: te_history_bar_signed's green/red split
-			### would read as good-above / bad-below, and deflation is not the
-			### opposite of a problem. It is also the honest axis — a signed bar
-			### splits the plot 50/50 whatever its two ranges are, so a -2%
-			### month would draw taller than a +2% one.
-			### NO INFLATION AND NO EXCHANGE RATE UNDER `banking_system_simplified`, so
-			### the two charts that read them are hidden rather than drawn empty; the
-			### samples are not taken either (te_history_banking_effects.txt).
-			te_history_chart = {
-				visible = "[GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				blockoverride "chart_title" {
-					text = "te_hist_chart_mon_inflation_title"
-				}
-				blockoverride "chart_legend" {
-					text = "te_hist_chart_mon_inflation_legend"
-				}
-				blockoverride "zero_axis" {
-					widget = {
-						size = { 100% 2 }
-						parentanchor = bottom
-						position = { 0 -27 }
-						alwaystransparent = yes
-
-						background = {
-							using = dark_area
-							alpha = 0.7
-						}
-					}
-				}
-				blockoverride "bar_tooltip" {
-					tooltip = "te_hist_tt_mon_inflation"
-				}
-				blockoverride "bar_body" {
-					te_history_bar_unsigned = {
-						visible = "[ScriptContainer.HasVariable( 'te_hist_v_mon_inflation' )]"
-						blockoverride "values" {
-							min = -4
-							max = 12
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)-3.7', ScriptContainer.GetVariableValue( 'te_hist_v_mon_inflation' ) ) )]"
-						}
-						blockoverride "cover_values" {
-							min = -4
-							max = 12
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)-4', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_mon_inflation' ), '(CFixedPoint)0.65' ) ) )]"
-						}
-						blockoverride "color" {
-							color = { 0.80 0.45 0.32 1.0 }
-						}
-					}
-				}
-			}
-
-			### ---- The exchange rate (monetary policy phase 4, §15.5) ----------
-			### te_fx_index, 50..150 with a drawn line at par. The spec's LOOP
-			### DETECTOR for the depreciation spiral (§20 risk 9): weak currency ->
-			### imported inflation -> expectations -> weaker currency shows up here
-			### as a slide that will not level off, years before it reaches the
-			### floor. Exact in the tooltip — the index is displayed exactly on the
-			### dashboard too, since every input to it already is. A metallic
-			### country draws a flat line at par, which is the right picture of a
-			### fixed parity. One colour either side of par, for the inflation
-			### chart's reason: weak is not the opposite of a problem.
-			### NO INFLATION AND NO EXCHANGE RATE UNDER `banking_system_simplified`, so
-			### the two charts that read them are hidden rather than drawn empty; the
-			### samples are not taken either (te_history_banking_effects.txt).
-			te_history_chart = {
-				visible = "[GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				blockoverride "chart_title" {
-					text = "te_hist_chart_mon_fx_title"
-				}
-				blockoverride "chart_legend" {
-					text = "te_hist_chart_mon_fx_legend"
-				}
-				blockoverride "zero_axis" {
-					widget = {
-						size = { 100% 2 }
-						parentanchor = vcenter
-						alwaystransparent = yes
-
-						background = {
-							using = dark_area
-							alpha = 0.7
-						}
-					}
-				}
-				blockoverride "bar_tooltip" {
-					tooltip = "te_hist_tt_mon_fx"
-				}
-				blockoverride "bar_body" {
-					te_history_bar_unsigned = {
-						visible = "[ScriptContainer.HasVariable( 'te_hist_v_mon_fx' )]"
-						blockoverride "values" {
-							min = 50
-							max = 150
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)51.5', ScriptContainer.GetVariableValue( 'te_hist_v_mon_fx' ) ) )]"
-						}
-						blockoverride "cover_values" {
-							min = 50
-							max = 150
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)50', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_mon_fx' ), '(CFixedPoint)4' ) ) )]"
-						}
-						blockoverride "color" {
-							color = { 0.36 0.56 0.78 1.0 }
-						}
-					}
-				}
-			}
+		te_banking_history_charts = {
+			visible = "[Not(GetVariableSystem.Exists('te_banking_tab_hist_closed'))]"
 		}
 	}
 }

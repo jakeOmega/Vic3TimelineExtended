@@ -409,11 +409,11 @@ Posture and crises share the **Nuclear Weapons** entry with the programme (above
 ### Policy Dashboard
 `gui/journal_entry_widgets/banking_dashboard_widget.gui` renders two custom widgets into the vanilla journal-entry panel (`custom_widget_container_1` and `_3`; the history charts take `_2`): a **Current Conditions** readout and an **Active Policies / Available Interventions** list.
 
-**Budget tab (prototype, 2026-09-28).** The same three panels also show in a fourth tab of the Budget panel, *Banking* (`gui/budget_panel.gui`, a full-file override of vanilla's).
-- Each panel is a type: `te_banking_conditions_panel`, `te_banking_policies_panel`, `te_banking_history_panel`. The journal entry attaches it through a named wrapper at the foot of its file; the tab instances it under `datacontext = "[GetPlayerJournalEntry('je_banking_cycle')]"`.
-- The tab button and its content are gated on `te_budget_banking_tab_sgui` (rule on, entry active). The entry's scripted buttons are not drawn in the tab.
+**Budget tab (prototype, 2026-09-28; seen in game).** The same panels also show in a fourth tab of the Budget panel, *Banking* (`gui/budget_panel.gui`, a full-file override of vanilla's): conditions, policies, a link back to the entry, then the history charts.
+- Each panel is a type: `te_banking_conditions_panel`, `te_banking_policies_panel`, and the charts `te_banking_history_charts`. The journal entry attaches them through named wrappers at the foot of their files; the tab instances them under `datacontext = "[GetPlayerJournalEntry('je_banking_cycle')]"`.
+- The history section has two shells over the same charts: `te_banking_history_panel` for the journal (collapsed by default, open flag `te_hist_charts_open`) and `te_banking_history_panel_open` for the tab (open by default, closed flag `te_banking_tab_hist_closed`).
+- The tab is on the strip whenever the rule is on (`te_budget_banking_tab_unlock_sgui`) and greyed until the entry is active (`te_budget_banking_tab_sgui`). The greyed tab's tooltip renders the unlock test with ticks: `te_banking_entry_unlocked`, the same trigger the entry's `is_shown_when_inactive` calls. The entry's scripted buttons are not drawn in the tab.
 - **The panels must read nothing but `JournalEntry` and what it reaches**, or they break in the tab. `GetPlayer` or a GUI-variable flag is fine; an ancestor's datacontext from `journal_entry.gui` is not.
-- Not yet checked in game. What each outcome of the first launch means: `system_panels_feasibility.md` header.
 
 **Single source of truth.** Every button's `possible` and `effect` body lives in a named helper — `banking_possible_<button>` in `common/scripted_triggers/banking_policy_triggers.txt`, `banking_effect_<button>` in `common/scripted_effects/banking_policy_effects.txt` — and both the `scripted_button` and the dashboard's scripted GUI call it. `visible`/`possible` on both halves of every enable/disable pair read the `banking_tool_*_active` family in `market_triggers.txt`. **If you add or retune a policy, edit the helper, never the button or the scripted GUI body.**
 

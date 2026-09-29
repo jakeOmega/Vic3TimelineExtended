@@ -11,12 +11,17 @@
 # purely so the widget can ask script a yes/no question.
 
 # ---------------------------------------------------------------------------
-# Budget panel's Banking tab (gui/budget_panel.gui). Shows the tab, and lets its
-# GetPlayerJournalEntry('je_banking_cycle') datacontext resolve, only for a
-# country running the entry. has_journal_entry counts active entries only, so a
-# country whose entry is still shown-but-inactive gets no tab. Reads nothing
-# but the root, so it is safe as a `visible` gate (gotcha #22 in
+# Budget panel's Banking tab (gui/budget_panel.gui). Both read nothing but the
+# root, so they are safe as `visible` / `enabled` gates (gotcha #22 in
 # docs/guides/gui_modding_guide.md).
+#
+# te_budget_banking_tab_sgui: the entry is running. Enables the tab, and gates
+# the content that lets its GetPlayerJournalEntry('je_banking_cycle')
+# datacontext resolve. has_journal_entry counts active entries only.
+#
+# te_budget_banking_tab_unlock_sgui: is_shown puts the tab on the strip
+# whenever the rule is on, greyed until the entry runs. is_valid is the entry's
+# unlock test, rendered with IsValidTooltip as the greyed tab's checklist.
 # ---------------------------------------------------------------------------
 te_budget_banking_tab_sgui = {
 	scope = country
@@ -26,6 +31,14 @@ te_budget_banking_tab_sgui = {
 	}
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
+	effect = { }
+}
+
+te_budget_banking_tab_unlock_sgui = {
+	scope = country
+	is_shown = { te_banking_system_on = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_banking_entry_unlocked = yes }
 	effect = { }
 }
 

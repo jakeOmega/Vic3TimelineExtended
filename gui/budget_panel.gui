@@ -146,29 +146,31 @@ types budget
 
 				### MOD: Banking tab (te_banking) ###
 				# A fourth tab showing the banking journal entry's own panels (the
-				# content block at the foot of scrollarea_content). Offered only to a
-				# country running je_banking_cycle with the banking rule on, which
-				# te_budget_banking_tab_sgui answers for. tab_buttons defaults both
-				# halves of an unused tab to `visible = no`, so each visibility block
-				# below tests the gate as well as the tab.
+				# content block at the foot of scrollarea_content). On the strip
+				# whenever the banking rule is on (te_budget_banking_tab_unlock_sgui),
+				# greyed until the entry runs (te_budget_banking_tab_sgui); the greyed
+				# tab's tooltip lists the unlock conditions with ticks. tab_buttons
+				# defaults both halves of an unused tab to `visible = no`, so each
+				# visibility block below tests the gate as well as the tab.
 				blockoverride "fourth_button"
 				{
 					text = "te_budget_tab_banking"
 				}
 				blockoverride "fourth_button_tooltip" {
-					tooltip = "te_budget_tab_banking_tt"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_budget_tab_banking_tt', Concatenate( Localize( 'te_budget_tab_banking_locked_tt' ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 				}
 				blockoverride "fourth_button_click"
 				{
+					enabled = "[GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					onclick = "[InformationPanel.SelectTab('te_banking')]"
 				}
 				blockoverride "fourth_button_visibility"
 				{
-					visible = "[And( InformationPanel.IsTabSelected('te_banking'), GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					visible = "[And( InformationPanel.IsTabSelected('te_banking'), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 				}
 				blockoverride "fourth_button_visibility_checked"
 				{
-					visible = "[And( Not( InformationPanel.IsTabSelected('te_banking') ), GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					visible = "[And( Not( InformationPanel.IsTabSelected('te_banking') ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 				}
 				blockoverride "fourth_button_selected"
 				{
@@ -1509,10 +1511,11 @@ types budget
 			### MOD: Banking tab (te_banking) ###
 			# The banking journal entry's panels, the same types the entry shows
 			# (gui/journal_entry_widgets/banking_dashboard_widget.gui and
-			# banking_history_widget.gui), in the entry's order: conditions, history,
-			# policies. The entry's scripted buttons are not drawn: the policy panel
-			# carries the same actions, and the buttons stay in the journal as the
-			# AI's path and the player's fallback.
+			# banking_history_widget.gui): conditions, policies, a link back to the
+			# entry, then the history charts, open by default here
+			# (te_banking_history_panel_open). The entry's scripted buttons are not
+			# drawn: the policy panel carries the same actions, and the buttons stay
+			# in the journal as the AI's path and the player's fallback.
 			#
 			# Three layers, so a failure shows where it is. The header sits outside
 			# the gate, so it appears whenever the tab is selected. The gate
@@ -1549,7 +1552,6 @@ types budget
 						spacing = 10
 
 						te_banking_conditions_panel = {}
-						te_banking_history_panel = {}
 						te_banking_policies_panel = {}
 
 						button = {
@@ -1561,6 +1563,8 @@ types budget
 							tooltip = "te_budget_banking_open_journal_tt"
 							onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
 						}
+
+						te_banking_history_panel_open = {}
 					}
 				}
 			}
