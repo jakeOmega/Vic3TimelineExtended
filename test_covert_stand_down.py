@@ -26,11 +26,15 @@ class StandDownTests(unittest.TestCase):
 
     def test_each_type_visible_on_its_own_tag_only(self):
         gui = WIDGET.read_text(encoding="utf-8-sig")
-        # Instances (not the type definition): `covert_op_stand_down_button = {`
-        # indented under the row, each up to the next instance or the row's end.
-        starts = [m.start() for m in re.finditer(r"(?m)^\t\tcovert_op_stand_down_button = \{", gui)]
+        # Instances (not the type definition) inside the row type: each
+        # `covert_op_stand_down_button = {` up to its own closing brace. Since
+        # the style-guide pass they sit in the row's centred controls strip,
+        # one level deeper than before, so the indentation is read, not fixed.
+        row = gui[gui.index("type widget_je_covert_operation_row = "):]
+        row = row[: re.search(r"\n\ttype \w+ = |\n}\n", row).start()]
+        starts = list(re.finditer(r"(?m)^(\t+)covert_op_stand_down_button = \{", row))
         self.assertEqual(len(starts), len(TYPES))
-        blocks = [gui[a:b] for a, b in zip(starts, starts[1:] + [gui.index("\n\t}\n", starts[-1])])]
+        blocks = [row[m.start():row.index("\n" + m.group(1) + "}\n", m.start())] for m in starts]
         for t, block in zip(TYPES, blocks):
             self.assertIn("covert_stand_down_%s_sgui" % t, block)
             self.assertIn("visible = \"[ScriptContainer.HasTag('iw_op_%s')]\"" % t, block)

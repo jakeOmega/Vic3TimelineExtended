@@ -288,13 +288,20 @@ class DisplayTests(unittest.TestCase):
             self.assertIn("iw_tradecraft_reason_%d" % code, block)
 
     def test_widget_row(self):
+        # Since the style-guide pass Tradecraft is in the always-shown
+        # overview (te_covert_overview_panel): the tier as an icon after
+        # funding's, and the score as a bar row, after the capacity bar,
+        # carrying the rules tooltip it had as a command-centre line.
         body = _text(WIDGET)
-        cc = body[body.index('name = "widget_je_covert_command_centre"'):body.index('name = "widget_je_covert_operations"')]
-        self.assertIn('text = "je_iw_tradecraft_header"', cc)
-        self.assertIn('text = "je_iw_tradecraft_line"', cc)
-        self.assertIn('tooltip = "je_iw_tradecraft_tooltip"', cc)
-        self.assertLess(cc.index("je_iw_funding_header"), cc.index("je_iw_tradecraft_header"))
-        self.assertLess(cc.index("je_iw_tradecraft_header"), cc.index("je_iw_detection_header"))
+        ov = body[body.index("type te_covert_overview_panel = "):]
+        ov = ov[: ov.index("\n\t}\n")]
+        self.assertIn('text = "je_iw_tradecraft_header"', ov)
+        self.assertIn('text = "je_iw_tradecraft_line"', ov)
+        self.assertIn('tooltip = "je_iw_tradecraft_tooltip"', ov)
+        self.assertIn('text = "je_iw_ov_tc_label"', ov)
+        self.assertLess(ov.index("je_iw_ov_funding_label"), ov.index("je_iw_ov_tc_label"))
+        self.assertLess(ov.index("je_iw_capacity_header"), ov.index("je_iw_tradecraft_header"))
+        self.assertIn("covert_tradecraft_tier_name", _all_loc().split(" je_iw_ov_tc_label:")[1].split("\n")[0])
 
     def test_loc_keys_exist(self):
         loc = _all_loc()
