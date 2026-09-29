@@ -274,9 +274,35 @@ types diplomatic_panel
 
 							te_je_scripted_bars = {}
 							te_je_status_desc = {}
-							te_un_chamber_panel = {}
-							te_je_scripted_buttons = {}
-							te_un_authority_panel = {}
+							te_un_status_sections = {}
+
+							# The entry's own buttons (founding, joining, leaving and most
+							# requests exist only here), in a section of their own. A
+							# wrapper carries the section's gate: te_je_scripted_buttons
+							# has a visible of its own (gotcha #17).
+							un_chamber_section_header = {
+								blockoverride "left_text" {
+									text = "te_diplomacy_un_tab_actions_header"
+								}
+								blockoverride "onclick" {
+									onclick = "[GetVariableSystem.Toggle('te_un_tab_actions_closed')]"
+								}
+								blockoverride "onclick_showmore" {
+									visible = "[GetVariableSystem.Exists('te_un_tab_actions_closed')]"
+								}
+								blockoverride "onclick_showless" {
+									visible = "[Not(GetVariableSystem.Exists('te_un_tab_actions_closed'))]"
+								}
+							}
+							flowcontainer = {
+								visible = "[Not(GetVariableSystem.Exists('te_un_tab_actions_closed'))]"
+								parentanchor = hcenter
+								direction = vertical
+
+								te_je_scripted_buttons = {}
+							}
+
+							te_un_reference_sections = {}
 
 							button = {
 								visible = "[JournalEntry.IsActive]"

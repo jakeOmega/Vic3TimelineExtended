@@ -29,9 +29,12 @@
 ### scripted GUI here is still called only through ExecuteTooltip, which
 ### renders an effect without executing it.
 ###
-### Wired via `widget = { name = "widget_je_un_chamber" container =
-### "custom_widget_container_2" }` in je_united_nations, so it sits under the
-### status description and above the button grid.
+### A type library, one type per section (te_un_sec_*).
+### gui/journal_entry_widgets/un_layout_widget.gui sets their order, with the
+### authority widget's sections, for the journal entry and the Diplomacy
+### panel's UN tab alike: the General Assembly (te_un_sec_assembly, built there
+### from te_un_sec_assembly_core, _delegations, _ballot and _propose), then the
+### status sections, then the record and the explanations.
 ###
 ### The expand/collapse state lives in GetVariableSystem (client-side UI state,
 ### never saved and never gameplay state), keyed per section rather than per
@@ -304,191 +307,186 @@ types un_chamber_widget_types
 		block "action_binding" {}
 	}
 
-	### WIDGETS
-	type te_un_chamber_panel = flowcontainer {
+	### ======================================================================
+	### SECTIONS. Each is composed, in order, by un_layout_widget.gui.
+	### ======================================================================
+	type te_un_sec_assembly_core = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 4
 
-		# je_united_nations carries `is_shown_when_inactive`, so this widget is
-		# built for every country that can see the entry at all — including ones
-		# whose journal entry has never activated, where none of the UN's variables
-		# and globals exist. Everything the panels render is guarded in script, but
-		# there is nothing worth rendering in that state and the sguis re-run every
-		# frame the entry is on screen, so the whole widget is gated here. Vanilla
-		# uses the same test in gui/journal_entry.gui:670.
-		visible = "[JournalEntry.IsActive]"
+		# ---- The resolution in session, and our ballot ----
+		# The General Assembly section's core (te_un_sec_assembly). Our standing
+		# and the Security Council used to open this panel; they are the
+		# overview's membership, standing and council tooltips now.
+		un_chamber_subheader = {
+			blockoverride "subheader_margin" {}
+			blockoverride "subheader_text" {
+				text = "je_un_chamber_sub_session"
+			}
+		}
+		un_chamber_text = {
+			text = "[GetScriptedGui('un_chamber_active_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
 
-		# ---- Our own standing, and the resolution in session ----
-		un_chamber_panel = {
-			un_chamber_subheader = {
-				blockoverride "subheader_margin" {}
-				blockoverride "subheader_text" {
-					text = "je_un_chamber_sub_standing"
-				}
-			}
-			un_chamber_text = {
-				text = "[GetScriptedGui('un_chamber_status_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
-			}
-			# Who holds the five permanent seats, and who is in line for an open one.
-			un_chamber_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_un_chamber_sub_council"
-				}
-			}
-			un_chamber_text = {
-				text = "[GetScriptedGui('un_chamber_council_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
-			}
-			un_chamber_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_un_chamber_sub_session"
-				}
-			}
-			un_chamber_text = {
-				text = "[GetScriptedGui('un_chamber_active_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
-			}
+		# Redesign phase 3: how the Assembly reads our own position on the
+		# resolution in session — the lean the AI votes by, term by term.
+		un_chamber_text = {
+			visible = "[GetScriptedGui('un_chamber_position_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			text = "[GetScriptedGui('un_chamber_position_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
 
-			# Redesign phase 3: how the Assembly reads our own position on the
-			# resolution in session — the lean the AI votes by, term by term.
-			un_chamber_text = {
-				visible = "[GetScriptedGui('un_chamber_position_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				text = "[GetScriptedGui('un_chamber_position_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
-			}
+		# ---- Our ballot ----
+		# Available from the day the resolution opens; the un_vote.1 popup that
+		# arrives on day 30 is the same three options and is skipped entirely
+		# once a ballot is on the record (its trigger is re-evaluated when it
+		# fires). One scripted GUI, one op code per control:
+		#
+		#   op 0  Vote in Favour    op 1  Vote Against    op 2  Veto
+		#
+		# The table is repeated in common/scripted_guis/un_chamber_sguis.txt;
+		# keep the two in step. Each tooltip is IsValidTooltip (why the control
+		# is greyed out) concatenated with ExecuteTooltip (what the vote does),
+		# which is the un_vote.1 option's own consequence text, lobbying
+		# keep/break line included.
+		flowcontainer = {
+			direction = vertical
+			spacing = 4
+			ignoreinvisible = yes
+			parentanchor = hcenter
+			datacontext = "[GetScriptedGui('un_chamber_vote_sgui')]"
 
-			# ---- Our ballot ----
-			# Available from the day the resolution opens; the un_vote.1 popup that
-			# arrives on day 30 is the same three options and is skipped entirely
-			# once a ballot is on the record (its trigger is re-evaluated when it
-			# fires). One scripted GUI, one op code per control:
-			#
-			#   op 0  Vote in Favour    op 1  Vote Against    op 2  Veto
-			#
-			# The table is repeated in common/scripted_guis/un_chamber_sguis.txt;
-			# keep the two in step. Each tooltip is IsValidTooltip (why the control
-			# is greyed out) concatenated with ExecuteTooltip (what the vote does),
-			# which is the un_vote.1 option's own consequence text, lobbying
-			# keep/break line included.
 			flowcontainer = {
-				direction = vertical
+				direction = horizontal
 				spacing = 4
 				ignoreinvisible = yes
-				parentanchor = hcenter
-				datacontext = "[GetScriptedGui('un_chamber_vote_sgui')]"
 
-				flowcontainer = {
-					direction = horizontal
-					spacing = 4
-					ignoreinvisible = yes
-
-					un_chamber_action_button = {
-						blockoverride "action_label" {
-							text = "je_un_chamber_vote_yes_label"
-						}
-						blockoverride "action_binding" {
-							visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
-						}
+				un_chamber_action_button = {
+					blockoverride "action_label" {
+						text = "je_un_chamber_vote_yes_label"
 					}
-
-					un_chamber_action_button = {
-						blockoverride "action_label" {
-							text = "je_un_chamber_vote_no_label"
-						}
-						blockoverride "action_binding" {
-							visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
-						}
+					blockoverride "action_binding" {
+						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
 					}
 				}
 
-				# The veto is armed before it is cast. A scripted GUI's documented
-				# confirm_title / confirm_text fields have no usage anywhere in
-				# vanilla to copy, and this cannot be tested without running the
-				# game, so the confirmation is built out of the expander mechanism
-				# this widget already relies on: GetVariableSystem state, which is
-				# client-side, never saved and never gameplay state.
-				flowcontainer = {
-					direction = horizontal
-					spacing = 4
-					ignoreinvisible = yes
-
-					un_chamber_action_button = {
-						blockoverride "action_label" {
-							text = "je_un_chamber_vote_veto_label"
-						}
-						blockoverride "action_binding" {
-							visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Not(GetVariableSystem.Exists('un_chamber_veto_armed')) )]"
-							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-							onclick = "[GetVariableSystem.Toggle('un_chamber_veto_armed')]"
-							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
-						}
+				un_chamber_action_button = {
+					blockoverride "action_label" {
+						text = "je_un_chamber_vote_no_label"
 					}
-
-					un_chamber_action_button = {
-						blockoverride "action_label" {
-							text = "je_un_chamber_vote_veto_confirm_label"
-						}
-						blockoverride "action_binding" {
-							visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), GetVariableSystem.Exists('un_chamber_veto_armed') )]"
-							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-							onclick = "[GetVariableSystem.Toggle('un_chamber_veto_armed')]"
-							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
-						}
+					blockoverride "action_binding" {
+						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
 					}
+				}
+			}
 
-					button = {
-						using = default_button_action
-						size = { 152 30 }
-						parentanchor = vcenter
-						visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), GetVariableSystem.Exists('un_chamber_veto_armed') )]"
+			# The veto is armed before it is cast. A scripted GUI's documented
+			# confirm_title / confirm_text fields have no usage anywhere in
+			# vanilla to copy, and this cannot be tested without running the
+			# game, so the confirmation is built out of the expander mechanism
+			# this widget already relies on: GetVariableSystem state, which is
+			# client-side, never saved and never gameplay state.
+			flowcontainer = {
+				direction = horizontal
+				spacing = 4
+				ignoreinvisible = yes
+
+				un_chamber_action_button = {
+					blockoverride "action_label" {
+						text = "je_un_chamber_vote_veto_label"
+					}
+					blockoverride "action_binding" {
+						visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Not(GetVariableSystem.Exists('un_chamber_veto_armed')) )]"
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 						onclick = "[GetVariableSystem.Toggle('un_chamber_veto_armed')]"
-						tooltip = "je_un_chamber_vote_veto_cancel_tt"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+					}
+				}
 
-						textbox = {
-							parentanchor = center
-							align = center|nobaseline
-							autoresize = yes
-							max_width = 142
-							elide = right
-							using = fontsize_small
-							text = "je_un_chamber_vote_veto_cancel_label"
-						}
+				un_chamber_action_button = {
+					blockoverride "action_label" {
+						text = "je_un_chamber_vote_veto_confirm_label"
+					}
+					blockoverride "action_binding" {
+						visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), GetVariableSystem.Exists('un_chamber_veto_armed') )]"
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+						onclick = "[GetVariableSystem.Toggle('un_chamber_veto_armed')]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+					}
+				}
+
+				button = {
+					using = default_button_action
+					size = { 152 30 }
+					parentanchor = vcenter
+					visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), GetVariableSystem.Exists('un_chamber_veto_armed') )]"
+					onclick = "[GetVariableSystem.Toggle('un_chamber_veto_armed')]"
+					tooltip = "je_un_chamber_vote_veto_cancel_tt"
+
+					textbox = {
+						parentanchor = center
+						align = center|nobaseline
+						autoresize = yes
+						max_width = 142
+						elide = right
+						using = fontsize_small
+						text = "je_un_chamber_vote_veto_cancel_label"
 					}
 				}
 			}
 		}
+	}
+
+	type te_un_sec_delegations = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
 
 		# ---- Delegations (UN vote lobbying, §6) ----
 		# How each AI member stands on the resolution in session, as a band: the
 		# members someone is working on first, then the undecided, then those
 		# leaning for, then those leaning against; the firmly decided are counted
 		# on the summary line (its tooltip names them). Up to 24 rows, one
-		# ExecuteTooltip each, passing the slot as `op` (gotcha #27). Collapsed by
-		# default like every other section: 24 rows of five controls re-render
-		# every frame the panel is open.
-		un_chamber_section_header = {
-			blockoverride "left_text" {
-				text = "je_un_chamber_deleg_header"
-			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('un_chamber_delegations')]"
-			}
-			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('un_chamber_delegations'))]"
-			}
-			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('un_chamber_delegations')]"
+		# ExecuteTooltip each, passing the slot as `op` (gotcha #27). A subsection
+		# of the General Assembly, shown while a resolution is in session, and
+		# collapsed by default: 24 rows of five controls re-render every frame
+		# the panel is open.
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			margin_left = 20
+			margin_bottom = 6
+
+			un_chamber_subsection_header = {
+				blockoverride "left_text" {
+					text = "je_un_chamber_deleg_header"
+				}
+				blockoverride "onclick" {
+					onclick = "[GetVariableSystem.Toggle('un_chamber_delegations_open')]"
+				}
+				blockoverride "onclick_showmore" {
+					visible = "[Not(GetVariableSystem.Exists('un_chamber_delegations_open'))]"
+				}
+				blockoverride "onclick_showless" {
+					visible = "[GetVariableSystem.Exists('un_chamber_delegations_open')]"
+				}
 			}
 		}
 
-		un_chamber_panel = {
-			visible = "[GetVariableSystem.Exists('un_chamber_delegations')]"
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			parentanchor = hcenter
+			visible = "[GetVariableSystem.Exists('un_chamber_delegations_open')]"
 
 			un_chamber_note = {
 				text = "je_un_chamber_deleg_intro"
@@ -1939,56 +1937,70 @@ types un_chamber_widget_types
 				}
 			}
 		}
+	}
+
+	type te_un_sec_standing_help = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
 
 		# ---- How international standing works ----
-		# Collapsed by default like every other section here. The text never
-		# changes, and ExecuteTooltip re-renders it every frame the panel is
-		# visible, so there is no reason to keep it open. The score itself, its
-		# tier and this year's accrual are in the always-visible status panel
-		# above — this is only the explanation of where they come from.
+		# Collapsed by default, like every explanation. The text never changes,
+		# and ExecuteTooltip re-renders it every frame the panel is visible, so
+		# there is no reason to keep it open. The score itself, its tier and this
+		# year's accrual are the overview's standing meter and its tooltip
+		# (un_chamber_standing_sgui): this is only where they come from.
 		un_chamber_section_header = {
 			blockoverride "left_text" {
 				text = "je_un_chamber_standing_header"
 			}
 			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('un_chamber_standing')]"
+				onclick = "[GetVariableSystem.Toggle('un_chamber_standing_open')]"
 			}
 			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('un_chamber_standing'))]"
+				visible = "[Not(GetVariableSystem.Exists('un_chamber_standing_open'))]"
 			}
 			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('un_chamber_standing')]"
+				visible = "[GetVariableSystem.Exists('un_chamber_standing_open')]"
 			}
 		}
 
 		un_chamber_panel = {
-			visible = "[GetVariableSystem.Exists('un_chamber_standing')]"
+			visible = "[GetVariableSystem.Exists('un_chamber_standing_open')]"
 
 			un_chamber_text = {
 				text = "[GetScriptedGui('un_chamber_standing_help_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 			}
 		}
+	}
+
+	type te_un_sec_exposure = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
 
 		# ---- Our exposure (redesign phase 3) ----
 		# Our own dossier, and which punitive resolutions our record would support
-		# against us today. Collapsed by default, like every other section.
+		# against us today. Open by default, like every section that changes.
 		un_chamber_section_header = {
 			blockoverride "left_text" {
 				text = "je_un_chamber_exposure_header"
 			}
 			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('un_chamber_exposure')]"
+				onclick = "[GetVariableSystem.Toggle('un_chamber_exposure_closed')]"
 			}
 			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('un_chamber_exposure'))]"
+				visible = "[GetVariableSystem.Exists('un_chamber_exposure_closed')]"
 			}
 			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('un_chamber_exposure')]"
+				visible = "[Not(GetVariableSystem.Exists('un_chamber_exposure_closed'))]"
 			}
 		}
 
 		un_chamber_panel = {
-			visible = "[GetVariableSystem.Exists('un_chamber_exposure')]"
+			visible = "[Not(GetVariableSystem.Exists('un_chamber_exposure_closed'))]"
 
 			# The headings wait for the UN: before it is founded, or once it has
 			# dissolved, the builder prints the one line saying there is no record.
@@ -2013,27 +2025,34 @@ types un_chamber_widget_types
 				text = "je_un_chamber_exposure_help"
 			}
 		}
+	}
+
+	type te_un_sec_missions = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
 
 		# ---- Missions in the field (redesign phase 6) ----
 		# The mission register: where the UN is, for whom, how far along, and
-		# who serves in each mission. Collapsed by default.
+		# who serves in each mission. Open by default.
 		un_chamber_section_header = {
 			blockoverride "left_text" {
 				text = "je_un_chamber_missions_header"
 			}
 			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('un_chamber_missions')]"
+				onclick = "[GetVariableSystem.Toggle('un_chamber_missions_closed')]"
 			}
 			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('un_chamber_missions'))]"
+				visible = "[GetVariableSystem.Exists('un_chamber_missions_closed')]"
 			}
 			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('un_chamber_missions')]"
+				visible = "[Not(GetVariableSystem.Exists('un_chamber_missions_closed'))]"
 			}
 		}
 
 		un_chamber_panel = {
-			visible = "[GetVariableSystem.Exists('un_chamber_missions')]"
+			visible = "[Not(GetVariableSystem.Exists('un_chamber_missions_closed'))]"
 
 			# Missions still at work, then the ones that have ended, then how a
 			# mission works. Each list prints its own empty line.
@@ -2209,28 +2228,35 @@ types un_chamber_widget_types
 				text = "je_un_chamber_missions_help"
 			}
 		}
+	}
+
+	type te_un_sec_obligations = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
 
 		# ---- Our obligations (redesign phase 5) ----
 		# What membership asks of us: dues and arrears, the conventions' regimes
-		# that bind us, and the pressure on our sovereignty at home. Collapsed by
-		# default, like every other section.
+		# that bind us, and the pressure on our sovereignty at home. Open by
+		# default, like every section that changes.
 		un_chamber_section_header = {
 			blockoverride "left_text" {
 				text = "je_un_chamber_obligations_header"
 			}
 			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('un_chamber_obligations')]"
+				onclick = "[GetVariableSystem.Toggle('un_chamber_obligations_closed')]"
 			}
 			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('un_chamber_obligations'))]"
+				visible = "[GetVariableSystem.Exists('un_chamber_obligations_closed')]"
 			}
 			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('un_chamber_obligations')]"
+				visible = "[Not(GetVariableSystem.Exists('un_chamber_obligations_closed'))]"
 			}
 		}
 
 		un_chamber_panel = {
-			visible = "[GetVariableSystem.Exists('un_chamber_obligations')]"
+			visible = "[Not(GetVariableSystem.Exists('un_chamber_obligations_closed'))]"
 
 			# No UN: one line, and nothing else.
 			un_chamber_text = {
@@ -2284,25 +2310,44 @@ types un_chamber_widget_types
 				text = "je_un_chamber_obligations_help"
 			}
 		}
+	}
+
+	type te_un_sec_ballot = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
 
 		# ---- Recorded ballot of the resolution in session ----
-		un_chamber_section_header = {
-			blockoverride "left_text" {
-				text = "je_un_chamber_votes_header"
-			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('un_chamber_votes')]"
-			}
-			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('un_chamber_votes'))]"
-			}
-			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('un_chamber_votes')]"
+		# A subsection of the General Assembly, shown while a resolution is in
+		# session. Collapsed by default.
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			margin_left = 20
+			margin_bottom = 6
+
+			un_chamber_subsection_header = {
+				blockoverride "left_text" {
+					text = "je_un_chamber_votes_header"
+				}
+				blockoverride "onclick" {
+					onclick = "[GetVariableSystem.Toggle('un_chamber_votes_open')]"
+				}
+				blockoverride "onclick_showmore" {
+					visible = "[Not(GetVariableSystem.Exists('un_chamber_votes_open'))]"
+				}
+				blockoverride "onclick_showless" {
+					visible = "[GetVariableSystem.Exists('un_chamber_votes_open')]"
+				}
 			}
 		}
 
-		un_chamber_panel = {
-			visible = "[GetVariableSystem.Exists('un_chamber_votes')]"
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			parentanchor = hcenter
+			visible = "[GetVariableSystem.Exists('un_chamber_votes_open')]"
 
 			# Redesign phase 3: why the members voted as they did. Both headings
 			# wait for a resolution to be in session; without one, the ballot
@@ -2328,10 +2373,18 @@ types un_chamber_widget_types
 				text = "[GetScriptedGui('un_chamber_active_voters_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 			}
 		}
+	}
+
+	type te_un_sec_propose = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
 
 		# ---- Table a Resolution ----
-		# Collapsed by default like every other section: eighteen ExecuteTooltip
-		# rows re-render every frame the panel is open.
+		# A subsection of the General Assembly, shown when nothing is in session
+		# (every proposal needs the one-vote lock free). Collapsed by default:
+		# eighteen ExecuteTooltip rows re-render every frame the panel is open.
 		#
 		# The rows are the topics a member can put before the Assembly on its own
 		# initiative, in the order the chamber thinks about them — censure and
@@ -2352,23 +2405,33 @@ types un_chamber_widget_types
 		# re-derives an eligibility rule: the Propose button asks
 		# un_chamber_propose_sgui, which asks the very triggers the journal entry's
 		# own scripted buttons and the docket ask.
-		un_chamber_section_header = {
-			blockoverride "left_text" {
-				text = "je_un_chamber_propose_header"
-			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('un_chamber_propose')]"
-			}
-			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('un_chamber_propose'))]"
-			}
-			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('un_chamber_propose')]"
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			margin_left = 20
+			margin_bottom = 6
+
+			un_chamber_subsection_header = {
+				blockoverride "left_text" {
+					text = "je_un_chamber_propose_header"
+				}
+				blockoverride "onclick" {
+					onclick = "[GetVariableSystem.Toggle('un_chamber_propose_open')]"
+				}
+				blockoverride "onclick_showmore" {
+					visible = "[Not(GetVariableSystem.Exists('un_chamber_propose_open'))]"
+				}
+				blockoverride "onclick_showless" {
+					visible = "[GetVariableSystem.Exists('un_chamber_propose_open')]"
+				}
 			}
 		}
 
-		un_chamber_panel = {
-			visible = "[GetVariableSystem.Exists('un_chamber_propose')]"
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			parentanchor = hcenter
+			visible = "[GetVariableSystem.Exists('un_chamber_propose_open')]"
 
 			un_chamber_row_text = {
 				text = "[GetScriptedGui('un_chamber_propose_intro_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
@@ -2637,28 +2700,34 @@ types un_chamber_widget_types
 				text = "[GetScriptedGui('un_chamber_docket_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 			}
 		}
+	}
+
+	type te_un_sec_mandates = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
 
 		# ---- Authorized military mandates ----
-		# Collapsed by default like every other section here: ExecuteTooltip
-		# re-renders each frame the panel is visible, and the register only has
-		# anything to say once the Assembly has issued an authorization.
+		# Open by default, like every section that changes. The register has
+		# anything to say only once the Assembly has issued an authorization.
 		un_chamber_section_header = {
 			blockoverride "left_text" {
 				text = "je_un_chamber_mandates_header"
 			}
 			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('un_chamber_mandates')]"
+				onclick = "[GetVariableSystem.Toggle('un_chamber_mandates_closed')]"
 			}
 			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('un_chamber_mandates'))]"
+				visible = "[GetVariableSystem.Exists('un_chamber_mandates_closed')]"
 			}
 			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('un_chamber_mandates')]"
+				visible = "[Not(GetVariableSystem.Exists('un_chamber_mandates_closed'))]"
 			}
 		}
 
 		un_chamber_panel = {
-			visible = "[GetVariableSystem.Exists('un_chamber_mandates')]"
+			visible = "[Not(GetVariableSystem.Exists('un_chamber_mandates_closed'))]"
 
 			un_chamber_subheader = {
 				blockoverride "subheader_margin" {}
@@ -2684,6 +2753,13 @@ types un_chamber_widget_types
 				text = "[GetScriptedGui('un_chamber_mandate_case_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 			}
 		}
+	}
+
+	type te_un_sec_archive = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
 
 		# ---- Archive of closed resolutions ----
 		un_chamber_section_header = {
@@ -2691,18 +2767,18 @@ types un_chamber_widget_types
 				text = "je_un_chamber_history_header"
 			}
 			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('un_chamber_history')]"
+				onclick = "[GetVariableSystem.Toggle('un_chamber_history_open')]"
 			}
 			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('un_chamber_history'))]"
+				visible = "[Not(GetVariableSystem.Exists('un_chamber_history_open'))]"
 			}
 			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('un_chamber_history')]"
+				visible = "[GetVariableSystem.Exists('un_chamber_history_open')]"
 			}
 		}
 
 		un_chamber_panel = {
-			visible = "[GetVariableSystem.Exists('un_chamber_history')]"
+			visible = "[GetVariableSystem.Exists('un_chamber_history_open')]"
 
 			# Voting-detail depth for the archive: a section nested in this one,
 			# so it sits inside the archive's panel, set in from its edge, rather
@@ -2875,19 +2951,3 @@ types un_chamber_widget_types
 }
 
 
-### ==========================================================================
-### JOURNAL ENTRY ROOT
-### ==========================================================================
-### The name je_united_nations.txt attaches: a bare wrapper around the panel
-### type above, which the Diplomacy panel's UN tab (gui/diplomatic_overview.gui)
-### also instances under a GetPlayerJournalEntry datacontext. The wrapper
-### repeats the panel's own visible gate, so the journal lays out exactly as
-### when the panel was the root.
-flowcontainer = {
-	name = "widget_je_un_chamber"
-	visible = "[JournalEntry.IsActive]"
-	parentanchor = hcenter
-	ignoreinvisible = yes
-
-	te_un_chamber_panel = {}
-}

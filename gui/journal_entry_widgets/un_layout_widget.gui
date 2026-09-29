@@ -1,0 +1,104 @@
+﻿### United Nations — layout. The one place that sets the order of the UN's
+### sections, for both hosts: the journal entry (je_united_nations.txt attaches
+### the named roots at the foot of this file) and the Diplomacy panel's UN tab
+### (gui/diplomatic_overview.gui instances the composers). The sections are
+### types in un_chamber_widget.gui and un_authority_widget.gui; the overview is
+### un_overview_widget.gui. Spec: docs/superpowers/specs/2026-09-28-un-gui-pass-design.md.
+###
+### Collapse flags say their default: *_closed sections are open until closed,
+### *_open ones collapsed until opened (test_un_layout.py).
+
+types un_layout_widget_types
+{
+	### The General Assembly: the session core, then either the session's
+	### delegations and ballot, or, with nothing in session, the proposals. The
+	### two never both apply: every proposal needs the one-vote lock free.
+	type te_un_sec_assembly = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		un_chamber_section_header = {
+			blockoverride "left_text" {
+				text = "je_un_assembly_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('un_chamber_assembly_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('un_chamber_assembly_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('un_chamber_assembly_closed'))]"
+			}
+		}
+
+		un_chamber_panel = {
+			visible = "[Not(GetVariableSystem.Exists('un_chamber_assembly_closed'))]"
+
+			te_un_sec_assembly_core = {}
+			te_un_sec_delegations = {
+				visible = "[GetScriptedGui('un_session_open_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			}
+			te_un_sec_ballot = {
+				visible = "[GetScriptedGui('un_session_open_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			}
+			te_un_sec_propose = {
+				visible = "[Not( GetScriptedGui('un_session_open_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+			}
+		}
+	}
+
+	### Everything a returning player checks, open by default.
+	type te_un_status_sections = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+		visible = "[JournalEntry.IsActive]"
+
+		te_un_sec_assembly = {}
+		te_un_sec_why = {}
+		te_un_sec_missions = {}
+		te_un_sec_mandates = {}
+		te_un_sec_obligations = {}
+		te_un_sec_exposure = {}
+	}
+
+	### The chart, then the record and the explanations, mostly collapsed.
+	type te_un_reference_sections = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+		visible = "[JournalEntry.IsActive]"
+
+		te_un_sec_auth_history = {}
+		te_un_sec_archive = {}
+		te_un_sec_standing_help = {}
+		te_un_sec_auth_help = {}
+	}
+}
+
+### ==========================================================================
+### JOURNAL ENTRY ROOTS (je_united_nations.txt). Bare wrappers that repeat the
+### composers' IsActive gate, so an inactive entry's containers collapse.
+### ==========================================================================
+flowcontainer = {
+	name = "widget_je_un_status"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	ignoreinvisible = yes
+
+	te_un_status_sections = {}
+}
+
+flowcontainer = {
+	name = "widget_je_un_reference"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	ignoreinvisible = yes
+
+	te_un_reference_sections = {}
+}

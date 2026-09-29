@@ -3,24 +3,18 @@
 
 	group = je_group_foreign_affairs
 
-	# The General Assembly chamber: the resolution in session, its recorded
-	# ballot and the bounded archive. Display-only — it reads
-	# global_var:un_active_resolution and the un_resolution_history list in
-	# place through common/scripted_guis/un_chamber_sguis.txt. Sits in
-	# container_2 (under the status description, above the button grid).
+	# The UN's panels (docs/superpowers/specs/2026-09-28-un-gui-pass-design.md).
+	# The order lives in gui/journal_entry_widgets/un_layout_widget.gui, which the
+	# Diplomacy panel's UN tab also instances: the dynamic sections above the
+	# button grid, the chart, the record and the explanations below it.
 	widget = {
-		gui = "gui/journal_entry_widgets/un_chamber_widget.gui"
-		name = "widget_je_un_chamber"
+		gui = "gui/journal_entry_widgets/un_layout_widget.gui"
+		name = "widget_je_un_status"
 		container = "custom_widget_container_2"
 	}
-
-	# Why authority is moving: the target, its seven pillars, our weight in
-	# world affairs, the recent ledger entries, and the authority history
-	# chart. Display-only (gui/journal_entry_widgets/un_authority_widget.gui).
-	# Sits in container_3, under the chamber and above the button grid.
 	widget = {
-		gui = "gui/journal_entry_widgets/un_authority_widget.gui"
-		name = "widget_je_un_authority"
+		gui = "gui/journal_entry_widgets/un_layout_widget.gui"
+		name = "widget_je_un_reference"
 		container = "custom_widget_container_3"
 	}
 
