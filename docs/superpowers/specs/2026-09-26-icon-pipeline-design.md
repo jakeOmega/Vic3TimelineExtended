@@ -292,6 +292,14 @@ The UN GUI pass (#567, `docs/systems/un_gui_placeholder_icons.md`) draws 43 new 
 
 **Derived entries** (`"from": "<cat>/<key>"`) have no render of their own. The base is the source's composed icon, then an optional `tint` (`grey`, `faint`), then an optional `layout` (`flag` with a `size`), then `marks`. A mark is `{"icon": <vanilla .dds>}`, `{"part": "<cat>/<key>"}` or `{"draw": "star"|"pause"}`, with `at` (its centre, as shares of the side) and `scale`. The sheet shows one candidate per candidate of the source, so picking the emblem is done among the seven membership icons. `write` writes a derived icon once its source and every part it uses are picked, and records the recipe in the manifest, so an edited mark rewrites it. A `part` category (the emblem, the scroll badge) is reviewed like any other and never written.
 
+**What review found (owner, 2026-09-29).** The owner took my picks, except UNESCO and UNHCR on their s0. Sheets are in `~/flux_runs/for_owner/un_*.png`.
+- **Shapes that shrink to nothing at 36–40 px.** A satellite seen side-on and a lone sword came out as specks or lines; a sword inside a wreath read as a ring with a line. They became a ringed planet and crossed swords. The fill scales by the longest side, so a long thin object loses its body.
+- **Things that read as something else.** A clenched gauntlet read as a mug, open shackles as a horseshoe, and a dove seen from the front as a heraldic eagle. A "five-pointed star" came out with six points in one seed out of four.
+- **Cut-out holes inside an object.** rembg took the sanctions crate's front boards for background, and the disc showed through the box. The entry's `"solid": True` fills them back (`icon_render.cut`). A glass inkwell cut out as a hollow grey ring; ask for a dark ceramic one.
+- **Vanilla marks aren't what their names say.** `trend_down.dds` is an orange-gold triangle, not a red arrow, and it merged with the gold star under it. `paused.dds` gold bars vanished on a gold emblem. Both marks are drawn instead: a red arrow, and amber bars on a dark badge. View a vanilla mark over the actual icon before using it.
+- **A derived icon beats a second render when the idea is a variant.** Condemnation is the mandate's swords under the red cross, so the two topics read as a pair.
+- **A reroll replaces the old candidates.** When the subject changes, its raws are overwritten. The first subject's pick can be recovered by rendering the old prompt at the same seed, because renders are deterministic per prompt and seed.
+
 **Pies.** `gen_ch_model_pie_textures.py` writes `un_icons/pie_members.dds` (UN blue, `#5b92e5`) and `pie_rest.dds` (grey, `#8c8474`) in the Cultural Hegemony pie's format. Checked with the dataviz validator against the dark panel: ΔE 16.8 normal and 16.9 protan, and both clear 3:1 contrast. The grey fails only the chroma floor, as intended for the part that is not the subject.
 
 ## Review lessons (2026-09-27)
