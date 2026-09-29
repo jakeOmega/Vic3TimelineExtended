@@ -17,6 +17,10 @@
 ### open until closed, *_open collapsed until opened.
 ### test_strategic_reserve_layout.py holds the order, the flags and the rows.
 ###
+### Icons: the hub cell uses the hub building's own icon; the row's policy
+### icon is a vanilla placeholder. docs/systems/strategic_reserve_gui_icons.md
+### lists both, with the final art the placeholder should become.
+###
 ### THE INVENTORY is a table with one te_st_res_good_row per unlocked good:
 ###   Good | Stock | Status | policy icon | decrease / stop / increase
 ### Stock is the fill bar, with a marker at the policy's target stockpile while
@@ -671,8 +675,8 @@ types strategic_reserve_widget_types
 		ignoreinvisible = yes
 		spacing = 2
 
-		### The table line. 136 + 114 + 90 + 26 + 3 x 26, with seven 4px gaps,
-		### is 472 of the panel's 480; st_res_col_heading widths match.
+		### The table line. 130 + 114 + 96 + 26 + 3 x 26, with seven 4px gaps,
+		### is 472 of the panel's 480; the column headings' widths match.
 		flowcontainer = {
 			direction = horizontal
 			spacing = 4
@@ -684,7 +688,7 @@ types strategic_reserve_widget_types
 			### expanded. Both are alwaystransparent, so chevron and name are one
 			### click target. Its tooltip replaces the row's over the name only.
 			button = {
-				size = { 136 28 }
+				size = { 130 28 }
 				parentanchor = vcenter
 				block "row_toggle" {}
 
@@ -704,7 +708,7 @@ types strategic_reserve_widget_types
 				}
 				textbox = {
 					position = { 20 0 }
-					size = { 116 28 }
+					size = { 110 28 }
 					align = left|nobaseline
 					using = fontsize_medium
 					elide = right
@@ -774,7 +778,7 @@ types strategic_reserve_widget_types
 			### Status: Storing / Withdrawing / Idle / Blocked, coloured. The
 			### reason is on the row's tooltip.
 			textbox = {
-				size = { 90 28 }
+				size = { 96 28 }
 				parentanchor = vcenter
 				align = left|nobaseline
 				using = fontsize_medium
@@ -954,7 +958,7 @@ types strategic_reserve_widget_types
 				margin_top = 4
 
 				st_res_col_heading = {
-					size = { 136 20 }
+					size = { 130 20 }
 					margin_left = 20
 					text = "je_strategic_reserve_inv_col_good"
 				}
@@ -965,7 +969,7 @@ types strategic_reserve_widget_types
 					tooltip = "je_strategic_reserve_inv_col_stock_tt"
 				}
 				st_res_col_heading = {
-					size = { 90 20 }
+					size = { 96 20 }
 					default_format = "#tooltippable"
 					text = "je_strategic_reserve_inv_col_status"
 					tooltip = "je_strategic_reserve_inv_col_status_tt"
