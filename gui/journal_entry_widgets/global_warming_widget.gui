@@ -403,220 +403,244 @@ types global_warming_widget_types
 		visible = "[JournalEntry.IsActive]"
 
 		gw_panel = {
-			spacing = 10
-
-			### Row 1: tier · market role · penalty scale · treaty (while bound)
+			### One 480 px column, so the panel is as wide as the sections below
+			### (520 with its margins) from the first layout on; the UN overview
+			### pins its rows the same way. Without it the block sat ~70 px in
+			### from the column and ran off the panel's right edge (play-test
+			### round 1, 2026-09-29): by the numbers, centred at row 1's width
+			### (3 x 110 + gaps + margins = 382, (520 - 382) / 2 = 69) before the
+			### temperature headline's text widened row 2.
 			flowcontainer = {
-				direction = horizontal
-				spacing = 6
+				direction = vertical
+				spacing = 10
 				ignoreinvisible = yes
-				parentanchor = hcenter
+				minimumsize = { 480 -1 }
 
-				### The tier, one icon per gw_disp_tier_code; the word is
-				### gw_severity_short and the tooltip the tier's sentence.
+				### Row 1: tier · market role · penalty scale · treaty (while bound)
 				flowcontainer = {
+					direction = horizontal
+					spacing = 6
 					ignoreinvisible = yes
-					tooltip = "gw_ov_tier_tt"
+					parentanchor = hcenter
 
-					te_gw_ov_icon_label = {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)0' )]"
-						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/event_icons/je_global_warming.dds"
+					### The tier, one icon per gw_disp_tier_code; the word is
+					### gw_severity_short and the tooltip the tier's sentence.
+					flowcontainer = {
+						ignoreinvisible = yes
+						tooltip = "gw_ov_tier_tt"
+
+						te_gw_ov_icon_label = {
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)0' )]"
+							blockoverride "icon_texture" {
+								texture = "gfx/interface/icons/event_icons/je_global_warming.dds"
+							}
+							blockoverride "label" {
+								text = "gw_cond_tier_value"
+							}
 						}
-						blockoverride "label" {
-							text = "gw_cond_tier_value"
+						te_gw_ov_icon_label = {
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)1' )]"
+							blockoverride "icon_texture" {
+								texture = "gfx/interface/icons/event_icons/je_global_warming.dds"
+							}
+							blockoverride "label" {
+								text = "gw_cond_tier_value"
+							}
+						}
+						te_gw_ov_icon_label = {
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)2' )]"
+							blockoverride "icon_texture" {
+								texture = "gfx/interface/icons/event_icons/je_global_warming.dds"
+							}
+							blockoverride "label" {
+								text = "gw_cond_tier_value"
+							}
+						}
+						te_gw_ov_icon_label = {
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)3' )]"
+							blockoverride "icon_texture" {
+								texture = "gfx/interface/icons/event_icons/je_global_warming.dds"
+							}
+							blockoverride "label" {
+								text = "gw_cond_tier_value"
+							}
+						}
+						te_gw_ov_icon_label = {
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)4' )]"
+							blockoverride "icon_texture" {
+								texture = "gfx/interface/icons/event_icons/je_global_warming.dds"
+							}
+							blockoverride "label" {
+								text = "gw_cond_tier_value"
+							}
+						}
+						te_gw_ov_icon_label = {
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)5' )]"
+							blockoverride "icon_texture" {
+								texture = "gfx/interface/icons/event_icons/je_global_warming.dds"
+							}
+							blockoverride "label" {
+								text = "gw_cond_tier_value"
+							}
+						}
+						te_gw_ov_icon_label = {
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)6' )]"
+							blockoverride "icon_texture" {
+								texture = "gfx/interface/icons/event_icons/je_global_warming.dds"
+							}
+							blockoverride "label" {
+								text = "gw_cond_tier_value"
+							}
 						}
 					}
-					te_gw_ov_icon_label = {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)1' )]"
-						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/event_icons/je_global_warming.dds"
+
+					### Market leader or member: who sets the market-wide policies.
+					flowcontainer = {
+						ignoreinvisible = yes
+						tooltip = "gw_cond_role_tt"
+
+						te_gw_ov_icon_label = {
+							visible = "[GetScriptedGui('gw_is_market_leader_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							blockoverride "icon_texture" {
+								texture = "gfx/interface/icons/state_status_icons/state_market_capital_icon.dds"
+							}
+							blockoverride "label" {
+								text = "gw_cond_role_value"
+							}
 						}
-						blockoverride "label" {
-							text = "gw_cond_tier_value"
-						}
-					}
-					te_gw_ov_icon_label = {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)2' )]"
-						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/event_icons/je_global_warming.dds"
-						}
-						blockoverride "label" {
-							text = "gw_cond_tier_value"
-						}
-					}
-					te_gw_ov_icon_label = {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)3' )]"
-						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/event_icons/je_global_warming.dds"
-						}
-						blockoverride "label" {
-							text = "gw_cond_tier_value"
+						te_gw_ov_icon_label = {
+							visible = "[Not( GetScriptedGui('gw_is_market_leader_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+							blockoverride "icon_texture" {
+								texture = "gfx/interface/icons/generic_icons/world_market.dds"
+							}
+							blockoverride "label" {
+								text = "gw_cond_role_value"
+							}
 						}
 					}
+
+					### The Climate Warming modifier's scale; hover for its effects.
 					te_gw_ov_icon_label = {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)4' )]"
+						tooltip = "gw_cond_penalty_tt"
 						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/event_icons/je_global_warming.dds"
+							texture = "gfx/interface/icons/generic_icons/warning.dds"
 						}
 						blockoverride "label" {
-							text = "gw_cond_tier_value"
+							text = "gw_ov_penalty_label"
 						}
 					}
+
+					### Only while an Enforce Emissions Reduction treaty binds us.
 					te_gw_ov_icon_label = {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)5' )]"
+						visible = "[GetScriptedGui('gw_treaty_bound_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "gw_ov_treaty_tt"
 						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/event_icons/je_global_warming.dds"
+							texture = "gfx/interface/icons/diplomatic_treaties_articles_icons/enforce_emissions_reduction.dds"
 						}
 						blockoverride "label" {
-							text = "gw_cond_tier_value"
-						}
-					}
-					te_gw_ov_icon_label = {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)6' )]"
-						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/event_icons/je_global_warming.dds"
-						}
-						blockoverride "label" {
-							text = "gw_cond_tier_value"
+							text = "gw_ov_treaty_label"
 						}
 					}
 				}
 
-				### Market leader or member: who sets the market-wide policies.
+				### Row 2: the temperature on the journal entry's 0-4 C scale, a
+				### marker where the next tier begins (the UN authority bar's marker
+				### technique), and where it is heading at last year's rate. Three
+				### fixed cells, 96 + 170 + 198 and two 8 px gaps = 480: the label and
+				### the headline elide inside their cells rather than widen the row.
 				flowcontainer = {
-					ignoreinvisible = yes
-					tooltip = "gw_cond_role_tt"
+					direction = horizontal
+					spacing = 8
+					tooltip = "gw_ov_temp_tt"
 
-					te_gw_ov_icon_label = {
-						visible = "[GetScriptedGui('gw_is_market_leader_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/state_status_icons/state_market_capital_icon.dds"
-						}
-						blockoverride "label" {
-							text = "gw_cond_role_value"
-						}
-					}
-					te_gw_ov_icon_label = {
-						visible = "[Not( GetScriptedGui('gw_is_market_leader_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
-						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/generic_icons/world_market.dds"
-						}
-						blockoverride "label" {
-							text = "gw_cond_role_value"
+					widget = {
+						size = { 96 24 }
+						parentanchor = vcenter
+
+						textbox = {
+							parentanchor = left|vcenter
+							autoresize = yes
+							max_width = 96
+							elide = right
+							align = left|nobaseline
+							text = "gw_ov_temp_label"
 						}
 					}
-				}
-
-				### The Climate Warming modifier's scale; hover for its effects.
-				te_gw_ov_icon_label = {
-					tooltip = "gw_cond_penalty_tt"
-					blockoverride "icon_texture" {
-						texture = "gfx/interface/icons/generic_icons/warning.dds"
-					}
-					blockoverride "label" {
-						text = "gw_ov_penalty_label"
-					}
-				}
-
-				### Only while an Enforce Emissions Reduction treaty binds us.
-				te_gw_ov_icon_label = {
-					visible = "[GetScriptedGui('gw_treaty_bound_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "gw_ov_treaty_tt"
-					blockoverride "icon_texture" {
-						texture = "gfx/interface/icons/diplomatic_treaties_articles_icons/enforce_emissions_reduction.dds"
-					}
-					blockoverride "label" {
-						text = "gw_ov_treaty_label"
-					}
-				}
-			}
-
-			### Row 2: the temperature on the journal entry's 0-4 C scale, a
-			### marker where the next tier begins (the UN authority bar's marker
-			### technique), and where it is heading at last year's rate.
-			flowcontainer = {
-				direction = horizontal
-				spacing = 8
-				parentanchor = hcenter
-				tooltip = "gw_ov_temp_tt"
-
-				textbox = {
-					minimumsize = { 90 -1 }
-					autoresize = yes
-					parentanchor = vcenter
-					align = left|nobaseline
-					text = "gw_ov_temp_label"
-				}
-				default_progressbar_horizontal = {
-					size = { 180 18 }
-					parentanchor = vcenter
-					blockoverride "values" {
-						value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_temp_frac') )]"
-						min = 0
-						max = 1
-					}
-					blockoverride "on_top_of_the_progressbar" {
-						# No marker past the last threshold (tier 6, 4 C).
-						progressbar = {
-							visible = "[Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)6' ) )]"
-							noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-							progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-							size = { 100% 100% }
-							skip_initial_animation = yes
-							direction = horizontal
-							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_next_frac') )]"
+					default_progressbar_horizontal = {
+						size = { 170 18 }
+						parentanchor = vcenter
+						blockoverride "values" {
+							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_temp_frac') )]"
 							min = 0
 							max = 1
-							marker = {
-								icon = {
-									size = { 36 20 }
-									parentanchor = vcenter
-									widgetanchor = center
-									texture = "gfx/interface/progressbar/progressbar_marker.dds"
+						}
+						blockoverride "on_top_of_the_progressbar" {
+							# No marker past the last threshold (tier 6, 4 C).
+							progressbar = {
+								visible = "[Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)6' ) )]"
+								noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+								progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+								size = { 100% 100% }
+								skip_initial_animation = yes
+								direction = horizontal
+								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_next_frac') )]"
+								min = 0
+								max = 1
+								marker = {
+									icon = {
+										size = { 36 20 }
+										parentanchor = vcenter
+										widgetanchor = center
+										texture = "gfx/interface/progressbar/progressbar_marker.dds"
+									}
 								}
 							}
 						}
 					}
-				}
-				textbox = {
-					autoresize = yes
-					max_width = 190
-					elide = right
-					parentanchor = vcenter
-					align = left|nobaseline
-					text = "gw_ov_temp_value"
-				}
-			}
+					widget = {
+						size = { 198 24 }
+						parentanchor = vcenter
 
-			### Row 3: our market's share of the world's emissions, and how far
-			### its emissions are cut.
-			flowcontainer = {
-				direction = horizontal
-				parentanchor = hcenter
-
-				te_gw_ov_pie = {
-					tooltip = "gw_cond_share_tt"
-					blockoverride "pie_value" {
-						value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_share_frac') )]"
-					}
-					blockoverride "pie_fill" {
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds"
-					}
-					blockoverride "label" {
-						text = "gw_ov_pie_share"
+						textbox = {
+							parentanchor = left|vcenter
+							autoresize = yes
+							max_width = 198
+							elide = right
+							align = left|nobaseline
+							text = "gw_ov_temp_value"
+						}
 					}
 				}
-				te_gw_ov_pie = {
-					tooltip = "gw_ov_pie_cut_tt"
-					blockoverride "pie_value" {
-						value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_cut_frac') )]"
+
+				### Row 3: our market's share of the world's emissions, and how far
+				### its emissions are cut.
+				flowcontainer = {
+					direction = horizontal
+					parentanchor = hcenter
+
+					te_gw_ov_pie = {
+						tooltip = "gw_cond_share_tt"
+						blockoverride "pie_value" {
+							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_share_frac') )]"
+						}
+						blockoverride "pie_fill" {
+							texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds"
+						}
+						blockoverride "label" {
+							text = "gw_ov_pie_share"
+						}
 					}
-					blockoverride "pie_fill" {
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds"
-					}
-					blockoverride "label" {
-						text = "gw_ov_pie_cut"
+					te_gw_ov_pie = {
+						tooltip = "gw_ov_pie_cut_tt"
+						blockoverride "pie_value" {
+							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_cut_frac') )]"
+						}
+						blockoverride "pie_fill" {
+							texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds"
+						}
+						blockoverride "label" {
+							text = "gw_ov_pie_cut"
+						}
 					}
 				}
 			}
@@ -663,6 +687,7 @@ types global_warming_widget_types
 			flowcontainer = {
 				direction = vertical
 				ignoreinvisible = yes
+				minimumsize = { 480 -1 }
 				visible = "[GetScriptedGui('gw_has_yearly_figures_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 
 				gw_value_row = {
