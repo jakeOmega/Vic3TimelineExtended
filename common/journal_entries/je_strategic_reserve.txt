@@ -2,14 +2,14 @@
 # Strategic Reserve Journal Entry
 # ============================================================================
 # Activates automatically when a country builds a Strategic Reserve Hub.
-# All per-good presentation and control lives in the inventory widget
-# (gui/journal_entry_widgets/strategic_reserve_widget.gui): one row per
-# unlocked good with its stock, capacity, fill bar, configured signed rate,
-# actual net weekly movement, status label and decrease/stop/increase controls.
-# Positive rates store goods, negative rates withdraw them. This JE keeps only
-# the reserve-wide summary text, the two shared buttons (step size, reset all)
-# and the lifecycle entry points into the SR wrapper effects; persistent
-# reserve state lives on country vars.
+# All presentation and per-good control lives in the panel
+# (gui/journal_entry_widgets/strategic_reserve_widget.gui): an overview of the
+# hub, its flow cap and the week's sales income; the inventory table, one row
+# per unlocked good with its fill bar, status, policy and decrease/stop/increase
+# controls; and How the Strategic Reserve Works. Positive rates store goods,
+# negative rates withdraw them. This JE keeps only the hub status line, the two
+# shared buttons (step size, reset all) and the lifecycle entry points into the
+# SR wrapper effects; persistent reserve state lives on country vars.
 # ============================================================================
 
 je_strategic_reserve = {
@@ -42,14 +42,24 @@ je_strategic_reserve = {
 		st_res_je_invalid_effect = yes
 	}
 
-	# Reserve inventory table: one row per unlocked good with its stock, fill
-	# bar, configured rate, actual net weekly movement, status and controls.
-	# container_2 puts it directly under the summary status text and above the
-	# two shared buttons below.
+	# The panel, in three parts (gui/journal_entry_widgets/strategic_reserve_widget.gui):
+	# the overview above the status text, the inventory table between the
+	# status text and the two shared buttons below, and How the Strategic
+	# Reserve Works under the buttons.
+	widget = {
+		gui = "gui/journal_entry_widgets/strategic_reserve_widget.gui"
+		name = "widget_je_strategic_reserve_overview"
+		container = "custom_widget_container_1"
+	}
 	widget = {
 		gui = "gui/journal_entry_widgets/strategic_reserve_widget.gui"
 		name = "widget_je_strategic_reserve_inventory"
 		container = "custom_widget_container_2"
+	}
+	widget = {
+		gui = "gui/journal_entry_widgets/strategic_reserve_widget.gui"
+		name = "widget_je_strategic_reserve_reference"
+		container = "custom_widget_container_3"
 	}
 
 	# Per-good fill bars and the fourteen per-good rate buttons now live inside
@@ -58,9 +68,10 @@ je_strategic_reserve = {
 	scripted_button = st_res_cycle_step_size_button
 	scripted_button = st_res_reset_rates_button
 
-	# Summary only. The per-good stock / rate / status detail moved into the
-	# inventory widget; status_desc also renders in the journal list, where
-	# seven multi-line good blocks were pure noise.
+	# The hub's status only. The per-good detail is in the inventory table, and
+	# the week's sales income and the hub flow cap are in the panel's overview
+	# (they were two more lines here until the style-guide pass); status_desc
+	# also renders in the journal list, where a short line reads best.
 	status_desc = {
 		first_valid = {
 			triggered_desc = {
@@ -81,14 +92,6 @@ je_strategic_reserve = {
 				desc = je_strategic_reserve_status_active
 				trigger = { always = yes }
 			}
-		}
-		triggered_desc = {
-			desc = je_strategic_reserve_profit_line
-			trigger = { always = yes }
-		}
-		triggered_desc = {
-			desc = je_strategic_reserve_rate_line
-			trigger = { always = yes }
 		}
 	}
 
