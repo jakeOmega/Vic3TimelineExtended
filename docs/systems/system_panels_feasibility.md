@@ -2,7 +2,9 @@
 
 > **Status: feasibility study, 2026-09-28.** Checked against the vanilla 1.14.4 GUI files, the mod at `6a0a3c06`, and two Workshop mods installed locally: Community Mod Framework (CMF) 1.65.0 and Demography v14.
 >
-> **Prototype, 2026-09-28: Banking as a Budget tab** (PR #567; `mod_systems.md` § Policy Dashboard). **Seen in game the same day:** the tab selects and all three panels render. So custom tab names work (§3.4, §8 test 1), and `GetPlayerJournalEntry` works for an active entry (§3.2). What it returns for an entry the player lacks or holds inactive is still untested (§8 test 2); the tab never builds the datacontext then.
+> **Prototypes (PR #567), 2026-09-28.** Each tab is on its panel's strip while its game rule is on, greyed until its journal entry is active, with the unlock conditions in the tooltip. Shared pieces: `gui/te_system_tab_widgets.gui` (a journal entry's bars, status description and button grid; `te_tab_buttons_six`) and the gates in `common/scripted_guis/te_system_tab_sguis.txt`.
+> - **Banking as a Budget tab** (`gui/budget_panel.gui`; `mod_systems.md` § Policy Dashboard). **Seen in game the same day:** the tab selects and all three panels render. So custom tab names work (§3.4, §8 test 1), and `GetPlayerJournalEntry` works for an active entry (§3.2). What it returns for an entry the player lacks or holds inactive is still untested (§8 test 2); the tabs never build the datacontext then.
+> - **Cultural Hegemony as a Society tab** (`gui/culture_panel.gui`, the fifth slot). Not yet seen in game. CMF redefines `society_panel` (§7.4), so with CMF enabled one side's version is dropped.
 >
 > Each claim carries a marker. **[verified]**: read in shipping vanilla or mod code. **[precedent]**: a shipping mod or vanilla does it. **[untested]**: plausible, needs an in-game check (§8).
 
@@ -71,7 +73,7 @@ Tabs are plain strings. The tab buttons call `InformationPanel.SelectTab('states
 | Society | `culture_panel.gui` (1,875), type `society_panel` | 4 | yes; a fifth has shipped before (§7.1) |
 | Diplomacy | `diplomatic_overview.gui` (1,827) | 5 | tight: the tab row is an expanding `hbox` |
 
-Before the Banking prototype (header), this mod replaced none of the three; it now replaces `budget_panel.gui`. Each one added is another file to merge every patch (the 3-way merge in `docs/guides/gui_modding_guide.md`). It also collides with any other mod that replaces it (§7.4): Demography replaces `budget_panel.gui`, and CMF redefines `society_panel`.
+Before the prototypes (header), this mod replaced none of the three; it now replaces `budget_panel.gui` and `culture_panel.gui`. Each one added is another file to merge every patch (the 3-way merge in `docs/guides/gui_modding_guide.md`). It also collides with any other mod that replaces it (§7.4): Demography replaces `budget_panel.gui`, and CMF redefines `society_panel`.
 
 ### 3.5 A sidebar button
 

@@ -428,6 +428,7 @@ All four programmes are **persistent toggles**, not timed one-shots — includin
 Three custom widgets replace a 55-entry `status_desc` — a ten-line hand-rolled leaderboard, a twelve-branch ideology ladder, ten breakdown lines and four policy lines, all of which were a table pretending to be prose. `status_desc` now carries three lines (tier, share, funding level), which is what a pinned or unopened entry shows.
 
 - **File:** `gui/journal_entry_widgets/cultural_hegemony_widget.gui` (chart types: `gui/journal_entry_widgets/te_history_chart.gui`)
+- **Second host:** the Society panel's Hegemony tab (`gui/culture_panel.gui`) shows the same three panels, which are types (`te_ch_summary_panel`, `te_ch_programmes_panel`, `te_ch_standing_panel`) for that reason. See `mod_systems.md` § Cultural Hegemony, Key Files.
 - **Handlers:** `common/scripted_guis/cultural_hegemony_sguis.txt`
 - **Shared helpers:** `common/scripted_triggers/cultural_hegemony_triggers.txt` (`ch_possible_<button>`, `ch_active_<programme>`, `ch_shown_<programme>`), `common/scripted_effects/cultural_hegemony_effects.txt` (`ch_effect_<button>`, `ch_refresh_funding_modifiers`, `ch_set_display_state`, `ch_set_political_model`)
 - **Handlers, 10:** `ch_policy_sgui` (the only interactive one), four scope-free `ch_active_<programme>_sgui`, and five display-only — `ch_show_sgui`, `ch_board_row_sgui`, `ch_board_detail_sgui`, `ch_board_is_us_sgui`, `ch_history_marker_sgui`

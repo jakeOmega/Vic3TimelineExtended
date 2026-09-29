@@ -12,6 +12,21 @@
 # Scope: country (the journal entry's owner).
 # ============================================================================
 
+# What a country needs before je_cultural_hegemony activates: the entry's
+# `possible` (its is_shown_when_inactive is the game rule alone). Also the
+# checklist in the Society panel's greyed Hegemony tab
+# (te_society_ch_tab_unlock_sgui's is_valid), which is why the all-countries
+# test carries its own tooltip line.
+ch_entry_unlocked = {
+	custom_tooltip = {
+		text = ch_unlock_any_mass_media_tt
+		any_country = {
+			has_technology_researched = mass_media
+		}
+	}
+	has_technology_researched = romanticism
+}
+
 ch_possible_increase_program_funding = {
 	custom_tooltip = {
 		text = CH_REQUIRES_MINISTRY_TT

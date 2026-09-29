@@ -1559,7 +1559,7 @@ types budget
 							using = default_button
 							parentanchor = hcenter
 							size = { 480 32 }
-							text = "te_budget_banking_open_journal"
+							text = "te_system_tab_open_journal"
 							tooltip = "te_budget_banking_open_journal_tt"
 							onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
 						}
