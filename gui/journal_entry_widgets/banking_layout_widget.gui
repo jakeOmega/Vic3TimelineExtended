@@ -1,0 +1,78 @@
+﻿### Banking — layout. The one place that sets the order of the banking
+### sections, for both hosts: the journal entry (je_banking.txt attaches the
+### named roots at the foot of this file) and the Budget panel's Banking tab
+### (gui/budget_panel.gui instances the composers). The sections are types in
+### banking_dashboard_widget.gui (the overview, Active Policies, Monetary
+### Policy, Available Interventions) and banking_history_widget.gui (the
+### charts), in the shape of the UN's un_layout_widget.gui.
+###
+### Collapse flags say their default: *_closed sections are open until closed,
+### *_open ones collapsed until opened (test_banking_layout.py).
+
+types banking_layout_widget_types
+{
+	### What a returning player acts on, open by default: what is in force, the
+	### dial, and the tools.
+	type te_banking_status_sections = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+		visible = "[JournalEntry.IsActive]"
+
+		te_banking_sec_active = {}
+		te_banking_sec_monetary = {}
+		te_banking_sec_interventions = {}
+	}
+
+	### The record. The history charts are the one section the two hosts show
+	### differently: collapsed in the journal (te_banking_history_panel, open
+	### flag te_hist_charts_open), open in the Budget tab, which overrides the
+	### "history" block with te_banking_history_panel_open (closed flag
+	### te_banking_tab_hist_closed; owner, 2026-09-28).
+	type te_banking_reference_sections = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+		visible = "[JournalEntry.IsActive]"
+
+		block "history" {
+			te_banking_history_panel = {}
+		}
+	}
+}
+
+### ==========================================================================
+### JOURNAL ENTRY ROOTS (je_banking.txt). Bare wrappers that repeat the
+### composers' IsActive gate: je_banking_cycle has is_shown_when_inactive, so
+### the panel can open for a country whose entry has not activated yet and
+### therefore has none of the cycle variables, and an inactive entry's
+### containers must collapse.
+### ==========================================================================
+flowcontainer = {
+	name = "widget_je_banking_overview"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	ignoreinvisible = yes
+
+	te_banking_overview_panel = {}
+}
+
+flowcontainer = {
+	name = "widget_je_banking_status"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	ignoreinvisible = yes
+
+	te_banking_status_sections = {}
+}
+
+flowcontainer = {
+	name = "widget_je_banking_reference"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	ignoreinvisible = yes
+
+	te_banking_reference_sections = {}
+}

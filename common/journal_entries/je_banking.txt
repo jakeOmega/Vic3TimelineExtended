@@ -16,28 +16,30 @@
 	scripted_progress_bar = banking_policy_stance_bar
 	scripted_progress_bar = banking_bubble_pressure_bar
 
-	# Policy dashboard. Both widgets are presentation only: every action they
-	# expose runs through common/scripted_guis/banking_dashboard_scripted_gui.txt,
-	# which calls the same shared triggers and effects as the scripted buttons
-	# below, so the two surfaces cannot diverge.
+	# Policy dashboard: the overview (the bars and Current Conditions), the live
+	# sections (Active Policies, Monetary Policy, Available Interventions) and the
+	# reference sections (the history charts, collapsed here, and How Banking
+	# Works), in the order gui/journal_entry_widgets/banking_layout_widget.gui
+	# sets for this entry and the Budget panel's Banking tab alike. All of it is
+	# presentation only: every action runs through
+	# common/scripted_guis/banking_dashboard_scripted_gui.txt, which calls the same
+	# shared triggers and effects as the scripted buttons below, so the two
+	# surfaces cannot diverge. The history charts only read the samples
+	# te_history_effects.txt records from the monthly pulse below.
 	widget = {
-		gui = "gui/journal_entry_widgets/banking_dashboard_widget.gui"
-		name = "widget_je_banking_conditions"
+		gui = "gui/journal_entry_widgets/banking_layout_widget.gui"
+		name = "widget_je_banking_overview"
 		container = "custom_widget_container_1"
 	}
 	widget = {
-		gui = "gui/journal_entry_widgets/banking_dashboard_widget.gui"
-		name = "widget_je_banking_policies"
-		container = "custom_widget_container_3"
-	}
-
-	# History charts. Collapsed by default, so the bars are only built once the
-	# player asks for them. Purely a view over the samples te_history_effects.txt
-	# records from the monthly pulse below — the section has no effect of its own.
-	widget = {
-		gui = "gui/journal_entry_widgets/banking_history_widget.gui"
-		name = "widget_je_banking_history"
+		gui = "gui/journal_entry_widgets/banking_layout_widget.gui"
+		name = "widget_je_banking_status"
 		container = "custom_widget_container_2"
+	}
+	widget = {
+		gui = "gui/journal_entry_widgets/banking_layout_widget.gui"
+		name = "widget_je_banking_reference"
+		container = "custom_widget_container_3"
 	}
 
 	# MARKER, not content. gui/journal_entry.gui (the mod's override of the
@@ -54,8 +56,8 @@
 
 	# Buttons
 	# These stay declared here: their `ai_chance` blocks are the AI's only path to
-	# banking policy, and they remain the player's fallback controls next to the
-	# dashboard above.
+	# banking policy. Each `visible` starts with `is_ai = yes`, so the player
+	# never sees them; the dashboard above carries the same actions.
 	scripted_button = cb_open_market_ops
 	scripted_button = cb_disable_open_market_ops
 	scripted_button = cb_countercyclical_buffer

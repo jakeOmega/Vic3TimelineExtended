@@ -2,12 +2,13 @@
 ###
 ### The charts are the te_banking_history_charts type, shown in two places,
 ### each through its own collapsible shell:
-### - te_banking_history_panel, which common/journal_entries/je_banking.txt
-###   attaches through the named wrapper at the foot of the file,
-###   `widget = { name = "widget_je_banking_history" container = "custom_widget_container_2" }`,
-###   directly under Current Conditions;
+### - te_banking_history_panel, the journal entry's: the default of the
+###   "history" block of te_banking_reference_sections
+###   (gui/journal_entry_widgets/banking_layout_widget.gui), which
+###   common/journal_entries/je_banking.txt attaches in
+###   custom_widget_container_3, at the foot of the entry;
 ### - te_banking_history_panel_open, which the Budget panel's Banking tab
-###   (gui/budget_panel.gui) instances below the policies, under datacontext
+###   (gui/budget_panel.gui) puts in that block instead, under datacontext
 ###   GetPlayerJournalEntry('je_banking_cycle').
 ###
 ### Six charts, one per unit: the cycle value and bubble pressure are 0..100
@@ -21,8 +22,8 @@
 ### common/scripted_effects/te_history_banking_effects.txt; the reusable
 ### chart type lives in te_history_chart.gui.
 ###
-### In the journal the section is collapsed by default — the flag is the *open*
-### flag, the inverse of the dashboard's collapsed flags — so a player who does
+### In the journal the section is collapsed by default — te_hist_charts_open is
+### an *open* flag, where the dashboard's are *closed* flags — so a player who does
 ### not open it never pays for 1,440 bar slots (six charts x the 240-month store
 ### cap). The Budget tab's shell is open by default (owner's call, 2026-09-28):
 ### the tab is a page the player chose to open, and the charts sit below the policies.
@@ -693,17 +694,4 @@ types te_banking_history_types
 			visible = "[Not(GetVariableSystem.Exists('te_banking_tab_hist_closed'))]"
 		}
 	}
-}
-
-### The name je_banking.txt attaches: a bare wrapper around the panel type
-### above, which the Budget panel's Banking tab (gui/budget_panel.gui) also
-### instances. It repeats the panel's IsActive gate so an inactive entry's
-### container collapses as it did when the panel was the root.
-flowcontainer = {
-	name = "widget_je_banking_history"
-	visible = "[JournalEntry.IsActive]"
-	parentanchor = hcenter
-	ignoreinvisible = yes
-
-	te_banking_history_panel = {}
 }
