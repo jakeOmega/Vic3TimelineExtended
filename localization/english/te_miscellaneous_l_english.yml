@@ -1769,6 +1769,8 @@
  concept_asset_relief_program:0 "Asset Relief Program"
  concept_ch_art_diminishing_returns:0 "Diminishing Returns"
  concept_ch_art_production:0 "Art Production"
+ concept_ch_exported_model:0 "Exported Model"
+ concept_ch_influence_tier:0 "Influence Tier"
  concept_ch_modifier_bonus:0 "Modifier Bonus"
  concept_ch_tech_leadership:0 "Tech Leadership"
  concept_civil_rights_movement:0 "Civil Rights Movement"

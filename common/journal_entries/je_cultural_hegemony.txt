@@ -34,22 +34,25 @@ je_cultural_hegemony = {
 	scripted_button = ch_disable_cultural_protectionism_button
 
 	# The human-facing surface. Every scripted button above carries `is_ai = yes`,
-	# so the vanilla button grid renders nothing for a player; these three panels
+	# so the vanilla button grid renders nothing for a player; these panels
 	# replace it. Their controls call ch_policy_sgui, which delegates to the very
-	# triggers and effects the buttons use.
+	# triggers and effects the buttons use. Three named roots, in the order
+	# cultural_hegemony_widget.gui composes for both hosts: the overview above the
+	# status text, the live sections below it, and the history and "How Cultural
+	# Hegemony Works" below the (empty for a human) button grid.
 	widget = {
 		gui = "gui/journal_entry_widgets/cultural_hegemony_widget.gui"
-		name = "widget_je_ch_summary"
+		name = "widget_je_ch_overview"
 		container = "custom_widget_container_1"
 	}
 	widget = {
 		gui = "gui/journal_entry_widgets/cultural_hegemony_widget.gui"
-		name = "widget_je_ch_programmes"
+		name = "widget_je_ch_status"
 		container = "custom_widget_container_2"
 	}
 	widget = {
 		gui = "gui/journal_entry_widgets/cultural_hegemony_widget.gui"
-		name = "widget_je_ch_standing"
+		name = "widget_je_ch_reference"
 		container = "custom_widget_container_3"
 	}
 
