@@ -96,6 +96,9 @@ SILHOUETTE = ("a bold solid black silhouette icon of {subject}, simple flat pict
               "thick chunky shapes with a few bold white cut-out details, no thin lines, no outlines, "
               "no hatching, the whole object fully visible and centered with a wide white margin on "
               "every side, on a plain white background")
+# The UN's GUI icons show at 32-40 px: one bold object in clear colours.
+UN_STYLE = ("{subject}, one compact bold object filling the frame, simple chunky silhouette, strong clear "
+            "colours, " + PAINTED)
 
 # folder/size/mode/fill/style drive rendering and composing. A category that
 # `generate_icons.py` produces also names where its entities live
@@ -268,6 +271,43 @@ CATEGORIES = {
                     "lower third, no objects, no spacecraft, stylized hand-painted video game background "
                     "art with visible brush strokes")),
         style="{subject}, one chunky readable object, " + PAINTED),
+    # The UN's journal and Diplomacy-tab GUI (docs/systems/un_gui_placeholder_icons.md):
+    # icons that belong to no game entity, only to a `texture =` line in a .gui
+    # file, so the category is GUI-hosted (`gui`): each entry names the
+    # placeholder it replaces (`now`), and `wire` is done by hand in the .gui.
+    # They show at 32-40 px, so every subject is one bold object. All are
+    # written at 150 px (alert_icons' size) to un_icons/, a folder vanilla
+    # lacks, so grading and the sheet's neighbours come from alert_icons.
+    # Agencies and the topics that are not an agency's share one drawn disc
+    # (draw_disc): UN blue enamel under a gold rim, with warm or light
+    # symbols on it for contrast.
+    "un_disc": dict(
+        folder="un_icons", size=150, mode="backed", fill=0.64, grade_strength=0.5,
+        grade_folder="alert_icons", neighbours="alert_icons",
+        gui=("gui/journal_entry_widgets/un_overview_widget.gui", "gui/journal_entry_widgets/un_layout_widget.gui"),
+        backdrop=dict(drawn=dict(centre=(104, 150, 205), edge=(36, 70, 118),
+                                 rim_light=(246, 214, 138), rim_dark=(150, 104, 42))),
+        style=UN_STYLE),
+    # The authority tiers: one colonnade in five stages, as plain cut-outs.
+    # grade_strength 0.4: the silver portico would turn copper at 0.7 (see
+    # journal_entry_space).
+    "un_tier": dict(
+        folder="un_icons", size=150, mode="cutout", fill=0.92, grade_strength=0.4,
+        grade_folder="alert_icons", neighbours="alert_icons",
+        gui=("gui/journal_entry_widgets/un_overview_widget.gui",),
+        style=UN_STYLE),
+    # Pieces the derived UN icons are built from; reviewed like icons, never
+    # written as icons of their own.
+    "un_part": dict(
+        folder="un_icons", size=150, mode="cutout", fill=0.96, grade_strength=0.5, part=True,
+        grade_folder="alert_icons", neighbours="alert_icons", gui=(),
+        style=UN_STYLE),
+    # Membership, the crisis alert and the vacant seat: the emblem part, greyed
+    # or not, under a vanilla mark. Colour means the membership's benefits
+    # apply, grey that they do not; the mark says which state.
+    "un_member": dict(
+        folder="un_icons", size=150, mode="derived", grade_folder="alert_icons", neighbours="alert_icons",
+        gui=("gui/journal_entry_widgets/un_overview_widget.gui",)),
 }
 
 
@@ -280,6 +320,8 @@ def icon_path(cat: str, key: str) -> str:
     spec = CATEGORIES[cat]
     return f"{spec.get('root', 'gfx/interface/icons')}/{spec['folder']}/{key}.dds"
 
+
+_GI = "gfx/interface/icons"
 
 ICONS: dict[str, dict[str, dict]] = {
     "technology": {
@@ -850,6 +892,121 @@ ICONS: dict[str, dict[str, dict]] = {
         "je_space_race_interstellar_results": {"subject": "three large grey radio-telescope dishes in a row, tilted up toward the sky on steel frames", "seed": 1},
         "je_space_race_solar_colonization": {"subject": "a large banded tan-and-brown ringed gas giant planet beside a small rust-red planet and a small blue-and-green planet", "seed": 1},
     },
+    # The UN's GUI icons (docs/systems/un_gui_placeholder_icons.md). Keys are
+    # the file names the doc proposes. `now` is the vanilla placeholder the
+    # .gui draws today. Symbols on the blue disc are warm or light, for contrast.
+    "un_disc": {
+        # Agencies (36 px in the overview): one symbol each.
+        "agency_who": {"subject": "a thick gold staff with one green serpent coiled around it", "seed": None,
+                       "now": f"{_GI}/institution_icons/health_service.dds"},
+        "agency_unesco": {"subject": "an ancient Greek amphora vase in terracotta orange with black bands", "seed": None,
+                          "now": f"{_GI}/goods_icons/fine_art.dds"},
+        "agency_icj": {"subject": "a pair of polished brass balance scales, the two pans level", "seed": None,
+                       "now": f"{_GI}/institution_icons/home_affairs.dds"},
+        "agency_unhrc": {"subject": "a golden dove with its wings spread wide", "seed": None,
+                         "now": f"{_GI}/institution_icons/social_security.dds"},
+        "agency_iaea": {"subject": "a gold atom model, three thick elliptical orbit rings around a red ball nucleus", "seed": None,
+                        "now": f"{_GI}/goods_icons/electricity.dds"},
+        "agency_unep": {"subject": "a single broad bright green leaf with pale veins", "seed": None,
+                        "now": f"{_GI}/goods_icons/wood.dds"},
+        "agency_unhcr": {"subject": "a small tan canvas ridge tent with its flap open", "seed": None,
+                         "now": f"{_GI}/institution_icons/colonization.dds"},
+        "agency_unoosa": {"subject": "a small satellite with a gold foil body and two wide blue solar panel wings", "seed": None,
+                          "now": f"{_GI}/goods_icons/aeroplanes.dds"},
+        "agency_itlos": {"subject": "a heavy brass ship's anchor", "seed": None,
+                         "now": f"{_GI}/goods_icons/merchant_marine.dds"},
+        "agency_icc": {"subject": "a dark polished wooden judge's gavel lying on its round wooden block", "seed": None,
+                       "now": f"{_GI}/institution_icons/police.dds"},
+        "agency_cppnm": {"subject": "a heavy closed brass padlock with a black-and-yellow radiation trefoil on its body", "seed": None,
+                         "now": f"{_GI}/goods_icons/explosives.dds"},
+        # Resolution topics that are no agency's (40 px in the session strip).
+        "topic_condemn": {"subject": "an upright steel sword with a gold hilt", "seed": None,
+                          "marks": [{"icon": f"{_GI}/generic_icons/red_cross.dds"}],
+                          "now": f"{_GI}/alert_icons/land_invasion.dds"},
+        "topic_sanctions": {"subject": "a wooden crate bound shut with a heavy iron chain", "seed": None,
+                            "now": f"{_GI}/alert_icons/blockaded.dds"},
+        # The permanent member's gold star (as on its membership icon), falling.
+        "topic_expulsion": {"subject": "a polished gold five-pointed star", "seed": None,
+                            "marks": [{"icon": f"{_GI}/generic_icons/trend_down.dds"}],
+                            "now": f"{_GI}/alert_icons/is_losing_rank.dds"},
+        "topic_mandate": {"subject": "an upright steel sword inside a round gold laurel wreath", "seed": None,
+                          "now": f"{_GI}/goods_icons/artillery.dds"},
+        "topic_peacekeepers": {"subject": "an empty light-blue steel army helmet seen from the side", "seed": None,
+                               "now": f"{_GI}/goods_icons/small_arms.dds"},
+        "topic_aid": {"subject": "two plump burlap grain sacks tied at the top", "seed": None,
+                      "now": f"{_GI}/goods_icons/groceries.dds"},
+        "topic_reform": {"subject": "a white feather quill pen standing in a round glass inkwell", "seed": None,
+                         "now": f"{_GI}/alert_icons/reform_government.dds"},
+        # FLUX will not break a chain on request; open shackles say the same.
+        "topic_decolonization": {"subject": "a pair of open iron shackles joined by a short chain", "seed": None,
+                                 "now": f"{_GI}/alert_icons/secession.dds"},
+        # A convention topic founds or runs an agency: that agency's icon under
+        # the scroll badge.
+        **{f"topic_{topic}": {"from": f"un_disc/agency_{agency}", "marks": [{"part": "un_part/scroll_badge"}],
+                              "now": now}
+           for topic, agency, now in (
+               ("human_rights", "unhrc", f"{_GI}/institution_icons/social_security.dds"),
+               ("icc", "icc", f"{_GI}/institution_icons/police.dds"),
+               ("npt", "iaea", f"{_GI}/goods_icons/electricity.dds"),
+               ("climate", "unep", f"{_GI}/goods_icons/wood.dds"),
+               ("pandemic", "who", f"{_GI}/institution_icons/health_service.dds"),
+               ("refugee", "unhcr", f"{_GI}/institution_icons/colonization.dds"),
+               ("heritage", "unesco", f"{_GI}/goods_icons/fine_art.dds"),
+               ("space", "unoosa", f"{_GI}/goods_icons/aeroplanes.dds"),
+               ("law_of_sea", "itlos", f"{_GI}/goods_icons/merchant_marine.dds"),
+               ("physical_protection", "cppnm", f"{_GI}/goods_icons/explosives.dds"))},
+    },
+    # Authority tiers (32 px): the colonnade gains columns and finer metal.
+    "un_tier": {
+        "tier_moribund": {"subject": "a single short broken grey stone column stump with a few stone blocks at its base", "seed": None,
+                          "now": f"{_GI}/alert_icons/revolution.dds"},
+        "tier_contested": {"subject": "two thick weathered bronze columns of unequal height", "seed": None,
+                           "now": f"{_GI}/alert_icons/low_legitimacy.dds"},
+        "tier_established": {"subject": "three thick bronze columns under a plain flat stone lintel", "seed": None,
+                             "now": f"{_GI}/generic_icons/checkmark.dds"},
+        "tier_strong": {"subject": "a silver classical portico of four thick columns under a triangular pediment", "seed": None,
+                        "now": f"{_GI}/generic_icons/green_checkmark.dds"},
+        "tier_supranational": {"subject": "a gleaming gold classical temple front of six thick columns under a triangular pediment", "seed": None,
+                               "now": f"{_GI}/alert_icons/formable_possible.dds"},
+    },
+    "un_part": {
+        # A globe needs its continents named, or it renders as a plain ball.
+        "emblem": {"subject": "a round emblem: a blue globe with green continents and blue oceans, encircled by a thick gold laurel wreath", "seed": None},
+        # Tan, not cream: a pale surface is lost in the cut-out.
+        "scroll_badge": {"subject": "a small rolled tan parchment scroll tied with a red ribbon", "seed": None},
+    },
+    "un_member": {
+        "member_no_un": {"from": "un_part/emblem", "tint": "faint",
+                         "now": f"{_GI}/generic_icons/map_list_cross.dds"},
+        "member_cannot_join": {"from": "un_part/emblem", "tint": "grey",
+                               "marks": [{"icon": f"{_GI}/generic_icons/red_cross.dds", "scale": 0.62}],
+                               "now": f"{_GI}/generic_icons/red_cross.dds"},
+        "member_can_join": {"from": "un_part/emblem", "tint": "grey",
+                            "marks": [{"icon": f"{_GI}/generic_icons/map_list_plus.dds", "scale": 0.62}],
+                            "now": f"{_GI}/generic_icons/checkbox_simple.dds"},
+        "member": {"from": "un_part/emblem",
+                   "marks": [{"icon": f"{_GI}/generic_icons/green_checkmark.dds", "scale": 0.62}],
+                   "now": f"{_GI}/generic_icons/green_checkmark.dds"},
+        "member_permanent": {"from": "un_part/emblem",
+                             "marks": [{"icon": f"{_GI}/generic_icons/green_checkmark.dds", "scale": 0.62},
+                                       {"draw": "star", "at": (0.24, 0.24), "scale": 0.44}],
+                             "now": f"{_GI}/generic_icons/checkbox_greencheck.dds"},
+        # Suspended: the overlord carries the seat, so the benefits apply (colour) ...
+        "member_suspended_carried": {"from": "un_part/emblem",
+                                     "marks": [{"draw": "pause", "scale": 0.56}],
+                                     "now": f"{_GI}/generic_icons/checkmark.dds"},
+        # ... or nobody does, and they do not (grey).
+        "member_suspended": {"from": "un_part/emblem", "tint": "grey",
+                             "marks": [{"draw": "pause", "scale": 0.56}],
+                             "now": f"{_GI}/generic_icons/warning.dds"},
+        "crisis": {"from": "un_part/emblem",
+                   "marks": [{"icon": f"{_GI}/generic_icons/warning.dds", "scale": 0.62}],
+                   "now": f"{_GI}/alert_icons/critical_supply_network.dds"},
+        # A permanent seat with nobody in it, in place of a flag: bare UN-blue
+        # cloth with the emblem as a faint watermark. 3:2 like a flag.
+        "seat_vacant": {"from": "un_part/emblem", "layout": "flag", "size": (132, 88),
+                        "now": "gfx/interface/progressbar/progressbar_empty.dds"},
+    },
 }
 
 
@@ -860,13 +1017,20 @@ def check(mod_root: str | None = None, on_disk: set[str] | None = None) -> dict:
       unknown     a key with no plain or REPLACE_OR_CREATE: top-level definition
                   in its entity_dir
       bad_entry   an empty subject, a seed that is not None, an int or "keep",
-                  or a "use" that is not a gfx/ .dds path
+                  or a "use" that is not a gfx/ .dds path; for a GUI-hosted
+                  category, a missing `now` placeholder; a malformed mark, or a
+                  derived entry whose source is not a rendered entry
       missing_dds an accepted seed whose DDS is not committed (or on disk)
       bad_backdrop a category's shared `backdrop` with no prompt, a seed that is
                   not None or an int, or no seed while an icon over it is
-                  accepted (its DDS could not be written)
+                  accepted (its DDS could not be written); a drawn one missing
+                  a colour
     Information:
-      states      how many entries are unreviewed / accepted / kept / reused
+      states      how many entries are unreviewed / accepted / kept / reused /
+                  derived
+    A GUI-hosted category (`gui`) has no entity files, so its keys are never
+    `unknown`. An accepted `part` needs no DDS; a derived entry needs one as
+    soon as its source and parts are accepted.
     `on_disk` defaults to the icon paths git tracks, so it works in a sparse
     worktree.
     """
@@ -883,22 +1047,37 @@ def check(mod_root: str | None = None, on_disk: set[str] | None = None) -> dict:
     for cat, entries in ICONS.items():
         spec = CATEGORIES[cat]
         defined: set[str] = set()
-        for dirpath, _dirs, files in os.walk(os.path.join(mod_root, spec["entity_dir"])):
+        # A GUI-hosted category has no entity files: its keys are file names.
+        for dirpath, _dirs, files in os.walk(os.path.join(mod_root, spec["entity_dir"])) if "gui" not in spec else ():
             for fname in files:
                 if fname.endswith(".txt"):
                     with open(os.path.join(dirpath, fname), encoding="utf-8-sig", errors="replace") as fh:
                         defined |= set(re.findall(r"^(?:REPLACE_OR_CREATE:)?([A-Za-z0-9_\-]+)\s*=\s*\{",
                                                    fh.read(), re.M))
-        states = {"unreviewed": 0, "accepted": 0, "kept": 0, "reused": 0}
+        states = {"unreviewed": 0, "accepted": 0, "kept": 0, "reused": 0, "derived": 0}
         for key, entry in entries.items():
-            if key not in defined:
+            if "gui" not in spec and key not in defined:
                 report["unknown"].append((cat, key))
+            if "gui" in spec and not spec.get("part") and not _is_gfx_path(entry.get("now"), (".dds",)):
+                report["bad_entry"].append((cat, key))
+                continue
+            if not _marks_ok(entry.get("marks", [])):
+                report["bad_entry"].append((cat, key))
+                continue
             if "use" in entry:
                 use = entry["use"]
                 if isinstance(use, str) and use.startswith("gfx/") and use.endswith(".dds"):
                     states["reused"] += 1
                 else:
                     report["bad_entry"].append((cat, key))
+                continue
+            if "from" in entry:
+                if not _derived_ok(spec, entry):
+                    report["bad_entry"].append((cat, key))
+                    continue
+                states["derived"] += 1
+                if all(_accepted(c, k) for c, k in _depends_on(entry)) and icon_path(cat, key) not in on_disk:
+                    report["missing_dds"].append((cat, key))
                 continue
             seed = entry.get("seed")
             if not entry.get("subject") or not (seed is None or seed == KEEP
@@ -911,16 +1090,77 @@ def check(mod_root: str | None = None, on_disk: set[str] | None = None) -> dict:
                 states["kept"] += 1
             else:
                 states["accepted"] += 1
-                if icon_path(cat, key) not in on_disk:
+                if not spec.get("part") and icon_path(cat, key) not in on_disk:
                     report["missing_dds"].append((cat, key))
         report["states"][cat] = states
         bd = spec.get("backdrop")
-        if bd:
+        if bd and "drawn" in bd:
+            drawn = bd["drawn"]
+            if not all(isinstance(drawn.get(k), tuple) and len(drawn[k]) == 3
+                       for k in ("centre", "edge", "rim_light", "rim_dark")):
+                report["bad_backdrop"].append((cat, "_backdrop"))
+        elif bd:
             seed = bd.get("seed")
             picked = isinstance(seed, int) and not isinstance(seed, bool) and seed >= 0
             if not bd.get("prompt") or not (seed is None or picked) or (seed is None and states["accepted"]):
                 report["bad_backdrop"].append((cat, "_backdrop"))
     return report
+
+
+TINTS = ("grey", "faint")
+LAYOUTS = ("flag",)
+DRAWN_MARKS = ("star", "pause")
+
+
+def _is_gfx_path(path, suffixes) -> bool:
+    return isinstance(path, str) and path.startswith("gfx/") and path.endswith(suffixes)
+
+
+def _ref(path) -> tuple[str, str] | None:
+    """"<category>/<key>" naming an ICONS entry, as (category, key); None otherwise."""
+    if not isinstance(path, str) or "/" not in path:
+        return None
+    cat, key = path.split("/", 1)
+    return (cat, key) if key in ICONS.get(cat, {}) else None
+
+
+def _depends_on(entry: dict) -> list[tuple[str, str]]:
+    return [_ref(entry["from"])] + [_ref(m["part"]) for m in entry.get("marks", []) if "part" in m]
+
+
+def _accepted(cat: str, key: str) -> bool:
+    seed = ICONS[cat][key].get("seed")
+    return "from" not in ICONS[cat][key] and isinstance(seed, int) and not isinstance(seed, bool)
+
+
+def _marks_ok(marks) -> bool:
+    """Each mark is one vanilla .dds, one registry part or one drawn shape, placed on the icon."""
+    if not isinstance(marks, list):
+        return False
+    for m in marks:
+        kinds = [k for k in ("icon", "part", "draw") if k in m]
+        if len(kinds) != 1:
+            return False
+        if "icon" in m and not _is_gfx_path(m["icon"], (".dds",)):
+            return False
+        if "part" in m and not (_ref(m["part"]) and CATEGORIES[_ref(m["part"])[0]].get("part")):
+            return False
+        if "draw" in m and m["draw"] not in DRAWN_MARKS:
+            return False
+        at, scale = m.get("at", (0.5, 0.5)), m.get("scale", 0.5)
+        if not (len(at) == 2 and all(0 <= v <= 1 for v in at) and 0 < scale <= 1):
+            return False
+    return True
+
+
+def _derived_ok(spec: dict, entry: dict) -> bool:
+    """A derived entry: GUI-hosted, built on a rendered entry, with a known tint and layout."""
+    src = _ref(entry["from"])
+    if "gui" not in spec or not src or "from" in ICONS[src[0]][src[1]] or "subject" not in ICONS[src[0]][src[1]]:
+        return False
+    if entry.get("tint") not in (None,) + TINTS or entry.get("layout") not in (None,) + LAYOUTS:
+        return False
+    return entry.get("layout") != "flag" or (isinstance(entry.get("size"), tuple) and len(entry["size"]) == 2)
 
 
 def validate() -> bool:

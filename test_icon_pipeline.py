@@ -42,8 +42,47 @@ class RegistryTests(unittest.TestCase):
 
     def test_every_generated_category_names_its_entities(self):
         for cat in ip.ICONS:
+            if "gui" in ip.CATEGORIES[cat]:
+                continue                                    # GUI-hosted: entries name their placeholder
             self.assertIn("entity_dir", ip.CATEGORIES[cat])
             self.assertIn("field", ip.CATEGORIES[cat])
+
+    def test_check_gui_hosted_parts_and_derived_entries(self):
+        gi_ = "gfx/interface/icons/generic_icons"
+        saved = ip.ICONS
+        try:
+            ip.ICONS = {
+                "un_part": {"emblem": {"subject": "a laurel", "seed": 0},       # accepted part: no DDS needed
+                            "badge": {"subject": "a scroll", "seed": None}},
+                "un_disc": {
+                    "agency_a": {"subject": "an anchor", "seed": 1, "now": f"{gi_}/x.dds"},
+                    "no_now": {"subject": "an anchor", "seed": None},
+                    "topic_a": {"from": "un_disc/agency_a", "marks": [{"part": "un_part/badge"}],
+                                "now": f"{gi_}/x.dds"},                      # badge unpicked: not yet due
+                    "bad_from": {"from": "un_disc/nowhere", "now": f"{gi_}/x.dds"},
+                    "from_derived": {"from": "un_disc/topic_a", "now": f"{gi_}/x.dds"},
+                    "bad_mark": {"subject": "a sword", "seed": None, "now": f"{gi_}/x.dds",
+                                 "marks": [{"icon": f"{gi_}/red_cross.dds", "draw": "star"}]},
+                    "part_not_a_part": {"from": "un_disc/agency_a", "now": f"{gi_}/x.dds",
+                                        "marks": [{"part": "un_disc/agency_a"}]},
+                },
+                "un_member": {
+                    "member": {"from": "un_part/emblem", "marks": [{"draw": "star", "at": (0.2, 0.2)}],
+                               "now": f"{gi_}/x.dds"},                       # due: emblem accepted
+                    "bad_tint": {"from": "un_part/emblem", "tint": "sepia", "now": f"{gi_}/x.dds"},
+                    "flag_no_size": {"from": "un_part/emblem", "layout": "flag", "now": f"{gi_}/x.dds"},
+                },
+            }
+            r = ip.check(tempfile.mkdtemp(), on_disk=set())
+        finally:
+            ip.ICONS = saved
+        self.assertEqual(r["unknown"], [])                                   # no entity files to miss
+        self.assertEqual(sorted(r["bad_entry"]), [
+            ("un_disc", "bad_from"), ("un_disc", "bad_mark"), ("un_disc", "from_derived"),
+            ("un_disc", "no_now"), ("un_disc", "part_not_a_part"),
+            ("un_member", "bad_tint"), ("un_member", "flag_no_size")])
+        self.assertEqual(sorted(r["missing_dds"]), [("un_disc", "agency_a"), ("un_member", "member")])
+        self.assertEqual(r["states"]["un_disc"]["derived"], 1)
 
     def test_check_flags_bad_entries(self):
         saved = ip.ICONS
@@ -73,7 +112,7 @@ class RegistryTests(unittest.TestCase):
                                                   ("technology", "no_subject")])
         self.assertEqual(r["missing_dds"], [("technology", "accepted")])
         self.assertEqual(r["states"]["technology"],
-                         {"unreviewed": 2, "accepted": 1, "kept": 1, "reused": 1})
+                         {"unreviewed": 2, "accepted": 1, "kept": 1, "reused": 1, "derived": 0})
 
     def test_check_knows_replace_or_create_definitions(self):
         saved = ip.ICONS
@@ -103,6 +142,14 @@ class RegistryTests(unittest.TestCase):
             self.assertEqual(sorted(gi.generated("technology", set())), ["chosen", "new"])
             self.assertEqual([k for k, e in ip.ICONS["technology"].items()
                               if "use" not in e and gi.accepted(e)], ["chosen"])
+            ip.ICONS = gi.ICONS = {"un_disc": {
+                "agency": {"subject": "an anchor", "seed": 0, "now": "gfx/x.dds"},
+                "topic": {"from": "un_disc/agency", "now": "gfx/x.dds"},
+            }}
+            self.assertEqual(list(gi.generated("un_disc", set())), ["agency"])   # derived: never rendered
+            self.assertEqual(list(gi.derived("un_disc", set())), ["topic"])
+            self.assertFalse(gi.accepted(ip.ICONS["un_disc"]["topic"]))
+            self.assertTrue(gi.derived_ready(ip.ICONS["un_disc"]["topic"]))
         finally:
             ip.ICONS = gi.ICONS = saved
 
@@ -528,6 +575,91 @@ class BackedComposeTests(unittest.TestCase):
         composer._target["journal_entry_space"] = (0.45, 0.57)          # skip reading vanilla's icons
         with self.assertRaises(ValueError):
             composer.compose(Image.new("RGB", (8, 8)), "journal_entry_space", ip.CATEGORIES["journal_entry_space"])
+
+
+@unittest.skipIf(icon_dds is None, "Pillow is not installed")
+class DerivedIconTests(unittest.TestCase):
+    """The UN's derived icons: a drawn disc, tints, marks over an icon, the flag layout, and writing them."""
+
+    def setUp(self):
+        import icon_render
+        self.r = icon_render
+
+    def test_drawn_disc_is_blue_enamel_under_a_gold_rim(self):
+        drawn = ip.CATEGORIES["un_disc"]["backdrop"]["drawn"]
+        disc = np.asarray(self.r.draw_disc(150, drawn)).astype(int)
+        self.assertEqual(disc[0, 0, 3], 0)                                    # round, not square
+        self.assertEqual(disc[75, 75, 3], 255)
+        r, g, b = disc[75, 75, :3]
+        self.assertGreater(b, r + 40)                                         # enamel: blue
+        r, g, b = disc[8, 75, :3]                                             # top of the rim
+        self.assertGreater(r, b + 40)                                         # rim: gold
+
+    def test_tints(self):
+        im = Image.new("RGBA", (8, 8), (200, 40, 40, 255))
+        grey = np.asarray(self.r.tint(im, "grey")).astype(int)
+        self.assertLess(np.ptp(grey[0, 0, :3]), 20)                           # colour gone
+        self.assertEqual(grey[0, 0, 3], 255)
+        self.assertLess(np.asarray(self.r.tint(im, "faint"))[0, 0, 3], 128)   # faded as well
+        self.assertIs(self.r.tint(im, None), im)
+        with self.assertRaises(ValueError):
+            self.r.tint(im, "sepia")
+
+    def test_marks_land_where_they_are_placed(self):
+        base = Image.new("RGBA", (150, 150), (0, 0, 0, 0))
+        green = Image.new("RGBA", (40, 40), (20, 200, 20, 255))
+        out = np.asarray(self.r.apply_marks(base, [{"icon": "x"}, {"draw": "star", "at": (0.24, 0.24), "scale": 0.4}],
+                                            lambda m: green)).astype(int)
+        self.assertGreater(out[108, 108, 1], 150)                             # default: lower right
+        self.assertEqual(out[140, 20, 3], 0)                                  # lower left untouched
+        self.assertGreater(out[36, 36, 0], 150)                               # the star, gold, top left
+        self.assertEqual(np.asarray(base)[108, 108, 3], 0)                    # the input is not changed
+
+    def test_flag_layout(self):
+        emblem = Image.new("RGBA", (100, 100), (0, 0, 0, 0))
+        emblem.paste((200, 160, 60, 255), (30, 30, 70, 70))
+        flag = np.asarray(self.r.flag_layout(emblem, (132, 88))).astype(int)
+        self.assertEqual(flag.shape, (88, 132, 4))
+        self.assertTrue((flag[..., 3] == 255).all())                          # opaque cloth
+        self.assertGreater(flag[44, 66, :3].sum(), flag[44, 10, :3].sum())    # the watermark is lighter
+        self.assertLess(flag[0, 66, :3].sum(), flag[44, 10, :3].sum())        # a dark border
+
+    def test_derived_icons_are_written_once_their_source_is_picked(self):
+        import icon_render
+        root, work = Path(tempfile.mkdtemp()), Path(tempfile.mkdtemp())
+        (root / "gfx" / "interface").mkdir(parents=True)
+        saved = (ip.ICONS, gi.MOD_ROOT, icon_render.vanilla_icons_dir)
+        emblem = {"subject": "a laurel", "seed": None}
+        try:
+            ip.ICONS = gi.ICONS = {"un_part": {"emblem": emblem},
+                                   "un_member": {"member": {"from": "un_part/emblem", "tint": "grey",
+                                                            "marks": [{"draw": "star"}], "now": "gfx/x.dds"}}}
+            gi.MOD_ROOT = root
+            icon_render.vanilla_icons_dir = lambda: root / "game" / "gfx" / "interface" / "icons"
+            # A raw render and its composed final, newer than it, so nothing is recomposed.
+            (work / "raw").mkdir()
+            (work / "final").mkdir()
+            Image.new("RGB", (64, 64), "white").save(work / "raw" / "un_part__emblem__s1.png")
+            final = Image.new("RGBA", (150, 150), (0, 0, 0, 0))
+            final.paste((40, 90, 200, 255), (30, 30, 120, 120))
+            final.save(work / "final" / "un_part__emblem__s1.png")
+            dest = root / ip.icon_path("un_member", "member")
+            gi.stage_write("un_member", set(), work)
+            self.assertFalse(dest.exists())                                   # emblem not picked yet
+            emblem["seed"] = 1
+            gi.stage_write("un_part", set(), work)                            # parts are never written
+            self.assertFalse((root / ip.icon_path("un_part", "emblem")).exists())
+            gi.stage_write("un_member", set(), work)
+            self.assertTrue(dest.exists())
+            mtime = dest.stat().st_mtime_ns
+            gi.stage_write("un_member", set(), work)
+            self.assertEqual(dest.stat().st_mtime_ns, mtime)                  # unchanged: left alone
+            ip.ICONS["un_member"]["member"]["tint"] = None
+            gi.stage_write("un_member", set(), work)
+            self.assertNotEqual(dest.stat().st_mtime_ns, mtime)               # recipe changed: rewritten
+        finally:
+            ip.ICONS, gi.MOD_ROOT, icon_render.vanilla_icons_dir = saved
+            gi.ICONS = ip.ICONS
 
 
 if __name__ == "__main__":
