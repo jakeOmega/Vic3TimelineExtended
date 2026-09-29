@@ -347,5 +347,134 @@ class ProposeTextTest(unittest.TestCase):
             with self.subTest(key=key):
                 self.assertFalse(_loc(key).startswith(" "), key)
 
+
+MEMBER_MODIFIERS = {   # convention -> (member modifier, where it sits); test_un_convention_registry's table
+    "human_rights": ("un_human_rights_declaration_modifier", "je"),
+    "icc": ("un_icc_member_modifier", "country"),
+    "npt": ("un_nonproliferation_modifier", "je"),
+    "climate": ("un_climate_binding_modifier", "je"),
+    "pandemic": ("un_pandemic_cooperation_modifier", "je"),
+    "refugee": ("un_refugee_program_modifier", "je"),
+    "heritage": ("un_heritage_program_modifier", "je"),
+    "space": ("un_space_partnership_modifier", "je"),
+    "law_of_sea": ("un_law_of_sea_modifier", "country"),
+    "physical_protection": ("un_physical_protection_modifier", "country"),
+}
+TERMS = {   # convention -> its regime terms, in display order
+    "human_rights": ("un_regime_rights_violator_modifier",),
+    "npt": ("un_regime_npt_inspection_modifier", "un_regime_npt_guarantee_modifier"),
+    "climate": ("un_regime_climate_emitter_modifier", "un_regime_climate_adaptation_modifier"),
+    "refugee": ("un_regime_refugee_host_modifier", "un_regime_refugee_source_modifier"),
+    "heritage": ("un_regime_heritage_site_modifier",),
+    "space": ("un_regime_space_leader_modifier", "un_regime_space_laggard_modifier",
+              "un_regime_space_weapon_modifier"),
+    "law_of_sea": ("un_regime_naval_curb_modifier",),
+}
+OTHER_TERMS = ("un_regime_colonial_pressure_modifier", "un_regime_shared_intelligence_modifier")
+
+
+def _modifier_name(mod):
+    return _loc_or_none(mod)
+
+
+class MissionButtonsTest(unittest.TestCase):
+    def test_send_and_bring_home_are_centred(self):
+        row = _type_body(_read(CHAMBER), "un_chamber_mission_row")
+        buttons = re.findall(r"button = \{\s*using = default_button_action\s*size = \{ 200 28 \}\s*(parentanchor = \w+)?", row)
+        self.assertEqual(buttons, ["parentanchor = hcenter"] * 2)
+
+
+class ObligationsTest(unittest.TestCase):
+    """Our Obligations, shortened (owner, 2026-09-28): our dues beside the whole
+    budget, then one line per convention with its modifiers on hover."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _type_body(_read(CHAMBER), "te_un_sec_obligations")
+        cls.regimes = _block(_read(CHAMBER_EFFECTS), "un_chamber_regime_lines")
+
+    def assertModifierHover(self, line_key, modifier):
+        line = _loc(line_key)
+        m = re.search(r"#tooltippable;tooltip:\[GetPlayer\.GetTooltipTag\],(\w+) ", line)
+        self.assertTrue(m, f"{line_key} does not hover its modifier: {line}")
+        self.assertIn(f"GetStaticModifier('{modifier}').GetDesc", _loc(m.group(1)))
+        self.assertTrue(_modifier_name(modifier), f"{modifier} has no name")
+
+    def test_our_dues_sit_beside_the_budget(self):
+        dues = self.gui.index("un_chamber_dues_sgui")
+        budget = self.gui.index("un_chamber_budget_sgui")
+        conventions = self.gui.index("je_un_chamber_sub_regimes")
+        self.assertLess(dues, budget)
+        self.assertLess(budget, conventions)
+        self.assertNotIn("je_un_chamber_sub_budget", self.gui)
+        self.assertIsNone(_loc_or_none("je_un_chamber_sub_budget"))
+
+    def test_every_convention_we_carry_has_a_line_with_its_modifier(self):
+        for key, (mod, scope) in MEMBER_MODIFIERS.items():
+            with self.subTest(convention=key):
+                m = re.search(rf"un_chamber_convention_line_{scope} = \{{ MODIFIER = {mod} LINE = (\w+) \}}",
+                              self.regimes)
+                self.assertTrue(m, key)
+                self.assertModifierHover(m.group(1), mod)
+
+    def test_every_term_sits_under_its_convention_with_its_modifier(self):
+        for key, terms in TERMS.items():
+            head = self.regimes.index(f"MODIFIER = {MEMBER_MODIFIERS[key][0]} ")
+            later = [self.regimes.index(f"MODIFIER = {m[0]} ") for k, m in MEMBER_MODIFIERS.items()]
+            nxt = min([i for i in later if i > head] + [len(self.regimes)])
+            for mod in terms:
+                with self.subTest(term=mod):
+                    m = re.search(rf"un_chamber_regime_line = \{{ MODIFIER = {mod} LINE = (\w+) \}}", self.regimes)
+                    self.assertTrue(m, mod)
+                    self.assertTrue(head < m.start() < nxt, f"{mod} is not under {key}")
+                    self.assertModifierHover(m.group(1), mod)
+        for mod in OTHER_TERMS:
+            with self.subTest(term=mod):
+                m = re.search(rf"un_chamber_regime_line = \{{ MODIFIER = {mod} LINE = (\w+) \}}", self.regimes)
+                self.assertModifierHover(m.group(1), mod)
+        self.assertModifierHover("je_un_chamber_regime_colony", "un_regime_colony_liberty_modifier")
+
+    def test_less_explaining(self):
+        for key in ("je_un_chamber_regimes_header", "je_un_chamber_regimes_none"):
+            self.assertNotIn(key, self.regimes)
+            self.assertIsNone(_loc_or_none(key), key)
+        scale = _loc("je_un_chamber_regimes_scale")
+        self.assertIn("un_enforcement_now", scale)
+        self.assertNotIn("re-assessed", scale)
+        self.assertIn("re-assessed", _loc("je_un_chamber_obligations_help"))
+        self.assertNotIn("Until we pay", _loc("je_un_chamber_dues_article_19"))
+
+
+RECORD_TERMS = ("un_case_infamy_term", "un_disp_dos_aggression", "un_disp_dos_defiance",
+                "un_disp_dos_violation", "un_disp_dos_covert", "un_disp_dos_nuclear")
+
+
+class RecordTest(unittest.TestCase):
+    """Our Record: one name, and its terms a table (owner, 2026-09-28)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _type_body(_read(CHAMBER), "te_un_sec_exposure")
+
+    def test_one_name(self):
+        self.assertEqual(_loc("je_un_chamber_exposure_header"), "Our Record")
+        self.assertNotIn("je_un_chamber_sub_record", self.gui)
+        self.assertIsNone(_loc_or_none("je_un_chamber_sub_record"))
+
+    def test_the_terms_are_a_table(self):
+        rows = self.gui.count("un_chamber_value_row = {")
+        self.assertGreaterEqual(rows, 1 + len(RECORD_TERMS) + 1 + 3)
+        for sv in ("un_case_strength",) + RECORD_TERMS:
+            self.assertIn(f"ScriptValue('{sv}')", self.gui, sv)
+        self.assertRegex(self.gui, r"visible = \"\[GreaterThan_CFixedPoint\( JournalEntry\.GetCountry\.MakeScope\.ScriptValue\('un_case_standing_term'\)")
+        for topic in ("condemn", "sanctions", "mandate"):
+            self.assertIn(f"GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_strength'), "
+                          f"JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_threshold_{topic}') )", self.gui, topic)
+
+    def test_no_text_builder_left(self):
+        self.assertNotIn("un_chamber_exposure_sgui", self.gui)
+        self.assertNotIn("un_chamber_exposure_sgui", _read(CHAMBER_SGUIS))
+        self.assertNotIn("un_chamber_exposure_block", _read(CHAMBER_EFFECTS))
+
 if __name__ == "__main__":
     unittest.main()

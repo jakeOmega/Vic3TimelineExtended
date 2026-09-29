@@ -1757,42 +1757,6 @@ un_chamber_council_in_line = {
 	}
 }
 
-# OUR EXPOSURE: our own dossier, and which punitive topics our record would
-# support against us today (§5.1: "a real case is visible before it lands").
-# Root-level lines only. How the record works is static text, under its own
-# heading in the widget (je_un_chamber_exposure_help).
-# Scope: country (the viewer)
-un_chamber_exposure_block = {
-	if = {
-		limit = { has_global_variable = un_founded }
-		custom_tooltip_no_bullet = je_un_chamber_exposure_case
-		# The Supranational standing case against an outsider (redesign
-		# phase 5): already inside the case strength above; named here.
-		if = {
-			limit = { un_case_standing_applies = yes }
-			custom_tooltip_no_bullet = je_un_chamber_exposure_standing_case
-		}
-		if = {
-			limit = { un_case_supports = { TOPIC = mandate } }
-			custom_tooltip_no_bullet = je_un_chamber_exposure_mandate
-		}
-		else_if = {
-			limit = { un_case_supports = { TOPIC = sanctions } }
-			custom_tooltip_no_bullet = je_un_chamber_exposure_sanctions
-		}
-		else_if = {
-			limit = { un_case_supports = { TOPIC = condemn } }
-			custom_tooltip_no_bullet = je_un_chamber_exposure_condemn
-		}
-		else = {
-			custom_tooltip_no_bullet = je_un_chamber_exposure_clean
-		}
-	}
-	else = {
-		custom_tooltip_no_bullet = je_un_chamber_exposure_no_un
-	}
-}
-
 # OUR OBLIGATIONS (redesign phase 5): what membership asks of us — our
 # assessed dues and any arrears (§7.2), the conventions' regimes that bind us
 # as winner or loser (§5.3), and the pressure on our sovereignty at home
@@ -1854,38 +1818,21 @@ un_chamber_dues_lines = {
 	}
 }
 
-# The regimes' terms for us (§5.3), shared intelligence (§7.4) and our
-# interest groups' reaction (§7.1): one line per modifier we carry, read
-# straight off the modifiers un_regime_refresh_country applies, so the list
-# is the rule.
+# The conventions we are party to (§5.3), shared intelligence (§7.4) and our
+# interest groups' reaction (§7.1), read straight off the modifiers
+# un_regime_refresh_country applies, so the list is the rule. Each convention
+# we carry is a line of its own, its name hoverable for its member modifier's
+# effects, with our terms under it, each hoverable for its own (owner,
+# 2026-09-28). A term is applied only to a party, so none prints without its
+# convention above it; decolonization has no parties and intelligence
+# sharing belongs to no convention, so each of those is a line of its own.
 # Scope: country (a member)
 un_chamber_regime_lines = {
-	if = {
-		limit = { un_regime_has_terms = yes }
-		custom_tooltip_no_bullet = je_un_chamber_regimes_header
-		un_chamber_regime_line = { MODIFIER = un_regime_climate_emitter_modifier LINE = je_un_chamber_regime_climate_emitter }
-		un_chamber_regime_line = { MODIFIER = un_regime_climate_adaptation_modifier LINE = je_un_chamber_regime_climate_adaptation }
-		un_chamber_regime_line = { MODIFIER = un_regime_npt_inspection_modifier LINE = je_un_chamber_regime_npt_inspection }
-		un_chamber_regime_line = { MODIFIER = un_regime_npt_guarantee_modifier LINE = je_un_chamber_regime_npt_guarantee }
-		un_chamber_regime_line = { MODIFIER = un_regime_naval_curb_modifier LINE = je_un_chamber_regime_naval_curb }
-		un_chamber_regime_line = { MODIFIER = un_regime_rights_violator_modifier LINE = je_un_chamber_regime_rights_violator }
-		un_chamber_regime_line = { MODIFIER = un_regime_colonial_pressure_modifier LINE = je_un_chamber_regime_colonial_pressure }
-		un_chamber_regime_line = { MODIFIER = un_regime_refugee_host_modifier LINE = je_un_chamber_regime_refugee_host }
-		un_chamber_regime_line = { MODIFIER = un_regime_refugee_source_modifier LINE = je_un_chamber_regime_refugee_source }
-		un_chamber_regime_line = { MODIFIER = un_regime_space_leader_modifier LINE = je_un_chamber_regime_space_leader }
-		un_chamber_regime_line = { MODIFIER = un_regime_space_laggard_modifier LINE = je_un_chamber_regime_space_laggard }
-		un_chamber_regime_line = { MODIFIER = un_regime_space_weapon_modifier LINE = je_un_chamber_regime_space_weapon }
-		un_chamber_regime_line = { MODIFIER = un_regime_heritage_site_modifier LINE = je_un_chamber_regime_heritage_site }
-		un_chamber_regime_line = { MODIFIER = un_regime_shared_intelligence_modifier LINE = je_un_chamber_regime_shared_intelligence }
-	}
-	else_if = {
-		limit = { un_regime_any_convention = yes }
-		custom_tooltip_no_bullet = je_un_chamber_regimes_none
-	}
-	else = {
-		custom_tooltip_no_bullet = je_un_chamber_regimes_no_convention
-	}
-	# The court's reach over our ruler.
+	un_chamber_convention_line_je = { MODIFIER = un_human_rights_declaration_modifier LINE = je_un_chamber_conv_human_rights }
+	un_chamber_regime_line = { MODIFIER = un_regime_rights_violator_modifier LINE = je_un_chamber_regime_rights_violator }
+	un_chamber_convention_line_country = { MODIFIER = un_icc_member_modifier LINE = je_un_chamber_conv_icc }
+	# The court's reach over our ruler: a party's from the Established tier,
+	# everyone's at Supranational.
 	if = {
 		limit = {
 			has_global_variable = un_agency_icc
@@ -1897,6 +1844,27 @@ un_chamber_regime_lines = {
 		}
 		custom_tooltip_no_bullet = je_un_chamber_regime_icc
 	}
+	un_chamber_convention_line_je = { MODIFIER = un_nonproliferation_modifier LINE = je_un_chamber_conv_npt }
+	un_chamber_regime_line = { MODIFIER = un_regime_npt_inspection_modifier LINE = je_un_chamber_regime_npt_inspection }
+	un_chamber_regime_line = { MODIFIER = un_regime_npt_guarantee_modifier LINE = je_un_chamber_regime_npt_guarantee }
+	un_chamber_convention_line_je = { MODIFIER = un_climate_binding_modifier LINE = je_un_chamber_conv_climate }
+	un_chamber_regime_line = { MODIFIER = un_regime_climate_emitter_modifier LINE = je_un_chamber_regime_climate_emitter }
+	un_chamber_regime_line = { MODIFIER = un_regime_climate_adaptation_modifier LINE = je_un_chamber_regime_climate_adaptation }
+	un_chamber_convention_line_je = { MODIFIER = un_pandemic_cooperation_modifier LINE = je_un_chamber_conv_pandemic }
+	un_chamber_convention_line_je = { MODIFIER = un_refugee_program_modifier LINE = je_un_chamber_conv_refugee }
+	un_chamber_regime_line = { MODIFIER = un_regime_refugee_host_modifier LINE = je_un_chamber_regime_refugee_host }
+	un_chamber_regime_line = { MODIFIER = un_regime_refugee_source_modifier LINE = je_un_chamber_regime_refugee_source }
+	un_chamber_convention_line_je = { MODIFIER = un_heritage_program_modifier LINE = je_un_chamber_conv_heritage }
+	un_chamber_regime_line = { MODIFIER = un_regime_heritage_site_modifier LINE = je_un_chamber_regime_heritage_site }
+	un_chamber_convention_line_je = { MODIFIER = un_space_partnership_modifier LINE = je_un_chamber_conv_space }
+	un_chamber_regime_line = { MODIFIER = un_regime_space_leader_modifier LINE = je_un_chamber_regime_space_leader }
+	un_chamber_regime_line = { MODIFIER = un_regime_space_laggard_modifier LINE = je_un_chamber_regime_space_laggard }
+	un_chamber_regime_line = { MODIFIER = un_regime_space_weapon_modifier LINE = je_un_chamber_regime_space_weapon }
+	un_chamber_convention_line_country = { MODIFIER = un_law_of_sea_modifier LINE = je_un_chamber_conv_law_of_sea }
+	un_chamber_regime_line = { MODIFIER = un_regime_naval_curb_modifier LINE = je_un_chamber_regime_naval_curb }
+	un_chamber_convention_line_country = { MODIFIER = un_physical_protection_modifier LINE = je_un_chamber_conv_physical_protection }
+	un_chamber_regime_line = { MODIFIER = un_regime_colonial_pressure_modifier LINE = je_un_chamber_regime_colonial_pressure }
+	un_chamber_regime_line = { MODIFIER = un_regime_shared_intelligence_modifier LINE = je_un_chamber_regime_shared_intelligence }
 	# Sovereignty: our interest groups' reaction, from the Strong tier.
 	if = {
 		limit = {
@@ -1915,6 +1883,27 @@ un_chamber_regime_lines = {
 	if = {
 		limit = { un_regime_any_convention = yes }
 		custom_tooltip_no_bullet = je_un_chamber_regimes_scale
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_regimes_no_convention
+	}
+}
+
+# A convention we are party to, whose member modifier sits on the journal
+# entry (_je) or on the country (_country) — test_un_convention_registry's
+# `scope` column.
+# Parameters: $MODIFIER$ = its member modifier, $LINE$ = its line
+# Scope: country
+un_chamber_convention_line_je = {
+	if = {
+		limit = { je:je_united_nations ?= { has_modifier = $MODIFIER$ } }
+		custom_tooltip_no_bullet = $LINE$
+	}
+}
+un_chamber_convention_line_country = {
+	if = {
+		limit = { has_modifier = $MODIFIER$ }
+		custom_tooltip_no_bullet = $LINE$
 	}
 }
 

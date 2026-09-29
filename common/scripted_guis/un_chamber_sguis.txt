@@ -274,16 +274,6 @@ un_chamber_position_sgui = {
 	}
 }
 
-# Redesign phase 3: our own dossier, and which punitive topics it would
-# support against us.
-un_chamber_exposure_sgui = {
-	scope = country
-
-	effect = {
-		un_chamber_exposure_block = yes
-	}
-}
-
 # Missions in the field (redesign phase 6): the mission register, in two
 # lists under their own headings in the widget — the missions still at work,
 # and the ones that have ended.

@@ -218,7 +218,9 @@ un_regime_any_convention = {
 	}
 }
 
-# The scoped country carries some regime modifier.
+# The scoped country carries some regime modifier. The roster of every term:
+# test_un_convention_registry holds the chamber's regime lines, the clear list
+# and the refresh to it.
 # Scope: country
 un_regime_has_terms = {
 	OR = {

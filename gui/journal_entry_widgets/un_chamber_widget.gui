@@ -266,6 +266,7 @@ types un_chamber_widget_types
 		button = {
 			using = default_button_action
 			size = { 200 28 }
+			parentanchor = hcenter
 
 			textbox = {
 				parentanchor = center
@@ -283,6 +284,7 @@ types un_chamber_widget_types
 		button = {
 			using = default_button_action
 			size = { 200 28 }
+			parentanchor = hcenter
 
 			textbox = {
 				parentanchor = center
@@ -1991,9 +1993,12 @@ types un_chamber_widget_types
 		ignoreinvisible = yes
 		spacing = 4
 
-		# ---- Our exposure (redesign phase 3) ----
-		# Our own dossier, and which punitive resolutions our record would support
-		# against us today. Open by default, like every section that changes.
+		# ---- Our record (redesign phase 3) ----
+		# Our own dossier as a table: the case the Assembly could make against
+		# us and its terms, then which punitive resolutions it would support
+		# today (owner, 2026-09-28; it was a paragraph under "Our Exposure").
+		# Open by default, like every section that changes. How the record
+		# grows and fades is in "How the UN Works".
 		un_chamber_section_header = {
 			blockoverride "left_text" {
 				text = "je_un_chamber_exposure_header"
@@ -2012,17 +2017,113 @@ types un_chamber_widget_types
 		un_chamber_panel = {
 			visible = "[Not(GetVariableSystem.Exists('un_chamber_exposure_closed'))]"
 
-			# The headings wait for the UN: before it is founded, or once it has
-			# dissolved, the builder prints the one line saying there is no record.
-			un_chamber_subheader = {
-				visible = "[GetScriptedGui('un_chamber_founded_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				blockoverride "subheader_margin" {}
-				blockoverride "subheader_text" {
-					text = "je_un_chamber_sub_record"
-				}
-			}
+			# No UN: one line, and nothing else.
 			un_chamber_text = {
-				text = "[GetScriptedGui('un_chamber_exposure_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+				visible = "[Not( GetScriptedGui('un_chamber_founded_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+				text = "je_un_chamber_exposure_no_un"
+			}
+
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				visible = "[GetScriptedGui('un_chamber_founded_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+				un_chamber_value_row = {
+					blockoverride "row_label" {
+						text = "je_un_record_case"
+					}
+					blockoverride "row_value" {
+						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_strength')|0] / 100"
+					}
+				}
+				un_chamber_value_row = {
+					blockoverride "row_label" {
+						text = "je_un_record_infamy"
+					}
+					blockoverride "row_value" {
+						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_infamy_term')|0]"
+					}
+				}
+				un_chamber_value_row = {
+					blockoverride "row_label" {
+						text = "je_un_record_aggression"
+					}
+					blockoverride "row_value" {
+						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dos_aggression')|0]"
+					}
+				}
+				un_chamber_value_row = {
+					blockoverride "row_label" {
+						text = "je_un_record_defiance"
+					}
+					blockoverride "row_value" {
+						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dos_defiance')|0]"
+					}
+				}
+				un_chamber_value_row = {
+					blockoverride "row_label" {
+						text = "je_un_record_violation"
+					}
+					blockoverride "row_value" {
+						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dos_violation')|0]"
+					}
+				}
+				un_chamber_value_row = {
+					blockoverride "row_label" {
+						text = "je_un_record_covert"
+					}
+					blockoverride "row_value" {
+						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dos_covert')|0]"
+					}
+				}
+				un_chamber_value_row = {
+					blockoverride "row_label" {
+						text = "je_un_record_nuclear"
+					}
+					blockoverride "row_value" {
+						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dos_nuclear')|0]"
+					}
+				}
+				un_chamber_value_row = {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_standing_term'), '(CFixedPoint)0' )]"
+					tooltip = "je_un_record_standing_tt"
+					blockoverride "row_label" {
+						text = "je_un_record_standing"
+					}
+					blockoverride "row_value" {
+						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_standing_term')|0]"
+					}
+				}
+
+				un_chamber_subheader = {
+					blockoverride "subheader_text" {
+						text = "je_un_record_supports_header"
+					}
+				}
+				un_chamber_value_row = {
+					blockoverride "row_label" {
+						text = "je_un_record_supports_condemn"
+					}
+					blockoverride "row_value" {
+						text = "[SelectLocalization( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_strength'), JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_threshold_condemn') ), 'je_un_record_yes', 'je_un_record_no' )]"
+					}
+				}
+				un_chamber_value_row = {
+					blockoverride "row_label" {
+						text = "je_un_record_supports_sanctions"
+					}
+					blockoverride "row_value" {
+						text = "[SelectLocalization( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_strength'), JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_threshold_sanctions') ), 'je_un_record_yes', 'je_un_record_no' )]"
+					}
+				}
+				un_chamber_value_row = {
+					blockoverride "row_label" {
+						text = "je_un_record_supports_mandate"
+					}
+					blockoverride "row_value" {
+						text = "[SelectLocalization( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_strength'), JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_threshold_mandate') ), 'je_un_record_yes', 'je_un_record_no' )]"
+					}
+				}
 			}
 		}
 	}
@@ -2351,9 +2452,9 @@ types un_chamber_widget_types
 		spacing = 4
 
 		# ---- Our obligations (redesign phase 5) ----
-		# What membership asks of us: dues and arrears, the conventions' regimes
-		# that bind us, and the pressure on our sovereignty at home. Open by
-		# default, like every section that changes.
+		# What membership asks of us: dues and arrears beside the whole budget,
+		# the conventions that bind us, and the pressure on our sovereignty.
+		# Open by default, like every section that changes.
 		un_chamber_section_header = {
 			blockoverride "left_text" {
 				text = "je_un_chamber_obligations_header"
@@ -2378,8 +2479,8 @@ types un_chamber_widget_types
 				text = "je_un_chamber_obligations_no_un"
 			}
 
-			# Our dues: a member's assessment and arrears, or, outside, what
-			# membership would ask and anything still owed from before.
+			# Dues: a member's assessment and arrears, or, outside, anything
+			# still owed from before; then the whole budget.
 			un_chamber_subheader = {
 				visible = "[GetScriptedGui('un_chamber_founded_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				blockoverride "subheader_margin" {}
@@ -2395,8 +2496,15 @@ types un_chamber_widget_types
 				visible = "[And( GetScriptedGui('un_chamber_founded_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Not( GetScriptedGui('un_chamber_member_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
 				text = "[GetScriptedGui('un_chamber_obligations_outside_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 			}
+			# Everyone: what all the members pay, beside what we pay (owner,
+			# 2026-09-28; it sat below the conventions).
+			un_chamber_text = {
+				visible = "[GetScriptedGui('un_chamber_founded_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				text = "[GetScriptedGui('un_chamber_budget_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+			}
 
-			# A member: the conventions' terms for us.
+			# A member: each convention we are party to, and its terms for us,
+			# their modifiers on hover (un_chamber_regime_lines).
 			un_chamber_subheader = {
 				visible = "[GetScriptedGui('un_chamber_member_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				blockoverride "subheader_text" {
@@ -2408,17 +2516,6 @@ types un_chamber_widget_types
 				text = "[GetScriptedGui('un_chamber_regimes_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 			}
 
-			# Everyone: who pays for the UN, and how dues work.
-			un_chamber_subheader = {
-				visible = "[GetScriptedGui('un_chamber_founded_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				blockoverride "subheader_text" {
-					text = "je_un_chamber_sub_budget"
-				}
-			}
-			un_chamber_text = {
-				visible = "[GetScriptedGui('un_chamber_founded_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				text = "[GetScriptedGui('un_chamber_budget_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
-			}
 		}
 	}
 
