@@ -2208,7 +2208,7 @@
  gm_je_lbl_vanity:0 "Palaces amid Hardship"
  gm_je_lbl_war_memorial:0 "$country_war_support_casualties_mult$"
  gm_je_monuments_header:0 "Our Monuments"
- gm_je_monuments_none:0 "No Grand Monument stands. The entry stays until the records under Interest Group Approval and Fading Legitimacy have faded."
+ gm_je_monuments_none:0 "We have no Grand Monument. The entry stays until the records under Interest Group Approval and Fading Legitimacy have faded."
  gm_je_national_header:0 "National Effects"
  gm_je_ov_contested_none:0 "Contested: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_count_contested')|0]#!"
  gm_je_ov_contested_some:0 "#R Contested: [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_count_contested')|0]#!"
