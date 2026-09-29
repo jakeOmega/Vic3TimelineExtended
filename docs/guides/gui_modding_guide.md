@@ -1721,8 +1721,9 @@ Journal-entry widgets are **additive**, not overrides: a `.gui` under `gui/journ
 |---|---|---|
 | `covert_operations_widget.gui` | `je_covert_warfare` | command centre (capacity, slots, funding ladder + stepper, detection factors, covert defence) and one row per running operation with phase, countdown and a stand-down control; a third widget lists per-target networks |
 | `strategic_reserve_widget.gui` | `je_strategic_reserve` | per-good reserve readouts |
-| `banking_dashboard_widget.gui` | `je_banking_cycle` | conditions readout + policy dashboard; both panels are types, also instanced by the Budget panel's Banking tab |
-| `banking_history_widget.gui` | `je_banking_cycle` | the banking history charts; a type, also instanced by the Budget panel's Banking tab |
+| `banking_dashboard_widget.gui` | `je_banking_cycle` | the banking sections as types: the overview (the entry's bars, Current Conditions with a momentum trend arrow), Active Policies, Monetary Policy (the dial block), Available Interventions |
+| `banking_history_widget.gui` | `je_banking_cycle` | the banking history charts as a type, with two shells: collapsed in the journal, open in the Budget tab |
+| `banking_layout_widget.gui` | `je_banking_cycle` | the one order of the banking sections for both the journal entry (its named roots) and the Budget panel's Banking tab; also How Banking Works |
 | `un_chamber_widget.gui` | `je_united_nations` | the General Assembly's sections as types (`te_un_sec_*`): the session card and ballot, delegations, proposals, missions, mandates, obligations, exposure, the archive, how standing works |
 | `un_authority_widget.gui` | `je_united_nations` | the authority sections as types: why authority is moving (pillar bars with last-month trends, the ladder, the powers, the ledger), how it works, the history chart |
 | `un_overview_widget.gui` | `je_united_nations` | the overview: membership, tier, crisis, standing, authority and target, members' share pies, Security Council flags, agencies |
