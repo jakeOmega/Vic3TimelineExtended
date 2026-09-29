@@ -321,8 +321,28 @@ gw_disp_temp_trend = {
 	}
 }
 
-# 1 while the headline can say where the temperature is heading: warming, and
-# below the top tier. Otherwise the headline shows the reading alone.
+# How far ahead the overview's headline projects: "1.61 -> 1.81 C" is the
+# reading now and in this many years, if every year warms as much as the last
+# (the owner, 2026-09-29: temperature has no resting point to head towards, so
+# a projection stands in for the UN's "-> target"). Ten years rather than one:
+# at a typical +0.02 C a year, one year's step would round away in the
+# headline's two decimals. The tooltip says what the projection assumes.
+gw_disp_projection_years = {
+	value = 10
+}
+
+# The reading gw_disp_projection_years from now at last year's rate. Equal to
+# the reading until the first yearly figure exists (the rate reads 0), which is
+# when the headline shows "(rate in January)" instead of an arrow.
+gw_disp_temp_projected = {
+	value = gw_yearly_change_display
+	multiply = gw_disp_projection_years
+	add = temperature_anomaly_display
+}
+
+# 1 while the next threshold is being approached: warming, and below the top
+# tier. Picks the bar tooltip's "N years away" line; otherwise it says no
+# threshold is being approached at last year's rate.
 gw_disp_heading_code = {
 	value = 0
 	if = {

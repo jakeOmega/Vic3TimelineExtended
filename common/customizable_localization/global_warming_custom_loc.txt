@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GLOBAL WARMING — branchy display text
 # ============================================================================
-# Read from je_global_warming's `status_desc` / `progress_desc` as
+# Read from je_global_warming's `progress_desc` as
 # [ROOT.GetCountry.GetCustom('<key>')] and from
 # gui/journal_entry_widgets/global_warming_widget.gui as
 # [JournalEntry.GetCountry.GetCustom('<key>')].
@@ -22,7 +22,8 @@
 # are safe to evaluate per frame.
 # ============================================================================
 
-# The full tier sentence — the journal entry's one-line status.
+# The full tier sentence: the tooltip of the overview's tier icon. It was the
+# journal entry's status line until the overview took its place (2026-09-29).
 gw_severity_text = {
 	type = country
 	random_valid = no

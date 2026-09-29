@@ -21,8 +21,8 @@ REFERENCE = ["te_gw_sec_history", "te_gw_sec_how"]
 ROOTS = {"widget_je_gw_overview": ("custom_widget_container_1", "te_gw_overview_panel"),
          "widget_je_gw_status": ("custom_widget_container_2", "te_gw_status_sections"),
          "widget_je_gw_reference": ("custom_widget_container_3", "te_gw_reference_sections")}
-FLAGS = {"gw_emissions_closed", "gw_policies_closed", "gw_world_open", "gw_hist_closed", "gw_how_open"}
-OLD_FLAGS = ["gw_hist_open"]
+FLAGS = {"gw_emissions_closed", "gw_policies_closed", "gw_world_closed", "gw_hist_closed", "gw_how_open"}
+OLD_FLAGS = ["gw_hist_open", "gw_world_open"]
 MARKET_WIDE = ["carbon_tax", "renewable_investment", "emission_standards"]
 NATIONAL = ["climate_adaptation", "reforestation", "public_transit", "fossil_fuel_divestment",
             "green_building_codes"]
@@ -62,6 +62,14 @@ def _top_level(text, name):
     return _block_from(text, m.end())
 
 
+def _loc_value(key):
+    for path in glob.glob(os.path.join(LOC_DIR, "**", "*.yml"), recursive=True):
+        m = re.search(rf'^ {re.escape(key)}:\d* "(.*)"\s*$', _read(path), re.M)
+        if m:
+            return m.group(1)
+    raise AssertionError(f"no loc {key}")
+
+
 def _loc_keys():
     keys = set()
     for path in glob.glob(os.path.join(LOC_DIR, "**", "*.yml"), recursive=True):
@@ -89,6 +97,13 @@ class OrderTest(unittest.TestCase):
             body = _block_from(gui, gui.index("{", m.start()) + 1)
             self.assertIn('visible = "[JournalEntry.IsActive]"', body, name)
             self.assertEqual(re.findall(r"^\t(\w+) = \{", body, re.M), [composer], name)
+
+    def test_the_bars_on_top_marker_is_attached(self):
+        """Round 2: the overview draws the temperature bar, so the entry carries
+        the marker that hides the panel's own bar block (the goal bar from #582)."""
+        self.assertRegex(_read(JE), r'gui = "gui/journal_entry_widgets/te_je_bars_on_top_marker\.gui"\s*'
+                                    r'name = "widget_te_je_bars_on_top_marker"\s*'
+                                    r'container = "custom_widget_container_7"')
 
     def test_the_old_root_names_are_gone(self):
         for old in ("widget_je_gw_conditions", "widget_je_gw_policies", "widget_je_gw_history"):
@@ -249,6 +264,43 @@ class TierLadderTest(unittest.TestCase):
         codes = {int(n) for n in re.findall(
             r"ScriptValue\('gw_disp_tier_code'\), '\(CFixedPoint\)(\d+)' \)\]\"\s*blockoverride \"icon_texture\"", body)}
         self.assertEqual(codes, set(range(7)))
+
+
+class RoundTwoTest(unittest.TestCase):
+    """The owner's answers after play-test round 1 (2026-09-29)."""
+
+    def test_headline_projects_ten_years_at_last_years_rate(self):
+        values = _read(VALUES)
+        self.assertRegex(_top_level(values, "gw_disp_projection_years"), r"^\s*value = 10\s*$")
+        proj = _top_level(values, "gw_disp_temp_projected")
+        for line in ("value = gw_yearly_change_display", "multiply = gw_disp_projection_years",
+                     "add = temperature_anomaly_display"):
+            self.assertIn(line, proj)
+        head = _loc_value("gw_ov_temp_value")
+        self.assertIn("GetScriptedGui('gw_has_yearly_figures_sgui').IsShown", head)
+        self.assertIn("'gw_ov_temp_projected', 'gw_ov_temp_pending'", head)
+        self.assertRegex(_loc_value("gw_ov_temp_projected"),
+                         r"temperature_anomaly_display'\)\|2\]#! → \[[^\]]*'gw_disp_temp_projected'\)\|2\] °C \(")
+        tt = _loc_value("gw_ov_temp_tt")
+        for key in ("gw_ov_temp_tt_projection", "gw_ov_temp_tt_years"):
+            self.assertIn(f"'{key}'", tt)
+        self.assertIn("gw_disp_projection_years", _loc_value("gw_ov_temp_tt_projection"))
+        keys = _loc_keys()
+        for gone in ("gw_ov_temp_toward", "gw_ov_temp_now", "gw_ov_temp_rate", "gw_ov_temp_rate_pending"):
+            self.assertNotIn(gone, keys)
+
+    def test_status_line_only_while_inactive(self):
+        je = _read(JE)
+        m = re.search(r"(?m)^\tstatus_desc = \{", je)
+        self.assertTrue(m, "status_desc is not a block")
+        status = _block_from(je, m.end())
+        blocks = [_block_from(status, m.end()) for m in re.finditer(r"triggered_desc = \{", status)]
+        self.assertEqual([re.search(r"desc = (\w+)", b).group(1) for b in blocks],
+                         ["je_global_warming_status_inactive", "je_global_warming_status_none"])
+        self.assertRegex(blocks[0], r"trigger = \{\s*NOT = \{ has_journal_entry = je_global_warming \}\s*\}")
+        self.assertIn("trigger = { always = yes }", blocks[1])
+        self.assertEqual(_loc_value("je_global_warming_status_none"), "")
+        self.assertNotIn("je_global_warming_status", _loc_keys())
 
 
 class OverviewWidthTest(unittest.TestCase):

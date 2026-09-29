@@ -5,13 +5,17 @@
 ###   widget_je_gw_overview  -> custom_widget_container_1 (above the status line)
 ###       te_gw_overview_panel: tier, market role, penalty scale and, while one
 ###       binds us, the treaty; the temperature bar with its next-threshold
-###       marker and "1.59 -> 2.0 C (+0.03/yr)" headline; the share and cut pies.
-###       Always shown.
+###       marker and "1.61 -> 1.81 C (+0.02/yr)" headline (the reading, then
+###       the reading in ten years at last year's rate); the share and cut
+###       pies. Always shown. It replaces the entry's status line, which now
+###       prints only while the entry is inactive, and vanilla's goal bar near
+###       the foot: the entry puts the bars-on-top marker in
+###       custom_widget_container_7 (which hides the goal bar from #582 on).
 ###   widget_je_gw_status    -> custom_widget_container_2 (below the status line,
 ###                             above the vanilla button grid, which is hidden
 ###                             from humans)
 ###       te_gw_status_sections: Emissions (a table), Mitigation Policies (the
-###       eight rows, with Around the World nested and collapsed). Open.
+###       eight rows, with Around the World nested). All open.
 ###   widget_je_gw_reference -> custom_widget_container_3 (below the grid)
 ###       te_gw_reference_sections: History (the two charts, open) and How
 ###       Global Warming Works (every explanation, collapsed).
@@ -545,7 +549,8 @@ types global_warming_widget_types
 
 				### Row 2: the temperature on the journal entry's 0-4 C scale, a
 				### marker where the next tier begins (the UN authority bar's marker
-				### technique), and where it is heading at last year's rate. Three
+				### technique), and the headline: the reading, then the reading in
+				### gw_disp_projection_years (10) at last year's rate. Three
 				### fixed cells, 96 + 170 + 198 and two 8 px gaps = 480: the label and
 				### the headline elide inside their cells rather than widen the row.
 				flowcontainer = {
@@ -736,8 +741,8 @@ types global_warming_widget_types
 
 	### Mitigation Policies: the eight rows, market-wide first. What greys every
 	### Adopt or every Repeal is said once, above the rows (style rule 6), and
-	### only while it holds. How many nations run each policy is a collapsed
-	### table at the foot.
+	### only while it holds. How many nations run each policy is a nested table
+	### at the foot, open by default.
 	type te_gw_sec_policies = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -964,8 +969,10 @@ types global_warming_widget_types
 				}
 			}
 
-			### ---- Around the World: how many nations run each policy. A
-			### subsection, collapsed by default, like the UN's programme tallies.
+			### ---- Around the World: how many nations run each policy. A live
+			### table, so open by default (the owner, 2026-09-29: live lists stay
+			### open, lists of past items collapse); nested, so it can be closed
+			### on its own.
 			flowcontainer = {
 				direction = vertical
 				ignoreinvisible = yes
@@ -977,20 +984,20 @@ types global_warming_widget_types
 						text = "gw_sect_world"
 					}
 					blockoverride "onclick" {
-						onclick = "[GetVariableSystem.Toggle('gw_world_open')]"
+						onclick = "[GetVariableSystem.Toggle('gw_world_closed')]"
 					}
 					blockoverride "onclick_showmore" {
-						visible = "[Not(GetVariableSystem.Exists('gw_world_open'))]"
+						visible = "[GetVariableSystem.Exists('gw_world_closed')]"
 					}
 					blockoverride "onclick_showless" {
-						visible = "[GetVariableSystem.Exists('gw_world_open')]"
+						visible = "[Not(GetVariableSystem.Exists('gw_world_closed'))]"
 					}
 				}
 			}
 			flowcontainer = {
 				direction = vertical
 				ignoreinvisible = yes
-				visible = "[GetVariableSystem.Exists('gw_world_open')]"
+				visible = "[Not(GetVariableSystem.Exists('gw_world_closed'))]"
 
 				gw_value_row = {
 					blockoverride "row_label" {
