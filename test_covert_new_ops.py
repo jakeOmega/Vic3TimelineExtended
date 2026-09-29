@@ -301,10 +301,19 @@ class CultivateAssetsTests(unittest.TestCase):
 
     def test_its_row_says_what_it_does_instead_of_phase_and_priority(self):
         gui = _text(WIDGET)
-        for key in ("je_iw_op_row_phase_prep", "je_iw_op_row_phase_est", "je_iw_op_row_phase_full",
-                    "je_iw_op_row_priority_1", "je_iw_op_row_priority_2", "je_iw_op_row_priority_3"):
+        for key in ("je_iw_op_row_phase_prep", "je_iw_op_row_phase_est", "je_iw_op_row_phase_full"):
             line = gui[: gui.index('text = "%s"' % key)].rsplit("visible = ", 1)[1]
             self.assertIn("Not( ScriptContainer.HasTag('iw_op_cultivate_assets') )", line, key)
+        # Since the owner's round-2 review, what each priority level multiplies
+        # is the hover of the stepper's label, one label per level, inside the
+        # stepper type, which a cultivate-assets row never shows (its own
+        # visible, pinned by test_cultivate_assets_is_pinned_at_priority_1 above).
+        stepper = gui[gui.index("type covert_op_priority_stepper = flowcontainer {"):]
+        stepper = stepper[: stepper.index("\n\t}\n")]
+        self.assertIn("Not( ScriptContainer.HasTag('iw_op_cultivate_assets') )", stepper[: stepper.index("textbox = {")])
+        for key in ("je_iw_op_row_priority_1", "je_iw_op_row_priority_2", "je_iw_op_row_priority_3"):
+            self.assertIn('tooltip = "%s"' % key, stepper, key)
+            self.assertNotIn('text = "%s"' % key, gui, key)
         self.assertIn(
             "visible = \"[ScriptContainer.HasTag('iw_op_cultivate_assets')]\"\n\t\t\ttext = \"je_iw_op_row_cultivate_detail\"",
             gui,

@@ -8,11 +8,12 @@
 ###     recent catch as icons; operation slots as a row of lit/dimmed icons;
 ###     capacity and Tradecraft as bars.
 ###   widget_je_covert_status     custom_widget_container_2  te_covert_status_sections
-###     Open by default: Operations (one row per running operation, from the
-###     operator's `iw_ops` list of script containers; see
+###     Open by default: Operations (the detection factors every operation
+###     shares, then one row per running operation, from the operator's
+###     `iw_ops` list of script containers; see
 ###     common/scripted_effects/covert_warfare_effects.txt for their tags and
-###     variables), Agent Networks (one row per `iw_nets` container, slices 4
-###     and 7), Funding (the stepper, cost and ladder), Detection Risk and
+###     variables), Funding (the stepper, cost and ladder), Agent Networks
+###     (one row per `iw_nets` container, slices 4 and 7) and
 ###     Counterintelligence.
 ###   widget_je_covert_reference  custom_widget_container_3  te_covert_reference_sections
 ###     "How Covert Warfare Works", collapsed: every explanation, one heading
@@ -319,16 +320,47 @@ types covert_operations_widget_types
 	### datacontext, so the row's container travels alone in a single AddScope
 	### (the stand-down shape). Hidden until every container carries
 	### iw_priority, so a pre-slice-3 save never reads a missing variable.
+	###
+	### What the current level multiplies is the label's hover (owner, round 2;
+	### it was a line of its own above the stepper): one label per level, each
+	### with its own tooltip. The tooltips sit inside a datamodel item, so they
+	### read only GetPlayer (gotcha #24).
 	type covert_op_priority_stepper = flowcontainer {
 		direction = horizontal
 		spacing = 3
 		parentanchor = vcenter
+		ignoreinvisible = yes
 		### Hidden on a cultivate-assets row: its priority is fixed at 1
 		### (covert_possible_priority_up), and the row says so instead.
 		visible = "[And( GetScriptedGui('covert_ops_priority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Not( ScriptContainer.HasTag('iw_op_cultivate_assets') ) )]"
 
 		textbox = {
+			visible = "[And( GetScriptedGui('covert_ops_priority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_priority'), '(CFixedPoint)1') )]"
 			text = "je_iw_priority_stepper_label"
+			tooltip = "je_iw_op_row_priority_1"
+			default_format = "#tooltippable"
+			size = { 80 24 }
+			align = right|nobaseline
+			using = fontsize_small
+			parentanchor = vcenter
+			elide = right
+		}
+		textbox = {
+			visible = "[And( GetScriptedGui('covert_ops_priority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_priority'), '(CFixedPoint)2') )]"
+			text = "je_iw_priority_stepper_label"
+			tooltip = "je_iw_op_row_priority_2"
+			default_format = "#tooltippable"
+			size = { 80 24 }
+			align = right|nobaseline
+			using = fontsize_small
+			parentanchor = vcenter
+			elide = right
+		}
+		textbox = {
+			visible = "[And( GetScriptedGui('covert_ops_priority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_priority'), '(CFixedPoint)3') )]"
+			text = "je_iw_priority_stepper_label"
+			tooltip = "je_iw_op_row_priority_3"
+			default_format = "#tooltippable"
 			size = { 80 24 }
 			align = right|nobaseline
 			using = fontsize_small
@@ -374,8 +406,9 @@ types covert_operations_widget_types
 		using = fontsize_medium
 	}
 
-	### One running operation: its icon and title, its phase, priority and
-	### detection as "Label: value" lines, then its controls centred beneath.
+	### One running operation: its icon and title, its phase and detection as
+	### "Label: value" lines, then its controls centred beneath (what the
+	### priority multiplies is the stepper label's hover).
 	### Whether funding has stood everything down is said once, above the rows
 	### (te_covert_sec_operations), not on every row (style rule 6).
 	type widget_je_covert_operation_row = flowcontainer {
@@ -561,21 +594,6 @@ types covert_operations_widget_types
 			text = "je_iw_op_row_cultivate_detail"
 		}
 
-		# ---- Priority: what the current level multiplies (the stepper is
-		#      below, with Stand down) ----
-		widget_je_covert_operation_detail = {
-			visible = "[And3( GetScriptedGui('covert_ops_priority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_priority'), '(CFixedPoint)1'), Not( ScriptContainer.HasTag('iw_op_cultivate_assets') ) )]"
-			text = "je_iw_op_row_priority_1"
-		}
-		widget_je_covert_operation_detail = {
-			visible = "[And3( GetScriptedGui('covert_ops_priority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_priority'), '(CFixedPoint)2'), Not( ScriptContainer.HasTag('iw_op_cultivate_assets') ) )]"
-			text = "je_iw_op_row_priority_2"
-		}
-		widget_je_covert_operation_detail = {
-			visible = "[And3( GetScriptedGui('covert_ops_priority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_priority'), '(CFixedPoint)3'), Not( ScriptContainer.HasTag('iw_op_cultivate_assets') ) )]"
-			text = "je_iw_op_row_priority_3"
-		}
-
 		# ---- This operation's own monthly detection risk; the arithmetic on hover ----
 		widget_je_covert_operation_detail = {
 			text = "je_iw_op_row_detection"
@@ -728,8 +746,38 @@ types covert_operations_widget_types
 			alpha = 0.5
 		}
 
-		widget_je_covert_operation_text = {
-			text = "je_iw_net_row_title"
+		# ---- The target's flag, then the row's title ----
+		# Vanilla's flag widget, as the UN overview's Security Council seats
+		# use it: the country's name on hover, a click opens it. Its
+		# datacontext is the country of the stored capital state
+		# (iw_target_capital, written at creation and each monthly tick; the
+		# title reads the same chain, gotcha #11). The wrapper is gated on
+		# the variable, so a network without it never reads it.
+		flowcontainer = {
+			direction = horizontal
+			spacing = 8
+			ignoreinvisible = yes
+
+			widget = {
+				size = { 70 48 }
+				parentanchor = vcenter
+				visible = "[ScriptContainer.HasVariable('iw_target_capital')]"
+
+				flag = {
+					parentanchor = center
+					datacontext = "[ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry]"
+				}
+			}
+			textbox = {
+				autoresize = yes
+				multiline = yes
+				minimumsize = { 402 -1 }
+				maximumsize = { 402 -1 }
+				parentanchor = vcenter
+				align = left|nobaseline
+				using = fontsize_large
+				text = "je_iw_net_row_title"
+			}
 		}
 
 		# ---- Strength: where it is heading, then the bar ----
@@ -958,11 +1006,52 @@ types covert_operations_widget_types
 					}
 				}
 
-				# Tradecraft: the tier's name.
+				# Tradecraft: an icon per tier (owner, round 2), the tier's name beneath.
 				covert_ov_icon_label = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier'), '(CFixedPoint)0' )]"
+					tooltip = "je_iw_ov_tc_tt"
+					blockoverride "icon_texture" {
+						texture = "gfx/interface/icons/generic_icons/maybe_icon.dds"
+					}
+					blockoverride "label" {
+						text = "je_iw_ov_tc_label"
+					}
+				}
+				covert_ov_icon_label = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier'), '(CFixedPoint)1' )]"
+					tooltip = "je_iw_ov_tc_tt"
+					blockoverride "icon_texture" {
+						texture = "gfx/interface/icons/generic_icons/population.dds"
+					}
+					blockoverride "label" {
+						text = "je_iw_ov_tc_label"
+					}
+				}
+				covert_ov_icon_label = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier'), '(CFixedPoint)2' )]"
+					tooltip = "je_iw_ov_tc_tt"
+					blockoverride "icon_texture" {
+						texture = "gfx/interface/politics_view/institution_level_icon.dds"
+					}
+					blockoverride "label" {
+						text = "je_iw_ov_tc_label"
+					}
+				}
+				covert_ov_icon_label = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier'), '(CFixedPoint)3' )]"
 					tooltip = "je_iw_ov_tc_tt"
 					blockoverride "icon_texture" {
 						texture = "gfx/interface/icons/formation_order_icons/upgrade.dds"
+					}
+					blockoverride "label" {
+						text = "je_iw_ov_tc_label"
+					}
+				}
+				covert_ov_icon_label = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier'), '(CFixedPoint)4' )]"
+					tooltip = "je_iw_ov_tc_tt"
+					blockoverride "icon_texture" {
+						texture = "gfx/interface/icons/generic_icons/most_senior_front_commander.dds"
 					}
 					blockoverride "label" {
 						text = "je_iw_ov_tc_label"
@@ -1234,7 +1323,8 @@ types covert_operations_widget_types
 	### ======================================================================
 
 	### Operations: whether funding has stood them down or none is running,
-	### said once, then one row per running operation.
+	### and the detection factors every operation shares, each said once;
+	### then one row per running operation.
 	type te_covert_sec_operations = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -1277,6 +1367,43 @@ types covert_operations_widget_types
 					default_format = "#tooltippable"
 					text = "je_iw_no_operations"
 					tooltip = "je_iw_no_operations_tt"
+				}
+			}
+
+			# What every operation's detection risk shares, said once above the
+			# rows (owner, round 2: it was a section of its own). Each row
+			# adds its target's counterintelligence and its priority.
+			covert_panel = {
+				covert_subheader = {
+					blockoverride "subheader_margin" {}
+					blockoverride "subheader_text" {
+						text = "je_iw_detection_header"
+					}
+				}
+				covert_value_row = {
+					blockoverride "row_label" {
+						text = "je_iw_detection_base_label"
+					}
+					blockoverride "row_value" {
+						text = "je_iw_detection_base"
+					}
+				}
+				covert_value_row = {
+					blockoverride "row_label" {
+						text = "je_iw_detection_funding_label"
+					}
+					blockoverride "row_value" {
+						text = "je_iw_detection_funding"
+					}
+				}
+				covert_value_row = {
+					tooltip = "je_iw_detection_factors_tooltip"
+					blockoverride "row_label" {
+						text = "je_iw_detection_efficiency_label"
+					}
+					blockoverride "row_value" {
+						text = "je_iw_detection_efficiency"
+					}
 				}
 			}
 
@@ -1395,60 +1522,6 @@ types covert_operations_widget_types
 			}
 			covert_text = {
 				text = "[GetScriptedGui('covert_funding_ladder_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-			}
-		}
-	}
-
-	### Detection Risk: the factors every operation's risk shares. Each
-	### operation's own risk is on its row.
-	type te_covert_sec_detection = flowcontainer {
-		direction = vertical
-		parentanchor = hcenter
-		ignoreinvisible = yes
-		spacing = 4
-
-		covert_section_header = {
-			blockoverride "left_text" {
-				text = "je_iw_detection_header"
-			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('covert_detection_closed')]"
-			}
-			blockoverride "onclick_showmore" {
-				visible = "[GetVariableSystem.Exists('covert_detection_closed')]"
-			}
-			blockoverride "onclick_showless" {
-				visible = "[Not(GetVariableSystem.Exists('covert_detection_closed'))]"
-			}
-		}
-
-		covert_panel = {
-			visible = "[Not(GetVariableSystem.Exists('covert_detection_closed'))]"
-
-			covert_value_row = {
-				blockoverride "row_label" {
-					text = "je_iw_detection_base_label"
-				}
-				blockoverride "row_value" {
-					text = "je_iw_detection_base"
-				}
-			}
-			covert_value_row = {
-				blockoverride "row_label" {
-					text = "je_iw_detection_funding_label"
-				}
-				blockoverride "row_value" {
-					text = "je_iw_detection_funding"
-				}
-			}
-			covert_value_row = {
-				tooltip = "je_iw_detection_factors_tooltip"
-				blockoverride "row_label" {
-					text = "je_iw_detection_efficiency_label"
-				}
-				blockoverride "row_value" {
-					text = "je_iw_detection_efficiency"
-				}
 			}
 		}
 	}
@@ -1650,9 +1723,8 @@ types covert_operations_widget_types
 		visible = "[JournalEntry.IsActive]"
 
 		te_covert_sec_operations = {}
-		te_covert_sec_networks = {}
 		te_covert_sec_funding = {}
-		te_covert_sec_detection = {}
+		te_covert_sec_networks = {}
 		te_covert_sec_counterintel = {}
 	}
 
