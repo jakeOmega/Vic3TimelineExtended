@@ -1511,9 +1511,9 @@ types budget
 			### MOD: Banking tab (te_banking) ###
 			# The banking journal entry's panels, the same types the entry shows
 			# (gui/journal_entry_widgets/banking_dashboard_widget.gui and
-			# banking_history_widget.gui): conditions, policies, a link back to the
-			# entry, then the history charts, open by default here
-			# (te_banking_history_panel_open). The entry's scripted buttons are not
+			# banking_history_widget.gui): conditions, policies, then the history
+			# charts, open by default here (te_banking_history_panel_open), and a
+			# link back to the entry at the foot. The entry's scripted buttons are not
 			# drawn: the policy panel carries the same actions, and the buttons stay
 			# in the journal as the AI's path and the player's fallback.
 			#
@@ -1553,6 +1553,7 @@ types budget
 
 						te_banking_conditions_panel = {}
 						te_banking_policies_panel = {}
+						te_banking_history_panel_open = {}
 
 						button = {
 							visible = "[JournalEntry.IsActive]"
@@ -1563,8 +1564,6 @@ types budget
 							tooltip = "te_budget_banking_open_journal_tt"
 							onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
 						}
-
-						te_banking_history_panel_open = {}
 					}
 				}
 			}
