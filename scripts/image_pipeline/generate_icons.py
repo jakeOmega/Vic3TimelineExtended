@@ -519,6 +519,9 @@ def stage_write(cat: str, only: set[str], work: Path) -> None:
             if flux_backdrop(c):
                 # A new backdrop pick or prompt rewrites every icon over it.
                 want += [CATEGORIES[c]["backdrop"]["seed"], backdrop_prompt(c)]
+            elif "backdrop" in CATEGORIES[c]:
+                # So do new colours for a drawn one.
+                want += [CATEGORIES[c]["backdrop"]["drawn"]]
             if e.get("marks"):
                 want += [e["marks"]] + part_seeds(e)
             if any(k in e for k in ENTRY_SPEC_KEYS):
