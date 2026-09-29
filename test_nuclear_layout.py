@@ -277,6 +277,14 @@ class OverviewTest(unittest.TestCase):
             self.assertIn(f"ScriptValue('{sv}')", value, sv)
         self.assertIn("/mo)", value)
 
+    def test_survivability_is_a_bar_marking_its_ceiling(self):
+        body = _type_body(ALL_GUI, "te_nuclear_sec_forces")
+        row = body[body.index('tooltip = "nd_w_survivability_tt"'):]
+        row = row[:row.index('text = "nd_w_survivability_value"')]
+        self.assertIn("ScriptValue('nd_display_survivability')", row)
+        cap = row.index("ScriptValue('nd_display_survivability_cap')")
+        self.assertLess(cap, row.index("progressbar_marker.dds"))
+
     def test_cells_have_a_fixed_width(self):
         for t in ("te_nuclear_ov_icon_label", "te_nuclear_ov_posture_cell"):
             body = _type_body(self.ov, t)
