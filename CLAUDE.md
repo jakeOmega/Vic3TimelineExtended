@@ -86,6 +86,7 @@ Before redesigning, rebalancing, or extending an existing gameplay system, read 
 - `docs/vanilla/vanilla_formable_countries_reference.md` — concept primer on formable-country mechanics (minor / major / special unifications); complement to the `add-formable-country` skill.
 - `docs/systems/mod_systems.md`, `docs/systems/journal_entry_systems.md` — every gameplay system's files and mechanics.
 - `docs/guides/python_tools.md` — full server endpoint list and AI-agent workflow.
+- `docs/guides/gui_style_guide.md` — the house style for system panels (owner-endorsed defaults): who a panel is for, dynamic content visual and open, explanations collapsed, brief labels with the detail on hover. Read before designing any panel; `gui_modding_guide.md` has the how.
 - `docs/guides/gui_modding_guide.md`, `docs/vanilla/treaty_articles_reference.md`, `docs/vanilla/wonder_buildings_reference.md`, `docs/vanilla/vanilla_company_buildings_reference.md`.
 - **External**: [`Modding-Digests`](https://github.com/Victoria-3-Modding-Co-op/Modding-Digests/) — community-maintained per-vanilla-patch summaries (breaking changes, script-doc diffs, new modifiers/effects/triggers, file-level changes). Local clone at `vic3_modding_digests_path` (`~/src/Modding-Digests` by default), auto-pulled on `mod_state_server` cold start. **First stop** for any "what changed in vanilla 1.x" question — beats manually diffing `~/src/vic3` between version commits.
 
@@ -149,7 +150,7 @@ Squash-merging the parent leaves the child's branch unable to see that it alread
 
 ### Play-testing unmerged work
 
-Build one integration branch from the stack tips, check it out in the **full** main checkout (`scripts/deploy.sh` rsyncs with `--delete` and includes `gfx/`, so deploying from a sparse worktree would delete the textures), `POST /reload`, then `./scripts/deploy.sh --apply`. Make sure the launcher playset does not also enable a Steam Workshop copy of this mod: a later-loaded copy overrides same-path files and produces a half-old, half-new game. Vic3's console has **no `effect` command** (that is CK3) — run test script with `event <id>` (see `events/te_debug_un_events.txt`).
+Build one integration branch from the stack tips, check it out in the **full** main checkout (`scripts/deploy.sh` rsyncs with `--delete` and includes `gfx/`, so deploying from a sparse worktree would delete the textures), `POST /reload`, then `./scripts/deploy.sh --apply`. Before `--apply`, confirm the branch contains `origin/main` (`git merge-base --is-ancestor origin/main <branch>`; merge it in if not) and read the dry run on its own: a `deleting` line means the deploy would roll back newer `main` content or someone else's deployed branch (2026-09-28: a stale PR branch deleted #570's art from the game folder). Make sure the launcher playset does not also enable a Steam Workshop copy of this mod: a later-loaded copy overrides same-path files and produces a half-old, half-new game. Vic3's console has **no `effect` command** (that is CK3) — run test script with `event <id>` (see `events/te_debug_un_events.txt`).
 
 ### Orchestrated multi-branch waves
 

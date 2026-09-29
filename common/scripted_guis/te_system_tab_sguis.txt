@@ -1,0 +1,91 @@
+﻿# ============================================================================
+# SYSTEM TABS IN VANILLA PANELS — gates
+# ============================================================================
+# A system's journal-entry panels are also shown as a tab in a vanilla panel
+# (docs/systems/system_panels_feasibility.md). Each tab has two handlers here,
+# and both read nothing but the root, so they are safe as `visible` / `enabled`
+# gates (gotcha #22 in docs/guides/gui_modding_guide.md):
+#
+#   te_<host>_<system>_tab_sgui         the entry is running. Enables the tab,
+#                                       and gates the content that lets its
+#                                       GetPlayerJournalEntry datacontext
+#                                       resolve. has_journal_entry counts
+#                                       active entries only.
+#   te_<host>_<system>_tab_unlock_sgui  is_shown puts the tab on the strip
+#                                       whenever the system's game rule is on,
+#                                       greyed until the entry runs. is_valid is
+#                                       the entry's unlock test, rendered with
+#                                       IsValidTooltip as the greyed tab's
+#                                       checklist, so it calls the same trigger
+#                                       the entry does.
+#
+# None of these has an effect or is used by the AI.
+# ============================================================================
+
+# ---------------------------------------------------------------------------
+# Banking: Budget panel (gui/budget_panel.gui), je_banking_cycle.
+# ---------------------------------------------------------------------------
+te_budget_banking_tab_sgui = {
+	scope = country
+	is_shown = {
+		te_banking_system_on = yes
+		has_journal_entry = je_banking_cycle
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_budget_banking_tab_unlock_sgui = {
+	scope = country
+	is_shown = { te_banking_system_on = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_banking_entry_unlocked = yes }
+	effect = { }
+}
+
+# ---------------------------------------------------------------------------
+# Cultural Hegemony: Society panel (gui/culture_panel.gui), je_cultural_hegemony.
+# ---------------------------------------------------------------------------
+te_society_ch_tab_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = cultural_hegemony_enabled
+		has_journal_entry = je_cultural_hegemony
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_society_ch_tab_unlock_sgui = {
+	scope = country
+	is_shown = { has_game_rule = cultural_hegemony_enabled }
+	ai_is_valid = { always = no }
+	is_valid = { ch_entry_unlocked = yes }
+	effect = { }
+}
+
+# ---------------------------------------------------------------------------
+# United Nations: Diplomacy panel (gui/diplomatic_overview.gui),
+# je_united_nations. A non-member runs the entry too (it is where it joins), so
+# the tab opens for every country the entry is active for.
+# ---------------------------------------------------------------------------
+te_diplomacy_un_tab_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = united_nations_enabled
+		has_journal_entry = je_united_nations
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_diplomacy_un_tab_unlock_sgui = {
+	scope = country
+	is_shown = { has_game_rule = united_nations_enabled }
+	ai_is_valid = { always = no }
+	is_valid = { un_entry_unlocked = yes }
+	effect = { }
+}

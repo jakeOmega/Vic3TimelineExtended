@@ -27,11 +27,13 @@
 # no country-side copy of either is kept.
 # ============================================================================
 
-# The player's own seat in the organisation, and the national record it has
-# built there: the international-standing score, its tier, whether the tier's
-# benefits are currently withheld and roughly why, what the tier is doing,
-# this rolling year's programme accrual against the cap, and the last thing
-# that moved the score.
+# The player's own seat in the organisation: one membership line for every
+# state, from no UN at all to a suspended permanent seat. The overview's
+# membership icon's tooltip (un_overview_widget.gui); the icon itself is picked
+# by un_disp_member_code, which tests the states in the same order. The
+# national record (the international-standing score, its tier, withheld
+# benefits, the year's programme accrual, the last move) is
+# un_chamber_standing_sgui below.
 un_chamber_status_sgui = {
 	scope = country
 
@@ -58,11 +60,108 @@ un_chamber_status_sgui = {
 				custom_tooltip_no_bullet = je_un_chamber_status_member
 			}
 		}
-		else = {
-			custom_tooltip_no_bullet = je_un_chamber_status_nonmember
+		else_if = {
+			limit = { NOT = { has_global_variable = un_founded } }
+			custom_tooltip_no_bullet = je_un_ov_status_no_un
 		}
+		else_if = {
+			limit = { NOT = { un_membership_eligible = yes } }
+			custom_tooltip_no_bullet = je_un_status_not_eligible
+		}
+		else = {
+			# What joining brings: the journal entry's status text said so until
+			# the overview took its place.
+			custom_tooltip_no_bullet = je_un_status_not_member
+		}
+	}
+}
+
+# Our international standing: the overview's standing meter's tooltip.
+un_chamber_standing_sgui = {
+	scope = country
+
+	effect = {
 		un_standing_status_block = yes
 	}
+}
+
+# The authority tier's line, as the journal entry's status_desc words it: the
+# overview's tier icon's tooltip.
+un_overview_tier_sgui = {
+	scope = country
+
+	effect = {
+		if = {
+			limit = { un_tier_is_supranational = yes }
+			custom_tooltip_no_bullet = je_un_tier_line_supranational
+		}
+		else_if = {
+			limit = { un_tier_at_least_strong = yes }
+			custom_tooltip_no_bullet = je_un_tier_line_strong
+		}
+		else_if = {
+			limit = { un_tier_at_least_established = yes }
+			custom_tooltip_no_bullet = je_un_tier_line_established
+		}
+		else_if = {
+			limit = { un_tier_at_least_contested = yes }
+			custom_tooltip_no_bullet = je_un_tier_line_contested
+		}
+		else_if = {
+			limit = { un_tier_is_moribund = yes }
+			custom_tooltip_no_bullet = je_un_tier_line_moribund
+		}
+	}
+}
+
+# The UN headquarters, under its building in the overview
+# (un_overview_widget.gui): named once the building stands, and the host told
+# when it has yet to build it. is_shown answers whether there is anything to
+# say. These three lines were the journal entry's status_desc until
+# 2026-09-28.
+un_overview_hq_sgui = {
+	scope = country
+	is_shown = {
+		OR = {
+			je:je_united_nations ?= { has_modifier = un_headquarters_modifier }
+			AND = {
+				has_global_variable = un_hq_country
+				has_global_variable = un_hq_state
+			}
+		}
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = {
+		if = {
+			limit = {
+				je:je_united_nations ?= { has_modifier = un_headquarters_modifier }
+				has_global_variable = un_hq_state
+			}
+			custom_tooltip_no_bullet = je_un_hq_host
+		}
+		else_if = {
+			limit = { je:je_united_nations ?= { has_modifier = un_headquarters_modifier } }
+			custom_tooltip_no_bullet = je_un_hq_host_unbuilt
+		}
+		else_if = {
+			limit = {
+				has_global_variable = un_hq_country
+				has_global_variable = un_hq_state
+			}
+			custom_tooltip_no_bullet = je_un_hq_established
+		}
+	}
+}
+
+# Scope-free gate: a resolution is in session. The General Assembly shows its
+# tally, delegations and ballot, or, when this is false, the proposals.
+un_session_open_sgui = {
+	scope = country
+	is_shown = { un_session_open = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
 }
 
 # The Security Council: the permanent members by name, and who is in line for
@@ -74,18 +173,6 @@ un_chamber_council_sgui = {
 
 	effect = {
 		un_chamber_council_block = yes
-	}
-}
-
-# "How standing works" — the sources, the losses and the limits in plain
-# language. Split into its own SGUI behind its own collapsed-by-default toggle
-# for the same reason the archive is: ExecuteTooltip re-renders every frame the
-# panel is visible, and this text never changes.
-un_chamber_standing_help_sgui = {
-	scope = country
-
-	effect = {
-		un_standing_help_block = yes
 	}
 }
 
@@ -172,16 +259,6 @@ un_chamber_position_sgui = {
 
 	effect = {
 		un_chamber_position_block = yes
-	}
-}
-
-# Redesign phase 3: our own dossier, and which punitive topics it would
-# support against us.
-un_chamber_exposure_sgui = {
-	scope = country
-
-	effect = {
-		un_chamber_exposure_block = yes
 	}
 }
 
@@ -518,6 +595,52 @@ un_chamber_regimes_sgui = {
 	effect = {
 		un_chamber_regime_lines = yes
 	}
+}
+
+# The reach of a Strong UN (un_chamber_reach_lines): its heading and text show
+# only when one of its lines would print. Reads the root only (gotcha #22).
+un_chamber_reach_sgui = {
+	scope = country
+	is_shown = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		OR = {
+			has_modifier = un_regime_shared_intelligence_modifier
+			AND = {
+				un_tier_at_least_strong = yes
+				any_interest_group = {
+					OR = {
+						has_modifier = un_sovereignty_resentment_ig_modifier
+						has_modifier = un_sovereignty_welcome_ig_modifier
+					}
+				}
+			}
+		}
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+
+	effect = {
+		un_chamber_reach_lines = yes
+	}
+}
+
+# Whether the entry's status text says anything (je_united_nations'
+# status_desc: a conference, a dissolution, or the Assembly's statistics), so
+# the Diplomacy tab's Status section shows only then. Reads globals only.
+un_status_text_sgui = {
+	scope = country
+	is_shown = {
+		OR = {
+			un_conference_in_session = yes
+			un_founding_is_refounding = yes
+			any_country = {
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
+			}
+		}
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
 }
 
 un_chamber_obligations_outside_sgui = {
@@ -1479,6 +1602,19 @@ un_chamber_propose_intro_sgui = {
 		if = {
 			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 			custom_tooltip_no_bullet = je_un_chamber_propose_intro
+			# A held floor greys every row's button; it is said here, once,
+			# rather than on each of the eighteen rows.
+			if = {
+				limit = {
+					has_global_variable = un_vote_active
+					has_global_variable = un_vote_reservation
+				}
+				custom_tooltip_no_bullet = je_un_chamber_propose_blocked_reserved
+			}
+			else_if = {
+				limit = { has_global_variable = un_vote_active }
+				custom_tooltip_no_bullet = je_un_chamber_propose_blocked_in_session
+			}
 			# The recess (redesign phase 3): the floor is ours for a while.
 			if = {
 				limit = { has_global_variable = un_recess_months }

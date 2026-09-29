@@ -218,7 +218,9 @@ un_regime_any_convention = {
 	}
 }
 
-# The scoped country carries some regime modifier.
+# The scoped country carries some regime modifier. The roster of every term:
+# test_un_convention_registry holds the chamber's regime lines, the clear list
+# and the refresh to it.
 # Scope: country
 un_regime_has_terms = {
 	OR = {
@@ -236,5 +238,33 @@ un_regime_has_terms = {
 		has_modifier = un_regime_space_weapon_modifier
 		has_modifier = un_regime_heritage_site_modifier
 		has_modifier = un_regime_shared_intelligence_modifier
+		has_modifier = un_regime_colony_liberty_modifier
+	}
+}
+
+# The scoped country carries something the enforcement footnote under Our
+# Obligations describes: a convention's member modifier (on the journal entry
+# or the country, as un_regime_reapply_conventions has them), decolonization's
+# pressure on a colonial power, or its reach into a member colony. Display
+# only (un_chamber_regime_lines).
+# Scope: country
+un_chamber_party_to_a_convention = {
+	OR = {
+		je:je_united_nations ?= {
+			OR = {
+				has_modifier = un_human_rights_declaration_modifier
+				has_modifier = un_nonproliferation_modifier
+				has_modifier = un_climate_binding_modifier
+				has_modifier = un_heritage_program_modifier
+				has_modifier = un_pandemic_cooperation_modifier
+				has_modifier = un_refugee_program_modifier
+				has_modifier = un_space_partnership_modifier
+			}
+		}
+		has_modifier = un_law_of_sea_modifier
+		has_modifier = un_icc_member_modifier
+		has_modifier = un_physical_protection_modifier
+		has_modifier = un_regime_colonial_pressure_modifier
+		has_modifier = un_regime_colony_liberty_modifier
 	}
 }

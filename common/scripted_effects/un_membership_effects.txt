@@ -34,6 +34,8 @@ un_representation_monthly_update = {
 				limit = { has_variable = un_permanent_subgp_months }
 				remove_variable = un_permanent_subgp_months
 			}
+			# The overview's Security Council flags (un_overview_display_effects.txt).
+			un_p5_display_refresh = yes
 		}
 		# UN programmes and stances end, as their stop buttons end them: a
 		# suspended member runs none (ruling 3), and the start buttons refuse

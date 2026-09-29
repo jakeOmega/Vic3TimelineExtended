@@ -1,6 +1,11 @@
 # Moving System UI Out of the Journal — Feasibility
 
-> **Status: feasibility study, 2026-09-28. Nothing implemented.** Checked against the vanilla 1.14.4 GUI files, the mod at `6a0a3c06`, and two Workshop mods installed locally: Community Mod Framework (CMF) 1.65.0 and Demography v14.
+> **Status: feasibility study, 2026-09-28.** Checked against the vanilla 1.14.4 GUI files, the mod at `6a0a3c06`, and two Workshop mods installed locally: Community Mod Framework (CMF) 1.65.0 and Demography v14.
+>
+> **Prototypes (PR #567), 2026-09-28.** Each tab is on its panel's strip while its game rule is on, greyed until its journal entry is active, with the unlock conditions in the tooltip. Shared pieces: `gui/te_system_tab_widgets.gui` (a journal entry's bars, status description and button grid; `te_tab_buttons_six`) and the gates in `common/scripted_guis/te_system_tab_sguis.txt`.
+> - **Banking as a Budget tab** (`gui/budget_panel.gui`; `mod_systems.md` § Policy Dashboard). **Seen in game the same day:** the tab selects and all three panels render. So custom tab names work (§3.4, §8 test 1), and `GetPlayerJournalEntry` works for an active entry (§3.2). What it returns for an entry the player lacks or holds inactive is still untested (§8 test 2); the tabs never build the datacontext then.
+> - **Cultural Hegemony as a Society tab** (`gui/culture_panel.gui`, the fifth slot). Not yet seen in game. CMF redefines `society_panel` (§7.4), so with CMF enabled one side's version is dropped.
+> - **The UN as a Diplomacy tab** (`gui/diplomatic_overview.gui`; `journal_entry_systems.md` § Chamber Widget). Vanilla's five tabs fill `tab_buttons`, so the strip is `te_tab_buttons_six`, a copy with a sixth slot; the only vanilla line changed is that type name. Unlike the other two, the tab draws the entry's scripted buttons (founding, joining and leaving exist only there) and its status description. Seen in game 2026-09-28: six tabs fit. Then round 1 of a visual pass of the UN's panels, in both hosts (`docs/superpowers/specs/2026-09-28-un-gui-pass-design.md`).
 >
 > Each claim carries a marker. **[verified]**: read in shipping vanilla or mod code. **[precedent]**: a shipping mod or vanilla does it. **[untested]**: plausible, needs an in-game check (§8).
 
@@ -16,7 +21,7 @@ How possible is that, how hard, and what would it take?
 
 It is possible. It costs much less than a rewrite, because the existing widgets can be shown outside the journal unchanged (§3.2–3.3).
 - **The mod's own windows are on solid ground.** They need no vanilla file replaced.
-- **Tabs inside vanilla windows have one untested step**, custom tab names (§3.4), and each host window is another full-file replacement to merge every patch.
+- **Tabs inside vanilla windows work.** Custom tab names are confirmed in game (§3.4). Each host window is another full-file replacement to merge every patch.
 - **The journal entry stays** as the state carrier: completion, outliner pin, notifications, and the scripted buttons the AI presses. The window is a second view of the same entry, and no script moves.
 
 ## 3. Building blocks
@@ -56,7 +61,10 @@ A JE widget file is a `types` block plus top-level named widgets, which the entr
 
 Width: every vanilla side panel is `@panel_width = 540`. The widgets are built at 520 (`@panel_width_minus_20`), so they fit any host without relayout.
 
-### 3.4 Tabs inside vanilla windows [untested]
+### 3.4 Tabs inside vanilla windows [verified in game]
+
+**Confirmed 2026-09-28** by the Banking prototype (`gui/budget_panel.gui`): `SelectTab('te_banking')` selects and holds a tab name vanilla does not define. The sidebar button's cycle (below) does not list it, so pressing Budget never lands on it. Adding it to the cycle means replacing `information_panel_bar.gui` (§3.5). The paragraph below is the reasoning from before the test.
+
 
 Tabs are plain strings. The tab buttons call `InformationPanel.SelectTab('states')` and gate content on `InformationPanel.IsTabSelected('states')`. The sidebar opens panels with a tab cycle, `InformationPanelBar.OpenPanelCycleTabs('budget', 'default|states|assets')`, and `OpenPanelTab( panel, tab )` opens one tab directly. That points to `SelectTab('te_banking')` just working. There is one data point, but it doesn't settle this: an earlier Demography version shipped a fifth Society tab (§7.1), but its file is gone, so whether it used a new tab name is unknown. No mod installed today uses a tab name vanilla does not define: not this mod, not CMF, not Demography v14. **Fallback that certainly works:** the new tab button sets a `GetVariableSystem` flag, vanilla's tab contents are gated on its absence, and vanilla's tab buttons clear it.
 
@@ -64,9 +72,9 @@ Tabs are plain strings. The tab buttons call `InformationPanel.SelectTab('states
 |---|---|---|---|
 | Budget | `budget_panel.gui` (2,112) | 3 | yes |
 | Society | `culture_panel.gui` (1,875), type `society_panel` | 4 | yes; a fifth has shipped before (§7.1) |
-| Diplomacy | `diplomatic_overview.gui` (1,827) | 5 | tight: the tab row is an expanding `hbox` |
+| Diplomacy | `diplomatic_overview.gui` (1,827) | 5 | none in `tab_buttons`, which has five slots; the UN prototype uses a six-slot copy |
 
-None of the three is replaced by this mod today. Each one added is another file to merge every patch (the 3-way merge in `docs/guides/gui_modding_guide.md`). It also collides with any other mod that replaces it (§7.4): Demography replaces `budget_panel.gui`, and CMF redefines `society_panel`.
+Before the prototypes (header), this mod replaced none of the three; it now replaces all three. Each one added is another file to merge every patch (the 3-way merge in `docs/guides/gui_modding_guide.md`). It also collides with any other mod that replaces it (§7.4): Demography replaces `budget_panel.gui`, and CMF redefines `society_panel`.
 
 ### 3.5 A sidebar button
 
@@ -99,7 +107,7 @@ widget = { state = { trigger_when = "[MapListPanelManager.IsVisible]"      on_fi
 |---|---|---|---|
 | 0 | A button that opens the journal entry itself (`OpenJournalEntryPanel`) | none or 1 (sidebar) | verified |
 | 1 | The mod's own window, one per system or one "Timeline Extended" window with its own tabs, showing the existing widgets under a JE datacontext | none, or 1 (sidebar) | precedent throughout; §8 items 2–3 untested |
-| 2 | A tab inside a vanilla window | 1 per host, 1,800–2,100 lines each | custom tab names untested; compat cost §7.4 |
+| 2 | A tab inside a vanilla window | 1 per host, 1,800–2,100 lines each | custom tab names confirmed in game (§3.4); compat cost §7.4 |
 | 3 | A redesign for a wider or two-column layout | as 1 or 2 | new work, not relocation |
 
 ## 5. What an implementation needs
@@ -206,8 +214,8 @@ Regardless of adoption, §7.4 is worth fixing or documenting for players who run
 Each fits in one throwaway test file and one launch.
 
 0. **CMF and this mod together:** which of the 11 shared types win (§7.4)? Check the banking entry's bars (drawn once or twice), the production-method rows and the building details; grep `debug.log` for GUI type messages. The same launch answers §7.3.
-1. **`InformationPanel.SelectTab('te_test')`** in a copy of `budget_panel.gui`: does the tab select and stay selected?
-2. **`GetPlayerJournalEntry('je_x')`** for an entry the player lacks, and for one inactive with `is_shown_when_inactive`: is it null, is it the entry, and what is logged?
+1. ~~**`InformationPanel.SelectTab('te_test')`** in a copy of `budget_panel.gui`: does the tab select and stay selected?~~ Yes (Banking prototype, 2026-09-28).
+2. **`GetPlayerJournalEntry('je_x')`** for an entry the player lacks, and for one inactive with `is_shown_when_inactive`: is it null, is it the entry, and what is logged? (For an active entry it works: Banking prototype, 2026-09-28.)
 3. **A hidden scripted widget:** does `visible = no` on the window root stop its children from updating? A JE widget exists only while the journal is open; a scripted widget exists all session. If a hidden 3,000-line body keeps updating, it floods the log like gotcha #14 in the GUI guide, for the whole session.
 4. **Law directive order with CMF:** is `country_colonial_stability_drift_add` from `law_autocracy` in the modifier breakdown when CMF is enabled?
 

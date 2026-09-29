@@ -225,3 +225,19 @@ un_chamber_history_has_entry = {
 		has_tag = un_resolution
 	}
 }
+
+# A resolution is before the General Assembly: the chamber's session card and
+# its tally and time bars (un_overview_display_values.txt). un_active_resolution
+# is removed when the vote is archived (un_vote_effects.txt).
+# Scope: any
+un_session_open = {
+	has_global_variable = un_active_resolution
+	exists = global_var:un_active_resolution
+}
+
+# The resolution in session carries topic $TOPIC$ (the un_topic_<topic> tag).
+# Scope: any
+un_session_topic_is = {
+	un_session_open = yes
+	global_var:un_active_resolution = { has_tag = un_topic_$TOPIC$ }
+}

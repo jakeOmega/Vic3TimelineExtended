@@ -27,6 +27,21 @@ te_banking_system_on = {
 	}
 }
 
+# What a country needs, besides the rule above, before je_banking_cycle
+# activates. The entry's `possible` is `always = yes`, so it activates as soon
+# as its is_shown_when_inactive (the rule plus this) holds. Also the checklist in
+# the Budget panel's greyed Banking tab (te_budget_banking_tab_unlock_sgui's
+# is_valid), which is why the building test carries its own tooltip line.
+te_banking_entry_unlocked = {
+	has_technology_researched = stock_exchange
+	custom_tooltip = {
+		text = te_banking_unlock_urban_center_tt
+		any_scope_state = {
+			any_scope_building = { is_building_type = building_urban_center level >= 5 }
+		}
+	}
+}
+
 # The "Raise Policy Rate" eligibility trigger used to sit above this one, and
 # OMO used to exclude itself while that tool was active. Both are gone with the
 # tool (monetary_policy_design.md §18).

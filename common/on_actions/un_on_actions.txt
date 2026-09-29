@@ -135,6 +135,11 @@ un_global_authority_on_action = {
 		# new UN ages toward its founding.
 		un_ladder_bloc_vacuum_update = yes
 		un_conference_monthly_update = yes
+
+		# The overview's Security Council flags (un_overview_display_effects.txt),
+		# last: after un_seat_monthly_update has filled or emptied this month's
+		# seats.
+		un_p5_display_refresh = yes
 	}
 }
 

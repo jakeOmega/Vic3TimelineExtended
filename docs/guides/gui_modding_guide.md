@@ -2,6 +2,8 @@
 
 Comprehensive reference for creating and modifying GUI elements in Victoria 3 mods.
 
+What the mod's own panels should look like (the house style) is in [`gui_style_guide.md`](gui_style_guide.md); this guide is how to build them.
+
 ## Table of Contents
 
 1. [Overview](#overview)
@@ -1570,6 +1572,7 @@ Data error in loc string 'te_hist_tt_markers'
     - **What works under it.** Every `JournalEntry.*` expression a JE widget uses, and the widget's loc. That includes `GetScriptedButtons` (drawn with vanilla's `scripted_journal_entry_button` type, `journal_entry.gui:988`), `GetScriptedProgressBars` and `IsActive`.
       The exception is a loc string shown as the `tooltip` of a `datamodel` item. It gets a fresh context without `JournalEntry` (gotcha #24), in a window just as in the journal.
     - **Gate it.** Vanilla shows that block only after a scripted GUI's `is_shown` passes `owner ?= { has_journal_entry = je_meiji_restoration }` (`journal_entry_sguis.txt:110`). Do the same, and put the datacontext on a child of the gated widget.
+    - **Confirmed in game (2026-09-28)** for an active entry: the Budget panel's Banking tab (`gui/budget_panel.gui`) draws the banking entry's three panels this way.
     - **Untested:** what it returns for an entry the player lacks or holds inactive.
 
     `docs/systems/system_panels_feasibility.md` § 3.2 uses this to show the journal widgets in a standalone window.
@@ -1580,6 +1583,13 @@ Data error in loc string 'te_hist_tt_markers'
     - **Compatibility, either way.** CMF redefines 11 types that this mod customizes through its full-file replacements: `journal_entry_panel`, `mobilization_widget`, the production-method and building-details items, and the state-buildings content. With CMF enabled, one side's changes to each are dropped without a log line.
 
     The type list and a test plan are in `docs/systems/system_panels_feasibility.md` § 7.3–7.4 and § 8.
+
+31. **A vanilla panel takes a tab name it does not define.** `gui/budget_panel.gui` adds a fourth Budget tab with `InformationPanel.SelectTab('te_banking')` and gates its content on `IsTabSelected('te_banking')`; it selects and stays selected (confirmed in game 2026-09-28).
+    - **Slots.** Vanilla's `tab_buttons` type (`shared/tab_bars.gui`) has five, and slots four and five are `visible = no` until a `*_button_visibility` / `*_button_visibility_checked` blockoverride says otherwise. Both halves of a slot need the tab test *and* any gate of your own. For a panel whose five are full (Diplomacy), `gui/te_system_tab_widgets.gui` has `te_tab_buttons_six`: vanilla's type copied with a `sixth_button*` slot, which has no hotkey because the input profile defines `tab_1` to `tab_5` only.
+    - **The sidebar cycle skips it.** The sidebar opens Budget with `OpenPanelCycleTabs('budget', 'default|states|assets')` (`information_panel_bar.gui`), so pressing Budget never lands on the new tab, and pressing it on Assets closes the panel as in vanilla. Adding the tab to the cycle means replacing that file.
+    - **Greying a tab.** `tab_button` is a plain `button` that carries `using = disabled_stripes`, so an `enabled = "[…]"` placed in the `*_button_click` blockoverride greys it; its tooltip still shows. The Banking tab does this until the entry activates. Not yet seen in game. An `OR` in the unlock trigger printed as a bare "All of these:" with nothing under it (the UN tab, 2026-09-29): wrap the `OR` in one `custom_tooltip` whose line names every way in (`un_entry_unlocked`).
+
+32. **A hover can sit on a word inside a scripted GUI's `ExecuteTooltip` text.** Write `#tooltippable;tooltip:<key> Word#!` in the loc line the scripted GUI prints; the word is underlined and hovering it shows `<key>`. When `<key>` reads data (`[GetStaticModifier('<name>').GetDesc]` and the like), use the tagged form vanilla uses, `#tooltippable;tooltip:[GetPlayer.GetTooltipTag],<key> Word#!`. Both confirmed in game 2026-09-29 (PR #567): the plain form on the UN proposal rows' "None", and the tagged form on Our Obligations' conventions, whose hover lists the modifier's name and effects. `GetDesc` shows the definition's values, so a modifier applied with a `multiplier` needs the scaling said in the tooltip. `organize_loc.py` counts a key named after `tooltip:` as used only if the key is plain `\w+` (no dots). What to use it for: `gui_style_guide.md`, "Hover recipes".
 
 ---
 
@@ -1671,14 +1681,18 @@ my_dangerous_sgui = {
 
 ## This Mod's GUI Files
 
-Currently 22 GUI files at the top of `gui/`: 19 full-file replacements of vanilla panels plus 3 additive files (marked below):
+Currently 27 GUI files at the top of `gui/`: 23 full-file replacements of vanilla panels plus 4 additive files (marked below):
 
 | File | Vanilla Panel | Purpose of Override |
 |---|---|---|
+| `budget_panel.gui` | Budget | A fourth tab, Banking: the banking journal entry's panel types under `GetPlayerJournalEntry('je_banking_cycle')` (gotcha #29). Prototype for `docs/systems/system_panels_feasibility.md` |
 | `building_browser_panel.gui` | Building browser | Custom building display |
 | `building_details_panel.gui` | Building details | Enhanced building info |
 | `construction_panel.gui` | Construction queue | Construction-market section: government purchase stepper, live read-out, collapsible explainer |
+| `culture_panel.gui` | Society | A fifth tab, Hegemony: the cultural hegemony journal entry's panel types under `GetPlayerJournalEntry('je_cultural_hegemony')`. CMF redefines this file's `society_panel` type (`system_panels_feasibility.md` § 7.4) |
+| `diplomatic_overview.gui` | Diplomacy | A sixth tab, UN: the strip becomes `te_tab_buttons_six` (vanilla's five slots are full), and the tab shows the United Nations journal entry's panel types plus its bar, status description and scripted buttons under `GetPlayerJournalEntry('je_united_nations')` |
 | `goods_state_panel.gui` | Goods by state | Modified goods display |
+| `journal_entry.gui` | Journal entry panel | Hides the bottom bar block for an entry that draws its own bars (`custom_widget_container_7` marker) |
 | `market_panel.gui` | Market panel | Widened panel; Top Trade Partners table and import/export partner charts |
 | `military_formation_panel.gui` | Military formation | Custom military info |
 | `panel_military.gui` | Military overview | Modified military overview |
@@ -1692,6 +1706,7 @@ Currently 22 GUI files at the top of `gui/`: 19 full-file replacements of vanill
 | `states_panel.gui` | States list | Modified state display; instances the state-view types below |
 | `states_panel_buildings.gui` | State buildings tab | Enhanced building display |
 | `te_state_panel_widgets.gui` | (additive, type library) | State-view types: aligned label/value rows, headroom bars, the tourism card |
+| `te_system_tab_widgets.gui` | (additive, type library) | For system tabs in vanilla panels: a journal entry's bars, status description and button grid (`te_je_*`), and `te_tab_buttons_six`, vanilla's tab strip with a sixth slot |
 | `te_trade_partner_tooltips.gui` | (additive) | Per-partner goods-breakdown tooltip used by `market_panel.gui` |
 | `tooltip.gui` | Tooltip widget | Custom tooltip content |
 | `treaty_draft_panel.gui` | Treaty drafting | Custom treaty interface |
@@ -1706,10 +1721,13 @@ Journal-entry widgets are **additive**, not overrides: a `.gui` under `gui/journ
 |---|---|---|
 | `covert_operations_widget.gui` | `je_covert_warfare` | command centre (capacity, slots, funding ladder + stepper, detection factors, covert defence) and one row per running operation with phase, countdown and a stand-down control; a third widget lists per-target networks |
 | `strategic_reserve_widget.gui` | `je_strategic_reserve` | per-good reserve readouts |
-| `banking_dashboard_widget.gui` | `je_banking_cycle` | conditions readout + policy dashboard |
-| `banking_history_widget.gui` | `je_banking_cycle` | the three banking history charts |
-| `un_chamber_widget.gui` | `je_united_nations` | General Assembly chamber: standing, open resolutions, vote and propose controls |
-| `cultural_hegemony_widget.gui` | `je_cultural_hegemony` | summary, programme funding + four programme rows, and the standing section (pull breakdown, top-10 leaderboard built in script, share history chart) |
+| `banking_dashboard_widget.gui` | `je_banking_cycle` | conditions readout + policy dashboard; both panels are types, also instanced by the Budget panel's Banking tab |
+| `banking_history_widget.gui` | `je_banking_cycle` | the banking history charts; a type, also instanced by the Budget panel's Banking tab |
+| `un_chamber_widget.gui` | `je_united_nations` | the General Assembly's sections as types (`te_un_sec_*`): the session card and ballot, delegations, proposals, missions, mandates, obligations, exposure, the archive, how standing works |
+| `un_authority_widget.gui` | `je_united_nations` | the authority sections as types: why authority is moving (pillar bars with last-month trends, the ladder, the powers, the ledger), how it works, the history chart |
+| `un_overview_widget.gui` | `je_united_nations` | the overview: membership, tier, crisis, standing, authority and target, members' share pies, Security Council flags, agencies |
+| `un_layout_widget.gui` | `je_united_nations` | the one order of the UN's sections for both the journal entry (its named roots) and the Diplomacy panel's UN tab; also the General Assembly's session strip |
+| `cultural_hegemony_widget.gui` | `je_cultural_hegemony` | summary, programme funding + four programme rows, and the standing section (pull breakdown, top-10 leaderboard built in script, share history chart); the three panels are types, also instanced by the Society panel's Hegemony tab |
 | `space_race_widget.gui` | the nine `je_space_race_*` | one shared milestone panel instanced by nine named widgets: pace, setback risk, approach selector, funding stepper, rivals list, programme overview |
 | `colonial_empire_widget.gui` | `je_colonial_empire` | colonial stability: the bar's own per-term breakdown, nine drift groups, great-power pressure roster, three programme rows, three decolonization decisions, two history charts |
 | `global_warming_widget.gui` | `je_global_warming` | climate conditions readout, all eight mitigation policies as rows, world adoption counts, two history charts |

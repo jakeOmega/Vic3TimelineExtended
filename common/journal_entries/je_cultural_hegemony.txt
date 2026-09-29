@@ -19,10 +19,7 @@ je_cultural_hegemony = {
 	}
 
 	possible = {
-		any_country = {
-			has_technology_researched = mass_media
-		}
-		has_technology_researched = romanticism
+		ch_entry_unlocked = yes
 	}
 
 	scripted_button = ch_increase_program_funding_button

@@ -315,6 +315,9 @@ un_state_rebuild = {
 		un_state_forget_representation = yes
 		un_state_forget_conventions = yes
 	}
+
+	# The overview's Security Council flags (un_overview_display_effects.txt).
+	un_p5_display_refresh = yes
 }
 
 # The mirrors of what only a represented member holds: the seats and the

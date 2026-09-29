@@ -77,16 +77,15 @@ un_authority_ladder_block = {
 		else = {
 			custom_tooltip_no_bullet = je_un_auth_tier_moribund
 		}
+		# The cap, as a concept whose tooltip explains the reforms; left out once
+		# both reforms have lifted it to 100 (owner, 2026-09-28).
 		if = {
-			limit = { un_charter_level_value >= 2 }
-			custom_tooltip_no_bullet = je_un_auth_charter_2
+			limit = { un_charter_level_value < 1 }
+			custom_tooltip_no_bullet = je_un_auth_charter_0
 		}
 		else_if = {
-			limit = { un_charter_level_value >= 1 }
+			limit = { un_charter_level_value < 2 }
 			custom_tooltip_no_bullet = je_un_auth_charter_1
-		}
-		else = {
-			custom_tooltip_no_bullet = je_un_auth_charter_0
 		}
 		# Ripe is only an invitation when no reform voted on in the last five
 		# years still bars the topic; otherwise the clock shows, and the
@@ -157,42 +156,56 @@ un_authority_crisis_block = {
 	}
 }
 
-# Who is driving the commitment and participation pillars: every champion,
-# every underminer, and every great power outside the UN, each line saying
-# which it is. Scope: country (the viewer)
+# Who is driving the commitment and participation pillars, in three groups:
+# the champions, the underminers, and the great powers outside the UN. Each
+# group is its own builder under its own GUI heading (un_authority_widget.gui),
+# because one builder prints every root-level line before any nested scope's,
+# so headings between script-built lists would all land on top
+# (gui_modding_guide.md gotcha #18). A line names the country and its share of
+# world power; the heading says which group it is in.
+# Scope: country (the viewer)
+un_authority_champions_block = {
+	every_country = {
+		limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+		custom_tooltip = je_un_auth_power_line
+	}
+}
+un_authority_underminers_block = {
+	every_country = {
+		limit = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+		custom_tooltip = je_un_auth_power_line
+	}
+}
+un_authority_outsiders_block = {
+	every_country = {
+		limit = {
+			country_rank >= rank_value:great_power
+			NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+		}
+		custom_tooltip = je_un_auth_power_line
+	}
+}
+
+# The empty state under the heading: nobody champions or undermines the order,
+# and every great power is a member. Prints nothing otherwise.
+# Scope: country (the viewer)
 un_authority_powers_block = {
 	if = {
 		limit = {
 			has_global_variable = un_founded
-			any_country = {
-				OR = {
-					je:je_united_nations ?= { has_modifier = un_champion_order_cost }
-					je:je_united_nations ?= { has_modifier = un_undermine_order_cost }
-					AND = {
-						country_rank >= rank_value:great_power
-						NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+			NOT = {
+				any_country = {
+					OR = {
+						je:je_united_nations ?= { has_modifier = un_champion_order_cost }
+						je:je_united_nations ?= { has_modifier = un_undermine_order_cost }
+						AND = {
+							country_rank >= rank_value:great_power
+							NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+						}
 					}
 				}
 			}
 		}
-		every_country = {
-			limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
-			custom_tooltip = je_un_auth_power_champion
-		}
-		every_country = {
-			limit = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
-			custom_tooltip = je_un_auth_power_underminer
-		}
-		every_country = {
-			limit = {
-				country_rank >= rank_value:great_power
-				NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
-			}
-			custom_tooltip = je_un_auth_power_outsider
-		}
-	}
-	else_if = {
-		limit = { has_global_variable = un_founded }
 		custom_tooltip_no_bullet = je_un_auth_powers_none
 	}
 }
@@ -500,14 +513,3 @@ un_authority_log_topic_case = {
 	}
 }
 
-# How the model works, in plain language. Static text. Scope: country
-un_authority_help_block = {
-	custom_tooltip_no_bullet = je_un_auth_help_1
-	custom_tooltip_no_bullet = je_un_auth_help_2
-	custom_tooltip_no_bullet = je_un_auth_help_3
-	custom_tooltip_no_bullet = je_un_auth_help_4
-	custom_tooltip_no_bullet = je_un_auth_help_5
-	custom_tooltip_no_bullet = je_un_auth_help_6
-	custom_tooltip_no_bullet = je_un_auth_help_7
-	custom_tooltip_no_bullet = je_un_auth_help_8
-}

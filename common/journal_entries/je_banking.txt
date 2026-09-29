@@ -8,10 +8,7 @@
 	# (common/scripted_triggers/banking_policy_triggers.txt).
 	is_shown_when_inactive = {
 		te_banking_system_on = yes
-		has_technology_researched = stock_exchange
-		any_scope_state = {
-			any_scope_building = { is_building_type = building_urban_center level >= 5 }
-		}
+		te_banking_entry_unlocked = yes
 	}
 
 	scripted_progress_bar = banking_cycle_value_bar

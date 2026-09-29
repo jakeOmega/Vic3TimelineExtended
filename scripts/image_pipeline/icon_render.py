@@ -23,8 +23,13 @@ production pipeline). Nothing here knows about a particular entity list.
                card             dark pictogram on a blank card lifted from vanilla (IG and
                                 character traits; `recolor` turns it to a colour vanilla lacks)
                strip            wide painted scene centred on an institution's 3500x220 strip
-               backed           cutout over a shared painted disc (Space Race journal entries);
-                                the disc is the category's own `backdrop`, rendered like an icon
+               backed           cutout over a shared disc: the category's own `backdrop`, rendered
+                                like an icon (Space Race journal entries) or drawn (draw_disc; the
+                                UN's agencies and topics)
+  tint() / apply_marks() / flag_layout()
+                  Derived icons: another entry's icon, greyed or faded, with vanilla's
+                  marks, a drawn star or a registry part drawn over it, or laid out as
+                  a bare flag (the UN's membership icons, badged topics, vacant seat).
   strip_sheet()   The strip category's review sheet: each strip as the panel shows it.
   review_sheet()  Row per entity: [current icon | 3 vanilla neighbours || candidates].
   panel_preview() Journal icons as the panel draws them: 100 px in the round frame, and 40 px.
@@ -289,6 +294,27 @@ def cut_out(im: Image.Image) -> Image.Image:
     return remove(im, session=_REMBG)
 
 
+def cut(raw: Image.Image, spec: dict) -> Image.Image:
+    """cut_out, then with `solid` in the spec, the holes it left inside the object filled back in.
+
+    rembg can take a flat panel inside an object for background: it cut the
+    front boards out of the sanctions crate, leaving the disc showing
+    through. `solid` makes every transparent region the object encloses
+    opaque again, in the raw render's colours. Only for objects with no
+    real holes: an anchor's ring or a wreath's gaps would be filled too.
+    """
+    obj = cut_out(raw)
+    if not spec.get("solid"):
+        return obj
+    from scipy.ndimage import binary_fill_holes
+    alpha = np.asarray(obj.getchannel("A"))
+    holes = binary_fill_holes(alpha > 128) & (alpha <= 128)
+    out = np.asarray(obj.convert("RGBA")).copy()
+    out[holes, :3] = np.asarray(raw.convert("RGB"))[holes]
+    out[holes, 3] = 255
+    return Image.fromarray(out, "RGBA")
+
+
 def fit_square(obj: Image.Image, size: int, fill: float) -> Image.Image:
     """Trim to the opaque bbox, pad to a square where the object spans `fill` of the side."""
     bbox = obj.getchannel("A").point(lambda v: 255 if v > 16 else 0).getbbox()
@@ -312,7 +338,7 @@ def drop_shadow(im: Image.Image, offset: int, blur: float, opacity: float) -> Im
 
 
 def compose_cutout(raw: Image.Image, spec: dict, target) -> Image.Image:
-    icon = fit_square(cut_out(raw), spec["size"], spec["fill"])
+    icon = fit_square(cut(raw, spec), spec["size"], spec["fill"])
     icon = grade(icon, target, spec.get("grade_strength", 0.7))
     return drop_shadow(icon, max(1, spec["size"] // 100), spec["size"] / 90, 0.45)
 
@@ -373,10 +399,193 @@ def compose_backdrop(raw: Image.Image, spec: dict) -> Image.Image:
 def compose_backed(raw: Image.Image, spec: dict, target, backdrop: Image.Image) -> Image.Image:
     """The graded cut-out subject, smaller than a plain cutout, over the shared disc."""
     size = spec["size"]
-    subject = grade(fit_square(cut_out(raw), size, spec["fill"]), target, spec.get("grade_strength", 0.7))
+    subject = grade(fit_square(cut(raw, spec), size, spec["fill"]), target, spec.get("grade_strength", 0.7))
     icon = backdrop.copy()
     icon.alpha_composite(drop_shadow(subject, max(1, size // 100), size / 90, 0.45))
     return icon
+
+
+def draw_disc(size: int, drawn: dict) -> Image.Image:
+    """A flat enamel disc under a metal rim, drawn rather than rendered (the UN's agency and topic icons).
+
+    A painted FLUX disc varies from render to render; a set that has to read
+    as one family at 36 px wants the same disc under every symbol. `drawn`
+    gives the enamel's `centre` and `edge` colours (a radial gradient lit from
+    a little above centre), the rim's `rim_light` (top) and `rim_dark`
+    (bottom) colours, and optionally `fill` (the disc's share of the side,
+    0.96) and `rim` (the rim's width as a share of the side, 0.07). A thin
+    dark line outside the rim keeps a pale rim readable on a pale panel.
+    """
+    fill, rim_w = drawn.get("fill", 0.96), drawn.get("rim", 0.07) * size
+    c = (size - 1) / 2
+    yy, xx = np.mgrid[0:size, 0:size].astype(np.float32)
+    r = np.hypot(xx - c, yy - c)
+    radius = size * fill / 2
+    # Enamel: a radial gradient whose light spot sits a little above centre.
+    lit = np.hypot(xx - c, yy - c + size * 0.12) / radius
+    t = np.clip(lit / 1.1, 0, 1)[..., None]
+    rgb = np.array(drawn["centre"], np.float32) * (1 - t) + np.array(drawn["edge"], np.float32) * t
+    # Rim: a vertical metal gradient, with a soft shadow cast inward onto the enamel.
+    ring_in = radius - rim_w
+    shade = np.clip((ring_in - r) / (size * 0.05), 0, 1)[..., None]
+    rgb *= 0.72 + 0.28 * shade
+    v = np.clip((yy - (c - radius)) / (2 * radius), 0, 1)[..., None]
+    metal = np.array(drawn["rim_light"], np.float32) * (1 - v) + np.array(drawn["rim_dark"], np.float32) * v
+    # A bright bevel line along the rim's middle catches the light.
+    bevel = np.clip(1 - np.abs(r - (ring_in + rim_w * 0.45)) / (rim_w * 0.25), 0, 1)[..., None] * (1 - v) * 0.35
+    metal = metal * (1 - bevel) + 255 * bevel
+    in_ring = np.clip(r - ring_in + 0.5, 0, 1)[..., None]
+    rgb = rgb * (1 - in_ring) + metal * in_ring
+    edge = np.clip(r - (radius - 1.5) + 0.5, 0, 1)[..., None]
+    rgb = rgb * (1 - edge * 0.75) + np.array((25, 20, 15), np.float32) * edge * 0.75
+    alpha = np.clip(radius - r + 0.5, 0, 1) * 255
+    return Image.fromarray(np.clip(np.dstack([rgb, alpha]), 0, 255).astype(np.uint8), "RGBA")
+
+
+# ── derived icons: tints, marks and layouts over an accepted icon ────────
+#
+# A derived registry entry has no render of its own: it takes another entry's
+# composed icon ("from"), optionally tints it and lays it out differently,
+# then draws marks over it (vanilla's own check and cross, a drawn star, or a
+# registry part such as the UN's scroll badge). The UN's membership icons are
+# one emblem under seven marks; its convention topics are the agency icon
+# under a scroll.
+
+def tint(im: Image.Image, how: str | None) -> Image.Image:
+    """`grey`: the icon as greyed stone. `faint`: grey, and half transparent."""
+    if not how:
+        return im
+    if how not in ("grey", "faint"):
+        raise ValueError(f"unknown tint {how!r}")
+    a = np.asarray(im.convert("RGBA"), dtype=np.float32)
+    lum = (a[..., :3] @ LUMA)[..., None] * 0.85 + 12
+    a[..., :3] = lum * np.array((1.0, 0.97, 0.92), np.float32)
+    if how == "faint":
+        a[..., 3] *= 0.45
+    return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), "RGBA")
+
+
+def star(size: int, fill=(250, 214, 110), shade=(190, 130, 30)) -> Image.Image:
+    """A five-pointed gold star with a dark outline, `size` px square."""
+    ss = 4
+    n = size * ss
+    c = n / 2
+    pts = []
+    for i in range(10):
+        rad = (n * 0.48) if i % 2 == 0 else (n * 0.2)
+        ang = -np.pi / 2 + i * np.pi / 5
+        pts.append((c + rad * np.cos(ang), c + n * 0.03 + rad * np.sin(ang)))
+    mask = Image.new("L", (n, n), 0)
+    ImageDraw.Draw(mask).polygon(pts, fill=255)
+    t = np.linspace(0, 1, n, dtype=np.float32)[:, None, None]
+    rgb = np.array(fill, np.float32) * (1 - t) + np.array(shade, np.float32) * t
+    im = Image.fromarray(np.dstack([np.broadcast_to(rgb, (n, n, 3)), np.asarray(mask)]).astype(np.uint8), "RGBA")
+    return resize_premultiplied(outlined(im, ss * max(1, size // 40)), (size, size))
+
+
+def pause(size: int, bars=(250, 190, 70), badge=(38, 36, 42)) -> Image.Image:
+    """Amber pause bars on a small dark badge, `size` px square.
+
+    Vanilla's paused.dds is gold bars with no ground, which vanish into a
+    gold emblem at 32 px and read as ingots.
+    """
+    ss = 4
+    n = size * ss
+    im = Image.new("RGBA", (n, n), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    d.ellipse([n * 0.02, n * 0.02, n * 0.98, n * 0.98], fill=badge + (255,))
+    d.ellipse([n * 0.02, n * 0.02, n * 0.98, n * 0.98], outline=(15, 13, 12, 255), width=max(1, n // 30))
+    for x0 in (0.29, 0.56):
+        d.rounded_rectangle([n * x0, n * 0.26, n * (x0 + 0.15), n * 0.74], radius=n * 0.03, fill=bars + (255,))
+    return resize_premultiplied(im, (size, size))
+
+
+def arrow_down(size: int, top=(235, 80, 62), bottom=(150, 28, 22)) -> Image.Image:
+    """A thick red arrow pointing down, `size` px square: loss, as vanilla's alerts draw it.
+
+    Vanilla's generic trend_down.dds is an orange-gold triangle, which merges
+    with a gold object under it.
+    """
+    ss = 4
+    n = size * ss
+    pts = [(0.34, 0.04), (0.66, 0.04), (0.66, 0.5), (0.92, 0.5), (0.5, 0.96), (0.08, 0.5), (0.34, 0.5)]
+    mask = Image.new("L", (n, n), 0)
+    ImageDraw.Draw(mask).polygon([(x * n, y * n) for x, y in pts], fill=255)
+    t = np.linspace(0, 1, n, dtype=np.float32)[:, None, None]
+    rgb = np.array(top, np.float32) * (1 - t) + np.array(bottom, np.float32) * t
+    im = Image.fromarray(np.dstack([np.broadcast_to(rgb, (n, n, 3)), np.asarray(mask)]).astype(np.uint8), "RGBA")
+    return resize_premultiplied(outlined(im, ss * max(1, size // 40)), (size, size))
+
+
+def outlined(im: Image.Image, width: int, colour=(20, 16, 12), opacity: float = 0.85) -> Image.Image:
+    """`im` over a dark outline `width` px wide, so a mark reads on any ground."""
+    alpha = im.getchannel("A").filter(ImageFilter.MaxFilter(2 * width + 1))
+    base = Image.new("RGBA", im.size, colour + (0,))
+    base.putalpha(alpha.point(lambda v: int(v * opacity)))
+    base.alpha_composite(im)
+    return base
+
+
+def apply_marks(icon: Image.Image, marks: list[dict], load) -> Image.Image:
+    """Draw each mark over `icon`.
+
+    A mark is {"icon": <vanilla path>} or {"part": "<cat>/<key>"} or
+    {"draw": "star" | "pause" | "arrow_down"}, placed with "at" (its centre, as shares of the width and
+    height; default the lower right, (0.72, 0.72)) and "scale" (its larger
+    side as a share of the icon's side; default 0.55). `load(mark)` returns
+    the mark's image for the first two kinds. Each gets a dark outline so it
+    reads over the icon and the panel alike.
+    """
+    icon = icon.copy()
+    side = min(icon.size)
+    for mark in marks:
+        box = max(1, round(side * mark.get("scale", 0.55)))
+        if mark.get("draw") == "star":
+            im = star(box)
+        elif mark.get("draw") == "pause":
+            im = pause(box)
+        elif mark.get("draw") == "arrow_down":
+            im = arrow_down(box)
+        else:
+            im = load(mark).convert("RGBA")
+            bbox = im.getchannel("A").point(lambda v: 255 if v > 16 else 0).getbbox()
+            if bbox:
+                im = im.crop(bbox)
+            k = box / max(im.size)
+            im = resize_premultiplied(im, (max(1, round(im.width * k)), max(1, round(im.height * k))))
+            im = outlined(im, max(1, side // 50))
+        cx, cy = mark.get("at", (0.72, 0.72))
+        icon.alpha_composite(im, (round(cx * icon.width - im.width / 2), round(cy * icon.height - im.height / 2)))
+    return icon
+
+
+def flag_layout(im: Image.Image, size: tuple[int, int], cloth=(128, 172, 214)) -> Image.Image:
+    """A bare flag: `cloth` with the icon as a faint pale watermark (the vacant seat).
+
+    The watermark keeps the icon's own light and shade, lifted toward white,
+    so a wreath still shows its leaves; its bare silhouette would be a blob.
+    """
+    w, h = size
+    yy = np.linspace(0, 1, h, dtype=np.float32)[:, None, None]
+    xx = np.linspace(0, 1, w, dtype=np.float32)[None, :, None]
+    # A soft diagonal light so the cloth is not a flat swatch.
+    rgb = np.array(cloth, np.float32) * (1.08 - 0.16 * (0.6 * yy + 0.4 * xx))
+    rgb = np.broadcast_to(rgb, (h, w, 3)).copy()
+    mark_h = round(h * 0.78)
+    k = mark_h / im.height
+    mark = np.asarray(resize_premultiplied(im, (max(1, round(im.width * k)), mark_h)), np.float32)
+    x0, y0 = (w - mark.shape[1]) // 2, (h - mark.shape[0]) // 2
+    region = rgb[y0:y0 + mark.shape[0], x0:x0 + mark.shape[1]]
+    lum = (mark[..., :3] @ LUMA)[..., None]
+    pale = 150 + lum * 0.45  # the icon's shading, in pale tones
+    a = mark[..., 3:4] / 255 * 0.55
+    region[:] = region * (1 - a) + np.clip(pale, 0, 255) * a
+    border = max(1, round(h / 44))
+    frame = np.zeros((h, w), bool)
+    frame[:border], frame[-border:], frame[:, :border], frame[:, -border:] = True, True, True, True
+    rgb[frame] = rgb[frame] * 0.35 + np.array((20, 24, 30), np.float32) * 0.65
+    alpha = np.full((h, w, 1), 255, np.float32)
+    return Image.fromarray(np.clip(np.concatenate([rgb, alpha], -1), 0, 255).astype(np.uint8), "RGBA")
 
 
 def embossed(raw: Image.Image, spec: dict, size: int) -> Image.Image:
@@ -437,7 +646,7 @@ def compose_medallion(raw: Image.Image, spec: dict, tmpl, target, obj: Image.Ima
     base = np.dstack([bg, alpha]).astype(np.uint8)
     icon = Image.fromarray(base, "RGBA")
     if obj is None:
-        obj = fit_square(cut_out(raw), size, 1.0)
+        obj = fit_square(cut(raw, spec), size, 1.0)
         obj = grade_spread(obj, target, spec["disc"]) if spec.get("grade") == "spread" else grade(obj, target)
     inner = int(size * spec["fill"])
     obj = resize_premultiplied(obj, (inner, inner))
@@ -520,7 +729,7 @@ def compose_plinth(raw: Image.Image, spec: dict, tmpl, target) -> Image.Image:
     """Cut the figure out and stand it on the slab lifted from vanilla."""
     slab, y0, face = tmpl
     size = spec["size"]
-    obj = cut_out(raw)
+    obj = cut(raw, spec)
     bbox = obj.getchannel("A").point(lambda v: 255 if v > 16 else 0).getbbox()
     if bbox:
         obj = obj.crop(bbox)
@@ -586,7 +795,7 @@ def compose_tinted(raw: Image.Image, spec: dict, ramp) -> Image.Image:
     every hue goes.
     """
     quantiles, lut = ramp
-    obj = fit_square(cut_out(raw), spec["size"], spec["fill"])
+    obj = fit_square(cut(raw, spec), spec["size"], spec["fill"])
     a = np.asarray(obj, dtype=np.float32)
     lum = a[..., :3] @ LUMA
     opaque = a[..., 3] > 200

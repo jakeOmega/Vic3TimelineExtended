@@ -18,7 +18,10 @@ background and have no effect. The entry never completes.
 
 Its panels show your tier, share and world rank, the cultural programs, and
 collapsible sections for your pull breakdown, the top ten cultural powers, the
-world's political models and a history chart of your share.
+world's political models and a history chart of your share. The same panels
+appear as a Hegemony tab in the Society panel, and a change made in one shows in
+the other. The tab is greyed until the journal entry opens; hover it for what is
+still missing. It ends with an Open Journal Entry button.
 
 ![The lower sections of the Cultural Hegemony journal entry: where our pull comes from, the top ten cultural powers with each one's change since the last recount, and the world's political models weighted by cultural pull.](images/cultural_hegemony.png)
 

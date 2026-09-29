@@ -1,0 +1,393 @@
+﻿### United Nations — layout. The one place that sets the order of the UN's
+### sections, for both hosts: the journal entry (je_united_nations.txt attaches
+### the named roots at the foot of this file) and the Diplomacy panel's UN tab
+### (gui/diplomatic_overview.gui instances the composers). The sections are
+### types in un_chamber_widget.gui and un_authority_widget.gui; the overview is
+### un_overview_widget.gui. Spec: docs/superpowers/specs/2026-09-28-un-gui-pass-design.md.
+###
+### Collapse flags say their default: *_closed sections are open until closed,
+### *_open ones collapsed until opened (test_un_layout.py).
+
+types un_layout_widget_types
+{
+	### The General Assembly: the session core, then either the session's
+	### delegations and ballot, or, with nothing in session, the proposals. The
+	### two never both apply: every proposal needs the one-vote lock free.
+	type te_un_sec_assembly = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		un_chamber_section_header = {
+			blockoverride "left_text" {
+				text = "je_un_assembly_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('un_chamber_assembly_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('un_chamber_assembly_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('un_chamber_assembly_closed'))]"
+			}
+		}
+
+		un_chamber_panel = {
+			visible = "[Not(GetVariableSystem.Exists('un_chamber_assembly_closed'))]"
+
+			### The resolution in session at a glance: topic, tally, time. The tally
+			### spans the members with a vote: three stacked bars, red to the end,
+			### grey (not yet voted) to 1 - no, green (yes) on top. The upper layers
+			### blank their own background and frame so the lower ones show.
+			flowcontainer = {
+				direction = vertical
+				spacing = 4
+				ignoreinvisible = yes
+				visible = "[GetScriptedGui('un_session_open_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+				flowcontainer = {
+					direction = horizontal
+					spacing = 8
+
+					widget = {
+						size = { 40 40 }
+						parentanchor = vcenter
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)0' )]"
+							texture = "gfx/interface/icons/un_icons/topic_condemn.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)1' )]"
+							texture = "gfx/interface/icons/un_icons/topic_sanctions.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)2' )]"
+							texture = "gfx/interface/icons/un_icons/topic_expulsion.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)3' )]"
+							texture = "gfx/interface/icons/un_icons/topic_mandate.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)4' )]"
+							texture = "gfx/interface/icons/un_icons/topic_peacekeepers.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)5' )]"
+							texture = "gfx/interface/icons/un_icons/topic_aid.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)6' )]"
+							texture = "gfx/interface/icons/un_icons/topic_reform.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)7' )]"
+							texture = "gfx/interface/icons/un_icons/topic_human_rights.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)8' )]"
+							texture = "gfx/interface/icons/un_icons/topic_icc.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)9' )]"
+							texture = "gfx/interface/icons/un_icons/topic_npt.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)10' )]"
+							texture = "gfx/interface/icons/un_icons/topic_climate.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)11' )]"
+							texture = "gfx/interface/icons/un_icons/topic_pandemic.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)12' )]"
+							texture = "gfx/interface/icons/un_icons/topic_refugee.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)13' )]"
+							texture = "gfx/interface/icons/un_icons/topic_heritage.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)14' )]"
+							texture = "gfx/interface/icons/un_icons/topic_decolonization.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)15' )]"
+							texture = "gfx/interface/icons/un_icons/topic_space.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)16' )]"
+							texture = "gfx/interface/icons/un_icons/topic_law_of_sea.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)17' )]"
+							texture = "gfx/interface/icons/un_icons/topic_physical_protection.dds"
+						}
+					}
+
+					flowcontainer = {
+						direction = vertical
+						spacing = 4
+						parentanchor = vcenter
+
+						### Tally
+						flowcontainer = {
+							direction = horizontal
+							spacing = 6
+							tooltip = "je_un_tally_tt"
+
+							widget = {
+								size = { 300 18 }
+								parentanchor = vcenter
+
+								bad_progressbar_horizontal = {
+									size = { 100% 100% }
+									blockoverride "values" {
+										value = 1
+										min = 0
+										max = 1
+									}
+								}
+								white_progressbar_horizontal = {
+									size = { 100% 100% }
+									blockoverride "background" {}
+									blockoverride "frame" {}
+									blockoverride "values" {
+										value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_not_no_frac') )]"
+										min = 0
+										max = 1
+									}
+								}
+								green_progressbar_horizontal = {
+									size = { 100% 100% }
+									blockoverride "background" {}
+									blockoverride "frame" {}
+									blockoverride "values" {
+										value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_yes_frac') )]"
+										min = 0
+										max = 1
+									}
+								}
+								# two-thirds mark: expulsion and charter reform pass on two
+								# thirds of the members with a vote (un_vote_supermajority_passed);
+								# 200 is two thirds of the bar's 300.
+								icon = {
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_supermajority'), '(CFixedPoint)1' )]"
+									size = { 3 22 }
+									position = { 199 -2 }
+									texture = "gfx/interface/progressbar/progressbar_marker.dds"
+								}
+							}
+							textbox = {
+								autoresize = yes
+								parentanchor = vcenter
+								align = left|nobaseline
+								text = "je_un_tally_counts"
+							}
+						}
+						textbox = {
+							autoresize = yes
+							align = left|nobaseline
+							using = fontsize_medium
+							text = "[SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_supermajority'), '(CFixedPoint)1' ), 'je_un_tally_rule_super', 'je_un_tally_rule_simple' )]"
+						}
+
+						### Time in session
+						flowcontainer = {
+							direction = horizontal
+							spacing = 6
+
+							default_progressbar_horizontal = {
+								size = { 300 12 }
+								parentanchor = vcenter
+								blockoverride "values" {
+									value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_months_frac') )]"
+									min = 0
+									max = 1
+								}
+							}
+							textbox = {
+								autoresize = yes
+								parentanchor = vcenter
+								align = left|nobaseline
+								text = "je_un_session_months"
+							}
+						}
+					}
+				}
+			}
+
+			te_un_sec_assembly_core = {}
+			te_un_sec_delegations = {
+				visible = "[GetScriptedGui('un_session_open_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			}
+			te_un_sec_ballot = {
+				visible = "[GetScriptedGui('un_session_open_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			}
+			te_un_sec_propose = {
+				visible = "[Not( GetScriptedGui('un_session_open_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+			}
+		}
+	}
+
+	### Everything a returning player checks, open by default.
+	type te_un_status_sections = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+		visible = "[JournalEntry.IsActive]"
+
+		te_un_sec_assembly = {}
+		te_un_sec_why = {}
+		te_un_sec_missions = {}
+		te_un_sec_programmes = {}
+		te_un_sec_mandates = {}
+		te_un_sec_obligations = {}
+		te_un_sec_exposure = {}
+	}
+
+	### "How the UN Works": every explanation, gathered out of the live sections
+	### (owner, 2026-09-28) into one section, collapsed by default, one heading
+	### per topic. The live sections above say what is happening; this says how
+	### it works.
+	type te_un_sec_how = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		un_chamber_section_header = {
+			blockoverride "left_text" {
+				text = "je_un_how_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('un_how_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('un_how_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('un_how_open')]"
+			}
+		}
+
+		un_chamber_panel = {
+			visible = "[GetVariableSystem.Exists('un_how_open')]"
+
+			un_chamber_subheader = {
+				blockoverride "subheader_margin" {}
+				blockoverride "subheader_text" {
+					text = "je_un_how_sub_authority"
+				}
+			}
+			te_un_help_authority = {}
+			un_chamber_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_un_how_sub_standing"
+				}
+			}
+			te_un_help_standing = {}
+			un_chamber_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_un_how_sub_missions"
+				}
+			}
+			un_chamber_note = {
+				text = "je_un_chamber_missions_intro"
+			}
+			un_chamber_note = {
+				text = "je_un_chamber_missions_help"
+			}
+			un_chamber_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_un_how_sub_delegations"
+				}
+			}
+			un_chamber_note = {
+				text = "je_un_chamber_deleg_intro"
+			}
+			un_chamber_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_un_how_sub_dues"
+				}
+			}
+			un_chamber_note = {
+				text = "je_un_chamber_obligations_help"
+			}
+			un_chamber_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_un_how_sub_record"
+				}
+			}
+			un_chamber_note = {
+				text = "je_un_chamber_exposure_help"
+			}
+		}
+	}
+
+	### The chart, then the record, then how it all works.
+	type te_un_reference_sections = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+		visible = "[JournalEntry.IsActive]"
+
+		te_un_sec_auth_history = {}
+		te_un_sec_archive = {}
+		te_un_sec_how = {}
+	}
+}
+
+### ==========================================================================
+### JOURNAL ENTRY ROOTS (je_united_nations.txt). Bare wrappers that repeat the
+### composers' IsActive gate, so an inactive entry's containers collapse.
+### ==========================================================================
+flowcontainer = {
+	name = "widget_je_un_overview"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	ignoreinvisible = yes
+
+	te_un_overview_panel = {}
+}
+
+flowcontainer = {
+	name = "widget_je_un_status"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	ignoreinvisible = yes
+
+	te_un_status_sections = {}
+}
+
+flowcontainer = {
+	name = "widget_je_un_reference"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	ignoreinvisible = yes
+
+	te_un_reference_sections = {}
+}

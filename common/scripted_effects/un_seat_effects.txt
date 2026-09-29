@@ -117,6 +117,9 @@ un_seat_grant = {
 		remove_variable = un_permanent_subgp_months
 	}
 	post_notification = un_permanent_seat_granted_notice
+
+	# The overview's Security Council flags (un_overview_display_effects.txt).
+	un_p5_display_refresh = yes
 }
 
 # What joining means for a permanent seat, for the tooltip of every way to join.

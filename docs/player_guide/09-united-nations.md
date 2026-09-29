@@ -6,8 +6,9 @@ Intergovernmental Organizations, an era 6 society technology, and for every
 country once a UN exists. It shows UN Authority (how seriously the world takes
 the organization), the Security Council of five permanent members with a veto,
 the conventions in force, missions in individual states and the dues members
-pay. It also holds the General Assembly chamber, where you vote and table
-resolutions. The United Nations game rule turns the system off.
+pay. It also holds the General Assembly, where you vote and table resolutions.
+The same panels appear as a UN tab in the Diplomacy panel (see [The UN
+panels](#the-un-panels)). The United Nations game rule turns the system off.
 
 ## Founding the United Nations
 
@@ -84,7 +85,7 @@ it under Isolationism and refuses it under Total War. See
 
 ## UN Authority
 
-UN Authority runs from 0 to 100 and is the bar on the journal entry. Each month
+UN Authority runs from 0 to 100 and is the bar at the top of the UN panels. Each month
 it closes a 48th of the gap to a target, at most 1 point, so a change in the
 world shows over years. The target is the sum of seven pillars:
 
@@ -92,7 +93,7 @@ world shows over years. The target is the sum of seven pillars:
 |---|---|---|
 | Base | 15 | Constant. |
 | Participation | 0 to +25 | The share of world prestige held by members. |
-| Great-power commitment | −25 to +25 | Members championing (+1) or undermining (−1) the order, weighted by their share of world power. Members of a bloc with Multilateral Institutions count a little in favor. |
+| Commitment | −25 to +25 | Members championing (+1) or undermining (−1) the order, weighted by their share of world power. Members of a bloc with Multilateral Institutions count a little in favor. |
 | Credibility | −15 to +15 | Resolutions carried or failing, vetoes, members backing or defying the UN in events, lifted sanctions, abused mandates, failed missions. |
 | Funding | −10 to +10 | The power-weighted share of major and great power members running UN programs, minus up to 15 for dues withheld. |
 | Peace and order | −20 to 0 | Members at war with fellow members, and nuclear use. |
@@ -101,8 +102,8 @@ world shows over years. The target is the sum of seven pillars:
 Credibility, delivery and the nuclear half of peace and order are kept as
 ledgers: each act adds or subtracts points, and old entries halve every four
 years. Acts by powerful countries count for more. Each entry is multiplied by
-the actor's **weight in world affairs**, its share of world prestige against a
-typical great power's 10% (×1), up to ×5. A permanent member walking out and a
+the actor's **weight**, its share of world prestige against a typical great
+power's 10% (×1), up to ×5. A permanent member walking out and a
 nuclear first strike also knock authority down directly. A new UN starts at 50,
 but with empty ledgers, no champions and no programs its target sits well below
 that, so expect authority to fall in its first years unless great powers
@@ -141,7 +142,7 @@ than a charter reform that two thirds of the members with a vote carry is no
 longer stopped by a veto.
 
 A reform is ripe once authority has held within 5 points of the ceiling for 24
-months running; the authority widget counts the months. A member of major-power
+months running; Why UN Authority Is Moving counts the months. A member of major-power
 rank may then table it, and the docket may offer it to a great power (The
 Charter Has Been Outgrown). It needs two thirds of all members with a vote, any
 permanent member can veto it outright, and the next reform cannot be tabled for
@@ -153,8 +154,8 @@ Below authority 10 the UN is in crisis until authority climbs above 20. Every
 great power then receives The United Nations in Crisis: members can stand by the
 organization (−10% influence for five years, credibility +2 × weight), outsiders
 can join to save it, and anyone can wait and see or let it go (+5% influence for
-five years, credibility −2 × weight). The authority widget lists every great
-power that could lift the target, and by how much. If the target falls below 5
+five years, credibility −2 × weight). Why UN Authority Is Moving lists every
+great power that could lift the target, and by how much. If the target falls below 5
 during the crisis, authority falls at least a quarter point a month, and at 0
 the UN dissolves.
 
@@ -174,8 +175,8 @@ with no agencies.
 The Security Council has five permanent seats. The founder takes one. The other
 four stay open for a twelve-month signing period, then go to the great-power
 members with the most prestige, never to whoever joined first. A seat that falls
-vacant later is filled the same way the next month. The chamber names the
-members and the candidates in line.
+vacant later is filled the same way the next month. The overview shows the
+permanent members' flags; hover Security Council for the candidates in line.
 
 A seat brings leverage generation, +250 Authority, prestige, influence and
 slower escalation in diplomatic plays. It is lost by leaving the UN, by ten
@@ -222,9 +223,9 @@ member that still has not voted (one that joined late, for example) votes in the
 last month of the session. After a year, General Assembly Vote Results applies the
 outcome.
 
-Most topics pass when the votes in favor outnumber those against. Charter
-reforms and motions to expel need two thirds of all members with a vote, so
-abstaining counts against them. A vote in favor gives +15 relations with the
+Most topics pass by **Majority**: the votes in favor outnumber those against.
+Charter reforms and motions to expel need **Two-Thirds**: two thirds of all
+members with a vote, so abstaining counts against them. A vote in favor gives +15 relations with the
 proposer, a vote against −15. On a resolution that accuses a country (a
 condemnation, sanctions, a mandate or a motion to expel), voting in favor also
 costs 15 relations with the target and voting against gains 15. When a power
@@ -280,14 +281,15 @@ Punitive topics need grounds. Every country has a **case strength** from 0 to
 | Infamy | 0.8 per point, up to 50 |
 
 Each entry halves every five years. A condemnation needs 30, sanctions 50 and a
-military mandate 60, so a clean record cannot be censured. The chamber's Our
-Exposure section shows your own case.
+military mandate 60, so a clean record cannot be censured. The Our Record
+section shows your own case, each part of it, and whether it would support a
+condemnation, sanctions or a mandate against you today.
 
 ### How members decide their UN votes
 
 Every ballot comes from one number, the member's **lean** on that resolution.
-The chamber prints your lean term by term under the resolution, and the recorded
-ballot shows every voter's lean and why the members voted as they did.
+The General Assembly prints your lean term by term under the resolution, and
+the Recorded Ballot shows every voter's lean and why the members voted as they did.
 
 | Term | Value |
 |---|---|
@@ -313,8 +315,8 @@ count, so a campaign can push a permanent member toward a veto or away from one.
 
 ### Reading how the members lean
 
-The chamber's Delegations section shows each AI member's lean as a band, not a
-number:
+The Delegations list under the General Assembly shows each AI member's lean as
+a band, not a number:
 
 | Band | Lean |
 |---|---|
@@ -343,8 +345,14 @@ ratifies a carried convention without being asked.
 
 ### Tabling UN business
 
-You table the seven topics above from the chamber's Propose a Resolution rows or
-the journal entry's buttons, and any convention from the chamber. Tabling on
+You table the seven topics above from the Propose a Resolution rows or the
+journal entry's buttons, and any convention from those rows. The rows sit under
+the General Assembly while no resolution is in session. Each gives the topic,
+whether it is a Binding Resolution (which can be vetoed) or a Recommendatory
+one, its passage rule and its target. "Target: None" means no country gives
+grounds right now; hover it for why. Hover a convention's name for the agency it
+would found and when the docket raises it. A greyed Propose button lists in its
+tooltip what stops you. Tabling on
 your own motion puts UN Request Cooldown on you for ten years, during which you
 can table nothing else yourself. A convention or charter reform the docket
 offers you is free, so the docket's offer is the cheap way to bring one to the
@@ -404,7 +412,7 @@ members vote only in the ninth to eleventh month, you have most of the session
 to work on them.
 
 A campaign is a diplomatic pact, Lobby For the Resolution or Lobby Against the
-Resolution, started from the diplomacy panel or the chamber's Delegations rows.
+Resolution, started from the diplomacy panel or the Delegations rows.
 It uses 100 influence while it runs. Each full month it runs moves the member's
 lean 3 points its way, up to 15, so it needs five months to reach its full
 effect. Campaigns on the same side stack to 20, and campaigns on opposite sides
@@ -432,9 +440,10 @@ A convention is a standing regime. When it carries it founds its agency (the
 decolonization declaration founds none), and every member that ratifies it
 carries its member modifier. Its effects are multiplied by the UN's enforcement,
 never below ×0.01, so a Moribund UN leaves conventions dormant rather than
-lapsed. Most also name winners and losers among the parties; the chamber's Our
-Obligations section lists your terms, which are re-read when the tier changes
-and once a year.
+lapsed. Most also name winners and losers among the parties. Our Obligations
+lists each convention you are party to, with your terms under it; hover a
+convention or a term to see its modifier. Terms are re-read when the tier
+changes and once a year.
 
 | Convention (agency) | Can come to the floor with | Parties gain | Winners and losers |
 |---|---|---|---|
@@ -457,7 +466,8 @@ also raise the target of the [nuclear
 taboo](13-nuclear.md#what-moves-the-nuclear-taboo), by up to 8 and 4 points, in
 proportion to UN authority.
 
-The journal entry counts eleven specialized agencies. Ten come from the
+The overview shows eleven specialized agencies, each lit once founded. Ten come
+from the
 conventions in the table: WHO, UNESCO, UNHRC, IAEA, UNEP, UNHCR, UNOOSA, ITLOS,
 the ICC and the CPPNM. The eleventh, the International Court of Justice, is
 founded the first time a country accepts a World Court ruling against it. Once
@@ -481,8 +491,8 @@ move for one you need authority 40, no mandate in force and none proposed in the
 last five years, standing above Disgraced, and a target that is not a subject,
 has a case of 60 or more and holds a state in a region you claim. The button
 picks the case (a condemned or sanctioned target first, a rival before a
-stranger, a weaker country before a stronger), and the chamber's Mandates in
-Force section previews it.
+stranger, a weaker country before a stronger), and both Mandates in Force and
+the Propose a Resolution row preview it.
 
 A carried mandate lasts five years and makes the Authorized Restoration war goal
 available against that country, for that state, at no infamy, in one diplomatic
@@ -515,7 +525,7 @@ credibility. The state panel shows a UN Mission tile, and contributors build
 covert networks in the host faster.
 
 Any major-power member not under sanctions can press Send a Contingent on a
-mission's row in the chamber, if it is not the host, not at war with it and has
+mission's row in Missions in the Field, if it is not the host, not at war with it and has
 not left that mission before. Each mission joined this way costs a quarter of a
 percent of GDP a year, free for peacekeeping and Stabilisation if you run the
 peacekeeping program. Bring Our Contingent Home costs 2 standing and 10
@@ -571,28 +581,41 @@ mandates discharged, and binding resolutions accepted at a cost. Gains shrink as
 standing rises, and voting earns none apart from a kept vote pledge. Censure,
 sanctions, defiance, abused mandates, leaving and withheld dues cost it.
 
-## The UN chamber and authority widgets
+## The UN panels
 
-The General Assembly chamber is where you vote and propose. Its top panel shows
-your status, the Security Council and the resolution in session (grounds, tally,
-projection, veto exposure, consequences and your own lean), with Vote in Favour,
-Vote Against and, for a permanent member, Veto…, which asks you to confirm.
-Below are collapsible sections: Delegations, with a line counting the firmly
-decided members (hover it for their names) and the votes cast, and a row for up
-to 24 AI members still in play, showing each one's band, the campaigns and
-pledges on it, and Lobby For, Lobby Against, Stop Lobbying, Pledge For and
-Pledge Against buttons (members someone is lobbying come first, then the
-undecided, then those leaning for, then those leaning against); How
-International Standing Works; Our Exposure;
-Missions in the Field, with a row and a Send a Contingent button per mission;
-Our Obligations, with dues and convention terms; Recorded Ballot; Propose a
-Resolution, with a row per topic, its target and why it is blocked, plus the
-docket's status; Mandates in Force; and Resolutions on the Record.
+The United Nations journal entry and the UN tab in the Diplomacy panel show the
+same panels, and a change made in one shows in the other. The tab is greyed
+until the journal entry is active; hover it for what is still missing. The tab
+adds the entry's status text and buttons as Status and Actions sections, and
+ends with an Open Journal Entry button.
 
-The Why UN Authority Is Moving widget shows authority, its target and the pillar
-table (hover a pillar for its formula), your weight in world affairs, the tier
-and the charter's reform clock, the crisis panel, the champions, underminers and
-great powers outside, and the latest ledger entries, with a history chart below.
+<!-- screenshot: the UN tab in the Diplomacy panel, with the overview and the General Assembly in view -->
+
+The overview at the top is always shown. Its first row is icons: your
+membership (a check for a member, a star for a permanent member, a pause mark
+while your representation is suspended), the UN's tier, a Crisis alert while
+the crisis runs, and your standing. Below them are the authority bar, with a
+tick at the target and the monthly change, and three pies: the members' share
+of the world's countries, GDP and population. Then come the Security Council's
+five flags (hover one for the country, click it to open the country), the
+eleven agencies, lit once founded, and the headquarters. Hover any of them for
+the detail.
+
+The sections below are open by default when they change month to month, and
+collapsed when they are reference:
+
+| Section | Starts | Shows |
+|---|---|---|
+| General Assembly | Open | The resolution in session: its topic, a tally bar (green for, grey not yet voted, red against, with a mark at two thirds for the topics that need it), how many of its twelve months have run, the grounds, your lean and the vote buttons. Delegations and Recorded Ballot sit under it while a resolution is in session; Propose a Resolution takes their place when none is. |
+| Why UN Authority Is Moving | Open | A bar for each pillar, with its trend since last month (hover a pillar for how it is computed), then your weight, the tier and the authority cap, the champions and underminers, and the newest ledger entries (collapsed). |
+| Missions in the Field | Open | A row for each mission, with Send a Contingent or Bring Our Contingent Home; ended missions below, collapsed. |
+| Programmes and Conventions | Collapsed | How many countries take part in each program and convention, and how many are under sanctions. |
+| Mandates in Force | Open | The mandates in force, and the case a mandate of yours would take. |
+| Our Obligations | Open | Your dues beside the whole budget, then each convention you are party to, with your terms under it, and from Strong the UN's reach (shared intelligence, your interest groups' reaction). |
+| Our Record | Open | Your case strength and its parts, and whether it would support a condemnation, sanctions or a mandate. |
+| UN Authority History | Open | A chart of authority over time. |
+| Resolutions on the Record | Collapsed | Closed resolutions, with how each member voted. |
+| How the UN Works | Collapsed | The explanations: authority, standing, missions, delegations, dues and the record. |
 
 ## How the AI uses the UN
 

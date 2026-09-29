@@ -335,1100 +335,1130 @@ types cultural_hegemony_widget_types
 			}
 		}
 	}
-}
 
-
-### ==========================================================================
-### SUMMARY — container_1
-### ==========================================================================
-flowcontainer = {
-	name = "widget_je_ch_summary"
-	direction = vertical
-	parentanchor = hcenter
-	ignoreinvisible = yes
-	spacing = 2
-
-	# je_cultural_hegemony has is_shown_when_inactive = { has_game_rule = ... }, so
-	# this panel is built for every country that can see the entry at all —
-	# including ones whose entry has never activated, where none of the ch_*
-	# variables exist. Everything below is guarded in script too, but there is
-	# nothing worth drawing in that state. Vanilla uses the same test at
-	# gui/journal_entry.gui:670.
-	visible = "[JournalEntry.IsActive]"
-
-	ch_panel = {
-		textbox = {
-			text = "je_ch_widget_summary_header"
-			default_format = "#header"
-			autoresize = yes
-			max_width = 470
-			align = left|nobaseline
-			margin_bottom = 4
-		}
-
-		### Tier name and its one-line reading, both from customizable loc driven
-		### by ch_tier. The thresholds are in ch_set_display_state, not here.
-		textbox = {
-			text = "je_ch_widget_tier_line"
-			autoresize = yes
-			max_width = 474
-			align = left|nobaseline
-			using = fontsize_large
-		}
-		textbox = {
-			text = "je_ch_widget_tier_blurb"
-			autoresize = yes
-			multiline = yes
-			minimumsize = { 474 -1 }
-			maximumsize = { 474 -1 }
-			align = left|nobaseline
-			using = fontsize_medium
-			default_format = "#lore"
-			margin_bottom = 2
-		}
-
-		### Share of global influence, as a bar plus the number.
-		ch_reading_row = {
-			tooltip = "je_ch_widget_share_tt"
-			blockoverride "reading_label" {
-				text = "je_ch_widget_share_label"
-			}
-			blockoverride "reading_value" {
-				text = "je_ch_widget_share_value"
-			}
-		}
-
-		default_progressbar_horizontal = {
-			size = { 474 14 }
-			parentanchor = hcenter
-			tooltip = "je_ch_widget_share_tt"
-
-			blockoverride "values" {
-				min = 0
-				max = 100
-				value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_share_fill_pct'))]"
-			}
-		}
-
-		### World rank. Hidden until the first yearly pass has numbered us
-		### (ch_show_sgui op 11), so a fresh save shows no "Rank 0 of 0".
-		ch_reading_row = {
-			datacontext = "[GetScriptedGui('ch_show_sgui')]"
-			visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
-			tooltip = "je_ch_widget_rank_tt"
-			blockoverride "reading_label" {
-				text = "je_ch_widget_rank_label"
-			}
-			blockoverride "reading_value" {
-				text = "je_ch_widget_rank_value"
-			}
-		}
-
-		### The world hegemon's exported political model, and how much of the world
-		### shares it. Hidden until the yearly ideology pass has run (op 12).
-		ch_reading_row = {
-			datacontext = "[GetScriptedGui('ch_show_sgui')]"
-			visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
-			tooltip = "je_ch_widget_model_tt"
-			blockoverride "reading_label" {
-				text = "je_ch_widget_model_label"
-			}
-			blockoverride "reading_value" {
-				text = "je_ch_widget_model_value"
-			}
-		}
-		ch_reading_row = {
-			datacontext = "[GetScriptedGui('ch_show_sgui')]"
-			visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
-			tooltip = "je_ch_widget_model_tt"
-			blockoverride "reading_label" {
-				text = "je_ch_widget_model_share_label"
-			}
-			blockoverride "reading_value" {
-				text = "je_ch_widget_model_share_value"
-			}
-		}
-	}
-}
-
-
-### ==========================================================================
-### CULTURAL PROGRAMMES — container_2
-### ==========================================================================
-flowcontainer = {
-	name = "widget_je_ch_programmes"
-	direction = vertical
-	parentanchor = hcenter
-	ignoreinvisible = yes
-	spacing = 2
-
-	visible = "[JournalEntry.IsActive]"
-
-	ch_panel = {
-		textbox = {
-			text = "je_ch_widget_programmes_header"
-			default_format = "#header"
-			autoresize = yes
-			max_width = 470
-			align = left|nobaseline
-			margin_bottom = 4
-		}
-
-		### Funding stepper — ops 0 (down) and 1 (up).
-		flowcontainer = {
-			direction = horizontal
-			ignoreinvisible = yes
-			spacing = 6
-			margin = { 6 3 }
-			parentanchor = hcenter
-			datacontext = "[GetScriptedGui('ch_policy_sgui')]"
-
-			background = {
-				using = entry_bg_fancy_dark
-				alpha = 0.35
-			}
-
-			widget = {
-				size = { 230 26 }
-				textbox = {
-					parentanchor = left|vcenter
-					autoresize = yes
-					max_width = 230
-					elide = right
-					align = nobaseline
-					using = fontsize_large
-					text = "je_ch_widget_funding_label"
-				}
-			}
-
-			button_icon_minus_action = {
-				size = { 26 26 }
-				parentanchor = vcenter
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
-			}
-
-			widget = {
-				size = { 86 26 }
-				textbox = {
-					parentanchor = center
-					align = center|nobaseline
-					autoresize = yes
-					max_width = 86
-					elide = right
-					using = fontsize_large
-					text = "je_ch_widget_funding_value"
-				}
-			}
-
-			button_icon_plus_action = {
-				size = { 26 26 }
-				parentanchor = vcenter
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
-			}
-		}
-
-		### International Cultural Outreach — ops 2 / 3
-		ch_programme_row = {
-			blockoverride "programme_label" { text = "je_ch_widget_prog_outreach" }
-			blockoverride "programme_status" { text = "je_ch_widget_prog_outreach_status" }
-			blockoverride "programme_enable" {
-				visible = "[Not(GetScriptedGui('ch_active_world_exposition_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
-				text = "ch_policy_outreach_on"
-			}
-			blockoverride "programme_disable" {
-				visible = "[GetScriptedGui('ch_active_world_exposition_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
-				text = "ch_policy_outreach_off"
-			}
-		}
-
-		### Cultural Institutes — ops 4 / 5
-		ch_programme_row = {
-			blockoverride "programme_label" { text = "je_ch_widget_prog_institutes" }
-			blockoverride "programme_status" { text = "je_ch_widget_prog_institutes_status" }
-			blockoverride "programme_enable" {
-				visible = "[Not(GetScriptedGui('ch_active_cultural_institutes_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
-				text = "ch_policy_institutes_on"
-			}
-			blockoverride "programme_disable" {
-				visible = "[GetScriptedGui('ch_active_cultural_institutes_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
-				text = "ch_policy_institutes_off"
-			}
-		}
-
-		### Global Media Campaign — ops 6 / 7. Mutually exclusive with Cultural
-		### Protectionism; the Enable control stays visible and greys out, and
-		### ch_possible_global_media_campaign carries the reason.
-		ch_programme_row = {
-			blockoverride "programme_label" { text = "je_ch_widget_prog_media" }
-			blockoverride "programme_status" { text = "je_ch_widget_prog_media_status" }
-			blockoverride "programme_enable" {
-				visible = "[Not(GetScriptedGui('ch_active_global_media_campaign_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
-				text = "ch_policy_media_on"
-			}
-			blockoverride "programme_disable" {
-				visible = "[GetScriptedGui('ch_active_global_media_campaign_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
-				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
-				text = "ch_policy_media_off"
-			}
-		}
-
-		### Cultural Protectionism — ops 8 / 9
-		ch_programme_row = {
-			blockoverride "programme_label" { text = "je_ch_widget_prog_protectionism" }
-			blockoverride "programme_status" { text = "je_ch_widget_prog_protectionism_status" }
-			blockoverride "programme_enable" {
-				visible = "[Not(GetScriptedGui('ch_active_cultural_protectionism_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
-				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
-				text = "ch_policy_protectionism_on"
-			}
-			blockoverride "programme_disable" {
-				visible = "[GetScriptedGui('ch_active_cultural_protectionism_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
-				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
-				text = "ch_policy_protectionism_off"
-			}
-		}
-	}
-}
-
-
-### ==========================================================================
-### STANDING — container_3: breakdown, leaderboard, history
-### ==========================================================================
-flowcontainer = {
-	name = "widget_je_ch_standing"
-	direction = vertical
-	parentanchor = hcenter
-	ignoreinvisible = yes
-	spacing = 2
-
-	visible = "[JournalEntry.IsActive]"
-
-	### ---- Where our pull comes from -----------------------------------------
-	ch_section_header = {
-		blockoverride "left_text" {
-			text = "je_ch_widget_breakdown_header"
-			using = elide_fontsize_min
-		}
-		blockoverride "onclick" {
-			onclick = "[GetVariableSystem.Toggle('ch_breakdown_open')]"
-		}
-		blockoverride "onclick_showmore" {
-			visible = "[Not(GetVariableSystem.Exists('ch_breakdown_open'))]"
-		}
-		blockoverride "onclick_showless" {
-			visible = "[GetVariableSystem.Exists('ch_breakdown_open')]"
-		}
-	}
-
-	ch_panel = {
-		visible = "[GetVariableSystem.Exists('ch_breakdown_open')]"
-
-		### Art, in two mutually exclusive forms: below the diminishing-returns
-		### threshold (op 0) and above it (op 1). Which one shows is
-		### ch_show_sgui's decision, so 33 stays in cultural_pull_art_dr_threshold.
-		ch_breakdown_row = {
-			tooltip = "je_ch_widget_bd_art_tt"
-			blockoverride "breakdown_label" { text = "je_ch_widget_bd_art_label" }
-			blockoverride "breakdown_value" { text = "je_ch_widget_bd_art_value" }
-			blockoverride "breakdown_detail" { text = "je_ch_widget_bd_art_detail" }
-			blockoverride "breakdown_visible" {
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-			}
-		}
-		ch_breakdown_row = {
-			tooltip = "je_ch_widget_bd_art_tt"
-			blockoverride "breakdown_label" { text = "je_ch_widget_bd_art_label" }
-			blockoverride "breakdown_value" { text = "je_ch_widget_bd_art_value" }
-			blockoverride "breakdown_detail" { text = "je_ch_widget_bd_art_dr_detail" }
-			blockoverride "breakdown_visible" {
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-			}
-		}
-
-		### Prestige — op 2
-		ch_breakdown_row = {
-			blockoverride "breakdown_label" { text = "je_ch_widget_bd_prestige_label" }
-			blockoverride "breakdown_value" { text = "je_ch_widget_bd_prestige_value" }
-			blockoverride "breakdown_detail" { text = "je_ch_widget_bd_prestige_detail" }
-			blockoverride "breakdown_visible" {
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-			}
-		}
-
-		### Standard of living — op 3
-		ch_breakdown_row = {
-			blockoverride "breakdown_label" { text = "je_ch_widget_bd_sol_label" }
-			blockoverride "breakdown_value" { text = "je_ch_widget_bd_sol_value" }
-			blockoverride "breakdown_detail" { text = "je_ch_widget_bd_sol_detail" }
-			blockoverride "breakdown_visible" {
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-			}
-		}
-
-		### Tech leadership — op 4
-		ch_breakdown_row = {
-			blockoverride "breakdown_label" { text = "je_ch_widget_bd_tech_label" }
-			blockoverride "breakdown_value" { text = "je_ch_widget_bd_tech_value" }
-			blockoverride "breakdown_detail" { text = "je_ch_widget_bd_tech_detail" }
-			blockoverride "breakdown_visible" {
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-			}
-		}
-
-		### Monuments — op 5
-		ch_breakdown_row = {
-			blockoverride "breakdown_label" { text = "je_ch_widget_bd_monuments_label" }
-			blockoverride "breakdown_value" { text = "je_ch_widget_bd_monuments_value" }
-			blockoverride "breakdown_visible" {
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-			}
-		}
-
-		### Megaprojects — op 6
-		ch_breakdown_row = {
-			blockoverride "breakdown_label" { text = "je_ch_widget_bd_megaprojects_label" }
-			blockoverride "breakdown_value" { text = "je_ch_widget_bd_megaprojects_value" }
-			blockoverride "breakdown_visible" {
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-			}
-		}
-
-		### Flat pull modifiers — op 7
-		ch_breakdown_row = {
-			blockoverride "breakdown_label" { text = "je_ch_widget_bd_modifiers_label" }
-			blockoverride "breakdown_value" { text = "je_ch_widget_bd_modifiers_value" }
-			blockoverride "breakdown_visible" {
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
-			}
-		}
-
-		### Infamy — op 8
-		ch_breakdown_row = {
-			blockoverride "breakdown_label" { text = "je_ch_widget_bd_infamy_label" }
-			blockoverride "breakdown_value" { text = "je_ch_widget_bd_infamy_value" }
-			blockoverride "breakdown_visible" {
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
-			}
-		}
-
-		### Instability — op 9
-		ch_breakdown_row = {
-			blockoverride "breakdown_label" { text = "je_ch_widget_bd_instability_label" }
-			blockoverride "breakdown_value" { text = "je_ch_widget_bd_instability_value" }
-			blockoverride "breakdown_visible" {
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
-			}
-		}
-
-		widget = { size = { 474 4 } }
-
-		### Totals. Always visible; the multiplier line is op 10.
-		ch_breakdown_row = {
-			blockoverride "breakdown_label" { text = "je_ch_widget_bd_raw_label" }
-			blockoverride "breakdown_value" { text = "je_ch_widget_bd_raw_value" }
-			blockoverride "breakdown_detail" { text = "je_ch_widget_bd_global_raw_detail" }
-		}
-		ch_breakdown_row = {
-			blockoverride "breakdown_label" { text = "je_ch_widget_bd_mult_label" }
-			blockoverride "breakdown_value" { text = "je_ch_widget_bd_mult_value" }
-			blockoverride "breakdown_visible" {
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
-			}
-		}
-	}
-
-	### ---- Top cultural powers -----------------------------------------------
-	ch_section_header = {
-		blockoverride "left_text" {
-			text = "je_ch_widget_board_header"
-			using = elide_fontsize_min
-		}
-		blockoverride "onclick" {
-			onclick = "[GetVariableSystem.Toggle('ch_board_open')]"
-		}
-		blockoverride "onclick_showmore" {
-			visible = "[Not(GetVariableSystem.Exists('ch_board_open'))]"
-		}
-		blockoverride "onclick_showless" {
-			visible = "[GetVariableSystem.Exists('ch_board_open')]"
-		}
-	}
-
-	### Ten rows, each one ExecuteTooltip. Inside the collapsed container, so a
-	### closed board renders nothing at all.
-	ch_panel = {
-		visible = "[GetVariableSystem.Exists('ch_board_open')]"
-
-		textbox = {
-			text = "je_ch_widget_board_legend"
-			autoresize = yes
-			multiline = yes
-			minimumsize = { 474 -1 }
-			maximumsize = { 474 -1 }
-			align = left|nobaseline
-			using = fontsize_small
-			default_format = "#lore"
-			margin_bottom = 2
-		}
-
-		ch_board_row = {
-			datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
-			blockoverride "row_visible" {
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-			}
-			blockoverride "row_text" {
-				text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-			}
-			blockoverride "row_tooltip" {
-				tooltip = "[GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-			}
-			blockoverride "row_us_marker" {
-				visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-			}
-		}
-		ch_board_row = {
-			datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
-			blockoverride "row_visible" {
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-			}
-			blockoverride "row_text" {
-				text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-			}
-			blockoverride "row_tooltip" {
-				tooltip = "[GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-			}
-			blockoverride "row_us_marker" {
-				visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-			}
-		}
-		ch_board_row = {
-			datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
-			blockoverride "row_visible" {
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-			}
-			blockoverride "row_text" {
-				text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-			}
-			blockoverride "row_tooltip" {
-				tooltip = "[GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-			}
-			blockoverride "row_us_marker" {
-				visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-			}
-		}
-		ch_board_row = {
-			datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
-			blockoverride "row_visible" {
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-			}
-			blockoverride "row_text" {
-				text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-			}
-			blockoverride "row_tooltip" {
-				tooltip = "[GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-			}
-			blockoverride "row_us_marker" {
-				visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-			}
-		}
-		ch_board_row = {
-			datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
-			blockoverride "row_visible" {
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-			}
-			blockoverride "row_text" {
-				text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-			}
-			blockoverride "row_tooltip" {
-				tooltip = "[GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-			}
-			blockoverride "row_us_marker" {
-				visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-			}
-		}
-		ch_board_row = {
-			datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
-			blockoverride "row_visible" {
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-			}
-			blockoverride "row_text" {
-				text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-			}
-			blockoverride "row_tooltip" {
-				tooltip = "[GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-			}
-			blockoverride "row_us_marker" {
-				visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-			}
-		}
-		ch_board_row = {
-			datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
-			blockoverride "row_visible" {
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
-			}
-			blockoverride "row_text" {
-				text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
-			}
-			blockoverride "row_tooltip" {
-				tooltip = "[GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
-			}
-			blockoverride "row_us_marker" {
-				visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
-			}
-		}
-		ch_board_row = {
-			datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
-			blockoverride "row_visible" {
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
-			}
-			blockoverride "row_text" {
-				text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
-			}
-			blockoverride "row_tooltip" {
-				tooltip = "[GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
-			}
-			blockoverride "row_us_marker" {
-				visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
-			}
-		}
-		ch_board_row = {
-			datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
-			blockoverride "row_visible" {
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
-			}
-			blockoverride "row_text" {
-				text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
-			}
-			blockoverride "row_tooltip" {
-				tooltip = "[GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
-			}
-			blockoverride "row_us_marker" {
-				visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
-			}
-		}
-		ch_board_row = {
-			datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
-			blockoverride "row_visible" {
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
-			}
-			blockoverride "row_text" {
-				text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
-			}
-			blockoverride "row_tooltip" {
-				tooltip = "[GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
-			}
-			blockoverride "row_us_marker" {
-				visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
-			}
-		}
-
-		### Our own standing, for the common case of being outside the top ten.
-		textbox = {
-			datacontext = "[GetScriptedGui('ch_show_sgui')]"
-			visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
-			text = "je_ch_widget_board_us"
-			autoresize = yes
-			max_width = 474
-			align = left|nobaseline
-			using = fontsize_medium
-			margin_top = 4
-		}
-	}
-
-	### ---- Political models of the world ------------------------------------
-	### Every country's political model (ch_set_political_model) weighted by its
-	### cultural pull: each model's share of world culture, recounted with the
-	### leaderboard. The pie is fifteen stacked progresspies, one per model, each
-	### filled to the model's CUMULATIVE share as a 0-1 fraction (max = 1, as every
-	### vanilla progresspie; ch_model_pie_cum_<n>_display) and
-	### declared largest first, so the later, smaller layers draw on top and
-	### slice n shows between cum_<n-1> and cum_<n>. Each layer's colour is baked
-	### into its texture's fill frame, as vanilla colours its own progresspies
-	### (sidebar_progress / sidebar_progress_red); frame 1 is transparent so the
-	### layers below show through. Layer order, legend order, the script values'
-	### order and the texture generator's MODELS tuple are the same list:
-	### scripts/image_pipeline/gen_ch_model_pie_textures.py.
-	ch_section_header = {
-		blockoverride "left_text" {
-			text = "je_ch_widget_models_header"
-			using = elide_fontsize_min
-		}
-		blockoverride "onclick" {
-			onclick = "[GetVariableSystem.Toggle('ch_models_open')]"
-		}
-		blockoverride "onclick_showmore" {
-			visible = "[Not(GetVariableSystem.Exists('ch_models_open'))]"
-		}
-		blockoverride "onclick_showless" {
-			visible = "[GetVariableSystem.Exists('ch_models_open')]"
-		}
-	}
-
-	ch_panel = {
-		visible = "[GetVariableSystem.Exists('ch_models_open')]"
-		datacontext = "[GetScriptedGui('ch_show_sgui')]"
-
-		### Before the first rebuild there is nothing to draw (op 12).
-		textbox = {
-			visible = "[Not( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End ) )]"
-			text = "je_ch_widget_models_pending"
-			autoresize = yes
-			multiline = yes
-			minimumsize = { 474 -1 }
-			maximumsize = { 474 -1 }
-			align = left|nobaseline
-			using = fontsize_medium
-			default_format = "#lore"
-		}
-
-		textbox = {
-			visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
-			text = "je_ch_widget_models_legend"
-			autoresize = yes
-			multiline = yes
-			minimumsize = { 474 -1 }
-			maximumsize = { 474 -1 }
-			align = left|nobaseline
-			using = fontsize_small
-			default_format = "#lore"
-			margin_bottom = 4
-		}
-
-		flowcontainer = {
-			visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
-			direction = horizontal
-			ignoreinvisible = yes
-			spacing = 12
-
-			widget = {
-				size = { 160 160 }
-				parentanchor = top
-				tooltip = "je_ch_widget_models_pie_tt"
-
-				icon = {
-					size = { 100% 100% }
-					texture = "gfx/interface/backgrounds/round_frame_dec.dds"
-				}
-
-				widget = {
-					size = { 75% 75% }
-					parentanchor = center
-					position = { 0 -1 }
-
-					progresspie = {
-						size = { 100% 100% }
-						min = 0
-						max = 1
-						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_15_display'))]"
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds"
-						framesize = { 128 128 }
-						frame = 2
-					}
-					progresspie = {
-						size = { 100% 100% }
-						min = 0
-						max = 1
-						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_14_display'))]"
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds"
-						framesize = { 128 128 }
-						frame = 2
-					}
-					progresspie = {
-						size = { 100% 100% }
-						min = 0
-						max = 1
-						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_13_display'))]"
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds"
-						framesize = { 128 128 }
-						frame = 2
-					}
-					progresspie = {
-						size = { 100% 100% }
-						min = 0
-						max = 1
-						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_12_display'))]"
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds"
-						framesize = { 128 128 }
-						frame = 2
-					}
-					progresspie = {
-						size = { 100% 100% }
-						min = 0
-						max = 1
-						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_11_display'))]"
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds"
-						framesize = { 128 128 }
-						frame = 2
-					}
-					progresspie = {
-						size = { 100% 100% }
-						min = 0
-						max = 1
-						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_10_display'))]"
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds"
-						framesize = { 128 128 }
-						frame = 2
-					}
-					progresspie = {
-						size = { 100% 100% }
-						min = 0
-						max = 1
-						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_9_display'))]"
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds"
-						framesize = { 128 128 }
-						frame = 2
-					}
-					progresspie = {
-						size = { 100% 100% }
-						min = 0
-						max = 1
-						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_8_display'))]"
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds"
-						framesize = { 128 128 }
-						frame = 2
-					}
-					progresspie = {
-						size = { 100% 100% }
-						min = 0
-						max = 1
-						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_7_display'))]"
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds"
-						framesize = { 128 128 }
-						frame = 2
-					}
-					progresspie = {
-						size = { 100% 100% }
-						min = 0
-						max = 1
-						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_6_display'))]"
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds"
-						framesize = { 128 128 }
-						frame = 2
-					}
-					progresspie = {
-						size = { 100% 100% }
-						min = 0
-						max = 1
-						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_5_display'))]"
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds"
-						framesize = { 128 128 }
-						frame = 2
-					}
-					progresspie = {
-						size = { 100% 100% }
-						min = 0
-						max = 1
-						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_4_display'))]"
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds"
-						framesize = { 128 128 }
-						frame = 2
-					}
-					progresspie = {
-						size = { 100% 100% }
-						min = 0
-						max = 1
-						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_3_display'))]"
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds"
-						framesize = { 128 128 }
-						frame = 2
-					}
-					progresspie = {
-						size = { 100% 100% }
-						min = 0
-						max = 1
-						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_2_display'))]"
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds"
-						framesize = { 128 128 }
-						frame = 2
-					}
-					progresspie = {
-						size = { 100% 100% }
-						min = 0
-						max = 1
-						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_1_display'))]"
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds"
-						framesize = { 128 128 }
-						frame = 2
-					}
-				}
-			}
-
-			flowcontainer = {
-				direction = vertical
-				ignoreinvisible = yes
-				spacing = 1
-
-				ch_model_legend_row = {
-					blockoverride "legend_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)44' ) ).End )]"
-					}
-					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds" }
-					blockoverride "legend_label" { text = "ch_model_republican" }
-					blockoverride "legend_value" { text = "je_ch_widget_models_share_republican" }
-				}
-				ch_model_legend_row = {
-					blockoverride "legend_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)34' ) ).End )]"
-					}
-					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds" }
-					blockoverride "legend_label" { text = "ch_model_corporatist" }
-					blockoverride "legend_value" { text = "je_ch_widget_models_share_corporatist" }
-				}
-				ch_model_legend_row = {
-					blockoverride "legend_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)32' ) ).End )]"
-					}
-					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds" }
-					blockoverride "legend_label" { text = "ch_model_anarchist" }
-					blockoverride "legend_value" { text = "je_ch_widget_models_share_anarchist" }
-				}
-				ch_model_legend_row = {
-					blockoverride "legend_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)42' ) ).End )]"
-					}
-					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds" }
-					blockoverride "legend_label" { text = "ch_model_other" }
-					blockoverride "legend_value" { text = "je_ch_widget_models_share_other" }
-				}
-				ch_model_legend_row = {
-					blockoverride "legend_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)36' ) ).End )]"
-					}
-					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds" }
-					blockoverride "legend_label" { text = "ch_model_royalist_absolutist" }
-					blockoverride "legend_value" { text = "je_ch_widget_models_share_royalist_absolutist" }
-				}
-				ch_model_legend_row = {
-					blockoverride "legend_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)43' ) ).End )]"
-					}
-					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds" }
-					blockoverride "legend_label" { text = "ch_model_technocratic" }
-					blockoverride "legend_value" { text = "je_ch_widget_models_share_technocratic" }
-				}
-				ch_model_legend_row = {
-					blockoverride "legend_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)38' ) ).End )]"
-					}
-					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds" }
-					blockoverride "legend_label" { text = "ch_model_religious" }
-					blockoverride "legend_value" { text = "je_ch_widget_models_share_religious" }
-				}
-				ch_model_legend_row = {
-					blockoverride "legend_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)35' ) ).End )]"
-					}
-					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds" }
-					blockoverride "legend_label" { text = "ch_model_socialist" }
-					blockoverride "legend_value" { text = "je_ch_widget_models_share_socialist" }
-				}
-				ch_model_legend_row = {
-					blockoverride "legend_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)40' ) ).End )]"
-					}
-					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds" }
-					blockoverride "legend_label" { text = "ch_model_military_junta" }
-					blockoverride "legend_value" { text = "je_ch_widget_models_share_military_junta" }
-				}
-				ch_model_legend_row = {
-					blockoverride "legend_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)37' ) ).End )]"
-					}
-					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds" }
-					blockoverride "legend_label" { text = "ch_model_royalist_constitutional" }
-					blockoverride "legend_value" { text = "je_ch_widget_models_share_royalist_constitutional" }
-				}
-				ch_model_legend_row = {
-					blockoverride "legend_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)31' ) ).End )]"
-					}
-					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds" }
-					blockoverride "legend_label" { text = "ch_model_communist" }
-					blockoverride "legend_value" { text = "je_ch_widget_models_share_communist" }
-				}
-				ch_model_legend_row = {
-					blockoverride "legend_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)41' ) ).End )]"
-					}
-					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds" }
-					blockoverride "legend_label" { text = "ch_model_liberal" }
-					blockoverride "legend_value" { text = "je_ch_widget_models_share_liberal" }
-				}
-				ch_model_legend_row = {
-					blockoverride "legend_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)39' ) ).End )]"
-					}
-					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds" }
-					blockoverride "legend_label" { text = "ch_model_reactionary" }
-					blockoverride "legend_value" { text = "je_ch_widget_models_share_reactionary" }
-				}
-				ch_model_legend_row = {
-					blockoverride "legend_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)45' ) ).End )]"
-					}
-					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds" }
-					blockoverride "legend_label" { text = "ch_model_developmentalist_junta" }
-					blockoverride "legend_value" { text = "je_ch_widget_models_share_developmentalist_junta" }
-				}
-				ch_model_legend_row = {
-					blockoverride "legend_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)33' ) ).End )]"
-					}
-					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds" }
-					blockoverride "legend_label" { text = "ch_model_fascist" }
-					blockoverride "legend_value" { text = "je_ch_widget_models_share_fascist" }
-				}
-			}
-		}
-	}
-
-	### ---- History -----------------------------------------------------------
-	ch_section_header = {
-		blockoverride "left_text" {
-			text = "je_ch_widget_history_header"
-			using = elide_fontsize_min
-		}
-		blockoverride "onclick" {
-			onclick = "[GetVariableSystem.Toggle('ch_hist_open')]"
-		}
-		blockoverride "onclick_showmore" {
-			visible = "[Not(GetVariableSystem.Exists('ch_hist_open'))]"
-		}
-		blockoverride "onclick_showless" {
-			visible = "[GetVariableSystem.Exists('ch_hist_open')]"
-		}
-	}
-
-	flowcontainer = {
+	### ==========================================================================
+	### SUMMARY — container_1
+	### ==========================================================================
+	type te_ch_summary_panel = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 2
-		visible = "[GetVariableSystem.Exists('ch_hist_open')]"
 
-		### The range selector and the retention note are shared with the banking
-		### charts: the same te_hist_range GUI variable drives both, so a player
-		### who picks 5 years in one place sees 5 years in the other.
+		# je_cultural_hegemony has is_shown_when_inactive = { has_game_rule = ... }, so
+		# this panel is built for every country that can see the entry at all —
+		# including ones whose entry has never activated, where none of the ch_*
+		# variables exist. Everything below is guarded in script too, but there is
+		# nothing worth drawing in that state. Vanilla uses the same test at
+		# gui/journal_entry.gui:670.
+		visible = "[JournalEntry.IsActive]"
+
+		ch_panel = {
+			textbox = {
+				text = "je_ch_widget_summary_header"
+				default_format = "#header"
+				autoresize = yes
+				max_width = 470
+				align = left|nobaseline
+				margin_bottom = 4
+			}
+
+			### Tier name and its one-line reading, both from customizable loc driven
+			### by ch_tier. The thresholds are in ch_set_display_state, not here.
+			textbox = {
+				text = "je_ch_widget_tier_line"
+				autoresize = yes
+				max_width = 474
+				align = left|nobaseline
+				using = fontsize_large
+			}
+			textbox = {
+				text = "je_ch_widget_tier_blurb"
+				autoresize = yes
+				multiline = yes
+				minimumsize = { 474 -1 }
+				maximumsize = { 474 -1 }
+				align = left|nobaseline
+				using = fontsize_medium
+				default_format = "#lore"
+				margin_bottom = 2
+			}
+
+			### Share of global influence, as a bar plus the number.
+			ch_reading_row = {
+				tooltip = "je_ch_widget_share_tt"
+				blockoverride "reading_label" {
+					text = "je_ch_widget_share_label"
+				}
+				blockoverride "reading_value" {
+					text = "je_ch_widget_share_value"
+				}
+			}
+
+			default_progressbar_horizontal = {
+				size = { 474 14 }
+				parentanchor = hcenter
+				tooltip = "je_ch_widget_share_tt"
+
+				blockoverride "values" {
+					min = 0
+					max = 100
+					value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_share_fill_pct'))]"
+				}
+			}
+
+			### World rank. Hidden until the first yearly pass has numbered us
+			### (ch_show_sgui op 11), so a fresh save shows no "Rank 0 of 0".
+			ch_reading_row = {
+				datacontext = "[GetScriptedGui('ch_show_sgui')]"
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
+				tooltip = "je_ch_widget_rank_tt"
+				blockoverride "reading_label" {
+					text = "je_ch_widget_rank_label"
+				}
+				blockoverride "reading_value" {
+					text = "je_ch_widget_rank_value"
+				}
+			}
+
+			### The world hegemon's exported political model, and how much of the world
+			### shares it. Hidden until the yearly ideology pass has run (op 12).
+			ch_reading_row = {
+				datacontext = "[GetScriptedGui('ch_show_sgui')]"
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
+				tooltip = "je_ch_widget_model_tt"
+				blockoverride "reading_label" {
+					text = "je_ch_widget_model_label"
+				}
+				blockoverride "reading_value" {
+					text = "je_ch_widget_model_value"
+				}
+			}
+			ch_reading_row = {
+				datacontext = "[GetScriptedGui('ch_show_sgui')]"
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
+				tooltip = "je_ch_widget_model_tt"
+				blockoverride "reading_label" {
+					text = "je_ch_widget_model_share_label"
+				}
+				blockoverride "reading_value" {
+					text = "je_ch_widget_model_share_value"
+				}
+			}
+		}
+	}
+
+	### ==========================================================================
+	### CULTURAL PROGRAMMES — container_2
+	### ==========================================================================
+	type te_ch_programmes_panel = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+
+		visible = "[JournalEntry.IsActive]"
+
+		ch_panel = {
+			textbox = {
+				text = "je_ch_widget_programmes_header"
+				default_format = "#header"
+				autoresize = yes
+				max_width = 470
+				align = left|nobaseline
+				margin_bottom = 4
+			}
+
+			### Funding stepper — ops 0 (down) and 1 (up).
+			flowcontainer = {
+				direction = horizontal
+				ignoreinvisible = yes
+				spacing = 6
+				margin = { 6 3 }
+				parentanchor = hcenter
+				datacontext = "[GetScriptedGui('ch_policy_sgui')]"
+
+				background = {
+					using = entry_bg_fancy_dark
+					alpha = 0.35
+				}
+
+				widget = {
+					size = { 230 26 }
+					textbox = {
+						parentanchor = left|vcenter
+						autoresize = yes
+						max_width = 230
+						elide = right
+						align = nobaseline
+						using = fontsize_large
+						text = "je_ch_widget_funding_label"
+					}
+				}
+
+				button_icon_minus_action = {
+					size = { 26 26 }
+					parentanchor = vcenter
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
+				}
+
+				widget = {
+					size = { 86 26 }
+					textbox = {
+						parentanchor = center
+						align = center|nobaseline
+						autoresize = yes
+						max_width = 86
+						elide = right
+						using = fontsize_large
+						text = "je_ch_widget_funding_value"
+					}
+				}
+
+				button_icon_plus_action = {
+					size = { 26 26 }
+					parentanchor = vcenter
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+				}
+			}
+
+			### International Cultural Outreach — ops 2 / 3
+			ch_programme_row = {
+				blockoverride "programme_label" { text = "je_ch_widget_prog_outreach" }
+				blockoverride "programme_status" { text = "je_ch_widget_prog_outreach_status" }
+				blockoverride "programme_enable" {
+					visible = "[Not(GetScriptedGui('ch_active_world_exposition_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+					text = "ch_policy_outreach_on"
+				}
+				blockoverride "programme_disable" {
+					visible = "[GetScriptedGui('ch_active_world_exposition_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
+					text = "ch_policy_outreach_off"
+				}
+			}
+
+			### Cultural Institutes — ops 4 / 5
+			ch_programme_row = {
+				blockoverride "programme_label" { text = "je_ch_widget_prog_institutes" }
+				blockoverride "programme_status" { text = "je_ch_widget_prog_institutes_status" }
+				blockoverride "programme_enable" {
+					visible = "[Not(GetScriptedGui('ch_active_cultural_institutes_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
+					text = "ch_policy_institutes_on"
+				}
+				blockoverride "programme_disable" {
+					visible = "[GetScriptedGui('ch_active_cultural_institutes_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
+					text = "ch_policy_institutes_off"
+				}
+			}
+
+			### Global Media Campaign — ops 6 / 7. Mutually exclusive with Cultural
+			### Protectionism; the Enable control stays visible and greys out, and
+			### ch_possible_global_media_campaign carries the reason.
+			ch_programme_row = {
+				blockoverride "programme_label" { text = "je_ch_widget_prog_media" }
+				blockoverride "programme_status" { text = "je_ch_widget_prog_media_status" }
+				blockoverride "programme_enable" {
+					visible = "[Not(GetScriptedGui('ch_active_global_media_campaign_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
+					text = "ch_policy_media_on"
+				}
+				blockoverride "programme_disable" {
+					visible = "[GetScriptedGui('ch_active_global_media_campaign_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
+					text = "ch_policy_media_off"
+				}
+			}
+
+			### Cultural Protectionism — ops 8 / 9
+			ch_programme_row = {
+				blockoverride "programme_label" { text = "je_ch_widget_prog_protectionism" }
+				blockoverride "programme_status" { text = "je_ch_widget_prog_protectionism_status" }
+				blockoverride "programme_enable" {
+					visible = "[Not(GetScriptedGui('ch_active_cultural_protectionism_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
+					text = "ch_policy_protectionism_on"
+				}
+				blockoverride "programme_disable" {
+					visible = "[GetScriptedGui('ch_active_cultural_protectionism_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
+					text = "ch_policy_protectionism_off"
+				}
+			}
+		}
+	}
+
+	### ==========================================================================
+	### STANDING — container_3: breakdown, leaderboard, history
+	### ==========================================================================
+	type te_ch_standing_panel = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+
+		visible = "[JournalEntry.IsActive]"
+
+		### ---- Where our pull comes from -----------------------------------------
+		ch_section_header = {
+			blockoverride "left_text" {
+				text = "je_ch_widget_breakdown_header"
+				using = elide_fontsize_min
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('ch_breakdown_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('ch_breakdown_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('ch_breakdown_open')]"
+			}
+		}
+
+		ch_panel = {
+			visible = "[GetVariableSystem.Exists('ch_breakdown_open')]"
+
+			### Art, in two mutually exclusive forms: below the diminishing-returns
+			### threshold (op 0) and above it (op 1). Which one shows is
+			### ch_show_sgui's decision, so 33 stays in cultural_pull_art_dr_threshold.
+			ch_breakdown_row = {
+				tooltip = "je_ch_widget_bd_art_tt"
+				blockoverride "breakdown_label" { text = "je_ch_widget_bd_art_label" }
+				blockoverride "breakdown_value" { text = "je_ch_widget_bd_art_value" }
+				blockoverride "breakdown_detail" { text = "je_ch_widget_bd_art_detail" }
+				blockoverride "breakdown_visible" {
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+				}
+			}
+			ch_breakdown_row = {
+				tooltip = "je_ch_widget_bd_art_tt"
+				blockoverride "breakdown_label" { text = "je_ch_widget_bd_art_label" }
+				blockoverride "breakdown_value" { text = "je_ch_widget_bd_art_value" }
+				blockoverride "breakdown_detail" { text = "je_ch_widget_bd_art_dr_detail" }
+				blockoverride "breakdown_visible" {
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				}
+			}
+
+			### Prestige — op 2
+			ch_breakdown_row = {
+				blockoverride "breakdown_label" { text = "je_ch_widget_bd_prestige_label" }
+				blockoverride "breakdown_value" { text = "je_ch_widget_bd_prestige_value" }
+				blockoverride "breakdown_detail" { text = "je_ch_widget_bd_prestige_detail" }
+				blockoverride "breakdown_visible" {
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				}
+			}
+
+			### Standard of living — op 3
+			ch_breakdown_row = {
+				blockoverride "breakdown_label" { text = "je_ch_widget_bd_sol_label" }
+				blockoverride "breakdown_value" { text = "je_ch_widget_bd_sol_value" }
+				blockoverride "breakdown_detail" { text = "je_ch_widget_bd_sol_detail" }
+				blockoverride "breakdown_visible" {
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				}
+			}
+
+			### Tech leadership — op 4
+			ch_breakdown_row = {
+				blockoverride "breakdown_label" { text = "je_ch_widget_bd_tech_label" }
+				blockoverride "breakdown_value" { text = "je_ch_widget_bd_tech_value" }
+				blockoverride "breakdown_detail" { text = "je_ch_widget_bd_tech_detail" }
+				blockoverride "breakdown_visible" {
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				}
+			}
+
+			### Monuments — op 5
+			ch_breakdown_row = {
+				blockoverride "breakdown_label" { text = "je_ch_widget_bd_monuments_label" }
+				blockoverride "breakdown_value" { text = "je_ch_widget_bd_monuments_value" }
+				blockoverride "breakdown_visible" {
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+				}
+			}
+
+			### Megaprojects — op 6
+			ch_breakdown_row = {
+				blockoverride "breakdown_label" { text = "je_ch_widget_bd_megaprojects_label" }
+				blockoverride "breakdown_value" { text = "je_ch_widget_bd_megaprojects_value" }
+				blockoverride "breakdown_visible" {
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				}
+			}
+
+			### Flat pull modifiers — op 7
+			ch_breakdown_row = {
+				blockoverride "breakdown_label" { text = "je_ch_widget_bd_modifiers_label" }
+				blockoverride "breakdown_value" { text = "je_ch_widget_bd_modifiers_value" }
+				blockoverride "breakdown_visible" {
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				}
+			}
+
+			### Infamy — op 8
+			ch_breakdown_row = {
+				blockoverride "breakdown_label" { text = "je_ch_widget_bd_infamy_label" }
+				blockoverride "breakdown_value" { text = "je_ch_widget_bd_infamy_value" }
+				blockoverride "breakdown_visible" {
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+				}
+			}
+
+			### Instability — op 9
+			ch_breakdown_row = {
+				blockoverride "breakdown_label" { text = "je_ch_widget_bd_instability_label" }
+				blockoverride "breakdown_value" { text = "je_ch_widget_bd_instability_value" }
+				blockoverride "breakdown_visible" {
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+				}
+			}
+
+			widget = { size = { 474 4 } }
+
+			### Totals. Always visible; the multiplier line is op 10.
+			ch_breakdown_row = {
+				blockoverride "breakdown_label" { text = "je_ch_widget_bd_raw_label" }
+				blockoverride "breakdown_value" { text = "je_ch_widget_bd_raw_value" }
+				blockoverride "breakdown_detail" { text = "je_ch_widget_bd_global_raw_detail" }
+			}
+			ch_breakdown_row = {
+				blockoverride "breakdown_label" { text = "je_ch_widget_bd_mult_label" }
+				blockoverride "breakdown_value" { text = "je_ch_widget_bd_mult_value" }
+				blockoverride "breakdown_visible" {
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
+				}
+			}
+		}
+
+		### ---- Top cultural powers -----------------------------------------------
+		ch_section_header = {
+			blockoverride "left_text" {
+				text = "je_ch_widget_board_header"
+				using = elide_fontsize_min
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('ch_board_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('ch_board_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('ch_board_open')]"
+			}
+		}
+
+		### Ten rows, each one ExecuteTooltip. Inside the collapsed container, so a
+		### closed board renders nothing at all.
+		ch_panel = {
+			visible = "[GetVariableSystem.Exists('ch_board_open')]"
+
+			textbox = {
+				text = "je_ch_widget_board_legend"
+				autoresize = yes
+				multiline = yes
+				minimumsize = { 474 -1 }
+				maximumsize = { 474 -1 }
+				align = left|nobaseline
+				using = fontsize_small
+				default_format = "#lore"
+				margin_bottom = 2
+			}
+
+			ch_board_row = {
+				datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
+				blockoverride "row_visible" {
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				}
+				blockoverride "row_text" {
+					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				}
+				blockoverride "row_tooltip" {
+					tooltip = "[GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				}
+				blockoverride "row_us_marker" {
+					visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				}
+			}
+			ch_board_row = {
+				datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
+				blockoverride "row_visible" {
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				}
+				blockoverride "row_text" {
+					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				}
+				blockoverride "row_tooltip" {
+					tooltip = "[GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				}
+				blockoverride "row_us_marker" {
+					visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				}
+			}
+			ch_board_row = {
+				datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
+				blockoverride "row_visible" {
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				}
+				blockoverride "row_text" {
+					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				}
+				blockoverride "row_tooltip" {
+					tooltip = "[GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				}
+				blockoverride "row_us_marker" {
+					visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				}
+			}
+			ch_board_row = {
+				datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
+				blockoverride "row_visible" {
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				}
+				blockoverride "row_text" {
+					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				}
+				blockoverride "row_tooltip" {
+					tooltip = "[GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				}
+				blockoverride "row_us_marker" {
+					visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				}
+			}
+			ch_board_row = {
+				datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
+				blockoverride "row_visible" {
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+				}
+				blockoverride "row_text" {
+					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+				}
+				blockoverride "row_tooltip" {
+					tooltip = "[GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+				}
+				blockoverride "row_us_marker" {
+					visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+				}
+			}
+			ch_board_row = {
+				datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
+				blockoverride "row_visible" {
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				}
+				blockoverride "row_text" {
+					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				}
+				blockoverride "row_tooltip" {
+					tooltip = "[GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				}
+				blockoverride "row_us_marker" {
+					visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				}
+			}
+			ch_board_row = {
+				datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
+				blockoverride "row_visible" {
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				}
+				blockoverride "row_text" {
+					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				}
+				blockoverride "row_tooltip" {
+					tooltip = "[GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				}
+				blockoverride "row_us_marker" {
+					visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				}
+			}
+			ch_board_row = {
+				datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
+				blockoverride "row_visible" {
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+				}
+				blockoverride "row_text" {
+					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+				}
+				blockoverride "row_tooltip" {
+					tooltip = "[GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+				}
+				blockoverride "row_us_marker" {
+					visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+				}
+			}
+			ch_board_row = {
+				datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
+				blockoverride "row_visible" {
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+				}
+				blockoverride "row_text" {
+					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+				}
+				blockoverride "row_tooltip" {
+					tooltip = "[GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+				}
+				blockoverride "row_us_marker" {
+					visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+				}
+			}
+			ch_board_row = {
+				datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
+				blockoverride "row_visible" {
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
+				}
+				blockoverride "row_text" {
+					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
+				}
+				blockoverride "row_tooltip" {
+					tooltip = "[GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
+				}
+				blockoverride "row_us_marker" {
+					visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
+				}
+			}
+
+			### Our own standing, for the common case of being outside the top ten.
+			textbox = {
+				datacontext = "[GetScriptedGui('ch_show_sgui')]"
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
+				text = "je_ch_widget_board_us"
+				autoresize = yes
+				max_width = 474
+				align = left|nobaseline
+				using = fontsize_medium
+				margin_top = 4
+			}
+		}
+
+		### ---- Political models of the world ------------------------------------
+		### Every country's political model (ch_set_political_model) weighted by its
+		### cultural pull: each model's share of world culture, recounted with the
+		### leaderboard. The pie is fifteen stacked progresspies, one per model, each
+		### filled to the model's CUMULATIVE share as a 0-1 fraction (max = 1, as every
+		### vanilla progresspie; ch_model_pie_cum_<n>_display) and
+		### declared largest first, so the later, smaller layers draw on top and
+		### slice n shows between cum_<n-1> and cum_<n>. Each layer's colour is baked
+		### into its texture's fill frame, as vanilla colours its own progresspies
+		### (sidebar_progress / sidebar_progress_red); frame 1 is transparent so the
+		### layers below show through. Layer order, legend order, the script values'
+		### order and the texture generator's MODELS tuple are the same list:
+		### scripts/image_pipeline/gen_ch_model_pie_textures.py.
+		ch_section_header = {
+			blockoverride "left_text" {
+				text = "je_ch_widget_models_header"
+				using = elide_fontsize_min
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('ch_models_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('ch_models_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('ch_models_open')]"
+			}
+		}
+
+		ch_panel = {
+			visible = "[GetVariableSystem.Exists('ch_models_open')]"
+			datacontext = "[GetScriptedGui('ch_show_sgui')]"
+
+			### Before the first rebuild there is nothing to draw (op 12).
+			textbox = {
+				visible = "[Not( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End ) )]"
+				text = "je_ch_widget_models_pending"
+				autoresize = yes
+				multiline = yes
+				minimumsize = { 474 -1 }
+				maximumsize = { 474 -1 }
+				align = left|nobaseline
+				using = fontsize_medium
+				default_format = "#lore"
+			}
+
+			textbox = {
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
+				text = "je_ch_widget_models_legend"
+				autoresize = yes
+				multiline = yes
+				minimumsize = { 474 -1 }
+				maximumsize = { 474 -1 }
+				align = left|nobaseline
+				using = fontsize_small
+				default_format = "#lore"
+				margin_bottom = 4
+			}
+
+			flowcontainer = {
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
+				direction = horizontal
+				ignoreinvisible = yes
+				spacing = 12
+
+				widget = {
+					size = { 160 160 }
+					parentanchor = top
+					tooltip = "je_ch_widget_models_pie_tt"
+
+					icon = {
+						size = { 100% 100% }
+						texture = "gfx/interface/backgrounds/round_frame_dec.dds"
+					}
+
+					widget = {
+						size = { 75% 75% }
+						parentanchor = center
+						position = { 0 -1 }
+
+						progresspie = {
+							size = { 100% 100% }
+							min = 0
+							max = 1
+							value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_15_display'))]"
+							texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds"
+							framesize = { 128 128 }
+							frame = 2
+						}
+						progresspie = {
+							size = { 100% 100% }
+							min = 0
+							max = 1
+							value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_14_display'))]"
+							texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds"
+							framesize = { 128 128 }
+							frame = 2
+						}
+						progresspie = {
+							size = { 100% 100% }
+							min = 0
+							max = 1
+							value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_13_display'))]"
+							texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds"
+							framesize = { 128 128 }
+							frame = 2
+						}
+						progresspie = {
+							size = { 100% 100% }
+							min = 0
+							max = 1
+							value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_12_display'))]"
+							texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds"
+							framesize = { 128 128 }
+							frame = 2
+						}
+						progresspie = {
+							size = { 100% 100% }
+							min = 0
+							max = 1
+							value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_11_display'))]"
+							texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds"
+							framesize = { 128 128 }
+							frame = 2
+						}
+						progresspie = {
+							size = { 100% 100% }
+							min = 0
+							max = 1
+							value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_10_display'))]"
+							texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds"
+							framesize = { 128 128 }
+							frame = 2
+						}
+						progresspie = {
+							size = { 100% 100% }
+							min = 0
+							max = 1
+							value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_9_display'))]"
+							texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds"
+							framesize = { 128 128 }
+							frame = 2
+						}
+						progresspie = {
+							size = { 100% 100% }
+							min = 0
+							max = 1
+							value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_8_display'))]"
+							texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds"
+							framesize = { 128 128 }
+							frame = 2
+						}
+						progresspie = {
+							size = { 100% 100% }
+							min = 0
+							max = 1
+							value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_7_display'))]"
+							texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds"
+							framesize = { 128 128 }
+							frame = 2
+						}
+						progresspie = {
+							size = { 100% 100% }
+							min = 0
+							max = 1
+							value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_6_display'))]"
+							texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds"
+							framesize = { 128 128 }
+							frame = 2
+						}
+						progresspie = {
+							size = { 100% 100% }
+							min = 0
+							max = 1
+							value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_5_display'))]"
+							texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds"
+							framesize = { 128 128 }
+							frame = 2
+						}
+						progresspie = {
+							size = { 100% 100% }
+							min = 0
+							max = 1
+							value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_4_display'))]"
+							texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds"
+							framesize = { 128 128 }
+							frame = 2
+						}
+						progresspie = {
+							size = { 100% 100% }
+							min = 0
+							max = 1
+							value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_3_display'))]"
+							texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds"
+							framesize = { 128 128 }
+							frame = 2
+						}
+						progresspie = {
+							size = { 100% 100% }
+							min = 0
+							max = 1
+							value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_2_display'))]"
+							texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds"
+							framesize = { 128 128 }
+							frame = 2
+						}
+						progresspie = {
+							size = { 100% 100% }
+							min = 0
+							max = 1
+							value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_1_display'))]"
+							texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds"
+							framesize = { 128 128 }
+							frame = 2
+						}
+					}
+				}
+
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 1
+
+					ch_model_legend_row = {
+						blockoverride "legend_visible" {
+							visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)44' ) ).End )]"
+						}
+						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds" }
+						blockoverride "legend_label" { text = "ch_model_republican" }
+						blockoverride "legend_value" { text = "je_ch_widget_models_share_republican" }
+					}
+					ch_model_legend_row = {
+						blockoverride "legend_visible" {
+							visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)34' ) ).End )]"
+						}
+						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds" }
+						blockoverride "legend_label" { text = "ch_model_corporatist" }
+						blockoverride "legend_value" { text = "je_ch_widget_models_share_corporatist" }
+					}
+					ch_model_legend_row = {
+						blockoverride "legend_visible" {
+							visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)32' ) ).End )]"
+						}
+						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds" }
+						blockoverride "legend_label" { text = "ch_model_anarchist" }
+						blockoverride "legend_value" { text = "je_ch_widget_models_share_anarchist" }
+					}
+					ch_model_legend_row = {
+						blockoverride "legend_visible" {
+							visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)42' ) ).End )]"
+						}
+						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds" }
+						blockoverride "legend_label" { text = "ch_model_other" }
+						blockoverride "legend_value" { text = "je_ch_widget_models_share_other" }
+					}
+					ch_model_legend_row = {
+						blockoverride "legend_visible" {
+							visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)36' ) ).End )]"
+						}
+						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds" }
+						blockoverride "legend_label" { text = "ch_model_royalist_absolutist" }
+						blockoverride "legend_value" { text = "je_ch_widget_models_share_royalist_absolutist" }
+					}
+					ch_model_legend_row = {
+						blockoverride "legend_visible" {
+							visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)43' ) ).End )]"
+						}
+						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds" }
+						blockoverride "legend_label" { text = "ch_model_technocratic" }
+						blockoverride "legend_value" { text = "je_ch_widget_models_share_technocratic" }
+					}
+					ch_model_legend_row = {
+						blockoverride "legend_visible" {
+							visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)38' ) ).End )]"
+						}
+						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds" }
+						blockoverride "legend_label" { text = "ch_model_religious" }
+						blockoverride "legend_value" { text = "je_ch_widget_models_share_religious" }
+					}
+					ch_model_legend_row = {
+						blockoverride "legend_visible" {
+							visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)35' ) ).End )]"
+						}
+						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds" }
+						blockoverride "legend_label" { text = "ch_model_socialist" }
+						blockoverride "legend_value" { text = "je_ch_widget_models_share_socialist" }
+					}
+					ch_model_legend_row = {
+						blockoverride "legend_visible" {
+							visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)40' ) ).End )]"
+						}
+						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds" }
+						blockoverride "legend_label" { text = "ch_model_military_junta" }
+						blockoverride "legend_value" { text = "je_ch_widget_models_share_military_junta" }
+					}
+					ch_model_legend_row = {
+						blockoverride "legend_visible" {
+							visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)37' ) ).End )]"
+						}
+						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds" }
+						blockoverride "legend_label" { text = "ch_model_royalist_constitutional" }
+						blockoverride "legend_value" { text = "je_ch_widget_models_share_royalist_constitutional" }
+					}
+					ch_model_legend_row = {
+						blockoverride "legend_visible" {
+							visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)31' ) ).End )]"
+						}
+						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds" }
+						blockoverride "legend_label" { text = "ch_model_communist" }
+						blockoverride "legend_value" { text = "je_ch_widget_models_share_communist" }
+					}
+					ch_model_legend_row = {
+						blockoverride "legend_visible" {
+							visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)41' ) ).End )]"
+						}
+						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds" }
+						blockoverride "legend_label" { text = "ch_model_liberal" }
+						blockoverride "legend_value" { text = "je_ch_widget_models_share_liberal" }
+					}
+					ch_model_legend_row = {
+						blockoverride "legend_visible" {
+							visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)39' ) ).End )]"
+						}
+						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds" }
+						blockoverride "legend_label" { text = "ch_model_reactionary" }
+						blockoverride "legend_value" { text = "je_ch_widget_models_share_reactionary" }
+					}
+					ch_model_legend_row = {
+						blockoverride "legend_visible" {
+							visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)45' ) ).End )]"
+						}
+						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds" }
+						blockoverride "legend_label" { text = "ch_model_developmentalist_junta" }
+						blockoverride "legend_value" { text = "je_ch_widget_models_share_developmentalist_junta" }
+					}
+					ch_model_legend_row = {
+						blockoverride "legend_visible" {
+							visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)33' ) ).End )]"
+						}
+						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds" }
+						blockoverride "legend_label" { text = "ch_model_fascist" }
+						blockoverride "legend_value" { text = "je_ch_widget_models_share_fascist" }
+					}
+				}
+			}
+		}
+
+		### ---- History -----------------------------------------------------------
+		ch_section_header = {
+			blockoverride "left_text" {
+				text = "je_ch_widget_history_header"
+				using = elide_fontsize_min
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('ch_hist_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('ch_hist_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('ch_hist_open')]"
+			}
+		}
+
 		flowcontainer = {
-			direction = horizontal
+			direction = vertical
+			parentanchor = hcenter
 			ignoreinvisible = yes
-			parentanchor = hcenter
-			spacing = 4
-			margin = { 4 4 }
+			spacing = 2
+			visible = "[GetVariableSystem.Exists('ch_hist_open')]"
 
-			te_history_range_button = {
-				blockoverride "range_text" {
-					text = "te_hist_range_1y"
-				}
-				blockoverride "range_enabled" {
-					enabled = "[Not(GetVariableSystem.HasValue( 'te_hist_range', '1' ))]"
-				}
-				blockoverride "range_onclick" {
-					onclick = "[GetVariableSystem.Set( 'te_hist_range', '1' )]"
-				}
-			}
-			te_history_range_button = {
-				blockoverride "range_text" {
-					text = "te_hist_range_5y"
-				}
-				blockoverride "range_enabled" {
-					enabled = "[Not(GetVariableSystem.HasValue( 'te_hist_range', '5' ))]"
-				}
-				blockoverride "range_onclick" {
-					onclick = "[GetVariableSystem.Set( 'te_hist_range', '5' )]"
-				}
-			}
-			te_history_range_button = {
-				blockoverride "range_text" {
-					text = "te_hist_range_20y"
-				}
-				blockoverride "range_enabled" {
-					enabled = "[Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '5' ) )]"
-				}
-				blockoverride "range_onclick" {
-					onclick = "[GetVariableSystem.Set( 'te_hist_range', '20' )]"
-				}
-			}
-		}
+			### The range selector and the retention note are shared with the banking
+			### charts: the same te_hist_range GUI variable drives both, so a player
+			### who picks 5 years in one place sees 5 years in the other.
+			flowcontainer = {
+				direction = horizontal
+				ignoreinvisible = yes
+				parentanchor = hcenter
+				spacing = 4
+				margin = { 4 4 }
 
-		textbox = {
-			visible = "[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('te_hist') ) )]"
-			parentanchor = hcenter
-			autoresize = yes
-			multiline = yes
-			max_width = 480
-			align = hcenter|nobaseline
-			text = "te_hist_since"
-		}
-
-		### Share of global influence. The axis tops out at 50 rather than 100
-		### because the share is a fraction of the world's total pull and no
-		### country has approached half of it; a 0-100 axis would flatten the whole
-		### series into the bottom fifth of the chart.
-		te_history_chart = {
-			blockoverride "chart_title" {
-				text = "te_hist_chart_ch_share_title"
-			}
-			blockoverride "chart_legend" {
-				text = "te_hist_chart_ch_share_legend"
-			}
-			blockoverride "bar_tooltip" {
-				tooltip = "te_hist_tt_ch_share"
-			}
-			# The shared store also holds banking events. Show only cultural
-			# programme changes here, including those already saved before this fix.
-			blockoverride "marker_pips" {
-				icon = {
-					visible = "[Or( Or( Or( ScriptContainer.HasVariable('te_hist_mk_ch_on_outreach'), ScriptContainer.HasVariable('te_hist_mk_ch_off_outreach') ), Or( ScriptContainer.HasVariable('te_hist_mk_ch_on_institutes'), ScriptContainer.HasVariable('te_hist_mk_ch_off_institutes') ) ), Or( Or( ScriptContainer.HasVariable('te_hist_mk_ch_on_media'), ScriptContainer.HasVariable('te_hist_mk_ch_off_media') ), Or( ScriptContainer.HasVariable('te_hist_mk_ch_on_protectionism'), ScriptContainer.HasVariable('te_hist_mk_ch_off_protectionism') ) ) )]"
-					parentanchor = hcenter
-					alwaystransparent = yes
-					size = { 9 9 }
-					texture = "gfx/interface/icons/generic_icons/information.dds"
-				}
-			}
-			blockoverride "bar_body" {
-				te_history_bar_unsigned = {
-					visible = "[ScriptContainer.HasVariable( 'te_hist_v_ch_share' )]"
-					blockoverride "values" {
-						min = 0
-						max = 50
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)1', ScriptContainer.GetVariableValue( 'te_hist_v_ch_share' ) ) )]"
+				te_history_range_button = {
+					blockoverride "range_text" {
+						text = "te_hist_range_1y"
 					}
-					blockoverride "cover_values" {
-						min = 0
-						max = 50
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_ch_share' ), '(CFixedPoint)2' ) ) )]"
+					blockoverride "range_enabled" {
+						enabled = "[Not(GetVariableSystem.HasValue( 'te_hist_range', '1' ))]"
 					}
-					blockoverride "color" {
-						color = { 0.78 0.60 0.30 1.0 }
+					blockoverride "range_onclick" {
+						onclick = "[GetVariableSystem.Set( 'te_hist_range', '1' )]"
+					}
+				}
+				te_history_range_button = {
+					blockoverride "range_text" {
+						text = "te_hist_range_5y"
+					}
+					blockoverride "range_enabled" {
+						enabled = "[Not(GetVariableSystem.HasValue( 'te_hist_range', '5' ))]"
+					}
+					blockoverride "range_onclick" {
+						onclick = "[GetVariableSystem.Set( 'te_hist_range', '5' )]"
+					}
+				}
+				te_history_range_button = {
+					blockoverride "range_text" {
+						text = "te_hist_range_20y"
+					}
+					blockoverride "range_enabled" {
+						enabled = "[Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '5' ) )]"
+					}
+					blockoverride "range_onclick" {
+						onclick = "[GetVariableSystem.Set( 'te_hist_range', '20' )]"
+					}
+				}
+			}
+
+			textbox = {
+				visible = "[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('te_hist') ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 480
+				align = hcenter|nobaseline
+				text = "te_hist_since"
+			}
+
+			### Share of global influence. The axis tops out at 50 rather than 100
+			### because the share is a fraction of the world's total pull and no
+			### country has approached half of it; a 0-100 axis would flatten the whole
+			### series into the bottom fifth of the chart.
+			te_history_chart = {
+				blockoverride "chart_title" {
+					text = "te_hist_chart_ch_share_title"
+				}
+				blockoverride "chart_legend" {
+					text = "te_hist_chart_ch_share_legend"
+				}
+				blockoverride "bar_tooltip" {
+					tooltip = "te_hist_tt_ch_share"
+				}
+				# The shared store also holds banking events. Show only cultural
+				# programme changes here, including those already saved before this fix.
+				blockoverride "marker_pips" {
+					icon = {
+						visible = "[Or( Or( Or( ScriptContainer.HasVariable('te_hist_mk_ch_on_outreach'), ScriptContainer.HasVariable('te_hist_mk_ch_off_outreach') ), Or( ScriptContainer.HasVariable('te_hist_mk_ch_on_institutes'), ScriptContainer.HasVariable('te_hist_mk_ch_off_institutes') ) ), Or( Or( ScriptContainer.HasVariable('te_hist_mk_ch_on_media'), ScriptContainer.HasVariable('te_hist_mk_ch_off_media') ), Or( ScriptContainer.HasVariable('te_hist_mk_ch_on_protectionism'), ScriptContainer.HasVariable('te_hist_mk_ch_off_protectionism') ) ) )]"
+						parentanchor = hcenter
+						alwaystransparent = yes
+						size = { 9 9 }
+						texture = "gfx/interface/icons/generic_icons/information.dds"
+					}
+				}
+				blockoverride "bar_body" {
+					te_history_bar_unsigned = {
+						visible = "[ScriptContainer.HasVariable( 'te_hist_v_ch_share' )]"
+						blockoverride "values" {
+							min = 0
+							max = 50
+							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)1', ScriptContainer.GetVariableValue( 'te_hist_v_ch_share' ) ) )]"
+						}
+						blockoverride "cover_values" {
+							min = 0
+							max = 50
+							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_ch_share' ), '(CFixedPoint)2' ) ) )]"
+						}
+						blockoverride "color" {
+							color = { 0.78 0.60 0.30 1.0 }
+						}
 					}
 				}
 			}
 		}
 	}
+}
+
+
+### ==========================================================================
+### JOURNAL ENTRY ROOTS
+### ==========================================================================
+### The names je_cultural_hegemony.txt attaches. Each is a bare wrapper around
+### one of the panel types above; the Society panel's Hegemony tab
+### (gui/culture_panel.gui) instances the same types under a
+### GetPlayerJournalEntry datacontext. Each wrapper repeats its panel's own
+### visible gate, so the journal lays out exactly as when the panel was the root.
+flowcontainer = {
+	name = "widget_je_ch_summary"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	ignoreinvisible = yes
+
+	te_ch_summary_panel = {}
+}
+
+flowcontainer = {
+	name = "widget_je_ch_programmes"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	ignoreinvisible = yes
+
+	te_ch_programmes_panel = {}
+}
+
+flowcontainer = {
+	name = "widget_je_ch_standing"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	ignoreinvisible = yes
+
+	te_ch_standing_panel = {}
 }
