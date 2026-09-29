@@ -37,6 +37,207 @@ types un_layout_widget_types
 		un_chamber_panel = {
 			visible = "[Not(GetVariableSystem.Exists('un_chamber_assembly_closed'))]"
 
+			### The resolution in session at a glance: topic, tally, time. The tally
+			### spans the members with a vote: three stacked bars, red to the end,
+			### grey (not yet voted) to 1 - no, green (yes) on top. The upper layers
+			### blank their own background and frame so the lower ones show.
+			flowcontainer = {
+				direction = vertical
+				spacing = 4
+				ignoreinvisible = yes
+				visible = "[GetScriptedGui('un_session_open_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+				flowcontainer = {
+					direction = horizontal
+					spacing = 8
+
+					widget = {
+						size = { 40 40 }
+						parentanchor = vcenter
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)0' )]"
+							texture = "gfx/interface/icons/alert_icons/land_invasion.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)1' )]"
+							texture = "gfx/interface/icons/alert_icons/blockaded.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)2' )]"
+							texture = "gfx/interface/icons/alert_icons/is_losing_rank.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)3' )]"
+							texture = "gfx/interface/icons/goods_icons/artillery.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)4' )]"
+							texture = "gfx/interface/icons/goods_icons/small_arms.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)5' )]"
+							texture = "gfx/interface/icons/goods_icons/groceries.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)6' )]"
+							texture = "gfx/interface/icons/alert_icons/reform_government.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)7' )]"
+							texture = "gfx/interface/icons/institution_icons/social_security.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)8' )]"
+							texture = "gfx/interface/icons/institution_icons/police.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)9' )]"
+							texture = "gfx/interface/icons/goods_icons/electricity.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)10' )]"
+							texture = "gfx/interface/icons/goods_icons/wood.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)11' )]"
+							texture = "gfx/interface/icons/institution_icons/health_service.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)12' )]"
+							texture = "gfx/interface/icons/institution_icons/colonization.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)13' )]"
+							texture = "gfx/interface/icons/goods_icons/fine_art.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)14' )]"
+							texture = "gfx/interface/icons/alert_icons/secession.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)15' )]"
+							texture = "gfx/interface/icons/goods_icons/aeroplanes.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)16' )]"
+							texture = "gfx/interface/icons/goods_icons/merchant_marine.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)17' )]"
+							texture = "gfx/interface/icons/goods_icons/explosives.dds"
+						}
+					}
+
+					flowcontainer = {
+						direction = vertical
+						spacing = 4
+						parentanchor = vcenter
+
+						### Tally
+						flowcontainer = {
+							direction = horizontal
+							spacing = 6
+							tooltip = "je_un_tally_tt"
+
+							widget = {
+								size = { 300 18 }
+								parentanchor = vcenter
+
+								bad_progressbar_horizontal = {
+									size = { 100% 100% }
+									blockoverride "values" {
+										value = 1
+										min = 0
+										max = 1
+									}
+								}
+								white_progressbar_horizontal = {
+									size = { 100% 100% }
+									blockoverride "background" {}
+									blockoverride "frame" {}
+									blockoverride "values" {
+										value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_not_no_frac') )]"
+										min = 0
+										max = 1
+									}
+								}
+								green_progressbar_horizontal = {
+									size = { 100% 100% }
+									blockoverride "background" {}
+									blockoverride "frame" {}
+									blockoverride "values" {
+										value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_yes_frac') )]"
+										min = 0
+										max = 1
+									}
+								}
+								# two-thirds mark: expulsion and charter reform pass on two
+								# thirds of the members with a vote (un_vote_supermajority_passed);
+								# 200 is two thirds of the bar's 300.
+								icon = {
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_supermajority'), '(CFixedPoint)1' )]"
+									size = { 3 22 }
+									position = { 199 -2 }
+									texture = "gfx/interface/progressbar/progressbar_marker.dds"
+								}
+							}
+							textbox = {
+								autoresize = yes
+								parentanchor = vcenter
+								align = left|nobaseline
+								text = "je_un_tally_counts"
+							}
+						}
+						textbox = {
+							autoresize = yes
+							align = left|nobaseline
+							using = fontsize_medium
+							text = "[SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_supermajority'), '(CFixedPoint)1' ), 'je_un_tally_rule_super', 'je_un_tally_rule_simple' )]"
+						}
+
+						### Time in session
+						flowcontainer = {
+							direction = horizontal
+							spacing = 6
+
+							default_progressbar_horizontal = {
+								size = { 300 12 }
+								parentanchor = vcenter
+								blockoverride "values" {
+									value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_months_frac') )]"
+									min = 0
+									max = 1
+								}
+							}
+							textbox = {
+								autoresize = yes
+								parentanchor = vcenter
+								align = left|nobaseline
+								text = "je_un_session_months"
+							}
+						}
+					}
+				}
+			}
+
 			te_un_sec_assembly_core = {}
 			te_un_sec_delegations = {
 				visible = "[GetScriptedGui('un_session_open_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"

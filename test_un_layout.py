@@ -84,5 +84,20 @@ class FlagTest(unittest.TestCase):
             self.assertNotRegex(self.text, rf"'{f}'", f)
 
 
+class SessionStripTest(unittest.TestCase):
+    def test_strip_is_gated_and_the_two_thirds_mark_only_on_supermajority(self):
+        body = _type_body(_read(LAYOUT), "te_un_sec_assembly")
+        self.assertIn("ScriptValue('un_disp_res_yes_frac')", body)
+        self.assertIn("ScriptValue('un_disp_res_not_no_frac')", body)
+        self.assertIn("ScriptValue('un_disp_res_months_frac')", body)
+        mark = re.search(r"# two-thirds mark.*?visible = \"\[(.*?)\]\"", body, re.S)
+        self.assertTrue(mark)
+        self.assertIn("un_disp_res_supermajority", mark.group(1))
+
+    def test_every_topic_has_an_icon(self):
+        codes = {int(n) for n in re.findall(
+            r"ScriptValue\('un_disp_res_topic_code'\), '\(CFixedPoint\)(\d+)'", _read(LAYOUT))}
+        self.assertEqual(codes, set(range(18)))
+
 if __name__ == "__main__":
     unittest.main()
