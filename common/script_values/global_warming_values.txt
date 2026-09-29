@@ -220,3 +220,154 @@ gw_world_n_green_building_codes_display = {
 		add = global_var:gw_g_n_green_building_codes
 	}
 }
+
+# ----------------------------------------------------------------------------
+# The overview (gw_disp_*): codes and 0-1 fractions for the widget's icons,
+# bar and pies (gui/journal_entry_widgets/global_warming_widget.gui,
+# te_gw_overview_panel). Display only, O(1), no variable of their own.
+# Scope: country (read as JournalEntry.GetCountry.MakeScope.ScriptValue)
+# ----------------------------------------------------------------------------
+
+# THE WARMING LADDER'S ONE DEFINITION. The tier as a code, 0 (negligible) to 6
+# (apocalyptic). gw_severity_text / gw_severity_short
+# (common/customizable_localization/global_warming_custom_loc.txt) compare this
+# code, and the overview picks its tier icon by it, so the word, the sentence
+# and the icon cannot drift. The thresholds also match the threshold events in
+# global_warming_events_on_action (0.5, 1, 2, 3, 4 C) and the journal entry's
+# 4 C goal: change them there too, or not at all.
+gw_disp_tier_code = {
+	value = 0
+	if = {
+		limit = { temperature_anomaly_display >= 4.0 }
+		value = 6
+	}
+	else_if = {
+		limit = { temperature_anomaly_display >= 3.0 }
+		value = 5
+	}
+	else_if = {
+		limit = { temperature_anomaly_display >= 2.0 }
+		value = 4
+	}
+	else_if = {
+		limit = { temperature_anomaly_display >= 1.0 }
+		value = 3
+	}
+	else_if = {
+		limit = { temperature_anomaly_display >= 0.5 }
+		value = 2
+	}
+	else_if = {
+		limit = { temperature_anomaly_display >= 0.1 }
+		value = 1
+	}
+}
+
+# The temperature at which the next tier begins: the marker on the overview's
+# bar. The ladder above, one step up (test_global_warming_layout.py holds the
+# two tables equal). At the top tier there is no next one; it reads 4 and the
+# marker is hidden. The codes are compared with < and >, the forms the
+# file's other script-value triggers use, rather than with =.
+gw_disp_next_threshold = {
+	value = 4
+	if = {
+		limit = { gw_disp_tier_code < 1 }
+		value = 0.1
+	}
+	else_if = {
+		limit = { gw_disp_tier_code < 2 }
+		value = 0.5
+	}
+	else_if = {
+		limit = { gw_disp_tier_code < 3 }
+		value = 1.0
+	}
+	else_if = {
+		limit = { gw_disp_tier_code < 4 }
+		value = 2.0
+	}
+	else_if = {
+		limit = { gw_disp_tier_code < 5 }
+		value = 3.0
+	}
+}
+
+# The bar's scale is the journal entry's own: 0 to its 4 C goal.
+gw_disp_temp_frac = {
+	value = temperature_anomaly_display
+	divide = 4
+	min = 0
+	max = 1
+}
+
+gw_disp_next_frac = {
+	value = gw_disp_next_threshold
+	divide = 4
+	min = 0
+	max = 1
+}
+
+# Direction of last year's warming: 1 warming, -1 cooling, 0 steady (or no
+# yearly figure yet). The same test gw_trend_prefix colours the rate with.
+gw_disp_temp_trend = {
+	value = 0
+	if = {
+		limit = { gw_yearly_change_display > 0 }
+		value = 1
+	}
+	else_if = {
+		limit = { gw_yearly_change_display < 0 }
+		value = -1
+	}
+}
+
+# 1 while the headline can say where the temperature is heading: warming, and
+# below the top tier. Otherwise the headline shows the reading alone.
+gw_disp_heading_code = {
+	value = 0
+	if = {
+		limit = {
+			gw_disp_temp_trend > 0
+			gw_disp_tier_code < 6
+		}
+		value = 1
+	}
+}
+
+# Years to the next threshold at last year's rate, for the bar's tooltip. 0
+# unless gw_disp_heading_code is 1, where the rate is positive. Capped, so a
+# year of near-zero emissions cannot print a five-digit wait.
+gw_disp_years_to_next = {
+	value = 0
+	if = {
+		limit = { gw_disp_heading_code > 0 }
+		value = gw_disp_next_threshold
+		subtract = temperature_anomaly_display
+		divide = gw_yearly_change_display
+	}
+	min = 0
+	max = 999
+}
+
+# The two pies, as 0-1 fractions (every vanilla progresspie is fed 0-1;
+# gui_modding_guide.md, "Pie charts of script-held data").
+gw_disp_share_frac = {
+	value = gw_share_pct_display
+	divide = 100
+	min = 0
+	max = 1
+}
+
+gw_disp_cut_frac = {
+	value = gw_emissions_cut_pct_display
+	divide = 100
+	min = 0
+	max = 1
+}
+
+# Carbon captured, as a positive amount for the Emissions table's "Carbon
+# Captured" row (gw_capture_display is the negative term of the market figure).
+gw_disp_captured = {
+	value = gw_capture_display
+	multiply = -1
+}

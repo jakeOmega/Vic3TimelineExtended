@@ -6,19 +6,20 @@
 # gui/journal_entry_widgets/global_warming_widget.gui as
 # [JournalEntry.GetCountry.GetCustom('<key>')].
 #
-# THE SEVERITY LADDER IS DEFINED EXACTLY ONCE, HERE. It used to be six
-# `triggered_desc` blocks inside the journal entry's `status_desc`; the widget
-# needs the same tier, and duplicating a threshold table is how the two drift.
-# The six original sentence keys are unchanged -- only the branching moved; the
-# seventh tier, apocalyptic (4.0 C, where the progress bar fills), came later.
-# Thresholds match the journal entry's own scale and the five warming-threshold
-# events in global_warming_events_on_action (0.5, 1, 2, 3, 4 C); change them in
-# all three places or in none.
+# THE SEVERITY LADDER IS DEFINED EXACTLY ONCE, in the script value
+# gw_disp_tier_code (common/script_values/global_warming_values.txt), 0
+# negligible to 6 apocalyptic. The two ladders below compare that code, and the
+# widget's overview picks its tier icon by it, so the sentence, the word and the
+# icon cannot drift. The ladder used to be six `triggered_desc` blocks inside the
+# journal entry's `status_desc`, and then temperature thresholds here; the
+# sentence keys are unchanged. The thresholds match the journal entry's own
+# scale and the five warming-threshold events in global_warming_events_on_action
+# (0.5, 1, 2, 3, 4 C); change them in all three places or in none.
 #
-# `temperature_anomaly_display` is read as a bare script value on the left of a
-# comparison, which is the documented form for using a script value as a trigger.
-# It is O(1) (one global-variable read and two divides), so these are safe to
-# evaluate per frame.
+# `gw_disp_tier_code` is read as a bare script value on the left of a
+# comparison, which is the documented form for using a script value as a
+# trigger. It is O(1) (a few comparisons of one global-variable read), so these
+# are safe to evaluate per frame.
 # ============================================================================
 
 # The full tier sentence — the journal entry's one-line status.
@@ -27,27 +28,27 @@ gw_severity_text = {
 	random_valid = no
 
 	text = {
-		trigger = { temperature_anomaly_display >= 4.0 }
+		trigger = { gw_disp_tier_code >= 6 }
 		localization_key = je_global_warming_status_apocalyptic
 	}
 	text = {
-		trigger = { temperature_anomaly_display >= 3.0 }
+		trigger = { gw_disp_tier_code >= 5 }
 		localization_key = je_global_warming_status_catastrophic
 	}
 	text = {
-		trigger = { temperature_anomaly_display >= 2.0 }
+		trigger = { gw_disp_tier_code >= 4 }
 		localization_key = je_global_warming_status_severe
 	}
 	text = {
-		trigger = { temperature_anomaly_display >= 1.0 }
+		trigger = { gw_disp_tier_code >= 3 }
 		localization_key = je_global_warming_status_significant
 	}
 	text = {
-		trigger = { temperature_anomaly_display >= 0.5 }
+		trigger = { gw_disp_tier_code >= 2 }
 		localization_key = je_global_warming_status_moderate
 	}
 	text = {
-		trigger = { temperature_anomaly_display >= 0.1 }
+		trigger = { gw_disp_tier_code >= 1 }
 		localization_key = je_global_warming_status_slight
 	}
 	text = {
@@ -63,27 +64,27 @@ gw_severity_short = {
 	random_valid = no
 
 	text = {
-		trigger = { temperature_anomaly_display >= 4.0 }
+		trigger = { gw_disp_tier_code >= 6 }
 		localization_key = gw_tier_short_apocalyptic
 	}
 	text = {
-		trigger = { temperature_anomaly_display >= 3.0 }
+		trigger = { gw_disp_tier_code >= 5 }
 		localization_key = gw_tier_short_catastrophic
 	}
 	text = {
-		trigger = { temperature_anomaly_display >= 2.0 }
+		trigger = { gw_disp_tier_code >= 4 }
 		localization_key = gw_tier_short_severe
 	}
 	text = {
-		trigger = { temperature_anomaly_display >= 1.0 }
+		trigger = { gw_disp_tier_code >= 3 }
 		localization_key = gw_tier_short_significant
 	}
 	text = {
-		trigger = { temperature_anomaly_display >= 0.5 }
+		trigger = { gw_disp_tier_code >= 2 }
 		localization_key = gw_tier_short_moderate
 	}
 	text = {
-		trigger = { temperature_anomaly_display >= 0.1 }
+		trigger = { gw_disp_tier_code >= 1 }
 		localization_key = gw_tier_short_slight
 	}
 	text = {

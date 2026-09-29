@@ -45,27 +45,31 @@
 
 	progressbar = yes
 
-	# ---- PLAYER-FACING SURFACE: the climate dashboard ---------------------
+	# ---- PLAYER-FACING SURFACE: the climate panels -------------------------
 	# The sixteen scripted buttons below stay declared because their `ai_chance`
 	# is the AI's only route into this system, but each carries `is_ai = yes` in
 	# its `visible`, so a human sees these three widgets instead of the grid.
 	# Every action the grid offered has a control here — see the mapping in
-	# docs/systems/journal_entry_systems.md.
+	# docs/systems/journal_entry_systems.md. The order of the sections lives in
+	# the widget file's composers (te_gw_status_sections,
+	# te_gw_reference_sections): the overview above the status line, the live
+	# sections above the (hidden) grid, the charts and "How Global Warming
+	# Works" below it.
 	widget = {
 		gui = "gui/journal_entry_widgets/global_warming_widget.gui"
-		name = "widget_je_gw_conditions"
+		name = "widget_je_gw_overview"
 		container = "custom_widget_container_1"
 	}
 
 	widget = {
 		gui = "gui/journal_entry_widgets/global_warming_widget.gui"
-		name = "widget_je_gw_policies"
+		name = "widget_je_gw_status"
 		container = "custom_widget_container_2"
 	}
 
 	widget = {
 		gui = "gui/journal_entry_widgets/global_warming_widget.gui"
-		name = "widget_je_gw_history"
+		name = "widget_je_gw_reference"
 		container = "custom_widget_container_3"
 	}
 
