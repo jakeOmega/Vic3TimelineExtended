@@ -235,7 +235,8 @@ types diplomatic_panel
 				### MOD: UN tab (te_un) ###
 				# The United Nations journal entry, laid out for the tab in the order
 				# gui/journal_entry_widgets/un_layout_widget.gui sets for both hosts:
-				# the overview, the status sections, the entry's scripted buttons as an
+				# the overview, the entry's status text as a collapsed Status section,
+				# the status sections, the entry's scripted buttons as an
 				# Actions section (founding, joining and leaving the UN and most
 				# requests exist only as buttons), the chart, the record and the
 				# explanations, then a link back. Spec:
@@ -283,6 +284,34 @@ types diplomatic_panel
 							spacing = 10
 
 							te_un_overview_panel = {}
+
+							# The entry's own status text (membership, tier, headquarters,
+							# statistics, programmes under way), collapsed: the overview says
+							# most of it at a glance, and nothing the journal says is lost from
+							# the tab. te_je_status_desc has a visible of its own, so the
+							# section's gate is on a wrapper (gotcha #17).
+							un_chamber_section_header = {
+								blockoverride "left_text" {
+									text = "te_diplomacy_un_tab_status_header"
+								}
+								blockoverride "onclick" {
+									onclick = "[GetVariableSystem.Toggle('te_un_tab_status_open')]"
+								}
+								blockoverride "onclick_showmore" {
+									visible = "[Not(GetVariableSystem.Exists('te_un_tab_status_open'))]"
+								}
+								blockoverride "onclick_showless" {
+									visible = "[GetVariableSystem.Exists('te_un_tab_status_open')]"
+								}
+							}
+							flowcontainer = {
+								visible = "[GetVariableSystem.Exists('te_un_tab_status_open')]"
+								parentanchor = hcenter
+								direction = vertical
+
+								te_je_status_desc = {}
+							}
+
 							te_un_status_sections = {}
 
 							# The entry's own buttons (founding, joining, leaving and most

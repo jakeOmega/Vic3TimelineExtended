@@ -384,6 +384,8 @@
 					}
 					un_state_off = { MODIFIER = un_security_council_modifier }
 					un_state_off = { MODIFIER = un_permanent_member_modifier }
+					# The overview's Security Council flags (un_overview_display_effects.txt).
+					un_p5_display_refresh = yes
 				}
 				# A non-member draws no privileges (§0.8 ruling 5): a safety net for a
 				# path that ended membership without un_membership_end_effect.
@@ -612,6 +614,8 @@
 							limit = { has_variable = un_permanent_subgp_months }
 							remove_variable = un_permanent_subgp_months
 						}
+						# The overview's Security Council flags (un_overview_display_effects.txt).
+						un_p5_display_refresh = yes
 					}
 				}
 

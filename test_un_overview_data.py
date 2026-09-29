@@ -13,11 +13,21 @@ AUTH_EFFECTS = os.path.join(REPO, "common", "scripted_effects", "un_authority_ef
 UN_VALUES = os.path.join(REPO, "common", "script_values", "un_script_values.txt")
 PILLARS = ("participation", "commitment", "credibility", "funding", "order", "delivery")
 
+# A change the council display can see: the seat's mirror variable
+# (un_permanent_member_modifier_on) set or cleared. un_state_restore and
+# te_debug_un_drop move only the modifier, and un_p5_display_seat reads the
+# mirror (a modifier added in an effect block is invisible to the rest of it).
 SEAT_CHANGE = re.compile(
-    r"MODIFIER\s*=\s*un_permanent_member_modifier"
-    r"|add_modifier\s*=\s*\{\s*name\s*=\s*un_permanent_member_modifier"
-    r"|remove_modifier\s*=\s*un_permanent_member_modifier"
+    r"un_state_(?:on|off|forget|record)\s*=\s*\{\s*MODIFIER\s*=\s*un_permanent_member_modifier\s*\}"
+    r"|(?:set|remove)_variable\s*=\s*un_permanent_member_modifier_on"
 )
+REFRESH = "un_p5_display_refresh = yes"
+# Blocks that change a seat without refreshing, and why that is right.
+SEAT_CHANGE_EXEMPT = {
+    "un_state_forget_representation": "called only by un_state_rebuild, which refreshes after it",
+}
+ON_ACTIONS = os.path.join(REPO, "common", "on_actions", "un_on_actions.txt")
+DISPLAY_EFFECTS = os.path.join(REPO, "common", "scripted_effects", "un_overview_display_effects.txt")
 
 
 def _read(path):
@@ -51,19 +61,61 @@ def _block(text, name):
     raise AssertionError(f"no top-level block {name}")
 
 
+def _enclosing(text, pos):
+    """Spans (start, end) of the blocks enclosing pos, innermost first."""
+    spans, depth_stack = [], []
+    for i, ch in enumerate(text):
+        if ch == "{":
+            depth_stack.append(i)
+        elif ch == "}":
+            start = depth_stack.pop()
+            if start < pos < i:
+                spans.append((start, i))
+    return sorted(spans, key=lambda sp: sp[1] - sp[0])
+
+
+def _seat_files():
+    for sub in (("common", "scripted_effects"), ("events",), ("common", "journal_entries")):
+        for path in glob.glob(os.path.join(REPO, *sub, "*.txt")):
+            yield path, sub[-1] == "scripted_effects"
+
+
 class SeatRefreshTest(unittest.TestCase):
     def test_every_seat_change_refreshes_the_council_display(self):
-        paths = glob.glob(os.path.join(REPO, "common", "scripted_effects", "*.txt"))
-        paths += glob.glob(os.path.join(REPO, "events", "*.txt"))
+        """A refresh follows each seat change inside a block around it. A scripted
+        effect may refresh at its own end; an event or a journal entry must do it
+        inside the option or branch, not anywhere later in the file."""
         sites = 0
-        for path in paths:
+        for path, top_level_ok in _seat_files():
+            text = _strip_comments(_read(path))
+            tops = [(m.group(1), m.start()) for m in re.finditer(r"^([\w.]+)\s*=\s*\{", text, re.M)]
+            for m in SEAT_CHANGE.finditer(text):
+                sites += 1
+                top = max((t for t in tops if t[1] <= m.start()), key=lambda t: t[1])[0]
+                if top in SEAT_CHANGE_EXEMPT:
+                    continue
+                spans = _enclosing(text, m.start())
+                if not top_level_ok:
+                    spans = spans[:-1]
+                self.assertTrue(any(REFRESH in text[m.end():end] for _, end in spans),
+                                f"{os.path.basename(path)}:{text.count(chr(10), 0, m.start()) + 1} "
+                                f"({top}) changes a permanent seat without refreshing after it")
+        self.assertGreaterEqual(sites, 8)
+
+    def test_refresh_only_where_a_seat_changes(self):
+        """Mirror bookkeeping and modifier-only restores change nothing the council
+        display reads; a refresh there is a wasted sweep (every holder, monthly)."""
+        for path, _ in _seat_files():
             for name, body in _top_blocks(_read(path)):
-                if SEAT_CHANGE.search(body):
-                    sites += 1
-                    self.assertIn("un_p5_display_refresh = yes", body,
-                                  f"{os.path.basename(path)}: {name} changes a permanent seat "
-                                  "but does not call un_p5_display_refresh")
-        self.assertGreaterEqual(sites, 7)
+                if REFRESH in body and name != "un_p5_display_refresh":
+                    self.assertRegex(body, SEAT_CHANGE, f"{os.path.basename(path)}: {name} refreshes "
+                                     "the council display but changes no seat")
+
+    def test_the_council_is_read_from_the_mirror(self):
+        body = _strip_comments(_read(DISPLAY_EFFECTS))
+        self.assertNotIn("is_un_permanent_member", body)
+        self.assertNotIn("has_modifier", body)
+        self.assertEqual(body.count("has_variable = un_permanent_member_modifier_on"), 2)
 
 
 class DisplayValueTest(unittest.TestCase):
@@ -102,13 +154,22 @@ class MonthlySnapshotTest(unittest.TestCase):
             self.assertGreaterEqual(prev, 0, f"no un_pillar_{p}_prev copy")
             self.assertLess(prev, snap, f"un_pillar_{p}_prev must be copied before the snapshot")
 
-    def test_the_shares_and_the_council_are_refreshed_monthly(self):
+    def test_the_shares_are_snapshotted_monthly(self):
         body = _block(_read(AUTH_EFFECTS), "un_authority_monthly_update")
         for g in ("un_member_country_share", "un_member_gdp_share", "un_member_pop_share",
                   "un_vote_eligible_count"):
             self.assertIn(f"name = {g} value", body)
-        self.assertIn("un_p5_display_refresh = yes", body)
 
+    def test_the_council_is_refreshed_after_the_monthly_seat_fill(self):
+        self.assertNotIn(REFRESH, _block(_read(AUTH_EFFECTS), "un_authority_monthly_update"))
+        body = _block(_read(ON_ACTIONS), "un_global_authority_on_action")
+        self.assertIn(REFRESH, body)
+        self.assertGreater(body.index(REFRESH), body.index("un_seat_monthly_update = yes"))
+
+    def test_the_tally_never_divides_by_one_before_the_first_snapshot(self):
+        body = _block(_read(DISPLAY), "un_disp_res_eligible")
+        self.assertIn("un_disp_res_yes", body)
+        self.assertIn("un_disp_res_no", body)
 
 OVERVIEW = os.path.join(REPO, "gui", "journal_entry_widgets", "un_overview_widget.gui")
 

@@ -177,8 +177,6 @@ un_authority_monthly_update = {
 	#    itself is checked last in un_global_authority_on_action.
 	un_ladder_monthly_update = yes
 
-	# The Security Council's seats, for the overview's flags.
-	un_p5_display_refresh = yes
 }
 
 # change_global_variable has no clamp argument.

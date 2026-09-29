@@ -411,7 +411,12 @@ un_disp_pillar_delivery_trend = {
 # not_no_frac, green to yes_frac.
 
 un_disp_res_eligible = {
-	value = 1
+	# Before the first monthly snapshot (a save loaded mid-vote, or a
+	# resolution tabled in the UN's first month) the bar spans the ballots cast,
+	# so it never reads "of 1".
+	value = un_disp_res_yes
+	add = un_disp_res_no
+	min = 1
 	if = {
 		limit = {
 			has_global_variable = un_vote_eligible_count

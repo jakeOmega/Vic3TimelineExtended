@@ -270,9 +270,6 @@ un_state_restore_all = {
 			remove_variable = un_regime_stamp
 		}
 	}
-
-	# The overview's Security Council flags (un_overview_display_effects.txt).
-	un_p5_display_refresh = yes # REVIEWED 2026-09-28: un_p5_seat_* are a display cache rebuilt from the permanent-seat modifiers; rewriting them here is the point
 }
 
 # Rebuild the entry from the mirrors, and decide what the restore declined:
@@ -337,9 +334,6 @@ un_state_forget_representation = {
 	un_state_forget = { MODIFIER = un_arms_control_participant_modifier }
 	un_state_forget = { MODIFIER = un_champion_order_cost }
 	un_state_forget = { MODIFIER = un_undermine_order_cost }
-
-	# The overview's Security Council flags (un_overview_display_effects.txt).
-	un_p5_display_refresh = yes
 }
 
 # Scope: country
@@ -431,9 +425,6 @@ un_state_reconcile = {
 	un_state_reconcile_country = { MODIFIER = un_law_of_sea_modifier }
 	un_state_reconcile_country = { MODIFIER = un_icc_member_modifier }
 	un_state_reconcile_country = { MODIFIER = un_physical_protection_modifier }
-
-	# The overview's Security Council flags (un_overview_display_effects.txt).
-	un_p5_display_refresh = yes
 }
 
 # ---- The headquarters host across a revolution ------------------------------------------
