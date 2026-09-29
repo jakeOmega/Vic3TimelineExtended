@@ -12,6 +12,8 @@ import os
 import re
 import unittest
 
+from test_covert_op_registry import TYPES as OP_TYPES
+
 REPO = os.path.dirname(os.path.abspath(__file__))
 GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "covert_operations_widget.gui")
 JE = os.path.join(REPO, "common", "journal_entries", "je_covert_warfare.txt")
@@ -59,10 +61,6 @@ OTHER_ICONS = {
 # Final art, not placeholders: vanilla's own marks.
 NOT_PLACEHOLDERS = {GENERIC + "trend_up.dds", GENERIC + "trend_down.dds", GENERIC + "trend_nochange.dds",
                     GENERIC + "transparent.dds", "gfx/interface/progressbar/progressbar_marker.dds"}
-OP_TYPES = ["election_interference", "financial_subversion", "infrastructure_sabotage", "comms_disruption",
-            "industrial_espionage", "military_espionage", "influence_campaign", "ideological_subversion",
-            "destabilization", "regime_change", "nuclear_sabotage", "space_espionage", "cultivate_assets",
-            "secure_material"]
 
 
 def _read(path):
@@ -283,7 +281,7 @@ class OperationRowTest(unittest.TestCase):
     def test_each_type_has_its_own_icon(self):
         found = re.findall(r"visible = \"\[ScriptContainer\.HasTag\('iw_op_(\w+)'\)\]\"\s*"
                            r"texture = \"gfx/interface/icons/diplomatic_action_icons/covert_(\w+)_action\.dds\"", self.row)
-        self.assertEqual([a for a, _ in found], OP_TYPES)
+        self.assertEqual([a for a, _ in found], list(OP_TYPES))
         self.assertTrue(all(a == b for a, b in found))
         for t in OP_TYPES:
             self.assertIn(f"gfx/interface/icons/diplomatic_action_icons/covert_{t}_action.dds",
