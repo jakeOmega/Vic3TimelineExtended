@@ -433,16 +433,6 @@ gw_is_market_leader_sgui = {
 	effect = { }
 }
 
-# At least one policy in force — inverted in the widget to show the
-# "no policies adopted yet" line.
-gw_any_policy_active_sgui = {
-	scope = country
-	is_shown = { gw_any_policy_active = yes }
-	ai_is_valid = { always = no }
-	is_valid = { always = no }
-	effect = { }
-}
-
 # Have the yearly emissions figures been taken yet? False before the first
 # yearly state pulse of a new game and on a save upgraded mid-year, when the
 # widget shows "figures update each January" rather than a row of zeroes.

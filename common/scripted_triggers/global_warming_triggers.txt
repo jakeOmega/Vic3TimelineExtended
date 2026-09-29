@@ -92,20 +92,6 @@ gw_has_yearly_figures = {
 	}
 }
 
-# At least one of the eight policies is in force. Drives the widget's
-# "no policies adopted yet" line.
-gw_any_policy_active = {
-	OR = {
-		gw_policy_carbon_tax_active = yes
-		gw_policy_renewable_investment_active = yes
-		gw_policy_emission_standards_active = yes
-		gw_policy_climate_adaptation_active = yes
-		gw_policy_reforestation_active = yes
-		gw_policy_public_transit_active = yes
-		gw_policy_fossil_fuel_divestment_active = yes
-		gw_policy_green_building_codes_active = yes
-	}
-}
 
 # ---------------------------------------------------------------------------
 # Adopt / repeal eligibility. Bodies extracted verbatim from the scripted
