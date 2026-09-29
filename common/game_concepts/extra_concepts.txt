@@ -26,6 +26,12 @@ concept_climate_policy = {}
 concept_nuclear_program = {}
 concept_nuclear_strike = {}
 concept_nuclear_stockpile = {}
+# Nuclear Weapons panel (je_nuclear_program): the terms its overview and How
+# Nuclear Weapons Work name.
+concept_nuclear_taboo = {}
+concept_nuclear_doctrine = {}
+concept_nuclear_readiness = {}
+concept_launch_authority = {}
 concept_space_race = {}
 concept_space_milestone = {}
 concept_solar_colonization = {}

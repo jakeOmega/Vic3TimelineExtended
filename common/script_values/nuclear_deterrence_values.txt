@@ -914,6 +914,34 @@ nd_display_stockpile = {
 	value = nd_stockpile
 }
 
+# The posture as codes, for the overview's three icons
+# (nuclear_overview_widget.gui). Each falls back to the value the name blocks in
+# nuclear_deterrence_custom_loc.txt fall back to (nd_doctrine_name,
+# nd_readiness_name, nd_authority_name), so the icon and its word agree.
+nd_display_doctrine_code = {
+	value = 2
+	if = {
+		limit = { has_variable = nd_doctrine }
+		value = var:nd_doctrine
+	}
+}
+
+nd_display_readiness_code = {
+	value = 1
+	if = {
+		limit = { has_variable = nd_readiness }
+		value = var:nd_readiness
+	}
+}
+
+nd_display_authority_code = {
+	value = 1
+	if = {
+		limit = { has_variable = nd_authority }
+		value = var:nd_authority
+	}
+}
+
 # Direct subjects under our nuclear umbrella (umbrella/recessed/dead-hand spec
 # §1.6). Vanilla precedent for an iterator in a script value: india_values.txt.
 nd_display_umbrella_count = {
