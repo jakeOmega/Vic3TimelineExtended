@@ -187,8 +187,23 @@ colonial_empire_refresh_display = {
 		set_variable = { name = colonial_empire_d_acceptance value = colonial_stability_drift_acceptance }
 
 		# Condemners' share of great-power prestige (0-1), the number the two
-		# great-power escalations fire on. Read by colonial_empire_pressure_sgui.
+		# great-power escalations fire on. Read by colonial_empire_pressure_sgui
+		# and the overview's pie.
 		set_variable = { name = colonial_empire_condemner_share value = colonial_gp_condemner_prestige_share }
+
+		# Which of those two escalations applies: 0 neither, 1 diplomatic
+		# isolation, 2 international consensus (the two stack, so 2 means
+		# both). Read off the bar's own escalation leaves, so the share
+		# thresholds stay in colonial_empire_values.txt. The overview's alert.
+		set_variable = { name = colonial_empire_pressure_level value = 0 }
+		if = {
+			limit = { colonial_stability_term_gp_extreme_pressure < 0 }
+			set_variable = { name = colonial_empire_pressure_level value = 2 }
+		}
+		else_if = {
+			limit = { colonial_stability_term_gp_high_pressure < 0 }
+			set_variable = { name = colonial_empire_pressure_level value = 1 }
+		}
 
 		# Projected monthly change. Identical by construction to the sum the bar
 		# applies -- both are built from the same leaf script values. Feeds the

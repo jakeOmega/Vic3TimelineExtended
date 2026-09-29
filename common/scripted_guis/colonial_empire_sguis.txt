@@ -59,7 +59,7 @@
 # ---------------------------------------------------------------------------
 # Read-only: has colonial_empire_refresh_display run yet?
 #
-# All ten display variables are written by that one effect, so a single
+# Every display variable is written by that one effect, so a single
 # has_variable check gates every var read in the widget. This is the guard for
 # gui_modding_guide gotcha #14: je_colonial_empire has is_shown_when_inactive, so
 # the widget is built for countries whose entry never activated, and an
