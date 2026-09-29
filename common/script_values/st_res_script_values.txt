@@ -1122,6 +1122,319 @@ st_res_fertilizer_last_net = {
 	}
 }
 
+# --- Panel display values -------------------------------------------------
+# Read only by the inventory widget and its overview
+# (gui/journal_entry_widgets/strategic_reserve_widget.gui). Nothing in the
+# reserve's bookkeeping or its policies reads them, and every `var:` read is
+# `has_variable`-guarded, for the same every-frame reason as the accessors
+# above.
+
+# The hub is staffed (1) or not (0): the overview's hub icon and its word.
+# The same test as the journal entry's "deactivated" status line and every
+# flow gate: st_res_hub_workforce_cached above 0.99.
+st_res_disp_hub_staffed = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = st_res_hub_workforce_cached
+			var:st_res_hub_workforce_cached > 0.99
+		}
+		value = 1
+	}
+}
+
+# The good's reserve policy code (0 Manual, 1 Buy When Cheap, 2 Release When
+# Expensive, 3 Stabilize Prices) for the row's automation icon, lit above 0.
+# A save from before policies has no variable and reads as Manual.
+st_res_grain_disp_policy = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_grain_policy }
+		value = var:st_res_grain_policy
+	}
+}
+st_res_ammunition_disp_policy = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_ammunition_policy }
+		value = var:st_res_ammunition_policy
+	}
+}
+st_res_oil_disp_policy = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_oil_policy }
+		value = var:st_res_oil_policy
+	}
+}
+st_res_small_arms_disp_policy = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_small_arms_policy }
+		value = var:st_res_small_arms_policy
+	}
+}
+st_res_artillery_disp_policy = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_artillery_policy }
+		value = var:st_res_artillery_policy
+	}
+}
+st_res_aeroplanes_disp_policy = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_aeroplanes_policy }
+		value = var:st_res_aeroplanes_policy
+	}
+}
+st_res_tanks_disp_policy = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_tanks_policy }
+		value = var:st_res_tanks_policy
+	}
+}
+st_res_fertilizer_disp_policy = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_fertilizer_policy }
+		value = var:st_res_fertilizer_policy
+	}
+}
+
+# Where the row's fill bar marks the policy's stock band, in percent of
+# capacity (the bar's own scale). The target stockpile applies while the
+# policy can buy (Buy When Cheap, Stabilize Prices), the protected stockpile
+# while it can sell (Release When Expensive, Stabilize Prices); the evaluator,
+# st_res_policy_evaluate_good_effect, reads them under the same policies.
+# Otherwise each value sits at its end of the bar (target 100, protected 0),
+# where the widget hides its marker, so a Manual good shows no marker.
+st_res_grain_disp_target = {
+	value = 100
+	if = {
+		limit = {
+			has_variable = st_res_grain_policy
+			has_variable = st_res_grain_ceil_pct
+			OR = {
+				var:st_res_grain_policy = 1
+				var:st_res_grain_policy = 3
+			}
+		}
+		value = var:st_res_grain_ceil_pct
+	}
+}
+st_res_grain_disp_floor = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = st_res_grain_policy
+			has_variable = st_res_grain_floor_pct
+			OR = {
+				var:st_res_grain_policy = 2
+				var:st_res_grain_policy = 3
+			}
+		}
+		value = var:st_res_grain_floor_pct
+	}
+}
+st_res_ammunition_disp_target = {
+	value = 100
+	if = {
+		limit = {
+			has_variable = st_res_ammunition_policy
+			has_variable = st_res_ammunition_ceil_pct
+			OR = {
+				var:st_res_ammunition_policy = 1
+				var:st_res_ammunition_policy = 3
+			}
+		}
+		value = var:st_res_ammunition_ceil_pct
+	}
+}
+st_res_ammunition_disp_floor = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = st_res_ammunition_policy
+			has_variable = st_res_ammunition_floor_pct
+			OR = {
+				var:st_res_ammunition_policy = 2
+				var:st_res_ammunition_policy = 3
+			}
+		}
+		value = var:st_res_ammunition_floor_pct
+	}
+}
+st_res_oil_disp_target = {
+	value = 100
+	if = {
+		limit = {
+			has_variable = st_res_oil_policy
+			has_variable = st_res_oil_ceil_pct
+			OR = {
+				var:st_res_oil_policy = 1
+				var:st_res_oil_policy = 3
+			}
+		}
+		value = var:st_res_oil_ceil_pct
+	}
+}
+st_res_oil_disp_floor = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = st_res_oil_policy
+			has_variable = st_res_oil_floor_pct
+			OR = {
+				var:st_res_oil_policy = 2
+				var:st_res_oil_policy = 3
+			}
+		}
+		value = var:st_res_oil_floor_pct
+	}
+}
+st_res_small_arms_disp_target = {
+	value = 100
+	if = {
+		limit = {
+			has_variable = st_res_small_arms_policy
+			has_variable = st_res_small_arms_ceil_pct
+			OR = {
+				var:st_res_small_arms_policy = 1
+				var:st_res_small_arms_policy = 3
+			}
+		}
+		value = var:st_res_small_arms_ceil_pct
+	}
+}
+st_res_small_arms_disp_floor = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = st_res_small_arms_policy
+			has_variable = st_res_small_arms_floor_pct
+			OR = {
+				var:st_res_small_arms_policy = 2
+				var:st_res_small_arms_policy = 3
+			}
+		}
+		value = var:st_res_small_arms_floor_pct
+	}
+}
+st_res_artillery_disp_target = {
+	value = 100
+	if = {
+		limit = {
+			has_variable = st_res_artillery_policy
+			has_variable = st_res_artillery_ceil_pct
+			OR = {
+				var:st_res_artillery_policy = 1
+				var:st_res_artillery_policy = 3
+			}
+		}
+		value = var:st_res_artillery_ceil_pct
+	}
+}
+st_res_artillery_disp_floor = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = st_res_artillery_policy
+			has_variable = st_res_artillery_floor_pct
+			OR = {
+				var:st_res_artillery_policy = 2
+				var:st_res_artillery_policy = 3
+			}
+		}
+		value = var:st_res_artillery_floor_pct
+	}
+}
+st_res_aeroplanes_disp_target = {
+	value = 100
+	if = {
+		limit = {
+			has_variable = st_res_aeroplanes_policy
+			has_variable = st_res_aeroplanes_ceil_pct
+			OR = {
+				var:st_res_aeroplanes_policy = 1
+				var:st_res_aeroplanes_policy = 3
+			}
+		}
+		value = var:st_res_aeroplanes_ceil_pct
+	}
+}
+st_res_aeroplanes_disp_floor = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = st_res_aeroplanes_policy
+			has_variable = st_res_aeroplanes_floor_pct
+			OR = {
+				var:st_res_aeroplanes_policy = 2
+				var:st_res_aeroplanes_policy = 3
+			}
+		}
+		value = var:st_res_aeroplanes_floor_pct
+	}
+}
+st_res_tanks_disp_target = {
+	value = 100
+	if = {
+		limit = {
+			has_variable = st_res_tanks_policy
+			has_variable = st_res_tanks_ceil_pct
+			OR = {
+				var:st_res_tanks_policy = 1
+				var:st_res_tanks_policy = 3
+			}
+		}
+		value = var:st_res_tanks_ceil_pct
+	}
+}
+st_res_tanks_disp_floor = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = st_res_tanks_policy
+			has_variable = st_res_tanks_floor_pct
+			OR = {
+				var:st_res_tanks_policy = 2
+				var:st_res_tanks_policy = 3
+			}
+		}
+		value = var:st_res_tanks_floor_pct
+	}
+}
+st_res_fertilizer_disp_target = {
+	value = 100
+	if = {
+		limit = {
+			has_variable = st_res_fertilizer_policy
+			has_variable = st_res_fertilizer_ceil_pct
+			OR = {
+				var:st_res_fertilizer_policy = 1
+				var:st_res_fertilizer_policy = 3
+			}
+		}
+		value = var:st_res_fertilizer_ceil_pct
+	}
+}
+st_res_fertilizer_disp_floor = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = st_res_fertilizer_policy
+			has_variable = st_res_fertilizer_floor_pct
+			OR = {
+				var:st_res_fertilizer_policy = 2
+				var:st_res_fertilizer_policy = 3
+			}
+		}
+		value = var:st_res_fertilizer_floor_pct
+	}
+}
+
 # --- Aggregate weekly sales income across all goods ---
 # Sum of every per-good `_sale_profit` (each is 0 unless that good is being sold,
 # i.e. rate < 0 with stored > 0). Result is gross weekly £ income at current
