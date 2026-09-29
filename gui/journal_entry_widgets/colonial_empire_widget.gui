@@ -1,14 +1,31 @@
-﻿### Colonial Empire JE widget — the player-facing surface for je_colonial_empire.
+﻿### Colonial Empire JE widget — the player-facing surface for je_colonial_empire,
+### laid out to docs/guides/gui_style_guide.md.
 ###
-### Two roots, both mounted from je_colonial_empire:
-###   widget_je_colonial_empire          custom_widget_container_2
-###       stability conditions, international pressure, the three colonial
-###       programmes, and the three decolonization decisions.
-###   widget_je_colonial_empire_history  custom_widget_container_3
-###       the two history charts, directly above the native stability bar.
+### Three roots at the foot of this file, all mounted from je_colonial_empire:
+###   widget_je_colonial_empire_overview   custom_widget_container_1
+###       the overview (te_ce_overview_panel), always shown: the band, the
+###       programmes running, the stability bar with the next band marked, and
+###       the condemning great powers' share of prestige.
+###   widget_je_colonial_empire_status     custom_widget_container_2
+###       te_ce_status_sections, open: why stability is moving, international
+###       pressure, the three colonial programmes, the three decolonization
+###       decisions.
+###   widget_je_colonial_empire_reference  custom_widget_container_3
+###       te_ce_reference_sections: the two history charts, then "How the
+###       Colonial Empire Works", the one collapsed section of explanations.
+### The overview draws the stability bar, so the entry also attaches
+### te_je_bars_on_top_marker to custom_widget_container_7 and the journal panel
+### drops its own bar at the bottom (gui/journal_entry.gui; je_banking.txt).
 ###
-### The vanilla button grid is AI-only now (`is_ai = yes` on all nine buttons),
-### so every action a human could take has a control here. Each control calls the
+### Every section is a type (te_ce_sec_*) and the two composers set their order,
+### so a system tab can instance the same pieces later (style rule 9). The
+### roots are thin wrappers that repeat the composers' IsActive gate.
+###
+### Collapse flags say their default: *_closed sections are open until closed,
+### *_open ones collapsed until opened (test_colonial_empire_layout.py).
+###
+### The vanilla button grid is AI-only (`is_ai = yes` on all nine buttons), so
+### every action a human could take has a control here. Each control calls the
 ### SAME shared trigger/effect the button calls, through
 ### common/scripted_guis/colonial_empire_sguis.txt.
 ###
@@ -28,22 +45,25 @@
 ### An op code decides what a control DOES, never whether it is DRAWN. Each
 ### programme's Enable/Disable pair takes its visibility from a scope-free
 ### read-only handler — colonial_empire_active_{invest,garrison,assimilation}_sgui
-### — with Disable on `IsShown(...)` and Enable on `Not(IsShown(...))`. Passing a
-### saved scope to IsValid / Execute / the tooltips is proven in this mod;
-### passing one to IsShown is not, and with the button grid hidden from humans a
-### row whose visibility quietly evaluated false would leave no control at all.
-### The sgui file header has the full reasoning. Do not move visibility onto an
-### op-parameterised IsShown.
+### — with Disable on `IsShown(...)` and Enable on `Not(IsShown(...))`. The
+### overview's lit and dimmed programme icons read the same three handlers.
+### Passing a saved scope to IsValid / Execute / the tooltips is proven in this
+### mod; passing one to IsShown is not, and with the button grid hidden from
+### humans a row whose visibility quietly evaluated false would leave no control
+### at all. The sgui file header has the full reasoning. Do not move visibility
+### onto an op-parameterised IsShown.
 ###
 ### NO NUMBER IS TYPED IN THIS FILE. The nine stability contributions come from
 ### colonial_stability_drift_* script values — the same leaves the bar itself
 ### consumes — six read live and three read from the snapshot variables
 ### colonial_empire_refresh_display writes. Band boundaries come from
-### var:colonial_empire_next_boundary. Programme costs and effects come from
-### [GetStaticModifier('x').GetDesc]. If you need a new number here, derive it in
-### colonial_empire_display_effects.txt and read the variable.
+### var:colonial_empire_next_boundary; the overview reads its snapshots through
+### the guarded colonial_empire_disp_* values (colonial_empire_values.txt).
+### Programme costs and effects come from [GetStaticModifier('x').GetDesc]. If
+### you need a new number here, derive it in colonial_empire_display_effects.txt
+### and read the variable.
 ###
-### je_colonial_empire carries `is_shown_when_inactive`, so both roots are gated
+### je_colonial_empire carries `is_shown_when_inactive`, so every root is gated
 ### on [JournalEntry.IsActive] (gotcha #14: an unguarded display sgui in that
 ### state produces a "Failed to fetch variable" per frame for every country that
 ### can merely see the entry). Inside, every var read is additionally gated on
@@ -55,6 +75,10 @@
 ### action state anywhere: the three decolonization decisions confirm through
 ### decolonization_events.400 / .401, which is real game state and offers a
 ### Reconsider option.
+###
+### Placeholder art: the band, alert and programme icons and the pie's fill are
+### vanilla textures standing in for the system's own icons. Each is listed,
+### with what the final art should show, in docs/systems/colonial_empire_gui_icons.md.
 
 types colonial_empire_widget_types
 {
@@ -65,17 +89,6 @@ types colonial_empire_widget_types
 		maximumsize = { 480 -1 }
 		align = left|nobaseline
 		using = fontsize_large
-	}
-
-	### Smaller body text for the programme and decision rows, which have to
-	### leave room for a button beside or under them.
-	type colonial_empire_row_text = textbox {
-		autoresize = yes
-		multiline = yes
-		minimumsize = { 460 -1 }
-		maximumsize = { 460 -1 }
-		align = left|nobaseline
-		using = fontsize_medium
 	}
 
 	type colonial_empire_panel = flowcontainer {
@@ -97,6 +110,74 @@ types colonial_empire_widget_types
 		}
 		blockoverride "left_text_alignment" {
 			align = left|nobaseline
+		}
+	}
+
+	### A heading inside a section's panel, over one group of its lines, with a
+	### faint rule under it (un_chamber_subheader's shape).
+	type colonial_empire_subheader = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 1
+		block "subheader_margin" {
+			margin_top = 10
+		}
+
+		textbox = {
+			autoresize = yes
+			multiline = yes
+			maximumsize = { 480 -1 }
+			align = left|nobaseline
+			using = fontsize_large
+			default_format = "#title"
+			block "subheader_text" {}
+		}
+		divider_clean = {
+			blockoverride "size" {
+				size = { 480 2 }
+			}
+		}
+	}
+
+	### Explanatory text under a subheading in "How the Colonial Empire Works":
+	### how a part of the system works, rather than what it says now.
+	type colonial_empire_note = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = fontsize_medium
+		default_format = "#lore"
+	}
+
+	### A table row: a label on the left and its value on the right
+	### (un_chamber_value_row's shape). Every row carries a tooltip with the
+	### reason behind its value, so the label is marked hoverable.
+	type colonial_empire_value_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		margin = { 4 1 }
+
+		textbox = {
+			autoresize = yes
+			minimumsize = { 320 -1 }
+			maximumsize = { 320 -1 }
+			align = left|nobaseline
+			using = fontsize_medium
+			default_format = "#tooltippable"
+			elide = right
+			block "row_label" {}
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 140 -1 }
+			maximumsize = { 140 -1 }
+			align = right|nobaseline
+			using = fontsize_medium
+			default_format = "#v"
+			elide = right
+			block "row_value" {}
 		}
 	}
 
@@ -176,29 +257,40 @@ types colonial_empire_widget_types
 		}
 	}
 
-	### One decolonization decision: what it would do, built in script, and the
-	### control that opens its confirmation event. Every row shares one scripted
-	### GUI and differs only by op code, so the datacontext lives here.
+	### One decolonization decision: its name on the left, what it does on
+	### hover, and the control that opens its confirmation event beside it
+	### (style rule 6; it used to sit under a paragraph, flush left). Every row
+	### shares one scripted GUI and differs only by op code, so the datacontext
+	### lives here.
 	type colonial_empire_decision_row = flowcontainer {
-		direction = vertical
+		direction = horizontal
 		ignoreinvisible = yes
-		spacing = 2
+		spacing = 10
 		margin = { 4 4 }
 		datacontext = "[GetScriptedGui('colonial_empire_decision_sgui')]"
 
-		colonial_empire_row_text = {
+		textbox = {
+			autoresize = yes
+			multiline = yes
+			minimumsize = { 300 -1 }
+			maximumsize = { 300 -1 }
+			parentanchor = vcenter
+			align = left|nobaseline
+			using = fontsize_medium
+			default_format = "#tooltippable"
 			block "row_text" {}
 		}
 
 		button = {
 			using = default_button_action
-			size = { 220 28 }
+			size = { 150 28 }
+			parentanchor = vcenter
 
 			textbox = {
 				parentanchor = center
 				align = center|nobaseline
 				autoresize = yes
-				max_width = 210
+				max_width = 140
 				elide = right
 				using = fontsize_small
 				text = "je_colonial_empire_btn_open_choice"
@@ -207,474 +299,1128 @@ types colonial_empire_widget_types
 			block "row_action" {}
 		}
 	}
-}
 
+	### ======================================================================
+	### OVERVIEW. Always shown, not collapsible (style rule 1).
+	### ======================================================================
 
-### WIDGETS
+	### A cell of the overview: an icon, its word small beneath. Fixed width,
+	### so a long word cannot push the row wider (te_un_ov_icon_label's shape).
+	type te_ce_ov_icon_label = widget {
+		size = { 110 58 }
 
-### ---------------------------------------------------------------------------
-### container_2: conditions, pressure, programmes, decisions
-### ---------------------------------------------------------------------------
-flowcontainer = {
-	name = "widget_je_colonial_empire"
-	direction = vertical
-	parentanchor = hcenter
-	ignoreinvisible = yes
-	spacing = 4
-
-	visible = "[JournalEntry.IsActive]"
-
-	# ---- Colonial stability: where we are and why it is moving ----
-	colonial_empire_section_header = {
-		blockoverride "left_text" {
-			text = "je_colonial_empire_stability_header"
+		icon = {
+			size = { 36 36 }
+			parentanchor = top|hcenter
+			block "icon_texture" {}
 		}
-		blockoverride "onclick" {
-			onclick = "[GetVariableSystem.Toggle('colonial_empire_stability_closed')]"
-		}
-		blockoverride "onclick_showmore" {
-			visible = "[GetVariableSystem.Exists('colonial_empire_stability_closed')]"
-		}
-		blockoverride "onclick_showless" {
-			visible = "[Not(GetVariableSystem.Exists('colonial_empire_stability_closed'))]"
+		textbox = {
+			parentanchor = bottom|hcenter
+			autoresize = yes
+			max_width = 108
+			elide = right
+			align = hcenter|nobaseline
+			using = fontsize_small
+			default_format = "#tooltippable"
+			block "label" {}
 		}
 	}
 
-	colonial_empire_panel = {
-		# The flag is the CLOSED flag, so this section is open by default — it is
-		# the one the player came for. International Pressure and History below
-		# use *open* flags and start collapsed.
-		visible = "[Not(GetVariableSystem.Exists('colonial_empire_stability_closed'))]"
+	### One programme: full colour while it runs, dimmed while it does not. The
+	### instance sets the texture on both icons, and the visible gate and
+	### tooltip on each (te_un_ov_agency's shape).
+	type te_ce_ov_programme = widget {
+		size = { 40 40 }
 
-		# ---- The bar, restated with the engine's own breakdown --------------
-		# SELF-CONTAINED BLOCK. Everything that depends on reaching a
-		# ScriptedProgressBar from a JE widget's datacontext is inside this one
-		# flowcontainer, so if the chain does not resolve in game the fallback is
-		# to delete this block whole and lose nothing else. The entry has exactly
-		# one scripted bar, so the datamodel yields one item.
-		#
-		# GetPeriodicProgressBreakdown is the engine's own per-term rendering of
-		# monthly_progress, generated from the 21 `desc` keys on the bar's `add`
-		# lines. Reusing it is why this widget can show the formula without a
-		# single number of its own: it cannot drift from the mechanic because it
-		# IS the mechanic. Vanilla renders the same call at
-		# gui/journal_entry.gui:303 for a default_green bar.
-		flowcontainer = {
-			direction = vertical
-			ignoreinvisible = yes
-			parentanchor = hcenter
-			datamodel = "[JournalEntry.GetScriptedProgressBars]"
-
-			item = {
-				colonial_empire_text = {
-					text = "je_colonial_empire_bar_headline"
-					tooltip = "[ScriptedProgressBar.GetPeriodicProgressBreakdown]"
-				}
-			}
+		icon = {
+			size = { 36 36 }
+			parentanchor = center
+			block "lit" {}
+			block "programme_texture" {}
 		}
-
-		# ---- Band, distance to the next band, projected monthly change ------
-		colonial_empire_text = {
-			visible = "[GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-			text = "je_colonial_empire_band_headline"
-		}
-
-		# ---- The nine contributions ----
-		colonial_empire_text = {
-			visible = "[GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-			text = "je_colonial_empire_conditions_body"
-		}
-
-		# ---- The phase modifier the entry is carrying ----
-		colonial_empire_text = {
-			visible = "[GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-			text = "je_colonial_empire_phase_row"
-		}
-
-		# Shown for the one month between activation and the first pulse, and on
-		# a save upgraded mid-entry.
-		colonial_empire_text = {
-			visible = "[Not(GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
-			text = "je_colonial_empire_conditions_pending"
+		icon = {
+			size = { 36 36 }
+			parentanchor = center
+			alpha = 0.25
+			block "unlit" {}
+			block "programme_texture" {}
 		}
 	}
 
-	# ---- International pressure ----
-	# Collapsed by default: its scripted GUI walks every country twice per frame
-	# while open, so nothing runs until the player asks for it.
-	colonial_empire_section_header = {
-		blockoverride "left_text" {
-			text = "je_colonial_empire_pressure_header"
+	### A 0..1 share as a pie over a background disc, inside vanilla's
+	### decorated round frame, its label beneath (te_un_ov_pie's shape; the
+	### recipe is "Pie charts of script-held data" in gui_modding_guide.md).
+	### Frame 1 of each texture is transparent, frame 2 the colour.
+	type te_ce_ov_pie = widget {
+		size = { 150 108 }
+
+		icon = {
+			size = { 86 86 }
+			parentanchor = top|hcenter
+			texture = "gfx/interface/backgrounds/round_frame_dec.dds"
 		}
-		blockoverride "onclick" {
-			onclick = "[GetVariableSystem.Toggle('colonial_empire_pressure_open')]"
+		widget = {
+			size = { 62 62 }
+			parentanchor = top|hcenter
+			position = { 0 12 }
+
+			progresspie = {
+				size = { 100% 100% }
+				min = 0
+				max = 1
+				value = 1
+				texture = "gfx/interface/icons/un_icons/pie_rest.dds"
+				framesize = { 128 128 }
+				frame = 2
+			}
+			progresspie = {
+				size = { 100% 100% }
+				min = 0
+				max = 1
+				block "pie_value" {}
+				texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds"
+				framesize = { 128 128 }
+				frame = 2
+			}
 		}
-		blockoverride "onclick_showmore" {
-			visible = "[Not(GetVariableSystem.Exists('colonial_empire_pressure_open'))]"
-		}
-		blockoverride "onclick_showless" {
-			visible = "[GetVariableSystem.Exists('colonial_empire_pressure_open')]"
+		textbox = {
+			parentanchor = bottom|hcenter
+			autoresize = yes
+			align = hcenter|nobaseline
+			using = fontsize_medium
+			default_format = "#tooltippable"
+			block "label" {}
 		}
 	}
 
-	colonial_empire_panel = {
-		visible = "[GetVariableSystem.Exists('colonial_empire_pressure_open')]"
+	### What a returning player checks: which band, which programmes are
+	### running, where the bar is and which way it is moving, and how much of
+	### the great powers' weight is condemning us.
+	type te_ce_overview_panel = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		visible = "[JournalEntry.IsActive]"
 
-		colonial_empire_text = {
-			text = "[GetScriptedGui('colonial_empire_pressure_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
-		}
-	}
+		colonial_empire_panel = {
+			spacing = 10
 
-	# ---- The three colonial programmes ----
-	colonial_empire_section_header = {
-		blockoverride "left_text" {
-			text = "je_colonial_empire_programmes_header"
-		}
-		blockoverride "onclick" {
-			onclick = "[GetVariableSystem.Toggle('colonial_empire_programmes_closed')]"
-		}
-		blockoverride "onclick_showmore" {
-			visible = "[GetVariableSystem.Exists('colonial_empire_programmes_closed')]"
-		}
-		blockoverride "onclick_showless" {
-			visible = "[Not(GetVariableSystem.Exists('colonial_empire_programmes_closed'))]"
-		}
-	}
+			### Before the first monthly assessment (a save upgraded mid-entry):
+			### one line in place of the rows that read the snapshot.
+			colonial_empire_text = {
+				visible = "[Not(GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
+				text = "je_colonial_empire_conditions_pending"
+			}
 
-	colonial_empire_panel = {
-		visible = "[Not(GetVariableSystem.Exists('colonial_empire_programmes_closed'))]"
+			### Row 1: the band · the programmes running
+			flowcontainer = {
+				direction = horizontal
+				spacing = 6
+				ignoreinvisible = yes
+				parentanchor = hcenter
 
-		# Development Investment — op 0 enable / op 1 disable
-		colonial_empire_policy_row = {
-			tooltip = "je_colonial_empire_tt_invest"
-			blockoverride "row_label" {
-				text = "je_colonial_empire_row_invest"
-			}
-			blockoverride "row_cost" {
-				text = "je_colonial_empire_cost_invest"
-			}
-			blockoverride "enable_action" {
-				datacontext = "[GetScriptedGui('colonial_empire_policy_sgui')]"
-				# Visibility comes from the scope-free handler, never from an op code
-				# reaching an is_shown block (see the sgui file header).
-				visible = "[Not(GetScriptedGui('colonial_empire_active_invest_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
-			}
-			blockoverride "disable_action" {
-				datacontext = "[GetScriptedGui('colonial_empire_policy_sgui')]"
-				visible = "[GetScriptedGui('colonial_empire_active_invest_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
-			}
-		}
+				### The band. Its tooltip is the entry's status line and the
+				### modifier the band puts on the entry (the panel's old "While in
+				### this band" line).
+				flowcontainer = {
+					ignoreinvisible = yes
+					visible = "[GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					tooltip = "je_colonial_empire_ov_band_tt"
 
-		# Military Garrison — op 2 enable / op 3 disable
-		colonial_empire_policy_row = {
-			tooltip = "je_colonial_empire_tt_garrison"
-			blockoverride "row_label" {
-				text = "je_colonial_empire_row_garrison"
-			}
-			blockoverride "row_cost" {
-				text = "je_colonial_empire_cost_garrison"
-			}
-			blockoverride "enable_action" {
-				datacontext = "[GetScriptedGui('colonial_empire_policy_sgui')]"
-				# Visibility comes from the scope-free handler, never from an op code
-				# reaching an is_shown block (see the sgui file header).
-				visible = "[Not(GetScriptedGui('colonial_empire_active_garrison_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
-			}
-			blockoverride "disable_action" {
-				datacontext = "[GetScriptedGui('colonial_empire_policy_sgui')]"
-				visible = "[GetScriptedGui('colonial_empire_active_garrison_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
-			}
-		}
-
-		# Cultural Assimilation — op 4 enable / op 5 disable
-		colonial_empire_policy_row = {
-			tooltip = "je_colonial_empire_tt_assimilation"
-			blockoverride "row_label" {
-				text = "je_colonial_empire_row_assimilation"
-			}
-			blockoverride "row_cost" {
-				text = "je_colonial_empire_cost_assimilation"
-			}
-			blockoverride "enable_action" {
-				datacontext = "[GetScriptedGui('colonial_empire_policy_sgui')]"
-				# Visibility comes from the scope-free handler, never from an op code
-				# reaching an is_shown block (see the sgui file header).
-				visible = "[Not(GetScriptedGui('colonial_empire_active_assimilation_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
-			}
-			blockoverride "disable_action" {
-				datacontext = "[GetScriptedGui('colonial_empire_policy_sgui')]"
-				visible = "[GetScriptedGui('colonial_empire_active_assimilation_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
-			}
-		}
-	}
-
-	# ---- The three decolonization decisions ----
-	colonial_empire_section_header = {
-		blockoverride "left_text" {
-			text = "je_colonial_empire_decisions_header"
-		}
-		blockoverride "onclick" {
-			onclick = "[GetVariableSystem.Toggle('colonial_empire_decisions_closed')]"
-		}
-		blockoverride "onclick_showmore" {
-			visible = "[GetVariableSystem.Exists('colonial_empire_decisions_closed')]"
-		}
-		blockoverride "onclick_showless" {
-			visible = "[Not(GetVariableSystem.Exists('colonial_empire_decisions_closed'))]"
-		}
-	}
-
-	colonial_empire_panel = {
-		visible = "[Not(GetVariableSystem.Exists('colonial_empire_decisions_closed'))]"
-
-		# How many territories are on the table, and which one the confirmation
-		# event will offer first. The three-candidate flood-fill itself stays in
-		# the button action, on click.
-		colonial_empire_text = {
-			visible = "[GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-			text = "je_colonial_empire_candidates_row"
-		}
-
-		# Separate widget, separate guard: refresh_display removes the variable
-		# when nothing qualifies, so this must not share the row above's gate.
-		colonial_empire_text = {
-			visible = "[GetScriptedGui('colonial_empire_has_candidates').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-			text = "je_colonial_empire_candidates_largest"
-		}
-
-		# Release a Colonial Territory — op 0
-		colonial_empire_decision_row = {
-			blockoverride "row_text" {
-				text = "je_colonial_empire_decision_release"
-			}
-			blockoverride "row_action" {
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
-			}
-		}
-
-		# Round Table Conference — op 2 (listed second: it is the negotiated
-		# middle path between a unilateral grant and liquidating the empire)
-		colonial_empire_decision_row = {
-			blockoverride "row_text" {
-				text = "je_colonial_empire_decision_round_table"
-			}
-			blockoverride "row_action" {
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
-			}
-		}
-
-		# Planned Full Decolonization — op 1
-		colonial_empire_decision_row = {
-			blockoverride "row_text" {
-				text = "je_colonial_empire_decision_planned"
-			}
-			blockoverride "row_action" {
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
-			}
-		}
-	}
-}
-
-
-### ---------------------------------------------------------------------------
-### container_3: history charts, directly above the native stability bar
-###
-### te_history_chart / te_history_bar_unsigned / te_history_bar_signed /
-### te_history_range_button are declared in
-### gui/journal_entry_widgets/te_history_chart.gui. Types declared in a .gui file
-### are global once loaded, so they are instanced here without including it.
-###
-### `te_hist_range` is a single global GUI variable shared with the banking
-### history widget: changing the range here changes it there too. Accepted.
-### ---------------------------------------------------------------------------
-flowcontainer = {
-	name = "widget_je_colonial_empire_history"
-	direction = vertical
-	parentanchor = hcenter
-	ignoreinvisible = yes
-	spacing = 4
-
-	visible = "[JournalEntry.IsActive]"
-
-	colonial_empire_section_header = {
-		blockoverride "left_text" {
-			text = "je_colonial_empire_history_header"
-		}
-		blockoverride "onclick" {
-			onclick = "[GetVariableSystem.Toggle('colonial_empire_history_open')]"
-		}
-		blockoverride "onclick_showmore" {
-			visible = "[Not(GetVariableSystem.Exists('colonial_empire_history_open'))]"
-		}
-		blockoverride "onclick_showless" {
-			visible = "[GetVariableSystem.Exists('colonial_empire_history_open')]"
-		}
-	}
-
-	colonial_empire_panel = {
-		visible = "[GetVariableSystem.Exists('colonial_empire_history_open')]"
-
-		# ---- Range ----
-		flowcontainer = {
-			direction = horizontal
-			spacing = 4
-			ignoreinvisible = yes
-			parentanchor = hcenter
-
-			te_history_range_button = {
-				blockoverride "range_text" {
-					text = "te_hist_range_1y"
-				}
-				blockoverride "range_enabled" {
-					enabled = "[Not(GetVariableSystem.HasValue( 'te_hist_range', '1' ))]"
-				}
-				blockoverride "range_onclick" {
-					onclick = "[GetVariableSystem.Set( 'te_hist_range', '1' )]"
-				}
-			}
-			te_history_range_button = {
-				blockoverride "range_text" {
-					text = "te_hist_range_5y"
-				}
-				blockoverride "range_enabled" {
-					enabled = "[Not(GetVariableSystem.HasValue( 'te_hist_range', '5' ))]"
-				}
-				blockoverride "range_onclick" {
-					onclick = "[GetVariableSystem.Set( 'te_hist_range', '5' )]"
-				}
-			}
-			te_history_range_button = {
-				blockoverride "range_text" {
-					text = "te_hist_range_20y"
-				}
-				blockoverride "range_enabled" {
-					enabled = "[Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '5' ) )]"
-				}
-				blockoverride "range_onclick" {
-					onclick = "[GetVariableSystem.Set( 'te_hist_range', '20' )]"
-				}
-			}
-		}
-
-		# ---- Colonial stability, 0-100 ----
-		# Sampled to the nearest 5 (see colonial_empire_refresh_display: the bar
-		# is trigger-only, so a comparison ladder is the only read). The legend
-		# says so.
-		te_history_chart = {
-			blockoverride "chart_title" {
-				text = "te_hist_chart_colonial_stability_title"
-			}
-			blockoverride "chart_legend" {
-				text = "te_hist_chart_colonial_stability_legend"
-			}
-			# This series records no markers; the store's pips belong to
-			# other systems (banking, cultural hegemony) and would go unexplained.
-			blockoverride "marker_pips" {}
-			blockoverride "bar_tooltip" {
-				tooltip = "te_hist_tt_colonial_stability"
-			}
-			blockoverride "bar_body" {
-				te_history_bar_unsigned = {
-					visible = "[ScriptContainer.HasVariable( 'te_hist_v_colonial_stability' )]"
-					blockoverride "values" {
-						min = 0
-						max = 100
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_colonial_stability' ) ) )]"
+					te_ce_ov_icon_label = {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)5' )]"
+						blockoverride "icon_texture" {
+							texture = "gfx/interface/icons/state_status_icons/state_homelands.dds"
+						}
+						blockoverride "label" {
+							text = "je_colonial_empire_band_solidified"
+						}
 					}
-					blockoverride "cover_values" {
-						min = 0
-						max = 100
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_colonial_stability' ), '(CFixedPoint)4' ) ) )]"
+					te_ce_ov_icon_label = {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)4' )]"
+						blockoverride "icon_texture" {
+							texture = "gfx/interface/icons/state_status_icons/incorporated_state.dds"
+						}
+						blockoverride "label" {
+							text = "je_colonial_empire_band_stable"
+						}
 					}
-					blockoverride "color" {
-						color = { 0.45 0.68 0.45 1.0 }
+					te_ce_ov_icon_label = {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)3' )]"
+						blockoverride "icon_texture" {
+							texture = "gfx/interface/icons/generic_icons/warning.dds"
+						}
+						blockoverride "label" {
+							text = "je_colonial_empire_band_strained"
+						}
+					}
+					te_ce_ov_icon_label = {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)2' )]"
+						blockoverride "icon_texture" {
+							texture = "gfx/interface/icons/state_status_icons/has_turmoil.dds"
+						}
+						blockoverride "label" {
+							text = "je_colonial_empire_band_crumbling"
+						}
+					}
+					te_ce_ov_icon_label = {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)1' )]"
+						blockoverride "icon_texture" {
+							texture = "gfx/interface/icons/war_goals/independence.dds"
+						}
+						blockoverride "label" {
+							text = "je_colonial_empire_band_collapsing"
+						}
 					}
 				}
-			}
-		}
 
-		# ---- Projected monthly drift, signed ----
-		# Exact: colonial_stability_drift_total, the same capped sum of leaf
-		# script values the bar applies. The scale is +/-2 because that sum is
-		# capped at +/-colonial_stability_drift_cap (1.667); the cap stripe is
-		# 0.17, the same 1/12 of the half-height the other signed charts use.
-		te_history_chart = {
-			blockoverride "chart_title" {
-				text = "te_hist_chart_colonial_drift_title"
-			}
-			blockoverride "chart_legend" {
-				text = "te_hist_chart_colonial_drift_legend"
-			}
-			# This series records no markers; the store's pips belong to
-			# other systems (banking, cultural hegemony) and would go unexplained.
-			blockoverride "marker_pips" {}
-			blockoverride "zero_axis" {
+				### The three programmes, lit while they run. Which half of each
+				### pair is drawn comes from the same scope-free handlers that pick
+				### the Enable or the Disable control below.
 				widget = {
-					size = { 100% 2 }
-					parentanchor = vcenter
-					alwaystransparent = yes
+					size = { 150 58 }
 
-					background = {
-						using = dark_area
-						alpha = 0.7
+					flowcontainer = {
+						direction = horizontal
+						spacing = 4
+						parentanchor = top|hcenter
+
+						te_ce_ov_programme = {
+							blockoverride "programme_texture" {
+								texture = "gfx/interface/icons/building_icons/building_browser_filter_icons/filter_icons_development.dds"
+							}
+							blockoverride "lit" {
+								visible = "[GetScriptedGui('colonial_empire_active_invest_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+								tooltip = "je_colonial_empire_ov_invest_on_tt"
+							}
+							blockoverride "unlit" {
+								visible = "[Not(GetScriptedGui('colonial_empire_active_invest_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
+								tooltip = "je_colonial_empire_ov_invest_off_tt"
+							}
+						}
+						te_ce_ov_programme = {
+							blockoverride "programme_texture" {
+								texture = "gfx/interface/icons/generic_icons/battalions.dds"
+							}
+							blockoverride "lit" {
+								visible = "[GetScriptedGui('colonial_empire_active_garrison_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+								tooltip = "je_colonial_empire_ov_garrison_on_tt"
+							}
+							blockoverride "unlit" {
+								visible = "[Not(GetScriptedGui('colonial_empire_active_garrison_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
+								tooltip = "je_colonial_empire_ov_garrison_off_tt"
+							}
+						}
+						te_ce_ov_programme = {
+							blockoverride "programme_texture" {
+								texture = "gfx/interface/population/pop_culture.dds"
+							}
+							blockoverride "lit" {
+								visible = "[GetScriptedGui('colonial_empire_active_assimilation_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+								tooltip = "je_colonial_empire_ov_assimilation_on_tt"
+							}
+							blockoverride "unlit" {
+								visible = "[Not(GetScriptedGui('colonial_empire_active_assimilation_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
+								tooltip = "je_colonial_empire_ov_assimilation_off_tt"
+							}
+						}
+					}
+					textbox = {
+						parentanchor = bottom|hcenter
+						autoresize = yes
+						align = hcenter|nobaseline
+						using = fontsize_small
+						text = "je_colonial_empire_ov_programmes_label"
 					}
 				}
 			}
-			blockoverride "bar_tooltip" {
-				tooltip = "te_hist_tt_colonial_drift"
+
+			### Row 2: the stability bar, a marker where the next band begins,
+			### the value and this month's projected change, and its direction.
+			### Reached the way vanilla's journal panel reaches it, through the
+			### entry's own datamodel (one scripted bar, so one item). The row's
+			### tooltip is the engine's own term-by-term breakdown, which reads
+			### only the ScriptedProgressBar (gotcha #24: a tooltip in a datamodel
+			### item has no JournalEntry). Everything else in the row is a widget
+			### property or text, which does see JournalEntry.
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				parentanchor = hcenter
+				datamodel = "[JournalEntry.GetScriptedProgressBars]"
+
+				item = {
+					flowcontainer = {
+						direction = horizontal
+						spacing = 8
+						ignoreinvisible = yes
+						tooltip = "[ScriptedProgressBar.GetPeriodicProgressBreakdown]"
+
+						textbox = {
+							minimumsize = { 90 -1 }
+							maximumsize = { 90 -1 }
+							autoresize = yes
+							parentanchor = vcenter
+							align = left|nobaseline
+							text = "je_colonial_empire_ov_stability_label"
+						}
+						default_progressbar_horizontal = {
+							size = { 200 18 }
+							parentanchor = vcenter
+							blockoverride "values" {
+								value = "[JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)]"
+								min = 0
+								max = 1
+							}
+							### The next band's edge (the marker technique of the UN
+							### overview's authority target).
+							blockoverride "on_top_of_the_progressbar" {
+								progressbar = {
+									visible = "[GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+									noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+									progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+									size = { 100% 100% }
+									skip_initial_animation = yes
+									direction = horizontal
+									value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_next_boundary_frac') )]"
+									min = 0
+									max = 1
+									marker = {
+										icon = {
+											size = { 36 20 }
+											parentanchor = vcenter
+											widgetanchor = center
+											texture = "gfx/interface/progressbar/progressbar_marker.dds"
+										}
+									}
+								}
+							}
+						}
+						textbox = {
+							minimumsize = { 120 -1 }
+							maximumsize = { 120 -1 }
+							autoresize = yes
+							parentanchor = vcenter
+							align = left|nobaseline
+							elide = right
+							text = "je_colonial_empire_ov_stability_value"
+						}
+						widget = {
+							size = { 24 24 }
+							parentanchor = vcenter
+
+							icon = {
+								size = { 24 24 }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_trend'), '(CFixedPoint)1' )]"
+								texture = "gfx/interface/icons/generic_icons/trend_up.dds"
+							}
+							icon = {
+								size = { 24 24 }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_trend'), '(CFixedPoint)-1' )]"
+								texture = "gfx/interface/icons/generic_icons/trend_down.dds"
+							}
+							icon = {
+								size = { 24 24 }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_trend'), '(CFixedPoint)0' )]"
+								texture = "gfx/interface/icons/generic_icons/trend_nochange.dds"
+							}
+						}
+					}
+				}
 			}
-			blockoverride "bar_body" {
-				te_history_bar_signed = {
-					visible = "[ScriptContainer.HasVariable( 'te_hist_v_colonial_drift' )]"
-					blockoverride "positive_values" {
-						min = 0
-						max = 2
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_colonial_drift' ) ) )]"
+
+			### Row 3: where the next band begins, under the marker that shows it.
+			textbox = {
+				visible = "[GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				autoresize = yes
+				parentanchor = hcenter
+				align = hcenter|nobaseline
+				using = fontsize_medium
+				text = "je_colonial_empire_ov_next"
+			}
+
+			### Row 4: the great powers. The pie is the condemners' share of
+			### great-power prestige (ours included), the number the two
+			### escalations fire on; its tooltip is International Pressure's
+			### roster, built only while hovered. Beside it, the escalation in
+			### force, if any.
+			flowcontainer = {
+				direction = horizontal
+				spacing = 6
+				ignoreinvisible = yes
+				parentanchor = hcenter
+				visible = "[GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+				te_ce_ov_pie = {
+					tooltip = "[GetScriptedGui('colonial_empire_pressure_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+					blockoverride "pie_value" {
+						value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_condemner_share') )]"
 					}
-					blockoverride "positive_cover_values" {
-						min = 0
-						max = 2
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_colonial_drift' ), '(CFixedPoint)0.17' ) ) )]"
+					blockoverride "label" {
+						text = "je_colonial_empire_ov_pie_label"
 					}
-					blockoverride "negative_values" {
-						min = -2
-						max = 0
-						value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_colonial_drift' ) ) )]"
+				}
+				te_ce_ov_icon_label = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)1' )]"
+					parentanchor = vcenter
+					tooltip = "je_colonial_empire_ov_isolation_tt"
+					blockoverride "icon_texture" {
+						texture = "gfx/interface/icons/generic_icons/disapproval_icon.dds"
 					}
-					blockoverride "negative_cover_values" {
-						min = -2
-						max = 0
-						value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', Add_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_colonial_drift' ), '(CFixedPoint)0.17' ) ) )]"
+					blockoverride "label" {
+						text = "je_colonial_empire_ov_isolation"
+					}
+				}
+				te_ce_ov_icon_label = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)2' )]"
+					parentanchor = vcenter
+					tooltip = "je_colonial_empire_ov_consensus_tt"
+					blockoverride "icon_texture" {
+						texture = "gfx/interface/icons/generic_icons/red_cross.dds"
+					}
+					blockoverride "label" {
+						text = "je_colonial_empire_ov_consensus"
 					}
 				}
 			}
 		}
 	}
+
+	### ======================================================================
+	### SECTIONS. Each is composed, in order, by te_ce_status_sections or
+	### te_ce_reference_sections below.
+	### ======================================================================
+
+	### Why stability is moving: the nine groups of the bar's formula as a
+	### table, then the monthly limit and the total. Open by default (the
+	### CLOSED flag). Each row's tooltip says what the group holds; the
+	### explanations are in "How the Colonial Empire Works".
+	type te_ce_sec_stability = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		colonial_empire_section_header = {
+			blockoverride "left_text" {
+				text = "je_colonial_empire_stability_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('colonial_empire_stability_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('colonial_empire_stability_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('colonial_empire_stability_closed'))]"
+			}
+		}
+
+		colonial_empire_panel = {
+			visible = "[Not(GetVariableSystem.Exists('colonial_empire_stability_closed'))]"
+
+			# Shown for a save upgraded mid-entry, until the first pulse.
+			colonial_empire_text = {
+				visible = "[Not(GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
+				text = "je_colonial_empire_conditions_pending"
+			}
+
+			# Six groups read live (a click moves them the next frame); the
+			# three that iterate — overreach, great-power pressure, acceptance —
+			# read this month's snapshot, behind the display_ready gate.
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				visible = "[GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+				colonial_empire_value_row = {
+					tooltip = "je_colonial_empire_drift_base_tt"
+					blockoverride "row_label" {
+						text = "je_colonial_empire_drift_base"
+					}
+					blockoverride "row_value" {
+						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_base')|=+2]"
+					}
+				}
+				colonial_empire_value_row = {
+					tooltip = "je_colonial_empire_drift_laws_tt"
+					blockoverride "row_label" {
+						text = "je_colonial_empire_drift_laws"
+					}
+					blockoverride "row_value" {
+						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_laws')|=+2]"
+					}
+				}
+				colonial_empire_value_row = {
+					tooltip = "je_colonial_empire_drift_igs_tt"
+					blockoverride "row_label" {
+						text = "je_colonial_empire_drift_igs"
+					}
+					blockoverride "row_value" {
+						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_igs')|=+2]"
+					}
+				}
+				colonial_empire_value_row = {
+					tooltip = "je_colonial_empire_drift_rank_tt"
+					blockoverride "row_label" {
+						text = "je_colonial_empire_drift_rank"
+					}
+					blockoverride "row_value" {
+						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_rank')|=+2]"
+					}
+				}
+				colonial_empire_value_row = {
+					tooltip = "je_colonial_empire_drift_policies_tt"
+					blockoverride "row_label" {
+						text = "je_colonial_empire_drift_policies"
+					}
+					blockoverride "row_value" {
+						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_policies')|=+2]"
+					}
+				}
+				colonial_empire_value_row = {
+					tooltip = "je_colonial_empire_drift_domestic_tt"
+					blockoverride "row_label" {
+						text = "je_colonial_empire_drift_domestic"
+					}
+					blockoverride "row_value" {
+						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_domestic')|=+2]"
+					}
+				}
+				colonial_empire_value_row = {
+					tooltip = "je_colonial_empire_drift_overreach_tt"
+					blockoverride "row_label" {
+						text = "je_colonial_empire_drift_overreach"
+					}
+					blockoverride "row_value" {
+						text = "[JournalEntry.GetCountry.MakeScope.Var('colonial_empire_d_overreach').GetValue|=+2]"
+					}
+				}
+				colonial_empire_value_row = {
+					tooltip = "je_colonial_empire_drift_gp_tt"
+					blockoverride "row_label" {
+						text = "je_colonial_empire_drift_gp"
+					}
+					blockoverride "row_value" {
+						text = "[JournalEntry.GetCountry.MakeScope.Var('colonial_empire_d_gp').GetValue|=+2]"
+					}
+				}
+				colonial_empire_value_row = {
+					tooltip = "je_colonial_empire_drift_acceptance_tt"
+					blockoverride "row_label" {
+						text = "je_colonial_empire_drift_acceptance"
+					}
+					blockoverride "row_value" {
+						text = "[JournalEntry.GetCountry.MakeScope.Var('colonial_empire_d_acceptance').GetValue|=+2]"
+					}
+				}
+
+				divider_clean = {
+					blockoverride "size" {
+						size = { 480 2 }
+					}
+				}
+
+				# What the monthly limit takes off, so the rows add up to the total.
+				colonial_empire_value_row = {
+					tooltip = "je_colonial_empire_drift_cap_tt"
+					blockoverride "row_label" {
+						text = "je_colonial_empire_drift_cap"
+					}
+					blockoverride "row_value" {
+						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_cap_display')|=+2]"
+					}
+				}
+				colonial_empire_value_row = {
+					tooltip = "je_colonial_empire_drift_total_tt"
+					blockoverride "row_label" {
+						text = "je_colonial_empire_drift_total"
+					}
+					blockoverride "row_value" {
+						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]"
+					}
+				}
+			}
+		}
+	}
+
+	### International pressure: which great powers condemn or back us. Collapsed
+	### by default, AGAINST style rule 1, for the reason it always was: its
+	### roster is walked live in script (colonial_empire_pressure_sgui, two
+	### every_country walks per frame while it is open), so nothing runs until
+	### the player asks. The overview's pie shows the condemners' share, and its
+	### tooltip carries this same roster, built only while hovered.
+	type te_ce_sec_pressure = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		colonial_empire_section_header = {
+			blockoverride "left_text" {
+				text = "je_colonial_empire_pressure_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('colonial_empire_pressure_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('colonial_empire_pressure_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('colonial_empire_pressure_open')]"
+			}
+		}
+
+		colonial_empire_panel = {
+			visible = "[GetVariableSystem.Exists('colonial_empire_pressure_open')]"
+
+			colonial_empire_text = {
+				text = "[GetScriptedGui('colonial_empire_pressure_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+			}
+		}
+	}
+
+	### The three colonial programmes, each with its Enable or Disable control
+	### beside it. Open by default.
+	type te_ce_sec_programmes = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		colonial_empire_section_header = {
+			blockoverride "left_text" {
+				text = "je_colonial_empire_programmes_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('colonial_empire_programmes_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('colonial_empire_programmes_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('colonial_empire_programmes_closed'))]"
+			}
+		}
+
+		colonial_empire_panel = {
+			visible = "[Not(GetVariableSystem.Exists('colonial_empire_programmes_closed'))]"
+
+			# Development Investment — op 0 enable / op 1 disable
+			colonial_empire_policy_row = {
+				tooltip = "je_colonial_empire_tt_invest"
+				blockoverride "row_label" {
+					text = "je_colonial_empire_row_invest"
+				}
+				blockoverride "row_cost" {
+					text = "je_colonial_empire_cost_invest"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('colonial_empire_policy_sgui')]"
+					# Visibility comes from the scope-free handler, never from an op code
+					# reaching an is_shown block (see the sgui file header).
+					visible = "[Not(GetScriptedGui('colonial_empire_active_invest_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('colonial_empire_policy_sgui')]"
+					visible = "[GetScriptedGui('colonial_empire_active_invest_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+				}
+			}
+
+			# Military Garrison — op 2 enable / op 3 disable
+			colonial_empire_policy_row = {
+				tooltip = "je_colonial_empire_tt_garrison"
+				blockoverride "row_label" {
+					text = "je_colonial_empire_row_garrison"
+				}
+				blockoverride "row_cost" {
+					text = "je_colonial_empire_cost_garrison"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('colonial_empire_policy_sgui')]"
+					# Visibility comes from the scope-free handler, never from an op code
+					# reaching an is_shown block (see the sgui file header).
+					visible = "[Not(GetScriptedGui('colonial_empire_active_garrison_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('colonial_empire_policy_sgui')]"
+					visible = "[GetScriptedGui('colonial_empire_active_garrison_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
+				}
+			}
+
+			# Cultural Assimilation — op 4 enable / op 5 disable
+			colonial_empire_policy_row = {
+				tooltip = "je_colonial_empire_tt_assimilation"
+				blockoverride "row_label" {
+					text = "je_colonial_empire_row_assimilation"
+				}
+				blockoverride "row_cost" {
+					text = "je_colonial_empire_cost_assimilation"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('colonial_empire_policy_sgui')]"
+					# Visibility comes from the scope-free handler, never from an op code
+					# reaching an is_shown block (see the sgui file header).
+					visible = "[Not(GetScriptedGui('colonial_empire_active_assimilation_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('colonial_empire_policy_sgui')]"
+					visible = "[GetScriptedGui('colonial_empire_active_assimilation_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
+				}
+			}
+		}
+	}
+
+	### The three decolonization decisions. Open by default. The candidate
+	### counts sit once above the rows, since an empty count greys all three
+	### (style rule 6); each decision's description is on its name's hover.
+	type te_ce_sec_decisions = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		colonial_empire_section_header = {
+			blockoverride "left_text" {
+				text = "je_colonial_empire_decisions_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('colonial_empire_decisions_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('colonial_empire_decisions_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('colonial_empire_decisions_closed'))]"
+			}
+		}
+
+		colonial_empire_panel = {
+			visible = "[Not(GetVariableSystem.Exists('colonial_empire_decisions_closed'))]"
+
+			# How many territories are on the table, and which one the confirmation
+			# event will offer first. The three-candidate flood-fill itself stays in
+			# the button action, on click.
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				visible = "[GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+				colonial_empire_value_row = {
+					tooltip = "je_colonial_empire_candidates_eligible_tt"
+					blockoverride "row_label" {
+						text = "je_colonial_empire_candidates_eligible"
+					}
+					blockoverride "row_value" {
+						text = "[JournalEntry.GetCountry.MakeScope.Var('colonial_empire_eligible_count').GetValue|0]"
+					}
+				}
+				colonial_empire_value_row = {
+					tooltip = "je_colonial_empire_candidates_round_table_tt"
+					blockoverride "row_label" {
+						text = "je_colonial_empire_candidates_round_table"
+					}
+					blockoverride "row_value" {
+						text = "[JournalEntry.GetCountry.MakeScope.Var('colonial_empire_round_table_count').GetValue|0]"
+					}
+				}
+				# Its own gate: refresh_display removes the variable when nothing
+				# qualifies, so this row must not rely on the display_ready gate
+				# above alone.
+				colonial_empire_value_row = {
+					visible = "[GetScriptedGui('colonial_empire_has_candidates').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					tooltip = "je_colonial_empire_candidates_largest_tt"
+					blockoverride "row_label" {
+						text = "je_colonial_empire_candidates_largest"
+					}
+					blockoverride "row_value" {
+						text = "[JournalEntry.GetCountry.MakeScope.Var('colonial_empire_largest_eligible_state').GetState.GetName]"
+					}
+				}
+			}
+
+			# Release a Colonial Territory — op 0
+			colonial_empire_decision_row = {
+				blockoverride "row_text" {
+					text = "je_colonial_empire_decision_release"
+					tooltip = "je_colonial_empire_decision_release_tt"
+				}
+				blockoverride "row_action" {
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
+				}
+			}
+
+			# Round Table Conference — op 2 (listed second: it is the negotiated
+			# middle path between a unilateral grant and liquidating the empire)
+			colonial_empire_decision_row = {
+				blockoverride "row_text" {
+					text = "je_colonial_empire_decision_round_table"
+					tooltip = "je_colonial_empire_decision_round_table_tt"
+				}
+				blockoverride "row_action" {
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+				}
+			}
+
+			# Planned Full Decolonization — op 1
+			colonial_empire_decision_row = {
+				blockoverride "row_text" {
+					text = "je_colonial_empire_decision_planned"
+					tooltip = "je_colonial_empire_decision_planned_tt"
+				}
+				blockoverride "row_action" {
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+				}
+			}
+		}
+	}
+
+	### The history charts. Open by default, as the UN's is (the owner's call
+	### for the UN, 2026-09-28; rule 1: what changes month to month is open).
+	###
+	### te_history_chart / te_history_bar_unsigned / te_history_bar_signed /
+	### te_history_range_button are declared in
+	### gui/journal_entry_widgets/te_history_chart.gui. Types declared in a .gui
+	### file are global once loaded, so they are instanced here without
+	### including it. `te_hist_range` is a single global GUI variable shared with
+	### every other history chart: changing the range here changes it there too.
+	type te_ce_sec_history = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		colonial_empire_section_header = {
+			blockoverride "left_text" {
+				text = "je_colonial_empire_history_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('colonial_empire_history_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('colonial_empire_history_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('colonial_empire_history_closed'))]"
+			}
+		}
+
+		colonial_empire_panel = {
+			visible = "[Not(GetVariableSystem.Exists('colonial_empire_history_closed'))]"
+
+			# ---- Range ----
+			flowcontainer = {
+				direction = horizontal
+				spacing = 4
+				ignoreinvisible = yes
+				parentanchor = hcenter
+
+				te_history_range_button = {
+					blockoverride "range_text" {
+						text = "te_hist_range_1y"
+					}
+					blockoverride "range_enabled" {
+						enabled = "[Not(GetVariableSystem.HasValue( 'te_hist_range', '1' ))]"
+					}
+					blockoverride "range_onclick" {
+						onclick = "[GetVariableSystem.Set( 'te_hist_range', '1' )]"
+					}
+				}
+				te_history_range_button = {
+					blockoverride "range_text" {
+						text = "te_hist_range_5y"
+					}
+					blockoverride "range_enabled" {
+						enabled = "[Not(GetVariableSystem.HasValue( 'te_hist_range', '5' ))]"
+					}
+					blockoverride "range_onclick" {
+						onclick = "[GetVariableSystem.Set( 'te_hist_range', '5' )]"
+					}
+				}
+				te_history_range_button = {
+					blockoverride "range_text" {
+						text = "te_hist_range_20y"
+					}
+					blockoverride "range_enabled" {
+						enabled = "[Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '5' ) )]"
+					}
+					blockoverride "range_onclick" {
+						onclick = "[GetVariableSystem.Set( 'te_hist_range', '20' )]"
+					}
+				}
+			}
+
+			textbox = {
+				visible = "[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('te_hist') ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 480
+				align = hcenter|nobaseline
+				text = "te_hist_since"
+			}
+
+			# ---- Colonial stability, 0-100 ----
+			# Sampled to the nearest 5 (see colonial_empire_refresh_display: the bar
+			# is trigger-only, so a comparison ladder is the only read). The legend
+			# says so.
+			te_history_chart = {
+				blockoverride "chart_title" {
+					text = "te_hist_chart_colonial_stability_title"
+				}
+				blockoverride "chart_legend" {
+					text = "te_hist_chart_colonial_stability_legend"
+				}
+				# This series records no markers; the store's pips belong to
+				# other systems (banking, cultural hegemony) and would go unexplained.
+				blockoverride "marker_pips" {}
+				blockoverride "bar_tooltip" {
+					tooltip = "te_hist_tt_colonial_stability"
+				}
+				blockoverride "bar_body" {
+					te_history_bar_unsigned = {
+						visible = "[ScriptContainer.HasVariable( 'te_hist_v_colonial_stability' )]"
+						blockoverride "values" {
+							min = 0
+							max = 100
+							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_colonial_stability' ) ) )]"
+						}
+						blockoverride "cover_values" {
+							min = 0
+							max = 100
+							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_colonial_stability' ), '(CFixedPoint)4' ) ) )]"
+						}
+						blockoverride "color" {
+							color = { 0.45 0.68 0.45 1.0 }
+						}
+					}
+				}
+			}
+
+			# ---- Projected monthly drift, signed ----
+			# Exact: colonial_stability_drift_total, the same capped sum of leaf
+			# script values the bar applies. The scale is +/-2 because that sum is
+			# capped at +/-colonial_stability_drift_cap (1.667); the cap stripe is
+			# 0.17, the same 1/12 of the half-height the other signed charts use.
+			te_history_chart = {
+				blockoverride "chart_title" {
+					text = "te_hist_chart_colonial_drift_title"
+				}
+				blockoverride "chart_legend" {
+					text = "te_hist_chart_colonial_drift_legend"
+				}
+				# This series records no markers; the store's pips belong to
+				# other systems (banking, cultural hegemony) and would go unexplained.
+				blockoverride "marker_pips" {}
+				blockoverride "zero_axis" {
+					widget = {
+						size = { 100% 2 }
+						parentanchor = vcenter
+						alwaystransparent = yes
+
+						background = {
+							using = dark_area
+							alpha = 0.7
+						}
+					}
+				}
+				blockoverride "bar_tooltip" {
+					tooltip = "te_hist_tt_colonial_drift"
+				}
+				blockoverride "bar_body" {
+					te_history_bar_signed = {
+						visible = "[ScriptContainer.HasVariable( 'te_hist_v_colonial_drift' )]"
+						blockoverride "positive_values" {
+							min = 0
+							max = 2
+							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_colonial_drift' ) ) )]"
+						}
+						blockoverride "positive_cover_values" {
+							min = 0
+							max = 2
+							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_colonial_drift' ), '(CFixedPoint)0.17' ) ) )]"
+						}
+						blockoverride "negative_values" {
+							min = -2
+							max = 0
+							value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_colonial_drift' ) ) )]"
+						}
+						blockoverride "negative_cover_values" {
+							min = -2
+							max = 0
+							value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', Add_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_colonial_drift' ), '(CFixedPoint)0.17' ) ) )]"
+						}
+					}
+				}
+			}
+		}
+	}
+
+	### "How the Colonial Empire Works": every explanation, gathered out of the
+	### live sections into one section at the foot, collapsed by default, one
+	### subheading per topic (style rule 1). The live sections say what is
+	### happening; this says how it works.
+	type te_ce_sec_how = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		colonial_empire_section_header = {
+			blockoverride "left_text" {
+				text = "je_colonial_empire_how_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('colonial_empire_how_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('colonial_empire_how_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('colonial_empire_how_open')]"
+			}
+		}
+
+		colonial_empire_panel = {
+			visible = "[GetVariableSystem.Exists('colonial_empire_how_open')]"
+
+			colonial_empire_subheader = {
+				blockoverride "subheader_margin" {}
+				blockoverride "subheader_text" {
+					text = "je_colonial_empire_how_sub_bar"
+				}
+			}
+			colonial_empire_note = {
+				text = "je_colonial_empire_how_bar_1"
+			}
+			colonial_empire_note = {
+				text = "je_colonial_empire_how_bar_2"
+			}
+			colonial_empire_note = {
+				text = "je_colonial_empire_how_bar_3"
+			}
+			colonial_empire_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_colonial_empire_how_sub_moves"
+				}
+			}
+			colonial_empire_note = {
+				text = "je_colonial_empire_how_moves"
+			}
+			colonial_empire_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_colonial_empire_how_sub_pressure"
+				}
+			}
+			colonial_empire_note = {
+				text = "je_colonial_empire_how_pressure"
+			}
+			colonial_empire_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_colonial_empire_how_sub_programmes"
+				}
+			}
+			colonial_empire_note = {
+				text = "je_colonial_empire_how_programmes"
+			}
+			colonial_empire_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_colonial_empire_how_sub_decolonization"
+				}
+			}
+			colonial_empire_note = {
+				text = "je_colonial_empire_how_decolonization"
+			}
+		}
+	}
+
+	### ======================================================================
+	### LAYOUT. The one order of the sections.
+	### ======================================================================
+
+	### Everything a returning player checks or acts on, open by default
+	### except International Pressure (see te_ce_sec_pressure).
+	type te_ce_status_sections = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+		visible = "[JournalEntry.IsActive]"
+
+		te_ce_sec_stability = {}
+		te_ce_sec_pressure = {}
+		te_ce_sec_programmes = {}
+		te_ce_sec_decisions = {}
+	}
+
+	### The charts, then how it all works.
+	type te_ce_reference_sections = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+		visible = "[JournalEntry.IsActive]"
+
+		te_ce_sec_history = {}
+		te_ce_sec_how = {}
+	}
+}
+
+
+### ==========================================================================
+### JOURNAL ENTRY ROOTS (je_colonial_empire.txt). Bare wrappers that repeat the
+### composers' IsActive gate, so an inactive entry's containers collapse.
+### ==========================================================================
+flowcontainer = {
+	name = "widget_je_colonial_empire_overview"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	ignoreinvisible = yes
+
+	te_ce_overview_panel = {}
+}
+
+flowcontainer = {
+	name = "widget_je_colonial_empire_status"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	ignoreinvisible = yes
+
+	te_ce_status_sections = {}
+}
+
+flowcontainer = {
+	name = "widget_je_colonial_empire_reference"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	ignoreinvisible = yes
+
+	te_ce_reference_sections = {}
 }

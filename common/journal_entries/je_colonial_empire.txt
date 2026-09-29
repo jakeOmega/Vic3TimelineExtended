@@ -39,19 +39,35 @@
 	scripted_progress_bar = colonial_stability_bar
 
 	# --- Player-facing surface --------------------------------------------
-	# container_2 (under the status line, where the button grid used to be):
-	# stability conditions, international pressure, the three programmes and the
-	# three decolonization decisions.
+	# The panels (gui/journal_entry_widgets/colonial_empire_widget.gui, which
+	# sets the order of the sections): the overview above the status line,
+	# the live sections above the button grid, and the charts and "How the
+	# Colonial Empire Works" below it.
 	widget = {
 		gui = "gui/journal_entry_widgets/colonial_empire_widget.gui"
-		name = "widget_je_colonial_empire"
+		name = "widget_je_colonial_empire_overview"
+		container = "custom_widget_container_1"
+	}
+	# MARKER, not content: the overview draws the stability bar, so the journal
+	# panel drops its own bar block at the bottom (gui/journal_entry.gui; see
+	# je_banking.txt for the mechanism).
+	widget = {
+		gui = "gui/journal_entry_widgets/te_je_bars_on_top_marker.gui"
+		name = "widget_te_je_bars_on_top_marker"
+		container = "custom_widget_container_7"
+	}
+	# container_2 (under the status line, where the button grid used to be):
+	# why stability is moving, international pressure, the three programmes and
+	# the three decolonization decisions.
+	widget = {
+		gui = "gui/journal_entry_widgets/colonial_empire_widget.gui"
+		name = "widget_je_colonial_empire_status"
 		container = "custom_widget_container_2"
 	}
-	# container_3 (directly above the native stability bar): history charts,
-	# collapsed by default.
+	# container_3: the history charts, then "How the Colonial Empire Works".
 	widget = {
 		gui = "gui/journal_entry_widgets/colonial_empire_widget.gui"
-		name = "widget_je_colonial_empire_history"
+		name = "widget_je_colonial_empire_reference"
 		container = "custom_widget_container_3"
 	}
 
@@ -80,9 +96,9 @@
 
 	# One summary line. The five tier phrases, the five great-power-pressure
 	# phrases and the seven-slot condemner roster that used to live here (18
-	# triggered_desc in total) are now the widget's "Colonial Stability" and
-	# "International Pressure" sections, where they can be read next to the
-	# numbers that drive them. The tier phrase comes from customizable
+	# triggered_desc in total) are now the widget's overview (the band and its
+	# tooltip) and "International Pressure" section, where they can be read next
+	# to the numbers that drive them. The tier phrase comes from customizable
 	# localization keyed on var:colonial_empire_tier, so the thresholds stay in
 	# the one ladder in colonial_empire_refresh_display.
 	#

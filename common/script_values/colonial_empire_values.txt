@@ -676,3 +676,77 @@ colonial_assimilate_startup_cost_display = {
 	value = colonial_assimilate_startup_cost
 	multiply = -1
 }
+
+# ============================================================================
+# OVERVIEW DISPLAY VALUES
+#
+# Read every frame by the overview at the top of the panel (te_ce_overview_panel
+# in gui/journal_entry_widgets/colonial_empire_widget.gui). Each one reads a
+# snapshot colonial_empire_refresh_display wrote, or the O(1) headline above,
+# and every var: read is guarded, so an entry before its first refresh (or a
+# save from before the overview) reads 0 rather than failing per frame.
+# Display only: nothing in the mechanic reads these.
+#
+# SCOPE: country.
+# ============================================================================
+
+# The stability band, 1 collapsing .. 5 solidified (the tier ladder in
+# colonial_empire_refresh_display); 0 until that has run. Picks the band icon.
+colonial_empire_disp_tier = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_empire_tier }
+		value = var:colonial_empire_tier
+	}
+}
+
+# Where the next band starts, as a 0-1 fraction of the bar: the position of the
+# marker on the overview's stability bar. The boundary itself is the ladder's
+# (var:colonial_empire_next_boundary); the bar runs 0-100.
+colonial_empire_disp_next_boundary_frac = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_empire_next_boundary }
+		value = var:colonial_empire_next_boundary
+		divide = 100
+	}
+	min = 0
+	max = 1
+}
+
+# Which way the bar is heading this month, from the projected change the
+# overview prints beside it: 1 up, -1 down, 0 flat (under half a hundredth
+# either way, which the panel prints as 0.00). Picks the trend arrow.
+colonial_empire_disp_trend = {
+	value = 0
+	if = {
+		limit = { colonial_stability_drift_total_display > 0.005 }
+		value = 1
+	}
+	else_if = {
+		limit = { colonial_stability_drift_total_display < -0.005 }
+		value = -1
+	}
+}
+
+# The condemning great powers' share of great-power prestige, ours included
+# (0-1): the overview's pie.
+colonial_empire_disp_condemner_share = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_empire_condemner_share }
+		value = var:colonial_empire_condemner_share
+	}
+	min = 0
+	max = 1
+}
+
+# 0 no escalation, 1 diplomatic isolation, 2 international consensus: the
+# overview's alert beside the pie.
+colonial_empire_disp_pressure_level = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_empire_pressure_level }
+		value = var:colonial_empire_pressure_level
+	}
+}
