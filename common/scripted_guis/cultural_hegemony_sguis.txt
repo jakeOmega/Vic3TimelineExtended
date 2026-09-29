@@ -49,7 +49,9 @@
 #   6   megaprojects row        7   cultural-pull modifier row
 #   8   infamy row              9   instability row
 #   10  cultural-pull multiplier row
-#   11  "Rank N of M" line      12  exported-model block
+#   12  exported-model block (the models section's "census taken" gate)
+#   (11 was the "Rank N of M" line; the overview and the board's own-rank
+#   line now test ch_rank_self_display without a saved scope)
 #   31-45  one "Political models" legend row each (op = 30 + ch_model code)
 #   (fail open: no scope -> the row shows)
 #
@@ -259,12 +261,6 @@ ch_show_sgui = {
 		trigger_else_if = {
 			limit = { exists = scope:op scope:op = 10 }
 			modifier:country_cultural_pull_mult > 0
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op scope:op = 11 }
-			has_variable = ch_rank_self
-			var:ch_rank_self > 0
-			has_global_variable = ch_ranked_total
 		}
 		trigger_else_if = {
 			limit = { exists = scope:op scope:op = 12 }

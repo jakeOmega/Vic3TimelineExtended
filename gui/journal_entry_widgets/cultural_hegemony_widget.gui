@@ -66,9 +66,9 @@
 ###   3 standard of living             4 tech leadership     5 monuments
 ###   6 megaprojects                   7 pull modifiers      8 infamy
 ###   9 instability                    10 pull multiplier
-###   11 "Rank N of M" line (retired from this file: the overview and the
-###      board's own-rank line test ch_rank_self_display instead)
 ###   12 exported-model block (the models section's "census taken" gate)
+###   (11, the "Rank N of M" line, is retired: the overview and the board's
+###   own-rank line test ch_rank_self_display without a saved scope)
 ###   31-45 one "Political models" legend row each (op = 30 + ch_model code)
 ###
 ### ---- ch_board_is_us_sgui ----------------------------------------------------
