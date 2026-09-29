@@ -96,6 +96,8 @@ Each row: current placeholder | three vanilla neighbours ‖ two generated candi
 ## Runtime (RTX 3080 10 GB, 39 GB RAM, WSL2)
 
 - **Offload:** `enable_model_cpu_offload` runs out of memory, because the transformer is 24 GB in bf16. `enable_sequential_cpu_offload` works: ~30 s per 1024² image once warm, 2–4 min for the first.
+- **Other CPU work slows it down:** sequential offload streams the 24 GB transformer through the CPU on every step, so FLUX needs the CPU and memory bandwidth as much as the GPU. On 2026-09-28 another session's heavy CPU job pushed a render to ~300 s per step (normal is 8–16). Its main thread sat at 100%, the GPU at 1%, with no page faults and no disk reads. Restarted once that job had eased, it ran at 55 s per image. If the warm `s/it` figures are far above 20, look for a competing job before anything else. `py-spy` can't attach to a running process here (`ptrace_scope` is 1), but `py-spy record -- <command>` can profile one it starts.
+- **Queueing a second render:** a `while pgrep -f "<pattern>"` wait inside `bash -c` matches its own command line and never ends. Chain the renders with `&&` in one command instead.
 - **Embedding:** ~5 min per process (T5 reload) from the first copy; 15 s on 2026-09-27 with the weights in `~/models/FLUX.1-schnell` and still in the page cache from the copy. Peak RSS 6.4 GB.
 - **Full run:** 683 icons × 2 seeds ≈ 11 h GPU, more than a night. Render one seed first (~5.7 h), then second seeds for the rejects only.
 - **NF4:** `bitsandbytes` is installed in `.venv-img` but a 4-bit transformer is **untested**. If it fits in VRAM it would avoid the offload streaming.
