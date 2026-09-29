@@ -8,36 +8,45 @@
 
 types un_overview_widget_types
 {
-	### An icon and a short label, for membership and tier.
-	type te_un_ov_icon_label = flowcontainer {
-		direction = horizontal
-		spacing = 6
-		ignoreinvisible = yes
+	### A cell of the overview's first row: an icon, its word small beneath
+	### (owner, 2026-09-28: icons first, the words secondary). Fixed width, so
+	### the row cannot push the panel wider.
+	type te_un_ov_icon_label = widget {
+		size = { 110 58 }
 
 		icon = {
-			size = { 32 32 }
-			parentanchor = vcenter
+			size = { 36 36 }
+			parentanchor = top|hcenter
 			block "icon_texture" {}
 		}
 		textbox = {
+			parentanchor = bottom|hcenter
 			autoresize = yes
-			parentanchor = vcenter
-			align = left|nobaseline
-			using = fontsize_large
+			max_width = 108
+			elide = right
+			align = hcenter|nobaseline
+			using = fontsize_small
 			default_format = "#tooltippable"
 			block "label" {}
 		}
 	}
 
-	### A 0..1 share as a pie over a background disc, its label beneath. The
+	### A 0..1 share as a pie over a background disc, inside vanilla's
+	### decorated round frame, its label beneath. The
 	### textures are the Cultural Hegemony pie's (frame 1 transparent, frame 2
 	### the colour; gui_modding_guide.md "Pie charts of script-held data").
 	type te_un_ov_pie = widget {
-		size = { 150 92 }
+		size = { 150 108 }
 
-		widget = {
-			size = { 64 64 }
+		icon = {
+			size = { 86 86 }
 			parentanchor = top|hcenter
+			texture = "gfx/interface/backgrounds/round_frame_dec.dds"
+		}
+		widget = {
+			size = { 62 62 }
+			parentanchor = top|hcenter
+			position = { 0 12 }
 
 			progresspie = {
 				size = { 100% 100% }
@@ -114,8 +123,9 @@ types un_overview_widget_types
 			### Row 1: membership · tier · crisis · standing
 			flowcontainer = {
 				direction = horizontal
-				spacing = 18
+				spacing = 6
 				ignoreinvisible = yes
+				parentanchor = hcenter
 
 				flowcontainer = {
 					ignoreinvisible = yes
@@ -234,30 +244,33 @@ types un_overview_widget_types
 						}
 					}
 				}
-				icon = {
-					size = { 32 32 }
-					parentanchor = vcenter
+				te_un_ov_icon_label = {
 					visible = "[GetScriptedGui('un_authority_crisis_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					texture = "gfx/interface/icons/alert_icons/critical_supply_network.dds"
 					tooltip = "[GetScriptedGui('un_authority_crisis_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+					blockoverride "icon_texture" {
+						texture = "gfx/interface/icons/alert_icons/critical_supply_network.dds"
+					}
+					blockoverride "label" {
+						text = "je_un_ov_crisis_label"
+					}
 				}
-				flowcontainer = {
-					direction = horizontal
-					spacing = 6
-					parentanchor = vcenter
+				widget = {
+					size = { 110 58 }
 					visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)0' )]"
 					tooltip = "[GetScriptedGui('un_chamber_standing_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 
 					textbox = {
+						parentanchor = bottom|hcenter
 						autoresize = yes
-						parentanchor = vcenter
-						align = left|nobaseline
+						align = hcenter|nobaseline
+						using = fontsize_small
 						default_format = "#tooltippable"
 						text = "je_un_ov_standing_label"
 					}
 					default_progressbar_horizontal = {
-						size = { 80 12 }
-						parentanchor = vcenter
+						size = { 96 12 }
+						parentanchor = top|hcenter
+						position = { 0 12 }
 						blockoverride "values" {
 							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_standing_frac') )]"
 							min = 0
@@ -372,8 +385,8 @@ types un_overview_widget_types
 					textbox = {
 						default_format = "#tooltippable"
 						autoresize = yes
-						parentanchor = vcenter
-						align = left|nobaseline
+						parentanchor = hcenter
+						align = hcenter|nobaseline
 						text = "je_un_ov_council_label"
 						tooltip = "[GetScriptedGui('un_chamber_council_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 					}
@@ -446,7 +459,7 @@ types un_overview_widget_types
 					}
 				}
 
-				### Agencies: the label on the left, the two rows centred.
+				### Agencies: the label and the two rows centred.
 				flowcontainer = {
 					direction = vertical
 					spacing = 2
@@ -454,7 +467,8 @@ types un_overview_widget_types
 
 					textbox = {
 						autoresize = yes
-						align = left|nobaseline
+						parentanchor = hcenter
+						align = hcenter|nobaseline
 						text = "je_un_ov_agencies_label"
 					}
 					flowcontainer = {
@@ -598,6 +612,31 @@ types un_overview_widget_types
 								visible = "[Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_cppnm'), '(CFixedPoint)1' ) )]"
 							}
 						}
+					}
+				}
+
+				### The UN headquarters, under its building: where it stands, or
+				### that we host it but have not built it. Shown only when there is
+				### something to say (un_overview_hq_sgui); it was the journal
+				### entry's status text until 2026-09-28.
+				flowcontainer = {
+					direction = vertical
+					spacing = 2
+					minimumsize = { 480 -1 }
+					visible = "[GetScriptedGui('un_overview_hq_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+					icon = {
+						size = { 48 48 }
+						parentanchor = hcenter
+						texture = "gfx/interface/icons/building_icons/building_un_headquarters.dds"
+					}
+					textbox = {
+						autoresize = yes
+						multiline = yes
+						maximumsize = { 460 -1 }
+						parentanchor = hcenter
+						align = hcenter|nobaseline
+						text = "[GetScriptedGui('un_overview_hq_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 					}
 				}
 			}

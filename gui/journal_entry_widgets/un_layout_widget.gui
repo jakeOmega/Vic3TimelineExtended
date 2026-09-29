@@ -262,6 +262,7 @@ types un_layout_widget_types
 		te_un_sec_assembly = {}
 		te_un_sec_why = {}
 		te_un_sec_missions = {}
+		te_un_sec_programmes = {}
 		te_un_sec_mandates = {}
 		te_un_sec_obligations = {}
 		te_un_sec_exposure = {}

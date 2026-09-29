@@ -126,8 +126,10 @@
 	status_desc = {
 		# The overview (gui/journal_entry_widgets/un_overview_widget.gui) shows
 		# membership, the tier, the crisis, authority, the Security Council and
-		# the agencies, with the old lines here as its tooltips (owner,
-		# 2026-09-28). This text keeps what only it says.
+		# the agencies and the headquarters, with the old lines here as its
+		# tooltips; the programmes under way are the "Programmes and
+		# Conventions" section (owner, 2026-09-28). This text keeps what only it
+		# says: whether a UN exists, and who sits in the Assembly.
 		#
 		# 1. No UN: a founding conference in session, or dissolved.
 		first_valid = {
@@ -141,32 +143,7 @@
 			}
 		}
 
-		# 2. UN Headquarters. Named only once the building stands
-		# (global_var:un_hq_state, refreshed by un_hq_monthly_update); the host
-		# is told when it has yet to build it, and everyone else hears nothing
-		# about a headquarters that does not exist.
-		first_valid = {
-			triggered_desc = {
-				desc = je_un_hq_host
-				trigger = {
-					je:je_united_nations ?= { has_modifier = un_headquarters_modifier }
-					has_global_variable = un_hq_state
-				}
-			}
-			triggered_desc = {
-				desc = je_un_hq_host_unbuilt
-				trigger = { je:je_united_nations ?= { has_modifier = un_headquarters_modifier } }
-			}
-			triggered_desc = {
-				desc = je_un_hq_established
-				trigger = {
-					has_global_variable = un_hq_country
-					has_global_variable = un_hq_state
-				}
-			}
-		}
-
-		# 3. General Assembly statistics (§0.8 ruling 8): the represented
+		# 2. General Assembly statistics (§0.8 ruling 8): the represented
 		# members of the eligible nations, then the members whose
 		# representation is suspended, in the singular or the plural.
 		first_valid = {
@@ -193,18 +170,6 @@
 						count >= 1
 					}
 				}
-			}
-		}
-
-		# 4. Active resolutions & program participation (members) / join prompt (non-members)
-		first_valid = {
-			triggered_desc = {
-				desc = je_un_active_programs
-				trigger = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
-			}
-			triggered_desc = {
-				desc = je_un_active_policies
-				trigger = { always = yes }
 			}
 		}
 	}

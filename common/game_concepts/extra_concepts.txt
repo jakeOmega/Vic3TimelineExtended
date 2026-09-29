@@ -33,6 +33,7 @@ concept_decolonization_system = {}
 concept_colonial_stability = {}
 concept_united_nations_system = {}
 concept_un_general_assembly = {}
+concept_un_represented = {}
 concept_un_security_council = {}
 concept_un_permanent_member = {}
 concept_un_veto = {}

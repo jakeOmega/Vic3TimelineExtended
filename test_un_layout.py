@@ -10,8 +10,8 @@ UN_GUI = [os.path.join(W, f) for f in ("un_chamber_widget.gui", "un_authority_wi
                                         "un_layout_widget.gui")]
 UN_GUI.append(os.path.join(REPO, "gui", "diplomatic_overview.gui"))
 
-STATUS = ["te_un_sec_assembly", "te_un_sec_why", "te_un_sec_missions", "te_un_sec_mandates",
-          "te_un_sec_obligations", "te_un_sec_exposure"]
+STATUS = ["te_un_sec_assembly", "te_un_sec_why", "te_un_sec_missions", "te_un_sec_programmes",
+          "te_un_sec_mandates", "te_un_sec_obligations", "te_un_sec_exposure"]
 REFERENCE = ["te_un_sec_auth_history", "te_un_sec_archive", "te_un_sec_how"]
 OLD_FLAGS = ["un_chamber_delegations", "un_chamber_standing", "un_chamber_exposure",
              "un_chamber_missions", "un_chamber_obligations", "un_chamber_votes",
@@ -163,6 +163,19 @@ class PowersTest(unittest.TestCase):
 class ProposeRowTest(unittest.TestCase):
     def test_the_propose_button_sits_beside_its_topic(self):
         self.assertRegex(_read(CHAMBER), r"type un_chamber_propose_row = flowcontainer \{\s*direction = horizontal")
+
+PROGRAMME_TALLIES = ("un_peacekeeping_count", "un_development_count", "un_human_rights_champion_count",
+                     "un_human_rights_signatories", "un_arms_control_count",
+                     "un_nonproliferation_signatories", "un_climate_signatories",
+                     "un_heritage_participants", "un_sanctions_target_count")
+
+
+class ProgrammesTest(unittest.TestCase):
+    def test_programmes_are_a_collapsed_table(self):
+        body = _type_body(_read(CHAMBER), "te_un_sec_programmes")
+        self.assertIn("GetVariableSystem.Toggle('un_chamber_programmes_open')", body)
+        for sv in PROGRAMME_TALLIES:
+            self.assertIn(f"ScriptValue('{sv}')", body, sv)
 
 if __name__ == "__main__":
     unittest.main()

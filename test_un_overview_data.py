@@ -229,12 +229,45 @@ class StatusDescTest(unittest.TestCase):
 
     def test_what_only_it_says_stays(self):
         status = self._status()
-        for kept in ("je_un_hq_host", "je_un_hq_established", "je_un_statistics",
-                     "je_un_active_programs", "je_un_status_conference", "je_un_status_dissolved"):
+        for kept in ("je_un_statistics", "je_un_status_conference", "je_un_status_dissolved"):
             self.assertIn(kept, status, kept)
+        # The headquarters moved to the overview, the programmes to their own section.
+        for moved in ("je_un_hq_", "je_un_active_programs"):
+            self.assertNotIn(moved, status, moved)
 
     def test_a_non_member_learns_what_joining_brings(self):
         self.assertIn("je_un_status_not_member", _block(_read(SGUIS), "un_chamber_status_sgui"))
+
+LOC_DIR = os.path.join(REPO, "localization", "english")
+
+
+def _loc_values():
+    values = {}
+    for path in glob.glob(os.path.join(LOC_DIR, "*.yml")):
+        for m in re.finditer(r'^ (\w+):\d* "(.*)"\s*$', _read(path), re.M):
+            values[m.group(1)] = m.group(2)
+    return values
+
+
+class TooltipTextTest(unittest.TestCase):
+    """A line that ends or begins a tooltip carries no blank line (owner, 2026-09-28)."""
+
+    def test_overview_tooltip_lines_have_no_blank_ends(self):
+        loc = _loc_values()
+        sguis = _read(SGUIS)
+        for handler in ("un_chamber_status_sgui", "un_overview_tier_sgui", "un_overview_hq_sgui"):
+            for key in re.findall(r"custom_tooltip_no_bullet = (\w+)", _block(sguis, handler)):
+                with self.subTest(handler=handler, key=key):
+                    self.assertFalse(loc[key].endswith("\\n"), f"{key} ends with a line break")
+                    self.assertFalse(loc[key].startswith("\\n"), f"{key} starts with a line break")
+
+
+class OverviewHqTest(unittest.TestCase):
+    def test_the_headquarters_sits_in_the_overview_under_its_building(self):
+        gui = _read(OVERVIEW)
+        self.assertIn("GetScriptedGui('un_overview_hq_sgui').IsShown", gui)
+        self.assertIn("GetScriptedGui('un_overview_hq_sgui').ExecuteTooltip", gui)
+        self.assertIn("building_icons/building_un_headquarters.dds", gui)
 
 if __name__ == "__main__":
     unittest.main()

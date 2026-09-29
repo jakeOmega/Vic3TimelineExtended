@@ -145,6 +145,33 @@ types un_chamber_widget_types
 		}
 	}
 
+	### A table row: a label on the left and its value on the right. The
+	### Programmes and Conventions tallies and the record's terms.
+	type un_chamber_value_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		margin = { 4 1 }
+
+		textbox = {
+			autoresize = yes
+			minimumsize = { 360 -1 }
+			maximumsize = { 360 -1 }
+			align = left|nobaseline
+			using = fontsize_medium
+			elide = right
+			block "row_label" {}
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 100 -1 }
+			maximumsize = { 100 -1 }
+			align = right|nobaseline
+			using = fontsize_medium
+			default_format = "#v"
+			block "row_value" {}
+		}
+	}
+
 	### Smaller body text for the proposal rows, which carry four or five short
 	### lines each and have to leave room for a button beside them.
 	type un_chamber_row_text = textbox {
@@ -2209,6 +2236,110 @@ types un_chamber_widget_types
 			un_chamber_text = {
 				visible = "[GetVariableSystem.Exists('un_chamber_missions_ended_open')]"
 				text = "[GetScriptedGui('un_chamber_missions_ended_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+			}
+		}
+	}
+
+	type te_un_sec_programmes = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		# ---- Programmes and Conventions ----
+		# World tallies of the UN's programmes and conventions: how many
+		# countries take part in each. They were the journal entry's
+		# "Resolutions & Programs" status lines until 2026-09-28. A table, and
+		# collapsed by default: world counts, not the player's own business.
+		un_chamber_section_header = {
+			blockoverride "left_text" {
+				text = "je_un_programmes_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('un_chamber_programmes_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('un_chamber_programmes_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('un_chamber_programmes_open')]"
+			}
+		}
+
+		un_chamber_panel = {
+			visible = "[GetVariableSystem.Exists('un_chamber_programmes_open')]"
+
+			un_chamber_value_row = {
+				blockoverride "row_label" {
+					text = "je_un_prog_peacekeeping"
+				}
+				blockoverride "row_value" {
+					text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_peacekeeping_count')|0]"
+				}
+			}
+			un_chamber_value_row = {
+				blockoverride "row_label" {
+					text = "je_un_prog_development"
+				}
+				blockoverride "row_value" {
+					text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_development_count')|0]"
+				}
+			}
+			un_chamber_value_row = {
+				blockoverride "row_label" {
+					text = "je_un_prog_hr_champions"
+				}
+				blockoverride "row_value" {
+					text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_human_rights_champion_count')|0]"
+				}
+			}
+			un_chamber_value_row = {
+				blockoverride "row_label" {
+					text = "je_un_prog_hr_signatories"
+				}
+				blockoverride "row_value" {
+					text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_human_rights_signatories')|0]"
+				}
+			}
+			un_chamber_value_row = {
+				blockoverride "row_label" {
+					text = "je_un_prog_arms"
+				}
+				blockoverride "row_value" {
+					text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_arms_control_count')|0]"
+				}
+			}
+			un_chamber_value_row = {
+				blockoverride "row_label" {
+					text = "je_un_prog_npt"
+				}
+				blockoverride "row_value" {
+					text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_nonproliferation_signatories')|0]"
+				}
+			}
+			un_chamber_value_row = {
+				blockoverride "row_label" {
+					text = "je_un_prog_climate"
+				}
+				blockoverride "row_value" {
+					text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_climate_signatories')|0]"
+				}
+			}
+			un_chamber_value_row = {
+				blockoverride "row_label" {
+					text = "je_un_prog_heritage"
+				}
+				blockoverride "row_value" {
+					text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_heritage_participants')|0]"
+				}
+			}
+			un_chamber_value_row = {
+				blockoverride "row_label" {
+					text = "je_un_prog_sanctions"
+				}
+				blockoverride "row_value" {
+					text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_sanctions_target_count')|0]"
+				}
 			}
 		}
 	}

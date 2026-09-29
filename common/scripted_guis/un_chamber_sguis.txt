@@ -114,6 +114,46 @@ un_overview_tier_sgui = {
 	}
 }
 
+# The UN headquarters, under its building in the overview
+# (un_overview_widget.gui): named once the building stands, and the host told
+# when it has yet to build it. is_shown answers whether there is anything to
+# say. These three lines were the journal entry's status_desc until
+# 2026-09-28.
+un_overview_hq_sgui = {
+	scope = country
+	is_shown = {
+		OR = {
+			je:je_united_nations ?= { has_modifier = un_headquarters_modifier }
+			AND = {
+				has_global_variable = un_hq_country
+				has_global_variable = un_hq_state
+			}
+		}
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = {
+		if = {
+			limit = {
+				je:je_united_nations ?= { has_modifier = un_headquarters_modifier }
+				has_global_variable = un_hq_state
+			}
+			custom_tooltip_no_bullet = je_un_hq_host
+		}
+		else_if = {
+			limit = { je:je_united_nations ?= { has_modifier = un_headquarters_modifier } }
+			custom_tooltip_no_bullet = je_un_hq_host_unbuilt
+		}
+		else_if = {
+			limit = {
+				has_global_variable = un_hq_country
+				has_global_variable = un_hq_state
+			}
+			custom_tooltip_no_bullet = je_un_hq_established
+		}
+	}
+}
+
 # Scope-free gate: a resolution is in session. The General Assembly shows its
 # tally, delegations and ballot, or, when this is false, the proposals.
 un_session_open_sgui = {
