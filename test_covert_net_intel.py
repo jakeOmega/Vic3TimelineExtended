@@ -253,9 +253,18 @@ class WidgetTests(unittest.TestCase):
         self.assertIn("GetVariableValue('iw_net_intel_techs')", service)
         self.assertIn("ScriptValue('covert_techs_researched_display')", service)
         self.assertIn("GetVariableValue('iw_net_intel_ops')", value("je_iw_net_row_intel_ops"))
-        # Thresholds are printed from the constants, never typed.
-        self.assertIn("covert_net_intel_tier_1_strength", value("je_iw_net_row_intel_none"))
-        self.assertIn("covert_net_intel_tier_2_strength", value("je_iw_net_row_intel_ops_locked"))
+        # Thresholds are printed from the constants, never typed. Since play-
+        # test round 1 the row's strength headline names the next threshold
+        # ("45 -> 50: their service revealed"), so the report lines below it
+        # no longer repeat it, and its hover names both.
+        self.assertIn("covert_net_intel_tier_1_strength", value("je_iw_net_row_strength_to_service"))
+        self.assertIn("covert_net_intel_tier_2_strength", value("je_iw_net_row_strength_to_ops"))
+        hover = value("je_iw_net_row_strength_tt")
+        self.assertIn("covert_net_intel_tier_1_strength", hover)
+        self.assertIn("covert_net_intel_tier_2_strength", hover)
+        for key in ("je_iw_net_row_intel_none", "je_iw_net_row_intel_ops_locked", "je_iw_net_row_strength_to_service",
+                    "je_iw_net_row_strength_to_ops", "je_iw_net_row_strength_tt"):
+            self.assertNotRegex(value(key), r"\b(50|75)\b", key)
         header = value("je_iw_net_header_tooltip")
         self.assertIn("covert_net_intel_tier_1_strength", header)
         self.assertIn("covert_net_intel_tier_2_strength", header)

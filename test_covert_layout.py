@@ -300,9 +300,57 @@ class OperationRowTest(unittest.TestCase):
         for key in ("je_iw_op_row_phase_prep_tt", "je_iw_op_row_phase_est_tt", "je_iw_op_row_phase_full_tt",
                     "je_iw_op_row_detection_tt", "je_iw_net_row_trend_growing", "je_iw_net_row_trend_decaying",
                     "je_iw_net_row_trend_holding", "je_iw_net_row_intel_service_tooltip",
-                    "je_iw_net_row_intel_ops_tooltip"):
+                    "je_iw_net_row_intel_ops_tooltip", "je_iw_net_row_strength_tt"):
             self.assertNotIn("JournalEntry", loc[key], key)
 
+
+
+class NetworkRowTest(unittest.TestCase):
+    """Play-test round 1: the strength bar's marker read as an unexplained
+    target. A headline above the bar names where it is heading and what that
+    reveals; the hover says what each part of the report is."""
+
+    HEADLINES = {  # gate -> headline key
+        "Not( ScriptContainer.HasVariable('iw_net_intel_tier') )": "je_iw_net_row_strength",
+        "(CFixedPoint)0": "je_iw_net_row_strength_to_service",
+        "(CFixedPoint)1": "je_iw_net_row_strength_to_ops",
+        "(CFixedPoint)2": "je_iw_net_row_strength_full",
+    }
+
+    @classmethod
+    def setUpClass(cls):
+        cls.row = _type_body(_read(GUI), "widget_je_covert_network_row")
+        cls.loc = _loc()
+
+    def test_one_headline_per_report_state_each_with_the_hover(self):
+        for gate, key in self.HEADLINES.items():
+            block = self.row[self.row.rindex("widget_je_covert_operation_detail = {", 0, self.row.index(f'text = "{key}"')):]
+            block = block[:block.index("\n\t\t}")]
+            self.assertIn(gate, _gate_before(self.row, key), key)
+            self.assertIn('tooltip = "je_iw_net_row_strength_tt"', block, key)
+        # Exactly one of the four can show: no report yet, or one tier each.
+        for code in ("0", "1", "2"):
+            self.assertEqual(self.row.count(f"'iw_net_intel_tier'), '(CFixedPoint){code}') )]\"\n\t\t\ttext = \"je_iw_net_row_strength"), 1, code)
+
+    def test_the_headline_sits_right_above_the_bar(self):
+        last = self.row.index('text = "je_iw_net_row_strength_full"')
+        bar = self.row.index("default_progressbar_horizontal = {")
+        self.assertLess(last, bar)
+        between = self.row[last:bar]
+        self.assertNotIn("widget_je_covert_operation_detail", between)
+        self.assertIn("size = { 400 14 }", self.row[bar:bar + 200])
+        self.assertIn('tooltip = "je_iw_net_row_strength_tt"', self.row[bar:bar + 200])
+
+    def test_headlines_name_the_next_mark_from_the_constants(self):
+        self.assertIn("covert_net_intel_tier_1_strength", self.loc["je_iw_net_row_strength_to_service"])
+        self.assertIn("covert_net_intel_tier_2_strength", self.loc["je_iw_net_row_strength_to_ops"])
+        self.assertIn("→", self.loc["je_iw_net_row_strength_to_service"])
+        self.assertIn("→", self.loc["je_iw_net_row_strength_to_ops"])
+        self.assertNotIn("→", self.loc["je_iw_net_row_strength_full"])
+        self.assertIn("full report", self.loc["je_iw_net_row_strength_full"])
+        hover = self.loc["je_iw_net_row_strength_tt"]
+        for name in ("covert_net_intel_tier_1_strength", "covert_net_intel_tier_2_strength", "marker"):
+            self.assertIn(name, hover, name)
 
 def _git_files():
     import subprocess
