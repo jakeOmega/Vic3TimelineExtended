@@ -740,8 +740,9 @@ class NationalTests(unittest.TestCase):
         # alone (scripting_best_practices.md § "JE Auto-Activation Requires
         # BOTH"), so gm_country_refresh must add it explicitly too.
         self.assertIn("add_journal_entry = { type = je_grand_monuments }", squash(read(EFFECTS)))
-        for key in ("je_grand_monuments", "je_grand_monuments_reason", "je_grand_monuments_status",
-                    "je_grand_monuments_status_contested"):
+        # No status_desc since play-test round 2 (2026-09-29): its counts were
+        # the overview's (LocFixTests.test_no_status_line_repeats_the_overview).
+        for key in ("je_grand_monuments", "je_grand_monuments_reason"):
             self.assertIn(key, loc())
 
     def test_refresh_event_and_hooks(self):
@@ -1257,10 +1258,16 @@ class LocFixTests(unittest.TestCase):
         L = loc()
         self.assertNotIn("faith still stands", L["je_grand_monuments_reason"])
 
-    def test_status_lines_avoid_the_plural(self):
+    def test_no_status_line_repeats_the_overview(self):
+        # The status lines ("Grand Monuments: 3, contested: 1") repeated the
+        # overview's counts and were removed (owner, play-test round 2,
+        # 2026-09-29); their wording fix is moot. The counts they showed are
+        # the overview's cells (test_grand_monuments_layout.py).
+        self.assertIsNone(block(read(JE), "status_desc"))
         L = loc()
-        self.assertIn("Grand Monuments:", L["je_grand_monuments_status"])
-        self.assertIn("Grand Monuments:", L["je_grand_monuments_status_contested"])
+        for key in ("je_grand_monuments_status", "je_grand_monuments_status_contested"):
+            self.assertNotIn(key, L)
+        self.assertIn("ScriptValue('gm_disp_count_contested')", read(WIDGET))
 
     def test_culture_line_hides_next_step_at_cap(self):
         # Deferred item (2026-09-27): gm_display_culture caps at +5, but the

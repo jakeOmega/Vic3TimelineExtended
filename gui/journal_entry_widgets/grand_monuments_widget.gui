@@ -4,9 +4,10 @@
 ### Three named roots at the foot of this file, mounted from je_grand_monuments:
 ###   widget_je_gm_overview   custom_widget_container_1 (above the status desc)
 ###     The overview, always shown: how many monuments stand, are heritage,
-###     undedicated or contested, as lit or dimmed icons, and Hard Times while
-###     a finished level would cause vanity backlash (§5).
-###   widget_je_gm_status     custom_widget_container_2 (below the status desc)
+###     undedicated or contested, as lit or dimmed icons, and under them
+###     Hard Times while a finished level would cause vanity backlash (§5).
+###   widget_je_gm_status     custom_widget_container_2
+###     (The entry has no status description: its counts were the overview's.)
 ###     National Effects (open): a bar per stepped total, then interest group
 ###     approval and the fading ledgers. Our Monuments (open): one row per
 ###     monument, from the country's gm_states list (rebuilt by every
@@ -365,8 +366,8 @@ types grand_monuments_widget_types
 	### ======================================================================
 
 	### The overview, always shown. One cell per status, lit while any monument
-	### has it; Hard Times only while it holds. The cells share the status
-	### tooltips with the rows below.
+	### has it; under the cells, Hard Times only while it holds. The cells share
+	### the status tooltips with the rows below.
 	type te_gm_overview_panel = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -445,31 +446,48 @@ types grand_monuments_widget_types
 							text = "[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_count_contested'), '(CFixedPoint)0' ), 'gm_je_ov_contested_some', 'gm_je_ov_contested_none' )]"
 						}
 					}
-					# Hard times (§5): only while a finished level would cause
-					# vanity backlash. It was a red line under the national
-					# effects; the sentence is now its tooltip.
-					gm_ov_cell = {
-						visible = "[GetScriptedGui('gm_hard_times_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				}
+
+				# Hard times (§5): only while a finished level would cause
+				# vanity backlash, the warning icon over a red phrase, each
+				# with the sentence on hover (owner, play-test round 2). Its
+				# own line, not a fifth cell: a cell appearing later would
+				# widen the row after its first layout and pull it off-centre.
+				# Every width here is fixed: the column is 480, the icon 32,
+				# the phrase 480 with its text centred.
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 2
+					minimumsize = { 480 -1 }
+					margin_top = 4
+					visible = "[GetScriptedGui('gm_hard_times_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+					icon = {
+						size = { 32 32 }
+						parentanchor = hcenter
 						tooltip = "gm_je_ov_hard_times_tt"
-						blockoverride "cell_texture" {
-							texture = "gfx/interface/icons/generic_icons/warning.dds"
-						}
-						blockoverride "unlit" {
-							visible = no
-						}
-						blockoverride "label" {
-							text = "gm_je_ov_hard_times"
-						}
+						texture = "gfx/interface/icons/generic_icons/warning.dds"
+					}
+					textbox = {
+						autoresize = yes
+						minimumsize = { 480 -1 }
+						maximumsize = { 480 -1 }
+						align = hcenter|nobaseline
+						using = fontsize_large
+						default_format = "#tooltippable"
+						tooltip = "gm_je_ov_hard_times_tt"
+						text = "gm_je_ov_hard_times"
 					}
 				}
 			}
 		}
 	}
 
-	### National Effects (open): what our monuments give the country. Prestige,
-	### legitimacy and cultural pull always, each dedication's own effect while
-	### it is in force; then approval and the fading legitimacy, each under a
-	### heading shown only while it has a line.
+	### National Effects (open): what our monuments give the country. Each total
+	### only while it is in force (owner, play-test round 2: zero rows hide),
+	### and one line when none is; then approval and the fading legitimacy,
+	### each under a heading shown only while it has a line.
 	type te_gm_sec_national = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -495,7 +513,14 @@ types grand_monuments_widget_types
 			visible = "[Not(GetVariableSystem.Exists('gm_national_closed'))]"
 			spacing = 2
 
+			# Nothing in force (every monument contested, say, or the month's
+			# count not yet run): one line, so the section never opens empty.
+			gm_text = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_national_any'), '(CFixedPoint)0' )]"
+				text = "gm_je_national_none"
+			}
 			gm_step_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_prestige'), '(CFixedPoint)0' )]"
 				tooltip = "gm_je_tt_prestige"
 				blockoverride "row_label" {
 					text = "gm_je_lbl_prestige"
@@ -508,6 +533,7 @@ types grand_monuments_widget_types
 				}
 			}
 			gm_step_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_legitimacy'), '(CFixedPoint)0' )]"
 				tooltip = "gm_je_tt_legitimacy"
 				blockoverride "row_label" {
 					text = "gm_je_lbl_legitimacy"
@@ -520,6 +546,7 @@ types grand_monuments_widget_types
 				}
 			}
 			gm_step_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_culture'), '(CFixedPoint)0' )]"
 				tooltip = "gm_je_tt_culture"
 				blockoverride "row_label" {
 					text = "gm_je_lbl_culture"

@@ -230,3 +230,8 @@ concept_internal_resettlement = {
 concept_grandeur = {
 	texture = "gfx/interface/icons/building_icons/building_government_administration.dds"
 }
+
+# Grand Monuments: the two statuses a monument can hold under a government it
+# does not honour (the Monuments journal entry and its How Grand Monuments Work).
+concept_contested_monument = {}
+concept_heritage_monument = {}
