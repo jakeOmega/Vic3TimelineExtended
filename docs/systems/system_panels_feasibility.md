@@ -56,7 +56,7 @@ The `JournalEntry` object also exposes `GetScriptedButtons`, `GetScriptedProgres
 ### 3.3 One layout, two hosts [precedent, in-repo]
 
 A JE widget file is a `types` block plus top-level named widgets, which the entry attaches with `widget = { gui = … name = … container = … }`. `space_race_widget.gui` already splits them.
-- *The wrappers.* Each of its nine top-level `flowcontainer`s is a named wrapper (line 381 on; ~80 lines each, nearly all `blockoverride`s) around the shared `widget_je_sr_milestone_panel` type.
+- *The wrappers.* Its top-level `flowcontainer`s are named wrappers (after the style guide pass: an overview and a live-sections root per milestone and one shared reference root, nearly all `blockoverride`s) around the shared composer types `te_sr_overview_milestone` and `te_sr_status_sections`.
 - *Why the shared types still work.* They read `JournalEntry` themselves (18 references), because a type takes the datacontext of the place it is instanced. Under a `GetPlayerJournalEntry` datacontext in a window, the same types would work unchanged. Doing that to every widget lets the journal entry and a window instance the same body. Types are global across `.gui` files; `te_history_chart.gui` and `te_state_panel_widgets.gui` are already used from other files.
 
 Width: every vanilla side panel is `@panel_width = 540`. The widgets are built at 520 (`@panel_width_minus_20`), so they fit any host without relayout.
