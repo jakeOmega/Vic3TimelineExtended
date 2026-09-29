@@ -35,6 +35,10 @@ concept_launch_authority = {}
 concept_space_race = {}
 concept_space_milestone = {}
 concept_solar_colonization = {}
+# Space Race panel terms (gui/journal_entry_widgets/space_race_widget.gui)
+concept_sr_approach = {}
+concept_sr_funding = {}
+concept_sr_setback_risk = {}
 concept_decolonization_system = {}
 concept_colonial_stability = {}
 # Colonial Empire panel terms (gui/journal_entry_widgets/colonial_empire_widget.gui)

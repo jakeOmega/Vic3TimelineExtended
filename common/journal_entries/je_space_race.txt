@@ -35,13 +35,26 @@ je_space_race_suborbital = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_suborbital.dds"
 	group = je_group_foreign_affairs
 
-	# The player-facing surface. The vanilla button grid below is hidden from
-	# humans (every space race button carries `is_ai = yes`), so every action it
-	# offered is offered here, through common/scripted_guis/space_race_sguis.txt.
+	# The player-facing surface (gui/journal_entry_widgets/space_race_widget.gui):
+	# the overview above the status line, the live sections below it, How the
+	# Space Race Works last. The vanilla button grid below is hidden from humans
+	# (every space race button carries `is_ai = yes`), so every action it offered
+	# is offered in the live sections, through
+	# common/scripted_guis/space_race_sguis.txt.
+	widget = {
+		gui = "gui/journal_entry_widgets/space_race_widget.gui"
+		name = "widget_je_space_race_suborbital_overview"
+		container = "custom_widget_container_1"
+	}
 	widget = {
 		gui = "gui/journal_entry_widgets/space_race_widget.gui"
 		name = "widget_je_space_race_suborbital"
 		container = "custom_widget_container_2"
+	}
+	widget = {
+		gui = "gui/journal_entry_widgets/space_race_widget.gui"
+		name = "widget_je_space_race_reference"
+		container = "custom_widget_container_3"
 	}
 
 	is_shown_when_inactive = {
@@ -173,13 +186,26 @@ je_space_race_orbital = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_orbital.dds"
 	group = je_group_foreign_affairs
 
-	# The player-facing surface. The vanilla button grid below is hidden from
-	# humans (every space race button carries `is_ai = yes`), so every action it
-	# offered is offered here, through common/scripted_guis/space_race_sguis.txt.
+	# The player-facing surface (gui/journal_entry_widgets/space_race_widget.gui):
+	# the overview above the status line, the live sections below it, How the
+	# Space Race Works last. The vanilla button grid below is hidden from humans
+	# (every space race button carries `is_ai = yes`), so every action it offered
+	# is offered in the live sections, through
+	# common/scripted_guis/space_race_sguis.txt.
+	widget = {
+		gui = "gui/journal_entry_widgets/space_race_widget.gui"
+		name = "widget_je_space_race_orbital_overview"
+		container = "custom_widget_container_1"
+	}
 	widget = {
 		gui = "gui/journal_entry_widgets/space_race_widget.gui"
 		name = "widget_je_space_race_orbital"
 		container = "custom_widget_container_2"
+	}
+	widget = {
+		gui = "gui/journal_entry_widgets/space_race_widget.gui"
+		name = "widget_je_space_race_reference"
+		container = "custom_widget_container_3"
 	}
 
 	is_shown_when_inactive = { sr_milestone_followup_is_shown = { PREREQ = suborbital TECH = guided_missiles } }
@@ -304,13 +330,26 @@ je_space_race_moon_landing = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_moon_landing.dds"
 	group = je_group_foreign_affairs
 
-	# The player-facing surface. The vanilla button grid below is hidden from
-	# humans (every space race button carries `is_ai = yes`), so every action it
-	# offered is offered here, through common/scripted_guis/space_race_sguis.txt.
+	# The player-facing surface (gui/journal_entry_widgets/space_race_widget.gui):
+	# the overview above the status line, the live sections below it, How the
+	# Space Race Works last. The vanilla button grid below is hidden from humans
+	# (every space race button carries `is_ai = yes`), so every action it offered
+	# is offered in the live sections, through
+	# common/scripted_guis/space_race_sguis.txt.
+	widget = {
+		gui = "gui/journal_entry_widgets/space_race_widget.gui"
+		name = "widget_je_space_race_moon_landing_overview"
+		container = "custom_widget_container_1"
+	}
 	widget = {
 		gui = "gui/journal_entry_widgets/space_race_widget.gui"
 		name = "widget_je_space_race_moon_landing"
 		container = "custom_widget_container_2"
+	}
+	widget = {
+		gui = "gui/journal_entry_widgets/space_race_widget.gui"
+		name = "widget_je_space_race_reference"
+		container = "custom_widget_container_3"
 	}
 
 	is_shown_when_inactive = { sr_milestone_followup_is_shown = { PREREQ = orbital TECH = space_exploration } }
@@ -435,13 +474,26 @@ je_space_race_probe = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_probe.dds"
 	group = je_group_foreign_affairs
 
-	# The player-facing surface. The vanilla button grid below is hidden from
-	# humans (every space race button carries `is_ai = yes`), so every action it
-	# offered is offered here, through common/scripted_guis/space_race_sguis.txt.
+	# The player-facing surface (gui/journal_entry_widgets/space_race_widget.gui):
+	# the overview above the status line, the live sections below it, How the
+	# Space Race Works last. The vanilla button grid below is hidden from humans
+	# (every space race button carries `is_ai = yes`), so every action it offered
+	# is offered in the live sections, through
+	# common/scripted_guis/space_race_sguis.txt.
+	widget = {
+		gui = "gui/journal_entry_widgets/space_race_widget.gui"
+		name = "widget_je_space_race_probe_overview"
+		container = "custom_widget_container_1"
+	}
 	widget = {
 		gui = "gui/journal_entry_widgets/space_race_widget.gui"
 		name = "widget_je_space_race_probe"
 		container = "custom_widget_container_2"
+	}
+	widget = {
+		gui = "gui/journal_entry_widgets/space_race_widget.gui"
+		name = "widget_je_space_race_reference"
+		container = "custom_widget_container_3"
 	}
 
 	is_shown_when_inactive = { sr_milestone_followup_is_shown = { PREREQ = orbital TECH = space_exploration } }
@@ -566,13 +618,26 @@ je_space_race_moon_base = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_moon_base.dds"
 	group = je_group_foreign_affairs
 
-	# The player-facing surface. The vanilla button grid below is hidden from
-	# humans (every space race button carries `is_ai = yes`), so every action it
-	# offered is offered here, through common/scripted_guis/space_race_sguis.txt.
+	# The player-facing surface (gui/journal_entry_widgets/space_race_widget.gui):
+	# the overview above the status line, the live sections below it, How the
+	# Space Race Works last. The vanilla button grid below is hidden from humans
+	# (every space race button carries `is_ai = yes`), so every action it offered
+	# is offered in the live sections, through
+	# common/scripted_guis/space_race_sguis.txt.
+	widget = {
+		gui = "gui/journal_entry_widgets/space_race_widget.gui"
+		name = "widget_je_space_race_moon_base_overview"
+		container = "custom_widget_container_1"
+	}
 	widget = {
 		gui = "gui/journal_entry_widgets/space_race_widget.gui"
 		name = "widget_je_space_race_moon_base"
 		container = "custom_widget_container_2"
+	}
+	widget = {
+		gui = "gui/journal_entry_widgets/space_race_widget.gui"
+		name = "widget_je_space_race_reference"
+		container = "custom_widget_container_3"
 	}
 
 	is_shown_when_inactive = { sr_milestone_followup_is_shown = { PREREQ = moon_landing TECH = reusable_rocketry } }
@@ -697,13 +762,26 @@ je_space_race_mars_landing = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_mars_landing.dds"
 	group = je_group_foreign_affairs
 
-	# The player-facing surface. The vanilla button grid below is hidden from
-	# humans (every space race button carries `is_ai = yes`), so every action it
-	# offered is offered here, through common/scripted_guis/space_race_sguis.txt.
+	# The player-facing surface (gui/journal_entry_widgets/space_race_widget.gui):
+	# the overview above the status line, the live sections below it, How the
+	# Space Race Works last. The vanilla button grid below is hidden from humans
+	# (every space race button carries `is_ai = yes`), so every action it offered
+	# is offered in the live sections, through
+	# common/scripted_guis/space_race_sguis.txt.
+	widget = {
+		gui = "gui/journal_entry_widgets/space_race_widget.gui"
+		name = "widget_je_space_race_mars_landing_overview"
+		container = "custom_widget_container_1"
+	}
 	widget = {
 		gui = "gui/journal_entry_widgets/space_race_widget.gui"
 		name = "widget_je_space_race_mars_landing"
 		container = "custom_widget_container_2"
+	}
+	widget = {
+		gui = "gui/journal_entry_widgets/space_race_widget.gui"
+		name = "widget_je_space_race_reference"
+		container = "custom_widget_container_3"
 	}
 
 	is_shown_when_inactive = { sr_milestone_followup_is_shown = { PREREQ = orbital TECH = knowledge_economy } }
@@ -829,13 +907,26 @@ je_space_race_interstellar_probe = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_interstellar_probe.dds"
 	group = je_group_foreign_affairs
 
-	# The player-facing surface. The vanilla button grid below is hidden from
-	# humans (every space race button carries `is_ai = yes`), so every action it
-	# offered is offered here, through common/scripted_guis/space_race_sguis.txt.
+	# The player-facing surface (gui/journal_entry_widgets/space_race_widget.gui):
+	# the overview above the status line, the live sections below it, How the
+	# Space Race Works last. The vanilla button grid below is hidden from humans
+	# (every space race button carries `is_ai = yes`), so every action it offered
+	# is offered in the live sections, through
+	# common/scripted_guis/space_race_sguis.txt.
+	widget = {
+		gui = "gui/journal_entry_widgets/space_race_widget.gui"
+		name = "widget_je_space_race_interstellar_probe_overview"
+		container = "custom_widget_container_1"
+	}
 	widget = {
 		gui = "gui/journal_entry_widgets/space_race_widget.gui"
 		name = "widget_je_space_race_interstellar_probe"
 		container = "custom_widget_container_2"
+	}
+	widget = {
+		gui = "gui/journal_entry_widgets/space_race_widget.gui"
+		name = "widget_je_space_race_reference"
+		container = "custom_widget_container_3"
 	}
 
 	is_shown_when_inactive = {
@@ -960,13 +1051,18 @@ je_space_race_interstellar_results = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_interstellar_results.dds"
 	group = je_group_foreign_affairs
 
-	# The player-facing surface. The vanilla button grid below is hidden from
-	# humans (every space race button carries `is_ai = yes`), so every action it
-	# offered is offered here, through common/scripted_guis/space_race_sguis.txt.
+	# The panel (gui/journal_entry_widgets/space_race_widget.gui): the transit
+	# and the programme above the status line, How the Space Race Works last.
+	# There is nothing to adjust while the probe coasts, so no live sections.
 	widget = {
 		gui = "gui/journal_entry_widgets/space_race_widget.gui"
-		name = "widget_je_space_race_interstellar_results"
-		container = "custom_widget_container_2"
+		name = "widget_je_space_race_interstellar_results_overview"
+		container = "custom_widget_container_1"
+	}
+	widget = {
+		gui = "gui/journal_entry_widgets/space_race_widget.gui"
+		name = "widget_je_space_race_reference"
+		container = "custom_widget_container_3"
 	}
 
 	is_shown_when_inactive = {
@@ -1058,13 +1154,26 @@ je_space_race_solar_colonization = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_solar_colonization.dds"
 	group = je_group_foreign_affairs
 
-	# The player-facing surface. The vanilla button grid below is hidden from
-	# humans (every space race button carries `is_ai = yes`), so every action it
-	# offered is offered here, through common/scripted_guis/space_race_sguis.txt.
+	# The player-facing surface (gui/journal_entry_widgets/space_race_widget.gui):
+	# the overview above the status line, the live sections below it, How the
+	# Space Race Works last. The vanilla button grid below is hidden from humans
+	# (every space race button carries `is_ai = yes`), so every action it offered
+	# is offered in the live sections, through
+	# common/scripted_guis/space_race_sguis.txt.
+	widget = {
+		gui = "gui/journal_entry_widgets/space_race_widget.gui"
+		name = "widget_je_space_race_solar_colonization_overview"
+		container = "custom_widget_container_1"
+	}
 	widget = {
 		gui = "gui/journal_entry_widgets/space_race_widget.gui"
 		name = "widget_je_space_race_solar_colonization"
 		container = "custom_widget_container_2"
+	}
+	widget = {
+		gui = "gui/journal_entry_widgets/space_race_widget.gui"
+		name = "widget_je_space_race_reference"
+		container = "custom_widget_container_3"
 	}
 
 	is_shown_when_inactive = {

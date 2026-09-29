@@ -598,6 +598,7 @@
  sr_colony_valles_marineris_tt:0 "  #G @check!#! Valles Marineris (Mars)"
  sr_colony_venus_tt:0 "  #G @check!#! Venus"
  sr_colony_vesta_tt:0 "  #G @check!#! Vesta (Asteroid Belt)"
+ sr_pace_note_passive:0 "This programme is not running, and nothing is being spent on it."
  sr_solar_colonization:0 "Solar System Colonization Achieved"
  sr_solar_colonization_desc:0 "Humanity's reach now extends across the solar system."
  st_res_row_policy_toggle_tooltip:0 "#bold Reserve Policy Settings#!\nShow or hide this good's policy selector, presets and settings.\n#italic Only changes what you see: an automated policy keeps running while this panel is collapsed and while the journal entry is closed.#!"
