@@ -1719,7 +1719,7 @@ Journal-entry widgets are **additive**, not overrides: a `.gui` under `gui/journ
 
 | File | Journal entry | Purpose |
 |---|---|---|
-| `covert_operations_widget.gui` | `je_covert_warfare` | the sections as types (`te_covert_*`) and the three named roots that compose them: the overview (standing, funding, Tradecraft and a recent catch as icons; operation slots as lit/dimmed icons; capacity and Tradecraft bars), the live sections (Operations, one row per running operation with its icon, phase, detection, priority stepper and Stand down; Agent Networks, one row per network with a strength bar and trend; Funding; Detection Risk; Counterintelligence) and How Covert Warfare Works |
+| `covert_operations_widget.gui` | `je_covert_warfare` | the sections as types (`te_covert_*`) and the three named roots that compose them: the overview (standing, funding, Tradecraft tier and a recent catch as icons; operation slots as lit/dimmed icons; capacity and Tradecraft bars), the live sections (Operations: the shared detection factors, then one row per running operation with its icon, phase, detection, priority stepper and Stand down; Funding; Agent Networks, one row per network led by the target's flag, with a strength headline, bar and trend; Counterintelligence) and How Covert Warfare Works |
 | `strategic_reserve_widget.gui` | `je_strategic_reserve` | per-good reserve readouts |
 | `banking_dashboard_widget.gui` | `je_banking_cycle` | conditions readout + policy dashboard; both panels are types, also instanced by the Budget panel's Banking tab |
 | `banking_history_widget.gui` | `je_banking_cycle` | the banking history charts; a type, also instanced by the Budget panel's Banking tab |

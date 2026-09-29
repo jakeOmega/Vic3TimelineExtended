@@ -22,8 +22,10 @@ CONCEPTS = os.path.join(REPO, "common", "game_concepts", "extra_concepts.txt")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 ICONS_DOC = os.path.join(REPO, "docs", "systems", "covert_gui_icons.md")
 
-STATUS = ["te_covert_sec_operations", "te_covert_sec_networks", "te_covert_sec_funding",
-          "te_covert_sec_detection", "te_covert_sec_counterintel"]
+# Owner, round 2: Funding second, next to its overview icon; Detection Risk
+# is a table at the top of Operations, not a section of its own.
+STATUS = ["te_covert_sec_operations", "te_covert_sec_funding", "te_covert_sec_networks",
+          "te_covert_sec_counterintel"]
 REFERENCE = ["te_covert_sec_how"]
 # root name -> (container, what it wraps)
 ROOTS = {
@@ -51,10 +53,17 @@ STANDING_ICONS = {
     1: GENERIC + "disapproval_icon.dds",
     0: GENERIC + "red_cross.dds",
 }
+# Owner, round 2: an icon per Tradecraft tier (covert_tradecraft_tier).
+TRADECRAFT_ICONS = {
+    0: GENERIC + "maybe_icon.dds",
+    1: GENERIC + "population.dds",
+    2: "gfx/interface/politics_view/institution_level_icon.dds",
+    3: "gfx/interface/icons/formation_order_icons/upgrade.dds",
+    4: GENERIC + "most_senior_front_commander.dds",
+}
 OTHER_ICONS = {
     "funding_dormant": GENERIC + "warning.dds",
     "funding": GENERIC + "gdp.dds",
-    "tradecraft": "gfx/interface/icons/formation_order_icons/upgrade.dds",
     "caught": "gfx/interface/icons/military_icons/navy_icons/detection_navy.dds",
     "slot": "gfx/interface/icons/event_icons/je_covert_warfare.dds",
 }
@@ -161,7 +170,7 @@ class FlagTest(unittest.TestCase):
     def test_section_flags_say_their_default(self):
         flags = set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", self.text))
         self.assertEqual(flags, {"covert_ops_closed", "covert_nets_closed", "covert_funding_closed",
-                                 "covert_detection_closed", "covert_counterintel_closed", "covert_how_open"})
+                                 "covert_counterintel_closed", "covert_how_open"})
         for f in flags:
             negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{f}'\)\s*\)", self.text))
             bare = len(re.findall(rf"GetVariableSystem\.Exists\('{f}'\)", self.text)) - negated
@@ -205,6 +214,20 @@ class StateGateTest(unittest.TestCase):
         self.assertNotIn("covert_ops_dormant_sgui", row)
         self.assertNotIn("je_iw_op_row_dormant", self.text)
 
+    def test_detection_factors_are_said_once_above_the_rows(self):
+        self.assertNotIn("te_covert_sec_detection", self.text)
+        ops = _type_body(self.text, "te_covert_sec_operations")
+        rows = ops.index("datamodel =")
+        for key in ("je_iw_detection_header", "je_iw_detection_base", "je_iw_detection_funding",
+                    "je_iw_detection_efficiency"):
+            self.assertEqual(self.text.count(f'text = "{key}"'), 1, key)
+            self.assertLess(ops.index(f'text = "{key}"'), rows, key)
+        self.assertIn('tooltip = "je_iw_detection_factors_tooltip"', ops[:rows])
+        # The table's card is not gated: every operation, and the next one
+        # launched, shares these factors.
+        card = ops[ops.rindex("covert_panel = {", 0, ops.index('text = "je_iw_detection_header"')):]
+        self.assertNotRegex(card[:card.index("covert_subheader")], r"visible =")
+
     def test_the_empty_state_shows_only_with_no_rows(self):
         ops = _type_body(self.text, "te_covert_sec_operations")
         self.assertIn(NO_OPS, _gate_before(ops, "je_iw_no_operations"))
@@ -247,6 +270,12 @@ class OverviewTest(unittest.TestCase):
 
     def test_each_standing_code_draws_its_own_icon(self):
         self.assertEqual(self._coded("covert_disp_standing_code"), STANDING_ICONS)
+
+    def test_each_tradecraft_tier_draws_its_own_icon(self):
+        self.assertEqual(self._coded("covert_tradecraft_tier"), TRADECRAFT_ICONS)
+        self.assertEqual(len(set(TRADECRAFT_ICONS.values())), 5)
+        # Distinct from every other placeholder in the row.
+        self.assertFalse(set(TRADECRAFT_ICONS.values()) & (set(STANDING_ICONS.values()) | set(OTHER_ICONS.values())))
 
     def test_ten_slots_lit_by_the_operations_running(self):
         for n in range(1, 11):
@@ -293,6 +322,20 @@ class OperationRowTest(unittest.TestCase):
         self.assertIn("direction = horizontal", strip[:200])
         self.assertGreater(self.row.index("covert_op_priority_stepper = { }"), self.row.index('text = "je_iw_op_row_detection"'))
 
+    def test_priority_meaning_is_the_stepper_labels_hover(self):
+        # Owner, round 2: the "Priority: effect ..." line moved into the
+        # stepper's hover. One label per level, gated on the level and on
+        # every container having one.
+        stepper = _type_body(_read(GUI), "covert_op_priority_stepper")
+        self.assertIn("ignoreinvisible = yes", stepper)
+        for n in (1, 2, 3):
+            label = stepper[: stepper.index(f'tooltip = "je_iw_op_row_priority_{n}"')]
+            gate = label.rsplit("visible = ", 1)[1].split("\n", 1)[0]
+            self.assertIn("covert_ops_priority_ready_sgui", gate, n)
+            self.assertIn(f"GetVariableValue('iw_priority'), '(CFixedPoint){n}')", gate, n)
+            self.assertNotIn(f'text = "je_iw_op_row_priority_{n}"', self.row, n)
+        self.assertEqual(stepper.count('default_format = "#tooltippable"'), 3)
+
     def test_row_tooltips_need_no_journal_entry(self):
         # A tooltip inside a datamodel item renders with the item's
         # ScriptContainer only (gui_modding_guide.md gotcha #24).
@@ -300,7 +343,8 @@ class OperationRowTest(unittest.TestCase):
         for key in ("je_iw_op_row_phase_prep_tt", "je_iw_op_row_phase_est_tt", "je_iw_op_row_phase_full_tt",
                     "je_iw_op_row_detection_tt", "je_iw_net_row_trend_growing", "je_iw_net_row_trend_decaying",
                     "je_iw_net_row_trend_holding", "je_iw_net_row_intel_service_tooltip",
-                    "je_iw_net_row_intel_ops_tooltip", "je_iw_net_row_strength_tt"):
+                    "je_iw_net_row_intel_ops_tooltip", "je_iw_net_row_strength_tt",
+                    "je_iw_op_row_priority_1", "je_iw_op_row_priority_2", "je_iw_op_row_priority_3"):
             self.assertNotIn("JournalEntry", loc[key], key)
 
 
@@ -321,6 +365,16 @@ class NetworkRowTest(unittest.TestCase):
     def setUpClass(cls):
         cls.row = _type_body(_read(GUI), "widget_je_covert_network_row")
         cls.loc = _loc()
+
+    def test_the_row_leads_with_the_targets_flag(self):
+        # Owner, round 2: vanilla's flag widget, as the UN overview's council
+        # seats use it, from the stored capital, gated on the variable.
+        head = self.row[: self.row.index('text = "je_iw_net_row_title"')]
+        self.assertIn("flag = {", head)
+        wrapper = head[head.rindex("widget = {"):]
+        self.assertIn("visible = \"[ScriptContainer.HasVariable('iw_target_capital')]\"", wrapper[:wrapper.index("flag = {")])
+        self.assertIn("datacontext = \"[ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry]\"", wrapper)
+        self.assertLess(self.row.index("flag = {"), self.row.index("je_iw_net_row_strength"))
 
     def test_one_headline_per_report_state_each_with_the_hover(self):
         for gate, key in self.HEADLINES.items():
@@ -446,14 +500,14 @@ class IconsTest(unittest.TestCase):
 
     def test_the_doc_lists_every_placeholder(self):
         doc = _read(ICONS_DOC)
-        for path in list(STANDING_ICONS.values()) + list(OTHER_ICONS.values()):
+        for path in list(STANDING_ICONS.values()) + list(TRADECRAFT_ICONS.values()) + list(OTHER_ICONS.values()):
             self.assertIn(f"`{path}`", doc, path)
 
     def test_the_overview_uses_only_listed_textures(self):
         gui = _read(GUI)
         used = set(re.findall(r'texture = "([^"]+)"', _type_body(gui, "te_covert_overview_panel")))
         used |= set(re.findall(r'texture = "([^"]+)"', _type_body(gui, "covert_ov_slot")))
-        known = set(STANDING_ICONS.values()) | set(OTHER_ICONS.values()) | NOT_PLACEHOLDERS
+        known = set(STANDING_ICONS.values()) | set(TRADECRAFT_ICONS.values()) | set(OTHER_ICONS.values()) | NOT_PLACEHOLDERS
         self.assertEqual(used - known, set())
 
 
