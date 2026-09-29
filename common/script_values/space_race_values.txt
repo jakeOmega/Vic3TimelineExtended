@@ -636,3 +636,120 @@ sr_eta_months_solar_colonization = {
 	min = 0
 	divide = sr_pace_rate_solar_colonization
 }
+
+# ======= Rivals' estimated progress (display) =======
+# How far off a rival's announced progress may be, as a share of the goal: the
+# band the Rivals rows draw around each estimate. The viewer's covert network in
+# the rival narrows it (sr_disp_rival_band, space_race_display_values.txt).
+sr_rival_band_open   = { value = 0.25 }
+sr_rival_band_tier_1 = { value = 0.1  }
+sr_rival_band_tier_2 = { value = 0.05 }
+
+# A rival's estimate with the open band: its progress towards the goal plus
+# its yearly offset (sr_fuzz_<m>, −1 to +1) times the open band, kept within
+# 0-1. What the monthly refresh orders the Rivals rows by, so the order leaks
+# no more than the widest band shows. Scope: the rival.
+sr_rival_est_open_suborbital = {
+	value = sr_progress_suborbital_value
+	divide = sr_suborbital_goal
+	if = {
+		limit = { has_variable = sr_fuzz_suborbital }
+		add = {
+			value = var:sr_fuzz_suborbital
+			multiply = sr_rival_band_open
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_rival_est_open_orbital = {
+	value = sr_progress_orbital_value
+	divide = sr_orbital_goal
+	if = {
+		limit = { has_variable = sr_fuzz_orbital }
+		add = {
+			value = var:sr_fuzz_orbital
+			multiply = sr_rival_band_open
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_rival_est_open_moon_landing = {
+	value = sr_progress_moon_landing_value
+	divide = sr_moon_landing_goal
+	if = {
+		limit = { has_variable = sr_fuzz_moon_landing }
+		add = {
+			value = var:sr_fuzz_moon_landing
+			multiply = sr_rival_band_open
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_rival_est_open_probe = {
+	value = sr_progress_probe_value
+	divide = sr_probe_goal
+	if = {
+		limit = { has_variable = sr_fuzz_probe }
+		add = {
+			value = var:sr_fuzz_probe
+			multiply = sr_rival_band_open
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_rival_est_open_moon_base = {
+	value = sr_progress_moon_base_value
+	divide = sr_moon_base_goal
+	if = {
+		limit = { has_variable = sr_fuzz_moon_base }
+		add = {
+			value = var:sr_fuzz_moon_base
+			multiply = sr_rival_band_open
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_rival_est_open_mars_landing = {
+	value = sr_progress_mars_landing_value
+	divide = sr_mars_landing_goal
+	if = {
+		limit = { has_variable = sr_fuzz_mars_landing }
+		add = {
+			value = var:sr_fuzz_mars_landing
+			multiply = sr_rival_band_open
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_rival_est_open_interstellar_probe = {
+	value = sr_progress_interstellar_probe_value
+	divide = sr_interstellar_probe_goal
+	if = {
+		limit = { has_variable = sr_fuzz_interstellar_probe }
+		add = {
+			value = var:sr_fuzz_interstellar_probe
+			multiply = sr_rival_band_open
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_rival_est_open_solar_colonization = {
+	value = sr_progress_solar_colonization_value
+	divide = sr_solar_colonization_goal
+	if = {
+		limit = { has_variable = sr_fuzz_solar_colonization }
+		add = {
+			value = var:sr_fuzz_solar_colonization
+			multiply = sr_rival_band_open
+		}
+	}
+	min = 0
+	max = 1
+}

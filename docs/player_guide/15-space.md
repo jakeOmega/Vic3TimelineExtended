@@ -84,10 +84,17 @@ Each running milestone has a panel in its journal entry. It shows progress
 against the goal, the pace per month, the current setback risk, the setbacks so
 far and a rough estimate of the months left. Hover the progress line to see the
 reward for finishing first and for finishing later. The controls are an approach
-selector (Standard, Safe or Ambitious) and a funding stepper. Two collapsed sections
-follow. Who else is racing lists the other powers running the same milestone and
-whether its "first" is still unclaimed, but not how far along they are. The
-program so far shows how far your own program has come across all nine entries.
+selector (Standard, Safe or Ambitious) and a funding stepper. The row of nine
+icons shows how far your own program has come across all nine entries.
+
+Rivals lists the other powers running the same milestone. The first five each
+show an estimate of how far along they are: a band reaching 25% of the goal to
+either side of a marker, which always contains the true figure. Programs are
+announced but their schedules are not, so where the marker sits in the band is
+drawn again once a year. An agent network in the rival's country narrows the
+band to ±10% at strength 50 and ±5% at 75 (see [Agent
+networks](10-influence.md#agent-networks)). Hover a rival for its figures; any
+rivals past the fifth are listed when you hover the line below them.
 
 A new milestone starts on the Standard approach at funding level 1. It moves at
 your program's pace and rolls against its base setback risk from its first
@@ -309,7 +316,7 @@ AI great and major powers use the same entries, approaches and funding, and
 start each milestone on Standard as you do; only you can switch a milestone back
 to Standard. Only an
 AI in the top three of the global ranking makes progress; a weaker one can open
-an entry but its bar doesn't move, and the Who else is racing list leaves it
+an entry but its bar doesn't move, and the Rivals list leaves it
 out. Such an AI winds its funding down to 0 and pays nothing for the approach
 it has chosen until it climbs back into the top three. AI great powers prefer
 the Ambitious approach, more so when another country is running the same
