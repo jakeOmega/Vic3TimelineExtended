@@ -22,6 +22,8 @@ production pipeline). Nothing here knows about a particular entity list.
                tinted           cutout recast in its folder's one metal (laws, institutions)
                card             dark pictogram on a blank card lifted from vanilla (IG and
                                 character traits; `recolor` turns it to a colour vanilla lacks)
+               strip            wide painted scene centred on an institution's 3500x220 strip
+  strip_sheet()   The strip category's review sheet: each strip as the panel shows it.
   review_sheet()  Row per entity: [current icon | 3 vanilla neighbours || candidates].
 
 Frames are not hand-drawn: `vanilla_template()` takes the per-pixel median of
@@ -238,19 +240,22 @@ def medallion_object_target(folder: str, disc) -> dict:
     return {1: np.percentile(np.concatenate(s), SPREAD_PCT), 2: np.percentile(np.concatenate(v), SPREAD_PCT)}
 
 
-def grade_spread(im: Image.Image, target: dict, disc, strength: float = 0.8,
+def grade_spread(im: Image.Image, target: dict, disc=None, strength: float = 0.8,
                  max_gain: float = 1.6) -> Image.Image:
     """Pull the 50th and 90th percentiles of saturation and value toward `target`.
 
     Each channel goes through a piecewise-linear curve from (0, 0) through the
     two moved percentiles to (1, 1), so contrast can grow as well as the
-    middle. Percentiles are taken over the pixels that `medallion_object_target`
-    would count, so both sides are measured alike. Gains are capped: a
-    near-grey object's saturation is mostly noise hue.
+    middle. With a `disc`, percentiles are taken over the pixels that
+    `medallion_object_target` would count, so both sides are measured alike;
+    without one, over every opaque pixel. Gains are capped: a near-grey
+    object's saturation is mostly noise hue.
     """
     a = np.asarray(im)
     alpha = a[..., 3]
-    m = (alpha > 200) & _object_mask(a[..., :3].astype(np.float32), disc)
+    m = alpha > 200
+    if disc is not None:
+        m &= _object_mask(a[..., :3].astype(np.float32), disc)
     if m.sum() < 50:
         return im
     hsv = np.asarray(im.convert("RGB").convert("HSV"), dtype=np.float32) / 255
@@ -653,6 +658,123 @@ def compose_card(raw: Image.Image, spec: dict, card: np.ndarray) -> Image.Image:
     return icon
 
 
+def vanilla_folder(spec: dict) -> Path:
+    """The vanilla folder a category's files live in (`root` defaults to gfx/interface/icons)."""
+    return vanilla_icons_dir().parents[2] / spec.get("root", "gfx/interface/icons") / spec["folder"]
+
+
+# Institution strips (Institution.GetBackground, politics_panel_institutions.gui)
+# are 3500x220, but the panel centre-crops each to its row: a box from 70 px
+# into the row to 150 px past its right edge, where the panel clips it, scaled
+# to the row's height. About x 1300-2000 of the strip shows, drawn at roughly
+# half opacity through institution_image_mask.dds. Vanilla paints its figures
+# there and fills the rest with a dim, blurred continuation.
+STRIP_BAND = (1300, 2000)
+STRIP_CENTRE = 1700
+
+
+def strip_grade_target(folder: Path) -> dict:
+    """50th and 90th percentiles of saturation and value in the band of vanilla's strips that shows."""
+    s, v = [], []
+    for f in sorted(folder.glob("*.dds")):
+        if "mask" in f.stem:
+            continue
+        try:
+            im = load_rgba(f).crop((STRIP_BAND[0], 0, STRIP_BAND[1], 220))
+        except Exception:
+            continue
+        hsv = np.asarray(im.convert("RGB").convert("HSV"), dtype=np.float32).reshape(-1, 3) / 255
+        s.append(hsv[:, 1])
+        v.append(hsv[:, 2])
+    if not s:
+        raise SystemExit(f"no strips in {folder}: check VIC3_BASE_GAME")
+    return {1: np.percentile(np.concatenate(s), SPREAD_PCT), 2: np.percentile(np.concatenate(v), SPREAD_PCT)}
+
+
+def compose_strip(raw: Image.Image, spec: dict, target) -> Image.Image:
+    """A wide render centred on the strip, the sides its mirror image, blurred and dimmed.
+
+    The sides only show on a short row, as in vanilla. Mirroring keeps them
+    continuous with the scene's edge; they blend from sharp to blurred over
+    60 px and darken with distance.
+    """
+    from scipy.ndimage import gaussian_filter
+
+    W, H = spec["size"]
+    scene = raw.convert("RGBA").resize((round(raw.width * H / raw.height), H), Image.LANCZOS)
+    scene = grade_spread(scene, target, strength=spec.get("grade_strength", 0.8))
+    w = scene.width
+    x0 = max(0, min(W - w, round(STRIP_CENTRE - w / 2)))
+    a = np.asarray(scene.convert("RGB"), dtype=np.float32)
+    wide = np.pad(a, ((0, 0), (x0, W - x0 - w), (0, 0)), mode="symmetric")
+    soft = gaussian_filter(wide, sigma=(3, 14, 0))
+    x = np.arange(W)
+    d = np.maximum(np.maximum(x0 - x, x - (x0 + w - 1)), 0).astype(np.float32)
+    t = np.clip(d / 60, 0, 1)[None, :, None]
+    out = (wide * (1 - t) + soft * t) * (1 - 0.4 * np.clip(d / 900, 0, 1))[None, :, None]
+    return Image.fromarray(np.dstack([np.clip(out + 0.5, 0, 255), np.full((H, W), 255.0)]).astype(np.uint8), "RGBA")
+
+
+def _nine_slice(m: Image.Image, size: tuple[int, int], borders: tuple[int, int, int, int],
+                density: float) -> Image.Image:
+    """`spriteType = Corneredstretched`: fixed borders (texels / density), stretched middle."""
+    W, H = m.size
+    w, h = size
+    L, T, R, B = borders
+    xs_src, ys_src = (0, L, W - R, W), (0, T, H - B, H)
+    xs = (0, round(L / density), w - round(R / density), w)
+    ys = (0, round(T / density), h - round(B / density), h)
+    out = Image.new(m.mode, size)
+    for i in range(3):
+        for j in range(3):
+            src = (xs_src[i], ys_src[j], xs_src[i + 1], ys_src[j + 1])
+            dst = (xs[i], ys[j], xs[i + 1], ys[j + 1])
+            if src[2] > src[0] and src[3] > src[1] and dst[2] > dst[0] and dst[3] > dst[1]:
+                out.paste(m.crop(src).resize((dst[2] - dst[0], dst[3] - dst[1]), Image.BILINEAR), dst[:2])
+    return out
+
+
+def strip_in_panel(strip: Image.Image, mask: Image.Image, row_h: int = 180) -> Image.Image:
+    """Roughly what the institution panel shows of a strip: the review sheet's view of it.
+
+    The box is 600 px wide (70 px into the 520 px row to 150 px past it) and
+    row_h tall; the panel clips it at the row's edge, 450 px in.
+    """
+    bw = 600
+    scale = max(bw / strip.width, row_h / strip.height)
+    cw, ch = bw / scale, row_h / scale
+    left, top = (strip.width - cw) / 2, (strip.height - ch) / 2
+    view = strip.convert("RGB").resize((bw, row_h), Image.LANCZOS, box=(left, top, left + cw, top + ch))
+    alpha = _nine_slice(mask.getchannel("A"), (bw, row_h), (150, 0, 50, 50), 2)
+    panel = Image.new("RGB", (bw, row_h), (38, 41, 46))
+    panel.paste(view, (0, 0), alpha)
+    return panel.crop((0, 0, 450, row_h))
+
+
+def strip_sheet(rows: list, mask_path: Path, out: Path) -> None:
+    """Row per entity: [current | candidates], each as the panel shows it over the whole strip."""
+    mask = load_rgba(mask_path)
+    tile_w, view_h, full_h, gap = 450, 180, 28, 12
+    n = max(1 + len(c) for _, _, c in rows)
+    row_h = 22 + view_h + full_h + gap
+    sheet = Image.new("RGB", (n * (tile_w + gap), len(rows) * row_h), (24, 26, 30))
+    d = ImageDraw.Draw(sheet)
+    for r, (label, current, cands) in enumerate(rows):
+        y = r * row_h
+        for j, (caption, src) in enumerate([("now", current)] + cands):
+            x = j * (tile_w + gap)
+            try:
+                strip = load_rgba(src)
+            except Exception:
+                continue
+            d.text((x + 4, y + 4), f"{label.splitlines()[0]}  {caption}" if j == 0 else caption,
+                   fill=(220, 200, 140) if j else (200, 200, 200))
+            sheet.paste(strip_in_panel(strip, mask, view_h), (x, y + 22))
+            sheet.paste(strip.convert("RGB").resize((tile_w, full_h), Image.LANCZOS), (x, y + 22 + view_h))
+    out.parent.mkdir(parents=True, exist_ok=True)
+    sheet.save(out)
+
+
 class Composer:
     """Compose raw renders per category, caching each category's vanilla template."""
 
@@ -671,6 +793,8 @@ class Composer:
             # object against a folder of bare objects instead.
             self._target[cat] = (medallion_object_target(spec["folder"], spec["disc"]) if spec.get("grade") == "spread"
                                  else category_grade_target(spec.get("grade_folder", spec["folder"])))
+        if mode == "strip" and cat not in self._target:
+            self._target[cat] = strip_grade_target(vanilla_folder(spec))
         if mode == "tinted" and cat not in self._tmpl:
             self._tmpl[cat] = tone_ramp(spec.get("ramp_folder", spec["folder"]))
         if mode == "card" and cat not in self._tmpl:
@@ -682,6 +806,8 @@ class Composer:
             spec = dict(spec, **{k: recolor_rgb(spec[k], *spec["recolor"])
                                  for k in ("color", "color_bottom") if k in spec})
         raw = raw.convert("RGB")
+        if mode == "strip":
+            return compose_strip(raw, spec, self._target[cat])
         if mode == "tinted":
             return compose_tinted(raw, spec, self._tmpl[cat])
         if mode == "card":

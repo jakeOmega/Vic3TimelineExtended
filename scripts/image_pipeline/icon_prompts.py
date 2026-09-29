@@ -157,12 +157,24 @@ CATEGORIES = {
     # also holds institution_icon_bg, the dark disc the GUI draws them over.
     # Vanilla's objects span 0.68-0.80 of the side (median 0.775) and the disc
     # 0.80; at 0.9 ours spilled past the disc (#561 in-game review).
-    # Only `icon =` is wired; `background_texture` (a 3500x220 painted strip in
-    # illustrations/institutions/) is a different layout.
+    # `background_texture`, the painted strip, is the next category.
     "institution": dict(
         folder="institution_icons", ramp_folder="law_icons", size=256, mode="tinted", fill=0.78,
         entity_dir="common/institutions", field="icon",
         style="{subject}, one chunky readable object, " + PAINTED),
+    # Institution strips (3500x220, Institution.GetBackground): the painted
+    # scene behind each institution's row. Only about x 1300-2000 shows, at
+    # roughly half opacity (icon_render.STRIP_BAND), so a 4:1 render fills the
+    # middle and compose_strip mirrors it out to the edges. Block-compressed
+    # through texconv like event pictures: vanilla's seven are uncompressed at
+    # 4.1 MB each.
+    "institution_strip": dict(
+        folder="institutions", root="gfx/interface/illustrations", size=(3500, 220),
+        gen_size=(1792, 448), mode="strip", dds_format="BC7_UNORM_SRGB",
+        entity_dir="common/institutions", field="background_texture",
+        style="{subject}, candid close-up, the figures large and cropped at the chest in the middle of "
+              "the frame, seen from the side busy at their work, oil painting, historical realism, muted "
+              "earthy colours, soft diffuse light, visible brushwork"),
     # IG trait cards (124x162, InterestGroupTrait.GetTexture): a dark embossed
     # pictogram on a card whose colour is the trait's approval slot, gold for
     # loyal, green for happy, rust for unhappy. One category per slot, since
@@ -227,7 +239,8 @@ def prompt_for(cat: str, subject: str) -> str:
 
 def icon_path(cat: str, key: str) -> str:
     """The mod path an accepted icon is written to and wired as."""
-    return f"gfx/interface/icons/{CATEGORIES[cat]['folder']}/{key}.dds"
+    spec = CATEGORIES[cat]
+    return f"{spec.get('root', 'gfx/interface/icons')}/{spec['folder']}/{key}.dds"
 
 
 ICONS: dict[str, dict[str, dict]] = {
@@ -679,6 +692,30 @@ ICONS: dict[str, dict[str, dict]] = {
         "institution_ministry_of_international_aid": {"subject": "a wooden supply crate with a cross on its side, a sack of grain beside it", "seed": 0},
         "institution_migration_controls": {"subject": "a wooden rubber stamp standing on an ink pad beside a small booklet", "seed": 0},
     },
+    # The same institutions' background strips, each scene set in its
+    # institution's era and echoing its icon. All were on vanilla's seven.
+    "institution_strip": {
+        "institution_ministry_of_war": {"subject": "army officers in dark 1900s uniforms leaning over a map spread on a table, one pointing at it, in a wood-panelled war room lit by a hanging lamp", "seed": 1},
+        "institution_ministry_of_commerce": {"subject": "merchants in frock coats inspecting bolts of cloth, sacks of coffee and wooden crates in a busy 19th-century harbour warehouse, tall sailing ships beyond the open doors", "seed": 0},
+        "institution_ministry_of_foreign_affairs": {"subject": "diplomats in 19th-century frock coats seated along a long polished table signing a treaty, under a crystal chandelier in a gilded palace hall", "seed": 0},
+        "institution_national_bank": {"subject": "clerks in waistcoats counting stacks of banknotes and weighing gold bars at long wooden counters in a marble-columned 19th-century bank hall", "seed": 1},
+        "institution_ministry_of_culture": {"subject": "visitors in 19th-century dress admiring large framed landscape paintings and marble statues in a grand skylit museum gallery", "seed": 0},
+        "institution_ministry_of_labor": {"subject": "a government mediator in a grey suit seated at a table between factory workers in flat caps and a mill owner in a waistcoat, on an early 1900s factory floor with machinery behind them", "seed": 1},
+        # s1 drew a giant cropped torso and a pair of floating legs.
+        "institution_ministry_of_the_environment": {"subject": "scientists in 1970s field jackets taking water samples on a reedy river bank, a smoking factory chimney in the hazy distance", "seed": 0},
+        "institution_ministry_of_intelligence_and_security": {"subject": "intelligence officers in 1950s suits examining photographs and files under a desk lamp in a dim office, a reel-to-reel tape recorder on a shelf", "seed": 1},
+        "institution_ministry_of_refugee_affairs": {"subject": "families with bundles and suitcases standing in line at a relief table outside rows of white canvas tents, aid workers handing out blankets", "seed": 1},
+        # s0 has a framed certificate at its left edge, under the panel's fade.
+        "institution_ministry_of_propaganda": {"subject": "a 1930s radio broadcasting studio, a man in a suit speaking into a large chrome microphone while technicians watch through a glass window beside dials and switches", "seed": 0},
+        "institution_ministry_of_science": {"subject": "scientists in white coats working at laboratory benches with glass flasks, brass microscopes and a large electrical apparatus in an early 20th-century laboratory", "seed": 0},
+        "institution_ministry_of_thought_control": {"subject": "rows of clerks wearing headphones seated at desks with reel-to-reel tape recorders in a grim grey concrete hall under harsh hanging lamps", "seed": 0},
+        "institution_ministry_of_consumer_protection": {"subject": "food inspectors in white coats examining tin cans and loaves of bread on a long steel table in a 1950s testing laboratory", "seed": 0},
+        "institution_ministry_of_urban_planning": {"subject": "architects in 1950s shirtsleeves gathered around a large white scale model of a city with tower blocks and parks, drafting tables behind them", "seed": 1},
+        "institution_ministry_of_religion": {"subject": "robed clerics conferring around a long wooden table in a candlelit stone hall with tall stained glass windows", "seed": 0},
+        # FLUX lettered the grain sacks: large on s1, small on s0 under the panel's fade.
+        "institution_ministry_of_international_aid": {"subject": "1960s aid workers unloading sacks of grain from a dusty truck for waiting villagers in a sunlit rural village", "seed": 0},
+        "institution_migration_controls": {"subject": "immigration officers at wooden desks checking the papers of arriving families with trunks, in a large early 1900s inspection hall with tall arched windows", "seed": 1},
+    },
     # The custom-religion IG traits on another trait's card (all but the
     # traditionalist trio, which is the Devout IG's own set). Slot = category.
     "ig_trait_loyal": {
@@ -755,7 +792,7 @@ def check(mod_root: str | None = None, on_disk: set[str] | None = None) -> dict:
 
     mod_root = mod_root or os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     if on_disk is None:
-        out = subprocess.run(["git", "-C", mod_root, "ls-files", "--", "gfx/interface/icons"],
+        out = subprocess.run(["git", "-C", mod_root, "ls-files", "--", "gfx/interface"],
                              capture_output=True, text=True, check=True).stdout
         on_disk = set(out.splitlines())
     report: dict = {"unknown": [], "bad_entry": [], "missing_dds": [], "states": {}}
