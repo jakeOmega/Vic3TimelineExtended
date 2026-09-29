@@ -10,8 +10,9 @@
 ### the status desc (188), container_2, the button grid (hidden from humans),
 ### container_3, the native bar (670), container_4):
 ###   container_1  widget_je_nuclear_overview   the overview, always shown
-###   status desc  the taboo, programme and posture lines; the only thing an
-###                inactive entry shows
+###   status desc  empty while the entry is active (the overview says it all);
+###                the taboo, programme and posture lines for an inactive one,
+###                where it is the only thing drawn
 ###   container_3  widget_je_nuclear_programme  The Programme (only with one),
 ###                directly above the native bar, which is progress toward the
 ###                next warhead
@@ -20,9 +21,9 @@
 ###                Nuclear Crisis (only in one), Nuclear Posture, Forces and
 ###                At Home (only while armed), Reputation (once there is a
 ###                record), The Nuclear Taboo (from the first warhead), Delivery
-###                and Defence
-###   container_4  widget_je_nuclear_reference  Nuclear Powers and How Nuclear
-###                Weapons Work, collapsed
+###                and Defence, Nuclear Powers (from the first warhead)
+###   container_4  widget_je_nuclear_reference  How Nuclear Weapons Work,
+###                collapsed
 ###
 ### Collapse flags say their default: *_closed sections are open until closed,
 ### *_open ones collapsed until opened (test_nuclear_layout.py).
@@ -45,6 +46,7 @@ types nuclear_layout_widget_types
 		te_nuclear_sec_reputation = {}
 		te_nuclear_sec_taboo = {}
 		te_nuclear_sec_delivery = {}
+		te_nuclear_sec_powers = {}
 	}
 
 	### "How Nuclear Weapons Work": the explanations gathered out of the live
@@ -143,7 +145,8 @@ types nuclear_layout_widget_types
 		}
 	}
 
-	### The leaderboard, then how it all works.
+	### How it all works. (The leaderboard was here, collapsed, until the owner's
+	### rule of 2026-09-29 that live lists stay open.)
 	type te_nuclear_reference_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -151,7 +154,6 @@ types nuclear_layout_widget_types
 		spacing = 4
 		visible = "[JournalEntry.IsActive]"
 
-		te_nuclear_sec_powers = {}
 		te_nuclear_sec_how = {}
 	}
 }
