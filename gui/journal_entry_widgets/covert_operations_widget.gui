@@ -75,13 +75,13 @@ types covert_operations_widget_types
 	### SHARED BUILDING BLOCKS (the UN's un_chamber_* shapes, renamed)
 	### ======================================================================
 
-	### A section's body: the dark card under its header.
+	### A section's body: the dark card under its header. No spacing of its
+	### own (an instance that wants some sets it, as the overview does).
 	type covert_panel = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
 		parentanchor = hcenter
 		margin = { 20 8 }
-		spacing = 4
 
 		background = {
 			using = entry_bg_fancy_dark
