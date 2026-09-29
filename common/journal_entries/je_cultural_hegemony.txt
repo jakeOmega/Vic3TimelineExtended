@@ -10,7 +10,7 @@
 # ============================================================================
 
 je_cultural_hegemony = {
-	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+	icon = "gfx/interface/icons/event_icons/je_cultural_hegemony.dds"
 
 	group = je_group_soft_power
 

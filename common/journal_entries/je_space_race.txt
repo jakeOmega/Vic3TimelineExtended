@@ -32,7 +32,7 @@
 # Prereq: rocketry tech, GP/MP rank
 # ===========================================
 je_space_race_suborbital = {
-	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	icon = "gfx/interface/icons/event_icons/je_space_race_suborbital.dds"
 	group = je_group_foreign_affairs
 
 	# The player-facing surface. The vanilla button grid below is hidden from
@@ -170,7 +170,7 @@ je_space_race_suborbital = {
 # Prereq: Suborbital complete
 # ===========================================
 je_space_race_orbital = {
-	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	icon = "gfx/interface/icons/event_icons/je_space_race_orbital.dds"
 	group = je_group_foreign_affairs
 
 	# The player-facing surface. The vanilla button grid below is hidden from
@@ -301,7 +301,7 @@ je_space_race_orbital = {
 # Special: Landing site choice event
 # ===========================================
 je_space_race_moon_landing = {
-	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	icon = "gfx/interface/icons/event_icons/je_space_race_moon_landing.dds"
 	group = je_group_foreign_affairs
 
 	# The player-facing surface. The vanilla button grid below is hidden from
@@ -432,7 +432,7 @@ je_space_race_moon_landing = {
 # Linear after the prior milestone chain
 # ===========================================
 je_space_race_probe = {
-	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	icon = "gfx/interface/icons/event_icons/je_space_race_probe.dds"
 	group = je_group_foreign_affairs
 
 	# The player-facing surface. The vanilla button grid below is hidden from
@@ -563,7 +563,7 @@ je_space_race_probe = {
 # Prereq: Moon Landing complete + reusable_rocketry tech
 # ===========================================
 je_space_race_moon_base = {
-	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	icon = "gfx/interface/icons/event_icons/je_space_race_moon_base.dds"
 	group = je_group_foreign_affairs
 
 	# The player-facing surface. The vanilla button grid below is hidden from
@@ -694,7 +694,7 @@ je_space_race_moon_base = {
 # Linear after the prior milestone chain
 # ===========================================
 je_space_race_mars_landing = {
-	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	icon = "gfx/interface/icons/event_icons/je_space_race_mars_landing.dds"
 	group = je_group_foreign_affairs
 
 	# The player-facing surface. The vanilla button grid below is hidden from
@@ -826,7 +826,7 @@ je_space_race_mars_landing = {
 # The culminating probe mission, requires the most advanced space program tier
 # ===========================================
 je_space_race_interstellar_probe = {
-	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	icon = "gfx/interface/icons/event_icons/je_space_race_interstellar_probe.dds"
 	group = je_group_foreign_affairs
 
 	# The player-facing surface. The vanilla button grid below is hidden from
@@ -957,7 +957,7 @@ je_space_race_interstellar_probe = {
 # ~11 years (132 months) transit + return signal
 # ===========================================
 je_space_race_interstellar_results = {
-	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	icon = "gfx/interface/icons/event_icons/je_space_race_interstellar_results.dds"
 	group = je_group_foreign_affairs
 
 	# The player-facing surface. The vanilla button grid below is hidden from
@@ -1055,7 +1055,7 @@ je_space_race_interstellar_results = {
 # Stage 5: Kuiper Belt & Beyond
 # ===========================================
 je_space_race_solar_colonization = {
-	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	icon = "gfx/interface/icons/event_icons/je_space_race_solar_colonization.dds"
 	group = je_group_foreign_affairs
 
 	# The player-facing surface. The vanilla button grid below is hidden from

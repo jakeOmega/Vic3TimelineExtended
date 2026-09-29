@@ -13,7 +13,7 @@
 # ============================================================================
 
 je_covert_warfare = {
-	icon = "gfx/interface/icons/event_icons/event_default.dds"
+	icon = "gfx/interface/icons/event_icons/je_covert_warfare.dds"
 
 	group = je_group_covert_warfare
 

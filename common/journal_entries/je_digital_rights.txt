@@ -1,5 +1,5 @@
 ﻿je_digital_rights = {
-	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	icon = "gfx/interface/icons/event_icons/je_digital_rights.dds"
 	group = je_group_internal_affairs
 
 	modifiers_while_active = {
