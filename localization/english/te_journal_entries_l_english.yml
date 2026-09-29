@@ -471,7 +471,7 @@
  je_nuclear_ov_prog_8:0 "Disarmed"
  je_nuclear_ov_prog_tt:0 "#tooltip_header Programme#!\n$TOOLTIP_DELIMITER$\n[JournalEntry.GetCountry.GetCustom('nuclear_program_status_line')]"
  je_nuclear_ov_taboo_label:0 "[concept_nuclear_taboo]"
- je_nuclear_ov_taboo_value:0 "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo')|0]#! → [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_target')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_step')|+1]/mo)"
+ je_nuclear_ov_taboo_value:0 "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo')|0]#! → [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_target')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_step')|+2]/mo)"
  je_nuclear_ov_warheads_label:0 "Warheads #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_stockpile')|0]#!"
  je_nuclear_ov_warheads_tt:0 "#tooltip_header Warheads#!\n$TOOLTIP_DELIMITER$\nWe hold #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_stockpile')|0]#!, and the world estimates #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_public_estimate')|0]#!. Other countries re-observe an arsenal once a year, with an error, and learn the truth after a test or a strike.\n\nWarheads are what a nuclear strike spends, one each; a disarmament settlement takes all of them."
  je_nuclear_program:0 "Nuclear Weapons"
