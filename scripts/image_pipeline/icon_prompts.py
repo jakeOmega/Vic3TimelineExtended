@@ -940,7 +940,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "topic_sanctions": {"subject": "a wooden crate bound shut with a heavy iron chain", "seed": 1, "solid": True,
                             "now": f"{_GI}/alert_icons/blockaded.dds"},
         # The permanent member's gold star (as on its membership icon), falling.
-        "topic_expulsion": {"subject": "a polished gold five-pointed star", "seed": None,
+        # s1 drew six points; s2 of four is a clean five.
+        "topic_expulsion": {"subject": "a polished gold five-pointed star", "seed": 2,
                             "marks": [{"draw": "arrow_down", "scale": 0.5}],
                             "now": f"{_GI}/alert_icons/is_losing_rank.dds"},
         # Vanilla's war symbol; a sword in a wreath read as a ring with a line at 40 px.
@@ -977,7 +978,7 @@ ICONS: dict[str, dict[str, dict]] = {
     # Authority tiers (32 px): the colonnade gains columns and finer metal.
     "un_tier": {
         # "Stone blocks at its base" drew an orange ground patch, or a block (two seeds).
-        "tier_moribund": {"subject": "a broken grey marble column snapped off at half height with a jagged top, two fallen column drums lying beside it", "seed": None,
+        "tier_moribund": {"subject": "a broken grey marble column snapped off at half height with a jagged top, two fallen column drums lying beside it", "seed": 1,
                           "now": f"{_GI}/alert_icons/revolution.dds"},
         "tier_contested": {"subject": "two thick weathered bronze columns of unequal height", "seed": 0,
                            "now": f"{_GI}/alert_icons/low_legitimacy.dds"},
