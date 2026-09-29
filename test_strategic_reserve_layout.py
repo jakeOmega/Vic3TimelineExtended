@@ -17,6 +17,8 @@ JE = os.path.join(REPO, "common", "journal_entries", "je_strategic_reserve.txt")
 TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "st_res_triggers.txt")
 SVALS = os.path.join(REPO, "common", "script_values", "st_res_script_values.txt")
 SGUIS = os.path.join(REPO, "common", "scripted_guis", "st_res_scripted_gui.txt")
+BUTTONS = os.path.join(REPO, "common", "scripted_buttons", "st_res_buttons.txt")
+HISTORY = os.path.join(REPO, "common", "scripted_effects", "te_history_strategic_reserve_effects.txt")
 CONCEPTS = os.path.join(REPO, "common", "game_concepts", "extra_concepts.txt")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 
@@ -27,7 +29,7 @@ ROOTS = {"widget_je_strategic_reserve_overview": ("custom_widget_container_1", "
          "widget_je_strategic_reserve_reference": ("custom_widget_container_3", "te_st_res_reference_sections")}
 # The keys the panel used before the pass; a survivor means a half-renamed flag.
 OLD_FLAGS = ["st_res_row_expanded_", "st_res_policy_open_"]
-HOW_TOPICS = ["hub", "rates", "status", "decay", "policies", "presets", "income"]
+HOW_TOPICS = ["hub", "rates", "status", "decay", "policies", "presets", "income", "history"]
 # Per-good loc keys a row reads; the skill's file 14 lists the same set.
 ROW_LOC = ["name", "status", "tooltip", "amount", "flow", "last", "decay", "price", "policy", "policy_reason"]
 DISPLAY_VALUES = ["disp_policy", "disp_target", "disp_floor"]
@@ -259,11 +261,11 @@ class HowItWorksTest(unittest.TestCase):
             self.assertNotIn("st_res_note", body, sec)
             self.assertNotIn("je_strategic_reserve_how_", body, sec)
 
-    def test_status_text_keeps_only_the_hub_line(self):
+    def test_status_text_keeps_only_the_no_hub_line(self):
+        """Status text that repeats the overview is removed (owner, 2026-09-29)."""
         je = _read(JE)
         status = _body(je, r"status_desc = \{")
-        self.assertNotIn("je_strategic_reserve_profit_line", status)
-        self.assertNotIn("je_strategic_reserve_rate_line", status)
+        self.assertEqual(re.findall(r"desc = (\w+)", status), ["je_strategic_reserve_status_no_hub"])
         overview = _type_body(self.widget, "te_st_res_overview_panel")
         for key in ("je_strategic_reserve_ov_cap_tt", "je_strategic_reserve_ov_income_tt"):
             self.assertIn(f'"{key}"', overview, key)
@@ -291,6 +293,83 @@ class TidinessTest(unittest.TestCase):
             self.assertIn(c, concepts)
             self.assertIn(c, loc)
             self.assertIn(f"{c}_desc", loc)
+
+
+class SharedButtonsTest(unittest.TestCase):
+    """Cycle Step Size and Reset Reserve Rates sit beside the adjustment step (owner, 2026-09-29)."""
+    PAIRS = {"st_res_cycle_step_sgui": ("st_res_cycle_step_size_button", "st_res_cycle_step_size_effect"),
+             "st_res_reset_rates_sgui": ("st_res_reset_rates_button", "st_res_reset_rates_effect")}
+
+    def test_the_panel_buttons_run_the_scripted_buttons_effects(self):
+        sguis, buttons = _read(SGUIS), _read(BUTTONS)
+        for sgui, (button, effect) in self.PAIRS.items():
+            self.assertIn(f"{effect} = yes", _body(buttons, rf"^{button} = \{{".replace("^", r"(?m)^")), button)
+            body = _body(sguis, rf"^{sgui} = \{{".replace("^", r"(?m)^"))
+            self.assertIn(f"{effect} = yes", _body(body, r"effect = \{"), sgui)
+            self.assertIn("always = no", _body(body, r"ai_is_valid = \{"), sgui)
+
+    def test_the_scripted_buttons_are_the_ais_only(self):
+        buttons = _read(BUTTONS)
+        for button, _ in self.PAIRS.values():
+            visible = _body(_body(buttons, rf"(?m)^{button} = \{{"), r"visible = \{")
+            self.assertIn("is_ai = yes", visible, button)
+
+    def test_they_sit_beside_the_step_with_composed_tooltips(self):
+        widget = _read(WIDGET)
+        inventory = _type_body(widget, "te_st_res_sec_inventory")
+        step = inventory.index('"je_strategic_reserve_inv_step"')
+        for sgui in self.PAIRS:
+            at = inventory.index(f"GetScriptedGui('{sgui}')")
+            self.assertLess(abs(at - step), 600, f"{sgui} is not beside the step line")
+        button = _type_body(widget, "st_res_shared_button")
+        self.assertIn("Concatenate( ScriptedGui.IsValidTooltip(", button)
+        self.assertIn("Localize( 'te_tt_break' )", button)
+        self.assertIn("ScriptedGui.ExecuteTooltip(", button)
+
+
+class HistoryTest(unittest.TestCase):
+    """Each good's fill by month, charted inside its expanded row (owner, 2026-09-29)."""
+
+    def test_every_unlocked_good_is_recorded(self):
+        history = _read(HISTORY)
+        for g in _goods():
+            self.assertRegex(history, rf"st_res_{g}_unlocked_trigger = yes \}}\s*te_history_record_sample = \{{ "
+                                      rf"METRIC = st_res_{g} VALUE = st_res_{g}_fill_pct \}}", g)
+
+    def test_the_entry_records_monthly(self):
+        pulse = _body(_read(JE), r"on_monthly_pulse = \{")
+        self.assertIn("te_history_record_strategic_reserve_samples = yes", pulse)
+
+    def test_each_row_charts_its_own_good_inside_the_expanded_row(self):
+        widget = _read(WIDGET)
+        row_type = _type_body(widget, "te_st_res_good_row")
+        chart_box = _body(row_type, r"flowcontainer = \{\s*direction = vertical\s*ignoreinvisible = yes\s*spacing = 2\s*margin_bottom = 4")
+        self.assertIn('block "row_open" {}', chart_box, "the chart is not gated on the row being expanded")
+        self.assertIn('block "row_history" {}', chart_box)
+        for row in _instances(_type_body(widget, "te_st_res_sec_inventory"), "te_st_res_good_row"):
+            g = re.search(r"st_res_adjust_(\w+)_sgui", row).group(1)
+            chart = _body(row, r'blockoverride "row_history" \{')
+            self.assertIn(f'tooltip = "st_res_hist_tt_{g}"', chart, g)
+            self.assertIn(f"ScriptContainer.HasVariable( 'te_hist_v_st_res_{g}' )", chart, g)
+            self.assertIn('blockoverride "marker_pips" {}', chart, g)
+
+
+class PolicyIconTest(unittest.TestCase):
+    """Clicking a good's policy icon opens its settings directly (owner, 2026-09-29)."""
+
+    def test_the_icon_toggles_the_settings(self):
+        row_type = _type_body(_read(WIDGET), "te_st_res_good_row")
+        icon = _body(row_type, r'button = \{\s*size = \{ 26 28 \}')
+        self.assertIn('block "row_settings_toggle" {}', icon)
+        self.assertIn("auto_expand.dds", icon)
+
+    def test_settings_show_under_a_collapsed_row_while_open(self):
+        widget = _read(WIDGET)
+        for row in _instances(_type_body(widget, "te_st_res_sec_inventory"), "te_st_res_good_row"):
+            g = re.search(r"st_res_adjust_(\w+)_sgui", row).group(1)
+            shown = _body(row, r'blockoverride "row_settings_shown" \{')
+            self.assertIn(f"Or( GetVariableSystem.Exists('st_res_row_{g}_open'), "
+                          f"GetVariableSystem.Exists('st_res_policy_{g}_open') )", shown, g)
 
 
 ICONS_DOC = os.path.join(REPO, "docs", "systems", "strategic_reserve_gui_icons.md")
