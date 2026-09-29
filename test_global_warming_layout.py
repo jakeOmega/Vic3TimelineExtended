@@ -132,7 +132,7 @@ class GatedLinesTest(unittest.TestCase):
         pending = _visible_of(body, "gw_emis_pending")
         self.assertTrue(pending.startswith("Not(") and gate in pending, pending)
         table = re.search(r'flowcontainer = \{\s*direction = vertical\s*ignoreinvisible = yes\s*'
-                          r'visible = "\[([^"]*)\]"\s*gw_value_row', body)
+                          r'(?:minimumsize = \{ 480 -1 \}\s*)?visible = "\[([^"]*)\]"\s*gw_value_row', body)
         self.assertTrue(table, "the table has no gate")
         self.assertTrue(table.group(1).startswith(gate), table.group(1))
 
@@ -249,6 +249,35 @@ class TierLadderTest(unittest.TestCase):
         codes = {int(n) for n in re.findall(
             r"ScriptValue\('gw_disp_tier_code'\), '\(CFixedPoint\)(\d+)' \)\]\"\s*blockoverride \"icon_texture\"", body)}
         self.assertEqual(codes, set(range(7)))
+
+
+class OverviewWidthTest(unittest.TestCase):
+    """Play-test round 1: the overview sat ~70 px right of the column and ran off
+    the panel. It is pinned to the sections' 480 px column, and the temperature
+    row is fixed cells that fill it exactly."""
+
+    def test_rows_sit_in_a_480_column(self):
+        body = _type_body(_read(GUI), "te_gw_overview_panel")
+        self.assertRegex(body, r"gw_panel = \{\s*(?:###[^\n]*\n\s*)*flowcontainer = \{\s*direction = vertical\s*"
+                               r"spacing = \d+\s*ignoreinvisible = yes\s*minimumsize = \{ 480 -1 \}")
+
+    def test_temperature_row_is_fixed_cells_filling_the_column(self):
+        body = _type_body(_read(GUI), "te_gw_overview_panel")
+        start = body.index('tooltip = "gw_ov_temp_tt"')
+        row = _block_from(body, body.rindex("{", 0, start) + 1)
+        spacing = int(re.search(r"spacing = (\d+)", row).group(1))
+        cells = [int(w) for w in re.findall(r"^\t{5}(?:widget|default_progressbar_horizontal) = \{\s*size = \{ (\d+) \d+ \}", row, re.M)]
+        self.assertEqual(len(cells), 3, cells)
+        self.assertEqual(sum(cells) + spacing * (len(cells) - 1), 480)
+        self.assertNotIn("parentanchor = hcenter", row.split("widget = {")[0])
+        for key in ("gw_ov_temp_label", "gw_ov_temp_value"):
+            cell = re.search(rf"max_width = (\d+)\s*elide = right\s*align = left\|nobaseline\s*text = \"{key}\"", row)
+            self.assertTrue(cell, f"{key} does not elide inside its cell")
+        self.assertIn(int(re.search(r'max_width = (\d+)\s*elide = right\s*align = left\|nobaseline\s*text = "gw_ov_temp_value"', row).group(1)), cells)
+
+    def test_emissions_table_matches_the_column(self):
+        body = _type_body(_read(GUI), "te_gw_sec_emissions")
+        self.assertRegex(body, r"minimumsize = \{ 480 -1 \}\s*visible = \"\[GetScriptedGui\('gw_has_yearly_figures_sgui'\)")
 
 
 class LocTest(unittest.TestCase):
