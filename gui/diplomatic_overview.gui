@@ -275,30 +275,39 @@ types diplomatic_panel
 
 							te_un_overview_panel = {}
 
-							# The entry's own status text (membership, tier, headquarters,
-							# statistics, programmes under way), open by default (the owner's
-							# call, 2026-09-28): nothing the journal says is lost from the tab. te_je_status_desc has a visible of its own, so the
-							# section's gate is on a wrapper (gotcha #17).
-							un_chamber_section_header = {
-								blockoverride "left_text" {
-									text = "te_diplomacy_un_tab_status_header"
-								}
-								blockoverride "onclick" {
-									onclick = "[GetVariableSystem.Toggle('te_un_tab_status_closed')]"
-								}
-								blockoverride "onclick_showmore" {
-									visible = "[GetVariableSystem.Exists('te_un_tab_status_closed')]"
-								}
-								blockoverride "onclick_showless" {
-									visible = "[Not(GetVariableSystem.Exists('te_un_tab_status_closed'))]"
-								}
-							}
+							# The entry's own status text (a founding conference or a
+							# dissolution, and the Assembly's statistics), open by default
+							# (the owner's call, 2026-09-28): nothing the journal says is lost
+							# from the tab. The whole section hides while the text is empty
+							# (un_status_text_sgui). te_je_status_desc has a visible of its
+							# own, so the section's gate is on a wrapper (gotcha #17).
 							flowcontainer = {
-								visible = "[Not(GetVariableSystem.Exists('te_un_tab_status_closed'))]"
+								visible = "[GetScriptedGui('un_status_text_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 								parentanchor = hcenter
 								direction = vertical
+								ignoreinvisible = yes
 
-								te_je_status_desc = {}
+								un_chamber_section_header = {
+									blockoverride "left_text" {
+										text = "te_diplomacy_un_tab_status_header"
+									}
+									blockoverride "onclick" {
+										onclick = "[GetVariableSystem.Toggle('te_un_tab_status_closed')]"
+									}
+									blockoverride "onclick_showmore" {
+										visible = "[GetVariableSystem.Exists('te_un_tab_status_closed')]"
+									}
+									blockoverride "onclick_showless" {
+										visible = "[Not(GetVariableSystem.Exists('te_un_tab_status_closed'))]"
+									}
+								}
+								flowcontainer = {
+									visible = "[Not(GetVariableSystem.Exists('te_un_tab_status_closed'))]"
+									parentanchor = hcenter
+									direction = vertical
+
+									te_je_status_desc = {}
+								}
 							}
 
 							te_un_status_sections = {}

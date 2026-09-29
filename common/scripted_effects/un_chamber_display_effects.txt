@@ -1807,31 +1807,38 @@ un_chamber_dues_lines = {
 	}
 }
 
-# The conventions we are party to (§5.3), shared intelligence (§7.4) and our
-# interest groups' reaction (§7.1), read straight off the modifiers
+# The conventions we are party to (§5.3), read straight off the modifiers
 # un_regime_refresh_country applies, so the list is the rule. Each convention
 # we carry is a line of its own, its name hoverable for its member modifier's
 # effects, with our terms under it, each hoverable for its own (owner,
 # 2026-09-28). A term is applied only to a party, so none prints without its
-# convention above it; decolonization has no parties and intelligence
-# sharing belongs to no convention, so each of those is a line of its own.
+# convention above it. Three lines stand alone, unindented and self-named:
+# decolonization's (it has no parties), a member colony's, and the Court's
+# reach over a non-party at Supranational. The enforcement footnote follows
+# only when something above it is scaled by enforcement. Intelligence sharing
+# and the sovereignty reaction grow with the tier, not with enforcement, and
+# are no convention's, so they are their own group (un_chamber_reach_lines).
 # Scope: country (a member)
 un_chamber_regime_lines = {
 	un_chamber_convention_line_je = { MODIFIER = un_human_rights_declaration_modifier LINE = je_un_chamber_conv_human_rights }
 	un_chamber_regime_line = { MODIFIER = un_regime_rights_violator_modifier LINE = je_un_chamber_regime_rights_violator }
 	un_chamber_convention_line_country = { MODIFIER = un_icc_member_modifier LINE = je_un_chamber_conv_icc }
-	# The court's reach over our ruler: a party's from the Established tier,
-	# everyone's at Supranational.
+	# The court's reach over our ruler: a party's from the Established tier
+	# (under the Court's line), everyone's at Supranational (its own line).
 	if = {
 		limit = {
 			has_global_variable = un_agency_icc
 			un_tier_at_least_established = yes
-			OR = {
-				has_modifier = un_icc_member_modifier
-				un_tier_is_supranational = yes
-			}
+			has_modifier = un_icc_member_modifier
 		}
 		custom_tooltip_no_bullet = je_un_chamber_regime_icc
+	}
+	else_if = {
+		limit = {
+			has_global_variable = un_agency_icc
+			un_tier_is_supranational = yes
+		}
+		custom_tooltip_no_bullet = je_un_chamber_regime_icc_outside
 	}
 	un_chamber_convention_line_je = { MODIFIER = un_nonproliferation_modifier LINE = je_un_chamber_conv_npt }
 	un_chamber_regime_line = { MODIFIER = un_regime_npt_inspection_modifier LINE = je_un_chamber_regime_npt_inspection }
@@ -1853,8 +1860,27 @@ un_chamber_regime_lines = {
 	un_chamber_regime_line = { MODIFIER = un_regime_naval_curb_modifier LINE = je_un_chamber_regime_naval_curb }
 	un_chamber_convention_line_country = { MODIFIER = un_physical_protection_modifier LINE = je_un_chamber_conv_physical_protection }
 	un_chamber_regime_line = { MODIFIER = un_regime_colonial_pressure_modifier LINE = je_un_chamber_regime_colonial_pressure }
+	un_chamber_regime_line = { MODIFIER = un_regime_colony_liberty_modifier LINE = je_un_chamber_regime_colony }
+	if = {
+		limit = { un_chamber_party_to_a_convention = yes }
+		custom_tooltip_no_bullet = je_un_chamber_regimes_scale
+	}
+	else_if = {
+		limit = { un_regime_any_convention = yes }
+		custom_tooltip_no_bullet = je_un_chamber_regimes_not_party
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_regimes_no_convention
+	}
+}
+
+# The reach of a Strong or Supranational UN into our country (§7.1, §7.4):
+# intelligence sharing among its members, and our interest groups' reaction.
+# Both grow with the tier (un_regime_strong_steps), not with enforcement.
+# Under their own heading in Our Obligations (un_chamber_reach_sgui).
+# Scope: country (a member)
+un_chamber_reach_lines = {
 	un_chamber_regime_line = { MODIFIER = un_regime_shared_intelligence_modifier LINE = je_un_chamber_regime_shared_intelligence }
-	# Sovereignty: our interest groups' reaction, from the Strong tier.
 	if = {
 		limit = {
 			un_tier_at_least_strong = yes
@@ -1868,13 +1894,6 @@ un_chamber_regime_lines = {
 			any_interest_group = { has_modifier = un_sovereignty_welcome_ig_modifier }
 		}
 		custom_tooltip_no_bullet = je_un_chamber_sovereignty_welcome
-	}
-	if = {
-		limit = { un_regime_any_convention = yes }
-		custom_tooltip_no_bullet = je_un_chamber_regimes_scale
-	}
-	else = {
-		custom_tooltip_no_bullet = je_un_chamber_regimes_no_convention
 	}
 }
 

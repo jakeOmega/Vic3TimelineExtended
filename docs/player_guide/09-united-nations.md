@@ -606,12 +606,12 @@ collapsed when they are reference:
 
 | Section | Starts | Shows |
 |---|---|---|
-| General Assembly | Open | The resolution in session: its topic, a tally bar (green for, grey not yet voted, red against, with a mark at two thirds for the topics that need it), the months left, the grounds, your lean and the vote buttons. Delegations and Recorded Ballot sit under it while a resolution is in session; Propose a Resolution takes their place when none is. |
+| General Assembly | Open | The resolution in session: its topic, a tally bar (green for, grey not yet voted, red against, with a mark at two thirds for the topics that need it), how many of its twelve months have run, the grounds, your lean and the vote buttons. Delegations and Recorded Ballot sit under it while a resolution is in session; Propose a Resolution takes their place when none is. |
 | Why UN Authority Is Moving | Open | A bar for each pillar, with its trend since last month (hover a pillar for how it is computed), then your weight, the tier and the authority cap, the champions and underminers, and the newest ledger entries (collapsed). |
 | Missions in the Field | Open | A row for each mission, with Send a Contingent or Bring Our Contingent Home; ended missions below, collapsed. |
 | Programmes and Conventions | Collapsed | How many countries take part in each program and convention, and how many are under sanctions. |
 | Mandates in Force | Open | The mandates in force, and the case a mandate of yours would take. |
-| Our Obligations | Open | Your dues beside the whole budget, then each convention you are party to, with your terms under it. |
+| Our Obligations | Open | Your dues beside the whole budget, then each convention you are party to, with your terms under it, and from Strong the UN's reach (shared intelligence, your interest groups' reaction). |
 | Our Record | Open | Your case strength and its parts, and whether it would support a condemnation, sanctions or a mandate. |
 | UN Authority History | Open | A chart of authority over time. |
 | Resolutions on the Record | Collapsed | Closed resolutions, with how each member voted. |

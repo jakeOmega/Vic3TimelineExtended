@@ -2043,7 +2043,7 @@ types un_chamber_widget_types
 						text = "je_un_record_case"
 					}
 					blockoverride "row_value" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_strength')|0] / 100"
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_strength')|1] / 100"
 					}
 				}
 				un_chamber_value_row = {
@@ -2051,7 +2051,7 @@ types un_chamber_widget_types
 						text = "je_un_record_infamy"
 					}
 					blockoverride "row_value" {
-						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_infamy_term')|0]"
+						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_infamy_term')|1]"
 					}
 				}
 				un_chamber_value_row = {
@@ -2059,7 +2059,7 @@ types un_chamber_widget_types
 						text = "je_un_record_aggression"
 					}
 					blockoverride "row_value" {
-						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dos_aggression')|0]"
+						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dos_aggression')|1]"
 					}
 				}
 				un_chamber_value_row = {
@@ -2067,7 +2067,7 @@ types un_chamber_widget_types
 						text = "je_un_record_defiance"
 					}
 					blockoverride "row_value" {
-						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dos_defiance')|0]"
+						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dos_defiance')|1]"
 					}
 				}
 				un_chamber_value_row = {
@@ -2075,7 +2075,7 @@ types un_chamber_widget_types
 						text = "je_un_record_violation"
 					}
 					blockoverride "row_value" {
-						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dos_violation')|0]"
+						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dos_violation')|1]"
 					}
 				}
 				un_chamber_value_row = {
@@ -2083,7 +2083,7 @@ types un_chamber_widget_types
 						text = "je_un_record_covert"
 					}
 					blockoverride "row_value" {
-						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dos_covert')|0]"
+						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dos_covert')|1]"
 					}
 				}
 				un_chamber_value_row = {
@@ -2091,7 +2091,7 @@ types un_chamber_widget_types
 						text = "je_un_record_nuclear"
 					}
 					blockoverride "row_value" {
-						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dos_nuclear')|0]"
+						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dos_nuclear')|1]"
 					}
 				}
 				un_chamber_value_row = {
@@ -2101,7 +2101,7 @@ types un_chamber_widget_types
 						text = "je_un_record_standing"
 					}
 					blockoverride "row_value" {
-						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_standing_term')|0]"
+						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_standing_term')|1]"
 					}
 				}
 
@@ -2524,6 +2524,20 @@ types un_chamber_widget_types
 			un_chamber_text = {
 				visible = "[GetScriptedGui('un_chamber_member_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				text = "[GetScriptedGui('un_chamber_regimes_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+			}
+
+			# A Strong UN's reach into our country: intelligence sharing and the
+			# sovereignty reaction, which grow with the tier rather than with
+			# enforcement (un_chamber_reach_lines). Only when one of them applies.
+			un_chamber_subheader = {
+				visible = "[GetScriptedGui('un_chamber_reach_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				blockoverride "subheader_text" {
+					text = "je_un_chamber_sub_reach"
+				}
+			}
+			un_chamber_text = {
+				visible = "[GetScriptedGui('un_chamber_reach_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				text = "[GetScriptedGui('un_chamber_reach_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 			}
 
 		}

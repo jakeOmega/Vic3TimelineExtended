@@ -812,8 +812,10 @@ class RegimeTests(unittest.TestCase):
                                  _block(self.effects, "un_regime_clear_country")))
         terms = set(re.findall(r"has_modifier\s*=\s*(un_regime_\w+_modifier)",
                                _block(self.triggers, "un_regime_has_terms")))
-        lines = dict(re.findall(r"MODIFIER\s*=\s*(un_regime_\w+_modifier)\s+LINE\s*=\s*(\w+)",
-                                _block(self.display, "un_chamber_regime_lines")))
+        # Shown under Our Obligations: the conventions' terms, and the reach of a
+        # Strong UN (intelligence sharing) in a group of its own.
+        shown = _block(self.display, "un_chamber_regime_lines") + _block(self.display, "un_chamber_reach_lines")
+        lines = dict(re.findall(r"MODIFIER\s*=\s*(un_regime_\w+_modifier)\s+LINE\s*=\s*(\w+)", shown))
         with self.subTest(site="un_regime_clear_country"):
             self.assertLessEqual(expected, cleared)
             self.assertLessEqual(cleared - expected, OTHER_REGIME_MODIFIERS)

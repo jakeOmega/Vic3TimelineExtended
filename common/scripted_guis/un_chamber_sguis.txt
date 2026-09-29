@@ -597,6 +597,52 @@ un_chamber_regimes_sgui = {
 	}
 }
 
+# The reach of a Strong UN (un_chamber_reach_lines): its heading and text show
+# only when one of its lines would print. Reads the root only (gotcha #22).
+un_chamber_reach_sgui = {
+	scope = country
+	is_shown = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		OR = {
+			has_modifier = un_regime_shared_intelligence_modifier
+			AND = {
+				un_tier_at_least_strong = yes
+				any_interest_group = {
+					OR = {
+						has_modifier = un_sovereignty_resentment_ig_modifier
+						has_modifier = un_sovereignty_welcome_ig_modifier
+					}
+				}
+			}
+		}
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+
+	effect = {
+		un_chamber_reach_lines = yes
+	}
+}
+
+# Whether the entry's status text says anything (je_united_nations'
+# status_desc: a conference, a dissolution, or the Assembly's statistics), so
+# the Diplomacy tab's Status section shows only then. Reads globals only.
+un_status_text_sgui = {
+	scope = country
+	is_shown = {
+		OR = {
+			un_conference_in_session = yes
+			un_founding_is_refounding = yes
+			any_country = {
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
+			}
+		}
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
 un_chamber_obligations_outside_sgui = {
 	scope = country
 

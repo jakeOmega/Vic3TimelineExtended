@@ -269,9 +269,6 @@ class OverviewHqTest(unittest.TestCase):
         self.assertIn("GetScriptedGui('un_overview_hq_sgui').ExecuteTooltip", gui)
         self.assertIn("building_icons/building_un_headquarters.dds", gui)
 
-if __name__ == "__main__":
-    unittest.main()
-
 
 UN_ICONS = "gfx/interface/icons/un_icons/"
 LAYOUT = os.path.join(REPO, "gui", "journal_entry_widgets", "un_layout_widget.gui")
@@ -351,3 +348,6 @@ class UnIconsTest(unittest.TestCase):
                         rest = path[len("gfx/interface/icons/"):] if path.startswith("gfx/interface/icons/") else path
                         self.assertTrue(rest in VANILLA_KEPT or not path.startswith("gfx/interface/icons/"),
                                         f"placeholder left: {path}")
+
+if __name__ == "__main__":
+    unittest.main()

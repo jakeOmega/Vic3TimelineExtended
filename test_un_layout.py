@@ -428,9 +428,13 @@ class ObligationsTest(unittest.TestCase):
                     self.assertTrue(m, mod)
                     self.assertTrue(head < m.start() < nxt, f"{mod} is not under {key}")
                     self.assertModifierHover(m.group(1), mod)
-        for mod in OTHER_TERMS:
+        # Decolonization's term stands alone among the conventions; intelligence
+        # sharing is the reach group's (un_chamber_reach_lines).
+        reach = _block(_read(CHAMBER_EFFECTS), "un_chamber_reach_lines")
+        for mod, block in zip(OTHER_TERMS, (self.regimes, reach)):
             with self.subTest(term=mod):
-                m = re.search(rf"un_chamber_regime_line = \{{ MODIFIER = {mod} LINE = (\w+) \}}", self.regimes)
+                m = re.search(rf"un_chamber_regime_line = \{{ MODIFIER = {mod} LINE = (\w+) \}}", block)
+                self.assertTrue(m, mod)
                 self.assertModifierHover(m.group(1), mod)
         self.assertModifierHover("je_un_chamber_regime_colony", "un_regime_colony_liberty_modifier")
 
@@ -579,6 +583,85 @@ class TabUnlockTooltipTest(unittest.TestCase):
         line = _loc(m.group(1))
         self.assertIn("$intergovernmental_organizations$", line)
         self.assertIn("$je_united_nations$", line)
+
+
+CONV_KEYS = ("human_rights", "icc", "npt", "climate", "pandemic", "refugee", "heritage", "decolonization",
+             "space", "law_of_sea", "physical_protection")
+REGIME_TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "un_regime_triggers.txt")
+
+
+class ReviewRound2Test(unittest.TestCase):
+    """The fresh review of the owner's second round (2026-09-29)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = _read(CHAMBER_EFFECTS)
+        cls.regimes = _block(cls.effects, "un_chamber_regime_lines")
+
+    def test_a_hover_says_the_multiplier_its_modifier_is_applied_with(self):
+        intel = _loc("je_un_chamber_regime_shared_intelligence_tt")
+        self.assertNotIn("concept_un_enforcement", intel)          # applied with un_regime_strong_steps
+        self.assertIn("concept_un_tier_supranational", intel)
+        self.assertIn("warming", _loc("je_un_chamber_regime_climate_adaptation_tt"))
+
+    def test_the_reach_of_a_strong_un_is_its_own_group(self):
+        reach = _block(self.effects, "un_chamber_reach_lines")
+        for key in ("je_un_chamber_regime_shared_intelligence", "je_un_chamber_sovereignty_resent",
+                    "je_un_chamber_sovereignty_welcome"):
+            self.assertIn(key, reach, key)
+            self.assertNotIn(key, self.regimes, key)
+        gui = _type_body(_read(CHAMBER), "te_un_sec_obligations")
+        self.assertIn("je_un_chamber_sub_reach", gui)
+        self.assertIn("GetScriptedGui('un_chamber_reach_sgui').IsShown", gui)
+
+    def test_the_footnote_needs_a_convention_above_it(self):
+        m = re.search(r"if = \{\s*limit = \{ un_chamber_party_to_a_convention = yes \}\s*"
+                      r"custom_tooltip_no_bullet = je_un_chamber_regimes_scale", self.regimes)
+        self.assertTrue(m, "the footnote is not gated on being party to a convention")
+        self.assertIn("je_un_chamber_regimes_not_party", self.regimes)
+        party = _block(_read(REGIME_TRIGGERS), "un_chamber_party_to_a_convention")
+        for key, (mod, scope) in MEMBER_MODIFIERS.items():
+            with self.subTest(convention=key):
+                if scope == "je":
+                    self.assertRegex(party, rf"je:je_united_nations \?= \{{[^}}]*has_modifier = {mod}\b")
+                else:
+                    self.assertRegex(party, rf"(?m)^\t+has_modifier = {mod}$")
+
+    def test_icc_jurisdiction_over_a_non_party_is_its_own_line(self):
+        self.assertIn("je_un_chamber_regime_icc_outside", self.regimes)
+        outside = _loc("je_un_chamber_regime_icc_outside")
+        self.assertFalse(outside.startswith(" "))
+        self.assertIn("$je_un_conv_name_icc$", outside)
+
+    def test_a_member_colony_sees_its_decolonization_term(self):
+        self.assertIn("MODIFIER = un_regime_colony_liberty_modifier LINE = je_un_chamber_regime_colony", self.regimes)
+
+    def test_one_name_per_convention(self):
+        for k in CONV_KEYS:
+            with self.subTest(convention=k):
+                name = _loc(f"je_un_conv_name_{k}")
+                self.assertNotIn("$", name)
+                self.assertIn(f"$je_un_conv_name_{k}$", _loc(f"je_un_chamber_propose_topic_{k}"))
+                if k in MEMBER_MODIFIERS:
+                    self.assertIn(f"$je_un_conv_name_{k}$", _loc(f"je_un_chamber_conv_{k}"))
+        self.assertIn("$je_un_conv_name_decolonization$", _loc("je_un_chamber_regime_colonial_pressure"))
+
+    def test_the_tab_status_hides_with_nothing_to_say(self):
+        tab = _read(os.path.join(REPO, "gui", "diplomatic_overview.gui"))
+        self.assertIn("GetScriptedGui('un_status_text_sgui').IsShown", tab)
+        for key in ("je_un_status_conference", "je_un_status_dissolved"):
+            self.assertFalse(_loc(key).endswith("\\n"), key)
+
+    def test_the_record_rounds_like_the_verdict_reads(self):
+        record = _type_body(_read(CHAMBER), "te_un_sec_exposure")
+        values = re.findall(r"ScriptValue\('(un_case_[a-z_]+|un_disp_dos_[a-z]+)'\)\|(\d)\]", record)
+        self.assertTrue(values)
+        for sv, digits in values:
+            with self.subTest(value=sv):
+                self.assertEqual(digits, "1", sv)
+
+    def test_the_refugee_target_line_ends_its_sentence(self):
+        self.assertTrue(_loc("je_un_chamber_propose_target_refugee").endswith("nobody."))
 
 if __name__ == "__main__":
     unittest.main()
