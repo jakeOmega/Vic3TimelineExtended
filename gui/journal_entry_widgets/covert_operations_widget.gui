@@ -732,25 +732,46 @@ types covert_operations_widget_types
 			text = "je_iw_net_row_title"
 		}
 
-		# ---- Strength: a bar with a marker where the next part of the report
-		#      starts, the figure, and which way it is moving ----
+		# ---- Strength: where it is heading, then the bar ----
+		# Play-test round 1: the bar's marker read as an unexplained target.
+		# The headline above the bar now names it: "45 → 50: their service
+		# revealed", then "→ 75: their operations revealed", then "full
+		# report", with the marker hidden, as the Tradecraft bar says where it
+		# is heading (style rule 5). Which headline shows is chosen by the
+		# stored report tier, like the report lines below, so no strength is
+		# compared here. The hover (headline and bar) says what each part of
+		# the report reveals and why the marker sits there.
+		widget_je_covert_operation_detail = {
+			visible = "[Not( ScriptContainer.HasVariable('iw_net_intel_tier') )]"
+			text = "je_iw_net_row_strength"
+			tooltip = "je_iw_net_row_strength_tt"
+		}
+		widget_je_covert_operation_detail = {
+			visible = "[And( ScriptContainer.HasVariable('iw_net_intel_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)0') )]"
+			text = "je_iw_net_row_strength_to_service"
+			tooltip = "je_iw_net_row_strength_tt"
+		}
+		widget_je_covert_operation_detail = {
+			visible = "[And( ScriptContainer.HasVariable('iw_net_intel_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)1') )]"
+			text = "je_iw_net_row_strength_to_ops"
+			tooltip = "je_iw_net_row_strength_tt"
+		}
+		widget_je_covert_operation_detail = {
+			visible = "[And( ScriptContainer.HasVariable('iw_net_intel_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)2') )]"
+			text = "je_iw_net_row_strength_full"
+			tooltip = "je_iw_net_row_strength_tt"
+		}
+		# The bar, full width under its headline, with the marker where the
+		# next part of the report starts, and which way strength is moving.
 		flowcontainer = {
 			direction = horizontal
 			spacing = 8
 			margin_left = 12
 
-			textbox = {
-				minimumsize = { 100 -1 }
-				maximumsize = { 100 -1 }
-				autoresize = yes
-				parentanchor = vcenter
-				align = left|nobaseline
-				using = fontsize_medium
-				text = "je_iw_net_row_strength_label"
-			}
 			default_progressbar_horizontal = {
-				size = { 200 14 }
+				size = { 400 14 }
 				parentanchor = vcenter
+				tooltip = "je_iw_net_row_strength_tt"
 				blockoverride "values" {
 					value = "[FixedPointToFloat( ScriptContainer.MakeScope.ScriptValue('covert_disp_net_strength_frac') )]"
 					min = 0
@@ -780,15 +801,6 @@ types covert_operations_widget_types
 						}
 					}
 				}
-			}
-			textbox = {
-				minimumsize = { 100 -1 }
-				maximumsize = { 100 -1 }
-				autoresize = yes
-				parentanchor = vcenter
-				align = left|nobaseline
-				using = fontsize_medium
-				text = "je_iw_net_row_strength"
 			}
 			# Growing / decaying / holding at full strength, from the stored
 			# iw_net_trend code; the sentence each replaced is its tooltip.
