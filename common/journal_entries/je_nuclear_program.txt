@@ -33,8 +33,10 @@
 #                the native bar, which is progress toward the next warhead
 #   native bar   progress toward the next warhead
 #   container_4  the live sections (crisis, posture, forces, at home,
-#                reputation, the taboo, delivery and defence), then the
-#                nuclear powers and How Nuclear Weapons Work
+#                reputation, the taboo, delivery and defence, the nuclear
+#                powers), then How Nuclear Weapons Work
+# The status desc sits between container_1 and container_2, and is empty
+# while the entry is active (see status_desc below).
 #
 # Deterrence logic lives in scripted effects (nuclear_deterrence_effects.txt,
 # nuclear_crisis_effects.txt); the pulses below are their only callers.
@@ -298,9 +300,30 @@ je_nuclear_program = {
 	# The nuclear taboo first, then the programme's line (two while armed or in
 	# a crisis). Unlike the widgets, status_desc is rendered by
 	# gui/journal_entry.gui:188 with no IsActive gate, so it also speaks for an
-	# inactive entry shown before the first warhead to a country with the
-	# science but not the standing.
-	status_desc = je_nuclear_program_status_line
+	# inactive entry: one shown before the first warhead to a country with the
+	# science but not the standing, or one a disarmament settlement closed.
+	#
+	# Only then. For an active entry every line of it repeats the overview
+	# (nuclear_overview_widget.gui: the taboo bar, the programme icon, whose
+	# hover is this programme sentence, the warheads, the posture icons, the
+	# crisis), so it is left empty and the panel draws no status box (owner,
+	# 2026-09-29: status text that repeats the overview goes).
+	# has_journal_entry is true for an active entry only
+	# (docs/vanilla/modding-reference.md: "JE active"). UNVERIFIED in game for
+	# this use: if it were true for an inactive entry too, the inactive entry
+	# would lose its line, never gain a duplicate.
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = nuke_line_empty
+				trigger = { has_journal_entry = je_nuclear_program }
+			}
+			triggered_desc = {
+				desc = je_nuclear_program_status_line
+				trigger = { always = yes }
+			}
+		}
+	}
 
 	should_update_on_player_command = yes
 	should_be_pinned_by_default_uninvolved_or_context = yes

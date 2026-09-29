@@ -18,15 +18,15 @@ LOC_DIR = os.path.join(REPO, "localization", "english")
 
 STATUS = ["te_nuclear_sec_crisis", "te_nuclear_sec_posture", "te_nuclear_sec_forces",
           "te_nuclear_sec_home", "te_nuclear_sec_reputation", "te_nuclear_sec_taboo",
-          "te_nuclear_sec_delivery"]
-REFERENCE = ["te_nuclear_sec_powers", "te_nuclear_sec_how"]
+          "te_nuclear_sec_delivery", "te_nuclear_sec_powers"]
+REFERENCE = ["te_nuclear_sec_how"]
 # (root name, container, the one type it wraps), in the entry's declaration order.
 ROOTS = [("widget_je_nuclear_overview", "custom_widget_container_1", "te_nuclear_overview_panel"),
          ("widget_je_nuclear_programme", "custom_widget_container_3", "te_nuclear_sec_programme"),
          ("widget_je_nuclear_status", "custom_widget_container_4", "te_nuclear_status_sections"),
          ("widget_je_nuclear_reference", "custom_widget_container_4", "te_nuclear_reference_sections")]
 OLD_FLAGS = ["nuclear_program_powers", "nuclear_program_odds", "nd_capabilities_open", "nd_home_open",
-             "nd_reputation_open"]
+             "nd_reputation_open", "nuclear_program_powers_open", "nd_taboo_hist_open"]
 OLD_ROOTS = ["widget_je_nuclear_posture", "widget_je_nuclear_crisis", "widget_je_nuclear_balance"]
 
 
@@ -199,16 +199,18 @@ class FlagTest(unittest.TestCase):
                   "te_nuclear_sec_reputation": "nd_reputation_closed",
                   "te_nuclear_sec_taboo": "nd_taboo_panel_closed",
                   "te_nuclear_sec_delivery": "nuclear_program_odds_closed",
-                  "te_nuclear_sec_powers": "nuclear_program_powers_open",
+                  "te_nuclear_sec_powers": "nuclear_program_powers_closed",
                   "te_nuclear_sec_how": "nuclear_how_open"}
         for sec, flag in opened.items():
             body = _type_body(ALL_GUI, sec)
             toggles = re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", body)
             self.assertEqual(toggles[0], flag, sec)
 
-    def test_long_subsections_start_collapsed(self):
+    def test_subsections_are_nested(self):
+        """The choices start collapsed; the taboo's chart is open (owner, 2026-09-29:
+        history charts open by default)."""
         for sec, flags in (("te_nuclear_sec_posture", ["nd_doctrine_open", "nd_forces_open"]),
-                           ("te_nuclear_sec_taboo", ["nd_taboo_hist_open"])):
+                           ("te_nuclear_sec_taboo", ["nd_taboo_hist_closed"])):
             body = _type_body(ALL_GUI, sec)
             for f in flags:
                 self.assertIn(f"GetVariableSystem.Toggle('{f}')", body, f)
@@ -236,7 +238,7 @@ class HowItWorksTest(unittest.TestCase):
         self.assertEqual(how.count("nd_subheader = {"), how.count("nd_note = {"))
 
     def test_live_sections_carry_no_explanations(self):
-        for sec in STATUS + ["te_nuclear_sec_programme", "te_nuclear_sec_powers"]:
+        for sec in STATUS + ["te_nuclear_sec_programme"]:
             body = _type_body(ALL_GUI, sec)
             for key in HOW_KEYS:
                 self.assertNotIn(f'"{key}"', body, f"{sec} still explains ({key})")
@@ -394,6 +396,22 @@ class DisplayValueTest(unittest.TestCase):
         self.assertEqual(order, sorted(order), "later ifs must be the status line's earlier branches")
         for code in range(9):
             self.assertTrue(_loc(f"je_nuclear_ov_prog_{code}"))
+
+
+class StatusDescTest(unittest.TestCase):
+    """Status text that repeats the overview goes (owner, 2026-09-29): the
+    entry's status line is drawn only for an inactive entry, which has no
+    overview."""
+
+    def test_the_status_line_is_for_an_inactive_entry_only(self):
+        je = _read(JE)
+        m = re.search(r"^\tstatus_desc = \{(.*?)^\t\}", je, re.S | re.M)
+        self.assertTrue(m, "status_desc is not a block")
+        branches = re.findall(r"desc = (\w+)\s*trigger = \{ (.*?) \}", m.group(1))
+        self.assertEqual(branches, [("nuke_line_empty", "has_journal_entry = je_nuclear_program"),
+                                    ("je_nuclear_program_status_line", "always = yes")])
+        self.assertIn("first_valid = {", m.group(1))
+        self.assertEqual(_loc("nuke_line_empty"), "")
 
 
 class TidinessTest(unittest.TestCase):

@@ -11,12 +11,11 @@
 ###                            programme). Mounted in container_3, just
 ###                            above the entry's native bar.
 ### te_nuclear_sec_taboo       The nuclear taboo (open, from the world's first
-###                            warhead), with its chart as a collapsed
-###                            subsection.
+###                            warhead), with its chart as a subsection, open.
 ### te_nuclear_sec_delivery    Delivery capability and home defence (open).
 ### te_nuclear_sec_powers      The global nuclear-powers leaderboard that used
 ###                            to be eleven triggered_desc lines on the entry
-###                            (collapsed, from the world's first warhead).
+###                            (open, from the world's first warhead).
 ### The notes these sections used to carry (how a strike's odds combine, what
 ### the leaderboard's estimates are) are in "How Nuclear Weapons Work"
 ### (te_nuclear_sec_how, nuclear_layout_widget.gui).
@@ -284,7 +283,7 @@ types nuclear_program_widget_types
 	### The nuclear taboo (open; from the world's first warhead, for every country
 	### — the entry is active for all of them by then): the score, where it is
 	### heading and why, what a nuclear act costs us now, the burden of our arsenal,
-	### the last use in war, and a collapsed chart (nuclear_taboo_values.txt).
+	### the last use in war, and its chart (nuclear_taboo_values.txt).
 	type te_nuclear_sec_taboo = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -389,8 +388,9 @@ types nuclear_program_widget_types
 				text = "je_nuclear_program_widget_taboo_note"
 			}
 
-			### The taboo's history (a subsection, collapsed) — the shared chart
-			### types and range variable (te_history_chart.gui), as the UN chart uses.
+			### The taboo's history (a subsection, open: the owner's rule for history
+			### charts, 2026-09-29) — the shared chart types and range variable
+			### (te_history_chart.gui), as the UN chart uses.
 			flowcontainer = {
 				direction = vertical
 				ignoreinvisible = yes
@@ -402,13 +402,13 @@ types nuclear_program_widget_types
 						text = "je_nuclear_program_widget_taboo_history_header"
 					}
 					blockoverride "onclick" {
-						onclick = "[GetVariableSystem.Toggle('nd_taboo_hist_open')]"
+						onclick = "[GetVariableSystem.Toggle('nd_taboo_hist_closed')]"
 					}
 					blockoverride "onclick_showmore" {
-						visible = "[Not(GetVariableSystem.Exists('nd_taboo_hist_open'))]"
+						visible = "[GetVariableSystem.Exists('nd_taboo_hist_closed')]"
 					}
 					blockoverride "onclick_showless" {
-						visible = "[GetVariableSystem.Exists('nd_taboo_hist_open')]"
+						visible = "[Not(GetVariableSystem.Exists('nd_taboo_hist_closed'))]"
 					}
 				}
 			}
@@ -417,7 +417,7 @@ types nuclear_program_widget_types
 				parentanchor = hcenter
 				ignoreinvisible = yes
 				spacing = 2
-				visible = "[GetVariableSystem.Exists('nd_taboo_hist_open')]"
+				visible = "[Not(GetVariableSystem.Exists('nd_taboo_hist_closed'))]"
 
 				flowcontainer = {
 					direction = horizontal
@@ -594,9 +594,9 @@ types nuclear_program_widget_types
 		}
 	}
 
-	### The world's ten largest arsenals as the world estimates them (collapsed:
-	### ten ExecuteTooltip calls re-render every frame the section is open, and
-	### nothing here changes faster than once a month). Drawn from the world's
+	### The world's ten largest arsenals as the world estimates them (open: a
+	### live list, the owner's rule of 2026-09-29; it costs ten ExecuteTooltip
+	### calls a frame while the entry is on screen). Drawn from the world's
 	### first warhead, which is when the nuclear taboo is born: before it there is
 	### no arsenal to list and the section would open on nothing. The rows carry
 	### the op code twice: once to decide whether the slot is filled, once to
@@ -613,18 +613,18 @@ types nuclear_program_widget_types
 				text = "je_nuclear_program_widget_powers_header"
 			}
 			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('nuclear_program_powers_open')]"
+				onclick = "[GetVariableSystem.Toggle('nuclear_program_powers_closed')]"
 			}
 			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('nuclear_program_powers_open'))]"
+				visible = "[GetVariableSystem.Exists('nuclear_program_powers_closed')]"
 			}
 			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('nuclear_program_powers_open')]"
+				visible = "[Not(GetVariableSystem.Exists('nuclear_program_powers_closed'))]"
 			}
 		}
 
 		nuclear_program_panel = {
-			visible = "[GetVariableSystem.Exists('nuclear_program_powers_open')]"
+			visible = "[Not(GetVariableSystem.Exists('nuclear_program_powers_closed'))]"
 
 			nuclear_program_power_row = {
 				blockoverride "row_visible" {
