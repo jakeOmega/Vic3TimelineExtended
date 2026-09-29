@@ -173,6 +173,17 @@ class RootTest(unittest.TestCase):
         for name in names:
             head = _root(self.gui, name).split("\n\n")[0]  # the root's own properties
             self.assertIn('visible = "[JournalEntry.IsActive]"', head, name)
+            # round 2: fixed-width roots, never content-sized wrappers centred in the panel
+            self.assertIn("minimumsize = { 520 -1 }", head, name)
+
+    def test_composers_and_number_columns_are_fixed_width(self):
+        for composer in ("te_sr_overview_milestone", "te_sr_overview_transit",
+                         "te_sr_status_sections", "te_sr_reference_sections"):
+            self.assertIn("minimumsize = { 520 -1 }", _type_body(self.gui, composer).split("\n\n")[0], composer)
+        bar = _type_body(self.gui, "te_sr_ov_bar_row")
+        for width in (90, 170):
+            self.assertIn(f"minimumsize = {{ {width} -1 }}\n\t\t\tmaximumsize = {{ {width} -1 }}", bar)
+        self.assertIn("size = { 200 18 }", bar)
 
     def test_each_root_reads_only_its_own_milestone(self):
         for m in CONTROLLED:

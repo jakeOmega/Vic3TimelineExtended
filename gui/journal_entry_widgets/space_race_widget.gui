@@ -66,6 +66,10 @@
 ### sits inside the container whose `visible` is its collapse flag, so closing
 ### it stops the iteration.
 ###
+### Widths are fixed, never content-sized: every root and composer is 520
+### wide (`minimumsize`), each panel's content 480, and rows of numbers use
+### fixed columns, so nothing shifts when a value changes length.
+###
 ### Every root is gated on `[JournalEntry.IsActive]`: all nine entries carry
 ### `is_shown_when_inactive`, so a widget is otherwise built for countries that
 ### hold none of the space race's variables — the failure mode that produced
@@ -262,6 +266,8 @@ types space_race_widget_types
 	### Progress towards the goal: a label, the bar and the headline
 	### ("124 / 200 (+3.5/mo)"); the tooltip is on the whole row, as the UN's
 	### authority row. The bar ends at the goal, so it needs no target marker.
+	### Fixed columns (90 + 200 + 170, with the spacing 476), so a longer number
+	### never moves the bar.
 	type te_sr_ov_bar_row = flowcontainer {
 		direction = horizontal
 		spacing = 8
@@ -270,7 +276,9 @@ types space_race_widget_types
 
 		textbox = {
 			minimumsize = { 90 -1 }
+			maximumsize = { 90 -1 }
 			autoresize = yes
+			elide = right
 			parentanchor = vcenter
 			align = left|nobaseline
 			default_format = "#tooltippable"
@@ -287,7 +295,8 @@ types space_race_widget_types
 		}
 		textbox = {
 			autoresize = yes
-			max_width = 170
+			minimumsize = { 170 -1 }
+			maximumsize = { 170 -1 }
 			elide = right
 			parentanchor = vcenter
 			align = left|nobaseline
@@ -583,6 +592,7 @@ types space_race_widget_types
 	type te_sr_overview_milestone = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 520 -1 }
 		ignoreinvisible = yes
 		visible = "[JournalEntry.IsActive]"
 
@@ -715,6 +725,7 @@ types space_race_widget_types
 	type te_sr_overview_transit = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 520 -1 }
 		ignoreinvisible = yes
 		visible = "[JournalEntry.IsActive]"
 
@@ -781,7 +792,7 @@ types space_race_widget_types
 				direction = vertical
 				spacing = 4
 				ignoreinvisible = yes
-				parentanchor = hcenter
+				minimumsize = { 480 -1 }
 				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 
 				### Approach — ops 4 (Standard), 0 (Safe) and 1 (Ambitious),
@@ -965,6 +976,7 @@ types space_race_widget_types
 	type te_sr_status_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 520 -1 }
 		ignoreinvisible = yes
 		spacing = 4
 		visible = "[JournalEntry.IsActive]"
@@ -1101,6 +1113,7 @@ types space_race_widget_types
 	type te_sr_reference_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 520 -1 }
 		ignoreinvisible = yes
 		spacing = 4
 		visible = "[JournalEntry.IsActive]"
@@ -1125,6 +1138,7 @@ flowcontainer = {
 	name = "widget_je_space_race_suborbital_overview"
 	visible = "[JournalEntry.IsActive]"
 	parentanchor = hcenter
+	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 	datacontext = "[GetScriptedGui('sr_milestone_suborbital_sgui')]"
 
@@ -1185,6 +1199,7 @@ flowcontainer = {
 	name = "widget_je_space_race_suborbital"
 	visible = "[JournalEntry.IsActive]"
 	parentanchor = hcenter
+	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 	datacontext = "[GetScriptedGui('sr_milestone_suborbital_sgui')]"
 
@@ -1237,6 +1252,7 @@ flowcontainer = {
 	name = "widget_je_space_race_orbital_overview"
 	visible = "[JournalEntry.IsActive]"
 	parentanchor = hcenter
+	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 	datacontext = "[GetScriptedGui('sr_milestone_orbital_sgui')]"
 
@@ -1297,6 +1313,7 @@ flowcontainer = {
 	name = "widget_je_space_race_orbital"
 	visible = "[JournalEntry.IsActive]"
 	parentanchor = hcenter
+	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 	datacontext = "[GetScriptedGui('sr_milestone_orbital_sgui')]"
 
@@ -1349,6 +1366,7 @@ flowcontainer = {
 	name = "widget_je_space_race_moon_landing_overview"
 	visible = "[JournalEntry.IsActive]"
 	parentanchor = hcenter
+	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 	datacontext = "[GetScriptedGui('sr_milestone_moon_landing_sgui')]"
 
@@ -1409,6 +1427,7 @@ flowcontainer = {
 	name = "widget_je_space_race_moon_landing"
 	visible = "[JournalEntry.IsActive]"
 	parentanchor = hcenter
+	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 	datacontext = "[GetScriptedGui('sr_milestone_moon_landing_sgui')]"
 
@@ -1461,6 +1480,7 @@ flowcontainer = {
 	name = "widget_je_space_race_probe_overview"
 	visible = "[JournalEntry.IsActive]"
 	parentanchor = hcenter
+	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 	datacontext = "[GetScriptedGui('sr_milestone_probe_sgui')]"
 
@@ -1521,6 +1541,7 @@ flowcontainer = {
 	name = "widget_je_space_race_probe"
 	visible = "[JournalEntry.IsActive]"
 	parentanchor = hcenter
+	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 	datacontext = "[GetScriptedGui('sr_milestone_probe_sgui')]"
 
@@ -1573,6 +1594,7 @@ flowcontainer = {
 	name = "widget_je_space_race_moon_base_overview"
 	visible = "[JournalEntry.IsActive]"
 	parentanchor = hcenter
+	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 	datacontext = "[GetScriptedGui('sr_milestone_moon_base_sgui')]"
 
@@ -1633,6 +1655,7 @@ flowcontainer = {
 	name = "widget_je_space_race_moon_base"
 	visible = "[JournalEntry.IsActive]"
 	parentanchor = hcenter
+	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 	datacontext = "[GetScriptedGui('sr_milestone_moon_base_sgui')]"
 
@@ -1685,6 +1708,7 @@ flowcontainer = {
 	name = "widget_je_space_race_mars_landing_overview"
 	visible = "[JournalEntry.IsActive]"
 	parentanchor = hcenter
+	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 	datacontext = "[GetScriptedGui('sr_milestone_mars_landing_sgui')]"
 
@@ -1745,6 +1769,7 @@ flowcontainer = {
 	name = "widget_je_space_race_mars_landing"
 	visible = "[JournalEntry.IsActive]"
 	parentanchor = hcenter
+	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 	datacontext = "[GetScriptedGui('sr_milestone_mars_landing_sgui')]"
 
@@ -1797,6 +1822,7 @@ flowcontainer = {
 	name = "widget_je_space_race_interstellar_probe_overview"
 	visible = "[JournalEntry.IsActive]"
 	parentanchor = hcenter
+	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 	datacontext = "[GetScriptedGui('sr_milestone_interstellar_probe_sgui')]"
 
@@ -1857,6 +1883,7 @@ flowcontainer = {
 	name = "widget_je_space_race_interstellar_probe"
 	visible = "[JournalEntry.IsActive]"
 	parentanchor = hcenter
+	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 	datacontext = "[GetScriptedGui('sr_milestone_interstellar_probe_sgui')]"
 
@@ -1909,6 +1936,7 @@ flowcontainer = {
 	name = "widget_je_space_race_solar_colonization_overview"
 	visible = "[JournalEntry.IsActive]"
 	parentanchor = hcenter
+	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 	datacontext = "[GetScriptedGui('sr_milestone_solar_colonization_sgui')]"
 
@@ -1987,6 +2015,7 @@ flowcontainer = {
 	name = "widget_je_space_race_solar_colonization"
 	visible = "[JournalEntry.IsActive]"
 	parentanchor = hcenter
+	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 	datacontext = "[GetScriptedGui('sr_milestone_solar_colonization_sgui')]"
 
@@ -2039,6 +2068,7 @@ flowcontainer = {
 	name = "widget_je_space_race_interstellar_results_overview"
 	visible = "[JournalEntry.IsActive]"
 	parentanchor = hcenter
+	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 
 	te_sr_overview_transit = {}
@@ -2049,6 +2079,7 @@ flowcontainer = {
 	name = "widget_je_space_race_reference"
 	visible = "[JournalEntry.IsActive]"
 	parentanchor = hcenter
+	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 
 	te_sr_reference_sections = {}
