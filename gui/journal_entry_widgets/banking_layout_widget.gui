@@ -128,11 +128,12 @@ types banking_layout_widget_types
 		}
 	}
 
-	### The record, then how it all works. The history charts are the one section the two hosts show
-	### differently: collapsed in the journal (te_banking_history_panel, open
-	### flag te_hist_charts_open), open in the Budget tab, which overrides the
-	### "history" block with te_banking_history_panel_open (closed flag
-	### te_banking_tab_hist_closed; owner, 2026-09-28).
+	### The record, then how it all works. The history charts are the one
+	### section the two hosts show differently: collapsed in the journal
+	### (te_banking_history_panel, open flag te_hist_charts_open), open in the
+	### Budget tab, which overrides the "history" block with
+	### te_banking_history_panel_open (closed flag te_banking_tab_hist_closed;
+	### owner, 2026-09-28).
 	type te_banking_reference_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
