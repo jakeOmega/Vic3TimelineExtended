@@ -90,11 +90,9 @@ class OrderTest(unittest.TestCase):
 
     def test_reference_order_history_then_how(self):
         body = _type_body(_read(LAYOUT), "te_banking_reference_sections")
-        self.assertEqual(re.findall(r"\b(te_banking_\w+) = \{", body), REFERENCE)
-        # the journal's history is the block's default, so the tab can swap it
-        self.assertIn('block "history" {', body, "the history charts are not in a \"history\" block")
-        block = _block_from(body, body.index('block "history" {'))
-        self.assertIn("te_banking_history_panel = {}", block)
+        self.assertEqual(re.findall(r"^\t\t(te_banking_\w+) = \{", body, re.M), REFERENCE)
+        # one open history shell for both hosts (play-test round 2): no swap left
+        self.assertNotIn("block ", body)
 
     def test_composers_and_roots_are_gated_on_an_active_entry(self):
         layout = _read(LAYOUT)
@@ -127,13 +125,16 @@ class OrderTest(unittest.TestCase):
             r"|te_system_tab_open_journal)\b", tab)]
         self.assertEqual(order, ["te_banking_overview_panel", "te_banking_status_sections",
                                  "te_banking_reference_sections", "te_system_tab_open_journal"])
-        ref = _block_from(tab, tab.index("te_banking_reference_sections = {"))
-        self.assertRegex(ref, r'blockoverride "history" \{\s*te_banking_history_panel_open = \{\}\s*\}')
+        self.assertIn("te_banking_reference_sections = {}", tab)
 
-    def test_history_is_collapsed_in_the_journal_and_open_in_the_tab(self):
+    def test_history_is_open_in_both_hosts(self):
+        """The owner's rule since play-test round 2: history charts start open,
+        so the journal and the tab share one shell with a CLOSED flag."""
         hist = _read(HIST)
-        self.assertIn("Toggle('te_hist_charts_open')", _type_body(hist, "te_banking_history_panel"))
-        self.assertIn("Toggle('te_banking_tab_hist_closed')", _type_body(hist, "te_banking_history_panel_open"))
+        self.assertIn("Toggle('banking_dash_history_closed')", _type_body(hist, "te_banking_history_panel"))
+        text = "\n".join(_read(p) for p in BANKING_GUI)
+        for old in ("te_hist_charts_open", "te_banking_tab_hist_closed", "te_banking_history_panel_open"):
+            self.assertNotIn(old, text, old)
 
     def test_the_old_panels_and_roots_are_gone(self):
         text = "\n".join(_read(p) for p in BANKING_GUI + [JE])
@@ -151,7 +152,7 @@ class FlagTest(unittest.TestCase):
     def test_section_flags_say_their_default(self):
         flags = {f for f in re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", self.text)
                  if f.startswith(("banking_", "te_banking_", "te_hist_"))}
-        self.assertGreaterEqual(len(flags), 17)
+        self.assertGreaterEqual(len(flags), 16)
         for f in flags:
             self.assertRegex(f, r"_(open|closed)$", f"section flag {f} does not say its default")
             negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{f}'\)\s*\)", self.text))
@@ -439,6 +440,126 @@ class IconsDocTest(unittest.TestCase):
         drawn = {(DOC_SECTIONS[p], k) for _, _, found, _ in _cells() for p, k, _ in found}
         drawn.add(("Overview row 1: bubble pressure", "crash risk"))
         self.assertEqual(listed, drawn)
+
+
+MON_LABELS = ["banking_dash_mon_world_label", "banking_dash_mon_worldrate_label", "banking_dash_mon_rate_label",
+              "banking_dash_mon_target_label", "banking_dash_mon_delegation_label", "banking_dash_mon_mandate_label",
+              "banking_dash_mon_bankgold_label", "banking_dash_mon_goldgap_label", "banking_dash_mon_goldflow_label",
+              "banking_dash_mon_hotmoney_label", "banking_dash_mon_goldcarry_label", "banking_dash_mon_pegconf_label",
+              "banking_dash_mon_fx_label", "banking_dash_mon_fx_effect_label", "banking_dash_mon_anchor_label",
+              "banking_dash_mon_backstops_label", "banking_dash_mon_union_label", "banking_dash_mon_paid_label",
+              "banking_dash_mon_standing_label", "banking_dash_mon_premium_label", "banking_dash_mon_inflation_label",
+              "banking_dash_mon_expected_label", "banking_dash_mon_wage_label", "banking_dash_mon_pressure_label",
+              "banking_dash_mon_anchoring_label", "banking_dash_mon_monetise_label"]
+CONCEPTS_FILE = os.path.join(REPO, "common", "game_concepts", "extra_concepts.txt")
+CONCEPT_LOC = os.path.join(REPO, "localization", "english", "te_concepts_l_english.yml")
+
+
+def _concept_loc():
+    """All English loc: organize_loc files a concept's four-token name with the
+    miscellaneous keys and its _desc with the concepts (its categorize_key)."""
+    keys = {}
+    loc_dir = os.path.dirname(CONCEPT_LOC)
+    for name in sorted(os.listdir(loc_dir)):
+        if not name.endswith(".yml"):
+            continue
+        for line in _read(os.path.join(loc_dir, name)).splitlines():
+            m = re.match(r'\s+([\w.\-]+):\d*\s*"(.*)"\s*$', line)
+            if m:
+                keys[m.group(1)] = m.group(2)
+    return keys
+
+
+class ShortPanelTest(unittest.TestCase):
+    """Play-test round 2: a shorter panel. Readings that repeat the overview
+    are gone from Monetary Policy, short related readings share a row, and the
+    status text keeps only what the panels do not show."""
+
+    def test_row_labels_are_concepts(self):
+        loc, cloc = _loc(), _concept_loc()
+        defined = set(re.findall(r"(?m)^(concept_\w+) = \{", _read(CONCEPTS_FILE)))
+        captions = [c for _, c, _ in CELLS]
+        for key in MON_LABELS + captions:
+            with self.subTest(label=key):
+                self.assertIn(key, _read(DASH))
+                m = re.fullmatch(r"\[(?:(concept_\w+)|Concept\('(concept_\w+)','[^']+'\))\]", loc[key])
+                self.assertTrue(m, f"{key} is not a concept link: {loc[key]}")
+                concept = m.group(1) or m.group(2)
+                self.assertIn(concept, defined)
+                self.assertIn(concept, cloc)
+                self.assertIn(concept + "_desc", cloc)
+
+    def test_new_concepts_render_anywhere(self):
+        """A concept's tooltip has no JournalEntry context: its text is static."""
+        cloc = _concept_loc()
+        for c in re.findall(r"(?m)^(concept_banking_\w+) = \{", _read(CONCEPTS_FILE)):
+            for key in (c, c + "_desc"):
+                self.assertNotIn("JournalEntry", cloc.get(key, ""), key)
+                self.assertNotIn("ROOT", cloc.get(key, ""), key)
+
+    def test_monetary_policy_does_not_repeat_the_overview(self):
+        body = re.sub(r"#[^\n]*", "", _type_body(_read(DASH), "te_banking_sec_monetary"))
+        for gone in ("banking_dash_mon_band_tt", "banking_dash_mon_stance_tt",
+                     "banking_dash_mon_stance_impact_line", "banking_dash_mon_sub_bank"):
+            self.assertNotIn(gone, body, gone)
+        overview = _type_body(_read(DASH), "te_banking_overview_panel")
+        for kept in ("banking_dash_mon_band_tt", "banking_dash_mon_stance_tt"):
+            self.assertIn(kept, overview, kept)
+
+    def test_short_readings_share_rows(self):
+        body = _type_body(_read(DASH), "te_banking_sec_monetary")
+        pairs = []
+        for m in re.finditer(r"banking_dash_pair_row = \{", body):
+            row = _block_from(body, m.end() - 1)
+            pairs.append(re.findall(r'tooltip = "(banking_dash_mon_\w+_tt)"', row))
+        self.assertEqual(pairs, [
+            ["banking_dash_mon_world_tt", "banking_dash_mon_worldrate_tt"],
+            ["banking_dash_mon_rate_tt", "banking_dash_mon_target_tt"],
+            ["banking_dash_mon_standing_tt", "banking_dash_mon_premium_tt"],
+            ["banking_dash_mon_inflation_tt", "banking_dash_mon_expected_tt"],
+            ["banking_dash_mon_wage_tt", "banking_dash_mon_pressure_tt"],
+        ])
+
+    def test_the_dial_sits_together(self):
+        """Delegation and mandate follow the rate target, before open-market
+        operations; the delegate button shares the Delegation row."""
+        body = _type_body(_read(DASH), "te_banking_sec_monetary")
+        order = [body.index(k) for k in ('"banking_dash_mon_target_tt"', '"banking_dash_mon_delegation_tt"',
+                                         '"banking_dash_mon_mandate_tt"', '"banking_dash_tt_cb_open_market_ops"',
+                                         '"banking_dash_mon_sub_gold"')]
+        self.assertEqual(order, sorted(order))
+        row_at = body.rindex("flowcontainer = {", 0, body.index('tooltip = "banking_dash_mon_delegation_tt"'))
+        row = _block_from(body, row_at)
+        for btn in ("banking_dash_mon_btn_delegate", "banking_dash_mon_btn_take_control"):
+            self.assertIn(btn, row)
+
+    def test_every_row_fits_the_block(self):
+        dash = _read(DASH)
+
+        def widths(typ):
+            return [int(w) for w in re.findall(r"size = \{ (\d+) \d+ \}", _type_body(dash, typ))]
+        label, value = widths("banking_dash_pair")
+        self.assertEqual(label + 4 + value, 230)                     # two to a row: 460
+        self.assertEqual(widths("banking_dash_condition_row"), [label])
+        self.assertIn("max_width = %d" % (460 - label - 4), _type_body(dash, "banking_dash_condition_value"))
+        (mon_label,), (mon_value,) = widths("banking_dash_mon_label"), widths("banking_dash_mon_value")
+        (button,) = widths("banking_dash_mon_button")
+        self.assertLessEqual(mon_label + 4 + mon_value + 4 + button, 460)  # the Delegation row
+        body = _type_body(dash, "te_banking_sec_monetary")
+        target = _block_from(body, body.index("flowcontainer = {", body.index('blockoverride "pair_right" {')))
+        parts = [int(w) for w in re.findall(r"size = \{ (\d+) \d+ \}", target)]
+        self.assertLessEqual(sum(parts) + 2 * (len(parts) - 1), 230, parts)
+
+    def test_status_text_keeps_only_the_breakdown(self):
+        je = _read(JE)
+        status = _block_from(je, je.index("status_desc = {"))
+        self.assertEqual(re.findall(r"desc = (\w+)", status),
+                         ["banking_cycle_status_not_started", "BANKING_CURR_MODIFIERS"])
+        self.assertIn("NOT = { has_variable = finance_cycle_value }", status)
+        cloc = _concept_loc()
+        v = cloc["BANKING_CURR_MODIFIERS"]
+        self.assertFalse(v.startswith("\\n") or v.endswith("\\n"))
+        self.assertIn("banking_cycle_status_not_started", _loc())
 
 
 if __name__ == "__main__":

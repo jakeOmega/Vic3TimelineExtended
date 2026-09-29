@@ -1,16 +1,16 @@
 # Banking GUI: Icons
 
-The banking overview (`te_banking_overview_panel`, at the top of the Banking Cycle journal entry and of the Budget panel's Banking tab) draws its readings as icons with their word beneath. There are 32 icon slots: one per state of six readings, plus a crash-risk badge. All of them are placeholders (style guide rule 10): textures the mod already uses elsewhere, mostly vanilla's timed-modifier icons, chosen so the layout could be judged in game before the art exists. The owner's first play-test (2026-09-29) asked for them, starting with the inflation band. This page lists each one: where it is set, what the final art should show, and where it should go. The model is [`un_gui_icons.md`](un_gui_icons.md), which records how the UN's set went from placeholders to finished art.
+The banking overview (`te_banking_overview_panel`, at the top of the Banking Cycle journal entry and of the Budget panel's Banking tab) draws its readings as icons, each with a caption and its word beside it. There are 32 icon slots: one per state of six readings, plus a crash-risk badge. All of them are placeholders (style guide rule 10): textures the mod already uses elsewhere, mostly vanilla's timed-modifier icons, chosen so the layout could be judged in game before the art exists. The owner's first play-test (2026-09-29) asked for them, starting with the inflation band. This page lists each one: where it is set, what the final art should show, and where it should go. The model is [`un_gui_icons.md`](un_gui_icons.md), which records how the UN's set went from placeholders to finished art.
 
 **Where each is set.** Every icon is a literal `texture = "…"` line in `gui/journal_entry_widgets/banking_dashboard_widget.gui`, inside `te_banking_overview_panel`. No script reads the paths. Each icon is picked by one of two things. The cycle phase uses the `banking_dash_phase_*` scripted GUI that also picks its coloured word. The other readings use a display code, `banking_disp_<reading>_band_code` in `common/script_values/banking_overview_display_values.txt`, which repeats its band word's customizable-localization tests, so icon and word cannot disagree. Swapping one in is one path change. `IconsDocTest` in `test_banking_layout.py` holds each row below to its code; `BandCodeTest` holds each code to its word.
 
 **Proposed home.** `gfx/interface/icons/banking_icons/`, made with the icon pipeline (`scripts/image_pipeline/`, spec `docs/superpowers/specs/2026-09-26-icon-pipeline-design.md`) under a new `banking_*` registry category, as the UN's were.
 
-**The rule for the set** is the UN's. Icons must be simple and easy to recognize at 36 px, one bold object each. The states of one reading share an emblem and differ by a mark or a colour. The pairs across the cycle mirror each other: Panic and Frenzy, Downturn and Boom, Stagnation and Expansion.
+**The rule for the set** is the UN's. Icons must be simple and easy to recognize at 32 px, one bold object each. The states of one reading share an emblem and differ by a mark or a colour. The pairs across the cycle mirror each other: Panic and Frenzy, Downturn and Boom, Stagnation and Expansion.
 
 ## Overview row 1: cycle phase
 
-36 px, the phase's coloured word beneath. Picked by `banking_dash_phase_<phase>`.
+32 px, the phase's coloured word beside it. Picked by `banking_dash_phase_<phase>`.
 
 | Phase | Placeholder | Final art | Proposed path |
 |---|---|---|---|
@@ -24,7 +24,7 @@ The banking overview (`te_banking_overview_panel`, at the top of the Banking Cyc
 
 ## Overview row 1: momentum
 
-36 px, the band word beneath. Code: `banking_disp_momentum_band_code`. The arrows are vanilla's and can stay. The double arrows mark the two bands the old table tagged "(overheating)" and "(contracting)".
+32 px, the band word beside it. Code: `banking_disp_momentum_band_code`. The arrows are vanilla's and can stay. The double arrows mark the two bands the old table tagged "(overheating)" and "(contracting)".
 
 | Code | Band | Placeholder | Final art | Proposed path |
 |---|---|---|---|---|
@@ -36,7 +36,7 @@ The banking overview (`te_banking_overview_panel`, at the top of the Banking Cyc
 
 ## Overview row 1: bubble pressure
 
-36 px, the band word beneath. Code: `banking_disp_bubble_band_code`.
+32 px, the band word beside it. Code: `banking_disp_bubble_band_code`.
 
 | Code | Band | Placeholder | Final art | Proposed path |
 |---|---|---|---|---|
@@ -46,7 +46,7 @@ The banking overview (`te_banking_overview_panel`, at the top of the Banking Cyc
 | 4 | High | `gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds` | the bubble dwarfing the coins, gold rim, a thin spot catching the light | `banking_icons/bubble_high.dds` |
 | 5 | Severe | `gfx/interface/icons/generic_icons/red_cross.dds` | the bubble stretched to bursting, red rim, a crack across it | `banking_icons/bubble_severe.dds` |
 
-**Crash-risk badge.** 20 px, over the bubble icon's top-right corner, while `banking_dash_bubble_risk_high` holds: the cycle is at the top of its range, or booming with momentum surging. The badge carries the old row's "(crash risk)" tag, and its tooltip says why.
+**Crash-risk badge.** 16 px, over the bubble icon's top-right corner, while `banking_dash_bubble_risk_high` holds: the cycle is at the top of its range, or booming with momentum surging. The badge carries the old row's "(crash risk)" tag, and its tooltip says why.
 
 | Badge | Placeholder | Final art | Proposed path |
 |---|---|---|---|
@@ -54,7 +54,7 @@ The banking overview (`te_banking_overview_panel`, at the top of the Banking Cyc
 
 ## Overview row 2: policy stance
 
-36 px, the band word beneath, only for a country with a dial once the monetary layer has reported. Code: `banking_disp_stance_band_code`.
+32 px, the band word beside it, only for a country with a dial once the monetary layer has reported. Code: `banking_disp_stance_band_code`.
 
 | Code | Band | Placeholder | Final art | Proposed path |
 |---|---|---|---|---|
@@ -66,7 +66,7 @@ The banking overview (`te_banking_overview_panel`, at the top of the Banking Cyc
 
 ## Overview row 2: inflation (the price band)
 
-36 px, the band word beneath, only while the monetary layer is on and has reported. Code: `banking_disp_price_band_code`. Where a band modifier has an icon of its own, the placeholder is that icon (`te_inflation_band_*` in `extra_modifiers.txt`), apart from Elevated and Hyperinflation, which borrow an icon so they read differently from their neighbours.
+32 px, the band word beside it, only while the monetary layer is on and has reported. Code: `banking_disp_price_band_code`. Where a band modifier has an icon of its own, the placeholder is that icon (`te_inflation_band_*` in `extra_modifiers.txt`), apart from Elevated and Hyperinflation, which borrow an icon so they read differently from their neighbours.
 
 | Code | Band | Placeholder | Final art | Proposed path |
 |---|---|---|---|---|
@@ -81,7 +81,7 @@ The banking overview (`te_banking_overview_panel`, at the top of the Banking Cyc
 
 ## Overview row 2: intervention budget
 
-36 px, "N free" beneath. One icon, always shown.
+32 px, "N free" beside it. One icon, always shown.
 
 | Cell | Placeholder | Final art | Proposed path |
 |---|---|---|---|

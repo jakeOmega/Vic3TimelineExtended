@@ -32,26 +32,29 @@
 
 types banking_dashboard_widget_types
 {
-	### A line of the Current Conditions block: label on the left, value on the right.
-	### Both columns are fixed-width wrappers so the readings line up; the text
-	### inside them elides rather than pushing the row past the panel. Every
-	### instance puts its tooltip (what the reading is, and what moves it) on the
-	### row, so the label is set as hoverable text (#tooltippable, style guide
-	### rule 3), as the UN's pillar rows are.
+	### A row of the Monetary Policy table: the label (a concept, so hovering the
+	### word explains the term) on the left, the value on the right. Both columns
+	### are fixed-width wrappers so the readings line up; the text inside them
+	### elides rather than pushing the row past the block. Every instance puts
+	### its tooltip (the reading, and what moves it) on the row, as the UN's
+	### pillar rows do. The table is in the UN tables' medium type, and its label
+	### column is 132, the same as a banking_dash_pair's, so a full row's value
+	### lines up with the left value of a pair row (play-test round 2, which
+	### asked for a shorter panel).
 	type banking_dash_condition_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
-		spacing = 6
+		spacing = 4
 
 		widget = {
-			size = { 200 24 }
+			size = { 132 22 }
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
-				max_width = 200
+				max_width = 132
 				elide = right
 				align = nobaseline
-				using = fontsize_large
+				using = fontsize_medium
 				default_format = "#tooltippable"
 				block "condition_label" {}
 			}
@@ -67,20 +70,67 @@ types banking_dashboard_widget_types
 	}
 
 	### Free-standing value textbox used inside banking_dash_condition_row.
-	### 254 is what the Monetary Policy block has left of its 460 once the
-	### 200 label column and the 6 spacing are taken; wider runs the value
-	### past the block's right edge. That is about 28 characters at this font,
-	### so any row whose text can run longer — a country name, two signed
-	### figures, a state word after a number — sets `multiline = yes` and
-	### wraps instead of eliding: Peg Confidence, Exchange Rate Index, Trade
-	### and Prices, Monetary Anchor, Backstops, Monetary Union.
+	### 324 is what the Monetary Policy block has left of its 460 once the
+	### 132 label column and the 4 spacing are taken; wider runs the value
+	### past the block's right edge. Any row whose text can run longer — a
+	### country name, two signed figures, a state word after a number — sets
+	### `multiline = yes` and wraps instead of eliding: Peg Confidence,
+	### Exchange Rate Index, Trade and Prices, Monetary Anchor, Backstops,
+	### Monetary Union.
 	type banking_dash_condition_value = textbox {
 		parentanchor = vcenter
 		autoresize = yes
-		max_width = 254
+		max_width = 324
 		elide = right
 		align = nobaseline
-		using = fontsize_large
+		using = fontsize_medium
+	}
+
+	### One reading of a two-column pair row: label 132 + 4 + value 94 = 230,
+	### so two fill the block's 460. Only for short readings (a percentage,
+	### a signed figure); anything longer keeps a full row. The instance puts
+	### its tooltip on the cell, so each half explains itself.
+	type banking_dash_pair = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+
+		widget = {
+			size = { 132 22 }
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 132
+				elide = right
+				align = nobaseline
+				using = fontsize_medium
+				default_format = "#tooltippable"
+				block "pair_label" {}
+			}
+		}
+		widget = {
+			size = { 94 22 }
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 94
+				elide = right
+				align = nobaseline
+				using = fontsize_medium
+				block "pair_value" {}
+			}
+		}
+	}
+
+	### Two readings on one row, where two short related figures used to take
+	### two (play-test round 2). Either half can be hidden; the other stays put
+	### on the left.
+	type banking_dash_pair_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 0
+		block "pair_left" {}
+		block "pair_right" {}
 	}
 
 	### One action button. The data context is a scripted GUI, so visibility,
@@ -90,7 +140,7 @@ types banking_dashboard_widget_types
 	### frontend-only button_standard_* family is never instantiated in-game.
 	type banking_dash_action_button = button {
 		using = default_button_action
-		size = { 100 30 }
+		size = { 100 28 }
 		parentanchor = vcenter
 		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
@@ -108,22 +158,22 @@ types banking_dashboard_widget_types
 	### its row supplies.
 	type banking_dash_mon_button = button {
 		using = default_button_action
-		size = { 128 28 }
+		size = { 128 26 }
 		parentanchor = vcenter
 	}
 
-	### The label column of a monetary row, sized to line up with
+	### The label column of a monetary row with controls, sized to line up with
 	### banking_dash_condition_row's.
 	type banking_dash_mon_label = widget {
-		size = { 200 28 }
+		size = { 132 26 }
 
 		textbox = {
 			parentanchor = left|vcenter
 			autoresize = yes
-			max_width = 200
+			max_width = 132
 			elide = right
 			align = nobaseline
-			using = fontsize_large
+			using = fontsize_medium
 			default_format = "#tooltippable"
 			block "mon_label_text" {}
 		}
@@ -132,8 +182,9 @@ types banking_dashboard_widget_types
 	### A heading inside a section, over one group of its rows, with a faint rule
 	### under it: the UN's un_chamber_subheader, at this panel's 460 width. The
 	### Monetary Policy block grew to some twenty rows over three phases; these
-	### split it into what the world is doing, what gold is doing, what the debt
-	### costs, what prices are doing, and who holds the dial. How Banking Works
+	### split it into the rate and who holds the dial, what gold is doing, the
+	### exchange rate, what the debt costs, and what prices are doing (the
+	### central bank's rows joined the rate in play-test round 2). How Banking Works
 	### uses it for its topics. A heading whose rows are all hidden carries the
 	### same `visible` as they do; the first heading of a block drops its top
 	### margin (blockoverride "subheader_margin" {}), so the block does not open
@@ -188,18 +239,19 @@ types banking_dashboard_widget_types
 		}
 	}
 
-	### The value column of a monetary row: the whole 254 the row has after
-	### the label column, so "Bound by mandate" fits without eliding.
+	### The value column of a monetary row with a control: 190, which leaves the
+	### Delegation row room for its 128 button (132 + 4 + 190 + 4 + 128 = 458),
+	### and still fits "Bound by mandate" without eliding.
 	type banking_dash_mon_value = widget {
-		size = { 254 28 }
+		size = { 190 26 }
 
 		textbox = {
 			parentanchor = left|vcenter
 			autoresize = yes
-			max_width = 254
+			max_width = 190
 			elide = right
 			align = nobaseline
-			using = fontsize_large
+			using = fontsize_medium
 			block "mon_value_text" {}
 		}
 	}
@@ -213,7 +265,7 @@ types banking_dashboard_widget_types
 		direction = horizontal
 		ignoreinvisible = yes
 		spacing = 6
-		margin = { 6 3 }
+		margin = { 6 2 }
 		parentanchor = hcenter
 
 		background = {
@@ -269,51 +321,55 @@ types banking_dashboard_widget_types
 	### OVERVIEW: THE BARS AND THE READINGS AS ICONS
 	### ==========================================================================
 	### At the top of both hosts, always shown: what a returning player checks.
-	### The entry's four bars, then the readings as icons with their word beneath
-	### (style guide rule 4; the owner's first play-test, 2026-09-29: "an icon for
-	### the inflation band, maybe other banking icons"). The cells replace the
-	### Current Conditions table; each cell's tooltip is the one its row had.
-	### Every icon is a placeholder: docs/systems/banking_gui_icons.md lists what
-	### each should become and where it is set (test_banking_layout.IconsDocTest).
+	### The entry's four bars, then the readings as icons, each with its word
+	### beside it (style guide rule 4; the owner's first play-test, 2026-09-29:
+	### "an icon for the inflation band, maybe other banking icons"). The cells
+	### replace the Current Conditions table; each cell's tooltip is the one its
+	### row had. Every icon is a placeholder: docs/systems/banking_gui_icons.md
+	### lists what each should become and where it is set
+	### (test_banking_layout.IconsDocTest).
 
-	### A cell of the overview: a caption, an icon, the reading's word beneath.
-	### Fixed size, so no cell can widen its row: three to a row is 3 x 150 +
-	### 2 x 6 = 462, inside the bars' 480. The caption says which reading it is,
-	### because two band words (Elevated, High) name a band of bubble pressure
-	### and of inflation alike. The instance puts one icon per state in "icons",
-	### each with its own visible, and its word (or words) in "word"; "badge" is
-	### for a small alert over the icon's corner.
+	### A cell of the overview: the icon on the left, and beside it the caption
+	### (a concept) over the reading's word. Play-test round 2 laid the cells
+	### on their side to shorten the panel: 40 high instead of 76, the word
+	### still right next to its icon. Fixed size, so no cell can widen its
+	### row: three to a row is 3 x 156 + 2 x 6 = 480, the bars' width. The
+	### caption says which reading it is, because two band words (Elevated,
+	### High) name a band of bubble pressure and of inflation alike. The
+	### instance puts one icon per state in "icons", each with its own
+	### visible, and its word (or words) in "word"; "badge" is for a small
+	### alert over the icon's corner.
 	type te_banking_ov_cell = widget {
-		size = { 150 76 }
+		size = { 156 40 }
 
+		widget = {
+			size = { 32 32 }
+			parentanchor = left|vcenter
+			position = { 2 0 }
+			block "icons" {}
+		}
 		textbox = {
-			parentanchor = top|hcenter
+			position = { 40 2 }
 			autoresize = yes
-			max_width = 146
+			max_width = 114
 			elide = right
-			align = hcenter|nobaseline
+			align = left|nobaseline
 			using = fontsize_small
 			default_format = "#tooltippable"
 			block "caption" {}
-		}
-		widget = {
-			size = { 36 36 }
-			parentanchor = top|hcenter
-			position = { 0 19 }
-			block "icons" {}
 		}
 		block "word" {}
 		block "badge" {}
 	}
 
-	### The word under a cell's icon.
+	### The word beside a cell's icon, under its caption.
 	type te_banking_ov_word = textbox {
-		parentanchor = bottom|hcenter
+		position = { 40 19 }
 		autoresize = yes
-		max_width = 146
+		max_width = 114
 		elide = right
-		align = hcenter|nobaseline
-		using = fontsize_small
+		align = left|nobaseline
+		using = fontsize_medium
 	}
 
 	type te_banking_overview_panel = flowcontainer {
@@ -324,7 +380,7 @@ types banking_dashboard_widget_types
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
-		spacing = 6
+		spacing = 4
 		# 10 + the bars' 480 + 10 = 500, the width of the section headers below.
 		margin = { 10 8 }
 
@@ -359,37 +415,37 @@ types banking_dashboard_widget_types
 				}
 				blockoverride "icons" {
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[GetScriptedGui('banking_dash_phase_panic').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						texture = "gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds"
 					}
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[GetScriptedGui('banking_dash_phase_downturn').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						texture = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
 					}
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[GetScriptedGui('banking_dash_phase_stagnation').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						texture = "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
 					}
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[GetScriptedGui('banking_dash_phase_stable').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						texture = "gfx/interface/icons/event_icons/je_banking_cycle.dds"
 					}
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[GetScriptedGui('banking_dash_phase_expansion').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						texture = "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
 					}
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[GetScriptedGui('banking_dash_phase_boom').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						texture = "gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds"
 					}
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[GetScriptedGui('banking_dash_phase_frenzy').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						texture = "gfx/interface/icons/timed_modifier_icons/modifier_fire_positive.dds"
 					}
@@ -436,27 +492,27 @@ types banking_dashboard_widget_types
 				}
 				blockoverride "icons" {
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)1' )]"
 						texture = "gfx/interface/icons/generic_icons/down_down.dds"
 					}
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)2' )]"
 						texture = "gfx/interface/icons/generic_icons/trend_down.dds"
 					}
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)3' )]"
 						texture = "gfx/interface/icons/generic_icons/trend_nochange.dds"
 					}
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)4' )]"
 						texture = "gfx/interface/icons/generic_icons/trend_up.dds"
 					}
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)5' )]"
 						texture = "gfx/interface/icons/generic_icons/trend_upup.dds"
 					}
@@ -477,27 +533,27 @@ types banking_dashboard_widget_types
 				}
 				blockoverride "icons" {
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)1' )]"
 						texture = "gfx/interface/icons/generic_icons/green_checkmark.dds"
 					}
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)2' )]"
 						texture = "gfx/interface/icons/generic_icons/maybe_icon.dds"
 					}
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)3' )]"
 						texture = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
 					}
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)4' )]"
 						texture = "gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds"
 					}
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)5' )]"
 						texture = "gfx/interface/icons/generic_icons/red_cross.dds"
 					}
@@ -509,9 +565,8 @@ types banking_dashboard_widget_types
 				}
 				blockoverride "badge" {
 					icon = {
-						size = { 20 20 }
-						parentanchor = top|hcenter
-						position = { 24 18 }
+						size = { 16 16 }
+						position = { 22 0 }
 						visible = "[GetScriptedGui('banking_dash_bubble_risk_high').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						texture = "gfx/interface/icons/generic_icons/warning.dds"
 						tooltip = "banking_dash_ov_crash_risk_tt"
@@ -538,27 +593,27 @@ types banking_dashboard_widget_types
 				}
 				blockoverride "icons" {
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_stance_band_code'), '(CFixedPoint)1' )]"
 						texture = "gfx/interface/icons/timed_modifier_icons/modifier_fire_positive.dds"
 					}
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_stance_band_code'), '(CFixedPoint)2' )]"
 						texture = "gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds"
 					}
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_stance_band_code'), '(CFixedPoint)3' )]"
 						texture = "gfx/interface/icons/generic_icons/money.dds"
 					}
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_stance_band_code'), '(CFixedPoint)4' )]"
 						texture = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
 					}
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_stance_band_code'), '(CFixedPoint)5' )]"
 						texture = "gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds"
 					}
@@ -580,42 +635,42 @@ types banking_dashboard_widget_types
 				}
 				blockoverride "icons" {
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)1' )]"
 						texture = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
 					}
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)2' )]"
 						texture = "gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds"
 					}
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)3' )]"
 						texture = "gfx/interface/icons/generic_icons/warning.dds"
 					}
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)4' )]"
 						texture = "gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds"
 					}
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)5' )]"
 						texture = "gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds"
 					}
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)6' )]"
 						texture = "gfx/interface/icons/generic_icons/red_cross.dds"
 					}
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)7' )]"
 						texture = "gfx/interface/icons/generic_icons/world_market.dds"
 					}
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)8' )]"
 						texture = "gfx/interface/icons/generic_icons/government_building_icon.dds"
 					}
@@ -635,7 +690,7 @@ types banking_dashboard_widget_types
 				}
 				blockoverride "icons" {
 					icon = {
-						size = { 36 36 }
+						size = { 32 32 }
 						texture = "gfx/interface/icons/diplomatic_treaties_articles_icons/bankroll_treaties.dds"
 					}
 				}
@@ -1530,125 +1585,228 @@ types banking_dashboard_widget_types
 						}
 					}
 
-					### World reference rate — read-only, the same figure for
-					### every country, and the anchor the rest of the block is
-					### measured against: it is the base of the lenders' floor
-					### (§10) and what the World Rate below falls back to when
-					### no great power sets a rate of its own. Public
-					### information by spec §10, unlike anything downstream of
-					### the neutral rate.
+					### World reference rate and world rate, side by side.
 					###
-					### te_mon_era_base_now is the country's per-pulse copy of
-					### global_var:te_mon_era_base_world. It is read rather than
-					### the global because a .gui has no HasGlobalVariable to
-					### guard with (gui_modding_guide.md gotcha 15), and step 0
-					### of the monthly update writes it before anything else —
-					### so banking_mon_display_ready, which now asks for it,
-					### is the guard.
-					banking_dash_condition_row = {
-						tooltip = "banking_dash_mon_world_tt"
-						blockoverride "condition_label" {
-							text = "banking_dash_mon_world_label"
-						}
-						blockoverride "condition_value" {
-							banking_dash_condition_value = {
-								text = "banking_dash_mon_world_value"
-							}
-						}
-					}
-
-					### World rate (phase 3, §12.1) — the REAL rate the discretionary
-					### great powers are actually running, GDP-weighted. A no-dial
-					### country pays it plus expectations plus a point, Peg Defence
-					### targets it, and a gold country's reserves move on the gap
-					### against it. Built from displayed figures only (policy rates
-					### and expected inflation), so it is printed exactly.
+					### The reference rate is read-only, the same figure for every country,
+					### and the anchor the rest of the block is measured against: the base of
+					### the lenders' floor (§10) and what the world rate falls back to when no
+					### great power sets a rate of its own. Public by spec §10, unlike anything
+					### downstream of the neutral rate. te_mon_era_base_now is the country's
+					### per-pulse copy of global_var:te_mon_era_base_world, read rather than the
+					### global because a .gui has no HasGlobalVariable to guard with
+					### (gui_modding_guide.md gotcha 15); step 0 of the monthly update writes
+					### it first, so banking_mon_display_ready is its guard.
 					###
-					### te_mon_world_rate_now is the per-pulse copy of
-					### global_var:te_world_rate, read for the same reason as
-					### te_mon_era_base_now above; its own readiness handler
-					### because a phase-2 save has none until its first pulse.
-					banking_dash_condition_row = {
-						visible = "[GetScriptedGui('banking_mon_world_rate_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						tooltip = "banking_dash_mon_worldrate_tt"
-						blockoverride "condition_label" {
-							text = "banking_dash_mon_worldrate_label"
+					### The world rate (phase 3, §12.1) is the REAL rate the discretionary great
+					### powers are running, GDP-weighted: a no-dial country pays it plus
+					### expectations plus a point, Peg Defence targets it, a gold country's
+					### reserves move on the gap against it. te_mon_world_rate_now is its
+					### per-pulse copy, behind its own readiness handler because a phase-2 save
+					### has none until its first pulse.
+					banking_dash_pair_row = {
+						blockoverride "pair_left" {
+							banking_dash_pair = {
+								tooltip = "banking_dash_mon_world_tt"
+								blockoverride "pair_label" {
+									text = "banking_dash_mon_world_label"
+								}
+								blockoverride "pair_value" {
+									text = "banking_dash_mon_world_value"
+								}
+							}
 						}
-						blockoverride "condition_value" {
-							banking_dash_condition_value = {
-								text = "banking_dash_mon_worldrate_value"
+						blockoverride "pair_right" {
+							banking_dash_pair = {
+								visible = "[GetScriptedGui('banking_mon_world_rate_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+								tooltip = "banking_dash_mon_worldrate_tt"
+								blockoverride "pair_label" {
+									text = "banking_dash_mon_worldrate_label"
+								}
+								blockoverride "pair_value" {
+									text = "banking_dash_mon_worldrate_value"
+								}
 							}
 						}
 					}
 
-					### Policy rate — the actual rate, one decimal.
-					banking_dash_condition_row = {
-						tooltip = "banking_dash_mon_rate_tt"
-						blockoverride "condition_label" {
-							text = "banking_dash_mon_rate_label"
+					### The policy rate (the actual rate, one decimal) and, beside it, the
+					### Rate Target: the dial itself. Ops 0 (down) and 1 (up) of
+					### banking_mon_control_sgui; the handler answers why a step is greyed out,
+					### so no threshold lives in this file. The target half is 100 + 2 + 26 +
+					### 2 + 60 + 2 + 26 = 218, inside the pair's 230.
+					banking_dash_pair_row = {
+						blockoverride "pair_left" {
+							banking_dash_pair = {
+								tooltip = "banking_dash_mon_rate_tt"
+								blockoverride "pair_label" {
+									text = "banking_dash_mon_rate_label"
+								}
+								blockoverride "pair_value" {
+									text = "banking_dash_mon_rate_value"
+								}
+							}
 						}
-						blockoverride "condition_value" {
-							banking_dash_condition_value = {
-								text = "banking_dash_mon_rate_value"
+						blockoverride "pair_right" {
+							flowcontainer = {
+								direction = horizontal
+								ignoreinvisible = yes
+								spacing = 2
+								tooltip = "banking_dash_mon_target_tt"
+								datacontext = "[GetScriptedGui('banking_mon_control_sgui')]"
+								visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+								widget = {
+									size = { 100 26 }
+									textbox = {
+										parentanchor = left|vcenter
+										autoresize = yes
+										max_width = 100
+										elide = right
+										align = nobaseline
+										using = fontsize_medium
+										default_format = "#tooltippable"
+										text = "banking_dash_mon_target_label"
+									}
+								}
+
+								button_icon_minus_action = {
+									size = { 26 26 }
+									parentanchor = vcenter
+									enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+									### Click a point, ctrl-click a tenth, shift-click to the limit.
+									click_modifiers = {
+										ondefault = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+										onctrl = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+										onshift = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
+									}
+									tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
+								}
+
+								widget = {
+									size = { 60 26 }
+									textbox = {
+										parentanchor = center
+										align = center|nobaseline
+										autoresize = yes
+										max_width = 60
+										elide = right
+										using = fontsize_medium
+										text = "banking_dash_mon_target_value"
+									}
+								}
+
+								button_icon_plus_action = {
+									size = { 26 26 }
+									parentanchor = vcenter
+									enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+									### Click a point, ctrl-click a tenth, shift-click to the limit.
+									click_modifiers = {
+										ondefault = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+										onctrl = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
+										onshift = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
+									}
+									tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+								}
 							}
 						}
 					}
 
-					### Target — the dial itself. Ops 0 (down) and 1 (up) of
-					### banking_mon_control_sgui; the handler answers why a step
-					### is greyed out, so no threshold lives in this file.
+					### Delegation — ops 2 (delegate) and 3 (take it back), the button
+					### beside the value it changes (132 + 4 + 190 + 4 + 128 = 458). Exactly one
+					### button is ever drawn, and neither under central bank independence,
+					### which is permanently mandate-bound; the value says so there (§5.2).
 					flowcontainer = {
 						direction = horizontal
 						ignoreinvisible = yes
-						spacing = 6
+						spacing = 4
 						parentanchor = left
-						tooltip = "banking_dash_mon_target_tt"
+						tooltip = "banking_dash_mon_delegation_tt"
 						datacontext = "[GetScriptedGui('banking_mon_control_sgui')]"
 						visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 
 						banking_dash_mon_label = {
 							blockoverride "mon_label_text" {
-								text = "banking_dash_mon_target_label"
+								text = "banking_dash_mon_delegation_label"
 							}
 						}
 
-						button_icon_minus_action = {
-							size = { 26 26 }
-							parentanchor = vcenter
-							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-							### Click a point, ctrl-click a tenth, shift-click to the limit.
-							click_modifiers = {
-								ondefault = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-								onctrl = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
-								onshift = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
-							}
-							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
-						}
-
-						widget = {
-							size = { 68 28 }
-							textbox = {
-								parentanchor = center
-								align = center|nobaseline
-								autoresize = yes
-								max_width = 68
-								elide = right
-								using = fontsize_large
-								text = "banking_dash_mon_target_value"
+						banking_dash_mon_value = {
+							blockoverride "mon_value_text" {
+								text = "banking_dash_mon_delegation_value"
 							}
 						}
 
-						button_icon_plus_action = {
-							size = { 26 26 }
-							parentanchor = vcenter
-							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-							### Click a point, ctrl-click a tenth, shift-click to the limit.
-							click_modifiers = {
-								ondefault = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-								onctrl = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
-								onshift = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
+						banking_dash_mon_button = {
+							visible = "[And( GetScriptedGui('banking_mon_can_delegate').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Not( GetScriptedGui('banking_mon_is_delegated').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+							text = "banking_dash_mon_btn_delegate"
+						}
+
+						banking_dash_mon_button = {
+							visible = "[And( GetScriptedGui('banking_mon_can_delegate').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('banking_mon_is_delegated').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
+							text = "banking_dash_mon_btn_take_control"
+						}
+					}
+
+					### Mandate — which rule a delegated bank follows.
+					flowcontainer = {
+						direction = horizontal
+						ignoreinvisible = yes
+						spacing = 4
+						parentanchor = left
+						tooltip = "banking_dash_mon_mandate_tt"
+						visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+						banking_dash_mon_label = {
+							blockoverride "mon_label_text" {
+								text = "banking_dash_mon_mandate_label"
 							}
-							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+						}
+
+						banking_dash_mon_value = {
+							blockoverride "mon_value_text" {
+								text = "banking_dash_mon_mandate_value"
+							}
+						}
+					}
+
+					### Ops 4 / 5 / 6. The mandate already in force is greyed out
+					### by the handler's is_valid — that is the "you are here"
+					### marker — and peg defence only exists on a gold standard.
+					flowcontainer = {
+						direction = horizontal
+						ignoreinvisible = yes
+						spacing = 4
+						parentanchor = hcenter
+						margin_bottom = 2
+						datacontext = "[GetScriptedGui('banking_mon_control_sgui')]"
+						visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+						banking_dash_mon_button = {
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
+							text = "banking_dash_mon_mandate_price"
+						}
+
+						banking_dash_mon_button = {
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
+							text = "banking_dash_mon_mandate_growth"
+						}
+
+						banking_dash_mon_button = {
+							visible = "[GetScriptedGui('banking_mon_is_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
+							text = "banking_dash_mon_mandate_peg"
 						}
 					}
 
@@ -2014,28 +2172,29 @@ types banking_dashboard_widget_types
 						}
 					}
 
-					### Credit standing — the structural tier (§7).
-					banking_dash_condition_row = {
-						tooltip = "banking_dash_mon_standing_tt"
-						blockoverride "condition_label" {
-							text = "banking_dash_mon_standing_label"
-						}
-						blockoverride "condition_value" {
-							banking_dash_condition_value = {
-								text = "banking_dash_mon_standing_value"
+					### Credit standing (the structural tier) and risk premium (the cyclical
+					### tier), side by side (§7).
+					banking_dash_pair_row = {
+						blockoverride "pair_left" {
+							banking_dash_pair = {
+								tooltip = "banking_dash_mon_standing_tt"
+								blockoverride "pair_label" {
+									text = "banking_dash_mon_standing_label"
+								}
+								blockoverride "pair_value" {
+									text = "banking_dash_mon_standing_value"
+								}
 							}
 						}
-					}
-
-					### Risk premium — the cyclical tier (§7).
-					banking_dash_condition_row = {
-						tooltip = "banking_dash_mon_premium_tt"
-						blockoverride "condition_label" {
-							text = "banking_dash_mon_premium_label"
-						}
-						blockoverride "condition_value" {
-							banking_dash_condition_value = {
-								text = "banking_dash_mon_premium_value"
+						blockoverride "pair_right" {
+							banking_dash_pair = {
+								tooltip = "banking_dash_mon_premium_tt"
+								blockoverride "pair_label" {
+									text = "banking_dash_mon_premium_label"
+								}
+								blockoverride "pair_value" {
+									text = "banking_dash_mon_premium_value"
+								}
 							}
 						}
 					}
@@ -2055,75 +2214,61 @@ types banking_dashboard_widget_types
 					### print only the part the player CHOSE, which is a modifier
 					### the engine breaks down on its own.
 
-					### Inflation — what prices actually did.
-					banking_dash_condition_row = {
-						tooltip = "banking_dash_mon_inflation_tt"
-						blockoverride "condition_label" {
-							text = "banking_dash_mon_inflation_label"
+					### Inflation (what prices actually did) and expected inflation (what
+					### lenders and workers have priced in, the half that costs money).
+					banking_dash_pair_row = {
+						blockoverride "pair_left" {
+							banking_dash_pair = {
+								tooltip = "banking_dash_mon_inflation_tt"
+								blockoverride "pair_label" {
+									text = "banking_dash_mon_inflation_label"
+								}
+								blockoverride "pair_value" {
+									text = "banking_dash_mon_inflation_value"
+								}
+							}
 						}
-						blockoverride "condition_value" {
-							banking_dash_condition_value = {
-								text = "banking_dash_mon_inflation_value"
+						blockoverride "pair_right" {
+							banking_dash_pair = {
+								tooltip = "banking_dash_mon_expected_tt"
+								blockoverride "pair_label" {
+									text = "banking_dash_mon_expected_label"
+								}
+								blockoverride "pair_value" {
+									text = "banking_dash_mon_expected_value"
+								}
 							}
 						}
 					}
 
-					### Expected inflation — what lenders and workers have
-					### priced in, which is the half that costs money.
-					banking_dash_condition_row = {
-						tooltip = "banking_dash_mon_expected_tt"
-						blockoverride "condition_label" {
-							text = "banking_dash_mon_expected_label"
-						}
-						blockoverride "condition_value" {
-							banking_dash_condition_value = {
-								text = "banking_dash_mon_expected_value"
+					### The price band has no row here: the overview's Inflation cell shows it,
+					### with the same tooltip (banking_dash_mon_band_tt), since play-test round 2.
+					###
+					### Wage pressure (the labour and welfare half, §9.4, kept apart because it
+					### is the half that earns the real-wage dividend) and price pressure
+					### (everything else the player chose: devaluations, crisis outcomes,
+					### event modifiers).
+					banking_dash_pair_row = {
+						blockoverride "pair_left" {
+							banking_dash_pair = {
+								tooltip = "banking_dash_mon_wage_tt"
+								blockoverride "pair_label" {
+									text = "banking_dash_mon_wage_label"
+								}
+								blockoverride "pair_value" {
+									text = "banking_dash_mon_wage_value"
+								}
 							}
 						}
-					}
-
-					### Price band — the band NAME, and in the tooltip the band
-					### modifier's own account of what it costs. No band edge
-					### and no modifier value is copied into this file: both
-					### come from customizable_localization blocks reading the
-					### band variable step 6b wrote.
-					banking_dash_condition_row = {
-						tooltip = "banking_dash_mon_band_tt"
-						blockoverride "condition_label" {
-							text = "banking_dash_mon_band_label"
-						}
-						blockoverride "condition_value" {
-							banking_dash_condition_value = {
-								text = "banking_dash_mon_band_value"
-							}
-						}
-					}
-
-					### Wage pressure — the labour and welfare half (§9.4),
-					### kept apart from every other source because it is the
-					### half that earns the real-wage dividend.
-					banking_dash_condition_row = {
-						tooltip = "banking_dash_mon_wage_tt"
-						blockoverride "condition_label" {
-							text = "banking_dash_mon_wage_label"
-						}
-						blockoverride "condition_value" {
-							banking_dash_condition_value = {
-								text = "banking_dash_mon_wage_value"
-							}
-						}
-					}
-
-					### Price pressure — everything else the player chose:
-					### devaluations, crisis outcomes, event modifiers.
-					banking_dash_condition_row = {
-						tooltip = "banking_dash_mon_pressure_tt"
-						blockoverride "condition_label" {
-							text = "banking_dash_mon_pressure_label"
-						}
-						blockoverride "condition_value" {
-							banking_dash_condition_value = {
-								text = "banking_dash_mon_pressure_value"
+						blockoverride "pair_right" {
+							banking_dash_pair = {
+								tooltip = "banking_dash_mon_pressure_tt"
+								blockoverride "pair_label" {
+									text = "banking_dash_mon_pressure_label"
+								}
+								blockoverride "pair_value" {
+									text = "banking_dash_mon_pressure_value"
+								}
 							}
 						}
 					}
@@ -2179,14 +2324,14 @@ types banking_dashboard_widget_types
 						}
 
 						widget = {
-							size = { 68 28 }
+							size = { 60 26 }
 							textbox = {
 								parentanchor = center
 								align = center|nobaseline
 								autoresize = yes
-								max_width = 68
+								max_width = 60
 								elide = right
-								using = fontsize_large
+								using = fontsize_medium
 								text = "banking_dash_mon_monetise_value"
 							}
 						}
@@ -2200,150 +2345,6 @@ types banking_dashboard_widget_types
 						}
 					}
 
-					banking_dash_subheader = {
-						blockoverride "subheader_text" {
-							text = "banking_dash_mon_sub_bank"
-						}
-					}
-
-					### Policy stance — the band NAME and nothing else.
-					banking_dash_condition_row = {
-						tooltip = "banking_dash_mon_stance_tt"
-						blockoverride "condition_label" {
-							text = "banking_dash_mon_stance_label"
-						}
-						blockoverride "condition_value" {
-							banking_dash_condition_value = {
-								text = "banking_dash_mon_stance_value"
-							}
-						}
-					}
-
-					### What the stance is worth, in the open rather than only in the
-					### tooltip. BANDED on purpose: both phrases come from the displayed
-					### band (te_mon_stance_momentum_effect / _bubble_effect), never from
-					### the gap, so nothing here narrows the neutral rate.
-					textbox = {
-						visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						text = "banking_dash_mon_stance_impact_line"
-						autoresize = yes
-						multiline = yes
-						max_width = 460
-						align = left|nobaseline
-						margin_bottom = 2
-					}
-
-					### Delegation — ops 2 (delegate) and 3 (take it back).
-					### Exactly one button is ever drawn, and neither is drawn
-					### under central bank independence, which is permanently
-					### mandate-bound; the value cell says so there (§5.2).
-					flowcontainer = {
-						direction = horizontal
-						ignoreinvisible = yes
-						spacing = 6
-						parentanchor = left
-						tooltip = "banking_dash_mon_delegation_tt"
-						datacontext = "[GetScriptedGui('banking_mon_control_sgui')]"
-						visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-
-						banking_dash_mon_label = {
-							blockoverride "mon_label_text" {
-								text = "banking_dash_mon_delegation_label"
-							}
-						}
-
-						banking_dash_mon_value = {
-							blockoverride "mon_value_text" {
-								text = "banking_dash_mon_delegation_value"
-							}
-						}
-					}
-
-					### Delegate / Take control — a row of their own, under the
-					### Delegation row they act on. They used to share that row, which
-					### is what kept the label column at 160 and "World Reference Rate"
-					### elided; with the button gone the labels get 200.
-					flowcontainer = {
-						direction = horizontal
-						ignoreinvisible = yes
-						spacing = 4
-						parentanchor = hcenter
-						datacontext = "[GetScriptedGui('banking_mon_control_sgui')]"
-						visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-
-						banking_dash_mon_button = {
-							visible = "[And( GetScriptedGui('banking_mon_can_delegate').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Not( GetScriptedGui('banking_mon_is_delegated').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
-							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
-							text = "banking_dash_mon_btn_delegate"
-						}
-
-						banking_dash_mon_button = {
-							visible = "[And( GetScriptedGui('banking_mon_can_delegate').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('banking_mon_is_delegated').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
-							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
-							text = "banking_dash_mon_btn_take_control"
-						}
-					}
-
-					### Mandate — which rule a delegated bank follows.
-					flowcontainer = {
-						direction = horizontal
-						ignoreinvisible = yes
-						spacing = 6
-						parentanchor = left
-						tooltip = "banking_dash_mon_mandate_tt"
-						visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-
-						banking_dash_mon_label = {
-							blockoverride "mon_label_text" {
-								text = "banking_dash_mon_mandate_label"
-							}
-						}
-
-						banking_dash_mon_value = {
-							blockoverride "mon_value_text" {
-								text = "banking_dash_mon_mandate_value"
-							}
-						}
-					}
-
-					### Ops 4 / 5 / 6. The mandate already in force is greyed out
-					### by the handler's is_valid — that is the "you are here"
-					### marker — and peg defence only exists on a gold standard.
-					flowcontainer = {
-						direction = horizontal
-						ignoreinvisible = yes
-						spacing = 4
-						parentanchor = hcenter
-						margin_bottom = 2
-						datacontext = "[GetScriptedGui('banking_mon_control_sgui')]"
-						visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-
-						banking_dash_mon_button = {
-							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
-							text = "banking_dash_mon_mandate_price"
-						}
-
-						banking_dash_mon_button = {
-							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
-							text = "banking_dash_mon_mandate_growth"
-						}
-
-						banking_dash_mon_button = {
-							visible = "[GetScriptedGui('banking_mon_is_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
-							text = "banking_dash_mon_mandate_peg"
-						}
-					}
 				}
 			}
 
@@ -2663,8 +2664,6 @@ types banking_dashboard_widget_types
 						text = "banking_dash_btn_disable"
 					}
 				}
-
-
 
 			}
 		}
