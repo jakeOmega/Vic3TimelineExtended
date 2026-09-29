@@ -14,7 +14,9 @@ Reads the registry (icon_prompts.py) and takes each category through:
   sheet   review sheets, 20 entities each: current icon | 3 vanilla neighbours
           || candidates. Pick a seed per entity and record it in ICONS.
   write   the accepted icons as uncompressed DDS with mips, vanilla's format
-          (icon_dds.py), to gfx/interface/icons/<folder>/<key>.dds. A DDS is
+          (icon_dds.py), to gfx/interface/icons/<folder>/<key>.dds, or for a
+          category with `dds_format` (the institution strips) block-compressed
+          through texconv to <root>/<folder>/<key>.dds. A DDS is
           rewritten when its pick (seed or subject) changed since it was
           written (recorded in <work>/written.json); otherwise it is left
           alone, so to force one, delete it. For diplomatic actions it also
@@ -206,7 +208,8 @@ def stage_render(cat: str, only: set[str], work: Path, seeds: int, offload: str)
         for seed in ([e["seed"]] if accepted(e) else range(seeds)):
             jobs.append((name(cat, key), prompt, seed))
     embed(prompts, work / "embeds")
-    render(jobs, work / "embeds", work / "raw", offload)
+    kw = {"size": CATEGORIES[cat]["gen_size"]} if "gen_size" in CATEGORIES[cat] else {}
+    render(jobs, work / "embeds", work / "raw", offload, **kw)
 
 
 def _compose_one(composer, cat: str, raw: Path, final: Path):
@@ -232,7 +235,7 @@ def stage_compose(cat: str, only: set[str], work: Path) -> None:
 
 
 def stage_sheet(cat: str, only: set[str], work: Path, include_reviewed: bool) -> None:
-    from icon_render import review_sheet, vanilla_icons_dir
+    from icon_render import review_sheet, strip_sheet, vanilla_folder, vanilla_icons_dir
 
     current = current_icons(cat)
     game = vanilla_icons_dir().parents[2]
@@ -249,8 +252,11 @@ def stage_sheet(cat: str, only: set[str], work: Path, include_reviewed: bool) ->
     out = work / "sheets"
     out.mkdir(parents=True, exist_ok=True)
     for i in range(0, len(rows), SHEET_ROWS):
-        review_sheet(rows[i:i + SHEET_ROWS], CATEGORIES[cat]["folder"],
-                     out / f"{cat}_{i // SHEET_ROWS + 1:02d}.png")
+        dest = out / f"{cat}_{i // SHEET_ROWS + 1:02d}.png"
+        if CATEGORIES[cat]["mode"] == "strip":
+            strip_sheet(rows[i:i + SHEET_ROWS], vanilla_folder(CATEGORIES[cat]) / "institution_image_mask.dds", dest)
+        else:
+            review_sheet(rows[i:i + SHEET_ROWS], CATEGORIES[cat]["folder"], dest)
 
 
 def needs_write(exists: bool, recorded: list | None, want: list) -> bool:
@@ -270,10 +276,11 @@ def stage_write(cat: str, only: set[str], work: Path) -> None:
     from icon_dds import write_dds
     from icon_render import Composer, raw_path
 
-    out_dir = MOD_ROOT / "gfx" / "interface" / "icons" / CATEGORIES[cat]["folder"]
-    if not out_dir.parent.is_dir():
-        raise SystemExit(f"{out_dir.parent} is not checked out (a sparse worktree?)")
-    out_dir.mkdir(exist_ok=True)
+    spec = CATEGORIES[cat]
+    out_dir = (MOD_ROOT / icon_path(cat, "_")).parent
+    if not (MOD_ROOT / "gfx" / "interface").is_dir():
+        raise SystemExit(f"{MOD_ROOT / 'gfx' / 'interface'} is not checked out (a sparse worktree?)")
+    out_dir.mkdir(parents=True, exist_ok=True)
     # What each DDS was written from, so a changed pick is rewritten instead of
     # silently kept. Machine-local, beside the renders it refers to.
     manifest_path = work / "written.json"
@@ -290,7 +297,15 @@ def stage_write(cat: str, only: set[str], work: Path) -> None:
         if not raw.exists():
             print(f"  no render for {cat}/{key} seed {e['seed']}: run --stage render")
             continue
-        write_dds(_compose_one(composer, cat, raw, work / "final" / raw.name), dest)
+        final = work / "final" / raw.name
+        icon = _compose_one(composer, cat, raw, final)
+        if "dds_format" in spec:
+            # Block-compressed through texconv, as event pictures are; the
+            # composed PNG is already at its final size.
+            from convert_event_image import convert_image, ensure_texconv
+            convert_image(final, dest, ensure_texconv(), spec["dds_format"], do_resize=False)
+        else:
+            write_dds(icon, dest)
         manifest[name(cat, key)] = want
         wrote += 1
     manifest_path.parent.mkdir(parents=True, exist_ok=True)

@@ -351,5 +351,36 @@ class SpreadGradeAndRecolorTests(unittest.TestCase):
         self.assertTrue((turned[..., 3] == 200).all())
 
 
+@unittest.skipIf(icon_dds is None, "Pillow is not installed")
+class StripTests(unittest.TestCase):
+    """compose_strip centres the scene on a 3500x220 strip; icon_path honours `root`."""
+
+    def setUp(self):
+        try:
+            import scipy  # noqa: F401  (the sides' blur)
+        except ImportError:
+            self.skipTest("scipy is not installed")
+        import icon_render
+        self.r = icon_render
+
+    def test_scene_sits_sharp_in_the_middle(self):
+        rng = np.random.default_rng(0)
+        raw = Image.fromarray(rng.integers(40, 200, (448, 1792, 3), dtype=np.uint8))
+        target = {1: np.array([0.4, 0.6]), 2: np.array([0.5, 0.7])}
+        strip = np.asarray(self.r.compose_strip(raw, {"size": (3500, 220)}, target)).astype(float)
+        self.assertEqual(strip.shape, (220, 3500, 4))
+        self.assertTrue((strip[..., 3] == 255).all())
+        detail = np.abs(np.diff(strip[..., :3].mean(-1), axis=1)).mean(0)  # horizontal texture per column
+        x0 = self.r.STRIP_CENTRE - 440
+        self.assertGreater(detail[x0 + 100:x0 + 780].mean(), 5 * detail[:600].mean())  # sides blurred
+        self.assertLess(strip[:, :300, :3].mean(), strip[:, x0:x0 + 880, :3].mean())  # and dimmed
+
+    def test_icon_path_takes_the_category_root(self):
+        self.assertEqual(ip.icon_path("institution_strip", "institution_ministry_of_war"),
+                         "gfx/interface/illustrations/institutions/institution_ministry_of_war.dds")
+        self.assertEqual(ip.icon_path("institution", "institution_ministry_of_war"),
+                         "gfx/interface/icons/institution_icons/institution_ministry_of_war.dds")
+
+
 if __name__ == "__main__":
     unittest.main()

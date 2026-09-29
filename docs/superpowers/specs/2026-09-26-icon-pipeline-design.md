@@ -166,7 +166,7 @@ Every category below is read only from its entity's icon field; the engine has n
 | Ideologies | 3 IG, 6 leader | `emboss_medallion` | `leader_ideology` is a second category (silver on teal, `ideology_leader/`); the 24 `custom_religion_*` variants keep their base icon, as vanilla's do |
 | Decrees | 15 | `medallion`, with the disc colour set and the two-point grade | 13 were on `road_maintenance` |
 | Laws | 4 | `tinted` (new) | penal labor camps, private military contractors, littoral defense, auxiliary fleet |
-| Institutions | 17 | `tinted` | `icon` only; `background_texture` (a 3500×220 painted strip) stays borrowed |
+| Institutions | 17 | `tinted` | `icon`; the `background_texture` strips came later (below) |
 | IG traits | 15 | `card` (new), one category per approval slot | the traditionalist trio is the Devout IG's own set and stays |
 | Character traits | 6 | `card` | the combined-arms traits are `type = condition`: the condition card, turned gold |
 | Harvest conditions | 3 | `framed` | the round rim lifts like the building frame |
@@ -223,6 +223,32 @@ The owner compared the merged batch (#561) with vanilla in game and asked for fo
 - **The pink card said "bad trait".** Vanilla's condition card marks bad traits (alcoholic, cancer). The combined-arms traits keep the condition template but turn it with `recolor = (45, 1.4)`: hue +45°, saturation ×1.4, a gold no vanilla type uses. The pictogram's fitted tint turns with the card.
 
 **Compose keeps a final that is newer than its raw.** A layout or spec change therefore recomposes nothing. Move the category's `final/<category>__*` files aside, compose, then delete the DDS files and `write`.
+
+### Institution strips (2026-09-28)
+
+After #561 the owner asked for the institutions' `background_texture` strips too. Those were the last borrowed art on institutions: all 17 had been on vanilla's seven, 7 of them on `schools.dds`. Category `institution_strip`, layout `strip`.
+
+**What the panel shows.** A strip is 3500×220, but `politics_panel_institutions.gui` draws it with `fittype = centercrop` into a box 600 px wide by the row's height: it starts 70 px into the 520 px row and runs 150 px past its right edge, where the panel clips it. At a row height of 150–200 px, only about x 1300–2000 of the strip shows. `institution_image_mask.dds` (`Corneredstretched`, `alphamultiply`) fades it in from the left and draws the middle at about half opacity (alpha ~122). Vanilla paints its figures in that band and fills the rest with a dim, blurred continuation. The geometry comes from the GUI file, not from the game; the in-game check confirms it.
+
+**The layout.**
+- **Render.** FLUX renders at 1792×448 (4:1, `gen_size`), which scales to 880×220 and is centred at x 1700 (`STRIP_CENTRE`).
+- **Sides.** The rest of the strip is the scene mirrored outward, blended to a blur (σ 3×14 px) over 60 px and dimmed by up to 40%. The sides only show on a short row, as vanilla's do.
+- **Grade.** The scene takes the two-point grade toward vanilla's strips, measured in the visible band (`strip_grade_target`).
+- **Review sheet.** `strip_sheet()` shows each candidate as the panel would, roughly: the 600-px box at a row height of 180, the nine-sliced mask, clipped at 450 px. The whole strip sits underneath. Judge picks there: lettering under the left fade doesn't show.
+
+**Framing.** The first style asked for a "wide cinematic composition, the figures seen from the waist up". It drew a symmetric room with two small officers posing at the viewer, and a map table set with dozens of markers. Vanilla's strips are candid close-ups, figures cropped at the chest and busy with something. The style now asks for exactly that ("candid close-up, the figures large and cropped at the chest in the middle of the frame, seen from the side busy at their work"). Subjects follow the event-picture rules: period props, no signs, no flags, and each scene set in its institution's era.
+
+**What FLUX lettered anyway:**
+- Grain sacks (International Aid).
+- A framed certificate on a studio wall (Propaganda).
+- A sign on a tent (Refugee Affairs).
+- A maker's plate on a machine (Science).
+
+Each pick keeps its lettering at an edge the panel crops or fades.
+
+**Format.** The strips are block-compressed, BC7_UNORM_SRGB, through texconv (`convert_event_image.convert_image`, as event pictures are): 1.03 MB with 12 mips, against 4.1 MB for vanilla's uncompressed ones. The round trip averages 0.28/255 of error. The sRGB type is carried over from event pictures; vanilla's strips are untyped BGRA. If the panel samples them brighter or darker than the sheet shows, try `BC7_UNORM` without `-srgb`. A category opts in with `dds_format`, and `root` puts it outside `gfx/interface/icons/`. `texconv.exe` is gitignored: copy it from a checkout that has one or let `ensure_texconv()` download it.
+
+**Runtime.** Renders take 27–38 s. One stalled for 10 minutes on a single CPU core with the transformer in RAM and nothing on the GPU; a rerun took 34 s. If a render takes minutes, kill it and rerun.
 
 ## Review lessons (2026-09-27)
 

@@ -105,6 +105,7 @@ National Queue tab.
 | Purchase control | The government purchase you have set. Fixed Quantity: click for ±1, Shift+Click ±10, Ctrl+Click ±100, Alt+Click ±1,000; right-click on the plus adds 10,000. Fixed Budget: click for ±£1,000, Shift+Click ±£10,000, Ctrl+Click ±£100,000, Alt+Click ±£1,000,000; right-click on the plus adds £10,000,000. In both, right-click on the minus sets 0. |
 | Government buys | Points bought this week and the approximate treasury cost. "Capped at what the queue can use" appears when your setting is higher than the queue can take. |
 | Your budget buys | Fixed Budget only: how many points a week your budget buys at today's price, which is where the government purchase is heading. |
+| Still moving toward it | Fixed Budget only, and only while the purchase has not yet reached what your budget buys: the share of the remaining gap that closes this week. Its tooltip explains why the purchase moves in steps. |
 | Private investors buy | Points investors bought this week and the share of construction going to private projects. |
 | Price | What one construction point costs now: the market price, raised in rich countries by Construction Cost Scaling. |
 | Your market | Construction on sale (including imports) against construction wanted (every buyer, including maintenance and exports). A red "shortage" marks demand above supply. |
@@ -119,13 +120,17 @@ price.
 | Fixed Quantity (default) | Points the government buys each week | The treasury cost, at once | A set build rate, such as finishing a queue by a date or rebuilding after a war |
 | Fixed Budget | What the government spends each week | The points it buys, over a few weeks | A set cost: spending stays near your figure while the price moves |
 
-Under Fixed Budget, the purchase moves each week a quarter of the way toward what
-the budget buys at that week's price. A change goes about two-thirds of the way
-in a month and nine-tenths in two months. The delay is deliberate. The
-government's purchase moves the price, so a purchase that jumped straight to
-what the budget buys would push the price up, buy less the next week, let the
-price fall, and swing back and forth. Setting the budget to 0 stops government
-buying at once.
+Under Fixed Budget, the purchase moves each week toward what the budget buys at
+that week's price. A raise closes at most half of the remaining gap a week, so
+it gets most of the way in three or four weeks. A cut takes hold faster, often
+within a week or two. The delay on a raise is deliberate. The government's
+purchase moves the price, so a purchase that jumped straight to what the budget
+buys would push the price up, buy less the next week, let the price fall, and
+swing back and forth. How far the price moves depends on your purchase next to
+the market. A small purchase in a large market barely moves it, and a large one
+in a thin market, or one that lifts a very low price, takes longer. While the
+purchase is still moving, the panel shows how much of the gap closes that week.
+Setting the budget to 0 stops government buying at once.
 
 Switching keeps the purchase in force. Fixed Budget starts at what your current
 purchase costs, to the nearest £1,000, and Fixed Quantity starts at the number

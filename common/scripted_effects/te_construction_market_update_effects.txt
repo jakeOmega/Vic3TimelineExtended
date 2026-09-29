@@ -152,10 +152,11 @@ te_construction_market_update_price_stabilizer = {
 	# }
 }
 
-# Fixed Budget mode: move the quantity the budget buys a quarter of the way
-# toward budget / this week's price (te_construction_market_budget_quantity_next_value;
-# why only part of the way: te_construction_market_target_values.txt). Runs in
-# the weekly pulse after the price stabilizer and before the sites are sized.
+# Fixed Budget mode: move the quantity the budget buys 1 / N of the way toward
+# budget / this week's price (te_construction_market_budget_quantity_next_value;
+# why only part of the way, and how N follows the market:
+# te_construction_market_target_values.txt). Runs in the weekly pulse after the
+# price stabilizer and before the sites are sized.
 te_construction_market_update_budget_quantity = {
 	if = {
 		limit = {
@@ -206,10 +207,10 @@ te_construction_market_switch_to_quantity_mode = {
 
 
 # Fixed Budget +/- buttons: change the weekly budget by $AMOUNT$ (negative to
-# cut it). The quantity bought follows over the next weeks
-# (te_construction_market_update_budget_quantity), except that a budget of 0
-# stops government buying at once, as a quantity of 0 does: with nothing left
-# to buy, there is no price change to chase.
+# cut it). The quantity bought follows over the next weeks, a raise more slowly
+# than a cut (te_construction_market_update_budget_quantity), except that a
+# budget of 0 stops government buying at once, as a quantity of 0 does: with
+# nothing left to buy, there is no price change to chase.
 te_construction_market_change_budget = {
 	if = {
 		limit = {
