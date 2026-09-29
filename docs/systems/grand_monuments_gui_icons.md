@@ -11,9 +11,9 @@ The Monuments journal entry's overview and its monument rows draw five status ic
 | Status (code) | Where | Placeholder now | Final art should show (icon-pipeline subject) | Proposed path |
 |---|---|---|---|---|
 | Undedicated (1) | overview cell; row status | `gfx/interface/icons/generic_icons/undecided_icon.dds` | a plain stone monument on a plinth, bare, with an empty panel where a dedication would be carved | `gfx/interface/icons/gm_icons/status_undedicated.dds` |
-| Stands (2) | overview cell; row status | `gfx/interface/icons/generic_icons/green_checkmark.dds` | the same monument in bright stone with a gold laurel wreath hung on its face | `gfx/interface/icons/gm_icons/status_stands.dds` |
+| Upheld (2) | overview cell; row status | `gfx/interface/icons/generic_icons/green_checkmark.dds` | the same monument in bright stone with a gold laurel wreath hung on its face | `gfx/interface/icons/gm_icons/status_upheld.dds` |
 | Heritage (3) | overview cell; row status | `gfx/interface/icons/generic_icons/maybe_icon.dds` | the same monument, weathered and mossy, behind a low bronze railing | `gfx/interface/icons/gm_icons/status_heritage.dds` |
 | Contested (4) | overview cell; row status | `gfx/interface/icons/generic_icons/disapproval_icon.dds` | the same monument with a thick rope thrown around its top and a crack down its face | `gfx/interface/icons/gm_icons/status_contested.dds` |
 | Hard Times | its own line under the overview's cells, over the red phrase, only while it holds | `gfx/interface/icons/generic_icons/warning.dds` | an empty wooden alms bowl beside a stonemason's idle chisel and mallet | `gfx/interface/icons/gm_icons/hard_times.dds` |
 
-"Unsettled", the brief state between a change of government and the month's check, shares code 2 and so shows the Stands icon with its own word beneath.
+"Unsettled", the brief state between a change of government and the month's check, shares code 2 and so shows the Upheld icon with its own word beneath.
