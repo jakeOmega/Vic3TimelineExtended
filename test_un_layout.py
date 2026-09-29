@@ -227,5 +227,125 @@ class AuthorityTextTest(unittest.TestCase):
         start = effects.index("un_authority_ladder_block = {")
         self.assertNotIn("je_un_auth_charter_2", effects[start:effects.index("\n}\n", start)])
 
+
+CHAMBER_EFFECTS = os.path.join(REPO, "common", "scripted_effects", "un_chamber_display_effects.txt")
+CHAMBER_SGUIS = os.path.join(REPO, "common", "scripted_guis", "un_chamber_sguis.txt")
+NAMED_TARGETS = ("condemn", "sanctions", "expulsion", "mandate", "refugee")
+UNNAMED_CASES = ("peacekeepers", "aid", "decolonization")
+CONVENTIONS = ("human_rights", "icc", "npt", "climate", "pandemic", "refugee", "heritage",
+               "decolonization", "space", "law_of_sea", "physical_protection")
+
+
+def _block(text, name):
+    start = text.index(f"\n{name} = {{") + 1
+    return text[start:text.index("\n}\n", start) + 2]
+
+
+def _loc_or_none(key):
+    try:
+        return _loc(key)
+    except AssertionError:
+        return None
+
+
+def _tooltip_key(value):
+    m = re.search(r"#tooltippable;tooltip:(\w+) ", value)
+    return m and m.group(1)
+
+
+class ProposeTextTest(unittest.TestCase):
+    """Table a Resolution, shortened (owner, 2026-09-28): the type, the passage
+    rule and the target on a line each; the explanations on hover."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = _read(CHAMBER_EFFECTS)
+        cls.rows = "\n".join(_block(cls.effects, n) for n in
+                               re.findall(r"(?m)^(un_chamber_propose_\w+) = \{", cls.effects))
+
+    def assertScopeFreeTooltip(self, value, where):
+        key = _tooltip_key(value)
+        self.assertTrue(key, f"{where} is not hoverable: {value}")
+        body = _loc(key)
+        for token in ("THIS.", "SCOPE.", "ROOT", "#Y"):
+            self.assertNotIn(token, body, f"{key}: a static tooltip has no scope")
+        return body
+
+    def test_passage_rules_are_concepts(self):
+        concepts = _read(CONCEPTS)
+        for c in ("concept_un_passage_majority", "concept_un_passage_two_thirds"):
+            self.assertRegex(concepts, rf"(?m)^{c} = \{{\}}", c)
+            self.assertTrue(_loc(c) and _loc(f"{c}_desc"), c)
+        self.assertEqual(_loc("je_un_chamber_rule_majority"),
+                         "#bold Passage Rule:#! [concept_un_passage_majority]")
+        two_thirds = _loc("je_un_chamber_rule_supermajority")
+        self.assertTrue(two_thirds.startswith("#bold Passage Rule:#! [concept_un_passage_two_thirds]"))
+        self.assertIn("ScriptValue('un_vote_eligible_member_count')", two_thirds)
+
+    def test_type_lines_are_brief(self):
+        self.assertEqual(_loc("je_un_chamber_binding_not_vetoed"),
+                         "[concept_un_resolution_binding] — [Concept('concept_un_veto','Vetoable')]")
+        self.assertEqual(_loc("je_un_chamber_recommendatory"), "[concept_un_resolution_recommendatory]")
+        self.assertNotIn("je_un_chamber_binding_flat_block", self.effects)
+        self.assertIsNone(_loc_or_none("je_un_chamber_binding_flat_block"))
+
+    def test_a_named_target_reads_target_x_or_none(self):
+        for t in NAMED_TARGETS:
+            with self.subTest(topic=t):
+                self.assertTrue(_loc(f"je_un_chamber_propose_target_{t}").startswith("#bold Target:#! "))
+                none = _loc(f"je_un_chamber_propose_no_case_{t}")
+                self.assertTrue(none.startswith("#bold Target:#! #tooltippable;tooltip:"), none)
+                self.assertTrue(none.endswith(" None#!"), none)
+                self.assertScopeFreeTooltip(none, t)
+
+    def test_a_topic_without_a_target_says_no_case(self):
+        for t in UNNAMED_CASES:
+            with self.subTest(topic=t):
+                line = _loc(f"je_un_chamber_propose_no_case_{t}")
+                self.assertIn("No Case", line)
+                self.assertScopeFreeTooltip(line, t)
+        self.assertIn("Both reforms", _loc("je_un_chamber_propose_no_case_reform"))
+
+    def test_the_button_carries_the_gate_the_row_does_not(self):
+        for key in ("je_un_chamber_propose_ready", "je_un_chamber_propose_blocked_gates",
+                    "je_un_chamber_propose_reform_clock"):
+            self.assertNotIn(key, self.effects, key)
+            self.assertIsNone(_loc_or_none(key), key)
+        self.assertNotIn("POSSIBLE", self.rows)
+        self.assertIn("je_un_auth_reform_clock", _block(self.effects, "un_chamber_propose_reform_row"))
+
+    def test_a_held_floor_is_said_once_above_the_rows(self):
+        self.assertNotIn("je_un_chamber_propose_blocked_", self.rows)
+        intro = _block(_read(CHAMBER_SGUIS), "un_chamber_propose_intro_sgui")
+        for key in ("je_un_chamber_propose_blocked_reserved", "je_un_chamber_propose_blocked_in_session"):
+            self.assertIn(key, intro)
+
+    def test_in_force_and_cooldown_are_one_hoverable_word(self):
+        for key, word in (("je_un_chamber_topic_in_force", "In Force"),
+                          ("je_un_chamber_propose_topic_cooldown", "On Cooldown")):
+            with self.subTest(key=key):
+                line = _loc(key)
+                self.assertIn(word, line)
+                self.assertScopeFreeTooltip(line, key)
+
+    def test_conventions_and_reforms_explain_on_hover(self):
+        self.assertNotIn("je_un_chamber_raised_", self.rows)
+        for t in CONVENTIONS:
+            with self.subTest(topic=t):
+                body = self.assertScopeFreeTooltip(_loc(f"je_un_chamber_propose_topic_{t}"), t)
+                raised = re.findall(r"\$(je_un_chamber_raised_\w+)\$", body)
+                self.assertEqual(len(raised), 1, body)
+                self.assertFalse(_loc(raised[0]).startswith(" "), raised[0])
+        for stage in ("1", "2"):
+            self.assertScopeFreeTooltip(_loc(f"je_un_chamber_propose_topic_reform_{stage}"), stage)
+
+    def test_no_row_line_is_indented(self):
+        keys = set(re.findall(r"custom_tooltip_no_bullet = (je_\w+)", self.rows))
+        keys |= set(re.findall(r"= (je_un_chamber_\w+)", self.rows))
+        self.assertTrue(keys)
+        for key in sorted(keys):
+            with self.subTest(key=key):
+                self.assertFalse(_loc(key).startswith(" "), key)
+
 if __name__ == "__main__":
     unittest.main()

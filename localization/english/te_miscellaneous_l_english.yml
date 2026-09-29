@@ -1800,6 +1800,8 @@
  concept_tourism_base_appeal:0 "Base Appeal"
  concept_un_authority_cap:0 "Authority Cap"
  concept_un_general_assembly:0 "General Assembly"
+ concept_un_passage_majority:0 "Majority"
+ concept_un_passage_two_thirds:0 "Two-Thirds"
  concept_un_permanent_member:0 "Permanent Member"
  concept_un_resolution_binding:0 "Binding Resolution"
  concept_un_resolution_recommendatory:0 "Recommendatory Resolution"

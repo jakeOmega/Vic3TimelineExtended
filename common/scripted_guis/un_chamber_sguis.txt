@@ -1578,6 +1578,19 @@ un_chamber_propose_intro_sgui = {
 		if = {
 			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 			custom_tooltip_no_bullet = je_un_chamber_propose_intro
+			# A held floor greys every row's button; it is said here, once,
+			# rather than on each of the eighteen rows.
+			if = {
+				limit = {
+					has_global_variable = un_vote_active
+					has_global_variable = un_vote_reservation
+				}
+				custom_tooltip_no_bullet = je_un_chamber_propose_blocked_reserved
+			}
+			else_if = {
+				limit = { has_global_variable = un_vote_active }
+				custom_tooltip_no_bullet = je_un_chamber_propose_blocked_in_session
+			}
 			# The recess (redesign phase 3): the floor is ours for a while.
 			if = {
 				limit = { has_global_variable = un_recess_months }

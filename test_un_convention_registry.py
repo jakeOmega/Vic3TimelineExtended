@@ -256,6 +256,20 @@ def _event_trigger(event_body):
     return _body_at(event_body, m.start(1))
 
 
+def _loc_values():
+    """Every live loc key with its text (te_unused left out, as in _loc)."""
+    values = {}
+    for name in sorted(os.listdir(LOC_DIR)):
+        if not name.endswith(".yml") or name.startswith("te_unused"):
+            continue
+        with open(os.path.join(LOC_DIR, name), encoding="utf-8-sig") as f:
+            for line in f:
+                m = re.match(r'^ ([A-Za-z0-9_.\-]+):\d* "(.*)"\s*$', line)
+                if m:
+                    values[m.group(1)] = m.group(2)
+    return values
+
+
 def _loc():
     """Every live loc key. te_unused is organize_loc's output for keys nothing
     references, so a key found only there counts as missing."""
@@ -573,17 +587,24 @@ class ChamberTests(unittest.TestCase):
 
     def test_row_renderer_is_the_conventions_own(self):
         loc = _loc()
+        values = _loc_values()
         others = set(KEYS)
         for c in CONVENTIONS:
             with self.subTest(key=c.key):
                 body = _flat(_block(self.display, f"un_chamber_propose_{c.key}_row"))
                 self.assertIn(f"je_un_chamber_propose_topic_{c.key}", body)
-                for part in ("in_force", "available", "possible"):
+                # The row reads no _possible: the Propose button's greyed state
+                # and tooltip say whether the gates are met (owner, 2026-09-28).
+                for part in ("in_force", "available"):
                     self.assertIn(f"un_propose_{c.key}_{part}", body)
                 named = set(re.findall(r"\bun_propose_(\w+?)_(?:in_force|available|possible)\b", body))
                 self.assertEqual(named & others, {c.key})
                 self.assertIn(f"TOPIC = {c.key} ", body + " ")
-                raised = re.findall(r"\bje_un_chamber_raised_(\w+)", body)
+                # When the docket raises it is said on hover over the title.
+                title = values[f"je_un_chamber_propose_topic_{c.key}"]
+                tip = re.search(r"#tooltippable;tooltip:(\w+) ", title)
+                self.assertTrue(tip, title)
+                raised = re.findall(r"\$je_un_chamber_raised_(\w+)\$", values.get(tip.group(1), ""))
                 self.assertEqual(len(raised), 1, raised)
                 self.assertIn(f"je_un_chamber_raised_{raised[0]}", loc)
                 if raised[0] == "agenda":
