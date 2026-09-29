@@ -2648,6 +2648,7 @@
  un_trade_deal_bilateral_modifier_desc:0 "A bilateral trade agreement has improved trade competitiveness and diplomatic standing."
  un_undermine_order_cost_desc:0 "Actively undermining the United Nations international order. Ongoing cost to authority and influence generation."
  un_unilateral_tariffs_modifier_desc:0 "This country has imposed unilateral tariffs in defiance of international arbitration, boosting domestic industry at the cost of diplomatic reputation."
+ un_unlock_tt:0 "You have researched $intergovernmental_organizations$, or the $je_united_nations$ has been founded"
  un_veto_abolition_modifier_desc:0 "This country has proposed abolishing the Security Council [concept_un_veto], pushing for democratic reform of the United Nations."
  un_veto_crisis_modifier_desc:0 "This country publicly denounced a [concept_great_power]'s [concept_un_veto] at the Security Council, gaining diplomatic standing at the cost of institutional authority."
  un_vote_failure_penalty_desc:0 "Failed to pass a UN resolution. Our diplomatic standing has suffered."

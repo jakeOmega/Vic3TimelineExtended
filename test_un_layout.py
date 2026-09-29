@@ -540,5 +540,45 @@ class DebugLogHygieneTest(unittest.TestCase):
         self.assertIn('tooltip = "TAB_6"', _read(TAB_WIDGETS))
         self.assertEqual(_loc("TAB_6"), "#header Tab 6#!")
 
+
+UNLOCK_TRIGGERS = {   # the tab gates' is_valid (te_system_tab_sguis.txt), and the file each lives in
+    "te_banking_entry_unlocked": "banking_policy_triggers.txt",
+    "ch_entry_unlocked": "cultural_hegemony_triggers.txt",
+    "un_entry_unlocked": "un_membership_triggers.txt",
+}
+
+
+class TabUnlockTooltipTest(unittest.TestCase):
+    """A greyed tab's tooltip lists its unlock conditions. An OR printed
+    bare there shows as an empty "All of these:" (owner, 2026-09-29, the UN
+    tab), so any OR sits inside a custom_tooltip that says it in one line."""
+
+    def _body(self, name):
+        text = _read(os.path.join(REPO, "common", "scripted_triggers", UNLOCK_TRIGGERS[name]))
+        return _block(text, name)
+
+    def test_no_bare_or(self):
+        for name in UNLOCK_TRIGGERS:
+            with self.subTest(trigger=name):
+                body = self._body(name)
+                stack = []   # the kind of each open block
+                for m in re.finditer(r"custom_tooltip = \{|\bOR = \{|\{|\}", body):
+                    tok = m.group(0)
+                    if tok == "}":
+                        stack.pop()
+                        continue
+                    kind = "tooltip" if tok.startswith("custom_tooltip") else "or" if tok.startswith("OR") else "block"
+                    if kind == "or":
+                        self.assertIn("tooltip", stack, f"{name}: an OR outside a custom_tooltip")
+                    stack.append(kind)
+
+    def test_the_un_line_names_both_ways_in(self):
+        body = self._body("un_entry_unlocked")
+        m = re.search(r"custom_tooltip = \{\s*text = (\w+)", body)
+        self.assertTrue(m, body)
+        line = _loc(m.group(1))
+        self.assertIn("$intergovernmental_organizations$", line)
+        self.assertIn("$je_united_nations$", line)
+
 if __name__ == "__main__":
     unittest.main()

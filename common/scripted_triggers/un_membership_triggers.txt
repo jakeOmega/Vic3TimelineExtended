@@ -16,14 +16,16 @@
 # activates: the entry's `possible`, and with the rule its
 # is_shown_when_inactive. Either the country has the founding technology or
 # the UN already exists. Also the checklist in the Diplomacy panel's greyed UN
-# tab (te_diplomacy_un_tab_unlock_sgui's is_valid), which is why the global
-# test carries its own tooltip line.
+# tab (te_diplomacy_un_tab_unlock_sgui's is_valid), which is why the whole
+# test is one tooltip line.
 # Scope: country
 un_entry_unlocked = {
-	OR = {
-		has_technology_researched = intergovernmental_organizations
-		custom_tooltip = {
-			text = un_unlock_founded_tt
+	# One line: a bare OR prints as an empty "All of these:" in the UN tab's
+	# locked tooltip (IsValidTooltip; owner, 2026-09-29).
+	custom_tooltip = {
+		text = un_unlock_tt
+		OR = {
+			has_technology_researched = intergovernmental_organizations
 			has_global_variable = un_founded
 		}
 	}
