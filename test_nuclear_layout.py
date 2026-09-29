@@ -98,8 +98,26 @@ class OrderTest(unittest.TestCase):
             m = re.search(rf'^flowcontainer = \{{\n\tname = "{name}"\n(.*?)^\}}', layout, re.S | re.M)
             self.assertTrue(m, name)
             body = m.group(1)
-            self.assertIn('\tvisible = "[JournalEntry.IsActive]"', body, name)
-            self.assertEqual(re.findall(r"^\t(\w+) = \{", body, re.M), [wrapped], name)
+            visible = re.findall(r'^\tvisible = "\[(.*)\]"$', body, re.M)
+            self.assertEqual(len(visible), 1, name)
+            self.assertTrue(visible[0] == "JournalEntry.IsActive"
+                            or visible[0].startswith("And( JournalEntry.IsActive, "), name)
+            self.assertEqual(re.findall(r"^\t(\w+) = \{\}?$", body, re.M), [wrapped], name)
+
+    def test_roots_are_a_section_wide(self):
+        """A wrapper sized by its one child was centred by the width it had at its
+        first layout; the programme drew half off the column (play-test 2026-09-29)."""
+        layout = _read(LAYOUT)
+        for name, _, _ in ROOTS:
+            body = re.search(rf'^flowcontainer = \{{\n\tname = "{name}"\n(.*?)^\}}', layout, re.S | re.M).group(1)
+            self.assertIn("\tdirection = vertical\n", body, name)
+            self.assertIn("\tminimumsize = { 520 -1 }\n", body, name)
+
+    def test_the_programme_root_carries_its_gate(self):
+        """As on main: the root is laid out only once the section has something in it."""
+        layout = _read(LAYOUT)
+        body = re.search(r'^flowcontainer = \{\n\tname = "widget_je_nuclear_programme"\n(.*?)^\}', layout, re.S | re.M).group(1)
+        self.assertIn(_sgui("nuclear_program_has_programme_sgui"), body)
 
 
 class GateTest(unittest.TestCase):
@@ -284,6 +302,24 @@ class OverviewTest(unittest.TestCase):
         self.assertIn("ScriptValue('nd_display_survivability')", row)
         cap = row.index("ScriptValue('nd_display_survivability_cap')")
         self.assertLess(cap, row.index("progressbar_marker.dds"))
+
+    def test_every_row_fits_the_column(self):
+        """The overview is a section's width: a fixed 480 column in a frame with
+        20 px margins, and no row wider than the column (play-test 2026-09-29)."""
+        frame = _type_body(self.ov, "te_nuclear_ov_frame")
+        self.assertIn("margin = { 20 8 }", frame)
+        panel = _type_body(self.ov, "te_nuclear_overview_panel")
+        self.assertIn("minimumsize = { 480 -1 }", panel)
+
+        def width(type_name):
+            return int(re.search(r"\n\t\tsize = \{ (\d+) \d+ \}", _type_body(self.ov, type_name)).group(1))
+        self.assertLessEqual(4 * width("te_nuclear_ov_icon_label") + 3 * 6, 480)
+        self.assertLessEqual(3 * width("te_nuclear_ov_posture_cell") + 2 * 6, 480)
+        row3 = panel[panel.index("Row 3"):]
+        cells = [int(w) for w in re.findall(r"maximumsize = \{ (\d+) -1 \}", row3)]
+        bar = int(re.search(r"default_progressbar_horizontal = \{\s*size = \{ (\d+) \d+ \}", row3).group(1))
+        self.assertEqual(len(cells), 2)
+        self.assertLessEqual(sum(cells) + bar + 24 + 3 * 8, 480)
 
     def test_cells_have_a_fixed_width(self):
         for t in ("te_nuclear_ov_icon_label", "te_nuclear_ov_posture_cell"):
