@@ -513,14 +513,3 @@ un_authority_log_topic_case = {
 	}
 }
 
-# How the model works, in plain language. Static text. Scope: country
-un_authority_help_block = {
-	custom_tooltip_no_bullet = je_un_auth_help_1
-	custom_tooltip_no_bullet = je_un_auth_help_2
-	custom_tooltip_no_bullet = je_un_auth_help_3
-	custom_tooltip_no_bullet = je_un_auth_help_4
-	custom_tooltip_no_bullet = je_un_auth_help_5
-	custom_tooltip_no_bullet = je_un_auth_help_6
-	custom_tooltip_no_bullet = je_un_auth_help_7
-	custom_tooltip_no_bullet = je_un_auth_help_8
-}

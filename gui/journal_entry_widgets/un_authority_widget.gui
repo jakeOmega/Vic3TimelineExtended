@@ -683,9 +683,31 @@ types un_authority_widget_types
 	type te_un_help_authority = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
+		spacing = 4
 
-		un_auth_text = {
-			text = "[GetScriptedGui('un_authority_help_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		un_chamber_note = {
+			text = "je_un_auth_help_1"
+		}
+		un_chamber_note = {
+			text = "je_un_auth_help_2"
+		}
+		un_chamber_note = {
+			text = "je_un_auth_help_3"
+		}
+		un_chamber_note = {
+			text = "je_un_auth_help_4"
+		}
+		un_chamber_note = {
+			text = "je_un_auth_help_5"
+		}
+		un_chamber_note = {
+			text = "je_un_auth_help_6"
+		}
+		un_chamber_note = {
+			text = "je_un_auth_help_7"
+		}
+		un_chamber_note = {
+			text = "je_un_auth_help_8"
 		}
 	}
 

@@ -1981,9 +1981,19 @@ types un_chamber_widget_types
 	type te_un_help_standing = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
+		spacing = 4
 
-		un_chamber_text = {
-			text = "[GetScriptedGui('un_chamber_standing_help_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		un_chamber_note = {
+			text = "je_un_standing_help_intro"
+		}
+		un_chamber_note = {
+			text = "je_un_standing_help_sources"
+		}
+		un_chamber_note = {
+			text = "je_un_standing_help_losses"
+		}
+		un_chamber_note = {
+			text = "je_un_standing_help_limits"
 		}
 	}
 

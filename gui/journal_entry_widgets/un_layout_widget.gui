@@ -302,9 +302,6 @@ types un_layout_widget_types
 					text = "je_un_how_sub_authority"
 				}
 			}
-			un_chamber_note = {
-				text = "je_un_auth_tbl_explain"
-			}
 			te_un_help_authority = {}
 			un_chamber_subheader = {
 				blockoverride "subheader_text" {

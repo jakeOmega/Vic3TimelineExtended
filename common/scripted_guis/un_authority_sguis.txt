@@ -122,11 +122,3 @@ un_authority_log_sgui = {
 	}
 }
 
-# How the model works. Static.
-un_authority_help_sgui = {
-	scope = country
-
-	effect = {
-		un_authority_help_block = yes
-	}
-}

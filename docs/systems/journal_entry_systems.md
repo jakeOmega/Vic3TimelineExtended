@@ -1107,7 +1107,7 @@ It was deliberately **not** added to `un_mandate_actor_in_good_standing`. That t
 
 The chamber widget's status panel (`un_chamber_status_sgui`, `common/scripted_guis/un_chamber_sguis.txt:45`) gained `un_standing_status_block`: the tier and the score, why benefits are suspended if they are, what the current tier is doing (quoted from the static modifier's own `$name$` and `$name_desc$` loc, so the line cannot drift from `extra_modifiers.txt`), this rolling year's programme accrual against the cap, and the most recent reason for a change. A member whose first pulse has not run yet reads as "not yet recorded" rather than printing a missing variable; a non-member gets one line saying standing is a record of membership.
 
-A new collapsed-by-default section, "How International Standing Works" (`un_chamber_standing_help_sgui`, toggle key `un_chamber_standing`), carries the sources, the losses and the limits in plain language. Split into its own SGUI for the same reason the archive is: `ExecuteTooltip` re-renders every frame the panel is visible.
+A new collapsed-by-default section, "How International Standing Works" (`un_chamber_standing_help_sgui`, toggle key `un_chamber_standing`), carries the sources, the losses and the limits in plain language. Split into its own SGUI for the same reason the archive is: `ExecuteTooltip` re-renders every frame the panel is visible. (Since 2026-09-28 it is static note text under "How the UN Works", with no SGUI.)
 
 Every line is `custom_tooltip` text built in script, in the same read-only file as the rest of the chamber's display effects, and no country other than the scoped one is referenced anywhere in it — so there is nothing an annexation can break.
 

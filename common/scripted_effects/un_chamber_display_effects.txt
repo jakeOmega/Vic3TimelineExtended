@@ -969,17 +969,6 @@ un_standing_status_block = {
 	}
 }
 
-# "How standing works", behind its own collapsed toggle in the widget. Plain
-# language, and deliberately the ONE place the tuning figures are restated in
-# words — see the header of common/script_values/un_standing_values.txt.
-# Scope: country
-un_standing_help_block = {
-	custom_tooltip_no_bullet = je_un_standing_help_intro
-	custom_tooltip_no_bullet = je_un_standing_help_sources
-	custom_tooltip_no_bullet = je_un_standing_help_losses
-	custom_tooltip_no_bullet = je_un_standing_help_limits
-}
-
 # The case the propose button would table if pressed right now. Calls the very
 # effect the button calls (un_mandate_select_case), so the preview cannot drift
 # from the proposal: both leave the same two temporary scopes and neither

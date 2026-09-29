@@ -121,7 +121,7 @@ class TabStatusTest(unittest.TestCase):
 
 CHAMBER = os.path.join(W, "un_chamber_widget.gui")
 # Explanations that live in "How the UN works", and the live sections they left.
-HOW_KEYS = ["je_un_auth_tbl_explain", "je_un_chamber_missions_intro", "je_un_chamber_missions_help",
+HOW_KEYS = ["je_un_chamber_missions_intro", "je_un_chamber_missions_help",
             "je_un_chamber_deleg_intro", "je_un_chamber_obligations_help", "je_un_chamber_exposure_help"]
 LIVE_SECTIONS = [(AUTHORITY, "te_un_sec_why"), (CHAMBER, "te_un_sec_missions"),
                  (CHAMBER, "te_un_sec_delegations"), (CHAMBER, "te_un_sec_obligations"),
@@ -475,6 +475,34 @@ class RecordTest(unittest.TestCase):
         self.assertNotIn("un_chamber_exposure_sgui", self.gui)
         self.assertNotIn("un_chamber_exposure_sgui", _read(CHAMBER_SGUIS))
         self.assertNotIn("un_chamber_exposure_block", _read(CHAMBER_EFFECTS))
+
+
+class HowStyleTest(unittest.TestCase):
+    """How the UN Works in one style: the smaller #lore notes under ruled
+    subheadings (owner, 2026-09-28)."""
+
+    def test_every_text_is_a_note(self):
+        how = _type_body(_read(LAYOUT), "te_un_sec_how")
+        helps = _type_body(_read(AUTHORITY), "te_un_help_authority") + _type_body(_read(CHAMBER), "te_un_help_standing")
+        for body in (how, helps):
+            self.assertNotIn("ExecuteTooltip", body)
+            self.assertNotRegex(body, r"\b(un_chamber_text|un_auth_text) = \{")
+        for n in range(1, 9):
+            self.assertIn(f'"je_un_auth_help_{n}"', helps)
+        for part in ("intro", "sources", "losses", "limits"):
+            self.assertIn(f'"je_un_standing_help_{part}"', helps)
+
+    def test_the_text_builders_are_gone(self):
+        for path, name in ((os.path.join(REPO, "common", "scripted_guis", "un_authority_sguis.txt"), "un_authority_help_sgui"),
+                           (CHAMBER_SGUIS, "un_chamber_standing_help_sgui"),
+                           (DISPLAY_EFFECTS, "un_authority_help_block"),
+                           (CHAMBER_EFFECTS, "un_standing_help_block")):
+            self.assertNotIn(f"\n{name} = {{", _read(path), name)
+
+    def test_one_authority_explanation(self):
+        self.assertIsNone(_loc_or_none("je_un_auth_tbl_explain"))
+        self.assertIn("48th", _loc("je_un_auth_help_1"))
+        self.assertIn("Hover a pillar", _loc("je_un_auth_help_3"))
 
 if __name__ == "__main__":
     unittest.main()

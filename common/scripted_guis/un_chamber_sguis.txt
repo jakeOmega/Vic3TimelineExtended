@@ -176,18 +176,6 @@ un_chamber_council_sgui = {
 	}
 }
 
-# "How standing works" — the sources, the losses and the limits in plain
-# language. Split into its own SGUI behind its own collapsed-by-default toggle
-# for the same reason the archive is: ExecuteTooltip re-renders every frame the
-# panel is visible, and this text never changes.
-un_chamber_standing_help_sgui = {
-	scope = country
-
-	effect = {
-		un_standing_help_block = yes
-	}
-}
-
 # The resolution currently before the General Assembly, or the empty state.
 un_chamber_active_sgui = {
 	scope = country
