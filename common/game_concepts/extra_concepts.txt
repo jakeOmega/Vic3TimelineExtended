@@ -29,6 +29,10 @@ concept_nuclear_stockpile = {}
 concept_space_race = {}
 concept_space_milestone = {}
 concept_solar_colonization = {}
+# Space Race panel terms (gui/journal_entry_widgets/space_race_widget.gui)
+concept_sr_approach = {}
+concept_sr_funding = {}
+concept_sr_setback_risk = {}
 concept_decolonization_system = {}
 concept_colonial_stability = {}
 concept_united_nations_system = {}

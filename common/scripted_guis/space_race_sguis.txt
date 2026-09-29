@@ -434,9 +434,9 @@ sr_milestone_solar_colonization_sgui = {
 }
 
 # ----------------------------------------------------------------------------
-# Who else is racing. Display only — the widget calls ExecuteTooltip, which
-# renders the effect body without running it, and is_valid is always = no so no
-# control can ever fire it.
+# Who else is racing (the Rivals section). Display only — the widget calls
+# ExecuteTooltip, which renders the effect body without running it, and
+# is_valid is always = no so no control can ever fire it.
 #
 #   scope:op   0 suborbital · 1 orbital · 2 moon_landing · 3 probe
 #              4 moon_base  · 5 mars_landing · 6 interstellar_probe
@@ -446,8 +446,12 @@ sr_milestone_solar_colonization_sgui = {
 # gotchas #11 and #15), so the list is built here and handed over as text. Each
 # entry prints inside a country scope change, which is what gives it a flag and
 # a bullet for free (gotcha #19). Note gotcha #18: every line printed at ROOT
-# scope — the two "first" lines and the intro — renders ABOVE the country
-# entries whatever order the script is in.
+# scope — the intro — renders ABOVE the country entries whatever order the
+# script is in.
+#
+# Whether "the first" is still open is the overview's (sr_disp_first_claimed_<m>
+# in common/script_values/space_race_display_values.txt), so this prints the
+# participants only, for every milestone.
 # ----------------------------------------------------------------------------
 sr_rivals_sgui = {
 	scope = country
@@ -464,36 +468,33 @@ sr_rivals_sgui = {
 	effect = {
 		if = {
 			limit = { scope:op = 0 }
-			sr_rivals_line_base = { MILESTONE = suborbital }
+			sr_rivals_participants_base = { MILESTONE = suborbital }
 		}
 		else_if = {
 			limit = { scope:op = 1 }
-			sr_rivals_line_base = { MILESTONE = orbital }
+			sr_rivals_participants_base = { MILESTONE = orbital }
 		}
 		else_if = {
 			limit = { scope:op = 2 }
-			sr_rivals_line_base = { MILESTONE = moon_landing }
+			sr_rivals_participants_base = { MILESTONE = moon_landing }
 		}
 		else_if = {
 			limit = { scope:op = 3 }
-			sr_rivals_line_base = { MILESTONE = probe }
+			sr_rivals_participants_base = { MILESTONE = probe }
 		}
 		else_if = {
 			limit = { scope:op = 4 }
-			sr_rivals_line_base = { MILESTONE = moon_base }
+			sr_rivals_participants_base = { MILESTONE = moon_base }
 		}
 		else_if = {
 			limit = { scope:op = 5 }
-			sr_rivals_line_base = { MILESTONE = mars_landing }
+			sr_rivals_participants_base = { MILESTONE = mars_landing }
 		}
 		else_if = {
 			limit = { scope:op = 6 }
-			sr_rivals_line_base = { MILESTONE = interstellar_probe }
+			sr_rivals_participants_base = { MILESTONE = interstellar_probe }
 		}
 		else = {
-			# Solar colonization only gets the participation list: there is no
-			# "first" to claim on it (no sr_first_solar_colonization modifier and
-			# no sr_global_first_ flag is ever written for it).
 			sr_rivals_participants_base = { MILESTONE = solar_colonization }
 		}
 	}
