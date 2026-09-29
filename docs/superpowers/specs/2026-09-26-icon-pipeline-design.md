@@ -246,7 +246,7 @@ After #561 the owner asked for the institutions' `background_texture` strips too
 
 Each pick keeps its lettering at an edge the panel crops or fades.
 
-**Format.** The strips are block-compressed, BC7_UNORM_SRGB, through texconv (`convert_event_image.convert_image`, as event pictures are): 1.03 MB with 12 mips, against 4.1 MB for vanilla's uncompressed ones. The round trip averages 0.28/255 of error. A category opts in with `dds_format`, and `root` puts it outside `gfx/interface/icons/`. `texconv.exe` is gitignored: copy it from a checkout that has one or let `ensure_texconv()` download it.
+**Format.** The strips are block-compressed, BC7_UNORM_SRGB, through texconv (`convert_event_image.convert_image`, as event pictures are): 1.03 MB with 12 mips, against 4.1 MB for vanilla's uncompressed ones. The round trip averages 0.28/255 of error. The sRGB type is carried over from event pictures; vanilla's strips are untyped BGRA. If the panel samples them brighter or darker than the sheet shows, try `BC7_UNORM` without `-srgb`. A category opts in with `dds_format`, and `root` puts it outside `gfx/interface/icons/`. `texconv.exe` is gitignored: copy it from a checkout that has one or let `ensure_texconv()` download it.
 
 **Runtime.** Renders take 27–38 s. One stalled for 10 minutes on a single CPU core with the transformer in RAM and nothing on the GPU; a rerun took 34 s. If a render takes minutes, kill it and rerun.
 
