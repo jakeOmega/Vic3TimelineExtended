@@ -20,6 +20,12 @@ neighbouring slices, including the wrap-around, clears CVD dE 8 and
 normal-vision dE 15. "Other" is grey on purpose. Fifteen categories are too
 many for colour alone, so the legend's names and percentages carry identity.
 
+The UN overview's member-share pies use a pair of their own in the same
+format (`UN_PIES`, written to gfx/interface/icons/un_icons/): members in UN
+blue over the rest in a muted grey. Validated the same way against the dark
+panel: dE 16.8 normal and 16.9 protan; the grey fails only the chroma floor,
+as intended for the part that is not the subject.
+
 Run standalone (numpy only; no Pillow needed):
     .venv/bin/python scripts/image_pipeline/gen_ch_model_pie_textures.py
 """
@@ -36,6 +42,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from path_constants import mod_path  # noqa: E402
 
 OUTPUT_DIR = Path(mod_path) / "gfx" / "interface" / "journal_entry_widgets" / "ch_model_pie"
+UN_OUTPUT_DIR = Path(mod_path) / "gfx" / "interface" / "icons" / "un_icons"
 FRAME = 128  # pixels per frame side; the texture is 2 * FRAME wide
 
 # Clockwise slice order, starting at 12 o'clock.
@@ -55,6 +62,12 @@ MODELS: tuple[tuple[str, str], ...] = (
     ("reactionary", "#2460a8"),
     ("developmentalist_junta", "#4ea253"),
     ("fascist", "#8e4c2c"),
+)
+
+# The UN overview's pie: the fill (members' share) and the disc under it.
+UN_PIES: tuple[tuple[str, str], ...] = (
+    ("pie_members", "#5b92e5"),
+    ("pie_rest", "#8c8474"),
 )
 
 
@@ -98,8 +111,9 @@ def write_dds(img: np.ndarray, path: Path) -> None:
 
 
 def main() -> int:
-    for model, colour in MODELS:
-        out = OUTPUT_DIR / f"ch_pie_{model}.dds"
+    jobs = [(OUTPUT_DIR / f"ch_pie_{model}.dds", colour) for model, colour in MODELS]
+    jobs += [(UN_OUTPUT_DIR / f"{key}.dds", colour) for key, colour in UN_PIES]
+    for out, colour in jobs:
         write_dds(render(colour), out)
         print(f"wrote {out.relative_to(mod_path)}")
     return 0

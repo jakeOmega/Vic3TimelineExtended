@@ -96,6 +96,8 @@ Each row: current placeholder | three vanilla neighbours ‖ two generated candi
 ## Runtime (RTX 3080 10 GB, 39 GB RAM, WSL2)
 
 - **Offload:** `enable_model_cpu_offload` runs out of memory, because the transformer is 24 GB in bf16. `enable_sequential_cpu_offload` works: ~30 s per 1024² image once warm, 2–4 min for the first.
+- **Other CPU work slows it down:** sequential offload streams the 24 GB transformer through the CPU on every step, so FLUX needs the CPU and memory bandwidth as much as the GPU. On 2026-09-28 another session's heavy CPU job pushed a render to ~300 s per step (normal is 8–16). Its main thread sat at 100%, the GPU at 1%, with no page faults and no disk reads. Restarted once that job had eased, it ran at 55 s per image. If the warm `s/it` figures are far above 20, look for a competing job before anything else. `py-spy` can't attach to a running process here (`ptrace_scope` is 1), but `py-spy record -- <command>` can profile one it starts.
+- **Queueing a second render:** a `while pgrep -f "<pattern>"` wait inside `bash -c` matches its own command line and never ends. Chain the renders with `&&` in one command instead.
 - **Embedding:** ~5 min per process (T5 reload) from the first copy; 15 s on 2026-09-27 with the weights in `~/models/FLUX.1-schnell` and still in the page cache from the copy. Peak RSS 6.4 GB.
 - **Full run:** 683 icons × 2 seeds ≈ 11 h GPU, more than a night. Render one seed first (~5.7 h), then second seeds for the rejects only.
 - **NF4:** `bitsandbytes` is installed in `.venv-img` but a 4-bit transformer is **untested**. If it fits in VRAM it would avoid the offload streaming.
@@ -273,6 +275,32 @@ After the institution strips the owner asked for the journal entries' icons. 26 
 - **Meaning at a glance.** A thermometer standing in an ice block reads as cold (global warming s1); the separate cube (s0) reads as melting. A pith helmet drawn hollow side up reads as an empty hood (colonial s1).
 
 **Still open.** The owner's review of the picks and the backdrop. The in-game check: whether the gold ring of the round frame shows around the Space Race discs as the preview says, and the 40 px list. The Strategic Reserve player-guide screenshot (`docs/player_guide/images/strategic_reserve.png`) shows the old building icon in its header and needs retaking in game; no other guide screenshot includes a journal icon.
+
+## UN GUI icons (2026-09-28)
+
+The UN GUI pass (#567, `docs/systems/un_gui_placeholder_icons.md`) draws 43 new icons with vanilla placeholders: membership states, authority tiers, the crisis alert and the Security Council's vacant seat in the overview, the eleven agencies, and the eighteen resolution topics in the session strip. Plus the pie pair. None belongs to a game entity; each is a `texture =` line in a `.gui` file.
+
+**GUI-hosted categories.** A category with `gui` in its spec has no `entity_dir`. Each entry names the placeholder it replaces (`now`, shown as "current" on the sheet), its key is the file name the doc proposes, and its DDS goes to `un_icons/`, a folder vanilla lacks. So `grade_folder` and `neighbours` point at `alert_icons`, the nearest painted folder. `check()` never calls such a key unknown, and `wire` prints a reminder instead of editing: the `.gui` is edited by hand on the GUI branch.
+
+**Legibility decides the layout.** These show at 32–40 px. At 32 px vanilla's own painted alert icons are blobs, and only the flat marks (check, cross, plus, the warning "!") still read. The owner's rule for the set: lean strongly toward simple, easy-to-recognize options. So:
+- **Membership, the crisis alert and the vacant seat are derived icons.** They are one FLUX emblem (a gold laurel wreath around a blue globe), picked once, under marks. Colour means the membership's benefits apply, and grey means they do not; the mark names the state. Member: a green check. Permanent member: the check plus a drawn gold star. Can join: grey with a green plus. Cannot join: grey with a red cross. Suspended with the seat carried by the overlord: colour with a pause mark. Suspended: grey with a pause mark. No UN: faint grey with no mark. Crisis: colour with vanilla's warning. The vacant seat is UN-blue cloth with the emblem as a pale watermark, 3:2 like a flag.
+- **Vanilla's `paused.dds` is gold bars with no ground.** On a gold emblem at 32 px it read as ingots, so the pause mark is drawn: amber bars on a small dark badge. Every mark gets a dark outline so it reads over the icon and the panel.
+- **The agencies and the topics that are no agency's share one drawn disc** (`draw_disc`): UN-blue enamel under a gold rim, the same under every symbol, where a FLUX backdrop would vary. It is a `backed` category whose `backdrop` is `drawn` (colours) rather than rendered. Symbols are warm or light for contrast with the blue.
+- **A convention topic is its agency's icon under a scroll badge** (a `part`). Ten topics cost one render. The doc's extras for two of them (a broken missile under the atom, a thermometer by the leaf) were dropped, since FLUX will not break things and a second object is noise at 40 px.
+- **Condemnation and expulsion carry a vanilla mark too.** A sword with the red cross; the permanent member's gold star with vanilla's red down arrow.
+- **Tiers stay plain cut-outs.** A broken stump, two columns, three under a lintel, a silver portico, a gold temple front: the silhouette and the metal carry the climb. `grade_strength=0.4` keeps the silver from turning copper.
+
+**Derived entries** (`"from": "<cat>/<key>"`) have no render of their own. The base is the source's composed icon, then an optional `tint` (`grey`, `faint`), then an optional `layout` (`flag` with a `size`), then `marks`. A mark is `{"icon": <vanilla .dds>}`, `{"part": "<cat>/<key>"}` or `{"draw": "star"|"pause"}`, with `at` (its centre, as shares of the side) and `scale`. The sheet shows one candidate per candidate of the source, so picking the emblem is done among the seven membership icons. `write` writes a derived icon once its source and every part it uses are picked, and records the recipe in the manifest, so an edited mark rewrites it. A `part` category (the emblem, the scroll badge) is reviewed like any other and never written.
+
+**What review found (owner, 2026-09-29).** The owner took my picks, except UNESCO and UNHCR on their s0. Sheets are in `~/flux_runs/for_owner/un_*.png`.
+- **Shapes that shrink to nothing at 36–40 px.** A satellite seen side-on and a lone sword came out as specks or lines; a sword inside a wreath read as a ring with a line. They became a ringed planet and crossed swords. The fill scales by the longest side, so a long thin object loses its body.
+- **Things that read as something else.** A clenched gauntlet read as a mug, open shackles as a horseshoe, and a dove seen from the front as a heraldic eagle. A "five-pointed star" came out with six points in one seed out of four.
+- **Cut-out holes inside an object.** rembg took the sanctions crate's front boards for background, and the disc showed through the box. The entry's `"solid": True` fills them back (`icon_render.cut`). A glass inkwell cut out as a hollow grey ring; ask for a dark ceramic one.
+- **Vanilla marks aren't what their names say.** `trend_down.dds` is an orange-gold triangle, not a red arrow, and it merged with the gold star under it. `paused.dds` gold bars vanished on a gold emblem. Both marks are drawn instead: a red arrow, and amber bars on a dark badge. View a vanilla mark over the actual icon before using it.
+- **A derived icon beats a second render when the idea is a variant.** Condemnation is the mandate's swords under the red cross, so the two topics read as a pair.
+- **A reroll replaces the old candidates.** When the subject changes, its raws are overwritten. The first subject's pick can be recovered by rendering the old prompt at the same seed, because renders are deterministic per prompt and seed.
+
+**Pies.** `gen_ch_model_pie_textures.py` writes `un_icons/pie_members.dds` (UN blue, `#5b92e5`) and `pie_rest.dds` (grey, `#8c8474`) in the Cultural Hegemony pie's format. Checked with the dataviz validator against the dark panel: ΔE 16.8 normal and 16.9 protan, and both clear 3:1 contrast. The grey fails only the chroma floor, as intended for the part that is not the subject.
 
 ## Review lessons (2026-09-27)
 
