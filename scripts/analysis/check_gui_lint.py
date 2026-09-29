@@ -27,7 +27,8 @@ WARN:
   - a collapse flag (GetVariableSystem.Toggle) whose name does not say its
     default (_open: collapsed until opened; _closed: open until closed), or
     whose Exists() tests disagree with that default (gui_style_guide.md rule 7)
-  - an added loc value that starts or ends with a literal \\n (rule 8)
+  - an added loc value that starts or ends with a literal \\n (rule 8), outside
+    te_unused_l_english.yml
 """
 import argparse
 import glob
@@ -275,7 +276,11 @@ class Linter:
                                              "test it (expected one: the show-more arrow)")
 
     def lint_added_loc(self):
-        for line in self.git("diff", "-U0", self.base, "--", "localization/english/").split("\n"):
+        # te_unused holds keys nothing renders; organize_loc moving a key there
+        # is not an added value.
+        diff = self.git("diff", "-U0", self.base, "--", "localization/english/",
+                        ":!localization/english/te_unused_l_english.yml")
+        for line in diff.split("\n"):
             if not line.startswith("+") or line.startswith("+++"):
                 continue
             m = LOC_LINE.match(line[1:])

@@ -401,6 +401,8 @@ python3 vanilla_parsed.py info             # one-line summary of the committed s
 - **Skipped (reported).** With no game files, or outdated ones, the post-load chain skips `VANILLA_FILE_REGENERATORS` (`pop_needs_curves`, `apply_ideologies`, `ig_feminism`, `pm_costs`, `resources`, `gen_law_consistency`) and `generate_docs`, because they read raw vanilla text. The reload reports them in one `vanilla_files_missing` warning. Their committed outputs are left alone rather than regenerated blind. Run blind, `apply_ideologies` would empty `common/ideologies/modified.txt`.
 - **Vanilla side empty.** These return mod-only results: `/engine-docs/usage`, the vanilla callers in `/scripted-effects|triggers/<id>`, the vanilla side of `/modifier-grants`, `/engine-docs/loc-functions`, `/gui/render-*`, `/dev-docs`, `/tech-unlocks?source=vanilla`, `/duplicate-images`' vanilla hashes, and the `/validate/*?old_ref=` migration helpers. All of them scan raw files.
 
+**Audit CLIs take vanilla from the same place.** An audit run as a script builds its ModState with `mod_state_server.cli_mod_state()`, which uses `_choose_vanilla_source` and then loads the English loc (vanilla, then the mod's). `concept_reference_audit.py`, `loc_coverage_audit.py` and `pm_employment_audit.py` use it. Until 2026-09-29 they built a bare `ModState(base_game_paths, mod_paths)`, which has no vanilla without a game install: offline, the concept audit flagged every concept reference, the mod's own included (3,522 flags), and so said nothing. A new audit CLI that needs vanilla data or loc should call the helper.
+
 Engine docs (`effects.log` & co.) are separate from all this and still come from Modding-Digests (`vic3_modding_digests_path`).
 
 ### Checking If the Server Is Running
