@@ -2570,7 +2570,7 @@ Vic3 1.13 added a rich set of JE-display fields, documented canonically in vanil
 [JournalEntry.GetCountry.MakeScope.ScriptValue('foo')|0]
 ```
 
-Mirrors the established `[ROOT.GetCountry.MakeScope.ScriptValue('foo')]` pattern used in the mod's `status_desc` / `progress_desc` loc strings, but `JournalEntry.GetCountry` is unambiguous in widget context. See the `je_strategic_reserve_widget_step_badge` loc key for a working example, and vanilla `gui/journal_entry_widgets/ep2_japan_widgets.gui` for richer patterns (portraits, fixed-grid lists, scripted-GUI bindings).
+Mirrors the established `[ROOT.GetCountry.MakeScope.ScriptValue('foo')]` pattern used in the mod's `status_desc` / `progress_desc` loc strings, but `JournalEntry.GetCountry` is unambiguous in widget context. See the `st_res_row_<good>_tooltip` loc keys (the Strategic Reserve inventory rows) for a working example, and vanilla `gui/journal_entry_widgets/ep2_japan_widgets.gui` for richer patterns (portraits, fixed-grid lists, scripted-GUI bindings).
 
 **`event_outcome_*_effect_desc` blocks: effect bodies are tooltips, not behavior.** Per the vanilla doc: "the effects here are only used for description purposes and will not actually happen." A body of just `custom_tooltip = SOME_KEY` is a valid descriptive block — the engine renders it as the tooltip text alongside the auto-generated change preview. Use this when there's no clean modifier or variable mutation to preview (cf. the interstellar_results JE, where the reward is randomized across 30+ flavor sub-events).
 

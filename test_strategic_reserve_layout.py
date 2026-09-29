@@ -293,5 +293,20 @@ class TidinessTest(unittest.TestCase):
             self.assertIn(f"{c}_desc", loc)
 
 
+ICONS_DOC = os.path.join(REPO, "docs", "systems", "strategic_reserve_gui_icons.md")
+# Interface chrome, not icons: the transparent overlay and the UN's bar marker.
+CHROME = {"gfx/interface/icons/generic_icons/transparent.dds", "gfx/interface/progressbar/progressbar_marker.dds"}
+
+
+class IconsTest(unittest.TestCase):
+    def test_every_icon_is_listed(self):
+        """Style rule 10: every icon, placeholder or final, is in the icons doc."""
+        doc = _read(ICONS_DOC)
+        textures = set(re.findall(r'texture = "([^"]+)"', _read(WIDGET))) - CHROME
+        self.assertTrue(textures)
+        for t in textures:
+            self.assertIn(t, doc, t)
+
+
 if __name__ == "__main__":
     unittest.main()
