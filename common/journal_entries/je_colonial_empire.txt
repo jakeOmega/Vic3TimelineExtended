@@ -138,7 +138,11 @@
 	# Path-dependent resolution: which policy did the empire lean on?
 	# Months tracked in vars colonial_invest_months / colonial_garrison_months /
 	# colonial_assimilate_months by the monthly pulse below. The dispatch
-	# picks the dominant path and triggers a flavor-matched event.
+	# picks the dominant path and triggers a flavor-matched event. It reads them
+	# through colonial_{invest,garrison,assimilate}_months_value, which are 0
+	# until the first pulse creates the variables: the journal panel renders
+	# on_complete and on_fail as tooltips every frame, and a bare var: read of a
+	# counter that does not exist yet logged an error per frame.
 	#
 	# IF Act capstone routes (300/301) take priority — reaching the Solidified
 	# capstone is the explicit "victory" path; it bypasses the bar-100 routing.
@@ -153,21 +157,21 @@
 		}
 		else_if = {
 			limit = {
-				var:colonial_garrison_months >= var:colonial_invest_months
-				var:colonial_garrison_months >= var:colonial_assimilate_months
-				var:colonial_garrison_months > 24
+				colonial_garrison_months_value >= colonial_invest_months_value
+				colonial_garrison_months_value >= colonial_assimilate_months_value
+				colonial_garrison_months_value > 24
 			}
 			trigger_event = { id = decolonization_events.203 }   # Iron Fist
 		}
 		else_if = {
 			limit = {
-				var:colonial_invest_months >= var:colonial_assimilate_months
-				var:colonial_invest_months > 24
+				colonial_invest_months_value >= colonial_assimilate_months_value
+				colonial_invest_months_value > 24
 			}
 			trigger_event = { id = decolonization_events.202 }   # Commonwealth Path
 		}
 		else_if = {
-			limit = { var:colonial_assimilate_months > 24 }
+			limit = { colonial_assimilate_months_value > 24 }
 			trigger_event = { id = decolonization_events.205 }   # Quiet Assimilation
 		}
 		else = {
@@ -236,12 +240,12 @@
 		else_if = {
 			limit = {
 				NAND = {
-					var:colonial_garrison_months >= var:colonial_invest_months
-					var:colonial_garrison_months >= var:colonial_assimilate_months
+					colonial_garrison_months_value >= colonial_invest_months_value
+					colonial_garrison_months_value >= colonial_assimilate_months_value
 				}
 				OR = {
-					var:colonial_invest_months > 24
-					var:colonial_assimilate_months > 24
+					colonial_invest_months_value > 24
+					colonial_assimilate_months_value > 24
 				}
 			}
 			trigger_event = { id = decolonization_events.204 }   # Negotiated Withdrawal

@@ -328,7 +328,7 @@ class StabilityTableTest(unittest.TestCase):
             with self.subTest(text=value):
                 gates = " ".join(_enclosing_visibles(text, m.start()))
                 self.assertTrue(READY in gates or HAS_CANDIDATES in gates, value)
-        self.assertGreaterEqual(checked, 7)   # three drift groups, three candidate rows, the next band
+        self.assertGreaterEqual(checked, 6)   # three drift groups, three candidate rows
 
 
 class DecisionsTest(unittest.TestCase):
@@ -412,6 +412,97 @@ class PlaceholderIconsTest(unittest.TestCase):
         doc = _read(ICONS_DOC)
         for t in sorted(placeholders):
             self.assertIn(f"`{t}`", doc, t)
+
+
+CUSTOM_LOC = os.path.join(REPO, "common", "customizable_localization", "colonial_empire_custom_loc.txt")
+MONTHS = ("invest", "garrison", "assimilate")
+
+
+class LiveBandTest(unittest.TestCase):
+    """Play-test round 1 (2026-09-29): a newly activated entry at 50 read
+    "Collapsing", because every display read the var:colonial_empire_tier
+    snapshot, which the entry's `immediate` takes before the bar holds its
+    start value. The displays now read the band ladder live."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.values = _read(VALUES)
+
+    def test_the_ladder_reads_the_bar_live(self):
+        tier = _block(self.values, "colonial_empire_live_tier")
+        self.assertIn("has_journal_entry = je_colonial_empire", tier)
+        for edge in (90, 65, 40, 20):
+            self.assertIn(f'je:je_colonial_empire ?= {{ "scripted_bar_progress(colonial_stability_bar)" >= {edge} }}',
+                          tier, edge)
+        self.assertNotIn("var:", tier)
+        nxt = _block(self.values, "colonial_empire_live_next_boundary")
+        self.assertIn("colonial_empire_live_tier", nxt)
+        self.assertNotIn("var:", nxt)
+        self.assertNotIn("scripted_bar_progress", nxt, "a second copy of the ladder")
+
+    def test_the_displays_read_the_live_ladder(self):
+        self.assertIn("value = colonial_empire_live_tier", _block(self.values, "colonial_empire_disp_tier"))
+        frac = _block(self.values, "colonial_empire_disp_next_boundary_frac")
+        self.assertIn("value = colonial_empire_live_next_boundary", frac)
+        self.assertNotIn("var:", frac)
+        custom = _read(CUSTOM_LOC)
+        for name in ("colonial_empire_status_custom", "colonial_empire_tier_name",
+                     "colonial_empire_next_band_name", "colonial_empire_phase_modifier"):
+            with self.subTest(custom=name):
+                body = _block(custom, name)
+                triggers = re.findall(r"trigger = \{ (.*?) \}", body)
+                self.assertEqual(triggers, ["colonial_empire_live_tier < 1"] +
+                                 [f"colonial_empire_live_tier >= {t}" for t in (5, 4, 3, 2)])
+        loc = _loc()["je_colonial_empire_ov_next"]
+        self.assertIn("ScriptValue('colonial_empire_live_next_boundary')", loc)
+        self.assertNotIn("Var('colonial_empire_next_boundary')", loc)
+
+    def test_the_snapshot_comes_from_the_ladder(self):
+        refresh = _block(_read(DISPLAY), "colonial_empire_refresh_display")
+        self.assertIn("set_variable = { name = colonial_empire_tier value = colonial_empire_live_tier }", refresh)
+        self.assertIn("set_variable = { name = colonial_empire_next_boundary value = colonial_empire_live_next_boundary }",
+                      refresh)
+        self.assertEqual(len(re.findall(r"name = colonial_empire_tier\b", refresh)), 1)
+
+
+class QuietTooltipsTest(unittest.TestCase):
+    """Play-test round 1 (2026-09-29): the journal panel renders on_complete and
+    on_fail as tooltips every frame, so a bare var: read of a counter that does
+    not exist yet, or a remove_modifier of a modifier the scope lacks, logged an
+    error per frame."""
+
+    def test_no_bare_read_of_the_programme_months(self):
+        je = _read(JE)
+        decol = _read(DECOLONIZATION)
+        for name, body in (("on_complete", _block_in(je, "on_complete")), ("on_fail", _block_in(je, "on_fail")),
+                           ("apply_decolonization_path", _block(decol, "apply_decolonization_path"))):
+            with self.subTest(block=name):
+                self.assertNotRegex(body, r"var:colonial_(invest|garrison|assimilate)_months")
+                self.assertRegex(body, r"colonial_(invest|garrison|assimilate)_months_value")
+        values = _read(VALUES)
+        for m in MONTHS:
+            with self.subTest(counter=m):
+                body = _block(values, f"colonial_{m}_months_value")
+                self.assertIn(f"has_variable = colonial_{m}_months", body)
+                self.assertIn(f"value = var:colonial_{m}_months", body)
+
+    def test_every_remove_modifier_in_the_cleanup_is_guarded(self):
+        cleanup = _strip_comments(_block(_read(DECOLONIZATION), "colonial_empire_je_cleanup_effect"))
+        removes = re.findall(r"remove_modifier = (\w+)", cleanup)
+        self.assertEqual(len(removes), 9)
+        for mod in removes:
+            with self.subTest(modifier=mod):
+                self.assertEqual(len(re.findall(rf"remove_modifier = {mod}\b", cleanup)),
+                                 len(re.findall(rf"if = \{{ limit = \{{ has_modifier = {mod} \}} remove_modifier = {mod} \}}",
+                                                cleanup)))
+
+
+def _block_in(text, name):
+    """A block opened at one tab of indentation (a journal entry's own field)."""
+    m = re.search(rf"(?m)^\t{name} = \{{", text)
+    assert m, f"no {name}"
+    a, b = _span(text, m.end() - 1)
+    return text[a + 1:b]
 
 
 class LocHygieneTest(unittest.TestCase):

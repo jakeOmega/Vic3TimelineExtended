@@ -56,9 +56,12 @@
 ### NO NUMBER IS TYPED IN THIS FILE. The nine stability contributions come from
 ### colonial_stability_drift_* script values — the same leaves the bar itself
 ### consumes — six read live and three read from the snapshot variables
-### colonial_empire_refresh_display writes. Band boundaries come from
-### var:colonial_empire_next_boundary; the overview reads its snapshots through
-### the guarded colonial_empire_disp_* values (colonial_empire_values.txt).
+### colonial_empire_refresh_display writes. The band and the next band's edge
+### come from the live band ladder (colonial_empire_live_tier /
+### colonial_empire_live_next_boundary in colonial_empire_values.txt), never
+### from the snapshot, which is stale on a newly activated entry; the overview
+### reads them and its snapshots through the guarded colonial_empire_disp_*
+### values.
 ### Programme costs and effects come from [GetStaticModifier('x').GetDesc]. If
 ### you need a new number here, derive it in colonial_empire_display_effects.txt
 ### and read the variable.
