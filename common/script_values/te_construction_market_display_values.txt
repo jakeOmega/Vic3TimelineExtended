@@ -25,9 +25,18 @@ te_construction_market_display_public_budget = {
 }
 
 # Fixed Budget mode: what the budget buys at today's price, which the quantity
-# bought moves toward a quarter of the way each week.
+# bought moves toward each week.
 te_construction_market_display_budget_quantity_target = {
 	value = te_construction_market_budget_quantity_target
+}
+
+# Fixed Budget mode: how much of the gap to that the quantity closes this week,
+# in percent (100 / te_construction_market_budget_shift_weeks). Shown by the
+# "still moving" line, which te_construction_market_budget_stepping_sgui hides
+# once the two are within a point of each other.
+te_construction_market_display_budget_step_percent = {
+	value = 100
+	divide = te_construction_market_budget_shift_weeks
 }
 
 # How much the government queue can absorb in a week: each queued level takes
@@ -35,8 +44,7 @@ te_construction_market_display_budget_quantity_target = {
 # actually goes through (te_construction_market_public_use_target) is capped
 # at this, so a purchase above it buys nothing extra.
 te_construction_market_display_public_queue_cap = {
-	value = construction_queue_num_queued_government_levels
-	multiply = modifier:country_max_weekly_construction_progress_add
+	value = te_construction_market_public_queue_cap
 }
 
 # The government purchase actually in force this week (after the queue cap,
