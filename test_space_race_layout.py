@@ -352,7 +352,9 @@ class DisplayValuesTest(unittest.TestCase):
             body = _strip_comments(_block(self.values, name))
             for var in re.findall(r"var:(\w+)", body):
                 with self.subTest(value=name, var=var):
-                    self.assertRegex(body, rf"limit = \{{ has_variable = {var} \}}[^\n]*var:{var}")
+                    # the read sits straight after its own guard, in the same `if`
+                    self.assertRegex(body, rf"limit = \{{ has_variable = {var} \}}\s*(?:value = 1\s+)?"
+                                           rf"(?:add|value) = (?:\{{\s*value = )?var:{var}\b")
 
     def test_state_reads_the_single_derivation_site(self):
         for m in CONTROLLED:

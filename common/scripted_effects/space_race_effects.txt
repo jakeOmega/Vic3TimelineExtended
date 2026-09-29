@@ -585,6 +585,12 @@ sr_cleanup_milestone_if_inactive_base = {
 			if = { limit = { has_variable = sr_$MILESTONE$_last_status } remove_variable = sr_$MILESTONE$_last_status }
 			if = { limit = { has_variable = sr_$MILESTONE$_setbacks    } remove_variable = sr_$MILESTONE$_setbacks    }
 		}
+		# The rivals estimate (display only; sr_rivals_estimate_refresh): this
+		# country's offset as a rival, and its own snapshot as a viewer. Outside
+		# the block above, so it never asks for a cost recalculation.
+		if = { limit = { has_variable = sr_fuzz_$MILESTONE$       } remove_variable = sr_fuzz_$MILESTONE$       }
+		if = { limit = { has_variable = sr_fuzz_until_$MILESTONE$ } remove_variable = sr_fuzz_until_$MILESTONE$ }
+		sr_clear_rival_slots = { MILESTONE = $MILESTONE$ }
 	}
 }
 
@@ -1289,25 +1295,142 @@ sr_fire_safe_setback_event = {
 sr_rivals_participants_base = {
 	if = {
 		limit = {
-			any_country = {
-				NOT = { THIS = ROOT }
-				has_variable = sr_active_$MILESTONE$
-				sr_ai_should_participate = yes
-			}
+			any_country = { sr_is_rival = { MILESTONE = $MILESTONE$ } }
 		}
 		custom_tooltip_no_bullet = sr_rivals_intro
 		every_country = {
-			limit = {
-				NOT = { THIS = ROOT }
-				has_variable = sr_active_$MILESTONE$
-				sr_ai_should_participate = yes
-			}
+			limit = { sr_is_rival = { MILESTONE = $MILESTONE$ } }
 			custom_tooltip = sr_rivals_entry
 		}
 	}
 	else = {
 		custom_tooltip_no_bullet = sr_rivals_none
 	}
+}
+
+# --- Display-only: rivals' estimated progress --------------------------------
+# The Rivals rows (space_race_widget.gui, te_sr_rival_row) show up to five
+# rivals, each as an estimate of its progress inside a band. The owner asked for
+# "a bar with some fuzz ... less if you have an intelligence network there".
+#
+# - The fuzz is one random offset per rival and milestone, sr_fuzz_<m> (−1 to
+#   +1 in nine steps), drawn again a year after it was drawn (sr_fuzz_until_<m>,
+#   a month index). Script values cannot roll dice, so it is a variable.
+# - The band around it is the viewer's: ±25% of the goal, ±10% or ±5% with a
+#   covert network of intelligence tier 1 or 2 in the rival
+#   (sr_disp_rival_band). The estimate is progress + offset × band, so the true
+#   figure is always inside the band drawn around it.
+# - The rows' order and names come from here, once a month, into the viewer's
+#   own variables: sr_rival_total_<m> (how many rivals), and
+#   sr_rival_<m>_<1..5>, each rival's capital (gotcha #11: the GUI reaches a
+#   country through a stored state). The numbers are read live, per frame,
+#   through script values with the rival passed in as scope:sr_rival.
+#
+# Players only: nobody else looks, and the draws happen here, on the rivals a
+# player can see, so no AI pulse carries any of it. Several players seeing one
+# rival share its offset, and a month index (not a countdown) dates it, so a
+# second player's pulse cannot age it twice. Everything is a variable, so a
+# revolution's winner keeps it; the snapshot is rebuilt every month anyway.
+# Scope: country (a player); ROOT is the same country (the monthly pulse).
+sr_rivals_estimate_refresh = {
+	sr_rivals_estimate_refresh_base = { MILESTONE = suborbital         }
+	sr_rivals_estimate_refresh_base = { MILESTONE = orbital            }
+	sr_rivals_estimate_refresh_base = { MILESTONE = moon_landing       }
+	sr_rivals_estimate_refresh_base = { MILESTONE = probe              }
+	sr_rivals_estimate_refresh_base = { MILESTONE = moon_base          }
+	sr_rivals_estimate_refresh_base = { MILESTONE = mars_landing       }
+	sr_rivals_estimate_refresh_base = { MILESTONE = interstellar_probe }
+	sr_rivals_estimate_refresh_base = { MILESTONE = solar_colonization }
+}
+
+sr_rivals_estimate_refresh_base = {
+	if = {
+		limit = { has_variable = sr_active_$MILESTONE$ }
+		save_scope_as = sr_rivals_viewer
+		# 1. Each rival's offset: drawn if it has none, again a year after.
+		every_country = {
+			limit = { sr_is_rival = { MILESTONE = $MILESTONE$ } }
+			if = {
+				limit = { NOT = { has_variable = sr_fuzz_until_$MILESTONE$ } }
+				sr_roll_rival_fuzz = { MILESTONE = $MILESTONE$ }
+			}
+			else_if = {
+				limit = { var:sr_fuzz_until_$MILESTONE$ <= te_history_month_index }
+				sr_roll_rival_fuzz = { MILESTONE = $MILESTONE$ }
+			}
+		}
+		# 2. How many rivals, then the first five by the open estimate.
+		set_variable = { name = sr_rival_total_$MILESTONE$ value = 0 } # REVIEWED 2026-09-29: a display snapshot rebuilt every month; nothing a revolution's winner could lose
+		every_country = {
+			limit = { sr_is_rival = { MILESTONE = $MILESTONE$ } }
+			scope:sr_rivals_viewer = { change_variable = { name = sr_rival_total_$MILESTONE$ add = 1 } }
+		}
+		sr_rival_slot = { MILESTONE = $MILESTONE$ N = 1 POS = 0 }
+		sr_rival_slot = { MILESTONE = $MILESTONE$ N = 2 POS = 1 }
+		sr_rival_slot = { MILESTONE = $MILESTONE$ N = 3 POS = 2 }
+		sr_rival_slot = { MILESTONE = $MILESTONE$ N = 4 POS = 3 }
+		sr_rival_slot = { MILESTONE = $MILESTONE$ N = 5 POS = 4 }
+	}
+	else = {
+		sr_clear_rival_slots = { MILESTONE = $MILESTONE$ }
+	}
+}
+
+# Slot $N$ (1-5) gets the rival at position $POS$ ($N$ - 1) of the open
+# estimate's order. An ordered_ position past the end of the list clamps to the
+# last element instead of skipping (un_overview_display_effects.txt), so the
+# count is checked first. Scope: the viewer (scope:sr_rivals_viewer is set).
+sr_rival_slot = {
+	if = {
+		limit = {
+			any_country = {
+				sr_is_rival = { MILESTONE = $MILESTONE$ }
+				count >= $N$
+			}
+		}
+		ordered_country = {
+			limit = { sr_is_rival = { MILESTONE = $MILESTONE$ } }
+			order_by = sr_rival_est_open_$MILESTONE$
+			position = $POS$
+			capital = { save_scope_as = sr_rival_capital }
+		}
+		scope:sr_rivals_viewer = {
+			set_variable = { name = sr_rival_$MILESTONE$_$N$ value = scope:sr_rival_capital } # REVIEWED 2026-09-29: a display snapshot rebuilt every month; nothing a revolution's winner could lose
+		}
+	}
+	else_if = {
+		limit = { has_variable = sr_rival_$MILESTONE$_$N$ }
+		remove_variable = sr_rival_$MILESTONE$_$N$
+	}
+}
+
+# One draw of a rival's offset, in nine even steps from −1 to +1, dated a year
+# ahead. random_list takes literal weights (scripting_best_practices.md).
+# Scope: the rival.
+sr_roll_rival_fuzz = {
+	random_list = {
+		1 = { set_variable = { name = sr_fuzz_$MILESTONE$ value = -1 } }
+		1 = { set_variable = { name = sr_fuzz_$MILESTONE$ value = -0.75 } }
+		1 = { set_variable = { name = sr_fuzz_$MILESTONE$ value = -0.5 } }
+		1 = { set_variable = { name = sr_fuzz_$MILESTONE$ value = -0.25 } }
+		1 = { set_variable = { name = sr_fuzz_$MILESTONE$ value = 0 } }
+		1 = { set_variable = { name = sr_fuzz_$MILESTONE$ value = 0.25 } }
+		1 = { set_variable = { name = sr_fuzz_$MILESTONE$ value = 0.5 } }
+		1 = { set_variable = { name = sr_fuzz_$MILESTONE$ value = 0.75 } }
+		1 = { set_variable = { name = sr_fuzz_$MILESTONE$ value = 1 } }
+	}
+	set_variable = { name = sr_fuzz_until_$MILESTONE$ value = te_history_month_index }
+	change_variable = { name = sr_fuzz_until_$MILESTONE$ add = 12 }
+}
+
+# The viewer's snapshot for a milestone it no longer runs. Scope: the viewer.
+sr_clear_rival_slots = {
+	if = { limit = { has_variable = sr_rival_total_$MILESTONE$ } remove_variable = sr_rival_total_$MILESTONE$ }
+	if = { limit = { has_variable = sr_rival_$MILESTONE$_1 } remove_variable = sr_rival_$MILESTONE$_1 }
+	if = { limit = { has_variable = sr_rival_$MILESTONE$_2 } remove_variable = sr_rival_$MILESTONE$_2 }
+	if = { limit = { has_variable = sr_rival_$MILESTONE$_3 } remove_variable = sr_rival_$MILESTONE$_3 }
+	if = { limit = { has_variable = sr_rival_$MILESTONE$_4 } remove_variable = sr_rival_$MILESTONE$_4 }
+	if = { limit = { has_variable = sr_rival_$MILESTONE$_5 } remove_variable = sr_rival_$MILESTONE$_5 }
 }
 
 # --- A launch complex that can no longer carry a milestone -------------------
