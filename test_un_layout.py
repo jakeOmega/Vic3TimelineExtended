@@ -1,5 +1,4 @@
 """The UN's section order and collapse defaults (spec 2026-09-28-un-gui-pass-design.md §1)."""
-import glob
 import os
 import re
 import unittest
