@@ -99,5 +99,18 @@ class SessionStripTest(unittest.TestCase):
             r"ScriptValue\('un_disp_res_topic_code'\), '\(CFixedPoint\)(\d+)'", _read(LAYOUT))}
         self.assertEqual(codes, set(range(18)))
 
+AUTHORITY = os.path.join(W, "un_authority_widget.gui")
+PILLARS = ("participation", "commitment", "credibility", "funding", "order", "delivery")
+
+
+class PillarBarTest(unittest.TestCase):
+    def test_each_pillar_is_a_bar_with_a_trend(self):
+        body = _type_body(_read(AUTHORITY), "te_un_sec_why")
+        for p in PILLARS:
+            for v in ("pos", "neg", "trend"):
+                self.assertIn(f"ScriptValue('un_disp_pillar_{p}_{v}')", body, f"{p} {v}")
+            self.assertNotRegex(body, rf'blockoverride "pillar_value" \{{ text = "je_un_auth_tbl_{p}_value" \}}',
+                                f"{p} still has its old table row")
+
 if __name__ == "__main__":
     unittest.main()
