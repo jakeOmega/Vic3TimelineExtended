@@ -453,3 +453,28 @@ gw_has_yearly_figures_sgui = {
 	is_valid = { always = no }
 	effect = { }
 }
+
+# Is warming still below the point where any policy can be adopted? Every
+# gw_possible_<policy> needs 0.5 C (gw_cond_warming_mild; divestment 1.0 C), so
+# until then every Adopt control is greyed for the same reason. The Mitigation
+# Policies section says so once, above the rows (style guide rule 6), instead of
+# leaving eight greyed buttons to explain it one hover at a time.
+# test_global_warming_layout.py holds this threshold to gw_possible_carbon_tax's.
+gw_policies_waiting_sgui = {
+	scope = country
+	is_shown = { temperature_anomaly_display < 0.5 }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Bound by an Enforce Emissions Reduction treaty: every Repeal but Climate
+# Adaptation's is greyed (gw_cond_not_treaty_bound), so the section says it once.
+# The overview shows a treaty cell on the same test.
+gw_treaty_bound_sgui = {
+	scope = country
+	is_shown = { gw_bound_by_emissions_treaty = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
