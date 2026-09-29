@@ -95,6 +95,17 @@ sr_possible_ambitious = {
 	}
 }
 
+# Standard is the approach with neither variable: offered while one is set.
+sr_possible_standard = {
+	custom_tooltip = {
+		text = "SR_NOT_ALREADY_STANDARD"
+		OR = {
+			has_variable = sr_safe_$MILESTONE$
+			has_variable = sr_ambitious_$MILESTONE$
+		}
+	}
+}
+
 sr_possible_fund_up = {
 	custom_tooltip = {
 		text = "SR_MAX_FUNDING_NOT_REACHED"

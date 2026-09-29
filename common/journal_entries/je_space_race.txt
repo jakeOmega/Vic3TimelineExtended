@@ -1429,34 +1429,21 @@ je_space_race_solar_colonization = {
 				}
 				if = {
 					limit = { sr_ai_should_participate = yes }
+					# Every approach moves and rolls; Standard is neither variable.
+					change_variable = { name = sr_progress_solar_colonization add = sr_progress }
 					if = {
-						limit = {
-							OR = {
-								has_variable = sr_safe_solar_colonization
-								has_variable = sr_ambitious_solar_colonization
+						limit = { NOT = { sr_has_failure_cooldown = yes } }
+						random = {
+							chance = sr_risk_pct_solar_colonization
+							set_variable = { name = sr_failed_solar_colonization value = yes }
+							sr_count_setback_base = { MILESTONE = solar_colonization }
+							if = {
+								limit = { has_variable = sr_ambitious_solar_colonization }
+								sr_fire_ambitious_failure_event = { MILESTONE = solar_colonization }
 							}
-						}
-						change_variable = { name = sr_progress_solar_colonization add = sr_progress }
-						if = {
-							limit = { NOT = { sr_has_failure_cooldown = yes } }
-							random = {
-								chance = sr_risk_pct_solar_colonization
-								set_variable = { name = sr_failed_solar_colonization value = yes }
-								sr_count_setback_base = { MILESTONE = solar_colonization }
-								if = {
-									limit = { has_variable = sr_ambitious_solar_colonization }
-									sr_fire_ambitious_failure_event = { MILESTONE = solar_colonization }
-								}
-								else = {
-									sr_fire_safe_setback_event = { MILESTONE = solar_colonization }
-								}
+							else = {
+								sr_fire_safe_setback_event = { MILESTONE = solar_colonization }
 							}
-						}
-					}
-					else = {
-						change_variable = {
-							name = sr_progress_solar_colonization
-							add = sr_progress_drift
 						}
 					}
 					# Bar-fill detection: when progress reaches goal, establish a colony and reset

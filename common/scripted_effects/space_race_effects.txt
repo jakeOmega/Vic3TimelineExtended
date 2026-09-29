@@ -11,6 +11,10 @@
 # cooldown suppresses only the roll. Progress is added above it, so a programme
 # inside its cooldown runs at full speed with zero chance of a setback.
 #
+# Every running milestone moves and rolls, whatever its approach: Standard (no
+# sr_safe_ / sr_ambitious_ variable) is an approach with no modifier and no
+# cost. Until 2026-09-29 that state drifted at a flat 0.5 a month with no roll.
+#
 # Parameters:
 #   $MILESTONE$ — milestone token (suborbital, orbital, moon_landing, probe,
 #                 moon_base, mars_landing, interstellar_probe). Resolves the
@@ -19,33 +23,22 @@
 sr_monthly_progress_update_effect = {
 	if = {
 		limit = { sr_ai_should_participate = yes }
+		change_variable = { name = sr_progress_$MILESTONE$ add = sr_progress }
 		if = {
-			limit = {
-				OR = {
-					has_variable = sr_safe_$MILESTONE$
-					has_variable = sr_ambitious_$MILESTONE$
+			limit = { NOT = { sr_has_failure_cooldown = yes } }
+			random = {
+				chance = sr_risk_pct_$MILESTONE$
+				set_variable = { name = sr_failed_$MILESTONE$ value = yes }
+				sr_count_setback_base = { MILESTONE = $MILESTONE$ }
+				# Ambitious fails big; Safe and Standard suffer the minor setbacks.
+				if = {
+					limit = { has_variable = sr_ambitious_$MILESTONE$ }
+					sr_fire_ambitious_failure_event = { MILESTONE = $MILESTONE$ }
+				}
+				else = {
+					sr_fire_safe_setback_event = { MILESTONE = $MILESTONE$ }
 				}
 			}
-			change_variable = { name = sr_progress_$MILESTONE$ add = sr_progress }
-			if = {
-				limit = { NOT = { sr_has_failure_cooldown = yes } }
-				random = {
-					chance = sr_risk_pct_$MILESTONE$
-					set_variable = { name = sr_failed_$MILESTONE$ value = yes }
-					sr_count_setback_base = { MILESTONE = $MILESTONE$ }
-					if = {
-						limit = { has_variable = sr_ambitious_$MILESTONE$ }
-						sr_fire_ambitious_failure_event = { MILESTONE = $MILESTONE$ }
-					}
-					else = {
-						sr_fire_safe_setback_event = { MILESTONE = $MILESTONE$ }
-					}
-				}
-			}
-		}
-		else = {
-			# Default (no approach selected) — minimal progress drift.
-			change_variable = { name = sr_progress_$MILESTONE$ add = sr_progress_drift }
 		}
 	}
 	sr_set_milestone_status_base = { MILESTONE = $MILESTONE$ }
@@ -596,13 +589,17 @@ sr_cleanup_milestone_if_inactive_base = {
 }
 
 # --- Shared bodies for the milestone controls --------------------------------
-# The four things a player (or the AI) can do to a running milestone. Each of
-# the 32 journal-entry buttons and each op on that milestone's scripted GUI runs
-# the body from here, so the two surfaces cannot drift apart. $MILESTONE$ is one
-# of the eight milestone tokens.
+# The five things a player can do to a running milestone, four of them also the
+# AI's. Each of the 32 journal-entry buttons and each op on that milestone's
+# scripted GUI runs the body from here, so the two surfaces cannot drift apart.
+# $MILESTONE$ is one of the eight milestone tokens. Standard is the player's
+# only (op 4 on the scripted GUI): the AI never had a way back from an approach,
+# and starts on Standard like everyone.
 #
 # The custom_tooltip wrappers are what the button grid and the widget's
 # ExecuteTooltip both render, so they belong here rather than at the call sites.
+# Each approach body ends with its cost line (sr_approach_cost_*_<m>, the weekly
+# innovation from sr_disp_cost_*_<m>), outside the wrapper so it prints.
 
 sr_effect_safe = {
 	custom_tooltip = {
@@ -618,6 +615,7 @@ sr_effect_safe = {
 		}
 		sr_recalculate_cost = yes
 	}
+	custom_tooltip = sr_approach_cost_safe_$MILESTONE$
 }
 
 sr_effect_ambitious = {
@@ -634,6 +632,27 @@ sr_effect_ambitious = {
 		}
 		sr_recalculate_cost = yes
 	}
+	custom_tooltip = sr_approach_cost_ambitious_$MILESTONE$
+}
+
+sr_effect_standard = {
+	custom_tooltip = {
+		text = "SR_STANDARD_APPROACH_EFFECT"
+		if = {
+			limit = { has_variable = sr_safe_$MILESTONE$ }
+			remove_variable = sr_safe_$MILESTONE$
+		}
+		if = {
+			limit = { has_variable = sr_ambitious_$MILESTONE$ }
+			remove_variable = sr_ambitious_$MILESTONE$
+		}
+		je:je_space_race_$MILESTONE$ = {
+			remove_modifier = sr_safe_approach
+			remove_modifier = sr_ambitious_approach
+		}
+		sr_recalculate_cost = yes
+	}
+	custom_tooltip = SR_APPROACH_COST_STANDARD
 }
 
 sr_effect_fund_up = {
@@ -664,14 +683,15 @@ sr_effect_fund_down = {
 # mission-failure effects, which start the cooldown) and the tail of the monthly
 # progress pulse.
 #
-#   (no variable)  the milestone is not running — the panel shows its passive text
-#   0              running, no approach selected yet (drifts at sr_progress_drift)
+#   (no variable)  the milestone is not running — the panel shows it as Idle
+#   0              standard approach (neither variable), exposed to setbacks
 #   1              safe approach, exposed to setbacks
 #   2              ambitious approach, exposed to setbacks
 #   3              safe approach, inside the post-setback cooldown
 #   4              ambitious approach, inside the post-setback cooldown
+#   5              standard approach, inside the post-setback cooldown
 #
-# States 3 and 4 are "shielded, not paused": the cooldown suppresses only the
+# States 3 to 5 are "shielded, not paused": the cooldown suppresses only the
 # failure roll, so progress continues at full rate. The widget says exactly that.
 # Deliberately no "programme incompatible" state — that is the journal entry's
 # own `fail` block, which already explains itself through
@@ -707,7 +727,13 @@ sr_set_milestone_status_base = {
 	}
 	else = {
 		sr_ensure_setback_counter_base = { MILESTONE = $MILESTONE$ }
-		set_variable = { name = sr_$MILESTONE$_last_status value = 0 }
+		if = {
+			limit = { sr_has_failure_cooldown = yes }
+			set_variable = { name = sr_$MILESTONE$_last_status value = 5 }
+		}
+		else = {
+			set_variable = { name = sr_$MILESTONE$_last_status value = 0 }
+		}
 	}
 }
 

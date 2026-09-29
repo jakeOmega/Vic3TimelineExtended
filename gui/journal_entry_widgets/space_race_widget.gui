@@ -24,10 +24,12 @@
 ### every space race scripted button carries `is_ai = yes` in its `visible`, so
 ### the AI still picks its approach and funding through the buttons' ai_chance
 ### while a player sees only this. That makes the mapping an obligation — all
-### four actions per milestone have a control here (te_sr_sec_control):
+### four of the buttons' actions per milestone have a control here
+### (te_sr_sec_control), and a fifth the grid never had:
 ###
 ###   op 0  Safe approach        op 2  funding −
 ###   op 1  Ambitious approach   op 3  funding +
+###   op 4  Standard approach (player only; every milestone starts on it)
 ###
 ### The table is repeated in common/scripted_guis/space_race_sguis.txt; keep the
 ### two in step. Neither side holds a rule: every op delegates to the shared
@@ -38,14 +40,16 @@
 ###   state (status cell) -> ScriptValue('sr_disp_status_<m>'), read from
 ###                          sr_<m>_last_status, whose single derivation site
 ###                          is sr_set_milestone_status_base; its tooltip is the
-###                          matching sr_pace_note_* sentence
+###                          matching sr_pace_note_* sentence, and Safe and
+###                          Ambitious carry their weekly cost in the word
+###                          (sr_disp_cost_*_<m>)
 ###   progress / goal     -> ScriptValue('sr_progress_<m>_value'), ('sr_<m>_goal');
 ###                          the bar reads sr_disp_progress_frac_<m>, the same
 ###                          two numbers as a 0..1 fraction
 ###   pace                -> ScriptValue('sr_pace_rate_<m>'), the rate the pulse
 ###                          actually applies
 ###   setback risk        -> ScriptValue('sr_risk_shown_<m>'), the value the roll
-###                          uses, forced to zero while no roll is made
+###                          uses, forced to zero during the post-setback review
 ###   the first           -> ScriptValue('sr_disp_first_claimed_<m>')
 ###   setbacks, estimate  -> sr_setbacks_<m>_value, sr_eta_months_<m>
 ###   mission profile     -> GetCustom('sr_<m>_profile')
@@ -176,17 +180,18 @@ types space_race_widget_types
 
 	### One approach option. `action_binding` carries the four properties that
 	### address the scripted GUI, because they are the only part that differs
-	### between the two options; the sizing is shared.
+	### between the three options; the sizing is shared (110 + 3 × 116 + 3 × 4
+	### fits the 480 content width).
 	type te_sr_action_button = button {
 		using = default_button_action
-		size = { 174 30 }
+		size = { 116 30 }
 		parentanchor = vcenter
 
 		textbox = {
 			parentanchor = center
 			align = center|nobaseline
 			autoresize = yes
-			max_width = 164
+			max_width = 106
 			elide = right
 			using = fontsize_small
 			block "action_label" {}
@@ -607,15 +612,17 @@ types space_race_widget_types
 					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 
 					te_sr_ov_icon_label = {
-						block "sr_status_drifting" {}
-						tooltip = "sr_pace_note_drift"
+						block "sr_status_standard" {}
+						tooltip = "sr_pace_note_standard"
 						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/generic_icons/undecided_icon.dds"
+							texture = "gfx/interface/icons/commander_order_icons/move.dds"
 						}
 						blockoverride "label" {
-							text = "je_space_race_widget_ov_drifting"
+							text = "je_space_race_widget_standard_label"
 						}
 					}
+					### Safe and Ambitious carry their weekly cost in the word
+					### (round 2: "make that clear").
 					te_sr_ov_icon_label = {
 						block "sr_status_safe" {}
 						tooltip = "sr_pace_note_safe"
@@ -623,7 +630,7 @@ types space_race_widget_types
 							texture = "gfx/interface/icons/commander_order_icons/defend.dds"
 						}
 						blockoverride "label" {
-							text = "je_space_race_widget_safe_label"
+							block "sr_label_safe" {}
 						}
 					}
 					te_sr_ov_icon_label = {
@@ -633,7 +640,7 @@ types space_race_widget_types
 							texture = "gfx/interface/icons/military_icons/navy_icons/speed_navy.dds"
 						}
 						blockoverride "label" {
-							text = "je_space_race_widget_ambitious_label"
+							block "sr_label_ambitious" {}
 						}
 					}
 					te_sr_ov_icon_label = {
@@ -744,8 +751,8 @@ types space_race_widget_types
 	### GUI's is_shown, which is the same gate the milestone's four
 	### journal-entry buttons use. That is what keeps the funding cell's `Var`
 	### read safe, and what hides them when solar colonization drops into
-	### passive mode with every colony claimed; the estimate would otherwise
-	### divide by the drift floor with no progress left.
+	### passive mode with every colony claimed or its method off; the estimate
+	### would otherwise quote a pace nothing is adding.
 	type te_sr_sec_control = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
@@ -777,9 +784,10 @@ types space_race_widget_types
 				parentanchor = hcenter
 				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 
-				### Approach — ops 0 and 1, beside their label. The option already
-				### in force greys itself out through is_valid, and its tooltip
-				### says so (IsValidTooltip, then what it does). The two rows are
+				### Approach — ops 4 (Standard), 0 (Safe) and 1 (Ambitious),
+				### beside their label. The option already in force greys itself
+				### out through is_valid, and its tooltip says so (IsValidTooltip,
+				### then what it does and what it costs a week). The two rows are
 				### left-aligned so their labels form one column.
 				flowcontainer = {
 					direction = horizontal
@@ -793,6 +801,18 @@ types space_race_widget_types
 						using = fontsize_medium
 						parentanchor = vcenter
 						elide = right
+					}
+
+					te_sr_action_button = {
+						blockoverride "action_label" {
+							text = "je_space_race_widget_standard_label"
+						}
+						blockoverride "action_binding" {
+							visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
+						}
 					}
 
 					te_sr_action_button = {
@@ -1109,7 +1129,7 @@ flowcontainer = {
 	datacontext = "[GetScriptedGui('sr_milestone_suborbital_sgui')]"
 
 	te_sr_overview_milestone = {
-		blockoverride "sr_status_drifting" {
+		blockoverride "sr_status_standard" {
 			visible = "[LessThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_suborbital'), '(CFixedPoint)1' )]"
 		}
 		blockoverride "sr_status_safe" {
@@ -1129,6 +1149,12 @@ flowcontainer = {
 		}
 		blockoverride "sr_risk_label" {
 			text = "je_space_race_widget_risk_suborbital"
+		}
+		blockoverride "sr_label_safe" {
+			text = "je_space_race_widget_ov_safe_suborbital"
+		}
+		blockoverride "sr_label_ambitious" {
+			text = "je_space_race_widget_ov_ambitious_suborbital"
 		}
 		blockoverride "sr_third_cells" {
 			te_sr_ov_first = {
@@ -1215,7 +1241,7 @@ flowcontainer = {
 	datacontext = "[GetScriptedGui('sr_milestone_orbital_sgui')]"
 
 	te_sr_overview_milestone = {
-		blockoverride "sr_status_drifting" {
+		blockoverride "sr_status_standard" {
 			visible = "[LessThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_orbital'), '(CFixedPoint)1' )]"
 		}
 		blockoverride "sr_status_safe" {
@@ -1235,6 +1261,12 @@ flowcontainer = {
 		}
 		blockoverride "sr_risk_label" {
 			text = "je_space_race_widget_risk_orbital"
+		}
+		blockoverride "sr_label_safe" {
+			text = "je_space_race_widget_ov_safe_orbital"
+		}
+		blockoverride "sr_label_ambitious" {
+			text = "je_space_race_widget_ov_ambitious_orbital"
 		}
 		blockoverride "sr_third_cells" {
 			te_sr_ov_first = {
@@ -1321,7 +1353,7 @@ flowcontainer = {
 	datacontext = "[GetScriptedGui('sr_milestone_moon_landing_sgui')]"
 
 	te_sr_overview_milestone = {
-		blockoverride "sr_status_drifting" {
+		blockoverride "sr_status_standard" {
 			visible = "[LessThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_moon_landing'), '(CFixedPoint)1' )]"
 		}
 		blockoverride "sr_status_safe" {
@@ -1341,6 +1373,12 @@ flowcontainer = {
 		}
 		blockoverride "sr_risk_label" {
 			text = "je_space_race_widget_risk_moon_landing"
+		}
+		blockoverride "sr_label_safe" {
+			text = "je_space_race_widget_ov_safe_moon_landing"
+		}
+		blockoverride "sr_label_ambitious" {
+			text = "je_space_race_widget_ov_ambitious_moon_landing"
 		}
 		blockoverride "sr_third_cells" {
 			te_sr_ov_first = {
@@ -1427,7 +1465,7 @@ flowcontainer = {
 	datacontext = "[GetScriptedGui('sr_milestone_probe_sgui')]"
 
 	te_sr_overview_milestone = {
-		blockoverride "sr_status_drifting" {
+		blockoverride "sr_status_standard" {
 			visible = "[LessThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_probe'), '(CFixedPoint)1' )]"
 		}
 		blockoverride "sr_status_safe" {
@@ -1447,6 +1485,12 @@ flowcontainer = {
 		}
 		blockoverride "sr_risk_label" {
 			text = "je_space_race_widget_risk_probe"
+		}
+		blockoverride "sr_label_safe" {
+			text = "je_space_race_widget_ov_safe_probe"
+		}
+		blockoverride "sr_label_ambitious" {
+			text = "je_space_race_widget_ov_ambitious_probe"
 		}
 		blockoverride "sr_third_cells" {
 			te_sr_ov_first = {
@@ -1533,7 +1577,7 @@ flowcontainer = {
 	datacontext = "[GetScriptedGui('sr_milestone_moon_base_sgui')]"
 
 	te_sr_overview_milestone = {
-		blockoverride "sr_status_drifting" {
+		blockoverride "sr_status_standard" {
 			visible = "[LessThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_moon_base'), '(CFixedPoint)1' )]"
 		}
 		blockoverride "sr_status_safe" {
@@ -1553,6 +1597,12 @@ flowcontainer = {
 		}
 		blockoverride "sr_risk_label" {
 			text = "je_space_race_widget_risk_moon_base"
+		}
+		blockoverride "sr_label_safe" {
+			text = "je_space_race_widget_ov_safe_moon_base"
+		}
+		blockoverride "sr_label_ambitious" {
+			text = "je_space_race_widget_ov_ambitious_moon_base"
 		}
 		blockoverride "sr_third_cells" {
 			te_sr_ov_first = {
@@ -1639,7 +1689,7 @@ flowcontainer = {
 	datacontext = "[GetScriptedGui('sr_milestone_mars_landing_sgui')]"
 
 	te_sr_overview_milestone = {
-		blockoverride "sr_status_drifting" {
+		blockoverride "sr_status_standard" {
 			visible = "[LessThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_mars_landing'), '(CFixedPoint)1' )]"
 		}
 		blockoverride "sr_status_safe" {
@@ -1659,6 +1709,12 @@ flowcontainer = {
 		}
 		blockoverride "sr_risk_label" {
 			text = "je_space_race_widget_risk_mars_landing"
+		}
+		blockoverride "sr_label_safe" {
+			text = "je_space_race_widget_ov_safe_mars_landing"
+		}
+		blockoverride "sr_label_ambitious" {
+			text = "je_space_race_widget_ov_ambitious_mars_landing"
 		}
 		blockoverride "sr_third_cells" {
 			te_sr_ov_first = {
@@ -1745,7 +1801,7 @@ flowcontainer = {
 	datacontext = "[GetScriptedGui('sr_milestone_interstellar_probe_sgui')]"
 
 	te_sr_overview_milestone = {
-		blockoverride "sr_status_drifting" {
+		blockoverride "sr_status_standard" {
 			visible = "[LessThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_interstellar_probe'), '(CFixedPoint)1' )]"
 		}
 		blockoverride "sr_status_safe" {
@@ -1765,6 +1821,12 @@ flowcontainer = {
 		}
 		blockoverride "sr_risk_label" {
 			text = "je_space_race_widget_risk_interstellar_probe"
+		}
+		blockoverride "sr_label_safe" {
+			text = "je_space_race_widget_ov_safe_interstellar_probe"
+		}
+		blockoverride "sr_label_ambitious" {
+			text = "je_space_race_widget_ov_ambitious_interstellar_probe"
 		}
 		blockoverride "sr_third_cells" {
 			te_sr_ov_first = {
@@ -1851,7 +1913,7 @@ flowcontainer = {
 	datacontext = "[GetScriptedGui('sr_milestone_solar_colonization_sgui')]"
 
 	te_sr_overview_milestone = {
-		blockoverride "sr_status_drifting" {
+		blockoverride "sr_status_standard" {
 			visible = "[LessThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_solar_colonization'), '(CFixedPoint)1' )]"
 		}
 		blockoverride "sr_status_safe" {
@@ -1871,6 +1933,12 @@ flowcontainer = {
 		}
 		blockoverride "sr_risk_label" {
 			text = "je_space_race_widget_risk_solar_colonization"
+		}
+		blockoverride "sr_label_safe" {
+			text = "je_space_race_widget_ov_safe_solar_colonization"
+		}
+		blockoverride "sr_label_ambitious" {
+			text = "je_space_race_widget_ov_ambitious_solar_colonization"
 		}
 		# No first to race for: the stage, whose tooltip is the stage's description.
 		blockoverride "sr_third_cells" {
