@@ -1,17 +1,32 @@
-﻿### Global Warming journal-entry widgets.
+﻿### Global Warming journal-entry widgets, laid out to docs/guides/gui_style_guide.md.
 ###
-### Three root widgets, all wired from common/journal_entries/je_global_warming.txt:
-###   widget_je_gw_conditions -> custom_widget_container_1 (above the status line)
-###   widget_je_gw_policies   -> custom_widget_container_2 (below it, above the
-###                              vanilla scripted-button grid, which is hidden
-###                              from humans)
-###   widget_je_gw_history    -> custom_widget_container_3 (below the grid)
+### LAYOUT. Three named roots at the foot of this file, attached by
+### common/journal_entries/je_global_warming.txt:
+###   widget_je_gw_overview  -> custom_widget_container_1 (above the status line)
+###       te_gw_overview_panel: tier, market role, penalty scale and, while one
+###       binds us, the treaty; the temperature bar with its next-threshold
+###       marker and "1.59 -> 2.0 C (+0.03/yr)" headline; the share and cut pies.
+###       Always shown.
+###   widget_je_gw_status    -> custom_widget_container_2 (below the status line,
+###                             above the vanilla button grid, which is hidden
+###                             from humans)
+###       te_gw_status_sections: Emissions (a table), Mitigation Policies (the
+###       eight rows, with Around the World nested and collapsed). Open.
+###   widget_je_gw_reference -> custom_widget_container_3 (below the grid)
+###       te_gw_reference_sections: History (the two charts, open) and How
+###       Global Warming Works (every explanation, collapsed).
+### Each section is a type, so a tab in a vanilla panel can compose the same
+### pieces later (style rule 9); the roots are thin wrappers that repeat the
+### composers' [JournalEntry.IsActive] gate.
+###
+### Collapse flags say their default: *_closed sections are open until closed,
+### *_open ones collapsed until opened (test_global_warming_layout.py).
 ###
 ### Every yes/no question and every action is answered by a scripted GUI in
 ### common/scripted_guis/global_warming_sguis.txt, which delegates to the same
 ### gw_possible_* / gw_effect_* helpers as the journal-entry buttons. Nothing here
 ### holds gameplay state; the only widget-local state is the GUI variable system
-### flag that collapses a section.
+### flags that collapse the sections.
 ###
 ### OP CODES (must match the header of global_warming_sguis.txt)
 ###   0  Adopt   1  Repeal
@@ -26,53 +41,148 @@
 ###   what would it do    -> ScriptedGui.ExecuteTooltip, which renders the
 ###                          policy's GW_*_DESC including its
 ###                          [GetStaticModifier(...).GetDesc] effect list
-###   severity tier       -> GetCustom('gw_severity_short'/'gw_severity_text'),
-###                          the single definition of the 6-tier ladder
+###   severity tier       -> ScriptValue('gw_disp_tier_code') for the icon,
+###                          GetCustom('gw_severity_short'/'gw_severity_text')
+###                          for the word and the sentence; the code is the
+###                          ladder's one definition (global_warming_values.txt)
+###   bar, marker, pies   -> the gw_disp_* values in global_warming_values.txt
 ###   every figure        -> a ScriptValue from global_warming_values.txt, all of
 ###                          them O(1) reads over pulse-written snapshots
 ###
 ### MARKET LEADERSHIP IS NOT A VISIBILITY RULE. All eight rows render for every
 ### country, because the three market-wide policies are applied to a market
-### MEMBER's journal entry by its leader. A member therefore sees "Active — set
-### by market leader" with a greyed Repeal, where the old button grid showed it
-### nothing at all.
+### MEMBER's journal entry by its leader. A member sees them lit and "Active",
+### with "Set by our market leader" said once above them and a greyed control.
 ###
 ### The two charts reuse te_history_chart from te_history_chart.gui; the samples
 ### come from common/scripted_effects/te_history_global_warming_effects.txt.
+###
+### Icons are placeholders (style rule 10): every one is listed, with what the
+### final art should show, in docs/systems/global_warming_gui_icons.md.
 
 types global_warming_widget_types
 {
-	### A line of a readout block: fixed-width label, then a value area whose
-	### textboxes elide rather than pushing the row past the panel.
-	type gw_condition_row = flowcontainer {
-		direction = horizontal
+	### ======================================================================
+	### BUILDING BLOCKS. The UN's (un_chamber_widget.gui), gw_-prefixed, so
+	### this file depends on no other system's file loading first.
+	### ======================================================================
+
+	### A live line: the section's own text type (style rule 7).
+	type gw_text = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = fontsize_large
+	}
+
+	### A section's body, under its header.
+	type gw_panel = flowcontainer {
+		direction = vertical
 		ignoreinvisible = yes
-		spacing = 6
+		parentanchor = hcenter
+		margin = { 20 8 }
+		spacing = 4
 
-		widget = {
-			size = { 210 24 }
-			textbox = {
-				parentanchor = left|vcenter
-				autoresize = yes
-				max_width = 210
-				elide = right
-				align = nobaseline
-				using = fontsize_large
-				default_format = "#title"
-				block "condition_label" {}
-			}
-		}
-
-		flowcontainer = {
-			direction = horizontal
-			ignoreinvisible = yes
-			spacing = 4
-			parentanchor = vcenter
-			block "condition_value" {}
+		background = {
+			using = entry_bg_fancy_dark
+			alpha = 0.5
 		}
 	}
 
-	### Free-standing value textbox used inside gw_condition_row.
+	### Collapsible section header. The flag lives in the GUI variable system
+	### only — presentation state, never written to the save.
+	type gw_section_header = section_header_button {
+		blockoverride "layout" {
+			parentanchor = hcenter
+			size = { 520 38 }
+		}
+	}
+
+	### A heading inside a section's panel, over one group of its lines, with a
+	### faint rule under it (gui_modding_guide.md gotcha #26).
+	type gw_subheader = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 1
+		block "subheader_margin" {
+			margin_top = 6
+		}
+
+		textbox = {
+			autoresize = yes
+			multiline = yes
+			maximumsize = { 480 -1 }
+			align = left|nobaseline
+			using = fontsize_large
+			default_format = "#title"
+			block "subheader_text" {}
+		}
+		divider_clean = {
+			blockoverride "size" {
+				size = { 480 2 }
+			}
+		}
+	}
+
+	### Explanatory text under a heading, for How Global Warming Works only.
+	### Static keys: the datacontext is the journal entry.
+	type gw_note = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = fontsize_medium
+		default_format = "#lore"
+	}
+
+	### An expandable section nested inside another section's panel: narrower,
+	### lower and smaller than gw_section_header, set in by its holder.
+	type gw_subsection_header = section_header_button {
+		blockoverride "layout" {
+			size = { 440 30 }
+		}
+		blockoverride "fontsize" {
+			using = fontsize_medium
+		}
+		blockoverride "arrow_size" {
+			size = { 20 20 }
+		}
+		blockoverride "left_textbox_margin_left" {
+			margin_left = 32
+		}
+	}
+
+	### A table row: a label on the left and its value on the right (style
+	### rule 5; un_chamber_value_row's shape).
+	type gw_value_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		margin = { 4 1 }
+
+		textbox = {
+			autoresize = yes
+			minimumsize = { 360 -1 }
+			maximumsize = { 360 -1 }
+			align = left|nobaseline
+			using = fontsize_medium
+			elide = right
+			block "row_label" {}
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 100 -1 }
+			maximumsize = { 100 -1 }
+			align = right|nobaseline
+			using = fontsize_medium
+			default_format = "#v"
+			block "row_value" {}
+		}
+	}
+
+	### Free-standing value textbox: a policy row's status cell.
 	type gw_condition_value = textbox {
 		parentanchor = vcenter
 		autoresize = yes
@@ -80,18 +190,6 @@ types global_warming_widget_types
 		elide = right
 		align = nobaseline
 		using = fontsize_large
-	}
-
-	### Collapsible section header. The open flag lives in the GUI variable
-	### system only — presentation state, never written to the save.
-	type gw_section_header = section_header_button {
-		blockoverride "layout" {
-			parentanchor = hcenter
-			size = { 500 32 }
-		}
-		blockoverride "left_text_alignment" {
-			align = left|nobaseline
-		}
 	}
 
 	### The Adopt control. Op 0 is baked in, so a row instance only supplies the
@@ -124,8 +222,10 @@ types global_warming_widget_types
 		tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
 	}
 
-	### One policy: name, in-force state, an optional note, and exactly one of
-	### the Adopt / Repeal controls.
+	### One policy: its icon, lit while in force and dimmed while not (style
+	### rule 4), its name (hover: what it does), its in-force word, and exactly
+	### one of the Adopt / Repeal controls beside it. Fixed-width cells, 466 px
+	### in all, so no name or status can widen the row.
 	###
 	### The row's datacontext is the policy's gw_active_<policy>_sgui, so
 	### `ScriptedGui.IsShown` below is "is this policy in force for us?". The
@@ -144,49 +244,69 @@ types global_warming_widget_types
 		}
 
 		widget = {
-			size = { 192 26 }
+			size = { 26 26 }
+			parentanchor = vcenter
+
+			icon = {
+				size = { 26 26 }
+				parentanchor = center
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				block "row_icon" {}
+			}
+			icon = {
+				size = { 26 26 }
+				parentanchor = center
+				alpha = 0.25
+				visible = "[Not( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+				block "row_icon" {}
+			}
+		}
+
+		### The name. The instance's block sets the text and the tooltip, the
+		### policy's GW_*_DESC with its effect list: the Repeal control's
+		### tooltip shows only what repealing does, so this is where a policy in
+		### force says what it is doing.
+		widget = {
+			size = { 176 26 }
+			parentanchor = vcenter
+
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
-				max_width = 192
+				max_width = 176
 				elide = right
 				align = nobaseline
 				using = fontsize_large
+				default_format = "#tooltippable"
 				block "row_label" {}
 			}
 		}
 
-		### In-force state, plus a per-row note for the market-wide policies.
-		flowcontainer = {
-			direction = horizontal
-			ignoreinvisible = yes
-			spacing = 3
+		### In force or not.
+		widget = {
+			size = { 124 26 }
 			parentanchor = vcenter
 
-			widget = {
-				size = { 168 26 }
-
-				gw_condition_value = {
-					parentanchor = left|vcenter
-					max_width = 168
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					text = "gw_policy_status_active"
-				}
-				gw_condition_value = {
-					parentanchor = left|vcenter
-					max_width = 168
-					visible = "[Not( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
-					text = "gw_policy_status_inactive"
-				}
-				block "row_note" {}
+			gw_condition_value = {
+				parentanchor = left|vcenter
+				max_width = 124
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				text = "gw_policy_status_active"
+			}
+			gw_condition_value = {
+				parentanchor = left|vcenter
+				max_width = 124
+				visible = "[Not( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+				text = "gw_policy_status_inactive"
 			}
 		}
 
 		### Exactly one control. Adopt while the policy is not in force, Repeal
-		### while it is — the same question that drives the status cell, asked of
-		### the same scripted GUI.
+		### while it is — the same question that drives the icon and the status
+		### cell, asked of the same scripted GUI.
 		widget = {
 			size = { 110 30 }
+			parentanchor = vcenter
 
 			widget = {
 				size = { 100% 100% }
@@ -201,619 +321,1017 @@ types global_warming_widget_types
 			}
 		}
 	}
-}
 
+	### ======================================================================
+	### OVERVIEW. Always shown: the state a returning player checks.
+	### ======================================================================
 
-### ==========================================================================
-### CLIMATE CONDITIONS
-### ==========================================================================
-flowcontainer = {
-	name = "widget_je_gw_conditions"
+	### A cell of the overview's first row: an icon, its word small beneath.
+	### Fixed width, so the row cannot push the panel wider (te_un_ov_icon_label).
+	type te_gw_ov_icon_label = widget {
+		size = { 110 58 }
 
-	# je_global_warming has is_shown_when_inactive and stays inactive until the
-	# world has warmed by 0.1 C, which is decades on a normal game. Until then
-	# the entry renders greyed for every country and none of this content means
-	# anything, so draw nothing at all — that also stops the per-frame
-	# ExecuteTooltip work for countries that will never look at the panel.
-	visible = "[JournalEntry.IsActive]"
-	direction = vertical
-	parentanchor = hcenter
-	ignoreinvisible = yes
-	spacing = 2
-	margin = { 14 8 }
-
-	background = {
-		using = entry_bg_fancy_dark
-		alpha = 0.5
-	}
-
-	textbox = {
-		text = "gw_sect_conditions"
-		default_format = "#header"
-		autoresize = yes
-		max_width = 470
-		align = left|nobaseline
-		margin_bottom = 4
-	}
-
-	### Global temperature anomaly + its tier word
-	gw_condition_row = {
-		tooltip = "gw_cond_temp_tt"
-		blockoverride "condition_label" {
-			text = "gw_cond_temp_label"
+		icon = {
+			size = { 36 36 }
+			parentanchor = top|hcenter
+			block "icon_texture" {}
 		}
-		blockoverride "condition_value" {
-			gw_condition_value = {
-				text = "gw_cond_temp_value"
-			}
-			gw_condition_value = {
-				text = "gw_cond_tier_value"
-			}
-		}
-	}
-
-	### Change over the last completed year
-	gw_condition_row = {
-		tooltip = "gw_cond_trend_tt"
-		blockoverride "condition_label" {
-			text = "gw_cond_trend_label"
-		}
-		blockoverride "condition_value" {
-			gw_condition_value = {
-				visible = "[GetScriptedGui('gw_has_yearly_figures_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				text = "gw_cond_trend_value"
-			}
-			gw_condition_value = {
-				visible = "[Not( GetScriptedGui('gw_has_yearly_figures_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
-				text = "gw_cond_pending"
-			}
-		}
-	}
-
-	### This market's annual emissions
-	gw_condition_row = {
-		tooltip = "gw_cond_emis_tt"
-		blockoverride "condition_label" {
-			text = "gw_cond_emis_label"
-		}
-		blockoverride "condition_value" {
-			gw_condition_value = {
-				visible = "[GetScriptedGui('gw_has_yearly_figures_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				text = "gw_cond_emis_value"
-			}
-			gw_condition_value = {
-				visible = "[Not( GetScriptedGui('gw_has_yearly_figures_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
-				text = "gw_cond_pending"
-			}
-		}
-	}
-
-	### Share of world annual emissions
-	gw_condition_row = {
-		tooltip = "gw_cond_share_tt"
-		blockoverride "condition_label" {
-			text = "gw_cond_share_label"
-		}
-		blockoverride "condition_value" {
-			gw_condition_value = {
-				visible = "[GetScriptedGui('gw_has_yearly_figures_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				text = "gw_cond_share_value"
-			}
-			gw_condition_value = {
-				visible = "[Not( GetScriptedGui('gw_has_yearly_figures_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
-				text = "gw_cond_pending"
-			}
-		}
-	}
-
-	### Emissions reduction currently in force — a live read, so it reacts to a
-	### policy click on the very next frame.
-	gw_condition_row = {
-		tooltip = "gw_cond_cut_tt"
-		blockoverride "condition_label" {
-			text = "gw_cond_cut_label"
-		}
-		blockoverride "condition_value" {
-			gw_condition_value = {
-				text = "gw_cond_cut_value"
-			}
-		}
-	}
-
-	### Market leader or market member
-	gw_condition_row = {
-		tooltip = "gw_cond_role_tt"
-		blockoverride "condition_label" {
-			text = "gw_cond_role_label"
-		}
-		blockoverride "condition_value" {
-			gw_condition_value = {
-				text = "gw_cond_role_value"
-			}
-		}
-	}
-
-	### The penalty this country is carrying
-	gw_condition_row = {
-		tooltip = "gw_cond_penalty_tt"
-		blockoverride "condition_label" {
-			text = "gw_cond_penalty_label"
-		}
-		blockoverride "condition_value" {
-			gw_condition_value = {
-				text = "gw_cond_penalty_value"
-			}
-		}
-	}
-}
-
-
-### ==========================================================================
-### MITIGATION POLICIES
-### ==========================================================================
-flowcontainer = {
-	name = "widget_je_gw_policies"
-
-	visible = "[JournalEntry.IsActive]"
-	direction = vertical
-	parentanchor = hcenter
-	ignoreinvisible = yes
-	spacing = 2
-
-	textbox = {
-		text = "gw_sect_policies"
-		default_format = "#header"
-		autoresize = yes
-		max_width = 500
-		align = left|nobaseline
-		margin = { 4 4 }
-	}
-
-	textbox = {
-		visible = "[Not( GetScriptedGui('gw_any_policy_active_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
-		text = "gw_policies_none_yet"
-		autoresize = yes
-		multiline = yes
-		minimumsize = { 480 -1 }
-		maximumsize = { 480 -1 }
-		align = left|nobaseline
-		margin = { 6 4 }
-	}
-
-	### ---- Market-wide policies (leader sets them for the whole market) -----
-	gw_policy_row = {
-		datacontext = "[GetScriptedGui('gw_active_carbon_tax_sgui')]"
-		blockoverride "row_label" {
-			text = "GW_CARBON_TAX_ROW"
-		}
-		blockoverride "row_note" {
-			gw_condition_value = {
-				parentanchor = right|vcenter
-				max_width = 168
-				visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Not( GetScriptedGui('gw_is_market_leader_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
-				text = "gw_policy_status_by_leader"
-			}
-		}
-		blockoverride "adopt_action" {
-			gw_adopt_button = {
-				datacontext = "[GetScriptedGui('gw_policy_carbon_tax_sgui')]"
-			}
-		}
-		blockoverride "repeal_action" {
-			gw_repeal_button = {
-				datacontext = "[GetScriptedGui('gw_policy_carbon_tax_sgui')]"
-			}
-		}
-	}
-
-	gw_policy_row = {
-		datacontext = "[GetScriptedGui('gw_active_renewable_investment_sgui')]"
-		blockoverride "row_label" {
-			text = "GW_RENEWABLE_INVESTMENT_ROW"
-		}
-		blockoverride "row_note" {
-			gw_condition_value = {
-				parentanchor = right|vcenter
-				max_width = 168
-				visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Not( GetScriptedGui('gw_is_market_leader_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
-				text = "gw_policy_status_by_leader"
-			}
-		}
-		blockoverride "adopt_action" {
-			gw_adopt_button = {
-				datacontext = "[GetScriptedGui('gw_policy_renewable_investment_sgui')]"
-			}
-		}
-		blockoverride "repeal_action" {
-			gw_repeal_button = {
-				datacontext = "[GetScriptedGui('gw_policy_renewable_investment_sgui')]"
-			}
-		}
-	}
-
-	gw_policy_row = {
-		datacontext = "[GetScriptedGui('gw_active_emission_standards_sgui')]"
-		blockoverride "row_label" {
-			text = "GW_EMISSION_STANDARDS_ROW"
-		}
-		blockoverride "row_note" {
-			gw_condition_value = {
-				parentanchor = right|vcenter
-				max_width = 168
-				visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Not( GetScriptedGui('gw_is_market_leader_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
-				text = "gw_policy_status_by_leader"
-			}
-		}
-		blockoverride "adopt_action" {
-			gw_adopt_button = {
-				datacontext = "[GetScriptedGui('gw_policy_emission_standards_sgui')]"
-			}
-		}
-		blockoverride "repeal_action" {
-			gw_repeal_button = {
-				datacontext = "[GetScriptedGui('gw_policy_emission_standards_sgui')]"
-			}
-		}
-	}
-
-	### ---- National policies (every country sets its own) -------------------
-	gw_policy_row = {
-		datacontext = "[GetScriptedGui('gw_active_climate_adaptation_sgui')]"
-		blockoverride "row_label" {
-			text = "GW_CLIMATE_ADAPTATION_ROW"
-		}
-		blockoverride "adopt_action" {
-			gw_adopt_button = {
-				datacontext = "[GetScriptedGui('gw_policy_climate_adaptation_sgui')]"
-			}
-		}
-		blockoverride "repeal_action" {
-			gw_repeal_button = {
-				datacontext = "[GetScriptedGui('gw_policy_climate_adaptation_sgui')]"
-			}
-		}
-	}
-
-	gw_policy_row = {
-		datacontext = "[GetScriptedGui('gw_active_reforestation_sgui')]"
-		blockoverride "row_label" {
-			text = "GW_REFORESTATION_ROW"
-		}
-		blockoverride "adopt_action" {
-			gw_adopt_button = {
-				datacontext = "[GetScriptedGui('gw_policy_reforestation_sgui')]"
-			}
-		}
-		blockoverride "repeal_action" {
-			gw_repeal_button = {
-				datacontext = "[GetScriptedGui('gw_policy_reforestation_sgui')]"
-			}
-		}
-	}
-
-	gw_policy_row = {
-		datacontext = "[GetScriptedGui('gw_active_public_transit_sgui')]"
-		blockoverride "row_label" {
-			text = "GW_PUBLIC_TRANSIT_ROW"
-		}
-		blockoverride "adopt_action" {
-			gw_adopt_button = {
-				datacontext = "[GetScriptedGui('gw_policy_public_transit_sgui')]"
-			}
-		}
-		blockoverride "repeal_action" {
-			gw_repeal_button = {
-				datacontext = "[GetScriptedGui('gw_policy_public_transit_sgui')]"
-			}
-		}
-	}
-
-	gw_policy_row = {
-		datacontext = "[GetScriptedGui('gw_active_fossil_fuel_divestment_sgui')]"
-		blockoverride "row_label" {
-			text = "GW_FOSSIL_FUEL_DIVESTMENT_ROW"
-		}
-		blockoverride "adopt_action" {
-			gw_adopt_button = {
-				datacontext = "[GetScriptedGui('gw_policy_fossil_fuel_divestment_sgui')]"
-			}
-		}
-		blockoverride "repeal_action" {
-			gw_repeal_button = {
-				datacontext = "[GetScriptedGui('gw_policy_fossil_fuel_divestment_sgui')]"
-			}
-		}
-	}
-
-	gw_policy_row = {
-		datacontext = "[GetScriptedGui('gw_active_green_building_codes_sgui')]"
-		blockoverride "row_label" {
-			text = "GW_GREEN_BUILDING_CODES_ROW"
-		}
-		blockoverride "adopt_action" {
-			gw_adopt_button = {
-				datacontext = "[GetScriptedGui('gw_policy_green_building_codes_sgui')]"
-			}
-		}
-		blockoverride "repeal_action" {
-			gw_repeal_button = {
-				datacontext = "[GetScriptedGui('gw_policy_green_building_codes_sgui')]"
-			}
-		}
-	}
-
-	### ---- How many nations run each policy (collapsed by default) ----------
-	gw_section_header = {
-		blockoverride "left_text" {
-			text = "gw_sect_world"
-			using = elide_fontsize_min
-		}
-		blockoverride "onclick" {
-			onclick = "[GetVariableSystem.Toggle('gw_world_open')]"
-		}
-		blockoverride "onclick_showmore" {
-			visible = "[Not(GetVariableSystem.Exists('gw_world_open'))]"
-		}
-		blockoverride "onclick_showless" {
-			visible = "[GetVariableSystem.Exists('gw_world_open')]"
-		}
-	}
-
-	flowcontainer = {
-		direction = vertical
-		parentanchor = hcenter
-		ignoreinvisible = yes
-		spacing = 1
-		margin = { 14 4 }
-		visible = "[GetVariableSystem.Exists('gw_world_open')]"
-
-		gw_condition_row = {
-			blockoverride "condition_label" {
-				text = "GW_CARBON_TAX_ROW"
-			}
-			blockoverride "condition_value" {
-				gw_condition_value = {
-					text = "gw_world_n_carbon_tax"
-				}
-			}
-		}
-		gw_condition_row = {
-			blockoverride "condition_label" {
-				text = "GW_RENEWABLE_INVESTMENT_ROW"
-			}
-			blockoverride "condition_value" {
-				gw_condition_value = {
-					text = "gw_world_n_renewable_investment"
-				}
-			}
-		}
-		gw_condition_row = {
-			blockoverride "condition_label" {
-				text = "GW_EMISSION_STANDARDS_ROW"
-			}
-			blockoverride "condition_value" {
-				gw_condition_value = {
-					text = "gw_world_n_emission_standards"
-				}
-			}
-		}
-		gw_condition_row = {
-			blockoverride "condition_label" {
-				text = "GW_CLIMATE_ADAPTATION_ROW"
-			}
-			blockoverride "condition_value" {
-				gw_condition_value = {
-					text = "gw_world_n_climate_adaptation"
-				}
-			}
-		}
-		gw_condition_row = {
-			blockoverride "condition_label" {
-				text = "GW_REFORESTATION_ROW"
-			}
-			blockoverride "condition_value" {
-				gw_condition_value = {
-					text = "gw_world_n_reforestation"
-				}
-			}
-		}
-		gw_condition_row = {
-			blockoverride "condition_label" {
-				text = "GW_PUBLIC_TRANSIT_ROW"
-			}
-			blockoverride "condition_value" {
-				gw_condition_value = {
-					text = "gw_world_n_public_transit"
-				}
-			}
-		}
-		gw_condition_row = {
-			blockoverride "condition_label" {
-				text = "GW_FOSSIL_FUEL_DIVESTMENT_ROW"
-			}
-			blockoverride "condition_value" {
-				gw_condition_value = {
-					text = "gw_world_n_fossil_fuel_divestment"
-				}
-			}
-		}
-		gw_condition_row = {
-			blockoverride "condition_label" {
-				text = "GW_GREEN_BUILDING_CODES_ROW"
-			}
-			blockoverride "condition_value" {
-				gw_condition_value = {
-					text = "gw_world_n_green_building_codes"
-				}
-			}
-		}
-	}
-}
-
-
-### ==========================================================================
-### HISTORY
-### ==========================================================================
-### Two series from the shared history store: the global anomaly (identical for
-### everyone, stored per tracked country so it shares this country's x-axis and
-### the chart's country datamodel) and this market's share of world emissions.
-### Both are re-based each January, so both read as staircases — see the legends.
-###
-### Collapsed by default: a player who never opens it never pays for 240 bar
-### widgets. Nothing here has an effect; the only click targets write GUI
-### variables.
-flowcontainer = {
-	name = "widget_je_gw_history"
-
-	visible = "[JournalEntry.IsActive]"
-	direction = vertical
-	parentanchor = hcenter
-	ignoreinvisible = yes
-	spacing = 2
-
-	gw_section_header = {
-		blockoverride "left_text" {
-			text = "gw_sect_history"
-			using = elide_fontsize_min
-		}
-		blockoverride "onclick" {
-			onclick = "[GetVariableSystem.Toggle('gw_hist_open')]"
-		}
-		blockoverride "onclick_showmore" {
-			visible = "[Not(GetVariableSystem.Exists('gw_hist_open'))]"
-		}
-		blockoverride "onclick_showless" {
-			visible = "[GetVariableSystem.Exists('gw_hist_open')]"
-		}
-	}
-
-	flowcontainer = {
-		direction = vertical
-		parentanchor = hcenter
-		ignoreinvisible = yes
-		spacing = 2
-		visible = "[GetVariableSystem.Exists('gw_hist_open')]"
-
-		### Range selector — shared type, shared GUI variable, so switching the
-		### range here also switches it on any other history chart in the game.
-		flowcontainer = {
-			direction = horizontal
-			ignoreinvisible = yes
-			parentanchor = hcenter
-			spacing = 4
-			margin = { 4 4 }
-
-			te_history_range_button = {
-				blockoverride "range_text" {
-					text = "te_hist_range_1y"
-				}
-				blockoverride "range_enabled" {
-					enabled = "[Not(GetVariableSystem.HasValue( 'te_hist_range', '1' ))]"
-				}
-				blockoverride "range_onclick" {
-					onclick = "[GetVariableSystem.Set( 'te_hist_range', '1' )]"
-				}
-			}
-			te_history_range_button = {
-				blockoverride "range_text" {
-					text = "te_hist_range_5y"
-				}
-				blockoverride "range_enabled" {
-					enabled = "[Not(GetVariableSystem.HasValue( 'te_hist_range', '5' ))]"
-				}
-				blockoverride "range_onclick" {
-					onclick = "[GetVariableSystem.Set( 'te_hist_range', '5' )]"
-				}
-			}
-			te_history_range_button = {
-				blockoverride "range_text" {
-					text = "te_hist_range_20y"
-				}
-				blockoverride "range_enabled" {
-					enabled = "[Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '5' ) )]"
-				}
-				blockoverride "range_onclick" {
-					onclick = "[GetVariableSystem.Set( 'te_hist_range', '20' )]"
-				}
-			}
-		}
-
 		textbox = {
-			visible = "[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('te_hist') ) )]"
-			parentanchor = hcenter
+			parentanchor = bottom|hcenter
 			autoresize = yes
-			multiline = yes
-			max_width = 480
+			max_width = 108
+			elide = right
 			align = hcenter|nobaseline
-			text = "te_hist_since"
+			using = fontsize_small
+			default_format = "#tooltippable"
+			block "label" {}
 		}
+	}
 
-		### ---- Global temperature anomaly (0-4 C, the journal entry's scale) -
-		te_history_chart = {
-			blockoverride "chart_title" {
-				text = "gw_hist_chart_temp_title"
+	### A 0..1 share as a pie over a background disc, inside vanilla's
+	### decorated round frame, its label beneath (te_un_ov_pie; the recipe is
+	### gui_modding_guide.md "Pie charts of script-held data"). The instance
+	### names the fill texture: frame 1 transparent, frame 2 the colour.
+	type te_gw_ov_pie = widget {
+		size = { 150 108 }
+
+		icon = {
+			size = { 86 86 }
+			parentanchor = top|hcenter
+			texture = "gfx/interface/backgrounds/round_frame_dec.dds"
+		}
+		widget = {
+			size = { 62 62 }
+			parentanchor = top|hcenter
+			position = { 0 12 }
+
+			progresspie = {
+				size = { 100% 100% }
+				min = 0
+				max = 1
+				value = 1
+				texture = "gfx/interface/icons/un_icons/pie_rest.dds"
+				framesize = { 128 128 }
+				frame = 2
 			}
-			blockoverride "chart_legend" {
-				text = "gw_hist_chart_temp_legend"
+			progresspie = {
+				size = { 100% 100% }
+				min = 0
+				max = 1
+				block "pie_value" {}
+				block "pie_fill" {
+					texture = "gfx/interface/icons/un_icons/pie_members.dds"
+				}
+				framesize = { 128 128 }
+				frame = 2
 			}
-			# This series records no markers; the store's pips belong to
-			# other systems (banking, cultural hegemony) and would go unexplained.
-			blockoverride "marker_pips" {}
-			blockoverride "bar_tooltip" {
-				tooltip = "gw_hist_tt_temp"
-			}
-			blockoverride "bar_body" {
-				te_history_bar_unsigned = {
-					visible = "[ScriptContainer.HasVariable( 'te_hist_v_gw_temp' )]"
-					blockoverride "values" {
-						min = 0
-						max = 4
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0.08', ScriptContainer.GetVariableValue( 'te_hist_v_gw_temp' ) ) )]"
+		}
+		textbox = {
+			parentanchor = bottom|hcenter
+			autoresize = yes
+			align = hcenter|nobaseline
+			using = fontsize_medium
+			default_format = "#tooltippable"
+			block "label" {}
+		}
+	}
+
+	type te_gw_overview_panel = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		visible = "[JournalEntry.IsActive]"
+
+		gw_panel = {
+			spacing = 10
+
+			### Row 1: tier · market role · penalty scale · treaty (while bound)
+			flowcontainer = {
+				direction = horizontal
+				spacing = 6
+				ignoreinvisible = yes
+				parentanchor = hcenter
+
+				### The tier, one icon per gw_disp_tier_code; the word is
+				### gw_severity_short and the tooltip the tier's sentence.
+				flowcontainer = {
+					ignoreinvisible = yes
+					tooltip = "gw_ov_tier_tt"
+
+					te_gw_ov_icon_label = {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)0' )]"
+						blockoverride "icon_texture" {
+							texture = "gfx/interface/icons/event_icons/je_global_warming.dds"
+						}
+						blockoverride "label" {
+							text = "gw_cond_tier_value"
+						}
 					}
-					blockoverride "cover_values" {
-						min = 0
-						max = 4
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_gw_temp' ), '(CFixedPoint)0.16' ) ) )]"
+					te_gw_ov_icon_label = {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)1' )]"
+						blockoverride "icon_texture" {
+							texture = "gfx/interface/icons/event_icons/je_global_warming.dds"
+						}
+						blockoverride "label" {
+							text = "gw_cond_tier_value"
+						}
 					}
-					blockoverride "color" {
-						color = { 0.85 0.42 0.30 1.0 }
+					te_gw_ov_icon_label = {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)2' )]"
+						blockoverride "icon_texture" {
+							texture = "gfx/interface/icons/event_icons/je_global_warming.dds"
+						}
+						blockoverride "label" {
+							text = "gw_cond_tier_value"
+						}
+					}
+					te_gw_ov_icon_label = {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)3' )]"
+						blockoverride "icon_texture" {
+							texture = "gfx/interface/icons/event_icons/je_global_warming.dds"
+						}
+						blockoverride "label" {
+							text = "gw_cond_tier_value"
+						}
+					}
+					te_gw_ov_icon_label = {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)4' )]"
+						blockoverride "icon_texture" {
+							texture = "gfx/interface/icons/event_icons/je_global_warming.dds"
+						}
+						blockoverride "label" {
+							text = "gw_cond_tier_value"
+						}
+					}
+					te_gw_ov_icon_label = {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)5' )]"
+						blockoverride "icon_texture" {
+							texture = "gfx/interface/icons/event_icons/je_global_warming.dds"
+						}
+						blockoverride "label" {
+							text = "gw_cond_tier_value"
+						}
+					}
+					te_gw_ov_icon_label = {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)6' )]"
+						blockoverride "icon_texture" {
+							texture = "gfx/interface/icons/event_icons/je_global_warming.dds"
+						}
+						blockoverride "label" {
+							text = "gw_cond_tier_value"
+						}
+					}
+				}
+
+				### Market leader or member: who sets the market-wide policies.
+				flowcontainer = {
+					ignoreinvisible = yes
+					tooltip = "gw_cond_role_tt"
+
+					te_gw_ov_icon_label = {
+						visible = "[GetScriptedGui('gw_is_market_leader_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						blockoverride "icon_texture" {
+							texture = "gfx/interface/icons/state_status_icons/state_market_capital_icon.dds"
+						}
+						blockoverride "label" {
+							text = "gw_cond_role_value"
+						}
+					}
+					te_gw_ov_icon_label = {
+						visible = "[Not( GetScriptedGui('gw_is_market_leader_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+						blockoverride "icon_texture" {
+							texture = "gfx/interface/icons/generic_icons/world_market.dds"
+						}
+						blockoverride "label" {
+							text = "gw_cond_role_value"
+						}
+					}
+				}
+
+				### The Climate Warming modifier's scale; hover for its effects.
+				te_gw_ov_icon_label = {
+					tooltip = "gw_cond_penalty_tt"
+					blockoverride "icon_texture" {
+						texture = "gfx/interface/icons/generic_icons/warning.dds"
+					}
+					blockoverride "label" {
+						text = "gw_ov_penalty_label"
+					}
+				}
+
+				### Only while an Enforce Emissions Reduction treaty binds us.
+				te_gw_ov_icon_label = {
+					visible = "[GetScriptedGui('gw_treaty_bound_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					tooltip = "gw_ov_treaty_tt"
+					blockoverride "icon_texture" {
+						texture = "gfx/interface/icons/diplomatic_treaties_articles_icons/enforce_emissions_reduction.dds"
+					}
+					blockoverride "label" {
+						text = "gw_ov_treaty_label"
 					}
 				}
 			}
-		}
 
-		### ---- This market's share of world emissions (0-100 %) -------------
-		te_history_chart = {
-			blockoverride "chart_title" {
-				text = "gw_hist_chart_share_title"
-			}
-			blockoverride "chart_legend" {
-				text = "gw_hist_chart_share_legend"
-			}
-			# This series records no markers; the store's pips belong to
-			# other systems (banking, cultural hegemony) and would go unexplained.
-			blockoverride "marker_pips" {}
-			blockoverride "bar_tooltip" {
-				tooltip = "gw_hist_tt_share"
-			}
-			blockoverride "bar_body" {
-				te_history_bar_unsigned = {
-					visible = "[ScriptContainer.HasVariable( 'te_hist_v_gw_share' )]"
+			### Row 2: the temperature on the journal entry's 0-4 C scale, a
+			### marker where the next tier begins (the UN authority bar's marker
+			### technique), and where it is heading at last year's rate.
+			flowcontainer = {
+				direction = horizontal
+				spacing = 8
+				parentanchor = hcenter
+				tooltip = "gw_ov_temp_tt"
+
+				textbox = {
+					minimumsize = { 90 -1 }
+					autoresize = yes
+					parentanchor = vcenter
+					align = left|nobaseline
+					text = "gw_ov_temp_label"
+				}
+				default_progressbar_horizontal = {
+					size = { 180 18 }
+					parentanchor = vcenter
 					blockoverride "values" {
+						value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_temp_frac') )]"
 						min = 0
-						max = 100
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_gw_share' ) ) )]"
+						max = 1
 					}
-					blockoverride "cover_values" {
-						min = 0
-						max = 100
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_gw_share' ), '(CFixedPoint)4' ) ) )]"
+					blockoverride "on_top_of_the_progressbar" {
+						# No marker past the last threshold (tier 6, 4 C).
+						progressbar = {
+							visible = "[Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)6' ) )]"
+							noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+							progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+							size = { 100% 100% }
+							skip_initial_animation = yes
+							direction = horizontal
+							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_next_frac') )]"
+							min = 0
+							max = 1
+							marker = {
+								icon = {
+									size = { 36 20 }
+									parentanchor = vcenter
+									widgetanchor = center
+									texture = "gfx/interface/progressbar/progressbar_marker.dds"
+								}
+							}
+						}
 					}
-					blockoverride "color" {
-						color = { 0.45 0.60 0.40 1.0 }
+				}
+				textbox = {
+					autoresize = yes
+					max_width = 190
+					elide = right
+					parentanchor = vcenter
+					align = left|nobaseline
+					text = "gw_ov_temp_value"
+				}
+			}
+
+			### Row 3: our market's share of the world's emissions, and how far
+			### its emissions are cut.
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+
+				te_gw_ov_pie = {
+					tooltip = "gw_cond_share_tt"
+					blockoverride "pie_value" {
+						value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_share_frac') )]"
+					}
+					blockoverride "pie_fill" {
+						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds"
+					}
+					blockoverride "label" {
+						text = "gw_ov_pie_share"
+					}
+				}
+				te_gw_ov_pie = {
+					tooltip = "gw_ov_pie_cut_tt"
+					blockoverride "pie_value" {
+						value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_cut_frac') )]"
+					}
+					blockoverride "pie_fill" {
+						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds"
+					}
+					blockoverride "label" {
+						text = "gw_ov_pie_cut"
 					}
 				}
 			}
 		}
 	}
+
+	### ======================================================================
+	### SECTIONS. Each is composed, in order, by te_gw_status_sections or
+	### te_gw_reference_sections below.
+	### ======================================================================
+
+	### Emissions: the yearly figures behind the pies, as a table. Before the
+	### first January of a game (or on a save upgraded mid-year) the table is
+	### replaced by one line saying when they arrive.
+	type te_gw_sec_emissions = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		gw_section_header = {
+			blockoverride "left_text" {
+				text = "gw_sect_emissions"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('gw_emissions_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('gw_emissions_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('gw_emissions_closed'))]"
+			}
+		}
+
+		gw_panel = {
+			visible = "[Not(GetVariableSystem.Exists('gw_emissions_closed'))]"
+
+			gw_text = {
+				visible = "[Not( GetScriptedGui('gw_has_yearly_figures_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+				text = "gw_emis_pending"
+			}
+
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				visible = "[GetScriptedGui('gw_has_yearly_figures_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+				gw_value_row = {
+					tooltip = "gw_cond_emis_tt"
+					blockoverride "row_label" {
+						text = "gw_emis_market_label"
+						default_format = "#tooltippable"
+					}
+					blockoverride "row_value" {
+						text = "gw_emis_market_value"
+					}
+				}
+				gw_value_row = {
+					tooltip = "gw_emis_capture_tt"
+					blockoverride "row_label" {
+						text = "gw_emis_capture_label"
+						default_format = "#tooltippable"
+					}
+					blockoverride "row_value" {
+						text = "gw_emis_capture_value"
+					}
+				}
+				gw_value_row = {
+					tooltip = "gw_emis_world_tt"
+					blockoverride "row_label" {
+						text = "gw_emis_world_label"
+						default_format = "#tooltippable"
+					}
+					blockoverride "row_value" {
+						text = "gw_emis_world_value"
+					}
+				}
+				gw_value_row = {
+					tooltip = "gw_cond_trend_tt"
+					blockoverride "row_label" {
+						text = "gw_emis_warming_label"
+						default_format = "#tooltippable"
+					}
+					blockoverride "row_value" {
+						text = "gw_cond_trend_value"
+					}
+				}
+			}
+		}
+	}
+
+	### Mitigation Policies: the eight rows, market-wide first. What greys every
+	### Adopt or every Repeal is said once, above the rows (style rule 6), and
+	### only while it holds. How many nations run each policy is a collapsed
+	### table at the foot.
+	type te_gw_sec_policies = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		gw_section_header = {
+			blockoverride "left_text" {
+				text = "gw_sect_policies"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('gw_policies_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('gw_policies_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('gw_policies_closed'))]"
+			}
+		}
+
+		gw_panel = {
+			visible = "[Not(GetVariableSystem.Exists('gw_policies_closed'))]"
+
+			# Below 0.5 C every Adopt is greyed for the same reason.
+			gw_text = {
+				visible = "[GetScriptedGui('gw_policies_waiting_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				align = hcenter|nobaseline
+				text = "gw_pol_waiting"
+			}
+			# Under the treaty every Repeal but Climate Adaptation's is greyed.
+			gw_text = {
+				visible = "[GetScriptedGui('gw_treaty_bound_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				align = hcenter|nobaseline
+				text = "gw_pol_treaty"
+			}
+
+			### ---- Market-wide (the leader sets them for the whole market) ----
+			gw_subheader = {
+				blockoverride "subheader_margin" {}
+				blockoverride "subheader_text" {
+					text = "gw_pol_sub_market"
+				}
+			}
+			# A member's three market-wide controls are all greyed by the same
+			# rule; say it once.
+			gw_text = {
+				visible = "[Not( GetScriptedGui('gw_is_market_leader_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+				text = "gw_pol_set_by_leader"
+			}
+
+			gw_policy_row = {
+				datacontext = "[GetScriptedGui('gw_active_carbon_tax_sgui')]"
+				blockoverride "row_icon" {
+					texture = "gfx/interface/icons/trade_icons/consumption_tax.dds"
+				}
+				blockoverride "row_label" {
+					text = "GW_CARBON_TAX_ROW"
+					tooltip = "GW_CARBON_TAX_DESC"
+				}
+				blockoverride "adopt_action" {
+					gw_adopt_button = {
+						datacontext = "[GetScriptedGui('gw_policy_carbon_tax_sgui')]"
+					}
+				}
+				blockoverride "repeal_action" {
+					gw_repeal_button = {
+						datacontext = "[GetScriptedGui('gw_policy_carbon_tax_sgui')]"
+					}
+				}
+			}
+
+			gw_policy_row = {
+				datacontext = "[GetScriptedGui('gw_active_renewable_investment_sgui')]"
+				blockoverride "row_icon" {
+					texture = "gfx/interface/icons/building_icons/renewable_plant.dds"
+				}
+				blockoverride "row_label" {
+					text = "GW_RENEWABLE_INVESTMENT_ROW"
+					tooltip = "GW_RENEWABLE_INVESTMENT_DESC"
+				}
+				blockoverride "adopt_action" {
+					gw_adopt_button = {
+						datacontext = "[GetScriptedGui('gw_policy_renewable_investment_sgui')]"
+					}
+				}
+				blockoverride "repeal_action" {
+					gw_repeal_button = {
+						datacontext = "[GetScriptedGui('gw_policy_renewable_investment_sgui')]"
+					}
+				}
+			}
+
+			gw_policy_row = {
+				datacontext = "[GetScriptedGui('gw_active_emission_standards_sgui')]"
+				blockoverride "row_icon" {
+					texture = "gfx/interface/icons/decree/decree_pollution_control.dds"
+				}
+				blockoverride "row_label" {
+					text = "GW_EMISSION_STANDARDS_ROW"
+					tooltip = "GW_EMISSION_STANDARDS_DESC"
+				}
+				blockoverride "adopt_action" {
+					gw_adopt_button = {
+						datacontext = "[GetScriptedGui('gw_policy_emission_standards_sgui')]"
+					}
+				}
+				blockoverride "repeal_action" {
+					gw_repeal_button = {
+						datacontext = "[GetScriptedGui('gw_policy_emission_standards_sgui')]"
+					}
+				}
+			}
+
+			### ---- National (every country sets its own) ----
+			gw_subheader = {
+				blockoverride "subheader_text" {
+					text = "gw_pol_sub_national"
+				}
+			}
+
+			gw_policy_row = {
+				datacontext = "[GetScriptedGui('gw_active_climate_adaptation_sgui')]"
+				blockoverride "row_icon" {
+					texture = "gfx/interface/icons/state_status_icons/state_infrastructure.dds"
+				}
+				blockoverride "row_label" {
+					text = "GW_CLIMATE_ADAPTATION_ROW"
+					tooltip = "GW_CLIMATE_ADAPTATION_DESC"
+				}
+				blockoverride "adopt_action" {
+					gw_adopt_button = {
+						datacontext = "[GetScriptedGui('gw_policy_climate_adaptation_sgui')]"
+					}
+				}
+				blockoverride "repeal_action" {
+					gw_repeal_button = {
+						datacontext = "[GetScriptedGui('gw_policy_climate_adaptation_sgui')]"
+					}
+				}
+			}
+
+			gw_policy_row = {
+				datacontext = "[GetScriptedGui('gw_active_reforestation_sgui')]"
+				blockoverride "row_icon" {
+					texture = "gfx/interface/icons/decree/decree_greenest_grass_campaign.dds"
+				}
+				blockoverride "row_label" {
+					text = "GW_REFORESTATION_ROW"
+					tooltip = "GW_REFORESTATION_DESC"
+				}
+				blockoverride "adopt_action" {
+					gw_adopt_button = {
+						datacontext = "[GetScriptedGui('gw_policy_reforestation_sgui')]"
+					}
+				}
+				blockoverride "repeal_action" {
+					gw_repeal_button = {
+						datacontext = "[GetScriptedGui('gw_policy_reforestation_sgui')]"
+					}
+				}
+			}
+
+			gw_policy_row = {
+				datacontext = "[GetScriptedGui('gw_active_public_transit_sgui')]"
+				blockoverride "row_icon" {
+					texture = "gfx/interface/icons/goods_icons/transportation.dds"
+				}
+				blockoverride "row_label" {
+					text = "GW_PUBLIC_TRANSIT_ROW"
+					tooltip = "GW_PUBLIC_TRANSIT_DESC"
+				}
+				blockoverride "adopt_action" {
+					gw_adopt_button = {
+						datacontext = "[GetScriptedGui('gw_policy_public_transit_sgui')]"
+					}
+				}
+				blockoverride "repeal_action" {
+					gw_repeal_button = {
+						datacontext = "[GetScriptedGui('gw_policy_public_transit_sgui')]"
+					}
+				}
+			}
+
+			gw_policy_row = {
+				datacontext = "[GetScriptedGui('gw_active_fossil_fuel_divestment_sgui')]"
+				blockoverride "row_icon" {
+					texture = "gfx/interface/icons/generic_icons/money.dds"
+				}
+				blockoverride "row_label" {
+					text = "GW_FOSSIL_FUEL_DIVESTMENT_ROW"
+					tooltip = "GW_FOSSIL_FUEL_DIVESTMENT_DESC"
+				}
+				blockoverride "adopt_action" {
+					gw_adopt_button = {
+						datacontext = "[GetScriptedGui('gw_policy_fossil_fuel_divestment_sgui')]"
+					}
+				}
+				blockoverride "repeal_action" {
+					gw_repeal_button = {
+						datacontext = "[GetScriptedGui('gw_policy_fossil_fuel_divestment_sgui')]"
+					}
+				}
+			}
+
+			gw_policy_row = {
+				datacontext = "[GetScriptedGui('gw_active_green_building_codes_sgui')]"
+				blockoverride "row_icon" {
+					texture = "gfx/interface/icons/production_method_icons/cat_building_green_p1.dds"
+				}
+				blockoverride "row_label" {
+					text = "GW_GREEN_BUILDING_CODES_ROW"
+					tooltip = "GW_GREEN_BUILDING_CODES_DESC"
+				}
+				blockoverride "adopt_action" {
+					gw_adopt_button = {
+						datacontext = "[GetScriptedGui('gw_policy_green_building_codes_sgui')]"
+					}
+				}
+				blockoverride "repeal_action" {
+					gw_repeal_button = {
+						datacontext = "[GetScriptedGui('gw_policy_green_building_codes_sgui')]"
+					}
+				}
+			}
+
+			### ---- Around the World: how many nations run each policy. A
+			### subsection, collapsed by default, like the UN's programme tallies.
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				margin_left = 20
+				margin_top = 6
+
+				gw_subsection_header = {
+					blockoverride "left_text" {
+						text = "gw_sect_world"
+					}
+					blockoverride "onclick" {
+						onclick = "[GetVariableSystem.Toggle('gw_world_open')]"
+					}
+					blockoverride "onclick_showmore" {
+						visible = "[Not(GetVariableSystem.Exists('gw_world_open'))]"
+					}
+					blockoverride "onclick_showless" {
+						visible = "[GetVariableSystem.Exists('gw_world_open')]"
+					}
+				}
+			}
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				visible = "[GetVariableSystem.Exists('gw_world_open')]"
+
+				gw_value_row = {
+					blockoverride "row_label" {
+						text = "GW_CARBON_TAX_ROW"
+					}
+					blockoverride "row_value" {
+						text = "gw_world_n_carbon_tax"
+					}
+				}
+				gw_value_row = {
+					blockoverride "row_label" {
+						text = "GW_RENEWABLE_INVESTMENT_ROW"
+					}
+					blockoverride "row_value" {
+						text = "gw_world_n_renewable_investment"
+					}
+				}
+				gw_value_row = {
+					blockoverride "row_label" {
+						text = "GW_EMISSION_STANDARDS_ROW"
+					}
+					blockoverride "row_value" {
+						text = "gw_world_n_emission_standards"
+					}
+				}
+				gw_value_row = {
+					blockoverride "row_label" {
+						text = "GW_CLIMATE_ADAPTATION_ROW"
+					}
+					blockoverride "row_value" {
+						text = "gw_world_n_climate_adaptation"
+					}
+				}
+				gw_value_row = {
+					blockoverride "row_label" {
+						text = "GW_REFORESTATION_ROW"
+					}
+					blockoverride "row_value" {
+						text = "gw_world_n_reforestation"
+					}
+				}
+				gw_value_row = {
+					blockoverride "row_label" {
+						text = "GW_PUBLIC_TRANSIT_ROW"
+					}
+					blockoverride "row_value" {
+						text = "gw_world_n_public_transit"
+					}
+				}
+				gw_value_row = {
+					blockoverride "row_label" {
+						text = "GW_FOSSIL_FUEL_DIVESTMENT_ROW"
+					}
+					blockoverride "row_value" {
+						text = "gw_world_n_fossil_fuel_divestment"
+					}
+				}
+				gw_value_row = {
+					blockoverride "row_label" {
+						text = "GW_GREEN_BUILDING_CODES_ROW"
+					}
+					blockoverride "row_value" {
+						text = "gw_world_n_green_building_codes"
+					}
+				}
+			}
+		}
+	}
+
+	### History: two series from the shared history store, the global anomaly
+	### (identical for everyone, stored per tracked country so it shares this
+	### country's x-axis and the chart's country datamodel) and this market's
+	### share of world emissions. Both are re-based each January, so both read
+	### as staircases — see the legends. Open by default, as the UN's chart is.
+	### Nothing here has an effect; the only click targets write GUI variables.
+	type te_gw_sec_history = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		gw_section_header = {
+			blockoverride "left_text" {
+				text = "gw_sect_history"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('gw_hist_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('gw_hist_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('gw_hist_closed'))]"
+			}
+		}
+
+		flowcontainer = {
+			direction = vertical
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 2
+			visible = "[Not(GetVariableSystem.Exists('gw_hist_closed'))]"
+
+			### Range selector — shared type, shared GUI variable, so switching the
+			### range here also switches it on any other history chart in the game.
+			flowcontainer = {
+				direction = horizontal
+				ignoreinvisible = yes
+				parentanchor = hcenter
+				spacing = 4
+				margin = { 4 4 }
+
+				te_history_range_button = {
+					blockoverride "range_text" {
+						text = "te_hist_range_1y"
+					}
+					blockoverride "range_enabled" {
+						enabled = "[Not(GetVariableSystem.HasValue( 'te_hist_range', '1' ))]"
+					}
+					blockoverride "range_onclick" {
+						onclick = "[GetVariableSystem.Set( 'te_hist_range', '1' )]"
+					}
+				}
+				te_history_range_button = {
+					blockoverride "range_text" {
+						text = "te_hist_range_5y"
+					}
+					blockoverride "range_enabled" {
+						enabled = "[Not(GetVariableSystem.HasValue( 'te_hist_range', '5' ))]"
+					}
+					blockoverride "range_onclick" {
+						onclick = "[GetVariableSystem.Set( 'te_hist_range', '5' )]"
+					}
+				}
+				te_history_range_button = {
+					blockoverride "range_text" {
+						text = "te_hist_range_20y"
+					}
+					blockoverride "range_enabled" {
+						enabled = "[Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '5' ) )]"
+					}
+					blockoverride "range_onclick" {
+						onclick = "[GetVariableSystem.Set( 'te_hist_range', '20' )]"
+					}
+				}
+			}
+
+			textbox = {
+				visible = "[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('te_hist') ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 480
+				align = hcenter|nobaseline
+				text = "te_hist_since"
+			}
+
+			### ---- Global temperature anomaly (0-4 C, the journal entry's scale) -
+			te_history_chart = {
+				blockoverride "chart_title" {
+					text = "gw_hist_chart_temp_title"
+				}
+				blockoverride "chart_legend" {
+					text = "gw_hist_chart_temp_legend"
+				}
+				# This series records no markers; the store's pips belong to
+				# other systems (banking, cultural hegemony) and would go unexplained.
+				blockoverride "marker_pips" {}
+				blockoverride "bar_tooltip" {
+					tooltip = "gw_hist_tt_temp"
+				}
+				blockoverride "bar_body" {
+					te_history_bar_unsigned = {
+						visible = "[ScriptContainer.HasVariable( 'te_hist_v_gw_temp' )]"
+						blockoverride "values" {
+							min = 0
+							max = 4
+							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0.08', ScriptContainer.GetVariableValue( 'te_hist_v_gw_temp' ) ) )]"
+						}
+						blockoverride "cover_values" {
+							min = 0
+							max = 4
+							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_gw_temp' ), '(CFixedPoint)0.16' ) ) )]"
+						}
+						blockoverride "color" {
+							color = { 0.85 0.42 0.30 1.0 }
+						}
+					}
+				}
+			}
+
+			### ---- This market's share of world emissions (0-100 %) -------------
+			te_history_chart = {
+				blockoverride "chart_title" {
+					text = "gw_hist_chart_share_title"
+				}
+				blockoverride "chart_legend" {
+					text = "gw_hist_chart_share_legend"
+				}
+				# This series records no markers; the store's pips belong to
+				# other systems (banking, cultural hegemony) and would go unexplained.
+				blockoverride "marker_pips" {}
+				blockoverride "bar_tooltip" {
+					tooltip = "gw_hist_tt_share"
+				}
+				blockoverride "bar_body" {
+					te_history_bar_unsigned = {
+						visible = "[ScriptContainer.HasVariable( 'te_hist_v_gw_share' )]"
+						blockoverride "values" {
+							min = 0
+							max = 100
+							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_gw_share' ) ) )]"
+						}
+						blockoverride "cover_values" {
+							min = 0
+							max = 100
+							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_gw_share' ), '(CFixedPoint)4' ) ) )]"
+						}
+						blockoverride "color" {
+							color = { 0.45 0.60 0.40 1.0 }
+						}
+					}
+				}
+			}
+		}
+	}
+
+	### "How Global Warming Works": every explanation, gathered into one
+	### section at the foot, collapsed by default, one heading per topic (style
+	### rule 1). The live sections above say what is happening; this says how
+	### it works.
+	type te_gw_sec_how = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		gw_section_header = {
+			blockoverride "left_text" {
+				text = "gw_how_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('gw_how_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('gw_how_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('gw_how_open')]"
+			}
+		}
+
+		gw_panel = {
+			visible = "[GetVariableSystem.Exists('gw_how_open')]"
+
+			gw_subheader = {
+				blockoverride "subheader_margin" {}
+				blockoverride "subheader_text" {
+					text = "gw_how_sub_warming"
+				}
+			}
+			gw_note = {
+				text = "gw_how_warming_1"
+			}
+			gw_note = {
+				text = "gw_how_warming_2"
+			}
+			gw_subheader = {
+				blockoverride "subheader_text" {
+					text = "gw_how_sub_penalty"
+				}
+			}
+			gw_note = {
+				text = "gw_how_penalty"
+			}
+			gw_subheader = {
+				blockoverride "subheader_text" {
+					text = "gw_how_sub_emissions"
+				}
+			}
+			gw_note = {
+				text = "gw_how_emissions_1"
+			}
+			gw_note = {
+				text = "gw_how_emissions_2"
+			}
+			gw_subheader = {
+				blockoverride "subheader_text" {
+					text = "gw_how_sub_policies"
+				}
+			}
+			gw_note = {
+				text = "gw_how_policies_1"
+			}
+			gw_note = {
+				text = "gw_how_policies_2"
+			}
+			gw_note = {
+				text = "gw_how_policies_3"
+			}
+		}
+	}
+
+	### ======================================================================
+	### COMPOSERS: the one order of the sections.
+	### ======================================================================
+
+	### Everything a returning player checks, open by default.
+	type te_gw_status_sections = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+		visible = "[JournalEntry.IsActive]"
+
+		te_gw_sec_emissions = {}
+		te_gw_sec_policies = {}
+	}
+
+	### The charts, then how it all works.
+	type te_gw_reference_sections = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+		visible = "[JournalEntry.IsActive]"
+
+		te_gw_sec_history = {}
+		te_gw_sec_how = {}
+	}
+}
+
+### ==========================================================================
+### JOURNAL ENTRY ROOTS (je_global_warming.txt). Bare wrappers that repeat the
+### composers' IsActive gate, so an inactive entry's containers collapse.
+###
+### je_global_warming has is_shown_when_inactive and stays inactive until the
+### world has warmed by 0.1 C, which is decades on a normal game. Until then
+### the entry renders greyed for every country and none of this content means
+### anything, so nothing is drawn at all — which also stops the per-frame
+### ExecuteTooltip work for countries that will never look at the panel
+### (gui_modding_guide.md gotcha #14).
+### ==========================================================================
+flowcontainer = {
+	name = "widget_je_gw_overview"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	ignoreinvisible = yes
+
+	te_gw_overview_panel = {}
+}
+
+flowcontainer = {
+	name = "widget_je_gw_status"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	ignoreinvisible = yes
+
+	te_gw_status_sections = {}
+}
+
+flowcontainer = {
+	name = "widget_je_gw_reference"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	ignoreinvisible = yes
+
+	te_gw_reference_sections = {}
 }
