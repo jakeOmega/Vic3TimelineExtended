@@ -1,6 +1,6 @@
 # UN GUI pass, round 1: design
 
-**Status:** approved in conversation with the owner, 2026-09-28. Round 1 built the same day (plan `docs/superpowers/plans/2026-09-28-un-gui-pass.md`, commits `e6faf1f`..), branch `feat/banking-budget-tab`, PR #567. Not yet seen in game.
+**Status:** approved in conversation with the owner, 2026-09-28. Round 1 built the same day (plan `docs/superpowers/plans/2026-09-28-un-gui-pass.md`, commits `e6faf1f`..), branch `feat/banking-budget-tab`, PR #567. The owner has since reviewed it in game twice, and the two review rounds changed much of what follows (Obligations and Our Record are no longer text as they were; the overview's first row is icons with labels beneath). PR #567's description is the record of those rounds; this spec is the round-1 design.
 
 ## Goal
 
