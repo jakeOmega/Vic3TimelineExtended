@@ -3,8 +3,8 @@
 ### named roots at the foot of this file) and the Budget panel's Banking tab
 ### (gui/budget_panel.gui instances the composers). The sections are types in
 ### banking_dashboard_widget.gui (the overview, Active Policies, Monetary
-### Policy, Available Interventions) and banking_history_widget.gui (the
-### charts), in the shape of the UN's un_layout_widget.gui.
+### Policy, Available Interventions), banking_history_widget.gui (the charts)
+### and here (How Banking Works), in the shape of the UN's un_layout_widget.gui.
 ###
 ### Collapse flags say their default: *_closed sections are open until closed,
 ### *_open ones collapsed until opened (test_banking_layout.py).
@@ -25,7 +25,110 @@ types banking_layout_widget_types
 		te_banking_sec_interventions = {}
 	}
 
-	### The record. The history charts are the one section the two hosts show
+	### "How Banking Works": the explanations, collapsed by default, one heading
+	### per topic (style guide rule 1), for the player learning the system. The
+	### live sections carry none: each reading's meaning and what moves it are
+	### in its row's tooltip, each tool's in its own. The monetary topics are
+	### shown only while the monetary layer is on (not under
+	### banking_system_simplified), as the rows they explain are.
+	type te_banking_sec_how = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+
+		banking_dash_category_header = {
+			blockoverride "left_text" {
+				text = "banking_dash_how_header"
+				using = elide_fontsize_min
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('banking_dash_how_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('banking_dash_how_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('banking_dash_how_open')]"
+			}
+		}
+
+		flowcontainer = {
+			visible = "[GetVariableSystem.Exists('banking_dash_how_open')]"
+			direction = vertical
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 2
+			margin = { 8 6 }
+
+			background = {
+				using = entry_bg_fancy_dark
+				alpha = 0.35
+			}
+
+			banking_dash_subheader = {
+				blockoverride "subheader_margin" {}
+				blockoverride "subheader_text" {
+					text = "banking_dash_how_sub_cycle"
+				}
+			}
+			banking_dash_note = {
+				text = "banking_dash_how_cycle"
+			}
+			banking_dash_note = {
+				text = "banking_dash_how_cycle_moves"
+			}
+
+			banking_dash_subheader = {
+				blockoverride "subheader_text" {
+					text = "banking_dash_how_sub_crashes"
+				}
+			}
+			banking_dash_note = {
+				text = "banking_dash_how_crashes"
+			}
+
+			banking_dash_subheader = {
+				blockoverride "subheader_text" {
+					text = "banking_dash_how_sub_budget"
+				}
+			}
+			banking_dash_note = {
+				text = "banking_dash_how_budget"
+			}
+
+			### The monetary layer's topics (not under banking_system_simplified).
+			flowcontainer = {
+				visible = "[GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 2
+
+				banking_dash_subheader = {
+					blockoverride "subheader_text" {
+						text = "banking_dash_how_sub_rate"
+					}
+				}
+				banking_dash_note = {
+					text = "banking_dash_how_rate"
+				}
+				banking_dash_note = {
+					text = "banking_dash_how_stance"
+				}
+
+				banking_dash_subheader = {
+					blockoverride "subheader_text" {
+						text = "banking_dash_how_sub_borrowing"
+					}
+				}
+				banking_dash_note = {
+					text = "banking_dash_how_borrowing"
+				}
+			}
+		}
+	}
+
+	### The record, then how it all works. The history charts are the one section the two hosts show
 	### differently: collapsed in the journal (te_banking_history_panel, open
 	### flag te_hist_charts_open), open in the Budget tab, which overrides the
 	### "history" block with te_banking_history_panel_open (closed flag
@@ -40,6 +143,7 @@ types banking_layout_widget_types
 		block "history" {
 			te_banking_history_panel = {}
 		}
+		te_banking_sec_how = {}
 	}
 }
 

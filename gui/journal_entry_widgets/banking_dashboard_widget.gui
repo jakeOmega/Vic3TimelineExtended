@@ -162,6 +162,19 @@ types banking_dashboard_widget_types
 		}
 	}
 
+	### Explanatory text under a banking_dash_subheader in How Banking Works: how
+	### a thing works, rather than what it reads now (the UN's un_chamber_note,
+	### at this panel's 460). Static keys only.
+	type banking_dash_note = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 460 -1 }
+		maximumsize = { 460 -1 }
+		align = left|nobaseline
+		using = fontsize_medium
+		default_format = "#lore"
+	}
+
 	### A plain 0-1 meter under a row of the gold sub-section (the bank's vault
 	### against its limit, peg confidence against 100). Vanilla's own bar type,
 	### so it matches the journal entry's scripted bars above.
