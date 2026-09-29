@@ -31,6 +31,9 @@ concept_space_milestone = {}
 concept_solar_colonization = {}
 concept_decolonization_system = {}
 concept_colonial_stability = {}
+# Colonial Empire panel terms (gui/journal_entry_widgets/colonial_empire_widget.gui)
+concept_colonial_band = {}
+concept_colonial_overreach = {}
 concept_united_nations_system = {}
 concept_un_general_assembly = {}
 concept_un_represented = {}
