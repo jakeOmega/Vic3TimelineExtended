@@ -1,8 +1,8 @@
 ﻿# ============================================================================
 # CULTURAL HEGEMONY — SCRIPTED GUIS FOR THE JOURNAL-ENTRY WIDGET
 # ============================================================================
-# Read by gui/journal_entry_widgets/cultural_hegemony_widget.gui. Ten handlers,
-# in two kinds.
+# Read by gui/journal_entry_widgets/cultural_hegemony_widget.gui. Twelve
+# handlers, in two kinds.
 #
 # WHY THERE ARE FOUR ch_active_<programme>_sgui HANDLERS THAT TAKE NO SCOPE
 # Whether a `saved_scopes` value reaches a handler's `is_shown` is UNPROVEN in
@@ -23,7 +23,8 @@
 #    the widget and the AI's buttons run the same script.
 #
 # 2. DISPLAY-ONLY HANDLERS — ch_show_sgui, ch_board_row_sgui,
-#    ch_board_detail_sgui, ch_history_marker_sgui. All four carry
+#    ch_board_detail_sgui, ch_history_marker_sgui (and the scope-free yes/no
+#    handlers at the foot of the file). All of them carry
 #    `is_valid = { always = no }` and `ai_is_valid = { always = no }`, so neither
 #    a player nor the AI can execute them. Two are pure questions with an empty
 #    effect (the banking dashboard's `banking_dash_phase_*` shape); two emit
@@ -58,6 +59,12 @@
 # ---- ch_active_<programme>_sgui --------------------------------------------
 #   No saved scope at all. is_shown = ch_active_<programme>, the shared trigger
 #   the journal-entry buttons' `visible` also reads.
+#
+# ---- ch_ministry_missing_sgui / ch_benchmark_sgui ---------------------------
+#   No saved scope. The first gates the programmes section's one line saying
+#   the Ministry of Culture is missing (it greys every Enable control and the
+#   funding +, so it is said once above the rows); the second gates the
+#   overview's Foreign Cultural Benchmark cell.
 # ============================================================================
 
 # ---------------------------------------------------------------------------
@@ -767,6 +774,55 @@ ch_board_is_us_sgui = {
 		trigger_else = {
 			always = no
 		}
+	}
+
+	is_valid = {
+		always = no
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	effect = { }
+}
+
+# ---------------------------------------------------------------------------
+# PANEL GATES — scope-free yes/no questions for the widget's layout
+# ---------------------------------------------------------------------------
+# Same shape as the ch_active_<programme>_sgui handlers: is_shown asks one
+# question of the root, is_valid is always no, the effect is empty.
+
+# The programmes section's "Requires Ministry of Culture" line. The law is the
+# first condition of ch_possible_increase_program_funding and of all four
+# Enable controls, so without it every one of them is greyed for the same
+# reason; the line says it once, above the rows (gui_style_guide.md rule 6).
+ch_ministry_missing_sgui = {
+	scope = country
+
+	is_shown = {
+		NOT = { has_law = law_type:law_ministry_of_culture }
+	}
+
+	is_valid = {
+		always = no
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	effect = { }
+}
+
+# The overview's Foreign Cultural Benchmark cell: shown while the country
+# carries the modifier je_cultural_hegemony's monthly pulse applies to
+# countries trailing the leading cultural power.
+ch_benchmark_sgui = {
+	scope = country
+
+	is_shown = {
+		has_modifier = cultural_hegemony_foreign_benchmark
 	}
 
 	is_valid = {

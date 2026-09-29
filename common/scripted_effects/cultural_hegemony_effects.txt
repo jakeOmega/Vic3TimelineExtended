@@ -9,6 +9,13 @@
 # Scope: Country
 # Caches all display variables and applies/removes CH modifiers.
 ch_monthly_country_update = {
+	# Last month's share, kept for the journal-entry widget's trend arrow
+	# (ch_disp_share_trend). Display bookkeeping: nothing else reads it.
+	if = {
+		limit = { has_variable = ch_total }
+		set_variable = { name = ch_total_prev value = var:ch_total }
+	}
+
 	# Cache variables used by JE triggers (visibility/status conditions)
 	set_variable = { name = ch_total value = cultural_pull_total }
 	set_variable = { name = ch_art value = cultural_pull_from_art }
