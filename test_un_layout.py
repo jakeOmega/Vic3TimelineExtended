@@ -1,4 +1,5 @@
 """The UN's section order and collapse defaults (spec 2026-09-28-un-gui-pass-design.md §1)."""
+import glob
 import os
 import re
 import unittest
@@ -176,6 +177,55 @@ class ProgrammesTest(unittest.TestCase):
         self.assertIn("GetVariableSystem.Toggle('un_chamber_programmes_open')", body)
         for sv in PROGRAMME_TALLIES:
             self.assertIn(f"ScriptValue('{sv}')", body, sv)
+
+CONCEPTS = os.path.join(REPO, "common", "game_concepts", "extra_concepts.txt")
+LOC_DIR = os.path.join(REPO, "localization", "english")
+DISPLAY_EFFECTS = os.path.join(REPO, "common", "scripted_effects", "un_authority_display_effects.txt")
+
+
+def _loc(key):
+    for path in glob.glob(os.path.join(LOC_DIR, "**", "*.yml"), recursive=True):
+        m = re.search(rf'^ {key}:\d* "(.*)"\s*$', _read(path), re.M)
+        if m:
+            return m.group(1)
+    raise AssertionError(f"no loc {key}")
+
+
+class AuthorityTextTest(unittest.TestCase):
+    """Why authority is moving, shortened (owner, 2026-09-28)."""
+
+    def test_commitment_is_one_word(self):
+        self.assertEqual(_loc("je_un_auth_tbl_commitment_label"), "Commitment")
+
+    def test_weight_is_a_concept_with_a_breakdown(self):
+        why = _type_body(_read(AUTHORITY), "te_un_sec_why")
+        self.assertNotIn('"je_un_auth_tbl_weight"', why)
+        self.assertIn('"je_un_auth_weight_label"', why)
+        self.assertIn('tooltip = "je_un_auth_weight_tt"', why)
+        self.assertIn("concept_un_weight", _loc("je_un_auth_weight_label"))
+
+    def test_power_headings_are_centred(self):
+        why = _type_body(_read(AUTHORITY), "te_un_sec_why")
+        for head in ("je_un_auth_powers_champions", "je_un_auth_powers_underminers",
+                     "je_un_auth_powers_outsiders"):
+            m = re.search(rf'align = hcenter\|nobaseline\s*text = "{head}"', why)
+            self.assertTrue(m, head)
+
+    def test_tier_and_cap_are_concepts(self):
+        concepts = _read(CONCEPTS)
+        for c in ("concept_un_tier_moribund", "concept_un_tier_contested", "concept_un_tier_established",
+                  "concept_un_tier_strong", "concept_un_tier_supranational", "concept_un_authority_cap",
+                  "concept_un_weight"):
+            self.assertRegex(concepts, rf"(?m)^{c} = \{{\}}", c)
+        for tier in ("moribund", "contested", "established", "strong", "supranational"):
+            self.assertIn(f"concept_un_tier_{tier}", _loc(f"je_un_auth_tier_{tier}"))
+        for level in ("0", "1"):
+            self.assertIn("concept_un_authority_cap", _loc(f"je_un_auth_charter_{level}"))
+
+    def test_no_cap_line_once_both_reforms_pass(self):
+        effects = _read(DISPLAY_EFFECTS)
+        start = effects.index("un_authority_ladder_block = {")
+        self.assertNotIn("je_un_auth_charter_2", effects[start:effects.index("\n}\n", start)])
 
 if __name__ == "__main__":
     unittest.main()

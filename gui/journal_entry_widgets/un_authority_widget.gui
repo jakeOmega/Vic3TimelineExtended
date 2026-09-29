@@ -560,9 +560,26 @@ types un_authority_widget_types
 					}
 				}
 
-				un_auth_text = {
-					tooltip = "je_un_auth_tbl_weight_tt"
-					text = "je_un_auth_tbl_weight"
+				# Weight: a concept, and its value with the breakdown as tooltip.
+				flowcontainer = {
+					direction = horizontal
+					spacing = 6
+					margin = { 4 4 }
+
+					textbox = {
+						autoresize = yes
+						align = left|nobaseline
+						using = fontsize_large
+						text = "je_un_auth_weight_label"
+					}
+					textbox = {
+						autoresize = yes
+						align = left|nobaseline
+						using = fontsize_large
+						default_format = "#tooltippable"
+						tooltip = "je_un_auth_weight_tt"
+						text = "je_un_auth_weight_value"
+					}
 				}
 
 				# Redesign phase 2: the tier and its enforcement, the charter's
@@ -592,6 +609,7 @@ types un_authority_widget_types
 			# empty state when all three are empty.
 			un_auth_text = {
 				visible = "[GetScriptedGui('un_authority_champions_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				align = hcenter|nobaseline
 				text = "je_un_auth_powers_champions"
 			}
 			un_auth_text = {
@@ -600,6 +618,7 @@ types un_authority_widget_types
 			}
 			un_auth_text = {
 				visible = "[GetScriptedGui('un_authority_underminers_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				align = hcenter|nobaseline
 				text = "je_un_auth_powers_underminers"
 			}
 			un_auth_text = {
@@ -608,6 +627,7 @@ types un_authority_widget_types
 			}
 			un_auth_text = {
 				visible = "[GetScriptedGui('un_authority_outsiders_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				align = hcenter|nobaseline
 				text = "je_un_auth_powers_outsiders"
 			}
 			un_auth_text = {

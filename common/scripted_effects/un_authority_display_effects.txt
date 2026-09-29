@@ -77,16 +77,15 @@ un_authority_ladder_block = {
 		else = {
 			custom_tooltip_no_bullet = je_un_auth_tier_moribund
 		}
+		# The cap, as a concept whose tooltip explains the reforms; left out once
+		# both reforms have lifted it to 100 (owner, 2026-09-28).
 		if = {
-			limit = { un_charter_level_value >= 2 }
-			custom_tooltip_no_bullet = je_un_auth_charter_2
+			limit = { un_charter_level_value < 1 }
+			custom_tooltip_no_bullet = je_un_auth_charter_0
 		}
 		else_if = {
-			limit = { un_charter_level_value >= 1 }
+			limit = { un_charter_level_value < 2 }
 			custom_tooltip_no_bullet = je_un_auth_charter_1
-		}
-		else = {
-			custom_tooltip_no_bullet = je_un_auth_charter_0
 		}
 		# Ripe is only an invitation when no reform voted on in the last five
 		# years still bars the topic; otherwise the clock shows, and the
