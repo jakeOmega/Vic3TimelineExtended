@@ -266,9 +266,56 @@ types banking_dashboard_widget_types
 	}
 
 	### ==========================================================================
-	### OVERVIEW: THE BARS AND CURRENT CONDITIONS
+	### OVERVIEW: THE BARS AND THE READINGS AS ICONS
 	### ==========================================================================
 	### At the top of both hosts, always shown: what a returning player checks.
+	### The entry's four bars, then the readings as icons with their word beneath
+	### (style guide rule 4; the owner's first play-test, 2026-09-29: "an icon for
+	### the inflation band, maybe other banking icons"). The cells replace the
+	### Current Conditions table; each cell's tooltip is the one its row had.
+	### Every icon is a placeholder: docs/systems/banking_gui_icons.md lists what
+	### each should become and where it is set (test_banking_layout.IconsDocTest).
+
+	### A cell of the overview: a caption, an icon, the reading's word beneath.
+	### Fixed size, so no cell can widen its row: three to a row is 3 x 150 +
+	### 2 x 6 = 462, inside the bars' 480. The caption says which reading it is,
+	### because two band words (Elevated, High) name a band of bubble pressure
+	### and of inflation alike. The instance puts one icon per state in "icons",
+	### each with its own visible, and its word (or words) in "word"; "badge" is
+	### for a small alert over the icon's corner.
+	type te_banking_ov_cell = widget {
+		size = { 150 76 }
+
+		textbox = {
+			parentanchor = top|hcenter
+			autoresize = yes
+			max_width = 146
+			elide = right
+			align = hcenter|nobaseline
+			using = fontsize_small
+			default_format = "#tooltippable"
+			block "caption" {}
+		}
+		widget = {
+			size = { 36 36 }
+			parentanchor = top|hcenter
+			position = { 0 19 }
+			block "icons" {}
+		}
+		block "word" {}
+		block "badge" {}
+	}
+
+	### The word under a cell's icon.
+	type te_banking_ov_word = textbox {
+		parentanchor = bottom|hcenter
+		autoresize = yes
+		max_width = 146
+		elide = right
+		align = hcenter|nobaseline
+		using = fontsize_small
+	}
+
 	type te_banking_overview_panel = flowcontainer {
 		# je_banking_cycle has is_shown_when_inactive, so the panel can open for a
 		# country whose entry has not activated yet and therefore has none of the
@@ -277,8 +324,9 @@ types banking_dashboard_widget_types
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
-		spacing = 2
-		margin = { 14 8 }
+		spacing = 6
+		# 10 + the bars' 480 + 10 = 500, the width of the section headers below.
+		margin = { 10 8 }
 
 		background = {
 			using = entry_bg_fancy_dark
@@ -295,138 +343,306 @@ types banking_dashboard_widget_types
 		### entry that does.
 		te_je_scripted_bars = {}
 
-		textbox = {
-			text = "banking_dash_conditions_header"
-			default_format = "#header"
-			autoresize = yes
-			max_width = 470
-			align = left|nobaseline
-			margin_bottom = 4
+		### Row 1: the cycle — phase, momentum, bubble pressure.
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 6
+
+			### The phase: icon and coloured word from the same banking_dash_phase_*
+			### scripted GUI, the one the word always used.
+			te_banking_ov_cell = {
+				tooltip = "banking_dash_phase_tt"
+				blockoverride "caption" {
+					text = "banking_dash_phase_label"
+				}
+				blockoverride "icons" {
+					icon = {
+						size = { 36 36 }
+						visible = "[GetScriptedGui('banking_dash_phase_panic').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						texture = "gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds"
+					}
+					icon = {
+						size = { 36 36 }
+						visible = "[GetScriptedGui('banking_dash_phase_downturn').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						texture = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+					}
+					icon = {
+						size = { 36 36 }
+						visible = "[GetScriptedGui('banking_dash_phase_stagnation').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						texture = "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
+					}
+					icon = {
+						size = { 36 36 }
+						visible = "[GetScriptedGui('banking_dash_phase_stable').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						texture = "gfx/interface/icons/event_icons/je_banking_cycle.dds"
+					}
+					icon = {
+						size = { 36 36 }
+						visible = "[GetScriptedGui('banking_dash_phase_expansion').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						texture = "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+					}
+					icon = {
+						size = { 36 36 }
+						visible = "[GetScriptedGui('banking_dash_phase_boom').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						texture = "gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds"
+					}
+					icon = {
+						size = { 36 36 }
+						visible = "[GetScriptedGui('banking_dash_phase_frenzy').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						texture = "gfx/interface/icons/timed_modifier_icons/modifier_fire_positive.dds"
+					}
+				}
+				blockoverride "word" {
+					te_banking_ov_word = {
+						visible = "[GetScriptedGui('banking_dash_phase_panic').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						text = "banking_dash_phase_panic_value"
+					}
+					te_banking_ov_word = {
+						visible = "[GetScriptedGui('banking_dash_phase_downturn').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						text = "banking_dash_phase_downturn_value"
+					}
+					te_banking_ov_word = {
+						visible = "[GetScriptedGui('banking_dash_phase_stagnation').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						text = "banking_dash_phase_stagnation_value"
+					}
+					te_banking_ov_word = {
+						visible = "[GetScriptedGui('banking_dash_phase_stable').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						text = "banking_dash_phase_stable_value"
+					}
+					te_banking_ov_word = {
+						visible = "[GetScriptedGui('banking_dash_phase_expansion').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						text = "banking_dash_phase_expansion_value"
+					}
+					te_banking_ov_word = {
+						visible = "[GetScriptedGui('banking_dash_phase_boom').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						text = "banking_dash_phase_boom_value"
+					}
+					te_banking_ov_word = {
+						visible = "[GetScriptedGui('banking_dash_phase_frenzy').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						text = "banking_dash_phase_frenzy_value"
+					}
+				}
+			}
+
+			### Momentum: an arrow per band, from the band word's own edges
+			### (banking_disp_momentum_band_code). The double arrows are Surging and
+			### Collapsing, which the old table also tagged overheating / contracting.
+			te_banking_ov_cell = {
+				tooltip = "banking_dash_momentum_tt"
+				blockoverride "caption" {
+					text = "banking_dash_momentum_label"
+				}
+				blockoverride "icons" {
+					icon = {
+						size = { 36 36 }
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)1' )]"
+						texture = "gfx/interface/icons/generic_icons/down_down.dds"
+					}
+					icon = {
+						size = { 36 36 }
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)2' )]"
+						texture = "gfx/interface/icons/generic_icons/trend_down.dds"
+					}
+					icon = {
+						size = { 36 36 }
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)3' )]"
+						texture = "gfx/interface/icons/generic_icons/trend_nochange.dds"
+					}
+					icon = {
+						size = { 36 36 }
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)4' )]"
+						texture = "gfx/interface/icons/generic_icons/trend_up.dds"
+					}
+					icon = {
+						size = { 36 36 }
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)5' )]"
+						texture = "gfx/interface/icons/generic_icons/trend_upup.dds"
+					}
+				}
+				blockoverride "word" {
+					te_banking_ov_word = {
+						text = "banking_dash_momentum_value"
+					}
+				}
+			}
+
+			### Bubble pressure's band (banking_disp_bubble_band_code). The badge is the
+			### old row's '(crash risk)' tag: the cycle at its top, or booming and surging.
+			te_banking_ov_cell = {
+				tooltip = "banking_dash_bubble_tt"
+				blockoverride "caption" {
+					text = "banking_dash_bubble_label"
+				}
+				blockoverride "icons" {
+					icon = {
+						size = { 36 36 }
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)1' )]"
+						texture = "gfx/interface/icons/generic_icons/green_checkmark.dds"
+					}
+					icon = {
+						size = { 36 36 }
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)2' )]"
+						texture = "gfx/interface/icons/generic_icons/maybe_icon.dds"
+					}
+					icon = {
+						size = { 36 36 }
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)3' )]"
+						texture = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+					}
+					icon = {
+						size = { 36 36 }
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)4' )]"
+						texture = "gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds"
+					}
+					icon = {
+						size = { 36 36 }
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)5' )]"
+						texture = "gfx/interface/icons/generic_icons/red_cross.dds"
+					}
+				}
+				blockoverride "word" {
+					te_banking_ov_word = {
+						text = "banking_dash_bubble_value"
+					}
+				}
+				blockoverride "badge" {
+					icon = {
+						size = { 20 20 }
+						parentanchor = top|hcenter
+						position = { 24 18 }
+						visible = "[GetScriptedGui('banking_dash_bubble_risk_high').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						texture = "gfx/interface/icons/generic_icons/warning.dds"
+						tooltip = "banking_dash_ov_crash_risk_tt"
+					}
+				}
+			}
 		}
 
-		### Cycle phase
-		banking_dash_condition_row = {
-			tooltip = "banking_dash_phase_tt"
-			blockoverride "condition_label" {
-				text = "banking_dash_phase_label"
-			}
-			blockoverride "condition_value" {
-				banking_dash_condition_value = {
-					visible = "[GetScriptedGui('banking_dash_phase_panic').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					text = "banking_dash_phase_panic_value"
-				}
-				banking_dash_condition_value = {
-					visible = "[GetScriptedGui('banking_dash_phase_downturn').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					text = "banking_dash_phase_downturn_value"
-				}
-				banking_dash_condition_value = {
-					visible = "[GetScriptedGui('banking_dash_phase_stagnation').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					text = "banking_dash_phase_stagnation_value"
-				}
-				banking_dash_condition_value = {
-					visible = "[GetScriptedGui('banking_dash_phase_stable').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					text = "banking_dash_phase_stable_value"
-				}
-				banking_dash_condition_value = {
-					visible = "[GetScriptedGui('banking_dash_phase_expansion').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					text = "banking_dash_phase_expansion_value"
-				}
-				banking_dash_condition_value = {
-					visible = "[GetScriptedGui('banking_dash_phase_boom').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					text = "banking_dash_phase_boom_value"
-				}
-				banking_dash_condition_value = {
-					visible = "[GetScriptedGui('banking_dash_phase_frenzy').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					text = "banking_dash_phase_frenzy_value"
-				}
-			}
-		}
+		### Row 2: what the player sets — the stance (only with a dial, once the
+		### monetary layer has reported), the price band (the monetary layer
+		### only, once it has reported) and the intervention budget (always).
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 6
 
-		### Momentum
-		banking_dash_condition_row = {
-			tooltip = "banking_dash_momentum_tt"
-			blockoverride "condition_label" {
-				text = "banking_dash_momentum_label"
+			### Policy stance's band (banking_disp_stance_band_code).
+			te_banking_ov_cell = {
+				visible = "[And( GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('banking_mon_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+				tooltip = "banking_dash_mon_stance_tt"
+				blockoverride "caption" {
+					text = "banking_dash_mon_stance_label"
+				}
+				blockoverride "icons" {
+					icon = {
+						size = { 36 36 }
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_stance_band_code'), '(CFixedPoint)1' )]"
+						texture = "gfx/interface/icons/timed_modifier_icons/modifier_fire_positive.dds"
+					}
+					icon = {
+						size = { 36 36 }
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_stance_band_code'), '(CFixedPoint)2' )]"
+						texture = "gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds"
+					}
+					icon = {
+						size = { 36 36 }
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_stance_band_code'), '(CFixedPoint)3' )]"
+						texture = "gfx/interface/icons/generic_icons/money.dds"
+					}
+					icon = {
+						size = { 36 36 }
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_stance_band_code'), '(CFixedPoint)4' )]"
+						texture = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+					}
+					icon = {
+						size = { 36 36 }
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_stance_band_code'), '(CFixedPoint)5' )]"
+						texture = "gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds"
+					}
+				}
+				blockoverride "word" {
+					te_banking_ov_word = {
+						text = "banking_dash_mon_stance_value"
+					}
+				}
 			}
-			blockoverride "condition_value" {
-				### Which way the cycle is heading, as an arrow (style guide rule
-				### 5): up from Rising, down from Falling, flat while Steady — the
-				### band word's own edges (banking_dash_momentum_band).
-				icon = {
-					size = { 24 24 }
-					parentanchor = vcenter
-					visible = "[GetScriptedGui('banking_dash_momentum_up').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					texture = "gfx/interface/icons/generic_icons/trend_up.dds"
-				}
-				icon = {
-					size = { 24 24 }
-					parentanchor = vcenter
-					visible = "[GetScriptedGui('banking_dash_momentum_down').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					texture = "gfx/interface/icons/generic_icons/trend_down.dds"
-				}
-				icon = {
-					size = { 24 24 }
-					parentanchor = vcenter
-					visible = "[GetScriptedGui('banking_dash_momentum_steady').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					texture = "gfx/interface/icons/generic_icons/trend_nochange.dds"
-				}
-				banking_dash_condition_value = {
-					text = "banking_dash_momentum_value"
-				}
-				banking_dash_condition_value = {
-					visible = "[GetScriptedGui('banking_dash_momentum_rising').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					text = "banking_dash_momentum_rising_tag"
-				}
-				banking_dash_condition_value = {
-					visible = "[GetScriptedGui('banking_dash_momentum_falling').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					text = "banking_dash_momentum_falling_tag"
-				}
-			}
-		}
 
-		### Bubble pressure
-		### Policy stance, between momentum and bubble pressure — the order of the
-		### bars above, and the order of cause: the stance feeds both. The BAND NAME
-		### only, from the same customizable localization the Monetary Policy block
-		### uses; a country with no dial has no stance, so it has no row.
-		banking_dash_condition_row = {
-			visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-			tooltip = "banking_dash_mon_stance_tt"
-			blockoverride "condition_label" {
-				text = "banking_dash_mon_stance_label"
-			}
-			blockoverride "condition_value" {
-				banking_dash_condition_value = {
-					text = "banking_dash_mon_stance_value"
+			### The price band (banking_disp_price_band_code): the six bands of the
+			### ladder, and the two states with none (dollarised; set by plan).
+			te_banking_ov_cell = {
+				visible = "[And( GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('banking_mon_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+				tooltip = "banking_dash_mon_band_tt"
+				blockoverride "caption" {
+					text = "banking_dash_mon_inflation_label"
+				}
+				blockoverride "icons" {
+					icon = {
+						size = { 36 36 }
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)1' )]"
+						texture = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+					}
+					icon = {
+						size = { 36 36 }
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)2' )]"
+						texture = "gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds"
+					}
+					icon = {
+						size = { 36 36 }
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)3' )]"
+						texture = "gfx/interface/icons/generic_icons/warning.dds"
+					}
+					icon = {
+						size = { 36 36 }
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)4' )]"
+						texture = "gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds"
+					}
+					icon = {
+						size = { 36 36 }
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)5' )]"
+						texture = "gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds"
+					}
+					icon = {
+						size = { 36 36 }
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)6' )]"
+						texture = "gfx/interface/icons/generic_icons/red_cross.dds"
+					}
+					icon = {
+						size = { 36 36 }
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)7' )]"
+						texture = "gfx/interface/icons/generic_icons/world_market.dds"
+					}
+					icon = {
+						size = { 36 36 }
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)8' )]"
+						texture = "gfx/interface/icons/generic_icons/government_building_icon.dds"
+					}
+				}
+				blockoverride "word" {
+					te_banking_ov_word = {
+						text = "banking_dash_mon_band_value"
+					}
 				}
 			}
-		}
 
-		banking_dash_condition_row = {
-			tooltip = "banking_dash_bubble_tt"
-			blockoverride "condition_label" {
-				text = "banking_dash_bubble_label"
-			}
-			blockoverride "condition_value" {
-				banking_dash_condition_value = {
-					text = "banking_dash_bubble_value"
+			### The intervention budget: points free. One icon, always shown.
+			te_banking_ov_cell = {
+				tooltip = "banking_dash_budget_tt"
+				blockoverride "caption" {
+					text = "banking_dash_budget_label"
 				}
-				banking_dash_condition_value = {
-					visible = "[GetScriptedGui('banking_dash_bubble_risk_high').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					text = "banking_dash_bubble_warn_tag"
+				blockoverride "icons" {
+					icon = {
+						size = { 36 36 }
+						texture = "gfx/interface/icons/diplomatic_treaties_articles_icons/bankroll_treaties.dds"
+					}
 				}
-			}
-		}
-
-		### Intervention budget
-		banking_dash_condition_row = {
-			tooltip = "banking_dash_budget_tt"
-			blockoverride "condition_label" {
-				text = "banking_dash_budget_label"
-			}
-			blockoverride "condition_value" {
-				banking_dash_condition_value = {
-					text = "banking_dash_budget_value"
+				blockoverride "word" {
+					te_banking_ov_word = {
+						text = "banking_dash_budget_value"
+					}
 				}
 			}
 		}
