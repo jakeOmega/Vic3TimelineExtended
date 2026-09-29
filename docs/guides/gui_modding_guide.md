@@ -1671,14 +1671,16 @@ my_dangerous_sgui = {
 
 ## This Mod's GUI Files
 
-Currently 22 GUI files at the top of `gui/`: 19 full-file replacements of vanilla panels plus 3 additive files (marked below):
+Currently 24 GUI files at the top of `gui/`: 21 full-file replacements of vanilla panels plus 3 additive files (marked below):
 
 | File | Vanilla Panel | Purpose of Override |
 |---|---|---|
 | `building_browser_panel.gui` | Building browser | Custom building display |
 | `building_details_panel.gui` | Building details | Enhanced building info |
+| `budget_panel.gui` | Budget | A fourth tab, Banking: the banking journal entry's panel types under `GetPlayerJournalEntry('je_banking_cycle')` (gotcha #29). Prototype for `docs/systems/system_panels_feasibility.md` |
 | `construction_panel.gui` | Construction queue | Construction-market section: government purchase stepper, live read-out, collapsible explainer |
 | `goods_state_panel.gui` | Goods by state | Modified goods display |
+| `journal_entry.gui` | Journal entry panel | Hides the bottom bar block for an entry that draws its own bars (`custom_widget_container_7` marker) |
 | `market_panel.gui` | Market panel | Widened panel; Top Trade Partners table and import/export partner charts |
 | `military_formation_panel.gui` | Military formation | Custom military info |
 | `panel_military.gui` | Military overview | Modified military overview |
@@ -1706,8 +1708,8 @@ Journal-entry widgets are **additive**, not overrides: a `.gui` under `gui/journ
 |---|---|---|
 | `covert_operations_widget.gui` | `je_covert_warfare` | command centre (capacity, slots, funding ladder + stepper, detection factors, covert defence) and one row per running operation with phase, countdown and a stand-down control; a third widget lists per-target networks |
 | `strategic_reserve_widget.gui` | `je_strategic_reserve` | per-good reserve readouts |
-| `banking_dashboard_widget.gui` | `je_banking_cycle` | conditions readout + policy dashboard |
-| `banking_history_widget.gui` | `je_banking_cycle` | the three banking history charts |
+| `banking_dashboard_widget.gui` | `je_banking_cycle` | conditions readout + policy dashboard; both panels are types, also instanced by the Budget panel's Banking tab |
+| `banking_history_widget.gui` | `je_banking_cycle` | the banking history charts; a type, also instanced by the Budget panel's Banking tab |
 | `un_chamber_widget.gui` | `je_united_nations` | General Assembly chamber: standing, open resolutions, vote and propose controls |
 | `cultural_hegemony_widget.gui` | `je_cultural_hegemony` | summary, programme funding + four programme rows, and the standing section (pull breakdown, top-10 leaderboard built in script, share history chart) |
 | `space_race_widget.gui` | the nine `je_space_race_*` | one shared milestone panel instanced by nine named widgets: pace, setback risk, approach selector, funding stepper, rivals list, programme overview |

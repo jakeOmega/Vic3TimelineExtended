@@ -53,9 +53,10 @@ Central bank policy tools, organized as toggle pairs (market economy only):
 - Each has an enable/disable toggle pair. Modifiers use prefix `cooperative_*`.
 
 ### Policy Dashboard (journal-entry widget)
-Two custom widgets, wired from `je_banking.txt` into the vanilla panel's `custom_widget_container_1` and `_2`, are the player-facing surface. The 68 scripted buttons stay declared on the journal entry because the AI picks policies through their `ai_chance` (confirmed in play testing), but each carries `is_ai = yes` in its `visible`, so the vanilla button grid shows nothing to a human.
+Two custom widgets, wired from `je_banking.txt` into the vanilla panel's `custom_widget_container_1` and `_3` (the history charts take `_2`), are the player-facing surface. The 68 scripted buttons stay declared on the journal entry because the AI picks policies through their `ai_chance` (confirmed in play testing), but each carries `is_ai = yes` in its `visible`, so the vanilla button grid shows nothing to a human.
 
 - **File:** `gui/journal_entry_widgets/banking_dashboard_widget.gui`
+- **Second host:** the Budget panel's Banking tab (`gui/budget_panel.gui`) shows the same panels, which are types for that reason. See `mod_systems.md` § Policy Dashboard.
 - **Handlers:** `common/scripted_guis/banking_dashboard_scripted_gui.txt`
 - **Shared helpers:** `common/scripted_triggers/banking_policy_triggers.txt` (`banking_possible_<button>`), `common/scripted_effects/banking_policy_effects.txt` (`banking_effect_<button>`), plus the `banking_tool_*_active` family in `market_triggers.txt`
 - **Display-only reads:** `banking_display_value_monthly_add`, `banking_display_momentum_monthly_add`, `banking_display_momentum_decay`, `banking_display_bubble_monthly_add`, `banking_display_points_free` in `extra_script_values.txt`

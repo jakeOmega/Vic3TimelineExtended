@@ -1,6 +1,12 @@
 # Moving System UI Out of the Journal — Feasibility
 
-> **Status: feasibility study, 2026-09-28. Nothing implemented.** Checked against the vanilla 1.14.4 GUI files, the mod at `6a0a3c06`, and two Workshop mods installed locally: Community Mod Framework (CMF) 1.65.0 and Demography v14.
+> **Status: feasibility study, 2026-09-28.** Checked against the vanilla 1.14.4 GUI files, the mod at `6a0a3c06`, and two Workshop mods installed locally: Community Mod Framework (CMF) 1.65.0 and Demography v14.
+>
+> **Prototype, 2026-09-28: Banking as a Budget tab** (branch `feat/banking-budget-tab`; `mod_systems.md` § Policy Dashboard). It skips the rest of §8, but its first launch answers tests 1 and 2 for an active entry:
+> - *No fourth tab:* `te_budget_banking_tab_sgui` is false (rule off, or the entry is not active).
+> - *The tab shows but will not select:* custom tab names do not work (§3.4). Switch to the `GetVariableSystem` fallback.
+> - *The tab selects and shows its header, with nothing under it:* the `GetPlayerJournalEntry` datacontext failed (§3.2). This reading holds only after clicking a visible tab: vanilla's `tab_buttons` binds the fourth tab to the `tab_4` hotkey, which may select it for a country without the entry.
+> - *All three panels:* both work.
 >
 > Each claim carries a marker. **[verified]**: read in shipping vanilla or mod code. **[precedent]**: a shipping mod or vanilla does it. **[untested]**: plausible, needs an in-game check (§8).
 
@@ -66,7 +72,7 @@ Tabs are plain strings. The tab buttons call `InformationPanel.SelectTab('states
 | Society | `culture_panel.gui` (1,875), type `society_panel` | 4 | yes; a fifth has shipped before (§7.1) |
 | Diplomacy | `diplomatic_overview.gui` (1,827) | 5 | tight: the tab row is an expanding `hbox` |
 
-None of the three is replaced by this mod today. Each one added is another file to merge every patch (the 3-way merge in `docs/guides/gui_modding_guide.md`). It also collides with any other mod that replaces it (§7.4): Demography replaces `budget_panel.gui`, and CMF redefines `society_panel`.
+Before the Banking prototype (header), this mod replaced none of the three; it now replaces `budget_panel.gui`. Each one added is another file to merge every patch (the 3-way merge in `docs/guides/gui_modding_guide.md`). It also collides with any other mod that replaces it (§7.4): Demography replaces `budget_panel.gui`, and CMF redefines `society_panel`.
 
 ### 3.5 A sidebar button
 
