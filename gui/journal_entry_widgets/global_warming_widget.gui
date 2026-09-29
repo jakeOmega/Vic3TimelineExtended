@@ -6,16 +6,16 @@
 ###       te_gw_overview_panel: tier, market role, penalty scale and, while one
 ###       binds us, the treaty; the temperature bar with its next-threshold
 ###       marker and "1.61 -> 1.81 C (+0.02/yr)" headline (the reading, then
-###       the reading in ten years at last year's rate); the share and cut
-###       pies. Always shown. It replaces the entry's status line, which now
+###       the reading in ten years at last year's rate); the yearly emissions
+###       table; the share and cut pies. Always shown. It replaces the entry's status line, which now
 ###       prints only while the entry is inactive, and vanilla's goal bar near
 ###       the foot: the entry puts the bars-on-top marker in
 ###       custom_widget_container_7 (which hides the goal bar from #582 on).
 ###   widget_je_gw_status    -> custom_widget_container_2 (below the status line,
 ###                             above the vanilla button grid, which is hidden
 ###                             from humans)
-###       te_gw_status_sections: Emissions (a table), Mitigation Policies (the
-###       eight rows, with Around the World nested). All open.
+###       te_gw_status_sections: Mitigation Policies (the eight rows, with
+###       Around the World nested). Open.
 ###   widget_je_gw_reference -> custom_widget_container_3 (below the grid)
 ###       te_gw_reference_sections: History (the two charts, open) and How
 ###       Global Warming Works (every explanation, collapsed).
@@ -617,7 +617,67 @@ types global_warming_widget_types
 					}
 				}
 
-				### Row 3: our market's share of the world's emissions, and how far
+				### Row 3: the yearly emissions figures, as a table of fixed cells
+				### (gw_value_row, 360 + 100) in the 480 column, beside the headline
+				### whose rate they explain and above the pies they add up to. Until
+				### the first January's figures exist (a new game, or a save upgraded
+				### mid-year), one line saying when they arrive. It was a section of
+				### its own until play-test round 3 (the owner, 2026-09-29).
+				gw_text = {
+					visible = "[Not( GetScriptedGui('gw_has_yearly_figures_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+					align = hcenter|nobaseline
+					text = "gw_emis_pending"
+				}
+
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					minimumsize = { 480 -1 }
+					visible = "[GetScriptedGui('gw_has_yearly_figures_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+					gw_value_row = {
+						tooltip = "gw_cond_emis_tt"
+						blockoverride "row_label" {
+							text = "gw_emis_market_label"
+							default_format = "#tooltippable"
+						}
+						blockoverride "row_value" {
+							text = "gw_emis_market_value"
+						}
+					}
+					gw_value_row = {
+						tooltip = "gw_emis_capture_tt"
+						blockoverride "row_label" {
+							text = "gw_emis_capture_label"
+							default_format = "#tooltippable"
+						}
+						blockoverride "row_value" {
+							text = "gw_emis_capture_value"
+						}
+					}
+					gw_value_row = {
+						tooltip = "gw_emis_world_tt"
+						blockoverride "row_label" {
+							text = "gw_emis_world_label"
+							default_format = "#tooltippable"
+						}
+						blockoverride "row_value" {
+							text = "gw_emis_world_value"
+						}
+					}
+					gw_value_row = {
+						tooltip = "gw_cond_trend_tt"
+						blockoverride "row_label" {
+							text = "gw_emis_warming_label"
+							default_format = "#tooltippable"
+						}
+						blockoverride "row_value" {
+							text = "gw_cond_trend_value"
+						}
+					}
+				}
+
+				### Row 4: our market's share of the world's emissions, and how far
 				### its emissions are cut.
 				flowcontainer = {
 					direction = horizontal
@@ -656,88 +716,6 @@ types global_warming_widget_types
 	### SECTIONS. Each is composed, in order, by te_gw_status_sections or
 	### te_gw_reference_sections below.
 	### ======================================================================
-
-	### Emissions: the yearly figures behind the pies, as a table. Before the
-	### first January of a game (or on a save upgraded mid-year) the table is
-	### replaced by one line saying when they arrive.
-	type te_gw_sec_emissions = flowcontainer {
-		direction = vertical
-		parentanchor = hcenter
-		ignoreinvisible = yes
-		spacing = 4
-
-		gw_section_header = {
-			blockoverride "left_text" {
-				text = "gw_sect_emissions"
-			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('gw_emissions_closed')]"
-			}
-			blockoverride "onclick_showmore" {
-				visible = "[GetVariableSystem.Exists('gw_emissions_closed')]"
-			}
-			blockoverride "onclick_showless" {
-				visible = "[Not(GetVariableSystem.Exists('gw_emissions_closed'))]"
-			}
-		}
-
-		gw_panel = {
-			visible = "[Not(GetVariableSystem.Exists('gw_emissions_closed'))]"
-
-			gw_text = {
-				visible = "[Not( GetScriptedGui('gw_has_yearly_figures_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
-				text = "gw_emis_pending"
-			}
-
-			flowcontainer = {
-				direction = vertical
-				ignoreinvisible = yes
-				minimumsize = { 480 -1 }
-				visible = "[GetScriptedGui('gw_has_yearly_figures_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-
-				gw_value_row = {
-					tooltip = "gw_cond_emis_tt"
-					blockoverride "row_label" {
-						text = "gw_emis_market_label"
-						default_format = "#tooltippable"
-					}
-					blockoverride "row_value" {
-						text = "gw_emis_market_value"
-					}
-				}
-				gw_value_row = {
-					tooltip = "gw_emis_capture_tt"
-					blockoverride "row_label" {
-						text = "gw_emis_capture_label"
-						default_format = "#tooltippable"
-					}
-					blockoverride "row_value" {
-						text = "gw_emis_capture_value"
-					}
-				}
-				gw_value_row = {
-					tooltip = "gw_emis_world_tt"
-					blockoverride "row_label" {
-						text = "gw_emis_world_label"
-						default_format = "#tooltippable"
-					}
-					blockoverride "row_value" {
-						text = "gw_emis_world_value"
-					}
-				}
-				gw_value_row = {
-					tooltip = "gw_cond_trend_tt"
-					blockoverride "row_label" {
-						text = "gw_emis_warming_label"
-						default_format = "#tooltippable"
-					}
-					blockoverride "row_value" {
-						text = "gw_cond_trend_value"
-					}
-				}
-			}
-		}
-	}
 
 	### Mitigation Policies: the eight rows, market-wide first. What greys every
 	### Adopt or every Repeal is said once, above the rows (style rule 6), and
@@ -1313,7 +1291,6 @@ types global_warming_widget_types
 		spacing = 4
 		visible = "[JournalEntry.IsActive]"
 
-		te_gw_sec_emissions = {}
 		te_gw_sec_policies = {}
 	}
 
