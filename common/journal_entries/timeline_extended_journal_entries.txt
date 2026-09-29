@@ -1,5 +1,5 @@
 ﻿je_state_collapse = {
-	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+	icon = "gfx/interface/icons/event_icons/je_state_collapse.dds"
 
 	group = je_group_internal_affairs
 
@@ -71,7 +71,7 @@
 }
 
 je_create_new_religion = {
-	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+	icon = "gfx/interface/icons/event_icons/je_create_new_religion.dds"
 
 	group = je_group_internal_affairs
 

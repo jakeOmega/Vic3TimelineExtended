@@ -70,8 +70,48 @@ def generated(cat: str, only: set[str]) -> dict[str, dict]:
     return {k: e for k, e in entries(cat, only).items() if "use" not in e and e["seed"] != KEEP}
 
 
+def picked(seed) -> bool:
+    return isinstance(seed, int) and not isinstance(seed, bool)
+
+
 def accepted(e: dict) -> bool:
-    return "use" not in e and isinstance(e["seed"], int) and not isinstance(e["seed"], bool)
+    return "use" not in e and picked(e["seed"])
+
+
+# A category with a shared `backdrop` (the Space Race journal icons) renders it
+# under this key, beside its entities. It is no entity: `--only _backdrop`
+# renders it alone, which is how it is picked first.
+BACKDROP = "_backdrop"
+
+
+def backdrop_prompt(cat: str) -> str:
+    return CATEGORIES[cat]["backdrop"]["prompt"] + ", no text, no writing, no letters"
+
+
+def backdrop_seed(cat: str) -> int:
+    """The backdrop candidate icons are composed over: the accepted seed, else s0 while it is under review."""
+    seed = CATEGORIES[cat]["backdrop"]["seed"]
+    return seed if picked(seed) else 0
+
+
+def final_dir(cat: str, work: Path) -> Path:
+    """Where composed candidates go. A backed category keeps one folder per
+    backdrop seed, so a new pick never reuses finals composed over the old one."""
+    if "backdrop" in CATEGORIES[cat]:
+        return work / "final" / f"{cat}_bd{backdrop_seed(cat)}"
+    return work / "final"
+
+
+def load_backdrop(cat: str, work: Path, seed: int | None = None):
+    """The composed backdrop disc and the raw render it came from."""
+    from PIL import Image
+
+    from icon_render import compose_backdrop, raw_path
+
+    raw = raw_path(work / "raw", name(cat, BACKDROP), backdrop_seed(cat) if seed is None else seed)
+    if not raw.exists():
+        raise SystemExit(f"no backdrop render for {cat}: run --stage render --only {BACKDROP}")
+    return compose_backdrop(Image.open(raw), CATEGORIES[cat]), raw
 
 
 # ── reading and rewriting entity files ───────────────────────────────────
@@ -207,17 +247,23 @@ def stage_render(cat: str, only: set[str], work: Path, seeds: int, offload: str)
         prompts[name(cat, key)] = prompt
         for seed in ([e["seed"]] if accepted(e) else range(seeds)):
             jobs.append((name(cat, key), prompt, seed))
+    bd = CATEGORIES[cat].get("backdrop")
+    if bd and (not only or BACKDROP in only):
+        prompts[name(cat, BACKDROP)] = backdrop_prompt(cat)
+        for seed in ([bd["seed"]] if picked(bd["seed"]) else range(bd["seeds"])):
+            jobs.append((name(cat, BACKDROP), backdrop_prompt(cat), seed))
     embed(prompts, work / "embeds")
     kw = {"size": CATEGORIES[cat]["gen_size"]} if "gen_size" in CATEGORIES[cat] else {}
     render(jobs, work / "embeds", work / "raw", offload, **kw)
 
 
-def _compose_one(composer, cat: str, raw: Path, final: Path):
+def _compose_one(composer, cat: str, raw: Path, final: Path, backdrop=None, backdrop_raw: Path | None = None):
     from PIL import Image
 
-    if final.exists() and final.stat().st_mtime >= raw.stat().st_mtime:
+    newest = max(raw.stat().st_mtime, backdrop_raw.stat().st_mtime if backdrop_raw else 0)
+    if final.exists() and final.stat().st_mtime >= newest:
         return Image.open(final)
-    icon = composer.compose(Image.open(raw), cat, CATEGORIES[cat])
+    icon = composer.compose(Image.open(raw), cat, CATEGORIES[cat], backdrop=backdrop)
     final.parent.mkdir(parents=True, exist_ok=True)
     icon.save(final)
     return icon
@@ -227,36 +273,61 @@ def stage_compose(cat: str, only: set[str], work: Path) -> None:
     from icon_render import Composer
 
     composer, n = Composer(), 0
+    backdrop, backdrop_raw = load_backdrop(cat, work) if "backdrop" in CATEGORIES[cat] else (None, None)
+    final = final_dir(cat, work)
     for key in generated(cat, only):
         for raw in sorted((work / "raw").glob(f"{name(cat, key)}__s*.png")):
-            _compose_one(composer, cat, raw, work / "final" / raw.name)
+            _compose_one(composer, cat, raw, final / raw.name, backdrop, backdrop_raw)
             n += 1
-    print(f"compose: {n} candidates in {work / 'final'}")
+    print(f"compose: {n} candidates in {final}")
 
 
 def stage_sheet(cat: str, only: set[str], work: Path, include_reviewed: bool) -> None:
-    from icon_render import review_sheet, strip_sheet, vanilla_folder, vanilla_icons_dir
+    from icon_render import (Composer, backdrop_sheet, panel_preview, review_sheet, strip_sheet, vanilla_folder,
+                             vanilla_icons_dir)
+    from PIL import Image
 
     current = current_icons(cat)
     game = vanilla_icons_dir().parents[2]
-    rows = []
+    spec = CATEGORIES[cat]
+    final = final_dir(cat, work)
+    rows, panel_rows = [], []
     for key, e in generated(cat, only).items():
         if e["seed"] is not None and not include_reviewed:
             continue
-        cands = [(f"s{p.stem.rsplit('__s', 1)[1]}", p)
-                 for p in sorted((work / "final").glob(f"{name(cat, key)}__s*.png"))]
+        cands = [(f"s{p.stem.rsplit('__s', 1)[1]}", p) for p in sorted(final.glob(f"{name(cat, key)}__s*.png"))]
         now = current.get(key, "")
         now_path = MOD_ROOT / now if (MOD_ROOT / now).exists() else game / now
         subject = e["subject"] if len(e["subject"]) <= 60 else e["subject"][:57] + "..."
         rows.append((f"{key}\n{subject}", now_path, cands))
+        if spec.get("panel_preview"):
+            tiles = [("now", Image.open(now_path))] if now_path.is_file() else []
+            panel_rows.append((key, tiles + [(c, Image.open(p)) for c, p in cands]))
     out = work / "sheets"
     out.mkdir(parents=True, exist_ok=True)
     for i in range(0, len(rows), SHEET_ROWS):
         dest = out / f"{cat}_{i // SHEET_ROWS + 1:02d}.png"
-        if CATEGORIES[cat]["mode"] == "strip":
-            strip_sheet(rows[i:i + SHEET_ROWS], vanilla_folder(CATEGORIES[cat]) / "institution_image_mask.dds", dest)
+        if spec["mode"] == "strip":
+            strip_sheet(rows[i:i + SHEET_ROWS], vanilla_folder(spec) / "institution_image_mask.dds", dest)
         else:
-            review_sheet(rows[i:i + SHEET_ROWS], CATEGORIES[cat]["folder"], dest)
+            review_sheet(rows[i:i + SHEET_ROWS], spec["folder"], dest)
+        if panel_rows:
+            panel_preview(panel_rows[i:i + SHEET_ROWS], out / f"{cat}_panel_{i // SHEET_ROWS + 1:02d}.png")
+    if "backdrop" in spec and not picked(spec["backdrop"]["seed"]):
+        # Each backdrop candidate bare, then under the first raw of a few subjects.
+        composer, samples = Composer(), list(generated(cat, only))[::2][:4]
+        bd_rows = []
+        for raw in sorted((work / "raw").glob(f"{name(cat, BACKDROP)}__s*.png")):
+            seed = int(raw.stem.rsplit("__s", 1)[1])
+            backdrop, _ = load_backdrop(cat, work, seed)
+            images = [(f"backdrop s{seed}", backdrop)]
+            for key in samples:
+                sample = work / "raw" / f"{name(cat, key)}__s0.png"
+                if sample.exists():
+                    images.append(("", composer.compose(Image.open(sample), cat, spec, backdrop=backdrop)))
+            bd_rows.append((f"s{seed}", images))
+        if bd_rows:
+            backdrop_sheet(bd_rows, out / f"{cat}_backdrops.png")
 
 
 def needs_write(exists: bool, recorded: list | None, want: list) -> bool:
@@ -277,6 +348,9 @@ def stage_write(cat: str, only: set[str], work: Path) -> None:
     from icon_render import Composer, raw_path
 
     spec = CATEGORIES[cat]
+    bd = spec.get("backdrop")
+    if bd and not picked(bd["seed"]) and any(accepted(e) for e in entries(cat, only).values()):
+        raise SystemExit(f"{cat}: pick the backdrop first (set its seed in icon_prompts.py)")
     out_dir = (MOD_ROOT / icon_path(cat, "_")).parent
     if not (MOD_ROOT / "gfx" / "interface").is_dir():
         raise SystemExit(f"{MOD_ROOT / 'gfx' / 'interface'} is not checked out (a sparse worktree?)")
@@ -286,19 +360,23 @@ def stage_write(cat: str, only: set[str], work: Path) -> None:
     manifest_path = work / "written.json"
     manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else {}
     composer, wrote = Composer(), 0
+    backdrop, backdrop_raw = load_backdrop(cat, work) if bd and picked(bd["seed"]) else (None, None)
     for key, e in generated(cat, only).items():
         if not accepted(e):
             continue
         dest = MOD_ROOT / icon_path(cat, key)
         want = [e["seed"], prompt_for(cat, e["subject"])]
+        if bd:
+            # A new backdrop pick or prompt rewrites every icon over it.
+            want += [bd["seed"], backdrop_prompt(cat)]
         if not needs_write(dest.exists(), manifest.get(name(cat, key)), want):
             continue
         raw = raw_path(work / "raw", name(cat, key), e["seed"])
         if not raw.exists():
             print(f"  no render for {cat}/{key} seed {e['seed']}: run --stage render")
             continue
-        final = work / "final" / raw.name
-        icon = _compose_one(composer, cat, raw, final)
+        final = final_dir(cat, work) / raw.name
+        icon = _compose_one(composer, cat, raw, final, backdrop, backdrop_raw)
         if "dds_format" in spec:
             # Block-compressed through texconv, as event pictures are; the
             # composed PNG is already at its final size.

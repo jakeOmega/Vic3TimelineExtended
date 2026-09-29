@@ -1,5 +1,5 @@
 ﻿je_global_warming = {
-	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	icon = "gfx/interface/icons/event_icons/je_global_warming.dds"
 
 	group = je_group_internal_affairs
 

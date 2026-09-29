@@ -107,6 +107,41 @@ class RegistryTests(unittest.TestCase):
             ip.ICONS = gi.ICONS = saved
 
 
+    def test_check_flags_a_bad_backdrop(self):
+        saved_icons, saved_bd = ip.ICONS, ip.CATEGORIES["journal_entry_space"]["backdrop"]
+        d = tempfile.mkdtemp()
+        jdir = Path(d) / "common" / "journal_entries"
+        jdir.mkdir(parents=True)
+        (jdir / "j.txt").write_text("je_a = {\n}\n", encoding="utf-8-sig")
+
+        def flagged(backdrop, seed):
+            ip.ICONS = {"journal_entry_space": {"je_a": {"subject": "a silver sphere", "seed": seed}}}
+            ip.CATEGORIES["journal_entry_space"]["backdrop"] = backdrop
+            return ip.check(d, on_disk={ip.icon_path("journal_entry_space", "je_a")})["bad_backdrop"]
+
+        try:
+            ok = dict(seed=None, seeds=4, prompt="a night sky")
+            self.assertEqual(flagged(ok, None), [])                          # still under review
+            self.assertEqual(flagged(dict(ok, seed=2), 1), [])               # picked, icon accepted
+            self.assertEqual(flagged(dict(ok, prompt=""), None), [("journal_entry_space", "_backdrop")])
+            self.assertEqual(flagged(dict(ok, seed="2"), None), [("journal_entry_space", "_backdrop")])
+            self.assertEqual(flagged(ok, 1), [("journal_entry_space", "_backdrop")])  # icon over an unpicked backdrop
+        finally:
+            ip.ICONS = saved_icons
+            ip.CATEGORIES["journal_entry_space"]["backdrop"] = saved_bd
+
+    def test_journal_categories_cover_every_mod_entry_but_the_nuclear_one(self):
+        """Every mod-defined journal entry is in the registry, except the nuclear one (own art).
+        REPLACE:-ed vanilla entries do not match the pattern, and the registry cannot wire them."""
+        import re
+        defined = set()
+        for path in Path(MOD_ROOT, "common", "journal_entries").glob("*.txt"):
+            defined |= set(re.findall(r"^([A-Za-z0-9_]+)\s*=\s*\{", path.read_text(encoding="utf-8-sig"), re.M))
+        registered = set(ip.ICONS["journal_entry"]) | set(ip.ICONS["journal_entry_space"])
+        self.assertEqual(defined - registered, {"je_nuclear_program"})
+        self.assertEqual(registered - defined, set())
+
+
 class WriteDecisionTests(unittest.TestCase):
     def test_changed_pick_is_rewritten_unknown_history_is_trusted(self):
         want = [1, "prompt b"]
@@ -380,6 +415,119 @@ class StripTests(unittest.TestCase):
                          "gfx/interface/illustrations/institutions/institution_ministry_of_war.dds")
         self.assertEqual(ip.icon_path("institution", "institution_ministry_of_war"),
                          "gfx/interface/icons/institution_icons/institution_ministry_of_war.dds")
+
+
+class BackdropPlumbingTests(unittest.TestCase):
+    """The backed category's shared backdrop: which jobs render, where finals go, when writing is refused."""
+
+    def setUp(self):
+        self.cat = "journal_entry_space"
+        self.spec = ip.CATEGORIES[self.cat]
+        self.saved_seed = self.spec["backdrop"]["seed"]
+
+    def tearDown(self):
+        self.spec["backdrop"]["seed"] = self.saved_seed
+
+    def test_backdrop_seed_and_final_dir_follow_the_pick(self):
+        work = Path("/w")
+        self.spec["backdrop"]["seed"] = None
+        self.assertEqual(gi.backdrop_seed(self.cat), 0)               # candidates go over s0 in review
+        self.assertEqual(gi.final_dir(self.cat, work), work / "final" / f"{self.cat}_bd0")
+        self.spec["backdrop"]["seed"] = 3
+        self.assertEqual(gi.final_dir(self.cat, work), work / "final" / f"{self.cat}_bd3")
+        self.assertEqual(gi.final_dir("technology", work), work / "final")  # no backdrop, no subfolder
+
+    def test_write_is_refused_until_the_backdrop_is_picked(self):
+        saved = ip.ICONS
+        try:
+            ip.ICONS = gi.ICONS = {self.cat: {"je_x": {"subject": "a silver sphere", "seed": 0}}}
+            self.spec["backdrop"]["seed"] = None
+            with self.assertRaisesRegex(SystemExit, "pick the backdrop"):
+                gi.stage_write(self.cat, set(), Path(tempfile.mkdtemp()))
+        finally:
+            ip.ICONS = gi.ICONS = saved
+
+    @unittest.skipIf(icon_dds is None, "Pillow is not installed")
+    def test_render_jobs_include_the_backdrop_only_when_asked_for(self):
+        import icon_render
+        saved, saved_embed, saved_render = ip.ICONS, icon_render.embed, icon_render.render
+        jobs_seen = []
+        try:
+            ip.ICONS = gi.ICONS = {self.cat: {"je_a": {"subject": "a silver sphere", "seed": None},
+                                              "je_b": {"subject": "a gold lander", "seed": None}}}
+            icon_render.embed = lambda prompts, emb_dir: None
+            icon_render.render = lambda jobs, *a, **k: jobs_seen.append(list(jobs))
+
+            def names(only):
+                jobs_seen.clear()
+                gi.stage_render(self.cat, only, Path("/w"), 2, "sequential")
+                return [(n.split("__", 1)[1], s) for n, _, s in jobs_seen[0]]
+
+            self.spec["backdrop"]["seed"] = None
+            everything = names(set())
+            self.assertEqual([j for j in everything if j[0] == gi.BACKDROP],
+                             [(gi.BACKDROP, s) for s in range(self.spec["backdrop"]["seeds"])])
+            self.assertEqual(len([j for j in everything if j[0] != gi.BACKDROP]), 4)  # 2 subjects x 2 seeds
+            self.assertEqual({j[0] for j in names({"je_a"})}, {"je_a"})               # not for a subject rerun
+            self.assertEqual({j[0] for j in names({gi.BACKDROP})}, {gi.BACKDROP})     # alone, picked first
+            self.spec["backdrop"]["seed"] = 2
+            self.assertEqual(names({gi.BACKDROP}), [(gi.BACKDROP, 2)])               # picked: its seed only
+        finally:
+            ip.ICONS = gi.ICONS = saved
+            icon_render.embed, icon_render.render = saved_embed, saved_render
+
+
+@unittest.skipIf(icon_dds is None, "Pillow is not installed")
+class BackedComposeTests(unittest.TestCase):
+    """compose_backdrop makes a soft-edged, vignetted disc; compose_backed lays a subject over it."""
+
+    SIZE = 150
+
+    def setUp(self):
+        import icon_render
+        self.r = icon_render
+        self.spec = dict(size=self.SIZE, fill=0.5, disc_fill=0.86)
+        self.flat = Image.new("RGB", (256, 256), (60, 80, 140))
+
+    def test_backdrop_is_a_disc_inside_the_frames_ring(self):
+        disc = np.asarray(self.r.compose_backdrop(self.flat, self.spec)).astype(float)
+        c = self.SIZE // 2
+        self.assertEqual(disc[c, c, 3], 255)
+        self.assertEqual(disc[0, 0, 3], 0)                            # corners stay clear of the round frame
+        edge = int(c + self.SIZE * 0.86 / 2)
+        self.assertGreater(disc[c, edge - 3, 3], 200)
+        self.assertLess(disc[c, min(edge + 3, self.SIZE - 1), 3], 40)
+
+    def test_vignette_darkens_the_rim_only(self):
+        disc = np.asarray(self.r.compose_backdrop(self.flat, dict(self.spec, rim=0))).astype(float)
+        c = self.SIZE // 2
+        centre = disc[c, c, :3].sum()
+        self.assertAlmostEqual(disc[c, c + 20, :3].sum(), centre, delta=2)   # inside 0.55 of the radius
+        self.assertLess(disc[c, c + 60, :3].sum(), centre * 0.85)
+
+    def test_subject_sits_over_the_disc_and_the_disc_survives_around_it(self):
+        raw = Image.new("RGBA", (64, 64), (0, 0, 0, 0))
+        raw.paste((200, 30, 30, 255), (16, 16, 48, 48))
+        saved = self.r.cut_out
+        self.r.cut_out = lambda im: im                                  # rembg is a GPU-venv dependency
+        try:
+            disc = self.r.compose_backdrop(self.flat, self.spec)
+            icon = self.r.compose_backed(raw, self.spec, (0.45, 0.57), disc)
+        finally:
+            self.r.cut_out = saved
+        a, b = np.asarray(icon).astype(int), np.asarray(disc).astype(int)
+        c = self.SIZE // 2
+        self.assertEqual(icon.size, (self.SIZE, self.SIZE))
+        self.assertGreater(a[c, c, 0], a[c, c, 2] + 60)                 # the red subject is on top
+        self.assertTrue((a[..., 3] == b[..., 3]).all())                # the disc's outline is unchanged
+        far = (c, int(self.SIZE * 0.2))
+        self.assertTrue((a[far] == b[far]).all())                       # away from the subject: bare disc
+
+    def test_backed_needs_its_backdrop(self):
+        composer = self.r.Composer()
+        composer._target["journal_entry_space"] = (0.45, 0.57)          # skip reading vanilla's icons
+        with self.assertRaises(ValueError):
+            composer.compose(Image.new("RGB", (8, 8)), "journal_entry_space", ip.CATEGORIES["journal_entry_space"])
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 ﻿je_post_scarcity = {
-	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+	icon = "gfx/interface/icons/event_icons/je_post_scarcity.dds"
 	group = je_group_technology
 
 	modifiers_while_active = {

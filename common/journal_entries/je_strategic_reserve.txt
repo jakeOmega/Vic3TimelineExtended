@@ -13,7 +13,7 @@
 # ============================================================================
 
 je_strategic_reserve = {
-	icon = "gfx/interface/icons/building_icons/building_government_administration.dds"
+	icon = "gfx/interface/icons/event_icons/je_strategic_reserve.dds"
 	group = je_group_internal_affairs
 
 	is_shown_when_inactive = {

@@ -1,5 +1,5 @@
 ﻿je_colonial_empire = {
-	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	icon = "gfx/interface/icons/event_icons/je_colonial_empire.dds"
 
 	group = je_group_foreign_affairs
 
