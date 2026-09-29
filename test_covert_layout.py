@@ -299,7 +299,8 @@ class OperationRowTest(unittest.TestCase):
         loc = _loc()
         for key in ("je_iw_op_row_phase_prep_tt", "je_iw_op_row_phase_est_tt", "je_iw_op_row_phase_full_tt",
                     "je_iw_op_row_detection_tt", "je_iw_net_row_trend_growing", "je_iw_net_row_trend_decaying",
-                    "je_iw_net_row_trend_holding"):
+                    "je_iw_net_row_trend_holding", "je_iw_net_row_intel_service_tooltip",
+                    "je_iw_net_row_intel_ops_tooltip"):
             self.assertNotIn("JournalEntry", loc[key], key)
 
 
