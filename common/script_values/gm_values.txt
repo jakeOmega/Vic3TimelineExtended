@@ -615,7 +615,7 @@ gm_display_vanity = {
 # The overview's four cells: how many monuments hold each status. Live, with
 # gm_status_code's order of precedence (contested over heritage over the
 # rest), so the cells always agree with the rows' status icons.
-gm_disp_count_stands = {
+gm_disp_count_upheld = {
 	value = 0
 	every_scope_state = {
 		limit = {

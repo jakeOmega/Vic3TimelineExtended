@@ -3,7 +3,7 @@
 ###
 ### Three named roots at the foot of this file, mounted from je_grand_monuments:
 ###   widget_je_gm_overview   custom_widget_container_1 (above the status desc)
-###     The overview, always shown: how many monuments stand, are heritage,
+###     The overview, always shown: how many monuments are upheld, heritage,
 ###     undedicated or contested, as lit or dimmed icons, and under them
 ###     Hard Times while a finished level would cause vanity backlash (§5).
 ###   widget_je_gm_status     custom_widget_container_2
@@ -287,7 +287,7 @@ types grand_monuments_widget_types
 			}
 			gm_row_status = {
 				visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)2' )]"
-				tooltip = "gm_je_status_stands_tt"
+				tooltip = "gm_je_status_upheld_tt"
 				blockoverride "status_texture" {
 					texture = "gfx/interface/icons/generic_icons/green_checkmark.dds"
 				}
@@ -387,18 +387,18 @@ types grand_monuments_widget_types
 					parentanchor = hcenter
 
 					gm_ov_cell = {
-						tooltip = "gm_je_status_stands_tt"
+						tooltip = "gm_je_status_upheld_tt"
 						blockoverride "cell_texture" {
 							texture = "gfx/interface/icons/generic_icons/green_checkmark.dds"
 						}
 						blockoverride "lit" {
-							visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_count_stands'), '(CFixedPoint)0' )]"
+							visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_count_upheld'), '(CFixedPoint)0' )]"
 						}
 						blockoverride "unlit" {
-							visible = "[Not( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_count_stands'), '(CFixedPoint)0' ) )]"
+							visible = "[Not( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_count_upheld'), '(CFixedPoint)0' ) )]"
 						}
 						blockoverride "label" {
-							text = "gm_je_ov_stands"
+							text = "gm_je_ov_upheld"
 						}
 					}
 					gm_ov_cell = {
