@@ -2,6 +2,8 @@
 
 Comprehensive reference for creating and modifying GUI elements in Victoria 3 mods.
 
+What the mod's own panels should look like (the house style) is in [`gui_style_guide.md`](gui_style_guide.md); this guide is how to build them.
+
 ## Table of Contents
 
 1. [Overview](#overview)
