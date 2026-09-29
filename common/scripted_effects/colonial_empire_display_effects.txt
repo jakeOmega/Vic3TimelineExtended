@@ -161,6 +161,10 @@ colonial_empire_refresh_display = {
 		# and the overview's pie.
 		set_variable = { name = colonial_empire_condemner_share value = colonial_gp_condemner_prestige_share }
 
+		# The supporters' share of the same pool: the pie's second slice and a
+		# roster line. Display only; no escalation reads it.
+		set_variable = { name = colonial_empire_supporter_share value = colonial_gp_supporter_prestige_share }
+
 		# Which of those two escalations applies: 0 neither, 1 diplomatic
 		# isolation, 2 international consensus (the two stack, so 2 means
 		# both). Read off the bar's own escalation leaves, so the share

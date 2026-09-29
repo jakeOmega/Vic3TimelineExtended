@@ -200,6 +200,15 @@ colonial_empire_pressure_sgui = {
 				}
 				custom_tooltip = je_colonial_empire_pressure_share_tt
 			}
+			# The supporters' share, beside it, with a hover that says it does
+			# not offset the escalations (only the condemners' share counts).
+			if = {
+				limit = {
+					has_variable = colonial_empire_supporter_share
+					var:colonial_empire_supporter_share > 0
+				}
+				custom_tooltip = je_colonial_empire_pressure_support_share_tt
+			}
 		}
 
 		every_country = {
