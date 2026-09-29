@@ -57,16 +57,16 @@ je_cultural_hegemony = {
 	}
 
 	status_desc = {
-		# The journal entry's own text is deliberately short: three lines that read
-		# sensibly on a pinned, unopened entry. Everything that used to be here —
-		# the component breakdown, the cultural-policy readout, the ideological
-		# alignment block and the top-ten leaderboard — is now the custom widget
-		# mounted above, which can lay it out in columns instead of as prose.
-		desc = je_cultural_hegemony_status
-		desc = je_ch_share_info
+		# No status text while the entry is active: the panels above and below
+		# show everything it said (the overview's tier and share, the programmes'
+		# funding row), and status text that repeats the overview goes (owner,
+		# 2026-09-29). The entry is also shown while inactive
+		# (is_shown_when_inactive), when the panels are hidden and the scores
+		# already run, so it keeps one line there: tier and share.
+		# has_journal_entry counts active entries only.
 		triggered_desc = {
-			desc = je_ch_policy_program_funding
-			trigger = { has_law = law_type:law_ministry_of_culture }
+			desc = je_cultural_hegemony_status
+			trigger = { NOT = { has_journal_entry = je_cultural_hegemony } }
 		}
 	}
 

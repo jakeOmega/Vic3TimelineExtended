@@ -776,6 +776,16 @@ ch_disp_share_trend = {
 	}
 }
 
+# How many of the overview's leader flags are filled (ch_leaders_display_write
+# in cultural_hegemony_effects.txt): 0 hides them, N draws flags 1..N.
+ch_disp_leader_count = {
+	value = 0
+	if = {
+		limit = { has_variable = ch_leader_seat_count }
+		add = var:ch_leader_seat_count
+	}
+}
+
 # The world's leading cultural power's political model, 1-15 in
 # ch_set_political_model's codes (0 before the first census), for the overview's
 # exported-model disc.

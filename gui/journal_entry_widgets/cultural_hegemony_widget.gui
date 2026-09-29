@@ -8,11 +8,13 @@
 ###   te_ch_overview_panel        always shown: tier, world rank, the exported
 ###                               model and the benchmark alert as icons with a
 ###                               word beneath; our cultural share as a framed pie
-###                               with last month's trend
+###                               with last month's trend, and the three leading
+###                               powers as vanilla flags
 ###   te_ch_status_sections       open by default (flags *_closed):
+###     te_ch_sec_board           the top ten cultural powers (first: owner,
+###                               2026-09-29)
 ###     te_ch_sec_programmes      funding stepper and the four programmes
 ###     te_ch_sec_breakdown       where our pull comes from, as a table
-###     te_ch_sec_board           the top ten cultural powers
 ###     te_ch_sec_models          political models of the world, pie and legend
 ###   te_ch_reference_sections
 ###     te_ch_sec_history         the share history chart, open (ch_hist_closed)
@@ -387,7 +389,7 @@ types cultural_hegemony_widget_types
 	### PLACEHOLDER colours: the models pie's "Mixed / Other" grey as the disc and
 	### its "Liberal" gold as the fill (docs/systems/cultural_hegemony_gui_icons.md).
 	type te_ch_ov_pie = widget {
-		size = { 220 108 }
+		size = { 180 108 }
 
 		icon = {
 			size = { 86 86 }
@@ -440,8 +442,8 @@ types cultural_hegemony_widget_types
 	### OVERVIEW — always shown, at the top of both hosts
 	### ==========================================================================
 	### What a returning player checks: our tier, where we rank, whose political
-	### model leads the world, whether we are paying the benchmark, and our share
-	### with last month's trend. Each tooltip carries the text it replaced (the
+	### model leads the world, whether we are paying the benchmark, our share
+	### with last month's trend, and who the leading powers are. Each tooltip carries the text it replaced (the
 	### tier's blurb, the rank's reading, the exported model's share and push).
 	type te_ch_overview_panel = flowcontainer {
 		direction = vertical
@@ -751,35 +753,113 @@ types cultural_hegemony_widget_types
 					}
 				}
 
-				### Row 2: our share of global cultural influence, and last month's trend.
-				te_ch_ov_pie = {
+				### Row 2: our share of global cultural influence with last month's
+				### trend, and the three leading cultural powers.
+				flowcontainer = {
+					direction = horizontal
 					parentanchor = hcenter
-					tooltip = "je_ch_ov_share_tt"
-					blockoverride "pie_value" {
-						value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_share_frac') )]"
-					}
-					blockoverride "label" {
-						text = "je_ch_ov_share_label"
-					}
-					blockoverride "trend" {
-						widget = {
-							size = { 20 20 }
-							parentanchor = vcenter
+					ignoreinvisible = yes
+					spacing = 12
 
-							icon = {
+					te_ch_ov_pie = {
+						parentanchor = vcenter
+						tooltip = "je_ch_ov_share_tt"
+						blockoverride "pie_value" {
+							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_share_frac') )]"
+						}
+						blockoverride "label" {
+							text = "je_ch_ov_share_label"
+						}
+						blockoverride "trend" {
+							widget = {
 								size = { 20 20 }
-								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_share_trend'), '(CFixedPoint)1' )]"
-								texture = "gfx/interface/icons/generic_icons/trend_up.dds"
+								parentanchor = vcenter
+
+								icon = {
+									size = { 20 20 }
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_share_trend'), '(CFixedPoint)1' )]"
+									texture = "gfx/interface/icons/generic_icons/trend_up.dds"
+								}
+								icon = {
+									size = { 20 20 }
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_share_trend'), '(CFixedPoint)-1' )]"
+									texture = "gfx/interface/icons/generic_icons/trend_down.dds"
+								}
+								icon = {
+									size = { 20 20 }
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_share_trend'), '(CFixedPoint)0' )]"
+									texture = "gfx/interface/icons/generic_icons/trend_nochange.dds"
+								}
 							}
-							icon = {
-								size = { 20 20 }
-								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_share_trend'), '(CFixedPoint)-1' )]"
-								texture = "gfx/interface/icons/generic_icons/trend_down.dds"
+						}
+					}
+
+					### The three leading cultural powers at the last recount, leader
+					### first, as vanilla flags (the country's name on hover, the
+					### country on click), the way the UN overview draws its Security
+					### Council. Each flag's country comes from a capital the viewer
+					### holds (ch_leaders_display_write), and its slot's gate means a
+					### seat that is not set is never read. The slots keep their width
+					### whether filled or not, so the row does not change width.
+					flowcontainer = {
+						direction = vertical
+						parentanchor = vcenter
+						ignoreinvisible = yes
+						spacing = 4
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_leader_count'), '(CFixedPoint)1' )]"
+
+						textbox = {
+							parentanchor = hcenter
+							autoresize = yes
+							align = hcenter|nobaseline
+							using = fontsize_medium
+							default_format = "#tooltippable"
+							text = "je_ch_ov_leaders_label"
+							tooltip = "je_ch_ov_leaders_tt"
+						}
+						flowcontainer = {
+							direction = horizontal
+							parentanchor = hcenter
+							spacing = 6
+
+							widget = {
+								size = { 70 48 }
+
+								widget = {
+									size = { 70 48 }
+									visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_leader_count'), '(CFixedPoint)1' )]"
+
+									flag = {
+										parentanchor = center
+										datacontext = "[JournalEntry.GetCountry.MakeScope.Var('ch_leader_seat_1').GetState.GetCountry]"
+									}
+								}
 							}
-							icon = {
-								size = { 20 20 }
-								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_share_trend'), '(CFixedPoint)0' )]"
-								texture = "gfx/interface/icons/generic_icons/trend_nochange.dds"
+							widget = {
+								size = { 70 48 }
+
+								widget = {
+									size = { 70 48 }
+									visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_leader_count'), '(CFixedPoint)2' )]"
+
+									flag = {
+										parentanchor = center
+										datacontext = "[JournalEntry.GetCountry.MakeScope.Var('ch_leader_seat_2').GetState.GetCountry]"
+									}
+								}
+							}
+							widget = {
+								size = { 70 48 }
+
+								widget = {
+									size = { 70 48 }
+									visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_leader_count'), '(CFixedPoint)3' )]"
+
+									flag = {
+										parentanchor = center
+										datacontext = "[JournalEntry.GetCountry.MakeScope.Var('ch_leader_seat_3').GetState.GetCountry]"
+									}
+								}
 							}
 						}
 					}
@@ -1917,9 +1997,9 @@ types cultural_hegemony_widget_types
 		spacing = 4
 		visible = "[JournalEntry.IsActive]"
 
+		te_ch_sec_board = {}
 		te_ch_sec_programmes = {}
 		te_ch_sec_breakdown = {}
-		te_ch_sec_board = {}
 		te_ch_sec_models = {}
 	}
 

@@ -45,3 +45,4 @@ Both in the pie format (`gui_modding_guide.md`, "Pie charts of script-held data"
 - **The exported model's disc.** The overview shows the leading power's political model as that model's slice texture from the models pie (`ch_pie_<model>.dds`, frame 2), so the colour matches the pie and its legend. That is by design. A drawn emblem per model would be a new set of fifteen, not a swap.
 - **The trend arrows** are vanilla's `trend_up` / `trend_down` / `trend_nochange`, as the UN's pillar rows use them.
 - **World rank** is a number, with no icon.
+- **The leading powers** are vanilla's `flag` widget, drawn from the capitals the viewer holds (`ch_leader_seat_1..3`), as the UN overview draws its Security Council.
