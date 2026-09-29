@@ -269,58 +269,65 @@ types strategic_reserve_widget_types
 		visible = "[JournalEntry.IsActive]"
 
 		st_res_panel = {
+			### As wide as the sections below (the UN overview's 480px column),
+			### with the three cells centred in it.
 			flowcontainer = {
-				direction = horizontal
-				spacing = 12
-				parentanchor = hcenter
+				direction = vertical
+				minimumsize = { 480 -1 }
 
-				### The hub: its own icon, at full colour while it is fully
-				### staffed and dimmed below that, when it trades nothing. The
-				### dimmed icon is always drawn; the lit one covers it.
-				st_res_ov_cell = {
-					tooltip = "je_strategic_reserve_ov_hub_tt"
-					blockoverride "cell_top" {
-						icon = {
-							size = { 36 36 }
-							parentanchor = top|hcenter
-							alpha = 0.3
-							texture = "gfx/interface/icons/building_icons/building_strategic_reserve_hub.dds"
-						}
-						icon = {
-							size = { 36 36 }
-							parentanchor = top|hcenter
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_disp_hub_staffed'), '(CFixedPoint)1' )]"
-							texture = "gfx/interface/icons/building_icons/building_strategic_reserve_hub.dds"
-						}
-					}
-					blockoverride "label" {
-						text = "[SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_disp_hub_staffed'), '(CFixedPoint)1' ), 'je_strategic_reserve_ov_hub_staffed', 'je_strategic_reserve_ov_hub_understaffed' )]"
-					}
-				}
+				flowcontainer = {
+					direction = horizontal
+					spacing = 12
+					parentanchor = hcenter
 
-				### How much of one good the hub may move in a week.
-				st_res_ov_cell = {
-					tooltip = "je_strategic_reserve_ov_cap_tt"
-					blockoverride "cell_top" {
-						st_res_ov_figure = {
-							text = "je_strategic_reserve_ov_cap_value"
+					### The hub: its own icon, at full colour while it is fully
+					### staffed and dimmed below that, when it trades nothing. The
+					### dimmed icon is always drawn; the lit one covers it.
+					st_res_ov_cell = {
+						tooltip = "je_strategic_reserve_ov_hub_tt"
+						blockoverride "cell_top" {
+							icon = {
+								size = { 36 36 }
+								parentanchor = top|hcenter
+								alpha = 0.3
+								texture = "gfx/interface/icons/building_icons/building_strategic_reserve_hub.dds"
+							}
+							icon = {
+								size = { 36 36 }
+								parentanchor = top|hcenter
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_disp_hub_staffed'), '(CFixedPoint)1' )]"
+								texture = "gfx/interface/icons/building_icons/building_strategic_reserve_hub.dds"
+							}
+						}
+						blockoverride "label" {
+							text = "[SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_disp_hub_staffed'), '(CFixedPoint)1' ), 'je_strategic_reserve_ov_hub_staffed', 'je_strategic_reserve_ov_hub_understaffed' )]"
 						}
 					}
-					blockoverride "label" {
-						text = "je_strategic_reserve_ov_cap_label"
-					}
-				}
 
-				### What this week's releases earn.
-				st_res_ov_cell = {
-					tooltip = "je_strategic_reserve_ov_income_tt"
-					blockoverride "cell_top" {
-						st_res_ov_figure = {
-							text = "je_strategic_reserve_ov_income_value"
+					### How much of one good the hub may move in a week.
+					st_res_ov_cell = {
+						tooltip = "je_strategic_reserve_ov_cap_tt"
+						blockoverride "cell_top" {
+							st_res_ov_figure = {
+								text = "je_strategic_reserve_ov_cap_value"
+							}
+						}
+						blockoverride "label" {
+							text = "je_strategic_reserve_ov_cap_label"
 						}
 					}
-					blockoverride "label" {
-						text = "je_strategic_reserve_ov_income_label"
+
+					### What this week's releases earn.
+					st_res_ov_cell = {
+						tooltip = "je_strategic_reserve_ov_income_tt"
+						blockoverride "cell_top" {
+							st_res_ov_figure = {
+								text = "je_strategic_reserve_ov_income_value"
+							}
+						}
+						blockoverride "label" {
+							text = "je_strategic_reserve_ov_income_label"
+						}
 					}
 				}
 			}
