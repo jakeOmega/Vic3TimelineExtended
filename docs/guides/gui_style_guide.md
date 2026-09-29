@@ -84,7 +84,7 @@ A new icon can start as any vanilla texture, so a layout can be judged in game b
 
 ## Hover recipes
 
-Proven in game:
+All proven in game:
 
 | To show on hover | Write | Example |
 |---|---|---|
@@ -93,9 +93,4 @@ Proven in game:
 | A modifier's effects, in loc | `[GetStaticModifier('<name>').GetDesc]` | `scripting_best_practices.md`, "Render Static Modifier Effects in Loc" |
 | Why a button is greyed, and what it does | `Concatenate( IsValidTooltip(...), Localize('te_tt_break'), ExecuteTooltip(...) )` | gotcha #16; the Propose buttons |
 | A word inside a line printed by a scripted GUI's `ExecuteTooltip`, when the tooltip is plain text | `#tooltippable;tooltip:<key> Word#!` | the proposal rows' "None" (confirmed 2026-09-29), "No Case", "In Force", "On Cooldown" |
-
-Awaiting the owner's in-game check (PR #567). Confirm this before relying on it, and update this section with what the check finds:
-
-| To show on hover | Write | Used by |
-|---|---|---|
-| A word inside scripted text, when the tooltip reads data such as `GetStaticModifier(...)` | `#tooltippable;tooltip:[GetPlayer.GetTooltipTag],<key> Word#!`, the form vanilla uses whenever the tooltip reads data | Our Obligations: each convention's modifiers |
+| The same, when the tooltip reads data such as `GetStaticModifier(...)` | `#tooltippable;tooltip:[GetPlayer.GetTooltipTag],<key> Word#!`, the form vanilla uses whenever the tooltip reads data | Our Obligations' conventions and terms (confirmed 2026-09-29); gotcha #32 |

@@ -1589,6 +1589,8 @@ Data error in loc string 'te_hist_tt_markers'
     - **The sidebar cycle skips it.** The sidebar opens Budget with `OpenPanelCycleTabs('budget', 'default|states|assets')` (`information_panel_bar.gui`), so pressing Budget never lands on the new tab, and pressing it on Assets closes the panel as in vanilla. Adding the tab to the cycle means replacing that file.
     - **Greying a tab.** `tab_button` is a plain `button` that carries `using = disabled_stripes`, so an `enabled = "[…]"` placed in the `*_button_click` blockoverride greys it; its tooltip still shows. The Banking tab does this until the entry activates. Not yet seen in game.
 
+32. **A hover can sit on a word inside a scripted GUI's `ExecuteTooltip` text.** Write `#tooltippable;tooltip:<key> Word#!` in the loc line the scripted GUI prints; the word is underlined and hovering it shows `<key>`. When `<key>` reads data (`[GetStaticModifier('<name>').GetDesc]` and the like), use the tagged form vanilla uses, `#tooltippable;tooltip:[GetPlayer.GetTooltipTag],<key> Word#!`. Both confirmed in game 2026-09-29 (PR #567): the plain form on the UN proposal rows' "None", and the tagged form on Our Obligations' conventions, whose hover lists the modifier's name and effects. `GetDesc` shows the definition's values, so a modifier applied with a `multiplier` needs the scaling said in the tooltip. `organize_loc.py` counts a key named after `tooltip:` as used only if the key is plain `\w+` (no dots). What to use it for: `gui_style_guide.md`, "Hover recipes".
+
 ---
 
 ## Patterns from Workshop Mods
