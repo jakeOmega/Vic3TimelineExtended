@@ -877,6 +877,7 @@
  SUMMIT_ATTEND_RELATIONS_TT:0 "#G +5#! relations with all [concept_great_power]s."
  SUMMIT_BOYCOTT_RELATIONS_TT:0 "#R -5#! relations with all [concept_great_power]s."
  SUMMIT_HOST_RELATIONS_TT:0 "#G +10#! relations with all [concept_great_power]s."
+ TAB_6:0 "#header Tab 6#!"
  TECHNOLOGY_RESEARCHED_civil_rights_movement:0 "Researched Civil Rights Movement"
  TECHNOLOGY_RESEARCHED_social_justice_movements:0 "Researched Social Justice Movements"
  TEMPERATURE_ANOMALY_2:0 "[concept_global_warming_system] has reached 2°C above pre-industrial levels."

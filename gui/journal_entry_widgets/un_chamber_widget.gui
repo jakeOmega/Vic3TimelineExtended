@@ -2043,7 +2043,7 @@ types un_chamber_widget_types
 						text = "je_un_record_case"
 					}
 					blockoverride "row_value" {
-						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_strength')|0] / 100"
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_strength')|0] / 100"
 					}
 				}
 				un_chamber_value_row = {

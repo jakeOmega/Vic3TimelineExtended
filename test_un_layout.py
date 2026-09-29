@@ -504,5 +504,41 @@ class HowStyleTest(unittest.TestCase):
         self.assertIn("48th", _loc("je_un_auth_help_1"))
         self.assertIn("Hover a pillar", _loc("je_un_auth_help_3"))
 
+
+TAB_WIDGETS = os.path.join(REPO, "gui", "te_system_tab_widgets.gui")
+
+
+def _outside_brackets(value):
+    out, depth = [], 0
+    for ch in value:
+        if ch == "[":
+            depth += 1
+        elif ch == "]":
+            depth = max(0, depth - 1)
+        elif depth == 0:
+            out.append(ch)
+    return "".join(out).strip()
+
+
+class DebugLogHygieneTest(unittest.TestCase):
+    """What the owner's debug.log flagged from these panels (2026-09-29)."""
+
+    def test_no_text_mixes_words_and_data(self):
+        # `text = "[X] / 100"` logs "Unlocalized text ... use the raw_text
+        # property instead": a text is either a loc key or one data binding.
+        files = UN_GUI + [os.path.join(W, "un_overview_widget.gui"), TAB_WIDGETS]
+        for path in files:
+            for n, line in enumerate(_read(path).splitlines(), 1):
+                for m in re.finditer(r'(?<![\w])text\s*=\s*"([^"]*)"', line):
+                    if "[" in m.group(1):
+                        with self.subTest(file=os.path.basename(path), line=n):
+                            self.assertEqual(_outside_brackets(m.group(1)), "", m.group(1))
+
+    def test_the_sixth_tab_has_vanillas_placeholder_key(self):
+        # Vanilla's tab_buttons defaults each slot's tooltip to TAB_1..TAB_5,
+        # which its loc defines; the sixth slot's default needs its own.
+        self.assertIn('tooltip = "TAB_6"', _read(TAB_WIDGETS))
+        self.assertEqual(_loc("TAB_6"), "#header Tab 6#!")
+
 if __name__ == "__main__":
     unittest.main()
