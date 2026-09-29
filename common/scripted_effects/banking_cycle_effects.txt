@@ -1678,14 +1678,20 @@ apply_banking_contagion_effects = {
 				change_variable = { name = finance_cycle_momentum add = -1 }
 			}
 		}
-		# Clamp
-		if = {
-			limit = { var:finance_cycle_value < 5 }
-			set_variable = { name = finance_cycle_value value = 5 }
-		}
-		if = {
-			limit = { var:finance_cycle_momentum < -5 }
-			set_variable = { name = finance_cycle_momentum value = -5 }
+		# Clamp. Bookkeeping, not news: the tooltipped changes above are what
+		# the player is told, so the bounds go in a hidden_effect, which changes
+		# nothing (set_variable prints no line) but says so to
+		# silent_variable_audit, which sees momentum once the banking overview
+		# reads it for its icon (banking_disp_momentum_band_code).
+		hidden_effect = {
+			if = {
+				limit = { var:finance_cycle_value < 5 }
+				set_variable = { name = finance_cycle_value value = 5 }
+			}
+			if = {
+				limit = { var:finance_cycle_momentum < -5 }
+				set_variable = { name = finance_cycle_momentum value = -5 }
+			}
 		}
 	}
 }

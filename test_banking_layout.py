@@ -18,6 +18,9 @@ BUDGET = os.path.join(REPO, "gui", "budget_panel.gui")
 JE = os.path.join(REPO, "common", "journal_entries", "je_banking.txt")
 SGUIS = os.path.join(REPO, "common", "scripted_guis", "banking_dashboard_scripted_gui.txt")
 LOC = os.path.join(REPO, "localization", "english", "te_miscellaneous_l_english.yml")
+CUSTOM_LOC = os.path.join(REPO, "common", "customizable_localization", "banking_dash_custom_loc.txt")
+DISP = os.path.join(REPO, "common", "script_values", "banking_overview_display_values.txt")
+ICONS_DOC = os.path.join(REPO, "docs", "systems", "banking_gui_icons.md")
 BANKING_GUI = [DASH, HIST, LAYOUT, BUDGET]
 
 STATUS = ["te_banking_sec_active", "te_banking_sec_monetary", "te_banking_sec_interventions"]
@@ -205,26 +208,6 @@ class GateTest(unittest.TestCase):
 
 
 class TidyTest(unittest.TestCase):
-    def test_momentum_has_a_trend_arrow(self):
-        body = _type_body(_read(DASH), "te_banking_overview_panel")
-        for sgui, icon in (("banking_dash_momentum_up", "trend_up"),
-                           ("banking_dash_momentum_down", "trend_down"),
-                           ("banking_dash_momentum_steady", "trend_nochange")):
-            self.assertRegex(body, rf"GetScriptedGui\('{sgui}'\)\.IsShown[^\n]*\n\s*texture = "
-                                   rf"\"gfx/interface/icons/generic_icons/{icon}\.dds\"", sgui)
-            block = _sgui(sgui)
-            # display only, and every read guarded
-            self.assertIn("is_valid = { always = no }", block)
-            self.assertIn("ai_is_valid = { always = no }", block)
-            self.assertIn("has_variable = finance_cycle_momentum", block)
-
-    def test_the_arrow_turns_where_the_band_word_does(self):
-        self.assertIn("var:finance_cycle_momentum >= 1", _sgui("banking_dash_momentum_up"))
-        self.assertIn("var:finance_cycle_momentum <= -1", _sgui("banking_dash_momentum_down"))
-        steady = _sgui("banking_dash_momentum_steady")
-        self.assertIn("var:finance_cycle_momentum > -1", steady)
-        self.assertIn("var:finance_cycle_momentum < 1", steady)
-
     def test_labels_with_a_tooltip_look_hoverable(self):
         dash = _read(DASH)
         for typ, block in (("banking_dash_condition_row", "condition_label"),
@@ -266,6 +249,196 @@ class TidyTest(unittest.TestCase):
         self.assertIn('text = "banking_dash_available_header"', head)
         self.assertIn("align = center|nobaseline", head)
         self.assertIn("parentanchor = hcenter", head)
+
+
+# Each band word's customizable localization, the display code that picks its
+# icon, and which code each of the word's keys is.
+BANDS = {
+    "banking_dash_momentum_band": ("banking_disp_momentum_band_code", {
+        "banking_dash_momentum_band_surging": 5, "banking_dash_momentum_band_rising": 4,
+        "banking_dash_momentum_band_steady": 3, "banking_dash_momentum_band_falling": 2,
+        "banking_dash_momentum_band_collapsing": 1}),
+    "banking_dash_bubble_band": ("banking_disp_bubble_band_code", {
+        "banking_dash_bubble_band_low": 1, "banking_dash_bubble_band_building": 2,
+        "banking_dash_bubble_band_elevated": 3, "banking_dash_bubble_band_high": 4,
+        "banking_dash_bubble_band_severe": 5}),
+    "te_mon_stance_band_name": ("banking_disp_stance_band_code", {
+        "banking_dash_stance_band_very_loose": 1, "banking_dash_stance_band_loose": 2,
+        "banking_dash_stance_band_neutral": 3, "banking_dash_stance_band_tight": 4,
+        "banking_dash_stance_band_very_tight": 5}),
+    "te_mon_inflation_band_name": ("banking_disp_price_band_code", {
+        "banking_dash_price_band_dollarised": 7, "banking_dash_price_band_command": 8,
+        "banking_dash_price_band_deflation": 1, "banking_dash_price_band_comfort": 2,
+        "banking_dash_price_band_elevated": 3, "banking_dash_price_band_high": 4,
+        "banking_dash_price_band_very_high": 5, "banking_dash_price_band_hyper": 6}),
+}
+# The overview's cells: tooltip (the Current Conditions row's it replaced),
+# caption, and what picks the icon.
+CELLS = [
+    ("banking_dash_phase_tt", "banking_dash_phase_label", "banking_dash_phase_"),
+    ("banking_dash_momentum_tt", "banking_dash_momentum_label", "banking_disp_momentum_band_code"),
+    ("banking_dash_bubble_tt", "banking_dash_bubble_label", "banking_disp_bubble_band_code"),
+    ("banking_dash_mon_stance_tt", "banking_dash_mon_stance_label", "banking_disp_stance_band_code"),
+    ("banking_dash_mon_band_tt", "banking_dash_mon_inflation_label", "banking_disp_price_band_code"),
+    ("banking_dash_budget_tt", "banking_dash_budget_label", None),
+]
+DOC_SECTIONS = {
+    "banking_dash_phase_": "Overview row 1: cycle phase",
+    "banking_disp_momentum_band_code": "Overview row 1: momentum",
+    "banking_disp_bubble_band_code": "Overview row 1: bubble pressure",
+    "banking_disp_stance_band_code": "Overview row 2: policy stance",
+    "banking_disp_price_band_code": "Overview row 2: inflation (the price band)",
+    None: "Overview row 2: intervention budget",
+}
+
+
+def _norm(s):
+    return " ".join(s.split())
+
+
+def _cells():
+    """(tooltip, caption, [(picker, key, texture)], block) per overview cell."""
+    body = _type_body(_read(DASH), "te_banking_overview_panel")
+    out = []
+    for m in re.finditer(r"te_banking_ov_cell = \{", body):
+        block = _block_from(body, m.end() - 1)
+        tip = re.search(r'^\t*tooltip = "(\w+)"', block, re.M).group(1)
+        cap = re.search(r'blockoverride "caption" \{\s*text = "(\w+)"', block).group(1)
+        icons_at = block.index('blockoverride "icons" {')
+        icons = _block_from(block, icons_at)
+        found = []
+        for im in re.finditer(r"icon = \{", icons):
+            ib = _block_from(icons, im.end() - 1)
+            tex = re.search(r'texture = "([^"]+)"', ib).group(1)
+            vis = re.search(r'visible = "(.*)"', ib)
+            vis = vis.group(1) if vis else ""
+            sv = re.search(r"ScriptValue\('(\w+)'\), '\(CFixedPoint\)(\d+)'", vis)
+            sg = re.search(r"GetScriptedGui\('banking_dash_phase_(\w+)'\)", vis)
+            if sv:
+                found.append((sv.group(1), sv.group(2), tex))
+            elif sg:
+                found.append(("banking_dash_phase_", sg.group(1), tex))
+            else:
+                found.append((None, "budget", tex))
+        out.append((tip, cap, found, block))
+    return out
+
+
+class OverviewTest(unittest.TestCase):
+    """Play-test round 1 (2026-09-29): the readings as icons with their word
+    beneath, in place of the Current Conditions table."""
+
+    def test_the_cells_replace_the_table_rows(self):
+        cells = _cells()
+        self.assertEqual([(tip, cap) for tip, cap, _, _ in cells], [(t, c) for t, c, _ in CELLS])
+        pickers = [{p for p, _, _ in icons} for _, _, icons, _ in cells]
+        self.assertEqual(pickers, [{p} for _, _, p in CELLS])
+        body = _type_body(_read(DASH), "te_banking_overview_panel")
+        self.assertNotIn("banking_dash_condition_row", body)
+        self.assertNotIn("banking_dash_conditions_header", body)
+
+    def test_every_state_has_an_icon(self):
+        icons = {p: {k for _, k, _ in found} for _, _, found, _ in _cells() for p in {f[0] for f in found}}
+        self.assertEqual(icons["banking_dash_phase_"], {"panic", "downturn", "stagnation", "stable",
+                                                       "expansion", "boom", "frenzy"})
+        for _, (sv, codes) in BANDS.items():
+            self.assertEqual(icons[sv], {str(c) for c in codes.values()}, sv)
+
+    def test_the_phase_icon_and_word_share_their_scripted_gui(self):
+        tip, _, found, block = _cells()[0]
+        words = re.findall(r"te_banking_ov_word = \{\s*visible = \"\[GetScriptedGui\('banking_dash_phase_(\w+)'\)"
+                           r"[^\n]*\s*text = \"banking_dash_phase_(\w+)_value\"", block)
+        self.assertEqual([k for _, k, _ in found], [a for a, _ in words])
+        self.assertTrue(all(a == b for a, b in words))
+
+    def test_monetary_cells_are_gated(self):
+        cells = {tip: block for tip, _, _, block in _cells()}
+        stance = re.search(r'^\t*visible = "(.*)"', cells["banking_dash_mon_stance_tt"], re.M).group(1)
+        self.assertIn("banking_mon_has_dial", stance)
+        self.assertIn("banking_mon_display_ready", stance)
+        band = re.search(r'^\t*visible = "(.*)"', cells["banking_dash_mon_band_tt"], re.M).group(1)
+        self.assertIn("banking_mon_system_shown", band)
+        self.assertIn("banking_mon_display_ready", band)
+
+    def test_the_crash_risk_tag_is_a_badge(self):
+        block = [b for tip, _, _, b in _cells() if tip == "banking_dash_bubble_tt"][0]
+        badge = _block_from(block, block.index('blockoverride "badge" {'))
+        self.assertIn("GetScriptedGui('banking_dash_bubble_risk_high').IsShown", badge)
+        self.assertIn('tooltip = "banking_dash_ov_crash_risk_tt"', badge)
+        self.assertIn("banking_dash_ov_crash_risk_tt", _loc())
+
+    def test_the_overview_is_as_wide_as_the_sections(self):
+        dash = _read(DASH)
+        cell = _type_body(dash, "te_banking_ov_cell")
+        w = int(re.search(r"size = \{ (\d+) \d+ \}", cell).group(1))
+        body = _type_body(dash, "te_banking_overview_panel")
+        self.assertRegex(body, r"(?m)^\t\tmargin = \{ 10 8 \}")   # 10 + 480 bars + 10 = 500
+        header = _type_body(dash, "banking_dash_category_header")
+        self.assertIn("size = { 500 32 }", header)
+        for m in re.finditer(r"(?m)^\t\t### Row \d", body):
+            row = _block_from(body, body.index("flowcontainer = {", m.end()))
+            n = len(re.findall(r"te_banking_ov_cell = \{", row))
+            spacing = int(re.search(r"spacing = (\d+)", row).group(1))
+            self.assertLessEqual(n * w + (n - 1) * spacing, 480, row[:80])
+        for textbox in re.findall(r"max_width = (\d+)", cell) + \
+                re.findall(r"max_width = (\d+)", _type_body(dash, "te_banking_ov_word")):
+            self.assertLessEqual(int(textbox), w)
+
+
+class BandCodeTest(unittest.TestCase):
+    """Each icon's display code repeats its band word's tests, in order, so the
+    icon and the word beneath it cannot disagree."""
+
+    def test_codes_follow_the_band_words(self):
+        custom, disp = _read(CUSTOM_LOC), _read(DISP)
+        for loc_name, (sv, codes) in BANDS.items():
+            with self.subTest(band=loc_name):
+                loc = _block_from(custom, re.search(rf"(?m)^{loc_name} = \{{", custom).end() - 1)
+                branches = re.findall(r"text = \{\s*(?:trigger = \{(.*?)\}\s*)?localization_key = (\w+)\s*\}",
+                                      loc, re.S)
+                unknown, branches = branches[0], branches[1:]
+                self.assertEqual(unknown[1], "banking_dash_band_unknown")
+                var = re.search(r"NOT = \{ has_variable = (\w+) \}", unknown[0]).group(1)
+                value = _block_from(disp, re.search(rf"(?m)^{sv} = \{{", disp).end() - 1)
+                self.assertRegex(value, rf"value = 0\s*if = \{{\s*limit = \{{ has_variable = {var} \}}")
+                chain = re.findall(r"(?:if|else_if) = \{\s*limit = \{([^{}]*)\}\s*value = (\d+)\s*\}", value)
+                last = re.search(r"else = \{\s*value = (\d+)\s*\}", value).group(1)
+                self.assertEqual([_norm(c) for c, _ in chain], [_norm(c) for c, _ in branches[:-1]])
+                self.assertEqual(branches[-1][0], "", "the word's last branch is its fallback")
+                got = [int(v) for _, v in chain] + [int(last)]
+                self.assertEqual(got, [codes[k] for _, k in branches])
+
+
+class IconsDocTest(unittest.TestCase):
+    """docs/systems/banking_gui_icons.md holds each placeholder to its code."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.doc = {}
+        section = None
+        for line in _read(ICONS_DOC).splitlines():
+            if line.startswith("## "):
+                section = line[3:].strip()
+            m = re.match(r"\| ([^|]+?) \|(?: [^|]+ \|)*? `(gfx/[^`]+)` \|", line)
+            if m and section:
+                cls.doc.setdefault(section, {})[m.group(1)] = m.group(2)
+
+    def test_every_icon_is_listed_with_its_code(self):
+        for _, _, found, _ in _cells():
+            for picker, key, tex in found:
+                table = self.doc.get(DOC_SECTIONS[picker], {})
+                self.assertEqual(table.get(key), tex, f"{picker} {key}")
+
+    def test_the_badge_is_listed(self):
+        block = [b for tip, _, _, b in _cells() if tip == "banking_dash_bubble_tt"][0]
+        tex = re.search(r'blockoverride "badge" \{.*?texture = "([^"]+)"', block, re.S).group(1)
+        self.assertEqual(self.doc["Overview row 1: bubble pressure"].get("crash risk"), tex)
+
+    def test_no_row_names_a_state_the_overview_lacks(self):
+        listed = {(s, k) for s, rows in self.doc.items() for k in rows}
+        drawn = {(DOC_SECTIONS[p], k) for _, _, found, _ in _cells() for p, k, _ in found}
+        drawn.add(("Overview row 1: bubble pressure", "crash risk"))
+        self.assertEqual(listed, drawn)
 
 
 if __name__ == "__main__":
