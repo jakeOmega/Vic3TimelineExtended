@@ -233,16 +233,16 @@ types diplomatic_panel
 				}
 
 				### MOD: UN tab (te_un) ###
-				# The United Nations journal entry, laid out for the tab: its authority
-				# bar (te_je_scripted_bars) and status description (membership and
-				# authority tier), the chamber, the entry's scripted buttons, then the
-				# authority breakdown and a link back. The buttons ARE drawn here, unlike
-				# the Banking and Hegemony tabs: founding, joining and leaving the UN and
-				# most requests exist only as buttons. The panels are the types the
-				# entry shows (gui/journal_entry_widgets/un_chamber_widget.gui,
-				# un_authority_widget.gui). The gate sits on a parent of the
-				# GetPlayerJournalEntry datacontext, never on the widget carrying it
-				# (vanilla's shape: states_panel.gui, the Meiji faction button).
+				# The United Nations journal entry, laid out for the tab in the order
+				# gui/journal_entry_widgets/un_layout_widget.gui sets for both hosts:
+				# the overview, the status sections, the entry's scripted buttons as an
+				# Actions section (founding, joining and leaving the UN and most
+				# requests exist only as buttons), the chart, the record and the
+				# explanations, then a link back. Spec:
+				# docs/superpowers/specs/2026-09-28-un-gui-pass-design.md. The gate sits
+				# on a parent of the GetPlayerJournalEntry datacontext, never on the
+				# widget carrying it (vanilla's shape: states_panel.gui, the Meiji
+				# faction button).
 				flowcontainer = {
 					name = "te_diplomacy_un_tab"
 					visible = "[InformationPanel.IsTabSelected('te_un')]"
@@ -272,8 +272,7 @@ types diplomatic_panel
 							ignoreinvisible = yes
 							spacing = 10
 
-							te_je_scripted_bars = {}
-							te_je_status_desc = {}
+							te_un_overview_panel = {}
 							te_un_status_sections = {}
 
 							# The entry's own buttons (founding, joining, leaving and most

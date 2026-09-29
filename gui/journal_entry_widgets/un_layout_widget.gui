@@ -86,6 +86,15 @@ types un_layout_widget_types
 ### composers' IsActive gate, so an inactive entry's containers collapse.
 ### ==========================================================================
 flowcontainer = {
+	name = "widget_je_un_overview"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	ignoreinvisible = yes
+
+	te_un_overview_panel = {}
+}
+
+flowcontainer = {
 	name = "widget_je_un_status"
 	visible = "[JournalEntry.IsActive]"
 	parentanchor = hcenter

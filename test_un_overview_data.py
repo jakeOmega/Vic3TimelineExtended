@@ -110,5 +110,38 @@ class MonthlySnapshotTest(unittest.TestCase):
         self.assertIn("un_p5_display_refresh = yes", body)
 
 
+OVERVIEW = os.path.join(REPO, "gui", "journal_entry_widgets", "un_overview_widget.gui")
+
+
+class OverviewGuiTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _read(OVERVIEW)
+
+    def _codes(self, value):
+        return {int(n) for n in re.findall(
+            rf"ScriptValue\('{value}'\), '\(CFixedPoint\)(-?\d+)'", self.gui)}
+
+    def test_every_agency_has_a_slot(self):
+        agencies = re.findall(r"un_agency_(\w+)", _block(_read(UN_VALUES), "un_agency_count"))
+        for a in agencies:
+            self.assertIn(f"ScriptValue('un_disp_agency_{a}')", self.gui, a)
+
+    def test_every_membership_state_and_tier_has_an_icon(self):
+        self.assertEqual(self._codes("un_disp_member_code"), set(range(7)))
+        self.assertEqual(self._codes("un_disp_tier_code"), set(range(5)))
+
+    def test_five_council_seats_gated_on_the_count(self):
+        for n in range(1, 6):
+            self.assertIn(f"Var('un_p5_seat_{n}')", self.gui)
+        self.assertEqual(
+            {int(n) for n in re.findall(
+                r"GreaterThanOrEqualTo_CFixedPoint\( JournalEntry\.GetCountry\.MakeScope\.ScriptValue\('un_disp_p5_count'\), '\(CFixedPoint\)(\d)' \)",
+                self.gui)},
+            set(range(1, 6)))
+
+    def test_rows_below_membership_wait_for_the_first_update(self):
+        self.assertIn("GetScriptedGui('un_authority_ready_sgui').IsShown", self.gui)
+
 if __name__ == "__main__":
     unittest.main()

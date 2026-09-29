@@ -9,6 +9,19 @@
 	# button grid, the chart, the record and the explanations below it.
 	widget = {
 		gui = "gui/journal_entry_widgets/un_layout_widget.gui"
+		name = "widget_je_un_overview"
+		container = "custom_widget_container_1"
+	}
+	# MARKER, not content: the overview draws authority, so the journal panel
+	# drops its own bar block at the bottom (gui/journal_entry.gui; see
+	# je_banking.txt for the mechanism).
+	widget = {
+		gui = "gui/journal_entry_widgets/te_je_bars_on_top_marker.gui"
+		name = "widget_te_je_bars_on_top_marker"
+		container = "custom_widget_container_7"
+	}
+	widget = {
+		gui = "gui/journal_entry_widgets/un_layout_widget.gui"
 		name = "widget_je_un_status"
 		container = "custom_widget_container_2"
 	}
