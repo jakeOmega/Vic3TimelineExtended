@@ -1,6 +1,6 @@
 # UN GUI pass, round 1: design
 
-**Status:** approved in conversation with the owner, 2026-09-28. Branch `feat/banking-budget-tab`, PR #567.
+**Status:** approved in conversation with the owner, 2026-09-28. Round 1 built the same day (plan `docs/superpowers/plans/2026-09-28-un-gui-pass.md`, commits `e6faf1f`..), branch `feat/banking-budget-tab`, PR #567. Not yet seen in game.
 
 ## Goal
 

@@ -259,6 +259,16 @@ types diplomatic_panel
 						}
 					}
 
+						# ROUND-2 PROBE (remove in round 2). Can the GUI walk a global list?
+						# If this counts the mission registry, round 2 reads the UN's
+						# global lists directly; if not, script mirrors them per player.
+						textbox = {
+							visible = "[InDebugMode]"
+							autoresize = yes
+							align = left|nobaseline
+							raw_text = "Probe: GetGlobalList('un_mission_registry') holds [GetDataModelSize( GetGlobalList('un_mission_registry') )] items"
+						}
+
 					flowcontainer = {
 						visible = "[GetScriptedGui('te_diplomacy_un_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 						using = default_list_position

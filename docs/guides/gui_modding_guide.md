@@ -1719,8 +1719,10 @@ Journal-entry widgets are **additive**, not overrides: a `.gui` under `gui/journ
 | `strategic_reserve_widget.gui` | `je_strategic_reserve` | per-good reserve readouts |
 | `banking_dashboard_widget.gui` | `je_banking_cycle` | conditions readout + policy dashboard; both panels are types, also instanced by the Budget panel's Banking tab |
 | `banking_history_widget.gui` | `je_banking_cycle` | the banking history charts; a type, also instanced by the Budget panel's Banking tab |
-| `un_chamber_widget.gui` | `je_united_nations` | General Assembly chamber: standing, open resolutions, vote and propose controls; a type, also instanced by the Diplomacy panel's UN tab |
-| `un_authority_widget.gui` | `je_united_nations` | why UN authority is moving: target, pillars, our weight, the ledger, the history chart; a type, also instanced by the Diplomacy panel's UN tab |
+| `un_chamber_widget.gui` | `je_united_nations` | the General Assembly's sections as types (`te_un_sec_*`): the session card and ballot, delegations, proposals, missions, mandates, obligations, exposure, the archive, how standing works |
+| `un_authority_widget.gui` | `je_united_nations` | the authority sections as types: why authority is moving (pillar bars with last-month trends, the ladder, the powers, the ledger), how it works, the history chart |
+| `un_overview_widget.gui` | `je_united_nations` | the overview: membership, tier, crisis, standing, authority and target, members' share pies, Security Council flags, agencies |
+| `un_layout_widget.gui` | `je_united_nations` | the one order of the UN's sections for both the journal entry (its named roots) and the Diplomacy panel's UN tab; also the General Assembly's session strip |
 | `cultural_hegemony_widget.gui` | `je_cultural_hegemony` | summary, programme funding + four programme rows, and the standing section (pull breakdown, top-10 leaderboard built in script, share history chart); the three panels are types, also instanced by the Society panel's Hegemony tab |
 | `space_race_widget.gui` | the nine `je_space_race_*` | one shared milestone panel instanced by nine named widgets: pace, setback risk, approach selector, funding stepper, rivals list, programme overview |
 | `colonial_empire_widget.gui` | `je_colonial_empire` | colonial stability: the bar's own per-term breakdown, nine drift groups, great-power pressure roster, three programme rows, three decolonization decisions, two history charts |
