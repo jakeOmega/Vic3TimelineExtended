@@ -563,6 +563,9 @@ un_membership_end_effect = {
 	un_state_country_off = { MODIFIER = un_law_of_sea_modifier }
 	un_state_country_off = { MODIFIER = un_icc_member_modifier }
 	un_state_country_off = { MODIFIER = un_physical_protection_modifier }
+
+	# The overview's Security Council flags (un_overview_display_effects.txt).
+	un_p5_display_refresh = yes
 }
 
 # ---- Founding and joining ------------------------------------------------------------
@@ -598,6 +601,9 @@ un_found_organisation = {
 		un_state_on = { MODIFIER = un_security_council_modifier }
 		un_state_on = { MODIFIER = un_permanent_member_modifier }
 	}
+
+	# The overview's Security Council flags (un_overview_display_effects.txt).
+	un_p5_display_refresh = yes
 }
 
 # Invite every other country that conducts its own foreign policy

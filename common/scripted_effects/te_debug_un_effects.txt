@@ -61,6 +61,9 @@ te_debug_un_seat_member = {
 		un_state_on = { MODIFIER = un_security_council_modifier }
 		un_state_on = { MODIFIER = un_permanent_member_modifier }
 	}
+
+	# The overview's Security Council flags (un_overview_display_effects.txt).
+	un_p5_display_refresh = yes
 }
 
 # Hand the player a live mandate without a vote: claims $REGION$ for the player
@@ -461,6 +464,9 @@ te_debug_un_wipe_entry = {
 		limit = { NOT = { has_variable = un_state_rebuild_pending } }
 		set_variable = un_state_rebuild_pending
 	}
+
+	# The overview's Security Council flags (un_overview_display_effects.txt).
+	un_p5_display_refresh = yes
 }
 
 # Remove $MODIFIER$ from our journal entry if it is there, leaving its mirror.

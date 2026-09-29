@@ -1188,6 +1188,7 @@
  je_un_led_topic_refugee:0 "        International Refugee Resolution"
  je_un_led_topic_sanctions:0 "        [concept_un_sanctions]"
  je_un_led_topic_space:0 "        International Space Cooperation"
+ je_un_ov_status_no_un:0 "#v There is no $je_united_nations$.#! None has been founded, or the last one was dissolved.\n"
  je_un_preview_dues_header:0 "If we are a member"
  je_un_preview_dues_tt:0 "Every member pays [concept_un_dues]: a share of its GDP a year that grows with the UN's tier, from 0.1% when Contested to 1% when Supranational. Withholding them saves the money but costs standing, and after 24 months in arrears our vote in the [concept_un_general_assembly]."
  je_un_preview_membership_benefits_header:0 "If our authority earns us membership benefits"

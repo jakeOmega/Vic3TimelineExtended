@@ -134,6 +134,75 @@ un_member_power_share_value = {
 	max = 1
 }
 
+# Members' share of the world's countries, GDP and population, 0..1: the
+# overview's three pies (gui/journal_entry_widgets/un_overview_widget.gui).
+# Swept by the monthly update and read by the display from its snapshots
+# (un_member_*_share), never here. A member is any country whose journal entry
+# carries un_member_modifier, suspended or not.
+un_world_country_count_value = {
+	value = 0
+	every_country = { add = 1 }
+}
+un_member_country_count_value = {
+	value = 0
+	every_country = {
+		limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+		add = 1
+	}
+}
+un_world_gdp_value = {
+	value = 0
+	every_country = { add = gdp }
+}
+un_member_gdp_value = {
+	value = 0
+	every_country = {
+		limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+		add = gdp
+	}
+}
+un_world_pop_value = {
+	value = 0
+	every_country = { add = total_population }
+}
+un_member_pop_value = {
+	value = 0
+	every_country = {
+		limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+		add = total_population
+	}
+}
+un_member_country_share_value = {
+	value = 0
+	if = {
+		limit = { un_world_country_count_value > 0 }
+		value = un_member_country_count_value
+		divide = un_world_country_count_value
+	}
+	min = 0
+	max = 1
+}
+un_member_gdp_share_value = {
+	value = 0
+	if = {
+		limit = { un_world_gdp_value > 0 }
+		value = un_member_gdp_value
+		divide = un_world_gdp_value
+	}
+	min = 0
+	max = 1
+}
+un_member_pop_share_value = {
+	value = 0
+	if = {
+		limit = { un_world_pop_value > 0 }
+		value = un_member_pop_value
+		divide = un_world_pop_value
+	}
+	min = 0
+	max = 1
+}
+
 un_pillar_participation_value = {
 	value = un_member_power_share_value
 	multiply = un_participation_weight

@@ -27,11 +27,13 @@
 # no country-side copy of either is kept.
 # ============================================================================
 
-# The player's own seat in the organisation, and the national record it has
-# built there: the international-standing score, its tier, whether the tier's
-# benefits are currently withheld and roughly why, what the tier is doing,
-# this rolling year's programme accrual against the cap, and the last thing
-# that moved the score.
+# The player's own seat in the organisation: one membership line for every
+# state, from no UN at all to a suspended permanent seat. The overview's
+# membership icon's tooltip (un_overview_widget.gui); the icon itself is picked
+# by un_disp_member_code, which tests the states in the same order. The
+# national record (the international-standing score, its tier, withheld
+# benefits, the year's programme accrual, the last move) is
+# un_chamber_standing_sgui below.
 un_chamber_status_sgui = {
 	scope = country
 
@@ -58,11 +60,66 @@ un_chamber_status_sgui = {
 				custom_tooltip_no_bullet = je_un_chamber_status_member
 			}
 		}
+		else_if = {
+			limit = { NOT = { has_global_variable = un_founded } }
+			custom_tooltip_no_bullet = je_un_ov_status_no_un
+		}
+		else_if = {
+			limit = { NOT = { un_membership_eligible = yes } }
+			custom_tooltip_no_bullet = je_un_status_not_eligible
+		}
 		else = {
 			custom_tooltip_no_bullet = je_un_chamber_status_nonmember
 		}
+	}
+}
+
+# Our international standing: the overview's standing meter's tooltip.
+un_chamber_standing_sgui = {
+	scope = country
+
+	effect = {
 		un_standing_status_block = yes
 	}
+}
+
+# The authority tier's line, as the journal entry's status_desc words it: the
+# overview's tier icon's tooltip.
+un_overview_tier_sgui = {
+	scope = country
+
+	effect = {
+		if = {
+			limit = { un_tier_is_supranational = yes }
+			custom_tooltip_no_bullet = je_un_tier_line_supranational
+		}
+		else_if = {
+			limit = { un_tier_at_least_strong = yes }
+			custom_tooltip_no_bullet = je_un_tier_line_strong
+		}
+		else_if = {
+			limit = { un_tier_at_least_established = yes }
+			custom_tooltip_no_bullet = je_un_tier_line_established
+		}
+		else_if = {
+			limit = { un_tier_at_least_contested = yes }
+			custom_tooltip_no_bullet = je_un_tier_line_contested
+		}
+		else_if = {
+			limit = { un_tier_is_moribund = yes }
+			custom_tooltip_no_bullet = je_un_tier_line_moribund
+		}
+	}
+}
+
+# Scope-free gate: a resolution is in session. The General Assembly shows its
+# tally, delegations and ballot, or, when this is false, the proposals.
+un_session_open_sgui = {
+	scope = country
+	is_shown = { un_session_open = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
 }
 
 # The Security Council: the permanent members by name, and who is in line for

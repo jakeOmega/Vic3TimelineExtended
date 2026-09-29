@@ -818,6 +818,8 @@ un_vote.2 = {
 					}
 				}
 				change_relations = { country = scope:un_vote_target value = -25 }
+				# The overview's Security Council flags (un_overview_display_effects.txt).
+				un_p5_display_refresh = yes
 			}
 			# Seat the great-power member with the most prestige outside the
 			# Council (scope:un_vote_promoted was selected in the immediate

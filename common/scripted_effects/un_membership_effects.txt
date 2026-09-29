@@ -71,6 +71,9 @@ un_representation_monthly_update = {
 			un_rep_convention_forget = yes
 		}
 	}
+
+	# The overview's Security Council flags (un_overview_display_effects.txt).
+	un_p5_display_refresh = yes
 }
 
 # Mark the conventions in force now (var:un_rep_had_<agency>), when our

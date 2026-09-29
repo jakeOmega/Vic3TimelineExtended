@@ -1,0 +1,531 @@
+﻿# ============================================================================
+# UN OVERVIEW — display values
+# ============================================================================
+# Read by gui/journal_entry_widgets/un_overview_widget.gui, un_layout_widget.gui
+# (the session strip) and un_authority_widget.gui (the pillar bars). Rendered
+# every frame the panels are open, so these read snapshots and the viewer's
+# own variables only; the sweeps behind them run in un_authority_monthly_update.
+# Every read is guarded: a save from before the overview, or a UN before its
+# first monthly update, reads 0 (test_un_overview_data.py).
+# Spec: docs/superpowers/specs/2026-09-28-un-gui-pass-design.md.
+# Scope: country (the viewer)
+# ============================================================================
+
+# ---- Membership and tier -----------------------------------------------------
+
+# 0 no UN · 1 cannot join · 2 can join · 3 member · 4 permanent member ·
+# 5 suspended, the seat carried · 6 suspended. Same order of tests as
+# un_chamber_status_sgui, which is the icon's tooltip.
+un_disp_member_code = {
+	value = 0
+	if = {
+		limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+		value = 3
+		if = {
+			limit = { is_un_permanent_member = yes }
+			value = 4
+		}
+		if = {
+			limit = { un_representation_suspended = yes }
+			value = 6
+			if = {
+				limit = { un_seat_carried = yes }
+				value = 5
+			}
+		}
+	}
+	else_if = {
+		limit = { has_global_variable = un_founded }
+		value = 1
+		if = {
+			limit = { un_membership_eligible = yes }
+			value = 2
+		}
+	}
+}
+
+# -1 while there is no tier (no UN, or before its first monthly update), else
+# global_var:un_tier: 0 moribund, 1 contested, 2 established, 3 strong,
+# 4 supranational (un_ladder_triggers.txt).
+un_disp_tier_code = {
+	value = -1
+	if = {
+		limit = {
+			has_global_variable = un_founded
+			has_global_variable = un_tier
+		}
+		value = global_var:un_tier
+	}
+}
+
+un_disp_standing = {
+	value = 0
+	if = {
+		limit = { has_variable = un_standing }
+		value = var:un_standing
+	}
+}
+un_disp_standing_frac = {
+	value = un_disp_standing
+	divide = 100
+	min = 0
+	max = 1
+}
+
+# ---- Authority ------------------------------------------------------------------
+
+un_disp_authority_frac = {
+	value = un_disp_authority
+	divide = 100
+	min = 0
+	max = 1
+}
+un_disp_target_frac = {
+	value = un_disp_target
+	divide = 100
+	min = 0
+	max = 1
+}
+
+# ---- Members' share of the world (the three pies) -----------------------------
+
+un_disp_share_countries = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_member_country_share }
+		value = global_var:un_member_country_share
+	}
+}
+un_disp_share_gdp = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_member_gdp_share }
+		value = global_var:un_member_gdp_share
+	}
+}
+un_disp_share_pop = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_member_pop_share }
+		value = global_var:un_member_pop_share
+	}
+}
+un_disp_share_countries_pct = {
+	value = un_disp_share_countries
+	multiply = 100
+}
+un_disp_share_gdp_pct = {
+	value = un_disp_share_gdp
+	multiply = 100
+}
+un_disp_share_pop_pct = {
+	value = un_disp_share_pop
+	multiply = 100
+}
+
+# ---- Security Council -----------------------------------------------------------
+
+# How many of un_p5_seat_1..5 are set (un_p5_display_refresh). Seat N is drawn
+# when this is at least N.
+un_disp_p5_count = {
+	value = 0
+	if = {
+		limit = { has_variable = un_p5_seat_count }
+		value = var:un_p5_seat_count
+	}
+}
+
+# ---- Agencies (the un_agency_count list, un_script_values.txt) ------------------
+
+un_disp_agency_who = {
+	value = 0
+	if = { limit = { has_global_variable = un_agency_who } value = 1 }
+}
+un_disp_agency_unesco = {
+	value = 0
+	if = { limit = { has_global_variable = un_agency_unesco } value = 1 }
+}
+un_disp_agency_icj = {
+	value = 0
+	if = { limit = { has_global_variable = un_agency_icj } value = 1 }
+}
+un_disp_agency_unhrc = {
+	value = 0
+	if = { limit = { has_global_variable = un_agency_unhrc } value = 1 }
+}
+un_disp_agency_iaea = {
+	value = 0
+	if = { limit = { has_global_variable = un_agency_iaea } value = 1 }
+}
+un_disp_agency_unep = {
+	value = 0
+	if = { limit = { has_global_variable = un_agency_unep } value = 1 }
+}
+un_disp_agency_unhcr = {
+	value = 0
+	if = { limit = { has_global_variable = un_agency_unhcr } value = 1 }
+}
+un_disp_agency_unoosa = {
+	value = 0
+	if = { limit = { has_global_variable = un_agency_unoosa } value = 1 }
+}
+un_disp_agency_itlos = {
+	value = 0
+	if = { limit = { has_global_variable = un_agency_itlos } value = 1 }
+}
+un_disp_agency_icc = {
+	value = 0
+	if = { limit = { has_global_variable = un_agency_icc } value = 1 }
+}
+un_disp_agency_cppnm = {
+	value = 0
+	if = { limit = { has_global_variable = un_agency_cppnm } value = 1 }
+}
+
+# ---- Pillars (the bars in "Why authority is moving") ----------------------------
+# Each bar is vanilla's double_direction_progressbar: the left half takes a
+# -1..0 fraction, the right half 0..1. A pillar is scaled by the larger end of
+# its own range (un_authority_values.txt), so zero is always the centre line.
+# _trend is 1 / -1 when the pillar moved more than a twentieth of a point since
+# last month's snapshot (un_pillar_<p>_prev), else 0.
+
+un_disp_order_span = {
+	value = un_order_floor
+	multiply = -1
+}
+
+un_disp_pillar_participation_pos = {
+	value = un_disp_pillar_participation
+	divide = un_participation_weight
+	min = 0
+	max = 1
+}
+un_disp_pillar_participation_neg = {
+	value = un_disp_pillar_participation
+	divide = un_participation_weight
+	min = -1
+	max = 0
+}
+un_disp_pillar_participation_delta = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = un_pillar_participation
+			has_global_variable = un_pillar_participation_prev
+		}
+		value = global_var:un_pillar_participation
+		subtract = global_var:un_pillar_participation_prev
+	}
+}
+un_disp_pillar_participation_trend = {
+	value = 0
+	if = {
+		limit = { un_disp_pillar_participation_delta > 0.05 }
+		value = 1
+	}
+	else_if = {
+		limit = { un_disp_pillar_participation_delta < -0.05 }
+		value = -1
+	}
+}
+
+un_disp_pillar_commitment_pos = {
+	value = un_disp_pillar_commitment
+	divide = un_commitment_weight
+	min = 0
+	max = 1
+}
+un_disp_pillar_commitment_neg = {
+	value = un_disp_pillar_commitment
+	divide = un_commitment_weight
+	min = -1
+	max = 0
+}
+un_disp_pillar_commitment_delta = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = un_pillar_commitment
+			has_global_variable = un_pillar_commitment_prev
+		}
+		value = global_var:un_pillar_commitment
+		subtract = global_var:un_pillar_commitment_prev
+	}
+}
+un_disp_pillar_commitment_trend = {
+	value = 0
+	if = {
+		limit = { un_disp_pillar_commitment_delta > 0.05 }
+		value = 1
+	}
+	else_if = {
+		limit = { un_disp_pillar_commitment_delta < -0.05 }
+		value = -1
+	}
+}
+
+un_disp_pillar_credibility_pos = {
+	value = un_disp_pillar_credibility
+	divide = un_credibility_cap
+	min = 0
+	max = 1
+}
+un_disp_pillar_credibility_neg = {
+	value = un_disp_pillar_credibility
+	divide = un_credibility_cap
+	min = -1
+	max = 0
+}
+un_disp_pillar_credibility_delta = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = un_pillar_credibility
+			has_global_variable = un_pillar_credibility_prev
+		}
+		value = global_var:un_pillar_credibility
+		subtract = global_var:un_pillar_credibility_prev
+	}
+}
+un_disp_pillar_credibility_trend = {
+	value = 0
+	if = {
+		limit = { un_disp_pillar_credibility_delta > 0.05 }
+		value = 1
+	}
+	else_if = {
+		limit = { un_disp_pillar_credibility_delta < -0.05 }
+		value = -1
+	}
+}
+
+un_disp_pillar_funding_pos = {
+	value = un_disp_pillar_funding
+	divide = un_funding_pillar_max
+	min = 0
+	max = 1
+}
+un_disp_pillar_funding_neg = {
+	value = un_disp_pillar_funding
+	divide = un_funding_pillar_max
+	min = -1
+	max = 0
+}
+un_disp_pillar_funding_delta = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = un_pillar_funding
+			has_global_variable = un_pillar_funding_prev
+		}
+		value = global_var:un_pillar_funding
+		subtract = global_var:un_pillar_funding_prev
+	}
+}
+un_disp_pillar_funding_trend = {
+	value = 0
+	if = {
+		limit = { un_disp_pillar_funding_delta > 0.05 }
+		value = 1
+	}
+	else_if = {
+		limit = { un_disp_pillar_funding_delta < -0.05 }
+		value = -1
+	}
+}
+
+un_disp_pillar_order_pos = {
+	value = un_disp_pillar_order
+	divide = un_disp_order_span
+	min = 0
+	max = 1
+}
+un_disp_pillar_order_neg = {
+	value = un_disp_pillar_order
+	divide = un_disp_order_span
+	min = -1
+	max = 0
+}
+un_disp_pillar_order_delta = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = un_pillar_order
+			has_global_variable = un_pillar_order_prev
+		}
+		value = global_var:un_pillar_order
+		subtract = global_var:un_pillar_order_prev
+	}
+}
+un_disp_pillar_order_trend = {
+	value = 0
+	if = {
+		limit = { un_disp_pillar_order_delta > 0.05 }
+		value = 1
+	}
+	else_if = {
+		limit = { un_disp_pillar_order_delta < -0.05 }
+		value = -1
+	}
+}
+
+un_disp_pillar_delivery_pos = {
+	value = un_disp_pillar_delivery
+	divide = un_delivery_cap
+	min = 0
+	max = 1
+}
+un_disp_pillar_delivery_neg = {
+	value = un_disp_pillar_delivery
+	divide = un_delivery_cap
+	min = -1
+	max = 0
+}
+un_disp_pillar_delivery_delta = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = un_pillar_delivery
+			has_global_variable = un_pillar_delivery_prev
+		}
+		value = global_var:un_pillar_delivery
+		subtract = global_var:un_pillar_delivery_prev
+	}
+}
+un_disp_pillar_delivery_trend = {
+	value = 0
+	if = {
+		limit = { un_disp_pillar_delivery_delta > 0.05 }
+		value = 1
+	}
+	else_if = {
+		limit = { un_disp_pillar_delivery_delta < -0.05 }
+		value = -1
+	}
+}
+
+# ---- The resolution in session (the General Assembly's tally and time bars) -----
+# The tally bar spans the members with a vote (global_var:un_vote_eligible_count,
+# snapshotted monthly from un_vote_eligible_member_count: the denominator the
+# supermajority rule uses). Three stacked bars draw it: red to 1, grey to
+# not_no_frac, green to yes_frac.
+
+un_disp_res_eligible = {
+	value = 1
+	if = {
+		limit = {
+			has_global_variable = un_vote_eligible_count
+			global_var:un_vote_eligible_count > 0
+		}
+		value = global_var:un_vote_eligible_count
+	}
+}
+un_disp_res_yes = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = un_active_resolution
+			un_session_open = yes
+		}
+		global_var:un_active_resolution = {
+			if = {
+				limit = { has_variable = un_res_support }
+				add = var:un_res_support
+			}
+		}
+	}
+}
+un_disp_res_no = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = un_active_resolution
+			un_session_open = yes
+		}
+		global_var:un_active_resolution = {
+			if = {
+				limit = { has_variable = un_res_oppose }
+				add = var:un_res_oppose
+			}
+		}
+	}
+}
+un_disp_res_yes_frac = {
+	value = un_disp_res_yes
+	divide = un_disp_res_eligible
+	min = 0
+	max = 1
+}
+un_disp_res_no_frac = {
+	value = un_disp_res_no
+	divide = un_disp_res_eligible
+	min = 0
+	max = 1
+}
+un_disp_res_not_no_frac = {
+	value = 1
+	subtract = un_disp_res_no_frac
+}
+
+# Months in session, of the twelve a vote runs (un_vote.2 fires 365 days after
+# the resolution opens; un_vote_effects.txt).
+un_disp_res_months = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = un_active_resolution
+			un_session_open = yes
+		}
+		global_var:un_active_resolution = {
+			if = {
+				limit = { has_variable = un_res_months }
+				add = var:un_res_months
+			}
+		}
+	}
+}
+un_disp_res_months_frac = {
+	value = un_disp_res_months
+	divide = 12
+	min = 0
+	max = 1
+}
+
+un_disp_res_supermajority = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = un_active_resolution
+			un_session_open = yes
+			global_var:un_active_resolution = { un_resolution_needs_supermajority = yes }
+		}
+		value = 1
+	}
+}
+
+# The topic, in the proposal op order (un_chamber_propose_sgui): 0 condemn,
+# 1 sanctions, 2 expulsion, 3 military_mandate, 4 peacekeeping_request,
+# 5 aid_request, 6 reform, 7 human_rights, 8 icc, 9 npt, 10 climate,
+# 11 pandemic, 12 refugee, 13 heritage, 14 decolonization, 15 space,
+# 16 law_of_sea, 17 physical_protection. -1 with nothing in session.
+un_disp_res_topic_code = {
+	value = -1
+	if = { limit = { un_session_topic_is = { TOPIC = condemn } } value = 0 }
+	if = { limit = { un_session_topic_is = { TOPIC = sanctions } } value = 1 }
+	if = { limit = { un_session_topic_is = { TOPIC = expulsion } } value = 2 }
+	if = { limit = { un_session_topic_is = { TOPIC = military_mandate } } value = 3 }
+	if = { limit = { un_session_topic_is = { TOPIC = peacekeeping_request } } value = 4 }
+	if = { limit = { un_session_topic_is = { TOPIC = aid_request } } value = 5 }
+	if = { limit = { un_session_topic_is = { TOPIC = reform } } value = 6 }
+	if = { limit = { un_session_topic_is = { TOPIC = human_rights } } value = 7 }
+	if = { limit = { un_session_topic_is = { TOPIC = icc } } value = 8 }
+	if = { limit = { un_session_topic_is = { TOPIC = npt } } value = 9 }
+	if = { limit = { un_session_topic_is = { TOPIC = climate } } value = 10 }
+	if = { limit = { un_session_topic_is = { TOPIC = pandemic } } value = 11 }
+	if = { limit = { un_session_topic_is = { TOPIC = refugee } } value = 12 }
+	if = { limit = { un_session_topic_is = { TOPIC = heritage } } value = 13 }
+	if = { limit = { un_session_topic_is = { TOPIC = decolonization } } value = 14 }
+	if = { limit = { un_session_topic_is = { TOPIC = space } } value = 15 }
+	if = { limit = { un_session_topic_is = { TOPIC = law_of_sea } } value = 16 }
+	if = { limit = { un_session_topic_is = { TOPIC = physical_protection } } value = 17 }
+}

@@ -1,0 +1,64 @@
+﻿# ============================================================================
+# UN OVERVIEW — the Security Council's seats for the GUI
+# ============================================================================
+# gui/journal_entry_widgets/un_overview_widget.gui draws a flag for each
+# permanent member. The GUI can reach a country only through a stored state
+# (gui_modding_guide.md gotcha #11: Var().GetCountry is unreliable, and
+# Var('x').GetState.GetCountry is what the covert widget uses), so every player
+# country holds the permanent members' capitals, most prestigious first, in
+# un_p5_seat_1..5. un_p5_seat_count says how many are filled, so the GUI never
+# reads a seat that is not set (gotcha #23).
+#
+# Called from un_authority_monthly_update and from every effect that grants or
+# removes un_permanent_member_modifier; test_un_overview_data.py fails if a new
+# seat site forgets it. Only players are written: nobody else looks.
+# Scope: any
+# ============================================================================
+
+un_p5_display_refresh = {
+	# Hidden: it is reached from options and scripted buttons (seat grants,
+	# expulsions), whose tooltips must not change.
+	hidden_effect = {
+		every_country = {
+			limit = { is_player = yes }
+			save_scope_as = un_p5_viewer
+			remove_variable = un_p5_seat_1
+			remove_variable = un_p5_seat_2
+			remove_variable = un_p5_seat_3
+			remove_variable = un_p5_seat_4
+			remove_variable = un_p5_seat_5
+			set_variable = { name = un_p5_seat_count value = 0 }
+			un_p5_display_seat = { N = 1 POS = 0 }
+			un_p5_display_seat = { N = 2 POS = 1 }
+			un_p5_display_seat = { N = 3 POS = 2 }
+			un_p5_display_seat = { N = 4 POS = 3 }
+			un_p5_display_seat = { N = 5 POS = 4 }
+		}
+	}
+}
+
+# Seat $N$ (1-5) gets the permanent member at position $POS$ ($N$ - 1) of the
+# council's prestige order, when there are at least $N$. An ordered_ position
+# past the end of the list clamps to the last element instead of skipping, so
+# the count is checked first (un_chamber_council_in_line does the same).
+# Scope: the viewer (scope:un_p5_viewer is set)
+un_p5_display_seat = {
+	if = {
+		limit = {
+			any_country = {
+				is_un_permanent_member = yes
+				count >= $N$
+			}
+		}
+		ordered_country = {
+			limit = { is_un_permanent_member = yes }
+			order_by = un_prestige_order_value
+			position = $POS$
+			capital = { save_scope_as = un_p5_capital }
+		}
+		scope:un_p5_viewer = {
+			set_variable = { name = un_p5_seat_$N$ value = scope:un_p5_capital }
+			set_variable = { name = un_p5_seat_count value = $N$ }
+		}
+	}
+}

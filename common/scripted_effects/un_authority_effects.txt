@@ -115,6 +115,32 @@ un_authority_monthly_update = {
 	set_global_variable = { name = un_funding_arrears_share value = un_funding_arrears_share_value }
 	set_global_variable = { name = un_budget_weekly value = un_budget_weekly_value }
 	set_global_variable = { name = un_members_at_war_share value = un_members_at_war_share_value }
+	# Last month's pillars, for the overview's trend icons (a pillar's change
+	# since the previous snapshot; un_overview_display_values.txt).
+	if = {
+		limit = { has_global_variable = un_pillar_participation }
+		set_global_variable = { name = un_pillar_participation_prev value = global_var:un_pillar_participation }
+	}
+	if = {
+		limit = { has_global_variable = un_pillar_commitment }
+		set_global_variable = { name = un_pillar_commitment_prev value = global_var:un_pillar_commitment }
+	}
+	if = {
+		limit = { has_global_variable = un_pillar_credibility }
+		set_global_variable = { name = un_pillar_credibility_prev value = global_var:un_pillar_credibility }
+	}
+	if = {
+		limit = { has_global_variable = un_pillar_funding }
+		set_global_variable = { name = un_pillar_funding_prev value = global_var:un_pillar_funding }
+	}
+	if = {
+		limit = { has_global_variable = un_pillar_order }
+		set_global_variable = { name = un_pillar_order_prev value = global_var:un_pillar_order }
+	}
+	if = {
+		limit = { has_global_variable = un_pillar_delivery }
+		set_global_variable = { name = un_pillar_delivery_prev value = global_var:un_pillar_delivery }
+	}
 	set_global_variable = { name = un_pillar_participation value = un_pillar_participation_value }
 	set_global_variable = { name = un_pillar_commitment value = un_pillar_commitment_value }
 	set_global_variable = { name = un_pillar_credibility value = un_pillar_credibility_value }
@@ -122,6 +148,12 @@ un_authority_monthly_update = {
 	set_global_variable = { name = un_pillar_order value = un_pillar_order_value }
 	set_global_variable = { name = un_pillar_delivery value = un_pillar_delivery_value }
 	set_global_variable = { name = un_authority_target value = un_authority_target_value }
+	# The overview's pies, and the tally bar's denominator (the members with a
+	# vote, as un_vote_supermajority_passed counts them).
+	set_global_variable = { name = un_member_country_share value = un_member_country_share_value }
+	set_global_variable = { name = un_member_gdp_share value = un_member_gdp_share_value }
+	set_global_variable = { name = un_member_pop_share value = un_member_pop_share_value }
+	set_global_variable = { name = un_vote_eligible_count value = un_vote_eligible_member_count }
 
 	# 4. Saves from the drift model. Their authority is kept, NOT reseeded at the
 	#    target: the credibility and delivery ledgers start empty in such a save,
@@ -144,6 +176,9 @@ un_authority_monthly_update = {
 	#    enforcement, the charter's reform clock, and the crisis. Dissolution
 	#    itself is checked last in un_global_authority_on_action.
 	un_ladder_monthly_update = yes
+
+	# The Security Council's seats, for the overview's flags.
+	un_p5_display_refresh = yes
 }
 
 # change_global_variable has no clamp argument.
