@@ -678,38 +678,143 @@ colonial_assimilate_startup_cost_display = {
 }
 
 # ============================================================================
+# STABILITY BANDS — THE ONE LADDER
+#
+# The five bands, read LIVE from the bar: collapsing 0-20, crumbling 20-40,
+# strained 40-65, stable 65-90, solidified 90+ (the edges of
+# je_colonial_empire's phase-modifier ladder). Every display of the band reads
+# these: the overview, the customizable loc (status line, band names, phase
+# modifier) and "Next band". colonial_empire_refresh_display snapshots both
+# into var:colonial_empire_tier / var:colonial_empire_next_boundary for any
+# other reader.
+#
+# They are live because the snapshot alone was wrong on activation: the refresh
+# also runs in the entry's `immediate`, before the bar holds its start value,
+# so a newly activated entry at 50 read "Collapsing" until its first monthly
+# pulse (play-test, 2026-09-29).
+#
+# SCOPE: country. The bar is reached through `je:`, as the refresh always has,
+# because the GUI, the customizable loc and the button actions all read from
+# country scope; `?=` because the entry may have ended. At most four bar
+# comparisons, so safe to read every frame.
+# ============================================================================
+
+# 1 collapsing .. 5 solidified; 0 while the country has no active entry (the
+# customizable loc's "still taking stock" line).
+colonial_empire_live_tier = {
+	value = 0
+	if = {
+		limit = { has_journal_entry = je_colonial_empire }
+		value = 1
+		if = {
+			limit = { je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 90 } }
+			value = 5
+		}
+		else_if = {
+			limit = { je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 65 } }
+			value = 4
+		}
+		else_if = {
+			limit = { je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 40 } }
+			value = 3
+		}
+		else_if = {
+			limit = { je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 20 } }
+			value = 2
+		}
+	}
+}
+
+# Where the band above the current one starts: 20 / 40 / 65 / 90, and 100 (the
+# cap, which completion needs held) from the top band. 0 with no active entry.
+colonial_empire_live_next_boundary = {
+	value = 0
+	if = {
+		limit = { colonial_empire_live_tier >= 5 }
+		value = 100
+	}
+	else_if = {
+		limit = { colonial_empire_live_tier >= 4 }
+		value = 90
+	}
+	else_if = {
+		limit = { colonial_empire_live_tier >= 3 }
+		value = 65
+	}
+	else_if = {
+		limit = { colonial_empire_live_tier >= 2 }
+		value = 40
+	}
+	else_if = {
+		limit = { colonial_empire_live_tier >= 1 }
+		value = 20
+	}
+}
+
+# ============================================================================
+# PROGRAMME-MONTH COUNTERS, GUARDED
+#
+# The monthly pulse creates colonial_invest_months / _garrison_months /
+# _assimilate_months (at 0) and counts each programme's months; the endings
+# pick the dominant programme from them (on_complete, on_fail,
+# apply_decolonization_path). Before the entry's first pulse they do not
+# exist, and the journal panel renders on_complete and on_fail as tooltips
+# every frame, so bare var: reads there logged "Failed to fetch variable" per
+# frame (play-test, 2026-09-29). These read 0 until the counter exists. No
+# ending can fire before the first pulse, so every ending picks the same event
+# it did with the bare reads.
+#
+# SCOPE: country (the metropole).
+# ============================================================================
+
+colonial_invest_months_value = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_invest_months }
+		value = var:colonial_invest_months
+	}
+}
+
+colonial_garrison_months_value = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_garrison_months }
+		value = var:colonial_garrison_months
+	}
+}
+
+colonial_assimilate_months_value = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_assimilate_months }
+		value = var:colonial_assimilate_months
+	}
+}
+
+# ============================================================================
 # OVERVIEW DISPLAY VALUES
 #
 # Read every frame by the overview at the top of the panel (te_ce_overview_panel
-# in gui/journal_entry_widgets/colonial_empire_widget.gui). Each one reads a
-# snapshot colonial_empire_refresh_display wrote, or the O(1) headline above,
-# and every var: read is guarded, so an entry before its first refresh (or a
-# save from before the overview) reads 0 rather than failing per frame.
-# Display only: nothing in the mechanic reads these.
+# in gui/journal_entry_widgets/colonial_empire_widget.gui). Each one reads the
+# live band ladder above, a snapshot colonial_empire_refresh_display wrote, or
+# the O(1) headline above, and every var: read is guarded, so an entry before
+# its first refresh (or a save from before the overview) reads 0 rather than
+# failing per frame. Display only: nothing in the mechanic reads these.
 #
 # SCOPE: country.
 # ============================================================================
 
-# The stability band, 1 collapsing .. 5 solidified (the tier ladder in
-# colonial_empire_refresh_display); 0 until that has run. Picks the band icon.
+# The stability band, 1 collapsing .. 5 solidified; 0 with no active entry.
+# Picks the band icon.
 colonial_empire_disp_tier = {
-	value = 0
-	if = {
-		limit = { has_variable = colonial_empire_tier }
-		value = var:colonial_empire_tier
-	}
+	value = colonial_empire_live_tier
 }
 
-# Where the next band starts, as a 0-1 fraction of the bar: the position of the
-# marker on the overview's stability bar. The boundary itself is the ladder's
-# (var:colonial_empire_next_boundary); the bar runs 0-100.
+# Where the next band starts, as a 0-1 fraction of the bar (which runs 0-100):
+# the position of the marker on the overview's stability bar.
 colonial_empire_disp_next_boundary_frac = {
-	value = 0
-	if = {
-		limit = { has_variable = colonial_empire_next_boundary }
-		value = var:colonial_empire_next_boundary
-		divide = 100
-	}
+	value = colonial_empire_live_next_boundary
+	divide = 100
 	min = 0
 	max = 1
 }

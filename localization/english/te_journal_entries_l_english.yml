@@ -187,7 +187,7 @@
  je_colonial_empire_ov_invest_on_tt:0 "#header $je_colonial_empire_row_invest$#!\n#G Running#!"
  je_colonial_empire_ov_isolation:0 "#O Isolated#!"
  je_colonial_empire_ov_isolation_tt:0 "#header Diplomatic Isolation#!\nThe condemning [Concept('concept_great_power','great powers')] hold a third of the [concept_prestige] of all great powers and ourselves. Until their share falls, [concept_colonial_stability] takes a further loss every month."
- je_colonial_empire_ov_next:0 "Next [Concept('concept_colonial_band','band')]: [JournalEntry.GetCountry.GetCustom('colonial_empire_next_band_name')] at #v [JournalEntry.GetCountry.MakeScope.Var('colonial_empire_next_boundary').GetValue|0]#!"
+ je_colonial_empire_ov_next:0 "Next [Concept('concept_colonial_band','band')]: [JournalEntry.GetCountry.GetCustom('colonial_empire_next_band_name')] at #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_live_next_boundary')|0]#!"
  je_colonial_empire_ov_pie_label:0 "Condemners: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_condemner_share')|%0]#!"
  je_colonial_empire_ov_programmes_label:0 "Programmes"
  je_colonial_empire_ov_stability_label:0 "[Concept('concept_colonial_stability','Stability')]"

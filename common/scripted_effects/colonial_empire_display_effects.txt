@@ -32,55 +32,25 @@
 #
 # EDITING RULE: if the widget needs a new number, add it here and read
 # `var:` in the .gui. Never derive state in .gui, never in loc, and never
-# re-encode a tier boundary anywhere but the ladder below.
+# re-encode a tier boundary anywhere but the band ladder in
+# colonial_empire_values.txt (colonial_empire_live_tier /
+# colonial_empire_live_next_boundary), which the displays read live and this
+# effect snapshots.
 # ============================================================================
 
 colonial_empire_refresh_display = {
 	hidden_effect = {
 		# --- Stability tier and the next band's boundary -------------------
-		# The five bands are the ones je_colonial_empire's own phase-modifier
-		# ladder uses: collapsing 0-20, crumbling 20-40, strained 40-65,
-		# stable 65-90, solidified 90+. Stored as an integer so the widget can
-		# pick a label through customizable localization without knowing a
-		# single threshold, and as the next boundary so the panel can say
-		# "Stable -> Solidified at 90" without a literal in the .gui.
-		#
-		# Read through the `je:` scope link rather than scope:journal_entry,
-		# because this effect is also called from button actions and from
-		# `immediate`, where scope:journal_entry is not reliably saved. `?=`
-		# because the entry may already have ended.
-		if = {
-			limit = {
-				je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 90 }
-			}
-			set_variable = { name = colonial_empire_tier value = 5 }
-			set_variable = { name = colonial_empire_next_boundary value = 100 }
-		}
-		else_if = {
-			limit = {
-				je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 65 }
-			}
-			set_variable = { name = colonial_empire_tier value = 4 }
-			set_variable = { name = colonial_empire_next_boundary value = 90 }
-		}
-		else_if = {
-			limit = {
-				je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 40 }
-			}
-			set_variable = { name = colonial_empire_tier value = 3 }
-			set_variable = { name = colonial_empire_next_boundary value = 65 }
-		}
-		else_if = {
-			limit = {
-				je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 20 }
-			}
-			set_variable = { name = colonial_empire_tier value = 2 }
-			set_variable = { name = colonial_empire_next_boundary value = 40 }
-		}
-		else = {
-			set_variable = { name = colonial_empire_tier value = 1 }
-			set_variable = { name = colonial_empire_next_boundary value = 20 }
-		}
+		# A snapshot of the band ladder in colonial_empire_values.txt
+		# (colonial_empire_live_tier, 1 collapsing .. 5 solidified, 0 with no
+		# active entry; colonial_empire_live_next_boundary, the next band's
+		# edge). The displays read the ladder live instead: from `immediate`
+		# this runs before the bar holds its start value, so the snapshot is
+		# wrong until the first monthly pulse (play-test, 2026-09-29). It is
+		# kept for colonial_empire_display_ready (which asks whether this
+		# effect has run) and the debug harness.
+		set_variable = { name = colonial_empire_tier value = colonial_empire_live_tier }
+		set_variable = { name = colonial_empire_next_boundary value = colonial_empire_live_next_boundary }
 
 		# --- Bar value, bucketed to the nearest 5 --------------------------
 		# `scripted_bar_progress` is a TRIGGER only (engine docs: type

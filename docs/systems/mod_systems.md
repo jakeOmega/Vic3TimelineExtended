@@ -1265,13 +1265,13 @@ Three layers:
 |---|---|
 | `common/journal_entries/je_colonial_empire.txt` | JE definition, bar, widget mounts, monthly pulse, outcomes |
 | `common/scripted_progress_bars/extra_progress_bars.txt` | `colonial_stability_bar`; its `monthly_progress` consumes the 21 leaf script values plus the monthly cap |
-| `common/script_values/colonial_empire_values.txt` | Colony counts, `colonial_stability_term_*` leaves, `colonial_stability_drift_*` groups, cost and display values |
+| `common/script_values/colonial_empire_values.txt` | Colony counts, `colonial_stability_term_*` leaves, `colonial_stability_drift_*` groups, the stability-band ladder (`colonial_empire_live_tier` / `_live_next_boundary`), the guarded programme-month counters, cost and display values |
 | `common/scripted_triggers/colonial_empire_triggers.txt` | Macro-regions, `is_overseas_colonial_state`, the 9 `colonial_empire_possible_*` button gates |
 | `common/scripted_buttons/colonial_empire_buttons.txt` | 9 AI-only JE buttons; `possible` / `effect` delegate to the shared helpers |
 | `common/scripted_effects/decolonization.txt` | `form_decolonized_country`, JE cleanup, the 9 `colonial_empire_effect_*` button actions |
 | `common/scripted_effects/colonial_empire_display_effects.txt` | `colonial_empire_refresh_display` — the single site deriving all widget display state |
 | `common/scripted_guis/colonial_empire_sguis.txt` | 8 handlers backing the widget (2 guards, 3 programme-state reads, 1 text renderer, 2 op-coded actions) |
-| `common/customizable_localization/colonial_empire_custom_loc.txt` | Band names, status line and phase-modifier line, keyed on `var:colonial_empire_tier` |
+| `common/customizable_localization/colonial_empire_custom_loc.txt` | Band names, status line and phase-modifier line, keyed on `colonial_empire_live_tier`, the band ladder in `colonial_empire_values.txt`, read live |
 | `common/scripted_effects/te_history_colonial_effects.txt` | `te_history_record_colonial_samples` — the two chart series |
 | `common/scripted_effects/colonial_collapse_effects.txt` | Colonial collapse: tiny, poor AI countries absorbed or decentralized in the decolonization era |
 | `common/laws/colonial_empire_law_injections.txt` | Per-law colonial-stability and programme-effectiveness contributions |

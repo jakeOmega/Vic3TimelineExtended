@@ -201,7 +201,7 @@ Models the challenge of maintaining overseas colonies after decolonization tech.
 
 ### Key Mechanics
 - **Progress bar:** `colonial_stability_bar` (0-100, `start_value = 50`, `default_green`). Purely `monthly_progress`-driven — nothing calls `set_bar_progress` on it outside the debug harness. Its 21 terms are named leaf script values, followed by a 22nd line (`colonial_stability_term_cap`) that caps the net monthly change at ±`colonial_stability_drift_cap` (1.667, i.e. 0→100 takes at least five years); see `mod_systems.md` § Stability Bar Formula.
-- **5 stability bands:** collapsing (0-20), crumbling (20-40), strained (40-65), stable (65-90), solidified (90+). Derived **once**, in `colonial_empire_refresh_display`, into `var:colonial_empire_tier` (1-5). No other file knows a boundary.
+- **5 stability bands:** collapsing (0-20), crumbling (20-40), strained (40-65), stable (65-90), solidified (90+). Derived **once**, in the script values `colonial_empire_live_tier` (1-5; 0 with no active entry) and `colonial_empire_live_next_boundary` (`colonial_empire_values.txt`), which read the bar live through `je:`; every display reads those, and `colonial_empire_refresh_display` snapshots them into `var:colonial_empire_tier` / `_next_boundary`. Displays must not read the snapshot: the refresh also runs in `immediate`, before the bar holds its start value, so a newly activated entry read "Collapsing" at 50 until its first pulse (play-test 2026-09-29). Besides the ladder, only the entry's own phase-modifier pulse knows a boundary.
 - **GP pressure:** `colonial_gp_condemners_count` / `colonial_gp_supporters_count` (great powers carrying `gp_anti_colonial_stance` / `gp_pro_colonial_stance`). The bar's per-power GP terms use the prestige-weighted `colonial_gp_condemnation_weight` / `colonial_gp_support_weight` instead: each power counts for its prestige ÷ ours, clamped to 0.25-2.0. Its two escalations fire when the condemners hold 1/3 and 2/3 of the prestige of all great powers plus ours (`colonial_gp_condemner_prestige_share`). See `mod_systems.md` § Stability Bar Formula.
 - **Phase modifiers, applied to the ENTRY not the country** (`je:je_colonial_empire = { add_modifier = … }`, so a country-scope `has_modifier` never sees them): `colonial_empire_crumbling_modifier` (<20), `colonial_empire_under_pressure_modifier` (<40), `colonial_empire_strained_modifier` (<65), `colonial_empire_stable_modifier` (<90), `colonial_empire_solidified_modifier` (90+).
 - **`is_shown_when_inactive`** on game rule + `decolonization` tech, so any widget here must be guarded (see below).
@@ -228,8 +228,8 @@ Written by `colonial_empire_refresh_display` (`common/scripted_effects/colonial_
 
 | Variable | Meaning |
 |---|---|
-| `colonial_empire_tier` | 1-5 band index |
-| `colonial_empire_next_boundary` | 20 / 40 / 65 / 90 / 100 — the next band's edge |
+| `colonial_empire_tier` | snapshot of `colonial_empire_live_tier`, the 1-5 band index (0 if taken with no active entry); its presence is `colonial_empire_display_ready`. Displays read the live value, not this |
+| `colonial_empire_next_boundary` | snapshot of `colonial_empire_live_next_boundary`: 20 / 40 / 65 / 90 / 100, the next band's edge |
 | `colonial_empire_bar_bucket` | bar value to the nearest 5, for the history chart |
 | `colonial_empire_d_overreach`, `_d_gp`, `_d_acceptance` | the three drift groups that iterate |
 | `colonial_empire_condemner_share` | condemners' share (0-1) of the prestige of all great powers plus ours; read by `colonial_empire_pressure_sgui` behind a `has_variable` guard, and by the overview's pie |
@@ -238,7 +238,7 @@ Written by `colonial_empire_refresh_display` (`common/scripted_effects/colonial_
 | `colonial_empire_eligible_count`, `_round_table_count` | decolonization candidate counts |
 | `colonial_empire_largest_eligible_state` | largest eligible state (removed when none) |
 
-Still owned by the JE's own pulse: `colonial_invest_months`, `colonial_garrison_months`, `colonial_assimilate_months`, `colonial_solidified_months`, `colonial_at_100_months`, `colonial_je_total_months` (path-dependence and completion counters).
+Still owned by the JE's own pulse: `colonial_invest_months`, `colonial_garrison_months`, `colonial_assimilate_months`, `colonial_solidified_months`, `colonial_at_100_months`, `colonial_je_total_months` (path-dependence and completion counters). The first three exist only from the entry's first monthly pulse, so `on_complete`, `on_fail` and `apply_decolonization_path` read them through `colonial_{invest,garrison,assimilate}_months_value`, which are 0 until then: the journal panel renders `on_complete` / `on_fail` as tooltips every frame, and a bare `var:` read of a missing counter logged an error per frame (play-test 2026-09-29). For the same reason every `remove_modifier` in `colonial_empire_je_cleanup_effect` sits behind `has_modifier`.
 
 **Retired:** the seven `colonial_condemner_rank_N` slots and `colonial_condemner_idx`. The roster is walked live in script now; their `remove_variable` lines were dropped rather than kept, because a `remove_variable` for a name nothing sets logs "used but never set".
 
@@ -271,11 +271,11 @@ Eight handlers. All carry `ai_is_valid = { always = no }`; the five read-only on
 **Display-only reads** — the widget derives nothing:
 - Bar value: `[JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)]` (the overview's bar; `|%0` in its text), reached through `datamodel = "[JournalEntry.GetScriptedProgressBars]"`. The only tooltip inside that datamodel item is the breakdown below, which reads the bar alone (gotcha #24).
 - Bar breakdown: `[ScriptedProgressBar.GetPeriodicProgressBreakdown]` — the **engine's own** per-term rendering, built from the 22 `desc` keys on the bar's `add` lines (21 terms plus the monthly cap). It cannot drift from the mechanic because it *is* the mechanic.
-- Overview: `colonial_empire_disp_{tier,next_boundary_frac,trend,condemner_share,pressure_level}` (`colonial_empire_values.txt`), each reading a snapshot behind a `has_variable` guard: the band icon, the marker at the next band's edge, the trend arrow, the pie, the pressure alert.
+- Overview: `colonial_empire_disp_{tier,next_boundary_frac,trend,condemner_share,pressure_level}` (`colonial_empire_values.txt`): the band icon and the marker at the next band's edge read the live band ladder; the trend arrow, the pie and the pressure alert read the headline or a snapshot behind a `has_variable` guard.
 - Six drift groups live: `[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_{base,laws,igs,rank,policies,domestic}')]` — all O(1), and live so a click moves them the next frame.
 - Three drift groups + the total from `var:` (they iterate; the widget runs every frame).
 - Monthly cap: the headline is `colonial_stability_drift_total_display` (capped), and the breakdown's last row is `colonial_stability_drift_cap_display` — capped minus uncapped, 0 inside the cap — so the rows still add up to the headline. Both are O(1) over the live groups and the snapshots.
-- Band names and the phase modifier (the band icon's tooltip, and "Next band: X at N"): `[JournalEntry.GetCountry.GetCustom('colonial_empire_{status_custom,tier_name,next_band_name,phase_modifier}')]` (`common/customizable_localization/colonial_empire_custom_loc.txt`), keyed on the tier integer.
+- Band names and the phase modifier (the band icon's tooltip, and "Next band: X at N"): `[JournalEntry.GetCountry.GetCustom('colonial_empire_{status_custom,tier_name,next_band_name,phase_modifier}')]` (`common/customizable_localization/colonial_empire_custom_loc.txt`), keyed on `colonial_empire_live_tier` (descending `>=` comparisons, `< 1` for "still taking stock"); "Next band" reads `colonial_empire_live_next_boundary`.
 - Programme costs / effects: `[GetStaticModifier('x').GetDesc]` plus `colonial_{invest,garrison,assim}_effectiveness_display` and `colonial_{invest,assimilate}_startup_cost_display`.
 
 **Areas**, in order:
