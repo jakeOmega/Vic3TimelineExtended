@@ -204,5 +204,37 @@ class OverviewGuiTest(unittest.TestCase):
     def test_rows_below_membership_wait_for_the_first_update(self):
         self.assertIn("GetScriptedGui('un_authority_ready_sgui').IsShown", self.gui)
 
+JE = os.path.join(REPO, "common", "journal_entries", "je_united_nations.txt")
+SGUIS = os.path.join(REPO, "common", "scripted_guis", "un_chamber_sguis.txt")
+
+
+class StatusDescTest(unittest.TestCase):
+    """The entry's status text says only what the overview does not (owner, 2026-09-28)."""
+
+    def _status(self):
+        text = _strip_comments(_read(JE))
+        m = re.search(r"\tstatus_desc = \{", text)
+        depth = 0
+        for j in range(m.end() - 1, len(text)):
+            depth += {"{": 1, "}": -1}.get(text[j], 0)
+            if depth == 0:
+                return text[m.end():j]
+
+    def test_nothing_the_overview_shows(self):
+        status = self._status()
+        for gone in ("je_un_status_member", "je_un_status_not_member", "je_un_status_suspended",
+                     "je_un_status_not_eligible", "je_un_tier_line_", "je_un_crisis_line_",
+                     "je_un_authority_heading", "je_un_security_council_", "je_un_agenc"):
+            self.assertNotIn(gone, status, gone)
+
+    def test_what_only_it_says_stays(self):
+        status = self._status()
+        for kept in ("je_un_hq_host", "je_un_hq_established", "je_un_statistics",
+                     "je_un_active_programs", "je_un_status_conference", "je_un_status_dissolved"):
+            self.assertIn(kept, status, kept)
+
+    def test_a_non_member_learns_what_joining_brings(self):
+        self.assertIn("je_un_status_not_member", _block(_read(SGUIS), "un_chamber_status_sgui"))
+
 if __name__ == "__main__":
     unittest.main()

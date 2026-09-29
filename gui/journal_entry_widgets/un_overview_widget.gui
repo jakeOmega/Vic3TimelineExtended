@@ -24,6 +24,7 @@ types un_overview_widget_types
 			parentanchor = vcenter
 			align = left|nobaseline
 			using = fontsize_large
+			default_format = "#tooltippable"
 			block "label" {}
 		}
 	}
@@ -31,14 +32,12 @@ types un_overview_widget_types
 	### A 0..1 share as a pie over a background disc, its label beneath. The
 	### textures are the Cultural Hegemony pie's (frame 1 transparent, frame 2
 	### the colour; gui_modding_guide.md "Pie charts of script-held data").
-	type te_un_ov_pie = flowcontainer {
-		direction = vertical
-		spacing = 2
-		minimumsize = { 150 -1 }
+	type te_un_ov_pie = widget {
+		size = { 150 92 }
 
 		widget = {
 			size = { 64 64 }
-			parentanchor = hcenter
+			parentanchor = top|hcenter
 
 			progresspie = {
 				size = { 100% 100% }
@@ -60,10 +59,11 @@ types un_overview_widget_types
 			}
 		}
 		textbox = {
-			parentanchor = hcenter
+			parentanchor = bottom|hcenter
 			autoresize = yes
 			align = hcenter|nobaseline
 			using = fontsize_medium
+			default_format = "#tooltippable"
 			block "label" {}
 		}
 	}
@@ -90,11 +90,11 @@ types un_overview_widget_types
 
 	### A vacant permanent seat.
 	type te_un_ov_vacant_seat = widget {
-		size = { 52 36 }
+		size = { 70 48 }
 		tooltip = "je_un_ov_vacant_tt"
 
 		icon = {
-			size = { 48 32 }
+			size = { 66 44 }
 			parentanchor = center
 			texture = "gfx/interface/progressbar/progressbar_empty.dds"
 			spriteType = Corneredtiled
@@ -252,6 +252,7 @@ types un_overview_widget_types
 						autoresize = yes
 						parentanchor = vcenter
 						align = left|nobaseline
+						default_format = "#tooltippable"
 						text = "je_un_ov_standing_label"
 					}
 					default_progressbar_horizontal = {
@@ -271,6 +272,7 @@ types un_overview_widget_types
 				direction = vertical
 				spacing = 10
 				ignoreinvisible = yes
+				minimumsize = { 480 -1 }
 				visible = "[GetScriptedGui('un_authority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 
 				### Authority, with a tick at the target (the marker technique of
@@ -358,87 +360,97 @@ types un_overview_widget_types
 					}
 				}
 
-				### The Security Council: five seats. A filled seat's datacontext is
+				### The Security Council: the label (its tooltip lists the council and
+				### who is in line), then five seats centred beneath. A filled seat's datacontext is
 				### the stored capital's country (un_p5_display_refresh); the gate on
 				### its parent means a seat that is not set is never read.
 				flowcontainer = {
-					direction = horizontal
+					direction = vertical
 					spacing = 4
+					minimumsize = { 480 -1 }
 
 					textbox = {
-						minimumsize = { 130 -1 }
+						default_format = "#tooltippable"
 						autoresize = yes
 						parentanchor = vcenter
 						align = left|nobaseline
 						text = "je_un_ov_council_label"
 						tooltip = "[GetScriptedGui('un_chamber_council_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 					}
-					widget = {
-						size = { 52 36 }
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_p5_count'), '(CFixedPoint)1' )]"
 
-						small_flag = {
-							parentanchor = center
-							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_p5_seat_1').GetState.GetCountry]"
-						}
-					}
-					te_un_ov_vacant_seat = {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_p5_count'), '(CFixedPoint)1' ) )]"
-					}
-					widget = {
-						size = { 52 36 }
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_p5_count'), '(CFixedPoint)2' )]"
+					flowcontainer = {
+						direction = horizontal
+						spacing = 6
+						parentanchor = hcenter
 
-						small_flag = {
-							parentanchor = center
-							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_p5_seat_2').GetState.GetCountry]"
-						}
-					}
-					te_un_ov_vacant_seat = {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_p5_count'), '(CFixedPoint)2' ) )]"
-					}
-					widget = {
-						size = { 52 36 }
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_p5_count'), '(CFixedPoint)3' )]"
+						widget = {
+							size = { 70 48 }
+							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_p5_count'), '(CFixedPoint)1' )]"
 
-						small_flag = {
-							parentanchor = center
-							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_p5_seat_3').GetState.GetCountry]"
+							flag = {
+								parentanchor = center
+								datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_p5_seat_1').GetState.GetCountry]"
+							}
 						}
-					}
-					te_un_ov_vacant_seat = {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_p5_count'), '(CFixedPoint)3' ) )]"
-					}
-					widget = {
-						size = { 52 36 }
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_p5_count'), '(CFixedPoint)4' )]"
+						te_un_ov_vacant_seat = {
+							visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_p5_count'), '(CFixedPoint)1' ) )]"
+						}
+						widget = {
+							size = { 70 48 }
+							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_p5_count'), '(CFixedPoint)2' )]"
 
-						small_flag = {
-							parentanchor = center
-							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_p5_seat_4').GetState.GetCountry]"
+							flag = {
+								parentanchor = center
+								datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_p5_seat_2').GetState.GetCountry]"
+							}
 						}
-					}
-					te_un_ov_vacant_seat = {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_p5_count'), '(CFixedPoint)4' ) )]"
-					}
-					widget = {
-						size = { 52 36 }
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_p5_count'), '(CFixedPoint)5' )]"
+						te_un_ov_vacant_seat = {
+							visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_p5_count'), '(CFixedPoint)2' ) )]"
+						}
+						widget = {
+							size = { 70 48 }
+							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_p5_count'), '(CFixedPoint)3' )]"
 
-						small_flag = {
-							parentanchor = center
-							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_p5_seat_5').GetState.GetCountry]"
+							flag = {
+								parentanchor = center
+								datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_p5_seat_3').GetState.GetCountry]"
+							}
 						}
-					}
-					te_un_ov_vacant_seat = {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_p5_count'), '(CFixedPoint)5' ) )]"
+						te_un_ov_vacant_seat = {
+							visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_p5_count'), '(CFixedPoint)3' ) )]"
+						}
+						widget = {
+							size = { 70 48 }
+							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_p5_count'), '(CFixedPoint)4' )]"
+
+							flag = {
+								parentanchor = center
+								datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_p5_seat_4').GetState.GetCountry]"
+							}
+						}
+						te_un_ov_vacant_seat = {
+							visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_p5_count'), '(CFixedPoint)4' ) )]"
+						}
+						widget = {
+							size = { 70 48 }
+							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_p5_count'), '(CFixedPoint)5' )]"
+
+							flag = {
+								parentanchor = center
+								datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_p5_seat_5').GetState.GetCountry]"
+							}
+						}
+						te_un_ov_vacant_seat = {
+							visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_p5_count'), '(CFixedPoint)5' ) )]"
+						}
 					}
 				}
 
-				### Agencies
+				### Agencies: the label on the left, the two rows centred.
 				flowcontainer = {
 					direction = vertical
 					spacing = 2
+					minimumsize = { 480 -1 }
 
 					textbox = {
 						autoresize = yes
@@ -448,6 +460,7 @@ types un_overview_widget_types
 					flowcontainer = {
 						direction = horizontal
 						spacing = 4
+						parentanchor = hcenter
 						te_un_ov_agency = {
 							tooltip = "[Concatenate( Localize( 'je_un_ov_agency_who_tt' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_who'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' ) )]"
 							blockoverride "agency_texture" {
@@ -524,6 +537,7 @@ types un_overview_widget_types
 					flowcontainer = {
 						direction = horizontal
 						spacing = 4
+						parentanchor = hcenter
 						te_un_ov_agency = {
 							tooltip = "[Concatenate( Localize( 'je_un_ov_agency_unhcr_tt' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_unhcr'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' ) )]"
 							blockoverride "agency_texture" {

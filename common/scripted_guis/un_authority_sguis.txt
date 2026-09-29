@@ -68,6 +68,51 @@ un_authority_powers_sgui = {
 	}
 }
 
+# The three groups of "Champions, Underminers and Outsiders", each with its own
+# heading in the GUI. is_shown gates the heading and the list: it reads only
+# the world, never a saved scope (gui_modding_guide.md gotcha #22).
+un_authority_champions_sgui = {
+	scope = country
+	is_shown = {
+		has_global_variable = un_founded
+		any_country = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = {
+		un_authority_champions_block = yes
+	}
+}
+
+un_authority_underminers_sgui = {
+	scope = country
+	is_shown = {
+		has_global_variable = un_founded
+		any_country = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = {
+		un_authority_underminers_block = yes
+	}
+}
+
+un_authority_outsiders_sgui = {
+	scope = country
+	is_shown = {
+		has_global_variable = un_founded
+		any_country = {
+			country_rank >= rank_value:great_power
+			NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+		}
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = {
+		un_authority_outsiders_block = yes
+	}
+}
+
 # The twelve most recent ledger entries, newest first.
 un_authority_log_sgui = {
 	scope = country

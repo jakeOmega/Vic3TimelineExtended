@@ -157,42 +157,56 @@ un_authority_crisis_block = {
 	}
 }
 
-# Who is driving the commitment and participation pillars: every champion,
-# every underminer, and every great power outside the UN, each line saying
-# which it is. Scope: country (the viewer)
+# Who is driving the commitment and participation pillars, in three groups:
+# the champions, the underminers, and the great powers outside the UN. Each
+# group is its own builder under its own GUI heading (un_authority_widget.gui),
+# because one builder prints every root-level line before any nested scope's,
+# so headings between script-built lists would all land on top
+# (gui_modding_guide.md gotcha #18). A line names the country and its share of
+# world power; the heading says which group it is in.
+# Scope: country (the viewer)
+un_authority_champions_block = {
+	every_country = {
+		limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+		custom_tooltip = je_un_auth_power_line
+	}
+}
+un_authority_underminers_block = {
+	every_country = {
+		limit = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+		custom_tooltip = je_un_auth_power_line
+	}
+}
+un_authority_outsiders_block = {
+	every_country = {
+		limit = {
+			country_rank >= rank_value:great_power
+			NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+		}
+		custom_tooltip = je_un_auth_power_line
+	}
+}
+
+# The empty state under the heading: nobody champions or undermines the order,
+# and every great power is a member. Prints nothing otherwise.
+# Scope: country (the viewer)
 un_authority_powers_block = {
 	if = {
 		limit = {
 			has_global_variable = un_founded
-			any_country = {
-				OR = {
-					je:je_united_nations ?= { has_modifier = un_champion_order_cost }
-					je:je_united_nations ?= { has_modifier = un_undermine_order_cost }
-					AND = {
-						country_rank >= rank_value:great_power
-						NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+			NOT = {
+				any_country = {
+					OR = {
+						je:je_united_nations ?= { has_modifier = un_champion_order_cost }
+						je:je_united_nations ?= { has_modifier = un_undermine_order_cost }
+						AND = {
+							country_rank >= rank_value:great_power
+							NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+						}
 					}
 				}
 			}
 		}
-		every_country = {
-			limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
-			custom_tooltip = je_un_auth_power_champion
-		}
-		every_country = {
-			limit = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
-			custom_tooltip = je_un_auth_power_underminer
-		}
-		every_country = {
-			limit = {
-				country_rank >= rank_value:great_power
-				NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
-			}
-			custom_tooltip = je_un_auth_power_outsider
-		}
-	}
-	else_if = {
-		limit = { has_global_variable = un_founded }
 		custom_tooltip_no_bullet = je_un_auth_powers_none
 	}
 }

@@ -179,29 +179,38 @@ types un_chamber_widget_types
 	}
 
 	### One row of the proposal list: the topic's description, built in script
-	### by un_chamber_propose_row_sgui, and the Propose control. Every row shares
-	### one scripted GUI (un_chamber_propose_sgui) and differs only by its op
-	### code, so the datacontext lives here rather than on each instance.
+	### by un_chamber_propose_row_sgui, on the left, and the Propose control
+	### beside it on the right (owner, 2026-09-28; it used to sit below). Every
+	### row shares one scripted GUI (un_chamber_propose_sgui) and differs only by
+	### its op code, so the datacontext lives here rather than on each instance.
 	type un_chamber_propose_row = flowcontainer {
-		direction = vertical
+		direction = horizontal
 		ignoreinvisible = yes
-		spacing = 2
+		spacing = 10
 		margin = { 4 4 }
 		datacontext = "[GetScriptedGui('un_chamber_propose_sgui')]"
 
-		un_chamber_row_text = {
+		textbox = {
+			autoresize = yes
+			multiline = yes
+			minimumsize = { 320 -1 }
+			maximumsize = { 320 -1 }
+			parentanchor = vcenter
+			align = left|nobaseline
+			using = fontsize_medium
 			block "row_text" {}
 		}
 
 		button = {
 			using = default_button_action
-			size = { 200 28 }
+			size = { 130 28 }
+			parentanchor = vcenter
 
 			textbox = {
 				parentanchor = center
 				align = center|nobaseline
 				autoresize = yes
-				max_width = 190
+				max_width = 120
 				elide = right
 				using = fontsize_small
 				text = "je_un_chamber_propose_button_label"
@@ -488,9 +497,6 @@ types un_chamber_widget_types
 			parentanchor = hcenter
 			visible = "[GetVariableSystem.Exists('un_chamber_delegations_open')]"
 
-			un_chamber_note = {
-				text = "je_un_chamber_deleg_intro"
-			}
 			un_chamber_text = {
 				text = "[GetScriptedGui('un_chamber_deleg_summary_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 				tooltip = "[GetScriptedGui('un_chamber_deleg_firm_list_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
@@ -1939,39 +1945,16 @@ types un_chamber_widget_types
 		}
 	}
 
-	type te_un_sec_standing_help = flowcontainer {
+	### How international standing works: the text only, for "How the UN Works"
+	### (te_un_sec_how, un_layout_widget.gui), which carries the heading. The
+	### score, its tier and this year's accrual are the overview's standing
+	### meter and its tooltip (un_chamber_standing_sgui).
+	type te_un_help_standing = flowcontainer {
 		direction = vertical
-		parentanchor = hcenter
 		ignoreinvisible = yes
-		spacing = 4
 
-		# ---- How international standing works ----
-		# Collapsed by default, like every explanation. The text never changes,
-		# and ExecuteTooltip re-renders it every frame the panel is visible, so
-		# there is no reason to keep it open. The score itself, its tier and this
-		# year's accrual are the overview's standing meter and its tooltip
-		# (un_chamber_standing_sgui): this is only where they come from.
-		un_chamber_section_header = {
-			blockoverride "left_text" {
-				text = "je_un_chamber_standing_header"
-			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('un_chamber_standing_open')]"
-			}
-			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('un_chamber_standing_open'))]"
-			}
-			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('un_chamber_standing_open')]"
-			}
-		}
-
-		un_chamber_panel = {
-			visible = "[GetVariableSystem.Exists('un_chamber_standing_open')]"
-
-			un_chamber_text = {
-				text = "[GetScriptedGui('un_chamber_standing_help_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
-			}
+		un_chamber_text = {
+			text = "[GetScriptedGui('un_chamber_standing_help_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 		}
 	}
 
@@ -2014,16 +1997,6 @@ types un_chamber_widget_types
 			un_chamber_text = {
 				text = "[GetScriptedGui('un_chamber_exposure_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 			}
-			un_chamber_subheader = {
-				visible = "[GetScriptedGui('un_chamber_founded_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				blockoverride "subheader_text" {
-					text = "je_un_chamber_sub_record_help"
-				}
-			}
-			un_chamber_note = {
-				visible = "[GetScriptedGui('un_chamber_founded_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				text = "je_un_chamber_exposure_help"
-			}
 		}
 	}
 
@@ -2035,7 +2008,9 @@ types un_chamber_widget_types
 
 		# ---- Missions in the field (redesign phase 6) ----
 		# The mission register: where the UN is, for whom, how far along, and
-		# who serves in each mission. Open by default.
+		# who serves in each mission. Open by default; the ended missions are a
+		# collapsed subsection, and how missions work is in "How the UN Works"
+		# (te_un_sec_how, un_layout_widget.gui).
 		un_chamber_section_header = {
 			blockoverride "left_text" {
 				text = "je_un_chamber_missions_header"
@@ -2208,24 +2183,32 @@ types un_chamber_widget_types
 				visible = "[GetScriptedGui('un_chamber_missions_unlisted_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				text = "[GetScriptedGui('un_chamber_missions_active_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 			}
-			un_chamber_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_un_chamber_sub_missions_ended"
+			# Ended missions: a subsection, collapsed by default.
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				margin_left = 20
+				margin_top = 6
+				margin_bottom = 6
+
+				un_chamber_subsection_header = {
+					blockoverride "left_text" {
+						text = "je_un_chamber_sub_missions_ended"
+					}
+					blockoverride "onclick" {
+						onclick = "[GetVariableSystem.Toggle('un_chamber_missions_ended_open')]"
+					}
+					blockoverride "onclick_showmore" {
+						visible = "[Not(GetVariableSystem.Exists('un_chamber_missions_ended_open'))]"
+					}
+					blockoverride "onclick_showless" {
+						visible = "[GetVariableSystem.Exists('un_chamber_missions_ended_open')]"
+					}
 				}
 			}
 			un_chamber_text = {
+				visible = "[GetVariableSystem.Exists('un_chamber_missions_ended_open')]"
 				text = "[GetScriptedGui('un_chamber_missions_ended_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
-			}
-			un_chamber_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_un_chamber_sub_missions_help"
-				}
-			}
-			un_chamber_note = {
-				text = "je_un_chamber_missions_intro"
-			}
-			un_chamber_note = {
-				text = "je_un_chamber_missions_help"
 			}
 		}
 	}
@@ -2304,10 +2287,6 @@ types un_chamber_widget_types
 			un_chamber_text = {
 				visible = "[GetScriptedGui('un_chamber_founded_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				text = "[GetScriptedGui('un_chamber_budget_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
-			}
-			un_chamber_note = {
-				visible = "[GetScriptedGui('un_chamber_founded_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				text = "je_un_chamber_obligations_help"
 			}
 		}
 	}

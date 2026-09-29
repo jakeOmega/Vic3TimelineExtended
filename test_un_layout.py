@@ -12,8 +12,7 @@ UN_GUI.append(os.path.join(REPO, "gui", "diplomatic_overview.gui"))
 
 STATUS = ["te_un_sec_assembly", "te_un_sec_why", "te_un_sec_missions", "te_un_sec_mandates",
           "te_un_sec_obligations", "te_un_sec_exposure"]
-REFERENCE = ["te_un_sec_auth_history", "te_un_sec_archive", "te_un_sec_standing_help",
-             "te_un_sec_auth_help"]
+REFERENCE = ["te_un_sec_auth_history", "te_un_sec_archive", "te_un_sec_how"]
 OLD_FLAGS = ["un_chamber_delegations", "un_chamber_standing", "un_chamber_exposure",
              "un_chamber_missions", "un_chamber_obligations", "un_chamber_votes",
              "un_chamber_propose", "un_chamber_mandates", "un_chamber_history", "un_auth_hist_open"]
@@ -118,6 +117,52 @@ class TabStatusTest(unittest.TestCase):
         m = re.search(r"flowcontainer = \{\s*visible = \"\[Not\(GetVariableSystem\.Exists\('te_un_tab_status_closed'\)\)\]\"(.*?)\}", tab, re.S)
         self.assertTrue(m, "no Status section gated on te_un_tab_status_closed")
         self.assertIn("te_je_status_desc", m.group(1))
+
+CHAMBER = os.path.join(W, "un_chamber_widget.gui")
+# Explanations that live in "How the UN works", and the live sections they left.
+HOW_KEYS = ["je_un_auth_tbl_explain", "je_un_chamber_missions_intro", "je_un_chamber_missions_help",
+            "je_un_chamber_deleg_intro", "je_un_chamber_obligations_help", "je_un_chamber_exposure_help"]
+LIVE_SECTIONS = [(AUTHORITY, "te_un_sec_why"), (CHAMBER, "te_un_sec_missions"),
+                 (CHAMBER, "te_un_sec_delegations"), (CHAMBER, "te_un_sec_obligations"),
+                 (CHAMBER, "te_un_sec_exposure")]
+
+
+class HowItWorksTest(unittest.TestCase):
+    def test_explanations_live_in_how_the_un_works(self):
+        how = _type_body(_read(LAYOUT), "te_un_sec_how")
+        for key in HOW_KEYS:
+            self.assertIn(f'"{key}"', how, key)
+        for sub in ("te_un_help_authority", "te_un_help_standing"):
+            self.assertIn(f"{sub} = {{", how, sub)
+        self.assertIn("GetVariableSystem.Toggle('un_how_open')", how)
+
+    def test_live_sections_carry_no_explanations(self):
+        for path, sec in LIVE_SECTIONS:
+            body = _type_body(_read(path), sec)
+            for key in HOW_KEYS:
+                self.assertNotIn(f'"{key}"', body, f"{sec} still explains ({key})")
+
+    def test_recent_entries_and_ended_missions_start_collapsed(self):
+        why = _type_body(_read(AUTHORITY), "te_un_sec_why")
+        self.assertIn("GetVariableSystem.Toggle('un_auth_log_open')", why)
+        missions = _type_body(_read(CHAMBER), "te_un_sec_missions")
+        self.assertIn("GetVariableSystem.Toggle('un_chamber_missions_ended_open')", missions)
+
+    def test_the_probe_is_gone(self):
+        self.assertNotIn("GetGlobalList", _read(os.path.join(REPO, "gui", "diplomatic_overview.gui")))
+
+
+class PowersTest(unittest.TestCase):
+    def test_champions_underminers_outsiders_are_groups(self):
+        why = _type_body(_read(AUTHORITY), "te_un_sec_why")
+        for group in ("champions", "underminers", "outsiders"):
+            self.assertIn(f"GetScriptedGui('un_authority_{group}_sgui').IsShown", why, group)
+            self.assertIn(f"GetScriptedGui('un_authority_{group}_sgui').ExecuteTooltip", why, group)
+
+
+class ProposeRowTest(unittest.TestCase):
+    def test_the_propose_button_sits_beside_its_topic(self):
+        self.assertRegex(_read(CHAMBER), r"type un_chamber_propose_row = flowcontainer \{\s*direction = horizontal")
 
 if __name__ == "__main__":
     unittest.main()

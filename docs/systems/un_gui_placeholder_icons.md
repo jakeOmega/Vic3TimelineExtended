@@ -42,7 +42,7 @@ Same file, shown only while the UN's crisis is open.
 |---|---|---|
 | `alert_icons/critical_supply_network.dds` | the laurel-and-globe roundel split by a jagged red crack, on vanilla's round red alert disc | `un_icons/crisis.dds` |
 
-## Overview: the Security Council's vacant seat (48×32)
+## Overview: the Security Council's vacant seat (66×44)
 
 Same file, `te_un_ov_vacant_seat`, in place of a flag when a permanent seat is empty.
 

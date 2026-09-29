@@ -124,65 +124,13 @@
 	progress_desc = un_authority_progress_desc
 
 	status_desc = {
-		# 1. Personal membership status. §0.8: a country that does not conduct
-		# its own foreign policy is told it cannot join, and a member whose
-		# representation is suspended is told so, and whether its overlord
-		# carries its seat, before the general lines.
+		# The overview (gui/journal_entry_widgets/un_overview_widget.gui) shows
+		# membership, the tier, the crisis, authority, the Security Council and
+		# the agencies, with the old lines here as its tooltips (owner,
+		# 2026-09-28). This text keeps what only it says.
+		#
+		# 1. No UN: a founding conference in session, or dissolved.
 		first_valid = {
-			triggered_desc = {
-				desc = je_un_status_not_eligible
-				trigger = {
-					NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
-					NOT = { un_membership_eligible = yes }
-				}
-			}
-			triggered_desc = {
-				desc = je_un_status_not_member
-				trigger = { NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } } }
-			}
-			triggered_desc = {
-				desc = je_un_status_suspended_carried
-				trigger = {
-					un_representation_suspended = yes
-					un_seat_carried = yes
-				}
-			}
-			triggered_desc = {
-				desc = je_un_status_suspended
-				trigger = { un_representation_suspended = yes }
-			}
-			triggered_desc = {
-				desc = je_un_status_member
-				trigger = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
-			}
-		}
-
-		# 2. Authority tier (redesign phase 2): the tier global carries the
-		# hysteresis, so the line never flickers at a boundary. Before the first
-		# monthly update of a founded UN there is no tier yet and nothing prints.
-		# While no UN exists: dissolved, a founding conference in session, or
-		# never founded (the widget says so).
-		first_valid = {
-			triggered_desc = {
-				desc = je_un_tier_line_supranational
-				trigger = { un_tier_is_supranational = yes }
-			}
-			triggered_desc = {
-				desc = je_un_tier_line_strong
-				trigger = { un_tier_at_least_strong = yes }
-			}
-			triggered_desc = {
-				desc = je_un_tier_line_established
-				trigger = { un_tier_at_least_established = yes }
-			}
-			triggered_desc = {
-				desc = je_un_tier_line_contested
-				trigger = { un_tier_at_least_contested = yes }
-			}
-			triggered_desc = {
-				desc = je_un_tier_line_moribund
-				trigger = { un_tier_is_moribund = yes }
-			}
 			triggered_desc = {
 				desc = je_un_status_conference
 				trigger = { un_conference_in_session = yes }
@@ -193,28 +141,7 @@
 			}
 		}
 
-		# 2a. The crisis: the collapse clock, or the lingering form.
-		first_valid = {
-			triggered_desc = {
-				desc = je_un_crisis_line_clock
-				trigger = { un_crisis_clock_running = yes }
-			}
-			triggered_desc = {
-				desc = je_un_crisis_line_open
-				trigger = { un_crisis_is_open = yes }
-			}
-		}
-
-		# 2b. Where authority is heading: the target and this month's step. The
-		# full breakdown is in the "Why authority is moving" widget below.
-		first_valid = {
-			triggered_desc = {
-				desc = je_un_authority_heading
-				trigger = { has_global_variable = un_authority_target }
-			}
-		}
-
-		# 3. UN Headquarters. Named only once the building stands
+		# 2. UN Headquarters. Named only once the building stands
 		# (global_var:un_hq_state, refreshed by un_hq_monthly_update); the host
 		# is told when it has yet to build it, and everyone else hears nothing
 		# about a headquarters that does not exist.
@@ -239,7 +166,7 @@
 			}
 		}
 
-		# 4. General Assembly statistics (§0.8 ruling 8): the represented
+		# 3. General Assembly statistics (§0.8 ruling 8): the represented
 		# members of the eligible nations, then the members whose
 		# representation is suspended, in the singular or the plural.
 		first_valid = {
@@ -269,79 +196,7 @@
 			}
 		}
 
-		# 5. Security Council (uses permanent-member status for veto-eligibility display)
-		first_valid = {
-			triggered_desc = {
-				desc = je_un_security_council_member
-				trigger = { is_un_permanent_member = yes }
-			}
-			triggered_desc = {
-				desc = je_un_security_council_nonmember
-				trigger = {
-					je:je_united_nations ?= { has_modifier = un_member_modifier }
-					any_country = {
-						is_un_permanent_member = yes
-						count >= 1
-					}
-				}
-			}
-		}
-
-		# 6. Specialized Agencies header
-		first_valid = {
-			triggered_desc = {
-				desc = je_un_agencies_header
-				trigger = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
-			}
-		}
-
-		# 6a-6k. Individual agency status (only shown when established)
-		triggered_desc = {
-			desc = je_un_agency_who_active
-			trigger = { has_global_variable = un_agency_who }
-		}
-		triggered_desc = {
-			desc = je_un_agency_unesco_active
-			trigger = { has_global_variable = un_agency_unesco }
-		}
-		triggered_desc = {
-			desc = je_un_agency_icj_active
-			trigger = { has_global_variable = un_agency_icj }
-		}
-		triggered_desc = {
-			desc = je_un_agency_unhrc_active
-			trigger = { has_global_variable = un_agency_unhrc }
-		}
-		triggered_desc = {
-			desc = je_un_agency_iaea_active
-			trigger = { has_global_variable = un_agency_iaea }
-		}
-		triggered_desc = {
-			desc = je_un_agency_unep_active
-			trigger = { has_global_variable = un_agency_unep }
-		}
-		triggered_desc = {
-			desc = je_un_agency_unhcr_active
-			trigger = { has_global_variable = un_agency_unhcr }
-		}
-		triggered_desc = {
-			desc = je_un_agency_unoosa_active
-			trigger = { has_global_variable = un_agency_unoosa }
-		}
-		triggered_desc = {
-			desc = je_un_agency_itlos_active
-			trigger = { has_global_variable = un_agency_itlos }
-		}
-		triggered_desc = {
-			desc = je_un_agency_icc_active
-			trigger = { has_global_variable = un_agency_icc }
-		}
-		triggered_desc = {
-			desc = je_un_agency_cppnm_active
-			trigger = { has_global_variable = un_agency_cppnm }
-		}
-
-		# 7. Active resolutions & program participation (members) / join prompt (non-members)
+		# 4. Active resolutions & program participation (members) / join prompt (non-members)
 		first_valid = {
 			triggered_desc = {
 				desc = je_un_active_programs

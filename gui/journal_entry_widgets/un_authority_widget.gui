@@ -16,8 +16,8 @@
 ### te_history_chart.gui; its samples come from un_authority_record_history
 ### (un_authority_effects.txt).
 ###
-### A type library, one type per section (te_un_sec_why, te_un_sec_auth_help,
-### te_un_sec_auth_history). gui/journal_entry_widgets/un_layout_widget.gui
+### A type library, one type per section (te_un_sec_why, te_un_sec_auth_history), plus
+### te_un_help_authority, the text "How the UN Works" shows. gui/journal_entry_widgets/un_layout_widget.gui
 ### sets their order among the chamber's sections, for the journal entry and
 ### the Diplomacy panel's UN tab alike.
 ###
@@ -99,57 +99,6 @@ types un_authority_widget_types
 		}
 	}
 
-	### One row of the pillar table: the pillar, its value, and a short reading
-	### of what drives it. The long explanation (range, formula) is the row's
-	### tooltip. Same three-column shape as ch_breakdown_row in the cultural
-	### hegemony widget, so the two breakdowns read alike. Every value is an
-	### O(1) read of a snapshot (un_disp_* in un_authority_values.txt).
-	type un_auth_pillar_row = flowcontainer {
-		direction = horizontal
-		ignoreinvisible = yes
-		spacing = 4
-
-		widget = {
-			size = { 164 22 }
-			textbox = {
-				parentanchor = left|vcenter
-				autoresize = yes
-				max_width = 164
-				elide = right
-				align = nobaseline
-				using = fontsize_medium
-				block "pillar_label" {}
-			}
-		}
-
-		widget = {
-			size = { 56 22 }
-			textbox = {
-				parentanchor = right|vcenter
-				autoresize = yes
-				max_width = 56
-				elide = right
-				align = nobaseline
-				using = fontsize_medium
-				block "pillar_value" {}
-			}
-		}
-
-		widget = {
-			size = { 252 22 }
-			textbox = {
-				parentanchor = left|vcenter
-				autoresize = yes
-				max_width = 252
-				elide = right
-				align = nobaseline
-				using = fontsize_small
-				default_format = "#lore"
-				block "pillar_detail" {}
-			}
-		}
-	}
-
 	### ======================================================================
 	### SECTIONS. Each is composed, in order, by un_layout_widget.gui.
 	### ======================================================================
@@ -208,9 +157,6 @@ types un_authority_widget_types
 				un_auth_text = {
 					text = "je_un_auth_tbl_headline"
 				}
-				un_auth_note_text = {
-					text = "je_un_auth_tbl_explain"
-				}
 
 				### participation: the bar spans the pillar's own range, zero at the centre line
 				### (un_overview_display_values.txt). Tooltip: what the pillar is,
@@ -222,16 +168,17 @@ types un_authority_widget_types
 					tooltip = "je_un_auth_bar_participation_tt"
 
 					textbox = {
-						minimumsize = { 120 -1 }
-						maximumsize = { 120 -1 }
+						minimumsize = { 170 -1 }
+						maximumsize = { 170 -1 }
 						autoresize = yes
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = fontsize_medium
+						default_format = "#tooltippable"
 						text = "je_un_auth_tbl_participation_label"
 					}
 					double_direction_progressbar = {
-						size = { 200 14 }
+						size = { 170 14 }
 						parentanchor = vcenter
 						blockoverride "value_left" {
 							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_pillar_participation_neg') )]"
@@ -278,16 +225,17 @@ types un_authority_widget_types
 					tooltip = "je_un_auth_bar_commitment_tt"
 
 					textbox = {
-						minimumsize = { 120 -1 }
-						maximumsize = { 120 -1 }
+						minimumsize = { 170 -1 }
+						maximumsize = { 170 -1 }
 						autoresize = yes
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = fontsize_medium
+						default_format = "#tooltippable"
 						text = "je_un_auth_tbl_commitment_label"
 					}
 					double_direction_progressbar = {
-						size = { 200 14 }
+						size = { 170 14 }
 						parentanchor = vcenter
 						blockoverride "value_left" {
 							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_pillar_commitment_neg') )]"
@@ -334,16 +282,17 @@ types un_authority_widget_types
 					tooltip = "je_un_auth_bar_credibility_tt"
 
 					textbox = {
-						minimumsize = { 120 -1 }
-						maximumsize = { 120 -1 }
+						minimumsize = { 170 -1 }
+						maximumsize = { 170 -1 }
 						autoresize = yes
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = fontsize_medium
+						default_format = "#tooltippable"
 						text = "je_un_auth_tbl_credibility_label"
 					}
 					double_direction_progressbar = {
-						size = { 200 14 }
+						size = { 170 14 }
 						parentanchor = vcenter
 						blockoverride "value_left" {
 							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_pillar_credibility_neg') )]"
@@ -390,16 +339,17 @@ types un_authority_widget_types
 					tooltip = "je_un_auth_bar_funding_tt"
 
 					textbox = {
-						minimumsize = { 120 -1 }
-						maximumsize = { 120 -1 }
+						minimumsize = { 170 -1 }
+						maximumsize = { 170 -1 }
 						autoresize = yes
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = fontsize_medium
+						default_format = "#tooltippable"
 						text = "je_un_auth_tbl_funding_label"
 					}
 					double_direction_progressbar = {
-						size = { 200 14 }
+						size = { 170 14 }
 						parentanchor = vcenter
 						blockoverride "value_left" {
 							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_pillar_funding_neg') )]"
@@ -446,16 +396,17 @@ types un_authority_widget_types
 					tooltip = "je_un_auth_bar_order_tt"
 
 					textbox = {
-						minimumsize = { 120 -1 }
-						maximumsize = { 120 -1 }
+						minimumsize = { 170 -1 }
+						maximumsize = { 170 -1 }
 						autoresize = yes
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = fontsize_medium
+						default_format = "#tooltippable"
 						text = "je_un_auth_tbl_order_label"
 					}
 					double_direction_progressbar = {
-						size = { 200 14 }
+						size = { 170 14 }
 						parentanchor = vcenter
 						blockoverride "value_left" {
 							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_pillar_order_neg') )]"
@@ -502,16 +453,17 @@ types un_authority_widget_types
 					tooltip = "je_un_auth_bar_delivery_tt"
 
 					textbox = {
-						minimumsize = { 120 -1 }
-						maximumsize = { 120 -1 }
+						minimumsize = { 170 -1 }
+						maximumsize = { 170 -1 }
 						autoresize = yes
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = fontsize_medium
+						default_format = "#tooltippable"
 						text = "je_un_auth_tbl_delivery_label"
 					}
 					double_direction_progressbar = {
-						size = { 200 14 }
+						size = { 170 14 }
 						parentanchor = vcenter
 						blockoverride "value_left" {
 							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_pillar_delivery_neg') )]"
@@ -548,19 +500,64 @@ types un_authority_widget_types
 						}
 					}
 				}
-				un_auth_pillar_row = {
-					tooltip = "je_un_auth_tbl_base_tt"
-					blockoverride "pillar_label" { text = "je_un_auth_tbl_base_label" }
-					blockoverride "pillar_value" { text = "je_un_auth_tbl_base_value" }
-					blockoverride "pillar_detail" { text = "je_un_auth_tbl_base_detail" }
+				### Base, a constant: label and value on the bars' columns, the detail in
+				### the tooltip (je_un_auth_bar_base_tt).
+				flowcontainer = {
+					direction = horizontal
+					spacing = 8
+					margin = { 4 2 }
+					tooltip = "je_un_auth_bar_base_tt"
+
+					textbox = {
+						minimumsize = { 170 -1 }
+						maximumsize = { 170 -1 }
+						autoresize = yes
+						parentanchor = vcenter
+						align = left|nobaseline
+						using = fontsize_medium
+						default_format = "#tooltippable"
+						text = "je_un_auth_tbl_base_label"
+					}
+					widget = {
+						size = { 170 14 }
+					}
+					textbox = {
+						minimumsize = { 50 -1 }
+						autoresize = yes
+						parentanchor = vcenter
+						align = right|nobaseline
+						text = "je_un_auth_tbl_base_value"
+					}
 				}
 
-				# The sum
-				un_auth_pillar_row = {
-					tooltip = "je_un_auth_tbl_target_tt"
-					blockoverride "pillar_label" { text = "je_un_auth_tbl_target_label" }
-					blockoverride "pillar_value" { text = "je_un_auth_tbl_target_value" }
-					blockoverride "pillar_detail" { text = "je_un_auth_tbl_target_detail" }
+				### The target, the sum: label and value on the bars' columns, the detail in
+				### the tooltip (je_un_auth_bar_target_tt).
+				flowcontainer = {
+					direction = horizontal
+					spacing = 8
+					margin = { 4 2 }
+					tooltip = "je_un_auth_bar_target_tt"
+
+					textbox = {
+						minimumsize = { 170 -1 }
+						maximumsize = { 170 -1 }
+						autoresize = yes
+						parentanchor = vcenter
+						align = left|nobaseline
+						using = fontsize_medium
+						default_format = "#tooltippable"
+						text = "je_un_auth_tbl_target_label"
+					}
+					widget = {
+						size = { 170 14 }
+					}
+					textbox = {
+						minimumsize = { 50 -1 }
+						autoresize = yes
+						parentanchor = vcenter
+						align = right|nobaseline
+						text = "je_un_auth_tbl_target_value"
+					}
 				}
 
 				un_auth_text = {
@@ -590,54 +587,85 @@ types un_authority_widget_types
 					text = "je_un_auth_sub_powers"
 				}
 			}
+			# Three groups, each a heading row over its own list (one builder
+			# would print every heading above both lists: gotcha #18), then the
+			# empty state when all three are empty.
+			un_auth_text = {
+				visible = "[GetScriptedGui('un_authority_champions_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				text = "je_un_auth_powers_champions"
+			}
+			un_auth_text = {
+				visible = "[GetScriptedGui('un_authority_champions_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				text = "[GetScriptedGui('un_authority_champions_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+			}
+			un_auth_text = {
+				visible = "[GetScriptedGui('un_authority_underminers_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				text = "je_un_auth_powers_underminers"
+			}
+			un_auth_text = {
+				visible = "[GetScriptedGui('un_authority_underminers_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				text = "[GetScriptedGui('un_authority_underminers_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+			}
+			un_auth_text = {
+				visible = "[GetScriptedGui('un_authority_outsiders_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				text = "je_un_auth_powers_outsiders"
+			}
+			un_auth_text = {
+				visible = "[GetScriptedGui('un_authority_outsiders_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				text = "[GetScriptedGui('un_authority_outsiders_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+			}
 			un_auth_text = {
 				text = "[GetScriptedGui('un_authority_powers_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 			}
 
 			# The ledger's display log: what each member did to the organisation,
-			# and what became of the Assembly's resolutions and missions.
-			un_auth_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_un_auth_sub_log"
+			# and what became of the Assembly's resolutions and missions. A
+			# subsection, collapsed by default (the chamber's nested header type).
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				margin_left = 20
+				margin_top = 6
+				margin_bottom = 6
+
+				un_chamber_subsection_header = {
+					blockoverride "left_text" {
+						text = "je_un_auth_sub_log"
+					}
+					blockoverride "onclick" {
+						onclick = "[GetVariableSystem.Toggle('un_auth_log_open')]"
+					}
+					blockoverride "onclick_showmore" {
+						visible = "[Not(GetVariableSystem.Exists('un_auth_log_open'))]"
+					}
+					blockoverride "onclick_showless" {
+						visible = "[GetVariableSystem.Exists('un_auth_log_open')]"
+					}
 				}
 			}
-			un_auth_note_text = {
-				text = "je_un_auth_log_intro"
-			}
-			un_auth_text = {
-				text = "[GetScriptedGui('un_authority_log_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				visible = "[GetVariableSystem.Exists('un_auth_log_open')]"
+
+				un_auth_note_text = {
+					text = "je_un_auth_log_intro"
+				}
+				un_auth_text = {
+					text = "[GetScriptedGui('un_authority_log_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+				}
 			}
 		}
 	}
 
-	type te_un_sec_auth_help = flowcontainer {
+	### How UN authority works: the text only, for "How the UN Works"
+	### (te_un_sec_how, un_layout_widget.gui), which carries the heading.
+	type te_un_help_authority = flowcontainer {
 		direction = vertical
-		parentanchor = hcenter
 		ignoreinvisible = yes
-		spacing = 4
 
-		# ---- How UN authority works (closed by default) ----
-		un_auth_section_header = {
-			blockoverride "left_text" {
-				text = "je_un_auth_header_help"
-			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('un_auth_help_open')]"
-			}
-			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('un_auth_help_open'))]"
-			}
-			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('un_auth_help_open')]"
-			}
-		}
-
-		un_auth_panel = {
-			visible = "[GetVariableSystem.Exists('un_auth_help_open')]"
-
-			un_auth_text = {
-				text = "[GetScriptedGui('un_authority_help_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
-			}
+		un_auth_text = {
+			text = "[GetScriptedGui('un_authority_help_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 		}
 	}
 

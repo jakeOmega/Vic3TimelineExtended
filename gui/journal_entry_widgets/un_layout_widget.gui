@@ -267,7 +267,89 @@ types un_layout_widget_types
 		te_un_sec_exposure = {}
 	}
 
-	### The chart, then the record and the explanations, mostly collapsed.
+	### "How the UN Works": every explanation, gathered out of the live sections
+	### (owner, 2026-09-28) into one section, collapsed by default, one heading
+	### per topic. The live sections above say what is happening; this says how
+	### it works.
+	type te_un_sec_how = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		un_chamber_section_header = {
+			blockoverride "left_text" {
+				text = "je_un_how_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('un_how_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('un_how_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('un_how_open')]"
+			}
+		}
+
+		un_chamber_panel = {
+			visible = "[GetVariableSystem.Exists('un_how_open')]"
+
+			un_chamber_subheader = {
+				blockoverride "subheader_margin" {}
+				blockoverride "subheader_text" {
+					text = "je_un_how_sub_authority"
+				}
+			}
+			un_chamber_note = {
+				text = "je_un_auth_tbl_explain"
+			}
+			te_un_help_authority = {}
+			un_chamber_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_un_how_sub_standing"
+				}
+			}
+			te_un_help_standing = {}
+			un_chamber_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_un_how_sub_missions"
+				}
+			}
+			un_chamber_note = {
+				text = "je_un_chamber_missions_intro"
+			}
+			un_chamber_note = {
+				text = "je_un_chamber_missions_help"
+			}
+			un_chamber_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_un_how_sub_delegations"
+				}
+			}
+			un_chamber_note = {
+				text = "je_un_chamber_deleg_intro"
+			}
+			un_chamber_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_un_how_sub_dues"
+				}
+			}
+			un_chamber_note = {
+				text = "je_un_chamber_obligations_help"
+			}
+			un_chamber_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_un_how_sub_record"
+				}
+			}
+			un_chamber_note = {
+				text = "je_un_chamber_exposure_help"
+			}
+		}
+	}
+
+	### The chart, then the record, then how it all works.
 	type te_un_reference_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -277,8 +359,7 @@ types un_layout_widget_types
 
 		te_un_sec_auth_history = {}
 		te_un_sec_archive = {}
-		te_un_sec_standing_help = {}
-		te_un_sec_auth_help = {}
+		te_un_sec_how = {}
 	}
 }
 
