@@ -64,20 +64,10 @@ je_grand_monuments = {
 		}
 	}
 
-	status_desc = {
-		first_valid = {
-			triggered_desc = {
-				desc = je_grand_monuments_status_contested
-				trigger = {
-					any_scope_state = { gm_state_is_contested = yes }
-				}
-			}
-			triggered_desc = {
-				desc = je_grand_monuments_status
-				trigger = { always = yes }
-			}
-		}
-	}
+	# No status_desc: its counts ("Grand Monuments: 3, contested: 1") were the
+	# overview's (owner, play-test round 2). No line is kept for the inactive
+	# state: `possible` is `is_shown_when_inactive`, so an entry that shows
+	# activates at the engine's next check of `possible`.
 
 	weight = 400
 	should_update_on_player_command = yes

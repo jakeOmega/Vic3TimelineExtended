@@ -708,6 +708,97 @@ gm_disp_ig_any = {
 	}
 }
 
+# 1 while any national total is in force: every row of National Effects reads
+# a gm_display_* value that is non-zero exactly when its variable here is. At 0
+# the section shows its empty-state line instead (test_grand_monuments_layout.py
+# holds this list to the rows).
+gm_disp_national_any = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				AND = {
+					has_variable = gm_s_standing
+					NOT = { var:gm_s_standing = 0 }
+				}
+				AND = {
+					has_variable = gm_s_culture
+					NOT = { var:gm_s_culture = 0 }
+				}
+				AND = {
+					has_variable = gm_s_regime
+					NOT = { var:gm_s_regime = 0 }
+				}
+				AND = {
+					has_variable = gm_s_leader
+					NOT = { var:gm_s_leader = 0 }
+				}
+				AND = {
+					has_variable = gm_s_religious
+					NOT = { var:gm_s_religious = 0 }
+				}
+				AND = {
+					has_variable = gm_s_war_memorial
+					NOT = { var:gm_s_war_memorial = 0 }
+				}
+				AND = {
+					has_variable = gm_s_artistic
+					NOT = { var:gm_s_artistic = 0 }
+				}
+				AND = {
+					has_variable = gm_s_scientific
+					NOT = { var:gm_s_scientific = 0 }
+				}
+				AND = {
+					has_variable = gm_s_industrial
+					NOT = { var:gm_s_industrial = 0 }
+				}
+				AND = {
+					has_variable = gm_s_teardown
+					NOT = { var:gm_s_teardown = 0 }
+				}
+				AND = {
+					has_variable = gm_vanity_ledger
+					NOT = { var:gm_vanity_ledger = 0 }
+				}
+				AND = {
+					has_variable = gm_s_ig_armed_forces
+					NOT = { var:gm_s_ig_armed_forces = 0 }
+				}
+				AND = {
+					has_variable = gm_s_ig_devout
+					NOT = { var:gm_s_ig_devout = 0 }
+				}
+				AND = {
+					has_variable = gm_s_ig_industrialists
+					NOT = { var:gm_s_ig_industrialists = 0 }
+				}
+				AND = {
+					has_variable = gm_s_ig_intelligentsia
+					NOT = { var:gm_s_ig_intelligentsia = 0 }
+				}
+				AND = {
+					has_variable = gm_s_ig_landowners
+					NOT = { var:gm_s_ig_landowners = 0 }
+				}
+				AND = {
+					has_variable = gm_s_ig_petty_bourgeoisie
+					NOT = { var:gm_s_ig_petty_bourgeoisie = 0 }
+				}
+				AND = {
+					has_variable = gm_s_ig_rural_folk
+					NOT = { var:gm_s_ig_rural_folk = 0 }
+				}
+				AND = {
+					has_variable = gm_s_ig_trade_unions
+					NOT = { var:gm_s_ig_trade_unions = 0 }
+				}
+			}
+		}
+		value = 1
+	}
+}
+
 # The National Effects bars: how far the step now being filled has come, 0-1.
 # On the doubling curve with first step f, the step that completes at N
 # (gm_n_*, gm_curve_next_f*) began at (N - f) / 2, so at grandeur G (gm_g_*)

@@ -15,6 +15,8 @@ VALUES = os.path.join(REPO, "common", "script_values", "gm_values.txt")
 EFFECTS = os.path.join(REPO, "common", "scripted_effects", "gm_effects.txt")
 LOC = os.path.join(REPO, "localization", "english", "te_miscellaneous_l_english.yml")
 ICONS_DOC = os.path.join(REPO, "docs", "systems", "grand_monuments_gui_icons.md")
+CONCEPTS = os.path.join(REPO, "common", "game_concepts", "extra_concepts.txt")
+CONCEPT_LOC = os.path.join(REPO, "localization", "english", "te_concepts_l_english.yml")
 
 STATUS = ["te_gm_sec_national", "te_gm_sec_monuments"]
 REFERENCE = ["te_gm_sec_how"]
@@ -56,7 +58,18 @@ def _read(path):
 
 
 def _strip_comments(text):
-    return re.sub(r"#[^\n\"]*(?=\n|$)", "", text)
+    """Drop each line's comment: from a `#` outside quotes to the line end."""
+    out = []
+    for line in text.split("\n"):
+        quoted = False
+        for i, ch in enumerate(line):
+            if ch == '"':
+                quoted = not quoted
+            elif ch == "#" and not quoted:
+                line = line[:i]
+                break
+        out.append(line)
+    return "\n".join(out)
 
 
 def _match_brace(text, open_end):
@@ -187,14 +200,36 @@ class StateGatedTest(unittest.TestCase):
         self.assertEqual(buttons.group(2).count("gm_choice_button = {"), 3)
 
     def test_hard_times_only_while_it_holds(self):
-        ov = _squash(_type_body(_gui(), "te_gm_overview_panel"))
-        self.assertIn('gm_ov_cell = { visible = "[GetScriptedGui(\'gm_hard_times_sgui\').IsShown( '
-                      'GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]" '
-                      'tooltip = "gm_je_ov_hard_times_tt"', ov)
+        """The icon over a red phrase, both explaining on hover, in a line of
+        its own under the cells with every width fixed (play-test round 2)."""
+        ov = _squash(_strip_comments(_type_body(_gui(), "te_gm_overview_panel")))
+        m = re.search(r'flowcontainer = \{ direction = vertical ignoreinvisible = yes spacing = 2 '
+                      r'minimumsize = \{ 480 -1 \} margin_top = 4 visible = "\[GetScriptedGui\(\'gm_hard_times_sgui\'\)'
+                      r'\.IsShown\( GuiScope\.SetRoot\( JournalEntry\.GetCountry\.MakeScope \)\.End \)\]" (.*)', ov)
+        self.assertTrue(m, "no pinned Hard Times line")
+        line = m.group(1)
+        self.assertRegex(line, r'^icon = \{ size = \{ 32 32 \} parentanchor = hcenter tooltip = "gm_je_ov_hard_times_tt"')
+        self.assertIn('minimumsize = { 480 -1 } maximumsize = { 480 -1 } align = hcenter|nobaseline using = fontsize_large '
+                      'default_format = "#tooltippable" tooltip = "gm_je_ov_hard_times_tt" text = "gm_je_ov_hard_times"', line)
+        loc = _loc()
+        self.assertTrue(loc["gm_je_ov_hard_times"].startswith("#R "), "the phrase is red")
+        self.assertLessEqual(len(loc["gm_je_ov_hard_times"].split()), 4, "a couple of words")
 
-    def test_specific_effects_only_while_in_force(self):
+    def test_the_cell_row_never_changes_width(self):
+        """Four fixed cells, none gated: a row whose width comes from its
+        content is centred by the width it had at first layout."""
+        ov = _squash(_strip_comments(_type_body(_gui(), "te_gm_overview_panel")))
+        row = re.search(r"flowcontainer = \{ direction = horizontal spacing = 4 ignoreinvisible = yes "
+                        r"parentanchor = hcenter (.*?) \} flowcontainer = \{ direction = vertical", ov)
+        self.assertTrue(row)
+        self.assertEqual(row.group(1).count("gm_ov_cell = {"), 4)
+        self.assertNotRegex(row.group(1), r"gm_ov_cell = \{ visible")
+
+    def test_every_total_only_while_in_force(self):
+        """Zero rows hide, prestige, legitimacy and cultural pull included
+        (owner, play-test round 2)."""
         nat = _squash(_type_body(_gui(), "te_gm_sec_national"))
-        for key in SPECIFIC:
+        for key in FRACS:
             self.assertIn(f"gm_step_row = {{ visible = \"[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope"
                           f".ScriptValue('gm_display_{key}'), '(CFixedPoint)0' )]\" tooltip = \"gm_je_tt_{key}\"",
                           nat, key)
@@ -214,10 +249,13 @@ class StateGatedTest(unittest.TestCase):
 
     def test_sections_never_start_empty(self):
         gui = _gui()
-        # National Effects opens on prestige, which is always shown.
-        panel = _squash(_type_body(gui, "te_gm_sec_national").split("gm_panel = {", 1)[1])
+        # National Effects opens on its empty-state line when nothing is in
+        # force (test_the_empty_state_covers_every_row holds the gate).
+        panel = _squash(_strip_comments(_type_body(gui, "te_gm_sec_national")).split("gm_panel = {", 1)[1])
         self.assertTrue(panel.startswith('visible = "[Not(GetVariableSystem.Exists(\'gm_national_closed\'))]" '
-                                         'spacing = 2 gm_step_row = { tooltip = "gm_je_tt_prestige"'), panel[:200])
+                                         'spacing = 2 gm_text = { visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry'
+                                         '.MakeScope.ScriptValue(\'gm_disp_national_any\'), \'(CFixedPoint)0\' )]" '
+                                         'text = "gm_je_national_none" }'), panel[:300])
         # Our Monuments: the empty-state line shows exactly when the list is empty.
         mon = _squash(_type_body(gui, "te_gm_sec_monuments"))
         self.assertIn("gm_text = { visible = \"[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope"
@@ -226,6 +264,51 @@ class StateGatedTest(unittest.TestCase):
         how = _squash(_type_body(gui, "te_gm_sec_how").split("gm_panel = {", 1)[1])
         self.assertIn('gm_subheader = { blockoverride "subheader_margin" {} blockoverride "subheader_text" '
                       '{ text = "gm_je_how_sub_grandeur" } }', how.split("gm_note", 1)[0])
+
+
+class NationalEmptyStateTest(unittest.TestCase):
+    def test_the_empty_state_covers_every_row(self):
+        """gm_disp_national_any is 1 exactly when some row of National Effects
+        shows: every gm_display_* a row is gated on reads a variable the value
+        tests, and gm_disp_ig_any's variables are in it too."""
+        values = _read(VALUES)
+        nat = _type_body(_gui(), "te_gm_sec_national")
+        anyv = _squash(_block(values, "gm_disp_national_any"))
+        gates = set(re.findall(r"ScriptValue\('(gm_display_\w+)'\), '\(CFixedPoint\)0' \)", nat))
+        self.assertEqual(len(gates), len(FRACS) + len(IGS) + 2)
+        for display in gates:
+            read_vars = set(re.findall(r"var:(\w+)", _block(values, display)))
+            self.assertEqual(len(read_vars), 1, display)
+            var = read_vars.pop()
+            self.assertIn(f"AND = {{ has_variable = {var} NOT = {{ var:{var} = 0 }} }}", anyv, display)
+        for var in re.findall(r"has_variable = (\w+)", _block(values, "gm_disp_ig_any")):
+            self.assertIn(f"has_variable = {var} ", anyv, var)
+
+
+class ConceptsTest(unittest.TestCase):
+    """Contested and Heritage are concepts (owner, play-test round 2)."""
+    NAMES = ("contested_monument", "heritage_monument")
+
+    def test_defined_beside_grandeur_with_name_and_desc(self):
+        concepts = _strip_comments(_read(CONCEPTS))
+        tail = concepts[concepts.index("concept_grandeur = {"):]
+        loc = {}
+        for line in _read(CONCEPT_LOC).splitlines():
+            m = re.match(r'\s*([\w.]+):\d*\s+"(.*)"\s*$', line)
+            if m:
+                loc[m.group(1)] = m.group(2)
+        for name in self.NAMES:
+            self.assertRegex(tail, rf"(?m)^concept_{name} = \{{", name)
+            self.assertIn(f"concept_{name}", loc)
+            self.assertIn(f"concept_{name}_desc", loc)
+
+    def test_used_in_the_words_and_how_it_works(self):
+        loc = _loc()
+        for key, name in (("gm_je_ov_heritage", "heritage"), ("gm_je_ov_contested_none", "contested"),
+                          ("gm_je_ov_contested_some", "contested"), ("gm_status_heritage", "heritage"),
+                          ("gm_status_contested", "contested"), ("gm_je_how_contested", "contested"),
+                          ("gm_je_how_contested", "heritage"), ("gm_je_how_counts_other", "heritage")):
+            self.assertIn(f"Concept('concept_{name}_monument',", loc[key], key)
 
 
 class IconsTest(unittest.TestCase):
@@ -246,8 +329,7 @@ class IconsTest(unittest.TestCase):
                              r'blockoverride "unlit" \{ visible = "\[Not\( ' + re.escape(gt) + r' \)\]" \}', ov)
             self.assertTrue(cell, value)
             self.assertEqual(cell.group(1), ICONS[code], value)
-        hard = re.search(r"tooltip = \"gm_je_ov_hard_times_tt\" blockoverride \"cell_texture\" "
-                         r"\{ texture = \"([^\"]+)\" \}", ov)
+        hard = re.search(r'tooltip = "gm_je_ov_hard_times_tt" texture = "([^"]+)" \}', ov)
         self.assertEqual(hard.group(1), ICONS["hard_times"])
 
     def test_every_placeholder_is_listed(self):
@@ -322,6 +404,13 @@ class DisplayValuesTest(unittest.TestCase):
                 start = end
 
 
+class StatusDescTest(unittest.TestCase):
+    def test_no_status_line_repeats_the_overview(self):
+        """The status description's counts were the overview's (owner,
+        play-test round 2)."""
+        self.assertNotIn("status_desc", _strip_comments(_read(JE)))
+
+
 class TidinessTest(unittest.TestCase):
     def test_no_panel_loc_starts_or_ends_with_a_newline(self):
         for key, value in _loc().items():
@@ -349,7 +438,7 @@ class TidinessTest(unittest.TestCase):
                          + int(re.search(r"minimumsize = \{ (\d+) ", _type_body(gui, "gm_row_line")).group(1)), 480)
         self.assertIn("spacing = 8", row)
         cell = int(re.search(r"size = \{ (\d+) ", _type_body(gui, "gm_ov_cell")).group(1))
-        self.assertLessEqual(5 * cell + 4 * 4, 480)
+        self.assertLessEqual(4 * cell + 3 * 4, 480)
 
 
 if __name__ == "__main__":
