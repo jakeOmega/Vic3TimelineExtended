@@ -617,6 +617,10 @@ class DerivedIconTests(unittest.TestCase):
 
     def test_solid_fills_the_holes_the_cut_out_left_inside_an_object(self):
         # A ring the cut-out left hollow: `solid` fills its middle from the raw render.
+        try:
+            import scipy  # noqa: F401  (icon_render.cut's binary_fill_holes)
+        except ImportError:
+            self.skipTest("scipy is not installed")
         raw = Image.new("RGB", (60, 60), (120, 80, 40))
         ring = Image.new("RGBA", (60, 60), (0, 0, 0, 0))
         ring.paste((120, 80, 40, 255), (10, 10, 50, 50))

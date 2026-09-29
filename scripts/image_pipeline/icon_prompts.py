@@ -282,7 +282,7 @@ CATEGORIES = {
                     "lower third, no objects, no spacecraft, stylized hand-painted video game background "
                     "art with visible brush strokes")),
         style="{subject}, one chunky readable object, " + PAINTED),
-    # The UN's journal and Diplomacy-tab GUI (docs/systems/un_gui_placeholder_icons.md):
+    # The UN's journal and Diplomacy-tab GUI (docs/systems/un_gui_icons.md):
     # icons that belong to no game entity, only to a `texture =` line in a .gui
     # file, so the category is GUI-hosted (`gui`): each entry names the
     # placeholder it replaces (`now`), and `wire` is done by hand in the .gui.
@@ -903,9 +903,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "je_space_race_interstellar_results": {"subject": "three large grey radio-telescope dishes in a row, tilted up toward the sky on steel frames", "seed": 1},
         "je_space_race_solar_colonization": {"subject": "a large banded tan-and-brown ringed gas giant planet beside a small rust-red planet and a small blue-and-green planet", "seed": 1},
     },
-    # The UN's GUI icons (docs/systems/un_gui_placeholder_icons.md). Keys are
-    # the file names the doc proposes. `now` is the vanilla placeholder the
-    # .gui draws today. Symbols on the blue disc are warm or light, for contrast.
+    # The UN's GUI icons (docs/systems/un_gui_icons.md). Keys are the file
+    # names. `now` is the vanilla placeholder the .gui drew before them. Symbols on the blue disc are warm or light, for contrast.
     "un_disc": {
         # Agencies (36 px in the overview): one symbol each.
         "agency_who": {"subject": "a thick gold staff with one green serpent coiled around it", "seed": 0,

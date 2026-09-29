@@ -57,92 +57,92 @@ types un_layout_widget_types
 						icon = {
 							size = { 40 40 }
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)0' )]"
-							texture = "gfx/interface/icons/alert_icons/land_invasion.dds"
+							texture = "gfx/interface/icons/un_icons/topic_condemn.dds"
 						}
 						icon = {
 							size = { 40 40 }
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)1' )]"
-							texture = "gfx/interface/icons/alert_icons/blockaded.dds"
+							texture = "gfx/interface/icons/un_icons/topic_sanctions.dds"
 						}
 						icon = {
 							size = { 40 40 }
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)2' )]"
-							texture = "gfx/interface/icons/alert_icons/is_losing_rank.dds"
+							texture = "gfx/interface/icons/un_icons/topic_expulsion.dds"
 						}
 						icon = {
 							size = { 40 40 }
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)3' )]"
-							texture = "gfx/interface/icons/goods_icons/artillery.dds"
+							texture = "gfx/interface/icons/un_icons/topic_mandate.dds"
 						}
 						icon = {
 							size = { 40 40 }
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)4' )]"
-							texture = "gfx/interface/icons/goods_icons/small_arms.dds"
+							texture = "gfx/interface/icons/un_icons/topic_peacekeepers.dds"
 						}
 						icon = {
 							size = { 40 40 }
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)5' )]"
-							texture = "gfx/interface/icons/goods_icons/groceries.dds"
+							texture = "gfx/interface/icons/un_icons/topic_aid.dds"
 						}
 						icon = {
 							size = { 40 40 }
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)6' )]"
-							texture = "gfx/interface/icons/alert_icons/reform_government.dds"
+							texture = "gfx/interface/icons/un_icons/topic_reform.dds"
 						}
 						icon = {
 							size = { 40 40 }
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)7' )]"
-							texture = "gfx/interface/icons/institution_icons/social_security.dds"
+							texture = "gfx/interface/icons/un_icons/topic_human_rights.dds"
 						}
 						icon = {
 							size = { 40 40 }
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)8' )]"
-							texture = "gfx/interface/icons/institution_icons/police.dds"
+							texture = "gfx/interface/icons/un_icons/topic_icc.dds"
 						}
 						icon = {
 							size = { 40 40 }
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)9' )]"
-							texture = "gfx/interface/icons/goods_icons/electricity.dds"
+							texture = "gfx/interface/icons/un_icons/topic_npt.dds"
 						}
 						icon = {
 							size = { 40 40 }
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)10' )]"
-							texture = "gfx/interface/icons/goods_icons/wood.dds"
+							texture = "gfx/interface/icons/un_icons/topic_climate.dds"
 						}
 						icon = {
 							size = { 40 40 }
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)11' )]"
-							texture = "gfx/interface/icons/institution_icons/health_service.dds"
+							texture = "gfx/interface/icons/un_icons/topic_pandemic.dds"
 						}
 						icon = {
 							size = { 40 40 }
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)12' )]"
-							texture = "gfx/interface/icons/institution_icons/colonization.dds"
+							texture = "gfx/interface/icons/un_icons/topic_refugee.dds"
 						}
 						icon = {
 							size = { 40 40 }
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)13' )]"
-							texture = "gfx/interface/icons/goods_icons/fine_art.dds"
+							texture = "gfx/interface/icons/un_icons/topic_heritage.dds"
 						}
 						icon = {
 							size = { 40 40 }
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)14' )]"
-							texture = "gfx/interface/icons/alert_icons/secession.dds"
+							texture = "gfx/interface/icons/un_icons/topic_decolonization.dds"
 						}
 						icon = {
 							size = { 40 40 }
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)15' )]"
-							texture = "gfx/interface/icons/goods_icons/aeroplanes.dds"
+							texture = "gfx/interface/icons/un_icons/topic_space.dds"
 						}
 						icon = {
 							size = { 40 40 }
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)16' )]"
-							texture = "gfx/interface/icons/goods_icons/merchant_marine.dds"
+							texture = "gfx/interface/icons/un_icons/topic_law_of_sea.dds"
 						}
 						icon = {
 							size = { 40 40 }
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)17' )]"
-							texture = "gfx/interface/icons/goods_icons/explosives.dds"
+							texture = "gfx/interface/icons/un_icons/topic_physical_protection.dds"
 						}
 					}
 

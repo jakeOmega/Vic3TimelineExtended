@@ -278,7 +278,7 @@ After the institution strips the owner asked for the journal entries' icons. 26 
 
 ## UN GUI icons (2026-09-28)
 
-The UN GUI pass (#567, `docs/systems/un_gui_placeholder_icons.md`) draws 43 new icons with vanilla placeholders: membership states, authority tiers, the crisis alert and the Security Council's vacant seat in the overview, the eleven agencies, and the eighteen resolution topics in the session strip. Plus the pie pair. None belongs to a game entity; each is a `texture =` line in a `.gui` file.
+The UN GUI pass (#567; the icons' record is now `docs/systems/un_gui_icons.md`) draws 43 new icons with vanilla placeholders: membership states, authority tiers, the crisis alert and the Security Council's vacant seat in the overview, the eleven agencies, and the eighteen resolution topics in the session strip. Plus the pie pair. None belongs to a game entity; each is a `texture =` line in a `.gui` file.
 
 **GUI-hosted categories.** A category with `gui` in its spec has no `entity_dir`. Each entry names the placeholder it replaces (`now`, shown as "current" on the sheet), its key is the file name the doc proposes, and its DDS goes to `un_icons/`, a folder vanilla lacks. So `grade_folder` and `neighbours` point at `alert_icons`, the nearest painted folder. `check()` never calls such a key unknown, and `wire` prints a reminder instead of editing: the `.gui` is edited by hand on the GUI branch.
 

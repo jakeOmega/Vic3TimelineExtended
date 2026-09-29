@@ -80,7 +80,7 @@ Example: the overview's first row and the agency icons in `gui/journal_entry_wid
 
 ### 10. Placeholder art is fine
 
-A new icon can start as any vanilla texture, so a layout can be judged in game before the art exists. List every placeholder in one doc, stating where it is set, what the final art should show (written as an icon-pipeline subject) and its proposed path. `docs/systems/un_gui_placeholder_icons.md` is the model. Swapping one in should then be one path change.
+A new icon can start as any vanilla texture, so a layout can be judged in game before the art exists. List every placeholder in one doc, stating where it is set, what the final art should show (written as an icon-pipeline subject) and its proposed path. The UN's list was the model (now `docs/systems/un_gui_icons.md`, which records the finished set). Swapping one in should then be one path change, with a test holding each path to its code (`UnIconsTest`).
 
 ## Hover recipes
 

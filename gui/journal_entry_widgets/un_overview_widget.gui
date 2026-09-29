@@ -3,7 +3,8 @@
 ### strong is it, who runs it, what has it built. Every figure is a
 ### un_disp_* value (common/script_values/un_overview_display_values.txt); every
 ### tooltip is the text it replaced, from a scripted GUI in un_chamber_sguis.txt.
-### Icons are vanilla placeholders; real art changes the paths only.
+### Icons are the UN's own (gfx/interface/icons/un_icons/, PR #572); what each
+### shows is in docs/systems/un_gui_icons.md.
 ### Spec: docs/superpowers/specs/2026-09-28-un-gui-pass-design.md §2.
 
 types un_overview_widget_types
@@ -53,7 +54,7 @@ types un_overview_widget_types
 				min = 0
 				max = 1
 				value = 1
-				texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds"
+				texture = "gfx/interface/icons/un_icons/pie_rest.dds"
 				framesize = { 128 128 }
 				frame = 2
 			}
@@ -62,7 +63,7 @@ types un_overview_widget_types
 				min = 0
 				max = 1
 				block "pie_value" {}
-				texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds"
+				texture = "gfx/interface/icons/un_icons/pie_members.dds"
 				framesize = { 128 128 }
 				frame = 2
 			}
@@ -105,9 +106,7 @@ types un_overview_widget_types
 		icon = {
 			size = { 66 44 }
 			parentanchor = center
-			texture = "gfx/interface/progressbar/progressbar_empty.dds"
-			spriteType = Corneredtiled
-			spriteborder = { 4 4 }
+			texture = "gfx/interface/icons/un_icons/seat_vacant.dds"
 		}
 	}
 
@@ -133,7 +132,7 @@ types un_overview_widget_types
 					te_un_ov_icon_label = {
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)0' )]"
 						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/generic_icons/map_list_cross.dds"
+							texture = "gfx/interface/icons/un_icons/member_no_un.dds"
 						}
 						blockoverride "label" {
 							text = "je_un_ov_member_0"
@@ -142,7 +141,7 @@ types un_overview_widget_types
 					te_un_ov_icon_label = {
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)1' )]"
 						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/generic_icons/red_cross.dds"
+							texture = "gfx/interface/icons/un_icons/member_cannot_join.dds"
 						}
 						blockoverride "label" {
 							text = "je_un_ov_member_1"
@@ -151,7 +150,7 @@ types un_overview_widget_types
 					te_un_ov_icon_label = {
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)2' )]"
 						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/generic_icons/checkbox_simple.dds"
+							texture = "gfx/interface/icons/un_icons/member_can_join.dds"
 						}
 						blockoverride "label" {
 							text = "je_un_ov_member_2"
@@ -160,7 +159,7 @@ types un_overview_widget_types
 					te_un_ov_icon_label = {
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)3' )]"
 						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/generic_icons/green_checkmark.dds"
+							texture = "gfx/interface/icons/un_icons/member.dds"
 						}
 						blockoverride "label" {
 							text = "je_un_ov_member_3"
@@ -169,7 +168,7 @@ types un_overview_widget_types
 					te_un_ov_icon_label = {
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)4' )]"
 						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/generic_icons/checkbox_greencheck.dds"
+							texture = "gfx/interface/icons/un_icons/member_permanent.dds"
 						}
 						blockoverride "label" {
 							text = "je_un_ov_member_4"
@@ -178,7 +177,7 @@ types un_overview_widget_types
 					te_un_ov_icon_label = {
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)5' )]"
 						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/generic_icons/checkmark.dds"
+							texture = "gfx/interface/icons/un_icons/member_suspended_carried.dds"
 						}
 						blockoverride "label" {
 							text = "je_un_ov_member_5"
@@ -187,7 +186,7 @@ types un_overview_widget_types
 					te_un_ov_icon_label = {
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)6' )]"
 						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/generic_icons/warning.dds"
+							texture = "gfx/interface/icons/un_icons/member_suspended.dds"
 						}
 						blockoverride "label" {
 							text = "je_un_ov_member_6"
@@ -201,7 +200,7 @@ types un_overview_widget_types
 					te_un_ov_icon_label = {
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_tier_code'), '(CFixedPoint)0' )]"
 						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/alert_icons/revolution.dds"
+							texture = "gfx/interface/icons/un_icons/tier_moribund.dds"
 						}
 						blockoverride "label" {
 							text = "je_un_ov_tier_0"
@@ -210,7 +209,7 @@ types un_overview_widget_types
 					te_un_ov_icon_label = {
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_tier_code'), '(CFixedPoint)1' )]"
 						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/alert_icons/low_legitimacy.dds"
+							texture = "gfx/interface/icons/un_icons/tier_contested.dds"
 						}
 						blockoverride "label" {
 							text = "je_un_ov_tier_1"
@@ -219,7 +218,7 @@ types un_overview_widget_types
 					te_un_ov_icon_label = {
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_tier_code'), '(CFixedPoint)2' )]"
 						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/generic_icons/checkmark.dds"
+							texture = "gfx/interface/icons/un_icons/tier_established.dds"
 						}
 						blockoverride "label" {
 							text = "je_un_ov_tier_2"
@@ -228,7 +227,7 @@ types un_overview_widget_types
 					te_un_ov_icon_label = {
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_tier_code'), '(CFixedPoint)3' )]"
 						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/generic_icons/green_checkmark.dds"
+							texture = "gfx/interface/icons/un_icons/tier_strong.dds"
 						}
 						blockoverride "label" {
 							text = "je_un_ov_tier_3"
@@ -237,7 +236,7 @@ types un_overview_widget_types
 					te_un_ov_icon_label = {
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_tier_code'), '(CFixedPoint)4' )]"
 						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/alert_icons/formable_possible.dds"
+							texture = "gfx/interface/icons/un_icons/tier_supranational.dds"
 						}
 						blockoverride "label" {
 							text = "je_un_ov_tier_4"
@@ -248,7 +247,7 @@ types un_overview_widget_types
 					visible = "[GetScriptedGui('un_authority_crisis_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 					tooltip = "[GetScriptedGui('un_authority_crisis_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 					blockoverride "icon_texture" {
-						texture = "gfx/interface/icons/alert_icons/critical_supply_network.dds"
+						texture = "gfx/interface/icons/un_icons/crisis.dds"
 					}
 					blockoverride "label" {
 						text = "je_un_ov_crisis_label"
@@ -478,7 +477,7 @@ types un_overview_widget_types
 						te_un_ov_agency = {
 							tooltip = "[Concatenate( Localize( 'je_un_ov_agency_who_tt' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_who'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' ) )]"
 							blockoverride "agency_texture" {
-								texture = "gfx/interface/icons/institution_icons/health_service.dds"
+								texture = "gfx/interface/icons/un_icons/agency_who.dds"
 							}
 							blockoverride "lit" {
 								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_who'), '(CFixedPoint)1' )]"
@@ -490,7 +489,7 @@ types un_overview_widget_types
 						te_un_ov_agency = {
 							tooltip = "[Concatenate( Localize( 'je_un_ov_agency_unesco_tt' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_unesco'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' ) )]"
 							blockoverride "agency_texture" {
-								texture = "gfx/interface/icons/goods_icons/fine_art.dds"
+								texture = "gfx/interface/icons/un_icons/agency_unesco.dds"
 							}
 							blockoverride "lit" {
 								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_unesco'), '(CFixedPoint)1' )]"
@@ -502,7 +501,7 @@ types un_overview_widget_types
 						te_un_ov_agency = {
 							tooltip = "[Concatenate( Localize( 'je_un_ov_agency_icj_tt' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_icj'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' ) )]"
 							blockoverride "agency_texture" {
-								texture = "gfx/interface/icons/institution_icons/home_affairs.dds"
+								texture = "gfx/interface/icons/un_icons/agency_icj.dds"
 							}
 							blockoverride "lit" {
 								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_icj'), '(CFixedPoint)1' )]"
@@ -514,7 +513,7 @@ types un_overview_widget_types
 						te_un_ov_agency = {
 							tooltip = "[Concatenate( Localize( 'je_un_ov_agency_unhrc_tt' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_unhrc'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' ) )]"
 							blockoverride "agency_texture" {
-								texture = "gfx/interface/icons/institution_icons/social_security.dds"
+								texture = "gfx/interface/icons/un_icons/agency_unhrc.dds"
 							}
 							blockoverride "lit" {
 								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_unhrc'), '(CFixedPoint)1' )]"
@@ -526,7 +525,7 @@ types un_overview_widget_types
 						te_un_ov_agency = {
 							tooltip = "[Concatenate( Localize( 'je_un_ov_agency_iaea_tt' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_iaea'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' ) )]"
 							blockoverride "agency_texture" {
-								texture = "gfx/interface/icons/goods_icons/electricity.dds"
+								texture = "gfx/interface/icons/un_icons/agency_iaea.dds"
 							}
 							blockoverride "lit" {
 								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_iaea'), '(CFixedPoint)1' )]"
@@ -538,7 +537,7 @@ types un_overview_widget_types
 						te_un_ov_agency = {
 							tooltip = "[Concatenate( Localize( 'je_un_ov_agency_unep_tt' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_unep'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' ) )]"
 							blockoverride "agency_texture" {
-								texture = "gfx/interface/icons/goods_icons/wood.dds"
+								texture = "gfx/interface/icons/un_icons/agency_unep.dds"
 							}
 							blockoverride "lit" {
 								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_unep'), '(CFixedPoint)1' )]"
@@ -555,7 +554,7 @@ types un_overview_widget_types
 						te_un_ov_agency = {
 							tooltip = "[Concatenate( Localize( 'je_un_ov_agency_unhcr_tt' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_unhcr'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' ) )]"
 							blockoverride "agency_texture" {
-								texture = "gfx/interface/icons/institution_icons/colonization.dds"
+								texture = "gfx/interface/icons/un_icons/agency_unhcr.dds"
 							}
 							blockoverride "lit" {
 								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_unhcr'), '(CFixedPoint)1' )]"
@@ -567,7 +566,7 @@ types un_overview_widget_types
 						te_un_ov_agency = {
 							tooltip = "[Concatenate( Localize( 'je_un_ov_agency_unoosa_tt' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_unoosa'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' ) )]"
 							blockoverride "agency_texture" {
-								texture = "gfx/interface/icons/goods_icons/aeroplanes.dds"
+								texture = "gfx/interface/icons/un_icons/agency_unoosa.dds"
 							}
 							blockoverride "lit" {
 								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_unoosa'), '(CFixedPoint)1' )]"
@@ -579,7 +578,7 @@ types un_overview_widget_types
 						te_un_ov_agency = {
 							tooltip = "[Concatenate( Localize( 'je_un_ov_agency_itlos_tt' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_itlos'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' ) )]"
 							blockoverride "agency_texture" {
-								texture = "gfx/interface/icons/goods_icons/merchant_marine.dds"
+								texture = "gfx/interface/icons/un_icons/agency_itlos.dds"
 							}
 							blockoverride "lit" {
 								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_itlos'), '(CFixedPoint)1' )]"
@@ -591,7 +590,7 @@ types un_overview_widget_types
 						te_un_ov_agency = {
 							tooltip = "[Concatenate( Localize( 'je_un_ov_agency_icc_tt' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_icc'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' ) )]"
 							blockoverride "agency_texture" {
-								texture = "gfx/interface/icons/institution_icons/police.dds"
+								texture = "gfx/interface/icons/un_icons/agency_icc.dds"
 							}
 							blockoverride "lit" {
 								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_icc'), '(CFixedPoint)1' )]"
@@ -603,7 +602,7 @@ types un_overview_widget_types
 						te_un_ov_agency = {
 							tooltip = "[Concatenate( Localize( 'je_un_ov_agency_cppnm_tt' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_cppnm'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' ) )]"
 							blockoverride "agency_texture" {
-								texture = "gfx/interface/icons/goods_icons/explosives.dds"
+								texture = "gfx/interface/icons/un_icons/agency_cppnm.dds"
 							}
 							blockoverride "lit" {
 								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_cppnm'), '(CFixedPoint)1' )]"

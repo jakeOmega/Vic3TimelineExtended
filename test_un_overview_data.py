@@ -271,3 +271,83 @@ class OverviewHqTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+UN_ICONS = "gfx/interface/icons/un_icons/"
+LAYOUT = os.path.join(REPO, "gui", "journal_entry_widgets", "un_layout_widget.gui")
+MEMBER_ICONS = ["member_no_un", "member_cannot_join", "member_can_join", "member", "member_permanent",
+                "member_suspended_carried", "member_suspended"]
+TIER_ICONS = ["tier_moribund", "tier_contested", "tier_established", "tier_strong", "tier_supranational"]
+TOPIC_ICONS = ["topic_condemn", "topic_sanctions", "topic_expulsion", "topic_mandate", "topic_peacekeepers",
+               "topic_aid", "topic_reform", "topic_human_rights", "topic_icc", "topic_npt", "topic_climate",
+               "topic_pandemic", "topic_refugee", "topic_heritage", "topic_decolonization", "topic_space",
+               "topic_law_of_sea", "topic_physical_protection"]
+AGENCY_KEYS = ["who", "unesco", "icj", "unhrc", "iaea", "unep", "unhcr", "unoosa", "itlos", "icc", "cppnm"]
+# Icons the UN GUI uses as they are: vanilla's, used as vanilla uses them, and
+# the headquarters building's own. Everything else is the UN's own art.
+VANILLA_KEPT = {"generic_icons/transparent.dds", "generic_icons/trend_up.dds", "generic_icons/trend_down.dds",
+                "generic_icons/trend_nochange.dds", "building_icons/building_un_headquarters.dds"}
+
+
+def _tracked(path):
+    import subprocess
+    out = subprocess.run(["git", "ls-files", "--error-unmatch", path], cwd=REPO,
+                         capture_output=True, text=True)
+    return out.returncode == 0
+
+
+class UnIconsTest(unittest.TestCase):
+    """The UN GUI's own icons (PR #572) replace every placeholder."""
+
+    @classmethod
+    def setUpClass(cls):
+        with open(OVERVIEW, encoding="utf-8-sig") as f:
+            cls.overview = f.read()
+        with open(LAYOUT, encoding="utf-8-sig") as f:
+            cls.layout = f.read()
+
+    def _coded(self, text, value):
+        """{code: texture} for the icons gated on ScriptValue(value) == code."""
+        found = {}
+        pat = (rf"visible = \"\[EqualTo_CFixedPoint\( JournalEntry\.GetCountry\.MakeScope\.ScriptValue\('{value}'\), "
+               rf"'\(CFixedPoint\)(\d+)' \)\]\"(.*?)texture = \"([^\"]+)\"")
+        for m in re.finditer(pat, text, re.S):
+            found[int(m.group(1))] = m.group(3)
+        return found
+
+    def test_each_code_draws_its_own_icon(self):
+        for text, value, names in ((self.overview, "un_disp_member_code", MEMBER_ICONS),
+                                   (self.overview, "un_disp_tier_code", TIER_ICONS),
+                                   (self.layout, "un_disp_res_topic_code", TOPIC_ICONS)):
+            with self.subTest(value=value):
+                self.assertEqual(self._coded(text, value),
+                                 {i: f"{UN_ICONS}{n}.dds" for i, n in enumerate(names)})
+
+    def test_each_agency_draws_its_own_icon(self):
+        for key in AGENCY_KEYS:
+            with self.subTest(agency=key):
+                m = re.search(rf"je_un_ov_agency_{key}_tt.*?texture = \"([^\"]+)\"", self.overview, re.S)
+                self.assertEqual(m.group(1), f"{UN_ICONS}agency_{key}.dds")
+
+    def test_crisis_seat_and_pies(self):
+        self.assertIn(f'texture = "{UN_ICONS}crisis.dds"', self.overview)
+        seat = self.overview[self.overview.index("type te_un_ov_vacant_seat"):]
+        seat = seat[:seat.index("\n\t}\n")]
+        self.assertIn(f'texture = "{UN_ICONS}seat_vacant.dds"', seat)
+        self.assertNotIn("Corneredtiled", seat)   # a centred watermark, not a frame to tile
+        self.assertNotIn("spriteborder", seat)
+        pie = self.overview[self.overview.index("type te_un_ov_pie"):]
+        pie = pie[:pie.index("\n\t}\n")]
+        self.assertEqual(re.findall(r'texture = "([^"]+)"', pie)[-2:],
+                         [f"{UN_ICONS}pie_rest.dds", f"{UN_ICONS}pie_members.dds"])
+
+    def test_no_placeholder_left_and_every_icon_exists(self):
+        for name, text in (("overview", self.overview), ("layout", self.layout)):
+            for path in re.findall(r'texture = "(gfx/interface/[^"]+)"', text):
+                with self.subTest(file=name, path=path):
+                    if path.startswith(UN_ICONS):
+                        self.assertTrue(_tracked(path), f"{path} is not in the repo")
+                    else:
+                        rest = path[len("gfx/interface/icons/"):] if path.startswith("gfx/interface/icons/") else path
+                        self.assertTrue(rest in VANILLA_KEPT or not path.startswith("gfx/interface/icons/"),
+                                        f"placeholder left: {path}")
