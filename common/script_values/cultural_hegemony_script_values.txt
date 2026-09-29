@@ -719,15 +719,72 @@ ch_ranked_total_display = {
 	round = yes
 }
 
-# Fill fraction for the widget's share bar, as a percentage of the bar's length.
-# The bar reads full at a 50% share of global cultural influence: no country has
-# ever come near that, and a raw 0-100 bar would leave a real hegemon's reading
-# looking like a quarter-full sliver. The scale lives here so the .gui stays 0-100.
-ch_share_fill_pct = {
+# ---- The widget's overview (te_ch_overview_panel) ----
+# Display only: nothing but the overview reads these. Every variable read is
+# guarded, so a country whose entry never activated, or a save from before the
+# first monthly pulse, reads 0 instead of logging a missing variable.
+
+# The influence tier, 0 negligible .. 5 hegemon, for the overview's tier icon.
+# ch_set_display_state is the only place the tier is derived.
+ch_disp_tier_code = {
+	value = 0
+	if = {
+		limit = { has_variable = ch_tier }
+		add = var:ch_tier
+	}
+}
+
+# Our share of global cultural influence as a 0-1 fraction, for the overview's
+# pie (a progresspie reads 0-1; gui_modding_guide.md "Pie charts of script-held
+# data"). The same live reading as cultural_pull_display, which labels the pie.
+ch_disp_share_frac = {
 	value = cultural_pull_total
-	multiply = 2
+	divide = 100
 	min = 0
-	max = 100
+	max = 1
+}
+
+# The change in our share since last month, from ch_total and the
+# ch_total_prev snapshot ch_monthly_country_update takes before recomputing it.
+# 0 until both exist (the first month of a new game, or the first month on an
+# older save).
+ch_disp_share_delta = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = ch_total
+			has_variable = ch_total_prev
+		}
+		add = var:ch_total
+		subtract = var:ch_total_prev
+	}
+	multiply = 10
+	round = yes
+	divide = 10
+}
+
+# The overview's trend arrow: 1 up, -1 down, 0 level (within 0.05 points).
+ch_disp_share_trend = {
+	value = 0
+	if = {
+		limit = { ch_disp_share_delta > 0.05 }
+		value = 1
+	}
+	else_if = {
+		limit = { ch_disp_share_delta < -0.05 }
+		value = -1
+	}
+}
+
+# The world's leading cultural power's political model, 1-15 in
+# ch_set_political_model's codes (0 before the first census), for the overview's
+# exported-model disc.
+ch_disp_model_code = {
+	value = 0
+	if = {
+		limit = { has_global_variable = ch_rank_1_ideology }
+		add = global_var:ch_rank_1_ideology
+	}
 }
 
 ch_prog_count_display = {
