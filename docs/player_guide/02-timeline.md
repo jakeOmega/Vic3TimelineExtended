@@ -102,6 +102,31 @@ Some of the mod's buildings arrive earlier, with base-game technologies: the
 Aerospace Industry with Military Aviation, the Highway with Paved Roads, and the
 Tourism Industry with Romanticism.
 
+### Global technological development
+
+The further the world's leading powers advance, the faster everyone else
+catches up. Once a year, every country checks a list of 54 mid-century and later
+technologies, from Television and Cryptography to Space Colonization. Each one
+that any great power (or a country ranked above that) has researched adds a
+bonus to technology spread, the trickle of innovation that pulls you toward
+technologies others already have. The bonuses add up, and the later the
+technology, the more it is worth: the earliest tier adds a small step, and the
+last tier (Artificial Intelligence, Space Colonization and their peers) adds ten
+times as much. Only great powers count, so a technology first reached by a
+minor country does not move the world's pace until a great power follows.
+
+The bonus appears on your country as the Global Technological Development
+modifier, and every country gets the same one, recognized or not. It is a
+catch-up mechanism, not a research boost for the leaders. A backward country
+gains the most from it, because spread only works on technologies you lack. The
+leaders gain little, since spread only ever feeds technologies someone has
+already researched. So the further ahead the great powers pull, the harder it is
+for a country to stay far behind them. The tooltip on the modifier shows your
+current figure. It sits alongside the usual sources of spread (literacy, laws
+and power bloc principles) and is separate from
+[agricultural diffusion](#agricultural-diffusion), which grants arable land
+rather than research.
+
 ### Agricultural diffusion
 
 Five farming technologies spread around the world once someone invents them:
