@@ -7,7 +7,8 @@
 # that is already gone). Comes back with the next monument. Holds the
 # national modifiers (gm_apply_national_modifiers), which go with it. No
 # `immediate`: nothing here a revolution's winner should lose. The widgets
-# (Task 9) show the national lines and one row per monument.
+# show the overview, the national effects, one row per monument and How
+# Grand Monuments Work.
 #
 # Activates two ways: is_shown_when_inactive below auto-activates it in new
 # saves the moment a country owns a Grand Monument (gated on the rule too,
@@ -20,16 +21,24 @@ je_grand_monuments = {
 	icon = "gfx/interface/icons/event_icons/je_grand_monuments.dds"
 	group = je_group_internal_affairs
 
+	# The overview above the status description, the live sections below it,
+	# How Grand Monuments Work at the foot (grand_monuments_widget.gui).
 	widget = {
 		gui = "gui/journal_entry_widgets/grand_monuments_widget.gui"
-		name = "widget_je_gm_national"
+		name = "widget_je_gm_overview"
 		container = "custom_widget_container_1"
 	}
 
 	widget = {
 		gui = "gui/journal_entry_widgets/grand_monuments_widget.gui"
-		name = "widget_je_gm_monuments"
+		name = "widget_je_gm_status"
 		container = "custom_widget_container_2"
+	}
+
+	widget = {
+		gui = "gui/journal_entry_widgets/grand_monuments_widget.gui"
+		name = "widget_je_gm_reference"
+		container = "custom_widget_container_3"
 	}
 
 	is_shown_when_inactive = {
