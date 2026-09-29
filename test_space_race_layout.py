@@ -140,7 +140,22 @@ class OrderTest(unittest.TestCase):
                 if m in CONTROLLED:
                     expected.append((f"widget_je_space_race_{m}", "custom_widget_container_2"))
                 expected.append(("widget_je_space_race_reference", "custom_widget_container_3"))
+                # the bars-on-top marker: the overview draws the progress, so the
+                # entry's own goal bar at the foot is hidden (gui/journal_entry.gui)
+                expected.append(("widget_te_je_bars_on_top_marker", "custom_widget_container_7"))
                 self.assertEqual(widgets, expected)
+                self.assertIn("progressbar = yes", entry)  # the journal list still uses it
+
+    def test_the_status_line_shows_only_while_inactive(self):
+        """Round 2 (owner): an active entry's overview shows its state, and the
+        reason text repeats the rest, so the status line is for inactive entries."""
+        je = _read(JE)
+        for m in ALL:
+            with self.subTest(milestone=m):
+                status = _block(_block(je, f"je_space_race_{m}").replace("\n\t", "\n"), "status_desc")
+                self.assertIn(f"desc = je_space_race_{m}_status", status)
+                self.assertIn(f"trigger = {{ NOT = {{ has_journal_entry = je_space_race_{m} }} }}", status)
+                self.assertEqual(status.count("triggered_desc"), 1)
 
 
 class RootTest(unittest.TestCase):

@@ -56,6 +56,14 @@ je_space_race_suborbital = {
 		name = "widget_je_space_race_reference"
 		container = "custom_widget_container_3"
 	}
+	# MARKER, not content (gui/journal_entry_widgets/te_je_bars_on_top_marker.gui):
+	# the mod's gui/journal_entry.gui hides the entry's own goal bar at the foot
+	# of the panel, because the overview above draws the same progress.
+	widget = {
+		gui = "gui/journal_entry_widgets/te_je_bars_on_top_marker.gui"
+		name = "widget_te_je_bars_on_top_marker"
+		container = "custom_widget_container_7"
+	}
 
 	is_shown_when_inactive = {
 		has_game_rule = space_race_enabled
@@ -103,13 +111,17 @@ je_space_race_suborbital = {
 		subtract = sr_progress_suborbital_value
 	}
 
+	# Kept for the journal list (the entry's own goal bar is hidden in the panel
+	# by the bars-on-top marker above; the overview draws the progress).
 	progressbar = yes
 
+	# Only while the entry is inactive. An active entry's overview shows its
+	# state, and the reason text below repeats the rest.
 	status_desc = {
 		first_valid = {
 			triggered_desc = {
 				desc = je_space_race_suborbital_status
-				trigger = { always = yes }
+				trigger = { NOT = { has_journal_entry = je_space_race_suborbital } }
 			}
 		}
 	}
@@ -207,6 +219,14 @@ je_space_race_orbital = {
 		name = "widget_je_space_race_reference"
 		container = "custom_widget_container_3"
 	}
+	# MARKER, not content (gui/journal_entry_widgets/te_je_bars_on_top_marker.gui):
+	# the mod's gui/journal_entry.gui hides the entry's own goal bar at the foot
+	# of the panel, because the overview above draws the same progress.
+	widget = {
+		gui = "gui/journal_entry_widgets/te_je_bars_on_top_marker.gui"
+		name = "widget_te_je_bars_on_top_marker"
+		container = "custom_widget_container_7"
+	}
 
 	is_shown_when_inactive = { sr_milestone_followup_is_shown = { PREREQ = suborbital TECH = guided_missiles } }
 
@@ -247,13 +267,17 @@ je_space_race_orbital = {
 		subtract = sr_progress_orbital_value
 	}
 
+	# Kept for the journal list (the entry's own goal bar is hidden in the panel
+	# by the bars-on-top marker above; the overview draws the progress).
 	progressbar = yes
 
+	# Only while the entry is inactive. An active entry's overview shows its
+	# state, and the reason text below repeats the rest.
 	status_desc = {
 		first_valid = {
 			triggered_desc = {
 				desc = je_space_race_orbital_status
-				trigger = { always = yes }
+				trigger = { NOT = { has_journal_entry = je_space_race_orbital } }
 			}
 		}
 	}
@@ -351,6 +375,14 @@ je_space_race_moon_landing = {
 		name = "widget_je_space_race_reference"
 		container = "custom_widget_container_3"
 	}
+	# MARKER, not content (gui/journal_entry_widgets/te_je_bars_on_top_marker.gui):
+	# the mod's gui/journal_entry.gui hides the entry's own goal bar at the foot
+	# of the panel, because the overview above draws the same progress.
+	widget = {
+		gui = "gui/journal_entry_widgets/te_je_bars_on_top_marker.gui"
+		name = "widget_te_je_bars_on_top_marker"
+		container = "custom_widget_container_7"
+	}
 
 	is_shown_when_inactive = { sr_milestone_followup_is_shown = { PREREQ = orbital TECH = space_exploration } }
 
@@ -391,13 +423,17 @@ je_space_race_moon_landing = {
 		subtract = sr_progress_moon_landing_value
 	}
 
+	# Kept for the journal list (the entry's own goal bar is hidden in the panel
+	# by the bars-on-top marker above; the overview draws the progress).
 	progressbar = yes
 
+	# Only while the entry is inactive. An active entry's overview shows its
+	# state, and the reason text below repeats the rest.
 	status_desc = {
 		first_valid = {
 			triggered_desc = {
 				desc = je_space_race_moon_landing_status
-				trigger = { always = yes }
+				trigger = { NOT = { has_journal_entry = je_space_race_moon_landing } }
 			}
 		}
 	}
@@ -495,6 +531,14 @@ je_space_race_probe = {
 		name = "widget_je_space_race_reference"
 		container = "custom_widget_container_3"
 	}
+	# MARKER, not content (gui/journal_entry_widgets/te_je_bars_on_top_marker.gui):
+	# the mod's gui/journal_entry.gui hides the entry's own goal bar at the foot
+	# of the panel, because the overview above draws the same progress.
+	widget = {
+		gui = "gui/journal_entry_widgets/te_je_bars_on_top_marker.gui"
+		name = "widget_te_je_bars_on_top_marker"
+		container = "custom_widget_container_7"
+	}
 
 	is_shown_when_inactive = { sr_milestone_followup_is_shown = { PREREQ = orbital TECH = space_exploration } }
 
@@ -536,13 +580,17 @@ je_space_race_probe = {
 		subtract = sr_progress_probe_value
 	}
 
+	# Kept for the journal list (the entry's own goal bar is hidden in the panel
+	# by the bars-on-top marker above; the overview draws the progress).
 	progressbar = yes
 
+	# Only while the entry is inactive. An active entry's overview shows its
+	# state, and the reason text below repeats the rest.
 	status_desc = {
 		first_valid = {
 			triggered_desc = {
 				desc = je_space_race_probe_status
-				trigger = { always = yes }
+				trigger = { NOT = { has_journal_entry = je_space_race_probe } }
 			}
 		}
 	}
@@ -639,6 +687,14 @@ je_space_race_moon_base = {
 		name = "widget_je_space_race_reference"
 		container = "custom_widget_container_3"
 	}
+	# MARKER, not content (gui/journal_entry_widgets/te_je_bars_on_top_marker.gui):
+	# the mod's gui/journal_entry.gui hides the entry's own goal bar at the foot
+	# of the panel, because the overview above draws the same progress.
+	widget = {
+		gui = "gui/journal_entry_widgets/te_je_bars_on_top_marker.gui"
+		name = "widget_te_je_bars_on_top_marker"
+		container = "custom_widget_container_7"
+	}
 
 	is_shown_when_inactive = { sr_milestone_followup_is_shown = { PREREQ = moon_landing TECH = reusable_rocketry } }
 
@@ -679,13 +735,17 @@ je_space_race_moon_base = {
 		subtract = sr_progress_moon_base_value
 	}
 
+	# Kept for the journal list (the entry's own goal bar is hidden in the panel
+	# by the bars-on-top marker above; the overview draws the progress).
 	progressbar = yes
 
+	# Only while the entry is inactive. An active entry's overview shows its
+	# state, and the reason text below repeats the rest.
 	status_desc = {
 		first_valid = {
 			triggered_desc = {
 				desc = je_space_race_moon_base_status
-				trigger = { always = yes }
+				trigger = { NOT = { has_journal_entry = je_space_race_moon_base } }
 			}
 		}
 	}
@@ -783,6 +843,14 @@ je_space_race_mars_landing = {
 		name = "widget_je_space_race_reference"
 		container = "custom_widget_container_3"
 	}
+	# MARKER, not content (gui/journal_entry_widgets/te_je_bars_on_top_marker.gui):
+	# the mod's gui/journal_entry.gui hides the entry's own goal bar at the foot
+	# of the panel, because the overview above draws the same progress.
+	widget = {
+		gui = "gui/journal_entry_widgets/te_je_bars_on_top_marker.gui"
+		name = "widget_te_je_bars_on_top_marker"
+		container = "custom_widget_container_7"
+	}
 
 	is_shown_when_inactive = { sr_milestone_followup_is_shown = { PREREQ = orbital TECH = knowledge_economy } }
 
@@ -824,13 +892,17 @@ je_space_race_mars_landing = {
 		subtract = sr_progress_mars_landing_value
 	}
 
+	# Kept for the journal list (the entry's own goal bar is hidden in the panel
+	# by the bars-on-top marker above; the overview draws the progress).
 	progressbar = yes
 
+	# Only while the entry is inactive. An active entry's overview shows its
+	# state, and the reason text below repeats the rest.
 	status_desc = {
 		first_valid = {
 			triggered_desc = {
 				desc = je_space_race_mars_landing_status
-				trigger = { always = yes }
+				trigger = { NOT = { has_journal_entry = je_space_race_mars_landing } }
 			}
 		}
 	}
@@ -928,6 +1000,14 @@ je_space_race_interstellar_probe = {
 		name = "widget_je_space_race_reference"
 		container = "custom_widget_container_3"
 	}
+	# MARKER, not content (gui/journal_entry_widgets/te_je_bars_on_top_marker.gui):
+	# the mod's gui/journal_entry.gui hides the entry's own goal bar at the foot
+	# of the panel, because the overview above draws the same progress.
+	widget = {
+		gui = "gui/journal_entry_widgets/te_je_bars_on_top_marker.gui"
+		name = "widget_te_je_bars_on_top_marker"
+		container = "custom_widget_container_7"
+	}
 
 	is_shown_when_inactive = {
 		has_game_rule = space_race_enabled
@@ -968,13 +1048,17 @@ je_space_race_interstellar_probe = {
 		subtract = sr_progress_interstellar_probe_value
 	}
 
+	# Kept for the journal list (the entry's own goal bar is hidden in the panel
+	# by the bars-on-top marker above; the overview draws the progress).
 	progressbar = yes
 
+	# Only while the entry is inactive. An active entry's overview shows its
+	# state, and the reason text below repeats the rest.
 	status_desc = {
 		first_valid = {
 			triggered_desc = {
 				desc = je_space_race_interstellar_probe_status
-				trigger = { always = yes }
+				trigger = { NOT = { has_journal_entry = je_space_race_interstellar_probe } }
 			}
 		}
 	}
@@ -1064,6 +1148,14 @@ je_space_race_interstellar_results = {
 		name = "widget_je_space_race_reference"
 		container = "custom_widget_container_3"
 	}
+	# MARKER, not content (gui/journal_entry_widgets/te_je_bars_on_top_marker.gui):
+	# the mod's gui/journal_entry.gui hides the entry's own goal bar at the foot
+	# of the panel, because the overview above draws the same progress.
+	widget = {
+		gui = "gui/journal_entry_widgets/te_je_bars_on_top_marker.gui"
+		name = "widget_te_je_bars_on_top_marker"
+		container = "custom_widget_container_7"
+	}
 
 	is_shown_when_inactive = {
 		has_game_rule = space_race_enabled
@@ -1090,13 +1182,17 @@ je_space_race_interstellar_results = {
 		subtract = sr_interstellar_transit_value
 	}
 
+	# Kept for the journal list (the entry's own goal bar is hidden in the panel
+	# by the bars-on-top marker above; the overview draws the progress).
 	progressbar = yes
 
+	# Only while the entry is inactive. An active entry's overview shows its
+	# state, and the reason text below repeats the rest.
 	status_desc = {
 		first_valid = {
 			triggered_desc = {
 				desc = je_space_race_interstellar_results_status
-				trigger = { always = yes }
+				trigger = { NOT = { has_journal_entry = je_space_race_interstellar_results } }
 			}
 		}
 	}
@@ -1174,6 +1270,14 @@ je_space_race_solar_colonization = {
 		gui = "gui/journal_entry_widgets/space_race_widget.gui"
 		name = "widget_je_space_race_reference"
 		container = "custom_widget_container_3"
+	}
+	# MARKER, not content (gui/journal_entry_widgets/te_je_bars_on_top_marker.gui):
+	# the mod's gui/journal_entry.gui hides the entry's own goal bar at the foot
+	# of the panel, because the overview above draws the same progress.
+	widget = {
+		gui = "gui/journal_entry_widgets/te_je_bars_on_top_marker.gui"
+		name = "widget_te_je_bars_on_top_marker"
+		container = "custom_widget_container_7"
 	}
 
 	is_shown_when_inactive = {
@@ -1264,13 +1368,17 @@ je_space_race_solar_colonization = {
 		value = 100
 	}
 
+	# Kept for the journal list (the entry's own goal bar is hidden in the panel
+	# by the bars-on-top marker above; the overview draws the progress).
 	progressbar = yes
 
+	# Only while the entry is inactive. An active entry's overview shows its
+	# state, and the reason text below repeats the rest.
 	status_desc = {
 		first_valid = {
 			triggered_desc = {
 				desc = je_space_race_solar_colonization_status
-				trigger = { always = yes }
+				trigger = { NOT = { has_journal_entry = je_space_race_solar_colonization } }
 			}
 		}
 	}
