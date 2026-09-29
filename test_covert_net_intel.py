@@ -19,6 +19,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 VALUES = ROOT / "common/script_values/covert_warfare_script_values.txt"
+DISPLAY_VALUES = ROOT / "common/script_values/covert_display_values.txt"
 EFFECTS = ROOT / "common/scripted_effects/covert_warfare_effects.txt"
 WIDGET = ROOT / "gui/journal_entry_widgets/covert_operations_widget.gui"
 DEBUG_EFFECTS = ROOT / "common/scripted_effects/te_debug_covert_effects.txt"
@@ -84,6 +85,12 @@ class ConstantTests(unittest.TestCase):
                 if path == VALUES:
                     # The definition, plus the one comparison.
                     self.assertEqual(uses, 2, name)
+                elif path == DISPLAY_VALUES:
+                    # The network row's bar marker (style-guide pass) reads
+                    # each constant once, as a position picked by the stored
+                    # code: `value = <name>`, never a comparison.
+                    self.assertEqual(uses, 1, name)
+                    self.assertRegex(body, r"(?m)^\s*value = %s$" % name)
                 else:
                     self.assertEqual(uses, 0, "%s in %s" % (name, path.name))
 
