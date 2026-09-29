@@ -344,13 +344,15 @@ def needs_write(exists: bool, recorded: list | None, want: list) -> bool:
 def stage_write(cat: str, only: set[str], work: Path) -> None:
     import json
 
+    spec = CATEGORIES[cat]
+    bd = spec.get("backdrop")
+    # Before the image imports: refusing needs neither Pillow nor the game.
+    if bd and not picked(bd["seed"]) and any(accepted(e) for e in entries(cat, only).values()):
+        raise SystemExit(f"{cat}: pick the backdrop first (set its seed in icon_prompts.py)")
+
     from icon_dds import write_dds
     from icon_render import Composer, raw_path
 
-    spec = CATEGORIES[cat]
-    bd = spec.get("backdrop")
-    if bd and not picked(bd["seed"]) and any(accepted(e) for e in entries(cat, only).values()):
-        raise SystemExit(f"{cat}: pick the backdrop first (set its seed in icon_prompts.py)")
     out_dir = (MOD_ROOT / icon_path(cat, "_")).parent
     if not (MOD_ROOT / "gfx" / "interface").is_dir():
         raise SystemExit(f"{MOD_ROOT / 'gfx' / 'interface'} is not checked out (a sparse worktree?)")
