@@ -34,7 +34,10 @@ types banking_dashboard_widget_types
 {
 	### A line of the Current Conditions block: label on the left, value on the right.
 	### Both columns are fixed-width wrappers so the readings line up; the text
-	### inside them elides rather than pushing the row past the panel.
+	### inside them elides rather than pushing the row past the panel. Every
+	### instance puts its tooltip (what the reading is, and what moves it) on the
+	### row, so the label is set as hoverable text (#tooltippable, style guide
+	### rule 3), as the UN's pillar rows are.
 	type banking_dash_condition_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -49,7 +52,7 @@ types banking_dashboard_widget_types
 				elide = right
 				align = nobaseline
 				using = fontsize_large
-				default_format = "#title"
+				default_format = "#tooltippable"
 				block "condition_label" {}
 			}
 		}
@@ -121,25 +124,42 @@ types banking_dashboard_widget_types
 			elide = right
 			align = nobaseline
 			using = fontsize_large
-			default_format = "#title"
+			default_format = "#tooltippable"
 			block "mon_label_text" {}
 		}
 	}
 
-	### A sub-heading inside the Monetary Policy block. The block grew to some
-	### twenty rows over three phases; these split it into what the world is
-	### doing, what gold is doing, what the debt costs, what prices are doing,
-	### and who holds the dial. A heading whose rows are all hidden carries the
-	### same `visible` as they do.
-	type banking_dash_mon_subheader = textbox {
-		autoresize = yes
-		max_width = 460
-		parentanchor = hcenter
-		align = center|nobaseline
-		margin_top = 6
-		margin_bottom = 1
-		default_format = "#lore"
-		block "mon_subheader_text" {}
+	### A heading inside a section, over one group of its rows, with a faint rule
+	### under it: the UN's un_chamber_subheader, at this panel's 460 width. The
+	### Monetary Policy block grew to some twenty rows over three phases; these
+	### split it into what the world is doing, what gold is doing, what the debt
+	### costs, what prices are doing, and who holds the dial. How Banking Works
+	### uses it for its topics. A heading whose rows are all hidden carries the
+	### same `visible` as they do; the first heading of a block drops its top
+	### margin (blockoverride "subheader_margin" {}), so the block does not open
+	### on a gap. Until 2026-09-29 these were centred #lore captions in capitals.
+	type banking_dash_subheader = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 1
+		block "subheader_margin" {
+			margin_top = 8
+		}
+
+		textbox = {
+			autoresize = yes
+			multiline = yes
+			maximumsize = { 460 -1 }
+			align = left|nobaseline
+			using = fontsize_large
+			default_format = "#title"
+			block "subheader_text" {}
+		}
+		divider_clean = {
+			blockoverride "size" {
+				size = { 460 2 }
+			}
+		}
 	}
 
 	### A plain 0-1 meter under a row of the gold sub-section (the bank's vault
@@ -173,7 +193,9 @@ types banking_dashboard_widget_types
 
 	### One policy: status/label, point cost, and the enable + disable actions.
 	### Exactly one of the two buttons is ever shown, because their scripted GUIs
-	### mirror the enable/disable scripted_button pair's `visible` triggers.
+	### mirror the enable/disable scripted_button pair's `visible` triggers. The
+	### row's tooltip is the policy's description and effects, so its name is
+	### set as hoverable text; the button's own tooltip says why it is greyed.
 	type banking_dash_policy_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -195,6 +217,7 @@ types banking_dashboard_widget_types
 				elide = right
 				align = nobaseline
 				using = fontsize_large
+				default_format = "#tooltippable"
 				block "row_label" {}
 			}
 		}
@@ -313,6 +336,27 @@ types banking_dashboard_widget_types
 				text = "banking_dash_momentum_label"
 			}
 			blockoverride "condition_value" {
+				### Which way the cycle is heading, as an arrow (style guide rule
+				### 5): up from Rising, down from Falling, flat while Steady — the
+				### band word's own edges (banking_dash_momentum_band).
+				icon = {
+					size = { 24 24 }
+					parentanchor = vcenter
+					visible = "[GetScriptedGui('banking_dash_momentum_up').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					texture = "gfx/interface/icons/generic_icons/trend_up.dds"
+				}
+				icon = {
+					size = { 24 24 }
+					parentanchor = vcenter
+					visible = "[GetScriptedGui('banking_dash_momentum_down').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					texture = "gfx/interface/icons/generic_icons/trend_down.dds"
+				}
+				icon = {
+					size = { 24 24 }
+					parentanchor = vcenter
+					visible = "[GetScriptedGui('banking_dash_momentum_steady').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					texture = "gfx/interface/icons/generic_icons/trend_nochange.dds"
+				}
 				banking_dash_condition_value = {
 					text = "banking_dash_momentum_value"
 				}
@@ -1250,8 +1294,9 @@ types banking_dashboard_widget_types
 						margin_bottom = 2
 					}
 
-					banking_dash_mon_subheader = {
-						blockoverride "mon_subheader_text" {
+					banking_dash_subheader = {
+						blockoverride "subheader_margin" {}
+						blockoverride "subheader_text" {
 							text = "banking_dash_mon_sub_rates"
 						}
 					}
@@ -1407,9 +1452,9 @@ types banking_dashboard_widget_types
 						}
 					}
 
-					banking_dash_mon_subheader = {
+					banking_dash_subheader = {
 						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						blockoverride "mon_subheader_text" {
+						blockoverride "subheader_text" {
 							text = "banking_dash_mon_sub_gold"
 						}
 					}
@@ -1553,8 +1598,8 @@ types banking_dashboard_widget_types
 					### through the policy rate the player chose), so it leaks no
 					### hidden state. te_mon_fx_state says "Par" for metal and for a
 					### command economy; the tooltip lists fx_target's four terms.
-					banking_dash_mon_subheader = {
-						blockoverride "mon_subheader_text" {
+					banking_dash_subheader = {
+						blockoverride "subheader_text" {
 							text = "banking_dash_mon_sub_fx"
 						}
 					}
@@ -1594,9 +1639,9 @@ types banking_dashboard_widget_types
 					### country holds some role in one. Every branch that reads the
 					### anchor sits behind te_mon_is_anchored in customizable
 					### localization, so no absent scope variable is ever fetched.
-					banking_dash_mon_subheader = {
+					banking_dash_subheader = {
 						visible = "[GetScriptedGui('banking_mon_shows_arrangements').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						blockoverride "mon_subheader_text" {
+						blockoverride "subheader_text" {
 							text = "banking_dash_mon_sub_arrangements"
 						}
 					}
@@ -1715,8 +1760,8 @@ types banking_dashboard_widget_types
 						}
 					}
 
-					banking_dash_mon_subheader = {
-						blockoverride "mon_subheader_text" {
+					banking_dash_subheader = {
+						blockoverride "subheader_text" {
 							text = "banking_dash_mon_sub_borrowing"
 						}
 					}
@@ -1766,8 +1811,8 @@ types banking_dashboard_widget_types
 						}
 					}
 
-					banking_dash_mon_subheader = {
-						blockoverride "mon_subheader_text" {
+					banking_dash_subheader = {
+						blockoverride "subheader_text" {
 							text = "banking_dash_mon_sub_prices"
 						}
 					}
@@ -1926,8 +1971,8 @@ types banking_dashboard_widget_types
 						}
 					}
 
-					banking_dash_mon_subheader = {
-						blockoverride "mon_subheader_text" {
+					banking_dash_subheader = {
+						blockoverride "subheader_text" {
 							text = "banking_dash_mon_sub_bank"
 						}
 					}

@@ -147,6 +147,39 @@ banking_dash_momentum_falling = {
 	effect = { }
 }
 
+# The Momentum row's trend arrow (display only). The edges are the band
+# word's own (banking_dash_custom_loc.txt, banking_dash_momentum_band): up from
+# Rising (1), down from Falling (-1), flat while Steady, so the arrow turns
+# exactly when the word does. Exactly one of the three is shown once the
+# variable exists; before that, none.
+banking_dash_momentum_up = {
+	scope = country
+	is_shown = { has_variable = finance_cycle_momentum var:finance_cycle_momentum >= 1 }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+banking_dash_momentum_down = {
+	scope = country
+	is_shown = { has_variable = finance_cycle_momentum var:finance_cycle_momentum <= -1 }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+banking_dash_momentum_steady = {
+	scope = country
+	is_shown = {
+		has_variable = finance_cycle_momentum
+		var:finance_cycle_momentum > -1
+		var:finance_cycle_momentum < 1
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
 banking_dash_bubble_risk_high = {
 	scope = country
 	is_shown = { has_variable = finance_cycle_value banking_cycle_bubble_risk_high = yes }
