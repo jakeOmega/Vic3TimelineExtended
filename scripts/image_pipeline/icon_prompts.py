@@ -15,6 +15,15 @@ Each ICONS entry is {"subject": <phrase>, "seed": <state>}:
 or {"use": "gfx/interface/icons/.../x.dds"}: a different existing icon fits
 better than the borrowed one (vanilla's crossed-out guarantee for withdrawing
 one); never rendered, and `wire` points the entity at it.
+In a GUI-hosted category (`gui`: icons a .gui file draws, not an entity's),
+an entry also names the placeholder it replaces, "now": <vanilla path>, and
+may instead be derived: {"from": "<cat>/<key>", "tint": "grey"|"faint",
+"layout": "flag", "size": (w, h), "marks": [...], "now": ...}, another
+entry's icon reworked with no render of its own. Any entry may carry
+"marks": each {"icon": <vanilla .dds>} | {"part": "<cat>/<key>"} |
+{"draw": "star"|"pause"}, with "at" (centre, as shares of the side) and
+"scale". A `part` category is reviewed like icons but never written; it
+supplies derived icons and marks (the UN's emblem and scroll badge).
 A subject describes one physical object, with its material and colour. FLUX
 fills in whatever a subject leaves open, and review kept catching the same
 defaults (September 2026, ~350 icons):
