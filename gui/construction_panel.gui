@@ -1255,6 +1255,16 @@ types construction_panel
 						}
 
 						textbox = {
+							visible = "[GetScriptedGui('te_construction_market_budget_stepping_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+							text = "TE_CM_STAT_BUDGET_STEP"
+							tooltip = "TE_CM_STAT_BUDGET_STEP_TT"
+							autoresize = yes
+							multiline = yes
+							max_width = @panel_width_minus_10
+							align = left|nobaseline
+						}
+
+						textbox = {
 							text = "TE_CM_STAT_PRIVATE"
 							tooltip = "TE_CM_STAT_PRIVATE_TT"
 							autoresize = yes

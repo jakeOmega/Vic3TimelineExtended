@@ -48,6 +48,13 @@ te_construction_market_public_setting = {
 	}
 }
 
+# What the government queue can absorb in a week: each queued level takes at
+# most country_max_weekly_construction_progress_add.
+te_construction_market_public_queue_cap = {
+	value = construction_queue_num_queued_government_levels
+	multiply = modifier:country_max_weekly_construction_progress_add
+}
+
 te_construction_market_public_use_target = {
 	if = {
 		limit = {
@@ -65,10 +72,7 @@ te_construction_market_public_use_target = {
 			# the variables (the number or budget shown in the construction
 			# panel) keep the player's setting. The AI's target is already
 			# capped the same way in te_construction_market_ai_purchase_target.
-			max = {
-				value = construction_queue_num_queued_government_levels
-				multiply = modifier:country_max_weekly_construction_progress_add
-			}
+			max = te_construction_market_public_queue_cap
 		}
 		else = {
 			value = 0
@@ -210,18 +214,60 @@ te_construction_market_price_stabilizer_next_value = {
 # The player sets what the government spends a week
 # (var:te_construction_market_public_budget) instead of how much it buys. The
 # quantity bought (var:te_construction_market_budget_quantity) moves each
-# weekly pulse a quarter of the way toward what the budget buys at that week's
-# price (te_construction_market_update_budget_quantity).
+# weekly pulse 1 / N of the way toward what the budget buys at that week's
+# price (te_construction_market_update_budget_quantity), N being
+# te_construction_market_budget_shift_weeks.
 #
-# Why only part of the way: the government's purchase is a large share of the
-# demand in its market, so the purchase moves the price it is divided by.
-# Setting the quantity to budget / price outright would chase that: buy more,
-# the price rises, buy less next week, the price falls, and so on. If a 1%
-# larger purchase raises the price by e%, closing 1/N of the gap each week
-# multiplies what is left of it by 1 - (1 + e) / N. At N = 1 that is -e, an
-# overshoot every week that grows once e > 1; at N = 4 it stays positive, a
-# steady approach without overshooting, up to e = 3.
-TE_CONSTRUCTION_MARKET_BUDGET_SHIFT_WEEKS = 4
+# Why only part of the way: the government's purchase is part of the demand in
+# its market, so it moves the price it is divided by. Setting the quantity to
+# budget / price outright chases that: buy more, the price rises, buy less next
+# week, the price falls, and so on. If a 1% larger purchase raises the price by
+# e%, closing 1/N of the gap each week leaves 1 - (1 + e) / N of it.
+# For a small gap, N = 1 + e is the exact first-order step (Newton's method on
+# quantity x price = budget): a purchase that moves the price little closes the
+# gap at once, and a larger N approaches without overshooting. Across a large
+# gap the price is not linear in the purchase (it stops moving at its floor and
+# its ceiling), and a slope read at either end of the step misses that: a raise
+# near the floor overshot by several times in testing. So N is taken from the
+# chord between where the purchase is (Q) and where the budget wants it (T):
+#   N = 1 + T / (T - Q) x (price at T / price now - 1)
+# which is where the line through (Q, spending now - budget) and
+# (T, spending at T - budget) crosses zero, and is 1 + e as the gap closes.
+#
+# The two prices come from the engine's price formula, so N follows the market.
+# e is about 0.01 for a purchase that is a small part of a large market, and far
+# larger when the purchase is a big part of it or the price is near its floor,
+# where any fixed step is either too slow or overshoots. The formula, with the
+# two defines it uses (common/defines/extra_defines.txt):
+#   price = base * (1 + PRICE_RANGE * clamp(imbalance / (F - 1), -1, 1))
+#   imbalance = (BUY - SELL) / min(BUY, SELL)
+#   F = BUY_SELL_DIFF_AT_MAX_FACTOR: the price is at its ceiling when BUY = F x
+#   SELL and at its floor when SELL = F x BUY (vanilla's F = 2 gives the
+#   unnormalised clamp(imbalance, -1, 1); the mod's F = 4 makes it a third as steep)
+# BUY and SELL are the construction good's market_goods_buy_orders and
+# market_goods_sell_orders. The government's own share of BUY is the purchase in
+# goods (points x te_construction_market_goods_per_point).
+#
+# The model sets the size of the step, not where it lands. Each week's target is
+# still budget / the price the market actually shows, so the quantity settles
+# where spending equals the budget whatever the model gets wrong (the site's
+# local price against the market's, other buyers reacting, an engine lag); a
+# wrong N only makes the approach slower or faster.
+#
+# The floor on N, when the budget is being raised, is insurance for those same
+# blind spots: an overshoot on a raise spends past the budget. A cut has no
+# floor: an overshoot there spends less than the budget, and a saving shouldn't
+# be held back.
+
+# The engine defines the price formula uses. Script can't read defines, so they
+# are mirrored here; test_construction_market_budget_step.py fails when they
+# differ from common/defines/extra_defines.txt.
+TE_CONSTRUCTION_MARKET_PRICE_RANGE = 0.999
+TE_CONSTRUCTION_MARKET_BUY_SELL_DIFF_AT_MAX_FACTOR = 4
+
+# A raise in the budget is spread over at least this many weeks (N is never
+# below it): a half-step at most.
+TE_CONSTRUCTION_MARKET_BUDGET_MIN_RAISE_WEEKS = 2
 
 # What the weekly budget buys at this week's price.
 te_construction_market_budget_quantity_target = {
@@ -249,9 +295,165 @@ te_construction_market_budget_quantity_gap = {
 	}
 }
 
-# Next week's quantity: a quarter of the gap closed. Within a point of the
-# target it takes the target, so a budget cut to 0 reaches 0 instead of
-# approaching it forever.
+# The step. Everything below is a read of the market as the last engine update
+# left it; the chain is only read from the weekly pulse (and by the panel).
+#
+# Goods the construction sites use per construction point: the same factor
+# te_construction_market_price scales the price by (construction cost scaling,
+# at least 1).
+te_construction_market_goods_per_point = {
+	value = 1
+	add = construction_cost_scaling_mult
+	min = 1
+}
+
+# The construction good's buy and sell orders in the country's market
+# (everyone in it, maintenance included). Block form, not a this.market.mg: dot
+# chain (docs/guides/scripting_best_practices.md, "Is it signed below base
+# price?"). Sell orders are floored at 1: they are divided by.
+te_construction_market_budget_buy_orders = {
+	value = 0
+	market = {
+		mg:construction = {
+			add = market_goods_buy_orders
+		}
+	}
+}
+
+te_construction_market_budget_sell_orders = {
+	value = 0
+	market = {
+		mg:construction = {
+			add = market_goods_sell_orders
+		}
+	}
+	min = 1
+}
+
+# The government's share of the buy orders, in goods: the purchase in force
+# (the one those orders were placed for) ...
+te_construction_market_budget_goods_now = {
+	value = te_construction_market_public_use_target
+	multiply = te_construction_market_goods_per_point
+}
+
+# ... and the purchase the budget wants at today's price, as far as the queue
+# can use it (nothing while construction is paused).
+te_construction_market_budget_goods_target = {
+	value = te_construction_market_budget_quantity_target
+	max = te_construction_market_public_queue_cap
+	multiply = te_construction_market_goods_per_point
+	if = {
+		limit = {
+			is_construction_paused = yes
+		}
+		value = 0
+	}
+}
+
+# Everyone else's buy orders: the orders less the government's purchase in
+# force (never below 0). The orders with the government at either size are
+# these plus its goods.
+te_construction_market_budget_other_buy_orders = {
+	value = te_construction_market_budget_buy_orders
+	subtract = te_construction_market_budget_goods_now
+	min = 0
+}
+
+# The price relative to base with the government buying the purchase in force
+# and, below, the purchase the budget wants. imbalance is
+# (BUY - SELL) / min(BUY, SELL) / (F - 1), unclamped: -1 or below and 1 or above
+# are the price's floor and ceiling. min(BUY, SELL) is `max = SELL` on BUY, and
+# is floored at 1: it is divided by.
+te_construction_market_budget_imbalance_now = {
+	value = te_construction_market_budget_other_buy_orders
+	add = te_construction_market_budget_goods_now
+	subtract = te_construction_market_budget_sell_orders
+	divide = {
+		value = te_construction_market_budget_other_buy_orders
+		add = te_construction_market_budget_goods_now
+		max = te_construction_market_budget_sell_orders
+		min = 1
+	}
+	divide = {
+		value = TE_CONSTRUCTION_MARKET_BUY_SELL_DIFF_AT_MAX_FACTOR
+		subtract = 1
+	}
+}
+
+te_construction_market_budget_price_factor_now = {
+	value = te_construction_market_budget_imbalance_now
+	min = -1
+	max = 1
+	multiply = TE_CONSTRUCTION_MARKET_PRICE_RANGE
+	add = 1
+	min = 0.001
+}
+
+te_construction_market_budget_imbalance_target = {
+	value = te_construction_market_budget_other_buy_orders
+	add = te_construction_market_budget_goods_target
+	subtract = te_construction_market_budget_sell_orders
+	divide = {
+		value = te_construction_market_budget_other_buy_orders
+		add = te_construction_market_budget_goods_target
+		max = te_construction_market_budget_sell_orders
+		min = 1
+	}
+	divide = {
+		value = TE_CONSTRUCTION_MARKET_BUY_SELL_DIFF_AT_MAX_FACTOR
+		subtract = 1
+	}
+}
+
+te_construction_market_budget_price_factor_target = {
+	value = te_construction_market_budget_imbalance_target
+	min = -1
+	max = 1
+	multiply = TE_CONSTRUCTION_MARKET_PRICE_RANGE
+	add = 1
+	min = 0.001
+}
+
+# N, in weeks: 1 + T / (T - Q) x (price at T / price now - 1), with T and Q the
+# purchase the budget wants and the purchase in force, in goods (their ratio is
+# the same in points). 1 when the two are equal: a purchase held at the queue's
+# cap doesn't move the price. A cut can't fall below 1 (it never goes past the
+# target); a raise is never spread over fewer than
+# TE_CONSTRUCTION_MARKET_BUDGET_MIN_RAISE_WEEKS.
+te_construction_market_budget_shift_weeks = {
+	value = 1
+	if = {
+		limit = {
+			OR = {
+				te_construction_market_budget_goods_target > te_construction_market_budget_goods_now
+				te_construction_market_budget_goods_target < te_construction_market_budget_goods_now
+			}
+		}
+		value = te_construction_market_budget_price_factor_target
+		divide = te_construction_market_budget_price_factor_now
+		subtract = 1
+		multiply = {
+			value = te_construction_market_budget_goods_target
+			divide = {
+				value = te_construction_market_budget_goods_target
+				subtract = te_construction_market_budget_goods_now
+			}
+		}
+		add = 1
+		min = 1
+	}
+	if = {
+		limit = {
+			te_construction_market_budget_quantity_gap > 0
+		}
+		min = TE_CONSTRUCTION_MARKET_BUDGET_MIN_RAISE_WEEKS
+	}
+}
+
+# Next week's quantity: 1 / N of the gap closed. Within a point of the target
+# it takes the target, so a budget cut to 0 reaches 0 instead of approaching it
+# forever.
 te_construction_market_budget_quantity_next_value = {
 	value = te_construction_market_budget_quantity_target
 	if = {
@@ -263,7 +465,7 @@ te_construction_market_budget_quantity_next_value = {
 			}
 		}
 		value = te_construction_market_budget_quantity_gap
-		divide = TE_CONSTRUCTION_MARKET_BUDGET_SHIFT_WEEKS
+		divide = te_construction_market_budget_shift_weeks
 		add = var:te_construction_market_budget_quantity
 	}
 }

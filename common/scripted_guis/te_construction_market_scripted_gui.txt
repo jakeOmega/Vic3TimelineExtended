@@ -13,8 +13,9 @@
 # - Fixed Budget: the te_construction_market_{increase,decrease}_budget_*
 #   handlers nudge the weekly budget (te_construction_market_public_budget) by
 #   1,000 / 10,000 / 100,000 / 1,000,000, right-click +10,000,000 or reset; the
-#   quantity bought follows the budget over a few weeks
-#   (te_construction_market_update_budget_quantity).
+#   quantity bought follows the budget over the next weeks
+#   (te_construction_market_update_budget_quantity), while the panel says so
+#   (te_construction_market_budget_stepping_sgui).
 #
 # Every handler is shown only while the construction market runs
 # (te_free_market_construction_on): with free_market_construction_rule
@@ -329,6 +330,35 @@ te_construction_market_budget_mode_sgui = {
 	is_shown = {
 		te_free_market_construction_on = yes
 		te_construction_market_budget_mode_on = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		always = no
+	}
+
+	effect = {
+	}
+}
+
+# Read-only: Fixed Budget, and the quantity bought is still moving toward what
+# the budget buys (they differ by more than the point at which
+# te_construction_market_budget_quantity_next_value takes the target). Shows the
+# panel's "still moving" line, which says how much of the gap closes this week.
+te_construction_market_budget_stepping_sgui = {
+
+	scope = country
+
+	is_shown = {
+		te_free_market_construction_on = yes
+		te_construction_market_budget_mode_on = yes
+		OR = {
+			te_construction_market_budget_quantity_gap > 1
+			te_construction_market_budget_quantity_gap < -1
+		}
 	}
 
 	ai_is_valid = {
