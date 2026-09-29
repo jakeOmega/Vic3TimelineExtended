@@ -542,10 +542,12 @@ types cultural_hegemony_widget_types
 
 						textbox = {
 							parentanchor = top|hcenter
-							position = { 0 4 }
+							position = { 0 8 }
 							autoresize = yes
+							max_width = 108
+							elide = right
 							align = hcenter|nobaseline
-							using = fontsize_xl
+							using = fontsize_large
 							text = "je_ch_ov_rank_value"
 						}
 						textbox = {
