@@ -6,10 +6,12 @@
 # (gui/journal_entry_widgets/strategic_reserve_widget.gui): an overview of the
 # hub, its flow cap and the week's sales income; the inventory table, one row
 # per unlocked good with its fill bar, status, policy and decrease/stop/increase
-# controls; and How the Strategic Reserve Works. Positive rates store goods,
-# negative rates withdraw them. This JE keeps only the hub status line, the two
-# shared buttons (step size, reset all) and the lifecycle entry points into the
-# SR wrapper effects; persistent reserve state lives on country vars.
+# controls, the step size and reset-all buttons, and each good's fill history;
+# and How the Strategic Reserve Works. Positive rates store goods, negative
+# rates withdraw them. This JE keeps the no-hub status line, the two shared
+# scripted buttons (now the AI's only; the panel's buttons are the player's),
+# the weekly pulse, the monthly history sample and the lifecycle entry points
+# into the SR wrapper effects; persistent reserve state lives on country vars.
 # ============================================================================
 
 je_strategic_reserve = {
@@ -43,9 +45,8 @@ je_strategic_reserve = {
 	}
 
 	# The panel, in three parts (gui/journal_entry_widgets/strategic_reserve_widget.gui):
-	# the overview above the status text, the inventory table between the
-	# status text and the two shared buttons below, and How the Strategic
-	# Reserve Works under the buttons.
+	# the overview at the top, the inventory table (with the step size and
+	# reset-all buttons), and How the Strategic Reserve Works at the foot.
 	widget = {
 		gui = "gui/journal_entry_widgets/strategic_reserve_widget.gui"
 		name = "widget_je_strategic_reserve_overview"
@@ -62,35 +63,27 @@ je_strategic_reserve = {
 		container = "custom_widget_container_3"
 	}
 
-	# Per-good fill bars and the fourteen per-good rate buttons now live inside
-	# the inventory widget above. Only the two shared, reserve-wide actions stay
-	# as vanilla-rendered journal-entry buttons.
+	# The two reserve-wide actions. The panel draws them as its own buttons
+	# beside the adjustment step (st_res_cycle_step_sgui, st_res_reset_rates_sgui,
+	# the same effects), so these carry `is_ai = yes` in their `visible` and the
+	# vanilla grid is empty for a player. They stay declared because an entry
+	# binds its scripted buttons when it activates.
 	scripted_button = st_res_cycle_step_size_button
 	scripted_button = st_res_reset_rates_button
 
-	# The hub's status only. The per-good detail is in the inventory table, and
-	# the week's sales income and the hub flow cap are in the panel's overview
-	# (they were two more lines here until the style-guide pass); status_desc
-	# also renders in the journal list, where a short line reads best.
+	# Only the no-hub line. The entry is shown from Logistics
+	# (is_shown_when_inactive), before a hub exists, when the panel draws
+	# nothing, so this line is what says to build one. While the entry runs, the overview's hub
+	# cell says whether the hub is operating or understaffed, so the status
+	# text is empty then (owner, 2026-09-29: status text that repeats the
+	# overview is removed).
 	status_desc = {
-		first_valid = {
-			triggered_desc = {
-				desc = je_strategic_reserve_status_no_hub
-				trigger = {
-					NOT = {
-						any_scope_building = { is_building_type = building_strategic_reserve_hub }
-					}
+		triggered_desc = {
+			desc = je_strategic_reserve_status_no_hub
+			trigger = {
+				NOT = {
+					any_scope_building = { is_building_type = building_strategic_reserve_hub }
 				}
-			}
-			triggered_desc = {
-				desc = je_strategic_reserve_status_deactivated
-				trigger = {
-					var:st_res_hub_workforce_cached <= 0.99
-				}
-			}
-			triggered_desc = {
-				desc = je_strategic_reserve_status_active
-				trigger = { always = yes }
 			}
 		}
 	}
@@ -99,6 +92,15 @@ je_strategic_reserve = {
 	on_weekly_pulse = {
 		effect = {
 			st_res_je_weekly_pulse_effect = yes
+		}
+	}
+
+	# Each unlocked good's fill, once a month, for the history chart in its
+	# expanded row. Display only: the shared history store
+	# (common/scripted_effects/te_history_strategic_reserve_effects.txt).
+	on_monthly_pulse = {
+		effect = {
+			te_history_record_strategic_reserve_samples = yes
 		}
 	}
 
