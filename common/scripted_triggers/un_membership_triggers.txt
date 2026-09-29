@@ -12,6 +12,23 @@
 # (un_representation_monthly_update, un_membership_effects.txt).
 # ============================================================================
 
+# What a country needs, besides the game rule, before je_united_nations
+# activates: the entry's `possible`, and with the rule its
+# is_shown_when_inactive. Either the country has the founding technology or
+# the UN already exists. Also the checklist in the Diplomacy panel's greyed UN
+# tab (te_diplomacy_un_tab_unlock_sgui's is_valid), which is why the global
+# test carries its own tooltip line.
+# Scope: country
+un_entry_unlocked = {
+	OR = {
+		has_technology_researched = intergovernmental_organizations
+		custom_tooltip = {
+			text = un_unlock_founded_tt
+			has_global_variable = un_founded
+		}
+	}
+}
+
 # The scoped country conducts its own foreign policy, so it may join and, as a
 # member, is represented: not decentralized, and independent or a dominion,
 # protectorate or tributary. Those are the vanilla subject types that may start

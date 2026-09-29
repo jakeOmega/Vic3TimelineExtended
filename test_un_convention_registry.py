@@ -283,7 +283,7 @@ def _widget_rows():
     """[(set of ops, row body)] for each Table a Resolution row of the widget."""
     widget = _read(WIDGET)
     rows = []
-    for m in re.finditer(r"^\t\tun_chamber_propose_row\s*=\s*\{", widget, re.M):
+    for m in re.finditer(r"^\t+un_chamber_propose_row\s*=\s*\{", widget, re.M):
         body = _body_at(widget, m.end() - 1)
         ops = {int(op) for op in re.findall(r"MakeScopeValue\(\s*'\(CFixedPoint\)(\d+)'\s*\)", body)}
         rows.append((ops, body))

@@ -101,7 +101,7 @@ class ChamberProposeOpTableTest(unittest.TestCase):
 
         widget = _read(WIDGET)
         cls.widget_rows = []
-        for m in re.finditer(r"^\t\tun_chamber_propose_row\s*=\s*\{", widget, re.M):
+        for m in re.finditer(r"^\t+un_chamber_propose_row\s*=\s*\{", widget, re.M):
             body = _sub_block(widget[m.start():], "un_chamber_propose_row")
             cls.widget_rows.append([int(op) for op in _WIDGET_OP.findall(body)])
 

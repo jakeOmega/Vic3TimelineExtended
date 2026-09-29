@@ -1583,7 +1583,7 @@ Data error in loc string 'te_hist_tt_markers'
     The type list and a test plan are in `docs/systems/system_panels_feasibility.md` § 7.3–7.4 and § 8.
 
 31. **A vanilla panel takes a tab name it does not define.** `gui/budget_panel.gui` adds a fourth Budget tab with `InformationPanel.SelectTab('te_banking')` and gates its content on `IsTabSelected('te_banking')`; it selects and stays selected (confirmed in game 2026-09-28).
-    - **Slots.** Vanilla's `tab_buttons` type (`shared/tab_bars.gui`) has five, and slots four and five are `visible = no` until a `*_button_visibility` / `*_button_visibility_checked` blockoverride says otherwise. Both halves of a slot need the tab test *and* any gate of your own.
+    - **Slots.** Vanilla's `tab_buttons` type (`shared/tab_bars.gui`) has five, and slots four and five are `visible = no` until a `*_button_visibility` / `*_button_visibility_checked` blockoverride says otherwise. Both halves of a slot need the tab test *and* any gate of your own. For a panel whose five are full (Diplomacy), `gui/te_system_tab_widgets.gui` has `te_tab_buttons_six`: vanilla's type copied with a `sixth_button*` slot, which has no hotkey because the input profile defines `tab_1` to `tab_5` only.
     - **The sidebar cycle skips it.** The sidebar opens Budget with `OpenPanelCycleTabs('budget', 'default|states|assets')` (`information_panel_bar.gui`), so pressing Budget never lands on the new tab, and pressing it on Assets closes the panel as in vanilla. Adding the tab to the cycle means replacing that file.
     - **Greying a tab.** `tab_button` is a plain `button` that carries `using = disabled_stripes`, so an `enabled = "[…]"` placed in the `*_button_click` blockoverride greys it; its tooltip still shows. The Banking tab does this until the entry activates. Not yet seen in game.
 
@@ -1677,7 +1677,7 @@ my_dangerous_sgui = {
 
 ## This Mod's GUI Files
 
-Currently 26 GUI files at the top of `gui/`: 22 full-file replacements of vanilla panels plus 4 additive files (marked below):
+Currently 27 GUI files at the top of `gui/`: 23 full-file replacements of vanilla panels plus 4 additive files (marked below):
 
 | File | Vanilla Panel | Purpose of Override |
 |---|---|---|
@@ -1686,6 +1686,7 @@ Currently 26 GUI files at the top of `gui/`: 22 full-file replacements of vanill
 | `building_details_panel.gui` | Building details | Enhanced building info |
 | `construction_panel.gui` | Construction queue | Construction-market section: government purchase stepper, live read-out, collapsible explainer |
 | `culture_panel.gui` | Society | A fifth tab, Hegemony: the cultural hegemony journal entry's panel types under `GetPlayerJournalEntry('je_cultural_hegemony')`. CMF redefines this file's `society_panel` type (`system_panels_feasibility.md` § 7.4) |
+| `diplomatic_overview.gui` | Diplomacy | A sixth tab, UN: the strip becomes `te_tab_buttons_six` (vanilla's five slots are full), and the tab shows the United Nations journal entry's panel types plus its bar, status description and scripted buttons under `GetPlayerJournalEntry('je_united_nations')` |
 | `goods_state_panel.gui` | Goods by state | Modified goods display |
 | `journal_entry.gui` | Journal entry panel | Hides the bottom bar block for an entry that draws its own bars (`custom_widget_container_7` marker) |
 | `market_panel.gui` | Market panel | Widened panel; Top Trade Partners table and import/export partner charts |
@@ -1718,7 +1719,8 @@ Journal-entry widgets are **additive**, not overrides: a `.gui` under `gui/journ
 | `strategic_reserve_widget.gui` | `je_strategic_reserve` | per-good reserve readouts |
 | `banking_dashboard_widget.gui` | `je_banking_cycle` | conditions readout + policy dashboard; both panels are types, also instanced by the Budget panel's Banking tab |
 | `banking_history_widget.gui` | `je_banking_cycle` | the banking history charts; a type, also instanced by the Budget panel's Banking tab |
-| `un_chamber_widget.gui` | `je_united_nations` | General Assembly chamber: standing, open resolutions, vote and propose controls |
+| `un_chamber_widget.gui` | `je_united_nations` | General Assembly chamber: standing, open resolutions, vote and propose controls; a type, also instanced by the Diplomacy panel's UN tab |
+| `un_authority_widget.gui` | `je_united_nations` | why UN authority is moving: target, pillars, our weight, the ledger, the history chart; a type, also instanced by the Diplomacy panel's UN tab |
 | `cultural_hegemony_widget.gui` | `je_cultural_hegemony` | summary, programme funding + four programme rows, and the standing section (pull breakdown, top-10 leaderboard built in script, share history chart); the three panels are types, also instanced by the Society panel's Hegemony tab |
 | `space_race_widget.gui` | the nine `je_space_race_*` | one shared milestone panel instanced by nine named widgets: pace, setback risk, approach selector, funding stepper, rivals list, programme overview |
 | `colonial_empire_widget.gui` | `je_colonial_empire` | colonial stability: the bar's own per-term breakdown, nine drift groups, great-power pressure roster, three programme rows, three decolonization decisions, two history charts |

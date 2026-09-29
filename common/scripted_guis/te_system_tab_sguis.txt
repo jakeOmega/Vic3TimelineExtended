@@ -65,3 +65,27 @@ te_society_ch_tab_unlock_sgui = {
 	is_valid = { ch_entry_unlocked = yes }
 	effect = { }
 }
+
+# ---------------------------------------------------------------------------
+# United Nations: Diplomacy panel (gui/diplomatic_overview.gui),
+# je_united_nations. A non-member runs the entry too (it is where it joins), so
+# the tab opens for every country the entry is active for.
+# ---------------------------------------------------------------------------
+te_diplomacy_un_tab_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = united_nations_enabled
+		has_journal_entry = je_united_nations
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_diplomacy_un_tab_unlock_sgui = {
+	scope = country
+	is_shown = { has_game_rule = united_nations_enabled }
+	ai_is_valid = { always = no }
+	is_valid = { un_entry_unlocked = yes }
+	effect = { }
+}

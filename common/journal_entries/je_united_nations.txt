@@ -26,17 +26,11 @@
 
 	is_shown_when_inactive = {
 		has_game_rule = united_nations_enabled
-		OR = {
-			has_technology_researched = intergovernmental_organizations
-			has_global_variable = un_founded
-		}
+		un_entry_unlocked = yes
 	}
 
 	possible = {
-		OR = {
-			has_technology_researched = intergovernmental_organizations
-			has_global_variable = un_founded
-		}
+		un_entry_unlocked = yes
 	}
 
 	scripted_progress_bar = un_authority_bar
