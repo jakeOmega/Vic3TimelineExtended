@@ -149,7 +149,7 @@ Squash-merging the parent leaves the child's branch unable to see that it alread
 
 ### Play-testing unmerged work
 
-Build one integration branch from the stack tips, check it out in the **full** main checkout (`scripts/deploy.sh` rsyncs with `--delete` and includes `gfx/`, so deploying from a sparse worktree would delete the textures), `POST /reload`, then `./scripts/deploy.sh --apply`. Make sure the launcher playset does not also enable a Steam Workshop copy of this mod: a later-loaded copy overrides same-path files and produces a half-old, half-new game. Vic3's console has **no `effect` command** (that is CK3) — run test script with `event <id>` (see `events/te_debug_un_events.txt`).
+Build one integration branch from the stack tips, check it out in the **full** main checkout (`scripts/deploy.sh` rsyncs with `--delete` and includes `gfx/`, so deploying from a sparse worktree would delete the textures), `POST /reload`, then `./scripts/deploy.sh --apply`. Before `--apply`, confirm the branch contains `origin/main` (`git merge-base --is-ancestor origin/main <branch>`; merge it in if not) and read the dry run on its own: a `deleting` line means the deploy would roll back newer `main` content or someone else's deployed branch (2026-09-28: a stale PR branch deleted #570's art from the game folder). Make sure the launcher playset does not also enable a Steam Workshop copy of this mod: a later-loaded copy overrides same-path files and produces a half-old, half-new game. Vic3's console has **no `effect` command** (that is CK3) — run test script with `event <id>` (see `events/te_debug_un_events.txt`).
 
 ### Orchestrated multi-branch waves
 
