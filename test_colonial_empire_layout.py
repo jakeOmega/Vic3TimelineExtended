@@ -23,7 +23,7 @@ ROOTS = {   # root name -> (what it instances, the journal container it is attac
     "widget_je_colonial_empire_reference": ("te_ce_reference_sections", "custom_widget_container_3"),
 }
 OLD_ROOTS = ["widget_je_colonial_empire", "widget_je_colonial_empire_history"]
-OLD_FLAGS = ["colonial_empire_history_open"]
+OLD_FLAGS = ["colonial_empire_history_open", "colonial_empire_pressure_open"]
 PROGRAMMES = ("invest", "garrison", "assimilation")
 
 # The explanations "How the Colonial Empire Works" holds, and the live
@@ -31,7 +31,8 @@ PROGRAMMES = ("invest", "garrison", "assimilation")
 HOW_KEYS = ["je_colonial_empire_how_bar_1", "je_colonial_empire_how_bar_2", "je_colonial_empire_how_bar_3",
             "je_colonial_empire_how_moves", "je_colonial_empire_how_pressure",
             "je_colonial_empire_how_programmes", "je_colonial_empire_how_decolonization"]
-RETIRED_KEYS = ["je_colonial_empire_bar_headline", "je_colonial_empire_band_headline",
+RETIRED_KEYS = ["je_colonial_empire_status_summary", "je_colonial_empire_ov_pie_label",
+                "je_colonial_empire_bar_headline", "je_colonial_empire_band_headline",
                 "je_colonial_empire_conditions_body", "je_colonial_empire_phase_row",
                 "je_colonial_empire_candidates_row"]
 # The nine drift groups, the monthly limit and the total, and where each reads.
@@ -197,20 +198,18 @@ class FlagTest(unittest.TestCase):
 
     def test_live_sections_open_and_explanations_collapsed(self):
         for sec, flag in (("te_ce_sec_stability", "colonial_empire_stability_closed"),
+                          ("te_ce_sec_pressure", "colonial_empire_pressure_closed"),
                           ("te_ce_sec_programmes", "colonial_empire_programmes_closed"),
                           ("te_ce_sec_decisions", "colonial_empire_decisions_closed"),
                           ("te_ce_sec_history", "colonial_empire_history_closed"),
                           ("te_ce_sec_how", "colonial_empire_how_open")):
             self.assertIn(f"GetVariableSystem.Toggle('{flag}')", _type_body(self.text, sec), sec)
 
-    def test_international_pressure_says_why_it_is_collapsed(self):
-        """The one exception to rule 1: its roster walks every country per frame."""
-        self.assertIn("GetVariableSystem.Toggle('colonial_empire_pressure_open')",
-                      _type_body(self.text, "te_ce_sec_pressure"))
-        m = re.search(r"((?:\t### .*\n)+)\ttype te_ce_sec_pressure = ", self.text)
-        self.assertTrue(m)
-        self.assertIn("AGAINST style rule 1", m.group(1))
-        self.assertIn("every_country", m.group(1))
+    def test_no_section_is_an_exception(self):
+        """Live lists stay open (owner, play-test round 2): International
+        Pressure's old collapsed-for-cost exception is gone."""
+        self.assertNotIn("AGAINST style rule 1", self.text)
+        self.assertNotIn("except International Pressure", self.text)
 
     def test_no_old_flag_survives(self):
         for f in OLD_FLAGS:
@@ -258,7 +257,23 @@ class OverviewTest(unittest.TestCase):
             self.assertIn(f"generic_icons/{arrow}.dds", item)
 
     def test_pressure_pie_and_alerts(self):
+        pie = _type_body(_read(GUI), "te_ce_ov_pie")
+        # Largest first: the supporters' layer (the sum) under the condemners'.
+        self.assertLess(pie.index('block "pie_value_cum"'), pie.index('block "pie_value"'))
+        self.assertLess(pie.index("ch_pie_developmentalist_junta.dds"), pie.index("ch_pie_communist.dds"))
+        self.assertIn("ScriptValue('colonial_empire_disp_pressure_cum')", self.body)
         self.assertIn("ScriptValue('colonial_empire_disp_condemner_share')", self.body)
+        for key in ("je_colonial_empire_ov_legend_condemn", "je_colonial_empire_ov_legend_support",
+                    "je_colonial_empire_ov_legend_note"):
+            self.assertIn(f'text = "{key}"', self.body, key)
+        loc = _loc()
+        self.assertIn("colonial_empire_disp_supporter_share", loc["je_colonial_empire_ov_legend_support"])
+        # The label and the hovers say the escalations count only the condemners.
+        self.assertIn("only the condemning share", loc["je_colonial_empire_ov_legend_note"])
+        self.assertIn("only the condemning share", loc["je_colonial_empire_pressure_support_share_note"])
+        self.assertIn("does not offset", loc["je_colonial_empire_pressure_share_note"])
+        self.assertIn("je_colonial_empire_pressure_support_share_tt",
+                      _read(os.path.join(REPO, "common", "scripted_guis", "colonial_empire_sguis.txt")))
         self.assertIn("GetScriptedGui('colonial_empire_pressure_sgui').ExecuteTooltip", self.body)
         codes = {int(n) for n in re.findall(
             r"ScriptValue\('colonial_empire_disp_pressure_level'\), '\(CFixedPoint\)(\d+)'", self.body)}
@@ -269,11 +284,11 @@ class DisplayScriptTest(unittest.TestCase):
     def test_display_values_guard_every_variable(self):
         values = _read(VALUES)
         names = re.findall(r"(?m)^(colonial_empire_disp_\w+) = \{", values)
-        self.assertEqual(len(names), 5)
-        gui = _read(GUI)
+        self.assertEqual(len(names), 12)
+        panel = _read(GUI) + "\n".join(v for k, v in _loc().items() if k.startswith("je_colonial_empire_"))
         for name in names:
             with self.subTest(value=name):
-                self.assertIn(f"ScriptValue('{name}')", gui, f"{name} is not read by the panel")
+                self.assertIn(f"ScriptValue('{name}')", panel, f"{name} is not read by the panel or its loc")
                 body = _block(values, name)
                 for var in re.findall(r"var:(\w+)", body):
                     self.assertIn(f"has_variable = {var}", body, f"{name} reads var:{var} unguarded")
@@ -408,7 +423,7 @@ class PlaceholderIconsTest(unittest.TestCase):
         for t in ("te_ce_ov_pie", "te_ce_ov_icon_label", "te_ce_ov_programme"):
             textures |= set(re.findall(r'texture = "([^"]+)"', _type_body(gui, t)))
         placeholders = textures - NOT_PLACEHOLDERS
-        self.assertEqual(len(placeholders), 12)   # 5 bands, 2 alerts, 3 programmes, 2 pie layers
+        self.assertEqual(len(placeholders), 13)   # 5 bands, 2 alerts, 3 programmes, 3 pie layers
         doc = _read(ICONS_DOC)
         for t in sorted(placeholders):
             self.assertIn(f"`{t}`", doc, t)
@@ -503,6 +518,80 @@ def _block_in(text, name):
     assert m, f"no {name}"
     a, b = _span(text, m.end() - 1)
     return text[a + 1:b]
+
+
+DECISIONS = os.path.join(REPO, "common", "decisions", "extra_decisions.txt")
+
+
+class CompletionClocksTest(unittest.TestCase):
+    """Play-test round 2 (owner, 2026-09-29): in the top band the overview shows
+    months held at 100 and, for a great power, months Solidified, each a bar
+    whose end is its target. The targets are script values the triggers share."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.values = _read(VALUES)
+        cls.body = _type_body(_read(GUI), "te_ce_overview_panel")
+
+    def test_the_targets_are_shared_and_unchanged(self):
+        self.assertRegex(self.values, r"(?m)^colonial_empire_completion_months = 60$")
+        self.assertRegex(self.values, r"(?m)^colonial_empire_federation_months = 36$")
+        complete = _block_in(_read(JE), "complete")
+        self.assertIn("var:colonial_at_100_months >= colonial_empire_completion_months", complete)
+        self.assertNotRegex(complete, r">= 60\b")
+        decisions = _read(DECISIONS)
+        for d in ("imperial_federation_act_iron_fist", "imperial_federation_act_civilizing_mission"):
+            with self.subTest(decision=d):
+                body = _block(decisions, d)
+                self.assertIn("var:colonial_solidified_months >= colonial_empire_federation_months", body)
+                self.assertNotRegex(body, r"colonial_solidified_months >= 36")
+        tt = _loc()["je_colonial_empire_complete_tt"]
+        for sv in ("colonial_empire_completion_months", "colonial_empire_federation_months"):
+            self.assertIn(f"ScriptValue('{sv}')", tt, sv)
+        self.assertNotIn(".Var(", tt, "the completion tooltip reads the guarded counts")
+
+    def test_the_clocks_show_in_the_top_band_only(self):
+        m = re.search(r"### Row 4, in the top band only", self.body)
+        self.assertTrue(m)
+        a, b = _span(self.body, m.end())
+        block = self.body[a:b]
+        self.assertIn(
+            "visible = \"[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), "
+            "'(CFixedPoint)5' )]\"", self.body[m.end():a + 400])
+        for frac in ("colonial_empire_disp_at_100_frac", "colonial_empire_disp_solidified_frac"):
+            self.assertIn(f"ScriptValue('{frac}')", block, frac)
+        self.assertIn("ScriptValue('colonial_empire_disp_act_in_reach'), '(CFixedPoint)1'", block)
+        loc = _loc()
+        self.assertTrue(loc["je_colonial_empire_ov_hold"].startswith("Months at 100: "))
+        self.assertIn("ScriptValue('colonial_empire_completion_months')", loc["je_colonial_empire_ov_hold"])
+        self.assertIn("ScriptValue('colonial_empire_federation_months')", loc["je_colonial_empire_ov_act"])
+
+    def test_the_overview_is_pinned_to_the_column(self):
+        """A frame sized by its content is centred by its first layout; the
+        clocks and the alert appear later (play-test round 2)."""
+        m = re.search(r"colonial_empire_panel = \{\s*(?:###.*\n\s*)*flowcontainer = \{\s*direction = vertical\s*"
+                      r"spacing = 10\s*ignoreinvisible = yes\s*minimumsize = \{ 480 -1 \}\s*maximumsize = \{ 480 -1 \}",
+                      self.body)
+        self.assertTrue(m, "the overview's rows are not in a fixed 480 column")
+
+
+class StatusLineTest(unittest.TestCase):
+    """Status text that repeats the overview goes (owner, play-test round 2): an
+    active entry has no status line; an inactive one says why it is not running."""
+
+    def test_only_an_inactive_entry_has_a_status_line(self):
+        status = _block_in(_read(JE), "status_desc")
+        descs = re.findall(r"desc = (\w+)\s*trigger = \{(.*?)\n\t\t\t\t\}", status, re.S)
+        self.assertEqual([d for d, _ in descs], ["je_colonial_empire_status_completed",
+                                                 "je_colonial_empire_status_cooldown",
+                                                 "je_colonial_empire_status_no_colonies"])
+        for desc, trigger in descs:
+            with self.subTest(desc=desc):
+                self.assertIn("NOT = { has_journal_entry = je_colonial_empire }", trigger)
+        self.assertIn("first_valid = {", status)
+        loc = _loc()
+        for desc, _ in descs:
+            self.assertTrue(loc.get(desc), desc)
 
 
 class LocHygieneTest(unittest.TestCase):

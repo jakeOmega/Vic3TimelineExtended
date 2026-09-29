@@ -187,6 +187,23 @@ colonial_gp_condemner_prestige_share = {
 	divide = colonial_gp_prestige_pool
 }
 
+# The supporting great powers' share of the same pool (0-1). Display only: the
+# overview's pie shows it beside the condemners' share, but neither escalation
+# reads it; support acts through the per-power colonial_stability_term_gp_support.
+# Snapshotted into colonial_empire_supporter_share for the widget.
+colonial_gp_supporter_prestige_share = {
+	value = 0
+	every_country = {
+		limit = {
+			NOT = { this = prev }
+			country_rank >= rank_value:great_power
+			has_variable = gp_pro_colonial_stance
+		}
+		add = prestige
+	}
+	divide = colonial_gp_prestige_pool
+}
+
 # Bureaucracy cost of colonial maintenance - scaled by number of colonial states
 colonial_maintenance_bureaucracy_cost = {
 	value = colonial_state_count
@@ -792,6 +809,24 @@ colonial_assimilate_months_value = {
 }
 
 # ============================================================================
+# COMPLETION CLOCKS
+#
+# How long the two winning holds must last. je_colonial_empire's `complete`
+# reads the first; the Imperial Federation Act and the Civilizing Mission
+# Compact (common/decisions/extra_decisions.txt) read the second; the
+# overview and the entry's completion tooltip print both. The numbers live
+# here only.
+# ============================================================================
+
+# Consecutive months the bar must hold at 100 (var:colonial_at_100_months,
+# which the monthly pulse resets below 100).
+colonial_empire_completion_months = 60
+
+# Consecutive months in the Solidified band (var:colonial_solidified_months,
+# reset below 90) the two Imperial Federation Act decisions need.
+colonial_empire_federation_months = 36
+
+# ============================================================================
 # OVERVIEW DISPLAY VALUES
 #
 # Read every frame by the overview at the top of the panel (te_ce_overview_panel
@@ -853,5 +888,71 @@ colonial_empire_disp_pressure_level = {
 	if = {
 		limit = { has_variable = colonial_empire_pressure_level }
 		value = var:colonial_empire_pressure_level
+	}
+}
+
+# The supporting great powers' share of great-power prestige (0-1): the pie's
+# second slice. Display only; the escalations count the condemners alone.
+colonial_empire_disp_supporter_share = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_empire_supporter_share }
+		value = var:colonial_empire_supporter_share
+	}
+	min = 0
+	max = 1
+}
+
+# The two slices stacked: the lower (supporters') layer fills to the sum, and
+# the condemners' layer on top fills to its own share, so the supporters show
+# between the two (gui_modding_guide.md, "Pie charts of script-held data").
+colonial_empire_disp_pressure_cum = {
+	value = colonial_empire_disp_condemner_share
+	add = colonial_empire_disp_supporter_share
+	min = 0
+	max = 1
+}
+
+# The completion clocks, shown in the top band: months held at 100, and months
+# in the Solidified band for the Imperial Federation Act; each as a count and
+# as a 0-1 fraction of its target (the bar's end).
+colonial_empire_disp_at_100_months = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_at_100_months }
+		value = var:colonial_at_100_months
+	}
+}
+
+colonial_empire_disp_at_100_frac = {
+	value = colonial_empire_disp_at_100_months
+	divide = colonial_empire_completion_months
+	min = 0
+	max = 1
+}
+
+colonial_empire_disp_solidified_months = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_solidified_months }
+		value = var:colonial_solidified_months
+	}
+}
+
+colonial_empire_disp_solidified_frac = {
+	value = colonial_empire_disp_solidified_months
+	divide = colonial_empire_federation_months
+	min = 0
+	max = 1
+}
+
+# 1 while the Imperial Federation Act's clock is worth showing: we are a great
+# power, which both decisions need and a player cannot change quickly. The
+# clock's tooltip lists their other requirements.
+colonial_empire_disp_act_in_reach = {
+	value = 0
+	if = {
+		limit = { country_rank >= rank_value:great_power }
+		value = 1
 	}
 }

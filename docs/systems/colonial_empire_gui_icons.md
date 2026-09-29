@@ -1,6 +1,6 @@
 # Colonial Empire GUI: Icons
 
-The Colonial Empire overview (`te_ce_overview_panel` in `gui/journal_entry_widgets/colonial_empire_widget.gui`) draws ten icons and a pie. All of them are **placeholders**: vanilla textures, or textures of other systems, that another `.gui` of this mod already uses, so the layout could be judged in game before the art exists (style rule 10, `docs/guides/gui_style_guide.md`). This page lists each one for the icon pipeline. `docs/systems/un_gui_icons.md` records how the UN's set went from placeholders to finished art.
+The Colonial Empire overview (`te_ce_overview_panel` in `gui/journal_entry_widgets/colonial_empire_widget.gui`) draws ten icons and a two-slice pie with its legend. All of them are **placeholders**: vanilla textures, or textures of other systems, that another `.gui` of this mod already uses, so the layout could be judged in game before the art exists (style rule 10, `docs/guides/gui_style_guide.md`). This page lists each one for the icon pipeline. `docs/systems/un_gui_icons.md` records how the UN's set went from placeholders to finished art.
 
 **Where each is set.** Every icon is a literal `texture = "…"` line in `te_ce_overview_panel`, chosen by a display value's code (`colonial_empire_disp_tier`, `colonial_empire_disp_pressure_level`) or by a programme's scope-free handler (`colonial_empire_active_*_sgui`). No script reads the paths. Swapping one in is one path change; when the art lands, add a test that holds each code to its file, as `UnIconsTest` does for the UN.
 
@@ -37,11 +37,12 @@ A row of three, 36 px, at full colour while the programme runs and 25% opacity w
 | Military Garrison | `gfx/interface/icons/generic_icons/battalions.dds` | a colonial fort's gate with a sentry and a flag | `…/programme_garrison.dds` |
 | Cultural Assimilation Programme | `gfx/interface/population/pop_culture.dds` | a schoolhouse with an open primer on its steps | `…/programme_assimilation.dds` |
 
-## Overview: the condemners' pie
+## Overview: the great-power pie
 
-The condemning great powers' share of great-power prestige (`colonial_empire_disp_condemner_share`), a stacked `progresspie` in vanilla's `round_frame_dec.dds`. The textures are frame 1 transparent, frame 2 the colour (`gui_modding_guide.md`, "Pie charts of script-held data"); `scripts/image_pipeline/gen_ch_model_pie_textures.py` writes both kinds.
+Great-power prestige (ours included) as a stacked `progresspie` in vanilla's `round_frame_dec.dds`: the condemning powers' share (`colonial_empire_disp_condemner_share`) and, in its own colour, the supporting powers' share (the supporters' layer fills to `colonial_empire_disp_pressure_cum`, the sum, under the condemners'). The legend beside it uses the same two textures as swatches. The textures are frame 1 transparent, frame 2 the colour (`gui_modding_guide.md`, "Pie charts of script-held data"); `scripts/image_pipeline/gen_ch_model_pie_textures.py` writes both kinds.
 
 | Layer | Placeholder now | Final | Proposed path |
 |---|---|---|---|
-| The condemners' share (the fill) | `gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds` (Cultural Hegemony's red, `#c44039`) | a red of its own, generated beside the UN's pair | `…/pie_condemners.dds` |
-| The rest (the disc under it) | `gfx/interface/icons/un_icons/pie_rest.dds` (the UN's muted grey) | can stay the UN's disc, or a copy of it | `…/pie_rest.dds` |
+| The condemners' share (the top fill, and its swatch) | `gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds` (Cultural Hegemony's red, `#c44039`) | a red of its own, generated beside the UN's pair | `…/pie_condemners.dds` |
+| The supporters' share (the lower fill, and its swatch) | `gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds` (Cultural Hegemony's green, `#4ea253`) | a green of its own | `…/pie_supporters.dds` |
+| The rest (the disc under both) | `gfx/interface/icons/un_icons/pie_rest.dds` (the UN's muted grey) | can stay the UN's disc, or a copy of it | `…/pie_rest.dds` |

@@ -94,24 +94,41 @@
 
 	progressbar = no
 
-	# One summary line. The five tier phrases, the five great-power-pressure
-	# phrases and the seven-slot condemner roster that used to live here (18
-	# triggered_desc in total) are now the widget's overview (the band and its
-	# tooltip) and "International Pressure" section, where they can be read next
-	# to the numbers that drive them. The tier phrase comes from customizable
-	# localization keyed on var:colonial_empire_tier, so the thresholds stay in
-	# the one ladder in colonial_empire_refresh_display.
+	# The status line says only what the panel's overview cannot. The five tier
+	# phrases, the five great-power-pressure phrases and the seven-slot
+	# condemner roster that used to live here (18 triggered_desc in total) are
+	# the widget's overview (the band and its tooltip, which carries the status
+	# sentence) and "International Pressure" section. So an ACTIVE entry has no
+	# status line (no triggered_desc below is valid; the owner's rule, play-test
+	# round 2: status text that repeats the overview goes). The entry is shown
+	# while inactive (`is_shown_when_inactive`), where the widgets are hidden,
+	# and there the line says why it is not running: the three ways `possible`
+	# fails.
 	#
-	# Kept as an untriggered `triggered_desc` rather than the bare
-	# `status_desc = <key>` form: the journal-entry script docs note "value can be
-	# a localization key or first_valid + triggered_desc script" for
-	# `progress_desc` but NOT for `status_desc`, and no vanilla journal entry uses
-	# the bare form for `status_desc` (0 hits across common/journal_entries/). A
-	# wrong form here would fail silently as an empty status line.
+	# `first_valid` + `triggered_desc`, the form the journal-entry script docs
+	# name and this mod's other entries use (je_banking.txt, je_civil_rights.txt).
 	status_desc = {
-		triggered_desc = {
-			desc = je_colonial_empire_status_summary
-			trigger = { always = yes }
+		first_valid = {
+			triggered_desc = {
+				desc = je_colonial_empire_status_completed
+				trigger = {
+					NOT = { has_journal_entry = je_colonial_empire }
+					has_variable = colonial_empire_completed
+				}
+			}
+			triggered_desc = {
+				desc = je_colonial_empire_status_cooldown
+				trigger = {
+					NOT = { has_journal_entry = je_colonial_empire }
+					has_variable = colonial_empire_collapsed_recently
+				}
+			}
+			triggered_desc = {
+				desc = je_colonial_empire_status_no_colonies
+				trigger = {
+					NOT = { has_journal_entry = je_colonial_empire }
+				}
+			}
 		}
 	}
 
@@ -119,13 +136,15 @@
 		custom_tooltip = {
 			text = je_colonial_empire_complete_tt
 			OR = {
-				# Basic completion: 60 months (5 years) sustained at the cap.
-				# Reaching 100 is not enough on its own — the bar must hold.
-				# Longer than the IF Act's 36-mo ≥90 gate so the decision path
-				# stays meaningfully faster for countries that qualify.
+				# Basic completion: colonial_empire_completion_months (60, five
+				# years) sustained at the cap. Reaching 100 is not enough on its
+				# own — the bar must hold. Longer than the IF Act's
+				# colonial_empire_federation_months (36) at ≥90 so the decision
+				# path stays meaningfully faster for countries that qualify. Both
+				# live in colonial_empire_values.txt, which the overview reads too.
 				root = {
 					has_variable = colonial_at_100_months
-					var:colonial_at_100_months >= 60
+					var:colonial_at_100_months >= colonial_empire_completion_months
 				}
 				# IF Act capstone — set by the Imperial Federation Act decision
 				root = {
