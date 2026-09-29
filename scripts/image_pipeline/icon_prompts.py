@@ -846,8 +846,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "je_space_race_probe": {"subject": "a deep-space probe with a large gold parabolic dish, a long boom carrying a small instrument box, and a grey cylindrical power unit", "seed": 1},
         "je_space_race_moon_base": {"subject": "a low moon habitat of two silver-grey rounded domes joined by a short tube, small square lit windows along its side, on a mound of grey moon dust", "seed": 2},
         "je_space_race_mars_landing": {"subject": "a dark grey cone-shaped crew capsule standing on three legs, its hatch open with a small ladder, on a mound of rust-red rocky ground", "seed": 2},
-        "je_space_race_interstellar_probe": {"subject": "a long slim silver needle-shaped spacecraft with a wide round gold shield disc at its rear and a bright blue engine flame", "seed": 0},
-        "je_space_race_interstellar_results": {"subject": "three large grey radio-telescope dishes in a row, tilted up toward the sky on steel frames", "seed": 0},
+        "je_space_race_interstellar_probe": {"subject": "a long slim silver needle-shaped spacecraft with a wide round gold shield disc at its rear and a bright blue engine flame", "seed": 1},
+        "je_space_race_interstellar_results": {"subject": "three large grey radio-telescope dishes in a row, tilted up toward the sky on steel frames", "seed": 1},
         "je_space_race_solar_colonization": {"subject": "a large banded tan-and-brown ringed gas giant planet beside a small rust-red planet and a small blue-and-green planet", "seed": 1},
     },
 }
