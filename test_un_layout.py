@@ -112,10 +112,11 @@ class PillarBarTest(unittest.TestCase):
                                 f"{p} still has its old table row")
 
 class TabStatusTest(unittest.TestCase):
-    def test_the_tab_keeps_the_entrys_status_text_collapsed(self):
+    def test_the_tab_keeps_the_entrys_status_text_open(self):
+        """Open by default (owner, 2026-09-28): the flag is the CLOSED flag."""
         tab = _read(os.path.join(REPO, "gui", "diplomatic_overview.gui"))
-        m = re.search(r"flowcontainer = \{\s*visible = \"\[GetVariableSystem\.Exists\('te_un_tab_status_open'\)\]\"(.*?)\}", tab, re.S)
-        self.assertTrue(m, "no Status section gated on te_un_tab_status_open")
+        m = re.search(r"flowcontainer = \{\s*visible = \"\[Not\(GetVariableSystem\.Exists\('te_un_tab_status_closed'\)\)\]\"(.*?)\}", tab, re.S)
+        self.assertTrue(m, "no Status section gated on te_un_tab_status_closed")
         self.assertIn("te_je_status_desc", m.group(1))
 
 if __name__ == "__main__":

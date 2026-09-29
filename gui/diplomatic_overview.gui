@@ -235,7 +235,7 @@ types diplomatic_panel
 				### MOD: UN tab (te_un) ###
 				# The United Nations journal entry, laid out for the tab in the order
 				# gui/journal_entry_widgets/un_layout_widget.gui sets for both hosts:
-				# the overview, the entry's status text as a collapsed Status section,
+				# the overview, the entry's status text as a Status section (open),
 				# the status sections, the entry's scripted buttons as an
 				# Actions section (founding, joining and leaving the UN and most
 				# requests exist only as buttons), the chart, the record and the
@@ -286,26 +286,25 @@ types diplomatic_panel
 							te_un_overview_panel = {}
 
 							# The entry's own status text (membership, tier, headquarters,
-							# statistics, programmes under way), collapsed: the overview says
-							# most of it at a glance, and nothing the journal says is lost from
-							# the tab. te_je_status_desc has a visible of its own, so the
+							# statistics, programmes under way), open by default (the owner's
+							# call, 2026-09-28): nothing the journal says is lost from the tab. te_je_status_desc has a visible of its own, so the
 							# section's gate is on a wrapper (gotcha #17).
 							un_chamber_section_header = {
 								blockoverride "left_text" {
 									text = "te_diplomacy_un_tab_status_header"
 								}
 								blockoverride "onclick" {
-									onclick = "[GetVariableSystem.Toggle('te_un_tab_status_open')]"
+									onclick = "[GetVariableSystem.Toggle('te_un_tab_status_closed')]"
 								}
 								blockoverride "onclick_showmore" {
-									visible = "[Not(GetVariableSystem.Exists('te_un_tab_status_open'))]"
+									visible = "[GetVariableSystem.Exists('te_un_tab_status_closed')]"
 								}
 								blockoverride "onclick_showless" {
-									visible = "[GetVariableSystem.Exists('te_un_tab_status_open')]"
+									visible = "[Not(GetVariableSystem.Exists('te_un_tab_status_closed'))]"
 								}
 							}
 							flowcontainer = {
-								visible = "[GetVariableSystem.Exists('te_un_tab_status_open')]"
+								visible = "[Not(GetVariableSystem.Exists('te_un_tab_status_closed'))]"
 								parentanchor = hcenter
 								direction = vertical
 

@@ -102,7 +102,7 @@ Missions, mandates, obligations and exposure keep today's text and open by defau
   - status in `_2`, above the button grid;
   - reference in `_3`, below it;
   - the bars-on-top marker in `_7`, so the overview's authority bar replaces the journal's bottom one.
-- `gui/diplomatic_overview.gui`: the tab composes header → overview → Status (the entry's status text, collapsed) → status sections → Actions → reference → link. It drops `te_je_scripted_bars`, which the overview replaces. (The first build dropped `te_je_status_desc` too; the final review found the headquarters, statistics and programme lines it carries appear nowhere else, against the Goal's "nothing is lost", so it stays, collapsed.)
+- `gui/diplomatic_overview.gui`: the tab composes header → overview → Status (the entry's status text, open) → status sections → Actions → reference → link. It drops `te_je_scripted_bars`, which the overview replaces. (The first build dropped `te_je_status_desc` too; the final review found the headquarters, statistics and programme lines it carries appear nowhere else, against the Goal's "nothing is lost", so it stays, open by default (the owner's call).)
 
 ## 6. Round-2 probe
 
