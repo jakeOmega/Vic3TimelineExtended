@@ -22,7 +22,7 @@ CONCEPTS = os.path.join(REPO, "common", "game_concepts", "extra_concepts.txt")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 ICONS_DOC = os.path.join(REPO, "docs", "systems", "cultural_hegemony_gui_icons.md")
 
-STATUS = ["te_ch_sec_programmes", "te_ch_sec_breakdown", "te_ch_sec_board", "te_ch_sec_models"]
+STATUS = ["te_ch_sec_board", "te_ch_sec_programmes", "te_ch_sec_breakdown", "te_ch_sec_models"]   # board first (owner, 2026-09-29)
 REFERENCE = ["te_ch_sec_history", "te_ch_sec_how"]
 COMPOSERS = ["te_ch_overview_panel", "te_ch_status_sections", "te_ch_reference_sections"]
 ROOTS = {   # named root -> (container, composer)
@@ -325,7 +325,7 @@ class DisplayDataTest(unittest.TestCase):
 
     def test_every_read_is_guarded(self):
         values = _read(VALUES)
-        for name in ("ch_disp_tier_code", "ch_disp_share_delta", "ch_disp_model_code"):
+        for name in ("ch_disp_tier_code", "ch_disp_share_delta", "ch_disp_model_code", "ch_disp_leader_count"):
             body = _block(values, name)
             for kind, var in re.findall(r"\b(var|global_var):(\w+)", body):
                 with self.subTest(value=name, var=var):
@@ -419,6 +419,85 @@ class PlaceholderTest(unittest.TestCase):
                 self.assertIn(f'texture = "{now}"', gui)
                 self.assertIn(now, doc)
                 self.assertIn(proposed, doc)
+
+
+class LeaderFlagsTest(unittest.TestCase):
+    """The three leading powers as vanilla flags, the UN council's shape (owner, 2026-09-29)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.ov = _type_body(_read(WIDGET), "te_ch_overview_panel")
+        cls.effects = _read(EFFECTS)
+
+    def test_each_flag_reads_its_seat_behind_a_gate_on_its_parent(self):
+        for n in (1, 2, 3):
+            with self.subTest(seat=n):
+                m = re.search(
+                    r"visible = \"\[GreaterThanOrEqualTo_CFixedPoint\( JournalEntry\.GetCountry\.MakeScope\.ScriptValue\('ch_disp_leader_count'\), "
+                    rf"'\(CFixedPoint\){n}' \)\]\"\s*flag = \{{\s*parentanchor = center\s*"
+                    rf"datacontext = \"\[JournalEntry\.GetCountry\.MakeScope\.Var\('ch_leader_seat_{n}'\)\.GetState\.GetCountry\]\"",
+                    self.ov)
+                self.assertTrue(m, f"seat {n}")
+        self.assertEqual(len(re.findall(r"\bflag = \{", self.ov)), 3)
+
+    def test_the_slots_keep_their_width(self):
+        # each gated 70x48 widget sits in an ungated 70x48 slot
+        self.assertEqual(len(re.findall(r"widget = \{\s*size = \{ 70 48 \}\s*widget = \{\s*size = \{ 70 48 \}\s*visible", self.ov)), 3)
+
+    def test_seats_fill_in_order_from_guarded_ranks(self):
+        seat = _block(self.effects, "ch_leaders_display_seat")
+        self.assertIn("var:ch_leader_seat_count = $PREV$", seat)
+        self.assertIn("has_global_variable = ch_rank_$N$", seat)
+        self.assertIn("global_var:ch_rank_$N$ ?= { exists = capital }", seat)
+        write = _block(self.effects, "ch_leaders_display_write")
+        self.assertEqual(re.findall(r"ch_leaders_display_seat = \{ N = (\d) PREV = (\d) \}", write),
+                         [("1", "0"), ("2", "1"), ("3", "2")])
+        self.assertLess(write.index("set_variable = { name = ch_leader_seat_count value = 0 }"),
+                        write.index("ch_leaders_display_seat"))
+
+    def test_written_after_the_census_and_monthly_for_players(self):
+        census = _block(self.effects, "ch_yearly_global_update")
+        sweep = census.index("ch_leaders_display_write = yes")
+        self.assertGreater(sweep, census.index("set_global_variable = { name = ch_ranked_total"))
+        self.assertIn("is_player = yes", census[census.rindex("every_country", 0, sweep):sweep])
+        monthly = _block(self.effects, "ch_monthly_country_update")
+        m = re.search(r"limit = \{ is_player = yes \}\s*ch_leaders_display_write = yes", monthly)
+        self.assertTrue(m)
+
+    def test_nothing_but_the_display_reads_the_seats(self):
+        readers = []
+        for path in glob.glob(os.path.join(REPO, "common", "**", "*.txt"), recursive=True) + \
+                glob.glob(os.path.join(REPO, "events", "**", "*.txt"), recursive=True):
+            if "ch_leader_seat" in _read(path):
+                readers.append(os.path.relpath(path, REPO))
+        self.assertEqual(sorted(readers), sorted([os.path.relpath(EFFECTS, REPO), os.path.relpath(VALUES, REPO)]))
+
+
+class StatusTextTest(unittest.TestCase):
+    """Status text that repeats the overview goes (owner, 2026-09-29); the
+    inactive entry, whose panels are hidden, keeps one line."""
+
+    def test_only_the_inactive_entry_has_status_text(self):
+        body = _braced(_read(JE), _read(JE).index("status_desc = {") + len("status_desc = "))
+        self.assertNotRegex(body, r"^\t\tdesc = ", "an unconditional status line")
+        m = re.search(r"triggered_desc = \{\s*desc = (\w+)\s*trigger = \{ NOT = \{ has_journal_entry = je_cultural_hegemony \} \}", body)
+        self.assertTrue(m)
+        self.assertEqual(len(re.findall(r"(?<!\w)desc = ", body)), 1)
+        val = _loc()[m.group(1)]
+        self.assertNotIn("\\n", val)
+
+
+class ValueColourTest(unittest.TestCase):
+    """Good numbers green, penalties red (style rule 5; owner, 2026-09-29)."""
+
+    def test_breakdown_values(self):
+        loc = _loc()
+        for part in ("art", "prestige", "sol", "tech", "monuments", "megaprojects", "modifiers", "mult"):
+            with self.subTest(part=part):
+                self.assertTrue(loc[f"je_ch_widget_bd_{part}_value"].startswith("#G "))
+        for part in ("infamy", "instability"):
+            with self.subTest(part=part):
+                self.assertTrue(loc[f"je_ch_widget_bd_{part}_value"].startswith("#R "))
 
 
 if __name__ == "__main__":
