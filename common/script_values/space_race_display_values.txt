@@ -12,11 +12,10 @@
 # ============================================================================
 
 # ---- A milestone's state, from its single derivation site -------------------
-# 0 not running · 1 no approach (drifting) · 2 safe · 3 ambitious ·
-# 4 inside the post-setback review (either approach; the roll is skipped).
-# Read from sr_<m>_last_status, which sr_set_milestone_status_base writes and
-# the pace sentence (sr_<m>_pace) also reads, so the icon and the sentence
-# cannot disagree: absent -> 0, then 0 / 1 / 2 / 3-4 -> 1 / 2 / 3 / 4.
+# 0 not running · 1 standard · 2 safe · 3 ambitious · 4 inside the
+# post-setback review (any approach; the roll is skipped). Read from
+# sr_<m>_last_status, whose single derivation site is
+# sr_set_milestone_status_base: absent -> 0, then 0 / 1 / 2 / 3-5 -> 1 / 2 / 3 / 4.
 sr_disp_status_suborbital = {
 	value = 0
 	if = { limit = { has_variable = sr_suborbital_last_status } value = 1 add = var:sr_suborbital_last_status }
@@ -243,4 +242,74 @@ sr_disp_worlds_ours_frac = {
 	divide = 34
 	min = 0
 	max = 1
+}
+
+# ---- What an approach costs, for the panel and the approach buttons ----------
+# Weekly innovation on top of funding: Safe one cost level, Ambitious two
+# (sr_<m>_cost), times the milestone's factor. Standard costs nothing. Read by
+# the overview's state labels and the buttons' approach-cost lines
+# (sr_approach_cost_*_<m>, printed by sr_effect_safe / sr_effect_ambitious).
+sr_disp_cost_safe_suborbital = {
+	value = sr_innovation_per_cost_level
+	multiply = sr_cost_factor_suborbital
+}
+sr_disp_cost_ambitious_suborbital = {
+	value = sr_disp_cost_safe_suborbital
+	multiply = 2
+}
+sr_disp_cost_safe_orbital = {
+	value = sr_innovation_per_cost_level
+	multiply = sr_cost_factor_orbital
+}
+sr_disp_cost_ambitious_orbital = {
+	value = sr_disp_cost_safe_orbital
+	multiply = 2
+}
+sr_disp_cost_safe_moon_landing = {
+	value = sr_innovation_per_cost_level
+	multiply = sr_cost_factor_moon_landing
+}
+sr_disp_cost_ambitious_moon_landing = {
+	value = sr_disp_cost_safe_moon_landing
+	multiply = 2
+}
+sr_disp_cost_safe_probe = {
+	value = sr_innovation_per_cost_level
+	multiply = sr_cost_factor_probe
+}
+sr_disp_cost_ambitious_probe = {
+	value = sr_disp_cost_safe_probe
+	multiply = 2
+}
+sr_disp_cost_safe_moon_base = {
+	value = sr_innovation_per_cost_level
+	multiply = sr_cost_factor_moon_base
+}
+sr_disp_cost_ambitious_moon_base = {
+	value = sr_disp_cost_safe_moon_base
+	multiply = 2
+}
+sr_disp_cost_safe_mars_landing = {
+	value = sr_innovation_per_cost_level
+	multiply = sr_cost_factor_mars_landing
+}
+sr_disp_cost_ambitious_mars_landing = {
+	value = sr_disp_cost_safe_mars_landing
+	multiply = 2
+}
+sr_disp_cost_safe_interstellar_probe = {
+	value = sr_innovation_per_cost_level
+	multiply = sr_cost_factor_interstellar_probe
+}
+sr_disp_cost_ambitious_interstellar_probe = {
+	value = sr_disp_cost_safe_interstellar_probe
+	multiply = 2
+}
+sr_disp_cost_safe_solar_colonization = {
+	value = sr_innovation_per_cost_level
+	multiply = sr_cost_factor_solar_colonization
+}
+sr_disp_cost_ambitious_solar_colonization = {
+	value = sr_disp_cost_safe_solar_colonization
+	multiply = 2
 }

@@ -122,7 +122,7 @@ class OrderTest(unittest.TestCase):
 
     def test_overview_rows_in_order(self):
         body = _type_body(_read(GUI), "te_sr_overview_milestone")
-        marks = ['block "sr_status_drifting"', 'block "sr_risk_lit"', 'block "sr_third_cells"',
+        marks = ['block "sr_status_standard"', 'block "sr_risk_lit"', 'block "sr_third_cells"',
                  "te_sr_ov_bar_row = {", 'block "sr_extra_rows"', "te_sr_ov_programme = {}"]
         positions = [body.find(m) for m in marks]
         self.assertNotIn(-1, positions, dict(zip(marks, positions)))
@@ -140,7 +140,22 @@ class OrderTest(unittest.TestCase):
                 if m in CONTROLLED:
                     expected.append((f"widget_je_space_race_{m}", "custom_widget_container_2"))
                 expected.append(("widget_je_space_race_reference", "custom_widget_container_3"))
+                # the bars-on-top marker: the overview draws the progress, so the
+                # entry's own goal bar at the foot is hidden (gui/journal_entry.gui)
+                expected.append(("widget_te_je_bars_on_top_marker", "custom_widget_container_7"))
                 self.assertEqual(widgets, expected)
+                self.assertIn("progressbar = yes", entry)  # the journal list still uses it
+
+    def test_the_status_line_shows_only_while_inactive(self):
+        """Round 2 (owner): an active entry's overview shows its state, and the
+        reason text repeats the rest, so the status line is for inactive entries."""
+        je = _read(JE)
+        for m in ALL:
+            with self.subTest(milestone=m):
+                status = _block(_block(je, f"je_space_race_{m}").replace("\n\t", "\n"), "status_desc")
+                self.assertIn(f"desc = je_space_race_{m}_status", status)
+                self.assertIn(f"trigger = {{ NOT = {{ has_journal_entry = je_space_race_{m} }} }}", status)
+                self.assertEqual(status.count("triggered_desc"), 1)
 
 
 class RootTest(unittest.TestCase):
@@ -158,6 +173,17 @@ class RootTest(unittest.TestCase):
         for name in names:
             head = _root(self.gui, name).split("\n\n")[0]  # the root's own properties
             self.assertIn('visible = "[JournalEntry.IsActive]"', head, name)
+            # round 2: fixed-width roots, never content-sized wrappers centred in the panel
+            self.assertIn("minimumsize = { 520 -1 }", head, name)
+
+    def test_composers_and_number_columns_are_fixed_width(self):
+        for composer in ("te_sr_overview_milestone", "te_sr_overview_transit",
+                         "te_sr_status_sections", "te_sr_reference_sections"):
+            self.assertIn("minimumsize = { 520 -1 }", _type_body(self.gui, composer).split("\n\n")[0], composer)
+        bar = _type_body(self.gui, "te_sr_ov_bar_row")
+        for width in (90, 170):
+            self.assertIn(f"minimumsize = {{ {width} -1 }}\n\t\t\tmaximumsize = {{ {width} -1 }}", bar)
+        self.assertIn("size = { 200 18 }", bar)
 
     def test_each_root_reads_only_its_own_milestone(self):
         for m in CONTROLLED:
@@ -236,9 +262,9 @@ class GatingTest(unittest.TestCase):
         # rows and the margined heading
         self.assertEqual(control.count(f'visible = "[{IS_SHOWN_OP0}]"'), 5)
         self.assertEqual(control.count(f'visible = "[Not( {IS_SHOWN_OP0} )]"'), 1)
-        for op in range(4):
+        for op in range(5):  # 4 is Standard (round 2)
             self.assertIn(f"MakeScopeValue( '(CFixedPoint){op}' ) ).End )]\"", control)
-        self.assertEqual(control.count("Concatenate( ScriptedGui.IsValidTooltip("), 4)
+        self.assertEqual(control.count("Concatenate( ScriptedGui.IsValidTooltip("), 5)
 
     def test_overview_risk_and_progress_follow_the_scripted_gui(self):
         body = _type_body(self.gui, "te_sr_overview_milestone")
@@ -366,7 +392,7 @@ class LocTest(unittest.TestCase):
 
     def test_the_pace_sentence_is_the_state_icon_tooltip(self):
         overview = _type_body(_read(GUI), "te_sr_overview_milestone")
-        for note in ("drift", "safe", "ambitious", "shielded"):
+        for note in ("standard", "safe", "ambitious", "shielded"):
             self.assertIn(f'tooltip = "sr_pace_note_{note}"', overview)
         self.assertNotRegex(_read(CUSTOM_LOC), r"(?m)^sr_\w+_pace = \{")
 

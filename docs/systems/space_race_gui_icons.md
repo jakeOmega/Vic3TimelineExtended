@@ -13,9 +13,9 @@ Shown at 36 px, one at a time, chosen by `sr_disp_status_<m>` (and Idle by the s
 | State | Placeholder | What the final art should show | Proposed file |
 |---|---|---|---|
 | Idle (colonization not running) | `generic_icons/inactive_building.dds` | an empty launch gantry, grey, no rocket | `state_idle.dds` |
-| No Approach | `generic_icons/undecided_icon.dds` | a grey rocket on its pad, no flame, a small hourglass beside it | `state_no_approach.dds` |
-| Safe | `commander_order_icons/defend.dds` | a white rocket on its pad inside a blue shield outline | `state_safe.dds` |
-| Ambitious | `military_icons/navy_icons/speed_navy.dds` | a white rocket climbing steeply on a long orange flame | `state_ambitious.dds` |
+| Standard (where every milestone starts) | `commander_order_icons/move.dds` | a white rocket rising on a steady yellow flame, no mark | `state_standard.dds` |
+| Safe (the word carries the weekly cost) | `commander_order_icons/defend.dds` | a white rocket on its pad inside a blue shield outline | `state_safe.dds` |
+| Ambitious (the word carries the weekly cost) | `military_icons/navy_icons/speed_navy.dds` | a white rocket climbing steeply on a long orange flame | `state_ambitious.dds` |
 | Shielded (post-setback review) | `generic_icons/clock.dds` | a white rocket under a pale blue dome, a small clock face on the dome | `state_shielded.dds` |
 
 ## Overview: risk, the first, the stage

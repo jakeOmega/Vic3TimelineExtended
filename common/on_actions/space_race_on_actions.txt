@@ -44,6 +44,28 @@ space_race_on_action = {
 				}
 				sr_recalculate_cost = yes
 			}
+			# The same for solar colonization's billing, which stops while its
+			# production method is off (sr_milestone_billed_solar_colonization):
+			# the method changes without any button press.
+			else_if = {
+				limit = { NOT = { has_variable = sr_cost_solar_running } }
+				sr_recalculate_cost = yes
+			}
+			else_if = {
+				limit = {
+					OR = {
+						AND = {
+							sr_milestone_billed_solar_colonization = yes
+							var:sr_cost_solar_running = 0
+						}
+						AND = {
+							NOT = { sr_milestone_billed_solar_colonization = yes }
+							var:sr_cost_solar_running = 1
+						}
+					}
+				}
+				sr_recalculate_cost = yes
+			}
 		}
 		if = {
 			limit = { NOT = { has_variable = sr_failure_cooldown } }
