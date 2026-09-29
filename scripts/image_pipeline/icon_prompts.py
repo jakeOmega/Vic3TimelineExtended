@@ -923,7 +923,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "agency_unhcr": {"subject": "a small tan canvas ridge tent with its flap open", "seed": 0,
                          "now": f"{_GI}/institution_icons/colonization.dds"},
         # A satellite is wide and thin side-on: a speck at 36 px (two seeds).
-        "agency_unoosa": {"subject": "a tan and cream banded ringed planet like Saturn, its wide ring tilted", "seed": None,
+        "agency_unoosa": {"subject": "a tan and cream banded ringed planet like Saturn, its wide ring tilted", "seed": 1,
                           "now": f"{_GI}/goods_icons/aeroplanes.dds"},
         "agency_itlos": {"subject": "a heavy brass ship's anchor", "seed": 1,
                          "now": f"{_GI}/goods_icons/merchant_marine.dds"},
@@ -932,9 +932,9 @@ ICONS: dict[str, dict[str, dict]] = {
         "agency_cppnm": {"subject": "a heavy closed brass padlock with a black-and-yellow radiation trefoil on its body", "seed": 0,
                          "now": f"{_GI}/goods_icons/explosives.dds"},
         # Resolution topics that are no agency's (40 px in the session strip).
-        # A sword is too thin at 40 px under the cross (two seeds); a fist is chunky.
-        "topic_condemn": {"subject": "a heavy steel knight's gauntlet clenched into a fist", "seed": None,
-                          "marks": [{"icon": f"{_GI}/generic_icons/red_cross.dds"}],
+        # War, condemned: the mandate's crossed swords under vanilla's red cross.
+        # A lone sword was too thin at 40 px, and a gauntlet read as a mug.
+        "topic_condemn": {"from": "un_disc/topic_mandate", "marks": [{"icon": f"{_GI}/generic_icons/red_cross.dds"}],
                           "now": f"{_GI}/alert_icons/land_invasion.dds"},
         # rembg cut the crate's front boards out as background: `solid` fills them back.
         "topic_sanctions": {"subject": "a wooden crate bound shut with a heavy iron chain", "seed": 1, "solid": True,
@@ -944,18 +944,18 @@ ICONS: dict[str, dict[str, dict]] = {
                             "marks": [{"draw": "arrow_down", "scale": 0.5}],
                             "now": f"{_GI}/alert_icons/is_losing_rank.dds"},
         # Vanilla's war symbol; a sword in a wreath read as a ring with a line at 40 px.
-        "topic_mandate": {"subject": "two crossed broad steel swords with gold hilts", "seed": None,
+        "topic_mandate": {"subject": "two crossed broad steel swords with gold hilts", "seed": 0,
                           "now": f"{_GI}/goods_icons/artillery.dds"},
         "topic_peacekeepers": {"subject": "an empty light-blue steel army helmet seen from the side", "seed": 1,
                                "now": f"{_GI}/goods_icons/small_arms.dds"},
         "topic_aid": {"subject": "two plump burlap grain sacks tied at the top", "seed": 1,
                       "now": f"{_GI}/goods_icons/groceries.dds"},
         # A glass inkwell cut out as a hollow grey ring and the white quill faded (two seeds).
-        "topic_reform": {"subject": "a brown feather quill pen standing in a squat dark blue ceramic inkwell", "seed": None,
+        "topic_reform": {"subject": "a brown feather quill pen standing in a squat dark blue ceramic inkwell", "seed": 1,
                          "now": f"{_GI}/alert_icons/reform_government.dds"},
         # FLUX will not break a chain on request, and open shackles read as a
         # horseshoe (two seeds): a new nation's flag instead.
-        "topic_decolonization": {"subject": "a plain bright green cloth flag on a short wooden pole planted in a small mound of brown earth", "seed": None,
+        "topic_decolonization": {"subject": "a plain bright green cloth flag on a short wooden pole planted in a small mound of brown earth", "seed": 1,
                                  "now": f"{_GI}/alert_icons/secession.dds"},
         # A convention topic founds or runs an agency: that agency's icon under
         # the scroll badge.
