@@ -23,8 +23,12 @@ production pipeline). Nothing here knows about a particular entity list.
                card             dark pictogram on a blank card lifted from vanilla (IG and
                                 character traits; `recolor` turns it to a colour vanilla lacks)
                strip            wide painted scene centred on an institution's 3500x220 strip
+               backed           cutout over a shared painted disc (Space Race journal entries);
+                                the disc is the category's own `backdrop`, rendered like an icon
   strip_sheet()   The strip category's review sheet: each strip as the panel shows it.
   review_sheet()  Row per entity: [current icon | 3 vanilla neighbours || candidates].
+  panel_preview() Journal icons as the panel draws them: 100 px in the round frame, and 40 px.
+  backdrop_sheet() The backed category's backdrop candidates, each under a few sample icons.
 
 Frames are not hand-drawn: `vanilla_template()` takes the per-pixel median of
 every vanilla icon in the category's folder. The frame is the part that never
@@ -329,6 +333,50 @@ def compose_framed(raw: Image.Image, spec: dict, tmpl) -> Image.Image:
     out[..., :3] = sc[..., :3] * inner[..., None] + med[..., :3] * (1 - inner[..., None])
     out[..., 3] = alpha
     return Image.fromarray(np.clip(out, 0, 255).astype(np.uint8), "RGBA")
+
+
+BACKDROP_RIM = (150, 165, 195)  # thin steel-blue edge so a dark disc reads on the dark panel
+
+
+def compose_backdrop(raw: Image.Image, spec: dict) -> Image.Image:
+    """A full-bleed painted scene as the soft-edged disc the `backed` layout sits on.
+
+    The journal panel draws its icon at 100 px over a 120 px round frame
+    whose gold ring starts at 0.9 of the icon's width, so the disc is
+    `disc_fill` of the canvas (0.86 by default), just inside it; a square
+    would cover the ring and poke out of the frame. A gentle
+    vignette darkens the rim, which keeps contrast for the object in front,
+    and the edge gets a thin light line. The scene is not graded toward the
+    folder's saturation and value: a night sky lifted to vanilla's brightness
+    stops being one.
+    """
+    size = spec["size"]
+    disc_fill = spec.get("disc_fill", 0.86)
+    scene = np.asarray(resize_premultiplied(raw.convert("RGBA"), (size, size)), dtype=np.float32)
+    ss = 4
+    pad = size * ss * (1 - disc_fill) / 2
+    mask = Image.new("L", (size * ss, size * ss), 0)
+    ImageDraw.Draw(mask).ellipse([pad, pad, size * ss - 1 - pad, size * ss - 1 - pad], fill=255)
+    alpha = np.asarray(mask.resize((size, size), Image.LANCZOS), dtype=np.float32) / 255
+    c = (size - 1) / 2
+    yy, xx = np.mgrid[0:size, 0:size]
+    radius = size * disc_fill / 2
+    r_px = np.hypot(xx - c, yy - c)
+    scene[..., :3] *= (1 - 0.35 * np.clip((r_px / radius - 0.55) / 0.45, 0, 1) ** 2)[..., None]
+    rim_w = max(1.5, size / 75)
+    rim = np.clip(1 - np.abs((radius - r_px) - rim_w / 2) / (rim_w / 2), 0, 1) * spec.get("rim", 0.5)
+    scene[..., :3] = scene[..., :3] * (1 - rim[..., None]) + np.array(BACKDROP_RIM, dtype=np.float32) * rim[..., None]
+    scene[..., 3] = alpha * 255
+    return Image.fromarray(np.clip(scene, 0, 255).astype(np.uint8), "RGBA")
+
+
+def compose_backed(raw: Image.Image, spec: dict, target, backdrop: Image.Image) -> Image.Image:
+    """The graded cut-out subject, smaller than a plain cutout, over the shared disc."""
+    size = spec["size"]
+    subject = grade(fit_square(cut_out(raw), size, spec["fill"]), target, spec.get("grade_strength", 0.7))
+    icon = backdrop.copy()
+    icon.alpha_composite(drop_shadow(subject, max(1, size // 100), size / 90, 0.45))
+    return icon
 
 
 def embossed(raw: Image.Image, spec: dict, size: int) -> Image.Image:
@@ -782,13 +830,13 @@ class Composer:
         self._tmpl: dict[str, tuple] = {}
         self._target: dict[str, tuple] = {}
 
-    def compose(self, raw: Image.Image, cat: str, spec: dict) -> Image.Image:
+    def compose(self, raw: Image.Image, cat: str, spec: dict, backdrop: Image.Image | None = None) -> Image.Image:
         mode = spec["mode"]
         if mode in ("framed", "medallion", "emboss_medallion") and cat not in self._tmpl:
             self._tmpl[cat] = vanilla_template(spec["folder"], spec["size"])
         if mode == "plinth" and cat not in self._tmpl:
             self._tmpl[cat] = plinth_template(spec["folder"], spec["size"])
-        if mode in ("cutout", "medallion", "plinth") and cat not in self._target:
+        if mode in ("cutout", "backed", "medallion", "plinth") and cat not in self._target:
             # A medallion's opaque pixels are mostly its dark disc: grade the
             # object against a folder of bare objects instead.
             self._target[cat] = (medallion_object_target(spec["folder"], spec["disc"]) if spec.get("grade") == "spread"
@@ -814,6 +862,10 @@ class Composer:
             return compose_card(raw, spec, self._tmpl[cat])
         if mode == "cutout":
             return compose_cutout(raw, spec, self._target[cat])
+        if mode == "backed":
+            if backdrop is None:
+                raise ValueError(f"{cat}: the backed layout needs its composed backdrop")
+            return compose_backed(raw, spec, self._target[cat], backdrop)
         if mode == "framed":
             return compose_framed(raw, spec, self._tmpl[cat])
         if mode == "emboss":
@@ -856,5 +908,57 @@ def review_sheet(rows: list, folder: str, out: Path) -> None:
                 d.text((240 + j * cell + 6, y + 6), caption, fill=(220, 200, 140, 255))
         d.line([(240 + 4 * cell - 3, y + 10), (240 + 4 * cell - 3, y + cell - 10)],
                fill=(200, 170, 90, 255), width=2)
+    sheet.save(out)
+    print(f"wrote {out}")
+
+
+def panel_preview(rows: list, out: Path) -> None:
+    """Journal icons as the game draws them, one row per entity.
+
+    The panel puts the icon at 100 px inside vanilla's 120 px round frame
+    (gui/journal_entry.gui), and the journal list shows it alone at 40 px. Each
+    candidate gets both, on the panel's dark ground, at 2x so they can be judged.
+    rows: (label, [(caption, candidate image), ...]).
+    """
+    frame = load_rgba(vanilla_icons_dir().parent / "backgrounds" / "round_frame_dec.dds")
+    frame = resize_premultiplied(frame, (120, 120))
+    ground = (33, 34, 40, 255)
+    cell_w, cell_h, label_w = 250, 130, 220
+    ncols = max((len(c) for _, c in rows), default=0)
+    sheet = Image.new("RGBA", (label_w + cell_w * ncols, cell_h * len(rows)), ground)
+    d = ImageDraw.Draw(sheet)
+    for i, (label, candidates) in enumerate(rows):
+        y = i * cell_h
+        d.text((6, y + 8), label, fill=(235, 235, 235, 255))
+        for j, (caption, im) in enumerate(candidates):
+            x = label_w + j * cell_w
+            tile = Image.new("RGBA", (cell_w, cell_h), ground)
+            tile.alpha_composite(frame, (5, 5))
+            im = im.convert("RGBA")
+            tile.alpha_composite(resize_premultiplied(im, (100, 100)), (15, 15))
+            tile.alpha_composite(resize_premultiplied(im, (40, 40)), (140, 45))
+            d.text((x + 150, y + 96), caption, fill=(220, 200, 140, 255))
+            sheet.alpha_composite(tile, (x, y))
+    sheet.save(out)
+    print(f"wrote {out}")
+
+
+def backdrop_sheet(rows: list, out: Path, scale: int = 2) -> None:
+    """The backed category's backdrop candidates, each under sample icons.
+
+    rows: (label, [(caption, image), ...]); the first image is the bare disc,
+    the rest are sample subjects composed over it. At `scale` x native.
+    """
+    size = max((im.width for _, c in rows for _, im in c), default=150) * scale
+    ncols = max((len(c) for _, c in rows), default=0)
+    sheet = Image.new("RGBA", (120 + (size + 10) * ncols, (size + 10) * len(rows)), (33, 34, 40, 255))
+    d = ImageDraw.Draw(sheet)
+    for i, (label, images) in enumerate(rows):
+        y = i * (size + 10)
+        d.text((6, y + 8), label, fill=(235, 235, 235, 255))
+        for j, (caption, im) in enumerate(images):
+            sheet.alpha_composite(im.convert("RGBA").resize((size, size), Image.LANCZOS), (120 + j * (size + 10), y + 5))
+            if caption:
+                d.text((124 + j * (size + 10), y + 8), caption, fill=(220, 200, 140, 255))
     sheet.save(out)
     print(f"wrote {out}")

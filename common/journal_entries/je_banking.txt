@@ -1,5 +1,5 @@
 ﻿je_banking_cycle = {
-	icon    = "gfx/interface/icons/event_icons/event_trade.dds"
+	icon    = "gfx/interface/icons/event_icons/je_banking_cycle.dds"
 	group = je_group_internal_affairs
 
 	# te_banking_system_on, not `has_game_rule = banking_system_enabled`: the

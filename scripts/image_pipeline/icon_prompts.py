@@ -57,6 +57,11 @@ defaults (September 2026, ~350 icons):
   bevel turns thin parts into dark hairlines: a beam, an antenna, radio
   waves, fronds. Ask for thick shapes. A wide object seen side-on fits the
   icon's width and comes out thin; an angled view fills more of it.
+- In the backed layout (Space Race journal entries) the subject still renders
+  on white and is cut out, then laid over the shared backdrop. Leave space
+  out of the subject ("in orbit", "against stars"): the cut-out would try to
+  separate the craft from the stars. Craft the cut-out can keep are gold,
+  silver, grey or orange; a white one loses its body.
 - Some objects read as something else at icon size: a laser turret as a
   camera (make it fire at a target), a landing craft as a ferry, a flight
   simulator pod as a lunar lander, a parachute as a hot-air balloon, a
@@ -230,6 +235,39 @@ CATEGORIES = {
         # percentile): a median grade left ours dull (#561 in-game review).
         grade="spread",
         style="{subject}, one chunky compact object, bright warm lighting, " + PAINTED),
+    # Journal entries (150 px, JournalEntry.GetIcon; all three places that draw
+    # one read `icon =`). Vanilla's are painted single objects on transparency
+    # in event_icons/, shown at 100 px inside the panel's round frame and at 40
+    # px in the journal list. Measured on the 17 files: objects span 0.79-0.98
+    # of the side (median 0.89), median saturation 0.45 and value 0.57. The
+    # Nuclear Weapons entry's mushroom_cloud.dds is a hand-made 1024 px file
+    # and is not part of this registry.
+    "journal_entry": dict(
+        folder="event_icons", size=150, mode="cutout", fill=0.89, panel_preview=True,
+        entity_dir="common/journal_entries", field="icon",
+        style="{subject}, one chunky readable object, " + PAINTED),
+    # The nine Space Race milestones share one painted disc, so the family
+    # reads as one in the journal list. The disc is round, not square: the
+    # panel draws the icon inside a round frame and a square's corners would
+    # poke out of it. `backdrop` is rendered like an icon (its own prompt, its
+    # own candidates, a `seed` picked in review) and lives here, not in ICONS,
+    # because it is no journal entry. Subjects render on white as usual; the
+    # space comes only from the backdrop at compose time, since a starfield in
+    # a subject would go through the cut-out. The objects sit smaller than in
+    # the plain category (`fill`) so the disc shows around them. The folder
+    # grade is gentler here (0.4, not 0.7): it multiplies a near-grey object's
+    # saturation many times over, and turned the orbital satellite's silver
+    # sphere copper.
+    "journal_entry_space": dict(
+        folder="event_icons", size=150, mode="backed", fill=0.66, panel_preview=True, grade_strength=0.4,
+        entity_dir="common/journal_entries", field="icon",
+        backdrop=dict(
+            seed=3, seeds=4,
+            prompt=("a painted deep-space scene, a dark navy-blue night sky with soft indigo and teal "
+                    "nebula clouds and many fine stars, the curved blue-lit edge of a planet across the "
+                    "lower third, no objects, no spacecraft, stylized hand-painted video game background "
+                    "art with visible brush strokes")),
+        style="{subject}, one chunky readable object, " + PAINTED),
 }
 
 
@@ -771,6 +809,47 @@ ICONS: dict[str, dict[str, dict]] = {
         "ideology_optimist_transhumanist": {"subject": "a DNA double helix rising in front of a half sun with bold rays", "seed": 1},
         "ideology_corporate": {"subject": "a leather briefcase in front of a tall skyscraper", "seed": 1},
     },
+    # Journal entries on vanilla's event icons (the nine Space Race milestones
+    # shared its gears; the rest a newspaper, portrait, flag or building icon).
+    # Not the Nuclear Weapons entry, which has its own mushroom cloud, nor
+    # je_unite_the_nations, a vanilla entry the mod replaces.
+    "journal_entry": {
+        "je_banking_cycle": {"subject": "a bronze bull statuette and a bronze bear statuette facing each other, side by side", "seed": 1},
+        "je_civil_rights": {"subject": "a level brass balance scale with two identical pans, one holding a dark brown wooden block and the other a pale tan wooden block of the same size", "seed": 0},
+        "je_colonial_empire": {"subject": "an empty tan pith helmet resting on a rolled sepia-brown map tied with red cord", "seed": 0},
+        "je_covert_warfare": {"subject": "a black-handled dagger lying across a folded dark grey fedora hat", "seed": 0},
+        "je_cultural_hegemony": {"subject": "a pair of gold and deep-blue theatre masks, one smiling and one sad, side by side", "seed": 1},
+        "je_digital_rights": {"subject": "a grey box security camera on a metal wall bracket, beside a closed brass padlock", "seed": 1},
+        "je_global_warming": {"subject": "a tall glass thermometer with a bright red liquid column rising to its top and plain unlabelled tick marks, beside a small melting block of pale blue ice", "seed": 0},
+        "je_grand_monuments": {"subject": "a tall grey stone obelisk with a golden pyramid tip on a stepped stone base", "seed": 0},
+        "je_heir_education": {"subject": "a small gold crown resting on a stack of three closed leather-bound books with blank covers", "seed": 1},
+        "je_human_augmentation": {"subject": "a polished steel prosthetic hand with an open palm, brass pistons and gears showing at the wrist", "seed": 3},
+        "je_mental_health_crisis": {"subject": "a featureless grey plaster mannequin head in profile with a tangled knot of black wire rising from the top of it", "seed": 0},
+        "je_post_scarcity": {"subject": "a golden cornucopia horn spilling ripe fruit, golden wheat and small brass gears", "seed": 1},
+        "je_strategic_reserve": {"subject": "a neat stack of olive-green wooden ammunition crates and rust-red steel oil barrels with a brown burlap grain sack on top", "seed": 1},
+        "je_united_nations": {"subject": "a round globe of the Earth with green continents and blue oceans, held in a curved golden olive-branch wreath", "seed": 1},
+        "je_state_collapse": {"subject": "a single weathered stone column with its top half fallen and lying broken in rubble at its base", "seed": 0},
+        "je_create_new_religion": {"subject": "a plain grey stone altar block with a lit red candle on top and a brass bowl beside it", "seed": 0},
+        "je_world_war": {"subject": "a dark thundercloud with yellow lightning bolts above a small black iron field cannon", "seed": 0},
+    },
+    # The Space Race milestones, in order, over the shared backdrop. Silhouettes
+    # have to differ at 40 px, and none may redraw a space tech's icon
+    # (rocketry, space_exploration, recon_satellites, satellite_communications).
+    # Craft are gold, silver, grey or orange, never white: the cut-out loses a
+    # large white surface. No flags on the Moon or Mars.
+    # mars_landing s2 is retouched: FLUX's painted cast shadow (a grey wedge left of
+    # the rock, opaque after the cut-out) whitened out in the raw.
+    "journal_entry_space": {
+        "je_space_race_suborbital": {"subject": "a stubby glossy orange sounding rocket with a black nose cone and three fins, launching upward at a slant on a short jet of orange flame", "seed": 1},
+        "je_space_race_orbital": {"subject": "a polished silver sphere with four long swept-back whip antennas", "seed": 3},
+        "je_space_race_moon_landing": {"subject": "a spindly gold-foil-wrapped lunar lander with four thin legs, standing on a small mound of grey moon dust", "seed": 0},
+        "je_space_race_probe": {"subject": "a deep-space probe with a large gold parabolic dish, a long boom carrying a small instrument box, and a grey cylindrical power unit", "seed": 1},
+        "je_space_race_moon_base": {"subject": "a low moon habitat of two silver-grey rounded domes joined by a short tube, small square lit windows along its side, on a mound of grey moon dust", "seed": 2},
+        "je_space_race_mars_landing": {"subject": "a dark grey cone-shaped crew capsule standing on three legs, its hatch open with a small ladder, on a mound of rust-red rocky ground", "seed": 2},
+        "je_space_race_interstellar_probe": {"subject": "a long slim silver needle-shaped spacecraft with a wide round gold shield disc at its rear and a bright blue engine flame", "seed": 1},
+        "je_space_race_interstellar_results": {"subject": "three large grey radio-telescope dishes in a row, tilted up toward the sky on steel frames", "seed": 1},
+        "je_space_race_solar_colonization": {"subject": "a large banded tan-and-brown ringed gas giant planet beside a small rust-red planet and a small blue-and-green planet", "seed": 1},
+    },
 }
 
 
@@ -783,6 +862,9 @@ def check(mod_root: str | None = None, on_disk: set[str] | None = None) -> dict:
       bad_entry   an empty subject, a seed that is not None, an int or "keep",
                   or a "use" that is not a gfx/ .dds path
       missing_dds an accepted seed whose DDS is not committed (or on disk)
+      bad_backdrop a category's shared `backdrop` with no prompt, a seed that is
+                  not None or an int, or no seed while an icon over it is
+                  accepted (its DDS could not be written)
     Information:
       states      how many entries are unreviewed / accepted / kept / reused
     `on_disk` defaults to the icon paths git tracks, so it works in a sparse
@@ -797,7 +879,7 @@ def check(mod_root: str | None = None, on_disk: set[str] | None = None) -> dict:
         out = subprocess.run(["git", "-C", mod_root, "ls-files", "--", "gfx/interface"],
                              capture_output=True, text=True, check=True).stdout
         on_disk = set(out.splitlines())
-    report: dict = {"unknown": [], "bad_entry": [], "missing_dds": [], "states": {}}
+    report: dict = {"unknown": [], "bad_entry": [], "missing_dds": [], "bad_backdrop": [], "states": {}}
     for cat, entries in ICONS.items():
         spec = CATEGORIES[cat]
         defined: set[str] = set()
@@ -832,19 +914,25 @@ def check(mod_root: str | None = None, on_disk: set[str] | None = None) -> dict:
                 if icon_path(cat, key) not in on_disk:
                     report["missing_dds"].append((cat, key))
         report["states"][cat] = states
+        bd = spec.get("backdrop")
+        if bd:
+            seed = bd.get("seed")
+            picked = isinstance(seed, int) and not isinstance(seed, bool) and seed >= 0
+            if not bd.get("prompt") or not (seed is None or picked) or (seed is None and states["accepted"]):
+                report["bad_backdrop"].append((cat, "_backdrop"))
     return report
 
 
 def validate() -> bool:
     r = check()
-    for title in ("unknown", "bad_entry", "missing_dds"):
+    for title in ("unknown", "bad_entry", "missing_dds", "bad_backdrop"):
         if r[title]:
             print(f"{title.upper()} ({len(r[title])}):")
             for cat, key in r[title]:
                 print(f"  {cat}/{key}")
     for cat, states in r["states"].items():
         print(f"{cat}: " + ", ".join(f"{n} {s}" for s, n in states.items()))
-    errors = len(r["unknown"]) + len(r["bad_entry"]) + len(r["missing_dds"])
+    errors = sum(len(r[t]) for t in ("unknown", "bad_entry", "missing_dds", "bad_backdrop"))
     print(f"Errors: {errors}")
     return errors == 0
 

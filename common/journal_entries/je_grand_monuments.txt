@@ -17,7 +17,7 @@
 # (scripting_best_practices.md § "JE Auto-Activation Requires BOTH").
 
 je_grand_monuments = {
-	icon = "gfx/interface/icons/building_icons/building_government_administration.dds"
+	icon = "gfx/interface/icons/event_icons/je_grand_monuments.dds"
 	group = je_group_internal_affairs
 
 	widget = {
