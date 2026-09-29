@@ -701,8 +701,10 @@ ICONS: dict[str, dict[str, dict]] = {
         "institution_national_bank": {"subject": "clerks in waistcoats counting stacks of banknotes and weighing gold bars at long wooden counters in a marble-columned 19th-century bank hall", "seed": 1},
         "institution_ministry_of_culture": {"subject": "visitors in 19th-century dress admiring large framed landscape paintings and marble statues in a grand skylit museum gallery", "seed": 0},
         "institution_ministry_of_labor": {"subject": "a government mediator in a grey suit seated at a table between factory workers in flat caps and a mill owner in a waistcoat, on an early 1900s factory floor with machinery behind them", "seed": 1},
-        # s1 drew a giant cropped torso and a pair of floating legs.
-        "institution_ministry_of_the_environment": {"subject": "scientists in 1970s field jackets taking water samples on a reedy river bank, a smoking factory chimney in the hazy distance", "seed": 0},
+        # Rerolled at 4 seeds (owner): "taking water samples" drew two men standing
+        # idle in the reeds, and one seed a giant cropped torso. Of the reroll, s1
+        # cut the scientists off at the neck.
+        "institution_ministry_of_the_environment": {"subject": "two scientists in 1970s field jackets crouching at the edge of a murky river, filling glass sample jars, a smoking factory chimney in the hazy distance behind them", "seed": 0},
         "institution_ministry_of_intelligence_and_security": {"subject": "intelligence officers in 1950s suits examining photographs and files under a desk lamp in a dim office, a reel-to-reel tape recorder on a shelf", "seed": 1},
         "institution_ministry_of_refugee_affairs": {"subject": "families with bundles and suitcases standing in line at a relief table outside rows of white canvas tents, aid workers handing out blankets", "seed": 1},
         # s0 has a framed certificate at its left edge, under the panel's fade.
