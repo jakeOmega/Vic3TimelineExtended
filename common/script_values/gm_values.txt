@@ -605,3 +605,300 @@ gm_display_vanity = {
 		multiply = gm_step_vanity
 	}
 }
+
+# ---- Journal entry overview and bars (display only, country scope) -------------
+# Read by gui/journal_entry_widgets/grand_monuments_widget.gui every frame the
+# entry is open; nothing in script reads them. Every var: read is guarded (a
+# save older than the system has none of these variables until the first
+# refresh).
+#
+# The overview's four cells: how many monuments hold each status. Live, with
+# gm_status_code's order of precedence (contested over heritage over the
+# rest), so the cells always agree with the rows' status icons.
+gm_disp_count_stands = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			gm_state_is_dedicated = yes
+			gm_state_is_heritage = no
+			gm_state_is_contested = no
+		}
+		add = 1
+	}
+}
+
+gm_disp_count_heritage = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			has_building = building_grand_monument
+			gm_state_is_heritage = yes
+			gm_state_is_contested = no
+		}
+		add = 1
+	}
+}
+
+gm_disp_count_undedicated = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			has_building = building_grand_monument
+			gm_state_is_dedicated = no
+			gm_state_is_heritage = no
+			gm_state_is_contested = no
+		}
+		add = 1
+	}
+}
+
+gm_disp_count_contested = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			has_building = building_grand_monument
+			gm_state_is_contested = yes
+		}
+		add = 1
+	}
+}
+
+# 1 while any interest group has a monument approval total: the Interest Group
+# Approval heading's visibility.
+gm_disp_ig_any = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				AND = {
+					has_variable = gm_s_ig_armed_forces
+					NOT = { var:gm_s_ig_armed_forces = 0 }
+				}
+				AND = {
+					has_variable = gm_s_ig_devout
+					NOT = { var:gm_s_ig_devout = 0 }
+				}
+				AND = {
+					has_variable = gm_s_ig_industrialists
+					NOT = { var:gm_s_ig_industrialists = 0 }
+				}
+				AND = {
+					has_variable = gm_s_ig_intelligentsia
+					NOT = { var:gm_s_ig_intelligentsia = 0 }
+				}
+				AND = {
+					has_variable = gm_s_ig_landowners
+					NOT = { var:gm_s_ig_landowners = 0 }
+				}
+				AND = {
+					has_variable = gm_s_ig_petty_bourgeoisie
+					NOT = { var:gm_s_ig_petty_bourgeoisie = 0 }
+				}
+				AND = {
+					has_variable = gm_s_ig_rural_folk
+					NOT = { var:gm_s_ig_rural_folk = 0 }
+				}
+				AND = {
+					has_variable = gm_s_ig_trade_unions
+					NOT = { var:gm_s_ig_trade_unions = 0 }
+				}
+			}
+		}
+		value = 1
+	}
+}
+
+# The National Effects bars: how far the step now being filled has come, 0-1.
+# On the doubling curve with first step f, the step that completes at N
+# (gm_n_*, gm_curve_next_f*) began at (N - f) / 2, so at grandeur G (gm_g_*)
+# it is (2G - N + f) / (N + f) full. Past the curve's last step the result
+# exceeds 1 and the clamp holds the bar full. Each value's f must match its
+# gm_set_steps call in gm_compute_totals (test_grand_monuments_layout.py).
+gm_disp_frac_prestige = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_g_standing
+			has_variable = gm_n_standing
+		}
+		value = var:gm_g_standing
+		multiply = 2
+		subtract = var:gm_n_standing
+		add = 5
+		divide = {
+			value = var:gm_n_standing
+			add = 5
+		}
+	}
+	min = 0
+	max = 1
+}
+
+gm_disp_frac_legitimacy = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_g_regime
+			has_variable = gm_n_regime
+		}
+		value = var:gm_g_regime
+		multiply = 2
+		subtract = var:gm_n_regime
+		add = 10
+		divide = {
+			value = var:gm_n_regime
+			add = 10
+		}
+	}
+	min = 0
+	max = 1
+}
+
+# Full once cultural pull is at its +5 cap (gm_display_culture), where the
+# curve keeps stepping but buys no more.
+gm_disp_frac_culture = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_g_standing
+			has_variable = gm_n_culture
+		}
+		value = var:gm_g_standing
+		multiply = 2
+		subtract = var:gm_n_culture
+		add = 10
+		divide = {
+			value = var:gm_n_culture
+			add = 10
+		}
+	}
+	if = {
+		limit = {
+			has_variable = gm_s_culture
+			var:gm_s_culture >= 5
+		}
+		value = 1
+	}
+	min = 0
+	max = 1
+}
+
+gm_disp_frac_leader = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_g_leader
+			has_variable = gm_n_leader
+		}
+		value = var:gm_g_leader
+		multiply = 2
+		subtract = var:gm_n_leader
+		add = 5
+		divide = {
+			value = var:gm_n_leader
+			add = 5
+		}
+	}
+	min = 0
+	max = 1
+}
+
+gm_disp_frac_religious = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_g_religious
+			has_variable = gm_n_religious
+		}
+		value = var:gm_g_religious
+		multiply = 2
+		subtract = var:gm_n_religious
+		add = 5
+		divide = {
+			value = var:gm_n_religious
+			add = 5
+		}
+	}
+	min = 0
+	max = 1
+}
+
+gm_disp_frac_war_memorial = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_g_war_memorial
+			has_variable = gm_n_war_memorial
+		}
+		value = var:gm_g_war_memorial
+		multiply = 2
+		subtract = var:gm_n_war_memorial
+		add = 5
+		divide = {
+			value = var:gm_n_war_memorial
+			add = 5
+		}
+	}
+	min = 0
+	max = 1
+}
+
+gm_disp_frac_artistic = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_g_artistic
+			has_variable = gm_n_artistic
+		}
+		value = var:gm_g_artistic
+		multiply = 2
+		subtract = var:gm_n_artistic
+		add = 5
+		divide = {
+			value = var:gm_n_artistic
+			add = 5
+		}
+	}
+	min = 0
+	max = 1
+}
+
+gm_disp_frac_scientific = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_g_scientific
+			has_variable = gm_n_scientific
+		}
+		value = var:gm_g_scientific
+		multiply = 2
+		subtract = var:gm_n_scientific
+		add = 5
+		divide = {
+			value = var:gm_n_scientific
+			add = 5
+		}
+	}
+	min = 0
+	max = 1
+}
+
+gm_disp_frac_industrial = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_g_industrial
+			has_variable = gm_n_industrial
+		}
+		value = var:gm_g_industrial
+		multiply = 2
+		subtract = var:gm_n_industrial
+		add = 5
+		divide = {
+			value = var:gm_n_industrial
+			add = 5
+		}
+	}
+	min = 0
+	max = 1
+}

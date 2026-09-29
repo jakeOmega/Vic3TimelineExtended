@@ -1734,6 +1734,7 @@ Journal-entry widgets are **additive**, not overrides: a `.gui` under `gui/journ
 | `global_warming_widget.gui` | `je_global_warming` | climate conditions readout, all eight mitigation policies as rows, world adoption counts, two history charts |
 | `nuclear_program_widget.gui` | `je_nuclear_program` | programme panel (funding stepper, production rate, time to next warhead, stockpile) above the native bar, and a collapsed delivery-and-defence + nuclear-powers readout at the foot of the entry; the posture and crisis panels between them come from `nuclear_deterrence_widget.gui` |
 | `te_history_chart.gui` | (type library) | reusable `te_history_chart` column-chart types, usable from any JE widget |
+| `grand_monuments_widget.gui` | `je_grand_monuments` | the overview (monuments by status as lit or dimmed icons, Hard Times while it holds), National Effects (a step bar per stepped total, approval and fading-legitimacy tables), Our Monuments (one row per monument: status icon, grandeur, the three choices while contested) and a collapsed How Grand Monuments Work; the sections are types (`te_gm_sec_*`) composed by `te_gm_status_sections` / `te_gm_reference_sections` behind three named roots |
 
 **The state view uses the same idiom, from its own type library.** `gui/te_state_panel_widgets.gui` holds the types; `states_panel.gui`, a full-file override re-merged every vanilla patch, holds only instances.
 - Rows root on `State.MakeScope.ScriptValue(...)`: the JE widgets' `JournalEntry.GetCountry.MakeScope` doesn't exist in the state view.

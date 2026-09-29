@@ -1,44 +1,241 @@
-﻿### Grand Monuments JE widgets (spec §6)
+﻿### Grand Monuments JE widgets (spec §6; style pass 2026-09-29,
+### docs/guides/gui_style_guide.md)
 ###
-### Two widgets, mounted from je_grand_monuments:
-###   widget_je_gm_national   custom_widget_container_1 (above the status desc)
-###     One line per national total in force, with its next step, and the
-###     hard-times warning (§5).
-###   widget_je_gm_monuments  custom_widget_container_2 (below the status desc)
-###     One row per monument, from the country's gm_states list (rebuilt by
-###     every gm_country_refresh). A contested row carries three buttons.
+### Three named roots at the foot of this file, mounted from je_grand_monuments:
+###   widget_je_gm_overview   custom_widget_container_1 (above the status desc)
+###     The overview, always shown: how many monuments stand, are heritage,
+###     undedicated or contested, as lit or dimmed icons, and Hard Times while
+###     a finished level would cause vanity backlash (§5).
+###   widget_je_gm_status     custom_widget_container_2 (below the status desc)
+###     National Effects (open): a bar per stepped total, then interest group
+###     approval and the fading ledgers. Our Monuments (open): one row per
+###     monument, from the country's gm_states list (rebuilt by every
+###     gm_country_refresh); a contested row carries three buttons.
+###   widget_je_gm_reference  custom_widget_container_3
+###     How Grand Monuments Work (collapsed): every explanation.
+### The sections are types composed by te_gm_status_sections and
+### te_gm_reference_sections, so a future tab can reuse them.
 ###
 ### EDITING RULES
 ### * Numbers come from JournalEntry.GetCountry.MakeScope.ScriptValue (the
-###   guarded gm_display_* values) and State.MakeScope.ScriptValue.
+###   guarded gm_display_* and gm_disp_* values in gm_values.txt) and, in a
+###   monument's row, State.MakeScope.ScriptValue.
 ### * A row's status is gm_status_code (0-4), tested for identity, never a
 ###   threshold (gotcha #23).
 ### * The row buttons pass the row's state as the saved scope gm_state, one
 ###   scripted GUI per action (common/scripted_guis/gm_sguis.txt).
-### * Both roots are gated on [JournalEntry.IsActive] (gotcha #14).
+### * A tooltip inside a monument's row reads nothing but State: the row is a
+###   datamodel item (gotcha #24).
+### * Collapse flags say their default: *_closed sections are open until
+###   closed, *_open ones collapsed until opened (test_grand_monuments_layout.py).
+### * Every root and composer is gated on [JournalEntry.IsActive] (gotcha #14).
+### * The status icons are vanilla placeholders, listed in
+###   docs/systems/grand_monuments_gui_icons.md.
 
 types grand_monuments_widget_types
 {
-	type gm_header = textbox {
+	### ======================================================================
+	### BUILDING BLOCKS (the UN chamber's shapes, un_chamber_widget.gui)
+	### ======================================================================
+
+	type gm_panel = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		margin = { 20 8 }
+
+		background = {
+			using = entry_bg_fancy_dark
+			alpha = 0.5
+		}
+	}
+
+	type gm_section_header = section_header_button {
+		blockoverride "layout" {
+			parentanchor = hcenter
+			size = { 520 38 }
+		}
+	}
+
+	### A heading inside a section's panel, over one group of its lines, with a
+	### faint rule under it. A heading over a group that can be empty carries
+	### the group's `visible`.
+	type gm_subheader = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 1
+		block "subheader_margin" {
+			margin_top = 10
+		}
+
+		textbox = {
+			autoresize = yes
+			multiline = yes
+			maximumsize = { 480 -1 }
+			align = left|nobaseline
+			using = fontsize_large
+			default_format = "#title"
+			block "subheader_text" {}
+		}
+		divider_clean = {
+			blockoverride "size" {
+				size = { 480 2 }
+			}
+		}
+	}
+
+	### Explanatory text under a heading in How Grand Monuments Work.
+	type gm_note = textbox {
 		autoresize = yes
 		multiline = yes
 		minimumsize = { 480 -1 }
 		maximumsize = { 480 -1 }
 		align = left|nobaseline
 		using = fontsize_medium
-		margin_top = 4
-		block "header_text" {}
+		default_format = "#lore"
 	}
 
-	type gm_line = textbox {
+	### A live line of text across the panel.
+	type gm_text = textbox {
 		autoresize = yes
 		multiline = yes
 		minimumsize = { 480 -1 }
 		maximumsize = { 480 -1 }
 		align = left|nobaseline
-		using = fontsize_small
-		block "line_text" {}
-		block "line_extra" {}
+		using = fontsize_medium
+	}
+
+	### A cell of the overview: an icon, its word small beneath. Lit at full
+	### colour while its count is above zero, dimmed at zero; the instance sets
+	### the texture and the two `visible`s. Fixed width, so the row cannot push
+	### the panel wider.
+	type gm_ov_cell = widget {
+		size = { 92 58 }
+
+		icon = {
+			size = { 36 36 }
+			parentanchor = top|hcenter
+			block "lit" {}
+			block "cell_texture" {}
+		}
+		icon = {
+			size = { 36 36 }
+			parentanchor = top|hcenter
+			alpha = 0.25
+			block "unlit" {}
+			block "cell_texture" {}
+		}
+		textbox = {
+			parentanchor = bottom|hcenter
+			autoresize = yes
+			max_width = 90
+			elide = right
+			align = hcenter|nobaseline
+			using = fontsize_small
+			default_format = "#tooltippable"
+			block "label" {}
+		}
+	}
+
+	### A stepped national total: its name, a bar showing how far the step now
+	### being filled has come, and its value. The tooltip (on the instance)
+	### gives the grandeur behind it and where the next step completes.
+	### 4 + 200 + 8 + 170 + 8 + 86 + 4 = 480.
+	type gm_step_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 8
+		margin = { 4 2 }
+
+		textbox = {
+			minimumsize = { 200 -1 }
+			maximumsize = { 200 -1 }
+			autoresize = yes
+			parentanchor = vcenter
+			align = left|nobaseline
+			using = fontsize_medium
+			elide = right
+			default_format = "#tooltippable"
+			block "row_label" {}
+		}
+		default_progressbar_horizontal = {
+			size = { 170 14 }
+			parentanchor = vcenter
+			blockoverride "values" {
+				block "row_frac" {}
+				min = 0
+				max = 1
+			}
+		}
+		textbox = {
+			minimumsize = { 86 -1 }
+			maximumsize = { 86 -1 }
+			autoresize = yes
+			parentanchor = vcenter
+			align = right|nobaseline
+			using = fontsize_medium
+			block "row_value" {}
+		}
+	}
+
+	### A table row: a label on the left and its value on the right, the value
+	### column in line with gm_step_row's. 4 + 386 + 86 + 4 = 480.
+	type gm_value_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		margin = { 4 1 }
+
+		textbox = {
+			minimumsize = { 386 -1 }
+			maximumsize = { 386 -1 }
+			autoresize = yes
+			align = left|nobaseline
+			using = fontsize_medium
+			elide = right
+			default_format = "#tooltippable"
+			block "row_label" {}
+		}
+		textbox = {
+			minimumsize = { 86 -1 }
+			maximumsize = { 86 -1 }
+			autoresize = yes
+			align = right|nobaseline
+			using = fontsize_medium
+			block "row_value" {}
+		}
+	}
+
+	### A monument's status: an icon, the status word beneath. The instance
+	### sets the texture, the `visible` (one status code each) and a tooltip
+	### that reads nothing (gotcha #24).
+	type gm_row_status = widget {
+		size = { 80 58 }
+
+		icon = {
+			size = { 36 36 }
+			parentanchor = top|hcenter
+			block "status_texture" {}
+		}
+		textbox = {
+			parentanchor = bottom|hcenter
+			autoresize = yes
+			max_width = 78
+			elide = right
+			align = hcenter|nobaseline
+			using = fontsize_small
+			default_format = "#tooltippable"
+			text = "gm_row_status"
+		}
+	}
+
+	### A line of a monument's row, beside its status (80 + 8 + 392 = 480).
+	type gm_row_line = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 392 -1 }
+		maximumsize = { 392 -1 }
+		align = left|nobaseline
+		using = fontsize_medium
 	}
 
 	### One of a contested row's three choices. choice_context points it at its
@@ -66,50 +263,82 @@ types grand_monuments_widget_types
 		}
 	}
 
-	type widget_je_gm_row = flowcontainer {
+	### One monument: its status as an icon with the word beneath; its form
+	### and dedication; where it stands and its grandeur; while contested, who
+	### wants it kept and who resents it, and the three choices centred under
+	### the row; last, the revived-language inscription (empty when none).
+	type gm_monument_row = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
-		parentanchor = hcenter
-		margin = { 20 8 }
+		spacing = 4
 
-		background = {
-			using = entry_bg_fancy_dark
-			alpha = 0.5
-		}
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = yes
+			spacing = 8
 
-		# ---- Its form and dedication ----
-		textbox = {
-			autoresize = yes
-			multiline = yes
-			minimumsize = { 480 -1 }
-			maximumsize = { 480 -1 }
-			align = left|nobaseline
-			using = fontsize_large
-			text = "gm_row_title"
-		}
-
-		# ---- Where, how grand, its status ----
-		gm_line = {
-			blockoverride "line_text" { text = "gm_row_detail" }
-		}
-
-		# ---- The revived-language inscription (empty when none) ----
-		gm_line = {
-			blockoverride "line_text" { text = "gm_row_inscription" }
-		}
-
-		# ---- Contested: who wants what, and the three choices ----
-		gm_line = {
-			blockoverride "line_text" { text = "gm_row_contest" }
-			blockoverride "line_extra" {
+			gm_row_status = {
+				visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)1' )]"
+				tooltip = "gm_je_status_undedicated_tt"
+				blockoverride "status_texture" {
+					texture = "gfx/interface/icons/generic_icons/undecided_icon.dds"
+				}
+			}
+			gm_row_status = {
+				visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)2' )]"
+				tooltip = "gm_je_status_stands_tt"
+				blockoverride "status_texture" {
+					texture = "gfx/interface/icons/generic_icons/green_checkmark.dds"
+				}
+			}
+			gm_row_status = {
+				visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)3' )]"
+				tooltip = "gm_je_status_heritage_tt"
+				blockoverride "status_texture" {
+					texture = "gfx/interface/icons/generic_icons/maybe_icon.dds"
+				}
+			}
+			gm_row_status = {
 				visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)4' )]"
+				tooltip = "gm_je_status_contested_tt"
+				blockoverride "status_texture" {
+					texture = "gfx/interface/icons/generic_icons/disapproval_icon.dds"
+				}
+			}
+
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 2
+
+				textbox = {
+					autoresize = yes
+					multiline = yes
+					minimumsize = { 392 -1 }
+					maximumsize = { 392 -1 }
+					align = left|nobaseline
+					using = fontsize_large
+					text = "gm_row_title"
+				}
+				gm_row_line = {
+					text = "gm_row_detail"
+				}
+				gm_row_line = {
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)4' )]"
+					default_format = "#tooltippable"
+					tooltip = "gm_row_contest_tt"
+					text = "gm_row_contest"
+				}
+				gm_row_line = {
+					text = "gm_row_inscription"
+				}
 			}
 		}
 
 		flowcontainer = {
 			direction = horizontal
 			spacing = 4
-			margin_left = 12
+			parentanchor = hcenter
 			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)4' )]"
 
 			gm_choice_button = {
@@ -129,165 +358,547 @@ types grand_monuments_widget_types
 			}
 		}
 	}
-}
 
+	### ======================================================================
+	### SECTIONS. Composed, in order, by te_gm_status_sections and
+	### te_gm_reference_sections below.
+	### ======================================================================
 
-### WIDGETS
-
-### National effects: a line per total in force.
-flowcontainer = {
-	name = "widget_je_gm_national"
-	direction = vertical
-	parentanchor = hcenter
-	spacing = 2
-	visible = "[JournalEntry.IsActive]"
-
-	gm_header = {
-		blockoverride "header_text" { text = "gm_je_header_national" }
-	}
-
-	gm_line = {
-		blockoverride "line_text" { text = "gm_je_line_prestige" }
-		blockoverride "line_extra" {
-			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_prestige'), '(CFixedPoint)0' )]"
-		}
-	}
-	gm_line = {
-		blockoverride "line_text" { text = "gm_je_line_legitimacy" }
-		blockoverride "line_extra" {
-			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_legitimacy'), '(CFixedPoint)0' )]"
-		}
-	}
-	gm_line = {
-		blockoverride "line_text" { text = "gm_je_line_culture" }
-		blockoverride "line_extra" {
-			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_culture'), '(CFixedPoint)0' )]"
-		}
-	}
-	gm_line = {
-		blockoverride "line_text" { text = "gm_je_line_leader" }
-		blockoverride "line_extra" {
-			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_leader'), '(CFixedPoint)0' )]"
-		}
-	}
-	gm_line = {
-		blockoverride "line_text" { text = "gm_je_line_religious" }
-		blockoverride "line_extra" {
-			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_religious'), '(CFixedPoint)0' )]"
-		}
-	}
-	gm_line = {
-		blockoverride "line_text" { text = "gm_je_line_war_memorial" }
-		blockoverride "line_extra" {
-			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_war_memorial'), '(CFixedPoint)0' )]"
-		}
-	}
-	gm_line = {
-		blockoverride "line_text" { text = "gm_je_line_artistic" }
-		blockoverride "line_extra" {
-			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_artistic'), '(CFixedPoint)0' )]"
-		}
-	}
-	gm_line = {
-		blockoverride "line_text" { text = "gm_je_line_scientific" }
-		blockoverride "line_extra" {
-			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_scientific'), '(CFixedPoint)0' )]"
-		}
-	}
-	gm_line = {
-		blockoverride "line_text" { text = "gm_je_line_industrial" }
-		blockoverride "line_extra" {
-			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_industrial'), '(CFixedPoint)0' )]"
-		}
-	}
-	gm_line = {
-		blockoverride "line_text" { text = "gm_je_line_ig_armed_forces" }
-		blockoverride "line_extra" {
-			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_armed_forces'), '(CFixedPoint)0' )]"
-		}
-	}
-	gm_line = {
-		blockoverride "line_text" { text = "gm_je_line_ig_devout" }
-		blockoverride "line_extra" {
-			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_devout'), '(CFixedPoint)0' )]"
-		}
-	}
-	gm_line = {
-		blockoverride "line_text" { text = "gm_je_line_ig_industrialists" }
-		blockoverride "line_extra" {
-			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_industrialists'), '(CFixedPoint)0' )]"
-		}
-	}
-	gm_line = {
-		blockoverride "line_text" { text = "gm_je_line_ig_intelligentsia" }
-		blockoverride "line_extra" {
-			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_intelligentsia'), '(CFixedPoint)0' )]"
-		}
-	}
-	gm_line = {
-		blockoverride "line_text" { text = "gm_je_line_ig_landowners" }
-		blockoverride "line_extra" {
-			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_landowners'), '(CFixedPoint)0' )]"
-		}
-	}
-	gm_line = {
-		blockoverride "line_text" { text = "gm_je_line_ig_petty_bourgeoisie" }
-		blockoverride "line_extra" {
-			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_petty_bourgeoisie'), '(CFixedPoint)0' )]"
-		}
-	}
-	gm_line = {
-		blockoverride "line_text" { text = "gm_je_line_ig_rural_folk" }
-		blockoverride "line_extra" {
-			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_rural_folk'), '(CFixedPoint)0' )]"
-		}
-	}
-	gm_line = {
-		blockoverride "line_text" { text = "gm_je_line_ig_trade_unions" }
-		blockoverride "line_extra" {
-			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_trade_unions'), '(CFixedPoint)0' )]"
-		}
-	}
-	gm_line = {
-		blockoverride "line_text" { text = "gm_je_line_teardown" }
-		blockoverride "line_extra" {
-			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_teardown'), '(CFixedPoint)0' )]"
-		}
-	}
-	gm_line = {
-		blockoverride "line_text" { text = "gm_je_line_vanity" }
-		blockoverride "line_extra" {
-			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_vanity'), '(CFixedPoint)0' )]"
-		}
-	}
-	gm_line = {
-		blockoverride "line_text" { text = "gm_je_hard_times" }
-		blockoverride "line_extra" {
-			visible = "[GetScriptedGui('gm_hard_times_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-		}
-	}
-}
-
-### One row per monument.
-flowcontainer = {
-	name = "widget_je_gm_monuments"
-	direction = vertical
-	parentanchor = hcenter
-	spacing = 4
-	visible = "[JournalEntry.IsActive]"
-
-	gm_header = {
-		blockoverride "header_text" { text = "gm_je_header_monuments" }
-	}
-
-	flowcontainer = {
+	### The overview, always shown. One cell per status, lit while any monument
+	### has it; Hard Times only while it holds. The cells share the status
+	### tooltips with the rows below.
+	type te_gm_overview_panel = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
-		spacing = 4
-		datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('gm_states')]"
+		ignoreinvisible = yes
+		visible = "[JournalEntry.IsActive]"
 
-		item = {
-			widget_je_gm_row = { datacontext = "[Scope.GetState]" }
+		gm_panel = {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				minimumsize = { 480 -1 }
+
+				flowcontainer = {
+					direction = horizontal
+					spacing = 4
+					ignoreinvisible = yes
+					parentanchor = hcenter
+
+					gm_ov_cell = {
+						tooltip = "gm_je_status_stands_tt"
+						blockoverride "cell_texture" {
+							texture = "gfx/interface/icons/generic_icons/green_checkmark.dds"
+						}
+						blockoverride "lit" {
+							visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_count_stands'), '(CFixedPoint)0' )]"
+						}
+						blockoverride "unlit" {
+							visible = "[Not( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_count_stands'), '(CFixedPoint)0' ) )]"
+						}
+						blockoverride "label" {
+							text = "gm_je_ov_stands"
+						}
+					}
+					gm_ov_cell = {
+						tooltip = "gm_je_status_heritage_tt"
+						blockoverride "cell_texture" {
+							texture = "gfx/interface/icons/generic_icons/maybe_icon.dds"
+						}
+						blockoverride "lit" {
+							visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_count_heritage'), '(CFixedPoint)0' )]"
+						}
+						blockoverride "unlit" {
+							visible = "[Not( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_count_heritage'), '(CFixedPoint)0' ) )]"
+						}
+						blockoverride "label" {
+							text = "gm_je_ov_heritage"
+						}
+					}
+					gm_ov_cell = {
+						tooltip = "gm_je_status_undedicated_tt"
+						blockoverride "cell_texture" {
+							texture = "gfx/interface/icons/generic_icons/undecided_icon.dds"
+						}
+						blockoverride "lit" {
+							visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_count_undedicated'), '(CFixedPoint)0' )]"
+						}
+						blockoverride "unlit" {
+							visible = "[Not( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_count_undedicated'), '(CFixedPoint)0' ) )]"
+						}
+						blockoverride "label" {
+							text = "gm_je_ov_undedicated"
+						}
+					}
+					gm_ov_cell = {
+						tooltip = "gm_je_status_contested_tt"
+						blockoverride "cell_texture" {
+							texture = "gfx/interface/icons/generic_icons/disapproval_icon.dds"
+						}
+						blockoverride "lit" {
+							visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_count_contested'), '(CFixedPoint)0' )]"
+						}
+						blockoverride "unlit" {
+							visible = "[Not( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_count_contested'), '(CFixedPoint)0' ) )]"
+						}
+						blockoverride "label" {
+							text = "[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_count_contested'), '(CFixedPoint)0' ), 'gm_je_ov_contested_some', 'gm_je_ov_contested_none' )]"
+						}
+					}
+					# Hard times (§5): only while a finished level would cause
+					# vanity backlash. It was a red line under the national
+					# effects; the sentence is now its tooltip.
+					gm_ov_cell = {
+						visible = "[GetScriptedGui('gm_hard_times_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "gm_je_ov_hard_times_tt"
+						blockoverride "cell_texture" {
+							texture = "gfx/interface/icons/generic_icons/warning.dds"
+						}
+						blockoverride "unlit" {
+							visible = no
+						}
+						blockoverride "label" {
+							text = "gm_je_ov_hard_times"
+						}
+					}
+				}
+			}
 		}
 	}
+
+	### National Effects (open): what our monuments give the country. Prestige,
+	### legitimacy and cultural pull always, each dedication's own effect while
+	### it is in force; then approval and the fading legitimacy, each under a
+	### heading shown only while it has a line.
+	type te_gm_sec_national = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		gm_section_header = {
+			blockoverride "left_text" {
+				text = "gm_je_national_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('gm_national_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('gm_national_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('gm_national_closed'))]"
+			}
+		}
+
+		gm_panel = {
+			visible = "[Not(GetVariableSystem.Exists('gm_national_closed'))]"
+			spacing = 2
+
+			gm_step_row = {
+				tooltip = "gm_je_tt_prestige"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_prestige"
+				}
+				blockoverride "row_frac" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_frac_prestige') )]"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_prestige"
+				}
+			}
+			gm_step_row = {
+				tooltip = "gm_je_tt_legitimacy"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_legitimacy"
+				}
+				blockoverride "row_frac" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_frac_legitimacy') )]"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_legitimacy"
+				}
+			}
+			gm_step_row = {
+				tooltip = "gm_je_tt_culture"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_culture"
+				}
+				blockoverride "row_frac" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_frac_culture') )]"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_culture"
+				}
+			}
+			gm_step_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_leader'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_leader"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_leader"
+				}
+				blockoverride "row_frac" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_frac_leader') )]"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_leader"
+				}
+			}
+			gm_step_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_religious'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_religious"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_religious"
+				}
+				blockoverride "row_frac" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_frac_religious') )]"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_religious"
+				}
+			}
+			gm_step_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_war_memorial'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_war_memorial"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_war_memorial"
+				}
+				blockoverride "row_frac" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_frac_war_memorial') )]"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_war_memorial"
+				}
+			}
+			gm_step_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_artistic'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_artistic"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_artistic"
+				}
+				blockoverride "row_frac" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_frac_artistic') )]"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_artistic"
+				}
+			}
+			gm_step_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_scientific'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_scientific"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_scientific"
+				}
+				blockoverride "row_frac" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_frac_scientific') )]"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_scientific"
+				}
+			}
+			gm_step_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_industrial'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_industrial"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_industrial"
+				}
+				blockoverride "row_frac" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_frac_industrial') )]"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_industrial"
+				}
+			}
+
+			# ---- Interest group approval: one row per group with a total ----
+			gm_subheader = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_ig_any'), '(CFixedPoint)1' )]"
+				blockoverride "subheader_text" {
+					text = "gm_je_sub_approval"
+				}
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_armed_forces'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_ig"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_ig_armed_forces"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_ig_armed_forces"
+				}
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_devout'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_ig"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_ig_devout"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_ig_devout"
+				}
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_industrialists'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_ig"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_ig_industrialists"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_ig_industrialists"
+				}
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_intelligentsia'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_ig"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_ig_intelligentsia"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_ig_intelligentsia"
+				}
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_landowners'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_ig"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_ig_landowners"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_ig_landowners"
+				}
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_petty_bourgeoisie'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_ig"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_ig_petty_bourgeoisie"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_ig_petty_bourgeoisie"
+				}
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_rural_folk'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_ig"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_ig_rural_folk"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_ig_rural_folk"
+				}
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_trade_unions'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_ig"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_ig_trade_unions"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_ig_trade_unions"
+				}
+			}
+
+			# ---- Fading legitimacy: the teardown and vanity ledgers (§4.3, §5) ----
+			gm_subheader = {
+				visible = "[Or( NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_teardown'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_vanity'), '(CFixedPoint)0' ) )]"
+				blockoverride "subheader_text" {
+					text = "gm_je_sub_fading"
+				}
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_teardown'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_teardown"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_teardown"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_teardown"
+				}
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_vanity'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_vanity"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_vanity"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_vanity"
+				}
+			}
+		}
+	}
+
+	### Our Monuments (open): one row per monument. The entry can outlive its
+	### last monument while a ledger fades; the panel then says so.
+	type te_gm_sec_monuments = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		gm_section_header = {
+			blockoverride "left_text" {
+				text = "gm_je_monuments_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('gm_monuments_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('gm_monuments_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('gm_monuments_closed'))]"
+			}
+		}
+
+		gm_panel = {
+			visible = "[Not(GetVariableSystem.Exists('gm_monuments_closed'))]"
+
+			gm_text = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_count'), '(CFixedPoint)0' )]"
+				text = "gm_je_monuments_none"
+			}
+
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 10
+				datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('gm_states')]"
+
+				item = {
+					gm_monument_row = { datacontext = "[Scope.GetState]" }
+				}
+			}
+		}
+	}
+
+	### "How Grand Monuments Work": every explanation, collapsed by default,
+	### one heading per topic. The live sections above say what is happening;
+	### this says how it works.
+	type te_gm_sec_how = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		gm_section_header = {
+			blockoverride "left_text" {
+				text = "gm_je_how_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('gm_how_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('gm_how_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('gm_how_open')]"
+			}
+		}
+
+		gm_panel = {
+			visible = "[GetVariableSystem.Exists('gm_how_open')]"
+
+			gm_subheader = {
+				blockoverride "subheader_margin" {}
+				blockoverride "subheader_text" {
+					text = "gm_je_how_sub_grandeur"
+				}
+			}
+			gm_note = {
+				text = "gm_je_how_grandeur"
+			}
+			gm_note = {
+				text = "gm_je_how_grandeur_national"
+			}
+			gm_subheader = {
+				blockoverride "subheader_text" {
+					text = "gm_je_how_sub_counts"
+				}
+			}
+			gm_note = {
+				text = "gm_je_how_counts"
+			}
+			gm_note = {
+				text = "gm_je_how_counts_other"
+			}
+			gm_subheader = {
+				blockoverride "subheader_text" {
+					text = "gm_je_how_sub_contested"
+				}
+			}
+			gm_note = {
+				text = "gm_je_how_contested"
+			}
+			gm_note = {
+				text = "gm_je_how_choices"
+			}
+			gm_subheader = {
+				blockoverride "subheader_text" {
+					text = "gm_je_how_sub_hard_times"
+				}
+			}
+			gm_note = {
+				text = "gm_je_how_hard_times"
+			}
+		}
+	}
+
+	### ======================================================================
+	### COMPOSERS. The one order of the sections.
+	### ======================================================================
+
+	### Everything a returning player checks, open by default.
+	type te_gm_status_sections = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+		visible = "[JournalEntry.IsActive]"
+
+		te_gm_sec_national = {}
+		te_gm_sec_monuments = {}
+	}
+
+	### How it all works, collapsed.
+	type te_gm_reference_sections = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+		visible = "[JournalEntry.IsActive]"
+
+		te_gm_sec_how = {}
+	}
+}
+
+### ==========================================================================
+### JOURNAL ENTRY ROOTS (je_grand_monuments.txt). Bare wrappers that repeat the
+### composers' IsActive gate, so an inactive entry's containers collapse.
+### ==========================================================================
+flowcontainer = {
+	name = "widget_je_gm_overview"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	ignoreinvisible = yes
+
+	te_gm_overview_panel = {}
+}
+
+flowcontainer = {
+	name = "widget_je_gm_status"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	ignoreinvisible = yes
+
+	te_gm_status_sections = {}
+}
+
+flowcontainer = {
+	name = "widget_je_gm_reference"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	ignoreinvisible = yes
+
+	te_gm_reference_sections = {}
 }

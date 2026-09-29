@@ -1176,27 +1176,52 @@ class WidgetTests(unittest.TestCase):
     def setUp(self):
         self.gui = read(WIDGET)
 
+    # The three roots of the style-guide pass (2026-09-29): the overview above
+    # the status description, the live sections below it, How Grand Monuments
+    # Work at the foot (test_grand_monuments_layout.py checks their contents).
+    ROOTS = (("widget_je_gm_overview", "custom_widget_container_1"),
+             ("widget_je_gm_status", "custom_widget_container_2"),
+             ("widget_je_gm_reference", "custom_widget_container_3"))
+
     def test_mounted(self):
         je = squash(read(JE))
-        for name, container in (("widget_je_gm_national", "custom_widget_container_1"),
-                                ("widget_je_gm_monuments", "custom_widget_container_2")):
+        for name, container in self.ROOTS:
             self.assertIn(f'gui = "gui/journal_entry_widgets/grand_monuments_widget.gui" name = "{name}" '
                           f'container = "{container}"', je)
             self.assertIn(f'name = "{name}"', self.gui)
 
     def test_roots_gated_and_rows_from_the_list(self):
         g = squash(strip_comments(self.gui))
-        self.assertEqual(g.count('visible = "[JournalEntry.IsActive]"'), 2)
+        # Every named root carries the gate itself, not only the composer it wraps.
+        for name, _ in self.ROOTS:
+            self.assertIn(f'name = "{name}" visible = "[JournalEntry.IsActive]"', g, name)
         self.assertIn('datamodel = "[JournalEntry.GetCountry.MakeScope.GetList(\'gm_states\')]"', g)
-        self.assertIn('widget_je_gm_row = { datacontext = "[Scope.GetState]" }', g)
+        self.assertIn('gm_monument_row = { datacontext = "[Scope.GetState]" }', g)
+
+    def _shown_text(self):
+        """The widget and the loc of every key it renders, followed through
+        $splices$ and SelectLocalization: the national values moved from the
+        .gui into their rows' value and tooltip keys (style pass 2026-09-29)."""
+        L = loc()
+        text, todo, seen = self.gui, set(re.findall(r'(?:text|tooltip) = "([a-z][\w.]*)"', self.gui)), set()
+        todo |= set(re.findall(r"'(gm_[a-z]\w*)'", self.gui)) & set(L)
+        while todo:
+            key = todo.pop()
+            if key in seen or key not in L:
+                continue
+            seen.add(key)
+            text += "\n" + L[key]
+            todo |= set(re.findall(r"\$([a-z]\w*)\$", L[key])) | (set(re.findall(r"'([a-z]\w*)'", L[key])) & set(L))
+        return text
 
     def test_national_lines_read_guarded_displays(self):
         values = read(VALUES)
-        for display in re.findall(r"ScriptValue\('(gm_display_\w+)'\)", self.gui):
+        shown_text = self._shown_text()
+        for display in re.findall(r"ScriptValue\('(gm_display_\w+)'\)", shown_text):
             body = squash(block(values, display))
             self.assertIsNotNone(block(values, display), display)
             self.assertIn("if = { limit = { has_variable =", body, display)
-        shown = set(re.findall(r"ScriptValue\('(gm_display_\w+)'\)", self.gui))
+        shown = set(re.findall(r"ScriptValue\('(gm_display_\w+)'\)", shown_text))
         for key in ["prestige", "legitimacy", "culture", "teardown", "vanity"] + list(NATIONAL):
             self.assertIn(f"gm_display_{key}", shown)
         for ig in IGS:
@@ -1246,11 +1271,15 @@ class LocFixTests(unittest.TestCase):
         # TE_HOMELAND_REMOVAL_THRESHOLD_TT uses for its own _ZERO clause.
         v = squash(block(read(VALUES), "gm_display_n_culture"))
         self.assertIn("has_variable = gm_n_culture var:gm_s_culture < 5", v)
+        # Since the style pass (2026-09-29) the clause is in the Cultural Pull
+        # row's tooltip, and the cap has words of its own instead of ''.
         L = loc()
         self.assertIn("SelectLocalization(EqualTo_CFixedPoint("
                       "JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_culture'), "
-                      "'(CFixedPoint)0'), '', 'gm_je_line_culture_next')", L["gm_je_line_culture"])
-        self.assertIn("next step at", L["gm_je_line_culture_next"])
+                      "'(CFixedPoint)0'), 'gm_je_tt_culture_cap', 'gm_je_tt_culture_next')", L["gm_je_tt_culture"])
+        self.assertIn("next step at", L["gm_je_tt_culture_next"])
+        self.assertNotIn("next step", L["gm_je_tt_culture_cap"])
+        self.assertIn('tooltip = "gm_je_tt_culture"', read(WIDGET))
 
 
 # ---- Task 10: flavour events ---------------------------------------------------------
