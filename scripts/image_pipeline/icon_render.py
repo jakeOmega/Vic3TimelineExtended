@@ -294,6 +294,27 @@ def cut_out(im: Image.Image) -> Image.Image:
     return remove(im, session=_REMBG)
 
 
+def cut(raw: Image.Image, spec: dict) -> Image.Image:
+    """cut_out, then with `solid` in the spec, the holes it left inside the object filled back in.
+
+    rembg can take a flat panel inside an object for background: it cut the
+    front boards out of the sanctions crate, leaving the disc showing
+    through. `solid` makes every transparent region the object encloses
+    opaque again, in the raw render's colours. Only for objects with no
+    real holes: an anchor's ring or a wreath's gaps would be filled too.
+    """
+    obj = cut_out(raw)
+    if not spec.get("solid"):
+        return obj
+    from scipy.ndimage import binary_fill_holes
+    alpha = np.asarray(obj.getchannel("A"))
+    holes = binary_fill_holes(alpha > 128) & (alpha <= 128)
+    out = np.asarray(obj.convert("RGBA")).copy()
+    out[holes, :3] = np.asarray(raw.convert("RGB"))[holes]
+    out[holes, 3] = 255
+    return Image.fromarray(out, "RGBA")
+
+
 def fit_square(obj: Image.Image, size: int, fill: float) -> Image.Image:
     """Trim to the opaque bbox, pad to a square where the object spans `fill` of the side."""
     bbox = obj.getchannel("A").point(lambda v: 255 if v > 16 else 0).getbbox()
@@ -317,7 +338,7 @@ def drop_shadow(im: Image.Image, offset: int, blur: float, opacity: float) -> Im
 
 
 def compose_cutout(raw: Image.Image, spec: dict, target) -> Image.Image:
-    icon = fit_square(cut_out(raw), spec["size"], spec["fill"])
+    icon = fit_square(cut(raw, spec), spec["size"], spec["fill"])
     icon = grade(icon, target, spec.get("grade_strength", 0.7))
     return drop_shadow(icon, max(1, spec["size"] // 100), spec["size"] / 90, 0.45)
 
@@ -378,7 +399,7 @@ def compose_backdrop(raw: Image.Image, spec: dict) -> Image.Image:
 def compose_backed(raw: Image.Image, spec: dict, target, backdrop: Image.Image) -> Image.Image:
     """The graded cut-out subject, smaller than a plain cutout, over the shared disc."""
     size = spec["size"]
-    subject = grade(fit_square(cut_out(raw), size, spec["fill"]), target, spec.get("grade_strength", 0.7))
+    subject = grade(fit_square(cut(raw, spec), size, spec["fill"]), target, spec.get("grade_strength", 0.7))
     icon = backdrop.copy()
     icon.alpha_composite(drop_shadow(subject, max(1, size // 100), size / 90, 0.45))
     return icon
@@ -479,6 +500,23 @@ def pause(size: int, bars=(250, 190, 70), badge=(38, 36, 42)) -> Image.Image:
     return resize_premultiplied(im, (size, size))
 
 
+def arrow_down(size: int, top=(235, 80, 62), bottom=(150, 28, 22)) -> Image.Image:
+    """A thick red arrow pointing down, `size` px square: loss, as vanilla's alerts draw it.
+
+    Vanilla's generic trend_down.dds is an orange-gold triangle, which merges
+    with a gold object under it.
+    """
+    ss = 4
+    n = size * ss
+    pts = [(0.34, 0.04), (0.66, 0.04), (0.66, 0.5), (0.92, 0.5), (0.5, 0.96), (0.08, 0.5), (0.34, 0.5)]
+    mask = Image.new("L", (n, n), 0)
+    ImageDraw.Draw(mask).polygon([(x * n, y * n) for x, y in pts], fill=255)
+    t = np.linspace(0, 1, n, dtype=np.float32)[:, None, None]
+    rgb = np.array(top, np.float32) * (1 - t) + np.array(bottom, np.float32) * t
+    im = Image.fromarray(np.dstack([np.broadcast_to(rgb, (n, n, 3)), np.asarray(mask)]).astype(np.uint8), "RGBA")
+    return resize_premultiplied(outlined(im, ss * max(1, size // 40)), (size, size))
+
+
 def outlined(im: Image.Image, width: int, colour=(20, 16, 12), opacity: float = 0.85) -> Image.Image:
     """`im` over a dark outline `width` px wide, so a mark reads on any ground."""
     alpha = im.getchannel("A").filter(ImageFilter.MaxFilter(2 * width + 1))
@@ -492,7 +530,7 @@ def apply_marks(icon: Image.Image, marks: list[dict], load) -> Image.Image:
     """Draw each mark over `icon`.
 
     A mark is {"icon": <vanilla path>} or {"part": "<cat>/<key>"} or
-    {"draw": "star" | "pause"}, placed with "at" (its centre, as shares of the width and
+    {"draw": "star" | "pause" | "arrow_down"}, placed with "at" (its centre, as shares of the width and
     height; default the lower right, (0.72, 0.72)) and "scale" (its larger
     side as a share of the icon's side; default 0.55). `load(mark)` returns
     the mark's image for the first two kinds. Each gets a dark outline so it
@@ -506,6 +544,8 @@ def apply_marks(icon: Image.Image, marks: list[dict], load) -> Image.Image:
             im = star(box)
         elif mark.get("draw") == "pause":
             im = pause(box)
+        elif mark.get("draw") == "arrow_down":
+            im = arrow_down(box)
         else:
             im = load(mark).convert("RGBA")
             bbox = im.getchannel("A").point(lambda v: 255 if v > 16 else 0).getbbox()
@@ -606,7 +646,7 @@ def compose_medallion(raw: Image.Image, spec: dict, tmpl, target, obj: Image.Ima
     base = np.dstack([bg, alpha]).astype(np.uint8)
     icon = Image.fromarray(base, "RGBA")
     if obj is None:
-        obj = fit_square(cut_out(raw), size, 1.0)
+        obj = fit_square(cut(raw, spec), size, 1.0)
         obj = grade_spread(obj, target, spec["disc"]) if spec.get("grade") == "spread" else grade(obj, target)
     inner = int(size * spec["fill"])
     obj = resize_premultiplied(obj, (inner, inner))
@@ -689,7 +729,7 @@ def compose_plinth(raw: Image.Image, spec: dict, tmpl, target) -> Image.Image:
     """Cut the figure out and stand it on the slab lifted from vanilla."""
     slab, y0, face = tmpl
     size = spec["size"]
-    obj = cut_out(raw)
+    obj = cut(raw, spec)
     bbox = obj.getchannel("A").point(lambda v: 255 if v > 16 else 0).getbbox()
     if bbox:
         obj = obj.crop(bbox)
@@ -755,7 +795,7 @@ def compose_tinted(raw: Image.Image, spec: dict, ramp) -> Image.Image:
     every hue goes.
     """
     quantiles, lut = ramp
-    obj = fit_square(cut_out(raw), spec["size"], spec["fill"])
+    obj = fit_square(cut(raw, spec), spec["size"], spec["fill"])
     a = np.asarray(obj, dtype=np.float32)
     lum = a[..., :3] @ LUMA
     opaque = a[..., 3] > 200

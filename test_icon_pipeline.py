@@ -615,6 +615,24 @@ class DerivedIconTests(unittest.TestCase):
         self.assertGreater(out[36, 36, 0], 150)                               # the star, gold, top left
         self.assertEqual(np.asarray(base)[108, 108, 3], 0)                    # the input is not changed
 
+    def test_solid_fills_the_holes_the_cut_out_left_inside_an_object(self):
+        # A ring the cut-out left hollow: `solid` fills its middle from the raw render.
+        raw = Image.new("RGB", (60, 60), (120, 80, 40))
+        ring = Image.new("RGBA", (60, 60), (0, 0, 0, 0))
+        ring.paste((120, 80, 40, 255), (10, 10, 50, 50))
+        ring.paste((0, 0, 0, 0), (20, 20, 40, 40))
+        saved = self.r.cut_out
+        self.r.cut_out = lambda im: ring                                  # rembg is a GPU-venv dependency
+        try:
+            hollow = np.asarray(self.r.cut(raw, {}))
+            solid = np.asarray(self.r.cut(raw, {"solid": True}))
+        finally:
+            self.r.cut_out = saved
+        self.assertEqual(hollow[30, 30, 3], 0)
+        self.assertEqual(solid[30, 30, 3], 255)
+        self.assertEqual(tuple(solid[30, 30, :3]), (120, 80, 40))         # the raw's colours
+        self.assertEqual(solid[5, 5, 3], 0)                               # outside stays clear
+
     def test_flag_layout(self):
         emblem = Image.new("RGBA", (100, 100), (0, 0, 0, 0))
         emblem.paste((200, 160, 60, 255), (30, 30, 70, 70))

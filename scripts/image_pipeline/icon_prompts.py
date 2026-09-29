@@ -21,8 +21,10 @@ may instead be derived: {"from": "<cat>/<key>", "tint": "grey"|"faint",
 "layout": "flag", "size": (w, h), "marks": [...], "now": ...}, another
 entry's icon reworked with no render of its own. Any entry may carry
 "marks": each {"icon": <vanilla .dds>} | {"part": "<cat>/<key>"} |
-{"draw": "star"|"pause"}, with "at" (centre, as shares of the side) and
-"scale". A `part` category is reviewed like icons but never written; it
+{"draw": "star"|"pause"|"arrow_down"}, with "at" (centre, as shares of the side) and
+"scale". "solid": True fills back any hole the cut-out left inside the
+object (rembg took a crate's front boards for background); only for
+objects with no real holes. A `part` category is reviewed like icons but never written; it
 supplies derived icons and marks (the UN's emblem and scroll badge).
 A subject describes one physical object, with its material and colour. FLUX
 fills in whatever a subject leaves open, and review kept catching the same
@@ -906,52 +908,59 @@ ICONS: dict[str, dict[str, dict]] = {
     # .gui draws today. Symbols on the blue disc are warm or light, for contrast.
     "un_disc": {
         # Agencies (36 px in the overview): one symbol each.
-        "agency_who": {"subject": "a thick gold staff with one green serpent coiled around it", "seed": None,
+        "agency_who": {"subject": "a thick gold staff with one green serpent coiled around it", "seed": 0,
                        "now": f"{_GI}/institution_icons/health_service.dds"},
-        "agency_unesco": {"subject": "an ancient Greek amphora vase in terracotta orange with black bands", "seed": None,
+        "agency_unesco": {"subject": "an ancient Greek amphora vase in terracotta orange with black bands", "seed": 0,
                           "now": f"{_GI}/goods_icons/fine_art.dds"},
-        "agency_icj": {"subject": "a pair of polished brass balance scales, the two pans level", "seed": None,
+        "agency_icj": {"subject": "a pair of polished brass balance scales, the two pans level", "seed": 0,
                        "now": f"{_GI}/institution_icons/home_affairs.dds"},
-        "agency_unhrc": {"subject": "a golden dove with its wings spread wide", "seed": None,
+        "agency_unhrc": {"subject": "a golden dove with its wings spread wide", "seed": 0,
                          "now": f"{_GI}/institution_icons/social_security.dds"},
-        "agency_iaea": {"subject": "a gold atom model, three thick elliptical orbit rings around a red ball nucleus", "seed": None,
+        "agency_iaea": {"subject": "a gold atom model, three thick elliptical orbit rings around a red ball nucleus", "seed": 0,
                         "now": f"{_GI}/goods_icons/electricity.dds"},
-        "agency_unep": {"subject": "a single broad bright green leaf with pale veins", "seed": None,
+        "agency_unep": {"subject": "a single broad bright green leaf with pale veins", "seed": 1,
                         "now": f"{_GI}/goods_icons/wood.dds"},
-        "agency_unhcr": {"subject": "a small tan canvas ridge tent with its flap open", "seed": None,
+        "agency_unhcr": {"subject": "a small tan canvas ridge tent with its flap open", "seed": 0,
                          "now": f"{_GI}/institution_icons/colonization.dds"},
-        "agency_unoosa": {"subject": "a small satellite with a gold foil body and two wide blue solar panel wings", "seed": None,
+        # A satellite is wide and thin side-on: a speck at 36 px (two seeds).
+        "agency_unoosa": {"subject": "a tan and cream banded ringed planet like Saturn, its wide ring tilted", "seed": None,
                           "now": f"{_GI}/goods_icons/aeroplanes.dds"},
-        "agency_itlos": {"subject": "a heavy brass ship's anchor", "seed": None,
+        "agency_itlos": {"subject": "a heavy brass ship's anchor", "seed": 1,
                          "now": f"{_GI}/goods_icons/merchant_marine.dds"},
-        "agency_icc": {"subject": "a dark polished wooden judge's gavel lying on its round wooden block", "seed": None,
+        "agency_icc": {"subject": "a dark polished wooden judge's gavel lying on its round wooden block", "seed": 0,
                        "now": f"{_GI}/institution_icons/police.dds"},
-        "agency_cppnm": {"subject": "a heavy closed brass padlock with a black-and-yellow radiation trefoil on its body", "seed": None,
+        "agency_cppnm": {"subject": "a heavy closed brass padlock with a black-and-yellow radiation trefoil on its body", "seed": 0,
                          "now": f"{_GI}/goods_icons/explosives.dds"},
         # Resolution topics that are no agency's (40 px in the session strip).
-        "topic_condemn": {"subject": "an upright steel sword with a gold hilt", "seed": None,
+        # A sword is too thin at 40 px under the cross (two seeds); a fist is chunky.
+        "topic_condemn": {"subject": "a heavy steel knight's gauntlet clenched into a fist", "seed": None,
                           "marks": [{"icon": f"{_GI}/generic_icons/red_cross.dds"}],
                           "now": f"{_GI}/alert_icons/land_invasion.dds"},
-        "topic_sanctions": {"subject": "a wooden crate bound shut with a heavy iron chain", "seed": None,
+        # rembg cut the crate's front boards out as background: `solid` fills them back.
+        "topic_sanctions": {"subject": "a wooden crate bound shut with a heavy iron chain", "seed": 1, "solid": True,
                             "now": f"{_GI}/alert_icons/blockaded.dds"},
         # The permanent member's gold star (as on its membership icon), falling.
         "topic_expulsion": {"subject": "a polished gold five-pointed star", "seed": None,
-                            "marks": [{"icon": f"{_GI}/generic_icons/trend_down.dds"}],
+                            "marks": [{"draw": "arrow_down", "scale": 0.5}],
                             "now": f"{_GI}/alert_icons/is_losing_rank.dds"},
-        "topic_mandate": {"subject": "an upright steel sword inside a round gold laurel wreath", "seed": None,
+        # Vanilla's war symbol; a sword in a wreath read as a ring with a line at 40 px.
+        "topic_mandate": {"subject": "two crossed broad steel swords with gold hilts", "seed": None,
                           "now": f"{_GI}/goods_icons/artillery.dds"},
-        "topic_peacekeepers": {"subject": "an empty light-blue steel army helmet seen from the side", "seed": None,
+        "topic_peacekeepers": {"subject": "an empty light-blue steel army helmet seen from the side", "seed": 1,
                                "now": f"{_GI}/goods_icons/small_arms.dds"},
-        "topic_aid": {"subject": "two plump burlap grain sacks tied at the top", "seed": None,
+        "topic_aid": {"subject": "two plump burlap grain sacks tied at the top", "seed": 1,
                       "now": f"{_GI}/goods_icons/groceries.dds"},
-        "topic_reform": {"subject": "a white feather quill pen standing in a round glass inkwell", "seed": None,
+        # A glass inkwell cut out as a hollow grey ring and the white quill faded (two seeds).
+        "topic_reform": {"subject": "a brown feather quill pen standing in a squat dark blue ceramic inkwell", "seed": None,
                          "now": f"{_GI}/alert_icons/reform_government.dds"},
-        # FLUX will not break a chain on request; open shackles say the same.
-        "topic_decolonization": {"subject": "a pair of open iron shackles joined by a short chain", "seed": None,
+        # FLUX will not break a chain on request, and open shackles read as a
+        # horseshoe (two seeds): a new nation's flag instead.
+        "topic_decolonization": {"subject": "a plain bright green cloth flag on a short wooden pole planted in a small mound of brown earth", "seed": None,
                                  "now": f"{_GI}/alert_icons/secession.dds"},
         # A convention topic founds or runs an agency: that agency's icon under
         # the scroll badge.
-        **{f"topic_{topic}": {"from": f"un_disc/agency_{agency}", "marks": [{"part": "un_part/scroll_badge"}],
+        **{f"topic_{topic}": {"from": f"un_disc/agency_{agency}",
+                              "marks": [{"part": "un_part/scroll_badge", "at": (0.75, 0.77), "scale": 0.48}],
                               "now": now}
            for topic, agency, now in (
                ("human_rights", "unhrc", f"{_GI}/institution_icons/social_security.dds"),
@@ -967,22 +976,23 @@ ICONS: dict[str, dict[str, dict]] = {
     },
     # Authority tiers (32 px): the colonnade gains columns and finer metal.
     "un_tier": {
-        "tier_moribund": {"subject": "a single short broken grey stone column stump with a few stone blocks at its base", "seed": None,
+        # "Stone blocks at its base" drew an orange ground patch, or a block (two seeds).
+        "tier_moribund": {"subject": "a broken grey marble column snapped off at half height with a jagged top, two fallen column drums lying beside it", "seed": None,
                           "now": f"{_GI}/alert_icons/revolution.dds"},
-        "tier_contested": {"subject": "two thick weathered bronze columns of unequal height", "seed": None,
+        "tier_contested": {"subject": "two thick weathered bronze columns of unequal height", "seed": 0,
                            "now": f"{_GI}/alert_icons/low_legitimacy.dds"},
-        "tier_established": {"subject": "three thick bronze columns under a plain flat stone lintel", "seed": None,
+        "tier_established": {"subject": "three thick bronze columns under a plain flat stone lintel", "seed": 0,
                              "now": f"{_GI}/generic_icons/checkmark.dds"},
-        "tier_strong": {"subject": "a silver classical portico of four thick columns under a triangular pediment", "seed": None,
+        "tier_strong": {"subject": "a silver classical portico of four thick columns under a triangular pediment", "seed": 0,
                         "now": f"{_GI}/generic_icons/green_checkmark.dds"},
-        "tier_supranational": {"subject": "a gleaming gold classical temple front of six thick columns under a triangular pediment", "seed": None,
+        "tier_supranational": {"subject": "a gleaming gold classical temple front of six thick columns under a triangular pediment", "seed": 0,
                                "now": f"{_GI}/alert_icons/formable_possible.dds"},
     },
     "un_part": {
         # A globe needs its continents named, or it renders as a plain ball.
-        "emblem": {"subject": "a round emblem: a blue globe with green continents and blue oceans, encircled by a thick gold laurel wreath", "seed": None},
+        "emblem": {"subject": "a round emblem: a blue globe with green continents and blue oceans, encircled by a thick gold laurel wreath", "seed": 2},
         # Tan, not cream: a pale surface is lost in the cut-out.
-        "scroll_badge": {"subject": "a small rolled tan parchment scroll tied with a red ribbon", "seed": None},
+        "scroll_badge": {"subject": "a small rolled tan parchment scroll tied with a red ribbon", "seed": 3},
     },
     "un_member": {
         "member_no_un": {"from": "un_part/emblem", "tint": "faint",
@@ -1118,7 +1128,7 @@ def check(mod_root: str | None = None, on_disk: set[str] | None = None) -> dict:
 
 TINTS = ("grey", "faint")
 LAYOUTS = ("flag",)
-DRAWN_MARKS = ("star", "pause")
+DRAWN_MARKS = ("star", "pause", "arrow_down")
 
 
 def _is_gfx_path(path, suffixes) -> bool:

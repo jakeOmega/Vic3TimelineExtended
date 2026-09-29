@@ -307,13 +307,24 @@ def stage_render(cat: str, only: set[str], work: Path, seeds: int, offload: str)
     render(jobs, work / "embeds", work / "raw", offload, **kw)
 
 
-def _compose_one(composer, cat: str, raw: Path, final: Path, backdrop=None, backdrop_raw: Path | None = None):
+# Per-entry settings that change how an entry's render is composed.
+ENTRY_SPEC_KEYS = ("solid",)
+
+
+def entry_spec(cat: str, e: dict) -> dict:
+    """The category's spec with the entry's own compose settings (`solid`) over it."""
+    own = {k: e[k] for k in ENTRY_SPEC_KEYS if k in e}
+    return dict(CATEGORIES[cat], **own) if own else CATEGORIES[cat]
+
+
+def _compose_one(composer, cat: str, raw: Path, final: Path, backdrop=None, backdrop_raw: Path | None = None,
+                 spec: dict | None = None):
     from PIL import Image
 
     newest = max(raw.stat().st_mtime, backdrop_raw.stat().st_mtime if backdrop_raw else 0)
     if final.exists() and final.stat().st_mtime >= newest:
         return Image.open(final)
-    icon = composer.compose(Image.open(raw), cat, CATEGORIES[cat], backdrop=backdrop)
+    icon = composer.compose(Image.open(raw), cat, spec or CATEGORIES[cat], backdrop=backdrop)
     final.parent.mkdir(parents=True, exist_ok=True)
     icon.save(final)
     return icon
@@ -353,7 +364,8 @@ class Finals:
         raw = raw_path(self.work / "raw", name(cat, key), seed)
         if not raw.exists():
             return None
-        icon = _compose_one(self.composer, cat, raw, final_dir(cat, self.work) / raw.name, *self.backdrop(cat))
+        icon = _compose_one(self.composer, cat, raw, final_dir(cat, self.work) / raw.name, *self.backdrop(cat),
+                            spec=entry_spec(cat, ICONS[cat][key]))
         return self.finish(ICONS[cat][key], icon)
 
     def finish(self, e: dict, icon):
@@ -392,9 +404,9 @@ def stage_compose(cat: str, only: set[str], work: Path) -> None:
     composer, n = Composer(), 0
     backdrop, backdrop_raw = load_backdrop(cat, work) if "backdrop" in CATEGORIES[cat] else (None, None)
     final = final_dir(cat, work)
-    for key in generated(cat, only):
+    for key, e in generated(cat, only).items():
         for raw in sorted((work / "raw").glob(f"{name(cat, key)}__s*.png")):
-            _compose_one(composer, cat, raw, final / raw.name, backdrop, backdrop_raw)
+            _compose_one(composer, cat, raw, final / raw.name, backdrop, backdrop_raw, spec=entry_spec(cat, e))
             n += 1
     print(f"compose: {n} candidates in {final}")
 
@@ -509,6 +521,8 @@ def stage_write(cat: str, only: set[str], work: Path) -> None:
                 want += [CATEGORIES[c]["backdrop"]["seed"], backdrop_prompt(c)]
             if e.get("marks"):
                 want += [e["marks"]] + part_seeds(e)
+            if any(k in e for k in ENTRY_SPEC_KEYS):
+                want += [{k: e[k] for k in ENTRY_SPEC_KEYS if k in e}]
         return json.loads(json.dumps(want))  # tuples as lists, as read back
 
     def _src(e: dict) -> tuple[str, dict]:
