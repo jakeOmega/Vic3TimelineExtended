@@ -15,11 +15,13 @@ production pipeline). Nothing here knows about a particular entity list.
                cutout           background removed (rembg), trimmed, padded, graded
                framed           full-bleed scene inside the frame lifted from vanilla
                medallion        cutout on a disc, under the ring lifted from vanilla
+                                (grade="spread": graded at two percentiles to the folder's objects)
                emboss           FLUX silhouette -> the PM pipeline's metallic emboss
                emboss_medallion that emboss on the disc and ring
                plinth           cutout standing on the slab lifted from vanilla
                tinted           cutout recast in its folder's one metal (laws, institutions)
-               card             dark pictogram on a blank card lifted from vanilla (IG traits)
+               card             dark pictogram on a blank card lifted from vanilla (IG and
+                                character traits; `recolor` turns it to a colour vanilla lacks)
   review_sheet()  Row per entity: [current icon | 3 vanilla neighbours || candidates].
 
 Frames are not hand-drawn: `vanilla_template()` takes the per-pixel median of
@@ -203,6 +205,70 @@ def grade(im: Image.Image, target: tuple[float, float], strength: float = 0.7) -
     return out
 
 
+SPREAD_PCT = (50, 90)
+DISC_DIST = 45  # an object pixel is at least this far (RGB) from its disc's colour
+
+
+def _object_mask(rgb: np.ndarray, disc) -> np.ndarray:
+    return np.linalg.norm(rgb - np.mean(np.asarray(disc, dtype=np.float32), axis=0), axis=-1) > DISC_DIST
+
+
+def medallion_object_target(folder: str, disc) -> dict:
+    """The 50th and 90th percentiles of saturation and value of vanilla's objects on their disc.
+
+    Object pixels are those inside the ring that stand apart from the disc
+    colour. A median alone missed vanilla decrees' highlights: graded to it,
+    ours matched in the middle but topped out at a value of 0.71 against 0.88.
+    """
+    s, v = [], []
+    for f in sorted((vanilla_icons_dir() / folder).glob("*.dds")):
+        try:
+            im = load_rgba(f)
+        except Exception:
+            continue
+        n = im.size[0]
+        yy, xx = np.mgrid[0:n, 0:n]
+        inside = np.hypot(xx - (n - 1) / 2, yy - (n - 1) / 2) < 0.4 * n
+        m = inside & _object_mask(np.asarray(im, dtype=np.float32)[..., :3], disc)
+        hsv = np.asarray(im.convert("RGB").convert("HSV"), dtype=np.float32) / 255
+        s.append(hsv[..., 1][m])
+        v.append(hsv[..., 2][m])
+    if not s:
+        raise SystemExit(f"no .dds in {vanilla_icons_dir() / folder}: check VIC3_BASE_GAME")
+    return {1: np.percentile(np.concatenate(s), SPREAD_PCT), 2: np.percentile(np.concatenate(v), SPREAD_PCT)}
+
+
+def grade_spread(im: Image.Image, target: dict, disc, strength: float = 0.8,
+                 max_gain: float = 1.6) -> Image.Image:
+    """Pull the 50th and 90th percentiles of saturation and value toward `target`.
+
+    Each channel goes through a piecewise-linear curve from (0, 0) through the
+    two moved percentiles to (1, 1), so contrast can grow as well as the
+    middle. Percentiles are taken over the pixels that `medallion_object_target`
+    would count, so both sides are measured alike. Gains are capped: a
+    near-grey object's saturation is mostly noise hue.
+    """
+    a = np.asarray(im)
+    alpha = a[..., 3]
+    m = (alpha > 200) & _object_mask(a[..., :3].astype(np.float32), disc)
+    if m.sum() < 50:
+        return im
+    hsv = np.asarray(im.convert("RGB").convert("HSV"), dtype=np.float32) / 255
+    for ch, t in target.items():
+        own = np.percentile(hsv[..., ch][m], SPREAD_PCT)
+        want = own * np.clip((t / np.maximum(own, 1e-3)) ** strength, 1 / max_gain, max_gain)
+        xp, fp = [0.0], [0.0]
+        for o, w in zip(own, np.minimum(want, 0.995)):
+            if o > xp[-1] + 1e-3 and w > fp[-1] and o < 0.999:
+                xp.append(float(o))
+                fp.append(float(w))
+        hsv[..., ch] = np.interp(hsv[..., ch], xp + [1.0], fp + [1.0])
+    rgb = Image.fromarray(np.clip(hsv * 255 + 0.5, 0, 255).astype(np.uint8), "HSV").convert("RGB")
+    out = rgb.convert("RGBA")
+    out.putalpha(Image.fromarray(alpha))
+    return out
+
+
 _REMBG = None
 
 
@@ -238,7 +304,7 @@ def drop_shadow(im: Image.Image, offset: int, blur: float, opacity: float) -> Im
 
 def compose_cutout(raw: Image.Image, spec: dict, target) -> Image.Image:
     icon = fit_square(cut_out(raw), spec["size"], spec["fill"])
-    icon = grade(icon, target)
+    icon = grade(icon, target, spec.get("grade_strength", 0.7))
     return drop_shadow(icon, max(1, spec["size"] // 100), spec["size"] / 90, 0.45)
 
 
@@ -318,7 +384,8 @@ def compose_medallion(raw: Image.Image, spec: dict, tmpl, target, obj: Image.Ima
     base = np.dstack([bg, alpha]).astype(np.uint8)
     icon = Image.fromarray(base, "RGBA")
     if obj is None:
-        obj = grade(fit_square(cut_out(raw), size, 1.0), target)
+        obj = fit_square(cut_out(raw), size, 1.0)
+        obj = grade_spread(obj, target, spec["disc"]) if spec.get("grade") == "spread" else grade(obj, target)
     inner = int(size * spec["fill"])
     obj = resize_premultiplied(obj, (inner, inner))
     icon.alpha_composite(drop_shadow(obj, 2, 2.5, 0.5), ((size - inner) // 2, (size - inner) // 2 + 2))
@@ -550,6 +617,28 @@ def card_template(folder: str, size: tuple[int, int], frame: tuple[int, int, int
     return card
 
 
+def recolor_card(card: np.ndarray, deg: float, sat: float) -> np.ndarray:
+    """A card template with every hue turned by `deg` and saturation scaled by `sat`.
+
+    For a card colour vanilla has no cards in: the ornaments and shading of a
+    lifted template carry over.
+    """
+    out = card.copy()
+    hsv = np.asarray(Image.fromarray(np.clip(card[..., :3] + 0.5, 0, 255).astype(np.uint8), "RGB").convert("HSV"),
+                     dtype=np.float32)
+    hsv[..., 0] = (hsv[..., 0] + deg / 360 * 256) % 256
+    hsv[..., 1] = np.clip(hsv[..., 1] * sat, 0, 255)
+    out[..., :3] = np.asarray(Image.fromarray(hsv.astype(np.uint8), "HSV").convert("RGB"), dtype=np.float32)
+    return out
+
+
+def recolor_rgb(c, deg: float, sat: float) -> tuple[float, float, float]:
+    """recolor_card for one colour (channels above 255 allowed, as in emboss colours)."""
+    import colorsys
+    h, s, v = colorsys.rgb_to_hsv(*(x / 255 for x in c))
+    return tuple(x * 255 for x in colorsys.hsv_to_rgb((h + deg / 360) % 1, min(1.0, s * sat), v))
+
+
 def compose_card(raw: Image.Image, spec: dict, card: np.ndarray) -> Image.Image:
     """The dark embossed pictogram, centred on the slot's card."""
     h, w = card.shape[:2]
@@ -580,11 +669,18 @@ class Composer:
         if mode in ("cutout", "medallion", "plinth") and cat not in self._target:
             # A medallion's opaque pixels are mostly its dark disc: grade the
             # object against a folder of bare objects instead.
-            self._target[cat] = category_grade_target(spec.get("grade_folder", spec["folder"]))
+            self._target[cat] = (medallion_object_target(spec["folder"], spec["disc"]) if spec.get("grade") == "spread"
+                                 else category_grade_target(spec.get("grade_folder", spec["folder"])))
         if mode == "tinted" and cat not in self._tmpl:
             self._tmpl[cat] = tone_ramp(spec.get("ramp_folder", spec["folder"]))
         if mode == "card" and cat not in self._tmpl:
             self._tmpl[cat] = card_template(spec["folder"], spec["card_size"], spec["frame"])
+            if "recolor" in spec:
+                self._tmpl[cat] = recolor_card(self._tmpl[cat], *spec["recolor"])
+        if mode == "card" and "recolor" in spec:
+            # The pictogram's tint turns with its card.
+            spec = dict(spec, **{k: recolor_rgb(spec[k], *spec["recolor"])
+                                 for k in ("color", "color_bottom") if k in spec})
         raw = raw.convert("RGB")
         if mode == "tinted":
             return compose_tinted(raw, spec, self._tmpl[cat])

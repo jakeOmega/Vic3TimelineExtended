@@ -300,5 +300,56 @@ class EmbossGradientTests(unittest.TestCase):
         self.assertTrue((a[..., 3] == np.asarray(self.embossed(self.raw, self.spec, 64))[..., 3]).all())
 
 
+@unittest.skipIf(icon_dds is None, "Pillow is not installed")
+class SpreadGradeAndRecolorTests(unittest.TestCase):
+    """`grade_spread` moves two percentiles; `recolor_card`/`recolor_rgb` turn a card's hue."""
+
+    NO_DISC = ((-1000, -1000, -1000),)  # every opaque pixel counts as object
+
+    def setUp(self):
+        import icon_render
+        self.r = icon_render
+
+    def _hsv_image(self, h, s, v):
+        hsv = np.stack(np.broadcast_arrays(h, s, v), axis=-1) * 255
+        im = Image.fromarray(np.clip(hsv + 0.5, 0, 255).astype(np.uint8), "HSV").convert("RGBA")
+        return im
+
+    def _pct(self, im, ch):
+        hsv = np.asarray(im.convert("RGB").convert("HSV"), dtype=np.float32) / 255
+        return np.percentile(hsv[..., ch], (50, 90))
+
+    def test_moves_both_percentiles_and_keeps_order(self):
+        v = np.linspace(0.9, 1.0, 64 * 64).reshape(64, 64)  # bright and flat
+        im = self._hsv_image(30 / 360, 0.5, v)
+        out = self.r.grade_spread(im, {2: np.array([0.6, 0.8])}, self.NO_DISC, strength=1.0)
+        np.testing.assert_allclose(self._pct(out, 2), [0.6, 0.8], atol=0.03)
+        before = np.asarray(im.convert("RGB").convert("HSV"))[..., 2].ravel()
+        after = np.asarray(out.convert("RGB").convert("HSV"))[..., 2].ravel()
+        self.assertTrue((np.diff(after[np.argsort(before, kind="stable")].astype(int)) >= 0).all())
+        self.assertTrue((np.asarray(out)[..., 3] == 255).all())
+
+    def test_saturation_gain_is_capped(self):
+        s = np.linspace(0.01, 0.04, 64 * 64).reshape(64, 64)  # near grey
+        im = self._hsv_image(200 / 360, s, 0.6)
+        out = self.r.grade_spread(im, {1: np.array([0.4, 0.6])}, self.NO_DISC, strength=1.0, max_gain=1.6)
+        self.assertLess(self._pct(out, 1)[0], self._pct(im, 1)[0] * 1.6 + 0.01)
+
+    def test_recolor_turns_hue_and_keeps_value(self):
+        pink = (184, 129, 128)
+        gold = self.r.recolor_rgb(pink, 45, 1.0)
+        import colorsys
+        h0, s0, v0 = colorsys.rgb_to_hsv(*(c / 255 for c in pink))
+        h1, s1, v1 = colorsys.rgb_to_hsv(*(c / 255 for c in gold))
+        self.assertAlmostEqual((h1 - h0) % 1, 45 / 360, places=3)
+        self.assertAlmostEqual(v1, v0, places=3)
+        card = np.zeros((8, 8, 4), np.float32)
+        card[..., :3] = pink
+        card[..., 3] = 200
+        turned = self.r.recolor_card(card, 45, 1.0)
+        self.assertLess(np.abs(turned[0, 0, :3] - gold).max(), 4)  # PIL's 8-bit hue
+        self.assertTrue((turned[..., 3] == 200).all())
+
+
 if __name__ == "__main__":
     unittest.main()

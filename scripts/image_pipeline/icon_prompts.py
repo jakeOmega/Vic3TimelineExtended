@@ -155,10 +155,12 @@ CATEGORIES = {
         style="{subject}, one chunky readable object, " + PAINTED),
     # The same metal as laws. The ramp comes from law_icons: institution_icons
     # also holds institution_icon_bg, the dark disc the GUI draws them over.
+    # Vanilla's objects span 0.68-0.80 of the side (median 0.775) and the disc
+    # 0.80; at 0.9 ours spilled past the disc (#561 in-game review).
     # Only `icon =` is wired; `background_texture` (a 3500x220 painted strip in
     # illustrations/institutions/) is a different layout.
     "institution": dict(
-        folder="institution_icons", ramp_folder="law_icons", size=256, mode="tinted", fill=0.9,
+        folder="institution_icons", ramp_folder="law_icons", size=256, mode="tinted", fill=0.78,
         entity_dir="common/institutions", field="icon",
         style="{subject}, one chunky readable object, " + PAINTED),
     # IG trait cards (124x162, InterestGroupTrait.GetTexture): a dark embossed
@@ -179,8 +181,12 @@ CATEGORIES = {
     # layout; the frame colour is the trait's type: condition pink (184,129,128
     # where card_template samples it), skill grey (151,149,139), personality
     # blue (125,147,158). Pictogram colours fitted to vanilla's condition cards.
+    # The combined-arms traits then turn card and tint to gold (`recolor`:
+    # hue +45 degrees, saturation x1.4): pink marks vanilla's bad traits, and
+    # no vanilla type is yellow (#561 in-game review).
     "character_trait": dict(
         folder="character_trait_icons", size=320, card_size=(240, 320), frame=(184, 129, 128),
+        recolor=(45, 1.4),
         mode="card", fill=(0.8, 0.72), entity_dir="common/character_traits", field="texture",
         color=(99, 101, 101), color_bottom=(65, 45, 43), style=SILHOUETTE),
     # Harvest conditions (150 px, HarvestConditionType.GetIcon): a painted
@@ -194,8 +200,12 @@ CATEGORIES = {
     # Power bloc identities (~200 px, PowerBlocIdentity.GetIcon): one ornate,
     # often gilded object on a transparent background. The background field
     # is shared by every identity, vanilla's too.
+    # grade_strength 0.5, not 0.7: the Diplomatic Framework's parchment
+    # rendered clipped near white, and the full grade flattened it to one dull
+    # beige (#561 in-game review). The two-point grade decrees use turned the
+    # clipped parchment blotchy.
     "power_bloc_identity": dict(
-        folder="central_identity_pillars_icons", size=200, mode="cutout", fill=0.92,
+        folder="central_identity_pillars_icons", size=200, mode="cutout", fill=0.92, grade_strength=0.5,
         entity_dir="common/power_bloc_identities", field="icon",
         style="{subject}, one ornate readable object, " + PAINTED),
     # Read only from `texture =` (Decree.GetTexture, DecreeType.GetTexture).
@@ -204,7 +214,9 @@ CATEGORIES = {
         # Vanilla's disc, measured on its bare pixels: centre, then edge.
         disc=((28, 42, 42), (25, 44, 50)),
         entity_dir="common/decrees", field="texture",
-        grade_folder="invention_icons",
+        # Graded to vanilla decrees' objects at two points (median and 90th
+        # percentile): a median grade left ours dull (#561 in-game review).
+        grade="spread",
         style="{subject}, one chunky compact object, bright warm lighting, " + PAINTED),
 }
 

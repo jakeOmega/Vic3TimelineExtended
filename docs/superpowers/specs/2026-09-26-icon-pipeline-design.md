@@ -164,11 +164,11 @@ Every category below is read only from its entity's icon field; the engine has n
 |---|---|---|---|
 | Mobilization options | 27 | `emboss`, with a colour gradient | 14 were on `machinegunners.dds` |
 | Ideologies | 3 IG, 6 leader | `emboss_medallion` | `leader_ideology` is a second category (silver on teal, `ideology_leader/`); the 24 `custom_religion_*` variants keep their base icon, as vanilla's do |
-| Decrees | 15 | `medallion`, with the disc colour set | 13 were on `road_maintenance` |
+| Decrees | 15 | `medallion`, with the disc colour set and the two-point grade | 13 were on `road_maintenance` |
 | Laws | 4 | `tinted` (new) | penal labor camps, private military contractors, littoral defense, auxiliary fleet |
 | Institutions | 17 | `tinted` | `icon` only; `background_texture` (a 3500×220 painted strip) stays borrowed |
 | IG traits | 15 | `card` (new), one category per approval slot | the traditionalist trio is the Devout IG's own set and stays |
-| Character traits | 6 | `card` | the combined-arms traits are `type = condition`, so the condition card |
+| Character traits | 6 | `card` | the combined-arms traits are `type = condition`: the condition card, turned gold |
 | Harvest conditions | 3 | `framed` | the round rim lifts like the building frame |
 | Power bloc identity | 1 | `cutout` | Diplomatic Framework |
 
@@ -207,6 +207,22 @@ The pictogram's `fill` is (width, height) of the card. Vanilla's span about 0.8 
 - **Stray specks in a silhouette.** Dark connected parts under 1% of the largest one can be whitened in the raw (Fire Support).
 
 **Pairs share a symbol.** An ideology held by both an IG and a leader (Multiculturalist, Anti-Colonialist) uses one subject in both categories. The same prompt and seed render the same picture, so the two looks match.
+
+### In-game review (2026-09-28)
+
+The owner compared the merged batch (#561) with vanilla in game and asked for four changes.
+- **Institutions were too big.** Vanilla's objects span 0.68–0.80 of the side (median 0.775), and `institution_icon_bg`, the disc the panel draws them over, spans 0.80. At `fill` 0.9 ours spilled past the disc. They are now at 0.78. Laws were left alone (vanilla 0.877, ours 0.9). This is the second category sized by eye and then corrected (ideology symbols were the first): measure vanilla's opaque bounding boxes before choosing `fill`.
+- **Decrees were dull.** The FLUX renders are more vivid than vanilla: Tax Breaks' cut-out had a median saturation of 0.70 and value of 0.93. The old grade scaled every tone by the same factor to hit one median (from `invention_icons`), so it pulled the highlights down with everything else. `grade="spread"` measures vanilla's decree objects on their disc (pixels inside the ring more than 45 RGB from the disc colour). It then moves the 50th and 90th percentiles of saturation and value toward theirs, along a piecewise-linear curve through (0,0) and (1,1), at strength 0.8 with gains capped at 1.6. The table gives medians of per-icon values; the target itself is pooled over all of vanilla's object pixels (V p90 0.91), so it reads a little higher:
+
+  | | S p50 | S p90 | V p50 | V p90 |
+  |---|---|---|---|---|
+  | vanilla | 0.40 | 0.62 | 0.65 | 0.88 |
+  | before | 0.36 | 0.46 | 0.57 | 0.71 |
+  | after | 0.44 | 0.68 | 0.65 | 0.91 |
+- **The spread grade needs detail at the top.** The Diplomatic Framework's parchment rendered clipped near white (V p50 0.98, p90 0.99), and the old grade flattened it to one beige at V 0.51. Stretching that clipped range made it blotchy, so the category takes the plain grade at `grade_strength` 0.5 instead of 0.7. Mean luminance went from 103 to 125; vanilla's identities range from 71 to 115.
+- **The pink card said "bad trait".** Vanilla's condition card marks bad traits (alcoholic, cancer). The combined-arms traits keep the condition template but turn it with `recolor = (45, 1.4)`: hue +45°, saturation ×1.4, a gold no vanilla type uses. The pictogram's fitted tint turns with the card.
+
+**Compose keeps a final that is newer than its raw.** A layout or spec change therefore recomposes nothing. Move the category's `final/<category>__*` files aside, compose, then delete the DDS files and `write`.
 
 ## Review lessons (2026-09-27)
 
