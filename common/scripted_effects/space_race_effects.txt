@@ -83,6 +83,16 @@ sr_recalculate_cost = {
 	else = {
 		set_variable = { name = sr_cost_participation value = 0 } # REVIEWED 2026-09-26: a cache of live state (global ranking), re-derived on every call; nothing a revolution's winner could lose
 	}
+	# Whether solar colonization was billed (sr_milestone_billed_solar_colonization).
+	# Its production method can be switched off with no button press, so
+	# space_race_on_action recalculates when this is stale.
+	if = {
+		limit = { sr_milestone_billed_solar_colonization = yes }
+		set_variable = { name = sr_cost_solar_running value = 1 } # REVIEWED 2026-09-29: a cache of live state (the production method), re-derived on every call; nothing a revolution's winner could lose
+	}
+	else = {
+		set_variable = { name = sr_cost_solar_running value = 0 } # REVIEWED 2026-09-29: a cache of live state (the production method), re-derived on every call; nothing a revolution's winner could lose
+	}
 	# Refresh the widget's display state. This effect is the shared tail of every
 	# approach / funding button, every journal entry's `immediate`, milestone
 	# completion and the monthly cleanup, so the panel's status label reacts to a
@@ -539,12 +549,13 @@ sr_clear_milestone_cost_modifiers_base = {
 }
 
 # Re-apply the cost and funding-progress modifiers to one milestone's JE,
-# gated on the active flag. Multiplier names interpolate from $MILESTONE$
-# (sr_<X>_cost and sr_funding_<X>_level — verified to exist for all 8 tokens).
-# Country scope.
+# gated on sr_milestone_billed_<X> (the active flag; for solar colonization,
+# its programme actually running). Multiplier names interpolate from
+# $MILESTONE$ (sr_<X>_cost and sr_funding_<X>_level — verified to exist for
+# all 8 tokens). Country scope.
 sr_apply_milestone_cost_modifiers_base = {
 	if = {
-		limit = { has_variable = sr_active_$MILESTONE$ }
+		limit = { sr_milestone_billed_$MILESTONE$ = yes }
 		je:je_space_race_$MILESTONE$ = {
 			add_modifier = { name = sr_space_program_cost multiplier = sr_$MILESTONE$_cost          }
 			add_modifier = { name = sr_funding_progress   multiplier = sr_funding_$MILESTONE$_level }
