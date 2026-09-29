@@ -16,13 +16,13 @@ CUSTOM_LOC = os.path.join(REPO, "common", "customizable_localization", "global_w
 ICONS_DOC = os.path.join(REPO, "docs", "systems", "global_warming_gui_icons.md")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 
-STATUS = ["te_gw_sec_emissions", "te_gw_sec_policies"]
+STATUS = ["te_gw_sec_policies"]
 REFERENCE = ["te_gw_sec_history", "te_gw_sec_how"]
 ROOTS = {"widget_je_gw_overview": ("custom_widget_container_1", "te_gw_overview_panel"),
          "widget_je_gw_status": ("custom_widget_container_2", "te_gw_status_sections"),
          "widget_je_gw_reference": ("custom_widget_container_3", "te_gw_reference_sections")}
-FLAGS = {"gw_emissions_closed", "gw_policies_closed", "gw_world_closed", "gw_hist_closed", "gw_how_open"}
-OLD_FLAGS = ["gw_hist_open", "gw_world_open"]
+FLAGS = {"gw_policies_closed", "gw_world_closed", "gw_hist_closed", "gw_how_open"}
+OLD_FLAGS = ["gw_hist_open", "gw_world_open", "gw_emissions_closed"]
 MARKET_WIDE = ["carbon_tax", "renewable_investment", "emission_standards"]
 NATIONAL = ["climate_adaptation", "reforestation", "public_transit", "fossil_fuel_divestment",
             "green_building_codes"]
@@ -142,7 +142,7 @@ class GatedLinesTest(unittest.TestCase):
     """Lines that matter in one state appear only in that state (style rules 6, 7)."""
 
     def test_emissions_table_waits_for_the_first_january(self):
-        body = _type_body(_read(GUI), "te_gw_sec_emissions")
+        body = _type_body(_read(GUI), "te_gw_overview_panel")
         gate = "GetScriptedGui('gw_has_yearly_figures_sgui').IsShown"
         pending = _visible_of(body, "gw_emis_pending")
         self.assertTrue(pending.startswith("Not(") and gate in pending, pending)
@@ -220,7 +220,7 @@ class HowItWorksTest(unittest.TestCase):
         self.assertGreaterEqual(len(notes), 6)
         self.assertTrue(all(n.startswith("gw_how_") for n in notes), notes)
         self.assertIn("GetVariableSystem.Toggle('gw_how_open')", how)
-        for sec in ("te_gw_overview_panel", "te_gw_sec_emissions", "te_gw_sec_policies", "te_gw_sec_history"):
+        for sec in ("te_gw_overview_panel", "te_gw_sec_policies", "te_gw_sec_history"):
             body = _type_body(gui, sec)
             self.assertNotIn("gw_note", body, sec)
             self.assertNotIn('"gw_how_', body, sec)
@@ -328,8 +328,38 @@ class OverviewWidthTest(unittest.TestCase):
         self.assertIn(int(re.search(r'max_width = (\d+)\s*elide = right\s*align = left\|nobaseline\s*text = "gw_ov_temp_value"', row).group(1)), cells)
 
     def test_emissions_table_matches_the_column(self):
-        body = _type_body(_read(GUI), "te_gw_sec_emissions")
+        body = _type_body(_read(GUI), "te_gw_overview_panel")
         self.assertRegex(body, r"minimumsize = \{ 480 -1 \}\s*visible = \"\[GetScriptedGui\('gw_has_yearly_figures_sgui'\)")
+        # gw_value_row's cells are fixed: min and max width equal.
+        row = _type_body(_read(GUI), "gw_value_row")
+        for w in re.findall(r"minimumsize = \{ (\d+) -1 \}\s*maximumsize = \{ (\d+) -1 \}", row):
+            self.assertEqual(w[0], w[1])
+        self.assertEqual(len(re.findall(r"minimumsize = \{ (\d+) -1 \}\s*maximumsize", row)), 2)
+
+
+class RoundThreeTest(unittest.TestCase):
+    """Emissions became a table in the overview (the owner, 2026-09-29)."""
+
+    def test_table_sits_between_the_headline_and_the_pies(self):
+        body = _type_body(_read(GUI), "te_gw_overview_panel")
+        headline = body.index('tooltip = "gw_ov_temp_tt"')
+        pending = body.index('text = "gw_emis_pending"')
+        table = body.index('text = "gw_emis_market_label"')
+        pies = body.index("te_gw_ov_pie = {")
+        self.assertLess(headline, pending)
+        self.assertLess(pending, table)
+        self.assertLess(table, pies)
+
+    def test_each_row_keeps_its_tooltip(self):
+        body = _type_body(_read(GUI), "te_gw_overview_panel")
+        rows = re.findall(r'gw_value_row = \{\s*tooltip = "(\w+)"\s*blockoverride "row_label" \{\s*text = "(\w+)"', body)
+        self.assertEqual(rows, [("gw_cond_emis_tt", "gw_emis_market_label"), ("gw_emis_capture_tt", "gw_emis_capture_label"),
+                                ("gw_emis_world_tt", "gw_emis_world_label"), ("gw_cond_trend_tt", "gw_emis_warming_label")])
+
+    def test_the_section_is_gone(self):
+        gui = _read(GUI)
+        self.assertNotIn("te_gw_sec_emissions", gui)
+        self.assertNotIn("gw_sect_emissions", _loc_keys())
 
 
 class LocTest(unittest.TestCase):
