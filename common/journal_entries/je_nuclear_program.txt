@@ -22,14 +22,19 @@
 #     stops holding. Every other "does this country have a programme?" test in
 #     the mod asks nuclear_program_has_programme too, never has_journal_entry.
 #
-# Panels, top to bottom (gui/journal_entry.gui draws status desc(188),
-# container_2(207), the button grid(215), container_3(236), scripted bars(246),
-# the native bar(670), container_4(728), reason(742)):
+# Panels, top to bottom (gui/journal_entry.gui draws container_1(161), status
+# desc(188), container_2(207), the button grid(215), container_3(236), scripted
+# bars(246), the native bar(670), container_4(732)). The order of the sections
+# lives in gui/journal_entry_widgets/nuclear_layout_widget.gui, which holds the
+# four roots below:
+#   container_1  the overview: programme, warheads, crisis, credibility, the
+#                posture, the nuclear taboo
 #   container_3  the programme — only while there is one; sits directly above
 #                the native bar, which is progress toward the next warhead
 #   native bar   progress toward the next warhead
-#   container_4  posture (only while armed), then the crisis and reputation,
-#                then delivery and defence and the world's nuclear powers
+#   container_4  the live sections (crisis, posture, forces, at home,
+#                reputation, the taboo, delivery and defence), then the
+#                nuclear powers and How Nuclear Weapons Work
 #
 # Deterrence logic lives in scripted effects (nuclear_deterrence_effects.txt,
 # nuclear_crisis_effects.txt); the pulses below are their only callers.
@@ -59,28 +64,30 @@ je_nuclear_program = {
 	scripted_button = increase_funding_nuclear_program
 	scripted_button = decrease_funding_nuclear_program
 
+	# The order of every section is set in nuclear_layout_widget.gui; the header
+	# above says where each root lands.
 	widget = {
-		gui = "gui/journal_entry_widgets/nuclear_program_widget.gui"
+		gui = "gui/journal_entry_widgets/nuclear_layout_widget.gui"
+		name = "widget_je_nuclear_overview"
+		container = "custom_widget_container_1"
+	}
+
+	widget = {
+		gui = "gui/journal_entry_widgets/nuclear_layout_widget.gui"
 		name = "widget_je_nuclear_programme"
 		container = "custom_widget_container_3"
 	}
 
-	# Three widgets stacked in container_4, drawn in the order declared.
+	# Two widgets stacked in container_4, drawn in the order declared.
 	widget = {
-		gui = "gui/journal_entry_widgets/nuclear_deterrence_widget.gui"
-		name = "widget_je_nuclear_posture"
+		gui = "gui/journal_entry_widgets/nuclear_layout_widget.gui"
+		name = "widget_je_nuclear_status"
 		container = "custom_widget_container_4"
 	}
 
 	widget = {
-		gui = "gui/journal_entry_widgets/nuclear_deterrence_widget.gui"
-		name = "widget_je_nuclear_crisis"
-		container = "custom_widget_container_4"
-	}
-
-	widget = {
-		gui = "gui/journal_entry_widgets/nuclear_program_widget.gui"
-		name = "widget_je_nuclear_balance"
+		gui = "gui/journal_entry_widgets/nuclear_layout_widget.gui"
+		name = "widget_je_nuclear_reference"
 		container = "custom_widget_container_4"
 	}
 
