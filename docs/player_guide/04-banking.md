@@ -31,6 +31,14 @@ carries on the cycle and the central bank where the old one left them (see
 [After a revolution](05-politics.md#after-a-revolution)), but policies you had
 switched on are lost and must be enabled again.
 
+The same panels appear as a Banking tab in the Budget panel, and a change made
+in one shows in the other. The tab is greyed until the journal entry appears;
+hover it for what you still need. It shows Current Conditions, the policies and
+the History charts (open there, collapsed in the journal), and ends with an Open
+Journal Entry button.
+
+<!-- screenshot: the Banking tab of the Budget panel, Current Conditions and the policy list in view -->
+
 ### Cycle value, momentum and bubble pressure
 
 Three readings drive the cycle, each drawn as a bar at the top of the entry. The
