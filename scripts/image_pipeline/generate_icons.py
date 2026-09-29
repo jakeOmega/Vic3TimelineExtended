@@ -9,6 +9,8 @@ Reads the registry (icon_prompts.py) and takes each category through:
           one. Cached per prompt, so an edited subject re-renders only itself,
           and raising --seeds later renders only the new seeds.
   compose fit each render into the category's vanilla layout (icon_render.py).
+          A candidate whose final is newer than its raw is kept, so after a
+          layout or spec change move the category's finals aside first.
   sheet   review sheets, 20 entities each: current icon | 3 vanilla neighbours
           || candidates. Pick a seed per entity and record it in ICONS.
   write   the accepted icons as uncompressed DDS with mips, vanilla's format
