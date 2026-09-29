@@ -791,6 +791,7 @@ A bounded, save-persistent store of monthly samples, plus a reusable column char
 | `common/scripted_triggers/te_history_triggers.txt` | `te_history_country_is_tracked` — the one eligibility rule |
 | `common/scripted_effects/te_history_effects.txt` | generic country and global recording/pruning helpers |
 | `common/scripted_effects/te_history_banking_effects.txt` | the banking series' sampling + marker wrappers |
+| `common/scripted_effects/te_history_strategic_reserve_effects.txt` | the Strategic Reserve's per-good fill series (`st_res_<good>`, one per unlocked good), charted inside each good's expanded inventory row |
 | `common/scripted_guis/te_history_scripted_gui.txt` | `te_history_marker_tooltip` — display-only, emits `custom_tooltip` lines |
 | `gui/journal_entry_widgets/te_history_chart.gui` | the reusable `te_history_chart` / `te_history_bar_*` / `te_history_range_button` types |
 | `gui/journal_entry_widgets/banking_history_widget.gui` | the three banking charts, wired to `custom_widget_container_2` of `je_banking_cycle` |
@@ -859,7 +860,7 @@ Nothing else. The store, pruning, ranges, marker pips, empty state and "availabl
 
 ### Cost
 
-Per tracked country: 120 containers, each with 3 bookkeeping variables plus one per recorded metric (3 for banking today), plus 6 country variables. Per month per tracked country: one container create, one destroy, ~6 `set_variable`, and two 120-element ordered scans. GUI cost is paid only while the section is open: 120 items per chart, each running one script-value evaluation for the range test.
+Per tracked country: 120 containers, each with 3 bookkeeping variables plus one per recorded metric (3 for banking today), plus 6 country variables. The Strategic Reserve adds up to eight metrics (one per unlocked good) for a tracked country with a reserve, so its containers carry up to eight more variables each; the reserve adds no containers. Per month per tracked country: one container create, one destroy, ~6 `set_variable`, and two 120-element ordered scans. GUI cost is paid only while the section is open: 120 items per chart, each running one script-value evaluation for the range test.
 
 ## Colonial Collapse (`colonial_collapse_effect`)
 

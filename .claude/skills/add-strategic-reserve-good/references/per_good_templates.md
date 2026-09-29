@@ -425,6 +425,17 @@ st_res_decrease_<GOOD>_rate_effect  = { st_res_decrease_rate_base = { GOOD = <GO
 st_res_stop_<GOOD>_rate_effect      = { st_res_stop_rate_base     = { GOOD = <GOOD> } }
 ```
 
+### 7g. The good's history series (`common/scripted_effects/te_history_strategic_reserve_effects.txt`)
+
+One block in `te_history_record_strategic_reserve_samples`, after the other goods', gated on the good's unlock trigger like them. It records the good's fill (0–100) once a month from the journal entry's `on_monthly_pulse`, for the chart in its expanded row.
+
+```
+		if = {
+			limit = { st_res_<GOOD>_unlocked_trigger = yes }
+			te_history_record_sample = { METRIC = st_res_<GOOD> VALUE = st_res_<GOOD>_fill_pct }
+		}
+```
+
 ---
 
 ## File 8: `common/scripted_guis/st_res_scripted_gui.txt`
@@ -622,6 +633,35 @@ One `te_st_res_good_row` instance, added inside the `te_st_res_sec_inventory` ty
 		blockoverride "row_price" { text = "st_res_row_<GOOD>_price" }
 		blockoverride "row_policy" { text = "st_res_row_<GOOD>_policy" }
 		blockoverride "row_policy_reason" { text = "st_res_row_<GOOD>_policy_reason" }
+		blockoverride "row_history" {
+			te_history_chart = {
+				blockoverride "chart_title" {
+					text = "st_res_hist_title"
+				}
+				blockoverride "chart_legend" {
+					text = "st_res_hist_legend"
+				}
+				blockoverride "marker_pips" {}
+				blockoverride "bar_tooltip" {
+					tooltip = "st_res_hist_tt_<GOOD>"
+				}
+				blockoverride "bar_body" {
+					te_history_bar_unsigned = {
+						visible = "[ScriptContainer.HasVariable( 'te_hist_v_st_res_<GOOD>' )]"
+						blockoverride "values" {
+							min = 0
+							max = 100
+							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_st_res_<GOOD>' ) ) )]"
+						}
+						blockoverride "cover_values" {
+							min = 0
+							max = 100
+							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_<GOOD>' ), '(CFixedPoint)4' ) ) )]"
+						}
+					}
+				}
+			}
+		}
 		blockoverride "row_settings_toggle" {
 			onclick = "[GetVariableSystem.Toggle('st_res_policy_<GOOD>_open')]"
 		}
@@ -630,6 +670,9 @@ One `te_st_res_good_row` instance, added inside the `te_st_res_sec_inventory` ty
 		}
 		blockoverride "row_settings_closed" {
 			visible = "[Not(GetVariableSystem.Exists('st_res_policy_<GOOD>_open'))]"
+		}
+		blockoverride "row_settings_shown" {
+			visible = "[Or( GetVariableSystem.Exists('st_res_row_<GOOD>_open'), GetVariableSystem.Exists('st_res_policy_<GOOD>_open') )]"
 		}
 		blockoverride "row_policy_panel" {
 			widget_je_st_res_policy_panel = {
@@ -671,7 +714,8 @@ What each part does:
 - `row_fill` drives the fill bar; `row_target_marker` / `row_floor_marker` place the two markers and hide each at its end of the bar (the display values above put it there when the policy does not use that bound).
 - `row_auto` shows the lit policy icon over the always-drawn dimmed one.
 - `row_stored` … `row_policy_reason` are the expanded figures, one loc key each (file 14).
-- `row_settings_toggle` / `row_settings_open` / `row_settings_closed` share `st_res_policy_<GOOD>_open`, the Policy Settings subsection, collapsed until opened.
+- `row_history` is the good's fill-by-month chart (`te_history_chart`, shown inside the expanded row): its bars read `te_hist_v_st_res_<GOOD>`, which `te_history_record_strategic_reserve_samples` records (file 7g), and its bar tooltip is `st_res_hist_tt_<GOOD>` (file 14). The tooltip key may read only `ScriptContainer` (gotcha #24; `test_history_chart_tooltip_context.py`).
+- `row_settings_toggle` / `row_settings_open` / `row_settings_closed` share `st_res_policy_<GOOD>_open`, the Policy Settings subsection, collapsed until opened. `row_settings_toggle` is also the policy icon's click, so the icon opens the settings from the table line; `row_settings_shown` shows the subsection under an expanded row, or under a collapsed one while it is open.
 - `row_policy_panel` nests the shared `widget_je_st_res_policy_panel` with the good's `st_res_policy_<GOOD>_sgui` as its datacontext and its eight value cells. The value cells put their data function inline in `text` rather than behind a loc key, which is why adding a good needs no per-setting localization.
 
 **`.gui` files need a UTF-8 BOM** — `bom_normalizer` adds one on the next reload, but keep it if you rewrite the file wholesale.
@@ -734,6 +778,15 @@ All row expressions use `JournalEntry.GetCountry…`, **not** `ROOT…` — the 
 ```
 
 `price` and `policy` are value cells like `amount` (labels Market Price and Reserve Policy); `policy_reason` is the line under the figures.
+
+### te_miscellaneous_l_english.yml — the history chart's bar tooltip (two more keys)
+
+```
+ st_res_hist_tt_<GOOD>:0 "$te_hist_tt_date$\n[SelectLocalization( ScriptContainer.HasVariable('te_hist_v_st_res_<GOOD>'), 'st_res_hist_tt_<GOOD>_row', 'te_hist_tt_missing' )]"
+ st_res_hist_tt_<GOOD>_row:0 "Filled: #v [ScriptContainer.GetVariableValue('te_hist_v_st_res_<GOOD>')|0]%#!"
+```
+
+A bar tooltip renders with only the month's `ScriptContainer` as its context, so these must not read `JournalEntry` (gui_modding_guide.md gotcha #24). The chart's title and legend (`st_res_hist_title`, `st_res_hist_legend`) are shared.
 
 Everything else the policy panel shows — policy names, preset names, settings labels, all the tooltips and all ten explanations — is shared across goods and already exists.
 
