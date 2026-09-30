@@ -109,7 +109,7 @@ but with empty ledgers, no champions and no programs its target sits well below
 that, so expect authority to fall in its first years unless great powers
 champion it and run programs.
 
-![The Why UN Authority Is Moving widget. Authority is 58.7 and falling toward a target of 51.0, the sum of the pillars; below come the tier and the charter, the champions and underminers, and the newest ledger entries.](images/un_authority_moving.png)
+![The Why UN Authority Is Moving section in the UN tab of the Diplomacy panel. Authority is 68.1 and rising toward a target of 72.4, the sum of the pillars; below come the tier and the charter and the champions and underminers, with Recent Entries collapsed at the foot.](images/un_authority_moving.png)
 
 ### UN authority tiers
 
