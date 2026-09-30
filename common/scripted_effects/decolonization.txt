@@ -29,13 +29,19 @@ apply_decolonization_path = {
 		limit = {
 			exists = scope:decolonizing_parent
 		}
+		# The parent's programme-month counters, through the guarded
+		# colonial_*_months_value (0 when the counter is missing: before the
+		# parent's first pulse, or after its entry ended and cleared them).
+		# A missing counter read as a bare var: logged an error and failed the
+		# comparison; as 0 it fails the "> 24" test instead, so no legacy is
+		# chosen either way.
 		# Iron Fist legacy — parent leaned hardest on garrison
 		if = {
 			limit = {
 				scope:decolonizing_parent = {
-					var:colonial_garrison_months >= var:colonial_invest_months
-					var:colonial_garrison_months >= var:colonial_assimilate_months
-					var:colonial_garrison_months > 24
+					colonial_garrison_months_value >= colonial_invest_months_value
+					colonial_garrison_months_value >= colonial_assimilate_months_value
+					colonial_garrison_months_value > 24
 				}
 			}
 			add_modifier = {
@@ -55,9 +61,9 @@ apply_decolonization_path = {
 		else_if = {
 			limit = {
 				scope:decolonizing_parent = {
-					var:colonial_invest_months > var:colonial_garrison_months
-					var:colonial_invest_months >= var:colonial_assimilate_months
-					var:colonial_invest_months > 24
+					colonial_invest_months_value > colonial_garrison_months_value
+					colonial_invest_months_value >= colonial_assimilate_months_value
+					colonial_invest_months_value > 24
 				}
 			}
 			add_modifier = {
@@ -77,9 +83,9 @@ apply_decolonization_path = {
 		else_if = {
 			limit = {
 				scope:decolonizing_parent = {
-					var:colonial_assimilate_months > var:colonial_garrison_months
-					var:colonial_assimilate_months > var:colonial_invest_months
-					var:colonial_assimilate_months > 24
+					colonial_assimilate_months_value > colonial_garrison_months_value
+					colonial_assimilate_months_value > colonial_invest_months_value
+					colonial_assimilate_months_value > 24
 				}
 			}
 			add_modifier = {
@@ -711,20 +717,40 @@ colonial_empire_je_cleanup_effect = {
 	remove_variable = colonial_empire_d_gp
 	remove_variable = colonial_empire_d_acceptance
 	remove_variable = colonial_empire_condemner_share
+	remove_variable = colonial_empire_supporter_share
+	remove_variable = colonial_empire_pressure_level
 	remove_variable = colonial_empire_d_total
 	remove_variable = colonial_empire_eligible_count
 	remove_variable = colonial_empire_round_table_count
 	remove_variable = colonial_empire_largest_eligible_state
+	remove_variable = colonial_empire_territory_1
+	remove_variable = colonial_empire_territory_2
+	remove_variable = colonial_empire_territory_3
+	remove_variable = colonial_empire_territory_4
+	remove_variable = colonial_empire_territory_5
+	remove_variable = colonial_empire_territory_6
+	remove_variable = colonial_empire_territory_7
+	remove_variable = colonial_empire_territory_8
+	# And the primary-culture shares the list recorded on its states.
+	every_scope_state = {
+		limit = { has_variable = colonial_territory_primary_share }
+		remove_variable = colonial_territory_primary_share
+	}
 
 	# Country-scope policy modifiers from the three policy buttons. If any
 	# button was active at end-of-JE, its modifier persisted after the JE
 	# vanished; clear them so the country reverts to neutral. The Invest
 	# program also has a dedicated budget-expense modifier refreshed each
 	# pulse — clear it alongside the policy modifier or it would linger.
-	remove_modifier = colonial_development_investment_modifier
-	remove_modifier = colonial_development_investment_expense_modifier
-	remove_modifier = colonial_military_garrison_modifier
-	remove_modifier = colonial_cultural_assimilation_modifier
+	# Each is guarded: the journal panel renders on_complete / on_fail (and so
+	# this effect) as tooltips every frame, and an unguarded remove_modifier of
+	# a modifier the scope lacks logs "Timed modifier ... not found" each time
+	# (play-test, 2026-09-29). The legacy_modifier_cleanup.txt pattern; the
+	# effect is the same.
+	if = { limit = { has_modifier = colonial_development_investment_modifier } remove_modifier = colonial_development_investment_modifier }
+	if = { limit = { has_modifier = colonial_development_investment_expense_modifier } remove_modifier = colonial_development_investment_expense_modifier }
+	if = { limit = { has_modifier = colonial_military_garrison_modifier } remove_modifier = colonial_military_garrison_modifier }
+	if = { limit = { has_modifier = colonial_cultural_assimilation_modifier } remove_modifier = colonial_cultural_assimilation_modifier }
 	# And their records (decol_sync_programmes), or a revolution's winner, or a
 	# later run of the entry, would be handed the programmes back.
 	remove_variable = colonial_development_investment_modifier_held
@@ -735,8 +761,8 @@ colonial_empire_je_cleanup_effect = {
 	# the JE was active. Remove from any civil-rights movement.
 	every_political_movement = {
 		limit = { is_political_movement_type = movement_civil_rights }
-		remove_modifier = colonial_pressure_movement_radicalism
-		remove_modifier = colonial_crumbling_movement_radicalism
+		if = { limit = { has_modifier = colonial_pressure_movement_radicalism } remove_modifier = colonial_pressure_movement_radicalism }
+		if = { limit = { has_modifier = colonial_crumbling_movement_radicalism } remove_modifier = colonial_crumbling_movement_radicalism }
 	}
 
 	# Subject-side LD pressure modifiers (bar-band driven). Remove from
@@ -745,9 +771,9 @@ colonial_empire_je_cleanup_effect = {
 	# this list.
 	every_subject_or_below = {
 		limit = { is_qualifying_colonial_subject = yes }
-		remove_modifier = colonial_overlord_strained_subject_ld_modifier
-		remove_modifier = colonial_overlord_crumbling_subject_ld_modifier
-		remove_modifier = colonial_overlord_collapsing_subject_ld_modifier
+		if = { limit = { has_modifier = colonial_overlord_strained_subject_ld_modifier } remove_modifier = colonial_overlord_strained_subject_ld_modifier }
+		if = { limit = { has_modifier = colonial_overlord_crumbling_subject_ld_modifier } remove_modifier = colonial_overlord_crumbling_subject_ld_modifier }
+		if = { limit = { has_modifier = colonial_overlord_collapsing_subject_ld_modifier } remove_modifier = colonial_overlord_collapsing_subject_ld_modifier }
 	}
 }
 
