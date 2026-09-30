@@ -57,7 +57,7 @@ Three custom widgets, wired from `je_banking.txt` into the vanilla panel's `cust
 
 - **Files:** `gui/journal_entry_widgets/banking_dashboard_widget.gui` (the section types), `banking_history_widget.gui` (the charts) and `banking_layout_widget.gui` (the order, How Banking Works and the entry's named roots)
 - **Second host:** the Budget panel's Banking tab (`gui/budget_panel.gui`) composes the same layout types. See `mod_systems.md` § Policy Dashboard.
-- **Top bar:** the phase, momentum and bubble pressure icons, after MONEY in vanilla's top bar (`gui/topbar.gui`, `te_banking_topbar_readings`). See `mod_systems.md` § Policy Dashboard.
+- **Top bar:** the phase icon, after MONEY in vanilla's top bar (`gui/topbar.gui`, `te_banking_topbar_readings`). See `mod_systems.md` § Policy Dashboard.
 - **Handlers:** `common/scripted_guis/banking_dashboard_scripted_gui.txt`
 - **Shared helpers:** `common/scripted_triggers/banking_policy_triggers.txt` (`banking_possible_<button>`), `common/scripted_effects/banking_policy_effects.txt` (`banking_effect_<button>`), plus the `banking_tool_*_active` family in `market_triggers.txt`
 - **Display-only reads:** `banking_display_value_monthly_add`, `banking_display_momentum_monthly_add`, `banking_display_momentum_decay`, `banking_display_bubble_monthly_add`, `banking_display_points_free` in `extra_script_values.txt`

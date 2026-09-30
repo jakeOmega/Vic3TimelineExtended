@@ -233,7 +233,18 @@ types topbar_components
 			using = hud_visibility
 			datacontext = "[AccessMetaPlayer.AccessPlayedOrObservedCountry]"
 			using = clickthrough_blocker
-			size = { 705 80 }
+			### TIMELINE EXTENDED — the declared width, vanilla's 705 widened for the
+			### Banking phase. ingame_hud.gui lays the bar out in an hbox beside the
+			### alerts (topfrontend) by this size, not by what the content grows to, so
+			### without this the alerts sat on the readings (#588). Widest case, with
+			### supply ships: 130 (the primary row's x) + 5 x 100 (Bureaucracy,
+			### Authority, Influence, supply ships, MONEY) + 5 x 12 (spacing, the last
+			### before the phase) + 40 (te_banking_topbar_readings) + 35 (margin_right)
+			### = 765. Landlocked (no supply ships, spacing 37): 130 + 4 x 100 + 4 x 37
+			### + 40 + 35 = 753. The lock toggle, 49 in from this size's right edge,
+			### sits on the bottom row, below the phase. The phase keeps its 40 while
+			### Banking is off, so the bar then ends in an empty stretch of wood.
+			size = { 765 80 }
 			allow_outside = yes
 			resizeparent = yes
 
@@ -582,10 +593,10 @@ types topbar_components
 								}
 							}
 
-							### TIMELINE EXTENDED — the Banking readings, the one change to this vanilla
-							### file: the cycle's phase, momentum and bubble pressure as three icons after
-							### MONEY, hidden unless the banking journal entry is running (and in observer
-							### mode). The type is te_banking_topbar_readings in
+							### TIMELINE EXTENDED — the Banking phase, one of two changes to this vanilla
+							### file (the other is the bar's declared size): the cycle's phase as one
+							### icon after MONEY, hidden unless the banking journal entry is running (and
+							### in observer mode). The type is te_banking_topbar_readings in
 							### gui/journal_entry_widgets/banking_dashboard_widget.gui.
 							te_banking_topbar_readings = {}
 

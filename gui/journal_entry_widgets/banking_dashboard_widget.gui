@@ -7,17 +7,17 @@
 ###   te_banking_sec_monetary       Monetary Policy (the dial block)
 ###   te_banking_sec_interventions  Available Interventions, one collapsible
 ###                                 category per group of tools
-###   te_banking_topbar_readings    the cycle's three readings in vanilla's top
-###                                 bar (gui/topbar.gui), from the overview's
-###                                 icon types
+###   te_banking_topbar_readings    the cycle's phase in vanilla's top bar
+###                                 (gui/topbar.gui), from the overview's icon
+###                                 type
 ### gui/journal_entry_widgets/banking_layout_widget.gui sets their order, with
 ### the history charts (banking_history_widget.gui) and How Banking Works, for
 ### both hosts: the journal entry (je_banking.txt attaches the named roots at
 ### the foot of that file) and the Budget panel's Banking tab
 ### (gui/budget_panel.gui), which instances the same types under datacontext
 ### GetPlayerJournalEntry('je_banking_cycle'), as te_banking_topbar_readings
-### does too. So every JournalEntry.* expression below resolves in all three. Keep it that way: read nothing
-### the tab's datacontext does not supply.
+### does too. So every JournalEntry.* expression below resolves in all three.
+### Keep it that way: read nothing the tab's datacontext does not supply.
 ###
 ### Every yes/no question and every action is answered by a scripted GUI in
 ### common/scripted_guis/banking_dashboard_scripted_gui.txt, which in turn calls the
@@ -401,9 +401,10 @@ types banking_dashboard_widget_types
 	### visible: the phase from the banking_dash_phase_* scripted GUI its word
 	### uses, momentum and bubble pressure from their display codes
 	### (banking_overview_display_values.txt). The icons fill the widget, so an
-	### instance sets the size: 32, the default, in the overview's cells and 28 in
-	### the top bar (te_banking_topbar_readings). One type per reading, so the two
-	### places cannot draw different art for the same state.
+	### instance sets the size: 32, the default, in the overview's cells. The top
+	### bar draws the phase's too, also at 32 (te_banking_topbar_readings). One
+	### type per reading, so the two places cannot draw different art for the
+	### same state.
 	type te_banking_phase_icons = widget {
 		size = { 32 32 }
 
@@ -510,8 +511,8 @@ types banking_dashboard_widget_types
 
 	### The crash-risk mark over the bubble icon's top-right corner, the old
 	### row's "(crash risk)" tag: the cycle at the top of its range, or booming
-	### with momentum surging. The instance sets its position (and, in the top
-	### bar, a smaller size).
+	### with momentum surging. The instance sets its position. The top bar shows
+	### the same state as a line of the phase's tooltip (banking_dash_top_phase_tt).
 	type te_banking_crash_risk_badge = icon {
 		size = { 16 16 }
 		visible = "[GetScriptedGui('banking_dash_bubble_risk_high').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
@@ -763,23 +764,47 @@ types banking_dashboard_widget_types
 	}
 
 	### ==========================================================================
-	### THE TOP BAR'S BANKING READINGS
+	### THE TOP BAR'S BANKING PHASE
 	### ==========================================================================
-	### The cycle's phase, momentum and bubble pressure as three icons in
-	### vanilla's top bar, after MONEY (gui/topbar.gui, its one change). The
-	### owner asked for the band, not the number: no figures and no words. Hover
-	### an icon for its word and the overview's tooltip for that reading; click
-	### it for the Budget panel's Banking tab. The icons are the overview's own
-	### types at 28 px, so the two cannot disagree.
+	### The cycle's phase as one icon in vanilla's top bar, after MONEY
+	### (gui/topbar.gui). The owner asked for the band, not the number, and then
+	### for the phase alone (momentum and bubble pressure stay in the overview):
+	### no figures and no words. Hover it for the phase's word, a crash-risk
+	### line while that risk is high, and the overview's phase tooltip; click it
+	### for the Budget panel's Banking tab. The icon is the overview's own type,
+	### so the two cannot disagree.
 	###
-	### Three gates, one widget each, outermost first, so nothing inside a closed
-	### one is evaluated: not in observer mode (GetPlayer is empty there); the
-	### Budget tab's gate, te_budget_banking_tab_sgui (the rule on and the entry
-	### held), on the parent of the datacontext as budget_panel.gui has it; and
-	### the entry running (JournalEntry.IsActive), the overview's own gate. The
-	### top bar's hud_visibility hides it with the bar. 3 x 30 + 2 x 2 = 94
-	### wide, a little under one of vanilla's 100-wide buttons.
-	type te_banking_topbar_readings = flowcontainer {
+	### 40 x 40, a primary button's height, with the icon at 32 px and 2 below
+	### centre, as vanilla's primary icons are: level with Bureaucracy ... MONEY,
+	### and the bar no taller. The widget keeps its 40 while the phase is hidden,
+	### because gui/topbar.gui declares the bar's width with these 40 in it (see
+	### the comment on its size line). test_topbar_banking.py recomputes all of
+	### this from the markup. The top bar's hud_visibility hides it with the bar.
+	type te_banking_topbar_readings = widget {
+		size = { 40 40 }
+
+		te_banking_topbar_gate = {
+			blockoverride "readings" {
+				te_banking_topbar_reading = {
+					name = "te_topbar_banking_phase"
+					tooltip = "banking_dash_top_phase_tt"
+					te_banking_phase_icons = {
+						size = { 32 32 }
+						position = { 0 2 }
+						parentanchor = center
+					}
+				}
+			}
+		}
+	}
+
+	### The top bar's gates, one widget each, outermost first, so nothing inside
+	### a closed one is evaluated: not in observer mode (GetPlayer is empty there);
+	### the Budget tab's gate, te_budget_banking_tab_sgui (the rule on and the
+	### entry held), on the parent of the datacontext as budget_panel.gui has
+	### it; and the entry running (JournalEntry.IsActive), the overview's own
+	### gate. The instance puts the phase in "readings".
+	type te_banking_topbar_gate = flowcontainer {
 		visible = "[Not( GetMetaPlayer.IsObserver )]"
 		ignoreinvisible = yes
 
@@ -793,50 +818,19 @@ types banking_dashboard_widget_types
 
 				flowcontainer = {
 					visible = "[JournalEntry.IsActive]"
-					direction = horizontal
-					spacing = 2
+					ignoreinvisible = yes
 
-					te_banking_topbar_reading = {
-						name = "te_topbar_banking_phase"
-						tooltip = "banking_dash_top_phase_tt"
-						te_banking_phase_icons = {
-							size = { 28 28 }
-							position = { 0 2 }
-							parentanchor = center
-						}
-					}
-					te_banking_topbar_reading = {
-						name = "te_topbar_banking_momentum"
-						tooltip = "banking_dash_top_momentum_tt"
-						te_banking_momentum_icons = {
-							size = { 28 28 }
-							position = { 0 2 }
-							parentanchor = center
-						}
-					}
-					te_banking_topbar_reading = {
-						name = "te_topbar_banking_bubble"
-						tooltip = "banking_dash_top_bubble_tt"
-						te_banking_bubble_icons = {
-							size = { 28 28 }
-							position = { 0 2 }
-							parentanchor = center
-						}
-						te_banking_crash_risk_badge = {
-							size = { 12 12 }
-							position = { 18 6 }
-						}
-					}
+					block "readings" {}
 				}
 			}
 		}
 	}
 
-	### One reading's hover and click target: vanilla's top-bar button (glow on
-	### hover, tooltip below, a click opens a panel) at under a third of the width.
+	### The phase's hover and click target: vanilla's top-bar button (glow on
+	### hover, tooltip below, a click opens a panel), icon-only.
 	type te_banking_topbar_reading = button {
 		using = glow_button
-		size = { 30 40 }
+		size = { 40 40 }
 		using = tooltip_below
 		onclick = "[InformationPanelBar.OpenPanelTab('budget', 'te_banking')]"
 	}
