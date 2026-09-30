@@ -249,12 +249,13 @@ cb_disable_directed_credit_infrastructure = {
 	desc = "CB_DISABLE_DIRECTED_CREDIT_INFRA_DESC"
 	visible = { is_ai = yes banking_tool_directed_active = yes }
 	# Lift it once the recovery it was bought for has arrived. Directed credit
-	# is bought in a downturn and carries +0.05 momentum (+0.5 cycle points a
-	# month, standing) and +0.3 bubble; held through stable and expansion it
-	# ran the cycle hot, and the simulation attributed 30-40% of a tooled
-	# AI's crashes to it (docs/audits/banking_cycle_simulation.md F11). The
-	# stable and expansion weights below are what the other expansionary tools
-	# already carry.
+	# is bought in a downturn and carried +0.05 momentum (+0.5 cycle points a
+	# month, standing) and +0.3 bubble when F11 measured it; held through stable
+	# and expansion it ran the cycle hot, and the simulation attributed 30-40% of
+	# a tooled AI's crashes to it (docs/audits/banking_cycle_simulation.md F11).
+	# Infrastructure now carries +0.03 and +0.1 (§14), the safest sector to hold,
+	# but the weights below still serve all five; the stable and expansion
+	# weights are what the other expansionary tools already carry.
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_panic = yes } add = 45 }

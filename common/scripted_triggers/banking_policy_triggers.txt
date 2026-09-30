@@ -153,6 +153,10 @@ banking_possible_cb_expand_deposit_guarantee = {
 # Development Banks (country_directed_credit_sectors_add). The cap is
 # banking_directed_credit_slots_free (extra_script_values.txt), and
 # banking_directed_credit_enforce_cap sheds any excess a law change leaves.
+# The sectors are priced apart (2026-09-30): Heavy Industry 4 points,
+# Infrastructure and Armaments 3, Agriculture and Electrification 2. The gate
+# below must match each sector's own country_banking_intervention_max_add in
+# extra_modifiers.txt.
 banking_possible_cb_directed_credit_infrastructure = {
 	custom_tooltip = {
 		text = BANKING_POINTS_3
@@ -170,8 +174,8 @@ banking_possible_cb_directed_credit_infrastructure = {
 
 banking_possible_cb_directed_credit_heavy_industry = {
 	custom_tooltip = {
-		text = BANKING_POINTS_3
-		modifier:country_banking_intervention_max_add >= 3
+		text = BANKING_POINTS_4
+		modifier:country_banking_intervention_max_add >= 4
 	}
 	custom_tooltip = {
 		text = banking_button_locked_by_law_tt
@@ -185,8 +189,8 @@ banking_possible_cb_directed_credit_heavy_industry = {
 
 banking_possible_cb_directed_credit_agriculture = {
 	custom_tooltip = {
-		text = BANKING_POINTS_3
-		modifier:country_banking_intervention_max_add >= 3
+		text = BANKING_POINTS_2
+		modifier:country_banking_intervention_max_add >= 2
 	}
 	custom_tooltip = {
 		text = banking_button_locked_by_law_tt
@@ -216,8 +220,8 @@ banking_possible_cb_directed_credit_armaments = {
 banking_possible_cb_directed_credit_electrification = {
 	modifier:country_can_use_directed_credit_electrification_bool = yes
 	custom_tooltip = {
-		text = BANKING_POINTS_3
-		modifier:country_banking_intervention_max_add >= 3
+		text = BANKING_POINTS_2
+		modifier:country_banking_intervention_max_add >= 2
 	}
 	custom_tooltip = {
 		text = banking_button_locked_by_law_tt
@@ -587,6 +591,14 @@ banking_ai_core_cb_bail_in_regime = {
 # exactly as often as it did with one sector (docs/audits/banking_cycle_simulation.md
 # F11: it is the AI's riskiest tool), and picks the sector that suits whoever
 # governs. The one deliberate increase is the Directed Credit law's second slot.
+#
+# The sectors cost a player 2 to 4 points (2026-09-30), but the AI keeps the
+# reserve it always had: no sector is a candidate below three free points
+# (banking_points_low = no). Priced at 2, Agriculture and Electrification put
+# directed credit within reach of budgets, and of half-spent ones, where the AI
+# never used it, and the simulation showed clicks a century up 84% with all
+# four favoured (banking_cycle_simulation.md §14). Directed credit is still the
+# AI's riskiest tool (F11), so the discount is the player's.
 # ----------------------------------------------------------------------------
 banking_dc_affinity_heavy_industry = {
 	ig:ig_industrialists ?= { is_in_government = yes }
@@ -613,24 +625,28 @@ banking_dc_affinity_electrification = {
 banking_dc_ai_candidate_heavy_industry = {
 	banking_dc_affinity_heavy_industry = yes
 	banking_tool_directed_credit_heavy_industry_active = no
+	banking_points_low = no
 	banking_possible_cb_directed_credit_heavy_industry = yes
 }
 
 banking_dc_ai_candidate_agriculture = {
 	banking_dc_affinity_agriculture = yes
 	banking_tool_directed_credit_agriculture_active = no
+	banking_points_low = no
 	banking_possible_cb_directed_credit_agriculture = yes
 }
 
 banking_dc_ai_candidate_armaments = {
 	banking_dc_affinity_armaments = yes
 	banking_tool_directed_credit_armaments_active = no
+	banking_points_low = no
 	banking_possible_cb_directed_credit_armaments = yes
 }
 
 banking_dc_ai_candidate_electrification = {
 	banking_dc_affinity_electrification = yes
 	banking_tool_directed_credit_electrification_active = no
+	banking_points_low = no
 	banking_possible_cb_directed_credit_electrification = yes
 }
 

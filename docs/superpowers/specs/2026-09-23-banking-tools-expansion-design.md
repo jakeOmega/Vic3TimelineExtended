@@ -34,6 +34,14 @@ sector. It was dropped: `law_state_owned_banking` has `unlocking_laws = { law_co
 command economy fails `banking_is_market_economy`, so every `cb_*` tool is hidden there and stripped on
 the way in (`remove_banking_market_modifiers_effect`). The grant would have been dead text on the law.
 
+**Amended 2026-09-30 (owner).** The five sectors were one template with five labels, so they now differ in
+price, cycle signature and a second effect; Electrification & High Tech became the cheap one. Points are now
+Infrastructure 3, Heavy Industry 4, Agriculture 2, Armaments 3, Electrification 2, and the numbers in B1 and the
+table at the end of this document are superseded by the profile table in
+`docs/audits/banking_cycle_simulation.md` §14 and above `banking_directed_credit_infrastructure` in
+`extra_modifiers.txt`. The AI is unchanged by design: it still needs three free points before it directs credit,
+so the discount is the player's (§14, F19).
+
 ## Constraints the design works inside
 
 - **The AI's only path to a tool is the `scripted_button`'s `ai_chance`**, one weighted roll a month

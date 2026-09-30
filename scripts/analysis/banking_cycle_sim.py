@@ -1644,9 +1644,15 @@ def tool_scores(cfg: Config, state: State) -> dict[str, float]:
                  + (10 if "eliq" in state.tools else 0) + (10 if med else 0))
     v -= 35 if p == FRENZY else 0
     v -= 30 if p == PANIC else 0
+    # No sector is a candidate below three free points (`banking_points_low = no`
+    # on banking_dc_ai_candidate_*): the sectors cost a player 2 to 4 points, but
+    # the AI keeps the reserve it had when they all cost 3 (audit §14).
+    # `--tune ai_dc_reserve=off` lets it buy at a sector's own price.
+    reserve = TUNE.get("ai_dc_reserve") != "off"
     candidates = [
         t for t in DC_NEW_SECTORS
         if dc_affinity(cfg, state, t) and tool_possible(cfg, state, t)
+        and not (low and reserve)
     ]
     s["directed"] = 0.0 if candidates else v
     for t in DC_NEW_SECTORS:

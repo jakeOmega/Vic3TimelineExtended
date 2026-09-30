@@ -5276,20 +5276,20 @@
   "de": "#header $CB_COUNTERCYCLICAL_BUFFER$#!\\n$CB_COUNTERCYCLICAL_BUFFER_DESC$\\n$TOOLTIP_DELIMITER$\\n#title Erfordert:#! $BANKING_POINTS_2$\\n#title Solange aktiv:#!\\n[GetStaticModifier('banking_countercyclical_capital_buffer').GetDesc]"
  },
  "banking_dash_tt_cb_directed_credit_agriculture": {
-  "en": "#header $CB_DIRECTED_CREDIT_AGRI$#!\\n$CB_DIRECTED_CREDIT_AGRI_DESC$\\n$TOOLTIP_DELIMITER$\\n#title Requires:#! $BANKING_POINTS_3$\\n$banking_dc_sector_cap_tt$\\n#title While active:#!\\n[GetStaticModifier('banking_directed_credit_agriculture').GetDesc]",
-  "de": "#header $CB_DIRECTED_CREDIT_AGRI$#!\\n$CB_DIRECTED_CREDIT_AGRI_DESC$\\n$TOOLTIP_DELIMITER$\\n#title Erfordert:#! $BANKING_POINTS_3$\\n$banking_dc_sector_cap_tt$\\n#title Solange aktiv:#!\\n[GetStaticModifier('banking_directed_credit_agriculture').GetDesc]"
+  "en": "#header $CB_DIRECTED_CREDIT_AGRI$#!\\n$CB_DIRECTED_CREDIT_AGRI_DESC$\\n$TOOLTIP_DELIMITER$\\n#title Requires:#! $BANKING_POINTS_2$\\n$banking_dc_sector_cap_tt$\\n#title While active:#!\\n[GetStaticModifier('banking_directed_credit_agriculture').GetDesc]",
+  "de": "#header $CB_DIRECTED_CREDIT_AGRI$#!\\n$CB_DIRECTED_CREDIT_AGRI_DESC$\\n$TOOLTIP_DELIMITER$\\n#title Erfordert:#! $BANKING_POINTS_2$\\n$banking_dc_sector_cap_tt$\\n#title Solange aktiv:#!\\n[GetStaticModifier('banking_directed_credit_agriculture').GetDesc]"
  },
  "banking_dash_tt_cb_directed_credit_armaments": {
   "en": "#header $CB_DIRECTED_CREDIT_ARMS$#!\\n$CB_DIRECTED_CREDIT_ARMS_DESC$\\n$TOOLTIP_DELIMITER$\\n#title Requires:#! $BANKING_POINTS_3$\\n$banking_dc_sector_cap_tt$\\n#title While active:#!\\n[GetStaticModifier('banking_directed_credit_armaments').GetDesc]",
   "de": "#header $CB_DIRECTED_CREDIT_ARMS$#!\\n$CB_DIRECTED_CREDIT_ARMS_DESC$\\n$TOOLTIP_DELIMITER$\\n#title Erfordert:#! $BANKING_POINTS_3$\\n$banking_dc_sector_cap_tt$\\n#title Solange aktiv:#!\\n[GetStaticModifier('banking_directed_credit_armaments').GetDesc]"
  },
  "banking_dash_tt_cb_directed_credit_electrification": {
-  "en": "#header $CB_DIRECTED_CREDIT_ELEC$#!\\n$CB_DIRECTED_CREDIT_ELEC_DESC$\\n$TOOLTIP_DELIMITER$\\n#title Requires:#! $BANKING_POINTS_3$\\n$banking_dc_sector_cap_tt$\\n#title While active:#!\\n[GetStaticModifier('banking_directed_credit_electrification').GetDesc]",
-  "de": "#header $CB_DIRECTED_CREDIT_ELEC$#!\\n$CB_DIRECTED_CREDIT_ELEC_DESC$\\n$TOOLTIP_DELIMITER$\\n#title Erfordert:#! $BANKING_POINTS_3$\\n$banking_dc_sector_cap_tt$\\n#title Solange aktiv:#!\\n[GetStaticModifier('banking_directed_credit_electrification').GetDesc]"
+  "en": "#header $CB_DIRECTED_CREDIT_ELEC$#!\\n$CB_DIRECTED_CREDIT_ELEC_DESC$\\n$TOOLTIP_DELIMITER$\\n#title Requires:#! $BANKING_POINTS_2$\\n$banking_dc_sector_cap_tt$\\n#title While active:#!\\n[GetStaticModifier('banking_directed_credit_electrification').GetDesc]",
+  "de": "#header $CB_DIRECTED_CREDIT_ELEC$#!\\n$CB_DIRECTED_CREDIT_ELEC_DESC$\\n$TOOLTIP_DELIMITER$\\n#title Erfordert:#! $BANKING_POINTS_2$\\n$banking_dc_sector_cap_tt$\\n#title Solange aktiv:#!\\n[GetStaticModifier('banking_directed_credit_electrification').GetDesc]"
  },
  "banking_dash_tt_cb_directed_credit_heavy_industry": {
-  "en": "#header $CB_DIRECTED_CREDIT_HEAVY$#!\\n$CB_DIRECTED_CREDIT_HEAVY_DESC$\\n$TOOLTIP_DELIMITER$\\n#title Requires:#! $BANKING_POINTS_3$\\n$banking_dc_sector_cap_tt$\\n#title While active:#!\\n[GetStaticModifier('banking_directed_credit_heavy_industry').GetDesc]",
-  "de": "#header $CB_DIRECTED_CREDIT_HEAVY$#!\\n$CB_DIRECTED_CREDIT_HEAVY_DESC$\\n$TOOLTIP_DELIMITER$\\n#title Erfordert:#! $BANKING_POINTS_3$\\n$banking_dc_sector_cap_tt$\\n#title Solange aktiv:#!\\n[GetStaticModifier('banking_directed_credit_heavy_industry').GetDesc]"
+  "en": "#header $CB_DIRECTED_CREDIT_HEAVY$#!\\n$CB_DIRECTED_CREDIT_HEAVY_DESC$\\n$TOOLTIP_DELIMITER$\\n#title Requires:#! $BANKING_POINTS_4$\\n$banking_dc_sector_cap_tt$\\n#title While active:#!\\n[GetStaticModifier('banking_directed_credit_heavy_industry').GetDesc]",
+  "de": "#header $CB_DIRECTED_CREDIT_HEAVY$#!\\n$CB_DIRECTED_CREDIT_HEAVY_DESC$\\n$TOOLTIP_DELIMITER$\\n#title Erfordert:#! $BANKING_POINTS_4$\\n$banking_dc_sector_cap_tt$\\n#title Solange aktiv:#!\\n[GetStaticModifier('banking_directed_credit_heavy_industry').GetDesc]"
  },
  "banking_dash_tt_cb_directed_credit_infrastructure": {
   "en": "#header $CB_DIRECTED_CREDIT_INFRA$#!\\n$CB_DIRECTED_CREDIT_INFRA_DESC$\\n$TOOLTIP_DELIMITER$\\n#title Requires:#! $BANKING_POINTS_3$\\n$banking_dc_sector_cap_tt$\\n#title While active:#!\\n[GetStaticModifier('banking_directed_credit_infrastructure').GetDesc]",
