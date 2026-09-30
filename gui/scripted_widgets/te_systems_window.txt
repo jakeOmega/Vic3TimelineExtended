@@ -1,0 +1,9 @@
+﻿# Timeline Extended: scripted widgets, created at startup on top of the HUD
+# (vanilla game/gui/scripted_widgets/scripted_widgets.md). One line per widget:
+# the .gui file, then the name of a top-level widget in it. Additive: every
+# file in this folder loads, so no vanilla file is replaced.
+#
+# The Timeline Extended window: the launcher under the sidebar, and the window
+# with its Space Race, Colonial Empire and Grand Monuments tabs.
+gui/te_systems_window.gui = te_systems_window_launcher
+gui/te_systems_window.gui = te_systems_window

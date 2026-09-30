@@ -81,6 +81,13 @@ but neither can start before the Moon Landing.
 A running milestone's journal entry shows its panel: an overview at the top and
 sections below it. An entry that hasn't started yet shows only its status text.
 
+The same panels appear on the Space Race tab of the Timeline Extended window,
+which the button under the sidebar's Map List opens, and a change made in one
+shows in the other. The tab shows every milestone you have under way, each
+under its own name and followed by an Open Journal Entry button, then How the
+Space Race Works once at the end. It is grayed until your first milestone
+starts; hover it for what is still missing.
+
 <!-- screenshot: the Moon Landing journal entry: the overview (Standard, Risk, First: Open, the Progress bar and the Programme row) above Mission Control with the approach buttons and the funding stepper -->
 
 The overview is always shown. Its first row is three icons, each with a label

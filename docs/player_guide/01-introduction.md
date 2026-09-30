@@ -9,6 +9,12 @@ a United Nations, a space race, cultural and covert competition between powers,
 and social movements. Most of these systems have their own journal entry, and
 most can be switched off with a game rule.
 
+The mod adds one button to the sidebar, under Map List. It opens the Timeline
+Extended window, which has a tab each for the space race, your colonial empire
+and your Grand Monuments: the same panels as their journal entries, in one
+place. The button shows while at least one of those three systems is switched
+on.
+
 This guide explains what each system does and how to play it. It assumes you
 know the base game: pops, interest groups, laws, markets, construction and
 diplomatic plays are not explained here except where the mod changes them.

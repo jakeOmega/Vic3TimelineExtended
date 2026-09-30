@@ -52,10 +52,15 @@ def _body(text, name, prefix=""):
 
 
 def _root(text, name):
+    """A journal root with the body of the milestone's own type it wraps
+    (te_sr_<m>_status), as the journal renders it."""
     m = re.search(rf'name = "{name}"', text)
     assert m, name
     start = text.rfind("flowcontainer = {", 0, m.start())
-    return _body(text[start:], "flowcontainer")
+    root = _body(text[start:], "flowcontainer")
+    for wrapped in re.findall(r"^\t(te_sr_\w+_(?:overview|status)) = \{\}$", root, re.M):
+        root += "\n" + _body(text, wrapped, prefix=r"\ttype ")
+    return root
 
 
 def _loc(key):
