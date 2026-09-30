@@ -412,6 +412,18 @@ types nuclear_deterrence_widget_types
 				text = "nd_home_row_business_value"
 			}
 		}
+		nd_home_term_row = {
+			visible = "[NotEqualTo_CFixedPoint( InterestGroup.MakeScope.ScriptValue('nd_disp_ig_cap_cut'), '(CFixedPoint)0' )]"
+			blockoverride "row_tooltip" {
+				tooltip = "nd_home_row_cap_tt"
+			}
+			blockoverride "row_label" {
+				text = "nd_home_row_cap"
+			}
+			blockoverride "row_value" {
+				text = "nd_home_row_cap_value"
+			}
+		}
 	}
 
 	### A heading inside a section's panel, over one group of its lines, with a
