@@ -2,6 +2,33 @@
 # COVERT WARFARE — Scripted Triggers
 # ============================================================================
 
+# Country scope: je_covert_warfare's `possible` as one tooltip line: the
+# checklist in the Military panel's greyed Covert tab
+# (te_military_covert_tab_unlock_sgui's is_valid, te_system_tab_sguis.txt).
+# One line because the test is an OR, and a bare OR prints there as an empty
+# "All of these:" (gui_modding_guide.md gotcha #31, the UN tab). The OR is the
+# entry's own, copied verbatim, since the entry itself is left as it is;
+# MilitaryCovertTabTest in test_covert_layout.py fails if the two differ.
+covert_warfare_entry_unlocked = {
+	custom_tooltip = {
+		text = covert_warfare_unlock_tt
+		OR = {
+			AND = {
+				country_rank >= rank_value:great_power
+				covert_operation_max_slots >= 4
+			}
+			AND = {
+				country_rank = rank_value:major_power
+				covert_operation_max_slots >= 3
+			}
+			AND = {
+				NOT = { country_rank >= rank_value:major_power }
+				covert_operation_max_slots >= 2
+			}
+		}
+	}
+}
+
 # Check if a diplomatic pact is a covert operation pact (any type; the list is
 # pinned by test_covert_op_registry).
 # Scope: diplomatic_pact
