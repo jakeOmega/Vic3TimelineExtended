@@ -353,8 +353,13 @@ one, its passage rule and its target. "Target: None" means no country gives
 grounds right now; hover it for why. Hover a convention's name for the agency it
 would found and when the docket raises it. A greyed Propose button lists in its
 tooltip what stops you. Tabling on
-your own motion puts UN Request Cooldown on you for ten years, during which you
-can table nothing else yourself. A convention or charter reform the docket
+your own motion puts UN Request Cooldown on you, during which you can table
+nothing else yourself. It lasts ten years for an ordinary member. A great power
+waits half as long, and [standing](#international-standing) stretches or
+shortens the wait: 15% shorter at Respected, 30% shorter at Exemplary, 25%
+longer at Poor and 50% longer at Disgraced (never under one year). Suspended
+standing benefits count as Neutral. The sponsor mark that also bars a second
+proposal shortens the same way, from five years. A convention or charter reform the docket
 offers you is free, so the docket's offer is the cheap way to bring one to the
 floor. A topic cannot return to the floor for five years after a resolution on
 it closes (ten for a motion to expel), except that an appeal over a nuclear
@@ -384,7 +389,7 @@ situation and offers it to the countries it concerns. Roughly from gravest down:
 | A colonial empire's collapse | A proposer | Decolonization Resolution |
 | The first Moon landing or colony | A proposer | International Space Cooperation |
 | A trade embargo between members | The weaker party | International Trade Dispute |
-| Nothing graver, at most once in 24 months | A proposer | A convention no situation raises |
+| Nothing graver, at most once in 24 months (12 while a great power member is Respected or better) | A proposer | A convention no situation raises |
 
 An appeal lets the wronged party table a condemnation or sanctions, ask for
 peacekeepers, take the accused to the World Court, or pass the matter to a
@@ -575,7 +580,11 @@ Authority. It starts at 50 when you join.
 | Poor | 20–39 | −2 diplomatic reputation |
 | Disgraced | below 20 | −4 diplomatic reputation, slower infamy decay; no mandates |
 
-Standing also sways votes on your resolutions. You earn it by delivering:
+Standing also sways votes on your resolutions and sets how soon you may table
+business again (see Tabling UN business). When the docket offers a convention,
+it goes to the strongest member with a claim, ranked by power share and stretched
+the same way: a great power in good standing first, a member with a ruined record
+last. You earn it by delivering:
 programs kept for two years, aid and peacekeepers sent, missions accomplished,
 mandates discharged, and binding resolutions accepted at a cost. Gains shrink as
 standing rises, and voting earns none apart from a kept vote pledge. Censure,

@@ -75,15 +75,20 @@ def entries(cat: str, only: set[str]) -> dict[str, dict]:
     return {k: e for k, e in ICONS[cat].items() if not only or k in only}
 
 
+def is_derived(e: dict) -> bool:
+    """Built from another entry's icon ("from") or drawn on a disc ("disc"), with no render of its own."""
+    return "from" in e or "disc" in e
+
+
 def generated(cat: str, only: set[str]) -> dict[str, dict]:
     """The entries that get a FLUX icon: not "keep", not reusing another icon, not derived."""
     return {k: e for k, e in entries(cat, only).items()
-            if "use" not in e and "from" not in e and e["seed"] != KEEP}
+            if "use" not in e and not is_derived(e) and e["seed"] != KEEP}
 
 
 def derived(cat: str, only: set[str]) -> dict[str, dict]:
-    """The entries built from another entry's icon ("from"), with no render of their own."""
-    return {k: e for k, e in entries(cat, only).items() if "from" in e}
+    """The entries built from another entry's icon ("from") or drawn ("disc"), with no render of their own."""
+    return {k: e for k, e in entries(cat, only).items() if is_derived(e)}
 
 
 def picked(seed) -> bool:
@@ -91,7 +96,7 @@ def picked(seed) -> bool:
 
 
 def accepted(e: dict) -> bool:
-    return "use" not in e and "from" not in e and picked(e.get("seed"))
+    return "use" not in e and not is_derived(e) and picked(e.get("seed"))
 
 
 def hosted(cat: str) -> bool:
@@ -106,8 +111,8 @@ def ref(path: str) -> tuple[str, str]:
 
 
 def depends_on(e: dict) -> list[tuple[str, str]]:
-    """The registry entries a derived entry is built from: its source, then any part marks."""
-    return [ref(e["from"])] + [ref(m["part"]) for m in e.get("marks", []) if "part" in m]
+    """The registry entries a derived entry is built from: its source (none for a drawn one), then any part marks."""
+    return ([ref(e["from"])] if "from" in e else []) + [ref(m["part"]) for m in e.get("marks", []) if "part" in m]
 
 
 def derived_ready(e: dict) -> bool:
@@ -309,6 +314,9 @@ def stage_render(cat: str, only: set[str], work: Path, seeds: int, offload: str)
 
 # Per-entry settings that change how an entry's render is composed.
 ENTRY_SPEC_KEYS = ("solid",)
+# A derived entry's settings added after the UN's (tint, layout, size,
+# marks); recorded only when set, so the UN's manifest entries stay valid.
+DERIVED_KEYS = ("damage", "tilt", "base", "turn", "flip")
 
 
 def entry_spec(cat: str, e: dict) -> dict:
@@ -371,7 +379,8 @@ class Finals:
     def finish(self, e: dict, icon):
         from icon_render import apply_marks
 
-        return apply_marks(icon, e["marks"], self.load_mark) if e.get("marks") else icon
+        marks = [m for m in e.get("marks", []) if not m.get("pre")]
+        return apply_marks(icon, marks, self.load_mark) if marks else icon
 
     def load_mark(self, mark: dict):
         from icon_render import load_rgba
@@ -385,17 +394,44 @@ class Finals:
             raise SystemExit(f"no render for the part {mark['part']}: run --stage render --category {cat}")
         return im
 
-    def derived(self, e: dict, seed: int):
-        """A derived entry built on its source's candidate `seed`; None with no render."""
-        from icon_render import flag_layout, tint
+    def derived(self, e: dict, seed: int, size: int = 150):
+        """A derived entry built on its source's candidate `seed`; None with no render.
 
-        base = self.get(*ref(e["from"]), seed)
-        if base is None:
-            return None
+        In order: the source (or, for a drawn entry, its `disc`), `pre` marks,
+        `tint`, `flip` (mirrored), `turn` (about its centre), `damage` and `tilt` (a lean about its foot),
+        `base` (shrunk and placed), the `flag` layout, then the marks. A drawn entry has one candidate, whatever `seed` says.
+        """
+        from icon_render import damage, draw_disc, flag_layout, place, tint, turn
+
+        if "disc" in e:
+            base = draw_disc(size, e["disc"])
+        else:
+            base = self.get(*ref(e["from"]), seed)
+            if base is None:
+                return None
+        # A `pre` mark is part of the emblem (the covert shield's eyelid): drawn
+        # before the tint and the break, so it takes the metal and cracks with it.
+        pre = [m for m in e.get("marks", []) if m.get("pre")]
+        if pre:
+            from icon_render import apply_marks
+            base = apply_marks(base, pre, self.load_mark)
         im = tint(base, e.get("tint"))
+        if e.get("flip"):
+            from PIL import ImageOps
+            im = ImageOps.mirror(im)
+        if e.get("turn"):
+            im = turn(im, e["turn"])
+        if e.get("damage") or e.get("tilt"):
+            im = damage(im, e.get("damage"), e.get("tilt", 0))
+        if "base" in e:
+            im = place(im, e["base"].get("scale", 1.0), tuple(e["base"].get("at", (0.5, 0.5))))
         if e.get("layout") == "flag":
             im = flag_layout(im, tuple(e["size"]))
         return self.finish(e, im)
+
+    def derived_seeds(self, e: dict) -> list[int]:
+        """The candidates a derived entry is shown on: its source's, or one for a drawn entry."""
+        return self.seeds(*ref(e["from"])) if "from" in e else [0]
 
 
 def stage_compose(cat: str, only: set[str], work: Path) -> None:
@@ -422,14 +458,14 @@ def stage_sheet(cat: str, only: set[str], work: Path, include_reviewed: bool) ->
     finals = Finals(work)
     rows, panel_rows = [], []
     for key, e in {**generated(cat, only), **derived(cat, only)}.items():
-        if "from" in e:
+        if is_derived(e):
             # Shown while anything it is built from is under review, one
             # candidate per candidate of its source.
             if derived_ready(e) and not include_reviewed:
                 continue
-            cands = [(f"{ref(e['from'])[1]} s{seed}", finals.derived(e, seed))
-                     for seed in finals.seeds(*ref(e["from"]))]
-            subject = "from " + e["from"]
+            src = ref(e["from"])[1] if "from" in e else "drawn"
+            cands = [(f"{src} s{seed}", finals.derived(e, seed, spec["size"])) for seed in finals.derived_seeds(e)]
+            subject = "from " + e["from"] if "from" in e else "drawn"
         else:
             if e["seed"] is not None and not include_reviewed:
                 continue
@@ -511,9 +547,12 @@ def stage_write(cat: str, only: set[str], work: Path) -> None:
 
     def want_for(c: str, e: dict) -> list:
         """What an icon is made from, as the manifest stores it; a change rewrites the icon."""
-        if "from" in e:
-            want = (["from", want_for(*_src(e))] + [e.get(k) for k in ("tint", "layout", "size", "marks")]
-                    + part_seeds(e))
+        if is_derived(e):
+            src = ["disc", e["disc"]] if "disc" in e else ["from", want_for(*_src(e))]
+            want = src + [e.get(k) for k in ("tint", "layout", "size", "marks")] + part_seeds(e)
+            extra = {k: e[k] for k in DERIVED_KEYS if k in e}
+            if extra:
+                want.append(extra)
         else:
             want = [e["seed"], prompt_for(c, e["subject"])]
             if flux_backdrop(c):
@@ -539,7 +578,7 @@ def stage_write(cat: str, only: set[str], work: Path) -> None:
         want = want_for(cat, e)
         if not needs_write(dest.exists(), manifest.get(name(cat, key)), want):
             continue
-        icon = finals.derived(e, _src(e)[1]["seed"])
+        icon = finals.derived(e, _src(e)[1]["seed"] if "from" in e else 0, spec["size"])
         if icon is None:
             print(f"  no render for {e['from']}, which {cat}/{key} is built on: run --stage render")
             continue

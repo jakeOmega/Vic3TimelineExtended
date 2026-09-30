@@ -684,5 +684,182 @@ class DerivedIconTests(unittest.TestCase):
             gi.ICONS = ip.ICONS
 
 
+@unittest.skipIf(icon_dds is None, "Pillow is not installed")
+class PanelStateTests(unittest.TestCase):
+    """The system panels' states: metal tints, drawn marks, breaks, placement, drawn entries."""
+
+    def setUp(self):
+        import icon_render
+        self.r = icon_render
+
+    def _stone(self):
+        im = Image.new("RGBA", (60, 60), (0, 0, 0, 0))
+        im.paste((90, 88, 84, 255), (10, 10, 50, 30))
+        im.paste((190, 186, 180, 255), (10, 30, 50, 50))
+        return im
+
+    def test_metal_tints_keep_the_shape_and_change_the_metal(self):
+        stone = self._stone()
+        gold = np.asarray(self.r.tint(stone, "gold")).astype(int)
+        silver = np.asarray(self.r.tint(stone, "silver")).astype(int)
+        iron = np.asarray(self.r.tint(stone, "iron")).astype(int)
+        self.assertTrue((gold[..., 3] == np.asarray(stone)[..., 3]).all())     # same silhouette
+        self.assertGreater(gold[40, 30, 0], gold[40, 30, 2] + 60)              # gold: warm
+        self.assertLess(np.ptp(silver[40, 30, :3]), 25)                        # silver: near neutral, a little cool
+        self.assertLess(iron[40, 30, :3].sum(), silver[40, 30, :3].sum())      # iron: darker than silver
+        self.assertGreater(gold[40, 30, :3].sum(), gold[20, 30, :3].sum())     # light and shade kept
+        moss = np.asarray(self.r.tint(stone, "moss")).astype(int)
+        self.assertGreater(moss[20, 30, 1], moss[20, 30, 2])                   # shadows go green
+
+    def test_arrows_point_the_way_they_are_told(self):
+        up = np.asarray(self.r.arrow(60, "up", "green")).astype(int)
+        down = np.asarray(self.r.arrow(60, "down", "red")).astype(int)
+        # The tip is narrow and the tail is the shaft's width: up, the narrow end is on top.
+        rows = lambda a: [w for w in (a[..., 3] > 128).sum(axis=1) if w]  # noqa: E731
+        self.assertLess(rows(up)[0], rows(up)[-1])
+        self.assertGreater(rows(down)[0], rows(down)[-1])
+        self.assertGreater(up[40, 30, 1], up[40, 30, 0])                       # green
+        self.assertGreater(down[20, 30, 0], down[20, 30, 1])                   # red
+
+    def test_chevrons_count(self):
+        for n in (1, 2, 4):
+            col = np.asarray(self.r.chevrons(120, n))[:, 60].astype(int)       # the middle column
+            a = np.concatenate([[False], (col[:, 3] > 128) & (col[:, 0] > 120)])   # gold, not the dark outline
+            bands = int(np.sum(a[1:] & ~a[:-1]))
+            self.assertEqual(bands, n)
+
+    def test_bubble_rim_and_thermometer_level(self):
+        rim = np.asarray(self.r.bubble(100, "green")).astype(int)
+        self.assertGreater(rim[50, 5, 1], rim[50, 5, 0] + 40)                  # the rim carries the colour
+        self.assertLess(rim[50, 50, 3], 128)                                   # the film is clear
+        def column_top(level):
+            a = np.asarray(self.r.thermometer(120, level)).astype(int)
+            red = (a[..., 0] > 180) & (a[..., 1] < 90) & (a[:, :, 3] > 200)
+            return int(np.argmax(red[:, 60]))
+        self.assertLess(column_top(0.8), column_top(0.2))                      # higher column, higher top
+
+    def test_disc_shield_dome_and_link(self):
+        d = np.asarray(self.r.disc(60, "green")).astype(int)
+        self.assertEqual(d[0, 0, 3], 0)                                        # round
+        self.assertGreater(d[40, 30, 1], d[40, 30, 0] + 40)                    # green enamel
+        sh = np.asarray(self.r.shield_outline(60, "blue"))
+        self.assertLess(sh[26, 30, 3], 30)                                     # open inside
+        self.assertGreater(sh[5, 30, 3], 200)                                  # the rim at the top
+        dm = np.asarray(self.r.dome(60))
+        self.assertLess(dm[40, 30, 3], 128)                                    # clear, so the rocket shows
+        whole = np.asarray(self.r.link(100, "gold", 0.1))
+        broken = np.asarray(self.r.link(100, "gold", 0.1, "broken"))
+        self.assertGreater((whole[..., 3] > 128).sum(), (broken[..., 3] > 128).sum())   # a gap in the broken tie
+        right = np.asarray(self.r.arrow(60, "right", "red"))
+        widths = [w for w in (right[..., 3] > 128).sum(axis=0) if w]
+        self.assertLess(widths[-1], widths[0])                                 # the tip on the right
+
+    def test_eyelid_shuts_or_half_opens(self):
+        shut = np.asarray(self.r.eyelid(100)).astype(int)
+        half = np.asarray(self.r.eyelid(100, 0.5)).astype(int)
+        self.assertGreater(shut[62, 50, 3], 200)                               # the lid covers the lower eye
+        self.assertLess(half[64, 50, 3], 60)                                   # half open: the lower eye shows
+        self.assertGreater(half[34, 50, 3], 200)                               # while the lid covers the top
+        self.assertEqual(shut[5, 50, 3], 0)                                    # nothing outside the eye
+
+    def test_pre_marks_are_part_of_the_emblem(self):
+        # A `pre` mark is drawn before the tint, so it takes the emblem's metal.
+        finals = gi.Finals.__new__(gi.Finals)
+        finals.load_mark = lambda m: None
+        base = Image.new("RGBA", (100, 100), (150, 150, 150, 255))
+        finals.get = lambda cat, key, seed: base
+        e = {"from": "covert_part/shield", "tint": "gold",
+             "marks": [{"draw": "bar", "colour": "white", "at": (0.5, 0.5), "scale": 0.8, "pre": True}]}
+        out = np.asarray(finals.derived(e, 0)).astype(int)
+        self.assertGreater(out[50, 50, 0], out[50, 50, 2] + 40)               # the white bar turned gold
+
+    def test_turn_and_rotated_marks(self):
+        tall = Image.new("RGBA", (100, 100), (0, 0, 0, 0))
+        tall.paste((200, 200, 200, 255), (45, 5, 55, 95))
+        lying = np.asarray(self.r.turn(tall, -90))
+        self.assertEqual(lying.shape, (100, 100, 4))
+        self.assertTrue((lying[50, 10:90, 3] > 128).all())                     # now across, not up
+        self.assertTrue((lying[10, 45:55, 3] < 128).all())
+        bar = Image.new("RGBA", (40, 8), (220, 20, 20, 255))
+        out = np.asarray(self.r.apply_marks(Image.new("RGBA", (100, 100), (0, 0, 0, 0)),
+                                            [{"icon": "x", "at": (0.5, 0.5), "scale": 0.6, "rotate": 90,
+                                              "outline": False}], lambda m: bar))
+        self.assertGreater(out[30, 50, 3], 128)                                # the bar stands upright
+        self.assertEqual(out[50, 25, 3], 0)
+
+    def test_damage_and_tilt(self):
+        solid = Image.new("RGBA", (80, 80), (160, 160, 160, 255))
+        crack = np.asarray(self.r.damage(solid, "crack")).astype(int)
+        self.assertTrue((crack[..., 3] == 255).all())                          # a crack keeps the shape
+        self.assertLess(crack[..., :3].sum(axis=2).min(), 200)                 # and draws a dark line
+        split = np.asarray(self.r.damage(solid, "split"))
+        self.assertTrue((split[5:75, 40:50, 3] < 128).any())                   # a gap opens down the middle
+        self.assertTrue((split[20:70, 10:26, 3] > 128).all() and (split[20:70, 55:68, 3] > 128).all())   # both halves
+        tilted = np.asarray(self.r.damage(Image.new("RGBA", (80, 80), (0, 0, 0, 0)).crop((0, 0, 80, 80)), None, 9))
+        self.assertEqual(tilted.shape, (80, 80, 4))
+        with self.assertRaises(ValueError):
+            self.r.damage(solid, "shatter")
+
+    def test_place_and_marks_under(self):
+        big = Image.new("RGBA", (100, 100), (200, 30, 30, 255))
+        placed = np.asarray(self.r.place(big, 0.4, (0.5, 0.8)))
+        self.assertEqual(placed[80, 50, 3], 255)
+        self.assertEqual(placed[30, 50, 3], 0)
+        blue = Image.new("RGBA", (40, 40), (20, 20, 220, 255))
+        over = np.asarray(self.r.apply_marks(big, [{"icon": "x", "at": (0.5, 0.5)}], lambda m: blue))
+        under = np.asarray(self.r.apply_marks(big, [{"icon": "x", "at": (0.5, 0.5), "under": True}], lambda m: blue))
+        self.assertGreater(over[50, 50, 2], 150)
+        self.assertGreater(under[50, 50, 0], 150)                              # hidden beneath the icon
+        edge = self.r.apply_marks(big, [{"draw": "bar", "at": (0.98, 0.98)}], None)   # clipped, not refused
+        self.assertEqual(edge.size, (100, 100))
+
+    def test_check_takes_drawn_entries_and_the_new_settings(self):
+        disc = {"centre": (1, 2, 3), "edge": (1, 2, 3), "rim_light": (1, 2, 3), "rim_dark": (1, 2, 3)}
+        now = "gfx/interface/icons/x.dds"
+        saved = ip.ICONS
+        try:
+            ip.ICONS = {
+                "gw_part": {"crate": {"subject": "a crate", "seed": 1}},
+                "gw_state": {
+                    "tier": {"disc": disc, "marks": [{"draw": "thermometer", "level": 0.4}], "now": now},
+                    "member": {"from": "gw_part/crate", "tint": "iron", "damage": "split", "tilt": 5,
+                               "base": {"scale": 0.8, "at": (0.5, 0.6)},
+                               "marks": [{"draw": "arrow", "dir": "up", "colour": "green", "under": True}],
+                               "now": now},
+                    "bad_damage": {"from": "gw_part/crate", "damage": "shatter", "now": now},
+                    "bad_colour": {"from": "gw_part/crate", "marks": [{"draw": "arrow", "colour": "mauve"}],
+                                   "now": now},
+                    "bad_disc": {"disc": {"centre": (1, 2, 3)}, "now": now},
+                    "bad_base": {"from": "gw_part/crate", "base": {"scale": 1.5}, "now": now},
+                },
+            }
+            r = ip.check(on_disk={ip.icon_path("gw_state", "tier"), ip.icon_path("gw_state", "member")})
+        finally:
+            ip.ICONS = saved
+        self.assertEqual(sorted(r["bad_entry"]), [("gw_state", "bad_base"), ("gw_state", "bad_colour"),
+                                                  ("gw_state", "bad_damage"), ("gw_state", "bad_disc")])
+        self.assertEqual(r["missing_dds"], [])
+        self.assertEqual(r["states"]["gw_state"]["derived"], 2)
+        self.assertEqual(gi.depends_on({"disc": disc}), [])                    # a drawn entry waits on nothing
+
+    def test_drawn_entry_is_written_at_once(self):
+        import icon_render
+        root, work = Path(tempfile.mkdtemp()), Path(tempfile.mkdtemp())
+        (root / "gfx" / "interface").mkdir(parents=True)
+        disc = {"centre": (150, 205, 195), "edge": (60, 120, 115), "rim_light": (240, 225, 190),
+                "rim_dark": (120, 95, 60)}
+        saved = (ip.ICONS, gi.MOD_ROOT, icon_render.vanilla_icons_dir)
+        try:
+            ip.ICONS = gi.ICONS = {"gw_state": {"tier": {"disc": disc, "now": "gfx/x.dds",
+                                                         "marks": [{"draw": "thermometer", "level": 0.2}]}}}
+            gi.MOD_ROOT = root
+            icon_render.vanilla_icons_dir = lambda: root / "game" / "gfx" / "interface" / "icons"
+            gi.stage_write("gw_state", set(), work)
+            self.assertTrue((root / ip.icon_path("gw_state", "tier")).exists())
+        finally:
+            ip.ICONS, gi.MOD_ROOT, icon_render.vanilla_icons_dir = saved
+            gi.ICONS = ip.ICONS
+
+
 if __name__ == "__main__":
     unittest.main()
