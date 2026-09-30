@@ -160,7 +160,8 @@ types global_warming_widget_types
 	}
 
 	### A table row: a label on the left and its value on the right (style
-	### rule 5; un_chamber_value_row's shape).
+	### rule 5; un_chamber_value_row's shape). 340 + 120: the value column is
+	### wide enough for "136 nations" (play-test round 3's width budget).
 	type gw_value_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -168,8 +169,8 @@ types global_warming_widget_types
 
 		textbox = {
 			autoresize = yes
-			minimumsize = { 360 -1 }
-			maximumsize = { 360 -1 }
+			minimumsize = { 340 -1 }
+			maximumsize = { 340 -1 }
 			align = left|nobaseline
 			using = fontsize_medium
 			elide = right
@@ -177,23 +178,13 @@ types global_warming_widget_types
 		}
 		textbox = {
 			autoresize = yes
-			minimumsize = { 100 -1 }
-			maximumsize = { 100 -1 }
+			minimumsize = { 120 -1 }
+			maximumsize = { 120 -1 }
 			align = right|nobaseline
 			using = fontsize_medium
 			default_format = "#v"
 			block "row_value" {}
 		}
-	}
-
-	### Free-standing value textbox: a policy row's status cell.
-	type gw_condition_value = textbox {
-		parentanchor = vcenter
-		autoresize = yes
-		max_width = 250
-		elide = right
-		align = nobaseline
-		using = fontsize_large
 	}
 
 	### The Adopt control. Op 0 is baked in, so a row instance only supplies the
@@ -227,9 +218,13 @@ types global_warming_widget_types
 	}
 
 	### One policy: its icon, lit while in force and dimmed while not (style
-	### rule 4), its name (hover: what it does), its in-force word, and exactly
-	### one of the Adopt / Repeal controls beside it. Fixed-width cells, 466 px
-	### in all, so no name or status can widen the row.
+	### rule 4; hover: in force or not), its name (hover: what it does), a
+	### green check while in force, and exactly one of the Adopt / Repeal
+	### controls beside it. Fixed-width cells, 26 + 276 + 24 + 110 and the
+	### gaps and margins = 466 px, so nothing can widen the row. The check
+	### replaced the "Active"/"Inactive" word in play-test round 3, which
+	### freed the width the names needed: the longest, "Reforestation
+	### Subsidies", is 23 characters, about 253 units in the large font.
 	###
 	### The row's datacontext is the policy's gw_active_<policy>_sgui, so
 	### `ScriptedGui.IsShown` below is "is this policy in force for us?". The
@@ -250,6 +245,7 @@ types global_warming_widget_types
 		widget = {
 			size = { 26 26 }
 			parentanchor = vcenter
+			tooltip = "[SelectLocalization( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), 'gw_policy_status_active', 'gw_policy_status_inactive' )]"
 
 			icon = {
 				size = { 26 26 }
@@ -271,13 +267,13 @@ types global_warming_widget_types
 		### tooltip shows only what repealing does, so this is where a policy in
 		### force says what it is doing.
 		widget = {
-			size = { 176 26 }
+			size = { 276 26 }
 			parentanchor = vcenter
 
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
-				max_width = 176
+				max_width = 276
 				elide = right
 				align = nobaseline
 				using = fontsize_large
@@ -286,22 +282,18 @@ types global_warming_widget_types
 			}
 		}
 
-		### In force or not.
+		### A green check while in force; nothing while not (the dimmed icon
+		### beside the name already says so).
 		widget = {
-			size = { 124 26 }
+			size = { 24 26 }
 			parentanchor = vcenter
 
-			gw_condition_value = {
-				parentanchor = left|vcenter
-				max_width = 124
+			icon = {
+				size = { 20 20 }
+				parentanchor = center
 				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				text = "gw_policy_status_active"
-			}
-			gw_condition_value = {
-				parentanchor = left|vcenter
-				max_width = 124
-				visible = "[Not( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
-				text = "gw_policy_status_inactive"
+				texture = "gfx/interface/icons/generic_icons/green_checkmark.dds"
+				tooltip = "gw_policy_status_active"
 			}
 		}
 
@@ -355,9 +347,10 @@ types global_warming_widget_types
 	### A 0..1 share as a pie over a background disc, inside vanilla's
 	### decorated round frame, its label beneath (te_un_ov_pie; the recipe is
 	### gui_modding_guide.md "Pie charts of script-held data"). The instance
-	### names the fill texture: frame 1 transparent, frame 2 the colour.
+	### names the fill texture: frame 1 transparent, frame 2 the colour. 176
+	### wide, so "Emissions Cut 100%" fits beneath (play-test round 3).
 	type te_gw_ov_pie = widget {
-		size = { 150 108 }
+		size = { 176 108 }
 
 		icon = {
 			size = { 86 86 }
@@ -393,6 +386,8 @@ types global_warming_widget_types
 		textbox = {
 			parentanchor = bottom|hcenter
 			autoresize = yes
+			max_width = 176
+			elide = right
 			align = hcenter|nobaseline
 			using = fontsize_medium
 			default_format = "#tooltippable"
@@ -547,57 +542,132 @@ types global_warming_widget_types
 					}
 				}
 
-				### Row 2: the temperature on the journal entry's 0-4 C scale, a
-				### marker where the next tier begins (the UN authority bar's marker
-				### technique), and the headline: the reading, then the reading in
-				### gw_disp_projection_years (10) at last year's rate. Three
-				### fixed cells, 96 + 170 + 198 and two 8 px gaps = 480: the label and
-				### the headline elide inside their cells rather than widen the row.
+				### Row 2: the temperature on the journal entry's 0-4 C scale, and the
+				### headline: the reading, then the reading in
+				### gw_disp_projection_years (10) at last year's rate. Three fixed
+				### cells, 106 + 160 + 198 and two 8 px gaps = 480: the label and the
+				### headline elide inside their cells rather than widen the row.
+				###
+				### THE BAR (play-test round 3, 2026-09-30; the Nuclear taboo bar
+				### follows the same spec). Five layers in one fixed 160 x 18 cell,
+				### bottom to top. The solid fill runs to the lower of reading and
+				### projection; a translucent segment runs from there to the higher.
+				### THE SEGMENT'S COLOUR SAYS WHETHER THE CHANGE IS GOOD OR BAD FOR
+				### THE PLAYER, not its direction (the owner's convention for every
+				### projection bar: red bad, green good, the bar's own fill, pale, for
+				### a neutral change). Where it sits already shows the direction:
+				### past the solid fill when rising, the bar's tail when falling.
+				###   1. default_progressbar_horizontal at value 0: the bar's own
+				###      background and frame, no fill.
+				###   2. Rising (gw_disp_temp_trend 1), i.e. warming, which is BAD:
+				###      bad_progressbar_horizontal's red fill at 40% opacity (a
+				###      wrapper widget, alpha = 0.4) up to the projection.
+				###   3. Falling (gw_disp_temp_trend -1), i.e. cooling, which is GOOD:
+				###      green_progressbar_horizontal's green fill at 50% opacity up
+				###      to today's reading, the tail the temperature is set to lose.
+				###   4. default_progressbar_horizontal's own fill, background and
+				###      frame blanked (the UN tally's stacking), up to the lower of
+				###      the two: solid.
+				###   5. The next tier's threshold as a thin 3 px cream line (a
+				###      progressbar marker drawn with white.dds tinted by `color`),
+				###      with its own hover. None past the last threshold (tier 6).
+				### No eye marker. With no rate yet (before the first January) the
+				### projection equals the reading and layers 2-3 draw nothing.
 				flowcontainer = {
 					direction = horizontal
 					spacing = 8
 					tooltip = "gw_ov_temp_tt"
 
 					widget = {
-						size = { 96 24 }
+						size = { 106 24 }
 						parentanchor = vcenter
 
 						textbox = {
 							parentanchor = left|vcenter
 							autoresize = yes
-							max_width = 96
+							max_width = 106
 							elide = right
 							align = left|nobaseline
 							text = "gw_ov_temp_label"
 						}
 					}
-					default_progressbar_horizontal = {
-						size = { 170 18 }
+					widget = {
+						size = { 160 18 }
 						parentanchor = vcenter
-						blockoverride "values" {
-							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_temp_frac') )]"
-							min = 0
-							max = 1
-						}
-						blockoverride "on_top_of_the_progressbar" {
-							# No marker past the last threshold (tier 6, 4 C).
-							progressbar = {
-								visible = "[Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)6' ) )]"
-								noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-								progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-								size = { 100% 100% }
-								skip_initial_animation = yes
-								direction = horizontal
-								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_next_frac') )]"
+
+						# 1. Background and frame.
+						default_progressbar_horizontal = {
+							size = { 100% 100% }
+							blockoverride "values" {
+								value = 0
 								min = 0
 								max = 1
-								marker = {
-									icon = {
-										size = { 36 20 }
-										parentanchor = vcenter
-										widgetanchor = center
-										texture = "gfx/interface/progressbar/progressbar_marker.dds"
-									}
+							}
+						}
+						# 2. Rising, i.e. warming (bad): red, from the reading to the projection.
+						widget = {
+							size = { 100% 100% }
+							alpha = 0.4
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_temp_trend'), '(CFixedPoint)1' )]"
+
+							bad_progressbar_horizontal = {
+								size = { 100% 100% }
+								blockoverride "background" {}
+								blockoverride "frame" {}
+								blockoverride "values" {
+									value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_bar_high_frac') )]"
+									min = 0
+									max = 1
+								}
+							}
+						}
+						# 3. Falling, i.e. cooling (good): green, from the projection up to the reading.
+						widget = {
+							size = { 100% 100% }
+							alpha = 0.5
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_temp_trend'), '(CFixedPoint)-1' )]"
+
+							green_progressbar_horizontal = {
+								size = { 100% 100% }
+								blockoverride "background" {}
+								blockoverride "frame" {}
+								blockoverride "values" {
+									value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_bar_high_frac') )]"
+									min = 0
+									max = 1
+								}
+							}
+						}
+						# 4. Solid: the lower of reading and projection.
+						default_progressbar_horizontal = {
+							size = { 100% 100% }
+							blockoverride "background" {}
+							blockoverride "frame" {}
+							blockoverride "values" {
+								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_bar_low_frac') )]"
+								min = 0
+								max = 1
+							}
+						}
+						# 5. The next tier's threshold: a thin line with its own hover.
+						progressbar = {
+							visible = "[Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)6' ) )]"
+							noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+							progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+							size = { 100% 100% }
+							skip_initial_animation = yes
+							direction = horizontal
+							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_next_frac') )]"
+							min = 0
+							max = 1
+							marker = {
+								icon = {
+									size = { 3 24 }
+									parentanchor = vcenter
+									widgetanchor = center
+									texture = "gfx/interface/backgrounds/white.dds"
+									color = { 0.96 0.90 0.72 0.95 }
+									tooltip = "gw_ov_tick_tt"
 								}
 							}
 						}
@@ -618,7 +688,7 @@ types global_warming_widget_types
 				}
 
 				### Row 3: the yearly emissions figures, as a table of fixed cells
-				### (gw_value_row, 360 + 100) in the 480 column, beside the headline
+				### (gw_value_row, 340 + 120) in the 480 column, beside the headline
 				### whose rate they explain and above the pies they add up to. Until
 				### the first January's figures exist (a new game, or a save upgraded
 				### mid-year), one line saying when they arrive. It was a section of

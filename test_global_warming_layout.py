@@ -28,7 +28,7 @@ NATIONAL = ["climate_adaptation", "reforestation", "public_transit", "fossil_fue
             "green_building_codes"]
 # Textures in the widget that are not placeholders for art still to come.
 NOT_PLACEHOLDERS = {"gfx/interface/backgrounds/round_frame_dec.dds",
-                    "gfx/interface/progressbar/progressbar_marker.dds",
+                    "gfx/interface/backgrounds/white.dds",   # the threshold line, a tinted flat fill
                     "gfx/interface/icons/generic_icons/transparent.dds"}
 
 
@@ -204,12 +204,28 @@ class PolicyRowTest(unittest.TestCase):
     def test_icon_lit_and_dimmed_on_the_in_force_question(self):
         row = _type_body(_read(GUI), "gw_policy_row")
         icons = re.findall(r"icon = \{(.*?)\n\t\t\t\}", row, re.S)
-        self.assertEqual(len(icons), 2)
+        self.assertEqual(len(icons), 3)   # lit, dimmed, and the in-force check
         shown = "ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )"
         self.assertIn(f'visible = "[{shown}]"', icons[0])
         self.assertNotIn("alpha", icons[0])
         self.assertIn(f'visible = "[Not( {shown} )]"', icons[1])
         self.assertIn("alpha = 0.25", icons[1])
+
+    def test_status_is_a_check_not_a_word(self):
+        """Play-test round 3: "Active"/"Inactive" became a green check, freeing
+        the width the names needed; the words stay on the icon's hover."""
+        row = _type_body(_read(GUI), "gw_policy_row")
+        shown = "ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )"
+        self.assertRegex(row, rf'visible = "\[{re.escape(shown)}\]"\s*'
+                              r'texture = "gfx/interface/icons/generic_icons/green_checkmark\.dds"\s*'
+                              r'tooltip = "gw_policy_status_active"')
+        self.assertNotIn('text = "gw_policy_status_', row)
+        self.assertIn("'gw_policy_status_active', 'gw_policy_status_inactive'", row)
+        cells = [int(w) for w in re.findall(r"^\t\t(?:widget) = \{\s*size = \{ (\d+) \d+ \}", row, re.M)]
+        spacing = int(re.search(r"spacing = (\d+)", row).group(1))
+        margin = int(re.search(r"margin = \{ (\d+) \d+ \}", row).group(1))
+        self.assertEqual(cells, [26, 276, 24, 110])
+        self.assertEqual(sum(cells) + spacing * 3 + margin * 2, 466)
 
 
 class HowItWorksTest(unittest.TestCase):
@@ -360,6 +376,170 @@ class RoundThreeTest(unittest.TestCase):
         gui = _read(GUI)
         self.assertNotIn("te_gw_sec_emissions", gui)
         self.assertNotIn("gw_sect_emissions", _loc_keys())
+
+
+class ProjectionBarTest(unittest.TestCase):
+    """Play-test round 3: the bar shows the projection as a segment, not a marker.
+    The segment is coloured by whether the change is good or bad for the player
+    (the owner's convention: red bad, green good): warming is red, cooling green."""
+
+    @classmethod
+    def setUpClass(cls):
+        body = _type_body(_read(GUI), "te_gw_overview_panel")
+        m = re.search(r"(?m)^\t{5}widget = \{\s*size = \{ 160 18 \}", body)
+        assert m, "no 160 x 18 bar cell"
+        cls.bar = _block_from(body, body.index("{", m.start()) + 1)
+
+    def test_no_eye_marker(self):
+        self.assertNotIn("progressbar_marker.dds", _read(GUI))
+
+    def test_layers_in_order(self):
+        tops = [t for t in re.findall(r"^\t{6}(\w+) = \{", self.bar, re.M) if t != "size"]
+        self.assertEqual(tops, ["default_progressbar_horizontal", "widget", "widget",
+                                "default_progressbar_horizontal", "progressbar"])
+        layers = []
+        for m in re.finditer(r"(?m)^\t{6}(\w+) = \{", self.bar):
+            if m.group(1) != "size":
+                layers.append(_block_from(self.bar, m.end()))
+        base, warming, cooling, solid, tick = layers
+        self.assertRegex(base, r"value = 0\s*min = 0\s*max = 1")
+        self.assertNotIn('blockoverride "background" {}', base)
+        # Warming is bad: red, past the solid fill, up to the projection.
+        self.assertIn("alpha = 0.4", warming)
+        self.assertIn("ScriptValue('gw_disp_temp_trend'), '(CFixedPoint)1' )", warming)
+        self.assertIn("bad_progressbar_horizontal = {", warming)
+        self.assertIn("ScriptValue('gw_disp_bar_high_frac')", warming)
+        # Cooling is good: green, the tail from the projection up to the reading.
+        self.assertIn("alpha = 0.5", cooling)
+        self.assertIn("ScriptValue('gw_disp_temp_trend'), '(CFixedPoint)-1' )", cooling)
+        self.assertIn("green_progressbar_horizontal = {", cooling)
+        self.assertIn("ScriptValue('gw_disp_bar_high_frac')", cooling)
+        for layer in (warming, cooling, solid):
+            self.assertIn('blockoverride "background" {}', layer)
+            self.assertIn('blockoverride "frame" {}', layer)
+        self.assertIn("ScriptValue('gw_disp_bar_low_frac')", solid)
+        self.assertIn("ScriptValue('gw_disp_next_frac')", tick)
+        self.assertRegex(tick, r"marker = \{\s*icon = \{\s*size = \{ 3 24 \}")
+        self.assertIn('texture = "gfx/interface/backgrounds/white.dds"', tick)
+        self.assertIn('tooltip = "gw_ov_tick_tt"', tick)
+
+    def test_the_tooltip_explains_the_colours(self):
+        tt = _loc_value("gw_ov_temp_tt")
+        self.assertIn("#R red#!", tt)
+        self.assertIn("#G green#!", tt)
+        self.assertNotIn("pale", tt)
+
+    def test_low_and_high_swap_when_cooling(self):
+        values = _read(VALUES)
+        low = _top_level(values, "gw_disp_bar_low_frac")
+        high = _top_level(values, "gw_disp_bar_high_frac")
+        self.assertRegex(low, r"^\s*value = gw_disp_temp_frac\s*if = \{\s*limit = \{ gw_disp_temp_trend < 0 \}\s*value = gw_disp_proj_frac")
+        self.assertRegex(high, r"^\s*value = gw_disp_proj_frac\s*if = \{\s*limit = \{ gw_disp_temp_trend < 0 \}\s*value = gw_disp_temp_frac")
+        self.assertIn("value = gw_disp_temp_projected", _top_level(values, "gw_disp_proj_frac"))
+
+    def test_next_tier_word_is_the_ladder_one_step_up(self):
+        body = _top_level(_read(CUSTOM_LOC), "gw_next_tier_short")
+        pairs = re.findall(r"gw_disp_tier_code >= (\d+) \}\s*localization_key = gw_tier_short_(\w+)", body)
+        order = ["negligible", "slight", "moderate", "significant", "severe", "catastrophic", "apocalyptic"]
+        self.assertEqual(len(pairs), 5)
+        for code, word in pairs:
+            self.assertEqual(order.index(word), int(code) + 1, (code, word))
+        self.assertRegex(body, r"always = yes \}\s*localization_key = gw_tier_short_slight")
+        self.assertIn("GetCustom('gw_next_tier_short')", _loc_value("gw_ov_tick_tt"))
+
+
+# Play-test round 3, rule 1: nothing a player reads may end in "...". Units per
+# character, from the owner's screenshots: the large row font about 10 and the
+# medium table font about 8.6 (the coordinator's measurements), the small font
+# about 7 (the overview's "Market Leader", 13 characters in about 90 units, in
+# the round-1 screenshot), and digits in the default font about 7.1 (the
+# temperature headline, 22 characters in about 155 units, same screenshot; the
+# round-2 screenshot showed all 25 characters of "1.61 -> 1.82 C (+0.02/yr)" in
+# its 198-unit cell). The default font is otherwise taken as medium. Plus 10%.
+UNITS = {"large": 10.0, "medium": 8.6, "small": 7.0, "digits": 7.1}
+MARGIN = 1.1
+
+
+def _visible_text(value):
+    """What a loc value shows: concept links become their display text, and
+    formatting codes and data reads are dropped (the caller supplies data)."""
+    value = re.sub(r"\[Concept\('\w+',\s*'([^']*)'\)\]", r"\1", value)
+    value = re.sub(r"\[concept_(\w+)\]", lambda m: _loc_value(f"concept_{m.group(1)}"), value)
+    value = re.sub(r"#!|#\w+ ?", "", value)
+    return value
+
+
+class WidthBudgetTest(unittest.TestCase):
+    """Every label in a fixed-width cell fits it by the round-3 estimate. The
+    cell widths are read from the .gui, so narrowing a cell fails here."""
+
+    @classmethod
+    def setUpClass(cls):
+        gui = _read(GUI)
+        row = _type_body(gui, "gw_policy_row")
+        cls.name_cell = int(re.search(r"max_width = (\d+)\s*elide = right\s*align = nobaseline\s*"
+                                      r"using = fontsize_large", row).group(1))
+        table = _type_body(gui, "gw_value_row")
+        cls.label_cell, cls.value_cell = (int(w) for w in re.findall(r"maximumsize = \{ (\d+) -1 \}", table))
+        cls.pie_cell = int(re.search(r"size = \{ (\d+) \d+ \}", _type_body(gui, "te_gw_ov_pie")).group(1))
+        cls.icon_cell = int(re.search(r"max_width = (\d+)", _type_body(gui, "te_gw_ov_icon_label")).group(1))
+        ov = _type_body(gui, "te_gw_overview_panel")
+        cls.temp_label_cell = int(re.search(r'max_width = (\d+)\s*elide = right\s*align = left\|nobaseline\s*'
+                                            r'text = "gw_ov_temp_label"', ov).group(1))
+        cls.headline_cell = int(re.search(r'max_width = (\d+)\s*elide = right\s*align = left\|nobaseline\s*'
+                                          r'text = "gw_ov_temp_value"', ov).group(1))
+
+    def assertFits(self, text, font, cell, what):
+        """`text` is a string in one font, or a list of (string, font) runs."""
+        runs = [(text, font)] if isinstance(text, str) else text
+        need = sum(len(t) * UNITS[f] for t, f in runs) * MARGIN
+        self.assertLessEqual(need, cell, f"{what}: {text!r} needs ~{need:.0f} of {cell} ({font})")
+
+    def test_static_labels(self):
+        cases = [
+            # (loc key, font, cell width)
+            ("gw_ov_temp_label", "medium", self.temp_label_cell),   # "Temperature", default font
+            ("gw_ov_treaty_label", "small", self.icon_cell),
+            ("gw_market_role_leader", "small", self.icon_cell),
+            ("gw_market_role_member", "small", self.icon_cell),
+            ("gw_emis_market_label", "medium", self.label_cell),
+            ("gw_emis_capture_label", "medium", self.label_cell),
+            ("gw_emis_world_label", "medium", self.label_cell),
+            ("gw_emis_warming_label", "medium", self.label_cell),
+            ("gw_sect_world", "medium", 440 - 32),        # nested header, text after its arrow
+            ("gw_sect_policies", "large", 480),           # section headers, 520 with the arrow
+            ("gw_sect_history", "large", 480),
+            ("gw_how_header", "large", 480),
+            ("gw_btn_adopt", "large", 104),               # the buttons' text, taken as large
+            ("gw_btn_repeal", "large", 104),
+        ]
+        for p in MARKET_WIDE + NATIONAL:
+            cases.append((f"GW_{p.upper()}_ROW", "large", self.name_cell))   # the policy row name
+            cases.append((f"GW_{p.upper()}_ROW", "medium", self.label_cell))  # Around the World's label
+        for key, font, cell in cases:
+            self.assertFits(_visible_text(_loc_value(key)), font, cell, key)
+
+    def test_longest_dynamic_texts(self):
+        tiers = [_visible_text(_loc_value(f"gw_tier_short_{t}")) for t in
+                 ("negligible", "slight", "moderate", "significant", "severe", "catastrophic", "apocalyptic")]
+        self.assertEqual(max(tiers, key=len), "Catastrophic")
+        cases = [
+            (max(tiers, key=len), "small", self.icon_cell, "tier word"),
+            ("Penalty ×9.99", "small", self.icon_cell, "penalty cell (anomaly below 10 C)"),
+            ("9.99 → 9.99 °C (-0.20/yr)", "digits", self.headline_cell, "temperature headline"),
+            ([("9.99 °C ", "digits"), ("(no rate yet)", "medium")], None, self.headline_cell,
+             "headline before January"),
+            ("Emissions Cut 100%", "medium", self.pie_cell, "cut pie label"),
+            ("Our Share 100%", "medium", self.pie_cell, "share pie label"),
+            (_visible_text(_loc_value("gw_ov_pie_share_pending")), "medium", self.pie_cell,
+             "share pie label, pending"),
+            ("-999.9/yr", "medium", self.value_cell, "an emissions value"),
+            ("99999/yr", "medium", self.value_cell, "world emissions"),
+            ("+0.20 °C", "medium", self.value_cell, "warming last year"),
+            ("136 nations", "medium", self.value_cell, "an adoption count (every country)"),
+        ]
+        for text, font, cell, what in cases:
+            self.assertFits(text, font, cell, what)
 
 
 class LocTest(unittest.TestCase):

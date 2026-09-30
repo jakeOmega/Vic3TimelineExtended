@@ -1,6 +1,6 @@
 # Global Warming GUI: Icons
 
-The Global Warming panels' overview and policy rows draw 20 icons and two pie fills. All of them are placeholders for now (style guide rule 10), textures the mod already ships or already uses elsewhere, so the layout could be judged in game before the art exists. This page lists each one: where it is set, what the final art should show, and where it should go. The model is [`un_gui_icons.md`](un_gui_icons.md), which records the UN's finished set.
+The Global Warming panels' overview and policy rows draw 21 icons and two pie fills. All of them are placeholders for now (style guide rule 10), textures the mod already ships or already uses elsewhere, so the layout could be judged in game before the art exists. This page lists each one: where it is set, what the final art should show, and where it should go. The model is [`un_gui_icons.md`](un_gui_icons.md), which records the UN's finished set.
 
 **Where each is set.** Every icon is a literal `texture = "…"` line in `gui/journal_entry_widgets/global_warming_widget.gui`: the overview's cells and pies in `te_gw_overview_panel`, the policy icons in the `row_icon` blockoverride of each `gw_policy_row` in `te_gw_sec_policies`. No script reads the paths. Swapping one in is one path change. `IconsDocTest` in `test_global_warming_layout.py` fails when a texture in the widget is missing from this page.
 
@@ -33,7 +33,13 @@ One icon per `gw_disp_tier_code`, 36 px, the tier's coloured word beneath. All s
 
 ## Mitigation Policies: one icon per row
 
-26 px, at full colour while the policy is in force and 25% opacity while it is not.
+26 px, at full colour while the policy is in force and 25% opacity while it is not. Beside the name, a 20 px check shows while the policy is in force (play-test round 3; it replaced the "Active"/"Inactive" word) and nothing shows while it is not.
+
+| State | Placeholder | Final art | Proposed path |
+|---|---|---|---|
+| In force (the check) | `gfx/interface/icons/generic_icons/green_checkmark.dds` | vanilla's green check may stay; otherwise a small green check on a dark disc, legible at 20 px | `gw_icons/policy_in_force.dds` |
+| Not in force | (nothing drawn) | none needed | — |
+
 
 | Policy | Placeholder | Final art | Proposed path |
 |---|---|---|---|
@@ -45,6 +51,10 @@ One icon per `gw_disp_tier_code`, 36 px, the tier's coloured word beneath. All s
 | Public Transit | `gfx/interface/icons/goods_icons/transportation.dds` | a green tram, front view | `gw_icons/policy_public_transit.dds` |
 | Fossil-Fuel Divestment | `gfx/interface/icons/generic_icons/money.dds` | a black oil barrel with a gold coin leaving it on a red arrow | `gw_icons/policy_fossil_fuel_divestment.dds` |
 | Green Building Codes | `gfx/interface/icons/production_method_icons/cat_building_green_p1.dds` | a building front with a green leaf on it | `gw_icons/policy_green_building_codes.dds` |
+
+## Overview: the temperature bar
+
+No art. Play-test round 3 replaced the vanilla eye marker with drawn layers: the projection as a translucent stretch coloured by whether the change is good or bad (warming: vanilla `bad_progressbar_horizontal`'s red at 40%; cooling: `green_progressbar_horizontal`'s green at 50%) and the next tier's threshold as a 3 × 24 px line of `gfx/interface/backgrounds/white.dds` tinted cream (`color = { 0.96 0.90 0.72 0.95 }`). The layer spec is in `te_gw_overview_panel`'s comment.
 
 ## Overview: pies
 
