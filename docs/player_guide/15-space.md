@@ -102,7 +102,10 @@ under it:
 
 Below them, the Progress bar fills toward the goal. Beside it are your progress,
 the goal and this month's pace, as in "124 / 200 (+3.5/mo)". Hover the bar for
-the reward for finishing first and for finishing later.
+the reward for finishing first and for finishing later. Hover the pace for where
+it comes from: each source that adds progress every month, each that multiplies
+it, and the pace that results, which is never below 0.5. Every running milestone
+gains the same pace.
 
 At the foot of the overview, the Programme row has an icon for each entry, in
 order. An icon is lit once you have achieved that milestone, with a flag if you
