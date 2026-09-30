@@ -645,6 +645,36 @@ nuclear_program_display_defense_rating = {
 	multiply = 100
 }
 
+# The programme's state as one code, for the overview's programme icon
+# (nuclear_overview_widget.gui). The same order as nuclear_program_status_line
+# (nuclear_program_custom_loc.txt), so the icon and the status line agree:
+#   0 unfunded   1 first device under development   2 series production
+#   3 frozen by a pause treaty   4 held at the arsenal ceiling   5 dismantling
+#   6 no programme (no science, or not the standing)   7 renounced   8 disarmed
+# 0-5 are nuclear_program_last_status, whose only writer is
+# nuclear_program_refresh_state_effect; 1 stands in for a save or a first week
+# that has not written it yet (the status line's generic branch). Later `if`s
+# win, as the status line's earlier branches do.
+nuclear_program_display_state = {
+	value = 1
+	if = {
+		limit = { has_variable = nuclear_program_last_status }
+		value = var:nuclear_program_last_status
+	}
+	if = {
+		limit = { nuclear_program_has_programme = no }
+		value = 6
+	}
+	if = {
+		limit = { modifier:country_nuclear_disarmament_bool = yes }
+		value = 8
+	}
+	if = {
+		limit = { has_modifier = nd_taboo_renounced }
+		value = 7
+	}
+}
+
 nuclear_industrial_strike_killed_population = {
 	value = state_population
 	multiply = 0.1
