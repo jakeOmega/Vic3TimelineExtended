@@ -142,7 +142,9 @@ Solar System Colonization also has a fourth section, Our Colonies (open), below
 Rivals. It lists every world you hold, grouped by stage, under the
 specialization you chose for it, with Colonies Held (out of 34) at the top. A
 stage's heading appears once you hold one of its worlds, and hovering a colony
-shows its permanent effects. It stays on the panel when the program is Idle, so
+shows its permanent effects. Each row has a small icon for its kind of world:
+Mars, the asteroids, a moon of Jupiter, Saturn, Uranus or Neptune, Venus,
+Mercury, or a dwarf planet. It stays on the panel when the program is Idle, so
 you can always see where your colony modifiers come from.
 
 Interstellar Probe: Awaiting Data has nothing to control, so it has no Mission

@@ -1,10 +1,10 @@
 # Space Race GUI: Icons
 
-The Space Race panels' overview (the GUI style guide pass, September 2026) draws 16 icons of its own, including three pie layers. They were vanilla or borrowed placeholders in the first rounds of the pass (`gui_style_guide.md` rule 10), and PR #586 replaced them. All of them live in `gfx/interface/icons/space_race_icons/`. The programme row's seven single-state icons are the journal-entry icons painted in PR #571 (`gfx/interface/icons/event_icons/je_space_race_<m>.dds`), used as they are.
+The Space Race panels' overview (the GUI style guide pass, September 2026) draws 25 icons of its own, including three pie layers and nine for the kinds of world in Our Colonies. They were vanilla or borrowed placeholders in the first rounds of the pass (`gui_style_guide.md` rule 10), and PR #586 replaced them. All of them live in `gfx/interface/icons/space_race_icons/`. The programme row's seven single-state icons are the journal-entry icons painted in PR #571 (`gfx/interface/icons/event_icons/je_space_race_<m>.dds`), used as they are.
 
 **Where each is set.** Every icon is a literal `texture = "…"` line in `gui/journal_entry_widgets/space_race_widget.gui`, in the type named below, and the states are chosen by a display value's code. No script reads the paths. `SpaceRaceIconsTest` in `test_space_race_layout.py` holds each state to its file. It also fails on any placeholder left in the widget, and, once #586's files are in the repo, on any path that does not exist.
 
-**Remaking one.** The icons come from the icon pipeline (`scripts/image_pipeline/`). Their registry entries are the `space_part` (the one rocket), `space` (the first, the first-to-finish mark, the stage) and `space_state` (the five states, the risk, the four interstellar states) categories in `icon_prompts.py`. Each entry's `now` field names the placeholder it replaced. The pies are plain discs from `scripts/image_pipeline/gen_ch_model_pie_textures.py`. Change the entry, re-render, review, then `write`. The GUI needs no edit unless a file name changes.
+**Remaking one.** The icons come from the icon pipeline (`scripts/image_pipeline/`). Their registry entries are the `space_part` (the one rocket), `space` (the first, the first-to-finish mark, the stage, the nine colony kinds) and `space_state` (the five states, the risk, the four interstellar states) categories in `icon_prompts.py`. Each entry's `now` field names the placeholder it replaced. The pies are plain discs from `scripts/image_pipeline/gen_ch_model_pie_textures.py`. Change the entry, re-render, review, then `write`. The GUI needs no edit unless a file name changes.
 
 **The rule for the set** is the UN's (`un_gui_icons.md`): simple and easy to recognize at 32–40 px. The five state icons and the risk share one emblem, a silver rocket with red fins, and differ by what surrounds it.
 
@@ -62,6 +62,24 @@ Three stacked `progresspie` layers in `te_sr_ov_pie` (the recipe in `gui_modding
 | The unclaimed rest (the disc) | muted grey `#8c8474` | `pie_unclaimed.dds` |
 | Worlds claimed by anyone | rust red `#cf4a2a` | `pie_claimed.dds` |
 | Ours, on top | bright gold `#ecc043` | `pie_ours.dds` |
+
+## Our Colonies: the kind of world
+
+One icon for each of nine kinds of world, not one for each of the 34 worlds or 68 specializations. It shows at 24 px, left of the specialization's name, in `te_sr_colony_row`, which takes the file from a `colony_icon` block override on each of the 68 rows. A row shows the icon of the kind its world belongs to, so a world's two specializations share one. `ColoniesTest` holds every row to its kind.
+
+| Kind | Worlds | Shows | File |
+|---|---|---|---|
+| Mars | Valles Marineris, Olympus Mons, Hellas, Utopia, Arcadia | a rust-red planet with canyon scars and a pale polar cap | `colony_mars.dds` |
+| Asteroid | Ceres, Vesta, Psyche, Pallas, Hygiea | a lumpy, cratered grey-brown rock | `colony_asteroid.dds` |
+| Jovian moon | Io, Europa, Ganymede, Callisto, Himalia, Amalthea | a cratered moon before a banded orange gas giant | `colony_jovian.dds` |
+| Venus | Venus | a yellow-ochre planet in swirling cloud | `colony_venus.dds` |
+| Mercury | Mercury | a small cratered planet, bright on one side | `colony_mercury.dds` |
+| Saturnian moon | Titan, Enceladus, Rhea, Mimas, Iapetus | a hazy orange moon before a tan ring | `colony_saturnian.dds` |
+| Uranian moon | Titania, Oberon, Miranda, Ariel | an icy grey-blue moon with a steep cyan ring behind | `colony_uranian.dds` |
+| Neptunian moon | Triton, Proteus | a pink-and-blue moon streaked with geyser plumes | `colony_neptunian.dds` |
+| Dwarf planet | Pluto, Eris, Makemake, Haumea, Sedna | a tan-and-brown dwarf planet with a pale heart patch and a tiny moon | `colony_dwarf.dds` |
+
+The kinds group worlds by the body they orbit. Each falls inside one stage (Mars and the asteroids in stage 1, the Jovian moons and Venus in 2, Mercury and the Saturnian moons in 3, the Uranian and Neptunian moons in 4, the dwarf planets in 5), so no kind's icon sits under two stage headings. A world that is mostly white or pale loses its body in the cut-out, so Venus and the dwarf planet are drawn in colour. The modifiers' own icons (`icon =` on the 68 `sr_colony_*` static modifiers) are not these: they are the shared lightbulb and coins glyphs that say what kind of effect it is.
 
 ## Kept as they are
 

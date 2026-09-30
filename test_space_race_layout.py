@@ -40,6 +40,18 @@ COLONY_EVENTS = os.path.join(REPO, "events", "space_race_colony_events.txt")
 COLONY_MODIFIERS = os.path.join(REPO, "common", "static_modifiers", "space_race_modifiers.txt")
 # The events that offer each stage's worlds (space_race_colony_events.<n>).
 COLONY_STAGES = {1: range(1, 11), 2: range(11, 18), 3: range(18, 24), 4: range(24, 30), 5: range(30, 35)}
+# The kind of world each colony is, and so which space_race_icons/colony_<kind>.dds its row shows.
+COLONY_KINDS = {
+    "mars": ["valles_marineris", "olympus_mons", "hellas", "utopia", "arcadia"],
+    "asteroid": ["ceres", "vesta", "psyche", "pallas", "hygiea"],
+    "jovian": ["io", "europa", "ganymede", "callisto", "himalia", "amalthea"],
+    "venus": ["venus"],
+    "mercury": ["mercury"],
+    "saturnian": ["titan", "enceladus", "rhea", "mimas", "iapetus"],
+    "uranian": ["titania", "oberon", "miranda", "ariel"],
+    "neptunian": ["triton", "proteus"],
+    "dwarf": ["pluto", "eris", "makemake", "haumea", "sedna"],
+}
 
 STATUS = ["te_sr_sec_control", "te_sr_sec_rivals"]
 REFERENCE = ["te_sr_sec_how"]
@@ -391,13 +403,46 @@ class ColoniesTest(unittest.TestCase):
 
     def test_every_name_fits_its_row(self):
         row = _type_body(self.gui, "te_sr_colony_row")
-        self.assertIn("minimumsize = { 470 -1 }\n\t\t\tmaximumsize = { 470 -1 }", row)
-        self.assertIn("margin = { 4 1 }", row)  # 470 + 2 x 4 = the 480 column
+        self.assertIn("size = { 442 24 }", row)
+        self.assertIn("max_width = 442", row)
+        self.assertIn("spacing = 4", row)
+        self.assertIn("margin = { 4 1 }", row)  # 24 icon + 4 + 442 name + 2 x 4 = the 480 column
         self.assertIn("using = fontsize_medium", row)
         for mod in self.mods:
             with self.subTest(modifier=mod):
                 need = len(_loc(mod)) * 8.6 * 1.1  # the labels test's medium-font budget
-                self.assertLessEqual(need, 470, _loc(mod))
+                self.assertLessEqual(need, 442, _loc(mod))
+
+    def test_a_row_shows_the_icon_of_its_kind_of_world(self):
+        """Nine kinds of world, not 34 icons: a row's icon follows its world, and
+        the second specialization of a world shows the same one."""
+        kind_of = {w: k for k, ws in COLONY_KINDS.items() for w in ws}
+        self.assertEqual((len(COLONY_KINDS), len(kind_of)), (9, 34))
+        rows = self.section.split("te_sr_colony_row = {")[1:]
+        seen = set()
+        for row, mod in zip(rows, self.mods):
+            sx = mod[len("sr_colony_"):]
+            worlds = [w for w in kind_of if sx.startswith(w + "_")]
+            with self.subTest(modifier=mod):
+                self.assertEqual(len(worlds), 1, f"{sx} names no world, or two")
+                seen.add(worlds[0])
+                self.assertRegex(row, rf'blockoverride "colony_icon" \{{\s*texture = '
+                                      rf'"{SR_ICONS}colony_{kind_of[worlds[0]]}\.dds"\s*\}}')
+        self.assertEqual(seen, set(kind_of), "a world in the table has no colony")
+
+    def test_a_kind_of_world_sits_under_one_stage_heading(self):
+        kind_of = {w: k for k, ws in COLONY_KINDS.items() for w in ws}
+        stage_of = {n: st for st, ns in COLONY_STAGES.items() for n in ns}
+        stages = {}
+        for n, mods in self.sites:
+            for mod in mods:
+                sx = mod[len("sr_colony_"):]
+                kind = kind_of[next(w for w in kind_of if sx.startswith(w + "_"))]
+                stages.setdefault(kind, set()).add(stage_of[n])
+        self.assertEqual(set(stages), set(COLONY_KINDS))
+        for kind, found in stages.items():
+            with self.subTest(kind=kind):
+                self.assertEqual(len(found), 1, f"{kind} spans stages {sorted(found)}")
 
 
 class HowItWorksTest(unittest.TestCase):

@@ -1246,23 +1246,42 @@ types space_race_widget_types
 	### (GetStaticModifier('<modifier>').GetDesc in the tooltip key, never a typed
 	### number). The instance sets when the row shows, on one equality test of
 	### its sr_disp_colony_<world>_<specialization> value, and which loc keys it
-	### reads. Fixed width, 470 + 2 x 4 margin = the 480 column.
+	### reads, and the icon of the kind of world it is (space_race_icons/
+	### colony_<kind>.dds, one of nine; the same cell shape as the Colonial
+	### Empire's territory row). Fixed width, 24 icon + 4 + 442 name = the 470 the
+	### name box had alone, + 2 x 4 margin = the 480 column.
 	type te_sr_colony_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
+		spacing = 4
 		margin = { 4 1 }
 		block "colony_visible" {}
 		block "colony_tooltip" {}
 
-		textbox = {
-			autoresize = yes
-			minimumsize = { 470 -1 }
-			maximumsize = { 470 -1 }
-			align = left|nobaseline
-			using = fontsize_medium
-			elide = right
-			default_format = "#tooltippable"
-			block "colony_name" {}
+		widget = {
+			size = { 24 24 }
+			parentanchor = vcenter
+
+			icon = {
+				size = { 24 24 }
+				parentanchor = center
+				block "colony_icon" {}
+			}
+		}
+		widget = {
+			size = { 442 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 442
+				align = left|nobaseline
+				using = fontsize_medium
+				elide = right
+				default_format = "#tooltippable"
+				block "colony_name" {}
+			}
 		}
 	}
 
@@ -1329,6 +1348,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_valles_marineris_research_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_valles_marineris_research"
 				}
@@ -1340,6 +1362,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_valles_marineris_mining_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_valles_marineris_mining"
@@ -1353,6 +1378,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_olympus_mons_atmospheric_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_olympus_mons_atmospheric"
 				}
@@ -1364,6 +1392,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_olympus_mons_geothermal_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_olympus_mons_geothermal"
@@ -1377,6 +1408,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_hellas_settlement_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_hellas_settlement"
 				}
@@ -1388,6 +1422,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_hellas_astrobiology_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_hellas_astrobiology"
@@ -1401,6 +1438,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_utopia_ice_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_utopia_ice"
 				}
@@ -1412,6 +1452,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_utopia_agriculture_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_utopia_agriculture"
@@ -1425,6 +1468,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_arcadia_civilian_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_arcadia_civilian"
 				}
@@ -1436,6 +1482,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_arcadia_military_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_arcadia_military"
@@ -1449,6 +1498,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_ceres_waystation_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_ceres_waystation"
 				}
@@ -1460,6 +1512,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_ceres_observatory_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_ceres_observatory"
@@ -1473,6 +1528,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_vesta_mining_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_vesta_mining"
 				}
@@ -1484,6 +1542,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_vesta_science_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_vesta_science"
@@ -1497,6 +1558,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_psyche_industrial_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_psyche_industrial"
 				}
@@ -1508,6 +1572,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_psyche_careful_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_psyche_careful"
@@ -1521,6 +1588,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_pallas_composites_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_pallas_composites"
 				}
@@ -1532,6 +1602,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_pallas_observatory_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_pallas_observatory"
@@ -1545,6 +1618,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_hygiea_volatiles_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_hygiea_volatiles"
 				}
@@ -1556,6 +1632,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_hygiea_automated_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_hygiea_automated"
@@ -1576,6 +1655,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_io_mining_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_io_mining"
 				}
@@ -1587,6 +1669,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_io_research_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_io_research"
@@ -1600,6 +1685,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_europa_drilling_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_europa_drilling"
 				}
@@ -1611,6 +1699,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_europa_surface_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_europa_surface"
@@ -1624,6 +1715,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_ganymede_settlement_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_ganymede_settlement"
 				}
@@ -1635,6 +1729,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_ganymede_command_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_ganymede_command"
@@ -1648,6 +1745,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_callisto_gateway_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_callisto_gateway"
 				}
@@ -1659,6 +1759,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_callisto_agricultural_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_callisto_agricultural"
@@ -1672,6 +1775,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_himalia_telescope_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_himalia_telescope"
 				}
@@ -1683,6 +1789,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_himalia_depot_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_himalia_depot"
@@ -1696,6 +1805,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_amalthea_physics_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_amalthea_physics"
 				}
@@ -1707,6 +1819,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_amalthea_rings_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_amalthea_rings"
@@ -1720,6 +1835,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_venus_atmospheric_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_venus.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_venus_atmospheric"
 				}
@@ -1731,6 +1849,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_venus_extraction_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_venus.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_venus_extraction"
@@ -1751,6 +1872,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_mercury_solar_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_mercury.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_mercury_solar"
 				}
@@ -1762,6 +1886,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_mercury_ice_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_mercury.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_mercury_ice"
@@ -1775,6 +1902,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_titan_hydrocarbons_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_titan_hydrocarbons"
 				}
@@ -1786,6 +1916,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_titan_prebiotic_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_titan_prebiotic"
@@ -1799,6 +1932,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_enceladus_astrobiology_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_enceladus_astrobiology"
 				}
@@ -1810,6 +1946,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_enceladus_water_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_enceladus_water"
@@ -1823,6 +1962,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_rhea_propellant_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_rhea_propellant"
 				}
@@ -1834,6 +1976,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_rhea_observation_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_rhea_observation"
@@ -1847,6 +1992,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_mimas_installation_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_mimas_installation"
 				}
@@ -1858,6 +2006,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_mimas_gravity_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_mimas_gravity"
@@ -1871,6 +2022,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_iapetus_ridge_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_iapetus_ridge"
 				}
@@ -1882,6 +2036,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_iapetus_organics_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_iapetus_organics"
@@ -1902,6 +2059,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_titania_mining_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_uranian.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_titania_mining"
 				}
@@ -1913,6 +2073,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_titania_geophysics_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_uranian.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_titania_geophysics"
@@ -1926,6 +2089,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_oberon_relay_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_uranian.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_oberon_relay"
 				}
@@ -1937,6 +2103,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_oberon_research_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_uranian.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_oberon_research"
@@ -1950,6 +2119,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_miranda_rupes_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_uranian.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_miranda_rupes"
 				}
@@ -1961,6 +2133,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_miranda_drilling_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_uranian.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_miranda_drilling"
@@ -1974,6 +2149,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_ariel_cryovolcanic_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_uranian.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_ariel_cryovolcanic"
 				}
@@ -1985,6 +2163,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_ariel_quarrying_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_uranian.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_ariel_quarrying"
@@ -1998,6 +2179,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_triton_geyser_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_neptunian.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_triton_geyser"
 				}
@@ -2009,6 +2193,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_triton_gateway_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_neptunian.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_triton_gateway"
@@ -2022,6 +2209,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_proteus_probe_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_neptunian.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_proteus_probe"
 				}
@@ -2033,6 +2223,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_proteus_extraction_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_neptunian.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_proteus_extraction"
@@ -2053,6 +2246,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_pluto_research_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_pluto_research"
 				}
@@ -2064,6 +2260,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_pluto_harvesting_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_pluto_harvesting"
@@ -2077,6 +2276,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_eris_selfsufficiency_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_eris_selfsufficiency"
 				}
@@ -2088,6 +2290,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_eris_monitoring_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_eris_monitoring"
@@ -2101,6 +2306,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_makemake_chemistry_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_makemake_chemistry"
 				}
@@ -2112,6 +2320,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_makemake_solarwind_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_makemake_solarwind"
@@ -2125,6 +2336,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_haumea_dynamics_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_haumea_dynamics"
 				}
@@ -2136,6 +2350,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_haumea_rings_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_haumea_rings"
@@ -2149,6 +2366,9 @@ types space_race_widget_types
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_sedna_outpost_tt"
 				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
+				}
 				blockoverride "colony_name" {
 					text = "sr_colony_sedna_outpost"
 				}
@@ -2160,6 +2380,9 @@ types space_race_widget_types
 				}
 				blockoverride "colony_tooltip" {
 					tooltip = "je_space_race_widget_colony_sedna_interstellar_tt"
+				}
+				blockoverride "colony_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
 				}
 				blockoverride "colony_name" {
 					text = "sr_colony_sedna_interstellar"
