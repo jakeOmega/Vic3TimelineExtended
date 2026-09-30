@@ -660,7 +660,7 @@ class LabelBudgetTest(unittest.TestCase):
         self._fits([f"nd_home_view_{n}" for n in range(1, 11)], 200, MEDIUM, "At Home class")
         table = _type_body(det, "nd_home_term_row")
         self.assertEqual([int(w) for w in re.findall(r"size = \{ (\d+) 22 \}", table)], [220, 60])
-        terms = ("approval", "doctrine", "readiness", "authority", "strain", "possession", "business")
+        terms = ("approval", "doctrine", "readiness", "authority", "strain", "possession", "business", "cap")
         self._fits([f"nd_home_row_{t}" for t in terms], 220, MEDIUM, "At Home row")
         self._fits([f"nd_home_row_{t}_value" for t in terms], 60, MEDIUM, "At Home value")
 

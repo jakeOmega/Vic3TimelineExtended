@@ -1496,6 +1496,19 @@ nd_disp_ig_term_possession = {
 	}
 }
 
+# What the cap took off the group's terms, for the row that closes its table:
+# the stored approval less the stored terms. 0 when the terms fit the cap, so
+# the row is hidden; -1 when a full group's terms total 3 and it is held to 2.
+nd_disp_ig_cap_cut = {
+	value = nd_disp_ig_stance
+	subtract = nd_disp_ig_term_doctrine
+	subtract = nd_disp_ig_term_readiness
+	subtract = nd_disp_ig_term_authority
+	subtract = nd_disp_ig_term_strain
+	subtract = nd_disp_ig_term_business
+	subtract = nd_disp_ig_term_possession
+}
+
 # The class word under the group's name: 1 militarist, 2 militarist (mild),
 # 3 restraint, 4 restraint (mild), 5 officers, hawkish, 6 officers,
 # restrained, 7 officers, 8 business, hawkish, 9 business, restrained,
