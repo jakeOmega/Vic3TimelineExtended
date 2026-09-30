@@ -429,7 +429,7 @@ event, which names you and the operation. It can shore up its
 counterintelligence (Counterintelligence Alert: +6 intelligence capacity and
 more separatism and coup resistance, fading over five years), retaliate in kind
 (a network of up to 25 inside your country, if it has a Covert Warfare journal
-entry of its own), or make the evidence public (−3 infamy for itself). The event
+entry of its own), or make the evidence public (−1 infamy for itself). The event
 fires at most once every two years per country, whether or not that country has
 a Covert Warfare journal entry. The Spy Caught icon and the Last Caught line in
 the Counterintelligence section show your latest catch, and who ran it, for ten
