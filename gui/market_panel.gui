@@ -168,12 +168,7 @@ types market_panel
 				# market with Reserve still selected marks the tab and shows its
 				# note (the content block), not an empty body under no tab.
 				#
-				# Each tab's icon is a text icon at the front of its label
-				# (gui/zzz_extra_goods_texticons.gui), not a *_button_icon block. At
-				# six tabs a slot is about 87 wide, so an icon anchored beside
-				# vanilla's centred label would cover its first letters; in the label
-				# the two centre together. (Slot 5's selected half would also draw
-				# fourth_button_icon, a slip te_tab_buttons_six keeps from vanilla.)
+				# No icon, as vanilla's tabs have none (the owner, 2026-09-30).
 				blockoverride "fifth_button" {
 					text = "te_market_tab_global_warming"
 				}

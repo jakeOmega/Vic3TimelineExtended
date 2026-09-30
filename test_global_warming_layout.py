@@ -3,7 +3,6 @@ warming ladder's one definition, and the icons (#586's art, recorded in
 docs/systems/global_warming_gui_icons.md)
 (docs/guides/gui_style_guide.md; test_un_layout.py is the model)."""
 import glob
-import json
 import os
 import re
 import unittest
@@ -665,10 +664,8 @@ class IconsDocTest(unittest.TestCase):
 
 MARKET = os.path.join(REPO, "gui", "market_panel.gui")
 TAB_SGUIS = os.path.join(REPO, "common", "scripted_guis", "te_system_tab_sguis.txt")
-TAB_TEXTICONS = os.path.join(REPO, "gui", "zzz_extra_goods_texticons.gui")
 TAB_WIDGETS = os.path.join(REPO, "gui", "te_system_tab_widgets.gui")
 BUTTONS = os.path.join(REPO, "common", "scripted_buttons", "global_warming_buttons.txt")
-VANILLA_LOC = os.path.join(REPO, "vanilla_parsed", "localization_english.json")
 GW_TAB_GATE = "GetScriptedGui('te_market_global_warming_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )"
 GW_TAB_UNLOCK = "GetScriptedGui('te_market_global_warming_tab_unlock_sgui')"
 OWN_MARKET = "MarketPanel.GetMarket.IsSame( GetPlayer.GetCapital.GetMarket )"
@@ -686,7 +683,6 @@ VANILLA_TABS = [("first", "default", "MARKET_PANEL_DETAILS_TAB_LABEL", "MARKET_P
 # panel's 540 less the strip's 3 + 3 margin and its two 5-wide dividers.
 TAB_UNITS, TAB_MARGIN = 10.0, 1.1
 SIX_SLOT = (540 - 6 - 10) / 6
-TEXT_ICON = "XX"   # a @texticon! draws about two characters wide (test_strategic_reserve_layout.py)
 
 
 def _te_blocks(text, tag):
@@ -714,15 +710,9 @@ def _overrides(body):
 
 
 def _label_units(text):
-    """A label's width in GUI units: text icons as two characters, formatting dropped."""
-    text = re.sub(r"@\w+!", TEXT_ICON, text)
+    """A label's width in GUI units, formatting dropped."""
     text = re.sub(r"#\w+ |#!", "", text)
     return len(text) * TAB_UNITS * TAB_MARGIN
-
-
-def _vanilla_loc():
-    with open(VANILLA_LOC, encoding="utf-8") as f:
-        return dict(json.load(f))
 
 
 def _txt_block(text, name):
@@ -835,23 +825,14 @@ class MarketTabTest(unittest.TestCase):
         self.assertNotIn("IsSame", " ".join(self._gw_buttons().values()))
         self.assertNotIn("IsSame", self.content[0])
 
-    def test_the_tab_icon_is_the_thermometer_in_the_label(self):
-        label = _loc_value("te_market_tab_global_warming")
-        self.assertTrue(label.startswith("@te_tab_global_warming! "), label)
-        m = re.search(r"icon = te_tab_global_warming\s*iconsize = \{[^}]*texture = \"([^\"]+)\"", _read(TAB_TEXTICONS))
-        self.assertTrue(m)
-        self.assertEqual(m.group(1), f"{GW_ICONS}tier_significant.dds")
-        # Not a *_button_icon block: beside a centred label in a six-tab slot it would cover the name.
+    def test_no_tab_icon(self):
+        """System tabs carry no icon, as vanilla's tabs don't (the owner, 2026-09-30):
+        none in a *_button_icon block, none as a text icon in the label."""
         self.assertEqual([k for k in _overrides(self.buttons[0]) if k.endswith("_icon")], [])
+        self.assertNotIn("@", _loc_value("te_market_tab_global_warming"))
 
-    def test_the_label_fits_beside_vanillas(self):
-        """The word alone fits one of six slots by the house budget; with its
-        icon, the label is no wider than vanilla's widest on the same strip."""
-        label = _loc_value("te_market_tab_global_warming")
-        self.assertLessEqual(_label_units(re.sub(r"@\w+! ", "", label)), SIX_SLOT)
-        vanilla = _vanilla_loc()
-        widest = max(_label_units(vanilla[lab]) for _, _, lab, _, _ in VANILLA_TABS)
-        self.assertLessEqual(_label_units(label), widest)
+    def test_the_label_fits_one_of_six_slots(self):
+        self.assertLessEqual(_label_units(_loc_value("te_market_tab_global_warming")), SIX_SLOT)
 
     def test_the_gates_read_the_rule_and_the_entry(self):
         sguis = _read(TAB_SGUIS)

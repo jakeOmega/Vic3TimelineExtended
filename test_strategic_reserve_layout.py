@@ -562,7 +562,6 @@ class IconsTest(unittest.TestCase):
 
 MARKET = os.path.join(REPO, "gui", "market_panel.gui")
 TAB_SGUIS = os.path.join(REPO, "common", "scripted_guis", "te_system_tab_sguis.txt")
-TAB_TEXTICONS = os.path.join(REPO, "gui", "zzz_extra_goods_texticons.gui")
 SR_TAB_GATE = ("GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( "
                "GuiScope.SetRoot( GetPlayer.MakeScope ).End )")
 SR_TAB_UNLOCK = "GetScriptedGui('te_market_strategic_reserve_tab_unlock_sgui')"
@@ -681,17 +680,13 @@ class MarketTabTest(unittest.TestCase):
                         (os.path.join(REPO, "gui", "topbar.gui"), "AccessPlayer.AccessFirstMarket.Self")):
             self.assertIn(vanilla[1], _read(vanilla[0]), vanilla)
 
-    def test_the_tab_icon_is_the_storing_crate_in_the_label(self):
-        label = _loc()["te_market_tab_strategic_reserve"]
-        self.assertTrue(label.startswith("@te_tab_strategic_reserve! "), label)
-        m = re.search(r"icon = te_tab_strategic_reserve\s*iconsize = \{[^}]*texture = \"([^\"]+)\"",
-                      _read(TAB_TEXTICONS))
-        self.assertTrue(m)
-        self.assertEqual(m.group(1), f"{ST_RES_ICONS}status_storing.dds")
+    def test_no_tab_icon(self):
+        """System tabs carry no icon, as vanilla's tabs don't (the owner, 2026-09-30)."""
         self.assertEqual([k for k in _overrides(self.buttons[0]) if k.endswith("_icon")], [])
+        self.assertNotIn("@", _loc()["te_market_tab_strategic_reserve"])
 
-    def test_the_label_word_fits_one_of_six_slots(self):
-        word = re.sub(r"@\w+! ", "", _loc()["te_market_tab_strategic_reserve"])
+    def test_the_label_fits_one_of_six_slots(self):
+        word = _loc()["te_market_tab_strategic_reserve"]
         self.assertLessEqual(len(word) * UPC["large"] * MARGIN, SIX_SLOT, word)
 
     def test_the_gates_read_the_entry(self):

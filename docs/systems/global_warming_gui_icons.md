@@ -79,7 +79,3 @@ Each pie is a stacked `progresspie` pair over the UN's grey disc (`gfx/interface
 |---|---|---|---|
 | Our Share (of world emissions) | an antialiased disc (frame 2; frame 1 transparent) | `#e0661a`, orange | `pie_share.dds` |
 | Emissions Cut | the same | `#4fb85a`, green | `pie_cut.dds` |
-
-## The Market panel's Climate tab
-
-The tab's label, "Climate" (`gui/market_panel.gui`, the fifth slot), starts with the Significant thermometer, `tier_significant.dds`, as the text icon `te_tab_global_warming` in `gui/zzz_extra_goods_texticons.gui` (25 px, the goods icons' size and offset). It is the overview's own file, so no new art: repainting the tier repaints the tab. It is in the label, not in the strip's `*_button_icon` block, because at six tabs an icon beside the centred name would cover its first letters (`gui_modding_guide.md` gotcha #31). `MarketTabTest` in `test_global_warming_layout.py` holds the text icon to its file.
