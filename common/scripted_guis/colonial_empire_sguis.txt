@@ -233,6 +233,47 @@ colonial_empire_pressure_sgui = {
 
 
 # ---------------------------------------------------------------------------
+# Read-only text: the eligible territories the list's eight rows leave out,
+# by GDP. The hover on the list's "+N more" line (colonial_empire_widget.gui,
+# te_ce_territory_list), built only while hovered. Sixteen names, then a count
+# of any beyond them.
+# ---------------------------------------------------------------------------
+colonial_empire_territories_sgui = {
+	scope = country
+	is_shown = { always = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+
+	effect = {
+		custom_tooltip = je_colonial_empire_territories_more_head
+		colonial_empire_more_territory_line = { POS = 8 }
+		colonial_empire_more_territory_line = { POS = 9 }
+		colonial_empire_more_territory_line = { POS = 10 }
+		colonial_empire_more_territory_line = { POS = 11 }
+		colonial_empire_more_territory_line = { POS = 12 }
+		colonial_empire_more_territory_line = { POS = 13 }
+		colonial_empire_more_territory_line = { POS = 14 }
+		colonial_empire_more_territory_line = { POS = 15 }
+		colonial_empire_more_territory_line = { POS = 16 }
+		colonial_empire_more_territory_line = { POS = 17 }
+		colonial_empire_more_territory_line = { POS = 18 }
+		colonial_empire_more_territory_line = { POS = 19 }
+		colonial_empire_more_territory_line = { POS = 20 }
+		colonial_empire_more_territory_line = { POS = 21 }
+		colonial_empire_more_territory_line = { POS = 22 }
+		colonial_empire_more_territory_line = { POS = 23 }
+		if = {
+			limit = {
+				has_variable = colonial_empire_eligible_count
+				var:colonial_empire_eligible_count > 24
+			}
+			custom_tooltip = je_colonial_empire_territories_more_tail
+		}
+	}
+}
+
+
+# ---------------------------------------------------------------------------
 # The three colonial programmes, enable and disable.
 #
 # `is_valid` delegates to the same trigger the matching scripted_button's
