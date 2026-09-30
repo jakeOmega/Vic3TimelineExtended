@@ -38,20 +38,21 @@ types banking_dashboard_widget_types
 	### elides rather than pushing the row past the block. Every instance puts
 	### its tooltip (the reading, and what moves it) on the row, as the UN's
 	### pillar rows do. The table is in the UN tables' medium type, and its label
-	### column is 132, the same as a banking_dash_pair's, so a full row's value
+	### column is 164, the same as a banking_dash_pair's, so a full row's value
 	### lines up with the left value of a pair row (play-test round 2, which
-	### asked for a shorter panel).
+	### asked for a shorter panel; round 3 widened the column from 132 so the
+	### longest label, "Gap to World Rate", fits the width budget).
 	type banking_dash_condition_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
 		spacing = 4
 
 		widget = {
-			size = { 132 22 }
+			size = { 164 22 }
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
-				max_width = 132
+				max_width = 164
 				elide = right
 				align = nobaseline
 				using = fontsize_medium
@@ -70,8 +71,8 @@ types banking_dashboard_widget_types
 	}
 
 	### Free-standing value textbox used inside banking_dash_condition_row.
-	### 324 is what the Monetary Policy block has left of its 460 once the
-	### 132 label column and the 4 spacing are taken; wider runs the value
+	### 292 is what the Monetary Policy block has left of its 460 once the
+	### 164 label column and the 4 spacing are taken; wider runs the value
 	### past the block's right edge. Any row whose text can run longer — a
 	### country name, two signed figures, a state word after a number — sets
 	### `multiline = yes` and wraps instead of eliding: Peg Confidence,
@@ -80,15 +81,15 @@ types banking_dashboard_widget_types
 	type banking_dash_condition_value = textbox {
 		parentanchor = vcenter
 		autoresize = yes
-		max_width = 324
+		max_width = 292
 		elide = right
 		align = nobaseline
 		using = fontsize_medium
 	}
 
-	### One reading of a two-column pair row: label 132 + 4 + value 94 = 230,
-	### so two fill the block's 460. Only for short readings (a percentage,
-	### a signed figure); anything longer keeps a full row. The instance puts
+	### One reading of a two-column pair row: label 164 + 4 + value 62 = 230,
+	### so two fill the block's 460. Only for short readings (a percentage or a
+	### signed figure, six characters at most); anything longer keeps a full row. The instance puts
 	### its tooltip on the cell, so each half explains itself.
 	type banking_dash_pair = flowcontainer {
 		direction = horizontal
@@ -96,11 +97,11 @@ types banking_dashboard_widget_types
 		spacing = 4
 
 		widget = {
-			size = { 132 22 }
+			size = { 164 22 }
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
-				max_width = 132
+				max_width = 164
 				elide = right
 				align = nobaseline
 				using = fontsize_medium
@@ -109,11 +110,11 @@ types banking_dashboard_widget_types
 			}
 		}
 		widget = {
-			size = { 94 22 }
+			size = { 62 22 }
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
-				max_width = 94
+				max_width = 62
 				elide = right
 				align = nobaseline
 				using = fontsize_medium
@@ -165,12 +166,12 @@ types banking_dashboard_widget_types
 	### The label column of a monetary row with controls, sized to line up with
 	### banking_dash_condition_row's.
 	type banking_dash_mon_label = widget {
-		size = { 132 26 }
+		size = { 164 26 }
 
 		textbox = {
 			parentanchor = left|vcenter
 			autoresize = yes
-			max_width = 132
+			max_width = 164
 			elide = right
 			align = nobaseline
 			using = fontsize_medium
@@ -239,16 +240,16 @@ types banking_dashboard_widget_types
 		}
 	}
 
-	### The value column of a monetary row with a control: 190, which leaves the
-	### Delegation row room for its 128 button (132 + 4 + 190 + 4 + 128 = 458),
+	### The value column of a monetary row with a control: 160, which leaves the
+	### Delegation row room for its 128 button (164 + 4 + 160 + 4 + 128 = 460),
 	### and still fits "Bound by mandate" without eliding.
 	type banking_dash_mon_value = widget {
-		size = { 190 26 }
+		size = { 160 26 }
 
 		textbox = {
 			parentanchor = left|vcenter
 			autoresize = yes
-			max_width = 190
+			max_width = 160
 			elide = right
 			align = nobaseline
 			using = fontsize_medium
@@ -261,6 +262,17 @@ types banking_dashboard_widget_types
 	### mirror the enable/disable scripted_button pair's `visible` triggers. The
 	### row's tooltip is the policy's description and effects, so its name is
 	### set as hoverable text; the button's own tooltip says why it is greyed.
+	### 6 + 288 + 6 + 36 + 6 + 100 + 6 = 448, inside the Monetary Policy block's
+	### 460 (the open-market operations row sits there).
+	###
+	### Play-test round 3 (the owner: "a lot of the interventions ... are too
+	### long"): the name is in the medium type, with a dashboard name where the
+	### button's own is longer than the 288 cell holds (banking_dash_name_*,
+	### the sector alone under the Directed Credit heading), and the
+	### requirement ("At least 2 free Banking Intervention Points") is a compact
+	### cell, the budget's icon and the points, with the full line in the row's
+	### tooltip under Requires. test_banking_layout.WidthBudgetTest holds every
+	### name to the cell.
 	type banking_dash_policy_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -274,27 +286,35 @@ types banking_dashboard_widget_types
 		}
 
 		widget = {
-			size = { 240 26 }
+			size = { 288 26 }
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
-				max_width = 240
+				max_width = 288
 				elide = right
 				align = nobaseline
-				using = fontsize_large
+				using = fontsize_medium
 				default_format = "#tooltippable"
 				block "row_label" {}
 			}
 		}
 
 		widget = {
-			size = { 84 26 }
+			size = { 36 26 }
+			block "cost_icon" {
+				icon = {
+					size = { 18 18 }
+					parentanchor = left|vcenter
+					texture = "gfx/interface/icons/diplomatic_treaties_articles_icons/bankroll_treaties.dds"
+				}
+			}
 			textbox = {
-				parentanchor = left|vcenter
+				parentanchor = right|vcenter
 				autoresize = yes
-				max_width = 84
+				max_width = 16
 				elide = right
-				align = nobaseline
+				align = right|nobaseline
+				using = fontsize_medium
 				block "row_cost" {}
 			}
 		}
@@ -333,25 +353,26 @@ types banking_dashboard_widget_types
 	### (a concept) over the reading's word. Play-test round 2 laid the cells
 	### on their side to shorten the panel: 40 high instead of 76, the word
 	### still right next to its icon. Fixed size, so no cell can widen its
-	### row: three to a row is 3 x 156 + 2 x 6 = 480, the bars' width. The
+	### row: three to a row is 3 x 158 + 2 x 3 = 480, the bars' width. The
 	### caption says which reading it is, because two band words (Elevated,
 	### High) name a band of bubble pressure and of inflation alike. The
 	### instance puts one icon per state in "icons", each with its own
 	### visible, and its word (or words) in "word"; "badge" is for a small
-	### alert over the icon's corner.
+	### alert over the icon's corner. Round 3: 158 wide (3 x 158 + 2 x 3 = 480)
+	### and the text from x 34, so its column is 124, and the word in the small
+	### type, so the longest ("Hyperinflation") fits the width budget.
 	type te_banking_ov_cell = widget {
-		size = { 156 40 }
+		size = { 158 40 }
 
 		widget = {
 			size = { 32 32 }
 			parentanchor = left|vcenter
-			position = { 2 0 }
 			block "icons" {}
 		}
 		textbox = {
-			position = { 40 2 }
+			position = { 34 2 }
 			autoresize = yes
-			max_width = 114
+			max_width = 124
 			elide = right
 			align = left|nobaseline
 			using = fontsize_small
@@ -364,12 +385,12 @@ types banking_dashboard_widget_types
 
 	### The word beside a cell's icon, under its caption.
 	type te_banking_ov_word = textbox {
-		position = { 40 19 }
+		position = { 34 20 }
 		autoresize = yes
-		max_width = 114
+		max_width = 124
 		elide = right
 		align = left|nobaseline
-		using = fontsize_medium
+		using = fontsize_small
 	}
 
 	type te_banking_overview_panel = flowcontainer {
@@ -404,7 +425,7 @@ types banking_dashboard_widget_types
 			direction = horizontal
 			parentanchor = hcenter
 			ignoreinvisible = yes
-			spacing = 6
+			spacing = 3
 
 			### The phase: icon and coloured word from the same banking_dash_phase_*
 			### scripted GUI, the one the word always used.
@@ -582,7 +603,7 @@ types banking_dashboard_widget_types
 			direction = horizontal
 			parentanchor = hcenter
 			ignoreinvisible = yes
-			spacing = 6
+			spacing = 3
 
 			### Policy stance's band (banking_disp_stance_band_code).
 			te_banking_ov_cell = {
@@ -791,7 +812,7 @@ types banking_dashboard_widget_types
 				visible = "[GetScriptedGui('banking_dash_disable_cb_countercyclical_buffer').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_countercyclical_buffer"
 				blockoverride "row_label" {
-					text = "CB_COUNTERCYCLICAL_BUFFER"
+					text = "banking_dash_name_cb_countercyclical_buffer"
 				}
 				blockoverride "row_cost" {
 					text = "banking_dash_cost_cb_countercyclical_buffer"
@@ -848,7 +869,7 @@ types banking_dashboard_widget_types
 				visible = "[GetScriptedGui('banking_dash_disable_cb_directed_credit_infrastructure').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_directed_credit_infrastructure"
 				blockoverride "row_label" {
-					text = "CB_DIRECTED_CREDIT_INFRA"
+					text = "banking_dash_name_active_cb_directed_credit_infrastructure"
 				}
 				blockoverride "row_cost" {
 					text = "banking_dash_cost_cb_directed_credit_infrastructure"
@@ -924,7 +945,7 @@ types banking_dashboard_widget_types
 				visible = "[GetScriptedGui('banking_dash_disable_cb_foreign_borrowing_limits').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_foreign_borrowing_limits"
 				blockoverride "row_label" {
-					text = "CB_FOREIGN_BORROWING_LIMITS"
+					text = "banking_dash_name_cb_foreign_borrowing_limits"
 				}
 				blockoverride "row_cost" {
 					text = "banking_dash_cost_cb_foreign_borrowing_limits"
@@ -943,7 +964,7 @@ types banking_dashboard_widget_types
 				visible = "[GetScriptedGui('banking_dash_disable_cb_fx_surrender').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_fx_surrender"
 				blockoverride "row_label" {
-					text = "CB_FX_SURRENDER"
+					text = "banking_dash_name_cb_fx_surrender"
 				}
 				blockoverride "row_cost" {
 					text = "banking_dash_cost_cb_fx_surrender"
@@ -1038,7 +1059,7 @@ types banking_dashboard_widget_types
 				visible = "[GetScriptedGui('banking_dash_disable_cb_directed_credit_heavy_industry').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_directed_credit_heavy_industry"
 				blockoverride "row_label" {
-					text = "CB_DIRECTED_CREDIT_HEAVY"
+					text = "banking_dash_name_active_cb_directed_credit_heavy_industry"
 				}
 				blockoverride "row_cost" {
 					text = "banking_dash_cost_cb_directed_credit_heavy_industry"
@@ -1057,7 +1078,7 @@ types banking_dashboard_widget_types
 				visible = "[GetScriptedGui('banking_dash_disable_cb_directed_credit_agriculture').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_directed_credit_agriculture"
 				blockoverride "row_label" {
-					text = "CB_DIRECTED_CREDIT_AGRI"
+					text = "banking_dash_name_active_cb_directed_credit_agriculture"
 				}
 				blockoverride "row_cost" {
 					text = "banking_dash_cost_cb_directed_credit_agriculture"
@@ -1076,7 +1097,7 @@ types banking_dashboard_widget_types
 				visible = "[GetScriptedGui('banking_dash_disable_cb_directed_credit_armaments').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_directed_credit_armaments"
 				blockoverride "row_label" {
-					text = "CB_DIRECTED_CREDIT_ARMS"
+					text = "banking_dash_name_active_cb_directed_credit_armaments"
 				}
 				blockoverride "row_cost" {
 					text = "banking_dash_cost_cb_directed_credit_armaments"
@@ -1095,7 +1116,7 @@ types banking_dashboard_widget_types
 				visible = "[GetScriptedGui('banking_dash_disable_cb_directed_credit_electrification').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_directed_credit_electrification"
 				blockoverride "row_label" {
-					text = "CB_DIRECTED_CREDIT_ELEC"
+					text = "banking_dash_name_active_cb_directed_credit_electrification"
 				}
 				blockoverride "row_cost" {
 					text = "banking_dash_cost_cb_directed_credit_electrification"
@@ -1285,7 +1306,7 @@ types banking_dashboard_widget_types
 				visible = "[GetScriptedGui('banking_dash_disable_ce_admin_campaign').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_ce_admin_campaign"
 				blockoverride "row_label" {
-					text = "CE_ADMIN_CAMPAIGN"
+					text = "banking_dash_name_ce_admin_campaign"
 				}
 				blockoverride "row_cost" {
 					text = "banking_dash_cost_ce_admin_campaign"
@@ -1304,7 +1325,7 @@ types banking_dashboard_widget_types
 				visible = "[GetScriptedGui('banking_dash_disable_ce_coordination_protocol').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_ce_coordination_protocol"
 				blockoverride "row_label" {
-					text = "CE_COORDINATION_PROTOCOL"
+					text = "banking_dash_name_ce_coordination_protocol"
 				}
 				blockoverride "row_cost" {
 					text = "banking_dash_cost_ce_coordination_protocol"
@@ -1361,7 +1382,7 @@ types banking_dashboard_widget_types
 				visible = "[GetScriptedGui('banking_dash_disable_cw_capital_plan').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cw_capital_plan"
 				blockoverride "row_label" {
-					text = "CW_CAPITAL_PLAN"
+					text = "banking_dash_name_cw_capital_plan"
 				}
 				blockoverride "row_cost" {
 					text = "banking_dash_cost_cw_capital_plan"
@@ -1380,7 +1401,7 @@ types banking_dashboard_widget_types
 				visible = "[GetScriptedGui('banking_dash_disable_cw_credit_expansion').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cw_credit_expansion"
 				blockoverride "row_label" {
-					text = "CW_CREDIT_EXPANSION"
+					text = "banking_dash_name_cw_credit_expansion"
 				}
 				blockoverride "row_cost" {
 					text = "banking_dash_cost_cw_credit_expansion"
@@ -1399,7 +1420,7 @@ types banking_dashboard_widget_types
 				visible = "[GetScriptedGui('banking_dash_disable_cw_council_directive').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cw_council_directive"
 				blockoverride "row_label" {
-					text = "CW_COUNCIL_DIRECTIVE"
+					text = "banking_dash_name_cw_council_directive"
 				}
 				blockoverride "row_cost" {
 					text = "banking_dash_cost_cw_council_directive"
@@ -1418,7 +1439,7 @@ types banking_dashboard_widget_types
 				visible = "[GetScriptedGui('banking_dash_disable_cw_consumption_ceiling').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cw_consumption_ceiling"
 				blockoverride "row_label" {
-					text = "CW_CONSUMPTION_CEILING"
+					text = "banking_dash_name_cw_consumption_ceiling"
 				}
 				blockoverride "row_cost" {
 					text = "banking_dash_cost_cw_consumption_ceiling"
@@ -1632,8 +1653,8 @@ types banking_dashboard_widget_types
 					### The policy rate (the actual rate, one decimal) and, beside it, the
 					### Rate Target: the dial itself. Ops 0 (down) and 1 (up) of
 					### banking_mon_control_sgui; the handler answers why a step is greyed out,
-					### so no threshold lives in this file. The target half is 100 + 2 + 26 +
-					### 2 + 60 + 2 + 26 = 218, inside the pair's 230.
+					### so no threshold lives in this file. The target half is 106 + 2 + 26 +
+					### 2 + 60 + 2 + 26 = 224, inside the pair's 230.
 					banking_dash_pair_row = {
 						blockoverride "pair_left" {
 							banking_dash_pair = {
@@ -1656,11 +1677,11 @@ types banking_dashboard_widget_types
 								visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 
 								widget = {
-									size = { 100 26 }
+									size = { 106 26 }
 									textbox = {
 										parentanchor = left|vcenter
 										autoresize = yes
-										max_width = 100
+										max_width = 106
 										elide = right
 										align = nobaseline
 										using = fontsize_medium
@@ -1712,7 +1733,7 @@ types banking_dashboard_widget_types
 					}
 
 					### Delegation — ops 2 (delegate) and 3 (take it back), the button
-					### beside the value it changes (132 + 4 + 190 + 4 + 128 = 458). Exactly one
+					### beside the value it changes (164 + 4 + 160 + 4 + 128 = 460). Exactly one
 					### button is ever drawn, and neither under central bank independence,
 					### which is permanently mandate-bound; the value says so there (§5.2).
 					flowcontainer = {
@@ -1778,6 +1799,7 @@ types banking_dashboard_widget_types
 					### Ops 4 / 5 / 6. The mandate already in force is greyed out
 					### by the handler's is_valid — that is the "you are here"
 					### marker — and peg defence only exists on a gold standard.
+					### 150 each (3 x 150 + 2 x 4 = 458), so "Price Stability" fits.
 					flowcontainer = {
 						direction = horizontal
 						ignoreinvisible = yes
@@ -1791,6 +1813,7 @@ types banking_dashboard_widget_types
 							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
+							size = { 150 26 }
 							text = "banking_dash_mon_mandate_price"
 						}
 
@@ -1798,6 +1821,7 @@ types banking_dashboard_widget_types
 							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
+							size = { 150 26 }
 							text = "banking_dash_mon_mandate_growth"
 						}
 
@@ -1806,6 +1830,7 @@ types banking_dashboard_widget_types
 							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
+							size = { 150 26 }
 							text = "banking_dash_mon_mandate_peg"
 						}
 					}
@@ -2483,7 +2508,7 @@ types banking_dashboard_widget_types
 					visible = "[GetScriptedGui('banking_dash_enable_cb_countercyclical_buffer').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_countercyclical_buffer"
 					blockoverride "row_label" {
-						text = "CB_COUNTERCYCLICAL_BUFFER"
+						text = "banking_dash_name_cb_countercyclical_buffer"
 					}
 					blockoverride "row_cost" {
 						text = "banking_dash_cost_cb_countercyclical_buffer"
@@ -2574,7 +2599,7 @@ types banking_dashboard_widget_types
 					visible = "[GetScriptedGui('banking_dash_enable_cb_directed_credit_infrastructure').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_directed_credit_infrastructure"
 					blockoverride "row_label" {
-						text = "CB_DIRECTED_CREDIT_INFRA"
+						text = "banking_dash_name_cb_directed_credit_infrastructure"
 					}
 					blockoverride "row_cost" {
 						text = "banking_dash_cost_cb_directed_credit_infrastructure"
@@ -2593,7 +2618,7 @@ types banking_dashboard_widget_types
 					visible = "[GetScriptedGui('banking_dash_enable_cb_directed_credit_heavy_industry').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_directed_credit_heavy_industry"
 					blockoverride "row_label" {
-						text = "CB_DIRECTED_CREDIT_HEAVY"
+						text = "banking_dash_name_cb_directed_credit_heavy_industry"
 					}
 					blockoverride "row_cost" {
 						text = "banking_dash_cost_cb_directed_credit_heavy_industry"
@@ -2612,7 +2637,7 @@ types banking_dashboard_widget_types
 					visible = "[GetScriptedGui('banking_dash_enable_cb_directed_credit_agriculture').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_directed_credit_agriculture"
 					blockoverride "row_label" {
-						text = "CB_DIRECTED_CREDIT_AGRI"
+						text = "banking_dash_name_cb_directed_credit_agriculture"
 					}
 					blockoverride "row_cost" {
 						text = "banking_dash_cost_cb_directed_credit_agriculture"
@@ -2631,7 +2656,7 @@ types banking_dashboard_widget_types
 					visible = "[GetScriptedGui('banking_dash_enable_cb_directed_credit_armaments').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_directed_credit_armaments"
 					blockoverride "row_label" {
-						text = "CB_DIRECTED_CREDIT_ARMS"
+						text = "banking_dash_name_cb_directed_credit_armaments"
 					}
 					blockoverride "row_cost" {
 						text = "banking_dash_cost_cb_directed_credit_armaments"
@@ -2650,7 +2675,7 @@ types banking_dashboard_widget_types
 					visible = "[GetScriptedGui('banking_dash_enable_cb_directed_credit_electrification').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_directed_credit_electrification"
 					blockoverride "row_label" {
-						text = "CB_DIRECTED_CREDIT_ELEC"
+						text = "banking_dash_name_cb_directed_credit_electrification"
 					}
 					blockoverride "row_cost" {
 						text = "banking_dash_cost_cb_directed_credit_electrification"
@@ -2760,7 +2785,7 @@ types banking_dashboard_widget_types
 					visible = "[GetScriptedGui('banking_dash_enable_cb_foreign_borrowing_limits').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_foreign_borrowing_limits"
 					blockoverride "row_label" {
-						text = "CB_FOREIGN_BORROWING_LIMITS"
+						text = "banking_dash_name_cb_foreign_borrowing_limits"
 					}
 					blockoverride "row_cost" {
 						text = "banking_dash_cost_cb_foreign_borrowing_limits"
@@ -2779,7 +2804,7 @@ types banking_dashboard_widget_types
 					visible = "[GetScriptedGui('banking_dash_enable_cb_fx_surrender').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_fx_surrender"
 					blockoverride "row_label" {
-						text = "CB_FX_SURRENDER"
+						text = "banking_dash_name_cb_fx_surrender"
 					}
 					blockoverride "row_cost" {
 						text = "banking_dash_cost_cb_fx_surrender"
@@ -3162,7 +3187,7 @@ types banking_dashboard_widget_types
 					visible = "[GetScriptedGui('banking_dash_enable_ce_admin_campaign').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_ce_admin_campaign"
 					blockoverride "row_label" {
-						text = "CE_ADMIN_CAMPAIGN"
+						text = "banking_dash_name_ce_admin_campaign"
 					}
 					blockoverride "row_cost" {
 						text = "banking_dash_cost_ce_admin_campaign"
@@ -3181,7 +3206,7 @@ types banking_dashboard_widget_types
 					visible = "[GetScriptedGui('banking_dash_enable_ce_coordination_protocol').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_ce_coordination_protocol"
 					blockoverride "row_label" {
-						text = "CE_COORDINATION_PROTOCOL"
+						text = "banking_dash_name_ce_coordination_protocol"
 					}
 					blockoverride "row_cost" {
 						text = "banking_dash_cost_ce_coordination_protocol"
@@ -3236,6 +3261,7 @@ types banking_dashboard_widget_types
 					blockoverride "row_label" {
 						text = "CE_INVEST_POOL_INJECT"
 					}
+					blockoverride "cost_icon" {}
 					blockoverride "row_cost" {
 						text = "banking_dash_cost_ce_invest_pool_inject"
 					}
@@ -3255,6 +3281,7 @@ types banking_dashboard_widget_types
 					blockoverride "row_label" {
 						text = "CE_INVEST_POOL_WITHDRAW"
 					}
+					blockoverride "cost_icon" {}
 					blockoverride "row_cost" {
 						text = "banking_dash_cost_ce_invest_pool_withdraw"
 					}
@@ -3378,7 +3405,7 @@ types banking_dashboard_widget_types
 					visible = "[GetScriptedGui('banking_dash_enable_cw_capital_plan').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cw_capital_plan"
 					blockoverride "row_label" {
-						text = "CW_CAPITAL_PLAN"
+						text = "banking_dash_name_cw_capital_plan"
 					}
 					blockoverride "row_cost" {
 						text = "banking_dash_cost_cw_capital_plan"
@@ -3397,7 +3424,7 @@ types banking_dashboard_widget_types
 					visible = "[GetScriptedGui('banking_dash_enable_cw_credit_expansion').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cw_credit_expansion"
 					blockoverride "row_label" {
-						text = "CW_CREDIT_EXPANSION"
+						text = "banking_dash_name_cw_credit_expansion"
 					}
 					blockoverride "row_cost" {
 						text = "banking_dash_cost_cw_credit_expansion"
@@ -3450,7 +3477,7 @@ types banking_dashboard_widget_types
 					visible = "[GetScriptedGui('banking_dash_enable_cw_council_directive').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cw_council_directive"
 					blockoverride "row_label" {
-						text = "CW_COUNCIL_DIRECTIVE"
+						text = "banking_dash_name_cw_council_directive"
 					}
 					blockoverride "row_cost" {
 						text = "banking_dash_cost_cw_council_directive"
@@ -3469,7 +3496,7 @@ types banking_dashboard_widget_types
 					visible = "[GetScriptedGui('banking_dash_enable_cw_consumption_ceiling').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cw_consumption_ceiling"
 					blockoverride "row_label" {
-						text = "CW_CONSUMPTION_CEILING"
+						text = "banking_dash_name_cw_consumption_ceiling"
 					}
 					blockoverride "row_cost" {
 						text = "banking_dash_cost_cw_consumption_ceiling"
