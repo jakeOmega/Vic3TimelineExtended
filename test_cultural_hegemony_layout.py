@@ -37,16 +37,13 @@ OLD_TYPES = ["te_ch_summary_panel", "te_ch_programmes_panel", "te_ch_standing_pa
 HOW_KEYS = ["je_ch_how_share", "je_ch_how_programmes", "je_ch_how_pull", "je_ch_how_board",
             "je_ch_widget_models_legend", "je_ch_how_models", "je_ch_how_benchmark"]
 
-# Placeholder art (docs/systems/cultural_hegemony_gui_icons.md): what is set now,
-# and the path the final art is proposed for. Swapping one in changes both.
-PLACEHOLDERS = {
-    "tier": ("gfx/interface/icons/event_icons/je_cultural_hegemony.dds", "gfx/interface/icons/ch_icons/tier_"),
-    "benchmark": ("gfx/interface/icons/generic_icons/warning.dds", "gfx/interface/icons/ch_icons/benchmark.dds"),
-    "share pie fill": ("gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds",
-                       "gfx/interface/journal_entry_widgets/ch_model_pie/ch_share_fill.dds"),
-    "share pie rest": ("gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds",
-                       "gfx/interface/journal_entry_widgets/ch_model_pie/ch_share_rest.dds"),
-}
+# The overview's art (PR #586; docs/systems/cultural_hegemony_gui_icons.md).
+CH_ICONS = "gfx/interface/icons/ch_icons/"
+CH_PIES = "gfx/interface/journal_entry_widgets/ch_model_pie/"
+TIER_ICONS = ["tier_negligible", "tier_minor", "tier_moderate", "tier_significant", "tier_major", "tier_hegemon"]
+# Textures the overview keeps from vanilla on purpose.
+VANILLA_KEPT = {"gfx/interface/backgrounds/round_frame_dec.dds", "gfx/interface/icons/generic_icons/trend_up.dds",
+                "gfx/interface/icons/generic_icons/trend_down.dds", "gfx/interface/icons/generic_icons/trend_nochange.dds"}
 
 
 def _read(path):
@@ -408,17 +405,43 @@ class LocTest(unittest.TestCase):
         self.assertIn("Concept('concept_ch_modifier_bonus'", self.loc["je_ch_widget_bd_mult_label"])
 
 
-class PlaceholderTest(unittest.TestCase):
-    """Every placeholder is set where the doc says, and the doc names its final path."""
+class ChIconsTest(unittest.TestCase):
+    """The #586 art replaces every placeholder (as test_un_overview_data.UnIconsTest)."""
 
-    def test_each_placeholder_is_listed(self):
-        gui = _read(WIDGET)
-        doc = _read(ICONS_DOC)
-        for what, (now, proposed) in PLACEHOLDERS.items():
-            with self.subTest(placeholder=what):
-                self.assertIn(f'texture = "{now}"', gui)
-                self.assertIn(now, doc)
-                self.assertIn(proposed, doc)
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _read(WIDGET)
+        cls.ov = _type_body(cls.gui, "te_ch_overview_panel")
+        cls.doc = _read(ICONS_DOC)
+
+    def test_each_tier_draws_its_own_icon(self):
+        found = {}
+        pat = (r"visible = \"\[EqualTo_CFixedPoint\( JournalEntry\.GetCountry\.MakeScope\.ScriptValue\('ch_disp_tier_code'\), "
+               r"'\(CFixedPoint\)(\d+)' \)\]\"\s*blockoverride \"icon_texture\" \{\s*texture = \"([^\"]+)\"")
+        for m in re.finditer(pat, self.ov):
+            found[int(m.group(1))] = m.group(2)
+        self.assertEqual(found, {i: f"{CH_ICONS}{n}.dds" for i, n in enumerate(TIER_ICONS)})
+
+    def test_the_benchmark_and_the_share_pie(self):
+        cell = self.ov[self.ov.index("GetScriptedGui('ch_benchmark_sgui').IsShown"):]
+        self.assertEqual(re.search(r'texture = "([^"]+)"', cell).group(1), f"{CH_ICONS}benchmark.dds")
+        pie = _type_body(self.gui, "te_ch_ov_pie")
+        self.assertEqual(re.findall(r'texture = "([^"]+)"', pie)[-2:],
+                         [f"{CH_PIES}ch_share_rest.dds", f"{CH_PIES}ch_share_fill.dds"])
+
+    def test_no_placeholder_left(self):
+        for name, text in (("overview", self.ov), ("pie", _type_body(self.gui, "te_ch_ov_pie"))):
+            for path in re.findall(r'texture = "(gfx/[^"]+)"', text):
+                with self.subTest(part=name, path=path):
+                    self.assertTrue(path.startswith((CH_ICONS, CH_PIES)) or path in VANILLA_KEPT,
+                                    f"placeholder left: {path}")
+
+    def test_the_doc_records_each_file(self):
+        for n in TIER_ICONS + ["benchmark"]:
+            self.assertIn(f"`{n}.dds`", self.doc, n)
+        for n in ("ch_share_fill", "ch_share_rest"):
+            self.assertIn(f"`{n}.dds`", self.doc, n)
+        self.assertNotIn("Placeholder now", self.doc)
 
 
 class LeaderFlagsTest(unittest.TestCase):
