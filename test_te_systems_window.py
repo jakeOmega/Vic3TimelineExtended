@@ -436,6 +436,34 @@ class TabContentTest(unittest.TestCase):
         # nothing the journal hides behind the bars-on-top marker comes back
         self.assertNotIn("te_je_goal_bar", widget)
 
+    def test_colonial_empire(self):
+        tab = self._tab("colonial_empire")
+        blocks = list(_entry_blocks(tab))
+        self.assertEqual([key for key, _, _ in blocks], ["je_colonial_empire"])
+        _, widget, before = blocks[0]
+        self.assertRegex(before, re.compile(r'default_header = \{.*?text = "je_colonial_empire"', re.S))
+        self.assertLess(before.index("default_header"), before.index("te_window_colonial_empire_tab_sgui"))
+        self._check_entry(widget, before, "te_window_colonial_empire_tab_sgui",
+                          _journal_types("je_colonial_empire", "je_colonial_empire.txt", "colonial_empire_widget.gui"),
+                          "te_window_colonial_empire_open_journal_tt")
+        # The overview draws the stability bar, so the entry mounts the marker and
+        # the tab draws no bar of its own; every scripted button is the AI's.
+        entry = _read(os.path.join(JE_DIR, "je_colonial_empire.txt"))
+        self.assertIn('name = "widget_te_je_bars_on_top_marker"', entry)
+        self.assertIn("progressbar = no", entry)
+        overview = _type_body(_read(os.path.join(WIDGETS, "colonial_empire_widget.gui")), "te_ce_overview_panel")
+        self.assertIn("JournalEntry.GetScriptedProgressBars", overview)
+        self.assertNotIn("te_je_scripted_bars", widget)
+        # The status line is for an inactive entry only.
+        status = _txt_block(_strip_comments(entry).replace("\n\t", "\n"), "status_desc")
+        triggers = re.findall(r"trigger = \{(.*?)\n\t\t\}", status, re.S)
+        self.assertTrue(triggers)
+        for trigger in triggers:
+            self.assertIn("NOT = { has_journal_entry = je_colonial_empire }", trigger)
+        buttons = _read(os.path.join(REPO, "common", "scripted_buttons", "colonial_empire_buttons.txt"))
+        for name in re.findall(r"scripted_button = (\w+)", entry):
+            self.assertRegex(_txt_block(buttons, name), r"visible = \{[^}]*is_ai = yes", name)
+
     def test_grand_monuments(self):
         tab = self._tab("grand_monuments")
         blocks = list(_entry_blocks(tab))
