@@ -290,7 +290,7 @@ DOC_SECTIONS = {
     "banking_disp_bubble_band_code": "Overview row 1: bubble pressure",
     "banking_disp_stance_band_code": "Overview row 2: policy stance",
     "banking_disp_price_band_code": "Overview row 2: inflation (the price band)",
-    None: "Overview row 2: intervention budget",
+    None: "Overview row 2: intervention budget; tool rows: point cost",
 }
 
 
@@ -412,7 +412,7 @@ class BandCodeTest(unittest.TestCase):
 
 
 class IconsDocTest(unittest.TestCase):
-    """docs/systems/banking_gui_icons.md holds each placeholder to its code."""
+    """docs/systems/banking_gui_icons.md records each icon's file by its code."""
 
     @classmethod
     def setUpClass(cls):
@@ -441,14 +441,64 @@ class IconsDocTest(unittest.TestCase):
         row = _type_body(_read(DASH), "banking_dash_policy_row")
         cost = _block_from(row, row.index('block "cost_icon" {'))
         tex = re.search(r'texture = "([^"]+)"', cost).group(1)
-        self.assertEqual(self.doc["Tool rows: point cost"].get("cost"), tex)
+        self.assertEqual(self.doc[DOC_SECTIONS[None]].get("cost"), tex)
 
     def test_no_row_names_a_state_the_overview_lacks(self):
         listed = {(s, k) for s, rows in self.doc.items() for k in rows}
         drawn = {(DOC_SECTIONS[p], k) for _, _, found, _ in _cells() for p, k, _ in found}
         drawn.add(("Overview row 1: bubble pressure", "crash risk"))
-        drawn.add(("Tool rows: point cost", "cost"))
+        drawn.add((DOC_SECTIONS[None], "cost"))
         self.assertEqual(listed, drawn)
+
+
+BANKING_ICONS = "gfx/interface/icons/banking_icons/"
+# PR #586's banking set, by the code or scripted GUI that picks each icon.
+PHASE_ICONS = {p: f"{BANKING_ICONS}phase_{p}.dds"
+               for p in ("panic", "downturn", "stagnation", "stable", "expansion", "boom", "frenzy")}
+BAND_ICONS = {
+    "banking_disp_bubble_band_code": ["bubble_low", "bubble_building", "bubble_elevated", "bubble_high",
+                                      "bubble_severe"],
+    "banking_disp_stance_band_code": ["stance_very_loose", "stance_loose", "stance_neutral", "stance_tight",
+                                      "stance_very_tight"],
+    "banking_disp_price_band_code": ["price_deflation", "price_stable", "price_elevated", "price_high",
+                                     "price_very_high", "price_hyper", "price_dollarised", "price_planned"],
+}
+# Kept as vanilla's marks, as the icon list allowed.
+MOMENTUM_ICONS = ["down_down", "trend_down", "trend_nochange", "trend_up", "trend_upup"]
+VANILLA_KEPT = {f"gfx/interface/icons/generic_icons/{n}.dds" for n in MOMENTUM_ICONS + ["warning"]}
+
+
+class BankingIconsTest(unittest.TestCase):
+    """The banking GUI's own icons (PR #586) replace every placeholder."""
+
+    def drawn(self):
+        out = {}
+        for _, _, found, _ in _cells():
+            for picker, key, tex in found:
+                out.setdefault(picker, {})[key] = tex
+        return out
+
+    def test_each_phase_draws_its_own_icon(self):
+        self.assertEqual(self.drawn()["banking_dash_phase_"], PHASE_ICONS)
+
+    def test_each_band_draws_its_own_icon(self):
+        drawn = self.drawn()
+        for value, names in BAND_ICONS.items():
+            with self.subTest(value=value):
+                self.assertEqual(drawn[value], {str(i): f"{BANKING_ICONS}{n}.dds" for i, n in enumerate(names, 1)})
+        self.assertEqual(drawn["banking_disp_momentum_band_code"],
+                         {str(i): f"gfx/interface/icons/generic_icons/{n}.dds" for i, n in enumerate(MOMENTUM_ICONS, 1)})
+
+    def test_the_budget_and_the_cost_share_one_icon(self):
+        self.assertEqual(self.drawn()[None], {"budget": f"{BANKING_ICONS}budget.dds"})
+        row = _type_body(_read(DASH), "banking_dash_policy_row")
+        self.assertIn(f'texture = "{BANKING_ICONS}budget.dds"', _block_from(row, row.index('block "cost_icon" {')))
+
+    def test_no_placeholder_is_left(self):
+        for tex in re.findall(r'texture = "([^"]+)"', _type_body(_read(DASH), "te_banking_overview_panel") +
+                              _type_body(_read(DASH), "banking_dash_policy_row")):
+            with self.subTest(texture=tex):
+                self.assertTrue(tex.startswith(BANKING_ICONS) or tex in VANILLA_KEPT, tex)
 
 
 MON_LABELS = ["banking_dash_mon_world_label", "banking_dash_mon_worldrate_label", "banking_dash_mon_rate_label",
