@@ -26,6 +26,16 @@ blue over the rest in a muted grey. Validated the same way against the dark
 panel: dE 16.8 normal and 16.9 protan; the grey fails only the chroma floor,
 as intended for the part that is not the subject.
 
+The system panels' pies (the style pass, `PANEL_PIES`) follow the UN's: a
+fill over the same muted grey. The colours their icon lists proposed failed
+the validator's normal-vision floor against that grey (dE 12-13; the GW green's
+deutan dE was 5.4), so each is the nearest lighter step that clears it:
+Cultural Hegemony's share #d89a2b (dE 16.1 normal, 14.0 protan), Global
+Warming's share #e0661a (15.6, 10.0) and cut #4fb85a (17.5, 10.2). They sit
+above the categorical lightness band on purpose: a single subject over the
+rest, not one of several equal slices. List 2's three-slice pies (Colonial
+Empire, Space Race) were checked on every pair, the wrap-around included.
+
 Run standalone (numpy only; no Pillow needed):
     .venv/bin/python scripts/image_pipeline/gen_ch_model_pie_textures.py
 """
@@ -68,6 +78,26 @@ MODELS: tuple[tuple[str, str], ...] = (
 UN_PIES: tuple[tuple[str, str], ...] = (
     ("pie_members", "#5b92e5"),
     ("pie_rest", "#8c8474"),
+)
+
+# The system panels' pies (docs/systems/<system>_gui_icons.md): path under
+# gfx/interface/, and colour. Each fill is validated against the grey rest.
+PANEL_PIES: tuple[tuple[str, str], ...] = (
+    ("journal_entry_widgets/ch_model_pie/ch_share_fill.dds", "#d89a2b"),
+    ("journal_entry_widgets/ch_model_pie/ch_share_rest.dds", "#8c8474"),
+    ("icons/gw_icons/pie_share.dds", "#e0661a"),
+    ("icons/gw_icons/pie_cut.dds", "#4fb85a"),
+    # List 2 (provisional). Colonial Empire: condemners over supporters over
+    # the rest, three slices side by side, so every pair was checked
+    # (`--pairs all`: worst dE 8.1 deutan, 15.6 normal).
+    ("icons/colonial_empire_icons/pie_condemners.dds", "#dd4a3a"),
+    ("icons/colonial_empire_icons/pie_supporters.dds", "#4cbc9a"),
+    ("icons/colonial_empire_icons/pie_rest.dds", "#8c8474"),
+    # Space Race: ours over everyone's claims over the unclaimed rest
+    # (worst dE 8.7 deutan, 16.2 normal).
+    ("icons/space_race_icons/pie_unclaimed.dds", "#8c8474"),
+    ("icons/space_race_icons/pie_claimed.dds", "#cf4a2a"),
+    ("icons/space_race_icons/pie_ours.dds", "#ecc043"),
 )
 
 
@@ -113,6 +143,7 @@ def write_dds(img: np.ndarray, path: Path) -> None:
 def main() -> int:
     jobs = [(OUTPUT_DIR / f"ch_pie_{model}.dds", colour) for model, colour in MODELS]
     jobs += [(UN_OUTPUT_DIR / f"{key}.dds", colour) for key, colour in UN_PIES]
+    jobs += [(Path(mod_path) / "gfx" / "interface" / rel, colour) for rel, colour in PANEL_PIES]
     for out, colour in jobs:
         write_dds(render(colour), out)
         print(f"wrote {out.relative_to(mod_path)}")

@@ -39,19 +39,35 @@
 	scripted_progress_bar = colonial_stability_bar
 
 	# --- Player-facing surface --------------------------------------------
-	# container_2 (under the status line, where the button grid used to be):
-	# stability conditions, international pressure, the three programmes and the
-	# three decolonization decisions.
+	# The panels (gui/journal_entry_widgets/colonial_empire_widget.gui, which
+	# sets the order of the sections): the overview above the status line,
+	# the live sections above the button grid, and the charts and "How the
+	# Colonial Empire Works" below it.
 	widget = {
 		gui = "gui/journal_entry_widgets/colonial_empire_widget.gui"
-		name = "widget_je_colonial_empire"
+		name = "widget_je_colonial_empire_overview"
+		container = "custom_widget_container_1"
+	}
+	# MARKER, not content: the overview draws the stability bar, so the journal
+	# panel drops its own bar block at the bottom (gui/journal_entry.gui; see
+	# je_banking.txt for the mechanism).
+	widget = {
+		gui = "gui/journal_entry_widgets/te_je_bars_on_top_marker.gui"
+		name = "widget_te_je_bars_on_top_marker"
+		container = "custom_widget_container_7"
+	}
+	# container_2 (under the status line, where the button grid used to be):
+	# why stability is moving, international pressure, the three programmes and
+	# the three decolonization decisions.
+	widget = {
+		gui = "gui/journal_entry_widgets/colonial_empire_widget.gui"
+		name = "widget_je_colonial_empire_status"
 		container = "custom_widget_container_2"
 	}
-	# container_3 (directly above the native stability bar): history charts,
-	# collapsed by default.
+	# container_3: the history charts, then "How the Colonial Empire Works".
 	widget = {
 		gui = "gui/journal_entry_widgets/colonial_empire_widget.gui"
-		name = "widget_je_colonial_empire_history"
+		name = "widget_je_colonial_empire_reference"
 		container = "custom_widget_container_3"
 	}
 
@@ -78,24 +94,41 @@
 
 	progressbar = no
 
-	# One summary line. The five tier phrases, the five great-power-pressure
-	# phrases and the seven-slot condemner roster that used to live here (18
-	# triggered_desc in total) are now the widget's "Colonial Stability" and
-	# "International Pressure" sections, where they can be read next to the
-	# numbers that drive them. The tier phrase comes from customizable
-	# localization keyed on var:colonial_empire_tier, so the thresholds stay in
-	# the one ladder in colonial_empire_refresh_display.
+	# The status line says only what the panel's overview cannot. The five tier
+	# phrases, the five great-power-pressure phrases and the seven-slot
+	# condemner roster that used to live here (18 triggered_desc in total) are
+	# the widget's overview (the band and its tooltip, which carries the status
+	# sentence) and "International Pressure" section. So an ACTIVE entry has no
+	# status line (no triggered_desc below is valid; the owner's rule, play-test
+	# round 2: status text that repeats the overview goes). The entry is shown
+	# while inactive (`is_shown_when_inactive`), where the widgets are hidden,
+	# and there the line says why it is not running: the three ways `possible`
+	# fails.
 	#
-	# Kept as an untriggered `triggered_desc` rather than the bare
-	# `status_desc = <key>` form: the journal-entry script docs note "value can be
-	# a localization key or first_valid + triggered_desc script" for
-	# `progress_desc` but NOT for `status_desc`, and no vanilla journal entry uses
-	# the bare form for `status_desc` (0 hits across common/journal_entries/). A
-	# wrong form here would fail silently as an empty status line.
+	# `first_valid` + `triggered_desc`, the form the journal-entry script docs
+	# name and this mod's other entries use (je_banking.txt, je_civil_rights.txt).
 	status_desc = {
-		triggered_desc = {
-			desc = je_colonial_empire_status_summary
-			trigger = { always = yes }
+		first_valid = {
+			triggered_desc = {
+				desc = je_colonial_empire_status_completed
+				trigger = {
+					NOT = { has_journal_entry = je_colonial_empire }
+					has_variable = colonial_empire_completed
+				}
+			}
+			triggered_desc = {
+				desc = je_colonial_empire_status_cooldown
+				trigger = {
+					NOT = { has_journal_entry = je_colonial_empire }
+					has_variable = colonial_empire_collapsed_recently
+				}
+			}
+			triggered_desc = {
+				desc = je_colonial_empire_status_no_colonies
+				trigger = {
+					NOT = { has_journal_entry = je_colonial_empire }
+				}
+			}
 		}
 	}
 
@@ -103,13 +136,15 @@
 		custom_tooltip = {
 			text = je_colonial_empire_complete_tt
 			OR = {
-				# Basic completion: 60 months (5 years) sustained at the cap.
-				# Reaching 100 is not enough on its own — the bar must hold.
-				# Longer than the IF Act's 36-mo ≥90 gate so the decision path
-				# stays meaningfully faster for countries that qualify.
+				# Basic completion: colonial_empire_completion_months (60, five
+				# years) sustained at the cap. Reaching 100 is not enough on its
+				# own — the bar must hold. Longer than the IF Act's
+				# colonial_empire_federation_months (36) at ≥90 so the decision
+				# path stays meaningfully faster for countries that qualify. Both
+				# live in colonial_empire_values.txt, which the overview reads too.
 				root = {
 					has_variable = colonial_at_100_months
-					var:colonial_at_100_months >= 60
+					var:colonial_at_100_months >= colonial_empire_completion_months
 				}
 				# IF Act capstone — set by the Imperial Federation Act decision
 				root = {
@@ -122,7 +157,11 @@
 	# Path-dependent resolution: which policy did the empire lean on?
 	# Months tracked in vars colonial_invest_months / colonial_garrison_months /
 	# colonial_assimilate_months by the monthly pulse below. The dispatch
-	# picks the dominant path and triggers a flavor-matched event.
+	# picks the dominant path and triggers a flavor-matched event. It reads them
+	# through colonial_{invest,garrison,assimilate}_months_value, which are 0
+	# until the first pulse creates the variables: the journal panel renders
+	# on_complete and on_fail as tooltips every frame, and a bare var: read of a
+	# counter that does not exist yet logged an error per frame.
 	#
 	# IF Act capstone routes (300/301) take priority — reaching the Solidified
 	# capstone is the explicit "victory" path; it bypasses the bar-100 routing.
@@ -137,21 +176,21 @@
 		}
 		else_if = {
 			limit = {
-				var:colonial_garrison_months >= var:colonial_invest_months
-				var:colonial_garrison_months >= var:colonial_assimilate_months
-				var:colonial_garrison_months > 24
+				colonial_garrison_months_value >= colonial_invest_months_value
+				colonial_garrison_months_value >= colonial_assimilate_months_value
+				colonial_garrison_months_value > 24
 			}
 			trigger_event = { id = decolonization_events.203 }   # Iron Fist
 		}
 		else_if = {
 			limit = {
-				var:colonial_invest_months >= var:colonial_assimilate_months
-				var:colonial_invest_months > 24
+				colonial_invest_months_value >= colonial_assimilate_months_value
+				colonial_invest_months_value > 24
 			}
 			trigger_event = { id = decolonization_events.202 }   # Commonwealth Path
 		}
 		else_if = {
-			limit = { var:colonial_assimilate_months > 24 }
+			limit = { colonial_assimilate_months_value > 24 }
 			trigger_event = { id = decolonization_events.205 }   # Quiet Assimilation
 		}
 		else = {
@@ -220,12 +259,12 @@
 		else_if = {
 			limit = {
 				NAND = {
-					var:colonial_garrison_months >= var:colonial_invest_months
-					var:colonial_garrison_months >= var:colonial_assimilate_months
+					colonial_garrison_months_value >= colonial_invest_months_value
+					colonial_garrison_months_value >= colonial_assimilate_months_value
 				}
 				OR = {
-					var:colonial_invest_months > 24
-					var:colonial_assimilate_months > 24
+					colonial_invest_months_value > 24
+					colonial_assimilate_months_value > 24
 				}
 			}
 			trigger_event = { id = decolonization_events.204 }   # Negotiated Withdrawal

@@ -1,6 +1,6 @@
 # GUI Style Guide
 
-What the mod's panels should look like. This is the default for every new or reworked system panel, whether it is a journal entry, a tab in a vanilla window or a window of its own. The owner set these rules over two in-game reviews of the UN panels (PR #567, September 2026) and endorsed them as the house style.
+What the mod's panels should look like. This is the default for every new or reworked system panel, whether it is a journal entry, a tab in a vanilla window or a window of its own. The owner set these rules over two in-game reviews of the UN panels (PR #567, September 2026) and endorsed them as the house style. Three play-test rounds of the other system panels (PRs #573–#583) added the rules marked *(play-test)*.
 
 They are defaults, not laws. Break one when a panel has a real reason to, and say why in a comment next to the exception. That should be rare.
 
@@ -21,6 +21,8 @@ The rules run roughly from the most to the least important.
 - Anything that changes from month to month gets a visual where one fits (a bar, a pie, an icon, a table) and is **open by default**. Examples are missions in the field, the resolution in session, the authority pillars and why authority is moving.
 - Anything that explains how the system works goes into **one collapsed "How X Works" section** at the bottom of the panel, with a subheading per topic. Don't sprinkle explanatory notes through the live sections.
 - The overview at the top is always shown and cannot be collapsed.
+- *(play-test)* A **history chart** is open by default. A **list of past items** (an archive, a ledger, ended missions) starts collapsed. A **live list** (rivals, pressure, networks) is open.
+- *(play-test)* The journal entry's own **status text must not repeat the overview.** When the overview shows everything it said, it is empty while the entry is active. It keeps one line for the inactive entry, which draws no overview.
 
 Example: `te_un_status_sections` (open, dynamic) and `te_un_reference_sections` → `te_un_sec_how` (collapsed) in `gui/journal_entry_widgets/un_layout_widget.gui`.
 
@@ -34,6 +36,14 @@ When an icon or a short label replaces a sentence, the sentence moves into that 
 - A game term in the label is a **concept** (`[concept_x]`), so hovering it explains the term. Add the concept when the term is new (`common/game_concepts/extra_concepts.txt` plus a name and a `_desc` key).
 - The reason behind a value goes in a tooltip: a breakdown of a number, the reason a list is empty ("Target: None" gives why on hover), or what a title means. Hoverable text is underlined (`#tooltippable`).
 - Trim what the reader already knows. "Great-power commitment" became "Commitment", with the rest in its tooltip.
+- *(play-test)* **Nothing a player reads ends in "...".** A fixed-width cell elides text too long for it. In order of preference:
+  1. drop words a heading already says ("Infrastructure" under a Directed Credit heading);
+  2. use a shorter label with the full name on hover;
+  3. narrow a neighbouring column (a status word becomes an icon);
+  4. use a smaller font;
+  5. widen the cell.
+
+  Budget about 10 GUI units per character for the large row font and 8.6 for the medium table font, plus 10%. Check the longest dynamic name a cell can show, too.
 
 ### 4. Icons first, with a small word beneath
 
@@ -47,9 +57,15 @@ Example: the overview's first row and the agency icons in `gui/journal_entry_wid
 
 - **Several related figures form a table**, not a sentence: label on the left, value on the right (`un_chamber_value_row`). Our Record's case strength and its six terms were a paragraph and are now a table.
 - **A share is a pie**, framed with a ring so it reads as a dial (`round_frame_dec.dds` behind a stacked `progresspie`; the pie recipe is "Pie charts of script-held data" in the GUI guide).
-- **Progress towards a target is a bar with a marker** at the target, and the headline says where it is heading: "62 → 68 (+0.4/mo)".
+- **Progress towards a target is a bar**, and the headline says where it is heading: "62 → 68 (+0.4/mo)".
+- *(play-test)* **Where a bar is heading is a translucent segment, not a marker.** The solid fill runs to the lower of the current and projected values, and the segment runs to the higher. So a rise extends past the fill, and a fall shows as the tail about to be lost.
+  - The segment is **green when the change is good for the player, red when it is bad**, and the bar's own colour, pale, when it is neither. Warming is red; cooling is green.
+  - A fixed threshold on the bar is a thin vertical line with its own hover.
+  - Vanilla's eye-shaped `progressbar_marker` read as ambiguous, so it is not used for either.
+  - The layers: Global Warming's temperature bar (`global_warming_widget.gui`, PR #575).
 - **Related figures sit together.** Our dues belong next to the whole budget, not on the other side of the conventions.
-- A good or bad number is coloured (`#G`/`#R`), and a trend gets an arrow icon rather than a sentence.
+- A good or bad number is coloured (`#G`/`#R`), and a trend gets an arrow icon rather than a sentence. The same convention holds everywhere: green is good for the player and red is bad, whatever the direction.
+- *(play-test)* **The parts of a total are bars**, like the UN's authority pillars: one row per component, with a label, a fixed-width bar over an approximate range and a signed value. Examples are the parts of cultural pull and the terms moving colonial stability.
 
 ### 6. Buttons carry their own reasons
 
@@ -69,6 +85,7 @@ Example: the overview's first row and the agency icons in `gui/journal_entry_wid
 - No section starts with an empty line or an empty block. If the first builder can print nothing, gate it or reorder.
 - No tooltip ends in a blank line. Don't end a loc line with `\n`, because a script-built list already separates its lines.
 - No element may widen its row. Give each cell in a row of cells a fixed width, so a long label or a bar can't push its neighbours off-centre (the standing bar once pushed the pies out of line).
+- *(play-test)* **Give every root a fixed width** (`minimumsize = { 520 -1 }` for a journal-entry root, with its rows in a 480 column). A wrapper sized by its content is centred once, at its first width. Rows that appear later then drift off-centre and clip, as the Global Warming and Nuclear overviews did in round 1.
 - Scripted text needs no leading spaces when each line is its own row. Keep indentation for a sub-item under a heading line, such as a convention's terms under its name.
 
 ### 9. Where a system's panel goes

@@ -421,7 +421,10 @@ class TestPossession(unittest.TestCase):
             self.assertIn(needle, term)
         self.assertNotIn("nd_ig_posture_judged", term)
         self.assertIn("add = nd_ig_term_possession_value", block(dv, "nd_ig_stance_value"))
-        self.assertIn("THIS.Var('nd_ig_term_possession').GetValue", loc_value("nd_home_terms_restraint"))
+        # At Home shows it as a row of a restraint group's table (round 3).
+        self.assertIn("nd_disp_ig_class = 2", block(dv, "nd_disp_ig_shows_possession"))
+        self.assertIn("has_variable = nd_ig_term_possession", block(dv, "nd_disp_ig_term_possession"))
+        self.assertIn("ScriptValue('nd_disp_ig_term_possession')", loc_value("nd_home_row_possession_value"))
 
     def test_modifier_has_loc(self):
         keys = loc_keys()
@@ -762,7 +765,7 @@ class TestPanel(unittest.TestCase):
         self.assertIn("nd_taboo_record_history = yes", block(strip_comments(read(TABOO_EFFECTS)), "nd_taboo_country_monthly"))
         for metric in ("nd_taboo", "nd_taboo_tgt"):
             self.assertIn(f"ScriptContainer.HasVariable( 'te_hist_v_{metric}' )", self.gui, metric)
-        section = self.gui[self.gui.index("nd_taboo_hist_open"):]
+        section = self.gui[self.gui.index("nd_taboo_hist_closed"):]
         self.assertGreaterEqual(section.count('blockoverride "marker_pips" {}'), 2)
 
     def test_custom_loc_targets_have_loc(self):
