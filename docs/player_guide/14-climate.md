@@ -33,12 +33,17 @@ zero; only carbon capture takes a market below it.
 
 ## The Global Warming journal entry
 
-The entry is listed, grayed out, for every country from the start of the game.
-It activates for everyone once the anomaly reaches 0.1 °C and then stays active:
-it never completes and never goes away, even if the world cools again. Its
-progress bar fills at 4 °C, but the penalties keep growing past that.
+The entry is listed, grayed out, for every country from the start of the game,
+with a line saying that it opens once the world has warmed by 0.1 °C and its
+climate policies at 0.5 °C. It activates for everyone once the anomaly reaches
+0.1 °C and then stays active: it never completes and never goes away, even if
+the world cools again. The temperature bar at its top runs to 4 °C, but the
+penalties keep growing past that.
 
-| Anomaly | Status |
+The anomaly sets the warming tier, which the entry shows as a thermometer icon
+with the tier's name beneath it:
+
+| Anomaly | Tier |
 |---|---|
 | Below 0.1 °C | Negligible |
 | 0.1–0.5 °C | Slight |
@@ -63,39 +68,58 @@ heatwaves and wildfires, in both impact and duration;
 - 25% weaker pollinator surges and 10% weaker moderate rainfall, the two
 harvest conditions that help.
 
-At 2 °C every line doubles, and at 3 °C it triples. The dashboard's Warming
-Penalty Scale shows the current multiplier.
+At 2 °C every line doubles, and at 3 °C it triples. The Penalty figure at the
+top of the entry shows the current multiplier; hover it for the modifier's
+lines.
 
 ## The climate dashboard
 
-The journal entry holds three panels.
+The journal entry opens with an overview that is always shown. The sections
+below it start open, except How Global Warming Works. While the entry is active
+it has no status line: the overview carries the tier and the readings.
 
 ![The Global Warming journal entry at 1.59 °C, status Significant: Climate Conditions, the status line, the eight Mitigation Policies (seven active) and Adoption Around the World.](images/global_warming_JE.png)
 
-Climate Conditions shows the Global Temperature with its status, the Change Last
-Year, Our Market's Emissions (with the amount captured), our Share of World
-Emissions, the Emissions Cut In Force (the percentage and how many of the eight
-policies are active), Our Role in the market, and the Warming Penalty Scale.
-Each row's tooltip explains the reading. The emissions and yearly figures are
-recalculated once a year; the cut and the policy count change the moment you
-adopt or repeal.
+<!-- screenshot: the Global Warming journal entry as it is now: the overview (tier, Market Leader, Penalty, the Temperature bar with its red stretch and threshold line, the emissions table, the two pies) and Mitigation Policies -->
 
-Mitigation Policies lists all eight policies for every country. Each row shows
-Active or Inactive and one control: Adopt while the policy is not in force,
-Repeal while it is. A market-wide policy that your market leader put in force is
-also marked "set by market leader". A grayed control's tooltip lists the
-conditions and which of them you meet. Adoption Around the World, a collapsible
-section, counts the nations running each policy.
+The overview's first row is icons with a word under each: the warming tier
+(hover it for what the tier means), Market Leader or Market Member (whether you
+set the market-wide policies), and Penalty with the Climate Warming modifier's
+current multiplier. A Treaty-Bound icon joins them while an Enforce Emissions
+Reduction treaty binds you.
 
-History, collapsed by default, charts global temperature and your market's share
-of world emissions. Both lines step once a year, when the emissions figures
-update.
+Below them is the Temperature bar, from 0 to 4 °C, with a headline such as
+"1.61 → 1.82 °C (+0.02/yr)": the anomaly now, the anomaly in ten years if every
+year warms as much as the last, and last year's change. The bar shows the same
+projection. While the world warms, the solid fill ends at today's reading and a
+red stretch runs on to the projection: red is warming to come. While it cools,
+the solid fill ends at the projection and a green stretch runs on to today's
+reading: green is warming set to be lost. A thin line marks where the next tier
+begins; hover it for the tier and how many years away it is at last year's
+rate. Until the first yearly figures arrive in January, the headline shows the
+anomaly with "(no rate yet)".
+
+Under the bar, a table gives the year's figures: Our Market's Emissions, Carbon
+Captured, World Emissions and Warming Last Year. Hover a row for what it counts.
+They update each January; before the first January of a game, a line says when
+they arrive.
+
+Two pies close the overview. Our Share is your market's share of world
+emissions. Emissions Cut is how far your market's emissions are held below what
+its coal and oil use would otherwise produce; hover it for how many of the eight
+policies you run. The cut changes the moment a policy is adopted or repealed.
+
+| Section | Starts | Shows |
+|---|---|---|
+| Mitigation Policies | Open | The eight policies, under Market-Wide and National. Each row has the policy's icon, lit while the policy is in force, its name (hover it for what the policy does), a green check while it is in force, and one control: Adopt while the policy is not in force, Repeal while it is. A grayed control's tooltip lists the conditions and which of them you meet. When one reason grays out every Adopt or every Repeal, a line above the rows says so once: warming below 0.5 °C, an emissions-reduction treaty (only Climate Adaptation can then be repealed), or, for a market member, "Set by our market leader for the whole market" over the market-wide rows. Adoption Around the World, under the rows, counts the nations running each policy. |
+| History | Open | Charts of global temperature and of your market's share of world emissions. Both step once a year, when the emissions figures update. |
+| How Global Warming Works | Collapsed | The explanations: warming, the warming penalty, emissions and the mitigation policies. |
 
 ## Climate policies
 
 There are eight policies. Three are market-wide: only a market leader can adopt
 or repeal them, and they then apply to every country in its market, which sees
-them as "set by market leader". The other five are national, open to every
+them in force under "Set by our market leader for the whole market". The other five are national, open to every
 country. Every policy needs the anomaly to have reached 0.5 °C, except
 Fossil-Fuel Divestment, which needs 1.0 °C.
 
