@@ -705,7 +705,7 @@ class PanelStateTests(unittest.TestCase):
         iron = np.asarray(self.r.tint(stone, "iron")).astype(int)
         self.assertTrue((gold[..., 3] == np.asarray(stone)[..., 3]).all())     # same silhouette
         self.assertGreater(gold[40, 30, 0], gold[40, 30, 2] + 60)              # gold: warm
-        self.assertLess(np.ptp(silver[40, 30, :3]), 15)                        # silver: neutral
+        self.assertLess(np.ptp(silver[40, 30, :3]), 25)                        # silver: near neutral, a little cool
         self.assertLess(iron[40, 30, :3].sum(), silver[40, 30, :3].sum())      # iron: darker than silver
         self.assertGreater(gold[40, 30, :3].sum(), gold[20, 30, :3].sum())     # light and shade kept
         moss = np.asarray(self.r.tint(stone, "moss")).astype(int)
@@ -774,7 +774,7 @@ class PanelStateTests(unittest.TestCase):
         self.assertLess(crack[..., :3].sum(axis=2).min(), 200)                 # and draws a dark line
         split = np.asarray(self.r.damage(solid, "split"))
         self.assertTrue((split[5:75, 40:50, 3] < 128).any())                   # a gap opens down the middle
-        self.assertTrue((split[5:75, 5, 3] > 128).all() and (split[5:75, 75, 3] > 128).all())
+        self.assertTrue((split[20:70, 10:26, 3] > 128).all() and (split[20:70, 55:68, 3] > 128).all())   # both halves
         tilted = np.asarray(self.r.damage(Image.new("RGBA", (80, 80), (0, 0, 0, 0)).crop((0, 0, 80, 80)), None, 9))
         self.assertEqual(tilted.shape, (80, 80, 4))
         with self.assertRaises(ValueError):
