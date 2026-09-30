@@ -208,6 +208,27 @@ class LauncherTest(unittest.TestCase):
         self.assertEqual(button.count("sidepanel_button_small = {"), 2)
         self.assertIn('tooltip = "te_systems_window_launcher_tt"', button)
 
+    def test_it_has_vanillas_hover_label(self):
+        """The sidebar's label: a strip and a label pair that slide out on the
+        mouse entering the button's flowcontainer, on vanilla's state names."""
+        button = _named(self.gui, "te_systems_window_launcher_button")
+        for state in ("show_sidebar_labels", "hide_sidebar_labels"):
+            self.assertIn(f"name = {state}", button)
+        self.assertIn("onmousehierarchyenter = \"[PdxGuiInterruptThenTriggerAllAnimations("
+                      "'hide_sidebar_labels','show_sidebar_labels')]\"", button)
+        self.assertIn("onmousehierarchyleave = \"[PdxGuiInterruptThenTriggerAllAnimations("
+                      "'show_sidebar_labels','hide_sidebar_labels')]\"", button)
+        # the strip is a sibling of the hover container, as vanilla's is
+        self.assertLess(button.index("name = show_sidebar_labels"),
+                        button.index("te_systems_window_launcher_hover"))
+        hover = _named(self.gui, "te_systems_window_launcher_hover")
+        self.assertEqual(hover.count("sidebar_label_button_small = {"), 2)
+        self.assertIn('text = "te_systems_window_launcher_label"', hover)
+        # one label button per state, each doing what the button does
+        self.assertRegex(hover, r"sidebar_label_button_small = \{\s*visible = \"\[Not\( " + re.escape(OPEN))
+        self.assertIn("onclick = \"[GetVariableSystem.Set('com_open_window', 'te_systems_window')]\"", hover)
+        self.assertIn("onclick = \"[GetVariableSystem.Clear('com_open_window')]\"", hover)
+
     def test_the_panel_stack_clearing_widgets(self):
         """§3.6: a vanilla panel or the ledger opening closes the window."""
         for condition in ("InformationPanelBar.IsAnyPanelOpen", "MapListPanelManager.IsVisible"):
@@ -601,6 +622,7 @@ class LocTest(unittest.TestCase):
 
 class IconsTest(unittest.TestCase):
     LAUNCHER = "gfx/interface/main_hud/journal_btn.dds"   # the placeholder
+    FADE_MASK = "gfx/interface/masks/fade_horizontal_right.dds"   # vanilla's, for the hover strip
 
     def test_no_tab_sets_an_icon(self):
         """System tabs carry no icon, as vanilla's tabs and the mod's other
@@ -614,13 +636,15 @@ class IconsTest(unittest.TestCase):
     def test_the_launcher_draws_its_placeholder(self):
         gui = _read(GUI)
         button = _named(gui, "te_systems_window_launcher_button")
-        self.assertEqual(re.findall(r'texture = "([^"]+)"', button), [self.LAUNCHER] * 2)
-        # ...and it is the window's only texture
-        self.assertEqual(set(re.findall(r'texture = "([^"]+)"', gui)), {self.LAUNCHER})
+        # the hover strip's fade is vanilla's mask, not the window's art
+        textures = [t for t in re.findall(r'texture = "([^"]+)"', button) if t != self.FADE_MASK]
+        self.assertEqual(textures, [self.LAUNCHER] * 2)
+        # ...and it is the window's only icon
+        self.assertEqual(set(re.findall(r'texture = "([^"]+)"', gui)) - {self.FADE_MASK}, {self.LAUNCHER})
 
     def test_every_texture_is_listed(self):
         doc = _read(ICON_DOC)
-        for path in set(re.findall(r'texture = "([^"]+)"', _read(GUI))):
+        for path in set(re.findall(r'texture = "([^"]+)"', _read(GUI))) - {self.FADE_MASK}:
             with self.subTest(path=path):
                 self.assertIn(f"`{path}`", doc)
 

@@ -733,8 +733,23 @@ types te_systems_window_types
 ### the 40-high slot at +580, so the next is at 200 + 5 + 620 = 825. The button
 ### is vanilla's own (sidepanel_button_small, lit by
 ### selected_sidepanel_animation_small while the window is open), with vanilla's
-### tooltip area over it. It has no hover label: the sidebar's labels slide out
-### on its own flowcontainer's mouse events, which reach no other widget.
+### tooltip area over it.
+###
+### THE HOVER LABEL, built as vanilla builds the sidebar's (information_panel_bar.gui).
+### Vanilla's flowcontainer of label buttons runs
+### PdxGuiInterruptThenTriggerAllAnimations on onmousehierarchyenter / -leave
+### ('hide_sidebar_labels' then 'show_sidebar_labels', and the reverse), which
+### slides each label out (its own states, in vanilla's sidebar_label_button_small
+### and sidebar_label_text_small types) and fades the dark strip behind them in
+### (the first widget below, a copy of the bar's own). The launcher does the same
+### with its own flowcontainer, the same state names and vanilla's two label
+### types, so it slides out on the hover of its own button. Whether the call also
+### reaches the sidebar's widgets, so that hovering either slides out both, is
+### untested: PdxGuiInterruptThenTriggerAllAnimations is not documented. The strip
+### has no start_sound: if the call is global, the sidebar's own would play twice.
+###
+### The label is two buttons, one per state, as vanilla's power bloc pair is:
+### the closed one opens the window and the open one closes it.
 ### ==========================================================================
 widget = {
 	name = "te_systems_window_launcher"
@@ -772,56 +787,121 @@ widget = {
 			size = { 100% 100% }
 			visible = "[GetScriptedGui('te_window_launcher_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 
-			### Closed: opens the window.
+			### The dark strip behind the label: vanilla's, sized for one row
+			### (the bar's is as tall as the whole sidebar).
 			widget = {
-				size = { 100% 100% }
-				visible = "[Not( GetVariableSystem.HasValue('com_open_window', 'te_systems_window') )]"
+				size = { 300 40 }
+				alpha = 0
 
-				widget = {
-					using = clickthrough_blocker
-					using = sidebar_button_size_small
-					using = selected_sidepanel_animation_small
-					blockoverride "selected_visibility" {
-						visible = no
+				background = {
+					using = dark_area
+					alpha = 1
+					margin_right = 40
+					margin_top = -5
+					margin_left = -25
+					margin_bottom = -5
+
+					modify_texture = {
+						texture = "gfx/interface/masks/fade_horizontal_right.dds"
+						spriteType = Corneredstretched
+						spriteborder = { 0 0 }
+						blend_mode = alphamultiply
 					}
-					sidepanel_button_small = {
-						blockoverride "icon" {
-							texture = "gfx/interface/main_hud/journal_btn.dds"
-						}
-						blockoverride "button_selected" {
-							visible = no
-						}
-						onclick = "[GetVariableSystem.Set('com_open_window', 'te_systems_window')]"
-					}
+				}
+
+				state = {
+					name = show_sidebar_labels
+					alpha = 0.7
+					duration = 0.15
+					using = Animation_Curve_Default
+				}
+				state = {
+					name = hide_sidebar_labels
+					alpha = 0
+					duration = 0.15
+					using = Animation_Curve_Default
 				}
 			}
 
-			### Open: lit, and closes it.
-			widget = {
-				size = { 100% 100% }
-				visible = "[GetVariableSystem.HasValue('com_open_window', 'te_systems_window')]"
+			flowcontainer = {
+				name = "te_systems_window_launcher_hover"
+				margin_right = -8 # trims the hover area for the label, as vanilla's does
+				onmousehierarchyenter = "[PdxGuiInterruptThenTriggerAllAnimations('hide_sidebar_labels','show_sidebar_labels')]"
+				onmousehierarchyleave = "[PdxGuiInterruptThenTriggerAllAnimations('show_sidebar_labels','hide_sidebar_labels')]"
 
-				widget = {
-					using = clickthrough_blocker
-					using = sidebar_button_size_small
-					using = selected_sidepanel_animation_small
-					blockoverride "selected_visibility" {
-						visible = yes
+				container = {
+					### The label: closed opens the window, open closes it.
+					sidebar_label_button_small = {
+						visible = "[Not( GetVariableSystem.HasValue('com_open_window', 'te_systems_window') )]"
+						position = { -100 0 }
+						blockoverride "onclick" {
+							onclick = "[GetVariableSystem.Set('com_open_window', 'te_systems_window')]"
+						}
 					}
-					sidepanel_button_small = {
-						blockoverride "icon" {
-							texture = "gfx/interface/main_hud/journal_btn.dds"
+					sidebar_label_button_small = {
+						visible = "[GetVariableSystem.HasValue('com_open_window', 'te_systems_window')]"
+						position = { -100 0 }
+						blockoverride "onclick" {
+							onclick = "[GetVariableSystem.Clear('com_open_window')]"
 						}
-						blockoverride "button_selected" {
-							visible = yes
+					}
+					sidebar_label_text_small = {
+						position = { -100 0 }
+						text = "te_systems_window_launcher_label"
+					}
+
+					### Closed: opens the window.
+					widget = {
+						size = { 42 40 }
+						visible = "[Not( GetVariableSystem.HasValue('com_open_window', 'te_systems_window') )]"
+
+						widget = {
+							using = clickthrough_blocker
+							using = sidebar_button_size_small
+							using = selected_sidepanel_animation_small
+							blockoverride "selected_visibility" {
+								visible = no
+							}
+							sidepanel_button_small = {
+								blockoverride "icon" {
+									texture = "gfx/interface/main_hud/journal_btn.dds"
+								}
+								blockoverride "button_selected" {
+									visible = no
+								}
+								onclick = "[GetVariableSystem.Set('com_open_window', 'te_systems_window')]"
+							}
 						}
-						onclick = "[GetVariableSystem.Clear('com_open_window')]"
+					}
+
+					### Open: lit, and closes it.
+					widget = {
+						size = { 42 40 }
+						visible = "[GetVariableSystem.HasValue('com_open_window', 'te_systems_window')]"
+
+						widget = {
+							using = clickthrough_blocker
+							using = sidebar_button_size_small
+							using = selected_sidepanel_animation_small
+							blockoverride "selected_visibility" {
+								visible = yes
+							}
+							sidepanel_button_small = {
+								blockoverride "icon" {
+									texture = "gfx/interface/main_hud/journal_btn.dds"
+								}
+								blockoverride "button_selected" {
+									visible = yes
+								}
+								onclick = "[GetVariableSystem.Clear('com_open_window')]"
+							}
+						}
+					}
+
+					sidebar_tooltip_area_small = {
+						tooltip = "te_systems_window_launcher_tt"
 					}
 				}
-			}
-
-			sidebar_tooltip_area_small = {
-				tooltip = "te_systems_window_launcher_tt"
 			}
 		}
 	}
