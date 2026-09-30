@@ -55,7 +55,7 @@
  law_federal_system:0 "Federal System"
  law_federal_system_desc:0 "Power is shared between the central government and its constituent political units."
  law_feudal_contracts:0 "Traditional Vassalage"
- law_feudal_contracts_desc:0 "The state is a tapestry of personal oaths and traditional [Concept('concept_obligation', 'obligations')]."
+ law_feudal_contracts_desc:0 "The state is a tapestry of personal oaths and traditional obligations."
  law_fiat_currency:0 "Fiat Money"
  law_fiat_currency_desc:0 "Money that has no intrinsic value and is not backed by a physical commodity. Its value is derived from the trust and confidence of the people who use it."
  law_free_mutual_banking:"Free & Mutual Banking"
