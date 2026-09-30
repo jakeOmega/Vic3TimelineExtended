@@ -138,3 +138,67 @@ te_military_covert_tab_unlock_sgui = {
 	is_valid = { covert_warfare_entry_unlocked = yes }
 	effect = { }
 }
+
+# ---------------------------------------------------------------------------
+# Global Warming: Market panel (gui/market_panel.gui), je_global_warming. The
+# entry is active for every country once the world has warmed 0.1 C, so the
+# tab opens for all of them. It shows on every market the panel opens: on
+# another market, that market's emissions and policies, read-only.
+# ---------------------------------------------------------------------------
+te_market_global_warming_tab_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = global_warming_enabled
+		has_journal_entry = je_global_warming
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_market_global_warming_tab_unlock_sgui = {
+	scope = country
+	is_shown = { has_game_rule = global_warming_enabled }
+	ai_is_valid = { always = no }
+	is_valid = { gw_entry_unlocked = yes }
+	effect = { }
+}
+
+# Root: the leader of the market the panel shows, when it is not the player's.
+# The Climate tab shows that market's emissions and policies (read-only),
+# reading the leader as a Country datacontext on a child of the widget this
+# gates, once the leader's entry is running: before that its policies and
+# figures mean nothing. (Not the leader's journal entry: another country's
+# entry did not resolve in GUI; gotcha #35 in docs/guides/gui_modding_guide.md.)
+te_market_global_warming_leader_sgui = {
+	scope = country
+	is_shown = { has_journal_entry = je_global_warming }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# ---------------------------------------------------------------------------
+# Strategic Reserve: Market panel (gui/market_panel.gui), je_strategic_reserve.
+# The system has no game rule. Its tab is on the strip from Logistics, when the
+# greyed entry first shows in the journal (its is_shown_when_inactive), and
+# opens once the entry runs, which is once a Strategic Reserve Hub exists. The
+# reserve buys and sells in the player's own market, so the tab shows only
+# while the panel shows that market (the test is in market_panel.gui: it is
+# the panel's, not the country's).
+# ---------------------------------------------------------------------------
+te_market_strategic_reserve_tab_sgui = {
+	scope = country
+	is_shown = { has_journal_entry = je_strategic_reserve }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_market_strategic_reserve_tab_unlock_sgui = {
+	scope = country
+	is_shown = { has_technology_researched = logistics }
+	ai_is_valid = { always = no }
+	is_valid = { st_res_entry_unlocked = yes }
+	effect = { }
+}
