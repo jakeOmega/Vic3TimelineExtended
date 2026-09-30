@@ -2621,7 +2621,7 @@
  un_rejectionist_modifier:0 "UN Rejectionist"
  un_rejectionist_modifier_desc:0 "This country has rejected the United Nations, strengthening domestic authority but damaging international standing."
  un_request_cooldown:0 "UN Request Cooldown"
- un_request_cooldown_desc:0 "A recent request to the General Assembly is still being processed. Further requests must wait."
+ un_request_cooldown_desc:0 "A recent request to the General Assembly is still being processed. Further requests must wait: ten years at the base pace, halved for a Great Power, and shorter or longer with International Standing."
  un_sanctions_busting_modifier_desc:0 "This country is quietly circumventing [concept_un_sanctions] for commercial advantage, at the cost of diplomatic reputation."
  un_sanctions_cooldown:0 "Recent Sanctions Action"
  un_sanctions_cooldown_desc:0 "A sanctions action was recently taken."
