@@ -549,22 +549,3 @@ sr_prog_solar_colonization = {
 		localization_key = sr_prog_state_open
 	}
 }
-
-# The waiting entry is not a milestone: it has no approach, no funding and no
-# race for "the first". Its row tracks the probe itself.
-sr_prog_interstellar_results = {
-	type = country
-	random_valid = no
-
-	text = {
-		trigger = { has_variable = sr_interstellar_results_received }
-		localization_key = sr_prog_state_signal_received
-	}
-	text = {
-		trigger = { has_variable = sr_active_interstellar_results }
-		localization_key = sr_prog_state_in_transit
-	}
-	text = {
-		localization_key = sr_prog_state_open
-	}
-}
