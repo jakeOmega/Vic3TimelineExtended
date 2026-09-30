@@ -561,6 +561,21 @@ class LocTest(unittest.TestCase):
 
 
 class IconsTest(unittest.TestCase):
+    ICONS = {"first": "gfx/interface/icons/space_race_icons/state_standard.dds",
+             "second": "gfx/interface/icons/colonial_empire_icons/band_stable.dds",
+             "third": "gfx/interface/icons/gm_icons/status_upheld.dds"}
+    LAUNCHER = "gfx/interface/main_hud/journal_btn.dds"   # the placeholder
+
+    def test_each_place_draws_its_file(self):
+        gui = _read(GUI)
+        panel = _type_body(gui, "te_systems_window_panel")
+        for slot, path in self.ICONS.items():
+            with self.subTest(slot=slot):
+                m = re.search(rf'blockoverride "{slot}_button_icon" \{{.*?texture = "([^"]+)"', panel, re.S)
+                self.assertEqual(m.group(1), path)
+        button = _named(gui, "te_systems_window_launcher_button")
+        self.assertEqual(re.findall(r'texture = "([^"]+)"', button), [self.LAUNCHER] * 2)
+
     def test_every_texture_is_listed(self):
         doc = _read(ICON_DOC)
         textures = set(re.findall(r'texture = "([^"]+)"', _read(GUI)))
