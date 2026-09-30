@@ -319,3 +319,337 @@ sr_disp_cost_ambitious_solar_colonization = {
 	value = sr_disp_cost_safe_solar_colonization
 	multiply = 2
 }
+
+# ---- Rivals: the estimate rows ----------------------------------------------
+# Read by the Rivals rows with the rival passed in: GuiScope.SetRoot(viewer)
+# .AddScope('sr_rival', <the rival>).ScriptValue(...), the shape
+# gui/market_panel.gui uses for a trade partner. ROOT is the viewer.
+# The band: ±25% of the goal, ±10% / ±5% with a covert network of
+# intelligence tier 1 / 2 in the rival (sr_has_intel_tier).
+sr_disp_rival_band = {
+	value = sr_rival_band_open
+	if = {
+		limit = { root = { sr_has_intel_tier = { TARGET = scope:sr_rival TIER = 2 } } }
+		value = sr_rival_band_tier_2
+	}
+	else_if = {
+		limit = { root = { sr_has_intel_tier = { TARGET = scope:sr_rival TIER = 1 } } }
+		value = sr_rival_band_tier_1
+	}
+}
+
+# Per milestone: the estimate (the marker), the band's ends, and the viewer's
+# count of rivals (sr_rival_total_<m>, written by sr_rivals_estimate_refresh)
+# with how many there are beyond the five rows.
+sr_disp_rival_est_suborbital = {
+	value = 0
+	scope:sr_rival = {
+		add = sr_progress_suborbital_value
+	}
+	divide = sr_suborbital_goal
+	scope:sr_rival = {
+		if = {
+			limit = { has_variable = sr_fuzz_suborbital }
+			add = {
+				value = var:sr_fuzz_suborbital
+				multiply = sr_disp_rival_band
+			}
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_disp_rival_lo_suborbital = {
+	value = sr_disp_rival_est_suborbital
+	subtract = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_hi_suborbital = {
+	value = sr_disp_rival_est_suborbital
+	add = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_total_suborbital = {
+	value = 0
+	if = { limit = { has_variable = sr_rival_total_suborbital } value = var:sr_rival_total_suborbital }
+}
+sr_disp_rival_more_suborbital = {
+	value = sr_disp_rival_total_suborbital
+	subtract = 5
+	min = 0
+}
+sr_disp_rival_est_orbital = {
+	value = 0
+	scope:sr_rival = {
+		add = sr_progress_orbital_value
+	}
+	divide = sr_orbital_goal
+	scope:sr_rival = {
+		if = {
+			limit = { has_variable = sr_fuzz_orbital }
+			add = {
+				value = var:sr_fuzz_orbital
+				multiply = sr_disp_rival_band
+			}
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_disp_rival_lo_orbital = {
+	value = sr_disp_rival_est_orbital
+	subtract = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_hi_orbital = {
+	value = sr_disp_rival_est_orbital
+	add = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_total_orbital = {
+	value = 0
+	if = { limit = { has_variable = sr_rival_total_orbital } value = var:sr_rival_total_orbital }
+}
+sr_disp_rival_more_orbital = {
+	value = sr_disp_rival_total_orbital
+	subtract = 5
+	min = 0
+}
+sr_disp_rival_est_moon_landing = {
+	value = 0
+	scope:sr_rival = {
+		add = sr_progress_moon_landing_value
+	}
+	divide = sr_moon_landing_goal
+	scope:sr_rival = {
+		if = {
+			limit = { has_variable = sr_fuzz_moon_landing }
+			add = {
+				value = var:sr_fuzz_moon_landing
+				multiply = sr_disp_rival_band
+			}
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_disp_rival_lo_moon_landing = {
+	value = sr_disp_rival_est_moon_landing
+	subtract = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_hi_moon_landing = {
+	value = sr_disp_rival_est_moon_landing
+	add = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_total_moon_landing = {
+	value = 0
+	if = { limit = { has_variable = sr_rival_total_moon_landing } value = var:sr_rival_total_moon_landing }
+}
+sr_disp_rival_more_moon_landing = {
+	value = sr_disp_rival_total_moon_landing
+	subtract = 5
+	min = 0
+}
+sr_disp_rival_est_probe = {
+	value = 0
+	scope:sr_rival = {
+		add = sr_progress_probe_value
+	}
+	divide = sr_probe_goal
+	scope:sr_rival = {
+		if = {
+			limit = { has_variable = sr_fuzz_probe }
+			add = {
+				value = var:sr_fuzz_probe
+				multiply = sr_disp_rival_band
+			}
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_disp_rival_lo_probe = {
+	value = sr_disp_rival_est_probe
+	subtract = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_hi_probe = {
+	value = sr_disp_rival_est_probe
+	add = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_total_probe = {
+	value = 0
+	if = { limit = { has_variable = sr_rival_total_probe } value = var:sr_rival_total_probe }
+}
+sr_disp_rival_more_probe = {
+	value = sr_disp_rival_total_probe
+	subtract = 5
+	min = 0
+}
+sr_disp_rival_est_moon_base = {
+	value = 0
+	scope:sr_rival = {
+		add = sr_progress_moon_base_value
+	}
+	divide = sr_moon_base_goal
+	scope:sr_rival = {
+		if = {
+			limit = { has_variable = sr_fuzz_moon_base }
+			add = {
+				value = var:sr_fuzz_moon_base
+				multiply = sr_disp_rival_band
+			}
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_disp_rival_lo_moon_base = {
+	value = sr_disp_rival_est_moon_base
+	subtract = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_hi_moon_base = {
+	value = sr_disp_rival_est_moon_base
+	add = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_total_moon_base = {
+	value = 0
+	if = { limit = { has_variable = sr_rival_total_moon_base } value = var:sr_rival_total_moon_base }
+}
+sr_disp_rival_more_moon_base = {
+	value = sr_disp_rival_total_moon_base
+	subtract = 5
+	min = 0
+}
+sr_disp_rival_est_mars_landing = {
+	value = 0
+	scope:sr_rival = {
+		add = sr_progress_mars_landing_value
+	}
+	divide = sr_mars_landing_goal
+	scope:sr_rival = {
+		if = {
+			limit = { has_variable = sr_fuzz_mars_landing }
+			add = {
+				value = var:sr_fuzz_mars_landing
+				multiply = sr_disp_rival_band
+			}
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_disp_rival_lo_mars_landing = {
+	value = sr_disp_rival_est_mars_landing
+	subtract = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_hi_mars_landing = {
+	value = sr_disp_rival_est_mars_landing
+	add = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_total_mars_landing = {
+	value = 0
+	if = { limit = { has_variable = sr_rival_total_mars_landing } value = var:sr_rival_total_mars_landing }
+}
+sr_disp_rival_more_mars_landing = {
+	value = sr_disp_rival_total_mars_landing
+	subtract = 5
+	min = 0
+}
+sr_disp_rival_est_interstellar_probe = {
+	value = 0
+	scope:sr_rival = {
+		add = sr_progress_interstellar_probe_value
+	}
+	divide = sr_interstellar_probe_goal
+	scope:sr_rival = {
+		if = {
+			limit = { has_variable = sr_fuzz_interstellar_probe }
+			add = {
+				value = var:sr_fuzz_interstellar_probe
+				multiply = sr_disp_rival_band
+			}
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_disp_rival_lo_interstellar_probe = {
+	value = sr_disp_rival_est_interstellar_probe
+	subtract = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_hi_interstellar_probe = {
+	value = sr_disp_rival_est_interstellar_probe
+	add = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_total_interstellar_probe = {
+	value = 0
+	if = { limit = { has_variable = sr_rival_total_interstellar_probe } value = var:sr_rival_total_interstellar_probe }
+}
+sr_disp_rival_more_interstellar_probe = {
+	value = sr_disp_rival_total_interstellar_probe
+	subtract = 5
+	min = 0
+}
+sr_disp_rival_est_solar_colonization = {
+	value = 0
+	scope:sr_rival = {
+		add = sr_progress_solar_colonization_value
+	}
+	divide = sr_solar_colonization_goal
+	scope:sr_rival = {
+		if = {
+			limit = { has_variable = sr_fuzz_solar_colonization }
+			add = {
+				value = var:sr_fuzz_solar_colonization
+				multiply = sr_disp_rival_band
+			}
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_disp_rival_lo_solar_colonization = {
+	value = sr_disp_rival_est_solar_colonization
+	subtract = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_hi_solar_colonization = {
+	value = sr_disp_rival_est_solar_colonization
+	add = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_total_solar_colonization = {
+	value = 0
+	if = { limit = { has_variable = sr_rival_total_solar_colonization } value = var:sr_rival_total_solar_colonization }
+}
+sr_disp_rival_more_solar_colonization = {
+	value = sr_disp_rival_total_solar_colonization
+	subtract = 5
+	min = 0
+}

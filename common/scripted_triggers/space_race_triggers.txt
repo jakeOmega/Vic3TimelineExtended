@@ -152,6 +152,34 @@ sr_milestone_billed_mars_landing = { has_variable = sr_active_mars_landing }
 sr_milestone_billed_interstellar_probe = { has_variable = sr_active_interstellar_probe }
 sr_milestone_billed_solar_colonization = { sr_solar_colonization_running = yes }
 
+# A rival on milestone $MILESTONE$, seen from ROOT: another country running it
+# and actually moving it (sr_ai_should_participate — an AI outside the top
+# three can hold sr_active_<m> and never tick). The Rivals list, its estimate
+# rows and the monthly refresh that fills them all use this one test.
+# Scope: the candidate country; ROOT: the viewer.
+sr_is_rival = {
+	NOT = { THIS = ROOT }
+	has_variable = sr_active_$MILESTONE$
+	sr_ai_should_participate = yes
+}
+
+# This country (the viewer) holds a covert network in $TARGET$ whose
+# intelligence tier is at least $TIER$ (1: strength 50+, 2: 75+). Reads the
+# covert system's own stored tier code, iw_net_intel_tier (covert_net_clamp
+# writes it after every strength change), so the thresholds live in one place.
+# The lookup works inside the list, as the covert "lookup rule" requires.
+# Parameters: $TARGET$ = country (a scope: reference), $TIER$ = 1 or 2
+# Scope: country (the viewer)
+sr_has_intel_tier = {
+	has_variable_list = iw_nets
+	any_in_list = {
+		variable = iw_nets
+		var:iw_target ?= $TARGET$
+		has_variable = iw_net_intel_tier
+		var:iw_net_intel_tier >= $TIER$
+	}
+}
+
 # At least one milestone is under way: exactly the milestones
 # sr_boost_active_milestones pushes, so an event can offer progress when this
 # holds and something else when it does not. The one test of "a milestone is

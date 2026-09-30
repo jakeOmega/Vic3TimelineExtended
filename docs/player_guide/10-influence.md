@@ -295,7 +295,9 @@ A strong network gives new operations there a head start of up to five months
 50 it reports the target's intelligence capacity and technology count beside
 yours, and from 75 how many covert operations the target runs against you: the
 only way to learn of operations your counterintelligence has not caught, though
-it never says which.
+it never says which. In the space race, the same two tiers narrow your estimate
+of that country's progress on a milestone from ±25% of the goal to ±10% and ±5%
+(see [The space milestone panel](15-space.md#the-space-milestone-panel)).
 
 ### Tradecraft
 

@@ -16,8 +16,14 @@ bounds it. Multi-line text (the notes, the profile, the Rivals list) wraps
 instead of eliding and is exempt.
 
 The widths are read from the GUI, so narrowing a column fails here too.
+
+A rival's name is the longest dynamic text: any country's name, vanilla's or
+the mod's, dynamic names included. The longest today is 48 characters
+("United Socialist Council Republics of California"), which is why the rival
+row gives the name a line of its own.
 """
 import glob
+import json
 import os
 import re
 import unittest
@@ -26,6 +32,7 @@ REPO = os.path.dirname(os.path.abspath(__file__))
 GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "space_race_widget.gui")
 VALUES = os.path.join(REPO, "common", "script_values", "space_race_values.txt")
 LOC_DIR = os.path.join(REPO, "localization", "english")
+VANILLA_LOC = os.path.join(REPO, "vanilla_parsed", "localization_english.json")
 
 UNITS_PER_CHAR = {"large": 10.0, "medium": 8.6, "small": 8.0}
 MARGIN = 1.1
@@ -141,6 +148,22 @@ class _Script:
 
 
 SCRIPT = None
+_COUNTRY = []
+
+
+def _longest_country_name():
+    """The longest name a country can carry: every tag's name and every
+    dynamic name (dyn_c_*), vanilla's (the committed parse) and the mod's."""
+    if not _COUNTRY:
+        with open(VANILLA_LOC, encoding="utf-8") as f:
+            names = dict(json.load(f))
+        _loc("concept_sr_approach")  # fills _LOC with the mod's keys
+        names.update(_LOC)
+        plain = [v for k, v in names.items()
+                 if isinstance(v, str) and (re.fullmatch(r"[A-Z][A-Z0-9]{2}", k) or re.fullmatch(r"dyn_c_\w+", k))
+                 and not re.search(r"[$\[#]", v)]
+        _COUNTRY.append(max(plain, key=len))
+    return _COUNTRY[0]
 
 
 def _longest_figure(name):
@@ -163,6 +186,8 @@ def _longest_figure(name):
         return SETBACKS_CEILING
     if re.fullmatch(r"sr_funding_\w+|sr_max_funding_level", name):
         return FUNDING_CEILING
+    if re.fullmatch(r"sr_disp_rival_(lo|hi|est)_\w+", name):
+        return 1.0  # a share of the goal, clamped to 0..1: "100%"
     fixed = {"sr_disp_cooldown_months": SCRIPT.cooldown, "sr_current_colonization_stage": STAGE_CEILING,
              "sr_interstellar_transit_value": TRANSIT_MONTHS, "sr_total_global_colonies": WORLDS}
     assert name in fixed, f"no longest figure known for {name}: add one to _longest_figure"
@@ -175,12 +200,15 @@ def _render(value):
         value = re.sub(r"\$(\w+)\$", lambda m: _loc(m.group(1)), value)
 
     def figure(m):
-        name, fmt = m.group(1) or m.group(2), m.group(3)
+        name, pct, fmt = m.group(1) or m.group(2), m.group(3), m.group(4)
         assert fmt is not None, f"a figure with no format: {m.group(0)}"
+        if pct:
+            return f"{_longest_figure(name) * 100:.{int(fmt)}f}%"
         return f"{_longest_figure(name):.{int(fmt)}f}"
 
-    value = re.sub(r"\[[^\[\]]*?(?:ScriptValue\('(\w+)'\)|Var\('(\w+)'\)\.GetValue)\|?(\d)?\]",
+    value = re.sub(r"\[[^\[\]]*?(?:ScriptValue\('(\w+)'\)|Var\('(\w+)'\)\.GetValue)(?:\|(%?)(\d))?\]",
                    figure, value)
+    value = value.replace("[State.GetCountry.GetName]", _longest_country_name())
     value = re.sub(r"\[Concept\('\w+',\s*'([^']*)'\)\]", r"\1", value)
     value = re.sub(r"\[(concept_\w+)\]", lambda m: _loc(m.group(1)), value)
     assert "[" not in value, f"an unmeasured expression in {value!r}"
@@ -190,7 +218,7 @@ def _render(value):
 
 # Every loc key the panel shows, by the cell it shows in. Keys in more than one
 # cell are measured against each.
-MULTILINE = r"je_space_race_widget_(how_\w+|profile_\w+)"
+MULTILINE = r"je_space_race_widget_(how_\w+|profile_\w+|rival_more_\w+)"
 CELLS = {
     # (type, marker picking the textbox): patterns of the keys it shows
     "state, risk, first and stage (te_sr_ov_icon_label)": (
@@ -224,6 +252,12 @@ CELLS = {
     "worlds pie label (te_sr_ov_pie)": (
         ("te_sr_ov_pie", 'block "pie_label"'),
         r"je_space_race_widget_ov_worlds"),
+    "rival name (te_sr_rival_row)": (
+        ("te_sr_rival_row", 'text = "je_space_race_widget_rival_name"'),
+        r"je_space_race_widget_rival_name"),
+    "rival band in words (te_sr_rival_row)": (
+        ("te_sr_rival_row", 'block "row_range"'),
+        r"je_space_race_widget_rival_range_\w+"),
     "programme label (te_sr_ov_programme)": (
         ("te_sr_ov_programme", 'text = "je_space_race_widget_programme_header"'),
         r"je_space_race_widget_programme_header"),
@@ -292,6 +326,8 @@ class LabelBudgetTest(unittest.TestCase):
         self.assertEqual(_render(_loc("je_space_race_widget_ov_colony_label")), "Next Colony")
         self.assertEqual(_render(_loc("je_space_race_widget_approach_label")), "Approach")
         self.assertEqual(_render(_loc("je_space_race_widget_funding_label")), "Funding")
+        self.assertEqual(_longest_country_name(), "United Socialist Council Republics of California")
+        self.assertEqual(_render(_loc("je_space_race_widget_rival_range_mars_landing")), "100%–100%")
 
     def test_the_owners_overrun_is_caught(self):
         """The budget flags what the owner saw: "Next Colony" in the old 90."""

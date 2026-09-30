@@ -417,7 +417,10 @@ class InterstellarCellTest(unittest.TestCase):
 
 # Textures the widget uses as they are: vanilla's, used as vanilla uses them.
 # Everything else is the Space Race's own art or a #571 journal icon.
-VANILLA_KEPT = {"gfx/interface/backgrounds/round_frame_dec.dds"}
+VANILLA_KEPT = {"gfx/interface/backgrounds/round_frame_dec.dds",
+                # the rival rows' band marker, drawn as the UN's authority bar draws it
+                "gfx/interface/icons/generic_icons/transparent.dds",
+                "gfx/interface/progressbar/progressbar_marker.dds"}
 
 
 def _enclosing(text, anchor, opener):
@@ -509,7 +512,9 @@ class DisplayValuesTest(unittest.TestCase):
             body = _strip_comments(_block(self.values, name))
             for var in re.findall(r"var:(\w+)", body):
                 with self.subTest(value=name, var=var):
-                    self.assertRegex(body, rf"limit = \{{ has_variable = {var} \}}[^\n]*var:{var}")
+                    # the read sits straight after its own guard, in the same `if`
+                    self.assertRegex(body, rf"limit = \{{ has_variable = {var} \}}\s*(?:value = 1\s+)?"
+                                           rf"(?:add|value) = (?:\{{\s*value = )?var:{var}\b")
 
     def test_state_reads_the_single_derivation_site(self):
         for m in CONTROLLED:
