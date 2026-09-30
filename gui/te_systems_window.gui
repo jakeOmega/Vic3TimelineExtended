@@ -38,7 +38,8 @@
 ###   docs/guides/gui_modding_guide.md). Gates: te_window_* in
 ###   common/scripted_guis/te_system_tab_sguis.txt.
 ###
-### Icons: docs/systems/te_systems_window_gui_icons.md.
+### The launcher's icon: docs/systems/te_systems_window_gui_icons.md. The tabs
+### carry none.
 
 ### Which tab is shown. U = the tab is open (te_window_<system>_tab_sgui: its
 ### rule on and an entry running), R = the tab is on the strip
@@ -100,6 +101,13 @@ types te_systems_window_types
 			### unlock conditions with a tick or a cross. tab_buttons defaults both
 			### halves of a slot to `visible = no`, so each visibility block says
 			### when its half shows: the templates above.
+			###
+			### No tab carries an icon, as vanilla's tabs and the mod's other tabs
+			### don't (owner, 2026-09-30). The names are the short ones: three tabs
+			### share about 540, so a name gets about 160 inside the tab's 10 px
+			### margins, and "Colonial Empire" and "Grand Monuments" need 165 at the
+			### house budget (10 units a character plus 10%). The tooltips and the
+			### content's headers carry the full names.
 			tab_buttons = {
 				### Space Race
 				blockoverride "first_button" {
@@ -120,16 +128,6 @@ types te_systems_window_types
 				}
 				blockoverride "first_button_selected" {
 					text = "te_window_tab_space_race"
-				}
-				### The rocket from the Space Race overview (#586), left of the
-				### name, in both halves of the slot.
-				blockoverride "first_button_icon" {
-					icon = {
-						size = { 24 24 }
-						parentanchor = left|vcenter
-						position = { 8 0 }
-						texture = "gfx/interface/icons/space_race_icons/state_standard.dds"
-					}
 				}
 
 				### Colonial Empire
@@ -152,15 +150,6 @@ types te_systems_window_types
 				blockoverride "second_button_selected" {
 					text = "te_window_tab_colonial_empire"
 				}
-				### The Stable band's globe from the Colonial Empire overview (#586).
-				blockoverride "second_button_icon" {
-					icon = {
-						size = { 24 24 }
-						parentanchor = left|vcenter
-						position = { 8 0 }
-						texture = "gfx/interface/icons/colonial_empire_icons/band_stable.dds"
-					}
-				}
 
 				### Grand Monuments
 				blockoverride "third_button" {
@@ -181,15 +170,6 @@ types te_systems_window_types
 				}
 				blockoverride "third_button_selected" {
 					text = "te_window_tab_grand_monuments"
-				}
-				### The Upheld stele from the Monuments overview (#586).
-				blockoverride "third_button_icon" {
-					icon = {
-						size = { 24 24 }
-						parentanchor = left|vcenter
-						position = { 8 0 }
-						texture = "gfx/interface/icons/gm_icons/status_upheld.dds"
-					}
 				}
 			}
 		}

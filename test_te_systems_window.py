@@ -11,7 +11,6 @@ import glob
 import itertools
 import os
 import re
-import subprocess
 import unittest
 
 REPO = os.path.dirname(os.path.abspath(__file__))
@@ -30,6 +29,11 @@ TABS = [("space_race", "has_game_rule = space_race_enabled", "first"),
         ("grand_monuments", "gm_system_enabled = yes", "third")]
 SR = ["suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
       "interstellar_probe", "interstellar_results", "solar_colonization"]   # je_space_race.txt order
+# The systems' full names, and the width a tab's name gets: three tabs share
+# about 540, less tab_text_properties' 10 px margin each side (no icon).
+FULL_NAMES = {"space_race": "Space Race", "colonial_empire": "Colonial Empire",
+              "grand_monuments": "Grand Monuments"}
+NAME_WIDTH = 540 / 3 - 2 * 10
 OPEN = "GetVariableSystem.HasValue('com_open_window', 'te_systems_window')"
 PLAYED = "GetMetaPlayer.GetPlayedOrObservedCountry.IsValid"
 NOT_OBSERVER = "Not( GetMetaPlayer.IsObserver )"
@@ -551,47 +555,50 @@ class LocTest(unittest.TestCase):
                     "ce_unlock_not_secured_tt", "ce_unlock_no_collapse_tt", "gm_unlock_tt"):
             self.assertIn(key, loc)
 
-    def test_no_label_is_elided(self):
-        """The strip's three tabs share about 540: each name, at 10 units a
-        character plus 10%, fits between its 24 px icon and the tab's middle."""
+    def test_each_tab_has_its_full_name_when_it_fits(self):
+        """The tabs carry no icon, so a name gets its tab less tab_text_properties'
+        10 px margins: three tabs share about 540. The full name when it fits
+        the house budget (10 units a character plus 10%), otherwise the short
+        one, and the tooltip names the system in full."""
         loc = _all_loc()
-        for tab, _, _ in TABS:
-            name = loc[f"te_window_tab_{tab}"]
-            self.assertLessEqual(len(name) * 10 * 1.1, 113, name)
+
+        def expanded(value):
+            return re.sub(r"\$(\w+)\$", lambda m: loc.get(m.group(1), m.group(0)), value)
+
+        for tab, full in FULL_NAMES.items():
+            with self.subTest(tab=tab):
+                name = loc[f"te_window_tab_{tab}"]
+                self.assertLessEqual(len(name) * 10 * 1.1, NAME_WIDTH, name)
+                if len(full) * 10 * 1.1 <= NAME_WIDTH:
+                    self.assertEqual(name, full)
+                else:
+                    self.assertIn(full, expanded(loc[f"te_window_tab_{tab}_tt"]))
 
 
 class IconsTest(unittest.TestCase):
-    ICONS = {"first": "gfx/interface/icons/space_race_icons/state_standard.dds",
-             "second": "gfx/interface/icons/colonial_empire_icons/band_stable.dds",
-             "third": "gfx/interface/icons/gm_icons/status_upheld.dds"}
     LAUNCHER = "gfx/interface/main_hud/journal_btn.dds"   # the placeholder
 
-    def test_each_place_draws_its_file(self):
+    def test_no_tab_sets_an_icon(self):
+        """System tabs carry no icon, as vanilla's tabs and the mod's other
+        tabs don't (owner, 2026-09-30)."""
+        panel = _strip_comments(_type_body(_read(GUI), "te_systems_window_panel"))
+        m = re.search(r"\btab_buttons = \{", panel)
+        strip = panel[m.end():_close(panel, m.end() - 1)]
+        self.assertNotRegex(panel, r'blockoverride "\w+_button_icon"')
+        self.assertNotRegex(strip, r"\bicon = \{|\btexture =|\bbutton_icon")
+
+    def test_the_launcher_draws_its_placeholder(self):
         gui = _read(GUI)
-        panel = _type_body(gui, "te_systems_window_panel")
-        for slot, path in self.ICONS.items():
-            with self.subTest(slot=slot):
-                m = re.search(rf'blockoverride "{slot}_button_icon" \{{.*?texture = "([^"]+)"', panel, re.S)
-                self.assertEqual(m.group(1), path)
         button = _named(gui, "te_systems_window_launcher_button")
         self.assertEqual(re.findall(r'texture = "([^"]+)"', button), [self.LAUNCHER] * 2)
+        # ...and it is the window's only texture
+        self.assertEqual(set(re.findall(r'texture = "([^"]+)"', gui)), {self.LAUNCHER})
 
     def test_every_texture_is_listed(self):
         doc = _read(ICON_DOC)
-        textures = set(re.findall(r'texture = "([^"]+)"', _read(GUI)))
-        self.assertEqual(len(textures), 4)
-        for path in textures:
+        for path in set(re.findall(r'texture = "([^"]+)"', _read(GUI))):
             with self.subTest(path=path):
                 self.assertIn(f"`{path}`", doc)
-
-    def test_the_tab_icons_are_in_the_repo(self):
-        out = subprocess.run(["git", "ls-files", "gfx/interface/icons/"], cwd=REPO, capture_output=True, text=True)
-        tracked = set(out.stdout.split())
-        if out.returncode != 0 or not tracked:
-            self.skipTest("gfx/ is not in this tree")
-        for path in re.findall(r'texture = "(gfx/interface/icons/[^"]+)"', _read(GUI)):
-            with self.subTest(path=path):
-                self.assertIn(path, tracked)
 
 
 if __name__ == "__main__":
